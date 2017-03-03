@@ -1,72 +1,8 @@
-import React, { Component } from 'react';
-import { Sidebar, Segment, Menu, Header, Icon, Container, Grid, Table } from 'semantic-ui-react';
+import React  from 'react';
+import { Segment, Menu, Header, Grid, Table } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
-import 'semantic-ui-css/semantic.css';
-import './Kmedia.css';
-
-class SidebarLeftPush extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { visible: false };
-  }
-
-  toggleVisibility = () => this.setState({ visible: !this.state.visible });
-
-  render() {
-    return (
-      <Sidebar.Pushable as={Segment}>
-        <Sidebar as={Menu} animation="push" visible={this.state.visible} pointing vertical>
-          <Menu.Item as={Link} to="/home" active color="violet"> Daily Lessons </Menu.Item>
-          <Menu.Item as={Link} to="/home"> TV & Video Programs </Menu.Item>
-          <Menu.Item as={Link} to="/home"> Lectures & Lessons </Menu.Item>
-          <Menu.Item as={Link} to="/home"> Sources </Menu.Item>
-          <Menu.Item as={Link} to="/home"> Events </Menu.Item>
-          <Menu.Item as={Link} to="/home"> Books </Menu.Item>
-          <Menu.Item as={Link} to="/home"> Topics </Menu.Item>
-          <Menu.Item as={Link} to="/home"> Publications </Menu.Item>
-          <Menu.Item as={Link} to="/home"> Photos </Menu.Item>
-        </Sidebar>
-        <Sidebar.Pusher>
-          <TopFixedMenu title="Daily Lessons" toggleVisibility={this.toggleVisibility}/>
-          <div className="pusher">
-            {this.props.children}
-          </div>
-        </Sidebar.Pusher>
-      </Sidebar.Pushable>
-    )
-  }
-}
-
-const TopFixedMenu = ({ title, toggleVisibility }) => (
-  <Menu fixed="top">
-    <Menu.Item as="a" icon className="ui padded grid tablet mobile only" onClick={toggleVisibility}>
-      <Icon name="sidebar" style={{ padding: 0 }}/>
-    </Menu.Item>
-    <Menu.Item header>
-      <Header as="h4" className="main-title" style={{ marginBottom: 0 }}>Kabbalah Media</Header>
-      <small>&nbsp;- {title}</small>
-    </Menu.Item>
-    <Menu.Item as={Link} to="/home"> Features </Menu.Item>
-    <Menu.Item as={Link} to="/home"> Testimonials </Menu.Item>
-    <Menu.Item as={Link} to="/home"> Sign-in </Menu.Item>
-  </Menu>
-);
-
-const Footer = () => (
-  <Segment inverted vertical color="black">
-    <Container as="p">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque beatae deleniti
-      dignissimos dolorem exercitationem expedita odio quasi unde. Atque, blanditiis deserunt doloribus
-      molestias quisquam sequi temporibus! Dolorem ea eligendi hic illum modi pariatur placeat possimus repellat
-      tempora tempore. Aliquid at atque aut beatae consectetur corporis cum delectus dolore eaque eligendi enim
-      ex explicabo fugiat id, impedit incidunt inventore ipsam, ipsum iste itaque labore minima nemo odio, optio
-      quia tempora vitae? Eum ex quidem tenetur. A atque excepturi hic iste? Adipisci culpa, cum dignissimos
-      fugit laboriosam laudantium libero magnam officia omnis quisquam voluptatibus voluptatum. Cumque doloribus
-      error, nostrum quos soluta veritatis?</Container>
-  </Segment>
-);
-
-class Content extends Component {
+class Content extends React.Component {
   constructor(props) {
     super(props);
     this.state = { activeItem: 'date-filter' };
@@ -159,11 +95,4 @@ class Content extends Component {
   }
 }
 
-const Kmedia = () => (
-  <SidebarLeftPush>
-    <Content/>
-    <Footer/>
-  </SidebarLeftPush>
-);
-
-export default Kmedia;
+export default Content;
