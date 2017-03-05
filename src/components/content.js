@@ -2,6 +2,8 @@ import React  from 'react';
 import { Segment, Menu, Header, Grid, Table } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
+import MenuItems from './menu';
+
 class Content extends React.Component {
   constructor(props) {
     super(props);
@@ -17,17 +19,7 @@ class Content extends React.Component {
       <Grid columns='equal' className="main-content">
         <Grid.Row stretched>
           <Grid.Column width={3} only="computer">
-            <Menu vertical fluid pointing>
-              <Menu.Item as={Link} to="/home" active color="violet"> Daily Lessons </Menu.Item>
-              <Menu.Item as={Link} to="/home"> TV & Video Programs </Menu.Item>
-              <Menu.Item as={Link} to="/home"> Lectures & Lessons </Menu.Item>
-              <Menu.Item as={Link} to="/home"> Sources </Menu.Item>
-              <Menu.Item as={Link} to="/home"> Events </Menu.Item>
-              <Menu.Item as={Link} to="/home"> Books </Menu.Item>
-              <Menu.Item as={Link} to="/home"> Topics </Menu.Item>
-              <Menu.Item as={Link} to="/home"> Publications </Menu.Item>
-              <Menu.Item as={Link} to="/home"> Photos </Menu.Item>
-            </Menu>
+            <MenuItems simple active="daily_lessons"/>
           </Grid.Column>
           <Grid.Column>
             <Grid padded>
@@ -36,14 +28,14 @@ class Content extends React.Component {
                   <Header as="h3">Results 1 - 30 of 2190</Header>
                   <Menu secondary pointing color="violet" className="index-filters">
                     <Menu.Header className="item">Filter by:</Menu.Header>
-                    <Menu.Item name="date-filter" active={activeItem === "date-filter"} onClick={this.handleItemClick}>Date</Menu.Item>
-                    <Menu.Item name="sources-filter" active={activeItem === "sources-filter"} onClick={this.handleItemClick}>Sources</Menu.Item>
-                    <Menu.Item name="topic-filter" active={activeItem === "topic-filter"} onClick={this.handleItemClick}>Topic</Menu.Item>
+                    <Menu.Item name="date-filter" active={activeItem === 'date-filter'} onClick={this.handleItemClick}>Date</Menu.Item>
+                    <Menu.Item name="sources-filter" active={activeItem === 'sources-filter'} onClick={this.handleItemClick}>Sources</Menu.Item>
+                    <Menu.Item name="topic-filter" active={activeItem === 'topic-filter'} onClick={this.handleItemClick}>Topic</Menu.Item>
                   </Menu>
                   {
-                    activeItem === "date-filter" ? (
+                    activeItem === 'date-filter' ? (
                         <Segment basic attached="bottom" className="tab active">First</Segment>
-                      ) : activeItem === "sources-filter" ? (
+                      ) : activeItem === 'sources-filter' ? (
                           <Segment basic attached="bottom" className="tab active">Second</Segment>
                         ) : (
                           <Segment basic attached="bottom" className="tab active">Third</Segment>
@@ -91,7 +83,7 @@ class Content extends React.Component {
           </Grid.Column>
         </Grid.Row>
       </Grid>
-    )
+    );
   }
 }
 
