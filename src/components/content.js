@@ -22,7 +22,7 @@ class Content extends React.Component {
             <MenuItems simple active="daily_lessons"/>
           </Grid.Column>
           <Grid.Column>
-            <Grid padded>
+            <Grid padded={true}>
               <Grid.Row stretched>
                 <Grid.Column width={16}>
                   <Header as="h3">Results 1 - 30 of 2190</Header>
@@ -45,35 +45,42 @@ class Content extends React.Component {
                     <Table.Body>
                       <Table.Row verticalAlign="top">
                         <Table.Cell className="minimized" rowSpan="4"><b>2017-01-22</b></Table.Cell>
-                        <Table.Cell><a><b>Morning Lesson</b></a></Table.Cell>
+                        <Table.Cell><Link to="#"><b>Morning Lesson</b></Link></Table.Cell>
                       </Table.Row>
                       <Table.Row>
-                        <Table.Cell><a>Lorem ipsum dolor sit amet, consectetur.</a></Table.Cell>
+                        <Table.Cell><Link to="#">Lorem ipsum dolor sit amet, consectetur.</Link></Table.Cell>
                       </Table.Row>
                       <Table.Row>
-                        <Table.Cell><a>Lorem ipsum dolor sit amet, consectetur.</a></Table.Cell>
+                        <Table.Cell><Link to="#">Lorem ipsum dolor sit amet, consectetur.</Link></Table.Cell>
                       </Table.Row>
                       <Table.Row>
-                        <Table.Cell><a>Lorem ipsum dolor sit amet, consectetur.</a></Table.Cell>
+                        <Table.Cell><Link to="#">Lorem ipsum dolor sit amet, consectetur.</Link></Table.Cell>
                       </Table.Row>
                       <Table.Row verticalAlign="top">
-                        <Table.Cell className="minimized" rowSpan="6"><b>2017-01-20</b></Table.Cell>
-                        <Table.Cell><a><b>Morning Lesson</b></a></Table.Cell>
+                        <Table.Cell className="minimized" rowSpan="4"><b>2017-01-21</b></Table.Cell>
+                        <Table.Cell><Link to="#"><b>Morning Lesson</b></Link></Table.Cell>
                       </Table.Row>
                       <Table.Row>
-                        <Table.Cell><a>Lorem ipsum dolor sit amet, consectetur.</a></Table.Cell>
+                        <Table.Cell><Link to="#">Lorem ipsum dolor sit amet, consectetur.</Link></Table.Cell>
                       </Table.Row>
                       <Table.Row>
-                        <Table.Cell><a>Lorem ipsum dolor sit amet, consectetur.</a></Table.Cell>
+                        <Table.Cell><Link to="#">Lorem ipsum dolor sit amet, consectetur.</Link></Table.Cell>
                       </Table.Row>
                       <Table.Row>
-                        <Table.Cell><a>Lorem ipsum dolor sit amet, consectetur.</a></Table.Cell>
+                        <Table.Cell><Link to="#">Lorem ipsum dolor sit amet, consectetur.</Link></Table.Cell>
+                      </Table.Row>
+                      <Table.Row verticalAlign="top">
+                        <Table.Cell className="minimized" rowSpan="4"><b>2017-01-20</b></Table.Cell>
+                        <Table.Cell><Link to="#"><b>Morning Lesson</b></Link></Table.Cell>
                       </Table.Row>
                       <Table.Row>
-                        <Table.Cell><a>Lorem ipsum dolor sit amet, consectetur.</a></Table.Cell>
+                        <Table.Cell><Link to="#">Lorem ipsum dolor sit amet, consectetur.</Link></Table.Cell>
                       </Table.Row>
                       <Table.Row>
-                        <Table.Cell><a>Lorem ipsum dolor sit amet, consectetur.</a></Table.Cell>
+                        <Table.Cell><Link to="#">Lorem ipsum dolor sit amet, consectetur.</Link></Table.Cell>
+                      </Table.Row>
+                      <Table.Row>
+                        <Table.Cell><Link to="#">Lorem ipsum dolor sit amet, consectetur.</Link></Table.Cell>
                       </Table.Row>
                     </Table.Body>
                   </Table>

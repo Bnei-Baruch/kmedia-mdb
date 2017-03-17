@@ -4,14 +4,14 @@ import 'semantic-ui-css/semantic.css';
 import '../stylesheets/Kmedia.css';
 
 import Footer from './footer';
-import SidebarLeftPush from './sidebarLeftPush';
+import Layout from './layout';
 import Content from './content';
 
-const Kmedia = () => (  
-  <SidebarLeftPush>
+const Kmedia = () => (
+  <Layout>
     <Content/>
     <Footer/>
-  </SidebarLeftPush>
+  </Layout>
 );
 
 export default Kmedia;

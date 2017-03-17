@@ -15,7 +15,7 @@ const menuItems = [
 ];
 
 const isActive = (active, key) => active === key;
-const getColor = (active, key) => isActive() ? 'violet' : '';
+const getColor = (active, key) => isActive(active, key) ? 'violet' : 'black';
 
 const MenuItems = ({ active, simple, visible }) => {
   const menu_items = menuItems.map((item) =>
