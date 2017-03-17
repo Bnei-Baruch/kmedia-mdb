@@ -15,11 +15,11 @@ class SidebarLeftPush extends React.Component {
 
   render() {
     return (
-      <Sidebar.Pushable as={Segment}>
+      <Sidebar.Pushable>
         <MenuItems active="daily_lessons" visible={this.state.visible} />
         <Sidebar.Pusher>
           <TopFixedMenu title="Daily Lessons" toggleVisibility={this.toggleVisibility}/>
-          <div className="pusher">
+          <div className="wrapper">
             {this.props.children}
           </div>
         </Sidebar.Pusher>
