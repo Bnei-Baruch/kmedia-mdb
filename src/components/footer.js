@@ -2,7 +2,7 @@ import React from 'react';
 import { Segment, Container } from 'semantic-ui-react';
 
 const Footer = () => (
-  <Segment inverted vertical color="black">
+  <Segment inverted vertical color="black" className="footer">
     <Container as="p">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque beatae deleniti
       dignissimos dolorem exercitationem expedita odio quasi unde. Atque, blanditiis deserunt doloribus
       molestias quisquam sequi temporibus! Dolorem ea eligendi hic illum modi pariatur placeat possimus repellat

@@ -7,7 +7,7 @@ import Footer from './footer';
 import SidebarLeftPush from './sidebarLeftPush';
 import Content from './content';
 
-const Kmedia = () => (
+const Kmedia = () => (  
   <SidebarLeftPush>
     <Content/>
     <Footer/>

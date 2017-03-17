@@ -16,9 +16,9 @@ class Content extends React.Component {
     const activeItem = this.state.activeItem;
 
     return (
-      <Grid columns='equal' className="main-content">
-        <Grid.Row stretched>
-          <Grid.Column width={3} only="computer">
+      <Grid columns='equal' className="main-content container">
+        <Grid.Row>
+          <Grid.Column width={3} only="computer" className="main-menu">
             <MenuItems simple active="daily_lessons"/>
           </Grid.Column>
           <Grid.Column>
