@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Icon, Header, Container } from 'semantic-ui-react';
+import { Menu, Icon, Container } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 const TopFixedMenu = ({ title, toggleVisibility }) => (

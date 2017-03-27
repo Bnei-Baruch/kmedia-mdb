@@ -1,16 +1,23 @@
-import React  from 'react';
-
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
 import 'semantic-ui-css/semantic.css';
 import '../stylesheets/Kmedia.css';
 
-import Footer from './footer';
 import Layout from './layout';
-import Content from './content';
+import Footer from './footer';
+
+import { Routes } from './router';
 
 const Kmedia = () => (
   <Layout>
-    <Content/>
-    <Footer/>
+    <Switch>
+      {
+        Routes.map(route =>
+          <Route key={route.key} exact={route.exact} path={route.path} component={route.component} />)
+      }
+      <Route render={() => <h1>Page not found</h1>} />
+    </Switch>
+    <Footer />
   </Layout>
 );
 

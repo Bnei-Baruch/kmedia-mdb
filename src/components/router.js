@@ -1,0 +1,27 @@
+import React from 'react';
+import { Header } from 'semantic-ui-react';
+import Lessons from './lessons';
+import Lesson from './lesson';
+
+const Menu = [
+  { key: 'daily_lessons', name: 'Daily Lessons', to: '/lessons', },
+  { key: 'tv_video_programs', name: 'TV & Video Programs', to: '/tv_video_programs', },
+  { key: 'lectures_lessons', name: 'Lectures & Lessons', to: '/lectures', },
+  { key: 'sources', name: 'Sources', to: '/sources', },
+  { key: 'events', name: 'Events', to: '/events', },
+  { key: 'books', name: 'Books', to: '/books', },
+  { key: 'topics', name: 'Topics', to: '/topics', },
+  { key: 'publications', name: 'Publications', to: '/publications', },
+  { key: 'photos', name: 'Photos', to: '/photos', },
+];
+
+export default Menu;
+
+const NotImplemented = () => <Header as="h3">Not Implemented Yet</Header>;
+
+export const Routes = [
+  { key: 'homepage', exact: true, path: '/', component: Lessons },
+  { key: 'daily_lessons', exact: true, path: '/lessons', component: Lessons },
+  { key: 'tv_video_programs', exact: true, path: '/tv_video_programs', component: NotImplemented },
+  { key: 'lesson', exact: true, path: '/lessons/:id(\\d+)', component: Lesson },
+];

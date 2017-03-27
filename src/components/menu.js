@@ -1,37 +1,38 @@
 import React from 'react';
 import { Sidebar, Menu } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
-const menuItems = [
-  { key: 'daily_lessons', name: 'Daily Lessons', to: '/home', },
-  { key: 'tv_video_programs', name: 'TV & Video Programs', to: '/home', },
-  { key: 'lectures_lessons', name: 'Lectures & Lessons', to: '/home', },
-  { key: 'sources', name: 'Sources', to: '/home', },
-  { key: 'events', name: 'Events', to: '/home', },
-  { key: 'books', name: 'Books', to: '/home', },
-  { key: 'topics', name: 'Topics', to: '/home', },
-  { key: 'publications', name: 'Publications', to: '/home', },
-  { key: 'photos', name: 'Photos', to: '/home', },
-];
-
-const isActive = (active, key) => active === key;
-const getColor = (active, key) => isActive(active, key) ? 'violet' : 'black';
-
-const MenuItems = ({ active, simple, visible }) => {
-  const menu_items = menuItems.map((item) =>
-    <Menu.Item as={Link} key={item.key} to={item.to} active={isActive(active, item.key)} color={getColor(active, item.key)}>{item.name}</Menu.Item>
+const MenuItems = ({ simple, visible, routes }) => {
+  const menuItems = routes.map(item =>
+    <Menu.Item as={NavLink} activeClassName="active violet" key={item.name} to={item.to}>{item.name}</Menu.Item>
   );
   if (simple) {
     return (
-      <Menu vertical fluid pointing>{menu_items}</Menu>
-    );
-  } else {
-    return (
-      <Sidebar as={Menu} animation="push" visible={visible} pointing vertical>
-        {menu_items}
-      </Sidebar>
+      <Menu vertical fluid pointing>{menuItems}</Menu>
     );
   }
+
+  return (
+    <Sidebar as={Menu} animation="push" visible={visible} pointing vertical>
+      {menuItems}
+    </Sidebar>
+  );
+};
+
+MenuItems.propTypes = {
+  simple : React.PropTypes.bool,
+  visible: React.PropTypes.bool,
+  routes : React.PropTypes.arrayOf(React.PropTypes.shape({
+    key      : React.PropTypes.string,
+    exact    : React.PropTypes.bool,
+    path     : React.PropTypes.string,
+    component: React.PropTypes.object
+  })).isRequired
+};
+
+MenuItems.defaultProps = {
+  simple : false,
+  visible: false
 };
 
 export default MenuItems;
