@@ -23,5 +23,5 @@ export const Routes = [
   { key: 'homepage', exact: true, path: '/', component: Lessons },
   { key: 'daily_lessons', exact: true, path: '/lessons', component: Lessons },
   { key: 'tv_video_programs', exact: true, path: '/tv_video_programs', component: NotImplemented },
-  { key: 'lesson', exact: true, path: '/lessons/:id(\\d+)', component: Lesson },
+  { key: 'lesson', exact: true, path: '/lessons/:id', component: Lesson },
 ];
