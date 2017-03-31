@@ -1,6 +1,10 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import 'semantic-ui-css/semantic.css';
+
+import '../../public/pace.min';
+import '../../public/pace.css';
+
 import '../stylesheets/Kmedia.css';
 
 import Layout from './layout';
