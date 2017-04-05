@@ -29,7 +29,8 @@
     "start": "npm-run-all -p watch-css start-js",
     "build": "npm run build-css && react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "npm run build && scp -r build/* archive@app.archive.bbdomain.org:/sites/archive-frontend "
   },
   "eslintConfig": {
     "extends": "airbnb",
