@@ -3,24 +3,29 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "eslint": "^3.18.0",
+    "babel-eslint": "^6.1.2",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
     "node-sass": "^4.5.0",
     "npm-run-all": "^4.0.2",
-    "react-scripts": "0.9.5"
+    "react-scripts": "0.9.5",
+    "react-test-renderer": "^15.5.4"
   },
   "dependencies": {
     "axios": "^0.15.3",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
+    "babel-polyfill": "^6.23.0",
+    "classnames": "^2.2.5",
+    "eslint": "^3.18.0",
+    "prop-types": "^15.5.8",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
     "react-redux": "^5.0.3",
     "react-router-dom": "next",
     "redux": "^3.6.0",
     "semantic-ui-css": "^2.2.9",
-    "semantic-ui-react": "^0.66.0"
+    "semantic-ui-react": "^0.68.0"
   },
   "scripts": {
     "build-css": "node-sass src/ -o src/",
@@ -34,6 +39,7 @@
   },
   "eslintConfig": {
     "extends": "airbnb",
+    "parser": "babel-eslint",
     "env": {
       "browser": true
     },
@@ -51,6 +57,10 @@
       }
     },
     "rules": {
+      "indent": [
+        "error",
+        2
+      ],
       "no-console": "warn",
       "comma-dangle": "off",
       "key-spacing": "off",
