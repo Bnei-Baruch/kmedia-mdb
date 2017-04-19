@@ -1,7 +1,10 @@
 import React from 'react';
-import { Header, Segment } from 'semantic-ui-react';
-import { FetchContentUnit } from './fetch';
+import PropTypes from 'prop-types';
+
 import { Link } from 'react-router-dom';
+import { Header, Segment } from 'semantic-ui-react';
+
+import { FetchContentUnit } from './fetch';
 
 class LessonView extends React.Component {
   constructor(props) {
@@ -12,16 +15,16 @@ class LessonView extends React.Component {
     };
   }
 
-  handleDataFetch = (params, lesson) => {
-    this.setState({ lesson });
-  }
-
   componentDidMount() {
     const { match } = this.props;
 
     FetchContentUnit(match.params.id, {
       language: this.state.language,
     }, this.handleDataFetch);
+  }
+
+  handleDataFetch = (params, lesson) => {
+    this.setState({ lesson });
   }
 
   render() {
@@ -32,24 +35,24 @@ class LessonView extends React.Component {
 }
 
 LessonView.propTypes = {
-  match: React.PropTypes.shape({
-    isExact: React.PropTypes.bool,
-    params : React.PropTypes.object,
-    path   : React.PropTypes.string,
-    url    : React.PropTypes.string,
+  match: PropTypes.shape({
+    isExact: PropTypes.bool,
+    params : PropTypes.object,
+    path   : PropTypes.string,
+    url    : PropTypes.string,
   }).isRequired
 };
 
-const duration = (value) => {
+const duration = (source) => {
+  let value     = source;
   const days    = Math.floor(value / 86400);
   value %= 86400;
   const hours   = Math.floor(value / 3600);
   value %= 3600;
   const minutes = Math.floor(value / 60);
   value %= 60;
-  const seconds = value;
 
-  return (days ? `${days} d ` : '') + (hours ? `${hours}:` : '00:') + (minutes ? `${minutes}:` : '00') + (seconds ? seconds : '00')
+  return (days ? `${days} d ` : '') + (hours ? `${hours}:` : '00:') + (minutes ? `${minutes}:` : '00') + (value || '00');
 };
 
 const Lesson = ({ lesson }) => (
@@ -67,9 +70,9 @@ const Lesson = ({ lesson }) => (
 );
 
 Lesson.propTypes = {
-  lesson: React.PropTypes.shape({
-    uid        : React.PropTypes.string,
-    description: React.PropTypes.string
+  lesson: PropTypes.shape({
+    uid        : PropTypes.string,
+    description: PropTypes.string
   })
 };
 
@@ -78,15 +81,25 @@ Lesson.defaultProps = {
 };
 
 const Files = ({ files }) => {
-  const content = files.map((file) => <File key={file.id} file={file} />);
+  const content = files.map(file => <File key={file.id} file={file} />);
 
   return (
     <Segment>
       Files:
       { content }
     </Segment>
-  )
-}
+  );
+};
+
+Files.propTypes = {
+  files: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+  }))
+};
+
+Files.defaultProps = {
+  files: []
+};
 
 const File = ({ file }) =>
   <Segment>
@@ -96,5 +109,17 @@ const File = ({ file }) =>
     </div>
   </Segment>
 ;
+
+File.propTypes = {
+  file: PropTypes.shape({
+    name: PropTypes.string,
+    language: PropTypes.string,
+    size: PropTypes.number,
+    type: PropTypes.string,
+    mimetype: PropTypes.string,
+    url: PropTypes.string,
+    download_url: PropTypes.string,
+  }).isRequired
+};
 
 export default LessonView;

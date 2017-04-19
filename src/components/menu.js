@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { Sidebar, Menu } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 
@@ -20,13 +22,13 @@ const MenuItems = ({ simple, visible, routes }) => {
 };
 
 MenuItems.propTypes = {
-  simple : React.PropTypes.bool,
-  visible: React.PropTypes.bool,
-  routes : React.PropTypes.arrayOf(React.PropTypes.shape({
-    key      : React.PropTypes.string,
-    exact    : React.PropTypes.bool,
-    path     : React.PropTypes.string,
-    component: React.PropTypes.object
+  simple : PropTypes.bool,
+  visible: PropTypes.bool,
+  routes : PropTypes.arrayOf(PropTypes.shape({
+    key      : PropTypes.string,
+    exact    : PropTypes.bool,
+    path     : PropTypes.string,
+    component: PropTypes.object
   })).isRequired
 };
 
