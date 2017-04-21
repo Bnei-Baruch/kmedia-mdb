@@ -3,6 +3,7 @@ import { Header } from 'semantic-ui-react';
 import Lessons from './lessons';
 import Lesson from './lesson';
 import Sources from './sources';
+import Topics from './topics';
 
 const MenuRoutes = [
   { key: 'daily_lessons', name: 'Daily Lessons', to: '/lessons', },
@@ -26,4 +27,5 @@ export const AppRoutes = [
   { key: 'tv_video_programs', exact: true, path: '/tv_video_programs', component: NotImplemented },
   { key: 'lesson', exact: true, path: '/lessons/:id', component: Lesson },
   { key: 'sources', exact: true, path: '/sources', component: Sources },
+  { key: 'topics', exact: true, path: '/topics', component: Topics },
 ];

@@ -5,12 +5,12 @@ import { Grid } from 'semantic-ui-react';
 
 import MenuRoutes from './router';
 
-import { FetchSources } from './fetch';
+import { FetchTopics } from './fetch';
 import MenuItems from './menu';
 
 import TreeNode from './treeNode';
 
-class Sources extends React.Component {
+class Topics extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,7 +20,7 @@ class Sources extends React.Component {
   }
 
   componentDidMount() {
-    FetchSources(null, {
+    FetchTopics(null, {
       language: this.state.language,
     }, this.handleDataFetch);
   }
@@ -55,4 +55,4 @@ class Sources extends React.Component {
 
 // Topics.propTypes = {};
 
-export default Sources;
+export default Topics;

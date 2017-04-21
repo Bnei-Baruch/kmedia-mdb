@@ -34,4 +34,10 @@ export const FetchSources = (id, params, callback) => {
   const url = `sources?${[Object.entries(params).map(pair => `${pair[0]}=${pair[1]}`), id ? `id=${id}` : null].join('&')}`;
   return Fetcher(url, callback);
 };
+
+export const FetchTopics = (id, params, callback) => {
+  const url = `tags?${[Object.entries(params).map(pair => `${pair[0]}=${pair[1]}`), id ? `id=${id}` : null].join('&')}`;
+  return Fetcher(url, callback);
+};
+
 // export default Fetcher;
