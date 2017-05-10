@@ -4,26 +4,33 @@
   "private": true,
   "devDependencies": {
     "babel-eslint": "^6.1.2",
+    "enzyme": "^2.8.2",
+    "eslint": "^3.19.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jest": "^20.0.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
     "node-sass": "^4.5.0",
     "npm-run-all": "^4.0.2",
     "react-scripts": "0.9.5",
-    "react-test-renderer": "^15.5.4"
+    "react-test-renderer": "^15.5.4",
+    "teaspoon": "^6.5.0"
   },
   "dependencies": {
     "axios": "^0.15.3",
     "babel-polyfill": "^6.23.0",
     "classnames": "^2.2.5",
-    "eslint": "^3.18.0",
+    "history": "^4.6.1",
     "prop-types": "^15.5.8",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-redux": "^5.0.3",
-    "react-router-dom": "next",
+    "react-redux": "^5.0.4",
+    "react-redux-loading-bar": "^2.9.0",
+    "react-router-dom": "^4.1.1",
+    "react-router-redux": "^5.0.0-alpha.6",
     "redux": "^3.6.0",
+    "redux-thunk": "^2.2.0",
     "semantic-ui-css": "^2.2.9",
     "semantic-ui-react": "^0.68.0"
   },
@@ -38,13 +45,19 @@
     "deploy": "npm run build && scp -r build/* archive@app.archive.bbdomain.org:/sites/archive-frontend "
   },
   "eslintConfig": {
-    "extends": "airbnb",
+    "extends": [
+      "airbnb",
+      "plugin:jest/recommended"
+    ],
     "parser": "babel-eslint",
     "env": {
-      "browser": true
+      "browser": true,
+      "es6": true,
+      "jest": true
     },
     "plugins": [
       "react",
+      "jest",
       "import"
     ],
     "settings": {
@@ -87,7 +100,8 @@
       ]
     },
     "globals": {
-      "socket": true
+      "socket": true,
+      "enzyme": true
     }
   }
 }
