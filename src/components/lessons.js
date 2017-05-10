@@ -1,7 +1,7 @@
 import React  from 'react';
 import PropTypes from 'prop-types';
 
-import { Segment, Menu as Rmenu, Header, Grid, Container } from 'semantic-ui-react';
+import { Segment, Menu as RMenu, Header, Grid, List, ListItem } from 'semantic-ui-react';
 import { Link, NavLink } from 'react-router-dom';
 
 import MenuRoutes from './router';
@@ -38,7 +38,7 @@ class LessonsIndex extends React.Component {
     }
 
     return (isNaN(page) || page <= 0) ? 1 : page;
-  }
+  };
 
   handleDataFetch = (params, { total, collections }) => {
     this.setState({
@@ -47,7 +47,7 @@ class LessonsIndex extends React.Component {
       page_no: params.page_no,
       loading: false
     });
-  }
+  };
 
   handleFilterClick = ({ name }) => this.setState({ activeFilter: name });
 
@@ -64,7 +64,7 @@ class LessonsIndex extends React.Component {
         page_size   : this.state.page_size
       }, this.handleDataFetch)
     );
-  }
+  };
 
   render() {
     const state = this.state;
@@ -77,7 +77,7 @@ class LessonsIndex extends React.Component {
           </Grid.Column>
           <Grid.Column>
             <Grid padded>
-              <Grid.Row stretched>
+              <Grid.Row>
                 <Grid.Column width={16}>
                   <Header as="h3">
                     Results {((state.page_no - 1) * state.page_size) + 1} - {(state.page_no * state.page_size) + 1}
@@ -128,17 +128,17 @@ ActiveFilter.defaultProps = {
 const DateFilter = () => <Segment basic attached="bottom" className="tab active">First</Segment>;
 
 const FilterMenu = props =>
-  <Rmenu secondary pointing color="violet" className="index-filters">
-    <Rmenu.Header className="item">Filter by:</Rmenu.Header>
+  <RMenu secondary pointing color="violet" className="index-filters">
+    <RMenu.Header className="item">Filter by:</RMenu.Header>
     <FilterMenuDate name="date" title="Date" {...props} />
     <FilterMenuSources name="sources" title="Sources" {...props} />
     <FilterMenuTopics name="topic" title="Topics" {...props} />
-  </Rmenu>;
+  </RMenu>;
 
 const FilterMenuDate = ({ name, title, active, handler }) => {
   const fullName = `${name}-filter`;
   return (
-    <Rmenu.Item name={fullName} active={active === fullName} onClick={() => handler({ name: fullName })}>{title}</Rmenu.Item>
+    <RMenu.Item name={fullName} active={active === fullName} onClick={() => handler({ name: fullName })}>{title}</RMenu.Item>
   );
 };
 
@@ -152,7 +152,7 @@ FilterMenuDate.propTypes = {
 const FilterMenuSources = ({ name, title, active, handler }) => {
   const fullName = `${name}-filter`;
   return (
-    <Rmenu.Item name={fullName} active={active === fullName} onClick={() => handler({ name: fullName })}>{title}</Rmenu.Item>
+    <RMenu.Item name={fullName} active={active === fullName} onClick={() => handler({ name: fullName })}>{title}</RMenu.Item>
   );
 };
 
@@ -166,7 +166,7 @@ FilterMenuSources.propTypes = {
 const FilterMenuTopics = ({ name, title, active, handler }) => {
   const fullName = `${name}-filter`;
   return (
-    <Rmenu.Item name={fullName} active={active === fullName} onClick={() => handler({ name: fullName })}>{title}</Rmenu.Item>
+    <RMenu.Item name={fullName} active={active === fullName} onClick={() => handler({ name: fullName })}>{title}</RMenu.Item>
   );
 };
 
@@ -186,24 +186,23 @@ const Lessons = (props) => {
 
   const lessons = props.lessons.map((lesson) => {
     const units = lesson.content_units.map(unit => (
-      <Container as="div" key={`u-${unit.id}`}><Link to={`/lessons/${unit.id}`}>{unit.name}<br />{unit.description}
-      </Link></Container>
+      <Link to={`/lessons/${unit.id}`} key={`u-${unit.id}`}>{unit.name}<br />{unit.description}</Link>
     ));
 
     return (
-      <Grid.Row key={`l-${lesson.id}`} stretched verticalAlign="top">
-        <Grid.Column width={2}><a><strong>{lesson.film_date}</strong></a></Grid.Column>
+      <Grid.Row key={`l-${lesson.id}`}>
+        <Grid.Column width={2}><strong>{lesson.film_date}</strong></Grid.Column>
         <Grid.Column width={14}>
-          <Grid.Column>
-            <a><strong>{lesson.content_type}</strong></a>
+          <List divided relaxed="very">
+            <ListItem><Link to={`/lessons/`}><strong>{lesson.content_type}</strong></Link></ListItem>
             {units}
-          </Grid.Column>
+          </List>
         </Grid.Column>
       </Grid.Row>
     );
   });
 
-  return (<Segment><Grid columns={2} divided="vertically">{lessons}</Grid></Segment>);
+  return (<Grid columns={2} celled="internally">{lessons}</Grid>);
 };
 
 Lessons.propTypes = {
@@ -232,7 +231,7 @@ const Pagination = ({ totalPages }) => {
 
   const total = totalPages > 10 ? 10 : totalPages;
   const menu  = [...new Array(total).keys()].map(id =>
-    <Rmenu.Item
+    <RMenu.Item
       as={NavLink}
       activeClassName="active violet"
       key={`page-${id + 1}`}
@@ -240,7 +239,7 @@ const Pagination = ({ totalPages }) => {
         pathname: '/lessons',
         search  : `?page=${id + 1}`
       }}
-    >&nbsp;{id + 1}</Rmenu.Item>
+    >&nbsp;{id + 1}</RMenu.Item>
   );
 
   return (
