@@ -1,14 +1,16 @@
-/* eslint-disable react/forbid-prop-types */
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
+import { Route, Switch } from 'react-router-dom';
+import LoadingBar from 'react-redux-loading-bar';
 
 import { Sidebar } from 'semantic-ui-react';
 
 import TopFixedMenu from './topFixedMenu';
 import MenuItems from './menu';
-import MenuRoutes from './router';
+import MenuRoutes, { AppRoutes } from './router';
+import Footer from './footer';
 
-export default class SidebarLeftPush extends React.Component {
+export default class Layout extends React.Component {
   constructor(props) {
     super(props);
     this.state = { visible: false };
@@ -18,19 +20,24 @@ export default class SidebarLeftPush extends React.Component {
 
   render() {
     return (
-      <Sidebar.Pushable>
-        <MenuItems active="daily_lessons" routes={MenuRoutes} visible={this.state.visible} />
-        <Sidebar.Pusher>
-          <TopFixedMenu title="Daily Lessons" toggleVisibility={this.toggleVisibility} />
-          <div className="wrapper">
-            {this.props.children}
-          </div>
-        </Sidebar.Pusher>
-      </Sidebar.Pushable>
+      <div>
+        <Sidebar.Pushable>
+          <MenuItems active="daily_lessons" routes={MenuRoutes} visible={this.state.visible} />
+          <Sidebar.Pusher>
+            <TopFixedMenu title="Daily Lessons" toggleVisibility={this.toggleVisibility} />
+            <div className="wrapper">
+              <Switch>
+                { AppRoutes.map(route => <Route {...route} />) }
+                <Route render={() => <h1>Page not found</h1>} />
+              </Switch>
+            </div>
+          </Sidebar.Pusher>
+        </Sidebar.Pushable>
+        <LoadingBar />
+        <Footer />
+      </div>
     );
   }
 }
 
-SidebarLeftPush.propTypes = {
-  children: PropTypes.array.isRequired
-};
+Layout.propTypes = {};

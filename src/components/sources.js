@@ -5,7 +5,6 @@ import { Grid } from 'semantic-ui-react';
 
 import MenuRoutes from './router';
 
-import { FetchSources } from './fetch';
 import MenuItems from './menu';
 
 import TreeNode from './treeNode';
@@ -19,17 +18,17 @@ class Sources extends React.Component {
     };
   }
 
-  componentDidMount() {
-    FetchSources(null, {
-      language: this.state.language,
-    }, this.handleDataFetch);
-  }
-
-  handleDataFetch = (collections) => {
-    this.setState({
-      tree: collections,
-    });
-  }
+  // componentDidMount() {
+  //   FetchSources(null, {
+  //     language: this.state.language,
+  //   }, this.handleDataFetch);
+  // }
+  //
+  // handleDataFetch = (collections) => {
+  //   this.setState({
+  //     tree: collections,
+  //   });
+  // };
 
   render() {
     return (
