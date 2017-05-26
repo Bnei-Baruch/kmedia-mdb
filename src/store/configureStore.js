@@ -1,4 +1,4 @@
-import { routerReducer, routerMiddleware, push } from 'react-router-redux';
+import { routerReducer, routerMiddleware /* , push */ } from 'react-router-redux';
 import { loadingBarMiddleware } from 'react-redux-loading-bar';
 import thunk from 'redux-thunk';
 import { createStore, combineReducers, applyMiddleware } from 'redux';

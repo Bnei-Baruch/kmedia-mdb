@@ -8,7 +8,7 @@ class LessonApi {
   static makeUrl = params => `${API_BACKEND}/collections?${Object.entries(params).map(pair => `${pair[0]}=${pair[1]}`).join('&')}`;
 
   static getAllLessons(args) {
-    const params = Object.assign(args, { content_type: LESSONS });
+    const params = Object.assign(args, { content_type: LESSONS, order_by: 'id' });
     return zlFetch(this.makeUrl(params));
   }
 }

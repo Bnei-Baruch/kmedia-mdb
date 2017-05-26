@@ -3,7 +3,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
 
-import { Sidebar } from 'semantic-ui-react';
+import { Sidebar, Grid, } from 'semantic-ui-react';
 
 import TopFixedMenu from './topFixedMenu';
 import MenuItems from './menu';
@@ -20,22 +20,33 @@ export default class Layout extends React.Component {
 
   render() {
     return (
-      <div>
-        <Sidebar.Pushable>
-          <MenuItems active="daily_lessons" routes={MenuRoutes} visible={this.state.visible} />
-          <Sidebar.Pusher>
-            <TopFixedMenu title="Daily Lessons" toggleVisibility={this.toggleVisibility} />
-            <div className="wrapper">
-              <Switch>
-                { AppRoutes.map(route => <Route {...route} />) }
-                <Route render={() => <h1>Page not found</h1>} />
-              </Switch>
-            </div>
-          </Sidebar.Pusher>
-        </Sidebar.Pushable>
-        <LoadingBar />
-        <Footer />
-      </div>
+      <Sidebar.Pushable>
+        <MenuItems active="daily_lessons" routes={MenuRoutes} visible={this.state.visible} />
+        <Sidebar.Pusher>
+          <TopFixedMenu title="Daily Lessons" toggleVisibility={this.toggleVisibility} />
+          <div className="wrapper">
+            <Grid columns="equal" className="main-content container">
+              <Grid.Row>
+                <Grid.Column width={3} only="computer" className="main-menu">
+                  <MenuItems simple routes={MenuRoutes} />
+                </Grid.Column>
+                <Grid.Column>
+                  <Grid padded>
+                    <Grid.Row>
+                      <Switch>
+                        { AppRoutes.map(route => <Route {...route} />) }
+                        <Route render={() => <h1>Page not found</h1>} />
+                      </Switch>
+                    </Grid.Row>
+                  </Grid>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+            <LoadingBar />
+            <Footer />
+          </div>
+        </Sidebar.Pusher>
+      </Sidebar.Pushable>
     );
   }
 }

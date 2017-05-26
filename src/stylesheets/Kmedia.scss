@@ -1,31 +1,39 @@
 $text-colors: blue, green, orange, pink, purple, red, teal, yellow, black, grey, white;
-@each $tc in $text-colors{
-  .text.#{$tc}{
+@each $tc in $text-colors {
+  .text.#{$tc} {
     color: #{$tc};
   }
 }
+
 .wrapper {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
 }
+
 .main-content {
   flex: 1 0 auto;
   .vertical.menu {
-    border-radius: 0!important;
-    .item{
-      border-radius: 0!important;
+    border-radius: 0 !important;
+    .item {
+      border-radius: 0 !important;
     }
   }
 }
+
 .wrapper > .footer {
   flex: 0 0 auto;
 }
-.main-title{
+
+.main-title {
   line-height: 14px;
 }
-.main-menu{
-  display:flex!important;
-  align-items:stretch;
+
+.main-menu {
+  display: flex !important;
+  align-items: stretch;
 }
-.ui.fixed.menu+.wrapper{padding-top:42px}
+
+.ui.fixed.menu + .wrapper {
+  padding-top: 42px
+}

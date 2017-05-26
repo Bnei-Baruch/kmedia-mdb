@@ -29,3 +29,12 @@ export const AppRoutes = [
   { key: 'sources', exact: true, path: '/sources', component: Sources },
   { key: 'topics', exact: true, path: '/topics', component: Topics },
 ];
+
+export const getPageNo = (search) => {
+  let page = 0;
+  if (search) {
+    page = parseInt(search.match(/page=(\d+)/)[1], 10);
+  }
+
+  return (isNaN(page) || page <= 0) ? 1 : page;
+};
