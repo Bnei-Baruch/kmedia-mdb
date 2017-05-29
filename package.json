@@ -37,7 +37,6 @@
     "redux": "^3.6.0",
     "redux-devtools-extension": "^2.13.2",
     "redux-immutable-state-invariant": "^2.0.0",
-    "redux-paginator": "^1.0.6",
     "redux-thunk": "^2.2.0",
     "semantic-ui-css": "^2.2.9",
     "semantic-ui-react": "^0.68.0",
@@ -90,6 +89,7 @@
       "import/prefer-default-export": "off",
       "react/jsx-filename-extension": "off",
       "no-multi-spaces": "off",
+      "no-plusplus": "off",
       "import/no-named-as-default-member": "off",
       "no-unused-vars": [
         1,

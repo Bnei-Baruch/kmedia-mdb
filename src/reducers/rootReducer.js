@@ -5,7 +5,7 @@ import settings from './settingsReducer';
 
 const rootReducer = combineReducers({
   settings,
-  lessons
+  lessons,
 });
 
 export default rootReducer;
