@@ -78,8 +78,8 @@ class DateFilter extends Component {
     from: null,
     to: null,
     datePreset: null,
-    fromInputValue: null,
-    toInputValue: null
+    fromInputValue: '',
+    toInputValue: ''
   };
 
   componentDidMount() {
@@ -169,6 +169,7 @@ class DateFilter extends Component {
 
   render() {
     const { from, to, fromInputValue, toInputValue } = this.state;
+    const { onCancel, onApply } = this.props;
 
     return (
       <Segment basic attached="bottom" className="tab active">
@@ -212,8 +213,8 @@ class DateFilter extends Component {
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column textAlign="right">
-                    <Button type="button">Cancel</Button>
-                    <Button type="button" primary disabled={!this.canApply()}>Apply</Button>
+                    <Button type="button" onClick={onCancel}>Cancel</Button>
+                    <Button type="button" primary disabled={!this.canApply()} onClick={onApply}>Apply</Button>
                   </Grid.Column>
                 </Grid.Row>
               </Grid>

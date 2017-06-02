@@ -9,11 +9,13 @@ export default class Filter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeFilter: 'date-filter'
+      activeFilter: null
     };
   }
 
   handleFilterClick = ({ name }) => this.setState({ activeFilter: name });
+
+  handleFilterHide = () => this.setState({ activeFilter: null });
 
   render() {
     const activeFilter = this.state.activeFilter;
@@ -21,18 +23,18 @@ export default class Filter extends React.Component {
     return (
       <div>
         <FilterMenu active={activeFilter} handler={this.handleFilterClick} />
-        <ActiveFilter filter={activeFilter} />
+        <ActiveFilter filter={activeFilter} onCancel={() => this.handleFilterHide()} />
       </div>
     );
   }
 }
 
-const ActiveFilter = ({ filter }) => {
+const ActiveFilter = ({ filter, onCancel }) => {
   switch (filter) {
   case 'date-filter':
-    return <DateFilter />;
+    return <DateFilter onCancel={onCancel} />;
   case 'sources-filter':
-    return <SourcesFilter />
+    return <SourcesFilter onCancel={onCancel} />;
   case 'topic-filter':
     return <Segment basic attached="bottom" className="tab active">Third</Segment>;
   default:
@@ -41,7 +43,8 @@ const ActiveFilter = ({ filter }) => {
 };
 
 ActiveFilter.propTypes = {
-  filter: PropTypes.string.isRequired
+  filter: PropTypes.string.isRequired,
+  onCancel: PropTypes.func
 };
 
 
