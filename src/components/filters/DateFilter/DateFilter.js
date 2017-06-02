@@ -62,6 +62,16 @@ const presetToRange = {
   })
 };
 
+const isValidDateRange = (fromValue, toValue) => {
+  const fromMoment = moment(fromValue, format, true);
+  const toMoment = moment(toValue, format, true);
+
+  return fromMoment.isValid() &&
+    toMoment.isValid() &&
+    fromMoment.isSameOrBefore(toMoment) &&
+    toMoment.isSameOrBefore(now());
+};
+
 class DateFilter extends Component {
 
   static propTypes = {
@@ -95,8 +105,11 @@ class DateFilter extends Component {
       range = (presetToRange[datePreset] ? presetToRange[datePreset] : presetToRange[TODAY])();
     }
 
+    console.log(from);
+    console.log(to);
+    console.log(range);
     // try to show entire range in calendar
-    if (!from && !to && range && range.from) {
+    if (datePreset !== CUSTOM_RANGE || (datePreset === CUSTOM_RANGE && range && range.from)) {
       this.datePicker.showMonth(range.from);
     }
 
@@ -128,17 +141,19 @@ class DateFilter extends Component {
     const momentValue = moment(value, format, true);
 
     const isValid = momentValue.isValid();
-
-    // TODO (yaniv): test if toInputValue is valid date and set it as to
-    // TODO (yaniv): do not let user set date after today
-
-    this.setRange(
-      CUSTOM_RANGE,
-      isValid ? momentValue.toDate() : null,
-      this.state.to,
-      value,
-      this.state.toInputValue
-    );
+    if (isValid && isValidDateRange(value, this.state.toInputValue)) {
+      this.setRange(
+        CUSTOM_RANGE,
+        momentValue.toDate(),
+        moment(this.state.toInputValue, format, true).toDate(),
+        value,
+        this.state.toInputValue
+      );
+    } else {
+      this.setState({
+        fromInputValue: value
+      });
+    }
   };
 
   handleToInputChange = (event) => {
@@ -146,28 +161,22 @@ class DateFilter extends Component {
     const momentValue = moment(value, format, true);
 
     const isValid = momentValue.isValid();
-
-    // TODO (yaniv): test if fromInputValue is valid date and set it as from
-    // TODO (yaniv): do not let user set date after today
-
-    this.setRange(
-      CUSTOM_RANGE,
-      this.state.from,
-      isValid ? momentValue.toDate() : null,
-      this.state.fromInputValue,
-      value
-    );
+    if (isValid && isValidDateRange(this.state.fromInputValue, value)) {
+      this.setRange(
+        CUSTOM_RANGE,
+        moment(this.state.fromInputValue, format, true).toDate(),
+        momentValue.toDate(),
+        this.state.fromInputValue,
+        value
+      );
+    } else {
+      this.setState({
+        toInputValue: value
+      });
+    }
   };
 
-  canApply = () => {
-    const fromMoment = moment(this.state.fromInputValue, format, true);
-    const toMoment = moment(this.state.toInputValue, format, true);
-
-    return fromMoment.isValid() &&
-      toMoment.isValid() &&
-      fromMoment.isSameOrBefore(toMoment) &&
-      toMoment.isSameOrBefore(now());
-  };
+  canApply = () => isValidDateRange(this.state.fromInputValue, this.state.toInputValue);
 
   render() {
     const { from, to, fromInputValue, toInputValue } = this.state;
