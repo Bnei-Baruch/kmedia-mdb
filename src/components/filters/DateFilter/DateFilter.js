@@ -130,6 +130,7 @@ class DateFilter extends Component {
     const isValid = momentValue.isValid();
 
     // TODO (yaniv): test if toInputValue is valid date and set it as to
+    // TODO (yaniv): do not let user set date after today
 
     this.setRange(
       CUSTOM_RANGE,
@@ -147,6 +148,7 @@ class DateFilter extends Component {
     const isValid = momentValue.isValid();
 
     // TODO (yaniv): test if fromInputValue is valid date and set it as from
+    // TODO (yaniv): do not let user set date after today
 
     this.setRange(
       CUSTOM_RANGE,
