@@ -3,9 +3,9 @@ import React from 'react';
 
 import { Grid } from 'semantic-ui-react';
 
-import MenuRoutes from './router';
+import MenuRoutes from './Layout/router';
 
-import MenuItems from './menu';
+import MenuItems from './Layout/Menu';
 
 import TreeNode from './treeNode';
 

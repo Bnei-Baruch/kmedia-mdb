@@ -5,7 +5,7 @@
 // will only see deployed updates on the "N+1" visit to a page, since previously
 // cached resources are updated in the background.
 
-// To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
+// To learn more about the benefits of this model, read https://goo.g l/KwvDNy.
 // This link also includes instructions on opting out of this behavior.
 
 export default function register() {

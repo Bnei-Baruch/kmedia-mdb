@@ -1,9 +1,9 @@
 import React from 'react';
 import { Header } from 'semantic-ui-react';
-import Lessons from './lessons';
-import Lesson from './lesson';
-import Sources from './sources';
-import Topics from './topics';
+import Lessons from '../lessons';
+import Lesson from '../lesson';
+import Sources from '../sources';
+import Topics from '../topics';
 
 const MenuRoutes = [
   { key: 'daily_lessons', name: 'Daily Lessons', to: '/lessons', },

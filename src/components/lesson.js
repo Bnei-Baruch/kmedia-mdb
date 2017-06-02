@@ -1,8 +1,8 @@
-// import React  from 'react';
+import React  from 'react';
 // import PropTypes from 'prop-types';
 
 const Lesson = (props) => {
-  return ('Lesson');
+  return null;
 };
 
 export default Lesson;
