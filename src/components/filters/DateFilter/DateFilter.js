@@ -129,6 +129,8 @@ class DateFilter extends Component {
 
     const isValid = momentValue.isValid();
 
+    // TODO (yaniv): test if toInputValue is valid date and set it as to
+
     this.setRange(
       CUSTOM_RANGE,
       isValid ? momentValue.toDate() : null,
@@ -143,6 +145,8 @@ class DateFilter extends Component {
     const momentValue = moment(value, format, true);
 
     const isValid = momentValue.isValid();
+
+    // TODO (yaniv): test if fromInputValue is valid date and set it as from
 
     this.setRange(
       CUSTOM_RANGE,
