@@ -1,26 +1,33 @@
-import React  from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { Header, Grid, List, ListItem } from 'semantic-ui-react';
+import { Grid, Header, List, ListItem } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import { Pagination } from './pagination';
 import Filter from './filters/filters';
 import * as lessonActions from '../actions/lessonActions';
+import { actions } from '../redux/modules/lessons';
+import { selectors as settingsSelectors } from '../redux/modules/settings';
 
 class LessonsIndex extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      pageNo: 1,
-    };
-  }
 
   componentDidMount() {
-    const pageNo = this.getPageNo(this.props.location.search);
-    this.props.actions.onSetPage(pageNo);
+    const { language, pageSize, location } = this.props;
+    this.askForData(location.search, language, pageSize);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // if relevant props changed then askForData
+    const { language, pageSize, location } = nextProps;
+    const props                            = this.props;
+
+    if (language !== props.language || pageSize !== props.pageSize || location.search !== props.location.search) {
+      this.askForData(location.search, language, pageSize);
+    }
+    // TODO: what to do if total was changed?
   }
 
   getPageNo = (search) => {
@@ -32,11 +39,14 @@ class LessonsIndex extends React.Component {
     return (isNaN(page) || page <= 0) ? 1 : page;
   };
 
+  askForData(search, language, pageSize) {
+    const pageNo = this.getPageNo(search);
+    this.props.fetchList(pageNo, language, pageSize);
+  }
+
   render() {
-    const { total, collections } = this.props.lessons;
-    const { pageSize }           = this.props.settings;
-    const { pageNo }             = this.state;
-    const onSetPage              = this.props.actions.onSetPage;
+    const { total, lessons, pageSize, location } = this.props;
+    const pageNo                                 = this.getPageNo(location.search);
 
     return (
       <Grid.Column width={16}>
@@ -44,61 +54,53 @@ class LessonsIndex extends React.Component {
           Results {((pageNo - 1) * pageSize) + 1} - {(pageNo * pageSize) + 1}&nbsp;
           of {total}</Header>
         <Filter />
-        <Pagination currentPage={pageNo} totalItems={total} pageSize={pageSize} onSetPage={onSetPage} />
-        <Lessons lessons={collections} />
+        <Pagination currentPage={pageNo} totalItems={total} pageSize={pageSize} />
+        <Lessons lessons={lessons} />
       </Grid.Column>
-
     );
   }
 }
 
-LessonsIndex.defaultProps = {
-  lessons: { total: 0, containers: [] }
-};
-
 LessonsIndex.propTypes = {
-  lessons : PropTypes.shape({
-    total      : PropTypes.number,
-    collections: PropTypes.arrayOf(
-      PropTypes.shape({
-        id           : PropTypes.string.isRequired,
-        film_date    : PropTypes.string.isRequired,
-        content_type : PropTypes.string.isRequired,
-        content_units: PropTypes.arrayOf(
-          PropTypes.shape({
-            id         : PropTypes.string.isRequired,
-            name       : PropTypes.string.isRequired,
-            description: PropTypes.string,
-          })
-        ).isRequired,
-      })
-    )
-  }),
-  location: PropTypes.shape({
+  total    : PropTypes.number,
+  lessons  : PropTypes.arrayOf(
+    PropTypes.shape({
+      id           : PropTypes.string.isRequired,
+      film_date    : PropTypes.string.isRequired,
+      content_type : PropTypes.string.isRequired,
+      content_units: PropTypes.arrayOf(
+        PropTypes.shape({
+          id         : PropTypes.string.isRequired,
+          name       : PropTypes.string.isRequired,
+          description: PropTypes.string,
+        })
+      ).isRequired,
+    })
+  ),
+  location : PropTypes.shape({
     search: PropTypes.string.isRequired
   }).isRequired,
-  actions : PropTypes.shape({
-    loadLessons: PropTypes.func.isRequired,
-    onSetPage  : PropTypes.func.isRequired
-  }).isRequired,
-  settings: PropTypes.shape({
-    language: PropTypes.string.isRequired,
-    pageSize: PropTypes.number.isRequired
-  }).isRequired
+  fetchList: PropTypes.func.isRequired,
+  language : PropTypes.string.isRequired,
+  pageSize : PropTypes.number.isRequired,
+};
+
+LessonsIndex.defaultProps = {
+  total  : 0,
+  lessons: [],
 };
 
 function mapStateToProps(state /* , ownProps */) {
   return {
-    lessons : state.root.lessons.lessons,
-    pageNo  : state.root.lessons.pageNo,
-    settings: state.root.settings,
+    total   : state.lessons.total,
+    lessons : state.lessons.lessons,
+    language: settingsSelectors.getLanguage(state.settings),
+    pageSize: settingsSelectors.getPageSize(state.settings),
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(lessonActions, dispatch)
-  };
+  return bindActionCreators(actions, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LessonsIndex);

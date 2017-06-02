@@ -1,14 +1,13 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
 
-import { Sidebar, Grid, } from 'semantic-ui-react';
+import { Grid, Sidebar } from 'semantic-ui-react';
 
-import TopFixedMenu from './topFixedMenu';
-import MenuItems from './menu';
+import TopFixedMenu from './TopFixedMenu';
+import MenuItems from './Menu';
 import MenuRoutes, { AppRoutes } from './router';
-import Footer from './footer';
+import Footer from './Footer';
 
 export default class Layout extends React.Component {
   constructor(props) {

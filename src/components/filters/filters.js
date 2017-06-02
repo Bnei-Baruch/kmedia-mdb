@@ -30,7 +30,8 @@ export default class Filter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeFilter: 'date-filter'
+      activeFilter: 'date-filter',
+      sourcesSelection: [],
     };
   }
 
@@ -53,7 +54,7 @@ const ActiveFilter = ({ filter }) => {
   case 'date-filter':
     return <DateFilter />;
   case 'sources-filter':
-    return <SourcesFilterWithData />
+    return <SourcesFilterWithData selection={this.state.sourcesSelection} />
   case 'topic-filter':
     return <Segment basic attached="bottom" className="tab active">Third</Segment>;
   default:

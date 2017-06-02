@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import { Sidebar, Menu } from 'semantic-ui-react';
+import { Menu, Sidebar } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 
 const MenuItems = ({ simple, visible, routes }) => {
@@ -22,18 +21,18 @@ const MenuItems = ({ simple, visible, routes }) => {
 };
 
 MenuItems.propTypes = {
-  simple : PropTypes.bool,
+  simple: PropTypes.bool,
   visible: PropTypes.bool,
-  routes : PropTypes.arrayOf(PropTypes.shape({
-    key      : PropTypes.string,
-    exact    : PropTypes.bool,
-    path     : PropTypes.string,
+  routes: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string,
+    exact: PropTypes.bool,
+    path: PropTypes.string,
     component: PropTypes.object
   })).isRequired
 };
 
 MenuItems.defaultProps = {
-  simple : false,
+  simple: false,
   visible: false
 };
 
