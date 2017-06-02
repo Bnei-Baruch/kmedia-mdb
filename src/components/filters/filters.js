@@ -54,7 +54,7 @@ const ActiveFilter = ({ filter }) => {
   case 'date-filter':
     return <DateFilter />;
   case 'sources-filter':
-    return <SourcesFilterWithData selection={this.state.sourcesSelection} />
+    return <SourcesFilterWithData />
   case 'topic-filter':
     return <Segment basic attached="bottom" className="tab active">Third</Segment>;
   default:

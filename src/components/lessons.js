@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 
 import { Pagination } from './pagination';
 import Filter from './filters/filters';
-import * as lessonActions from '../actions/lessonActions';
 import { actions } from '../redux/modules/lessons';
 import { selectors as settingsSelectors } from '../redux/modules/settings';
 
