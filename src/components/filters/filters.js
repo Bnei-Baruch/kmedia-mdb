@@ -47,8 +47,7 @@ const DateFilter = () =>
 
 const FilterMenu = props =>
   (
-    <RMenu secondary pointing color="violet" className="index-filters">
-      <RMenu.Header className="item">Filter by:</RMenu.Header>
+    <RMenu secondary pointing color="blue" className="index-filters" size="large">
       <FilterMenuDate name="date" title="Date" {...props} />
       <FilterMenuSources name="sources" title="Sources" {...props} />
       <FilterMenuTopics name="topic" title="Topics" {...props} />

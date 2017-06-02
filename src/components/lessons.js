@@ -7,7 +7,7 @@ import { Header, Grid, List, ListItem } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import { Pagination } from './pagination';
-import Filter from './filters';
+import Filter from './filters/filters';
 import * as lessonActions from '../actions/lessonActions';
 
 class LessonsIndex extends React.Component {
