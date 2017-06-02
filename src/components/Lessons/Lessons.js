@@ -6,10 +6,10 @@ import { bindActionCreators } from 'redux';
 import { Grid, Header, List, ListItem } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
-import { Pagination } from './pagination';
-import Filter from './filters';
-import { actions } from '../redux/modules/lessons';
-import { selectors as settingsSelectors } from '../redux/modules/settings';
+import { Pagination } from '../pagination';
+import Filter from '../filters';
+import { selectors as settingsSelectors } from '../../redux/modules/settings';
+import { actions, selectors as lessonsSelectors } from '../../redux/modules/lessons';
 
 class LessonsIndex extends React.Component {
 
@@ -92,7 +92,7 @@ LessonsIndex.defaultProps = {
 function mapStateToProps(state /* , ownProps */) {
   return {
     total   : state.lessons.total,
-    lessons : state.lessons.lessons,
+    lessons : lessonsSelectors.getLessons(state.lessons),
     language: settingsSelectors.getLanguage(state.settings),
     pageSize: settingsSelectors.getPageSize(state.settings),
   };

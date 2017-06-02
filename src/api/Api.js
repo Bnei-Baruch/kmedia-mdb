@@ -16,7 +16,7 @@ class LessonApi {
     return Requests.get(`collections?${Requests.limit(pageNo, pageSize)}&${Requests.makeParams(params)}`);
   };
 
-  static get = (id, language) => Requests.get(`/content_units?id=${id}&language=${language}`);
+  static get = ({ id, language }) => Requests.get(`content_units/${id}?${Requests.makeParams({ language })}`);
 }
 
 export default LessonApi;
