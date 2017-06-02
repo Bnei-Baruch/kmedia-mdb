@@ -105,9 +105,6 @@ class DateFilter extends Component {
       range = (presetToRange[datePreset] ? presetToRange[datePreset] : presetToRange[TODAY])();
     }
 
-    console.log(from);
-    console.log(to);
-    console.log(range);
     // try to show entire range in calendar
     if (datePreset !== CUSTOM_RANGE || (datePreset === CUSTOM_RANGE && range && range.from)) {
       this.datePicker.showMonth(range.from);
