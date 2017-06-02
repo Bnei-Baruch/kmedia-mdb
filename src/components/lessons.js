@@ -15,12 +15,18 @@ class LessonsIndex extends React.Component {
 
   componentDidMount() {
     const { language, pageSize, location } = this.props;
-    const pageNo                           = this.getPageNo(location.search);
-    this.askForData(pageNo, language, pageSize);
+    this.askForData(location.search, language, pageSize);
   }
 
-  componentWillReceiveProps(props, nextProps) {
-    // TODO: if relevant props changed then askForData
+  componentWillReceiveProps(nextProps) {
+    // if relevant props changed then askForData
+    const { language, pageSize, location } = nextProps;
+    const props                            = this.props;
+
+    if (language !== props.language || pageSize !== props.pageSize || location.search !== props.location.search) {
+      this.askForData(location.search, language, pageSize);
+    }
+    // TODO: what to do if total was changed?
   }
 
   getPageNo = (search) => {
@@ -32,7 +38,8 @@ class LessonsIndex extends React.Component {
     return (isNaN(page) || page <= 0) ? 1 : page;
   };
 
-  askForData(pageNo, language, pageSize) {
+  askForData(search, language, pageSize) {
+    const pageNo = this.getPageNo(search);
     this.props.fetchList(pageNo, language, pageSize);
   }
 
@@ -54,37 +61,38 @@ class LessonsIndex extends React.Component {
 }
 
 LessonsIndex.propTypes = {
-  total: PropTypes.number,
-  lessons: PropTypes.arrayOf(
+  total    : PropTypes.number,
+  lessons  : PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      film_date: PropTypes.string.isRequired,
-      content_type: PropTypes.string.isRequired,
+      id           : PropTypes.string.isRequired,
+      film_date    : PropTypes.string.isRequired,
+      content_type : PropTypes.string.isRequired,
       content_units: PropTypes.arrayOf(
         PropTypes.shape({
-          id: PropTypes.string.isRequired,
-          name: PropTypes.string.isRequired,
+          id         : PropTypes.string.isRequired,
+          name       : PropTypes.string.isRequired,
           description: PropTypes.string,
         })
       ).isRequired,
     })
   ),
-  location: PropTypes.shape({
+  location : PropTypes.shape({
     search: PropTypes.string.isRequired
   }).isRequired,
   fetchList: PropTypes.func.isRequired,
-  language: PropTypes.string.isRequired,
-  pageSize: PropTypes.number.isRequired,
+  language : PropTypes.string.isRequired,
+  pageSize : PropTypes.number.isRequired,
 };
 
 LessonsIndex.defaultProps = {
-  total: 0,
+  total  : 0,
   lessons: [],
 };
 
 function mapStateToProps(state /* , ownProps */) {
   return {
-    lessons: state.lessons.lessons,
+    total   : state.lessons.total,
+    lessons : state.lessons.lessons,
     language: settingsSelectors.getLanguage(state.settings),
     pageSize: settingsSelectors.getPageSize(state.settings),
   };
@@ -127,13 +135,13 @@ const Lessons = (props) => {
 Lessons.propTypes = {
   lessons: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      film_date: PropTypes.string.isRequired,
-      content_type: PropTypes.string.isRequired,
+      id           : PropTypes.string.isRequired,
+      film_date    : PropTypes.string.isRequired,
+      content_type : PropTypes.string.isRequired,
       content_units: PropTypes.arrayOf(
         PropTypes.shape({
-          id: PropTypes.string.isRequired,
-          name: PropTypes.string.isRequired,
+          id         : PropTypes.string.isRequired,
+          name       : PropTypes.string.isRequired,
           description: PropTypes.string,
         })
       ).isRequired,
