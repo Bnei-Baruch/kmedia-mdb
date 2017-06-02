@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Segment, Menu as RMenu } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 
-export const Pagination = ({ totalItems = 10, pageSize = 10, currentPage = 1, onSetPage }) => {
+export const Pagination = ({ totalItems = 10, pageSize = 10, currentPage = 1 }) => {
   if (totalItems === 10 || totalItems <= pageSize) {
     return <Segment> Loading... </Segment>;
   }
@@ -13,8 +13,6 @@ export const Pagination = ({ totalItems = 10, pageSize = 10, currentPage = 1, on
   for (let i = 0; i < Math.ceil(totalItems / pageSize); i++) {
     range.push(i);
   }
-
-  const setPage = page => onSetPage(page);
 
   const menu = range.map(id =>
     (
@@ -26,7 +24,6 @@ export const Pagination = ({ totalItems = 10, pageSize = 10, currentPage = 1, on
           pathname: '/lessons',
           search  : `?page=${id + 1}`
         }}
-        onClick={page => setPage(page)}
       >&nbsp;{id + 1}</RMenu.Item>
     )
   );
@@ -47,5 +44,4 @@ Pagination.propTypes = {
   ]),
   pageSize   : PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
-  onSetPage  : PropTypes.func.isRequired
 };
