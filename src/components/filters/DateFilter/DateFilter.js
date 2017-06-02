@@ -1,8 +1,16 @@
 import React, { Component }  from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
+import noop from 'lodash/noop';
 import DayPicker, { DateUtils } from 'react-day-picker';
 import { Segment, Grid, Header, Dropdown, Input, Button } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
+
+// TODO (yaniv -> oleg): need indication for user when clicking on a bad date (after today) or when typing bad dates
+
+const format = 'DD-MM-YYYY';
+
+const now = () => new Date();
 
 const TODAY = 1;
 const YESTERDAY = 2;
@@ -24,7 +32,7 @@ const datePresets = {
 
 const datePresetsOptions = Object.keys(datePresets).map(key => datePresets[key]);
 
-const ranges = {
+const presetToRange = {
   [TODAY]: () => {
     const today = moment().toDate();
     return ({ from: today, to: today });
@@ -56,49 +64,107 @@ const ranges = {
 
 class DateFilter extends Component {
 
+  static propTypes = {
+    onCancel: PropTypes.func,
+    onApply: PropTypes.func
+  };
+
+  static defaultProps = {
+    onCancel: noop,
+    onApply: noop
+  }
+
   state = {
     from: null,
     to: null,
-    datePreset: null
+    datePreset: null,
+    fromInputValue: null,
+    toInputValue: null
   };
 
   componentDidMount() {
     this.setRange(TODAY);
   }
 
-  setRange(datePreset, from, to) {
-    let range = (ranges[datePreset] ? ranges[datePreset] : ranges[TODAY])();
+  setRange(datePreset, from, to, fromInputValue = '', toInputValue = '') {
+    let range = {};
     if (datePreset === CUSTOM_RANGE) {
-      range = {};
-      if (from) {
-        range.from = from;
-      }
-
-      if (to) {
-        range.to = to;
-      }
+      range.from = from || this.state.from;
+      range.to = to || this.state.to;
+    } else {
+      range = (presetToRange[datePreset] ? presetToRange[datePreset] : presetToRange[TODAY])();
     }
 
-    // try to show all range in calendar
-    if (!from && !to) {
+    // try to show entire range in calendar
+    if (!from && !to && range && range.from) {
       this.datePicker.showMonth(range.from);
     }
 
-    this.setState({ ...range, datePreset });
+    const momentFrom = moment(new Date(range.from));
+    const momentTo = moment(new Date(range.to));
+
+    this.setState({
+      ...range,
+      datePreset,
+      fromInputValue: fromInputValue || (momentFrom.isValid() ? momentFrom.format(format) : ''),
+      toInputValue: toInputValue || (momentTo.isValid() ? momentTo.format(format) : '')
+    });
   }
 
   handleDayClick = (day) => {
+    if (moment(day).isAfter(now())) {
+      return;
+    }
+
     const { from, to } = this.state;
     const range = DateUtils.addDayToRange(day, { from, to });
     this.setRange(CUSTOM_RANGE, range.from, range.to);
   };
 
-  handleDatePresetsChange = (event, data) => {
-    this.setRange(data.value);
+  handleDatePresetsChange = (event, data) => this.setRange(data.value);
+
+  handleFromInputChange = (event) => {
+    const value = event.target.value;
+    const momentValue = moment(value, format, true);
+
+    const isValid = momentValue.isValid();
+
+    this.setRange(
+      CUSTOM_RANGE,
+      isValid ? momentValue.toDate() : null,
+      this.state.to,
+      value,
+      this.state.toInputValue
+    );
+  };
+
+  handleToInputChange = (event) => {
+    const value = event.target.value;
+    const momentValue = moment(value, format, true);
+
+    const isValid = momentValue.isValid();
+
+    this.setRange(
+      CUSTOM_RANGE,
+      this.state.from,
+      isValid ? momentValue.toDate() : null,
+      this.state.fromInputValue,
+      value
+    );
+  };
+
+  canApply = () => {
+    const fromMoment = moment(this.state.fromInputValue, format, true);
+    const toMoment = moment(this.state.toInputValue, format, true);
+
+    return fromMoment.isValid() &&
+      toMoment.isValid() &&
+      fromMoment.isSameOrBefore(toMoment) &&
+      toMoment.isSameOrBefore(now());
   };
 
   render() {
-    const { from, to } = this.state;
+    const { from, to, fromInputValue, toInputValue } = this.state;
 
     return (
       <Segment basic attached="bottom" className="tab active">
@@ -109,6 +175,7 @@ class DateFilter extends Component {
                 numberOfMonths={2}
                 selectedDays={{ from, to }}
                 onDayClick={this.handleDayClick}
+                toMonth={now()}
                 // eslint-disable-next-line no-return-assign
                 ref={el => this.datePicker = el}
               />
@@ -123,16 +190,26 @@ class DateFilter extends Component {
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column width={8}>
-                    <Input value={moment(new Date(from)).format('DD-MM-YYYY')} fluid />
+                    <Input
+                      value={fromInputValue}
+                      onChange={this.handleFromInputChange}
+                      fluid
+                      placeholder="DD-MM-YYYY"
+                    />
                   </Grid.Column>
                   <Grid.Column width={8}>
-                    <Input value={moment(new Date(to)).format('DD-MM-YYYY')} fluid />
+                    <Input
+                      value={toInputValue}
+                      onChange={this.handleToInputChange}
+                      fluid
+                      placeholder="DD-MM-YYYY"
+                    />
                   </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column textAlign="right">
                     <Button type="button">Cancel</Button>
-                    <Button type="button" primary>Apply</Button>
+                    <Button type="button" primary disabled={!this.canApply()}>Apply</Button>
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
