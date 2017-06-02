@@ -1,5 +1,7 @@
 import React  from 'react';
 import PropTypes from 'prop-types';
+import DateFilter from './DateFilter/DateFilter';
+import SourcesFilter from './SourcesFilter/SourcesFilter';
 
 import { Segment, Menu as RMenu } from 'semantic-ui-react';
 
@@ -30,7 +32,7 @@ const ActiveFilter = ({ filter }) => {
   case 'date-filter':
     return <DateFilter />;
   case 'sources-filter':
-    return <Segment basic attached="bottom" className="tab active">Second</Segment>;
+    return <SourcesFilter />
   case 'topic-filter':
     return <Segment basic attached="bottom" className="tab active">Third</Segment>;
   default:
@@ -42,8 +44,7 @@ ActiveFilter.propTypes = {
   filter: PropTypes.string.isRequired
 };
 
-const DateFilter = () =>
-  <Segment basic attached="bottom" className="tab active">First</Segment>;
+
 
 const FilterMenu = props =>
   (
