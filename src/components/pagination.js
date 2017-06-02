@@ -4,9 +4,12 @@ import PropTypes from 'prop-types';
 import { Segment, Menu as RMenu } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 
-export const Pagination = ({ totalItems = 10, pageSize = 10, currentPage = 1 }) => {
-  if (totalItems === 10 || totalItems <= pageSize) {
+export const Pagination = ({ totalItems, pageSize, currentPage }) => {
+  if (totalItems <= 0) {
+    // Not enough items to display..
     return <Segment> Loading... </Segment>;
+  } else if (totalItems <= pageSize) {
+    return '';
   }
 
   const range = [];

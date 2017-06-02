@@ -89,6 +89,7 @@
       "comma-dangle": "off",
       "key-spacing": "off",
       "max-len": "off",
+      "no-underscore-dangle": "off",
       "import/prefer-default-export": "off",
       "react/jsx-filename-extension": "off",
       "no-multi-spaces": "off",
@@ -99,15 +100,6 @@
         {
           "varsIgnorePattern": "_",
           "argsIgnorePattern": "_"
-        }
-      ],
-      "no-underscore-dangle": [
-        "error",
-        {
-          "allow": [
-            "_browserHistory",
-            "__data"
-          ]
         }
       ]
     },
