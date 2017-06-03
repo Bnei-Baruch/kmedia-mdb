@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Button, Container, Divider, Dropdown, Grid, Header, Item, List, Menu, Table } from 'semantic-ui-react';
 
-import ReactJWPlayer from 'react-jw-player';
+import ReactJWPlayer from '../ReactJWPlayer/ReactJWPlayer';
 
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { actions, selectors as lessonsSelectors } from '../../redux/modules/lessons';
@@ -108,24 +108,58 @@ function isEmpty(obj) {
 const Video = ({ file }) => {
   const ext = file.name.substring(file.name.lastIndexOf('.'));
 
-  return (<div id="video" style={{ width: '100%' }}>
-    <ReactJWPlayer
+  return (<ReactJWPlayer
       playerId="video"
       playerScript="https://content.jwplatform.com/libraries/mxNkRalL.js"
       file={`http://cdn.kabbalahmedia.info/${file.id}${ext}`}
       image=""
       customProps={{ skin: { name: 'seven' }, width: 500, height: 375 }}
-    />
-    {/* <video controls width="100%"> */}
-    {/* <source src={files[1].url} type={files[1].mimetype} /> */}
-    {/* <track kind="captions" /> */}
-    {/* </video> */}
-  </div>);
+    />);
 };
 
 Video.propTypes = {
   file: PropTypes.object.isRequired
 };
+
+const AudioVideoSwitch = ({ video, audio, active, handler }) => {
+  return (
+    <Button.Group widths="3">
+      {video && active === video ? <Button active color="blue">Video</Button> : undefined }
+      {video && active !== video ? <Button onClick={handler}>Video</Button> : undefined}
+      {!video ? <Button disabled>Video</Button> : undefined}
+
+      {audio && active === audio ? <Button active color="blue">Audio</Button> : undefined }
+      {audio && active !== audio ? <Button onClick={handler}>Audio</Button> : undefined }
+      {!audio ? <Button disabled>Audio</Button> : undefined}
+    </Button.Group>
+  );
+};
+
+const languages = new Map([
+  ['ar', 'العربية'],
+  ['bg', 'Български език'],
+  ['de', 'Deutsch'],
+  ['en', 'English'],
+  ['es', 'Español'],
+  ['fr', 'Français'],
+  ['he', 'עברית'],
+  ['hu', 'magyar'],
+  ['ja', '日本語'],
+  ['it', 'Italiano'],
+  ['ka', 'ქართული'],
+  ['ru', 'Русский'],
+  ['lt', 'Lietuvių kalba'],
+  ['lv', 'Latviešu valoda'],
+  ['no', 'Norsk'],
+  ['pl', 'Polszczyzna'],
+  ['pt', 'Português'],
+  ['ro', 'Română'],
+  ['sl', 'Slovenščina'],
+  ['sv', 'Svenska'],
+  ['tr', 'Türkçe'],
+  ['ua', 'Українська'],
+  ['zh', '中文'],
+]);
 
 class VideoBox extends React.Component {
   constructor(props) {
@@ -147,9 +181,8 @@ class VideoBox extends React.Component {
       language = groups.keys().next().value;
     }
 
-    const set   = groups.get(language);
-    const video = set.find(file => file.type === 'video');
-    const audio = set.find(file => file.type === 'audio');
+    let video, audio;
+    [video, audio] = this.setVA(language, groups);
 
     this.state = {
       groups,
@@ -160,13 +193,20 @@ class VideoBox extends React.Component {
     };
   }
 
-  handleVideoAudio = () => {
-    const state = this.state;
+  setVA = (language, groups) => {
+    const set   = groups.get(language);
+    const video = set.find(file => file.type === 'video');
+    const audio = set.find(file => file.type === 'audio');
 
+    return [video, audio];
+  };
+
+  handleVideoAudio = (event, data) => {
+    const state = this.state;
     if (state.active === state.video && state.audio) {
       this.setState({ active: state.audio });
     } else if (state.active === state.audio && state.video) {
-      this.setState({ active: state.audio });
+      this.setState({ active: state.video });
     }
   };
 
@@ -181,6 +221,7 @@ class VideoBox extends React.Component {
       <Grid.Row className="video_box">
         <Grid.Column width="10">
           <div className="video_player">
+            <div id="video" />
             <Video file={state.active} />
           </div>
         </Grid.Column>
@@ -188,31 +229,30 @@ class VideoBox extends React.Component {
           <Grid columns="equal">
             <Grid.Row>
               <Grid.Column>
-                <Button.Group widths="3">
-                  {state.video ? <Button active color="blue" onClick={this.handleVideoAudio}>Video</Button> :
-                    <Button disabled>Video</Button> }
-                  {state.audio && state.video ? <Button onClick={this.handleVideoAudio}>Audio</Button> : undefined }
-                  { state.audio && !state.video ?
-                    <Button active color="blue" onClick={this.handleVideoAudio}>Audio</Button> : undefined }
-                  {!state.audio ? <Button disabled>Audio</Button> : undefined}
-                </Button.Group>
+                <AudioVideoSwitch video={state.video} audio={state.audio} active={state.active} handler={this.handleVideoAudio} />
               </Grid.Column>
               <Grid.Column>
                 <Dropdown
                   placeholder="Language"
-                  search
                   selection
-                  options={[
-                    { key: 'EN', value: 'EN', text: 'English' },
-                    { key: 'HE', value: 'HE', text: 'Hebrew' },
-                    { key: 'RU', value: 'RU', text: 'Russian' }
-                  ]}
+                  defaultValue={this.props.language.toUpperCase()}
+                  onChange={(event, { value }) => {
+                    const language = value.toLowerCase();
+                    let video, audio;
+                    [video, audio] = this.setVA(language, state.groups);
+                    this.setState({ language, video, audio, active: video || audio });
+                  }}
+                  options={
+                    Array.from(this.state.groups.keys()).sort().map(k =>
+                      ({ value: k.toUpperCase(), text: languages.get(k) })
+                    )
+                  }
                 />
               </Grid.Column>
             </Grid.Row>
           </Grid>
           <Divider />
-          <Header as="h3">
+          <Header style={{ backgroundColor: 'gray', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)' }} as="h3">
             <Header.Content>
               Morning Lesson - 2/4
               <Header.Subheader>
@@ -220,7 +260,7 @@ class VideoBox extends React.Component {
               </Header.Subheader>
             </Header.Content>
           </Header>
-          <Menu vertical fluid size="small">
+          <Menu style={{ backgroundColor: 'gray', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)' }} vertical fluid size="small">
             <Menu.Item>1 - Lesson preparation - 00:12:02</Menu.Item>
             <Menu.Item active>2 - Lesson on the topic of &quot;Brit (Union)&quot; - 01:29:00</Menu.Item>
             <Menu.Item>3 - Baal HaSulam, TES, part 8, item 20 - 00:31:54</Menu.Item>
@@ -255,21 +295,21 @@ const Lesson = ({ lesson, language }) => {
               <span className="text grey">{lesson.film_date}</span><br />
               {lesson.name}
             </Header>
-            <List>
+            <List style={{ backgroundColor: 'gray', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)' }}>
               <List.Item><b>Topics:</b> <a href="">From Lo Lishma to Lishma</a>, <a href="">Work in
                 group</a></List.Item>
               <List.Item><b>Sources:</b> <a href=""> Shamati - There is None Else Beside Him</a>, <a href="">Shamati -
                 Divinity in Exile</a></List.Item>
               <List.Item><b>Related to Event:</b> <a href="">World Israel Congress 2016</a></List.Item>
             </List>
-            <Menu secondary pointing color="blue" className="index-filters">
+            <Menu style={{ backgroundColor: 'gray', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)' }} secondary pointing color="blue" className="index-filters">
               <Menu.Item name="item-summary">Summary</Menu.Item>
               <Menu.Item name="item-transcription">Transcription</Menu.Item>
               <Menu.Item name="item-sources">Sources</Menu.Item>
               <Menu.Item name="item-sketches">Sketches</Menu.Item>
             </Menu>
           </Grid.Column>
-          <Grid.Column width={6}>
+          <Grid.Column style={{ backgroundColor: 'gray', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)' }} width={6}>
             <Grid columns="equal">
               <Grid.Row>
                 <Grid.Column>
