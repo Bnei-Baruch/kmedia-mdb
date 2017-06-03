@@ -11,8 +11,8 @@ class Requests {
 }
 
 class LessonApi {
-  static all = ({ language, pageNo, pageSize }) => {
-    const params = Object.assign({}, { language, content_type: LESSONS, order_by: 'id' });
+  static all = ({ language, pageNo, pageSize, ...rest }) => {
+    const params = Object.assign({}, { language, content_type: LESSONS, order_by: 'id', ...rest });
     return Requests.get(`collections?${Requests.limit(pageNo, pageSize)}&${Requests.makeParams(params)}`);
   };
 
