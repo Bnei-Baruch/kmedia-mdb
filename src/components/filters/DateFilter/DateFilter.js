@@ -2,15 +2,24 @@ import React, { Component }  from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import noop from 'lodash/noop';
+import { connect } from 'react-redux';
 import DayPicker, { DateUtils } from 'react-day-picker';
 import { Segment, Grid, Header, Dropdown, Input, Button, Divider } from 'semantic-ui-react';
+
 import 'react-day-picker/lib/style.css';
+import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
 
 // TODO (yaniv -> oleg): need indication for user when clicking on a bad date (after today) or when typing bad dates
 
 const format = 'DD-MM-YYYY';
 
-const now = () => new Date();
+const now = () =>
+  moment(new Date())
+    .hours(12)
+    .minutes(0)
+    .seconds(0)
+    .milliseconds(0)
+    .toDate();
 
 const TODAY = 1;
 const YESTERDAY = 2;
@@ -75,32 +84,36 @@ const isValidDateRange = (fromValue, toValue) => {
 class DateFilter extends Component {
 
   static propTypes = {
+    namespace: PropTypes.string.isRequired,
+    value: PropTypes.shape({
+      from: PropTypes.objectOf(Date),
+      to: PropTypes.objectOf(Date),
+      dataPreset: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    }),
     onCancel: PropTypes.func,
-    onApply: PropTypes.func
+    onApply: PropTypes.func,
+    setFilterValue: PropTypes.func.isRequired
   };
 
   static defaultProps = {
     onCancel: noop,
-    onApply: noop
+    onApply: noop,
+    value: {
+      datePreset: TODAY,
+      ...presetToRange[TODAY]()
+    }
   }
 
   state = {
-    from: null,
-    to: null,
-    datePreset: null,
     fromInputValue: '',
     toInputValue: ''
   };
 
-  componentDidMount() {
-    this.setRange(TODAY);
-  }
-
   setRange(datePreset, from, to, fromInputValue = '', toInputValue = '') {
     let range = {};
     if (datePreset === CUSTOM_RANGE) {
-      range.from = from || this.state.from;
-      range.to = to || this.state.to;
+      range.from = from || this.props.value.from;
+      range.to = to || this.props.value.to;
     } else {
       range = (presetToRange[datePreset] ? presetToRange[datePreset] : presetToRange[TODAY])();
     }
@@ -114,10 +127,13 @@ class DateFilter extends Component {
     const momentTo = moment(new Date(range.to));
 
     this.setState({
-      ...range,
-      datePreset,
       fromInputValue: fromInputValue || (momentFrom.isValid() ? momentFrom.format(format) : ''),
       toInputValue: toInputValue || (momentTo.isValid() ? momentTo.format(format) : '')
+    });
+
+    this.props.setFilterValue(this.props.namespace, {
+      ...range,
+      datePreset,
     });
   }
 
@@ -126,8 +142,9 @@ class DateFilter extends Component {
       return;
     }
 
-    const { from, to } = this.state;
+    const { from, to } = this.props.value;
     const range = DateUtils.addDayToRange(day, { from, to });
+
     this.setRange(CUSTOM_RANGE, range.from, range.to);
   };
 
@@ -176,8 +193,9 @@ class DateFilter extends Component {
   canApply = () => isValidDateRange(this.state.fromInputValue, this.state.toInputValue);
 
   render() {
-    const { from, to, fromInputValue, toInputValue } = this.state;
-    const { onCancel, onApply } = this.props;
+    const { fromInputValue, toInputValue } = this.state;
+    const { onCancel, onApply, value } = this.props;
+    const { from, to, datePreset } = value;
 
     return (
       <Segment basic attached="bottom" className="tab active">
@@ -198,7 +216,7 @@ class DateFilter extends Component {
               <Grid>
                 <Grid.Row>
                   <Grid.Column width={16}>
-                    <Dropdown fluid options={datePresetsOptions} item value={this.state.datePreset} onChange={this.handleDatePresetsChange} />
+                    <Dropdown fluid options={datePresetsOptions} item value={datePreset} onChange={this.handleDatePresetsChange} />
                     <Divider />
                   </Grid.Column>
                 </Grid.Row>
@@ -235,4 +253,9 @@ class DateFilter extends Component {
   }
 }
 
-export default DateFilter;
+export default connect(
+  (state, ownProps) => ({
+    value: filterSelectors.getFilterValue(state.filters, ownProps.namespace)
+  }),
+  filterActions
+)(DateFilter);

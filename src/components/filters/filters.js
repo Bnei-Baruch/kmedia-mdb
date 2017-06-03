@@ -27,13 +27,15 @@ const SourcesFilterWithData = dataLoader(() => {
 
 
 export default class Filter extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeFilter: null,
-      sourcesSelection: []
-    };
-  }
+
+  static propTypes = {
+    namespace: PropTypes.string.isRequired
+  };
+
+  state = {
+    activeFilter: null,
+    sourcesSelection: []
+  };
 
   handleFilterClick = ({ name }) => this.setState({ activeFilter: name });
 
@@ -45,18 +47,22 @@ export default class Filter extends React.Component {
     return (
       <div>
         <FilterMenu active={activeFilter} handler={this.handleFilterClick} />
-        <ActiveFilter filter={activeFilter} onCancel={() => this.handleFilterHide()} />
+        <ActiveFilter
+          namespace={this.props.namespace}
+          filter={activeFilter}
+          onCancel={() => this.handleFilterHide()}
+        />
       </div>
     );
   }
 }
 
-const ActiveFilter = ({ filter, onCancel }) => {
+const ActiveFilter = ({ filter, onCancel, ...rest }) => {
   switch (filter) {
   case 'date-filter':
-    return <DateFilter onCancel={onCancel} />;
+    return <DateFilter onCancel={onCancel} {...rest} />;
   case 'sources-filter':
-    return <SourcesFilterWithData onCancel={onCancel} />
+    return <SourcesFilterWithData onCancel={onCancel} {...rest} />;
   case 'topic-filter':
     return <Segment basic attached="bottom" className="tab active">Third</Segment>;
   default:

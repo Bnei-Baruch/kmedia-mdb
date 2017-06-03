@@ -60,12 +60,12 @@ class LessonsIndex extends React.Component {
 
     return (
       <Grid.Column width={16}>
-        <Filter />
+        <Filter namespace="lessons" />
         <Header as="h2">
           Results {((pageNo - 1) * pageSize) + 1} - {(pageNo * pageSize) + 1}&nbsp;
           of {total}
         </Header>
-        <FilterTags tags={tags} />
+        <FilterTags tags={tags} namespace="lessons" />
         <Pagination currentPage={pageNo} totalItems={total} pageSize={pageSize} />
         <Lessons lessons={lessons} />
       </Grid.Column>
