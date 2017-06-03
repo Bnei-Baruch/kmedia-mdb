@@ -11,6 +11,7 @@ import { actions as filterActions, selectors as filterSelectors } from '../../..
 
 // TODO (yaniv -> oleg): need indication for user when clicking on a bad date (after today) or when typing bad dates
 
+const filterName = 'date-filter';
 const format = 'DD-MM-YYYY';
 
 const now = () =>
@@ -131,7 +132,7 @@ class DateFilter extends Component {
       toInputValue: toInputValue || (momentTo.isValid() ? momentTo.format(format) : '')
     });
 
-    this.props.setFilterValue(this.props.namespace, {
+    this.props.setFilterValue(this.props.namespace, filterName, {
       ...range,
       datePreset,
     });
@@ -255,7 +256,7 @@ class DateFilter extends Component {
 
 export default connect(
   (state, ownProps) => ({
-    value: filterSelectors.getFilterValue(state.filters, ownProps.namespace)
+    value: filterSelectors.getFilterValue(state.filters, ownProps.namespace, filterName)
   }),
   filterActions
 )(DateFilter);

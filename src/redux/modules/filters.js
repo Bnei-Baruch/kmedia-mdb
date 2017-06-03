@@ -10,7 +10,7 @@ export const types = {
 
 /* Actions */
 
-const setFilterValue = createAction(SET_FILTER_VALUE, (namespace, value) => ({ namespace, value }));
+const setFilterValue = createAction(SET_FILTER_VALUE, (namespace, name, value) => ({ namespace, name, value }));
 
 export const actions = {
   setFilterValue
@@ -20,10 +20,18 @@ export const actions = {
 
 const initialState = {};
 
-const _setFilterValue = (state, action) => ({
-  ...state,
-  [action.payload.namespace]: action.payload.value
-});
+const _setFilterValue = (state, action) => {
+  const { namespace, name, value } = action.payload;
+  const oldFilterNamespace = state[namespace];
+
+  return {
+    ...state,
+    [namespace]: {
+      ...oldFilterNamespace,
+      [name]: value
+    }
+  };
+};
 
 export const reducer      = handleActions({
   [SET_FILTER_VALUE]  : (state, action) => _setFilterValue(state, action),
@@ -31,7 +39,7 @@ export const reducer      = handleActions({
 
 /* Selectors */
 
-const getFilterValue = (state, namespace) => state[namespace];
+const getFilterValue = (state, namespace, name) => (state[namespace] ? state[namespace][name] : undefined);
 
 export const selectors = {
   getFilterValue,
