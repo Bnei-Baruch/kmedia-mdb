@@ -106,13 +106,13 @@ function isEmpty(obj) {
 }
 
 const Video = ({ file }) => (
-    <ReactJWPlayer
-      playerId="video"
-      playerScript="http://content.jwplatform.com/libraries/rXTkmI8O.js"
-      file={file.url}
-      image=""
-      customProps={{ skin: { name: 'seven' }, width: 500, height: 375 }}
-    />
+  <ReactJWPlayer
+    playerId="video"
+    playerScript="http://content.jwplatform.com/libraries/rXTkmI8O.js"
+    file={file.url}
+    image=""
+    customProps={{ skin: { name: 'seven' }, width: 500, height: 375 }}
+  />
 );
 
 Video.propTypes = {
@@ -132,6 +132,32 @@ const AudioVideoSwitch = ({ video, audio, active, handler }) => {
     </Button.Group>
   );
 };
+
+const languages = new Map([
+  ['ar', 'العربية'],
+  ['bg', 'Български език'],
+  ['de', 'Deutsch'],
+  ['en', 'English'],
+  ['es', 'Español'],
+  ['fr', 'Français'],
+  ['he', 'עברית'],
+  ['hu', 'magyar'],
+  ['ja', '日本語'],
+  ['it', 'Italiano'],
+  ['ka', 'ქართული'],
+  ['ru', 'Русский'],
+  ['lt', 'Lietuvių kalba'],
+  ['lv', 'Latviešu valoda'],
+  ['no', 'Norsk'],
+  ['pl', 'Polszczyzna'],
+  ['pt', 'Português'],
+  ['ro', 'Română'],
+  ['sl', 'Slovenščina'],
+  ['sv', 'Svenska'],
+  ['tr', 'Türkçe'],
+  ['ua', 'Українська'],
+  ['zh', '中文'],
+]);
 
 class VideoBox extends React.Component {
   constructor(props) {
@@ -153,9 +179,8 @@ class VideoBox extends React.Component {
       language = groups.keys().next().value;
     }
 
-    const set   = groups.get(language);
-    const video = set.find(file => file.type === 'video');
-    const audio = set.find(file => file.type === 'audio');
+    let video, audio;
+    [video, audio] = this.setVA(language, groups);
 
     this.state = {
       groups,
@@ -165,6 +190,14 @@ class VideoBox extends React.Component {
       active: video || audio
     };
   }
+
+  setVA = (language, groups) => {
+    const set   = groups.get(language);
+    const video = set.find(file => file.type === 'video');
+    const audio = set.find(file => file.type === 'audio');
+
+    return [video, audio];
+  };
 
   handleVideoAudio = (event, data) => {
     const state = this.state;
@@ -199,13 +232,19 @@ class VideoBox extends React.Component {
               <Grid.Column>
                 <Dropdown
                   placeholder="Language"
-                  search
                   selection
-                  options={[
-                    { key: 'EN', value: 'EN', text: 'English' },
-                    { key: 'HE', value: 'HE', text: 'Hebrew' },
-                    { key: 'RU', value: 'RU', text: 'Russian' }
-                  ]}
+                  defaultValue={this.props.language.toUpperCase()}
+                  onChange={(event, { value }) => {
+                    const language = value.toLowerCase();
+                    let video, audio;
+                    [video, audio] = this.setVA(language, state.groups);
+                    this.setState({ language, video, audio, active: video || audio });
+                  }}
+                  options={
+                    Array.from(this.state.groups.keys()).sort().map(k =>
+                      ({ value: k.toUpperCase(), text: languages.get(k) })
+                    )
+                  }
                 />
               </Grid.Column>
             </Grid.Row>
