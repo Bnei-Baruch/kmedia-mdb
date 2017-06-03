@@ -6,27 +6,6 @@ import { actions as filterActions } from '../../redux/modules/filters';
 import DateFilter from './DateFilter/DateFilter';
 import SourcesFilter from './SourcesFilter/SourcesFilter';
 
-// Remove this when move to redux
-import dataLoader from './dataLoader';
-
-const buildSources = (json) => {
-  if (!json) {
-    return {};
-  }
-
-  const sources = json.reduce((acc, s) => {
-    const codeOrId = s.code || s.id;
-    acc[codeOrId] = { name: s.name, children: buildSources(s.children) };
-    return acc;
-  }, {});
-  return sources;
-};
-const SourcesFilterWithData = dataLoader(() => {
-    return fetch('http://rt-dev.kbb1.com:8080/hierarchy/sources/')
-      .then(response => response.json())
-      .then(json => ({ sources: buildSources(json) }));
-})(SourcesFilter);
-
 class Filter extends React.Component {
 
   static propTypes = {
@@ -81,7 +60,7 @@ const ActiveFilter = ({ filter, onCancel, onApply, ...rest }) => {
   case 'date-filter':
     return <DateFilter onCancel={onCancel} onApply={onApply} {...rest} />;
   case 'sources-filter':
-    return <SourcesFilterWithData onCancel={onCancel} onApply={onApply} {...rest} />;
+    return <SourcesFilter onCancel={onCancel} onApply={onApply} {...rest} />;
   case 'topic-filter':
     return <Segment basic attached="bottom" className="tab active">Third</Segment>;
   default:

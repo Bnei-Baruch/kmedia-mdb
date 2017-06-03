@@ -1,34 +1,35 @@
 /* eslint-disable no-extra-boolean-cast */
 
 import React  from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Divider, List, Segment } from 'semantic-ui-react';
 import map from 'lodash/map';
 import noop from 'lodash/noop';
+import { selectors as filterSelectors, actions as filterActions } from '../../../redux/modules/filters';
+// Remove this when move to redux
+import dataLoader from '../dataLoader';
 
-export default class SourceFilter extends React.Component {
+const filterName = 'sources-filter';
 
-  state = {
-    selection: [],
-  };
-
-  componentDidUpdate = (prevProps, prevState) => {
+class SourcesFilter extends React.Component {
+  componentDidUpdate = () => {
     this.listContainer.scrollLeft = this.listContainer.scrollWidth;
   }
 
   onSelectionChange = (event, data) => {
     const { value } = data;
-    const depth = data['data-depth']
-    this.setState((prevState) => {
-      const { selection } = prevState;
-      selection.splice(depth, selection.length - depth);
-      selection.push(value);
-      return { ...prevState, selection };
-    });
+    const depth = data['data-depth'];
+
+    const { selection: oldSelection } = this.props;
+    const newSelection = [...oldSelection];
+    newSelection.splice(depth, oldSelection.length - depth);
+    newSelection.push(value);
+    this.props.setFilterValue(this.props.namespace, filterName, newSelection);
   };
 
   onCancel = () => {
-    this.setState({ selection: [] });
+    this.props.setFilterValue(this.props.namespace, filterName, []);
     this.props.onCancel();
   }
 
@@ -87,7 +88,7 @@ export default class SourceFilter extends React.Component {
           <div style={{ whiteSpace: 'nowrap', width: '100%' }}>
             {
               !!this.props.sources ?
-              this.createLists(0, this.props.sources, this.state.selection).map(l => l) :
+              this.createLists(0, this.props.sources, this.props.selection).map(l => l) :
               'Loading...'
             }
           </div>
@@ -101,3 +102,53 @@ export default class SourceFilter extends React.Component {
     );
   }
 }
+
+const SourceShape = {
+  name: PropTypes.string.isRequired,
+  children: PropTypes.objectOf(PropTypes.shape)
+};
+const SourcesType = PropTypes.objectOf(PropTypes.shape(SourceShape));
+SourceShape.children = SourcesType;
+
+SourcesFilter.propTypes = {
+  namespace: PropTypes.string.isRequired,
+  sources: SourcesType,
+  onCancel: PropTypes.func,
+  onApply: PropTypes.func,
+  selection: PropTypes.arrayOf(PropTypes.string),
+  setFilterValue: PropTypes.func.isRequired
+};
+
+SourcesFilter.defaultProps = {
+  sources: null,
+  onCancel: noop,
+  onApply: noop,
+  selection: []
+};
+
+const ConnectedSourcesFilter = connect(
+  (state, ownProps) => ({
+    selection: filterSelectors.getFilterValue(state.filters, ownProps.namespace, filterName)
+  }),
+  filterActions
+)(SourcesFilter);
+
+const buildSources = (json) => {
+  if (!json) {
+    return {};
+  }
+
+  const sources = json.reduce((acc, s) => {
+    const codeOrId = s.code || s.id;
+    acc[codeOrId] = { name: s.name, children: buildSources(s.children) };
+    return acc;
+  }, {});
+  return sources;
+};
+
+export default dataLoader(() =>
+  fetch('http://rt-dev.kbb1.com:8080/hierarchy/sources/')
+    .then(response => response.json())
+    .then(json => ({ sources: buildSources(json) }))
+)(ConnectedSourcesFilter);
+
