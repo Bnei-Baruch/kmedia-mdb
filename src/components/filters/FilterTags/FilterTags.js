@@ -43,7 +43,8 @@ class FilterTags extends Component {
       name: PropTypes.string.isRequired,
       value: PropTypes.any
     })),
-    clearFilter: PropTypes.func.isRequired
+    clearFilter: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -63,7 +64,10 @@ class FilterTags extends Component {
                 key={tag.name}
                 icon={tagData.icon}
                 label={tagData.valueToLabel(tag.value)}
-                onClose={() => this.props.clearFilter(namespace, tag.name)}
+                onClose={() => {
+                  this.props.clearFilter(namespace, tag.name);
+                  this.props.onClose();
+                }}
               />
             );
           })

@@ -1,7 +1,6 @@
 import zlFetch from 'zl-fetch';
 
 const API_ROOT = process.env.REACT_APP_API_BACKEND;
-const LESSONS  = 'DAILY_LESSON';
 
 class Requests {
   static get        = url => zlFetch(`${API_ROOT}${url}`);
@@ -12,8 +11,8 @@ class Requests {
 
 class LessonApi {
   static all = ({ language, pageNo, pageSize, ...rest }) => {
-    const params = Object.assign({}, { language, content_type: LESSONS, order_by: 'id', ...rest });
-    return Requests.get(`collections?${Requests.limit(pageNo, pageSize)}&${Requests.makeParams(params)}`);
+    const params = Object.assign({}, { language, order_by: 'id', ...rest });
+    return Requests.get(`lessons?${Requests.limit(pageNo, pageSize)}&${Requests.makeParams(params)}`);
   };
 
   static get = ({ id, language }) => Requests.get(`content_units/${id}?${Requests.makeParams({ language })}`);

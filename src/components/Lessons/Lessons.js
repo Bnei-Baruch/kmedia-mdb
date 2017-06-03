@@ -45,7 +45,7 @@ class LessonsIndex extends React.Component {
 
   render() {
     const { total, lessons, language, pageSize, location } = this.props;
-    const pageNo                                 = this.getPageNo(location.search);
+    const pageNo = this.getPageNo(location.search);
 
     return (
       <Grid.Column width={16}>
@@ -57,7 +57,7 @@ class LessonsIndex extends React.Component {
           Results {((pageNo - 1) * pageSize) + 1} - {(pageNo * pageSize) + 1}&nbsp;
           of {total}
         </Header>
-        <FilterTags namespace="lessons" />
+        <FilterTags namespace="lessons" onClose={() => this.askForData(location.search, language, pageSize)} />
         <Pagination currentPage={pageNo} totalItems={total} pageSize={pageSize} />
         <Lessons lessons={lessons} />
       </Grid.Column>

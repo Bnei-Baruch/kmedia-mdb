@@ -4,8 +4,8 @@ const filtersToParams = {
   'date-filter': (value) => {
     const { from, to } = value;
     return {
-      start_date: moment(new Date(from)).format('DD-MM-YYYY'),
-      end_date: moment(new Date(to)).format('DD-MM-YYYY')
+      start_date: moment(new Date(from)).format('YYYY-MM-DD'),
+      end_date: moment(new Date(to)).format('YYYY-MM-DD')
     };
   }
 };
