@@ -32,7 +32,8 @@ class Filter extends React.Component {
   static propTypes = {
     namespace: PropTypes.string.isRequired,
     activateFilter: PropTypes.func.isRequired,
-    clearFilter: PropTypes.func.isRequired
+    clearFilter: PropTypes.func.isRequired,
+    onFilterApplication: PropTypes.func.isRequired
   };
 
   state = {
@@ -44,11 +45,14 @@ class Filter extends React.Component {
 
   handleCancelActiveFilter = () => {
     this.props.clearFilter(this.props.namespace, this.state.activeFilter);
+    this.props.onFilterApplication();
     this.setState({ activeFilter: null });
   }
 
-  handleApplyActiveFilter = () =>
+  handleApplyActiveFilter = () => {
     this.props.activateFilter(this.props.namespace, this.state.activeFilter);
+    this.props.onFilterApplication();
+  };
 
   render() {
     const activeFilter = this.state.activeFilter;

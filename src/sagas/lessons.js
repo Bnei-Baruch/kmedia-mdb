@@ -1,10 +1,17 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest, select } from 'redux-saga/effects';
 import { actions, types } from '../redux/modules/lessons';
+import { selectors as filterSelectors } from '../redux/modules/filters';
 import LessonApi from '../api/Api';
+import filterToParams from '../api/filterToParams';
 
 function* fetchList(action) {
   try {
-    const resp = yield call(LessonApi.all, action.payload);
+    const filters = yield select(state => filterSelectors.getActivatedFilters(state.filters, 'lessons'));
+    const params = filters.reduce((acc, filter) => ({
+      ...acc,
+      ...filterToParams(filter.name)(filter.value)
+    }), {});
+    const resp = yield call(LessonApi.all, { ...action.payload, ...params });
     yield put(actions.fetchListSuccess(resp));
   } catch (err) {
     yield put(actions.fetchListFailure(err));

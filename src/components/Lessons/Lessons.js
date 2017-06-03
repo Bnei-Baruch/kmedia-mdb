@@ -38,23 +38,26 @@ class LessonsIndex extends React.Component {
     return (isNaN(page) || page <= 0) ? 1 : page;
   };
 
-  askForData(search, language, pageSize) {
+  askForData = (search, language, pageSize) => {
     const pageNo = this.getPageNo(search);
     this.props.fetchList(pageNo, language, pageSize);
-  }
+  };
 
   render() {
-    const { total, lessons, pageSize, location } = this.props;
-    const pageNo                                 = this.getPageNo(location.search);
+    const { total, lessons, language, pageSize, location } = this.props;
+    const pageNo = this.getPageNo(location.search);
 
     return (
       <Grid.Column width={16}>
-        <Filter namespace="lessons" />
+        <Filter
+          namespace="lessons"
+          onFilterApplication={() => this.askForData(location.search, language, pageSize)}
+        />
         <Header as="h2">
           Results {((pageNo - 1) * pageSize) + 1} - {(pageNo * pageSize) + 1}&nbsp;
           of {total}
         </Header>
-        <FilterTags namespace="lessons" />
+        <FilterTags namespace="lessons" onClose={() => this.askForData(location.search, language, pageSize)} />
         <Pagination currentPage={pageNo} totalItems={total} pageSize={pageSize} />
         <Lessons lessons={lessons} />
       </Grid.Column>
