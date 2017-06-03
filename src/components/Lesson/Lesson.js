@@ -105,12 +105,14 @@ function isEmpty(obj) {
   return Object.getOwnPropertyNames(obj).length <= 0;
 }
 
-const Video = ({ file }) => (
-  <div id="video" style={{ width: '100%' }}>
+const Video = ({ file }) => {
+  const ext = file.name.substring(file.name.lastIndexOf('.'));
+
+  return (<div id="video" style={{ width: '100%' }}>
     <ReactJWPlayer
       playerId="video"
-      playerScript="http://content.jwplatform.com/libraries/rXTkmI8O.js"
-      file={file.url}
+      playerScript="https://content.jwplatform.com/libraries/mxNkRalL.js"
+      file={`http://cdn.kabbalahmedia.info/${file.id}${ext}`}
       image=""
       customProps={{ skin: { name: 'seven' }, width: 500, height: 375 }}
     />
@@ -118,8 +120,8 @@ const Video = ({ file }) => (
     {/* <source src={files[1].url} type={files[1].mimetype} /> */}
     {/* <track kind="captions" /> */}
     {/* </video> */}
-  </div>
-);
+  </div>);
+};
 
 Video.propTypes = {
   file: PropTypes.object.isRequired
