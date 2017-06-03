@@ -5,7 +5,7 @@ import { Grid } from 'semantic-ui-react';
 
 import MenuRoutes from './Layout/router';
 
-import MenuItems from './Layout/Menu';
+import MenuItems from './Layout/MenuItems';
 
 import TreeNode from './treeNode';
 

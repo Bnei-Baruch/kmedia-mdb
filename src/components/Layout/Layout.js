@@ -5,7 +5,7 @@ import LoadingBar from 'react-redux-loading-bar';
 import { Grid, Sidebar } from 'semantic-ui-react';
 
 import TopFixedMenu from './TopFixedMenu';
-import MenuItems from './Menu';
+import MenuItems from './MenuItems';
 import MenuRoutes, { AppRoutes } from './router';
 import Footer from './Footer';
 

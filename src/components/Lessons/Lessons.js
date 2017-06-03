@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { Grid, Header, List, ListItem } from 'semantic-ui-react';
+import { Grid, Header, List, ListItem, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { Pagination } from '../pagination';
-import Filter from '../filters/filters';
-import FilterTags from '../filters/FilterTags/FilterTags';
+import Filters from '../Filters/Filters';
+import FilterTags from '../Filters/FilterTags/FilterTags';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { actions as lessonActions, selectors as lessonsSelectors } from '../../redux/modules/lessons';
 
@@ -77,7 +77,7 @@ class LessonsIndex extends React.Component {
 
     return (
       <Grid.Column width={16}>
-        <Filter
+        <Filters
           namespace="lessons"
           onFilterApplication={() => this.askForData(location.search, language, pageSize)}
         />
@@ -86,8 +86,9 @@ class LessonsIndex extends React.Component {
           of {total}
         </Header>
         <FilterTags namespace="lessons" onClose={() => this.askForData(location.search, language, pageSize)} />
-        <Pagination currentPage={pageNo} totalItems={total} pageSize={pageSize} />
+        <Divider />
         <LessonsList lessons={lessons} />
+        <Pagination currentPage={pageNo} totalItems={total} pageSize={pageSize} />
       </Grid.Column>
     );
   }
