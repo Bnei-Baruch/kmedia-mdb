@@ -43,8 +43,12 @@ const ActiveFilter = ({ filter, onCancel }) => {
 };
 
 ActiveFilter.propTypes = {
-  filter: PropTypes.string.isRequired,
+  filter: PropTypes.string,
   onCancel: PropTypes.func
+};
+
+ActiveFilter.defaultProps = {
+  filter: null
 };
 
 

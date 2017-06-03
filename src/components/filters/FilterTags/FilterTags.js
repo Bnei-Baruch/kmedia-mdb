@@ -43,6 +43,7 @@ const FilterTags = (props) => {
           const tagData = getTagData(tag.name);
           return (
             <FilterTag
+              key={tag.name}
               icon={tagData.icon}
               label={tagData.valueToLabel(tag.value)}
               onClose={() => onTagClose(tag.name)}
