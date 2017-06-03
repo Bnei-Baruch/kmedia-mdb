@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Button, Container, Divider, Dropdown, Grid, Header, Item, List, Menu, Table } from 'semantic-ui-react';
 
-import ReactJWPlayer from 'react-jw-player';
+import ReactJWPlayer from '../ReactJWPlayer/ReactJWPlayer';
 
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { actions, selectors as lessonsSelectors } from '../../redux/modules/lessons';
@@ -106,7 +106,6 @@ function isEmpty(obj) {
 }
 
 const Video = ({ file }) => (
-  <div id="video" style={{ width: '100%' }}>
     <ReactJWPlayer
       playerId="video"
       playerScript="http://content.jwplatform.com/libraries/rXTkmI8O.js"
@@ -114,15 +113,24 @@ const Video = ({ file }) => (
       image=""
       customProps={{ skin: { name: 'seven' }, width: 500, height: 375 }}
     />
-    {/* <video controls width="100%"> */}
-    {/* <source src={files[1].url} type={files[1].mimetype} /> */}
-    {/* <track kind="captions" /> */}
-    {/* </video> */}
-  </div>
 );
 
 Video.propTypes = {
   file: PropTypes.object.isRequired
+};
+
+const AudioVideoSwitch = ({ video, audio, active, handler }) => {
+  return (
+    <Button.Group widths="3">
+      {video && active === video ? <Button active color="blue">Video</Button> : undefined }
+      {video && active !== video ? <Button onClick={handler}>Video</Button> : undefined}
+      {!video ? <Button disabled>Video</Button> : undefined}
+
+      {audio && active === audio ? <Button active color="blue">Audio</Button> : undefined }
+      {audio && active !== audio ? <Button onClick={handler}>Audio</Button> : undefined }
+      {!audio ? <Button disabled>Audio</Button> : undefined}
+    </Button.Group>
+  );
 };
 
 class VideoBox extends React.Component {
@@ -158,13 +166,12 @@ class VideoBox extends React.Component {
     };
   }
 
-  handleVideoAudio = () => {
+  handleVideoAudio = (event, data) => {
     const state = this.state;
-
     if (state.active === state.video && state.audio) {
       this.setState({ active: state.audio });
     } else if (state.active === state.audio && state.video) {
-      this.setState({ active: state.audio });
+      this.setState({ active: state.video });
     }
   };
 
@@ -179,6 +186,7 @@ class VideoBox extends React.Component {
       <Grid.Row className="video_box">
         <Grid.Column width="10">
           <div className="video_player">
+            <div id="video" />
             <Video file={state.active} />
           </div>
         </Grid.Column>
@@ -186,14 +194,7 @@ class VideoBox extends React.Component {
           <Grid columns="equal">
             <Grid.Row>
               <Grid.Column>
-                <Button.Group widths="3">
-                  {state.video ? <Button active color="blue" onClick={this.handleVideoAudio}>Video</Button> :
-                    <Button disabled>Video</Button> }
-                  {state.audio && state.video ? <Button onClick={this.handleVideoAudio}>Audio</Button> : undefined }
-                  { state.audio && !state.video ?
-                    <Button active color="blue" onClick={this.handleVideoAudio}>Audio</Button> : undefined }
-                  {!state.audio ? <Button disabled>Audio</Button> : undefined}
-                </Button.Group>
+                <AudioVideoSwitch video={state.video} audio={state.audio} active={state.active} handler={this.handleVideoAudio} />
               </Grid.Column>
               <Grid.Column>
                 <Dropdown
