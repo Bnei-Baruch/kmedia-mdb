@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 
 import { Grid, Header, List, ListItem } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-
 import { Pagination } from '../pagination';
 import Filter from '../filters/filters';
 import FilterTags from '../filters/FilterTags/FilterTags';

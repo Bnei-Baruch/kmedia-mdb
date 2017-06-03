@@ -2,14 +2,36 @@ import React  from 'react';
 import PropTypes from 'prop-types';
 import DateFilter from './DateFilter/DateFilter';
 import SourcesFilter from './SourcesFilter/SourcesFilter';
-
 import { Segment, Menu as RMenu } from 'semantic-ui-react';
+
+// Remove this when move to redux
+import dataLoader from './dataLoader';
+
+const buildSources = (json) => {
+  if (!json) {
+    return {};
+  }
+
+  const sources = json.reduce((acc, s) => {
+    const codeOrId = s.code || s.id;
+    acc[codeOrId] = { name: s.name, children: buildSources(s.children) };
+    return acc;
+  }, {});
+  return sources;
+};
+const SourcesFilterWithData = dataLoader(() => {
+    return fetch('http://rt-dev.kbb1.com:8080/hierarchy/sources/')
+      .then(response => response.json())
+      .then(json => ({ sources: buildSources(json) }));
+})(SourcesFilter);
+
 
 export default class Filter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeFilter: null
+      activeFilter: null,
+      sourcesSelection: []
     };
   }
 
@@ -34,7 +56,7 @@ const ActiveFilter = ({ filter, onCancel }) => {
   case 'date-filter':
     return <DateFilter onCancel={onCancel} />;
   case 'sources-filter':
-    return <SourcesFilter onCancel={onCancel} />;
+    return <SourcesFilterWithData onCancel={onCancel} />
   case 'topic-filter':
     return <Segment basic attached="bottom" className="tab active">Third</Segment>;
   default:
