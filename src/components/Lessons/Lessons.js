@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 import { Grid, Header, List, ListItem } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
@@ -9,9 +8,38 @@ import { Pagination } from '../pagination';
 import Filter from '../filters/filters';
 import FilterTags from '../filters/FilterTags/FilterTags';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
-import { actions, selectors as lessonsSelectors } from '../../redux/modules/lessons';
+import { actions as lessonActions, selectors as lessonsSelectors } from '../../redux/modules/lessons';
 
 class LessonsIndex extends React.Component {
+
+  static propTypes = {
+    total: PropTypes.number,
+    lessons: PropTypes.arrayOf(
+      PropTypes.shape({
+        id : PropTypes.string.isRequired,
+        film_date: PropTypes.string.isRequired,
+        content_type: PropTypes.string.isRequired,
+        content_units: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+            description: PropTypes.string,
+          })
+        ).isRequired,
+      })
+    ),
+    location: PropTypes.shape({
+      search: PropTypes.string.isRequired
+    }).isRequired,
+    fetchList: PropTypes.func.isRequired,
+    language: PropTypes.string.isRequired,
+    pageSize: PropTypes.number.isRequired,
+  };
+
+  static defaultProps = {
+    total  : 0,
+    lessons: [],
+  };
 
   componentDidMount() {
     const { language, pageSize, location } = this.props;
@@ -59,59 +87,25 @@ class LessonsIndex extends React.Component {
         </Header>
         <FilterTags namespace="lessons" onClose={() => this.askForData(location.search, language, pageSize)} />
         <Pagination currentPage={pageNo} totalItems={total} pageSize={pageSize} />
-        <Lessons lessons={lessons} />
+        <LessonsList lessons={lessons} />
       </Grid.Column>
     );
   }
 }
 
-LessonsIndex.propTypes = {
-  total    : PropTypes.number,
-  lessons  : PropTypes.arrayOf(
-    PropTypes.shape({
-      id           : PropTypes.string.isRequired,
-      film_date    : PropTypes.string.isRequired,
-      content_type : PropTypes.string.isRequired,
-      content_units: PropTypes.arrayOf(
-        PropTypes.shape({
-          id         : PropTypes.string.isRequired,
-          name       : PropTypes.string.isRequired,
-          description: PropTypes.string,
-        })
-      ).isRequired,
-    })
-  ),
-  location : PropTypes.shape({
-    search: PropTypes.string.isRequired
-  }).isRequired,
-  fetchList: PropTypes.func.isRequired,
-  language : PropTypes.string.isRequired,
-  pageSize : PropTypes.number.isRequired,
-};
-
-LessonsIndex.defaultProps = {
-  total  : 0,
-  lessons: [],
-};
-
-function mapStateToProps(state /* , ownProps */) {
-  return {
+export default connect(
+  state => ({
     total   : state.lessons.total,
     lessons : lessonsSelectors.getLessons(state.lessons),
     language: settingsSelectors.getLanguage(state.settings),
     pageSize: settingsSelectors.getPageSize(state.settings),
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(actions, dispatch);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LessonsIndex);
+  }),
+  lessonActions
+)(LessonsIndex);
 
 // LESSONS
 
-const Lessons = (props) => {
+const LessonsList = (props) => {
   if (!props.lessons) {
     return (<Grid columns={2} celled="internally" />);
   }
@@ -137,7 +131,7 @@ const Lessons = (props) => {
   return (<Grid columns={2} celled="internally">{lessons}</Grid>);
 };
 
-Lessons.propTypes = {
+LessonsList.propTypes = {
   lessons: PropTypes.arrayOf(
     PropTypes.shape({
       id           : PropTypes.string.isRequired,

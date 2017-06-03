@@ -101,24 +101,3 @@ export default class SourceFilter extends React.Component {
     );
   }
 }
-
-const SourceShape = {
-  name: PropTypes.string.isRequired,
-  children: PropTypes.objectOf(PropTypes.shape)
-};
-const SourcesType = PropTypes.objectOf(PropTypes.shape(SourceShape));
-SourceShape.children = SourcesType;
-
-SourceFilter.propTypes = {
-  sources: SourcesType,
-  onCancel: PropTypes.func,
-  onApply: PropTypes.func,
-  // selection: PropTypes.arrayOf(PropTypes.string),
-};
-
-SourceFilter.defaultProps = {
-  sources: null,
-  onCancel: noop,
-  onApply: noop,
-  // selection: []
-};
