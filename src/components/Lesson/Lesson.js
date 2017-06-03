@@ -6,6 +6,8 @@ import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 import { Item, Container, Table, Button, Header, Grid, List, Menu, Dropdown, Divider } from 'semantic-ui-react';
 
+import ReactJWPlayer from 'react-jw-player';
+
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { actions, selectors as lessonsSelectors } from '../../redux/modules/lessons';
 
@@ -33,7 +35,7 @@ class LessonIndex extends React.Component {
 
   render() {
     return (
-      <Lesson lesson={this.props.lesson} />
+      <Lesson lesson={this.props.lesson} language={this.props.language} />
     );
   }
 }
@@ -105,7 +107,140 @@ function isEmpty(obj) {
   return Object.getOwnPropertyNames(obj).length <= 0;
 }
 
-const Lesson = ({ lesson }) => {
+const Video = ({ file }) => {
+  return (
+    <div id="video" style={{ width: '100%' }}>
+      <ReactJWPlayer
+        playerId="video"
+        playerScript="http://content.jwplatform.com/libraries/rXTkmI8O.js"
+        file={file.url}
+        image=""
+        isMuted
+        customProps={{ skin: { name: 'seven' }, width: 500, height: 375 }}
+      />
+      {/* <video controls width="100%"> */}
+      {/* <source src={files[1].url} type={files[1].mimetype} /> */}
+      {/* <track kind="captions" /> */}
+      {/* </video> */}
+    </div>
+  );
+};
+
+Video.propTypes = {
+  file: PropTypes.object.isRequired
+};
+
+class VideoBox extends React.Component {
+  constructor(props) {
+    super(props);
+    const files  = props.files;
+    const groups = new Map();
+
+    files.forEach((file) => {
+      if (file.mimetype === 'audio/mpeg' || file.mimetype === 'video/mp4') {
+        if (groups.get(file.language) === undefined) {
+          groups.set(file.language, []);
+        }
+        groups.get(file.language).push(file);
+      }
+    });
+
+    let language = this.props.language;
+    if (groups.get(language) === undefined) {
+      language = groups.keys().next().value;
+    }
+
+    const set   = groups.get(language);
+    const video = set.find(file => file.type === 'video');
+    const audio = set.find(file => file.type === 'audio');
+
+    this.state = {
+      groups  : groups,
+      language: language,
+      video   : video,
+      audio   : audio,
+      active  : video || audio
+    };
+  }
+
+  handleVideoAudio = () => {
+    const state = this.state;
+
+    if (state.active === state.video && state.audio) {
+      this.setState({ active: state.audio });
+    } else if (state.active === state.audio && state.video) {
+      this.setState({ active: state.audio });
+    }
+  };
+
+  render() {
+    const state = this.state;
+
+    if (state.video === undefined && state.audio === undefined) {
+      return (<div>No video/audio file.</div>);
+    }
+
+    return (
+      <Grid.Row className="video_box">
+        <Grid.Column width="10">
+          <div className="video_player">
+            <Video file={state.active} />
+          </div>
+        </Grid.Column>
+        <Grid.Column className="player_panel" width="6">
+          <Grid columns="equal">
+            <Grid.Row>
+              <Grid.Column>
+                <Button.Group widths="3">
+                  {state.video ? <Button active color="blue" onClick={this.handleVideoAudio}>Video</Button> :
+                    <Button disabled>Video</Button> }
+                  {state.audio && state.video ? <Button onClick={this.handleVideoAudio}>Audio</Button> : undefined }
+                  { state.audio && !state.video ?
+                    <Button active color="blue" onClick={this.handleVideoAudio}>Audio</Button> : undefined }
+                  {!state.audio ? <Button disabled>Audio</Button> : undefined}
+                </Button.Group>
+              </Grid.Column>
+              <Grid.Column>
+                <Dropdown
+                  placeholder="Language"
+                  search
+                  selection
+                  options={[
+                    { key: 'EN', value: 'EN', text: 'English' },
+                    { key: 'HE', value: 'HE', text: 'Hebrew' },
+                    { key: 'RU', value: 'RU', text: 'Russian' }
+                  ]}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+          <Divider />
+          <Header as="h3">
+            <Header.Content>
+              Morning Lesson - 2/4
+              <Header.Subheader>
+                2016-10-26
+              </Header.Subheader>
+            </Header.Content>
+          </Header>
+          <Menu vertical fluid size="small">
+            <Menu.Item>1 - Lesson preparation - 00:12:02</Menu.Item>
+            <Menu.Item active>2 - Lesson on the topic of &quot;Brit (Union)&quot; - 01:29:00</Menu.Item>
+            <Menu.Item>3 - Baal HaSulam, TES, part 8, item 20 - 00:31:54</Menu.Item>
+            <Menu.Item>4 - Baal HaSulam, &quot;The Giving of the Torah&quot;, item 6 - 00:43:41</Menu.Item>
+          </Menu>
+        </Grid.Column>
+      </Grid.Row>
+    );
+  }
+}
+
+VideoBox.propTypes = {
+  files   : PropTypes.array.isRequired,
+  language: PropTypes.string.isRequired
+};
+
+const Lesson = ({ lesson, language }) => {
   console.log(lesson);
   if (isEmpty(lesson)) {
     return <div />;
@@ -114,54 +249,7 @@ const Lesson = ({ lesson }) => {
   return (
     <div>
       <Grid>
-        <Grid.Row className="video_box">
-          <Grid.Column width="10">
-            <div className="video_player">
-              <video controls width="100%">
-                <source src="http://files.kabbalahmedia.info/download/files/eng_t_norav_achana_2017-04-24_lesson.mp4" type="video/mp4" />
-                <track kind="captions" />
-              </video>
-            </div>
-          </Grid.Column>
-          <Grid.Column className="player_panel" width="6">
-            <Grid columns="equal">
-              <Grid.Row>
-                <Grid.Column>
-                  <Button.Group widths="3">
-                    <Button active color="blue">Video</Button>
-                    <Button>Audio</Button>
-                  </Button.Group></Grid.Column>
-                <Grid.Column>
-                  <Dropdown
-                    placeholder="Language"
-                    search
-                    selection
-                    options={[
-                      { key: 'EN', value: 'EN', text: 'English' },
-                      { key: 'HE', value: 'HE', text: 'Hebrew' },
-                      { key: 'RU', value: 'RU', text: 'Russian' }
-                    ]}
-                  />
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
-            <Divider />
-            <Header as="h3">
-              <Header.Content>
-                Morning Lesson - 2/4
-                <Header.Subheader>
-                  2016-10-26
-                </Header.Subheader>
-              </Header.Content>
-            </Header>
-            <Menu vertical fluid size="small">
-              <Menu.Item>1 - Lesson preparation - 00:12:02</Menu.Item>
-              <Menu.Item active>2 - Lesson on the topic of &quot;Brit (Union)&quot; - 01:29:00</Menu.Item>
-              <Menu.Item>3 - Baal HaSulam, TES, part 8, item 20 - 00:31:54</Menu.Item>
-              <Menu.Item>4 - Baal HaSulam, &quot;The Giving of the Torah&quot;, item 6 - 00:43:41</Menu.Item>
-            </Menu>
-          </Grid.Column>
-        </Grid.Row>
+        <VideoBox files={lesson.files} language={language} />
       </Grid>
       <Grid>
         <Grid.Row>
@@ -278,10 +366,11 @@ const Lesson = ({ lesson }) => {
 };
 
 Lesson.propTypes = {
-  lesson: PropTypes.shape({
+  lesson  : PropTypes.shape({
     uid        : PropTypes.string,
     description: PropTypes.string
-  })
+  }),
+  language: PropTypes.string.isRequired
 };
 
 Lesson.defaultProps = {

@@ -29,6 +29,7 @@
     "prop-types": "^15.5.8",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-jw-player": "^1.5.0",
     "react-redux": "^5.0.4",
     "react-redux-loading-bar": "^2.9.0",
     "react-router-dom": "^4.1.1",
