@@ -136,7 +136,7 @@ SourcesFilter.defaultProps = {
 
 const ConnectedSourcesFilter = connect(
   (state, ownProps) => ({
-    lastSelection: filterSelectors.getFilterValue(state.filters, ownProps.namespace, filterName)
+    selection: filterSelectors.getLastFilterValue(state.filters, ownProps.namespace, filterName)
   }),
   filterActions
 )(SourcesFilter);

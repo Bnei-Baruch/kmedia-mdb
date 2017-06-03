@@ -264,7 +264,7 @@ class DateFilter extends Component {
 
 export default connect(
   (state, ownProps) => ({
-    value: filterSelectors.getFilterValue(state.filters, ownProps.namespace, filterName)
+    value: filterSelectors.getLastFilterValue(state.filters, ownProps.namespace, filterName)
   }),
   filterActions
 )(DateFilter);

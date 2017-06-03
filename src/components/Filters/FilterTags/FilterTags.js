@@ -25,6 +25,16 @@ const tagsData = {
       return `${dateFormat(from)} - ${dateFormat(to)}`;
     }
   },
+  'sources-filter': {
+    icon: 'book',
+    valueToLabel: (value) => {
+      if (!value) {
+        return '';
+      }
+
+      return value.join(' > ');
+    }
+  },
   default: {
     icon: 'tag',
     valueToLabel: value => value
@@ -44,7 +54,7 @@ class FilterTags extends Component {
       name: PropTypes.string.isRequired,
       value: PropTypes.any
     })),
-    clearFilter: PropTypes.func.isRequired,
+    removeFilter: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired
   };
 
@@ -62,11 +72,11 @@ class FilterTags extends Component {
             const tagData = getTagData(tag.name);
             return (
               <FilterTag
-                key={tag.name}
+                key={tag.name + "_" + tag.index}
                 icon={tagData.icon}
                 label={tagData.valueToLabel(tag.value)}
                 onClose={() => {
-                  this.props.clearFilter(namespace, tag.name);
+                  this.props.removeFilter(namespace, tag.name, tag.index);
                   this.props.onClose();
                 }}
               />
@@ -85,8 +95,9 @@ export default connect(
 
     const tags = reduce(filters, (acc, filter) => {
       const values = filter.values;
-      return acc.concat(values.map(value => ({
+      return acc.concat(values.map((value, index) => ({
         name: filter.name,
+        index,
         value
       })));
     }, []);

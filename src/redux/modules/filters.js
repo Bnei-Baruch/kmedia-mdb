@@ -30,7 +30,9 @@ const initialState = {};
 const _addFilterValue = (state, action) => {
   const { namespace, name, value } = action.payload;
   const oldFilterNamespace = state[namespace] || {};
-  const oldFilterValues = oldFilterNamespace[name].value || [];
+  const oldFilterValues = oldFilterNamespace[name] && oldFilterNamespace[name].values ? oldFilterNamespace[name].values : [];
+
+  console.log(oldFilterValues, value);
 
   return {
     ...state,
@@ -63,7 +65,7 @@ const _setFilterValue = (state, action) => {
 const _removeFilter = (state, action) => {
   const { namespace, name, idx } = action.payload;
   const oldFilterNamespace = state[namespace] || { value: [] };
-  const oldFilterValues = oldFilterNamespace[name].value || [];
+  const oldFilterValues = oldFilterNamespace[name] && oldFilterNamespace[name].values ? oldFilterNamespace[name].values : [];
   const newFilterValues = oldFilterValues.slice(0, idx).concat(oldFilterValues.slice(idx + 1));
 
   return {
