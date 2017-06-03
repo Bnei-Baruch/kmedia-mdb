@@ -26,7 +26,6 @@
     "classnames": "^2.2.5",
     "core-js": "^2.4.1",
     "history": "^4.6.1",
-    "jest-enzyme": "^3.1.1",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "prop-types": "^15.5.8",
@@ -48,7 +47,7 @@
   "scripts": {
     "build-css": "node-sass src/ -o src/",
     "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
-    "start-js": "PORT=4000 react-scripts start",
+    "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build": "npm run build-css && react-scripts build",
     "test": "react-scripts test --env=jsdom",
@@ -89,7 +88,6 @@
       "comma-dangle": "off",
       "key-spacing": "off",
       "max-len": "off",
-      "no-underscore-dangle": "off",
       "import/prefer-default-export": "off",
       "react/jsx-filename-extension": "off",
       "no-multi-spaces": "off",
@@ -100,6 +98,15 @@
         {
           "varsIgnorePattern": "_",
           "argsIgnorePattern": "_"
+        }
+      ],
+      "no-underscore-dangle": [
+        "error",
+        {
+          "allow": [
+            "_browserHistory",
+            "__data"
+          ]
         }
       ]
     },
