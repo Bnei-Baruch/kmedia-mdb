@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import noop from 'lodash/noop';
 import DayPicker, { DateUtils } from 'react-day-picker';
-import { Segment, Grid, Header, Dropdown, Input, Button } from 'semantic-ui-react';
+import { Segment, Grid, Header, Dropdown, Input, Button, Divider } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
 
 // TODO (yaniv -> oleg): need indication for user when clicking on a bad date (after today) or when typing bad dates
@@ -199,6 +199,7 @@ class DateFilter extends Component {
                 <Grid.Row>
                   <Grid.Column width={16}>
                     <Dropdown fluid options={datePresetsOptions} item value={this.state.datePreset} onChange={this.handleDatePresetsChange} />
+                    <Divider />
                   </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
