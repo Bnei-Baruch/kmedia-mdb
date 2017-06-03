@@ -89,7 +89,7 @@ class DateFilter extends Component {
     value: PropTypes.shape({
       from: PropTypes.objectOf(Date),
       to: PropTypes.objectOf(Date),
-      dataPreset: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+      datePreset: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
     }),
     onCancel: PropTypes.func,
     onApply: PropTypes.func,
@@ -106,15 +106,18 @@ class DateFilter extends Component {
   }
 
   state = {
-    fromInputValue: '',
-    toInputValue: ''
+    from: this.props.value.from,
+    to: this.props.value.to,
+    datePreset: this.props.value.datePreset,
+    fromInputValue: moment(this.props.value.from, 'DD-MM-YYYY').format('DD-MM-YYYY'),
+    toInputValue: moment(this.props.value.to, 'DD-MM-YYYY').format('DD-MM-YYYY')
   };
 
   setRange(datePreset, from, to, fromInputValue = '', toInputValue = '') {
     let range = {};
     if (datePreset === CUSTOM_RANGE) {
-      range.from = from || this.props.value.from;
-      range.to = to || this.props.value.to;
+      range.from = from || this.state.from;
+      range.to = to || this.state.to;
     } else {
       range = (presetToRange[datePreset] ? presetToRange[datePreset] : presetToRange[TODAY])();
     }
@@ -128,22 +131,28 @@ class DateFilter extends Component {
     const momentTo = moment(new Date(range.to));
 
     this.setState({
+      ...range,
+      datePreset,
       fromInputValue: fromInputValue || (momentFrom.isValid() ? momentFrom.format(format) : ''),
       toInputValue: toInputValue || (momentTo.isValid() ? momentTo.format(format) : '')
     });
-
-    this.props.setFilterValue(this.props.namespace, filterName, {
-      ...range,
-      datePreset,
-    });
   }
+
+  apply = () => {
+    this.props.setFilterValue(this.props.namespace, filterName, {
+      from: this.state.from,
+      to: this.state.to,
+      datePreset: this.state.datePreset
+    });
+    this.props.onApply();
+  };
 
   handleDayClick = (day) => {
     if (moment(day).isAfter(now())) {
       return;
     }
 
-    const { from, to } = this.props.value;
+    const { from, to } = this.state;
     const range = DateUtils.addDayToRange(day, { from, to });
 
     this.setRange(CUSTOM_RANGE, range.from, range.to);
@@ -194,9 +203,8 @@ class DateFilter extends Component {
   canApply = () => isValidDateRange(this.state.fromInputValue, this.state.toInputValue);
 
   render() {
-    const { fromInputValue, toInputValue } = this.state;
-    const { onCancel, onApply, value } = this.props;
-    const { from, to, datePreset } = value;
+    const { fromInputValue, toInputValue, from, to, datePreset } = this.state;
+    const { onCancel } = this.props;
 
     return (
       <Segment basic attached="bottom" className="tab active">
@@ -242,7 +250,7 @@ class DateFilter extends Component {
                 <Grid.Row>
                   <Grid.Column textAlign="right">
                     <Button type="button" onClick={onCancel}>Cancel</Button>
-                    <Button type="button" primary disabled={!this.canApply()} onClick={onApply}>Apply</Button>
+                    <Button type="button" primary disabled={!this.canApply()} onClick={this.apply}>Apply</Button>
                   </Grid.Column>
                 </Grid.Row>
               </Grid>

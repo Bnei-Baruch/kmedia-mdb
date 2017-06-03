@@ -1,8 +1,6 @@
 import React  from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Segment, Menu as RMenu } from 'semantic-ui-react';
-import { actions as filterActions } from '../../redux/modules/filters';
 import DateFilter from './DateFilter/DateFilter';
 import SourcesFilter from './SourcesFilter/SourcesFilter';
 
@@ -10,8 +8,6 @@ class Filter extends React.Component {
 
   static propTypes = {
     namespace: PropTypes.string.isRequired,
-    activateFilter: PropTypes.func.isRequired,
-    clearFilter: PropTypes.func.isRequired,
     onFilterApplication: PropTypes.func.isRequired
   };
 
@@ -23,13 +19,10 @@ class Filter extends React.Component {
   handleFilterClick = ({ name }) => this.setState({ activeFilter: name });
 
   handleCancelActiveFilter = () => {
-    this.props.clearFilter(this.props.namespace, this.state.activeFilter);
-    this.props.onFilterApplication();
     this.setState({ activeFilter: null });
   }
 
   handleApplyActiveFilter = () => {
-    this.props.activateFilter(this.props.namespace, this.state.activeFilter);
     this.props.onFilterApplication();
   };
 
@@ -50,10 +43,7 @@ class Filter extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  filterActions
-)(Filter);
+export default Filter;
 
 const ActiveFilter = ({ filter, onCancel, onApply, ...rest }) => {
   switch (filter) {
