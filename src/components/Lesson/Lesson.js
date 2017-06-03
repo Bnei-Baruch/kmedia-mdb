@@ -109,12 +109,12 @@ const Video = ({ file }) => {
   const ext = file.name.substring(file.name.lastIndexOf('.'));
 
   return (<ReactJWPlayer
-      playerId="video"
-      playerScript="https://content.jwplatform.com/libraries/mxNkRalL.js"
-      file={`http://cdn.kabbalahmedia.info/${file.id}${ext}`}
-      image=""
-      customProps={{ skin: { name: 'seven' }, width: 500, height: 375 }}
-    />);
+    playerId="video"
+    playerScript="https://content.jwplatform.com/libraries/mxNkRalL.js"
+    file={`http://cdn.kabbalahmedia.info/${file.id}${ext}`}
+    image=""
+    customProps={{ skin: { name: 'seven' }, width: 500, height: 375 }}
+  />);
 };
 
 Video.propTypes = {
@@ -252,7 +252,10 @@ class VideoBox extends React.Component {
             </Grid.Row>
           </Grid>
           <Divider />
-          <Header style={{ backgroundColor: 'gray', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)' }} as="h3">
+          <Header style={{
+            backgroundColor: 'gray',
+            backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)'
+          }} as="h3">
             <Header.Content>
               Morning Lesson - 2/4
               <Header.Subheader>
@@ -260,7 +263,10 @@ class VideoBox extends React.Component {
               </Header.Subheader>
             </Header.Content>
           </Header>
-          <Menu style={{ backgroundColor: 'gray', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)' }} vertical fluid size="small">
+          <Menu style={{
+            backgroundColor: 'gray',
+            backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)'
+          }} vertical fluid size="small">
             <Menu.Item>1 - Lesson preparation - 00:12:02</Menu.Item>
             <Menu.Item active>2 - Lesson on the topic of &quot;Brit (Union)&quot; - 01:29:00</Menu.Item>
             <Menu.Item>3 - Baal HaSulam, TES, part 8, item 20 - 00:31:54</Menu.Item>
@@ -295,21 +301,30 @@ const Lesson = ({ lesson, language }) => {
               <span className="text grey">{lesson.film_date}</span><br />
               {lesson.name}
             </Header>
-            <List style={{ backgroundColor: 'gray', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)' }}>
+            <List style={{
+              backgroundColor: 'gray',
+              backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)'
+            }}>
               <List.Item><b>Topics:</b> <a href="">From Lo Lishma to Lishma</a>, <a href="">Work in
                 group</a></List.Item>
               <List.Item><b>Sources:</b> <a href=""> Shamati - There is None Else Beside Him</a>, <a href="">Shamati -
                 Divinity in Exile</a></List.Item>
               <List.Item><b>Related to Event:</b> <a href="">World Israel Congress 2016</a></List.Item>
             </List>
-            <Menu style={{ backgroundColor: 'gray', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)' }} secondary pointing color="blue" className="index-filters">
+            <Menu style={{
+              backgroundColor: 'gray',
+              backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)'
+            }} secondary pointing color="blue" className="index-filters">
               <Menu.Item name="item-summary">Summary</Menu.Item>
               <Menu.Item name="item-transcription">Transcription</Menu.Item>
               <Menu.Item name="item-sources">Sources</Menu.Item>
               <Menu.Item name="item-sketches">Sketches</Menu.Item>
             </Menu>
           </Grid.Column>
-          <Grid.Column style={{ backgroundColor: 'gray', backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)' }} width={6}>
+          <Grid.Column style={{
+            backgroundColor: 'gray',
+            backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)'
+          }} width={6}>
             <Grid columns="equal">
               <Grid.Row>
                 <Grid.Column>
