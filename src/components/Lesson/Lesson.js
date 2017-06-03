@@ -1,10 +1,8 @@
-import React  from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
-import { Link } from 'react-router-dom';
-import { Item, Container, Table, Button, Header, Grid, List, Menu, Dropdown, Divider } from 'semantic-ui-react';
+import { Button, Container, Divider, Dropdown, Grid, Header, Item, List, Menu, Table } from 'semantic-ui-react';
 
 import ReactJWPlayer from 'react-jw-player';
 
@@ -41,23 +39,23 @@ class LessonIndex extends React.Component {
 }
 
 LessonIndex.propTypes = {
-  match      : PropTypes.shape({
+  match: PropTypes.shape({
     isExact: PropTypes.bool.isRequired,
-    params : PropTypes.shape({
+    params: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }).isRequired,
-    path   : PropTypes.string.isRequired,
-    url    : PropTypes.string.isRequired,
+    path: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
   }).isRequired,
-  language   : PropTypes.string.isRequired,
-  lesson     : PropTypes.shape({
-    id           : PropTypes.string,
-    film_date    : PropTypes.string,
-    content_type : PropTypes.string,
+  language: PropTypes.string.isRequired,
+  lesson: PropTypes.shape({
+    id: PropTypes.string,
+    film_date: PropTypes.string,
+    content_type: PropTypes.string,
     content_units: PropTypes.arrayOf(
       PropTypes.shape({
-        id         : PropTypes.string,
-        name       : PropTypes.string,
+        id: PropTypes.string,
+        name: PropTypes.string,
         description: PropTypes.string,
       })
     ),
@@ -71,7 +69,7 @@ LessonIndex.defaultProps = {
 
 function mapStateToProps(state /* , ownProps */) {
   return {
-    lesson  : lessonsSelectors.getLesson(state.lessons),
+    lesson: lessonsSelectors.getLesson(state.lessons),
     language: settingsSelectors.getLanguage(state.settings),
   };
 }
@@ -107,24 +105,21 @@ function isEmpty(obj) {
   return Object.getOwnPropertyNames(obj).length <= 0;
 }
 
-const Video = ({ file }) => {
-  return (
-    <div id="video" style={{ width: '100%' }}>
-      <ReactJWPlayer
-        playerId="video"
-        playerScript="http://content.jwplatform.com/libraries/rXTkmI8O.js"
-        file={file.url}
-        image=""
-        isMuted
-        customProps={{ skin: { name: 'seven' }, width: 500, height: 375 }}
-      />
-      {/* <video controls width="100%"> */}
-      {/* <source src={files[1].url} type={files[1].mimetype} /> */}
-      {/* <track kind="captions" /> */}
-      {/* </video> */}
-    </div>
-  );
-};
+const Video = ({ file }) => (
+  <div id="video" style={{ width: '100%' }}>
+    <ReactJWPlayer
+      playerId="video"
+      playerScript="http://content.jwplatform.com/libraries/rXTkmI8O.js"
+      file={file.url}
+      image=""
+      customProps={{ skin: { name: 'seven' }, width: 500, height: 375 }}
+    />
+    {/* <video controls width="100%"> */}
+    {/* <source src={files[1].url} type={files[1].mimetype} /> */}
+    {/* <track kind="captions" /> */}
+    {/* </video> */}
+  </div>
+);
 
 Video.propTypes = {
   file: PropTypes.object.isRequired
@@ -155,11 +150,11 @@ class VideoBox extends React.Component {
     const audio = set.find(file => file.type === 'audio');
 
     this.state = {
-      groups  : groups,
-      language: language,
-      video   : video,
-      audio   : audio,
-      active  : video || audio
+      groups,
+      language,
+      video,
+      audio,
+      active: video || audio
     };
   }
 
@@ -236,7 +231,7 @@ class VideoBox extends React.Component {
 }
 
 VideoBox.propTypes = {
-  files   : PropTypes.array.isRequired,
+  files: PropTypes.array.isRequired,
   language: PropTypes.string.isRequired
 };
 
@@ -366,8 +361,8 @@ const Lesson = ({ lesson, language }) => {
 };
 
 Lesson.propTypes = {
-  lesson  : PropTypes.shape({
-    uid        : PropTypes.string,
+  lesson: PropTypes.shape({
+    uid: PropTypes.string,
     description: PropTypes.string
   }),
   language: PropTypes.string.isRequired
