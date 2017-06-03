@@ -13,6 +13,11 @@ import dataLoader from '../dataLoader';
 const filterName = 'sources-filter';
 
 class SourcesFilter extends React.Component {
+
+  state = {
+    selection: this.props.lastSelection
+  };
+
   componentDidUpdate = () => {
     this.listContainer.scrollLeft = this.listContainer.scrollWidth;
   }
@@ -21,17 +26,21 @@ class SourcesFilter extends React.Component {
     const { value } = data;
     const depth = data['data-depth'];
 
-    const { selection: oldSelection } = this.props;
+    const { selection: oldSelection } = this.state;
     const newSelection = [...oldSelection];
     newSelection.splice(depth, oldSelection.length - depth);
     newSelection.push(value);
-    this.props.setFilterValue(this.props.namespace, filterName, newSelection);
+    this.setState({ selection: newSelection });
   };
 
   onCancel = () => {
-    this.props.setFilterValue(this.props.namespace, filterName, []);
     this.props.onCancel();
   }
+
+  apply = () => {
+    this.props.addFilterValue(this.props.namespace, filterName, this.state.selection);
+    this.props.onApply();
+  };
 
   // Return all lists of selected sources.
   createLists = (depth, sources, selection) => {
@@ -77,7 +86,6 @@ class SourcesFilter extends React.Component {
   );
 
   render() {
-    const { onApply } = this.props;
     return (
       <Segment basic attached="bottom" className="tab active" clearing>
         <div
@@ -88,14 +96,14 @@ class SourcesFilter extends React.Component {
           <div style={{ whiteSpace: 'nowrap', width: '100%' }}>
             {
               !!this.props.sources ?
-              this.createLists(0, this.props.sources, this.props.selection).map(l => l) :
+              this.createLists(0, this.props.sources, this.state.selection).map(l => l) :
               'Loading...'
             }
           </div>
         </div>
         <Divider />
         <div>
-          <Button floated="right" onClick={onApply} primary>Apply</Button>
+          <Button floated="right" onClick={this.apply} primary>Apply</Button>
           <Button floated="right" onClick={this.onCancel}>Cancel</Button>
         </div>
       </Segment>
@@ -115,20 +123,20 @@ SourcesFilter.propTypes = {
   sources: SourcesType,
   onCancel: PropTypes.func,
   onApply: PropTypes.func,
-  selection: PropTypes.arrayOf(PropTypes.string),
-  setFilterValue: PropTypes.func.isRequired
+  addFilterValue: PropTypes.func.isRequired,
+  lastSelection: PropTypes.arrayOf(PropTypes.string)
 };
 
 SourcesFilter.defaultProps = {
   sources: null,
   onCancel: noop,
   onApply: noop,
-  selection: []
+  lastSelection: []
 };
 
 const ConnectedSourcesFilter = connect(
   (state, ownProps) => ({
-    selection: filterSelectors.getFilterValue(state.filters, ownProps.namespace, filterName)
+    lastSelection: filterSelectors.getFilterValue(state.filters, ownProps.namespace, filterName)
   }),
   filterActions
 )(SourcesFilter);

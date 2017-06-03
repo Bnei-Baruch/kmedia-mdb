@@ -6,7 +6,7 @@ import filterToParams from '../api/filterToParams';
 
 function* fetchList(action) {
   try {
-    const filters = yield select(state => filterSelectors.getActivatedFilters(state.filters, 'lessons'));
+    const filters = yield select(state => filterSelectors.getFilters(state.filters, 'lessons'));
     const params = filters.reduce((acc, filter) => ({
       ...acc,
       ...filterToParams(filter.name)(filter.value)

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import reduce from 'lodash/reduce';
 import { connect } from 'react-redux';
 import { Label } from 'semantic-ui-react';
 import { selectors as filterSelectors, actions as filterActions } from '../../../redux/modules/filters';
@@ -39,7 +40,7 @@ class FilterTags extends Component {
 
   static propTypes = {
     namespace: PropTypes.string.isRequired,
-    tags: PropTypes.arrayOf(PropTypes.shape({
+    filters: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string.isRequired,
       value: PropTypes.any
     })),
@@ -48,7 +49,7 @@ class FilterTags extends Component {
   };
 
   static defaultProps = {
-    tags: []
+    filters: []
   };
 
   render() {
@@ -78,8 +79,19 @@ class FilterTags extends Component {
 }
 
 export default connect(
-  (state, ownProps) => ({
-    tags: filterSelectors.getActivatedFilters(state.filters, ownProps.namespace)
-  }),
+  (state, ownProps) => {
+    // TODO (yaniv): use reselect to cache selector
+    const filters = filterSelectors.getFilters(state.filters, ownProps.namespace);
+
+    const tags = reduce(filters, (acc, filter) => {
+      const values = filter.values;
+      return acc.concat(values.map(value => ({
+        name: filter.name,
+        value
+      })));
+    }, []);
+
+    return { tags };
+  },
   filterActions
 )(FilterTags);
