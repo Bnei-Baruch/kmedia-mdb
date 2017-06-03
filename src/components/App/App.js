@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect, Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
-import 'semantic-ui-css/semantic.min.css';
 import { selectors as systemSelectors } from '../../redux/modules/system';
 import Layout from '../Layout/Layout';
 
+import '../../stylesheets/semantic.min.css';
 import '../../stylesheets/Kmedia.css';
 
 const Loader = () => (
