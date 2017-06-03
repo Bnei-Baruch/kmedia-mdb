@@ -63,14 +63,17 @@ const _fetchListSuccess = (state, action) => {
 };
 
 const _fetchLessonSuccess = (state, action) => {
-  const payload = action.payload;
-  const lesson  = Object.assign({}, state.byUnitId[payload.id], payload);
-
-  return {
+  const payload              = action.payload;
+  const id                   = payload.id;
+  const lesson               = Object.assign({}, state.byUnitId[id], payload);
+  const newState             = {
     ...state,
-    lesson_id: action.payload.id,
-    lesson   : [...lesson],
+    lesson_id: id,
+    lesson,
   };
+  newState.byUnitId[payload.id] = lesson;
+
+  return newState;
 };
 export const reducer      = handleActions({
   [FETCH_LIST_SUCCESS]  : (state, action) => _fetchListSuccess(state, action),
