@@ -1,8 +1,10 @@
 import React  from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Segment, Menu as RMenu } from 'semantic-ui-react';
+import { actions as filterActions } from '../../redux/modules/filters';
 import DateFilter from './DateFilter/DateFilter';
 import SourcesFilter from './SourcesFilter/SourcesFilter';
-import { Segment, Menu as RMenu } from 'semantic-ui-react';
 
 // Remove this when move to redux
 import dataLoader from './dataLoader';
@@ -25,11 +27,12 @@ const SourcesFilterWithData = dataLoader(() => {
       .then(json => ({ sources: buildSources(json) }));
 })(SourcesFilter);
 
-
-export default class Filter extends React.Component {
+class Filter extends React.Component {
 
   static propTypes = {
-    namespace: PropTypes.string.isRequired
+    namespace: PropTypes.string.isRequired,
+    activateFilter: PropTypes.func.isRequired,
+    clearFilter: PropTypes.func.isRequired
   };
 
   state = {
@@ -39,7 +42,13 @@ export default class Filter extends React.Component {
 
   handleFilterClick = ({ name }) => this.setState({ activeFilter: name });
 
-  handleFilterHide = () => this.setState({ activeFilter: null });
+  handleCancelActiveFilter = () => {
+    this.props.clearFilter(this.props.namespace, this.state.activeFilter);
+    this.setState({ activeFilter: null });
+  }
+
+  handleApplyActiveFilter = () =>
+    this.props.activateFilter(this.props.namespace, this.state.activeFilter);
 
   render() {
     const activeFilter = this.state.activeFilter;
@@ -50,19 +59,25 @@ export default class Filter extends React.Component {
         <ActiveFilter
           namespace={this.props.namespace}
           filter={activeFilter}
-          onCancel={() => this.handleFilterHide()}
+          onCancel={() => this.handleCancelActiveFilter()}
+          onApply={() => this.handleApplyActiveFilter()}
         />
       </div>
     );
   }
 }
 
-const ActiveFilter = ({ filter, onCancel, ...rest }) => {
+export default connect(
+  null,
+  filterActions
+)(Filter);
+
+const ActiveFilter = ({ filter, onCancel, onApply, ...rest }) => {
   switch (filter) {
   case 'date-filter':
-    return <DateFilter onCancel={onCancel} {...rest} />;
+    return <DateFilter onCancel={onCancel} onApply={onApply} {...rest} />;
   case 'sources-filter':
-    return <SourcesFilterWithData onCancel={onCancel} {...rest} />;
+    return <SourcesFilterWithData onCancel={onCancel} onApply={onApply} {...rest} />;
   case 'topic-filter':
     return <Segment basic attached="bottom" className="tab active">Third</Segment>;
   default:
@@ -72,7 +87,8 @@ const ActiveFilter = ({ filter, onCancel, ...rest }) => {
 
 ActiveFilter.propTypes = {
   filter: PropTypes.string,
-  onCancel: PropTypes.func
+  onCancel: PropTypes.func.isRequired,
+  onApply: PropTypes.func.isRequired
 };
 
 ActiveFilter.defaultProps = {

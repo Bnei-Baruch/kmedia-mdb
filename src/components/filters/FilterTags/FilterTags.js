@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { connect } from 'react-redux';
 import { Label } from 'semantic-ui-react';
+import { selectors as filterSelectors, actions as filterActions } from '../../../redux/modules/filters';
 import FilterTag from '../FilterTag/FilterTag';
 
 const tagsData = {
@@ -33,38 +35,47 @@ const getTagData = (tagName) => {
   return tagData || tagsData.default;
 };
 
-const FilterTags = (props) => {
-  const { tags, onTagClose } = props;
+class FilterTags extends Component {
 
-  return (
-    <Label.Group color="blue">
-      {
-        tags.map((tag) => {
-          const tagData = getTagData(tag.name);
-          return (
-            <FilterTag
-              key={tag.name}
-              icon={tagData.icon}
-              label={tagData.valueToLabel(tag.value)}
-              onClose={() => onTagClose(tag.name)}
-            />
-          );
-        })
-      }
-    </Label.Group>
-  );
-};
+  static propTypes = {
+    namespace: PropTypes.string.isRequired,
+    tags: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      value: PropTypes.any
+    })),
+    clearFilter: PropTypes.func.isRequired
+  };
 
-FilterTags.propTypes = {
-  tags: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    value: PropTypes.any
-  })),
-  onTagClose: PropTypes.func.isRequired
-};
+  static defaultProps = {
+    tags: []
+  };
 
-FilterTags.defaultProps = {
-  tags: []
-};
+  render() {
+    const { tags, namespace } = this.props;
 
-export default FilterTags;
+    return (
+      <Label.Group color="blue">
+        {
+          tags.map((tag) => {
+            const tagData = getTagData(tag.name);
+            return (
+              <FilterTag
+                key={tag.name}
+                icon={tagData.icon}
+                label={tagData.valueToLabel(tag.value)}
+                onClose={() => this.props.clearFilter(namespace, tag.name)}
+              />
+            );
+          })
+        }
+      </Label.Group>
+    );
+  }
+}
+
+export default connect(
+  (state, ownProps) => ({
+    tags: filterSelectors.getActivatedFilters(state.filters, ownProps.namespace)
+  }),
+  filterActions
+)(FilterTags);

@@ -11,17 +11,6 @@ import FilterTags from '../filters/FilterTags/FilterTags';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { actions, selectors as lessonsSelectors } from '../../redux/modules/lessons';
 
-// NOTE (yaniv): this is mock - we should get it through redux
-const tags = [
-  {
-    name: 'date-filter',
-    value: {
-      from: '02-06-2017',
-      to: '04-06-2017'
-    }
-  }
-];
-
 class LessonsIndex extends React.Component {
 
   componentDidMount() {
@@ -65,7 +54,7 @@ class LessonsIndex extends React.Component {
           Results {((pageNo - 1) * pageSize) + 1} - {(pageNo * pageSize) + 1}&nbsp;
           of {total}
         </Header>
-        <FilterTags tags={tags} namespace="lessons" />
+        <FilterTags namespace="lessons" />
         <Pagination currentPage={pageNo} totalItems={total} pageSize={pageSize} />
         <Lessons lessons={lessons} />
       </Grid.Column>
