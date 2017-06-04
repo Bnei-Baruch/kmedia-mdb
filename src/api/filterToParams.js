@@ -7,16 +7,35 @@ const filtersToParams = {
       start_date: moment(new Date(from)).format('YYYY-MM-DD'),
       end_date: moment(new Date(to)).format('YYYY-MM-DD')
     };
-  }
+  },
+  'sources-filter': value => ({ source: value[value.length - 1] })
 };
 
-const filterToParams = name => (value) => {
+const filterToParams = name => (values) => {
   const transform = filtersToParams[name];
   if (!transform) {
-    return value;
+    return { [name]: values };
   }
 
-  return transform(value);
+  const transformedValues = Array.isArray(values)
+    ? values.map(value => transform(value))
+    : transform(values);
+
+  if (Array.isArray(transformedValues)) {
+    return transformedValues.reduce((acc, param) => {
+      Object.keys(param).forEach((key) => {
+        const value = param[key];
+        if (Array.isArray(acc[key])) {
+          acc[key].push(value);
+        } else {
+          acc[key] = [value];
+        }
+      });
+      return acc;
+    }, {});
+  }
+
+  return transformedValues;
 };
 
 export default filterToParams;

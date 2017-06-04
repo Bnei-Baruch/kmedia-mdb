@@ -9,7 +9,7 @@ function* fetchList(action) {
     const filters = yield select(state => filterSelectors.getFilters(state.filters, 'lessons'));
     const params = filters.reduce((acc, filter) => ({
       ...acc,
-      ...filterToParams(filter.name)(filter.value)
+      ...filterToParams(filter.name)(filter.values)
     }), {});
     const resp = yield call(LessonApi.all, { ...action.payload, ...params });
     yield put(actions.fetchListSuccess(resp));

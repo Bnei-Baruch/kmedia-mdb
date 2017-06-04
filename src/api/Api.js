@@ -4,7 +4,18 @@ const API_ROOT = process.env.REACT_APP_API_BACKEND;
 
 class Requests {
   static get        = url => zlFetch(`${API_ROOT}${url}`);
-  static makeParams = params => `${Object.entries(params).map(pair => `${pair[0]}=${pair[1]}`).join('&')}`;
+  static makeParams = params =>
+    `${Object.entries(params).map((pair) => {
+      const key = pair[0];
+      const value = pair[1];
+
+      if (Array.isArray(value)) {
+        return value.map(val => `${key}=${val}`).join('&');
+      }
+
+      return `${key}=${value}`;
+    }).join('&')}`;
+
   static limit      = (page, count) => `page_no=${page}&page_size=${count}`;
   static encode     = encodeURIComponent;
 }
