@@ -32,8 +32,6 @@ const _addFilterValue = (state, action) => {
   const oldFilterNamespace = state[namespace] || {};
   const oldFilterValues = oldFilterNamespace[name] && oldFilterNamespace[name].values ? oldFilterNamespace[name].values : [];
 
-  console.log(oldFilterValues, value);
-
   return {
     ...state,
     [namespace]: {
