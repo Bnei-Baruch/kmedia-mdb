@@ -17,3 +17,7 @@ yarn-debug.log*
 yarn-error.log*
 src/**/*.css
 .idea/
+*.swp
+
+# do not ignore main theme
+!src/**/semantic.min.css

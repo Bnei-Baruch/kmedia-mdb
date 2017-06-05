@@ -29,4 +29,3 @@ TopFixedMenu.propTypes = {
 };
 
 export default TopFixedMenu;
-

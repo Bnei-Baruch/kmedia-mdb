@@ -3,10 +3,9 @@ import React from 'react';
 
 import { Grid } from 'semantic-ui-react';
 
-import MenuRoutes from './router';
+import MenuRoutes from './Layout/router';
 
-import { FetchTopics } from './fetch';
-import MenuItems from './menu';
+import MenuItems from './Layout/MenuItems';
 
 import TreeNode from './treeNode';
 
@@ -20,16 +19,16 @@ class Topics extends React.Component {
   }
 
   componentDidMount() {
-    FetchTopics(null, {
-      language: this.state.language,
-    }, this.handleDataFetch);
+    // FetchTopics(null, {
+    //   language: this.state.language,
+    // }, this.handleDataFetch);
   }
 
-  handleDataFetch = (collections) => {
-    this.setState({
-      tree: collections,
-    });
-  }
+  // handleDataFetch = (collections) => {
+  //   this.setState({
+  //     tree: collections,
+  //   });
+  // };
 
   render() {
     return (

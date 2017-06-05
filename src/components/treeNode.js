@@ -13,7 +13,7 @@ class TreeNode extends React.Component {
 
   toggle = () => {
     this.setState({ visible: !this.state.visible });
-  }
+  };
 
   description = (name, description) => {
     if (name) {
@@ -23,7 +23,7 @@ class TreeNode extends React.Component {
       return ` (${description})`;
     }
     return '';
-  }
+  };
 
   render() {
     const node = this.props.node;
@@ -31,8 +31,9 @@ class TreeNode extends React.Component {
     let childNodes = null;
     let classObj   = null;
 
+// eslint-disable-next-line no-extra-boolean-cast
     if (!!node.children) {
-      childNodes = node.children.map(node => <li key={`${node.uid}-c`}><TreeNode node={node} /></li>);
+      childNodes = node.children.map(item => <li key={`${item.uid}-c`}><TreeNode node={item} /></li>);
 
       classObj = {
         togglable       : true,
@@ -45,9 +46,9 @@ class TreeNode extends React.Component {
 
     return (
       <div>
-        <div key={node.code} onClick={this.toggle} className={classNames(classObj)}>{node.name}
+        <a key={node.code} onClick={this.toggle} className={classNames(classObj)}>{node.name}
           {this.description(node.full_name, node.description)}
-        </div>
+        </a>
         <ul style={style}>{childNodes}</ul>
       </div>
     );
