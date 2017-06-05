@@ -1,4 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
+import isEqual from 'lodash/isEqual';
+import some from 'lodash/some';
 
 /* Types */
 
@@ -31,6 +33,11 @@ const _addFilterValue = (state, action) => {
   const { namespace, name, value } = action.payload;
   const oldFilterNamespace = state[namespace] || {};
   const oldFilterValues = oldFilterNamespace[name] && oldFilterNamespace[name].values ? oldFilterNamespace[name].values : [];
+  if (value.length === 0 || some(oldFilterValues, (v) => isEqual(v, value))) {
+    return state;
+  }
+
+  console.log(oldFilterValues, value);
 
   return {
     ...state,

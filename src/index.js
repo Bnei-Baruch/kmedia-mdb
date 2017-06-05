@@ -59,6 +59,9 @@ function* application() {
   // Deep merges state fetched from server with the state saved in the local storage
   yield put(system.init({}));
 
+  // Load sources on init.
+  yield put(fetchSources());
+
   //
   // Just make sure that everybody does their initialization homework
   //
