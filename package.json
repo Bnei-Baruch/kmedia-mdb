@@ -40,7 +40,6 @@
     "redux-actions": "^2.0.3",
     "redux-saga": "^0.15.3",
     "regenerator-runtime": "^0.10.5",
-    "semantic-ui-css": "^2.2.9",
     "semantic-ui-react": "^0.68.0",
     "zl-fetch": "^1.0.4"
   },
