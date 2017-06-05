@@ -39,53 +39,29 @@ export const actions = {
 /* Reducer */
 
 const initialState = {
-  total    : 0,
-  lessons  : [],
-  lesson   : {},
-  lesson_id: 0,
-  byUnitId : {}
+  total: 0,
+  lessons: [],
 };
 
 const _fetchListSuccess = (state, action) => {
-  const collections = action.payload.collections;
-  const newState    = {
+  const items = action.payload.collections || action.payload.content_units || [];
+  return {
     ...state,
-    total  : action.payload.total,
-    lessons: collections.map(lesson => lesson.id),
+    total: action.payload.total,
+    lessons: items.map(x => [x.id, x.content_type]),
   };
-  collections.forEach((element) => {
-    newState.byUnitId[element.id] = element;
-    element.content_units.forEach((cu) => {
-      newState.byUnitId[cu.id] = cu;
-    });
-  });
-  return newState;
 };
 
-const _fetchLessonSuccess = (state, action) => {
-  const payload              = action.payload;
-  const id                   = payload.id;
-  const lesson               = Object.assign({}, state.byUnitId[id], payload);
-  const newState             = {
-    ...state,
-    lesson_id: id,
-    lesson,
-  };
-  newState.byUnitId[payload.id] = lesson;
-
-  return newState;
-};
-export const reducer      = handleActions({
-  [FETCH_LIST_SUCCESS]  : (state, action) => _fetchListSuccess(state, action),
-  [FETCH_LESSON_SUCCESS]: (state, action) => _fetchLessonSuccess(state, action),
+export const reducer = handleActions({
+  [FETCH_LIST_SUCCESS]: (state, action) => _fetchListSuccess(state, action),
 }, initialState);
 
 /* Selectors */
 
-const getLessons = state => state.lessons.map(id => state.byUnitId[id]);
-const getLesson  = state => state.byUnitId[state.lesson_id];
+const getTotal   = state => state.total;
+const getLessons = state => state.lessons;
 
 export const selectors = {
+  getTotal,
   getLessons,
-  getLesson,
 };
