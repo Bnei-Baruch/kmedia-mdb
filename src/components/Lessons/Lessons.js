@@ -60,7 +60,10 @@ class LessonsIndex extends React.Component {
   getPageNo = (search) => {
     let page = 0;
     if (search) {
-      page = parseInt(search.match(/page=(\d+)/)[1], 10);
+      const pageMatchInSearch = search.match(/page=(\d+)/);
+      if (pageMatchInSearch) {
+        page = parseInt(pageMatchInSearch[1], 10);
+      }
     }
 
     return (isNaN(page) || page <= 0) ? 1 : page;

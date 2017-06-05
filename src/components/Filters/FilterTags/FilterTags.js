@@ -79,7 +79,7 @@ class FilterTags extends Component {
                 icon={tagData.icon}
                 label={tagData.valueToLabel(tag.value, this.props)}
                 onClose={() => {
-                  this.props.removeFilter(namespace, tag.name, tag.index);
+                  this.props.removeFilter(namespace, tag.name, tag.value);
                   this.props.onClose();
                 }}
               />

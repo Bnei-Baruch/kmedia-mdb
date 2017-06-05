@@ -4,18 +4,19 @@ import { createAction, handleActions } from 'redux-actions';
 
 const ADD_FILTER_VALUE  = 'Filters/ADD_FILTER_VALUE';
 const SET_FILTER_VALUE  = 'Filters/SET_FILTER_VALUE';
-const REMOVE_FILTER = 'Filters/REMOVE_FILTER';
+const REMOVE_FILTER_VALUE = 'Filters/REMOVE_FILTER_VALUE';
 
 export const types = {
+  ADD_FILTER_VALUE,
   SET_FILTER_VALUE,
-  REMOVE_FILTER
+  REMOVE_FILTER_VALUE
 };
 
 /* Actions */
 
 const addFilterValue = createAction(ADD_FILTER_VALUE, (namespace, name, value) => ({ namespace, name, value }));
 const setFilterValue = createAction(SET_FILTER_VALUE, (namespace, name, value) => ({ namespace, name, value }));
-const removeFilter = createAction(REMOVE_FILTER, (namespace, name, idx) => ({ namespace, name, idx }));
+const removeFilter = createAction(REMOVE_FILTER_VALUE, (namespace, name, value) => ({ namespace, name, value }));
 
 export const actions = {
   addFilterValue,
@@ -61,9 +62,16 @@ const _setFilterValue = (state, action) => {
 };
 
 const _removeFilter = (state, action) => {
-  const { namespace, name, idx } = action.payload;
+  const { namespace, name, value } = action.payload;
   const oldFilterNamespace = state[namespace] || { value: [] };
   const oldFilterValues = oldFilterNamespace[name] && oldFilterNamespace[name].values ? oldFilterNamespace[name].values : [];
+  const idx = oldFilterValues.indexOf(value);
+
+  // eslint-disable-next-line no-bitwise
+  if (!~idx) {
+    return state;
+  }
+
   const newFilterValues = oldFilterValues.slice(0, idx).concat(oldFilterValues.slice(idx + 1));
 
   return {
@@ -81,7 +89,7 @@ const _removeFilter = (state, action) => {
 export const reducer = handleActions({
   [ADD_FILTER_VALUE]: (state, action) => _addFilterValue(state, action),
   [SET_FILTER_VALUE]: (state, action) => _setFilterValue(state, action),
-  [REMOVE_FILTER]: (state, action) => _removeFilter(state, action)
+  [REMOVE_FILTER_VALUE]: (state, action) => _removeFilter(state, action)
 }, initialState);
 
 /* Selectors */
@@ -104,12 +112,12 @@ const getLastFilterValue = (state, namespace, filterName) => {
       state[namespace][filterName].values.length > 0) {
     const values = state[namespace][filterName].values;
     return values[values.length - 1];
-  } else {
-    return undefined;
   }
+
+  return undefined;
 };
 
 export const selectors = {
   getFilters,
-  getLastFilterValue,
+  getLastFilterValue
 };
