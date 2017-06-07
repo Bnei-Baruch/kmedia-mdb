@@ -45,11 +45,6 @@ class LessonsContainer extends Component {
     lessons: [],
   };
 
-  componentDidMount() {
-    const { language, pageSize, location } = this.props;
-    this.askForData(location.search, language, pageSize);
-  }
-
   componentWillReceiveProps(nextProps) {
     // if relevant props changed then askForData
     const { language, pageSize, location } = nextProps;
@@ -84,7 +79,10 @@ class LessonsContainer extends Component {
 
     return (
       <Grid.Column width={16}>
-        <FiltersHydrator namespace="lessons" />
+        <FiltersHydrator
+          namespace="lessons"
+          onHydrated={() => this.askForData(location.search, language, pageSize)}
+        />
         <Filters
           namespace="lessons"
           filters={filters}

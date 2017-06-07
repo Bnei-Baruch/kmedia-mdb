@@ -137,6 +137,7 @@ function* hydrateFilters(action) {
 
   if (filters) {
     yield put(filterActions.setHydratedFilterValues(namespace, filters));
+    yield put(filterActions.hydrated(namespace));
   }
 }
 

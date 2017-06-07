@@ -9,6 +9,7 @@ const SET_FILTER_VALUE  = 'Filters/SET_FILTER_VALUE';
 const REMOVE_FILTER_VALUE = 'Filters/REMOVE_FILTER_VALUE';
 const SET_HYDRATED_FILTER_VALUES = 'Filters/SET_HYDRATED_FILTER_VALUES';
 const HYDRATE = 'Filters/HYDRATE';
+const HYDRATED = 'Filters/HYDRATED';
 
 export const types = {
   ADD_FILTER_VALUE,
@@ -16,6 +17,7 @@ export const types = {
   REMOVE_FILTER_VALUE,
   SET_HYDRATED_FILTER_VALUES,
   HYDRATE,
+  HYDRATED
 };
 
 /* Actions */
@@ -28,13 +30,15 @@ const setHydratedFilterValues = createAction(
   (namespace, filters) => ({ namespace, filters })
 );
 const hydrateFilters = createAction(HYDRATE, (namespace, from = 'query') => ({ namespace, from }));
+const hydrated = createAction(HYDRATED, namespace => ({ namespace }));
 
 export const actions = {
   addFilterValue,
   setFilterValue,
   removeFilter,
   setHydratedFilterValues,
-  hydrateFilters
+  hydrateFilters,
+  hydrated
 };
 
 /* Reducer */
@@ -48,8 +52,6 @@ const _addFilterValue = (state, action) => {
   if (value.length === 0 || some(oldFilterValues, (v) => isEqual(v, value))) {
     return state;
   }
-
-  console.log(oldFilterValues, value);
 
   return {
     ...state,
@@ -108,7 +110,6 @@ const _setHydratedFilterValues = (state, action) => {
   const { namespace, filters } = action.payload;
   const oldNamespace = state[namespace] || {};
 
-  console.log(filters);
   return {
     ...state,
     [namespace]: {
@@ -124,11 +125,29 @@ const _setHydratedFilterValues = (state, action) => {
   };
 };
 
+const _hydrate = (state, action) => ({
+  ...state,
+  isHydrated: {
+    ...state.isHydrated,
+    [action.payload.namespace]: false
+  }
+});
+
+const _hydrated = (state, action) => ({
+  ...state,
+  isHydrated: {
+    ...state.isHydrated,
+    [action.payload.namespace]: true
+  }
+});
+
 export const reducer = handleActions({
   [ADD_FILTER_VALUE]: (state, action) => _addFilterValue(state, action),
   [SET_FILTER_VALUE]: (state, action) => _setFilterValue(state, action),
   [REMOVE_FILTER_VALUE]: (state, action) => _removeFilterValue(state, action),
-  [SET_HYDRATED_FILTER_VALUES]: (state, action) => _setHydratedFilterValues(state, action)
+  [SET_HYDRATED_FILTER_VALUES]: (state, action) => _setHydratedFilterValues(state, action),
+  [HYDRATE]: _hydrate,
+  [HYDRATED]: _hydrated
 }, initialState);
 
 /* Selectors */
@@ -156,7 +175,10 @@ const getLastFilterValue = (state, namespace, filterName) => {
   return undefined;
 };
 
+const getIsHydrated = (state, namespace) => !!state.isHydrated && !!state.isHydrated[namespace];
+
 export const selectors = {
   getFilters,
-  getLastFilterValue
+  getLastFilterValue,
+  getIsHydrated
 };
