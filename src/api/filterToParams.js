@@ -8,7 +8,8 @@ const filtersToParams = {
       end_date: moment(new Date(to)).format('YYYY-MM-DD')
     };
   },
-  'sources-filter': value => ({ [value.length === 1 ? 'author' : 'source']: value[value.length - 1] })
+  'sources-filter': value => ({ [value.length === 1 ? 'author' : 'source']: value[value.length - 1] }),
+  'topics-filter': value => ({ 'tag': value }),
 };
 
 const filterToParams = name => (values) => {

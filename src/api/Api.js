@@ -32,3 +32,7 @@ export class LessonApi {
 export class SourcesApi {
   static all = () => Requests.get('sources');
 }
+
+export class TagsApi {
+  static all = () => Requests.get('tags');
+}

@@ -1,8 +1,9 @@
 import React  from 'react';
 import PropTypes from 'prop-types';
-import { Segment, Menu as RMenu } from 'semantic-ui-react';
+import { Menu as RMenu } from 'semantic-ui-react';
 import DateFilter from './DateFilter/DateFilter';
 import SourcesFilter from './SourcesFilter/SourcesFilter';
+import TopicsFilter from './TopicsFilter/TopicsFilter';
 
 class Filter extends React.Component {
 
@@ -51,8 +52,8 @@ const ActiveFilter = ({ filter, onCancel, onApply, ...rest }) => {
     return <DateFilter onCancel={onCancel} onApply={onApply} {...rest} />;
   case 'sources-filter':
     return <SourcesFilter onCancel={onCancel} onApply={onApply} {...rest} />;
-  case 'topic-filter':
-    return <Segment basic attached="bottom" className="tab active">Third</Segment>;
+  case 'topics-filter':
+    return <TopicsFilter onCancel={onCancel} onApply={onApply} {...rest} />;
   default:
     return <span />;
   }
@@ -75,7 +76,7 @@ const FilterMenu = props =>
     <RMenu secondary pointing color="blue" className="index-filters" size="large">
       <FilterMenuDate name="date" title="Date" {...props} />
       <FilterMenuSources name="sources" title="Sources" {...props} />
-      <FilterMenuTopics name="topic" title="Topics" {...props} />
+      <FilterMenuTopics name="topics" title="Topics" {...props} />
     </RMenu>
   )
 ;

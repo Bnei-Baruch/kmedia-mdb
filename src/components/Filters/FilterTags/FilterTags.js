@@ -7,6 +7,7 @@ import { Label } from 'semantic-ui-react';
 import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
 import FilterTag from '../FilterTag/FilterTag';
 import { selectors as sources } from '../../../redux/modules/sources';
+import { selectors as tagsSelectors } from '../../../redux/modules/tags';
 
 const tagsData = {
   'date-filter': {
@@ -34,6 +35,15 @@ const tagsData = {
       }
       // TODO (edo): Support RTL languages here with the '>' sign
       return value.map(x => props.getSourceLabel(x)).join(' > ');
+    }
+  },
+  'topics-filter': {
+    icon: 'tag',
+    valueToLabel: (value, props) => {
+      if (!value) {
+        return '';
+      }
+      return props.getTopicLabel(value);
     }
   },
   default: {
@@ -107,6 +117,7 @@ export default connect(
     return {
       tags,
       getSourceLabel: sources.getSourceLabel(state.sources),
+      getTopicLabel: tagsSelectors.getTopicLabel(state.tags),
     };
   },
   filterActions
