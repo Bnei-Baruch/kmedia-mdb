@@ -4,7 +4,7 @@ import moment from 'moment';
 import reduce from 'lodash/reduce';
 import { connect } from 'react-redux';
 import { Label } from 'semantic-ui-react';
-import { selectors as filterSelectors, actions as filterActions } from '../../../redux/modules/filters';
+import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
 import FilterTag from '../FilterTag/FilterTag';
 import { selectors as sources } from '../../../redux/modules/sources';
 
@@ -17,7 +17,7 @@ const tagsData = {
       }
 
       const { from, to } = value;
-      const dateFormat = date => moment(new Date(date)).format('D MMM YYYY');
+      const dateFormat   = date => moment(new Date(date)).format('D MMM YYYY');
 
       if (value.from === value.to) {
         return dateFormat(from);
@@ -32,7 +32,8 @@ const tagsData = {
       if (!value) {
         return '';
       }
-      return value.map(codeOrId => sources.getSourceLabel(codeOrId)).join(' > ');
+      // TODO (edo): Support RTL languages here with the '>' sign
+      return value.map(x => props.getSourceLabel(x)).join(' > ');
     }
   },
   default: {
@@ -50,12 +51,13 @@ class FilterTags extends Component {
 
   static propTypes = {
     namespace: PropTypes.string.isRequired,
-    filters: PropTypes.arrayOf(PropTypes.shape({
+    tags: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string.isRequired,
       value: PropTypes.any
     })),
     removeFilter: PropTypes.func.isRequired,
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    getSourceLabel: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -72,7 +74,7 @@ class FilterTags extends Component {
             const tagData = getTagData(tag.name);
             return (
               <FilterTag
-                key={tag.name + "_" + tag.index}
+                key={`${tag.name}_${tag.index}`}
                 icon={tagData.icon}
                 label={tagData.valueToLabel(tag.value, this.props)}
                 onClose={() => {
@@ -104,6 +106,7 @@ export default connect(
 
     return {
       tags,
+      getSourceLabel: sources.getSourceLabel(state.sources),
     };
   },
   filterActions

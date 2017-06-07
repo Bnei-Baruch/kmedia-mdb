@@ -8,7 +8,7 @@ import { selectors as settings } from '../../redux/modules/settings';
 import { selectors as mdb } from '../../redux/modules/mdb';
 import { actions, selectors as lessonsSelectors } from '../../redux/modules/lessons';
 import { CT_LESSON_PART } from '../../helpers/consts';
-import Pagination from '../shared/pagination';
+import Pagination from '../shared/Pagination';
 import ResultsPageHeader from '../shared/ResultsPageHeader';
 import Filters from '../Filters/Filters';
 import FilterTags from '../Filters/FilterTags/FilterTags';

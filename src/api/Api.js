@@ -6,7 +6,7 @@ class Requests {
   static get        = url => zlFetch(`${API_ROOT}${url}`);
   static makeParams = params =>
     `${Object.entries(params).map((pair) => {
-      const key = pair[0];
+      const key   = pair[0];
       const value = pair[1];
 
       if (Array.isArray(value)) {
@@ -16,8 +16,8 @@ class Requests {
       return `${key}=${value}`;
     }).join('&')}`;
 
-  static limit      = (page, count) => `page_no=${page}&page_size=${count}`;
-  static encode     = encodeURIComponent;
+  static limit  = (page, count) => `page_no=${page}&page_size=${count}`;
+  static encode = encodeURIComponent;
 }
 
 export class LessonApi {
@@ -30,7 +30,5 @@ export class LessonApi {
 }
 
 export class SourcesApi {
-  static all = () => {
-    return Requests.get('sources');
-  };
+  static all = () => Requests.get('sources');
 }

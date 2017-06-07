@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { actions, types } from '../redux/modules/sources';
 import { SourcesApi } from '../api/Api';
-import { types as systemTypes } from '../redux/modules/system';
+import { types as system } from '../redux/modules/system';
 
 function* fetchSources(action) {
   try {
@@ -13,7 +13,7 @@ function* fetchSources(action) {
 }
 
 function* watchFetchSources() {
-  yield takeLatest([types.FETCH_SOURCES, systemTypes.INIT], fetchSources);
+  yield takeLatest([types.FETCH_SOURCES, system.INIT], fetchSources);
 }
 
 export const sagas = [

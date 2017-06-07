@@ -2,9 +2,9 @@ import { createAction, handleActions } from 'redux-actions';
 
 /* Types */
 
-const FETCH_SOURCES  = 'Sources/FETCH_SOURCES';
-const FETCH_SOURCES_SUCCESS   = 'Sources/FETCH_SOURCES_SUCCESS';
-const FETCH_SOURCES_FAILURE   = 'Sources/FETCH_SOURCES_FAILURE';
+const FETCH_SOURCES         = 'Sources/FETCH_SOURCES';
+const FETCH_SOURCES_SUCCESS = 'Sources/FETCH_SOURCES_SUCCESS';
+const FETCH_SOURCES_FAILURE = 'Sources/FETCH_SOURCES_FAILURE';
 
 export const types = {
   FETCH_SOURCES,
@@ -14,7 +14,7 @@ export const types = {
 
 /* Actions */
 
-const fetchSources = createAction(FETCH_SOURCES);
+const fetchSources        = createAction(FETCH_SOURCES);
 const fetchSourcesSuccess = createAction(FETCH_SOURCES_SUCCESS);
 const fetchSourcesFailure = createAction(FETCH_SOURCES_FAILURE);
 
@@ -40,7 +40,7 @@ const buildSources = (json) => {
 
   const sources = json.reduce((acc, s) => {
     const codeOrId = s.code || s.uid;
-    acc[codeOrId] = { name: s.name, children: buildSources(s.children) };
+    acc[codeOrId]  = { name: s.name, children: buildSources(s.children) };
     return acc;
   }, {});
   return sources;
@@ -53,16 +53,16 @@ const buildLabels = (json) => {
 
   const labels = json.reduce((acc, s) => {
     const codeOrId = s.code || s.uid;
-    acc[codeOrId] = s.name;
-    Object.assign(acc, buildLabels(s.children))
+    acc[codeOrId]  = s.name;
+    Object.assign(acc, buildLabels(s.children));
     return acc;
   }, {});
   return labels;
-}
+};
 
 const _fetchSourcesSuccess = (state, action) => {
   const sources = buildSources(action.payload);
-  const labels = buildLabels(action.payload);
+  const labels  = buildLabels(action.payload);
   return {
     ...state,
     sources,
@@ -83,13 +83,9 @@ export const reducer = handleActions({
 }, initialState);
 
 /* Selectors */
-const getSources = (state) => {
-  return state.sources;
-};
 
-const getSourceLabel = (state, codeOrId) => {
-  return state.labels[codeOrId];
-}
+const getSources     = state => state.sources;
+const getSourceLabel = state => codeOrId => state.labels[codeOrId];
 
 export const selectors = {
   getSources,
