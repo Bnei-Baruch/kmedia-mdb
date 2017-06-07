@@ -1,19 +1,25 @@
 import React  from 'react';
 import PropTypes from 'prop-types';
-import { Segment, Menu as RMenu } from 'semantic-ui-react';
-import DateFilter from './DateFilter/DateFilter';
-import SourcesFilter from './SourcesFilter/SourcesFilter';
+import find from 'lodash/find';
+import { Menu } from 'semantic-ui-react';
+
+const filterPropShape = PropTypes.shape({
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  component: PropTypes.any.isRequired
+});
 
 class Filter extends React.Component {
 
   static propTypes = {
     namespace: PropTypes.string.isRequired,
-    onFilterApplication: PropTypes.func.isRequired
+    onFilterApplication: PropTypes.func.isRequired,
+    filters: PropTypes.arrayOf(filterPropShape).isRequired
   };
 
   state = {
     activeFilter: null,
-    sourcesSelection: []
+    sourcesSelection: [],
   };
 
   handleFilterClick = ({ name }) => this.setState({ activeFilter: name });
@@ -31,10 +37,11 @@ class Filter extends React.Component {
 
     return (
       <div>
-        <FilterMenu active={activeFilter} handler={this.handleFilterClick} />
+        <FilterMenu items={this.props.filters} active={activeFilter} onChoose={this.handleFilterClick} />
         <ActiveFilter
           namespace={this.props.namespace}
-          filter={activeFilter}
+          activeFilterName={activeFilter}
+          filters={this.props.filters}
           onCancel={() => this.handleCancelActiveFilter()}
           onApply={() => this.handleApplyActiveFilter()}
         />
@@ -45,79 +52,72 @@ class Filter extends React.Component {
 
 export default Filter;
 
-const ActiveFilter = ({ filter, onCancel, onApply, ...rest }) => {
-  switch (filter) {
-  case 'date-filter':
-    return <DateFilter onCancel={onCancel} onApply={onApply} {...rest} />;
-  case 'sources-filter':
-    return <SourcesFilter onCancel={onCancel} onApply={onApply} {...rest} />;
-  case 'topic-filter':
-    return <Segment basic attached="bottom" className="tab active">Third</Segment>;
-  default:
-    return <span />;
+const ActiveFilter = ({ activeFilterName, filters, onCancel, onApply, ...rest }) => {
+  const activeFilter = find(filters, filter => filter.name === activeFilterName);
+
+  if (!activeFilter) {
+    return null;
   }
+
+  const { component: Component } = activeFilter;
+  return (
+    <Component onCancel={onCancel} onApply={onApply} {...rest} />
+  );
 };
 
 ActiveFilter.propTypes = {
-  filter: PropTypes.string,
+  filters: PropTypes.arrayOf(filterPropShape).isRequired,
+  activeFilterName: PropTypes.string,
   onCancel: PropTypes.func.isRequired,
   onApply: PropTypes.func.isRequired
 };
 
 ActiveFilter.defaultProps = {
-  filter: null
+  activeFilterName: null
 };
 
+const FilterMenuItem = ({ name, label, isActive, onChoose }) => (
+  <Menu.Item name={name} active={isActive} onClick={() => onChoose({ name })}>{label}</Menu.Item>
+);
 
+FilterMenuItem.propTypes = {
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  isActive: PropTypes.bool,
+  onChoose: PropTypes.func,
+};
 
-const FilterMenu = props =>
-  (
-    <RMenu secondary pointing color="blue" className="index-filters" size="large">
-      <FilterMenuDate name="date" title="Date" {...props} />
-      <FilterMenuSources name="sources" title="Sources" {...props} />
-      <FilterMenuTopics name="topic" title="Topics" {...props} />
-    </RMenu>
-  )
-;
+FilterMenuItem.defaultProps = {
+  isActive: false,
+  onChoose: undefined
+};
 
-const FilterMenuDate = ({ name, title, active, handler }) => {
-  const fullName = `${name}-filter`;
+const FilterMenu = (props) => {
+  const { items, active, onChoose } = props;
   return (
-    <RMenu.Item name={fullName} active={active === fullName} onClick={() => handler({ name: fullName })}>{title}</RMenu.Item>
+    <Menu secondary pointing color="blue" className="index-filters" size="large">
+      {
+        items.map(item => (
+          <FilterMenuItem
+            key={item.name}
+            name={item.name}
+            label={item.label}
+            isActive={item.name === active}
+            onChoose={onChoose}
+          />
+        ))
+      }
+    </Menu>
   );
 };
 
-FilterMenuDate.propTypes = {
-  name   : PropTypes.string.isRequired,
-  title  : PropTypes.string.isRequired,
-  active : PropTypes.string,
-  handler: PropTypes.func,
+FilterMenu.propTypes = {
+  items: PropTypes.arrayOf(filterPropShape).isRequired,
+  active: PropTypes.string,
+  onChoose: PropTypes.func
 };
 
-const FilterMenuSources = ({ name, title, active, handler }) => {
-  const fullName = `${name}-filter`;
-  return (
-    <RMenu.Item name={fullName} active={active === fullName} onClick={() => handler({ name: fullName })}>{title}</RMenu.Item>
-  );
-};
-
-FilterMenuSources.propTypes = {
-  name   : PropTypes.string.isRequired,
-  title  : PropTypes.string.isRequired,
-  active : PropTypes.string,
-  handler: PropTypes.func,
-};
-
-const FilterMenuTopics = ({ name, title, active, handler }) => {
-  const fullName = `${name}-filter`;
-  return (
-    <RMenu.Item name={fullName} active={active === fullName} onClick={() => handler({ name: fullName })}>{title}</RMenu.Item>
-  );
-};
-
-FilterMenuTopics.propTypes = {
-  name   : PropTypes.string.isRequired,
-  title  : PropTypes.string.isRequired,
-  active : PropTypes.string,
-  handler: PropTypes.func,
-};
+FilterMenu.defaultProps = {
+  active: '',
+  onChoose: undefined
+}

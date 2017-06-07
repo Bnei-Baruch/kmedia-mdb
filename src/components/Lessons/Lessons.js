@@ -6,9 +6,24 @@ import { Grid, Header, List, ListItem, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { Pagination } from '../pagination';
 import Filters from '../Filters/Filters';
+import filterComponents from '../Filters/filterComponents';
 import FilterTags from '../Filters/FilterTags/FilterTags';
+import FiltersHydrator from '../Filters/FiltersHydrator/FiltersHydrator';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { actions as lessonActions, selectors as lessonsSelectors } from '../../redux/modules/lessons';
+
+const filters = [
+  {
+    name: 'date-filter',
+    label: 'Date',
+    component: filterComponents.DateFilter
+  },
+  {
+    name: 'sources-filter',
+    label: 'Sources',
+    component: filterComponents.SourcesFilter
+  }
+];
 
 class LessonsIndex extends React.Component {
 
@@ -80,8 +95,10 @@ class LessonsIndex extends React.Component {
 
     return (
       <Grid.Column width={16}>
+        <FiltersHydrator namespace="lessons" />
         <Filters
           namespace="lessons"
+          filters={filters}
           onFilterApplication={() => this.askForData(location.search, language, pageSize)}
         />
         <Header as="h2">

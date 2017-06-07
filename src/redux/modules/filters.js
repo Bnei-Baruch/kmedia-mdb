@@ -5,11 +5,15 @@ import { createAction, handleActions } from 'redux-actions';
 const ADD_FILTER_VALUE  = 'Filters/ADD_FILTER_VALUE';
 const SET_FILTER_VALUE  = 'Filters/SET_FILTER_VALUE';
 const REMOVE_FILTER_VALUE = 'Filters/REMOVE_FILTER_VALUE';
+const SET_HYDRATED_FILTER_VALUES = 'Filters/SET_HYDRATED_FILTER_VALUES';
+const HYDRATE = 'Filters/HYDRATE';
 
 export const types = {
   ADD_FILTER_VALUE,
   SET_FILTER_VALUE,
-  REMOVE_FILTER_VALUE
+  REMOVE_FILTER_VALUE,
+  SET_HYDRATED_FILTER_VALUES,
+  HYDRATE,
 };
 
 /* Actions */
@@ -17,11 +21,18 @@ export const types = {
 const addFilterValue = createAction(ADD_FILTER_VALUE, (namespace, name, value) => ({ namespace, name, value }));
 const setFilterValue = createAction(SET_FILTER_VALUE, (namespace, name, value) => ({ namespace, name, value }));
 const removeFilter = createAction(REMOVE_FILTER_VALUE, (namespace, name, value) => ({ namespace, name, value }));
+const setHydratedFilterValues = createAction(
+  SET_HYDRATED_FILTER_VALUES,
+  (namespace, filters) => ({ namespace, filters })
+);
+const hydrateFilters = createAction(HYDRATE, (namespace, from = 'query') => ({ namespace, from }));
 
 export const actions = {
   addFilterValue,
   setFilterValue,
-  removeFilter
+  removeFilter,
+  setHydratedFilterValues,
+  hydrateFilters
 };
 
 /* Reducer */
@@ -61,9 +72,9 @@ const _setFilterValue = (state, action) => {
   };
 };
 
-const _removeFilter = (state, action) => {
+const _removeFilterValue = (state, action) => {
   const { namespace, name, value } = action.payload;
-  const oldFilterNamespace = state[namespace] || { value: [] };
+  const oldFilterNamespace = state[namespace] || {};
   const oldFilterValues = oldFilterNamespace[name] && oldFilterNamespace[name].values ? oldFilterNamespace[name].values : [];
   const idx = oldFilterValues.indexOf(value);
 
@@ -86,10 +97,31 @@ const _removeFilter = (state, action) => {
   };
 };
 
+const _setHydratedFilterValues = (state, action) => {
+  const { namespace, filters } = action.payload;
+  const oldNamespace = state[namespace] || {};
+
+  console.log(filters);
+  return {
+    ...state,
+    [namespace]: {
+      ...oldNamespace,
+      ...Object.keys(filters).reduce((acc, key) => {
+        acc[key] = {
+          ...oldNamespace[key],
+          values: filters[key]
+        };
+        return acc;
+      }, {})
+    }
+  };
+};
+
 export const reducer = handleActions({
   [ADD_FILTER_VALUE]: (state, action) => _addFilterValue(state, action),
   [SET_FILTER_VALUE]: (state, action) => _setFilterValue(state, action),
-  [REMOVE_FILTER_VALUE]: (state, action) => _removeFilter(state, action)
+  [REMOVE_FILTER_VALUE]: (state, action) => _removeFilterValue(state, action),
+  [SET_HYDRATED_FILTER_VALUES]: (state, action) => _setHydratedFilterValues(state, action)
 }, initialState);
 
 /* Selectors */
