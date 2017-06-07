@@ -55,6 +55,7 @@ const buildLabels = (json) => {
     const codeOrId = s.code || s.id;
     acc[codeOrId] = s.name;
     Object.assign(acc, buildLabels(s.children))
+    return acc;
   }, {});
   return labels;
 }

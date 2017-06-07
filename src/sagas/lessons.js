@@ -1,7 +1,7 @@
 import { call, put, takeLatest, select } from 'redux-saga/effects';
 import { actions, types } from '../redux/modules/lessons';
 import { selectors as filterSelectors } from '../redux/modules/filters';
-import LessonApi from '../api/Api';
+import { LessonApi } from '../api/Api';
 import filterToParams from '../api/filterToParams';
 
 function* fetchList(action) {

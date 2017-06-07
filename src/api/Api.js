@@ -20,7 +20,7 @@ class Requests {
   static encode     = encodeURIComponent;
 }
 
-class LessonApi {
+export class LessonApi {
   static all = ({ language, pageNo, pageSize, ...rest }) => {
     const params = Object.assign({}, { language, order_by: 'id', ...rest });
     return Requests.get(`lessons?${Requests.limit(pageNo, pageSize)}&${Requests.makeParams(params)}`);
@@ -29,4 +29,8 @@ class LessonApi {
   static get = ({ id, language }) => Requests.get(`content_units/${id}?${Requests.makeParams({ language })}`);
 }
 
-export default LessonApi;
+export class SourcesApi {
+  static all = () => {
+    return Requests.get('sources');
+  };
+}
