@@ -15,8 +15,8 @@ export const types = {
 /* Actions */
 
 const fetchSources = createAction(FETCH_SOURCES);
-const fetchSourcesSuccess = createAction(FETCH_SOURCES);
-const fetchSourcesFailure = createAction(FETCH_SOURCES);
+const fetchSourcesSuccess = createAction(FETCH_SOURCES_SUCCESS);
+const fetchSourcesFailure = createAction(FETCH_SOURCES_FAILURE);
 
 export const actions = {
   fetchSources,
@@ -39,7 +39,7 @@ const buildSources = (json) => {
   }
 
   const sources = json.reduce((acc, s) => {
-    const codeOrId = s.code || s.id;
+    const codeOrId = s.code || s.uid;
     acc[codeOrId] = { name: s.name, children: buildSources(s.children) };
     return acc;
   }, {});
@@ -52,7 +52,7 @@ const buildLabels = (json) => {
   }
 
   const labels = json.reduce((acc, s) => {
-    const codeOrId = s.code || s.id;
+    const codeOrId = s.code || s.uid;
     acc[codeOrId] = s.name;
     Object.assign(acc, buildLabels(s.children))
     return acc;
