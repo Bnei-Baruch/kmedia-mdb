@@ -6,8 +6,7 @@ import { connect } from 'react-redux';
 import { Label } from 'semantic-ui-react';
 import { selectors as filterSelectors, actions as filterActions } from '../../../redux/modules/filters';
 import FilterTag from '../FilterTag/FilterTag';
-// Remove this when move to redux
-import dataLoader from '../dataLoader';
+import { selectors as sources } from '../../../redux/modules/sources';
 
 const tagsData = {
   'date-filter': {
@@ -29,13 +28,11 @@ const tagsData = {
   },
   'sources-filter': {
     icon: 'book',
-    // Remove props when moveing sources to redux, then use store instead of props.
     valueToLabel: (value, props) => {
       if (!value) {
         return '';
       }
-
-      return value.map(codeOrId => props.sources[codeOrId]).join(' > ');
+      return value.map(codeOrId => sources.getSourceLabel(codeOrId)).join(' > ');
     }
   },
   default: {
@@ -91,27 +88,6 @@ class FilterTags extends Component {
   }
 }
 
-// This should move to redux sources which will enable map from value to name (label) for tags.
-const buildSources = (json) => {
-  if (!json) {
-    return {};
-  }
-
-  const sources = json.reduce((acc, s) => {
-    const codeOrId = s.code || s.id;
-    acc[codeOrId] = s.name;
-    return {...acc, ...buildSources(s.children)};
-  }, {});
-  return sources;
-};
-
-const FilterTagsWithData = dataLoader(() =>
-  fetch('http://rt-dev.kbb1.com:8080/hierarchy/sources/')
-    .then(response => response.json())
-    .then(json => ({ sources: buildSources(json) }))
-)(FilterTags);
-
-
 export default connect(
   (state, ownProps) => {
     // TODO (yaniv): use reselect to cache selector
@@ -126,8 +102,10 @@ export default connect(
       })));
     }, []);
 
-    return { tags };
+    return {
+      tags,
+    };
   },
   filterActions
-)(FilterTagsWithData);
+)(FilterTags);
 

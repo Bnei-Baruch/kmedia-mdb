@@ -13,7 +13,7 @@ function* fetchSources(action) {
 }
 
 function* watchFetchSources() {
-  yield takeLatest([systemTypes.INIT], fetchSources);
+  yield takeLatest([types.FETCH_SOURCES, systemTypes.INIT], fetchSources);
 }
 
 export const sagas = [
