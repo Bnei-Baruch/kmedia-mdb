@@ -35,7 +35,7 @@ const queryToFilterMap = {
     };
   },
   sources: value => ({
-    'sources-filter': Array.isArray(value) ? value.map(singleValue => singleValue.split('_')) : value.split('_')
+    'sources-filter': Array.isArray(value) ? value.map(singleValue => singleValue.split('_')) : [value.split('_')]
   })
 };
 

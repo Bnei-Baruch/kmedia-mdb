@@ -5,20 +5,21 @@
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-eslint": "^7.2.3",
+    "babel-jest": "^20.0.3",
     "babel-plugin-lodash": "^3.2.11",
     "babel-preset-env": "^1.4.0",
-    "enzyme": "^2.8.2",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jest": "^20.0.0",
     "eslint-plugin-jsx-a11y": "^5.0.0",
     "eslint-plugin-react": "^7.0.0",
-    "jest-enzyme": "^3.1.1",
+    "jest": "^20.0.4",
     "node-sass": "^4.5.0",
     "npm-run-all": "^4.0.2",
     "react-scripts": "1.0.6",
-    "react-test-renderer": "^15.5.4"
+    "react-test-renderer": "^15.5.4",
+    "regenerator-runtime": "^0.10.5"
   },
   "dependencies": {
     "babel-polyfill": "^6.23.0",
@@ -40,8 +41,6 @@
     "redux": "^3.6.0",
     "redux-actions": "^2.0.3",
     "redux-saga": "^0.15.3",
-    "regenerator-runtime": "^0.10.5",
-    "semantic-ui-css": "^2.2.9",
     "semantic-ui-react": "^0.68.0",
     "zl-fetch": "^1.0.4"
   },
@@ -55,6 +54,7 @@
     "eject": "react-scripts eject",
     "deploy": "npm run build && scp -r build/* archive@app.archive.bbdomain.org:/sites/archive-frontend "
   },
+  "jest": {},
   "eslintConfig": {
     "extends": [
       "airbnb",

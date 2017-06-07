@@ -7,8 +7,7 @@ import { Button, Divider, List, Segment } from 'semantic-ui-react';
 import map from 'lodash/map';
 import noop from 'lodash/noop';
 import { selectors as filterSelectors, actions as filterActions } from '../../../redux/modules/filters';
-// Remove this when move to redux
-import dataLoader from '../dataLoader';
+import { selectors as sources } from '../../../redux/modules/sources';
 
 const filterName = 'sources-filter';
 
@@ -134,29 +133,10 @@ SourcesFilter.defaultProps = {
   lastSelection: []
 };
 
-const ConnectedSourcesFilter = connect(
+export default connect(
   (state, ownProps) => ({
-    selection: filterSelectors.getLastFilterValue(state.filters, ownProps.namespace, filterName)
+    selection: filterSelectors.getLastFilterValue(state.filters, ownProps.namespace, filterName),
+    sources: sources.getSources(state.sources),
   }),
   filterActions
 )(SourcesFilter);
-
-const buildSources = (json) => {
-  if (!json) {
-    return {};
-  }
-
-  const sources = json.reduce((acc, s) => {
-    const codeOrId = s.code || s.id;
-    acc[codeOrId] = { name: s.name, children: buildSources(s.children) };
-    return acc;
-  }, {});
-  return sources;
-};
-
-export default dataLoader(() =>
-  fetch('http://rt-dev.kbb1.com:8080/hierarchy/sources/')
-    .then(response => response.json())
-    .then(json => ({ sources: buildSources(json) }))
-)(ConnectedSourcesFilter);
-

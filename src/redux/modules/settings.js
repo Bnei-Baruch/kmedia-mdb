@@ -23,7 +23,7 @@ export const actions = {
 /* Reducer */
 
 const initialState = {
-  language: 'ru',
+  language: 'en',
   pageSize: 10,
 };
 

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Header } from 'semantic-ui-react';
-import Lessons from '../Lessons/Lessons';
-import Lesson from '../Lesson/Lesson';
+import Lessons from '../Lessons/LessonsContainer';
+import Lesson from '../Lesson/LessonContainer';
 import Sources from '../sources';
 import Topics from '../topics';
+import Design from '../Design/Design';
 
 const MenuRoutes = [
   { key: 'daily_lessons', name: 'Daily Lessons', to: '/lessons', },
@@ -28,6 +29,7 @@ export const AppRoutes = [
   { key: 'lesson', exact: true, path: '/lessons/:id', component: Lesson },
   { key: 'sources', exact: true, path: '/sources', component: Sources },
   { key: 'topics', exact: true, path: '/topics', component: Topics },
+  { key: 'design', exact: true, path: '/design', component: Design },
 ];
 
 export const getPageNo = (search) => {
