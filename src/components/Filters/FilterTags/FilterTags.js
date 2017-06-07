@@ -28,12 +28,12 @@ const tagsData = {
   },
   'sources-filter': {
     icon: 'book',
-    valueToLabel: (value, props) => {
+    valueToLabel: (value, props, state) => {
       if (!value) {
         return '';
       }
       // TODO (edo): Support RTL languages here with the '>' sign
-      return value.map(x => props.getSourceLabel(x)).join(' > ');
+      return value.map(x => sources.getSourceLabel(state.sources)(x)).join(' > ');
     }
   },
   default: {
@@ -57,11 +57,14 @@ class FilterTags extends Component {
     })),
     removeFilter: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
-    getSourceLabel: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     filters: []
+  };
+
+  static contextTypes = {
+    store: PropTypes.object.isRequired
   };
 
   render() {
@@ -76,7 +79,7 @@ class FilterTags extends Component {
               <FilterTag
                 key={`${tag.name}_${tag.index}`}
                 icon={tagData.icon}
-                label={tagData.valueToLabel(tag.value, this.props)}
+                label={tagData.valueToLabel(tag.value, this.props, this.context.store.getState())}
                 onClose={() => {
                   this.props.removeFilter(namespace, tag.name, tag.value);
                   this.props.onClose();
@@ -104,10 +107,7 @@ export default connect(
       })));
     }, []);
 
-    return {
-      tags,
-      getSourceLabel: sources.getSourceLabel(state.sources),
-    };
+    return { tags };
   },
   filterActions
 )(FilterTags);
