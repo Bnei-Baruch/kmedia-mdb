@@ -19,7 +19,6 @@ class Filter extends React.Component {
 
   state = {
     activeFilter: null,
-    sourcesSelection: [],
   };
 
   handleFilterClick = ({ name }) => this.setState({ activeFilter: name });
