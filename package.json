@@ -1,105 +1,107 @@
 {
-  "name": "kmedia-mdb",
-  "version": "0.1.0",
-  "private": true,
+  "name":            "kmedia-mdb",
+  "version":         "0.1.0",
+  "private":         true,
   "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-eslint": "^7.2.3",
-    "babel-plugin-lodash": "^3.2.11",
-    "babel-preset-env": "^1.4.0",
-    "enzyme": "^2.8.2",
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb": "^15.0.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jest": "^20.0.0",
+    "babel-cli":              "^6.24.1",
+    "babel-eslint":           "^7.2.3",
+    "babel-jest":             "^20.0.3",
+    "babel-plugin-lodash":    "^3.2.11",
+    "babel-preset-env":       "^1.4.0",
+    "eslint":                 "^3.19.0",
+    "eslint-config-airbnb":   "^15.0.0",
+    "eslint-plugin-import":   "^2.2.0",
+    "eslint-plugin-jest":     "^20.0.0",
     "eslint-plugin-jsx-a11y": "^5.0.0",
-    "eslint-plugin-react": "^7.0.0",
-    "jest-enzyme": "^3.1.1",
-    "node-sass": "^4.5.0",
-    "npm-run-all": "^4.0.2",
-    "react-scripts": "1.0.6",
-    "react-test-renderer": "^15.5.4"
+    "eslint-plugin-react":    "^7.0.0",
+    "jest":                   "^20.0.4",
+    "node-sass":              "^4.5.0",
+    "npm-run-all":            "^4.0.2",
+    "react-scripts":          "1.0.6",
+    "react-test-renderer":    "^15.5.4",
+    "regenerator-runtime":    "^0.10.5"
   },
-  "dependencies": {
-    "babel-polyfill": "^6.23.0",
-    "child_process": "^1.0.2",
-    "classnames": "^2.2.5",
-    "core-js": "^2.4.1",
-    "history": "^4.6.1",
-    "lodash": "^4.17.4",
-    "moment": "^2.18.1",
-    "prop-types": "^15.5.8",
-    "react": "^15.5.4",
-    "react-day-picker": "^5.5.3",
-    "react-dom": "^15.5.4",
-    "react-redux": "^5.0.4",
+  "dependencies":    {
+    "babel-polyfill":          "^6.23.0",
+    "child_process":           "^1.0.2",
+    "classnames":              "^2.2.5",
+    "core-js":                 "^2.4.1",
+    "history":                 "^4.6.1",
+    "lodash":                  "^4.17.4",
+    "moment":                  "^2.18.1",
+    "prop-types":              "^15.5.8",
+    "react":                   "^15.5.4",
+    "react-day-picker":        "^5.5.3",
+    "react-dom":               "^15.5.4",
+    "react-redux":             "^5.0.4",
     "react-redux-loading-bar": "^2.9.0",
-    "react-router-dom": "^4.1.1",
-    "react-router-redux": "^5.0.0-alpha.6",
-    "redux": "^3.6.0",
-    "redux-actions": "^2.0.3",
-    "redux-saga": "^0.15.3",
-    "regenerator-runtime": "^0.10.5",
-    "semantic-ui-react": "^0.68.0",
-    "zl-fetch": "^1.0.4"
+    "react-router-dom":        "^4.1.1",
+    "react-router-redux":      "^5.0.0-alpha.6",
+    "redux":                   "^3.6.0",
+    "redux-actions":           "^2.0.3",
+    "redux-saga":              "^0.15.3",
+    "semantic-ui-react":       "^0.68.0",
+    "zl-fetch":                "^1.0.4"
   },
-  "scripts": {
+  "scripts":         {
     "build-css": "node-sass src/ -o src/",
     "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
-    "start-js": "react-scripts start",
-    "start": "npm-run-all -p watch-css start-js",
-    "build": "npm run build-css && react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "deploy": "npm run build && scp -r build/* archive@app.archive.bbdomain.org:/sites/archive-frontend "
+    "start-js":  "react-scripts start",
+    "start":     "npm-run-all -p watch-css start-js",
+    "build":     "npm run build-css && react-scripts build",
+    "test":      "react-scripts test --env=jsdom",
+    "eject":     "react-scripts eject",
+    "deploy":    "npm run build && scp -r build/* archive@app.archive.bbdomain.org:/sites/archive-frontend "
   },
-  "eslintConfig": {
-    "extends": [
+  "jest":            {
+  },
+  "eslintConfig":    {
+    "extends":  [
       "airbnb",
       "plugin:jest/recommended"
     ],
-    "parser": "babel-eslint",
-    "env": {
+    "parser":   "babel-eslint",
+    "env":      {
       "browser": true,
-      "es6": true,
-      "jest": true
+      "es6":     true,
+      "jest":    true
     },
-    "plugins": [
+    "plugins":  [
       "react",
       "jest",
       "import"
     ],
     "settings": {
-      "parser": "babel-eslint",
-      "import/parser": "babel-eslint",
+      "parser":         "babel-eslint",
+      "import/parser":  "babel-eslint",
       "import/resolve": {},
-      "ecmaFeatures": {
+      "ecmaFeatures":   {
         "classes": true,
-        "jsx": true
+        "jsx":     true
       }
     },
-    "rules": {
-      "indent": [
+    "rules":    {
+      "indent":                            [
         "error",
         2
       ],
-      "no-console": "warn",
-      "comma-dangle": "off",
-      "key-spacing": "off",
-      "max-len": "off",
-      "import/prefer-default-export": "off",
-      "react/jsx-filename-extension": "off",
-      "no-multi-spaces": "off",
-      "no-plusplus": "off",
+      "no-console":                        "warn",
+      "comma-dangle":                      "off",
+      "key-spacing":                       "off",
+      "max-len":                           "off",
+      "import/prefer-default-export":      "off",
+      "react/jsx-filename-extension":      "off",
+      "no-multi-spaces":                   "off",
+      "no-plusplus":                       "off",
       "import/no-named-as-default-member": "off",
-      "no-unused-vars": [
+      "no-unused-vars":                    [
         1,
         {
           "varsIgnorePattern": "_",
           "argsIgnorePattern": "_"
         }
       ],
-      "no-underscore-dangle": [
+      "no-underscore-dangle":              [
         "error",
         {
           "allow": [
@@ -109,7 +111,7 @@
         }
       ]
     },
-    "globals": {
+    "globals":  {
       "socket": true,
       "enzyme": true
     }
