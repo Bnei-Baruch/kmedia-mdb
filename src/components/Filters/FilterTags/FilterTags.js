@@ -7,6 +7,7 @@ import { Label } from 'semantic-ui-react';
 import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
 import FilterTag from '../FilterTag/FilterTag';
 import { selectors as sources } from '../../../redux/modules/sources';
+import { selectors as tagsSelectors } from '../../../redux/modules/tags';
 
 const tagsData = {
   'date-filter': {
@@ -28,12 +29,21 @@ const tagsData = {
   },
   'sources-filter': {
     icon: 'book',
-    valueToLabel: (value, props, state) => {
+    valueToLabel: (value, props, { getState }) => {
       if (!value) {
         return '';
       }
       // TODO (edo): Support RTL languages here with the '>' sign
-      return value.map(x => sources.getSourceLabel(state.sources)(x)).join(' > ');
+      return value.map(x => sources.getSourceLabel(getState().sources)(x)).join(' > ');
+    }
+  },
+  'topics-filter': {
+    icon: 'tag',
+    valueToLabel: (value, props, { getState }) => {
+      if (!value) {
+        return '';
+      }
+      return tagsSelectors.getTopicLabel(getState().tags)(value);
     }
   },
   __default: {
@@ -79,7 +89,7 @@ class FilterTags extends Component {
               <FilterTag
                 key={`${tag.name}_${tag.index}`}
                 icon={tagData.icon}
-                label={tagData.valueToLabel(tag.value, this.props, this.context.store.getState())}
+                label={tagData.valueToLabel(tag.value, this.props, this.context.store)}
                 onClose={() => {
                   this.props.removeFilter(namespace, tag.name, tag.value);
                   this.props.onClose();

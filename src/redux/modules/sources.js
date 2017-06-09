@@ -1,5 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 
+import { types as settings } from './settings';
+
 /* Types */
 
 const FETCH_SOURCES         = 'Sources/FETCH_SOURCES';
@@ -78,6 +80,7 @@ const _fetchSourcesFailure = (state, action) => {
 };
 
 export const reducer = handleActions({
+  [settings.SET_LANGUAGE]: () => initialState,
   [FETCH_SOURCES_SUCCESS]: (state, action) => _fetchSourcesSuccess(state, action),
   [FETCH_SOURCES_FAILURE]: (state, action) => _fetchSourcesFailure(state, action),
 }, initialState);

@@ -115,9 +115,10 @@ const _setHydratedFilterValues = (state, action) => {
     [namespace]: {
       ...oldNamespace,
       ...Object.keys(filters).reduce((acc, key) => {
+        const value = filters[key];
         acc[key] = {
           ...oldNamespace[key],
-          values: filters[key]
+          values: Array.isArray(value) ? value : [value]
         };
         return acc;
       }, {})
@@ -125,7 +126,7 @@ const _setHydratedFilterValues = (state, action) => {
   };
 };
 
-const _hydrate = (state, action) => ({
+const _hydrateFilter = (state, action) => ({
   ...state,
   isHydrated: {
     ...state.isHydrated,
@@ -133,7 +134,7 @@ const _hydrate = (state, action) => ({
   }
 });
 
-const _hydrated = (state, action) => ({
+const _filtersHydrated = (state, action) => ({
   ...state,
   isHydrated: {
     ...state.isHydrated,
@@ -146,8 +147,8 @@ export const reducer = handleActions({
   [SET_FILTER_VALUE]: (state, action) => _setFilterValue(state, action),
   [REMOVE_FILTER_VALUE]: (state, action) => _removeFilterValue(state, action),
   [SET_HYDRATED_FILTER_VALUES]: (state, action) => _setHydratedFilterValues(state, action),
-  [HYDRATE_FILTERS]: _hydrate,
-  [FILTERS_HYDRATED]: _hydrated
+  [HYDRATE_FILTERS]: _hydrateFilters,
+  [FILTERS_HYDRATED]: _filtersHydrated
 }, initialState);
 
 /* Selectors */

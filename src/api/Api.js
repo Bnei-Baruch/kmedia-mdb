@@ -30,5 +30,9 @@ export class LessonApi {
 }
 
 export class SourcesApi {
-  static all = () => Requests.get('sources');
+  static all = ({ language }) => Requests.get(`sources?${Requests.makeParams({ language })}`);
+}
+
+export class TagsApi {
+  static all = ({ language }) => Requests.get(`tags?${Requests.makeParams({ language })}`);
 }

@@ -10,10 +10,10 @@ import {
 } from '../redux/modules/filters';
 
 /*
- * When a filter value is changed, the query is also changed to match this change.
+ * When a filter value is changed, the query is also changed to match..
  * The params in the query can have the filter's name and value transformed (to for example a different string representation)
  * The filters values can be hydrated (by dispatching HYDRATE_FILTERS) from a query containing keys and values matching filters that know how to transform them.
- * The hydration is needed when a we mount a page containing filters and we have a query full of filter values.
+ * The hydration is needed when a we mount a page containing filters and we have a query full of filter values (this enables us to link to specific results).
  * You can know that filter values have been hydrated when the FILTERS_HYDRATED action is dispatched.
  *
  * The sagas will catch actions that change filter values and update the query accordingly.
@@ -38,10 +38,10 @@ const queryToFilterMap = {
     const parts = value.split('_');
 
     return {
-      'date-filter': [{
+      'date-filter': {
         from: moment(parts[0], 'DD-MM-YYYY').toDate(),
         to: moment(parts[1], 'DD-MM-YYYY').toDate()
-      }]
+      }
     };
   },
   sources: value => ({

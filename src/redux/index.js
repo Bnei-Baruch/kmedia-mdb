@@ -5,6 +5,7 @@ import { reducer as settings } from './modules/settings';
 import { reducer as lessons } from './modules/lessons';
 import { reducer as filters } from './modules/filters';
 import { reducer as sources } from './modules/sources';
+import { reducer as tags } from './modules/tags';
 import { reducer as mdb } from './modules/mdb';
 
 export default combineReducers({
@@ -14,6 +15,7 @@ export default combineReducers({
   lessons,
   filters,
   sources,
+  tags,
   mdb,
 });
 
