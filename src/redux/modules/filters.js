@@ -126,7 +126,7 @@ const _setHydratedFilterValues = (state, action) => {
   };
 };
 
-const _hydrateFilter = (state, action) => ({
+const _hydrateFilters = (state, action) => ({
   ...state,
   isHydrated: {
     ...state.isHydrated,

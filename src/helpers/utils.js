@@ -1,4 +1,3 @@
-import identity from 'lodash/identity';
 
 export const isEmpty = (obj) => {
   // null and undefined are "empty"
@@ -40,8 +39,7 @@ export const isEmpty = (obj) => {
  * const mapper = createMapper(mapperObj);
  * const transformedValue = mapper('key1', ['value1', 'value2'])
  */
-export const createMapper = (mapperObj, defaultTransform = identity) => (key, value) => {
-  // eslint-disable-next-line no-underscore-dangle
+export const createMapper = (mapperObj, defaultTransform = (value, key) => ({ [key]: value })) => (key, value) => {
   const transform = mapperObj[key] || mapperObj.__default;
   if (transform) {
     return transform(value, key);

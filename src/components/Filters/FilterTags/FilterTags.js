@@ -54,7 +54,7 @@ const tagsData = {
 
 const getTagData = (tagName) => {
   const tagData = tagsData[tagName];
-  return tagData || tagsData.default;
+  return tagData || tagsData.__default;
 };
 
 class FilterTags extends Component {

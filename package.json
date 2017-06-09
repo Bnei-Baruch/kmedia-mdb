@@ -106,7 +106,8 @@
         {
           "allow": [
             "_browserHistory",
-            "__data"
+            "__data",
+            "__default"
           ]
         }
       ],

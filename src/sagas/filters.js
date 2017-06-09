@@ -30,7 +30,8 @@ const filterToQueryMap = {
       dates: `${moment(value.from).format('DD-MM-YYYY')}_${moment(value.to).format('DD-MM-YYYY')}`,
     };
   },
-  'sources-filter': value => ({ sources: value.join('_') })
+  'sources-filter': value => ({ source: value.join('_') }),
+  'topics-filter': value => ({ topic: value })
 };
 
 const queryToFilterMap = {
@@ -44,13 +45,16 @@ const queryToFilterMap = {
       }
     };
   },
-  sources: value => ({
+  source: value => ({
     'sources-filter': Array.isArray(value) ? value.map(singleValue => singleValue.split('_')) : [value.split('_')]
+  }),
+  topic: value => ({
+    'topics-filter': value
   })
 };
 
 const transformFilterToQuery = createMapper(filterToQueryMap);
-const transformQueryToFilter = createMapper(queryToFilterMap);
+const transformQueryToFilter = createMapper(queryToFilterMap, () => null);
 
 function* getQuery() {
   const router = yield select(state => state.router);
@@ -80,6 +84,7 @@ function* addFilterValueToUrl(action) {
     search: `?${qs.stringify({
       ...(Object.keys(param).reduce((acc, key) => {
         const paramValue = param[key];
+        console.log(paramValue);
         if (paramValue) {
           const paramValues = (Array.isArray(paramValue) ? paramValue : [paramValue]);
           const queryValue = acc[key];

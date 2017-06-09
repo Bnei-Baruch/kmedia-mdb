@@ -26,6 +26,11 @@ const filters = [
     name: 'sources-filter',
     label: 'Sources',
     component: filterComponents.SourcesFilter
+  },
+  {
+    name: 'topics-filter',
+    label: 'Topics',
+    component: filterComponents.TopicsFilter
   }
 ];
 
