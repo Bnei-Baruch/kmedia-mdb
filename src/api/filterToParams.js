@@ -9,7 +9,7 @@ const filtersToParams = {
     };
   },
   'sources-filter': value => ({ [value.length === 1 ? 'author' : 'source']: value[value.length - 1] }),
-  'topics-filter': value => ({ 'tag': value }),
+  'topics-filter': value => ({ tag: value }),
 };
 
 const filterToParams = name => (values) => {
