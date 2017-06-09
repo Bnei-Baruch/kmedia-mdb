@@ -70,7 +70,7 @@ class FilterTags extends Component {
   };
 
   static defaultProps = {
-    filters: []
+    tags: []
   };
 
   static contextTypes = {
