@@ -94,15 +94,15 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getTags       = state => state.tags || {};
-const getTagIdByPattern = (state, pattern) => state.tagIdsByPattern ? state.tagIdsByPattern[pattern] : null;
+const getTags = state => state.tags || {};
+const getTagIdByPattern = (state, pattern) => (state.tagIdsByPattern ? state.tagIdsByPattern[pattern] : null);
 const getTagChildrenById = (state, uid) => {
   const tags = getTags(state);
   if (tags[uid]) {
-    return tags[uid].children;
+    return tags[uid].children.map(id => tags[id]);
   }
 
-  return null;
+  return [];
 };
 const getTagChildrenByPattern = (state, pattern) => {
   const tagId = state.tagIdsByPattern[pattern];
@@ -110,14 +110,11 @@ const getTagChildrenByPattern = (state, pattern) => {
     return getTagChildrenById(state, tagId);
   }
 
-  return null;
+  return [];
 };
 
 const getTagLabel = state => (uid) => {
-  console.log(state);
-  console.log(uid);
   const tag = getTags(state)[uid];
-  console.log(tag);
 
   return tag ? tag.label : '';
 };

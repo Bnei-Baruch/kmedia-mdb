@@ -51,7 +51,7 @@ export const LessonPart = PropTypes.shape({
   collections: PropTypes.objectOf(PropTypes.shape(MDBBaseCollection)),
 });
 
-export const Topics = PropTypes.objectOf(PropTypes.shape({
+export const Topics = PropTypes.arrayOf(PropTypes.shape({
   uid: PropTypes.string.isRequired,
   pattern: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,

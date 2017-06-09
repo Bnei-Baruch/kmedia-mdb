@@ -7,8 +7,6 @@ import { selectors as filterSelectors, actions as filterActions } from '../../..
 import { selectors as tags } from '../../../redux/modules/tags';
 import * as shapes from '../../shapes';
 
-const broken = true;
-
 const filterName = 'topics-filter';
 
 class TopicsFilter extends React.Component {
@@ -41,14 +39,14 @@ class TopicsFilter extends React.Component {
     >
       <List divided relaxed selection>
         {
-          Object.entries(topics).map(([uid, t]) => (
+          topics.map(topic => (
             <List.Item
-              active={selected === uid}
+              active={selected === topic.uid}
               onClick={this.onSelectionChange}
-              key={uid}
-              value={uid}
+              key={topic.uid}
+              value={topic.uid}
             >
-              {t.label}
+              {topic.label}
             </List.Item>
           ))
         }
@@ -84,7 +82,7 @@ TopicsFilter.propTypes = {
 };
 
 TopicsFilter.defaultProps = {
-  topics: null,
+  topics: [],
   onCancel: noop,
   onApply: noop,
   lastSelection: null,
