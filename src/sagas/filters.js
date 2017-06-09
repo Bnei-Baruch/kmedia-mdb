@@ -133,7 +133,6 @@ function* hydrateFilters(action) {
   if (from === 'query') {
     const query = yield* getQuery();
     const params = qs.parse(query);
-    console.log(transformQueryToFilter('dates', params.dates));
     filters = Object.keys(params).reduce((acc, key) => ({
       ...acc,
       ...transformQueryToFilter(key, params[key])

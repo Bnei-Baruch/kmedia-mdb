@@ -72,6 +72,29 @@ const presetToRange = {
   })
 };
 
+const rangeToPreset = (from, to) => {
+  if (moment(from, 'day').isSame(to, 'day')) {
+    if (moment(to).isSame(now(), 'day')) {
+      return TODAY;
+    } else if (moment(to).isSame(moment().subtract(1, 'days'), 'days')) {
+      return YESTERDAY;
+    }
+  } else if (moment(to).subtract(6, 'days').isSame(from, 'day')) {
+    return LAST_7_DAYS;
+  } else if (moment(to).subtract(30, 'days').isSame(from, 'day') && moment(to).isSame(moment(), 'day')) {
+    return LAST_30_DAYS;
+  } else if (moment().startOf('month').isSame(from, 'day') && moment().isSame(to, 'day')) {
+    return THIS_MONTH;
+  }
+
+  const todayMinusMonthMoment = moment().subtract(1, 'months');
+  if (todayMinusMonthMoment.startOf('month').isSame(from, 'day') && todayMinusMonthMoment.endOf('month').isSame(to, 'day')) {
+    return LAST_MONTH;
+  }
+
+  return CUSTOM_RANGE;
+}
+
 const isValidDateRange = (fromValue, toValue) => {
   const fromMoment = moment(fromValue, format, true);
   const toMoment = moment(toValue, format, true);
@@ -108,10 +131,14 @@ class DateFilter extends Component {
   state = {
     from: this.props.value.from,
     to: this.props.value.to,
-    datePreset: this.props.value.datePreset,
+    datePreset: this.props.value.datePreset || rangeToPreset(this.props.value.from, this.props.value.to),
     fromInputValue: moment(this.props.value.from, 'DD-MM-YYYY').format('DD-MM-YYYY'),
     toInputValue: moment(this.props.value.to, 'DD-MM-YYYY').format('DD-MM-YYYY')
   };
+
+  componentDidMount() {
+    this.datePicker.showMonth(this.state.from);
+  }
 
   setRange(datePreset, from, to, fromInputValue = '', toInputValue = '') {
     let range = {};
