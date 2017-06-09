@@ -1,5 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 
+import { types as settings } from './settings';
+
 /* Types */
 
 const FETCH_TAGS         = 'Tags/FETCH_TAGS';
@@ -31,10 +33,22 @@ const initialState = {
   error: null,
 };
 
+const buildTags = (json) => {
+  if (!json) {
+    return {};
+  }
+
+  const tags = json.reduce((acc, t) => {
+    acc[t.uid]  = { ...t, children: buildTags(t.children) };
+    return acc;
+  }, {});
+  return tags;
+};
+
 const _fetchTagsSuccess = (state, action) => {
   return {
     ...state,
-    tags: action.payload,
+    tags: buildTags(action.payload),
   };
 };
 
@@ -46,6 +60,7 @@ const _fetchTagsFailure = (state, action) => {
 };
 
 export const reducer = handleActions({
+  [settings.SET_LANGUAGE]: () => initialState,
   [FETCH_TAGS_SUCCESS]: (state, action) => _fetchTagsSuccess(state, action),
   [FETCH_TAGS_FAILURE]: (state, action) => _fetchTagsFailure(state, action),
 }, initialState);
@@ -53,8 +68,8 @@ export const reducer = handleActions({
 /* Selectors */
 
 const getTags       = state => state.tags;
-const getTopics     = state => state.tags.find(t => t.uid === "mS7hrYXK").children;
-const getTopicLabel = state => uid => getTopics(state).find(t => t.uid === uid).label;
+const getTopics     = state => state.tags["mS7hrYXK"].children;
+const getTopicLabel = state => uid => getTopics(state)[uid].label;
 
 export const selectors = {
   getTags,

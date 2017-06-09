@@ -1,11 +1,13 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { actions, types } from '../redux/modules/tags';
 import { TagsApi } from '../api/Api';
 import { types as system } from '../redux/modules/system';
+import { selectors as settings } from '../redux/modules/settings';
 
 function* fetchTags(action) {
   try {
-    const resp = yield call(TagsApi.all);
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const resp = yield call(TagsApi.all, { language });
     yield put(actions.fetchTagsSuccess(resp));
   } catch (err) {
     yield put(actions.fetchTagsFailure(err));

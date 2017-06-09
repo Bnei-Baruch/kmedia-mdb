@@ -5,6 +5,7 @@ import { Button, Divider, List, Segment } from 'semantic-ui-react';
 import noop from 'lodash/noop';
 import { selectors as filterSelectors, actions as filterActions } from '../../../redux/modules/filters';
 import { selectors as tags } from '../../../redux/modules/tags';
+import * as shapes from '../../shapes';
 
 const filterName = 'topics-filter';
 
@@ -38,12 +39,12 @@ class TopicsFilter extends React.Component {
     >
       <List divided relaxed selection>
         {
-          topics.map(t => (
+          Object.entries(topics).map(([uid, t]) => (
             <List.Item
-              active={selected === t.uid}
+              active={selected === uid}
               onClick={this.onSelectionChange}
-              key={t.uid}
-              value={t.uid}
+              key={uid}
+              value={uid}
             >
               {t.label}
             </List.Item>
@@ -59,7 +60,7 @@ class TopicsFilter extends React.Component {
         {
           !!this.props.topics ?
           this.createList(this.props.topics, this.state.selection) :
-          'Loading...'
+          'No topics'
         }
         <Divider />
         <div>
@@ -73,11 +74,7 @@ class TopicsFilter extends React.Component {
 
 TopicsFilter.propTypes = {
   namespace: PropTypes.string.isRequired,
-  topics: PropTypes.arrayOf(PropTypes.shape({
-    uid: PropTypes.string.isRequired,
-    pattern: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-  })),
+  topics: shapes.Topics,
   onCancel: PropTypes.func,
   onApply: PropTypes.func,
   addFilterValue: PropTypes.func.isRequired,
