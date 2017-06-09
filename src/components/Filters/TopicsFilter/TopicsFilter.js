@@ -7,6 +7,8 @@ import { selectors as filterSelectors, actions as filterActions } from '../../..
 import { selectors as tags } from '../../../redux/modules/tags';
 import * as shapes from '../../shapes';
 
+const broken = true;
+
 const filterName = 'topics-filter';
 
 class TopicsFilter extends React.Component {
