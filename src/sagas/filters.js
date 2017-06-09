@@ -84,7 +84,6 @@ function* addFilterValueToUrl(action) {
     search: `?${qs.stringify({
       ...(Object.keys(param).reduce((acc, key) => {
         const paramValue = param[key];
-        console.log(paramValue);
         if (paramValue) {
           const paramValues = (Array.isArray(paramValue) ? paramValue : [paramValue]);
           const queryValue = acc[key];
@@ -134,7 +133,7 @@ function* hydrateFilters(action) {
   if (from === 'query') {
     const query = yield* getQuery();
     const params = qs.parse(query);
-
+    console.log(transformQueryToFilter('dates', params.dates));
     filters = Object.keys(params).reduce((acc, key) => ({
       ...acc,
       ...transformQueryToFilter(key, params[key])

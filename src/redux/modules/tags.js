@@ -30,6 +30,7 @@ export const actions = {
 
 const initialState = {
   tags: {},
+  tagIdsByPattern: {},
   error: null,
 };
 
@@ -38,17 +39,43 @@ const buildTags = (json) => {
     return {};
   }
 
-  const tags = json.reduce((acc, t) => {
-    acc[t.uid]  = { ...t, children: buildTags(t.children) };
+  const tags = json.reduce((acc, tag) => {
+    acc[tag.uid]  = { ...tag, children: tag.children ? tag.children.map(childTag => childTag.uid) : [] };
+    if (tag.children) {
+      return {
+        ...acc,
+        ...buildTags(tag.children)
+      };
+    }
     return acc;
   }, {});
   return tags;
 };
 
+const buildTagPatternToId = (tags = []) => {
+  const patternToId = tags.reduce((acc, tag) => {
+    acc[tag.pattern] = tag.uid;
+    if (tag.children) {
+      return {
+        ...acc,
+        ...buildTagPatternToId(tag.children)
+      };
+    }
+
+    return acc;
+  }, {});
+
+  return patternToId;
+};
+
 const _fetchTagsSuccess = (state, action) => {
+  const tags = buildTags(action.payload);
+  const tagIdsByPattern = buildTagPatternToId(action.payload);
+
   return {
     ...state,
-    tags: buildTags(action.payload),
+    tags,
+    tagIdsByPattern
   };
 };
 
@@ -67,13 +94,38 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getTags       = state => state.tags;
-const getTopics     = state => state.tags["mS7hrYXK"].children;
-const getTopicLabel = state => uid => getTopics(state)[uid].label;
+const getTags       = state => state.tags || {};
+const getTagIdByPattern = (state, pattern) => state.tagIdsByPattern ? state.tagIdsByPattern[pattern] : null;
+const getTagChildrenById = (state, uid) => {
+  const tags = getTags(state);
+  if (tags[uid]) {
+    return tags[uid].children;
+  }
+
+  return null;
+};
+const getTagChildrenByPattern = (state, pattern) => {
+  const tagId = state.tagIdsByPattern[pattern];
+  if (tagId) {
+    return getTagChildrenById(state, tagId);
+  }
+
+  return null;
+};
+
+const getTagLabel = state => (uid) => {
+  console.log(state);
+  console.log(uid);
+  const tag = getTags(state)[uid];
+  console.log(tag);
+
+  return tag ? tag.label : '';
+};
 
 export const selectors = {
   getTags,
-  getTopics,
-  getTopicLabel,
+  getTagLabel,
+  getTagIdByPattern,
+  getTagChildrenByPattern
 };
 

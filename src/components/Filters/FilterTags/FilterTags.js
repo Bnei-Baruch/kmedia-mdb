@@ -43,7 +43,7 @@ const tagsData = {
       if (!value) {
         return '';
       }
-      return tagsSelectors.getTopicLabel(getState().tags)(value);
+      return tagsSelectors.getTagLabel(getState().tags)(value);
     }
   },
   __default: {

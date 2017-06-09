@@ -91,7 +91,7 @@ TopicsFilter.defaultProps = {
 export default connect(
   (state, ownProps) => ({
     selection: filterSelectors.getLastFilterValue(state.filters, ownProps.namespace, filterName),
-    topics: tags.getTopics(state.tags),
+    topics: tags.getTagChildrenByPattern(state.tags, 'lesson-topic'),
   }),
   filterActions
 )(TopicsFilter);
