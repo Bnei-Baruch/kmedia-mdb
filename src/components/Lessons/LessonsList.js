@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, List, ListItem } from 'semantic-ui-react';
+import { Grid, List, ListItem, Table } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import { CT_LESSON_PART } from '../../helpers/consts';
@@ -22,20 +22,31 @@ const renderPart = part => (
 
 const renderCollection = (collection) => {
   const units = collection.content_units.map(unit => (
-    <Link to={`/lessons/${unit.id}`} key={`u-${unit.id}`}>{unit.name}<br />{unit.description}</Link>
+    <Table.Row verticalAlign='top' key={`u-${unit.id}`}>
+      <Table.Cell>
+        <Link to={`/lessons/${unit.id}`} >
+          {unit.name}<br />{unit.description}
+        </Link>
+      </Table.Cell>
+    </Table.Row>
+
   ));
 
-  return (
-    <Grid.Row key={`l-${collection.id}`}>
-      <Grid.Column width={2}><strong>{collection.film_date}</strong></Grid.Column>
-      <Grid.Column width={14}>
-        <List divided relaxed="very">
-          <ListItem><strong>{collection.content_type}</strong></ListItem>
-          {units}
-        </List>
-      </Grid.Column>
-    </Grid.Row>
-  );
+  
+  let rows =[]
+  const first_unit = collection.content_units[0]
+  rows.push((
+    <Table.Row verticalAlign='top' key={`l-${collection.id}`}>
+      <Table.Cell collapsing singleLine width='1' rowSpan={collection.content_units.length + 1}>
+        <strong>{collection.film_date}</strong>
+      </Table.Cell>
+      <Table.Cell>
+        <strong>{collection.content_type}</strong>
+      </Table.Cell>
+    </Table.Row>))
+  rows=rows.concat(units)
+        
+  return rows;
 };
 
 const LessonsList = ({ lessons }) => {
@@ -44,11 +55,13 @@ const LessonsList = ({ lessons }) => {
   }
 
   return (
-    <Grid columns={2} celled="internally">
+    <Table basic='very' sortable>
+      <Table.Body>
       {
         lessons.map(x => (x.content_type === CT_LESSON_PART ? renderPart(x) : renderCollection(x)))
       }
-    </Grid>
+      </Table.Body>
+    </Table>
   );
 };
 

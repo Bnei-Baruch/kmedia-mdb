@@ -11,7 +11,7 @@ const AVPlayer = ({ file }) => {
     playerScript="https://content.jwplatform.com/libraries/mxNkRalL.js"
     file={`http://cdn.kabbalahmedia.info/${file.id}${ext}`}
     image=""
-    customProps={{ skin: { name: 'seven' }, width: 500, height: 375 }}
+    customProps={{ skin: { name: 'seven' }, aspectratio:'16:9', width: '100%' }}
   />);
 };
 
