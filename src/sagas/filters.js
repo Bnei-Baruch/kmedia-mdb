@@ -1,14 +1,24 @@
 import { takeEvery, select, put } from 'redux-saga/effects';
 import qs from 'qs';
 import moment from 'moment';
-import identity from 'lodash/identity';
 import without from 'lodash/without';
 import { replace } from 'react-router-redux';
+import { createMapper } from '../helpers/utils';
 import {
   types as filterTypes,
   actions as filterActions
 } from '../redux/modules/filters';
 
+/*
+ * When a filter value is changed, the query is also changed to match this change.
+ * The params in the query can have the filter's name and value transformed (to for example a different string representation)
+ * The filters values can be hydrated (by dispatching HYDRATE_FILTERS) from a query containing keys and values matching filters that know how to transform them.
+ * The hydration is needed when a we mount a page containing filters and we have a query full of filter values.
+ * You can know that filter values have been hydrated when the FILTERS_HYDRATED action is dispatched.
+ *
+ * The sagas will catch actions that change filter values and update the query accordingly.
+ * NOTE: if you add new actions you'll need to watch for those too.
+ */
 
 const filterToQueryMap = {
   'date-filter': (value) => {
@@ -37,15 +47,6 @@ const queryToFilterMap = {
   sources: value => ({
     'sources-filter': Array.isArray(value) ? value.map(singleValue => singleValue.split('_')) : [value.split('_')]
   })
-};
-
-const createMapper = (mapperObj, defaultTransform = identity) => (key, value) => {
-  const transform = mapperObj[key] || mapperObj.default;
-  if (transform) {
-    return transform(value);
-  }
-
-  return defaultTransform(value);
 };
 
 const transformFilterToQuery = createMapper(filterToQueryMap);
@@ -137,7 +138,7 @@ function* hydrateFilters(action) {
 
   if (filters) {
     yield put(filterActions.setHydratedFilterValues(namespace, filters));
-    yield put(filterActions.hydrated(namespace));
+    yield put(filterActions.filtersHydrated(namespace));
   }
 }
 
@@ -154,7 +155,7 @@ function* watchRemoveFilter() {
 }
 
 function* watchHydrateFilters() {
-  yield takeEvery(filterTypes.HYDRATE, hydrateFilters);
+  yield takeEvery(filterTypes.HYDRATE_FILTERS, hydrateFilters);
 }
 
 export const sagas = [

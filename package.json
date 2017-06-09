@@ -109,6 +109,12 @@
             "__data"
           ]
         }
+      ],
+      "react/no-multi-comp": [
+        1,
+        {
+          "ignoreStateless": false
+        }
       ]
     },
     "globals": {

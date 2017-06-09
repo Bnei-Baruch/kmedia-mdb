@@ -50,3 +50,9 @@ export const LessonPart = PropTypes.shape({
   film_date: PropTypes.string.isRequired,
   collections: PropTypes.objectOf(PropTypes.shape(MDBBaseCollection)),
 });
+
+export const filterPropShape = PropTypes.shape({
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  component: PropTypes.any.isRequired
+});

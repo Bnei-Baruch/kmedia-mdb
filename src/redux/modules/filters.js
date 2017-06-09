@@ -8,16 +8,16 @@ const ADD_FILTER_VALUE  = 'Filters/ADD_FILTER_VALUE';
 const SET_FILTER_VALUE  = 'Filters/SET_FILTER_VALUE';
 const REMOVE_FILTER_VALUE = 'Filters/REMOVE_FILTER_VALUE';
 const SET_HYDRATED_FILTER_VALUES = 'Filters/SET_HYDRATED_FILTER_VALUES';
-const HYDRATE = 'Filters/HYDRATE';
-const HYDRATED = 'Filters/HYDRATED';
+const HYDRATE_FILTERS = 'Filters/HYDRATE_FILTERS';
+const FILTERS_HYDRATED = 'Filters/FILTERS_HYDRATED';
 
 export const types = {
   ADD_FILTER_VALUE,
   SET_FILTER_VALUE,
   REMOVE_FILTER_VALUE,
   SET_HYDRATED_FILTER_VALUES,
-  HYDRATE,
-  HYDRATED
+  HYDRATE_FILTERS,
+  FILTERS_HYDRATED
 };
 
 /* Actions */
@@ -29,8 +29,8 @@ const setHydratedFilterValues = createAction(
   SET_HYDRATED_FILTER_VALUES,
   (namespace, filters) => ({ namespace, filters })
 );
-const hydrateFilters = createAction(HYDRATE, (namespace, from = 'query') => ({ namespace, from }));
-const hydrated = createAction(HYDRATED, namespace => ({ namespace }));
+const hydrateFilters = createAction(HYDRATE_FILTERS, (namespace, from = 'query') => ({ namespace, from }));
+const filtersHydrated = createAction(FILTERS_HYDRATED, namespace => ({ namespace }));
 
 export const actions = {
   addFilterValue,
@@ -38,7 +38,7 @@ export const actions = {
   removeFilter,
   setHydratedFilterValues,
   hydrateFilters,
-  hydrated
+  filtersHydrated
 };
 
 /* Reducer */
@@ -146,8 +146,8 @@ export const reducer = handleActions({
   [SET_FILTER_VALUE]: (state, action) => _setFilterValue(state, action),
   [REMOVE_FILTER_VALUE]: (state, action) => _removeFilterValue(state, action),
   [SET_HYDRATED_FILTER_VALUES]: (state, action) => _setHydratedFilterValues(state, action),
-  [HYDRATE]: _hydrate,
-  [HYDRATED]: _hydrated
+  [HYDRATE_FILTERS]: _hydrate,
+  [FILTERS_HYDRATED]: _hydrated
 }, initialState);
 
 /* Selectors */

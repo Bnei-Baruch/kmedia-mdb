@@ -36,7 +36,7 @@ const tagsData = {
       return value.map(x => sources.getSourceLabel(state.sources)(x)).join(' > ');
     }
   },
-  default: {
+  __default: {
     icon: 'tag',
     valueToLabel: value => value
   }

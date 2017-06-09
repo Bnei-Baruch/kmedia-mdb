@@ -1,15 +1,10 @@
-import React  from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import find from 'lodash/find';
-import { Menu } from 'semantic-ui-react';
+import { filterPropShape } from '../shapes';
+import ActiveFilter from './ActiveFilter/ActiveFilter';
+import FilterMenu from './FilterMenu/FilterMenu';
 
-const filterPropShape = PropTypes.shape({
-  name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  component: PropTypes.any.isRequired
-});
-
-class Filter extends React.Component {
+class Filter extends Component {
 
   static propTypes = {
     namespace: PropTypes.string.isRequired,
@@ -50,73 +45,3 @@ class Filter extends React.Component {
 }
 
 export default Filter;
-
-const ActiveFilter = ({ activeFilterName, filters, onCancel, onApply, ...rest }) => {
-  const activeFilter = find(filters, filter => filter.name === activeFilterName);
-
-  if (!activeFilter) {
-    return null;
-  }
-
-  const { component: Component } = activeFilter;
-  return (
-    <Component onCancel={onCancel} onApply={onApply} {...rest} />
-  );
-};
-
-ActiveFilter.propTypes = {
-  filters: PropTypes.arrayOf(filterPropShape).isRequired,
-  activeFilterName: PropTypes.string,
-  onCancel: PropTypes.func.isRequired,
-  onApply: PropTypes.func.isRequired
-};
-
-ActiveFilter.defaultProps = {
-  activeFilterName: null
-};
-
-const FilterMenuItem = ({ name, label, isActive, onChoose }) => (
-  <Menu.Item name={name} active={isActive} onClick={() => onChoose({ name })}>{label}</Menu.Item>
-);
-
-FilterMenuItem.propTypes = {
-  name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  isActive: PropTypes.bool,
-  onChoose: PropTypes.func,
-};
-
-FilterMenuItem.defaultProps = {
-  isActive: false,
-  onChoose: undefined
-};
-
-const FilterMenu = (props) => {
-  const { items, active, onChoose } = props;
-  return (
-    <Menu secondary pointing color="blue" className="index-filters" size="large">
-      {
-        items.map(item => (
-          <FilterMenuItem
-            key={item.name}
-            name={item.name}
-            label={item.label}
-            isActive={item.name === active}
-            onChoose={onChoose}
-          />
-        ))
-      }
-    </Menu>
-  );
-};
-
-FilterMenu.propTypes = {
-  items: PropTypes.arrayOf(filterPropShape).isRequired,
-  active: PropTypes.string,
-  onChoose: PropTypes.func
-};
-
-FilterMenu.defaultProps = {
-  active: '',
-  onChoose: undefined
-}
