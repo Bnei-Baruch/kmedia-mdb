@@ -8,6 +8,7 @@ const LanguageSelector = (props) => {
 
   return (
     <Dropdown
+      fluid
       item
       labeled
       selection

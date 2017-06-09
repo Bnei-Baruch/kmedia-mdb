@@ -5,7 +5,7 @@ import { Button } from 'semantic-ui-react';
 import * as shapes from '../shapes';
 
 const AVSwitch = ({ video, audio, active, onChange }) => (
-  <Button.Group widths="3">
+  <Button.Group fluid>
     {video && active === video ? <Button active color="blue">Video</Button> : null }
     {video && active !== video ? <Button onClick={onChange}>Video</Button> : null}
     {!video ? <Button disabled>Video</Button> : null}
