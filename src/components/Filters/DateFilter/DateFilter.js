@@ -1,10 +1,10 @@
-import React, { Component }  from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import noop from 'lodash/noop';
 import { connect } from 'react-redux';
 import DayPicker, { DateUtils } from 'react-day-picker';
-import { Segment, Grid, Header, Dropdown, Input, Button, Divider } from 'semantic-ui-react';
+import { Button, Divider, Dropdown, Grid, Header, Input, Segment } from 'semantic-ui-react';
 
 import 'react-day-picker/lib/style.css';
 import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
@@ -12,7 +12,7 @@ import { actions as filterActions, selectors as filterSelectors } from '../../..
 // TODO (yaniv -> oleg): need indication for user when clicking on a bad date (after today) or when typing bad dates
 
 const filterName = 'date-filter';
-const format = 'DD-MM-YYYY';
+const format     = 'DD-MM-YYYY';
 
 const now = () =>
   moment(new Date())
@@ -22,12 +22,12 @@ const now = () =>
     .milliseconds(0)
     .toDate();
 
-const TODAY = 1;
-const YESTERDAY = 2;
-const LAST_7_DAYS = 3;
+const TODAY        = 1;
+const YESTERDAY    = 2;
+const LAST_7_DAYS  = 3;
 const LAST_30_DAYS = 4;
-const LAST_MONTH = 5;
-const THIS_MONTH = 6;
+const LAST_MONTH   = 5;
+const THIS_MONTH   = 6;
 const CUSTOM_RANGE = 100;
 
 const datePresets = {
@@ -93,11 +93,11 @@ const rangeToPreset = (from, to) => {
   }
 
   return CUSTOM_RANGE;
-}
+};
 
 const isValidDateRange = (fromValue, toValue) => {
   const fromMoment = moment(fromValue, format, true);
-  const toMoment = moment(toValue, format, true);
+  const toMoment   = moment(toValue, format, true);
 
   return fromMoment.isValid() &&
     toMoment.isValid() &&
@@ -126,7 +126,7 @@ class DateFilter extends Component {
       datePreset: TODAY,
       ...presetToRange[TODAY]()
     }
-  }
+  };
 
   state = {
     from: this.props.value.from,
@@ -144,7 +144,7 @@ class DateFilter extends Component {
     let range = {};
     if (datePreset === CUSTOM_RANGE) {
       range.from = from || this.state.from;
-      range.to = to || this.state.to;
+      range.to   = to || this.state.to;
     } else {
       range = (presetToRange[datePreset] ? presetToRange[datePreset] : presetToRange[TODAY])();
     }
@@ -155,7 +155,7 @@ class DateFilter extends Component {
     }
 
     const momentFrom = moment(new Date(range.from));
-    const momentTo = moment(new Date(range.to));
+    const momentTo   = moment(new Date(range.to));
 
     this.setState({
       ...range,
@@ -180,7 +180,7 @@ class DateFilter extends Component {
     }
 
     const { from, to } = this.state;
-    const range = DateUtils.addDayToRange(day, { from, to });
+    const range        = DateUtils.addDayToRange(day, { from, to });
 
     this.setRange(CUSTOM_RANGE, range.from, range.to);
   };
@@ -188,7 +188,7 @@ class DateFilter extends Component {
   handleDatePresetsChange = (event, data) => this.setRange(data.value);
 
   handleFromInputChange = (event) => {
-    const value = event.target.value;
+    const value       = event.target.value;
     const momentValue = moment(value, format, true);
 
     const isValid = momentValue.isValid();
@@ -208,7 +208,7 @@ class DateFilter extends Component {
   };
 
   handleToInputChange = (event) => {
-    const value = event.target.value;
+    const value       = event.target.value;
     const momentValue = moment(value, format, true);
 
     const isValid = momentValue.isValid();
@@ -231,7 +231,7 @@ class DateFilter extends Component {
 
   render() {
     const { fromInputValue, toInputValue, from, to, datePreset } = this.state;
-    const { onCancel } = this.props;
+    const { onCancel }                                           = this.props;
 
     return (
       <Segment basic attached="bottom" className="tab active">

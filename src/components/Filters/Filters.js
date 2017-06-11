@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import { filterPropShape } from '../shapes';
 import ActiveFilter from './ActiveFilter/ActiveFilter';
 import FilterMenu from './FilterMenu/FilterMenu';
@@ -20,7 +21,7 @@ class Filter extends Component {
 
   handleCancelActiveFilter = () => {
     this.setState({ activeFilter: null });
-  }
+  };
 
   handleApplyActiveFilter = () => {
     this.props.onFilterApplication();

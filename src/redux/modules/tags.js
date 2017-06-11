@@ -40,7 +40,7 @@ const buildTags = (json) => {
   }
 
   const tags = json.reduce((acc, tag) => {
-    acc[tag.uid]  = { ...tag, children: tag.children ? tag.children.map(childTag => childTag.uid) : [] };
+    acc[tag.uid] = { ...tag, children: tag.children ? tag.children.map(childTag => childTag.uid) : [] };
     if (tag.children) {
       return {
         ...acc,
@@ -69,22 +69,21 @@ const buildTagPatternToId = (tags = []) => {
 };
 
 const _fetchTagsSuccess = (state, action) => {
-  const tags = buildTags(action.payload);
+  const tags            = buildTags(action.payload);
   const tagIdsByPattern = buildTagPatternToId(action.payload);
 
   return {
     ...state,
     tags,
-    tagIdsByPattern
+    tagIdsByPattern,
+    error: null,
   };
 };
 
-const _fetchTagsFailure = (state, action) => {
-  return {
-    ...state,
-    error: action.payload,
-  };
-};
+const _fetchTagsFailure = (state, action) => ({
+  ...state,
+  error: action.payload,
+});
 
 export const reducer = handleActions({
   [settings.SET_LANGUAGE]: () => initialState,
@@ -94,9 +93,9 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getTags = state => state.tags || {};
-const getTagIdByPattern = (state, pattern) => (state.tagIdsByPattern ? state.tagIdsByPattern[pattern] : null);
-const getTagChildrenById = (state, uid) => {
+const getTags                 = state => state.tags || {};
+const getTagIdByPattern       = (state, pattern) => (state.tagIdsByPattern ? state.tagIdsByPattern[pattern] : null);
+const getTagChildrenById      = (state, uid) => {
   const tags = getTags(state);
   if (tags[uid]) {
     return tags[uid].children.map(id => tags[id]);

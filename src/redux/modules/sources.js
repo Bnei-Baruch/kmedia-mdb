@@ -69,6 +69,7 @@ const _fetchSourcesSuccess = (state, action) => {
     ...state,
     sources,
     labels,
+    error: null,
   };
 };
 

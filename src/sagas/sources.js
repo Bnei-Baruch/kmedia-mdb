@@ -7,7 +7,6 @@ import { selectors as settings } from '../redux/modules/settings';
 function* fetchSources(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    console.log(language);
     const resp = yield call(SourcesApi.all, { language });
     yield put(actions.fetchSourcesSuccess(resp));
   } catch (err) {

@@ -1,11 +1,11 @@
-import { sagas as lessonsSagas } from './lessons';
-import { sagas as sourcesSagas } from './sources';
-import { sagas as filterSagas } from './filters';
-import { sagas as tagsSagas } from './tags';
+import { sagas as lessons } from './lessons';
+import { sagas as sources } from './sources';
+import { sagas as filters } from './filters';
+import { sagas as tags } from './tags';
 
 export default [
-  ...lessonsSagas,
-  ...sourcesSagas,
-  ...filterSagas,
-  ...tagsSagas,
+  ...lessons,
+  ...sources,
+  ...filters,
+  ...tags,
 ];
