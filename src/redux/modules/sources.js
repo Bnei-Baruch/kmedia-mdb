@@ -29,69 +29,55 @@ export const actions = {
 /* Reducer */
 
 const initialState = {
-  sources: {},
-  labels: {},
+  byId: {},
+  roots: [],
   error: null,
 };
 
-// Helper method to build sources from json response.
-const buildSources = (json) => {
-  if (!json) {
-    return {};
+const buildById = (items) => {
+  const byId = {};
+
+  // We BFS the tree, extracting each item by it's ID
+  // and normalizing it's children
+  let s = [...items];
+  while (s.length > 0) {
+    const node = s.pop();
+    if (node.children) {
+      s = s.concat(node.children);
+    }
+    byId[node.uid || node.code] = {
+      ...node,
+      children: node.children ? node.children.map(x => x.uid) : node,
+    };
   }
 
-  const sources = json.reduce((acc, s) => {
-    const codeOrId = s.code || s.uid;
-    acc[codeOrId]  = { name: s.name, children: buildSources(s.children) };
-    return acc;
-  }, {});
-  return sources;
-};
-
-const buildLabels = (json) => {
-  if (!json) {
-    return {};
-  }
-
-  const labels = json.reduce((acc, s) => {
-    const codeOrId = s.code || s.uid;
-    acc[codeOrId]  = s.name;
-    Object.assign(acc, buildLabels(s.children));
-    return acc;
-  }, {});
-  return labels;
-};
-
-const _fetchSourcesSuccess = (state, action) => {
-  const sources = buildSources(action.payload);
-  const labels  = buildLabels(action.payload);
-  return {
-    ...state,
-    sources,
-    labels,
-    error: null,
-  };
-};
-
-const _fetchSourcesFailure = (state, action) => {
-  return {
-    ...state,
-    error: action.payload,
-  };
+  return byId;
 };
 
 export const reducer = handleActions({
   [settings.SET_LANGUAGE]: () => initialState,
-  [FETCH_SOURCES_SUCCESS]: (state, action) => _fetchSourcesSuccess(state, action),
-  [FETCH_SOURCES_FAILURE]: (state, action) => _fetchSourcesFailure(state, action),
+
+  [FETCH_SOURCES_SUCCESS]: (state, action) => ({
+    ...state,
+    byId: buildById(action.payload),
+    roots: action.payload.map(x => x.code),
+    error: null,
+  }),
+
+  [FETCH_SOURCES_FAILURE]: (state, action) => ({
+    ...state,
+    error: action.payload,
+  }),
 }, initialState);
 
 /* Selectors */
 
-const getSources     = state => state.sources;
-const getSourceLabel = state => codeOrId => state.labels[codeOrId];
+const getSources     = state => state.byId;
+const getRoots     = state => state.roots;
+const getSourceById = state => codeOrId => state.byId[codeOrId];
 
 export const selectors = {
   getSources,
-  getSourceLabel,
+  getRoots,
+  getSourceById,
 };

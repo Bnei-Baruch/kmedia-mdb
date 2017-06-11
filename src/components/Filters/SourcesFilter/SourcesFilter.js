@@ -1,12 +1,11 @@
 /* eslint-disable no-extra-boolean-cast */
 
-import React  from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Divider, List, Segment } from 'semantic-ui-react';
-import map from 'lodash/map';
 import noop from 'lodash/noop';
-import { selectors as filterSelectors, actions as filterActions } from '../../../redux/modules/filters';
+import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
 import { selectors as sources } from '../../../redux/modules/sources';
 
 const filterName = 'sources-filter';
@@ -19,14 +18,14 @@ class SourcesFilter extends React.Component {
 
   componentDidUpdate = () => {
     this.listContainer.scrollLeft = this.listContainer.scrollWidth;
-  }
+  };
 
   onSelectionChange = (event, data) => {
     const { value } = data;
-    const depth = data['data-depth'];
+    const depth     = data['data-depth'];
 
     const { selection: oldSelection } = this.state;
-    const newSelection = [...oldSelection];
+    const newSelection                = [...oldSelection];
     newSelection.splice(depth, oldSelection.length - depth);
     newSelection.push(value);
     this.setState({ selection: newSelection });
@@ -34,7 +33,7 @@ class SourcesFilter extends React.Component {
 
   onCancel = () => {
     this.props.onCancel();
-  }
+  };
 
   apply = () => {
     this.props.addFilterValue(this.props.namespace, filterName, this.state.selection);
@@ -42,49 +41,63 @@ class SourcesFilter extends React.Component {
   };
 
   // Return all lists of selected sources.
-  createLists = (depth, sources, selection) => {
-    if (!sources || Object.keys(sources).length === 0) {
+  createLists = (depth, items, selection) => {
+    if (!Array.isArray(items) || items.length === 0) {
       return [];
     }
-    if (selection.length > 0) {
-      const selected = selection[0];
-      return [this.createList(depth, sources, selected)].concat(
-        this.createLists(depth + 1, sources[selected].children, selection.slice(1)));
+
+    if (selection.length === 0) {
+      return [this.createList(depth, items, '')];
     }
 
-    return [this.createList(depth, sources, '')];
-  }
+    const selected = this.props.getSourceById(selection[0]);
+    const current  = this.createList(depth, items, selection[0]);
+    let next       = [];
+    if (selected && selected.children) {
+      next = this.createLists(depth + 1, selected.children, selection.slice(1));
+    }
 
-  createList = (depth, sources, selected) => (
-    <div
-      key={selected}
-      style={{
-        width: '33%',
-        paddingRight: '15px',
-        height: '250px',
-        display: 'inline-block',
-        overflowY: 'scroll'
-      }}
-    >
-      <List divided relaxed selection>
-        {
-          map(sources, (v, k) => (
-            <List.Item
-              active={selected === k}
-              onClick={this.onSelectionChange}
-              key={k}
-              data-depth={depth}
-              value={k}
-            >
-              {v.name}
-            </List.Item>
-          ))
-        }
-      </List>
-    </div>
-  );
+    return [current].concat(next);
+  };
+
+  createList = (depth, items, selectedId) => {
+    const { getSourceById } = this.props;
+    return (
+      <div
+        key={selectedId}
+        style={{
+          width: '33%',
+          paddingRight: '15px',
+          height: '250px',
+          display: 'inline-block',
+          overflowY: 'scroll'
+        }}
+      >
+        <List divided relaxed selection>
+          {
+            items.map((x) => {
+              const node = getSourceById(x);
+              return (
+                <List.Item
+                  key={x}
+                  value={x}
+                  active={selectedId === x}
+                  data-depth={depth}
+                  onClick={this.onSelectionChange}
+                >
+                  {node.name}
+                </List.Item>
+              );
+            })
+          }
+        </List>
+      </div>
+    );
+  };
 
   render() {
+    const { roots } = this.props;
+
     return (
       <Segment basic attached="bottom" className="tab active" clearing>
         <div
@@ -94,9 +107,9 @@ class SourcesFilter extends React.Component {
         >
           <div style={{ whiteSpace: 'nowrap', width: '100%' }}>
             {
-              !!this.props.sources ?
-              this.createLists(0, this.props.sources, this.state.selection).map(l => l) :
-              'Loading...'
+              roots.length > 0 ?
+                this.createLists(0, roots, this.state.selection).map(l => l) :
+                'No Sources'
             }
           </div>
         </div>
@@ -110,16 +123,10 @@ class SourcesFilter extends React.Component {
   }
 }
 
-const SourceShape = {
-  name: PropTypes.string.isRequired,
-  children: PropTypes.objectOf(PropTypes.shape)
-};
-const SourcesType = PropTypes.objectOf(PropTypes.shape(SourceShape));
-SourceShape.children = SourcesType;
-
 SourcesFilter.propTypes = {
   namespace: PropTypes.string.isRequired,
-  sources: SourcesType,
+  roots: PropTypes.arrayOf(PropTypes.string),
+  getSourceById: PropTypes.func.isRequired,
   onCancel: PropTypes.func,
   onApply: PropTypes.func,
   addFilterValue: PropTypes.func.isRequired,
@@ -127,7 +134,7 @@ SourcesFilter.propTypes = {
 };
 
 SourcesFilter.defaultProps = {
-  sources: null,
+  roots: [],
   onCancel: noop,
   onApply: noop,
   lastSelection: []
@@ -136,7 +143,8 @@ SourcesFilter.defaultProps = {
 export default connect(
   (state, ownProps) => ({
     selection: filterSelectors.getLastFilterValue(state.filters, ownProps.namespace, filterName),
-    sources: sources.getSources(state.sources),
+    roots: sources.getRoots(state.sources),
+    getSourceById: sources.getSourceById(state.sources),
   }),
   filterActions
 )(SourcesFilter);

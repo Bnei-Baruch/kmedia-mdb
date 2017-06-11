@@ -33,8 +33,13 @@ const tagsData = {
       if (!value) {
         return '';
       }
-      // TODO (edo): Support RTL languages here with the '>' sign
-      return value.map(x => sources.getSourceLabel(getState().sources)(x)).join(' > ');
+
+      const getSourceById = sources.getSourceById(getState().sources);
+      const path          = value.map(x => getSourceById(x));
+
+      // Make sure we have all items.
+      // Location hydration probably happens before we receive sources
+      return path.some(x => !x) ? '' : path.map(x => x.name).join(' > ');
     }
   },
   'topics-filter': {
