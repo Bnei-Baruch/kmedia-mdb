@@ -13,7 +13,8 @@ const renderPart = part => (
       <List divided relaxed="very">
         <ListItem>
           <Link to={`/lessons/${part.id}`}> {part.name} </Link>
-          <br />{part.description}
+          <br />
+          <div dangerouslySetInnerHTML={{ __html: part.description }} />
         </ListItem>
       </List>
     </Grid.Column>
@@ -22,30 +23,30 @@ const renderPart = part => (
 
 const renderCollection = (collection) => {
   const units = collection.content_units.map(unit => (
-    <Table.Row verticalAlign='top' key={`u-${unit.id}`}>
+    <Table.Row verticalAlign="top" key={`u-${unit.id}`}>
       <Table.Cell>
-        <Link to={`/lessons/${unit.id}`} >
-          {unit.name}<br />{unit.description}
+        <Link to={`/lessons/${unit.id}`}>
+          {unit.name}
+          <br />
+          <div dangerouslySetInnerHTML={{ __html: unit.description }} />
         </Link>
       </Table.Cell>
     </Table.Row>
-
   ));
 
-  
-  let rows =[]
-  const first_unit = collection.content_units[0]
+  let rows = [];
   rows.push((
-    <Table.Row verticalAlign='top' key={`l-${collection.id}`}>
-      <Table.Cell collapsing singleLine width='1' rowSpan={collection.content_units.length + 1}>
+    <Table.Row verticalAlign="top" key={`l-${collection.id}`}>
+      <Table.Cell collapsing singleLine width={1} rowSpan={collection.content_units.length + 1}>
         <strong>{collection.film_date}</strong>
       </Table.Cell>
       <Table.Cell>
         <strong>{collection.content_type}</strong>
       </Table.Cell>
-    </Table.Row>))
-  rows=rows.concat(units)
-        
+    </Table.Row>
+  ));
+  rows = rows.concat(units);
+
   return rows;
 };
 
@@ -55,11 +56,11 @@ const LessonsList = ({ lessons }) => {
   }
 
   return (
-    <Table basic='very' sortable>
+    <Table basic="very" sortable>
       <Table.Body>
-      {
-        lessons.map(x => (x.content_type === CT_LESSON_PART ? renderPart(x) : renderCollection(x)))
-      }
+        {
+          lessons.map(x => (x.content_type === CT_LESSON_PART ? renderPart(x) : renderCollection(x)))
+        }
       </Table.Body>
     </Table>
   );
