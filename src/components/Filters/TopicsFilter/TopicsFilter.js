@@ -39,14 +39,14 @@ class TopicsFilter extends React.Component {
     >
       <List divided relaxed selection>
         {
-          Object.entries(topics).map(([uid, t]) => (
+          topics.map(topic => (
             <List.Item
-              active={selected === uid}
+              active={selected === topic.uid}
               onClick={this.onSelectionChange}
-              key={uid}
-              value={uid}
+              key={topic.uid}
+              value={topic.uid}
             >
-              {t.label}
+              {topic.label}
             </List.Item>
           ))
         }
@@ -82,7 +82,7 @@ TopicsFilter.propTypes = {
 };
 
 TopicsFilter.defaultProps = {
-  topics: null,
+  topics: [],
   onCancel: noop,
   onApply: noop,
   lastSelection: null,
@@ -91,7 +91,7 @@ TopicsFilter.defaultProps = {
 export default connect(
   (state, ownProps) => ({
     selection: filterSelectors.getLastFilterValue(state.filters, ownProps.namespace, filterName),
-    topics: tags.getTopics(state.tags),
+    topics: tags.getTagChildrenByPattern(state.tags, 'lesson-topic'),
   }),
   filterActions
 )(TopicsFilter);

@@ -11,8 +11,28 @@ import { CT_LESSON_PART } from '../../helpers/consts';
 import Pagination from '../shared/Pagination';
 import ResultsPageHeader from '../shared/ResultsPageHeader';
 import Filters from '../Filters/Filters';
+import filterComponents from '../Filters/filterComponents';
+import FiltersHydrator from '../Filters/FiltersHydrator/FiltersHydrator';
 import FilterTags from '../Filters/FilterTags/FilterTags';
 import LessonsList from './LessonsList';
+
+const filters = [
+  {
+    name: 'date-filter',
+    label: 'Date',
+    component: filterComponents.DateFilter
+  },
+  {
+    name: 'sources-filter',
+    label: 'Sources',
+    component: filterComponents.SourcesFilter
+  },
+  {
+    name: 'topics-filter',
+    label: 'Topics',
+    component: filterComponents.TopicsFilter
+  }
+];
 
 class LessonsContainer extends Component {
 
@@ -30,11 +50,6 @@ class LessonsContainer extends Component {
     lessons: [],
   };
 
-  componentDidMount() {
-    const { language, pageSize, location } = this.props;
-    this.askForData(location.search, language, pageSize);
-  }
-
   componentWillReceiveProps(nextProps) {
     // if relevant props changed then askForData
     const { language, pageSize, location } = nextProps;
@@ -49,7 +64,10 @@ class LessonsContainer extends Component {
   getPageNo = (search) => {
     let page = 0;
     if (search) {
-      page = parseInt(search.match(/page=(\d+)/)[1], 10);
+      const match = search.match(/page=(\d+)/);
+      if (match) {
+        page = parseInt(match[1], 10);
+      }
     }
 
     return (isNaN(page) || page <= 0) ? 1 : page;
@@ -66,8 +84,13 @@ class LessonsContainer extends Component {
 
     return (
       <Grid.Column width={16}>
+        <FiltersHydrator
+          namespace="lessons"
+          onHydrated={() => this.askForData(location.search, language, pageSize)}
+        />
         <Filters
           namespace="lessons"
+          filters={filters}
           onFilterApplication={() => this.askForData(location.search, language, pageSize)}
         />
         <ResultsPageHeader pageNo={pageNo} pageSize={pageSize} total={total} />
