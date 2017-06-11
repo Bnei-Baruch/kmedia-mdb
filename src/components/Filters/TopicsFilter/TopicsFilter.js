@@ -1,13 +1,14 @@
-import React  from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Divider, List, Segment } from 'semantic-ui-react';
 import noop from 'lodash/noop';
-import { selectors as filterSelectors, actions as filterActions } from '../../../redux/modules/filters';
-import { selectors as tags } from '../../../redux/modules/tags';
-import * as shapes from '../../shapes';
 
-const filterName = 'topics-filter';
+import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
+import { selectors as tags } from '../../../redux/modules/tags';
+
+const filterName  = 'topics-filter';
+const TOPICS_ROOT = 'mS7hrYXK';
 
 class TopicsFilter extends React.Component {
 
@@ -22,45 +23,57 @@ class TopicsFilter extends React.Component {
 
   onCancel = () => {
     this.props.onCancel();
-  }
+  };
 
   apply = () => {
     this.props.addFilterValue(this.props.namespace, filterName, this.state.selection);
     this.props.onApply();
   };
 
-  createList = (topics, selected) => (
-    <div
-      key={selected}
-      style={{
-        height: '250px',
-        overflowY: 'scroll'
-      }}
-    >
-      <List divided relaxed selection>
-        {
-          topics.map(topic => (
-            <List.Item
-              active={selected === topic.uid}
-              onClick={this.onSelectionChange}
-              key={topic.uid}
-              value={topic.uid}
-            >
-              {topic.label}
-            </List.Item>
-          ))
-        }
-      </List>
-    </div>
-  );
+  createList = (items, selected) => {
+    if (!Array.isArray(items)) {
+      return null;
+    }
+
+    const getTagById = this.props.getTagById;
+
+    return (
+      <div
+        style={{
+          height: '250px',
+          overflowY: 'scroll'
+        }}
+      >
+        <List divided relaxed selection>
+          {
+            items.map((x) => {
+              const node = getTagById(x);
+              return (
+                <List.Item
+                  active={selected === node.uid}
+                  onClick={this.onSelectionChange}
+                  key={node.uid}
+                  value={node.uid}
+                >
+                  {node.label}
+                </List.Item>
+              );
+            })
+          }
+        </List>
+      </div>
+    );
+  };
 
   render() {
+    const topics = this.props.getTagById(TOPICS_ROOT);
+
     return (
       <Segment basic attached="bottom" className="tab active" clearing>
         {
-          !!this.props.topics ?
-          this.createList(this.props.topics, this.state.selection) :
-          'No topics'
+          topics.children ?
+            this.createList(topics.children, this.state.selection) :
+            'No topics'
         }
         <Divider />
         <div>
@@ -74,15 +87,14 @@ class TopicsFilter extends React.Component {
 
 TopicsFilter.propTypes = {
   namespace: PropTypes.string.isRequired,
-  topics: shapes.Topics,
   onCancel: PropTypes.func,
   onApply: PropTypes.func,
   addFilterValue: PropTypes.func.isRequired,
   lastSelection: PropTypes.string,
+  getTagById: PropTypes.func.isRequired,
 };
 
 TopicsFilter.defaultProps = {
-  topics: [],
   onCancel: noop,
   onApply: noop,
   lastSelection: null,
@@ -91,7 +103,7 @@ TopicsFilter.defaultProps = {
 export default connect(
   (state, ownProps) => ({
     selection: filterSelectors.getLastFilterValue(state.filters, ownProps.namespace, filterName),
-    topics: tags.getTagChildrenByPattern(state.tags, 'lesson-topic'),
+    getTagById: tags.getTagById(state.tags),
   }),
   filterActions
 )(TopicsFilter);

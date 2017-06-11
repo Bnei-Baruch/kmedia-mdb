@@ -55,6 +55,8 @@ class LessonsContainer extends Component {
     const { language, pageSize, location } = nextProps;
     const props                            = this.props;
 
+    // TODO (edo): lesson.search changes shouldn't ask for data
+    // remove from condition once pagination is implemented as a filter
     if (language !== props.language || pageSize !== props.pageSize || location.search !== props.location.search) {
       this.askForData(location.search, language, pageSize);
     }

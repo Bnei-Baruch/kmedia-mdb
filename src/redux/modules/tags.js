@@ -29,99 +29,58 @@ export const actions = {
 /* Reducer */
 
 const initialState = {
+  byId: {},
+  roots: [],
   tags: {},
   tagIdsByPattern: {},
   error: null,
 };
 
-const buildTags = (json) => {
-  if (!json) {
-    return {};
+const buildById = (items) => {
+  const byId = {};
+
+  // We BFS the tree, extracting each item by it's ID
+  // and normalizing it's children
+  let s = [...items];
+  while (s.length > 0) {
+    const node = s.pop();
+    if (node.children) {
+      s = s.concat(node.children);
+    }
+    byId[node.uid] = {
+      ...node,
+      children: node.children ? node.children.map(x => x.uid) : node,
+    };
   }
 
-  const tags = json.reduce((acc, tag) => {
-    acc[tag.uid] = { ...tag, children: tag.children ? tag.children.map(childTag => childTag.uid) : [] };
-    if (tag.children) {
-      return {
-        ...acc,
-        ...buildTags(tag.children)
-      };
-    }
-    return acc;
-  }, {});
-  return tags;
+  return byId;
 };
-
-const buildTagPatternToId = (tags = []) => {
-  const patternToId = tags.reduce((acc, tag) => {
-    acc[tag.pattern] = tag.uid;
-    if (tag.children) {
-      return {
-        ...acc,
-        ...buildTagPatternToId(tag.children)
-      };
-    }
-
-    return acc;
-  }, {});
-
-  return patternToId;
-};
-
-const _fetchTagsSuccess = (state, action) => {
-  const tags            = buildTags(action.payload);
-  const tagIdsByPattern = buildTagPatternToId(action.payload);
-
-  return {
-    ...state,
-    tags,
-    tagIdsByPattern,
-    error: null,
-  };
-};
-
-const _fetchTagsFailure = (state, action) => ({
-  ...state,
-  error: action.payload,
-});
 
 export const reducer = handleActions({
   [settings.SET_LANGUAGE]: () => initialState,
-  [FETCH_TAGS_SUCCESS]: (state, action) => _fetchTagsSuccess(state, action),
-  [FETCH_TAGS_FAILURE]: (state, action) => _fetchTagsFailure(state, action),
+
+  [FETCH_TAGS_SUCCESS]: (state, action) => ({
+    ...state,
+    byId: buildById(action.payload),
+    roots: action.payload.map(x => x.code),
+    error: null,
+  }),
+
+  [FETCH_TAGS_FAILURE]: (state, action) => ({
+    ...state,
+    error: action.payload,
+  }),
 }, initialState);
 
 /* Selectors */
 
-const getTags                 = state => state.tags || {};
-const getTagIdByPattern       = (state, pattern) => (state.tagIdsByPattern ? state.tagIdsByPattern[pattern] : null);
-const getTagChildrenById      = (state, uid) => {
-  const tags = getTags(state);
-  if (tags[uid]) {
-    return tags[uid].children.map(id => tags[id]);
-  }
-
-  return [];
-};
-const getTagChildrenByPattern = (state, pattern) => {
-  const tagId = state.tagIdsByPattern[pattern];
-  if (tagId) {
-    return getTagChildrenById(state, tagId);
-  }
-
-  return [];
-};
-
-const getTagLabel = state => (uid) => {
-  const tag = getTags(state)[uid];
-
-  return tag ? tag.label : '';
-};
+const getTags    = state => state.byId;
+const getRoots   = state => state.roots;
+const getTagById = state => id => state.byId[id];
 
 export const selectors = {
   getTags,
-  getTagLabel,
-  getTagIdByPattern,
-  getTagChildrenByPattern
+  getRoots,
+  getTagById,
 };
 

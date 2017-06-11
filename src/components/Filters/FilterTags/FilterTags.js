@@ -48,7 +48,11 @@ const tagsData = {
       if (!value) {
         return '';
       }
-      return tagsSelectors.getTagLabel(getState().tags)(value);
+
+      // Make sure we have the item.
+      // Location hydration probably happens before we receive tags
+      const tag = tagsSelectors.getTagById(getState().tags)(value);
+      return tag ? tag.label : '';
     }
   },
   __default: {
