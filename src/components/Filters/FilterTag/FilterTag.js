@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { Label, Icon } from 'semantic-ui-react';
 
 const FilterTag = props => (
-  <Label as="a" onClick={props.onClose}>
-    <Icon name={props.icon} />{props.label}<Icon name="close" onClick={props.onClose} />
+  <Label as="a">
+    <Icon name={props.icon} />
+    {props.label}
+    <Icon name="close" onClick={props.onClose} />
   </Label>
 );
 
