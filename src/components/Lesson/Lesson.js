@@ -1,21 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Container, Grid, Header, Item, List, Menu } from 'semantic-ui-react';
+import { Grid, Header, List, Menu } from 'semantic-ui-react';
 
 import { isEmpty } from '../../helpers/utils';
 import * as shapes from '../shapes';
 import VideoBox from './VideoBox';
 import MediaDownloads from './MediaDownloads';
-import myimage from '../../images/image.png';
 
 const Lesson = ({ lesson, language }) => {
-  console.log(lesson);
   if (isEmpty(lesson)) {
     return <div />;
   }
 
   return (
-    <div>
+    <Grid.Column width={16}>
       <Grid>
         <VideoBox files={lesson.files} language={language} />
       </Grid>
@@ -53,78 +51,12 @@ const Lesson = ({ lesson, language }) => {
               <Menu.Item name="item-sketches">Sketches</Menu.Item>
             </Menu>
           </Grid.Column>
-          <Grid.Column
-            style={{
-              backgroundColor: 'gray',
-              backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)'
-            }}
-            width={6}
-          >
-
-            <MediaDownloads files={lesson.files} />
-
-            <Header as="h3">Other parts from the same lesson</Header>
-            <Item.Group divided link>
-              <Item>
-                <Item.Image src={myimage} size="tiny" />
-                <Item.Content >
-                  <Header as="h4">Part 0</Header>
-                  <Item.Meta>
-                    <small>00:12:37</small>
-                  </Item.Meta>
-                  <Item.Description>Lesson Preparation</Item.Description>
-                </Item.Content>
-              </Item>
-              <Item>
-                <Item.Image src={myimage} size="tiny" />
-                <Item.Content >
-                  <Header as="h4">Part 1</Header>
-                  <Item.Meta>
-                    <small>36:10:35</small>
-                  </Item.Meta>
-                  <Item.Description>Lesson on the topic of &quot;Preparation for the Pesach&quot;, part&nbsp;
-                    1</Item.Description>
-                </Item.Content>
-              </Item>
-              <Item>
-                <Item.Content>
-                  <Container fluid textAlign="right" as="a">more &raquo;</Container>
-                </Item.Content>
-              </Item>
-            </Item.Group>
-            <Header as="h3">Other parts from the same lesson</Header>
-            <Item.Group divided link>
-              <Item>
-                <Item.Image src={myimage} size="tiny" />
-                <Item.Content >
-                  <Header as="h4">Part 0</Header>
-                  <Item.Meta>
-                    <small>00:12:37</small>
-                  </Item.Meta>
-                  <Item.Description>Lesson Preparation</Item.Description>
-                </Item.Content>
-              </Item>
-              <Item>
-                <Item.Image src={myimage} size="tiny" />
-                <Item.Content >
-                  <Header as="h4">Part 1</Header>
-                  <Item.Meta>
-                    <small>36:10:35</small>
-                  </Item.Meta>
-                  <Item.Description>Lesson on the topic of &quot;Preparation for the Pesach&quot, part&nbsp;
-                    1</Item.Description>
-                </Item.Content>
-              </Item>
-              <Item>
-                <Item.Content>
-                  <Container fluid textAlign="right" as="a">more &raquo;</Container>
-                </Item.Content>
-              </Item>
-            </Item.Group>
+          <Grid.Column width={6}>
+            <MediaDownloads files={lesson.files} language={language} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
-    </div>
+    </Grid.Column>
   );
 };
 

@@ -119,13 +119,13 @@ class VideoBox extends Component {
 
     return (
       <Grid.Row className="video_box">
-        <Grid.Column width="10">
+        <Grid.Column width={10}>
           <div className="video_player">
             <div id="video" />
             <AVPlayer file={active} />
           </div>
         </Grid.Column>
-        <Grid.Column className="player_panel" width="6">
+        <Grid.Column className="player_panel" width={6}>
           <Grid columns="equal">
             <Grid.Row>
               <Grid.Column>

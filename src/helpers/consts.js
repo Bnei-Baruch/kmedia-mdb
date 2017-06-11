@@ -148,3 +148,11 @@ export const RTL_LANGUAGES = [
 ];
 
 export const LANGUAGE_OPTIONS = ALL_LANGUAGES.map(x => LANGUAGES[x]);
+
+export const MT_VIDEO = 'video';
+export const MT_AUDIO = 'audio';
+export const MT_IMAGE = 'image';
+export const MT_TEXT = 'text';
+export const MT_SHEET = 'sheet';
+export const MT_BANNER = 'banner';
+export const MT_PRESENTATION = 'presentation';
