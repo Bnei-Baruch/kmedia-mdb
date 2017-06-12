@@ -5,11 +5,11 @@ import { NavLink } from 'react-router-dom';
 
 const MenuItems = ({ simple, visible, routes }) => {
   const menuItems = routes.map(item =>
-    <Menu.Item as={NavLink} activeClassName="active blue" key={item.name} to={item.to}>{item.name}</Menu.Item>
+    <Menu.Item as={NavLink} activeClassName="active" key={item.name} to={item.to}>{item.name}</Menu.Item>
   );
   if (simple) {
     return (
-      <Menu vertical fluid pointing>{menuItems}</Menu>
+      <Menu vertical fluid pointing color='blue'>{menuItems}</Menu>
     );
   }
 

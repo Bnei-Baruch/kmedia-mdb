@@ -7,18 +7,18 @@ import { CT_LESSON_PART } from '../../helpers/consts';
 import * as shapes from '../shapes';
 
 const renderPart = part => (
-  <Grid.Row key={part.id}>
-    <Grid.Column width={2}><strong>{part.film_date}</strong></Grid.Column>
-    <Grid.Column width={14}>
-      <List divided relaxed="very">
-        <ListItem>
-          <Link to={`/lessons/${part.id}`}> {part.name} </Link>
+  <Table.Row verticalAlign="top" key={part.id}>
+    <Table.Cell collapsing singleLine width={1}>
+      <strong>{part.film_date}</strong>
+    </Table.Cell>
+    <Table.Cell>
+        <Link to={`/lessons/${part.id}`}>
+          <strong>{part.name}</strong>
           <br />
           <div dangerouslySetInnerHTML={{ __html: part.description }} />
-        </ListItem>
-      </List>
-    </Grid.Column>
-  </Grid.Row>
+        </Link>
+    </Table.Cell>
+  </Table.Row>
 );
 
 const renderCollection = (collection) => {

@@ -1,46 +1,33 @@
 import React, { Component } from 'react';
-import { Grid, Header, Menu, Icon, Button, Dropdown, Divider } from 'semantic-ui-react';
+import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, Container } from 'semantic-ui-react';
 import AVPlayer from '../Lesson/AVPlayer';
 class Design extends Component {
 
   render() {
     return (
       <Grid.Column width={16}>
-      	<Header size='large' color='pink' inverted>pagination (°ʖ°)</Header>
-      	<Grid>
-      		<Grid.Row>
-      			<Grid.Column textAlign='center'>
-      				<Menu pagination color='blue' size=''>                    
-                <Menu.Item icon><Icon name='angle double left' /></Menu.Item>
-                <Menu.Item icon><Icon name='angle left' /></Menu.Item>
-                <Menu.Item icon disabled><Icon name='ellipsis horizontal' /></Menu.Item>
-                <Menu.Item name='2' />
-                <Menu.Item name='3' />
-                <Menu.Item name='4' />
-                <Menu.Item name='5' />
-                <Menu.Item active name='6' />
-                <Menu.Item name='7' />
-                <Menu.Item name='8' />
-                <Menu.Item name='9' />
-                <Menu.Item name='10' />
-                <Menu.Item icon disabled><Icon name='ellipsis horizontal' /></Menu.Item>
-                <Menu.Item icon><Icon name='angle right' /></Menu.Item>
-                <Menu.Item icon><Icon name='angle double right' /></Menu.Item>
-              </Menu>
-      			</Grid.Column>
-      		</Grid.Row>
-      	</Grid>
-      	
+        <Header size='large' color='pink' inverted>video collection collapsed (๏㉨๏)</Header>
+        
+        <div className='collapsed_video_container'>
+        	<Grid >
+            <Grid.Row>
+              <Grid.Column width='3'>
+                <div className='video_player'>
+                  <div className='video_placeholder' />
+                </div>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </div>
       	<Header size='large' color='pink' inverted>video collection ☼.☼</Header>
         <Grid>
-          <Grid.Row color='' className="video_box">
+          <Grid.Row className='video_box'>
             <Grid.Column width='10'>
-             	<div className="video_player">
-		            <div id="video" />
-		            
+             	<div className='video_player'>
+		            <div className='video_placeholder' />
 		         	</div>
             </Grid.Column>
-            <Grid.Column className='player_panel' width='6' color=''>
+            <Grid.Column className='player_panel' width='6' >
               <Grid columns='equal'>
                 <Grid.Row>
                   <Grid.Column>
@@ -67,11 +54,36 @@ class Design extends Component {
                     </Header.Subheader>
                   </Header.Content>
                 </Header>
-              <Menu vertical fluid size="small">
+              <Menu vertical fluid size='small' color='blue'>
                 <Menu.Item>1 - Lesson preparation - 00:12:02</Menu.Item>
                 <Menu.Item active>2 - Lesson on the topic of "Brit (Union)" - 01:29:00</Menu.Item>
                 <Menu.Item>3 - Baal HaSulam, TES, part 8, item 20 - 00:31:54</Menu.Item>
                 <Menu.Item>4 - Baal HaSulam, "The Giving of the Torah", item 6 - 00:43:41</Menu.Item>
+              </Menu>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+
+        <Header size='large' color='pink' inverted>pagination (°ʖ°)</Header>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column textAlign='center'>
+              <Menu pagination color='blue'>                    
+                <Menu.Item icon><Icon name='angle double left' /></Menu.Item>
+                <Menu.Item icon><Icon name='angle left' /></Menu.Item>
+                <Menu.Item icon disabled><Icon name='ellipsis horizontal' /></Menu.Item>
+                <Menu.Item name='2' />
+                <Menu.Item name='3' />
+                <Menu.Item name='4' />
+                <Menu.Item name='5' />
+                <Menu.Item active name='6' />
+                <Menu.Item name='7' />
+                <Menu.Item name='8' />
+                <Menu.Item name='9' />
+                <Menu.Item name='10' />
+                <Menu.Item icon disabled><Icon name='ellipsis horizontal' /></Menu.Item>
+                <Menu.Item icon><Icon name='angle right' /></Menu.Item>
+                <Menu.Item icon><Icon name='angle double right' /></Menu.Item>
               </Menu>
             </Grid.Column>
           </Grid.Row>
