@@ -82,7 +82,7 @@ class LessonsContainer extends Component {
 
   render() {
     const { total, lessons, language, pageSize, location } = this.props;
-    const pageNo                                           = this.getPageNo(location.search);
+    const pageNo                                           = this.getPageNo(window.location.search);
 
     return (
       <Grid.Column width={16}>
@@ -101,8 +101,9 @@ class LessonsContainer extends Component {
           onClose={() => this.askForData(location.search, language, pageSize)}
         />
         <Divider />
+        <Pagination pageNo={pageNo} pageSize={pageSize} total={total} />
         <LessonsList lessons={lessons} />
-        <Pagination pageNo={pageNo} total={total} pageSize={pageSize} />
+        <Pagination pageNo={pageNo} pageSize={pageSize} total={total} />
       </Grid.Column>
     );
   }
