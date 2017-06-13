@@ -32,6 +32,7 @@
     "prop-types": "^15.5.8",
     "qs": "^6.4.0",
     "react": "^15.5.4",
+    "react-copy-to-clipboard": "^5.0.0",
     "react-day-picker": "^5.5.3",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.4",

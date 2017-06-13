@@ -46,12 +46,12 @@ class Pagination extends Component {
     pageSize: PropTypes.number.isRequired,
     total: PropTypes.number.isRequired,
     titles: PropTypes.shape({
-      first: PropTypes.object,
-      prev: PropTypes.object,
-      prevSet: PropTypes.object,
-      nextSet: PropTypes.object,
-      next: PropTypes.object,
-      last: PropTypes.object,
+      first: PropTypes.node,
+      prev: PropTypes.node,
+      prevSet: PropTypes.node,
+      nextSet: PropTypes.node,
+      next: PropTypes.node,
+      last: PropTypes.node,
     }),
   };
 
@@ -124,7 +124,7 @@ class Pagination extends Component {
     const blocks                      = Pagination.calcBlocks({ total, pageSize, pageNo });
 
     return (
-      <Menu>
+      <Menu compact>
         <Page
           index={1}
           isDisabled={Pagination.isPrevDisabled(blocks)}
@@ -193,7 +193,7 @@ Page.propTypes = {
   isActive: PropTypes.bool,
   isDisabled: PropTypes.bool,
   index: PropTypes.number,
-  children: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.number]),
 };
 
 Page.defaultProps = {
