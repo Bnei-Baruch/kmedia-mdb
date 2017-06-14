@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, Container } from 'semantic-ui-react';
-import AVPlayer from '../Lesson/AVPlayer';
+import AVPlayer from '../LessonPart/AVPlayer';
 class Design extends Component {
 
   render() {
     return (
       <Grid.Column width={16}>
         <Header size='large' color='pink' inverted>video collection collapsed (๏㉨๏)</Header>
-        
+
         <div className='collapsed_video_container'>
         	<Grid >
             <Grid.Row>
@@ -68,7 +68,7 @@ class Design extends Component {
         <Grid>
           <Grid.Row>
             <Grid.Column textAlign='center'>
-              <Menu pagination color='blue'>                    
+              <Menu pagination color='blue'>
                 <Menu.Item icon><Icon name='angle double left' /></Menu.Item>
                 <Menu.Item icon><Icon name='angle left' /></Menu.Item>
                 <Menu.Item icon disabled><Icon name='ellipsis horizontal' /></Menu.Item>

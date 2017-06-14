@@ -7,9 +7,9 @@ import { selectors as settings } from '../../redux/modules/settings';
 import { selectors as mdb } from '../../redux/modules/mdb';
 import { actions } from '../../redux/modules/lessons';
 import * as shapes from '../shapes';
-import Lesson from './Lesson';
+import LessonPart from './LessonPart';
 
-class LessonContainer extends Component {
+class LessonPartContainer extends Component {
   static propTypes = {
     match: shapes.RouterMatch.isRequired,
     language: PropTypes.string.isRequired,
@@ -35,7 +35,7 @@ class LessonContainer extends Component {
   }
 
   render() {
-    return <Lesson {...this.props} />;
+    return <LessonPart {...this.props} />;
   }
 }
 
@@ -50,4 +50,4 @@ function mapDispatch(dispatch) {
   return bindActionCreators(actions, dispatch);
 }
 
-export default connect(mapState, mapDispatch)(LessonContainer);
+export default connect(mapState, mapDispatch)(LessonPartContainer);

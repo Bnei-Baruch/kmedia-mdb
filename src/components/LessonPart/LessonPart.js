@@ -7,7 +7,7 @@ import * as shapes from '../shapes';
 import VideoBox from './VideoBox';
 import MediaDownloads from './MediaDownloads';
 
-const Lesson = ({ lesson, language }) => {
+const LessonPart = ({ lesson, language }) => {
   if (isEmpty(lesson)) {
     return <div />;
   }
@@ -60,13 +60,13 @@ const Lesson = ({ lesson, language }) => {
   );
 };
 
-Lesson.propTypes = {
+LessonPart.propTypes = {
   language: PropTypes.string.isRequired,
   lesson: shapes.LessonPart,
 };
 
-Lesson.defaultProps = {
+LessonPart.defaultProps = {
   lesson: null
 };
 
-export default Lesson;
+export default LessonPart;
