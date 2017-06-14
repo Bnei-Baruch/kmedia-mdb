@@ -140,7 +140,7 @@ const _addFilterValue = (state, action) => {
 
     return {
       values: newValues,
-      activeValueIndex: newValues.length - 1
+      activeValueIndex: null
     };
   });
 };
