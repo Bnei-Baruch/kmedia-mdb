@@ -72,8 +72,8 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getSources     = state => state.byId;
-const getRoots     = state => state.roots;
+const getSources    = state => state.byId;
+const getRoots      = state => state.roots;
 const getSourceById = state => codeOrId => state.byId[codeOrId];
 
 export const selectors = {
