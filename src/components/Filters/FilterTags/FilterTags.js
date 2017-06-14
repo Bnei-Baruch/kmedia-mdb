@@ -92,7 +92,7 @@ class FilterTags extends Component {
     const { tags, namespace } = this.props;
 
     return (
-      <Label.Group color="blue">
+      <Label.Group>
         {
           tags.map((tag) => {
             const tagData = getTagData(tag.name);
@@ -100,6 +100,7 @@ class FilterTags extends Component {
               <FilterTag
                 key={`${tag.name}_${tag.index}`}
                 icon={tagData.icon}
+                isActive={tag.isActive}
                 label={tagData.valueToLabel(tag.value, this.props, this.context.store)}
                 onClick={() => this.props.editExistingFilter(namespace, tag.name, tag.index)}
                 onClose={() => {
@@ -119,14 +120,19 @@ export default connect(
   (state, ownProps) => {
     // TODO (yaniv): use reselect to cache selector
     const filters = filterSelectors.getFilters(state.filters, ownProps.namespace);
+    const activeFilter = filterSelectors.getActiveFilter(state.filters, ownProps.namespace);
 
     const tags = reduce(filters, (acc, filter) => {
       const values = filter.values || [];
-      return acc.concat(values.map((value, index) => ({
-        name: filter.name,
-        index,
-        value
-      })));
+      return acc.concat(values.map((value, index) => {
+        const activeValueIndex = filterSelectors.getActiveValueIndex(state.filters, ownProps.namespace, filter.name);
+        return ({
+          name: filter.name,
+          index,
+          value,
+          isActive: activeFilter === filter.name && activeValueIndex === index
+        });
+      }));
     }, []);
 
     return { tags };

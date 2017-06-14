@@ -7,7 +7,12 @@ class FilterTag extends PureComponent {
     icon: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     onClose: PropTypes.func.isRequired,
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
+    isActive: PropTypes.bool
+  };
+
+  static defaultProps = {
+    isActive: false
   };
 
   handleClick = (event) => {
@@ -20,9 +25,11 @@ class FilterTag extends PureComponent {
   };
 
   render() {
-    const { icon, label, onClose, onClick } = this.props;
+    const { icon, label, onClose, onClick, isActive } = this.props;
+    const color = isActive ? 'green' : 'blue';
+
     return (
-      <Label as="a" ref={el => this.label = el} onClick={this.handleClick}>
+      <Label as="a" ref={el => this.label = el} onClick={this.handleClick} color={color}>
         <Icon name={icon} />
         {label}
         <Icon name="close" onClick={this.handleClose} />

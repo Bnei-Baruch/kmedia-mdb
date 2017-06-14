@@ -262,7 +262,7 @@ const getLastFilterValue = (state, namespace, name) => {
   return undefined;
 };
 
-const getActiveValueIndex = (state, namespace, name ) =>
+const getActiveValueIndex = (state, namespace, name) =>
   state[namespace] &&
   state[namespace][name] &&
   state[namespace][name].activeValueIndex;
@@ -279,7 +279,7 @@ const getIsEditingExistingFilter = (state, namespace, name) =>
 const getIsHydrated = (state, namespace) => !!state.isHydrated && !!state.isHydrated[namespace];
 
 const getActiveFilter = (state, namespace) => (
-  (state[namespace] && state[namespace] && state[namespace].activeFilter)
+  (state[namespace] && state[namespace].activeFilter)
     ? state[namespace].activeFilter
     : ''
 );
