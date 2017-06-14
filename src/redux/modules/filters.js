@@ -236,7 +236,7 @@ const getFilters = (state, namespace) => {
     return [];
   }
 
-  return Object.keys(filters).map(filterName => ({
+  return Object.keys(filters).filter(filterName => filterName !== 'activeFilter').map(filterName => ({
     name: filterName,
     ...filters[filterName],
   }));

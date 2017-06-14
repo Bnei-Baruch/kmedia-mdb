@@ -3,15 +3,12 @@ import { actions, types } from '../redux/modules/lessons';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 import { LessonApi } from '../api/Api';
-import filterToParams from '../api/filterToParams';
+import filterDefinitions from '../filters';
 
 function* fetchList(action) {
-  try {
     const filters = yield select(state => filterSelectors.getFilters(state.filters, 'lessons'));
-    const params  = filters.reduce((acc, filter) => ({
-      ...acc,
-      ...filterToParams(filter.name)(filter.values)
-    }), {});
+    const params  = filterDefinitions.toApiParams(filters);
+  try {
     const resp    = yield call(LessonApi.all, { ...action.payload, ...params });
 
     if (Array.isArray(resp.collections)) {
