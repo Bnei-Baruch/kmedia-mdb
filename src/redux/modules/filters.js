@@ -37,8 +37,8 @@ const closeActiveFilter = createAction(CLOSE_ACTIVE_FILTER, (namespace, name) =>
 const editNewFilter = createAction(EDIT_NEW_FILTER, (namespace, name) => ({ namespace, name }));
 const editExistingFilter = createAction(EDIT_EXISTING_FILTER, (namespace, name, index = 0) => ({ namespace, name, index }));
 
-const addFilterValue = createAction(ADD_FILTER_VALUE, (namespace, name, value, index) => ({ namespace, name, value, index }));
-const setFilterValue = createAction(SET_FILTER_VALUE, (namespace, name, value) => ({ namespace, name, value }));
+const addFilterValue = createAction(ADD_FILTER_VALUE, (namespace, name, value) => ({ namespace, name, value }));
+const setFilterValue = createAction(SET_FILTER_VALUE, (namespace, name, value, index) => ({ namespace, name, value, index }));
 const removeFilterValue = createAction(REMOVE_FILTER_VALUE, (namespace, name, value) => ({ namespace, name, value }));
 const setHydratedFilterValues = createAction(
   SET_HYDRATED_FILTER_VALUES,
@@ -136,9 +136,11 @@ const _addFilterValue = (state, action) => {
       return filterState;
     }
 
+    const newValues = values.concat([value]);
+
     return {
-      values: values.concat([value]),
-      activeValueIndex: values.length - 1
+      values: newValues,
+      activeValueIndex: newValues.length - 1
     };
   });
 };
@@ -152,7 +154,7 @@ const _setFilterValue = (state, action) => {
 
     const values = filterState.values || [];
     return {
-      values: values.slice(0, index).concat(value).concat(values.slice(index)),
+      values: values.slice(0, index).concat([value]).concat(values.slice(index + 1)),
       activeValueIndex: index
     };
   });
