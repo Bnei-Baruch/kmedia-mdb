@@ -92,7 +92,10 @@ const setFilterState = (state, namespace, name, newFilterStateReducer) => {
 
 const _stopEditing = (state, action) => {
   const { namespace, name } = action.payload;
-  return setFilterState(state, namespace, name, { editingExistingValue: false });
+  return setFilterState(state, namespace, name, {
+    editingExistingValue: false,
+    activeValueIndex: null
+  });
 };
 
 const _closeActiveFilter = (state, action) => {
@@ -106,7 +109,7 @@ const _editNewFilter = (state, action) => {
   const { namespace, name } = action.payload;
 
   const newState = setFilterState(state, namespace, name, (filterState) => ({
-    activeValueIndex: Array.isArray(filterState.values) && filterState.length > 0 ? filterState.length - 1 : 0,
+    activeValueIndex: Array.isArray(filterState.values) && filterState.values.length > 0 ? filterState.length - 1 : 0,
     editExistingFilter: false,
   }));
   newState[namespace].activeFilter = name;
@@ -115,7 +118,7 @@ const _editNewFilter = (state, action) => {
 
 const _editExistingFilter = (state, action) => {
   const { namespace, name, index } = action.payload;
-  const newState = setFilterState(namespace, name, {
+  const newState = setFilterState(state, namespace, name, {
     activeValueIndex: index,
     editExistingFilter: true
   });

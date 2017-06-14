@@ -37,8 +37,6 @@ class Filters extends Component {
   render() {
     const { activeFilter } = this.props;
 
-    console.log(activeFilter);
-
     return (
       <div>
         <FilterMenu items={this.props.filters} active={activeFilter} onChoose={this.handleFilterClick} />

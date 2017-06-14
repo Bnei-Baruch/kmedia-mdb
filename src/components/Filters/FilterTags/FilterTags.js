@@ -4,6 +4,7 @@ import moment from 'moment';
 import reduce from 'lodash/reduce';
 import { connect } from 'react-redux';
 import { Label } from 'semantic-ui-react';
+
 import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
 import FilterTag from '../FilterTag/FilterTag';
 import { selectors as sources } from '../../../redux/modules/sources';
@@ -75,6 +76,7 @@ class FilterTags extends Component {
       value: PropTypes.any
     })),
     removeFilterValue: PropTypes.func.isRequired,
+    editExistingFilter: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
   };
 
@@ -99,6 +101,7 @@ class FilterTags extends Component {
                 key={`${tag.name}_${tag.index}`}
                 icon={tagData.icon}
                 label={tagData.valueToLabel(tag.value, this.props, this.context.store)}
+                onClick={() => this.props.editExistingFilter(namespace, tag.name, tag.index)}
                 onClose={() => {
                   this.props.removeFilterValue(namespace, tag.name, tag.value);
                   this.props.onClose();
