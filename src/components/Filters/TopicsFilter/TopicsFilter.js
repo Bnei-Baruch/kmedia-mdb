@@ -29,6 +29,12 @@ class TopicsFilter extends React.Component {
     selection: this.props.value
   };
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      selection: nextProps.value
+    });
+  }
+
   onSelectionChange = (event, data) => {
     const { value } = data;
     this.setState({ selection: value });

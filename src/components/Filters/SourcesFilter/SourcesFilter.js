@@ -30,6 +30,12 @@ class SourcesFilter extends React.Component {
     selection: this.props.value
   };
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      selection: nextProps.value
+    });
+  }
+
   componentDidUpdate = () => {
     this.listContainer.scrollLeft = this.listContainer.scrollWidth;
   };
