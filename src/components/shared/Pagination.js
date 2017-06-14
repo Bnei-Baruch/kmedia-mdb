@@ -124,7 +124,7 @@ class Pagination extends Component {
     const blocks                      = Pagination.calcBlocks({ total, pageSize, pageNo });
 
     return (
-      <Menu compact>
+      <Menu compact color='blue'>
         <Page
           index={1}
           isDisabled={Pagination.isPrevDisabled(blocks)}
@@ -176,7 +176,7 @@ const Page = (props) => {
   return (
     <Menu.Item
       as={NavLink}
-      activeClassName="violet"
+      activeClassName=""
       key={index}
       disabled={isDisabled}
       active={isActive}
