@@ -33,6 +33,8 @@ const connectFilter = (options = {}) => (WrappedComponent) => {
 
     updateValue = (value) => {
       const { isEditing, activeValueIndex, namespace, name } = this.props;
+      console.log(activeValueIndex);
+      console.log(isEditing);
       if (isEditing) {
         this.props.setFilterValue(namespace, name, value, activeValueIndex);
       } else if (isMultiple) {
@@ -48,7 +50,6 @@ const connectFilter = (options = {}) => (WrappedComponent) => {
     };
 
     render() {
-      console.log(this.props.value);
       const { addFilterValue, setFilterValue, removeFilterValue, ...rest } = this.props;
       return (
         <WrappedComponent

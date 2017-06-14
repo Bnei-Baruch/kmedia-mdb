@@ -110,7 +110,7 @@ const _editNewFilter = (state, action) => {
 
   const newState = setFilterState(state, namespace, name, (filterState) => ({
     activeValueIndex: Array.isArray(filterState.values) && filterState.values.length > 0 ? filterState.length - 1 : 0,
-    editExistingFilter: false,
+    editingExistingValue: false,
   }));
   newState[namespace].activeFilter = name;
   return newState;
@@ -120,7 +120,7 @@ const _editExistingFilter = (state, action) => {
   const { namespace, name, index } = action.payload;
   const newState = setFilterState(state, namespace, name, {
     activeValueIndex: index,
-    editExistingFilter: true
+    editingExistingValue: true
   });
 
   newState[namespace].activeFilter = name;
