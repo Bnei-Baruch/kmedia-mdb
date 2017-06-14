@@ -74,7 +74,7 @@ class FilterTags extends Component {
       name: PropTypes.string.isRequired,
       value: PropTypes.any
     })),
-    removeFilter: PropTypes.func.isRequired,
+    removeFilterValue: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
   };
 
@@ -100,7 +100,7 @@ class FilterTags extends Component {
                 icon={tagData.icon}
                 label={tagData.valueToLabel(tag.value, this.props, this.context.store)}
                 onClose={() => {
-                  this.props.removeFilter(namespace, tag.name, tag.value);
+                  this.props.removeFilterValue(namespace, tag.name, tag.value);
                   this.props.onClose();
                 }}
               />
@@ -118,7 +118,7 @@ export default connect(
     const filters = filterSelectors.getFilters(state.filters, ownProps.namespace);
 
     const tags = reduce(filters, (acc, filter) => {
-      const values = filter.values;
+      const values = filter.values || [];
       return acc.concat(values.map((value, index) => ({
         name: filter.name,
         index,

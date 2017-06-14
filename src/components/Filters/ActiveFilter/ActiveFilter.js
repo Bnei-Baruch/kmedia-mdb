@@ -23,9 +23,9 @@ class ActiveFilter extends PureComponent {
       return null;
     }
 
-    const { component: Component } = activeFilter;
+    const { component: Component, name } = activeFilter;
     return (
-      <Component onCancel={onCancel} onApply={onApply} {...rest} />
+      <Component onCancel={onCancel} onApply={onApply} name={name} {...rest} />
     );
   }
 }
