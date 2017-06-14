@@ -7,22 +7,22 @@ import * as shapes from '../shapes';
 import VideoBox from './VideoBox';
 import MediaDownloads from './MediaDownloads';
 
-const LessonPart = ({ lesson, language }) => {
-  if (isEmpty(lesson)) {
+const LessonPart = ({ lessonPart, language }) => {
+  if (isEmpty(lessonPart)) {
     return <div />;
   }
 
   return (
     <Grid.Column width={16}>
       <Grid>
-        <VideoBox files={lesson.files} language={language} />
+        <VideoBox files={lessonPart.files} language={language} />
       </Grid>
       <Grid>
         <Grid.Row>
           <Grid.Column width={10}>
             <Header as="h3">
-              <span className="text grey">{lesson.film_date}</span><br />
-              {lesson.name}
+              <span className="text grey">{lessonPart.film_date}</span><br />
+              {lessonPart.name}
             </Header>
             <List style={{
               backgroundColor: 'gray',
@@ -52,7 +52,7 @@ const LessonPart = ({ lesson, language }) => {
             </Menu>
           </Grid.Column>
           <Grid.Column width={6}>
-            <MediaDownloads files={lesson.files} language={language} />
+            <MediaDownloads files={lessonPart.files} language={language} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -62,11 +62,11 @@ const LessonPart = ({ lesson, language }) => {
 
 LessonPart.propTypes = {
   language: PropTypes.string.isRequired,
-  lesson: shapes.LessonPart,
+  lessonPart: shapes.LessonPart,
 };
 
 LessonPart.defaultProps = {
-  lesson: null
+  lessonPart: null
 };
 
 export default LessonPart;

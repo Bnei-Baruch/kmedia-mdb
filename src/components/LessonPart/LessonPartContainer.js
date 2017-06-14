@@ -41,7 +41,7 @@ class LessonPartContainer extends Component {
 
 function mapState(state, props) {
   return {
-    lesson: mdb.getUnitById(state.mdb)(props.match.params.id),
+    lessonPart: mdb.getUnitById(state.mdb)(props.match.params.id),
     language: settings.getLanguage(state.settings),
   };
 }
