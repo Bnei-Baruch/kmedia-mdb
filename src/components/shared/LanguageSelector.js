@@ -4,7 +4,8 @@ import { Dropdown } from 'semantic-ui-react';
 import { LANG_HEBREW, LANGUAGE_OPTIONS } from '../../helpers/consts';
 
 const LanguageSelector = (props) => {
-  const options = LANGUAGE_OPTIONS.filter(x => props.languages.includes(x.value));
+  const { languages, defaultValue, onSelect } = props;
+  const options = LANGUAGE_OPTIONS.filter(x => languages.includes(x.value));
 
   return (
     <Dropdown
@@ -13,9 +14,9 @@ const LanguageSelector = (props) => {
       labeled
       selection
       scrolling
-      defaultValue={props.defaultValue}
+      defaultValue={defaultValue}
       options={options}
-      onChange={(e, { value }) => props.onSelect(e, value)}
+      onChange={(e, { value }) => onSelect(e, value)}
     />
   );
 };

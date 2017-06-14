@@ -33,7 +33,7 @@ class TreeNode extends React.Component {
 
 // eslint-disable-next-line no-extra-boolean-cast
     if (!!node.children) {
-      childNodes = node.children.map(item => <li key={`${item.uid}-c`}><TreeNode node={item} /></li>);
+      childNodes = node.children.map(item => <li key={`${item.id}-c`}><TreeNode node={item} /></li>);
 
       classObj = {
         togglable       : true,

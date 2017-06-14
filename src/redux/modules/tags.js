@@ -47,9 +47,9 @@ const buildById = (items) => {
     if (node.children) {
       s = s.concat(node.children);
     }
-    byId[node.uid] = {
+    byId[node.id] = {
       ...node,
-      children: node.children ? node.children.map(x => x.uid) : node,
+      children: node.children ? node.children.map(x => x.id) : node,
     };
   }
 
@@ -62,7 +62,7 @@ export const reducer = handleActions({
   [FETCH_TAGS_SUCCESS]: (state, action) => ({
     ...state,
     byId: buildById(action.payload),
-    roots: action.payload.map(x => x.code),
+    roots: action.payload.map(x => x.id),
     error: null,
   }),
 

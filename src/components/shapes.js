@@ -32,6 +32,8 @@ const MDBBaseContentUnit = {
   files: PropTypes.arrayOf(MDBFile),
 };
 
+export const ContentUnit = PropTypes.shape(MDBBaseContentUnit);
+
 const MDBBaseCollection = {
   id: PropTypes.string.isRequired,
   content_type: PropTypes.string.isRequired,
@@ -39,21 +41,26 @@ const MDBBaseCollection = {
   description: PropTypes.string,
 };
 
+export const Collection = PropTypes.shape(MDBBaseCollection);
+
 export const LessonCollection = PropTypes.shape({
   ...MDBBaseCollection,
   film_date: PropTypes.string.isRequired,
-  content_units: PropTypes.arrayOf(PropTypes.shape(MDBBaseContentUnit)),
+  content_units: PropTypes.arrayOf(ContentUnit),
 });
 
 export const LessonPart = PropTypes.shape({
   ...MDBBaseContentUnit,
   film_date: PropTypes.string.isRequired,
-  collections: PropTypes.objectOf(PropTypes.shape(MDBBaseCollection)),
+  collections: PropTypes.objectOf(Collection),
+  tags: PropTypes.arrayOf(PropTypes.string),
+  sources: PropTypes.arrayOf(PropTypes.string),
+  source_units: PropTypes.objectOf(ContentUnit),
+  derived_units: PropTypes.objectOf(ContentUnit),
 });
 
 export const Topics = PropTypes.arrayOf(PropTypes.shape({
-  uid: PropTypes.string.isRequired,
-  pattern: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
 }));
 

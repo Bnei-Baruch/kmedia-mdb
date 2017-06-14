@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, List, ListItem, Table } from 'semantic-ui-react';
+import { Grid, Table } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import { CT_LESSON_PART } from '../../helpers/consts';
@@ -12,11 +12,11 @@ const renderPart = part => (
       <strong>{part.film_date}</strong>
     </Table.Cell>
     <Table.Cell>
-        <Link to={`/lessons/${part.id}`}>
-          <strong>{part.name}</strong>
-          <br />
-          <div dangerouslySetInnerHTML={{ __html: part.description }} />
-        </Link>
+      <Link to={`/lessons/${part.id}`}>
+        <strong>{part.name}</strong>
+        <br />
+        <div dangerouslySetInnerHTML={{ __html: part.description }} />
+      </Link>
     </Table.Cell>
   </Table.Row>
 );

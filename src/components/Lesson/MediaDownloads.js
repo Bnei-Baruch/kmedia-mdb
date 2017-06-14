@@ -4,7 +4,7 @@ import { Button, Grid, Header, Table } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import * as shapes from '../shapes';
-import { MT_AUDIO, MT_IMAGE, MT_TEXT, MT_VIDEO } from '../../helpers/consts';
+import { CT_KITEI_MAKOR, MT_AUDIO, MT_IMAGE, MT_TEXT, MT_VIDEO } from '../../helpers/consts';
 import LanguageSelector from '../shared/LanguageSelector';
 
 const MEDIA_ORDER = [
@@ -18,11 +18,11 @@ class MediaDownloads extends Component {
 
   static propTypes = {
     language: PropTypes.string.isRequired,
-    files: PropTypes.arrayOf(shapes.MDBFile),
+    lesson: shapes.LessonPart,
   };
 
   static defaultProps = {
-    files: [],
+    lesson: undefined,
   };
 
   constructor(props) {
@@ -31,36 +31,38 @@ class MediaDownloads extends Component {
   }
 
   getInitialState = (props) => {
-    const groups = this.getFilesByLanguage(props.files);
+    const { lesson = {} } = props;
+    const groups          = this.getFilesByLanguage(lesson.files);
+    const derivedGroups   = this.getDerivedFilesByContentType(lesson.derived_units);
 
     let language = props.language;
     if (!groups.has(language)) {
       language = groups.keys().next().value;
     }
 
-    return { groups, language };
+    return { groups, language, derivedGroups };
   };
 
   componentWillReceiveProps(nextProps) {
-    const { files, language } = nextProps;
-    const props               = this.props;
-    const state               = this.state;
+    const { lesson, language } = nextProps;
+    const props                = this.props;
+    const state                = this.state;
 
     // no change
-    if (files === props.files && language === props.language) {
+    if (lesson === props.lesson && language === props.language) {
       return;
     }
 
     // only language changed
-    if (files === props.files && language !== props.language) {
+    if (lesson === props.lesson && language !== props.language) {
       if (state.groups.has(language)) {
         this.setState({ language });
         return;
       }
     }
 
-    // files changed, maybe language as well
-    const groups = this.getFilesByLanguage(files);
+    // lesson changed, maybe language as well
+    const groups = this.getFilesByLanguage(lesson.files);
     let lang;
     if (groups.has(language)) {
       lang = language;
@@ -70,9 +72,15 @@ class MediaDownloads extends Component {
       lang = groups.keys().next().value;
     }
 
+    let derivedGroups = state.derivedGroups;
+    if (lesson.derived_units !== props.lesson.derived_units) {
+      derivedGroups = this.getDerivedFilesByContentType(lesson.derived_units);
+    }
+
     this.setState({
       groups,
       language: lang,
+      derivedGroups,
     });
   }
 
@@ -97,13 +105,48 @@ class MediaDownloads extends Component {
     return groups;
   };
 
+  getDerivedFilesByContentType = units => (
+    Object.values(units || {})
+      .reduce((acc, val) => {
+        acc[val.content_type] = this.getFilesByLanguage(val.files);
+        return acc;
+      }, {})
+  );
+
   handleChangeLanguage = (e, language) => {
     this.setState({ language });
   };
 
+  renderRow = (file, label) => {
+    const ext = file.name.substring(file.name.lastIndexOf('.') + 1);
+    const url = `http://cdn.kabbalahmedia.info/${file.id}`;
+
+    return (
+      <Table.Row key={file.id} verticalAlign="top">
+        <Table.Cell>
+          {label}
+        </Table.Cell>
+        <Table.Cell collapsing>
+          <Button as="a" href={url} target="_blank" size="mini" color="orange" compact fluid>
+            {ext.toUpperCase()}
+          </Button>
+        </Table.Cell>
+        <Table.Cell collapsing>
+          <CopyToClipboard text={url}>
+            <Button size="mini" color="orange" compact fluid>
+              Copy Link
+            </Button>
+          </CopyToClipboard>
+        </Table.Cell>
+      </Table.Row>
+    );
+  };
+
   render() {
-    const { language, groups } = this.state;
-    const byType               = groups.get(language) || new Map();
+    const { language, groups, derivedGroups } = this.state;
+    const byType                              = groups.get(language) || new Map();
+    const kiteiMakor                          = derivedGroups[CT_KITEI_MAKOR];
+    const kiteiMakorByType                    = (kiteiMakor && kiteiMakor.get(language)) || new Map();
 
     let rows;
     if (byType.size === 0) {
@@ -111,32 +154,17 @@ class MediaDownloads extends Component {
     } else {
       rows = MEDIA_ORDER.reduce((acc, val) => {
         const { type, label } = val;
-        const items           = byType.get(type) || [];
+        const files           = (byType.get(type) || []).map(file => this.renderRow(file, label));
+        return acc.concat(files);
+      }, []);
+    }
 
-        const files = items.map((file) => {
-          const ext = file.name.substring(file.name.lastIndexOf('.') + 1);
-          const url = `http://cdn.kabbalahmedia.info/${file.id}`;
-          return (
-            <Table.Row key={file.id} verticalAlign="top">
-              <Table.Cell>
-                {label}
-              </Table.Cell>
-              <Table.Cell collapsing>
-                <Button as="a" href={url} size="mini" color="orange" compact fluid>
-                  {ext.toUpperCase()}
-                </Button>
-              </Table.Cell>
-              <Table.Cell collapsing>
-                <CopyToClipboard text={url}>
-                  <Button size="mini" color="orange" compact fluid>
-                    Copy Link
-                  </Button>
-                </CopyToClipboard>
-              </Table.Cell>
-            </Table.Row>
-          );
-        });
-
+    let derivedRows;
+    if (kiteiMakorByType.size > 0) {
+      derivedRows = MEDIA_ORDER.reduce((acc, val) => {
+        const { type } = val;
+        const label    = `Sources Materials - ${type.charAt(0).toUpperCase()}${type.slice(1).toLowerCase()}`;
+        const files    = (kiteiMakorByType.get(type) || []).map(file => this.renderRow(file, label));
         return acc.concat(files);
       }, []);
     }
@@ -162,6 +190,18 @@ class MediaDownloads extends Component {
             {rows}
           </Table.Body>
         </Table>
+        {
+          derivedRows ?
+            <div>
+              <Header size="tiny" content="Derived Media" />
+              <Table basic="very" compact="very">
+                <Table.Body>
+                  {derivedRows}
+                </Table.Body>
+              </Table>
+            </div>
+            : null
+        }
       </div>
     );
   }

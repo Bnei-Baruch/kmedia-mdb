@@ -50,6 +50,11 @@ class ReactJWPlayer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const isJWPlayerScriptLoaded = !!window.jwplayer;
+    if (!isJWPlayerScriptLoaded) {
+      return;
+    }
+
     const component  = this;
     const player     = window.jwplayer(this.props.playerId);
     const playerOpts = getPlayerOpts(nextProps);

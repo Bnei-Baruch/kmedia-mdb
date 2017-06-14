@@ -41,7 +41,7 @@ class Topics extends React.Component {
             <Grid padded>
               <Grid.Row stretched>
                 <Grid.Column width={16}>
-                  {this.state.tree.map(node => <TreeNode key={`${node.code}-t`} node={node} />)}
+                  {this.state.tree.map(node => <TreeNode key={`${node.id}-t`} node={node} />)}
                 </Grid.Column>
               </Grid.Row>
             </Grid>

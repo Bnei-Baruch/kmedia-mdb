@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import { Button, Divider, List, Segment } from 'semantic-ui-react';
 import noop from 'lodash/noop';
 
+import { TAG_ROOT_TOPICS } from '../../../helpers/consts';
 import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
 import { selectors as tags } from '../../../redux/modules/tags';
 
 const filterName  = 'topics-filter';
-const TOPICS_ROOT = 'mS7hrYXK';
 
 class TopicsFilter extends React.Component {
 
@@ -50,10 +50,10 @@ class TopicsFilter extends React.Component {
               const node = getTagById(x);
               return (
                 <List.Item
-                  active={selected === node.uid}
+                  active={selected === node.id}
                   onClick={this.onSelectionChange}
-                  key={node.uid}
-                  value={node.uid}
+                  key={node.id}
+                  value={node.id}
                 >
                   {node.label}
                 </List.Item>
@@ -66,7 +66,7 @@ class TopicsFilter extends React.Component {
   };
 
   render() {
-    const topics = this.props.getTagById(TOPICS_ROOT);
+    const topics = this.props.getTagById(TAG_ROOT_TOPICS);
 
     return (
       <Segment basic attached="bottom" className="tab active" clearing>

@@ -156,3 +156,5 @@ export const MT_TEXT = 'text';
 export const MT_SHEET = 'sheet';
 export const MT_BANNER = 'banner';
 export const MT_PRESENTATION = 'presentation';
+
+export const TAG_ROOT_TOPICS = 'mS7hrYXK';

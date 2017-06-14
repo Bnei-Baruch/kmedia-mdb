@@ -45,9 +45,9 @@ const buildById = (items) => {
     if (node.children) {
       s = s.concat(node.children);
     }
-    byId[node.uid || node.code] = {
+    byId[node.id] = {
       ...node,
-      children: node.children ? node.children.map(x => x.uid) : node,
+      children: node.children ? node.children.map(x => x.id) : node,
     };
   }
 
@@ -60,7 +60,7 @@ export const reducer = handleActions({
   [FETCH_SOURCES_SUCCESS]: (state, action) => ({
     ...state,
     byId: buildById(action.payload),
-    roots: action.payload.map(x => x.code),
+    roots: action.payload.map(x => x.id),
     error: null,
   }),
 
@@ -74,7 +74,7 @@ export const reducer = handleActions({
 
 const getSources     = state => state.byId;
 const getRoots     = state => state.roots;
-const getSourceById = state => codeOrId => state.byId[codeOrId];
+const getSourceById = state => id => state.byId[id];
 
 export const selectors = {
   getSources,

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from 'semantic-ui-react';
+
 import * as shapes from '../shapes';
+import { MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
 import LanguageSelector from '../shared/LanguageSelector';
 import AVPlayer from './AVPlayer';
 import AVSwitch from './AVSwitch';
@@ -9,12 +11,12 @@ import AVSwitch from './AVSwitch';
 class VideoBox extends Component {
 
   static propTypes = {
-    files: PropTypes.arrayOf(shapes.MDBFile),
-    language: PropTypes.string.isRequired
+    language: PropTypes.string.isRequired,
+    lesson: shapes.LessonPart,
   };
 
   static defaultProps = {
-    files: [],
+    lesson: undefined,
   };
 
   constructor(props) {
@@ -23,7 +25,8 @@ class VideoBox extends Component {
   }
 
   getInitialState = (props) => {
-    const groups = this.getFilesByLanguage(props.files);
+    const { lesson = {} } = props;
+    const groups          = this.getFilesByLanguage(lesson.files);
 
     let language = props.language;
     if (!groups.has(language)) {
@@ -36,25 +39,25 @@ class VideoBox extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    const { files, language } = nextProps;
-    const props               = this.props;
-    const state               = this.state;
+    const { lesson, language } = nextProps;
+    const props                = this.props;
+    const state                = this.state;
 
     // no change
-    if (files === props.files && language === props.language) {
+    if (lesson === props.lesson && language === props.language) {
       return;
     }
 
     // only language changed
-    if (files === props.files && language !== props.language) {
+    if (lesson === props.lesson && language !== props.language) {
       if (state.groups.has(language)) {
         this.setState({ language, ...this.splitAV(language, state.groups) });
         return;
       }
     }
 
-    // files changed, maybe language as well
-    const groups = this.getFilesByLanguage(files);
+    // lesson changed, maybe language as well
+    const groups = this.getFilesByLanguage(lesson.files);
     let lang;
     if (groups.has(language)) {
       lang = language;
@@ -91,8 +94,8 @@ class VideoBox extends Component {
 
   splitAV = (language, groups) => {
     const set   = groups.get(language);
-    const video = set.find(file => file.type === 'video');
-    const audio = set.find(file => file.type === 'audio');
+    const video = set.find(file => file.type === MT_VIDEO);
+    const audio = set.find(file => file.type === MT_AUDIO);
     return { video, audio };
   };
 
@@ -111,7 +114,7 @@ class VideoBox extends Component {
   };
 
   render() {
-    const { audio, video, active, groups } = this.state;
+    const { audio, video, active, groups, language } = this.state;
 
     if (!(video || audio)) {
       return (<div>No video/audio files.</div>);
@@ -134,6 +137,7 @@ class VideoBox extends Component {
               <Grid.Column>
                 <LanguageSelector
                   languages={Array.from(groups.keys())}
+                  defaultValue={language}
                   onSelect={this.handleChangeLanguage}
                 />
               </Grid.Column>

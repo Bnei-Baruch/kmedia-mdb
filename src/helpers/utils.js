@@ -1,4 +1,3 @@
-
 export const isEmpty = (obj) => {
   // null and undefined are "empty"
   if (obj === null) {
@@ -46,4 +45,36 @@ export const createMapper = (mapperObj, defaultTransform = (value, key) => ({ [k
   }
 
   return defaultTransform(value, key);
+};
+
+/**
+ * A generator for interspersing a delimiter between items of an iterable.
+ * @param iterable
+ * @param delim
+ */
+export function* intersperse(iterable, delim) {
+  let first = true;
+  for (const item of iterable) {
+    if (!first) yield delim;
+    first = false;
+    yield item;
+  }
+}
+
+/**
+ * Reconstruct a node's path up a tree
+ * @param {Object} node Tree node whose path we want
+ * @param {Function} getById a function to return a node in the tree by it's id
+ * @returns {[Object]} Array of the given node ancestor, from root to node including.
+ */
+export const tracePath = (node, getById) => {
+  let x      = node;
+  const path = [node];
+  while (x && x.parent_id) {
+    x = getById(x.parent_id);
+    if (x) {
+      path.unshift(x);
+    }
+  }
+  return path;
 };
