@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, Container } from 'semantic-ui-react';
+import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, Container, List } from 'semantic-ui-react';
 import AVPlayer from '../Lesson/AVPlayer';
 class Design extends Component {
 
   render() {
     return (
       <Grid.Column width={16}>
-        <Header size='large' color='pink' inverted>video collection collapsed (๏㉨๏)</Header>
+        {/*<Header size='large' color='pink' inverted>video collection collapsed (๏㉨๏)</Header>*/}
         
         <div className='collapsed_video_container'>
         	<Grid >
@@ -16,9 +16,33 @@ class Design extends Component {
                   <div className='video_placeholder' />
                 </div>
               </Grid.Column>
+                <Grid.Column width='8'>
+                  <Grid><Grid.Row><Grid.Column>
+                  <Header as="h5">
+                    2016-10-26<br/>Lesson on the topic of “From Lo Lishma to Lishma” (not for Her Name for Her Name)
+                  </Header>
+                  { /*<List>
+                    <List.Item><b>Topics:</b> <a href=''>From Lo Lishma to Lishma</a>, <a href=''>Work in group</a></List.Item>
+                    <List.Item><b>Sources:</b> <a href=''> Shamati - There is None Else Beside Him</a>, <a href=''>Shamati - Divinity in Exile</a></List.Item>
+                    <List.Item><b>Related to Event:</b> <a href=''>World Israel Congress 2016</a></List.Item>
+                  </List>  */ }
+                  </Grid.Column></Grid.Row></Grid>
+              </Grid.Column>
             </Grid.Row>
           </Grid>
         </div>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excep velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
       	<Header size='large' color='pink' inverted>video collection ☼.☼</Header>
         <Grid>
           <Grid.Row className='video_box'>
