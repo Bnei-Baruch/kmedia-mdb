@@ -24,12 +24,16 @@ import {
 const filterToQueryMap = {
   'date-filter': (value) => {
     if (!value) {
-      return '';
+      return null;
     }
 
-    if (Array.isArray(value) && value[0]) {
-      // eslint-disable-next-line no-param-reassign
-      value = value[0];
+    if (Array.isArray(value)) {
+      if (value[0]) {
+        // eslint-disable-next-line no-param-reassign
+        value = value[0];
+      } else {
+        return null;
+      }
     }
 
     return {
@@ -76,6 +80,11 @@ function* updateFilterValuesInQuery(action) {
     search: `?${qs.stringify({
       ...filters.reduce((acc, filter) => {
         const param = transformFilterToQuery(filter.name, filter.values || []);
+
+        if (!param) {
+          return acc;
+        }
+
         return Object.assign(acc, param);
       }, {})
     }, { arrayFormat: 'repeat' })}`

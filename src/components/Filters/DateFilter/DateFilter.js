@@ -137,6 +137,14 @@ class DateFilter extends Component {
     this.datePicker.showMonth(this.state.from);
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      from: nextProps.value.from,
+      to: nextProps.value.to,
+      datePreset: nextProps.value.datePreset || rangeToPreset(nextProps.value.from, this.props.value.to),
+    });
+  }
+
   setRange(datePreset, from, to, fromInputValue = '', toInputValue = '') {
     let range = {};
     if (datePreset === CUSTOM_RANGE) {
