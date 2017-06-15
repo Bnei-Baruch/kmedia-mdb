@@ -1,6 +1,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../api/Api';
+import { updateQuery } from './helpers/url';
 import { actions, types } from '../redux/modules/lessons';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as filterSelectors } from '../redux/modules/filters';
@@ -25,8 +26,9 @@ function* fetchList(action) {
   }
 }
 
-function* watchFetchList() {
-  yield takeLatest(types.FETCH_LIST, fetchList);
+function* updatePageInQuery(action) {
+  const page = action.payload > 1 ? action.payload : null;
+  yield* updateQuery(query => Object.assign(query, { page }));
 }
 
 function* fetchLesson(action) {
@@ -39,11 +41,20 @@ function* fetchLesson(action) {
   }
 }
 
+function* watchFetchList() {
+  yield takeLatest(types.FETCH_LIST, fetchList);
+}
+
 function* watchFetchLesson() {
   yield takeLatest(types.FETCH_LESSON, fetchLesson);
+}
+
+function* watchSetPage() {
+  yield takeLatest(types.SET_PAGE, updatePageInQuery);
 }
 
 export const sagas = [
   watchFetchList,
   watchFetchLesson,
+  watchSetPage,
 ];

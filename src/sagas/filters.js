@@ -1,14 +1,9 @@
-import { takeEvery, select, put } from 'redux-saga/effects';
-import qs from 'qs';
+import { put, select, takeEvery } from 'redux-saga/effects';
 import moment from 'moment';
-import without from 'lodash/without';
-import { replace } from 'react-router-redux';
+
 import { createMapper } from '../helpers/utils';
-import {
-  types as filterTypes,
-  actions as filterActions,
-  selectors as filterSelectors
-} from '../redux/modules/filters';
+import { getQuery, updateQuery } from './helpers/url';
+import { actions as filterActions, selectors as filterSelectors, types as filterTypes } from '../redux/modules/filters';
 
 /*
  * When a filter value is changed, the query is also changed to match..
@@ -32,7 +27,7 @@ const filterToQueryMap = {
         // eslint-disable-next-line no-param-reassign
         value = value[0];
       } else {
-        return null;
+        return { dates: null };
       }
     }
 
@@ -66,28 +61,14 @@ const queryToFilterMap = {
 const transformFilterToQuery = createMapper(filterToQueryMap);
 const transformQueryToFilter = createMapper(queryToFilterMap, () => null);
 
-function* getQuery() {
-  const router = yield select(state => state.router);
-  const query = qs.parse(router.location.search.slice(1));
-
-  return query;
-}
-
 function* updateFilterValuesInQuery(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, action.payload.namespace));
 
-  yield put(replace({
-    search: `?${qs.stringify({
-      ...filters.reduce((acc, filter) => {
-        const param = transformFilterToQuery(filter.name, filter.values || []);
-
-        if (!param) {
-          return acc;
-        }
-
-        return Object.assign(acc, param);
-      }, {})
-    }, { arrayFormat: 'repeat' })}`
+  yield* updateQuery(query => ({
+    ...filters.reduce((acc, filter) => {
+      const params = transformFilterToQuery(filter.name, filter.values || []);
+      return Object.assign(acc, params);
+    }, query)
   }));
 }
 
@@ -97,10 +78,9 @@ function* hydrateFilters(action) {
 
   if (from === 'query') {
     const query = yield* getQuery();
-    const params = qs.parse(query);
-    filters = Object.keys(params).reduce((acc, key) => ({
+    filters     = Object.keys(query).reduce((acc, key) => ({
       ...acc,
-      ...transformQueryToFilter(key, params[key])
+      ...transformQueryToFilter(key, query[key])
     }), {});
   }
 

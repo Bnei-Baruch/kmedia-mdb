@@ -15,30 +15,33 @@ import LessonsList from './LessonsList';
 class LessonsContainer extends Component {
 
   static propTypes = {
+    pageNo: PropTypes.number,
     total: PropTypes.number,
-    lessons: PropTypes.arrayOf(PropTypes.oneOfType([shapes.LessonCollection, shapes.LessonPart])),
+    items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.LessonCollection, shapes.LessonPart])),
     location: shapes.HistoryLocation.isRequired,
     fetchList: PropTypes.func.isRequired,
+    setPage: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
     pageSize: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
+    pageNo: 1,
     total: 0,
-    lessons: [],
+    items: [],
   };
 
   componentWillReceiveProps(nextProps) {
-    // if relevant props changed then askForData
-    const { language, pageSize, location } = nextProps;
-    const props                            = this.props;
+    const { pageNo, language, pageSize } = nextProps;
+    const props                          = this.props;
 
-    // TODO (edo): lesson.search changes shouldn't ask for data
-    // remove from condition once pagination is implemented as a filter
-    if (language !== props.language || pageSize !== props.pageSize || location.search !== props.location.search) {
-      this.askForData(location.search, language, pageSize);
+    if (pageSize !== props.pageSize) {
+      this.handlePageChange(1);
     }
-    // TODO: what to do if total was changed?
+
+    if (language !== props.language) {
+      this.askForData(pageNo, language, pageSize);
+    }
   }
 
   getPageNo = (search) => {
@@ -53,14 +56,24 @@ class LessonsContainer extends Component {
     return (isNaN(page) || page <= 0) ? 1 : page;
   };
 
-  askForData = (search, language, pageSize) => {
-    const pageNo = this.getPageNo(search);
+  handlePageChange = (pageNo) => {
+    const { setPage, language, pageSize } = this.props;
+    setPage(pageNo);
+    this.askForData(pageNo, language, pageSize);
+  };
+
+  handleFiltersHydrated = () => {
+    const { location }       = this.props;
+    const pageNoFromLocation = this.getPageNo(location.search);
+    this.handlePageChange(pageNoFromLocation);
+  };
+
+  askForData = (pageNo, language, pageSize) => {
     this.props.fetchList(pageNo, language, pageSize);
   };
 
   render() {
-    const { total, lessons, language, pageSize, location } = this.props;
-    const pageNo                                           = this.getPageNo(location.search);
+    const { pageNo, total, items, pageSize } = this.props;
 
     return (
       <Grid.Column width={16}>
@@ -68,11 +81,17 @@ class LessonsContainer extends Component {
           pageNo={pageNo}
           pageSize={pageSize}
           total={total}
-          onChange={() => this.askForData(location.search, language, pageSize)}
+          onChange={() => this.handlePageChange(1)}
+          onHydrated={this.handleFiltersHydrated}
         />
         <Divider />
-        <LessonsList lessons={lessons} />
-        <Pagination pageNo={pageNo} pageSize={pageSize} total={total} />
+        <LessonsList items={items} />
+        <Pagination
+          pageNo={pageNo}
+          pageSize={pageSize}
+          total={total}
+          onChange={x => this.handlePageChange(x)}
+        />
       </Grid.Column>
     );
   }
@@ -80,8 +99,9 @@ class LessonsContainer extends Component {
 
 export default connect(
   state => ({
+    pageNo: lessonsSelectors.getPageNo(state.lessons),
     total: lessonsSelectors.getTotal(state.lessons),
-    lessons: lessonsSelectors.getLessons(state.lessons)
+    items: lessonsSelectors.getItems(state.lessons)
       .map(x => (x[1] === CT_LESSON_PART ?
         mdb.getUnitById(state.mdb)(x[0]) :
         mdb.getCollectionById(state.mdb)(x[0]))),

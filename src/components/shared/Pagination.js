@@ -23,15 +23,15 @@
  *
  */
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Menu, Icon } from 'semantic-ui-react';
-import { NavLink } from 'react-router-dom';
+import { Icon, Menu } from 'semantic-ui-react';
+import noop from 'lodash/noop';
 
-class Pagination extends Component {
+class Pagination extends PureComponent {
 
   static TITLES = {
-    first:  <Icon name="angle double left" />,
+    first: <Icon name="angle double left" />,
     prev: <Icon name="angle left" />,
     prevSet: <Icon name="ellipsis horizontal" />,
     nextSet: <Icon name="ellipsis horizontal" />,
@@ -42,9 +42,10 @@ class Pagination extends Component {
   static WINDOW_SIZE = 12;
 
   static propTypes = {
-    pageNo: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
-    total: PropTypes.number.isRequired,
+    total: PropTypes.number,
+    pageNo: PropTypes.number,
+    onChange: PropTypes.func,
     titles: PropTypes.shape({
       first: PropTypes.node,
       prev: PropTypes.node,
@@ -56,14 +57,10 @@ class Pagination extends Component {
   };
 
   static defaultProps = {
-    titles: Pagination.TITLES
-  };
-
-  static range = ({ start, end }) => {
-    if (end <= start) {
-      return [];
-    }
-    return Array.from(new Array((end - start) + 1), (val, index) => start + index);
+    pageNo: 1,
+    total: 0,
+    onChange: noop,
+    titles: Pagination.TITLES,
   };
 
   /** Calculates "blocks" of buttons with page numbers. */
@@ -82,7 +79,8 @@ class Pagination extends Component {
   static isPrevMoreHidden = ({ current, total }) => total === 1 || current === 1;
   static isNextMoreHidden = ({ total, current }) => (current + Pagination.WINDOW_SIZE >= total);
   static isNextDisabled   = ({ total, current }) => (current === total);
-  static visibleRange     = ({ current: currentBlock, total }) => {
+
+  static visibleRange = ({ current: currentBlock, total }) => {
     let start;
     let last;
     if (currentBlock === 1) {
@@ -97,26 +95,36 @@ class Pagination extends Component {
     }
     const end = (last > total) ? total : last;
 
-    return { start, end };
-  };
+    if (end <= start) {
+      return [];
+    }
 
-  /** Renders block of pages' buttons with numbers. */
-  static renderPages = (pair, pageNo) => {
-    const page = pageNo === 0 ? 1 : pageNo;
-    return Pagination.range(pair).map((num) => {
-      const isActive = page === num;
-
-      return (
-        <Page
-          key={num.toString()}
-          index={num}
-          isActive={isActive}
-        >{num}</Page>
-      );
-    });
+    return Array.from(new Array((end - start) + 1), (val, index) => start + index);
   };
 
   getTitles = key => this.props.titles[key] || Pagination.TITLES[key];
+
+  /** Renders block of pages' buttons with numbers. */
+  renderPages = (blocks) => {
+    const range      = Pagination.visibleRange(blocks);
+    const { pageNo } = this.props;
+    return range.map(x => (this.renderPage(x, x, false, x === pageNo)));
+  };
+
+  renderPage = (content, value, disabled, active = false) => {
+    if (disabled) {
+      return <Menu.Item disabled>{content}</Menu.Item>;
+    }
+
+    return (
+      <Menu.Item
+        key={value}
+        active={active}
+        content={content}
+        onClick={() => this.props.onChange(value)}
+      />
+    );
+  };
 
   render() {
     const titles                      = this.getTitles;
@@ -124,84 +132,27 @@ class Pagination extends Component {
     const blocks                      = Pagination.calcBlocks({ total, pageSize, pageNo });
 
     return (
-      <Menu compact color='blue'>
-        <Page
-          index={1}
-          isDisabled={Pagination.isPrevDisabled(blocks)}
-        >{titles('first')}</Page>
-        <Page
-          index={blocks.current - 1}
-          isDisabled={Pagination.isPrevDisabled(blocks)}
-        >{titles('prev')}</Page>
-        <Page
-          isHidden={Pagination.isPrevMoreHidden(blocks)}
-          isDisabled
-        >{titles('prevSet')}</Page>
+      <Menu compact color="blue">
+        {this.renderPage(titles('first'), 1, Pagination.isPrevDisabled(blocks))}
+        {
+          Pagination.isPrevMoreHidden(blocks) ?
+            null :
+            this.renderPage(titles('prev'), blocks.current - 1, Pagination.isPrevDisabled(blocks))
+        }
+        {this.renderPage(titles('prevSet'), -100, true)}
 
-        {Pagination.renderPages(Pagination.visibleRange(blocks), this.props.pageNo)}
+        {this.renderPages(blocks)}
 
-        <Page
-          isHidden={Pagination.isNextMoreHidden(blocks)}
-          isDisabled
-        >{titles('nextSet')}</Page>
-        <Page
-          index={blocks.current + 1}
-          isDisabled={Pagination.isNextDisabled(blocks)}
-        >{titles('next')}</Page>
-        <Page
-          index={blocks.total}
-          isDisabled={Pagination.isNextDisabled(blocks)}
-        >{titles('last')}</Page>
-
+        {this.renderPage(titles('nextSet'), -101, true)}
+        {
+          Pagination.isNextMoreHidden(blocks) ?
+            null :
+            this.renderPage(titles('next'), blocks.current + 1, Pagination.isNextDisabled(blocks))
+        }
+        {this.renderPage(titles('last'), blocks.total, Pagination.isNextDisabled(blocks))}
       </Menu>
     );
   }
 }
-
-const Page = (props) => {
-  const { isHidden, isActive, isDisabled, index, children } = props;
-
-  if (isHidden) {
-    return null;
-  }
-
-  if (isDisabled) {
-    return (
-      <Menu.Item
-        disabled={isDisabled}
-      >{children}</Menu.Item>
-    );
-  }
-
-  return (
-    <Menu.Item
-      as={NavLink}
-      activeClassName=""
-      key={index}
-      disabled={isDisabled}
-      active={isActive}
-      to={isDisabled ? '' : {
-        pathname: '/lessons',
-        search: `?page=${index}`
-      }}
-    >{children}</Menu.Item>
-  );
-};
-
-Page.propTypes = {
-  isHidden: PropTypes.bool,
-  isActive: PropTypes.bool,
-  isDisabled: PropTypes.bool,
-  index: PropTypes.number,
-  children: PropTypes.oneOfType([PropTypes.node, PropTypes.number]),
-};
-
-Page.defaultProps = {
-  isHidden: false,
-  isActive: false,
-  isDisabled: false,
-  index: 0,
-  children: ''
-};
 
 export default Pagination;

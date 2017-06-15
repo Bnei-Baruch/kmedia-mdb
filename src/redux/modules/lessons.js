@@ -2,6 +2,8 @@ import { createAction, handleActions } from 'redux-actions';
 
 /* Types */
 
+const SET_PAGE = 'Lessons/SET_PAGE';
+
 const FETCH_LIST           = 'Lessons/FETCH_LIST';
 const FETCH_LIST_SUCCESS   = 'Lessons/FETCH_LIST_SUCCESS';
 const FETCH_LIST_FAILURE   = 'Lessons/FETCH_LIST_FAILURE';
@@ -10,6 +12,7 @@ const FETCH_LESSON_SUCCESS = 'Lesson/FETCH_LESSON_SUCCESS';
 const FETCH_LESSON_FAILURE = 'Lesson/FETCH_LESSON_FAILURE';
 
 export const types = {
+  SET_PAGE,
   FETCH_LIST,
   FETCH_LIST_SUCCESS,
   FETCH_LIST_FAILURE,
@@ -20,6 +23,7 @@ export const types = {
 
 /* Actions */
 
+const setPage            = createAction(SET_PAGE);
 const fetchList          = createAction(FETCH_LIST, (pageNo, language, pageSize) => ({ pageNo, language, pageSize }));
 const fetchListSuccess   = createAction(FETCH_LIST_SUCCESS);
 const fetchListFailure   = createAction(FETCH_LIST_FAILURE);
@@ -28,6 +32,7 @@ const fetchLessonSuccess = createAction(FETCH_LESSON_SUCCESS);
 const fetchLessonFailure = createAction(FETCH_LESSON_FAILURE);
 
 export const actions = {
+  setPage,
   fetchList,
   fetchListSuccess,
   fetchListFailure,
@@ -40,28 +45,39 @@ export const actions = {
 
 const initialState = {
   total: 0,
-  lessons: [],
+  items: [],
+  pageNo: 1,
 };
 
-const _fetchListSuccess = (state, action) => {
+const onFetchListSuccess = (state, action) => {
   const items = action.payload.collections || action.payload.content_units || [];
   return {
     ...state,
     total: action.payload.total,
-    lessons: items.map(x => [x.id, x.content_type]),
+    items: items.map(x => [x.id, x.content_type]),
   };
 };
 
+const onSetPage = (state, action) => (
+  {
+    ...state,
+    pageNo: action.payload
+  }
+);
+
 export const reducer = handleActions({
-  [FETCH_LIST_SUCCESS]: (state, action) => _fetchListSuccess(state, action),
+  [FETCH_LIST_SUCCESS]: onFetchListSuccess,
+  [SET_PAGE]: onSetPage,
 }, initialState);
 
 /* Selectors */
 
-const getTotal   = state => state.total;
-const getLessons = state => state.lessons;
+const getTotal  = state => state.total;
+const getItems  = state => state.items;
+const getPageNo = state => state.pageNo;
 
 export const selectors = {
   getTotal,
-  getLessons,
+  getItems,
+  getPageNo,
 };

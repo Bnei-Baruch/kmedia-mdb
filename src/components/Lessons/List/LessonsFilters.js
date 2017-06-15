@@ -29,27 +29,18 @@ class LessonsFilters extends PureComponent {
 
   static propTypes = {
     onChange: PropTypes.func.isRequired,
+    onHydrated: PropTypes.func.isRequired,
   };
 
   render() {
-    const { onChange } = this.props;
+    const { onChange, onHydrated } = this.props;
 
     return (
       <div>
-        <FiltersHydrator
-          namespace="lessons"
-          onHydrated={onChange}
-        />
-        <Filters
-          namespace="lessons"
-          filters={filters}
-          onFilterApplication={onChange}
-        />
+        <FiltersHydrator namespace="lessons" onHydrated={onHydrated} />
+        <Filters namespace="lessons" filters={filters} onFilterApplication={onChange} />
         <ResultsPageHeader {...this.props} />
-        <FilterTags
-          namespace="lessons"
-          onClose={onChange}
-        />
+        <FilterTags namespace="lessons" onClose={onChange} />
       </div>
     );
   }

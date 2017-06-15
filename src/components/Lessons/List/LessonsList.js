@@ -9,11 +9,11 @@ import * as shapes from '../../shapes';
 class LessonsList extends PureComponent {
 
   static propTypes = {
-    lessons: PropTypes.arrayOf(PropTypes.oneOfType([shapes.LessonCollection, shapes.LessonPart])),
+    items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.LessonCollection, shapes.LessonPart])),
   };
 
   static defaultProps = {
-    lessons: []
+    items: []
   };
 
   renderPart = part => (
@@ -63,9 +63,9 @@ class LessonsList extends PureComponent {
   };
 
   render() {
-    const { lessons } = this.props;
+    const { items } = this.props;
 
-    if (!lessons) {
+    if (!items) {
       return (<Grid columns={2} celled="internally" />);
     }
 
@@ -73,7 +73,7 @@ class LessonsList extends PureComponent {
       <Table basic="very" sortable>
         <Table.Body>
           {
-            lessons.map(x => (
+            items.map(x => (
               x.content_type === CT_LESSON_PART ?
                 this.renderPart(x) :
                 this.renderCollection(x))

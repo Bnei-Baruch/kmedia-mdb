@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import noop from 'lodash/noop';
+
 import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
 
 class FiltersHydrator extends Component {
@@ -12,8 +14,7 @@ class FiltersHydrator extends Component {
   };
 
   static defaultProps = {
-    children: null,
-    onHydrated: undefined,
+    onHydrated: noop,
     isHydrated: false
   };
 

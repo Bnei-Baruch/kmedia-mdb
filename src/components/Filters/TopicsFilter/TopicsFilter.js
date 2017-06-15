@@ -5,10 +5,8 @@ import { Button, Divider, List, Segment } from 'semantic-ui-react';
 import noop from 'lodash/noop';
 
 import { TAG_ROOT_TOPICS } from '../../../helpers/consts';
-import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
 import { selectors as tags } from '../../../redux/modules/tags';
 import connectFilter from '../connectFilter';
-
 
 class TopicsFilter extends React.Component {
 
