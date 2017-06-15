@@ -39,13 +39,12 @@ class Pagination extends PureComponent {
     last: <Icon name="angle double right" />,
   };
 
-  static WINDOW_SIZE = 12;
-
   static propTypes = {
     pageSize: PropTypes.number.isRequired,
     total: PropTypes.number,
     pageNo: PropTypes.number,
     onChange: PropTypes.func,
+    windowSize: PropTypes.number,
     titles: PropTypes.shape({
       first: PropTypes.node,
       prev: PropTypes.node,
@@ -60,40 +59,20 @@ class Pagination extends PureComponent {
     pageNo: 1,
     total: 0,
     onChange: noop,
+    windowSize: 3,
     titles: Pagination.TITLES,
   };
 
   /** Calculates "blocks" of buttons with page numbers. */
   static calcBlocks = ({ total, pageSize, pageNo }) => {
-    const current = pageNo === 0 ? 1 : pageNo;
-    const blocks  = Math.ceil(total / pageSize);
-
-    return {
-      total: blocks,
-      current,
-      size: pageSize,
-    };
+    const current     = pageNo === 0 ? 1 : pageNo;
+    const totalBlocks = Math.ceil(total / pageSize);
+    return { current, totalBlocks };
   };
 
-  static isPrevDisabled   = ({ current }) => current === 1;
-  static isPrevMoreHidden = ({ current, total }) => total === 1 || current === 1;
-  static isNextMoreHidden = ({ total, current }) => (current + Pagination.WINDOW_SIZE >= total);
-  static isNextDisabled   = ({ total, current }) => (current === total);
-
-  static visibleRange = ({ current: currentBlock, total }) => {
-    let start;
-    let last;
-    if (currentBlock === 1) {
-      start = currentBlock;
-      last  = start + Pagination.WINDOW_SIZE;
-    } else if ((total - currentBlock) < Pagination.WINDOW_SIZE) {
-      start = currentBlock - (Pagination.WINDOW_SIZE / 2);
-      last  = start + Pagination.WINDOW_SIZE;
-    } else {
-      start = currentBlock - 1;
-      last  = start + Pagination.WINDOW_SIZE;
-    }
-    const end = (last > total) ? total : last;
+  static visibleRange = (current, total, windowSize) => {
+    const start = Math.max(1, current - windowSize);
+    const end   = Math.min(current + windowSize, total);
 
     if (end <= start) {
       return [];
@@ -102,23 +81,16 @@ class Pagination extends PureComponent {
     return Array.from(new Array((end - start) + 1), (val, index) => start + index);
   };
 
-  getTitles = key => this.props.titles[key] || Pagination.TITLES[key];
+  getTitle = key => this.props.titles[key] || Pagination.TITLES[key];
 
-  /** Renders block of pages' buttons with numbers. */
-  renderPages = (blocks) => {
-    const range      = Pagination.visibleRange(blocks);
-    const { pageNo } = this.props;
-    return range.map(x => (this.renderPage(x, x, false, x === pageNo)));
-  };
-
-  renderPage = (content, value, disabled, active = false) => {
+  renderPage = (content, value, key, disabled, active = false) => {
     if (disabled) {
       return <Menu.Item disabled>{content}</Menu.Item>;
     }
 
     return (
       <Menu.Item
-        key={value}
+        key={key}
         active={active}
         content={content}
         onClick={() => this.props.onChange(value)}
@@ -127,29 +99,39 @@ class Pagination extends PureComponent {
   };
 
   render() {
-    const titles                      = this.getTitles;
-    const { total, pageSize, pageNo } = this.props;
-    const blocks                      = Pagination.calcBlocks({ total, pageSize, pageNo });
+    const { total, pageSize, pageNo, windowSize } = this.props;
+
+    const { current, totalBlocks } = Pagination.calcBlocks({ total, pageSize, pageNo });
+    const visibleRange             = Pagination.visibleRange(current, totalBlocks, windowSize);
+    if (visibleRange.length === 0) {
+      return null;
+    }
+
+    const titles       = this.getTitle;
+    const prevDisabled = current === 1;
+    const nextDisabled = current === totalBlocks;
+    const hidePrevSet  = visibleRange[0] === 1;
+    const hideNextSet  = visibleRange[visibleRange.length - 1] === totalBlocks;
 
     return (
       <Menu compact color="blue">
-        {this.renderPage(titles('first'), 1, Pagination.isPrevDisabled(blocks))}
+        {this.renderPage(titles('first'), 1, 'first', prevDisabled)}
+        {this.renderPage(titles('prev'), current - 1, 'prev', prevDisabled)}
         {
-          Pagination.isPrevMoreHidden(blocks) ?
+          hidePrevSet ?
             null :
-            this.renderPage(titles('prev'), blocks.current - 1, Pagination.isPrevDisabled(blocks))
+            this.renderPage(titles('prevSet'), -100, 'prevSet', true)
         }
-        {this.renderPage(titles('prevSet'), -100, true)}
 
-        {this.renderPages(blocks)}
+        {visibleRange.map(x => (this.renderPage(x, x, x, false, x === current)))}
 
-        {this.renderPage(titles('nextSet'), -101, true)}
         {
-          Pagination.isNextMoreHidden(blocks) ?
+          hideNextSet ?
             null :
-            this.renderPage(titles('next'), blocks.current + 1, Pagination.isNextDisabled(blocks))
+            this.renderPage(titles('nextSet'), -101, 'nextSet', true)
         }
-        {this.renderPage(titles('last'), blocks.total, Pagination.isNextDisabled(blocks))}
+        {this.renderPage(titles('next'), current + 1, 'next', nextDisabled)}
+        {this.renderPage(titles('last'), totalBlocks, 'last', nextDisabled)}
       </Menu>
     );
   }
