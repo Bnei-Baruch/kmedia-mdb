@@ -7,7 +7,7 @@ class Design extends Component {
     return (
       <Grid.Column width={16}>
         {/*<Header size='large' color='pink' inverted>video collection collapsed (๏㉨๏)</Header>*/}
-        
+
         <div className='collapsed_video_container'>
         	<Grid >
             <Grid.Row>
@@ -92,7 +92,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
         <Grid>
           <Grid.Row>
             <Grid.Column textAlign='center'>
-              <Menu pagination color='blue'>                    
+              <Menu pagination color='blue'>
                 <Menu.Item icon><Icon name='angle double left' /></Menu.Item>
                 <Menu.Item icon><Icon name='angle left' /></Menu.Item>
                 <Menu.Item icon disabled><Icon name='ellipsis horizontal' /></Menu.Item>

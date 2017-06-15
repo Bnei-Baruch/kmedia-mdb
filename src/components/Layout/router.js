@@ -1,7 +1,8 @@
 import React from 'react';
 import { Header } from 'semantic-ui-react';
 import Lessons from '../Lessons/LessonsContainer';
-import Lesson from '../Lesson/LessonContainer';
+import LessonPart from '../LessonPart/LessonPartContainer';
+import FullLesson from '../FullLesson/FullLessonContainer';
 import Sources from '../sources';
 import Topics from '../topics';
 import Design from '../Design/Design';
@@ -26,7 +27,8 @@ export const AppRoutes = [
   { key: 'homepage', exact: true, path: '/', component: Lessons },
   { key: 'daily_lessons', exact: true, path: '/lessons', component: Lessons },
   { key: 'tv_video_programs', exact: true, path: '/tv_video_programs', component: NotImplemented },
-  { key: 'lesson', exact: true, path: '/lessons/:id', component: Lesson },
+  { key: 'lesson', exact: true, path: '/lessons/:id', component: LessonPart },
+  { key: 'lesson', exact: true, path: '/lessons/c/:id', component: FullLesson },
   { key: 'sources', exact: true, path: '/sources', component: Sources },
   { key: 'topics', exact: true, path: '/topics', component: Topics },
   { key: 'design', exact: true, path: '/design', component: Design },

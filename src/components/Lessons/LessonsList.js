@@ -41,7 +41,9 @@ const renderCollection = (collection) => {
         <strong>{collection.film_date}</strong>
       </Table.Cell>
       <Table.Cell>
-        <strong>{collection.content_type}</strong>
+        <Link to={`/lessons/c/${collection.id}`}>
+          <strong>{collection.content_type}</strong>
+        </Link>
       </Table.Cell>
     </Table.Row>
   ));
