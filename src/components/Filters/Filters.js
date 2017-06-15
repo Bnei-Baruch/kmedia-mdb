@@ -1,23 +1,30 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import { filterPropShape } from '../shapes';
+import { selectors as filterSelectors, actions as filterActions } from '../../redux/modules/filters';
 import ActiveFilter from './ActiveFilter/ActiveFilter';
 import FilterMenu from './FilterMenu/FilterMenu';
 
-class Filter extends Component {
+class Filters extends Component {
 
   static propTypes = {
     namespace: PropTypes.string.isRequired,
     onFilterApplication: PropTypes.func.isRequired,
-    filters: PropTypes.arrayOf(filterPropShape).isRequired
+    editNewFilter: PropTypes.func.isRequired,
+    filters: PropTypes.arrayOf(filterPropShape).isRequired,
+    activeFilter: PropTypes.string
   };
 
-  state = {
-    activeFilter: null,
+  static defaultProps = {
+    activeFilter: ''
   };
 
-  handleFilterClick = ({ name }) => this.setState({ activeFilter: name });
+  handleFilterClick = ({ name }) => {
+    const { namespace } = this.props;
+    this.props.editNewFilter(namespace, name);
+  };
 
   handleCancelActiveFilter = () => {
     this.setState({ activeFilter: null });
@@ -28,7 +35,7 @@ class Filter extends Component {
   };
 
   render() {
-    const activeFilter = this.state.activeFilter;
+    const { activeFilter } = this.props;
 
     return (
       <div>
@@ -45,4 +52,9 @@ class Filter extends Component {
   }
 }
 
-export default Filter;
+export default connect(
+  (state, ownProps) => ({
+    activeFilter: filterSelectors.getActiveFilter(state.filters, ownProps.namespace)
+  }),
+  filterActions
+)(Filters);

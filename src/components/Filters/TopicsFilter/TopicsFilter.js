@@ -7,14 +7,34 @@ import noop from 'lodash/noop';
 import { TAG_ROOT_TOPICS } from '../../../helpers/consts';
 import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
 import { selectors as tags } from '../../../redux/modules/tags';
+import connectFilter from '../connectFilter';
 
-const filterName  = 'topics-filter';
 
 class TopicsFilter extends React.Component {
 
-  state = {
-    selection: this.props.lastSelection
+  static propTypes = {
+    onCancel: PropTypes.func,
+    onApply: PropTypes.func,
+    updateValue: PropTypes.func.isRequired,
+    value: PropTypes.string,
+    getTagById: PropTypes.func.isRequired,
   };
+
+  static defaultProps = {
+    onCancel: noop,
+    onApply: noop,
+    value: null,
+  };
+
+  state = {
+    selection: this.props.value
+  };
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      selection: nextProps.value
+    });
+  }
 
   onSelectionChange = (event, data) => {
     const { value } = data;
@@ -26,7 +46,7 @@ class TopicsFilter extends React.Component {
   };
 
   apply = () => {
-    this.props.addFilterValue(this.props.namespace, filterName, this.state.selection);
+    this.props.updateValue(this.state.selection);
     this.props.onApply();
   };
 
@@ -85,25 +105,8 @@ class TopicsFilter extends React.Component {
   }
 }
 
-TopicsFilter.propTypes = {
-  namespace: PropTypes.string.isRequired,
-  onCancel: PropTypes.func,
-  onApply: PropTypes.func,
-  addFilterValue: PropTypes.func.isRequired,
-  lastSelection: PropTypes.string,
-  getTagById: PropTypes.func.isRequired,
-};
-
-TopicsFilter.defaultProps = {
-  onCancel: noop,
-  onApply: noop,
-  lastSelection: null,
-};
-
 export default connect(
-  (state, ownProps) => ({
-    selection: filterSelectors.getLastFilterValue(state.filters, ownProps.namespace, filterName),
+  state => ({
     getTagById: tags.getTagById(state.tags),
-  }),
-  filterActions
-)(TopicsFilter);
+  })
+)(connectFilter({ isMultiple: true })(TopicsFilter));

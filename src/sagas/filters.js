@@ -6,7 +6,8 @@ import { replace } from 'react-router-redux';
 import { createMapper } from '../helpers/utils';
 import {
   types as filterTypes,
-  actions as filterActions
+  actions as filterActions,
+  selectors as filterSelectors
 } from '../redux/modules/filters';
 
 /*
@@ -23,14 +24,23 @@ import {
 const filterToQueryMap = {
   'date-filter': (value) => {
     if (!value) {
-      return '';
+      return null;
+    }
+
+    if (Array.isArray(value)) {
+      if (value[0]) {
+        // eslint-disable-next-line no-param-reassign
+        value = value[0];
+      } else {
+        return null;
+      }
     }
 
     return {
       dates: `${moment(value.from).format('DD-MM-YYYY')}_${moment(value.to).format('DD-MM-YYYY')}`,
     };
   },
-  'sources-filter': value => ({ source: value.join('_') }),
+  'sources-filter': value => ({ source: value.map(singleValue => singleValue.join('_')) }),
   'topics-filter': value => ({ topic: value })
 };
 
@@ -63,65 +73,20 @@ function* getQuery() {
   return query;
 }
 
-function* setFilterValueToUrl(action) {
-  const query = yield* getQuery();
-
-  const { name, value } = action.payload;
-  const param = transformFilterToQuery(name, value);
-
-  yield put(replace({
-    search: `?${qs.stringify({ ...query, ...param }, { arrayFormat: 'repeat' })}`
-  }));
-}
-
-function* addFilterValueToUrl(action) {
-  const query = yield* getQuery();
-
-  const { name, value } = action.payload;
-  const param = transformFilterToQuery(name, value);
+function* updateFilterValuesInQuery(action) {
+  const filters = yield select(state => filterSelectors.getFilters(state.filters, action.payload.namespace));
 
   yield put(replace({
     search: `?${qs.stringify({
-      ...(Object.keys(param).reduce((acc, key) => {
-        const paramValue = param[key];
-        if (paramValue) {
-          const paramValues = (Array.isArray(paramValue) ? paramValue : [paramValue]);
-          const queryValue = acc[key];
-          if (Array.isArray(queryValue)) {
-            acc[key] = [...queryValue, ...paramValues];
-          } else {
-            acc[key] = [queryValue, ...paramValues];
-          }
+      ...filters.reduce((acc, filter) => {
+        const param = transformFilterToQuery(filter.name, filter.values || []);
+
+        if (!param) {
+          return acc;
         }
 
-        return acc;
-      }, { ...query }))
-    }, { arrayFormat: 'repeat' })}`
-  }));
-}
-
-function* removeFilterValueFromUrl(action) {
-  const query = yield* getQuery();
-
-  const { name, value } = action.payload;
-  const param = transformFilterToQuery(name, value);
-
-  yield put(replace({
-    search: `?${qs.stringify({
-      ...(Object.keys(param).reduce((acc, key) => {
-        const paramValue = param[key];
-        if (paramValue) {
-          const paramValues = (Array.isArray(paramValue) ? paramValue : [paramValue]);
-          const queryValue = acc[key];
-          if (Array.isArray(queryValue)) {
-            acc[key] = without(queryValue, ...paramValues);
-          } else if (paramValues.includes(queryValue)) {
-            delete acc[key];
-          }
-        }
-
-        return acc;
-      }, { ...query }))
+        return Object.assign(acc, param);
+      }, {})
     }, { arrayFormat: 'repeat' })}`
   }));
 }
@@ -145,16 +110,14 @@ function* hydrateFilters(action) {
   }
 }
 
-function* watchAddFilter() {
-  yield takeEvery(filterTypes.ADD_FILTER_VALUE, addFilterValueToUrl);
-}
+const valueChangingActions = [
+  filterTypes.ADD_FILTER_VALUE,
+  filterTypes.SET_FILTER_VALUE,
+  filterTypes.REMOVE_FILTER_VALUE
+];
 
-function* watchSetFilter() {
-  yield takeEvery(filterTypes.SET_FILTER_VALUE, setFilterValueToUrl);
-}
-
-function* watchRemoveFilter() {
-  yield takeEvery(filterTypes.REMOVE_FILTER_VALUE, removeFilterValueFromUrl);
+function* watchFilterValueChange() {
+  yield takeEvery(valueChangingActions, updateFilterValuesInQuery);
 }
 
 function* watchHydrateFilters() {
@@ -162,8 +125,6 @@ function* watchHydrateFilters() {
 }
 
 export const sagas = [
-  watchAddFilter,
-  watchSetFilter,
-  watchRemoveFilter,
+  watchFilterValueChange,
   watchHydrateFilters
 ];

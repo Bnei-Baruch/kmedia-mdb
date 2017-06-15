@@ -2,16 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import noop from 'lodash/noop';
-import { connect } from 'react-redux';
 import DayPicker, { DateUtils } from 'react-day-picker';
 import { Button, Divider, Dropdown, Grid, Header, Input, Segment } from 'semantic-ui-react';
 
 import 'react-day-picker/lib/style.css';
-import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
+import connectFilter from '../connectFilter';
 
 // TODO (yaniv -> oleg): need indication for user when clicking on a bad date (after today) or when typing bad dates
 
-const filterName = 'date-filter';
 const format     = 'DD-MM-YYYY';
 
 const now = () =>
@@ -108,7 +106,6 @@ const isValidDateRange = (fromValue, toValue) => {
 class DateFilter extends Component {
 
   static propTypes = {
-    namespace: PropTypes.string.isRequired,
     value: PropTypes.shape({
       from: PropTypes.objectOf(Date),
       to: PropTypes.objectOf(Date),
@@ -116,7 +113,7 @@ class DateFilter extends Component {
     }),
     onCancel: PropTypes.func,
     onApply: PropTypes.func,
-    setFilterValue: PropTypes.func.isRequired
+    updateValue: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -138,6 +135,14 @@ class DateFilter extends Component {
 
   componentDidMount() {
     this.datePicker.showMonth(this.state.from);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      from: nextProps.value.from,
+      to: nextProps.value.to,
+      datePreset: nextProps.value.datePreset || rangeToPreset(nextProps.value.from, this.props.value.to),
+    });
   }
 
   setRange(datePreset, from, to, fromInputValue = '', toInputValue = '') {
@@ -166,7 +171,7 @@ class DateFilter extends Component {
   }
 
   apply = () => {
-    this.props.setFilterValue(this.props.namespace, filterName, {
+    this.props.updateValue({
       from: this.state.from,
       to: this.state.to,
       datePreset: this.state.datePreset
@@ -289,9 +294,4 @@ class DateFilter extends Component {
   }
 }
 
-export default connect(
-  (state, ownProps) => ({
-    value: filterSelectors.getLastFilterValue(state.filters, ownProps.namespace, filterName)
-  }),
-  filterActions
-)(DateFilter);
+export default connectFilter()(DateFilter);

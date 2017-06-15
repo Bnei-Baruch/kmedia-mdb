@@ -5,16 +5,36 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Divider, List, Segment } from 'semantic-ui-react';
 import noop from 'lodash/noop';
-import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
 import { selectors as sources } from '../../../redux/modules/sources';
-
-const filterName = 'sources-filter';
+import connectFilter from '../connectFilter';
 
 class SourcesFilter extends React.Component {
 
-  state = {
-    selection: this.props.lastSelection
+  static propTypes = {
+    roots: PropTypes.arrayOf(PropTypes.string),
+    getSourceById: PropTypes.func.isRequired,
+    onCancel: PropTypes.func,
+    onApply: PropTypes.func,
+    updateValue: PropTypes.func.isRequired,
+    value: PropTypes.arrayOf(PropTypes.string)
   };
+
+  static defaultProps = {
+    roots: [],
+    onCancel: noop,
+    onApply: noop,
+    value: []
+  };
+
+  state = {
+    selection: this.props.value
+  };
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      selection: nextProps.value
+    });
+  }
 
   componentDidUpdate = () => {
     this.listContainer.scrollLeft = this.listContainer.scrollWidth;
@@ -36,7 +56,7 @@ class SourcesFilter extends React.Component {
   };
 
   apply = () => {
-    this.props.addFilterValue(this.props.namespace, filterName, this.state.selection);
+    this.props.updateValue(this.state.selection);
     this.props.onApply();
   };
 
@@ -123,28 +143,9 @@ class SourcesFilter extends React.Component {
   }
 }
 
-SourcesFilter.propTypes = {
-  namespace: PropTypes.string.isRequired,
-  roots: PropTypes.arrayOf(PropTypes.string),
-  getSourceById: PropTypes.func.isRequired,
-  onCancel: PropTypes.func,
-  onApply: PropTypes.func,
-  addFilterValue: PropTypes.func.isRequired,
-  lastSelection: PropTypes.arrayOf(PropTypes.string)
-};
-
-SourcesFilter.defaultProps = {
-  roots: [],
-  onCancel: noop,
-  onApply: noop,
-  lastSelection: []
-};
-
 export default connect(
-  (state, ownProps) => ({
-    selection: filterSelectors.getLastFilterValue(state.filters, ownProps.namespace, filterName),
+  state => ({
     roots: sources.getRoots(state.sources),
     getSourceById: sources.getSourceById(state.sources),
-  }),
-  filterActions
-)(SourcesFilter);
+  })
+)(connectFilter({ isMultiple: true })(SourcesFilter));
