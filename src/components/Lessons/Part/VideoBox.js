@@ -5,7 +5,7 @@ import { Grid } from 'semantic-ui-react';
 import * as shapes from '../../shapes';
 import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
 import LanguageSelector from '../../shared/LanguageSelector';
-import AVPlayer from './AVPlayer';
+import AVPlayer from '../../shared/AVPlayer';
 import AVSwitch from './AVSwitch';
 
 class VideoBox extends Component {
