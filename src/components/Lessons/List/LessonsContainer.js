@@ -9,30 +9,8 @@ import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions, selectors as lessonsSelectors } from '../../../redux/modules/lessons';
 import { CT_LESSON_PART } from '../../../helpers/consts';
 import Pagination from '../../shared/Pagination';
-import ResultsPageHeader from '../../shared/ResultsPageHeader';
-import Filters from '../../Filters/Filters';
-import filterComponents from '../../Filters/filterComponents';
-import FiltersHydrator from '../../Filters/FiltersHydrator/FiltersHydrator';
-import FilterTags from '../../Filters/FilterTags/FilterTags';
+import LessonsFilters from './LessonsFilters';
 import LessonsList from './LessonsList';
-
-const filters = [
-  {
-    name: 'date-filter',
-    label: 'Date',
-    component: filterComponents.DateFilter
-  },
-  {
-    name: 'sources-filter',
-    label: 'Sources',
-    component: filterComponents.SourcesFilter
-  },
-  {
-    name: 'topics-filter',
-    label: 'Topics',
-    component: filterComponents.TopicsFilter
-  }
-];
 
 class LessonsContainer extends Component {
 
@@ -86,19 +64,11 @@ class LessonsContainer extends Component {
 
     return (
       <Grid.Column width={16}>
-        <FiltersHydrator
-          namespace="lessons"
-          onHydrated={() => this.askForData(location.search, language, pageSize)}
-        />
-        <Filters
-          namespace="lessons"
-          filters={filters}
-          onFilterApplication={() => this.askForData(location.search, language, pageSize)}
-        />
-        <ResultsPageHeader pageNo={pageNo} pageSize={pageSize} total={total} />
-        <FilterTags
-          namespace="lessons"
-          onClose={() => this.askForData(location.search, language, pageSize)}
+        <LessonsFilters
+          pageNo={pageNo}
+          pageSize={pageSize}
+          total={total}
+          onChange={() => this.askForData(location.search, language, pageSize)}
         />
         <Divider />
         <LessonsList lessons={lessons} />
