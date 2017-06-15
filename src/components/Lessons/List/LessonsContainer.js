@@ -3,17 +3,17 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Divider, Grid } from 'semantic-ui-react';
 
-import * as shapes from '../shapes';
-import { selectors as settings } from '../../redux/modules/settings';
-import { selectors as mdb } from '../../redux/modules/mdb';
-import { actions, selectors as lessonsSelectors } from '../../redux/modules/lessons';
-import { CT_LESSON_PART } from '../../helpers/consts';
-import Pagination from '../shared/Pagination';
-import ResultsPageHeader from '../shared/ResultsPageHeader';
-import Filters from '../Filters/Filters';
-import filterComponents from '../Filters/filterComponents';
-import FiltersHydrator from '../Filters/FiltersHydrator/FiltersHydrator';
-import FilterTags from '../Filters/FilterTags/FilterTags';
+import * as shapes from '../../shapes';
+import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as mdb } from '../../../redux/modules/mdb';
+import { actions, selectors as lessonsSelectors } from '../../../redux/modules/lessons';
+import { CT_LESSON_PART } from '../../../helpers/consts';
+import Pagination from '../../shared/Pagination';
+import ResultsPageHeader from '../../shared/ResultsPageHeader';
+import Filters from '../../Filters/Filters';
+import filterComponents from '../../Filters/filterComponents';
+import FiltersHydrator from '../../Filters/FiltersHydrator/FiltersHydrator';
+import FilterTags from '../../Filters/FilterTags/FilterTags';
 import LessonsList from './LessonsList';
 
 const filters = [

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Segment } from 'semantic-ui-react';
 
-import * as shapes from '../shapes';
-import TabsMenu from '../shared/TabsMenu';
+import * as shapes from '../../shapes';
+import TabsMenu from '../../shared/TabsMenu';
 
-class LessonMaterials extends Component {
+class Materials extends Component {
 
   static propTypes = {
     lesson: shapes.LessonPart,
@@ -44,4 +44,4 @@ class LessonMaterials extends Component {
   }
 }
 
-export default LessonMaterials;
+export default Materials;

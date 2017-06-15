@@ -1,8 +1,8 @@
 import React from 'react';
 import { Header } from 'semantic-ui-react';
-import Lessons from '../Lessons/LessonsContainer';
-import LessonPart from '../LessonPart/LessonPartContainer';
-import FullLesson from '../FullLesson/FullLessonContainer';
+import Lessons from '../Lessons/List/LessonsContainer';
+import LessonPart from '../Lessons/Part/LessonPartContainer';
+import FullLesson from '../Lessons/Full/FullLessonContainer';
 import Sources from '../sources';
 import Topics from '../topics';
 import Design from '../Design/Design';

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Header, List } from 'semantic-ui-react';
 
-import { intersperse, tracePath } from '../../helpers/utils';
-import * as shapes from '../shapes';
+import { intersperse, tracePath } from '../../../helpers/utils';
+import * as shapes from '../../shapes';
 
-const LessonInfo = (props) => {
+const Info = (props) => {
   const { lesson = {}, getSourceById, getTagById } = props;
   const { name, film_date, sources, tags }         = lesson;
 
@@ -61,14 +61,14 @@ const LessonInfo = (props) => {
   );
 };
 
-LessonInfo.propTypes = {
+Info.propTypes = {
   lesson: shapes.LessonPart,
   getSourceById: PropTypes.func.isRequired,
   getTagById: PropTypes.func.isRequired,
 };
 
-LessonInfo.defaultProps = {
+Info.defaultProps = {
   lesson: undefined,
 };
 
-export default LessonInfo;
+export default Info;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, Container, List } from 'semantic-ui-react';
-import AVPlayer from '../Lesson/AVPlayer';
+
 class Design extends Component {
 
   render() {

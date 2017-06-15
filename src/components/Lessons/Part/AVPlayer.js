@@ -1,7 +1,7 @@
 import React from 'react';
 
-import * as shapes from '../shapes';
-import ReactJWPlayer from '../ReactJWPlayer/ReactJWPlayer';
+import * as shapes from '../../shapes';
+import ReactJWPlayer from '../../ReactJWPlayer/ReactJWPlayer';
 
 const AVPlayer = ({ file }) => {
   const ext = file.name.substring(file.name.lastIndexOf('.'));

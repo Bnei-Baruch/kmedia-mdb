@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Grid, Table } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
-import { CT_LESSON_PART } from '../../helpers/consts';
-import * as shapes from '../shapes';
+import { CT_LESSON_PART } from '../../../helpers/consts';
+import * as shapes from '../../shapes';
 
 const renderPart = part => (
   <Table.Row verticalAlign="top" key={part.id}>

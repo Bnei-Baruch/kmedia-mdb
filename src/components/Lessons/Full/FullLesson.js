@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Header, List, Menu } from 'semantic-ui-react';
 
-import { isEmpty } from '../../helpers/utils';
-import * as shapes from '../shapes';
-import VideoBox from '../LessonPart/VideoBox';
-import MediaDownloads from '../LessonPart/MediaDownloads';
+import { isEmpty } from '../../../helpers/utils';
+import * as shapes from '../../shapes';
+import VideoBox from '../Part/VideoBox';
+import MediaDownloads from '../Part/MediaDownloads';
 
 const FullLesson = ({ fullLesson, language }) => {
   if (isEmpty(fullLesson)) {

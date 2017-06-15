@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from 'semantic-ui-react';
 
-import * as shapes from '../shapes';
-import { MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
-import LanguageSelector from '../shared/LanguageSelector';
+import * as shapes from '../../shapes';
+import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
+import LanguageSelector from '../../shared/LanguageSelector';
 import AVPlayer from './AVPlayer';
 import AVSwitch from './AVSwitch';
 

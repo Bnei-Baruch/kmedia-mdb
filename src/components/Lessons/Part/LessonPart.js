@@ -1,10 +1,10 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
 
-import { isEmpty } from '../../helpers/utils';
-import * as shapes from '../shapes';
-import LessonInfo from './LessonInfo';
-import LessonMaterials from './LessonMaterials';
+import { isEmpty } from '../../../helpers/utils';
+import * as shapes from '../../shapes';
+import Info from './Info';
+import Materials from './Materials';
 import VideoBox from './VideoBox';
 import MediaDownloads from './MediaDownloads';
 
@@ -21,8 +21,8 @@ const Lesson = (props) => {
       <Grid>
         <Grid.Row>
           <Grid.Column width={10}>
-            <LessonInfo {...props} />
-            <LessonMaterials {...props} />
+            <Info {...props} />
+            <Materials {...props} />
           </Grid.Column>
           <Grid.Column width={6}>
             <MediaDownloads {...props} />

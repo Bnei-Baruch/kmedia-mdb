@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Button, Grid, Header, Table } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
-import * as shapes from '../shapes';
-import { CT_KITEI_MAKOR, MT_AUDIO, MT_IMAGE, MT_TEXT, MT_VIDEO } from '../../helpers/consts';
-import LanguageSelector from '../shared/LanguageSelector';
+import * as shapes from '../../shapes';
+import { CT_KITEI_MAKOR, MT_AUDIO, MT_IMAGE, MT_TEXT, MT_VIDEO } from '../../../helpers/consts';
+import LanguageSelector from '../../shared/LanguageSelector';
 
 const MEDIA_ORDER = [
   { type: MT_VIDEO, label: 'Lesson Video' },
