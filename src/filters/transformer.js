@@ -5,7 +5,7 @@ import castArray from 'lodash/castArray';
 import { isEmpty } from '../helpers/utils';
 import * as definitions from './definitions';
 
-const compactMap = (values, transform) => compact(castArray(values).map(transform));
+const compactMap = (values, transform) => compact(values.map(transform));
 
 const filterValuesToQueryValues = (definition, values = []) =>
   compactMap(values, arg => definition.valueToQuery(arg));
