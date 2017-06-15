@@ -7,20 +7,24 @@ import { types as settings } from './settings';
 
 const RECEIVE_COLLECTIONS   = 'MDB/RECEIVE_COLLECTIONS';
 const RECEIVE_CONTENT_UNITS = 'MDB/RECEIVE_CONTENT_UNITS';
+const FETCH_FULL_LESSON     = 'MDB/FETCH_FULL_LESSON';
 
 export const types = {
   RECEIVE_COLLECTIONS,
   RECEIVE_CONTENT_UNITS,
+  FETCH_FULL_LESSON,
 };
 
 /* Actions */
 
 const receiveCollections  = createAction(RECEIVE_COLLECTIONS);
 const receiveContentUnits = createAction(RECEIVE_CONTENT_UNITS);
+const fetchFullLesson = createAction(FETCH_FULL_LESSON);
 
 export const actions = {
   receiveCollections,
   receiveContentUnits,
+  fetchFullLesson,
 };
 
 /* Reducer */
@@ -78,11 +82,16 @@ const _receiveContentUnits = (state, action) => {
   };
 };
 
+const _fetchFullLesson = (state, action) => {
+  return state;
+};
+
 export const reducer = handleActions({
   [system.INIT]: () => _freshStore(),
   [settings.SET_LANGUAGE]: () => _freshStore(),
   [RECEIVE_COLLECTIONS]: (state, action) => _receiveCollections(state, action),
-  [RECEIVE_CONTENT_UNITS]: (state, action) => _receiveContentUnits(state, action)
+  [RECEIVE_CONTENT_UNITS]: (state, action) => _receiveContentUnits(state, action),
+  [FETCH_FULL_LESSON]: (state, action) => _fetchFullLesson(state, action),
 }, _freshStore());
 
 /* Selectors */

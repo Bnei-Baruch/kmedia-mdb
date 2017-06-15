@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
-import { actions } from '../../../redux/modules/lessons';
+import { actions } from '../../../redux/modules/mdb';
 import * as shapes from '../../shapes';
 import FullLesson from './FullLesson';
 
