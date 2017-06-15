@@ -1,5 +1,5 @@
 import moment from 'moment';
-import createFilterDefinition from './createFilterDefinition';
+import { createFilterDefinition } from './util';
 
 const dateFilter = {
   name: 'date-filter',

@@ -1,9 +1,7 @@
 import { put, select, takeEvery } from 'redux-saga/effects';
-import moment from 'moment';
-
-import { createMapper } from '../helpers/utils';
 import { getQuery, updateQuery } from './helpers/url';
 import { actions as filterActions, selectors as filterSelectors, types as filterTypes } from '../redux/modules/filters';
+import { filtersTransformer } from '../filters';
 
 /*
  * When a filter value is changed, the query is also changed to match..
@@ -16,60 +14,10 @@ import { actions as filterActions, selectors as filterSelectors, types as filter
  * NOTE: if you add new actions you'll need to watch for those too.
  */
 
-const filterToQueryMap = {
-  'date-filter': (value) => {
-    if (!value) {
-      return null;
-    }
-
-    if (Array.isArray(value)) {
-      if (value[0]) {
-        // eslint-disable-next-line no-param-reassign
-        value = value[0];
-      } else {
-        return { dates: null };
-      }
-    }
-
-    return {
-      dates: `${moment(value.from).format('DD-MM-YYYY')}_${moment(value.to).format('DD-MM-YYYY')}`,
-    };
-  },
-  'sources-filter': value => ({ source: value.map(singleValue => singleValue.join('_')) }),
-  'topics-filter': value => ({ topic: value })
-};
-
-const queryToFilterMap = {
-  dates: (value) => {
-    const parts = value.split('_');
-
-    return {
-      'date-filter': {
-        from: moment(parts[0], 'DD-MM-YYYY').toDate(),
-        to: moment(parts[1], 'DD-MM-YYYY').toDate()
-      }
-    };
-  },
-  source: value => ({
-    'sources-filter': Array.isArray(value) ? value.map(singleValue => singleValue.split('_')) : [value.split('_')]
-  }),
-  topic: value => ({
-    'topics-filter': value
-  })
-};
-
-const transformFilterToQuery = createMapper(filterToQueryMap);
-const transformQueryToFilter = createMapper(queryToFilterMap, () => null);
-
 function* updateFilterValuesInQuery(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, action.payload.namespace));
 
-  yield* updateQuery(query => ({
-    ...filters.reduce((acc, filter) => {
-      const params = transformFilterToQuery(filter.name, filter.values || []);
-      return Object.assign(acc, params);
-    }, query)
-  }));
+  yield* updateQuery(query => Object.assign(query, filtersTransformer.toQueryParams(filters)));
 }
 
 function* hydrateFilters(action) {
@@ -78,10 +26,7 @@ function* hydrateFilters(action) {
 
   if (from === 'query') {
     const query = yield* getQuery();
-    filters     = Object.keys(query).reduce((acc, key) => ({
-      ...acc,
-      ...transformQueryToFilter(key, query[key])
-    }), {});
+    filters = filtersTransformer.fromQueryParams(query);
   }
 
   if (filters) {

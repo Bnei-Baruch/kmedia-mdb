@@ -25,7 +25,7 @@ class FilterTag extends PureComponent {
   };
 
   render() {
-    const { icon, label, onClose, onClick, isActive } = this.props;
+    const { icon, label, isActive } = this.props;
     const color = isActive ? 'green' : 'blue';
 
     return (
