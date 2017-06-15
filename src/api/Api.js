@@ -20,19 +20,14 @@ class Requests {
   static encode = encodeURIComponent;
 }
 
-export class LessonApi {
-  static all = ({ language, pageNo, pageSize, ...rest }) => {
+export default class Api {
+  static collection = ({ id, language }) => Requests.get(`collections/${id}?${Requests.makeParams({ language })}`);
+  static unit = ({ id, language }) => Requests.get(`content_units/${id}?${Requests.makeParams({ language })}`);
+  static sources = ({ language }) => Requests.get(`sources?${Requests.makeParams({ language })}`);
+  static tags = ({ language }) => Requests.get(`tags?${Requests.makeParams({ language })}`);
+
+  static lessons = ({ language, pageNo, pageSize, ...rest }) => {
     const params = Object.assign({}, { language, order_by: 'id', ...rest });
     return Requests.get(`lessons?${Requests.limit(pageNo, pageSize)}&${Requests.makeParams(params)}`);
   };
-
-  static get = ({ id, language }) => Requests.get(`content_units/${id}?${Requests.makeParams({ language })}`);
-}
-
-export class SourcesApi {
-  static all = ({ language }) => Requests.get(`sources?${Requests.makeParams({ language })}`);
-}
-
-export class TagsApi {
-  static all = ({ language }) => Requests.get(`tags?${Requests.makeParams({ language })}`);
 }

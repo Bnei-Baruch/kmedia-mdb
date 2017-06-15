@@ -1,15 +1,16 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
+
+import Api from '../api/Api';
 import { actions, types } from '../redux/modules/lessons';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as filterSelectors } from '../redux/modules/filters';
-import { LessonApi } from '../api/Api';
 import filterDefinitions from '../filters';
 
 function* fetchList(action) {
-    const filters = yield select(state => filterSelectors.getFilters(state.filters, 'lessons'));
-    const params  = filterDefinitions.toApiParams(filters);
+  const filters = yield select(state => filterSelectors.getFilters(state.filters, 'lessons'));
+  const params  = filterDefinitions.toApiParams(filters);
   try {
-    const resp    = yield call(LessonApi.all, { ...action.payload, ...params });
+    const resp = yield call(Api.lessons, { ...action.payload, ...params });
 
     if (Array.isArray(resp.collections)) {
       yield put(mdbActions.receiveCollections(resp.collections));
@@ -30,7 +31,7 @@ function* watchFetchList() {
 
 function* fetchLesson(action) {
   try {
-    const resp = yield call(LessonApi.get, action.payload);
+    const resp = yield call(Api.unit, action.payload);
     yield put(mdbActions.receiveContentUnits([resp]));
     yield put(actions.fetchLessonSuccess(resp));
   } catch (err) {
