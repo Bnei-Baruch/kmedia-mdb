@@ -1,9 +1,4 @@
-import dateFilterDefinition from './dateFilter';
-import sourcesFilterDefinition from './sourcesFilter';
-import topicsFilterDefinition from './topicsFilter';
+export { default as dateFilterDefinition } from './dateFilter';
+export { default as sourcesFilterDefinition } from './sourcesFilter';
+export { default as topicsFilterDefinition } from './topicsFilter';
 
-export default {
-  dateFilterDefinition,
-  sourcesFilterDefinition,
-  topicsFilterDefinition
-};

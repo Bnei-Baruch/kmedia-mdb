@@ -5,11 +5,11 @@ import { updateQuery } from './helpers/url';
 import { actions, types } from '../redux/modules/lessons';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as filterSelectors } from '../redux/modules/filters';
-import filterDefinitions from '../filters';
+import { filtersTransformer } from '../filters';
 
 function* fetchList(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, 'lessons'));
-  const params  = filterDefinitions.toApiParams(filters);
+  const params  = filtersTransformer.toApiParams(filters);
   try {
     const resp = yield call(Api.lessons, { ...action.payload, ...params });
 

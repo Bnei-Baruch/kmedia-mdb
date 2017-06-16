@@ -1,4 +1,4 @@
-import createFilterDefinition from './createFilterDefinition';
+import { createFilterDefinition } from './util';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 
 const sourcesFilter = {
