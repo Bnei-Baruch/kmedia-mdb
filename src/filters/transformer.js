@@ -8,9 +8,9 @@ import * as definitions from './definitions';
 const compactMap = (values, transform) => compact(values.map(transform));
 
 const filterValuesToQueryValues = (definition, values = []) =>
-  compactMap(values, arg => definition.valueToQuery(arg));
+  compactMap(castArray(values), arg => definition.valueToQuery(arg));
 const queryValuesToFilterValues = (definition, values = []) =>
-  compactMap(values, arg => definition.queryToValue(arg));
+  compactMap(castArray(values), arg => definition.queryToValue(arg));
 
 function filterValuesToApiParams(definition, values = []) {
   const transformedValues = castArray(values).map(definition.valueToApiParam);
@@ -25,7 +25,7 @@ function filterValuesToApiParams(definition, values = []) {
     });
     return acc;
   }, {});
-};
+}
 
 const filtersTransformer = {
   definitionsByName: keyBy(definitions, 'name'),
@@ -35,11 +35,7 @@ const filtersTransformer = {
       const definition = this.definitionsByName[filter.name];
       const paramValues = filterValuesToQueryValues(definition, filter.values);
 
-      if (paramValues.length) {
-        return Object.assign(acc, { [definition.queryKey]: paramValues });
-      }
-
-      return acc;
+      return Object.assign(acc, { [definition.queryKey]: paramValues });
     }, {});
 
     return queryParams;
@@ -72,6 +68,22 @@ const filtersTransformer = {
 
       return acc;
     }, {});
+  },
+  valueToTagLabel(filterName, value, props, store) {
+    const definition = this.definitionsByName[filterName];
+    if (!definition) {
+      return value;
+    }
+
+    return definition.valueToTagLabel(value, props, store);
+  },
+  getTagIcon(filterName) {
+    const definition = this.definitionsByName[filterName];
+    if (!definition) {
+      return '';
+    }
+
+    return definition.tagIcon;
   }
 };
 

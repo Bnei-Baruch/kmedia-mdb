@@ -1,71 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import reduce from 'lodash/reduce';
 import { connect } from 'react-redux';
 import { Label } from 'semantic-ui-react';
 
+import { filtersTransformer } from '../../../filters';
 import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
 import FilterTag from '../FilterTag/FilterTag';
-import { selectors as sources } from '../../../redux/modules/sources';
-import { selectors as tagsSelectors } from '../../../redux/modules/tags';
-
-const tagsData = {
-  'date-filter': {
-    icon: 'calendar',
-    valueToLabel: (value) => {
-      if (!value) {
-        return '';
-      }
-
-      const { from, to } = value;
-      const dateFormat   = date => moment(new Date(date)).format('D MMM YYYY');
-
-      if (value.from === value.to) {
-        return dateFormat(from);
-      }
-
-      return `${dateFormat(from)} - ${dateFormat(to)}`;
-    }
-  },
-  'sources-filter': {
-    icon: 'book',
-    valueToLabel: (value, props, { getState }) => {
-      if (!value) {
-        return '';
-      }
-
-      const getSourceById = sources.getSourceById(getState().sources);
-      const path          = value.map(x => getSourceById(x));
-
-      // Make sure we have all items.
-      // Location hydration probably happens before we receive sources
-      return path.some(x => !x) ? '' : path.map(x => x.name).join(' > ');
-    }
-  },
-  'topics-filter': {
-    icon: 'tag',
-    valueToLabel: (value, props, { getState }) => {
-      if (!value) {
-        return '';
-      }
-
-      // Make sure we have the item.
-      // Location hydration probably happens before we receive tags
-      const tag = tagsSelectors.getTagById(getState().tags)(value);
-      return tag ? tag.label : '';
-    }
-  },
-  __default: {
-    icon: 'tag',
-    valueToLabel: value => value
-  }
-};
-
-const getTagData = (tagName) => {
-  const tagData = tagsData[tagName];
-  return tagData || tagsData.__default;
-};
 
 class FilterTags extends Component {
 
@@ -90,18 +31,20 @@ class FilterTags extends Component {
 
   render() {
     const { tags, namespace } = this.props;
+    const store = this.context.store;
 
     return (
       <Label.Group>
         {
           tags.map((tag) => {
-            const tagData = getTagData(tag.name);
+            const icon = filtersTransformer.getTagIcon(tag.name);
+            const label = filtersTransformer.valueToTagLabel(tag.name, tag.value, this.props, store);
             return (
               <FilterTag
                 key={`${tag.name}_${tag.index}`}
-                icon={tagData.icon}
+                icon={icon}
                 isActive={tag.isActive}
-                label={tagData.valueToLabel(tag.value, this.props, this.context.store)}
+                label={label}
                 onClick={() => this.props.editExistingFilter(namespace, tag.name, tag.index)}
                 onClose={() => {
                   this.props.removeFilterValue(namespace, tag.name, tag.value);
