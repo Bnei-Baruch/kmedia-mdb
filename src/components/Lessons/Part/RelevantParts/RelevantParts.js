@@ -31,18 +31,20 @@ class RelevantParts extends Component {
   };
 
   componentDidMount() {
-    const { lesson, parts } = this.props;
-    if (!parts || !parts.length) {
-      this.props.fetchCollection(getCollectionIdFromLesson(lesson));
-    }
+    this.fetchCollectionIfNeeded(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { lesson, parts } = nextProps;
-    if (!parts || !parts.length) {
-      nextProps.fetchCollection(getCollectionIdFromLesson(lesson));
-    }
+    this.fetchCollectionIfNeeded(nextProps);
   }
+
+  fetchCollectionIfNeeded = (props) => {
+    const { lesson, parts } = props;
+    const collectionId = getCollectionIdFromLesson(lesson);
+    if ((!parts || !parts.length) && collectionId !== null) {
+      props.fetchCollection(collectionId);
+    }
+  };
 
   render() {
     const { lesson, parts } = this.props;
