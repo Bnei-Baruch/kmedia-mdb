@@ -56,7 +56,7 @@ class RelevantParts extends Component {
           <Header as="h3">Other parts from the same lesson</Header>
           <Item.Group divided link>
             {
-              otherParts.map(part => (
+              otherParts.slice(0, 3).map(part => (
                 <Item key={part.id} onClick={() => this.props.push(`/lessons/${part.id}`)}>
                   <Item.Image src={myimage} size="tiny" />
                   <Item.Content >
