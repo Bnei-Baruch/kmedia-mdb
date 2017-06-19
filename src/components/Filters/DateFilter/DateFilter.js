@@ -125,25 +125,26 @@ class DateFilter extends Component {
     }
   };
 
-  state = {
-    from: this.props.value.from,
-    to: this.props.value.to,
-    datePreset: this.props.value.datePreset || rangeToPreset(this.props.value.from, this.props.value.to),
-    fromInputValue: moment(this.props.value.from, 'DD-MM-YYYY').format('DD-MM-YYYY'),
-    toInputValue: moment(this.props.value.to, 'DD-MM-YYYY').format('DD-MM-YYYY')
-  };
+  constructor(props, context) {
+    super(props, context);
+    this.state = this.getUpdatedStateFromProps(this.props);
+  }
 
   componentDidMount() {
     this.datePicker.showMonth(this.state.from);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      from: nextProps.value.from,
-      to: nextProps.value.to,
-      datePreset: nextProps.value.datePreset || rangeToPreset(nextProps.value.from, this.props.value.to),
-    });
+    this.setState(this.getUpdatedStateFromProps(nextProps));
   }
+
+  getUpdatedStateFromProps = (props) => ({
+    from: props.value.from,
+    to: props.value.to,
+    datePreset: props.value.datePreset || rangeToPreset(props.value.from, props.value.to),
+    fromInputValue: moment(props.value.from, 'DD-MM-YYYY').format('DD-MM-YYYY'),
+    toInputValue: moment(props.value.to, 'DD-MM-YYYY').format('DD-MM-YYYY')
+  });
 
   setRange(datePreset, from, to, fromInputValue = '', toInputValue = '') {
     let range = {};
