@@ -5,22 +5,31 @@ import { types as settings } from './settings';
 
 /* Types */
 
+const FETCH_COLLECTION = 'MDB/FETCH_COLLECTION';
+const FETCH_COLLECTION_FAILURE = 'MDB/FETCH_COLLECTION_FAILURE';
 const RECEIVE_COLLECTIONS   = 'MDB/RECEIVE_COLLECTIONS';
 const RECEIVE_CONTENT_UNITS = 'MDB/RECEIVE_CONTENT_UNITS';
 
 export const types = {
   RECEIVE_COLLECTIONS,
   RECEIVE_CONTENT_UNITS,
+  FETCH_COLLECTION,
+  FETCH_COLLECTION_FAILURE
 };
 
 /* Actions */
 
+
+const fetchCollection = createAction(FETCH_COLLECTION, id => ({ id }));
+const fetchCollectionFailure = createAction(FETCH_COLLECTION_FAILURE);
 const receiveCollections  = createAction(RECEIVE_COLLECTIONS);
 const receiveContentUnits = createAction(RECEIVE_CONTENT_UNITS);
 
 export const actions = {
   receiveCollections,
   receiveContentUnits,
+  fetchCollection,
+  fetchCollectionFailure
 };
 
 /* Reducer */

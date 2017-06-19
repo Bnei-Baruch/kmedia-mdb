@@ -28,7 +28,7 @@ class LessonPartContainer extends Component {
     const props               = this.props;
 
     if (language !== props.language || match.params.id !== props.match.params.id) {
-      this.askForData(language, match.params.id);
+      this.askForData(match.params.id, language);
     }
   }
 
