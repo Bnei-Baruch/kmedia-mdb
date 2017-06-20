@@ -4,6 +4,7 @@ import { Grid } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
+import { physicalFile } from '../../../helpers/utils';
 import LanguageSelector from '../../shared/LanguageSelector';
 import AVPlayer from '../../shared/AVPlayer';
 import AVSwitch from './AVSwitch';
@@ -125,7 +126,7 @@ class VideoBox extends Component {
         <Grid.Column width={10}>
           <div className="video_player">
             <div id="video" />
-            <AVPlayer file={active} />
+            <AVPlayer playerId="lesson" file={physicalFile(active, true)} />
           </div>
         </Grid.Column>
         <Grid.Column className="player_panel" width={6}>

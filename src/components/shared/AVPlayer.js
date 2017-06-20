@@ -1,22 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import JWPlayer from 'react-jw-player';
 
-import * as shapes from '../shapes';
-import ReactJWPlayer from '../ReactJWPlayer/ReactJWPlayer';
-
-const AVPlayer = ({ file }) => {
-  const ext = file.name.substring(file.name.lastIndexOf('.'));
-
-  return (<ReactJWPlayer
-    playerId="video"
+const AVPlayer = props => (
+  <JWPlayer
+    playerId={props.playerId}
     playerScript="https://content.jwplatform.com/libraries/mxNkRalL.js"
-    file={`http://cdn.kabbalahmedia.info/${file.id}${ext}`}
-    image=""
-    customProps={{ skin: { name: 'seven' }, aspectratio:'16:9', width: '100%' }}
-  />);
-};
+    customProps={{ skin: { name: 'seven' }, aspectratio: '16:9', width: '100%' }}
+    {...props}
+  />
+);
 
 AVPlayer.propTypes = {
-  file: shapes.MDBFile.isRequired,
+  playerId: PropTypes.string.isRequired,
 };
 
 export default AVPlayer;
