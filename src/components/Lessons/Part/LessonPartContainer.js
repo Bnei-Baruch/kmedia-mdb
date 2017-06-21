@@ -41,6 +41,9 @@ class LessonPartContainer extends Component {
 export default connect(
   (state, ownProps) => ({
     lesson: mdb.getUnitById(state.mdb)(ownProps.match.params.id),
+
+    // NOTE (yaniv -> ido): using selectors this way will always make the component rerender
+    // since sources.getSourcesById(state) !== sources.getSourcesById(state) for every state
     getSourceById: sources.getSourceById(state.sources),
     getTagById: tags.getTagById(state.tags),
   }),
