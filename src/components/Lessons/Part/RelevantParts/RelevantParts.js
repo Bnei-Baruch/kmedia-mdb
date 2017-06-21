@@ -31,7 +31,8 @@ class RelevantParts extends Component {
   static propTypes = {
     fetchFullLesson: PropTypes.func.isRequired,
     lesson: LessonPart.isRequired,
-    parts: PropTypes.arrayOf(LessonPart)
+    parts: PropTypes.arrayOf(LessonPart),
+    relevantCollectionId: PropTypes.string.isRequired
   };
 
   static defaultProps = {
@@ -47,15 +48,14 @@ class RelevantParts extends Component {
   }
 
   fetchFullLessonIfNeeded = (props) => {
-    const { lesson, parts } = props;
-    const collectionId = getCollectionIdFromLesson(lesson);
-    if ((!parts || !parts.length) && collectionId !== null) {
-      props.fetchFullLesson(collectionId);
+    const { relevantCollectionId, parts } = props;
+    if ((!parts || !parts.length) && relevantCollectionId !== null) {
+      props.fetchFullLesson(relevantCollectionId);
     }
   };
 
   render() {
-    const { lesson, parts } = this.props;
+    const { lesson, parts, relevantCollectionId } = this.props;
     const otherParts = parts.filter(part => part.id !== lesson.id);
 
     return (
@@ -77,7 +77,7 @@ class RelevantParts extends Component {
             }
             <Item>
               <Item.Content>
-                <Container fluid textAlign="right" as="a">more &raquo;</Container>
+                <Container fluid textAlign="right" as={Link} to={`/lessons/full/${relevantCollectionId}`}>more &raquo;</Container>
               </Item.Content>
             </Item>
           </Item.Group>
@@ -90,11 +90,12 @@ class RelevantParts extends Component {
 export default connect(
   (state, ownProps) => {
     // collections should be id to object map
-    const collectionId = getCollectionIdFromLesson(ownProps.lesson);
+    const relevantCollectionId = getCollectionIdFromLesson(ownProps.lesson);
 
     return {
-      parts: collectionId !== null
-        ? mdbSelectors.getCollectionById(state.mdb)(collectionId).content_units
+      relevantCollectionId,
+      parts: relevantCollectionId !== null
+        ? mdbSelectors.getCollectionById(state.mdb)(relevantCollectionId).content_units
         : []
     };
   },
