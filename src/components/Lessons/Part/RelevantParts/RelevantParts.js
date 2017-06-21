@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import 'moment-duration-format';
 import { Header, Item, Container } from 'semantic-ui-react';
-import { selectors as mdbSelectors, actions as mdbActions } from '../../../../redux/modules/mdb';
+import { selectors as mdbSelectors } from '../../../../redux/modules/mdb';
+import { actions as lessonActions } from '../../../../redux/modules/lessons';
 import { LessonPart } from '../../../shapes';
 import myimage from './image.png';
 
@@ -20,7 +21,7 @@ const getCollectionIdFromLesson = lesson => {
 class RelevantParts extends Component {
 
   static propTypes = {
-    fetchCollection: PropTypes.func.isRequired,
+    fetchFullLesson: PropTypes.func.isRequired,
     lesson: LessonPart.isRequired,
     parts: PropTypes.arrayOf(LessonPart)
   };
@@ -30,18 +31,18 @@ class RelevantParts extends Component {
   };
 
   componentDidMount() {
-    this.fetchCollectionIfNeeded(this.props);
+    this.fetchFullLessonIfNeeded(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.fetchCollectionIfNeeded(nextProps);
+    this.fetchFullLessonIfNeeded(nextProps);
   }
 
-  fetchCollectionIfNeeded = (props) => {
+  fetchFullLessonIfNeeded = (props) => {
     const { lesson, parts } = props;
     const collectionId = getCollectionIdFromLesson(lesson);
     if ((!parts || !parts.length) && collectionId !== null) {
-      props.fetchCollection(collectionId);
+      props.fetchFullLesson(collectionId);
     }
   };
 
@@ -89,5 +90,5 @@ export default connect(
         : []
     };
   },
-  mdbActions
+  lessonActions
 )(RelevantParts);
