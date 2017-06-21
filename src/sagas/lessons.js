@@ -31,13 +31,13 @@ function* updatePageInQuery(action) {
   yield* updateQuery(query => Object.assign(query, { page }));
 }
 
-function* fetchLesson(action) {
+function* fetchLessonPart(action) {
   try {
     const resp = yield call(Api.unit, action.payload);
     yield put(mdbActions.receiveContentUnits([resp]));
-    yield put(actions.fetchLessonSuccess(resp));
+    yield put(actions.fetchLessonPartSuccess(resp));
   } catch (err) {
-    yield put(actions.fetchLessonFailure(err));
+    yield put(actions.fetchLessonPartFailure(err));
   }
 }
 
@@ -45,8 +45,8 @@ function* watchFetchList() {
   yield takeLatest(types.FETCH_LIST, fetchList);
 }
 
-function* watchFetchLesson() {
-  yield takeLatest(types.FETCH_LESSON, fetchLesson);
+function* watchFetchLessonPart() {
+  yield takeLatest(types.FETCH_LESSON_PART, fetchLessonPart);
 }
 
 function* watchSetPage() {
@@ -55,6 +55,6 @@ function* watchSetPage() {
 
 export const sagas = [
   watchFetchList,
-  watchFetchLesson,
+  watchFetchLessonPart,
   watchSetPage,
 ];

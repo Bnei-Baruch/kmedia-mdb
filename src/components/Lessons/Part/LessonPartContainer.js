@@ -15,7 +15,7 @@ class LessonPartContainer extends Component {
   static propTypes = {
     match: shapes.RouterMatch.isRequired,
     language: PropTypes.string.isRequired,
-    fetchLesson: PropTypes.func.isRequired,
+    fetchLessonPart: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
@@ -33,7 +33,7 @@ class LessonPartContainer extends Component {
   }
 
   askForData(id, language) {
-    this.props.fetchLesson({ id, language });
+    this.props.fetchLessonPart({ id, language });
   }
 
   render() {

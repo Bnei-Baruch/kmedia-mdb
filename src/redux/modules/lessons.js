@@ -7,18 +7,18 @@ const SET_PAGE = 'Lessons/SET_PAGE';
 const FETCH_LIST           = 'Lessons/FETCH_LIST';
 const FETCH_LIST_SUCCESS   = 'Lessons/FETCH_LIST_SUCCESS';
 const FETCH_LIST_FAILURE   = 'Lessons/FETCH_LIST_FAILURE';
-const FETCH_LESSON         = 'Lesson/FETCH_LESSON';
-const FETCH_LESSON_SUCCESS = 'Lesson/FETCH_LESSON_SUCCESS';
-const FETCH_LESSON_FAILURE = 'Lesson/FETCH_LESSON_FAILURE';
+const FETCH_LESSON_PART    = 'Lesson/FETCH_LESSON_PART';
+const FETCH_LESSON_PART_SUCCESS = 'Lesson/FETCH_LESSON_PART_SUCCESS';
+const FETCH_LESSON_PART_FAILURE = 'Lesson/FETCH_LESSON_PART_FAILURE';
 
 export const types = {
   SET_PAGE,
   FETCH_LIST,
   FETCH_LIST_SUCCESS,
   FETCH_LIST_FAILURE,
-  FETCH_LESSON,
-  FETCH_LESSON_SUCCESS,
-  FETCH_LESSON_FAILURE,
+  FETCH_LESSON_PART,
+  FETCH_LESSON_PART_SUCCESS,
+  FETCH_LESSON_PART_FAILURE,
 };
 
 /* Actions */
@@ -27,18 +27,18 @@ const setPage            = createAction(SET_PAGE);
 const fetchList          = createAction(FETCH_LIST, (pageNo, language, pageSize) => ({ pageNo, language, pageSize }));
 const fetchListSuccess   = createAction(FETCH_LIST_SUCCESS);
 const fetchListFailure   = createAction(FETCH_LIST_FAILURE);
-const fetchLesson        = createAction(FETCH_LESSON);
-const fetchLessonSuccess = createAction(FETCH_LESSON_SUCCESS);
-const fetchLessonFailure = createAction(FETCH_LESSON_FAILURE);
+const fetchLessonPart        = createAction(FETCH_LESSON_PART);
+const fetchLessonPartSuccess = createAction(FETCH_LESSON_PART_SUCCESS);
+const fetchLessonPartFailure = createAction(FETCH_LESSON_PART_FAILURE);
 
 export const actions = {
   setPage,
   fetchList,
   fetchListSuccess,
   fetchListFailure,
-  fetchLesson,
-  fetchLessonSuccess,
-  fetchLessonFailure,
+  fetchLessonPart,
+  fetchLessonPartSuccess,
+  fetchLessonPartFailure,
 };
 
 /* Reducer */

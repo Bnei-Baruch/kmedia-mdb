@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import 'moment-duration-format';
 import { Header, Item, Container } from 'semantic-ui-react';
@@ -21,7 +21,6 @@ class RelevantParts extends Component {
 
   static propTypes = {
     fetchCollection: PropTypes.func.isRequired,
-    push: PropTypes.func.isRequired,
     lesson: LessonPart.isRequired,
     parts: PropTypes.arrayOf(LessonPart)
   };
@@ -57,7 +56,7 @@ class RelevantParts extends Component {
           <Item.Group divided link>
             {
               otherParts.slice(0, 3).map(part => (
-                <Item key={part.id} onClick={() => this.props.push(`/lessons/${part.id}`)}>
+                <Item as={Link} key={part.id} to={`/lessons/${part.id}`}>
                   <Item.Image src={myimage} size="tiny" />
                   <Item.Content >
                     <Header as="h4">Part {part.name_in_collection}</Header>
@@ -90,8 +89,5 @@ export default connect(
         : []
     };
   },
-  {
-    ...mdbActions,
-    push
-  }
+  mdbActions
 )(RelevantParts);
