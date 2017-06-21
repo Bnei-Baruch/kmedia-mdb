@@ -10,9 +10,12 @@ import Materials from '../Part/Materials';
 import VideoBox from '../Part/VideoBox';
 import MediaDownloads from '../Part/MediaDownloads';
 
-const FullLesson = ({ fullLesson, language }) => {
+const FullLesson = (props) => {
+  const { fullLesson, language } = props;
 
+  console.log(props);
   console.log(fullLesson);
+  console.log(language);
 
   if (isEmpty(fullLesson)) {
     return <div />;
@@ -23,16 +26,16 @@ const FullLesson = ({ fullLesson, language }) => {
   return (
     <Grid.Column width={16}>
       <Grid>
-        <VideoBox {...this.props} />
+        <VideoBox {...props} />
       </Grid>
       <Grid>
         <Grid.Row>
           <Grid.Column width={10}>
-            <Info {...this.props} />
-            <Materials {...this.props} />
+            <Info {...props} />
+            <Materials {...props} />
           </Grid.Column>
           <Grid.Column width={6}>
-            <MediaDownloads {...this.props} />
+            <MediaDownloads {...props} />
           </Grid.Column>
         </Grid.Row>
       </Grid>

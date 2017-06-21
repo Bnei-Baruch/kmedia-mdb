@@ -35,6 +35,7 @@ class FullLessonContainer extends Component {
   }
 
   render() {
+    console.log(this.props);
     return <FullLesson {...this.props} />;
   }
 }
