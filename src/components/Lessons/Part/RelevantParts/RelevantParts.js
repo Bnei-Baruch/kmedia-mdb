@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import 'moment-duration-format';
 import { Header, Item, Container } from 'semantic-ui-react';
+import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../helpers/consts';
 import { selectors as mdbSelectors } from '../../../../redux/modules/mdb';
 import { actions as lessonActions } from '../../../../redux/modules/lessons';
 import { LessonPart } from '../../../shapes';
@@ -12,7 +13,14 @@ import myimage from './image.png';
 
 const getCollectionIdFromLesson = lesson => {
   if (lesson.collections) {
-    return Object.values(lesson.collections)[0].id;
+    const collections = Object.values(lesson.collections);
+    const relevantCollection = collections.find(collection =>
+      collection.content_type === CT_DAILY_LESSON || collection.content_type === CT_SPECIAL_LESSON
+    );
+
+    if (relevantCollection) {
+      return relevantCollection.id;
+    }
   }
 
   return null;
