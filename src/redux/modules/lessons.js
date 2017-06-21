@@ -33,7 +33,7 @@ const setPage            = createAction(SET_PAGE);
 const fetchList          = createAction(FETCH_LIST, (pageNo, language, pageSize) => ({ pageNo, language, pageSize }));
 const fetchListSuccess   = createAction(FETCH_LIST_SUCCESS);
 const fetchListFailure   = createAction(FETCH_LIST_FAILURE);
-const fetchLessonPart        = createAction(FETCH_LESSON_PART);
+const fetchLessonPart        = createAction(FETCH_LESSON_PART, id => ({ id }));
 const fetchLessonPartSuccess = createAction(FETCH_LESSON_PART_SUCCESS);
 const fetchLessonPartFailure = createAction(FETCH_LESSON_PART_FAILURE);
 const fetchFullLesson        = createAction(FETCH_FULL_LESSON, id => ({ id }));

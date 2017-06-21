@@ -9,7 +9,7 @@ import VideoBox from './VideoBox';
 import MediaDownloads from './MediaDownloads';
 import RelevantParts from './RelevantParts/RelevantParts';
 
-const Lesson = (props) => {
+const LessonPart = (props) => {
   if (isEmpty(props.lesson)) {
     return <div />;
   }
@@ -35,12 +35,12 @@ const Lesson = (props) => {
   );
 };
 
-Lesson.propTypes = {
+LessonPart.propTypes = {
   lesson: shapes.LessonPart,
 };
 
-Lesson.defaultProps = {
+LessonPart.defaultProps = {
   lesson: null
 };
 
-export default Lesson;
+export default LessonPart;

@@ -34,7 +34,8 @@ function* updatePageInQuery(action) {
 
 function* fetchLessonPart(action) {
   try {
-    const response = yield call(Api.unit, action.payload);
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const response = yield call(Api.unit, { id: action.payload.id, language });
     yield put(mdbActions.receiveContentUnits([response]));
     yield put(actions.fetchLessonPartSuccess(response));
   } catch (err) {
