@@ -118,6 +118,8 @@ class SourcesFilter extends React.Component {
   render() {
     const { roots } = this.props;
 
+    console.log(this.props.allValues);
+
     return (
       <Segment basic attached="bottom" className="tab active" clearing>
         <div
