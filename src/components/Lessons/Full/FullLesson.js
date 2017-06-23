@@ -13,9 +13,7 @@ import MediaDownloads from '../Part/MediaDownloads';
 const FullLesson = (props) => {
   const { fullLesson, language } = props;
 
-  console.log(props);
-  console.log(fullLesson);
-  console.log(language);
+  console.log('Render full lesson:', props, fullLesson, language);
 
   if (isEmpty(fullLesson)) {
     return <div />;
@@ -26,7 +24,7 @@ const FullLesson = (props) => {
   return (
     <Grid.Column width={16}>
       <Grid>
-        <VideoBox {...props} />
+        <VideoBox {...props} language={language} lesson={fullLesson.content_units[0]} />
       </Grid>
       <Grid>
         <Grid.Row>
