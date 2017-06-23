@@ -149,12 +149,58 @@ export const RTL_LANGUAGES = [
 
 export const LANGUAGE_OPTIONS = ALL_LANGUAGES.map(x => LANGUAGES[x]);
 
-export const MT_VIDEO = 'video';
-export const MT_AUDIO = 'audio';
-export const MT_IMAGE = 'image';
-export const MT_TEXT = 'text';
-export const MT_SHEET = 'sheet';
-export const MT_BANNER = 'banner';
+export const MT_VIDEO        = 'video';
+export const MT_AUDIO        = 'audio';
+export const MT_IMAGE        = 'image';
+export const MT_TEXT         = 'text';
+export const MT_SHEET        = 'sheet';
+export const MT_BANNER       = 'banner';
 export const MT_PRESENTATION = 'presentation';
+
+export const MEDIA_TYPES = {
+  mp4: { type: MT_VIDEO, sub_type: '', mime_type: 'video/mp4' },
+  wmv: { type: MT_VIDEO, sub_type: '', mime_type: 'video/x-ms-wmv' },
+  flv: { type: MT_VIDEO, sub_type: '', mime_type: 'video/x-flv' },
+  mov: { type: MT_VIDEO, sub_type: '', mime_type: 'video/quicktime' },
+  asf: { type: MT_VIDEO, sub_type: '', mime_type: 'video/x-ms-asf' },
+  mpg: { type: MT_VIDEO, sub_type: '', mime_type: 'video/mpeg' },
+  avi: { type: MT_VIDEO, sub_type: '', mime_type: 'video/x-msvideo' },
+  mp3: { type: MT_AUDIO, sub_type: '', mime_type: 'audio/mpeg' },
+  wma: { type: MT_AUDIO, sub_type: '', mime_type: 'audio/x-ms-wma' },
+  mid: { type: MT_AUDIO, sub_type: '', mime_type: 'audio/midi' },
+  wav: { type: MT_AUDIO, sub_type: '', mime_type: 'audio/x-wav' },
+  aac: { type: MT_AUDIO, sub_type: '', mime_type: 'audio/aac' },
+  jpg: { type: MT_IMAGE, sub_type: '', mime_type: 'image/jpeg' },
+  gif: { type: MT_IMAGE, sub_type: '', mime_type: 'image/gif' },
+  bmp: { type: MT_IMAGE, sub_type: '', mime_type: 'image/bmp' },
+  tif: { type: MT_IMAGE, sub_type: '', mime_type: 'image/tiff' },
+  zip: { type: MT_IMAGE, sub_type: '', mime_type: 'application/zip' },
+  '7z': { type: MT_IMAGE, sub_type: '', mime_type: 'application/x-7z-compressed' },
+  rar: { type: MT_IMAGE, sub_type: '', mime_type: 'application/x-rar-compressed' },
+  sfk: { type: MT_IMAGE, sub_type: '', mime_type: '' },
+  doc: { type: MT_TEXT, sub_type: '', mime_type: 'application/msword' },
+  docx: {
+    type: MT_TEXT,
+    sub_type: '',
+    mime_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  },
+  htm: { type: MT_TEXT, sub_type: '', mime_type: 'text/html' },
+  html: { type: MT_TEXT, sub_type: '', mime_type: 'text/html' },
+  pdf: { type: MT_TEXT, sub_type: '', mime_type: 'application/pdf' },
+  epub: { type: MT_TEXT, sub_type: '', mime_type: 'application/epub+zip' },
+  rtf: { type: MT_TEXT, sub_type: '', mime_type: 'text/rtf' },
+  txt: { type: MT_TEXT, sub_type: '', mime_type: 'text/plain' },
+  fb2: { type: MT_TEXT, sub_type: '', mime_type: 'text/xml' },
+  rb: { type: MT_TEXT, sub_type: '', mime_type: 'application/x-rocketbook' },
+  xls: { type: MT_SHEET, sub_type: '', mime_type: 'application/vnd.ms-excel' },
+  swf: { type: MT_BANNER, sub_type: '', mime_type: 'application/x-shockwave-flash' },
+  ppt: { type: MT_PRESENTATION, sub_type: '', mime_type: 'application/vnd.ms-powerpoint' },
+  pptx: {
+    type: MT_PRESENTATION,
+    sub_type: '',
+    mime_type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+  },
+  pps: { type: MT_PRESENTATION, sub_type: '', mime_type: 'application/vnd.ms-powerpoint' },
+};
 
 export const TAG_ROOT_TOPICS = 'mS7hrYXK';

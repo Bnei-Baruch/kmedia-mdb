@@ -29,7 +29,7 @@ export default class Api {
   static tags       = ({ language }) => Requests.get(`tags?${Requests.makeParams({ language })}`);
 
   static lessons = ({ language, pageNo, pageSize, ...rest }) => {
-    const params = Object.assign({}, { language, order_by: 'id', ...rest });
+    const params = Object.assign({}, { language, ...rest });
     return Requests.get(`lessons?${Requests.limit(pageNo, pageSize)}&${Requests.makeParams(params)}`);
   };
 }

@@ -1,4 +1,4 @@
-import createFilterDefinition from './createFilterDefinition';
+import { createFilterDefinition } from './util';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
 
 const topicsFilter = {

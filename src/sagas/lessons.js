@@ -2,14 +2,15 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../api/Api';
 import { updateQuery } from './helpers/url';
+import { selectors as settings } from '../redux/modules/settings';
 import { actions, types } from '../redux/modules/lessons';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as filterSelectors } from '../redux/modules/filters';
-import filterDefinitions from '../filters';
+import { filtersTransformer } from '../filters';
 
 function* fetchList(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, 'lessons'));
-  const params  = filterDefinitions.toApiParams(filters);
+  const params  = filtersTransformer.toApiParams(filters);
   try {
     const resp = yield call(Api.lessons, { ...action.payload, ...params });
 
@@ -31,13 +32,25 @@ function* updatePageInQuery(action) {
   yield* updateQuery(query => Object.assign(query, { page }));
 }
 
-function* fetchLesson(action) {
+function* fetchLessonPart(action) {
   try {
-    const resp = yield call(Api.unit, action.payload);
-    yield put(mdbActions.receiveContentUnits([resp]));
-    yield put(actions.fetchLessonSuccess(resp));
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const response = yield call(Api.unit, { id: action.payload.id, language });
+    yield put(mdbActions.receiveContentUnits([response]));
+    yield put(actions.fetchLessonPartSuccess(response));
   } catch (err) {
-    yield put(actions.fetchLessonFailure(err));
+    yield put(actions.fetchLessonPartFailure(err));
+  }
+}
+
+function* fetchFullLesson(action) {
+  try {
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const response = yield call(Api.collection, { id: action.payload.id, language });
+    yield put(mdbActions.receiveCollections([response]));
+    yield put(actions.fetchFullLessonSuccess(response));
+  } catch (err) {
+    yield put(actions.fetchFullLessonFailure(err));
   }
 }
 
@@ -45,8 +58,12 @@ function* watchFetchList() {
   yield takeLatest(types.FETCH_LIST, fetchList);
 }
 
-function* watchFetchLesson() {
-  yield takeLatest(types.FETCH_LESSON, fetchLesson);
+function* watchFetchLessonPart() {
+  yield takeLatest(types.FETCH_LESSON_PART, fetchLessonPart);
+}
+
+function* watchFetchFullLesson() {
+  yield takeLatest(types.FETCH_FULL_LESSON, fetchFullLesson);
 }
 
 function* watchSetPage() {
@@ -55,6 +72,7 @@ function* watchSetPage() {
 
 export const sagas = [
   watchFetchList,
-  watchFetchLesson,
+  watchFetchLessonPart,
   watchSetPage,
+  watchFetchFullLesson
 ];
