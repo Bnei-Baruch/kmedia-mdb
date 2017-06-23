@@ -4,6 +4,7 @@ import { Button, Grid, Header, Table } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import * as shapes from '../../shapes';
+import { physicalFile } from '../../../helpers/utils';
 import { CT_KITEI_MAKOR, MT_AUDIO, MT_IMAGE, MT_TEXT, MT_VIDEO } from '../../../helpers/consts';
 import LanguageSelector from '../../shared/LanguageSelector';
 
@@ -119,7 +120,7 @@ class MediaDownloads extends Component {
 
   renderRow = (file, label) => {
     const ext = file.name.substring(file.name.lastIndexOf('.') + 1);
-    const url = `http://cdn.kabbalahmedia.info/${file.id}`;
+    const url = physicalFile(file);
 
     return (
       <Table.Row key={file.id} verticalAlign="top">

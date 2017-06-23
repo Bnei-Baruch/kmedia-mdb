@@ -1,3 +1,5 @@
+import { MEDIA_TYPES } from './consts';
+
 export const isEmpty = (obj) => {
   // null and undefined are "empty"
   if (obj === null) {
@@ -77,4 +79,49 @@ export const tracePath = (node, getById) => {
     }
   }
   return path;
+};
+
+/**
+ * Returns the given string suffix after the last dot '.'
+ * The empty string '' is returned if no dots found.
+ * @param name {string}
+ * @returns {string}
+ */
+export const filenameExtension = (name) => {
+  const lastDot = name.lastIndexOf('.');
+  if (lastDot === -1) {
+    return '';
+  }
+  return name.substring(lastDot + 1, name.length);
+};
+
+/**
+ * Extract type, sub_type and mime_type from a file
+ * or infer based file name extension.
+ * @param file
+ * @returns {{type: String, sub_type: String, mime_type: String}}
+ */
+export const fileTypes = (file) => {
+  let { type, sub_type, mime_type } = file;
+
+  // infer from file extension in DB has nothing
+  if (!type) {
+    const ext = filenameExtension(file.name);
+    ({ type, sub_type, mime_type } = MEDIA_TYPES[ext] || {});
+  }
+
+  return { type, sub_type, mime_type };
+};
+
+/**
+ * Returns the url to the physical file
+ * @param file
+ * @param ext {boolean} include file name extension in url or not
+ */
+export const physicalFile = (file, ext = false) => {
+  let suffix = '';
+  if (ext) {
+    suffix = `.${filenameExtension(file.name)}`;
+  }
+  return `http://cdn.kabbalahmedia.info/${file.id}${suffix}`;
 };

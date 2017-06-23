@@ -22,7 +22,7 @@ class LessonsList extends PureComponent {
         <strong>{part.film_date}</strong>
       </Table.Cell>
       <Table.Cell>
-        <Link to={`/lessons/${part.id}`}>
+        <Link to={`/lessons/part/${part.id}`}>
           <strong>{part.name}</strong>
           <br />
           <div dangerouslySetInnerHTML={{ __html: part.description }} />
@@ -35,7 +35,7 @@ class LessonsList extends PureComponent {
     const units = collection.content_units.map(unit => (
       <Table.Row verticalAlign="top" key={`u-${unit.id}`}>
         <Table.Cell>
-          <Link to={`/lessons/${unit.id}`}>
+          <Link to={`/lessons/part/${unit.id}`}>
             {unit.name}
             <br />
             <div dangerouslySetInnerHTML={{ __html: unit.description }} />
@@ -51,7 +51,7 @@ class LessonsList extends PureComponent {
           <strong>{collection.film_date}</strong>
         </Table.Cell>
         <Table.Cell>
-          <Link to={`/lessons/c/${collection.id}`}>
+          <Link to={`/lessons/full/${collection.id}`}>
             <strong>{collection.content_type}</strong>
           </Link>
         </Table.Cell>

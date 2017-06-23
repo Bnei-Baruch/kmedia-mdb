@@ -16,14 +16,16 @@ class SourcesFilter extends React.Component {
     onCancel: PropTypes.func,
     onApply: PropTypes.func,
     updateValue: PropTypes.func.isRequired,
-    value: PropTypes.arrayOf(PropTypes.string)
+    value: PropTypes.arrayOf(PropTypes.string),
+    allValues: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string))
   };
 
   static defaultProps = {
     roots: [],
     onCancel: noop,
     onApply: noop,
-    value: []
+    value: [],
+    allValues: [],
   };
 
   state = {
@@ -61,26 +63,26 @@ class SourcesFilter extends React.Component {
   };
 
   // Return all lists of selected sources.
-  createLists = (depth, items, selection) => {
+  createLists = (depth, items, selection, otherSelected) => {
     if (!Array.isArray(items) || items.length === 0) {
       return [];
     }
 
     if (selection.length === 0) {
-      return [this.createList(depth, items, '')];
+      return [this.createList(depth, items, '', otherSelected.map(s => s[0]))];
     }
 
     const selected = this.props.getSourceById(selection[0]);
-    const current  = this.createList(depth, items, selection[0]);
+    const current  = this.createList(depth, items, selection[0], otherSelected.map(s => s[0]));
     let next       = [];
     if (selected && selected.children) {
-      next = this.createLists(depth + 1, selected.children, selection.slice(1));
+      next = this.createLists(depth + 1, selected.children, selection.slice(1), otherSelected.filter(s => s.length > 0).map(s => s.slice(1)));
     }
 
     return [current].concat(next);
   };
 
-  createList = (depth, items, selectedId) => {
+  createList = (depth, items, selectedId, otherSelectedIds) => {
     const { getSourceById } = this.props;
     return (
       <div className="filter-steps__column-wrapper"
@@ -91,6 +93,7 @@ class SourcesFilter extends React.Component {
             {
               items.map((x) => {
                 const node = getSourceById(x);
+                const style = otherSelectedIds.includes(x) && selectedId !== x ? {backgroundColor: 'lightgoldenrodyellow'} : {};
                 return (
                   <Menu.Item
                     key={x}
@@ -98,6 +101,7 @@ class SourcesFilter extends React.Component {
                     active={selectedId === x}
                     data-depth={depth}
                     onClick={this.onSelectionChange}
+                    style={style}
                   >
                     {node.name}
                   </Menu.Item>
@@ -114,6 +118,7 @@ class SourcesFilter extends React.Component {
     const { roots } = this.props;
 
     return (
+
       <div  style={{}}>
       
         <Segment vertical  className="tab active" style={{
@@ -127,10 +132,11 @@ class SourcesFilter extends React.Component {
             {/*<div style={{  }}>*/}
               {
                 roots.length > 0 ?
-                  this.createLists(0, roots, this.state.selection).map(l => l) :
+                  this.createLists(0, roots, this.state.selection, this.props.allValues).map(l => l) :
                   'No Sources'
               }
            {/* </div> )*/}
+
           </div>
         
         </Segment>

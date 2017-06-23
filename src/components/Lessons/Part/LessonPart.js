@@ -7,8 +7,9 @@ import Info from './Info';
 import Materials from './Materials';
 import VideoBox from './VideoBox';
 import MediaDownloads from './MediaDownloads';
+import RelevantParts from './RelevantParts/RelevantParts';
 
-const Lesson = (props) => {
+const LessonPart = (props) => {
   if (isEmpty(props.lesson)) {
     return <div />;
   }
@@ -26,6 +27,7 @@ const Lesson = (props) => {
           </Grid.Column>
           <Grid.Column width={6}>
             <MediaDownloads {...props} />
+            <RelevantParts lesson={props.lesson} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -33,12 +35,12 @@ const Lesson = (props) => {
   );
 };
 
-Lesson.propTypes = {
+LessonPart.propTypes = {
   lesson: shapes.LessonPart,
 };
 
-Lesson.defaultProps = {
+LessonPart.defaultProps = {
   lesson: null
 };
 
-export default Lesson;
+export default LessonPart;
