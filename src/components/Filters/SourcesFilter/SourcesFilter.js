@@ -100,7 +100,6 @@ class SourcesFilter extends React.Component {
             items.map((x) => {
               const node = getSourceById(x);
               const style = otherSelectedIds.includes(x) && selectedId !== x ? {backgroundColor: 'lightgoldenrodyellow'} : {};
-              console.log(x, selectedId, otherSelectedIds)
               return (
                 <List.Item
                   key={x}
@@ -122,8 +121,6 @@ class SourcesFilter extends React.Component {
 
   render() {
     const { roots } = this.props;
-
-    console.log(this.props.allValues);
 
     return (
       <Segment basic attached="bottom" className="tab active" clearing>
