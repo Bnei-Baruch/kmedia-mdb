@@ -61,26 +61,26 @@ class SourcesFilter extends React.Component {
   };
 
   // Return all lists of selected sources.
-  createLists = (depth, items, selection) => {
+  createLists = (depth, items, selection, otherSelected) => {
     if (!Array.isArray(items) || items.length === 0) {
       return [];
     }
 
     if (selection.length === 0) {
-      return [this.createList(depth, items, '')];
+      return [this.createList(depth, items, '', [])];
     }
 
     const selected = this.props.getSourceById(selection[0]);
-    const current  = this.createList(depth, items, selection[0]);
+    const current  = this.createList(depth, items, selection[0], otherSelected.map(s => s[0]));
     let next       = [];
     if (selected && selected.children) {
-      next = this.createLists(depth + 1, selected.children, selection.slice(1));
+      next = this.createLists(depth + 1, selected.children, selection.slice(1), otherSelected.map(s => s.slice(1)));
     }
 
     return [current].concat(next);
   };
 
-  createList = (depth, items, selectedId) => {
+  createList = (depth, items, selectedId, otherSelectedIds) => {
     const { getSourceById } = this.props;
     return (
       <div
@@ -101,7 +101,7 @@ class SourcesFilter extends React.Component {
                 <List.Item
                   key={x}
                   value={x}
-                  active={selectedId === x}
+                  active={selectedId === x || otherSelectedIds.includes(x)}
                   data-depth={depth}
                   onClick={this.onSelectionChange}
                 >
@@ -118,8 +118,6 @@ class SourcesFilter extends React.Component {
   render() {
     const { roots } = this.props;
 
-    console.log(this.props.allValues);
-
     return (
       <Segment basic attached="bottom" className="tab active" clearing>
         <div
@@ -130,7 +128,7 @@ class SourcesFilter extends React.Component {
           <div style={{ whiteSpace: 'nowrap', width: '100%' }}>
             {
               roots.length > 0 ?
-                this.createLists(0, roots, this.state.selection).map(l => l) :
+                this.createLists(0, roots, this.state.selection, this.props.allValues).map(l => l) :
                 'No Sources'
             }
           </div>
