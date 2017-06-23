@@ -242,13 +242,13 @@ const getFilters = (state, namespace) => {
   }));
 };
 
-const getFilterAllValue = (state, namespace, name) =>
+const getFilterAllValues = (state, namespace, name) =>
   state[namespace] &&
   state[namespace][name] &&
   state[namespace][name].values;
 
 const getFilterValue = (state, namespace, name, index = 0) =>
-  getFilterAllValue(state, namespace, name, index) &&
+  getFilterAllValues(state, namespace, name, index) &&
   state[namespace][name].values[index];
 
 const getLastFilterValue = (state, namespace, name) => {
@@ -290,7 +290,7 @@ const getActiveFilter = (state, namespace) => (
 export const selectors = {
   getFilters,
   getFilterValue,
-  getFilterAllValue,
+  getFilterAllValues,
   getLastFilterValue,
   getActiveValueIndex,
   getActiveValue,

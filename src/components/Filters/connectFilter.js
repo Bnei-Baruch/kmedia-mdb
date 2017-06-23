@@ -64,7 +64,7 @@ const connectFilter = (options = {}) => (WrappedComponent) => {
       isEditing: filterSelectors.getIsEditingExistingFilter(state.filters, ownProps.namespace, ownProps.name),
       activeValueIndex: filterSelectors.getActiveValueIndex(state.filters, ownProps.namespace, ownProps.name),
       value: filterSelectors.getActiveValue(state.filters, ownProps.namespace, ownProps.name),
-      allValues: isMultiple ? filterSelectors.getFilterAllValue(state.filters, ownProps.namespace, ownProps.name) : undefined,
+      allValues: isMultiple ? filterSelectors.getFilterAllValues(state.filters, ownProps.namespace, ownProps.name) : undefined,
     }),
     filterActions
   )(ConnectFilterHOC);
