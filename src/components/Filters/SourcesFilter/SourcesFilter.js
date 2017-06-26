@@ -89,7 +89,7 @@ class SourcesFilter extends React.Component {
         key={selectedId}
       >
         <div className="filter-steps__column">
-          <Menu pointing vertical compact color='blue' size='tiny'>
+          <Menu fluid vertical  color='blue' size='tiny'>
             {
               items.map((x) => {
                 const node = getSourceById(x);
