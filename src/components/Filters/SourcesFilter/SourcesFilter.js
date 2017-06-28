@@ -3,7 +3,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Button, Divider, List, Segment } from 'semantic-ui-react';
+import { Button, Divider, List, Segment, Menu } from 'semantic-ui-react';
 import noop from 'lodash/noop';
 import { selectors as sources } from '../../../redux/modules/sources';
 import connectFilter from '../connectFilter';
@@ -16,14 +16,16 @@ class SourcesFilter extends React.Component {
     onCancel: PropTypes.func,
     onApply: PropTypes.func,
     updateValue: PropTypes.func.isRequired,
-    value: PropTypes.arrayOf(PropTypes.string)
+    value: PropTypes.arrayOf(PropTypes.string),
+    allValues: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string))
   };
 
   static defaultProps = {
     roots: [],
     onCancel: noop,
     onApply: noop,
-    value: []
+    value: [],
+    allValues: [],
   };
 
   state = {
@@ -61,56 +63,53 @@ class SourcesFilter extends React.Component {
   };
 
   // Return all lists of selected sources.
-  createLists = (depth, items, selection) => {
+  createLists = (depth, items, selection, otherSelected) => {
     if (!Array.isArray(items) || items.length === 0) {
       return [];
     }
 
     if (selection.length === 0) {
-      return [this.createList(depth, items, '')];
+      return [this.createList(depth, items, '', otherSelected.map(s => s[0]))];
     }
 
     const selected = this.props.getSourceById(selection[0]);
-    const current  = this.createList(depth, items, selection[0]);
+    const current  = this.createList(depth, items, selection[0], otherSelected.map(s => s[0]));
     let next       = [];
     if (selected && selected.children) {
-      next = this.createLists(depth + 1, selected.children, selection.slice(1));
+      next = this.createLists(depth + 1, selected.children, selection.slice(1), otherSelected.filter(s => s.length > 0).map(s => s.slice(1)));
     }
 
     return [current].concat(next);
   };
 
-  createList = (depth, items, selectedId) => {
+  createList = (depth, items, selectedId, otherSelectedIds) => {
     const { getSourceById } = this.props;
     return (
-      <div
+      <div className="filter-steps__column-wrapper"
         key={selectedId}
-        style={{
-          width: '33%',
-          paddingRight: '15px',
-          height: '250px',
-          display: 'inline-block',
-          overflowY: 'scroll'
-        }}
       >
-        <List divided relaxed selection>
-          {
-            items.map((x) => {
-              const node = getSourceById(x);
-              return (
-                <List.Item
-                  key={x}
-                  value={x}
-                  active={selectedId === x}
-                  data-depth={depth}
-                  onClick={this.onSelectionChange}
-                >
-                  {node.name}
-                </List.Item>
-              );
-            })
-          }
-        </List>
+        <div className="filter-steps__column">
+          <Menu fluid vertical  color='blue' size='tiny'>
+            {
+              items.map((x) => {
+                const node = getSourceById(x);
+                const style = otherSelectedIds.includes(x) && selectedId !== x ? {backgroundColor: 'lightgoldenrodyellow'} : {};
+                return (
+                  <Menu.Item
+                    key={x}
+                    value={x}
+                    active={selectedId === x}
+                    data-depth={depth}
+                    onClick={this.onSelectionChange}
+                    style={style}
+                  >
+                    {node.name}
+                  </Menu.Item>
+                );
+              })
+            }
+          </Menu>
+        </div>
       </div>
     );
   };
@@ -119,26 +118,33 @@ class SourcesFilter extends React.Component {
     const { roots } = this.props;
 
     return (
-      <Segment basic attached="bottom" className="tab active" clearing>
-        <div
-          // eslint-disable-next-line no-return-assign
-          ref={el => this.listContainer = el}
-          style={{ overflowY: 'hidden', overflowX: 'scroll', width: '100%' }}
-        >
-          <div style={{ whiteSpace: 'nowrap', width: '100%' }}>
-            {
-              roots.length > 0 ?
-                this.createLists(0, roots, this.state.selection).map(l => l) :
-                'No Sources'
-            }
+
+      <div  style={{}}>
+      
+        <Segment vertical  className="tab active" style={{
+          padding:'0'
+        }}>
+          <div className="filter-steps"
+            // eslint-disable-next-line no-return-assign
+            ref={el => this.listContainer = el}
+            style={{  }}
+          >
+            {/*<div style={{  }}>*/}
+              {
+                roots.length > 0 ?
+                  this.createLists(0, roots, this.state.selection, this.props.allValues).map(l => l) :
+                  'No Sources'
+              }
+           {/* </div> )*/}
+
           </div>
-        </div>
-        <Divider />
-        <div>
+        
+        </Segment>
+        <Segment vertical clearing>
           <Button floated="right" onClick={this.apply} primary>Apply</Button>
           <Button floated="right" onClick={this.onCancel}>Cancel</Button>
-        </div>
-      </Segment>
+        </Segment>
+      </div>
     );
   }
 }
