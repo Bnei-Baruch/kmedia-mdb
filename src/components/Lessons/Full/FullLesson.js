@@ -6,7 +6,9 @@ import { isEmpty } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 
 import VideoBox from '../Part/VideoBox';
-import PartsList from './PartsList/PartsList';
+
+import moment from 'moment';
+import 'moment-duration-format';
 
 class FullLesson extends Component {
   static propTypes = {
@@ -58,7 +60,17 @@ class FullLesson extends Component {
           <VideoBox language={language} lesson={this.state.activeLesson} />
         </Grid>
         <Grid>
-          <PartsList parts={fullLesson.content_units}  />
+          <Menu vertical fluid pointing color='blue'>
+            {
+              fullLesson.content_units.map(part => (
+                <Menu.Item key={part.id}>
+                    {part.name_in_collection} -
+                    {part.name} -
+                    {moment.duration(part.duration, 'seconds').format('hh:mm:ss')}
+                </Menu.Item>
+              ))
+            }
+          </Menu>
         </Grid>
       </Grid.Column>
     );
