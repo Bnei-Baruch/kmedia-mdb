@@ -16,7 +16,6 @@ class FullLessonContainer extends Component {
     match: shapes.RouterMatch.isRequired,
     language: PropTypes.string.isRequired,
     fetchFullLesson: PropTypes.func.isRequired,
-    activeLessonPartId: PropTypes.string,
   };
 
   componentDidMount() {
@@ -35,7 +34,6 @@ class FullLessonContainer extends Component {
     }
   };
 
-
   render() {
     return <FullLesson {...this.props} />;
   }
@@ -44,8 +42,7 @@ class FullLessonContainer extends Component {
 function mapState(state, props) {
   return {
     fullLesson: mdb.getCollectionById(state.mdb)(props.match.params.id),
-    // CONTINUE HERE!!!! Does not make sence, we propbably need to store in State the active lesson part, not in props.
-    activeLessonPart: mdb.getUnitById(state.mdb)(props.activeLessonPartId);
+    getUnitById: mdb.getUnitById(state.mdb),
     language: settings.getLanguage(state.settings),
 
     // NOTE (yaniv -> ido): using selectors this way will always make the component rerender
