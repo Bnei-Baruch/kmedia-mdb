@@ -22,26 +22,29 @@ class VideoBox extends Component {
 
   constructor(props) {
     super(props);
-    this.state = this.getInitialState(props);
-    console.log('Initial state', this.state, props.lesson);
+    this.state = this.calcState(props);
   }
 
-  getInitialState = (props) => {
-    const { lesson = {} } = props;
+  calcState = (props) => {
+    const { lesson = {}, language } = props;
     const groups          = this.getFilesByLanguage(lesson.files);
 
-    let language = props.language;
-    if (!groups.has(language)) {
-      language = groups.keys().next().value;
+    let lang;
+    if (groups.has(language)) {
+      lang = language;
+    } else if (this.state && groups.has(this.state.language)) {
+      lang = this.state.language;
+    } else {
+      lang = groups.keys().next().value;
     }
 
-    const { video, audio } = language ? this.splitAV(language, groups) : {};
+    const { video, audio } = lang ? this.splitAV(lang, groups) : {};
 
-    return { groups, language, video, audio, active: video || audio };
+    return { groups, language: lang, video, audio, active: video || audio };
   };
 
   componentWillReceiveProps(nextProps) {
-    const { lesson, language } = nextProps;
+    const { lesson = {}, language } = nextProps;
     const props                = this.props;
     const state                = this.state;
 
@@ -62,29 +65,7 @@ class VideoBox extends Component {
       }
     }
 
-    console.log('Lesson changed', lesson);
-
-    // lesson changed, maybe language as well
-    const groups = this.getFilesByLanguage(lesson.files);
-    let lang;
-    if (groups.has(language)) {
-      lang = language;
-    } else if (groups.has(state.language)) {
-      lang = state.language;
-    } else {
-      lang = groups.keys().next().value;
-    }
-
-    const { video, audio } = lang ? this.splitAV(lang, groups) : {};
-    this.setState({
-      groups,
-      language: lang,
-      audio,
-      video,
-      active: video || audio
-    }, () => {
-      console.log('Updated state', this.state);
-    });
+    this.setState(this.calcState(nextProps));
   }
 
   getFilesByLanguage = (files) => {
@@ -125,8 +106,6 @@ class VideoBox extends Component {
 
   render() {
     const { audio, video, active, groups, language } = this.state;
-
-    console.log('VideoBox', language, this.props.lesson);
 
     if (!(video || audio)) {
       return (<div>No video/audio files.</div>);
