@@ -124,26 +124,37 @@ class FullVideoBox extends Component {
   };
 
   handleChangeLanguage = (e, language) => {
-    const { video, audio } = this.splitAV(language, this.state.parts[this.state.activePartId].groups);
-    this.setState({ language, video, audio, active: video || audio });
+    // const { video, audio } = this.splitAV(language, this.state.parts[this.state.activePartId].groups);
+    // this.setState({ language, video, audio, active: video || audio });
   };
 
   handleLessonPartClick = (e, { name }) => {
-    const part = this.fetchLessonIfNeeded(name);
+    const parts = this.state.parts;
+    const part = {
+      part: this.fetchLessonIfNeeded(name),
+      ...this.calcPartState(part, this.props)
+    }
     this.setState({
       activePartId: name,
-      activePart: part,
-      ...this.calcPartState(part, this.props),
+      parts: {
+        ...parts,
+        [name]: part,
+      },
     });
   }
 
   render() {
     const { fullLesson } = this.props;
-    const { parts = [], activePartId } = this.state;
+    const { parts = {}, activePartId } = this.state;
+
+    if (!fullLesson || !activePartId) {
+      return (<div>Loading...</div>);
+    }
+
     // Active lesson part.
     const { audio, video, active, groups, language } = parts[activePartId] || {};
 
-    if (!(activePartId || video || audio)) {
+    if (!(video || audio)) {
       return (<div>No video/audio files.</div>);
     }
 
@@ -162,7 +173,7 @@ class FullVideoBox extends Component {
         <Grid.Column width={10}>
           <div className="video_player">
             <div id="video" />
-            <AVPlayer playerId="lesson" file={physicalFile(active, true)} />
+            <AVPlayer playerId="lesson" file={physicalFile(video /* active */, true)} />
           </div>
         </Grid.Column>
         <Grid.Column className="player_panel" width={6}>
