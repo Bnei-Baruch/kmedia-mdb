@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Menu } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { Grid, Button, Menu } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
@@ -8,7 +9,10 @@ import { physicalFile } from '../../../helpers/utils';
 import LanguageSelector from '../../shared/LanguageSelector';
 import AVPlayer from '../../shared/AVPlayer';
 import AVSwitch from '../Part/AVSwitch';
+import { selectors as mdb } from '../../../redux/modules/mdb';
+import { actions } from '../../../redux/modules/lessons';
 
+import map from 'lodash/map';
 import moment from 'moment';
 import 'moment-duration-format';
 
@@ -16,56 +20,46 @@ class FullVideoBox extends Component {
 
   static propTypes = {
     language: PropTypes.string.isRequired,
-    // lesson: shapes.LessonPart,  <== optional param should override state.
     fullLesson: shapes.LessonCollection,
+    lessonParts: PropTypes.arrayOf(shapes.LessonPart),
   };
 
   static defaultProps = {
     fullLesson: undefined,
+    lessonParts: [],
   };
 
-  constructor(props) {
-    super(props);
-    this.state = this.calcFullState(props);
+  state = {
+    activePartIndex: 0,
+    language: undefined,
+    isVideo: undefined,
+    isAudio: undefined,
   }
 
-  calcFullState = (props) => {
-    const { fullLesson } = props;
-    if (!fullLesson || !fullLesson.content_units || !fullLesson.content_units.length) {
-      return {};
-    } else {
-      const id = this.state && this.state.activePartId || fullLesson.content_units[0].id;
-      const part = this.fetchLessonIfNeeded(id)
-      return {
-        activePartId: id,
-        parts: {
-          [id]: {
-            part: part,
-            ...this.calcPartState(part, props),
-          }
-        },
-      };
+  componentWillReceiveProps(nextProps) {
+    const { fullLesson, language } = nextProps;
+    const props                    = this.props;
+
+    // no change
+    if (fullLesson === props.fullLesson) {
+      console.log('No change');
+      return;
+    }
+
+    // Lesson changed
+    if (fullLesson && fullLesson !== props.fullLesson) {
+      this.setState({ activePartIndex: 0 })
     }
   }
 
-  fetchLessonIfNeeded = (partId) => {
-    const lessonPart = this.props.getUnitById(partId);
-    if (!lessonPart || !lessonPart.files) {
-      this.props.fetchLessonPart(partId);
-      return undefined;
-    }
-    return lessonPart;
-  }
-
-  calcPartState = (part = {}, props) => {
-    const { language } = props;
+  calcPart = (part, language) => {
     const groups       = this.getFilesByLanguage(part.files);
     const state        = this.state;
 
     let lang;
     if (groups.has(language)) {
       lang = language;
-    } else if (state && groups.has(state.language)) {
+    } else if (groups.has(state.language)) {
       lang = state.language;
     } else {
       lang = groups.keys().next().value;
@@ -73,21 +67,8 @@ class FullVideoBox extends Component {
 
     const { video, audio } = lang ? this.splitAV(lang, groups) : {};
 
-    return { groups, language: lang, video, audio, active: video || audio };
+    return { part, groups, language: lang, video, audio, active: video || audio };
   };
-
-  componentWillReceiveProps(nextProps) {
-    const { fullLesson = {}, language } = nextProps;
-    const props                = this.props;
-
-    // no change
-    if (fullLesson === props.fullLesson && language === props.language) {
-      console.log('No change');
-      return;
-    }
-
-    this.setState(this.calcFullState(nextProps));
-  }
 
   getFilesByLanguage = (files) => {
     const groups = new Map();
@@ -111,58 +92,44 @@ class FullVideoBox extends Component {
     return { video, audio };
   };
 
-  handleSwitchAV = () => {
-    const parts = this.state.parts;
-    const part = this.state.parts[this.state.activePartId];
-    const { audio, video, active } = part;
-    if (active === video && audio) {
-      part.active = audio;
-    } else if (active === audio && video) {
-      part.video = audio;
-    }
-    this.setState({ parts: { ...parts, [this.state.activePartId]: part } });
-  };
-
   handleChangeLanguage = (e, language) => {
-    // const { video, audio } = this.splitAV(language, this.state.parts[this.state.activePartId].groups);
-    // this.setState({ language, video, audio, active: video || audio });
+    this.setState({ language });
   };
 
   handleLessonPartClick = (e, { name }) => {
-    const parts = this.state.parts;
-    const part = {
-      part: this.fetchLessonIfNeeded(name),
-      ...this.calcPartState(part, this.props)
-    }
     this.setState({
-      activePartId: name,
-      parts: {
-        ...parts,
-        [name]: part,
-      },
+      activePartIndex: parseInt(name),
     });
   }
 
-  render() {
-    const { fullLesson } = this.props;
-    const { parts = {}, activePartId } = this.state;
+  handleOnVideo = () => {
+    this.setState({ isVideo: true });
+  }
 
-    if (!fullLesson || !activePartId) {
+  handleOnAudio = () => {
+    this.setState({ isAudio: true });
+  }
+
+  render() {
+    const { lessonParts } = this.props;
+    const { activePartIndex, isVideo, isAudio } = this.state;
+
+    if (!lessonParts || !lessonParts.length) {
       return (<div>Loading...</div>);
     }
 
+    console.log(lessonParts, activePartIndex);
+
     // Active lesson part.
-    const { audio, video, active, groups, language } = parts[activePartId] || {};
+    const { audio, video, active, groups, language } = this.calcPart(lessonParts[activePartIndex], this.props.language);
 
     if (!(video || audio)) {
       return (<div>No video/audio files.</div>);
     }
 
-    console.log(activePartId, video, audio);
-
-    const lessonMenuItems = fullLesson.content_units.map(part => (
-      <Menu.Item key={part.id} name={part.id}
-                 active={part.id === activePartId}
+    const lessonMenuItems = lessonParts.map((part, index) => (
+      <Menu.Item key={index} name={index.toString()}
+                 active={index === activePartIndex}
                  onClick={this.handleLessonPartClick}>
         {part.name_in_collection} - {part.name} - {moment.duration(part.duration, 'seconds').format('hh:mm:ss')}
       </Menu.Item>
@@ -180,7 +147,14 @@ class FullVideoBox extends Component {
           <Grid columns="equal">
             <Grid.Row>
               <Grid.Column>
-                <AVSwitch video={video} audio={audio} active={active} onChange={this.handleSwitchAV} />
+                <Button.Group fluid>
+                  { isVideo === true      ? <Button active color="blue">Video</Button> : null }
+                  { isVideo === false     ? <Button onClick={this.handleOnVideo}>Video</Button> : null}
+                  { isVideo === undefined ? <Button disabled>Video</Button> : null}
+                  { isAudio === true      ? <Button active color="blue">Audio</Button> : null }
+                  { isAudio === false     ? <Button onClick={this.handleOnAudio}>Audio</Button> : null }
+                  { isAudio === undefined ? <Button disabled>Audio</Button> : null}
+                </Button.Group>
               </Grid.Column>
               <Grid.Column>
                 <LanguageSelector
@@ -202,4 +176,23 @@ class FullVideoBox extends Component {
   }
 }
 
-export default FullVideoBox;
+function connectLessonParts(state, props) {
+  if (props.fullLesson) {
+    return props.fullLesson.content_units.map(cu => {
+      const u = mdb.getUnitById(state.mdb)(cu.id);
+      if (!u || !u.files) {
+        props.fetchLessonPart(cu.id);
+      }
+      return u;
+    });
+  } else {
+    return [];
+  }
+}
+
+export default connect(
+  (state, ownProps) => ({
+    lessonParts: connectLessonParts(state, ownProps)
+  }),
+  actions
+)(FullVideoBox);
