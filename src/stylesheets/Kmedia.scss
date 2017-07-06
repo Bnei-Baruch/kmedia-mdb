@@ -182,8 +182,11 @@ $text-colors: (
   &__column-wrapper {
     // height: 100%;
     overflow-y: scroll;
-    min-width:25%;
-    &:nth-child(n+3){
+    // min-width:25%;
+    // &:nth-child(n+3){
+
+    
+    &:last-child{
       flex:1 1 auto;
     }
     max-width:100%;

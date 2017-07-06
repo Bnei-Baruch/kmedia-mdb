@@ -94,7 +94,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             <Grid.Column>
               <div className='filter-tags'>
                 <Button.Group size='mini'>
-                  <Button basic color='blue'>
+                  <Button basic active color='blue'>
                     <Icon name='book' />
                     Baal HaSulam > TES
                   </Button>
