@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Grid, Button, Menu } from 'semantic-ui-react';
+import { Header, Grid, Button, Menu, Divider } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
@@ -32,64 +32,68 @@ class FullVideoBox extends Component {
   state = {
     activePartIndex: 0,
     language: undefined,
-    isVideo: undefined,
-    isAudio: undefined,
+    isVideo: true,
+    isAudio: false,
+    files: new Map(),
   }
 
   componentWillReceiveProps(nextProps) {
-    const { fullLesson, language } = nextProps;
-    const props                    = this.props;
+    const { fullLesson, language, lessonParts } = nextProps;
+    const props = this.props;
 
-    // no change
-    if (fullLesson === props.fullLesson) {
-      console.log('No change');
-      return;
-    }
-
-    // Lesson changed
-    if (fullLesson && fullLesson !== props.fullLesson) {
-      this.setState({ activePartIndex: 0 })
+    // Wait for full lesson to load.
+    if (fullLesson) {
+      // Update files
+      let { files } = this.state;
+      let stateUpdated = false;
+      // Wait for lesson parts to load.
+      if (lessonParts) {
+        lessonParts.forEach((p, i) => {
+          if (p.files && p.files.length) {
+            this.getFilesByLanguageByAV(p.files).forEach((filesByAV, language) => {
+              if (!files.has(language)) {
+                files.set(language, new Map());
+              }
+              filesByAV.forEach((file, audioOrVideo) => {
+                if (!files.get(language).has(audioOrVideo)) {
+                  files.get(language).set(audioOrVideo, []);
+                }
+                files.get(language).get(audioOrVideo)[i] = file;
+                stateUpdated = true;
+              });
+            });
+          }
+        });
+      }
+      if (fullLesson !== props.fullLesson && fullLesson.id !== props.fullLesson.id) {
+        files = new Map();
+        stateUpdated = true;
+      }
+      if (stateUpdated) {
+        this.setState({ files });
+      }
     }
   }
 
-  calcPart = (part, language) => {
-    const groups       = this.getFilesByLanguage(part.files);
-    const state        = this.state;
-
-    let lang;
-    if (groups.has(language)) {
-      lang = language;
-    } else if (groups.has(state.language)) {
-      lang = state.language;
-    } else {
-      lang = groups.keys().next().value;
-    }
-
-    const { video, audio } = lang ? this.splitAV(lang, groups) : {};
-
-    return { part, groups, language: lang, video, audio, active: video || audio };
-  };
-
-  getFilesByLanguage = (files) => {
-    const groups = new Map();
+  /**
+   * @param {!Array<Object>} files
+   * @return {Map<string, Map<string, file>>} map of files by language, then type (audio/video)
+   */
+  getFilesByLanguageByAV = (files) => {
+    const ret = new Map();
 
     (files || []).forEach((file) => {
-      if (file.mimetype === 'audio/mpeg' || file.mimetype === 'video/mp4') {
-        if (!groups.has(file.language)) {
-          groups.set(file.language, []);
+      // TODO: What is the difference between mimetype and type?!
+      if ((['audio/mpeg', 'video/mp4'].includes(file.mimetype)) &&
+          ([MT_VIDEO, MT_AUDIO].includes(file.type))) {
+        if (!ret.has(file.language)) {
+          ret.set(file.language, new Map());
         }
-        groups.get(file.language).push(file);
+        ret.get(file.language).set(file.type, file);
       }
     });
 
-    return groups;
-  };
-
-  splitAV = (language, groups) => {
-    const set   = groups.get(language);
-    const video = set.find(file => file.type === MT_VIDEO);
-    const audio = set.find(file => file.type === MT_AUDIO);
-    return { video, audio };
+    return ret;
   };
 
   handleChangeLanguage = (e, language) => {
@@ -111,24 +115,40 @@ class FullVideoBox extends Component {
   }
 
   render() {
-    const { lessonParts } = this.props;
-    const { activePartIndex, isVideo, isAudio } = this.state;
+    const { fullLesson, lessonParts, language: propsLanguage } = this.props;
+    let { activePartIndex, isVideo, isAudio, language = propsLanguage, files } = this.state;
 
-    if (!lessonParts || !lessonParts.length) {
-      return (<div>Loading...</div>);
+    const filesByAV = files.get(language) || new Map();
+    let fileList = [];
+    if (!filesByAV.has(MT_AUDIO)) {
+      isAudio = undefined;
+    } else if (isAudio) {
+      fileList = filesByAV.get(MT_AUDIO) || [];
+    }
+    if (!filesByAV.has(MT_VIDEO)) {
+      isVideo = undefined;
+    } else if (isVideo) {
+      fileList = filesByAV.get(MT_VIDEO) || [];
     }
 
-    console.log(lessonParts, activePartIndex);
+    console.log(files);
+    console.log(language, isVideo, isAudio, fileList);
 
-    // Active lesson part.
-    const { audio, video, active, groups, language } = this.calcPart(lessonParts[activePartIndex], this.props.language);
-
-    if (!(video || audio)) {
-      return (<div>No video/audio files.</div>);
+    if (!fileList[activePartIndex]) {
+      if (lessonParts.every(p => p.files)) {
+        return (<div>No video/audio files.</div>);
+      } else {
+        return (<div>Loading...</div>);
+      }
     }
+
+    const playlist = fileList.filter(f => f).map(f => ({ file: physicalFile(f, true) }));
+
+    console.log(playlist);
 
     const lessonMenuItems = lessonParts.map((part, index) => (
-      <Menu.Item key={index} name={index.toString()}
+      <Menu.Item key={index}
+                 name={index.toString()}
                  active={index === activePartIndex}
                  onClick={this.handleLessonPartClick}>
         {part.name_in_collection} - {part.name} - {moment.duration(part.duration, 'seconds').format('hh:mm:ss')}
@@ -140,7 +160,7 @@ class FullVideoBox extends Component {
         <Grid.Column width={10}>
           <div className="video_player">
             <div id="video" />
-            <AVPlayer playerId="lesson" file={physicalFile(video /* active */, true)} />
+            <AVPlayer playerId="lesson" playlist={playlist} />
           </div>
         </Grid.Column>
         <Grid.Column className="player_panel" width={6}>
@@ -158,16 +178,23 @@ class FullVideoBox extends Component {
               </Grid.Column>
               <Grid.Column>
                 <LanguageSelector
-                  languages={Array.from(groups.keys())}
+                  languages={Array.from(files.keys())}
                   defaultValue={language}
                   onSelect={this.handleChangeLanguage}
                 />
               </Grid.Column>
             </Grid.Row>
+          </Grid>
+          <Divider />
+          <Header as="h3" subheader={fullLesson.film_date}
+                  content={fullLesson.content_type + " - " + (activePartIndex + 1) + "/" + lessonParts.length} />
+          <Grid>
             <Grid.Row>
-              <Menu vertical fluid color='blue'>
-                { lessonMenuItems }
-              </Menu>
+              <Grid.Column>
+                <Menu vertical fluid size="small">
+                  { lessonMenuItems }
+                </Menu>
+              </Grid.Column>
             </Grid.Row>
           </Grid>
         </Grid.Column>
