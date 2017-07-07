@@ -134,17 +134,11 @@ class FullVideoBox extends Component {
     console.log(files);
     console.log(language, isVideo, isAudio, fileList);
 
-    if (!fileList[activePartIndex]) {
-      if (lessonParts.every(p => p.files)) {
-        return (<div>No video/audio files.</div>);
-      } else {
-        return (<div>Loading...</div>);
-      }
+    if (!fileList[activePartIndex] && !lessonParts.every(p => p.files)) {
+      return (<div>Loading...</div>);
     }
 
     const playlist = fileList.filter(f => f).map(f => ({ file: physicalFile(f, true) }));
-
-    console.log(playlist);
 
     const lessonMenuItems = lessonParts.map((part, index) => (
       <Menu.Item key={index}
@@ -155,12 +149,16 @@ class FullVideoBox extends Component {
       </Menu.Item>
     ));
 
+    const videoLoad = (e) => {
+      console.log('Video Load', e);
+    };
+
     return (
       <Grid.Row className="video_box">
         <Grid.Column width={10}>
           <div className="video_player">
             <div id="video" />
-            <AVPlayer playerId="lesson" playlist={playlist} />
+            <AVPlayer playerId="lesson" onVideoLoad={videoLoad} playlist={playlist} />
           </div>
         </Grid.Column>
         <Grid.Column className="player_panel" width={6}>
