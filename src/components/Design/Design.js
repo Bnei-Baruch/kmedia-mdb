@@ -88,6 +88,38 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
           </Grid.Row>
         </Grid>
 
+        <Header size='large' color='pink' inverted>tags -^+^-</Header>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column>
+              <div className='filter-tags'>
+                <Button.Group size='mini'>
+                  <Button basic active color='blue'>
+                    <Icon name='book' />
+                    Baal HaSulam > TES
+                  </Button>
+                  <Button color='blue' icon='close'></Button>
+                </Button.Group>
+                
+                <Button.Group size='mini'>
+                  <Button basic color='blue'>
+                    <Icon name='tag' />
+                    Arvut Between the Tens
+                  </Button>
+                  <Button color='blue' icon='close'></Button>
+                </Button.Group>
+                
+                <Button.Group size='mini'>
+                  <Button basic color='blue'>
+                    <Icon name='calendar' />
+                    3 Jul 2017 - 3 Jul 2017
+                  </Button>
+                  <Button color='blue' icon='close'></Button>
+                </Button.Group>
+              </div>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
         <Header size='large' color='pink' inverted>pagination (°ʖ°)</Header>
         <Grid>
           <Grid.Row>
