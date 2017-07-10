@@ -23,7 +23,6 @@ class VideoBox extends Component {
   constructor(props) {
     super(props);
     this.state = this.getInitialState(props);
-    console.log('Initial state', this.state, props.lesson);
   }
 
   getInitialState = (props) => {
@@ -47,22 +46,16 @@ class VideoBox extends Component {
 
     // no change
     if (lesson === props.lesson && language === props.language) {
-      console.log('No change');
       return;
     }
 
     // only language changed
     if (lesson === props.lesson && language !== props.language) {
-      console.log('Language changed');
       if (state.groups.has(language)) {
-        this.setState({ language, ...this.splitAV(language, state.groups) }, () => {
-          console.log('Updated state', this.state);
-        });
+        this.setState({ language, ...this.splitAV(language, state.groups) });
         return;
       }
     }
-
-    console.log('Lesson changed', lesson);
 
     // lesson changed, maybe language as well
     const groups = this.getFilesByLanguage(lesson.files);
@@ -82,8 +75,6 @@ class VideoBox extends Component {
       audio,
       video,
       active: video || audio
-    }, () => {
-      console.log('Updated state', this.state);
     });
   }
 
@@ -125,8 +116,6 @@ class VideoBox extends Component {
 
   render() {
     const { audio, video, active, groups, language } = this.state;
-
-    console.log('VideoBox', language, this.props.lesson);
 
     if (!(video || audio)) {
       return (<div>No video/audio files.</div>);

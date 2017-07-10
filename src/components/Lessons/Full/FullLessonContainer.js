@@ -14,7 +14,6 @@ import FullLesson from './FullLesson';
 class FullLessonContainer extends Component {
   static propTypes = {
     match: shapes.RouterMatch.isRequired,
-    language: PropTypes.string.isRequired,
     fetchFullLesson: PropTypes.func.isRequired,
   };
 
