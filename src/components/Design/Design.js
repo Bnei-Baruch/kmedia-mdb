@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, Container, List } from 'semantic-ui-react';
+import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, List, Popup, Table } from 'semantic-ui-react';
 
 class Design extends Component {
 
@@ -11,22 +11,70 @@ class Design extends Component {
         <div className='collapsed_video_container'>
         	<Grid >
             <Grid.Row>
-              <Grid.Column width='3'>
+              <Grid.Column width='4'>
                 <div className='video_player'>
                   <div className='video_placeholder' />
                 </div>
               </Grid.Column>
-                <Grid.Column width='8'>
-                  <Grid><Grid.Row><Grid.Column>
-                  <Header as="h5">
-                    2016-10-26<br/>Lesson on the topic of “From Lo Lishma to Lishma” (not for Her Name for Her Name)
-                  </Header>
-                  { /*<List>
-                    <List.Item><b>Topics:</b> <a href=''>From Lo Lishma to Lishma</a>, <a href=''>Work in group</a></List.Item>
-                    <List.Item><b>Sources:</b> <a href=''> Shamati - There is None Else Beside Him</a>, <a href=''>Shamati - Divinity in Exile</a></List.Item>
-                    <List.Item><b>Related to Event:</b> <a href=''>World Israel Congress 2016</a></List.Item>
-                  </List>  */ }
-                  </Grid.Column></Grid.Row></Grid>
+              <Grid.Column width='10'>
+               
+                <Header as="h5">
+                  2016-10-26<br/>Lesson on the topic of “From Lo Lishma to Lishma” (not for Her Name for Her Name)
+                </Header>
+                <List size='mini'>
+                  <List.Item><b>Topics:</b> <a href=''>From Lo Lishma to Lishma</a>, <a href=''>Work in group</a></List.Item>
+                  <List.Item><b>Sources:</b> <a href=''> Shamati - There is None Else Beside Him</a>, <a href=''>Shamati - Divinity in Exile</a></List.Item>
+                  <List.Item><b>Related to Event:</b> <a href=''>World Israel Congress 2016</a></List.Item>
+                </List>
+             
+              </Grid.Column>
+              <Grid.Column width='2'>
+                <Popup
+                  trigger={<Button size="mini" color="orange" compact fluid>Downloads</Button>}
+                  flowing
+                  position='bottom center'
+                >
+                  <Popup.Header>
+                    Downloads
+                  </Popup.Header>
+                  <Popup.Content>
+                  <Table basic="very" compact="very">
+                    <Table.Body>
+                      <Table.Row verticalAlign="top">
+                        <Table.Cell>
+                          Lesson Video
+                        </Table.Cell>
+                        <Table.Cell collapsing>
+                          <Button as="a" target="_blank" size="mini" color="orange" compact fluid>
+                            MP4
+                          </Button>
+                        </Table.Cell>
+                        <Table.Cell collapsing>
+                            <Button size="mini" color="orange" compact fluid>
+                              Copy Link
+                            </Button>
+                        </Table.Cell>
+                      </Table.Row>
+                      <Table.Row verticalAlign="top">
+                        <Table.Cell>
+                          Lesson Audio
+                        </Table.Cell>
+                        <Table.Cell collapsing>
+                          <Button as="a" target="_blank" size="mini" color="orange" compact fluid>
+                            MP3
+                          </Button>
+                        </Table.Cell>
+                        <Table.Cell collapsing>
+                            <Button size="mini" color="orange" compact fluid>
+                              Copy Link
+                            </Button>
+                        </Table.Cell>
+                      </Table.Row>
+                    </Table.Body>
+                  </Table>
+                  </Popup.Content>
+                </Popup>
+                
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -79,15 +127,50 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                   </Header.Content>
                 </Header>
               <Menu vertical fluid size='small' color='blue'>
-                <Menu.Item>1 - Lesson preparation - 00:12:02</Menu.Item>
-                <Menu.Item active>2 - Lesson on the topic of "Brit (Union)" - 01:29:00</Menu.Item>
-                <Menu.Item>3 - Baal HaSulam, TES, part 8, item 20 - 00:31:54</Menu.Item>
-                <Menu.Item>4 - Baal HaSulam, "The Giving of the Torah", item 6 - 00:43:41</Menu.Item>
+                <Menu.Item as='a'>1 - Lesson preparation - 00:12:02</Menu.Item>
+                <Menu.Item as='a' active>2 - Lesson on the topic of "Brit (Union)" - 01:29:00</Menu.Item>
+                <Menu.Item as='a' disabled>
+                  3 - Baal HaSulam, TES, part 8, item 20 - 00:31:54
+                  
+                </Menu.Item>
+                <Menu.Item as='a'>4 - Baal HaSulam, "The Giving of the Torah", item 6 - 00:43:41</Menu.Item>
               </Menu>
             </Grid.Column>
           </Grid.Row>
         </Grid>
 
+        <Header size='large' color='pink' inverted>tags -^+^-</Header>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column>
+              <div className='filter-tags'>
+                <Button.Group size='mini'>
+                  <Button basic color='blue'>
+                    <Icon name='book' />
+                    Baal HaSulam - TES
+                  </Button>
+                  <Button color='blue' icon='close'></Button>
+                </Button.Group>
+                
+                <Button.Group size='mini'>
+                  <Button basic color='blue'>
+                    <Icon name='tag' />
+                    Arvut Between the Tens
+                  </Button>
+                  <Button color='blue' icon='close'></Button>
+                </Button.Group>
+                
+                <Button.Group size='mini'>
+                  <Button basic color='blue'>
+                    <Icon name='calendar' />
+                    3 Jul 2017 - 3 Jul 2017
+                  </Button>
+                  <Button color='blue' icon='close'></Button>
+                </Button.Group>
+              </div>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
         <Header size='large' color='pink' inverted>pagination (°ʖ°)</Header>
         <Grid>
           <Grid.Row>
