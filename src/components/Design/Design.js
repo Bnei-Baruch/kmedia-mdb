@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, Container, List, Label } from 'semantic-ui-react';
+import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, List, Popup, Table } from 'semantic-ui-react';
 
 class Design extends Component {
 
@@ -11,22 +11,70 @@ class Design extends Component {
         <div className='collapsed_video_container'>
         	<Grid >
             <Grid.Row>
-              <Grid.Column width='3'>
+              <Grid.Column width='4'>
                 <div className='video_player'>
                   <div className='video_placeholder' />
                 </div>
               </Grid.Column>
-                <Grid.Column width='8'>
-                  <Grid><Grid.Row><Grid.Column>
-                  <Header as="h5">
-                    2016-10-26<br/>Lesson on the topic of “From Lo Lishma to Lishma” (not for Her Name for Her Name)
-                  </Header>
-                  { /*<List>
-                    <List.Item><b>Topics:</b> <a href=''>From Lo Lishma to Lishma</a>, <a href=''>Work in group</a></List.Item>
-                    <List.Item><b>Sources:</b> <a href=''> Shamati - There is None Else Beside Him</a>, <a href=''>Shamati - Divinity in Exile</a></List.Item>
-                    <List.Item><b>Related to Event:</b> <a href=''>World Israel Congress 2016</a></List.Item>
-                  </List>  */ }
-                  </Grid.Column></Grid.Row></Grid>
+              <Grid.Column width='10'>
+               
+                <Header as="h5">
+                  2016-10-26<br/>Lesson on the topic of “From Lo Lishma to Lishma” (not for Her Name for Her Name)
+                </Header>
+                <List size='mini'>
+                  <List.Item><b>Topics:</b> <a href=''>From Lo Lishma to Lishma</a>, <a href=''>Work in group</a></List.Item>
+                  <List.Item><b>Sources:</b> <a href=''> Shamati - There is None Else Beside Him</a>, <a href=''>Shamati - Divinity in Exile</a></List.Item>
+                  <List.Item><b>Related to Event:</b> <a href=''>World Israel Congress 2016</a></List.Item>
+                </List>
+             
+              </Grid.Column>
+              <Grid.Column width='2'>
+                <Popup
+                  trigger={<Button size="mini" color="orange" compact fluid>Downloads</Button>}
+                  flowing
+                  position='bottom center'
+                >
+                  <Popup.Header>
+                    Downloads
+                  </Popup.Header>
+                  <Popup.Content>
+                  <Table basic="very" compact="very">
+                    <Table.Body>
+                      <Table.Row verticalAlign="top">
+                        <Table.Cell>
+                          Lesson Video
+                        </Table.Cell>
+                        <Table.Cell collapsing>
+                          <Button as="a" target="_blank" size="mini" color="orange" compact fluid>
+                            MP4
+                          </Button>
+                        </Table.Cell>
+                        <Table.Cell collapsing>
+                            <Button size="mini" color="orange" compact fluid>
+                              Copy Link
+                            </Button>
+                        </Table.Cell>
+                      </Table.Row>
+                      <Table.Row verticalAlign="top">
+                        <Table.Cell>
+                          Lesson Audio
+                        </Table.Cell>
+                        <Table.Cell collapsing>
+                          <Button as="a" target="_blank" size="mini" color="orange" compact fluid>
+                            MP3
+                          </Button>
+                        </Table.Cell>
+                        <Table.Cell collapsing>
+                            <Button size="mini" color="orange" compact fluid>
+                              Copy Link
+                            </Button>
+                        </Table.Cell>
+                      </Table.Row>
+                    </Table.Body>
+                  </Table>
+                  </Popup.Content>
+                </Popup>
+                
               </Grid.Column>
             </Grid.Row>
           </Grid>
