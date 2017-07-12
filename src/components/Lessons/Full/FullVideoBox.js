@@ -106,12 +106,21 @@ class FullVideoBox extends Component {
     });
   }
 
+  videoLoad = (e) => {
+    console.log('Video Load', e);
+    if (this.state.activePartIndex !== e.item.mediaid) {
+      this.setState({
+        activePartIndex: e.item.mediaid,
+      });
+    }
+  }
+
   handleOnVideo = () => {
-    this.setState({ isVideo: true });
+    this.setState({ isVideo: true, isAudio: false });
   }
 
   handleOnAudio = () => {
-    this.setState({ isAudio: true });
+    this.setState({ isAudio: true, isVideo: false });
   }
 
   render() {
@@ -138,27 +147,46 @@ class FullVideoBox extends Component {
       return (<div>Loading...</div>);
     }
 
-    const playlist = fileList.filter(f => f).map(f => ({ file: physicalFile(f, true) }));
+    const partTitle = (part) => part.name_in_collection + " - " + part.name + " - " + moment.duration(part.duration, 'seconds').format('hh:mm:ss');
+
+    // Remove empty files, might be in case langage or video/audio is missing.
+    // Store idx in order to get fedback from the player to select the correct part.
+    const playlist = [];
+    let playlistActiveIndex = null;
+    fileList.forEach((file, idx) => {
+      if (file) {
+        // Set index in playlist to play.
+        if (playlistActiveIndex === null || idx <= activePartIndex) {
+          playlistActiveIndex = playlist.length;
+        }
+        playlist.push({
+          mediaid: idx,
+          file: physicalFile(file, true),
+          title: partTitle(lessonParts[idx]),
+        });
+      }
+    });
 
     const lessonMenuItems = lessonParts.map((part, index) => (
       <Menu.Item key={index}
                  name={index.toString()}
                  active={index === activePartIndex}
                  onClick={this.handleLessonPartClick}>
-        {part.name_in_collection} - {part.name} - {moment.duration(part.duration, 'seconds').format('hh:mm:ss')}
+        {partTitle(part)}
       </Menu.Item>
     ));
 
-    const videoLoad = (e) => {
-      console.log('Video Load', e);
-    };
+    console.log(activePartIndex, playlistActiveIndex);
 
     return (
       <Grid.Row className="video_box">
         <Grid.Column width={10}>
           <div className="video_player">
             <div id="video" />
-            <AVPlayer playerId="lesson" onVideoLoad={videoLoad} playlist={playlist} />
+            <AVPlayer playerId="lesson"
+                      onVideoLoad={this.videoLoad}
+                      playlist={playlist}
+                      playItem={playlistActiveIndex}/>
           </div>
         </Grid.Column>
         <Grid.Column className="player_panel" width={6}>
