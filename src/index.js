@@ -9,12 +9,14 @@ import { put } from 'redux-saga/effects';
 import { routerMiddleware as createRouterMiddleware } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 import { loadingBarMiddleware } from 'react-redux-loading-bar';
+import { I18nextProvider } from 'react-i18next';
 
 import reducer from './redux';
 import { actions as system } from './redux/modules/system';
 import allSagas from './sagas';
 import sagaMonitor from './sagas/helpers/sagaMonitor';
 import App from './components/App/App';
+import i18n from './i18n';
 
 //
 // Create redux store
@@ -36,7 +38,11 @@ const store = createStore(reducer, {}, compose(
 
 // Render regardless of application's state. let App decide what to render.
 const appContainer = document.getElementById('root');
-ReactDOM.render(<App store={store} history={history} />, appContainer);
+ReactDOM.render(
+  <I18nextProvider i18n={i18n} initialLanguage="he">
+    <App store={store} history={history} />
+  </I18nextProvider>
+, appContainer);
 
 //
 // The main application
