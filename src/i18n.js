@@ -11,7 +11,8 @@ i18n
   .init({
 
     backend: {
-
+      loadPath: 'http://rt-dev.kbb1.com:9876/locales/{{lng}}/{{ns}}.json',
+      crossDomain: true
     },
 
     fallbackLng: 'en',
