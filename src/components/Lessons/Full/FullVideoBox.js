@@ -37,6 +37,30 @@ class FullVideoBox extends Component {
     files: new Map(),
   }
 
+  componentDidMount() {
+    const { fullLesson, language, lessonParts } = this.props;
+
+    // Wait for full lesson to load.
+    if (fullLesson) {
+      // Update files
+      let { files } = this.state;
+      let stateUpdated = false;
+
+      // Wait for lesson parts to load.
+      if (lessonParts) {
+        const newFiles = this.buildFiles(lessonParts);
+        if (newFiles.size) {
+          files = new Map([...files, ...newFiles]);
+          stateUpdated = true;
+        }
+      }
+
+      if (stateUpdated) {
+        this.setState({ files });
+      }
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     const { fullLesson, language, lessonParts } = nextProps;
     const props = this.props;
@@ -46,33 +70,46 @@ class FullVideoBox extends Component {
       // Update files
       let { files } = this.state;
       let stateUpdated = false;
-      // Wait for lesson parts to load.
-      if (lessonParts) {
-        lessonParts.forEach((p, i) => {
-          if (p.files && p.files.length) {
-            this.getFilesByLanguageByAV(p.files).forEach((filesByAV, language) => {
-              if (!files.has(language)) {
-                files.set(language, new Map());
-              }
-              filesByAV.forEach((file, audioOrVideo) => {
-                if (!files.get(language).has(audioOrVideo)) {
-                  files.get(language).set(audioOrVideo, []);
-                }
-                files.get(language).get(audioOrVideo)[i] = file;
-                stateUpdated = true;
-              });
-            });
-          }
-        });
-      }
+
+      // Clear files if new full lesson was set.
       if (fullLesson !== props.fullLesson && fullLesson.id !== props.fullLesson.id) {
         files = new Map();
         stateUpdated = true;
       }
+
+      // Wait for lesson parts to load.
+      if (lessonParts) {
+        const newFiles = this.buildFiles(lessonParts);
+        if (newFiles.size) {
+          files = new Map([...files, ...newFiles]);
+          stateUpdated = true;
+        }
+      }
+
       if (stateUpdated) {
         this.setState({ files });
       }
     }
+  }
+
+  buildFiles = (lessonParts) => {
+    const files = new Map();
+    lessonParts.forEach((p, i) => {
+      if (p.files && p.files.length) {
+        this.getFilesByLanguageByAV(p.files).forEach((filesByAV, language) => {
+          if (!files.has(language)) {
+            files.set(language, new Map());
+          }
+          filesByAV.forEach((file, audioOrVideo) => {
+            if (!files.get(language).has(audioOrVideo)) {
+              files.get(language).set(audioOrVideo, []);
+            }
+            files.get(language).get(audioOrVideo)[i] = file;
+          });
+        });
+      }
+    });
+    return files;
   }
 
   /**
