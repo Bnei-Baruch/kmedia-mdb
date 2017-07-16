@@ -3,7 +3,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Button, Divider, List, Segment, Menu } from 'semantic-ui-react';
+import { Button, Segment, Menu } from 'semantic-ui-react';
 import noop from 'lodash/noop';
 import { selectors as sources } from '../../../redux/modules/sources';
 import connectFilter from '../connectFilter';

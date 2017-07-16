@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import reduce from 'lodash/reduce';
 import { connect } from 'react-redux';
-import { Label } from 'semantic-ui-react';
 
 import { filtersTransformer } from '../../../filters';
 import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
@@ -34,7 +33,7 @@ class FilterTags extends Component {
     const store = this.context.store;
 
     return (
-      <Label.Group>
+      <div className='filter-tags'>
         {
           tags.map((tag) => {
             const icon = filtersTransformer.getTagIcon(tag.name);
@@ -54,7 +53,7 @@ class FilterTags extends Component {
             );
           })
         }
-      </Label.Group>
+      </div>
     );
   }
 }
