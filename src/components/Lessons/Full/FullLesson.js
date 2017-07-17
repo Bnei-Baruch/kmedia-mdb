@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Header, List, Menu } from 'semantic-ui-react';
+import 'moment-duration-format';
+import { Grid } from 'semantic-ui-react';
 
 import { isEmpty } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
-
 import FullVideoBox from './FullVideoBox';
-
-import moment from 'moment';
-import 'moment-duration-format';
 
 class FullLesson extends Component {
   static propTypes = {
@@ -21,7 +18,7 @@ class FullLesson extends Component {
   };
 
   render() {
-    const { fullLesson, language } = this.props;
+    const { fullLesson } = this.props;
 
     if (isEmpty(fullLesson)) {
       return <div />;
@@ -35,6 +32,6 @@ class FullLesson extends Component {
       </Grid.Column>
     );
   }
-};
+}
 
 export default FullLesson;
