@@ -51,7 +51,7 @@
     "zl-fetch": "^1.0.4"
   },
   "scripts": {
-    "dev-serve-locals": "node bin/dev-serve-locals",
+    "serve-locals": "node bin/serve-locals",
     "build-css": "node-sass src/ -o src/",
     "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
