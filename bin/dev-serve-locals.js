@@ -10,17 +10,11 @@ const server = http.createServer((req, res) => {
   console.log(path.resolve(__dirname));
   const filePath = path.join(__dirname, '..', pathname);
   console.log(filePath);
-  res.setHeader('Content-Type', "application/json; charset=utf-8");
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
   res.setHeader('Access-Control-Allow-Origin', '*');
-  fs.readFile(filePath, { encoding: 'utf8' }, function (err, data) {
-    if (err) {
-      console.log(err);
-      res.end();
-    }
-    const content = data.toString();
-    console.log(content);
-    res.end(content);
-  });
+  const readStream = fs.createReadStream(filePath, { encoding: 'utf8' });
+  readStream.on('close', () => res.end());
+  readStream.pipe(res);
 });
 
 server.listen(9876, (err) => {

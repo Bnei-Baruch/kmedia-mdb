@@ -3,6 +3,7 @@ import XHR from 'i18next-xhr-backend';
 // import Cache from 'i18next-localstorage-cache';
 // import LanguageDetector from 'i18next-browser-languagedetector';
 
+const localesBackend = `${process.env.REACT_APP_LOCALES_BACKEND_HOST}:${process.env.REACT_APP_LOCALES_BACKEND_PORT}`;
 
 i18n
   .use(XHR)
@@ -11,7 +12,7 @@ i18n
   .init({
 
     backend: {
-      loadPath: 'http://rt-dev.kbb1.com:9876/locales/{{lng}}/{{ns}}.json',
+      loadPath: `${localesBackend}/locales/{{lng}}/{{ns}}.json`,
       crossDomain: true
     },
 
