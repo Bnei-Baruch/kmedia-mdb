@@ -1,9 +1,12 @@
 #!/usr/bin/env node
+require('dotenv').config();
 
 const http = require('http');
 const url = require('url');
 const fs = require('fs');
 const path = require('path');
+
+const port = process.env.REACT_APP_LOCALES_BACKEND_PORT || 80;
 
 const server = http.createServer((req, res) => {
   const pathname = url.parse(req.url).pathname;
@@ -15,7 +18,8 @@ const server = http.createServer((req, res) => {
   readStream.pipe(res);
 });
 
-server.listen(9876, (err) => {
+console.log(port);
+server.listen(port, (err) => {
   if (err) {
     console.log(err);
   } else {

@@ -26,6 +26,7 @@
     "child_process": "^1.0.2",
     "classnames": "^2.2.5",
     "core-js": "^2.4.1",
+    "dotenv": "^4.0.0",
     "history": "^4.6.3",
     "i18next": "^8.4.3",
     "i18next-xhr-backend": "^1.4.2",
