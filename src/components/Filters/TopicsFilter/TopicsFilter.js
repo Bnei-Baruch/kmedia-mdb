@@ -16,12 +16,14 @@ class TopicsFilter extends React.Component {
     updateValue: PropTypes.func.isRequired,
     value: PropTypes.string,
     getTagById: PropTypes.func.isRequired,
+    allValues: PropTypes.arrayOf(PropTypes.string)
   };
 
   static defaultProps = {
     onCancel: noop,
     onApply: noop,
     value: null,
+    allValues: [],
   };
 
   state = {
@@ -66,12 +68,14 @@ class TopicsFilter extends React.Component {
           {
             items.map((x) => {
               const node = getTagById(x);
+              const style = this.props.allValues.includes(x) && selected !== x ? {backgroundColor: 'lightgoldenrodyellow'} : {};
               return (
                 <List.Item
                   active={selected === node.id}
                   onClick={this.onSelectionChange}
                   key={node.id}
                   value={node.id}
+                  style={style}
                 >
                   {node.label}
                 </List.Item>
