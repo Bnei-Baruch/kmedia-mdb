@@ -18,7 +18,6 @@ const server = http.createServer((req, res) => {
   readStream.pipe(res);
 });
 
-console.log(port);
 server.listen(port, (err) => {
   if (err) {
     console.log(err);
