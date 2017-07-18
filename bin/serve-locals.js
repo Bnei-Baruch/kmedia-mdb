@@ -6,7 +6,7 @@ const url = require('url');
 const fs = require('fs');
 const path = require('path');
 
-const port = process.env.REACT_APP_LOCALES_BACKEND_PORT || 80;
+const port = process.argv[2] || 9876;
 
 const server = http.createServer((req, res) => {
   const pathname = url.parse(req.url).pathname;
@@ -22,6 +22,6 @@ server.listen(port, (err) => {
   if (err) {
     console.log(err);
   } else {
-    console.log('Serving locales.');
+    console.log(`Serving locales on port ${port}.`);
   }
 });
