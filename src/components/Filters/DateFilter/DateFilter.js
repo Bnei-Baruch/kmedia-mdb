@@ -171,6 +171,10 @@ class DateFilter extends Component {
     });
   }
 
+  showMonth = () => {
+    // TODO: (yaniv) make the calendar past facing when showing the current month
+  };
+
   apply = () => {
     this.props.updateValue({
       from: this.state.from,

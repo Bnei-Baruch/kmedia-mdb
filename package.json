@@ -34,7 +34,7 @@
     "qs": "^6.5.0",
     "react": "^15.6.1",
     "react-copy-to-clipboard": "^5.0.0",
-    "react-day-picker": "^5.5.3",
+    "react-day-picker": "^6.1.0",
     "react-dom": "^15.6.1",
     "react-jw-player": "github:Bnei-Baruch/react-jw-player",
     "react-redux": "^5.0.5",
