@@ -17,7 +17,7 @@
     "jest": "^20.0.4",
     "node-sass": "^4.5.3",
     "npm-run-all": "^4.0.2",
-    "react-scripts": "1.0.6",
+    "react-scripts": "1.0.10",
     "react-test-renderer": "^15.6.1",
     "regenerator-runtime": "^0.10.5"
   },
