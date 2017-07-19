@@ -14,6 +14,7 @@ import FullLesson from './FullLesson';
 class FullLessonContainer extends Component {
   static propTypes = {
     match: shapes.RouterMatch.isRequired,
+    language: PropTypes.string.isRequired,
     fetchFullLesson: PropTypes.func.isRequired,
   };
 
@@ -28,7 +29,7 @@ class FullLessonContainer extends Component {
   fetchFullLessonIfNeeded = (props) => {
     const { fullLesson } = props;
     const collectionId = props.match.params.id;
-    if (!fullLesson && collectionId !== null) {
+    if (!fullLesson && collectionId !== null || props.language !== this.props.language) {
       props.fetchFullLesson(collectionId);
     }
   };

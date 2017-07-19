@@ -11,6 +11,7 @@ import createHistory from 'history/createBrowserHistory';
 import { loadingBarMiddleware } from 'react-redux-loading-bar';
 import { I18nextProvider } from 'react-i18next';
 
+import { DEFAULT_LANGUAGE } from './helpers/consts';
 import reducer from './redux';
 import { actions as system } from './redux/modules/system';
 import allSagas from './sagas';
@@ -39,7 +40,7 @@ const store = createStore(reducer, {}, compose(
 // Render regardless of application's state. let App decide what to render.
 const appContainer = document.getElementById('root');
 ReactDOM.render(
-  <I18nextProvider i18n={i18n} initialLanguage="he">
+  <I18nextProvider i18n={i18n} initialLanguage={DEFAULT_LANGUAGE}>
     <App store={store} history={history} />
   </I18nextProvider>
 , appContainer);

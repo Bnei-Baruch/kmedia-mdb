@@ -1,5 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 
+import { DEFAULT_LANGUAGE } from '../../helpers/consts';
+
 /* Types */
 
 const SET_LANGUAGE  = 'Settings/SET_LANGUAGE';
@@ -23,18 +25,18 @@ export const actions = {
 /* Reducer */
 
 const initialState = {
-  language: 'en',
+  language: DEFAULT_LANGUAGE,
   pageSize: 10,
 };
 
 export const reducer = handleActions({
   [SET_LANGUAGE]: (state, action) => ({
     ...state,
-    language: action.language,
+    language: action.payload,
   }),
   [SET_PAGE_SIZE]: (state, action) => ({
     ...state,
-    pageSize: action.pageSize,
+    pageSize: action.payload,
   }),
 }, initialState);
 

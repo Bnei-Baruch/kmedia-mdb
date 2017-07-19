@@ -33,13 +33,12 @@ class LessonsContainer extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { pageNo, language, pageSize } = nextProps;
-    const props                          = this.props;
 
-    if (pageSize !== props.pageSize) {
+    if (pageSize !== this.props.pageSize) {
       this.handlePageChange(1);
     }
 
-    if (language !== props.language) {
+    if (language !== this.props.language) {
       this.askForData(pageNo, language, pageSize);
     }
   }

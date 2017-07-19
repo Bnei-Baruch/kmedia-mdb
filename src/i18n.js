@@ -3,6 +3,8 @@ import XHR from 'i18next-xhr-backend';
 // import Cache from 'i18next-localstorage-cache';
 // import LanguageDetector from 'i18next-browser-languagedetector';
 
+import { DEFAULT_LANGUAGE } from './helpers/consts';
+
 const localesBackend = `${process.env.production ? process.env.REACT_APP_LOCALES_BACKEND : 'http://localhost:9876'}`;
 
 i18n
@@ -16,7 +18,7 @@ i18n
       crossDomain: true
     },
 
-    fallbackLng: 'en',
+    fallbackLng: DEFAULT_LANGUAGE,
 
     react: {
       wait: true, // globally set to wait for loaded translations in translate hoc

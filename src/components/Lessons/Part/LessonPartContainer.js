@@ -13,6 +13,7 @@ import LessonPart from './LessonPart';
 class LessonPartContainer extends Component {
   static propTypes = {
     match: shapes.RouterMatch.isRequired,
+    language: PropTypes.string.isRequired,
     fetchLessonPart: PropTypes.func.isRequired,
   };
 
@@ -22,8 +23,12 @@ class LessonPartContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { match } = nextProps;
+    const { match, language } = nextProps;
     if (match.params.id !== this.props.match.params.id) {
+      this.askForData(match.params.id);
+    }
+
+    if (language !== this.props.language) {
       this.askForData(match.params.id);
     }
   }

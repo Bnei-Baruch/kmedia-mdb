@@ -141,6 +141,8 @@ export const ALL_LANGUAGES = [
   LANG_CZECH,
 ];
 
+export const DEFAULT_LANGUAGE = LANG_ENGLISH;
+
 export const RTL_LANGUAGES = [
   LANG_HEBREW,
   LANG_ARABIC,

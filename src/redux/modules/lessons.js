@@ -1,5 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 
+import { types as settings } from './settings';
+
 /* Types */
 
 const SET_PAGE = 'Lessons/SET_PAGE';
@@ -78,11 +80,20 @@ const onFetchListSuccess = (state, action) => {
 const onSetPage = (state, action) => (
   {
     ...state,
-    pageNo: action.payload
+    pageNo: action.payload,
+  }
+);
+
+const onSetLanguage = (state) => (
+  {
+    ...state,
+    items: [],
   }
 );
 
 export const reducer = handleActions({
+  [settings.SET_LANGUAGE]: onSetLanguage,
+
   [FETCH_LIST_SUCCESS]: onFetchListSuccess,
   [SET_PAGE]: onSetPage,
 }, initialState);
