@@ -111,4 +111,4 @@ export default connect(
   state => ({
     getTagById: tags.getTagById(state.tags),
   })
-)(connectFilter({ isMultiple: true })(TopicsFilter));
+)(connectFilter()(TopicsFilter));
