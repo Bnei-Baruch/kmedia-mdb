@@ -37,7 +37,7 @@ const _receiveCollections = (state, action) => {
     return state;
   }
 
-  const cById = { ...state.cById };
+  const cById  = { ...state.cById };
   const cuById = { ...state.cuById };
   items.forEach((x) => {
     cById[x.id] = Object.assign({}, state.cById[x.id], x);
@@ -82,7 +82,7 @@ export const reducer = handleActions({
   [system.INIT]: () => _freshStore(),
   [settings.SET_LANGUAGE]: () => _freshStore(),
   [RECEIVE_COLLECTIONS]: (state, action) => _receiveCollections(state, action),
-  [RECEIVE_CONTENT_UNITS]: (state, action) => _receiveContentUnits(state, action)
+  [RECEIVE_CONTENT_UNITS]: (state, action) => _receiveContentUnits(state, action),
 }, _freshStore());
 
 /* Selectors */

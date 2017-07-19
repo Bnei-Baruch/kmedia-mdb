@@ -21,3 +21,4 @@ src/**/*.css
 
 # do not ignore main theme
 !src/**/semantic.min.css
+!src/**/semantic.rtl.min.css

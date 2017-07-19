@@ -1,11 +1,10 @@
-/* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect, Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
-import { selectors as systemSelectors } from '../../redux/modules/system';
-import Layout from '../Layout/Layout';
 
+import { selectors as system } from '../../redux/modules/system';
+import Routes from './Routes';
 import '../../stylesheets/semantic.min.css';
 import '../../stylesheets/Kmedia.css';
 
@@ -27,11 +26,11 @@ class App extends Component {
   static propTypes = {
     store: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
-    isAppReady: PropTypes.bool
+    isAppReady: PropTypes.bool,
   };
 
   static defaultProps = {
-    isAppReady: false
+    isAppReady: false,
   };
 
   render() {
@@ -41,7 +40,7 @@ class App extends Component {
       return (
         <Provider store={store}>
           <ConnectedRouter history={history}>
-            <Layout />
+            <Routes />
           </ConnectedRouter>
         </Provider>
       );
@@ -52,5 +51,5 @@ class App extends Component {
 }
 
 export default connect(
-  state => ({ isAppReady: systemSelectors.isReady(state.system) })
+  state => ({ isAppReady: system.isReady(state.system) })
 )(App);
