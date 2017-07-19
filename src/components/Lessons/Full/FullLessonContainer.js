@@ -5,6 +5,8 @@ import { bindActionCreators } from 'redux';
 
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as sources } from '../../../redux/modules/sources';
+import { selectors as tags } from '../../../redux/modules/tags';
 import { actions } from '../../../redux/modules/lessons';
 import * as shapes from '../../shapes';
 import FullLesson from './FullLesson';
@@ -12,27 +14,24 @@ import FullLesson from './FullLesson';
 class FullLessonContainer extends Component {
   static propTypes = {
     match: shapes.RouterMatch.isRequired,
-    language: PropTypes.string.isRequired,
     fetchFullLesson: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
-    const { language, match } = this.props;
-    this.askForData(match.params.id, language);
+    this.fetchFullLessonIfNeeded(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { language, match } = nextProps;
-    const props               = this.props;
+    this.fetchFullLessonIfNeeded(nextProps);
+  }
 
-    if (language !== props.language || match.params.id !== props.match.params.id) {
-      this.askForData(language, match.params.id);
+  fetchFullLessonIfNeeded = (props) => {
+    const { fullLesson } = props;
+    const collectionId = props.match.params.id;
+    if (!fullLesson && collectionId !== null) {
+      props.fetchFullLesson(collectionId);
     }
-  }
-
-  askForData(id, language) {
-    this.props.fetchFullLesson({ id, language });
-  }
+  };
 
   render() {
     return <FullLesson {...this.props} />;
@@ -42,7 +41,13 @@ class FullLessonContainer extends Component {
 function mapState(state, props) {
   return {
     fullLesson: mdb.getCollectionById(state.mdb)(props.match.params.id),
+    getUnitById: mdb.getUnitById(state.mdb),
     language: settings.getLanguage(state.settings),
+
+    // NOTE (yaniv -> ido): using selectors this way will always make the component rerender
+    // since sources.getSourcesById(state) !== sources.getSourcesById(state) for every state
+    getSourceById: sources.getSourceById(state.sources),
+    getTagById: tags.getTagById(state.tags),
   };
 }
 

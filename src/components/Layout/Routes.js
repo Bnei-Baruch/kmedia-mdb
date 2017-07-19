@@ -1,0 +1,31 @@
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+
+import Lessons from '../Lessons/List/LessonsContainer';
+import LessonPart from '../Lessons/Part/LessonPartContainer';
+import FullLesson from '../Lessons/Full/FullLessonContainer';
+import Design from '../Design/Design';
+
+const NotImplemented = () => <h1>Not Implemented Yet</h1>;
+const NotFound       = () => <h1>Page not found</h1>;
+
+const Routes = () => (
+  <Switch>
+    <Route exact path="/" component={Lessons} />
+    <Route exact path="/lessons" component={Lessons} />
+    <Route exact path="/lessons/part/:id" component={LessonPart} />
+    <Route exact path="/lessons/full/:id" component={FullLesson} />
+    <Route exact path="/tv_shows" component={NotImplemented} />
+    <Route exact path="/lectures" component={NotImplemented} />
+    <Route exact path="/sources" component={NotImplemented} />
+    <Route exact path="/events" component={NotImplemented} />
+    <Route exact path="/books" component={NotImplemented} />
+    <Route exact path="/topics" component={NotImplemented} />
+    <Route exact path="/publications" component={NotImplemented} />
+    <Route exact path="/photos" component={NotImplemented} />
+    <Route exact path="/design" component={Design} />
+    <Route component={NotFound} />
+  </Switch>
+);
+
+export default Routes;

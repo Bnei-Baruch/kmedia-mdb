@@ -22,60 +22,50 @@ class VideoBox extends Component {
 
   constructor(props) {
     super(props);
-    this.state = this.getInitialState(props);
+    this.state = this.calcState(props);
   }
 
-  getInitialState = (props) => {
-    const { lesson = {} } = props;
+  calcState = (props) => {
+    const { lesson = {}, language } = props;
     const groups          = this.getFilesByLanguage(lesson.files);
 
-    let language = props.language;
-    if (!groups.has(language)) {
-      language = groups.keys().next().value;
-    }
-
-    const { video, audio } = language ? this.splitAV(language, groups) : {};
-
-    return { groups, language, video, audio, active: video || audio };
-  };
-
-  componentWillReceiveProps(nextProps) {
-    const { lesson, language } = nextProps;
-    const props                = this.props;
-    const state                = this.state;
-
-    // no change
-    if (lesson === props.lesson && language === props.language) {
-      return;
-    }
-
-    // only language changed
-    if (lesson === props.lesson && language !== props.language) {
-      if (state.groups.has(language)) {
-        this.setState({ language, ...this.splitAV(language, state.groups) });
-        return;
-      }
-    }
-
-    // lesson changed, maybe language as well
-    const groups = this.getFilesByLanguage(lesson.files);
     let lang;
     if (groups.has(language)) {
       lang = language;
-    } else if (groups.has(state.language)) {
-      lang = state.language;
+    } else if (this.state && groups.has(this.state.language)) {
+      lang = this.state.language;
     } else {
       lang = groups.keys().next().value;
     }
 
     const { video, audio } = lang ? this.splitAV(lang, groups) : {};
-    this.setState({
-      groups,
-      language: lang,
-      audio,
-      video,
-      active: video || audio
-    });
+
+    return { groups, language: lang, video, audio, active: video || audio };
+  };
+
+  componentWillReceiveProps(nextProps) {
+    const { lesson = {}, language } = nextProps;
+    const props                = this.props;
+    const state                = this.state;
+
+    // no change
+    if (lesson === props.lesson && language === props.language) {
+      console.log('No change');
+      return;
+    }
+
+    // only language changed
+    if (lesson === props.lesson && language !== props.language) {
+      console.log('Language changed');
+      if (state.groups.has(language)) {
+        this.setState({ language, ...this.splitAV(language, state.groups) }, () => {
+          console.log('Updated state', this.state);
+        });
+        return;
+      }
+    }
+
+    this.setState(this.calcState(nextProps));
   }
 
   getFilesByLanguage = (files) => {

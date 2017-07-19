@@ -4,13 +4,13 @@ import { createAction, handleActions } from 'redux-actions';
 
 const SET_PAGE = 'Lessons/SET_PAGE';
 
-const FETCH_LIST           = 'Lessons/FETCH_LIST';
-const FETCH_LIST_SUCCESS   = 'Lessons/FETCH_LIST_SUCCESS';
-const FETCH_LIST_FAILURE   = 'Lessons/FETCH_LIST_FAILURE';
-const FETCH_LESSON_PART    = 'Lesson/FETCH_LESSON_PART';
+const FETCH_LIST                = 'Lessons/FETCH_LIST';
+const FETCH_LIST_SUCCESS        = 'Lessons/FETCH_LIST_SUCCESS';
+const FETCH_LIST_FAILURE        = 'Lessons/FETCH_LIST_FAILURE';
+const FETCH_LESSON_PART         = 'Lesson/FETCH_LESSON_PART';
 const FETCH_LESSON_PART_SUCCESS = 'Lesson/FETCH_LESSON_PART_SUCCESS';
 const FETCH_LESSON_PART_FAILURE = 'Lesson/FETCH_LESSON_PART_FAILURE';
-const FETCH_FULL_LESSON    = 'Lesson/FETCH_FULL_LESSON';
+const FETCH_FULL_LESSON         = 'Lesson/FETCH_FULL_LESSON';
 const FETCH_FULL_LESSON_SUCCESS = 'Lesson/FETCH_FULL_LESSON_SUCCESS';
 const FETCH_FULL_LESSON_FAILURE = 'Lesson/FETCH_FULL_LESSON_FAILURE';
 
@@ -29,10 +29,14 @@ export const types = {
 
 /* Actions */
 
-const setPage            = createAction(SET_PAGE);
-const fetchList          = createAction(FETCH_LIST, (pageNo, language, pageSize) => ({ pageNo, language, pageSize }));
-const fetchListSuccess   = createAction(FETCH_LIST_SUCCESS);
-const fetchListFailure   = createAction(FETCH_LIST_FAILURE);
+const setPage                = createAction(SET_PAGE);
+const fetchList              = createAction(FETCH_LIST, (pageNo, language, pageSize) => ({
+  pageNo,
+  language,
+  pageSize
+}));
+const fetchListSuccess       = createAction(FETCH_LIST_SUCCESS);
+const fetchListFailure       = createAction(FETCH_LIST_FAILURE);
 const fetchLessonPart        = createAction(FETCH_LESSON_PART, id => ({ id }));
 const fetchLessonPartSuccess = createAction(FETCH_LESSON_PART_SUCCESS);
 const fetchLessonPartFailure = createAction(FETCH_LESSON_PART_FAILURE);
