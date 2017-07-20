@@ -139,11 +139,6 @@ class FullVideoBox extends Component {
     this.setState({ isAudio: true, isVideo: false });
   };
 
-  partTitle = (part) => {
-    const { name_in_collection: ccuName, name, duration } = part;
-    return `${ccuName} - ${name} - ${moment.duration(duration, 'seconds').format('hh:mm:ss')}`;
-  };
-
   render() {
     const { fullLesson, language: propsLanguage }                              = this.props;
     let { activePartIndex, isVideo, isAudio, language = propsLanguage, files } = this.state;
@@ -161,6 +156,13 @@ class FullVideoBox extends Component {
       fileList = filesByAV.get(MT_VIDEO) || [];
     }
 
+    const titles = fullLesson.content_units.map(cu => {
+      const { name, duration } = cu;
+      const ccuName            = fullLesson.ccuNames[cu.id];
+      const durationDisplay    = moment.duration(duration, 'seconds').format('hh:mm:ss');
+      return `${ccuName} - ${name} - ${durationDisplay}`;
+    });
+
     // Remove empty files, might be in case language or video/audio is missing.
     // Store idx in order to get feedback from the player to select the correct part.
     const playlist          = [];
@@ -174,12 +176,10 @@ class FullVideoBox extends Component {
         playlist.push({
           mediaid: idx,
           file: physicalFile(file, true),
-          title: this.partTitle(fullLesson.content_units[idx]),
+          title: titles[idx],
         });
       }
     });
-
-    console.log(activePartIndex, playlistActiveIndex);
 
     return (
       <Grid.Row className="video_box">
@@ -231,7 +231,7 @@ class FullVideoBox extends Component {
                       <Menu.Item
                         key={part.id}
                         name={part.id}
-                        content={this.partTitle(part)}
+                        content={titles[index]}
                         active={index === activePartIndex}
                         onClick={this.handleLessonPartClick}
                       />

@@ -25,12 +25,12 @@ export const actions = {
 
 /* Reducer */
 
-const _freshStore = () => ({
+const freshStore = () => ({
   cById: {},
   cuById: {},
 });
 
-const _receiveCollections = (state, action) => {
+const onReceiveCollections = (state, action) => {
   const items = action.payload || [];
 
   if (items.length === 0) {
@@ -40,14 +40,20 @@ const _receiveCollections = (state, action) => {
   const cById  = { ...state.cById };
   const cuById = { ...state.cuById };
   items.forEach((x) => {
-    if (x.content_units) {
-      x.cuIDs = x.content_units.map((cu) => {
-        cuById[cu.id] = Object.assign({}, cu, state.cuById[cu.id]);
+    const y = {...x};
+    if (y.content_units) {
+      y.ccuNames = y.ccuNames || {};
+      y.cuIDs    = y.content_units.map((cu) => {
+        y.ccuNames[cu.id] = cu.name_in_collection;
+        const updatedCU   = Object.assign({}, cu, state.cuById[cu.id]);
+        delete updatedCU.name_in_collection;
+        cuById[cu.id] = updatedCU;
         return cu.id;
       });
-      delete x.content_units;
+      delete y.content_units;
     }
-    cById[x.id] = Object.assign({}, state.cById[x.id], x);
+
+    cById[y.id] = Object.assign({}, state.cById[y.id], y);
   });
   return {
     ...state,
@@ -56,7 +62,7 @@ const _receiveCollections = (state, action) => {
   };
 };
 
-const _receiveContentUnits = (state, action) => {
+const onReceiveContentUnits = (state, action) => {
   const items = action.payload || [];
 
   if (items.length === 0) {
@@ -81,16 +87,16 @@ const _receiveContentUnits = (state, action) => {
 };
 
 export const reducer = handleActions({
-  [system.INIT]: () => _freshStore(),
-  [settings.SET_LANGUAGE]: () => _freshStore(),
-  [RECEIVE_COLLECTIONS]: (state, action) => _receiveCollections(state, action),
-  [RECEIVE_CONTENT_UNITS]: (state, action) => _receiveContentUnits(state, action),
-}, _freshStore());
+  [system.INIT]: () => freshStore(),
+  [settings.SET_LANGUAGE]: () => freshStore(),
+  [RECEIVE_COLLECTIONS]: (state, action) => onReceiveCollections(state, action),
+  [RECEIVE_CONTENT_UNITS]: (state, action) => onReceiveContentUnits(state, action),
+}, freshStore());
 
 /* Selectors */
 
-const getCollectionById = state => id => state.cById[id];
-const getUnitById       = state => id => state.cuById[id];
+const getCollectionById   = state => id => state.cById[id];
+const getUnitById         = state => id => state.cuById[id];
 const getDenormCollection = (state, id) => {
   const c = state.cById[id];
   if (c && Array.isArray(c.cuIDs)) {

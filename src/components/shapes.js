@@ -40,6 +40,7 @@ const MDBBaseCollection = {
   name: PropTypes.string,
   description: PropTypes.string,
   cuIDs: PropTypes.arrayOf(PropTypes.string),
+  ccuNames: PropTypes.objectOf(PropTypes.string),  // cuID -> ccuName
   content_units: PropTypes.arrayOf(ContentUnit),
 };
 

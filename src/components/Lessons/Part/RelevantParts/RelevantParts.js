@@ -33,7 +33,7 @@ const RelevantParts = (props) => {
                 <Item as={Link} key={part.id} to={`/lessons/part/${part.id}`}>
                   <Item.Image src={myimage} size="tiny" />
                   <Item.Content >
-                    <Header as="h4">Part {part.name_in_collection}</Header>
+                    <Header as="h4">Part {fullLesson.ccuNames[part.id]}</Header>
                     <Item.Meta>
                       <small>{moment.duration(part.duration, 'seconds').format('hh:mm:ss')}</small>
                     </Item.Meta>
