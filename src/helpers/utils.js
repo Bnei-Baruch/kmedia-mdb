@@ -26,27 +26,32 @@ export const isEmpty = (obj) => {
 };
 
 /**
- * Creates a function the recieves key and value and transforms the value depending on the object map.
- * The object can have a '__default' key that acts as the default case in switch.
+ * Format the given error into a user friendly string
+ * Intended to format axios errors but may be extended to handle other errors as well
  *
- * @param {Object} mapperObj a map object from key to value
- * @param {Function} [defaultTransform=identity] the default transform to use incase the key is missing in mapperObj and there is no __default key
- * @example
- * const mapperObj = {
- *   key1: (value) => value.join(','),
- *   __default: (value) => value.toString()
- * }
+ * @see https://github.com/mzabriskie/axios#handling-errors
  *
- * const mapper = createMapper(mapperObj);
- * const transformedValue = mapper('key1', ['value1', 'value2'])
+ * @param error
+ * @returns {String}
  */
-export const createMapper = (mapperObj, defaultTransform = (value, key) => ({ [key]: value })) => (key, value) => {
-  const transform = mapperObj[key] || mapperObj.__default;
-  if (transform) {
-    return transform(value, key);
+export const formatError = (error) => {
+  if (error.response) {
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx
+    const msg = error.response.data.error;
+    return error.response.statusText + (msg ? `: ${msg}` : '');
+  } else if (error.request) {
+    // The request was made but no response was received
+    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+    // http.ClientRequest in node.js
+    return 'No response from server';
+  } else if (error.message) {
+    // Something happened in setting up the request that triggered an Error
+    return error.message;
+  } else if (typeof error.toString === 'function') {
+    return error.toString();
   }
-
-  return defaultTransform(value, key);
+  return error;
 };
 
 /**

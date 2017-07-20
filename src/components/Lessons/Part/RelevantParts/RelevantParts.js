@@ -1,62 +1,27 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import moment from 'moment';
 import 'moment-duration-format';
-import { Header, Item, Container } from 'semantic-ui-react';
-import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../helpers/consts';
-import { selectors as mdbSelectors } from '../../../../redux/modules/mdb';
-import { actions as lessonActions } from '../../../../redux/modules/lessons';
-import { LessonPart } from '../../../shapes';
+import { Link } from 'react-router-dom';
+import { Container, Header, Item } from 'semantic-ui-react';
+
+import { formatError } from '../../../../helpers/utils';
+import * as shapes from '../../../shapes';
+import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../shared/Splash';
 import myimage from './image.png';
 
-const getCollectionIdFromLesson = lesson => {
-  if (lesson.collections) {
-    const collections = Object.values(lesson.collections);
-    const relevantCollection = collections.find(collection =>
-      collection.content_type === CT_DAILY_LESSON || collection.content_type === CT_SPECIAL_LESSON
-    );
+const RelevantParts = (props) => {
+  const { lesson, fullLesson, wip, err } = props;
 
-    if (relevantCollection) {
-      return relevantCollection.id;
-    }
+  if (err) {
+    return <ErrorSplash text="Server Error" subtext={formatError(err)} />;
   }
 
-  return null;
-};
-
-class RelevantParts extends Component {
-
-  static propTypes = {
-    fetchFullLesson: PropTypes.func.isRequired,
-    lesson: LessonPart.isRequired,
-    parts: PropTypes.arrayOf(LessonPart),
-    relevantCollectionId: PropTypes.string.isRequired
-  };
-
-  static defaultProps = {
-    parts: []
-  };
-
-  componentDidMount() {
-    this.fetchFullLessonIfNeeded(this.props);
+  if (wip) {
+    return <LoadingSplash text="Loading" subtext="Hold on tight..." />;
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.fetchFullLessonIfNeeded(nextProps);
-  }
-
-  fetchFullLessonIfNeeded = (props) => {
-    const { relevantCollectionId, parts } = props;
-    if ((!parts || !parts.length) && relevantCollectionId !== null) {
-      props.fetchFullLesson(relevantCollectionId);
-    }
-  };
-
-  render() {
-    const { lesson, parts, relevantCollectionId } = this.props;
-    const otherParts = parts.filter(part => part.id !== lesson.id);
+  if (fullLesson && Array.isArray(fullLesson.content_units)) {
+    const otherParts = fullLesson.content_units.filter(part => part.id !== lesson.id);
 
     return (
       otherParts.length ? (
@@ -69,7 +34,9 @@ class RelevantParts extends Component {
                   <Item.Image src={myimage} size="tiny" />
                   <Item.Content >
                     <Header as="h4">Part {part.name_in_collection}</Header>
-                    <Item.Meta><small>{moment.duration(part.duration, 'seconds').format('hh:mm:ss')}</small></Item.Meta>
+                    <Item.Meta>
+                      <small>{moment.duration(part.duration, 'seconds').format('hh:mm:ss')}</small>
+                    </Item.Meta>
                     <Item.Description>{part.name}</Item.Description>
                   </Item.Content>
                 </Item>
@@ -77,7 +44,13 @@ class RelevantParts extends Component {
             }
             <Item>
               <Item.Content>
-                <Container fluid textAlign="right" as={Link} to={`/lessons/full/${relevantCollectionId}`}>more &raquo;</Container>
+                <Container
+                  fluid
+                  as={Link}
+                  textAlign="right"
+                  to={`/lessons/full/${fullLesson.id}`}>
+                  more &raquo;
+                </Container>
               </Item.Content>
             </Item>
           </Item.Group>
@@ -85,19 +58,26 @@ class RelevantParts extends Component {
       ) : <div />
     );
   }
-}
 
-export default connect(
-  (state, ownProps) => {
-    // collections should be id to object map
-    const relevantCollectionId = getCollectionIdFromLesson(ownProps.lesson);
+  return (
+    <FrownSplash
+      text="Couldn't find lesson"
+      subtext={<span>Try the <Link to="/lessons">lessons list</Link>...</span>}
+    />
+  );
+};
 
-    return {
-      relevantCollectionId,
-      parts: relevantCollectionId !== null
-        ? mdbSelectors.getCollectionById(state.mdb)(relevantCollectionId).content_units
-        : []
-    };
-  },
-  lessonActions
-)(RelevantParts);
+RelevantParts.propTypes = {
+  lesson: shapes.LessonPart.isRequired,
+  fullLesson: shapes.LessonCollection,
+  wip: shapes.WIP,
+  error: shapes.Error,
+};
+
+RelevantParts.defaultProps = {
+  fullLesson: null,
+  wip: false,
+  error: null,
+};
+
+export default RelevantParts;

@@ -1,37 +1,54 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import 'moment-duration-format';
+import { Link } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 
-import { isEmpty } from '../../../helpers/utils';
+import { formatError } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
+import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
 import FullVideoBox from './FullVideoBox';
 
-class FullLesson extends Component {
-  static propTypes = {
-    language: PropTypes.string.isRequired,
-    fullLesson: shapes.LessonCollection,
-  };
+const FullLesson = (props) => {
+  const { fullLesson, wip, err, language } = props;
 
-  static defaultProps = {
-    fullLesson: null
-  };
+  if (err) {
+    return <ErrorSplash text="Server Error" subtext={formatError(err)} />;
+  }
 
-  render() {
-    const { fullLesson } = this.props;
+  if (wip) {
+    return <LoadingSplash text="Loading" subtext="Hold on tight..." />;
+  }
 
-    if (isEmpty(fullLesson)) {
-      return <div />;
-    }
-
+  if (fullLesson) {
     return (
       <Grid.Column width={16}>
         <Grid>
-          <FullVideoBox {...this.props} />
+          <FullVideoBox fullLesson={fullLesson} language={language} />
         </Grid>
       </Grid.Column>
     );
   }
-}
+
+  return (
+    <FrownSplash
+      text="Couldn't find lesson"
+      subtext={<span>Try the <Link to="/lessons">lessons list</Link>...</span>}
+    />
+  );
+};
+
+FullLesson.propTypes = {
+  language: PropTypes.string.isRequired,
+  fullLesson: shapes.LessonCollection,
+  wip: shapes.WIP,
+  error: shapes.Error,
+};
+
+FullLesson.defaultProps = {
+  fullLesson: null,
+  wip: false,
+  error: null,
+};
 
 export default FullLesson;

@@ -1,4 +1,4 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../api/Api';
 import { updateQuery } from './helpers/url';
@@ -35,22 +35,22 @@ function* updatePageInQuery(action) {
 function* fetchLessonPart(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const response = yield call(Api.unit, { id: action.payload.id, language });
+    const response = yield call(Api.unit, { id: action.payload, language });
     yield put(mdbActions.receiveContentUnits([response]));
-    yield put(actions.fetchLessonPartSuccess(response));
+    yield put(actions.fetchLessonPartSuccess(action.payload));
   } catch (err) {
-    yield put(actions.fetchLessonPartFailure(err));
+    yield put(actions.fetchLessonPartFailure(action.payload, err));
   }
 }
 
 function* fetchFullLesson(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const response = yield call(Api.collection, { id: action.payload.id, language });
+    const response = yield call(Api.collection, { id: action.payload, language });
     yield put(mdbActions.receiveCollections([response]));
-    yield put(actions.fetchFullLessonSuccess(response));
+    yield put(actions.fetchFullLessonSuccess(action.payload));
   } catch (err) {
-    yield put(actions.fetchFullLessonFailure(err));
+    yield put(actions.fetchFullLessonFailure(action.payload, err));
   }
 }
 
@@ -59,7 +59,7 @@ function* watchFetchList() {
 }
 
 function* watchFetchLessonPart() {
-  yield takeLatest(types.FETCH_LESSON_PART, fetchLessonPart);
+  yield takeEvery(types.FETCH_LESSON_PART, fetchLessonPart);
 }
 
 function* watchFetchFullLesson() {

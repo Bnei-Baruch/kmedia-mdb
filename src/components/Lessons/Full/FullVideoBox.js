@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import moment from 'moment';
 import 'moment-duration-format';
 import { Button, Divider, Grid, Header, Menu } from 'semantic-ui-react';
 
 import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
 import { physicalFile } from '../../../helpers/utils';
-import { actions } from '../../../redux/modules/lessons';
-import { selectors as mdb } from '../../../redux/modules/mdb';
 import * as shapes from '../../shapes';
 import LanguageSelector from '../../shared/LanguageSelector';
 import AVPlayer from '../../shared/AVPlayer';
@@ -17,13 +14,7 @@ class FullVideoBox extends Component {
 
   static propTypes = {
     language: PropTypes.string.isRequired,
-    fullLesson: shapes.LessonCollection,
-    lessonParts: PropTypes.arrayOf(shapes.LessonPart),
-  };
-
-  static defaultProps = {
-    fullLesson: undefined,
-    lessonParts: [],
+    fullLesson: shapes.LessonCollection.isRequired,
   };
 
   state = {
@@ -35,58 +26,49 @@ class FullVideoBox extends Component {
   };
 
   componentDidMount() {
-    const { fullLesson, lessonParts } = this.props;
+    const { fullLesson } = this.props;
 
-    // Wait for full lesson to load.
-    if (fullLesson) {
-      // Update files
-      let { files }    = this.state;
-      let stateUpdated = false;
+    // Update files
+    let { files }    = this.state;
+    let stateUpdated = false;
 
-      // Wait for lesson parts to load.
-      if (lessonParts) {
-        const newFiles = this.buildFiles(lessonParts);
-        if (newFiles.size) {
-          files        = new Map([...files, ...newFiles]);
-          stateUpdated = true;
-        }
-      }
-
-      if (stateUpdated) {
-        this.setState({ files });
-      }
+    const newFiles = this.buildFiles(fullLesson.content_units);
+    if (newFiles.size) {
+      files        = new Map([...files, ...newFiles]);
+      stateUpdated = true;
     }
+
+    if (stateUpdated) {
+      this.setState({ files });
+    }
+
   }
 
   componentWillReceiveProps(nextProps) {
-    const { fullLesson, lessonParts } = nextProps;
-    const props                       = this.props;
+    const { fullLesson } = nextProps;
+    const props          = this.props;
 
-    // Wait for full lesson to load.
-    if (fullLesson) {
-      // Update files
-      let { files }    = this.state;
-      let stateUpdated = false;
+    // Update files
+    let { files }    = this.state;
+    let stateUpdated = false;
 
-      // Clear files if new full lesson was set.
-      if (fullLesson !== props.fullLesson && fullLesson.id !== props.fullLesson.id) {
-        files        = new Map();
-        stateUpdated = true;
-      }
-
-      // Wait for lesson parts to load.
-      if (lessonParts) {
-        const newFiles = this.buildFiles(lessonParts);
-        if (newFiles.size) {
-          files        = new Map([...files, ...newFiles]);
-          stateUpdated = true;
-        }
-      }
-
-      if (stateUpdated) {
-        this.setState({ files });
-      }
+    // Clear files if new full lesson was set.
+    if (fullLesson !== props.fullLesson && fullLesson.id !== props.fullLesson.id) {
+      files        = new Map();
+      stateUpdated = true;
     }
+
+    // Wait for lesson parts to load.
+    const newFiles = this.buildFiles(fullLesson.content_units);
+    if (newFiles.size) {
+      files        = new Map([...files, ...newFiles]);
+      stateUpdated = true;
+    }
+
+    if (stateUpdated) {
+      this.setState({ files });
+    }
+
   }
 
   buildFiles = (lessonParts) => {
@@ -157,8 +139,13 @@ class FullVideoBox extends Component {
     this.setState({ isAudio: true, isVideo: false });
   };
 
+  partTitle = (part) => {
+    const { name_in_collection: ccuName, name, duration } = part;
+    return `${ccuName} - ${name} - ${moment.duration(duration, 'seconds').format('hh:mm:ss')}`;
+  };
+
   render() {
-    const { fullLesson, lessonParts, language: propsLanguage }                 = this.props;
+    const { fullLesson, language: propsLanguage }                              = this.props;
     let { activePartIndex, isVideo, isAudio, language = propsLanguage, files } = this.state;
 
     const filesByAV = files.get(language) || new Map();
@@ -174,15 +161,6 @@ class FullVideoBox extends Component {
       fileList = filesByAV.get(MT_VIDEO) || [];
     }
 
-    console.log(files);
-    console.log(language, isVideo, isAudio, fileList);
-
-    if (!fileList[activePartIndex] && !lessonParts.every(p => p.files)) {
-      return (<div>Loading...</div>);
-    }
-
-    const partTitle = (part) => part.name_in_collection + ' - ' + part.name + ' - ' + moment.duration(part.duration, 'seconds').format('hh:mm:ss');
-
     // Remove empty files, might be in case language or video/audio is missing.
     // Store idx in order to get feedback from the player to select the correct part.
     const playlist          = [];
@@ -196,19 +174,10 @@ class FullVideoBox extends Component {
         playlist.push({
           mediaid: idx,
           file: physicalFile(file, true),
-          title: partTitle(lessonParts[idx]),
+          title: this.partTitle(fullLesson.content_units[idx]),
         });
       }
     });
-
-    const lessonMenuItems = lessonParts.map((part, index) => (
-      <Menu.Item key={index}
-                 name={index.toString()}
-                 active={index === activePartIndex}
-                 onClick={this.handleLessonPartClick}>
-        {partTitle(part)}
-      </Menu.Item>
-    ));
 
     console.log(activePartIndex, playlistActiveIndex);
 
@@ -250,14 +219,24 @@ class FullVideoBox extends Component {
           <Divider />
           <Header
             as="h3"
+            content={`${fullLesson.content_type} - ${(activePartIndex + 1)}/${fullLesson.content_units.length}`}
             subheader={fullLesson.film_date}
-            content={fullLesson.content_type + ' - ' + (activePartIndex + 1) + '/' + lessonParts.length}
           />
           <Grid>
             <Grid.Row>
               <Grid.Column>
                 <Menu vertical fluid size="small">
-                  { lessonMenuItems }
+                  {
+                    fullLesson.content_units.map((part, index) => (
+                      <Menu.Item
+                        key={part.id}
+                        name={part.id}
+                        content={this.partTitle(part)}
+                        active={index === activePartIndex}
+                        onClick={this.handleLessonPartClick}
+                      />
+                    ))
+                  }
                 </Menu>
               </Grid.Column>
             </Grid.Row>
@@ -268,23 +247,4 @@ class FullVideoBox extends Component {
   }
 }
 
-function connectLessonParts(state, props) {
-  if (props.fullLesson) {
-    return props.fullLesson.content_units.map(cu => {
-      const u = mdb.getUnitById(state.mdb)(cu.id);
-      if (!u || !u.files) {
-        props.fetchLessonPart(cu.id);
-      }
-      return u;
-    });
-  } else {
-    return [];
-  }
-}
-
-export default connect(
-  (state, ownProps) => ({
-    lessonParts: connectLessonParts(state, ownProps)
-  }),
-  actions
-)(FullVideoBox);
+export default FullVideoBox;

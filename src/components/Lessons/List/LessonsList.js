@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Table } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { Grid, Table } from 'semantic-ui-react';
 
 import { CT_LESSON_PART } from '../../../helpers/consts';
 import * as shapes from '../../shapes';

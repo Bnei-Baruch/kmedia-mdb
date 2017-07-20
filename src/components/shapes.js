@@ -26,7 +26,7 @@ export const MDBFile = PropTypes.shape({
 
 const MDBBaseContentUnit = {
   id: PropTypes.string.isRequired,
-  content_type: PropTypes.string.isRequired,
+  content_type: PropTypes.string,
   name: PropTypes.string,
   description: PropTypes.string,
   files: PropTypes.arrayOf(MDBFile),
@@ -36,9 +36,11 @@ export const ContentUnit = PropTypes.shape(MDBBaseContentUnit);
 
 const MDBBaseCollection = {
   id: PropTypes.string.isRequired,
-  content_type: PropTypes.string.isRequired,
+  content_type: PropTypes.string,
   name: PropTypes.string,
   description: PropTypes.string,
+  cuIDs: PropTypes.arrayOf(PropTypes.string),
+  content_units: PropTypes.arrayOf(ContentUnit),
 };
 
 export const Collection = PropTypes.shape(MDBBaseCollection);
@@ -46,7 +48,6 @@ export const Collection = PropTypes.shape(MDBBaseCollection);
 export const LessonCollection = PropTypes.shape({
   ...MDBBaseCollection,
   film_date: PropTypes.string.isRequired,
-  content_units: PropTypes.arrayOf(ContentUnit),
 });
 
 export const LessonPart = PropTypes.shape({
@@ -69,3 +70,9 @@ export const filterPropShape = PropTypes.shape({
   label: PropTypes.string.isRequired,
   component: PropTypes.any.isRequired
 });
+
+export const WIP    = PropTypes.bool;
+export const WipMap = PropTypes.objectOf(PropTypes.oneOfType([WIP, PropTypes.objectOf(WIP)]));
+
+export const Error     = PropTypes.object;
+export const ErrorsMap = PropTypes.objectOf(PropTypes.oneOfType([Error, PropTypes.objectOf(Error)]));

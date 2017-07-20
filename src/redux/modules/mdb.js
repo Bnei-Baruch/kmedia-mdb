@@ -40,12 +40,14 @@ const _receiveCollections = (state, action) => {
   const cById  = { ...state.cById };
   const cuById = { ...state.cuById };
   items.forEach((x) => {
-    cById[x.id] = Object.assign({}, state.cById[x.id], x);
     if (x.content_units) {
-      x.content_units.forEach((cu) => {
+      x.cuIDs = x.content_units.map((cu) => {
         cuById[cu.id] = Object.assign({}, cu, state.cuById[cu.id]);
+        return cu.id;
       });
+      delete x.content_units;
     }
+    cById[x.id] = Object.assign({}, state.cById[x.id], x);
   });
   return {
     ...state,
@@ -89,8 +91,16 @@ export const reducer = handleActions({
 
 const getCollectionById = state => id => state.cById[id];
 const getUnitById       = state => id => state.cuById[id];
+const getDenormCollection = (state, id) => {
+  const c = state.cById[id];
+  if (c && Array.isArray(c.cuIDs)) {
+    c.content_units = c.cuIDs.map(x => state.cuById[x]).filter(x => !!x);
+  }
+  return c;
+};
 
 export const selectors = {
   getCollectionById,
   getUnitById,
+  getDenormCollection,
 };
