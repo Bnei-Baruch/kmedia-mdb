@@ -131,7 +131,8 @@ class DateFilter extends Component {
   }
 
   componentDidMount() {
-    this.datePicker.showMonth(this.state.from);
+    const { datePreset, from, to } = this.state;
+    this.showMonth(datePreset, from, to);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -151,7 +152,7 @@ class DateFilter extends Component {
 
     // try to show entire range in calendar
     if (datePreset !== CUSTOM_RANGE || (datePreset === CUSTOM_RANGE && range && range.from)) {
-      this.datePicker.showMonth(range.from);
+      this.showMonth(datePreset, range.from, range.to);
     }
 
     const momentFrom = moment(new Date(range.from));
@@ -177,8 +178,35 @@ class DateFilter extends Component {
     });
   };
 
-  showMonth = () => {
-    // TODO: (yaniv) make the calendar past facing when showing the current month
+  /**
+   * decides how to show to the visible months in the calendar
+   */
+  showMonth = (preset, from, to) => {
+    let dateToShow = from;
+    switch (preset) {
+    case TODAY:
+    case YESTERDAY:
+      dateToShow = moment(from).subtract(1, 'month').toDate();
+      break;
+    case LAST_7_DAYS:
+    case LAST_30_DAYS:
+      if (moment(from).month() < moment(to).month()) {
+        dateToShow = from;
+      } else {
+        dateToShow = moment(from).subtract(1, 'month').toDate();
+      }
+      break;
+    case LAST_MONTH:
+      dateToShow = moment(now()).subtract(2, 'month').toDate();
+      break;
+    case THIS_MONTH:
+      dateToShow = moment(now()).subtract(1, 'month').toDate();
+      break;
+    default:
+      return;
+    }
+
+    this.datePicker.showMonth(dateToShow);
   };
 
   apply = () => {
