@@ -37,7 +37,7 @@
     "react-day-picker": "^5.5.3",
     "react-dom": "^15.6.1",
     "react-jw-player": "github:Bnei-Baruch/react-jw-player",
-    "react-media-player": "^0.6.1",
+    "react-media-player": "^0.6.2",
     "react-redux": "^5.0.5",
     "react-redux-loading-bar": "^2.9.2",
     "react-router-dom": "^4.1.1",

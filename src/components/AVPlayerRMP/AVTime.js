@@ -12,15 +12,15 @@ class AVCurrentTime extends Component {
     const h    = Math.floor(current / 3600);
     const m    = Math.floor((current - (h * 3600)) / 60);
     const s    = Math.floor(current % 60);
-    let result = '';
+    const result = [];
 
     if (h > 0) {
-      result = h > 10 ? `${h}:` : `0${h}:`;
+      result.push(h > 10 ? `${h}` : `0${h}`);
     }
-    result += m > 10 ? `${m}:` : `0${m}:`;
-    result += s > 10 ? `${s}` : `0${s}`;
+    result.push(m > 10 ? `${m}` : `0${m}`);
+    result.push(s > 10 ? `${s}` : `0${s}`);
 
-    return result;
+    return result.join(':');
   };
 
   render() {

@@ -74,10 +74,8 @@ class AVPlayerRMP extends PureComponent {
                   />
                 </div>
                 <div className="media-controls">
-                  <AVPlayPause style={{ background: 'red' }} />
-                  <AVTime name={'currentTime'} />
-                  /
-                  <AVTime name={'duration'} />
+                  <AVPlayPause />
+                  <AVTime name={'currentTime'} />&nbsp;/&nbsp;<AVTime name={'duration'} />
                   <Progress />
                   <SeekBar />
                   <MuteUnmute />

@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import { withMediaProps } from 'react-media-player';
+import playImage from './images/play.svg';
+import pauseImage from './images/pause.svg';
+import './styles.css';
 
 class AVPlayPause extends Component {
-  static PropTypes = {
+  static propTypes = {
     media: PropTypes.shape({
       isPlaying: PropTypes.bool.isRequired,
       playPause: PropTypes.func.isRequired
@@ -18,7 +22,7 @@ class AVPlayPause extends Component {
     return this.props.media.isPlaying !== media.isPlaying;
   }
 
-  _handlePlayPause = () => {
+  handlePlayPause = () => {
     this.props.media.playPause();
   };
 
@@ -27,11 +31,14 @@ class AVPlayPause extends Component {
     return (
       <button
         type="button"
-        className={className}
+        className={classNames('player-button', className)}
         style={style}
-        onClick={this._handlePlayPause}
+        onClick={this.handlePlayPause}
       >
-        { media.isPlaying ? 'Pause!' : 'Play!' }
+        <img
+          src={media.isPlaying ? pauseImage : playImage} alt={media.isPlaying ? 'pause' : 'play'}
+          style={{ width: '16px' }}
+        />
       </button>
     );
   }
