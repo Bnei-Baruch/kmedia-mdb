@@ -63,7 +63,7 @@ function* watchFetchLessonPart() {
 }
 
 function* watchFetchFullLesson() {
-  yield takeLatest(types.FETCH_FULL_LESSON, fetchFullLesson);
+  yield takeEvery(types.FETCH_FULL_LESSON, fetchFullLesson);
 }
 
 function* watchSetPage() {

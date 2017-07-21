@@ -102,7 +102,7 @@ export default connect(
     total: selectors.getTotal(state.lessons),
     items: selectors.getItems(state.lessons)
       .map(x => (x[1] === CT_LESSON_PART ?
-        mdb.getUnitById(state.mdb)(x[0]) :
+        mdb.getUnitById(state.mdb, x[0]) :
         mdb.getDenormCollection(state.mdb, x[0]))),
     language: settings.getLanguage(state.settings),
     pageSize: settings.getPageSize(state.settings),

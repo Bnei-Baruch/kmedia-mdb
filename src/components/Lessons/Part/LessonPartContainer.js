@@ -44,7 +44,7 @@ class LessonPartContainer extends Component {
 
 export default connect(
   (state, ownProps) => ({
-    lesson: mdb.getUnitById(state.mdb)(ownProps.match.params.id),
+    lesson: mdb.getDenormContentUnit(state.mdb, ownProps.match.params.id),
     language: settings.getLanguage(state.settings),
 
     // NOTE (yaniv -> ido): using selectors this way will always make the component rerender

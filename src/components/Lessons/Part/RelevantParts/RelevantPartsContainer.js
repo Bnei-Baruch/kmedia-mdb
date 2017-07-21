@@ -58,12 +58,11 @@ class RelevantPartsContainer extends Component {
     if (
       fullLesson &&
       fullLesson.id === fullLessonID &&
-      Array.isArray(fullLesson.content_units) &&
-      !(wip || err)) {
+      Array.isArray(fullLesson.content_units)) {
       return;
     }
 
-    if (fullLessonID) {
+    if (fullLessonID && !(wip || err)) {
       fetchFullLesson(fullLessonID);
     }
   };
