@@ -7,7 +7,7 @@ import Info from './Info';
 import Materials from './Materials';
 import VideoBox from './VideoBox';
 import MediaDownloads from './MediaDownloads';
-import RelevantParts from './RelevantParts/RelevantParts';
+import RelevantPartsContainer from './RelevantParts/RelevantPartsContainer';
 
 const LessonPart = (props) => {
   if (isEmpty(props.lesson)) {
@@ -27,7 +27,7 @@ const LessonPart = (props) => {
           </Grid.Column>
           <Grid.Column width={6}>
             <MediaDownloads {...props} />
-            <RelevantParts lesson={props.lesson} />
+            <RelevantPartsContainer lesson={props.lesson} />
           </Grid.Column>
         </Grid.Row>
       </Grid>

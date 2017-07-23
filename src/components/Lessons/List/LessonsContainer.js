@@ -6,7 +6,7 @@ import { Divider, Grid } from 'semantic-ui-react';
 import * as shapes from '../../shapes';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
-import { actions, selectors as lessonsSelectors } from '../../../redux/modules/lessons';
+import { actions, selectors } from '../../../redux/modules/lessons';
 import { CT_LESSON_PART } from '../../../helpers/consts';
 import Pagination from '../../shared/Pagination';
 import LessonsFilters from './LessonsFilters';
@@ -33,13 +33,12 @@ class LessonsContainer extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { pageNo, language, pageSize } = nextProps;
-    const props                          = this.props;
 
-    if (pageSize !== props.pageSize) {
+    if (pageSize !== this.props.pageSize) {
       this.handlePageChange(1);
     }
 
-    if (language !== props.language) {
+    if (language !== this.props.language) {
       this.askForData(pageNo, language, pageSize);
     }
   }
@@ -99,12 +98,12 @@ class LessonsContainer extends Component {
 
 export default connect(
   state => ({
-    pageNo: lessonsSelectors.getPageNo(state.lessons),
-    total: lessonsSelectors.getTotal(state.lessons),
-    items: lessonsSelectors.getItems(state.lessons)
+    pageNo: selectors.getPageNo(state.lessons),
+    total: selectors.getTotal(state.lessons),
+    items: selectors.getItems(state.lessons)
       .map(x => (x[1] === CT_LESSON_PART ?
-        mdb.getUnitById(state.mdb)(x[0]) :
-        mdb.getCollectionById(state.mdb)(x[0]))),
+        mdb.getUnitById(state.mdb, x[0]) :
+        mdb.getDenormCollection(state.mdb, x[0]))),
     language: settings.getLanguage(state.settings),
     pageSize: settings.getPageSize(state.settings),
   }),

@@ -26,37 +26,46 @@ export const MDBFile = PropTypes.shape({
 
 const MDBBaseContentUnit = {
   id: PropTypes.string.isRequired,
-  content_type: PropTypes.string.isRequired,
+  content_type: PropTypes.string,
   name: PropTypes.string,
   description: PropTypes.string,
   files: PropTypes.arrayOf(MDBFile),
+  cIDs: PropTypes.objectOf(PropTypes.string),    // ccu.name => Collection ID
+  sduIDs: PropTypes.objectOf(PropTypes.string),  // sdu.name => Source Derived Units ID  (i.e parents)
+  dduIDs: PropTypes.objectOf(PropTypes.string),  // ddu.name => Derived Derived Units IDs (i.e children)
+  tags: PropTypes.arrayOf(PropTypes.string),
+  sources: PropTypes.arrayOf(PropTypes.string),
 };
-
-export const ContentUnit = PropTypes.shape(MDBBaseContentUnit);
 
 const MDBBaseCollection = {
   id: PropTypes.string.isRequired,
-  content_type: PropTypes.string.isRequired,
+  content_type: PropTypes.string,
   name: PropTypes.string,
   description: PropTypes.string,
+  cuIDs: PropTypes.arrayOf(PropTypes.string),      // Content Units IDs
+  ccuNames: PropTypes.objectOf(PropTypes.string),  // cuID -> ccu.name
 };
 
-export const Collection = PropTypes.shape(MDBBaseCollection);
+const MDBDenormalizedContentUnit = {
+  ...MDBBaseContentUnit,
+  collections: PropTypes.objectOf(PropTypes.shape(MDBBaseCollection)),     // ccu.name -> collection
+  source_units: PropTypes.objectOf(PropTypes.shape(MDBBaseContentUnit)),   // sdu.name => Source Derived Unit
+  derived_units: PropTypes.objectOf(PropTypes.shape(MDBBaseContentUnit)),  // ddu.name => Derived Derived Unit
+};
+
+const MDBDenormalizedCollection = {
+  ...MDBBaseCollection,
+  content_units: PropTypes.arrayOf(PropTypes.shape(MDBBaseContentUnit)),
+};
 
 export const LessonCollection = PropTypes.shape({
-  ...MDBBaseCollection,
+  ...MDBDenormalizedCollection,
   film_date: PropTypes.string.isRequired,
-  content_units: PropTypes.arrayOf(ContentUnit),
 });
 
 export const LessonPart = PropTypes.shape({
-  ...MDBBaseContentUnit,
+  ...MDBDenormalizedContentUnit,
   film_date: PropTypes.string.isRequired,
-  collections: PropTypes.objectOf(Collection),
-  tags: PropTypes.arrayOf(PropTypes.string),
-  sources: PropTypes.arrayOf(PropTypes.string),
-  source_units: PropTypes.objectOf(ContentUnit),
-  derived_units: PropTypes.objectOf(ContentUnit),
 });
 
 export const Topics = PropTypes.arrayOf(PropTypes.shape({
@@ -69,3 +78,9 @@ export const filterPropShape = PropTypes.shape({
   label: PropTypes.string.isRequired,
   component: PropTypes.any.isRequired
 });
+
+export const WIP    = PropTypes.bool;
+export const WipMap = PropTypes.objectOf(PropTypes.oneOfType([WIP, PropTypes.objectOf(WIP)]));
+
+export const Error     = PropTypes.object;
+export const ErrorsMap = PropTypes.objectOf(PropTypes.oneOfType([Error, PropTypes.objectOf(Error)]));

@@ -5,7 +5,6 @@ import { ConnectedRouter } from 'react-router-redux';
 
 import { selectors as system } from '../../redux/modules/system';
 import Routes from './Routes';
-import '../../stylesheets/semantic.min.css';
 import '../../stylesheets/Kmedia.css';
 
 const Loader = () => (
