@@ -15,10 +15,15 @@ class FullVideoBox extends Component {
   static propTypes = {
     language: PropTypes.string.isRequired,
     fullLesson: shapes.LessonCollection.isRequired,
+    activePart: PropTypes.number,
+    onActivePartChange: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    activePart: 0,
   };
 
   state = {
-    activePartIndex: 0,
     language: undefined,
     isVideo: true,
     isAudio: false,
@@ -41,7 +46,6 @@ class FullVideoBox extends Component {
     if (stateUpdated) {
       this.setState({ files });
     }
-
   }
 
   componentWillReceiveProps(nextProps) {
@@ -68,7 +72,6 @@ class FullVideoBox extends Component {
     if (stateUpdated) {
       this.setState({ files });
     }
-
   }
 
   buildFiles = (lessonParts) => {
@@ -116,32 +119,27 @@ class FullVideoBox extends Component {
     this.setState({ language });
   };
 
-  handleLessonPartClick = (e, { name }) => {
-    this.setState({
-      activePartIndex: parseInt(name, 10),
-    });
-  };
+  handleLessonPartClick = (e, data) =>
+    this.props.onActivePartChange(parseInt(data.name, 10));
 
-  videoLoad = (e) => {
-    console.log('Video Load', e);
-    if (this.state.activePartIndex !== e.item.mediaid) {
-      this.setState({
-        activePartIndex: e.item.mediaid,
-      });
+  handleOneHundredPercent = () => {
+    const { activePart, fullLesson, onActivePartChange } = this.props;
+    if (activePart < fullLesson.content_units.length - 1) {
+      onActivePartChange(activePart + 1);
     }
   };
 
-  handleOnVideo = () => {
+  handleVideo = () => {
     this.setState({ isVideo: true, isAudio: false });
   };
 
-  handleOnAudio = () => {
+  handleAudio = () => {
     this.setState({ isAudio: true, isVideo: false });
   };
 
   render() {
-    const { fullLesson, language: propsLanguage }                              = this.props;
-    let { activePartIndex, isVideo, isAudio, language = propsLanguage, files } = this.state;
+    const { activePart, fullLesson, language: propsLanguage } = this.props;
+    let { isVideo, isAudio, language = propsLanguage, files } = this.state;
 
     const filesByAV = files.get(language) || new Map();
     let fileList    = [];
@@ -170,7 +168,7 @@ class FullVideoBox extends Component {
     fileList.forEach((file, idx) => {
       if (file) {
         // Set index in playlist to play.
-        if (playlistActiveIndex === null || idx <= activePartIndex) {
+        if (playlistActiveIndex === null || idx <= activePart) {
           playlistActiveIndex = playlist.length;
         }
         playlist.push({
@@ -187,8 +185,8 @@ class FullVideoBox extends Component {
           <div className="video_player">
             <div id="video" />
             <AVPlayer
-              playerId="lesson"
-              onVideoLoad={this.videoLoad}
+              playerId="full-lesson"
+              onOneHundredPercent={this.handleOneHundredPercent}
               playlist={playlist}
               playItem={playlistActiveIndex}
             />
@@ -200,10 +198,10 @@ class FullVideoBox extends Component {
               <Grid.Column>
                 <Button.Group fluid>
                   { isVideo === true ? <Button active color="blue">Video</Button> : null }
-                  { isVideo === false ? <Button onClick={this.handleOnVideo}>Video</Button> : null}
+                  { isVideo === false ? <Button onClick={this.handleVideo}>Video</Button> : null}
                   { isVideo === undefined ? <Button disabled>Video</Button> : null}
                   { isAudio === true ? <Button active color="blue">Audio</Button> : null }
-                  { isAudio === false ? <Button onClick={this.handleOnAudio}>Audio</Button> : null }
+                  { isAudio === false ? <Button onClick={this.handleAudio}>Audio</Button> : null }
                   { isAudio === undefined ? <Button disabled>Audio</Button> : null}
                 </Button.Group>
               </Grid.Column>
@@ -219,7 +217,7 @@ class FullVideoBox extends Component {
           <Divider />
           <Header
             as="h3"
-            content={`${fullLesson.content_type} - ${(activePartIndex + 1)}/${fullLesson.content_units.length}`}
+            content={`${fullLesson.content_type} - ${(activePart + 1)}/${fullLesson.content_units.length}`}
             subheader={fullLesson.film_date}
           />
           <Grid>
@@ -230,9 +228,9 @@ class FullVideoBox extends Component {
                     fullLesson.content_units.map((part, index) => (
                       <Menu.Item
                         key={part.id}
-                        name={part.id}
+                        name={`${index}`}
                         content={titles[index]}
-                        active={index === activePartIndex}
+                        active={index === activePart}
                         onClick={this.handleLessonPartClick}
                       />
                     ))

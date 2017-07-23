@@ -6,8 +6,6 @@ import { bindActionCreators } from 'redux';
 import { actions, selectors } from '../../../redux/modules/lessons';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as sources } from '../../../redux/modules/sources';
-import { selectors as tags } from '../../../redux/modules/tags';
 import * as shapes from '../../shapes';
 import FullLesson from './FullLesson';
 
@@ -80,11 +78,6 @@ function mapState(state, props) {
     language: settings.getLanguage(state.settings),
     wip: selectors.getWip(state.lessons),
     errors: selectors.getErrors(state.lessons),
-
-    // NOTE (yaniv -> ido): using selectors this way will always make the component rerender
-    // since sources.getSourcesById(state) !== sources.getSourcesById(state) for every state
-    getSourceById: sources.getSourceById(state.sources),
-    getTagById: tags.getTagById(state.tags),
   };
 }
 

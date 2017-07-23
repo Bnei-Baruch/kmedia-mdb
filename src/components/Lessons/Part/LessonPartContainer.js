@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
-import { selectors as sources } from '../../../redux/modules/sources';
-import { selectors as tags } from '../../../redux/modules/tags';
 import { actions } from '../../../redux/modules/lessons';
 import * as shapes from '../../shapes';
 import LessonPart from './LessonPart';
@@ -38,7 +36,8 @@ class LessonPartContainer extends Component {
   }
 
   render() {
-    return <LessonPart {...this.props} />;
+    const { lesson, language } = this.props;
+    return <LessonPart lesson={lesson} language={language} />;
   }
 }
 
@@ -46,11 +45,6 @@ export default connect(
   (state, ownProps) => ({
     lesson: mdb.getDenormContentUnit(state.mdb, ownProps.match.params.id),
     language: settings.getLanguage(state.settings),
-
-    // NOTE (yaniv -> ido): using selectors this way will always make the component rerender
-    // since sources.getSourcesById(state) !== sources.getSourcesById(state) for every state
-    getSourceById: sources.getSourceById(state.sources),
-    getTagById: tags.getTagById(state.tags),
   }),
   actions
 )(LessonPartContainer);
