@@ -127,37 +127,32 @@ class DateFilter extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = this.getUpdatedStateFromProps(this.props);
+    this.state = this.convertToStateObject(this.props);
   }
 
   componentDidMount() {
-    this.datePicker.showMonth(this.state.from);
+    const { datePreset, from, to } = this.state;
+    this.showMonth(datePreset, from, to);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState(this.getUpdatedStateFromProps(nextProps));
+    this.setState(this.convertToStateObject(nextProps));
   }
 
-  getUpdatedStateFromProps = (props) => ({
-    from: props.value.from,
-    to: props.value.to,
-    datePreset: props.value.datePreset || rangeToPreset(props.value.from, props.value.to),
-    fromInputValue: moment(props.value.from, 'DD-MM-YYYY').format('DD-MM-YYYY'),
-    toInputValue: moment(props.value.to, 'DD-MM-YYYY').format('DD-MM-YYYY')
-  });
-
-  setRange(datePreset, from, to, fromInputValue = '', toInputValue = '') {
+  setRange = (datePreset, from, to, fromInputValue = '', toInputValue = '') => {
     let range = {};
+
+    // calculate range in regard to the date preset
     if (datePreset === CUSTOM_RANGE) {
       range.from = from || this.state.from;
       range.to   = to || this.state.to;
     } else {
-      range = (presetToRange[datePreset] ? presetToRange[datePreset] : presetToRange[TODAY])();
+      range = (presetToRange[datePreset] || presetToRange[TODAY])();
     }
 
     // try to show entire range in calendar
     if (datePreset !== CUSTOM_RANGE || (datePreset === CUSTOM_RANGE && range && range.from)) {
-      this.datePicker.showMonth(range.from);
+      this.showMonth(datePreset, range.from, range.to);
     }
 
     const momentFrom = moment(new Date(range.from));
@@ -169,14 +164,54 @@ class DateFilter extends Component {
       fromInputValue: fromInputValue || (momentFrom.isValid() ? momentFrom.format(format) : ''),
       toInputValue: toInputValue || (momentTo.isValid() ? momentTo.format(format) : '')
     });
-  }
+  };
+
+  convertToStateObject = (props) => {
+    const { value: { from, to, datePreset } } = props;
+
+    return ({
+      from,
+      to,
+      datePreset: datePreset || rangeToPreset(from, to),
+      fromInputValue: moment(from, 'DD-MM-YYYY').format('DD-MM-YYYY'),
+      toInputValue: moment(to, 'DD-MM-YYYY').format('DD-MM-YYYY')
+    });
+  };
+
+  /**
+   * decides how to show to the visible months in the calendar
+   */
+  showMonth = (preset, from, to) => {
+    let dateToShow = from;
+    switch (preset) {
+    case TODAY:
+    case YESTERDAY:
+      dateToShow = moment(from).subtract(1, 'month').toDate();
+      break;
+    case LAST_7_DAYS:
+    case LAST_30_DAYS:
+      if (moment(from).month() < moment(to).month()) {
+        dateToShow = from;
+      } else {
+        dateToShow = moment(from).subtract(1, 'month').toDate();
+      }
+      break;
+    case LAST_MONTH:
+      dateToShow = moment(now()).subtract(2, 'month').toDate();
+      break;
+    case THIS_MONTH:
+      dateToShow = moment(now()).subtract(1, 'month').toDate();
+      break;
+    default:
+      return;
+    }
+
+    this.datePicker.showMonth(dateToShow);
+  };
 
   apply = () => {
-    this.props.updateValue({
-      from: this.state.from,
-      to: this.state.to,
-      datePreset: this.state.datePreset
-    });
+    const { from, to, datePreset } = this.state;
+    this.props.updateValue({ from, to, datePreset });
     this.props.onApply();
   };
 
