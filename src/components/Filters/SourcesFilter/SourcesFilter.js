@@ -120,7 +120,7 @@ class SourcesFilter extends React.Component {
     return (
 
       <div  style={{}}>
-      
+
         <Segment vertical  className="tab active" style={{
           padding:'0'
         }}>
@@ -138,7 +138,7 @@ class SourcesFilter extends React.Component {
            {/* </div> )*/}
 
           </div>
-        
+
         </Segment>
         <Segment vertical clearing>
           <Button floated="right" onClick={this.apply} primary>Apply</Button>
@@ -154,4 +154,4 @@ export default connect(
     roots: sources.getRoots(state.sources),
     getSourceById: sources.getSourceById(state.sources),
   })
-)(connectFilter({ isMultiple: true })(SourcesFilter));
+)(connectFilter()(SourcesFilter));
