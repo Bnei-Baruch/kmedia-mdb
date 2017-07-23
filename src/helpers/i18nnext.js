@@ -3,7 +3,7 @@ import XHR from 'i18next-xhr-backend';
 // import Cache from 'i18next-localstorage-cache';
 // import LanguageDetector from 'i18next-browser-languagedetector';
 
-import { DEFAULT_LANGUAGE } from './helpers/consts';
+import { DEFAULT_LANGUAGE } from './consts';
 
 const localesBackend = `${process.env.production ? process.env.REACT_APP_LOCALES_BACKEND : 'http://localhost:9876'}`;
 

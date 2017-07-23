@@ -1,6 +1,6 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
-import Api  from '../api/Api';
+import Api  from '../helpers/Api';
 import { actions, types } from '../redux/modules/tags';
 import { types as system } from '../redux/modules/system';
 import { selectors as settings } from '../redux/modules/settings';

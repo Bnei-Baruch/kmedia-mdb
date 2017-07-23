@@ -5,7 +5,7 @@ import { changeDirection, getCurrentDirection } from '../helpers/i18n-utils';
 import { types } from '../redux/modules/settings';
 import { actions as sources } from '../redux/modules/sources';
 import { actions as tags } from '../redux/modules/tags';
-import i18n from '../i18n';
+import i18n from '../helpers/i18nnext';
 
 function* setLanguage(action) {
   const language = action.payload;

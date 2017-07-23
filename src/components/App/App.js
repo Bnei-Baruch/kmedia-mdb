@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect, Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
+import { I18nextProvider } from 'react-i18next';
 
+import { DEFAULT_LANGUAGE } from '../../helpers/consts';
+import i18n from '../../helpers/i18nnext';
 import { selectors as system } from '../../redux/modules/system';
 import Routes from './Routes';
 import '../../stylesheets/Kmedia.css';
@@ -37,11 +40,13 @@ class App extends Component {
 
     if (isAppReady) {
       return (
-        <Provider store={store}>
-          <ConnectedRouter history={history}>
-            <Routes />
-          </ConnectedRouter>
-        </Provider>
+        <I18nextProvider i18n={i18n} initialLanguage={DEFAULT_LANGUAGE}>
+          <Provider store={store}>
+            <ConnectedRouter history={history}>
+              <Routes />
+            </ConnectedRouter>
+          </Provider>
+        </I18nextProvider>
       );
     }
 
