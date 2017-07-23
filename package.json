@@ -48,7 +48,7 @@
     "redux": "^3.7.1",
     "redux-actions": "^2.2.1",
     "redux-saga": "^0.15.4",
-    "semantic-ui-react": "^0.68.5",
+    "semantic-ui-react": "^0.71.1",
     "zl-fetch": "^1.0.4"
   },
   "scripts": {

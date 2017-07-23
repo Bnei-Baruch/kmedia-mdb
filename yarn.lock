@@ -5836,9 +5836,9 @@ selfsigned@^1.9.1:
   dependencies:
     node-forge "0.6.33"
 
-semantic-ui-react@^0.68.5:
-  version "0.68.5"
-  resolved "https://registry.yarnpkg.com/semantic-ui-react/-/semantic-ui-react-0.68.5.tgz#179bb89c387f8117026ca01f6e8490db1fd8e713"
+semantic-ui-react@^0.71.1:
+  version "0.71.1"
+  resolved "https://registry.yarnpkg.com/semantic-ui-react/-/semantic-ui-react-0.71.1.tgz#241055be740bf0a73363f484446b360e944a792b"
   dependencies:
     babel-runtime "^6.22.0"
     classnames "^2.1.5"
