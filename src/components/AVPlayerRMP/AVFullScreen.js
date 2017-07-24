@@ -1,0 +1,39 @@
+import React, { Component, PropTypes } from 'react';
+import { withMediaProps } from 'react-media-player';
+import fullscreenImage from './images/fullscreen.svg';
+
+class AVFullscreen extends Component {
+  static propTypes = {
+    media: PropTypes.shape({
+      isFullscreen: PropTypes.bool.isRequired,
+      fullscreen: PropTypes.func.isRequired
+    }).isRequired,
+  };
+
+  shouldComponentUpdate({ media }) {
+    return this.props.media.isFullscreen !== media.isFullscreen;
+  }
+
+  handleFullscreen = () => {
+    this.props.media.fullscreen();
+  }
+
+  render() {
+    const { media } = this.props;
+    return (
+      <button
+        type="button"
+        className="player-button"
+        onClick={this.handleFullscreen}
+      >
+        <img
+          src={fullscreenImage}
+          alt={media.isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+          style={{ width: '16px', height: '16px' }}
+        />
+      </button>
+    )
+  }
+}
+
+export default withMediaProps(AVFullscreen);
