@@ -11,7 +11,6 @@ import { actions, selectors } from '../../redux/modules/settings';
 class TopFixedMenu extends PureComponent {
 
   static propTypes = {
-    title: PropTypes.string.isRequired,
     language: PropTypes.string.isRequired,
     toggleVisibility: PropTypes.func.isRequired,
     setLanguage: PropTypes.func.isRequired,
@@ -27,10 +26,10 @@ class TopFixedMenu extends PureComponent {
   };
 
   render() {
-    const { title, toggleVisibility, t } = this.props;
+    const { toggleVisibility, t } = this.props;
 
     return (
-      <Menu fixed="top" inverted color="blue">
+      <Menu inverted borderless fixed="top" color="blue">
         <Container>
           <Menu.Item as="a" icon className="ui padded grid tablet mobile only" onClick={toggleVisibility}>
             <Icon name="sidebar" style={{ padding: 0 }} />
@@ -38,7 +37,6 @@ class TopFixedMenu extends PureComponent {
           <Menu.Item header>
             <h3 className="main-title">
               {t('nav.top.header')}
-              <small>&nbsp;- {title}</small>
             </h3>
           </Menu.Item>
           <Menu.Menu position="right">
