@@ -4,7 +4,9 @@ import { DEFAULT_LANGUAGE } from './consts';
 // import Cache from 'i18next-localstorage-cache';
 // import LanguageDetector from 'i18next-browser-languagedetector';
 
-const localesBackend = `${process.env.production ? process.env.PUBLIC_URL : 'http://localhost:9876'}`;
+const LOCALES_BACKEND = process.env.NODE_ENV === 'production' ?
+  process.env.PUBLIC_URL :
+  'http://localhost:9876';
 
 i18n
   .use(XHR)
@@ -13,7 +15,7 @@ i18n
   .init({
 
     backend: {
-      loadPath: `${localesBackend}/locales/{{lng}}/{{ns}}.json`,
+      loadPath: `${LOCALES_BACKEND}/locales/{{lng}}/{{ns}}.json`,
       crossDomain: true
     },
 
