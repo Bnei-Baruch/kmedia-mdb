@@ -155,5 +155,8 @@
       "banner": "Banner",
       "presentation": "Presentation"
     }
+  },
+  "values": {
+    "date": "{{date, short_date}}"
   }
 }

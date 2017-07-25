@@ -224,7 +224,7 @@ class FullVideoBox extends Component {
           <Header
             as="h3"
             content={`${t(`constants.content-types.${fullLesson.content_type}`)} - ${(activePart + 1)}/${fullLesson.content_units.length}`}
-            subheader={fullLesson.film_date}
+            subheader={t('values.date', { date: new Date(fullLesson.film_date) })}
           />
           <Grid>
             <Grid.Row>

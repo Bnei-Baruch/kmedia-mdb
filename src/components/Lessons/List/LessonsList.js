@@ -18,10 +18,10 @@ class LessonsList extends PureComponent {
     items: []
   };
 
-  renderPart = part => (
+  renderPart = (part, t) => (
     <Table.Row verticalAlign="top" key={part.id}>
       <Table.Cell collapsing singleLine width={1}>
-        <strong>{part.film_date}</strong>
+        <strong>{t('values.date', { date: new Date(part.film_date) })}</strong>
       </Table.Cell>
       <Table.Cell>
         <Link to={`/lessons/part/${part.id}`}>
@@ -50,7 +50,7 @@ class LessonsList extends PureComponent {
     rows.push((
       <Table.Row verticalAlign="top" key={`l-${collection.id}`}>
         <Table.Cell collapsing singleLine width={1} rowSpan={collection.content_units.length + 1}>
-          <strong>{collection.film_date}</strong>
+          <strong>{t('values.date', { date: new Date(collection.film_date) })}</strong>
         </Table.Cell>
         <Table.Cell>
           <Link to={`/lessons/full/${collection.id}`}>
@@ -77,7 +77,7 @@ class LessonsList extends PureComponent {
           {
             items.map(x => (
               x.content_type === CT_LESSON_PART ?
-                this.renderPart(x) :
+                this.renderPart(x, t) :
                 this.renderCollection(x, t))
             )
           }

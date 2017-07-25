@@ -52,7 +52,7 @@ class Info extends Component {
     return (
       <div>
         <Header as="h3">
-          <span className="text grey">{filmDate}</span><br />
+          <span className="text grey">{t('values.date', { date: new Date(filmDate) })}</span><br />
           {name}
         </Header>
         <List>
