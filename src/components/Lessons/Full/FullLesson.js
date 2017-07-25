@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import 'moment-duration-format';
+import { Trans, translate } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 
@@ -17,31 +18,32 @@ class FullLesson extends Component {
     language: PropTypes.string.isRequired,
     fullLesson: shapes.LessonCollection,
     wip: shapes.WIP,
-    error: shapes.Error,
+    err: shapes.Error,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     fullLesson: null,
     wip: false,
-    error: null,
+    err: null,
   };
 
   state = {
     activePart: 0,
   };
 
-  handleActivePartChange = (activePart) =>
+  handleActivePartChange = activePart =>
     this.setState({ activePart });
 
   render() {
-    const { fullLesson, wip, err, language } = this.props;
+    const { fullLesson, wip, err, language, t } = this.props;
 
     if (err) {
-      return <ErrorSplash text="Server Error" subtext={formatError(err)} />;
+      return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
     }
 
     if (wip) {
-      return <LoadingSplash text="Loading" subtext="Hold on tight..." />;
+      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
     if (fullLesson) {
@@ -52,19 +54,20 @@ class FullLesson extends Component {
           <Grid>
             <FullVideoBox
               fullLesson={fullLesson}
-              language={language}
               activePart={activePart}
+              language={language}
+              t={t}
               onActivePartChange={this.handleActivePartChange}
             />
           </Grid>
           <Grid>
             <Grid.Row>
               <Grid.Column width={10}>
-                <Info lesson={lesson} />
-                <Materials lesson={lesson} />
+                <Info lesson={lesson} t={t} />
+                <Materials lesson={lesson} t={t} />
               </Grid.Column>
               <Grid.Column width={6}>
-                <MediaDownloads lesson={lesson} language={language} />
+                <MediaDownloads lesson={lesson} language={language} t={t} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -74,11 +77,15 @@ class FullLesson extends Component {
 
     return (
       <FrownSplash
-        text="Couldn't find lesson"
-        subtext={<span>Try the <Link to="/lessons">lessons list</Link>...</span>}
+        text={t('messages.lesson-not-found')}
+        subtext={
+          <Trans i18nKey="messages.lesson-not-found-subtext">
+            Try the <Link to="/lessons">lessons list</Link>...
+          </Trans>
+        }
       />
     );
   }
 }
 
-export default FullLesson;
+export default translate()(FullLesson);

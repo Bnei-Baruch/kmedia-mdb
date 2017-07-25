@@ -7,25 +7,26 @@ import { actions as sources } from '../redux/modules/sources';
 import { actions as tags } from '../redux/modules/tags';
 import i18n from '../helpers/i18nnext';
 
+function changeDirectionIfNeeded(language) {
+  const currentDirection = getCurrentDirection() || 'ltr';
+  const newDirection     = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
+
+  if (currentDirection !== newDirection) {
+    changeDirection(newDirection);
+  }
+}
+
 function* setLanguage(action) {
   const language = action.payload;
 
   // TODO (edo): promisify callback and check for errors
   i18n.changeLanguage(language);
 
+  // change page direction and fetch css
+  changeDirectionIfNeeded(language);
+
   yield put(sources.fetchSources());
   yield put(tags.fetchTags());
-  yield changeDirectionIfNeeded(language);
-}
-
-function* changeDirectionIfNeeded(language) {
-  const currentDirection = getCurrentDirection() || 'ltr';
-  const newDirection     = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
-
-  if (currentDirection !== newDirection) {
-    console.log('changeDirectionIfNeeded: ', language, newDirection);
-    changeDirection(newDirection);
-  }
 }
 
 function* watchSetLanguages() {

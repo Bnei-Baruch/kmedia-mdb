@@ -10,17 +10,14 @@ import ResultsPageHeader from '../../shared/ResultsPageHeader';
 const filters = [
   {
     name: 'date-filter',
-    label: 'Date',
     component: filterComponents.DateFilter
   },
   {
     name: 'sources-filter',
-    label: 'Sources',
     component: filterComponents.SourcesFilter
   },
   {
     name: 'topics-filter',
-    label: 'Topics',
     component: filterComponents.TopicsFilter
   }
 ];

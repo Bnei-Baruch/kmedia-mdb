@@ -1,8 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Button, Divider, List, Segment } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 import noop from 'lodash/noop';
+import { Button, Divider, List, Segment } from 'semantic-ui-react';
 
 import { TAG_ROOT_TOPICS } from '../../../helpers/consts';
 import { selectors as tags } from '../../../redux/modules/tags';
@@ -16,6 +16,7 @@ class TopicsFilter extends React.Component {
     updateValue: PropTypes.func.isRequired,
     value: PropTypes.string,
     getTagById: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
     allValues: PropTypes.arrayOf(PropTypes.string)
   };
 
@@ -67,15 +68,18 @@ class TopicsFilter extends React.Component {
         <List divided relaxed selection>
           {
             items.map((x) => {
-              const node = getTagById(x);
-              const style = this.props.allValues.includes(x) && selected !== x ? {backgroundColor: 'lightgoldenrodyellow'} : {};
+              const node  = getTagById(x);
+              const style = this.props.allValues.includes(x) && selected !== x ?
+                { backgroundColor: 'lightgoldenrodyellow' } :
+                {};
+
               return (
                 <List.Item
-                  active={selected === node.id}
-                  onClick={this.onSelectionChange}
                   key={node.id}
                   value={node.id}
                   style={style}
+                  active={selected === node.id}
+                  onClick={this.onSelectionChange}
                 >
                   {node.label}
                 </List.Item>
@@ -88,20 +92,21 @@ class TopicsFilter extends React.Component {
   };
 
   render() {
-    const topics = this.props.getTagById(TAG_ROOT_TOPICS);
+    const { t, getTagById } = this.props;
+    const topics            = getTagById(TAG_ROOT_TOPICS);
 
     return (
-      <Segment basic attached="bottom" className="tab active" clearing>
+      <Segment basic clearing attached="bottom" className="tab active">
         {
           topics.children ?
             this.createList(topics.children, this.state.selection) :
             'No topics'
         }
         <Divider />
-        <div>
-          <Button floated="right" onClick={this.apply} primary>Apply</Button>
-          <Button floated="right" onClick={this.onCancel}>Cancel</Button>
-        </div>
+        <Segment vertical clearing>
+          <Button primary content={t('buttons.apply')} floated="right" onClick={this.apply} />
+          <Button content={t('buttons.cancel')} floated="right" onClick={this.onCancel} />
+        </Segment>
       </Segment>
     );
   }

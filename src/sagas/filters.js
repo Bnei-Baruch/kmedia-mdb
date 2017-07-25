@@ -5,9 +5,13 @@ import { filtersTransformer } from '../filters';
 
 /*
  * When a filter value is changed, the query is also changed to match..
- * The params in the query can have the filter's name and value transformed (to for example a different string representation)
- * The filters values can be hydrated (by dispatching HYDRATE_FILTERS) from a query containing keys and values matching filters that know how to transform them.
- * The hydration is needed when a we mount a page containing filters and we have a query full of filter values (this enables us to link to specific results).
+ * The params in the query can have the filter's name and value transformed
+ * (to for example a different string representation)
+ *
+ * The filters values can be hydrated (by dispatching HYDRATE_FILTERS)
+ * from a query containing keys and values matching filters that know how to transform them.
+ * The hydration is needed when we mount a page containing filters and we have a query full of filter values
+ * (this enables us to link to specific results).
  * You can know that filter values have been hydrated when the FILTERS_HYDRATED action is dispatched.
  *
  * The sagas will catch actions that change filter values and update the query accordingly.
@@ -22,11 +26,11 @@ function* updateFilterValuesInQuery(action) {
 
 function* hydrateFilters(action) {
   const { namespace, from } = action.payload;
-  let filters;
 
+  let filters;
   if (from === 'query') {
     const query = yield* getQuery();
-    filters = filtersTransformer.fromQueryParams(query);
+    filters     = filtersTransformer.fromQueryParams(query);
   }
 
   if (filters) {
@@ -51,5 +55,5 @@ function* watchHydrateFilters() {
 
 export const sagas = [
   watchFilterValueChange,
-  watchHydrateFilters
+  watchHydrateFilters,
 ];

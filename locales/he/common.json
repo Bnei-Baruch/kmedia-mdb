@@ -1,1 +1,159 @@
-{}
+{
+  "nav": {
+    "top": {
+      "header": "קבלה מדיה"
+    },
+    "sidebar": {
+      "lessons": "שיעור יומי",
+      "tv_shows": "תוכניות טלוויזיה",
+      "lectures": "הרצאות ושיעורים",
+      "sources": "מקורות",
+      "events": "אירועים",
+      "books": "ספרים",
+      "topics": "נושאים",
+      "publications": "פרסומים",
+      "photos": "תמונות",
+      "design": "עיצוב"
+    }
+  },
+  "filters": {
+    "date-filter": {
+      "label": "תאריך",
+      "selectTitle": "בחר טווח תאריכים",
+      "presets": {
+        "TODAY": "היום",
+        "YESTERDAY": "אתמול",
+        "LAST_7_DAYS": "7 ימים אחרונים",
+        "LAST_30_DAYS": "30 ימים אחרונים",
+        "LAST_MONTH": "חודש שעבר",
+        "THIS_MONTH": "חודש נוכחי",
+        "CUSTOM_RANGE": "בחירה גמישה"
+      }
+    },
+    "sources-filter": {
+      "label": "מקורות"
+    },
+    "topics-filter": {
+      "label": "נושאים"
+    }
+  },
+  "buttons": {
+    "apply": "אישור",
+    "cancel": "ביטול",
+    "audio": "אודיו",
+    "video": "וידאו",
+    "more": "עוד"
+  },
+  "messages": {
+    "loading": "טוען",
+    "loading-subtext": "תיכף מגיע",
+    "server-error": "שגיאת שרת",
+    "lesson-not-found": "שיעור לא קיים",
+    "lesson-not-found-subtext": "נסה לחפש ב <1>רשימת השיעורים</1>...",
+    "no-files": "לא נמצאו קבצים",
+    "no-playable-files": "לא נמצאו קבצים מתאימים לתצוגה",
+    "no-results": "לא נמצאו תוצאות",
+    "pagination-results": "תוצאות {{start}} - {{end}} מתוך {{total}}"
+  },
+  "lessons": {
+    "part": {
+      "info": {
+        "tags": "תגיות",
+        "sources": "מקורות",
+        "related-event": "אירועים קשורים"
+      },
+      "materials": {
+        "summary": "תקציר",
+        "transcription": "תמליל",
+        "sources": "מקורות",
+        "sketches": "שרטוטים"
+      },
+      "downloads": {
+        "title": "קבצים להורדה",
+        "derived-title": "נגזרות",
+        "copy-link": "העתק קישור",
+        "type-labels": {
+          "video": "וידאו של השיעור",
+          "audio": "אודיו של השיעור",
+          "text": "תמליל מלא",
+          "image": "שרטוטים"
+        }
+      },
+      "relevant-parts": {
+        "title": "חלקים נוספים מאותו שיעור",
+        "item-title": "חלק {{name}}"
+      }
+    }
+  },
+  "constants": {
+    "languages": {
+      "he": "עברית",
+      "en": "אנגלית",
+      "ru": "רוסית",
+      "es": "ספרדית",
+      "it": "איטלקית",
+      "de": "גרמנית",
+      "nl": "הולנדית",
+      "fr": "צרפתית",
+      "pt": "פורטוגזית",
+      "tr": "טורקית",
+      "pl": "פולנית",
+      "ar": "ערבית",
+      "hu": "הונגרית",
+      "fi": "פינית",
+      "lt": "ליטאית",
+      "ja": "יפנית",
+      "bg": "בולגרית",
+      "ka": "גרוזינית",
+      "no": "נורווגית",
+      "sv": "שבדית",
+      "hr": "קרואטית",
+      "zh": "סינית",
+      "fa": "פרסית",
+      "ro": "רומנית",
+      "hi": "הינדי",
+      "ua": "אוקראינית",
+      "mk": "מקדונית",
+      "sl": "סלובנית",
+      "lv": "לטבית",
+      "sk": "סלובקית",
+      "cs": "צ'כית"
+    },
+    "content-types": {
+      "DAILY_LESSON": "שיעור יומי",
+      "SPECIAL_LESSON": "שיעור מיוחד",
+      "FRIENDS_GATHERINGS": "",
+      "CONGRESS": "",
+      "VIDEO_PROGRAM": "",
+      "LECTURE_SERIES": "",
+      "MEALS": "",
+      "HOLIDAY": "",
+      "PICNIC": "",
+      "UNITY_DAY": "",
+      "LESSON_PART": "",
+      "LECTURE": "",
+      "CHILDREN_LESSON_PART": "",
+      "WOMEN_LESSON_PART": "",
+      "VIRTUAL_LESSON": "",
+      "FRIENDS_GATHERING": "",
+      "MEAL": "",
+      "VIDEO_PROGRAM_CHAPTER": "",
+      "FULL_LESSON": "",
+      "TEXT": "",
+      "UNKNOWN": "",
+      "EVENT_PART": "",
+      "CLIP": "",
+      "TRAINING": "",
+      "KITEI_MAKOR": "קטעי מקור"
+    },
+    "media-types": {
+      "video": "וידאו",
+      "audio": "אודיו",
+      "image": "תמונה",
+      "text": "טקסט",
+      "sheet": "גליון",
+      "banner": "באנר",
+      "presentation": "מצגת"
+    }
+  }
+}

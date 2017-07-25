@@ -5,10 +5,10 @@ import { actions, types } from '../redux/modules/sources';
 import { types as system } from '../redux/modules/system';
 import { selectors as settings } from '../redux/modules/settings';
 
-function* fetchSources(action) {
+function* fetchSources() {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const resp = yield call(Api.sources, { language });
+    const resp     = yield call(Api.sources, { language });
     yield put(actions.fetchSourcesSuccess(resp));
   } catch (err) {
     yield put(actions.fetchSourcesFailure(err));

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { translate } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Grid, Table } from 'semantic-ui-react';
 
@@ -10,6 +11,7 @@ class LessonsList extends PureComponent {
 
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.LessonCollection, shapes.LessonPart])),
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -31,7 +33,7 @@ class LessonsList extends PureComponent {
     </Table.Row>
   );
 
-  renderCollection = (collection) => {
+  renderCollection = (collection, t) => {
     const units = collection.content_units.map(unit => (
       <Table.Row verticalAlign="top" key={`u-${unit.id}`}>
         <Table.Cell>
@@ -52,7 +54,7 @@ class LessonsList extends PureComponent {
         </Table.Cell>
         <Table.Cell>
           <Link to={`/lessons/full/${collection.id}`}>
-            <strong>{collection.content_type}</strong>
+            <strong>{t(`constants.content-types.${collection.content_type}`)}</strong>
           </Link>
         </Table.Cell>
       </Table.Row>
@@ -63,7 +65,7 @@ class LessonsList extends PureComponent {
   };
 
   render() {
-    const { items } = this.props;
+    const { items, t } = this.props;
 
     if (!items) {
       return (<Grid columns={2} celled="internally" />);
@@ -76,7 +78,7 @@ class LessonsList extends PureComponent {
             items.map(x => (
               x.content_type === CT_LESSON_PART ?
                 this.renderPart(x) :
-                this.renderCollection(x))
+                this.renderCollection(x, t))
             )
           }
         </Table.Body>
@@ -85,4 +87,4 @@ class LessonsList extends PureComponent {
   }
 }
 
-export default LessonsList;
+export default translate()(LessonsList);

@@ -25,8 +25,10 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Menu } from 'semantic-ui-react';
 import noop from 'lodash/noop';
+import { Icon, Menu } from 'semantic-ui-react';
+
+import { DEFAULT_LANGUAGE, RTL_LANGUAGES } from '../../helpers/consts';
 
 class Pagination extends PureComponent {
 
@@ -43,6 +45,7 @@ class Pagination extends PureComponent {
     pageSize: PropTypes.number.isRequired,
     total: PropTypes.number,
     pageNo: PropTypes.number,
+    language: PropTypes.string,
     onChange: PropTypes.func,
     windowSize: PropTypes.number,
     titles: PropTypes.shape({
@@ -58,6 +61,7 @@ class Pagination extends PureComponent {
   static defaultProps = {
     pageNo: 1,
     total: 0,
+    language: DEFAULT_LANGUAGE,
     onChange: noop,
     windowSize: 3,
     titles: Pagination.TITLES,
@@ -99,13 +103,15 @@ class Pagination extends PureComponent {
   };
 
   render() {
-    const { total, pageSize, pageNo, windowSize } = this.props;
+    const { total, pageSize, pageNo, windowSize, language } = this.props;
 
     const { current, totalBlocks } = Pagination.calcBlocks({ total, pageSize, pageNo });
     const visibleRange             = Pagination.visibleRange(current, totalBlocks, windowSize);
     if (visibleRange.length === 0) {
       return null;
     }
+
+    const isRTL = RTL_LANGUAGES.includes(language);
 
     const titles       = this.getTitle;
     const prevDisabled = current === 1;
@@ -115,12 +121,12 @@ class Pagination extends PureComponent {
 
     return (
       <Menu compact color="blue">
-        {this.renderPage(titles('first'), 1, 'first', prevDisabled)}
-        {this.renderPage(titles('prev'), current - 1, 'prev', prevDisabled)}
+        {this.renderPage(titles(isRTL ? 'last' : 'first'), 1, 'first', prevDisabled)}
+        {this.renderPage(titles(isRTL ? 'next' : 'prev'), current - 1, 'prev', prevDisabled)}
         {
           hidePrevSet ?
             null :
-            this.renderPage(titles('prevSet'), -100, 'prevSet', true)
+            this.renderPage(titles(isRTL ? 'nextSet' : 'prevSet'), -100, 'prevSet', true)
         }
 
         {visibleRange.map(x => (this.renderPage(x, x, x, false, x === current)))}
@@ -128,10 +134,10 @@ class Pagination extends PureComponent {
         {
           hideNextSet ?
             null :
-            this.renderPage(titles('nextSet'), -101, 'nextSet', true)
+            this.renderPage(titles(isRTL ? 'prevSet' : 'nextSet'), -101, 'nextSet', true)
         }
-        {this.renderPage(titles('next'), current + 1, 'next', nextDisabled)}
-        {this.renderPage(titles('last'), totalBlocks, 'last', nextDisabled)}
+        {this.renderPage(titles(isRTL ? 'prev' : 'next'), current + 1, 'next', nextDisabled)}
+        {this.renderPage(titles(isRTL ? 'first' : 'last'), totalBlocks, 'last', nextDisabled)}
       </Menu>
     );
   }
