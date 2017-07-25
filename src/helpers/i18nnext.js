@@ -4,7 +4,7 @@ import { DEFAULT_LANGUAGE } from './consts';
 // import Cache from 'i18next-localstorage-cache';
 // import LanguageDetector from 'i18next-browser-languagedetector';
 
-const localesBackend = `${process.env.production ? process.env.REACT_APP_LOCALES_BACKEND : 'http://localhost:9876'}`;
+const localesBackend = `${process.env.production ? process.env.PUBLIC_URL : 'http://localhost:9876'}`;
 
 i18n
   .use(XHR)
