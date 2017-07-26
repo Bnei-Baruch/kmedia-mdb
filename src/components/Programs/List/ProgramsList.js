@@ -62,19 +62,21 @@ class ProgramsList extends PureComponent {
   render() {
     const { items } = this.props;
 
-    if (!items) {
+    if (!Array.isArray(items) || items.length === 0) {
       return (<Grid columns={2} celled="internally" />);
     }
 
     return (
       <Table basic="very" sortable>
-        {
-          items.map(x => (
-            x.content_type === CT_VIDEO_PROGRAM_CHAPTER ?
-              this.renderPart(x) :
-              this.renderCollection(x))
-          )
-        }
+        <Table.Body>
+          {
+            items.map(x => (
+              x.content_type === CT_VIDEO_PROGRAM_CHAPTER ?
+                this.renderPart(x) :
+                this.renderCollection(x))
+            )
+          }
+        </Table.Body>
       </Table>
     );
   }

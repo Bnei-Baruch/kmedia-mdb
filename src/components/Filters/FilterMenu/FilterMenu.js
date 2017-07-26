@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Menu } from 'semantic-ui-react';
 import { translate } from 'react-i18next';
+import { Menu } from 'semantic-ui-react';
+
 import { filterPropShape } from '../../shapes';
 import FilterMenuItem from '../FilterMenuItem/FilterMenuItem';
 
@@ -28,7 +29,7 @@ class FilterMenu extends PureComponent {
             <FilterMenuItem
               key={item.name}
               name={item.name}
-              label={t(item.label)}
+              label={t(`filters.${item.name}.label`)}
               isActive={item.name === active}
               onChoose={onChoose}
             />
@@ -39,4 +40,4 @@ class FilterMenu extends PureComponent {
   }
 }
 
-export default translate('filters')(FilterMenu);
+export default translate()(FilterMenu);
