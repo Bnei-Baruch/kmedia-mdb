@@ -13,10 +13,11 @@ import LanguageSelector from '../shared/LanguageSelector';
 import AVPlayPause from './AVPlayPause';
 import AVTime from './AVTime';
 import AVSwitch from './AVSwitch';
+import AVFullScreen from './AVFullScreen';
 
 import Progress from './Progress';
 
-const { MuteUnmute, SeekBar, Volume, Fullscreen } = controls;
+const { MuteUnmute, Progress, SeekBar, Volume, Fullscreen } = controls;
 
 class AVPlayerRMP extends PureComponent {
 
@@ -82,7 +83,7 @@ class AVPlayerRMP extends PureComponent {
                   <SeekBar />
                   <MuteUnmute />
                   <Volume />
-                  <Fullscreen />
+                  <AVFullScreen />
                 </div>
               </div>
             )
