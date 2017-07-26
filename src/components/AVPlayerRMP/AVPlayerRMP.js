@@ -17,7 +17,7 @@ import AVFullScreen from './AVFullScreen';
 
 import Progress from './Progress';
 
-const { MuteUnmute, Progress, SeekBar, Volume, Fullscreen } = controls;
+const { MuteUnmute, SeekBar, Volume, Fullscreen } = controls;
 
 class AVPlayerRMP extends PureComponent {
 

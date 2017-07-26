@@ -6,6 +6,9 @@ import * as shapes from '../../shapes';
 import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
 import AVPlayer from '../../AVPlayerRMP/AVPlayerRMP';
 
+import LanguageSelector from '../../shared/LanguageSelector';
+import AVSwitch from '../../AVPlayerRMP/AVSwitch';
+
 class VideoBox extends Component {
 
   static propTypes = {
