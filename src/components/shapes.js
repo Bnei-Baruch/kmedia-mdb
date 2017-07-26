@@ -68,6 +68,16 @@ export const LessonPart = PropTypes.shape({
   film_date: PropTypes.string.isRequired,
 });
 
+export const ProgramCollection = PropTypes.shape({
+  ...MDBDenormalizedCollection,
+  film_date: PropTypes.string.isRequired,
+});
+
+export const ProgramPart = PropTypes.shape({
+  ...MDBDenormalizedContentUnit,
+  film_date: PropTypes.string.isRequired,
+});
+
 export const Topics = PropTypes.arrayOf(PropTypes.shape({
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,

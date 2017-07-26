@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 
 const ITEMS = [
   { key: 'daily_lessons', name: 'Daily Lessons', to: '/lessons', },
-  { key: 'tv_video_programs', name: 'TV & Video Programs', to: '/tv_shows', },
+  { key: 'tv_video_programs', name: 'TV & Video Programs', to: '/programs', },
   { key: 'lectures_lessons', name: 'Lectures & Lessons', to: '/lectures', },
   { key: 'sources', name: 'Kabbalah Sources', to: '/sources', },
   { key: 'events', name: 'Events', to: '/events', },
