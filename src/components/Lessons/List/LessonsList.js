@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { translate } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Grid, Table } from 'semantic-ui-react';
 
@@ -10,16 +11,17 @@ class LessonsList extends PureComponent {
 
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.LessonCollection, shapes.LessonPart])),
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     items: []
   };
 
-  renderPart = part => (
+  renderPart = (part, t) => (
     <Table.Row verticalAlign="top" key={part.id}>
       <Table.Cell collapsing singleLine width={1}>
-        <strong>{part.film_date}</strong>
+        <strong>{t('values.date', { date: new Date(part.film_date) })}</strong>
       </Table.Cell>
       <Table.Cell>
         <Link to={`/lessons/part/${part.id}`}>
@@ -31,7 +33,7 @@ class LessonsList extends PureComponent {
     </Table.Row>
   );
 
-  renderCollection = (collection) => {
+  renderCollection = (collection, t) => {
     const units = collection.content_units.map(unit => (
       <Table.Row verticalAlign="top" key={`u-${unit.id}`}>
         <Table.Cell>
@@ -48,11 +50,11 @@ class LessonsList extends PureComponent {
     rows.push((
       <Table.Row verticalAlign="top" key={`l-${collection.id}`}>
         <Table.Cell collapsing singleLine width={1} rowSpan={collection.content_units.length + 1}>
-          <strong>{collection.film_date}</strong>
+          <strong>{t('values.date', { date: new Date(collection.film_date) })}</strong>
         </Table.Cell>
         <Table.Cell>
           <Link to={`/lessons/full/${collection.id}`}>
-            <strong>{collection.content_type}</strong>
+            <strong>{t(`constants.content-types.${collection.content_type}`)}</strong>
           </Link>
         </Table.Cell>
       </Table.Row>
@@ -63,7 +65,7 @@ class LessonsList extends PureComponent {
   };
 
   render() {
-    const { items } = this.props;
+    const { items, t } = this.props;
 
     if (!items) {
       return (<Grid columns={2} celled="internally" />);
@@ -75,8 +77,8 @@ class LessonsList extends PureComponent {
           {
             items.map(x => (
               x.content_type === CT_LESSON_PART ?
-                this.renderPart(x) :
-                this.renderCollection(x))
+                this.renderPart(x, t) :
+                this.renderCollection(x, t))
             )
           }
         </Table.Body>
@@ -85,4 +87,4 @@ class LessonsList extends PureComponent {
   }
 }
 
-export default LessonsList;
+export default translate()(LessonsList);

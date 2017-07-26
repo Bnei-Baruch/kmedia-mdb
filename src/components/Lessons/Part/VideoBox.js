@@ -11,6 +11,7 @@ class VideoBox extends Component {
   static propTypes = {
     language: PropTypes.string.isRequired,
     lesson: shapes.LessonPart,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -24,7 +25,7 @@ class VideoBox extends Component {
 
   calcState = (props) => {
     const { lesson = {}, language } = props;
-    const groups          = this.getFilesByLanguage(lesson.files);
+    const groups                    = this.getFilesByLanguage(lesson.files);
 
     let lang;
     if (groups.has(language)) {
@@ -42,21 +43,18 @@ class VideoBox extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { lesson = {}, language } = nextProps;
-    const props                = this.props;
-    const state                = this.state;
+    const props                     = this.props;
+    const state                     = this.state;
 
     // no change
     if (lesson === props.lesson && language === props.language) {
-      console.log('No change');
       return;
     }
 
     // only language changed
     if (lesson === props.lesson && language !== props.language) {
-      console.log('Language changed');
       if (state.groups.has(language)) {
         this.setState({ language, ...this.splitAV(language, state.groups) }, () => {
-          console.log('Updated state', this.state);
         });
         return;
       }
@@ -102,10 +100,11 @@ class VideoBox extends Component {
   };
 
   render() {
+    const { t } = this.props;
     const { audio, video, active, groups, language } = this.state;
 
     if (!(video || audio)) {
-      return (<div>No video/audio files.</div>);
+      return (<div>{t('messages.no-playable-files')}</div>);
     }
 
     return (
@@ -127,6 +126,22 @@ class VideoBox extends Component {
               />
             </div>
           </div>
+        </Grid.Column>
+        <Grid.Column className="player_panel" width={6}>
+          <Grid columns="equal">
+            <Grid.Row>
+              <Grid.Column>
+                <AVSwitch video={video} audio={audio} active={active} t={t} onChange={this.handleSwitchAV} />
+              </Grid.Column>
+              <Grid.Column>
+                <LanguageSelector
+                  languages={Array.from(groups.keys())}
+                  defaultValue={language}
+                  onSelect={this.handleChangeLanguage}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </Grid.Column>
       </Grid.Row>
     );

@@ -1,10 +1,9 @@
-/* eslint-disable no-extra-boolean-cast */
-
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Button, Segment, Menu } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 import noop from 'lodash/noop';
+import { Button, Menu, Segment } from 'semantic-ui-react';
+
 import { selectors as sources } from '../../../redux/modules/sources';
 import connectFilter from '../connectFilter';
 
@@ -16,6 +15,7 @@ class SourcesFilter extends React.Component {
     onCancel: PropTypes.func,
     onApply: PropTypes.func,
     updateValue: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
     value: PropTypes.arrayOf(PropTypes.string),
     allValues: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string))
   };
@@ -38,9 +38,9 @@ class SourcesFilter extends React.Component {
     });
   }
 
-  componentDidUpdate = () => {
+  componentDidUpdate() {
     this.listContainer.scrollLeft = this.listContainer.scrollWidth;
-  };
+  }
 
   onSelectionChange = (event, data) => {
     const { value } = data;
@@ -85,15 +85,16 @@ class SourcesFilter extends React.Component {
   createList = (depth, items, selectedId, otherSelectedIds) => {
     const { getSourceById } = this.props;
     return (
-      <div className="filter-steps__column-wrapper"
-        key={selectedId}
-      >
+      <div key={selectedId} className="filter-steps__column-wrapper">
         <div className="filter-steps__column">
-          <Menu fluid vertical  color='blue' size='tiny'>
+          <Menu fluid vertical color="blue" size="tiny">
             {
               items.map((x) => {
-                const node = getSourceById(x);
-                const style = otherSelectedIds.includes(x) && selectedId !== x ? {backgroundColor: 'lightgoldenrodyellow'} : {};
+                const node  = getSourceById(x);
+                const style = otherSelectedIds.includes(x) && selectedId !== x ?
+                  { backgroundColor: 'lightgoldenrodyellow' } :
+                  {};
+
                 return (
                   <Menu.Item
                     key={x}
@@ -115,36 +116,26 @@ class SourcesFilter extends React.Component {
   };
 
   render() {
-    const { roots } = this.props;
+    const { roots, t } = this.props;
 
     return (
-
-      <div  style={{}}>
-
-        <Segment vertical  className="tab active" style={{
-          padding:'0'
-        }}>
-          <div className="filter-steps"
-            // eslint-disable-next-line no-return-assign
-            ref={el => this.listContainer = el}
-            style={{  }}
-          >
-            {/*<div style={{  }}>*/}
-              {
-                roots.length > 0 ?
-                  this.createLists(0, roots, this.state.selection, this.props.allValues).map(l => l) :
-                  'No Sources'
-              }
-           {/* </div> )*/}
-
-          </div>
-
-        </Segment>
+      <Segment basic clearing attached="bottom" className="tab active">
+        <div
+          className="filter-steps"
+          // eslint-disable-next-line no-return-assign
+          ref={el => this.listContainer = el}
+        >
+          {
+            roots.length > 0 ?
+              this.createLists(0, roots, this.state.selection, this.props.allValues).map(l => l) :
+              'No Sources'
+          }
+        </div>
         <Segment vertical clearing>
-          <Button floated="right" onClick={this.apply} primary>Apply</Button>
-          <Button floated="right" onClick={this.onCancel}>Cancel</Button>
+          <Button primary content={t('buttons.apply')} floated="right" onClick={this.apply} />
+          <Button content={t('buttons.cancel')} floated="right" onClick={this.onCancel} />
         </Segment>
-      </div>
+      </Segment>
     );
   }
 }

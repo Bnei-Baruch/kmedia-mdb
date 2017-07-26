@@ -148,7 +148,7 @@ const onSetPage = (state, action) => (
   }
 );
 
-const onSetLanguage = (state) => (
+const onSetLanguage = state => (
   {
     ...state,
     items: [],

@@ -9,7 +9,7 @@ import { actions, selectors } from '../../../../redux/modules/lessons';
 import * as shapes from '../../../shapes';
 import RelevantParts from './RelevantParts';
 
-const getCollectionIdFromLesson = lesson => {
+const getCollectionIdFromLesson = (lesson) => {
   if (lesson.collections) {
     const collections        = Object.values(lesson.collections);
     const relevantCollection = collections.find(collection =>
@@ -34,10 +34,12 @@ class RelevantPartsContainer extends Component {
     wip: shapes.WIP,
     err: shapes.Error,
     fetchFullLesson: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     fullLesson: null,
+    fullLessonID: '',
     wip: false,
     err: null,
   };
@@ -68,14 +70,17 @@ class RelevantPartsContainer extends Component {
   };
 
   render() {
-    const { lesson, fullLesson, wip, err } = this.props;
+    const { lesson, fullLesson, wip, err, t } = this.props;
 
-    return <RelevantParts
-      lesson={lesson}
-      err={err}
-      wip={wip}
-      fullLesson={wip || err ? null : fullLesson}
-    />;
+    return (
+      <RelevantParts
+        lesson={lesson}
+        wip={wip}
+        err={err}
+        fullLesson={wip || err ? null : fullLesson}
+        t={t}
+      />
+    );
   }
 }
 

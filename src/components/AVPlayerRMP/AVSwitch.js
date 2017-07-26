@@ -4,23 +4,27 @@ import { Button } from 'semantic-ui-react';
 
 import * as shapes from '../shapes';
 
-const AVSwitch = ({ video, audio, active, onChange }) => (
-  <Button.Group fluid>
-    {video && active === video ? <Button active color="blue">Video</Button> : null }
-    {video && active !== video ? <Button onClick={onChange}>Video</Button> : null}
-    {!video ? <Button disabled>Video</Button> : null}
+const AVSwitch = (props) => {
+  const { video, audio, active, onChange, t } = props;
+  return (
+    <Button.Group fluid>
+      {video && active === video ? <Button active color="blue" content={t('buttons.video')} /> : null }
+      {video && active !== video ? <Button content={t('buttons.video')} onClick={onChange} /> : null}
+      {!video ? <Button disabled content={t('buttons.video')} /> : null}
 
-    {audio && active === audio ? <Button active color="blue">Audio</Button> : null }
-    {audio && active !== audio ? <Button onClick={onChange}>Audio</Button> : null }
-    {!audio ? <Button disabled>Audio</Button> : null}
-  </Button.Group>
-);
+      {audio && active === audio ? <Button active color="blue" content={t('buttons.audio')} /> : null }
+      {audio && active !== audio ? <Button content={t('buttons.audio')} onClick={onChange} /> : null }
+      {!audio ? <Button disabled content={t('buttons.audio')} /> : null}
+    </Button.Group>
+  );
+};
 
 AVSwitch.propTypes = {
   video: shapes.MDBFile,
   audio: shapes.MDBFile,
   active: shapes.MDBFile,
   onChange: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
 };
 
 AVSwitch.defaultProps = {

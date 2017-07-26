@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import { Header, List } from 'semantic-ui-react';
 
 import { intersperse, tracePath } from '../../../helpers/utils';
-import { selectors as sources } from '../../../redux/modules/sources';
-import { selectors as tags } from '../../../redux/modules/tags';
+import { selectors as sourcesSelectors } from '../../../redux/modules/sources';
+import { selectors as tagsSelectors } from '../../../redux/modules/tags';
 import * as shapes from '../../shapes';
 
 class Info extends Component {
@@ -15,6 +15,7 @@ class Info extends Component {
     lesson: shapes.LessonPart,
     getSourceById: PropTypes.func.isRequired,
     getTagById: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -22,8 +23,8 @@ class Info extends Component {
   };
 
   render() {
-    const { lesson = {}, getSourceById, getTagById } = this.props;
-    const { name, film_date, sources, tags }         = lesson;
+    const { lesson = {}, getSourceById, getTagById, t } = this.props;
+    const { name, film_date: filmDate, sources, tags }  = lesson;
 
     const tagLinks = Array.from(intersperse(
       (tags || []).map((x) => {
@@ -51,7 +52,7 @@ class Info extends Component {
     return (
       <div>
         <Header as="h3">
-          <span className="text grey">{film_date}</span><br />
+          <span className="text grey">{t('values.date', { date: new Date(filmDate) })}</span><br />
           {name}
         </Header>
         <List>
@@ -59,29 +60,34 @@ class Info extends Component {
             tagLinks.length === 0 ?
               null :
               <List.Item>
-                <strong>Tags:</strong> {tagLinks}
+                <strong>{t('lessons.part.info.tags')}:</strong>
+                &nbsp;{tagLinks}
               </List.Item>
           }
           {
             sourcesLinks.length === 0 ?
               null :
               <List.Item>
-                <strong>Sources:</strong> {sourcesLinks}
+                <strong>{t('lessons.part.info.sources')}:</strong>
+                &nbsp;{sourcesLinks}
               </List.Item>
           }
 
-          <List.Item><strong>Related to Event:</strong> <a href="">World Israel Congress 2016</a></List.Item>
+          <List.Item>
+            <strong>{t('lessons.part.info.related-event')}:</strong>
+            &nbsp;<a href="">World Israel Congress 2016</a>
+          </List.Item>
         </List>
       </div>
     );
-  };
+  }
 }
 
 export default connect(
-  (state, ownProps) => ({
+  state => ({
     // NOTE (yaniv -> ido): using selectors this way will always make the component rerender
     // since sources.getSourcesById(state) !== sources.getSourcesById(state) for every state
-    getSourceById: sources.getSourceById(state.sources),
-    getTagById: tags.getTagById(state.tags),
+    getSourceById: sourcesSelectors.getSourceById(state.sources),
+    getTagById: tagsSelectors.getTagById(state.tags),
   })
 )(Info);

@@ -10,7 +10,7 @@ import connectFilter from '../connectFilter';
 
 // TODO (yaniv -> oleg): need indication for user when clicking on a bad date (after today) or when typing bad dates
 
-const format     = 'DD-MM-YYYY';
+const format = 'DD-MM-YYYY';
 
 const now = () =>
   moment(new Date())
@@ -20,25 +20,23 @@ const now = () =>
     .milliseconds(0)
     .toDate();
 
-const TODAY        = 1;
-const YESTERDAY    = 2;
-const LAST_7_DAYS  = 3;
-const LAST_30_DAYS = 4;
-const LAST_MONTH   = 5;
-const THIS_MONTH   = 6;
-const CUSTOM_RANGE = 100;
+const TODAY        = 'TODAY';
+const YESTERDAY    = 'YESTERDAY';
+const LAST_7_DAYS  = 'LAST_7_DAYS';
+const LAST_30_DAYS = 'LAST_30_DAYS';
+const LAST_MONTH   = 'LAST_MONTH';
+const THIS_MONTH   = 'THIS_MONTH';
+const CUSTOM_RANGE = 'CUSTOM_RANGE';
 
-const datePresets = {
-  TODAY: { key: 1, text: 'Today', value: TODAY },
-  YESTERDAY: { key: 2, text: 'Yesterday', value: YESTERDAY },
-  LAST_7_DAYS: { key: 3, text: 'Last 7 Days', value: LAST_7_DAYS },
-  LAST_30_DAYS: { key: 4, text: 'Last 30 Days', value: LAST_30_DAYS },
-  LAST_MONTH: { key: 5, text: 'Last Month', value: LAST_MONTH },
-  THIS_MONTH: { key: 6, text: 'This Month', value: THIS_MONTH },
-  CUSTOM_RANGE: { key: 7, text: 'Custom Range', value: CUSTOM_RANGE },
-};
-
-const datePresetsOptions = Object.keys(datePresets).map(key => datePresets[key]);
+const datePresets = [
+  TODAY,
+  YESTERDAY,
+  LAST_7_DAYS,
+  LAST_30_DAYS,
+  LAST_MONTH,
+  THIS_MONTH,
+  CUSTOM_RANGE,
+];
 
 const presetToRange = {
   [TODAY]: () => {
@@ -113,7 +111,8 @@ class DateFilter extends Component {
     }),
     onCancel: PropTypes.func,
     onApply: PropTypes.func,
-    updateValue: PropTypes.func.isRequired
+    updateValue: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -209,6 +208,10 @@ class DateFilter extends Component {
     this.datePicker.showMonth(dateToShow);
   };
 
+  onCancel = () => {
+    this.props.onCancel();
+  };
+
   apply = () => {
     const { from, to, datePreset } = this.state;
     this.props.updateValue({ from, to, datePreset });
@@ -271,8 +274,11 @@ class DateFilter extends Component {
   canApply = () => isValidDateRange(this.state.fromInputValue, this.state.toInputValue);
 
   render() {
+    const { t }                                                  = this.props;
     const { fromInputValue, toInputValue, from, to, datePreset } = this.state;
-    const { onCancel }                                           = this.props;
+
+    const i18nPresetsOptions = datePresets.map(x =>
+      ({ text: t(`filters.date-filter.presets.${x}`), value: x }));
 
     return (
       <Segment basic attached="bottom" className="tab active">
@@ -282,43 +288,49 @@ class DateFilter extends Component {
               <DayPicker
                 numberOfMonths={2}
                 selectedDays={{ from, to }}
-                onDayClick={this.handleDayClick}
                 toMonth={now()}
+                onDayClick={this.handleDayClick}
                 // eslint-disable-next-line no-return-assign
                 ref={el => this.datePicker = el}
               />
             </Grid.Column>
             <Grid.Column width={5}>
-              <Header textAlign="center">Select a start index</Header>
+              <Header content={t('filters.date-filter.selectTitle')} textAlign="center" />
               <Grid>
                 <Grid.Row>
                   <Grid.Column width={16}>
-                    <Dropdown fluid options={datePresetsOptions} item value={datePreset} onChange={this.handleDatePresetsChange} />
+                    <Dropdown
+                      item
+                      fluid
+                      options={i18nPresetsOptions}
+                      value={datePreset}
+                      onChange={this.handleDatePresetsChange}
+                    />
                     <Divider />
                   </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column width={8}>
                     <Input
-                      value={fromInputValue}
-                      onChange={this.handleFromInputChange}
                       fluid
                       placeholder="DD-MM-YYYY"
+                      value={fromInputValue}
+                      onChange={this.handleFromInputChange}
                     />
                   </Grid.Column>
                   <Grid.Column width={8}>
                     <Input
-                      value={toInputValue}
-                      onChange={this.handleToInputChange}
                       fluid
                       placeholder="DD-MM-YYYY"
+                      value={toInputValue}
+                      onChange={this.handleToInputChange}
                     />
                   </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column textAlign="right">
-                    <Button type="button" onClick={onCancel}>Cancel</Button>
-                    <Button type="button" primary disabled={!this.canApply()} onClick={this.apply}>Apply</Button>
+                    <Button content={t('buttons.cancel')} onClick={this.onCancel} />
+                    <Button primary content={t('buttons.apply')} disabled={!this.canApply()} onClick={this.apply} />
                   </Grid.Column>
                 </Grid.Row>
               </Grid>

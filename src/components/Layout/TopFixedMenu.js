@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { translate } from 'react-i18next';
 import { Container, Flag, Icon, Menu } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
 
 import { LANGUAGES } from '../../helpers/consts';
 import { actions, selectors } from '../../redux/modules/settings';
@@ -11,10 +11,10 @@ import { actions, selectors } from '../../redux/modules/settings';
 class TopFixedMenu extends PureComponent {
 
   static propTypes = {
-    title: PropTypes.string.isRequired,
     language: PropTypes.string.isRequired,
     toggleVisibility: PropTypes.func.isRequired,
     setLanguage: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   handleChangeLanguage = (e) => {
@@ -26,22 +26,19 @@ class TopFixedMenu extends PureComponent {
   };
 
   render() {
-    const { title, toggleVisibility } = this.props;
+    const { toggleVisibility, t } = this.props;
+
     return (
-      <Menu fixed="top" inverted color="blue">
+      <Menu inverted borderless fixed="top" color="blue">
         <Container>
           <Menu.Item as="a" icon className="ui padded grid tablet mobile only" onClick={toggleVisibility}>
             <Icon name="sidebar" style={{ padding: 0 }} />
           </Menu.Item>
           <Menu.Item header>
             <h3 className="main-title">
-              Kabbalah Media
-              <small>&nbsp;- {title}</small>
+              {t('nav.top.header')}
             </h3>
           </Menu.Item>
-          <Menu.Item as={Link} to="/home"> Features </Menu.Item>
-          <Menu.Item as={Link} to="/home"> Testimonials </Menu.Item>
-          <Menu.Item as={Link} to="/home"> Sign-in </Menu.Item>
           <Menu.Menu position="right">
             <Menu.Item>
               <Flag name="us" onClick={this.handleChangeLanguage} />
@@ -65,4 +62,4 @@ function mapDispatch(dispatch) {
   return bindActionCreators({ setLanguage: actions.setLanguage }, dispatch);
 }
 
-export default connect(mapState, mapDispatch)(TopFixedMenu);
+export default connect(mapState, mapDispatch)(translate()(TopFixedMenu));

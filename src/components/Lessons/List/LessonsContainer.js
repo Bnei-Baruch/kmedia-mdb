@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Divider, Grid } from 'semantic-ui-react';
 
-import * as shapes from '../../shapes';
+import { CT_LESSON_PART } from '../../../helpers/consts';
+import { actions, selectors } from '../../../redux/modules/lessons';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
-import { actions, selectors } from '../../../redux/modules/lessons';
-import { CT_LESSON_PART } from '../../../helpers/consts';
+import { selectors as filters } from '../../../redux/modules/filters';
+import * as shapes from '../../shapes';
 import Pagination from '../../shared/Pagination';
 import LessonsFilters from './LessonsFilters';
 import LessonsList from './LessonsList';
@@ -23,13 +24,27 @@ class LessonsContainer extends Component {
     setPage: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
     pageSize: PropTypes.number.isRequired,
+    isFiltersHydrated: PropTypes.bool,
   };
 
   static defaultProps = {
     pageNo: 1,
     total: 0,
     items: [],
+    isFiltersHydrated: false,
   };
+
+  componentDidMount() {
+    const { isFiltersHydrated } = this.props;
+
+    // If filters are already hydrated, handleFiltersHydrated won't be called.
+    // We'll have to ask for data here instead.
+    if (isFiltersHydrated) {
+      const { location, language, pageSize } = this.props;
+      const pageNo                           = this.getPageNo(location.search);
+      this.askForData(pageNo, language, pageSize);
+    }
+  }
 
   componentWillReceiveProps(nextProps) {
     const { pageNo, language, pageSize } = nextProps;
@@ -62,9 +77,9 @@ class LessonsContainer extends Component {
   };
 
   handleFiltersHydrated = () => {
-    const { location }       = this.props;
-    const pageNoFromLocation = this.getPageNo(location.search);
-    this.handlePageChange(pageNoFromLocation);
+    const { location } = this.props;
+    const pageNo       = this.getPageNo(location.search);
+    this.handlePageChange(pageNo);
   };
 
   askForData = (pageNo, language, pageSize) => {
@@ -72,7 +87,7 @@ class LessonsContainer extends Component {
   };
 
   render() {
-    const { pageNo, total, items, pageSize } = this.props;
+    const { pageNo, total, items, pageSize, language } = this.props;
 
     return (
       <Grid.Column width={16}>
@@ -89,7 +104,8 @@ class LessonsContainer extends Component {
           pageNo={pageNo}
           pageSize={pageSize}
           total={total}
-          onChange={x => this.handlePageChange(x)}
+          language={language}
+          onChange={this.handlePageChange}
         />
       </Grid.Column>
     );
@@ -106,6 +122,7 @@ export default connect(
         mdb.getDenormCollection(state.mdb, x[0]))),
     language: settings.getLanguage(state.settings),
     pageSize: settings.getPageSize(state.settings),
+    isFiltersHydrated: filters.getIsHydrated(state.filters, 'lessons'),
   }),
   actions
 )(LessonsContainer);

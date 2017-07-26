@@ -1,0 +1,13 @@
+{
+  "filters": {
+    "date-filter": {
+      "label": "Дата"
+    },
+    "sources-filter": {
+      "label": "Статьи"
+    },
+    "topics-filter": {
+      "label": "Темы"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Button } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 
 class FilterTag extends PureComponent {
   static propTypes = {
@@ -15,7 +15,7 @@ class FilterTag extends PureComponent {
     isActive: false
   };
 
-  handleClick = (event) => {
+  handleClick = () => {
     this.props.onClick();
   };
 
@@ -26,16 +26,15 @@ class FilterTag extends PureComponent {
 
   render() {
     const { icon, label, isActive } = this.props;
-    const color = isActive ? 'green' : 'blue';
+    const color                     = isActive ? 'green' : 'blue';
 
     return (
-      <Button.Group size='mini'>
-        <Button basic as="a" ref={el => this.label = el} onClick={this.handleClick} color={color}>
-          <Icon name={icon}/>
+      <Button.Group size="mini">
+        <Button basic as="a" color={color} onClick={this.handleClick} ref={el => this.label = el}>
+          <Icon name={icon} />
           {label}
         </Button>
-        <Button color={color} icon='close' onClick={this.handleClose}>
-        </Button>
+        <Button color={color} icon="close" onClick={this.handleClose} />
       </Button.Group>
     );
   }
