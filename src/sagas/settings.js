@@ -1,4 +1,5 @@
 import { put, takeLatest } from 'redux-saga/effects';
+import moment from 'moment';
 
 import { RTL_LANGUAGES } from '../helpers/consts';
 import { changeDirection, getCurrentDirection } from '../helpers/i18n-utils';
@@ -21,6 +22,9 @@ function* setLanguage(action) {
 
   // TODO (edo): promisify callback and check for errors
   i18n.changeLanguage(language);
+
+  // change global moment.js locale
+  moment.locale(language);
 
   // change page direction and fetch css
   changeDirectionIfNeeded(language);

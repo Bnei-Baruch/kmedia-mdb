@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 
 import { actions, selectors } from '../../redux/modules/filters';
+import { selectors as settings } from '../../redux/modules/settings';
 
 const connectFilter = (options = {}) => (WrappedComponent) => {
   const isMultiple = options.isMultiple;
@@ -18,6 +19,7 @@ const connectFilter = (options = {}) => (WrappedComponent) => {
       addFilterValue: PropTypes.func.isRequired,
       removeFilterValue: PropTypes.func.isRequired,
       t: PropTypes.func.isRequired,
+      language: PropTypes.string.isRequired,
       activeValueIndex: PropTypes.number,
       isEditing: PropTypes.bool
     };
@@ -67,6 +69,7 @@ const connectFilter = (options = {}) => (WrappedComponent) => {
       activeValueIndex: selectors.getActiveValueIndex(state.filters, ownProps.namespace, ownProps.name),
       value: selectors.getActiveValue(state.filters, ownProps.namespace, ownProps.name),
       allValues: selectors.getFilterAllValues(state.filters, ownProps.namespace, ownProps.name),
+      language: settings.getLanguage(state.settings),
     }),
     actions
   )(translate()(ConnectFilterHOC));

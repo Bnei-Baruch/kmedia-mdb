@@ -3,14 +3,18 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import noop from 'lodash/noop';
 import DayPicker, { DateUtils } from 'react-day-picker';
+import LocaleUtils from 'react-day-picker/moment';
 import { Button, Divider, Dropdown, Grid, Header, Input, Segment } from 'semantic-ui-react';
 
 import 'react-day-picker/lib/style.css';
+
+import { DATE_FORMAT, RTL_LANGUAGES } from '../../../helpers/consts';
 import connectFilter from '../connectFilter';
 
 // TODO (yaniv -> oleg): need indication for user when clicking on a bad date (after today) or when typing bad dates
 
-const format = 'DD-MM-YYYY';
+// must be locale aware
+const DATE_DISPLAY_FORMAT = 'l';
 
 const now = () =>
   moment(new Date())
@@ -92,8 +96,8 @@ const rangeToPreset = (from, to) => {
 };
 
 const isValidDateRange = (fromValue, toValue) => {
-  const fromMoment = moment(fromValue, format, true);
-  const toMoment   = moment(toValue, format, true);
+  const fromMoment = moment(fromValue, DATE_DISPLAY_FORMAT, true);
+  const toMoment   = moment(toValue, DATE_DISPLAY_FORMAT, true);
 
   return fromMoment.isValid() &&
     toMoment.isValid() &&
@@ -113,6 +117,7 @@ class DateFilter extends Component {
     onApply: PropTypes.func,
     updateValue: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    language: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -160,8 +165,8 @@ class DateFilter extends Component {
     this.setState({
       ...range,
       datePreset,
-      fromInputValue: fromInputValue || (momentFrom.isValid() ? momentFrom.format(format) : ''),
-      toInputValue: toInputValue || (momentTo.isValid() ? momentTo.format(format) : '')
+      fromInputValue: fromInputValue || (momentFrom.isValid() ? momentFrom.format(DATE_DISPLAY_FORMAT) : ''),
+      toInputValue: toInputValue || (momentTo.isValid() ? momentTo.format(DATE_DISPLAY_FORMAT) : '')
     });
   };
 
@@ -172,8 +177,8 @@ class DateFilter extends Component {
       from,
       to,
       datePreset: datePreset || rangeToPreset(from, to),
-      fromInputValue: moment(from, 'DD-MM-YYYY').format('DD-MM-YYYY'),
-      toInputValue: moment(to, 'DD-MM-YYYY').format('DD-MM-YYYY')
+      fromInputValue: moment(from, DATE_FORMAT).format(DATE_DISPLAY_FORMAT),
+      toInputValue: moment(to, DATE_FORMAT).format(DATE_DISPLAY_FORMAT)
     });
   };
 
@@ -208,9 +213,8 @@ class DateFilter extends Component {
     this.datePicker.showMonth(dateToShow);
   };
 
-  onCancel = () => {
+  onCancel = () =>
     this.props.onCancel();
-  };
 
   apply = () => {
     const { from, to, datePreset } = this.state;
@@ -233,14 +237,14 @@ class DateFilter extends Component {
 
   handleFromInputChange = (event) => {
     const value       = event.target.value;
-    const momentValue = moment(value, format, true);
+    const momentValue = moment(value, DATE_DISPLAY_FORMAT, true);
 
     const isValid = momentValue.isValid();
     if (isValid && isValidDateRange(value, this.state.toInputValue)) {
       this.setRange(
         CUSTOM_RANGE,
         momentValue.toDate(),
-        moment(this.state.toInputValue, format, true).toDate(),
+        moment(this.state.toInputValue, DATE_DISPLAY_FORMAT, true).toDate(),
         value,
         this.state.toInputValue
       );
@@ -253,13 +257,13 @@ class DateFilter extends Component {
 
   handleToInputChange = (event) => {
     const value       = event.target.value;
-    const momentValue = moment(value, format, true);
+    const momentValue = moment(value, DATE_DISPLAY_FORMAT, true);
 
     const isValid = momentValue.isValid();
     if (isValid && isValidDateRange(this.state.fromInputValue, value)) {
       this.setRange(
         CUSTOM_RANGE,
-        moment(this.state.fromInputValue, format, true).toDate(),
+        moment(this.state.fromInputValue, DATE_DISPLAY_FORMAT, true).toDate(),
         momentValue.toDate(),
         this.state.fromInputValue,
         value
@@ -271,10 +275,13 @@ class DateFilter extends Component {
     }
   };
 
-  canApply = () => isValidDateRange(this.state.fromInputValue, this.state.toInputValue);
+  canApply = () =>
+    isValidDateRange(this.state.fromInputValue, this.state.toInputValue);
 
   render() {
-    const { t }                                                  = this.props;
+    const { t, language } = this.props;
+    const isRTL           = RTL_LANGUAGES.includes(language);
+
     const { fromInputValue, toInputValue, from, to, datePreset } = this.state;
 
     const i18nPresetsOptions = datePresets.map(x =>
@@ -289,6 +296,9 @@ class DateFilter extends Component {
                 numberOfMonths={2}
                 selectedDays={{ from, to }}
                 toMonth={now()}
+                localeUtils={LocaleUtils}
+                locale={language}
+                dir={isRTL ? 'rtl' : 'ltr'}
                 onDayClick={this.handleDayClick}
                 // eslint-disable-next-line no-return-assign
                 ref={el => this.datePicker = el}
@@ -313,7 +323,7 @@ class DateFilter extends Component {
                   <Grid.Column width={8}>
                     <Input
                       fluid
-                      placeholder="DD-MM-YYYY"
+                      placeholder={t('filters.date-filter.start')}
                       value={fromInputValue}
                       onChange={this.handleFromInputChange}
                     />
@@ -321,7 +331,7 @@ class DateFilter extends Component {
                   <Grid.Column width={8}>
                     <Input
                       fluid
-                      placeholder="DD-MM-YYYY"
+                      placeholder={t('filters.date-filter.end')}
                       value={toInputValue}
                       onChange={this.handleToInputChange}
                     />

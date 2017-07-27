@@ -206,3 +206,5 @@ export const MEDIA_TYPES = {
 };
 
 export const TAG_ROOT_TOPICS = 'mS7hrYXK';
+
+export const DATE_FORMAT = 'YYYY-MM-DD';

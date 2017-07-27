@@ -28,7 +28,9 @@
         "LAST_MONTH": "חודש שעבר",
         "THIS_MONTH": "חודש נוכחי",
         "CUSTOM_RANGE": "בחירה גמישה"
-      }
+      },
+      "start": "התחלה",
+      "end": "סיום"
     },
     "sources-filter": {
       "label": "מקורות"
