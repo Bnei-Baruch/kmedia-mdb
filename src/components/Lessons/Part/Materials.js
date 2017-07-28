@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Segment } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import TabsMenu from '../../shared/TabsMenu';
 
+const tPrefix = 'lessons.part.materials';
+
 class Materials extends Component {
 
   static propTypes = {
     lesson: shapes.LessonPart,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -15,26 +19,27 @@ class Materials extends Component {
   };
 
   render() {
+    const { t } = this.props;
     const items = [
       {
         name: 'summary',
-        label: 'Summary',
-        component: <Segment basic>Summary</Segment>,
+        label: t(`${tPrefix}.summary`),
+        component: <Segment basic>{t(`${tPrefix}.summary`)}</Segment>,
       },
       {
         name: 'transcription',
-        label: 'Transcription',
-        component: <Segment basic>Transcription</Segment>,
+        label: t(`${tPrefix}.transcription`),
+        component: <Segment basic>{t(`${tPrefix}.transcription`)}</Segment>,
       },
       {
         name: 'sources',
-        label: 'Sources',
-        component: <Segment basic>Sources</Segment>,
+        label: t(`${tPrefix}.sources`),
+        component: <Segment basic>{t(`${tPrefix}.sources`)}</Segment>,
       },
       {
         name: 'sketches',
-        label: 'Sketches',
-        component: <Segment basic>Sketches</Segment>,
+        label: t(`${tPrefix}.sketches`),
+        component: <Segment basic>{t(`${tPrefix}.sketches`)}</Segment>,
       },
     ];
 

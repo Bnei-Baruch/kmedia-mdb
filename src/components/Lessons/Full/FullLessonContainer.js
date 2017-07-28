@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 import { actions, selectors } from '../../../redux/modules/lessons';
 import { selectors as mdb } from '../../../redux/modules/mdb';
@@ -41,7 +41,7 @@ class FullLessonContainer extends Component {
     // and a request for it is not in progress or ended with an error.
     const id = match.params.id;
     if (fullLesson && fullLesson.id === id) {
-      fullLesson.cuIDs.forEach(cuID => {
+      fullLesson.cuIDs.forEach((cuID) => {
         const cu = fullLesson.content_units.find(x => x.id === cuID);
         if (!cu || !cu.files) {
           if (!(wip.parts[cuID] || errors.parts[cuID])) {
@@ -63,7 +63,10 @@ class FullLessonContainer extends Component {
     let err  = errors.fulls[id];
     if (fullLesson) {
       wip = wip || fullLesson.cuIDs.some(cuID => wipMap.parts[cuID]);
-      err = err || fullLesson.cuIDs.some(cuID => errors.parts[cuID]);
+      if (!err) {
+        const cuIDwithError = fullLesson.cuIDs.find(cuID => errors.parts[cuID]);
+        err                 = cuIDwithError ? errors.parts[cuIDwithError] : null;
+      }
     }
 
     return <FullLesson fullLesson={fullLesson} wip={wip} err={err} language={language} />;
@@ -75,9 +78,9 @@ function mapState(state, props) {
 
   return {
     fullLesson,
-    language: settings.getLanguage(state.settings),
     wip: selectors.getWip(state.lessons),
     errors: selectors.getErrors(state.lessons),
+    language: settings.getLanguage(state.settings),
   };
 }
 

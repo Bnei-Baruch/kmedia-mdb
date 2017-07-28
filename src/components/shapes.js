@@ -75,7 +75,6 @@ export const Topics = PropTypes.arrayOf(PropTypes.shape({
 
 export const filterPropShape = PropTypes.shape({
   name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
   component: PropTypes.any.isRequired
 });
 

@@ -168,47 +168,29 @@ const getDenormCollection = (state, id) => {
   return c;
 };
 
+const denormalizeObject = (byID, obj) => (
+  Object.entries(obj || {}).reduce((acc, val) => {
+    const [k, v] = val;
+    const c      = byID[v];
+    if (c) {
+      acc[k] = c;
+    }
+    return acc;
+  }, {})
+);
+
 const getDenormContentUnit = (state, id) => {
   const cu = state.cuById[id];
 
   if (cu) {
-
     // denormalize collections
-    if (cu.cIDs) {
-      cu.collections = Object.entries(cu.cIDs).reduce((acc, val) => {
-        const [k, v] = val;
-        const c      = state.cById[v];
-        if (c) {
-          acc[k] = c;
-        }
-        return acc;
-      }, {});
-    }
+    cu.collections = denormalizeObject(state.cById, cu.cIDs);
 
     // denormalize derived units
-    if (cu.dduIDs) {
-      cu.derived_units = Object.entries(cu.dduIDs).reduce((acc, val) => {
-        const [k, v] = val;
-        const cu     = state.cuById[v];
-        if (cu) {
-          acc[k] = cu;
-        }
-        return acc;
-      }, {});
-    }
+    cu.derived_units = denormalizeObject(state.cuById, cu.dduIDs);
 
     // denormalize source units
-    if (cu.sduIDs) {
-      cu.source_units = Object.entries(cu.sduIDs).reduce((acc, val) => {
-        const [k, v] = val;
-        const cu     = state.cuById[v];
-        if (cu) {
-          acc[k] = cu;
-        }
-        return acc;
-      }, {});
-    }
-
+    cu.source_units = denormalizeObject(state.cuById, cu.sduIDs);
   }
 
   return cu;

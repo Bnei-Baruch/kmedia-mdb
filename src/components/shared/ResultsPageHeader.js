@@ -1,23 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { translate } from 'react-i18next';
 import { Header } from 'semantic-ui-react';
 
 const ResultsPageHeader = (props) => {
-  const { pageNo, pageSize, total } = props;
+  const { pageNo, pageSize, total, t } = props;
 
   if (total === 0) {
-    return <Header as="h2" content="No results" />;
+    return <Header as="h2" content={t('messages.no-results')} />;
   }
 
   if (total <= pageSize) {
-    return <Header as="h2">Results 1 - {total} of {total}</Header>;
+    return (
+      <Header
+        as="h2"
+        content={t('messages.pagination-results', { start: 1, end: total, total })}
+      />
+    );
   }
 
   return (
-    <Header as="h2">
-      Results {((pageNo - 1) * pageSize) + 1} - {Math.min(total, pageNo * pageSize)}&nbsp;
-      of {total}
-    </Header>
+    <Header
+      as="h2"
+      content={
+        t('messages.pagination-results',
+          {
+            start: ((pageNo - 1) * pageSize) + 1,
+            end: Math.min(total, pageNo * pageSize),
+            total,
+          }
+        )
+      }
+    />
   );
 };
 
@@ -25,6 +39,7 @@ ResultsPageHeader.propTypes = {
   pageNo: PropTypes.number,
   pageSize: PropTypes.number.isRequired,
   total: PropTypes.number,
+  t: PropTypes.func.isRequired,
 };
 
 ResultsPageHeader.defaultProps = {
@@ -32,4 +47,4 @@ ResultsPageHeader.defaultProps = {
   total: 0,
 };
 
-export default ResultsPageHeader;
+export default translate()(ResultsPageHeader);

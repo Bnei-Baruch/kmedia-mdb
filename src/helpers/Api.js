@@ -32,4 +32,8 @@ export default class Api {
     const params = Object.assign({}, { language, ...rest });
     return Requests.get(`lessons?${Requests.limit(pageNo, pageSize)}&${Requests.makeParams(params)}`);
   };
+  static collections = ({ content_type, language, pageNo, pageSize, ...rest }) => {
+    const params = Object.assign({}, { language, content_type, ...rest });
+    return Requests.get(`collections?${Requests.limit(pageNo, pageSize)}&${Requests.makeParams(params)}`);
+  };
 }

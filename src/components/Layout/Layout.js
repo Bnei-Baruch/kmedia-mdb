@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import LoadingBar from 'react-redux-loading-bar';
 import { Grid, Sidebar } from 'semantic-ui-react';
 
@@ -7,7 +7,7 @@ import TopFixedMenu from './TopFixedMenu';
 import MenuItems from './MenuItems';
 import Footer from './Footer';
 
-class Layout extends React.Component {
+class Layout extends Component {
   state = {
     visible: false
   };
@@ -19,7 +19,7 @@ class Layout extends React.Component {
       <Sidebar.Pushable>
         <MenuItems visible={this.state.visible} />
         <Sidebar.Pusher>
-          <TopFixedMenu title="Daily Lessons" toggleVisibility={this.toggleVisibility} />
+          <TopFixedMenu toggleVisibility={this.toggleVisibility} />
           <div className="wrapper">
             <Grid columns="equal" className="main-content container">
               <Grid.Row>

@@ -3,14 +3,18 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import noop from 'lodash/noop';
 import DayPicker, { DateUtils } from 'react-day-picker';
+import LocaleUtils from 'react-day-picker/moment';
 import { Button, Divider, Dropdown, Grid, Header, Input, Segment } from 'semantic-ui-react';
 
 import 'react-day-picker/lib/style.css';
+
+import { DATE_FORMAT, RTL_LANGUAGES } from '../../../helpers/consts';
 import connectFilter from '../connectFilter';
 
 // TODO (yaniv -> oleg): need indication for user when clicking on a bad date (after today) or when typing bad dates
 
-const format     = 'DD-MM-YYYY';
+// must be locale aware
+const DATE_DISPLAY_FORMAT = 'l';
 
 const now = () =>
   moment(new Date())
@@ -20,25 +24,23 @@ const now = () =>
     .milliseconds(0)
     .toDate();
 
-const TODAY        = 1;
-const YESTERDAY    = 2;
-const LAST_7_DAYS  = 3;
-const LAST_30_DAYS = 4;
-const LAST_MONTH   = 5;
-const THIS_MONTH   = 6;
-const CUSTOM_RANGE = 100;
+const TODAY        = 'TODAY';
+const YESTERDAY    = 'YESTERDAY';
+const LAST_7_DAYS  = 'LAST_7_DAYS';
+const LAST_30_DAYS = 'LAST_30_DAYS';
+const LAST_MONTH   = 'LAST_MONTH';
+const THIS_MONTH   = 'THIS_MONTH';
+const CUSTOM_RANGE = 'CUSTOM_RANGE';
 
-const datePresets = {
-  TODAY: { key: 1, text: 'Today', value: TODAY },
-  YESTERDAY: { key: 2, text: 'Yesterday', value: YESTERDAY },
-  LAST_7_DAYS: { key: 3, text: 'Last 7 Days', value: LAST_7_DAYS },
-  LAST_30_DAYS: { key: 4, text: 'Last 30 Days', value: LAST_30_DAYS },
-  LAST_MONTH: { key: 5, text: 'Last Month', value: LAST_MONTH },
-  THIS_MONTH: { key: 6, text: 'This Month', value: THIS_MONTH },
-  CUSTOM_RANGE: { key: 7, text: 'Custom Range', value: CUSTOM_RANGE },
-};
-
-const datePresetsOptions = Object.keys(datePresets).map(key => datePresets[key]);
+const datePresets = [
+  TODAY,
+  YESTERDAY,
+  LAST_7_DAYS,
+  LAST_30_DAYS,
+  LAST_MONTH,
+  THIS_MONTH,
+  CUSTOM_RANGE,
+];
 
 const presetToRange = {
   [TODAY]: () => {
@@ -94,8 +96,8 @@ const rangeToPreset = (from, to) => {
 };
 
 const isValidDateRange = (fromValue, toValue) => {
-  const fromMoment = moment(fromValue, format, true);
-  const toMoment   = moment(toValue, format, true);
+  const fromMoment = moment(fromValue, DATE_DISPLAY_FORMAT, true);
+  const toMoment   = moment(toValue, DATE_DISPLAY_FORMAT, true);
 
   return fromMoment.isValid() &&
     toMoment.isValid() &&
@@ -113,7 +115,9 @@ class DateFilter extends Component {
     }),
     onCancel: PropTypes.func,
     onApply: PropTypes.func,
-    updateValue: PropTypes.func.isRequired
+    updateValue: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
+    language: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -161,8 +165,8 @@ class DateFilter extends Component {
     this.setState({
       ...range,
       datePreset,
-      fromInputValue: fromInputValue || (momentFrom.isValid() ? momentFrom.format(format) : ''),
-      toInputValue: toInputValue || (momentTo.isValid() ? momentTo.format(format) : '')
+      fromInputValue: fromInputValue || (momentFrom.isValid() ? momentFrom.format(DATE_DISPLAY_FORMAT) : ''),
+      toInputValue: toInputValue || (momentTo.isValid() ? momentTo.format(DATE_DISPLAY_FORMAT) : '')
     });
   };
 
@@ -173,8 +177,8 @@ class DateFilter extends Component {
       from,
       to,
       datePreset: datePreset || rangeToPreset(from, to),
-      fromInputValue: moment(from, 'DD-MM-YYYY').format('DD-MM-YYYY'),
-      toInputValue: moment(to, 'DD-MM-YYYY').format('DD-MM-YYYY')
+      fromInputValue: moment(from, DATE_FORMAT).format(DATE_DISPLAY_FORMAT),
+      toInputValue: moment(to, DATE_FORMAT).format(DATE_DISPLAY_FORMAT)
     });
   };
 
@@ -209,6 +213,9 @@ class DateFilter extends Component {
     this.datePicker.showMonth(dateToShow);
   };
 
+  onCancel = () =>
+    this.props.onCancel();
+
   apply = () => {
     const { from, to, datePreset } = this.state;
     this.props.updateValue({ from, to, datePreset });
@@ -230,14 +237,14 @@ class DateFilter extends Component {
 
   handleFromInputChange = (event) => {
     const value       = event.target.value;
-    const momentValue = moment(value, format, true);
+    const momentValue = moment(value, DATE_DISPLAY_FORMAT, true);
 
     const isValid = momentValue.isValid();
     if (isValid && isValidDateRange(value, this.state.toInputValue)) {
       this.setRange(
         CUSTOM_RANGE,
         momentValue.toDate(),
-        moment(this.state.toInputValue, format, true).toDate(),
+        moment(this.state.toInputValue, DATE_DISPLAY_FORMAT, true).toDate(),
         value,
         this.state.toInputValue
       );
@@ -250,13 +257,13 @@ class DateFilter extends Component {
 
   handleToInputChange = (event) => {
     const value       = event.target.value;
-    const momentValue = moment(value, format, true);
+    const momentValue = moment(value, DATE_DISPLAY_FORMAT, true);
 
     const isValid = momentValue.isValid();
     if (isValid && isValidDateRange(this.state.fromInputValue, value)) {
       this.setRange(
         CUSTOM_RANGE,
-        moment(this.state.fromInputValue, format, true).toDate(),
+        moment(this.state.fromInputValue, DATE_DISPLAY_FORMAT, true).toDate(),
         momentValue.toDate(),
         this.state.fromInputValue,
         value
@@ -268,11 +275,17 @@ class DateFilter extends Component {
     }
   };
 
-  canApply = () => isValidDateRange(this.state.fromInputValue, this.state.toInputValue);
+  canApply = () =>
+    isValidDateRange(this.state.fromInputValue, this.state.toInputValue);
 
   render() {
+    const { t, language } = this.props;
+    const isRTL           = RTL_LANGUAGES.includes(language);
+
     const { fromInputValue, toInputValue, from, to, datePreset } = this.state;
-    const { onCancel }                                           = this.props;
+
+    const i18nPresetsOptions = datePresets.map(x =>
+      ({ text: t(`filters.date-filter.presets.${x}`), value: x }));
 
     return (
       <Segment basic attached="bottom" className="tab active">
@@ -282,43 +295,52 @@ class DateFilter extends Component {
               <DayPicker
                 numberOfMonths={2}
                 selectedDays={{ from, to }}
-                onDayClick={this.handleDayClick}
                 toMonth={now()}
+                localeUtils={LocaleUtils}
+                locale={language}
+                dir={isRTL ? 'rtl' : 'ltr'}
+                onDayClick={this.handleDayClick}
                 // eslint-disable-next-line no-return-assign
                 ref={el => this.datePicker = el}
               />
             </Grid.Column>
             <Grid.Column width={5}>
-              <Header textAlign="center">Select a start index</Header>
+              <Header content={t('filters.date-filter.selectTitle')} textAlign="center" />
               <Grid>
                 <Grid.Row>
                   <Grid.Column width={16}>
-                    <Dropdown fluid options={datePresetsOptions} item value={datePreset} onChange={this.handleDatePresetsChange} />
+                    <Dropdown
+                      item
+                      fluid
+                      options={i18nPresetsOptions}
+                      value={datePreset}
+                      onChange={this.handleDatePresetsChange}
+                    />
                     <Divider />
                   </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column width={8}>
                     <Input
+                      fluid
+                      placeholder={t('filters.date-filter.start')}
                       value={fromInputValue}
                       onChange={this.handleFromInputChange}
-                      fluid
-                      placeholder="DD-MM-YYYY"
                     />
                   </Grid.Column>
                   <Grid.Column width={8}>
                     <Input
+                      fluid
+                      placeholder={t('filters.date-filter.end')}
                       value={toInputValue}
                       onChange={this.handleToInputChange}
-                      fluid
-                      placeholder="DD-MM-YYYY"
                     />
                   </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column textAlign="right">
-                    <Button type="button" onClick={onCancel}>Cancel</Button>
-                    <Button type="button" primary disabled={!this.canApply()} onClick={this.apply}>Apply</Button>
+                    <Button content={t('buttons.cancel')} onClick={this.onCancel} />
+                    <Button primary content={t('buttons.apply')} disabled={!this.canApply()} onClick={this.apply} />
                   </Grid.Column>
                 </Grid.Row>
               </Grid>

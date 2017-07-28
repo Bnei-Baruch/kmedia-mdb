@@ -1,11 +1,20 @@
 import i18n from 'i18next';
 import XHR from 'i18next-xhr-backend';
+import moment from 'moment';
+import 'moment/locale/he';
+import 'moment/locale/ru';
+
 // import Cache from 'i18next-localstorage-cache';
 // import LanguageDetector from 'i18next-browser-languagedetector';
 
-import { DEFAULT_LANGUAGE } from './helpers/consts';
+import { DEFAULT_LANGUAGE } from './consts';
 
-const localesBackend = `${process.env.production ? process.env.REACT_APP_LOCALES_BACKEND : 'http://localhost:9876'}`;
+const LOCALES_BACKEND = process.env.NODE_ENV === 'production' ?
+  process.env.PUBLIC_URL :
+  'http://localhost:9876';
+
+// Initialize moment global locale to default language
+moment.locale(DEFAULT_LANGUAGE);
 
 i18n
   .use(XHR)
@@ -14,7 +23,7 @@ i18n
   .init({
 
     backend: {
-      loadPath: `${localesBackend}/locales/{{lng}}/{{ns}}.json`,
+      loadPath: `${LOCALES_BACKEND}/locales/{{lng}}/{{ns}}.json`,
       crossDomain: true
     },
 
@@ -31,10 +40,20 @@ i18n
 
     debug: true,
 
+    interpolation: {
+      escapeValue: false, // not needed for react!!
+      format: function (value, format, lng) {
+        if (value instanceof Date) {
+          return moment(value).format(format);
+          // return new Intl.DateTimeFormat(lng).format(value);
+        }
+        return value;
+      }
+    },
+
     // cache: {
     //   enabled: true
     // },
   });
-
 
 export default i18n;

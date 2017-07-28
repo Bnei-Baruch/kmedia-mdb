@@ -5260,9 +5260,9 @@ react-copy-to-clipboard@^5.0.0:
     copy-to-clipboard "^3"
     prop-types "^15.5.8"
 
-react-day-picker@^6.1.0:
+"react-day-picker@github:Bnei-Baruch/react-day-picker":
   version "6.1.0"
-  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-6.1.0.tgz#81122c34bfb4eeec288ec31709e8aa6d4bc161cc"
+  resolved "https://codeload.github.com/Bnei-Baruch/react-day-picker/tar.gz/2e0aae974b8c08bd6f5aaa5ea39762f48f4fa7bf"
   dependencies:
     object-assign "^4.1.1"
     prop-types "^15.5.10"

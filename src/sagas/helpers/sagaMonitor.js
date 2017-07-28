@@ -5,7 +5,7 @@
  */
 
 
-/* eslint-disable no-console */
+/* eslint-disable */
 
 import { asEffect, is } from 'redux-saga/utils';
 

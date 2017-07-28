@@ -1,4 +1,6 @@
 import moment from 'moment';
+
+import { DATE_FORMAT } from '../../helpers/consts';
 import { createFilterDefinition } from './util';
 
 const dateFilter = {
@@ -9,21 +11,21 @@ const dateFilter = {
       return null;
     }
 
-    return `${moment(value.from).format('DD-MM-YYYY')}_${moment(value.to).format('DD-MM-YYYY')}`;
+    return `${moment(value.from).format(DATE_FORMAT)}_${moment(value.to).format(DATE_FORMAT)}`;
   },
   queryToValue: (queryValue) => {
     const parts = queryValue.split('_');
 
     return {
-      from: moment(parts[0], 'DD-MM-YYYY').toDate(),
-      to: moment(parts[1], 'DD-MM-YYYY').toDate()
+      from: moment(parts[0], DATE_FORMAT).toDate(),
+      to: moment(parts[1], DATE_FORMAT).toDate()
     };
   },
   valueToApiParam: (value) => {
     const { from, to } = value;
     return {
-      start_date: moment(new Date(from)).format('YYYY-MM-DD'),
-      end_date: moment(new Date(to)).format('YYYY-MM-DD')
+      start_date: moment(new Date(from)).format(DATE_FORMAT),
+      end_date: moment(new Date(to)).format(DATE_FORMAT)
     };
   },
   tagIcon: 'calendar',

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  selectors as filterSelectors,
-  actions as filterActions
-} from '../../redux/modules/filters';
+import { translate } from 'react-i18next';
+
+import { actions, selectors } from '../../redux/modules/filters';
+import { selectors as settings } from '../../redux/modules/settings';
 
 const connectFilter = (options = {}) => (WrappedComponent) => {
   const isMultiple = options.isMultiple;
@@ -18,6 +18,8 @@ const connectFilter = (options = {}) => (WrappedComponent) => {
       setFilterValue: PropTypes.func.isRequired,
       addFilterValue: PropTypes.func.isRequired,
       removeFilterValue: PropTypes.func.isRequired,
+      t: PropTypes.func.isRequired,
+      language: PropTypes.string.isRequired,
       activeValueIndex: PropTypes.number,
       isEditing: PropTypes.bool
     };
@@ -28,7 +30,8 @@ const connectFilter = (options = {}) => (WrappedComponent) => {
     };
 
     componentWillUnmount() {
-      this.props.stopEditingFilter(this.props.namespace, this.props.name);
+      const { name, namespace, stopEditingFilter } = this.props;
+      stopEditingFilter(namespace, name);
     }
 
     updateValue = (value) => {
@@ -43,11 +46,12 @@ const connectFilter = (options = {}) => (WrappedComponent) => {
     };
 
     removeValue = () => {
-      const { namespace, name, activeValueIndex } = this.props;
-      this.props.removeFilterValue(namespace, name, activeValueIndex);
+      const { namespace, name, activeValueIndex, removeFilterValue } = this.props;
+      removeFilterValue(namespace, name, activeValueIndex);
     };
 
     render() {
+      // eslint-disable-next-line no-unused-vars
       const { addFilterValue, setFilterValue, removeFilterValue, ...rest } = this.props;
       return (
         <WrappedComponent
@@ -61,13 +65,14 @@ const connectFilter = (options = {}) => (WrappedComponent) => {
 
   return connect(
     (state, ownProps) => ({
-      isEditing: filterSelectors.getIsEditingExistingFilter(state.filters, ownProps.namespace, ownProps.name),
-      activeValueIndex: filterSelectors.getActiveValueIndex(state.filters, ownProps.namespace, ownProps.name),
-      value: filterSelectors.getActiveValue(state.filters, ownProps.namespace, ownProps.name),
-      allValues: filterSelectors.getFilterAllValues(state.filters, ownProps.namespace, ownProps.name),
+      isEditing: selectors.getIsEditingExistingFilter(state.filters, ownProps.namespace, ownProps.name),
+      activeValueIndex: selectors.getActiveValueIndex(state.filters, ownProps.namespace, ownProps.name),
+      value: selectors.getActiveValue(state.filters, ownProps.namespace, ownProps.name),
+      allValues: selectors.getFilterAllValues(state.filters, ownProps.namespace, ownProps.name),
+      language: settings.getLanguage(state.settings),
     }),
-    filterActions
-  )(ConnectFilterHOC);
+    actions
+  )(translate()(ConnectFilterHOC));
 
   // TODO (yaniv): change displayName
 };

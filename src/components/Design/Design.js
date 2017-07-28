@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Component } from 'react';
 import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, List, Popup, Table } from 'semantic-ui-react';
 
@@ -17,7 +19,7 @@ class Design extends Component {
                 </div>
               </Grid.Column>
               <Grid.Column width='10'>
-               
+
                 <Header as="h5">
                   2016-10-26<br/>Lesson on the topic of “From Lo Lishma to Lishma” (not for Her Name for Her Name)
                 </Header>
@@ -26,7 +28,7 @@ class Design extends Component {
                   <List.Item><b>Sources:</b> <a href=''> Shamati - There is None Else Beside Him</a>, <a href=''>Shamati - Divinity in Exile</a></List.Item>
                   <List.Item><b>Related to Event:</b> <a href=''>World Israel Congress 2016</a></List.Item>
                 </List>
-             
+
               </Grid.Column>
               <Grid.Column width='2'>
                 <Popup
@@ -74,7 +76,7 @@ class Design extends Component {
                   </Table>
                   </Popup.Content>
                 </Popup>
-                
+
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -131,7 +133,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                 <Menu.Item as='a' active>2 - Lesson on the topic of "Brit (Union)" - 01:29:00</Menu.Item>
                 <Menu.Item as='a' disabled>
                   3 - Baal HaSulam, TES, part 8, item 20 - 00:31:54
-                  
+
                 </Menu.Item>
                 <Menu.Item as='a'>4 - Baal HaSulam, "The Giving of the Torah", item 6 - 00:43:41</Menu.Item>
               </Menu>
@@ -151,7 +153,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                   </Button>
                   <Button color='blue' icon='close'></Button>
                 </Button.Group>
-                
+
                 <Button.Group size='mini'>
                   <Button basic color='blue'>
                     <Icon name='tag' />
@@ -159,7 +161,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                   </Button>
                   <Button color='blue' icon='close'></Button>
                 </Button.Group>
-                
+
                 <Button.Group size='mini'>
                   <Button basic color='blue'>
                     <Icon name='calendar' />

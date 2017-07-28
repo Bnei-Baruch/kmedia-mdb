@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import noop from 'lodash/noop';
 
-import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
+import { actions, selectors } from '../../../redux/modules/filters';
 
 class FiltersHydrator extends Component {
   static propTypes = {
@@ -23,8 +23,9 @@ class FiltersHydrator extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.isHydrated && nextProps.isHydrated) {
-      this.props.onHydrated(this.props.namespace);
+    const { isHydrated, onHydrated, namespace } = nextProps;
+    if (!this.props.isHydrated && isHydrated) {
+      onHydrated(namespace);
     }
   }
 
@@ -35,7 +36,7 @@ class FiltersHydrator extends Component {
 
 export default connect(
   (state, ownProps) => ({
-    isHydrated: filterSelectors.getIsHydrated(state.filters, ownProps.namespace)
+    isHydrated: selectors.getIsHydrated(state.filters, ownProps.namespace)
   }),
-  filterActions
+  actions
 )(FiltersHydrator);

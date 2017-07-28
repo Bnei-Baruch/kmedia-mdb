@@ -30,13 +30,13 @@ class FilterTags extends Component {
 
   render() {
     const { tags, namespace } = this.props;
-    const store = this.context.store;
+    const store               = this.context.store;
 
     return (
-      <div className='filter-tags'>
+      <div className="filter-tags">
         {
           tags.map((tag) => {
-            const icon = filtersTransformer.getTagIcon(tag.name);
+            const icon  = filtersTransformer.getTagIcon(tag.name);
             const label = filtersTransformer.valueToTagLabel(tag.name, tag.value, this.props, store);
             return (
               <FilterTag
@@ -61,7 +61,7 @@ class FilterTags extends Component {
 export default connect(
   (state, ownProps) => {
     // TODO (yaniv): use reselect to cache selector
-    const filters = filterSelectors.getFilters(state.filters, ownProps.namespace);
+    const filters      = filterSelectors.getFilters(state.filters, ownProps.namespace);
     const activeFilter = filterSelectors.getActiveFilter(state.filters, ownProps.namespace);
 
     const tags = reduce(filters, (acc, filter) => {

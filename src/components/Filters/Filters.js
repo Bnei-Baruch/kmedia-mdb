@@ -35,11 +35,11 @@ class Filters extends Component {
   };
 
   render() {
-    const { activeFilter } = this.props;
+    const { filters, activeFilter } = this.props;
 
     return (
       <div>
-        <FilterMenu items={this.props.filters} active={activeFilter} onChoose={this.handleFilterClick} />
+        <FilterMenu items={filters} active={activeFilter} onChoose={this.handleFilterClick} />
         <ActiveFilter
           namespace={this.props.namespace}
           activeFilterName={activeFilter}

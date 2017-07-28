@@ -1,38 +1,47 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Menu, Sidebar } from 'semantic-ui-react';
+import { translate } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
+import { Menu, Sidebar } from 'semantic-ui-react';
 
 const ITEMS = [
-  { key: 'daily_lessons', name: 'Daily Lessons', to: '/lessons', },
-  { key: 'tv_video_programs', name: 'TV & Video Programs', to: '/tv_shows', },
-  { key: 'lectures_lessons', name: 'Lectures & Lessons', to: '/lectures', },
-  { key: 'sources', name: 'Kabbalah Sources', to: '/sources', },
-  { key: 'events', name: 'Events', to: '/events', },
-  { key: 'books', name: 'Books', to: '/books', },
-  { key: 'topics', name: 'Topics', to: '/topics', },
-  { key: 'publications', name: 'Publications', to: '/publications', },
-  { key: 'photos', name: 'Photos', to: '/photos', },
-  { key: 'design', name: 'Design', to: '/design', },
-  { key: 'layout', name: 'Layout', to: '/design2', },
-].map(item =>
-  <Menu.Item as={NavLink} activeClassName="active" key={item.name} to={item.to} content={item.name} />
-);
+  'lessons',
+  'tv_shows',
+  'lectures',
+  'sources',
+  'events',
+  'books',
+  'topics',
+  'publications',
+  'photos',
+  'design',
+  'design2',
+];
 
 const MenuItems = (props) => {
-  const { simple, visible } = props;
+  const { simple, visible, t } = props;
+
+  const items = ITEMS.map(x => (
+    <Menu.Item
+      key={x}
+      as={NavLink}
+      to={`/${x}`}
+      activeClassName="active"
+      content={t(`nav.sidebar.${x}`)}
+    />
+  ));
 
   if (simple) {
     return (
       <Menu vertical borderless fluid color='blue' size='huge'>
-        {ITEMS}
+        {items}
       </Menu>
     );
   }
 
   return (
     <Sidebar pointing vertical as={Menu} animation="push" visible={visible}>
-      {ITEMS}
+      {items}
     </Sidebar>
   );
 };
@@ -40,11 +49,12 @@ const MenuItems = (props) => {
 MenuItems.propTypes = {
   simple: PropTypes.bool,
   visible: PropTypes.bool,
+  t: PropTypes.func.isRequired,
 };
 
 MenuItems.defaultProps = {
   simple: false,
-  visible: false
+  visible: false,
 };
 
-export default MenuItems;
+export default translate()(MenuItems);
