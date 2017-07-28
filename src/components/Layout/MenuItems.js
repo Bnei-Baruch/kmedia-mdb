@@ -14,6 +14,7 @@ const ITEMS = [
   { key: 'publications', name: 'Publications', to: '/publications', },
   { key: 'photos', name: 'Photos', to: '/photos', },
   { key: 'design', name: 'Design', to: '/design', },
+  { key: 'layout', name: 'Layout', to: '/design2', },
 ].map(item =>
   <Menu.Item as={NavLink} activeClassName="active" key={item.name} to={item.to} content={item.name} />
 );
@@ -23,7 +24,7 @@ const MenuItems = (props) => {
 
   if (simple) {
     return (
-      <Menu vertical fluid pointing color='blue'>
+      <Menu vertical borderless fluid color='blue' size='huge'>
         {ITEMS}
       </Menu>
     );

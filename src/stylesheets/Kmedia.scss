@@ -36,6 +36,88 @@ $text-colors: (
   }
 }
 
+/// NEW LAYOUT
+
+.layout {
+  &__header,
+  &__sidebar {
+    .menu,
+    .item {
+      border-radius: 0!important;
+    }
+    >.menu {
+      height: 60px;
+      
+      small {
+        line-height: 1;
+      }
+    }
+  }
+  &__header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+  &__sidebar{
+    position: fixed;
+    width: 290px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    >.menu {
+      // opacity: .5;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
+    &-menu {
+      position: absolute;
+      top: 60px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      overflow: scroll;
+      border-right: 1px solid rgba(34, 36, 38, 0.15);
+      .menu {
+        border: 0;
+        box-shadow: none!important;
+      }
+
+    //   &:before {
+    //     position: absolute;
+    // content: '';
+    // top: 0;
+    // right: 0;
+    // height: 100%;
+    // width: 1px;
+    // background: rgba(34, 36, 38, 0.1);
+    //   }
+    }
+  }
+  &__content{}
+  &__footer{}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .wrapper {
   display: flex;
   min-height: 100vh;
