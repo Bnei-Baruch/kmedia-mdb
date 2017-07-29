@@ -56,8 +56,11 @@ $text-colors: (
     top: 0;
     left: 0;
     right: 0;
+    z-index:999999;
   }
   &__sidebar{
+    z-index:999999;
+    background: #fff;
     position: fixed;
     transform: translate(-100%, 0);
     transition: transform .3s;
