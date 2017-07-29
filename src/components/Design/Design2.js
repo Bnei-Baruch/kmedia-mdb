@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
-import { Container, Flag, Icon, Menu, Header } from 'semantic-ui-react';
+import { Container, Flag, Icon, Menu, Header, Grid } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import MenuItems from '../Layout/MenuItems';
+import Routes from '../Layout/Routes';
 
 class Design2 extends Component {
+
+	toggleSidebar = (e, data) => 	{
+		document.querySelector('.layout__sidebar').classList.toggle('is-active');
+	}
+
 
   render() {
     return (
       <div className='layout'>
       	<div className='layout__header'>
       		<Menu inverted size='huge' borderless color='blue'>
-	          <Menu.Item as="a" icon >
-	            <Icon name="sidebar" style={{ padding: 0 }} />
+	          <Menu.Item className='layout__sidebar-toggle' as="a" icon onClick={this.toggleSidebar}>
+	            <Icon name="sidebar" />
 	          </Menu.Item>
 	          <Menu.Item as={Link} to="/" header>
 	            <Header inverted as='h2' >
@@ -33,9 +39,9 @@ class Design2 extends Component {
       		</Menu>
       	</div>
       	<div className='layout__sidebar'>
-      		<Menu inverted size='huge' borderless color='yellow'>
-	          <Menu.Item as="a" icon >
-	            <Icon name="sidebar" style={{ padding: 0 }} />
+      		<Menu inverted size='huge' borderless color='blue'>
+	          <Menu.Item className='layout__sidebar-toggle' as="a" icon onClick={this.toggleSidebar}>
+	            <Icon name="sidebar" />
 	          </Menu.Item>
 	          <Menu.Item as={Link} to="/" header>
 	            <Header inverted as='h2' >
@@ -48,6 +54,11 @@ class Design2 extends Component {
       		</div>
       	</div>
       	<div className='layout__content'>
+                  <Grid padded>
+                    <Grid.Row>
+                      <Routes />
+                    </Grid.Row>
+                  </Grid>
       		<div className='layout__footer'></div>
       	</div>
       </div>

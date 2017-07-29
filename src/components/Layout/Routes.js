@@ -24,6 +24,7 @@ const Routes = () => (
     <Route exact path="/publications" component={NotImplemented} />
     <Route exact path="/photos" component={NotImplemented} />
     <Route exact path="/design" component={Design} />
+    <Route exact path="/design2" component={Lessons} />
     <Route component={NotFound} />
   </Switch>
 );

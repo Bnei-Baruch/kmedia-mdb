@@ -36,8 +36,7 @@ $text-colors: (
   }
 }
 
-/// NEW LAYOUT
-
+/// THE NEW LAYOUT
 .layout {
   &__header,
   &__sidebar {
@@ -47,7 +46,6 @@ $text-colors: (
     }
     >.menu {
       height: 60px;
-      
       small {
         line-height: 1;
       }
@@ -61,12 +59,16 @@ $text-colors: (
   }
   &__sidebar{
     position: fixed;
+    transform: translate(-100%, 0);
+    transition: transform .3s;
     width: 290px;
     top: 0;
     left: 0;
     bottom: 0;
+    &.is-active {
+      transform: none;
+    }
     >.menu {
-      // opacity: .5;
       position: absolute;
       top: 0;
       left: 0;
@@ -84,26 +86,33 @@ $text-colors: (
         border: 0;
         box-shadow: none!important;
       }
-
-    //   &:before {
-    //     position: absolute;
-    // content: '';
-    // top: 0;
-    // right: 0;
-    // height: 100%;
-    // width: 1px;
-    // background: rgba(34, 36, 38, 0.1);
-    //   }
     }
   }
-  &__content{}
-  &__footer{}
+  &__content{
+    margin-top: 60px;
+  }
 }
-
-
-
-
-
+@media only screen and (min-width: 1490px) {
+  .layout {
+    &__sidebar-toggle {
+      display:none!important;
+    }
+    &__sidebar{
+      >.menu {
+        display: none;
+      }  
+      top: 60px;
+      transform: none;
+      &-menu {
+        top: 0;
+      }
+    }
+    &__content{
+      margin-left: 290px;
+    }
+  }
+}
+/// END OF THE NEW LAYOUT
 
 
 
