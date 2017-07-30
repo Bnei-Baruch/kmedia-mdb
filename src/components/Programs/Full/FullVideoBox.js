@@ -14,7 +14,7 @@ class FullVideoBox extends Component {
 
   static propTypes = {
     language: PropTypes.string.isRequired,
-    fullLesson: shapes.LessonCollection.isRequired,
+    fullProgram: shapes.ProgramCollection.isRequired,
     activePart: PropTypes.number,
     onActivePartChange: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
@@ -31,18 +31,18 @@ class FullVideoBox extends Component {
       language: undefined,
       isVideo: true,
       isAudio: false,
-      files: this.buildFiles(props.fullLesson.content_units),
+      files: this.buildFiles(props.fullProgram.content_units),
     };
   }
 
   componentDidMount() {
-    const { fullLesson } = this.props;
+    const { fullProgram } = this.props;
 
     // Update files
     let { files }    = this.state;
     let stateUpdated = false;
 
-    const newFiles = this.buildFiles(fullLesson.content_units);
+    const newFiles = this.buildFiles(fullProgram.content_units);
     if (newFiles.size) {
       files        = new Map([...files, ...newFiles]);
       stateUpdated = true;
@@ -54,21 +54,21 @@ class FullVideoBox extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { fullLesson } = nextProps;
+    const { fullProgram } = nextProps;
     const props          = this.props;
 
     // Update files
     let { files }    = this.state;
     let stateUpdated = false;
 
-    // Clear files if new full lesson was set.
-    if (fullLesson !== props.fullLesson && fullLesson.id !== props.fullLesson.id) {
+    // Clear files if new full program was set.
+    if (fullProgram !== props.fullProgram && fullProgram.id !== props.fullProgram.id) {
       files        = new Map();
       stateUpdated = true;
     }
 
-    // Wait for lesson parts to load.
-    const newFiles = this.buildFiles(fullLesson.content_units);
+    // Wait for program parts to load.
+    const newFiles = this.buildFiles(fullProgram.content_units);
     if (newFiles.size) {
       files        = new Map([...files, ...newFiles]);
       stateUpdated = true;
@@ -100,9 +100,9 @@ class FullVideoBox extends Component {
     return ret;
   };
 
-  buildFiles = (lessonParts) => {
+  buildFiles = (programParts) => {
     const files = new Map();
-    lessonParts.forEach((p, i) => {
+    programParts.forEach((p, i) => {
       if (p.files && p.files.length) {
         this.getFilesByLanguageByAV(p.files).forEach((filesByAV, language) => {
           if (!files.has(language)) {
@@ -124,12 +124,12 @@ class FullVideoBox extends Component {
     this.setState({ language });
   };
 
-  handleLessonPartClick = (e, data) =>
+  handleProgramPartClick = (e, data) =>
     this.props.onActivePartChange(parseInt(data.name, 10));
 
   handleOneHundredPercent = () => {
-    const { activePart, fullLesson, onActivePartChange } = this.props;
-    if (activePart < fullLesson.content_units.length - 1) {
+    const { activePart, fullProgram, onActivePartChange } = this.props;
+    if (activePart < fullProgram.content_units.length - 1) {
       onActivePartChange(activePart + 1);
     }
   };
@@ -143,7 +143,7 @@ class FullVideoBox extends Component {
   };
 
   render() {
-    const { t, activePart, fullLesson, language: propsLanguage } = this.props;
+    const { t, activePart, fullProgram, language: propsLanguage } = this.props;
     const { language = propsLanguage, files }                    = this.state;
     let { isVideo, isAudio }                                     = this.state;
 
@@ -160,9 +160,9 @@ class FullVideoBox extends Component {
       fileList = filesByAV.get(MT_VIDEO) || [];
     }
 
-    const titles = fullLesson.content_units.map((cu) => {
+    const titles = fullProgram.content_units.map((cu) => {
       const { name, duration } = cu;
-      const ccuName            = fullLesson.ccuNames[cu.id];
+      const ccuName            = fullProgram.ccuNames[cu.id];
       const durationDisplay    = moment.duration(duration, 'seconds').format('hh:mm:ss');
       return `${ccuName} - ${name} - ${durationDisplay}`;
     });
@@ -191,7 +191,7 @@ class FullVideoBox extends Component {
           <div className="video_player">
             <div id="video" />
             <AVPlayer
-              playerId="full-lesson"
+              playerId="full-program"
               onOneHundredPercent={this.handleOneHundredPercent}
               playlist={playlist}
               playItem={playlistActiveIndex}
@@ -223,21 +223,21 @@ class FullVideoBox extends Component {
           <Divider />
           <Header
             as="h3"
-            content={`${t(`constants.content-types.${fullLesson.content_type}`)} - ${(activePart + 1)}/${fullLesson.content_units.length}`}
-            subheader={t('values.date', { date: new Date(fullLesson.film_date) })}
+            content={`${t(`constants.content-types.${fullProgram.content_type}`)} - ${(activePart + 1)}/${fullProgram.content_units.length}`}
+            subheader={t('values.date', { date: new Date(fullProgram.film_date) })}
           />
           <Grid>
             <Grid.Row>
               <Grid.Column>
                 <Menu vertical fluid size="small">
                   {
-                    fullLesson.content_units.map((part, index) => (
+                    fullProgram.content_units.map((part, index) => (
                       <Menu.Item
                         key={part.id}
                         name={`${index}`}
                         content={titles[index]}
                         active={index === activePart}
-                        onClick={this.handleLessonPartClick}
+                        onClick={this.handleProgramPartClick}
                       />
                     ))
                   }

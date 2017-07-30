@@ -1,42 +1,51 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import { Grid } from 'semantic-ui-react';
+import { Link, NavLink } from 'react-router-dom';
+import { Menu, Table } from 'semantic-ui-react';
 
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
 import * as shapes from '../../shapes';
-import FullVideoBox from './FullVideoBox';
-import Info from '../Part/Info';
-import Materials from '../Part/Materials';
-import MediaDownloads from '../Part/MediaDownloads';
 
-class FullLesson extends Component {
+class FullProgram extends Component {
   static propTypes = {
     language: PropTypes.string.isRequired,
-    fullLesson: shapes.LessonCollection,
+    fullProgram: shapes.ProgramCollection,
     wip: shapes.WIP,
     err: shapes.Error,
     t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    fullLesson: null,
+    fullProgram: null,
     wip: false,
     err: null,
   };
 
-  state = {
-    activePart: 0,
+  getName = (fullProgram, cu) => {
+    const { name, duration } = cu;
+    const ccuName            = fullProgram.ccuNames[cu.id];
+    const durationDisplay    = moment.duration(duration, 'seconds').format('hh:mm:ss');
+    return { name, ccuName, duration: durationDisplay };
   };
 
-  handleActivePartChange = activePart =>
-    this.setState({ activePart });
+  tableRow = (fullProgram, cu) => {
+    const { ccuName, name, duration } = this.getName(fullProgram, cu);
+
+    return (
+      <Table.Row key={cu.id}>
+        <Table.Cell><Menu.Item as={NavLink} to={`/programs/part/${cu.id}`} content={ccuName} /></Table.Cell>
+        <Table.Cell><Menu.Item as={NavLink} to={`/programs/part/${cu.id}`}>{name}</Menu.Item></Table.Cell>
+        <Table.Cell><Menu.Item as={NavLink} to={`/programs/part/${cu.id}`}>{duration}</Menu.Item></Table.Cell>
+      </Table.Row>
+    );
+  };
 
   render() {
-    const { fullLesson, wip, err, language, t } = this.props;
+    const { fullProgram, wip, err, t } = this.props;
 
     if (err) {
       return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
@@ -46,41 +55,33 @@ class FullLesson extends Component {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
-    if (fullLesson) {
-      const { activePart } = this.state;
-      const lesson         = fullLesson.content_units[activePart];
+    if (fullProgram) {
       return (
-        <Grid.Column width={16}>
-          <Grid>
-            <FullVideoBox
-              fullLesson={fullLesson}
-              activePart={activePart}
-              language={language}
-              t={t}
-              onActivePartChange={this.handleActivePartChange}
-            />
-          </Grid>
-          <Grid>
-            <Grid.Row>
-              <Grid.Column width={10}>
-                <Info lesson={lesson} t={t} />
-                <Materials lesson={lesson} t={t} />
-              </Grid.Column>
-              <Grid.Column width={6}>
-                <MediaDownloads lesson={lesson} language={language} t={t} />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Grid.Column>
+        <Menu vertical fluid>
+          <Table basic="very" compact="very" celled>
+            <Table.Header>
+              <Table.HeaderCell>ccuName</Table.HeaderCell>
+              <Table.HeaderCell>Name</Table.HeaderCell>
+              <Table.HeaderCell>Duration</Table.HeaderCell>
+            </Table.Header>
+            <Table.Body>
+              {
+                fullProgram.content_units.map((cu) => (
+                  this.tableRow(fullProgram, cu)
+                ))
+              }
+            </Table.Body>
+          </Table>
+        </Menu>
       );
     }
 
     return (
       <FrownSplash
-        text={t('messages.lesson-not-found')}
+        text={t('messages.program-not-found')}
         subtext={
-          <Trans i18nKey="messages.lesson-not-found-subtext">
-            Try the <Link to="/lessons">lessons list</Link>...
+          <Trans i18nKey="messages.program-not-found-subtext">
+            Try the <Link to="/programs">programs list</Link>...
           </Trans>
         }
       />
@@ -88,4 +89,5 @@ class FullLesson extends Component {
   }
 }
 
-export default translate()(FullLesson);
+export default translate()(FullProgram);
+;
