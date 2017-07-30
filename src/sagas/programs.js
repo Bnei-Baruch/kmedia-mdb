@@ -1,4 +1,4 @@
-import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { updateQuery } from './helpers/url';
@@ -29,9 +29,9 @@ function* fetchProgramPart(action) {
     const language = yield select(state => settings.getLanguage(state.settings));
     const response = yield call(Api.unit, { id: action.payload, language });
     yield put(mdbActions.receiveContentUnits([response]));
-    yield put(actions.fetchLessonPartSuccess(action.payload));
+    yield put(actions.fetchProgramPartSuccess(action.payload));
   } catch (err) {
-    yield put(actions.fetchLessonPartFailure(action.payload, err));
+    yield put(actions.fetchProgramPartFailure(action.payload, err));
   }
 }
 
@@ -40,9 +40,9 @@ function* fetchFullProgram(action) {
     const language = yield select(state => settings.getLanguage(state.settings));
     const response = yield call(Api.collection, { id: action.payload, language });
     yield put(mdbActions.receiveCollections([response]));
-    yield put(actions.fetchFullLessonSuccess(action.payload));
+    yield put(actions.fetchFullProgramSuccess(action.payload));
   } catch (err) {
-    yield put(actions.fetchFullLessonFailure(action.payload, err));
+    yield put(actions.fetchFullProgramFailure(action.payload, err));
   }
 }
 
@@ -56,7 +56,7 @@ function* watchFetchList() {
 }
 
 function* watchFetchProgramPart() {
-  yield takeLatest(types.FETCH_PROGRAM_PART, fetchProgramPart);
+  yield takeEvery(types.FETCH_PROGRAM_PART, fetchProgramPart);
 }
 
 function* watchFetchFullProgram() {

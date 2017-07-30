@@ -70,12 +70,12 @@ const initialState = {
   wip: {
     list: false,
     parts: {},
-    full: {}
+    fulls: {}
   },
   errors: {
-    list: false,
+    list: null,
     parts: {},
-    full: {}
+    fulls: {}
   },
 };
 

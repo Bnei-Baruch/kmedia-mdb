@@ -19,8 +19,8 @@ const Routes = () => (
     <Route exact path="/lessons/part/:id" component={LessonPart} />
     <Route exact path="/lessons/full/:id" component={FullLesson} />
     <Route exact path="/programs" component={Programs} />
-    <Route exact path="/programs/full/:id" component={FullProgram} />
     <Route exact path="/programs/part/:id" component={ProgramPart} />
+    <Route exact path="/programs/full/:id" component={FullProgram} />
     <Route exact path="/programs" component={Programs} />
     <Route exact path="/lectures" component={NotImplemented} />
     <Route exact path="/sources" component={NotImplemented} />
