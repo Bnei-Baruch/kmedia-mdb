@@ -33,7 +33,7 @@ class AVPlayPause extends Component {
         type="button"
         className={classNames('player-button')}
         onClick={this.handlePlayPause}
-        style={{ width: '16px', height: '16px' }}
+        style={{ width: '20px', height: '20px', marginLeft: '5px' }}
       >
         <img
           src={media.isPlaying ? pauseImage : playImage}
