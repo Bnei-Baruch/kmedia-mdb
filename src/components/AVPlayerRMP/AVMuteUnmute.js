@@ -23,6 +23,8 @@ class AVMuteUnmute extends Component {
   render() {
     const { media: { isMuted, volume } } = this.props;
 
+    // TODO: (yaniv) preload images?
+
     return (
       <button
         type="button"
