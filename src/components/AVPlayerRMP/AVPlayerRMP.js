@@ -41,6 +41,30 @@ class AVPlayerRMP extends PureComponent {
     poster: null,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      videoElement: null,
+    }
+  }
+
+  componentDidMount() {
+    const videoElement = this.player_.instance;
+    this.setState({videoElement});
+  }
+
+  buffers = () => {
+    const { videoElement } = this.state;
+    const ret = [];
+    if (videoElement) {
+      for (let idx = 0; idx < videoElement.buffered.length; ++idx) {
+        ret.push({ start: videoElement.buffered.start(idx), end: videoElement.buffered.end(idx)});
+      }
+    }
+    return ret;
+  }
+
   render() {
     const { audio, video, active, playerId, handleSwitchAV, languages, defaultValue, onSelect } = this.props;
 
@@ -50,7 +74,7 @@ class AVPlayerRMP extends PureComponent {
           <Grid columns="equal">
             <Grid.Row>
               <Grid.Column>
-                <AVSwitch video={video} audio={audio} active={active} onChange={handleSwitchAV} />
+                AVSwitch
               </Grid.Column>
               <Grid.Column>
                 <LanguageSelector
@@ -68,19 +92,20 @@ class AVPlayerRMP extends PureComponent {
               <div className="media" id={playerId}>
                 <div className="media-player">
                   <Player
+                    ref={c => this.player_ = c}
                     src={physicalFile(active, true)}
                     vendor={active === video ? 'video' : 'audio'}
                     autoPlay={false}
                     loop="false"
                     controls
                     onClick={() => playPause()}
+                    preload="auto"
                   />
                 </div>
                 <div className="media-controls">
                   <AVPlayPause />
                   <AVTime name={'currentTime'} />&nbsp;/&nbsp;<AVTime name={'duration'} />
-                  <Progress />
-                  <SeekBar />
+                  <Progress buffers={this.buffers()} />
                   <MuteUnmute />
                   <Volume />
                   <AVFullScreen />
