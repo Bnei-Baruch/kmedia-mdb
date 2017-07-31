@@ -126,6 +126,7 @@ class VideoBox extends Component {
                 languages={Array.from(groups.keys())}
                 defaultValue={language}
                 onSelect={this.handleChangeLanguage}
+                t={t}
               />
             </div>
           </div>

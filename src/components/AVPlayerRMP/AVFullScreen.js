@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { withMediaProps } from 'react-media-player';
 import fullscreenImage from './images/fullscreen.svg';
 import exitFullscreenImage from './images/exit_fullscreen.svg';
@@ -26,11 +27,11 @@ class AVFullscreen extends Component {
         type="button"
         className="player-button"
         onClick={this.handleFullscreen}
+        style={{ width: '16px', height: '16px' }}
       >
         <img
           src={media.isFullScreen ? exitFullscreenImage : fullscreenImage}
           alt={media.isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
-          style={{ width: '16px', height: '16px' }}
         />
       </button>
     )
