@@ -9,29 +9,34 @@ class Progress extends Component {
   _onChangeUsed = false;
 
   componentDidMount() {
-    document.addEventListener('mousemove', this.handleMouseMove);
-    document.addEventListener('touchmove', this.handleMouseMove);
-    document.addEventListener('mouseup', this.handleMouseUp);
-    document.addEventListener('touchend', this.handleMouseUp);
+    document.addEventListener('mousemove', this.handleMove);
+    document.addEventListener('touchmove', this.handleMove);
+    document.addEventListener('mouseup', this.handleEnd);
+    document.addEventListener('touchend', this.handleEnd);
   }
 
-  handleMouseDown = (e) => {
+  handleStart = (e) => {
     this._wasMouseDown = true;
     this._isPlayingOnMouseDown = this.props.media.isPlaying;
+
     this.props.media.pause();
   }
 
-  handleMouseMove = (e) => {
-    // Resolve clientX from mouse or touch event.
-    const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
+  handleMove = (e) => {
     if (this._wasMouseDown) {
+      // Resolve clientX from mouse or touch event.
+      const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
       this.seek(clientX);
     }
   }
 
-  handleMouseUp = (e) => {
+  handleEnd = (e) => {
     if (this._wasMouseDown) {
       this._wasMouseDown = false;
+      // Seek on desktop on mouse up. On mobile Move is called so no need to seek here.
+      if (e.clientX) {
+        this.seek(e.clientX);
+      }
 
       // only play if media was playing prior to mouseDown
       if (this._isPlayingOnMouseDown) {
@@ -104,8 +109,8 @@ class Progress extends Component {
     };
     return (<div ref={c => this._element = c}
                  style={parent}
-                 onMouseDown={this.handleMouseDown}
-                 onTouchStart={this.handleMouseDown}>
+                 onMouseDown={this.handleStart}
+                 onTouchStart={this.handleStart}>
               <div style={stylePlayed}>
                 <div style={knobStyle}></div>
               </div>
