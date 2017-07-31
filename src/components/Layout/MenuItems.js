@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import { Menu, Sidebar } from 'semantic-ui-react';
 
@@ -57,4 +56,4 @@ MenuItems.defaultProps = {
   visible: false,
 };
 
-export default translate()(MenuItems);
+export default MenuItems;
