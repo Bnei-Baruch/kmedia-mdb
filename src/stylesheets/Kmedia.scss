@@ -83,7 +83,7 @@ $text-colors: (
       bottom: 0;
       left: 0;
       right: 0;
-      overflow: scroll;
+      overflow: auto;
       border-right: 1px solid rgba(34, 36, 38, 0.15);
       .menu {
         border: 0;
@@ -103,7 +103,7 @@ $text-colors: (
     &__sidebar{
       >.menu {
         display: none;
-      }  
+      }
       top: 60px;
       transform: none;
       &-menu {
@@ -112,6 +112,32 @@ $text-colors: (
     }
     &__content{
       margin-left: 290px;
+    }
+  }
+}
+
+.rtl {
+  .layout__sidebar {
+    transform: translate(100%, 0);
+    left: auto;
+    right: 0;
+    &.is-active {
+      transform: none;
+    }
+    &-menu {
+      border-right: none;
+      border-left: 1px solid rgba(34, 36, 38, 0.15);
+    }
+  }
+  @media only screen and (min-width: 1490px) {
+    .layout {
+      &__sidebar{
+        transform: none;
+      }
+      &__content{
+        margin-left: auto;
+        margin-right: 290px;
+      }
     }
   }
 }
@@ -210,7 +236,7 @@ $text-colors: (
   // right:0;
   // top: 1em;
   // bottom: 1em;
-  // overflow:scroll; 
+  // overflow:scroll;
   // margin-left: -1em;
   // margin-right: -5em;
   // padding-left: 2em!important;
@@ -240,11 +266,11 @@ $text-colors: (
 //   // width:100%;
 //   // top:56px;
   z-index: 10;
-  
+
   border-bottom: 1px solid $border-color;
 //   >.grid{
 //     margin-bottom:0;
-    
+
 //       >.row{
 //       padding:0;
 //       .grid{
@@ -279,7 +305,7 @@ $text-colors: (
     // min-width:25%;
     // &:nth-child(n+3){
 
-    
+
     &:last-child{
       flex:1 1 auto;
     }

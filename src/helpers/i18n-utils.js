@@ -14,5 +14,11 @@ export const changeDirection = (direction) => {
   document.getElementsByTagName('head').item(0).replaceChild(newlink, oldlink);
 
   // change root element direction
-  document.getElementById('root').setAttribute('style', `direction: ${direction};`);
+  const root = document.getElementById('root');
+  root.setAttribute('style', `direction: ${direction};`);
+  if (isRTL) {
+    root.classList.add('rtl');
+  } else {
+    root.classList.remove('rtl');
+  }
 };
