@@ -11,13 +11,14 @@ import { physicalFile } from '../../helpers/utils';
 import LanguageSelector from '../shared/LanguageSelector';
 
 import AVPlayPause from './AVPlayPause';
-import AVTime from './AVTime';
+import AVTimeElapsed from './AVTimeElapsed';
 import AVSwitch from './AVSwitch';
 import AVFullScreen from './AVFullScreen';
+import AVMuteUnmute from './AVMuteUnmute';
 
 import Progress from './Progress';
 
-const { MuteUnmute, SeekBar, Volume, Fullscreen } = controls;
+const { SeekBar, Volume } = controls;
 
 class AVPlayerRMP extends PureComponent {
 
@@ -31,6 +32,7 @@ class AVPlayerRMP extends PureComponent {
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
     defaultValue: PropTypes.string.isRequired,
     onSelect: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -42,7 +44,7 @@ class AVPlayerRMP extends PureComponent {
   };
 
   render() {
-    const { audio, video, active, playerId, handleSwitchAV, languages, defaultValue, onSelect } = this.props;
+    const { audio, video, active, playerId, handleSwitchAV, languages, defaultValue, onSelect, t } = this.props;
 
     return (
       <div>
@@ -50,7 +52,7 @@ class AVPlayerRMP extends PureComponent {
           <Grid columns="equal">
             <Grid.Row>
               <Grid.Column>
-                <AVSwitch video={video} audio={audio} active={active} onChange={handleSwitchAV} />
+                <AVSwitch video={video} audio={audio} active={active} t={t} onChange={handleSwitchAV} />
               </Grid.Column>
               <Grid.Column>
                 <LanguageSelector
@@ -78,10 +80,10 @@ class AVPlayerRMP extends PureComponent {
                 </div>
                 <div className="media-controls">
                   <AVPlayPause />
-                  <AVTime name={'currentTime'} />&nbsp;/&nbsp;<AVTime name={'duration'} />
+                  <AVTimeElapsed />
                   <Progress />
                   <SeekBar />
-                  <MuteUnmute />
+                  <AVMuteUnmute />
                   <Volume />
                   <AVFullScreen />
                 </div>

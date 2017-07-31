@@ -1,13 +1,20 @@
 .player-button {
+  padding: 0;
   background: transparent;
   border: none;
   box-shadow: none;
+
+  img {
+    height: 100%;
+  }
 }
 
 .media-controls {
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
   align-items: center;
+  height: 40px;
   background: rgba(0, 0, 0, 65%);
   color: #ffffff;
 }

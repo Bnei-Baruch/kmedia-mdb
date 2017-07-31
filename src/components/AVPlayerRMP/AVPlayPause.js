@@ -27,17 +27,16 @@ class AVPlayPause extends Component {
   };
 
   render() {
-    const { className, style, media } = this.props;
+    const { className, media } = this.props;
     return (
       <button
         type="button"
         className={classNames('player-button', className)}
-        style={style}
         onClick={this.handlePlayPause}
+        style={{ width: '16px', height: '16px' }}
       >
         <img
           src={media.isPlaying ? pauseImage : playImage} alt={media.isPlaying ? 'pause' : 'play'}
-          style={{ width: '16px' }}
         />
       </button>
     );

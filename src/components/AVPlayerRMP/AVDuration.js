@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { withMediaProps } from 'react-media-player';
 
-class AVCurrentTime extends Component {
+class AVDuration extends Component {
   static PropTypes = {
     name: PropTypes.string.isRequired
   };
@@ -35,4 +35,4 @@ class AVCurrentTime extends Component {
   }
 }
 
-export default withMediaProps(AVCurrentTime);
+export default withMediaProps(AVDuration);
