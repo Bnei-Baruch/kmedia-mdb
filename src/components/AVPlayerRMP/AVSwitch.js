@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'semantic-ui-react';
 
-import * as shapes from '../../shapes';
+import * as shapes from '../shapes';
 
 const AVSwitch = (props) => {
   const { video, audio, active, onChange, t } = props;

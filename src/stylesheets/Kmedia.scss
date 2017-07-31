@@ -321,11 +321,9 @@ $text-colors: (
 
   .ui.menu {
     border-radius: 0;
-    box-shadow: none!important;
-    // border: none!important;
-    display:block;
-    // border-bottom: 1px solid $border-color;
-    border-width: 0!important;
+    box-shadow: none !important;
+    border: none !important;
+    display: block;
     .item {
       border-radius: 0!important;
     }
@@ -338,4 +336,17 @@ $text-colors: (
       margin-left: 8px;
     }
   }
+}
+
+.player-minimize .video_position {
+  background-color: white;
+  border-radius: 2px;
+  top: 110px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.25);
+  left: 20px;
+  padding: 7px;
+  position: fixed;
+  width: 300px;
+  z-index: 1;
+  transition: all 0.4s ease-in-out;
 }

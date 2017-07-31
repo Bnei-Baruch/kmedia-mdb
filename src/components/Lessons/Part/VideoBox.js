@@ -4,10 +4,10 @@ import { Grid } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
-import { physicalFile } from '../../../helpers/utils';
+import AVPlayer from '../../AVPlayerRMP/AVPlayerRMP';
+
 import LanguageSelector from '../../shared/LanguageSelector';
-import AVPlayer from '../../shared/AVPlayer';
-import AVSwitch from './AVSwitch';
+import AVSwitch from '../../AVPlayerRMP/AVSwitch';
 
 class VideoBox extends Component {
 
@@ -114,8 +114,21 @@ class VideoBox extends Component {
       <Grid.Row className="video_box">
         <Grid.Column width={10}>
           <div className="video_player">
-            <div id="video" />
-            <AVPlayer playerId="lesson" file={physicalFile(active, true)} />
+            <div className="video_position">
+              <AVPlayer
+                playerId="lesson"
+                active={active}
+                video={video}
+                audio={audio}
+                handleSwitchAV={this.handleSwitchAV}
+                poster="http://kabbalahmedia.info/assets/cover-video.jpg"
+
+                languages={Array.from(groups.keys())}
+                defaultValue={language}
+                onSelect={this.handleChangeLanguage}
+                t={t}
+              />
+            </div>
           </div>
         </Grid.Column>
         <Grid.Column className="player_panel" width={6}>
