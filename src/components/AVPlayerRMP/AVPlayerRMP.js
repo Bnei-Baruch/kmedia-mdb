@@ -74,18 +74,19 @@ class AVPlayerRMP extends PureComponent {
                     vendor={active === video ? 'video' : 'audio'}
                     autoPlay={false}
                     loop="false"
-                    controls
                     onClick={() => playPause()}
                   />
-                </div>
-                <div className="media-controls">
-                  <AVPlayPause />
-                  <AVTimeElapsed />
-                  <Progress />
-                  <SeekBar />
-                  <AVMuteUnmute />
-                  <Volume />
-                  <AVFullScreen />
+                  <div className="media-controls">
+                    <div className="controls-container">
+                      <AVPlayPause />
+                      <AVTimeElapsed />
+                      <Progress />
+                      <SeekBar />
+                      <AVMuteUnmute />
+                      <Volume />
+                      <AVFullScreen />
+                    </div>
+                  </div>
                 </div>
               </div>
             )
