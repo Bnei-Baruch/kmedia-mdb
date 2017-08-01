@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import { Divider, Grid } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
@@ -11,6 +12,7 @@ import { CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
 import Pagination from '../../shared/Pagination';
 import ProgramsList from './ProgramsList';
 import ResultsPageHeader from '../../shared/ResultsPageHeader';
+import withPagination from '../../../helpers/paginationHOC';
 
 class ProgramsContainer extends Component {
 
@@ -23,6 +25,9 @@ class ProgramsContainer extends Component {
     setPage: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
     pageSize: PropTypes.number.isRequired,
+    getPageNo: PropTypes.func.isRequired,
+    askForData: PropTypes.func.isRequired,
+    handlePageChange: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -32,49 +37,27 @@ class ProgramsContainer extends Component {
   };
 
   componentDidMount() {
-    const { location, language, pageSize } = this.props;
+    const { location, askForData, getPageNo } = this.props;
 
-    const pageNo = this.getPageNo(location.search);
-    this.askForData(pageNo, language, pageSize);
+    const pageNo = getPageNo(location.search);
+    askForData({ ...this.props, pageNo });
   }
 
   componentWillReceiveProps(nextProps) {
-    const { pageNo, language, pageSize } = nextProps;
-    const props                          = this.props;
+    const { language, pageSize }           = nextProps;
+    const { handlePageChange, askForData } = this.props;
 
-    if (pageSize !== props.pageSize) {
-      this.handlePageChange(1);
+    if (pageSize !== this.props.pageSize) {
+      handlePageChange(1, nextProps);
     }
 
-    if (language !== props.language) {
-      this.askForData(pageNo, language, pageSize);
+    if (language !== this.props.language) {
+      askForData(nextProps);
     }
   }
 
-  getPageNo = (search) => {
-    let page = 0;
-    if (search) {
-      const match = search.match(/page=(\d+)/);
-      if (match) {
-        page = parseInt(match[1], 10);
-      }
-    }
-
-    return (isNaN(page) || page <= 0) ? 1 : page;
-  };
-
-  handlePageChange = (pageNo) => {
-    const { setPage, language, pageSize } = this.props;
-    setPage(pageNo);
-    this.askForData(pageNo, language, pageSize);
-  };
-
-  askForData = (pageNo, language, pageSize) => {
-    this.props.fetchList(pageNo, language, pageSize);
-  };
-
   render() {
-    const { pageNo, total, items, pageSize } = this.props;
+    const { pageNo, total, items, pageSize, handlePageChange } = this.props;
 
     return (
       <Grid.Column width={16}>
@@ -85,23 +68,28 @@ class ProgramsContainer extends Component {
           pageNo={pageNo}
           pageSize={pageSize}
           total={total}
-          onChange={x => this.handlePageChange(x)}
+          onChange={x => handlePageChange(x, this.props)}
         />
       </Grid.Column>
     );
   }
 }
 
-export default connect(
-  state => ({
-    pageNo: programSelectors.getPageNo(state.programs),
-    total: programSelectors.getTotal(state.programs),
-    items: programSelectors.getItems(state.programs)
-      .map(x => (x[1] === CT_VIDEO_PROGRAM_CHAPTER ?
-        mdb.getUnitById(state.mdb, x[0]) :
-        mdb.getDenormCollection(state.mdb, x[0]))),
-    language: settings.getLanguage(state.settings),
-    pageSize: settings.getPageSize(state.settings),
-  }),
-  actions
-)(ProgramsContainer);
+const enhance = compose(
+  connect(
+    state => ({
+      pageNo: programSelectors.getPageNo(state.programs),
+      total: programSelectors.getTotal(state.programs),
+      items: programSelectors.getItems(state.programs)
+        .map(x => (x[1] === CT_VIDEO_PROGRAM_CHAPTER ?
+          mdb.getUnitById(state.mdb, x[0]) :
+          mdb.getDenormCollection(state.mdb, x[0]))),
+      language: settings.getLanguage(state.settings),
+      pageSize: settings.getPageSize(state.settings),
+    }),
+    actions
+  ),
+  withPagination
+);
+
+export default enhance(ProgramsContainer);

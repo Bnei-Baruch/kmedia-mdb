@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import { Divider, Grid } from 'semantic-ui-react';
 
 import { CT_LESSON_PART } from '../../../helpers/consts';
@@ -12,6 +13,7 @@ import * as shapes from '../../shapes';
 import Pagination from '../../shared/Pagination';
 import LessonsFilters from './LessonsFilters';
 import LessonsList from './LessonsList';
+import withPagination from '../../../helpers/paginationHOC';
 
 class LessonsContainer extends Component {
 
@@ -25,6 +27,9 @@ class LessonsContainer extends Component {
     language: PropTypes.string.isRequired,
     pageSize: PropTypes.number.isRequired,
     isFiltersHydrated: PropTypes.bool,
+    getPageNo: PropTypes.func.isRequired,
+    askForData: PropTypes.func.isRequired,
+    handlePageChange: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -35,59 +40,40 @@ class LessonsContainer extends Component {
   };
 
   componentDidMount() {
-    const { isFiltersHydrated } = this.props;
+    const { isFiltersHydrated, askForData, getPageNo } = this.props;
 
     // If filters are already hydrated, handleFiltersHydrated won't be called.
     // We'll have to ask for data here instead.
     if (isFiltersHydrated) {
-      const { location, language, pageSize } = this.props;
-      const pageNo                           = this.getPageNo(location.search);
-      this.askForData(pageNo, language, pageSize);
+      const { location } = this.props;
+
+      const pageNo = getPageNo(location.search);
+      askForData({ ...this.props, pageNo });
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { pageNo, language, pageSize } = nextProps;
+    const { language, pageSize }           = nextProps;
+    const { handlePageChange, askForData } = this.props;
 
     if (pageSize !== this.props.pageSize) {
-      this.handlePageChange(1);
+      handlePageChange(1, nextProps);
     }
 
     if (language !== this.props.language) {
-      this.askForData(pageNo, language, pageSize);
+      askForData(nextProps);
     }
   }
 
-  getPageNo = (search) => {
-    let page = 0;
-    if (search) {
-      const match = search.match(/page=(\d+)/);
-      if (match) {
-        page = parseInt(match[1], 10);
-      }
-    }
-
-    return (isNaN(page) || page <= 0) ? 1 : page;
-  };
-
-  handlePageChange = (pageNo) => {
-    const { setPage, language, pageSize } = this.props;
-    setPage(pageNo);
-    this.askForData(pageNo, language, pageSize);
-  };
-
   handleFiltersHydrated = () => {
-    const { location } = this.props;
-    const pageNo       = this.getPageNo(location.search);
-    this.handlePageChange(pageNo);
-  };
+    const { location, handlePageChange, getPageNo } = this.props;
 
-  askForData = (pageNo, language, pageSize) => {
-    this.props.fetchList(pageNo, language, pageSize);
+    const pageNo = getPageNo(location.search);
+    handlePageChange(pageNo, this.props);
   };
 
   render() {
-    const { pageNo, total, items, pageSize, language } = this.props;
+    const { pageNo, total, items, pageSize, language, handlePageChange } = this.props;
 
     return (
       <Grid.Column width={16}>
@@ -95,7 +81,7 @@ class LessonsContainer extends Component {
           pageNo={pageNo}
           pageSize={pageSize}
           total={total}
-          onChange={() => this.handlePageChange(1)}
+          onChange={() => handlePageChange(1, this.props)}
           onHydrated={this.handleFiltersHydrated}
         />
         <Divider />
@@ -105,24 +91,29 @@ class LessonsContainer extends Component {
           pageSize={pageSize}
           total={total}
           language={language}
-          onChange={this.handlePageChange}
+          onChange={x => handlePageChange(x, this.props)}
         />
       </Grid.Column>
     );
   }
 }
 
-export default connect(
-  state => ({
-    pageNo: selectors.getPageNo(state.lessons),
-    total: selectors.getTotal(state.lessons),
-    items: selectors.getItems(state.lessons)
-      .map(x => (x[1] === CT_LESSON_PART ?
-        mdb.getUnitById(state.mdb, x[0]) :
-        mdb.getDenormCollection(state.mdb, x[0]))),
-    language: settings.getLanguage(state.settings),
-    pageSize: settings.getPageSize(state.settings),
-    isFiltersHydrated: filters.getIsHydrated(state.filters, 'lessons'),
-  }),
-  actions
-)(LessonsContainer);
+const enhance = compose(
+  connect(
+    state => ({
+      pageNo: selectors.getPageNo(state.lessons),
+      total: selectors.getTotal(state.lessons),
+      items: selectors.getItems(state.lessons)
+        .map(x => (x[1] === CT_LESSON_PART ?
+          mdb.getUnitById(state.mdb, x[0]) :
+          mdb.getDenormCollection(state.mdb, x[0]))),
+      language: settings.getLanguage(state.settings),
+      pageSize: settings.getPageSize(state.settings),
+      isFiltersHydrated: filters.getIsHydrated(state.filters, 'lessons'),
+    }),
+    actions
+  ),
+  withPagination
+);
+
+export default enhance(LessonsContainer);
