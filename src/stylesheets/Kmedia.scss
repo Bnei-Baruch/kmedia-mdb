@@ -38,6 +38,9 @@ $text-colors: (
 
 /// THE NEW LAYOUT
 .layout {
+  height: 100vh;
+
+
   &__header,
   &__sidebar {
     .menu,
@@ -91,11 +94,24 @@ $text-colors: (
       }
     }
   }
-  &__content {
+  &__main {
     margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+  }
+  &__content {
+    flex-grow: 1;
   }
 }
-
+.logo {
+  img {
+    display: none!important;
+  }
+  h2.header {
+    margin-top:0;
+    margin-left:0;
+  } 
+}
 @media only screen and (min-width: 1490px) {
   .layout {
     &__sidebar-toggle {
@@ -111,9 +127,18 @@ $text-colors: (
         top: 0;
       }
     }
-    &__content {
+    &__main {
       margin-left: 290px;
     }
+  }
+ .logo {
+    img {
+      display: inline-block!important;
+    }
+    h2.header {
+      margin-top:0;
+      margin-left:16px;
+    } 
   }
 }
 
@@ -135,7 +160,7 @@ $text-colors: (
       &__sidebar {
         transform: none;
       }
-      &__content {
+      &__main {
         margin-left: auto;
         margin-right: 290px;
       }

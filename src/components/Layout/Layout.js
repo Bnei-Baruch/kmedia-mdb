@@ -11,6 +11,9 @@ import { LANGUAGES } from '../../helpers/consts';
 import { actions, selectors } from '../../redux/modules/settings';
 import Routes from './Routes';
 import MenuItems from './MenuItems';
+import Footer from './Footer';
+
+import logo from '../../images/logo.svg';
 
 class Layout extends Component {
 
@@ -46,7 +49,8 @@ class Layout extends Component {
             <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.toggleSidebar}>
               <Icon name="sidebar" />
             </Menu.Item>
-            <Menu.Item header as={Link} to="/">
+            <Menu.Item className="logo" header as={Link} to="/">
+              <img src={logo}/>
               <Header inverted as="h2">
                 {t('nav.top.header')}
               </Header>
@@ -65,7 +69,8 @@ class Layout extends Component {
             <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.toggleSidebar}>
               <Icon name="sidebar" />
             </Menu.Item>
-            <Menu.Item header as={Link} to="/">
+            <Menu.Item className="logo" header as={Link} to="/">
+              <img src={logo}/>
               <Header inverted as="h2">
                 {t('nav.top.header')}
               </Header>
@@ -75,13 +80,15 @@ class Layout extends Component {
             <MenuItems simple t={t} />
           </div>
         </div>
-        <div className="layout__content">
-          <Grid padded>
-            <Grid.Row>
-              <Routes />
-            </Grid.Row>
-          </Grid>
-          <div className="layout__footer" />
+        <div className="layout__main">
+          <div className="layout__content">
+            <Grid padded>
+              <Grid.Row>
+                <Routes />
+              </Grid.Row>
+            </Grid>
+          </div>
+          <Footer/>
         </div>
       </div>
     );
