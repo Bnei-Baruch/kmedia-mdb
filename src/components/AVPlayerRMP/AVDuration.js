@@ -7,7 +7,7 @@ class AVDuration extends Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
     style: PropTypes.object,
-    media: PropTypes.object
+    media: PropTypes.object.isRequired,
   };
 
   static defaultProps = {

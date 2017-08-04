@@ -8,17 +8,14 @@ import { controls, Media, Player } from 'react-media-player';
 
 import * as shapes from '../shapes';
 import { physicalFile } from '../../helpers/utils';
-import LanguageSelector from '../shared/LanguageSelector';
 
 import AVPlayPause from './AVPlayPause';
 import AVTimeElapsed from './AVTimeElapsed';
-import AVSwitch from './AVSwitch';
 import AVFullScreen from './AVFullScreen';
 import AVMuteUnmute from './AVMuteUnmute';
-
-import Progress from './Progress';
-
-const { Volume } = controls;
+import AVLanguage from './AVLanguage';
+import AVAudioVideo from './AVAudioVideo';
+import AVProgress from './AVProgress';
 
 class AVPlayerRMP extends PureComponent {
 
@@ -72,22 +69,6 @@ class AVPlayerRMP extends PureComponent {
 
     return (
       <div>
-        <Grid.Column className="player_panel" width={6}>
-          <Grid columns="equal">
-            <Grid.Row>
-              <Grid.Column>
-                <AVSwitch video={video} audio={audio} active={active} t={t} onChange={handleSwitchAV} />
-              </Grid.Column>
-              <Grid.Column>
-                <LanguageSelector
-                  languages={languages}
-                  defaultValue={defaultValue}
-                  onSelect={onSelect}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Grid.Column>
         <Media>
           {
             ({ playPause }) => (
@@ -106,10 +87,14 @@ class AVPlayerRMP extends PureComponent {
                     <div className="controls-container">
                       <AVPlayPause />
                       <AVTimeElapsed />
-                      <Progress buffers={this.buffers()} />
+                      <AVProgress buffers={this.buffers()} />
                       <AVMuteUnmute />
-                      <Volume />
                       <AVFullScreen />
+                      <AVAudioVideo isAudio={audio == active} isVideo={video == active}
+                                    setAudio={handleSwitchAV} setVideo={handleSwitchAV} />
+                      <AVLanguage languages={languages}
+                                  defaultValue={defaultValue}
+                                  onSelect={onSelect} />
                     </div>
                   </div>
                 </div>

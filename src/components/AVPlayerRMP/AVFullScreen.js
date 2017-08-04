@@ -27,14 +27,14 @@ class AVFullscreen extends Component {
         type="button"
         className="player-button"
         onClick={this.handleFullscreen}
-        style={{ width: '16px', height: '16px' }}
+        style={{ width: '16px', height: '16px', marginLeft: 10, marginRight: 10 }}
       >
         <img
           src={media.isFullScreen ? exitFullscreenImage : fullscreenImage}
           alt={media.isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
         />
       </button>
-    )
+    );
   }
 }
 

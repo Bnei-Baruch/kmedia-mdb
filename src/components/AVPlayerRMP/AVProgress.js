@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 
 import { withMediaProps } from 'react-media-player';
 
-class Progress extends Component {
+class AVProgress extends Component {
   _element = null;
   _wasMouseDown = false;
   _isPlayingOnMouseDown = false;
-  _onChangeUsed = false;
 
   componentDidMount() {
     document.addEventListener('mousemove', this.handleMove);
@@ -66,7 +65,7 @@ class Progress extends Component {
       if (ret < 1) {
         return 0;
       }
-      return ret;
+      return ret + '%';
     }
 
     const parent = {
@@ -76,6 +75,7 @@ class Progress extends Component {
       paddingBottom: 5,
       marginLeft: 10,
       marginRight: 10,
+      width: '100%',
     };
     const styleBar = {
       height: 3,
@@ -120,4 +120,4 @@ class Progress extends Component {
   }
 }
 
-export default withMediaProps(Progress);
+export default withMediaProps(AVProgress);
