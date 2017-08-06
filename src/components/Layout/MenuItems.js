@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import { Menu, Sidebar } from 'semantic-ui-react';
 
@@ -15,6 +14,7 @@ const ITEMS = [
   'publications',
   'photos',
   'design',
+  'design2',
 ];
 
 const MenuItems = (props) => {
@@ -32,7 +32,7 @@ const MenuItems = (props) => {
 
   if (simple) {
     return (
-      <Menu vertical fluid pointing color="blue">
+      <Menu vertical borderless fluid color='blue' size='huge'>
         {items}
       </Menu>
     );
@@ -56,4 +56,4 @@ MenuItems.defaultProps = {
   visible: false,
 };
 
-export default translate()(MenuItems);
+export default MenuItems;

@@ -1,47 +1,108 @@
-import React, {Component} from 'react';
-import LoadingBar from 'react-redux-loading-bar';
-import { Grid, Sidebar } from 'semantic-ui-react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { translate } from 'react-i18next';
+import classnames from 'classnames';
+import { Link } from 'react-router-dom';
+import { Flag, Grid, Header, Icon, Menu } from 'semantic-ui-react';
 
+import { LANGUAGES } from '../../helpers/consts';
+import { actions, selectors } from '../../redux/modules/settings';
 import Routes from './Routes';
-import TopFixedMenu from './TopFixedMenu';
 import MenuItems from './MenuItems';
 import Footer from './Footer';
 
+import logo from '../../images/logo.svg';
+
 class Layout extends Component {
-  state = {
-    visible: false
+
+  static propTypes = {
+    language: PropTypes.string.isRequired,
+    setLanguage: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
-  toggleVisibility = () => this.setState({ visible: !this.state.visible });
+  state = {
+    sidebarActive: false
+  };
+
+  handleChangeLanguage = (e) => {
+    const flag     = e.target.getAttribute('class').split(' ')[0];
+    const language = Array.from(Object.values(LANGUAGES)).find(x => x.flag === flag).value;
+    if (this.props.language !== language) {
+      this.props.setLanguage(language);
+    }
+  };
+
+  toggleSidebar = (e, data) =>
+    this.setState({ sidebarActive: !this.state.sidebarActive });
 
   render() {
+    const { t }             = this.props;
+    const { sidebarActive } = this.state;
+
     return (
-      <Sidebar.Pushable>
-        <MenuItems visible={this.state.visible} />
-        <Sidebar.Pusher>
-          <TopFixedMenu toggleVisibility={this.toggleVisibility} />
-          <div className="wrapper">
-            <Grid columns="equal" className="main-content container">
+      <div className="layout">
+        <div className="layout__header">
+          <Menu inverted borderless size="huge" color="blue">
+            <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.toggleSidebar}>
+              <Icon name="sidebar" />
+            </Menu.Item>
+            <Menu.Item className="logo" header as={Link} to="/">
+              <img src={logo} alt="logo" />
+              <Header inverted as="h2">
+                {t('nav.top.header')}
+              </Header>
+            </Menu.Item>
+            <Menu.Menu position="right">
+              <Menu.Item>
+                <Flag name="us" onClick={this.handleChangeLanguage} />
+                <Flag name="ru" onClick={this.handleChangeLanguage} />
+                <Flag name="il" onClick={this.handleChangeLanguage} />
+              </Menu.Item>
+            </Menu.Menu>
+          </Menu>
+        </div>
+        <div className={classnames({ 'layout__sidebar': true, 'is-active': sidebarActive })}>
+          <Menu inverted borderless size="huge" color="blue">
+            <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.toggleSidebar}>
+              <Icon name="sidebar" />
+            </Menu.Item>
+            <Menu.Item className="logo" header as={Link} to="/">
+              <img src={logo} alt="logo" />
+              <Header inverted as="h2">
+                {t('nav.top.header')}
+              </Header>
+            </Menu.Item>
+          </Menu>
+          <div className="layout__sidebar-menu">
+            <MenuItems simple t={t} />
+          </div>
+        </div>
+        <div className="layout__main">
+          <div className="layout__content">
+            <Grid padded>
               <Grid.Row>
-                <Grid.Column width={3} only="computer" className="main-menu">
-                  <MenuItems simple />
-                </Grid.Column>
-                <Grid.Column>
-                  <Grid padded>
-                    <Grid.Row>
-                      <Routes />
-                    </Grid.Row>
-                  </Grid>
-                </Grid.Column>
+                <Routes />
               </Grid.Row>
             </Grid>
-            <LoadingBar />
-            <Footer />
           </div>
-        </Sidebar.Pusher>
-      </Sidebar.Pushable>
+          <Footer />
+        </div>
+      </div>
     );
   }
 }
 
-export default Layout;
+function mapState(state) {
+  return {
+    language: selectors.getLanguage(state.settings),
+  };
+}
+
+function mapDispatch(dispatch) {
+  return bindActionCreators({ setLanguage: actions.setLanguage }, dispatch);
+}
+
+export default connect(mapState, mapDispatch)(translate()(Layout));

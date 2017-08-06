@@ -119,7 +119,10 @@ class SourcesFilter extends React.Component {
     const { roots, t } = this.props;
 
     return (
-      <Segment basic clearing attached="bottom" className="tab active">
+      <div>
+      <Segment vertical  className="tab active" style={{
+          padding:'0'
+        }}>
         <div
           className="filter-steps"
           // eslint-disable-next-line no-return-assign
@@ -131,11 +134,12 @@ class SourcesFilter extends React.Component {
               'No Sources'
           }
         </div>
+        </Segment>
         <Segment vertical clearing>
           <Button primary content={t('buttons.apply')} floated="right" onClick={this.apply} />
           <Button content={t('buttons.cancel')} floated="right" onClick={this.onCancel} />
         </Segment>
-      </Segment>
+      </div>
     );
   }
 }
