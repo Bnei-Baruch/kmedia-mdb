@@ -1,25 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { Divider, Grid } from 'semantic-ui-react';
 
-import * as shapes from '../../shapes';
+import { CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions, selectors as programSelectors } from '../../../redux/modules/programs';
-import { CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
-import Pagination from '../../shared/Pagination';
-import ProgramsList from './ProgramsList';
-import ResultsPageHeader from '../../shared/ResultsPageHeader';
+import * as shapes from '../../shapes';
 import withPagination from '../../../helpers/paginationHOC';
+import Pagination from '../../shared/Pagination';
+import ResultsPageHeader from '../../shared/ResultsPageHeader';
+import ProgramsList from './ProgramsList';
 
 class ProgramsContainer extends Component {
 
   static propTypes = {
     pageNo: PropTypes.number,
     total: PropTypes.number,
-    items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.ProgramCollection, shapes.ProgramPart])),
+    items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.ProgramCollection, shapes.ProgramChapter])),
     location: shapes.HistoryLocation.isRequired,
     fetchList: PropTypes.func.isRequired,
     setPage: PropTypes.func.isRequired,

@@ -10,12 +10,12 @@ const tPrefix = 'programs.part.materials';
 class Materials extends Component {
 
   static propTypes = {
-    program: shapes.LessonPart,
+    chapter: shapes.ProgramChapter,
     t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    program: undefined,
+    chapter: undefined,
   };
 
   render() {

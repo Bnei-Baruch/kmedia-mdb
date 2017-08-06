@@ -9,7 +9,7 @@ import * as shapes from '../../shapes';
 class ProgramsList extends PureComponent {
 
   static propTypes = {
-    items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.ProgramCollection, shapes.ProgramPart])),
+    items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.ProgramCollection, shapes.ProgramChapter])),
   };
 
   static defaultProps = {
@@ -22,7 +22,7 @@ class ProgramsList extends PureComponent {
         <strong>{part.film_date}</strong>
       </Table.Cell>
       <Table.Cell>
-        <Link to={`/programs/part/${part.id}`}>
+        <Link to={`/programs/chapter/${part.id}`}>
           <strong>{part.name}</strong>
           <br />
           <div dangerouslySetInnerHTML={{ __html: part.description }} />
@@ -35,7 +35,7 @@ class ProgramsList extends PureComponent {
     const units = collection.content_units.map(unit => (
       <Table.Row verticalAlign="top" key={`u-${unit.id}`}>
         <Table.Cell>
-          <Link to={`/programs/part/${unit.id}`}>
+          <Link to={`/programs/chapter/${unit.id}`}>
             {unit.name || '☠ no name'}
             <br />
             <div dangerouslySetInnerHTML={{ __html: unit.description }} />

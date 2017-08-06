@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Grid, Header, Table } from 'semantic-ui-react';
 
-import { CT_KITEI_MAKOR, MT_AUDIO, MT_IMAGE, MT_TEXT, MT_VIDEO } from '../../../helpers/consts';
+import { MT_AUDIO, MT_IMAGE, MT_TEXT, MT_VIDEO } from '../../../helpers/consts';
 import { physicalFile } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import LanguageSelector from '../../shared/LanguageSelector';
@@ -19,12 +19,12 @@ class MediaDownloads extends Component {
 
   static propTypes = {
     language: PropTypes.string.isRequired,
-    program: shapes.ProgramPart,
+    chapter: shapes.ProgramChapter,
     t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    program: undefined,
+    chapter: undefined,
   };
 
   constructor(props) {
@@ -33,38 +33,37 @@ class MediaDownloads extends Component {
   }
 
   getInitialState = (props) => {
-    const { program = {} } = props;
-    const groups          = this.getFilesByLanguage(program.files);
-    const derivedGroups   = this.getDerivedFilesByContentType(program.derived_units);
+    const { chapter = {} } = props;
+    const groups           = this.getFilesByLanguage(chapter.files);
 
     let language = props.language;
     if (!groups.has(language)) {
       language = groups.keys().next().value;
     }
 
-    return { groups, language, derivedGroups };
+    return { groups, language };
   };
 
   componentWillReceiveProps(nextProps) {
-    const { program, language } = nextProps;
-    const props                = this.props;
-    const state                = this.state;
+    const { chapter, language } = nextProps;
+    const props                 = this.props;
+    const state                 = this.state;
 
     // no change
-    if (program === props.program && language === props.language) {
+    if (chapter === props.chapter && language === props.language) {
       return;
     }
 
     // only language changed
-    if (program === props.program && language !== props.language) {
+    if (chapter === props.chapter && language !== props.language) {
       if (state.groups.has(language)) {
         this.setState({ language });
         return;
       }
     }
 
-    // program changed, maybe language as well
-    const groups = this.getFilesByLanguage(program.files);
+    // chapter changed, maybe language as well
+    const groups = this.getFilesByLanguage(chapter.files);
     let lang;
     if (groups.has(language)) {
       lang = language;
@@ -74,15 +73,9 @@ class MediaDownloads extends Component {
       lang = groups.keys().next().value;
     }
 
-    let derivedGroups = state.derivedGroups;
-    if (program.derived_units !== props.program.derived_units) {
-      derivedGroups = this.getDerivedFilesByContentType(program.derived_units);
-    }
-
     this.setState({
       groups,
       language: lang,
-      derivedGroups,
     });
   }
 
@@ -106,14 +99,6 @@ class MediaDownloads extends Component {
 
     return groups;
   };
-
-  getDerivedFilesByContentType = units => (
-    Object.values(units || {})
-      .reduce((acc, val) => {
-        acc[val.content_type] = this.getFilesByLanguage(val.files);
-        return acc;
-      }, {})
-  );
 
   handleChangeLanguage = (e, language) => {
     this.setState({ language });
@@ -156,11 +141,9 @@ class MediaDownloads extends Component {
   };
 
   render() {
-    const { t }                               = this.props;
-    const { language, groups, derivedGroups } = this.state;
-    const byType                              = groups.get(language) || new Map();
-    const kiteiMakor                          = derivedGroups[CT_KITEI_MAKOR];
-    const kiteiMakorByType                    = (kiteiMakor && kiteiMakor.get(language)) || new Map();
+    const { t }                = this.props;
+    const { language, groups } = this.state;
+    const byType               = groups.get(language) || new Map();
 
     let rows;
     if (byType.size === 0) {
@@ -173,15 +156,6 @@ class MediaDownloads extends Component {
       rows = MEDIA_ORDER.reduce((acc, val) => {
         const label = t(`programs.part.downloads.type-labels.${val}`);
         const files = (byType.get(val) || []).map(file => this.renderRow(file, label, t));
-        return acc.concat(files);
-      }, []);
-    }
-
-    let derivedRows;
-    if (kiteiMakorByType.size > 0) {
-      derivedRows = MEDIA_ORDER.reduce((acc, val) => {
-        const label = `${t('constants.content-types.KITEI_MAKOR')} - ${t(`constants.media-types.${val}`)}`;
-        const files = (kiteiMakorByType.get(val) || []).map(file => this.renderRow(file, label, t));
         return acc.concat(files);
       }, []);
     }
@@ -207,18 +181,6 @@ class MediaDownloads extends Component {
             {rows}
           </Table.Body>
         </Table>
-        {
-          derivedRows ?
-            <div>
-              <Header size="tiny" content={t('programs.part.downloads.derived-title')} />
-              <Table basic="very" compact="very">
-                <Table.Body>
-                  {derivedRows}
-                </Table.Body>
-              </Table>
-            </div>
-            : null
-        }
       </div>
     );
   }

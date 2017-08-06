@@ -17,13 +17,13 @@ class FullProgramContainer extends Component {
     wip: shapes.WipMap,
     errors: shapes.ErrorsMap,
     fetchFullProgram: PropTypes.func.isRequired,
-    fetchProgramPart: PropTypes.func.isRequired,
+    fetchProgramChapter: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     fullProgram: null,
-    wip: { fulls: {}, parts: {} },
-    errors: { fulls: {}, parts: {} },
+    wip: { fulls: {}, chapters: {} },
+    errors: { fulls: {}, chapters: {} },
   };
 
   componentDidMount() {
@@ -35,7 +35,7 @@ class FullProgramContainer extends Component {
   }
 
   askForDataIfNeeded = (props) => {
-    const { match, fullProgram, wip, errors, fetchFullProgram, fetchProgramPart } = props;
+    const { match, fullProgram, wip, errors, fetchFullProgram, fetchProgramChapter } = props;
 
     // We fetch stuff if we don't have it already
     // and a request for it is not in progress or ended with an error.
@@ -44,8 +44,8 @@ class FullProgramContainer extends Component {
       fullProgram.cuIDs.forEach((cuID) => {
         const cu = fullProgram.content_units.find(x => x.id === cuID);
         if (!cu || !cu.files) {
-          if (!(wip.parts[cuID] || errors.parts[cuID])) {
-            fetchProgramPart(cuID);
+          if (!(wip.chapters[cuID] || errors.chapters[cuID])) {
+            fetchProgramChapter(cuID);
           }
         }
       });
@@ -62,10 +62,10 @@ class FullProgramContainer extends Component {
     let wip  = wipMap.fulls[id];
     let err  = errors.fulls[id];
     if (fullProgram) {
-      wip = wip || fullProgram.cuIDs.some(cuID => wipMap.parts[cuID]);
+      wip = wip || fullProgram.cuIDs.some(cuID => wipMap.chapters[cuID]);
       if (!err) {
-        const cuIDwithError = fullProgram.cuIDs.find(cuID => errors.parts[cuID]);
-        err                 = cuIDwithError ? errors.parts[cuIDwithError] : null;
+        const cuIDwithError = fullProgram.cuIDs.find(cuID => errors.chapters[cuID]);
+        err                 = cuIDwithError ? errors.chapters[cuIDwithError] : null;
       }
     }
 
@@ -87,7 +87,7 @@ function mapState(state, props) {
 function mapDispatch(dispatch) {
   return bindActionCreators({
     fetchFullProgram: actions.fetchFullProgram,
-    fetchProgramPart: actions.fetchProgramPart,
+    fetchProgramChapter: actions.fetchProgramChapter,
   }, dispatch);
 }
 

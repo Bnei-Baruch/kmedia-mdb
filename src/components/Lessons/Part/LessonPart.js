@@ -6,10 +6,10 @@ import { Grid } from 'semantic-ui-react';
 
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
+import RMPVideoBox from '../../shared/UnitPlayer/RMPVideoBox';
 import * as shapes from '../../shapes';
 import Info from './Info';
 import Materials from './Materials';
-import VideoBox from './VideoBox';
 import MediaDownloads from './MediaDownloads';
 import RelevantPartsContainer from './RelevantParts/RelevantPartsContainer';
 
@@ -28,7 +28,7 @@ const LessonPart = (props) => {
     return (
       <Grid.Column width={16}>
         <Grid>
-          <VideoBox lesson={lesson} language={language} t={t} />
+          <RMPVideoBox unit={lesson} language={language} t={t} />
         </Grid>
         <Grid>
           <Grid.Row>

@@ -5,7 +5,7 @@ import Lessons from '../Lessons/List/LessonsContainer';
 import LessonPart from '../Lessons/Part/LessonPartContainer';
 import FullLesson from '../Lessons/Full/FullLessonContainer';
 import Programs from '../Programs/List/ProgramsContainer';
-import ProgramPart from '../Programs/Part/ProgramPartContainer';
+import ProgramChapter from '../Programs/Chapter/ProgramChapterContainer';
 import FullProgram from '../Programs/Full/FullProgramContainer';
 import Design from '../Design/Design';
 
@@ -19,7 +19,7 @@ const Routes = () => (
     <Route exact path="/lessons/part/:id" component={LessonPart} />
     <Route exact path="/lessons/full/:id" component={FullLesson} />
     <Route exact path="/programs" component={Programs} />
-    <Route exact path="/programs/part/:id" component={ProgramPart} />
+    <Route exact path="/programs/chapter/:id" component={ProgramChapter} />
     <Route exact path="/programs/full/:id" component={FullProgram} />
     <Route exact path="/programs" component={Programs} />
     <Route exact path="/lectures" component={NotImplemented} />

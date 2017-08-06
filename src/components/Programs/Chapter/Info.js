@@ -12,19 +12,19 @@ import * as shapes from '../../shapes';
 class Info extends Component {
 
   static propTypes = {
-    program: shapes.LessonPart,
+    chapter: shapes.ProgramChapter,
     getSourceById: PropTypes.func.isRequired,
     getTagById: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    program: undefined,
+    chapter: undefined,
   };
 
   render() {
-    const { program = {}, getSourceById, getTagById, t } = this.props;
-    const { name, film_date: filmDate, sources, tags }  = program;
+    const { chapter = {}, getSourceById, getTagById, t } = this.props;
+    const { name, film_date: filmDate, sources, tags }   = chapter;
 
     const tagLinks = Array.from(intersperse(
       (tags || []).map((x) => {
@@ -72,11 +72,6 @@ class Info extends Component {
                 &nbsp;{sourcesLinks}
               </List.Item>
           }
-
-          <List.Item>
-            <strong>{t('programs.part.info.related-event')}:</strong>
-            &nbsp;<a href="">World Israel Congress 2016</a>
-          </List.Item>
         </List>
       </div>
     );

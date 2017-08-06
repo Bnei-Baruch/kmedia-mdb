@@ -37,9 +37,9 @@ class FullProgram extends Component {
 
     return (
       <Table.Row key={cu.id}>
-        <Table.Cell><Menu.Item as={NavLink} to={`/programs/part/${cu.id}`} content={ccuName} /></Table.Cell>
-        <Table.Cell><Menu.Item as={NavLink} to={`/programs/part/${cu.id}`}>{name}</Menu.Item></Table.Cell>
-        <Table.Cell><Menu.Item as={NavLink} to={`/programs/part/${cu.id}`}>{duration}</Menu.Item></Table.Cell>
+        <Table.Cell><Menu.Item as={NavLink} to={`/programs/chapter/${cu.id}`} content={ccuName} /></Table.Cell>
+        <Table.Cell><Menu.Item as={NavLink} to={`/programs/chapter/${cu.id}`}>{name}</Menu.Item></Table.Cell>
+        <Table.Cell><Menu.Item as={NavLink} to={`/programs/chapter/${cu.id}`}>{duration}</Menu.Item></Table.Cell>
       </Table.Row>
     );
   };
@@ -60,9 +60,11 @@ class FullProgram extends Component {
         <Menu vertical fluid>
           <Table basic="very" compact="very" celled>
             <Table.Header>
-              <Table.HeaderCell>ccuName</Table.HeaderCell>
-              <Table.HeaderCell>Name</Table.HeaderCell>
-              <Table.HeaderCell>Duration</Table.HeaderCell>
+              <Table.Row>
+                <Table.HeaderCell>ccuName</Table.HeaderCell>
+                <Table.HeaderCell>Name</Table.HeaderCell>
+                <Table.HeaderCell>Duration</Table.HeaderCell>
+              </Table.Row>
             </Table.Header>
             <Table.Body>
               {
@@ -90,4 +92,4 @@ class FullProgram extends Component {
 }
 
 export default translate()(FullProgram);
-;
+

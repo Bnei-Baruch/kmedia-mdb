@@ -1,4 +1,4 @@
-import { call, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
+import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { updateQuery } from './helpers/url';
@@ -9,7 +9,7 @@ import { actions as mdbActions } from '../redux/modules/mdb';
 function* fetchProgramsList(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const resp = yield call(Api.collections, { ...action.payload, language });
+    const resp     = yield call(Api.collections, { ...action.payload, language });
 
     if (Array.isArray(resp.collections)) {
       yield put(mdbActions.receiveCollections(resp.collections));
@@ -24,14 +24,14 @@ function* fetchProgramsList(action) {
   }
 }
 
-function* fetchProgramPart(action) {
+function* fetchProgramChapter(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const response = yield call(Api.unit, { id: action.payload, language });
     yield put(mdbActions.receiveContentUnits([response]));
-    yield put(actions.fetchProgramPartSuccess(action.payload));
+    yield put(actions.fetchProgramChapterSuccess(action.payload));
   } catch (err) {
-    yield put(actions.fetchProgramPartFailure(action.payload, err));
+    yield put(actions.fetchProgramChapterFailure(action.payload, err));
   }
 }
 
@@ -55,8 +55,8 @@ function* watchFetchList() {
   yield takeLatest(types.FETCH_LIST, fetchProgramsList);
 }
 
-function* watchFetchProgramPart() {
-  yield takeEvery(types.FETCH_PROGRAM_PART, fetchProgramPart);
+function* watchFetchProgramChapter() {
+  yield takeEvery(types.FETCH_PROGRAM_CHAPTER, fetchProgramChapter);
 }
 
 function* watchFetchFullProgram() {
@@ -69,7 +69,7 @@ function* watchSetPage() {
 
 export const sagas = [
   watchFetchList,
-  watchFetchProgramPart,
+  watchFetchProgramChapter,
   watchFetchFullProgram,
   watchSetPage,
 ];
