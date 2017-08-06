@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withMediaProps } from 'react-media-player';
+
 import fullscreenImage from './images/fullscreen.svg';
 import exitFullscreenImage from './images/exit_fullscreen.svg';
 
@@ -18,7 +19,7 @@ class AVFullscreen extends Component {
 
   handleFullscreen = () => {
     this.props.media.fullscreen();
-  }
+  };
 
   render() {
     const { media } = this.props;
@@ -34,7 +35,7 @@ class AVFullscreen extends Component {
           alt={media.isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
         />
       </button>
-    )
+    );
   }
 }
 

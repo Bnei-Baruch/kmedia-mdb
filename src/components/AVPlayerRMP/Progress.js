@@ -1,26 +1,32 @@
 import React, { Component } from 'react';
-
 import { withMediaProps } from 'react-media-player';
 
 class Progress extends Component {
-  _element = null;
-  _wasMouseDown = false;
+  _element              = null;
+  _wasMouseDown         = false;
   _isPlayingOnMouseDown = false;
-  _onChangeUsed = false;
+  _onChangeUsed         = false;
 
   componentDidMount() {
-    document.addEventListener('mousemove', this.handleMove);
-    document.addEventListener('touchmove', this.handleMove);
-    document.addEventListener('mouseup', this.handleEnd);
-    document.addEventListener('touchend', this.handleEnd);
+    this._element.addEventListener('mousemove', this.handleMove);
+    this._element.addEventListener('touchmove', this.handleMove);
+    this._element.addEventListener('mouseup', this.handleEnd);
+    this._element.addEventListener('touchend', this.handleEnd);
+  }
+
+  componentWillUnmount() {
+    this._element.removeEventListener('mousemove', this.handleMove);
+    this._element.removeEventListener('touchmove', this.handleMove);
+    this._element.removeEventListener('mouseup', this.handleEnd);
+    this._element.removeEventListener('touchend', this.handleEnd);
   }
 
   handleStart = (e) => {
-    this._wasMouseDown = true;
+    this._wasMouseDown         = true;
     this._isPlayingOnMouseDown = this.props.media.isPlaying;
 
     this.props.media.pause();
-  }
+  };
 
   handleMove = (e) => {
     if (this._wasMouseDown) {
@@ -28,7 +34,7 @@ class Progress extends Component {
       const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
       this.seek(clientX);
     }
-  }
+  };
 
   handleEnd = (e) => {
     if (this._wasMouseDown) {
@@ -43,31 +49,28 @@ class Progress extends Component {
         this.props.media.play();
       }
     }
-  }
+  };
 
   seek = (clientX) => {
     const { left, right } = this._element.getBoundingClientRect();
-    const { duration } = this.props.media;
-    const offset = Math.min(Math.max(0, clientX - left), right - left);
+    const { duration }    = this.props.media;
+    const offset          = Math.min(Math.max(0, clientX - left), right - left);
     this.props.media.seekTo(duration * offset / (right - left));
-  }
+  };
+
+  normalize = (l) => {
+    const ret = 100 * l;
+    return (ret < 1) ? 0 : ret;
+  };
 
   render() {
     const { currentTime, duration } = this.props.media;
-    const current = currentTime / duration;
+    const current                   = currentTime / duration;
     // Overriding progress of native react-media-player as he does not works correctly
     // with buffers.
     const { buffers } = this.props;
-    const b = buffers.find(b => b.start <= currentTime && b.end >= currentTime);
-    const progress = b && (b.end / duration) || (currentTime / duration);
-
-    const normalize = l => {
-      const ret = 100 * l;
-      if (ret < 1) {
-        return 0;
-      }
-      return ret;
-    }
+    const b           = buffers.find(b => b.start <= currentTime && b.end >= currentTime);
+    const progress    = (b && (b.end / duration)) || (currentTime / duration);
 
     const parent = {
       display: 'flex',
@@ -77,27 +80,32 @@ class Progress extends Component {
       marginLeft: 10,
       marginRight: 10,
     };
+
     const styleBar = {
       height: 3,
       marginLeft: 0,
       marginRight: 0,
     };
+
     const stylePlayed = {
-      width: normalize(current),
+      width: this.normalize(current),
       backgroundColor: 'rgb(66, 133, 244)',
       ...styleBar,
       position: 'relative',
     };
+
     const styleLoaded = {
-      width: normalize(progress - current),
+      width: this.normalize(progress - current),
       backgroundColor: 'rgb(214, 214, 214)',
       ...styleBar,
     };
+
     const styleLeft = {
-      width: normalize(1 - progress),
+      width: this.normalize(1 - progress),
       backgroundColor: 'rgb(118, 118, 118)',
       ...styleBar,
     };
+
     const knobStyle = {
       position: 'absolute',
       height: 10,
@@ -107,16 +115,20 @@ class Progress extends Component {
       right: -5,
       top: -3,
     };
-    return (<div ref={c => this._element = c}
-                 style={parent}
-                 onMouseDown={this.handleStart}
-                 onTouchStart={this.handleStart}>
-              <div style={stylePlayed}>
-                <div style={knobStyle}></div>
-              </div>
-              <div style={styleLoaded}></div>
-              <div style={styleLeft}></div>
-            </div>);
+
+    return (
+      <div
+        ref={c => this._element = c}
+        style={parent}
+        onMouseDown={this.handleStart}
+        onTouchStart={this.handleStart}>
+        <div style={stylePlayed}>
+          <div style={knobStyle} />
+        </div>
+        <div style={styleLoaded} />
+        <div style={styleLeft} />
+      </div>
+    );
   }
 }
 

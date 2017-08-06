@@ -8,12 +8,12 @@ const AVSwitch = (props) => {
   const { video, audio, active, onChange, t } = props;
   return (
     <Button.Group fluid>
-      {video && active === video ? <Button active color="blue" content={t('buttons.video')} /> : null }
+      {video && active === video ? <Button active color="blue" content={t('buttons.video')} /> : null}
       {video && active !== video ? <Button content={t('buttons.video')} onClick={onChange} /> : null}
       {!video ? <Button disabled content={t('buttons.video')} /> : null}
 
-      {audio && active === audio ? <Button active color="blue" content={t('buttons.audio')} /> : null }
-      {audio && active !== audio ? <Button content={t('buttons.audio')} onClick={onChange} /> : null }
+      {audio && active === audio ? <Button active color="blue" content={t('buttons.audio')} /> : null}
+      {audio && active !== audio ? <Button content={t('buttons.audio')} onClick={onChange} /> : null}
       {!audio ? <Button disabled content={t('buttons.audio')} /> : null}
     </Button.Group>
   );

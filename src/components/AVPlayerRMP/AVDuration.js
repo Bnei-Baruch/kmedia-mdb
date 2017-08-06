@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import { withMediaProps } from 'react-media-player';
 
 class AVDuration extends Component {
@@ -15,9 +14,9 @@ class AVDuration extends Component {
   };
 
   formatTime = (current) => {
-    const h    = Math.floor(current / 3600);
-    const m    = Math.floor((current - (h * 3600)) / 60);
-    const s    = Math.floor(current % 60);
+    const h      = Math.floor(current / 3600);
+    const m      = Math.floor((current - (h * 3600)) / 60);
+    const s      = Math.floor(current % 60);
     const result = [];
 
     if (h > 0) {
@@ -35,7 +34,7 @@ class AVDuration extends Component {
 
     return (
       <time style={style}>
-        { this.formatTime(time) }
+        {this.formatTime(time)}
       </time>
     );
   }

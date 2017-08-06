@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withMediaProps } from 'react-media-player';
+
 import volumeMuteImage from './images/volume_mute.svg';
 import volumeLowImage from './images/volume_low.svg';
 import volumeMediumImage from './images/volume_medium.svg';
@@ -18,7 +19,7 @@ class AVMuteUnmute extends Component {
 
   handleMuteUnmute = () => {
     this.props.media.muteUnmute();
-  }
+  };
 
   render() {
     const { media: { isMuted, volume } } = this.props;
@@ -32,17 +33,17 @@ class AVMuteUnmute extends Component {
         onClick={this.handleMuteUnmute}
         style={{ width: '16px', height: '16px' }}
       >
-        { isMuted &&
-          <img key="mute" src={volumeMuteImage} alt="muted" />
+        {isMuted &&
+        <img key="mute" src={volumeMuteImage} alt="muted" />
         }
-        { volume > 0 && volume < 0.3 &&
-          <img key="low-volume" src={volumeLowImage} alt="low volume" />
+        {volume > 0 && volume < 0.3 &&
+        <img key="low-volume" src={volumeLowImage} alt="low volume" />
         }
-        { volume > 0.3 && volume < 0.6 &&
-          <img key="medium-volume" src={volumeMediumImage} alt="medium volume" />
+        {volume > 0.3 && volume < 0.6 &&
+        <img key="medium-volume" src={volumeMediumImage} alt="medium volume" />
         }
-        { volume >= 0.6 &&
-          <img key="high-volume" src={volumeHighImage} alt="high volume" />
+        {volume >= 0.6 &&
+        <img key="high-volume" src={volumeHighImage} alt="high volume" />
         }
       </button>
     );

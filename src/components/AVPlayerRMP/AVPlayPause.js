@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-
 import { withMediaProps } from 'react-media-player';
+
 import playImage from './images/play.svg';
 import pauseImage from './images/pause.svg';
 import './styles.css';
@@ -13,9 +13,6 @@ class AVPlayPause extends Component {
       isPlaying: PropTypes.bool.isRequired,
       playPause: PropTypes.func.isRequired
     }).isRequired,
-  };
-
-  static defaultProps = {
   };
 
   shouldComponentUpdate({ media }) {

@@ -1,21 +1,16 @@
-// https://github.com/souporserious/react-media-player
-
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-
 import { Grid } from 'semantic-ui-react';
 import { controls, Media, Player } from 'react-media-player';
 
 import * as shapes from '../shapes';
 import { physicalFile } from '../../helpers/utils';
 import LanguageSelector from '../shared/LanguageSelector';
-
 import AVPlayPause from './AVPlayPause';
 import AVTimeElapsed from './AVTimeElapsed';
 import AVSwitch from './AVSwitch';
 import AVFullScreen from './AVFullScreen';
 import AVMuteUnmute from './AVMuteUnmute';
-
 import Progress from './Progress';
 
 const { Volume } = controls;
@@ -48,24 +43,24 @@ class AVPlayerRMP extends PureComponent {
 
     this.state = {
       videoElement: null,
-    }
+    };
   }
 
   componentDidMount() {
     const videoElement = this.player_.instance;
-    this.setState({videoElement});
+    this.setState({ videoElement });
   }
 
   buffers = () => {
     const { videoElement } = this.state;
-    const ret = [];
+    const ret              = [];
     if (videoElement) {
       for (let idx = 0; idx < videoElement.buffered.length; ++idx) {
-        ret.push({ start: videoElement.buffered.start(idx), end: videoElement.buffered.end(idx)});
+        ret.push({ start: videoElement.buffered.start(idx), end: videoElement.buffered.end(idx) });
       }
     }
     return ret;
-  }
+  };
 
   render() {
     const { audio, video, active, playerId, handleSwitchAV, languages, defaultValue, onSelect, t } = this.props;
