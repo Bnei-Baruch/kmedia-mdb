@@ -18,7 +18,6 @@ const { Volume } = controls;
 class AVPlayerRMP extends PureComponent {
 
   static propTypes = {
-    playerId: PropTypes.string.isRequired,
     audio: shapes.MDBFile,
     video: shapes.MDBFile,
     active: shapes.MDBFile,
@@ -63,7 +62,7 @@ class AVPlayerRMP extends PureComponent {
   };
 
   render() {
-    const { audio, video, active, playerId, handleSwitchAV, languages, defaultValue, onSelect, t } = this.props;
+    const { audio, video, active, handleSwitchAV, languages, defaultValue, onSelect, t } = this.props;
 
     return (
       <div>
@@ -86,7 +85,7 @@ class AVPlayerRMP extends PureComponent {
         <Media>
           {
             ({ playPause }) => (
-              <div className="media" id={playerId}>
+              <div className="media">
                 <div className="media-player">
                   <Player
                     ref={c => this.player_ = c}
