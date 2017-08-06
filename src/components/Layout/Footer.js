@@ -70,10 +70,9 @@ class Footer extends Component {
                       Media
                     </Header>
                     <Menu text vertical inverted>
-                      <Menu.Item name={t('nav.sidebar.tv_shows')} />
+                      <Menu.Item name={t('nav.sidebar.programs')} />
                       <Menu.Item name={t('nav.sidebar.publications')} />
                       <Menu.Item name={t('nav.sidebar.photos')} />
-                      <Menu.Item name={t('nav.sidebar.music')} />
                     </Menu>
                   </Grid.Column>
                 </Grid.Row>
