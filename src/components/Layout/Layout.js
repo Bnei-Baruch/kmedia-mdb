@@ -50,7 +50,7 @@ class Layout extends Component {
               <Icon name="sidebar" />
             </Menu.Item>
             <Menu.Item className="logo" header as={Link} to="/">
-              <img src={logo}/>
+              <img src={logo} alt="logo" />
               <Header inverted as="h2">
                 {t('nav.top.header')}
               </Header>
@@ -70,7 +70,7 @@ class Layout extends Component {
               <Icon name="sidebar" />
             </Menu.Item>
             <Menu.Item className="logo" header as={Link} to="/">
-              <img src={logo}/>
+              <img src={logo} alt="logo" />
               <Header inverted as="h2">
                 {t('nav.top.header')}
               </Header>
@@ -88,7 +88,7 @@ class Layout extends Component {
               </Grid.Row>
             </Grid>
           </div>
-          <Footer/>
+          <Footer />
         </div>
       </div>
     );

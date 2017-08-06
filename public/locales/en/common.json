@@ -15,6 +15,10 @@
       "photos": "Photos",
       "design": "Design",
       "design2": "Layout"
+    },
+    "footer": {
+      "copyright": "Copyright © 2003-{{year}}",
+      "rights": "Bnei Baruch – Kabbalah L’Am Association, All rights reserved"
     }
   },
   "filters": {
