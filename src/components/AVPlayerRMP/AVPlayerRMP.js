@@ -1,11 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Grid } from 'semantic-ui-react';
-import { controls, Media, Player } from 'react-media-player';
+import { Media, Player } from 'react-media-player';
 
 import * as shapes from '../shapes';
 import { physicalFile } from '../../helpers/utils';
-import LanguageSelector from '../shared/LanguageSelector';
 import AVPlayPause from './AVPlayPause';
 import AVTimeElapsed from './AVTimeElapsed';
 import AVFullScreen from './AVFullScreen';
@@ -17,15 +15,14 @@ import AVProgress from './AVProgress';
 class AVPlayerRMP extends PureComponent {
 
   static propTypes = {
-    playerId: PropTypes.string.isRequired,
     audio: shapes.MDBFile,
     video: shapes.MDBFile,
     active: shapes.MDBFile,
-    handleSwitchAV: PropTypes.func.isRequired,
+    onSwitchAV: PropTypes.func.isRequired,
     // poster: PropTypes.string,
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
     defaultValue: PropTypes.string.isRequired,
-    onSelect: PropTypes.func.isRequired,
+    onLanguageChange: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired
   };
 
@@ -55,14 +52,17 @@ class AVPlayerRMP extends PureComponent {
     const ret              = [];
     if (videoElement) {
       for (let idx = 0; idx < videoElement.buffered.length; ++idx) {
-        ret.push({ start: videoElement.buffered.start(idx), end: videoElement.buffered.end(idx) });
+        ret.push({
+          start: videoElement.buffered.start(idx),
+          end: videoElement.buffered.end(idx)
+        });
       }
     }
     return ret;
   };
 
   render() {
-    const { audio, video, active, handleSwitchAV, languages, defaultValue, onSelect, t } = this.props;
+    const { audio, video, active, onSwitchAV, languages, defaultValue, onLanguageChange, t } = this.props;
 
     return (
       <div>
@@ -77,8 +77,8 @@ class AVPlayerRMP extends PureComponent {
                     vendor={active === video ? 'video' : 'audio'}
                     autoPlay={false}
                     loop="false"
-                    onClick={() => playPause()}
                     preload="auto"
+                    onClick={playPause}
                   />
                   <div className="media-controls">
                     <div className="controls-container">
@@ -87,11 +87,18 @@ class AVPlayerRMP extends PureComponent {
                       <AVProgress buffers={this.buffers()} />
                       <AVMuteUnmute />
                       <AVFullScreen />
-                      <AVAudioVideo isAudio={audio == active} isVideo={video == active}
-                                    setAudio={handleSwitchAV} setVideo={handleSwitchAV} />
-                      <AVLanguage languages={languages}
-                                  defaultValue={defaultValue}
-                                  onSelect={onSelect} />
+                      <AVAudioVideo
+                        isAudio={audio === active}
+                        isVideo={video === active}
+                        setAudio={onSwitchAV}
+                        setVideo={onSwitchAV}
+                        t={t}
+                      />
+                      <AVLanguage
+                        languages={languages}
+                        defaultValue={defaultValue}
+                        onSelect={onLanguageChange}
+                      />
                     </div>
                   </div>
                 </div>

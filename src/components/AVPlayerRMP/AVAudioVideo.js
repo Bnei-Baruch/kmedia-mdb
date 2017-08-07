@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const AVAudioVideo = (props) => {
-  const { isAudio, setAudio, isVideo, setVideo } = props;
+  const { isAudio, setAudio, isVideo, setVideo, t } = props;
 
   return (
     <div style={{ display: 'flex' }}>
@@ -12,7 +12,7 @@ const AVAudioVideo = (props) => {
         tabIndex="0"
         onClick={setAudio}
       >
-        audio
+        {t('buttons.audio')}
       </div>
       <span>&nbsp;/&nbsp;</span>
       <div
@@ -21,7 +21,7 @@ const AVAudioVideo = (props) => {
         tabIndex="0"
         onClick={setVideo}
       >
-        video
+        {t('buttons.video')}
       </div>
     </div>
   );
@@ -32,6 +32,7 @@ AVAudioVideo.propTypes = {
   setAudio: PropTypes.func.isRequired,
   isVideo: PropTypes.bool.isRequired,
   setVideo: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
 };
 
-export default  AVAudioVideo;
+export default AVAudioVideo;

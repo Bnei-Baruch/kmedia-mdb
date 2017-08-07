@@ -11,7 +11,7 @@ class AVMuteUnmute extends Component {
 
   static propTypes = {
     media: PropTypes.shape({
-      isMute: PropTypes.bool.isRequired,
+      isMuted: PropTypes.bool.isRequired,
       volume: PropTypes.number.isRequired,
       muteUnmute: PropTypes.func.isRequired
     }).isRequired
@@ -21,7 +21,7 @@ class AVMuteUnmute extends Component {
     super(props);
 
     this.element = null;
-    this.state = {
+    this.state   = {
       volumeHover: 0,
       wasMouseDown: false,
     };
@@ -29,8 +29,8 @@ class AVMuteUnmute extends Component {
 
   setVolume = (clientY) => {
     const { top, bottom } = this.element.getBoundingClientRect();
-    const offset = Math.min(Math.max(0, clientY - top), bottom - top);
-    const newVolume = 1 - offset / (bottom - top);
+    const offset          = Math.min(Math.max(0, clientY - top), bottom - top);
+    const newVolume       = 1 - offset / (bottom - top);
     this.props.media.setVolume(newVolume);
   };
 
@@ -48,14 +48,21 @@ class AVMuteUnmute extends Component {
 
   // Handle volume change on bar
   componentDidMount() {
-    document.addEventListener('mousemove', e => this.handleMove(e));
-    document.addEventListener('touchmove', e => this.handleMove(e));
-    document.addEventListener('mouseup', e => this.handleEnd(e));
-    document.addEventListener('touchend', e => this.handleEnd(e));
+    this.element.addEventListener('mousemove', this.handleMove);
+    this.element.addEventListener('touchmove', this.handleMove);
+    this.element.addEventListener('mouseup', this.handleEnd);
+    this.element.addEventListener('touchend', this.handleEnd);
+  }
+
+  componentWillUnmount() {
+    this.element.removeEventListener('mousemove', this.handleMove);
+    this.element.removeEventListener('touchmove', this.handleMove);
+    this.element.removeEventListener('mouseup', this.handleEnd);
+    this.element.removeEventListener('touchend', this.handleEnd);
   }
 
   handleStart = (e) => {
-    this.setState({wasMouseDown: true});
+    this.setState({ wasMouseDown: true });
   };
 
   handleMove = (e) => {
@@ -68,7 +75,7 @@ class AVMuteUnmute extends Component {
 
   handleEnd = (e) => {
     if (this.state.wasMouseDown) {
-      this.setState({wasMouseDown: false});
+      this.setState({ wasMouseDown: false });
       // Seek on desktop on mouse up. On mobile Move is called so no need to setVolume here.
       if (e.clientY) {
         this.setVolume(e.clientY);
@@ -86,7 +93,7 @@ class AVMuteUnmute extends Component {
 
   render() {
     const { media: { isMuted, volume } } = this.props;
-    const { volumeHover, wasMouseDown } = this.state;
+    const { volumeHover, wasMouseDown }  = this.state;
 
     // TODO: (yaniv) preload images?
     const parentStyle = {
@@ -112,22 +119,26 @@ class AVMuteUnmute extends Component {
       marginBottom: 10,
       marginTop: 10,
     };
+
     const styleBar = {
       width: 3,
       marginTop: 0,
       marginBottom: 0,
     };
+
     const styleVolume = {
-      height: this.normalize(volume),
+      height: this.normalize(volume) + 'px',
       backgroundColor: 'rgb(66, 133, 244)',
       ...styleBar,
       position: 'relative',
     };
+
     const styleBlank = {
-      height: this.normalize(1 - volume),
+      height: this.normalize(1 - volume) + 'px',
       backgroundColor: 'rgb(118, 118, 118)',
       ...styleBar,
     };
+
     const knobStyle = {
       position: 'absolute',
       height: 10,
@@ -148,30 +159,32 @@ class AVMuteUnmute extends Component {
           onMouseLeave={this.handleMouseLeave}
           style={{ width: '16px', height: '16px' }}
         >
-          { isMuted &&
-            <img key="mute" src={volumeMuteImage} alt="muted" />
+          {isMuted &&
+          <img key="mute" src={volumeMuteImage} alt="muted" />
           }
-          { volume > 0 && volume < 0.3 &&
-            <img key="low-volume" src={volumeLowImage} alt="low volume" />
+          {volume > 0 && volume < 0.3 &&
+          <img key="low-volume" src={volumeLowImage} alt="low volume" />
           }
-          { volume > 0.3 && volume < 0.6 &&
-            <img key="medium-volume" src={volumeMediumImage} alt="medium volume" />
+          {volume > 0.3 && volume < 0.6 &&
+          <img key="medium-volume" src={volumeMediumImage} alt="medium volume" />
           }
-          { volume >= 0.6 &&
-            <img key="high-volume" src={volumeHighImage} alt="high volume" />
+          {volume >= 0.6 &&
+          <img key="high-volume" src={volumeHighImage} alt="high volume" />
           }
         </button>
         <div style={volumeStyle}
-          onMouseEnter={this.handleMouseEnter}
-          onMouseLeave={this.handleMouseLeave}>
-          <div ref={c => this.element = c}
-               style={bar}
-               onMouseDown={this.handleStart}
-               onTouchStart={this.handleStart}>
+             onMouseEnter={this.handleMouseEnter}
+             onMouseLeave={this.handleMouseLeave}>
+          <div
+            ref={c => this.element = c}
+            style={bar}
+            onMouseDown={this.handleStart}
+            onTouchStart={this.handleStart}
+          >
             <div style={styleVolume}>
-              <div style={knobStyle}></div>
+              <div style={knobStyle} />
             </div>
-            <div style={styleBlank}></div>
+            <div style={styleBlank} />
           </div>
         </div>
       </div>

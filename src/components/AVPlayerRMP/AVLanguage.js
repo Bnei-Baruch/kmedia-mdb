@@ -18,8 +18,11 @@ export default class AVLanguage extends Component {
     languages: [],
   };
 
+  handleChange = (e, data) =>
+    this.props.onSelect(e, data.value);
+
   render() {
-    const { languages, defaultValue, onSelect } = this.props;
+    const { languages, defaultValue } = this.props;
 
     const options = LANGUAGE_OPTIONS
       .filter(x => languages.includes(x.value))
@@ -28,14 +31,16 @@ export default class AVLanguage extends Component {
     return (
       <div style={{ marginLeft: 10, marginRight: 10 }}>
         <Dropdown
-          style={{ display: 'flex', textDecoration: 'underline' }}
           floating
           inline
           scrolling
+          upward
           icon={null}
+          selectOnBlur={false}
           options={options}
           defaultValue={defaultValue}
-          onChange={(e, { value }) => onSelect(e, value)}
+          onChange={this.handleChange}
+          style={{ display: 'flex', textDecoration: 'underline' }}
         />
       </div>
     );

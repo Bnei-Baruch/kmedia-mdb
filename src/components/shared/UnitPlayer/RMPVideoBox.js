@@ -116,11 +116,11 @@ class RMPVideoBox extends Component {
                 active={active}
                 video={video}
                 audio={audio}
-                handleSwitchAV={this.handleSwitchAV}
                 poster="http://kabbalahmedia.info/assets/cover-video.jpg"
+                onSwitchAV={this.handleSwitchAV}
                 languages={Array.from(groups.keys())}
                 defaultValue={language}
-                onSelect={this.handleChangeLanguage}
+                onLanguageChange={this.handleChangeLanguage}
                 t={t}
               />
             </div>

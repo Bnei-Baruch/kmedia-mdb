@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { withMediaProps } from 'react-media-player';
 
 class AVProgress extends Component {
-  _element = null;
-  _wasMouseDown = false;
+  _element              = null;
+  _wasMouseDown         = false;
   _isPlayingOnMouseDown = false;
 
   componentDidMount() {
@@ -121,7 +121,8 @@ class AVProgress extends Component {
         ref={c => this._element = c}
         style={parent}
         onMouseDown={this.handleStart}
-        onTouchStart={this.handleStart}>
+        onTouchStart={this.handleStart}
+      >
         <div style={stylePlayed}>
           <div style={knobStyle} />
         </div>
