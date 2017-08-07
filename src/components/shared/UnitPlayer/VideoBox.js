@@ -27,6 +27,21 @@ class VideoBox extends Component {
     this.state = this.calcState(props);
   }
 
+  getFilesByLanguage = (files) => {
+    const groups = new Map();
+
+    (files || []).forEach((file) => {
+      if (file.mimetype === 'audio/mpeg' || file.mimetype === 'video/mp4') {
+        if (!groups.has(file.language)) {
+          groups.set(file.language, []);
+        }
+        groups.get(file.language).push(file);
+      }
+    });
+
+    return groups;
+  };
+
   calcState = (props) => {
     const { unit = {}, language } = props;
     const groups                    = this.getFilesByLanguage(unit.files);
@@ -66,21 +81,6 @@ class VideoBox extends Component {
 
     this.setState(this.calcState(nextProps));
   }
-
-  getFilesByLanguage = (files) => {
-    const groups = new Map();
-
-    (files || []).forEach((file) => {
-      if (file.mimetype === 'audio/mpeg' || file.mimetype === 'video/mp4') {
-        if (!groups.has(file.language)) {
-          groups.set(file.language, []);
-        }
-        groups.get(file.language).push(file);
-      }
-    });
-
-    return groups;
-  };
 
   splitAV = (language, groups) => {
     const set   = groups.get(language);

@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { withMediaProps } from 'react-media-player';
 
-class Progress extends Component {
-  _element              = null;
-  _wasMouseDown         = false;
+class AVProgress extends Component {
+  _element = null;
+  _wasMouseDown = false;
   _isPlayingOnMouseDown = false;
-  _onChangeUsed         = false;
 
   componentDidMount() {
     this._element.addEventListener('mousemove', this.handleMove);
@@ -60,7 +59,7 @@ class Progress extends Component {
 
   normalize = (l) => {
     const ret = 100 * l;
-    return (ret < 1) ? 0 : ret;
+    return (ret < 1) ? 0 : ret + '%';
   };
 
   render() {
@@ -79,6 +78,7 @@ class Progress extends Component {
       paddingBottom: 5,
       marginLeft: 10,
       marginRight: 10,
+      width: '100%',
     };
 
     const styleBar = {
@@ -132,4 +132,4 @@ class Progress extends Component {
   }
 }
 
-export default withMediaProps(Progress);
+export default withMediaProps(AVProgress);
