@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Flag, Icon, Menu, Header, Grid } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import Link from '../Language/MultiLanguageLink';
 
 import MenuItems from '../Layout/MenuItems';
 import Routes from '../Layout/Routes';
@@ -47,7 +47,7 @@ class Design2 extends Component {
 	            <Header inverted as='h2' >
 	              Kabbalah Media
 	            </Header>
-       			</Menu.Item>		          
+       			</Menu.Item>
       		</Menu>
       		<div className='layout__sidebar-menu'>
       			<MenuItems simple />

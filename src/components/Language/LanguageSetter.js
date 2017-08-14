@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { actions as settingActions, selectors as settingSelectors } from '../../redux/modules/settings';
 import { LANGUAGES, DEFAULT_LANGUAGE } from '../../helpers/consts';
 
+// NOTE: yaniv -> edo: should we block rendering until language changed?
+
 const LanguageSetter = connect(
   state => ({
     currentLanguage: settingSelectors.getLanguage(state.settings),
@@ -27,7 +29,6 @@ const LanguageSetter = connect(
     this.catchLanguageChange(nextProps);
   }
 
-  // FIXME: (yaniv) block rendering until language changed
   componentDidMount() {
     this.catchLanguageChange(this.props);
   }

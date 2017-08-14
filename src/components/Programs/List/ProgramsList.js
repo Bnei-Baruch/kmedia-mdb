@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Table } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import Link from '../../Language/MultiLanguageLink';
 
 import { CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
 import * as shapes from '../../shapes';

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
+import Link from '../../Language/MultiLanguageLink';
 
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';

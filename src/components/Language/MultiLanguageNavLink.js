@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
-import Link from '../Link/Link';
+import Link from './MultiLanguageLink';
+
+
+// FIXME: (yaniv) this does not work! does not render anything
 
 // Taken from:
 // https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/modules/NavLink.js
@@ -11,7 +14,7 @@ import Link from '../Link/Link';
 /**
  * A <Link> wrapper that knows if it's "active" or not.
  */
-const NavLink = ({
+const MultiLanguageNavLink = ({
   to,
   exact,
   strict,
@@ -30,12 +33,12 @@ const NavLink = ({
     strict={strict}
     location={location}
     children={({ location, match }) => {
-      const isActive = !!(getIsActive ? getIsActive(match, location) : match)
+      const isActive = !!(getIsActive ? getIsActive(match, location) : match);
 
       return (
         <Link
           to={to}
-          className={isActive ? [ className, activeClassName ].filter(i => i).join(' ') : className}
+          className={isActive ? [className, activeClassName].filter(i => i).join(' ') : className}
           style={isActive ? { ...style, ...activeStyle } : style}
           aria-current={isActive && ariaCurrent}
           {...rest}
@@ -45,7 +48,7 @@ const NavLink = ({
   />
 );
 
-NavLink.propTypes = {
+MultiLanguageNavLink.propTypes = {
   to: Link.propTypes.to,
   exact: PropTypes.bool,
   strict: PropTypes.bool,
@@ -58,9 +61,9 @@ NavLink.propTypes = {
   ariaCurrent: PropTypes.oneOf(['page', 'step', 'location', 'true'])
 };
 
-NavLink.defaultProps = {
+MultiLanguageNavLink.defaultProps = {
   activeClassName: 'active',
   ariaCurrent: 'true'
 };
 
-export default NavLink;
+export default MultiLanguageNavLink;
