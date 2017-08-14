@@ -5,7 +5,7 @@
     },
     "sidebar": {
       "lessons": "Daily Lessons",
-      "tv_shows": "TV & Video Programs",
+      "programs": "TV & Video Programs",
       "lectures": "Lectures & Lessons",
       "sources": "Kabbalah Sources",
       "events": "Events",
@@ -15,6 +15,10 @@
       "photos": "Photos",
       "design": "Design",
       "design2": "Layout"
+    },
+    "footer": {
+      "copyright": "Copyright © 2003-{{year}}",
+      "rights": "Bnei Baruch – Kabbalah L’Am Association, All rights reserved"
     }
   },
   "filters": {
@@ -53,6 +57,8 @@
     "server-error": "Server Error",
     "lesson-not-found": "Couldn't find lesson",
     "lesson-not-found-subtext": "Try the <1>lessons list</1>...",
+    "program-not-found": "Couldn't find program",
+    "program-not-found-subtext": "Try the <1>programs list</1>...",
     "no-files": "No Files",
     "no-playable-files": "No Playable Files",
     "no-results": "No results",
@@ -84,6 +90,34 @@
       },
       "relevant-parts": {
         "title": "Other parts from the same lesson",
+        "item-title": "Part {{name}}"
+      }
+    }
+  },
+  "programs": {
+    "part": {
+      "info": {
+        "tags": "Tags",
+        "sources": "Sources",
+        "related-event": "Related to Event"
+      },
+      "materials": {
+        "summary": "Summary",
+        "transcription": "Transcription"
+      },
+      "downloads": {
+        "title": "Media Downloads",
+        "derived-title": "Derived Media",
+        "copy-link": "Copy Link",
+        "type-labels": {
+          "video": "Program Video",
+          "audio": "Program Audio",
+          "text": "Transcription Text",
+          "image": "Sketches"
+        }
+      },
+      "relevant-parts": {
+        "title": "Other parts from the same program",
         "item-title": "Part {{name}}"
       }
     }

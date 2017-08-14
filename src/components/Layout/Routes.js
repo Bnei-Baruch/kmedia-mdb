@@ -4,6 +4,9 @@ import { Route, Switch } from 'react-router-dom';
 import Lessons from '../Lessons/List/LessonsContainer';
 import LessonPart from '../Lessons/Part/LessonPartContainer';
 import FullLesson from '../Lessons/Full/FullLessonContainer';
+import Programs from '../Programs/List/ProgramsContainer';
+import ProgramChapter from '../Programs/Chapter/ProgramChapterContainer';
+import FullProgram from '../Programs/Full/FullProgramContainer';
 import Design from '../Design/Design';
 
 const NotImplemented = () => <h1>Not Implemented Yet</h1>;
@@ -21,7 +24,10 @@ const Routes = ({ match }) => {
       <Route exact path={`${urlPrefix}/lessons`} component={Lessons} />
       <Route exact path={`${urlPrefix}/lessons/part/:id`} component={LessonPart} />
       <Route exact path={`${urlPrefix}/lessons/full/:id`} component={FullLesson} />
-      <Route exact path={`${urlPrefix}/tv_shows`} component={NotImplemented} />
+      <Route exact path={`${urlPrefix}/programs`} component={Programs} />
+      <Route exact path={`${urlPrefix}/programs/chapter/:id`} component={ProgramChapter} />
+      <Route exact path={`${urlPrefix}/programs/full/:id`} component={FullProgram} />
+      <Route exact path={`${urlPrefix}/programs`} component={Programs} />
       <Route exact path={`${urlPrefix}/lectures`} component={NotImplemented} />
       <Route exact path={`${urlPrefix}/sources`} component={NotImplemented} />
       <Route exact path={`${urlPrefix}/events`} component={NotImplemented} />

@@ -58,12 +58,24 @@ const MDBDenormalizedCollection = {
   content_units: PropTypes.arrayOf(PropTypes.shape(MDBBaseContentUnit)),
 };
 
+export const ContentUnit = PropTypes.shape(MDBBaseContentUnit);
+
 export const LessonCollection = PropTypes.shape({
   ...MDBDenormalizedCollection,
   film_date: PropTypes.string.isRequired,
 });
 
 export const LessonPart = PropTypes.shape({
+  ...MDBDenormalizedContentUnit,
+  film_date: PropTypes.string.isRequired,
+});
+
+export const ProgramCollection = PropTypes.shape({
+  ...MDBDenormalizedCollection,
+  film_date: PropTypes.string.isRequired,
+});
+
+export const ProgramChapter = PropTypes.shape({
   ...MDBDenormalizedContentUnit,
   film_date: PropTypes.string.isRequired,
 });

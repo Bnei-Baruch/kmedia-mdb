@@ -5,7 +5,7 @@
     },
     "sidebar": {
       "lessons": "שיעור יומי",
-      "tv_shows": "תוכניות טלוויזיה",
+      "programs": "תוכניות טלוויזיה",
       "lectures": "הרצאות ושיעורים",
       "sources": "מקורות",
       "events": "אירועים",
@@ -14,6 +14,10 @@
       "publications": "פרסומים",
       "photos": "תמונות",
       "design": "עיצוב"
+    },
+    "footer": {
+      "copyright": "© כל הזכויות שמורות 2003-{{year}}",
+      "rights": "בני ברוך - קבלה לעם"
     }
   },
   "filters": {

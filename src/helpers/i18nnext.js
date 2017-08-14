@@ -11,7 +11,7 @@ import { DEFAULT_LANGUAGE } from './consts';
 
 const LOCALES_BACKEND = process.env.NODE_ENV === 'production' ?
   process.env.PUBLIC_URL :
-  'http://localhost:9876';
+  process.env.REACT_APP_LOCALES_BACKEND;
 
 // Initialize moment global locale to default language
 moment.locale(DEFAULT_LANGUAGE);

@@ -11,10 +11,9 @@ import * as shapes from '../../shapes';
 import Info from './Info';
 import Materials from './Materials';
 import MediaDownloads from './MediaDownloads';
-import RelevantPartsContainer from './RelevantParts/RelevantPartsContainer';
 
-const LessonPart = (props) => {
-  const { lesson, wip, err, language, t } = props;
+const ProgramChapter = (props) => {
+  const { chapter, wip, err, language, t } = props;
 
   if (err) {
     return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
@@ -24,21 +23,20 @@ const LessonPart = (props) => {
     return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
   }
 
-  if (lesson) {
+  if (chapter) {
     return (
       <Grid.Column width={16}>
         <Grid>
-          <RMPVideoBox unit={lesson} language={language} t={t} />
+          <RMPVideoBox unit={chapter} language={language} t={t} />
         </Grid>
         <Grid>
           <Grid.Row>
             <Grid.Column width={10}>
-              <Info lesson={lesson} t={t} />
-              <Materials lesson={lesson} t={t} />
+              <Info chapter={chapter} t={t} />
+              <Materials chapter={chapter} t={t} />
             </Grid.Column>
             <Grid.Column width={6}>
-              <MediaDownloads lesson={lesson} language={language} t={t} />
-              <RelevantPartsContainer lesson={lesson} t={t} />
+              <MediaDownloads chapter={chapter} language={language} t={t} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -48,28 +46,28 @@ const LessonPart = (props) => {
 
   return (
     <FrownSplash
-      text={t('messages.lesson-not-found')}
+      text={t('messages.program-not-found')}
       subtext={
-        <Trans i18nKey="messages.lesson-not-found-subtext">
-          Try the <Link to="/lessons">lessons list</Link>...
+        <Trans i18nKey="messages.program-not-found-subtext">
+          Try the <Link to="/programs">programs list</Link>...
         </Trans>
       }
     />
   );
 };
 
-LessonPart.propTypes = {
-  lesson: shapes.LessonPart,
+ProgramChapter.propTypes = {
+  chapter: shapes.ProgramChapter,
   language: PropTypes.string.isRequired,
   wip: shapes.WIP,
   err: shapes.Error,
   t: PropTypes.func.isRequired,
 };
 
-LessonPart.defaultProps = {
-  lesson: null,
+ProgramChapter.defaultProps = {
+  chapter: null,
   wip: false,
   err: null,
 };
 
-export default translate()(LessonPart);
+export default translate()(ProgramChapter);

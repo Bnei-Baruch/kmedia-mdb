@@ -3,6 +3,7 @@ import { routerReducer as router } from 'react-router-redux';
 import { reducer as system } from './modules/system';
 import { reducer as settings } from './modules/settings';
 import { reducer as lessons } from './modules/lessons';
+import { reducer as programs } from './modules/programs';
 import { reducer as filters } from './modules/filters';
 import { reducer as sources } from './modules/sources';
 import { reducer as tags } from './modules/tags';
@@ -13,6 +14,7 @@ export default combineReducers({
   system,
   settings,
   lessons,
+  programs,
   filters,
   sources,
   tags,

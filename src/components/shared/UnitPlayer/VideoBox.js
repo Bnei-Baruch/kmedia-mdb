@@ -5,65 +5,26 @@ import { Grid } from 'semantic-ui-react';
 import * as shapes from '../../shapes';
 import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
 import { physicalFile } from '../../../helpers/utils';
-import LanguageSelector from '../../shared/LanguageSelector';
-import AVPlayer from '../../shared/AVPlayer';
+import LanguageSelector from '../LanguageSelector';
+import AVPlayer from './AVPlayer';
 import AVSwitch from './AVSwitch';
 
 class VideoBox extends Component {
 
   static propTypes = {
+    playerId: PropTypes.string.isRequired,
     language: PropTypes.string.isRequired,
-    lesson: shapes.LessonPart,
+    unit: shapes.ContentUnit,
     t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    lesson: undefined,
+    unit: undefined,
   };
 
   constructor(props) {
     super(props);
     this.state = this.calcState(props);
-  }
-
-  calcState = (props) => {
-    const { lesson = {}, language } = props;
-    const groups                    = this.getFilesByLanguage(lesson.files);
-
-    let lang;
-    if (groups.has(language)) {
-      lang = language;
-    } else if (this.state && groups.has(this.state.language)) {
-      lang = this.state.language;
-    } else {
-      lang = groups.keys().next().value;
-    }
-
-    const { video, audio } = lang ? this.splitAV(lang, groups) : {};
-
-    return { groups, language: lang, video, audio, active: video || audio };
-  };
-
-  componentWillReceiveProps(nextProps) {
-    const { lesson = {}, language } = nextProps;
-    const props                     = this.props;
-    const state                     = this.state;
-
-    // no change
-    if (lesson === props.lesson && language === props.language) {
-      return;
-    }
-
-    // only language changed
-    if (lesson === props.lesson && language !== props.language) {
-      if (state.groups.has(language)) {
-        this.setState({ language, ...this.splitAV(language, state.groups) }, () => {
-        });
-        return;
-      }
-    }
-
-    this.setState(this.calcState(nextProps));
   }
 
   getFilesByLanguage = (files) => {
@@ -80,6 +41,46 @@ class VideoBox extends Component {
 
     return groups;
   };
+
+  calcState = (props) => {
+    const { unit = {}, language } = props;
+    const groups                    = this.getFilesByLanguage(unit.files);
+
+    let lang;
+    if (groups.has(language)) {
+      lang = language;
+    } else if (this.state && groups.has(this.state.language)) {
+      lang = this.state.language;
+    } else {
+      lang = groups.keys().next().value;
+    }
+
+    const { video, audio } = lang ? this.splitAV(lang, groups) : {};
+
+    return { groups, language: lang, video, audio, active: video || audio };
+  };
+
+  componentWillReceiveProps(nextProps) {
+    const { unit = {}, language } = nextProps;
+    const props                     = this.props;
+    const state                     = this.state;
+
+    // no change
+    if (unit === props.unit && language === props.language) {
+      return;
+    }
+
+    // only language changed
+    if (unit === props.unit && language !== props.language) {
+      if (state.groups.has(language)) {
+        this.setState({ language, ...this.splitAV(language, state.groups) }, () => {
+        });
+        return;
+      }
+    }
+
+    this.setState(this.calcState(nextProps));
+  }
 
   splitAV = (language, groups) => {
     const set   = groups.get(language);
@@ -103,7 +104,7 @@ class VideoBox extends Component {
   };
 
   render() {
-    const { t } = this.props;
+    const { t, playerId } = this.props;
     const { audio, video, active, groups, language } = this.state;
 
     if (!(video || audio)) {
@@ -115,7 +116,7 @@ class VideoBox extends Component {
         <Grid.Column width={10}>
           <div className="video_player">
             <div id="video" />
-            <AVPlayer playerId="lesson" file={physicalFile(active, true)} />
+            <AVPlayer playerId={playerId} file={physicalFile(active, true)} />
           </div>
         </Grid.Column>
         <Grid.Column className="player_panel" width={6}>

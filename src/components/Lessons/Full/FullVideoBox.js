@@ -8,7 +8,7 @@ import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
 import { physicalFile } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import LanguageSelector from '../../shared/LanguageSelector';
-import AVPlayer from '../../shared/AVPlayer';
+import AVPlayer from '../../shared/UnitPlayer/AVPlayer';
 
 class FullVideoBox extends Component {
 
