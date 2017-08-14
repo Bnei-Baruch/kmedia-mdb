@@ -5,8 +5,11 @@ import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import { Container, Flag, Icon, Menu } from 'semantic-ui-react';
 
-import { LANGUAGES } from '../../helpers/consts';
+import { FLAG_TO_LANGUAGE } from '../../helpers/consts';
 import { actions, selectors } from '../../redux/modules/settings';
+import Link from '../Language/MultiLanguageLink';
+
+const flags = ['us', 'ru', 'il'];
 
 class TopFixedMenu extends PureComponent {
 
@@ -17,13 +20,14 @@ class TopFixedMenu extends PureComponent {
     t: PropTypes.func.isRequired,
   };
 
-  handleChangeLanguage = (e) => {
-    const flag     = e.target.getAttribute('class').split(' ')[0];
-    const language = Array.from(Object.values(LANGUAGES)).find(x => x.flag === flag).value;
-    if (this.props.language !== language) {
-      this.props.setLanguage(language);
-    }
-  };
+  // FIXME: remove @deprecated
+  // handleChangeLanguage = (e) => {
+  //   const flag     = e.target.getAttribute('class').split(' ')[0];
+  //   const language = Array.from(Object.values(LANGUAGES)).find(x => x.flag === flag).value;
+  //   if (this.props.language !== language) {
+  //     this.props.setLanguage(language);
+  //   }
+  // };
 
   render() {
     const { toggleVisibility, t } = this.props;
@@ -41,9 +45,13 @@ class TopFixedMenu extends PureComponent {
           </Menu.Item>
           <Menu.Menu position="right">
             <Menu.Item>
-              <Flag name="us" onClick={this.handleChangeLanguage} />
-              <Flag name="ru" onClick={this.handleChangeLanguage} />
-              <Flag name="il" onClick={this.handleChangeLanguage} />
+              {
+                flags.map(flag => (
+                  <Link language={FLAG_TO_LANGUAGE[flag]} key={flag}>
+                    <Flag name={flag} />
+                  </Link>
+                ))
+              }
             </Menu.Item>
           </Menu.Menu>
         </Container>

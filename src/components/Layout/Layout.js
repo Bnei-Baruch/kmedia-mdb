@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import LoadingBar from 'react-redux-loading-bar';
 import { Grid, Sidebar } from 'semantic-ui-react';
-
+import { Route } from 'react-router-dom';
 import Routes from './Routes';
 import TopFixedMenu from './TopFixedMenu';
 import MenuItems from './MenuItems';
@@ -29,7 +29,7 @@ class Layout extends Component {
                 <Grid.Column>
                   <Grid padded>
                     <Grid.Row>
-                      <Routes />
+                      <Route component={Routes} />
                     </Grid.Row>
                   </Grid>
                 </Grid.Column>

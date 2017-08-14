@@ -130,3 +130,10 @@ export const physicalFile = (file, ext = false) => {
   }
   return `http://cdn.kabbalahmedia.info/${file.id}${suffix}`;
 };
+
+/**
+ * Test if a url is an absolute url
+ * @param {string} url
+ * @return {boolean}
+ */
+export const isAbsoluteUrl = url => /^(?:[a-z]+:)?\/\//i.test(url);

@@ -7,6 +7,7 @@ import { I18nextProvider } from 'react-i18next';
 import { DEFAULT_LANGUAGE } from '../../helpers/consts';
 import i18n from '../../helpers/i18nnext';
 import { selectors as system } from '../../redux/modules/system';
+import MultiLanguageRouteProvider from '../Language/MultiLanguageRouteProvider';
 import Routes from './Routes';
 import '../../stylesheets/Kmedia.css';
 
@@ -43,7 +44,9 @@ class App extends Component {
         <I18nextProvider i18n={i18n} initialLanguage={DEFAULT_LANGUAGE}>
           <Provider store={store}>
             <ConnectedRouter history={history}>
-              <Routes />
+              <MultiLanguageRouteProvider>
+                <Routes />
+              </MultiLanguageRouteProvider>
             </ConnectedRouter>
           </Provider>
         </I18nextProvider>
