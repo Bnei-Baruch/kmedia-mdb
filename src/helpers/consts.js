@@ -111,7 +111,6 @@ export const FLAG_TO_LANGUAGE = Object.values(LANGUAGES).reduce((acc, language) 
   acc[language.flag] = language.value;
   return acc;
 }, {});
-console.log(FLAG_TO_LANGUAGE);
 
 export const ALL_LANGUAGES = [
   LANG_HEBREW,
