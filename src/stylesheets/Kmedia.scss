@@ -170,6 +170,45 @@ $text-colors: (
 
 /// END OF THE NEW LAYOUT
 
+/// INDEX
+.index-list {
+  .list {
+    display: block!important;
+    margin: 0;
+    .item:nth-child(2){      
+      border: 0!important;
+    }
+  }
+}
+/// END OF INDEX
+
+/// INDEX FILTERS
+.index-filters {
+  .input {
+    width: 300px!important;
+    top:0.2em!important;
+  }
+}
+/// END OF INDEX FILTERS
+/// FEATURED UNIT
+.featured-unit2 {
+  .card {
+    overflow: hidden;
+     .content {
+      position: absolute;
+      bottom: 0;
+      * {
+        color: #fff!important;
+      }
+      background: linear-gradient(to top, rgba(0,0,0,.7) 50%, rgba(0,0,0,0) 100%)!important;
+      width: 100%;
+      border:0!important;
+      padding:3em 1em 1em!important;
+     }
+  }
+}
+/// END OF FEATURED UNIT
+
 .wrapper {
   display: flex;
   min-height: 100vh;
@@ -307,7 +346,7 @@ $text-colors: (
 }
 
 .filter_tab {
-  margin-top: -1rem !important;
+  // margin-top: -1rem !important;
 
   .menu {
     border: 0 !important;

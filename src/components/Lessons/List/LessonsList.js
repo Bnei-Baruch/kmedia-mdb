@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Grid, Table } from 'semantic-ui-react';
+import { Grid, Table, List, Header, Divider } from 'semantic-ui-react';
 
 import { CT_LESSON_PART } from '../../../helpers/consts';
 import * as shapes from '../../shapes';
@@ -26,9 +26,18 @@ class LessonsList extends PureComponent {
       <Table.Cell>
         <Link to={`/lessons/part/${part.id}`}>
           <strong>{part.name}</strong>
-          <br />
-          <div dangerouslySetInnerHTML={{ __html: part.description }} />
         </Link>
+        <List size='tiny' divided horizontal link>
+          <List.Item>
+            <List.Header>
+              Related to:
+            </List.Header>
+          </List.Item>
+          <List.Item as='a'>Daily Lesson from 25/7/2017</List.Item>
+          <List.Item as='a'>Moscow Congress 2013</List.Item>
+        </List>
+        <div dangerouslySetInnerHTML={{ __html: part.description }} />
+        
       </Table.Cell>
     </Table.Row>
   );
@@ -39,9 +48,17 @@ class LessonsList extends PureComponent {
         <Table.Cell>
           <Link to={`/lessons/part/${unit.id}`}>
             {unit.name}
-            <br />
-            <div dangerouslySetInnerHTML={{ __html: unit.description }} />
           </Link>
+          <List size='tiny' divided horizontal link>
+            <List.Item>
+              <List.Header>
+                Related to:
+              </List.Header>
+            </List.Item>          
+            <List.Item as='a'>Moscow Congress 2013</List.Item>
+          </List>
+            <div dangerouslySetInnerHTML={{ __html: unit.description }} />
+          
         </Table.Cell>
       </Table.Row>
     ));
@@ -72,7 +89,7 @@ class LessonsList extends PureComponent {
     }
 
     return (
-      <Table basic="very" sortable>
+      <Table basic="very" sortable className='index-list'>
         <Table.Body>
           {
             items.map(x => (
