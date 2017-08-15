@@ -34,22 +34,27 @@ class LessonsList extends PureComponent {
   );
 
   renderCollection = (collection, t) => {
-    const units = collection.content_units.map(unit => (
-      <Table.Row verticalAlign="top" key={`u-${unit.id}`}>
-        <Table.Cell>
-          <Link to={`/lessons/part/${unit.id}`}>
-            {unit.name}
-            <br />
-            <div dangerouslySetInnerHTML={{ __html: unit.description }} />
-          </Link>
-        </Table.Cell>
-      </Table.Row>
-    ));
+    let units = [];
+    if (collection.content_units) {
+      units = collection.content_units.map(unit => (
+        <Table.Row verticalAlign="top" key={`u-${unit.id}`}>
+          <Table.Cell>
+            <Link to={`/lessons/part/${unit.id}`}>
+              {unit.name}
+              <br />
+              <div dangerouslySetInnerHTML={{ __html: unit.description }} />
+            </Link>
+          </Table.Cell>
+        </Table.Row>
+      ));
+    }
 
-    let rows = [];
+    const rows = [];
+    const contentUnitsSpan = collection.content_units ? collection.content_units.length + 1 : 1;
+
     rows.push((
       <Table.Row verticalAlign="top" key={`l-${collection.id}`}>
-        <Table.Cell collapsing singleLine width={1} rowSpan={collection.content_units.length + 1}>
+        <Table.Cell collapsing singleLine width={1} rowSpan={contentUnitsSpan}>
           <strong>{t('values.date', { date: new Date(collection.film_date) })}</strong>
         </Table.Cell>
         <Table.Cell>
@@ -59,9 +64,7 @@ class LessonsList extends PureComponent {
         </Table.Cell>
       </Table.Row>
     ));
-    rows = rows.concat(units);
-
-    return rows;
+    return rows.concat(units);
   };
 
   render() {
