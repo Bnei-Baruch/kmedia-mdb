@@ -293,9 +293,9 @@ getFilterValue(state, namespace, name, getActiveValueIndex(state, namespace, nam
 getLastFilterValue(state, namespace, name);
 
 const getIsEditingExistingFilter = (state, namespace, name) =>
-!!state[namespace] &&
-!!state[namespace][name] &&
-!!state[namespace][name].editingExistingValue;
+state[namespace] &&
+state[namespace][name] &&
+state[namespace][name].editingExistingValue;
 
 const getIsHydrated = (state, namespace) => !!state.isHydrated && !!state.isHydrated[namespace];
 
