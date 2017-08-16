@@ -72,10 +72,23 @@ export const LessonPart = PropTypes.shape({
 
 export const ProgramCollection = PropTypes.shape({
   ...MDBDenormalizedCollection,
-  film_date: PropTypes.string.isRequired,
 });
 
 export const ProgramChapter = PropTypes.shape({
+  ...MDBDenormalizedContentUnit,
+  film_date: PropTypes.string.isRequired,
+});
+
+export const EventCollection = PropTypes.shape({
+  ...MDBDenormalizedCollection,
+  start_date: PropTypes.string.isRequired,
+  end_date: PropTypes.string.isRequired,
+  city: PropTypes.string,
+  country: PropTypes.string,
+  full_address: PropTypes.string,
+});
+
+export const EventItem = PropTypes.shape({
   ...MDBDenormalizedContentUnit,
   film_date: PropTypes.string.isRequired,
 });

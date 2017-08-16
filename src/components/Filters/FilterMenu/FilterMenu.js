@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Menu } from 'semantic-ui-react';
+import { Menu, Input } from 'semantic-ui-react';
 
 import { filterPropShape } from '../../shapes';
 import FilterMenuItem from '../FilterMenuItem/FilterMenuItem';
@@ -35,6 +35,9 @@ class FilterMenu extends PureComponent {
             />
           ))
         }
+        {/*<Menu.Item>
+          <Input size='small' icon icon='search' placeholder='Search Daily Lessons...' />
+        </Menu.Item>*/}
       </Menu>
     );
   }

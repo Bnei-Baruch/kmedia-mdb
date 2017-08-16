@@ -1,15 +1,100 @@
 /* eslint-disable */
 
 import React, { Component } from 'react';
-import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, List, Popup, Table } from 'semantic-ui-react';
+import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, List, Popup, Table, Card, Image, Input } from 'semantic-ui-react';
 
 class Design extends Component {
 
   render() {
     return (
       <Grid.Column width={16}>
+        <Header size='large' color='pink' inverted>TV & Video Programs</Header>
+        <Divider/>
+      
+        <div className='featured-unit'>
+          <Header
+            as="h2"
+            content='Featured Programs'
+          />
+          <Card.Group itemsPerRow='4' doubling>
+            <Card href='#'>
+              <Image fluid src='http://www.kab.co.il/images/attachments/91/276191_medium.jpg' />
+              <Card.Content>
+                <Card.Header>
+                  A New Life
+                </Card.Header>
+                <Card.Meta>
+                  <span className='date'>
+                    Last updated: 30/7/2017
+                  </span>
+                </Card.Meta>
+                <Card.Description>
+                  Episode 852 - Jewish Culture: Purity & Impurity, the Spiritual Root
+                </Card.Description>
+              </Card.Content>
+            </Card>
+            <Card href='#'>
+              <Image fluid src='http://www.kab.co.il/images/attachments/86/276186_medium.png' />
+              <Card.Content>
+                <Card.Header>
+                  Matthew
+                </Card.Header>
+                <Card.Meta>
+                  <span className='date'>
+                    Joined in 2015
+                  </span>
+                </Card.Meta>
+                <Card.Description>
+                  Matthew is a musician living in Nashville.
+                </Card.Description>
+              </Card.Content>
+            </Card>            
+            <Card href='#'>
+              <Image fluid src='http://www.kab.co.il/images/attachments/37/269137_medium.jpg' />
+              <Card.Content>
+                <Card.Header>
+                  Matthew
+                </Card.Header>
+                <Card.Meta>
+                  <span className='date'>
+                    Joined in 2015
+                  </span>
+                </Card.Meta>
+                <Card.Description>
+                  Matthew is a musician living in Nashville.
+                </Card.Description>
+              </Card.Content>
+            </Card>            
+            <Card href='#'>
+              <Image fluid src='http://www.kab.co.il/images/attachments/21/209721_medium.jpg' />
+              <Card.Content>
+                <Card.Header>
+                  Matthew
+                </Card.Header>
+                <Card.Meta>
+                  <span className='date'>
+                    Joined in 2015
+                  </span>
+                </Card.Meta>
+                <Card.Description>
+                  Matthew is a musician living in Nashville.
+                </Card.Description>
+              </Card.Content>
+            </Card>  
+          </Card.Group>
+        </div>
+        <Menu secondary pointing color="blue" className="index-filters" size="large">
+          <Menu.Item header>Filter Programs by:</Menu.Item>
+          <Menu.Item active>Date</Menu.Item>
+          <Menu.Item>Genre / Program</Menu.Item>
+          <Menu.Item>Topic</Menu.Item>
+          <Menu.Item>
+            <Input size='small' icon icon='search' placeholder='Search Programs...' />
+          </Menu.Item>
+        </Menu>
         {/*<Header size='large' color='pink' inverted>video collection collapsed (๏㉨๏)</Header>*/}
 
+        {/*
         <div className='collapsed_video_container'>
         	<Grid >
             <Grid.Row>
@@ -81,18 +166,8 @@ class Design extends Component {
             </Grid.Row>
           </Grid>
         </div>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excep velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        */}
+        
       	<Header size='large' color='pink' inverted>video collection ☼.☼</Header>
         <Grid>
           <Grid.Row className='video_box'>
