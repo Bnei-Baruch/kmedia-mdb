@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withMediaProps } from 'react-media-player';
-
-import fullscreenImage from './images/fullscreen.svg';
-import exitFullscreenImage from './images/exit_fullscreen.svg';
+import { Icon } from 'semantic-ui-react';
 
 class AVFullscreen extends Component {
   static propTypes = {
@@ -28,12 +26,10 @@ class AVFullscreen extends Component {
         type="button"
         className="player-button"
         onClick={this.handleFullscreen}
-        style={{ width: '16px', height: '16px', marginLeft: 10, marginRight: 10 }}
+        style={{ marginLeft: 10, marginRight: 10 }}
       >
-        <img
-          src={media.isFullScreen ? exitFullscreenImage : fullscreenImage}
-          alt={media.isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
-        />
+        <Icon name={media.isFullScreen ? 'compress' : 'expand' }
+              style={{margin: 0, height: '100%' }} />
       </button>
     );
   }

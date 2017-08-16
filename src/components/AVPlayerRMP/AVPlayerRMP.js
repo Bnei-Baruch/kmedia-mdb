@@ -86,7 +86,6 @@ class AVPlayerRMP extends PureComponent {
                       <AVTimeElapsed />
                       <AVProgress buffers={this.buffers()} />
                       <AVMuteUnmute />
-                      <AVFullScreen />
                       <AVAudioVideo
                         isAudio={audio === active}
                         isVideo={video === active}
@@ -99,6 +98,7 @@ class AVPlayerRMP extends PureComponent {
                         defaultValue={defaultValue}
                         onSelect={onLanguageChange}
                       />
+                      <AVFullScreen />
                     </div>
                   </div>
                 </div>
