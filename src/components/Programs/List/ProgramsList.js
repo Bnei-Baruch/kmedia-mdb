@@ -34,7 +34,7 @@ class ProgramsList extends PureComponent {
   renderCollection = (collection) => {
     let units = [];
     if (collection.content_units) {
-      units = collection.content_units.map(unit => (
+      units = collection.content_units.slice(0, 5).map(unit => (
         <Table.Row verticalAlign="top" key={`u-${unit.id}`}>
           <Table.Cell>
             <Link to={`/programs/chapter/${unit.id}`}>
@@ -48,7 +48,7 @@ class ProgramsList extends PureComponent {
     }
 
     const rows = [];
-    const contentUnitsSpan = collection.content_units ? collection.content_units.length + 1 : 1;
+    const contentUnitsSpan = units.length + 1;
 
     rows.push((
       <Table.Row verticalAlign="top" key={`l-${collection.id}`}>

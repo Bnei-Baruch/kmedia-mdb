@@ -40,7 +40,7 @@ class FullLessonContainer extends Component {
     // We fetch stuff if we don't have it already
     // and a request for it is not in progress or ended with an error.
     const id = match.params.id;
-    if (fullLesson && fullLesson.id === id && fullLesson.cuIDs) {
+    if (fullLesson && fullLesson.id === id) {
       fullLesson.cuIDs.forEach((cuID) => {
         const cu = fullLesson.content_units.find(x => x.id === cuID);
         if (!cu || !cu.files) {
@@ -61,7 +61,7 @@ class FullLessonContainer extends Component {
     const id = match.params.id;
     let wip  = wipMap.fulls[id];
     let err  = errors.fulls[id];
-    if (fullLesson && fullLesson.cuIDs) {
+    if (fullLesson) {
       wip = wip || fullLesson.cuIDs.some(cuID => wipMap.parts[cuID]);
       if (!err) {
         const cuIDwithError = fullLesson.cuIDs.find(cuID => errors.parts[cuID]);

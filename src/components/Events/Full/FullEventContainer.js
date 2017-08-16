@@ -14,72 +14,47 @@ class FullEventContainer extends Component {
     match: shapes.RouterMatch.isRequired,
     language: PropTypes.string.isRequired,
     fullEvent: shapes.EventCollection,
-    wip: shapes.WipMap,
-    errors: shapes.ErrorsMap,
+    wip: PropTypes.bool,
+    err: shapes.Error,
     fetchFullEvent: PropTypes.func.isRequired,
     fetchEventItem: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     fullEvent: null,
-    wip: { fulls: {}, items: {} },
-    errors: { fulls: {}, items: {} },
+    wip: false,
+    errors: null,
   };
 
   componentDidMount() {
-    this.askForDataIfNeeded(this.props);
+    this.askForData(this.props.match.params.id);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.askForDataIfNeeded(nextProps);
+    if (nextProps.match.params.id !== this.props.match.params.id) {
+      this.askForData(nextProps.match.params.id);
+    }
   }
 
-  askForDataIfNeeded = (props) => {
-    const { match, fullEvent, wip, errors, fetchFullEvent, fetchEventItem } = props;
-
-    // We fetch stuff if we don't have it already
-    // and a request for it is not in progress or ended with an error.
-    const id = match.params.id;
-    if (fullEvent && fullEvent.id === id && fullEvent.cuIDs) {
-      fullEvent.cuIDs.forEach((cuID) => {
-        const cu = fullEvent.content_units.find(x => x.id === cuID);
-        if (!cu || !cu.files) {
-          if (!(wip.items[cuID] || errors.items[cuID])) {
-            fetchEventItem(cuID);
-          }
-        }
-      });
-    } else if (!(wip.fulls[id] || errors.fulls[id])) {
-      fetchFullEvent(id);
-    }
+  askForData = (id) => {
+    this.props.fetchFullEvent(id);
   };
 
   render() {
-    const { match, language, fullEvent, wip: wipMap, errors } = this.props;
-
-    // We're wip / err if some request is wip / err
-    const id = match.params.id;
-    let wip  = wipMap.fulls[id];
-    let err  = errors.fulls[id];
-    if (fullEvent && fullEvent.cuIDs) {
-      wip = wip || fullEvent.cuIDs.some(cuID => wipMap.items[cuID]);
-      if (!err) {
-        const cuIDwithError = fullEvent.cuIDs.find(cuID => errors.items[cuID]);
-        err                 = cuIDwithError ? errors.items[cuIDwithError] : null;
-      }
-    }
+    const { language, fullEvent, wip, err } = this.props;
 
     return <FullEvent fullEvent={fullEvent} wip={wip} err={err} language={language} />;
   }
 }
 
 function mapState(state, props) {
-  const fullEvent = mdb.getDenormCollection(state.mdb, props.match.params.id);
+  const id = props.match.params.id;
+  const fullEvent = mdb.getDenormCollection(state.mdb, id);
 
   return {
     fullEvent,
-    wip: selectors.getWip(state.events),
-    errors: selectors.getErrors(state.events),
+    wip: selectors.getWip(state.programs).fulls[id],
+    err: selectors.getErrors(state.programs).fulls[id],
     language: settings.getLanguage(state.settings),
   };
 }

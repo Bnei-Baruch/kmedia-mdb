@@ -14,72 +14,46 @@ class FullProgramContainer extends Component {
     match: shapes.RouterMatch.isRequired,
     language: PropTypes.string.isRequired,
     fullProgram: shapes.ProgramCollection,
-    wip: shapes.WipMap,
-    errors: shapes.ErrorsMap,
+    wip: PropTypes.bool,
+    err: shapes.Error,
     fetchFullProgram: PropTypes.func.isRequired,
-    fetchProgramChapter: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     fullProgram: null,
-    wip: { fulls: {}, chapters: {} },
-    errors: { fulls: {}, chapters: {} },
+    wip: false,
+    err: null,
   };
 
   componentDidMount() {
-    this.askForDataIfNeeded(this.props);
+    this.askForData(this.props.match.params.id);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.askForDataIfNeeded(nextProps);
+    if (nextProps.match.params.id !== this.props.match.params.id) {
+      this.askForData(nextProps.match.params.id);
+    }
   }
 
-  askForDataIfNeeded = (props) => {
-    const { match, fullProgram, wip, errors, fetchFullProgram, fetchProgramChapter } = props;
-
-    // We fetch stuff if we don't have it already
-    // and a request for it is not in progress or ended with an error.
-    const id = match.params.id;
-    if (fullProgram && fullProgram.id === id && fullProgram.cuIDs) {
-      fullProgram.cuIDs.forEach((cuID) => {
-        const cu = fullProgram.content_units.find(x => x.id === cuID);
-        if (!cu || !cu.files) {
-          if (!(wip.chapters[cuID] || errors.chapters[cuID])) {
-            fetchProgramChapter(cuID);
-          }
-        }
-      });
-    } else if (!(wip.fulls[id] || errors.fulls[id])) {
-      fetchFullProgram(id);
-    }
+  askForData = (id) => {
+    this.props.fetchFullProgram(id);
   };
 
   render() {
-    const { match, language, fullProgram, wip: wipMap, errors } = this.props;
-
-    // We're wip / err if some request is wip / err
-    const id = match.params.id;
-    let wip  = wipMap.fulls[id];
-    let err  = errors.fulls[id];
-    if (fullProgram && fullProgram.cuIDs) {
-      wip = wip || fullProgram.cuIDs.some(cuID => wipMap.chapters[cuID]);
-      if (!err) {
-        const cuIDwithError = fullProgram.cuIDs.find(cuID => errors.chapters[cuID]);
-        err                 = cuIDwithError ? errors.chapters[cuIDwithError] : null;
-      }
-    }
+    const { language, fullProgram, wip, err } = this.props;
 
     return <FullProgram fullProgram={fullProgram} wip={wip} err={err} language={language} />;
   }
 }
 
 function mapState(state, props) {
-  const fullProgram = mdb.getDenormCollection(state.mdb, props.match.params.id);
+  const id = props.match.params.id;
+  const fullProgram = mdb.getDenormCollection(state.mdb, id);
 
   return {
     fullProgram,
-    wip: selectors.getWip(state.programs),
-    errors: selectors.getErrors(state.programs),
+    wip: selectors.getWip(state.programs).fulls[id],
+    err: selectors.getErrors(state.programs).fulls[id],
     language: settings.getLanguage(state.settings),
   };
 }

@@ -51,10 +51,6 @@ class FullEvent extends Component {
       return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
     }
 
-    if (wip) {
-      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-    }
-
     if (fullEvent) {
       return (
         <Menu vertical fluid>
@@ -68,7 +64,7 @@ class FullEvent extends Component {
             </Table.Header>
             <Table.Body>
               {
-                fullEvent.content_units.map((cu) => (
+                fullEvent.content_units.map(cu => (
                   this.tableRow(fullEvent, cu)
                 ))
               }
@@ -76,6 +72,10 @@ class FullEvent extends Component {
           </Table>
         </Menu>
       );
+    }
+
+    if (wip) {
+      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
     return (
