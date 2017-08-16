@@ -7,6 +7,9 @@ import FullLesson from '../Lessons/Full/FullLessonContainer';
 import Programs from '../Programs/List/ProgramsContainer';
 import ProgramChapter from '../Programs/Chapter/ProgramChapterContainer';
 import FullProgram from '../Programs/Full/FullProgramContainer';
+import Events from '../Events/List/EventsContainer';
+import EventItem from '../Events/Item/EventItemContainer';
+import FullEvent from '../Events/Full/FullEventContainer';
 import Design from '../Design/Design';
 
 const NotImplemented = () => <h1>Not Implemented Yet</h1>;
@@ -21,10 +24,12 @@ const Routes = () => (
     <Route exact path="/programs" component={Programs} />
     <Route exact path="/programs/chapter/:id" component={ProgramChapter} />
     <Route exact path="/programs/full/:id" component={FullProgram} />
-    <Route exact path="/programs" component={Programs} />
+    <Route exact path="/events" component={Events} />
+    <Route exact path="/events/item/:id" component={EventItem} />
+    <Route exact path="/events/full/:id" component={FullEvent} />
     <Route exact path="/lectures" component={NotImplemented} />
     <Route exact path="/sources" component={NotImplemented} />
-    <Route exact path="/events" component={NotImplemented} />
+    <Route exact path="/events" component={Events} />
     <Route exact path="/books" component={NotImplemented} />
     <Route exact path="/topics" component={NotImplemented} />
     <Route exact path="/publications" component={NotImplemented} />

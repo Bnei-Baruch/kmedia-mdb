@@ -40,7 +40,7 @@ class FullProgramContainer extends Component {
     // We fetch stuff if we don't have it already
     // and a request for it is not in progress or ended with an error.
     const id = match.params.id;
-    if (fullProgram && fullProgram.id === id) {
+    if (fullProgram && fullProgram.id === id && fullProgram.cuIDs) {
       fullProgram.cuIDs.forEach((cuID) => {
         const cu = fullProgram.content_units.find(x => x.id === cuID);
         if (!cu || !cu.files) {
@@ -61,7 +61,7 @@ class FullProgramContainer extends Component {
     const id = match.params.id;
     let wip  = wipMap.fulls[id];
     let err  = errors.fulls[id];
-    if (fullProgram) {
+    if (fullProgram && fullProgram.cuIDs) {
       wip = wip || fullProgram.cuIDs.some(cuID => wipMap.chapters[cuID]);
       if (!err) {
         const cuIDwithError = fullProgram.cuIDs.find(cuID => errors.chapters[cuID]);

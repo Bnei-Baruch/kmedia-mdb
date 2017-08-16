@@ -28,11 +28,11 @@ export default class Api {
   static sources    = ({ language }) => Requests.get(`sources?${Requests.makeParams({ language })}`);
   static tags       = ({ language }) => Requests.get(`tags?${Requests.makeParams({ language })}`);
 
-  static lessons = ({ language, pageNo, pageSize, ...rest }) => {
+  static lessons     = ({ language, pageNo, pageSize, ...rest }) => {
     const params = Object.assign({}, { language, ...rest });
     return Requests.get(`lessons?${Requests.limit(pageNo, pageSize)}&${Requests.makeParams(params)}`);
   };
-  static collections = ({ content_type, language, pageNo, pageSize, ...rest }) => {
+  static collections = ({ contentTypes: content_type, language, pageNo, pageSize, ...rest }) => {
     const params = Object.assign({}, { language, content_type, ...rest });
     return Requests.get(`collections?${Requests.limit(pageNo, pageSize)}&${Requests.makeParams(params)}`);
   };
