@@ -13,8 +13,8 @@ const getPageNo = (search) => {
   return (isNaN(page) || page <= 0) ? 1 : page;
 };
 
-const askForData = ({ fetchList, pageNo, language, pageSize }) => {
-  fetchList(pageNo, language, pageSize);
+const askForData = ({ fetchList, pageNo, language, pageSize, contentTypes }) => {
+  fetchList(pageNo, language, pageSize, contentTypes);
 };
 
 const handlePageChange = (pageNo, props) => {

@@ -3,26 +3,27 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { actions, selectors } from '../../../redux/modules/programs';
+import { actions, selectors } from '../../../redux/modules/events';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
-import FullProgram from './FullProgram';
+import FullEvent from './FullEvent';
 
-class FullProgramContainer extends Component {
+class FullEventContainer extends Component {
   static propTypes = {
     match: shapes.RouterMatch.isRequired,
     language: PropTypes.string.isRequired,
-    fullProgram: shapes.ProgramCollection,
+    fullEvent: shapes.EventCollection,
     wip: PropTypes.bool,
     err: shapes.Error,
-    fetchFullProgram: PropTypes.func.isRequired,
+    fetchFullEvent: PropTypes.func.isRequired,
+    fetchEventItem: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    fullProgram: null,
+    fullEvent: null,
     wip: false,
-    err: null,
+    errors: null,
   };
 
   componentDidMount() {
@@ -36,22 +37,22 @@ class FullProgramContainer extends Component {
   }
 
   askForData = (id) => {
-    this.props.fetchFullProgram(id);
+    this.props.fetchFullEvent(id);
   };
 
   render() {
-    const { language, fullProgram, wip, err } = this.props;
+    const { language, fullEvent, wip, err } = this.props;
 
-    return <FullProgram fullProgram={fullProgram} wip={wip} err={err} language={language} />;
+    return <FullEvent fullEvent={fullEvent} wip={wip} err={err} language={language} />;
   }
 }
 
 function mapState(state, props) {
   const id = props.match.params.id;
-  const fullProgram = mdb.getDenormCollection(state.mdb, id);
+  const fullEvent = mdb.getDenormCollection(state.mdb, id);
 
   return {
-    fullProgram,
+    fullEvent,
     wip: selectors.getWip(state.programs).fulls[id],
     err: selectors.getErrors(state.programs).fulls[id],
     language: settings.getLanguage(state.settings),
@@ -60,9 +61,9 @@ function mapState(state, props) {
 
 function mapDispatch(dispatch) {
   return bindActionCreators({
-    fetchFullProgram: actions.fetchFullProgram,
-    fetchProgramChapter: actions.fetchProgramChapter,
+    fetchFullEvent: actions.fetchFullEvent,
+    fetchEventItem: actions.fetchEventItem,
   }, dispatch);
 }
 
-export default connect(mapState, mapDispatch)(FullProgramContainer);
+export default connect(mapState, mapDispatch)(FullEventContainer);
