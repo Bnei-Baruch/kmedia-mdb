@@ -37,7 +37,7 @@ class LessonsList extends PureComponent {
           <List.Item as='a'>Moscow Congress 2013</List.Item>
         </List>
         <div dangerouslySetInnerHTML={{ __html: part.description }} />
-        
+
       </Table.Cell>
     </Table.Row>
   );
@@ -52,16 +52,15 @@ class LessonsList extends PureComponent {
             <Link to={`/lessons/part/${unit.id}`}>
               {unit.name}
             </Link>
-            List size='tiny' divided horizontal link>
-            <List.Item>
-              <List.Header>
-                Related to:
-              </List.Header>
-            </List.Item>          
-            <List.Item as='a'>Moscow Congress 2013</List.Item>
-          </List> 
-              <div dangerouslySetInnerHTML={{ __html: unit.description }} />
-            
+            <List size='tiny' divided horizontal link>
+              <List.Item>
+                <List.Header>
+                  Related to:
+                </List.Header>
+              </List.Item>
+              <List.Item as='a'>Moscow Congress 2013</List.Item>
+            </List>
+            <div dangerouslySetInnerHTML={{ __html: unit.description }} />
           </Table.Cell>
         </Table.Row>
       ));

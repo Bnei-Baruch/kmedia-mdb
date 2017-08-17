@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withMediaProps } from 'react-media-player';
+import { Icon } from 'semantic-ui-react';
 
-import playImage from './images/play.svg';
-import pauseImage from './images/pause.svg';
 import './styles.css';
 
 class AVPlayPause extends Component {
@@ -28,14 +27,13 @@ class AVPlayPause extends Component {
     return (
       <button
         type="button"
+        tabIndex="-1"
         className={classNames('player-button')}
         onClick={this.handlePlayPause}
-        style={{ width: '20px', height: '20px', marginLeft: '5px' }}
+        style={{ marginLeft: '10px', marginRight: '5px' }}
       >
-        <img
-          src={media.isPlaying ? pauseImage : playImage}
-          alt={media.isPlaying ? 'pause' : 'play'}
-        />
+        <Icon name={media.isPlaying ? 'pause' : 'play'}
+              style={{margin: 0, height: '100%' }} />
       </button>
     );
   }

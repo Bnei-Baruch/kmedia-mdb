@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withMediaProps } from 'react-media-player';
-
-import volumeMuteImage from './images/volume_mute.svg';
-import volumeLowImage from './images/volume_low.svg';
-import volumeMediumImage from './images/volume_medium.svg';
-import volumeHighImage from './images/volume_high.svg';
+import { Icon } from 'semantic-ui-react';
 
 class AVMuteUnmute extends Component {
 
@@ -114,8 +110,8 @@ class AVMuteUnmute extends Component {
       display: 'flex',
       flexDirection: 'column-reverse',
       flexWrap: 'nowrap',
-      paddingLeft: 8,
-      paddingRight: 8,
+      paddingLeft: 10,
+      paddingRight: 10,
       marginBottom: 10,
       marginTop: 10,
     };
@@ -157,19 +153,19 @@ class AVMuteUnmute extends Component {
           onClick={this.handleMuteUnmute}
           onMouseEnter={this.handleMouseEnter}
           onMouseLeave={this.handleMouseLeave}
-          style={{ width: '16px', height: '16px' }}
+          style={{}}
         >
           {isMuted &&
-          <img key="mute" src={volumeMuteImage} alt="muted" />
+          <Icon key="mute" name="volume off"
+                style={{margin: 0, height: '100%' }} />
           }
-          {volume > 0 && volume < 0.3 &&
-          <img key="low-volume" src={volumeLowImage} alt="low volume" />
+          {volume > 0 && volume < 0.5 &&
+          <Icon key="volume-down" name="volume down"
+                style={{margin: 0, height: '100%' }} />
           }
-          {volume > 0.3 && volume < 0.6 &&
-          <img key="medium-volume" src={volumeMediumImage} alt="medium volume" />
-          }
-          {volume >= 0.6 &&
-          <img key="high-volume" src={volumeHighImage} alt="high volume" />
+          {volume >= 0.5 &&
+          <Icon key="volume-up" name="volume up"
+                style={{margin: 0, height: '100%' }} />
           }
         </button>
         <div style={volumeStyle}

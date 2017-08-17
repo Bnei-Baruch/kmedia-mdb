@@ -29,7 +29,7 @@ export default class AVLanguage extends Component {
       .map(x => ({ value: x.value, text: x.value }));
 
     return (
-      <div style={{ marginLeft: 10, marginRight: 10 }}>
+      <div style={{ marginLeft: 5}}>
         <Dropdown
           floating
           inline

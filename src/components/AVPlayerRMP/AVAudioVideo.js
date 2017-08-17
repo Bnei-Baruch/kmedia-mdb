@@ -5,7 +5,7 @@ const AVAudioVideo = (props) => {
   const { isAudio, setAudio, isVideo, setVideo, t } = props;
 
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex', marginLeft: 5, marginRight: 5 }}>
       <div
         style={{ textDecoration: isAudio ? 'underline' : 'none' }}
         role="button"
