@@ -1,8 +1,9 @@
+/* eslint-disable react/no-danger */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Grid, Table, List, Header, Divider } from 'semantic-ui-react';
+import { Grid, List, Table } from 'semantic-ui-react';
 
 import { CT_LESSON_PART } from '../../../helpers/consts';
 import * as shapes from '../../shapes';
@@ -27,14 +28,14 @@ class LessonsList extends PureComponent {
         <Link to={`/lessons/part/${part.id}`}>
           <strong>{part.name}</strong>
         </Link>
-        <List size='tiny' divided horizontal link>
+        <List size="tiny" divided horizontal link>
           <List.Item>
             <List.Header>
               Related to:
             </List.Header>
           </List.Item>
-          <List.Item as='a'>Daily Lesson from 25/7/2017</List.Item>
-          <List.Item as='a'>Moscow Congress 2013</List.Item>
+          <List.Item as="a">Daily Lesson from 25/7/2017</List.Item>
+          <List.Item as="a">Moscow Congress 2013</List.Item>
         </List>
         <div dangerouslySetInnerHTML={{ __html: part.description }} />
 
@@ -43,7 +44,6 @@ class LessonsList extends PureComponent {
   );
 
   renderCollection = (collection, t) => {
-
     let units = [];
     if (collection.content_units) {
       units = collection.content_units.map(unit => (
@@ -52,13 +52,13 @@ class LessonsList extends PureComponent {
             <Link to={`/lessons/part/${unit.id}`}>
               {unit.name}
             </Link>
-            <List size='tiny' divided horizontal link>
+            <List size="tiny" divided horizontal link>
               <List.Item>
                 <List.Header>
                   Related to:
                 </List.Header>
               </List.Item>
-              <List.Item as='a'>Moscow Congress 2013</List.Item>
+              <List.Item as="a">Moscow Congress 2013</List.Item>
             </List>
             <div dangerouslySetInnerHTML={{ __html: unit.description }} />
           </Table.Cell>
@@ -66,9 +66,8 @@ class LessonsList extends PureComponent {
       ));
     }
 
-    const rows = [];
+    const rows             = [];
     const contentUnitsSpan = collection.content_units ? collection.content_units.length + 1 : 1;
-
 
     rows.push((
       <Table.Row verticalAlign="top" key={`l-${collection.id}`}>
@@ -93,7 +92,7 @@ class LessonsList extends PureComponent {
     }
 
     return (
-      <Table basic="very" sortable className='index-list'>
+      <Table basic="very" sortable className="index-list">
         <Table.Body>
           {
             items.map(x => (
