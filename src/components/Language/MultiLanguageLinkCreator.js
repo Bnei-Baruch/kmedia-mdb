@@ -5,6 +5,23 @@ import { Link, withRouter } from 'react-router-dom';
 import { LANGUAGES } from '../../helpers/consts';
 import { isAbsoluteUrl } from '../../helpers/utils';
 
+/**
+ * multiLanguageLinkCreator - an higher order component to create a link that allows navigating
+ * while keeping the current active language in the url, or changing to a new language on navigation.
+ *
+ * The wrapped component will keep most of the react-router-dom Link interface, with the following changes:
+ * - it adds a language prop to the wrapped component if you need to force a language to the specific route.
+ * - the "to" prop is not required like react-router-dom Link does, instead, if it is not supplied it will use the current location.
+ *
+ * There is a priority for how the active language after navigation is chosen (in descending order):
+ * 1. the "language" prop
+ * 2. the "to" prop contains a pathname that starts with a language's shorthand, for example: /ru/<Rest of url>,
+ * 3. the current pathname's language shorthand if it exists in the pathname
+ *
+ * If you want to change the language, it is preferred to use the "language" prop instead of prefixing the pathname in the to prop.
+ * i.e - <Component to="/some-path" language="ru" /> instead of <Component to="/ru/some-path" />
+ */
+
 const ensureStartsWithSlash = str => str && (str[0] === '/' ? str : `/${str}`);
 const splitLanguagePath = (path) => {
   const pathWithSlash = ensureStartsWithSlash(path);
@@ -32,7 +49,7 @@ const multiLanguageLinkCreator = () => (WrappedComponent) => {
         PropTypes.object
       ]),
       location: PropTypes.object.isRequired,
-      language: PropTypes.string
+      language: PropTypes.string // language shorthand, for example: "ru"
     };
 
     static defaultProps = {
