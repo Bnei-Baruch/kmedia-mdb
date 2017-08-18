@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { Dropdown } from 'semantic-ui-react';
+import classNames from 'classnames';
 
 import { LANG_HEBREW, LANGUAGE_OPTIONS } from '../../helpers/consts';
 
@@ -40,6 +41,7 @@ export default class AVLanguage extends Component {
           options={options}
           defaultValue={defaultValue}
           onChange={this.handleChange}
+          className={classNames('player-button')}
           style={{ display: 'flex', textDecoration: 'underline' }}
         />
       </div>

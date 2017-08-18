@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 const AVAudioVideo = (props) => {
   const { isAudio, setAudio, isVideo, setVideo, t } = props;
 
   return (
-    <div style={{ display: 'flex', marginLeft: 5, marginRight: 5 }}>
+    <div className={classNames('player-button')}
+         style={{ display: 'flex', marginLeft: 5, marginRight: 5 }}>
       <div
         style={{ textDecoration: isAudio ? 'underline' : 'none' }}
         role="button"

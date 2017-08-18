@@ -5,6 +5,7 @@ import { Media, Player } from 'react-media-player';
 import * as shapes from '../shapes';
 import { physicalFile } from '../../helpers/utils';
 import AVPlayPause from './AVPlayPause';
+import AVCenteredPlay from './AVCenteredPlay';
 import AVTimeElapsed from './AVTimeElapsed';
 import AVFullScreen from './AVFullScreen';
 import AVMuteUnmute from './AVMuteUnmute';
@@ -99,6 +100,11 @@ class AVPlayerRMP extends PureComponent {
                         onSelect={onLanguageChange}
                       />
                       <AVFullScreen />
+                    </div>
+                  </div>
+                  <div className="media-center-control">
+                    <div className="control-container">
+                      <AVCenteredPlay />
                     </div>
                   </div>
                 </div>

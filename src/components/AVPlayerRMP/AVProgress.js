@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withMediaProps } from 'react-media-player';
+import classNames from 'classnames';
 
 class AVProgress extends Component {
   _element              = null;
@@ -7,17 +8,17 @@ class AVProgress extends Component {
   _isPlayingOnMouseDown = false;
 
   componentDidMount() {
-    this._element.addEventListener('mousemove', this.handleMove);
-    this._element.addEventListener('touchmove', this.handleMove);
-    this._element.addEventListener('mouseup', this.handleEnd);
-    this._element.addEventListener('touchend', this.handleEnd);
+    document.addEventListener('mousemove', this.handleMove);
+    document.addEventListener('touchmove', this.handleMove);
+    document.addEventListener('mouseup', this.handleEnd);
+    document.addEventListener('touchend', this.handleEnd);
   }
 
   componentWillUnmount() {
-    this._element.removeEventListener('mousemove', this.handleMove);
-    this._element.removeEventListener('touchmove', this.handleMove);
-    this._element.removeEventListener('mouseup', this.handleEnd);
-    this._element.removeEventListener('touchend', this.handleEnd);
+    document.removeEventListener('mousemove', this.handleMove);
+    document.removeEventListener('touchmove', this.handleMove);
+    document.removeEventListener('mouseup', this.handleEnd);
+    document.removeEventListener('touchend', this.handleEnd);
   }
 
   handleStart = (e) => {
@@ -120,6 +121,7 @@ class AVProgress extends Component {
       <div
         ref={c => this._element = c}
         style={parent}
+        className={classNames('player-button')}
         onMouseDown={this.handleStart}
         onTouchStart={this.handleStart}
       >
