@@ -65,12 +65,22 @@ class AVPlayerRMP extends PureComponent {
   render() {
     const { audio, video, active, onSwitchAV, languages, defaultValue, onLanguageChange, t } = this.props;
 
+    const centerPlay = active === video ? (
+      <div className="media-center-control">
+        <div className="control-container">
+          <AVCenteredPlay />
+        </div>
+      </div>
+    ) : null;
+
     return (
       <div>
         <Media>
           {
             ({ playPause }) => (
-              <div className="media">
+              <div className="media"
+                   style={{minHeight: active === video ? 200 : 40,
+                           minWidth: active === video ? 300 : 'auto'}}>
                 <div className="media-player">
                   <Player
                     ref={c => this.player_ = c}
@@ -102,11 +112,7 @@ class AVPlayerRMP extends PureComponent {
                       <AVFullScreen />
                     </div>
                   </div>
-                  <div className="media-center-control">
-                    <div className="control-container">
-                      <AVCenteredPlay />
-                    </div>
-                  </div>
+                  { centerPlay }
                 </div>
               </div>
             )
