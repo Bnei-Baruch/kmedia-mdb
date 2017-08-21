@@ -19,7 +19,7 @@ import { isAbsoluteUrl } from '../../helpers/utils';
  * 3. the current pathname's language shorthand if it exists in the pathname
  *
  * If you want to change the language, it is preferred to use the "language" prop instead of prefixing the pathname in the to prop.
- * i.e - <Component to="/some-path" language="ru" /> instead of <Component to="/ru/some-path" />
+ * i.e - use <Component to="/some-path" language="ru" /> instead of <Component to="/ru/some-path" />
  */
 
 const ensureStartsWithSlash = str => str && (str[0] === '/' ? str : `/${str}`);
