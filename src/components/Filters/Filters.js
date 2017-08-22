@@ -27,7 +27,8 @@ class Filters extends Component {
   };
 
   handleCancelActiveFilter = () => {
-    this.setState({ activeFilter: null });
+    const { namespace } = this.props;
+    this.props.editNewFilter(namespace, '');
   };
 
   handleApplyActiveFilter = () => {

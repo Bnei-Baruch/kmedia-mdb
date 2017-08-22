@@ -64,7 +64,6 @@ class LessonsList extends PureComponent {
   };
 
   renderCollection = (collection, t) => {
-
     let units = [];
     if (collection.content_units) {
       units = collection.content_units.map(unit => {
@@ -136,7 +135,7 @@ class LessonsList extends PureComponent {
     }
 
     return (
-      <Table basic="very" sortable className='index-list'>
+      <Table basic="very" sortable className="index-list">
         <Table.Body>
           {
             items.map(x => (

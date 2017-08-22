@@ -47,8 +47,13 @@ class TopicsFilter extends React.Component {
   };
 
   apply = () => {
-    this.props.updateValue(this.state.selection);
+    const selection = this.state.selection;
+    if (selection === null) {
+      return;
+    }
+    this.props.updateValue(selection);
     this.props.onApply();
+
   };
 
   createList = (items, selected) => {

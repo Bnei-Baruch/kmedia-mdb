@@ -143,6 +143,9 @@ class DateFilter extends Component {
     this.setState(this.convertToStateObject(nextProps));
   }
 
+  onCancel = () =>
+    this.props.onCancel();
+
   setRange = (datePreset, from, to, fromInputValue = '', toInputValue = '') => {
     let range = {};
 
@@ -212,9 +215,6 @@ class DateFilter extends Component {
 
     this.datePicker.showMonth(dateToShow);
   };
-
-  onCancel = () =>
-    this.props.onCancel();
 
   apply = () => {
     const { from, to, datePreset } = this.state;
