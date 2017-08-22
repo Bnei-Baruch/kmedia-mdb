@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
 import { Menu, Sidebar } from 'semantic-ui-react';
+import NavLink from '../Language/MultiLanguageNavLink';
 
 const ITEMS = [
   'lessons',

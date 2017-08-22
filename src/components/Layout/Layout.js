@@ -1,38 +1,27 @@
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import classnames from 'classnames';
-import { Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { Flag, Grid, Header, Icon, Menu } from 'semantic-ui-react';
-
-import { LANGUAGES } from '../../helpers/consts';
-import { actions, selectors } from '../../redux/modules/settings';
 import Routes from './Routes';
 import MenuItems from './MenuItems';
 import Footer from './Footer';
-
+import Link from '../Language/MultiLanguageLink';
+import { FLAG_TO_LANGUAGE } from '../../helpers/consts';
 import logo from '../../images/logo.svg';
+
+const flags = ['us', 'ru', 'il'];
 
 class Layout extends Component {
 
   static propTypes = {
-    language: PropTypes.string.isRequired,
-    setLanguage: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
 
   state = {
     sidebarActive: false
-  };
-
-  handleChangeLanguage = (e) => {
-    const flag     = e.target.getAttribute('class').split(' ')[0];
-    const language = Array.from(Object.values(LANGUAGES)).find(x => x.flag === flag).value;
-    if (this.props.language !== language) {
-      this.props.setLanguage(language);
-    }
   };
 
   toggleSidebar = (e, data) =>
@@ -57,9 +46,13 @@ class Layout extends Component {
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
-                <Flag name="us" onClick={this.handleChangeLanguage} />
-                <Flag name="ru" onClick={this.handleChangeLanguage} />
-                <Flag name="il" onClick={this.handleChangeLanguage} />
+                {
+                  flags.map(flag => (
+                    <Link language={FLAG_TO_LANGUAGE[flag]} key={flag}>
+                      <Flag name={flag} />
+                    </Link>
+                  ))
+                }
               </Menu.Item>
             </Menu.Menu>
           </Menu>
@@ -84,7 +77,7 @@ class Layout extends Component {
           <div className="layout__content">
             <Grid padded>
               <Grid.Row>
-                <Routes />
+                <Route component={Routes} />
               </Grid.Row>
             </Grid>
           </div>
@@ -95,14 +88,4 @@ class Layout extends Component {
   }
 }
 
-function mapState(state) {
-  return {
-    language: selectors.getLanguage(state.settings),
-  };
-}
-
-function mapDispatch(dispatch) {
-  return bindActionCreators({ setLanguage: actions.setLanguage }, dispatch);
-}
-
-export default connect(mapState, mapDispatch)(translate()(Layout));
+export default translate()(Layout);

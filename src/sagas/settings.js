@@ -27,6 +27,9 @@ function* setLanguage(action) {
   moment.locale(language);
 
   // change page direction and fetch css
+
+  // NOTE: yaniv -> edo (i18n object has a dir getter)
+  // https://github.com/i18next/i18next/blob/master/src/i18next.js#L281
   changeDirectionIfNeeded(language);
 
   yield put(sources.fetchSources());

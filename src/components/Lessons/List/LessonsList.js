@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { Grid, List, Table } from 'semantic-ui-react';
 
 import { CT_LESSON_PART } from '../../../helpers/consts';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { canonicalLink } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
+import Link from '../../Language/MultiLanguageLink';
 
 class LessonsList extends PureComponent {
 

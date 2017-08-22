@@ -7,7 +7,7 @@ import Design2 from '../Design/Design2';
 const Routes = () => (
   <Switch>
     <Route exact path="/design2" component={Design2} />
-    <Route component={Layout} />
+    <Route path="" component={Layout} />
   </Switch>
 );
 

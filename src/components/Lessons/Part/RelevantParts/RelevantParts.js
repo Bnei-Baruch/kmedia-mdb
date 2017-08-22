@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-duration-format';
 import { Trans } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { Container, Header, Item } from 'semantic-ui-react';
+
+import Link from '../../../Language/MultiLanguageLink';
 
 import { formatError } from '../../../../helpers/utils';
 import * as shapes from '../../../shapes';
