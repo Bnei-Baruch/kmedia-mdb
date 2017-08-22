@@ -4,7 +4,8 @@ import { translate } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Grid, List, Table } from 'semantic-ui-react';
 
-import { CT_DAILY_LESSON, CT_LESSON_PART, CT_SPECIAL_LESSON } from '../../../helpers/consts';
+import { CT_LESSON_PART } from '../../../helpers/consts';
+import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { canonicalLink } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 
@@ -19,28 +20,15 @@ class LessonsList extends PureComponent {
     items: []
   };
 
-  collectionsBreakdown = (collections) => {
-    const lessons = [];
-    const others  = [];
-    Object.values(collections || {}).forEach(x => {
-      if (x.content_type === CT_DAILY_LESSON || x.content_type === CT_SPECIAL_LESSON) {
-        lessons.push(x);
-      } else {
-        others.push(x);
-      }
-    });
-    return { lessons, others };
-  };
-
   renderPart = (part, t) => {
-    const { lessons, others } = this.collectionsBreakdown(part.collections);
+    const breakdown = new CollectionsBreakdown(Object.values(part.collections || {}));
 
-    const relatedItems = lessons.map(x => (
+    const relatedItems = breakdown.getDailyLessons().map(x => (
         <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
           {t(`constants.content-types.${x.content_type}`)} {t('values.date', { date: new Date(x.film_date) })}
         </List.Item>
       )
-    ).concat(others.map(x => (
+    ).concat(breakdown.getAllButDailyLessons().map(x => (
       <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
         {x.name}
       </List.Item>
@@ -80,16 +68,16 @@ class LessonsList extends PureComponent {
     let units = [];
     if (collection.content_units) {
       units = collection.content_units.map(unit => {
-        const { lessons, others } = this.collectionsBreakdown(unit.collections);
+        const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
 
-        const relatedItems = lessons
+        const relatedItems = breakdown.getDailyLessons()
           .filter(x => x.id !== collection.id)
           .map(x => (
               <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
                 {t(`constants.content-types.${x.content_type}`)} {t('values.date', { date: new Date(x.film_date) })}
               </List.Item>
             )
-          ).concat(others.map(x => (
+          ).concat(breakdown.getAllButDailyLessons().map(x => (
             <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
               {x.name}
             </List.Item>

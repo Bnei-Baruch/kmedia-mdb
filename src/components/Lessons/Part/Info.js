@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Header, List } from 'semantic-ui-react';
 
-import { intersperse, tracePath } from '../../../helpers/utils';
+import { canonicalLink, intersperse, tracePath } from '../../../helpers/utils';
 import { stringify as urlSearchStringify } from '../../../helpers/url';
+import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { selectors as sourcesSelectors } from '../../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../../redux/modules/tags';
 import { filtersTransformer } from '../../../filters';
@@ -25,8 +26,8 @@ class Info extends Component {
   };
 
   render() {
-    const { lesson = {}, getSourceById, getTagById, t } = this.props;
-    const { name, film_date: filmDate, sources, tags }  = lesson;
+    const { lesson = {}, getSourceById, getTagById, t }             = this.props;
+    const { name, film_date: filmDate, sources, tags, collections } = lesson;
 
     const tagLinks = Array.from(intersperse(
       (tags || []).map((x) => {
@@ -58,6 +59,13 @@ class Info extends Component {
         return <Link key={x} to={{ pathname: '/lessons', search: urlSearchStringify(query) }}>{display}</Link>;
       }), ', '));
 
+    const breakdown   = new CollectionsBreakdown(Object.values(collections || {}));
+    const eventsLinks = Array.from(intersperse(
+      breakdown.getEvents().map(x => (
+          <Link key={x.id} to={canonicalLink(x)}>{x.name}</Link>
+        )
+      ), ', '));
+
     return (
       <div>
         <Header as="h3">
@@ -81,11 +89,14 @@ class Info extends Component {
                 &nbsp;{sourcesLinks}
               </List.Item>
           }
-
-          <List.Item>
-            <strong>{t('lessons.part.info.related-event')}:</strong>
-            &nbsp;<a href="">World Israel Congress 2016</a>
-          </List.Item>
+          {
+            eventsLinks.length === 0 ?
+              null :
+              <List.Item>
+                <strong>{t('lessons.part.info.related-event')}:</strong>
+                &nbsp;{eventsLinks}
+              </List.Item>
+          }
         </List>
       </div>
     );
