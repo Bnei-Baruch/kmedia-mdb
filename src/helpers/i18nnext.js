@@ -45,7 +45,6 @@ i18n
       format: function (value, format, lng) {
         if (value instanceof Date) {
           return moment(value).format(format);
-          // return new Intl.DateTimeFormat(lng).format(value);
         }
         return value;
       }

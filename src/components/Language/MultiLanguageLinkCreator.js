@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import hoistStatics from 'hoist-non-react-statics';
 import { Link, withRouter } from 'react-router-dom';
-import { prefixWithLanguage } from '../../helpers/language';
+
+import { prefixWithLanguage } from '../../helpers/url';
 
 /**
  * multiLanguageLinkCreator - an higher order component to create a link that allows navigating
@@ -41,7 +42,7 @@ const multiLanguageLinkCreator = () => (WrappedComponent) => {
       to: undefined
     };
 
-    prefixWithLanguage = (path) => {
+    prefixPath = (path) => {
       const { location, language } = this.props;
       return prefixWithLanguage(path, location, language);
     };
@@ -52,7 +53,7 @@ const multiLanguageLinkCreator = () => (WrappedComponent) => {
       let toWithLanguage;
 
       if (typeof navigateTo === 'string') {
-        toWithLanguage = this.prefixWithLanguage(navigateTo);
+        toWithLanguage = this.prefixPath(navigateTo);
       } else {
         if (!navigateTo) {
           navigateTo = location;
@@ -60,7 +61,7 @@ const multiLanguageLinkCreator = () => (WrappedComponent) => {
 
         toWithLanguage = {
           ...navigateTo,
-          pathname: this.prefixWithLanguage(navigateTo.pathname)
+          pathname: this.prefixPath(navigateTo.pathname)
         };
       }
 

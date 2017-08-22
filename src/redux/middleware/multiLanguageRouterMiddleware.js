@@ -1,5 +1,6 @@
-import { routerMiddleware as createRouterMiddleware, CALL_HISTORY_METHOD } from 'react-router-redux';
-import { prefixWithLanguage } from '../../helpers/language';
+import { CALL_HISTORY_METHOD, routerMiddleware as createRouterMiddleware } from 'react-router-redux';
+
+import { prefixWithLanguage } from '../../helpers/url';
 
 /**
  * This middleware uses react-router-redux's middleware and prefixes the location change depending on the language
@@ -13,7 +14,7 @@ export default function multiLanguageRouterMiddleware(history) {
     }
 
     const { payload: { args } } = action;
-    const { location } = history;
+    const { location }          = history;
 
     if (Array.isArray(args) && args[0]) {
       const firstArg = args[0];
