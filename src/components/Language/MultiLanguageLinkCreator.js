@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import hoistStatics from 'hoist-non-react-statics';
 import { Link, withRouter } from 'react-router-dom';
-import { LANGUAGES } from '../../helpers/consts';
-import { isAbsoluteUrl } from '../../helpers/utils';
+import { prefixWithLanguage } from '../../helpers/language';
 
 /**
  * multiLanguageLinkCreator - an higher order component to create a link that allows navigating
@@ -22,22 +21,7 @@ import { isAbsoluteUrl } from '../../helpers/utils';
  * i.e - use <Component to="/some-path" language="ru" /> instead of <Component to="/ru/some-path" />
  */
 
-const ensureStartsWithSlash = str => str && (str[0] === '/' ? str : `/${str}`);
-const splitLanguagePath = (path) => {
-  const pathWithSlash = ensureStartsWithSlash(path);
-  const parts = pathWithSlash.split('/');
 
-  if (LANGUAGES[parts[1]]) {
-    return {
-      language: parts[1],
-      path: ensureStartsWithSlash(parts.slice(2).join('/')) || '/'
-    };
-  }
-
-  return {
-    path: pathWithSlash
-  };
-};
 
 const multiLanguageLinkCreator = () => (WrappedComponent) => {
   class MultiLanguageLinkHOC extends Component {
@@ -58,18 +42,8 @@ const multiLanguageLinkCreator = () => (WrappedComponent) => {
     };
 
     prefixWithLanguage = (path) => {
-      // NOTE: (yaniv) this assumes we don't use an absolute url to kmedia - might need to fix this
-      if (isAbsoluteUrl(path)) {
-        return path;
-      }
-
-      const { location, language: propLanguage } = this.props;
-      const { language: languagePrefix, path: pathSuffix } = splitLanguagePath(path);
-      const { language: currentPathLangPrefix } = splitLanguagePath(location.pathname);
-
-      // priority: language from props > language from link path > language from current path
-      const language = propLanguage || languagePrefix || currentPathLangPrefix || '';
-      return language ? `/${language}${pathSuffix}` : pathSuffix;
+      const { location, language } = this.props;
+      return prefixWithLanguage(path, location, language);
     };
 
     render() {
