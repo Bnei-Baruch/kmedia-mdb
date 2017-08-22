@@ -65,6 +65,9 @@
     "pagination-results": "Results {{start}} - {{end}} of {{total}}"
   },
   "lessons": {
+    "list": {
+      "related": "Related to"
+    },
     "part": {
       "info": {
         "tags": "Tags",

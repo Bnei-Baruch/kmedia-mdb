@@ -62,6 +62,9 @@
     "pagination-results": "תוצאות {{start}} - {{end}} מתוך {{total}}"
   },
   "lessons": {
+    "list": {
+      "related": "קשור ל"
+    },
     "part": {
       "info": {
         "tags": "תגיות",

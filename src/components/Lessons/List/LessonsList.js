@@ -50,7 +50,7 @@ class LessonsList extends PureComponent {
                 <List size="tiny" divided horizontal link>
                   <List.Item>
                     <List.Header>
-                      Related to:
+                      {t('lessons.list.related')}:
                     </List.Header>
                   </List.Item>
                   {relatedItems}
@@ -95,7 +95,7 @@ class LessonsList extends PureComponent {
                     <List size="tiny" divided horizontal link>
                       <List.Item>
                         <List.Header>
-                          Related to:
+                          {t('lessons.list.related')}:
                         </List.Header>
                       </List.Item>
                       {relatedItems}
