@@ -59,6 +59,8 @@
     "lesson-not-found-subtext": "Try the <1>lessons list</1>...",
     "program-not-found": "Couldn't find program",
     "program-not-found-subtext": "Try the <1>programs list</1>...",
+    "event-not-found": "Couldn't find event",
+    "event-not-found-subtext": "Try the <1>events list</1>...",
     "no-files": "No Files",
     "no-playable-files": "No Playable Files",
     "no-results": "No results",
