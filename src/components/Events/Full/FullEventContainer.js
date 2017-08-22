@@ -34,6 +34,10 @@ class FullEventContainer extends Component {
     if (nextProps.match.params.id !== this.props.match.params.id) {
       this.askForData(nextProps.match.params.id);
     }
+
+    if (nextProps.language !== this.props.language) {
+      this.askForData(nextProps.match.params.id);
+    }
   }
 
   askForData = (id) => {
@@ -48,7 +52,7 @@ class FullEventContainer extends Component {
 }
 
 function mapState(state, props) {
-  const id = props.match.params.id;
+  const id        = props.match.params.id;
   const fullEvent = mdb.getDenormCollection(state.mdb, id);
 
   return {
