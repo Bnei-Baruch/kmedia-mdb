@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
-import { Link, NavLink } from 'react-router-dom';
 import { Menu, Table } from 'semantic-ui-react';
 
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
+import Link from '../../Language/MultiLanguageLink';
+import NavLink from '../../Language/MultiLanguageNavLink';
 import * as shapes from '../../shapes';
 
 class FullEvent extends Component {

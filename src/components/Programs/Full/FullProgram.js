@@ -5,11 +5,11 @@ import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
 import { Menu, Table } from 'semantic-ui-react';
 
-import Link from '../../Language/MultiLanguageLink';
-import NavLink from '../../Language/MultiLanguageNavLink';
 
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
+import Link from '../../Language/MultiLanguageLink';
+import NavLink from '../../Language/MultiLanguageNavLink';
 import * as shapes from '../../shapes';
 
 class FullProgram extends Component {

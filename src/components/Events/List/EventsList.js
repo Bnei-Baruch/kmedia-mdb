@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Table } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+
+import Link from '../../Language/MultiLanguageLink';
 import * as shapes from '../../shapes';
 
 class EventsList extends PureComponent {

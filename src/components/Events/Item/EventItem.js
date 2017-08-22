@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Trans, translate } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
+import Link from '../../Language/MultiLanguageLink';
 import RMPVideoBox from '../../shared/UnitPlayer/RMPVideoBox';
 import * as shapes from '../../shapes';
 
