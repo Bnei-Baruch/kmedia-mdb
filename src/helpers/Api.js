@@ -7,18 +7,19 @@ const API_BACKEND = process.env.NODE_ENV === 'production' ?
 class Requests {
   static get        = url => zlFetch(`${API_BACKEND}${url}`);
   static makeParams = params =>
-    `${Object.entries(params).map((pair) => {
-      const key   = pair[0];
-      const value = pair[1];
+    `${Object.entries(params)
+      .filter(([k, v]) => v !== undefined && v !== null)
+      .map((pair) => {
+        const key   = pair[0];
+        const value = pair[1];
 
-      if (Array.isArray(value)) {
-        return value.map(val => `${key}=${val}`).join('&');
-      }
+        if (Array.isArray(value)) {
+          return value.map(val => `${key}=${val}`).join('&');
+        }
 
-      return `${key}=${value}`;
-    }).join('&')}`;
+        return `${key}=${value}`;
+      }).join('&')}`;
 
-  static limit  = (page, count) => `page_no=${page}&page_size=${count}`;
   static encode = encodeURIComponent;
 }
 
@@ -28,12 +29,16 @@ export default class Api {
   static sources    = ({ language }) => Requests.get(`sources?${Requests.makeParams({ language })}`);
   static tags       = ({ language }) => Requests.get(`tags?${Requests.makeParams({ language })}`);
 
-  static lessons     = ({ language, pageNo, pageSize, ...rest }) => {
-    const params = Object.assign({}, { language, ...rest });
-    return Requests.get(`lessons?${Requests.limit(pageNo, pageSize)}&${Requests.makeParams(params)}`);
+  static lessons = ({ pageNo: page_no, pageSize: page_size, ...rest }) => {
+    return Requests.get(`lessons?${Requests.makeParams({page_no, page_size, ...rest})}`);
   };
-  static collections = ({ contentTypes: content_type, language, pageNo, pageSize, ...rest }) => {
-    const params = Object.assign({}, { language, content_type, ...rest });
-    return Requests.get(`collections?${Requests.limit(pageNo, pageSize)}&${Requests.makeParams(params)}`);
+
+  static collections = ({ contentTypes: content_type, pageNo: page_no, pageSize: page_size, ...rest }) => {
+    return Requests.get(`collections?${Requests.makeParams({page_no, page_size, content_type, ...rest})}`);
   };
+
+  static units = ({ contentTypes: content_type, pageNo: page_no, pageSize: page_size, ...rest }) => {
+    return Requests.get(`content_units?${Requests.makeParams({page_no, page_size, content_type, ...rest})}`);
+  };
+
 }

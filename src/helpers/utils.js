@@ -1,4 +1,31 @@
-import { MEDIA_TYPES } from './consts';
+import {
+  CT_CHILDREN_LESSON_PART,
+  CT_CLIP,
+  CT_CONGRESS,
+  CT_DAILY_LESSON,
+  CT_EVENT_PART,
+  CT_FRIENDS_GATHERING,
+  CT_FRIENDS_GATHERINGS,
+  CT_FULL_LESSON,
+  CT_HOLIDAY,
+  CT_KITEI_MAKOR,
+  CT_LECTURE,
+  CT_LECTURE_SERIES,
+  CT_LESSON_PART,
+  CT_MEAL,
+  CT_MEALS,
+  CT_PICNIC,
+  CT_SPECIAL_LESSON,
+  CT_TEXT,
+  CT_TRAINING,
+  CT_UNITY_DAY,
+  CT_UNKNOWN,
+  CT_VIDEO_PROGRAM,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  CT_VIRTUAL_LESSON,
+  CT_WOMEN_LESSON_PART,
+  MEDIA_TYPES
+} from './consts';
 
 export const isEmpty = (obj) => {
   // null and undefined are "empty"
@@ -129,4 +156,50 @@ export const physicalFile = (file, ext = false) => {
     suffix = `.${filenameExtension(file.name)}`;
   }
   return `http://cdn.kabbalahmedia.info/${file.id}${suffix}`;
+};
+
+export const canonicalLink = (entity) => {
+  if (!entity) {
+    return '/';
+  }
+
+  switch (entity.content_type) {
+  case CT_DAILY_LESSON:
+  case CT_SPECIAL_LESSON:
+    return `/lessons/full/${entity.id}`;
+  case CT_VIDEO_PROGRAM:
+    return `/programs/full/${entity.id}`;
+  case CT_LECTURE_SERIES:
+    return `/lectures/full/${entity.id}`;
+  case CT_FRIENDS_GATHERINGS:
+  case CT_MEALS:
+    return '/';
+  case CT_CONGRESS:
+  case CT_HOLIDAY:
+  case CT_PICNIC:
+  case CT_UNITY_DAY:
+    return `/events/full/${entity.id}`;
+  case CT_LESSON_PART:
+    return `/lessons/part/${entity.id}`;
+  case CT_LECTURE:
+  case CT_VIRTUAL_LESSON:
+  case CT_CHILDREN_LESSON_PART:
+  case CT_WOMEN_LESSON_PART:
+    return `/lectures/part/${entity.id}`;
+  case CT_VIDEO_PROGRAM_CHAPTER:
+    return `/programs/chapter/${entity.id}`;
+  case CT_EVENT_PART:
+  case CT_FULL_LESSON:
+    return `/events/item/${entity.id}`;
+  case CT_FRIENDS_GATHERING:
+  case CT_MEAL:
+  case CT_TEXT:
+  case CT_UNKNOWN:
+  case CT_CLIP:
+  case CT_TRAINING:
+  case CT_KITEI_MAKOR:
+    return '/';
+  default:
+    return '/';
+  }
 };
