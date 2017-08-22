@@ -203,7 +203,7 @@ const _setHydratedFilterValues = (state, action) => {
   return {
     ...state,
     [namespace]: {
-      ...oldNamespace,
+      // ...oldNamespace,  If we're hydrating then we need a fresh state
       ...Object.keys(filters).reduce((acc, name) => {
         const value = filters[name];
         acc[name]   = {

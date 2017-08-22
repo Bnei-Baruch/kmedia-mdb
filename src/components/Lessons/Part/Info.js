@@ -5,8 +5,10 @@ import { Link } from 'react-router-dom';
 import { Header, List } from 'semantic-ui-react';
 
 import { intersperse, tracePath } from '../../../helpers/utils';
+import { stringify as urlSearchStringify } from '../../../helpers/url';
 import { selectors as sourcesSelectors } from '../../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../../redux/modules/tags';
+import { filtersTransformer } from '../../../filters';
 import * as shapes from '../../shapes';
 
 class Info extends Component {
@@ -35,7 +37,10 @@ class Info extends Component {
 
         const path    = tracePath(tag, getTagById);
         const display = path.map(y => y.label).join(' - ');
-        return <Link key={x} to={`/tags/${x}`}>{display}</Link>;
+        const query   = filtersTransformer.toQueryParams(
+          [{ name: 'topics-filter', values: [x] }]);
+
+        return <Link key={x} to={{ pathname: '/lessons', search: urlSearchStringify(query) }}>{display}</Link>;
       }), ', '));
 
     const sourcesLinks = Array.from(intersperse(
@@ -44,9 +49,13 @@ class Info extends Component {
         if (!source) {
           return '';
         }
+
         const path    = tracePath(source, getSourceById);
         const display = path.map(y => y.name).join('. ');
-        return <Link key={x} to={`/sources/${x}`}>{display}</Link>;
+        const query   = filtersTransformer.toQueryParams(
+          [{ name: 'sources-filter', values: [path.map(y => y.id)] }]);
+
+        return <Link key={x} to={{ pathname: '/lessons', search: urlSearchStringify(query) }}>{display}</Link>;
       }), ', '));
 
     return (
