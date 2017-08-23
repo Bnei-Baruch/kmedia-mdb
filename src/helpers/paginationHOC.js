@@ -1,5 +1,6 @@
-/* eslint-disable react/prefer-stateless-function,arrow-body-style */
+/* eslint-disable react/prefer-stateless-function,arrow-body-style,react/no-multi-comp */
 import React from 'react';
+import ResultsPageHeader from '../components/shared/ResultsPageHeader';
 
 const getPageNo = (search) => {
   let page = 0;
@@ -27,13 +28,18 @@ const handlePageChange = (pageNo, props) => {
   askForData(data);
 };
 
+const resultsPageHeader = props => (
+  <ResultsPageHeader {...props} />
+);
+
 const withPagination = (WrappedComponent) => {
   return class extends React.Component {
     render() {
       const newProps = {
         getPageNo,
         askForData,
-        handlePageChange
+        handlePageChange,
+        resultsPageHeader
       };
       return <WrappedComponent  {...this.props} {...newProps} />;
     }

@@ -30,6 +30,7 @@ class LessonsContainer extends Component {
     getPageNo: PropTypes.func.isRequired,
     askForData: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
+    resultsPageHeader: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -73,7 +74,7 @@ class LessonsContainer extends Component {
   };
 
   render() {
-    const { pageNo, total, items, pageSize, language, handlePageChange } = this.props;
+    const { pageNo, total, items, pageSize, language, handlePageChange, resultsPageHeader } = this.props;
 
     return (
       <Grid.Column width={16}>
@@ -84,6 +85,7 @@ class LessonsContainer extends Component {
           onChange={() => handlePageChange(1, this.props)}
           onHydrated={this.handleFiltersHydrated}
         />
+        {resultsPageHeader(this.props)}
         <Divider />
         <LessonsList items={items} />
         <Pagination

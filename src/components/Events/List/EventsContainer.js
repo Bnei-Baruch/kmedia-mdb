@@ -31,6 +31,7 @@ class EventsContainer extends Component {
     getPageNo: PropTypes.func.isRequired,
     askForData: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
+    resultsPageHeader: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -61,11 +62,11 @@ class EventsContainer extends Component {
   }
 
   render() {
-    const { pageNo, total, items, pageSize, handlePageChange } = this.props;
+    const { pageNo, total, items, pageSize, handlePageChange, resultsPageHeader } = this.props;
 
     return (
       <Grid.Column width={16}>
-        <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+        {resultsPageHeader(this.props)}
         <Divider />
         <EventsList items={items} />
         <Pagination
