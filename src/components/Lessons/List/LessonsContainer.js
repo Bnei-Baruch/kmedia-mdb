@@ -10,7 +10,6 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as filters } from '../../../redux/modules/filters';
 import * as shapes from '../../shapes';
-import Pagination from '../../shared/Pagination';
 import LessonsFilters from './LessonsFilters';
 import LessonsList from './LessonsList';
 import withPagination from '../../../helpers/paginationHOC';
@@ -31,6 +30,7 @@ class LessonsContainer extends Component {
     askForData: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
     resultsPageHeader: PropTypes.func.isRequired,
+    Pagination: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -74,7 +74,7 @@ class LessonsContainer extends Component {
   };
 
   render() {
-    const { pageNo, total, items, pageSize, language, handlePageChange, resultsPageHeader } = this.props;
+    const { pageNo, total, items, pageSize, handlePageChange resultsPageHeader, Pagination } = this.props;
 
     return (
       <Grid.Column width={16}>
@@ -88,13 +88,7 @@ class LessonsContainer extends Component {
         {resultsPageHeader(this.props)}
         <Divider />
         <LessonsList items={items} />
-        <Pagination
-          pageNo={pageNo}
-          pageSize={pageSize}
-          total={total}
-          language={language}
-          onChange={x => handlePageChange(x, this.props)}
-        />
+        <Pagination {...this.props} onChange={x => handlePageChange(x, this.props)} />
       </Grid.Column>
     );
   }

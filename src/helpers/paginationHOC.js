@@ -1,6 +1,7 @@
 /* eslint-disable react/prefer-stateless-function,arrow-body-style,react/no-multi-comp */
 import React from 'react';
 import ResultsPageHeader from '../components/shared/ResultsPageHeader';
+import Pagination from '../components/shared/Pagination';
 
 const getPageNo = (search) => {
   let page = 0;
@@ -39,7 +40,8 @@ const withPagination = (WrappedComponent) => {
         getPageNo,
         askForData,
         handlePageChange,
-        resultsPageHeader
+        resultsPageHeader,
+        Pagination,
       };
       return <WrappedComponent  {...this.props} {...newProps} />;
     }
