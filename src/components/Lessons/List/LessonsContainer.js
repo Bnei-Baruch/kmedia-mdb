@@ -17,8 +17,8 @@ import withPagination from '../../../helpers/paginationHOC';
 class LessonsContainer extends Component {
 
   static propTypes = {
-    pageNo: PropTypes.number,
-    total: PropTypes.number,
+    pageNo: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired,
     items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.LessonCollection, shapes.LessonPart])),
     location: shapes.HistoryLocation.isRequired,
     setPage: PropTypes.func.isRequired,
@@ -33,8 +33,6 @@ class LessonsContainer extends Component {
   };
 
   static defaultProps = {
-    pageNo: 1,
-    total: 0,
     items: [],
     isFiltersHydrated: false,
   };

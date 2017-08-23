@@ -15,8 +15,8 @@ import ProgramsList from './ProgramsList';
 class ProgramsContainer extends Component {
 
   static propTypes = {
-    pageNo: PropTypes.number,
-    total: PropTypes.number,
+    pageNo: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired,
     items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.ProgramCollection, shapes.ProgramChapter])),
     location: shapes.HistoryLocation.isRequired,
     fetchList: PropTypes.func.isRequired,
@@ -31,8 +31,6 @@ class ProgramsContainer extends Component {
   };
 
   static defaultProps = {
-    pageNo: 1,
-    total: 0,
     items: [],
   };
 

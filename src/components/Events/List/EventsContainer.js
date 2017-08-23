@@ -17,8 +17,8 @@ const allEventTypes = [CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY];
 class EventsContainer extends Component {
 
   static propTypes = {
-    pageNo: PropTypes.number,
-    total: PropTypes.number,
+    pageNo: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired,
     items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.EventCollection, shapes.EventItem])),
     contentTypes: PropTypes.arrayOf(PropTypes.string),
     location: shapes.HistoryLocation.isRequired,
@@ -34,8 +34,6 @@ class EventsContainer extends Component {
   };
 
   static defaultProps = {
-    pageNo: 1,
-    total: 0,
     items: [],
     contentTypes: allEventTypes
   };
