@@ -63,7 +63,7 @@
     "event-not-found-subtext": "Попробуйте <1>events list</1>...",
     "no-files": "Нет файлов",
     "no-playable-files": "Не файлов для воспроизведения",
-    "no-results": "Нет резулчтатов",
+    "no-results": "Нет результатов",
     "pagination-results": "Результаты {{start}} - {{end}} из {{total}}"
   },
   "lessons": {
