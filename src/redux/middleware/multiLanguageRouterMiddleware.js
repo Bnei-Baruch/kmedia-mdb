@@ -25,6 +25,6 @@ export default function multiLanguageRouterMiddleware(history) {
       }
     }
 
-    return routerMiddleware(next, action);
+    return routerMiddleware()(next)(action);
   };
 }
