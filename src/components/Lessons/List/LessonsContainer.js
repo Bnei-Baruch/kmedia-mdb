@@ -12,7 +12,7 @@ import { selectors as filters } from '../../../redux/modules/filters';
 import * as shapes from '../../shapes';
 import LessonsFilters from './LessonsFilters';
 import LessonsList from './LessonsList';
-import withPagination from '../../../helpers/paginationHOC';
+import withPagination from '../../../helpers/pagination/paginationHOC';
 
 class LessonsContainer extends Component {
 

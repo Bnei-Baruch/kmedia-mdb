@@ -1,7 +1,7 @@
 /* eslint-disable react/prefer-stateless-function,arrow-body-style,react/no-multi-comp */
 import React from 'react';
-import ResultsPageHeader from '../components/shared/ResultsPageHeader';
-import Pagination from '../components/shared/Pagination';
+import ResultsPageHeader from './ResultsPageHeader';
+import Pagination from './Pagination';
 
 const getPageNo = (search) => {
   let page = 0;
