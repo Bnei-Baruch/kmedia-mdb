@@ -21,7 +21,6 @@ class LessonsContainer extends Component {
     total: PropTypes.number,
     items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.LessonCollection, shapes.LessonPart])),
     location: shapes.HistoryLocation.isRequired,
-    fetchList: PropTypes.func.isRequired,
     setPage: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
     pageSize: PropTypes.number.isRequired,
