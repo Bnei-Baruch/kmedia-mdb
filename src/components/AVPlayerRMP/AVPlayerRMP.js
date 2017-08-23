@@ -24,7 +24,7 @@ class AVPlayerRMP extends PureComponent {
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
     defaultValue: PropTypes.string.isRequired,
     onLanguageChange: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -62,8 +62,37 @@ class AVPlayerRMP extends PureComponent {
     return ret;
   };
 
+  // Remember the current time and isPlaying while switching.
+  onSwitchAV = (...params) => {
+    const { onSwitchAV } = this.props;
+    const { currentTime, isPlaying } = this.player_.context.media;
+    this.setState({ wasCurrentTime: currentTime, wasPlaying: isPlaying }, () => {
+      onSwitchAV(...params);
+    });
+  }
+
+  // Remember the current time and isPlaying while switching.
+  onLanguageChange = (...params) => {
+    const { onLanguageChange } = this.props;
+    const { currentTime, isPlaying } = this.player_.context.media;
+    this.setState({ wasCurrentTime: currentTime, wasPlaying: isPlaying }, () => {
+      onLanguageChange(...params);
+    });
+  }
+
+  onPlayerReady = () => {
+    const { wasCurrentTime, wasPlaying } = this.state;
+    if (wasCurrentTime) {
+      this.player_.context.media.seekTo(wasCurrentTime);
+    }
+    if (wasPlaying) {
+      this.player_.context.media.play();
+    }
+    this.setState({wasCurrentTime: undefined, wasPlaying: undefined});
+  }
+
   render() {
-    const { audio, video, active, onSwitchAV, languages, defaultValue, onLanguageChange, t } = this.props;
+    const { audio, video, active, languages, defaultValue, t } = this.props;
 
     const centerPlay = active === video ? (
       <div className="media-center-control">
@@ -87,6 +116,7 @@ class AVPlayerRMP extends PureComponent {
                     src={physicalFile(active, true)}
                     vendor={active === video ? 'video' : 'audio'}
                     autoPlay={false}
+                    onReady={this.onPlayerReady}
                     loop="false"
                     preload="auto"
                     onClick={playPause}
@@ -100,14 +130,14 @@ class AVPlayerRMP extends PureComponent {
                       <AVAudioVideo
                         isAudio={audio === active}
                         isVideo={video === active}
-                        setAudio={onSwitchAV}
-                        setVideo={onSwitchAV}
+                        setAudio={this.onSwitchAV}
+                        setVideo={this.onSwitchAV}
                         t={t}
                       />
                       <AVLanguage
                         languages={languages}
                         defaultValue={defaultValue}
-                        onSelect={onLanguageChange}
+                        onSelect={this.onLanguageChange}
                       />
                       <AVFullScreen />
                     </div>
