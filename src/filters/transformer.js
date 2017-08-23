@@ -33,6 +33,9 @@ const filtersTransformer = {
   toQueryParams(filters /* arrayOf({ name: string, values: array }) */) {
     const queryParams = filters.reduce((acc, filter) => {
       const definition = this.definitionsByName[filter.name];
+      if (definition === undefined) {
+        return {};
+      }
       const paramValues = filterValuesToQueryValues(definition, filter.values);
 
       return Object.assign(acc, { [definition.queryKey]: paramValues });
@@ -60,6 +63,10 @@ const filtersTransformer = {
   toApiParams(filters /* arrayOf({ name: string, values: array}) */) {
     return filters.reduce((acc, filter) => {
       const definition = this.definitionsByName[filter.name];
+      if (definition === undefined) {
+        return {};
+      }
+
       const apiParams = filterValuesToApiParams(definition, filter.values);
 
       if (!isEmpty(apiParams)) {
