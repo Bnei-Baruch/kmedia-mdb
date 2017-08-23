@@ -29,7 +29,7 @@ class LessonsContainer extends Component {
     getPageNo: PropTypes.func.isRequired,
     askForData: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
-    resultsPageHeader: PropTypes.func.isRequired,
+    ResultsPageHeader: PropTypes.func.isRequired,
     Pagination: PropTypes.func.isRequired,
   };
 
@@ -74,7 +74,7 @@ class LessonsContainer extends Component {
   };
 
   render() {
-    const { pageNo, total, items, pageSize, handlePageChange resultsPageHeader, Pagination } = this.props;
+    const { pageNo, total, items, pageSize, handlePageChange, ResultsPageHeader, Pagination } = this.props;
 
     return (
       <Grid.Column width={16}>
@@ -85,7 +85,7 @@ class LessonsContainer extends Component {
           onChange={() => handlePageChange(1, this.props)}
           onHydrated={this.handleFiltersHydrated}
         />
-        {resultsPageHeader(this.props)}
+        <ResultsPageHeader {...this.props} />
         <Divider />
         <LessonsList items={items} />
         <Pagination {...this.props} onChange={x => handlePageChange(x, this.props)} />

@@ -10,8 +10,6 @@ import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions, selectors as programSelectors } from '../../../redux/modules/programs';
 import * as shapes from '../../shapes';
 import withPagination from '../../../helpers/paginationHOC';
-import Pagination from '../../shared/Pagination';
-import ResultsPageHeader from '../../shared/ResultsPageHeader';
 import ProgramsList from './ProgramsList';
 
 class ProgramsContainer extends Component {
@@ -28,7 +26,8 @@ class ProgramsContainer extends Component {
     getPageNo: PropTypes.func.isRequired,
     askForData: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
-    resultsPageHeader: PropTypes.func.isRequired,
+    ResultsPageHeader: PropTypes.func.isRequired,
+    Pagination: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -58,19 +57,14 @@ class ProgramsContainer extends Component {
   }
 
   render() {
-    const { pageNo, total, items, pageSize, handlePageChange, resultsPageHeader } = this.props;
+    const { items, handlePageChange, ResultsPageHeader, Pagination } = this.props;
 
     return (
       <Grid.Column width={16}>
-        {resultsPageHeader(this.props)}
+        <ResultsPageHeader {...this.props} />
         <Divider />
         <ProgramsList items={items} />
-        <Pagination
-          pageNo={pageNo}
-          pageSize={pageSize}
-          total={total}
-          onChange={x => handlePageChange(x, this.props)}
-        />
+        <Pagination {...this.props} onChange={x => handlePageChange(x, this.props)} />
       </Grid.Column>
     );
   }

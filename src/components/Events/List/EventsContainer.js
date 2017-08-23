@@ -10,8 +10,6 @@ import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions, selectors as eventSelectors } from '../../../redux/modules/events';
 import * as shapes from '../../shapes';
 import withPagination from '../../../helpers/paginationHOC';
-import Pagination from '../../shared/Pagination';
-import ResultsPageHeader from '../../shared/ResultsPageHeader';
 import EventsList from './EventsList';
 
 const allEventTypes = [CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY];
@@ -31,7 +29,8 @@ class EventsContainer extends Component {
     getPageNo: PropTypes.func.isRequired,
     askForData: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
-    resultsPageHeader: PropTypes.func.isRequired,
+    ResultsPageHeader: PropTypes.func.isRequired,
+    Pagination: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -62,19 +61,14 @@ class EventsContainer extends Component {
   }
 
   render() {
-    const { pageNo, total, items, pageSize, handlePageChange, resultsPageHeader } = this.props;
+    const { items, handlePageChange, ResultsPageHeader, Pagination } = this.props;
 
     return (
       <Grid.Column width={16}>
-        {resultsPageHeader(this.props)}
+        <ResultsPageHeader {...this.props} />
         <Divider />
         <EventsList items={items} />
-        <Pagination
-          pageNo={pageNo}
-          pageSize={pageSize}
-          total={total}
-          onChange={x => handlePageChange(x, this.props)}
-        />
+        <Pagination {...this.props} onChange={x => handlePageChange(x, this.props)} />
       </Grid.Column>
     );
   }

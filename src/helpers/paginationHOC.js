@@ -29,10 +29,6 @@ const handlePageChange = (pageNo, props) => {
   askForData(data);
 };
 
-const resultsPageHeader = props => (
-  <ResultsPageHeader {...props} />
-);
-
 const withPagination = (WrappedComponent) => {
   return class extends React.Component {
     render() {
@@ -40,7 +36,7 @@ const withPagination = (WrappedComponent) => {
         getPageNo,
         askForData,
         handlePageChange,
-        resultsPageHeader,
+        ResultsPageHeader,
         Pagination,
       };
       return <WrappedComponent  {...this.props} {...newProps} />;
