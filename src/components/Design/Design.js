@@ -1,122 +1,95 @@
 /* eslint-disable */
 
 import React, { Component } from 'react';
-import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, List, Popup, Table, Card, Image, Input, Search, Label, Container } from 'semantic-ui-react';
+import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, List, Popup, Table, Card, Image, Input, Search, Label, Container, Embed } from 'semantic-ui-react';
 const results ={
-    "hard drive": {
-      "name": "hard drive",
+    "search": {
+      "icon": "search",
+      "name": "Search",
       "results": [
-        {
-          "title": "Lesch - Rogahn",
-          "description": "Sharable transitional architecture",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/laurengray/128.jpg",
-          "price": "$18.13"
-        },
-        {
-          "title": "Nitzsche, Reichel and Hodkiewicz",
-          "description": "Self-enabling composite groupware",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/chrisvanderkooi/128.jpg",
-          "price": "$7.42"
-        },
-        {
-          "title": "Lynch and Sons",
-          "description": "Up-sized disintermediate framework",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/okandungel/128.jpg",
-          "price": "$22.29"
-        },
-        {
-          "title": "Corwin - Schmidt",
-          "description": "Profound client-server customer loyalty",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/BrianPurkiss/128.jpg",
-          "price": "$65.22"
-        }
+        {"title": "tod"}
       ]
     },
-    "sensor": {
-      "name": "sensor",
+    "date": {
+      "icon": "calendar",
+      "name": "Date",
       "results": [
-        {
-          "title": "McGlynn - Hamill",
-          "description": "Organized composite migration",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/karthipanraj/128.jpg",
-          "price": "$2.36"
-        },
-        {
-          "title": "Howell Inc",
-          "description": "Programmable cohesive knowledge base",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/uxalex/128.jpg",
-          "price": "$85.90"
-        },
-        {
-          "title": "Nitzsche, Keebler and Schmidt",
-          "description": "Polarised responsive system engine",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/abdulhyeuk/128.jpg",
-          "price": "$93.35"
-        },
-        {
-          "title": "Thompson Group",
-          "description": "Up-sized optimal intranet",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/g3d/128.jpg",
-          "price": "$29.83"
-        },
-        {
-          "title": "Wisozk - Crona",
-          "description": "Phased multimedia standardization",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/mugukamil/128.jpg",
-          "price": "$96.05"
-        }
+        {"title": "Today"}
       ]
     },
-    "bus": {
-      "name": "bus",
+    "sources": {
+      "icon": "book",
+      "name": "Sources",
       "results": [
-        {
-          "title": "Yundt, Lehner and Friesen",
-          "description": "Sharable motivating project",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/josevnclch/128.jpg",
-          "price": "$19.71"
-        },
-        {
-          "title": "Jones LLC",
-          "description": "Customizable fresh-thinking array",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/thedamianhdez/128.jpg",
-          "price": "$38.43"
-        },
-        {
-          "title": "Crooks, Parisian and Kozey",
-          "description": "Cross-group bandwidth-monitored product",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/carlosblanco_eu/128.jpg",
-          "price": "$28.42"
-        },
-        {
-          "title": "Barrows Inc",
-          "description": "Configurable leading edge website",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/andrewabogado/128.jpg",
-          "price": "$29.60"
-        },
-        {
-          "title": "Becker - Parisian",
-          "description": "Multi-tiered analyzing alliance",
-          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/aaronkwhite/128.jpg",
-          "price": "$3.92"
-        }
+        {"title": "Rabash > Articles > You Stand Today, All of You"}
+      ]
+    },
+    "topics": {
+      "icon": "tag",
+      "name": "Topics",
+      "results": [
+        {"title": "Kabbalah today"},
+        {"title":"Today and Tomorrow"}
       ]
     }
   }
-const categoryRenderer = ({ name }) => <Label as={'span'} content={name} />
-const resultRenderer = ({ title }) => <Label content={title} />
+const categoryRenderer = ({ name, icon }) => <div><Icon name={icon}/>{name}</div>
+const resultRenderer = ({ title }) => <div>{title}</div>
 class Design extends Component {
 
   render() {
     return (
       <Grid.Column width={16}>
 
+        <Header size='large' color='pink' inverted>Event Collection</Header>
+        <Divider/>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={3}>
+               <Image fluid shape='rounded' src='https://i1.sndcdn.com/artworks-000205720468-8rbpnk-t500x500.jpg' />
+            </Grid.Column>
+            <Grid.Column width={8}>
+              <Header as='h1'>
+                <Header.Content>
+                  <small className='text grey'>25-27 of August 2017</small>
+                  <br/>
+                  EUROPE 2.0<br/>THE FUTURE BEGINS NOW
+                  <Header.Subheader>
+                    Bonn Area, Germany
+                  </Header.Subheader>
+                </Header.Content>
+              </Header>
+              <p>
+                A series of conversations with Rabbi Dr. Michael Laitman, whose purpose is to create the infrastructure to promote every person, organization, society or country, to better understand the reality of our lives and to achieve a good life
+              </p>
+              
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+              <Embed
+                active={true}
+                aspectRatio="21:9"
+                iframe={{
+                  allowFullScreen: false,
+                  style: {
+                    border: 0
+                  },
+                  frameborder: "0"
+                }}
+                placeholder='/assets/images/image-16by9.png'
+                url='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d80860.06794871506!2d7.04726036282409!3d50.703664739362665!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47bee19f7ccbda49%3A0x86dbf8c6685c9617!2sBonn%2C+Germany!5e0!3m2!1sen!2sil!4v1503539041101'
+              />
 
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+        
         <Header size='large' color='pink' inverted>Programs Collection</Header>
         <Divider/>
         <Grid>
           <Grid.Row>
-            <Grid.Column width={4}>
+            <Grid.Column width={3}>
                <Image fluid shape='rounded' src='http://www.kab.co.il/images/attachments/91/276191_medium.jpg' />
             </Grid.Column>
             <Grid.Column width={8}>
@@ -216,6 +189,7 @@ class Design extends Component {
           <Menu.Item>Genre / Program</Menu.Item>
           <Menu.Item>Topic</Menu.Item>
           <Menu.Item className='index-filters__search'>
+
             <Search  category results={results} size='mini' placeholder='Search Programs...'categoryRenderer={categoryRenderer} resultRenderer={resultRenderer} />
           </Menu.Item>
         </Menu>
