@@ -11,19 +11,21 @@ export default class AVLanguage extends Component {
     onSelect: PropTypes.func,
     defaultValue: PropTypes.string,
     languages: PropTypes.arrayOf(PropTypes.string),
+    upward: PropTypes.bool,
   };
 
   static defaultProps = {
     onSelect: noop,
     defaultValue: LANG_HEBREW,
     languages: [],
+    upward: true,
   };
 
   handleChange = (e, data) =>
     this.props.onSelect(e, data.value);
 
   render() {
-    const { languages, defaultValue } = this.props;
+    const { languages, defaultValue, upward } = this.props;
 
     const options = LANGUAGE_OPTIONS
       .filter(x => languages.includes(x.value))
@@ -35,7 +37,7 @@ export default class AVLanguage extends Component {
           floating
           inline
           scrolling
-          upward
+          upward={upward}
           icon={null}
           selectOnBlur={false}
           options={options}

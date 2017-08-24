@@ -9,9 +9,14 @@ class AVMuteUnmute extends Component {
     media: PropTypes.shape({
       isMuted: PropTypes.bool.isRequired,
       volume: PropTypes.number.isRequired,
-      muteUnmute: PropTypes.func.isRequired
-    }).isRequired
+      muteUnmute: PropTypes.func.isRequired,
+    }).isRequired,
+    upward: PropTypes.bool,
   };
+
+  static defaultProps = {
+    upward: true,
+  }
 
   constructor(props) {
     super(props);
@@ -44,17 +49,17 @@ class AVMuteUnmute extends Component {
 
   // Handle volume change on bar
   componentDidMount() {
-    this.element.addEventListener('mousemove', this.handleMove);
-    this.element.addEventListener('touchmove', this.handleMove);
-    this.element.addEventListener('mouseup', this.handleEnd);
-    this.element.addEventListener('touchend', this.handleEnd);
+    document.addEventListener('mousemove', this.handleMove);
+    document.addEventListener('touchmove', this.handleMove);
+    document.addEventListener('mouseup', this.handleEnd);
+    document.addEventListener('touchend', this.handleEnd);
   }
 
   componentWillUnmount() {
-    this.element.removeEventListener('mousemove', this.handleMove);
-    this.element.removeEventListener('touchmove', this.handleMove);
-    this.element.removeEventListener('mouseup', this.handleEnd);
-    this.element.removeEventListener('touchend', this.handleEnd);
+    document.removeEventListener('mousemove', this.handleMove);
+    document.removeEventListener('touchmove', this.handleMove);
+    document.removeEventListener('mouseup', this.handleEnd);
+    document.removeEventListener('touchend', this.handleEnd);
   }
 
   handleStart = (e) => {
@@ -100,7 +105,7 @@ class AVMuteUnmute extends Component {
 
     const volumeStyle = {
       position: 'absolute',
-      bottom: 17,
+      bottom: this.props.upward ? 17 : -118,
       background: 'black',
       opacity: 0.65,
       visibility: volumeHover || wasMouseDown ? 'visible' : 'hidden',

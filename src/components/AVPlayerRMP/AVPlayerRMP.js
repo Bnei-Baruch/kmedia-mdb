@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Media, Player } from 'react-media-player';
+import classNames from 'classnames';
 
 import * as shapes from '../shapes';
 import { physicalFile } from '../../helpers/utils';
@@ -40,12 +41,16 @@ class AVPlayerRMP extends PureComponent {
 
     this.state = {
       videoElement: null,
+      controlsVisible: true,
+      timeoutId: null,
     };
   }
 
   componentDidMount() {
     const videoElement = this.player_.instance;
     this.setState({ videoElement });
+    // By default hide controls after a while.
+    this.hideControlsTimeout();
   }
 
   buffers = () => {
@@ -91,8 +96,31 @@ class AVPlayerRMP extends PureComponent {
     this.setState({wasCurrentTime: undefined, wasPlaying: undefined});
   }
 
+  showControls = () => {
+    const { timeoutId } = this.state;
+    const newState = { controlsVisible: true };
+    if (timeoutId) {
+      this.setState({timeoutId: null}, () => {
+        clearTimeout(timeoutId);
+        this.setState({controlsVisible: true});
+      });
+    } else {
+      this.setState({controlsVisible: true});
+    }
+  }
+
+  hideControlsTimeout = () => {
+    if (!this.state.timeoutId) {
+      const timeoutId = setTimeout(() => {
+        this.setState({controlsVisible: false});
+      }, 2000);
+      this.setState({timeoutId});
+    }
+  }
+
   render() {
     const { audio, video, active, languages, defaultValue, t } = this.props;
+    const { controlsVisible } = this.state;
 
     const centerPlay = active === video ? (
       <div className="media-center-control">
@@ -110,7 +138,9 @@ class AVPlayerRMP extends PureComponent {
               <div className="media"
                    style={{minHeight: active === video ? 200 : 40,
                            minWidth: active === video ? 300 : 'auto'}}>
-                <div className="media-player">
+                <div className="media-player"
+                     onMouseMove={this.showControls}
+                     onMouseLeave={this.hideControlsTimeout}>
                   <Player
                     ref={c => this.player_ = c}
                     src={physicalFile(active, true)}
@@ -121,12 +151,13 @@ class AVPlayerRMP extends PureComponent {
                     preload="auto"
                     onClick={playPause}
                   />
-                  <div className="media-controls">
+                  <div className={classNames({'media-controls': true, fade: !controlsVisible})}>
                     <div className="controls-container">
                       <AVPlayPause />
                       <AVTimeElapsed />
                       <AVProgress buffers={this.buffers()} />
-                      <AVMuteUnmute />
+                      <AVMuteUnmute
+                        upward={video === active} />
                       <AVAudioVideo
                         isAudio={audio === active}
                         isVideo={video === active}
@@ -138,6 +169,7 @@ class AVPlayerRMP extends PureComponent {
                         languages={languages}
                         defaultValue={defaultValue}
                         onSelect={this.onLanguageChange}
+                        upward={video === active}
                       />
                       <AVFullScreen />
                     </div>
