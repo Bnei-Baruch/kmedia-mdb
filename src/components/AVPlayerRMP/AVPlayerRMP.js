@@ -49,7 +49,7 @@ class AVPlayerRMP extends PureComponent {
   componentDidMount() {
     const videoElement = this.player_.instance;
     this.setState({ videoElement });
-    // By default hide controls after a while.
+    // By default hide controls after a while if player playing.
     this.hideControlsTimeout();
   }
 
@@ -96,31 +96,58 @@ class AVPlayerRMP extends PureComponent {
     this.setState({wasCurrentTime: undefined, wasPlaying: undefined});
   }
 
-  showControls = () => {
+  showControls = (inControls, callback = undefined) => {
     const { timeoutId } = this.state;
-    const newState = { controlsVisible: true };
     if (timeoutId) {
-      this.setState({timeoutId: null}, () => {
+      console.log('Show controls. Set timetout null.');
+      this.setState({inControls, controlsVisible: true, timeoutId: null}, () => {
         clearTimeout(timeoutId);
-        this.setState({controlsVisible: true});
+        if (callback) {
+          callback();
+        }
       });
     } else {
-      this.setState({controlsVisible: true});
+      console.log('Show controls.')
+      this.setState({inControls, controlsVisible: true}, callback);
     }
   }
 
   hideControlsTimeout = () => {
     if (!this.state.timeoutId) {
       const timeoutId = setTimeout(() => {
+        console.log('Hide controls now.')
         this.setState({controlsVisible: false});
       }, 2000);
-      this.setState({timeoutId});
+      console.log('Set timeout.');
+      this.setState({inControls: false, timeoutId});
     }
+  }
+
+  playerMove = () => {
+    if (!this.state.inControls) {
+      this.showControls(false, () => {
+        console.log('inControls', this.state.inControls);
+        if (!this.state.inControls) {
+          this.hideControlsTimeout();
+        }
+      });
+    }
+  }
+
+  controlsEnter = () => {
+    this.showControls(true);
+  }
+
+  controlsLeave = () => {
+    this.hideControlsTimeout();
   }
 
   render() {
     const { audio, video, active, languages, defaultValue, t } = this.props;
     const { controlsVisible } = this.state;
+
+    const forceShowControls = !this.player_ || !this.player_.context.media.isPlaying;
+    console.log('forceShowControls', forceShowControls);
 
     const centerPlay = active === video ? (
       <div className="media-center-control">
@@ -132,15 +159,15 @@ class AVPlayerRMP extends PureComponent {
 
     return (
       <div>
+
         <Media>
           {
             ({ playPause }) => (
               <div className="media"
                    style={{minHeight: active === video ? 200 : 40,
                            minWidth: active === video ? 300 : 'auto'}}>
-                <div className="media-player"
-                     onMouseMove={this.showControls}
-                     onMouseLeave={this.hideControlsTimeout}>
+                <div className={classNames({'media-player': true, fade: !controlsVisible && !forceShowControls})}
+                     onMouseMove={this.playerMove}>
                   <Player
                     ref={c => this.player_ = c}
                     src={physicalFile(active, true)}
@@ -149,9 +176,11 @@ class AVPlayerRMP extends PureComponent {
                     onReady={this.onPlayerReady}
                     loop="false"
                     preload="auto"
-                    onClick={playPause}
+                    onClick={(...params) => { console.log(...params); playPause(); }}
                   />
-                  <div className={classNames({'media-controls': true, fade: !controlsVisible})}>
+                  <div className={classNames({'media-controls': true, fade: !controlsVisible && !forceShowControls})}
+                       onMouseEnter={this.controlsEnter}
+                       onMouseLeave={this.controlsLeave}>
                     <div className="controls-container">
                       <AVPlayPause />
                       <AVTimeElapsed />
