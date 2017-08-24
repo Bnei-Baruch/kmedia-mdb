@@ -1,20 +1,147 @@
 /* eslint-disable */
 
 import React, { Component } from 'react';
-import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, List, Popup, Table, Card, Image, Input } from 'semantic-ui-react';
-
+import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, List, Popup, Table, Card, Image, Input, Search, Label, Container } from 'semantic-ui-react';
+const results ={
+    "hard drive": {
+      "name": "hard drive",
+      "results": [
+        {
+          "title": "Lesch - Rogahn",
+          "description": "Sharable transitional architecture",
+          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/laurengray/128.jpg",
+          "price": "$18.13"
+        },
+        {
+          "title": "Nitzsche, Reichel and Hodkiewicz",
+          "description": "Self-enabling composite groupware",
+          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/chrisvanderkooi/128.jpg",
+          "price": "$7.42"
+        },
+        {
+          "title": "Lynch and Sons",
+          "description": "Up-sized disintermediate framework",
+          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/okandungel/128.jpg",
+          "price": "$22.29"
+        },
+        {
+          "title": "Corwin - Schmidt",
+          "description": "Profound client-server customer loyalty",
+          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/BrianPurkiss/128.jpg",
+          "price": "$65.22"
+        }
+      ]
+    },
+    "sensor": {
+      "name": "sensor",
+      "results": [
+        {
+          "title": "McGlynn - Hamill",
+          "description": "Organized composite migration",
+          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/karthipanraj/128.jpg",
+          "price": "$2.36"
+        },
+        {
+          "title": "Howell Inc",
+          "description": "Programmable cohesive knowledge base",
+          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/uxalex/128.jpg",
+          "price": "$85.90"
+        },
+        {
+          "title": "Nitzsche, Keebler and Schmidt",
+          "description": "Polarised responsive system engine",
+          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/abdulhyeuk/128.jpg",
+          "price": "$93.35"
+        },
+        {
+          "title": "Thompson Group",
+          "description": "Up-sized optimal intranet",
+          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/g3d/128.jpg",
+          "price": "$29.83"
+        },
+        {
+          "title": "Wisozk - Crona",
+          "description": "Phased multimedia standardization",
+          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/mugukamil/128.jpg",
+          "price": "$96.05"
+        }
+      ]
+    },
+    "bus": {
+      "name": "bus",
+      "results": [
+        {
+          "title": "Yundt, Lehner and Friesen",
+          "description": "Sharable motivating project",
+          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/josevnclch/128.jpg",
+          "price": "$19.71"
+        },
+        {
+          "title": "Jones LLC",
+          "description": "Customizable fresh-thinking array",
+          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/thedamianhdez/128.jpg",
+          "price": "$38.43"
+        },
+        {
+          "title": "Crooks, Parisian and Kozey",
+          "description": "Cross-group bandwidth-monitored product",
+          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/carlosblanco_eu/128.jpg",
+          "price": "$28.42"
+        },
+        {
+          "title": "Barrows Inc",
+          "description": "Configurable leading edge website",
+          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/andrewabogado/128.jpg",
+          "price": "$29.60"
+        },
+        {
+          "title": "Becker - Parisian",
+          "description": "Multi-tiered analyzing alliance",
+          "image": "https://s3.amazonaws.com/uifaces/faces/twitter/aaronkwhite/128.jpg",
+          "price": "$3.92"
+        }
+      ]
+    }
+  }
+const categoryRenderer = ({ name }) => <Label as={'span'} content={name} />
+const resultRenderer = ({ title }) => <Label content={title} />
 class Design extends Component {
 
   render() {
     return (
       <Grid.Column width={16}>
+
+
+        <Header size='large' color='pink' inverted>Programs Collection</Header>
+        <Divider/>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={4}>
+               <Image fluid shape='rounded' src='http://www.kab.co.il/images/attachments/91/276191_medium.jpg' />
+            </Grid.Column>
+            <Grid.Column width={8}>
+              <Header as='h1'>
+                <Header.Content>
+                  A New Life
+                  <Header.Subheader>
+                    920 Episodes
+                  </Header.Subheader>
+                </Header.Content>
+              </Header>
+              <p>
+                A series of conversations with Rabbi Dr. Michael Laitman, whose purpose is to create the infrastructure to promote every person, organization, society or country, to better understand the reality of our lives and to achieve a good life
+              </p>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+        
         <Header size='large' color='pink' inverted>TV & Video Programs</Header>
         <Divider/>
       
         <div className='featured-unit'>
           <Header
             as="h2"
-            content='Featured Programs'
+            content='Programs'
           />
           <Card.Group itemsPerRow='4' doubling>
             <Card href='#'>
@@ -88,8 +215,8 @@ class Design extends Component {
           <Menu.Item active>Date</Menu.Item>
           <Menu.Item>Genre / Program</Menu.Item>
           <Menu.Item>Topic</Menu.Item>
-          <Menu.Item>
-            <Input size='small' icon icon='search' placeholder='Search Programs...' />
+          <Menu.Item className='index-filters__search'>
+            <Search  category results={results} size='mini' placeholder='Search Programs...'categoryRenderer={categoryRenderer} resultRenderer={resultRenderer} />
           </Menu.Item>
         </Menu>
         {/*<Header size='large' color='pink' inverted>video collection collapsed (๏㉨๏)</Header>*/}

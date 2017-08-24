@@ -88,6 +88,7 @@ $text-colors: (
       right: 0;
       overflow: auto;
       border-right: 1px solid rgba(34, 36, 38, 0.15);
+      
       .menu {
         border: 0;
         box-shadow: none !important;
@@ -184,9 +185,12 @@ $text-colors: (
 
 /// INDEX FILTERS
 .index-filters {
-  .input {
-    width: 300px!important;
-    top:0.2em!important;
+  &__search
+   {
+    .input {
+      width: 300px!important;
+      top:0.8em!important;
+    }
   }
 }
 /// END OF INDEX FILTERS

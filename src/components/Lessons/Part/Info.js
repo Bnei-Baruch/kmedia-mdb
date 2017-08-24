@@ -68,8 +68,8 @@ class Info extends Component {
 
     return (
       <div>
-        <Header as="h3">
-          <span className="text grey">{t('values.date', { date: new Date(filmDate) })}</span><br />
+        <Header as="h1">
+          <small className="text grey">{t('values.date', { date: new Date(filmDate) })}</small><br />
           {name}
         </Header>
         <List>
