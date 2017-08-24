@@ -151,9 +151,7 @@ class AVPlayerRMP extends PureComponent {
 
     const centerPlay = active === video ? (
       <div className="media-center-control">
-        <div className="control-container">
-          <AVCenteredPlay />
-        </div>
+        <AVCenteredPlay />
       </div>
     ) : null;
 
@@ -162,12 +160,21 @@ class AVPlayerRMP extends PureComponent {
 
         <Media>
           {
-            ({ playPause }) => (
-              <div className="media"
-                   style={{minHeight: active === video ? 200 : 40,
-                           minWidth: active === video ? 300 : 'auto'}}>
-                <div className={classNames({'media-player': true, fade: !controlsVisible && !forceShowControls})}
-                     onMouseMove={this.playerMove}>
+            ({ playPause, isFullscreen }) => (
+              <div
+                className="media"
+                style={{
+                  minHeight: active === video ? 200 : 40,
+                  minWidth: active === video ? 300 : 'auto'
+                }}
+              >
+                <div
+                  className={classNames('media-player', {
+                    'media-player-fullscreen': isFullscreen,
+                    fade: !controlsVisible && !forceShowControls
+                  })}
+                  onMouseMove={this.playerMove}
+                >
                   <Player
                     ref={c => this.player_ = c}
                     src={physicalFile(active, true)}
@@ -178,32 +185,35 @@ class AVPlayerRMP extends PureComponent {
                     preload="auto"
                     onClick={(...params) => { console.log(...params); playPause(); }}
                   />
-                  <div className={classNames({'media-controls': true, fade: !controlsVisible && !forceShowControls})}
-                       onMouseEnter={this.controlsEnter}
-                       onMouseLeave={this.controlsLeave}>
-                    <div className="controls-container">
-                      <AVPlayPause />
-                      <AVTimeElapsed />
-                      <AVProgress buffers={this.buffers()} />
-                      <AVMuteUnmute
-                        upward={video === active} />
-                      <AVAudioVideo
-                        isAudio={audio === active}
-                        isVideo={video === active}
-                        setAudio={this.onSwitchAV}
-                        setVideo={this.onSwitchAV}
-                        t={t}
-                      />
-                      <AVLanguage
-                        languages={languages}
-                        defaultValue={defaultValue}
-                        onSelect={this.onLanguageChange}
-                        upward={video === active}
-                      />
-                      <AVFullScreen />
+                  <div
+                    className={classNames('media-controls', { fade: !controlsVisible && !forceShowControls })}
+                    onMouseEnter={this.controlsEnter}
+                    onMouseLeave={this.controlsLeave}
+                  >
+                    { centerPlay }
+                    <div className="controls-wrapper">
+                      <div className="controls-container">
+                        <AVPlayPause />
+                        <AVTimeElapsed />
+                        <AVProgress buffers={this.buffers()} />
+                        <AVMuteUnmute upward={video === active} />
+                        <AVAudioVideo
+                          isAudio={audio === active}
+                          isVideo={video === active}
+                          setAudio={this.onSwitchAV}
+                          setVideo={this.onSwitchAV}
+                          t={t}
+                        />
+                        <AVLanguage
+                          languages={languages}
+                          defaultValue={defaultValue}
+                          onSelect={this.onLanguageChange}
+                          upward={video === active}
+                        />
+                        <AVFullScreen />
+                      </div>
                     </div>
                   </div>
-                  { centerPlay }
                 </div>
               </div>
             )
