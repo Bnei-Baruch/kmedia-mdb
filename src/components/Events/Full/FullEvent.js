@@ -5,55 +5,54 @@ import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
 import { Menu, Table } from 'semantic-ui-react';
 
-
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
 import Link from '../../Language/MultiLanguageLink';
 import NavLink from '../../Language/MultiLanguageNavLink';
 import * as shapes from '../../shapes';
 
-class FullProgram extends Component {
+class FullEvent extends Component {
   static propTypes = {
     language: PropTypes.string.isRequired,
-    fullProgram: shapes.ProgramCollection,
+    fullEvent: shapes.EventCollection,
     wip: shapes.WIP,
     err: shapes.Error,
     t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    fullProgram: null,
+    fullEvent: null,
     wip: false,
     err: null,
   };
 
-  getName = (fullProgram, cu) => {
+  getName = (fullEvent, cu) => {
     const { name, duration } = cu;
-    const ccuName            = fullProgram.ccuNames[cu.id];
+    const ccuName            = fullEvent.ccuNames[cu.id];
     const durationDisplay    = moment.duration(duration, 'seconds').format('hh:mm:ss');
     return { name, ccuName, duration: durationDisplay };
   };
 
-  tableRow = (fullProgram, cu) => {
-    const { ccuName, name, duration } = this.getName(fullProgram, cu);
+  tableRow = (fullEvent, cu) => {
+    const { ccuName, name, duration } = this.getName(fullEvent, cu);
 
     return (
       <Table.Row key={cu.id}>
-        <Table.Cell><Menu.Item as={NavLink} to={`/programs/chapter/${cu.id}`} content={ccuName} /></Table.Cell>
-        <Table.Cell><Menu.Item as={NavLink} to={`/programs/chapter/${cu.id}`}>{name}</Menu.Item></Table.Cell>
-        <Table.Cell><Menu.Item as={NavLink} to={`/programs/chapter/${cu.id}`}>{duration}</Menu.Item></Table.Cell>
+        <Table.Cell><Menu.Item as={NavLink} to={`/events/item/${cu.id}`} content={ccuName} /></Table.Cell>
+        <Table.Cell><Menu.Item as={NavLink} to={`/events/item/${cu.id}`}>{name}</Menu.Item></Table.Cell>
+        <Table.Cell><Menu.Item as={NavLink} to={`/events/item/${cu.id}`}>{duration}</Menu.Item></Table.Cell>
       </Table.Row>
     );
   };
 
   render() {
-    const { fullProgram, wip, err, t } = this.props;
+    const { fullEvent, wip, err, t } = this.props;
 
     if (err) {
       return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
     }
 
-    if (fullProgram) {
+    if (fullEvent) {
       return (
         <Menu vertical fluid>
           <Table basic="very" compact="very" celled>
@@ -66,8 +65,8 @@ class FullProgram extends Component {
             </Table.Header>
             <Table.Body>
               {
-                fullProgram.content_units.map(cu => (
-                  this.tableRow(fullProgram, cu)
+                fullEvent.content_units.map(cu => (
+                  this.tableRow(fullEvent, cu)
                 ))
               }
             </Table.Body>
@@ -82,10 +81,10 @@ class FullProgram extends Component {
 
     return (
       <FrownSplash
-        text={t('messages.program-not-found')}
+        text={t('messages.event-not-found')}
         subtext={
-          <Trans i18nKey="messages.program-not-found-subtext">
-            Try the <Link to="/programs">programs list</Link>...
+          <Trans i18nKey="messages.event-not-found-subtext">
+            Try the <Link to="/events">events list</Link>...
           </Trans>
         }
       />
@@ -93,5 +92,5 @@ class FullProgram extends Component {
   }
 }
 
-export default translate()(FullProgram);
+export default translate()(FullEvent);
 

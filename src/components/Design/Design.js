@@ -1,20 +1,120 @@
 /* eslint-disable */
 
 import React, { Component } from 'react';
-import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, List, Popup, Table, Card, Image, Input } from 'semantic-ui-react';
-
+import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, List, Popup, Table, Card, Image, Input, Search, Label, Container, Embed } from 'semantic-ui-react';
+const results ={
+    "search": {
+      "icon": "search",
+      "name": "Search",
+      "results": [
+        {"title": "tod"}
+      ]
+    },
+    "date": {
+      "icon": "calendar",
+      "name": "Date",
+      "results": [
+        {"title": "Today"}
+      ]
+    },
+    "sources": {
+      "icon": "book",
+      "name": "Sources",
+      "results": [
+        {"title": "Rabash > Articles > You Stand Today, All of You"}
+      ]
+    },
+    "topics": {
+      "icon": "tag",
+      "name": "Topics",
+      "results": [
+        {"title": "Kabbalah today"},
+        {"title":"Today and Tomorrow"}
+      ]
+    }
+  }
+const categoryRenderer = ({ name, icon }) => <div><Icon name={icon}/>{name}</div>
+const resultRenderer = ({ title }) => <div>{title}</div>
 class Design extends Component {
 
   render() {
     return (
       <Grid.Column width={16}>
+
+        <Header size='large' color='pink' inverted>Event Collection</Header>
+        <Divider/>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={3}>
+               <Image fluid shape='rounded' src='https://i1.sndcdn.com/artworks-000205720468-8rbpnk-t500x500.jpg' />
+            </Grid.Column>
+            <Grid.Column width={8}>
+              <Header as='h1'>
+                <Header.Content>
+                  <small className='text grey'>25-27 of August 2017</small>
+                  <br/>
+                  EUROPE 2.0<br/>THE FUTURE BEGINS NOW
+                  <Header.Subheader>
+                    Bonn Area, Germany
+                  </Header.Subheader>
+                </Header.Content>
+              </Header>
+              <p>
+                A series of conversations with Rabbi Dr. Michael Laitman, whose purpose is to create the infrastructure to promote every person, organization, society or country, to better understand the reality of our lives and to achieve a good life
+              </p>
+              
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+              <Embed
+                active={true}
+                aspectRatio="21:9"
+                iframe={{
+                  allowFullScreen: false,
+                  style: {
+                    border: 0
+                  },
+                  frameborder: "0"
+                }}
+                placeholder='/assets/images/image-16by9.png'
+                url='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d80860.06794871506!2d7.04726036282409!3d50.703664739362665!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47bee19f7ccbda49%3A0x86dbf8c6685c9617!2sBonn%2C+Germany!5e0!3m2!1sen!2sil!4v1503539041101'
+              />
+
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+        
+        <Header size='large' color='pink' inverted>Programs Collection</Header>
+        <Divider/>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={3}>
+               <Image fluid shape='rounded' src='http://www.kab.co.il/images/attachments/91/276191_medium.jpg' />
+            </Grid.Column>
+            <Grid.Column width={8}>
+              <Header as='h1'>
+                <Header.Content>
+                  A New Life
+                  <Header.Subheader>
+                    920 Episodes
+                  </Header.Subheader>
+                </Header.Content>
+              </Header>
+              <p>
+                A series of conversations with Rabbi Dr. Michael Laitman, whose purpose is to create the infrastructure to promote every person, organization, society or country, to better understand the reality of our lives and to achieve a good life
+              </p>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+        
         <Header size='large' color='pink' inverted>TV & Video Programs</Header>
         <Divider/>
       
         <div className='featured-unit'>
           <Header
             as="h2"
-            content='Featured Programs'
+            content='Programs'
           />
           <Card.Group itemsPerRow='4' doubling>
             <Card href='#'>
@@ -88,8 +188,9 @@ class Design extends Component {
           <Menu.Item active>Date</Menu.Item>
           <Menu.Item>Genre / Program</Menu.Item>
           <Menu.Item>Topic</Menu.Item>
-          <Menu.Item>
-            <Input size='small' icon icon='search' placeholder='Search Programs...' />
+          <Menu.Item className='index-filters__search'>
+
+            <Search  category results={results} size='mini' placeholder='Search Programs...'categoryRenderer={categoryRenderer} resultRenderer={resultRenderer} />
           </Menu.Item>
         </Menu>
         {/*<Header size='large' color='pink' inverted>video collection collapsed (๏㉨๏)</Header>*/}

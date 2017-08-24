@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { Header, List } from 'semantic-ui-react';
 
+import Link from '../../Language/MultiLanguageLink';
 import { intersperse, tracePath } from '../../../helpers/utils';
 import { selectors as sourcesSelectors } from '../../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../../redux/modules/tags';

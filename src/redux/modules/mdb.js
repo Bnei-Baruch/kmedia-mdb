@@ -95,7 +95,14 @@ const onReceiveContentUnits = (state, action) => {
         const [cID, ccuName] = k.split('____');
 
         // make a copy of collection and set this unit ccuName
-        const updatedC    = { ...v, ...state.cById[v.id] };
+        const updatedC = { ...v, ...state.cById[v.id] };
+        if (updatedC.cuIDs) {
+          if (updatedC.cuIDs.findIndex(z => z === y.id) === -1) {
+            updatedC.cuIDs = [...updatedC.cuIDs, y.id];
+          }
+        } else {
+          updatedC.cuIDs = [y.id];
+        }
         updatedC.ccuNames = { ...updatedC.ccuNames, [y.id]: ccuName };
         cById[v.id]       = updatedC;
 
@@ -168,6 +175,14 @@ const getDenormCollection = (state, id) => {
   return c;
 };
 
+const getDenormCollectionWUnits = (state, id) => {
+  const c = state.cById[id];
+  if (c && Array.isArray(c.cuIDs)) {
+    c.content_units = c.cuIDs.map(x => getDenormContentUnit(state, x)).filter(x => !!x);
+  }
+  return c;
+};
+
 const denormalizeObject = (byID, obj) => (
   Object.entries(obj || {}).reduce((acc, val) => {
     const [k, v] = val;
@@ -200,5 +215,6 @@ export const selectors = {
   getCollectionById,
   getUnitById,
   getDenormCollection,
+  getDenormCollectionWUnits,
   getDenormContentUnit,
 };

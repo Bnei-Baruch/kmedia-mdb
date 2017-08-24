@@ -58,7 +58,11 @@ class SourcesFilter extends React.Component {
   };
 
   apply = () => {
-    this.props.updateValue(this.state.selection);
+    const selection = this.state.selection;
+    if (Array.isArray(selection) && selection.length === 0) {
+      return;
+    }
+    this.props.updateValue(selection);
     this.props.onApply();
   };
 
@@ -120,20 +124,20 @@ class SourcesFilter extends React.Component {
 
     return (
       <div>
-      <Segment vertical  className="tab active" style={{
-          padding:'0'
+        <Segment vertical className="tab active" style={{
+          padding: '0'
         }}>
-        <div
-          className="filter-steps"
-          // eslint-disable-next-line no-return-assign
-          ref={el => this.listContainer = el}
-        >
-          {
-            roots.length > 0 ?
-              this.createLists(0, roots, this.state.selection, this.props.allValues).map(l => l) :
-              'No Sources'
-          }
-        </div>
+          <div
+            className="filter-steps"
+            // eslint-disable-next-line no-return-assign
+            ref={el => this.listContainer = el}
+          >
+            {
+              roots.length > 0 ?
+                this.createLists(0, roots, this.state.selection, this.props.allValues).map(l => l) :
+                'No Sources'
+            }
+          </div>
         </Segment>
         <Segment vertical clearing>
           <Button primary content={t('buttons.apply')} floated="right" onClick={this.apply} />

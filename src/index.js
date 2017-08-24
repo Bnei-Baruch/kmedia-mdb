@@ -6,10 +6,10 @@ import ReactDOM from 'react-dom';
 import { applyMiddleware, compose, createStore } from 'redux';
 import createSagaMiddleware, { delay } from 'redux-saga';
 import { put } from 'redux-saga/effects';
-import { routerMiddleware as createRouterMiddleware } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 import { loadingBarMiddleware } from 'react-redux-loading-bar';
 
+import createMultiLanguageRouterMiddleware from './redux/middleware/multiLanguageRouterMiddleware';
 import reducer from './redux';
 import { actions as system } from './redux/modules/system';
 import allSagas from './sagas';
@@ -27,7 +27,7 @@ const sagaMiddlewareOptions = isProduction ? {} : { sagaMonitor };
 const sagaMiddleWare        = createSagaMiddleware(sagaMiddlewareOptions);
 
 const history          = createHistory();
-const routerMiddleware = createRouterMiddleware(history);
+const routerMiddleware = createMultiLanguageRouterMiddleware(history);
 
 const store = createStore(reducer, {}, compose(
   applyMiddleware(routerMiddleware, loadingBarMiddleware(), sagaMiddleWare),

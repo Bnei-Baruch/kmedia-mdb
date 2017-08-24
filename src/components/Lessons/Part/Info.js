@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { Header, List } from 'semantic-ui-react';
 
-import { intersperse, tracePath } from '../../../helpers/utils';
+import { canonicalLink, intersperse, tracePath } from '../../../helpers/utils';
+import { stringify as urlSearchStringify } from '../../../helpers/url';
+import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { selectors as sourcesSelectors } from '../../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../../redux/modules/tags';
+import { filtersTransformer } from '../../../filters';
 import * as shapes from '../../shapes';
+import Link from '../../Language/MultiLanguageLink';
 
 class Info extends Component {
 
@@ -23,8 +26,8 @@ class Info extends Component {
   };
 
   render() {
-    const { lesson = {}, getSourceById, getTagById, t } = this.props;
-    const { name, film_date: filmDate, sources, tags }  = lesson;
+    const { lesson = {}, getSourceById, getTagById, t }             = this.props;
+    const { name, film_date: filmDate, sources, tags, collections } = lesson;
 
     const tagLinks = Array.from(intersperse(
       (tags || []).map((x) => {
@@ -35,7 +38,10 @@ class Info extends Component {
 
         const path    = tracePath(tag, getTagById);
         const display = path.map(y => y.label).join(' - ');
-        return <Link key={x} to={`/tags/${x}`}>{display}</Link>;
+        const query   = filtersTransformer.toQueryParams(
+          [{ name: 'topics-filter', values: [x] }]);
+
+        return <Link key={x} to={{ pathname: '/lessons', search: urlSearchStringify(query) }}>{display}</Link>;
       }), ', '));
 
     const sourcesLinks = Array.from(intersperse(
@@ -44,15 +50,26 @@ class Info extends Component {
         if (!source) {
           return '';
         }
+
         const path    = tracePath(source, getSourceById);
         const display = path.map(y => y.name).join('. ');
-        return <Link key={x} to={`/sources/${x}`}>{display}</Link>;
+        const query   = filtersTransformer.toQueryParams(
+          [{ name: 'sources-filter', values: [path.map(y => y.id)] }]);
+
+        return <Link key={x} to={{ pathname: '/lessons', search: urlSearchStringify(query) }}>{display}</Link>;
       }), ', '));
+
+    const breakdown   = new CollectionsBreakdown(Object.values(collections || {}));
+    const eventsLinks = Array.from(intersperse(
+      breakdown.getEvents().map(x => (
+          <Link key={x.id} to={canonicalLink(x)}>{x.name}</Link>
+        )
+      ), ', '));
 
     return (
       <div>
-        <Header as="h3">
-          <span className="text grey">{t('values.date', { date: new Date(filmDate) })}</span><br />
+        <Header as="h1">
+          <small className="text grey">{t('values.date', { date: new Date(filmDate) })}</small><br />
           {name}
         </Header>
         <List>
@@ -72,11 +89,14 @@ class Info extends Component {
                 &nbsp;{sourcesLinks}
               </List.Item>
           }
-
-          <List.Item>
-            <strong>{t('lessons.part.info.related-event')}:</strong>
-            &nbsp;<a href="">World Israel Congress 2016</a>
-          </List.Item>
+          {
+            eventsLinks.length === 0 ?
+              null :
+              <List.Item>
+                <strong>{t('lessons.part.info.related-event')}:</strong>
+                &nbsp;{eventsLinks}
+              </List.Item>
+          }
         </List>
       </div>
     );

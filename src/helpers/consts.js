@@ -2,10 +2,10 @@
 export const CT_DAILY_LESSON       = 'DAILY_LESSON';
 export const CT_SPECIAL_LESSON     = 'SPECIAL_LESSON';
 export const CT_FRIENDS_GATHERINGS = 'FRIENDS_GATHERINGS';
-export const CT_CONGRESS           = 'CONGRESS';
 export const CT_VIDEO_PROGRAM      = 'VIDEO_PROGRAM';
 export const CT_LECTURE_SERIES     = 'LECTURE_SERIES';
 export const CT_MEALS              = 'MEALS';
+export const CT_CONGRESS           = 'CONGRESS';
 export const CT_HOLIDAY            = 'HOLIDAY';
 export const CT_PICNIC             = 'PICNIC';
 export const CT_UNITY_DAY          = 'UNITY_DAY';
@@ -106,6 +106,11 @@ export const LANGUAGES = {
   [LANG_SLOVAK]: { value: LANG_SLOVAK, flag: 'sk' },
   [LANG_CZECH]: { value: LANG_CZECH, flag: 'cz' },
 };
+
+export const FLAG_TO_LANGUAGE = Object.values(LANGUAGES).reduce((acc, language) => {
+  acc[language.flag] = language.value;
+  return acc;
+}, {});
 
 export const ALL_LANGUAGES = [
   LANG_HEBREW,
