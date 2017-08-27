@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import * as shapes from '../shapes';
 import { physicalFile } from '../../helpers/utils';
 import AVPlayPause from './AVPlayPause';
+import AVPlaybackRate from './AVPlaybackRate';
 import AVCenteredPlay from './AVCenteredPlay';
 import AVTimeElapsed from './AVTimeElapsed';
 import AVFullScreen from './AVFullScreen';
@@ -135,6 +136,10 @@ class AVPlayerRMP extends PureComponent {
     this.hideControlsTimeout();
   }
 
+  playbackRateChange = (e, rate) => {
+    this.player_.instance.playbackRate = parseFloat(rate.slice(0, -1));
+  }
+
   render() {
     const { audio, video, active, languages, defaultValue, t } = this.props;
     const { controlsVisible } = this.state;
@@ -170,7 +175,7 @@ class AVPlayerRMP extends PureComponent {
                 >
                   <Player
                     ref={c => this.player_ = c}
-                    src={physicalFile(active, true)}
+                    src="https://www.html5rocks.com/en/tutorials/video/basics/devstories.mp4"
                     vendor={active === video ? 'video' : 'audio'}
                     autoPlay={false}
                     onReady={this.onPlayerReady}
@@ -188,6 +193,9 @@ class AVPlayerRMP extends PureComponent {
                         <AVPlayPause />
                         <AVTimeElapsed />
                         <AVProgress buffers={this.buffers()} />
+                        <AVPlaybackRate
+                          onSelect={this.playbackRateChange}
+                          upward={video === active} />
                         <AVMuteUnmute upward={video === active} />
                         <AVAudioVideo
                           isAudio={audio === active}
