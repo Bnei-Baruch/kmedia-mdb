@@ -32,7 +32,7 @@ export default class AVLanguage extends Component {
       .map(x => ({ value: x.value, text: x.value }));
 
     return (
-      <div style={{ marginLeft: 5}}>
+      <div className="player-control-language">
         <Dropdown
           floating
           inline

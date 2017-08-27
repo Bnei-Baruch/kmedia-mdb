@@ -206,6 +206,7 @@ class AVPlayerRMP extends PureComponent {
                         <AVFullScreen />
                       </div>
                     </div>
+                    { centerPlay }
                   </div>
                 </div>
               </div>
