@@ -163,11 +163,10 @@ class AVPlayerRMP extends PureComponent {
                 >
                   <Player
                     ref={c => this.player_ = c}
-                    src="https://www.html5rocks.com/en/tutorials/video/basics/devstories.mp4"
+                    src={physicalFile(active, true)}
                     vendor={active === video ? 'video' : 'audio'}
                     autoPlay={false}
                     onReady={this.onPlayerReady}
-                    loop="false"
                     preload="auto"
                   />
                   <div
