@@ -100,7 +100,6 @@ class AVPlayerRMP extends PureComponent {
   showControls = (callback = undefined) => {
     const { timeoutId } = this.state;
     if (timeoutId) {
-      console.log('Show controls. Set timetout null.');
       this.setState({controlsVisible: true, timeoutId: null}, () => {
         clearTimeout(timeoutId);
         if (callback) {
@@ -108,7 +107,6 @@ class AVPlayerRMP extends PureComponent {
         }
       });
     } else {
-      console.log('Show controls.')
       this.setState({controlsVisible: true}, callback);
     }
   }
@@ -116,10 +114,8 @@ class AVPlayerRMP extends PureComponent {
   hideControlsTimeout = () => {
     if (!this.state.timeoutId) {
       const timeoutId = setTimeout(() => {
-        console.log('Hide controls now.')
         this.setState({controlsVisible: false});
       }, 2000);
-      console.log('Set timeout.');
       this.setState({timeoutId});
     }
   }
@@ -145,14 +141,6 @@ class AVPlayerRMP extends PureComponent {
     const { controlsVisible } = this.state;
 
     const forceShowControls = !this.player_ || !this.player_.context.media.isPlaying;
-    console.log('forceShowControls', forceShowControls);
-
-    const centerPlay = active === video ? (
-      <div className="media-center-control"
-           onMouseMove={this.centerMove}>
-        <AVCenteredPlay />
-      </div>
-    ) : null;
 
     return (
       <div>
@@ -181,7 +169,6 @@ class AVPlayerRMP extends PureComponent {
                     onReady={this.onPlayerReady}
                     loop="false"
                     preload="auto"
-                    onClick={(...params) => { console.log(...params); playPause(); }}
                   />
                   <div
                     className={classNames('media-controls', { fade: !controlsVisible && !forceShowControls })}
@@ -213,7 +200,16 @@ class AVPlayerRMP extends PureComponent {
                         <AVFullScreen />
                       </div>
                     </div>
-                    { centerPlay }
+                    { active === video ? (
+                        <div className="media-center-control"
+                             style={{outline: 'none'}}
+                             tabIndex="0"
+                             onClick={() => playPause()}
+                             onKeyDown={(e) => { playPause(); e.preventDefault(); }}
+                             onMouseMove={this.centerMove}>
+                          <AVCenteredPlay />
+                        </div>
+                      ) : null }
                   </div>
                 </div>
               </div>
