@@ -72,6 +72,12 @@
   width: 100%;
   height: 100%;
   color: #ffffff;
+  opacity: 1;
+  transition: 0.25s linear;
+
+  &.fade {
+    opacity: 0;
+  }
 
   .controls-wrapper {
     flex: 0 0 40px;

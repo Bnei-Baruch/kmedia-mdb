@@ -30,7 +30,7 @@ class AVDuration extends Component {
   };
 
   render() {
-    const { style, name } = this.props;
+    const { style, name, className } = this.props;
     const time            = this.props.media[name];
 
     return (

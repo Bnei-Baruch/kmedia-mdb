@@ -96,11 +96,11 @@ class AVPlayerRMP extends PureComponent {
     this.setState({wasCurrentTime: undefined, wasPlaying: undefined});
   }
 
-  showControls = (inControls, callback = undefined) => {
+  showControls = (callback = undefined) => {
     const { timeoutId } = this.state;
     if (timeoutId) {
       console.log('Show controls. Set timetout null.');
-      this.setState({inControls, controlsVisible: true, timeoutId: null}, () => {
+      this.setState({controlsVisible: true, timeoutId: null}, () => {
         clearTimeout(timeoutId);
         if (callback) {
           callback();
@@ -108,7 +108,7 @@ class AVPlayerRMP extends PureComponent {
       });
     } else {
       console.log('Show controls.')
-      this.setState({inControls, controlsVisible: true}, callback);
+      this.setState({controlsVisible: true}, callback);
     }
   }
 
@@ -119,23 +119,16 @@ class AVPlayerRMP extends PureComponent {
         this.setState({controlsVisible: false});
       }, 2000);
       console.log('Set timeout.');
-      this.setState({inControls: false, timeoutId});
-    }
-  }
-
-  playerMove = () => {
-    if (!this.state.inControls) {
-      this.showControls(false, () => {
-        console.log('inControls', this.state.inControls);
-        if (!this.state.inControls) {
-          this.hideControlsTimeout();
-        }
-      });
+      this.setState({timeoutId});
     }
   }
 
   controlsEnter = () => {
-    this.showControls(true);
+    this.showControls();
+  }
+
+  centerMove = () => {
+    this.showControls(() => this.hideControlsTimeout());
   }
 
   controlsLeave = () => {
@@ -150,7 +143,8 @@ class AVPlayerRMP extends PureComponent {
     console.log('forceShowControls', forceShowControls);
 
     const centerPlay = active === video ? (
-      <div className="media-center-control">
+      <div className="media-center-control"
+           onMouseMove={this.centerMove}>
         <AVCenteredPlay />
       </div>
     ) : null;
@@ -173,7 +167,6 @@ class AVPlayerRMP extends PureComponent {
                     'media-player-fullscreen': isFullscreen,
                     fade: !controlsVisible && !forceShowControls
                   })}
-                  onMouseMove={this.playerMove}
                 >
                   <Player
                     ref={c => this.player_ = c}
@@ -187,11 +180,11 @@ class AVPlayerRMP extends PureComponent {
                   />
                   <div
                     className={classNames('media-controls', { fade: !controlsVisible && !forceShowControls })}
-                    onMouseEnter={this.controlsEnter}
-                    onMouseLeave={this.controlsLeave}
                   >
                     { centerPlay }
-                    <div className="controls-wrapper">
+                    <div className="controls-wrapper"
+                         onMouseEnter={this.controlsEnter}
+                         onMouseLeave={this.controlsLeave}>
                       <div className="controls-container">
                         <AVPlayPause />
                         <AVTimeElapsed />
