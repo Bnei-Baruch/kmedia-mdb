@@ -181,7 +181,6 @@ class AVPlayerRMP extends PureComponent {
                   <div
                     className={classNames('media-controls', { fade: !controlsVisible && !forceShowControls })}
                   >
-                    { centerPlay }
                     <div className="controls-wrapper"
                          onMouseEnter={this.controlsEnter}
                          onMouseLeave={this.controlsLeave}>
