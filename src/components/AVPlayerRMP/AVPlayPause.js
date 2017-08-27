@@ -32,8 +32,10 @@ class AVPlayPause extends Component {
         onClick={this.handlePlayPause}
         style={{ marginLeft: '10px', marginRight: '5px' }}
       >
-        <Icon name={media.isPlaying ? 'pause' : 'play'}
-              style={{margin: 0, height: '100%' }} />
+        <Icon
+          name={media.isPlaying ? 'pause' : 'play'}
+          style={{margin: 0, height: '100%' }}
+        />
       </button>
     );
   }
