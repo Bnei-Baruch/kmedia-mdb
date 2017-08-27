@@ -190,7 +190,6 @@ class AVPlayerRMP extends PureComponent {
                     onMouseEnter={this.controlsEnter}
                     onMouseLeave={this.controlsLeave}
                   >
-                    { centerPlay }
                     <div className="controls-wrapper">
                       <div className="controls-container">
                         <AVPlayPause />
@@ -213,6 +212,7 @@ class AVPlayerRMP extends PureComponent {
                         <AVFullScreen />
                       </div>
                     </div>
+                    { centerPlay }
                   </div>
                 </div>
               </div>
