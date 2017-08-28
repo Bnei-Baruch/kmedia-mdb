@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Media, Player } from 'react-media-player';
 import classNames from 'classnames';
+import { Icon } from 'semantic-ui-react';
 
 import * as shapes from '../shapes';
 import { physicalFile } from '../../helpers/utils';
@@ -44,6 +45,7 @@ class AVPlayerRMP extends PureComponent {
       videoElement: null,
       controlsVisible: true,
       timeoutId: null,
+      error: false,
     };
   }
 
@@ -136,9 +138,16 @@ class AVPlayerRMP extends PureComponent {
     this.player_.instance.playbackRate = parseFloat(rate.slice(0, -1));
   }
 
+  onError = (e) => {
+    // Show error only on loading of video.
+    if (!e.currentTime && !e.isPlaying) {
+      this.setState({error: true});
+    }
+  }
+
   render() {
     const { audio, video, active, languages, defaultValue, t } = this.props;
-    const { controlsVisible } = this.state;
+    const { controlsVisible, error } = this.state;
 
     const forceShowControls = !this.player_ || !this.player_.context.media.isPlaying;
 
@@ -168,6 +177,7 @@ class AVPlayerRMP extends PureComponent {
                     autoPlay={false}
                     onReady={this.onPlayerReady}
                     preload="auto"
+                    onError={this.onError}
                   />
                   <div
                     className={classNames('media-controls', { fade: !controlsVisible && !forceShowControls })}
@@ -201,12 +211,18 @@ class AVPlayerRMP extends PureComponent {
                     </div>
                     { active === video ? (
                         <div className="media-center-control"
-                             style={{outline: 'none'}}
+                             style={!error ? {outline: 'none'} : {backgroundColor: 'black', outline: 'none'}}
                              tabIndex="0"
                              onClick={() => playPause()}
                              onKeyDown={(e) => { playPause(); e.preventDefault(); }}
                              onMouseMove={this.centerMove}>
-                          <AVCenteredPlay />
+                          { error ? (
+                              <div className="player-button">
+                                Error loading file.
+                                <Icon name={'warning sign'} size='large'/>
+                              </div>
+                            ) : <AVCenteredPlay />
+                          }
                         </div>
                       ) : null }
                   </div>
