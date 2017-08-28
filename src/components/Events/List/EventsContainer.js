@@ -9,7 +9,7 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions, selectors as eventSelectors } from '../../../redux/modules/events';
 import * as shapes from '../../shapes';
-import withPagination from '../../../helpers/pagination/paginationHOC';
+import withPagination from '../../pagination/paginationHOC';
 import EventsList from './EventsList';
 
 const allEventTypes = [CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY];

@@ -9,7 +9,7 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions, selectors as programSelectors } from '../../../redux/modules/programs';
 import * as shapes from '../../shapes';
-import withPagination from '../../../helpers/pagination/paginationHOC';
+import withPagination from '../../pagination/paginationHOC';
 import ProgramsList from './ProgramsList';
 
 class ProgramsContainer extends Component {

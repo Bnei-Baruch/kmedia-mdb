@@ -12,7 +12,7 @@ import { selectors as filters } from '../../../redux/modules/filters';
 import * as shapes from '../../shapes';
 import LessonsFilters from './LessonsFilters';
 import LessonsList from './LessonsList';
-import withPagination from '../../../helpers/pagination/paginationHOC';
+import withPagination from '../../pagination/paginationHOC';
 
 class LessonsContainer extends Component {
 
@@ -82,9 +82,11 @@ class LessonsContainer extends Component {
           onChange={() => handlePageChange(1, this.props)}
           onHydrated={this.handleFiltersHydrated}
         />
+        {this.renderPagniatorHeader()}
         <ResultsPageHeader {...this.props} />
         <Divider />
         <LessonsList items={items} />
+        {this.renderPagniatorMenu()}
         <Pagination {...this.props} onChange={x => handlePageChange(x, this.props)} />
       </Grid.Column>
     );
