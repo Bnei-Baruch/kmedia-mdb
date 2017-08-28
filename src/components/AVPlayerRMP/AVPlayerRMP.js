@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Media, Player } from 'react-media-player';
 import classNames from 'classnames';
+import { Icon } from 'semantic-ui-react';
 
 import * as shapes from '../shapes';
 import { physicalFile } from '../../helpers/utils';
@@ -44,6 +45,7 @@ class AVPlayerRMP extends PureComponent {
       videoElement: null,
       controlsVisible: true,
       timeoutId: null,
+      error: false,
     };
   }
 
@@ -100,7 +102,6 @@ class AVPlayerRMP extends PureComponent {
   showControls = (callback = undefined) => {
     const { timeoutId } = this.state;
     if (timeoutId) {
-      console.log('Show controls. Set timetout null.');
       this.setState({controlsVisible: true, timeoutId: null}, () => {
         clearTimeout(timeoutId);
         if (callback) {
@@ -108,7 +109,6 @@ class AVPlayerRMP extends PureComponent {
         }
       });
     } else {
-      console.log('Show controls.')
       this.setState({controlsVisible: true}, callback);
     }
   }
@@ -116,10 +116,8 @@ class AVPlayerRMP extends PureComponent {
   hideControlsTimeout = () => {
     if (!this.state.timeoutId) {
       const timeoutId = setTimeout(() => {
-        console.log('Hide controls now.')
         this.setState({controlsVisible: false});
       }, 2000);
-      console.log('Set timeout.');
       this.setState({timeoutId});
     }
   }
@@ -140,19 +138,18 @@ class AVPlayerRMP extends PureComponent {
     this.player_.instance.playbackRate = parseFloat(rate.slice(0, -1));
   }
 
+  onError = (e) => {
+    // Show error only on loading of video.
+    if (!e.currentTime && !e.isPlaying) {
+      this.setState({error: true});
+    }
+  }
+
   render() {
     const { audio, video, active, languages, defaultValue, t } = this.props;
-    const { controlsVisible } = this.state;
+    const { controlsVisible, error } = this.state;
 
     const forceShowControls = !this.player_ || !this.player_.context.media.isPlaying;
-    console.log('forceShowControls', forceShowControls);
-
-    const centerPlay = active === video ? (
-      <div className="media-center-control"
-           onMouseMove={this.centerMove}>
-        <AVCenteredPlay />
-      </div>
-    ) : null;
 
     return (
       <div>
@@ -175,13 +172,12 @@ class AVPlayerRMP extends PureComponent {
                 >
                   <Player
                     ref={c => this.player_ = c}
-                    src="https://www.html5rocks.com/en/tutorials/video/basics/devstories.mp4"
+                    src={physicalFile(active, true)}
                     vendor={active === video ? 'video' : 'audio'}
                     autoPlay={false}
                     onReady={this.onPlayerReady}
-                    loop="false"
                     preload="auto"
-                    onClick={(...params) => { console.log(...params); playPause(); }}
+                    onError={this.onError}
                   />
                   <div
                     className={classNames('media-controls', { fade: !controlsVisible && !forceShowControls })}
@@ -213,7 +209,22 @@ class AVPlayerRMP extends PureComponent {
                         <AVFullScreen />
                       </div>
                     </div>
-                    { centerPlay }
+                    { active === video ? (
+                        <div className="media-center-control"
+                             style={!error ? {outline: 'none'} : {backgroundColor: 'black', outline: 'none'}}
+                             tabIndex="0"
+                             onClick={() => playPause()}
+                             onKeyDown={(e) => { playPause(); e.preventDefault(); }}
+                             onMouseMove={this.centerMove}>
+                          { error ? (
+                              <div className="player-button">
+                                Error loading file.
+                                <Icon name={'warning sign'} size='large'/>
+                              </div>
+                            ) : <AVCenteredPlay />
+                          }
+                        </div>
+                      ) : null }
                   </div>
                 </div>
               </div>
