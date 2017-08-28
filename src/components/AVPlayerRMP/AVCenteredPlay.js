@@ -6,7 +6,7 @@ import { Icon } from 'semantic-ui-react';
 
 import './styles.css';
 
-class AVPlayPause extends Component {
+class AVCenteredPlay extends Component {
   static propTypes = {
     media: PropTypes.shape({
       isPlaying: PropTypes.bool.isRequired,
@@ -24,21 +24,24 @@ class AVPlayPause extends Component {
 
   render() {
     const { media } = this.props;
+
+    if (media.isPlaying) {
+      return (<div></div>);
+    }
+
     return (
       <button
         type="button"
         tabIndex="-1"
         className={classNames('player-button')}
         onClick={this.handlePlayPause}
-        style={{ marginLeft: '10px', marginRight: '5px' }}
+        style={{outline: 'none', pointerEvents: 'auto'}}
       >
-        <Icon
-          name={media.isPlaying ? 'pause' : 'play'}
-          style={{margin: 0, height: '100%' }}
-        />
+        <Icon name={'video play'}
+              size='massive' />
       </button>
     );
   }
 }
 
-export default withMediaProps(AVPlayPause);
+export default withMediaProps(AVCenteredPlay);

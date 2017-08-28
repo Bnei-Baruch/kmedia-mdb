@@ -6,6 +6,7 @@ class AVDuration extends Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
     style: PropTypes.object,
+    className: PropTypes.any,
     media: PropTypes.object.isRequired,
   };
 
@@ -29,11 +30,11 @@ class AVDuration extends Component {
   };
 
   render() {
-    const { style, name } = this.props;
+    const { style, name, className } = this.props;
     const time            = this.props.media[name];
 
     return (
-      <time style={style}>
+      <time className={className} style={style}>
         {this.formatTime(time)}
       </time>
     );

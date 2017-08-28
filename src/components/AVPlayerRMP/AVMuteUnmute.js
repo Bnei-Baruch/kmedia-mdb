@@ -9,9 +9,14 @@ class AVMuteUnmute extends Component {
     media: PropTypes.shape({
       isMuted: PropTypes.bool.isRequired,
       volume: PropTypes.number.isRequired,
-      muteUnmute: PropTypes.func.isRequired
-    }).isRequired
+      muteUnmute: PropTypes.func.isRequired,
+    }).isRequired,
+    upward: PropTypes.bool,
   };
+
+  static defaultProps = {
+    upward: true,
+  }
 
   constructor(props) {
     super(props);
@@ -44,17 +49,17 @@ class AVMuteUnmute extends Component {
 
   // Handle volume change on bar
   componentDidMount() {
-    this.element.addEventListener('mousemove', this.handleMove);
-    this.element.addEventListener('touchmove', this.handleMove);
-    this.element.addEventListener('mouseup', this.handleEnd);
-    this.element.addEventListener('touchend', this.handleEnd);
+    document.addEventListener('mousemove', this.handleMove);
+    document.addEventListener('touchmove', this.handleMove);
+    document.addEventListener('mouseup', this.handleEnd);
+    document.addEventListener('touchend', this.handleEnd);
   }
 
   componentWillUnmount() {
-    this.element.removeEventListener('mousemove', this.handleMove);
-    this.element.removeEventListener('touchmove', this.handleMove);
-    this.element.removeEventListener('mouseup', this.handleEnd);
-    this.element.removeEventListener('touchend', this.handleEnd);
+    document.removeEventListener('mousemove', this.handleMove);
+    document.removeEventListener('touchmove', this.handleMove);
+    document.removeEventListener('mouseup', this.handleEnd);
+    document.removeEventListener('touchend', this.handleEnd);
   }
 
   handleStart = (e) => {
@@ -91,62 +96,25 @@ class AVMuteUnmute extends Component {
     const { media: { isMuted, volume } } = this.props;
     const { volumeHover, wasMouseDown }  = this.state;
 
-    // TODO: (yaniv) preload images?
-    const parentStyle = {
-      position: 'relative',
-      display: 'flex',
-      flexDirection: 'column-reverse',
-    };
-
-    const volumeStyle = {
+    const volumePopoverStyle = {
       position: 'absolute',
-      bottom: 17,
+      bottom: this.props.upward ? '100%' : 'auto',
+      top: this.props.upward ? 'auto' : '100%',
       background: 'black',
       opacity: 0.65,
       visibility: volumeHover || wasMouseDown ? 'visible' : 'hidden',
     };
 
-    const bar = {
-      display: 'flex',
-      flexDirection: 'column-reverse',
-      flexWrap: 'nowrap',
-      paddingLeft: 10,
-      paddingRight: 10,
-      marginBottom: 10,
-      marginTop: 10,
-    };
-
-    const styleBar = {
-      width: 3,
-      marginTop: 0,
-      marginBottom: 0,
-    };
-
     const styleVolume = {
       height: this.normalize(volume) + 'px',
-      backgroundColor: 'rgb(66, 133, 244)',
-      ...styleBar,
-      position: 'relative',
     };
 
     const styleBlank = {
       height: this.normalize(1 - volume) + 'px',
-      backgroundColor: 'rgb(118, 118, 118)',
-      ...styleBar,
-    };
-
-    const knobStyle = {
-      position: 'absolute',
-      height: 10,
-      width: 10,
-      borderRadius: 5,
-      backgroundColor: 'rgb(66, 133, 244)',
-      right: -3,
-      top: -5,
     };
 
     return (
-      <div style={parentStyle}>
+      <div className="player-control-mute-unmute">
         <button
           type="button"
           className="player-button"
@@ -155,32 +123,50 @@ class AVMuteUnmute extends Component {
           onMouseLeave={this.handleMouseLeave}
           style={{}}
         >
-          {isMuted &&
-          <Icon key="mute" name="volume off"
-                style={{margin: 0, height: '100%' }} />
+          {
+            isMuted && (
+              <Icon
+                key="mute"
+                name="volume off"
+                style={{ margin: 0, height: '100%' }}
+              />
+            )
           }
-          {volume > 0 && volume < 0.5 &&
-          <Icon key="volume-down" name="volume down"
-                style={{margin: 0, height: '100%' }} />
+          {
+            volume > 0 && volume < 0.5 && (
+              <Icon
+                key="volume-down"
+                name="volume down"
+                style={{ margin: 0, height: '100%' }}
+              />
+            )
           }
-          {volume >= 0.5 &&
-          <Icon key="volume-up" name="volume up"
-                style={{margin: 0, height: '100%' }} />
+          {
+            volume >= 0.5 && (
+              <Icon
+                key="volume-up"
+                name="volume up"
+                style={{ margin: 0, height: '100%' }}
+              />
+            )
           }
         </button>
-        <div style={volumeStyle}
-             onMouseEnter={this.handleMouseEnter}
-             onMouseLeave={this.handleMouseLeave}>
+        <div
+          className="volume-popover"
+          style={volumePopoverStyle}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
+        >
           <div
             ref={c => this.element = c}
-            style={bar}
+            className="bar-wrapper"
             onMouseDown={this.handleStart}
             onTouchStart={this.handleStart}
           >
-            <div style={styleVolume}>
-              <div style={knobStyle} />
+            <div className="bar volume" style={styleVolume}>
+              <div className="knob" />
             </div>
-            <div style={styleBlank} />
+            <div className="bar blank" style={styleBlank} />
           </div>
         </div>
       </div>

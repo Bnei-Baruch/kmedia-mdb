@@ -28,8 +28,10 @@ class AVFullscreen extends Component {
         onClick={this.handleFullscreen}
         style={{ marginLeft: 10, marginRight: 10 }}
       >
-        <Icon name={media.isFullScreen ? 'compress' : 'expand' }
-              style={{margin: 0, height: '100%' }} />
+        <Icon
+          name={media.isFullscreen ? 'compress' : 'expand'}
+          style={{margin: 0, height: '100%' }}
+        />
       </button>
     );
   }

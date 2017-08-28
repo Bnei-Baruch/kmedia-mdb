@@ -4,20 +4,16 @@ import noop from 'lodash/noop';
 import { Dropdown } from 'semantic-ui-react';
 import classNames from 'classnames';
 
-import { LANG_HEBREW, LANGUAGE_OPTIONS } from '../../helpers/consts';
-
-export default class AVLanguage extends Component {
+export default class AVPlaybackRate extends Component {
   static propTypes = {
     onSelect: PropTypes.func,
     defaultValue: PropTypes.string,
-    languages: PropTypes.arrayOf(PropTypes.string),
     upward: PropTypes.bool,
   };
 
   static defaultProps = {
     onSelect: noop,
-    defaultValue: LANG_HEBREW,
-    languages: [],
+    defaultValue: '1x',
     upward: true,
   };
 
@@ -27,15 +23,13 @@ export default class AVLanguage extends Component {
   render() {
     const { languages, defaultValue, upward } = this.props;
 
-    const options = LANGUAGE_OPTIONS
-      .filter(x => languages.includes(x.value))
-      .map(x => ({ value: x.value, text: x.value }));
+    const options = ['1x', '1.5x', '2x']
+      .map(x => ({ value: x, text: x }));
 
     return (
-      <div className="player-control-language">
+      <div style={{marginRight: '5px'}}>
         <Dropdown
           floating
-          inline
           scrolling
           upward={upward}
           icon={null}
@@ -44,7 +38,6 @@ export default class AVLanguage extends Component {
           defaultValue={defaultValue}
           onChange={this.handleChange}
           className={classNames('player-button')}
-          style={{ display: 'flex', textDecoration: 'underline' }}
         />
       </div>
     );
