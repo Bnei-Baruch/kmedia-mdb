@@ -82,11 +82,9 @@ class LessonsContainer extends Component {
           onChange={() => handlePageChange(1, this.props)}
           onHydrated={this.handleFiltersHydrated}
         />
-        {this.renderPagniatorHeader()}
         <ResultsPageHeader {...this.props} />
         <Divider />
         <LessonsList items={items} />
-        {this.renderPagniatorMenu()}
         <Pagination {...this.props} onChange={x => handlePageChange(x, this.props)} />
       </Grid.Column>
     );
