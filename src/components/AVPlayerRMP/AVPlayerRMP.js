@@ -46,6 +46,7 @@ class AVPlayerRMP extends PureComponent {
       controlsVisible: true,
       timeoutId: null,
       error: false,
+      playbackRate: '1x',
     };
   }
 
@@ -135,7 +136,8 @@ class AVPlayerRMP extends PureComponent {
   }
 
   playbackRateChange = (e, rate) => {
-    this.player_.instance.playbackRate = parseFloat(rate.slice(0, -1));
+    this.state.videoElement.playbackRate = parseFloat(rate.slice(0, -1));
+    this.setState({playbackRate: rate});
   }
 
   onError = (e) => {
@@ -147,9 +149,14 @@ class AVPlayerRMP extends PureComponent {
 
   render() {
     const { audio, video, active, languages, defaultValue, t } = this.props;
-    const { controlsVisible, error } = this.state;
+    const { controlsVisible, error, playbackRate, videoElement } = this.state;
 
     const forceShowControls = !this.player_ || !this.player_.context.media.isPlaying;
+
+    // TODO: playbackRate should be added to react media player repository.
+    if (videoElement) {
+      videoElement.playbackRate = parseFloat(this.state.playbackRate.slice(0, -1));
+    }
 
     return (
       <div>
