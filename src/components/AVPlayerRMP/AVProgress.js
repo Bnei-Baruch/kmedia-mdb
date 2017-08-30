@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import isNumber from 'lodash/isNumber';
 import { withMediaProps } from 'react-media-player';
 import classNames from 'classnames';
 
@@ -72,35 +73,90 @@ class AVProgress extends Component {
     const { left, right } = this._element.getBoundingClientRect();
     const { duration }    = this.props.media;
     const offset          = Math.min(Math.max(0, clientX - left), right - left);
-    this.props.media.seekTo(duration * offset / (right - left));
+    this.props.media.seekTo((duration * offset) / (right - left));
   };
 
-  normalize = (l) => {
+  toPercentage = (l) => {
     const ret = 100 * l;
-    return (ret < 1) ? 0 : ret + '%';
+    if (ret > 100) {
+      return '100%';
+    }
+    return (ret < 1) ? 0 : `${ret}%`;
   };
+
+  getNormalizedSliceStart = (duration) => {
+    const { sliceEnd } = this.props;
+    let { sliceStart } = this.props;
+    if (!isNumber(sliceStart)) {
+      return 0;
+    }
+
+    if (sliceStart > sliceEnd) {
+      sliceStart = sliceEnd;
+    }
+
+    if (duration < sliceStart) {
+      sliceStart = duration;
+    }
+
+    if (sliceStart < 0) {
+      sliceStart = 0;
+    }
+
+    return sliceStart / duration;
+  }
+
+  getNormalizedSliceEnd = (duration) => {
+    const { sliceStart } = this.props;
+    let { sliceEnd } = this.props;
+
+    if (!isNumber(sliceEnd)) {
+      return 1;
+    }
+
+    if (sliceEnd < sliceStart) {
+      sliceEnd = sliceStart;
+    }
+
+    if (sliceEnd > duration) {
+      sliceEnd = duration;
+    }
+
+    if (sliceEnd < 0) {
+      sliceEnd = 0;
+    }
+
+    return sliceEnd / duration;
+  }
 
   render() {
     const { currentTime, duration } = this.props.media;
     const current                   = currentTime / duration;
     // Overriding progress of native react-media-player as he does not works correctly
     // with buffers.
-    const { buffers } = this.props;
+    const { buffers, isSlice, sliceStart, sliceEnd } = this.props;
     const b           = buffers.find(b => b.start <= currentTime && b.end >= currentTime);
     const progress    = (b && (b.end / duration)) || current;
 
     const stylePlayed = {
-      width: this.normalize(current),
+      width: this.toPercentage(current),
     };
 
     const styleLoaded = {
-      width: this.normalize(progress),
+      width: this.toPercentage(progress),
       left: 0
     };
 
     const styleRemaining = {
-      width: this.normalize(1 - progress),
-      left: this.normalize(progress)
+      width: this.toPercentage(1 - progress),
+      left: this.toPercentage(progress)
+    };
+
+    const normalizedSliceStart = this.getNormalizedSliceStart(duration);
+    const normalizedSliceEnd = this.getNormalizedSliceEnd(duration);
+    const styleSlice = {
+      left: this.toPercentage(normalizedSliceStart),
+      width: this.toPercentage(normalizedSliceEnd - normalizedSliceStart)
     };
 
     return (
@@ -115,6 +171,9 @@ class AVProgress extends Component {
         </div>
         <div className="bar loaded" style={styleLoaded} />
         <div className="bar remaining" style={styleRemaining} />
+        {
+          isSlice && <div className="bar slice" style={styleSlice} />
+        }
       </div>
     );
   }

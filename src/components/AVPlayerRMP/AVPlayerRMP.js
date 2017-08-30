@@ -61,10 +61,11 @@ class AVPlayerRMP extends PureComponent {
 
   componentWillMount() {
     const query = parse(this.props.location.search.slice(1));
+
     if (query.sstart || query.send) {
       this.setSliceMode({
-        sliceStart: query.sliceStart,
-        sliceEnd: query.sliceEnd
+        sliceStart: parseInt(query.sstart, 10),
+        sliceEnd: parseInt(query.send, 10)
       });
     }
   }
@@ -76,9 +77,8 @@ class AVPlayerRMP extends PureComponent {
     this.hideControlsTimeout();
   }
 
-
   componentWillReceiveProps(nextProps) {
-    if (this.props.active !== nextProps.active) {
+    if (this.props.video !== nextProps.video || this.props.audio !== nextProps.audio) {
       this.setNormalMode();
     }
   }
@@ -222,6 +222,7 @@ class AVPlayerRMP extends PureComponent {
                     onReady={this.onPlayerReady}
                     preload="auto"
                     onError={this.onError}
+                    defaultCurrentTime={sliceStart || 0}
                   />
                   <div
                     className={classNames('media-controls', { fade: !controlsVisible && !forceShowControls })}
