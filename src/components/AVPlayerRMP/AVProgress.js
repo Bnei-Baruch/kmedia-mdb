@@ -1,8 +1,25 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { withMediaProps } from 'react-media-player';
 import classNames from 'classnames';
 
 class AVProgress extends Component {
+
+  static propTypes = {
+    media: PropTypes.object.isRequired, // TODO: (yaniv) use right propType
+    buffers: PropTypes.array,
+    isSlice: PropTypes.bool,
+    sliceStart: PropTypes.number,
+    sliceEnd: PropTypes.number
+  };
+
+  static defaultProps = {
+    buffers: [],
+    isSlice: false,
+    sliceStart: 0,
+    sliceEnd: Infinity
+  };
+
   _element              = null;
   _wasMouseDown         = false;
   _isPlayingOnMouseDown = false;
@@ -70,66 +87,34 @@ class AVProgress extends Component {
     // with buffers.
     const { buffers } = this.props;
     const b           = buffers.find(b => b.start <= currentTime && b.end >= currentTime);
-    const progress    = (b && (b.end / duration)) || (currentTime / duration);
-
-    const parent = {
-      display: 'flex',
-      flexWrap: 'nowrap',
-      paddingTop: 5,
-      paddingBottom: 5,
-      marginLeft: 10,
-      marginRight: 10,
-      width: '100%',
-    };
-
-    const styleBar = {
-      height: 3,
-      marginLeft: 0,
-      marginRight: 0,
-    };
+    const progress    = (b && (b.end / duration)) || current;
 
     const stylePlayed = {
       width: this.normalize(current),
-      backgroundColor: 'rgb(66, 133, 244)',
-      ...styleBar,
-      position: 'relative',
     };
 
     const styleLoaded = {
-      width: this.normalize(progress - current),
-      backgroundColor: 'rgb(214, 214, 214)',
-      ...styleBar,
+      width: this.normalize(progress),
+      left: 0
     };
 
-    const styleLeft = {
+    const styleRemaining = {
       width: this.normalize(1 - progress),
-      backgroundColor: 'rgb(118, 118, 118)',
-      ...styleBar,
-    };
-
-    const knobStyle = {
-      position: 'absolute',
-      height: 10,
-      width: 10,
-      borderRadius: 5,
-      backgroundColor: 'rgb(66, 133, 244)',
-      right: -5,
-      top: -3,
+      left: this.normalize(progress)
     };
 
     return (
       <div
         ref={c => this._element = c}
-        style={parent}
-        className={classNames('player-button')}
+        className="player-button player-control-progress"
         onMouseDown={this.handleStart}
         onTouchStart={this.handleStart}
       >
-        <div style={stylePlayed}>
-          <div style={knobStyle} />
+        <div className="bar played" style={stylePlayed}>
+          <div className="knob" />
         </div>
-        <div style={styleLoaded} />
-        <div style={styleLeft} />
+        <div className="bar loaded" style={styleLoaded} />
+        <div className="bar remaining" style={styleRemaining} />
       </div>
     );
   }

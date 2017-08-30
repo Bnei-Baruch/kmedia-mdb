@@ -1,11 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { Media, Player } from 'react-media-player';
 import classNames from 'classnames';
 import { Icon } from 'semantic-ui-react';
 
 import * as shapes from '../shapes';
 import { physicalFile } from '../../helpers/utils';
+import { parse } from '../../helpers/url';
 import AVPlayPause from './AVPlayPause';
 import AVPlaybackRate from './AVPlaybackRate';
 import AVCenteredPlay from './AVCenteredPlay';
@@ -19,6 +21,7 @@ import AVProgress from './AVProgress';
 class AVPlayerRMP extends PureComponent {
 
   static propTypes = {
+    location: PropTypes.object.isRequired, // TODO: (yaniv) set right propType
     audio: shapes.MDBFile,
     video: shapes.MDBFile,
     active: shapes.MDBFile,
@@ -38,6 +41,11 @@ class AVPlayerRMP extends PureComponent {
     poster: null,
   };
 
+  static MODE = {
+    NORMAL: 0,
+    SLICE: 1
+  };
+
   constructor(props) {
     super(props);
 
@@ -47,7 +55,18 @@ class AVPlayerRMP extends PureComponent {
       timeoutId: null,
       error: false,
       playbackRate: '1x',
+      mode: AVPlayerRMP.MODE.NORMAL
     };
+  }
+
+  componentWillMount() {
+    const query = parse(this.props.location.search.slice(1));
+    if (query.sstart || query.send) {
+      this.setSliceMode({
+        sliceStart: query.sliceStart,
+        sliceEnd: query.sliceEnd
+      });
+    }
   }
 
   componentDidMount() {
@@ -56,6 +75,24 @@ class AVPlayerRMP extends PureComponent {
     // By default hide controls after a while if player playing.
     this.hideControlsTimeout();
   }
+
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.active !== nextProps.active) {
+      this.setNormalMode();
+    }
+  }
+
+  setSliceMode = properties => this.setState({
+    mode: AVPlayerRMP.MODE.SLICE,
+    ...properties
+  });
+
+  setNormalMode = () => this.setState({
+    mode: AVPlayerRMP.MODE.NORMAL,
+    sliceStart: undefined,
+    sliceEnd: undefined
+  });
 
   buffers = () => {
     const { videoElement } = this.state;
@@ -149,7 +186,7 @@ class AVPlayerRMP extends PureComponent {
 
   render() {
     const { audio, video, active, languages, defaultValue, t } = this.props;
-    const { controlsVisible, error, playbackRate, videoElement } = this.state;
+    const { controlsVisible, error, playbackRate, videoElement, mode, sliceStart, sliceEnd } = this.state;
 
     const forceShowControls = !this.player_ || !this.player_.context.media.isPlaying;
 
@@ -195,7 +232,12 @@ class AVPlayerRMP extends PureComponent {
                       <div className="controls-container">
                         <AVPlayPause />
                         <AVTimeElapsed />
-                        <AVProgress buffers={this.buffers()} />
+                        <AVProgress
+                          buffers={this.buffers()}
+                          isSlice={mode === AVPlayerRMP.MODE.SLICE}
+                          sliceStart={sliceStart}
+                          sliceEnd={sliceEnd}
+                        />
                         <AVPlaybackRate
                           onSelect={this.playbackRateChange}
                           upward={video === active} />
@@ -243,4 +285,4 @@ class AVPlayerRMP extends PureComponent {
   }
 }
 
-export default AVPlayerRMP;
+export default withRouter(AVPlayerRMP);
