@@ -19,23 +19,36 @@ import AVProgress from './AVProgress';
 class AVPlayerRMP extends PureComponent {
 
   static propTypes = {
+    autoPlay: PropTypes.bool,
     audio: shapes.MDBFile,
     video: shapes.MDBFile,
     active: shapes.MDBFile,
     onSwitchAV: PropTypes.func.isRequired,
-    // poster: PropTypes.string,
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
-    defaultValue: PropTypes.string.isRequired,
+    defaultLanguage: PropTypes.string.isRequired,
     onLanguageChange: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    // Playlist props
+    showNextPrev: PropTypes.bool,
+    hasNext: PropTypes.bool,
+    hasPrev: PropTypes.bool,
+    onFinish: PropTypes.func,
+    onPlay: PropTypes.func,
+    onPause: PropTypes.func,
+    onPrev: PropTypes.func,
+    onNext: PropTypes.func,
   };
 
   static defaultProps = {
+    autoPlay: false,
     audio: null,
     video: null,
     active: null,
     mediaType: null,
     poster: null,
+    showNextPrev: false,
+    hasNext: false,
+    hasPrev: false,
   };
 
   constructor(props) {
@@ -147,8 +160,22 @@ class AVPlayerRMP extends PureComponent {
     }
   }
 
+  onPlay = (e) => {
+    if (this.props.onPlay) {
+      this.props.onPlay();
+    }
+  }
+
+  onPause = (e) => {
+    if (Math.abs(e.currentTime - e.duration) < 0.1 && this.props.onFinish) {
+      this.props.onFinish();
+    } else if (this.props.onPause) {
+      this.props.onPause();
+    }
+  }
+
   render() {
-    const { audio, video, active, languages, defaultValue, t } = this.props;
+    const { autoPlay, audio, video, active, languages, defaultLanguage, t, showNextPrev, hasNext, hasPrev, onPrev, onNext } = this.props;
     const { controlsVisible, error, playbackRate, videoElement } = this.state;
 
     const forceShowControls = !this.player_ || !this.player_.context.media.isPlaying;
@@ -157,6 +184,8 @@ class AVPlayerRMP extends PureComponent {
     if (videoElement) {
       videoElement.playbackRate = parseFloat(this.state.playbackRate.slice(0, -1));
     }
+
+    console.log('AVPlayerRMP', hasPrev, hasNext);
 
     return (
       <div>
@@ -181,10 +210,12 @@ class AVPlayerRMP extends PureComponent {
                     ref={c => this.player_ = c}
                     src={physicalFile(active, true)}
                     vendor={active === video ? 'video' : 'audio'}
-                    autoPlay={false}
+                    autoPlay={autoPlay}
                     onReady={this.onPlayerReady}
                     preload="auto"
                     onError={this.onError}
+                    onPause={this.onPause}
+                    onPlay={this.onPlay}
                   />
                   <div
                     className={classNames('media-controls', { fade: !controlsVisible && !forceShowControls })}
@@ -193,7 +224,12 @@ class AVPlayerRMP extends PureComponent {
                          onMouseEnter={this.controlsEnter}
                          onMouseLeave={this.controlsLeave}>
                       <div className="controls-container">
-                        <AVPlayPause />
+                        <AVPlayPause
+                          showNextPrev={showNextPrev}
+                          hasNext={hasNext}
+                          hasPrev={hasPrev}
+                          onPrev={onPrev}
+                          onNext={onNext} />
                         <AVTimeElapsed />
                         <AVProgress buffers={this.buffers()} />
                         <AVPlaybackRate
@@ -209,7 +245,7 @@ class AVPlayerRMP extends PureComponent {
                         />
                         <AVLanguage
                           languages={languages}
-                          defaultValue={defaultValue}
+                          defaultValue={defaultLanguage}
                           onSelect={this.onLanguageChange}
                           upward={video === active}
                         />
