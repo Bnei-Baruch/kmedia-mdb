@@ -52,7 +52,7 @@ class Info extends Component {
         }
 
         const path    = tracePath(source, getSourceById);
-        const display = path.map(y => y.name).join('. ');
+        const display = path.map(y => y.name).join(' > ');
         const query   = filtersTransformer.toQueryParams(
           [{ name: 'sources-filter', values: [path.map(y => y.id)] }]);
 
