@@ -78,7 +78,9 @@ class AVPlayerRMP extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.video !== nextProps.video || this.props.audio !== nextProps.audio) {
+    const { active } = this.props;
+    if (active.id !== nextProps.video.id && active.id !== nextProps.audio) {
+      // TODO: (yaniv) - need to check if it is the same content unit...
       this.setNormalMode();
     }
   }
