@@ -55,9 +55,9 @@ class FullLesson extends Component {
             <FullVideoBox
               fullLesson={fullLesson}
               activePart={activePart}
+              onActivePartChange={this.handleActivePartChange}
               language={language}
               t={t}
-              onActivePartChange={this.handleActivePartChange}
             />
           </Grid>
           <Grid>

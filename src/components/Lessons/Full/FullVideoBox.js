@@ -8,7 +8,7 @@ import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
 import { physicalFile } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import LanguageSelector from '../../shared/LanguageSelector';
-import AVPlayer from '../../shared/UnitPlayer/AVPlayer';
+import AVPlayer from '../../AVPlayerRMP/AVPlayerRMP';
 
 class FullVideoBox extends Component {
 
@@ -28,6 +28,7 @@ class FullVideoBox extends Component {
     super(props);
 
     this.state = {
+      autoPlay: false,
       language: undefined,
       isVideo: true,
       isAudio: false,
@@ -127,37 +128,62 @@ class FullVideoBox extends Component {
   handleLessonPartClick = (e, data) =>
     this.props.onActivePartChange(parseInt(data.name, 10));
 
-  handleOneHundredPercent = () => {
+  onFinish = () => {
     const { activePart, fullLesson, onActivePartChange } = this.props;
     if (activePart < fullLesson.content_units.length - 1) {
       onActivePartChange(activePart + 1);
     }
+    this.setState({ autoPlay: true });
   };
 
-  handleVideo = () => {
-    this.setState({ isVideo: true, isAudio: false });
-  };
+  onNext = () => {
+    const { activePart, fullLesson, onActivePartChange } = this.props;
+    if (activePart < fullLesson.content_units.length - 1) {
+      onActivePartChange(activePart + 1);
+    }
+  }
 
-  handleAudio = () => {
-    this.setState({ isAudio: true, isVideo: false });
-  };
+  onPrev = () => {
+    const { activePart, onActivePartChange } = this.props;
+    if (activePart > 0) {
+      onActivePartChange(activePart - 1);
+    }
+  }
+
+  onPlay = () => {
+    this.setState({ autoPlay: true });
+  }
+
+  onPause = () => {
+    this.setState({ autoPlay: false });
+  }
+
+  handleSwitchAV = () => {
+    if (this.state.isAudio && this.state.isVideo !== undefined) {
+      this.setState({ isAudio: false, isVideo: true });
+    }
+    if (this.state.isVideo && this.state.isAudio !== undefined) {
+      this.setState({ isAudio: true, isVideo: false });
+    }
+  }
 
   render() {
     const { t, activePart, fullLesson, language: propsLanguage } = this.props;
-    const { language = propsLanguage, files }                    = this.state;
+    const { autoPlay, language = propsLanguage, files }          = this.state;
     let { isVideo, isAudio }                                     = this.state;
 
     const filesByAV = files.get(language) || new Map();
-    let fileList    = [];
+    let audioFileList = [];
     if (!filesByAV.has(MT_AUDIO)) {
       isAudio = undefined;
     } else if (isAudio) {
-      fileList = filesByAV.get(MT_AUDIO) || [];
+      audioFileList = filesByAV.get(MT_AUDIO) || [];
     }
+    let videoFileList = [];
     if (!filesByAV.has(MT_VIDEO)) {
       isVideo = undefined;
     } else if (isVideo) {
-      fileList = filesByAV.get(MT_VIDEO) || [];
+      videoFileList = filesByAV.get(MT_VIDEO) || [];
     }
 
     const titles = fullLesson.content_units.map((cu) => {
@@ -169,15 +195,15 @@ class FullVideoBox extends Component {
 
     // Remove empty files, might be in case language or video/audio is missing.
     // Store idx in order to get feedback from the player to select the correct part.
-    const playlist          = [];
-    let playlistActiveIndex = null;
-    fileList.forEach((file, idx) => {
+    const audioPlaylist = [];
+    let audioPlaylistActiveIndex = null;
+    audioFileList.forEach((file, idx) => {
       if (file) {
         // Set index in playlist to play.
-        if (playlistActiveIndex === null || idx <= activePart) {
-          playlistActiveIndex = playlist.length;
+        if (audioPlaylistActiveIndex === null || idx <= activePart) {
+          audioPlaylistActiveIndex = audioPlaylist.length;
         }
-        playlist.push({
+        audioPlaylist.push({
           mediaid: idx,
           file: physicalFile(file, true),
           title: titles[idx],
@@ -185,16 +211,49 @@ class FullVideoBox extends Component {
       }
     });
 
+    const videoPlaylist = [];
+    let videoPlaylistActiveIndex = null;
+    videoFileList.forEach((file, idx) => {
+      if (file) {
+        // Set index in playlist to play.
+        if (videoPlaylistActiveIndex === null || idx <= activePart) {
+          videoPlaylistActiveIndex = videoPlaylist.length;
+        }
+        videoPlaylist.push({
+          mediaid: idx,
+          file: physicalFile(file, true),
+          title: titles[idx],
+        });
+      }
+    });
+
+    console.log(videoPlaylistActiveIndex, videoFileList.length);
+
     return (
       <Grid.Row className="video_box">
         <Grid.Column width={10}>
           <div className="video_player">
             <div id="video" />
             <AVPlayer
-              playerId="full-lesson"
-              onOneHundredPercent={this.handleOneHundredPercent}
-              playlist={playlist}
-              playItem={playlistActiveIndex}
+              autoPlay={autoPlay}
+              active={isVideo ? videoFileList[videoPlaylistActiveIndex] : audioFileList[audioPlaylistActiveIndex]}
+              video={videoFileList[videoPlaylistActiveIndex]}
+              audio={audioFileList[audioPlaylistActiveIndex]}
+              poster="http://kabbalahmedia.info/assets/cover-video.jpg"
+              onSwitchAV={this.handleSwitchAV}
+              languages={Array.from(files.keys())}
+              defaultLanguage={language}
+              onLanguageChange={this.handleChangeLanguage}
+              t={t}
+              // Playlist props
+              onFinish={this.onFinish}
+              showNextPrev={true}
+              hasNext={isVideo ? videoPlaylistActiveIndex < videoFileList.length - 1 : audioPlaylistActiveIndex < audioFileList.length - 1}
+              hasPrev={isVideo ? videoPlaylistActiveIndex > 0 : audioPlaylistActiveIndex > 0}
+              onPrev={this.onPrev}
+              onNext={this.onNext}
+              onPause={this.onPause}
+              onPlay={this.onPlay}
             />
           </div>
         </Grid.Column>
@@ -204,10 +263,10 @@ class FullVideoBox extends Component {
               <Grid.Column>
                 <Button.Group fluid>
                   { isVideo === true ? <Button active color="blue" content={t('buttons.video')} /> : null }
-                  { isVideo === false ? <Button content={t('buttons.video')} onClick={this.handleVideo} /> : null}
+                  { isVideo === false ? <Button content={t('buttons.video')} onClick={this.handleSwitchAV} /> : null}
                   { isVideo === undefined ? <Button disabled content={t('buttons.video')} /> : null}
                   { isAudio === true ? <Button active color="blue" content={t('buttons.audio')} /> : null }
-                  { isAudio === false ? <Button content={t('buttons.audio')} onClick={this.handleAudio} /> : null }
+                  { isAudio === false ? <Button content={t('buttons.audio')} onClick={this.handleSwitchAV} /> : null }
                   { isAudio === undefined ? <Button disabled content={t('buttons.audio')} /> : null}
                 </Button.Group>
               </Grid.Column>
