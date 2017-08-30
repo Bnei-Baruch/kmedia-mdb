@@ -75,11 +75,11 @@ class Layout extends Component {
         </div>
         <div className="layout__main">
           <div className="layout__content">
-            <Grid padded>
-              <Grid.Row>
+           {/* <Grid padded>
+              <Grid.Row>*/}
                 <Route component={Routes} />
-              </Grid.Row>
-            </Grid>
+              {/*</Grid.Row>
+            </Grid>*/}
           </div>
           <Footer />
         </div>

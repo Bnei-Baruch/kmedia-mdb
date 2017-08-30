@@ -36,15 +36,12 @@ const ResultsPageHeader = (props) => {
 };
 
 ResultsPageHeader.propTypes = {
-  pageNo: PropTypes.number,
+  pageNo: PropTypes.number.isRequired,
   pageSize: PropTypes.number.isRequired,
-  total: PropTypes.number,
+  total: PropTypes.number.isRequired,
   t: PropTypes.func.isRequired,
 };
 
-ResultsPageHeader.defaultProps = {
-  pageNo: 1,
-  total: 0,
-};
+ResultsPageHeader.defaultProps = {};
 
 export default translate()(ResultsPageHeader);

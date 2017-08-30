@@ -34,7 +34,6 @@ const filtersTransformer = {
     const queryParams = filters.reduce((acc, filter) => {
       const definition = this.definitionsByName[filter.name];
       const paramValues = filterValuesToQueryValues(definition, filter.values);
-
       return Object.assign(acc, { [definition.queryKey]: paramValues });
     }, {});
 

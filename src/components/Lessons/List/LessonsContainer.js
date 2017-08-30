@@ -10,19 +10,17 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as filters } from '../../../redux/modules/filters';
 import * as shapes from '../../shapes';
-import Pagination from '../../shared/Pagination';
 import LessonsFilters from './LessonsFilters';
 import LessonsList from './LessonsList';
-import withPagination from '../../../helpers/paginationHOC';
+import withPagination from '../../pagination/paginationHOC';
 
 class LessonsContainer extends Component {
 
   static propTypes = {
-    pageNo: PropTypes.number,
-    total: PropTypes.number,
+    pageNo: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired,
     items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.LessonCollection, shapes.LessonPart])),
     location: shapes.HistoryLocation.isRequired,
-    fetchList: PropTypes.func.isRequired,
     setPage: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
     pageSize: PropTypes.number.isRequired,
@@ -30,11 +28,11 @@ class LessonsContainer extends Component {
     getPageNo: PropTypes.func.isRequired,
     askForData: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
+    ResultsPageHeader: PropTypes.func.isRequired,
+    Pagination: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    pageNo: 1,
-    total: 0,
     items: [],
     isFiltersHydrated: false,
   };
@@ -73,7 +71,7 @@ class LessonsContainer extends Component {
   };
 
   render() {
-    const { pageNo, total, items, pageSize, language, handlePageChange } = this.props;
+    const { pageNo, total, items, pageSize, handlePageChange, ResultsPageHeader, Pagination } = this.props;
 
     return (
       <Grid.Column width={16}>
@@ -84,15 +82,10 @@ class LessonsContainer extends Component {
           onChange={() => handlePageChange(1, this.props)}
           onHydrated={this.handleFiltersHydrated}
         />
+        <ResultsPageHeader {...this.props} />
         <Divider />
         <LessonsList items={items} />
-        <Pagination
-          pageNo={pageNo}
-          pageSize={pageSize}
-          total={total}
-          language={language}
-          onChange={x => handlePageChange(x, this.props)}
-        />
+        <Pagination {...this.props} onChange={x => handlePageChange(x, this.props)} />
       </Grid.Column>
     );
   }

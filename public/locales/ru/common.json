@@ -1,7 +1,41 @@
 {
+  "nav": {
+    "top": {
+      "header": "Kabbalah Media"
+    },
+    "sidebar": {
+      "lessons": "Ежедневные уроки",
+      "programs": "ТВ & программы",
+      "lectures": "Лекции и уроки",
+      "sources": "Каббалистические источники",
+      "events": "События",
+      "books": "Книги",
+      "topics": "Темы",
+      "publications": "Публикации",
+      "photos": "Фотографии",
+      "design": "Дизайн",
+      "design2": "Раскладка"
+    },
+    "footer": {
+      "copyright": "Copyright © 2003-{{year}}",
+      "rights": "Бней Барух – Ассоциация Каббала ла-ам"
+    }
+  },
   "filters": {
     "date-filter": {
-      "label": "Дата"
+      "label": "Дата",
+      "selectTitle": "Выберите временной промежуток",
+      "presets": {
+        "TODAY": "Сегодня",
+        "YESTERDAY": "Вчера",
+        "LAST_7_DAYS": "Последние 7 дней",
+        "LAST_30_DAYS": "Последние 30 дней",
+        "LAST_MONTH": "Прошлый месяц",
+        "THIS_MONTH": "Этот месяц",
+        "CUSTOM_RANGE": "Промежуток"
+      },
+      "start": "Начало",
+      "end": "Конец"
     },
     "sources-filter": {
       "label": "Статьи"
@@ -9,5 +43,162 @@
     "topics-filter": {
       "label": "Темы"
     }
+  },
+  "buttons": {
+    "apply": "Да",
+    "cancel": "Нет",
+    "audio": "Аудио",
+    "video": "Видео",
+    "more": "Ещё"
+  },
+  "messages": {
+    "loading": "Загрузка...",
+    "loading-subtext": "Ждите...",
+    "server-error": "Ошибка сервера",
+    "lesson-not-found": "Урок не найден",
+    "lesson-not-found-subtext": "Попробуйте <1>список уроков</1>...",
+    "program-not-found": "Программа не найдена",
+    "program-not-found-subtext": "Попробуйте <1>programs list</1>...",
+    "event-not-found": "Событие не найдено",
+    "event-not-found-subtext": "Попробуйте <1>events list</1>...",
+    "no-files": "Нет файлов",
+    "no-playable-files": "Не файлов для воспроизведения",
+    "no-results": "Нет результатов",
+    "pagination-results": "Результаты {{start}} - {{end}} из {{total}}"
+  },
+  "lessons": {
+    "list": {
+      "related": "Относятся к"
+    },
+    "part": {
+      "info": {
+        "tags": "Таги",
+        "sources": "Источники",
+        "related-event": "Относится к событию"
+      },
+      "materials": {
+        "summary": "Краткое содержание",
+        "transcription": "Конспект",
+        "sources": "Источники",
+        "sketches": "Чертежи"
+      },
+      "downloads": {
+        "title": "Медия для скачиания",
+        "derived-title": "Производная медиа",
+        "copy-link": "Копировать линк",
+        "type-labels": {
+          "video": "Видео урока",
+          "audio": "Аудио урока",
+          "text": "Текст",
+          "image": "Чертежи"
+        }
+      },
+      "relevant-parts": {
+        "title": "Остальные части того же урока",
+        "item-title": "Часть {{name}}"
+      }
+    }
+  },
+  "programs": {
+    "part": {
+      "info": {
+        "tags": "Таги",
+        "sources": "Источники",
+        "related-event": "Относится к событию"
+      },
+      "materials": {
+        "summary": "Краткое содержание",
+        "transcription": "Конспект"
+      },
+      "downloads": {
+        "title": "Медия для скачиания",
+        "derived-title": "Производная медиа",
+        "copy-link": "Копировать линк",
+        "type-labels": {
+          "video": "Видео программы",
+          "audio": "Аудио программы",
+          "text": "Текст",
+          "image": "Чертежи"
+        }
+      },
+      "relevant-parts": {
+        "title": "Остальные части той же программы",
+        "item-title": "Часть {{name}}"
+      }
+    }
+  },
+  "constants": {
+    "languages": {
+      "he": "Hebrew",
+      "en": "English",
+      "ru": "Russian",
+      "es": "Spanish",
+      "it": "Italian",
+      "de": "German",
+      "nl": "Dutch",
+      "fr": "French",
+      "pt": "Portuguese",
+      "tr": "Turkish",
+      "pl": "Polish",
+      "ar": "Arabic",
+      "hu": "Hungarian",
+      "fi": "Finnish",
+      "lt": "Lithuanian",
+      "ja": "Japanese",
+      "bg": "Bulgarian",
+      "ka": "Georgian",
+      "no": "Norwegian",
+      "sv": "Swedish",
+      "hr": "Croatian",
+      "zh": "Chinese",
+      "fa": "Persian",
+      "ro": "Romanian",
+      "hi": "Hindi",
+      "ua": "Ukrainian",
+      "mk": "Macedonian",
+      "sl": "Slovenian",
+      "lv": "Latvian",
+      "sk": "Slovak",
+      "cs": "Czech"
+    },
+    "content-types": {
+      "DAILY_LESSON": "Ежедневный урок",
+      "SPECIAL_LESSON": "Специальный урок",
+      "FRIENDS_GATHERINGS": "Собрания товарищей",
+      "CONGRESS": "Конгресс",
+      "VIDEO_PROGRAM": "Видео программа",
+      "LECTURE_SERIES": "Серия лекций",
+      "MEALS": "Трапезы",
+      "HOLIDAY": "Праздник",
+      "PICNIC": "Пикник",
+      "UNITY_DAY": "Вечер единства",
+      "LESSON_PART": "Часть урока",
+      "LECTURE": "Лекция",
+      "CHILDREN_LESSON_PART": "Часть детского урока",
+      "WOMEN_LESSON_PART": "Часть женского урока",
+      "VIRTUAL_LESSON": "Виртуальный урок",
+      "FRIENDS_GATHERING": "Собрание товарищей",
+      "MEAL": "Трапеза",
+      "VIDEO_PROGRAM_CHAPTER": "Часть программы",
+      "FULL_LESSON": "Полный урок",
+      "TEXT": "Текст",
+      "UNKNOWN": "Неизвестное",
+      "EVENT_PART": "Часть события",
+      "CLIP": "Клип",
+      "TRAINING": "Тренировка",
+      "KITEI_MAKOR": "Первоисточники"
+    },
+    "media-types": {
+      "video": "Video",
+      "audio": "Audio",
+      "image": "Image",
+      "text": "Text",
+      "sheet": "Sheet",
+      "banner": "Banner",
+      "presentation": "Presentation"
+    }
+  },
+  "values": {
+    "date": "{{date, l}}"
   }
 }

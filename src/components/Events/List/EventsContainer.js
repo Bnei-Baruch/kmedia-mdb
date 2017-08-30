@@ -9,9 +9,7 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions, selectors as eventSelectors } from '../../../redux/modules/events';
 import * as shapes from '../../shapes';
-import withPagination from '../../../helpers/paginationHOC';
-import Pagination from '../../shared/Pagination';
-import ResultsPageHeader from '../../shared/ResultsPageHeader';
+import withPagination from '../../pagination/paginationHOC';
 import EventsList from './EventsList';
 
 const allEventTypes = [CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY];
@@ -19,8 +17,8 @@ const allEventTypes = [CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY];
 class EventsContainer extends Component {
 
   static propTypes = {
-    pageNo: PropTypes.number,
-    total: PropTypes.number,
+    pageNo: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired,
     items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.EventCollection, shapes.EventItem])),
     contentTypes: PropTypes.arrayOf(PropTypes.string),
     location: shapes.HistoryLocation.isRequired,
@@ -31,11 +29,11 @@ class EventsContainer extends Component {
     getPageNo: PropTypes.func.isRequired,
     askForData: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
+    ResultsPageHeader: PropTypes.func.isRequired,
+    Pagination: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    pageNo: 1,
-    total: 0,
     items: [],
     contentTypes: allEventTypes
   };
@@ -61,19 +59,14 @@ class EventsContainer extends Component {
   }
 
   render() {
-    const { pageNo, total, items, pageSize, handlePageChange } = this.props;
+    const { items, handlePageChange, ResultsPageHeader, Pagination } = this.props;
 
     return (
       <Grid.Column width={16}>
-        <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+        <ResultsPageHeader {...this.props} />
         <Divider />
         <EventsList items={items} />
-        <Pagination
-          pageNo={pageNo}
-          pageSize={pageSize}
-          total={total}
-          onChange={x => handlePageChange(x, this.props)}
-        />
+        <Pagination {...this.props} onChange={x => handlePageChange(x, this.props)} />
       </Grid.Column>
     );
   }

@@ -9,16 +9,14 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions, selectors as programSelectors } from '../../../redux/modules/programs';
 import * as shapes from '../../shapes';
-import withPagination from '../../../helpers/paginationHOC';
-import Pagination from '../../shared/Pagination';
-import ResultsPageHeader from '../../shared/ResultsPageHeader';
+import withPagination from '../../pagination/paginationHOC';
 import ProgramsList from './ProgramsList';
 
 class ProgramsContainer extends Component {
 
   static propTypes = {
-    pageNo: PropTypes.number,
-    total: PropTypes.number,
+    pageNo: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired,
     items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.ProgramCollection, shapes.ProgramChapter])),
     location: shapes.HistoryLocation.isRequired,
     fetchList: PropTypes.func.isRequired,
@@ -28,11 +26,11 @@ class ProgramsContainer extends Component {
     getPageNo: PropTypes.func.isRequired,
     askForData: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
+    ResultsPageHeader: PropTypes.func.isRequired,
+    Pagination: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    pageNo: 1,
-    total: 0,
     items: [],
   };
 
@@ -57,19 +55,14 @@ class ProgramsContainer extends Component {
   }
 
   render() {
-    const { pageNo, total, items, pageSize, handlePageChange } = this.props;
+    const { items, handlePageChange, ResultsPageHeader, Pagination } = this.props;
 
     return (
       <Grid.Column width={16}>
-        <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+        <ResultsPageHeader {...this.props} />
         <Divider />
         <ProgramsList items={items} />
-        <Pagination
-          pageNo={pageNo}
-          pageSize={pageSize}
-          total={total}
-          onChange={x => handlePageChange(x, this.props)}
-        />
+        <Pagination {...this.props} onChange={x => handlePageChange(x, this.props)} />
       </Grid.Column>
     );
   }

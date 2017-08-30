@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Container } from 'semantic-ui-react';
 import Link from '../../Language/MultiLanguageLink';
 
 import { formatError } from '../../../helpers/utils';
@@ -50,28 +50,34 @@ class FullLesson extends Component {
       const { activePart } = this.state;
       const lesson         = fullLesson.content_units[activePart];
       return (
-        <Grid.Column width={16}>
-          <Grid>
-            <FullVideoBox
-              fullLesson={fullLesson}
-              activePart={activePart}
-              onActivePartChange={this.handleActivePartChange}
-              language={language}
-              t={t}
-            />
-          </Grid>
-          <Grid>
-            <Grid.Row>
-              <Grid.Column width={10}>
-                <Info lesson={lesson} t={t} />
-                <Materials lesson={lesson} t={t} />
-              </Grid.Column>
-              <Grid.Column width={6}>
-                <MediaDownloads lesson={lesson} language={language} t={t} />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Grid.Column>
+        <div>
+          <div className='video-bg'>
+            <Container>
+              <Grid padded>
+                <FullVideoBox
+                  fullLesson={fullLesson}
+                  activePart={activePart}
+                  language={language}
+                  t={t}
+                  onActivePartChange={this.handleActivePartChange}
+                />
+              </Grid>
+            </Container>
+          </div>
+          <Container>
+            <Grid padded>
+              <Grid.Row>
+                <Grid.Column width={10}>
+                  <Info lesson={lesson} t={t} />
+                  <Materials lesson={lesson} t={t} />
+                </Grid.Column>
+                <Grid.Column width={6}>
+                  <MediaDownloads lesson={lesson} language={language} t={t} />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Container>
+        </div>
       );
     }
 

@@ -5,7 +5,6 @@ import Filters from '../../Filters/Filters';
 import filterComponents from '../../Filters/filterComponents';
 import FiltersHydrator from '../../Filters/FiltersHydrator/FiltersHydrator';
 import FilterTags from '../../Filters/FilterTags/FilterTags';
-import ResultsPageHeader from '../../shared/ResultsPageHeader';
 
 const filters = [
   {
@@ -36,7 +35,6 @@ class LessonsFilters extends PureComponent {
       <div>
         <FiltersHydrator namespace="lessons" onHydrated={onHydrated} />
         <Filters namespace="lessons" filters={filters} onFilterApplication={onChange} />
-        <ResultsPageHeader {...this.props} />
         <FilterTags namespace="lessons" onClose={onChange} />
       </div>
     );
