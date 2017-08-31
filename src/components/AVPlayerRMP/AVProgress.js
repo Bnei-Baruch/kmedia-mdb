@@ -160,8 +160,8 @@ class AVProgress extends Component {
     };
 
     const styleLoaded = {
-      width: this.toPercentage(progress),
-      left: 0
+      width: this.toPercentage(isSlice ? (Math.min(progress, normalizedSliceEnd) - normalizedSliceStart) : progress),
+      left: isSlice ? this.toPercentage(normalizedSliceStart) : 0
     };
 
     const styleRemaining = {
@@ -177,7 +177,7 @@ class AVProgress extends Component {
     return (
       <div
         ref={c => this._element = c}
-        className="player-button player-control-progress"
+        className={classNames('player-button player-control-progress', { 'player-control-progress-slice': isSlice })}
         onMouseDown={this.handleStart}
         onTouchStart={this.handleStart}
       >

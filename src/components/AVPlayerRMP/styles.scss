@@ -86,6 +86,10 @@
     transform: translate(50%, -50%);
     z-index: 100;
   }
+
+  &.player-control-progress-slice {
+    background-color: rgb(118, 118, 118);
+  }
 }
 
 .player-control-mute-unmute {
