@@ -31,6 +31,7 @@ class AVPlayerRMP extends PureComponent {
     defaultValue: PropTypes.string.isRequired,
     onLanguageChange: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    isSliceable: PropTypes.bool
   };
 
   static defaultProps = {
@@ -39,6 +40,7 @@ class AVPlayerRMP extends PureComponent {
     active: null,
     mediaType: null,
     poster: null,
+    isSliceable: false
   };
 
   static MODE = {
@@ -60,13 +62,17 @@ class AVPlayerRMP extends PureComponent {
   }
 
   componentWillMount() {
-    const query = parse(this.props.location.search.slice(1));
+    const { isSliceable, location } = this.props;
 
-    if (query.sstart || query.send) {
-      this.setSliceMode({
-        sliceStart: parseInt(query.sstart, 10),
-        sliceEnd: parseInt(query.send, 10)
-      });
+    if (isSliceable) {
+      const query = parse(location.search.slice(1));
+
+      if (query.sstart || query.send) {
+        this.setSliceMode({
+          sliceStart: parseInt(query.sstart, 10),
+          sliceEnd: parseInt(query.send, 10)
+        });
+      }
     }
   }
 
