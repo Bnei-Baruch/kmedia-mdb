@@ -58,7 +58,6 @@
       content: "";
       position: absolute;
       top: 50%;
-      transform: translateY(-50%);
       height: 500%;
       width: 4px;
       border-radius: 10%;
@@ -67,10 +66,12 @@
 
     &:before {
       left: 0;
+      transform: translate(-50%, -50%);
     }
 
     &:after {
       right: 0;
+      transform: translate(50%, -50%);
     }
   }
 
@@ -80,9 +81,9 @@
     width: 10px;
     border-radius: 50%;
     background-color: rgb(66, 133, 244);
-    right: -5px;
+    right: 0;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translate(50%, -50%);
     z-index: 100;
   }
 }

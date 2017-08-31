@@ -70,10 +70,23 @@ class AVProgress extends Component {
   };
 
   seek = (clientX) => {
+    const { isSlice, sliceStart, sliceEnd, media } = this.props;
     const { left, right } = this._element.getBoundingClientRect();
-    const { duration }    = this.props.media;
+    const { duration }    = media;
     const offset          = Math.min(Math.max(0, clientX - left), right - left);
-    this.props.media.seekTo((duration * offset) / (right - left));
+
+    let seekPosition = (duration * offset) / (right - left);
+
+    // if we're in a  slice clamp the seek position inside of it
+    if (isSlice) {
+      if (seekPosition > sliceEnd) {
+        seekPosition = sliceEnd;
+      } else if (seekPosition < sliceStart) {
+        seekPosition = sliceStart;
+      }
+    }
+
+    media.seekTo(seekPosition);
   };
 
   toPercentage = (l) => {
@@ -138,8 +151,12 @@ class AVProgress extends Component {
     const b           = buffers.find(b => b.start <= currentTime && b.end >= currentTime);
     const progress    = (b && (b.end / duration)) || current;
 
+    const normalizedSliceStart = this.getNormalizedSliceStart(duration);
+    const normalizedSliceEnd = this.getNormalizedSliceEnd(duration);
+
     const stylePlayed = {
-      width: this.toPercentage(current),
+      width: this.toPercentage(current - normalizedSliceStart),
+      left: isSlice ? this.toPercentage(normalizedSliceStart) : 0
     };
 
     const styleLoaded = {
@@ -152,8 +169,6 @@ class AVProgress extends Component {
       left: this.toPercentage(progress)
     };
 
-    const normalizedSliceStart = this.getNormalizedSliceStart(duration);
-    const normalizedSliceEnd = this.getNormalizedSliceEnd(duration);
     const styleSlice = {
       left: this.toPercentage(normalizedSliceStart),
       width: this.toPercentage(normalizedSliceEnd - normalizedSliceStart)

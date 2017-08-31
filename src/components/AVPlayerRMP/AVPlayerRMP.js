@@ -69,8 +69,8 @@ class AVPlayerRMP extends PureComponent {
 
       if (query.sstart || query.send) {
         this.setSliceMode({
-          sliceStart: parseInt(query.sstart, 10),
-          sliceEnd: parseInt(query.send, 10)
+          sliceStart: query.sstart ? parseFloat(query.sstart) : 0,
+          sliceEnd: query.send ? parseFloat(query.send) : Infinity
         });
       }
     }
@@ -81,14 +81,6 @@ class AVPlayerRMP extends PureComponent {
     this.setState({ videoElement });
     // By default hide controls after a while if player playing.
     this.hideControlsTimeout();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { active } = this.props;
-    if (active.id !== nextProps.video.id && active.id !== nextProps.audio.id) {
-      // TODO: (yaniv) - need to check if it is the same content unit...
-      this.setNormalMode();
-    }
   }
 
   setSliceMode = properties => this.setState({
@@ -143,6 +135,14 @@ class AVPlayerRMP extends PureComponent {
       this.player_.context.media.play();
     }
     this.setState({wasCurrentTime: undefined, wasPlaying: undefined});
+  }
+
+  handleTimeUpdate = (timeData) => {
+    const { isSliceable } = this.props;
+    const { sliceEnd } = this.state;
+    if (isSliceable && timeData.currentTime >= sliceEnd) {
+      this.player_.context.media.pause();
+    }
   }
 
   showControls = (callback = undefined) => {
@@ -230,6 +230,7 @@ class AVPlayerRMP extends PureComponent {
                     onReady={this.onPlayerReady}
                     preload="auto"
                     onError={this.onError}
+                    onTimeUpdate={this.handleTimeUpdate}
                     defaultCurrentTime={sliceStart || 0}
                   />
                   <div
