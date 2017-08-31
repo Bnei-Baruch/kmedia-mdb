@@ -236,13 +236,15 @@ class AVPlayerRMP extends PureComponent {
                   <div
                     className={classNames('media-controls', { fade: !controlsVisible && !forceShowControls })}
                   >
-                    <div className="controls-wrapper"
-                         onMouseEnter={this.controlsEnter}
-                         onMouseLeave={this.controlsLeave}>
+                    <div
+                      className="controls-wrapper"
+                      onMouseEnter={this.controlsEnter}
+                      onMouseLeave={this.controlsLeave}
+                    >
                       <div className="controls-container">
                         <AVPlayPause />
                         <AVTimeElapsed
-                          isSlice={isSliceable && (sliceStart || sliceEnd)}
+                          isSlice={isSliceable && !!(sliceStart || sliceEnd)}
                           sliceStart={sliceStart}
                           sliceEnd={sliceEnd}
                         />
