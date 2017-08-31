@@ -193,7 +193,7 @@ class AVPlayerRMP extends PureComponent {
   }
 
   render() {
-    const { audio, video, active, languages, defaultValue, t } = this.props;
+    const { audio, video, active, languages, defaultValue, isSliceable, t } = this.props;
     const { controlsVisible, error, playbackRate, videoElement, mode, sliceStart, sliceEnd } = this.state;
 
     const forceShowControls = !this.player_ || !this.player_.context.media.isPlaying;
@@ -241,7 +241,11 @@ class AVPlayerRMP extends PureComponent {
                          onMouseLeave={this.controlsLeave}>
                       <div className="controls-container">
                         <AVPlayPause />
-                        <AVTimeElapsed />
+                        <AVTimeElapsed
+                          isSlice={isSliceable && (sliceStart || sliceEnd)}
+                          sliceStart={sliceStart}
+                          sliceEnd={sliceEnd}
+                        />
                         <AVProgress
                           buffers={this.buffers()}
                           isSlice={mode === AVPlayerRMP.MODE.SLICE}
