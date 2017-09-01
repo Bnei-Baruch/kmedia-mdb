@@ -178,14 +178,12 @@ class AVPlayerRMP extends PureComponent {
     const { autoPlay, audio, video, active, languages, defaultLanguage, t, showNextPrev, hasNext, hasPrev, onPrev, onNext } = this.props;
     const { controlsVisible, error, playbackRate, videoElement } = this.state;
 
-    const forceShowControls = !this.player_ || !this.player_.context.media.isPlaying;
+    const forceShowControls = active === audio || !this.player_ || !this.player_.context.media.isPlaying;
 
     // TODO: playbackRate should be added to react media player repository.
     if (videoElement) {
       videoElement.playbackRate = parseFloat(this.state.playbackRate.slice(0, -1));
     }
-
-    console.log('AVPlayerRMP', hasPrev, hasNext);
 
     return (
       <div>

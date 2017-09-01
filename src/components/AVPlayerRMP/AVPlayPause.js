@@ -34,8 +34,6 @@ class AVPlayPause extends Component {
   render() {
     const { media, showNextPrev, hasNext, hasPrev, onNext, onPrev } = this.props;
 
-    console.log(hasPrev, hasNext);
-
     return (
       <div style={{display: 'flex', flexDirection: 'row',
                    marginLeft: '10px', marginRight: '5px'}}>

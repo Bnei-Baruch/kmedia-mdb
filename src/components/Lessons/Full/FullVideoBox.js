@@ -227,8 +227,6 @@ class FullVideoBox extends Component {
       }
     });
 
-    console.log(videoPlaylistActiveIndex, videoFileList.length);
-
     return (
       <Grid.Row className="video_box">
         <Grid.Column width={10}>
@@ -258,28 +256,6 @@ class FullVideoBox extends Component {
           </div>
         </Grid.Column>
         <Grid.Column className="player_panel" width={6}>
-          <Grid columns="equal">
-            <Grid.Row>
-              <Grid.Column>
-                <Button.Group fluid>
-                  { isVideo === true ? <Button active color="blue" content={t('buttons.video')} /> : null }
-                  { isVideo === false ? <Button content={t('buttons.video')} onClick={this.handleSwitchAV} /> : null}
-                  { isVideo === undefined ? <Button disabled content={t('buttons.video')} /> : null}
-                  { isAudio === true ? <Button active color="blue" content={t('buttons.audio')} /> : null }
-                  { isAudio === false ? <Button content={t('buttons.audio')} onClick={this.handleSwitchAV} /> : null }
-                  { isAudio === undefined ? <Button disabled content={t('buttons.audio')} /> : null}
-                </Button.Group>
-              </Grid.Column>
-              <Grid.Column>
-                <LanguageSelector
-                  languages={Array.from(files.keys())}
-                  defaultValue={language}
-                  onSelect={this.handleChangeLanguage}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-          <Divider />
           <Header
             as="h3"
             content={`${t(`constants.content-types.${fullLesson.content_type}`)} - ${(activePart + 1)}/${fullLesson.content_units.length}`}
