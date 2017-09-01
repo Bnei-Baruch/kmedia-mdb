@@ -1,11 +1,14 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Media, Player } from 'react-media-player';
+import noop from 'lodash/noop';
+import { withRouter } from 'react-router-dom';
+import { Player, withMediaProps } from 'react-media-player';
 import classNames from 'classnames';
 import { Icon } from 'semantic-ui-react';
 
 import * as shapes from '../shapes';
 import { physicalFile } from '../../helpers/utils';
+import { parse } from '../../helpers/url';
 import AVPlayPause from './AVPlayPause';
 import AVPlaybackRate from './AVPlaybackRate';
 import AVCenteredPlay from './AVCenteredPlay';
@@ -16,19 +19,33 @@ import AVLanguage from './AVLanguage';
 import AVAudioVideo from './AVAudioVideo';
 import AVProgress from './AVProgress';
 
+// Converts playback rate string to float: 1.0x => 1.0
+const playbackToValue = (playback) => {
+  return parseFloat(playback.slice(0, -1))
+};
+
 class AVPlayerRMP extends PureComponent {
 
   static propTypes = {
-    autoPlay: PropTypes.bool,
+    t: PropTypes.func.isRequired,
+
+    // Language dropdown props.
+    languages: PropTypes.arrayOf(PropTypes.string).isRequired,
+    defaultLanguage: PropTypes.string.isRequired,
+    onLanguageChange: PropTypes.func.isRequired,
+
+    // Audio/Video switch props.
     audio: shapes.MDBFile,
     video: shapes.MDBFile,
     active: shapes.MDBFile,
     onSwitchAV: PropTypes.func.isRequired,
-    languages: PropTypes.arrayOf(PropTypes.string).isRequired,
-    defaultLanguage: PropTypes.string.isRequired,
-    onLanguageChange: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired,
+
+    // Slice props
+    isSliceable: PropTypes.bool,
+    location: PropTypes.object.isRequired, // TODO: (yaniv) set right propType
+
     // Playlist props
+    autoPlay: PropTypes.bool,
     showNextPrev: PropTypes.bool,
     hasNext: PropTypes.bool,
     hasPrev: PropTypes.bool,
@@ -40,38 +57,73 @@ class AVPlayerRMP extends PureComponent {
   };
 
   static defaultProps = {
-    autoPlay: false,
     audio: null,
     video: null,
     active: null,
-    mediaType: null,
-    poster: null,
+
+    isSliceable: false,
+
+    autoPlay: false,
     showNextPrev: false,
     hasNext: false,
     hasPrev: false,
+    onFinish: noop,
+    onPlay: noop,
+    onPause: noop,
+    onPrev: noop,
+    onNext: noop,
   };
 
-  constructor(props) {
-    super(props);
+  static MODE = {
+    NORMAL: 0,
+    SLICE: 1
+  };
 
-    this.state = {
-      videoElement: null,
-      controlsVisible: true,
-      timeoutId: null,
-      error: false,
-      playbackRate: '1x',
-    };
+  state = {
+    controlsVisible: true,
+    error: false,
+    playbackRate: '1x', // this is used only to rerender the component. actual value is saved on the player's instance
+    mode: AVPlayerRMP.MODE.NORMAL
+  };
+
+  // Timeout for auto-hiding controls.
+  autohideTimeoutId = null;
+
+  componentWillMount() {
+    const { isSliceable, location } = this.props;
+
+    if (isSliceable) {
+      const query = parse(location.search.slice(1));
+
+      if (query.sstart || query.send) {
+        this.setSliceMode({
+          sliceStart: query.sstart ? parseFloat(query.sstart) : 0,
+          sliceEnd: query.send ? parseFloat(query.send) : Infinity
+        });
+      }
+    }
   }
 
   componentDidMount() {
-    const videoElement = this.player_.instance;
-    this.setState({ videoElement });
     // By default hide controls after a while if player playing.
     this.hideControlsTimeout();
   }
 
+  setSliceMode = properties => this.setState({
+    mode: AVPlayerRMP.MODE.SLICE,
+    ...properties
+  });
+
+  setNormalMode = () => this.setState({
+    mode: AVPlayerRMP.MODE.NORMAL,
+    sliceStart: undefined,
+    sliceEnd: undefined
+  });
+
+  // Correctly fetch loaded buffers from video to show loading progress.
+  // This code should be ported to react-media-player.
   buffers = () => {
-    const { videoElement } = this.state;
+    const videoElement = this.player_ && this.player_.instance;
     const ret              = [];
     if (videoElement) {
       for (let idx = 0; idx < videoElement.buffered.length; ++idx) {
@@ -86,8 +138,7 @@ class AVPlayerRMP extends PureComponent {
 
   // Remember the current time and isPlaying while switching.
   onSwitchAV = (...params) => {
-    const { onSwitchAV } = this.props;
-    const { currentTime, isPlaying } = this.player_.context.media;
+    const { onSwitchAV, media: { currentTime, isPlaying } } = this.props;
     this.setState({ wasCurrentTime: currentTime, wasPlaying: isPlaying }, () => {
       onSwitchAV(...params);
     });
@@ -95,8 +146,7 @@ class AVPlayerRMP extends PureComponent {
 
   // Remember the current time and isPlaying while switching.
   onLanguageChange = (...params) => {
-    const { onLanguageChange } = this.props;
-    const { currentTime, isPlaying } = this.player_.context.media;
+    const { onLanguageChange, media: { currentTime, isPlaying } } = this.props;
     this.setState({ wasCurrentTime: currentTime, wasPlaying: isPlaying }, () => {
       onLanguageChange(...params);
     });
@@ -104,35 +154,44 @@ class AVPlayerRMP extends PureComponent {
 
   onPlayerReady = () => {
     const { wasCurrentTime, wasPlaying } = this.state;
+    const { media } = this.props;
     if (wasCurrentTime) {
-      this.player_.context.media.seekTo(wasCurrentTime);
+      media.seekTo(wasCurrentTime);
     }
     if (wasPlaying) {
-      this.player_.context.media.play();
+      media.play();
     }
-    this.setState({wasCurrentTime: undefined, wasPlaying: undefined});
+
+    // restore playback from state when player instance changed (when src changes, e.g., playlist).
+    this.player_.instance.playbackRate = playbackToValue(this.state.playbackRate);
+    this.setState({ wasCurrentTime: undefined, wasPlaying: undefined });
   }
 
-  showControls = (callback = undefined) => {
-    const { timeoutId } = this.state;
-    if (timeoutId) {
-      this.setState({controlsVisible: true, timeoutId: null}, () => {
-        clearTimeout(timeoutId);
-        if (callback) {
-          callback();
-        }
-      });
-    } else {
-      this.setState({controlsVisible: true}, callback);
+  handleTimeUpdate = (timeData) => {
+    // This method is called all the time without stopping.
+    const { isSliceable, media } = this.props;
+    const { sliceEnd } = this.state;
+
+    // stop playing when we're at the end of the slice or beyond
+    if (isSliceable && timeData.currentTime >= sliceEnd) {
+      media.pause();
+      media.seekTo(sliceEnd);
     }
+  }
+
+  showControls = (callback) => {
+    if (this.autohideTimeoutId) {
+      clearTimeout(this.autohideTimeoutId);
+      this.autohideTimeoutId = null;
+    }
+    this.setState({ controlsVisible: true }, callback);
   }
 
   hideControlsTimeout = () => {
-    if (!this.state.timeoutId) {
-      const timeoutId = setTimeout(() => {
-        this.setState({controlsVisible: false});
+    if (!this.autohideTimeoutId) {
+      this.autohideTimeoutId = setTimeout(() => {
+        this.setState({ controlsVisible: false });
       }, 2000);
-      this.setState({timeoutId});
     }
   }
 
@@ -149,24 +208,35 @@ class AVPlayerRMP extends PureComponent {
   }
 
   playbackRateChange = (e, rate) => {
-    this.state.videoElement.playbackRate = parseFloat(rate.slice(0, -1));
-    this.setState({playbackRate: rate});
+    this.player_.instance.playbackRate = playbackToValue(rate);
+    this.setState({ playbackRate: rate });
   }
 
   onError = (e) => {
     // Show error only on loading of video.
     if (!e.currentTime && !e.isPlaying) {
-      this.setState({error: true});
+      this.setState({ error: true });
     }
   }
 
   onPlay = (e) => {
+    const { isSliceable, media } = this.props;
+    const { sliceEnd } = this.state;
+
+    // interupt play if we're at the end of the slice
+    if (isSliceable && e.currentTime >= sliceEnd) {
+      media.pause();
+      media.seekTo(sliceEnd);
+      return;
+    }
+
     if (this.props.onPlay) {
       this.props.onPlay();
     }
   }
 
   onPause = (e) => {
+    // when we're close to the end regard this as finished
     if (Math.abs(e.currentTime - e.duration) < 0.1 && this.props.onFinish) {
       this.props.onFinish();
     } else if (this.props.onPause) {
@@ -175,106 +245,109 @@ class AVPlayerRMP extends PureComponent {
   }
 
   render() {
-    const { autoPlay, audio, video, active, languages, defaultLanguage, t, showNextPrev, hasNext, hasPrev, onPrev, onNext } = this.props;
-    const { controlsVisible, error, playbackRate, videoElement } = this.state;
+    const { autoPlay, audio, video, active, languages, defaultLanguage, t, showNextPrev, hasNext, hasPrev, onPrev, onNext, isSliceable, media } = this.props;
+    const { controlsVisible, error, sliceStart, sliceEnd, mode, playbackRate } = this.state;
 
-    const forceShowControls = active === audio || !this.player_ || !this.player_.context.media.isPlaying;
-
-    // TODO: playbackRate should be added to react media player repository.
-    if (videoElement) {
-      videoElement.playbackRate = parseFloat(this.state.playbackRate.slice(0, -1));
-    }
+    const { playPause, isFullscreen, isPlaying } = media;
+    const forceShowControls = active === audio || !isPlaying;
 
     return (
       <div>
-
-        <Media>
-          {
-            ({ playPause, isFullscreen }) => (
+        <div
+          className="media"
+          style={{
+            minHeight: active === video ? 200 : 40,
+            minWidth: active === video ? 300 : 'auto'
+          }}
+        >
+          <div
+            className={classNames('media-player', {
+              'media-player-fullscreen': isFullscreen,
+              fade: !controlsVisible && !forceShowControls
+            })}
+          >
+            <Player
+              ref={c => this.player_ = c}
+              src={physicalFile(active, true)}
+              vendor={active === video ? 'video' : 'audio'}
+              autoPlay={autoPlay}
+              onReady={this.onPlayerReady}
+              preload="auto"
+              onError={this.onError}
+              onPause={this.onPause}
+              onPlay={this.onPlay}
+              onTimeUpdate={this.handleTimeUpdate}
+              defaultCurrentTime={sliceStart || 0}
+            />
+            <div
+              className={classNames('media-controls', { fade: !controlsVisible && !forceShowControls })}
+            >
               <div
-                className="media"
-                style={{
-                  minHeight: active === video ? 200 : 40,
-                  minWidth: active === video ? 300 : 'auto'
-                }}
+                className="controls-wrapper"
+                onMouseEnter={this.controlsEnter}
+                onMouseLeave={this.controlsLeave}
               >
-                <div
-                  className={classNames('media-player', {
-                    'media-player-fullscreen': isFullscreen,
-                    fade: !controlsVisible && !forceShowControls
-                  })}
-                >
-                  <Player
-                    ref={c => this.player_ = c}
-                    src={physicalFile(active, true)}
-                    vendor={active === video ? 'video' : 'audio'}
-                    autoPlay={autoPlay}
-                    onReady={this.onPlayerReady}
-                    preload="auto"
-                    onError={this.onError}
-                    onPause={this.onPause}
-                    onPlay={this.onPlay}
+                <div className="controls-container">
+                  <AVPlayPause
+                    showNextPrev={showNextPrev}
+                    hasNext={hasNext}
+                    hasPrev={hasPrev}
+                    onPrev={onPrev}
+                    onNext={onNext} />
+                  <AVTimeElapsed
+                    isSlice={isSliceable && !!(sliceStart || sliceEnd)}
+                    sliceStart={sliceStart}
+                    sliceEnd={sliceEnd}
                   />
-                  <div
-                    className={classNames('media-controls', { fade: !controlsVisible && !forceShowControls })}
-                  >
-                    <div className="controls-wrapper"
-                         onMouseEnter={this.controlsEnter}
-                         onMouseLeave={this.controlsLeave}>
-                      <div className="controls-container">
-                        <AVPlayPause
-                          showNextPrev={showNextPrev}
-                          hasNext={hasNext}
-                          hasPrev={hasPrev}
-                          onPrev={onPrev}
-                          onNext={onNext} />
-                        <AVTimeElapsed />
-                        <AVProgress buffers={this.buffers()} />
-                        <AVPlaybackRate
-                          onSelect={this.playbackRateChange}
-                          upward={video === active} />
-                        <AVMuteUnmute upward={video === active} />
-                        <AVAudioVideo
-                          isAudio={audio === active}
-                          isVideo={video === active}
-                          setAudio={this.onSwitchAV}
-                          setVideo={this.onSwitchAV}
-                          t={t}
-                        />
-                        <AVLanguage
-                          languages={languages}
-                          defaultValue={defaultLanguage}
-                          onSelect={this.onLanguageChange}
-                          upward={video === active}
-                        />
-                        <AVFullScreen />
-                      </div>
-                    </div>
-                    { active === video ? (
-                        <div className="media-center-control"
-                             style={!error ? {outline: 'none'} : {backgroundColor: 'black', outline: 'none'}}
-                             tabIndex="0"
-                             onClick={() => playPause()}
-                             onKeyDown={(e) => { playPause(); e.preventDefault(); }}
-                             onMouseMove={this.centerMove}>
-                          { error ? (
-                              <div className="player-button">
-                                Error loading file.
-                                <Icon name={'warning sign'} size='large'/>
-                              </div>
-                            ) : <AVCenteredPlay />
-                          }
-                        </div>
-                      ) : null }
-                  </div>
+                  <AVProgress
+                    buffers={this.buffers()}
+                    isSlice={mode === AVPlayerRMP.MODE.SLICE}
+                    sliceStart={sliceStart}
+                    sliceEnd={sliceEnd}
+                  />
+                  <AVPlaybackRate
+                    value={playbackRate}
+                    onSelect={this.playbackRateChange}
+                    upward={video === active} />
+                  <AVMuteUnmute upward={video === active} />
+                  <AVAudioVideo
+                    isAudio={audio === active}
+                    isVideo={video === active}
+                    setAudio={this.onSwitchAV}
+                    setVideo={this.onSwitchAV}
+                    t={t}
+                  />
+                  <AVLanguage
+                    languages={languages}
+                    defaultValue={defaultLanguage}
+                    onSelect={this.onLanguageChange}
+                    upward={video === active}
+                  />
+                  <AVFullScreen />
                 </div>
               </div>
-            )
-          }
-        </Media>
+              { active === video ? (
+                  <div className="media-center-control"
+                       style={!error ? {outline: 'none'} : {backgroundColor: 'black', outline: 'none'}}
+                       tabIndex="0"
+                       onClick={() => playPause()}
+                       onKeyDown={(e) => { playPause(); e.preventDefault(); }}
+                       onMouseMove={this.centerMove}>
+                    { error ? (
+                        <div className="player-button">
+                          Error loading file.
+                          <Icon name={'warning sign'} size='large'/>
+                        </div>
+                      ) : <AVCenteredPlay />
+                    }
+                  </div>
+                ) : null }
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 }
 
-export default AVPlayerRMP;
+export default withMediaProps(withRouter(AVPlayerRMP));

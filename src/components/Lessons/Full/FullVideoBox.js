@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-duration-format';
 import { Button, Divider, Grid, Header, Menu } from 'semantic-ui-react';
+import { Media } from 'react-media-player';
 
 import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
 import { physicalFile } from '../../../helpers/utils';
@@ -232,27 +233,28 @@ class FullVideoBox extends Component {
         <Grid.Column width={10}>
           <div className="video_player">
             <div id="video" />
-            <AVPlayer
-              autoPlay={autoPlay}
-              active={isVideo ? videoFileList[videoPlaylistActiveIndex] : audioFileList[audioPlaylistActiveIndex]}
-              video={videoFileList[videoPlaylistActiveIndex]}
-              audio={audioFileList[audioPlaylistActiveIndex]}
-              poster="http://kabbalahmedia.info/assets/cover-video.jpg"
-              onSwitchAV={this.handleSwitchAV}
-              languages={Array.from(files.keys())}
-              defaultLanguage={language}
-              onLanguageChange={this.handleChangeLanguage}
-              t={t}
-              // Playlist props
-              onFinish={this.onFinish}
-              showNextPrev={true}
-              hasNext={isVideo ? videoPlaylistActiveIndex < videoFileList.length - 1 : audioPlaylistActiveIndex < audioFileList.length - 1}
-              hasPrev={isVideo ? videoPlaylistActiveIndex > 0 : audioPlaylistActiveIndex > 0}
-              onPrev={this.onPrev}
-              onNext={this.onNext}
-              onPause={this.onPause}
-              onPlay={this.onPlay}
-            />
+            <Media>
+              <AVPlayer
+                autoPlay={autoPlay}
+                active={isVideo ? videoFileList[videoPlaylistActiveIndex] : audioFileList[audioPlaylistActiveIndex]}
+                video={videoFileList[videoPlaylistActiveIndex]}
+                audio={audioFileList[audioPlaylistActiveIndex]}
+                onSwitchAV={this.handleSwitchAV}
+                languages={Array.from(files.keys())}
+                defaultLanguage={language}
+                onLanguageChange={this.handleChangeLanguage}
+                t={t}
+                // Playlist props
+                onFinish={this.onFinish}
+                showNextPrev={true}
+                hasNext={isVideo ? videoPlaylistActiveIndex < videoFileList.length - 1 : audioPlaylistActiveIndex < audioFileList.length - 1}
+                hasPrev={isVideo ? videoPlaylistActiveIndex > 0 : audioPlaylistActiveIndex > 0}
+                onPrev={this.onPrev}
+                onNext={this.onNext}
+                onPause={this.onPause}
+                onPlay={this.onPlay}
+              />
+            </Media>
           </div>
         </Grid.Column>
         <Grid.Column className="player_panel" width={6}>

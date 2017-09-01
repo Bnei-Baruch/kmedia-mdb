@@ -28,7 +28,7 @@ const LessonPart = (props) => {
     return (
       <Grid.Column width={16}>
         <Grid>
-          <RMPVideoBox unit={lesson} language={language} t={t} />
+          <RMPVideoBox unit={lesson} language={language} t={t} isSliceable />
         </Grid>
         <Grid>
           <Grid.Row>

@@ -7,13 +7,13 @@ import classNames from 'classnames';
 export default class AVPlaybackRate extends Component {
   static propTypes = {
     onSelect: PropTypes.func,
-    defaultValue: PropTypes.string,
+    value: PropTypes.string,
     upward: PropTypes.bool,
   };
 
   static defaultProps = {
     onSelect: noop,
-    defaultValue: '1x',
+    value: '1x',
     upward: true,
   };
 
@@ -21,7 +21,7 @@ export default class AVPlaybackRate extends Component {
     this.props.onSelect(e, data.value);
 
   render() {
-    const { languages, defaultValue, upward } = this.props;
+    const { languages, value, upward } = this.props;
 
     const options = ['1x', '1.5x', '2x']
       .map(x => ({ value: x, text: x }));
@@ -35,7 +35,7 @@ export default class AVPlaybackRate extends Component {
           icon={null}
           selectOnBlur={false}
           options={options}
-          defaultValue={defaultValue}
+          value={value}
           onChange={this.handleChange}
           className={classNames('player-button')}
         />

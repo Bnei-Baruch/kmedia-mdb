@@ -1,30 +1,68 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
+import { Media } from 'react-media-player';
 
 import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
+import { parse, stringify } from '../../../helpers/url';
 import * as shapes from '../../shapes';
 import AVPlayer from '../../AVPlayerRMP/AVPlayerRMP';
+
+const MEDIA_TYPES = {
+  VIDEO: 'video',
+  AUDIO: 'audio'
+};
+
+const DEFAULT_MEDIA_TYPE = MEDIA_TYPES.VIDEO;
 
 class RMPVideoBox extends Component {
 
   static propTypes = {
+    history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
     language: PropTypes.string.isRequired,
     unit: shapes.ContentUnit,
     t: PropTypes.func.isRequired,
+    isSliceable: PropTypes.bool
   };
 
   static defaultProps = {
     unit: undefined,
+    isSliceable: false
   };
 
-  constructor(props) {
-    super(props);
-    this.state = this.calcState(props);
+  componentWillMount() {
+    this.setState(this.calcState(this.props));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { unit = {}, language } = nextProps;
+    const props                   = this.props;
+    const state                   = this.state;
+
+    const prevMediaType = this.getMediaTypeFromQuery(props.location);
+    const newMediaType = this.getMediaTypeFromQuery(nextProps.location);
+
+    // no change
+    if (unit === props.unit && language === props.language && prevMediaType === newMediaType) {
+      return;
+    }
+
+    // only language changed
+    if (unit === props.unit && prevMediaType === newMediaType && language !== props.language) {
+      if (state.groups.has(language)) {
+        this.setState({ language, ...this.splitAV(language, state.groups) }, () => {
+        });
+        return;
+      }
+    }
+
+    this.setState(this.calcState(nextProps));
   }
 
   calcState = (props) => {
-    const { unit = {}, language } = props;
+    const { unit = {}, language, location } = props;
     const groups                  = this.getFilesByLanguage(unit.files);
 
     let lang;
@@ -36,31 +74,21 @@ class RMPVideoBox extends Component {
       lang = groups.keys().next().value;
     }
 
-    const { video, audio } = lang ? this.splitAV(lang, groups) : {};
+    const medias = lang ? this.splitAV(lang, groups) : {};
+    const mediaType = this.getMediaTypeFromQuery(location);
+    const active = this.getActiveByMediaType(mediaType, medias);
 
-    return { groups, language: lang, video, audio, active: video || audio };
+    return { groups, language: lang, ...medias, active };
   };
 
-  componentWillReceiveProps(nextProps) {
-    const { unit = {}, language } = nextProps;
-    const props                   = this.props;
-    const state                   = this.state;
+  getActiveByMediaType = (mediaType, medias) => {
+    const validMediaType = MEDIA_TYPES[(mediaType || '').toUpperCase()] || DEFAULT_MEDIA_TYPE;
+    return medias[validMediaType];
+  }
 
-    // no change
-    if (unit === props.unit && language === props.language) {
-      return;
-    }
-
-    // only language changed
-    if (unit === props.unit && language !== props.language) {
-      if (state.groups.has(language)) {
-        this.setState({ language, ...this.splitAV(language, state.groups) }, () => {
-        });
-        return;
-      }
-    }
-
-    this.setState(this.calcState(nextProps));
+  getMediaTypeFromQuery(location) {
+    const query = parse(location.search.slice(1));
+    return query.mediaType;
   }
 
   getFilesByLanguage = (files) => {
@@ -86,12 +114,21 @@ class RMPVideoBox extends Component {
   };
 
   handleSwitchAV = () => {
+    const { history, location } = this.props;
     const { audio, video, active } = this.state;
+    const query = parse(location.search.slice(1));
     if (active === video && audio) {
+      query.mediaType = MEDIA_TYPES.AUDIO;
       this.setState({ active: audio });
     } else if (active === audio && video) {
+      query.mediaType = MEDIA_TYPES.VIDEO;
       this.setState({ active: video });
+    } else {
+      // no change
+      return;
     }
+
+    history.replace({ search: stringify(query) });
   };
 
   handleChangeLanguage = (e, language) => {
@@ -100,7 +137,7 @@ class RMPVideoBox extends Component {
   };
 
   render() {
-    const { t }                                      = this.props;
+    const { t, isSliceable }                         = this.props;
     const { audio, video, active, groups, language } = this.state;
 
     if (!(video || audio)) {
@@ -112,17 +149,20 @@ class RMPVideoBox extends Component {
         <Grid.Column width={10}>
           <div className="video_player">
             <div className="video_position">
-              <AVPlayer
-                active={active}
-                video={video}
-                audio={audio}
-                poster="http://kabbalahmedia.info/assets/cover-video.jpg"
-                onSwitchAV={this.handleSwitchAV}
-                languages={Array.from(groups.keys())}
-                defaultLanguage={language}
-                onLanguageChange={this.handleChangeLanguage}
-                t={t}
-              />
+              <Media>
+                <AVPlayer
+                  isSliceable={isSliceable}
+                  active={active}
+                  video={video}
+                  audio={audio}
+                  poster="http://kabbalahmedia.info/assets/cover-video.jpg"
+                  onSwitchAV={this.handleSwitchAV}
+                  languages={Array.from(groups.keys())}
+                  defaultLanguage={language}
+                  onLanguageChange={this.handleChangeLanguage}
+                  t={t}
+                />
+              </Media>
             </div>
           </div>
         </Grid.Column>
@@ -131,4 +171,4 @@ class RMPVideoBox extends Component {
   }
 }
 
-export default RMPVideoBox;
+export default withRouter(RMPVideoBox);

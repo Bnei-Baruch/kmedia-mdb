@@ -1,8 +1,26 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import isNumber from 'lodash/isNumber';
 import { withMediaProps } from 'react-media-player';
 import classNames from 'classnames';
 
 class AVProgress extends Component {
+
+  static propTypes = {
+    media: PropTypes.object.isRequired, // TODO: (yaniv) use right propType
+    buffers: PropTypes.array,
+    isSlice: PropTypes.bool,
+    sliceStart: PropTypes.number,
+    sliceEnd: PropTypes.number
+  };
+
+  static defaultProps = {
+    buffers: [],
+    isSlice: false,
+    sliceStart: 0,
+    sliceEnd: Infinity
+  };
+
   _element              = null;
   _wasMouseDown         = false;
   _isPlayingOnMouseDown = false;
@@ -52,84 +70,125 @@ class AVProgress extends Component {
   };
 
   seek = (clientX) => {
+    const { isSlice, sliceStart, sliceEnd, media } = this.props;
     const { left, right } = this._element.getBoundingClientRect();
-    const { duration }    = this.props.media;
+    const { duration }    = media;
     const offset          = Math.min(Math.max(0, clientX - left), right - left);
-    this.props.media.seekTo(duration * offset / (right - left));
+
+    let seekPosition = (duration * offset) / (right - left);
+
+    // if we're in a  slice clamp the seek position inside of it
+    if (isSlice) {
+      if (seekPosition > sliceEnd) {
+        seekPosition = sliceEnd;
+      } else if (seekPosition < sliceStart) {
+        seekPosition = sliceStart;
+      }
+    }
+
+    media.seekTo(seekPosition);
   };
 
-  normalize = (l) => {
+  toPercentage = (l) => {
     const ret = 100 * l;
-    return (ret < 1) ? 0 : ret + '%';
+    if (ret > 100) {
+      return '100%';
+    }
+    return (ret < 1) ? 0 : `${ret}%`;
   };
+
+  getNormalizedSliceStart = (duration) => {
+    const { sliceEnd } = this.props;
+    let { sliceStart } = this.props;
+    if (!isNumber(sliceStart)) {
+      return 0;
+    }
+
+    if (sliceStart > sliceEnd) {
+      sliceStart = sliceEnd;
+    }
+
+    if (duration < sliceStart) {
+      sliceStart = duration;
+    }
+
+    if (sliceStart < 0) {
+      sliceStart = 0;
+    }
+
+    return sliceStart / duration;
+  }
+
+  getNormalizedSliceEnd = (duration) => {
+    const { sliceStart } = this.props;
+    let { sliceEnd } = this.props;
+
+    if (!isNumber(sliceEnd)) {
+      return 1;
+    }
+
+    if (sliceEnd < sliceStart) {
+      sliceEnd = sliceStart;
+    }
+
+    if (sliceEnd > duration) {
+      sliceEnd = duration;
+    }
+
+    if (sliceEnd < 0) {
+      sliceEnd = 0;
+    }
+
+    return sliceEnd / duration;
+  }
 
   render() {
     const { currentTime, duration } = this.props.media;
     const current                   = currentTime / duration;
     // Overriding progress of native react-media-player as he does not works correctly
     // with buffers.
-    const { buffers } = this.props;
+    const { buffers, isSlice, sliceStart, sliceEnd } = this.props;
     const b           = buffers.find(b => b.start <= currentTime && b.end >= currentTime);
-    const progress    = (b && (b.end / duration)) || (currentTime / duration);
+    const progress    = (b && (b.end / duration)) || current;
 
-    const parent = {
-      display: 'flex',
-      flexWrap: 'nowrap',
-      paddingTop: 5,
-      paddingBottom: 5,
-      marginLeft: 10,
-      marginRight: 10,
-      width: '100%',
-    };
-
-    const styleBar = {
-      height: 3,
-      marginLeft: 0,
-      marginRight: 0,
-    };
+    const normalizedSliceStart = this.getNormalizedSliceStart(duration);
+    const normalizedSliceEnd = this.getNormalizedSliceEnd(duration);
 
     const stylePlayed = {
-      width: this.normalize(current),
-      backgroundColor: 'rgb(66, 133, 244)',
-      ...styleBar,
-      position: 'relative',
+      width: this.toPercentage(current - normalizedSliceStart),
+      left: isSlice ? this.toPercentage(normalizedSliceStart) : 0
     };
 
     const styleLoaded = {
-      width: this.normalize(progress - current),
-      backgroundColor: 'rgb(214, 214, 214)',
-      ...styleBar,
+      width: this.toPercentage(isSlice ? (Math.min(progress, normalizedSliceEnd) - normalizedSliceStart) : progress),
+      left: isSlice ? this.toPercentage(normalizedSliceStart) : 0
     };
 
-    const styleLeft = {
-      width: this.normalize(1 - progress),
-      backgroundColor: 'rgb(118, 118, 118)',
-      ...styleBar,
+    const styleRemaining = {
+      width: this.toPercentage(1 - progress),
+      left: this.toPercentage(progress)
     };
 
-    const knobStyle = {
-      position: 'absolute',
-      height: 10,
-      width: 10,
-      borderRadius: 5,
-      backgroundColor: 'rgb(66, 133, 244)',
-      right: -5,
-      top: -3,
+    const styleSlice = {
+      left: this.toPercentage(normalizedSliceStart),
+      width: this.toPercentage(normalizedSliceEnd - normalizedSliceStart)
     };
 
     return (
       <div
         ref={c => this._element = c}
-        style={parent}
-        className={classNames('player-button')}
+        className={classNames('player-button player-control-progress', { 'player-control-progress-slice': isSlice })}
         onMouseDown={this.handleStart}
         onTouchStart={this.handleStart}
       >
-        <div style={stylePlayed}>
-          <div style={knobStyle} />
+        <div className="bar played" style={stylePlayed}>
+          <div className="knob" />
         </div>
-        <div style={styleLoaded} />
-        <div style={styleLeft} />
+        <div className="bar loaded" style={styleLoaded} />
+        <div className="bar remaining" style={styleRemaining} />
+        {
+          isSlice && <div className="bar slice" style={styleSlice} />
+        }
       </div>
     );
   }

@@ -4,10 +4,16 @@ import { withMediaProps } from 'react-media-player';
 
 class AVDuration extends Component {
   static propTypes = {
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    value: PropTypes.number,
     style: PropTypes.object,
     className: PropTypes.any,
     media: PropTypes.object.isRequired,
+  };
+
+  static defaultProps = {
+    name: undefined,
+    value: undefined
   };
 
   static defaultProps = {
@@ -30,8 +36,8 @@ class AVDuration extends Component {
   };
 
   render() {
-    const { style, name, className } = this.props;
-    const time            = this.props.media[name];
+    const { style, name, value, className } = this.props;
+    const time            = typeof value !== 'undefined' ? value : this.props.media[name];
 
     return (
       <time className={className} style={style}>
