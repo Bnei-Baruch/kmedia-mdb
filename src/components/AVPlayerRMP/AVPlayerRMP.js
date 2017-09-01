@@ -244,6 +244,13 @@ class AVPlayerRMP extends PureComponent {
     }
   }
 
+  onKeyDown = (e) => {
+    if (e.keyCode === 32) {
+      this.props.media.playPause();
+      e.preventDefault();
+    }
+  }
+
   render() {
     const { autoPlay, audio, video, active, languages, defaultLanguage, t, showNextPrev, hasNext, hasPrev, onPrev, onNext, isSliceable, media } = this.props;
     const { controlsVisible, error, sliceStart, sliceEnd, mode, playbackRate } = this.state;
@@ -331,7 +338,7 @@ class AVPlayerRMP extends PureComponent {
                        style={!error ? {outline: 'none'} : {backgroundColor: 'black', outline: 'none'}}
                        tabIndex="0"
                        onClick={() => playPause()}
-                       onKeyDown={(e) => { playPause(); e.preventDefault(); }}
+                       onKeyDown={this.onKeyDown}
                        onMouseMove={this.centerMove}>
                     { error ? (
                         <div className="player-button">

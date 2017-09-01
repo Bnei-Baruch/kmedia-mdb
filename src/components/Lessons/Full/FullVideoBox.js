@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-duration-format';
-import { Button, Divider, Grid, Header, Menu } from 'semantic-ui-react';
+import { Grid, Header, Menu } from 'semantic-ui-react';
 import { Media } from 'react-media-player';
 
 import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
-import { physicalFile } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
-import LanguageSelector from '../../shared/LanguageSelector';
 import AVPlayer from '../../AVPlayerRMP/AVPlayerRMP';
 
 class FullVideoBox extends Component {
@@ -39,32 +37,22 @@ class FullVideoBox extends Component {
 
   componentDidMount() {
     const { fullLesson } = this.props;
-
-    // Update files
-    let { files }    = this.state;
-    let stateUpdated = false;
-
-    const newFiles = this.buildFiles(fullLesson.content_units);
-    if (newFiles.size) {
-      files        = new Map([...files, ...newFiles]);
-      stateUpdated = true;
-    }
-
-    if (stateUpdated) {
-      this.setState({ files });
-    }
+    this.updateFilesFromFullLesson(fullLesson);
   }
 
   componentWillReceiveProps(nextProps) {
     const { fullLesson } = nextProps;
-    const props          = this.props;
+    this.updateFilesFromFullLesson(fullLesson);
+  }
 
+  updateFilesFromFullLesson = (fullLesson) => {
     // Update files
     let { files }    = this.state;
     let stateUpdated = false;
 
     // Clear files if new full lesson was set.
-    if (fullLesson !== props.fullLesson && fullLesson.id !== props.fullLesson.id) {
+    if (fullLesson !== this.props.fullLesson &&
+        fullLesson.id !== this.props.fullLesson.id) {
       files        = new Map();
       stateUpdated = true;
     }
@@ -79,11 +67,13 @@ class FullVideoBox extends Component {
     if (stateUpdated) {
       this.setState({ files });
     }
-  }
+  };
 
   /**
-   * @param {!Array<Object>} files
-   * @return {Map<string, Map<string, file>>} map of files by language, then type (audio/video)
+   * For one part, generates map of files by language, then by type.
+   * @param {!Array<MDBFile>} files
+   * @return {Map<string, Map<string, MDBFile>>} map of files by language,
+   *     then type (audio/video).
    */
   getFilesByLanguageByAV = (files) => {
     const ret = new Map();
@@ -102,6 +92,12 @@ class FullVideoBox extends Component {
     return ret;
   };
 
+  /**
+   * Generates playlist from all parts, will leave undefined is some parts that
+   * don't have appropriate language or type (video/audio).
+   * @param {!Array<MDBBaseContentUnit>} lessonParts
+   * @return {!Map<string, Map<string, !Array<Object>>}
+   */
   buildFiles = (lessonParts) => {
     const files = new Map();
     lessonParts.forEach((p, i) => {
@@ -194,39 +190,18 @@ class FullVideoBox extends Component {
       return `${ccuName} - ${name} - ${durationDisplay}`;
     });
 
-    // Remove empty files, might be in case language or video/audio is missing.
-    // Store idx in order to get feedback from the player to select the correct part.
-    const audioPlaylist = [];
-    let audioPlaylistActiveIndex = null;
-    audioFileList.forEach((file, idx) => {
-      if (file) {
-        // Set index in playlist to play.
-        if (audioPlaylistActiveIndex === null || idx <= activePart) {
-          audioPlaylistActiveIndex = audioPlaylist.length;
-        }
-        audioPlaylist.push({
-          mediaid: idx,
-          file: physicalFile(file, true),
-          title: titles[idx],
-        });
-      }
-    });
+    // hasNext, hasPrev are not trivial as checking the indexes due to fact
+    // that in some languages there might be missing audio or vide file.
+    const hasNext = () => {
+      const fileList = isVideo ? videoFileList : audioFileList;
+      return activePart < fileList.length - 1 &&
+        fileList.slice(activePart).some(f => !!f);
+    }
 
-    const videoPlaylist = [];
-    let videoPlaylistActiveIndex = null;
-    videoFileList.forEach((file, idx) => {
-      if (file) {
-        // Set index in playlist to play.
-        if (videoPlaylistActiveIndex === null || idx <= activePart) {
-          videoPlaylistActiveIndex = videoPlaylist.length;
-        }
-        videoPlaylist.push({
-          mediaid: idx,
-          file: physicalFile(file, true),
-          title: titles[idx],
-        });
-      }
-    });
+    const hasPrev = () => {
+      const fileList = isVideo ? videoFileList : audioFileList;
+      return activePart > 0 && fileList.slice(0, activePart).some(f => !!f);
+    }
 
     return (
       <Grid.Row className="video_box">
@@ -236,9 +211,9 @@ class FullVideoBox extends Component {
             <Media>
               <AVPlayer
                 autoPlay={autoPlay}
-                active={isVideo ? videoFileList[videoPlaylistActiveIndex] : audioFileList[audioPlaylistActiveIndex]}
-                video={videoFileList[videoPlaylistActiveIndex]}
-                audio={audioFileList[audioPlaylistActiveIndex]}
+                active={isVideo ? videoFileList[activePart] : audioFileList[activePart]}
+                video={videoFileList[activePart]}
+                audio={audioFileList[activePart]}
                 onSwitchAV={this.handleSwitchAV}
                 languages={Array.from(files.keys())}
                 defaultLanguage={language}
@@ -247,8 +222,8 @@ class FullVideoBox extends Component {
                 // Playlist props
                 onFinish={this.onFinish}
                 showNextPrev={true}
-                hasNext={isVideo ? videoPlaylistActiveIndex < videoFileList.length - 1 : audioPlaylistActiveIndex < audioFileList.length - 1}
-                hasPrev={isVideo ? videoPlaylistActiveIndex > 0 : audioPlaylistActiveIndex > 0}
+                hasNext={hasNext()}
+                hasPrev={hasPrev()}
                 onPrev={this.onPrev}
                 onNext={this.onNext}
                 onPause={this.onPause}

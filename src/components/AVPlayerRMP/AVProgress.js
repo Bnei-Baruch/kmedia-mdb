@@ -147,7 +147,7 @@ class AVProgress extends Component {
     const current                   = currentTime / duration;
     // Overriding progress of native react-media-player as he does not works correctly
     // with buffers.
-    const { buffers, isSlice, sliceStart, sliceEnd } = this.props;
+    const { buffers, isSlice } = this.props;
     const b           = buffers.find(b => b.start <= currentTime && b.end >= currentTime);
     const progress    = (b && (b.end / duration)) || current;
 

@@ -21,7 +21,7 @@ export default class AVPlaybackRate extends Component {
     this.props.onSelect(e, data.value);
 
   render() {
-    const { languages, value, upward } = this.props;
+    const { value, upward } = this.props;
 
     const options = ['1x', '1.5x', '2x']
       .map(x => ({ value: x, text: x }));
