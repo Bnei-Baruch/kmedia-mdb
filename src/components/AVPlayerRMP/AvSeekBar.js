@@ -124,15 +124,15 @@ class AvSeekBar extends Component {
     return (duration * offset) / (right - left);
   }
 
-  clampSeekPositionInSlice = (seekPosition, sliceStart, sliceEnd) => {
-    let sliceCorrectedSeekPosition;
-    if (seekPosition > sliceEnd) {
-      sliceCorrectedSeekPosition = sliceEnd;
-    } else if (seekPosition < sliceStart) {
-      sliceCorrectedSeekPosition = sliceStart;
+  clampPositionInSlice = (position, sliceStart, sliceEnd) => {
+    let clampedPosition = position;
+    if (position > sliceEnd) {
+      clampedPosition = sliceEnd;
+    } else if (position < sliceStart) {
+      clampedPosition = sliceStart;
     }
 
-    return sliceCorrectedSeekPosition;
+    return clampedPosition;
   }
 
   seek = (seekPosition) => {
@@ -140,7 +140,7 @@ class AvSeekBar extends Component {
     let correctedSeekPosition;
 
     if (playerMode === PLAYER_MODE.SLICE_EDIT || playerMode === PLAYER_MODE.SLICE_VIEW) {
-      correctedSeekPosition = this.clampSeekPositionInSlice(seekPosition, sliceStart, sliceEnd);
+      correctedSeekPosition = this.clampPositionInSlice(seekPosition, sliceStart, sliceEnd);
       media.seekTo(!correctedSeekPosition || correctedSeekPosition === Infinity ? media.duration : correctedSeekPosition);
     }
 
