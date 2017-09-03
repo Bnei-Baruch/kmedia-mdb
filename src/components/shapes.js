@@ -20,8 +20,10 @@ export const MDBFile = PropTypes.shape({
   name: PropTypes.string.isRequired,
   type: PropTypes.string,
   subtype: PropTypes.string,
-  mime_type: PropTypes.string,
+  mimetype: PropTypes.string,
   language: PropTypes.string,
+  size: PropTypes.number,
+  duration: PropTypes.number,
 });
 
 const MDBBaseContentUnit = {
