@@ -17,11 +17,6 @@ export default class AVSliceMenu extends Component {
     playerMode: playerModeProp.isRequired,
     onEdit: PropTypes.func.isRequired,
     onView: PropTypes.func.isRequired,
-    upward: PropTypes.bool
-  };
-
-  static defaultProps = {
-    upward: true
   };
 
   handleItemClick = (e, item) => {
@@ -38,7 +33,7 @@ export default class AVSliceMenu extends Component {
   };
 
   render() {
-    const { playerMode, upward } = this.props;
+    const { playerMode } = this.props;
 
     let options = [];
 
@@ -50,7 +45,7 @@ export default class AVSliceMenu extends Component {
 
     return (
       <div className="player-control-slice-menu">
-        <Menu compact inverted vertical upward={upward}>
+        <Menu compact inverted vertical>
           <Menu.Item header>Slice Menu</Menu.Item>
           {
             options.map(option => (

@@ -400,7 +400,6 @@ class AVPlayerRMP extends PureComponent {
                     isSliceable && (mode === PLAYER_MODE.SLICE_EDIT || mode === PLAYER_MODE.SLICE_VIEW) && (
                       <div className={classNames('player-control-slice-menu-wrapper', { 'downward': active === audio })}>
                         <AVSliceMenu
-                          upward={active === video}
                           playerMode={mode}
                           onEdit={() => this.setSliceMode(true)}
                           onView={() => this.setSliceMode(false)}
