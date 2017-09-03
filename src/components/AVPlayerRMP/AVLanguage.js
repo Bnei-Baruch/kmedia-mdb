@@ -34,9 +34,6 @@ export default class AVLanguage extends Component {
     return (
       <div className="player-control-language">
         <Dropdown
-          floating
-          inline
-          scrolling
           upward={upward}
           icon={null}
           selectOnBlur={false}

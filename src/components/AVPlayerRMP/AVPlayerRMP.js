@@ -8,7 +8,8 @@ import { Icon } from 'semantic-ui-react';
 
 import * as shapes from '../shapes';
 import { physicalFile } from '../../helpers/utils';
-import { parse } from '../../helpers/url';
+import { parse, stringify } from '../../helpers/url';
+import { PLAYER_MODE } from './constants';
 import AVPlayPause from './AVPlayPause';
 import AVPlaybackRate from './AVPlaybackRate';
 import AVCenteredPlay from './AVCenteredPlay';
@@ -17,7 +18,9 @@ import AVFullScreen from './AVFullScreen';
 import AVMuteUnmute from './AVMuteUnmute';
 import AVLanguage from './AVLanguage';
 import AVAudioVideo from './AVAudioVideo';
-import AVProgress from './AVProgress';
+import AvSeekBar from './AvSeekBar';
+import AVSliceToggle from './AVSliceToggle';
+import AVSliceMenu from './AVSliceMenu';
 
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = (playback) => {
@@ -28,6 +31,7 @@ class AVPlayerRMP extends PureComponent {
 
   static propTypes = {
     t: PropTypes.func.isRequired,
+    media: PropTypes.object.isRequired,
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -42,7 +46,7 @@ class AVPlayerRMP extends PureComponent {
 
     // Slice props
     isSliceable: PropTypes.bool,
-    location: PropTypes.object.isRequired, // TODO: (yaniv) set right propType
+    history: PropTypes.object.isRequired,
 
     // Playlist props
     autoPlay: PropTypes.bool,
@@ -74,29 +78,24 @@ class AVPlayerRMP extends PureComponent {
     onNext: noop,
   };
 
-  static MODE = {
-    NORMAL: 0,
-    SLICE: 1
-  };
-
   state = {
     controlsVisible: true,
     error: false,
     playbackRate: '1x', // this is used only to rerender the component. actual value is saved on the player's instance
-    mode: AVPlayerRMP.MODE.NORMAL
+    mode: PLAYER_MODE.NORMAL,
   };
 
   // Timeout for auto-hiding controls.
   autohideTimeoutId = null;
 
   componentWillMount() {
-    const { isSliceable, location } = this.props;
+    const { isSliceable, history } = this.props;
 
     if (isSliceable) {
-      const query = parse(location.search.slice(1));
+      const query = parse(history.location.search.slice(1));
 
       if (query.sstart || query.send) {
-        this.setSliceMode({
+        this.setSliceMode(!!query.sliceEdit, {
           sliceStart: query.sstart ? parseFloat(query.sstart) : 0,
           sliceEnd: query.send ? parseFloat(query.send) : Infinity
         });
@@ -109,16 +108,16 @@ class AVPlayerRMP extends PureComponent {
     this.hideControlsTimeout();
   }
 
-  setSliceMode = properties => this.setState({
-    mode: AVPlayerRMP.MODE.SLICE,
+  setSliceMode = (isEdit, properties, cb) => this.setState({
+    mode: isEdit ? PLAYER_MODE.SLICE_EDIT : PLAYER_MODE.SLICE_VIEW,
     ...properties
-  });
+  }, cb);
 
-  setNormalMode = () => this.setState({
-    mode: AVPlayerRMP.MODE.NORMAL,
+  setNormalMode = cb => this.setState({
+    mode: PLAYER_MODE.NORMAL,
     sliceStart: undefined,
     sliceEnd: undefined
-  });
+  }, cb);
 
   // Correctly fetch loaded buffers from video to show loading progress.
   // This code should be ported to react-media-player.
@@ -179,6 +178,61 @@ class AVPlayerRMP extends PureComponent {
     }
   }
 
+  handleToggleMode = () => {
+    const { mode } = this.state;
+
+    if (mode === PLAYER_MODE.SLICE_EDIT || mode === PLAYER_MODE.SLICE_VIEW) {
+      this.setNormalMode(this.resetSliceQuery);
+    } else {
+      this.setSliceMode(this.updateSliceQuery);
+    }
+  };
+
+  handleSliceEndChange = (value) => {
+    const newState = {
+      sliceEnd: value
+    };
+    this.setState(newState);
+    this.updateSliceQuery(newState);
+  };
+
+  handleSliceStartChange = (value) => {
+    const newState = {
+      sliceStart: value
+    };
+    this.setState(newState);
+    this.updateSliceQuery(newState);
+  };
+
+  resetSliceQuery = () => {
+    const { history } = this.props;
+    const query = parse(history.location.search.slice(1));
+    query.sstart = undefined;
+    query.send = undefined;
+    history.replace({ search: stringify(query) });
+  };
+
+  updateSliceQuery = (values) => {
+    const { history, media } = this.props;
+    const { sliceStart, sliceEnd } = this.state;
+
+    const query = parse(history.location.search.slice(1));
+    if (!values) {
+      query.sstart = sliceStart || 0;
+      query.send = (!sliceEnd || sliceEnd === Infinity) ? media.duration : sliceEnd;
+    } else {
+      if (typeof values.sliceEnd !== 'undefined') {
+        query.send = +values.sliceEnd.toFixed(3);
+      }
+
+      if (typeof values.sliceStart !== 'undefined') {
+        query.sstart = +values.sliceStart.toFixed(3);
+      }
+    }
+
+    history.replace({ search: stringify(query) });
+  }
+
   showControls = (callback) => {
     if (this.autohideTimeoutId) {
       clearTimeout(this.autohideTimeoutId);
@@ -223,7 +277,7 @@ class AVPlayerRMP extends PureComponent {
     const { isSliceable, media } = this.props;
     const { sliceEnd } = this.state;
 
-    // interupt play if we're at the end of the slice
+    // interrupt play if we're at the end of the slice
     if (isSliceable && e.currentTime >= sliceEnd) {
       media.pause();
       media.seekTo(sliceEnd);
@@ -300,17 +354,20 @@ class AVPlayerRMP extends PureComponent {
                     hasNext={hasNext}
                     hasPrev={hasPrev}
                     onPrev={onPrev}
-                    onNext={onNext} />
+                    onNext={onNext}
+                  />
                   <AVTimeElapsed
-                    isSlice={isSliceable && !!(sliceStart || sliceEnd)}
+                    isSlice={isSliceable && (mode === PLAYER_MODE.SLICE_VIEW || mode === PLAYER_MODE.SLICE_EDIT)}
                     sliceStart={sliceStart}
                     sliceEnd={sliceEnd}
                   />
-                  <AVProgress
+                  <AvSeekBar
                     buffers={this.buffers()}
-                    isSlice={mode === AVPlayerRMP.MODE.SLICE}
+                    playerMode={mode}
                     sliceStart={sliceStart}
                     sliceEnd={sliceEnd}
+                    onSliceStartChange={this.handleSliceStartChange}
+                    onSliceEndChange={this.handleSliceEndChange}
                   />
                   <AVPlaybackRate
                     value={playbackRate}
@@ -331,19 +388,42 @@ class AVPlayerRMP extends PureComponent {
                     upward={video === active}
                   />
                   <AVFullScreen />
+                  {
+                    isSliceable && (
+                      <AVSliceToggle
+                        playerMode={mode}
+                        onToggle={this.handleToggleMode}
+                      />
+                    )
+                  }
+                  {
+                    isSliceable && (mode === PLAYER_MODE.SLICE_EDIT || mode === PLAYER_MODE.SLICE_VIEW) && (
+                      <div className={classNames('player-control-slice-menu-wrapper', { 'downward': active === audio })}>
+                        <AVSliceMenu
+                          upward={active === video}
+                          playerMode={mode}
+                          onEdit={() => this.setSliceMode(true)}
+                          onView={() => this.setSliceMode(false)}
+                        />
+                      </div>
+                    )
+                  }
                 </div>
               </div>
               { active === video ? (
-                  <div className="media-center-control"
-                       style={!error ? {outline: 'none'} : {backgroundColor: 'black', outline: 'none'}}
-                       tabIndex="0"
-                       onClick={() => playPause()}
-                       onKeyDown={this.onKeyDown}
-                       onMouseMove={this.centerMove}>
-                    { error ? (
+                  <div
+                    className="media-center-control"
+                    style={!error ? { outline: 'none' } : { backgroundColor: 'black', outline: 'none' }}
+                    tabIndex="0"
+                    onClick={() => playPause()}
+                    onKeyDown={this.onKeyDown}
+                    onMouseMove={this.centerMove}
+                  >
+                    {
+                      error ? (
                         <div className="player-button">
                           Error loading file.
-                          <Icon name={'warning sign'} size='large'/>
+                          <Icon name="warning sign" size=" large" />
                         </div>
                       ) : <AVCenteredPlay />
                     }
