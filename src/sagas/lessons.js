@@ -28,11 +28,11 @@ function* fetchList(action) {
         if (Array.isArray(val.content_units)) {
           return acc.concat(val.content_units.map(x => x.id));
         }
-          return acc;
+        return acc;
       }, []);
-      const language = yield select(state => settings.getLanguage(state.settings));
-      const pageSize = cuIDsToFetch.length;
-      const resp2 = yield call(Api.units, {id: cuIDsToFetch, pageSize, language});
+      const language     = yield select(state => settings.getLanguage(state.settings));
+      const pageSize     = cuIDsToFetch.length;
+      const resp2        = yield call(Api.units, { id: cuIDsToFetch, pageSize, language });
       yield put(mdbActions.receiveContentUnits(resp2.content_units));
     }
 

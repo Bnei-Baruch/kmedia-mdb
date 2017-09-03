@@ -138,22 +138,22 @@ class FullVideoBox extends Component {
     if (activePart < fullLesson.content_units.length - 1) {
       onActivePartChange(activePart + 1);
     }
-  }
+  };
 
   onPrev = () => {
     const { activePart, onActivePartChange } = this.props;
     if (activePart > 0) {
       onActivePartChange(activePart - 1);
     }
-  }
+  };
 
   onPlay = () => {
     this.setState({ autoPlay: true });
-  }
+  };
 
   onPause = () => {
     this.setState({ autoPlay: false });
-  }
+  };
 
   handleSwitchAV = () => {
     if (this.state.isAudio && this.state.isVideo !== undefined) {
@@ -162,7 +162,7 @@ class FullVideoBox extends Component {
     if (this.state.isVideo && this.state.isAudio !== undefined) {
       this.setState({ isAudio: true, isVideo: false });
     }
-  }
+  };
 
   render() {
     const { t, activePart, fullLesson, language: propsLanguage } = this.props;
@@ -191,17 +191,17 @@ class FullVideoBox extends Component {
     });
 
     // hasNext, hasPrev are not trivial as checking the indexes due to fact
-    // that in some languages there might be missing audio or vide file.
+    // that in some languages there might be missing audio or video file.
     const hasNext = () => {
       const fileList = isVideo ? videoFileList : audioFileList;
       return activePart < fileList.length - 1 &&
         fileList.slice(activePart).some(f => !!f);
-    }
+    };
 
     const hasPrev = () => {
       const fileList = isVideo ? videoFileList : audioFileList;
       return activePart > 0 && fileList.slice(0, activePart).some(f => !!f);
-    }
+    };
 
     return (
       <Grid.Row className="video_box">
@@ -220,8 +220,8 @@ class FullVideoBox extends Component {
                 onLanguageChange={this.handleChangeLanguage}
                 t={t}
                 // Playlist props
+                showNextPrev
                 onFinish={this.onFinish}
-                showNextPrev={true}
                 hasNext={hasNext()}
                 hasPrev={hasPrev()}
                 onPrev={this.onPrev}

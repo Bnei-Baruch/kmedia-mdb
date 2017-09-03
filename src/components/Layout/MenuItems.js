@@ -32,7 +32,7 @@ const MenuItems = (props) => {
 
   if (simple) {
     return (
-      <Menu vertical borderless fluid color='blue' size='huge'>
+      <Menu vertical borderless fluid color="blue" size="huge">
         {items}
       </Menu>
     );
