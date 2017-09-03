@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Divider, Grid } from 'semantic-ui-react';
 
@@ -9,25 +8,16 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions, selectors as programSelectors } from '../../../redux/modules/programs';
 import * as shapes from '../../shapes';
-import withPagination from '../../pagination/paginationHOC';
 import ProgramsList from './ProgramsList';
+import withPagination from '../../pagination/withPagination';
 
-class ProgramsContainer extends Component {
+class ProgramsContainer extends withPagination {
 
   static propTypes = {
-    pageNo: PropTypes.number.isRequired,
-    total: PropTypes.number.isRequired,
     items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.ProgramCollection, shapes.ProgramChapter])),
     location: shapes.HistoryLocation.isRequired,
-    fetchList: PropTypes.func.isRequired,
-    setPage: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
     pageSize: PropTypes.number.isRequired,
-    getPageNo: PropTypes.func.isRequired,
-    askForData: PropTypes.func.isRequired,
-    handlePageChange: PropTypes.func.isRequired,
-    ResultsPageHeader: PropTypes.func.isRequired,
-    Pagination: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -35,54 +25,43 @@ class ProgramsContainer extends Component {
   };
 
   componentDidMount() {
-    const { location, askForData, getPageNo } = this.props;
-
-    const pageNo = getPageNo(location.search);
-    askForData({ ...this.props, pageNo });
+    withPagination.askForData(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { language, pageSize }           = nextProps;
-    const { handlePageChange, askForData } = this.props;
-
-    if (pageSize !== this.props.pageSize) {
-      handlePageChange(1, nextProps);
-    }
+    const { language } = nextProps;
 
     if (language !== this.props.language) {
-      askForData(nextProps);
+      withPagination.askForData(nextProps);
     }
+
+    super.componentWillReceiveProps(nextProps);
   }
 
   render() {
-    const { items, handlePageChange, ResultsPageHeader, Pagination } = this.props;
+    const { items } = this.props;
 
     return (
       <Grid.Column width={16}>
-        <ResultsPageHeader {...this.props} />
+        <withPagination.ResultsPageHeader {...this.props} />
         <Divider />
         <ProgramsList items={items} />
-        <Pagination {...this.props} onChange={x => handlePageChange(x, this.props)} />
+        <withPagination.Pagination {...this.props} />
       </Grid.Column>
     );
   }
 }
 
-const enhance = compose(
-  connect(
-    state => ({
-      pageNo: programSelectors.getPageNo(state.programs),
-      total: programSelectors.getTotal(state.programs),
-      items: programSelectors.getItems(state.programs)
-        .map(x => (x[1] === CT_VIDEO_PROGRAM_CHAPTER ?
-          mdb.getUnitById(state.mdb, x[0]) :
-          mdb.getDenormCollection(state.mdb, x[0]))),
-      language: settings.getLanguage(state.settings),
-      pageSize: settings.getPageSize(state.settings),
-    }),
-    actions
-  ),
-  withPagination
-);
+const mapState = (state) => {
+  const parentProps = withPagination.mapState('programs', state, programSelectors, settings);
+  return {
+    ...parentProps,
+    items: programSelectors.getItems(state.programs)
+      .map(x => (x[1] === CT_VIDEO_PROGRAM_CHAPTER ?
+        mdb.getUnitById(state.mdb, x[0]) :
+        mdb.getDenormCollection(state.mdb, x[0]))),
+    language: settings.getLanguage(state.settings),
+  };
+};
 
-export default enhance(ProgramsContainer);
+export default connect(mapState, actions)(ProgramsContainer);
