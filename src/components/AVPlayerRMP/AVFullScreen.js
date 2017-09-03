@@ -24,13 +24,12 @@ class AVFullscreen extends Component {
     return (
       <button
         type="button"
-        className="player-button"
+        className="player-button player-control-fullscreen"
         onClick={this.handleFullscreen}
-        style={{ marginLeft: 10, marginRight: 10 }}
       >
         <Icon
           name={media.isFullscreen ? 'compress' : 'expand'}
-          style={{margin: 0, height: '100%' }}
+          style={{ margin: 0, height: '100%' }}
         />
       </button>
     );

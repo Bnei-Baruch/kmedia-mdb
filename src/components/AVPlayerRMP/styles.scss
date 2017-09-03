@@ -13,6 +13,17 @@
   }
 }
 
+.player-control-share,
+.player-control-slice-toggle,
+.player-control-fullscreen {
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.player-control-slice-toggle {
+  margin-left: 10px;
+}
+
 .player-control-seekbar {
   position: relative;
   width: 100%;
@@ -177,8 +188,9 @@
   background: transparent;
   border: none;
   box-shadow: none;
+  line-height: 1.2;
 
-  img {
+  .icon {
     height: 100%;
   }
 }

@@ -21,6 +21,7 @@ import AVAudioVideo from './AVAudioVideo';
 import AvSeekBar from './AvSeekBar';
 import AVSliceToggle from './AVSliceToggle';
 import AVSliceMenu from './AVSliceMenu';
+import AVShare from './AVShare';
 
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = (playback) => {
@@ -387,7 +388,6 @@ class AVPlayerRMP extends PureComponent {
                     onSelect={this.onLanguageChange}
                     upward={video === active}
                   />
-                  <AVFullScreen />
                   {
                     isSliceable && (
                       <AVSliceToggle
@@ -407,6 +407,8 @@ class AVPlayerRMP extends PureComponent {
                       </div>
                     )
                   }
+                  <AVShare />
+                  <AVFullScreen />
                 </div>
               </div>
               { active === video ? (

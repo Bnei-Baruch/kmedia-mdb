@@ -14,20 +14,17 @@ export default class AVSliceToggle extends Component {
     const { playerMode, onToggle } = this.props;
 
     return (
-      <div className="player-control-slice-toggle">
-        <button
-          type="button"
-          tabIndex="-1"
-          className="player-button"
-          style={{ marginRight: '5px' }}
-          onClick={onToggle}
-        >
-          <Icon
-            name={playerMode === PLAYER_MODE.NORMAL ? 'cut' : 'video'}
-            style={{ margin: 0, height: '100%' }}
-          />
-        </button>
-      </div>
+      <button
+        type="button"
+        tabIndex="-1"
+        className="player-button player-control-slice-toggle"
+        onClick={onToggle}
+      >
+        <Icon
+          name={playerMode === PLAYER_MODE.NORMAL ? 'cut' : 'video'}
+          style={{ margin: 0, height: '100%' }}
+        />
+      </button>
     );
   }
 }
