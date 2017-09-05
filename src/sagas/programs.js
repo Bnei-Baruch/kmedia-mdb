@@ -5,11 +5,15 @@ import { updateQuery } from './helpers/url';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions, types } from '../redux/modules/programs';
 import { actions as mdbActions } from '../redux/modules/mdb';
+import { selectors as filterSelectors } from '../redux/modules/filters';
+import { filtersTransformer } from '../filters';
 
 function* fetchProgramsList(action) {
+  const filters = yield select(state => filterSelectors.getFilters(state.filters, 'programs'));
+  const params  = filtersTransformer.toApiParams(filters);
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const resp     = yield call(Api.collections, { ...action.payload, language });
+    const resp     = yield call(Api.collections, { ...action.payload, language, ...params });
 
     if (Array.isArray(resp.collections)) {
       yield put(mdbActions.receiveCollections(resp.collections));

@@ -21,18 +21,18 @@ function* fetchList(action) {
       // Here comes another call for all content_units we got
       // in order to fetch their possible additional collections.
       // We need this to show 'related to' second line in list.
-      // This second round trip to the API is awefull,
+      // This second round trip to the API is awful,
       // we should strive for a single call to the API and get all the data we need.
       // hmm, relay..., hmm ?
       const cuIDsToFetch = resp.collections.reduce((acc, val) => {
         if (Array.isArray(val.content_units)) {
           return acc.concat(val.content_units.map(x => x.id));
         }
-          return acc;
+        return acc;
       }, []);
-      const language = yield select(state => settings.getLanguage(state.settings));
-      const pageSize = cuIDsToFetch.length;
-      const resp2 = yield call(Api.units, {id: cuIDsToFetch, pageSize, language});
+      const language     = yield select(state => settings.getLanguage(state.settings));
+      const pageSize     = cuIDsToFetch.length;
+      const resp2        = yield call(Api.units, { id: cuIDsToFetch, pageSize, language });
       yield put(mdbActions.receiveContentUnits(resp2.content_units));
     }
 

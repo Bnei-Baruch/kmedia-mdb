@@ -1,105 +1,111 @@
 {
-  "nav": {
-    "top": {
+  "nav":       {
+    "top":     {
       "header": "קבלה מדיה"
     },
     "sidebar": {
-      "lessons": "שיעור יומי",
-      "programs": "תוכניות טלוויזיה",
-      "lectures": "הרצאות ושיעורים",
-      "sources": "מקורות",
-      "events": "אירועים",
-      "books": "ספרים",
-      "topics": "נושאים",
+      "lessons":      "שיעור יומי",
+      "programs":     "תוכניות טלוויזיה",
+      "lectures":     "הרצאות ושיעורים",
+      "sources":      "מקורות",
+      "events":       "אירועים",
+      "books":        "ספרים",
+      "topics":       "נושאים",
       "publications": "פרסומים",
-      "photos": "תמונות",
-      "design": "עיצוב"
+      "photos":       "תמונות",
+      "design":       "עיצוב"
     },
-    "footer": {
+    "footer":  {
       "copyright": "© כל הזכויות שמורות 2003-{{year}}",
-      "rights": "בני ברוך - קבלה לעם"
+      "rights":    "בני ברוך - קבלה לעם"
     }
   },
-  "filters": {
-    "date-filter": {
-      "label": "תאריך",
+  "filters":   {
+    "lessons":        {
+      "by": "סנן שיעורים לפי:"
+    },
+    "programs":        {
+      "by": "סנן תוכניות לפי:"
+    },
+    "date-filter":    {
+      "label":       "תאריך",
       "selectTitle": "בחר טווח תאריכים",
-      "presets": {
-        "TODAY": "היום",
-        "YESTERDAY": "אתמול",
-        "LAST_7_DAYS": "7 ימים אחרונים",
+      "presets":     {
+        "TODAY":        "היום",
+        "YESTERDAY":    "אתמול",
+        "LAST_7_DAYS":  "7 ימים אחרונים",
         "LAST_30_DAYS": "30 ימים אחרונים",
-        "LAST_MONTH": "חודש שעבר",
-        "THIS_MONTH": "חודש נוכחי",
+        "LAST_MONTH":   "חודש שעבר",
+        "THIS_MONTH":   "חודש נוכחי",
         "CUSTOM_RANGE": "בחירה גמישה"
       },
-      "start": "התחלה",
-      "end": "סיום"
+      "start":       "התחלה",
+      "end":         "סיום"
     },
     "sources-filter": {
       "label": "מקורות"
     },
-    "topics-filter": {
+    "topics-filter":  {
       "label": "נושאים"
     }
   },
-  "buttons": {
-    "apply": "אישור",
+  "buttons":   {
+    "apply":  "אישור",
     "cancel": "ביטול",
-    "audio": "אודיו",
-    "video": "וידאו",
-    "more": "עוד"
+    "audio":  "אודיו",
+    "video":  "וידאו",
+    "more":   "עוד"
   },
-  "messages": {
-    "loading": "טוען",
-    "loading-subtext": "תיכף מגיע",
-    "server-error": "שגיאת שרת",
-    "lesson-not-found": "שיעור לא קיים",
-    "lesson-not-found-subtext": "נסה לחפש ב <1>רשימת השיעורים</1>...",
-    "program-not-found": "תוכנית לא קיימת",
+  "messages":  {
+    "loading":                   "טוען",
+    "loading-subtext":           "תיכף מגיע",
+    "server-error":              "שגיאת שרת",
+    "lesson-not-found":          "שיעור לא קיים",
+    "lesson-not-found-subtext":  "נסה לחפש ב <1>רשימת השיעורים</1>...",
+    "program-not-found":         "תוכנית לא קיימת",
     "program-not-found-subtext": "נסה לחפש ב <1>רשימת התוכניות</1>...",
-    "event-not-found": "אירוע לא קיים",
-    "event-not-found-subtext": "נסה לחפש ב <1>רשימת האירועים</1>...",
-    "no-files": "לא נמצאו קבצים",
-    "no-playable-files": "לא נמצאו קבצים מתאימים לתצוגה",
-    "no-results": "לא נמצאו תוצאות",
-    "pagination-results": "תוצאות {{start}} - {{end}} מתוך {{total}}"
+    "event-not-found":           "אירוע לא קיים",
+    "event-not-found-subtext":   "נסה לחפש ב <1>רשימת האירועים</1>...",
+    "no-files":                  "לא נמצאו קבצים",
+    "no-playable-files":         "לא נמצאו קבצים מתאימים לתצוגה",
+    "no-results":                "לא נמצאו תוצאות",
+    "pagination-results":        "תוצאות {{start}} - {{end}} מתוך {{total}}"
   },
-  "lessons": {
+  "lessons":   {
     "list": {
       "related": "קשור ל"
     },
     "part": {
-      "info": {
-        "tags": "תגיות",
-        "sources": "מקורות",
+      "info":           {
+        "tags":          "תגיות",
+        "sources":       "מקורות",
         "related-event": "אירועים קשורים"
       },
-      "materials": {
-        "summary": "תקציר",
+      "materials":      {
+        "summary":       "תקציר",
         "transcription": "תמליל",
-        "sources": "מקורות",
-        "sketches": "שרטוטים"
+        "sources":       "מקורות",
+        "sketches":      "שרטוטים"
       },
-      "downloads": {
-        "title": "קבצים להורדה",
+      "downloads":      {
+        "title":         "קבצים להורדה",
         "derived-title": "נגזרות",
-        "copy-link": "העתק קישור",
-        "type-labels": {
+        "copy-link":     "העתק קישור",
+        "type-labels":   {
           "video": "וידאו של השיעור",
           "audio": "אודיו של השיעור",
-          "text": "תמליל מלא",
+          "text":  "תמליל מלא",
           "image": "שרטוטים"
         }
       },
       "relevant-parts": {
-        "title": "חלקים נוספים מאותו שיעור",
+        "title":      "חלקים נוספים מאותו שיעור",
         "item-title": "חלק {{name}}"
       }
     }
   },
   "constants": {
-    "languages": {
+    "languages":     {
       "he": "עברית",
       "en": "אנגלית",
       "ru": "רוסית",
@@ -133,39 +139,39 @@
       "cs": "צ'כית"
     },
     "content-types": {
-      "DAILY_LESSON": "שיעור יומי",
-      "SPECIAL_LESSON": "שיעור מיוחד",
-      "FRIENDS_GATHERINGS": "",
-      "CONGRESS": "",
-      "VIDEO_PROGRAM": "",
-      "LECTURE_SERIES": "",
-      "MEALS": "",
-      "HOLIDAY": "",
-      "PICNIC": "",
-      "UNITY_DAY": "",
-      "LESSON_PART": "",
-      "LECTURE": "",
-      "CHILDREN_LESSON_PART": "",
-      "WOMEN_LESSON_PART": "",
-      "VIRTUAL_LESSON": "",
-      "FRIENDS_GATHERING": "",
-      "MEAL": "",
+      "DAILY_LESSON":          "שיעור יומי",
+      "SPECIAL_LESSON":        "שיעור מיוחד",
+      "FRIENDS_GATHERINGS":    "",
+      "CONGRESS":              "",
+      "VIDEO_PROGRAM":         "",
+      "LECTURE_SERIES":        "",
+      "MEALS":                 "",
+      "HOLIDAY":               "",
+      "PICNIC":                "",
+      "UNITY_DAY":             "",
+      "LESSON_PART":           "",
+      "LECTURE":               "",
+      "CHILDREN_LESSON_PART":  "",
+      "WOMEN_LESSON_PART":     "",
+      "VIRTUAL_LESSON":        "",
+      "FRIENDS_GATHERING":     "",
+      "MEAL":                  "",
       "VIDEO_PROGRAM_CHAPTER": "",
-      "FULL_LESSON": "",
-      "TEXT": "",
-      "UNKNOWN": "",
-      "EVENT_PART": "",
-      "CLIP": "",
-      "TRAINING": "",
-      "KITEI_MAKOR": "קטעי מקור"
+      "FULL_LESSON":           "",
+      "TEXT":                  "",
+      "UNKNOWN":               "",
+      "EVENT_PART":            "",
+      "CLIP":                  "",
+      "TRAINING":              "",
+      "KITEI_MAKOR":           "קטעי מקור"
     },
-    "media-types": {
-      "video": "וידאו",
-      "audio": "אודיו",
-      "image": "תמונה",
-      "text": "טקסט",
-      "sheet": "גליון",
-      "banner": "באנר",
+    "media-types":   {
+      "video":        "וידאו",
+      "audio":        "אודיו",
+      "image":        "תמונה",
+      "text":         "טקסט",
+      "sheet":        "גליון",
+      "banner":       "באנר",
       "presentation": "מצגת"
     }
   }

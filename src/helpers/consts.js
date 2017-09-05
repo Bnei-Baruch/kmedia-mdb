@@ -210,6 +210,7 @@ export const MEDIA_TYPES = {
   pps: { type: MT_PRESENTATION, sub_type: '', mime_type: 'application/vnd.ms-powerpoint' },
 };
 
-export const TAG_ROOT_TOPICS = 'mS7hrYXK';
+export const TAG_LESSONS_TOPICS = 'mS7hrYXK';
+export const TAG_PROGRAMS_TOPICS = 'IgSeiMLj';
 
 export const DATE_FORMAT = 'YYYY-MM-DD';

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import noop from 'lodash/noop';
 import { Button, Divider, List, Segment } from 'semantic-ui-react';
 
-import { TAG_ROOT_TOPICS } from '../../../helpers/consts';
+import { TAG_LESSONS_TOPICS, TAG_PROGRAMS_TOPICS } from '../../../helpers/consts';
 import { selectors as tags } from '../../../redux/modules/tags';
 import connectFilter from '../connectFilter';
 
@@ -17,7 +17,8 @@ class TopicsFilter extends React.Component {
     value: PropTypes.string,
     getTagById: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
-    allValues: PropTypes.arrayOf(PropTypes.string)
+    allValues: PropTypes.arrayOf(PropTypes.string),
+    namespace: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -53,7 +54,6 @@ class TopicsFilter extends React.Component {
     }
     this.props.updateValue(selection);
     this.props.onApply();
-
   };
 
   createList = (items, selected) => {
@@ -97,8 +97,19 @@ class TopicsFilter extends React.Component {
   };
 
   render() {
-    const { t, getTagById } = this.props;
-    const topics            = getTagById(TAG_ROOT_TOPICS);
+    const { t, getTagById, namespace } = this.props;
+    let topics;
+
+    switch (namespace) {
+    case 'lessons':
+      topics = getTagById(TAG_LESSONS_TOPICS);
+      break;
+    case 'programs':
+      topics = getTagById(TAG_PROGRAMS_TOPICS);
+      break;
+    default:
+      topics = '';
+    }
 
     return (
       <Segment basic clearing attached="bottom" className="tab active">
