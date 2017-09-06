@@ -195,29 +195,30 @@ class AVPlaylistPlayerRMP extends Component {
 
     return (
       <div className="video_player">
-        <div id="video" />
-        <Media>
-          <AVPlayerRMP
-            autoPlay={autoPlay}
-            active={isVideo ? videoFileList[activePart] : audioFileList[activePart]}
-            video={videoFileList[activePart]}
-            audio={audioFileList[activePart]}
-            onSwitchAV={this.handleSwitchAV}
-            languages={Array.from(files.keys())}
-            defaultLanguage={language}
-            onLanguageChange={this.handleChangeLanguage}
-            t={t}
-            // Playlist props
-            showNextPrev
-            onFinish={this.onFinish}
-            hasNext={hasNext()}
-            hasPrev={hasPrev()}
-            onPrev={this.onPrev}
-            onNext={this.onNext}
-            onPause={this.onPause}
-            onPlay={this.onPlay}
-          />
-        </Media>
+        <div className="video_position">
+          <Media>
+            <AVPlayerRMP
+              autoPlay={autoPlay}
+              active={isVideo ? videoFileList[activePart] : audioFileList[activePart]}
+              video={videoFileList[activePart]}
+              audio={audioFileList[activePart]}
+              onSwitchAV={this.handleSwitchAV}
+              languages={Array.from(files.keys())}
+              defaultLanguage={language}
+              onLanguageChange={this.handleChangeLanguage}
+              t={t}
+              // Playlist props
+              showNextPrev
+              onFinish={this.onFinish}
+              hasNext={hasNext()}
+              hasPrev={hasPrev()}
+              onPrev={this.onPrev}
+              onNext={this.onNext}
+              onPause={this.onPause}
+              onPlay={this.onPlay}
+            />
+          </Media>
+        </div>
       </div>
     );
   }
