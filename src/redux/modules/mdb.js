@@ -175,14 +175,6 @@ const getDenormCollection = (state, id) => {
   return c;
 };
 
-const getDenormCollectionWUnits = (state, id) => {
-  const c = state.cById[id];
-  if (c && Array.isArray(c.cuIDs)) {
-    c.content_units = c.cuIDs.map(x => getDenormContentUnit(state, x)).filter(x => !!x);
-  }
-  return c;
-};
-
 const denormalizeObject = (byID, obj) => (
   Object.entries(obj || {}).reduce((acc, val) => {
     const [k, v] = val;
@@ -209,6 +201,14 @@ const getDenormContentUnit = (state, id) => {
   }
 
   return cu;
+};
+
+const getDenormCollectionWUnits = (state, id) => {
+  const c = state.cById[id];
+  if (c && Array.isArray(c.cuIDs)) {
+    c.content_units = c.cuIDs.map(x => getDenormContentUnit(state, x)).filter(x => !!x);
+  }
+  return c;
 };
 
 export const selectors = {

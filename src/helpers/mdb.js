@@ -42,7 +42,6 @@ export class CollectionsBreakdown {
       CT_UNITY_DAY);
 
   collectTypes = (...types) =>
-    types.reduce((acc, val) => {
-      return acc.concat(this.byType[val] || []);
-    }, []);
+    types.reduce((acc, val) =>
+      acc.concat(this.byType[val] || []), []);
 }

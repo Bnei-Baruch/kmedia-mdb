@@ -3,11 +3,10 @@ import XHR from 'i18next-xhr-backend';
 import moment from 'moment';
 import 'moment/locale/he';
 import 'moment/locale/ru';
+import { DEFAULT_LANGUAGE } from './consts';
 
 // import Cache from 'i18next-localstorage-cache';
 // import LanguageDetector from 'i18next-browser-languagedetector';
-
-import { DEFAULT_LANGUAGE } from './consts';
 
 const LOCALES_BACKEND = process.env.NODE_ENV === 'production' ?
   process.env.PUBLIC_URL :
@@ -42,12 +41,12 @@ i18n
 
     interpolation: {
       escapeValue: false, // not needed for react!!
-      format: function (value, format, lng) {
+      format: (value, format) => {
         if (value instanceof Date) {
           return moment(value).format(format);
         }
         return value;
-      }
+      },
     },
 
     // cache: {

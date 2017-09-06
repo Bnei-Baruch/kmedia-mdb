@@ -1,15 +1,15 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import classnames from 'classnames';
 import { Route } from 'react-router-dom';
-import { Flag, Grid, Header, Icon, Menu } from 'semantic-ui-react';
+import { Flag, Header, Icon, Menu } from 'semantic-ui-react';
+
+import { FLAG_TO_LANGUAGE } from '../../helpers/consts';
+import Link from '../Language/MultiLanguageLink';
 import Routes from './Routes';
 import MenuItems from './MenuItems';
 import Footer from './Footer';
-import Link from '../Language/MultiLanguageLink';
-import { FLAG_TO_LANGUAGE } from '../../helpers/consts';
 import logo from '../../images/logo.svg';
 
 const flags = ['us', 'ru', 'il'];
@@ -24,7 +24,7 @@ class Layout extends Component {
     sidebarActive: false
   };
 
-  toggleSidebar = (e, data) =>
+  toggleSidebar = () =>
     this.setState({ sidebarActive: !this.state.sidebarActive });
 
   render() {
@@ -57,7 +57,7 @@ class Layout extends Component {
             </Menu.Menu>
           </Menu>
         </div>
-        <div className={classnames({ 'layout__sidebar': true, 'is-active': sidebarActive })}>
+        <div className={classnames({ layout__sidebar: true, 'is-active': sidebarActive })}>
           <Menu inverted borderless size="huge" color="blue">
             <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.toggleSidebar}>
               <Icon name="sidebar" />
@@ -75,11 +75,7 @@ class Layout extends Component {
         </div>
         <div className="layout__main">
           <div className="layout__content">
-           {/* <Grid padded>
-              <Grid.Row>*/}
-                <Route component={Routes} />
-              {/*</Grid.Row>
-            </Grid>*/}
+            <Route component={Routes} />
           </div>
           <Footer />
         </div>

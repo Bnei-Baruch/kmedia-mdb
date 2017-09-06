@@ -29,16 +29,12 @@ export default class Api {
   static sources    = ({ language }) => Requests.get(`sources?${Requests.makeParams({ language })}`);
   static tags       = ({ language }) => Requests.get(`tags?${Requests.makeParams({ language })}`);
 
-  static lessons = ({ pageNo: page_no, pageSize: page_size, ...rest }) => {
-    return Requests.get(`lessons?${Requests.makeParams({page_no, page_size, ...rest})}`);
-  };
+  static lessons = ({ pageNo: page_no, pageSize: page_size, ...rest }) =>
+    Requests.get(`lessons?${Requests.makeParams({ page_no, page_size, ...rest })}`);
 
-  static collections = ({ contentTypes: content_type, pageNo: page_no, pageSize: page_size, ...rest }) => {
-    return Requests.get(`collections?${Requests.makeParams({page_no, page_size, content_type, ...rest})}`);
-  };
+  static collections = ({ contentTypes: content_type, pageNo: page_no, pageSize: page_size, ...rest }) =>
+    Requests.get(`collections?${Requests.makeParams({ page_no, page_size, content_type, ...rest })}`);
 
-  static units = ({ contentTypes: content_type, pageNo: page_no, pageSize: page_size, ...rest }) => {
-    return Requests.get(`content_units?${Requests.makeParams({page_no, page_size, content_type, ...rest})}`);
-  };
-
+  static units = ({ contentTypes: content_type, pageNo: page_no, pageSize: page_size, ...rest }) =>
+    Requests.get(`content_units?${Requests.makeParams({ page_no, page_size, content_type, ...rest })}`);
 }

@@ -23,7 +23,8 @@ class LessonsList extends PureComponent {
   renderPart = (part, t) => {
     const breakdown = new CollectionsBreakdown(Object.values(part.collections || {}));
 
-    const relatedItems = breakdown.getDailyLessons().map(x => (
+    const relatedItems = breakdown.getDailyLessons().map(x =>
+      (
         <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
           {t(`constants.content-types.${x.content_type}`)} {t('values.date', { date: new Date(x.film_date) })}
         </List.Item>
@@ -66,12 +67,13 @@ class LessonsList extends PureComponent {
   renderCollection = (collection, t) => {
     let units = [];
     if (collection.content_units) {
-      units = collection.content_units.map(unit => {
+      units = collection.content_units.map((unit) => {
         const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
 
         const relatedItems = breakdown.getDailyLessons()
           .filter(x => x.id !== collection.id)
-          .map(x => (
+          .map(x =>
+            (
               <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
                 {t(`constants.content-types.${x.content_type}`)} {t('values.date', { date: new Date(x.film_date) })}
               </List.Item>

@@ -41,7 +41,7 @@ export default class AVLanguage extends Component {
           icon={null}
           selectOnBlur={false}
           options={options}
-          defaultValue={defaultValue}
+          value={defaultValue}
           onChange={this.handleChange}
           className={classNames('player-button')}
           style={{ display: 'flex', textDecoration: 'underline' }}
