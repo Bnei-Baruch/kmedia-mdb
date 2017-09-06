@@ -199,7 +199,7 @@ class FullVideoBox extends Component {
           </div>
         </Grid.Column>
         <Grid.Column className="player_panel" width={6}>
-          <Grid columns="equal">
+          {/*<Grid columns="equal">
             <Grid.Row>
               <Grid.Column>
                 <Button.Group fluid>
@@ -220,8 +220,8 @@ class FullVideoBox extends Component {
               </Grid.Column>
             </Grid.Row>
           </Grid>
-          <Divider />
-          <Header
+          <Divider />*/}
+          <Header inverted
             as="h3"
             content={`${t(`constants.content-types.${fullLesson.content_type}`)} - ${(activePart + 1)}/${fullLesson.content_units.length}`}
             subheader={t('values.date', { date: new Date(fullLesson.film_date) })}
