@@ -407,7 +407,7 @@ class AVPlayerRMP extends PureComponent {
                       </div>
                     )
                   }
-                  <AVShare />
+                  <AVShare downward={active === audio} />
                   <AVFullScreen />
                 </div>
               </div>
