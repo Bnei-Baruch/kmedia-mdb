@@ -34,64 +34,52 @@ class FullVideoBox extends Component {
       return `${ccuName} - ${name} - ${durationDisplay}`;
     });
 
+    const player = (
+      <AVPlaylistPlayerRMP
+        language={language}
+        contentUnits={fullLesson.content_units}
+        activePart={activePart}
+        onActivePartChange={this.props.onActivePartChange}
+        t={t}
+      />
+    );
+
+    const playList = (
+      <div>
+        <Header inverted
+          as="h3"
+          content={`${t(`constants.content-types.${fullLesson.content_type}`)} - ${(activePart + 1)}/${fullLesson.content_units.length}`}
+          subheader={t('values.date', { date: new Date(fullLesson.film_date) })}
+        />
+        <Grid>
+          <Grid.Row>
+            <Grid.Column>
+              <Menu vertical fluid size="small">
+                {
+                  fullLesson.content_units.map((part, index) => (
+                    <Menu.Item
+                      key={part.id}
+                      name={`${index}`}
+                      content={titles[index]}
+                      active={index === activePart}
+                      onClick={this.handleLessonPartClick}
+                    />
+                  ))
+                }
+              </Menu>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </div>
+    );
+
     return (
       <Grid.Row className="video_box">
         <Grid.Column width={10}>
-          <AVPlaylistPlayerRMP
-            language={language}
-            contentUnits={fullLesson.content_units}
-            activePart={activePart}
-            onActivePartChange={this.props.onActivePartChange}
-            t={t}
-          />
+          {player}
         </Grid.Column>
         <Grid.Column className="player_panel" width={6}>
-          {/*<Grid columns="equal">
-            <Grid.Row>
-              <Grid.Column>
-                <Button.Group fluid>
-                  { isVideo === true ? <Button active color="blue" content={t('buttons.video')} /> : null }
-                  { isVideo === false ? <Button content={t('buttons.video')} onClick={this.handleVideo} /> : null}
-                  { isVideo === undefined ? <Button disabled content={t('buttons.video')} /> : null}
-                  { isAudio === true ? <Button active color="blue" content={t('buttons.audio')} /> : null }
-                  { isAudio === false ? <Button content={t('buttons.audio')} onClick={this.handleAudio} /> : null }
-                  { isAudio === undefined ? <Button disabled content={t('buttons.audio')} /> : null}
-                </Button.Group>
-              </Grid.Column>
-              <Grid.Column>
-                <LanguageSelector
-                  languages={Array.from(files.keys())}
-                  defaultValue={language}
-                  onSelect={this.handleChangeLanguage}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-          <Divider />*/}
-          <Header inverted
-            as="h3"
-            content={`${t(`constants.content-types.${fullLesson.content_type}`)} - ${(activePart + 1)}/${fullLesson.content_units.length}`}
-            subheader={t('values.date', { date: new Date(fullLesson.film_date) })}
-          />
-          <Grid>
-            <Grid.Row>
-              <Grid.Column>
-                <Menu vertical fluid size="small">
-                  {
-                    fullLesson.content_units.map((part, index) => (
-                      <Menu.Item
-                        key={part.id}
-                        name={`${index}`}
-                        content={titles[index]}
-                        active={index === activePart}
-                        onClick={this.handleLessonPartClick}
-                      />
-                    ))
-                  }
-                </Menu>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+          {playList}
         </Grid.Column>
       </Grid.Row>
     );
