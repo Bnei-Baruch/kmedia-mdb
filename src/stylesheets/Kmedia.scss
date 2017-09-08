@@ -96,12 +96,17 @@ $text-colors: (
     }
   }
   &__main {
-    margin-top: 60px;
+    padding-top: 60px;
     display: flex;
     flex-direction: column;
+    min-height: 100%;
   }
   &__content {
     flex-grow: 1;
+  }
+  &__footer {
+    background: $black;
+
   }
 }
 .logo {
@@ -295,6 +300,8 @@ $text-colors: (
     top: 0;
     width: 100%;
   }
+  margin-top: -1em;
+  margin-bottom: -1em;
 }
 
 .player_panel {
@@ -419,5 +426,5 @@ $text-colors: (
 }
 
 .video-bg{
-  background: rgba(0,0,0,.05);
+  background: rgba($black,1);
 }

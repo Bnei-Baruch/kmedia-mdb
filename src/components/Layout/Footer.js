@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Grid, Header, Menu } from 'semantic-ui-react';
+import { Grid, Header, Menu, Container } from 'semantic-ui-react';
 
 const Footer = (props) => {
   const { t } = props;
@@ -9,74 +9,75 @@ const Footer = (props) => {
 
   return (
     <div className="layout__footer">
-      <Grid padded inverted>
-        <Grid.Row color="black">
-          <Grid.Column>
-            <Grid columns="equal">
-              <Grid.Row>
-                <Grid.Column>
-                  <Header inverted as="h3">
-                    {t('nav.top.header')}
-                    <br />
-                    <small className="text grey">
-                      {t('nav.footer.copyright', { year })}
+      <Container>
+        <Grid padded inverted>
+          <Grid.Row>
+            <Grid.Column>
+              <Grid columns="equal">
+                <Grid.Row>
+                  <Grid.Column>
+                    <Header inverted as="h3">
+                      {t('nav.top.header')}
                       <br />
-                      {t('nav.footer.rights')}
-                    </small>
-                  </Header>
-                </Grid.Column>
-                <Grid.Column>
-                  <Header inverted as="h3">
-                    Study Materials
-                  </Header>
-                  <Menu text vertical inverted>
-                    <Menu.Item name={t('nav.sidebar.lessons')} />
-                    <Menu.Item name={t('nav.sidebar.lectures')} />
-                    <Menu.Item name={t('nav.sidebar.sources')} />
-                    <Menu.Item name={t('nav.sidebar.books')} />
-                  </Menu>
-                </Grid.Column>
-                <Grid.Column>
-                  <Header inverted as="h3">
-                    Kabbalah Topics
-                  </Header>
-                  <Menu text vertical inverted>
-                    <Menu.Item name="Work in the group" />
-                    <Menu.Item name="Life according to kabbalah" />
-                    <Menu.Item name="Dissemination" />
-                    <Menu.Item name="Weekly Torah portion" />
-                  </Menu>
-                </Grid.Column>
-                <Grid.Column>
-                  <Header inverted as="h3">
-                    Kabbalah Events
-                  </Header>
-                  <Menu text vertical inverted>
-                    <Menu.Item name="World congresses" />
-                    <Menu.Item name="Unity day" />
-                    <Menu.Item name="Assembly of friends" />
-                  </Menu>
-                </Grid.Column>
-                <Grid.Column>
-                  <Header inverted as="h3">
-                    Media
-                  </Header>
-                  <Menu text vertical inverted>
-                    <Menu.Item name={t('nav.sidebar.programs')} />
-                    <Menu.Item name={t('nav.sidebar.publications')} />
-                    <Menu.Item name={t('nav.sidebar.photos')} />
-                  </Menu>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
+                      <small className="text grey">
+                        {t('nav.footer.copyright', { year })} {t('nav.footer.rights')}
+                      </small>
+                    </Header>
 
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Header inverted as="h3">
+                      Study Materials
+                    </Header>
+                    <Menu text vertical inverted>
+                      <Menu.Item name={t('nav.sidebar.lessons')} />
+                      <Menu.Item name={t('nav.sidebar.lectures')} />
+                      <Menu.Item name={t('nav.sidebar.sources')} />
+                      <Menu.Item name={t('nav.sidebar.books')} />
+                    </Menu>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Header inverted as="h3">
+                      Kabbalah Topics
+                    </Header>
+                    <Menu text vertical inverted>
+                      <Menu.Item name="Work in the group" />
+                      <Menu.Item name="Life according to kabbalah" />
+                      <Menu.Item name="Dissemination" />
+                      <Menu.Item name="Weekly Torah portion" />
+                    </Menu>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Header inverted as="h3">
+                      Kabbalah Events
+                    </Header>
+                    <Menu text vertical inverted>
+                      <Menu.Item name="World congresses" />
+                      <Menu.Item name="Unity day" />
+                      <Menu.Item name="Assembly of friends" />
+                    </Menu>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Header inverted as="h3">
+                      Media
+                    </Header>
+                    <Menu text vertical inverted>
+                      <Menu.Item name={t('nav.sidebar.programs')} />
+                      <Menu.Item name={t('nav.sidebar.publications')} />
+                      <Menu.Item name={t('nav.sidebar.photos')} />
+                    </Menu>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Container>
     </div>
   );
 };
-
 Footer.propTypes = {
   t: PropTypes.func.isRequired,
 };

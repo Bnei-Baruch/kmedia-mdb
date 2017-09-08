@@ -146,7 +146,7 @@ class RMPVideoBox extends Component {
 
     return (
       <Grid.Row className="video_box">
-        <Grid.Column width={10}>
+        <Grid.Column mobile={16} tablet={12} computer={10}>
           <div className="video_player">
             <div className="video_position">
               <Media>
