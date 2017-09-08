@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Divider, Grid } from 'semantic-ui-react';
+import { Divider, Grid, Container } from 'semantic-ui-react';
 
 import { CT_LESSON_PART } from '../../../helpers/consts';
 import { actions, selectors as lessonSelectors } from '../../../redux/modules/lessons';
@@ -49,16 +49,21 @@ class LessonsContainer extends withPagination {
     const { items } = this.props;
 
     return (
-      <Grid.Column width={16}>
+      <div>
         <LessonsFilters
           onChange={() => withPagination.handlePageChange(this.props, 1)}
           onHydrated={() => withPagination.handlePageChange(this.props)}
         />
-        <withPagination.ResultsPageHeader {...this.props} />
-        <Divider />
-        <LessonsList items={items} />
-        <withPagination.Pagination {...this.props} />
-      </Grid.Column>
+        <Container className='padded'>
+            <withPagination.ResultsPageHeader {...this.props} />
+
+            <LessonsList items={items} />
+        </Container>
+        <Divider fitted />
+        <Container className='padded' textAlign='center'>
+          <withPagination.Pagination {...this.props} />
+        </Container>
+      </div>
     );
   }
 }

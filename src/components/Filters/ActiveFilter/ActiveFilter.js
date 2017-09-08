@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import find from 'lodash/find';
 import { filterPropShape } from '../../shapes';
-
+import { Divider, Container } from 'semantic-ui-react';
 class ActiveFilter extends PureComponent {
   static propTypes = {
     filters: PropTypes.arrayOf(filterPropShape).isRequired,
@@ -25,7 +25,12 @@ class ActiveFilter extends PureComponent {
 
     const { component: Component, name } = activeFilter;
     return (
-      <Component onCancel={onCancel} onApply={onApply} name={name} {...rest} />
+      <div>
+        <Container className='padded horizontally'>
+          <Component onCancel={onCancel} onApply={onApply} name={name} {...rest} />
+        </Container>
+        {/*<Divider />*/}
+      </div>
     );
   }
 }

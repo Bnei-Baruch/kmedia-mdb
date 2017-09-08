@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Menu, Input } from 'semantic-ui-react';
+import { Menu, Input, Container } from 'semantic-ui-react';
 
 import { filterPropShape } from '../../shapes';
 import FilterMenuItem from '../FilterMenuItem/FilterMenuItem';
@@ -24,6 +24,7 @@ class FilterMenu extends PureComponent {
     const { items, active, onChoose, t } = this.props;
     return (
       <Menu secondary pointing color="blue" className="index-filters" size="large">
+        <Container className='padded horizontally'>
         {
           items.map(item => (
             <FilterMenuItem
@@ -38,6 +39,7 @@ class FilterMenu extends PureComponent {
         {/*<Menu.Item>
           <Input size='small' icon icon='search' placeholder='Search Daily Lessons...' />
         </Menu.Item>*/}
+        </Container>
       </Menu>
     );
   }
