@@ -8,7 +8,7 @@ const AVTimeElapsed = (props) => {
 
   const endDurationProps = {};
 
-  if (isSlice) {
+  if (isSlice && sliceEnd) {
     endDurationProps.value = sliceEnd;
   } else {
     endDurationProps.name = 'duration';
