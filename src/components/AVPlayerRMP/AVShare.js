@@ -56,7 +56,7 @@ class AVShare extends Component {
           open={this.state.recentlyCopied}
           content={t('player.share.confirmation')}
           position={`${downward ? 'bottom' : 'top'} right`}
-          offset="10"
+          offset={10}
           trigger={
             <CopyToClipboard text={this.state.url} onCopy={this.handleCopied}>
               <Icon name="share" />
