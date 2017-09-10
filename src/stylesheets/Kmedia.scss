@@ -88,7 +88,7 @@ $text-colors: (
       right: 0;
       overflow: auto;
       border-right: 1px solid rgba(34, 36, 38, 0.15);
-      
+
       .menu {
         border: 0;
         box-shadow: none !important;
@@ -116,7 +116,7 @@ $text-colors: (
   h2.header {
     margin-top:0;
     margin-left:0;
-  } 
+  }
 }
 @media only screen and (min-width: 1490px) {
   .layout {
@@ -144,7 +144,7 @@ $text-colors: (
     h2.header {
       margin-top:0;
       margin-left:16px;
-    } 
+    }
   }
 }
 
@@ -194,7 +194,7 @@ $text-colors: (
   .list {
     display: block!important;
     margin: 0;
-    .item:nth-child(2){      
+    .item:nth-child(2){
       border: 0!important;
     }
   }
@@ -279,8 +279,8 @@ $text-colors: (
 //   }
 // }
 
-// .grid.video_player2 {
-//   height:0;
+// .grid .video_player {
+//   height: 0;
 //   padding-top: 56.25%;
 //   position: relative;
 //   background:red;
@@ -305,13 +305,14 @@ $text-colors: (
 }
 
 .video_player {
-  // height: 0;
-  // padding-top: 56.25%;
-  // position: relative;
-  // video {
-  //   position: absolute;
-  //   top: 0;
-  // }
+  height: 0;
+  padding-top: 56.25%;
+  position: relative;
+  .video_position {
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
   margin-top: -1em;
   margin-bottom: -1em;
 }

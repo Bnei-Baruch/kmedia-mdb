@@ -1,24 +1,30 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isNumber from 'lodash/isNumber';
+import noop from 'lodash/noop';
 import { withMediaProps } from 'react-media-player';
 import classNames from 'classnames';
+import { PLAYER_MODE } from './constants';
+import { playerModeProp } from './propTypes';
 
-class AVProgress extends Component {
+class AvSeekBar extends Component {
 
   static propTypes = {
     media: PropTypes.object.isRequired, // TODO: (yaniv) use right propType
     buffers: PropTypes.array,
-    isSlice: PropTypes.bool,
+    playerMode: playerModeProp.isRequired,
     sliceStart: PropTypes.number,
-    sliceEnd: PropTypes.number
+    sliceEnd: PropTypes.number,
+    onSliceStartChange: PropTypes.func,
+    onSliceEndChange: PropTypes.func,
   };
 
   static defaultProps = {
     buffers: [],
-    isSlice: false,
     sliceStart: 0,
-    sliceEnd: Infinity
+    sliceEnd: Infinity,
+    onSliceStartChange: noop,
+    onSliceEndChange: noop
   };
 
   _element              = null;
@@ -44,23 +50,63 @@ class AVProgress extends Component {
     this._isPlayingOnMouseDown = this.props.media.isPlaying;
 
     this.props.media.pause();
+
+    if (e.target.classList.contains('slice-start')) {
+      this._sliceStartActive = true;
+    } else if (e.target.classList.contains('slice-end')) {
+      this._sliceEndActive = true;
+    } else {
+      this._sliceStartActive = false;
+      this._sliceEndActive = false;
+    }
   };
 
   handleMove = (e) => {
+    const { playerMode, onSliceStartChange, onSliceEndChange, sliceStart, sliceEnd } = this.props;
     if (this._wasMouseDown) {
       // Resolve clientX from mouse or touch event.
       const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
-      this.seek(clientX);
+      const seekPosition = this.getSeekPositionFromClientX(clientX);
+
+      if (playerMode === PLAYER_MODE.SLICE_EDIT) {
+        if (this._sliceStartActive) {
+          if (seekPosition < sliceEnd) {
+            onSliceStartChange(seekPosition);
+          }
+        } else if (this._sliceEndActive) {
+          if (seekPosition > sliceStart) {
+            onSliceEndChange(seekPosition);
+          }
+        }
+      } else {
+        this.seek(seekPosition);
+      }
     }
   };
 
   handleEnd = (e) => {
+    const { playerMode, media } = this.props;
     if (this._wasMouseDown) {
       this._wasMouseDown = false;
-      // Seek on desktop on mouse up. On mobile Move is called so no need to seek here.
+
       if (e.clientX) {
-        this.seek(e.clientX);
+        const seekPosition = this.getSeekPositionFromClientX(e.clientX);
+        // Seek on desktop on mouse up. On mobile Move is called so no need to seek here.
+        if (playerMode === PLAYER_MODE.NORMAL || playerMode === PLAYER_MODE.SLICE_VIEW) {
+          this.seek(seekPosition);
+        // Correct current time if position is out of bounds of edited slice
+        } else if (playerMode === PLAYER_MODE.SLICE_EDIT) {
+          if (
+            (this._sliceStartActive === true && seekPosition > media.currentTime)
+            || (this._sliceEndActive === true && seekPosition < media.currentTime)
+          ) {
+            this.seek(seekPosition);
+          }
+        }
       }
+
+      this._sliceStartActive = false;
+      this._sliceEndActive = false;
 
       // only play if media was playing prior to mouseDown
       if (this._isPlayingOnMouseDown) {
@@ -69,21 +115,33 @@ class AVProgress extends Component {
     }
   };
 
-  seek = (clientX) => {
-    const { isSlice, sliceStart, sliceEnd, media } = this.props;
+  getSeekPositionFromClientX = clientX => {
+    const { media } = this.props;
     const { left, right } = this._element.getBoundingClientRect();
     const { duration }    = media;
     const offset          = Math.min(Math.max(0, clientX - left), right - left);
 
-    let seekPosition = (duration * offset) / (right - left);
+    return (duration * offset) / (right - left);
+  }
 
-    // if we're in a  slice clamp the seek position inside of it
-    if (isSlice) {
-      if (seekPosition > sliceEnd) {
-        seekPosition = sliceEnd;
-      } else if (seekPosition < sliceStart) {
-        seekPosition = sliceStart;
-      }
+  clampPositionInSlice = (position, sliceStart, sliceEnd) => {
+    let clampedPosition = position;
+    if (position > sliceEnd) {
+      clampedPosition = sliceEnd;
+    } else if (position < sliceStart) {
+      clampedPosition = sliceStart;
+    }
+
+    return clampedPosition;
+  }
+
+  seek = (seekPosition) => {
+    const { media, playerMode, sliceStart, sliceEnd } = this.props;
+    let correctedSeekPosition;
+
+    if (playerMode === PLAYER_MODE.SLICE_EDIT || playerMode === PLAYER_MODE.SLICE_VIEW) {
+      correctedSeekPosition = this.clampPositionInSlice(seekPosition, sliceStart, sliceEnd);
+      media.seekTo(!correctedSeekPosition || correctedSeekPosition === Infinity ? media.duration : correctedSeekPosition);
     }
 
     media.seekTo(seekPosition);
@@ -147,10 +205,12 @@ class AVProgress extends Component {
     const current                   = currentTime / duration;
     // Overriding progress of native react-media-player as he does not works correctly
     // with buffers.
-    const { buffers, isSlice } = this.props;
+    const { buffers, playerMode } = this.props;
     const b           = buffers.find(b => b.start <= currentTime && b.end >= currentTime);
     const progress    = (b && (b.end / duration)) || current;
 
+    const isSlice = playerMode === PLAYER_MODE.SLICE_EDIT || playerMode === PLAYER_MODE.SLICE_VIEW;
+    const isSliceEdit = playerMode === PLAYER_MODE.SLICE_EDIT;
     const normalizedSliceStart = this.getNormalizedSliceStart(duration);
     const normalizedSliceEnd = this.getNormalizedSliceEnd(duration);
 
@@ -177,7 +237,12 @@ class AVProgress extends Component {
     return (
       <div
         ref={c => this._element = c}
-        className={classNames('player-button player-control-progress', { 'player-control-progress-slice': isSlice })}
+        className={
+          classNames('player-button player-control-seekbar', {
+            'player-control-seekbar-slice': isSlice,
+            'player-control-seekbar-slice-edit': isSliceEdit
+          }
+        )}
         onMouseDown={this.handleStart}
         onTouchStart={this.handleStart}
       >
@@ -187,11 +252,16 @@ class AVProgress extends Component {
         <div className="bar loaded" style={styleLoaded} />
         <div className="bar remaining" style={styleRemaining} />
         {
-          isSlice && <div className="bar slice" style={styleSlice} />
+          isSlice && (
+            <div className="bar slice" style={styleSlice}>
+              <div className="slice-start" />
+              <div className="slice-end" />
+            </div>
+          )
         }
       </div>
     );
   }
 }
 
-export default withMediaProps(AVProgress);
+export default withMediaProps(AvSeekBar);

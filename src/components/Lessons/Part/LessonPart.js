@@ -30,7 +30,7 @@ const LessonPart = (props) => {
         <div className='video-bg'>
           <Container>
             <Grid centered padded>
-              <RMPVideoBox unit={lesson} language={language} t={t} />
+              <RMPVideoBox unit={lesson} language={language} t={t} isSliceable />
             </Grid>
           </Container>
         </div>
