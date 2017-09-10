@@ -12,7 +12,8 @@ class FilterMenu extends PureComponent {
     items: PropTypes.arrayOf(filterPropShape).isRequired,
     active: PropTypes.string,
     onChoose: PropTypes.func,
-    t: PropTypes.func.isRequired
+    t: PropTypes.func.isRequired,
+    namespace: PropTypes.string.isRequired
   };
 
   static defaultProps = {
@@ -21,10 +22,11 @@ class FilterMenu extends PureComponent {
   };
 
   render() {
-    const { items, active, onChoose, t } = this.props;
+    const { items, active, onChoose, t, namespace } = this.props;
     return (
       <Menu secondary pointing color="blue" className="index-filters" size="large">
         <Container className='padded horizontally'>
+        <Menu.Item header content={t(`filters.${namespace}.by`)} />
         {
           items.map(item => (
             <FilterMenuItem

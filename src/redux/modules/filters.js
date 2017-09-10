@@ -108,7 +108,7 @@ const setFilterState = (state, namespace, name, newFilterStateReducer) => {
   };
 };
 
-const _stopEditing = (state, action) => {
+const $$stopEditing = (state, action) => {
   const { namespace, name } = action.payload;
   return setFilterState(state, namespace, name, {
     editingExistingValue: false,
@@ -116,17 +116,17 @@ const _stopEditing = (state, action) => {
   });
 };
 
-const _closeActiveFilter = (state, action) => {
-  const newState = _stopEditing(state, action);
+const $$closeActiveFilter = (state, action) => {
+  const newState = $$stopEditing(state, action);
 
   newState[action.payload.namespace].activeFilter = '';
   return newState;
 };
 
-const _editNewFilter = (state, action) => {
+const $$editNewFilter = (state, action) => {
   const { namespace, name } = action.payload;
 
-  const newState                   = setFilterState(state, namespace, name, (filterState) => ({
+  const newState                   = setFilterState(state, namespace, name, filterState => ({
     activeValueIndex: Array.isArray(filterState.values) && filterState.values.length > 0 ? filterState.length - 1 : 0,
     editingExistingValue: false,
   }));
@@ -134,7 +134,7 @@ const _editNewFilter = (state, action) => {
   return newState;
 };
 
-const _editExistingFilter = (state, action) => {
+const $$editExistingFilter = (state, action) => {
   const { namespace, name, index } = action.payload;
   const newState                   = setFilterState(state, namespace, name, {
     activeValueIndex: index,
@@ -145,12 +145,12 @@ const _editExistingFilter = (state, action) => {
   return newState;
 };
 
-const _addFilterValue = (state, action) => {
+const $$addFilterValue = (state, action) => {
   const { namespace, name, value } = action.payload;
 
   return setFilterState(state, namespace, name, (filterState) => {
     const values = filterState.values || [];
-    if (value.length === 0 || values.some((v) => isEqual(v, value))) {
+    if (value.length === 0 || values.some(v => isEqual(v, value))) {
       return filterState;
     }
 
@@ -163,7 +163,7 @@ const _addFilterValue = (state, action) => {
   });
 };
 
-const _setFilterValue = (state, action) => {
+const $$setFilterValue = (state, action) => {
   const { namespace, name, value, index } = action.payload;
   return setFilterState(state, namespace, name, (filterState) => {
     if (typeof index === 'undefined') {
@@ -178,10 +178,10 @@ const _setFilterValue = (state, action) => {
   });
 };
 
-const _removeFilterValue = (state, action) => {
+const $$removeFilterValue = (state, action) => {
   const { namespace, name, value } = action.payload;
 
-  return setFilterState(state, namespace, name, filterState => {
+  return setFilterState(state, namespace, name, (filterState) => {
     const values = filterState.values || [];
     const idx    = values.indexOf(value);
 
@@ -196,7 +196,7 @@ const _removeFilterValue = (state, action) => {
   });
 };
 
-const _setHydratedFilterValues = (state, action) => {
+const $$setHydratedFilterValues = (state, action) => {
   const { namespace, filters } = action.payload;
   const oldNamespace           = state[namespace] || {};
 
@@ -216,7 +216,7 @@ const _setHydratedFilterValues = (state, action) => {
   };
 };
 
-const _hydrateFilters = (state, action) => ({
+const $$hydrateFilters = (state, action) => ({
   ...state,
   isHydrated: {
     ...state.isHydrated,
@@ -224,7 +224,7 @@ const _hydrateFilters = (state, action) => ({
   }
 });
 
-const _filtersHydrated = (state, action) => ({
+const $$filtersHydrated = (state, action) => ({
   ...state,
   isHydrated: {
     ...state.isHydrated,
@@ -233,22 +233,22 @@ const _filtersHydrated = (state, action) => ({
 });
 
 export const reducer = handleActions({
-  [STOP_EDITING_FILTER]: _stopEditing,
-  [CLOSE_ACTIVE_FILTER]: _closeActiveFilter,
-  [EDIT_NEW_FILTER]: _editNewFilter,
-  [EDIT_EXISTING_FILTER]: _editExistingFilter,
+  [STOP_EDITING_FILTER]: $$stopEditing,
+  [CLOSE_ACTIVE_FILTER]: $$closeActiveFilter,
+  [EDIT_NEW_FILTER]: $$editNewFilter,
+  [EDIT_EXISTING_FILTER]: $$editExistingFilter,
 
-  [ADD_FILTER_VALUE]: _addFilterValue,
-  [SET_FILTER_VALUE]: _setFilterValue,
-  [REMOVE_FILTER_VALUE]: _removeFilterValue,
-  [SET_HYDRATED_FILTER_VALUES]: _setHydratedFilterValues,
-  [HYDRATE_FILTERS]: _hydrateFilters,
-  [FILTERS_HYDRATED]: _filtersHydrated
+  [ADD_FILTER_VALUE]: $$addFilterValue,
+  [SET_FILTER_VALUE]: $$setFilterValue,
+  [REMOVE_FILTER_VALUE]: $$removeFilterValue,
+  [SET_HYDRATED_FILTER_VALUES]: $$setHydratedFilterValues,
+  [HYDRATE_FILTERS]: $$hydrateFilters,
+  [FILTERS_HYDRATED]: $$filtersHydrated
 }, initialState);
 
 /* Selectors */
 const getFilters = (state, namespace) => {
-  const filters = !!state[namespace] ? state[namespace] : null;
+  const filters = state[namespace] ? state[namespace] : null;
 
   if (!filters) {
     return [];
@@ -261,13 +261,13 @@ const getFilters = (state, namespace) => {
 };
 
 const getFilterAllValues = (state, namespace, name) =>
-state[namespace] &&
-state[namespace][name] &&
-state[namespace][name].values;
+  state[namespace] &&
+  state[namespace][name] &&
+  state[namespace][name].values;
 
 const getFilterValue = (state, namespace, name, index = 0) =>
-getFilterAllValues(state, namespace, name, index) &&
-state[namespace][name].values[index];
+  getFilterAllValues(state, namespace, name, index) &&
+  state[namespace][name].values[index];
 
 const getLastFilterValue = (state, namespace, name) => {
   if (
@@ -284,18 +284,18 @@ const getLastFilterValue = (state, namespace, name) => {
 };
 
 const getActiveValueIndex = (state, namespace, name) =>
-state[namespace] &&
-state[namespace][name] &&
-state[namespace][name].activeValueIndex;
+  state[namespace] &&
+  state[namespace][name] &&
+  state[namespace][name].activeValueIndex;
 
 const getActiveValue = (state, namespace, name) =>
-getFilterValue(state, namespace, name, getActiveValueIndex(state, namespace, name)) ||
-getLastFilterValue(state, namespace, name);
+  getFilterValue(state, namespace, name, getActiveValueIndex(state, namespace, name)) ||
+  getLastFilterValue(state, namespace, name);
 
 const getIsEditingExistingFilter = (state, namespace, name) =>
-state[namespace] &&
-state[namespace][name] &&
-state[namespace][name].editingExistingValue;
+  state[namespace] &&
+  state[namespace][name] &&
+  state[namespace][name].editingExistingValue;
 
 const getIsHydrated = (state, namespace) => !!state.isHydrated && !!state.isHydrated[namespace];
 
