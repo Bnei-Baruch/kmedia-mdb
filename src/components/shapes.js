@@ -60,6 +60,8 @@ const MDBDenormalizedCollection = {
   content_units: PropTypes.arrayOf(PropTypes.shape(MDBBaseContentUnit)),
 };
 
+export const GenericCollection = PropTypes.shape(MDBDenormalizedCollection);
+
 export const ContentUnit = PropTypes.shape(MDBBaseContentUnit);
 
 export const LessonCollection = PropTypes.shape({

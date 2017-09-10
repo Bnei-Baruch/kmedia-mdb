@@ -23,7 +23,7 @@ class FullLessonPlaylist extends Component {
   };
 
   render() {
-    const { t, collection, activePart, onItemClick } = this.props;
+    const { t, collection, activePart } = this.props;
 
     const titles = collection.content_units.map((cu) => {
       const { name, duration } = cu;

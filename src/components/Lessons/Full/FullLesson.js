@@ -8,7 +8,7 @@ import Link from '../../Language/MultiLanguageLink';
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
 import * as shapes from '../../shapes';
-import FullVideoBox from './FullVideoBox';
+import FullVideoBox from '../../shared/UnitPlayer/FullVideoBox';
 import Info from '../Part/Info';
 import Materials from '../Part/Materials';
 import MediaDownloads from '../Part/MediaDownloads';
@@ -52,11 +52,11 @@ class FullLesson extends Component {
       const lesson         = fullLesson.content_units[activePart];
       return (
         <div>
-          <div className='video-bg'>
+          <div className="video-bg">
             <Container>
               <Grid padded>
                 <FullVideoBox
-                  fullLesson={fullLesson}
+                  collection={fullLesson}
                   activePart={activePart}
                   language={language}
                   t={t}
