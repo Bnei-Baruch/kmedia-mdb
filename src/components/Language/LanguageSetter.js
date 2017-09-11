@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { actions as settingActions, selectors as settingSelectors } from '../../redux/modules/settings';
 import { LANGUAGES, DEFAULT_LANGUAGE } from '../../helpers/consts';
 
 // NOTE: yaniv -> edo: should we block rendering until language changed?
 
-const LanguageSetter = connect(
+const LanguageSetter = withRouter(connect(
   state => ({
     currentLanguage: settingSelectors.getLanguage(state.settings),
-    location: state.router.location
   }),
   { setLanguage: settingActions.setLanguage }
 )(class extends React.Component {
@@ -51,6 +51,6 @@ const LanguageSetter = connect(
   render() {
     return this.props.children;
   }
-});
+}));
 
 export default LanguageSetter;
