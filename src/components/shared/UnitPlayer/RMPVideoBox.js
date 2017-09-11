@@ -55,7 +55,6 @@ class RMPVideoBox extends Component {
   setPlayableItem(mediaType, language, cb) {
     const { unit } = this.props;
     const playableItem = playerHelper.playableItem(unit, mediaType, language);
-    console.log(playableItem);
     this.setState({ playableItem }, cb);
   }
 

@@ -1,3 +1,4 @@
+import pick from 'lodash/pick';
 import { MIME_TYPE_TO_MEDIA_TYPE } from './consts';
 import { physicalFile } from './utils';
 
@@ -42,11 +43,28 @@ function playableItem(contentUnit, mediaType, language) {
     src: file ? physicalFile(file, true) : '',
     mediaType,
     availableMediaTypes: availableMediaTypes(contentUnit, language),
-    availableLanguages: availableLanguages(contentUnit, mediaType)
+    availableLanguages: availableLanguages(contentUnit, mediaType),
+    ...pick(contentUnit, 'content_type', 'film_date', 'name', 'duration')
+  };
+}
+
+function playlist(collection, mediaType, language) {
+  if (!collection) {
+    return null;
+  }
+
+  const items = (collection.content_units || []).map(contentUnit => playableItem(contentUnit, mediaType, language));
+
+  return {
+    collectionId: collection.id,
+    language,
+    mediaType,
+    items,
+    ...pick(collection, 'content_type', 'film_date')
   };
 }
 
 export default {
   playableItem,
-  availableMediaTypes
+  playlist
 };

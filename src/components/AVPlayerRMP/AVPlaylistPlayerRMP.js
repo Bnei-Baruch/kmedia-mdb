@@ -10,7 +10,7 @@ class AVPlaylistPlayerRMP extends Component {
 
   static propTypes = {
     language: PropTypes.string.isRequired,
-    contentUnits: PropTypes.arrayOf(shapes.LessonPart),
+    collection: shapes.GenericCollection,
     activePart: PropTypes.number,
     onActivePartChange: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
@@ -28,18 +28,18 @@ class AVPlaylistPlayerRMP extends Component {
       language: undefined,
       isVideo: true,
       isAudio: false,
-      files: this.buildFiles(props.contentUnits),
+      files: this.buildFiles(props.collection.contentUnits),
     };
   }
 
   componentDidMount() {
-    const { contentUnits } = this.props;
-    this.updateFilesFromContentUnits(contentUnits);
+    const { collection } = this.props;
+    this.updateFilesFromContentUnits(collection.contentUnits);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { contentUnits } = nextProps;
-    this.updateFilesFromContentUnits(contentUnits);
+    const { collection } = nextProps;
+    this.updateFilesFromContentUnits(collection.contentUnits);
   }
 
   updateFilesFromContentUnits = (contentUnits) => {
@@ -49,7 +49,7 @@ class AVPlaylistPlayerRMP extends Component {
 
     // Clear files if new full lesson was set.
     if (contentUnits.map(cu => cu.id).join() !==
-        this.props.contentUnits.map(cu => cu.id).join()) {
+        this.props.collection.contentUnits.map(cu => cu.id).join()) {
       files        = new Map();
       stateUpdated = true;
     }
@@ -123,16 +123,16 @@ class AVPlaylistPlayerRMP extends Component {
     this.props.onActivePartChange(parseInt(data.name, 10));
 
   onFinish = () => {
-    const { activePart, contentUnits, onActivePartChange } = this.props;
-    if (activePart < contentUnits.length - 1) {
+    const { activePart, collection, onActivePartChange } = this.props;
+    if (activePart < collection.contentUnits.length - 1) {
       onActivePartChange(activePart + 1);
     }
     this.setState({ autoPlay: true });
   };
 
   onNext = () => {
-    const { activePart, contentUnits, onActivePartChange } = this.props;
-    if (activePart < contentUnits.length - 1) {
+    const { activePart, collection, onActivePartChange } = this.props;
+    if (activePart < collection.contentUnits.length - 1) {
       onActivePartChange(activePart + 1);
     }
   };

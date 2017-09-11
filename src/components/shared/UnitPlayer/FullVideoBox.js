@@ -30,7 +30,7 @@ class FullVideoBox extends Component {
     const player = (
       <AVPlaylistPlayerRMP
         language={language}
-        contentUnits={collection.content_units}
+        collection={collection}
         activePart={activePart}
         onActivePartChange={this.props.onActivePartChange}
         t={t}
