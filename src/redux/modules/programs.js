@@ -1,7 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 
 import { types as settings } from './settings';
-import { CT_VIDEO_PROGRAM } from '../../helpers/consts';
 
 /* Types */
 
@@ -34,7 +33,6 @@ export const types = {
 
 const setPage                    = createAction(SET_PAGE);
 const fetchList                  = createAction(FETCH_LIST, (pageNo, language, pageSize) => ({
-  content_type: CT_VIDEO_PROGRAM,
   pageNo,
   language,
   pageSize

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Divider, Grid, Container } from 'semantic-ui-react';
+import { Divider, Container } from 'semantic-ui-react';
 
 import { CT_LESSON_PART } from '../../../helpers/consts';
 import { actions, selectors as lessonSelectors } from '../../../redux/modules/lessons';

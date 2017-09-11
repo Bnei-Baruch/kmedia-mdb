@@ -7,13 +7,18 @@ import { actions, types } from '../redux/modules/programs';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 import { filtersTransformer } from '../filters';
+import { CT_VIDEO_PROGRAM, CT_VIDEO_PROGRAM_CHAPTER } from '../helpers/consts';
+import { isEmpty } from '../helpers/utils';
 
 function* fetchProgramsList(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, 'programs'));
   const params  = filtersTransformer.toApiParams(filters);
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const resp     = yield call(Api.collections, { ...action.payload, language, ...params });
+    console.log(params);
+    const resp = isEmpty(params) ?
+      yield call(Api.collections, { ...action.payload, language, content_type: CT_VIDEO_PROGRAM }) :
+      yield call(Api.units, { ...action.payload, language, ...params, content_type: CT_VIDEO_PROGRAM_CHAPTER });
 
     if (Array.isArray(resp.collections)) {
       yield put(mdbActions.receiveCollections(resp.collections));

@@ -13,6 +13,7 @@ class Filters extends Component {
     namespace: PropTypes.string.isRequired,
     onFilterApplication: PropTypes.func.isRequired,
     editNewFilter: PropTypes.func.isRequired,
+    closeActiveFilter: PropTypes.func.isRequired,
     filters: PropTypes.arrayOf(filterPropShape).isRequired,
     activeFilter: PropTypes.string
   };
@@ -27,8 +28,8 @@ class Filters extends Component {
   };
 
   handleCancelActiveFilter = () => {
-    const { namespace } = this.props;
-    this.props.editNewFilter(namespace, '');
+    const { namespace, activeFilter } = this.props;
+    this.props.closeActiveFilter(namespace, activeFilter);
   };
 
   handleApplyActiveFilter = () => {
@@ -45,8 +46,8 @@ class Filters extends Component {
           namespace={namespace}
           activeFilterName={activeFilter}
           filters={this.props.filters}
-          onCancel={() => this.handleCancelActiveFilter()}
-          onApply={() => this.handleApplyActiveFilter()}
+          onCancel={this.handleCancelActiveFilter}
+          onApply={this.handleApplyActiveFilter}
         />
       </div>
     );
