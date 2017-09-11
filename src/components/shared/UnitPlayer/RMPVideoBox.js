@@ -27,9 +27,9 @@ class RMPVideoBox extends Component {
   };
 
   componentWillMount() {
-    const { language, location } = this.props;
+    const { language, location, unit } = this.props;
     const mediaType = this.getMediaTypeFromQuery(location);
-    this.setPlayableItem(mediaType, language);
+    this.setPlayableItem(unit, mediaType, language);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -44,7 +44,7 @@ class RMPVideoBox extends Component {
       return;
     }
 
-    this.setPlayableItem(newMediaType, language);
+    this.setPlayableItem(unit, newMediaType, language);
   }
 
   getMediaTypeFromQuery = (location, defaultMediaType = MT_VIDEO) => {
@@ -52,8 +52,7 @@ class RMPVideoBox extends Component {
     return PLAYABLE_MEDIA_TYPES.find(media => media === (query.mediaType || '').toLowerCase()) || defaultMediaType;
   };
 
-  setPlayableItem(mediaType, language, cb) {
-    const { unit } = this.props;
+  setPlayableItem(unit, mediaType, language, cb) {
     const playableItem = playerHelper.playableItem(unit, mediaType, language);
     this.setState({ playableItem }, cb);
   }
@@ -76,10 +75,11 @@ class RMPVideoBox extends Component {
   };
 
   handleChangeLanguage = (e, language) => {
-    const { language: oldLanguage, playableItem } = this.state;
+    const { playableItem } = this.state;
+    const { unit } = this.props;
 
-    if (language !== oldLanguage) {
-      this.setPlayableItem(playableItem.mediaType, language);
+    if (language !== playableItem.language) {
+      this.setPlayableItem(unit, playableItem.mediaType, language);
     }
   };
 
