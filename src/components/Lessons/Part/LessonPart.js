@@ -27,7 +27,7 @@ const LessonPart = (props) => {
   if (lesson) {
     return (
       <div>
-        <div className='video-bg'>
+        <div className="video-bg">
           <Container>
             <Grid centered padded>
               <RMPVideoBox unit={lesson} language={language} t={t} isSliceable />

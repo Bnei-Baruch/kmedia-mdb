@@ -4,17 +4,11 @@ import { withRouter } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 import { Media } from 'react-media-player';
 
-import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
+import { MT_AUDIO, MT_VIDEO, PLAYABLE_MEDIA_TYPES } from '../../../helpers/consts';
 import { parse, stringify } from '../../../helpers/url';
+import playerHelper from '../../../helpers/player';
 import * as shapes from '../../shapes';
 import AVPlayer from '../../AVPlayerRMP/AVPlayerRMP';
-
-const MEDIA_TYPES = {
-  VIDEO: 'video',
-  AUDIO: 'audio'
-};
-
-const DEFAULT_MEDIA_TYPE = MEDIA_TYPES.VIDEO;
 
 class RMPVideoBox extends Component {
 
@@ -33,13 +27,14 @@ class RMPVideoBox extends Component {
   };
 
   componentWillMount() {
-    this.setState(this.calcState(this.props));
+    const { language, location } = this.props;
+    const mediaType = this.getMediaTypeFromQuery(location);
+    this.setPlayableItem(mediaType, language);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { unit = {}, language } = nextProps;
+    const { unit, language } = nextProps;
     const props                   = this.props;
-    const state                   = this.state;
 
     const prevMediaType = this.getMediaTypeFromQuery(props.location);
     const newMediaType = this.getMediaTypeFromQuery(nextProps.location);
@@ -49,80 +44,30 @@ class RMPVideoBox extends Component {
       return;
     }
 
-    // only language changed
-    if (unit === props.unit && prevMediaType === newMediaType && language !== props.language) {
-      if (state.groups.has(language)) {
-        this.setState({ language, ...this.splitAV(language, state.groups) }, () => {
-        });
-        return;
-      }
-    }
-
-    this.setState(this.calcState(nextProps));
+    this.setPlayableItem(newMediaType, language);
   }
 
-  calcState = (props) => {
-    const { unit = {}, language, location } = props;
-    const groups                  = this.getFilesByLanguage(unit.files);
-
-    let lang;
-    if (groups.has(language)) {
-      lang = language;
-    } else if (this.state && groups.has(this.state.language)) {
-      lang = this.state.language;
-    } else {
-      lang = groups.keys().next().value;
-    }
-
-    const medias = lang ? this.splitAV(lang, groups) : {};
-    const mediaType = this.getMediaTypeFromQuery(location);
-    const active = this.getActiveByMediaType(mediaType, medias);
-
-    return { groups, language: lang, ...medias, active };
-  };
-
-  getActiveByMediaType = (mediaType, medias) => {
-    const validMediaType = MEDIA_TYPES[(mediaType || '').toUpperCase()] || DEFAULT_MEDIA_TYPE;
-    return medias[validMediaType];
-  }
-
-  getMediaTypeFromQuery(location) {
+  getMediaTypeFromQuery = (location, defaultMediaType = MT_VIDEO) => {
     const query = parse(location.search.slice(1));
-    return query.mediaType;
+    return PLAYABLE_MEDIA_TYPES.find(media => media === (query.mediaType || '').toLowerCase()) || defaultMediaType;
+  };
+
+  setPlayableItem(mediaType, language, cb) {
+    const { unit } = this.props;
+    const playableItem = playerHelper.playableItem(unit, mediaType, language);
+    console.log(playableItem);
+    this.setState({ playableItem }, cb);
   }
-
-  getFilesByLanguage = (files) => {
-    const groups = new Map();
-
-    (files || []).forEach((file) => {
-      if (file.mimetype === 'audio/mpeg' || file.mimetype === 'video/mp4') {
-        if (!groups.has(file.language)) {
-          groups.set(file.language, []);
-        }
-        groups.get(file.language).push(file);
-      }
-    });
-
-    return groups;
-  };
-
-  splitAV = (language, groups) => {
-    const set   = groups.get(language);
-    const video = set.find(file => file.type === MT_VIDEO);
-    const audio = set.find(file => file.type === MT_AUDIO);
-    return { video, audio };
-  };
 
   handleSwitchAV = () => {
     const { history, location } = this.props;
-    const { audio, video, active } = this.state;
+    const { playableItem } = this.state;
+
     const query = parse(location.search.slice(1));
-    if (active === video && audio) {
-      query.mediaType = MEDIA_TYPES.AUDIO;
-      this.setState({ active: audio });
-    } else if (active === audio && video) {
-      query.mediaType = MEDIA_TYPES.VIDEO;
-      this.setState({ active: video });
+    if (playableItem.mediaType === MT_VIDEO && playableItem.availableMediaTypes.includes(MT_AUDIO) ) {
+      query.mediaType = MT_AUDIO;
+    } else if (playableItem.mediaType === MT_AUDIO && playableItem.availableMediaTypes.includes(MT_VIDEO)) {
+      query.mediaType = MT_VIDEO;
     } else {
       // no change
       return;
@@ -132,15 +77,18 @@ class RMPVideoBox extends Component {
   };
 
   handleChangeLanguage = (e, language) => {
-    const { video, audio } = this.splitAV(language, this.state.groups);
-    this.setState({ language, video, audio, active: video || audio });
+    const { language: oldLanguage, playableItem } = this.state;
+
+    if (language !== oldLanguage) {
+      this.setPlayableItem(playableItem.mediaType, language);
+    }
   };
 
   render() {
     const { t, isSliceable }                         = this.props;
-    const { audio, video, active, groups, language } = this.state;
+    const { playableItem, language } = this.state;
 
-    if (!(video || audio)) {
+    if (!playableItem || !playableItem.src) {
       return (<div>{t('messages.no-playable-files')}</div>);
     }
 
@@ -152,13 +100,11 @@ class RMPVideoBox extends Component {
               <Media>
                 <AVPlayer
                   isSliceable={isSliceable}
-                  active={active}
-                  video={video}
-                  audio={audio}
+                  item={playableItem}
                   poster="http://kabbalahmedia.info/assets/cover-video.jpg"
                   onSwitchAV={this.handleSwitchAV}
-                  languages={Array.from(groups.keys())}
-                  defaultLanguage={language}
+                  languages={playableItem.availableLanguages}
+                  language={playableItem.language}
                   onLanguageChange={this.handleChangeLanguage}
                   t={t}
                 />
