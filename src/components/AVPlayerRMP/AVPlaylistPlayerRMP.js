@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Media } from 'react-media-player';
-
-import { MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
-import playerHelper from '../../helpers/player';
 import * as shapes from '../shapes';
 import AVPlayerRMP from './AVPlayerRMP';
 
@@ -11,56 +8,20 @@ class AVPlaylistPlayerRMP extends Component {
 
   static propTypes = {
     language: PropTypes.string.isRequired,
-    collection: shapes.GenericCollection,
-    activePart: PropTypes.number,
+    playlist: PropTypes.object.isRequired,
+    activePart: PropTypes.number.isRequired,
     onActivePartChange: PropTypes.func.isRequired,
+    onLanguageChange: PropTypes.func.isRequired,
+    onSwitchAV: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
 
-  static defaultProps = {
-    activePart: 0,
-  };
-
   state = {
-    autoPlay: true
+    autoPlay: false
   };
-
-  setPlaylist = (collection, mediaType, language, cb) => {
-    const playlist = playerHelper.playlist(collection, mediaType, language);
-    console.log(playlist);
-    this.setState({ playlist }, cb);
-  };
-
-  componentWillMount() {
-    const { collection, language } = this.props;
-    this.setPlaylist(collection, MT_VIDEO, language);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { collection, language } = nextProps;
-    const { collection: oldCollection, language: oldLanguage } = this.props;
-    if (oldCollection !== collection || oldLanguage !== language) {
-      this.setPlaylist(collection, MT_VIDEO, language);
-    }
-  }
-
-  handleChangeLanguage = (e, language) => {
-    const { playlist } = this.state;
-    const { activePart, collection } = this.props;
-
-    const playableItem = playlist.items[activePart];
-
-    if (language !== playableItem.language) {
-      this.setPlaylist(collection, playableItem.mediaType, language);
-    }
-  }
-
-  handleLessonPartClick = (e, data) =>
-    this.props.onActivePartChange(parseInt(data.name, 10));
 
   onFinish = () => {
-    const { activePart, onActivePartChange } = this.props;
-    const { playlist } = this.state;
+    const { activePart, onActivePartChange, playlist } = this.props;
     if (activePart < playlist.items.length - 1) {
       onActivePartChange(activePart + 1);
     }
@@ -68,8 +29,7 @@ class AVPlaylistPlayerRMP extends Component {
   };
 
   onNext = () => {
-    const { activePart, onActivePartChange } = this.props;
-    const { playlist } = this.state;
+    const { activePart, onActivePartChange, playlist } = this.props;
     if (activePart < playlist.items.length - 1) {
       onActivePartChange(activePart + 1);
     }
@@ -86,20 +46,9 @@ class AVPlaylistPlayerRMP extends Component {
 
   onPause = () => this.setState({ autoPlay: false });
 
-  handleSwitchAV = () => {
-    const { collection, activePart } = this.props;
-    const { playlist } = this.state;
-    const activeItem = playlist.items[activePart];
-    if (activeItem.mediaType === MT_AUDIO && activeItem.availableMediaTypes.includes(MT_VIDEO)) {
-      this.setPlaylist(collection, MT_VIDEO, activeItem.language);
-    } else if (activeItem.mediaType === MT_VIDEO && activeItem.availableMediaTypes.includes(MT_AUDIO)) {
-      this.setPlaylist(collection, MT_AUDIO, activeItem.language);
-    }
-  };
-
   render() {
-    const { t, activePart } = this.props;
-    const { autoPlay, playlist }  = this.state;
+    const { t, activePart, playlist, onSwitchAV, onLanguageChange } = this.props;
+    const { autoPlay } = this.state;
 
     const items = playlist.items;
     const currentItem = items[activePart];
@@ -116,10 +65,10 @@ class AVPlaylistPlayerRMP extends Component {
             <AVPlayerRMP
               autoPlay={autoPlay}
               item={currentItem}
-              onSwitchAV={this.handleSwitchAV}
+              onSwitchAV={onSwitchAV}
               languages={currentItem.availableLanguages}
               language={playlist.language}
-              onLanguageChange={this.handleChangeLanguage}
+              onLanguageChange={onLanguageChange}
               t={t}
               // Playlist props
               showNextPrev
