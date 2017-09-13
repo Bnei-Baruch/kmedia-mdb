@@ -4,8 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 import { Media } from 'react-media-player';
 
-import { MT_AUDIO, MT_VIDEO, PLAYABLE_MEDIA_TYPES } from '../../../helpers/consts';
-import { parse, stringify } from '../../../helpers/url';
+import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
 import playerHelper from '../../../helpers/player';
 import * as shapes from '../../shapes';
 import AVPlayer from '../../AVPlayerRMP/AVPlayerRMP';
@@ -14,7 +13,7 @@ class RMPVideoBox extends Component {
 
   static propTypes = {
     history: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
+    location: shapes.HistoryLocation.isRequired,
     language: PropTypes.string.isRequired,
     unit: shapes.ContentUnit,
     t: PropTypes.func.isRequired,
@@ -28,7 +27,7 @@ class RMPVideoBox extends Component {
 
   componentWillMount() {
     const { language, location, unit } = this.props;
-    const mediaType = this.getMediaTypeFromQuery(location);
+    const mediaType = playerHelper.getMediaTypeFromQuery(location);
     this.setPlayableItem(unit, mediaType, language);
   }
 
@@ -36,8 +35,8 @@ class RMPVideoBox extends Component {
     const { unit, language } = nextProps;
     const props                   = this.props;
 
-    const prevMediaType = this.getMediaTypeFromQuery(props.location);
-    const newMediaType = this.getMediaTypeFromQuery(nextProps.location);
+    const prevMediaType = playerHelper.getMediaTypeFromQuery(props.location);
+    const newMediaType = playerHelper.getMediaTypeFromQuery(nextProps.location);
 
     // no change
     if (unit === props.unit && language === props.language && prevMediaType === newMediaType) {
@@ -47,31 +46,20 @@ class RMPVideoBox extends Component {
     this.setPlayableItem(unit, newMediaType, language);
   }
 
-  getMediaTypeFromQuery = (location, defaultMediaType = MT_VIDEO) => {
-    const query = parse(location.search.slice(1));
-    return PLAYABLE_MEDIA_TYPES.find(media => media === (query.mediaType || '').toLowerCase()) || defaultMediaType;
-  };
-
   setPlayableItem(unit, mediaType, language, cb) {
     const playableItem = playerHelper.playableItem(unit, mediaType, language);
     this.setState({ playableItem }, cb);
   }
 
   handleSwitchAV = () => {
-    const { history, location } = this.props;
+    const { history } = this.props;
     const { playableItem } = this.state;
 
-    const query = parse(location.search.slice(1));
     if (playableItem.mediaType === MT_VIDEO && playableItem.availableMediaTypes.includes(MT_AUDIO) ) {
-      query.mediaType = MT_AUDIO;
+      playerHelper.setMediaTypeInQuery(history, MT_AUDIO);
     } else if (playableItem.mediaType === MT_AUDIO && playableItem.availableMediaTypes.includes(MT_VIDEO)) {
-      query.mediaType = MT_VIDEO;
-    } else {
-      // no change
-      return;
+      playerHelper.setMediaTypeInQuery(history, MT_VIDEO);
     }
-
-    history.replace({ search: stringify(query) });
   };
 
   handleChangeLanguage = (e, language) => {
@@ -85,7 +73,7 @@ class RMPVideoBox extends Component {
 
   render() {
     const { t, isSliceable }                         = this.props;
-    const { playableItem, language } = this.state;
+    const { playableItem } = this.state;
 
     if (!playableItem || !playableItem.src) {
       return (<div>{t('messages.no-playable-files')}</div>);

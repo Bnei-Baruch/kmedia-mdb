@@ -1,5 +1,6 @@
 import pick from 'lodash/pick';
-import { MIME_TYPE_TO_MEDIA_TYPE } from './consts';
+import { getQuery, updateQuery } from './url';
+import { MIME_TYPE_TO_MEDIA_TYPE, PLAYABLE_MEDIA_TYPES, MT_VIDEO } from './consts';
 import { physicalFile } from './utils';
 
 function availableMediaTypes(contentUnit, language) {
@@ -64,7 +65,21 @@ function playlist(collection, mediaType, language) {
   };
 }
 
+function getMediaTypeFromQuery(location, defaultMediaType = MT_VIDEO) {
+  const query = getQuery(location);
+  return PLAYABLE_MEDIA_TYPES.find(media => media === (query.mediaType || '').toLowerCase()) || defaultMediaType;
+}
+
+function setMediaTypeInQuery(history, mediaType = MT_VIDEO) {
+  updateQuery(history, query => ({
+    ...query,
+    mediaType
+  }));
+}
+
 export default {
   playableItem,
-  playlist
+  playlist,
+  getMediaTypeFromQuery,
+  setMediaTypeInQuery
 };
