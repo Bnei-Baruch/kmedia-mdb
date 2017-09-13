@@ -4,6 +4,7 @@ import moment from 'moment';
 import 'moment-duration-format';
 import { Grid, Header, Menu } from 'semantic-ui-react';
 
+import withIsMobile from '../../../helpers/withIsMobile'
 import * as shapes from '../../shapes';
 import AVPlaylistPlayerRMP from '../../AVPlayerRMP/AVPlaylistPlayerRMP';
 
@@ -25,7 +26,7 @@ class FullVideoBox extends Component {
     this.props.onActivePartChange(parseInt(data.name, 10));
 
   render() {
-    const { t, activePart, fullLesson, language } = this.props;
+    const { isMobile, t, activePart, fullLesson, language } = this.props;
 
     const titles = fullLesson.content_units.map((cu) => {
       const { name, duration } = cu;
@@ -41,6 +42,7 @@ class FullVideoBox extends Component {
         activePart={activePart}
         onActivePartChange={this.props.onActivePartChange}
         t={t}
+        isMobile={isMobile}
       />
     );
 
@@ -73,17 +75,32 @@ class FullVideoBox extends Component {
       </div>
     );
 
-    return (
-      <Grid.Row className="video_box">
-        <Grid.Column width={10}>
-          {player}
-        </Grid.Column>
-        <Grid.Column className="player_panel" width={6}>
-          {playList}
-        </Grid.Column>
-      </Grid.Row>
-    );
+    return (isMobile ? (
+      <Grid padded>
+        <Grid.Row className="video_box">
+          <Grid.Column>
+            {player}
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column>
+            {playList}
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    ) : (
+      <Grid padded>
+        <Grid.Row className="video_box">
+          <Grid.Column width={10}>
+            {player}
+          </Grid.Column>
+          <Grid.Column className="player_panel" width={6}>
+            {playList}
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    ));
   }
 }
 
-export default FullVideoBox;
+export default withIsMobile(FullVideoBox);

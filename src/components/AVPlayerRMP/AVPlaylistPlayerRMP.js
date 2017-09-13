@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Media } from 'react-media-player';
 
+import classNames from 'classnames';
 import { MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import AVPlayerRMP from './AVPlayerRMP';
@@ -14,6 +15,7 @@ class AVPlaylistPlayerRMP extends Component {
     activePart: PropTypes.number,
     onActivePartChange: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    isMobile: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -26,8 +28,8 @@ class AVPlaylistPlayerRMP extends Component {
     this.state = {
       autoPlay: true,
       language: undefined,
-      isVideo: true,
-      isAudio: false,
+      isVideo: undefined,
+      isAudio: undefined,
       files: this.buildFiles(props.contentUnits),
     };
   }
@@ -152,19 +154,32 @@ class AVPlaylistPlayerRMP extends Component {
     this.setState({ autoPlay: false });
   };
 
+  getIsVideoIsAudio = () => {
+    const { isMobile }         = this.props;
+    let   { isVideo, isAudio } = this.state;
+    if (isVideo === undefined) {
+      isVideo = !isMobile;
+    }
+    if (isAudio === undefined) {
+      isAudio = isMobile;
+    }
+    return { isVideo, isAudio };
+  }
+
   handleSwitchAV = () => {
-    if (this.state.isAudio && this.state.isVideo !== undefined) {
+    const { isVideo, isAudio } = this.getIsVideoIsAudio();
+    if (isAudio && isVideo !== undefined) {
       this.setState({ isAudio: false, isVideo: true });
     }
-    if (this.state.isVideo && this.state.isAudio !== undefined) {
+    if (isVideo && this.state.isAudio !== undefined) {
       this.setState({ isAudio: true, isVideo: false });
     }
   };
 
   render() {
-    const { t, activePart, language: propsLanguage } = this.props;
-    const { autoPlay, language = propsLanguage, files }          = this.state;
-    let { isVideo, isAudio }                                     = this.state;
+    const { t, isMobile, activePart, language: propsLanguage } = this.props;
+    const { autoPlay, language = propsLanguage, files } = this.state;
+    let { isVideo, isAudio } = this.getIsVideoIsAudio();
 
     const filesByAV = files.get(language) || new Map();
     let audioFileList = [];
@@ -194,7 +209,7 @@ class AVPlaylistPlayerRMP extends Component {
     };
 
     return (
-      <div className="video_player">
+      <div className={classNames("video_player", {"audio": !isVideo})}>
         <div className="video_position">
           <Media>
             <AVPlayerRMP
@@ -207,6 +222,7 @@ class AVPlaylistPlayerRMP extends Component {
               defaultLanguage={language}
               onLanguageChange={this.handleChangeLanguage}
               t={t}
+              isMobile={isMobile}
               // Playlist props
               showNextPrev
               onFinish={this.onFinish}

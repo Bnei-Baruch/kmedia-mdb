@@ -33,8 +33,10 @@ class Layout extends Component {
 
     return (
       <div className="layout">
-        <div className="layout__header">
-          <Menu inverted borderless size="huge" color="blue">
+        {/*Added the width 100vw to better support mobile, please fix as needed*/}
+        <div className="layout__header" style={{width: '100vw'}}>
+          {/*Added the width 100vw to better support mobile, please fix as needed*/}
+          <Menu inverted borderless size="huge" color="blue" style={{width: '100vw'}}>
             <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.toggleSidebar}>
               <Icon name="sidebar" />
             </Menu.Item>

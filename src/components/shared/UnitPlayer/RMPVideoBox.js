@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 import { Media } from 'react-media-player';
 
+import classNames from 'classnames';
+import withIsMobile from '../../../helpers/withIsMobile'
 import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
 import { parse, stringify } from '../../../helpers/url';
 import * as shapes from '../../shapes';
@@ -24,6 +26,7 @@ class RMPVideoBox extends Component {
     language: PropTypes.string.isRequired,
     unit: shapes.ContentUnit,
     t: PropTypes.func.isRequired,
+    isMobile: PropTypes.bool.isRequired,
     isSliceable: PropTypes.bool
   };
 
@@ -137,7 +140,7 @@ class RMPVideoBox extends Component {
   };
 
   render() {
-    const { t, isSliceable }                         = this.props;
+    const { t, isMobile, isSliceable }                         = this.props;
     const { audio, video, active, groups, language } = this.state;
 
     if (!(video || audio)) {
@@ -147,7 +150,7 @@ class RMPVideoBox extends Component {
     return (
       <Grid.Row className="video_box">
         <Grid.Column mobile={16} tablet={12} computer={10}>
-          <div className="video_player">
+          <div className={classNames("video_player", {"audio": audio === active})}>
             <div className="video_position">
               <Media>
                 <AVPlayer
@@ -161,6 +164,7 @@ class RMPVideoBox extends Component {
                   defaultLanguage={language}
                   onLanguageChange={this.handleChangeLanguage}
                   t={t}
+                  isMobile={isMobile}
                 />
               </Media>
             </div>
@@ -171,4 +175,4 @@ class RMPVideoBox extends Component {
   }
 }
 
-export default withRouter(RMPVideoBox);
+export default withIsMobile(withRouter(RMPVideoBox));

@@ -295,6 +295,9 @@ $text-colors: (
   height: 0;
   padding-top: 56.25%;
   position: relative;
+  &.audio {
+    padding-top: 60px;
+  }
   .video_position {
     position: absolute;
     top: 0;
@@ -302,6 +305,7 @@ $text-colors: (
   }
   margin-top: -1em;
   margin-bottom: -1em;
+  min-width: 380px;
 }
 
 .player_panel {
