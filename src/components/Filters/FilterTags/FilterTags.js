@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import reduce from 'lodash/reduce';
 import { connect } from 'react-redux';
+import { Divider, Container } from 'semantic-ui-react';
 
 import { filtersTransformer } from '../../../filters';
 import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
@@ -34,6 +35,8 @@ class FilterTags extends Component {
 
     return (
       <div className="filter-tags">
+
+        <Container className='padded'>
         {
           tags.map((tag) => {
             const icon  = filtersTransformer.getTagIcon(tag.name);
@@ -53,6 +56,7 @@ class FilterTags extends Component {
             );
           })
         }
+        </Container>
       </div>
     );
   }
