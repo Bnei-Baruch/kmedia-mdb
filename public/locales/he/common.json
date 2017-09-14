@@ -69,7 +69,8 @@
     "no-files":                  "לא נמצאו קבצים",
     "no-playable-files":         "לא נמצאו קבצים מתאימים לתצוגה",
     "no-results":                "לא נמצאו תוצאות",
-    "pagination-results":        "תוצאות {{start}} - {{end}} מתוך {{total}}"
+    "pagination-results":        "תוצאות {{start}} - {{end}} מתוך {{total}}",
+    "link-copied-to-clipboard":  "הקישור הועתק ללוח בהצלחה!"
   },
   "lessons":   {
     "list": {

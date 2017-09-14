@@ -54,7 +54,7 @@ class AVShare extends Component {
       <div className="player-button player-control-share">
         <Popup
           open={this.state.recentlyCopied}
-          content={t('player.share.confirmation')}
+          content={t('messages.link-copied-to-clipboard')}
           position={`${downward ? 'bottom' : 'top'} right`}
           offset={10}
           trigger={
