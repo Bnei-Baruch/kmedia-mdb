@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Grid } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
-import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
+import { MT_AUDIO, MT_VIDEO, PLAYABLE_MEDIA_TYPES } from '../../../helpers/consts';
 import { physicalFile } from '../../../helpers/utils';
 import LanguageSelector from '../LanguageSelector';
 import AVPlayer from './AVPlayer';

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actions as settingActions, selectors as settingSelectors } from '../../redux/modules/settings';
 import { LANGUAGES, DEFAULT_LANGUAGE } from '../../helpers/consts';

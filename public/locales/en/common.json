@@ -206,5 +206,10 @@
   },
   "values":    {
     "date": "{{date, l}}"
+  },
+  "player": {
+    "share": {
+      "confirmation": "Link was copied!"
+    }
   }
 }

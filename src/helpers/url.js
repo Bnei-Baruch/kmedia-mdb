@@ -46,3 +46,20 @@ export const prefixWithLanguage = (path, location, toLanguage) => {
   const language = toLanguage || languagePrefix || currentPathLangPrefix || '';
   return language ? `/${language}${pathSuffix}` : pathSuffix;
 };
+
+export const getQuery = (location) => {
+  if (location && location.search) {
+    return parse(location.search.slice(1));
+  }
+
+  return {};
+}
+
+export const updateQuery = (history, updater) => {
+  if (!history) {
+    return;
+  }
+
+  const query = getQuery(history.location);
+  history.replace({ search: stringify(updater(query)) });
+}
