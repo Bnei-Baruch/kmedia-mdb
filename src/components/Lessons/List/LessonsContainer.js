@@ -54,7 +54,7 @@ class LessonsContainer extends withPagination {
           <Container className='padded'>
             <Grid>
               <Grid.Row>
-                <Grid.Column width={10}>
+                <Grid.Column computer={10} tablet={12} mobile={16}>
                   <Header as='h1' color='blue'>
                     <Header.Content>
                       Daily Lessons
