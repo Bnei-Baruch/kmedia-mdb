@@ -58,7 +58,7 @@ class Layout extends Component {
               </Header>
             </Menu.Item>
             <Menu.Item>
-              <OmniBox />
+              <OmniBox t={t}/>
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>

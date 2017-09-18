@@ -1,6 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 
-import {tracePath} from '../../helpers/utils';
+import { tracePath } from '../../helpers/utils';
 import { types as settings } from './settings';
 
 /* Types */
@@ -58,12 +58,25 @@ const buildById = (items) => {
 export const reducer = handleActions({
   [settings.SET_LANGUAGE]: () => initialState,
 
-  [FETCH_SOURCES_SUCCESS]: (state, action) => ({
-    ...state,
-    byId: buildById(action.payload),
-    roots: action.payload.map(x => x.id),
-    error: null,
-  }),
+  [FETCH_SOURCES_SUCCESS]: (state, action) => {
+    const byId = buildById(action.payload);
+
+    // selectors
+    // we keep those in state to avoid recreating them every time a selector is called
+    const getByID     = id => byId[id];
+    const getPath     = source => tracePath(source, getByID);
+    const getPathByID = id => getPath(getByID(id));
+
+    return {
+      ...state,
+      byId,
+      getByID,
+      getPath,
+      getPathByID,
+      roots: action.payload.map(x => x.id),
+      error: null,
+    };
+  },
 
   [FETCH_SOURCES_FAILURE]: (state, action) => ({
     ...state,
@@ -73,14 +86,16 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getSources     = state => state.byId;
-const getRoots     = state => state.roots;
-const getSourceById = state => id => state.byId[id];
-const getPath = (state, source) => tracePath(source, state.byId);
+const getSources    = state => state.byId;
+const getRoots      = state => state.roots;
+const getSourceById = state => state.getByID;
+const getPath       = state => state.getPath;
+const getPathByID   = state => state.getPathByID;
 
 export const selectors = {
   getSources,
   getRoots,
   getSourceById,
   getPath,
+  getPathByID,
 };

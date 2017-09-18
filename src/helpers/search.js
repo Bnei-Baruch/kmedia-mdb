@@ -1,3 +1,5 @@
+import uniqBy from 'lodash/uniqBy';
+
 export class SuggestionsHelper {
   constructor(autocompleteResults) {
     this.byType = {};
@@ -9,7 +11,11 @@ export class SuggestionsHelper {
     }
   }
 
-  getSuggestions = (type) => this.byType[type] || {};
+  getSuggestions = (type, topN = 5) => {
+    const x        = this.byType[type] || {};
+    const combined = uniqBy((x.name || []).concat(x.description || []), 'id');
+    return combined.slice(0, topN);
+  };
 
   $$addSuggestion = (option, field) => {
     const { text, _type: type, _source } = option;

@@ -97,6 +97,14 @@ export const EventItem = PropTypes.shape({
   film_date: PropTypes.string.isRequired,
 });
 
+export const Source = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  parent_id: PropTypes.string,
+  type: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  description: PropTypes.string,
+});
+
 export const Topics = PropTypes.arrayOf(PropTypes.shape({
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,

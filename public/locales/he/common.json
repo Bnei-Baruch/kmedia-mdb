@@ -49,6 +49,16 @@
       "label": "נושאים"
     }
   },
+  "search": {
+    "suggestions": {
+      "categories": {
+        "tags": "תגיות",
+        "sources": "מקורות",
+        "authors": "מחברים",
+        "persons": "אנשים"
+      }
+    }
+  },
   "buttons":   {
     "apply":  "אישור",
     "cancel": "ביטול",
