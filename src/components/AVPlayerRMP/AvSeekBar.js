@@ -33,10 +33,10 @@ class AvSeekBar extends Component {
   _isPlayingOnMouseDown = false;
 
   componentDidMount() {
-    document.addEventListener('mousemove', this.handleMove);
-    document.addEventListener('touchmove', this.handleMove);
-    document.addEventListener('mouseup', this.handleEnd);
-    document.addEventListener('touchend', this.handleEnd);
+    document.addEventListener('mousemove', this.handleMove, { passive: false });
+    document.addEventListener('touchmove', this.handleMove, { passive: false });
+    document.addEventListener('mouseup', this.handleEnd, { passive: false });
+    document.addEventListener('touchend', this.handleEnd, { passive: false });
   }
 
   componentWillUnmount() {
@@ -82,6 +82,7 @@ class AvSeekBar extends Component {
       } else {
         this.seek(seekPosition);
       }
+      e.preventDefault();
     }
   };
 
@@ -113,6 +114,7 @@ class AvSeekBar extends Component {
       if (this._isPlayingOnMouseDown) {
         this.props.media.play();
       }
+      e.preventDefault();
     }
   };
 

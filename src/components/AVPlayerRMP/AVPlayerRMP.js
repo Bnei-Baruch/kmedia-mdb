@@ -347,6 +347,7 @@ class AVPlayerRMP extends PureComponent {
     return (
       <div>
         <div
+          ref={c => this.mediaElement_ = c}
           className="media"
           style={{
             minHeight: active === video ? 200 : 40,
@@ -362,7 +363,6 @@ class AVPlayerRMP extends PureComponent {
             <Player
               ref={c => this.player_ = c}
               src={physicalFile(active, true)}
-              preload
               vendor={active === video ? 'video' : 'audio'}
               autoPlay={autoPlay}
               onReady={this.onPlayerReady}
@@ -462,7 +462,9 @@ class AVPlayerRMP extends PureComponent {
                     )
                   }
                   <AVShare />
-                  <AVFullScreen />
+                  <AVFullScreen
+                    container={this.mediaElement_}
+                  />
                 </div>
               </div>
               { active === video ? (
