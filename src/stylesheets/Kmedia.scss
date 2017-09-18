@@ -1,3 +1,9 @@
+@import 'includes/responsive-helpers';
+.layout__header span {
+  font-size: 12px;
+  font-weight: normal;
+}
+
 $border-color: rgba(34, 36, 38, .15);
 
 $red: #DB2828;
