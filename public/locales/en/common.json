@@ -1,134 +1,141 @@
 {
-  "nav": {
-    "top": {
+  "nav":       {
+    "top":     {
       "header": "Kabbalah Media"
     },
     "sidebar": {
-      "lessons": "Daily Lessons",
-      "programs": "TV & Video Programs",
-      "lectures": "Lectures & Lessons",
-      "sources": "Kabbalah Sources",
-      "events": "Events",
-      "books": "Books",
-      "topics": "Topics",
+      "lessons":      "Daily Lessons",
+      "programs":     "TV & Video Programs",
+      "lectures":     "Lectures & Lessons",
+      "sources":      "Kabbalah Sources",
+      "events":       "Events",
+      "books":        "Books",
+      "topics":       "Topics",
       "publications": "Publications",
-      "photos": "Photos",
-      "design": "Design",
-      "design2": "Layout"
+      "photos":       "Photos",
+      "design":       "Design",
+      "design2":      "Layout"
     },
-    "footer": {
+    "footer":  {
       "copyright": "Copyright © 2003-{{year}}",
-      "rights": "Bnei Baruch – Kabbalah L’Am Association, All rights reserved"
+      "rights":    "Bnei Baruch – Kabbalah L’Am Association, All rights reserved"
     }
   },
-  "filters": {
-    "date-filter": {
-      "label": "Date",
+  "filters":   {
+    "lessons":        {
+      "by": "Filter Lessons by:"
+    },
+    "programs":        {
+      "by": "Filter Programs by:"
+    },
+    "date-filter":    {
+      "label":       "Date",
       "selectTitle": "Select a date range",
-      "presets": {
-        "TODAY": "Today",
-        "YESTERDAY": "Yesterday",
-        "LAST_7_DAYS": "Last 7 Days",
+      "presets":     {
+        "TODAY":        "Today",
+        "YESTERDAY":    "Yesterday",
+        "LAST_7_DAYS":  "Last 7 Days",
         "LAST_30_DAYS": "Last 30 Days",
-        "LAST_MONTH": "Last Month",
-        "THIS_MONTH": "This Month",
+        "LAST_MONTH":   "Last Month",
+        "THIS_MONTH":   "This Month",
         "CUSTOM_RANGE": "Custom Range"
       },
-      "start": "Start",
-      "end": "End"
+      "start":       "Start",
+      "end":         "End"
     },
     "sources-filter": {
       "label": "Sources"
     },
-    "topics-filter": {
+    "topics-filter":  {
       "label": "Topics"
     }
   },
-  "buttons": {
-    "apply": "Apply",
+  "buttons":   {
+    "apply":  "Apply",
     "cancel": "Cancel",
-    "audio": "Audio",
-    "video": "Video",
-    "more": "More"
+    "audio":  "Audio",
+    "video":  "Video",
+    "more":   "More"
   },
-  "messages": {
-    "loading": "Loading",
-    "loading-subtext": "Hold on tight",
-    "server-error": "Server Error",
-    "lesson-not-found": "Couldn't find lesson",
-    "lesson-not-found-subtext": "Try the <1>lessons list</1>...",
-    "program-not-found": "Couldn't find program",
+  "messages":  {
+    "loading":                   "Loading",
+    "loading-subtext":           "Hold on tight",
+    "server-error":              "Server Error",
+    "lesson-not-found":          "Couldn't find lesson",
+    "lesson-not-found-subtext":  "Try the <1>lessons list</1>...",
+    "program-not-found":         "Couldn't find program",
     "program-not-found-subtext": "Try the <1>programs list</1>...",
-    "event-not-found": "Couldn't find event",
-    "event-not-found-subtext": "Try the <1>events list</1>...",
-    "no-files": "No Files",
-    "no-playable-files": "No Playable Files",
-    "no-results": "No results",
-    "pagination-results": "Results {{start}} - {{end}} of {{total}}"
+    "event-not-found":           "Couldn't find event",
+    "event-not-found-subtext":   "Try the <1>events list</1>...",
+    "no-files":                  "No Files",
+    "no-playable-files":         "No Playable Files",
+    "no-results":                "No results",
+    "pagination-results":        "Results {{start}} - {{end}} of {{total}}",
+    "link-copied-to-clipboard":  "Link was copied!"
   },
-  "lessons": {
+  "lessons":   {
     "list": {
       "related": "Related to"
     },
     "part": {
-      "info": {
-        "tags": "Tags",
-        "sources": "Sources",
+      "info":           {
+        "tags":          "Tags",
+        "sources":       "Sources",
         "related-event": "Related to Event"
       },
-      "materials": {
-        "summary": "Summary",
+      "materials":      {
+        "summary":       "Summary",
         "transcription": "Transcription",
-        "sources": "Sources",
-        "sketches": "Sketches"
+        "sources":       "Sources",
+        "sketches":      "Sketches"
       },
-      "downloads": {
-        "title": "Media Downloads",
+      "downloads":      {
+        "title":         "Media Downloads",
         "derived-title": "Derived Media",
-        "copy-link": "Copy Link",
-        "type-labels": {
+        "copy-link":     "Copy Link",
+        "type-labels":   {
           "video": "Lesson Video",
           "audio": "Lesson Audio",
-          "text": "Transcription Text",
+          "text":  "Transcription Text",
           "image": "Sketches"
         }
       },
       "relevant-parts": {
-        "title": "Other parts from the same lesson",
+        "title":      "Other parts from the same lesson",
         "item-title": "Part {{name}}"
       }
     }
   },
-  "programs": {
+  "programs":  {
     "part": {
-      "info": {
-        "tags": "Tags",
-        "sources": "Sources",
+      "info":           {
+        "tags":          "Tags",
+        "sources":       "Sources",
         "related-event": "Related to Event"
       },
-      "materials": {
-        "summary": "Summary",
+      "materials":      {
+        "summary":       "Summary",
         "transcription": "Transcription"
       },
-      "downloads": {
-        "title": "Media Downloads",
+      "downloads":      {
+        "title":         "Media Downloads",
         "derived-title": "Derived Media",
-        "copy-link": "Copy Link",
-        "type-labels": {
+        "copy-link":     "Copy Link",
+        "type-labels":   {
           "video": "Program Video",
           "audio": "Program Audio",
-          "text": "Transcription Text",
+          "text":  "Transcription Text",
           "image": "Sketches"
         }
       },
       "relevant-parts": {
-        "title": "Other parts from the same program",
+        "title":      "Other parts from the same program",
         "item-title": "Part {{name}}"
       }
     }
   },
   "constants": {
-    "languages": {
+    "languages":     {
       "he": "Hebrew",
       "en": "English",
       "ru": "Russian",
@@ -162,43 +169,43 @@
       "cs": "Czech"
     },
     "content-types": {
-      "DAILY_LESSON": "Daily Lesson",
-      "SPECIAL_LESSON": "Special Lesson",
-      "FRIENDS_GATHERINGS": "",
-      "CONGRESS": "",
-      "VIDEO_PROGRAM": "",
-      "LECTURE_SERIES": "",
-      "MEALS": "",
-      "HOLIDAY": "",
-      "PICNIC": "",
-      "UNITY_DAY": "",
-      "LESSON_PART": "",
-      "LECTURE": "",
-      "CHILDREN_LESSON_PART": "",
-      "WOMEN_LESSON_PART": "",
-      "VIRTUAL_LESSON": "",
-      "FRIENDS_GATHERING": "",
-      "MEAL": "",
+      "DAILY_LESSON":          "Daily Lesson",
+      "SPECIAL_LESSON":        "Special Lesson",
+      "FRIENDS_GATHERINGS":    "",
+      "CONGRESS":              "",
+      "VIDEO_PROGRAM":         "",
+      "LECTURE_SERIES":        "",
+      "MEALS":                 "",
+      "HOLIDAY":               "",
+      "PICNIC":                "",
+      "UNITY_DAY":             "",
+      "LESSON_PART":           "",
+      "LECTURE":               "",
+      "CHILDREN_LESSON_PART":  "",
+      "WOMEN_LESSON_PART":     "",
+      "VIRTUAL_LESSON":        "",
+      "FRIENDS_GATHERING":     "",
+      "MEAL":                  "",
       "VIDEO_PROGRAM_CHAPTER": "",
-      "FULL_LESSON": "",
-      "TEXT": "",
-      "UNKNOWN": "",
-      "EVENT_PART": "",
-      "CLIP": "",
-      "TRAINING": "",
-      "KITEI_MAKOR": "Sources Materials"
+      "FULL_LESSON":           "",
+      "TEXT":                  "",
+      "UNKNOWN":               "",
+      "EVENT_PART":            "",
+      "CLIP":                  "",
+      "TRAINING":              "",
+      "KITEI_MAKOR":           "Sources Materials"
     },
-    "media-types": {
-      "video": "Video",
-      "audio": "Audio",
-      "image": "Image",
-      "text": "Text",
-      "sheet": "Sheet",
-      "banner": "Banner",
+    "media-types":   {
+      "video":        "Video",
+      "audio":        "Audio",
+      "image":        "Image",
+      "text":         "Text",
+      "sheet":        "Sheet",
+      "banner":       "Banner",
       "presentation": "Presentation"
     }
   },
-  "values": {
+  "values":    {
     "date": "{{date, l}}"
   }
 }

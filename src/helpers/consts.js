@@ -164,6 +164,10 @@ export const MT_SHEET        = 'sheet';
 export const MT_BANNER       = 'banner';
 export const MT_PRESENTATION = 'presentation';
 
+export const PLAYABLE_MEDIA_TYPES = [
+  MT_VIDEO, MT_AUDIO
+];
+
 export const MEDIA_TYPES = {
   mp4: { type: MT_VIDEO, sub_type: '', mime_type: 'video/mp4' },
   wmv: { type: MT_VIDEO, sub_type: '', mime_type: 'video/x-ms-wmv' },
@@ -210,6 +214,12 @@ export const MEDIA_TYPES = {
   pps: { type: MT_PRESENTATION, sub_type: '', mime_type: 'application/vnd.ms-powerpoint' },
 };
 
-export const TAG_ROOT_TOPICS = 'mS7hrYXK';
+export const MIME_TYPE_TO_MEDIA_TYPE = Object.values(MEDIA_TYPES).reduce((acc, mediaInfo) => {
+  acc[mediaInfo.mime_type] = mediaInfo.type;
+  return acc;
+}, {});
+
+export const TAG_LESSONS_TOPICS = 'mS7hrYXK';
+export const TAG_PROGRAMS_TOPICS = 'IgSeiMLj';
 
 export const DATE_FORMAT = 'YYYY-MM-DD';

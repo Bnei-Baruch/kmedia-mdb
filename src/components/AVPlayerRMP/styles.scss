@@ -1,6 +1,8 @@
 /* This is required for full screen as the default is white background. */
 .media {
   background-color: black;
+  /* In full screen to take full with. */
+  width: 100%;
 }
 
 .media-player {

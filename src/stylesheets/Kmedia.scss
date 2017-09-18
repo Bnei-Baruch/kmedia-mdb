@@ -1,3 +1,9 @@
+@import 'includes/responsive-helpers';
+.layout__header span {
+  font-size: 12px;
+  font-weight: normal;
+}
+
 $border-color: rgba(34, 36, 38, .15);
 
 $red: #DB2828;
@@ -14,6 +20,13 @@ $brown: #A5673F;
 $grey: #767676;
 $black: #1B1C1D;
 
+
+// Neutrals
+$fullBlack        : #000000;
+$offWhite         : #F9FAFB;
+$darkWhite        : #F3F4F5;
+$midWhite         : #DCDDDE;
+$white            : #FFFFFF;
 $text-colors: (
   red : $red,
   orange : $orange,
@@ -174,6 +187,29 @@ $text-colors: (
   }
 }
 
+.ui.container.padded{
+  padding: 1em;
+  &.vertically{
+    padding: 1em 0;
+  }
+  &.horizontally{
+    padding: 0 1em;
+    &.vertically {
+      padding: 1em;
+    }
+  }
+}
+.section-header {
+  background: $darkWhite;
+  h1.header{
+    font-size: 3em;
+    font-weight: 400;
+    .sub.header {
+      margin: .2em 0 .5em;
+    }
+  }
+
+}
 /// END OF THE NEW LAYOUT
 
 /// INDEX
@@ -234,22 +270,22 @@ $text-colors: (
   }
 }
 
-.wrapper > .footer {
-  flex: 0 0 auto;
-}
+// .wrapper > .footer {
+//   flex: 0 0 auto;
+// }
 
-.main-title {
-  line-height: 14px;
-}
+// .main-title {
+//   line-height: 14px;
+// }
 
-.main-menu {
-  display: flex !important;
-  align-items: stretch;
-}
+// .main-menu {
+//   display: flex !important;
+//   align-items: stretch;
+// }
 
-.ui.fixed.menu + .wrapper {
-  padding-top: 42px
-}
+// .ui.fixed.menu + .wrapper {
+//   padding-top: 42px
+// }
 
 // .grid.video_player {
 //   margin-left:-2rem;
@@ -375,7 +411,8 @@ $text-colors: (
   height: 225px;
   overflow: hidden;
   // margin-top: -1em;
-  border-top: 1px solid $border-color;
+  // border-top: 1px solid $border-color;
+  margin-top: -1em;
 
   &__column-wrapper {
     // height: 100%;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import classnames from 'classnames';
 import { Route } from 'react-router-dom';
-import { Flag, Header, Icon, Menu } from 'semantic-ui-react';
+import { Flag, Header, Icon, Menu, Grid } from 'semantic-ui-react';
 
 import { FLAG_TO_LANGUAGE } from '../../helpers/consts';
 import Link from '../Language/MultiLanguageLink';
@@ -44,6 +44,18 @@ class Layout extends Component {
               <img src={logo} alt="logo" />
               <Header inverted as="h2">
                 {t('nav.top.header')}
+                    <span className='widescreen-only'> - widescreen</span>
+                    <span className='large-screen-only'> - large screen</span>
+                    <span className='computer-only'> - computer</span>
+                    <span className='tablet-only'> - tablet</span>
+                    <span className='mobile-only'> - mobile</span>
+                    {/*<span> /// </span>
+                    <span className='widescreen-hidden'> - widescreen hidden</span>
+                    <span className='large-screen-hidden'> - large screen hidden</span>
+                    <span className='computer-hidden'> - computer hidden</span>
+                    <span className='tablet-hidden'> - tablet hidden</span>
+                    <span className='mobile-hidden'> - mobile hidden</span>
+                    */}
               </Header>
             </Menu.Item>
             <Menu.Menu position="right">

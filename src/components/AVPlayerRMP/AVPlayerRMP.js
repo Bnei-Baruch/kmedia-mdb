@@ -9,8 +9,8 @@ import { Icon } from 'semantic-ui-react';
 import { AutoSizer } from 'react-virtualized';
 
 import * as shapes from '../shapes';
-import { physicalFile } from '../../helpers/utils';
 import { parse, stringify } from '../../helpers/url';
+import { MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
 import { PLAYER_MODE } from './constants';
 import AVPlayPause from './AVPlayPause';
 import AVPlaybackRate from './AVPlaybackRate';
@@ -39,13 +39,11 @@ class AVPlayerRMP extends PureComponent {
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
-    defaultLanguage: PropTypes.string.isRequired,
+    language: PropTypes.string.isRequired,
     onLanguageChange: PropTypes.func.isRequired,
 
     // Audio/Video switch props.
-    audio: shapes.MDBFile,
-    video: shapes.MDBFile,
-    active: shapes.MDBFile,
+    item: PropTypes.object.isRequired, // TODO: (yaniv) add shape fo this
     onSwitchAV: PropTypes.func.isRequired,
 
     // Slice props
@@ -65,10 +63,6 @@ class AVPlayerRMP extends PureComponent {
   };
 
   static defaultProps = {
-    audio: null,
-    video: null,
-    active: null,
-
     isSliceable: false,
 
     autoPlay: false,
@@ -327,7 +321,7 @@ class AVPlayerRMP extends PureComponent {
     }
   }
 
-  onClick = () => {
+  playPause = () => {
     const { isMobile, media: { playPause } } = this.props;
 
     if (isMobile && !this.state.controlsVisible) {
@@ -338,11 +332,14 @@ class AVPlayerRMP extends PureComponent {
   }
 
   render() {
-    const { isMobile, autoPlay, audio, video, active, languages, defaultLanguage, t, showNextPrev, hasNext, hasPrev, onPrev, onNext, isSliceable, media } = this.props;
+    const { isMobile, autoPlay, item, languages, language, t, showNextPrev, hasNext, hasPrev, onPrev, onNext, isSliceable, media } = this.props;
     const { isTopSeekbar, controlsVisible, error, sliceStart, sliceEnd, mode, playbackRate } = this.state;
 
     const { isFullscreen, isPlaying } = media;
-    const forceShowControls = active === audio || !isPlaying;
+    const forceShowControls = item.mediaType === MT_AUDIO || !isPlaying;
+
+    const isVideo = item.mediaType === MT_VIDEO;
+    const isAudio = item.mediaType === MT_AUDIO;
 
     return (
       <div>
@@ -350,8 +347,8 @@ class AVPlayerRMP extends PureComponent {
           ref={c => this.mediaElement_ = c}
           className="media"
           style={{
-            minHeight: active === video ? 200 : 40,
-            minWidth: active === video ? 380 : 'auto'
+            minHeight: isAudio ? 200 : 40,
+            minWidth: isVideo ? 380 : 'auto'
           }}
         >
           <div
@@ -362,8 +359,8 @@ class AVPlayerRMP extends PureComponent {
           >
             <Player
               ref={c => this.player_ = c}
-              src={physicalFile(active, true)}
-              vendor={active === video ? 'video' : 'audio'}
+              src={item.src}
+              vendor={isVideo ? 'video' : 'audio'}
               autoPlay={autoPlay}
               onReady={this.onPlayerReady}
               preload="auto"
@@ -376,7 +373,7 @@ class AVPlayerRMP extends PureComponent {
             <div
               className={classNames('media-controls', {
                 fade: !controlsVisible && !forceShowControls,
-                'audio-is-mobile': isTopSeekbar && active === audio
+                'audio-is-mobile': isTopSeekbar && isAudio,
               })}
             >
               <div
@@ -427,20 +424,20 @@ class AVPlayerRMP extends PureComponent {
                   <AVPlaybackRate
                     value={playbackRate}
                     onSelect={this.playbackRateChange}
-                    upward={video === active} />
-                  <AVMuteUnmute upward={video === active} />
+                    upward={isVideo} />
+                  <AVMuteUnmute upward={isVideo} />
                   <AVAudioVideo
-                    isAudio={audio === active}
-                    isVideo={video === active}
+                    isAudio={isAudio}
+                    isVideo={isVideo}
                     setAudio={this.onSwitchAV}
                     setVideo={this.onSwitchAV}
                     t={t}
                   />
                   <AVLanguage
                     languages={languages}
-                    defaultValue={defaultLanguage}
+                    defaultValue={language}
                     onSelect={this.onLanguageChange}
-                    upward={video === active}
+                    upward={isVideo}
                   />
                   {
                     isSliceable && (
@@ -452,7 +449,7 @@ class AVPlayerRMP extends PureComponent {
                   }
                   {
                     isSliceable && (mode === PLAYER_MODE.SLICE_EDIT || mode === PLAYER_MODE.SLICE_VIEW) && (
-                      <div className={classNames('player-control-slice-menu-wrapper', { 'downward': active === audio })}>
+                      <div className={classNames('player-control-slice-menu-wrapper', { 'downward': isAudio })}>
                         <AVSliceMenu
                           playerMode={mode}
                           onEdit={() => this.setSliceMode(true)}
@@ -461,31 +458,29 @@ class AVPlayerRMP extends PureComponent {
                       </div>
                     )
                   }
-                  <AVShare />
-                  <AVFullScreen
-                    container={this.mediaElement_}
-                  />
+                  <AVShare downward={isAudio} />
+                  <AVFullScreen container={this.mediaElement_} />
                 </div>
               </div>
-              { active === video ? (
-                  <div
-                    className="media-center-control"
-                    style={!error ? { outline: 'none' } : { backgroundColor: 'black', outline: 'none' }}
-                    tabIndex="0"
-                    onClick={this.onClick}
-                    onKeyDown={this.onKeyDown}
-                    onMouseMove={this.centerMove}
-                  >
-                    {
-                      error ? (
-                        <div className="player-button">
-                          Error loading file.
-                          <Icon name="warning sign" size=" large" />
-                        </div>
-                      ) : <AVCenteredPlay />
-                    }
-                  </div>
-                ) : null }
+              { isVideo ? (
+                <div
+                  className="media-center-control"
+                  style={!error ? { outline: 'none' } : { backgroundColor: 'black', outline: 'none' }}
+                  tabIndex="0"
+                  onClick={this.playPause}
+                  onKeyDown={this.onKeyDown}
+                  onMouseMove={this.centerMove}
+                >
+                  {
+                    error ? (
+                      <div className="player-button">
+                        Error loading file.
+                        <Icon name="warning sign" size=" large" />
+                      </div>
+                    ) : <AVCenteredPlay />
+                  }
+                </div>
+              ) : null }
             </div>
           </div>
         </div>

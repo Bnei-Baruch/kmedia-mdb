@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Menu, Input } from 'semantic-ui-react';
+import { Container, Menu } from 'semantic-ui-react';
 
 import { filterPropShape } from '../../shapes';
 import FilterMenuItem from '../FilterMenuItem/FilterMenuItem';
@@ -12,7 +12,8 @@ class FilterMenu extends PureComponent {
     items: PropTypes.arrayOf(filterPropShape).isRequired,
     active: PropTypes.string,
     onChoose: PropTypes.func,
-    t: PropTypes.func.isRequired
+    t: PropTypes.func.isRequired,
+    namespace: PropTypes.string.isRequired
   };
 
   static defaultProps = {
@@ -21,23 +22,26 @@ class FilterMenu extends PureComponent {
   };
 
   render() {
-    const { items, active, onChoose, t } = this.props;
+    const { items, active, onChoose, t, namespace } = this.props;
     return (
       <Menu secondary pointing color="blue" className="index-filters" size="large">
-        {
-          items.map(item => (
-            <FilterMenuItem
-              key={item.name}
-              name={item.name}
-              label={t(`filters.${item.name}.label`)}
-              isActive={item.name === active}
-              onChoose={onChoose}
-            />
-          ))
-        }
-        {/*<Menu.Item>
+        <Container className='padded horizontally'>
+          <Menu.Item header content={t(`filters.${namespace}.by`)} />
+          {
+            items.map(item => (
+              <FilterMenuItem
+                key={item.name}
+                name={item.name}
+                label={t(`filters.${item.name}.label`)}
+                isActive={item.name === active}
+                onChoose={onChoose}
+              />
+            ))
+          }
+          {/*<Menu.Item>
           <Input size='small' icon icon='search' placeholder='Search Daily Lessons...' />
         </Menu.Item>*/}
+        </Container>
       </Menu>
     );
   }
