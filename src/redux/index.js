@@ -9,6 +9,7 @@ import { reducer as filters } from './modules/filters';
 import { reducer as sources } from './modules/sources';
 import { reducer as tags } from './modules/tags';
 import { reducer as mdb } from './modules/mdb';
+import { reducer as search } from './modules/search';
 
 export default combineReducers({
   router,
@@ -21,5 +22,6 @@ export default combineReducers({
   sources,
   tags,
   mdb,
+  search,
 });
 

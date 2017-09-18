@@ -1,5 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 
+import {tracePath} from '../../helpers/utils';
 import { types as settings } from './settings';
 
 /* Types */
@@ -75,9 +76,11 @@ export const reducer = handleActions({
 const getSources     = state => state.byId;
 const getRoots     = state => state.roots;
 const getSourceById = state => id => state.byId[id];
+const getPath = (state, source) => tracePath(source, state.byId);
 
 export const selectors = {
   getSources,
   getRoots,
   getSourceById,
+  getPath,
 };

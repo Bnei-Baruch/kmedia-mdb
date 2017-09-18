@@ -5,6 +5,7 @@ import { sagas as sources } from './sources';
 import { sagas as filters } from './filters';
 import { sagas as tags } from './tags';
 import { sagas as settings } from './settings';
+import { sagas as search } from './search';
 
 export default [
   ...lessons,
@@ -14,4 +15,5 @@ export default [
   ...filters,
   ...tags,
   ...settings,
+  ...search,
 ];

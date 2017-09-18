@@ -7,6 +7,7 @@ import { Flag, Header, Icon, Menu } from 'semantic-ui-react';
 
 import { FLAG_TO_LANGUAGE } from '../../helpers/consts';
 import Link from '../Language/MultiLanguageLink';
+import OmniBox from '../Search/OmniBox';
 import Routes from './Routes';
 import MenuItems from './MenuItems';
 import Footer from './Footer';
@@ -43,6 +44,9 @@ class Layout extends Component {
               <Header inverted as="h2">
                 {t('nav.top.header')}
               </Header>
+            </Menu.Item>
+            <Menu.Item>
+              <OmniBox />
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
