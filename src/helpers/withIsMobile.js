@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-const MOBILE_WIDTH = 660;
+const MOBILE_WIDTH = 768;
 
 export default function withIsMobile(SomeComponent) {
   return class extends Component {

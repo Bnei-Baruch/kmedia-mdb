@@ -8,6 +8,7 @@ import { Icon } from 'semantic-ui-react';
 
 import { AutoSizer } from 'react-virtualized';
 
+import withIsMobile from '../../helpers/withIsMobile';
 import * as shapes from '../shapes';
 import { parse, stringify } from '../../helpers/url';
 import { MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
@@ -475,7 +476,7 @@ class AVPlayerRMP extends PureComponent {
                     error ? (
                       <div className="player-button">
                         Error loading file.
-                        <Icon name="warning sign" size=" large" />
+                        <Icon name="warning sign" size="large" />
                       </div>
                     ) : <AVCenteredPlay />
                   }
@@ -489,4 +490,4 @@ class AVPlayerRMP extends PureComponent {
   }
 }
 
-export default withMediaProps(withRouter(AVPlayerRMP));
+export default withIsMobile(withMediaProps(withRouter(AVPlayerRMP)));

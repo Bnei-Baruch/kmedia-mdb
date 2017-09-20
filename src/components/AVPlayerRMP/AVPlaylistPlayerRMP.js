@@ -17,7 +17,6 @@ class AVPlaylistPlayerRMP extends Component {
     onLanguageChange: PropTypes.func.isRequired,
     onSwitchAV: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
-    isMobile: PropTypes.bool.isRequired,
   };
 
   state = {
@@ -50,7 +49,7 @@ class AVPlaylistPlayerRMP extends Component {
   onPause = () => this.setState({ autoPlay: false });
 
   render() {
-    const { isMobile, t, activePart, playlist, onSwitchAV, onLanguageChange } = this.props;
+    const { t, activePart, playlist, onSwitchAV, onLanguageChange } = this.props;
     const { autoPlay } = this.state;
 
     const items = playlist.items;
@@ -73,7 +72,6 @@ class AVPlaylistPlayerRMP extends Component {
               language={playlist.language}
               onLanguageChange={onLanguageChange}
               t={t}
-              isMobile={isMobile}
               // Playlist props
               showNextPrev
               onFinish={this.onFinish}

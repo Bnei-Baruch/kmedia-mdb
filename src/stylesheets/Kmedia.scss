@@ -333,6 +333,8 @@ $text-colors: (
   position: relative;
   &.audio {
     padding-top: 70px;
+    margin-top: 0em;
+    margin-bottom: 0em;
   }
   .video_position {
     position: absolute;

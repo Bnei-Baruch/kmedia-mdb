@@ -29,17 +29,17 @@ class RMPVideoBox extends Component {
   };
 
   componentWillMount() {
-    const { language, location, unit } = this.props;
-    const mediaType = playerHelper.getMediaTypeFromQuery(location);
+    const { isMobile, language, location, unit } = this.props;
+    const mediaType = playerHelper.getMediaTypeFromQuery(location, isMobile ? MT_AUDIO : MT_VIDEO);
     this.setPlayableItem(unit, mediaType, language);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { unit, language } = nextProps;
+    const { isMobile, unit, language } = nextProps;
     const props                   = this.props;
 
-    const prevMediaType = playerHelper.getMediaTypeFromQuery(props.location);
-    const newMediaType = playerHelper.getMediaTypeFromQuery(nextProps.location);
+    const prevMediaType = playerHelper.getMediaTypeFromQuery(props.location, isMobile ? MT_AUDIO : MT_VIDEO);
+    const newMediaType = playerHelper.getMediaTypeFromQuery(nextProps.location, isMobile ? MT_AUDIO : MT_VIDEO);
 
     // no change
     if (unit === props.unit && language === props.language && prevMediaType === newMediaType) {
