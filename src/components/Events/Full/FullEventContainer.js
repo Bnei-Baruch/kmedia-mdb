@@ -17,13 +17,12 @@ class FullEventContainer extends Component {
     wip: PropTypes.bool,
     err: shapes.Error,
     fetchFullEvent: PropTypes.func.isRequired,
-    fetchEventItem: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     fullEvent: null,
     wip: false,
-    errors: null,
+    err: null,
   };
 
   componentDidMount() {
@@ -66,7 +65,6 @@ function mapState(state, props) {
 function mapDispatch(dispatch) {
   return bindActionCreators({
     fetchFullEvent: actions.fetchFullEvent,
-    fetchEventItem: actions.fetchEventItem,
   }, dispatch);
 }
 
