@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
+import classNames from 'classnames';
 
 export default class SliceHandle extends Component {
   static propTypes = {
@@ -8,23 +9,23 @@ export default class SliceHandle extends Component {
     isEditMode: PropTypes.bool,
     onMove: PropTypes.func,
     onMoveEnd: PropTypes.func,
-    seconds: PropTypes.string.isRequired
+    seconds: PropTypes.string.isRequired,
+    className: PropTypes.string
   };
 
   static defaultProps = {
     isEditMode: false,
     onMove: noop,
-    onMoveEnd: noop
+    onMoveEnd: noop,
+    className: ''
   };
 
   render() {
-    const { isEditMode, position, seconds } = this.props;
-
-    console.log(seconds);
+    const { isEditMode, position, seconds, className } = this.props;
 
     return (
       <div
-        className="player-slice-handle"
+        className={classNames('player-slice-handle', className)}
         style={{ left: position }}
       >
         {
@@ -36,7 +37,7 @@ export default class SliceHandle extends Component {
             </div>
           )
         }
-        { isEditMode && <div className="player-slice-handle--knob" /> }
+        { isEditMode && <div ref={el => this.knobElement = el} className="player-slice-handle--knob" /> }
         <div className="player-slice-handle--line" />
       </div>
     );

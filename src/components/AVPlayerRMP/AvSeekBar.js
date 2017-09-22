@@ -54,9 +54,9 @@ class AvSeekBar extends Component {
 
     this.props.media.pause();
 
-    if (e.target.classList.contains('slice-start')) {
+    if (e.target === this.sliceStartHandle.knobElement) {
       this._sliceStartActive = true;
-    } else if (e.target.classList.contains('slice-end')) {
+    } else if (e.target === this.sliceEndHandle.knobElement) {
       this._sliceEndActive = true;
     } else {
       this._sliceStartActive = false;
@@ -245,6 +245,7 @@ class AvSeekBar extends Component {
         {
           isSlice && (
             <SliceHandle
+              ref={el => this.sliceStartHandle = el}
               seconds={formatTime(sliceStart)}
               position={this.toPercentage(normalizedSliceStart)}
               isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
@@ -254,6 +255,7 @@ class AvSeekBar extends Component {
         {
           isSlice && (
             <SliceHandle
+              ref={el => this.sliceEndHandle = el}
               seconds={formatTime(sliceEnd === Infinity ? duration : sliceEnd)}
               position={this.toPercentage(normalizedSliceEnd)}
               isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
@@ -262,9 +264,7 @@ class AvSeekBar extends Component {
         }
         <div className={
           classNames('player-button player-control-seekbar', {
-            'mobile': isMobile,
-            'player-control-seekbar-slice': isSlice,
-            'player-control-seekbar-slice-edit': isSliceEdit
+            mobile: isMobile
           }
         )}>
           <div className="bar played" style={stylePlayed}>
