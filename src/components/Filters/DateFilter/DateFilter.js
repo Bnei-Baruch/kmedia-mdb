@@ -137,7 +137,7 @@ class DateFilter extends Component {
   componentDidMount() {
     const { datePreset, from, to } = this.state;
     this.showMonth(datePreset, from, to);
-    console.log(this.state);
+    console.log(datePreset, ' ', from, ' ', to);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -210,9 +210,9 @@ class DateFilter extends Component {
     case THIS_MONTH:
       dateToShow = moment(now()).subtract(1, 'month').toDate();
       break;
-    default:
-      return;
     }
+
+    console.log('dateToShow: ', dateToShow);
 
     this.datePicker.showMonth(dateToShow);
   };
@@ -303,7 +303,6 @@ class DateFilter extends Component {
                 onDayClick={this.handleDayClick}
                 // eslint-disable-next-line no-return-assign
                 ref={el => this.datePicker = el}
-                dateFormat="DD/MM/YYYY"
               />
             </Grid.Column>
             <Grid.Column width={5}>
