@@ -95,31 +95,66 @@ class Design extends Component {
               </div>
               <div className="filter-steps__column-wrapper">
                 <div className="filter-steps__column">
-                  <Grid padded>
-                    <Grid.Row>
+                  <Grid padded className="filter-steps__lists" columns={5}>
+                    <Grid.Row stretched>
                       <Grid.Column width={16}>
-                        <Header size='tiny' color='grey'>Recently Updated</Header>
-                        <Divider/>
+                        <Header as='h6' color='grey'>Recently Updated</Header>
                       </Grid.Column>
+                      <Grid.Column>
+                        <Card
+                          href='#'
+                          header='Between Words'
+                          meta='A new parts added: Today'
+                        />
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Card
+                          href='#'
+                          header='Between Words'
+                          meta='A new parts added: Today'
+                        />
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Card
+                          href='#'
+                          header='Between Words'
+                          meta='A new parts added: Today'
+                        />
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Card
+                          href='#'
+                          header='Between Words'
+                          meta='A new parts added: Today'
+                        />
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Card
+                          href='#'
+                          header='Between Words'
+                          meta='A new parts added: Today'
+                        />
+                      </Grid.Column>
+                      
                     </Grid.Row>
-                    <Grid.Row>
+                    <Grid.Row >
                       <Grid.Column width={16}>
-                        <Header size='tiny' color='grey'>All Programs</Header>
-                        <Divider/>
+                        <Header as='h6' color='grey'>All Programs</Header>
+                        
                       </Grid.Column>
-                      <Grid.Column width={4}>
-                        <List>
-                          <List.Item><List.Header>#</List.Header></List.Item>
+                      <Grid.Column>
+                        <List size='tiny'>
+                          <List.Item><List.Header>#<Divider/></List.Header></List.Item>
                           <List.Item>20 Ideas</List.Item>
                         </List>
                       </Grid.Column>
-                      <Grid.Column width={4}>
-                        <List>
-                          <List.Item><List.Header>A</List.Header></List.Item>
+                      <Grid.Column>
+                        <List size='tiny'>
+                          <List.Item><List.Header>A<Divider/></List.Header></List.Item>
                           <List.Item>A New Life</List.Item>
                           <List.Item>A New Life. Excerpts</List.Item>
                           <List.Item>A Point in the Heart</List.Item>
-                          <List.Item>A song from the source</List.Item>
+                          <List.Item inverted>A song from the source</List.Item>
                           <List.Item>A Song Out of the Sleeve</List.Item>
                           <List.Item>A Spiritual Story with Eran Kurtz</List.Item>
                           <List.Item>A Taste of Light</List.Item>
@@ -131,10 +166,10 @@ class Design extends Component {
                           <List.Item>Audio Program</List.Item>
                         </List>
                       </Grid.Column>
-                      <Grid.Column width={4}>
+                      <Grid.Column>
 
-                        <List>
-                          <List.Item><List.Header>B</List.Header></List.Item>
+                        <List size='tiny'>
+                          <List.Item><List.Header>B<Divider/></List.Header></List.Item>
                           <List.Item>Babylon Yesterday and Today</List.Item>
                           <List.Item>Backstage with</List.Item>
                           <List.Item>Basics</List.Item>
@@ -147,9 +182,9 @@ class Design extends Component {
                           <List.Item>Butterfly Effect</List.Item>
                         </List>
                       </Grid.Column>
-                      <Grid.Column width={4}>
-                        <List>
-                          <List.Item><List.Header>C</List.Header></List.Item>
+                      <Grid.Column>
+                        <List size='tiny'>
+                          <List.Item><List.Header>C<Divider/></List.Header></List.Item>
                           <List.Item>Child's Play</List.Item>
                           <List.Item>Children's World</List.Item>
                           <List.Item>Closeup</List.Item>
@@ -159,25 +194,23 @@ class Design extends Component {
                           <List.Item>Crossroads</List.Item>
                         </List>
                       </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row>
-                      <Grid.Column width={4}>
-                        <List>
-                          <List.Item><List.Header>E</List.Header></List.Item>
+                      <Grid.Column>
+                        <List size='tiny'>
+                          <List.Item><List.Header>E<Divider/></List.Header></List.Item>
                           <List.Item>Education Issues</List.Item>
                           <List.Item>Essentials of education</List.Item>
                           <List.Item>Experts</List.Item>
                         </List>                      
                       </Grid.Column>
-                      <Grid.Column width={4}>
-                        <List>
-                          <List.Item><List.Header>F</List.Header></List.Item>
+                      <Grid.Column>
+                        <List size='tiny'>
+                          <List.Item><List.Header>F<Divider/></List.Header></List.Item>
                           <List.Item>Films</List.Item>
                         </List>                      
                       </Grid.Column>
-                      <Grid.Column width={4}>
-                        <List>
-                          <List.Item><List.Header>G</List.Header></List.Item>
+                      <Grid.Column>
+                        <List size='tiny'>
+                          <List.Item><List.Header>G<Divider/></List.Header></List.Item>
                           <List.Item>Getting ready for the congress</List.Item>
                           <List.Item>Global Village</List.Item>
                           <List.Item>Good environment</List.Item>
@@ -185,9 +218,9 @@ class Design extends Component {
                           <List.Item>Great Kabbalists</List.Item>
                         </List>                      
                       </Grid.Column>
-                      <Grid.Column width={4}>
-                        <List>
-                          <List.Item><List.Header>H</List.Header></List.Item>
+                      <Grid.Column>
+                        <List size='tiny'>
+                          <List.Item><List.Header>H<Divider/></List.Header></List.Item>
                           <List.Item>Hasidism</List.Item>
                           <List.Item>Hot Topic</List.Item>
                           <List.Item>HR Secrets Revealed</List.Item>
@@ -414,7 +447,7 @@ class Design extends Component {
                 <Header as="h5">
                   2016-10-26<br/>Lesson on the topic of “From Lo Lishma to Lishma” (not for Her Name for Her Name)
                 </Header>
-                <List size='mini'>
+                <List size='tiny'>
                   <List.Item><b>Topics:</b> <a href=''>From Lo Lishma to Lishma</a>, <a href=''>Work in group</a></List.Item>
                   <List.Item><b>Sources:</b> <a href=''> Shamati - There is None Else Beside Him</a>, <a href=''>Shamati - Divinity in Exile</a></List.Item>
                   <List.Item><b>Related to Event:</b> <a href=''>World Israel Congress 2016</a></List.Item>

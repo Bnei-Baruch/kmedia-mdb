@@ -10,6 +10,7 @@ class AVMuteUnmute extends Component {
       isMuted: PropTypes.bool.isRequired,
       volume: PropTypes.number.isRequired,
       muteUnmute: PropTypes.func.isRequired,
+      setVolume: PropTypes.func.isRequired,
     }).isRequired,
     upward: PropTypes.bool,
   };
@@ -28,25 +29,6 @@ class AVMuteUnmute extends Component {
     };
   }
 
-  setVolume = (clientY) => {
-    const { top, bottom } = this.element.getBoundingClientRect();
-    const offset          = Math.min(Math.max(0, clientY - top), bottom - top);
-    const newVolume       = 1 - offset / (bottom - top);
-    this.props.media.setVolume(newVolume);
-  };
-
-  handleMuteUnmute = () => {
-    this.props.media.muteUnmute();
-  };
-
-  handleMouseEnter = (e) => {
-    this.setState({ volumeHover: true });
-  };
-
-  handleMouseLeave = (e) => {
-    this.setState({ volumeHover: false });
-  };
-
   // Handle volume change on bar
   componentDidMount() {
     document.addEventListener('mousemove', this.handleMove, { passive: false });
@@ -62,7 +44,26 @@ class AVMuteUnmute extends Component {
     document.removeEventListener('touchend', this.handleEnd);
   }
 
-  handleStart = (e) => {
+  setVolume = (clientY) => {
+    const { top, bottom } = this.element.getBoundingClientRect();
+    const offset          = Math.min(Math.max(0, clientY - top), bottom - top);
+    const newVolume       = 1 - (offset / (bottom - top));
+    this.props.media.setVolume(newVolume);
+  };
+
+  handleMuteUnmute = () => {
+    this.props.media.muteUnmute();
+  };
+
+  handleMouseEnter = () => {
+    this.setState({ volumeHover: true });
+  };
+
+  handleMouseLeave = () => {
+    this.setState({ volumeHover: false });
+  };
+
+  handleStart = () => {
     this.setState({ wasMouseDown: true });
   };
 
@@ -86,7 +87,7 @@ class AVMuteUnmute extends Component {
     }
   };
 
-  normalize = l => {
+  normalize = (l) => {
     const ret = 100 * l;
     if (ret < 1) {
       return 0;
@@ -108,11 +109,11 @@ class AVMuteUnmute extends Component {
     };
 
     const styleVolume = {
-      height: this.normalize(volume) + 'px',
+      height: `${this.normalize(volume)}px`,
     };
 
     const styleBlank = {
-      height: this.normalize(1 - volume) + 'px',
+      height: `${this.normalize(1 - volume)}px`,
     };
 
     return (
@@ -160,8 +161,9 @@ class AVMuteUnmute extends Component {
           onMouseLeave={this.handleMouseLeave}
         >
           <div
-            ref={c => this.element = c}
+            ref={(c) => { this.element = c; }}
             className="bar-wrapper"
+            role="button"
             onMouseDown={this.handleStart}
             onTouchStart={this.handleStart}
           >
