@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
-import { Container, Embed, Grid, Header, Image, Menu, Table } from 'semantic-ui-react';
+import { Container, Grid, Header, Image, Menu, Table } from 'semantic-ui-react';
 
 import { fromToLocalized } from '../../../helpers/date';
 import { formatError } from '../../../helpers/utils';
@@ -13,7 +13,7 @@ import NavLink from '../../Language/MultiLanguageNavLink';
 import * as shapes from '../../shapes';
 
 import placeholder from './placeholder.png';
-import EventMap from './EventMap'
+import EventMap from './EventMap';
 
 class FullEvent extends Component {
   static propTypes = {
@@ -49,9 +49,8 @@ class FullEvent extends Component {
     );
   };
 
-  titleDate = (fromStr, toStr) =>{
-    return fromToLocalized(moment.utc(fromStr, "YYYY-MM-DD"), moment.utc(toStr, "YYYY-MM-DD"));
-  }
+  titleDate = (fromStr, toStr) =>
+      fromToLocalized(moment.utc(fromStr, 'YYYY-MM-DD'), moment.utc(toStr, 'YYYY-MM-DD'));
 
   render() {
     const { language, fullEvent, wip, err, t } = this.props;
@@ -70,13 +69,13 @@ class FullEvent extends Component {
           <Grid>
             <Grid.Row>
               <Grid.Column width={3}>
-                 <Image fluid shape='rounded' src={placeholder} />
+                <Image fluid shape="rounded" src={placeholder} />
               </Grid.Column>
               <Grid.Column width={8}>
-                <Header as='h1'>
+                <Header as="h1">
                   <Header.Content>
-                    <small className='text grey'>{this.titleDate(fullEvent.start_date, fullEvent.end_date)}</small>
-                    <br/>
+                    <small className="text grey">{this.titleDate(fullEvent.start_date, fullEvent.end_date)}</small>
+                    <br />
                     {fullEvent.name}
                     <Header.Subheader>
                       {fullEvent.city}, {fullEvent.country}
@@ -88,10 +87,12 @@ class FullEvent extends Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column>
-                <EventMap language={language}
-                          address={fullEvent.full_address}
-                          city={fullEvent.city}
-                          country={fullEvent.country} />
+                <EventMap
+                  language={language}
+                  address={fullEvent.full_address}
+                  city={fullEvent.city}
+                  country={fullEvent.country}
+                />
               </Grid.Column>
             </Grid.Row>
           </Grid>

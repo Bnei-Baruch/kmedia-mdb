@@ -63,10 +63,10 @@ class EventMap extends Component {
     let { language } = this.props;
     const { loaded, location } = this.state;
     if (loaded && location) {
+      // Fix this in language setting and constants.
       if (language === 'he') {
         language = 'iw';
       }
-      console.log(language);
       return (
         <EventMapInner
           googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&language=${language}`}
