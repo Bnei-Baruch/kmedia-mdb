@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Menu } from 'semantic-ui-react';
+import { Menu, Icon } from 'semantic-ui-react';
 
 class FilterMenuItem extends PureComponent {
 
@@ -18,7 +18,7 @@ class FilterMenuItem extends PureComponent {
 
   render() {
     const { name, label, isActive, onChoose } = this.props;
-    return <Menu.Item name={name} active={isActive} onClick={() => onChoose({ name })}>{label}</Menu.Item>;
+    return <Menu.Item name={name} active={isActive} onClick={() => onChoose({ name })}>{label}<Icon name='dropdown'/></Menu.Item>;
   }
 }
 
