@@ -117,7 +117,9 @@ class AVPlayerRMP extends PureComponent {
 
   setSliceMode = (isEdit, properties, cb) => this.setState({
     mode: isEdit ? PLAYER_MODE.SLICE_EDIT : PLAYER_MODE.SLICE_VIEW,
-    ...properties
+    ...properties,
+    sliceStart: (properties && typeof properties.sliceStart !== 'undefined') ? properties.sliceStart : 0,
+    sliceEnd: (properties && typeof properties.sliceEnd !== 'undefined') ? properties.sliceEnd : Infinity
   }, cb);
 
   setNormalMode = cb => this.setState({
@@ -342,6 +344,9 @@ class AVPlayerRMP extends PureComponent {
     const isVideo = item.mediaType === MT_VIDEO;
     const isAudio = item.mediaType === MT_AUDIO;
 
+    const elapsedStart = media.currentTime + ((mode === PLAYER_MODE.SLICE_EDIT) ? sliceStart : 0);
+    const elapsedEnd = ((mode === PLAYER_MODE.SLICE_EDIT && sliceEnd !== Infinity) ? sliceEnd : media.duration);
+
     return (
       <div>
         <div
@@ -404,9 +409,8 @@ class AVPlayerRMP extends PureComponent {
                     onNext={onNext}
                   />
                   <AVTimeElapsed
-                    isSlice={isSliceable && (mode === PLAYER_MODE.SLICE_VIEW || mode === PLAYER_MODE.SLICE_EDIT)}
-                    sliceStart={sliceStart}
-                    sliceEnd={sliceEnd}
+                    start={elapsedStart}
+                    end={elapsedEnd}
                   />
                   <div className="player-seekbar-wrapper">
                     <AutoSizer onResize={this.onSeekBarResize}>{() => null}</AutoSizer>

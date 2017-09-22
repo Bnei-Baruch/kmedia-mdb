@@ -46,25 +46,41 @@
   margin-right: 10px;
 
   .player-slice-handle {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     position: absolute;
     bottom: 0;
 
+    &--time {
+      display: flex;
+      flex-direction: row;
+      position: relative;
+      left: 0;
+      transform: translateX(-50%);
+      align-items: center;
+      padding: 5px;
+      margin-bottom: 10px;
+      color: #ffffff;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 20%;
+    }
+
     &--knob {
-      position: absolute;
-      bottom: 45px;
+      position: relative;
       background: #0066ff;
       width: 26px;
       height: 25px;
       transform: translateX(-50%);
-      margin-bottom: 8px;
+      margin-bottom: 12px;
       border-top-left-radius: 20%;
       border-top-right-radius: 20%;
 
       &:after {
         content: "";
         position: absolute;
-
         top: 100%;
+        left: 0;
         width: 0;
         height: 0;
         border-left: 13px solid transparent;
@@ -85,8 +101,6 @@
     }
 
     &--line {
-      position: absolute;
-      bottom: 0;
       background: #ffffff;
       height: 40px;
       width: 2px;

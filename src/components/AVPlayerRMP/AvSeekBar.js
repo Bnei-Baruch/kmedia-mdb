@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { PLAYER_MODE } from './constants';
 import { playerModeProp } from './propTypes';
 import SliceHandle from './SliceHandle';
+import { formatTime } from '../../helpers/time';
 
 class AvSeekBar extends Component {
 
@@ -205,7 +206,7 @@ class AvSeekBar extends Component {
   }
 
   render() {
-    const { isMobile } = this.props;
+    const { isMobile, sliceStart, sliceEnd } = this.props;
     const { currentTime, duration } = this.props.media;
     const current                   = currentTime / duration;
     // Overriding progress of native react-media-player as he does not works correctly
@@ -244,6 +245,7 @@ class AvSeekBar extends Component {
         {
           isSlice && (
             <SliceHandle
+              seconds={formatTime(sliceStart)}
               position={this.toPercentage(normalizedSliceStart)}
               isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
             />
@@ -252,6 +254,7 @@ class AvSeekBar extends Component {
         {
           isSlice && (
             <SliceHandle
+              seconds={formatTime(sliceEnd === Infinity ? duration : sliceEnd)}
               position={this.toPercentage(normalizedSliceEnd)}
               isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
             />

@@ -7,7 +7,8 @@ export default class SliceHandle extends Component {
     position: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     isEditMode: PropTypes.bool,
     onMove: PropTypes.func,
-    onMoveEnd: PropTypes.func
+    onMoveEnd: PropTypes.func,
+    seconds: PropTypes.string.isRequired
   };
 
   static defaultProps = {
@@ -17,13 +18,24 @@ export default class SliceHandle extends Component {
   };
 
   render() {
-    const { isEditMode, position } = this.props;
+    const { isEditMode, position, seconds } = this.props;
+
+    console.log(seconds);
 
     return (
       <div
         className="player-slice-handle"
         style={{ left: position }}
       >
+        {
+          isEditMode && (
+            <div className="player-slice-handle--time">
+              <span className="player-slice-handle--time--seconds">
+                { seconds }
+              </span>
+            </div>
+          )
+        }
         { isEditMode && <div className="player-slice-handle--knob" /> }
         <div className="player-slice-handle--line" />
       </div>
