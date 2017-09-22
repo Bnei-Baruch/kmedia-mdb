@@ -4,8 +4,12 @@ import { Icon } from 'semantic-ui-react';
 
 class AVFullscreen extends Component {
   static propTypes = {
-    container: PropTypes.instanceOf(Element).isRequired,
+    container: PropTypes.instanceOf(Element),
   };
+
+  static defaultProps = {
+    container: null,
+  }
 
   constructor(props) {
     super(props);
@@ -63,9 +67,11 @@ class AVFullscreen extends Component {
   };
 
   render() {
+    const { container } = this.props;
     const { fullScreen } = this.state;
     return (
       <button
+        disabled={!container}
         type="button"
         className="player-button player-control-fullscreen"
         onClick={this.handleFullscreen}

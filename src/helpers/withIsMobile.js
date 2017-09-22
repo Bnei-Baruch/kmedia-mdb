@@ -12,20 +12,20 @@ export default function withIsMobile(SomeComponent) {
     }
 
     componentDidMount() {
-      this.isMounted = true;
+      this.componentIsMounted = true;
       window.addEventListener('resize', this.handleWindowSizeChange);
       this.handleWindowSizeChange();
     }
 
     componentWillUnmount() {
       window.removeEventListener('resize', this.handleWindowSizeChange);
-      this.isMounted = false;
+      this.componentIsMounted = false;
     }
 
     width = () => document.documentElement.clientWidth;
 
     handleWindowSizeChange = () => {
-      if (this.isMounted && this.state.isMobile !== (this.width() <= MOBILE_WIDTH)) {
+      if (this.componentIsMounted && this.state.isMobile !== (this.width() <= MOBILE_WIDTH)) {
         this.setState({ isMobile: this.width() <= MOBILE_WIDTH });
       }
     };
