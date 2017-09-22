@@ -17,6 +17,7 @@ class AvSeekBar extends Component {
     sliceEnd: PropTypes.number,
     onSliceStartChange: PropTypes.func,
     onSliceEndChange: PropTypes.func,
+    isMobile: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -32,10 +33,10 @@ class AvSeekBar extends Component {
   _isPlayingOnMouseDown = false;
 
   componentDidMount() {
-    document.addEventListener('mousemove', this.handleMove);
-    document.addEventListener('touchmove', this.handleMove);
-    document.addEventListener('mouseup', this.handleEnd);
-    document.addEventListener('touchend', this.handleEnd);
+    document.addEventListener('mousemove', this.handleMove, { passive: false });
+    document.addEventListener('touchmove', this.handleMove, { passive: false });
+    document.addEventListener('mouseup', this.handleEnd, { passive: false });
+    document.addEventListener('touchend', this.handleEnd, { passive: false });
   }
 
   componentWillUnmount() {
@@ -81,6 +82,7 @@ class AvSeekBar extends Component {
       } else {
         this.seek(seekPosition);
       }
+      e.preventDefault();
     }
   };
 
@@ -112,6 +114,7 @@ class AvSeekBar extends Component {
       if (this._isPlayingOnMouseDown) {
         this.props.media.play();
       }
+      e.preventDefault();
     }
   };
 
@@ -201,6 +204,7 @@ class AvSeekBar extends Component {
   }
 
   render() {
+    const { isMobile } = this.props;
     const { currentTime, duration } = this.props.media;
     const current                   = currentTime / duration;
     // Overriding progress of native react-media-player as he does not works correctly
@@ -239,6 +243,7 @@ class AvSeekBar extends Component {
         ref={c => this._element = c}
         className={
           classNames('player-button player-control-seekbar', {
+            'mobile': isMobile,
             'player-control-seekbar-slice': isSlice,
             'player-control-seekbar-slice-edit': isSliceEdit
           }
@@ -247,7 +252,7 @@ class AvSeekBar extends Component {
         onTouchStart={this.handleStart}
       >
         <div className="bar played" style={stylePlayed}>
-          <div className="knob" />
+          <div className={classNames("knob", {"mobile": isMobile})} />
         </div>
         <div className="bar loaded" style={styleLoaded} />
         <div className="bar remaining" style={styleRemaining} />

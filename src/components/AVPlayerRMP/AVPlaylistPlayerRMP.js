@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Media } from 'react-media-player';
+
+import classNames from 'classnames';
+import { MT_AUDIO } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import AVPlayerRMP from './AVPlayerRMP';
 
@@ -43,7 +46,6 @@ class AVPlaylistPlayerRMP extends Component {
   };
 
   onPlay = () => this.setState({ autoPlay: true });
-
   onPause = () => this.setState({ autoPlay: false });
 
   render() {
@@ -59,7 +61,7 @@ class AVPlaylistPlayerRMP extends Component {
     const hasPrev = activePart > 0 && items.slice(0, activePart).some(f => !!f.src);
 
     return (
-      <div className="video_player">
+      <div className={classNames("video_player", {"audio": currentItem.mediaType === MT_AUDIO})}>
         <div className="video_position">
           <Media>
             <AVPlayerRMP
