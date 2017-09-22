@@ -21,6 +21,7 @@ const EventMapInner = withScriptjs(withGoogleMap(props => (
 
 class EventMap extends Component {
   static propTypes = {
+    language: PropTypes.string.isRequired,
     address: PropTypes.string,
     country: PropTypes.string,
     city: PropTypes.string,
@@ -59,11 +60,16 @@ class EventMap extends Component {
               (json.results && json.results.length ? json.results[0].geometry.location : null)));
 
   render() {
+    let { language } = this.props;
     const { loaded, location } = this.state;
     if (loaded && location) {
+      if (language === 'he') {
+        language = 'iw';
+      }
+      console.log(language);
       return (
         <EventMapInner
-          googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+          googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&language=${language}`}
           loadingElement={<div style={{ height: '100%' }} />}
           containerElement={<div style={{ height: '400px' }} />}
           mapElement={<div style={{ height: '100%' }} />}

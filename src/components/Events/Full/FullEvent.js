@@ -54,15 +54,13 @@ class FullEvent extends Component {
   }
 
   render() {
-    const { fullEvent, wip, err, t } = this.props;
+    const { language, fullEvent, wip, err, t } = this.props;
 
     if (err) {
       return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
     }
 
     if (fullEvent) {
-      console.log('fullEvent', fullEvent);
-
       const description = !fullEvent.description ? null : (
         <p>{fullEvent.description}</p>
       );
@@ -90,7 +88,8 @@ class FullEvent extends Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column>
-                <EventMap address={fullEvent.full_address}
+                <EventMap language={language}
+                          address={fullEvent.full_address}
                           city={fullEvent.city}
                           country={fullEvent.country} />
               </Grid.Column>
