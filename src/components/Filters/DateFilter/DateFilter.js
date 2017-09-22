@@ -137,6 +137,7 @@ class DateFilter extends Component {
   componentDidMount() {
     const { datePreset, from, to } = this.state;
     this.showMonth(datePreset, from, to);
+    console.log(this.state);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -302,6 +303,7 @@ class DateFilter extends Component {
                 onDayClick={this.handleDayClick}
                 // eslint-disable-next-line no-return-assign
                 ref={el => this.datePicker = el}
+                dateFormat="DD/MM/YYYY"
               />
             </Grid.Column>
             <Grid.Column width={5}>
