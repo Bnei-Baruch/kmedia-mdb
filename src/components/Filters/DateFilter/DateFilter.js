@@ -212,8 +212,6 @@ class DateFilter extends Component {
       break;
     }
 
-    console.log('dateToShow: ', dateToShow);
-
     this.datePicker.showMonth(dateToShow);
   };
 
