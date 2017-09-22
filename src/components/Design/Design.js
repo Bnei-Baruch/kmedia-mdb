@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import React, { Component } from 'react';
-import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, List, Popup, Table, Card, Image, Input, Search, Label, Container, Embed } from 'semantic-ui-react';
+import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, List, Popup, Table, Card, Image, Input, Search, Label, Container, Embed, Segment } from 'semantic-ui-react';
 const results ={
     "search": {
       "icon": "search",
@@ -39,9 +39,214 @@ class Design extends Component {
 
   render() {
     return (
+      <div>
+        <div className='section-header'>
+          <Container className='padded'>
+            <Grid>
+              <Grid.Row>
+                <Grid.Column computer={10} tablet={12} mobile={16}>
+                  <Header as='h1' color='blue'>
+                    <Header.Content>
+                      Programs
+                      <Header.Subheader>
+                        The daily acceptance rate is delivered by Rabbi Dr. Michael Laitman to millions of viewers around the world, every night between 3-6 clock Israel, and describes the spiritual flow that humanity today.
+                      </Header.Subheader>
+                    </Header.Content>
+                  </Header>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Container>
+        </div>
+        <Divider fitted/>
+        <Menu secondary pointing color="blue" className="index-filters" size="large">
+          <Container className='padded-horizontally'>
+              <Menu.Item header>
+                Filter Programs by:
+              </Menu.Item>
+              <Menu.Item active>
+                Genre/Program
+                <Icon name='dropdown'/>
+              </Menu.Item>
+              <Menu.Item >
+                Topics
+                <Icon name='dropdown'/>
+              </Menu.Item>
+              <Menu.Item > 
+                Date
+                <Icon name='dropdown'/>
+              </Menu.Item>
+            </Container>
+          </Menu>
+        <Container className='padded-horizontally'>
+          <Segment vertical className="tab active" style={{
+            padding: '0'
+          }}>
+            <div className="filter-steps">
+              <div className="filter-steps__column-wrapper">
+                <div className="filter-steps__column">
+                  <Menu vertical color='blue' size='tiny' fluid>
+                    <Menu.Item active>All Programms</Menu.Item>
+                    <Menu.Item>Children</Menu.Item>
+                    <Menu.Item>Talk Show</Menu.Item>
+                    <Menu.Item>Late Night</Menu.Item>
+                  </Menu>
+                </div>
+              </div>
+              <div className="filter-steps__column-wrapper">
+                <div className="filter-steps__column">
+                  <Grid padded>
+                    <Grid.Row>
+                      <Grid.Column width={16}>
+                        <Header size='tiny' color='grey'>Recently Updated</Header>
+                        <Divider/>
+                      </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                      <Grid.Column width={16}>
+                        <Header size='tiny' color='grey'>All Programs</Header>
+                        <Divider/>
+                      </Grid.Column>
+                      <Grid.Column width={4}>
+                        <List>
+                          <List.Item><List.Header>#</List.Header></List.Item>
+                          <List.Item>20 Ideas</List.Item>
+                        </List>
+                      </Grid.Column>
+                      <Grid.Column width={4}>
+                        <List>
+                          <List.Item><List.Header>A</List.Header></List.Item>
+                          <List.Item>A New Life</List.Item>
+                          <List.Item>A New Life. Excerpts</List.Item>
+                          <List.Item>A Point in the Heart</List.Item>
+                          <List.Item>A song from the source</List.Item>
+                          <List.Item>A Song Out of the Sleeve</List.Item>
+                          <List.Item>A Spiritual Story with Eran Kurtz</List.Item>
+                          <List.Item>A Taste of Light</List.Item>
+                          <List.Item>All together</List.Item>
+                          <List.Item>Among Friends</List.Item>
+                          <List.Item>Ask the Kabbalist</List.Item>
+                          <List.Item>Ask the kabbalist</List.Item>
+                          <List.Item>At six on 66</List.Item>
+                          <List.Item>Audio Program</List.Item>
+                        </List>
+                      </Grid.Column>
+                      <Grid.Column width={4}>
+
+                        <List>
+                          <List.Item><List.Header>B</List.Header></List.Item>
+                          <List.Item>Babylon Yesterday and Today</List.Item>
+                          <List.Item>Backstage with</List.Item>
+                          <List.Item>Basics</List.Item>
+                          <List.Item>Behind the Words</List.Item>
+                          <List.Item>Between Parents and Children</List.Item>
+                          <List.Item>Between Us</List.Item>
+                          <List.Item>Between Words</List.Item>
+                          <List.Item>Book about Israel</List.Item>
+                          <List.Item>Business and the new reality</List.Item>
+                          <List.Item>Butterfly Effect</List.Item>
+                        </List>
+                      </Grid.Column>
+                      <Grid.Column width={4}>
+                        <List>
+                          <List.Item><List.Header>C</List.Header></List.Item>
+                          <List.Item>Child's Play</List.Item>
+                          <List.Item>Children's World</List.Item>
+                          <List.Item>Closeup</List.Item>
+                          <List.Item>Company</List.Item>
+                          <List.Item>Connecting for Good</List.Item>
+                          <List.Item>Conversations with Kabbalist</List.Item>
+                          <List.Item>Crossroads</List.Item>
+                        </List>
+                      </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                      <Grid.Column width={4}>
+                        <List>
+                          <List.Item><List.Header>E</List.Header></List.Item>
+                          <List.Item>Education Issues</List.Item>
+                          <List.Item>Essentials of education</List.Item>
+                          <List.Item>Experts</List.Item>
+                        </List>                      
+                      </Grid.Column>
+                      <Grid.Column width={4}>
+                        <List>
+                          <List.Item><List.Header>F</List.Header></List.Item>
+                          <List.Item>Films</List.Item>
+                        </List>                      
+                      </Grid.Column>
+                      <Grid.Column width={4}>
+                        <List>
+                          <List.Item><List.Header>G</List.Header></List.Item>
+                          <List.Item>Getting ready for the congress</List.Item>
+                          <List.Item>Global Village</List.Item>
+                          <List.Item>Good environment</List.Item>
+                          <List.Item>Good time</List.Item>
+                          <List.Item>Great Kabbalists</List.Item>
+                        </List>                      
+                      </Grid.Column>
+                      <Grid.Column width={4}>
+                        <List>
+                          <List.Item><List.Header>H</List.Header></List.Item>
+                          <List.Item>Hasidism</List.Item>
+                          <List.Item>Hot Topic</List.Item>
+                          <List.Item>HR Secrets Revealed</List.Item>
+                        </List>                      
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
+                  
+                  
+                </div>
+              </div>
+            </div>
+          </Segment>
+          <Segment vertical clearing>
+            <Button primary content='Apply' floated="right" />
+            <Button content='Cancel' floated="right" />
+          </Segment>
+        </Container>
       <Grid.Column width={16}>
 
         <Header size='large' color='pink' inverted>Event Collection</Header>
+        <Divider/>
+        <Container className='padded'>
+          <Menu>
+              <Menu.Item header>
+                Filter Programs by:
+              </Menu.Item>
+              <Menu.Item fitted='vertically' active>
+                  <div>
+                    <small>
+                    Genre/Program
+                    </small>
+                    <br/>
+                    All
+                  </div>
+                  <Icon name='dropdown'/>
+              </Menu.Item>
+              <Menu.Item fitted='vertically'>
+                  <div>
+                    <small>
+                    Topics
+                    </small>
+                    <br/>
+                    All
+                  </div>
+                  <Icon name='dropdown'/>
+              </Menu.Item>
+              <Menu.Item fitted='vertically'>
+                  <div>
+                    <small>
+                    Date
+                    </small>
+                    <br/>
+                    16 Sep 2017 - 22 Sep 2017
+                  </div>
+                  <Icon name='dropdown'/>
+              </Menu.Item>
+          </Menu>
+        </Container>
         <Divider/>
         <Grid>
           <Grid.Row>
@@ -374,6 +579,7 @@ class Design extends Component {
           </Grid.Row>
         </Grid>
       </Grid.Column>
+      </div>
     );
   }
 }
