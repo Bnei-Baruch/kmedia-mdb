@@ -216,23 +216,17 @@ class AvSeekBar extends Component {
     const progress    = (b && (b.end / duration)) || current;
 
     const isSlice = playerMode === PLAYER_MODE.SLICE_EDIT || playerMode === PLAYER_MODE.SLICE_VIEW;
-    const isSliceEdit = playerMode === PLAYER_MODE.SLICE_EDIT;
     const normalizedSliceStart = this.getNormalizedSliceStart(duration);
     const normalizedSliceEnd = this.getNormalizedSliceEnd(duration);
 
     const stylePlayed = {
-      width: this.toPercentage(current - normalizedSliceStart),
-      left: isSlice ? this.toPercentage(normalizedSliceStart) : 0
+      width: this.toPercentage(Math.max(0, current - (playerMode === PLAYER_MODE.SLICE_EDIT ? normalizedSliceStart : 0))),
+      left: this.toPercentage(playerMode === PLAYER_MODE.SLICE_EDIT ? normalizedSliceStart : 0)
     };
 
     const styleLoaded = {
-      width: this.toPercentage(isSlice ? (Math.min(progress, normalizedSliceEnd) - normalizedSliceStart) : progress),
-      left: isSlice ? this.toPercentage(normalizedSliceStart) : 0
-    };
-
-    const styleRemaining = {
-      width: this.toPercentage(1 - progress),
-      left: this.toPercentage(progress)
+      width: progress,
+      left: 0
     };
 
     return (
@@ -263,7 +257,7 @@ class AvSeekBar extends Component {
           )
         }
         <div className={
-          classNames('player-button player-control-seekbar', {
+          classNames('player-control-seekbar', {
             mobile: isMobile
           }
         )}>
@@ -271,7 +265,6 @@ class AvSeekBar extends Component {
             <div className={classNames("knob", {"mobile": isMobile})} />
           </div>
           <div className="bar loaded" style={styleLoaded} />
-          <div className="bar remaining" style={styleRemaining} />
 
               <div className="bar slice" >
                 <div className="slice-start" />

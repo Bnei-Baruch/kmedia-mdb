@@ -118,11 +118,7 @@
   top: 50%;
   transform: translateY(-50%);
   height: 4px;
-  &.mobile {
-    height: 10px;
-  }
-  padding-top: 5px;
-  padding-bottom: 5px;
+  background-color: rgb(118, 118, 118);
 
   .bar {
     position: absolute;
@@ -134,11 +130,6 @@
     margin-right: 0;
   }
 
-  .remaining {
-    background-color: rgb(118, 118, 118);
-    z-index: 1;
-  }
-
   .loaded {
     background-color: rgb(214, 214, 214);
     z-index: 2;
@@ -148,6 +139,10 @@
     left: 0;
     background-color: rgb(66, 133, 244);
     z-index: 10;
+  }
+
+  &.mobile {
+    height: 10px;
   }
 
 }
