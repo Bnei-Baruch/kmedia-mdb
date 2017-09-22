@@ -4,7 +4,7 @@ import { Icon } from 'semantic-ui-react';
 
 class AVFullscreen extends Component {
   static propTypes = {
-    container: PropTypes.instanceOf(Element),
+    container: PropTypes.instanceOf(Element).isRequired,
   };
 
   constructor(props) {
@@ -27,7 +27,7 @@ class AVFullscreen extends Component {
     this.setState({ fullScreen: this.isFullScreenElement() });
   }
 
-  launchIntoFullScreen() {
+  launchIntoFullScreen = () => {
     const { container } = this.props;
     if (container.requestFullscreen) {
       container.requestFullscreen();
@@ -40,7 +40,7 @@ class AVFullscreen extends Component {
     }
   }
 
-  exitFullScreen() {
+  exitFullScreen = () => {
     if (document.exitFullScreen) {
       document.exitFullScreen();
     } else if (document.mozCancelFullScreen) {
@@ -50,10 +50,9 @@ class AVFullscreen extends Component {
     }
   }
 
-  isFullScreenElement() {
-    return document.fullscreenElement || document.mozFullScreenElement ||
+  isFullScreenElement = () =>
+      document.fullscreenElement || document.mozFullScreenElement ||
       document.webkitFullscreenElement || document.msFullscreenElement;
-  }
 
   handleFullscreen = () => {
     if (this.isFullScreenElement()) {

@@ -6,7 +6,7 @@ const AVAudioVideo = (props) => {
   const { isAudio, setAudio, isVideo, setVideo, t } = props;
 
   return (
-    <div className={classNames("player-button player-control-audio-video")}>
+    <div className={classNames('player-button player-control-audio-videor')}>
       <div
         style={{ textDecoration: isAudio ? 'underline' : 'none' }}
         role="button"

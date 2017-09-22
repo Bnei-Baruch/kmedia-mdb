@@ -68,6 +68,10 @@ class FullVideoBox extends Component {
     this.setState({ playlist }, () => cb && cb(playlist));
   };
 
+  setActivePartInQuery = (activePart) => {
+    updateQuery(this.props.history, query => ({ ...query, ap: activePart }));
+  };
+
   handleChangeLanguage = (e, language) => {
     const { playlist } = this.state;
     const { activePart, collection } = this.props;
@@ -93,19 +97,14 @@ class FullVideoBox extends Component {
   handlePartClick = (e, data) =>
     this.setActivePartInQuery(parseInt(data.name, 10));
 
-  setActivePartInQuery = (activePart) => {
-    updateQuery(this.props.history, query => ({ ...query, ap: activePart }));
-  };
-
   render() {
-    const { t, activePart, collection, language, PlayListComponent } = this.props;
+    const { t, activePart, collection, PlayListComponent } = this.props;
     const { playlist } = this.state;
 
     return (
       <Grid.Row className="video_box">
         <Grid.Column computer={10} mobile={16}>
           <AVPlaylistPlayerRMP
-            language={language}
             playlist={playlist}
             activePart={activePart}
             onActivePartChange={this.setActivePartInQuery}

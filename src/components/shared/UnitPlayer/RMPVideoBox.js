@@ -5,7 +5,7 @@ import { Grid } from 'semantic-ui-react';
 import { Media } from 'react-media-player';
 
 import classNames from 'classnames';
-import withIsMobile from '../../../helpers/withIsMobile'
+import withIsMobile from '../../../helpers/withIsMobile';
 import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
 import playerHelper from '../../../helpers/player';
 import * as shapes from '../../shapes';
@@ -58,7 +58,7 @@ class RMPVideoBox extends Component {
     const { history } = this.props;
     const { playableItem } = this.state;
 
-    if (playableItem.mediaType === MT_VIDEO && playableItem.availableMediaTypes.includes(MT_AUDIO) ) {
+    if (playableItem.mediaType === MT_VIDEO && playableItem.availableMediaTypes.includes(MT_AUDIO)) {
       playerHelper.setMediaTypeInQuery(history, MT_AUDIO);
     } else if (playableItem.mediaType === MT_AUDIO && playableItem.availableMediaTypes.includes(MT_VIDEO)) {
       playerHelper.setMediaTypeInQuery(history, MT_VIDEO);
@@ -85,7 +85,7 @@ class RMPVideoBox extends Component {
     return (
       <Grid.Row className="video_box">
         <Grid.Column mobile={16} tablet={12} computer={10}>
-          <div className={classNames("video_player", {"audio": playableItem.mediaType === MT_AUDIO})}>
+          <div className={classNames('video_player', { audio: playableItem.mediaType === MT_AUDIO })}>
             <div className="video_position">
               <Media>
                 <AVPlayer

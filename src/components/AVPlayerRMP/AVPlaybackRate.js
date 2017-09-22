@@ -27,7 +27,7 @@ export default class AVPlaybackRate extends Component {
       .map(x => ({ value: x, text: x }));
 
     return (
-      <div style={{marginLeft: '5px', marginRight: '5px'}}>
+      <div style={{ marginLeft: '5px', marginRight: '5px' }}>
         <Dropdown
           floating
           scrolling
