@@ -18,6 +18,7 @@ function* fetchEventsList(action) {
       yield put(mdbActions.receiveContentUnits(resp.content_units));
     }
 
+
     yield put(actions.fetchListSuccess(resp));
   } catch (err) {
     yield put(actions.fetchListFailure(err));

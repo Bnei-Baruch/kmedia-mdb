@@ -9,6 +9,7 @@ import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions, selectors as eventSelectors } from '../../../redux/modules/events';
 import * as shapes from '../../shapes';
 import EventsList from './EventsList';
+import EventsFilters from './EventsFilters';
 import withPagination from '../../pagination/withPagination';
 
 const allEventTypes = [CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY];
@@ -45,12 +46,18 @@ class EventsContainer extends withPagination {
     const { items } = this.props;
 
     return (
-      <Grid.Column width={16}>
-        <withPagination.ResultsPageHeader {...this.props} />
-        <Divider />
-        <EventsList items={items} />
-        <withPagination.Pagination {...this.props} />
-      </Grid.Column>
+      <div>
+        <EventsFilters
+          onChange={() => withPagination.handlePageChange(this.props, 1)}
+          onHydrated={() => withPagination.handlePageChange(this.props)}
+        />
+        <Grid.Column width={16}>
+          <withPagination.ResultsPageHeader {...this.props} />
+          <Divider />
+          <EventsList items={items} />
+          <withPagination.Pagination {...this.props} />
+        </Grid.Column>
+      </div>
     );
   }
 }
