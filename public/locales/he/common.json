@@ -24,7 +24,7 @@
     "lessons":        {
       "by": "סנן שיעורים לפי:"
     },
-    "programs":        {
+    "programs":       {
       "by": "סנן תוכניות לפי:"
     },
     "date-filter":    {
@@ -105,6 +105,40 @@
       }
     }
   },
+  "programs":  {
+    "full": {
+      "episodes": "Episode(s)",
+      "ccuName": "Content Unit Name",
+      "name": "Program Name",
+      "duration": "Duration"
+    },
+    "part": {
+      "info":           {
+        "tags":          "Tags",
+        "sources":       "Sources",
+        "related-event": "Related to Event"
+      },
+      "materials":      {
+        "summary":       "Summary",
+        "transcription": "Transcription"
+      },
+      "downloads":      {
+        "title":         "Media Downloads",
+        "derived-title": "Derived Media",
+        "copy-link":     "Copy Link",
+        "type-labels":   {
+          "video": "Program Video",
+          "audio": "Program Audio",
+          "text":  "Transcription Text",
+          "image": "Sketches"
+        }
+      },
+      "relevant-parts": {
+        "title":      "Other parts from the same program",
+        "item-title": "Part {{name}}"
+      }
+    }
+  },
   "constants": {
     "languages":     {
       "he": "עברית",
@@ -144,7 +178,7 @@
       "SPECIAL_LESSON":        "שיעור מיוחד",
       "FRIENDS_GATHERINGS":    "",
       "CONGRESS":              "",
-      "VIDEO_PROGRAM":         "",
+      "VIDEO_PROGRAM":         "תוכנית וידאו",
       "LECTURE_SERIES":        "",
       "MEALS":                 "",
       "HOLIDAY":               "",

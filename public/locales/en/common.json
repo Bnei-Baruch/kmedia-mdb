@@ -25,7 +25,7 @@
     "lessons":        {
       "by": "Filter Lessons by:"
     },
-    "programs":        {
+    "programs":       {
       "by": "Filter Programs by:"
     },
     "date-filter":    {
@@ -107,6 +107,12 @@
     }
   },
   "programs":  {
+    "full": {
+      "episodes": "Episode(s)",
+      "ccuName": "Content Unit Name",
+      "name": "Program Name",
+      "duration": "Duration"
+    },
     "part": {
       "info":           {
         "tags":          "Tags",
@@ -173,7 +179,7 @@
       "SPECIAL_LESSON":        "Special Lesson",
       "FRIENDS_GATHERINGS":    "",
       "CONGRESS":              "",
-      "VIDEO_PROGRAM":         "",
+      "VIDEO_PROGRAM":         "Video Program",
       "LECTURE_SERIES":        "",
       "MEALS":                 "",
       "HOLIDAY":               "",
