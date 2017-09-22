@@ -34,19 +34,77 @@
 }
 
 .player-seekbar-wrapper {
+  position: relative;
+  height: 100%;
   flex: 1 0 auto;
+}
+
+.player-control-seekbar-container {
+  position: relative;
+  height: 100%;
+  margin-left: 10px;
+  margin-right: 10px;
+
+  .player-slice-handle {
+    position: absolute;
+    bottom: 0;
+
+    &--knob {
+      position: absolute;
+      bottom: 45px;
+      background: #0066ff;
+      width: 26px;
+      height: 25px;
+      transform: translateX(-50%);
+      margin-bottom: 8px;
+      border-top-left-radius: 20%;
+      border-top-right-radius: 20%;
+
+      &:after {
+        content: "";
+        position: absolute;
+
+        top: 100%;
+        width: 0;
+        height: 0;
+        border-left: 13px solid transparent;
+        border-right: 13px solid transparent;
+        border-top: 8px solid #0066ff;
+      }
+
+      &:before {
+        content: "| | |";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        font-weight: bold;
+        text-align: center;
+        font-size: 12px;
+      }
+    }
+
+    &--line {
+      position: absolute;
+      bottom: 0;
+      background: #ffffff;
+      height: 40px;
+      width: 2px;
+      transform: translateX(-50%);
+    }
+  }
 }
 
 .player-control-seekbar {
   position: relative;
+  top: 50%;
+  transform: translateY(-50%);
   height: 4px;
   &.mobile {
     height: 10px;
   }
   padding-top: 5px;
   padding-bottom: 5px;
-  margin-left: 10px;
-  margin-right: 10px;
 
   .bar {
     position: absolute;

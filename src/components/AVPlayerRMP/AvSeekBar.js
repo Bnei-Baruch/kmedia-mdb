@@ -6,6 +6,7 @@ import { withMediaProps } from 'react-media-player';
 import classNames from 'classnames';
 import { PLAYER_MODE } from './constants';
 import { playerModeProp } from './propTypes';
+import SliceHandle from './SliceHandle';
 
 class AvSeekBar extends Component {
 
@@ -233,37 +234,47 @@ class AvSeekBar extends Component {
       left: this.toPercentage(progress)
     };
 
-    const styleSlice = {
-      left: this.toPercentage(normalizedSliceStart),
-      width: this.toPercentage(normalizedSliceEnd - normalizedSliceStart)
-    };
-
     return (
       <div
         ref={c => this._element = c}
-        className={
+        className="player-control-seekbar-container"
+        onMouseDown={this.handleStart}
+        onTouchStart={this.handleStart}
+      >
+        {
+          isSlice && (
+            <SliceHandle
+              position={this.toPercentage(normalizedSliceStart)}
+              isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
+            />
+          )
+        }
+        {
+          isSlice && (
+            <SliceHandle
+              position={this.toPercentage(normalizedSliceEnd)}
+              isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
+            />
+          )
+        }
+        <div className={
           classNames('player-button player-control-seekbar', {
             'mobile': isMobile,
             'player-control-seekbar-slice': isSlice,
             'player-control-seekbar-slice-edit': isSliceEdit
           }
-        )}
-        onMouseDown={this.handleStart}
-        onTouchStart={this.handleStart}
-      >
-        <div className="bar played" style={stylePlayed}>
-          <div className={classNames("knob", {"mobile": isMobile})} />
+        )}>
+          <div className="bar played" style={stylePlayed}>
+            <div className={classNames("knob", {"mobile": isMobile})} />
+          </div>
+          <div className="bar loaded" style={styleLoaded} />
+          <div className="bar remaining" style={styleRemaining} />
+
+              <div className="bar slice" >
+                <div className="slice-start" />
+                <div className="slice-end" />
+              </div>
         </div>
-        <div className="bar loaded" style={styleLoaded} />
-        <div className="bar remaining" style={styleRemaining} />
-        {
-          isSlice && (
-            <div className="bar slice" style={styleSlice}>
-              <div className="slice-start" />
-              <div className="slice-end" />
-            </div>
-          )
-        }
       </div>
     );
   }
