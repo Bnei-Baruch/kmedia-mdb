@@ -101,7 +101,7 @@ class FullVideoBox extends Component {
 
     return (
       <Grid.Row className="video_box">
-        <Grid.Column width={10}>
+        <Grid.Column computer={10} mobile={16}>
           <AVPlaylistPlayerRMP
             language={language}
             playlist={playlist}
@@ -112,7 +112,7 @@ class FullVideoBox extends Component {
             t={t}
           />
         </Grid.Column>
-        <Grid.Column className="player_panel" width={6}>
+        <Grid.Column className="player_panel" computer={6} mobile={16}>
           <PlayListComponent
             collection={collection}
             activePart={activePart}
