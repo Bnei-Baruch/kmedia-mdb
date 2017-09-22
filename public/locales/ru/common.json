@@ -110,7 +110,8 @@
       "episodes": "эпизод(ов)",
       "ccuName": "Content Unit Name",
       "name": "Название программы",
-      "duration": "Продолжительность"
+      "duration": "Продолжительность",
+      "film_date": "Дата съёмок"
     },
     "part": {
       "info":           {

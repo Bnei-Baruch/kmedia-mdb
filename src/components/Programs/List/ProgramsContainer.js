@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Divider, Grid } from 'semantic-ui-react';
+import { Container, Divider, Grid, Header } from 'semantic-ui-react';
 
 import { CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
 import { actions, selectors as programSelectors } from '../../../redux/modules/programs';
@@ -50,16 +50,40 @@ class ProgramsContainer extends withPagination {
     const { items } = this.props;
 
     return (
-      <Grid.Column width={16}>
+      <div>
+        <div className="section-header">
+          <Container className="padded">
+            <Grid>
+              <Grid.Row>
+                <Grid.Column computer={10} tablet={12} mobile={16}>
+                  <Header as="h1" color="blue">
+                    <Header.Content>
+                      TV & Video Programs
+                      <Header.Subheader>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis dolorum eius facilis laborum quam quod saepe totam unde voluptates! Distinctio eveniet ex harum suscipit. Debitis pariatur possimus ratione sint veniam!
+                      </Header.Subheader>
+                    </Header.Content>
+                  </Header>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Container>
+        </div>
+        <Divider fitted />
         <ProgramsFilters
           onChange={() => withPagination.handlePageChange(this.props, 1)}
           onHydrated={() => withPagination.handlePageChange(this.props)}
         />
-        <withPagination.ResultsPageHeader {...this.props} />
-        <Divider />
-        <ProgramsList items={items} />
-        <withPagination.Pagination {...this.props} />
-      </Grid.Column>
+        <Container className="padded">
+          <withPagination.ResultsPageHeader {...this.props} />
+
+          <ProgramsList items={items} />
+        </Container>
+        <Divider fitted />
+        <Container className="padded" textAlign="center">
+          <withPagination.Pagination {...this.props} />
+        </Container>
+      </div>
     );
   }
 }

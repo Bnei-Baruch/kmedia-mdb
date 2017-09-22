@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
-import { Grid, Header, Image, Menu, Table } from 'semantic-ui-react';
+import { Container, Grid, Header, Image, Menu, Table } from 'semantic-ui-react';
 
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
@@ -13,7 +13,6 @@ import * as shapes from '../../shapes';
 
 class FullProgram extends Component {
   static propTypes = {
-    language: PropTypes.string.isRequired,
     fullProgram: shapes.ProgramCollection,
     wip: shapes.WIP,
     err: shapes.Error,
@@ -30,20 +29,45 @@ class FullProgram extends Component {
     activePart: 0,
   };
 
-  getName = (fullEvent, cu) => {
-    const { name, duration } = cu;
-    const ccuName            = fullEvent.ccuNames[cu.id];
-    const durationDisplay    = moment.duration(duration, 'seconds').format('hh:mm:ss');
-    return { name, ccuName, duration: durationDisplay };
-  };
+  getName = (fullEvent, cu) => (
+    fullEvent.ccuNames[cu.id]
+  );
+
+  header = (fullProgram, t) => (
+    <div className="section-header">
+      <Container className="padded">
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={3}>
+              <Image fluid shape="rounded" src="http://www.kab.co.il/images/attachments/91/276191_medium.jpg" />
+            </Grid.Column>
+            <Grid.Column width={8}>
+              <Header as="h1">
+                <Header.Content>
+                  {fullProgram.name}
+                  <Header.Subheader>
+                    {fullProgram.content_units.length}&nbsp;{t('programs.full.episodes')}
+                  </Header.Subheader>
+                </Header.Content>
+              </Header>
+              <p>This is description. I have no idea where to take it from</p>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Container>
+    </div>
+  );
 
   tableRow = (fullProgram, cu) => {
-    const { ccuName, name, duration } = this.getName(fullProgram, cu);
+    // const { ccuName } = this.getName(fullProgram, cu);
+    const duration  = moment.duration(cu.duration, 'seconds').format('hh:mm:ss');
+    const filmDate = moment(cu.film_date).format('L');
 
     return (
       <Table.Row key={cu.id}>
-        <Table.Cell><Menu.Item as={NavLink} to={`/programs/chapter/${cu.id}`} content={ccuName} /></Table.Cell>
-        <Table.Cell><Menu.Item as={NavLink} to={`/programs/chapter/${cu.id}`}>{name}</Menu.Item></Table.Cell>
+        <Table.Cell><Menu.Item as={NavLink} to={`/programs/chapter/${cu.id}`}>{filmDate}</Menu.Item></Table.Cell>
+        {/* <Table.Cell><Menu.Item as={NavLink} to={`/programs/chapter/${cu.id}`} content={ccuName} /></Table.Cell> */}
+        <Table.Cell><Menu.Item as={NavLink} to={`/programs/chapter/${cu.id}`}>{cu.name}</Menu.Item></Table.Cell>
         <Table.Cell><Menu.Item as={NavLink} to={`/programs/chapter/${cu.id}`}>{duration}</Menu.Item></Table.Cell>
       </Table.Row>
     );
@@ -54,7 +78,8 @@ class FullProgram extends Component {
       <Table basic="very" compact="very" celled>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>{t('programs.full.ccuName')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('programs.full.film_date')}</Table.HeaderCell>
+            {/* <Table.HeaderCell>{t('programs.full.ccuName')}</Table.HeaderCell> */}
             <Table.HeaderCell>{t('programs.full.name')}</Table.HeaderCell>
             <Table.HeaderCell>{t('programs.full.duration')}</Table.HeaderCell>
           </Table.Row>
@@ -83,29 +108,12 @@ class FullProgram extends Component {
 
     if (fullProgram && fullProgram.content_units) {
       return (
-        <Grid>
-          <Grid.Row>
-            <Grid.Column width={3}>
-              <Image fluid shape="rounded" src="http://www.kab.co.il/images/attachments/91/276191_medium.jpg" />
-            </Grid.Column>
-            <Grid.Column width={8}>
-              <Header as="h1">
-                <Header.Content>
-                  {fullProgram.name}
-                  <Header.Subheader>
-                    {fullProgram.content_units.length}&nbsp;{t('programs.full.episodes')}
-                  </Header.Subheader>
-                </Header.Content>
-              </Header>
-              <p>This is description. I have no idea where to take it from</p>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column>
-              {this.table(fullProgram, t)}
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+        <div>
+          {this.header(fullProgram, t)}
+          <Container className="padded">
+            {this.table(fullProgram, t)}
+          </Container>
+        </div>
       );
     }
 

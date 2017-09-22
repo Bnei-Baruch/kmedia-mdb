@@ -110,7 +110,8 @@
       "episodes": "Episode(s)",
       "ccuName": "Content Unit Name",
       "name": "Program Name",
-      "duration": "Duration"
+      "duration": "Duration",
+      "film_date": "Film Date"
     },
     "part": {
       "info":           {
