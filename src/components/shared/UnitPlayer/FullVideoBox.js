@@ -101,39 +101,28 @@ class FullVideoBox extends Component {
     const { t, activePart, collection, language, PlayListComponent } = this.props;
     const { playlist } = this.state;
 
-
-    const player = (
-      <AVPlaylistPlayerRMP
-        language={language}
-        playlist={playlist}
-        activePart={activePart}
-        onActivePartChange={this.setActivePartInQuery}
-        onLanguageChange={this.handleChangeLanguage}
-        onSwitchAV={this.handleSwitchAV}
-        t={t}
-      />
-    );
-
-    const playlistComponent = (
-      <PlayListComponent
-        collection={collection}
-        activePart={activePart}
-        t={t}
-        onItemClick={this.handlePartClick}
-      />
-    );
-
     return (
-      <Grid centered>
-        <Grid.Row className="video_box">
-          <Grid.Column mobile={16} tablet={9} computer={9}>
-            {player}
-          </Grid.Column>
-          <Grid.Column className="player_panel" mobile={16} tablet={5} computer={5}>
-            {playlistComponent}
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+      <Grid.Row className="video_box">
+        <Grid.Column computer={10} mobile={16}>
+          <AVPlaylistPlayerRMP
+            language={language}
+            playlist={playlist}
+            activePart={activePart}
+            onActivePartChange={this.setActivePartInQuery}
+            onLanguageChange={this.handleChangeLanguage}
+            onSwitchAV={this.handleSwitchAV}
+            t={t}
+          />
+        </Grid.Column>
+        <Grid.Column className="player_panel" computer={6} mobile={16}>
+          <PlayListComponent
+            collection={collection}
+            activePart={activePart}
+            t={t}
+            onItemClick={this.handlePartClick}
+          />
+        </Grid.Column>
+      </Grid.Row>
     );
   }
 }

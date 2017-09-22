@@ -71,14 +71,14 @@ class FullLesson extends Component {
             </Container>
           </div>
           <Container>
-            <Grid>
-              <Grid.Row>
-                <Grid.Column width={10}>
+            <Grid padded reversed='tablet' >
+              <Grid.Row reversed='computer'>
+                <Grid.Column computer={6} tablet={4} mobile={16}>
+                  <MediaDownloads lesson={lesson} language={language} t={t} />
+                </Grid.Column>
+                <Grid.Column computer={10} tablet={12} mobile={16}>
                   <Info lesson={lesson} t={t} />
                   <Materials lesson={lesson} t={t} />
-                </Grid.Column>
-                <Grid.Column width={6}>
-                  <MediaDownloads lesson={lesson} language={language} t={t} />
                 </Grid.Column>
               </Grid.Row>
             </Grid>

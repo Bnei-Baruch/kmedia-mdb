@@ -202,7 +202,7 @@ class MediaDownloads extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Table basic="very" compact="very">
+        <Table basic="very" compact="very" unstackable>
           <Table.Body>
             {rows}
           </Table.Body>
