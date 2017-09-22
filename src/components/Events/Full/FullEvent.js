@@ -90,7 +90,9 @@ class FullEvent extends Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column>
-                <EventMap address={fullEvent.full_address} />
+                <EventMap address={fullEvent.full_address}
+                          city={fullEvent.city}
+                          country={fullEvent.country} />
               </Grid.Column>
             </Grid.Row>
           </Grid>

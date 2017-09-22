@@ -6,9 +6,9 @@ import {
   withGoogleMap,
   GoogleMap,
   Marker,
-} from "react-google-maps";
+} from 'react-google-maps';
 
-const EventMapInner = withScriptjs(withGoogleMap((props) =>
+const EventMapInner = withScriptjs(withGoogleMap(props => (
   <GoogleMap
     defaultZoom={10}
     defaultCenter={{ lat: props.location.lat, lng: props.location.lng }}
@@ -17,11 +17,19 @@ const EventMapInner = withScriptjs(withGoogleMap((props) =>
       position={{ lat: props.location.lat, lng: props.location.lng }}
     />
   </GoogleMap>
-));
+)));
 
 class EventMap extends Component {
   static propTypes = {
-    address: PropTypes.string.isRequired,
+    address: PropTypes.string,
+    country: PropTypes.string,
+    city: PropTypes.string,
+  };
+
+  static defaultProps = {
+    address: '',
+    country: '',
+    city: '',
   };
 
   constructor(props) {
@@ -33,19 +41,25 @@ class EventMap extends Component {
   }
 
   componentDidMount() {
-    // zlFetch does not work well here.
-    fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + this.props.address).then(data => {
-      data.json().then(json =>{
-        const location = json.results && json.results.length ? json.results[0].geometry.location : null;
-        console.log(json, location);
-        this.setState({ loaded: true, location })
-      });
-    }).catch(error => console.log(error));
+    this.fetchLocation(this.props.address).then((location) => {
+      if (!location) {
+        this.fetchLocation(`${this.props.country}, ${this.props.city}`).then((altLocation) => {
+          this.setState({ loaded: true, location: altLocation });
+        });
+      } else {
+        this.setState({ loaded: true, location });
+      }
+    });
   }
+
+  // Fix: zlFetch does not work well here.
+  fetchLocation = address =>
+      fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}`).then(data =>
+          data.json().then(json =>
+              (json.results && json.results.length ? json.results[0].geometry.location : null)));
 
   render() {
     const { loaded, location } = this.state;
-    console.log('loaded, location:', loaded, location);
     if (loaded && location) {
       return (
         <EventMapInner
@@ -57,9 +71,8 @@ class EventMap extends Component {
           {...this.props}
         />
       );
-    } else {
-      return (<div style={{ height: '100%' }} />);
     }
+    return (<div style={{ height: '100%' }} />);
   }
 }
 

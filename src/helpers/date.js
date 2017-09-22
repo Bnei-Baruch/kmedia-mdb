@@ -12,8 +12,7 @@ export function fromToLocalized(from, to) {
     return from.format('DD MMMM') + SEPARATOR + toStr;
   } else if (from.date() !== to.date()) {
     return from.format('DD') + SEPARATOR + toStr;
-  } else {
-    return toStr;
   }
+  return toStr;
 }
 
