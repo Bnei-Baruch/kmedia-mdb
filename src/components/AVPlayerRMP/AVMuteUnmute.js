@@ -23,7 +23,7 @@ class AVMuteUnmute extends Component {
 
     this.element = null;
     this.state   = {
-      volumeHover: 0,
+      volumeHover: false,
       wasMouseDown: false,
     };
   }
@@ -39,20 +39,20 @@ class AVMuteUnmute extends Component {
     this.props.media.muteUnmute();
   };
 
-  handleMouseEnter = () => {
-    this.setState({ volumeHover: 1 });
+  handleMouseEnter = (e) => {
+    this.setState({ volumeHover: true });
   };
 
-  handleMouseLeave = () => {
-    this.setState({ volumeHover: 0 });
+  handleMouseLeave = (e) => {
+    this.setState({ volumeHover: false });
   };
 
   // Handle volume change on bar
   componentDidMount() {
-    document.addEventListener('mousemove', this.handleMove);
-    document.addEventListener('touchmove', this.handleMove);
-    document.addEventListener('mouseup', this.handleEnd);
-    document.addEventListener('touchend', this.handleEnd);
+    document.addEventListener('mousemove', this.handleMove, { passive: false });
+    document.addEventListener('touchmove', this.handleMove, { passive: false });
+    document.addEventListener('mouseup', this.handleEnd, { passive: false });
+    document.addEventListener('touchend', this.handleEnd, { passive: false });
   }
 
   componentWillUnmount() {
@@ -71,16 +71,18 @@ class AVMuteUnmute extends Component {
       // Resolve clientY from mouse or touch event.
       const clientY = e.touches ? e.touches[e.touches.length - 1].clientY : e.clientY;
       this.setVolume(clientY);
+      e.preventDefault();
     }
   };
 
   handleEnd = (e) => {
     if (this.state.wasMouseDown) {
-      this.setState({ wasMouseDown: false });
+      this.setState({ wasMouseDown: false, volumeHover: false });
       // Seek on desktop on mouse up. On mobile Move is called so no need to setVolume here.
       if (e.clientY) {
         this.setVolume(e.clientY);
       }
+      e.preventDefault();
     }
   };
 

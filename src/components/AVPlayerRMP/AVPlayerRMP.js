@@ -6,6 +6,9 @@ import { Player, withMediaProps } from 'react-media-player';
 import classNames from 'classnames';
 import { Icon } from 'semantic-ui-react';
 
+import { AutoSizer } from 'react-virtualized';
+
+import withIsMobile from '../../helpers/withIsMobile';
 import * as shapes from '../shapes';
 import { parse, stringify } from '../../helpers/url';
 import { MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
@@ -33,6 +36,7 @@ class AVPlayerRMP extends PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
     media: PropTypes.object.isRequired,
+    isMobile: PropTypes.bool.isRequired,
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -74,6 +78,7 @@ class AVPlayerRMP extends PureComponent {
   };
 
   state = {
+    isTopSeekbar: false,
     controlsVisible: true,
     error: false,
     playbackRate: '1x', // this is used only to rerender the component. actual value is saved on the player's instance
@@ -101,6 +106,13 @@ class AVPlayerRMP extends PureComponent {
   componentDidMount() {
     // By default hide controls after a while if player playing.
     this.hideControlsTimeout();
+  }
+
+  componentWillUnmount() {
+    if (this.autohideTimeoutId) {
+      clearTimeout(this.autohideTimeoutId);
+      this.autohideTimeoutId = null;
+    }
   }
 
   setSliceMode = (isEdit, properties, cb) => this.setState({
@@ -248,8 +260,11 @@ class AVPlayerRMP extends PureComponent {
     this.showControls();
   }
 
-  centerMove = () => {
-    this.showControls(() => this.hideControlsTimeout());
+  centerMove = (e) => {
+    const { isMobile } = this.props;
+    if (!isMobile) {
+      this.showControls(() => this.hideControlsTimeout());
+    }
   }
 
   controlsLeave = () => {
@@ -300,11 +315,28 @@ class AVPlayerRMP extends PureComponent {
     }
   }
 
-  render() {
-    const { autoPlay, item, languages, language, t, showNextPrev, hasNext, hasPrev, onPrev, onNext, isSliceable, media } = this.props;
-    const { controlsVisible, error, sliceStart, sliceEnd, mode, playbackRate } = this.state;
+  onSeekBarResize = ({ width }) => {
+    const MIN_SEEKBAR_SIZE = 100;
+    if (this.state.isTopSeekbar !== (width < MIN_SEEKBAR_SIZE)) {
+      this.setState({ isTopSeekbar: width < MIN_SEEKBAR_SIZE });
+    }
+  }
 
-    const { playPause, isFullscreen, isPlaying } = media;
+  playPause = () => {
+    const { isMobile, media: { playPause } } = this.props;
+
+    if (isMobile && !this.state.controlsVisible) {
+      this.showControls(() => this.hideControlsTimeout());
+    } else {
+      playPause();
+    }
+  }
+
+  render() {
+    const { isMobile, autoPlay, item, languages, language, t, showNextPrev, hasNext, hasPrev, onPrev, onNext, isSliceable, media } = this.props;
+    const { isTopSeekbar, controlsVisible, error, sliceStart, sliceEnd, mode, playbackRate } = this.state;
+
+    const { isFullscreen, isPlaying } = media;
     const forceShowControls = item.mediaType === MT_AUDIO || !isPlaying;
 
     const isVideo = item.mediaType === MT_VIDEO;
@@ -313,10 +345,11 @@ class AVPlayerRMP extends PureComponent {
     return (
       <div>
         <div
+          ref={c => this.mediaElement_ = c}
           className="media"
           style={{
             minHeight: isAudio ? 200 : 40,
-            minWidth: isVideo ? 300 : 'auto'
+            minWidth: isVideo ? 380 : 'auto'
           }}
         >
           <div
@@ -328,7 +361,7 @@ class AVPlayerRMP extends PureComponent {
             <Player
               ref={c => this.player_ = c}
               src={item.src}
-              vendor={item.mediaType === MT_VIDEO ? 'video' : 'audio'}
+              vendor={isVideo ? 'video' : 'audio'}
               autoPlay={autoPlay}
               onReady={this.onPlayerReady}
               preload="auto"
@@ -339,7 +372,10 @@ class AVPlayerRMP extends PureComponent {
               defaultCurrentTime={sliceStart || 0}
             />
             <div
-              className={classNames('media-controls', { fade: !controlsVisible && !forceShowControls })}
+              className={classNames('media-controls', {
+                fade: !controlsVisible && !forceShowControls,
+                'audio-is-mobile': isTopSeekbar && isAudio,
+              })}
             >
               <div
                 className="controls-wrapper"
@@ -347,6 +383,19 @@ class AVPlayerRMP extends PureComponent {
                 onMouseLeave={this.controlsLeave}
               >
                 <div className="controls-container">
+                  { !isTopSeekbar ? null : (
+                    <div style={{position: 'absolute', flex: '1 0 auto', left: 0, top: isMobile ? "-10px" : 0, width: '100%'}}>
+                      <AvSeekBar
+                        buffers={this.buffers()}
+                        playerMode={mode}
+                        sliceStart={sliceStart}
+                        sliceEnd={sliceEnd}
+                        onSliceStartChange={this.handleSliceStartChange}
+                        onSliceEndChange={this.handleSliceEndChange}
+                        isMobile={isMobile}
+                      />
+                    </div>
+                  )}
                   <AVPlayPause
                     showNextPrev={showNextPrev}
                     hasNext={hasNext}
@@ -359,14 +408,20 @@ class AVPlayerRMP extends PureComponent {
                     sliceStart={sliceStart}
                     sliceEnd={sliceEnd}
                   />
-                  <AvSeekBar
-                    buffers={this.buffers()}
-                    playerMode={mode}
-                    sliceStart={sliceStart}
-                    sliceEnd={sliceEnd}
-                    onSliceStartChange={this.handleSliceStartChange}
-                    onSliceEndChange={this.handleSliceEndChange}
-                  />
+                  <div className="player-seekbar-wrapper">
+                    <AutoSizer onResize={this.onSeekBarResize}>{() => null}</AutoSizer>
+                    { isTopSeekbar ? null : (
+                      <AvSeekBar
+                        buffers={this.buffers()}
+                        playerMode={mode}
+                        sliceStart={sliceStart}
+                        sliceEnd={sliceEnd}
+                        onSliceStartChange={this.handleSliceStartChange}
+                        onSliceEndChange={this.handleSliceEndChange}
+                        isMobile={isMobile}
+                      />
+                    )}
+                  </div>
                   <AVPlaybackRate
                     value={playbackRate}
                     onSelect={this.playbackRateChange}
@@ -405,7 +460,7 @@ class AVPlayerRMP extends PureComponent {
                     )
                   }
                   <AVShare downward={isAudio} />
-                  <AVFullScreen />
+                  <AVFullScreen container={this.mediaElement_} />
                 </div>
               </div>
               { isVideo ? (
@@ -413,7 +468,7 @@ class AVPlayerRMP extends PureComponent {
                   className="media-center-control"
                   style={!error ? { outline: 'none' } : { backgroundColor: 'black', outline: 'none' }}
                   tabIndex="0"
-                  onClick={() => playPause()}
+                  onClick={this.playPause}
                   onKeyDown={this.onKeyDown}
                   onMouseMove={this.centerMove}
                 >
@@ -421,7 +476,7 @@ class AVPlayerRMP extends PureComponent {
                     error ? (
                       <div className="player-button">
                         Error loading file.
-                        <Icon name="warning sign" size=" large" />
+                        <Icon name="warning sign" size="large" />
                       </div>
                     ) : <AVCenteredPlay />
                   }
@@ -435,4 +490,4 @@ class AVPlayerRMP extends PureComponent {
   }
 }
 
-export default withMediaProps(withRouter(AVPlayerRMP));
+export default withIsMobile(withMediaProps(withRouter(AVPlayerRMP)));

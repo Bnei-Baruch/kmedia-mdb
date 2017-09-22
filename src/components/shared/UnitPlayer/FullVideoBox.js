@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 
+import withIsMobile from '../../../helpers/withIsMobile';
 import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
 import { getQuery, updateQuery } from '../../../helpers/url';
 import playerHelper from '../../../helpers/player';
@@ -20,6 +21,7 @@ class FullVideoBox extends Component {
     activePart: PropTypes.number,
     onActivePartChange: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    isMobile: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -28,8 +30,8 @@ class FullVideoBox extends Component {
   };
 
   componentWillMount() {
-    const { collection, language, history, location, onActivePartChange } = this.props;
-    const mediaType = playerHelper.getMediaTypeFromQuery(history.location);
+    const { isMobile, collection, language, history, location, onActivePartChange } = this.props;
+    const mediaType = playerHelper.getMediaTypeFromQuery(history.location, isMobile ? MT_AUDIO : MT_VIDEO);
     this.setPlaylist(collection, mediaType, language, () => {
       const activePart = getQuery(location).ap;
       if (activePart != null) {
@@ -39,15 +41,15 @@ class FullVideoBox extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { collection, language, location, onActivePartChange } = nextProps;
+    const { isMobile, collection, language, location, onActivePartChange } = nextProps;
     const {
       collection: oldCollection,
       language: oldLanguage,
       location: oldLocation
     } = this.props;
 
-    const prevMediaType = playerHelper.getMediaTypeFromQuery(oldLocation);
-    const newMediaType = playerHelper.getMediaTypeFromQuery(location);
+    const prevMediaType = playerHelper.getMediaTypeFromQuery(oldLocation, isMobile ? MT_AUDIO : MT_VIDEO);
+    const newMediaType = playerHelper.getMediaTypeFromQuery(location, isMobile ? MT_AUDIO : MT_VIDEO);
 
     if (oldCollection !== collection || oldLanguage !== language || prevMediaType !== newMediaType) {
       this.setPlaylist(collection, newMediaType, language);
@@ -63,7 +65,7 @@ class FullVideoBox extends Component {
 
   setPlaylist = (collection, mediaType, language, cb) => {
     const playlist = playerHelper.playlist(collection, mediaType, language);
-    this.setState({ playlist }, () => cb(playlist));
+    this.setState({ playlist }, () => cb && cb(playlist));
   };
 
   handleChangeLanguage = (e, language) => {
@@ -101,7 +103,7 @@ class FullVideoBox extends Component {
 
     return (
       <Grid.Row className="video_box">
-        <Grid.Column width={10}>
+        <Grid.Column computer={10} mobile={16}>
           <AVPlaylistPlayerRMP
             language={language}
             playlist={playlist}
@@ -112,7 +114,7 @@ class FullVideoBox extends Component {
             t={t}
           />
         </Grid.Column>
-        <Grid.Column className="player_panel" width={6}>
+        <Grid.Column className="player_panel" computer={6} mobile={16}>
           <PlayListComponent
             collection={collection}
             activePart={activePart}
@@ -125,4 +127,4 @@ class FullVideoBox extends Component {
   }
 }
 
-export default withRouter(FullVideoBox);
+export default withIsMobile(withRouter(FullVideoBox));

@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 import { Media } from 'react-media-player';
 
+import classNames from 'classnames';
+import withIsMobile from '../../../helpers/withIsMobile'
 import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
 import playerHelper from '../../../helpers/player';
 import * as shapes from '../../shapes';
@@ -17,6 +19,7 @@ class RMPVideoBox extends Component {
     language: PropTypes.string.isRequired,
     unit: shapes.ContentUnit,
     t: PropTypes.func.isRequired,
+    isMobile: PropTypes.bool.isRequired,
     isSliceable: PropTypes.bool
   };
 
@@ -26,17 +29,17 @@ class RMPVideoBox extends Component {
   };
 
   componentWillMount() {
-    const { language, location, unit } = this.props;
-    const mediaType = playerHelper.getMediaTypeFromQuery(location);
+    const { isMobile, language, location, unit } = this.props;
+    const mediaType = playerHelper.getMediaTypeFromQuery(location, isMobile ? MT_AUDIO : MT_VIDEO);
     this.setPlayableItem(unit, mediaType, language);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { unit, language } = nextProps;
+    const { isMobile, unit, language } = nextProps;
     const props                   = this.props;
 
-    const prevMediaType = playerHelper.getMediaTypeFromQuery(props.location);
-    const newMediaType = playerHelper.getMediaTypeFromQuery(nextProps.location);
+    const prevMediaType = playerHelper.getMediaTypeFromQuery(props.location, isMobile ? MT_AUDIO : MT_VIDEO);
+    const newMediaType = playerHelper.getMediaTypeFromQuery(nextProps.location, isMobile ? MT_AUDIO : MT_VIDEO);
 
     // no change
     if (unit === props.unit && language === props.language && prevMediaType === newMediaType) {
@@ -72,7 +75,7 @@ class RMPVideoBox extends Component {
   };
 
   render() {
-    const { t, isSliceable }                         = this.props;
+    const { t, isMobile, isSliceable } = this.props;
     const { playableItem } = this.state;
 
     if (!playableItem || !playableItem.src) {
@@ -82,18 +85,18 @@ class RMPVideoBox extends Component {
     return (
       <Grid.Row className="video_box">
         <Grid.Column mobile={16} tablet={12} computer={10}>
-          <div className="video_player">
+          <div className={classNames("video_player", {"audio": playableItem.mediaType === MT_AUDIO})}>
             <div className="video_position">
               <Media>
                 <AVPlayer
                   isSliceable={isSliceable}
                   item={playableItem}
-                  poster="http://kabbalahmedia.info/assets/cover-video.jpg"
                   onSwitchAV={this.handleSwitchAV}
                   languages={playableItem.availableLanguages}
                   language={playableItem.language}
                   onLanguageChange={this.handleChangeLanguage}
                   t={t}
+                  isMobile={isMobile}
                 />
               </Media>
             </div>
@@ -104,4 +107,4 @@ class RMPVideoBox extends Component {
   }
 }
 
-export default withRouter(RMPVideoBox);
+export default withIsMobile(withRouter(RMPVideoBox));
