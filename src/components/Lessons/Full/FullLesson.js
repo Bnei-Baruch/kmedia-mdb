@@ -54,19 +54,15 @@ class FullLesson extends Component {
         <div>
           <div className="video-bg">
             <Container>
-              <Grid>
-                <Grid.Row>
-                  <Grid.Column>
-                    <FullVideoBox
-                      collection={fullLesson}
-                      activePart={activePart}
-                      language={language}
-                      t={t}
-                      onActivePartChange={this.handleActivePartChange}
-                      PlayListComponent={FullLessonPlaylist}
-                    />
-                  </Grid.Column>
-                </Grid.Row>
+              <Grid padded>
+                <FullVideoBox
+                  collection={fullLesson}
+                  activePart={activePart}
+                  language={language}
+                  t={t}
+                  onActivePartChange={this.handleActivePartChange}
+                  PlayListComponent={FullLessonPlaylist}
+                />
               </Grid>
             </Container>
           </div>
