@@ -115,12 +115,29 @@ class AVPlayerRMP extends PureComponent {
     }
   }
 
-  setSliceMode = (isEdit, properties, cb) => this.setState({
-    mode: isEdit ? PLAYER_MODE.SLICE_EDIT : PLAYER_MODE.SLICE_VIEW,
-    ...properties,
-    sliceStart: (properties && typeof properties.sliceStart !== 'undefined') ? properties.sliceStart : 0,
-    sliceEnd: (properties && typeof properties.sliceEnd !== 'undefined') ? properties.sliceEnd : Infinity
-  }, cb);
+  setSliceMode = (isEdit, properties = {}, cb) => {
+    let sliceStart = properties.sliceStart;
+    let sliceEnd = properties.sliceEnd;
+    const { media } = this.props;
+
+    if (isEdit) {
+      media.pause();
+    }
+
+    if (typeof sliceStart === 'undefined') {
+      sliceStart = this.state.sliceStart || 0;
+    }
+
+    if (typeof sliceEnd === 'undefined') {
+      sliceEnd = this.state.sliceEnd || media.duration || Infinity;
+    }
+    this.setState({
+      mode: isEdit ? PLAYER_MODE.SLICE_EDIT : PLAYER_MODE.SLICE_VIEW,
+      ...properties,
+      sliceStart,
+      sliceEnd
+    }, cb);
+  };
 
   setNormalMode = cb => this.setState({
     mode: PLAYER_MODE.NORMAL,
@@ -454,7 +471,7 @@ class AVPlayerRMP extends PureComponent {
                   }
                   {
                     isSliceable && (mode === PLAYER_MODE.SLICE_EDIT || mode === PLAYER_MODE.SLICE_VIEW) && (
-                      <div className={classNames('player-control-slice-menu-wrapper', { 'downward': isAudio })}>
+                      <div className={classNames('player-control-slice-menu-wrapper', { downward: isAudio })}>
                         <AVSliceMenu
                           playerMode={mode}
                           onEdit={() => this.setSliceMode(true)}
