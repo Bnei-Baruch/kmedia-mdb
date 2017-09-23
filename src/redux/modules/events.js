@@ -4,6 +4,9 @@ import { types as settings } from './settings';
 import { selectors as mdb } from './mdb';
 import { CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY, EVENT_TYPES } from '../../helpers/consts';
 
+const ALL_EVENTS = 'ALLEVENTS';
+const ALL_COUNTRIES = 'ALLCOUNTRIES';
+const ALL_CITIES = 'ALLCITIES';
 /* Types */
 
 const SET_PAGE = 'Events/SET_PAGE';
@@ -123,34 +126,33 @@ const setStatus = (state, action) => {
   };
 };
 
+const createItem = (id, name, children, typeName, extra) =>
+  ({ id, name, children, typeName, ...extra });
+
 const onFetchAllEventsSuccess = (state, action) => {
-  const ALL_EVENTS = 'ALL_EVENTS';
   const roots = [ALL_EVENTS, ...EVENT_TYPES];
+
+  const allCities = createItem(ALL_CITIES, i18n.t('filters.event-types-filter.allItem'), [], 'city');
+  const allCountries = createItem(ALL_COUNTRIES, i18n.t('filters.event-types-filter.allItem'), [ALL_CITIES], 'country');
 
   const { countries, cities } = action.payload.collections.reduce((acc, collection) => {
     const country = collection.country;
     if (country && !acc.countries[country]) {
-      acc.countries[country] = {
-        id: country,
-        name: country,
-        children: [],
-        typeName: 'country'
-      };
+      acc.countries[country] = createItem(country, country, [ALL_CITIES], 'country');
     }
 
     const city = collection.city;
     if (city && !acc.cities[city]) {
-      acc.cities[city] = {
-        id: city,
-        name: city,
-        children: [],
-        parentId: country,
-        typeName: 'city'
-      };
+      acc.cities[city] = createItem(city, city, [], 'city', { parentId: country });
     }
 
     return acc;
   }, { countries: {}, cities: {} });
+
+  const events = (EVENT_TYPES.reduce((acc, event) => {
+    acc[event] = createItem(event, i18n.t(`constants.content-types.${event}`), [], 'content_type');
+    return acc;
+  }, {}));
 
   // populate cities as children of their parent countries
   Object.keys(cities).forEach((city) => {
@@ -158,19 +160,14 @@ const onFetchAllEventsSuccess = (state, action) => {
     if (parent) {
       countries[parent].children.push(city);
     }
+
+    allCountries.children.push(city);
   });
 
-  const events = (EVENT_TYPES.reduce((acc, event) => {
-    acc[event] = {
-      id: event,
-      name: i18n.t(`constants.content-types.${event}`),
-      children: [],
-      typeName: 'content_type'
-    };
-    return acc;
-  }, {}));
+  Object.keys(countries).forEach(country => countries[country].children.sort());
 
-  events[CT_CONGRESS].children = Object.keys(countries);
+  const allCountriesListSorted = [ALL_COUNTRIES].concat(Object.keys(countries)).sort();
+  events[CT_CONGRESS].children = allCountriesListSorted;
   // TODO: (yaniv): CT_HOLIDAY data is missing
 
   return ({
@@ -180,11 +177,14 @@ const onFetchAllEventsSuccess = (state, action) => {
     eventsFilterTree: {
       roots,
       byIds: {
-        ALL_EVENTS: {
-          id: ALL_EVENTS,
-          name: i18n.t('lessons.ALL_EVENTS'),
-          children: events[CT_CONGRESS].children
-        },
+        [ALL_EVENTS]: createItem(
+          ALL_EVENTS,
+          i18n.t('filters.event-types-filter.all'),
+          allCountriesListSorted,
+          'content_type'
+        ),
+        [ALL_CITIES]: allCities,
+        [ALL_COUNTRIES]: allCountries,
         ...events,
         ...countries,
         ...cities
@@ -222,9 +222,9 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const cityPredicate = (item, city) => item.city === city;
-const countryPredicate = (item, country) => item.country === country;
-const contentTypePredicate = (item, contentType) => item.content_type === contentType;
+const cityPredicate = (item, city) => city === ALL_CITIES || item.city === city;
+const countryPredicate = (item, country) => country === ALL_COUNTRIES || item.country === country;
+const contentTypePredicate = (item, contentType) => contentType === ALL_EVENTS || item.content_type === contentType;
 const yearPredicate = (item, year) =>
   item.start_date.substring(0, 4) <= year && year <= item.end_date.substring(0, 4);
 // TODO: (yaniv) add holiday filter predicate
@@ -254,14 +254,6 @@ const getFilteredData = (state, filters, mdbState) => {
           }
 
           if (eventType.length > 1) {
-            const obj1 = state.eventsFilterTree.byIds[eventType[1]];
-            if (obj1.typeName === 'country') {
-              if (!countryPredicate(item, eventType[1])) {
-                return false;
-              }
-            }
-            // TODO (yaniv): handle holiday for eventType[1]
-
             if (eventType.length > 2) {
               const obj2 = state.eventsFilterTree.byIds[eventType[2]];
               if (obj2.typeName === 'city') {
@@ -271,6 +263,16 @@ const getFilteredData = (state, filters, mdbState) => {
               }
               // TODO (yaniv): handle holiday for eventType[2]
             }
+
+            console.log(eventType[1]);
+            const obj1 = state.eventsFilterTree.byIds[eventType[1]];
+            if (obj1.typeName === 'country') {
+              if (!countryPredicate(item, eventType[1])) {
+                console.log(item);
+                return false;
+              }
+            }
+            // TODO (yaniv): handle holiday for eventType[1]
           }
         }
 
