@@ -72,6 +72,9 @@
     "pagination-results":        "תוצאות {{start}} - {{end}} מתוך {{total}}",
     "link-copied-to-clipboard":  "הקישור הועתק ללוח בהצלחה!"
   },
+  "events": {
+    "ALL_EVENTS": "כל האירועים"
+  },
   "lessons":   {
     "list": {
       "related": "קשור ל"

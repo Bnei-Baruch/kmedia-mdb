@@ -2,26 +2,37 @@ import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { updateQuery } from './helpers/url';
+import { EVENT_TYPES } from '../helpers/consts';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions, types } from '../redux/modules/events';
 import { actions as mdbActions } from '../redux/modules/mdb';
+import { types as system } from '../redux/modules/system';
 
 function* fetchEventsList(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const resp     = yield call(Api.collections, { ...action.payload, language });
 
-    if (Array.isArray(resp.collections)) {
-      yield put(mdbActions.receiveCollections(resp.collections));
-    }
-    if (Array.isArray(resp.content_units)) {
-      yield put(mdbActions.receiveContentUnits(resp.content_units));
-    }
-
-
+    yield put(mdbActions.receiveCollections(resp.collections));
     yield put(actions.fetchListSuccess(resp));
   } catch (err) {
     yield put(actions.fetchListFailure(err));
+  }
+}
+
+function* fetchAllEvents(action) {
+  try {
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const resp     = yield call(Api.collections, {
+      ...action.payload,
+      contentTypes: EVENT_TYPES,
+      language,
+      pageNo: 1,
+      pageSize: 1000 // NOTE: we need to get all events, and the endpoint lets us fetch with pagination
+    });
+    yield put(actions.fetchAllEventsSuccess(resp));
+  } catch (err) {
+    yield put(actions.fetchAllEventsFailure(err));
   }
 }
 
@@ -53,7 +64,11 @@ function* updatePageInQuery(action) {
 }
 
 function* watchFetchList() {
-  yield takeLatest(types.FETCH_LIST, fetchEventsList);
+  yield takeLatest([types.FETCH_LIST, system.INIT], fetchEventsList);
+}
+
+function* watchFetchAllEvents() {
+  yield takeLatest([types.FETCH_ALL_EVENTS, system.INIT], fetchAllEvents);
 }
 
 function* watchfetchEventItem() {
@@ -70,6 +85,7 @@ function* watchSetPage() {
 
 export const sagas = [
   watchFetchList,
+  watchFetchAllEvents,
   watchfetchEventItem,
   watchFetchFullEvent,
   watchSetPage,

@@ -8,8 +8,8 @@ import FilterTags from '../../Filters/FilterTags/FilterTags';
 
 const filters = [
   {
-    name: 'events-filter',
-    component: filterComponents.DateFilter
+    name: 'event-types-filter',
+    component: filterComponents.EventTypesFilter
   },
   {
     name: 'years-filter',

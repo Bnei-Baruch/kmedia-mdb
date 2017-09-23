@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Divider, Grid } from 'semantic-ui-react';
 
-import { CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY } from '../../../helpers/consts';
+import { EVENT_TYPES } from '../../../helpers/consts';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions, selectors as eventSelectors } from '../../../redux/modules/events';
@@ -11,8 +11,6 @@ import * as shapes from '../../shapes';
 import EventsList from './EventsList';
 import EventsFilters from './EventsFilters';
 import withPagination from '../../pagination/withPagination';
-
-const allEventTypes = [CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY];
 
 class EventsContainer extends withPagination {
 
@@ -25,7 +23,7 @@ class EventsContainer extends withPagination {
 
   static defaultProps = {
     items: [],
-    contentTypes: allEventTypes
+    contentTypes: EVENT_TYPES
   };
 
   componentDidMount() {

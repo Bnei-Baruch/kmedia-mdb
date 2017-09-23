@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import noop from 'lodash/noop';
 import range from 'lodash/range';
 import { Button, Divider, Dropdown, Segment } from 'semantic-ui-react';
-
-import { TAG_LESSONS_TOPICS, TAG_PROGRAMS_TOPICS } from '../../../helpers/consts';
 import { selectors as tags } from '../../../redux/modules/tags';
 import connectFilter from '../connectFilter';
 

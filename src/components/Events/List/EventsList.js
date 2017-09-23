@@ -2,19 +2,15 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Table } from 'semantic-ui-react';
 import moment from 'moment';
-import { translate } from 'react-i18next';
-
 import Link from '../../Language/MultiLanguageLink';
 import * as shapes from '../../shapes';
 import { canonicalLink } from '../../../helpers/utils';
 import { fromToLocalized } from '../../../helpers/date';
-import { CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY } from '../../../helpers/consts';
 
 class EventsList extends PureComponent {
 
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.EventCollection, shapes.EventItem])),
-    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -22,8 +18,6 @@ class EventsList extends PureComponent {
   };
 
   renderCollection = (collection) => {
-    const { t } = this.props;
-
     const localDate = fromToLocalized(
       moment.utc(collection.start_date, 'YYYY-MM-DD'),
       moment.utc(collection.end_date, 'YYYY-MM-DD')
@@ -63,4 +57,4 @@ class EventsList extends PureComponent {
   }
 }
 
-export default translate()(EventsList);
+export default EventsList;
