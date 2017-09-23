@@ -1,15 +1,17 @@
 import pick from 'lodash/pick';
 import { getQuery, updateQuery } from './url';
-import { MEDIA_TYPES, MIME_TYPE_TO_MEDIA_TYPE, PLAYABLE_MEDIA_TYPES, MT_VIDEO } from './consts';
+import { MEDIA_TYPES, MIME_TYPE_TO_MEDIA_TYPE, PLAYABLE_MEDIA_TYPES, MT_VIDEO, MT_AUDIO } from './consts';
 import { physicalFile } from './utils';
 
-function availableMediaTypes(contentUnit, language) {
+function calcAvailableMediaTypes(contentUnit, language) {
   if (!contentUnit) {
     return [];
   }
 
   return Array.from((contentUnit.files || []).reduce((acc, file) => {
-    if (file.language === language) {
+    if (file.language === language &&
+        (file.mimetype === getMimeType(MT_VIDEO) ||
+         file.mimetype === getMimeType(MT_AUDIO))) {
       acc.add(MIME_TYPE_TO_MEDIA_TYPE[file.mimetype]);
     }
     return acc;
@@ -38,14 +40,26 @@ function playableItem(contentUnit, mediaType, language) {
     return null;
   }
 
-  const file = (contentUnit.files || []).find(f => f.language === language && f.mimetype === getMimeType(mediaType));
+  const availableMediaTypes = calcAvailableMediaTypes(contentUnit, language);
+  // Fallback to other media type if this one not available.
+  if (!availableMediaTypes.includes(mediaType)) {
+    if (mediaType === MT_AUDIO) {
+      mediaType = MT_VIDEO;
+    }
+    if (mediaType === MT_VIDEO) {
+      mediaType = MT_AUDIO;
+    }
+  }
+
+  const file = (contentUnit.files || []).find(f =>
+      f.language === language && f.mimetype === getMimeType(mediaType));
 
   return {
     contentUnitId: contentUnit.id,
     language,
     src: file ? physicalFile(file, true) : '',
     mediaType,
-    availableMediaTypes: availableMediaTypes(contentUnit, language),
+    availableMediaTypes,
     availableLanguages: availableLanguages(contentUnit, mediaType),
     ...pick(contentUnit, 'content_type', 'film_date', 'name', 'duration')
   };
