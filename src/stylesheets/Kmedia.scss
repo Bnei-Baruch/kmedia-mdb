@@ -332,9 +332,14 @@ $text-colors: (
   padding-top: 56.25%;
   position: relative;
   &.audio {
+    height: 200px;
     padding-top: 70px;
     margin-top: 0em;
     margin-bottom: 0em;
+    .video_position {
+      bottom: 0;
+      top: initial;
+    }
   }
   .video_position {
     position: absolute;

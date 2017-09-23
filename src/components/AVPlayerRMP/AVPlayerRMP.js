@@ -388,8 +388,8 @@ class AVPlayerRMP extends PureComponent {
     const isAudio = item.mediaType === MT_AUDIO;
     const isEditMode = mode === PLAYER_MODE.SLICE_EDIT;
 
-    const elapsedStart = (isEditMode ? Math.max(0, media.currentTime - sliceStart) : media.currentTime);
-    const elapsedEnd = ((isEditMode && sliceEnd !== Infinity) ? sliceEnd : media.duration);
+    const elapsedStart = isEditMode ? sliceStart : media.currentTime;
+    const elapsedEnd = (isEditMode && sliceEnd !== Infinity) ? sliceEnd : media.duration;
 
     let centerMediaControl;
     if (error) {
@@ -410,7 +410,7 @@ class AVPlayerRMP extends PureComponent {
           onClick={this.handleToggleMode}
         />
       );
-    } else {
+    } else if (isVideo) {
       centerMediaControl = <AVCenteredPlay />;
     }
 
@@ -420,7 +420,7 @@ class AVPlayerRMP extends PureComponent {
           ref={(c) => { this.mediaElement = c; }}
           className="media"
           style={{
-            minHeight: isAudio ? 200 : 40,
+            minHeight: isAudio ? 50 : 40,
             minWidth: isVideo ? 380 : 'auto'
           }}
         >
@@ -535,20 +535,16 @@ class AVPlayerRMP extends PureComponent {
                   { !isEditMode && <AVFullScreen container={this.mediaElement_} /> }
                 </div>
               </div>
-              {
-                isVideo && (
-                  <div
-                    className="media-center-control"
-                    style={!error ? { outline: 'none' } : { backgroundColor: 'black', outline: 'none' }}
-                    tabIndex="0"
-                    onClick={this.playPause}
-                    onKeyDown={this.onKeyDown}
-                    onMouseMove={this.centerMove}
-                  >
-                    { centerMediaControl }
-                  </div>
-                )
-              }
+              <div
+                className="media-center-control"
+                style={!error ? { outline: 'none' } : { backgroundColor: 'black', outline: 'none' }}
+                tabIndex="0"
+                onClick={this.playPause}
+                onKeyDown={this.onKeyDown}
+                onMouseMove={this.centerMove}
+              >
+                { centerMediaControl }
+              </div>
             </div>
           </div>
         </div>
