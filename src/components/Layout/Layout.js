@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import classnames from 'classnames';
 import { Route } from 'react-router-dom';
-import { Flag, Header, Icon, Menu, Grid } from 'semantic-ui-react';
+import { Flag, Header, Icon, Menu } from 'semantic-ui-react';
 
 import { FLAG_TO_LANGUAGE } from '../../helpers/consts';
 import Link from '../Language/MultiLanguageLink';
