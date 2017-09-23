@@ -9,7 +9,7 @@ export default {
   DateFilter,
   SourcesFilter,
   TopicsFilter,
-  ProgramsFilter
+  ProgramsFilter,
   YearsFilter,
   EventTypesFilter
 };

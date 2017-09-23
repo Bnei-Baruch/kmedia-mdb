@@ -27,15 +27,17 @@ const getGenres = (genres, r) => {
 
 const addGenres = (collection) => {
   const genres = [
-    'genre 1',
-    'genre 2',
-    'genre 3',
-    'genre 4',
-    'genre 5',
-    'genre 6',
+    'Children',
+    'Documentary',
+    'Educational',
+    'Late Night',
+    'News',
+    'Talk Show',
+    'Radio',
+    'Movie',
   ];
 
-  const r = random(6);
+  const r = random(8);
 
   Object.keys(collection).forEach((x) => {
     collection[x].genres = getGenres(genres, r);
