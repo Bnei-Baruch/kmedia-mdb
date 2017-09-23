@@ -8,13 +8,17 @@ import FilterTags from '../../Filters/FilterTags/FilterTags';
 
 const filters = [
   {
-    name: 'date-filter',
-    component: filterComponents.DateFilter
+    name: 'programs-filter',
+    component: filterComponents.ProgramsFilter
   },
   {
     name: 'topics-filter',
     component: filterComponents.TopicsFilter
-  }
+  },
+  {
+    name: 'date-filter',
+    component: filterComponents.DateFilter
+  },
 ];
 
 class ProgramsFilters extends PureComponent {

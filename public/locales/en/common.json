@@ -22,11 +22,14 @@
     }
   },
   "filters":   {
-    "lessons":        {
+    "lessons":         {
       "by": "Filter Lessons by:"
     },
     "programs":        {
       "by": "Filter Programs by:"
+    },
+    "programs-filter": {
+      "label": "Genre/Program"
     },
     "events": {
       "by": "Filter Events by:"
@@ -46,10 +49,10 @@
       "start":       "Start",
       "end":         "End"
     },
-    "sources-filter": {
+    "sources-filter":  {
       "label": "Sources"
     },
-    "topics-filter":  {
+    "topics-filter":   {
       "label": "Topics"
     },
     "event-types-filter": {
@@ -122,6 +125,16 @@
     }
   },
   "programs":  {
+    "list": {
+      "episode_from": "Episode from:"
+    },
+    "full": {
+      "episodes":  "Episode(s)",
+      "ccuName":   "Content Unit Name",
+      "name":      "Program Name",
+      "duration":  "Duration",
+      "film_date": "Date of Shooting"
+    },
     "part": {
       "info":           {
         "tags":          "Tags",
@@ -188,7 +201,7 @@
       "SPECIAL_LESSON":        "Special Lesson",
       "FRIENDS_GATHERINGS":    "",
       "CONGRESS":              "Congress",
-      "VIDEO_PROGRAM":         "",
+      "VIDEO_PROGRAM":         "Video Program",
       "LECTURE_SERIES":        "",
       "MEALS":                 "",
       "HOLIDAY":               "Holiday",
