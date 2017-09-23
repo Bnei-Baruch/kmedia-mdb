@@ -4,7 +4,7 @@ import noop from 'lodash/noop';
 import { withRouter } from 'react-router-dom';
 import { Player, withMediaProps } from 'react-media-player';
 import classNames from 'classnames';
-import { Icon } from 'semantic-ui-react';
+import { Icon, Button } from 'semantic-ui-react';
 
 import { AutoSizer } from 'react-virtualized';
 
@@ -360,9 +360,33 @@ class AVPlayerRMP extends PureComponent {
 
     const isVideo = item.mediaType === MT_VIDEO;
     const isAudio = item.mediaType === MT_AUDIO;
+    const isEditMode = mode === PLAYER_MODE.SLICE_EDIT;
 
-    const elapsedStart = ((mode === PLAYER_MODE.SLICE_EDIT) ? Math.max(0, media.currentTime - sliceStart) : media.currentTime);
-    const elapsedEnd = ((mode === PLAYER_MODE.SLICE_EDIT && sliceEnd !== Infinity) ? sliceEnd : media.duration);
+    const elapsedStart = (isEditMode ? Math.max(0, media.currentTime - sliceStart) : media.currentTime);
+    const elapsedEnd = ((isEditMode && sliceEnd !== Infinity) ? sliceEnd : media.duration);
+
+    let centerMediaControl;
+    if (error) {
+      centerMediaControl = (
+        <div className="player-button">
+          Error loading file.
+          <Icon name="warning sign" size="large" />
+        </div>
+      );
+    } else if (isEditMode) {
+      centerMediaControl = (
+        <Button
+          icon="chevron left"
+          content="Back to play"
+          size="large"
+          color="blue"
+          className="button-close-slice-edit"
+          onClick={this.handleToggleMode}
+        />
+      );
+    } else {
+      centerMediaControl = <AVCenteredPlay />;
+    }
 
     return (
       <div>
@@ -470,7 +494,7 @@ class AVPlayerRMP extends PureComponent {
                     )
                   }
                   {
-                    isSliceable && (mode === PLAYER_MODE.SLICE_EDIT || mode === PLAYER_MODE.SLICE_VIEW) && (
+                    isSliceable && (isEditMode || mode === PLAYER_MODE.SLICE_VIEW) && (
                       <div className={classNames('player-control-slice-menu-wrapper', { downward: isAudio })}>
                         <AVSliceMenu
                           playerMode={mode}
@@ -484,25 +508,20 @@ class AVPlayerRMP extends PureComponent {
                   <AVFullScreen container={this.mediaElement_} />
                 </div>
               </div>
-              { isVideo ? (
-                <div
-                  className="media-center-control"
-                  style={!error ? { outline: 'none' } : { backgroundColor: 'black', outline: 'none' }}
-                  tabIndex="0"
-                  onClick={this.playPause}
-                  onKeyDown={this.onKeyDown}
-                  onMouseMove={this.centerMove}
-                >
-                  {
-                    error ? (
-                      <div className="player-button">
-                        Error loading file.
-                        <Icon name="warning sign" size="large" />
-                      </div>
-                    ) : <AVCenteredPlay />
-                  }
-                </div>
-              ) : null }
+              {
+                isVideo && (
+                  <div
+                    className="media-center-control"
+                    style={!error ? { outline: 'none' } : { backgroundColor: 'black', outline: 'none' }}
+                    tabIndex="0"
+                    onClick={this.playPause}
+                    onKeyDown={this.onKeyDown}
+                    onMouseMove={this.centerMove}
+                  >
+                    { centerMediaControl }
+                  </div>
+                )
+              }
             </div>
           </div>
         </div>
