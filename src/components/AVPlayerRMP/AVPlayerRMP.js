@@ -80,6 +80,7 @@ class AVPlayerRMP extends PureComponent {
     isTopSeekbar: false,
     controlsVisible: true,
     error: false,
+    errorReason: '',
     playbackRate: '1x', // this is used only to rerender the component. actual value is saved on the player's instance
     mode: PLAYER_MODE.NORMAL,
   };
@@ -108,6 +109,12 @@ class AVPlayerRMP extends PureComponent {
     if (this.autohideTimeoutId) {
       clearTimeout(this.autohideTimeoutId);
       this.autohideTimeoutId = null;
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.item !== this.props.item) {
+      this.setState({ error: false, errorReason: '' });
     }
   }
 
@@ -146,7 +153,15 @@ class AVPlayerRMP extends PureComponent {
     console.log('Error', e);
     // Show error only on loading of video.
     if (!e.currentTime && !e.isPlaying) {
-      this.setState({ error: true });
+      const { item } = this.props;
+      let errorReason = '';
+      if (!item.src) {
+        errorReason = 'Source not specified.';
+      }
+      if (item.src.endsWith('wmv')) {
+        errorReason = 'Unsupported format (wmv).';
+      }
+      this.setState({ error: true, errorReason });
     }
   }
 
@@ -165,6 +180,7 @@ class AVPlayerRMP extends PureComponent {
       this.props.onPlay();
     }
   }
+
 
   onPause = (e) => {
     // when we're close to the end regard this as finished
@@ -334,7 +350,7 @@ class AVPlayerRMP extends PureComponent {
 
   render() {
     const { isMobile, autoPlay, item, languages, language, t, showNextPrev, hasNext, hasPrev, onPrev, onNext, isSliceable, media } = this.props;
-    const { isTopSeekbar, controlsVisible, error, sliceStart, sliceEnd, mode, playbackRate } = this.state;
+    const { isTopSeekbar, controlsVisible, error, errorReason, sliceStart, sliceEnd, mode, playbackRate } = this.state;
 
     const { isFullscreen, isPlaying } = media;
     const forceShowControls = item.mediaType === MT_AUDIO || !isPlaying;
@@ -484,6 +500,8 @@ class AVPlayerRMP extends PureComponent {
                     error ? (
                       <div className="player-button">
                         Error loading file.
+                        { errorReason ? ' ' + errorReason : '' }
+                        &nbsp;
                         <Icon name="warning sign" size="large" />
                       </div>
                     ) : <AVCenteredPlay />
