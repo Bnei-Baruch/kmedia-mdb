@@ -28,6 +28,9 @@
     "programs":       {
       "by": "Сортировать программы по:"
     },
+    "events": {
+      "by": "Сортировать по:"
+    },
     "date-filter":    {
       "label":       "Дата",
       "selectTitle": "Выберите временной промежуток",
@@ -48,11 +51,20 @@
     },
     "topics-filter":  {
       "label": "Темы"
+    },
+    "event-types-filter": {
+      "label": "",
+      "all": "",
+      "allItem": ""
+    },
+    "years-filter": {
+      "label": ""
     }
   },
   "buttons":   {
-    "apply":  "Да",
-    "cancel": "Нет",
+    "apply":  "Применить",
+    "cancel": "Отменитьт",
+    "close":  "Закрыть",
     "audio":  "Аудио",
     "video":  "Видео",
     "more":   "Ещё"
@@ -73,7 +85,7 @@
     "pagination-results":        "Результаты {{start}} - {{end}} из {{total}}"
   },
   "events": {
-    "ALL_EVENTS": ""
+
   },
   "lessons":   {
     "list": {

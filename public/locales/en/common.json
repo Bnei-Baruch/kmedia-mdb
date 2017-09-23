@@ -31,7 +31,10 @@
     "programs-filter": {
       "label": "Genre/Program"
     },
-    "date-filter":     {
+    "events": {
+      "by": "Filter Events by:"
+    },
+    "date-filter":    {
       "label":       "Date",
       "selectTitle": "Select a date range",
       "presets":     {
@@ -51,11 +54,20 @@
     },
     "topics-filter":   {
       "label": "Topics"
+    },
+    "event-types-filter": {
+      "label": "Types",
+      "all": "All Events",
+      "allItem": "All"
+    },
+    "years-filter": {
+      "label": "Year"
     }
   },
   "buttons":   {
     "apply":  "Apply",
     "cancel": "Cancel",
+    "close":  "Close",
     "audio":  "Audio",
     "video":  "Video",
     "more":   "More"

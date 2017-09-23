@@ -33,32 +33,25 @@ class FullEventPlaylist extends Component {
     });
 
     return (
-      <div>
-        <Header
-          as="h3"
-          content={`${t(`constants.content-types.${collection.content_type}`)} - ${(activePart + 1)}/${collection.content_units.length}`}
-          subheader={t('values.date', { date: new Date(collection.start_date) })}
-        />
-        <Grid>
-          <Grid.Row>
-            <Grid.Column>
-              <Menu vertical fluid size="small">
-                {
-                  collection.content_units.map((part, index) => (
-                    <Menu.Item
-                      key={part.id}
-                      name={`${index}`}
-                      content={titles[index]}
-                      active={index === activePart}
-                      onClick={this.handleLessonPartClick}
-                    />
-                  ))
-                }
-              </Menu>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </div>
+      <Grid>
+        <Grid.Row>
+          <Grid.Column>
+            <Menu vertical fluid size="small">
+              {
+                collection.content_units.map((part, index) => (
+                  <Menu.Item
+                    key={part.id}
+                    name={`${index}`}
+                    content={titles[index]}
+                    active={index === activePart}
+                    onClick={this.handleLessonPartClick}
+                  />
+                ))
+              }
+            </Menu>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     );
   }
 }

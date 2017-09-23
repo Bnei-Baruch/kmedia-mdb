@@ -32,6 +32,7 @@ class FullVideoBox extends Component {
   componentWillMount() {
     const { isMobile, collection, language, history, location, onActivePartChange } = this.props;
     const mediaType = playerHelper.getMediaTypeFromQuery(history.location, isMobile ? MT_AUDIO : MT_VIDEO);
+    console.log(language);
     this.setPlaylist(collection, mediaType, language, () => {
       const activePart = getQuery(location).ap;
       if (activePart != null) {
@@ -52,7 +53,8 @@ class FullVideoBox extends Component {
     const newMediaType = playerHelper.getMediaTypeFromQuery(location, isMobile ? MT_AUDIO : MT_VIDEO);
 
     if (oldCollection !== collection || oldLanguage !== language || prevMediaType !== newMediaType) {
-      this.setPlaylist(collection, newMediaType, language);
+      // Persist language in playableItem
+      this.setPlaylist(collection, newMediaType, this.state.playlist.language);
     }
 
     const oldLocationActivePart = getQuery(oldLocation).ap;
@@ -79,6 +81,7 @@ class FullVideoBox extends Component {
     const playableItem = playlist.items[activePart];
 
     if (language !== playableItem.language) {
+      console.log(language);
       this.setPlaylist(collection, playableItem.mediaType, language);
     }
   }
@@ -100,6 +103,8 @@ class FullVideoBox extends Component {
   render() {
     const { t, activePart, collection, PlayListComponent } = this.props;
     const { playlist } = this.state;
+
+    console.log(playlist);
 
     return (
       <Grid.Row className="video_box">

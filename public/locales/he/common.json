@@ -27,6 +27,9 @@
     "programs":       {
       "by": "סנן תוכניות לפי:"
     },
+    "events": {
+      "by": "סנן אירועים לפי:"
+    },
     "date-filter":    {
       "label":       "תאריך",
       "selectTitle": "בחר טווח תאריכים",
@@ -47,11 +50,20 @@
     },
     "topics-filter":  {
       "label": "נושאים"
+    },
+    "event-types-filter": {
+      "label": "סוגים",
+      "all": "כל האירועים",
+      "allItem": "הכל"
+    },
+    "years-filter": {
+      "label": "שנה"
     }
   },
   "buttons":   {
     "apply":  "אישור",
     "cancel": "ביטול",
+    "close": "סגור",
     "audio":  "אודיו",
     "video":  "וידאו",
     "more":   "עוד"
