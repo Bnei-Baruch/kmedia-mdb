@@ -72,6 +72,9 @@
     "pagination-results":        "תוצאות {{start}} - {{end}} מתוך {{total}}",
     "link-copied-to-clipboard":  "הקישור הועתק ללוח בהצלחה!"
   },
+  "events": {
+    "ALL_EVENTS": "כל האירועים"
+  },
   "lessons":   {
     "list": {
       "related": "קשור ל"
@@ -149,7 +152,7 @@
       "MEALS":                 "",
       "HOLIDAY":               "",
       "PICNIC":                "",
-      "UNITY_DAY":             "",
+      "UNITY_DAY":             "יום איחוד",
       "LESSON_PART":           "",
       "LECTURE":               "",
       "CHILDREN_LESSON_PART":  "",

@@ -73,6 +73,9 @@
     "pagination-results":        "Results {{start}} - {{end}} of {{total}}",
     "link-copied-to-clipboard":  "Link was copied!"
   },
+  "events": {
+    "ALL_EVENTS": "All Events"
+  },
   "lessons":   {
     "list": {
       "related": "Related to"
@@ -176,9 +179,9 @@
       "VIDEO_PROGRAM":         "",
       "LECTURE_SERIES":        "",
       "MEALS":                 "",
-      "HOLIDAY":               "",
-      "PICNIC":                "",
-      "UNITY_DAY":             "",
+      "HOLIDAY":               "Holiday",
+      "PICNIC":                "Picnic",
+      "UNITY_DAY":             "Unity Day",
       "LESSON_PART":           "",
       "LECTURE":               "",
       "CHILDREN_LESSON_PART":  "",

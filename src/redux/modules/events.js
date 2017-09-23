@@ -1,11 +1,15 @@
 import { createAction, handleActions } from 'redux-actions';
-
+import i18n from '../../helpers/i18nnext';
 import { types as settings } from './settings';
+import { CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY, EVENT_TYPES } from '../../helpers/consts';
 
 /* Types */
 
 const SET_PAGE = 'Events/SET_PAGE';
 
+const FETCH_ALL_EVENTS              = 'Events/FETCH_ALL_EVENTS';
+const FETCH_ALL_EVENTS_SUCCESS      = 'Events/FETCH_ALL_EVENTS_SUCCESS';
+const FETCH_ALL_EVENTS_FAILURE      = 'Events/FETCH_ALL_EVENTS_FAILURE';
 const FETCH_LIST                    = 'Events/FETCH_LIST';
 const FETCH_LIST_SUCCESS            = 'Events/FETCH_LIST_SUCCESS';
 const FETCH_LIST_FAILURE            = 'Events/FETCH_LIST_FAILURE';
@@ -18,6 +22,9 @@ const FETCH_FULL_EVENT_FAILURE    = 'Event/FETCH_FULL_EVENT_FAILURE';
 
 export const types = {
   SET_PAGE,
+  FETCH_ALL_EVENTS,
+  FETCH_ALL_EVENTS_SUCCESS,
+  FETCH_ALL_EVENTS_FAILURE,
   FETCH_LIST,
   FETCH_LIST_SUCCESS,
   FETCH_LIST_FAILURE,
@@ -32,6 +39,9 @@ export const types = {
 /* Actions */
 
 const setPage                    = createAction(SET_PAGE);
+const fetchAllEvents           = createAction(FETCH_ALL_EVENTS);
+const fetchAllEventsSuccess           = createAction(FETCH_ALL_EVENTS_SUCCESS);
+const fetchAllEventsFailure           = createAction(FETCH_ALL_EVENTS_FAILURE);
 const fetchList                  = createAction(FETCH_LIST, (pageNo, language, pageSize, contentTypes) => ({
   contentTypes,
   pageNo,
@@ -49,6 +59,9 @@ const fetchFullEventFailure    = createAction(FETCH_FULL_EVENT_FAILURE, (id, err
 
 export const actions = {
   setPage,
+  fetchAllEvents,
+  fetchAllEventsSuccess,
+  fetchAllEventsFailure,
   fetchList,
   fetchListSuccess,
   fetchListFailure,
@@ -76,6 +89,10 @@ const initialState = {
     items: {},
     fulls: {}
   },
+  eventsFilterTree: {
+    byIds: {},
+    roots: []
+  }
 };
 
 /**
@@ -134,13 +151,88 @@ const setStatus = (state, action) => {
 };
 
 const onFetchListSuccess = (state, action) => {
-  const items = action.payload.collections || action.payload.content_units || [];
+  const items = action.payload.collections || [];
   return {
     ...state,
     total: action.payload.total,
     items: items.map(x => [x.id, x.content_type]),
   };
 };
+
+const onFetchAllEventsSuccess = (state, action) => {
+  const ALL_EVENTS = 'ALL_EVENTS';
+  const roots = [ALL_EVENTS, ...EVENT_TYPES];
+
+  const { countries, cities } = action.payload.collections.reduce((acc, collection) => {
+    const country = collection.country;
+    if (country && !acc.countries[country]) {
+      acc.countries[country] = {
+        id: country,
+        name: country,
+        children: [],
+        typeName: 'country'
+      };
+    }
+
+    const city = collection.city;
+    if (city && !acc.cities[city]) {
+      acc.cities[city] = {
+        id: city,
+        name: city,
+        children: [],
+        parentId: country,
+        typeName: 'city'
+      };
+    }
+
+    return acc;
+  }, { countries: {}, cities: {} });
+
+  // populate cities as children of their parent countries
+  Object.keys(cities).forEach((city) => {
+    const parent = cities[city].parentId;
+    if (parent) {
+      countries[parent].children.push(city);
+    }
+  });
+
+  const events = (EVENT_TYPES.reduce((acc, event) => {
+    acc[event] = {
+      id: event,
+      name: i18n.t(`constants.content-types.${event}`),
+      children: [],
+      typeName: 'content_type'
+    };
+    return acc;
+  }, {}));
+
+  events[CT_CONGRESS].children = Object.keys(countries);
+  // TODO: (yaniv): CT_HOLIDAY data is missing
+
+  return ({
+    ...state,
+    eventsFilterTree: {
+      roots,
+      byIds: {
+        ALL_EVENTS: {
+          id: ALL_EVENTS,
+          name: i18n.t('lessons.ALL_EVENTS'),
+          children: events[CT_CONGRESS].children
+        },
+        ...events,
+        ...countries,
+        ...cities
+      }
+    }
+  });
+};
+
+const onFetchAllEventsFailure = state => ({
+  ...state,
+  eventsFilterTree: {
+    ...initialState.eventsFilterTree
+  }
+});
 
 const onSetPage = (state, action) => (
   {
@@ -159,6 +251,8 @@ const onSetLanguage = state => (
 export const reducer = handleActions({
   [settings.SET_LANGUAGE]: onSetLanguage,
 
+  [FETCH_ALL_EVENTS_SUCCESS]: onFetchAllEventsSuccess,
+  [FETCH_ALL_EVENTS_FAILURE]: onFetchAllEventsFailure,
   [FETCH_LIST]: setStatus,
   [FETCH_LIST_SUCCESS]: onFetchListSuccess,
   [FETCH_LIST_FAILURE]: setStatus,
@@ -180,10 +274,13 @@ const getPageNo = state => state.pageNo;
 const getWip    = state => state.wip;
 const getErrors = state => state.errors;
 
+const getEventFilterTree = state => state.eventsFilterTree;
+
 export const selectors = {
   getTotal,
   getItems,
   getPageNo,
   getWip,
   getErrors,
+  getEventFilterTree
 };

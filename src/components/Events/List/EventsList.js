@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Table } from 'semantic-ui-react';
-
+import moment from 'moment';
 import Link from '../../Language/MultiLanguageLink';
 import * as shapes from '../../shapes';
+import { canonicalLink } from '../../../helpers/utils';
+import { fromToLocalized } from '../../../helpers/date';
 
 class EventsList extends PureComponent {
 
@@ -16,35 +18,23 @@ class EventsList extends PureComponent {
   };
 
   renderCollection = (collection) => {
-    let units = [];
-    if (collection.content_units) {
-      units = collection.content_units.map(unit => (
-        <Table.Row verticalAlign="top" key={`u-${unit.id}`}>
-          <Table.Cell>
-            <Link to={`/events/item/${unit.id}`}>
-              {unit.name || '☠ no name'}
-              <br />
-              <div dangerouslySetInnerHTML={{ __html: unit.description }} />
-            </Link>
-          </Table.Cell>
-        </Table.Row>
-      ));
-    }
+    const localDate = fromToLocalized(
+      moment.utc(collection.start_date, 'YYYY-MM-DD'),
+      moment.utc(collection.end_date, 'YYYY-MM-DD')
+    );
 
-    const rows = [];
-    const contentUnitsSpan = collection.content_units ? collection.content_units.length + 1 : 1;
-
-    rows.push((
-      <Table.Row verticalAlign="top" key={`l-${collection.id}`}>
-        <Table.Cell collapsing singleLine width={1} rowSpan={contentUnitsSpan}>
-          <Link to={`/events/full/${collection.id}`}>
+    return (
+      <Table.Row verticalAlign="top" key={collection.id}>
+        <Table.Cell collapsing singleLine width={1}>
+          <strong>{localDate}</strong>
+        </Table.Cell>
+        <Table.Cell>
+          <Link to={canonicalLink(collection)}>
             <strong>{collection.name || '⛔ NO NAME'}</strong>
           </Link>
         </Table.Cell>
       </Table.Row>
-    ));
-
-    return rows.concat(units);
+    );
   };
 
   render() {
@@ -55,10 +45,11 @@ class EventsList extends PureComponent {
     }
 
     return (
+
       <Table basic="very" sortable>
         <Table.Body>
           {
-            items.map(x => (this.renderCollection(x)))
+            items.map(this.renderCollection)
           }
         </Table.Body>
       </Table>
