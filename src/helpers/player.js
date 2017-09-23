@@ -1,6 +1,6 @@
 import pick from 'lodash/pick';
 import { getQuery, updateQuery } from './url';
-import { MIME_TYPE_TO_MEDIA_TYPE, PLAYABLE_MEDIA_TYPES, MT_VIDEO } from './consts';
+import { MEDIA_TYPES, MIME_TYPE_TO_MEDIA_TYPE, PLAYABLE_MEDIA_TYPES, MT_VIDEO } from './consts';
 import { physicalFile } from './utils';
 
 function availableMediaTypes(contentUnit, language) {
@@ -16,13 +16,17 @@ function availableMediaTypes(contentUnit, language) {
   }, new Set()));
 }
 
+function getMimeType(mediaType) {
+  return mediaType === MT_VIDEO ? MEDIA_TYPES.mp4.mime_type : MEDIA_TYPES.mp3.mime_type;
+}
+
 function availableLanguages(contentUnit, mediaType) {
   if (!contentUnit) {
     return [];
   }
 
   return Array.from((contentUnit.files || []).reduce((acc, file) => {
-    if (file.type === mediaType || MIME_TYPE_TO_MEDIA_TYPE[file.mimetype] === mediaType) {
+    if (file.type === mediaType || file.mimetype === getMimeType(mediaType)) {
       acc.add(file.language);
     }
     return acc;
@@ -34,9 +38,7 @@ function playableItem(contentUnit, mediaType, language) {
     return null;
   }
 
-  const file = (contentUnit.files || []).find(
-    f => f.language === language && (f.type === mediaType || MIME_TYPE_TO_MEDIA_TYPE[f.mimetype] === mediaType)
-  );
+  const file = (contentUnit.files || []).find(f => f.language === language && f.mimetype === getMimeType(mediaType));
 
   return {
     contentUnitId: contentUnit.id,
