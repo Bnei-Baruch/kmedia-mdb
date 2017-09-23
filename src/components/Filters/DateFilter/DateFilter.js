@@ -295,6 +295,7 @@ class DateFilter extends Component {
               <DayPicker
                 numberOfMonths={2}
                 selectedDays={{ from, to }}
+                disabledDays={{ after: new Date() }}
                 toMonth={now()}
                 localeUtils={LocaleUtils}
                 locale={language}
