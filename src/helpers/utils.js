@@ -155,7 +155,7 @@ export const physicalFile = (file, ext = false) => {
   if (ext) {
     suffix = `.${filenameExtension(file.name)}`;
   }
-  return `http://cdn.kabbalahmedia.info/${file.id}${suffix}`;
+  return `https://cdn.kabbalahmedia.info/${file.id}${suffix}`;
 };
 
 export const canonicalLink = (entity) => {
