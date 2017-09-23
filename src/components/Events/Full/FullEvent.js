@@ -14,6 +14,8 @@ import * as shapes from '../../shapes';
 
 import placeholder from './placeholder.png';
 import EventMap from './EventMap';
+import FullEventPlaylist from './FullEventPlaylist';
+import FullVideoBox from '../../shared/UnitPlayer/FullVideoBox';
 
 class FullEvent extends Component {
   static propTypes = {
@@ -29,6 +31,13 @@ class FullEvent extends Component {
     wip: false,
     err: null,
   };
+
+  state = {
+    activePart: 0,
+  };
+
+  handleActivePartChange = activePart =>
+    this.setState({ activePart });
 
   getName = (fullEvent, cu) => {
     const { name, duration } = cu;
@@ -54,9 +63,14 @@ class FullEvent extends Component {
 
   render() {
     const { language, fullEvent, wip, err, t } = this.props;
+    const { activePart } = this.state;
 
     if (err) {
       return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
+    }
+
+    if (wip) {
+      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
     if (fullEvent) {
@@ -96,30 +110,18 @@ class FullEvent extends Component {
               </Grid.Column>
             </Grid.Row>
           </Grid>
-          <Menu vertical fluid>
-            <Table basic="very" compact="very" celled>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>ccuName</Table.HeaderCell>
-                  <Table.HeaderCell>Name</Table.HeaderCell>
-                  <Table.HeaderCell>Duration</Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {
-                  fullEvent.content_units.map(cu => (
-                    this.tableRow(fullEvent, cu)
-                  ))
-                }
-              </Table.Body>
-            </Table>
-          </Menu>
+          <Grid padded>
+            <FullVideoBox
+              collection={fullEvent}
+              activePart={activePart}
+              language={language}
+              t={t}
+              onActivePartChange={this.handleActivePartChange}
+              PlayListComponent={FullEventPlaylist}
+            />
+          </Grid>
         </Container>
       );
-    }
-
-    if (wip) {
-      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
     return (
@@ -132,6 +134,7 @@ class FullEvent extends Component {
         }
       />
     );
+
   }
 }
 

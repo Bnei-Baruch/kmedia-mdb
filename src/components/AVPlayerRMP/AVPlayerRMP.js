@@ -143,6 +143,7 @@ class AVPlayerRMP extends PureComponent {
   }
 
   onError = (e) => {
+    console.log('Error', e);
     // Show error only on loading of video.
     if (!e.currentTime && !e.isPlaying) {
       this.setState({ error: true });
