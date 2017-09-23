@@ -7,6 +7,10 @@ class AVFullscreen extends Component {
     container: PropTypes.instanceOf(Element),
   };
 
+  static defaultProps = {
+    container: null,
+  }
+
   constructor(props) {
     super(props);
 
@@ -27,7 +31,7 @@ class AVFullscreen extends Component {
     this.setState({ fullScreen: this.isFullScreenElement() });
   }
 
-  launchIntoFullScreen() {
+  launchIntoFullScreen = () => {
     const { container } = this.props;
     if (container.requestFullscreen) {
       container.requestFullscreen();
@@ -40,7 +44,7 @@ class AVFullscreen extends Component {
     }
   }
 
-  exitFullScreen() {
+  exitFullScreen = () => {
     if (document.exitFullScreen) {
       document.exitFullScreen();
     } else if (document.mozCancelFullScreen) {
@@ -50,10 +54,9 @@ class AVFullscreen extends Component {
     }
   }
 
-  isFullScreenElement() {
-    return document.fullscreenElement || document.mozFullScreenElement ||
+  isFullScreenElement = () =>
+      document.fullscreenElement || document.mozFullScreenElement ||
       document.webkitFullscreenElement || document.msFullscreenElement;
-  }
 
   handleFullscreen = () => {
     if (this.isFullScreenElement()) {
@@ -64,9 +67,11 @@ class AVFullscreen extends Component {
   };
 
   render() {
+    const { container } = this.props;
     const { fullScreen } = this.state;
     return (
       <button
+        disabled={!container}
         type="button"
         className="player-button player-control-fullscreen"
         onClick={this.handleFullscreen}

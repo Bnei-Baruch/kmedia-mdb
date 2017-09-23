@@ -197,8 +197,8 @@ class AvSeekBar extends Component {
     // Overriding progress of native react-media-player as he does not works correctly
     // with buffers.
     const { buffers, playerMode } = this.props;
-    const b           = buffers.find(b => b.start <= currentTime && b.end >= currentTime);
-    const progress    = (b && (b.end / duration)) || current;
+    const buf         = buffers.find(b => b.start <= currentTime && b.end >= currentTime);
+    const progress    = (buf && (buf.end / duration)) || current;
 
     const isSlice = playerMode === PLAYER_MODE.SLICE_EDIT || playerMode === PLAYER_MODE.SLICE_VIEW;
     const normalizedSliceStart = this.getNormalizedSliceStart(duration);

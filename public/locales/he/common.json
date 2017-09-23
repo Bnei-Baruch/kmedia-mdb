@@ -72,6 +72,9 @@
     "pagination-results":        "תוצאות {{start}} - {{end}} מתוך {{total}}",
     "link-copied-to-clipboard":  "הקישור הועתק ללוח בהצלחה!"
   },
+  "events": {
+    "ALL_EVENTS": "כל האירועים"
+  },
   "lessons":   {
     "list": {
       "related": "קשור ל"
@@ -143,13 +146,13 @@
       "DAILY_LESSON":          "שיעור יומי",
       "SPECIAL_LESSON":        "שיעור מיוחד",
       "FRIENDS_GATHERINGS":    "",
-      "CONGRESS":              "",
+      "CONGRESS":              "קונגרס",
       "VIDEO_PROGRAM":         "",
       "LECTURE_SERIES":        "",
       "MEALS":                 "",
       "HOLIDAY":               "",
       "PICNIC":                "",
-      "UNITY_DAY":             "",
+      "UNITY_DAY":             "יום איחוד",
       "LESSON_PART":           "",
       "LECTURE":               "",
       "CHILDREN_LESSON_PART":  "",

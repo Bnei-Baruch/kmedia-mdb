@@ -410,7 +410,7 @@ $text-colors: (
 
 .filter-steps {
   display: flex;
-  height: 225px;
+  height: 400px;
   overflow: hidden;
   // margin-top: -1em;
   // border-top: 1px solid $border-color;
@@ -421,7 +421,10 @@ $text-colors: (
     overflow-y: scroll;
     // min-width:25%;
     // &:nth-child(n+3){
-
+    &:first-child {
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
     &:last-child {
       flex: 1 1 auto;
     }
@@ -432,7 +435,20 @@ $text-colors: (
       border: 0;
     }
   }
-  &__column {
+  &__lists {
+    .divider {
+      margin: .2rem 0 0;
+    }
+    .list {
+      margin-bottom: 2em!important;
+    }
+
+    .column > .header {
+      // color: red!important;
+      margin-bottom: 1em;
+      text-transform: uppercase;
+      color: $grey!important;
+    }
   }
 
   .ui.menu {

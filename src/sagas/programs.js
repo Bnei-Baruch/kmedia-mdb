@@ -15,7 +15,6 @@ function* fetchProgramsList(action) {
   const params  = filtersTransformer.toApiParams(filters);
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    console.log(params);
     const resp = isEmpty(params) ?
       yield call(Api.collections, { ...action.payload, language, content_type: CT_VIDEO_PROGRAM }) :
       yield call(Api.units, { ...action.payload, language, ...params, content_type: CT_VIDEO_PROGRAM_CHAPTER });

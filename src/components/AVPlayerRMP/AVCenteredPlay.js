@@ -26,7 +26,7 @@ class AVCenteredPlay extends Component {
     const { media } = this.props;
 
     if (media.isPlaying) {
-      return (<div></div>);
+      return <div />;
     }
 
     return (
@@ -35,10 +35,12 @@ class AVCenteredPlay extends Component {
         tabIndex="-1"
         className={classNames('player-button')}
         onClick={this.handlePlayPause}
-        style={{outline: 'none', pointerEvents: 'auto'}}
+        style={{ outline: 'none', pointerEvents: 'auto' }}
       >
-        <Icon name={'video play'}
-              size='massive' />
+        <Icon
+          name={'video play'}
+          size="massive"
+        />
       </button>
     );
   }

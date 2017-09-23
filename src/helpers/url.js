@@ -53,7 +53,7 @@ export const getQuery = (location) => {
   }
 
   return {};
-}
+};
 
 export const updateQuery = (history, updater) => {
   if (!history) {
@@ -62,4 +62,4 @@ export const updateQuery = (history, updater) => {
 
   const query = getQuery(history.location);
   history.replace({ search: stringify(updater(query)) });
-}
+};

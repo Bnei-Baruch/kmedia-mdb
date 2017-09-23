@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 const MOBILE_WIDTH = 768;
 
@@ -11,23 +11,21 @@ export default function withIsMobile(SomeComponent) {
       };
     }
 
-    width() {
-      return document.documentElement.clientWidth;
-    }
-
     componentDidMount() {
-      this._isMounted = true;
+      this.componentIsMounted = true;
       window.addEventListener('resize', this.handleWindowSizeChange);
       this.handleWindowSizeChange();
     }
 
     componentWillUnmount() {
       window.removeEventListener('resize', this.handleWindowSizeChange);
-      this._isMounted = false;
+      this.componentIsMounted = false;
     }
 
+    width = () => document.documentElement.clientWidth;
+
     handleWindowSizeChange = () => {
-      if (this._isMounted && this.state.isMobile !== (this.width() <= MOBILE_WIDTH)) {
+      if (this.componentIsMounted && this.state.isMobile !== (this.width() <= MOBILE_WIDTH)) {
         this.setState({ isMobile: this.width() <= MOBILE_WIDTH });
       }
     };
@@ -42,5 +40,5 @@ export default function withIsMobile(SomeComponent) {
         />
       );
     }
-  }
+  };
 }

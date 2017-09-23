@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'semantic-ui-react';
-import { PLAYER_MODE } from './constants';
-import { playerModeProp } from './propTypes';
 
 export default class AVShare extends Component {
   static propTypes = {
-    onActivateSlice: playerModeProp.isRequired,
+    onActivateSlice: PropTypes.func.isRequired,
   };
 
   render() {

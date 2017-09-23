@@ -6,6 +6,7 @@ import { changeDirection, getCurrentDirection } from '../helpers/i18n-utils';
 import { types } from '../redux/modules/settings';
 import { actions as sources } from '../redux/modules/sources';
 import { actions as tags } from '../redux/modules/tags';
+import { actions as events } from '../redux/modules/events';
 import i18n from '../helpers/i18nnext';
 
 function changeDirectionIfNeeded(language) {
@@ -34,6 +35,7 @@ function* setLanguage(action) {
 
   yield put(sources.fetchSources());
   yield put(tags.fetchTags());
+  yield put(events.fetchAllEvents());
 }
 
 function* watchSetLanguages() {
