@@ -6,10 +6,17 @@ const eventTypesFilter = {
   queryKey: 'eventType',
   valueToQuery: value => value.join('_'),
   queryToValue: queryValue => queryValue.split('_'),
-  valueToApiParam: value => ({
-    content_type: value[0],
-    value: value[value.length - 1]
-  }),
+  valueToApiParam: (value) => {
+    const result = {
+      content_type: value[0]
+    };
+
+    if (value.length > 1) {
+      result.value = value[value.length - 1];
+    }
+
+    return result;
+  },
   tagIcon: 'book',
   valueToTagLabel: (value, props, { getState }) => {
     if (!value) {
