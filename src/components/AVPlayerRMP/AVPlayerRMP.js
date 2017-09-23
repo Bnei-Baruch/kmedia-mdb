@@ -344,7 +344,7 @@ class AVPlayerRMP extends PureComponent {
     const isVideo = item.mediaType === MT_VIDEO;
     const isAudio = item.mediaType === MT_AUDIO;
 
-    const elapsedStart = media.currentTime + ((mode === PLAYER_MODE.SLICE_EDIT) ? sliceStart : 0);
+    const elapsedStart = ((mode === PLAYER_MODE.SLICE_EDIT) ? Math.max(0, media.currentTime - sliceStart) : media.currentTime);
     const elapsedEnd = ((mode === PLAYER_MODE.SLICE_EDIT && sliceEnd !== Infinity) ? sliceEnd : media.duration);
 
     return (

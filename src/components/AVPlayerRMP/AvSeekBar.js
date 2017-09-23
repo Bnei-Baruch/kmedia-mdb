@@ -30,9 +30,9 @@ class AvSeekBar extends Component {
     onSliceEndChange: noop
   };
 
-  _element              = null;
-  _wasMouseDown         = false;
-  _isPlayingOnMouseDown = false;
+  element              = null;
+  wasMouseDown         = false;
+  isPlayingOnMouseDown = false;
 
   componentDidMount() {
     document.addEventListener('mousemove', this.handleMove, { passive: false });
@@ -49,108 +49,93 @@ class AvSeekBar extends Component {
   }
 
   handleStart = (e) => {
-    this._wasMouseDown         = true;
-    this._isPlayingOnMouseDown = this.props.media.isPlaying;
+    this.wasMouseDown         = true;
+    this.isPlayingOnMouseDown = this.props.media.isPlaying;
 
     this.props.media.pause();
 
-    if (e.target === this.sliceStartHandle.knobElement) {
-      this._sliceStartActive = true;
-    } else if (e.target === this.sliceEndHandle.knobElement) {
-      this._sliceEndActive = true;
+    if (this.sliceStartHandle && e.target === this.sliceStartHandle.getKnobElement()) {
+      this.sliceStartActive = true;
+    } else if (this.sliceEndHandle && e.target === this.sliceEndHandle.getKnobElement()) {
+      this.sliceEndActive = true;
     } else {
-      this._sliceStartActive = false;
-      this._sliceEndActive = false;
+      this.sliceStartActive = false;
+      this.sliceEndActive = false;
     }
   };
 
   handleMove = (e) => {
-    const { playerMode, onSliceStartChange, onSliceEndChange, sliceStart, sliceEnd } = this.props;
-    if (this._wasMouseDown) {
+    const { playerMode, onSliceStartChange, onSliceEndChange, sliceStart, sliceEnd, media } = this.props;
+    if (this.wasMouseDown) {
+      e.preventDefault();
       // Resolve clientX from mouse or touch event.
       const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
-      const seekPosition = this.getSeekPositionFromClientX(clientX);
+      let seekPosition = this.getSeekPositionFromClientX(clientX);
 
-      if (playerMode === PLAYER_MODE.SLICE_EDIT) {
-        if (this._sliceStartActive) {
-          if (seekPosition < sliceEnd) {
-            onSliceStartChange(seekPosition);
-          }
-        } else if (this._sliceEndActive) {
-          if (seekPosition > sliceStart) {
-            onSliceEndChange(seekPosition);
-          }
+      if (this.sliceStartActive) {
+        if (seekPosition < sliceEnd) {
+          onSliceStartChange(seekPosition);
         }
-      } else {
-        this.seek(seekPosition);
+      } else if (this.sliceEndActive) {
+        if (seekPosition > sliceStart) {
+          onSliceEndChange(seekPosition);
+        }
+      } else if (playerMode === PLAYER_MODE.SLICE_EDIT) {
+        // Correct current time if position is out of bounds of edited slice
+        if (seekPosition < sliceStart) {
+          seekPosition = Math.max(0, sliceStart);
+        } else if (seekPosition > sliceEnd) {
+          seekPosition = Math.min(sliceEnd, media.duration);
+        }
       }
-      e.preventDefault();
+
+      media.seekTo(seekPosition);
     }
   };
 
   handleEnd = (e) => {
-    const { playerMode, media } = this.props;
-    if (this._wasMouseDown) {
-      this._wasMouseDown = false;
+    const { playerMode, media, sliceStart, sliceEnd } = this.props;
+    if (this.wasMouseDown) {
+      e.preventDefault();
+      this.wasMouseDown = false;
 
       if (e.clientX) {
-        const seekPosition = this.getSeekPositionFromClientX(e.clientX);
-        // Seek on desktop on mouse up. On mobile Move is called so no need to seek here.
-        if (playerMode === PLAYER_MODE.NORMAL || playerMode === PLAYER_MODE.SLICE_VIEW) {
-          this.seek(seekPosition);
-        // Correct current time if position is out of bounds of edited slice
-        } else if (playerMode === PLAYER_MODE.SLICE_EDIT) {
-          if (
-            (this._sliceStartActive === true && seekPosition > media.currentTime)
-            || (this._sliceEndActive === true && seekPosition < media.currentTime)
-          ) {
-            this.seek(seekPosition);
+        let seekPosition = this.getSeekPositionFromClientX(e.clientX);
+
+        if (this.sliceStartActive === true || this.sliceEndActive === true) {
+          this.props.media.pause();
+        }
+
+        if (playerMode === PLAYER_MODE.SLICE_EDIT) {
+          // Correct current time if position is out of bounds of edited slice
+          if (seekPosition < sliceStart) {
+            seekPosition = Math.max(0, sliceStart);
+          } else if (seekPosition > sliceEnd) {
+            seekPosition = Math.min(sliceEnd, media.duration);
           }
         }
-      }
 
-      this._sliceStartActive = false;
-      this._sliceEndActive = false;
+        media.seekTo(seekPosition);
+      }
 
       // only play if media was playing prior to mouseDown
-      if (this._isPlayingOnMouseDown) {
+      if (!this.sliceStartActive && !this.sliceEndActive && this.isPlayingOnMouseDown) {
         this.props.media.play();
       }
-      e.preventDefault();
+
+      this.sliceStartActive = false;
+      this.sliceEndActive = false;
     }
   };
 
-  getSeekPositionFromClientX = clientX => {
+  getSeekPositionFromClientX = (clientX) => {
     const { media } = this.props;
-    const { left, right } = this._element.getBoundingClientRect();
+    const { left, right } = this.element.getBoundingClientRect();
     const { duration }    = media;
     const offset          = Math.min(Math.max(0, clientX - left), right - left);
 
     return (duration * offset) / (right - left);
   }
-
-  clampPositionInSlice = (position, sliceStart, sliceEnd) => {
-    let clampedPosition = position;
-    if (position > sliceEnd) {
-      clampedPosition = sliceEnd;
-    } else if (position < sliceStart) {
-      clampedPosition = sliceStart;
-    }
-
-    return clampedPosition;
-  }
-
-  seek = (seekPosition) => {
-    const { media, playerMode, sliceStart, sliceEnd } = this.props;
-    let correctedSeekPosition;
-
-    if (playerMode === PLAYER_MODE.SLICE_EDIT || playerMode === PLAYER_MODE.SLICE_VIEW) {
-      correctedSeekPosition = this.clampPositionInSlice(seekPosition, sliceStart, sliceEnd);
-      media.seekTo(!correctedSeekPosition || correctedSeekPosition === Infinity ? media.duration : correctedSeekPosition);
-    }
-
-    media.seekTo(seekPosition);
-  };
 
   toPercentage = (l) => {
     const ret = 100 * l;
@@ -231,7 +216,7 @@ class AvSeekBar extends Component {
 
     return (
       <div
-        ref={c => this._element = c}
+        ref={el => this.element = el}
         className="player-control-seekbar-container"
         onMouseDown={this.handleStart}
         onTouchStart={this.handleStart}
@@ -256,20 +241,17 @@ class AvSeekBar extends Component {
             />
           )
         }
-        <div className={
-          classNames('player-control-seekbar', {
-            mobile: isMobile
-          }
-        )}>
+        <div
+          className={
+            classNames('player-control-seekbar', {
+              mobile: isMobile
+            }
+          )}
+        >
           <div className="bar played" style={stylePlayed}>
-            <div className={classNames("knob", {"mobile": isMobile})} />
+            <div className={classNames('knob', { mobile: isMobile })} />
           </div>
           <div className="bar loaded" style={styleLoaded} />
-
-              <div className="bar slice" >
-                <div className="slice-start" />
-                <div className="slice-end" />
-              </div>
         </div>
       </div>
     );

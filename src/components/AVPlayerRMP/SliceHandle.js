@@ -20,6 +20,8 @@ export default class SliceHandle extends Component {
     className: ''
   };
 
+  getKnobElement = () => this.knobElement;
+
   render() {
     const { isEditMode, position, seconds, className } = this.props;
 
