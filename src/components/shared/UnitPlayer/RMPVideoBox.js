@@ -46,7 +46,8 @@ class RMPVideoBox extends Component {
       return;
     }
 
-    this.setPlayableItem(unit, newMediaType, language);
+    // Persist language in playableItem
+    this.setPlayableItem(unit, newMediaType, this.state.playableItem.language);
   }
 
   setPlayableItem(unit, mediaType, language, cb) {
