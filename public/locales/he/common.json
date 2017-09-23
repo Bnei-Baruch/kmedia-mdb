@@ -52,6 +52,7 @@
   "buttons":   {
     "apply":  "אישור",
     "cancel": "ביטול",
+    "close": "סגור",
     "audio":  "אודיו",
     "video":  "וידאו",
     "more":   "עוד"

@@ -339,7 +339,7 @@ class DateFilter extends Component {
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column textAlign="right">
-                    <Button content={t('buttons.cancel')} onClick={this.onCancel} />
+                    <Button content={t('buttons.close')} onClick={this.onCancel} />
                     <Button primary content={t('buttons.apply')} disabled={!this.canApply()} onClick={this.apply} />
                   </Grid.Column>
                 </Grid.Row>

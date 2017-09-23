@@ -53,6 +53,7 @@
   "buttons":   {
     "apply":  "Apply",
     "cancel": "Cancel",
+    "close":  "Close",
     "audio":  "Audio",
     "video":  "Video",
     "more":   "More"
