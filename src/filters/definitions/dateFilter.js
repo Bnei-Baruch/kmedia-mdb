@@ -1,6 +1,7 @@
 import moment from 'moment';
 
 import { DATE_FORMAT } from '../../helpers/consts';
+import { sameDate } from '../../helpers/date';
 import { createFilterDefinition } from './util';
 
 const dateFilter = {
@@ -37,7 +38,7 @@ const dateFilter = {
     const { from, to } = value;
     const dateFormat   = date => moment(new Date(date)).format('D MMM YYYY');
 
-    if (value.from === value.to) {
+    if (sameDate(value.from, value.to)) {
       return dateFormat(from);
     }
 
