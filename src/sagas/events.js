@@ -7,11 +7,15 @@ import { selectors as settings } from '../redux/modules/settings';
 import { actions, types } from '../redux/modules/events';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { types as system } from '../redux/modules/system';
+import { selectors as filterSelectors } from '../redux/modules/filters';
+import { filtersTransformer } from '../filters';
 
 function* fetchEventsList(action) {
+  const filters = yield select(state => filterSelectors.getFilters(state.filters, 'events'));
+  const params  = filtersTransformer.toApiParams(filters);
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const resp     = yield call(Api.collections, { ...action.payload, language });
+    const resp     = yield call(Api.collections, { ...action.payload, ...params, language });
 
     yield put(mdbActions.receiveCollections(resp.collections));
     yield put(actions.fetchListSuccess(resp));

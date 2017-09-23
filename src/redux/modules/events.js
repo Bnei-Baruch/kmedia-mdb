@@ -169,7 +169,8 @@ const onFetchAllEventsSuccess = (state, action) => {
       acc.countries[country] = {
         id: country,
         name: country,
-        children: []
+        children: [],
+        typeName: 'country'
       };
     }
 
@@ -179,7 +180,8 @@ const onFetchAllEventsSuccess = (state, action) => {
         id: city,
         name: city,
         children: [],
-        parentId: country
+        parentId: country,
+        typeName: 'city'
       };
     }
 
@@ -198,7 +200,8 @@ const onFetchAllEventsSuccess = (state, action) => {
     acc[event] = {
       id: event,
       name: i18n.t(`constants.content-types.${event}`),
-      children: []
+      children: [],
+      typeName: 'content_type'
     };
     return acc;
   }, {}));
