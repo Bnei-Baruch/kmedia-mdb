@@ -19,6 +19,14 @@ class AVPlayPause extends Component {
     onPrev: PropTypes.func,
   };
 
+  static defaultProps = {
+    showNextPrev: null,
+    hasNext: null,
+    hasPrev: null,
+    onNext: null,
+    onPrev: null,
+  };
+
   shouldComponentUpdate(prevProps) {
     const { media, hasNext, hasPrev, showNextPrev } = prevProps;
     return this.props.media.isPlaying !== media.isPlaying ||
@@ -35,23 +43,28 @@ class AVPlayPause extends Component {
     const { media, showNextPrev, hasNext, hasPrev, onNext, onPrev } = this.props;
 
     return (
-      <div style={{display: 'flex', flexDirection: 'row',
-                   marginLeft: '10px', marginRight: '5px'}}>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        marginLeft: '10px',
+        marginRight: '5px' }}
+      >
         { showNextPrev ? (
-        <button
-          type="button"
-          tabIndex="-1"
-          disabled={!hasPrev}
-          className={classNames('player-button')}
-          onClick={onPrev}
-          style={{ marginRight: '5px' }}
-        >
-          <Icon
-            name={'step backward'}
+          <button
+            type="button"
+            tabIndex="-1"
             disabled={!hasPrev}
-            style={{margin: 0, height: '100%' }}
-          />
-        </button>) : null }
+            className={classNames('player-button')}
+            onClick={onPrev}
+            style={{ marginRight: '5px' }}
+          >
+            <Icon
+              name={'step backward'}
+              disabled={!hasPrev}
+              style={{ margin: 0, height: '100%' }}
+            />
+          </button>
+        ) : null }
         <button
           type="button"
           tabIndex="-1"
@@ -60,24 +73,25 @@ class AVPlayPause extends Component {
         >
           <Icon
             name={media.isPlaying ? 'pause' : 'play'}
-            style={{margin: 0, height: '100%' }}
+            style={{ margin: 0, height: '100%' }}
           />
         </button>
         { showNextPrev ? (
-        <button
-          type="button"
-          tabIndex="-1"
-          disabled={!hasNext}
-          className={classNames('player-button')}
-          onClick={onNext}
-          style={{ marginLeft: '5px' }}
-        >
-          <Icon
-            name={'step forward'}
+          <button
+            type="button"
+            tabIndex="-1"
             disabled={!hasNext}
-            style={{margin: 0, height: '100%' }}
-          />
-        </button>) : null }
+            className={classNames('player-button')}
+            onClick={onNext}
+            style={{ marginLeft: '5px' }}
+          >
+            <Icon
+              name={'step forward'}
+              disabled={!hasNext}
+              style={{ margin: 0, height: '100%' }}
+            />
+          </button>
+        ) : null }
       </div>
     );
   }

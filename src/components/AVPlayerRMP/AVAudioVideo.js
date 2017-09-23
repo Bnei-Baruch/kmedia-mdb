@@ -6,9 +6,12 @@ const AVAudioVideo = (props) => {
   const { isAudio, setAudio, isVideo, setVideo, t } = props;
 
   return (
-    <div className={classNames("player-button player-control-audio-video")}>
+    <div className={classNames('player-button player-control-audio-videor')}>
       <div
-        style={{ textDecoration: isAudio ? 'underline' : 'none' }}
+        style={{
+          textDecoration: isAudio ? 'underline' : 'none',
+          display: 'inline-block',
+        }}
         role="button"
         tabIndex="0"
         onClick={setAudio}
@@ -17,7 +20,10 @@ const AVAudioVideo = (props) => {
       </div>
       <span>&nbsp;/&nbsp;</span>
       <div
-        style={{ textDecoration: isVideo ? 'underline' : 'none' }}
+        style={{
+          textDecoration: isVideo ? 'underline' : 'none',
+          display: 'inline-block',
+        }}
         role="button"
         tabIndex="0"
         onClick={setVideo}

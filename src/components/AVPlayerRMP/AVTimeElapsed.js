@@ -31,6 +31,6 @@ AVTimeElapsed.defaultProps = {
   isSlice: false,
   sliceStart: undefined,
   sliceEnd: undefined
-}
+};
 
 export default AVTimeElapsed;

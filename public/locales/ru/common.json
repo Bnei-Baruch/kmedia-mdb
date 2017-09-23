@@ -72,6 +72,9 @@
     "no-results":                "Нет результатов",
     "pagination-results":        "Результаты {{start}} - {{end}} из {{total}}"
   },
+  "events": {
+    "ALL_EVENTS": ""
+  },
   "lessons":   {
     "list": {
       "related": "Относятся к"

@@ -76,6 +76,9 @@
     "pagination-results":        "Results {{start}} - {{end}} of {{total}}",
     "link-copied-to-clipboard":  "Link was copied!"
   },
+  "events": {
+    "ALL_EVENTS": "All Events"
+  },
   "lessons":   {
     "list": {
       "related": "Related to"
@@ -185,13 +188,13 @@
       "DAILY_LESSON":          "Daily Lesson",
       "SPECIAL_LESSON":        "Special Lesson",
       "FRIENDS_GATHERINGS":    "",
-      "CONGRESS":              "",
+      "CONGRESS":              "Congress",
       "VIDEO_PROGRAM":         "Video Program",
       "LECTURE_SERIES":        "",
       "MEALS":                 "",
-      "HOLIDAY":               "",
-      "PICNIC":                "",
-      "UNITY_DAY":             "",
+      "HOLIDAY":               "Holiday",
+      "PICNIC":                "Picnic",
+      "UNITY_DAY":             "Unity Day",
       "LESSON_PART":           "",
       "LECTURE":               "",
       "CHILDREN_LESSON_PART":  "",
