@@ -104,7 +104,7 @@
         "sketches":      "Чертежи"
       },
       "downloads":      {
-        "title":         "Медия для скачиания",
+        "title":         "Медиа для скачивания",
         "derived-title": "Производная медиа",
         "copy-link":     "Копировать линк",
         "type-labels":   {
@@ -121,6 +121,16 @@
     }
   },
   "programs":  {
+    "list": {
+      "episode_from": "Часть из:"
+    },
+    "full": {
+      "episodes":  "эпизод(ов)",
+      "ccuName":   "Content Unit Name",
+      "name":      "Название программы",
+      "duration":  "Продолжительность",
+      "film_date": "Дата съёмок"
+    },
     "part": {
       "info":           {
         "tags":          "Таги",
@@ -132,7 +142,7 @@
         "transcription": "Конспект"
       },
       "downloads":      {
-        "title":         "Медия для скачиания",
+        "title":         "Медиа для скачивания",
         "derived-title": "Производная медиа",
         "copy-link":     "Копировать линк",
         "type-labels":   {

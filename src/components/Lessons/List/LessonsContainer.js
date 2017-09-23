@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Divider, Container, Header, Grid } from 'semantic-ui-react';
+import { Container, Divider, Grid, Header } from 'semantic-ui-react';
 
 import { CT_LESSON_PART } from '../../../helpers/consts';
 import { actions, selectors as lessonSelectors } from '../../../redux/modules/lessons';
@@ -50,16 +50,18 @@ class LessonsContainer extends withPagination {
 
     return (
       <div>
-        <div className='section-header'>
-          <Container className='padded'>
+        <div className="section-header">
+          <Container className="padded">
             <Grid>
               <Grid.Row>
                 <Grid.Column computer={10} tablet={12} mobile={16}>
-                  <Header as='h1' color='blue'>
+                  <Header as="h1" color="blue">
                     <Header.Content>
                       Daily Lessons
                       <Header.Subheader>
-                        The daily acceptance rate is delivered by Rabbi Dr. Michael Laitman to millions of viewers around the world, every night between 3-6 clock Israel, and describes the spiritual flow that humanity today.
+                        The daily acceptance rate is delivered by Rabbi Dr. Michael Laitman to millions of viewers
+                        around the world, every night between 3-6 clock Israel, and describes the spiritual flow that
+                        humanity today.
                       </Header.Subheader>
                     </Header.Content>
                   </Header>
@@ -68,18 +70,18 @@ class LessonsContainer extends withPagination {
             </Grid>
           </Container>
         </div>
-        <Divider fitted/>
+        <Divider fitted />
         <LessonsFilters
           onChange={() => withPagination.handlePageChange(this.props, 1)}
           onHydrated={() => withPagination.handlePageChange(this.props)}
         />
-        <Container className='padded'>
-            <withPagination.ResultsPageHeader {...this.props} />
+        <Container className="padded">
+          <withPagination.ResultsPageHeader {...this.props} />
 
-            <LessonsList items={items} />
+          <LessonsList items={items} />
         </Container>
         <Divider fitted />
-        <Container className='padded' textAlign='center'>
+        <Container className="padded" textAlign="center">
           <withPagination.Pagination {...this.props} />
         </Container>
       </div>

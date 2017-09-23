@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Divider, Grid } from 'semantic-ui-react';
+import { Container, Divider } from 'semantic-ui-react';
 
 import { CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
 import { actions, selectors as programSelectors } from '../../../redux/modules/programs';
@@ -50,16 +50,20 @@ class ProgramsContainer extends withPagination {
     const { items } = this.props;
 
     return (
-      <Grid.Column width={16}>
+      <div>
         <ProgramsFilters
           onChange={() => withPagination.handlePageChange(this.props, 1)}
           onHydrated={() => withPagination.handlePageChange(this.props)}
         />
-        <withPagination.ResultsPageHeader {...this.props} />
-        <Divider />
-        <ProgramsList items={items} />
-        <withPagination.Pagination {...this.props} />
-      </Grid.Column>
+        <Container className="padded">
+          <withPagination.ResultsPageHeader {...this.props} />
+          <ProgramsList items={items} />
+        </Container>
+        <Divider fitted />
+        <Container className="padded" textAlign="center">
+          <withPagination.Pagination {...this.props} />
+        </Container>
+      </div>
     );
   }
 }
@@ -69,9 +73,7 @@ const mapState = (state) => {
   return {
     ...parentProps,
     items: programSelectors.getItems(state.programs)
-      .map(x => (x[1] === CT_VIDEO_PROGRAM_CHAPTER ?
-        mdb.getUnitById(state.mdb, x[0]) :
-        mdb.getDenormCollection(state.mdb, x[0]))),
+      .map(x => mdb.getDenormContentUnit(state.mdb, x)),
     language: settings.getLanguage(state.settings),
     isFiltersHydrated: filters.getIsHydrated(state.filters, 'programs'),
   };

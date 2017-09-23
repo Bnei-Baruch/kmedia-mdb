@@ -19,9 +19,9 @@ class withPagination extends React.Component {
 
   static defaultProps = {};
 
-  static mapState = (namespase, state, selectors, settings) => ({
-    pageNo: selectors.getPageNo(state[namespase]),
-    total: selectors.getTotal(state[namespase]),
+  static mapState = (namespace, state, selectors, settings) => ({
+    pageNo: selectors.getPageNo(state[namespace]),
+    total: selectors.getTotal(state[namespace]),
     pageSize: settings.getPageSize(state.settings),
   });
 
