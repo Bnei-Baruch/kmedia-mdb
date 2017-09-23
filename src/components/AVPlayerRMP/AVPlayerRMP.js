@@ -22,9 +22,8 @@ import AVMuteUnmute from './AVMuteUnmute';
 import AVLanguage from './AVLanguage';
 import AVAudioVideo from './AVAudioVideo';
 import AvSeekBar from './AvSeekBar';
-import AVSliceToggle from './AVSliceToggle';
-import AVSliceMenu from './AVSliceMenu';
 import AVShare from './AVShare';
+import AVShareLink from './AVShareLink';
 
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = (playback) => {
@@ -472,40 +471,34 @@ class AVPlayerRMP extends PureComponent {
                     onSelect={this.playbackRateChange}
                     upward={isVideo} />
                   <AVMuteUnmute upward={isVideo} />
-                  <AVAudioVideo
-                    isAudio={isAudio}
-                    isVideo={isVideo}
-                    setAudio={this.onSwitchAV}
-                    setVideo={this.onSwitchAV}
-                    t={t}
-                  />
-                  <AVLanguage
-                    languages={languages}
-                    defaultValue={language}
-                    onSelect={this.onLanguageChange}
-                    upward={isVideo}
-                  />
                   {
-                    isSliceable && (
-                      <AVSliceToggle
-                        playerMode={mode}
-                        onToggle={this.handleToggleMode}
+                    !isEditMode && (
+                      <AVAudioVideo
+                        isAudio={isAudio}
+                        isVideo={isVideo}
+                        setAudio={this.onSwitchAV}
+                        setVideo={this.onSwitchAV}
+                        t={t}
                       />
                     )
                   }
                   {
-                    isSliceable && (isEditMode || mode === PLAYER_MODE.SLICE_VIEW) && (
-                      <div className={classNames('player-control-slice-menu-wrapper', { downward: isAudio })}>
-                        <AVSliceMenu
-                          playerMode={mode}
-                          onEdit={() => this.setSliceMode(true)}
-                          onView={() => this.setSliceMode(false)}
-                        />
-                      </div>
+                    !isEditMode && (
+                      <AVLanguage
+                        languages={languages}
+                        defaultValue={language}
+                        onSelect={this.onLanguageChange}
+                        upward={isVideo}
+                      />
                     )
                   }
-                  <AVShare downward={isAudio} />
-                  <AVFullScreen container={this.mediaElement_} />
+                  {
+                    isEditMode && <AVShareLink downward={isAudio} />
+                  }
+                  <AVShare
+                    onActivateSlice={() => this.setSliceMode(true)}
+                  />
+                  { !isEditMode && <AVFullScreen container={this.mediaElement_} /> }
                 </div>
               </div>
               {

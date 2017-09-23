@@ -1,71 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CopyToClipboard from 'react-copy-to-clipboard';
-import { Icon, Popup } from 'semantic-ui-react';
-import { translate } from 'react-i18next';
+import { Icon } from 'semantic-ui-react';
+import { PLAYER_MODE } from './constants';
+import { playerModeProp } from './propTypes';
 
-const POPOVER_CONFIRMATION_TIMEOUT = 2500;
-
-class AVShare extends Component {
-
+export default class AVShare extends Component {
   static propTypes = {
-    t: PropTypes.func.isRequired,
-    downward: PropTypes.bool
-  };
-
-  static defaultProps = {
-    downward: false
-  };
-
-  state = {
-    url: '',
-    recentlyCopied: false
-  };
-
-  confirmTimeoutHandle = null;
-
-  componentDidMount() {
-    this.setState({
-      url: window.location.href
-    });
-  }
-
-  componentWillUnmount() {
-    this.clearConfirmationTimeout();
-  }
-
-  clearConfirmationTimeout = () => {
-    if (this.confirmTimeoutHandle) {
-      clearTimeout(this.confirmTimeoutHandle);
-      this.confirmTimeoutHandle = null;
-    }
-  }
-
-  handleCopied = () => {
-    this.clearConfirmationTimeout();
-    this.setState({ recentlyCopied: true }, () => {
-      this.confirmTimeoutHandle = setTimeout(() => this.setState({ recentlyCopied: false }), POPOVER_CONFIRMATION_TIMEOUT);
-    });
+    onActivateSlice: playerModeProp.isRequired,
   };
 
   render() {
-    const { t, downward } = this.props;
+    const { onActivateSlice } = this.props;
+
     return (
-      <div className="player-button player-control-share">
-        <Popup
-          open={this.state.recentlyCopied}
-          content={t('messages.link-copied-to-clipboard')}
-          position={`${downward ? 'bottom' : 'top'} right`}
-          offset={10}
-          trigger={
-            <CopyToClipboard text={this.state.url} onCopy={this.handleCopied}>
-              <Icon name="share" />
-            </CopyToClipboard>
-          }
+      <button
+        type="button"
+        tabIndex="-1"
+        className="player-button player-control-slice-toggle"
+        onClick={onActivateSlice}
+      >
+        <Icon
+          name="share alternate"
+          style={{ margin: 0, height: '100%' }}
         />
-      </div>
+      </button>
     );
   }
 }
-
-export default translate()(AVShare);

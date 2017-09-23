@@ -276,28 +276,6 @@
       width: 100%;
       height: 100%;
       z-index: 1;
-
-      .player-control-slice-menu-wrapper {
-        position: absolute;
-        bottom: 100%;
-        right: 0;
-        color: #ffffff;
-
-        &:before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-color: #000000;
-          opacity: 0.65;
-        }
-
-        &.downward {
-          top: 100%;
-        }
-      }
     }
 
     &:before {
