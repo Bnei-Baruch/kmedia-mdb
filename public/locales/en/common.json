@@ -28,6 +28,9 @@
     "programs":        {
       "by": "Filter Programs by:"
     },
+    "events": {
+      "by": "Filter Events by:"
+    },
     "date-filter":    {
       "label":       "Date",
       "selectTitle": "Select a date range",
@@ -48,6 +51,14 @@
     },
     "topics-filter":  {
       "label": "Topics"
+    },
+    "event-types-filter": {
+      "label": "Types",
+      "all": "All Events",
+      "allItem": "All"
+    },
+    "years-filter": {
+      "label": "Year"
     }
   },
   "buttons":   {
