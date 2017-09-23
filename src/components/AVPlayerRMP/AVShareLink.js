@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Icon, Popup } from 'semantic-ui-react';
 import { translate } from 'react-i18next';
@@ -25,14 +26,24 @@ class AVShareLink extends Component {
   confirmTimeoutHandle = null;
 
   componentDidMount() {
-    this.setState({
-      url: window.location.href
-    });
+    this.loadUrl();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (window.location.href !== this.state.url) {
+      this.loadUrl();
+    }
   }
 
   componentWillUnmount() {
     this.clearConfirmationTimeout();
   }
+
+  loadUrl = () => {
+    this.setState({
+      url: window.location.href
+    });
+  };
 
   clearConfirmationTimeout = () => {
     if (this.confirmTimeoutHandle) {
@@ -51,7 +62,7 @@ class AVShareLink extends Component {
   render() {
     const { t, downward } = this.props;
     return (
-      <div className="player-button player-control-share">
+      <div className="player-button player-control-share-link">
         <Popup
           open={this.state.recentlyCopied}
           content={t('messages.link-copied-to-clipboard')}
@@ -68,4 +79,4 @@ class AVShareLink extends Component {
   }
 }
 
-export default translate()(AVShareLink);
+export default withRouter(translate()(AVShareLink));

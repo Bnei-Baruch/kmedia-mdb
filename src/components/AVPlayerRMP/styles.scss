@@ -27,16 +27,12 @@
   }
 }
 
-.player-control-share,
-.player-control-slice-toggle,
+.player-control-link-share,
+.player-control-slice-share,
 .player-control-fullscreen {
   cursor: pointer;
   margin-right: 5px;
   margin-left: 5px;
-}
-
-.player-control-slice-toggle {
-  margin-left: 10px;
 }
 
 .player-seekbar-wrapper {

@@ -5,7 +5,6 @@ import { Divider, Container } from 'semantic-ui-react';
 
 import { EVENT_TYPES } from '../../../helpers/consts';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions, selectors as eventSelectors } from '../../../redux/modules/events';
 import * as shapes from '../../shapes';
 import EventsList from './EventsList';

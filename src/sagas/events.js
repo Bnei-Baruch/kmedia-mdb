@@ -1,7 +1,6 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import { updateQuery } from './helpers/url';
 import { EVENT_TYPES } from '../helpers/consts';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions, types } from '../redux/modules/events';

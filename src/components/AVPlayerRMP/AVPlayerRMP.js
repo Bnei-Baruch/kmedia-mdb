@@ -378,7 +378,7 @@ class AVPlayerRMP extends PureComponent {
   }
 
   render() {
-    const { isMobile, autoPlay, item, languages, language, t, showNextPrev, hasNext, hasPrev, onPrev, onNext, isSliceable, media } = this.props;
+    const { isMobile, autoPlay, item, languages, language, t, showNextPrev, hasNext, hasPrev, onPrev, onNext, media } = this.props;
     const { isTopSeekbar, controlsVisible, error, sliceStart, sliceEnd, mode, playbackRate } = this.state;
 
     const { isFullscreen, isPlaying } = media;

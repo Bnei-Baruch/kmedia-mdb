@@ -2,7 +2,7 @@ import { createAction, handleActions } from 'redux-actions';
 import i18n from '../../helpers/i18nnext';
 import { types as settings } from './settings';
 import { selectors as mdb } from './mdb';
-import { CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY, EVENT_TYPES } from '../../helpers/consts';
+import { CT_CONGRESS, EVENT_TYPES } from '../../helpers/consts';
 
 /* Types */
 

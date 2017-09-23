@@ -14,7 +14,7 @@ export default class AVShare extends Component {
       <button
         type="button"
         tabIndex="-1"
-        className="player-button player-control-slice-toggle"
+        className="player-button player-control-slice-share"
         onClick={onActivateSlice}
       >
         <Icon

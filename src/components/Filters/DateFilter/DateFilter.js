@@ -191,6 +191,7 @@ class DateFilter extends Component {
    */
   showMonth = (preset, from, to) => {
     let dateToShow = from;
+    // eslint-disable-next-line default-case
     switch (preset) {
     case TODAY:
     case YESTERDAY:
