@@ -499,11 +499,15 @@ class AVPlayerRMP extends PureComponent {
                       />
                     )}
                   </div>
-                  <AVPlaybackRate
-                    value={playbackRate}
-                    onSelect={this.playbackRateChange}
-                    upward={isVideo}
-                  />
+                  {
+                    !isEditMode && (
+                      <AVPlaybackRate
+                        value={playbackRate}
+                        onSelect={this.playbackRateChange}
+                        upward={isVideo}
+                      />
+                    )
+                  }
                   <AVMuteUnmute upward={isVideo} />
                   {
                     !isEditMode && (
