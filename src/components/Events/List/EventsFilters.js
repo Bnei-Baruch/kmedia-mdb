@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import noop from 'lodash/noop';
 
 import Filters from '../../Filters/Filters';
 import filterComponents from '../../Filters/filterComponents';
@@ -20,8 +21,13 @@ const filters = [
 class EventsFilter extends PureComponent {
 
   static propTypes = {
-    onChange: PropTypes.func.isRequired,
-    onHydrated: PropTypes.func.isRequired,
+    onChange: PropTypes.func,
+    onHydrated: PropTypes.func,
+  };
+
+  static defaultProps = {
+    onChange: noop,
+    onHydrated: noop,
   };
 
   render() {

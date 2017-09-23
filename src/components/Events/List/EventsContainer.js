@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Divider, Grid } from 'semantic-ui-react';
+import { Divider, Container } from 'semantic-ui-react';
 
 import { EVENT_TYPES } from '../../../helpers/consts';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -10,9 +10,10 @@ import { actions, selectors as eventSelectors } from '../../../redux/modules/eve
 import * as shapes from '../../shapes';
 import EventsList from './EventsList';
 import EventsFilters from './EventsFilters';
-import withPagination from '../../pagination/withPagination';
+import ResultsPageHeader from '../../pagination/ResultsPageHeader';
+import { selectors as filterSelectors } from '../../../redux/modules/filters';
 
-class EventsContainer extends withPagination {
+class EventsContainer extends Component {
 
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.EventCollection, shapes.EventItem])),
@@ -26,46 +27,29 @@ class EventsContainer extends withPagination {
     contentTypes: EVENT_TYPES
   };
 
-  componentDidMount() {
-    withPagination.askForData(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { language } = nextProps;
-
-    if (language !== this.props.language) {
-      withPagination.askForData(nextProps);
-    }
-
-    super.componentWillReceiveProps(nextProps);
-  }
-
   render() {
     const { items } = this.props;
 
     return (
       <div>
-        <EventsFilters
-          onChange={() => withPagination.handlePageChange(this.props, 1)}
-          onHydrated={() => withPagination.handlePageChange(this.props)}
-        />
-        <Grid.Column width={16}>
-          <withPagination.ResultsPageHeader {...this.props} />
-          <Divider />
+        <EventsFilters />
+        <Container className="padded">
+          <ResultsPageHeader {...this.props} />
+          <Divider fitted />
           <EventsList items={items} />
-          <withPagination.Pagination {...this.props} />
-        </Grid.Column>
+        </Container>
       </div>
     );
   }
 }
 
 const mapState = (state) => {
-  const parentProps = withPagination.mapState('events', state, eventSelectors, settings);
+  const filters = filterSelectors.getFilters(state.filters, 'events');
+  const { items, ...paginationInfo } = eventSelectors.getFilteredData(state.events, filters, state.mdb);
+
   return {
-    ...parentProps,
-    items: eventSelectors.getItems(state.events)
-      .map(x => mdb.getDenormCollection(state.mdb, x[0])),
+    ...paginationInfo,
+    items,
     language: settings.getLanguage(state.settings),
   };
 };

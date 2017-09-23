@@ -7,22 +7,6 @@ import { selectors as settings } from '../redux/modules/settings';
 import { actions, types } from '../redux/modules/events';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { types as system } from '../redux/modules/system';
-import { selectors as filterSelectors } from '../redux/modules/filters';
-import { filtersTransformer } from '../filters';
-
-function* fetchEventsList(action) {
-  const filters = yield select(state => filterSelectors.getFilters(state.filters, 'events'));
-  const params  = filtersTransformer.toApiParams(filters);
-  try {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const resp     = yield call(Api.collections, { ...action.payload, ...params, language });
-
-    yield put(mdbActions.receiveCollections(resp.collections));
-    yield put(actions.fetchListSuccess(resp));
-  } catch (err) {
-    yield put(actions.fetchListFailure(err));
-  }
-}
 
 function* fetchAllEvents(action) {
   try {
@@ -32,8 +16,9 @@ function* fetchAllEvents(action) {
       contentTypes: EVENT_TYPES,
       language,
       pageNo: 1,
-      pageSize: 1000 // NOTE: we need to get all events, and the endpoint lets us fetch with pagination
+      pageSize: 1000 // NOTE: we need to get all events, and the endpoint lets us fetch only with pagination
     });
+    yield put(mdbActions.receiveCollections(resp.collections));
     yield put(actions.fetchAllEventsSuccess(resp));
   } catch (err) {
     yield put(actions.fetchAllEventsFailure(err));
@@ -62,15 +47,6 @@ function* fetchFullEvent(action) {
   }
 }
 
-function* updatePageInQuery(action) {
-  const page = action.payload > 1 ? action.payload : null;
-  yield* updateQuery(query => Object.assign(query, { page }));
-}
-
-function* watchFetchList() {
-  yield takeLatest([types.FETCH_LIST, system.INIT], fetchEventsList);
-}
-
 function* watchFetchAllEvents() {
   yield takeLatest([types.FETCH_ALL_EVENTS, system.INIT], fetchAllEvents);
 }
@@ -83,14 +59,8 @@ function* watchFetchFullEvent() {
   yield takeLatest(types.FETCH_FULL_EVENT, fetchFullEvent);
 }
 
-function* watchSetPage() {
-  yield takeLatest(types.SET_PAGE, updatePageInQuery);
-}
-
 export const sagas = [
-  watchFetchList,
   watchFetchAllEvents,
   watchfetchEventItem,
   watchFetchFullEvent,
-  watchSetPage,
 ];
