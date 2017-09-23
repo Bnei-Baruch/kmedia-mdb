@@ -106,11 +106,14 @@
     }
   },
   "programs":  {
+    "list": {
+      "episode_from": "Episode from:"
+    },
     "full": {
-      "episodes": "Episode(s)",
-      "ccuName": "Content Unit Name",
-      "name": "Program Name",
-      "duration": "Duration",
+      "episodes":  "Episode(s)",
+      "ccuName":   "Content Unit Name",
+      "name":      "Program Name",
+      "duration":  "Duration",
       "film_date": "Film Date"
     },
     "part": {

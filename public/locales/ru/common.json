@@ -106,11 +106,14 @@
     }
   },
   "programs":  {
+    "list": {
+      "episode_from": "Часть из:"
+    },
     "full": {
-      "episodes": "эпизод(ов)",
-      "ccuName": "Content Unit Name",
-      "name": "Название программы",
-      "duration": "Продолжительность",
+      "episodes":  "эпизод(ов)",
+      "ccuName":   "Content Unit Name",
+      "name":      "Название программы",
+      "duration":  "Продолжительность",
       "film_date": "Дата съёмок"
     },
     "part": {

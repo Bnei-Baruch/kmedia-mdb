@@ -9,6 +9,7 @@ const SET_PAGE = 'Programs/SET_PAGE';
 const FETCH_LIST                    = 'Programs/FETCH_LIST';
 const FETCH_LIST_SUCCESS            = 'Programs/FETCH_LIST_SUCCESS';
 const FETCH_LIST_FAILURE            = 'Programs/FETCH_LIST_FAILURE';
+const FETCH_COLLECTIONS             = 'Programs/FETCH_COLLECTIONS';
 const FETCH_PROGRAM_CHAPTER         = 'Program/FETCH_PROGRAM_CHAPTER';
 const FETCH_PROGRAM_CHAPTER_SUCCESS = 'Program/FETCH_PROGRAM_CHAPTER_SUCCESS';
 const FETCH_PROGRAM_CHAPTER_FAILURE = 'Program/FETCH_PROGRAM_CHAPTER_FAILURE';
@@ -21,6 +22,7 @@ export const types = {
   FETCH_LIST,
   FETCH_LIST_SUCCESS,
   FETCH_LIST_FAILURE,
+  FETCH_COLLECTIONS,
   FETCH_PROGRAM_CHAPTER,
   FETCH_PROGRAM_CHAPTER_SUCCESS,
   FETCH_PROGRAM_CHAPTER_FAILURE,
@@ -39,6 +41,7 @@ const fetchList                  = createAction(FETCH_LIST, (pageNo, language, p
 }));
 const fetchListSuccess           = createAction(FETCH_LIST_SUCCESS);
 const fetchListFailure           = createAction(FETCH_LIST_FAILURE);
+const fetchCollections           = createAction(FETCH_COLLECTIONS);
 const fetchProgramChapter        = createAction(FETCH_PROGRAM_CHAPTER);
 const fetchProgramChapterSuccess = createAction(FETCH_PROGRAM_CHAPTER_SUCCESS);
 const fetchProgramChapterFailure = createAction(FETCH_PROGRAM_CHAPTER_FAILURE, (id, err) => ({ id, err }));
@@ -49,6 +52,7 @@ const fetchFullProgramFailure    = createAction(FETCH_FULL_PROGRAM_FAILURE, (id,
 export const actions = {
   setPage,
   fetchList,
+  fetchCollections,
   fetchListSuccess,
   fetchListFailure,
   fetchProgramChapter,
@@ -65,6 +69,8 @@ const initialState = {
   total: 0,
   items: [],
   pageNo: 1,
+  genres: [],
+  programs: [],
   wip: {
     list: false,
     chapters: {},
@@ -137,7 +143,7 @@ const onFetchListSuccess = (state, action) => {
   return {
     ...state,
     total: action.payload.total,
-    items: items.map(x => [x.id, x.content_type]),
+    items: items.map(x => x.id),
   };
 };
 
@@ -152,12 +158,28 @@ const onSetLanguage = state => (
   {
     ...state,
     items: [],
+    genres: [],
+    programs: [],
   }
 );
+
+const setGenres = (state, action) => {
+  const genres = [...new Set(action.payload.map(x => x.genres).reduce(
+    (acc, cur) => acc.concat(cur),
+    []
+  ))].sort();
+
+  return {
+    ...state,
+    genres,
+    programs: action.payload,
+  };
+};
 
 export const reducer = handleActions({
   [settings.SET_LANGUAGE]: onSetLanguage,
 
+  [FETCH_COLLECTIONS]: setGenres,
   [FETCH_LIST]: setStatus,
   [FETCH_LIST_SUCCESS]: onFetchListSuccess,
   [FETCH_LIST_FAILURE]: setStatus,
@@ -173,11 +195,13 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getTotal  = state => state.total;
-const getItems  = state => state.items;
-const getPageNo = state => state.pageNo;
-const getWip    = state => state.wip;
-const getErrors = state => state.errors;
+const getTotal    = state => state.total;
+const getItems    = state => state.items;
+const getPageNo   = state => state.pageNo;
+const getWip      = state => state.wip;
+const getErrors   = state => state.errors;
+const getGenres   = state => state.genres;
+const getPrograms = state => state.programs;
 
 export const selectors = {
   getTotal,
@@ -185,4 +209,6 @@ export const selectors = {
   getPageNo,
   getWip,
   getErrors,
+  getGenres,
+  getPrograms,
 };

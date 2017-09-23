@@ -22,13 +22,16 @@
     }
   },
   "filters":   {
-    "lessons":        {
+    "lessons":         {
       "by": "Filter Lessons by:"
     },
-    "programs":       {
+    "programs":        {
       "by": "Filter Programs by:"
     },
-    "date-filter":    {
+    "programs-filter": {
+      "label": "Genre/Program"
+    },
+    "date-filter":     {
       "label":       "Date",
       "selectTitle": "Select a date range",
       "presets":     {
@@ -43,10 +46,10 @@
       "start":       "Start",
       "end":         "End"
     },
-    "sources-filter": {
+    "sources-filter":  {
       "label": "Sources"
     },
-    "topics-filter":  {
+    "topics-filter":   {
       "label": "Topics"
     }
   },
@@ -107,11 +110,14 @@
     }
   },
   "programs":  {
+    "list": {
+      "episode_from": "Episode from:"
+    },
     "full": {
-      "episodes": "Episode(s)",
-      "ccuName": "Content Unit Name",
-      "name": "Program Name",
-      "duration": "Duration",
+      "episodes":  "Episode(s)",
+      "ccuName":   "Content Unit Name",
+      "name":      "Program Name",
+      "duration":  "Duration",
       "film_date": "Date of Shooting"
     },
     "part": {

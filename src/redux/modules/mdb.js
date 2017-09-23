@@ -5,8 +5,8 @@ import { types as settings } from './settings';
 
 /* Types */
 
-const RECEIVE_COLLECTIONS   = 'MDB/RECEIVE_COLLECTIONS';
-const RECEIVE_CONTENT_UNITS = 'MDB/RECEIVE_CONTENT_UNITS';
+const RECEIVE_COLLECTIONS         = 'MDB/RECEIVE_COLLECTIONS';
+const RECEIVE_CONTENT_UNITS       = 'MDB/RECEIVE_CONTENT_UNITS';
 
 export const types = {
   RECEIVE_COLLECTIONS,
@@ -15,8 +15,8 @@ export const types = {
 
 /* Actions */
 
-const receiveCollections  = createAction(RECEIVE_COLLECTIONS);
-const receiveContentUnits = createAction(RECEIVE_CONTENT_UNITS);
+const receiveCollections        = createAction(RECEIVE_COLLECTIONS);
+const receiveContentUnits       = createAction(RECEIVE_CONTENT_UNITS);
 
 export const actions = {
   receiveCollections,
@@ -216,5 +216,5 @@ export const selectors = {
   getUnitById,
   getDenormCollection,
   getDenormCollectionWUnits,
-  getDenormContentUnit,
+  getDenormContentUnit
 };
