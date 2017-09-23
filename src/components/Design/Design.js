@@ -60,7 +60,7 @@ class Design extends Component {
         </div>
         <Divider fitted/>
         <Menu secondary pointing color="blue" className="index-filters" size="large">
-          <Container className='padded-horizontally'>
+          <Container className='padded horizontally'>
               <Menu.Item header>
                 Filter Programs by:
               </Menu.Item>
@@ -78,7 +78,7 @@ class Design extends Component {
               </Menu.Item>
             </Container>
           </Menu>
-        <Container className='padded-horizontally'>
+        <Container className='padded horizontally'>
           <Segment vertical className="tab active" style={{
             padding: '0'
           }}>
