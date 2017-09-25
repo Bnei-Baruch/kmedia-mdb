@@ -198,7 +198,7 @@ class AvSeekBar extends Component {
     // with buffers.
     const { buffers, playerMode } = this.props;
     const buf         = buffers.find(b => b.start <= currentTime && b.end >= currentTime);
-    const progress    = (buf && (buf.end / duration)) || current;
+    const progress    = (buf && (buf.end / duration));
 
     const isSliceEdit = playerMode === PLAYER_MODE.SLICE_EDIT;
     const isSliceView = playerMode === PLAYER_MODE.SLICE_VIEW;
@@ -219,7 +219,7 @@ class AvSeekBar extends Component {
     };
 
     const styleLoaded = {
-      width: progress,
+      width: this.toPercentage(progress),
       left: 0
     };
 
