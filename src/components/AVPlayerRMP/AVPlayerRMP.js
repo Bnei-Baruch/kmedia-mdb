@@ -388,9 +388,6 @@ class AVPlayerRMP extends PureComponent {
     const isAudio = item.mediaType === MT_AUDIO;
     const isEditMode = mode === PLAYER_MODE.SLICE_EDIT;
 
-    const elapsedStart = isEditMode ? sliceStart : media.currentTime;
-    const elapsedEnd = (isEditMode && sliceEnd !== Infinity) ? sliceEnd : media.duration;
-
     let centerMediaControl;
     if (error) {
       centerMediaControl = (
@@ -482,8 +479,8 @@ class AVPlayerRMP extends PureComponent {
                     onNext={onNext}
                   />
                   <AVTimeElapsed
-                    start={elapsedStart}
-                    end={elapsedEnd}
+                    start={media.currentTime}
+                    end={media.duration}
                   />
                   <div className="player-seekbar-wrapper">
                     <AutoSizer onResize={this.onSeekBarResize}>{() => null}</AutoSizer>
