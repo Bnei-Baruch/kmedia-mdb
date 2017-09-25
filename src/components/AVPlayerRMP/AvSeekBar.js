@@ -35,7 +35,8 @@ class AvSeekBar extends Component {
   isPlayingOnMouseDown = false;
 
   state = {
-    seekbarHadInteraction: false
+    seekbarHadInteraction: false,
+    playPoint: this.props.media.currentTime
   };
 
   componentDidMount() {
@@ -50,6 +51,12 @@ class AvSeekBar extends Component {
     document.removeEventListener('touchmove', this.handleMove);
     document.removeEventListener('mouseup', this.handleEnd);
     document.removeEventListener('touchend', this.handleEnd);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.sliceStartActive && !this.sliceEndActive && this.props.media.currentTime !== nextProps.media.currentTime) {
+      this.setState({ playPoint: nextProps.media.currentTime });
+    }
   }
 
   handleStart = (e) => {
@@ -73,7 +80,7 @@ class AvSeekBar extends Component {
   };
 
   handleMove = (e) => {
-    const { playerMode, onSliceStartChange, onSliceEndChange, sliceStart, sliceEnd, media } = this.props;
+    const { onSliceStartChange, onSliceEndChange, sliceStart, sliceEnd, media } = this.props;
     if (this.wasMouseDown) {
       e.preventDefault();
       // Resolve clientX from mouse or touch event.
@@ -95,7 +102,7 @@ class AvSeekBar extends Component {
   };
 
   handleEnd = (e) => {
-    const { playerMode, media, sliceStart, sliceEnd } = this.props;
+    const { media } = this.props;
     if (this.wasMouseDown) {
       e.preventDefault();
       this.wasMouseDown = false;
@@ -108,6 +115,7 @@ class AvSeekBar extends Component {
 
         const seekPosition = this.getSeekPositionFromClientX(e.clientX);
         media.seekTo(seekPosition);
+        this.setState({ playPoint: seekPosition });
       }
 
       // only play if media was playing prior to mouseDown
@@ -185,7 +193,7 @@ class AvSeekBar extends Component {
   render() {
     const { isMobile, sliceStart, sliceEnd } = this.props;
     const { currentTime, duration } = this.props.media;
-    const current                   = currentTime / duration;
+    const current                   = this.state.playPoint / duration;
     // Overriding progress of native react-media-player as he does not works correctly
     // with buffers.
     const { buffers, playerMode } = this.props;
@@ -197,7 +205,6 @@ class AvSeekBar extends Component {
     const isSlice = playerMode === isSliceEdit || isSliceView;
     const normalizedSliceStart = this.getNormalizedSliceStart(duration);
     const normalizedSliceEnd = this.getNormalizedSliceEnd(duration);
-
 
     let playedLeft = 0;
     if (isSliceView && !this.state.seekbarHadInteraction) {
