@@ -67,7 +67,8 @@
     "close": "Закрыть",
     "audio": "Аудио",
     "video": "Видео",
-    "more": "Ещё"
+    "more": "Ещё",
+    "copy-link": "Копировать линк"
   },
   "messages": {
     "loading": "Загрузка...",
@@ -106,17 +107,6 @@
         "sources": "Источники",
         "sketches": "Чертежи"
       },
-      "downloads": {
-        "title": "Медиа для скачивания",
-        "derived-title": "Производная медиа",
-        "copy-link": "Копировать линк",
-        "type-labels": {
-          "video": "Видео урока",
-          "audio": "Аудио урока",
-          "text": "Текст",
-          "image": "Чертежи"
-        }
-      },
       "relevant-parts": {
         "title": "Остальные части того же урока",
         "item-title": "Часть {{name}}"
@@ -144,20 +134,32 @@
         "summary": "Краткое содержание",
         "transcription": "Конспект"
       },
-      "downloads": {
-        "title": "Медиа для скачивания",
-        "derived-title": "Производная медиа",
-        "copy-link": "Копировать линк",
-        "type-labels": {
-          "video": "Видео программы",
-          "audio": "Аудио программы",
-          "text": "Текст",
-          "image": "Чертежи"
-        }
-      },
       "relevant-parts": {
         "title": "Остальные части той же программы",
         "item-title": "Часть {{name}}"
+      }
+    }
+  },
+  "media-downloads": {
+    "title": "Медиа для скачивания",
+    "derived-title": "Производная медиа",
+    "type-labels": {
+      "video": "Основное видео",
+      "audio": "Основное аудио",
+      "text": "Текст",
+      "image": "Изображений"
+    },
+    "lesson": {
+      "type-labels": {
+        "video": "Видео урока",
+        "audio": "Аудио урока",
+        "image": "Чертежи"
+      }
+    },
+    "program": {
+      "type-labels": {
+        "video": "Видео программы",
+        "audio": "Аудио программы"
       }
     }
   },

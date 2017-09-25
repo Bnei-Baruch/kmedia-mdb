@@ -71,7 +71,8 @@
     "close": "Close",
     "audio": "Audio",
     "video": "Video",
-    "more": "More"
+    "more": "More",
+    "copy-link": "Copy Link"
   },
   "messages": {
     "loading": "Loading",
@@ -113,17 +114,6 @@
         "sources": "Sources",
         "sketches": "Sketches"
       },
-      "downloads": {
-        "title": "Media Downloads",
-        "derived-title": "Derived Media",
-        "copy-link": "Copy Link",
-        "type-labels": {
-          "video": "Lesson Video",
-          "audio": "Lesson Audio",
-          "text": "Transcription Text",
-          "image": "Sketches"
-        }
-      },
       "relevant-parts": {
         "title": "Other parts from the same lesson",
         "item-title": "Part {{name}}"
@@ -151,20 +141,32 @@
         "summary": "Summary",
         "transcription": "Transcription"
       },
-      "downloads": {
-        "title": "Media Downloads",
-        "derived-title": "Derived Media",
-        "copy-link": "Copy Link",
-        "type-labels": {
-          "video": "Program Video",
-          "audio": "Program Audio",
-          "text": "Transcription Text",
-          "image": "Sketches"
-        }
-      },
       "relevant-parts": {
         "title": "Other parts from the same program",
         "item-title": "Part {{name}}"
+      }
+    }
+  },
+  "media-downloads": {
+    "title": "Media Downloads",
+    "derived-title": "Derived Media",
+    "type-labels": {
+      "video": "Main Video",
+      "audio": "Main Audio",
+      "text": "Transcription Text",
+      "image": "Images"
+    },
+    "lesson": {
+      "type-labels": {
+        "video": "Lesson Video",
+        "audio": "Lesson Audio",
+        "image": "Sketches"
+      }
+    },
+    "program": {
+      "type-labels": {
+        "video": "Program Video",
+        "audio": "Program Audio"
       }
     }
   },
