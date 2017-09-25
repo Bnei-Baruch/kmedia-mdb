@@ -104,12 +104,6 @@
         "sources": "מקורות",
         "related-event": "אירועים קשורים"
       },
-      "materials": {
-        "summary": "תקציר",
-        "transcription": "תמליל",
-        "sources": "מקורות",
-        "sketches": "שרטוטים"
-      },
       "relevant-parts": {
         "title": "חלקים נוספים מאותו שיעור",
         "item-title": "חלק {{name}}"
@@ -142,6 +136,12 @@
         "item-title": "Part {{name}}"
       }
     }
+  },
+  "materials": {
+    "summary": "תקציר",
+    "transcription": "תמליל",
+    "sources": "מקורות",
+    "sketches": "שרטוטים"
   },
   "media-downloads": {
     "title": "קבצים להורדה",

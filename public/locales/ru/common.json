@@ -101,12 +101,6 @@
         "sources": "Источники",
         "related-event": "Относится к событию"
       },
-      "materials": {
-        "summary": "Краткое содержание",
-        "transcription": "Конспект",
-        "sources": "Источники",
-        "sketches": "Чертежи"
-      },
       "relevant-parts": {
         "title": "Остальные части того же урока",
         "item-title": "Часть {{name}}"
@@ -139,6 +133,12 @@
         "item-title": "Часть {{name}}"
       }
     }
+  },
+  "materials": {
+    "summary": "Краткое содержание",
+    "transcription": "Конспект",
+    "sources": "Источники",
+    "sketches": "Чертежи"
   },
   "media-downloads": {
     "title": "Медиа для скачивания",

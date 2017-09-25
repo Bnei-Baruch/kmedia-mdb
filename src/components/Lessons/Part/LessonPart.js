@@ -7,10 +7,10 @@ import Link from '../../Language/MultiLanguageLink';
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
 import RMPVideoBox from '../../shared/UnitPlayer/RMPVideoBox';
+import Materials from '../../shared/UnitMaterials/Materials';
 import MediaDownloads from '../../shared/MediaDownloads';
 import * as shapes from '../../shapes';
 import Info from './Info';
-import Materials from './Materials';
 import RelevantPartsContainer from './RelevantParts/RelevantPartsContainer';
 
 const LessonPart = (props) => {
@@ -39,7 +39,7 @@ const LessonPart = (props) => {
             <Grid.Row>
               <Grid.Column width={10}>
                 <Info lesson={lesson} t={t} />
-                <Materials lesson={lesson} t={t} />
+                <Materials unit={lesson} t={t} />
               </Grid.Column>
               <Grid.Column width={6}>
                 <MediaDownloads unit={lesson} language={language} t={t} />

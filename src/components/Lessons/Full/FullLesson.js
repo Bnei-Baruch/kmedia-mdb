@@ -9,9 +9,9 @@ import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
 import * as shapes from '../../shapes';
 import FullVideoBox from '../../shared/UnitPlayer/FullVideoBox';
+import Materials from '../../shared/UnitMaterials/Materials';
 import MediaDownloads from '../../shared/MediaDownloads';
 import Info from '../Part/Info';
-import Materials from '../Part/Materials';
 import FullLessonPlaylist from './FullLessonPlaylist';
 
 class FullLesson extends Component {
@@ -74,7 +74,7 @@ class FullLesson extends Component {
                 </Grid.Column>
                 <Grid.Column computer={10} tablet={12} mobile={16}>
                   <Info lesson={lesson} t={t} />
-                  <Materials lesson={lesson} t={t} />
+                  <Materials unit={lesson} t={t} />
                 </Grid.Column>
               </Grid.Row>
             </Grid>

@@ -108,12 +108,6 @@
         "sources": "Sources",
         "related-event": "Related to Event"
       },
-      "materials": {
-        "summary": "Summary",
-        "transcription": "Transcription",
-        "sources": "Sources",
-        "sketches": "Sketches"
-      },
       "relevant-parts": {
         "title": "Other parts from the same lesson",
         "item-title": "Part {{name}}"
@@ -146,6 +140,12 @@
         "item-title": "Part {{name}}"
       }
     }
+  },
+  "materials": {
+    "summary": "Summary",
+    "transcription": "Transcription",
+    "sources": "Sources",
+    "sketches": "Sketches"
   },
   "media-downloads": {
     "title": "Media Downloads",

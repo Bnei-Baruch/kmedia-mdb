@@ -8,6 +8,8 @@ import { formatError } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
 import FullVideoBox from '../../shared/UnitPlayer/FullVideoBox';
+import Materials from '../../shared/UnitMaterials/Materials';
+import MediaDownloads from '../../shared/MediaDownloads';
 import Link from '../../Language/MultiLanguageLink';
 import PageHeader from './PageHeader';
 import EventMap from './EventMap';
@@ -48,6 +50,7 @@ class FullEvent extends Component {
     }
 
     if (fullEvent) {
+      const activeUnit = fullEvent.content_units[activePart];
       return (
         <Container>
           <Grid>
@@ -72,6 +75,16 @@ class FullEvent extends Component {
               onActivePartChange={this.handleActivePartChange}
               PlayListComponent={FullEventPlaylist}
             />
+          </Grid>
+          <Grid padded reversed="tablet">
+            <Grid.Row reversed="computer">
+              <Grid.Column computer={6} tablet={4} mobile={16}>
+                <MediaDownloads unit={activeUnit} language={language} t={t} />
+              </Grid.Column>
+              <Grid.Column computer={10} tablet={12} mobile={16}>
+                <Materials unit={activeUnit} t={t} />
+              </Grid.Column>
+            </Grid.Row>
           </Grid>
         </Container>
       );
