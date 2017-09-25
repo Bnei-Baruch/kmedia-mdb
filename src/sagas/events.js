@@ -1,12 +1,10 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import { updateQuery } from './helpers/url';
 import { EVENT_TYPES } from '../helpers/consts';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions, types } from '../redux/modules/events';
 import { actions as mdbActions } from '../redux/modules/mdb';
-import { types as system } from '../redux/modules/system';
 
 function* fetchAllEvents(action) {
   try {
@@ -48,10 +46,10 @@ function* fetchFullEvent(action) {
 }
 
 function* watchFetchAllEvents() {
-  yield takeLatest([types.FETCH_ALL_EVENTS, system.INIT], fetchAllEvents);
+  yield takeLatest(types.FETCH_ALL_EVENTS, fetchAllEvents);
 }
 
-function* watchfetchEventItem() {
+function* watchFetchEventItem() {
   yield takeEvery(types.FETCH_EVENT_ITEM, fetchEventItem);
 }
 
@@ -61,6 +59,6 @@ function* watchFetchFullEvent() {
 
 export const sagas = [
   watchFetchAllEvents,
-  watchfetchEventItem,
+  watchFetchEventItem,
   watchFetchFullEvent,
 ];

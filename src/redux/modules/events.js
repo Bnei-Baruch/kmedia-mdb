@@ -1,25 +1,27 @@
 import { createAction, handleActions } from 'redux-actions';
+
+import { CT_CONGRESS, EVENT_TYPES } from '../../helpers/consts';
 import i18n from '../../helpers/i18nnext';
 import { types as settings } from './settings';
 import { selectors as mdb } from './mdb';
-import { CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY, EVENT_TYPES } from '../../helpers/consts';
 
-const ALL_EVENTS = 'ALLEVENTS';
+const ALL_EVENTS    = 'ALLEVENTS';
 const ALL_COUNTRIES = 'ALLCOUNTRIES';
-const ALL_CITIES = 'ALLCITIES';
+const ALL_CITIES    = 'ALLCITIES';
+
 /* Types */
 
 const SET_PAGE = 'Events/SET_PAGE';
 
-const FETCH_ALL_EVENTS              = 'Events/FETCH_ALL_EVENTS';
-const FETCH_ALL_EVENTS_SUCCESS      = 'Events/FETCH_ALL_EVENTS_SUCCESS';
-const FETCH_ALL_EVENTS_FAILURE      = 'Events/FETCH_ALL_EVENTS_FAILURE';
+const FETCH_ALL_EVENTS         = 'Events/FETCH_ALL_EVENTS';
+const FETCH_ALL_EVENTS_SUCCESS = 'Events/FETCH_ALL_EVENTS_SUCCESS';
+const FETCH_ALL_EVENTS_FAILURE = 'Events/FETCH_ALL_EVENTS_FAILURE';
 const FETCH_EVENT_ITEM         = 'Event/FETCH_EVENT_ITEM';
 const FETCH_EVENT_ITEM_SUCCESS = 'Event/FETCH_EVENT_ITEM_SUCCESS';
 const FETCH_EVENT_ITEM_FAILURE = 'Event/FETCH_EVENT_ITEM_FAILURE';
-const FETCH_FULL_EVENT            = 'Event/FETCH_FULL_EVENT';
-const FETCH_FULL_EVENT_SUCCESS    = 'Event/FETCH_FULL_EVENT_SUCCESS';
-const FETCH_FULL_EVENT_FAILURE    = 'Event/FETCH_FULL_EVENT_FAILURE';
+const FETCH_FULL_EVENT         = 'Event/FETCH_FULL_EVENT';
+const FETCH_FULL_EVENT_SUCCESS = 'Event/FETCH_FULL_EVENT_SUCCESS';
+const FETCH_FULL_EVENT_FAILURE = 'Event/FETCH_FULL_EVENT_FAILURE';
 
 export const types = {
   SET_PAGE,
@@ -36,16 +38,16 @@ export const types = {
 
 /* Actions */
 
-const setPage                    = createAction(SET_PAGE);
-const fetchAllEvents           = createAction(FETCH_ALL_EVENTS);
-const fetchAllEventsSuccess           = createAction(FETCH_ALL_EVENTS_SUCCESS);
-const fetchAllEventsFailure           = createAction(FETCH_ALL_EVENTS_FAILURE);
+const setPage               = createAction(SET_PAGE);
+const fetchAllEvents        = createAction(FETCH_ALL_EVENTS);
+const fetchAllEventsSuccess = createAction(FETCH_ALL_EVENTS_SUCCESS);
+const fetchAllEventsFailure = createAction(FETCH_ALL_EVENTS_FAILURE);
 const fetchEventItem        = createAction(FETCH_EVENT_ITEM);
 const fetchEventItemSuccess = createAction(FETCH_EVENT_ITEM_SUCCESS);
 const fetchEventItemFailure = createAction(FETCH_EVENT_ITEM_FAILURE, (id, err) => ({ id, err }));
-const fetchFullEvent           = createAction(FETCH_FULL_EVENT);
-const fetchFullEventSuccess    = createAction(FETCH_FULL_EVENT_SUCCESS);
-const fetchFullEventFailure    = createAction(FETCH_FULL_EVENT_FAILURE, (id, err) => ({ id, err }));
+const fetchFullEvent        = createAction(FETCH_FULL_EVENT);
+const fetchFullEventSuccess = createAction(FETCH_FULL_EVENT_SUCCESS);
+const fetchFullEventFailure = createAction(FETCH_FULL_EVENT_FAILURE, (id, err) => ({ id, err }));
 
 export const actions = {
   setPage,
@@ -143,7 +145,7 @@ const createItem = (id, name, children, typeName, extra) =>
 const onFetchAllEventsSuccess = (state, action) => {
   const roots = [ALL_EVENTS, ...EVENT_TYPES];
 
-  const allCities = createItem(ALL_CITIES, i18n.t('filters.event-types-filter.allItem'), [], 'city');
+  const allCities    = createItem(ALL_CITIES, i18n.t('filters.event-types-filter.allItem'), [], 'city');
   const allCountries = createItem(ALL_COUNTRIES, i18n.t('filters.event-types-filter.allItem'), [ALL_CITIES], 'country');
 
   const { countries, cities } = action.payload.collections.reduce((acc, collection) => {
@@ -205,7 +207,7 @@ const onFetchAllEventsSuccess = (state, action) => {
   });
 };
 
-const onFetchAllEventsFailure = state => ({
+const onFetchAllEventsFailure = (state, action) => ({
   ...state,
   ...setStatus(state, action),
   eventsFilterTree: {
@@ -223,6 +225,7 @@ const onSetLanguage = state => (
 export const reducer = handleActions({
   [settings.SET_LANGUAGE]: onSetLanguage,
 
+  [FETCH_ALL_EVENTS]: setStatus,
   [FETCH_ALL_EVENTS_SUCCESS]: onFetchAllEventsSuccess,
   [FETCH_ALL_EVENTS_FAILURE]: onFetchAllEventsFailure,
   [FETCH_EVENT_ITEM]: setStatus,
@@ -235,10 +238,10 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const cityPredicate = (item, city) => city === ALL_CITIES || item.city === city;
-const countryPredicate = (item, country) => country === ALL_COUNTRIES || item.country === country;
+const cityPredicate        = (item, city) => city === ALL_CITIES || item.city === city;
+const countryPredicate     = (item, country) => country === ALL_COUNTRIES || item.country === country;
 const contentTypePredicate = (item, contentType) => contentType === ALL_EVENTS || item.content_type === contentType;
-const yearPredicate = (item, year) =>
+const yearPredicate        = (item, year) =>
   item.start_date.substring(0, 4) <= year && year <= item.end_date.substring(0, 4);
 // TODO: (yaniv) add holiday filter predicate
 
@@ -248,10 +251,10 @@ const getFilteredData = (state, filters, mdbState) => {
     return acc;
   }, {});
 
-  const yearsFilter = groupedFilters['years-filter'];
+  const yearsFilter      = groupedFilters['years-filter'];
   const eventTypesFilter = groupedFilters['event-types-filter'];
-  const years = (yearsFilter && yearsFilter.values) || [];
-  const eventTypes = (eventTypesFilter && eventTypesFilter.values) || [];
+  const years            = (yearsFilter && yearsFilter.values) || [];
+  const eventTypes       = (eventTypesFilter && eventTypesFilter.values) || [];
 
   const items = state.items.reduce((acc, shortItem) => {
     const item = mdb.getDenormCollection(mdbState, shortItem[0]);
