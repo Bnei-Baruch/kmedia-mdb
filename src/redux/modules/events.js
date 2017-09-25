@@ -93,11 +93,18 @@ const setStatus = (state, action) => {
   const errors = { ...state.errors };
 
   switch (action.type) {
+  case FETCH_ALL_EVENTS:
+    wip.list = true;
+    break;
   case FETCH_EVENT_ITEM:
     wip.items = { ...wip.items, [action.payload]: true };
     break;
   case FETCH_FULL_EVENT:
     wip.fulls = { ...wip.fulls, [action.payload]: true };
+    break;
+  case FETCH_ALL_EVENTS_SUCCESS:
+    wip.list    = false;
+    errors.list = null;
     break;
   case FETCH_EVENT_ITEM_SUCCESS:
     wip.items    = { ...wip.items, [action.payload]: false };
@@ -106,6 +113,10 @@ const setStatus = (state, action) => {
   case FETCH_FULL_EVENT_SUCCESS:
     wip.fulls    = { ...wip.fulls, [action.payload]: false };
     errors.fulls = { ...errors.fulls, [action.payload]: null };
+    break;
+  case FETCH_ALL_EVENTS_FAILURE:
+    wip.list    = false;
+    errors.list = action.payload;
     break;
   case FETCH_EVENT_ITEM_FAILURE:
     wip.items    = { ...wip.items, [action.payload.id]: false };
@@ -172,6 +183,7 @@ const onFetchAllEventsSuccess = (state, action) => {
 
   return ({
     ...state,
+    ...setStatus(state, action),
     total: action.payload.total,
     items: action.payload.collections.map(x => [x.id, x.content_type]),
     eventsFilterTree: {
@@ -195,6 +207,7 @@ const onFetchAllEventsSuccess = (state, action) => {
 
 const onFetchAllEventsFailure = state => ({
   ...state,
+  ...setStatus(state, action),
   eventsFilterTree: {
     ...initialState.eventsFilterTree
   }
