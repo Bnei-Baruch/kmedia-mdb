@@ -26,7 +26,7 @@ export const actions = {
 
 const initialState = {
   language: DEFAULT_LANGUAGE,
-  pageSize: 100,
+  pageSize: 10,
 };
 
 export const reducer = handleActions({
