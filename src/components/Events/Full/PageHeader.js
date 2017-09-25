@@ -8,7 +8,16 @@ import * as shapes from '../../shapes';
 import placeholder from './placeholder.png';
 
 const PageHeader = (props) => {
-  const { name, description, start_date, end_date, city, country } = props.item;
+  const { name, description, start_date, end_date, country, city, full_address: fullAddress } = props.item;
+
+  let addressLine = fullAddress;
+  if (!addressLine) {
+    if (city) {
+      addressLine = `${city},${country}`;
+    } else {
+      addressLine = country;
+    }
+  }
 
   return (
     <Grid.Row>
@@ -23,8 +32,8 @@ const PageHeader = (props) => {
             </small>
             <br />
             {name}
-            <Header.Subheader>
-              {city}, {country}
+            <Header.Subheader style={{direction: 'ltr'}}>
+              {addressLine}
             </Header.Subheader>
           </Header.Content>
         </Header>
