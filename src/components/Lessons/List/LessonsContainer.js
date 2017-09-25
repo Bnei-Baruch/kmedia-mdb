@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Container, Divider, Grid, Header } from 'semantic-ui-react';
+import { Container, Divider } from 'semantic-ui-react';
 
 import { CT_LESSON_PART } from '../../../helpers/consts';
 import { actions, selectors as lessonSelectors } from '../../../redux/modules/lessons';
@@ -9,6 +9,7 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as filters } from '../../../redux/modules/filters';
 import * as shapes from '../../shapes';
+import SectionHeader from '../../shared/SectionHeader';
 import LessonsFilters from './LessonsFilters';
 import LessonsList from './LessonsList';
 import withPagination from '../../pagination/withPagination';
@@ -50,26 +51,7 @@ class LessonsContainer extends withPagination {
 
     return (
       <div>
-        <div className="section-header">
-          <Container className="padded">
-            <Grid>
-              <Grid.Row>
-                <Grid.Column computer={10} tablet={12} mobile={16}>
-                  <Header as="h1" color="blue">
-                    <Header.Content>
-                      Daily Lessons
-                      <Header.Subheader>
-                        The daily acceptance rate is delivered by Rabbi Dr. Michael Laitman to millions of viewers
-                        around the world, every night between 3-6 clock Israel, and describes the spiritual flow that
-                        humanity today.
-                      </Header.Subheader>
-                    </Header.Content>
-                  </Header>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          </Container>
-        </div>
+        <SectionHeader section="lessons" />
         <Divider fitted />
         <LessonsFilters
           onChange={() => withPagination.handlePageChange(this.props, 1)}
@@ -77,7 +59,6 @@ class LessonsContainer extends withPagination {
         />
         <Container className="padded">
           <withPagination.ResultsPageHeader {...this.props} />
-
           <LessonsList items={items} />
         </Container>
         <Divider fitted />
