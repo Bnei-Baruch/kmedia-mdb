@@ -1,12 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import zlFetch from 'zl-fetch';
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker,
-} from 'react-google-maps';
+import { GoogleMap, Marker, withGoogleMap, withScriptjs, } from 'react-google-maps';
 
 const EventMapInner = withScriptjs(withGoogleMap(props => (
   <GoogleMap
@@ -55,12 +49,12 @@ class EventMap extends Component {
 
   // Fix: zlFetch does not work well here.
   fetchLocation = address =>
-      fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}`).then(data =>
-          data.json().then(json =>
-              (json.results && json.results.length ? json.results[0].geometry.location : null)));
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}`).then(data =>
+      data.json().then(json =>
+        (json.results && json.results.length ? json.results[0].geometry.location : null)));
 
   render() {
-    let { language } = this.props;
+    let { language }           = this.props;
     const { loaded, location } = this.state;
     if (loaded && location) {
       // Fix this in language setting and constants.

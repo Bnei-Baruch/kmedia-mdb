@@ -1,11 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Table } from 'semantic-ui-react';
 import moment from 'moment';
-import Link from '../../Language/MultiLanguageLink';
-import * as shapes from '../../shapes';
+import { Grid, Table } from 'semantic-ui-react';
+
+import { DATE_FORMAT } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/utils';
 import { fromToLocalized } from '../../../helpers/date';
+import * as shapes from '../../shapes';
+import Link from '../../Language/MultiLanguageLink';
 
 class EventsList extends PureComponent {
 
@@ -19,8 +21,8 @@ class EventsList extends PureComponent {
 
   renderCollection = (collection) => {
     const localDate = fromToLocalized(
-      moment.utc(collection.start_date, 'YYYY-MM-DD'),
-      moment.utc(collection.end_date, 'YYYY-MM-DD')
+      moment.utc(collection.start_date, DATE_FORMAT),
+      moment.utc(collection.end_date, DATE_FORMAT)
     );
 
     return (
@@ -45,7 +47,6 @@ class EventsList extends PureComponent {
     }
 
     return (
-
       <Table basic="very" sortable>
         <Table.Body>
           {

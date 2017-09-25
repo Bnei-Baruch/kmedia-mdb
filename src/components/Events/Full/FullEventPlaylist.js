@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-duration-format';
-import { Header, Grid, Menu } from 'semantic-ui-react';
+import { Grid, Menu } from 'semantic-ui-react';
 import * as shapes from '../../shapes';
 
 class FullEventPlaylist extends Component {
 
   static propTypes = {
     collection: shapes.EventCollection.isRequired,
-    t: PropTypes.func.isRequired,
     activePart: PropTypes.number,
     onItemClick: PropTypes.func.isRequired
   };
@@ -23,13 +22,12 @@ class FullEventPlaylist extends Component {
   };
 
   render() {
-    const { t, collection, activePart } = this.props;
+    const { collection, activePart } = this.props;
 
     const titles = collection.content_units.map((cu) => {
       const { name, duration } = cu;
-      const ccuName            = collection.ccuNames[cu.id];
       const durationDisplay    = moment.duration(duration, 'seconds').format('hh:mm:ss');
-      return `${ccuName} - ${name} - ${durationDisplay}`;
+      return `${name} - ${durationDisplay}`;
     });
 
     return (

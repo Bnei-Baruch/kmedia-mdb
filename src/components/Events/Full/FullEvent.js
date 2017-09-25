@@ -1,21 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
-import { Container, Grid, Header, Image, Menu, Table } from 'semantic-ui-react';
+import { Container, Grid } from 'semantic-ui-react';
 
-import { fromToLocalized } from '../../../helpers/date';
 import { formatError } from '../../../helpers/utils';
-import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
-import Link from '../../Language/MultiLanguageLink';
-import NavLink from '../../Language/MultiLanguageNavLink';
 import * as shapes from '../../shapes';
-
-import placeholder from './placeholder.png';
+import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
+import FullVideoBox from '../../shared/UnitPlayer/FullVideoBox';
+import Link from '../../Language/MultiLanguageLink';
+import PageHeader from './PageHeader';
 import EventMap from './EventMap';
 import FullEventPlaylist from './FullEventPlaylist';
-import FullVideoBox from '../../shared/UnitPlayer/FullVideoBox';
 
 class FullEvent extends Component {
   static propTypes = {
@@ -39,31 +35,9 @@ class FullEvent extends Component {
   handleActivePartChange = activePart =>
     this.setState({ activePart });
 
-  getName = (fullEvent, cu) => {
-    const { name, duration } = cu;
-    const ccuName            = fullEvent.ccuNames[cu.id];
-    const durationDisplay    = moment.duration(duration, 'seconds').format('hh:mm:ss');
-    return { name, ccuName, duration: durationDisplay };
-  };
-
-  tableRow = (fullEvent, cu) => {
-    const { ccuName, name, duration } = this.getName(fullEvent, cu);
-
-    return (
-      <Table.Row key={cu.id}>
-        <Table.Cell><Menu.Item as={NavLink} to={`/events/item/${cu.id}`} content={ccuName} /></Table.Cell>
-        <Table.Cell><Menu.Item as={NavLink} to={`/events/item/${cu.id}`}>{name}</Menu.Item></Table.Cell>
-        <Table.Cell><Menu.Item as={NavLink} to={`/events/item/${cu.id}`}>{duration}</Menu.Item></Table.Cell>
-      </Table.Row>
-    );
-  };
-
-  titleDate = (fromStr, toStr) =>
-      fromToLocalized(moment.utc(fromStr, 'YYYY-MM-DD'), moment.utc(toStr, 'YYYY-MM-DD'));
-
   render() {
     const { language, fullEvent, wip, err, t } = this.props;
-    const { activePart } = this.state;
+    const { activePart }                       = this.state;
 
     if (err) {
       return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
@@ -74,31 +48,10 @@ class FullEvent extends Component {
     }
 
     if (fullEvent) {
-      const description = !fullEvent.description ? null : (
-        <p>{fullEvent.description}</p>
-      );
-
       return (
         <Container>
           <Grid>
-            <Grid.Row>
-              <Grid.Column width={3}>
-                <Image fluid shape="rounded" src={placeholder} />
-              </Grid.Column>
-              <Grid.Column width={8}>
-                <Header as="h1">
-                  <Header.Content>
-                    <small className="text grey">{this.titleDate(fullEvent.start_date, fullEvent.end_date)}</small>
-                    <br />
-                    {fullEvent.name}
-                    <Header.Subheader>
-                      {fullEvent.city}, {fullEvent.country}
-                    </Header.Subheader>
-                  </Header.Content>
-                </Header>
-                {description}
-              </Grid.Column>
-            </Grid.Row>
+            <PageHeader item={fullEvent} />
             <Grid.Row>
               <Grid.Column>
                 <EventMap

@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Divider, Container } from 'semantic-ui-react';
+import { Container, Divider } from 'semantic-ui-react';
 
 import { EVENT_TYPES } from '../../../helpers/consts';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as filterSelectors } from '../../../redux/modules/filters';
 import { actions, selectors as eventSelectors } from '../../../redux/modules/events';
 import * as shapes from '../../shapes';
+import ResultsPageHeader from '../../pagination/ResultsPageHeader';
 import EventsList from './EventsList';
 import EventsFilters from './EventsFilters';
-import ResultsPageHeader from '../../pagination/ResultsPageHeader';
-import { selectors as filterSelectors } from '../../../redux/modules/filters';
 
 class EventsContainer extends Component {
 
@@ -44,7 +43,7 @@ class EventsContainer extends Component {
 }
 
 const mapState = (state) => {
-  const filters = filterSelectors.getFilters(state.filters, 'events');
+  const filters                      = filterSelectors.getFilters(state.filters, 'events');
   const { items, ...paginationInfo } = eventSelectors.getFilteredData(state.events, filters, state.mdb);
 
   return {
