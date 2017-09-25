@@ -256,7 +256,7 @@ const getFilteredData = (state, filters, mdbState) => {
   const years            = (yearsFilter && yearsFilter.values) || [];
   const eventTypes       = (eventTypesFilter && eventTypesFilter.values) || [];
 
-  const items = state.items.reduce((acc, shortItem) => {
+  return state.items.reduce((acc, shortItem) => {
     const item = mdb.getDenormCollection(mdbState, shortItem[0]);
     if (years.length > 0 && !years.some(year => yearPredicate(item, year))) {
       return acc;
@@ -280,11 +280,9 @@ const getFilteredData = (state, filters, mdbState) => {
               // TODO (yaniv): handle holiday for eventType[2]
             }
 
-            console.log(eventType[1]);
             const obj1 = state.eventsFilterTree.byIds[eventType[1]];
             if (obj1.typeName === 'country') {
               if (!countryPredicate(item, eventType[1])) {
-                console.log(item);
                 return false;
               }
             }
@@ -303,13 +301,6 @@ const getFilteredData = (state, filters, mdbState) => {
     acc.push(item);
     return acc;
   }, []);
-
-  return {
-    items,
-    pageNo: 1,
-    total: items.length,
-    pageSize: 1000
-  };
 };
 
 const getTotal  = state => state.total;

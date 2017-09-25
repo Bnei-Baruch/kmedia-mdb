@@ -61,7 +61,8 @@
       "allItem": "All"
     },
     "years-filter": {
-      "label": "Year"
+      "label": "Year",
+      "placeholder": "Select a year"
     }
   },
   "buttons": {
@@ -89,7 +90,8 @@
     "link-copied-to-clipboard": "Link was copied!"
   },
   "events": {
-    "ALL_EVENTS": "All Events"
+    "ALL_EVENTS": "All Events",
+    "no-matches": "No matching events found"
   },
   "lessons": {
     "header": {

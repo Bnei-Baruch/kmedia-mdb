@@ -57,7 +57,8 @@
       "allItem": "הכל"
     },
     "years-filter": {
-      "label": "שנה"
+      "label": "שנה",
+      "placeholder": "בחר שנה"
     }
   },
   "buttons":   {
@@ -85,7 +86,8 @@
     "link-copied-to-clipboard":  "הקישור הועתק ללוח בהצלחה!"
   },
   "events": {
-    "ALL_EVENTS": "כל האירועים"
+    "ALL_EVENTS": "כל האירועים",
+    "no-matches": "לא נמצאו אירועים מתאימים"
   },
   "lessons":   {
     "header": {

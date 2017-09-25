@@ -1,42 +1,40 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { translate } from 'react-i18next';
-import { Container, Divider } from 'semantic-ui-react';
 
-import { EVENT_TYPES } from '../../../helpers/consts';
-import { formatError } from '../../../helpers/utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as filterSelectors } from '../../../redux/modules/filters';
 import { actions, selectors as eventSelectors } from '../../../redux/modules/events';
 import * as shapes from '../../shapes';
-import { ErrorSplash, LoadingSplash } from '../../shared/Splash';
-import ResultsPageHeader from '../../pagination/ResultsPageHeader';
-import EventsList from './EventsList';
-import EventsFilters from './EventsFilters';
+import Page from './Page';
 
 class EventsContainer extends Component {
 
   static propTypes = {
-    fetchAllEvents: PropTypes.func.isRequired,
-    items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.EventCollection, shapes.EventItem])),
-    contentTypes: PropTypes.arrayOf(PropTypes.string),
     location: shapes.HistoryLocation.isRequired,
     language: PropTypes.string.isRequired,
+    fetchAllEvents: PropTypes.func.isRequired,
+    filteredItems: PropTypes.arrayOf(shapes.EventCollection),
+    hasItems: PropTypes.bool,
     wip: shapes.WIP,
     err: shapes.Error,
-    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    items: [],
-    contentTypes: EVENT_TYPES,
+    hasItems: false,
+    filteredItems: [],
     wip: false,
     err: null,
   };
 
   componentDidMount() {
-    this.props.fetchAllEvents();
+    const { hasItems, fetchAllEvents, wip, err } = this.props;
+
+    // We only fetch one time on first mount, if not wip or error.
+    // Next time we fetch is on language change.
+    if (!hasItems && !(wip || err)) {
+      fetchAllEvents();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -48,44 +46,22 @@ class EventsContainer extends Component {
   }
 
   render() {
-    const { items, wip, err, t } = this.props;
-
-    if (err) {
-      return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
-    }
-
-    if (Array.isArray(items) && items.length > 0) {
-      return (
-        <div>
-          <EventsFilters />
-          <Container className="padded">
-            <ResultsPageHeader {...this.props} />
-            <Divider fitted />
-            <EventsList items={items} />
-          </Container>
-        </div>
-      );
-    }
-
-    if (wip) {
-      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-    }
-
-    return null;
+    const { filteredItems, wip, err } = this.props;
+    return <Page items={filteredItems} wip={wip} err={err} />;
   }
 }
 
 const mapState = (state) => {
-  const filters                      = filterSelectors.getFilters(state.filters, 'events');
-  const { items, ...paginationInfo } = eventSelectors.getFilteredData(state.events, filters, state.mdb);
+  const filters       = filterSelectors.getFilters(state.filters, 'events');
+  const filteredItems = eventSelectors.getFilteredData(state.events, filters, state.mdb);
 
   return {
-    ...paginationInfo,
-    items,
+    filteredItems,
+    hasItems: eventSelectors.getTotal(state.events) > 0,
     language: settings.getLanguage(state.settings),
     wip: eventSelectors.getWip(state.events).list,
     err: eventSelectors.getErrors(state.events).list,
   };
 };
 
-export default connect(mapState, actions)(translate()(EventsContainer));
+export default connect(mapState, actions)(EventsContainer);

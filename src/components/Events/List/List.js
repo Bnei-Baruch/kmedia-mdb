@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Grid, Table } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 
 import { DATE_FORMAT } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/utils';
@@ -12,7 +12,8 @@ import Link from '../../Language/MultiLanguageLink';
 class EventsList extends PureComponent {
 
   static propTypes = {
-    items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.EventCollection, shapes.EventItem])),
+    items: PropTypes.arrayOf(shapes.EventCollection),
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -40,10 +41,10 @@ class EventsList extends PureComponent {
   };
 
   render() {
-    const { items } = this.props;
+    const { items, t } = this.props;
 
     if (!Array.isArray(items) || items.length === 0) {
-      return (<Grid columns={2} celled="internally" />);
+      return <div>{t('events.no-matches')}</div>;
     }
 
     return (
