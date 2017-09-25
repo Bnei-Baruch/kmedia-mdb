@@ -398,14 +398,19 @@ class AVPlayerRMP extends PureComponent {
       );
     } else if (isEditMode) {
       centerMediaControl = (
-        <Button
-          icon="chevron left"
-          content="Back to play"
-          size="large"
-          color="blue"
-          className="button-close-slice-edit"
-          onClick={this.handleToggleMode}
-        />
+        <div className="center-media-controls-edit">
+          <Button
+            icon="chevron left"
+            content="Back to play"
+            size="large"
+            color="blue"
+            className="button-close-slice-edit"
+            onClick={this.handleToggleMode}
+          />
+          <div className="slice-edit-help">
+            Drag the pointers to share a part of the video
+          </div>
+        </div>
       );
     } else if (isVideo) {
       centerMediaControl = <AVCenteredPlay />;
