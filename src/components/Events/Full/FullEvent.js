@@ -11,6 +11,7 @@ import FullVideoBox from '../../shared/UnitPlayer/FullVideoBox';
 import Materials from '../../shared/UnitMaterials/Materials';
 import MediaDownloads from '../../shared/MediaDownloads';
 import Link from '../../Language/MultiLanguageLink';
+import Info from '../Item/Info';
 import PageHeader from './PageHeader';
 import EventMap from './EventMap';
 import FullEventPlaylist from './FullEventPlaylist';
@@ -82,6 +83,7 @@ class FullEvent extends Component {
                 <MediaDownloads unit={activeUnit} language={language} t={t} />
               </Grid.Column>
               <Grid.Column computer={10} tablet={12} mobile={16}>
+                <Info unit={activeUnit} t={t} />
                 <Materials unit={activeUnit} t={t} />
               </Grid.Column>
             </Grid.Row>

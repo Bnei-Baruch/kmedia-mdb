@@ -76,7 +76,7 @@ class FullEventContainer extends Component {
 }
 
 function mapState(state, props) {
-  const fullEvent = mdb.getDenormCollection(state.mdb, props.match.params.id);
+  const fullEvent = mdb.getDenormCollectionWUnits(state.mdb, props.match.params.id);
 
   return {
     fullEvent,

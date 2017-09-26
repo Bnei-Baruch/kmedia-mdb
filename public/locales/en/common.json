@@ -160,13 +160,16 @@
       "type-labels": {
         "video": "Lesson Video",
         "audio": "Lesson Audio",
+        "text": "Transcription Text",
         "image": "Sketches"
       }
     },
     "program": {
       "type-labels": {
         "video": "Program Video",
-        "audio": "Program Audio"
+        "audio": "Program Audio",
+        "text": "Transcription Text",
+        "image": "Sketches"
       }
     }
   },
