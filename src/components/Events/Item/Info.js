@@ -4,11 +4,9 @@ import { connect } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
 import { canonicalLink, intersperse, tracePath } from '../../../helpers/utils';
-import { stringify as urlSearchStringify } from '../../../helpers/url';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { selectors as sourcesSelectors } from '../../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../../redux/modules/tags';
-import { filtersTransformer } from '../../../filters';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 
@@ -26,7 +24,7 @@ class Info extends Component {
   };
 
   render() {
-    const { unit = {}, getSourceById, getTagById, t }             = this.props;
+    const { unit = {}, getSourceById, getTagById, t }               = this.props;
     const { name, film_date: filmDate, sources, tags, collections } = unit;
 
     const tagLinks = Array.from(intersperse(
@@ -56,14 +54,17 @@ class Info extends Component {
     const breakdown   = new CollectionsBreakdown(Object.values(collections || {}));
     const eventsLinks = Array.from(intersperse(
       breakdown.getDailyLessons().map(x => (
-          <Link key={x.id} to={canonicalLink(x)}>{x.name}</Link>
+          <Link key={x.id} to={canonicalLink(x)}>
+            {t(`constants.content-types.${x.content_type}`)} {t('values.date', { date: new Date(x.film_date) })}
+          </Link>
         )
       ), ', '));
 
     return (
       <div>
         <Header as="h1">
-          <small className="text grey">{t('values.date', { date: new Date(filmDate) })}</small><br />
+          <small className="text grey">{t('values.date', { date: new Date(filmDate) })}</small>
+          <br />
           {name}
         </Header>
         <List>
@@ -87,7 +88,7 @@ class Info extends Component {
             eventsLinks.length === 0 ?
               null :
               <List.Item>
-                <strong>{t('lessons.part.info.related-event')}:</strong>
+                <strong>{t('lessons.list.related')}:</strong>
                 &nbsp;{eventsLinks}
               </List.Item>
           }
