@@ -49,7 +49,7 @@ class EventMap extends Component {
 
   // Fix: zlFetch does not work well here.
   fetchLocation = address =>
-    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}`).then(data =>
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyC7HLd3XbtydbQ8bYXY30EXvYCqLcBRINY`).then(data =>
       data.json().then(json =>
         (json.results && json.results.length ? json.results[0].geometry.location : null)));
 
@@ -63,7 +63,7 @@ class EventMap extends Component {
       }
       return (
         <EventMapInner
-          googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&language=${language}`}
+          googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&language=${language}&key=AIzaSyC7HLd3XbtydbQ8bYXY30EXvYCqLcBRINY`}
           loadingElement={<div style={{ height: '100%' }} />}
           containerElement={<div style={{ height: '400px' }} />}
           mapElement={<div style={{ height: '100%' }} />}
