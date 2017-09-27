@@ -61,6 +61,7 @@ class FullEvent extends Component {
             city={fullEvent.city}
             country={fullEvent.country}
           />
+          <Container className='padded vertically'>
             <Grid padded>
               <FullVideoBox
                 collection={fullEvent}
@@ -82,7 +83,7 @@ class FullEvent extends Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-         
+          </Container>
         </div>
       );
     }
