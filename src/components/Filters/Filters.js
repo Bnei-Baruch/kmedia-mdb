@@ -28,8 +28,8 @@ class Filters extends Component {
   };
 
   handleCancelActiveFilter = () => {
-    const { namespace, activeFilter } = this.props;
-    this.props.closeActiveFilter(namespace, activeFilter);
+    const { namespace, activeFilterName } = this.props;
+    this.props.closeActiveFilter(namespace, activeFilterName);
   };
 
   handleApplyActiveFilter = () => {
@@ -37,15 +37,15 @@ class Filters extends Component {
   };
 
   render() {
-    const { filters, activeFilter, namespace } = this.props;
+    const { filters, activeFilterName, namespace } = this.props;
 
     return (
       <div>
-        <FilterMenu items={filters} namespace={namespace} active={activeFilter} onChoose={this.handleFilterClick} />
+        <FilterMenu items={filters} namespace={namespace} active={activeFilterName} onChoose={this.handleFilterClick} />
         <ActiveFilter
           namespace={namespace}
-          activeFilterName={this.props.activeFilterName}
-          filters={this.props.filters}
+          activeFilterName={activeFilterName}
+          filters={filters}
           onCancel={this.handleCancelActiveFilter}
           onApply={this.handleApplyActiveFilter}
         />

@@ -88,6 +88,7 @@ export const formatError = (error) => {
  */
 export function* intersperse(iterable, delim) {
   let first = true;
+  // eslint-disable-next-line no-restricted-syntax
   for (const item of iterable) {
     if (!first) {
       yield delim;

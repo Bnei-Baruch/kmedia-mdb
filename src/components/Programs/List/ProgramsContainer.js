@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Container, Divider } from 'semantic-ui-react';
 
-import { CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
 import { actions, selectors as programSelectors } from '../../../redux/modules/programs';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
