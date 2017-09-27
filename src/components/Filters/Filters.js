@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { filterPropShape } from '../shapes';
-import { selectors as filterSelectors, actions as filterActions } from '../../redux/modules/filters';
+import { actions as filterActions, selectors as filterSelectors } from '../../redux/modules/filters';
 import ActiveFilter from './ActiveFilter/ActiveFilter';
 import FilterMenu from './FilterMenu/FilterMenu';
 
@@ -56,7 +56,9 @@ class Filters extends Component {
 
 export default connect(
   (state, ownProps) => ({
-    activeFilter: filterSelectors.getActiveFilter(state.filters, ownProps.namespace)
+    activeFilterName: filterSelectors.getActiveFilter(state.filters, ownProps.namespace) ||
+    ownProps.activeFilterName ||
+    ''
   }),
   filterActions
 )(Filters);
