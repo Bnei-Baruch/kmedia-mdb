@@ -6,6 +6,7 @@ import { Button, Card, Divider, Grid, Header, List, Menu, Segment } from 'semant
 
 import * as shapes from '../../shapes';
 import { selectors } from '../../../redux/modules/programs';
+import { isEmpty } from '../../../helpers/utils';
 import connectFilter from '../connectFilter';
 
 class ProgramsFilter extends React.Component {
@@ -33,10 +34,13 @@ class ProgramsFilter extends React.Component {
   };
 
   state = {
-    selection: this.props.value
+    selection: { genre: null, program: null, ...this.props.value }
   };
 
   componentWillReceiveProps(nextProps) {
+    if (isEmpty(nextProps.value)) {
+      return;
+    }
     this.setState({
       selection: nextProps.value
     });
@@ -46,7 +50,6 @@ class ProgramsFilter extends React.Component {
     const { value } = data;
     this.setState({ selection: value });
   };
-
 
   onSelectionProgramChange = (event, data) => {
     const { value } = data;
@@ -64,7 +67,7 @@ class ProgramsFilter extends React.Component {
 
   apply = () => {
     const selection = this.state.selection;
-    if (selection === null) {
+    if (selection === null || (selection.genre === null && selection.program === null)) {
       return;
     }
     this.props.updateValue(selection);
@@ -73,10 +76,10 @@ class ProgramsFilter extends React.Component {
 
   filterProgramsByGenre = (genre, programs) => {
     let filter;
-    if (genre === null) {
+    if (isEmpty(genre)) {
       filter = program => program;
     } else {
-      filter = program => program.genres.includes(genre.genre);
+      filter = program => program.genres.includes(genre);
     }
 
     const filteredProgram = programs.filter(
@@ -111,9 +114,10 @@ class ProgramsFilter extends React.Component {
     }, []);
   };
 
-  createList = (genre, programs) => {
-    const filteredPrograms = this.filterProgramsByGenre(genre, programs);
-    const header           = genre ? genre.genre : 'All Programs';
+  createList = (programs) => {
+    const { genre, program } = this.state.selection;
+    const filteredPrograms   = this.filterProgramsByGenre(genre, programs);
+    const header             = genre || 'All Programs';
 
     return (
       <Grid.Row>
@@ -129,12 +133,14 @@ class ProgramsFilter extends React.Component {
                 <List size="tiny">
                   <List.Item><List.Header>{key}<Divider /></List.Header></List.Item>
                   {
-                    programArr.map(program => (
+                    programArr.map(prog => (
                       <List.Item
-                        key={`PF${program.program.id}`}
-                        value={program.program.id}
+                        key={`PF${prog.program.id}`}
+                        value={prog.program.id}
+                        active={prog.program.id === program}
+                        style={prog.program.id === program ? { backgroundColor: 'lightgoldenrodyellow' } : {}}
                         onClick={this.onSelectionProgramChange}
-                      >{program.program.name}</List.Item>
+                      >{prog.program.name}</List.Item>
                     ))
                   }
                 </List>
@@ -146,12 +152,14 @@ class ProgramsFilter extends React.Component {
     );
   };
 
-  createLeftMenu = (genres, selected) => (
-    <Menu vertical color="blue" size="tiny" fluid>
+  createLeftMenu = (genres) => {
+    const selected      = this.state.selection;
+    const selectedGenre = selected ? selected.genre : null;
+    return (<Menu vertical color="blue" size="tiny" fluid>
       <Menu.Item
         key={0}
         value={null}
-        style={selected === null ?
+        style={selectedGenre === null ?
           { backgroundColor: 'lightgoldenrodyellow' } :
           {}}
         active={selected === 0}
@@ -160,9 +168,8 @@ class ProgramsFilter extends React.Component {
       {
         genres.map(
           (genre) => {
-            const selectedGenre = selected ? selected.genre : null;
-            const active        = selectedGenre === genre;
-            const style         = active ?
+            const active = selectedGenre === genre;
+            const style  = active ?
               { backgroundColor: 'lightgoldenrodyellow' } :
               {};
 
@@ -177,8 +184,8 @@ class ProgramsFilter extends React.Component {
             );
           })
       }
-    </Menu>
-  );
+    </Menu>);
+  };
 
   recentlyUpdated = () => (
     <Grid.Row stretched>
@@ -213,7 +220,7 @@ class ProgramsFilter extends React.Component {
           <div className="filter-steps__column-wrapper">
             <div className="filter-steps__column">
               {
-                this.createLeftMenu(genres, this.state.selection)
+                this.createLeftMenu(genres)
               }
             </div>
           </div>
@@ -221,10 +228,10 @@ class ProgramsFilter extends React.Component {
             <div className="filter-steps__column">
               <Grid padded className="filter-steps__lists" columns={5}>
                 {
-                  this.state.selection ? null : this.recentlyUpdated()
+                  this.state.selection === { genre: null, programs: null } ? null : this.recentlyUpdated()
                 }
                 {
-                  this.createList(this.state.selection, programs)
+                  this.createList(programs)
                 }
               </Grid>
             </div>

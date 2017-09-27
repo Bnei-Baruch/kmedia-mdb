@@ -1,5 +1,6 @@
 import { createFilterDefinition } from './util';
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
+import { isEmpty } from '../../helpers/utils';
 
 const programsFilter = {
   name: 'programs-filter',
@@ -12,13 +13,19 @@ const programsFilter = {
     if (!value) {
       return '';
     }
-    const key = Object.keys(value)[0];
-    if (key === 'genre') {
-      return value.genre;
+
+    const programName = value.program;
+    if (!isEmpty(programName)) {
+      const program = mdbSelectors.getCollectionById(getState().mdb, programName);
+      return program ? program.name : programName;
     }
 
-    const program = mdbSelectors.getCollectionById(getState().mdb, value.program);
-    return program ? program.name : value.program;
+    const genre = value.genre;
+    if (!isEmpty(genre)) {
+      return genre;
+    }
+
+    return '';
   }
 };
 
