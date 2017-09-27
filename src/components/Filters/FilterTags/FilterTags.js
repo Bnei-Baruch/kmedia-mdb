@@ -26,12 +26,13 @@ class FilterTags extends Component {
   };
 
   static contextTypes = {
-    store: PropTypes.object.isRequired
+    store: PropTypes.object.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   render() {
     const { tags, namespace } = this.props;
-    const store               = this.context.store;
+    const { store, t }        = this.context;
 
     return (
       <div className="filter-tags">
@@ -40,7 +41,7 @@ class FilterTags extends Component {
           {
             tags.map((tag) => {
               const icon  = filtersTransformer.getTagIcon(tag.name);
-              const label = filtersTransformer.valueToTagLabel(tag.name, tag.value, this.props, store);
+              const label = filtersTransformer.valueToTagLabel(tag.name, tag.value, this.props, store, t);
               return (
                 <FilterTag
                   key={`${tag.name}_${tag.index}`}
