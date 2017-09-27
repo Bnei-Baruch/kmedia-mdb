@@ -111,6 +111,16 @@
     }
   },
   "programs": {
+    "genres": {
+      "all": "כל התוכניות",
+      "documentary": "דוקומנטרי",
+      "late-night": "מאוחר בלילה",
+      "news": "אקטואליה",
+      "talk-show": "תוכניות אירוח",
+      "educational": "לימודי",
+      "children": "ילדים",
+      "movies": "סרטים"
+    },
     "list": {
       "episode_from": "Episode from:"
     },

@@ -2,15 +2,16 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { Grid, Image, List, Table } from 'semantic-ui-react';
+
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { canonicalLink } from '../../../helpers/utils';
-import Link from '../../Language/MultiLanguageLink';
 import * as shapes from '../../shapes';
+import Link from '../../Language/MultiLanguageLink';
 
 class ProgramsList extends PureComponent {
 
   static propTypes = {
-    items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.ProgramCollection, shapes.ProgramChapter])),
+    items: PropTypes.arrayOf(shapes.ProgramChapter),
     t: PropTypes.func.isRequired,
   };
 
@@ -34,7 +35,7 @@ class ProgramsList extends PureComponent {
     )));
 
     return (
-      <Table.Row verticalAlign="top" key={part.id}>
+      <Table.Row key={part.id} verticalAlign="top">
         <Table.Cell collapsing singleLine width={1}>
           <strong>{part.film_date || '0000-00-00'}</strong>
         </Table.Cell>
@@ -45,7 +46,7 @@ class ProgramsList extends PureComponent {
           <Link to={canonicalLink(part)}>
             <strong>{part.name || '☠ no name'}</strong>
           </Link>
-          <List size="tiny" horizontal link>
+          <List horizontal link size="tiny">
             <List.Item>
               <List.Header>{t('programs.list.episode_from')}</List.Header>
             </List.Item>
@@ -56,35 +57,6 @@ class ProgramsList extends PureComponent {
     );
   };
 
-  /* renderCollection = (collection) => {
-    let units = [];
-    if (collection.content_units) {
-      units = collection.content_units.slice(0, 5).map(unit => (
-        <Table.Row verticalAlign="top" key={`u-${unit.id}`}>
-          <Table.Cell>
-            <Link to={`/programs/chapter/${unit.id}`}>
-              {unit.name || '☠ no name'}
-            </Link>
-          </Table.Cell>
-        </Table.Row>
-      ));
-    }
-
-    const rows             = [];
-    const contentUnitsSpan = units.length + 1;
-
-    rows.push((
-      <Table.Row verticalAlign="top" key={`l-${collection.id}`}>
-        <Table.Cell collapsing singleLine width={1} rowSpan={contentUnitsSpan}>
-          <Link to={`/programs/full/${collection.id}`}>
-            <strong>{collection.name || '⛔ NO NAME'}</strong>
-          </Link>
-        </Table.Cell>
-      </Table.Row>
-    ));
-    return rows.concat(units);
-  }; */
-
   render() {
     const { items, t } = this.props;
 
@@ -93,7 +65,7 @@ class ProgramsList extends PureComponent {
     }
 
     return (
-      <Table basic="very" sortable className="index-list">
+      <Table sortable basic="very" className="index-list">
         <Table.Body>
           {
             items.map(x => this.renderPart(x, t))

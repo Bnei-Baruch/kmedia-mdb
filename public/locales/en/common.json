@@ -115,6 +115,16 @@
     }
   },
   "programs": {
+    "genres": {
+      "all": "All Programs",
+      "documentary": "Documentary",
+      "late-night": "Late Night",
+      "news": "News",
+      "talk-show": "Talk Show",
+      "educational": "Educational",
+      "children": "Children",
+      "movies": "Movies"
+    },
     "list": {
       "episode_from": "Episode from:"
     },

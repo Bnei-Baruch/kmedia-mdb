@@ -5,24 +5,27 @@ import { isEmpty } from '../../helpers/utils';
 const programsFilter = {
   name: 'programs-filter',
   queryKey: 'program',
-  valueToQuery: value => JSON.stringify(value), // Convert filter value to query param
-  queryToValue: queryValue => JSON.parse(queryValue), // convert query param to filter value
-  valueToApiParam: value => (value),  // convert filter value for api
-  tagIcon: 'block layout',           // https://react.semantic-ui.com/elements/icon
-  valueToTagLabel: (value, props, { getState }) => {
+  valueToQuery: value => [value.genre, value.program].map(x => x ? x : '').join('|'),
+  queryToValue: queryValue => {
+    const [genre, program] = queryValue.split('|');
+    return { genre, program };
+  },
+  valueToApiParam: value => (value),
+  tagIcon: 'tv',
+  valueToTagLabel: (value, props, store, t) => {
     if (!value) {
       return '';
     }
 
     const programName = value.program;
     if (!isEmpty(programName)) {
-      const program = mdbSelectors.getCollectionById(getState().mdb, programName);
+      const program = mdbSelectors.getCollectionById(store.getState().mdb, programName);
       return program ? program.name : programName;
     }
 
     const genre = value.genre;
     if (!isEmpty(genre)) {
-      return genre;
+      return t(`programs.genres.${genre}`);
     }
 
     return '';
