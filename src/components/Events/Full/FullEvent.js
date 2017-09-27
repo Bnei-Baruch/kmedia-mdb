@@ -53,42 +53,37 @@ class FullEvent extends Component {
     if (fullEvent) {
       const activeUnit = fullEvent.content_units[activePart];
       return (
-        <Container>
-          <Grid>
-            <PageHeader item={fullEvent} />
-            <Grid.Row>
-              <Grid.Column>
-                <EventMap
-                  language={language}
-                  address={fullEvent.full_address}
-                  city={fullEvent.city}
-                  country={fullEvent.country}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-          <Grid padded>
-            <FullVideoBox
-              collection={fullEvent}
-              activePart={activePart}
-              language={language}
-              t={t}
-              onActivePartChange={this.handleActivePartChange}
-              PlayListComponent={FullEventPlaylist}
-            />
-          </Grid>
-          <Grid padded reversed="tablet">
-            <Grid.Row reversed="computer">
-              <Grid.Column computer={6} tablet={4} mobile={16}>
-                <MediaDownloads unit={activeUnit} language={language} t={t} />
-              </Grid.Column>
-              <Grid.Column computer={10} tablet={12} mobile={16}>
-                <Info unit={activeUnit} t={t} />
-                <Materials unit={activeUnit} t={t} />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Container>
+        <div>
+          <PageHeader item={fullEvent} />
+          <EventMap
+            language={language}
+            address={fullEvent.full_address}
+            city={fullEvent.city}
+            country={fullEvent.country}
+          />
+            <Grid padded>
+              <FullVideoBox
+                collection={fullEvent}
+                activePart={activePart}
+                language={language}
+                t={t}
+                onActivePartChange={this.handleActivePartChange}
+                PlayListComponent={FullEventPlaylist}
+              />
+            </Grid>
+            <Grid padded reversed="tablet">
+              <Grid.Row reversed="computer">
+                <Grid.Column computer={6} tablet={4} mobile={16}>
+                  <MediaDownloads unit={activeUnit} language={language} t={t} />
+                </Grid.Column>
+                <Grid.Column computer={10} tablet={12} mobile={16}>
+                  <Info unit={activeUnit} t={t} />
+                  <Materials unit={activeUnit} t={t} />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+         
+        </div>
       );
     }
 
