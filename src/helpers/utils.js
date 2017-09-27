@@ -29,7 +29,7 @@ import {
 
 export const isEmpty = (obj) => {
   // null and undefined are "empty"
-  if (obj === null) {
+  if (obj === null || obj === undefined) {
     return true;
   }
 
@@ -89,7 +89,9 @@ export const formatError = (error) => {
 export function* intersperse(iterable, delim) {
   let first = true;
   for (const item of iterable) {
-    if (!first) yield delim;
+    if (!first) {
+      yield delim;
+    }
     first = false;
     yield item;
   }

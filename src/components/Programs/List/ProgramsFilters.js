@@ -34,7 +34,7 @@ class ProgramsFilters extends PureComponent {
     return (
       <div>
         <FiltersHydrator namespace="programs" onHydrated={onHydrated} />
-        <Filters namespace="programs" filters={filters} onFilterApplication={onChange} />
+        <Filters namespace="programs" filters={filters} activeFilterName="programs-filter" onFilterApplication={onChange} />
         <FilterTags namespace="programs" onClose={onChange} />
       </div>
     );

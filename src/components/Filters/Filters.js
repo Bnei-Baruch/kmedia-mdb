@@ -15,11 +15,11 @@ class Filters extends Component {
     editNewFilter: PropTypes.func.isRequired,
     closeActiveFilter: PropTypes.func.isRequired,
     filters: PropTypes.arrayOf(filterPropShape).isRequired,
-    activeFilter: PropTypes.string
+    activeFilterName: PropTypes.string
   };
 
   static defaultProps = {
-    activeFilter: ''
+    activeFilterName: ''
   };
 
   handleFilterClick = ({ name }) => {
@@ -44,7 +44,7 @@ class Filters extends Component {
         <FilterMenu items={filters} namespace={namespace} active={activeFilter} onChoose={this.handleFilterClick} />
         <ActiveFilter
           namespace={namespace}
-          activeFilterName={activeFilter}
+          activeFilterName={this.props.activeFilterName}
           filters={this.props.filters}
           onCancel={this.handleCancelActiveFilter}
           onApply={this.handleApplyActiveFilter}
