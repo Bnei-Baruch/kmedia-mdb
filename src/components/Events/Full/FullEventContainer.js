@@ -64,7 +64,7 @@ class FullEventContainer extends Component {
     let wip  = wipMap.fulls[id];
     let err  = errors.fulls[id];
     if (fullEvent) {
-      wip = wip || Array.isArray(fullEvent.cuIDs) && fullEvent.cuIDs.some(cuID => wipMap.items[cuID]);
+      wip = wip || (Array.isArray(fullEvent.cuIDs) && fullEvent.cuIDs.some(cuID => wipMap.items[cuID]));
       if (!err) {
         const cuIDwithError = Array.isArray(fullEvent.cuIDs) && fullEvent.cuIDs.find(cuID => errors.items[cuID]);
         err                 = cuIDwithError ? errors.items[cuIDwithError] : null;
