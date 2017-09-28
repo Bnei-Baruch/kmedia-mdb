@@ -36,12 +36,9 @@ class EventMap extends Component {
   }
 
   componentDidMount() {
-    this.fetchLocation(this.props.address).then((location) => {
-      if (!location) {
-        this.fetchLocation(`${this.props.country}, ${this.props.city}`).then((altLocation) => {
-          this.setState({ loaded: true, location: altLocation });
-        });
-      } else {
+    const address = this.props.address || `${this.props.city}, ${this.props.country}`;
+    this.fetchLocation(address).then((location) => {
+      if (location) {
         this.setState({ loaded: true, location });
       }
     });
@@ -57,7 +54,6 @@ class EventMap extends Component {
     let { language }           = this.props;
     const { loaded, location } = this.state;
     if (loaded && location) {
-      // Fix this in language setting and constants.
       if (language === 'he') {
         language = 'iw';
       }
