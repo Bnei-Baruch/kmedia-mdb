@@ -51,6 +51,9 @@
     "topics-filter": {
       "label": "נושאים"
     },
+    "programs-filter": {
+      "label": "ז'אנר \\ תוכנית"
+    },
     "event-types-filter": {
       "label": "סוגים",
       "all": "כל האירועים",

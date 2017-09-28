@@ -37,7 +37,6 @@ class ProgramsFilters extends PureComponent {
         <Filters
           namespace="programs"
           filters={filters}
-          activeFilterName="programs-filter"
           onFilterApplication={onChange}
         />
         <FilterTags namespace="programs" onClose={onChange} />

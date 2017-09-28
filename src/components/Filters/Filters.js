@@ -56,9 +56,7 @@ class Filters extends Component {
 
 export default connect(
   (state, ownProps) => ({
-    activeFilterName: filterSelectors.getActiveFilter(state.filters, ownProps.namespace) ||
-    ownProps.activeFilterName ||
-    ''
+    activeFilterName: filterSelectors.getActiveFilter(state.filters, ownProps.namespace),
   }),
   filterActions
 )(Filters);

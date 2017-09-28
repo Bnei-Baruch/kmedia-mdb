@@ -51,14 +51,6 @@
     },
     "topics-filter": {
       "label": "Темы"
-    },
-    "event-types-filter": {
-      "label": "",
-      "all": "",
-      "allItem": ""
-    },
-    "years-filter": {
-      "label": ""
     }
   },
   "buttons": {

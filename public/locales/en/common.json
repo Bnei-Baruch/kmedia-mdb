@@ -28,9 +28,6 @@
     "programs": {
       "by": "Filter Programs by:"
     },
-    "programs-filter": {
-      "label": "Genre/Program"
-    },
     "events": {
       "by": "Filter Events by:"
     },
@@ -54,6 +51,9 @@
     },
     "topics-filter": {
       "label": "Topics"
+    },
+    "programs-filter": {
+      "label": "Genre/Program"
     },
     "event-types-filter": {
       "label": "Types",
