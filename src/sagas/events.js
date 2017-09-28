@@ -14,7 +14,8 @@ function* fetchAllEvents(action) {
       contentTypes: EVENT_TYPES,
       language,
       pageNo: 1,
-      pageSize: 1000 // NOTE: we need to get all events, and the endpoint lets us fetch only with pagination
+      pageSize: 1000, // NOTE: we need to get all events, and the endpoint lets us fetch only with pagination,
+      with_units: false,
     });
     yield put(mdbActions.receiveCollections(resp.collections));
     yield put(actions.fetchAllEventsSuccess(resp));

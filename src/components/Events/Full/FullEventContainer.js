@@ -42,7 +42,7 @@ class FullEventContainer extends Component {
     // We fetch stuff if we don't have it already
     // and a request for it is not in progress or ended with an error.
     const id = match.params.id;
-    if (fullEvent && fullEvent.id === id) {
+    if (fullEvent && fullEvent.id === id && Array.isArray(fullEvent.cuIDs)) {
       fullEvent.cuIDs.forEach((cuID) => {
         const cu = fullEvent.content_units.find(x => x.id === cuID);
         if (!cu || !cu.files) {
@@ -64,9 +64,9 @@ class FullEventContainer extends Component {
     let wip  = wipMap.fulls[id];
     let err  = errors.fulls[id];
     if (fullEvent) {
-      wip = wip || fullEvent.cuIDs.some(cuID => wipMap.items[cuID]);
+      wip = wip || Array.isArray(fullEvent.cuIDs) && fullEvent.cuIDs.some(cuID => wipMap.items[cuID]);
       if (!err) {
-        const cuIDwithError = fullEvent.cuIDs.find(cuID => errors.items[cuID]);
+        const cuIDwithError = Array.isArray(fullEvent.cuIDs) && fullEvent.cuIDs.find(cuID => errors.items[cuID]);
         err                 = cuIDwithError ? errors.items[cuIDwithError] : null;
       }
     }

@@ -50,7 +50,7 @@ class FullEvent extends Component {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
-    if (fullEvent) {
+    if (fullEvent && Array.isArray(fullEvent.content_units)) {
       const activeUnit = fullEvent.content_units[activePart];
       return (
         <div>
