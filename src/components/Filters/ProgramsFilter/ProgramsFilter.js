@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import noop from 'lodash/noop';
 import { Button, Card, Divider, Grid, Header, List, Menu, Segment } from 'semantic-ui-react';
 
+import { canonicalLink, isEmpty } from '../../../helpers/utils';
 import { selectors } from '../../../redux/modules/programs';
-import { isEmpty } from '../../../helpers/utils';
+import { selectors as mdbSelectors } from '../../../redux/modules/mdb';
 import connectFilter from '../connectFilter';
 import * as shapes from '../../shapes';
 
@@ -22,6 +23,12 @@ class ProgramsFilter extends Component {
     t: PropTypes.func.isRequired,
     genres: PropTypes.arrayOf(PropTypes.string),
     programs: PropTypes.arrayOf(shapes.ProgramCollection),
+    recentlyUpdated: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      last_update: PropTypes.string.isRequired,
+      units_count: PropTypes.number.isRequired,
+      collection: shapes.ProgramCollection,
+    })),
   };
 
   static defaultProps = {
@@ -30,7 +37,9 @@ class ProgramsFilter extends Component {
     value: null,
     allValues: [],
     genres: [],
-    programs: []
+    programs: [],
+    recentlyUpdated: [],
+    recentlyUpdatedCollections: [],
   };
 
   state = {
@@ -108,7 +117,8 @@ class ProgramsFilter extends Component {
     }, []);
   };
 
-  createList = (programs, t) => {
+  createList = () => {
+    const { programs, t }    = this.props;
     const { genre, program } = this.state.selection || {};
     const filteredPrograms   = this.filterProgramsByGenre(genre, programs);
     const header             = t(`programs.genres.${genre || 'all'}`);
@@ -152,7 +162,8 @@ class ProgramsFilter extends Component {
     );
   };
 
-  createLeftMenu = (genres, t) => {
+  createLeftMenu = () => {
+    const { genres, t } = this.props;
     const selected      = this.state.selection;
     const selectedGenre = selected ? selected.genre : null;
     return (
@@ -187,29 +198,36 @@ class ProgramsFilter extends Component {
     );
   };
 
-  recentlyUpdated = () => (
-    <Grid.Row stretched>
-      <Grid.Column width={16}>
-        <Header as="h6" color="grey">Recently Updated</Header>
-      </Grid.Column>
-      <Grid.Column>
-        <Card href="#" header="Between Words" meta="A new parts added: Today" />
-      </Grid.Column>
-      <Grid.Column>
-        <Card href="#" header="Between Words" meta="A new parts added: Today" />
-      </Grid.Column>
-      <Grid.Column>
-        <Card href="#" header="Between Words" meta="A new parts added: Today" />
-      </Grid.Column>
-      <Grid.Column>
-        <Card href="#" header="Between Words" meta="A new parts added: Today" />
-      </Grid.Column>
-      <Grid.Column>
-        <Card href="#" header="Between Words" meta="A new parts added: Today" />
-      </Grid.Column>
+  createRecentlyUpdated = () => {
+    const { recentlyUpdated, t } = this.props;
 
-    </Grid.Row>
-  );
+    if (!Array.isArray(recentlyUpdated)) {
+      return null;
+    }
+
+    return (
+      <Grid.Row stretched>
+        <Grid.Column width={16}>
+          <Header as="h6" color="grey" content={t('filters.programs-filter.recently-updated')} />
+        </Grid.Column>
+        {
+          recentlyUpdated.slice(0, 5)
+            .filter(x => x.collection)
+            .map(x => {
+              const { collection, last_update: lastUpdate } = x;
+              return (
+                <Grid.Column key={x.id}>
+                  <Card
+                    header={collection.name}
+                    href={canonicalLink(collection)}
+                    meta={`${t('filters.programs-filter.last-updated')}: ${t('values.date', { date: new Date(lastUpdate) })}`} />
+                </Grid.Column>
+              );
+            })
+        }
+      </Grid.Row>
+    );
+  };
 
   render() {
     const { t, genres, programs } = this.props;
@@ -228,7 +246,7 @@ class ProgramsFilter extends Component {
                 {
                   this.state.selection ?
                     null :
-                    this.recentlyUpdated()
+                    this.createRecentlyUpdated(t)
                 }
                 {this.createList(programs, t)}
               </Grid>
@@ -246,8 +264,18 @@ class ProgramsFilter extends Component {
 }
 
 export default connect(
-  state => ({
-    genres: selectors.getGenres(state.programs),
-    programs: selectors.getPrograms(state.programs),
-  })
+  state => {
+    const recentlyUpdated = selectors.getRecentlyUpdated(state.programs)
+      .map(x => ({
+          ...x,
+          collection: mdbSelectors.getCollectionById(state.mdb, x.id),
+        }
+      ));
+
+    return {
+      genres: selectors.getGenres(state.programs),
+      programs: selectors.getPrograms(state.programs),
+      recentlyUpdated,
+    };
+  }
 )(connectFilter()(ProgramsFilter));

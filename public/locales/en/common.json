@@ -53,7 +53,9 @@
       "label": "Topics"
     },
     "programs-filter": {
-      "label": "Genre/Program"
+      "label": "Genre/Program",
+      "recently-updated": "Recently Updated",
+      "last-updated": "Last updated on"
     },
     "event-types-filter": {
       "label": "Types",

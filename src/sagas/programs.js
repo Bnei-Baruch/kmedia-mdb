@@ -14,9 +14,9 @@ function* fetchProgramsList(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, 'programs'));
   const params  = filtersTransformer.toApiParams(filters);
   try {
-    const language   = yield select(state => settings.getLanguage(state.settings));
+    const language = yield select(state => settings.getLanguage(state.settings));
 
-    // Initialize Genres
+    // fetch Genres if we don't have them
     const genresTree = yield select(state => progSelectors.getGenres(state.programs));
     if (isEmpty(genresTree)) {
       const genres = yield call(Api.collections, {
@@ -28,7 +28,16 @@ function* fetchProgramsList(action) {
       });
       if (Array.isArray(genres.collections)) {
         yield put(mdbActions.receiveCollections(genres.collections));
-        yield put(actions.fetchCollections(genres.collections));
+        yield put(actions.receiveCollections(genres.collections));
+      }
+    }
+
+    // fetch recently_updated if we don't have them
+    const recentlyUpdated = yield select(state => progSelectors.getRecentlyUpdated(state.programs));
+    if (isEmpty(recentlyUpdated)) {
+      const resp = yield call(Api.recentlyUpdated);
+      if (Array.isArray(resp)) {
+        yield put(actions.receiveRecentlyUpdated(resp));
       }
     }
 

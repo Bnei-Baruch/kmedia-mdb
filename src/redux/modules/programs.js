@@ -9,26 +9,28 @@ const SET_PAGE = 'Programs/SET_PAGE';
 const FETCH_LIST                    = 'Programs/FETCH_LIST';
 const FETCH_LIST_SUCCESS            = 'Programs/FETCH_LIST_SUCCESS';
 const FETCH_LIST_FAILURE            = 'Programs/FETCH_LIST_FAILURE';
-const FETCH_COLLECTIONS             = 'Programs/FETCH_COLLECTIONS';
 const FETCH_PROGRAM_CHAPTER         = 'Program/FETCH_PROGRAM_CHAPTER';
 const FETCH_PROGRAM_CHAPTER_SUCCESS = 'Program/FETCH_PROGRAM_CHAPTER_SUCCESS';
 const FETCH_PROGRAM_CHAPTER_FAILURE = 'Program/FETCH_PROGRAM_CHAPTER_FAILURE';
 const FETCH_FULL_PROGRAM            = 'Program/FETCH_FULL_PROGRAM';
 const FETCH_FULL_PROGRAM_SUCCESS    = 'Program/FETCH_FULL_PROGRAM_SUCCESS';
 const FETCH_FULL_PROGRAM_FAILURE    = 'Program/FETCH_FULL_PROGRAM_FAILURE';
+const RECEIVE_COLLECTIONS           = 'Programs/RECEIVE_COLLECTIONS';
+const RECEIVE_RECENTLY_UPDATED      = 'Programs/RECEIVE_RECENTLY_UPDATED';
 
 export const types = {
   SET_PAGE,
   FETCH_LIST,
   FETCH_LIST_SUCCESS,
   FETCH_LIST_FAILURE,
-  FETCH_COLLECTIONS,
   FETCH_PROGRAM_CHAPTER,
   FETCH_PROGRAM_CHAPTER_SUCCESS,
   FETCH_PROGRAM_CHAPTER_FAILURE,
   FETCH_FULL_PROGRAM,
   FETCH_FULL_PROGRAM_SUCCESS,
   FETCH_FULL_PROGRAM_FAILURE,
+  RECEIVE_COLLECTIONS,
+  RECEIVE_RECENTLY_UPDATED,
 };
 
 /* Actions */
@@ -41,18 +43,18 @@ const fetchList                  = createAction(FETCH_LIST, (pageNo, language, p
 }));
 const fetchListSuccess           = createAction(FETCH_LIST_SUCCESS);
 const fetchListFailure           = createAction(FETCH_LIST_FAILURE);
-const fetchCollections           = createAction(FETCH_COLLECTIONS);
 const fetchProgramChapter        = createAction(FETCH_PROGRAM_CHAPTER);
 const fetchProgramChapterSuccess = createAction(FETCH_PROGRAM_CHAPTER_SUCCESS);
 const fetchProgramChapterFailure = createAction(FETCH_PROGRAM_CHAPTER_FAILURE, (id, err) => ({ id, err }));
 const fetchFullProgram           = createAction(FETCH_FULL_PROGRAM);
 const fetchFullProgramSuccess    = createAction(FETCH_FULL_PROGRAM_SUCCESS);
 const fetchFullProgramFailure    = createAction(FETCH_FULL_PROGRAM_FAILURE, (id, err) => ({ id, err }));
+const receiveCollections         = createAction(RECEIVE_COLLECTIONS);
+const receiveRecentlyUpdated     = createAction(RECEIVE_RECENTLY_UPDATED);
 
 export const actions = {
   setPage,
   fetchList,
-  fetchCollections,
   fetchListSuccess,
   fetchListFailure,
   fetchProgramChapter,
@@ -61,6 +63,8 @@ export const actions = {
   fetchFullProgram,
   fetchFullProgramSuccess,
   fetchFullProgramFailure,
+  receiveCollections,
+  receiveRecentlyUpdated,
 };
 
 /* Reducer */
@@ -71,6 +75,7 @@ const initialState = {
   pageNo: 1,
   genres: [],
   programs: [],
+  recentlyUpdated: [],
   wip: {
     list: false,
     chapters: {},
@@ -163,7 +168,7 @@ const onSetLanguage = state => (
   }
 );
 
-const setGenres = (state, action) => {
+const onReceiveCollections = (state, action) => {
   const genres = [...new Set(action.payload.map(x => x.genres).reduce(
     (acc, cur) => acc.concat(cur),
     []
@@ -176,10 +181,16 @@ const setGenres = (state, action) => {
   };
 };
 
+const onReceiveRecentlyUpdated = (state, action) => {
+  return {
+    ...state,
+    recentlyUpdated: action.payload
+  };
+};
+
 export const reducer = handleActions({
   [settings.SET_LANGUAGE]: onSetLanguage,
 
-  [FETCH_COLLECTIONS]: setGenres,
   [FETCH_LIST]: setStatus,
   [FETCH_LIST_SUCCESS]: onFetchListSuccess,
   [FETCH_LIST_FAILURE]: setStatus,
@@ -191,17 +202,20 @@ export const reducer = handleActions({
   [FETCH_FULL_PROGRAM_FAILURE]: setStatus,
 
   [SET_PAGE]: onSetPage,
+  [RECEIVE_COLLECTIONS]: onReceiveCollections,
+  [RECEIVE_RECENTLY_UPDATED]: onReceiveRecentlyUpdated,
 }, initialState);
 
 /* Selectors */
 
-const getTotal    = state => state.total;
-const getItems    = state => state.items;
-const getPageNo   = state => state.pageNo;
-const getWip      = state => state.wip;
-const getErrors   = state => state.errors;
-const getGenres   = state => state.genres;
-const getPrograms = state => state.programs;
+const getTotal           = state => state.total;
+const getItems           = state => state.items;
+const getPageNo          = state => state.pageNo;
+const getWip             = state => state.wip;
+const getErrors          = state => state.errors;
+const getGenres          = state => state.genres;
+const getPrograms        = state => state.programs;
+const getRecentlyUpdated = state => state.recentlyUpdated;
 
 export const selectors = {
   getTotal,
@@ -211,4 +225,5 @@ export const selectors = {
   getErrors,
   getGenres,
   getPrograms,
+  getRecentlyUpdated,
 };
