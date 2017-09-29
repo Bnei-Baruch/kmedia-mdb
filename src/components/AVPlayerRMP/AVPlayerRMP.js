@@ -200,11 +200,12 @@ class AVPlayerRMP extends PureComponent {
     const { sliceEnd } = this.state;
 
     // interrupt play if we're at the end of the slice
-    if (isSliceable && e.currentTime >= sliceEnd) {
-      media.pause();
-      media.seekTo(sliceEnd);
-      return;
-    }
+
+    // if (isSliceable && e.currentTime >= sliceEnd) {
+    //   media.pause();
+    //   media.seekTo(sliceEnd);
+    //   return;
+    // }
 
     if (this.props.onPlay) {
       this.props.onPlay();
@@ -270,10 +271,10 @@ class AVPlayerRMP extends PureComponent {
     const { sliceEnd } = this.state;
 
     // stop playing when we're at the end of the slice or beyond
-    if (isSliceable && timeData.currentTime >= sliceEnd) {
-      media.pause();
-      media.seekTo(sliceEnd);
-    }
+    // if (isSliceable && timeData.currentTime >= sliceEnd) {
+    //   media.pause();
+    //   media.seekTo(sliceEnd);
+    // }
   }
 
   handleToggleMode = () => {

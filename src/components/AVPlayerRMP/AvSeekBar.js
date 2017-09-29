@@ -139,14 +139,17 @@ class AvSeekBar extends Component {
     if (playerMode === PLAYER_MODE.SLICE_EDIT) {
       // try stick to handle
       if (this.sliceStartHandle && this.sliceEndHandle) {
-        let handleRect = this.sliceStartHandle.getHandleElement().getBoundingClientRect();
-        if (Math.abs(clientX - handleRect.left) < stickyHandleDelta) {
+        const { left: startLeft } = this.sliceStartHandle.getHandleElement().getBoundingClientRect();
+        const { left: endLeft } = this.sliceEndHandle.getHandleElement().getBoundingClientRect();
+        const sliceWidth = endLeft - startLeft;
+        // reduce delta if slice is small
+        const fittedStickyDelta = stickyHandleDelta * 2.5 > sliceWidth ? sliceWidth / 4 : stickyHandleDelta;
+        if (Math.abs(clientX - startLeft) < fittedStickyDelta) {
           return sliceStart;
-        } else {
-          handleRect = this.sliceEndHandle.getHandleElement().getBoundingClientRect();
-          if (Math.abs(clientX - handleRect.left) < stickyHandleDelta) {
-            return sliceEnd > duration ? duration : sliceEnd;
-          }
+        }
+
+        if (Math.abs(clientX - endLeft) < fittedStickyDelta) {
+          return sliceEnd > duration ? duration : sliceEnd;
         }
       }
     }
