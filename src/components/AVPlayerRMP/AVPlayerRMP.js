@@ -196,9 +196,6 @@ class AVPlayerRMP extends PureComponent {
   }
 
   onPlay = (e) => {
-    const { isSliceable, media } = this.props;
-    const { sliceEnd } = this.state;
-
     if (this.props.onPlay) {
       this.props.onPlay();
     }
@@ -257,17 +254,7 @@ class AVPlayerRMP extends PureComponent {
     return ret;
   };
 
-  handleTimeUpdate = (timeData) => {
-    // This method is called all the time without stopping.
-    const { isSliceable, media } = this.props;
-    const { sliceEnd } = this.state;
-
-    // stop playing when we're at the end of the slice or beyond
-    // if (isSliceable && timeData.currentTime >= sliceEnd) {
-    //   media.pause();
-    //   media.seekTo(sliceEnd);
-    // }
-  }
+  handleTimeUpdate = timeData => timeData;
 
   handleToggleMode = () => {
     const { mode } = this.state;
