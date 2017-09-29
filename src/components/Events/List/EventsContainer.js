@@ -1,56 +1,66 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Divider, Container } from 'semantic-ui-react';
 
-import { EVENT_TYPES } from '../../../helpers/consts';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as filterSelectors } from '../../../redux/modules/filters';
 import { actions, selectors as eventSelectors } from '../../../redux/modules/events';
 import * as shapes from '../../shapes';
-import EventsList from './EventsList';
-import EventsFilters from './EventsFilters';
-import ResultsPageHeader from '../../pagination/ResultsPageHeader';
-import { selectors as filterSelectors } from '../../../redux/modules/filters';
+import Page from './Page';
 
 class EventsContainer extends Component {
 
   static propTypes = {
-    items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.EventCollection, shapes.EventItem])),
-    contentTypes: PropTypes.arrayOf(PropTypes.string),
     location: shapes.HistoryLocation.isRequired,
     language: PropTypes.string.isRequired,
+    fetchAllEvents: PropTypes.func.isRequired,
+    filteredItems: PropTypes.arrayOf(shapes.EventCollection),
+    hasItems: PropTypes.bool,
+    wip: shapes.WIP,
+    err: shapes.Error,
   };
 
   static defaultProps = {
-    items: [],
-    contentTypes: EVENT_TYPES
+    hasItems: false,
+    filteredItems: [],
+    wip: false,
+    err: null,
   };
 
-  render() {
-    const { items } = this.props;
+  componentDidMount() {
+    const { hasItems, fetchAllEvents, wip, err } = this.props;
 
-    return (
-      <div>
-        <EventsFilters />
-        <Container className="padded">
-          <ResultsPageHeader {...this.props} />
-          <Divider fitted />
-          <EventsList items={items} />
-        </Container>
-      </div>
-    );
+    // We only fetch one time on first mount, if not wip or error.
+    // Next time we fetch is on language change.
+    if (!hasItems && !(wip || err)) {
+      fetchAllEvents();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { language } = nextProps;
+
+    if (language !== this.props.language) {
+      nextProps.fetchAllEvents();
+    }
+  }
+
+  render() {
+    const { filteredItems, wip, err } = this.props;
+    return <Page items={filteredItems} wip={wip} err={err} />;
   }
 }
 
 const mapState = (state) => {
-  const filters = filterSelectors.getFilters(state.filters, 'events');
-  const { items, ...paginationInfo } = eventSelectors.getFilteredData(state.events, filters, state.mdb);
+  const filters       = filterSelectors.getFilters(state.filters, 'events');
+  const filteredItems = eventSelectors.getFilteredData(state.events, filters, state.mdb);
 
   return {
-    ...paginationInfo,
-    items,
+    filteredItems,
+    hasItems: eventSelectors.getTotal(state.events) > 0,
     language: settings.getLanguage(state.settings),
+    wip: eventSelectors.getWip(state.events).list,
+    err: eventSelectors.getErrors(state.events).list,
   };
 };
 

@@ -5,8 +5,8 @@ import { types as settings } from './settings';
 
 /* Types */
 
-const RECEIVE_COLLECTIONS   = 'MDB/RECEIVE_COLLECTIONS';
-const RECEIVE_CONTENT_UNITS = 'MDB/RECEIVE_CONTENT_UNITS';
+const RECEIVE_COLLECTIONS         = 'MDB/RECEIVE_COLLECTIONS';
+const RECEIVE_CONTENT_UNITS       = 'MDB/RECEIVE_CONTENT_UNITS';
 
 export const types = {
   RECEIVE_COLLECTIONS,
@@ -15,8 +15,8 @@ export const types = {
 
 /* Actions */
 
-const receiveCollections  = createAction(RECEIVE_COLLECTIONS);
-const receiveContentUnits = createAction(RECEIVE_CONTENT_UNITS);
+const receiveCollections        = createAction(RECEIVE_COLLECTIONS);
+const receiveContentUnits       = createAction(RECEIVE_CONTENT_UNITS);
 
 export const actions = {
   receiveCollections,
@@ -52,7 +52,7 @@ const onReceiveCollections = (state, action) => {
 
         // make a copy of content unit and set this collection ccuName
         const updatedCU = { ...cu, ...state.cuById[cu.id] };
-        updatedCU.cIDs  = { ...updatedCU.cIDs, [ccuName]: y.id };
+        updatedCU.cIDs  = { ...updatedCU.cIDs, [`${y.id}____${ccuName}`]: y.id };
 
         // we delete it's name_in_collection
         // as it might be overridden by successive calls from different collections
@@ -106,7 +106,7 @@ const onReceiveContentUnits = (state, action) => {
         updatedC.ccuNames = { ...updatedC.ccuNames, [y.id]: ccuName };
         cById[v.id]       = updatedC;
 
-        acc[ccuName] = cID;
+        acc[k] = cID;
         return acc;
       }, {});
       delete y.collections;
@@ -120,10 +120,10 @@ const onReceiveContentUnits = (state, action) => {
 
         // make a copy of derived unit and set this unit as source name
         const updatedDU  = { ...v, ...state.cuById[v.id] };
-        updatedDU.sduIDs = { ...updatedDU.sduIDs, [relName]: y.id };
+        updatedDU.sduIDs = { ...updatedDU.sduIDs, [y.id]: relName };
         cuById[v.id]     = updatedDU;
 
-        acc[relName] = cuID;
+        acc[k] = cuID;
         return acc;
       }, {});
       delete y.derived_units;
@@ -137,10 +137,10 @@ const onReceiveContentUnits = (state, action) => {
 
         // make a copy of source unit and set this unit as derived name
         const updatedDU  = { ...v, ...state.cuById[v.id] };
-        updatedDU.dduIDs = { ...updatedDU.dduIDs, [relName]: y.id };
+        updatedDU.dduIDs = { ...updatedDU.dduIDs, [y.id]: relName };
         cuById[v.id]     = updatedDU;
 
-        acc[relName] = cuID;
+        acc[k] = cuID;
         return acc;
       }, {});
       delete y.source_units;
@@ -216,5 +216,5 @@ export const selectors = {
   getUnitById,
   getDenormCollection,
   getDenormCollectionWUnits,
-  getDenormContentUnit,
+  getDenormContentUnit
 };

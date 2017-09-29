@@ -1,16 +1,19 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Table } from 'semantic-ui-react';
 import moment from 'moment';
-import Link from '../../Language/MultiLanguageLink';
-import * as shapes from '../../shapes';
+import { Table } from 'semantic-ui-react';
+
+import { DATE_FORMAT } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/utils';
 import { fromToLocalized } from '../../../helpers/date';
+import * as shapes from '../../shapes';
+import Link from '../../Language/MultiLanguageLink';
 
 class EventsList extends PureComponent {
 
   static propTypes = {
-    items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.EventCollection, shapes.EventItem])),
+    items: PropTypes.arrayOf(shapes.EventCollection),
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -19,8 +22,8 @@ class EventsList extends PureComponent {
 
   renderCollection = (collection) => {
     const localDate = fromToLocalized(
-      moment.utc(collection.start_date, 'YYYY-MM-DD'),
-      moment.utc(collection.end_date, 'YYYY-MM-DD')
+      moment.utc(collection.start_date, DATE_FORMAT),
+      moment.utc(collection.end_date, DATE_FORMAT)
     );
 
     return (
@@ -38,14 +41,13 @@ class EventsList extends PureComponent {
   };
 
   render() {
-    const { items } = this.props;
+    const { items, t } = this.props;
 
     if (!Array.isArray(items) || items.length === 0) {
-      return (<Grid columns={2} celled="internally" />);
+      return <div>{t('events.no-matches')}</div>;
     }
 
     return (
-
       <Table basic="very" sortable>
         <Table.Body>
           {

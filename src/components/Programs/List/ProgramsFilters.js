@@ -8,13 +8,17 @@ import FilterTags from '../../Filters/FilterTags/FilterTags';
 
 const filters = [
   {
-    name: 'date-filter',
-    component: filterComponents.DateFilter
+    name: 'programs-filter',
+    component: filterComponents.ProgramsFilter
   },
   {
     name: 'topics-filter',
     component: filterComponents.TopicsFilter
-  }
+  },
+  {
+    name: 'date-filter',
+    component: filterComponents.DateFilter
+  },
 ];
 
 class ProgramsFilters extends PureComponent {
@@ -30,7 +34,11 @@ class ProgramsFilters extends PureComponent {
     return (
       <div>
         <FiltersHydrator namespace="programs" onHydrated={onHydrated} />
-        <Filters namespace="programs" filters={filters} onFilterApplication={onChange} />
+        <Filters
+          namespace="programs"
+          filters={filters}
+          onFilterApplication={onChange}
+        />
         <FilterTags namespace="programs" onClose={onChange} />
       </div>
     );

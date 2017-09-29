@@ -68,13 +68,13 @@ const filtersTransformer = {
       return acc;
     }, {});
   },
-  valueToTagLabel(filterName, value, props, store) {
+  valueToTagLabel(filterName, value, props, store, t) {
     const definition = this.definitionsByName[filterName];
     if (!definition) {
       return value;
     }
 
-    return definition.valueToTagLabel(value, props, store);
+    return definition.valueToTagLabel(value, props, store, t);
   },
   getTagIcon(filterName) {
     const definition = this.definitionsByName[filterName];

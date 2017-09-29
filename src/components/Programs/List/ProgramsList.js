@@ -1,83 +1,74 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Table } from 'semantic-ui-react';
-import Link from '../../Language/MultiLanguageLink';
+import { translate } from 'react-i18next';
+import { Grid, Image, List, Table } from 'semantic-ui-react';
 
-import { CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
+import { CollectionsBreakdown } from '../../../helpers/mdb';
+import { canonicalLink } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
+import Link from '../../Language/MultiLanguageLink';
 
 class ProgramsList extends PureComponent {
 
   static propTypes = {
-    items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.ProgramCollection, shapes.ProgramChapter])),
+    items: PropTypes.arrayOf(shapes.ProgramChapter),
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     items: []
   };
 
-  renderPart = part => (
-    <Table.Row verticalAlign="top" key={part.id}>
-      <Table.Cell collapsing singleLine width={1}>
-        <strong>{part.film_date}</strong>
-      </Table.Cell>
-      <Table.Cell>
-        <Link to={`/programs/chapter/${part.id}`}>
-          <strong>{part.name}</strong>
-          <br />
-          <div dangerouslySetInnerHTML={{ __html: part.description }} />
-        </Link>
-      </Table.Cell>
-    </Table.Row>
-  );
+  renderPart = (part, t) => {
+    const breakdown = new CollectionsBreakdown(Object.values(part.collections || {}));
 
-  renderCollection = (collection) => {
-    let units = [];
-    if (collection.content_units) {
-      units = collection.content_units.slice(0, 5).map(unit => (
-        <Table.Row verticalAlign="top" key={`u-${unit.id}`}>
-          <Table.Cell>
-            <Link to={`/programs/chapter/${unit.id}`}>
-              {unit.name || '☠ no name'}
-              <br />
-              <div dangerouslySetInnerHTML={{ __html: unit.description }} />
-            </Link>
-          </Table.Cell>
-        </Table.Row>
-      ));
-    }
+    const relatedItems = breakdown.getPrograms().map(x =>
+      (
+        <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
+          {x.name || '☠ no name'}
+        </List.Item>
+      )
+    ).concat(breakdown.getAllButPrograms().map(x => (
+      <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
+        {x.name}
+      </List.Item>
+    )));
 
-    const rows = [];
-    const contentUnitsSpan = units.length + 1;
-
-    rows.push((
-      <Table.Row verticalAlign="top" key={`l-${collection.id}`}>
-        <Table.Cell collapsing singleLine width={1} rowSpan={contentUnitsSpan}>
-          <Link to={`/programs/full/${collection.id}`}>
-            <strong>{collection.name || '⛔ NO NAME'}</strong>
+    return (
+      <Table.Row key={part.id} verticalAlign="top">
+        <Table.Cell collapsing singleLine width={1}>
+          <strong>{part.film_date || '0000-00-00'}</strong>
+        </Table.Cell>
+        <Table.Cell collapsing width={1}>
+          <Image fluid src="http://www.kab.co.il/images/attachments/91/276191_medium.jpg" />
+        </Table.Cell>
+        <Table.Cell>
+          <Link to={canonicalLink(part)}>
+            <strong>{part.name || '☠ no name'}</strong>
           </Link>
+          <List horizontal link size="tiny">
+            <List.Item>
+              <List.Header>{t('programs.list.episode_from')}</List.Header>
+            </List.Item>
+            {relatedItems}
+          </List>
         </Table.Cell>
       </Table.Row>
-    ));
-    return rows.concat(units);
+    );
   };
 
   render() {
-    const { items } = this.props;
+    const { items, t } = this.props;
 
     if (!Array.isArray(items) || items.length === 0) {
       return (<Grid columns={2} celled="internally" />);
     }
 
     return (
-      <Table basic="very" sortable>
+      <Table sortable basic="very" className="index-list">
         <Table.Body>
           {
-            items.map(x => (
-              x.content_type === CT_VIDEO_PROGRAM_CHAPTER ?
-                this.renderPart(x) :
-                this.renderCollection(x))
-            )
+            items.map(x => this.renderPart(x, t))
           }
         </Table.Body>
       </Table>
@@ -85,4 +76,4 @@ class ProgramsList extends PureComponent {
   }
 }
 
-export default ProgramsList;
+export default translate()(ProgramsList);

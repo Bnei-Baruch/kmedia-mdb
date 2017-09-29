@@ -4,8 +4,8 @@ import { selectors as eventsSelectors } from '../../redux/modules/events';
 const eventTypesFilter = {
   name: 'event-types-filter',
   queryKey: 'eventType',
-  valueToQuery: value => value.join('_'),
-  queryToValue: queryValue => queryValue.split('_'),
+  valueToQuery: value => value.join('|'),
+  queryToValue: queryValue => queryValue.split('|'),
   valueToApiParam: (value) => {
     const result = {
       content_type: value[0]

@@ -74,7 +74,7 @@ class FullLessonContainer extends Component {
 }
 
 function mapState(state, props) {
-  const fullLesson = mdb.getDenormCollection(state.mdb, props.match.params.id);
+  const fullLesson = mdb.getDenormCollectionWUnits(state.mdb, props.match.params.id);
 
   return {
     fullLesson,

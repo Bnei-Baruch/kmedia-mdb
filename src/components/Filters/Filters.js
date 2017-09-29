@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { filterPropShape } from '../shapes';
-import { selectors as filterSelectors, actions as filterActions } from '../../redux/modules/filters';
+import { actions as filterActions, selectors as filterSelectors } from '../../redux/modules/filters';
 import ActiveFilter from './ActiveFilter/ActiveFilter';
 import FilterMenu from './FilterMenu/FilterMenu';
 
@@ -15,11 +15,11 @@ class Filters extends Component {
     editNewFilter: PropTypes.func.isRequired,
     closeActiveFilter: PropTypes.func.isRequired,
     filters: PropTypes.arrayOf(filterPropShape).isRequired,
-    activeFilter: PropTypes.string
+    activeFilterName: PropTypes.string
   };
 
   static defaultProps = {
-    activeFilter: ''
+    activeFilterName: ''
   };
 
   handleFilterClick = ({ name }) => {
@@ -28,8 +28,8 @@ class Filters extends Component {
   };
 
   handleCancelActiveFilter = () => {
-    const { namespace, activeFilter } = this.props;
-    this.props.closeActiveFilter(namespace, activeFilter);
+    const { namespace, activeFilterName } = this.props;
+    this.props.closeActiveFilter(namespace, activeFilterName);
   };
 
   handleApplyActiveFilter = () => {
@@ -37,15 +37,15 @@ class Filters extends Component {
   };
 
   render() {
-    const { filters, activeFilter, namespace } = this.props;
+    const { filters, activeFilterName, namespace } = this.props;
 
     return (
       <div>
-        <FilterMenu items={filters} namespace={namespace} active={activeFilter} onChoose={this.handleFilterClick} />
+        <FilterMenu items={filters} namespace={namespace} active={activeFilterName} onChoose={this.handleFilterClick} />
         <ActiveFilter
           namespace={namespace}
-          activeFilterName={activeFilter}
-          filters={this.props.filters}
+          activeFilterName={activeFilterName}
+          filters={filters}
           onCancel={this.handleCancelActiveFilter}
           onApply={this.handleApplyActiveFilter}
         />
@@ -56,7 +56,7 @@ class Filters extends Component {
 
 export default connect(
   (state, ownProps) => ({
-    activeFilter: filterSelectors.getActiveFilter(state.filters, ownProps.namespace)
+    activeFilterName: filterSelectors.getActiveFilter(state.filters, ownProps.namespace),
   }),
   filterActions
 )(Filters);

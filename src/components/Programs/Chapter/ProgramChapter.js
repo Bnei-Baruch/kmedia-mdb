@@ -8,10 +8,10 @@ import Link from '../../Language/MultiLanguageLink';
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
 import RMPVideoBox from '../../shared/UnitPlayer/RMPVideoBox';
+import Materials from '../../shared/UnitMaterials/Materials';
+import MediaDownloads from '../../shared/MediaDownloads';
 import * as shapes from '../../shapes';
 import Info from './Info';
-import Materials from './Materials';
-import MediaDownloads from './MediaDownloads';
 
 const ProgramChapter = (props) => {
   const { chapter, wip, err, language, t } = props;
@@ -34,10 +34,10 @@ const ProgramChapter = (props) => {
           <Grid.Row>
             <Grid.Column width={10}>
               <Info chapter={chapter} t={t} />
-              <Materials chapter={chapter} t={t} />
+              <Materials unit={chapter} t={t} />
             </Grid.Column>
             <Grid.Column width={6}>
-              <MediaDownloads chapter={chapter} language={language} t={t} />
+              <MediaDownloads unit={chapter} language={language} t={t} />
             </Grid.Column>
           </Grid.Row>
         </Grid>

@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import noop from 'lodash/noop';
 import range from 'lodash/range';
 import { Button, Divider, Dropdown, Segment } from 'semantic-ui-react';
-import { selectors as tags } from '../../../redux/modules/tags';
+
 import connectFilter from '../connectFilter';
 
 const buildYearOptions = (fromYear, toYear, order = -1) =>
@@ -61,28 +60,35 @@ class YearsFilter extends React.Component {
 
   render() {
     const { fromYear, toYear, t } = this.props;
+    const { year }                = this.state;
 
     return (
       <Segment basic clearing attached="bottom" className="tab active">
         <Dropdown
-          placeholder="Select a year"
-          fluid
           selection
+          value={year}
+          placeholder={t('filters.years-filter.placeholder')}
           options={buildYearOptions(toYear, fromYear)}
           onChange={this.onSelectionChange}
         />
         <Divider />
         <Segment vertical clearing>
-          <Button primary content={t('buttons.apply')} floated="right" onClick={this.apply} disabled={!this.state.year} />
-          <Button content={t('buttons.cancel')} floated="right" onClick={this.onCancel} />
+          <Button
+            primary
+            content={t('buttons.apply')}
+            floated="right"
+            disabled={!year}
+            onClick={this.apply}
+          />
+          <Button
+            content={t('buttons.cancel')}
+            floated="right"
+            onClick={this.onCancel}
+          />
         </Segment>
       </Segment>
     );
   }
 }
 
-export default connect(
-  state => ({
-    getTagById: tags.getTagById(state.tags),
-  })
-)(connectFilter()(YearsFilter));
+export default connectFilter()(YearsFilter);
