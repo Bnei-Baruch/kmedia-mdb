@@ -105,16 +105,16 @@ class AVPlayerRMP extends PureComponent {
     this.hideControlsTimeout();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.item !== this.props.item) {
+      this.setState({ error: false, errorReason: '' });
+    }
+  }
+
   componentWillUnmount() {
     if (this.autohideTimeoutId) {
       clearTimeout(this.autohideTimeoutId);
       this.autohideTimeoutId = null;
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.item !== this.props.item) {
-      this.setState({ error: false, errorReason: '' });
     }
   }
 
@@ -150,15 +150,15 @@ class AVPlayerRMP extends PureComponent {
   }
 
   onError = (e) => {
+    const { t } = this.props;
     // Show error only on loading of video.
     if (!e.currentTime && !e.isPlaying) {
       const { item } = this.props;
       let errorReason = '';
-      if (!item.src) {
-        errorReason = 'Source not specified.';
-      }
       if (item.src.endsWith('wmv')) {
-        errorReason = 'Unsupported format (wmv).';
+        errorReason = t('messages.unsupported-wmv');
+      } else {
+        errorReason = t('messages.unknown');
       }
       this.setState({ error: true, errorReason });
     }
@@ -349,13 +349,20 @@ class AVPlayerRMP extends PureComponent {
 
   render() {
     const { isMobile, autoPlay, item, languages, language, t, showNextPrev, hasNext, hasPrev, onPrev, onNext, isSliceable, media } = this.props;
-    const { isTopSeekbar, controlsVisible, error, errorReason, sliceStart, sliceEnd, mode, playbackRate } = this.state;
+    const { isTopSeekbar, controlsVisible, sliceStart, sliceEnd, mode, playbackRate } = this.state;
+    let { error, errorReason } = this.state;
 
     const { isFullscreen, isPlaying } = media;
     const forceShowControls = item.mediaType === MT_AUDIO || !isPlaying;
 
     const isVideo = item.mediaType === MT_VIDEO;
     const isAudio = item.mediaType === MT_AUDIO;
+    const fallbackMedia = item.mediaType !== item.requestedMediaType;
+
+    if (!item.src) {
+      error = true;
+      errorReason = t('messages.no-playable-files');
+    }
 
     return (
       <div>
@@ -454,13 +461,16 @@ class AVPlayerRMP extends PureComponent {
                     isVideo={isVideo}
                     setAudio={this.onSwitchAV}
                     setVideo={this.onSwitchAV}
+                    fallbackMedia={fallbackMedia}
                     t={t}
                   />
                   <AVLanguage
                     languages={languages}
-                    defaultValue={language}
+                    language={language}
+                    requestedLanguage={item.requestedLanguage}
                     onSelect={this.onLanguageChange}
                     upward={isVideo}
+                    t={t}
                   />
                   {
                     isSliceable && (
@@ -498,10 +508,12 @@ class AVPlayerRMP extends PureComponent {
                   {
                     error ? (
                       <div className="player-button">
-                        Error loading file.
-                        { errorReason ? ' ' + errorReason : '' }
+                        <h3 style={{ display: 'inline-block' }}>
+                          {t('messages.error-loading-file')}
+                          {errorReason ? ` ${errorReason}` : ''}
                         &nbsp;
-                        <Icon name="warning sign" size="large" />
+                        </h3>
+                        <Icon name="warning sign" size="big" />
                       </div>
                     ) : <AVCenteredPlay />
                   }

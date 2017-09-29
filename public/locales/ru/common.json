@@ -71,7 +71,10 @@
     "no-files":                  "Нет файлов",
     "no-playable-files":         "Не файлов для воспроизведения",
     "no-results":                "Нет результатов",
-    "pagination-results":        "Результаты {{start}} - {{end}} из {{total}}"
+    "pagination-results":        "Результаты {{start}} - {{end}} из {{total}}",
+    "fallback-language":         "Медиа не найденa для выбранного языка, выбран резервный язык.",
+    "fallback-to-audio":         "Видео не найдено, используется аудио.",
+    "fallback-to-video":         "Аудио не найдено, используется видео."
   },
   "events": {
     "ALL_EVENTS": ""
