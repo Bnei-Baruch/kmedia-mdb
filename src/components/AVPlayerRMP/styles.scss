@@ -26,23 +26,22 @@
     left: 0;
     width: 100%;
     height: 100%;
+    padding: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
   }
 
   .slice-edit-help {
-    position: absolute;
-    top: 15px;
-    left: 50%;
-    transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.6);
     padding: 10px 20px;
-    white-space: nowrap;
+    margin-left: 10px;
     font-size: 1.4em;
   }
 
   .button-close-slice-edit {
-    position: absolute;
-    top: 15px;
-    left: 15px;
+    flex: 0 0 auto;
   }
 }
 
