@@ -273,13 +273,7 @@ class AvSeekBar extends Component {
             />
           )
         }
-        <div
-          className={
-            classNames('player-control-seekbar', {
-              mobile: isMobile
-            }
-          )}
-        >
+        <div className="player-control-seekbar">
           {
             isSlice && (
               <div

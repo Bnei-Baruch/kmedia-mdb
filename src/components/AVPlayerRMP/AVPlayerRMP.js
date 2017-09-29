@@ -429,6 +429,7 @@ class AVPlayerRMP extends PureComponent {
               className={classNames('media-controls', {
                 fade: !controlsVisible && !forceShowControls,
                 'audio-is-mobile': isTopSeekbar && isAudio,
+                'video-is-mobile': isTopSeekbar && isVideo,
               })}
             >
               <div
@@ -441,8 +442,10 @@ class AVPlayerRMP extends PureComponent {
                     <div style={{
                       position: 'absolute',
                       flex: '1 0 auto',
+                      height: '20px',
                       left: 0,
-                      top: isMobile ? '-10px' : 0,
+                      top: isMobile ? 'initial' : 0,
+                      bottom: isMobile ? '100%' : 'initial',
                       width: '100%' }}
                     >
                       <AvSeekBar

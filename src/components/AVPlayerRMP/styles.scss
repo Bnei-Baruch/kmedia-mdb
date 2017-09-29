@@ -180,6 +180,12 @@
       transform: translate(-50%, -3px);
       background-color: rgb(66, 133, 244);
       border-radius: 50%;
+
+      &.mobile {
+        height: 12px;
+        width: 12px;
+        transform: translate(-50%, -4px);
+      }
     }
   }
 
@@ -325,6 +331,13 @@
       height: 100%;
       opacity: 0.65;
       z-index: 0;
+    }
+  }
+
+  &.video-is-mobile {
+    .controls-wrapper {
+      padding-top: 25px;
+      flex: 0 0 65px;
     }
   }
 }
