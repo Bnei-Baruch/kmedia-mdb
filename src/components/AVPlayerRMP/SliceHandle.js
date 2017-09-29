@@ -21,6 +21,7 @@ export default class SliceHandle extends Component {
   };
 
   getKnobElement = () => this.knobElement;
+  getHandleElement = () => this.handleElement;
 
   render() {
     const { isEditMode, position, seconds, className } = this.props;
@@ -29,6 +30,7 @@ export default class SliceHandle extends Component {
       <div
         className={classNames('player-slice-handle', className)}
         style={{ left: position }}
+        ref={el => this.handleElement = el}
       >
         {
           isEditMode && (

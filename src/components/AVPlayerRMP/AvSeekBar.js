@@ -9,6 +9,8 @@ import { playerModeProp } from './propTypes';
 import SliceHandle from './SliceHandle';
 import { formatTime } from '../../helpers/time';
 
+const stickyHandleDelta = 10; // pixel width from which to stick to handle
+
 class AvSeekBar extends Component {
 
   static propTypes = {
@@ -129,10 +131,25 @@ class AvSeekBar extends Component {
   };
 
   getSeekPositionFromClientX = (clientX) => {
-    const { media } = this.props;
+    const { media, playerMode, sliceStart, sliceEnd } = this.props;
     const { left, right } = this.element.getBoundingClientRect();
     const { duration }    = media;
     const offset          = Math.min(Math.max(0, clientX - left), right - left);
+
+    if (playerMode === PLAYER_MODE.SLICE_EDIT) {
+      // try stick to handle
+      if (this.sliceStartHandle && this.sliceEndHandle) {
+        let handleRect = this.sliceStartHandle.getHandleElement().getBoundingClientRect();
+        if (Math.abs(clientX - handleRect.left) < stickyHandleDelta) {
+          return sliceStart;
+        } else {
+          handleRect = this.sliceEndHandle.getHandleElement().getBoundingClientRect();
+          if (Math.abs(clientX - handleRect.left) < stickyHandleDelta) {
+            return sliceEnd > duration ? duration : sliceEnd;
+          }
+        }
+      }
+    }
 
     return (duration * offset) / (right - left);
   }
