@@ -199,14 +199,6 @@ class AVPlayerRMP extends PureComponent {
     const { isSliceable, media } = this.props;
     const { sliceEnd } = this.state;
 
-    // interrupt play if we're at the end of the slice
-
-    // if (isSliceable && e.currentTime >= sliceEnd) {
-    //   media.pause();
-    //   media.seekTo(sliceEnd);
-    //   return;
-    // }
-
     if (this.props.onPlay) {
       this.props.onPlay();
     }
