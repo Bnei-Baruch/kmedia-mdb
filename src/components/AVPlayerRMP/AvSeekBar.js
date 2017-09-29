@@ -62,6 +62,12 @@ class AvSeekBar extends Component {
   }
 
   handleStart = (e) => {
+    // regard only left mouse button click (0). touch is undefined
+    if (e.button) {
+      e.preventDefault();
+      return;
+    }
+
     this.wasMouseDown         = true;
     this.isPlayingOnMouseDown = this.props.media.isPlaying;
 
@@ -87,6 +93,7 @@ class AvSeekBar extends Component {
       e.preventDefault();
       // Resolve clientX from mouse or touch event.
       const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
+      this.touchClientX = clientX; // this is stored for touch because touchend has no coords
       const seekPosition = this.getSeekPositionFromClientX(clientX);
 
       if (this.sliceStartActive) {
@@ -109,13 +116,15 @@ class AvSeekBar extends Component {
       e.preventDefault();
       this.wasMouseDown = false;
 
-      if (e.clientX) {
+      const clientX = e.clientX || this.touchClientX;
+
+      if (typeof clientX !== 'undefined') {
         // pause when dragging handles
         if (this.sliceStartActive === true || this.sliceEndActive === true) {
           this.props.media.pause();
         }
 
-        const seekPosition = this.getSeekPositionFromClientX(e.clientX);
+        const seekPosition = this.getSeekPositionFromClientX(clientX);
         media.seekTo(seekPosition);
         this.setState({ playPoint: seekPosition });
       }
@@ -127,6 +136,7 @@ class AvSeekBar extends Component {
 
       this.sliceStartActive = false;
       this.sliceEndActive = false;
+      this.touchClientX = undefined;
     }
   };
 
