@@ -254,7 +254,18 @@ class AVPlayerRMP extends PureComponent {
     return ret;
   };
 
-  handleTimeUpdate = timeData => timeData;
+  handleTimeUpdate = (timeData) => {
+    const { media } = this.props;
+    const { mode, sliceEnd } = this.state;
+
+    const isSliceMode = mode === PLAYER_MODE.SLICE_EDIT || mode === PLAYER_MODE.SLICE_VIEW;
+
+    const lowerTime = Math.min(sliceEnd, timeData.currentTime);
+    if (isSliceMode && lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
+      media.pause();
+      media.seekTo(sliceEnd);
+    }
+  };
 
   handleToggleMode = () => {
     const { mode } = this.state;
