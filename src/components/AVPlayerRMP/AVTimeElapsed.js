@@ -4,33 +4,23 @@ import PropTypes from 'prop-types';
 import AVDuration from './AVDuration';
 
 const AVTimeElapsed = (props) => {
-  const { isSlice, sliceEnd } = props;
-
-  const endDurationProps = {};
-
-  if (isSlice && sliceEnd) {
-    endDurationProps.value = sliceEnd;
-  } else {
-    endDurationProps.name = 'duration';
-  }
+  const { start, end } = props;
 
   return (
     <div className="player-control-time-elapsed">
-      <AVDuration name="currentTime" />&nbsp;/&nbsp;<AVDuration {...endDurationProps} />
+      <AVDuration value={start} />&nbsp;/&nbsp;<AVDuration value={end} />
     </div>
   );
 };
 
 AVTimeElapsed.propTypes = {
-  isSlice: PropTypes.bool,
-  sliceStart: PropTypes.number,
-  sliceEnd: PropTypes.number
+  start: PropTypes.number,
+  end: PropTypes.number
 };
 
 AVTimeElapsed.defaultProps = {
-  isSlice: false,
-  sliceStart: undefined,
-  sliceEnd: undefined
+  start: undefined,
+  end: undefined
 };
 
 export default AVTimeElapsed;

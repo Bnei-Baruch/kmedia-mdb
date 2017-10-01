@@ -1,0 +1,82 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
+import CopyToClipboard from 'react-copy-to-clipboard';
+import { Icon, Popup } from 'semantic-ui-react';
+import { translate } from 'react-i18next';
+
+const POPOVER_CONFIRMATION_TIMEOUT = 2500;
+
+class AVShareLink extends Component {
+
+  static propTypes = {
+    t: PropTypes.func.isRequired,
+    downward: PropTypes.bool
+  };
+
+  static defaultProps = {
+    downward: false
+  };
+
+  state = {
+    url: '',
+    recentlyCopied: false
+  };
+
+  confirmTimeoutHandle = null;
+
+  componentDidMount() {
+    this.loadUrl();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (window.location.href !== this.state.url) {
+      this.loadUrl();
+    }
+  }
+
+  componentWillUnmount() {
+    this.clearConfirmationTimeout();
+  }
+
+  loadUrl = () => {
+    this.setState({
+      url: window.location.href
+    });
+  };
+
+  clearConfirmationTimeout = () => {
+    if (this.confirmTimeoutHandle) {
+      clearTimeout(this.confirmTimeoutHandle);
+      this.confirmTimeoutHandle = null;
+    }
+  }
+
+  handleCopied = () => {
+    this.clearConfirmationTimeout();
+    this.setState({ recentlyCopied: true }, () => {
+      this.confirmTimeoutHandle = setTimeout(() => this.setState({ recentlyCopied: false }), POPOVER_CONFIRMATION_TIMEOUT);
+    });
+  };
+
+  render() {
+    const { t, downward } = this.props;
+    return (
+      <div className="player-button player-control-share-link">
+        <Popup
+          open={this.state.recentlyCopied}
+          content={t('messages.link-copied-to-clipboard')}
+          position={`${downward ? 'bottom' : 'top'} right`}
+          offset={10}
+          trigger={
+            <CopyToClipboard text={this.state.url} onCopy={this.handleCopied}>
+              <Icon name="chain" />
+            </CopyToClipboard>
+          }
+        />
+      </div>
+    );
+  }
+}
+
+export default withRouter(translate()(AVShareLink));

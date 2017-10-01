@@ -137,6 +137,7 @@ class DateFilter extends Component {
   componentDidMount() {
     const { datePreset, from, to } = this.state;
     this.showMonth(datePreset, from, to);
+    console.log(datePreset, ' ', from, ' ', to);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -190,6 +191,7 @@ class DateFilter extends Component {
    */
   showMonth = (preset, from, to) => {
     let dateToShow = from;
+    // eslint-disable-next-line default-case
     switch (preset) {
     case TODAY:
     case YESTERDAY:
@@ -209,8 +211,6 @@ class DateFilter extends Component {
     case THIS_MONTH:
       dateToShow = moment(now()).subtract(1, 'month').toDate();
       break;
-    default:
-      return;
     }
 
     this.datePicker.showMonth(dateToShow);
