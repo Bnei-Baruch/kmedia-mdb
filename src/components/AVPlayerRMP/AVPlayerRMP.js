@@ -359,7 +359,7 @@ class AVPlayerRMP extends PureComponent {
 
   render() {
     const { isMobile, autoPlay, item, languages, language, t, showNextPrev, hasNext, hasPrev, onPrev, onNext, media } = this.props;
-    const { isTopSeekbar, controlsVisible, error, sliceStart, sliceEnd, mode, playbackRate } = this.state;
+    const { isTopSeekbar, controlsVisible, error, sliceStart, sliceEnd, mode, playbackRate, errorReason } = this.state;
 
     const { isFullscreen, isPlaying } = media;
     const forceShowControls = item.mediaType === MT_AUDIO || !isPlaying;
@@ -372,7 +372,9 @@ class AVPlayerRMP extends PureComponent {
     if (error) {
       centerMediaControl = (
         <div className="player-button">
-          Error loading file.
+          { t('player.error.loading') }
+          {errorReason ? ' ' + errorReason : ''}
+          &nbsp;
           <Icon name="warning sign" size="large" />
         </div>
       );
@@ -381,14 +383,14 @@ class AVPlayerRMP extends PureComponent {
         <div className="center-media-controls-edit">
           <Button
             icon="chevron left"
-            content="Back to play"
+            content={t('player.buttons.edit-back')}
             size="large"
             color="blue"
             className="button-close-slice-edit"
             onClick={this.handleToggleMode}
           />
           <div className="slice-edit-help">
-            Drag the pointers to share a part of the video
+            { t('player.messages.edit-help') }
           </div>
         </div>
       );
@@ -398,7 +400,9 @@ class AVPlayerRMP extends PureComponent {
 
     return (
       <div
-        ref={(c) => { this.mediaElement = c; }}
+        ref={(c) => {
+          this.mediaElement = c;
+        }}
         className={classNames('media', { 'media-edit-mode': isEditMode })}
         style={{
           minHeight: isAudio ? 'auto' : 40,
@@ -412,7 +416,9 @@ class AVPlayerRMP extends PureComponent {
           })}
         >
           <Player
-            ref={(c) => { this.player = c; }}
+            ref={(c) => {
+              this.player = c;
+            }}
             src={item.src}
             vendor={isVideo ? 'video' : 'audio'}
             autoPlay={autoPlay}
@@ -517,22 +523,23 @@ class AVPlayerRMP extends PureComponent {
                 {
                   isEditMode && <AVShareLink downward={isAudio} />
                 }
-                <AVShare
-                  onActivateSlice={() => this.setSliceMode(true)}
-                />
-                { !isEditMode && <AVFullScreen container={this.mediaElement_} /> }
+                <AVShare onActivateSlice={() => this.setSliceMode(true)} />
+                {!isEditMode && <AVFullScreen container={this.mediaElement} />}
               </div>
             </div>
-            <div
-              className="media-center-control"
-              style={!error ? { outline: 'none' } : { backgroundColor: 'black', outline: 'none' }}
-              tabIndex="0"
-              onClick={this.playPause}
-              onKeyDown={this.onKeyDown}
-              onMouseMove={this.centerMove}
-            >
-              { centerMediaControl }
-            </div>
+            {isVideo ? (
+              <div
+                className="media-center-control"
+                style={!error ? { outline: 'none' } : { backgroundColor: 'black', outline: 'none' }}
+                role="button"
+                tabIndex="0"
+                onClick={this.playPause}
+                onKeyDown={this.onKeyDown}
+                onMouseMove={this.centerMove}
+              >
+                {centerMediaControl}
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

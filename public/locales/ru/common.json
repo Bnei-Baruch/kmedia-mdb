@@ -57,13 +57,24 @@
     "video":  "Видео",
     "more":   "Ещё"
   },
-  "messages":  {
-    "loading":                   "Загрузка...",
-    "loading-subtext":           "Ждите...",
-    "server-error":              "Ошибка сервера",
-    "lesson-not-found":          "Урок не найден",
-    "lesson-not-found-subtext":  "Попробуйте <1>список уроков</1>...",
-    "program-not-found":         "Программа не найдена",
+  "player": {
+    "messages": {
+      "edit-help": ""
+    },
+    "buttons": {
+      "edit-back": ""
+    },
+    "error": {
+      "loading": ""
+    }
+  },
+  "messages": {
+    "loading": "Загрузка...",
+    "loading-subtext": "Ждите...",
+    "server-error": "Ошибка сервера",
+    "lesson-not-found": "Урок не найден",
+    "lesson-not-found-subtext": "Попробуйте <1>список уроков</1>...",
+    "program-not-found": "Программа не найдена",
     "program-not-found-subtext": "Попробуйте <1>programs list</1>...",
     "event-not-found":           "Событие не найдено",
     "event-not-found-subtext":   "Попробуйте <1>events list</1>...",

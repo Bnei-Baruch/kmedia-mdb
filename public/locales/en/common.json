@@ -57,13 +57,24 @@
     "video":  "Video",
     "more":   "More"
   },
-  "messages":  {
-    "loading":                   "Loading",
-    "loading-subtext":           "Hold on tight",
-    "server-error":              "Server Error",
-    "lesson-not-found":          "Couldn't find lesson",
-    "lesson-not-found-subtext":  "Try the <1>lessons list</1>...",
-    "program-not-found":         "Couldn't find program",
+  "player": {
+    "messages": {
+      "edit-help": "Drag the pointers to share a part of the video"
+    },
+    "buttons": {
+      "edit-back": "Black to play"
+    },
+    "error": {
+      "loading": "Error loading file."
+    }
+  },
+  "messages": {
+    "loading": "Loading",
+    "loading-subtext": "Hold on tight",
+    "server-error": "Server Error",
+    "lesson-not-found": "Couldn't find lesson",
+    "lesson-not-found-subtext": "Try the <1>lessons list</1>...",
+    "program-not-found": "Couldn't find program",
     "program-not-found-subtext": "Try the <1>programs list</1>...",
     "event-not-found":           "Couldn't find event",
     "event-not-found-subtext":   "Try the <1>events list</1>...",
