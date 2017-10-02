@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
-import { Menu, Table } from 'semantic-ui-react';
+import { Container, Grid } from 'semantic-ui-react';
 
 import { formatError } from '../../../helpers/utils';
-import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
-import Link from '../../Language/MultiLanguageLink';
-import NavLink from '../../Language/MultiLanguageNavLink';
 import * as shapes from '../../shapes';
+import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
+import FullVideoBox from '../../shared/UnitPlayer/FullVideoBox';
+import Materials from '../../shared/UnitMaterials/Materials';
+import MediaDownloads from '../../shared/MediaDownloads';
+import Link from '../../Language/MultiLanguageLink';
+import Info from '../Item/Info';
+// import PageHeader from './PageHeader';
+// import EventMap from './EventMap';
+import FullEventPlaylist from './FullEventPlaylist';
 
 class FullEvent extends Component {
   static propTypes = {
@@ -26,57 +31,66 @@ class FullEvent extends Component {
     err: null,
   };
 
-  getName = (fullEvent, cu) => {
-    const { name, duration } = cu;
-    const ccuName            = fullEvent.ccuNames[cu.id];
-    const durationDisplay    = moment.duration(duration, 'seconds').format('hh:mm:ss');
-    return { name, ccuName, duration: durationDisplay };
+  state = {
+    activePart: 0,
   };
 
-  tableRow = (fullEvent, cu) => {
-    const { ccuName, name, duration } = this.getName(fullEvent, cu);
-
-    return (
-      <Table.Row key={cu.id}>
-        <Table.Cell><Menu.Item as={NavLink} to={`/events/item/${cu.id}`} content={ccuName} /></Table.Cell>
-        <Table.Cell><Menu.Item as={NavLink} to={`/events/item/${cu.id}`}>{name}</Menu.Item></Table.Cell>
-        <Table.Cell><Menu.Item as={NavLink} to={`/events/item/${cu.id}`}>{duration}</Menu.Item></Table.Cell>
-      </Table.Row>
-    );
-  };
+  handleActivePartChange = activePart =>
+    this.setState({ activePart });
 
   render() {
-    const { fullEvent, wip, err, t } = this.props;
+    const { language, fullEvent, wip, err, t } = this.props;
+    const { activePart }                       = this.state;
 
     if (err) {
       return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
     }
 
-    if (fullEvent) {
-      return (
-        <Menu vertical fluid>
-          <Table basic="very" compact="very" celled>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>ccuName</Table.HeaderCell>
-                <Table.HeaderCell>Name</Table.HeaderCell>
-                <Table.HeaderCell>Duration</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {
-                fullEvent.content_units.map(cu => (
-                  this.tableRow(fullEvent, cu)
-                ))
-              }
-            </Table.Body>
-          </Table>
-        </Menu>
-      );
-    }
-
     if (wip) {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
+    }
+
+    if (fullEvent && Array.isArray(fullEvent.content_units)) {
+      const activeUnit = fullEvent.content_units[activePart];
+      return (
+        <div>
+          {/*<PageHeader item={fullEvent} />
+          <EventMap
+            language={language}
+            address={fullEvent.full_address}
+            city={fullEvent.city}
+            country={fullEvent.country}
+          />*/}
+          <div className="video-bg">
+            <Container>
+              <Grid padded>
+                <FullVideoBox
+                  collection={fullEvent}
+                  activePart={activePart}
+                  language={language}
+                  t={t}
+                  onActivePartChange={this.handleActivePartChange}
+                  PlayListComponent={FullEventPlaylist}
+                />
+              </Grid>
+            </Container>
+          </div>
+          <Container>
+            <Grid padded reversed="tablet">
+              <Grid.Row reversed="computer">
+                <Grid.Column computer={6} tablet={4} mobile={16}>
+                  <MediaDownloads unit={activeUnit} language={language} t={t} />
+                </Grid.Column>
+                <Grid.Column computer={10} tablet={12} mobile={16}>
+                  <Info unit={activeUnit} t={t} />
+                  <Materials unit={activeUnit} t={t} />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Container>
+          </div>
+
+      );
     }
 
     return (
@@ -89,6 +103,7 @@ class FullEvent extends Component {
         }
       />
     );
+
   }
 }
 

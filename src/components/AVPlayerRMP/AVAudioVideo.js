@@ -1,12 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import TimedPopup from '../shared/TimedPopup';
 
 const AVAudioVideo = (props) => {
-  const { isAudio, setAudio, isVideo, setVideo, t } = props;
+  const { isAudio, setAudio, isVideo, setVideo, t, fallbackMedia } = props;
+
+  const popup = !fallbackMedia ? null : (
+    <TimedPopup
+      openOnInit
+      message={isAudio ? t('messages.fallback-to-audio') : t('messages.fallback-to-video')}
+      downward={isAudio}
+      timeout={7000}
+    />
+  );
 
   return (
-    <div className={classNames("player-button player-control-audio-video")}>
+    <div className={classNames('player-button player-control-audio-video')}>
+      { popup }
       <div
         style={{ textDecoration: isAudio ? 'underline' : 'none' }}
         role="button"
@@ -34,6 +45,7 @@ AVAudioVideo.propTypes = {
   isVideo: PropTypes.bool.isRequired,
   setVideo: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
+  fallbackMedia: PropTypes.bool.isRequired,
 };
 
 export default AVAudioVideo;

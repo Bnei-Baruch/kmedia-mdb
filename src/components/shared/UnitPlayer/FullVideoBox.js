@@ -52,7 +52,8 @@ class FullVideoBox extends Component {
     const newMediaType = playerHelper.getMediaTypeFromQuery(location, isMobile ? MT_AUDIO : MT_VIDEO);
 
     if (oldCollection !== collection || oldLanguage !== language || prevMediaType !== newMediaType) {
-      this.setPlaylist(collection, newMediaType, language);
+      // Persist language in playableItem
+      this.setPlaylist(collection, newMediaType, this.state.playlist.language);
     }
 
     const oldLocationActivePart = getQuery(oldLocation).ap;
@@ -66,6 +67,10 @@ class FullVideoBox extends Component {
   setPlaylist = (collection, mediaType, language, cb) => {
     const playlist = playerHelper.playlist(collection, mediaType, language);
     this.setState({ playlist }, () => cb && cb(playlist));
+  };
+
+  setActivePartInQuery = (activePart) => {
+    updateQuery(this.props.history, query => ({ ...query, ap: activePart }));
   };
 
   handleChangeLanguage = (e, language) => {
@@ -93,19 +98,14 @@ class FullVideoBox extends Component {
   handlePartClick = (e, data) =>
     this.setActivePartInQuery(parseInt(data.name, 10));
 
-  setActivePartInQuery = (activePart) => {
-    updateQuery(this.props.history, query => ({ ...query, ap: activePart }));
-  };
-
   render() {
-    const { t, activePart, collection, language, PlayListComponent } = this.props;
+    const { t, activePart, collection, PlayListComponent } = this.props;
     const { playlist } = this.state;
 
     return (
       <Grid.Row className="video_box">
         <Grid.Column computer={10} mobile={16}>
           <AVPlaylistPlayerRMP
-            language={language}
             playlist={playlist}
             activePart={activePart}
             onActivePartChange={this.setActivePartInQuery}
@@ -115,12 +115,14 @@ class FullVideoBox extends Component {
           />
         </Grid.Column>
         <Grid.Column className="player_panel" computer={6} mobile={16}>
-          <PlayListComponent
-            collection={collection}
-            activePart={activePart}
-            t={t}
-            onItemClick={this.handlePartClick}
-          />
+          
+            <PlayListComponent
+              collection={collection}
+              activePart={activePart}
+              t={t}
+              onItemClick={this.handlePartClick}
+            />
+          
         </Grid.Column>
       </Grid.Row>
     );

@@ -76,6 +76,8 @@ export const LessonPart = PropTypes.shape({
 
 export const ProgramCollection = PropTypes.shape({
   ...MDBDenormalizedCollection,
+  genres: PropTypes.arrayOf(PropTypes.string),
+  default_language: PropTypes.string,
 });
 
 export const ProgramChapter = PropTypes.shape({

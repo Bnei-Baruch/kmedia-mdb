@@ -7,7 +7,6 @@ import { applyMiddleware, compose, createStore } from 'redux';
 import createSagaMiddleware, { delay } from 'redux-saga';
 import { put } from 'redux-saga/effects';
 import createHistory from 'history/createBrowserHistory';
-import { loadingBarMiddleware } from 'react-redux-loading-bar';
 
 import createMultiLanguageRouterMiddleware from './redux/middleware/multiLanguageRouterMiddleware';
 import reducer from './redux';
@@ -30,7 +29,7 @@ const history          = createHistory();
 const routerMiddleware = createMultiLanguageRouterMiddleware(history);
 
 const store = createStore(reducer, {}, compose(
-  applyMiddleware(routerMiddleware, loadingBarMiddleware(), sagaMiddleWare),
+  applyMiddleware(routerMiddleware, sagaMiddleWare),
   devToolsStoreEnhancer()
 ));
 

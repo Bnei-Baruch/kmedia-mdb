@@ -219,7 +219,11 @@ export const MIME_TYPE_TO_MEDIA_TYPE = Object.values(MEDIA_TYPES).reduce((acc, m
   return acc;
 }, {});
 
-export const TAG_LESSONS_TOPICS = 'mS7hrYXK';
+export const TAG_LESSONS_TOPICS  = 'mS7hrYXK';
 export const TAG_PROGRAMS_TOPICS = 'IgSeiMLj';
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
+
+export const EVENT_TYPES = [
+  CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY
+];

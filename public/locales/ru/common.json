@@ -1,140 +1,170 @@
 {
-  "nav":       {
-    "top":     {
+  "nav": {
+    "top": {
       "header": "Kabbalah Media"
     },
     "sidebar": {
-      "lessons":      "Ежедневные уроки",
-      "programs":     "ТВ & программы",
-      "lectures":     "Лекции и уроки",
-      "sources":      "Каббалистические источники",
-      "events":       "События",
-      "books":        "Книги",
-      "topics":       "Темы",
+      "lessons": "Ежедневные уроки",
+      "programs": "ТВ & программы",
+      "lectures": "Лекции и уроки",
+      "sources": "Каббалистические источники",
+      "events": "События",
+      "books": "Книги",
+      "topics": "Темы",
       "publications": "Публикации",
-      "photos":       "Фотографии",
-      "design":       "Дизайн",
-      "design2":      "Раскладка"
+      "photos": "Фотографии",
+      "design": "Дизайн",
+      "design2": "Раскладка"
     },
-    "footer":  {
+    "footer": {
       "copyright": "Copyright © 2003-{{year}}",
-      "rights":    "Бней Барух – Ассоциация Каббала ла-ам"
+      "rights": "Бней Барух – Ассоциация Каббала ла-ам"
     }
   },
-  "filters":   {
-    "lessons":        {
+  "filters": {
+    "lessons": {
       "by": "Сортировать уроки по:"
     },
-    "programs":       {
+    "programs": {
       "by": "Сортировать программы по:"
     },
-    "date-filter":    {
-      "label":       "Дата",
+    "events": {
+      "by": "Сортировать по:"
+    },
+    "date-filter": {
+      "label": "Дата",
       "selectTitle": "Выберите временной промежуток",
-      "presets":     {
-        "TODAY":        "Сегодня",
-        "YESTERDAY":    "Вчера",
-        "LAST_7_DAYS":  "Последние 7 дней",
+      "presets": {
+        "TODAY": "Сегодня",
+        "YESTERDAY": "Вчера",
+        "LAST_7_DAYS": "Последние 7 дней",
         "LAST_30_DAYS": "Последние 30 дней",
-        "LAST_MONTH":   "Прошлый месяц",
-        "THIS_MONTH":   "Этот месяц",
+        "LAST_MONTH": "Прошлый месяц",
+        "THIS_MONTH": "Этот месяц",
         "CUSTOM_RANGE": "Промежуток"
       },
-      "start":       "Начало",
-      "end":         "Конец"
+      "start": "Начало",
+      "end": "Конец"
     },
     "sources-filter": {
       "label": "Статьи"
     },
-    "topics-filter":  {
+    "topics-filter": {
       "label": "Темы"
     }
   },
-  "buttons":   {
-    "apply":  "Да",
-    "cancel": "Нет",
-    "audio":  "Аудио",
-    "video":  "Видео",
-    "more":   "Ещё"
+  "buttons": {
+    "apply": "Применить",
+    "cancel": "Отменитьт",
+    "close": "Закрыть",
+    "audio": "Аудио",
+    "video": "Видео",
+    "more": "Ещё",
+    "copy-link": "Копировать линк"
   },
-  "messages":  {
-    "loading":                   "Загрузка...",
-    "loading-subtext":           "Ждите...",
-    "server-error":              "Ошибка сервера",
-    "lesson-not-found":          "Урок не найден",
-    "lesson-not-found-subtext":  "Попробуйте <1>список уроков</1>...",
-    "program-not-found":         "Программа не найдена",
+  "messages": {
+    "loading": "Загрузка...",
+    "loading-subtext": "Ждите...",
+    "server-error": "Ошибка сервера",
+    "lesson-not-found": "Урок не найден",
+    "lesson-not-found-subtext": "Попробуйте <1>список уроков</1>...",
+    "program-not-found": "Программа не найдена",
     "program-not-found-subtext": "Попробуйте <1>programs list</1>...",
-    "event-not-found":           "Событие не найдено",
-    "event-not-found-subtext":   "Попробуйте <1>events list</1>...",
-    "no-files":                  "Нет файлов",
-    "no-playable-files":         "Не файлов для воспроизведения",
-    "no-results":                "Нет результатов",
-    "pagination-results":        "Результаты {{start}} - {{end}} из {{total}}"
+    "event-not-found": "Событие не найдено",
+    "event-not-found-subtext": "Попробуйте <1>events list</1>...",
+    "no-files": "Нет файлов",
+    "no-playable-files": "Не файлов для воспроизведения",
+    "no-results": "Нет результатов",
+    "pagination-results": "Результаты {{start}} - {{end}} из {{total}}",
+    "link-copied-to-clipboard": "Ссылка переписана!",
+    "unknown": "Неизвестна",
+    "unsupported-media-format": "Неподдерживаемый формат.",
+    "error-loading-file": "Ошибка загрузки файла.",
+    "fallback-language": "Медиа не найденa для выбранного языка, выбран резервный язык.",
+    "fallback-to-audio": "Видео не найдено, используется аудио.",
+    "fallback-to-video": "Аудио не найдено, используется видео."
   },
-  "lessons":   {
+  "lessons": {
+    "header": {
+      "text": "Ежедневные уроки",
+      "subtext": "На протяжении тысячелетий каббалисты учились каждый день, ради своего личного духовного возвышения, и ради духовного возвышения человечества. В наше время продолжает эту традицию каббалистическая группа \"Бней Барух\",  занимаясь ежедневно по подлинным каббалистическим источникам, под руководством ученого – каббалиста, основателя Международной академии каббалы, Михаэля Лайтмана."
+    },
     "list": {
       "related": "Относятся к"
     },
     "part": {
-      "info":           {
-        "tags":          "Таги",
-        "sources":       "Источники",
+      "info": {
+        "tags": "Таги",
+        "sources": "Источники",
         "related-event": "Относится к событию"
       },
-      "materials":      {
-        "summary":       "Краткое содержание",
-        "transcription": "Конспект",
-        "sources":       "Источники",
-        "sketches":      "Чертежи"
-      },
-      "downloads":      {
-        "title":         "Медия для скачиания",
-        "derived-title": "Производная медиа",
-        "copy-link":     "Копировать линк",
-        "type-labels":   {
-          "video": "Видео урока",
-          "audio": "Аудио урока",
-          "text":  "Текст",
-          "image": "Чертежи"
-        }
-      },
       "relevant-parts": {
-        "title":      "Остальные части того же урока",
+        "title": "Остальные части того же урока",
         "item-title": "Часть {{name}}"
       }
     }
   },
-  "programs":  {
+  "programs": {
+    "list": {
+      "episode_from": "Часть из:"
+    },
+    "full": {
+      "episodes": "эпизод(ов)",
+      "ccuName": "Content Unit Name",
+      "name": "Название программы",
+      "duration": "Продолжительность",
+      "film_date": "Дата съёмок"
+    },
     "part": {
-      "info":           {
-        "tags":          "Таги",
-        "sources":       "Источники",
+      "info": {
+        "tags": "Таги",
+        "sources": "Источники",
         "related-event": "Относится к событию"
       },
-      "materials":      {
-        "summary":       "Краткое содержание",
+      "materials": {
+        "summary": "Краткое содержание",
         "transcription": "Конспект"
       },
-      "downloads":      {
-        "title":         "Медия для скачиания",
-        "derived-title": "Производная медиа",
-        "copy-link":     "Копировать линк",
-        "type-labels":   {
-          "video": "Видео программы",
-          "audio": "Аудио программы",
-          "text":  "Текст",
-          "image": "Чертежи"
-        }
-      },
       "relevant-parts": {
-        "title":      "Остальные части той же программы",
+        "title": "Остальные части той же программы",
         "item-title": "Часть {{name}}"
+      }
+    }
+  },
+  "materials": {
+    "summary": "Краткое содержание",
+    "transcription": "Конспект",
+    "sources": "Источники",
+    "sketches": "Чертежи"
+  },
+  "media-downloads": {
+    "title": "Медиа для скачивания",
+    "derived-title": "Производная медиа",
+    "type-labels": {
+      "video": "Основное видео",
+      "audio": "Основное аудио",
+      "text": "Текст",
+      "image": "Изображений"
+    },
+    "lesson": {
+      "type-labels": {
+        "video": "Видео урока",
+        "audio": "Аудио урока",
+        "text": "Текст",
+        "image": "Чертежи"
+      }
+    },
+    "program": {
+      "type-labels": {
+        "video": "Видео программы",
+        "audio": "Аудио программы",
+        "text": "Текст",
+        "image": "Изображений"
       }
     }
   },
   "constants": {
-    "languages":     {
+    "languages": {
       "he": "Hebrew",
       "en": "English",
       "ru": "Russian",
@@ -168,43 +198,43 @@
       "cs": "Czech"
     },
     "content-types": {
-      "DAILY_LESSON":          "Ежедневный урок",
-      "SPECIAL_LESSON":        "Специальный урок",
-      "FRIENDS_GATHERINGS":    "Собрания товарищей",
-      "CONGRESS":              "Конгресс",
-      "VIDEO_PROGRAM":         "Видео программа",
-      "LECTURE_SERIES":        "Серия лекций",
-      "MEALS":                 "Трапезы",
-      "HOLIDAY":               "Праздник",
-      "PICNIC":                "Пикник",
-      "UNITY_DAY":             "Вечер единства",
-      "LESSON_PART":           "Часть урока",
-      "LECTURE":               "Лекция",
-      "CHILDREN_LESSON_PART":  "Часть детского урока",
-      "WOMEN_LESSON_PART":     "Часть женского урока",
-      "VIRTUAL_LESSON":        "Виртуальный урок",
-      "FRIENDS_GATHERING":     "Собрание товарищей",
-      "MEAL":                  "Трапеза",
+      "DAILY_LESSON": "Ежедневный урок",
+      "SPECIAL_LESSON": "Специальный урок",
+      "FRIENDS_GATHERINGS": "Собрания товарищей",
+      "CONGRESS": "Конгресс",
+      "VIDEO_PROGRAM": "Видео программа",
+      "LECTURE_SERIES": "Серия лекций",
+      "MEALS": "Трапезы",
+      "HOLIDAY": "Праздник",
+      "PICNIC": "Пикник",
+      "UNITY_DAY": "Вечер единства",
+      "LESSON_PART": "Часть урока",
+      "LECTURE": "Лекция",
+      "CHILDREN_LESSON_PART": "Часть детского урока",
+      "WOMEN_LESSON_PART": "Часть женского урока",
+      "VIRTUAL_LESSON": "Виртуальный урок",
+      "FRIENDS_GATHERING": "Собрание товарищей",
+      "MEAL": "Трапеза",
       "VIDEO_PROGRAM_CHAPTER": "Часть программы",
-      "FULL_LESSON":           "Полный урок",
-      "TEXT":                  "Текст",
-      "UNKNOWN":               "Неизвестное",
-      "EVENT_PART":            "Часть события",
-      "CLIP":                  "Клип",
-      "TRAINING":              "Тренировка",
-      "KITEI_MAKOR":           "Первоисточники"
+      "FULL_LESSON": "Полный урок",
+      "TEXT": "Текст",
+      "UNKNOWN": "Неизвестное",
+      "EVENT_PART": "Часть события",
+      "CLIP": "Клип",
+      "TRAINING": "Тренировка",
+      "KITEI_MAKOR": "Первоисточники"
     },
-    "media-types":   {
-      "video":        "Video",
-      "audio":        "Audio",
-      "image":        "Image",
-      "text":         "Text",
-      "sheet":        "Sheet",
-      "banner":       "Banner",
+    "media-types": {
+      "video": "Video",
+      "audio": "Audio",
+      "image": "Image",
+      "text": "Text",
+      "sheet": "Sheet",
+      "banner": "Banner",
       "presentation": "Presentation"
     }
   },
-  "values":    {
+  "values": {
     "date": "{{date, l}}"
   }
 }

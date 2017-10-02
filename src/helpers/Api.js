@@ -38,6 +38,9 @@ export default class Api {
   static units = ({ contentTypes: content_type, pageNo: page_no, pageSize: page_size, ...rest }) =>
     Requests.get(`content_units?${Requests.makeParams({ page_no, page_size, content_type, ...rest })}`);
 
+  static recentlyUpdated = () =>
+    Requests.get('recently_updated');
+
   static autocomplete = ({ q, language }) =>
     Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 }

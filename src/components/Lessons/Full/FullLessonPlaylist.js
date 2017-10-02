@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-duration-format';
-import { Header, Grid, Menu } from 'semantic-ui-react';
+import { Header, Menu } from 'semantic-ui-react';
+
 import * as shapes from '../../shapes';
 
 class FullLessonPlaylist extends Component {
@@ -18,7 +19,7 @@ class FullLessonPlaylist extends Component {
     activePart: 0
   };
 
-  handleLessonPartClick = (e, data) => {
+  handleItemClick = (e, data) => {
     this.props.onItemClick(e, data);
   };
 
@@ -36,29 +37,23 @@ class FullLessonPlaylist extends Component {
       <div>
         <Header
           inverted
-          as="h3"
+          as="h1"
           content={`${t(`constants.content-types.${collection.content_type}`)} - ${(activePart + 1)}/${collection.content_units.length}`}
           subheader={t('values.date', { date: new Date(collection.film_date) })}
         />
-        <Grid>
-          <Grid.Row>
-            <Grid.Column>
-              <Menu vertical fluid size="small">
-                {
-                  collection.content_units.map((part, index) => (
-                    <Menu.Item
-                      key={part.id}
-                      name={`${index}`}
-                      content={titles[index]}
-                      active={index === activePart}
-                      onClick={this.handleLessonPartClick}
-                    />
-                  ))
-                }
-              </Menu>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+        <Menu vertical fluid size="small">
+          {
+            collection.content_units.map((part, index) => (
+              <Menu.Item
+                key={part.id}
+                name={`${index}`}
+                content={titles[index]}
+                active={index === activePart}
+                onClick={this.handleItemClick}
+              />
+            ))
+          }
+        </Menu>
       </div>
     );
   }

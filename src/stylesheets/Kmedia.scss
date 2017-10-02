@@ -332,21 +332,41 @@ $text-colors: (
   padding-top: 56.25%;
   position: relative;
   &.audio {
+    height: 180px;
     padding-top: 70px;
     margin-top: 0em;
     margin-bottom: 0em;
+    .video_position {
+      bottom: 0;
+      top: initial;
+    }
   }
   .video_position {
     position: absolute;
     top: 0;
     width: 100%;
   }
-  margin-top: -1em;
-  margin-bottom: -1em;
+  margin-top: calc( -1em + 2px );
+  margin-bottom: calc( -1em + 2px );
   min-width: 380px;
+
 }
 
 .player_panel {
+  >div {
+    position: absolute;
+    top: 0;
+    bottom: 2px;
+    // overflow: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .header{
+    flex: 0 0 auto;
+  }
+  .menu {
+    overflow-y: scroll;
+  }
   // position: absolute!important;
   // right:0;
   // top: 1em;
@@ -410,7 +430,7 @@ $text-colors: (
 
 .filter-steps {
   display: flex;
-  height: 225px;
+  height: 400px;
   overflow: hidden;
   // margin-top: -1em;
   // border-top: 1px solid $border-color;
@@ -421,7 +441,10 @@ $text-colors: (
     overflow-y: scroll;
     // min-width:25%;
     // &:nth-child(n+3){
-
+    &:first-child {
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
     &:last-child {
       flex: 1 1 auto;
     }
@@ -432,7 +455,20 @@ $text-colors: (
       border: 0;
     }
   }
-  &__column {
+  &__lists {
+    .divider {
+      margin: .2rem 0 0;
+    }
+    .list {
+      margin-bottom: 2em!important;
+    }
+
+    .column > .header {
+      // color: red!important;
+      margin-bottom: 1em;
+      text-transform: uppercase;
+      color: $grey!important;
+    }
   }
 
   .ui.menu {
@@ -470,4 +506,26 @@ $text-colors: (
 
 .video-bg{
   background: rgba($black,1);
+}
+
+/* See TimedPopup.js, solves existing bug:
+ * https://github.com/Semantic-Org/Semantic-UI-React/issues/1065 */
+.popup {
+  margin: 0 0 .71428571em;
+  z-index: 1900;
+  border: 1px solid #d4d4d5;
+  line-height: 1.4285em;
+  max-width: 250px;
+  background: #fff;
+  padding: .833em 1em;
+  font-weight: 400;
+  font-style: normal;
+  color: rgba(0,0,0,.87);
+  border-radius: .28571429rem;
+  box-shadow: 1px 1px 0 0 #bababc;
+}
+
+.popup .content {
+  width: 200px;
+  text-align: center;
 }

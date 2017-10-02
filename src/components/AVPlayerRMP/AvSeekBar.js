@@ -6,6 +6,10 @@ import { withMediaProps } from 'react-media-player';
 import classNames from 'classnames';
 import { PLAYER_MODE } from './constants';
 import { playerModeProp } from './propTypes';
+import SliceHandle from './SliceHandle';
+import { formatTime } from '../../helpers/time';
+
+const stickyHandleDelta = 10; // pixel width from which to stick to handle
 
 class AvSeekBar extends Component {
 
@@ -28,9 +32,14 @@ class AvSeekBar extends Component {
     onSliceEndChange: noop
   };
 
-  _element              = null;
-  _wasMouseDown         = false;
-  _isPlayingOnMouseDown = false;
+  element              = null;
+  wasMouseDown         = false;
+  isPlayingOnMouseDown = false;
+
+  state = {
+    seekbarHadInteraction: false,
+    playPoint: this.props.media.currentTime
+  };
 
   componentDidMount() {
     document.addEventListener('mousemove', this.handleMove, { passive: false });
@@ -46,109 +55,117 @@ class AvSeekBar extends Component {
     document.removeEventListener('touchend', this.handleEnd);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!this.sliceStartActive && !this.sliceEndActive && this.props.media.currentTime !== nextProps.media.currentTime) {
+      this.setState({ playPoint: nextProps.media.currentTime });
+    }
+  }
+
   handleStart = (e) => {
-    this._wasMouseDown         = true;
-    this._isPlayingOnMouseDown = this.props.media.isPlaying;
+    // regard only left mouse button click (0). touch is undefined
+    if (e.button) {
+      e.preventDefault();
+      return;
+    }
+
+    this.wasMouseDown         = true;
+    this.isPlayingOnMouseDown = this.props.media.isPlaying;
 
     this.props.media.pause();
 
-    if (e.target.classList.contains('slice-start')) {
-      this._sliceStartActive = true;
-    } else if (e.target.classList.contains('slice-end')) {
-      this._sliceEndActive = true;
+    if (this.sliceStartHandle && e.target === this.sliceStartHandle.getKnobElement()) {
+      this.sliceStartActive = true;
+    } else if (this.sliceEndHandle && e.target === this.sliceEndHandle.getKnobElement()) {
+      this.sliceEndActive = true;
     } else {
-      this._sliceStartActive = false;
-      this._sliceEndActive = false;
+      this.sliceStartActive = false;
+      this.sliceEndActive = false;
+    }
+
+    if (!this.state.seekbarHadInteraction) {
+      this.setState({ seekbarHadInteraction: true });
     }
   };
 
   handleMove = (e) => {
-    const { playerMode, onSliceStartChange, onSliceEndChange, sliceStart, sliceEnd } = this.props;
-    if (this._wasMouseDown) {
+    const { onSliceStartChange, onSliceEndChange, sliceStart, sliceEnd, media } = this.props;
+    if (this.wasMouseDown) {
+      e.preventDefault();
       // Resolve clientX from mouse or touch event.
       const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
+      this.touchClientX = clientX; // this is stored for touch because touchend has no coords
       const seekPosition = this.getSeekPositionFromClientX(clientX);
 
-      if (playerMode === PLAYER_MODE.SLICE_EDIT) {
-        if (this._sliceStartActive) {
-          if (seekPosition < sliceEnd) {
-            onSliceStartChange(seekPosition);
-          }
-        } else if (this._sliceEndActive) {
-          if (seekPosition > sliceStart) {
-            onSliceEndChange(seekPosition);
-          }
+      if (this.sliceStartActive) {
+        if (seekPosition < sliceEnd) {
+          onSliceStartChange(seekPosition);
         }
-      } else {
-        this.seek(seekPosition);
+      } else if (this.sliceEndActive) {
+        if (seekPosition > sliceStart) {
+          onSliceEndChange(seekPosition);
+        }
       }
-      e.preventDefault();
+
+      media.seekTo(seekPosition);
     }
   };
 
   handleEnd = (e) => {
-    const { playerMode, media } = this.props;
-    if (this._wasMouseDown) {
-      this._wasMouseDown = false;
+    const { media } = this.props;
+    if (this.wasMouseDown) {
+      e.preventDefault();
+      this.wasMouseDown = false;
 
-      if (e.clientX) {
-        const seekPosition = this.getSeekPositionFromClientX(e.clientX);
-        // Seek on desktop on mouse up. On mobile Move is called so no need to seek here.
-        if (playerMode === PLAYER_MODE.NORMAL || playerMode === PLAYER_MODE.SLICE_VIEW) {
-          this.seek(seekPosition);
-        // Correct current time if position is out of bounds of edited slice
-        } else if (playerMode === PLAYER_MODE.SLICE_EDIT) {
-          if (
-            (this._sliceStartActive === true && seekPosition > media.currentTime)
-            || (this._sliceEndActive === true && seekPosition < media.currentTime)
-          ) {
-            this.seek(seekPosition);
-          }
+      const clientX = e.clientX || this.touchClientX;
+
+      if (typeof clientX !== 'undefined') {
+        // pause when dragging handles
+        if (this.sliceStartActive === true || this.sliceEndActive === true) {
+          this.props.media.pause();
         }
-      }
 
-      this._sliceStartActive = false;
-      this._sliceEndActive = false;
+        const seekPosition = this.getSeekPositionFromClientX(clientX);
+        media.seekTo(seekPosition);
+        this.setState({ playPoint: seekPosition });
+      }
 
       // only play if media was playing prior to mouseDown
-      if (this._isPlayingOnMouseDown) {
+      if (!this.sliceStartActive && !this.sliceEndActive && this.isPlayingOnMouseDown) {
         this.props.media.play();
       }
-      e.preventDefault();
+
+      this.sliceStartActive = false;
+      this.sliceEndActive = false;
+      this.touchClientX = undefined;
     }
   };
 
-  getSeekPositionFromClientX = clientX => {
-    const { media } = this.props;
-    const { left, right } = this._element.getBoundingClientRect();
+  getSeekPositionFromClientX = (clientX) => {
+    const { media, playerMode, sliceStart, sliceEnd } = this.props;
+    const { left, right } = this.element.getBoundingClientRect();
     const { duration }    = media;
     const offset          = Math.min(Math.max(0, clientX - left), right - left);
 
+    if (playerMode === PLAYER_MODE.SLICE_EDIT) {
+      // try stick to handle
+      if (this.sliceStartHandle && this.sliceEndHandle) {
+        const { left: startLeft } = this.sliceStartHandle.getHandleElement().getBoundingClientRect();
+        const { left: endLeft } = this.sliceEndHandle.getHandleElement().getBoundingClientRect();
+        const sliceWidth = endLeft - startLeft;
+        // reduce delta if slice is small
+        const fittedStickyDelta = stickyHandleDelta * 2.5 > sliceWidth ? sliceWidth / 4 : stickyHandleDelta;
+        if (Math.abs(clientX - startLeft) < fittedStickyDelta) {
+          return sliceStart;
+        }
+
+        if (Math.abs(clientX - endLeft) < fittedStickyDelta) {
+          return sliceEnd > duration ? duration : sliceEnd;
+        }
+      }
+    }
+
     return (duration * offset) / (right - left);
   }
-
-  clampPositionInSlice = (position, sliceStart, sliceEnd) => {
-    let clampedPosition = position;
-    if (position > sliceEnd) {
-      clampedPosition = sliceEnd;
-    } else if (position < sliceStart) {
-      clampedPosition = sliceStart;
-    }
-
-    return clampedPosition;
-  }
-
-  seek = (seekPosition) => {
-    const { media, playerMode, sliceStart, sliceEnd } = this.props;
-    let correctedSeekPosition;
-
-    if (playerMode === PLAYER_MODE.SLICE_EDIT || playerMode === PLAYER_MODE.SLICE_VIEW) {
-      correctedSeekPosition = this.clampPositionInSlice(seekPosition, sliceStart, sliceEnd);
-      media.seekTo(!correctedSeekPosition || correctedSeekPosition === Infinity ? media.duration : correctedSeekPosition);
-    }
-
-    media.seekTo(seekPosition);
-  };
 
   toPercentage = (l) => {
     const ret = 100 * l;
@@ -204,66 +221,88 @@ class AvSeekBar extends Component {
   }
 
   render() {
-    const { isMobile } = this.props;
+    const { isMobile, sliceStart, sliceEnd } = this.props;
     const { currentTime, duration } = this.props.media;
-    const current                   = currentTime / duration;
+    const current                   = this.state.playPoint / duration;
     // Overriding progress of native react-media-player as he does not works correctly
     // with buffers.
     const { buffers, playerMode } = this.props;
-    const b           = buffers.find(b => b.start <= currentTime && b.end >= currentTime);
-    const progress    = (b && (b.end / duration)) || current;
+    const buf         = buffers.find(b => b.start <= currentTime && b.end >= currentTime);
+    const progress    = (buf && (buf.end / duration));
 
-    const isSlice = playerMode === PLAYER_MODE.SLICE_EDIT || playerMode === PLAYER_MODE.SLICE_VIEW;
     const isSliceEdit = playerMode === PLAYER_MODE.SLICE_EDIT;
+    const isSliceView = playerMode === PLAYER_MODE.SLICE_VIEW;
+    const isSlice = playerMode === isSliceEdit || isSliceView;
     const normalizedSliceStart = this.getNormalizedSliceStart(duration);
     const normalizedSliceEnd = this.getNormalizedSliceEnd(duration);
 
+    let playedLeft = 0;
+    if (isSliceView && !this.state.seekbarHadInteraction) {
+      playedLeft = normalizedSliceStart;
+    }
+    const playedWidth = Math.max(0, current - playedLeft);
+
+
     const stylePlayed = {
-      width: this.toPercentage(current - normalizedSliceStart),
-      left: isSlice ? this.toPercentage(normalizedSliceStart) : 0
+      left: this.toPercentage(playedLeft),
+      width: this.toPercentage(playedWidth),
     };
 
     const styleLoaded = {
-      width: this.toPercentage(isSlice ? (Math.min(progress, normalizedSliceEnd) - normalizedSliceStart) : progress),
-      left: isSlice ? this.toPercentage(normalizedSliceStart) : 0
+      width: this.toPercentage(progress),
+      left: 0
     };
 
-    const styleRemaining = {
-      width: this.toPercentage(1 - progress),
-      left: this.toPercentage(progress)
-    };
-
-    const styleSlice = {
-      left: this.toPercentage(normalizedSliceStart),
-      width: this.toPercentage(normalizedSliceEnd - normalizedSliceStart)
-    };
+    const sliceStartLeft = this.toPercentage(normalizedSliceStart);
+    const sliceEndLeft = this.toPercentage(normalizedSliceEnd);
 
     return (
       <div
-        ref={c => this._element = c}
-        className={
-          classNames('player-button player-control-seekbar', {
-            'mobile': isMobile,
-            'player-control-seekbar-slice': isSlice,
-            'player-control-seekbar-slice-edit': isSliceEdit
-          }
-        )}
+        ref={el => this.element = el}
+        className="player-control-seekbar-container"
         onMouseDown={this.handleStart}
         onTouchStart={this.handleStart}
       >
-        <div className="bar played" style={stylePlayed}>
-          <div className={classNames("knob", {"mobile": isMobile})} />
-        </div>
-        <div className="bar loaded" style={styleLoaded} />
-        <div className="bar remaining" style={styleRemaining} />
         {
-          isSlice && (
-            <div className="bar slice" style={styleSlice}>
-              <div className="slice-start" />
-              <div className="slice-end" />
-            </div>
+          isSliceEdit && (
+            <SliceHandle
+              ref={el => this.sliceStartHandle = el}
+              seconds={formatTime(sliceStart)}
+              position={sliceStartLeft}
+              isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
+            />
           )
         }
+        {
+          isSliceEdit && (
+            <SliceHandle
+              ref={el => this.sliceEndHandle = el}
+              seconds={formatTime(sliceEnd === Infinity ? duration : sliceEnd)}
+              position={sliceEndLeft}
+              isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
+            />
+          )
+        }
+        <div className="player-control-seekbar">
+          {
+            isSlice && (
+              <div
+                className="player-slice-area"
+                style={{
+                  left: sliceStartLeft,
+                  width: this.toPercentage(normalizedSliceEnd - normalizedSliceStart)
+                }}
+              />
+            )
+          }
+          <div className={classNames('bar', 'empty', { mobile: isMobile })} />
+          <div className={classNames('bar', 'played', { mobile: isMobile })}
+               style={stylePlayed}>
+            <div className={classNames('knob', { mobile: isMobile })} />
+          </div>
+          <div className={classNames('bar', 'loaded', { mobile: isMobile })}
+               style={styleLoaded} />
+        </div>
       </div>
     );
   }

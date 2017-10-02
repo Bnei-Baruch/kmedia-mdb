@@ -1,25 +1,51 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
+import { CT_VIDEO_PROGRAM, CT_VIDEO_PROGRAM_CHAPTER } from '../helpers/consts';
 import { updateQuery } from './helpers/url';
+import { isEmpty } from '../helpers/utils';
 import { selectors as settings } from '../redux/modules/settings';
-import { actions, types } from '../redux/modules/programs';
+import { actions, selectors as progSelectors, types } from '../redux/modules/programs';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 import { filtersTransformer } from '../filters';
-import { CT_VIDEO_PROGRAM, CT_VIDEO_PROGRAM_CHAPTER } from '../helpers/consts';
-import { isEmpty } from '../helpers/utils';
 
 function* fetchProgramsList(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, 'programs'));
   const params  = filtersTransformer.toApiParams(filters);
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    console.log(params);
-    const resp = isEmpty(params) ?
-      yield call(Api.collections, { ...action.payload, language, content_type: CT_VIDEO_PROGRAM }) :
-      yield call(Api.units, { ...action.payload, language, ...params, content_type: CT_VIDEO_PROGRAM_CHAPTER });
 
+    // fetch Genres if we don't have them
+    const genresTree = yield select(state => progSelectors.getGenres(state.programs));
+    if (isEmpty(genresTree)) {
+      const genres = yield call(Api.collections, {
+        language,
+        content_type: CT_VIDEO_PROGRAM,
+        pageNo: 1,
+        pageSize: 1000,
+        with_units: false,
+      });
+      if (Array.isArray(genres.collections)) {
+        yield put(mdbActions.receiveCollections(genres.collections));
+        yield put(actions.receiveCollections(genres.collections));
+      }
+    }
+
+    // fetch recently_updated if we don't have them
+    const recentlyUpdated = yield select(state => progSelectors.getRecentlyUpdated(state.programs));
+    if (isEmpty(recentlyUpdated)) {
+      const resp = yield call(Api.recentlyUpdated);
+      if (Array.isArray(resp)) {
+        yield put(actions.receiveRecentlyUpdated(resp));
+      }
+    }
+
+    const args = isEmpty(params) ?
+      { ...action.payload, language, content_type: CT_VIDEO_PROGRAM_CHAPTER } :
+      { ...action.payload, language, ...params, content_type: CT_VIDEO_PROGRAM_CHAPTER };
+
+    const resp = yield call(Api.units, args);
     if (Array.isArray(resp.collections)) {
       yield put(mdbActions.receiveCollections(resp.collections));
     }

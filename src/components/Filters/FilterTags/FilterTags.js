@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import reduce from 'lodash/reduce';
 import { connect } from 'react-redux';
-import { Divider, Container } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 
 import { filtersTransformer } from '../../../filters';
 import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
@@ -26,36 +26,37 @@ class FilterTags extends Component {
   };
 
   static contextTypes = {
-    store: PropTypes.object.isRequired
+    store: PropTypes.object.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   render() {
     const { tags, namespace } = this.props;
-    const store               = this.context.store;
+    const { store, t }        = this.context;
 
     return (
       <div className="filter-tags">
 
-        <Container className='padded'>
-        {
-          tags.map((tag) => {
-            const icon  = filtersTransformer.getTagIcon(tag.name);
-            const label = filtersTransformer.valueToTagLabel(tag.name, tag.value, this.props, store);
-            return (
-              <FilterTag
-                key={`${tag.name}_${tag.index}`}
-                icon={icon}
-                isActive={tag.isActive}
-                label={label}
-                onClick={() => this.props.editExistingFilter(namespace, tag.name, tag.index)}
-                onClose={() => {
-                  this.props.removeFilterValue(namespace, tag.name, tag.value);
-                  this.props.onClose();
-                }}
-              />
-            );
-          })
-        }
+        <Container className="padded">
+          {
+            tags.map((tag) => {
+              const icon  = filtersTransformer.getTagIcon(tag.name);
+              const label = filtersTransformer.valueToTagLabel(tag.name, tag.value, this.props, store, t);
+              return (
+                <FilterTag
+                  key={`${tag.name}_${tag.index}`}
+                  icon={icon}
+                  isActive={tag.isActive}
+                  label={label}
+                  onClick={() => this.props.editExistingFilter(namespace, tag.name, tag.index)}
+                  onClose={() => {
+                    this.props.removeFilterValue(namespace, tag.name, tag.value);
+                    this.props.onClose();
+                  }}
+                />
+              );
+            })
+          }
         </Container>
       </div>
     );

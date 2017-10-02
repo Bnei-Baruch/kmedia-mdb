@@ -29,7 +29,7 @@ import {
 
 export const isEmpty = (obj) => {
   // null and undefined are "empty"
-  if (obj === null) {
+  if (obj === null || obj === undefined) {
     return true;
   }
 
@@ -88,8 +88,11 @@ export const formatError = (error) => {
  */
 export function* intersperse(iterable, delim) {
   let first = true;
+  // eslint-disable-next-line no-restricted-syntax
   for (const item of iterable) {
-    if (!first) yield delim;
+    if (!first) {
+      yield delim;
+    }
     first = false;
     yield item;
   }
@@ -155,7 +158,7 @@ export const physicalFile = (file, ext = false) => {
   if (ext) {
     suffix = `.${filenameExtension(file.name)}`;
   }
-  return `http://cdn.kabbalahmedia.info/${file.id}${suffix}`;
+  return `https://cdn.kabbalahmedia.info/${file.id}${suffix}`;
 };
 
 export const canonicalLink = (entity) => {

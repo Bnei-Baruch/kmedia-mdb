@@ -5,6 +5,16 @@
   width: 100%;
 }
 
+.video_player {
+  &.audio {
+    .media-edit-mode {
+      .media-center-control {
+        height: 150px;
+      }
+    }
+  }
+}
+
 .media-player {
   position: relative;
   min-height: 40px;
@@ -19,46 +29,155 @@
     display: block;
     width: 100%;
   }
+
+  .center-media-controls-edit {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .slice-edit-help {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 20px;
+    margin-left: 10px;
+    font-size: 1.4em;
+  }
+
+  .button-close-slice-edit {
+    flex: 0 0 auto;
+  }
 }
 
-.player-control-share,
-.player-control-slice-toggle,
+.player-control-link-share,
+.player-control-slice-share,
 .player-control-fullscreen {
   cursor: pointer;
   margin-right: 5px;
   margin-left: 5px;
 }
 
-.player-control-slice-toggle {
-  margin-left: 10px;
+.player-seekbar-wrapper {
+  position: relative;
+  height: 100%;
+  flex: 1 0 auto;
 }
 
-.player-seekbar-wrapper {
-  flex: 1 0 auto;
+.player-control-seekbar-container {
+  position: relative;
+  height: 100%;
+  margin-left: 10px;
+  margin-right: 10px;
+
+  .player-slice-handle {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: absolute;
+    bottom: 0;
+
+    &--time {
+      display: flex;
+      flex-direction: row;
+      position: relative;
+      left: 0;
+      transform: translateX(-50%);
+      align-items: center;
+      padding: 5px;
+      margin-bottom: 10px;
+      color: #ffffff;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 20%;
+    }
+
+    &--knob {
+      position: relative;
+      background: #0066ff;
+      width: 26px;
+      height: 25px;
+      transform: translateX(-50%);
+      margin-bottom: 12px;
+      border-top-left-radius: 20%;
+      border-top-right-radius: 20%;
+
+      &:hover {
+        cursor: ew-resize;
+      }
+
+      &:after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-left: 13px solid transparent;
+        border-right: 13px solid transparent;
+        border-top: 8px solid #0066ff;
+      }
+
+      &:before {
+        content: "| | |";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        font-weight: bold;
+        text-align: center;
+        font-size: 12px;
+      }
+    }
+
+    &--line {
+      background: #ffffff;
+      height: 40px;
+      width: 2px;
+      transform: translateX(-50%);
+    }
+  }
 }
 
 .player-control-seekbar {
   position: relative;
-  height: 4px;
-  &.mobile {
-    height: 10px;
-  }
-  padding-top: 5px;
-  padding-bottom: 5px;
-  margin-left: 10px;
-  margin-right: 10px;
+  bottom: 0;
+  height: 100%;
 
   .bar {
     position: absolute;
     top: 50%;
-    height: 100%;
+    height: 4px;
     width: 0;
     transform: translateY(-50%);
     margin-left: 0;
     margin-right: 0;
+    border-radius: 2px;
+
+    /* Mobile support for seekbar, make it thick. */
+    &.mobile {
+      height: 10px;
+      border-radius: 5px;
+      &.loaded {
+        border-radius: 5px 0px 0px 5px;
+      }
+    }
   }
 
-  .remaining {
+  .player-slice-area {
+    position: absolute;
+    bottom: 0;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.25);
+    z-index: 4;
+  }
+
+  .empty {
+    width: 100%;
     background-color: rgb(118, 118, 118);
     z-index: 1;
   }
@@ -72,73 +191,27 @@
     left: 0;
     background-color: rgb(66, 133, 244);
     z-index: 10;
-  }
 
-  .slice {
-    background-color: rgb(255, 120, 140);
-    z-index: 3;
-    opacity: 0.7;
-
-    .slice-start,
-    .slice-end {
-      content: "";
+    .knob {
       position: absolute;
-      top: 50%;
-      height: 500%;
-      width: 4px;
-      border-radius: 10%;
-      background-color: rgb(255, 120, 140);
-    }
+      left: 100%;
+      height: 10px;
+      width: 10px;
+      transform: translate(-50%, -3px);
+      background-color: rgb(66, 133, 244);
+      border-radius: 50%;
 
-    .slice-start {
-      left: 0;
-      transform: translate(-50%, -50%);
-      border-top-left-radius: 50%;
-      border-bottom-left-radius: 50%;
-    }
-
-    .slice-end {
-      right: 0;
-      transform: translate(50%, -50%);
-      border-top-right-radius: 50%;
-      border-bottom-right-radius: 50%;
-    }
-  }
-
-  .knob {
-    position: absolute;
-    height: 10px;
-    width: 10px;
-    &.mobile {
-      height: 15px;
-      width: 15px;
-    }
-    border-radius: 50%;
-    background-color: rgb(66, 133, 244);
-    right: 0;
-    top: 50%;
-    transform: translate(50%, -50%);
-    z-index: 100;
-  }
-
-  &.player-control-seekbar-slice {
-    background-color: rgb(118, 118, 118);
-  }
-
-  &.player-control-seekbar-slice-edit {
-
-    .slice {
-      z-index: 11;
-      opacity: 1;
-    }
-
-    .slice-start,
-    .slice-end {
-      &:hover {
-        cursor: ew-resize;
+      &.mobile {
+        height: 16px;
+        width: 16px;
       }
     }
   }
+
+  &.mobile {
+    height: 10px;
+  }
+
 }
 
 .player-control-mute-unmute {
@@ -200,6 +273,7 @@
 }
 
 .player-control-audio-video {
+  cursor: pointer;
   display: flex;
   margin-left: 5px;
   margin-right: 5px;
@@ -234,7 +308,7 @@
   display: flex;
   flex-direction: column-reverse;
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
   z-index: 10;
   width: 100%;
@@ -264,28 +338,6 @@
       width: 100%;
       height: 100%;
       z-index: 1;
-
-      .player-control-slice-menu-wrapper {
-        position: absolute;
-        bottom: 100%;
-        right: 0;
-        color: #ffffff;
-
-        &:before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-color: #000000;
-          opacity: 0.65;
-        }
-
-        &.downward {
-          top: 100%;
-        }
-      }
     }
 
     &:before {
@@ -299,6 +351,13 @@
       height: 100%;
       opacity: 0.65;
       z-index: 0;
+    }
+  }
+
+  &.video-is-mobile {
+    .controls-wrapper {
+      padding-top: 25px;
+      flex: 0 0 65px;
     }
   }
 }

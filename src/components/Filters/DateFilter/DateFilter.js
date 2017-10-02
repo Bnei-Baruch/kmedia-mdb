@@ -190,6 +190,7 @@ class DateFilter extends Component {
    */
   showMonth = (preset, from, to) => {
     let dateToShow = from;
+    // eslint-disable-next-line default-case
     switch (preset) {
     case TODAY:
     case YESTERDAY:
@@ -209,8 +210,6 @@ class DateFilter extends Component {
     case THIS_MONTH:
       dateToShow = moment(now()).subtract(1, 'month').toDate();
       break;
-    default:
-      return;
     }
 
     this.datePicker.showMonth(dateToShow);
@@ -295,6 +294,7 @@ class DateFilter extends Component {
               <DayPicker
                 numberOfMonths={2}
                 selectedDays={{ from, to }}
+                disabledDays={{ after: new Date() }}
                 toMonth={now()}
                 localeUtils={LocaleUtils}
                 locale={language}
@@ -339,7 +339,7 @@ class DateFilter extends Component {
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column textAlign="right">
-                    <Button content={t('buttons.cancel')} onClick={this.onCancel} />
+                    <Button content={t('buttons.close')} onClick={this.onCancel} />
                     <Button primary content={t('buttons.apply')} disabled={!this.canApply()} onClick={this.apply} />
                   </Grid.Column>
                 </Grid.Row>

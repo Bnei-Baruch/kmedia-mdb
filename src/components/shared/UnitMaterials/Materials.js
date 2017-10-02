@@ -5,17 +5,17 @@ import { Segment } from 'semantic-ui-react';
 import * as shapes from '../../shapes';
 import TabsMenu from '../../shared/TabsMenu';
 
-const tPrefix = 'lessons.part.materials';
+const tPrefix = 'materials';
 
 class Materials extends Component {
 
   static propTypes = {
-    lesson: shapes.LessonPart,
+    unit: shapes.ContentUnit,
     t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    lesson: undefined,
+    unit: undefined,
   };
 
   render() {

@@ -1,67 +1,66 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Divider, Grid } from 'semantic-ui-react';
 
-import { CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY } from '../../../helpers/consts';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as filterSelectors } from '../../../redux/modules/filters';
 import { actions, selectors as eventSelectors } from '../../../redux/modules/events';
 import * as shapes from '../../shapes';
-import EventsList from './EventsList';
-import withPagination from '../../pagination/withPagination';
+import Page from './Page';
 
-const allEventTypes = [CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY];
-
-class EventsContainer extends withPagination {
+class EventsContainer extends Component {
 
   static propTypes = {
-    items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.EventCollection, shapes.EventItem])),
-    contentTypes: PropTypes.arrayOf(PropTypes.string),
     location: shapes.HistoryLocation.isRequired,
     language: PropTypes.string.isRequired,
+    fetchAllEvents: PropTypes.func.isRequired,
+    filteredItems: PropTypes.arrayOf(shapes.EventCollection),
+    hasItems: PropTypes.bool,
+    wip: shapes.WIP,
+    err: shapes.Error,
   };
 
   static defaultProps = {
-    items: [],
-    contentTypes: allEventTypes
+    hasItems: false,
+    filteredItems: [],
+    wip: false,
+    err: null,
   };
 
   componentDidMount() {
-    withPagination.askForData(this.props);
+    const { hasItems, fetchAllEvents, wip, err } = this.props;
+
+    // We only fetch one time on first mount, if not wip or error.
+    // Next time we fetch is on language change.
+    if (!hasItems && !(wip || err)) {
+      fetchAllEvents();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     const { language } = nextProps;
 
     if (language !== this.props.language) {
-      withPagination.askForData(nextProps);
+      nextProps.fetchAllEvents();
     }
-
-    super.componentWillReceiveProps(nextProps);
   }
 
   render() {
-    const { items } = this.props;
-
-    return (
-      <Grid.Column width={16}>
-        <withPagination.ResultsPageHeader {...this.props} />
-        <Divider />
-        <EventsList items={items} />
-        <withPagination.Pagination {...this.props} />
-      </Grid.Column>
-    );
+    const { filteredItems, wip, err } = this.props;
+    return <Page items={filteredItems} wip={wip} err={err} />;
   }
 }
 
 const mapState = (state) => {
-  const parentProps = withPagination.mapState('events', state, eventSelectors, settings);
+  const filters       = filterSelectors.getFilters(state.filters, 'events');
+  const filteredItems = eventSelectors.getFilteredData(state.events, filters, state.mdb);
+
   return {
-    ...parentProps,
-    items: eventSelectors.getItems(state.events)
-      .map(x => mdb.getDenormCollection(state.mdb, x[0])),
+    filteredItems,
+    hasItems: eventSelectors.getItems(state.events).length > 0,
     language: settings.getLanguage(state.settings),
+    wip: eventSelectors.getWip(state.events).list,
+    err: eventSelectors.getErrors(state.events).list,
   };
 };
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import 'moment-duration-format';
 
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../helpers/consts';
@@ -41,7 +42,11 @@ class RelevantPartsContainer extends Component {
     fullLesson: null,
     fullLessonID: '',
     wip: false,
-    err: null,
+    err: null
+  };
+
+  state = {
+    fullLessonRequested: false,
   };
 
   componentDidMount() {
@@ -53,19 +58,29 @@ class RelevantPartsContainer extends Component {
   }
 
   askForDataIfNeeded = (props) => {
-    const { fullLesson, fullLessonID, wip, err, fetchFullLesson } = props;
+    const { fullLessonID, wip, err, fetchFullLesson } = props;
 
+    // TODO:
+    // Maybe in the future we'll do something more sophisticated
+    // to fetch data only in the case we really need it
+    // The following code is wrong.
+    //
     // We fetch stuff if we don't have it already
     // and a request for it is not in progress or ended with an error.
-    if (
-      fullLesson &&
-      fullLesson.id === fullLessonID &&
-      Array.isArray(fullLesson.content_units)) {
+    // if (
+    //   fullLesson &&
+    //   fullLesson.id === fullLessonID &&
+    //   Array.isArray(fullLesson.content_units)) {
+    //   return;
+    // }
+
+    if (this.state.fullLessonRequested) {
       return;
     }
 
     if (fullLessonID && !(wip || err)) {
       fetchFullLesson(fullLessonID);
+      this.setState({ fullLessonRequested: true });
     }
   };
 
@@ -94,5 +109,7 @@ export default connect(
       errors: selectors.getErrors(state.lessons).fulls[fullLessonID],
     };
   },
-  actions
+  dispatch => bindActionCreators({
+    fetchFullLesson: actions.fetchFullLesson,
+  }, dispatch)
 )(RelevantPartsContainer);
