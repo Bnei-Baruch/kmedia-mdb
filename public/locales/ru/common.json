@@ -70,7 +70,14 @@
     "no-files": "Нет файлов",
     "no-playable-files": "Не файлов для воспроизведения",
     "no-results": "Нет результатов",
-    "pagination-results": "Результаты {{start}} - {{end}} из {{total}}"
+    "pagination-results": "Результаты {{start}} - {{end}} из {{total}}",
+    "link-copied-to-clipboard": "Ссылка переписана!",
+    "unknown": "Неизвестна",
+    "unsupported-media-format": "Неподдерживаемый формат.",
+    "error-loading-file": "Ошибка загрузки файла.",
+    "fallback-language": "Медиа не найденa для выбранного языка, выбран резервный язык.",
+    "fallback-to-audio": "Видео не найдено, используется аудио.",
+    "fallback-to-video": "Аудио не найдено, используется видео."
   },
   "events": {
     "ALL_EVENTS": ""

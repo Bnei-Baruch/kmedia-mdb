@@ -100,7 +100,13 @@
     "no-playable-files": "לא נמצאו קבצים מתאימים לתצוגה",
     "no-results": "לא נמצאו תוצאות",
     "pagination-results": "תוצאות {{start}} - {{end}} מתוך {{total}}",
-    "link-copied-to-clipboard": "הקישור הועתק ללוח בהצלחה!"
+    "link-copied-to-clipboard": "הקישור הועתק ללוח בהצלחה!",
+    "unknown": "לא ידוע",
+    "unsupported-media-format": "פורמט לא נתמך.",
+    "error-loading-file": "טעות בהעלאת קובץ.",
+    "fallback-language": "אין את השפה המבוקשת למדיה, נבחרה שפת ברירת מחדל.",
+    "fallback-to-audio": "וידיאו לא נמצא, משתמש באודיו.",
+    "fallback-to-video": "אודיו לא נמצא, משתמש בוידיאו."
   },
   "events": {
     "ALL_EVENTS": "כל האירועים",

@@ -507,3 +507,23 @@ $text-colors: (
 .video-bg{
   background: rgba($black,1);
 }
+
+.popup {
+  margin: 0 0 .71428571em;
+  z-index: 1900;
+  border: 1px solid #d4d4d5;
+  line-height: 1.4285em;
+  max-width: 250px;
+  background: #fff;
+  padding: .833em 1em;
+  font-weight: 400;
+  font-style: normal;
+  color: rgba(0,0,0,.87);
+  border-radius: .28571429rem;
+  box-shadow: 1px 1px 0 0 #bababc;
+}
+
+.popup .content {
+  width: 200px;
+  text-align: center;
+}
