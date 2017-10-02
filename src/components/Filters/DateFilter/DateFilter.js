@@ -137,7 +137,6 @@ class DateFilter extends Component {
   componentDidMount() {
     const { datePreset, from, to } = this.state;
     this.showMonth(datePreset, from, to);
-    console.log(datePreset, ' ', from, ' ', to);
   }
 
   componentWillReceiveProps(nextProps) {
