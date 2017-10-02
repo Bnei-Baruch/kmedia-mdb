@@ -75,6 +75,17 @@
     "more": "עוד",
     "copy-link": "העתק קישור"
   },
+  "player": {
+    "messages": {
+      "edit-help": "משוך את הידיות על מנת לשתף חלק מהוידאו"
+    },
+    "buttons": {
+      "edit-back": "חזור"
+    },
+    "error": {
+      "loading": "שגיאה בטעינת קובץ"
+    }
+  },
   "messages": {
     "loading": "טוען",
     "loading-subtext": "תיכף מגיע",
