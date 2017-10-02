@@ -115,12 +115,14 @@ class FullVideoBox extends Component {
           />
         </Grid.Column>
         <Grid.Column className="player_panel" computer={6} mobile={16}>
-          <PlayListComponent
-            collection={collection}
-            activePart={activePart}
-            t={t}
-            onItemClick={this.handlePartClick}
-          />
+          
+            <PlayListComponent
+              collection={collection}
+              activePart={activePart}
+              t={t}
+              onItemClick={this.handlePartClick}
+            />
+          
         </Grid.Column>
       </Grid.Row>
     );

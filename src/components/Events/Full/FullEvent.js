@@ -54,15 +54,15 @@ class FullEvent extends Component {
       const activeUnit = fullEvent.content_units[activePart];
       return (
         <div>
-          <PageHeader item={fullEvent} />
+          {/*<PageHeader item={fullEvent} />
           <EventMap
             language={language}
             address={fullEvent.full_address}
             city={fullEvent.city}
             country={fullEvent.country}
-          />
+          />*/}
           <div className="video-bg">
-            <Container className='padded vertically'>
+            <Container>
               <Grid padded>
                 <FullVideoBox
                   collection={fullEvent}

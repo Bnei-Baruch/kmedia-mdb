@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-duration-format';
-import { Grid, Menu } from 'semantic-ui-react';
+import { Image, Header, Grid, Menu } from 'semantic-ui-react';
 import * as shapes from '../../shapes';
+import placeholder from './placeholder.png';
 
 class FullEventPlaylist extends Component {
 
@@ -31,25 +32,35 @@ class FullEventPlaylist extends Component {
     });
 
     return (
-      <Grid>
-        <Grid.Row>
-          <Grid.Column>
-            <Menu vertical fluid size="small">
-              {
-                collection.content_units.map((part, index) => (
-                  <Menu.Item
-                    key={part.id}
-                    name={`${index}`}
-                    content={titles[index]}
-                    active={index === activePart}
-                    onClick={this.handleLessonPartClick}
-                  />
-                ))
-              }
-            </Menu>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+      <div>
+        <Header
+          inverted
+          as="h1"
+        >
+          <Image shape='circular' src={placeholder} />
+          <Header.Content>
+            "All as One" in Georgia
+              <Header.Subheader>
+                15 - 17 September 2017
+              </Header.Subheader>
+          </Header.Content>
+        </Header>
+  
+              <Menu vertical fluid size="small">
+                {
+                  collection.content_units.map((part, index) => (
+                    <Menu.Item
+                      key={part.id}
+                      name={`${index}`}
+                      content={titles[index]}
+                      active={index === activePart}
+                      onClick={this.handleLessonPartClick}
+                    />
+                  ))
+                }
+              </Menu>
+
+      </div>
     );
   }
 }
