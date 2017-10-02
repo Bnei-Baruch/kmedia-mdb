@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-duration-format';
-import { Image, Header, Grid, Menu } from 'semantic-ui-react';
+import { Header, Image, Menu } from 'semantic-ui-react';
+
+import { DATE_FORMAT } from '../../../helpers/consts';
+import { fromToLocalized } from '../../../helpers/date';
 import * as shapes from '../../shapes';
 import placeholder from './placeholder.png';
 
@@ -18,12 +21,13 @@ class FullEventPlaylist extends Component {
     activePart: 0
   };
 
-  handleLessonPartClick = (e, data) => {
+  handleItemClick = (e, data) => {
     this.props.onItemClick(e, data);
   };
 
   render() {
-    const { collection, activePart } = this.props;
+    const { collection, activePart }     = this.props;
+    const { name, start_date, end_date } = collection;
 
     const titles = collection.content_units.map((cu) => {
       const { name, duration } = cu;
@@ -33,33 +37,29 @@ class FullEventPlaylist extends Component {
 
     return (
       <div>
-        <Header
-          inverted
-          as="h1"
-        >
-          <Image shape='circular' src={placeholder} />
+        <Header inverted as="h1">
+          <Image shape="circular" src={placeholder} />
           <Header.Content>
-            "All as One" in Georgia
-              <Header.Subheader>
-                15 - 17 September 2017
-              </Header.Subheader>
+            {name}
+            <Header.Subheader>
+              {fromToLocalized(moment.utc(start_date, DATE_FORMAT), moment.utc(end_date, DATE_FORMAT))}
+            </Header.Subheader>
           </Header.Content>
         </Header>
-  
-              <Menu vertical fluid size="small">
-                {
-                  collection.content_units.map((part, index) => (
-                    <Menu.Item
-                      key={part.id}
-                      name={`${index}`}
-                      content={titles[index]}
-                      active={index === activePart}
-                      onClick={this.handleLessonPartClick}
-                    />
-                  ))
-                }
-              </Menu>
 
+        <Menu vertical fluid size="small">
+          {
+            collection.content_units.map((part, index) => (
+              <Menu.Item
+                key={part.id}
+                name={`${index}`}
+                content={titles[index]}
+                active={index === activePart}
+                onClick={this.handleItemClick}
+              />
+            ))
+          }
+        </Menu>
       </div>
     );
   }
