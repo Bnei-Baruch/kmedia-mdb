@@ -508,6 +508,8 @@ $text-colors: (
   background: rgba($black,1);
 }
 
+/* See TimedPopup.js, solves existing bug:
+ * https://github.com/Semantic-Org/Semantic-UI-React/issues/1065 */
 .popup {
   margin: 0 0 .71428571em;
   z-index: 1900;
