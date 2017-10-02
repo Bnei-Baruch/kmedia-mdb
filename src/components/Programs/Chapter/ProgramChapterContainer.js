@@ -36,6 +36,10 @@ class ProgramChapterContainer extends Component {
   askForDataIfNeeded = (props) => {
     const { match, chapter, wip, err, fetchProgramChapter } = props;
 
+    if (wip || err) {
+      return;
+    }
+
     // We fetch stuff if we don't have it already
     // and a request for it is not in progress or ended with an error.
     const id = match.params.id;
@@ -46,9 +50,7 @@ class ProgramChapterContainer extends Component {
       return;
     }
 
-    if (!(wip || err)) {
-      fetchProgramChapter(id);
-    }
+    fetchProgramChapter(id);
   };
 
   render() {

@@ -12,19 +12,19 @@ import * as shapes from '../../shapes';
 class Info extends Component {
 
   static propTypes = {
-    chapter: shapes.ProgramChapter,
+    unit: shapes.ProgramChapter,
     getSourceById: PropTypes.func.isRequired,
     getTagById: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    chapter: undefined,
+    unit: undefined,
   };
 
   render() {
-    const { chapter = {}, getSourceById, getTagById, t } = this.props;
-    const { name, film_date: filmDate, sources, tags }   = chapter;
+    const { unit = {}, getSourceById, getTagById, t } = this.props;
+    const { name, film_date: filmDate, sources, tags }   = unit;
 
     const tagLinks = Array.from(intersperse(
       (tags || []).map((x) => {

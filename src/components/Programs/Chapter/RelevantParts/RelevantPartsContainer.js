@@ -4,18 +4,17 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import 'moment-duration-format';
 
-import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../helpers/consts';
+import { CT_VIDEO_PROGRAM } from '../../../../helpers/consts';
 import { selectors as mdb } from '../../../../redux/modules/mdb';
-import { actions, selectors } from '../../../../redux/modules/lessons';
+import { actions, selectors } from '../../../../redux/modules/programs';
 import * as shapes from '../../../shapes';
 import RelevantParts from './RelevantParts';
 
-const getCollectionIdFromLesson = (lesson) => {
-  if (lesson.collections) {
-    const collections        = Object.values(lesson.collections);
+const getCollectionIdFromProgram = (program) => {
+  if (program.collections) {
+    const collections        = Object.values(program.collections);
     const relevantCollection = collections.find(collection =>
-      collection.content_type === CT_DAILY_LESSON ||
-      collection.content_type === CT_SPECIAL_LESSON
+      collection.content_type === CT_VIDEO_PROGRAM
     );
 
     if (relevantCollection) {
@@ -29,24 +28,24 @@ const getCollectionIdFromLesson = (lesson) => {
 class RelevantPartsContainer extends Component {
 
   static propTypes = {
-    lesson: shapes.LessonPart.isRequired,
-    fullLessonID: PropTypes.string,
-    fullLesson: shapes.LessonCollection,
+    program: shapes.ProgramChapter.isRequired,
+    fullProgramID: PropTypes.string,
+    fullProgram: shapes.ProgramCollection,
     wip: shapes.WIP,
     err: shapes.Error,
-    fetchFullLesson: PropTypes.func.isRequired,
+    fetchFullProgram: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    fullLesson: null,
-    fullLessonID: '',
+    fullProgram: null,
+    fullProgramID: '',
     wip: false,
-    err: null
+    err: null,
   };
 
   state = {
-    fullLessonRequested: false,
+    fullProgramRequested: false,
   };
 
   componentDidMount() {
@@ -58,7 +57,7 @@ class RelevantPartsContainer extends Component {
   }
 
   askForDataIfNeeded = (props) => {
-    const { fullLessonID, wip, err, fetchFullLesson } = props;
+    const { fullProgramID, wip, err, fetchFullProgram } = props;
 
     // TODO:
     // Maybe in the future we'll do something more sophisticated
@@ -68,31 +67,31 @@ class RelevantPartsContainer extends Component {
     // We fetch stuff if we don't have it already
     // and a request for it is not in progress or ended with an error.
     // if (
-    //   fullLesson &&
-    //   fullLesson.id === fullLessonID &&
-    //   Array.isArray(fullLesson.content_units)) {
+    //   fullProgram &&
+    //   fullProgram.id === fullProgramID &&
+    //   Array.isArray(fullProgram.content_units)) {
     //   return;
     // }
 
-    if (this.state.fullLessonRequested) {
+    if (this.state.fullProgramRequested) {
       return;
     }
 
-    if (fullLessonID && !(wip || err)) {
-      fetchFullLesson(fullLessonID);
-      this.setState({ fullLessonRequested: true });
+    if (fullProgramID && !(wip || err)) {
+      fetchFullProgram(fullProgramID);
+      this.setState({ fullProgramRequested: true });
     }
   };
 
   render() {
-    const { lesson, fullLesson, wip, err, t } = this.props;
+    const { program, fullProgram, wip, err, t } = this.props;
 
     return (
       <RelevantParts
-        lesson={lesson}
+        program={program}
         wip={wip}
         err={err}
-        fullLesson={wip || err ? null : fullLesson}
+        fullProgram={(wip || err) ? null : fullProgram}
         t={t}
       />
     );
@@ -101,15 +100,15 @@ class RelevantPartsContainer extends Component {
 
 export default connect(
   (state, ownProps) => {
-    const fullLessonID = getCollectionIdFromLesson(ownProps.lesson);
+    const fullProgramID = getCollectionIdFromProgram(ownProps.program);
     return {
-      fullLessonID,
-      fullLesson: fullLessonID ? mdb.getDenormCollection(state.mdb, fullLessonID) : null,
-      wip: selectors.getWip(state.lessons).fulls[fullLessonID],
-      errors: selectors.getErrors(state.lessons).fulls[fullLessonID],
+      fullProgramID,
+      fullProgram: fullProgramID ? mdb.getDenormCollection(state.mdb, fullProgramID) : null,
+      wip: selectors.getWip(state.programs).fulls[fullProgramID],
+      errors: selectors.getErrors(state.programs).fulls[fullProgramID],
     };
   },
   dispatch => bindActionCreators({
-    fetchFullLesson: actions.fetchFullLesson,
+    fetchFullProgram: actions.fetchFullProgram,
   }, dispatch)
 )(RelevantPartsContainer);
