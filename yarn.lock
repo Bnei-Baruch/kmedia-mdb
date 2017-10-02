@@ -5273,7 +5273,7 @@ promise@7.1.1, promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.8:
+prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.8:
   version "15.5.10"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.10.tgz#2797dfc3126182e3a95e3dfbb2e893ddd7456154"
   dependencies:
@@ -5459,24 +5459,11 @@ react-i18next@^4.7.0:
   dependencies:
     hoist-non-react-statics "1.2.0"
 
-"react-jw-player@github:Bnei-Baruch/react-jw-player":
-  version "1.8.1"
-  resolved "https://codeload.github.com/Bnei-Baruch/react-jw-player/tar.gz/6d867888a6cf0526ad4303f1f94f89eb91d542d3"
-  dependencies:
-    prop-types "^15.5.10"
-    react "^15.4.1"
-
 react-media-player@^0.6.2:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/react-media-player/-/react-media-player-0.6.3.tgz#3b55aa9fbd346ba72b29166c0db0ff9ad75550a6"
   dependencies:
     prop-types "^15.5.10"
-
-react-redux-loading-bar@^2.9.2:
-  version "2.9.2"
-  resolved "https://registry.yarnpkg.com/react-redux-loading-bar/-/react-redux-loading-bar-2.9.2.tgz#f0e604ee35af5ecb25addb10bf24ca3d478c95a8"
-  dependencies:
-    prop-types "^15.5.6"
 
 react-redux@^5.0.5:
   version "5.0.6"
@@ -5580,7 +5567,7 @@ react-virtualized@^9.9.0:
     loose-envify "^1.3.0"
     prop-types "^15.5.4"
 
-react@^15.4.1, react@^15.6.1:
+react@^15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/react/-/react-15.6.1.tgz#baa8434ec6780bde997cdc380b79cd33b96393df"
   dependencies:
