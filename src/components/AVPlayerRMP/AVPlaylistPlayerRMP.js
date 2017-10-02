@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { Media } from 'react-media-player';
 
-import classNames from 'classnames';
 import { MT_AUDIO } from '../../helpers/consts';
 import AVPlayerRMP from './AVPlayerRMP';
 
