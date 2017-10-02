@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Trans, translate } from 'react-i18next';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Container } from 'semantic-ui-react';
 
 import Link from '../../Language/MultiLanguageLink';
-
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
 import RMPVideoBox from '../../shared/UnitPlayer/RMPVideoBox';
@@ -12,6 +11,7 @@ import Materials from '../../shared/UnitMaterials/Materials';
 import MediaDownloads from '../../shared/MediaDownloads';
 import * as shapes from '../../shapes';
 import Info from './Info';
+import RelevantPartsContainer from './RelevantParts/RelevantPartsContainer';
 
 const ProgramChapter = (props) => {
   const { chapter, wip, err, language, t } = props;
@@ -26,22 +26,29 @@ const ProgramChapter = (props) => {
 
   if (chapter) {
     return (
-      <Grid.Column width={16}>
-        <Grid>
-          <RMPVideoBox unit={chapter} language={language} t={t} />
-        </Grid>
-        <Grid>
-          <Grid.Row>
-            <Grid.Column width={10}>
-              <Info chapter={chapter} t={t} />
-              <Materials unit={chapter} t={t} />
-            </Grid.Column>
-            <Grid.Column width={6}>
-              <MediaDownloads unit={chapter} language={language} t={t} />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Grid.Column>
+      <div>
+        <div className="video-bg">
+          <Container>
+            <Grid centered padded>
+              <RMPVideoBox unit={chapter} language={language} t={t} isSliceable />
+            </Grid>
+          </Container>
+        </div>
+        <Container>
+          <Grid padded>
+            <Grid.Row>
+              <Grid.Column width={10}>
+                <Info unit={chapter} t={t} />
+                <Materials unit={chapter} t={t} />
+              </Grid.Column>
+              <Grid.Column width={6}>
+                <MediaDownloads unit={chapter} language={language} t={t} />
+                <RelevantPartsContainer program={chapter} t={t} />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Container>
+      </div>
     );
   }
 
