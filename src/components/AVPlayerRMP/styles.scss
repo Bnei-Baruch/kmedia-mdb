@@ -156,6 +156,16 @@
     transform: translateY(-50%);
     margin-left: 0;
     margin-right: 0;
+    border-radius: 2px;
+
+    /* Mobile support for seekbar, make it thick. */
+    &.mobile {
+      height: 10px;
+      border-radius: 5px;
+      &.loaded {
+        border-radius: 5px 0px 0px 5px;
+      }
+    }
   }
 
   .player-slice-area {
@@ -192,9 +202,8 @@
       border-radius: 50%;
 
       &.mobile {
-        height: 12px;
-        width: 12px;
-        transform: translate(-50%, -4px);
+        height: 16px;
+        width: 16px;
       }
     }
   }
