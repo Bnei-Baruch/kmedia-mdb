@@ -53,7 +53,6 @@
     "react-dom": "^15.6.1",
     "react-google-maps": "^8.3.0",
     "react-i18next": "^4.7.0",
-    "react-jw-player": "github:Bnei-Baruch/react-jw-player",
     "react-media-player": "^0.6.2",
     "react-redux": "^5.0.5",
     "react-redux-loading-bar": "^2.9.2",
