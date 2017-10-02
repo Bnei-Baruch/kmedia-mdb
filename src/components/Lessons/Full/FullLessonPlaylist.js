@@ -36,29 +36,23 @@ class FullLessonPlaylist extends Component {
       <div>
         <Header
           inverted
-          as="h3"
+          as="h1"
           content={`${t(`constants.content-types.${collection.content_type}`)} - ${(activePart + 1)}/${collection.content_units.length}`}
           subheader={t('values.date', { date: new Date(collection.film_date) })}
         />
-        <Grid>
-          <Grid.Row>
-            <Grid.Column>
-              <Menu vertical fluid size="small">
-                {
-                  collection.content_units.map((part, index) => (
-                    <Menu.Item
-                      key={part.id}
-                      name={`${index}`}
-                      content={titles[index]}
-                      active={index === activePart}
-                      onClick={this.handleLessonPartClick}
-                    />
-                  ))
-                }
-              </Menu>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+        <Menu vertical fluid size="small">
+          {
+            collection.content_units.map((part, index) => (
+              <Menu.Item
+                key={part.id}
+                name={`${index}`}
+                content={titles[index]}
+                active={index === activePart}
+                onClick={this.handleLessonPartClick}
+              />
+            ))
+          }
+        </Menu>
       </div>
     );
   }

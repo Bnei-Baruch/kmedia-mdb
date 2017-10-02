@@ -54,24 +54,28 @@ class FullEvent extends Component {
       const activeUnit = fullEvent.content_units[activePart];
       return (
         <div>
-          <PageHeader item={fullEvent} />
+          {/*<PageHeader item={fullEvent} />
           <EventMap
             language={language}
             address={fullEvent.full_address}
             city={fullEvent.city}
             country={fullEvent.country}
-          />
-          <Container className='padded vertically'>
-            <Grid padded>
-              <FullVideoBox
-                collection={fullEvent}
-                activePart={activePart}
-                language={language}
-                t={t}
-                onActivePartChange={this.handleActivePartChange}
-                PlayListComponent={FullEventPlaylist}
-              />
-            </Grid>
+          />*/}
+          <div className="video-bg">
+            <Container>
+              <Grid padded>
+                <FullVideoBox
+                  collection={fullEvent}
+                  activePart={activePart}
+                  language={language}
+                  t={t}
+                  onActivePartChange={this.handleActivePartChange}
+                  PlayListComponent={FullEventPlaylist}
+                />
+              </Grid>
+            </Container>
+          </div>
+          <Container>
             <Grid padded reversed="tablet">
               <Grid.Row reversed="computer">
                 <Grid.Column computer={6} tablet={4} mobile={16}>
@@ -84,7 +88,8 @@ class FullEvent extends Component {
               </Grid.Row>
             </Grid>
           </Container>
-        </div>
+          </div>
+
       );
     }
 

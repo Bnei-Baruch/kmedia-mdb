@@ -332,21 +332,41 @@ $text-colors: (
   padding-top: 56.25%;
   position: relative;
   &.audio {
+    height: 180px;
     padding-top: 70px;
     margin-top: 0em;
     margin-bottom: 0em;
+    .video_position {
+      bottom: 0;
+      top: initial;
+    }
   }
   .video_position {
     position: absolute;
     top: 0;
     width: 100%;
   }
-  margin-top: -1em;
-  margin-bottom: -1em;
+  margin-top: calc( -1em + 2px );
+  margin-bottom: calc( -1em + 2px );
   min-width: 380px;
+
 }
 
 .player_panel {
+  >div {
+    position: absolute;
+    top: 0;
+    bottom: 2px;
+    // overflow: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .header{
+    flex: 0 0 auto;
+  }
+  .menu {
+    overflow-y: scroll;
+  }
   // position: absolute!important;
   // right:0;
   // top: 1em;

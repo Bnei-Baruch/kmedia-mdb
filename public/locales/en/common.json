@@ -96,7 +96,7 @@
     "error-loading-file":        "Error loading file.",
     "fallback-language":         "Media not found for selected language, selected fallback language.",
     "fallback-to-audio":         "Video was not found, using audio.",
-    "fallback-to-video":         "Audio was not found, using video.",
+    "fallback-to-video":         "Audio was not found, using video."
   },
   "events": {
     "ALL_EVENTS": "All Events",

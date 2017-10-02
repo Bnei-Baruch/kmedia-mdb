@@ -4,7 +4,7 @@ import noop from 'lodash/noop';
 import { withRouter } from 'react-router-dom';
 import { Player, withMediaProps } from 'react-media-player';
 import classNames from 'classnames';
-import { Icon } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 
 import { AutoSizer } from 'react-virtualized';
 
@@ -21,14 +21,12 @@ import AVMuteUnmute from './AVMuteUnmute';
 import AVLanguage from './AVLanguage';
 import AVAudioVideo from './AVAudioVideo';
 import AvSeekBar from './AvSeekBar';
-import AVSliceToggle from './AVSliceToggle';
-import AVSliceMenu from './AVSliceMenu';
 import AVShare from './AVShare';
+import AVShareLink from './AVShareLink';
 
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = playback =>
   parseFloat(playback.slice(0, -1));
-
 
 class AVPlayerRMP extends PureComponent {
 
@@ -64,7 +62,6 @@ class AVPlayerRMP extends PureComponent {
 
   static defaultProps = {
     isSliceable: false,
-
     autoPlay: false,
     showNextPrev: false,
     hasNext: false,
@@ -118,96 +115,29 @@ class AVPlayerRMP extends PureComponent {
     }
   }
 
-  // Remember the current time and isPlaying while switching.
-  onSwitchAV = (...params) => {
-    const { onSwitchAV, media: { currentTime, isPlaying } } = this.props;
-    this.setState({ wasCurrentTime: currentTime, wasPlaying: isPlaying }, () => {
-      onSwitchAV(...params);
-    });
-  }
-
-  // Remember the current time and isPlaying while switching.
-  onLanguageChange = (...params) => {
-    const { onLanguageChange, media: { currentTime, isPlaying } } = this.props;
-    this.setState({ wasCurrentTime: currentTime, wasPlaying: isPlaying }, () => {
-      onLanguageChange(...params);
-    });
-  }
-
-  onPlayerReady = () => {
-    const { wasCurrentTime, wasPlaying } = this.state;
+  setSliceMode = (isEdit, properties = {}, cb) => {
+    let sliceStart  = properties.sliceStart;
+    let sliceEnd    = properties.sliceEnd;
     const { media } = this.props;
-    if (wasCurrentTime) {
-      media.seekTo(wasCurrentTime);
-    }
-    if (wasPlaying) {
-      media.play();
-    }
 
-    // restore playback from state when player instance changed (when src changes, e.g., playlist).
-    this.player.instance.playbackRate = playbackToValue(this.state.playbackRate);
-    this.setState({ wasCurrentTime: undefined, wasPlaying: undefined });
-  }
-
-  onError = (e) => {
-    const { t } = this.props;
-    // Show error only on loading of video.
-    if (!e.currentTime && !e.isPlaying) {
-      const { item } = this.props;
-      let errorReason = '';
-      if (item.src.endsWith('wmv')) {
-        errorReason = t('messages.unsupported-wmv');
-      } else {
-        errorReason = t('messages.unknown');
-      }
-      this.setState({ error: true, errorReason });
-    }
-  }
-
-  onPlay = (e) => {
-    const { isSliceable, media } = this.props;
-    const { sliceEnd } = this.state;
-
-    // interrupt play if we're at the end of the slice
-    if (isSliceable && e.currentTime >= sliceEnd) {
+    if (isEdit) {
       media.pause();
-      media.seekTo(sliceEnd);
-      return;
     }
 
-    if (this.props.onPlay) {
-      this.props.onPlay();
+    if (typeof sliceStart === 'undefined') {
+      sliceStart = this.state.sliceStart || 0;
     }
-  }
 
-
-  onPause = (e) => {
-    // when we're close to the end regard this as finished
-    if (Math.abs(e.currentTime - e.duration) < 0.1 && this.props.onFinish) {
-      this.props.onFinish();
-    } else if (this.props.onPause) {
-      this.props.onPause();
+    if (typeof sliceEnd === 'undefined') {
+      sliceEnd = this.state.sliceEnd || media.duration || Infinity;
     }
-  }
-
-  onKeyDown = (e) => {
-    if (e.keyCode === 32) {
-      this.props.media.playPause();
-      e.preventDefault();
-    }
-  }
-
-  onSeekBarResize = ({ width }) => {
-    const MIN_SEEKBAR_SIZE = 100;
-    if (this.state.isTopSeekbar !== (width < MIN_SEEKBAR_SIZE)) {
-      this.setState({ isTopSeekbar: width < MIN_SEEKBAR_SIZE });
-    }
-  }
-
-  setSliceMode = (isEdit, properties, cb) => this.setState({
-    mode: isEdit ? PLAYER_MODE.SLICE_EDIT : PLAYER_MODE.SLICE_VIEW,
-    ...properties
-  }, cb);
+    this.setState({
+      mode: isEdit ? PLAYER_MODE.SLICE_EDIT : PLAYER_MODE.SLICE_VIEW,
+      ...properties,
+      sliceStart,
+      sliceEnd
+    }, cb);
+  };
 
   setNormalMode = cb => this.setState({
     mode: PLAYER_MODE.NORMAL,
@@ -215,14 +145,11 @@ class AVPlayerRMP extends PureComponent {
     sliceEnd: undefined
   }, cb);
 
-  // Timeout for auto-hiding controls.
-  autohideTimeoutId = null;
-
   // Correctly fetch loaded buffers from video to show loading progress.
   // This code should be ported to react-media-player.
   buffers = () => {
     const videoElement = this.player && this.player.instance;
-    const ret              = [];
+    const ret          = [];
     if (videoElement) {
       for (let idx = 0; idx < videoElement.buffered.length; ++idx) {
         ret.push({
@@ -234,17 +161,82 @@ class AVPlayerRMP extends PureComponent {
     return ret;
   };
 
-  handleTimeUpdate = (timeData) => {
-    // This method is called all the time without stopping.
-    const { isSliceable, media } = this.props;
-    const { sliceEnd } = this.state;
+  // Remember the current time and isPlaying while switching.
+  onSwitchAV = (...params) => {
+    const { onSwitchAV, media: { currentTime, isPlaying } } = this.props;
+    this.setState({ wasCurrentTime: currentTime, wasPlaying: isPlaying }, () => {
+      onSwitchAV(...params);
+    });
+  };
 
-    // stop playing when we're at the end of the slice or beyond
-    if (isSliceable && timeData.currentTime >= sliceEnd) {
-      media.pause();
-      media.seekTo(sliceEnd);
+  // Remember the current time and isPlaying while switching.
+  onLanguageChange = (...params) => {
+    const { onLanguageChange, media: { currentTime, isPlaying } } = this.props;
+    this.setState({ wasCurrentTime: currentTime, wasPlaying: isPlaying }, () => {
+      onLanguageChange(...params);
+    });
+  };
+
+  onPlayerReady = () => {
+    const { wasCurrentTime, wasPlaying } = this.state;
+    const { media }                      = this.props;
+    if (wasCurrentTime) {
+      media.seekTo(wasCurrentTime);
     }
-  }
+    if (wasPlaying) {
+      media.play();
+    }
+
+    // restore playback from state when player instance changed (when src changes, e.g., playlist).
+    this.player.instance.playbackRate = playbackToValue(this.state.playbackRate);
+    this.setState({ wasCurrentTime: undefined, wasPlaying: undefined });
+  };
+
+  onError = (e) => {
+    const { t } = this.props;
+    // Show error only on loading of video.
+    if (!e.currentTime && !e.isPlaying) {
+      const { item }  = this.props;
+      let errorReason = '';
+      if (item.src.endsWith('wmv')) {
+        errorReason = t('messages.unsupported-wmv');
+      } else {
+        errorReason = t('messages.unknown');
+      }
+      this.setState({ error: true, errorReason });
+    }
+  };
+
+  onPlay = (e) => {
+    if (this.props.onPlay) {
+      this.props.onPlay();
+    }
+  };
+
+  onPause = (e) => {
+    // when we're close to the end regard this as finished
+    if (Math.abs(e.currentTime - e.duration) < 0.1 && this.props.onFinish) {
+      this.props.onFinish();
+    } else if (this.props.onPause) {
+      this.props.onPause();
+    }
+  };
+
+  onKeyDown = (e) => {
+    if (e.keyCode === 32) {
+      this.props.media.playPause();
+      e.preventDefault();
+    }
+  };
+
+  onSeekBarResize = ({ width }) => {
+    const MIN_SEEKBAR_SIZE = 100;
+    if (this.state.isTopSeekbar !== (width < MIN_SEEKBAR_SIZE)) {
+      this.setState({ isTopSeekbar: width < MIN_SEEKBAR_SIZE });
+    }
+  };
+
+  handleTimeUpdate = timeData => timeData;
 
   handleToggleMode = () => {
     const { mode } = this.state;
@@ -274,20 +266,20 @@ class AVPlayerRMP extends PureComponent {
 
   resetSliceQuery = () => {
     const { history } = this.props;
-    const query = parse(history.location.search.slice(1));
-    query.sstart = undefined;
-    query.send = undefined;
+    const query       = parse(history.location.search.slice(1));
+    query.sstart      = undefined;
+    query.send        = undefined;
     history.replace({ search: stringify(query) });
   };
 
   updateSliceQuery = (values) => {
-    const { history, media } = this.props;
+    const { history, media }       = this.props;
     const { sliceStart, sliceEnd } = this.state;
 
     const query = parse(history.location.search.slice(1));
     if (!values) {
       query.sstart = sliceStart || 0;
-      query.send = (!sliceEnd || sliceEnd === Infinity) ? media.duration : sliceEnd;
+      query.send   = (!sliceEnd || sliceEnd === Infinity) ? media.duration : sliceEnd;
     } else {
       if (typeof values.sliceEnd !== 'undefined') {
         query.send = +values.sliceEnd.toFixed(3);
@@ -299,7 +291,7 @@ class AVPlayerRMP extends PureComponent {
     }
 
     history.replace({ search: stringify(query) });
-  }
+  };
 
   showControls = (callback) => {
     if (this.autohideTimeoutId) {
@@ -307,7 +299,7 @@ class AVPlayerRMP extends PureComponent {
       this.autohideTimeoutId = null;
     }
     this.setState({ controlsVisible: true }, callback);
-  }
+  };
 
   hideControlsTimeout = () => {
     if (!this.autohideTimeoutId) {
@@ -315,27 +307,27 @@ class AVPlayerRMP extends PureComponent {
         this.setState({ controlsVisible: false });
       }, 2000);
     }
-  }
+  };
 
   controlsEnter = () => {
     this.showControls();
-  }
+  };
 
   centerMove = () => {
     const { isMobile } = this.props;
     if (!isMobile) {
       this.showControls(() => this.hideControlsTimeout());
     }
-  }
+  };
 
   controlsLeave = () => {
     this.hideControlsTimeout();
-  }
+  };
 
   playbackRateChange = (e, rate) => {
     this.player.instance.playbackRate = playbackToValue(rate);
     this.setState({ playbackRate: rate });
-  }
+  };
 
   playPause = () => {
     const { isMobile, media: { playPause } } = this.props;
@@ -345,18 +337,43 @@ class AVPlayerRMP extends PureComponent {
     } else {
       playPause();
     }
-  }
+  };
 
   render() {
-    const { isMobile, autoPlay, item, languages, language, t, showNextPrev, hasNext, hasPrev, onPrev, onNext, isSliceable, media } = this.props;
-    const { isTopSeekbar, controlsVisible, sliceStart, sliceEnd, mode, playbackRate } = this.state;
-    let { error, errorReason } = this.state;
+    const {
+            isMobile,
+            autoPlay,
+            item,
+            languages,
+            language,
+            t,
+            showNextPrev,
+            hasNext,
+            hasPrev,
+            onPrev,
+            onNext,
+            media,
+          } = this.props;
+    const {
+            isTopSeekbar,
+            controlsVisible,
+            sliceStart,
+            sliceEnd,
+            mode,
+            playbackRate,
+          } = this.state;
+    let   {
+            error,
+            errorReason,
+          } = this.state;
+
 
     const { isFullscreen, isPlaying } = media;
-    const forceShowControls = item.mediaType === MT_AUDIO || !isPlaying;
+    const forceShowControls           = item.mediaType === MT_AUDIO || !isPlaying;
 
-    const isVideo = item.mediaType === MT_VIDEO;
-    const isAudio = item.mediaType === MT_AUDIO;
+    const isVideo    = item.mediaType === MT_VIDEO;
+    const isAudio    = item.mediaType === MT_AUDIO;
+    const isEditMode = mode === PLAYER_MODE.SLICE_EDIT;
     const fallbackMedia = item.mediaType !== item.requestedMediaType;
 
     if (!item.src) {
@@ -364,11 +381,43 @@ class AVPlayerRMP extends PureComponent {
       errorReason = t('messages.no-playable-files');
     }
 
+    let centerMediaControl;
+    if (error) {
+      centerMediaControl = (
+        <div className="player-button">
+          Error loading file.
+          {errorReason ? ' ' + errorReason : ''}
+          &nbsp;
+          <Icon name="warning sign" size="large" />
+        </div>
+      );
+    } else if (isEditMode) {
+      centerMediaControl = (
+        <div className="center-media-controls-edit">
+          <Button
+            icon="chevron left"
+            content="Back to play"
+            size="large"
+            color="blue"
+            className="button-close-slice-edit"
+            onClick={this.handleToggleMode}
+          />
+          <div className="slice-edit-help">
+            Drag the pointers to share a part of the video
+          </div>
+        </div>
+      );
+    } else if (isVideo) {
+      centerMediaControl = <AVCenteredPlay />;
+    }
+
     return (
       <div>
         <div
-          ref={(c) => { this.mediaElement = c; }}
-          className="media"
+          ref={(c) => {
+            this.mediaElement = c;
+          }}
+          className={classNames('media', { 'media-edit-mode': isEditMode })}
           style={{
             minHeight: isAudio ? 200 : 40,
             minWidth: isVideo ? 380 : 'auto'
@@ -381,7 +430,9 @@ class AVPlayerRMP extends PureComponent {
             })}
           >
             <Player
-              ref={(c) => { this.player = c; }}
+              ref={(c) => {
+                this.player = c;
+              }}
               src={item.src}
               vendor={isVideo ? 'video' : 'audio'}
               autoPlay={autoPlay}
@@ -397,6 +448,7 @@ class AVPlayerRMP extends PureComponent {
               className={classNames('media-controls', {
                 fade: !controlsVisible && !forceShowControls,
                 'audio-is-mobile': isTopSeekbar && isAudio,
+                'video-is-mobile': isTopSeekbar && isVideo,
               })}
             >
               <div
@@ -405,13 +457,14 @@ class AVPlayerRMP extends PureComponent {
                 onMouseLeave={this.controlsLeave}
               >
                 <div className="controls-container">
-                  { !isTopSeekbar ? null : (
+                  {!isTopSeekbar ? null : (
                     <div style={{
                       position: 'absolute',
                       flex: '1 0 auto',
                       left: 0,
                       top: isMobile ? '-10px' : 0,
-                      width: '100%' }}
+                      width: '100%'
+                    }}
                     >
                       <AvSeekBar
                         buffers={this.buffers()}
@@ -432,13 +485,12 @@ class AVPlayerRMP extends PureComponent {
                     onNext={onNext}
                   />
                   <AVTimeElapsed
-                    isSlice={isSliceable && (mode === PLAYER_MODE.SLICE_VIEW || mode === PLAYER_MODE.SLICE_EDIT)}
-                    sliceStart={sliceStart}
-                    sliceEnd={sliceEnd}
+                    start={media.currentTime}
+                    end={media.duration}
                   />
                   <div className="player-seekbar-wrapper">
                     <AutoSizer onResize={this.onSeekBarResize}>{() => null}</AutoSizer>
-                    { isTopSeekbar ? null : (
+                    {isTopSeekbar ? null : (
                       <AvSeekBar
                         buffers={this.buffers()}
                         playerMode={mode}
@@ -450,52 +502,48 @@ class AVPlayerRMP extends PureComponent {
                       />
                     )}
                   </div>
-                  <AVPlaybackRate
-                    value={playbackRate}
-                    onSelect={this.playbackRateChange}
-                    upward={isVideo}
-                  />
-                  <AVMuteUnmute upward={isVideo} />
-                  <AVAudioVideo
-                    isAudio={isAudio}
-                    isVideo={isVideo}
-                    setAudio={this.onSwitchAV}
-                    setVideo={this.onSwitchAV}
-                    fallbackMedia={fallbackMedia}
-                    t={t}
-                  />
-                  <AVLanguage
-                    languages={languages}
-                    language={language}
-                    requestedLanguage={item.requestedLanguage}
-                    onSelect={this.onLanguageChange}
-                    upward={isVideo}
-                    t={t}
-                  />
                   {
-                    isSliceable && (
-                      <AVSliceToggle
-                        playerMode={mode}
-                        onToggle={this.handleToggleMode}
+                    !isEditMode && (
+                      <AVPlaybackRate
+                        value={playbackRate}
+                        onSelect={this.playbackRateChange}
+                        upward={isVideo}
+                      />
+                    )
+                  }
+                  <AVMuteUnmute upward={isVideo} />
+                  {
+                    !isEditMode && (
+                      <AVAudioVideo
+                        isAudio={isAudio}
+                        isVideo={isVideo}
+                        setAudio={this.onSwitchAV}
+                        setVideo={this.onSwitchAV}
+                        fallbackMedia={fallbackMedia}
+                        t={t}
                       />
                     )
                   }
                   {
-                    isSliceable && (mode === PLAYER_MODE.SLICE_EDIT || mode === PLAYER_MODE.SLICE_VIEW) && (
-                      <div className={classNames('player-control-slice-menu-wrapper', { downward: isAudio })}>
-                        <AVSliceMenu
-                          playerMode={mode}
-                          onEdit={() => this.setSliceMode(true)}
-                          onView={() => this.setSliceMode(false)}
-                        />
-                      </div>
+                    !isEditMode && (
+                      <AVLanguage
+                        languages={languages}
+                        language={language}
+                        requestedLanguage={item.requestedLanguage}
+                        onSelect={this.onLanguageChange}
+                        upward={isVideo}
+                        t={t}
+                      />
                     )
                   }
-                  <AVShare downward={isAudio} />
-                  <AVFullScreen container={this.mediaElement} />
+                  {
+                    isEditMode && <AVShareLink downward={isAudio} />
+                  }
+                  <AVShare onActivateSlice={() => this.setSliceMode(true)} />
+                  {!isEditMode && <AVFullScreen container={this.mediaElement} />}
                 </div>
               </div>
-              { isVideo ? (
+              {isVideo ? (
                 <div
                   className="media-center-control"
                   style={!error ? { outline: 'none' } : { backgroundColor: 'black', outline: 'none' }}
@@ -505,20 +553,9 @@ class AVPlayerRMP extends PureComponent {
                   onKeyDown={this.onKeyDown}
                   onMouseMove={this.centerMove}
                 >
-                  {
-                    error ? (
-                      <div className="player-button">
-                        <h3 style={{ display: 'inline-block' }}>
-                          {t('messages.error-loading-file')}
-                          {errorReason ? ` ${errorReason}` : ''}
-                        &nbsp;
-                        </h3>
-                        <Icon name="warning sign" size="big" />
-                      </div>
-                    ) : <AVCenteredPlay />
-                  }
+                  {centerMediaControl}
                 </div>
-              ) : null }
+              ) : null}
             </div>
           </div>
         </div>
