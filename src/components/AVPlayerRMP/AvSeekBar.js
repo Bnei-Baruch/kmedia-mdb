@@ -295,11 +295,13 @@ class AvSeekBar extends Component {
               />
             )
           }
-          <div className="bar empty" />
-          <div className="bar played" style={stylePlayed}>
+          <div className={classNames('bar', 'empty', { mobile: isMobile })} />
+          <div className={classNames('bar', 'played', { mobile: isMobile })}
+               style={stylePlayed}>
             <div className={classNames('knob', { mobile: isMobile })} />
           </div>
-          <div className="bar loaded" style={styleLoaded} />
+          <div className={classNames('bar', 'loaded', { mobile: isMobile })}
+               style={styleLoaded} />
         </div>
       </div>
     );
