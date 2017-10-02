@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-duration-format';
-import { Header, Grid, Menu } from 'semantic-ui-react';
+import { Header, Menu } from 'semantic-ui-react';
+
 import * as shapes from '../../shapes';
 
 class FullLessonPlaylist extends Component {
@@ -18,7 +19,7 @@ class FullLessonPlaylist extends Component {
     activePart: 0
   };
 
-  handleLessonPartClick = (e, data) => {
+  handleItemClick = (e, data) => {
     this.props.onItemClick(e, data);
   };
 
@@ -48,7 +49,7 @@ class FullLessonPlaylist extends Component {
                 name={`${index}`}
                 content={titles[index]}
                 active={index === activePart}
-                onClick={this.handleLessonPartClick}
+                onClick={this.handleItemClick}
               />
             ))
           }

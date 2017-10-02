@@ -35,6 +35,7 @@ function getMimeType(mediaType) {
  * Calculates available languages for content unit for specific language
  * is language is not provided calculates both video and audio available
  * languages.
+ * @param {object} contentUnit
  * @param {string|null} mediaType if null will check available languages
  *    for both audio and video.
  * @return {!Array<string>}
@@ -66,7 +67,7 @@ function playableItem(contentUnit, mediaType, language) {
   if (!allAvailableLanguages.includes(language)) {
     const fallbacks = [LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN];
     language = fallbacks.find(f => allAvailableLanguages.includes(f)) ||
-      allAvailableLanguages.length && allAvailableLanguages[0];
+      (allAvailableLanguages.length && allAvailableLanguages[0]);
   }
 
   const availableMediaTypes = calcAvailableMediaTypes(contentUnit, language);

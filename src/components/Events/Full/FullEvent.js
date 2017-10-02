@@ -12,8 +12,8 @@ import Materials from '../../shared/UnitMaterials/Materials';
 import MediaDownloads from '../../shared/MediaDownloads';
 import Link from '../../Language/MultiLanguageLink';
 import Info from '../Item/Info';
-import PageHeader from './PageHeader';
-import EventMap from './EventMap';
+// import PageHeader from './PageHeader';
+// import EventMap from './EventMap';
 import FullEventPlaylist from './FullEventPlaylist';
 
 class FullEvent extends Component {

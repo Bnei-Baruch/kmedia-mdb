@@ -74,8 +74,8 @@ class TimedPopup extends Component {
   };
 
   render() {
-    const { message, downward, trigger } = this.props;
-    const { opened }                     = this.state;
+    const { message, downward } = this.props;
+    const { opened }            = this.state;
 
     const style = {
       position: 'absolute',

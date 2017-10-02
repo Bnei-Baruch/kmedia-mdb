@@ -5,11 +5,10 @@ import 'moment-duration-format';
 import { Trans } from 'react-i18next';
 import { Container, Header, Item } from 'semantic-ui-react';
 
-import Link from '../../../Language/MultiLanguageLink';
-
 import { formatError } from '../../../../helpers/utils';
 import * as shapes from '../../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../shared/Splash';
+import Link from '../../../Language/MultiLanguageLink';
 import myimage from './image.png';
 
 const RelevantParts = (props) => {
@@ -35,7 +34,7 @@ const RelevantParts = (props) => {
               otherParts.slice(0, 3).map(part => (
                 <Item as={Link} key={part.id} to={`/programs/chapter/${part.id}`}>
                   <Item.Image src={myimage} size="tiny" />
-                  <Item.Content >
+                  <Item.Content>
                     <Header
                       as="h4"
                       content={t('programs.part.relevant-parts.item-title', { name: fullProgram.ccuNames[part.id] })}
