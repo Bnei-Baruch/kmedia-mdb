@@ -56,26 +56,26 @@ class TimedPopup extends Component {
       clearTimeout(this.confirmTimeoutHandle);
       this.confirmTimeoutHandle = null;
     }
-  }
+  };
 
   onTrigger = () => {
     if (this.props.onTrigger) {
       this.props.onTrigger();
     }
-  }
+  };
 
   open = () => {
     this.clearConfirmationTimeout();
     this.setState({ opened: true }, () => {
       this.confirmTimeoutHandle = setTimeout(
         () => this.setState({ opened: false }),
-          this.props.timeout);
+        this.props.timeout);
     });
   };
 
   render() {
     const { message, downward, trigger } = this.props;
-    const { opened } = this.state;
+    const { opened }                     = this.state;
 
     const style = {
       position: 'absolute',
@@ -89,7 +89,7 @@ class TimedPopup extends Component {
 
     return (
       opened ? (
-        <div style={{position: 'relative'}}>
+        <div style={{ position: 'relative' }}>
           <div className="popup" style={style}>
             <div className="content">{message}</div>
           </div>

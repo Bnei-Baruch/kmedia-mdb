@@ -28,6 +28,9 @@
     "programs": {
       "by": "Filter Programs by:"
     },
+    "events": {
+      "by": "Filter Events by:"
+    },
     "date-filter": {
       "label": "Date",
       "selectTitle": "Select a date range",
@@ -48,14 +51,30 @@
     },
     "topics-filter": {
       "label": "Topics"
+    },
+    "programs-filter": {
+      "label": "Genre/Program",
+      "recently-updated": "Recently Updated",
+      "last-updated": "Last updated on"
+    },
+    "event-types-filter": {
+      "label": "Types",
+      "all": "All Events",
+      "allItem": "All"
+    },
+    "years-filter": {
+      "label": "Year",
+      "placeholder": "Select a year"
     }
   },
   "buttons": {
     "apply": "Apply",
     "cancel": "Cancel",
+    "close": "Close",
     "audio": "Audio",
     "video": "Video",
-    "more": "More"
+    "more": "More",
+    "copy-link": "Copy Link"
   },
   "player": {
     "messages": {
@@ -91,9 +110,14 @@
     "fallback-to-video": "Audio was not found, using video."
   },
   "events": {
-    "ALL_EVENTS": "All Events"
+    "ALL_EVENTS": "All Events",
+    "no-matches": "No matching events found"
   },
   "lessons": {
+    "header": {
+      "text": "Daily Lessons",
+      "subtext": "The daily acceptance rate is delivered by Rabbi Dr. Michael Laitman to millions of viewers around the world, every night between 3-6 clock Israel, and describes the spiritual flow that humanity today."
+    },
     "list": {
       "related": "Related to"
     },
@@ -103,23 +127,6 @@
         "sources": "Sources",
         "related-event": "Related to Event"
       },
-      "materials": {
-        "summary": "Summary",
-        "transcription": "Transcription",
-        "sources": "Sources",
-        "sketches": "Sketches"
-      },
-      "downloads": {
-        "title": "Media Downloads",
-        "derived-title": "Derived Media",
-        "copy-link": "Copy Link",
-        "type-labels": {
-          "video": "Lesson Video",
-          "audio": "Lesson Audio",
-          "text": "Transcription Text",
-          "image": "Sketches"
-        }
-      },
       "relevant-parts": {
         "title": "Other parts from the same lesson",
         "item-title": "Part {{name}}"
@@ -127,6 +134,26 @@
     }
   },
   "programs": {
+    "genres": {
+      "all": "All Programs",
+      "documentary": "Documentary",
+      "late-night": "Late Night",
+      "news": "News",
+      "talk-show": "Talk Show",
+      "educational": "Educational",
+      "children": "Children",
+      "movies": "Movies"
+    },
+    "list": {
+      "episode_from": "Episode from:"
+    },
+    "full": {
+      "episodes": "Episode(s)",
+      "ccuName": "Content Unit Name",
+      "name": "Program Name",
+      "duration": "Duration",
+      "film_date": "Date of Shooting"
+    },
     "part": {
       "info": {
         "tags": "Tags",
@@ -137,20 +164,41 @@
         "summary": "Summary",
         "transcription": "Transcription"
       },
-      "downloads": {
-        "title": "Media Downloads",
-        "derived-title": "Derived Media",
-        "copy-link": "Copy Link",
-        "type-labels": {
-          "video": "Program Video",
-          "audio": "Program Audio",
-          "text": "Transcription Text",
-          "image": "Sketches"
-        }
-      },
       "relevant-parts": {
         "title": "Other parts from the same program",
         "item-title": "Part {{name}}"
+      }
+    }
+  },
+  "materials": {
+    "summary": "Summary",
+    "transcription": "Transcription",
+    "sources": "Sources",
+    "sketches": "Sketches"
+  },
+  "media-downloads": {
+    "title": "Media Downloads",
+    "derived-title": "Derived Media",
+    "type-labels": {
+      "video": "Main Video",
+      "audio": "Main Audio",
+      "text": "Transcription Text",
+      "image": "Images"
+    },
+    "lesson": {
+      "type-labels": {
+        "video": "Lesson Video",
+        "audio": "Lesson Audio",
+        "text": "Transcription Text",
+        "image": "Sketches"
+      }
+    },
+    "program": {
+      "type-labels": {
+        "video": "Program Video",
+        "audio": "Program Audio",
+        "text": "Transcription Text",
+        "image": "Sketches"
       }
     }
   },
@@ -192,8 +240,8 @@
       "DAILY_LESSON": "Daily Lesson",
       "SPECIAL_LESSON": "Special Lesson",
       "FRIENDS_GATHERINGS": "",
-      "CONGRESS": "Congress",
-      "VIDEO_PROGRAM": "",
+      "CONGRESS": "Convention",
+      "VIDEO_PROGRAM": "Program",
       "LECTURE_SERIES": "",
       "MEALS": "",
       "HOLIDAY": "Holiday",
