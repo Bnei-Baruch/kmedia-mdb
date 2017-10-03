@@ -10,6 +10,7 @@ import FullProgram from '../Programs/Full/FullProgramContainer';
 import Events from '../Events/List/EventsContainer';
 import EventItem from '../Events/Item/EventItemContainer';
 import FullEvent from '../Events/Full/FullEventContainer';
+import SearchResults from '../Search/SearchResultsContainer';
 import Design from '../Design/Design';
 
 const NotImplemented = () => <h1>Not Implemented Yet</h1>;
@@ -40,6 +41,7 @@ const Routes = ({ match }) => {
       <Route exact path={`${urlPrefix}/topics`} component={NotImplemented} />
       <Route exact path={`${urlPrefix}/publications`} component={NotImplemented} />
       <Route exact path={`${urlPrefix}/photos`} component={NotImplemented} />
+      <Route exact path={`${urlPrefix}/search`} component={SearchResults} />
       <Route exact path={`${urlPrefix}/design`} component={Design} />
       <Route exact path={`${urlPrefix}/design2`} component={Lessons} />
       <Route component={NotFound} />

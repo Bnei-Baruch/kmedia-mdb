@@ -6,6 +6,7 @@ import { Route } from 'react-router-dom';
 import { Flag, Header, Icon, Menu } from 'semantic-ui-react';
 
 import { FLAG_TO_LANGUAGE } from '../../helpers/consts';
+import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import OmniBox from '../Search/OmniBox';
 import Routes from './Routes';
@@ -19,6 +20,7 @@ class Layout extends Component {
 
   static propTypes = {
     t: PropTypes.func.isRequired,
+    location: shapes.HistoryLocation.isRequired,
   };
 
   state = {
@@ -29,15 +31,15 @@ class Layout extends Component {
     this.setState({ sidebarActive: !this.state.sidebarActive });
 
   render() {
-    const { t }             = this.props;
+    const { t, location }   = this.props;
     const { sidebarActive } = this.state;
 
     return (
       <div className="layout">
         {/*Added the width 100vw to better support mobile, please fix as needed*/}
-        <div className="layout__header" style={{width: '100vw'}}>
+        <div className="layout__header" style={{ width: '100vw' }}>
           {/*Added the width 100vw to better support mobile, please fix as needed*/}
-          <Menu inverted borderless size="huge" color="blue" style={{width: '100vw'}}>
+          <Menu inverted borderless size="huge" color="blue" style={{ width: '100vw' }}>
             <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.toggleSidebar}>
               <Icon name="sidebar" />
             </Menu.Item>
@@ -45,12 +47,12 @@ class Layout extends Component {
               <img src={logo} alt="logo" />
               <Header inverted as="h2">
                 {t('nav.top.header')}
-                    <span className='widescreen-only'> - widescreen</span>
-                    <span className='large-screen-only'> - large screen</span>
-                    <span className='computer-only'> - computer</span>
-                    <span className='tablet-only'> - tablet</span>
-                    <span className='mobile-only'> - mobile</span>
-                    {/*<span> /// </span>
+                <span className='widescreen-only'> - widescreen</span>
+                <span className='large-screen-only'> - large screen</span>
+                <span className='computer-only'> - computer</span>
+                <span className='tablet-only'> - tablet</span>
+                <span className='mobile-only'> - mobile</span>
+                {/*<span> /// </span>
                     <span className='widescreen-hidden'> - widescreen hidden</span>
                     <span className='large-screen-hidden'> - large screen hidden</span>
                     <span className='computer-hidden'> - computer hidden</span>
@@ -60,7 +62,7 @@ class Layout extends Component {
               </Header>
             </Menu.Item>
             <Menu.Item>
-              <OmniBox t={t}/>
+              <OmniBox t={t} location={location} />
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
