@@ -27,8 +27,26 @@ class Layout extends Component {
     sidebarActive: false
   };
 
-  toggleSidebar = () =>
+  // Required for handling outhide sidebar on click outside sidebar,
+  // i.e, main, header of footer.
+  componentDidMount() {
+    window.addEventListener('mousedown', this.clickOutside);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('mousedown', this.clickOutside);
+  }
+
+  clickOutside = (e) => {
+    if (!e.path.find(e => e.classList && e.classList.contains('layout__sidebar'))) {
+      this.toggleSidebar();
+    }
+  }
+
+  toggleSidebar = () => {
+    this.clickedInside = false;
     this.setState({ sidebarActive: !this.state.sidebarActive });
+  }
 
   render() {
     const { t, location }   = this.props;
