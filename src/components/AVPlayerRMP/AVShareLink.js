@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { Icon, Popup } from 'semantic-ui-react';
+import { Button, Popup } from 'semantic-ui-react';
 import { translate } from 'react-i18next';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
@@ -11,7 +11,6 @@ class AVShareLink extends Component {
 
   static propTypes = {
     t: PropTypes.func.isRequired,
-    downward: PropTypes.bool
   };
 
   static defaultProps = {
@@ -60,21 +59,25 @@ class AVShareLink extends Component {
   };
 
   render() {
-    const { t, downward } = this.props;
+    const { t } = this.props;
     return (
-      <div className="player-button player-control-share-link">
-        <Popup
-          open={this.state.recentlyCopied}
-          content={t('messages.link-copied-to-clipboard')}
-          position={`${downward ? 'bottom' : 'top'} right`}
-          offset={10}
-          trigger={
-            <CopyToClipboard text={this.state.url} onCopy={this.handleCopied}>
-              <Icon name="chain" />
-            </CopyToClipboard>
-          }
-        />
-      </div>
+      <Popup
+        open={this.state.recentlyCopied}
+        content={t('messages.link-copied-to-clipboard')}
+        position="left center"
+        offset={10}
+        trigger={
+          <CopyToClipboard text={this.state.url} onCopy={this.handleCopied}>
+            <Button
+              type="button"
+              primary
+              size="big"
+              circular
+              icon="chain"
+            />
+          </CopyToClipboard>
+        }
+      />
     );
   }
 }

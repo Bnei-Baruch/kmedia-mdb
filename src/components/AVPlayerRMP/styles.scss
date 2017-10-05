@@ -55,8 +55,27 @@
   }
 }
 
+.player-share-bar {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(-50%);
+
+  &__action {
+    &:not(:first-child) {
+      margin-top: 10px;
+    }
+
+    .ui.button {
+      border: 2px solid #ffffff;
+    }
+  }
+}
+
 .player-control-link-share,
-.player-control-slice-share,
+.player-control-edit-slice,
 .player-control-fullscreen {
   cursor: pointer;
   margin-right: 5px;
@@ -83,7 +102,7 @@
     bottom: 0;
     z-index: 10;
 
-    &--time {
+    &__time {
       display: flex;
       flex-direction: row;
       position: relative;
@@ -97,7 +116,7 @@
       border-radius: 20%;
     }
 
-    &--knob {
+    &__knob {
       position: relative;
       background: #0066ff;
       width: 26px;
@@ -135,7 +154,7 @@
       }
     }
 
-    &--line {
+    &__line {
       background: #ffffff;
       height: 40px;
       width: 2px;

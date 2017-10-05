@@ -34,15 +34,15 @@ export default class SliceHandle extends Component {
       >
         {
           isEditMode && (
-            <div className="player-slice-handle--time">
-              <span className="player-slice-handle--time--seconds">
+            <div className="player-slice-handle__time">
+              <span className="player-slice-handle__time__seconds">
                 { seconds }
               </span>
             </div>
           )
         }
-        { isEditMode && <div ref={el => this.knobElement = el} className="player-slice-handle--knob" /> }
-        <div className="player-slice-handle--line" />
+        { isEditMode && <div ref={el => this.knobElement = el} className="player-slice-handle__knob" /> }
+        <div className="player-slice-handle__line" />
       </div>
     );
   }
