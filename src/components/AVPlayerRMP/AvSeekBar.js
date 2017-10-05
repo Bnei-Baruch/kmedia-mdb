@@ -232,7 +232,7 @@ class AvSeekBar extends Component {
 
     const isSliceEdit = playerMode === PLAYER_MODE.SLICE_EDIT;
     const isSliceView = playerMode === PLAYER_MODE.SLICE_VIEW;
-    const isSlice = playerMode === isSliceEdit || isSliceView;
+    const isSlice = isSliceEdit || isSliceView;
     const normalizedSliceStart = this.getNormalizedSliceStart(duration);
     const normalizedSliceEnd = this.getNormalizedSliceEnd(duration);
 
