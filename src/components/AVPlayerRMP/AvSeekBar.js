@@ -248,6 +248,10 @@ class AvSeekBar extends Component {
       width: this.toPercentage(playedWidth),
     };
 
+    const stylePlayedKnob = {
+      left: this.toPercentage(playedLeft + playedWidth)
+    };
+
     const styleLoaded = {
       width: this.toPercentage(progress),
       left: 0
@@ -296,12 +300,9 @@ class AvSeekBar extends Component {
             )
           }
           <div className={classNames('bar', 'empty', { mobile: isMobile })} />
-          <div className={classNames('bar', 'played', { mobile: isMobile })}
-               style={stylePlayed}>
-            <div className={classNames('knob', { mobile: isMobile })} />
-          </div>
-          <div className={classNames('bar', 'loaded', { mobile: isMobile })}
-               style={styleLoaded} />
+          <div className={classNames('bar', 'played', { mobile: isMobile })} style={stylePlayed} />
+          <div className={classNames('played-knob', { mobile: isMobile })} style={stylePlayedKnob} />
+          <div className={classNames('bar', 'loaded', { mobile: isMobile })} style={styleLoaded} />
         </div>
       </div>
     );
