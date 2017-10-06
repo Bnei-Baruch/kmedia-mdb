@@ -30,14 +30,24 @@ class DeepListFilter extends React.Component {
     selection: this.props.value
   };
 
+  menus = {};
+  items = {};
+
+  componentDidMount() {
+    this.scrollToSelections(this.state.selection);
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       selection: nextProps.value
+    }, () => {
+      this.scrollToSelections(this.state.selection);
     });
   }
 
   componentDidUpdate() {
     this.listContainer.scrollLeft = this.listContainer.scrollWidth;
+    this.scrollToSelections(this.state.selection);
   }
 
   onSelectionChange = (event, data) => {
@@ -48,7 +58,12 @@ class DeepListFilter extends React.Component {
     const newSelection                = [...oldSelection];
     newSelection.splice(depth, oldSelection.length - depth);
     newSelection.push(value);
-    this.setState({ selection: newSelection });
+
+    const menu = this.menus[depth];
+    const prevScrollTop = menu.scrollTop;
+    this.setState({ selection: newSelection }, () => {
+      this.menus[depth].scrollTop = prevScrollTop;
+    });
   };
 
   onCancel = () => {
@@ -62,6 +77,19 @@ class DeepListFilter extends React.Component {
     }
     this.props.updateValue(selection);
     this.props.onApply();
+  };
+
+  scrollToSelections = (selections) => {
+    selections.forEach((selection, depth) => {
+      const selectedItems = this.items[depth].filter(item => !!item.dataset.active);
+
+      const firstItem = selectedItems[0];
+      if (firstItem) {
+        console.log(firstItem);
+        console.log(firstItem.offsetTop);
+        this.menus[depth].scrollTop = firstItem.offsetTop;
+      }
+    });
   };
 
   // Return all lists of selected sources.
@@ -88,7 +116,7 @@ class DeepListFilter extends React.Component {
     const { getSubItemById } = this.props;
 
     return (
-      <div key={selectedId} className="filter-steps__column-wrapper">
+      <div key={selectedId} className="filter-steps__column-wrapper" ref={el => this.menus[depth] = el}>
         <div className="filter-steps__column">
           <Menu fluid vertical color="blue" size="tiny">
             {
@@ -107,7 +135,12 @@ class DeepListFilter extends React.Component {
                     onClick={this.onSelectionChange}
                     style={style}
                   >
-                    {node.name}
+                    <div
+                      data-active={selectedId === x ? 'true' : ''}
+                      ref={el => this.items[depth] = Array.isArray(this.items[depth]) ? this.items[depth].concat(el) : [el]}
+                    >
+                      {node.name}
+                    </div>
                   </Menu.Item>
                 );
               })
@@ -135,7 +168,7 @@ class DeepListFilter extends React.Component {
           >
             {
               roots.length > 0 ?
-                this.createLists(0, roots, this.state.selection, this.props.allValues).map(l => l) :
+                this.createLists(0, roots, this.state.selection, this.props.allValues) :
                 { emptyLabel }
             }
           </div>
