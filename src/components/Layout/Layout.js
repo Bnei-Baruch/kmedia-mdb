@@ -27,8 +27,26 @@ class Layout extends Component {
     sidebarActive: false
   };
 
-  toggleSidebar = () =>
+  // Required for handling outhide sidebar on click outside sidebar,
+  // i.e, main, header of footer.
+  componentDidMount() {
+    window.addEventListener('mousedown', this.clickOutside);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('mousedown', this.clickOutside);
+  }
+
+  clickOutside = (e) => {
+    if (this.state.sidebarActive &&
+        !e.path.find(elem => elem.classList && elem.classList.contains('layout__sidebar'))) {
+      this.toggleSidebar();
+    }
+  }
+
+  toggleSidebar = () => {
     this.setState({ sidebarActive: !this.state.sidebarActive });
+  }
 
   render() {
     const { t, location }   = this.props;
@@ -36,9 +54,9 @@ class Layout extends Component {
 
     return (
       <div className="layout">
-        {/*Added the width 100vw to better support mobile, please fix as needed*/}
+        {/* Added the width 100vw to better support mobile, please fix as needed */}
         <div className="layout__header" style={{ width: '100vw' }}>
-          {/*Added the width 100vw to better support mobile, please fix as needed*/}
+          {/* Added the width 100vw to better support mobile, please fix as needed */}
           <Menu inverted borderless size="huge" color="blue" style={{ width: '100vw' }}>
             <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.toggleSidebar}>
               <Icon name="sidebar" />
@@ -47,18 +65,18 @@ class Layout extends Component {
               <img src={logo} alt="logo" />
               <Header inverted as="h2">
                 {t('nav.top.header')}
-                <span className='widescreen-only'> - widescreen</span>
-                <span className='large-screen-only'> - large screen</span>
-                <span className='computer-only'> - computer</span>
-                <span className='tablet-only'> - tablet</span>
-                <span className='mobile-only'> - mobile</span>
-                {/*<span> /// </span>
-                    <span className='widescreen-hidden'> - widescreen hidden</span>
-                    <span className='large-screen-hidden'> - large screen hidden</span>
-                    <span className='computer-hidden'> - computer hidden</span>
-                    <span className='tablet-hidden'> - tablet hidden</span>
-                    <span className='mobile-hidden'> - mobile hidden</span>
-                    */}
+                <span className="widescreen-only"> - widescreen</span>
+                <span className="large-screen-only"> - large screen</span>
+                <span className="computer-only"> - computer</span>
+                <span className="tablet-only"> - tablet</span>
+                <span className="mobile-only"> - mobile</span>
+                {/* <span> /// </span>
+                    <span className="widescreen-hidden"> - widescreen hidden</span>
+                    <span className="large-screen-hidden"> - large screen hidden</span>
+                    <span className="computer-hidden"> - computer hidden</span>
+                    <span className="tablet-hidden"> - tablet hidden</span>
+                    <span className="mobile-hidden"> - mobile hidden</span>
+                */}
               </Header>
             </Menu.Item>
             <Menu.Item>
