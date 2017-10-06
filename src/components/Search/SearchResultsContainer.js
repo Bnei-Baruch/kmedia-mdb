@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Container } from 'semantic-ui-react';
 
-import { selectors } from '../../redux/modules/search';
+import { actions, selectors } from '../../redux/modules/search';
+import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
 import * as shapes from '../shapes';
 import SearchResults from './SearchResults';
@@ -15,6 +17,12 @@ class SearchResultsContainer extends Component {
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
     wip: shapes.WIP,
     err: shapes.Error,
+    search: PropTypes.func.isRequired,
+    setPage: PropTypes.func.isRequired,
+    pageNo: PropTypes.number.isRequired,
+    pageSize: PropTypes.number.isRequired,
+    hydrateUrl: PropTypes.func.isRequired,
+    language: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -24,12 +32,32 @@ class SearchResultsContainer extends Component {
     err: null,
   };
 
+  componentDidMount() {
+    this.props.hydrateUrl();
+  }
+
+  handlePageChange = (pageNo) => {
+    const { setPage, search, query, pageSize } = this.props;
+    setPage(pageNo);
+    search(query, pageNo, pageSize);
+  };
+
   render() {
-    const { wip, err, query, results, cuMap } = this.props;
+    const { wip, err, query, results, cuMap, pageNo, pageSize, language } = this.props;
 
     return (
       <Container className="padded">
-        <SearchResults results={results} cuMap={cuMap} query={query} wip={wip} err={err} />
+        <SearchResults
+          results={results}
+          cuMap={cuMap}
+          query={query}
+          wip={wip}
+          err={err}
+          pageNo={pageNo}
+          pageSize={pageSize}
+          language={language}
+          handlePageChange={this.handlePageChange}
+        />
       </Container>
     );
   }
@@ -49,9 +77,18 @@ const mapState = state => {
     results,
     cuMap,
     query: selectors.getQuery(state.search),
+    pageNo: selectors.getPageNo(state.search),
+    pageSize: settingsSelectors.getPageSize(state.settings),
+    language: settingsSelectors.getLanguage(state.settings),
     wip: selectors.getWip(state.search),
     err: selectors.getError(state.search),
   };
 };
 
-export default connect(mapState)(SearchResultsContainer);
+const mapDispatch = dispatch => bindActionCreators({
+  search: actions.search,
+  setPage: actions.setPage,
+  hydrateUrl: actions.hydrateUrl,
+}, dispatch);
+
+export default connect(mapState, mapDispatch)(SearchResultsContainer);

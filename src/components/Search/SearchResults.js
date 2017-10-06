@@ -3,21 +3,26 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
-import { Header, Table } from 'semantic-ui-react';
+import { Header, Table, Container, Divider } from 'semantic-ui-react';
 
 import { canonicalLink, formatError, isEmpty } from '../../helpers/utils';
 import { ErrorSplash, LoadingSplash } from '../shared/Splash';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
+import Pagination from '../pagination/Pagination';
 
 class SearchResults extends Component {
   static propTypes = {
     query: PropTypes.string,
     results: PropTypes.object,
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
+    pageNo: PropTypes.number.isRequired,
+    pageSize: PropTypes.number.isRequired,
+    language: PropTypes.string.isRequired,
     wip: shapes.WIP,
     err: shapes.Error,
     t: PropTypes.func.isRequired,
+    handlePageChange: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -74,7 +79,7 @@ class SearchResults extends Component {
   };
 
   render() {
-    const { wip, err, query, results, t } = this.props;
+    const { wip, err, query, results, pageNo, pageSize, language, t, handlePageChange } = this.props;
 
     if (err) {
       return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
@@ -115,14 +120,24 @@ class SearchResults extends Component {
         <Header as="h1">
           {t('search.results.title')}
           <Header.Subheader>
-            {t('search.results.search-summary', { total, took: took / 1000 })}
+            {t('search.results.search-summary', { total, pageNo, took: took / 1000 })}
           </Header.Subheader>
         </Header>
         <Table sortable basic="very" className="index-list">
           <Table.Body>
-            {hits.map(x => this.renderHit(x))}
+            {hits.map(this.renderHit)}
           </Table.Body>
         </Table>
+        <Divider fitted />
+        <Container className="padded" textAlign="center">
+          <Pagination
+            pageNo={pageNo}
+            pageSize={pageSize}
+            total={total}
+            language={language}
+            onChange={handlePageChange}
+          />
+        </Container>
       </div>
     );
   }

@@ -9,6 +9,9 @@ const SEARCH               = 'Search/SEARCH';
 const SEARCH_SUCCESS       = 'Search/SEARCH_SUCCESS';
 const SEARCH_FAILURE       = 'Search/SEARCH_FAILURE';
 
+const SET_PAGE = 'Search/SET_PAGE';
+const HYDRATE_URL = 'Search/HYDRATE_URL';
+
 export const types = {
   AUTOCOMPLETE,
   AUTOCOMPLETE_SUCCESS,
@@ -16,6 +19,9 @@ export const types = {
   SEARCH,
   SEARCH_SUCCESS,
   SEARCH_FAILURE,
+
+  SET_PAGE,
+  HYDRATE_URL,
 };
 
 /* Actions */
@@ -26,6 +32,8 @@ const autocompleteFailure = createAction(AUTOCOMPLETE_FAILURE);
 const search              = createAction(SEARCH, (q, pageNo, pageSize) => ({ q, pageNo, pageSize }));
 const searchSuccess       = createAction(SEARCH_SUCCESS);
 const searchFailure       = createAction(SEARCH_FAILURE);
+const setPage             = createAction(SET_PAGE);
+const hydrateUrl             = createAction(HYDRATE_URL);
 
 export const actions = {
   autocomplete,
@@ -34,16 +42,27 @@ export const actions = {
   search,
   searchSuccess,
   searchFailure,
+
+  setPage,
+  hydrateUrl,
 };
 
 /* Reducer */
 
-const initialState = {};
+const initialState = {
+  acQ: '',
+  suggestions: [],
+  q: '',
+  results: {},
+  pageNo: 1,
+  wip: false,
+  err: null,
+};
 
 export const reducer = handleActions({
   [AUTOCOMPLETE]: (state, action) => ({
     ...state,
-    q: action.payload,
+    acQ: action.payload,
   }),
   [AUTOCOMPLETE_SUCCESS]: (state, action) => ({
     ...state,
@@ -69,6 +88,10 @@ export const reducer = handleActions({
     wip: false,
     error: action.payload,
   }),
+  [SET_PAGE]: (state, action) => ({
+    ...state,
+    pageNo: action.payload
+  }),
 }, initialState);
 
 /* Selectors */
@@ -76,13 +99,15 @@ export const reducer = handleActions({
 const getQuery       = state => state.q;
 const getSuggestions = state => state.suggestions;
 const getResults     = state => state.results;
-const getWip     = state => state.wip;
-const getError     = state => state.error;
+const getPageNo      = state => state.pageNo;
+const getWip         = state => state.wip;
+const getError       = state => state.error;
 
 export const selectors = {
   getQuery,
   getSuggestions,
   getResults,
+  getPageNo,
   getWip,
   getError,
 };

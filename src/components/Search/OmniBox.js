@@ -64,12 +64,14 @@ class OmniBox extends Component {
     }
 
     const { search, location, push } = this.props;
-    search(q, 1, 10);
 
-    // redirect to search results page if we're there already
-    if (!location.pathname.startsWith('/search')) {
+    // redirect to search results page if we're not there
+    if (!location.pathname.endsWith('search')) {
+      console.log('pushing:', location.pathname);
       push('search');
     }
+
+    search(q, 1, 10);
 
     if (this.state.isOpen) {
       this.setState({ isOpen: false });
@@ -103,16 +105,23 @@ class OmniBox extends Component {
   suggestionToResult = (type, item) => {
     switch (type) {
     case 'tags': {
-      const path    = this.props.getTagPath(item.id);
-      const display = path.map(y => y.label).join(' - ');
-      return { key: item.id, title: display };
+      if (this.props.getTagPath) {
+        const path    = this.props.getTagPath(item.id);
+        const display = path.map(y => y.label).join(' - ');
+        return { key: item.id, title: display };
+      } else {
+        return { key: item.id, title: item.text };
+      }
     }
     case 'sources': {
-      const path    = this.props.getSourcePath(item.id);
-      const display = path.map(y => y.name).join(' > ');
-      return { key: item.id, title: display };
+      if (this.props.getSourcePath) {
+        const path    = this.props.getSourcePath(item.id);
+        const display = path.map(y => y.name).join(' > ');
+        return { key: item.id, title: display };
+      } else {
+        return { key: item.id, title: item.text };
+      }
     }
-
     default:
       return { key: item.id, title: item.text };
     }

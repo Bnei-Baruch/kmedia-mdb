@@ -120,7 +120,7 @@
     },
     "results": {
       "title": "Search Results",
-      "search-summary": "Found {{total}} results ({{took}} seconds)",
+      "search-summary": "Page {{pageNo}} of {{total}} results ({{took}} seconds)",
       "empty-query": "No search term given. Please use the box above to search.",
       "no-results": "Your search for <1><0>{{query}}</0></1> found no results."
     }
