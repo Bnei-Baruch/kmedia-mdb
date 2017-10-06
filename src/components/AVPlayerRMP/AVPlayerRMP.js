@@ -435,7 +435,9 @@ class AVPlayerRMP extends PureComponent {
           <div
             className={classNames('media-player', {
               'media-player-fullscreen': isFullscreen,
-              fade: !controlsVisible && !forceShowControls
+              fade: !controlsVisible && !forceShowControls,
+              'audio-is-mobile': isTopSeekbar && isAudio,
+              'video-is-mobile': isTopSeekbar && isVideo,
             })}
           >
             <Player
@@ -465,14 +467,14 @@ class AVPlayerRMP extends PureComponent {
                 onMouseEnter={this.controlsEnter}
                 onMouseLeave={this.controlsLeave}
               >
-                <div className="controls-container">
+                <div className='controls-container'>
                   {!isTopSeekbar ? null : (
                     <div style={{
                       position: 'absolute',
                       flex: '1 0 auto',
                       left: 0,
                       top: isMobile ? '-10px' : 0,
-                      width: '100%'
+                      width: '100%',
                     }}
                     >
                       <AvSeekBar
@@ -549,7 +551,7 @@ class AVPlayerRMP extends PureComponent {
                     isEditMode && <AVShareLink downward={isAudio} />
                   }
                   <AVShare onActivateSlice={() => this.setSliceMode(true)} />
-                  {!isEditMode && <AVFullScreen container={this.mediaElement} />}
+                  {!isEditMode && !isAudio && <AVFullScreen container={this.mediaElement} />}
                 </div>
               </div>
               {isVideo ? (

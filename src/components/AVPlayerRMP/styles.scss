@@ -30,6 +30,10 @@
     width: 100%;
   }
 
+  &.audio-is-mobile {
+    height: 70px;
+  }
+
   .center-media-controls-edit {
     position: absolute;
     top: 0;
@@ -317,10 +321,6 @@
   opacity: 1;
   transition: 0.25s linear;
 
-  &.audio-is-mobile {
-    height: 70px;
-  }
-
   &.fade {
     opacity: 0;
   }
@@ -338,6 +338,10 @@
       width: 100%;
       height: 100%;
       z-index: 1;
+
+      &.audio-top-seekbar {
+        margin-top: 2em;
+      }
     }
 
     &:before {
