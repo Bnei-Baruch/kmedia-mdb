@@ -55,6 +55,12 @@
   }
 }
 
+.media-edit-mode {
+  .media-player {
+    min-height: 200px;
+  }
+}
+
 .player-share-bar {
   position: absolute;
   top: 50%;

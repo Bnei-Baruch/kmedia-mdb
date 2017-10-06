@@ -550,19 +550,17 @@ class AVPlayerRMP extends PureComponent {
                   { !isEditMode && <AVFullScreen container={this.mediaElement} /> }
                 </div>
               </div>
-              {isVideo ? (
-                <div
-                  className="media-center-control"
-                  style={!error ? { outline: 'none' } : { backgroundColor: 'black', outline: 'none' }}
-                  role="button"
-                  tabIndex="0"
-                  onClick={this.playPause}
-                  onKeyDown={this.onKeyDown}
-                  onMouseMove={this.centerMove}
-                >
-                  {centerMediaControl}
-                </div>
-              ) : null}
+              <div
+                className="media-center-control"
+                style={!error ? { outline: 'none' } : { backgroundColor: 'black', outline: 'none' }}
+                role="button"
+                tabIndex="0"
+                onClick={this.playPause}
+                onKeyDown={this.onKeyDown}
+                onMouseMove={this.centerMove}
+              >
+                {centerMediaControl}
+              </div>
             </div>
           </div>
         </div>
