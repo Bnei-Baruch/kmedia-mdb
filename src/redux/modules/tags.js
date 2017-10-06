@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-
+import identity from 'lodash/identity';
 import { tracePath } from '../../helpers/utils';
 import { types as settings } from './settings';
 
@@ -35,6 +35,7 @@ const initialState = {
   tags: {},
   tagIdsByPattern: {},
   error: null,
+  getByID: identity
 };
 
 const buildById = (items) => {
