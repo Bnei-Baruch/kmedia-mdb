@@ -27,7 +27,7 @@ class AVFullscreen extends Component {
     document.removeEventListener('fullscreenchange', this.fullScreenChange);
   }
 
-  fullScreenChange() {
+  fullScreenChange = () => {
     this.setState({ fullScreen: this.isFullScreenElement() });
   }
 
