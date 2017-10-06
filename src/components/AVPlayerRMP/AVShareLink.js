@@ -22,13 +22,11 @@ class AVShareLink extends Component {
     recentlyCopied: false
   };
 
-  confirmTimeoutHandle = null;
-
   componentDidMount() {
     this.loadUrl();
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps() {
     if (window.location.href !== this.state.url) {
       this.loadUrl();
     }
@@ -37,6 +35,8 @@ class AVShareLink extends Component {
   componentWillUnmount() {
     this.clearConfirmationTimeout();
   }
+
+  confirmTimeoutHandle = null;
 
   loadUrl = () => {
     this.setState({

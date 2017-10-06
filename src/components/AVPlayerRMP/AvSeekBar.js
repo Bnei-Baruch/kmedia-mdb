@@ -32,10 +32,6 @@ class AvSeekBar extends Component {
     onSliceEndChange: noop
   };
 
-  element              = null;
-  wasMouseDown         = false;
-  isPlayingOnMouseDown = false;
-
   state = {
     seekbarHadInteraction: false,
     playPoint: this.props.media.currentTime
@@ -48,6 +44,12 @@ class AvSeekBar extends Component {
     document.addEventListener('touchend', this.handleEnd, { passive: false });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!this.sliceStartActive && !this.sliceEndActive && this.props.media.currentTime !== nextProps.media.currentTime) {
+      this.setState({ playPoint: nextProps.media.currentTime });
+    }
+  }
+
   componentWillUnmount() {
     document.removeEventListener('mousemove', this.handleMove);
     document.removeEventListener('touchmove', this.handleMove);
@@ -55,11 +57,90 @@ class AvSeekBar extends Component {
     document.removeEventListener('touchend', this.handleEnd);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.sliceStartActive && !this.sliceEndActive && this.props.media.currentTime !== nextProps.media.currentTime) {
-      this.setState({ playPoint: nextProps.media.currentTime });
+  getSeekPositionFromClientX = (clientX) => {
+    const { media, playerMode, sliceStart, sliceEnd } = this.props;
+    const { left, right } = this.element.getBoundingClientRect();
+    const { duration }    = media;
+    const offset          = Math.min(Math.max(0, clientX - left), right - left);
+
+    if (playerMode === PLAYER_MODE.SLICE_EDIT) {
+      // try stick to handle
+      if (this.sliceStartHandle && this.sliceEndHandle) {
+        const { left: startLeft } = this.sliceStartHandle.getHandleElement().getBoundingClientRect();
+        const { left: endLeft } = this.sliceEndHandle.getHandleElement().getBoundingClientRect();
+        const sliceWidth = endLeft - startLeft;
+        // reduce delta if slice is small
+        const fittedStickyDelta = stickyHandleDelta * 2.5 > sliceWidth ? sliceWidth / 4 : stickyHandleDelta;
+        if (Math.abs(clientX - startLeft) < fittedStickyDelta) {
+          return sliceStart;
+        }
+
+        if (Math.abs(clientX - endLeft) < fittedStickyDelta) {
+          return sliceEnd > duration ? duration : sliceEnd;
+        }
+      }
     }
+
+    return (duration * offset) / (right - left);
   }
+
+  getNormalizedSliceStart = (duration) => {
+    const { sliceEnd } = this.props;
+    let { sliceStart } = this.props;
+    if (!isNumber(sliceStart)) {
+      return 0;
+    }
+
+    if (sliceStart > sliceEnd) {
+      sliceStart = sliceEnd;
+    }
+
+    if (duration < sliceStart) {
+      sliceStart = duration;
+    }
+
+    if (sliceStart < 0) {
+      sliceStart = 0;
+    }
+
+    return sliceStart / duration;
+  }
+
+  getNormalizedSliceEnd = (duration) => {
+    const { sliceStart } = this.props;
+    let { sliceEnd } = this.props;
+
+    if (!isNumber(sliceEnd)) {
+      return 1;
+    }
+
+    if (sliceEnd < sliceStart) {
+      sliceEnd = sliceStart;
+    }
+
+    if (sliceEnd > duration) {
+      sliceEnd = duration;
+    }
+
+    if (sliceEnd < 0) {
+      sliceEnd = 0;
+    }
+
+    return sliceEnd / duration;
+  }
+
+  element              = null;
+  wasMouseDown         = false;
+  isPlayingOnMouseDown = false;
+
+  toPercentage = (l) => {
+    const ret = 100 * l;
+    if (ret > 100) {
+      return '100%';
+    }
+    return (ret < 1) ? 0 : `${ret}%`;
+  };
+
 
   handleStart = (e) => {
     // regard only left mouse button click (0). touch is undefined
@@ -140,85 +221,6 @@ class AvSeekBar extends Component {
     }
   };
 
-  getSeekPositionFromClientX = (clientX) => {
-    const { media, playerMode, sliceStart, sliceEnd } = this.props;
-    const { left, right } = this.element.getBoundingClientRect();
-    const { duration }    = media;
-    const offset          = Math.min(Math.max(0, clientX - left), right - left);
-
-    if (playerMode === PLAYER_MODE.SLICE_EDIT) {
-      // try stick to handle
-      if (this.sliceStartHandle && this.sliceEndHandle) {
-        const { left: startLeft } = this.sliceStartHandle.getHandleElement().getBoundingClientRect();
-        const { left: endLeft } = this.sliceEndHandle.getHandleElement().getBoundingClientRect();
-        const sliceWidth = endLeft - startLeft;
-        // reduce delta if slice is small
-        const fittedStickyDelta = stickyHandleDelta * 2.5 > sliceWidth ? sliceWidth / 4 : stickyHandleDelta;
-        if (Math.abs(clientX - startLeft) < fittedStickyDelta) {
-          return sliceStart;
-        }
-
-        if (Math.abs(clientX - endLeft) < fittedStickyDelta) {
-          return sliceEnd > duration ? duration : sliceEnd;
-        }
-      }
-    }
-
-    return (duration * offset) / (right - left);
-  }
-
-  toPercentage = (l) => {
-    const ret = 100 * l;
-    if (ret > 100) {
-      return '100%';
-    }
-    return (ret < 1) ? 0 : `${ret}%`;
-  };
-
-  getNormalizedSliceStart = (duration) => {
-    const { sliceEnd } = this.props;
-    let { sliceStart } = this.props;
-    if (!isNumber(sliceStart)) {
-      return 0;
-    }
-
-    if (sliceStart > sliceEnd) {
-      sliceStart = sliceEnd;
-    }
-
-    if (duration < sliceStart) {
-      sliceStart = duration;
-    }
-
-    if (sliceStart < 0) {
-      sliceStart = 0;
-    }
-
-    return sliceStart / duration;
-  }
-
-  getNormalizedSliceEnd = (duration) => {
-    const { sliceStart } = this.props;
-    let { sliceEnd } = this.props;
-
-    if (!isNumber(sliceEnd)) {
-      return 1;
-    }
-
-    if (sliceEnd < sliceStart) {
-      sliceEnd = sliceStart;
-    }
-
-    if (sliceEnd > duration) {
-      sliceEnd = duration;
-    }
-
-    if (sliceEnd < 0) {
-      sliceEnd = 0;
-    }
-
-    return sliceEnd / duration;
-  }
 
   render() {
     const { isMobile, sliceStart, sliceEnd } = this.props;
@@ -262,15 +264,17 @@ class AvSeekBar extends Component {
 
     return (
       <div
-        ref={el => this.element = el}
+        ref={(el) => { this.element = el; }}
         className="player-control-seekbar-container"
         onMouseDown={this.handleStart}
         onTouchStart={this.handleStart}
+        role="button"
+        tabIndex="0"
       >
         {
           isSliceEdit && (
             <SliceHandle
-              ref={el => this.sliceStartHandle = el}
+              ref={(el) => { this.sliceStartHandle = el; }}
               seconds={formatTime(sliceStart)}
               position={sliceStartLeft}
               isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
@@ -280,7 +284,7 @@ class AvSeekBar extends Component {
         {
           isSliceEdit && (
             <SliceHandle
-              ref={el => this.sliceEndHandle = el}
+              ref={(el) => { this.sliceEndHandle = el; }}
               seconds={formatTime(sliceEnd === Infinity ? duration : sliceEnd)}
               position={sliceEndLeft}
               isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}

@@ -57,7 +57,7 @@ const mapState = (state) => {
 
   return {
     filteredItems,
-    hasItems: eventSelectors.getItems(state.events).length > 0,
+    hasItems: filteredItems.length > 0,
     language: settings.getLanguage(state.settings),
     wip: eventSelectors.getWip(state.events).list,
     err: eventSelectors.getErrors(state.events).list,

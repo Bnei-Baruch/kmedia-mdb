@@ -51,11 +51,25 @@
     },
     "topics-filter": {
       "label": "Темы"
+    },
+    "programs-filter": {
+      "label": "Жанр/Программа",
+      "recently-updated": "Недавно обновленные",
+      "last-updated": "Последний раз обновлен в"
+    },
+    "event-types-filter": {
+      "label": "Types",
+      "all": "All Events",
+      "allItem": "All"
+    },
+    "years-filter": {
+      "label": "Year",
+      "placeholder": "Select a year"
     }
   },
   "buttons": {
     "apply": "Применить",
-    "cancel": "Отменитьт",
+    "cancel": "Отменить",
     "close": "Закрыть",
     "audio": "Аудио",
     "video": "Видео",

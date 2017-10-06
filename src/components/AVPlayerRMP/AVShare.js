@@ -1,16 +1,14 @@
-import React, { Component } from 'react';
-import { Icon, Button } from 'semantic-ui-react';
+import React from 'react';
+import { Button } from 'semantic-ui-react';
 
-export default class AVShare extends Component {
-  render() {
-    return (
-      <Button
-        type="button"
-        primary
-        size="big"
-        circular
-        icon={'share alternate'}
-      />
-    );
-  }
-}
+const AVShare = () => (
+  <Button
+    type="button"
+    primary
+    size="big"
+    circular
+    icon={'share alternate'}
+  />
+);
+
+export default AVShare;

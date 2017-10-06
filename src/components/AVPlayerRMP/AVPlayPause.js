@@ -46,7 +46,6 @@ class AVPlayPause extends Component {
       <div style={{
         display: 'flex',
         flexDirection: 'row',
-        marginLeft: '10px',
         marginRight: '5px' }}
       >
         { showNextPrev ? (

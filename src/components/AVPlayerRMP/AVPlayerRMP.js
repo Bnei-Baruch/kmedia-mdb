@@ -114,52 +114,6 @@ class AVPlayerRMP extends PureComponent {
     }
   }
 
-  setSliceMode = (isEdit, properties = {}, cb) => {
-    let sliceStart  = properties.sliceStart;
-    let sliceEnd    = properties.sliceEnd;
-    const { media } = this.props;
-
-    if (isEdit) {
-      media.pause();
-    }
-
-    if (typeof sliceStart === 'undefined') {
-      sliceStart = this.state.sliceStart || 0;
-    }
-
-    if (typeof sliceEnd === 'undefined') {
-      sliceEnd = this.state.sliceEnd || media.duration || Infinity;
-    }
-    this.setState({
-      mode: isEdit ? PLAYER_MODE.SLICE_EDIT : PLAYER_MODE.SLICE_VIEW,
-      ...properties,
-      sliceStart,
-      sliceEnd
-    }, cb);
-  };
-
-  setNormalMode = cb => this.setState({
-    mode: PLAYER_MODE.NORMAL,
-    sliceStart: undefined,
-    sliceEnd: undefined
-  }, cb);
-
-  // Correctly fetch loaded buffers from video to show loading progress.
-  // This code should be ported to react-media-player.
-  buffers = () => {
-    const videoElement = this.player && this.player.instance;
-    const ret          = [];
-    if (videoElement) {
-      for (let idx = 0; idx < videoElement.buffered.length; ++idx) {
-        ret.push({
-          start: videoElement.buffered.start(idx),
-          end: videoElement.buffered.end(idx)
-        });
-      }
-    }
-    return ret;
-  };
-
   // Remember the current time and isPlaying while switching.
   onSwitchAV = (...params) => {
     const { onSwitchAV, media: { currentTime, isPlaying } } = this.props;
@@ -235,6 +189,37 @@ class AVPlayerRMP extends PureComponent {
     }
   };
 
+  setSliceMode = (isEdit, properties = {}, cb) => {
+    let sliceStart  = properties.sliceStart;
+    let sliceEnd    = properties.sliceEnd;
+    const { media } = this.props;
+
+    if (isEdit) {
+      media.pause();
+    }
+
+    if (typeof sliceStart === 'undefined') {
+      sliceStart = this.state.sliceStart || 0;
+    }
+
+    if (typeof sliceEnd === 'undefined') {
+      sliceEnd = this.state.sliceEnd || media.duration || Infinity;
+    }
+    this.setState({
+      mode: isEdit ? PLAYER_MODE.SLICE_EDIT : PLAYER_MODE.SLICE_VIEW,
+      ...properties,
+      sliceStart,
+      sliceEnd
+    }, cb);
+  };
+
+  setNormalMode = cb => this.setState({
+    mode: PLAYER_MODE.NORMAL,
+    sliceStart: undefined,
+    sliceEnd: undefined
+  }, cb);
+
+
   handleTimeUpdate = (timeData) => {
     const { media }          = this.props;
     const { mode, sliceEnd } = this.state;
@@ -280,6 +265,22 @@ class AVPlayerRMP extends PureComponent {
     query.sstart      = undefined;
     query.send        = undefined;
     history.replace({ search: stringify(query) });
+  };
+
+  // Correctly fetch loaded buffers from video to show loading progress.
+  // This code should be ported to react-media-player.
+  buffers = () => {
+    const videoElement = this.player && this.player.instance;
+    const ret          = [];
+    if (videoElement) {
+      for (let idx = 0; idx < videoElement.buffered.length; ++idx) {
+        ret.push({
+          start: videoElement.buffered.start(idx),
+          end: videoElement.buffered.end(idx)
+        });
+      }
+    }
+    return ret;
   };
 
   updateSliceQuery = (values) => {
@@ -395,7 +396,7 @@ class AVPlayerRMP extends PureComponent {
       centerMediaControl = (
         <div className="player-button">
           {t('player.error.loading')}
-          {errorReason ? ' ' + errorReason : ''}
+          {errorReason ? ` ${errorReason}` : ''}
           &nbsp;
           <Icon name="warning sign" size="large" />
         </div>
@@ -436,7 +437,9 @@ class AVPlayerRMP extends PureComponent {
           <div
             className={classNames('media-player', {
               'media-player-fullscreen': isFullscreen,
-              fade: !controlsVisible && !forceShowControls
+              fade: !controlsVisible && !forceShowControls,
+              'audio-is-mobile': isTopSeekbar && isAudio,
+              'video-is-mobile': isTopSeekbar && isVideo,
             })}
           >
             <Player
@@ -473,7 +476,7 @@ class AVPlayerRMP extends PureComponent {
                       flex: '1 0 auto',
                       left: 0,
                       top: isMobile ? '-10px' : 0,
-                      width: '100%'
+                      width: '100%',
                     }}
                     >
                       <AvSeekBar
@@ -547,7 +550,7 @@ class AVPlayerRMP extends PureComponent {
                     )
                   }
                   { !isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(true)} /> }
-                  { !isEditMode && <AVFullScreen container={this.mediaElement} /> }
+                  { !isEditMode && !isAudio && <AVFullScreen container={this.mediaElement} /> }
                 </div>
               </div>
               <div
