@@ -27,7 +27,7 @@ const ProgramChapter = (props) => {
   if (chapter) {
     return (
       <div>
-        <div className="video-bg">
+        <div className="avbox">
           <Container>
             <Grid centered padded>
               <RMPVideoBox unit={chapter} language={language} t={t} isSliceable />

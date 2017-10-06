@@ -34,26 +34,28 @@ class FullLessonPlaylist extends Component {
     });
 
     return (
-      <div>
+      <div className='avbox__playlist-wrapper'>
         <Header
           inverted
           as="h1"
           content={`${t(`constants.content-types.${collection.content_type}`)} - ${(activePart + 1)}/${collection.content_units.length}`}
           subheader={t('values.date', { date: new Date(collection.film_date) })}
         />
-        <Menu vertical fluid size="small">
-          {
-            collection.content_units.map((part, index) => (
-              <Menu.Item
-                key={part.id}
-                name={`${index}`}
-                content={titles[index]}
-                active={index === activePart}
-                onClick={this.handleItemClick}
-              />
-            ))
-          }
-        </Menu>
+        <div className='avbox__playlist-view'>
+          <Menu vertical fluid size="small">
+            {
+              collection.content_units.map((part, index) => (
+                <Menu.Item
+                  key={part.id}
+                  name={`${index}`}
+                  content={titles[index]}
+                  active={index === activePart}
+                  onClick={this.handleItemClick}
+                />
+              ))
+            }
+          </Menu>
+        </div>
       </div>
     );
   }

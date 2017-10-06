@@ -1,4 +1,4 @@
-@import 'includes/responsive-helpers';
+
 .layout__header span {
   font-size: 12px;
   font-weight: normal;
@@ -48,7 +48,8 @@ $text-colors: (
     color: #{$colorvalue};
   }
 }
-
+@import 'includes/responsive-helpers';
+@import 'includes/video-player';
 /// THE NEW LAYOUT
 .layout {
   height: 100vh;
@@ -131,7 +132,7 @@ $text-colors: (
     margin-left:0;
   }
 }
-@media only screen and (min-width: 1490px) {
+@media only screen and (min-width: $largeMonitorBreakpoint) {
   .layout {
     &__sidebar-toggle {
       display: none !important;
@@ -174,7 +175,7 @@ $text-colors: (
       border-left: 1px solid rgba(34, 36, 38, 0.15);
     }
   }
-  @media only screen and (min-width: 1490px) {
+  @media only screen and (min-width: $largeMonitorBreakpoint) {
     .layout {
       &__sidebar {
         transform: none;
@@ -325,102 +326,7 @@ $text-colors: (
 //   }
 // }
 
-.video_box {
-  // position: relative;
-  // padding:0!important;
-}
 
-.video_player {
-  height: 0;
-  padding-top: 56.25%;
-  position: relative;
-  &.audio {
-    height: 180px;
-    padding-top: 70px;
-    margin-top: 0em;
-    margin-bottom: 0em;
-    .video_position {
-      bottom: 0;
-      top: initial;
-    }
-  }
-  .video_position {
-    position: absolute;
-    top: 0;
-    width: 100%;
-  }
-  margin-top: calc( -1em + 2px );
-  margin-bottom: calc( -1em + 2px );
-  min-width: 380px;
-
-}
-
-.player_panel {
-  >div {
-    position: absolute;
-    top: 0;
-    bottom: 2px;
-    // overflow: auto;
-    display: flex;
-    flex-direction: column;
-  }
-  .header{
-    flex: 0 0 auto;
-  }
-  .menu {
-    overflow-y: scroll;
-  }
-  // position: absolute!important;
-  // right:0;
-  // top: 1em;
-  // bottom: 1em;
-  // overflow:scroll;
-  // margin-left: -1em;
-  // margin-right: -5em;
-  // padding-left: 2em!important;
-}
-
-.video_placeholder {
-  height: 0;
-  background: grey;
-  padding-top: 56.25%;
-  color: white;
-  position: relative;
-  font-size: .8em;
-  &:before {
-    content: 'video placeholder';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-}
-
-.collapsed_video_container {
-  background: white;
-  margin-left: -3em;
-  margin-right: -3em;
-  padding: 0 3em;
-  box-shadow: 0 1px 2px 0 $border-color;
-  position: relative;
-  //   // width:100%;
-  //   // top:56px;
-  z-index: 10;
-
-  border-bottom: 1px solid $border-color;
-  //   >.grid{
-  //     margin-bottom:0;
-
-  //       >.row{
-  //       padding:0;
-  //       .grid{
-  //         // background:pink;
-  //         margin-top:0;
-  //         margin-bottom:0;
-  //       }
-  //     }
-  //   }
-}
 
 .filter_tab {
   // margin-top: -1rem !important;
@@ -507,9 +413,7 @@ $text-colors: (
   transition: all 0.4s ease-in-out;
 }
 
-.video-bg{
-  background: rgba($black,1);
-}
+
 
 /* See TimedPopup.js, solves existing bug:
  * https://github.com/Semantic-Org/Semantic-UI-React/issues/1065 */

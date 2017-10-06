@@ -36,7 +36,7 @@ class FullEventPlaylist extends Component {
     });
 
     return (
-      <div>
+      <div className='avbox__playlist-wrapper'>
         <Header inverted as="h1">
           <Image shape="circular" src={placeholder} />
           <Header.Content>
@@ -46,20 +46,21 @@ class FullEventPlaylist extends Component {
             </Header.Subheader>
           </Header.Content>
         </Header>
-
-        <Menu vertical fluid size="small">
-          {
-            collection.content_units.map((part, index) => (
-              <Menu.Item
-                key={part.id}
-                name={`${index}`}
-                content={titles[index]}
-                active={index === activePart}
-                onClick={this.handleItemClick}
-              />
-            ))
-          }
-        </Menu>
+        <div className='avbox__playlist-view'>
+          <Menu vertical fluid size="small">
+            {
+              collection.content_units.map((part, index) => (
+                <Menu.Item
+                  key={part.id}
+                  name={`${index}`}
+                  content={titles[index]}
+                  active={index === activePart}
+                  onClick={this.handleItemClick}
+                />
+              ))
+            }
+          </Menu>
+        </div>
       </div>
     );
   }
