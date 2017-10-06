@@ -8,7 +8,6 @@ class AVDuration extends Component {
     name: PropTypes.string,
     value: PropTypes.number,
     style: PropTypes.object,
-    className: PropTypes.any,
     media: PropTypes.object.isRequired,
   };
 
@@ -22,11 +21,11 @@ class AVDuration extends Component {
   };
 
   render() {
-    const { style, name, value, className } = this.props;
+    const { style, name, value } = this.props;
     const time            = typeof value !== 'undefined' ? value : this.props.media[name];
 
     return (
-      <time className={className} style={style}>
+      <time style={style}>
         {formatTime(time)}
       </time>
     );

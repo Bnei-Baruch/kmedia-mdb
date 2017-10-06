@@ -30,7 +30,7 @@ export default class SliceHandle extends Component {
       <div
         className={classNames('player-slice-handle', className)}
         style={{ left: position }}
-        ref={el => this.handleElement = el}
+        ref={(el) => { this.handleElement = el; }}
       >
         {
           isEditMode && (
@@ -41,7 +41,7 @@ export default class SliceHandle extends Component {
             </div>
           )
         }
-        { isEditMode && <div ref={el => this.knobElement = el} className="player-slice-handle--knob" /> }
+        { isEditMode && <div ref={(el) => { this.knobElement = el; }} className="player-slice-handle--knob" /> }
         <div className="player-slice-handle--line" />
       </div>
     );

@@ -164,6 +164,7 @@ class AVMuteUnmute extends Component {
             ref={(c) => { this.element = c; }}
             className="bar-wrapper"
             role="button"
+            tabIndex="0"
             onMouseDown={this.handleStart}
             onTouchStart={this.handleStart}
           >
