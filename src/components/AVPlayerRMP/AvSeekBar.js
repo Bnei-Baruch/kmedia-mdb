@@ -232,7 +232,7 @@ class AvSeekBar extends Component {
 
     const isSliceEdit = playerMode === PLAYER_MODE.SLICE_EDIT;
     const isSliceView = playerMode === PLAYER_MODE.SLICE_VIEW;
-    const isSlice = playerMode === isSliceEdit || isSliceView;
+    const isSlice = isSliceEdit || isSliceView;
     const normalizedSliceStart = this.getNormalizedSliceStart(duration);
     const normalizedSliceEnd = this.getNormalizedSliceEnd(duration);
 
@@ -246,6 +246,10 @@ class AvSeekBar extends Component {
     const stylePlayed = {
       left: this.toPercentage(playedLeft),
       width: this.toPercentage(playedWidth),
+    };
+
+    const stylePlayedKnob = {
+      left: this.toPercentage(playedLeft + playedWidth)
     };
 
     const styleLoaded = {
@@ -296,12 +300,9 @@ class AvSeekBar extends Component {
             )
           }
           <div className={classNames('bar', 'empty', { mobile: isMobile })} />
-          <div className={classNames('bar', 'played', { mobile: isMobile })}
-               style={stylePlayed}>
-            <div className={classNames('knob', { mobile: isMobile })} />
-          </div>
-          <div className={classNames('bar', 'loaded', { mobile: isMobile })}
-               style={styleLoaded} />
+          <div className={classNames('bar', 'played', { mobile: isMobile })} style={stylePlayed} />
+          <div className={classNames('played-knob', { mobile: isMobile })} style={stylePlayedKnob} />
+          <div className={classNames('bar', 'loaded', { mobile: isMobile })} style={styleLoaded} />
         </div>
       </div>
     );

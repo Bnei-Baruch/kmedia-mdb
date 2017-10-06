@@ -20,8 +20,8 @@ import AVMuteUnmute from './AVMuteUnmute';
 import AVLanguage from './AVLanguage';
 import AVAudioVideo from './AVAudioVideo';
 import AvSeekBar from './AvSeekBar';
-import AVShare from './AVShare';
-import AVShareLink from './AVShareLink';
+import AVEditSlice from './AVEditSlice';
+import AVShareBar from './AVShareBar';
 
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = playback =>
@@ -414,6 +414,7 @@ class AVPlayerRMP extends PureComponent {
           <div className="slice-edit-help">
             {t('player.messages.edit-help')}
           </div>
+          <AVShareBar />
         </div>
       );
     } else if (isVideo) {
@@ -487,7 +488,7 @@ class AVPlayerRMP extends PureComponent {
                     </div>
                   )}
                   <AVPlayPause
-                    showNextPrev={showNextPrev}
+                    showNextPrev={showNextPrev && !isEditMode}
                     hasNext={hasNext}
                     hasPrev={hasPrev}
                     onPrev={onPrev}
@@ -545,26 +546,21 @@ class AVPlayerRMP extends PureComponent {
                       />
                     )
                   }
-                  {
-                    isEditMode && <AVShareLink downward={isAudio} />
-                  }
-                  <AVShare onActivateSlice={() => this.setSliceMode(true)} />
-                  {!isEditMode && <AVFullScreen container={this.mediaElement} />}
+                  { !isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(true)} /> }
+                  { !isEditMode && <AVFullScreen container={this.mediaElement} /> }
                 </div>
               </div>
-              {isVideo ? (
-                <div
-                  className="media-center-control"
-                  style={!error ? { outline: 'none' } : { backgroundColor: 'black', outline: 'none' }}
-                  role="button"
-                  tabIndex="0"
-                  onClick={this.playPause}
-                  onKeyDown={this.onKeyDown}
-                  onMouseMove={this.centerMove}
-                >
-                  {centerMediaControl}
-                </div>
-              ) : null}
+              <div
+                className="media-center-control"
+                style={!error ? { outline: 'none' } : { backgroundColor: 'black', outline: 'none' }}
+                role="button"
+                tabIndex="0"
+                onClick={this.playPause}
+                onKeyDown={this.onKeyDown}
+                onMouseMove={this.centerMove}
+              >
+                {centerMediaControl}
+              </div>
             </div>
           </div>
         </div>
