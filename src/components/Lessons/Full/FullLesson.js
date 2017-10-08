@@ -52,7 +52,7 @@ class FullLesson extends Component {
       const lesson         = fullLesson.content_units[activePart];
       return (
         <div>
-          <div className="video-bg">
+          <div className="avbox">
             <Container>
               <Grid padded>
                 <FullVideoBox

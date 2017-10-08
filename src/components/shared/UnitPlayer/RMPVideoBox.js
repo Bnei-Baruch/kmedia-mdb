@@ -84,10 +84,10 @@ class RMPVideoBox extends Component {
     }
 
     return (
-      <Grid.Row className="video_box">
+      <Grid.Row>
         <Grid.Column mobile={16} tablet={12} computer={10}>
-          <div className={classNames('video_player', { audio: playableItem.mediaType === MT_AUDIO })}>
-            <div className="video_position">
+          <div className={classNames('avbox__player', { audio: playableItem.mediaType === MT_AUDIO })}>
+            <div className="avbox__media-wrapper">
               <Media>
                 <AVPlayer
                   isSliceable={isSliceable}

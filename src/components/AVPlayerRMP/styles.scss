@@ -1,6 +1,6 @@
 /* This is required for full screen as the default is white background. */
 .media {
-  background-color: black;
+  // background-color: red;
   /* In full screen to take full with. */
   width: 100%;
 }
@@ -17,8 +17,8 @@
 
 .media-player {
   position: relative;
-  min-height: 40px;
-  min-width: 380px;
+  // min-height: 40px;
+  // min-width: 380px;
   user-select: none;
 
   video,

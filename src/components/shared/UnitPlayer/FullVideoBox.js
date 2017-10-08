@@ -103,7 +103,7 @@ class FullVideoBox extends Component {
     const { playlist } = this.state;
 
     return (
-      <Grid.Row className="video_box">
+      <Grid.Row>
         <Grid.Column computer={10} mobile={16}>
           <AVPlaylistPlayerRMP
             playlist={playlist}
@@ -114,7 +114,7 @@ class FullVideoBox extends Component {
             t={t}
           />
         </Grid.Column>
-        <Grid.Column className="player_panel" computer={6} mobile={16}>
+        <Grid.Column className="avbox__playlist" computer={6} mobile={16}>
           
             <PlayListComponent
               collection={collection}

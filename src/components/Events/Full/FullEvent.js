@@ -61,7 +61,7 @@ class FullEvent extends Component {
             city={fullEvent.city}
             country={fullEvent.country}
           />*/}
-          <div className="video-bg">
+          <div className="avbox">
             <Container>
               <Grid padded>
                 <FullVideoBox
