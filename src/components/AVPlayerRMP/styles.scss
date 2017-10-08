@@ -17,7 +17,7 @@
 
 .media-player {
   position: relative;
-  // min-height: 40px;
+   min-height: 40px;  // TODO: oleg, this makes 0 height on audio mode - please fix
   // min-width: 380px;
   user-select: none;
 
