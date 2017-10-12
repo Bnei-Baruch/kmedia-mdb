@@ -4,8 +4,8 @@
 		height: 0;
   	padding-top: 56.25%;
   	position: relative;
-	  margin-top: calc( -1rem + 2px );
-	  margin-bottom: calc( -1rem + 2px );
+	  margin-top: calc( -1rem + 0px );
+	  margin-bottom: calc( -1rem + 0px );
 	}
 
 	&__media-wrapper {
@@ -20,7 +20,7 @@
 	&__playlist-wrapper {
 		position: absolute;
     top: 0;
-    bottom: calc( -1rem + 2px );
+    bottom: calc( -1rem + 0px );
     display: flex;
     flex-direction: column;
     left:1rem;
@@ -62,7 +62,7 @@
 
 
 
-.video_player {
+.avbox__player {
 
   &.audio {
     height: 180px;
