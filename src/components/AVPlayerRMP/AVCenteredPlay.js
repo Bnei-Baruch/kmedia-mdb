@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { withMediaProps } from 'react-media-player';
 import { Icon } from 'semantic-ui-react';
 
-import './styles.css';
+
 
 class AVCenteredPlay extends Component {
   static propTypes = {

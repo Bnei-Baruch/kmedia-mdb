@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { withMediaProps } from 'react-media-player';
 import { Icon } from 'semantic-ui-react';
 
-import './styles.css';
+
 
 class AVPlayPause extends Component {
   static propTypes = {
