@@ -10,8 +10,8 @@ import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 import { filtersTransformer } from '../filters';
 
-function* fetchProgramsList(action) {
-  const filters = yield select(state => filterSelectors.getFilters(state.filters, 'programs'));
+function* fetchList(action, filterName, successAction, failureAction) {
+  const filters = yield select(state => filterSelectors.getFilters(state.filters, filterName));
   const params  = filtersTransformer.toApiParams(filters);
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
@@ -46,6 +46,9 @@ function* fetchProgramsList(action) {
       { ...action.payload, language, ...params, content_type: CT_VIDEO_PROGRAM_CHAPTER };
 
     const resp = yield call(Api.units, args);
+    if (action.payload.program) {
+      resp.program = action.payload.program;
+    }
     if (Array.isArray(resp.collections)) {
       yield put(mdbActions.receiveCollections(resp.collections));
     }
@@ -53,10 +56,18 @@ function* fetchProgramsList(action) {
       yield put(mdbActions.receiveContentUnits(resp.content_units));
     }
 
-    yield put(actions.fetchListSuccess(resp));
+    yield put(successAction(resp));
   } catch (err) {
-    yield put(actions.fetchListFailure(err));
+    yield put(failureAction(err));
   }
+}
+
+function* fetchProgramsList(action) {
+  yield fetchList(action, 'programs', actions.fetchListSuccess, actions.fetchListFailure);
+}
+
+function* fetchFullProgramList(action) {
+  yield fetchList(action, 'full-program', actions.fetchFullProgramListSuccess, actions.fetchFullProgramListFailure);
 }
 
 function* fetchProgramChapter(action) {
@@ -98,6 +109,10 @@ function* watchFetchFullProgram() {
   yield takeLatest(types.FETCH_FULL_PROGRAM, fetchFullProgram);
 }
 
+function* watchFetchFullProgramList() {
+  yield takeEvery(types.FETCH_FULL_PROGRAM_LIST, fetchFullProgramList);
+}
+
 function* watchSetPage() {
   yield takeLatest(types.SET_PAGE, updatePageInQuery);
 }
@@ -106,5 +121,6 @@ export const sagas = [
   watchFetchList,
   watchFetchProgramChapter,
   watchFetchFullProgram,
+  watchFetchFullProgramList,
   watchSetPage,
 ];

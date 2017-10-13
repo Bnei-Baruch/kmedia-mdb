@@ -14,10 +14,13 @@ class withPagination extends React.Component {
     location: shapes.HistoryLocation.isRequired,
     language: PropTypes.string.isRequired,
     fetchList: PropTypes.func.isRequired,
-    contentTypes: PropTypes.arrayOf(PropTypes.string).isRequired
+    contentTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    parentUid: PropTypes.string,
   };
 
-  static defaultProps = {};
+  static defaultProps = {
+    parentUid: null,
+  };
 
   static mapState = (namespace, state, selectors, settings) => ({
     pageNo: selectors.getPageNo(state[namespace]),
@@ -47,8 +50,14 @@ class withPagination extends React.Component {
   };
 
   static askForData = (props) => {
-    const { fetchList, pageNo = withPagination.getPageNo(props), language, pageSize, contentTypes } = props;
-    fetchList(pageNo, language, pageSize, contentTypes);
+    const { fetchList, pageNo = withPagination.getPageNo(props), language, pageSize, contentTypes, id } = props;
+    fetchList({
+      pageNo,
+      language,
+      pageSize,
+      contentTypes,
+      id,
+    });
   };
 
   static handlePageChange = (props, pageNo = withPagination.getPageNo(props)) => {

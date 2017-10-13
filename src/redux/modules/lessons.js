@@ -32,7 +32,7 @@ export const types = {
 /* Actions */
 
 const setPage                = createAction(SET_PAGE);
-const fetchList              = createAction(FETCH_LIST, (pageNo, language, pageSize) => ({
+const fetchList              = createAction(FETCH_LIST, ({pageNo, language, pageSize}) => ({
   pageNo,
   language,
   pageSize
