@@ -111,6 +111,7 @@
   "search": {
     "suggestions": {
       "categories": {
+        "search": "חיפוש",
         "tags": "תגיות",
         "sources": "מקורות",
         "authors": "מחברים",

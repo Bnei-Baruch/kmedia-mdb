@@ -13,6 +13,7 @@ import { selectors as tagsSelectors } from '../../redux/modules/tags';
 import * as shapes from '../shapes';
 
 const CATEGORIES_ICONS = {
+  'search': 'search',
   'tags': 'tags',
   'sources': 'book',
   'authors': 'student',
@@ -30,6 +31,7 @@ class OmniBox extends Component {
     suggestions: PropTypes.array,
     getSourcePath: PropTypes.func,
     getTagPath: PropTypes.func,
+    query: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -37,28 +39,32 @@ class OmniBox extends Component {
   };
 
   componentWillMount() {
-    this.resetComponent();
+    this.resetComponent(this.props.query);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.suggestions !== this.props.suggestions) {
       this.setState({ suggestionsHelper: new SuggestionsHelper(nextProps.suggestions) });
     }
+    if (nextProps.query !== this.props.query) {
+      this.setState({ query: nextProps.query });
+    }
   }
 
-  resetComponent = () =>
-    this.setState({ suggestionsHelper: new SuggestionsHelper(), query: '' });
+  resetComponent = query =>
+    this.setState({ suggestionsHelper: new SuggestionsHelper(), query });
 
   doAutocomplete = debounce(() => {
     const query = this.state.query;
     if (query) {
       this.props.autocomplete(query);
     } else {
-      this.resetComponent();
+      this.resetComponent('');
     }
   }, 100);
 
-  doSearch = (q) => {
+  doSearch = () => {
+    const q = this.state.query;
     if (!q) {
       return;
     }
@@ -80,7 +86,7 @@ class OmniBox extends Component {
 
   handleResultSelect = (e, data) => {
     console.log('OmniBox selection:', data);
-    this.resetComponent();
+    this.setState({ query: data.result.title }, this.doSearch);
   };
 
   handleSearchChange = (e, data) => {
@@ -90,12 +96,6 @@ class OmniBox extends Component {
     }
     this.setState(diff);
     this.doAutocomplete();
-  };
-
-  handleKeyDown = (e) => {
-    if (e.keyCode === 13) {
-      this.doSearch(this.state.query);
-    }
   };
 
   handleIconClick = () => {
@@ -131,27 +131,46 @@ class OmniBox extends Component {
     const { name } = category;
     const icon     = CATEGORIES_ICONS[name];
     return (
-      <div>
+      <div style={{'padding-top': '0.5em'}}>
         <Icon name={icon} />
         {this.props.t(`search.suggestions.categories.${name}`)}
       </div>
     );
   };
 
+  dontBlur = () => {
+    this.setState({ dontBlur: true });
+  }
+
+  closeSuggestions = (e, data) => {
+    if (this.state.dontBlur) {
+      this.setState({ dontBlur: false });
+    } else {
+      this.setState({ isOpen: false, dontBlur: false });
+    }
+  }
+
   render() {
     const { query, suggestionsHelper, isOpen } = this.state;
 
-    const results = ['tags', 'sources', 'authors', 'persons'].reduce((acc, val) => {
+    const categories = ['tags', 'sources', 'authors', 'persons'];
+    const results = !query ? [] : [{
+      name: 'search',
+      results: [{ key: 'search', title: query }],
+      onMouseDown: this.dontBlur
+    }];
+    categories.reduce((acc, val) => {
       const searchResults = suggestionsHelper.getSuggestions(val, 5);
       if (searchResults.length > 0) {
         acc.push({
           name: val,
           results: searchResults.map(x => this.suggestionToResult(val, x)),
+          onMouseDown: this.dontBlur,
         });
       }
 
       return acc;
-    }, []);
+    }, results);
 
     return (
       <Search
@@ -161,9 +180,11 @@ class OmniBox extends Component {
         value={query}
         open={isOpen}
         categoryRenderer={this.renderCategory}
-        onResultSelect={this.handleResultSelect}
         onSearchChange={this.handleSearchChange}
-        input={<Input onKeyDown={this.handleKeyDown} style={{ width: '600px' }} />}
+        onFocus={this.handleSearchChange}
+        onResultSelect={this.handleResultSelect}
+        onBlur={this.closeSuggestions}
+        input={<Input style={{ width: '600px' }} />}
         icon={<Icon link name="search" onClick={this.handleIconClick} />}
         size="mini"
         showNoResults={false}
@@ -176,6 +197,7 @@ const mapState = state => ({
   suggestions: selectors.getSuggestions(state.search),
   getSourcePath: sourcesSelectors.getPathByID(state.sources),
   getTagPath: tagsSelectors.getPathByID(state.tags),
+  query: selectors.getQuery(state.search),
 });
 
 const mapDispatch = dispatch => bindActionCreators({

@@ -112,6 +112,7 @@
   "search": {
     "suggestions": {
       "categories": {
+        "search": "Search",
         "tags": "Tags",
         "sources": "Sources",
         "authors": "Authors",
