@@ -46,4 +46,8 @@ export default class Api {
 
   static search = ({ q, language, pageNo: page_no, pageSize: page_size }) =>
     Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size })}`);
+
+  static sourceIdx = ({ id }) => Requests.get(`../assets/sources/${id}/index.json`);
+
+  static sourceContent = ({ id, name }) => Requests.get(`../assets/sources/${id}/${name}`);
 }
