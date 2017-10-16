@@ -1,24 +1,24 @@
 {
   "nav": {
     "top": {
-      "header": "Kabbalah Media"
+      "header": "Каббала Медиа"
     },
     "sidebar": {
       "lessons": "Ежедневные уроки",
-      "programs": "ТВ & программы",
-      "lectures": "Лекции и уроки",
-      "sources": "Каббалистические источники",
-      "events": "События",
+      "programs": "ТВ & Программы",
+      "lectures": "Уроки и Лекции",
+      "sources": "Каббалистические Первоисточники",
+      "events": "Конгрессы, события",
       "books": "Книги",
       "topics": "Темы",
       "publications": "Публикации",
-      "photos": "Фотографии",
+      "photos": "Картинки",
       "design": "Дизайн",
-      "design2": "Раскладка"
+      "design2": "Планировка"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
-      "rights": "Бней Барух – Ассоциация Каббала ла-ам"
+      "rights": "Бней Барух – Ассоциация Каббала Ла-Ам, Все права защищены"
     }
   },
   "filters": {
@@ -29,11 +29,11 @@
       "by": "Сортировать программы по:"
     },
     "events": {
-      "by": "Сортировать по:"
+      "by": "Сортировать события по:"
     },
     "date-filter": {
       "label": "Дата",
-      "selectTitle": "Выберите временной промежуток",
+      "selectTitle": "Выберите диапазон дат",
       "presets": {
         "TODAY": "Сегодня",
         "YESTERDAY": "Вчера",
@@ -41,7 +41,7 @@
         "LAST_30_DAYS": "Последние 30 дней",
         "LAST_MONTH": "Прошлый месяц",
         "THIS_MONTH": "Этот месяц",
-        "CUSTOM_RANGE": "Промежуток"
+        "CUSTOM_RANGE": "Произвольный диапазон"
       },
       "start": "Начало",
       "end": "Конец"
@@ -55,16 +55,16 @@
     "programs-filter": {
       "label": "Жанр/Программа",
       "recently-updated": "Недавно обновленные",
-      "last-updated": "Последний раз обновлен в"
+      "last-updated": "Последнее обновление в"
     },
     "event-types-filter": {
-      "label": "Types",
-      "all": "All Events",
-      "allItem": "All"
+      "label": "Тип",
+      "all": "Все События",
+      "allItem": "Все"
     },
     "years-filter": {
-      "label": "Year",
-      "placeholder": "Select a year"
+      "label": "Год",
+      "placeholder": "Выберите год"
     }
   },
   "buttons": {
@@ -76,6 +76,17 @@
     "more": "Ещё",
     "copy-link": "Копировать линк"
   },
+  "player": {
+    "messages": {
+      "edit-help": "Перемещайте курсор чтоб поделиться частью видео"
+    },
+    "buttons": {
+      "edit-back": "Назад"
+    },
+    "error": {
+      "loading": "Ошибка при загрузке файла."
+    }
+  },
   "messages": {
     "loading": "Загрузка...",
     "loading-subtext": "Ждите...",
@@ -83,18 +94,18 @@
     "lesson-not-found": "Урок не найден",
     "lesson-not-found-subtext": "Попробуйте <1>список уроков</1>...",
     "program-not-found": "Программа не найдена",
-    "program-not-found-subtext": "Попробуйте <1>programs list</1>...",
+    "program-not-found-subtext": "Попробуйте <1>список программ</1>...",
     "event-not-found": "Событие не найдено",
-    "event-not-found-subtext": "Попробуйте <1>events list</1>...",
+    "event-not-found-subtext": "Попробуйте <1>список событий</1>...",
     "no-files": "Нет файлов",
     "no-playable-files": "Не файлов для воспроизведения",
     "no-results": "Нет результатов",
     "pagination-results": "Результаты {{start}} - {{end}} из {{total}}",
-    "link-copied-to-clipboard": "Ссылка переписана!",
+    "link-copied-to-clipboard": "Ссылка скопирована!",
     "unknown": "Неизвестна",
     "unsupported-media-format": "Неподдерживаемый формат.",
-    "error-loading-file": "Ошибка загрузки файла.",
-    "fallback-language": "Медиа не найденa для выбранного языка, выбран резервный язык.",
+    "error-loading-file": "Ошибка при загрузке файла.",
+    "fallback-language": "Медиа не найденa на русском языке, выбран резервный язык.",
     "fallback-to-audio": "Видео не найдено, используется аудио.",
     "fallback-to-video": "Аудио не найдено, используется видео."
   },

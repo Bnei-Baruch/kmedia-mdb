@@ -81,7 +81,7 @@
       "edit-help": "Drag the pointers to share a part of the video"
     },
     "buttons": {
-      "edit-back": "Black to play"
+      "edit-back": "Back to play"
     },
     "error": {
       "loading": "Error loading file."
