@@ -8,8 +8,6 @@ import { Icon, Input, Search } from 'semantic-ui-react';
 
 import { SuggestionsHelper } from '../../helpers/search';
 import { actions, selectors } from '../../redux/modules/search';
-import { selectors as sourcesSelectors } from '../../redux/modules/sources';
-import { selectors as tagsSelectors } from '../../redux/modules/tags';
 import * as shapes from '../shapes';
 
 const CATEGORIES_ICONS = {
@@ -105,22 +103,10 @@ class OmniBox extends Component {
   suggestionToResult = (type, item) => {
     switch (type) {
     case 'tags': {
-      if (this.props.getTagPath) {
-        const path    = this.props.getTagPath(item.id);
-        const display = path.map(y => y.label).join(' - ');
-        return { key: item.id, title: display };
-      } else {
-        return { key: item.id, title: item.text };
-      }
+      return { key: item.id, title: item.text };
     }
     case 'sources': {
-      if (this.props.getSourcePath) {
-        const path    = this.props.getSourcePath(item.id);
-        const display = path.map(y => y.name).join(' > ');
-        return { key: item.id, title: display };
-      } else {
-        return { key: item.id, title: item.text };
-      }
+      return { key: item.id, title: item.text };
     }
     default:
       return { key: item.id, title: item.text };
@@ -131,7 +117,7 @@ class OmniBox extends Component {
     const { name } = category;
     const icon     = CATEGORIES_ICONS[name];
     return (
-      <div style={{'padding-top': '0.5em'}}>
+      <div style={{paddingTop: '0.5em'}}>
         <Icon name={icon} />
         {this.props.t(`search.suggestions.categories.${name}`)}
       </div>
@@ -174,17 +160,19 @@ class OmniBox extends Component {
 
     return (
       <Search
+        style={{width: '100%'}}
         category
         fluid
         results={results}
         value={query}
         open={isOpen}
+        selectFirstResult
         categoryRenderer={this.renderCategory}
         onSearchChange={this.handleSearchChange}
         onFocus={this.handleSearchChange}
         onResultSelect={this.handleResultSelect}
         onBlur={this.closeSuggestions}
-        input={<Input style={{ width: '600px' }} />}
+        input={<Input style={{ width: '100%' }} />}
         icon={<Icon link name="search" onClick={this.handleIconClick} />}
         size="mini"
         showNoResults={false}
@@ -195,8 +183,6 @@ class OmniBox extends Component {
 
 const mapState = state => ({
   suggestions: selectors.getSuggestions(state.search),
-  getSourcePath: sourcesSelectors.getPathByID(state.sources),
-  getTagPath: tagsSelectors.getPathByID(state.tags),
   query: selectors.getQuery(state.search),
 });
 

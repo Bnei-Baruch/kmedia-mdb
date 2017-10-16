@@ -110,6 +110,12 @@
     "fallback-to-video": "Audio was not found, using video."
   },
   "search": {
+    "sortby": "sort by",
+    "sorts": {
+      "relevance": "relevance",
+      "newertoolder": "newer to older",
+      "oldertonewer": "older to newer"
+    },
     "suggestions": {
       "categories": {
         "search": "Search",

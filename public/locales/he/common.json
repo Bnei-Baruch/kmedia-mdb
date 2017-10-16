@@ -109,6 +109,12 @@
     "fallback-to-video": "אודיו לא נמצא, משתמש בוידיאו."
   },
   "search": {
+    "sortby": "מיין לפי",
+    "sorts": {
+      "relevance": "רלונטיות",
+      "newertoolder": "חדש לישן",
+      "oldertonewer": "ישן לחדש"
+    },
     "suggestions": {
       "categories": {
         "search": "חיפוש",

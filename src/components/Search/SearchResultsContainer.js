@@ -9,6 +9,7 @@ import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
 import * as shapes from '../shapes';
 import SearchResults from './SearchResults';
+import SearchResultsHeader from './SearchResultsHeader';
 
 class SearchResultsContainer extends Component {
   static propTypes = {
@@ -21,6 +22,7 @@ class SearchResultsContainer extends Component {
     setPage: PropTypes.func.isRequired,
     pageNo: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
+    sortBy: PropTypes.string.isRequired,
     hydrateUrl: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
   };
@@ -42,11 +44,22 @@ class SearchResultsContainer extends Component {
     search(query, pageNo, pageSize);
   };
 
+  onSortByChange = (e, data) => {
+    const { setSortBy, search, query, pageSize, pageNo } = this.props;
+    setSortBy(data.value);
+    search(query, pageNo, pageSize);
+  }
+
   render() {
-    const { wip, err, query, results, cuMap, pageNo, pageSize, language } = this.props;
+    const { wip, err, query, results, cuMap, pageNo, pageSize, sortBy, language } = this.props;
 
     return (
       <Container className="padded">
+        {wip ? null : (
+        <SearchResultsHeader
+          sortBy={sortBy}
+          onSortByChange={this.onSortByChange}
+        />)}
         <SearchResults
           results={results}
           cuMap={cuMap}
@@ -78,6 +91,7 @@ const mapState = state => {
     cuMap,
     query: selectors.getQuery(state.search),
     pageNo: selectors.getPageNo(state.search),
+    sortBy: selectors.getSortBy(state.search),
     pageSize: settingsSelectors.getPageSize(state.settings),
     language: settingsSelectors.getLanguage(state.settings),
     wip: selectors.getWip(state.search),
@@ -88,6 +102,7 @@ const mapState = state => {
 const mapDispatch = dispatch => bindActionCreators({
   search: actions.search,
   setPage: actions.setPage,
+  setSortBy: actions.setSortBy,
   hydrateUrl: actions.hydrateUrl,
 }, dispatch);
 
