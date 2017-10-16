@@ -121,11 +121,11 @@ class OmniBox extends Component {
   }
 
   closeSuggestions = (e, data) => {
-    // if (this.state.dontBlur) {
-    //   this.setState({ dontBlur: false });
-    // } else {
-    //   this.setState({ isOpen: false, dontBlur: false });
-    // }
+    if (this.state.dontBlur) {
+      this.setState({ dontBlur: false });
+    } else {
+      this.setState({ isOpen: false, dontBlur: false });
+    }
   }
 
   render() {
