@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { Dropdown } from 'semantic-ui-react';
 import { translate } from 'react-i18next';
 import { RTL_LANGUAGES } from '../../helpers/consts';
-import { selectors as settings } from '../../redux/modules/settings';
-import { connect } from 'react-redux';
 
 class SearchResultsHeader extends Component {
   static propTypes = {
@@ -40,6 +38,4 @@ class SearchResultsHeader extends Component {
   }
 }
 
-export default connect((state, props) => ({
-  language: settings.getLanguage(state.settings)
-}))(translate()(SearchResultsHeader));
+export default translate()(SearchResultsHeader);

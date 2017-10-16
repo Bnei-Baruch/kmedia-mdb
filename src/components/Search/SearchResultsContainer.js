@@ -57,6 +57,7 @@ class SearchResultsContainer extends Component {
       <Container className="padded">
         {wip ? null : (
         <SearchResultsHeader
+          language={language}
           sortBy={sortBy}
           onSortByChange={this.onSortByChange}
         />)}

@@ -8,7 +8,9 @@ import { Icon, Input, Search } from 'semantic-ui-react';
 
 import { SuggestionsHelper } from '../../helpers/search';
 import { actions, selectors } from '../../redux/modules/search';
+import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
+import { RTL_LANGUAGES } from '../../helpers/consts';
 
 const CATEGORIES_ICONS = {
   'search': 'search',
@@ -30,6 +32,7 @@ class OmniBox extends Component {
     getSourcePath: PropTypes.func,
     getTagPath: PropTypes.func,
     query: PropTypes.string.isRequired,
+    language: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -100,18 +103,7 @@ class OmniBox extends Component {
     this.doSearch(this.state.query);
   };
 
-  suggestionToResult = (type, item) => {
-    switch (type) {
-    case 'tags': {
-      return { key: item.id, title: item.text };
-    }
-    case 'sources': {
-      return { key: item.id, title: item.text };
-    }
-    default:
-      return { key: item.id, title: item.text };
-    }
-  };
+  suggestionToResult = (type, item) => ({ key: item.id, title: item.text});
 
   renderCategory = (category) => {
     const { name } = category;
@@ -129,14 +121,15 @@ class OmniBox extends Component {
   }
 
   closeSuggestions = (e, data) => {
-    if (this.state.dontBlur) {
-      this.setState({ dontBlur: false });
-    } else {
-      this.setState({ isOpen: false, dontBlur: false });
-    }
+    // if (this.state.dontBlur) {
+    //   this.setState({ dontBlur: false });
+    // } else {
+    //   this.setState({ isOpen: false, dontBlur: false });
+    // }
   }
 
   render() {
+    const { language } = this.props;
     const { query, suggestionsHelper, isOpen } = this.state;
 
     const categories = ['tags', 'sources', 'authors', 'persons'];
@@ -184,6 +177,7 @@ class OmniBox extends Component {
 const mapState = state => ({
   suggestions: selectors.getSuggestions(state.search),
   query: selectors.getQuery(state.search),
+  language: settingsSelectors.getLanguage(state.settings),
 });
 
 const mapDispatch = dispatch => bindActionCreators({
