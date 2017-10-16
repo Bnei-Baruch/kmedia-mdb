@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
-import { Header, Table, Container, Divider } from 'semantic-ui-react';
+import { Header, Label, Table, Container, Divider } from 'semantic-ui-react';
 
 import { canonicalLink, formatError, isEmpty } from '../../helpers/utils';
 import { ErrorSplash, LoadingSplash } from '../shared/Splash';
@@ -52,6 +52,8 @@ class SearchResults extends Component {
       filmDate = t('values.date', { date: new Date(src.film_date) });
     }
 
+    console.log(src);
+
     return (
       <Table.Row key={src.mdb_uid} verticalAlign="top">
         <Table.Cell collapsing singleLine width={1}>
@@ -59,6 +61,7 @@ class SearchResults extends Component {
         </Table.Cell>
         <Table.Cell>
           <span>
+          <Label>{t(`constants.content-types.${src.content_type}`)}</Label>
           <Link to={canonicalLink({ id: src.mdb_uid, content_type: src.content_type })}>
             {name}
           </Link>
