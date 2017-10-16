@@ -50,7 +50,7 @@ class FullProgram extends Component {
                   </Header.Subheader>
                 </Header.Content>
               </Header>
-              <p>This is description. I have no idea where to take it from</p>
+              <p>{fullProgram.description}</p>
             </Grid.Column>
           </Grid.Row>
         </Grid>
