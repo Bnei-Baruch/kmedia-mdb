@@ -65,8 +65,6 @@ class FullProgramContainer extends withPagination {
   render() {
     const { items, language, fullProgram, wip, err } = this.props;
 
-    console.log('items', items);
-
     // return <FullProgram fullProgram={fullProgram} wip={wip} err={err} language={language} />;
     return (
       <div>
@@ -96,11 +94,16 @@ function mapState(state, props) {
   const id          = props.match.params.id;
   const fullProgram = mdb.getDenormCollection(state.mdb, id);
 
-  const paginationProps = withPagination.mapState('programs', state, programSelectors, settings);
+  const paginationProps = withPagination.mapState('programs', state, {
+    getPageNo: s => programSelectors.getFullProgramPageNo(s)(id),
+    getTotal: s => programSelectors.getFullProgramTotal(s)(id),
+  }, settings);
+
+  console.log(state['programs'].fullsItems, paginationProps);
 
   return {
     ...paginationProps,
-    items: programSelectors.getProgramItems(state.programs)(id)
+    items: programSelectors.getFullProgramItems(state.programs)(id)
       .map(x => mdb.getDenormContentUnit(state.mdb, x)),
     fullProgram,
     id,

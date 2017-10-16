@@ -9,17 +9,18 @@ import ResultsPageHeader from './ResultsPageHeader';
 class withPagination extends React.Component {
   static propTypes = {
     pageNo: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
     setPage: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
     language: PropTypes.string.isRequired,
     fetchList: PropTypes.func.isRequired,
     contentTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-    parentUid: PropTypes.string,
+    id: PropTypes.string,
   };
 
   static defaultProps = {
-    parentUid: null,
+    id: null,
   };
 
   static mapState = (namespace, state, selectors, settings) => ({
