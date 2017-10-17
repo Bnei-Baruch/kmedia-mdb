@@ -32,7 +32,7 @@
       "by": "Сортировать события по:"
     },
     "date-filter": {
-      "label": "Дата",
+      "label": "Дате",
       "selectTitle": "Выберите диапазон дат",
       "presets": {
         "TODAY": "Сегодня",
@@ -53,7 +53,7 @@
       "label": "Темы"
     },
     "programs-filter": {
-      "label": "Жанр/Программа",
+      "label": "Жанр",
       "recently-updated": "Недавно обновленные",
       "last-updated": "Последнее обновление в"
     },
@@ -108,6 +108,32 @@
     "fallback-language": "Медиа не найденa на русском языке, выбран резервный язык.",
     "fallback-to-audio": "Видео не найдено, используется аудио.",
     "fallback-to-video": "Аудио не найдено, используется видео."
+ },
+    "search": {
+      "sortby": "Сортировать по",
+        "sorts": {
+          "relevance": "актуальности",
+          "newertoolder": "в обратном порядке обновления",
+          "oldertonewer": "в порядке обновления"
+        },
+      "suggestions": {
+        "categories": {
+          "tags": "Теги",
+          "sources": "Первоисточники",
+          "authors": "Авторы",
+          "persons": "Лица"
+        }
+      },
+      "results": {
+        "title": "Результаты поиска",
+        "search-summary": "стр. {{pageNo}} из {{total}} результатов ({{took}} секунд)",
+        "empty-query": "Введите ваш запрос в поле расположенном выше для начала поиска.",
+        "no-results": "Ваш запрос <1><0>{{query}}</0></1> не найден."
+      }
+  },
+  "events": {
+    "ALL_EVENTS": "Все События",
+    "no-matches": "Событие не найдено"
   },
   "lessons": {
     "header": {
@@ -119,7 +145,7 @@
     },
     "part": {
       "info": {
-        "tags": "Таги",
+        "tags": "Теги",
         "sources": "Источники",
         "related-event": "Относится к событию"
       },
@@ -129,26 +155,36 @@
       }
     }
   },
-  "programs": {
+  "programs": {   
+    "genres": {
+    "all": "Все программы",
+    "documentary": "Документальные программы",
+    "late-night": "Ночные программы",
+    "news": "Новости",
+    "talk-show": "Ток-шоу",
+    "educational": "Образовательные программы",
+    "children": "Детские передачи",
+    "movies": "Фильмы"
+  },
     "list": {
       "episode_from": "Часть из:"
     },
     "full": {
       "episodes": "эпизод(ов)",
-      "ccuName": "Content Unit Name",
+      "ccuName": "Название блока",
       "name": "Название программы",
       "duration": "Продолжительность",
       "film_date": "Дата съёмок"
     },
     "part": {
       "info": {
-        "tags": "Таги",
+        "tags": "Теги",
         "sources": "Источники",
         "related-event": "Относится к событию"
       },
       "materials": {
         "summary": "Краткое содержание",
-        "transcription": "Конспект"
+        "transcription": "Стенограмма"
       },
       "relevant-parts": {
         "title": "Остальные части той же программы",
@@ -158,24 +194,24 @@
   },
   "materials": {
     "summary": "Краткое содержание",
-    "transcription": "Конспект",
+    "transcription": "Стенограмма",
     "sources": "Источники",
     "sketches": "Чертежи"
   },
   "media-downloads": {
-    "title": "Медиа для скачивания",
+    "title": "Скачать",
     "derived-title": "Производная медиа",
     "type-labels": {
       "video": "Основное видео",
       "audio": "Основное аудио",
-      "text": "Текст",
-      "image": "Изображений"
+      "text": "Стенограмма",
+      "image": "Изображения"
     },
     "lesson": {
       "type-labels": {
         "video": "Видео урока",
         "audio": "Аудио урока",
-        "text": "Текст",
+        "text": "Стенограмма",
         "image": "Чертежи"
       }
     },
@@ -183,16 +219,16 @@
       "type-labels": {
         "video": "Видео программы",
         "audio": "Аудио программы",
-        "text": "Текст",
-        "image": "Изображений"
+        "text": "Стенограмма",
+        "image": "Изображения"
       }
     }
   },
   "constants": {
     "languages": {
-      "he": "Hebrew",
+      "he": "Иврит",
       "en": "English",
-      "ru": "Russian",
+      "ru": "Русский",
       "es": "Spanish",
       "it": "Italian",
       "de": "German",
@@ -250,13 +286,13 @@
       "KITEI_MAKOR": "Первоисточники"
     },
     "media-types": {
-      "video": "Video",
-      "audio": "Audio",
-      "image": "Image",
-      "text": "Text",
-      "sheet": "Sheet",
-      "banner": "Banner",
-      "presentation": "Presentation"
+      "video": "Видео",
+      "audio": "Аудио",
+      "image": "Чертежи",
+      "text": "Стенограмма",
+      "sheet": "Cтраница",
+      "banner": "Баннер",
+      "presentation": "Презентация"
     }
   },
   "values": {
