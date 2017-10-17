@@ -89,7 +89,6 @@ class FullEvent extends Component {
             </Grid>
           </Container>
           </div>
-
       );
     }
 

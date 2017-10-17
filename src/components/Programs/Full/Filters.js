@@ -17,7 +17,7 @@ const filters = [
   },
 ];
 
-class ProgramsFilters extends PureComponent {
+class FullProgramFilters extends PureComponent {
 
   static propTypes = {
     onChange: PropTypes.func.isRequired,
@@ -41,4 +41,4 @@ class ProgramsFilters extends PureComponent {
   }
 }
 
-export default ProgramsFilters;
+export default FullProgramFilters;

@@ -28,6 +28,9 @@
     "programs": {
       "by": "Filter Programs by:"
     },
+    "full-program": {
+      "by":"Filter Episodes by:"
+    },
     "events": {
       "by": "Filter Events by:"
     },
@@ -164,11 +167,7 @@
       "episode_from": "Episode from:"
     },
     "full": {
-      "episodes": "Episode(s)",
-      "ccuName": "Content Unit Name",
-      "name": "Program Name",
-      "duration": "Duration",
-      "film_date": "Date of Shooting"
+      "episodes": "Episode(s)"
     },
     "part": {
       "info": {

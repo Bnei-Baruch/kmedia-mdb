@@ -1,47 +1,43 @@
-import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
+import { call, fork, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { CT_VIDEO_PROGRAM, CT_VIDEO_PROGRAM_CHAPTER } from '../helpers/consts';
 import { updateQuery } from './helpers/url';
 import { isEmpty } from '../helpers/utils';
 import { selectors as settings } from '../redux/modules/settings';
-import { actions, selectors as progSelectors, types } from '../redux/modules/programs';
+import { actions, selectors, types } from '../redux/modules/programs';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 import { filtersTransformer } from '../filters';
+
+function* fetchGenres() {
+  const language = yield select(state => settings.getLanguage(state.settings));
+  const genres   = yield call(Api.collections, {
+    language,
+    content_type: CT_VIDEO_PROGRAM,
+    pageNo: 1,
+    pageSize: 1000,
+    with_units: false,
+  });
+  if (Array.isArray(genres.collections)) {
+    yield put(mdbActions.receiveCollections(genres.collections));
+    yield put(actions.receiveCollections(genres.collections));
+  }
+}
+
+function* fetchRecentlyUpdated() {
+  const resp = yield call(Api.recentlyUpdated);
+  if (Array.isArray(resp)) {
+    yield put(actions.receiveRecentlyUpdated(resp));
+  }
+}
 
 function* fetchList(action, filterName, successAction, failureAction) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, filterName));
   const params  = filtersTransformer.toApiParams(filters);
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-
-    // fetch Genres if we don't have them
-    const genresTree = yield select(state => progSelectors.getGenres(state.programs));
-    if (isEmpty(genresTree)) {
-      const genres = yield call(Api.collections, {
-        language,
-        content_type: CT_VIDEO_PROGRAM,
-        pageNo: 1,
-        pageSize: 1000,
-        with_units: false,
-      });
-      if (Array.isArray(genres.collections)) {
-        yield put(mdbActions.receiveCollections(genres.collections));
-        yield put(actions.receiveCollections(genres.collections));
-      }
-    }
-
-    // fetch recently_updated if we don't have them
-    const recentlyUpdated = yield select(state => progSelectors.getRecentlyUpdated(state.programs));
-    if (isEmpty(recentlyUpdated)) {
-      const resp = yield call(Api.recentlyUpdated);
-      if (Array.isArray(resp)) {
-        yield put(actions.receiveRecentlyUpdated(resp));
-      }
-    }
-
-    const args = isEmpty(params) ?
+    const args     = isEmpty(params) ?
       { ...action.payload, language, content_type: CT_VIDEO_PROGRAM_CHAPTER } :
       { ...action.payload, language, ...params, content_type: CT_VIDEO_PROGRAM_CHAPTER };
 
@@ -63,6 +59,17 @@ function* fetchList(action, filterName, successAction, failureAction) {
 }
 
 function* fetchProgramsList(action) {
+  // fetch Genres if we don't have them
+  const genresTree = yield select(state => selectors.getGenres(state.programs));
+  if (isEmpty(genresTree)) {
+    yield fork(fetchGenres);
+  }
+
+  // fetch recently_updated if we don't have them
+  const recentlyUpdated = yield select(state => selectors.getRecentlyUpdated(state.programs));
+  if (isEmpty(recentlyUpdated)) {
+    yield fork(fetchRecentlyUpdated);
+  }
   yield fetchList(action, 'programs', actions.fetchListSuccess, actions.fetchListFailure);
 }
 
@@ -114,7 +121,7 @@ function* watchFetchFullProgramList() {
 }
 
 function* watchSetPage() {
-  yield takeLatest(types.SET_PAGE, updatePageInQuery);
+  yield takeLatest([types.SET_PAGE, types.SET_FULL_PROGRAM_PAGE], updatePageInQuery);
 }
 
 export const sagas = [

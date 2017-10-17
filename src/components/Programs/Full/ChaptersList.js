@@ -8,7 +8,7 @@ import { canonicalLink } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 
-class ProgramsList extends PureComponent {
+class ChaptersList extends PureComponent {
 
   static propTypes = {
     items: PropTypes.arrayOf(shapes.ProgramChapter),
@@ -19,7 +19,7 @@ class ProgramsList extends PureComponent {
     items: []
   };
 
-  renderUnit = (unit) => {
+  renderChapter = (unit) => {
     const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
 
     const relatedItems = breakdown.getPrograms().map(x =>
@@ -74,13 +74,11 @@ class ProgramsList extends PureComponent {
     return (
       <Table sortable basic="very" className="index-list">
         <Table.Body>
-          {
-            items.map(this.renderUnit)
-          }
+          {items.map(this.renderChapter)}
         </Table.Body>
       </Table>
     );
   }
 }
 
-export default translate()(ProgramsList);
+export default translate()(ChaptersList);

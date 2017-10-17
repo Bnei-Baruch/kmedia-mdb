@@ -105,6 +105,7 @@ class TopicsFilter extends React.Component {
       topics = getTagById(TAG_LESSONS_TOPICS);
       break;
     case 'programs':
+    case 'full-program':
       topics = getTagById(TAG_PROGRAMS_TOPICS);
       break;
     default:

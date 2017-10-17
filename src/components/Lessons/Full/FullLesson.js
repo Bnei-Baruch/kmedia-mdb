@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
-import { Grid, Container } from 'semantic-ui-react';
-import Link from '../../Language/MultiLanguageLink';
+import { Container, Grid } from 'semantic-ui-react';
 
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
+import Link from '../../Language/MultiLanguageLink';
 import * as shapes from '../../shapes';
 import FullVideoBox from '../../shared/UnitPlayer/FullVideoBox';
 import Materials from '../../shared/UnitMaterials/Materials';

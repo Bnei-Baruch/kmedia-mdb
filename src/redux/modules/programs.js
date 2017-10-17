@@ -4,7 +4,7 @@ import { types as settings } from './settings';
 
 /* Types */
 
-const SET_PAGE = 'Programs/SET_PAGE';
+const SET_PAGE              = 'Programs/SET_PAGE';
 const SET_FULL_PROGRAM_PAGE = 'Programs/SET_FULL_PROGRAM_PAGE';
 
 const FETCH_LIST                      = 'Programs/FETCH_LIST';
@@ -45,7 +45,7 @@ export const types = {
 
 const setPage                     = createAction(SET_PAGE);
 const setFullProgramPage          = createAction(SET_FULL_PROGRAM_PAGE);
-const fetchList                   = createAction(FETCH_LIST, ({pageNo, language, pageSize}) => ({
+const fetchList                   = createAction(FETCH_LIST, ({ pageNo, language, pageSize }) => ({
   pageNo,
   language,
   pageSize,
@@ -58,12 +58,12 @@ const fetchProgramChapterFailure  = createAction(FETCH_PROGRAM_CHAPTER_FAILURE, 
 const fetchFullProgram            = createAction(FETCH_FULL_PROGRAM);
 const fetchFullProgramSuccess     = createAction(FETCH_FULL_PROGRAM_SUCCESS);
 const fetchFullProgramFailure     = createAction(FETCH_FULL_PROGRAM_FAILURE, (id, err) => ({ id, err }));
-const fetchFullProgramList        = createAction(FETCH_FULL_PROGRAM_LIST, ({pageNo, language, pageSize, id}) => ({
+const fetchFullProgramList        = createAction(FETCH_FULL_PROGRAM_LIST, (pageNo, pageSize, language, id) => ({
   pageNo,
-  language,
   pageSize,
+  language,
   program: id,
-}))
+}));
 const fetchFullProgramListSuccess = createAction(FETCH_FULL_PROGRAM_LIST_SUCCESS);
 const fetchFullProgramListFailure = createAction(FETCH_FULL_PROGRAM_LIST_FAILURE);
 const receiveCollections          = createAction(RECEIVE_COLLECTIONS);
@@ -91,28 +91,26 @@ export const actions = {
 /* Reducer */
 
 const initialState = {
-  total:  0,
+  total: 0,
   pageNo: 1,
-  items:  [],
-  // Redux for full page object maps from program uid to
-  // {
-  //   total: null,
-  //   pageNo: 1,
-  //   items: [],
-  //   wip: false,
-  //   error: null,
-  // }
-  fullsItems: {},
+  items: [],
+  fullPaging: {
+    total: 0,
+    pageNo: 1,
+    items: [],
+  },
   genres: [],
   programs: [],
   recentlyUpdated: [],
   wip: {
     list: false,
+    fullList: false,
     chapters: {},
     fulls: {}
   },
   errors: {
     list: null,
+    fullList: null,
     chapters: {},
     fulls: {}
   },
@@ -125,9 +123,8 @@ const initialState = {
  * @returns {{wip: {}, errors: {}}}
  */
 const setStatus = (state, action) => {
-  const wip        = { ...state.wip };
-  const errors     = { ...state.errors };
-  const fullsItems = { ...state.fullsItems };
+  const wip    = { ...state.wip };
+  const errors = { ...state.errors };
 
   switch (action.type) {
   case FETCH_LIST:
@@ -140,10 +137,7 @@ const setStatus = (state, action) => {
     wip.fulls = { ...wip.fulls, [action.payload]: true };
     break;
   case FETCH_FULL_PROGRAM_LIST:
-    fullsItems[action.payload.program] = {
-      ...state.fullsItems[action.payload.program],
-      wip: true,
-    }
+    wip.fullList = true;
     break;
   case FETCH_LIST_SUCCESS:
     wip.list    = false;
@@ -158,11 +152,8 @@ const setStatus = (state, action) => {
     errors.fulls = { ...errors.fulls, [action.payload]: null };
     break;
   case FETCH_FULL_PROGRAM_LIST_SUCCESS:
-    fullsItems[action.payload.program] = {
-      ...fullsItems[action.payload.program],
-      wip: false,
-      error: null,
-    }
+    wip.fullList    = false;
+    errors.fullList = null;
     break;
   case FETCH_LIST_FAILURE:
     wip.list    = false;
@@ -173,16 +164,12 @@ const setStatus = (state, action) => {
     errors.chapters = { ...errors.chapters, [action.payload.id]: action.payload.err };
     break;
   case FETCH_FULL_PROGRAM_FAILURE:
-    console.log('Full program was loaded', action.payload);
     wip.fulls    = { ...wip.fulls, [action.payload.id]: false };
     errors.fulls = { ...errors.fulls, [action.payload.id]: action.payload.err };
     break;
   case FETCH_FULL_PROGRAM_LIST_FAILURE:
-    fullsItems[action.payload.program] = {
-      ...fullsItems[action.payload.program],
-      wip: false,
-      error: action.payload,
-    }
+    wip.fullList    = false;
+    errors.fullList = action.payload;
     break;
   default:
     break;
@@ -192,7 +179,6 @@ const setStatus = (state, action) => {
     ...state,
     wip,
     errors,
-    fullsItems,
   };
 };
 
@@ -206,20 +192,16 @@ const onFetchListSuccess = (state, action) => {
 };
 
 const onFetchFullProgramListSuccess = (state, action) => {
-  console.log('sucess list', action);
   const items = action.payload.collections || action.payload.content_units || [];
   return {
     ...state,
-    fullsItems: {
-      ...state.fullsItems,
-      [action.payload.program]: {
-        ...state.fullsItems[action.payload.program],
-        total: action.payload.total,
-        items: items.map(x => x.id),
-      }
+    fullPaging: {
+      ...state.fullPaging,
+      total: action.payload.total,
+      items: items.map(x => x.id),
     }
-  }
-}
+  };
+};
 
 const onSetPage = (state, action) => (
   {
@@ -229,15 +211,11 @@ const onSetPage = (state, action) => (
 );
 
 const onSetFullProgramPage = (state, action) => {
-  console.log('set full program page', action);
   return {
     ...state,
-    fullsItems: {
-      ...state.fullsItems,
-      [action.payload.program]: {
-        ...state.fullsItems[action.payload.program],
-        pageNo: action.payload
-      }
+    fullPaging: {
+      ...state.fullPaging,
+      pageNo: action.payload
     }
   };
 };
@@ -246,6 +224,10 @@ const onSetLanguage = state => (
   {
     ...state,
     items: [],
+    fullPaging: {
+      ...state.fullPaging,
+      items: [],
+    },
     genres: [],
     programs: [],
   }
@@ -297,27 +279,20 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getTotal             = state => state.total;
-const getPageNo            = state => state.pageNo;
-const getItems             = state => state.items;
-const getFullProgramTotal  = state => program => (
-  program in state.fullsItems && state.fullsItems[program].total || 0);
-const getFullProgramPageNo = state => program => (
-  program in state.fullsItems && state.fullsItems[program].pageNo || 1);
-const getFullProgramItems  = state => program => (
-  program in state.fullsItems && state.fullsItems[program].items || []);
-const getWip               = state => state.wip;
-const getErrors            = state => state.errors;
-const getGenres            = state => state.genres;
-const getPrograms          = state => state.programs;
-const getRecentlyUpdated   = state => state.recentlyUpdated;
+const getTotal           = state => state.total;
+const getPageNo          = state => state.pageNo;
+const getItems           = state => state.items;
+const getFullPaging      = state => state.fullPaging;
+const getWip             = state => state.wip;
+const getErrors          = state => state.errors;
+const getGenres          = state => state.genres;
+const getPrograms        = state => state.programs;
+const getRecentlyUpdated = state => state.recentlyUpdated;
 
 export const selectors = {
   getTotal,
   getItems,
-  getFullProgramItems,
-  getFullProgramPageNo,
-  getFullProgramTotal,
+  getFullPaging,
   getPageNo,
   getWip,
   getErrors,

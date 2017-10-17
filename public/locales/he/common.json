@@ -27,6 +27,9 @@
     "programs": {
       "by": "סנן תוכניות לפי:"
     },
+    "full-program": {
+      "by":"סנן פרקים לפי:"
+    },
     "events": {
       "by": "סנן אירועים לפי:"
     },
@@ -160,28 +163,24 @@
       "movies": "סרטים"
     },
     "list": {
-      "episode_from": "Episode from:"
+      "episode_from": "פרק מתוך התוכנית:"
     },
     "full": {
-      "episodes": "Episode(s)",
-      "ccuName": "Content Unit Name",
-      "name": "Program Name",
-      "duration": "Duration",
-      "film_date": "Film Date"
+      "episodes": "פרקים"
     },
     "part": {
       "info": {
-        "tags": "Tags",
-        "sources": "Sources",
-        "related-event": "Related to Event"
+        "tags": "תגיות",
+        "sources": "מקורות",
+        "related-event": "אירועים קשורים"
       },
       "materials": {
-        "summary": "Summary",
-        "transcription": "Transcription"
+        "summary": "תקציר",
+        "transcription": "תמליל"
       },
       "relevant-parts": {
-        "title": "Other parts from the same program",
-        "item-title": "Part {{name}}"
+        "title": "פרקים נוספים מאותה תוכנית",
+        "item-title": "פרק {{name}}"
       }
     }
   },
