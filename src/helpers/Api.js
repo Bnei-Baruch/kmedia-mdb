@@ -44,6 +44,6 @@ export default class Api {
   static autocomplete = ({ q, language }) =>
     Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 
-  static search = ({ q, language, pageNo: page_no, pageSize: page_size }) =>
-    Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size })}`);
+  static search = ({ q, language, pageNo: page_no, pageSize: page_size, sortBy: sort_by }) =>
+    Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by })}`);
 }

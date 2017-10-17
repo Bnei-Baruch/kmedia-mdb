@@ -18,9 +18,11 @@ export class SuggestionsHelper {
   };
 
   $$addSuggestion = (option, field) => {
-    const { text, _type: type, _source } = option;
-    const { mdb_uid: id }                = _source;
-    const item                           = { id, type, text };
+    const { _index, text, _type: type, _source } = option;
+    const { mdb_uid: id }                        = _source;
+    // TODO: Fix that to return detected language explicitly!
+    const language = _index.split('_').slice(-1)[0];
+    const item                                   = { id, type, text, language };
 
     let typeItems = this.byType[type];
     if (typeItems) {
