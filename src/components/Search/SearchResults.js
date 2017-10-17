@@ -52,8 +52,6 @@ class SearchResults extends Component {
       filmDate = t('values.date', { date: new Date(src.film_date) });
     }
 
-    console.log(src);
-
     return (
       <Table.Row key={src.mdb_uid} verticalAlign="top">
         <Table.Cell collapsing singleLine width={1}>

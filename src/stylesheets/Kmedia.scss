@@ -438,6 +438,7 @@ $text-colors: (
   text-align: center;
 }
 
-.search-result-rtl {
+.search-result-rtl .title {
   direction: rtl;
+  display: inline-block;
 }

@@ -121,12 +121,17 @@ class OmniBox extends Component {
   }
 
   closeSuggestions = (e, data) => {
-    if (this.state.dontBlur) {
-      this.setState({ dontBlur: false });
-    } else {
-      this.setState({ isOpen: false, dontBlur: false });
-    }
+    // if (this.state.dontBlur) {
+    //   this.setState({ dontBlur: false });
+    // } else {
+    //   this.setState({ isOpen: false, dontBlur: false });
+    // }
   }
+
+  resultRTL = (language, result) => ({
+    ...result,
+    className: RTL_LANGUAGES.includes(language) ? 'search-result-rtl' : undefined,
+  })
 
   render() {
     const { language } = this.props;
@@ -135,7 +140,7 @@ class OmniBox extends Component {
     const categories = ['tags', 'sources', 'authors', 'persons'];
     const results = !query ? [] : [{
       name: 'search',
-      results: [{ key: 'search', title: query }],
+      results: [this.resultRTL(language, { key: 'search', title: query })],
       onMouseDown: this.dontBlur
     }];
     categories.reduce((acc, val) => {
@@ -143,7 +148,7 @@ class OmniBox extends Component {
       if (searchResults.length > 0) {
         acc.push({
           name: val,
-          results: searchResults.map(x => this.suggestionToResult(val, x)),
+          results: searchResults.map(x => this.resultRTL(x.language, this.suggestionToResult(val, x))),
           onMouseDown: this.dontBlur,
         });
       }
