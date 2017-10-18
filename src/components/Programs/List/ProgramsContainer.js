@@ -9,6 +9,7 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
 import * as shapes from '../../shapes';
+import SectionHeader from '../../shared/SectionHeader';
 import withPagination from '../../pagination/withPagination';
 import ProgramsFilters from './ProgramsFilters';
 import ProgramsList from './ProgramsList';
@@ -65,6 +66,8 @@ class ProgramsContainer extends withPagination {
 
     return (
       <div>
+        <SectionHeader section="programs" />
+        <Divider fitted />
         <ProgramsFilters
           onChange={this.handleFiltersChanged}
           onHydrated={this.handleFiltersHydrated}

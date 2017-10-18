@@ -6,6 +6,7 @@ import { Container, Divider } from 'semantic-ui-react';
 import { formatError } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import { ErrorSplash, LoadingSplash } from '../../shared/Splash';
+import SectionHeader from '../../shared/SectionHeader';
 import ResultsPageHeader from '../../pagination/ResultsPageHeader';
 import Filters from './Filters';
 import List from './List';
@@ -38,6 +39,8 @@ class EventsPage extends PureComponent {
 
     return (
       <div>
+        <SectionHeader section="events" />
+        <Divider fitted />
         <Filters />
         <Container className="padded">
           <ResultsPageHeader pageNo={1} pageSize={1000} total={items.length} />
