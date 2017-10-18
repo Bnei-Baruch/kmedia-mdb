@@ -79,7 +79,7 @@ class Layout extends Component {
                 */}
               </Header>
             </Menu.Item>
-            <Menu.Item>
+            <Menu.Item style={{flex: 1}}>
               <OmniBox t={t} location={location} />
             </Menu.Item>
             <Menu.Menu position="right">

@@ -84,7 +84,7 @@
       "edit-help": "Drag the pointers to share a part of the video"
     },
     "buttons": {
-      "edit-back": "Black to play"
+      "edit-back": "Back to play"
     },
     "error": {
       "loading": "Error loading file."
@@ -113,8 +113,15 @@
     "fallback-to-video": "Audio was not found, using video."
   },
   "search": {
+    "sortby": "sort by",
+    "sorts": {
+      "relevance": "relevance",
+      "newertoolder": "newer to older",
+      "oldertonewer": "older to newer"
+    },
     "suggestions": {
       "categories": {
+        "search": "Search",
         "tags": "Tags",
         "sources": "Sources",
         "authors": "Authors",
@@ -254,28 +261,28 @@
     "content-types": {
       "DAILY_LESSON": "Daily Lesson",
       "SPECIAL_LESSON": "Special Lesson",
-      "FRIENDS_GATHERINGS": "",
+      "FRIENDS_GATHERINGS": "Friends Gatherings",
       "CONGRESS": "Convention",
       "VIDEO_PROGRAM": "Program",
-      "LECTURE_SERIES": "",
-      "MEALS": "",
+      "LECTURE_SERIES": "Lecture Series",
+      "MEALS": "Meals",
       "HOLIDAY": "Holiday",
       "PICNIC": "Picnic",
       "UNITY_DAY": "Unity Day",
-      "LESSON_PART": "",
-      "LECTURE": "",
-      "CHILDREN_LESSON_PART": "",
-      "WOMEN_LESSON_PART": "",
-      "VIRTUAL_LESSON": "",
-      "FRIENDS_GATHERING": "",
-      "MEAL": "",
-      "VIDEO_PROGRAM_CHAPTER": "",
-      "FULL_LESSON": "",
-      "TEXT": "",
-      "UNKNOWN": "",
-      "EVENT_PART": "",
-      "CLIP": "",
-      "TRAINING": "",
+      "LESSON_PART": "Lesson Part",
+      "LECTURE": "Lecture",
+      "CHILDREN_LESSON_PART": "Children Lesson Part",
+      "WOMEN_LESSON_PART": "Women Lesson Part",
+      "VIRTUAL_LESSON": "Virtual Lesson",
+      "FRIENDS_GATHERING": "Gathering Of Friends",
+      "MEAL": "Meal",
+      "VIDEO_PROGRAM_CHAPTER": "Video Program Chapter",
+      "FULL_LESSON": "Full Lesson",
+      "TEXT": "Text",
+      "UNKNOWN": "Unknown",
+      "EVENT_PART": "Event Part",
+      "CLIP": "Clip",
+      "TRAINING": "Training",
       "KITEI_MAKOR": "Sources Materials"
     },
     "media-types": {
