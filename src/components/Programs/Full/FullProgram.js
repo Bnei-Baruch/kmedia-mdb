@@ -60,6 +60,19 @@ class FullProgram extends Component {
           } = this.props;
 
     if (err) {
+      if (err.response && err.response.status === 404) {
+        return (
+          <FrownSplash
+            text={t('messages.program-not-found')}
+            subtext={
+              <Trans i18nKey="messages.program-not-found-subtext">
+                Try the <Link to="/programs">programs list</Link>...
+              </Trans>
+            }
+          />
+        );
+      }
+
       return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
     }
 
@@ -81,37 +94,27 @@ class FullProgram extends Component {
       );
     }
 
-    if (fullProgram) {
-      return (
-        <div>
-          <PageHeader fullProgram={fullProgram} wip={wip} err={err} />
-          <Filters onChange={onFiltersChanged} onHydrated={onFiltersHydrated} />
-          {listContent}
-          <Divider fitted />
-          <Container className="padded" textAlign="center">
-            <Pagination
-              pageNo={pageNo}
-              pageSize={pageSize}
-              total={total}
-              language={language}
-              onChange={onPageChange}
-            />
-          </Container>
-        </div>
-      );
+    if (!fullProgram) {
+      return null;
     }
 
     return (
-      <FrownSplash
-        text={t('messages.program-not-found')}
-        subtext={
-          <Trans i18nKey="messages.program-not-found-subtext">
-            Try the <Link to="/programs">programs list</Link>...
-          </Trans>
-        }
-      />
+      <div>
+        <PageHeader fullProgram={fullProgram} wip={wip} err={err} />
+        <Filters onChange={onFiltersChanged} onHydrated={onFiltersHydrated} />
+        {listContent}
+        <Divider fitted />
+        <Container className="padded" textAlign="center">
+          <Pagination
+            pageNo={pageNo}
+            pageSize={pageSize}
+            total={total}
+            language={language}
+            onChange={onPageChange}
+          />
+        </Container>
+      </div>
     );
-
   }
 }
 

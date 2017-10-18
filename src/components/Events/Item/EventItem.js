@@ -17,6 +17,19 @@ const EventItem = (props) => {
   const { item, wip, err, language, t } = props;
 
   if (err) {
+    if (err.response && err.response.status === 404) {
+      return (
+        <FrownSplash
+          text={t('messages.event-not-found')}
+          subtext={
+            <Trans i18nKey="messages.event-not-found-subtext">
+              Try the <Link to="/events">Events list</Link>...
+            </Trans>
+          }
+        />
+      );
+    }
+
     return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
   }
 
@@ -24,43 +37,34 @@ const EventItem = (props) => {
     return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
   }
 
-  if (item) {
-    return (
-      <div>
-        <div className="avbox">
-          <Container>
-            <Grid centered padded>
-              <RMPVideoBox unit={item} language={language} t={t} isSliceable />
-            </Grid>
-          </Container>
-        </div>
-        <Container>
-          <Grid padded>
-            <Grid.Row>
-              <Grid.Column width={10}>
-                <Info unit={item} t={t} />
-                <Materials unit={item} t={t} />
-              </Grid.Column>
-              <Grid.Column width={6}>
-                <MediaDownloads unit={item} language={language} t={t} />
-                <RelevantPartsContainer unit={item} t={t} />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Container>
-      </div>
-    );
+  if (!item) {
+    return null;
   }
 
   return (
-    <FrownSplash
-      text={t('messages.event-item-not-found')}
-      subtext={
-        <Trans i18nKey="messages.event-item-not-found-subtext">
-          Try the <Link to="/events">Events list</Link>...
-        </Trans>
-      }
-    />
+    <div>
+      <div className="avbox">
+        <Container>
+          <Grid centered padded>
+            <RMPVideoBox unit={item} language={language} t={t} isSliceable />
+          </Grid>
+        </Container>
+      </div>
+      <Container>
+        <Grid padded>
+          <Grid.Row>
+            <Grid.Column width={10}>
+              <Info unit={item} t={t} />
+              <Materials unit={item} t={t} />
+            </Grid.Column>
+            <Grid.Column width={6}>
+              <MediaDownloads unit={item} language={language} t={t} />
+              <RelevantPartsContainer unit={item} t={t} />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Container>
+    </div>
   );
 };
 

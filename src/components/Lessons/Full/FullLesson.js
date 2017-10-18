@@ -40,6 +40,19 @@ class FullLesson extends Component {
     const { fullLesson, wip, err, language, t } = this.props;
 
     if (err) {
+      if (err.response && err.response.status === 404) {
+        return (
+          <FrownSplash
+            text={t('messages.lesson-not-found')}
+            subtext={
+              <Trans i18nKey="messages.lesson-not-found-subtext">
+                Try the <Link to="/lessons">lessons list</Link>...
+              </Trans>
+            }
+          />
+        );
+      }
+
       return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
     }
 
@@ -47,51 +60,42 @@ class FullLesson extends Component {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
-    if (fullLesson) {
-      const { activePart } = this.state;
-      const lesson         = fullLesson.content_units[activePart];
-      return (
-        <div>
-          <div className="avbox">
-            <Container>
-              <Grid padded>
-                <FullVideoBox
-                  collection={fullLesson}
-                  activePart={activePart}
-                  language={language}
-                  t={t}
-                  onActivePartChange={this.handleActivePartChange}
-                  PlayListComponent={Playlist}
-                />
-              </Grid>
-            </Container>
-          </div>
+    if (!fullLesson) {
+      return null;
+    }
+
+    const { activePart } = this.state;
+    const lesson         = fullLesson.content_units[activePart];
+    return (
+      <div>
+        <div className="avbox">
           <Container>
-            <Grid padded reversed="tablet">
-              <Grid.Row reversed="computer">
-                <Grid.Column computer={6} tablet={4} mobile={16}>
-                  <MediaDownloads unit={lesson} language={language} t={t} />
-                </Grid.Column>
-                <Grid.Column computer={10} tablet={12} mobile={16}>
-                  <Info lesson={lesson} t={t} />
-                  <Materials unit={lesson} t={t} />
-                </Grid.Column>
-              </Grid.Row>
+            <Grid padded>
+              <FullVideoBox
+                collection={fullLesson}
+                activePart={activePart}
+                language={language}
+                t={t}
+                onActivePartChange={this.handleActivePartChange}
+                PlayListComponent={Playlist}
+              />
             </Grid>
           </Container>
         </div>
-      );
-    }
-
-    return (
-      <FrownSplash
-        text={t('messages.lesson-not-found')}
-        subtext={
-          <Trans i18nKey="messages.lesson-not-found-subtext">
-            Try the <Link to="/lessons">lessons list</Link>...
-          </Trans>
-        }
-      />
+        <Container>
+          <Grid padded reversed="tablet">
+            <Grid.Row reversed="computer">
+              <Grid.Column computer={6} tablet={4} mobile={16}>
+                <MediaDownloads unit={lesson} language={language} t={t} />
+              </Grid.Column>
+              <Grid.Column computer={10} tablet={12} mobile={16}>
+                <Info lesson={lesson} t={t} />
+                <Materials unit={lesson} t={t} />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Container>
+      </div>
     );
   }
 }

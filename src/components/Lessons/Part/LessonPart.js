@@ -17,6 +17,19 @@ const LessonPart = (props) => {
   const { lesson, wip, err, language, t } = props;
 
   if (err) {
+    if (err.response && err.response.status === 404) {
+      return (
+        <FrownSplash
+          text={t('messages.lesson-not-found')}
+          subtext={
+            <Trans i18nKey="messages.lesson-not-found-subtext">
+              Try the <Link to="/lessons">lessons list</Link>...
+            </Trans>
+          }
+        />
+      );
+    }
+
     return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
   }
 
@@ -24,43 +37,34 @@ const LessonPart = (props) => {
     return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
   }
 
-  if (lesson) {
-    return (
-      <div>
-        <div className="avbox">
-          <Container>
-            <Grid centered padded>
-              <RMPVideoBox unit={lesson} language={language} t={t} isSliceable />
-            </Grid>
-          </Container>
-        </div>
-        <Container>
-          <Grid padded>
-            <Grid.Row>
-              <Grid.Column width={10}>
-                <Info lesson={lesson} t={t} />
-                <Materials unit={lesson} t={t} />
-              </Grid.Column>
-              <Grid.Column width={6}>
-                <MediaDownloads unit={lesson} language={language} t={t} />
-                <RelevantPartsContainer unit={lesson} t={t} />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Container>
-      </div>
-    );
+  if (!lesson) {
+    return null;
   }
 
   return (
-    <FrownSplash
-      text={t('messages.lesson-not-found')}
-      subtext={
-        <Trans i18nKey="messages.lesson-not-found-subtext">
-          Try the <Link to="/lessons">lessons list</Link>...
-        </Trans>
-      }
-    />
+    <div>
+      <div className="avbox">
+        <Container>
+          <Grid centered padded>
+            <RMPVideoBox unit={lesson} language={language} t={t} isSliceable />
+          </Grid>
+        </Container>
+      </div>
+      <Container>
+        <Grid padded>
+          <Grid.Row>
+            <Grid.Column width={10}>
+              <Info lesson={lesson} t={t} />
+              <Materials unit={lesson} t={t} />
+            </Grid.Column>
+            <Grid.Column width={6}>
+              <MediaDownloads unit={lesson} language={language} t={t} />
+              <RelevantPartsContainer unit={lesson} t={t} />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Container>
+    </div>
   );
 };
 

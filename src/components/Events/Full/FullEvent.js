@@ -43,6 +43,19 @@ class FullEvent extends Component {
     const { activePart }                       = this.state;
 
     if (err) {
+      if (err.response && err.response.status === 404) {
+        return (
+          <FrownSplash
+            text={t('messages.event-not-found')}
+            subtext={
+              <Trans i18nKey="messages.event-not-found-subtext">
+                Try the <Link to="/events">events list</Link>...
+              </Trans>
+            }
+          />
+        );
+      }
+
       return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
     }
 
@@ -50,59 +63,49 @@ class FullEvent extends Component {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
-    if (fullEvent && Array.isArray(fullEvent.content_units)) {
-      const activeUnit = fullEvent.content_units[activePart];
-      return (
-        <div>
-          {/*<PageHeader item={fullEvent} />
+    if (!fullEvent || !Array.isArray(fullEvent.content_units)) {
+      return null;
+    }
+
+    const activeUnit = fullEvent.content_units[activePart];
+    return (
+      <div>
+        {/*<PageHeader item={fullEvent} />
           <EventMap
             language={language}
             address={fullEvent.full_address}
             city={fullEvent.city}
             country={fullEvent.country}
           />*/}
-          <div className="avbox">
-            <Container>
-              <Grid padded>
-                <FullVideoBox
-                  collection={fullEvent}
-                  activePart={activePart}
-                  language={language}
-                  t={t}
-                  onActivePartChange={this.handleActivePartChange}
-                  PlayListComponent={Playlist}
-                />
-              </Grid>
-            </Container>
-          </div>
+        <div className="avbox">
           <Container>
-            <Grid padded reversed="tablet">
-              <Grid.Row reversed="computer">
-                <Grid.Column computer={6} tablet={4} mobile={16}>
-                  <MediaDownloads unit={activeUnit} language={language} t={t} />
-                </Grid.Column>
-                <Grid.Column computer={10} tablet={12} mobile={16}>
-                  <Info unit={activeUnit} t={t} />
-                  <Materials unit={activeUnit} t={t} />
-                </Grid.Column>
-              </Grid.Row>
+            <Grid padded>
+              <FullVideoBox
+                collection={fullEvent}
+                activePart={activePart}
+                language={language}
+                t={t}
+                onActivePartChange={this.handleActivePartChange}
+                PlayListComponent={Playlist}
+              />
             </Grid>
           </Container>
         </div>
-      );
-    }
-
-    return (
-      <FrownSplash
-        text={t('messages.event-not-found')}
-        subtext={
-          <Trans i18nKey="messages.event-not-found-subtext">
-            Try the <Link to="/events">events list</Link>...
-          </Trans>
-        }
-      />
+        <Container>
+          <Grid padded reversed="tablet">
+            <Grid.Row reversed="computer">
+              <Grid.Column computer={6} tablet={4} mobile={16}>
+                <MediaDownloads unit={activeUnit} language={language} t={t} />
+              </Grid.Column>
+              <Grid.Column computer={10} tablet={12} mobile={16}>
+                <Info unit={activeUnit} t={t} />
+                <Materials unit={activeUnit} t={t} />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Container>
+      </div>
     );
-
   }
 }
 
