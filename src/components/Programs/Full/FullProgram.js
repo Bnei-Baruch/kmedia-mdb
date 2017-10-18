@@ -5,14 +5,14 @@ import { Trans, translate } from 'react-i18next';
 import { Container, Divider } from 'semantic-ui-react';
 
 import { formatError } from '../../../helpers/utils';
+import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
 import Link from '../../Language/MultiLanguageLink';
-import * as shapes from '../../shapes';
+import Pagination from '../../pagination/Pagination';
+import ResultsPageHeader from '../../pagination/ResultsPageHeader';
 import PageHeader from './PageHeader';
 import Filters from './Filters';
 import ChaptersList from './ChaptersList';
-import Pagination from '../../pagination/Pagination';
-import ResultsPageHeader from '../../pagination/ResultsPageHeader';
 
 class FullProgram extends Component {
   static propTypes = {

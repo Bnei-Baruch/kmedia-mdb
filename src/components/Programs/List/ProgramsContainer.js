@@ -2,28 +2,31 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Container, Divider } from 'semantic-ui-react';
 
-import { actions, selectors as programSelectors } from '../../../redux/modules/programs';
+import { actions, selectors } from '../../../redux/modules/programs';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
 import * as shapes from '../../shapes';
-import SectionHeader from '../../shared/SectionHeader';
 import withPagination from '../../pagination/withPagination';
-import Filters from './Filters';
-import List from './List';
+import Programs from './Programs';
 
 class ProgramsContainer extends withPagination {
 
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
-    language: PropTypes.string.isRequired,
-    fetchList: PropTypes.func.isRequired,
-    editNewFilter: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(shapes.ProgramChapter),
+    wip: shapes.WIP,
+    err: shapes.Error,
+    pageNo: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired,
+    pageSize: PropTypes.number.isRequired,
+    language: PropTypes.string.isRequired,
     isFiltersHydrated: PropTypes.bool,
     shouldOpenProgramsFilter: PropTypes.bool,
+    fetchList: PropTypes.func.isRequired,
+    setPage: PropTypes.func.isRequired,
+    editNewFilter: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -50,6 +53,12 @@ class ProgramsContainer extends withPagination {
     super.componentWillReceiveProps(nextProps);
   }
 
+  handlePageChanged = (pageNo) =>
+    withPagination.handlePageChange(this.props, pageNo);
+
+  handleFiltersChanged = () =>
+    withPagination.handlePageChange(this.props, 1);
+
   handleFiltersHydrated = () => {
     withPagination.handlePageChange(this.props);
 
@@ -58,41 +67,41 @@ class ProgramsContainer extends withPagination {
     }
   };
 
-  handleFiltersChanged = () =>
-    withPagination.handlePageChange(this.props, 1);
-
   render() {
-    const { items } = this.props;
+    const { items, wip, err, pageNo, total, pageSize, language } = this.props;
 
     return (
-      <div>
-        <SectionHeader section="programs" />
-        <Divider fitted />
-        <Filters onChange={this.handleFiltersChanged} onHydrated={this.handleFiltersHydrated} />
-        <Container className="padded">
-          <withPagination.ResultsPageHeader {...this.props} />
-          <List items={items} />
-        </Container>
-        <Divider fitted />
-        <Container className="padded" textAlign="center">
-          <withPagination.Pagination {...this.props} />
-        </Container>
-      </div>
+      <Programs
+        items={items}
+        wip={wip}
+        err={err}
+        pageNo={pageNo}
+        total={total}
+        pageSize={pageSize}
+        language={language}
+        onPageChange={this.handlePageChanged}
+        onFiltersChanged={this.handleFiltersChanged}
+        onFiltersHydrated={this.handleFiltersHydrated}
+      />
     );
   }
 }
 
 const mapState = (state) => {
-  const paginationProps = withPagination.mapState('programs', state, programSelectors, settings);
+  const paging = withPagination.mapState('programs', state, selectors, settings);
 
   // we want to open programs-filter if no filter is applied
   const allFilters               = filters.getFilters(state.filters, 'programs');
   const shouldOpenProgramsFilter = allFilters.length === 0;
 
   return {
-    ...paginationProps,
-    items: programSelectors.getItems(state.programs)
+    items: selectors.getItems(state.programs)
       .map(x => mdb.getDenormContentUnit(state.mdb, x)),
+    wip: selectors.getWip(state.programs).list,
+    err: selectors.getErrors(state.programs).list,
+    pageNo: paging.pageNo,
+    total: paging.total,
+    pageSize: settings.getPageSize(state.settings),
     language: settings.getLanguage(state.settings),
     isFiltersHydrated: filters.getIsHydrated(state.filters, 'programs'),
     shouldOpenProgramsFilter,

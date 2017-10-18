@@ -29,12 +29,19 @@ class EventsPage extends PureComponent {
   render() {
     const { items, wip, err, t } = this.props;
 
+    let content;
     if (err) {
-      return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
-    }
-
-    if (wip) {
-      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
+      content = <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
+    } else if (wip) {
+      content = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
+    } else {
+      content = (
+        <Container className="padded">
+          <ResultsPageHeader pageNo={1} pageSize={1000} total={items.length} />
+          <Divider fitted />
+          <List items={items} t={t} />
+        </Container>
+      );
     }
 
     return (
@@ -42,11 +49,7 @@ class EventsPage extends PureComponent {
         <SectionHeader section="events" />
         <Divider fitted />
         <Filters />
-        <Container className="padded">
-          <ResultsPageHeader pageNo={1} pageSize={1000} total={items.length} />
-          <Divider fitted />
-          <List items={items} t={t}/>
-        </Container>
+        {content}
       </div>
     );
   }
