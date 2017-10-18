@@ -43,7 +43,7 @@ const ProgramChapter = (props) => {
               </Grid.Column>
               <Grid.Column width={6}>
                 <MediaDownloads unit={chapter} language={language} t={t} />
-                <RelevantPartsContainer program={chapter} t={t} />
+                <RelevantPartsContainer unit={chapter} t={t} />
               </Grid.Column>
             </Grid.Row>
           </Grid>

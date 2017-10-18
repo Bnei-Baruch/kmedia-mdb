@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import 'moment-duration-format';
 
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../helpers/consts';
@@ -10,9 +10,9 @@ import { actions, selectors } from '../../../../redux/modules/lessons';
 import * as shapes from '../../../shapes';
 import RelevantParts from './RelevantParts';
 
-const getCollectionIdFromLesson = (lesson) => {
-  if (lesson.collections) {
-    const collections        = Object.values(lesson.collections);
+const getRelevantCollectionId = (unit) => {
+  if (unit.collections) {
+    const collections        = Object.values(unit.collections);
     const relevantCollection = collections.find(collection =>
       collection.content_type === CT_DAILY_LESSON ||
       collection.content_type === CT_SPECIAL_LESSON
@@ -29,24 +29,24 @@ const getCollectionIdFromLesson = (lesson) => {
 class RelevantPartsContainer extends Component {
 
   static propTypes = {
-    lesson: shapes.LessonPart.isRequired,
-    fullLessonID: PropTypes.string,
-    fullLesson: shapes.LessonCollection,
+    unit: shapes.EventItem.isRequired,
+    collectionID: PropTypes.string,
+    collection: shapes.GenericCollection,
     wip: shapes.WIP,
     err: shapes.Error,
-    fetchFullLesson: PropTypes.func.isRequired,
+    fetchCollection: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    fullLesson: null,
-    fullLessonID: '',
+    collection: null,
+    collectionID: '',
     wip: false,
     err: null
   };
 
   state = {
-    fullLessonRequested: false,
+    fullCollectionRequested: false,
   };
 
   componentDidMount() {
@@ -58,7 +58,7 @@ class RelevantPartsContainer extends Component {
   }
 
   askForDataIfNeeded = (props) => {
-    const { fullLessonID, wip, err, fetchFullLesson } = props;
+    const { collectionID, wip, err, fetchCollection } = props;
 
     // TODO:
     // Maybe in the future we'll do something more sophisticated
@@ -68,31 +68,31 @@ class RelevantPartsContainer extends Component {
     // We fetch stuff if we don't have it already
     // and a request for it is not in progress or ended with an error.
     // if (
-    //   fullLesson &&
-    //   fullLesson.id === fullLessonID &&
-    //   Array.isArray(fullLesson.content_units)) {
+    //   collection &&
+    //   collection.id === collectionID &&
+    //   Array.isArray(collection.content_units)) {
     //   return;
     // }
 
-    if (this.state.fullLessonRequested) {
+    if (this.state.fullCollectionRequested) {
       return;
     }
 
-    if (fullLessonID && !(wip || err)) {
-      fetchFullLesson(fullLessonID);
-      this.setState({ fullLessonRequested: true });
+    if (collectionID && !(wip || err)) {
+      fetchCollection(collectionID);
+      this.setState({ fullCollectionRequested: true });
     }
   };
 
   render() {
-    const { lesson, fullLesson, wip, err, t } = this.props;
+    const { unit, collection, wip, err, t } = this.props;
 
     return (
       <RelevantParts
-        lesson={lesson}
+        unit={unit}
         wip={wip}
         err={err}
-        fullLesson={wip || err ? null : fullLesson}
+        collection={wip || err ? null : collection}
         t={t}
       />
     );
@@ -101,15 +101,15 @@ class RelevantPartsContainer extends Component {
 
 export default connect(
   (state, ownProps) => {
-    const fullLessonID = getCollectionIdFromLesson(ownProps.lesson);
+    const collectionID = getRelevantCollectionId(ownProps.unit);
     return {
-      fullLessonID,
-      fullLesson: fullLessonID ? mdb.getDenormCollection(state.mdb, fullLessonID) : null,
-      wip: selectors.getWip(state.lessons).fulls[fullLessonID],
-      errors: selectors.getErrors(state.lessons).fulls[fullLessonID],
+      collectionID,
+      collection: collectionID ? mdb.getDenormCollection(state.mdb, collectionID) : null,
+      wip: selectors.getWip(state.lessons).fulls[collectionID],
+      errors: selectors.getErrors(state.lessons).fulls[collectionID],
     };
   },
   dispatch => bindActionCreators({
-    fetchFullLesson: actions.fetchFullLesson,
+    fetchCollection: actions.fetchFullLesson,
   }, dispatch)
 )(RelevantPartsContainer);

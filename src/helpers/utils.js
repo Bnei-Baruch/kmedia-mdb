@@ -206,3 +206,35 @@ export const canonicalLink = (entity) => {
     return '/';
   }
 };
+
+/**
+ * Return n adjacent indices in array around idx (excluding idx).
+ * @param idx center neighborhood, in range [-1,len)
+ * @param len array length
+ * @param n size of neighborhood
+ * @returns {Array<int>}
+ */
+export const neighborIndices = (idx, len, n) => {
+  const neighbors = [];
+  let step        = 1;
+
+  while (neighbors.length <= n) {
+    const l = idx - step;
+    if (l >= 0) {
+      neighbors.unshift(l);
+    }
+
+    const r = idx + step;
+    if (r < len) {
+      neighbors.push(r);
+    }
+
+    if (r >= len && l < 0) {
+      break;
+    }
+
+    step++;
+  }
+
+  return neighbors.slice(0, n);
+};
