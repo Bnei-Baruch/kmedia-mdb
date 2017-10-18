@@ -1,13 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Trans, translate } from 'react-i18next';
-import { Grid } from 'semantic-ui-react';
+import { Container, Grid } from 'semantic-ui-react';
 
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
-import Link from '../../Language/MultiLanguageLink';
-import RMPVideoBox from '../../shared/UnitPlayer/RMPVideoBox';
 import * as shapes from '../../shapes';
+import RMPVideoBox from '../../shared/UnitPlayer/RMPVideoBox';
+import Materials from '../../shared/UnitMaterials/Materials';
+import MediaDownloads from '../../shared/MediaDownloads';
+import Link from '../../Language/MultiLanguageLink';
+import Info from './Info';
+import RelevantPartsContainer from './RelevantParts/RelevantPartsContainer';
 
 const EventItem = (props) => {
   const { item, wip, err, language, t } = props;
@@ -22,9 +26,29 @@ const EventItem = (props) => {
 
   if (item) {
     return (
-      <Grid.Column width={16}>
-        <RMPVideoBox unit={item} language={language} t={t} />
-      </Grid.Column>
+      <div>
+        <div className="avbox">
+          <Container>
+            <Grid centered padded>
+              <RMPVideoBox unit={item} language={language} t={t} isSliceable />
+            </Grid>
+          </Container>
+        </div>
+        <Container>
+          <Grid padded>
+            <Grid.Row>
+              <Grid.Column width={10}>
+                <Info unit={item} t={t} />
+                <Materials unit={item} t={t} />
+              </Grid.Column>
+              <Grid.Column width={6}>
+                <MediaDownloads unit={item} language={language} t={t} />
+                <RelevantPartsContainer unit={item} t={t} />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Container>
+      </div>
     );
   }
 

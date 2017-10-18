@@ -35,7 +35,7 @@ class Info extends Component {
         }
 
         const path    = tracePath(tag, getTagById);
-        const display = path.map(y => y.label).join(' - ');
+        const display = path.map(y => y.label).join(' > ');
         return <span key={x}>{display}</span>;
       }), ', '));
 

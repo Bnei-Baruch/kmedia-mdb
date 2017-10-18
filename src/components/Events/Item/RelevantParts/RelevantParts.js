@@ -12,7 +12,7 @@ import Link from '../../../Language/MultiLanguageLink';
 import myimage from './image.png';
 
 const RelevantParts = (props) => {
-  const { lesson, fullLesson, wip, err, t } = props;
+  const { unit, collection, wip, err, t } = props;
 
   if (err) {
     return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
@@ -22,27 +22,23 @@ const RelevantParts = (props) => {
     return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
   }
 
-  if (fullLesson && Array.isArray(fullLesson.content_units)) {
-    const otherParts = fullLesson.content_units.filter(part => part.id !== lesson.id);
+  if (collection && Array.isArray(collection.content_units)) {
+    const otherParts = collection.content_units.filter(x => x.id !== unit.id);
 
     return (
       otherParts.length ? (
         <div style={{ marginTop: '50px' }}>
-          <Header as="h3" content={t('lessons.part.relevant-parts.title')} />
+          <Header as="h3" content={t('events.part.relevant-parts.title')} />
           <Item.Group divided link>
             {
               otherParts.slice(0, 3).map(part => (
-                <Item as={Link} key={part.id} to={`/lessons/part/${part.id}`}>
+                <Item as={Link} key={part.id} to={`/events/item/${part.id}`}>
                   <Item.Image src={myimage} size="tiny" />
                   <Item.Content>
-                    <Header
-                      as="h4"
-                      content={t('lessons.part.relevant-parts.item-title', { name: fullLesson.ccuNames[part.id] })}
-                    />
+                    <Item.Description>{part.name}</Item.Description>
                     <Item.Meta>
                       <small>{moment.duration(part.duration, 'seconds').format('hh:mm:ss')}</small>
                     </Item.Meta>
-                    <Item.Description>{part.name}</Item.Description>
                   </Item.Content>
                 </Item>
               ))
@@ -53,7 +49,7 @@ const RelevantParts = (props) => {
                   fluid
                   as={Link}
                   textAlign="right"
-                  to={`/lessons/full/${fullLesson.id}`}
+                  to={`/events/full/${collection.id}`}
                 >
                   {t('buttons.more')} &raquo;
                 </Container>
@@ -67,10 +63,10 @@ const RelevantParts = (props) => {
 
   return (
     <FrownSplash
-      text={t('messages.lesson-not-found')}
+      text={t('messages.event-not-found')}
       subtext={
-        <Trans i18nKey="messages.lesson-not-found-subtext">
-          Try the <Link to="/lessons">lessons list</Link>...
+        <Trans i18nKey="messages.event-not-found-subtext">
+          Try the <Link to="/events">events list</Link>...
         </Trans>
       }
     />
@@ -78,15 +74,15 @@ const RelevantParts = (props) => {
 };
 
 RelevantParts.propTypes = {
-  lesson: shapes.LessonPart.isRequired,
-  fullLesson: shapes.LessonCollection,
+  unit: shapes.ContentUnit.isRequired,
+  collection: shapes.GenericCollection,
   wip: shapes.WIP,
   err: shapes.Error,
   t: PropTypes.func.isRequired,
 };
 
 RelevantParts.defaultProps = {
-  fullLesson: null,
+  collection: null,
   wip: false,
   err: null,
 };

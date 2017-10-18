@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Trans, translate } from 'react-i18next';
-import { Grid, Container } from 'semantic-ui-react';
+import { Container, Grid } from 'semantic-ui-react';
 
-import Link from '../../Language/MultiLanguageLink';
 import { formatError } from '../../../helpers/utils';
-import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
+import * as shapes from '../../shapes';
 import RMPVideoBox from '../../shared/UnitPlayer/RMPVideoBox';
 import Materials from '../../shared/UnitMaterials/Materials';
 import MediaDownloads from '../../shared/MediaDownloads';
+import Link from '../../Language/MultiLanguageLink';
 import Info from './Info';
 import RelevantPartsContainer from './RelevantParts/RelevantPartsContainer';
 

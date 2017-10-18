@@ -138,10 +138,15 @@
   "events": {
     "header": {
       "text": "Events",
-      "subtext": "Today, the wisdom of Kabbalah is already everywhere in the world. In this section you will be able to see events, conventions and special meetings of the \"Kabbalah la-am\" association in Israel and abroad."
+      "subtext": "Today, the wisdom of Kabbalah is already everywhere in the world. In this section you will be able to see events, conventions and special meetings of the \"Kabbalah L’Am\" association in Israel and abroad."
     },
     "ALL_EVENTS": "All Events",
-    "no-matches": "No matching events found"
+    "no-matches": "No matching events found",
+    "part": {
+      "relevant-parts": {
+        "title": "Other parts from the same event"
+      }
+    }
   },
   "lessons": {
     "header": {
