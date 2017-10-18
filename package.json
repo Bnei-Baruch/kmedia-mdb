@@ -33,6 +33,7 @@
     "regenerator-runtime": "^0.10.5"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "babel-polyfill": "^6.23.0",
     "child_process": "^1.0.2",
     "classnames": "^2.2.5",
@@ -62,8 +63,7 @@
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
     "redux-saga": "^0.15.6",
-    "semantic-ui-react": "^0.74.2",
-    "zl-fetch": "^1.0.4"
+    "semantic-ui-react": "^0.74.2"
   },
   "jest": {}
 }

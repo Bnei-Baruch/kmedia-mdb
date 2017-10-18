@@ -12,23 +12,23 @@ import { filtersTransformer } from '../filters';
 
 function* fetchGenres() {
   const language = yield select(state => settings.getLanguage(state.settings));
-  const genres   = yield call(Api.collections, {
+  const { data } = yield call(Api.collections, {
     language,
     content_type: CT_VIDEO_PROGRAM,
     pageNo: 1,
     pageSize: 1000,
     with_units: false,
   });
-  if (Array.isArray(genres.collections)) {
-    yield put(mdbActions.receiveCollections(genres.collections));
-    yield put(actions.receiveCollections(genres.collections));
+  if (Array.isArray(data.collections)) {
+    yield put(mdbActions.receiveCollections(data.collections));
+    yield put(actions.receiveCollections(data.collections));
   }
 }
 
 function* fetchRecentlyUpdated() {
-  const resp = yield call(Api.recentlyUpdated);
-  if (Array.isArray(resp)) {
-    yield put(actions.receiveRecentlyUpdated(resp));
+  const { data } = yield call(Api.recentlyUpdated);
+  if (Array.isArray(data)) {
+    yield put(actions.receiveRecentlyUpdated(data));
   }
 }
 
@@ -41,18 +41,18 @@ function* fetchList(action, filterName, successAction, failureAction) {
       { ...action.payload, language, content_type: CT_VIDEO_PROGRAM_CHAPTER } :
       { ...action.payload, language, ...params, content_type: CT_VIDEO_PROGRAM_CHAPTER };
 
-    const resp = yield call(Api.units, args);
+    const { data } = yield call(Api.units, args);
     if (action.payload.program) {
-      resp.program = action.payload.program;
+      data.program = action.payload.program;
     }
-    if (Array.isArray(resp.collections)) {
-      yield put(mdbActions.receiveCollections(resp.collections));
+    if (Array.isArray(data.collections)) {
+      yield put(mdbActions.receiveCollections(data.collections));
     }
-    if (Array.isArray(resp.content_units)) {
-      yield put(mdbActions.receiveContentUnits(resp.content_units));
+    if (Array.isArray(data.content_units)) {
+      yield put(mdbActions.receiveContentUnits(data.content_units));
     }
 
-    yield put(successAction(resp));
+    yield put(successAction(data));
   } catch (err) {
     yield put(failureAction(err));
   }
@@ -70,6 +70,7 @@ function* fetchProgramsList(action) {
   if (isEmpty(recentlyUpdated)) {
     yield fork(fetchRecentlyUpdated);
   }
+
   yield fetchList(action, 'programs', actions.fetchListSuccess, actions.fetchListFailure);
 }
 
@@ -80,8 +81,8 @@ function* fetchFullProgramList(action) {
 function* fetchProgramChapter(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const response = yield call(Api.unit, { id: action.payload, language });
-    yield put(mdbActions.receiveContentUnits([response]));
+    const { data } = yield call(Api.unit, { id: action.payload, language });
+    yield put(mdbActions.receiveContentUnits([data]));
     yield put(actions.fetchProgramChapterSuccess(action.payload));
   } catch (err) {
     yield put(actions.fetchProgramChapterFailure(action.payload, err));
@@ -91,8 +92,8 @@ function* fetchProgramChapter(action) {
 function* fetchFullProgram(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const response = yield call(Api.collection, { id: action.payload, language });
-    yield put(mdbActions.receiveCollections([response]));
+    const { data } = yield call(Api.collection, { id: action.payload, language });
+    yield put(mdbActions.receiveCollections([data]));
     yield put(actions.fetchFullProgramSuccess(action.payload));
   } catch (err) {
     yield put(actions.fetchFullProgramFailure(action.payload, err));

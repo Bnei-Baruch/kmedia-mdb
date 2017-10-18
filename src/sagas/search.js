@@ -9,8 +9,8 @@ import { actions as mdbActions } from '../redux/modules/mdb';
 function* autocomplete(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const resp     = yield call(Api.autocomplete, { q: action.payload, language });
-    yield put(actions.autocompleteSuccess(resp));
+    const { data } = yield call(Api.autocomplete, { q: action.payload, language });
+    yield put(actions.autocompleteSuccess(data));
   } catch (err) {
     yield put(actions.autocompleteFailure(err));
   }
@@ -20,10 +20,10 @@ function* search(action) {
   try {
     yield* updateQuery(query => Object.assign(query, { q: action.payload.q }));
     const language = yield select(state => settings.getLanguage(state.settings));
-    const sortBy = yield select(state => selectors.getSortBy(state.search));
-    const resp     = yield call(Api.search, { ...action.payload, sortBy, language });
+    const sortBy   = yield select(state => selectors.getSortBy(state.search));
+    const { data } = yield call(Api.search, { ...action.payload, sortBy, language });
 
-    if (Array.isArray(resp.hits.hits) && resp.hits.hits.length > 0) {
+    if (Array.isArray(data.hits.hits) && data.hits.hits.length > 0) {
       // TODO edo: optimize data fetching
       // Here comes another call for all content_units we got
       // in order to fetch their possible additional collections.
@@ -31,16 +31,16 @@ function* search(action) {
       // This second round trip to the API is awful,
       // we should strive for a single call to the API and get all the data we need.
       // hmm, relay..., hmm ?
-      const cuIDsToFetch = resp.hits.hits.reduce((acc, val) => {
+      const cuIDsToFetch = data.hits.hits.reduce((acc, val) => {
         return acc.concat(val._source.mdb_uid);
       }, []);
       const language     = yield select(state => settings.getLanguage(state.settings));
       const pageSize     = cuIDsToFetch.length;
-      const resp2        = yield call(Api.units, { id: cuIDsToFetch, pageSize, language });
-      yield put(mdbActions.receiveContentUnits(resp2.content_units));
+      const resp         = yield call(Api.units, { id: cuIDsToFetch, pageSize, language });
+      yield put(mdbActions.receiveContentUnits(resp.data.content_units));
     }
 
-    yield put(actions.searchSuccess(resp));
+    yield put(actions.searchSuccess(data));
   } catch (err) {
     yield put(actions.searchFailure(err));
   }
@@ -57,8 +57,8 @@ function* updateSortByInQuery(action) {
 }
 
 function* hydrateUrl() {
-  const query            = yield* getQuery();
-  const { q, page = '1'} = query;
+  const query             = yield* getQuery();
+  const { q, page = '1' } = query;
 
   if (q) {
     if (query.sort_by) {

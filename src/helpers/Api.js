@@ -1,11 +1,11 @@
-import zlFetch from 'zl-fetch';
+import axios from 'axios';
 
 const API_BACKEND = process.env.NODE_ENV === 'production' ?
   '/backend/' :
   process.env.REACT_APP_API_BACKEND;
 
 class Requests {
-  static get        = url => zlFetch(`${API_BACKEND}${url}`);
+  static get        = url => axios(`${API_BACKEND}${url}`);
   static makeParams = params =>
     `${Object.entries(params)
       .filter(([k, v]) => v !== undefined && v !== null)

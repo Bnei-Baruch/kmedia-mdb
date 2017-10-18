@@ -8,8 +8,8 @@ import { selectors as settings } from '../redux/modules/settings';
 function* fetchSources() {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const resp     = yield call(Api.sources, { language });
-    yield put(actions.fetchSourcesSuccess(resp));
+    const { data } = yield call(Api.sources, { language });
+    yield put(actions.fetchSourcesSuccess(data));
   } catch (err) {
     yield put(actions.fetchSourcesFailure(err));
   }
