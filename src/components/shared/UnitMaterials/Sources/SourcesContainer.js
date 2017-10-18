@@ -15,7 +15,6 @@ class SourcesContainer extends Component {
   static propTypes = {
     unit: shapes.ContentUnit,
     t: PropTypes.func.isRequired,
-    wip: shapes.WIP,
     err: shapes.Error,
     fetchContent: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
@@ -29,36 +28,38 @@ class SourcesContainer extends Component {
     err: null,
   };
 
-  state = {};
+  state = {
+    wip: {},
+    html: {}
+  };
 
-  async componentDidMount() {
-    await this.askForDataIfNeeded(this.props);
+  componentDidMount() {
+    this.askForDataIfNeeded(this.props);
   }
 
-  async componentWillReceiveProps(nextProps) {
-    await this.askForDataIfNeeded(nextProps);
+  componentWillReceiveProps(nextProps) {
+    this.askForDataIfNeeded(nextProps);
   }
 
   askForDataIfNeeded = (props) => {
-    const { unit, wip, err, sources, fetchContent } = props;
+    const { unit, err, sources, fetchContent } = props;
 
     // We fetch stuff if we don't have it already
     // and a request for it is not in progress or ended with an error.
     if (
       unit &&
       Array.isArray(unit.sources) &&
-      !(wip || err)
+      !err
     ) {
+      const wip  = { ...this.state.wip };
+      const html = { ...this.state.html };
+
       unit.sources.forEach((id) => {
         const content = sources[id];
         if (isEmpty(content)) {
           // Fetch index
           fetchContent(id);
         } else {
-          if (!isEmpty(this.state[id])) {
-            // we already have html for this source
-            return;
-          }
           // We have index, so we can fetch html, but first let's decide which language to show
           const source    = sources[id];
           const languages = Object.keys(source);
@@ -75,23 +76,26 @@ class SourcesContainer extends Component {
             language = 'es';
           }
           const name = source[language].html;
-          if (!isEmpty(name)) {
-            Api.sourceContent({ id, name }).then((html) => {
-              this.setState({ [id]: html });
+
+          if (!isEmpty(name) && !wip[name] && isEmpty(html[name])) {
+            wip[name] = true;
+            Api.sourceContent({ id, name }).then((data) => {
+              html[name] = data;
+              this.setState({ html });
             });
           }
         }
       });
+      this.setState({ wip });
     }
   };
 
   render() {
-    const { t, language, err, wip } = this.props;
+    const { t, language, err } = this.props;
 
     return (<Sources
-      sources={wip || err ? null : this.state}
+      sources={err ? null : this.state.html}
       language={language}
-      wip={wip}
       err={err}
       t={t}
     />);
@@ -104,10 +108,7 @@ export default connect(
     return {
       unit: mdb.getDenormContentUnit(state.mdb, id),
       sources: selectors.getContentByID(state.sources, id),
-      // wip: sources.getWip(state.sources),
-      // err: sources.getErrors(state.sources),
-      wip: null,
-      err: null,
+      err: selectors.getError(state.sources),
       language: settings.getLanguage(state.settings),
     };
   },

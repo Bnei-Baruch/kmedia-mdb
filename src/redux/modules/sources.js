@@ -133,6 +133,7 @@ const getSourceById  = state => state.getByID;
 const getPath        = state => state.getPath;
 const getPathByID    = state => state.getPathByID;
 const getContentByID = state => state.byIdContent;
+const getError       = state => state.error_content;
 
 export const selectors = {
   getSources,
@@ -141,4 +142,5 @@ export const selectors = {
   getPath,
   getPathByID,
   getContentByID,
+  getError,
 };
