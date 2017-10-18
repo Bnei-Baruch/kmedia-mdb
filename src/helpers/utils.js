@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import {
   CT_CHILDREN_LESSON_PART,
   CT_CLIP,
@@ -24,8 +26,11 @@ import {
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON_PART,
+  EVENT_TYPES,
   MEDIA_TYPES
 } from './consts';
+
+import { CollectionsBreakdown } from './mdb';
 
 export const isEmpty = (obj) => {
   // null and undefined are "empty"
@@ -161,11 +166,40 @@ export const physicalFile = (file, ext = false) => {
   return `https://cdn.kabbalahmedia.info/${file.id}${suffix}`;
 };
 
+export const canonicalCollection = (unit) => {
+  if (!unit) {
+    return null;
+  }
+
+  if (isEmpty(unit.collections)) {
+    return null;
+  }
+
+  const collections = Array.isArray(unit.collections) ? unit.collections : Object.values(unit.collections);
+  if (collections.length === 1) {
+    return collections[0];
+  }
+
+  const breakdown = new CollectionsBreakdown(collections);
+  const lessons   = breakdown.getDailyLessons();
+  const events    = breakdown.getEvents();
+  if (lessons.length > 0 && events.length > 0) {
+    const { start_date: start, end_date: end } = events[0];
+    const { film_date: filmDate }              = unit;
+    if (start && end && filmDate) {
+      return (moment(filmDate).isBetween(start, end, 'day', '[]')) ? events[0] : lessons[0];
+    }
+  }
+
+  return collections[0];
+};
+
 export const canonicalLink = (entity) => {
   if (!entity) {
     return '/';
   }
 
+  // collections
   switch (entity.content_type) {
   case CT_DAILY_LESSON:
   case CT_SPECIAL_LESSON:
@@ -182,6 +216,18 @@ export const canonicalLink = (entity) => {
   case CT_PICNIC:
   case CT_UNITY_DAY:
     return `/events/full/${entity.id}`;
+  default:
+    break;
+  }
+
+  // units whose canonical collection is an event goes as an event item
+  const collection = canonicalCollection(entity);
+  if (collection && EVENT_TYPES.indexOf(collection.content_type) !== -1) {
+    return `/events/item/${entity.id}`;
+  }
+
+  // unit based on type
+  switch (entity.content_type) {
   case CT_LESSON_PART:
     return `/lessons/part/${entity.id}`;
   case CT_LECTURE:
