@@ -10,8 +10,8 @@ import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as filters } from '../../../redux/modules/filters';
 import * as shapes from '../../shapes';
 import SectionHeader from '../../shared/SectionHeader';
-import LessonsFilters from './LessonsFilters';
-import LessonsList from './LessonsList';
+import Filters from './Filters';
+import List from './List';
 import withPagination from '../../pagination/withPagination';
 
 class LessonsContainer extends withPagination {
@@ -46,6 +46,12 @@ class LessonsContainer extends withPagination {
     super.componentWillReceiveProps(nextProps);
   }
 
+  handleFiltersChanged = () =>
+    withPagination.handlePageChange(this.props, 1);
+
+  handleFiltersHydrated = () =>
+    withPagination.handlePageChange(this.props);
+
   render() {
     const { items } = this.props;
 
@@ -53,13 +59,10 @@ class LessonsContainer extends withPagination {
       <div>
         <SectionHeader section="lessons" />
         <Divider fitted />
-        <LessonsFilters
-          onChange={() => withPagination.handlePageChange(this.props, 1)}
-          onHydrated={() => withPagination.handlePageChange(this.props)}
-        />
+        <Filters onChange={this.handleFiltersChanged} onHydrated={this.handleFiltersHydrated} />
         <Container className="padded">
           <withPagination.ResultsPageHeader {...this.props} />
-          <LessonsList items={items} />
+          <List items={items} />
         </Container>
         <Divider fitted />
         <Container className="padded" textAlign="center">

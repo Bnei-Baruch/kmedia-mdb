@@ -11,8 +11,8 @@ import { actions as filtersActions, selectors as filters } from '../../../redux/
 import * as shapes from '../../shapes';
 import SectionHeader from '../../shared/SectionHeader';
 import withPagination from '../../pagination/withPagination';
-import ProgramsFilters from './ProgramsFilters';
-import ProgramsList from './ProgramsList';
+import Filters from './Filters';
+import List from './List';
 
 class ProgramsContainer extends withPagination {
 
@@ -68,13 +68,10 @@ class ProgramsContainer extends withPagination {
       <div>
         <SectionHeader section="programs" />
         <Divider fitted />
-        <ProgramsFilters
-          onChange={this.handleFiltersChanged}
-          onHydrated={this.handleFiltersHydrated}
-        />
+        <Filters onChange={this.handleFiltersChanged} onHydrated={this.handleFiltersHydrated} />
         <Container className="padded">
           <withPagination.ResultsPageHeader {...this.props} />
-          <ProgramsList items={items} />
+          <List items={items} />
         </Container>
         <Divider fitted />
         <Container className="padded" textAlign="center">

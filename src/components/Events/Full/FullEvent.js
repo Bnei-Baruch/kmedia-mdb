@@ -14,7 +14,7 @@ import Link from '../../Language/MultiLanguageLink';
 import Info from '../Item/Info';
 // import PageHeader from './PageHeader';
 // import EventMap from './EventMap';
-import FullEventPlaylist from './FullEventPlaylist';
+import Playlist from './Playlist';
 
 class FullEvent extends Component {
   static propTypes = {
@@ -70,7 +70,7 @@ class FullEvent extends Component {
                   language={language}
                   t={t}
                   onActivePartChange={this.handleActivePartChange}
-                  PlayListComponent={FullEventPlaylist}
+                  PlayListComponent={Playlist}
                 />
               </Grid>
             </Container>
@@ -88,7 +88,7 @@ class FullEvent extends Component {
               </Grid.Row>
             </Grid>
           </Container>
-          </div>
+        </div>
       );
     }
 

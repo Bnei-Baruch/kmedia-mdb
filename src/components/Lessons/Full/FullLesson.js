@@ -12,7 +12,7 @@ import FullVideoBox from '../../shared/UnitPlayer/FullVideoBox';
 import Materials from '../../shared/UnitMaterials/Materials';
 import MediaDownloads from '../../shared/MediaDownloads';
 import Info from '../Part/Info';
-import FullLessonPlaylist from './FullLessonPlaylist';
+import Playlist from './Playlist';
 
 class FullLesson extends Component {
   static propTypes = {
@@ -61,7 +61,7 @@ class FullLesson extends Component {
                   language={language}
                   t={t}
                   onActivePartChange={this.handleActivePartChange}
-                  PlayListComponent={FullLessonPlaylist}
+                  PlayListComponent={Playlist}
                 />
               </Grid>
             </Container>
