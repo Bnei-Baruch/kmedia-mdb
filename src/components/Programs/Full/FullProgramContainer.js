@@ -42,18 +42,15 @@ class FullProgramContainer extends Component {
   };
 
   componentDidMount() {
-    console.log('FullProgramContainer.componentDidMount: fetchCollection');
     this.fetchCollection(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.match.params.id !== this.props.match.params.id) {
-      console.log('FullProgramContainer.componentWillReceiveProps: fetchCollection [match]');
       this.fetchCollection(nextProps);
     }
 
     if (nextProps.language !== this.props.language) {
-      console.log('FullProgramContainer.componentWillReceiveProps: fetchCollection [language]');
       this.fetchCollection(nextProps);
     }
 
@@ -64,12 +61,10 @@ class FullProgramContainer extends Component {
     }
 
     if (nextProps.fullProgram && !this.props.fullProgram) {
-      console.log('FullProgramContainer.componentWillReceiveProps: fetchChapters [fullProgram]');
       this.fetchChapters(nextProps);
     }
 
     if (nextProps.pageSize !== this.props.pageSize) {
-      console.log('FullProgramContainer.componentWillReceiveProps: setAndFetchPage [pageSize]');
       this.setAndFetchPage(nextProps, 1);
     }
   }
@@ -90,17 +85,14 @@ class FullProgramContainer extends Component {
   };
 
   handlePageChanged = (pageNo) => {
-    console.log('FullProgramContainer.handlePageChanged: setAndFetchPage');
     this.setAndFetchPage(this.props, pageNo);
   };
 
   handleFiltersChanged = () => {
-    console.log('FullProgramContainer.handleFiltersChanged: setAndFetchPage');
     this.setAndFetchPage(this.props, 1);
   };
 
   handleFiltersHydrated = () => {
-    console.log('FullProgramContainer.handleFiltersHydrated: handlePageChanged');
     const pageNo = withPagination.getPageNo({ location: this.props.location });
     this.handlePageChanged(pageNo);
   };
