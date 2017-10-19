@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
 import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../../helpers/consts';
@@ -202,4 +201,4 @@ class Sources extends Component {
   }
 }
 
-export default translate()(Sources);
+export default Sources;

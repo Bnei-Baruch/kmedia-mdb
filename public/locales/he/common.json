@@ -207,7 +207,8 @@
   },
   "materials": {
     "summary": {
-      "header": "תקציר"
+      "header": "תקציר",
+      "no-summary": "חסר תקציר"
     },
     "transcription": {
       "header": "תמליל"

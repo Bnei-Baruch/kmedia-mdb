@@ -206,12 +206,10 @@
       }
     }
   },
-  "sources": {
-
-  },
   "materials": {
     "summary": {
-      "header": "Summary"
+      "header": "Summary",
+      "no-summary": "Summary is missing"
     },
     "transcription": {
       "header": "Transcription"
