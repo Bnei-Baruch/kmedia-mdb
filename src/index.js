@@ -29,7 +29,8 @@ const sagaMiddleWare        = createSagaMiddleware(sagaMiddlewareOptions);
 const history          = createHistory();
 const routerMiddleware = createMultiLanguageRouterMiddleware(history);
 
-ReactGA.initialize('UA-000000-01', { debug: true });
+// TODO: (yaniv -> edo) use actual google analytics code
+ReactGA.initialize('UA-000000-01');
 
 const store = createStore(reducer, {}, compose(
   applyMiddleware(routerMiddleware, sagaMiddleWare),
