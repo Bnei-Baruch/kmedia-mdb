@@ -3,6 +3,7 @@ import 'regenerator-runtime/runtime';
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ReactGA from 'react-ga';
 import { applyMiddleware, compose, createStore } from 'redux';
 import createSagaMiddleware, { delay } from 'redux-saga';
 import { put } from 'redux-saga/effects';
@@ -27,6 +28,8 @@ const sagaMiddleWare        = createSagaMiddleware(sagaMiddlewareOptions);
 
 const history          = createHistory();
 const routerMiddleware = createMultiLanguageRouterMiddleware(history);
+
+ReactGA.initialize('UA-000000-01', { debug: true });
 
 const store = createStore(reducer, {}, compose(
   applyMiddleware(routerMiddleware, sagaMiddleWare),

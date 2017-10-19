@@ -9,6 +9,7 @@ import { FLAG_TO_LANGUAGE } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import OmniBox from '../Search/OmniBox';
+import GAPageView from '../GAPageView/GAPageView';
 import Routes from './Routes';
 import MenuItems from './MenuItems';
 import Footer from './Footer';
@@ -54,6 +55,7 @@ class Layout extends Component {
 
     return (
       <div className="layout">
+        <GAPageView location={location} />
         {/* Added the width 100vw to better support mobile, please fix as needed */}
         <div className="layout__header" style={{ width: '100vw' }}>
           {/* Added the width 100vw to better support mobile, please fix as needed */}
