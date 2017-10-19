@@ -10,6 +10,7 @@ import SliceHandle from './SliceHandle';
 import { formatTime } from '../../helpers/time';
 
 const stickyHandleDelta = 10; // pixel width from which to stick to handle
+const minSliceAreaWidth = 4; // in pixels
 
 class AvSeekBar extends Component {
 
@@ -298,7 +299,7 @@ class AvSeekBar extends Component {
                 className="player-slice-area"
                 style={{
                   left: sliceStartLeft,
-                  width: this.toPercentage(normalizedSliceEnd - normalizedSliceStart)
+                  width: Math.max(minSliceAreaWidth, this.toPercentage(normalizedSliceEnd - normalizedSliceStart))
                 }}
               />
             )
