@@ -386,6 +386,7 @@ class AVPlayerRMP extends PureComponent {
             onPrev,
             onNext,
             media,
+            isSliceable
           } = this.props;
     const {
             isTopSeekbar,
@@ -572,7 +573,7 @@ class AVPlayerRMP extends PureComponent {
                       />
                     )
                   }
-                  { !isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(true)} /> }
+                  { isSliceable && !isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(true)} /> }
                   { !isEditMode && !isAudio && <AVFullScreen container={this.mediaElement} /> }
                 </div>
               </div>
