@@ -6,8 +6,6 @@ import * as shapes from '../../shapes';
 import TabsMenu from '../../shared/TabsMenu';
 import SourcesContainer from './Sources/SourcesContainer';
 
-const tPrefix = 'materials';
-
 class Materials extends Component {
 
   static propTypes = {
@@ -20,11 +18,16 @@ class Materials extends Component {
   };
 
   render() {
-    const { t } = this.props;
+    const { unit, t } = this.props;
+
+    if (!unit) {
+      return null;
+    }
+
     const items = [
       {
         name: 'summary',
-        label: t(`${tPrefix}.summary`),
+        label: t('materials.summary.header'),
         component: <Segment basic>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
           incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
           laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
@@ -46,18 +49,18 @@ class Materials extends Component {
       },
       {
         name: 'transcription',
-        label: t(`${tPrefix}.transcription`),
-        component: <Segment basic>{t(`${tPrefix}.transcription`)}</Segment>,
+        label: t('materials.transcription.header'),
+        component: <Segment basic>{t('materials.transcription.header')}</Segment>,
       },
       {
         name: 'sources',
-        label: t(`${tPrefix}.sources`),
+        label: t('materials.sources.header'),
         component: <SourcesContainer unit={this.props.unit} t={t} />
       },
       {
         name: 'sketches',
-        label: t(`${tPrefix}.sketches`),
-        component: <Segment basic>{t(`${tPrefix}.sketches`)}</Segment>,
+        label: t('materials.sketches.header'),
+        component: <Segment basic>{t('materials.sketches.header')}</Segment>,
       },
     ];
 

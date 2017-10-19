@@ -28,7 +28,7 @@
       "by": "סנן תוכניות לפי:"
     },
     "full-program": {
-      "by":"סנן פרקים לפי:"
+      "by": "סנן פרקים לפי:"
     },
     "events": {
       "by": "סנן אירועים לפי:"
@@ -109,7 +109,8 @@
     "error-loading-file": "טעות בהעלאת קובץ.",
     "fallback-language": "אין את השפה המבוקשת למדיה, נבחרה שפת ברירת מחדל.",
     "fallback-to-audio": "וידיאו לא נמצא, משתמש באודיו.",
-    "fallback-to-video": "אודיו לא נמצא, משתמש בוידיאו."
+    "fallback-to-video": "אודיו לא נמצא, משתמש בוידיאו.",
+    "source-content-not-found": "לא נמצא תוכן המקור"
   },
   "search": {
     "sortby": "מיין לפי",
@@ -205,10 +206,20 @@
     }
   },
   "materials": {
-    "summary": "תקציר",
-    "transcription": "תמליל",
-    "sources": "מקורות",
-    "sketches": "שרטוטים"
+    "summary": {
+      "header": "תקציר"
+    },
+    "transcription": {
+      "header": "תמליל"
+    },
+    "sources": {
+      "header": "מקורות",
+      "no-sources": "אין מקורות",
+      "no-source-available": "אף מקור לא מוכן לתצוגה"
+    },
+    "sketches": {
+      "header": "שרטוטים"
+    }
   },
   "media-downloads": {
     "title": "קבצים להורדה",

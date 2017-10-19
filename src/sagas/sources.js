@@ -14,14 +14,23 @@ function* fetchSources() {
   }
 }
 
-function* fetchContent(action) {
+function* fetchIndex(action) {
   const id = action.payload;
 
   try {
-    const index = yield call(Api.sourceIdx, { id });
-    yield put(actions.fetchContentSuccess({ id, index }));
+    const { data } = yield call(Api.sourceIdx, { id });
+    yield put(actions.fetchIndexSuccess(id, data));
   } catch (err) {
-    yield put(actions.fetchContentFailure(action.payload, err));
+    yield put(actions.fetchIndexFailure(id, err));
+  }
+}
+
+function* fetchContent(action) {
+  try {
+    const { data } = yield call(Api.sourceContent, action.payload);
+    yield put(actions.fetchContentSuccess(data));
+  } catch (err) {
+    yield put(actions.fetchContentFailure(err));
   }
 }
 
@@ -29,11 +38,16 @@ function* watchFetchSources() {
   yield takeLatest([types.FETCH_SOURCES, system.INIT], fetchSources);
 }
 
+function* watchFetchIndex() {
+  yield takeEvery(types.FETCH_INDEX, fetchIndex);
+}
+
 function* watchFetchContent() {
-  yield takeEvery(types.FETCH_CONTENT, fetchContent);
+  yield takeLatest(types.FETCH_CONTENT, fetchContent);
 }
 
 export const sagas = [
   watchFetchSources,
-  watchFetchContent
+  watchFetchIndex,
+  watchFetchContent,
 ];

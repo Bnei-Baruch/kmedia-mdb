@@ -203,10 +203,18 @@
     }
   },
   "materials": {
-    "summary": "Краткое содержание",
-    "transcription": "Стенограмма",
-    "sources": "Источники",
-    "sketches": "Чертежи"
+    "summary": {
+      "header": "Краткое содержание"
+    },
+    "transcription": {
+      "header": "Стенограмма"
+    },
+    "sources": {
+      "header": "Источники"
+    },
+    "sketches": {
+      "header": "Чертежи"
+    }
   },
   "media-downloads": {
     "title": "Скачать",

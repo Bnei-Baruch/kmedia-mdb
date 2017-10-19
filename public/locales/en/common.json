@@ -110,7 +110,8 @@
     "error-loading-file": "Error loading file.",
     "fallback-language": "Media not found for selected language, selected fallback language.",
     "fallback-to-audio": "Video was not found, using audio.",
-    "fallback-to-video": "Audio was not found, using video."
+    "fallback-to-video": "Audio was not found, using video.",
+    "source-content-not-found": "Source contents wasn't found"
   },
   "search": {
     "sortby": "sort by",
@@ -205,11 +206,24 @@
       }
     }
   },
+  "sources": {
+
+  },
   "materials": {
-    "summary": "Summary",
-    "transcription": "Transcription",
-    "sources": "Sources",
-    "sketches": "Sketches"
+    "summary": {
+      "header": "Summary"
+    },
+    "transcription": {
+      "header": "Transcription"
+    },
+    "sources": {
+      "header": "Sources",
+      "no-sources": "No sources",
+      "no-source-available": "No source is ready for display"
+    },
+    "sketches": {
+      "header": "Sketches"
+    }
   },
   "media-downloads": {
     "title": "Media Downloads",

@@ -3,116 +3,99 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import { isEmpty } from '../../../../helpers/utils';
 import { actions, selectors } from '../../../../redux/modules/sources';
 import { selectors as settings } from '../../../../redux/modules/settings';
-import { selectors as mdb } from '../../../../redux/modules/mdb';
 import * as shapes from '../../../shapes';
-import { isEmpty } from '../../../../helpers/utils';
-import Api from '../../../../helpers/Api';
 import Sources from './Sources';
 
 class SourcesContainer extends Component {
   static propTypes = {
-    unit: shapes.ContentUnit,
-    t: PropTypes.func.isRequired,
-    err: shapes.Error,
-    fetchContent: PropTypes.func.isRequired,
+    unit: shapes.ContentUnit.isRequired,
+    indexMap: PropTypes.objectOf(PropTypes.shape({
+      data: PropTypes.object, // content index
+      wip: shapes.WIP,
+      err: shapes.Error,
+    })),
+    content: PropTypes.shape({
+      data: PropTypes.string, // actual content (HTML)
+      wip: shapes.WIP,
+      err: shapes.Error,
+    }),
     language: PropTypes.string.isRequired,
-    sources: PropTypes.object,
+    t: PropTypes.func.isRequired,
+    fetchIndex: PropTypes.func.isRequired,
+    fetchContent: PropTypes.func.isRequired,
+    getSourceById: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    unit: null,
-    sources: {},
-    wip: false,
-    err: null,
-  };
-
-  state = {
-    wip: {},
-    html: {}
+    indexMap: {},
+    content: {
+      data: null,
+      wip: false,
+      err: null,
+    },
   };
 
   componentDidMount() {
-    this.askForDataIfNeeded(this.props);
+    this.fetchIndices(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.askForDataIfNeeded(nextProps);
+    if (nextProps.unit.sources !== this.props.unit.sources) {
+      this.fetchIndices(nextProps);
+    }
   }
 
-  askForDataIfNeeded = (props) => {
-    const { unit, err, sources, fetchContent } = props;
-
-    // We fetch stuff if we don't have it already
-    // and a request for it is not in progress or ended with an error.
-    if (
-      unit &&
-      Array.isArray(unit.sources) &&
-      !err
-    ) {
-      const wip  = { ...this.state.wip };
-      const html = { ...this.state.html };
-
-      unit.sources.forEach((id) => {
-        const content = sources[id];
-        if (isEmpty(content)) {
-          // Fetch index
-          fetchContent(id);
-        } else {
-          // We have index, so we can fetch html, but first let's decide which language to show
-          const source    = sources[id];
-          const languages = Object.keys(source);
-          let language    = languages[0];
-          if (languages.includes(this.props.language)) {
-            language = this.props.language;
-          } else if (languages.includes('he')) {
-            language = 'he';
-          } else if (languages.includes('en')) {
-            language = 'en';
-          } else if (languages.includes('ru')) {
-            language = 'ru';
-          } else if (languages.includes('es')) {
-            language = 'es';
-          }
-          const name = source[language].html;
-
-          if (!isEmpty(name) && !wip[name] && isEmpty(html[name])) {
-            wip[name] = true;
-            Api.sourceContent({ id, name }).then((data) => {
-              html[name] = data;
-              this.setState({ html });
-            });
-          }
+  fetchIndices = (props) => {
+    const { indexMap, fetchIndex } = props;
+    Object.entries(indexMap).forEach(([k, v]) => {
+        if (isEmpty(v)) {
+          fetchIndex(k);
         }
-      });
-      this.setState({ wip });
-    }
+      }
+    );
+  };
+
+  handleContentChange = (id, name) => {
+    this.props.fetchContent(id, name);
   };
 
   render() {
-    const { t, language, err } = this.props;
+    const { unit, indexMap, content, language, t, getSourceById } = this.props;
 
-    return (<Sources
-      sources={err ? null : this.state.html}
-      language={language}
-      err={err}
-      t={t}
-    />);
+    return (
+      <Sources
+        unit={unit}
+        indexMap={indexMap}
+        content={content}
+        language={language}
+        t={t}
+        getSourceById={getSourceById}
+        onContentChange={this.handleContentChange}
+      />
+    );
   }
 }
 
 export default connect(
   (state, ownProps) => {
-    const id = ownProps.unit.id;
+    const indexById = selectors.getIndexById(state.sources);
+    const indexMap  = (ownProps.unit.sources || []).reduce((acc, val) => {
+      acc[val] = indexById[val];
+      return acc;
+    }, {});
+
     return {
-      unit: mdb.getDenormContentUnit(state.mdb, id),
-      sources: selectors.getContentByID(state.sources, id),
-      err: selectors.getError(state.sources),
+      indexMap,
+      content: selectors.getContent(state.sources),
       language: settings.getLanguage(state.settings),
+      getSourceById: selectors.getSourceById(state.sources),
     };
   },
   dispatch => bindActionCreators({
+    fetchIndex: actions.fetchIndex,
     fetchContent: actions.fetchContent,
   }, dispatch)
 )(SourcesContainer);
