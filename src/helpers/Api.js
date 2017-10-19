@@ -4,8 +4,13 @@ const API_BACKEND = process.env.NODE_ENV === 'production' ?
   '/backend/' :
   process.env.REACT_APP_API_BACKEND;
 
+const ASSETS_BACKEND = process.env.NODE_ENV === 'production' ?
+  '/assets/' :
+  process.env.REACT_APP_ASSETS_BACKEND;
+
 class Requests {
   static get        = url => axios(`${API_BACKEND}${url}`);
+  static getAsset   = url => axios(`${ASSETS_BACKEND}${url}`);
   static makeParams = params =>
     `${Object.entries(params)
       .filter(([k, v]) => v !== undefined && v !== null)
@@ -46,4 +51,8 @@ export default class Api {
 
   static search = ({ q, language, pageNo: page_no, pageSize: page_size, sortBy: sort_by }) =>
     Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by })}`);
+
+  static sourceIdx = ({ id }) => Requests.getAsset(`sources/${id}/index.json`);
+
+  static sourceContent = ({ id, name }) => Requests.getAsset(`sources/${id}/${name}`);
 }
