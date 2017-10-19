@@ -32,7 +32,8 @@ class FullVideoBox extends Component {
   componentWillMount() {
     const { isMobile, collection, language, history, location, onActivePartChange } = this.props;
     const mediaType = playerHelper.getMediaTypeFromQuery(history.location, isMobile ? MT_AUDIO : MT_VIDEO);
-    this.setPlaylist(collection, mediaType, language, (playlist) => {
+    const playerLanguage = playerHelper.getLanguageFromQuery(location, language);
+    this.setPlaylist(collection, mediaType, playerLanguage, (playlist) => {
       const numParts = playlist.items.length;
       let activePart = getQuery(location).ap;
 
@@ -42,10 +43,12 @@ class FullVideoBox extends Component {
 
       onActivePartChange(parseInt(activePart, 10));
     });
+
+    playerHelper.setLanguageInQuery(history, playerLanguage);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { isMobile, collection, language, location, onActivePartChange } = nextProps;
+    const { isMobile, collection, language, location, onActivePartChange, history } = nextProps;
     const {
       collection: oldCollection,
       language: oldLanguage,
@@ -79,13 +82,15 @@ class FullVideoBox extends Component {
 
   handleChangeLanguage = (e, language) => {
     const { playlist } = this.state;
-    const { activePart, collection } = this.props;
+    const { activePart, collection, history } = this.props;
 
     const playableItem = playlist.items[activePart];
 
     if (language !== playableItem.language) {
       this.setPlaylist(collection, playableItem.mediaType, language);
     }
+
+    playerHelper.setLanguageInQuery(history, language);
   }
 
   handleSwitchAV = () => {

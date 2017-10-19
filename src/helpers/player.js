@@ -126,9 +126,24 @@ function setMediaTypeInQuery(history, mediaType = MT_VIDEO) {
   }));
 }
 
+function getLanguageFromQuery(location, fallbackLanguage = LANG_ENGLISH) {
+  const query = getQuery(location);
+  const language = query.language || fallbackLanguage;
+  return language.toLowerCase();
+}
+
+function setLanguageInQuery(history, language) {
+  updateQuery(history, query => ({
+    ...query,
+    language
+  }));
+}
+
 export default {
   playableItem,
   playlist,
   getMediaTypeFromQuery,
-  setMediaTypeInQuery
+  setMediaTypeInQuery,
+  getLanguageFromQuery,
+  setLanguageInQuery
 };

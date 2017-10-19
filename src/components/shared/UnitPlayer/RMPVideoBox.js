@@ -29,9 +29,11 @@ class RMPVideoBox extends Component {
   };
 
   componentWillMount() {
-    const { isMobile, language, location, unit } = this.props;
+    const { isMobile, language, location, history, unit } = this.props;
     const mediaType = playerHelper.getMediaTypeFromQuery(location, isMobile ? MT_AUDIO : MT_VIDEO);
-    this.setPlayableItem(unit, mediaType, language);
+    const playerLanguage = playerHelper.getLanguageFromQuery(location, language);
+    this.setPlayableItem(unit, mediaType, playerLanguage);
+    playerHelper.setLanguageInQuery(history, playerLanguage);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -68,11 +70,13 @@ class RMPVideoBox extends Component {
 
   handleChangeLanguage = (e, language) => {
     const { playableItem } = this.state;
-    const { unit } = this.props;
+    const { unit, history } = this.props;
 
     if (language !== playableItem.language) {
       this.setPlayableItem(unit, playableItem.mediaType, language);
     }
+
+    playerHelper.setLanguageInQuery(history, language);
   };
 
   render() {
