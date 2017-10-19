@@ -42,11 +42,11 @@ class Layout extends Component {
         !e.path.find(elem => elem.classList && elem.classList.contains('layout__sidebar'))) {
       this.toggleSidebar();
     }
-  }
+  };
 
-  toggleSidebar = () => {
-    this.setState({ sidebarActive: !this.state.sidebarActive });
-  }
+  toggleSidebar = () => this.setState({ sidebarActive: !this.state.sidebarActive });
+
+  closeSidebar = () => this.setState({ sidebarActive: false });
 
   render() {
     const { t, location }   = this.props;
@@ -95,12 +95,12 @@ class Layout extends Component {
             </Menu.Menu>
           </Menu>
         </div>
-        <div className={classnames({ layout__sidebar: true, 'is-active': sidebarActive })}>
+        <div className={classnames('layout__sidebar', { 'is-active': sidebarActive })}>
           <Menu inverted borderless size="huge" color="blue">
-            <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.toggleSidebar}>
+            <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.closeSidebar}>
               <Icon name="sidebar" />
             </Menu.Item>
-            <Menu.Item className="logo" header as={Link} to="/">
+            <Menu.Item className="logo" header as={Link} to="/" onClick={this.closeSidebar}>
               <img src={logo} alt="logo" />
               <Header inverted as="h2">
                 {t('nav.top.header')}
@@ -108,7 +108,7 @@ class Layout extends Component {
             </Menu.Item>
           </Menu>
           <div className="layout__sidebar-menu">
-            <MenuItems simple t={t} />
+            <MenuItems simple t={t} onItemClick={this.closeSidebar} />
           </div>
         </div>
         <div className="layout__main">

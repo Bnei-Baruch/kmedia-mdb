@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import identity from 'lodash/identity';
 import { Menu, Sidebar } from 'semantic-ui-react';
 import NavLink from '../Language/MultiLanguageNavLink';
 
@@ -18,7 +19,7 @@ const ITEMS = [
 ];
 
 const MenuItems = (props) => {
-  const { simple, visible, t } = props;
+  const { simple, visible, t, onItemClick } = props;
 
   const items = ITEMS.map(x => (
     <Menu.Item
@@ -27,6 +28,7 @@ const MenuItems = (props) => {
       to={`/${x}`}
       activeClassName="active"
       content={t(`nav.sidebar.${x}`)}
+      onClick={onItemClick}
     />
   ));
 
@@ -49,11 +51,13 @@ MenuItems.propTypes = {
   simple: PropTypes.bool,
   visible: PropTypes.bool,
   t: PropTypes.func.isRequired,
+  onItemClick: PropTypes.func
 };
 
 MenuItems.defaultProps = {
   simple: false,
   visible: false,
+  onItemClick: identity
 };
 
 export default MenuItems;
