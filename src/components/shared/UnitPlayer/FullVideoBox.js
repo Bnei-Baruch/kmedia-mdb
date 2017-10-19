@@ -32,11 +32,15 @@ class FullVideoBox extends Component {
   componentWillMount() {
     const { isMobile, collection, language, history, location, onActivePartChange } = this.props;
     const mediaType = playerHelper.getMediaTypeFromQuery(history.location, isMobile ? MT_AUDIO : MT_VIDEO);
-    this.setPlaylist(collection, mediaType, language, () => {
-      const activePart = getQuery(location).ap;
-      if (activePart != null) {
-        onActivePartChange(parseInt(activePart, 10));
+    this.setPlaylist(collection, mediaType, language, (playlist) => {
+      const numParts = playlist.items.length;
+      let activePart = getQuery(location).ap;
+
+      if (activePart == null || activePart >= numParts) {
+        activePart = 0;
       }
+
+      onActivePartChange(parseInt(activePart, 10));
     });
   }
 
@@ -115,14 +119,14 @@ class FullVideoBox extends Component {
           />
         </Grid.Column>
         <Grid.Column className="avbox__playlist" computer={6} mobile={16}>
-          
+
             <PlayListComponent
               collection={collection}
               activePart={activePart}
               t={t}
               onItemClick={this.handlePartClick}
             />
-          
+
         </Grid.Column>
       </Grid.Row>
     );
