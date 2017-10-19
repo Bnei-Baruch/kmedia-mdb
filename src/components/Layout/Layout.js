@@ -65,11 +65,13 @@ class Layout extends Component {
               <img src={logo} alt="logo" />
               <Header inverted as="h2">
                 {t('nav.top.header')}
+                {/*
                 <span className="widescreen-only"> - widescreen</span>
                 <span className="large-screen-only"> - large screen</span>
                 <span className="computer-only"> - computer</span>
                 <span className="tablet-only"> - tablet</span>
                 <span className="mobile-only"> - mobile</span>
+                */}
                 {/* <span> /// </span>
                     <span className="widescreen-hidden"> - widescreen hidden</span>
                     <span className="large-screen-hidden"> - large screen hidden</span>

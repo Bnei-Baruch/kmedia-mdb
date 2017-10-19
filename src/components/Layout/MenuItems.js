@@ -13,8 +13,8 @@ const ITEMS = [
   'topics',
   'publications',
   'photos',
-  'design',
-  'design2',
+  // 'design',
+  // 'design2',
 ];
 
 const MenuItems = (props) => {
