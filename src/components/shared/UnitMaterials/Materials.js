@@ -6,9 +6,10 @@ import * as shapes from '../../shapes';
 import TabsMenu from '../../shared/TabsMenu';
 import Sketches from './Sketches';
 
-const tPrefix = 'materials';
 import Summary from './Summary/Summary';
 import SourcesContainer from './Sources/SourcesContainer';
+
+const tPrefix = 'materials';
 
 class Materials extends Component {
 
@@ -47,7 +48,7 @@ class Materials extends Component {
       {
         name: 'sketches',
         label: t(`${tPrefix}.sketches`),
-        component: <div style="outerWidth=200px; outerHeight=200px" visible="true"> <Sketches></Sketches> </div>,  
+        component: <div style="outerWidth=200px; outerHeight=200px" visible="true"> <Sketches></Sketches> </div>,
         //component: <Segment basic>{t(`${tPrefix}.sketches`)}</Segment>,
       },
     ];

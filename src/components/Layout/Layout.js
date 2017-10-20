@@ -31,17 +31,16 @@ class Layout extends Component {
   // Required for handling outhide sidebar on click outside sidebar,
   // i.e, main, header of footer.
   componentDidMount() {
-    window.addEventListener('mousedown', this.clickOutside);
+    document.addEventListener('click', this.clickOutside, true);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('mousedown', this.clickOutside);
+    document.removeEventListener('click', this.clickOutside, true);
   }
 
   clickOutside = (e) => {
-    if (this.state.sidebarActive &&
-        !e.path.find(elem => elem.classList && elem.classList.contains('layout__sidebar'))) {
-      this.toggleSidebar();
+    if (this.state.sidebarActive && e.target !== this.sidebarElement && !this.sidebarElement.contains(e.target)) {
+      this.closeSidebar();
     }
   };
 
@@ -99,7 +98,10 @@ class Layout extends Component {
             </Menu.Menu>
           </Menu>
         </div>
-        <div className={classnames('layout__sidebar', { 'is-active': sidebarActive })}>
+        <div
+          className={classnames('layout__sidebar', { 'is-active': sidebarActive })}
+          ref={el => this.sidebarElement = el}
+        >
           <Menu inverted borderless size="huge" color="blue">
             <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.closeSidebar}>
               <Icon name="sidebar" />
