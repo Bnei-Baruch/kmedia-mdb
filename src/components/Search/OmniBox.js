@@ -71,8 +71,9 @@ class OmniBox extends Component {
     return !query && !Object.values(params).length;
   }
 
-  doSearch = () => {
-    const { query } = this.props;
+  doSearch = (q = null) => {
+    const query = q || this.props.query;
+    console.log('Query: ', query);
     const { search, location, push } = this.props;
 
     if (this.emptyQuery()) {
@@ -92,8 +93,9 @@ class OmniBox extends Component {
   };
 
   handleResultSelect = (e, data) => {
+    console.log('Result selected.', data.result.title);
     this.props.updateQuery(data.result.title);
-    this.doSearch();
+    this.doSearch(data.result.title);
   };
 
   handleSearchKeyDown = (e, data) => {
@@ -114,7 +116,7 @@ class OmniBox extends Component {
   };
 
   handleIconClick = () => {
-    this.doSearch(this.props.query);
+    this.doSearch();
   };
 
   suggestionToResult = (type, item) => ({ key: item.id, title: item.text});
@@ -135,6 +137,7 @@ class OmniBox extends Component {
   }
 
   closeSuggestions = (e, data) => {
+    console.log('Blur (close)', this.state);
     if (this.state.dontBlur) {
       this.setState({ dontBlur: false });
     } else {
@@ -152,11 +155,6 @@ class OmniBox extends Component {
     const { suggestionsHelper, isOpen } = this.state;
 
     const categories = ['tags', 'sources', 'authors', 'persons'];
-    // const results = !query ? [] : [{
-    //   name: 'search',
-    //   results: [this.resultRTL(language, { key: 'search', title: query })],
-    //   onMouseDown: this.dontBlur
-    // }];
     const textResults = new Set([query]);
     let results = categories.reduce((acc, val) => {
       const searchResults = suggestionsHelper.getSuggestions(val, 5);

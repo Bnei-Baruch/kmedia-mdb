@@ -17,7 +17,6 @@ import { getQuery } from '../../helpers/url';
 
 class SearchResults extends Component {
   static propTypes = {
-    query: PropTypes.string,
     results: PropTypes.object,
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
     pageNo: PropTypes.number.isRequired,
@@ -31,7 +30,6 @@ class SearchResults extends Component {
   };
 
   static defaultProps = {
-    query: '',
     results: null,
     cuMap: {},
     wip: false,
@@ -85,7 +83,9 @@ class SearchResults extends Component {
   };
 
   render() {
-    const { filters, wip, err, query: q, results, pageNo, pageSize, language, t, handlePageChange } = this.props;
+    const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange } = this.props;
+    // Query from URL (not changed until pressed Enter.
+    const query = getQuery(window.location).q;
 
     if (err) {
       return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
@@ -95,7 +95,7 @@ class SearchResults extends Component {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
-    if (q === '' && !Object.values(filtersTransformer.toApiParams(filters)).length) {
+    if (query === '' && !Object.values(filtersTransformer.toApiParams(filters)).length) {
       return (
         <div>
           {t('search.results.empty-query')}
@@ -108,8 +108,6 @@ class SearchResults extends Component {
     }
 
     const { took, hits: { total, hits } } = results;
-    // Query from URL (not changed until pressed Enter.
-    const query = getQuery(window.location).q;
     if (total === 0) {
       return (
         <div>

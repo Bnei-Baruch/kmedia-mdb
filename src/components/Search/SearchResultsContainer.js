@@ -69,7 +69,6 @@ class SearchResultsContainer extends Component {
         <SearchResults
           results={results}
           cuMap={cuMap}
-          query={query}
           wip={wip}
           err={err}
           pageNo={pageNo}
