@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Segment } from 'semantic-ui-react';
-
 import * as shapes from '../../shapes';
 import TabsMenu from '../../shared/TabsMenu';
 import Sketches from './Sketches';
@@ -48,8 +47,7 @@ class Materials extends Component {
       {
         name: 'sketches',
         label: t(`${tPrefix}.sketches`),
-        component: <div style="outerWidth=200px; outerHeight=200px" visible="true"> <Sketches></Sketches> </div>,
-        //component: <Segment basic>{t(`${tPrefix}.sketches`)}</Segment>,
+        component: <Segment basic>{t(`${tPrefix}.sketches`)}</Segment>,
       },
     ];
 
