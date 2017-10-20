@@ -56,6 +56,8 @@ class TopicsFilter extends React.Component {
     this.props.onApply();
   };
 
+  canApply = () => this.state.selection && this.state.selection.length > 0;
+
   createList = (items, selected) => {
     if (!Array.isArray(items)) {
       return null;
@@ -105,6 +107,7 @@ class TopicsFilter extends React.Component {
       topics = getTagById(TAG_LESSONS_TOPICS);
       break;
     case 'programs':
+    case 'full-program':
       topics = getTagById(TAG_PROGRAMS_TOPICS);
       break;
     default:
@@ -120,7 +123,7 @@ class TopicsFilter extends React.Component {
         }
         <Divider />
         <Segment vertical clearing>
-          <Button primary content={t('buttons.apply')} floated="right" onClick={this.apply} />
+          <Button primary content={t('buttons.apply')} floated="right" disabled={!this.canApply()} onClick={this.apply} />
           <Button content={t('buttons.cancel')} floated="right" onClick={this.onCancel} />
         </Segment>
       </Segment>

@@ -9,7 +9,7 @@ import { actions as mdbActions } from '../redux/modules/mdb';
 function* fetchAllEvents(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const resp     = yield call(Api.collections, {
+    const { data } = yield call(Api.collections, {
       ...action.payload,
       contentTypes: EVENT_TYPES,
       language,
@@ -17,8 +17,8 @@ function* fetchAllEvents(action) {
       pageSize: 1000, // NOTE: we need to get all events, and the endpoint lets us fetch only with pagination,
       with_units: false,
     });
-    yield put(mdbActions.receiveCollections(resp.collections));
-    yield put(actions.fetchAllEventsSuccess(resp));
+    yield put(mdbActions.receiveCollections(data.collections));
+    yield put(actions.fetchAllEventsSuccess(data));
   } catch (err) {
     yield put(actions.fetchAllEventsFailure(err));
   }
@@ -27,8 +27,8 @@ function* fetchAllEvents(action) {
 function* fetchEventItem(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const response = yield call(Api.unit, { id: action.payload, language });
-    yield put(mdbActions.receiveContentUnits([response]));
+    const { data } = yield call(Api.unit, { id: action.payload, language });
+    yield put(mdbActions.receiveContentUnits([data]));
     yield put(actions.fetchEventItemSuccess(action.payload));
   } catch (err) {
     yield put(actions.fetchEventItemFailure(action.payload, err));
@@ -38,8 +38,8 @@ function* fetchEventItem(action) {
 function* fetchFullEvent(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const response = yield call(Api.collection, { id: action.payload, language });
-    yield put(mdbActions.receiveCollections([response]));
+    const { data } = yield call(Api.collection, { id: action.payload, language });
+    yield put(mdbActions.receiveCollections([data]));
     yield put(actions.fetchFullEventSuccess(action.payload));
   } catch (err) {
     yield put(actions.fetchFullEventFailure(action.payload, err));

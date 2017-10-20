@@ -41,15 +41,17 @@ class App extends Component {
 
     if (isAppReady) {
       return (
-        <I18nextProvider i18n={i18n} initialLanguage={DEFAULT_LANGUAGE}>
-          <Provider store={store}>
-            <ConnectedRouter history={history}>
-              <MultiLanguageRouteProvider>
-                <Routes />
-              </MultiLanguageRouteProvider>
-            </ConnectedRouter>
-          </Provider>
-        </I18nextProvider>
+        <div>
+          <I18nextProvider i18n={i18n} initialLanguage={DEFAULT_LANGUAGE}>
+            <Provider store={store}>
+              <ConnectedRouter history={history}>
+                <MultiLanguageRouteProvider>
+                  <Routes />
+                </MultiLanguageRouteProvider>
+              </ConnectedRouter>
+            </Provider>
+          </I18nextProvider>
+        </div>
       );
     }
 
