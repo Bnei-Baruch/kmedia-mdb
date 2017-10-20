@@ -1,10 +1,12 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import { getQuery, updateQuery } from './helpers/url';
+import { getQuery, updateQuery as urlUpdateQuery } from './helpers/url';
 import { actions, selectors, types } from '../redux/modules/search';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions as mdbActions } from '../redux/modules/mdb';
+import { selectors as filterSelectors } from '../redux/modules/filters';
+import { filtersTransformer } from '../filters';
 
 function* autocomplete(action) {
   try {
@@ -18,10 +20,23 @@ function* autocomplete(action) {
 
 function* search(action) {
   try {
-    yield* updateQuery(query => Object.assign(query, { q: action.payload.q }));
+    yield* urlUpdateQuery(query => Object.assign(query, { q: action.payload.q }));
+
     const language = yield select(state => settings.getLanguage(state.settings));
     const sortBy = yield select(state => selectors.getSortBy(state.search));
-    const resp     = yield call(Api.search, { ...action.payload, sortBy, language });
+
+    // Prepare filters values.
+    const filters = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
+    const params  = filtersTransformer.toApiParams(filters);
+    const filterQuery = Object.entries(params).map(([v, k]) => `${v}:${k}`).join(' ')
+
+    const q = action.payload.q ? `${action.payload.q} ${filterQuery}` : filterQuery;
+    if (!q) {
+      // If no query nor filters, silently fail the request, don't sent request to backend.
+      yield put(actions.searchFailure(null));
+      return
+    }
+    const resp     = yield call(Api.search, { q, sortBy, language });
 
     if (Array.isArray(resp.hits.hits) && resp.hits.hits.length > 0) {
       // TODO edo: optimize data fetching
@@ -37,6 +52,7 @@ function* search(action) {
       const language     = yield select(state => settings.getLanguage(state.settings));
       const pageSize     = cuIDsToFetch.length;
       const resp2        = yield call(Api.units, { id: cuIDsToFetch, pageSize, language });
+
       yield put(mdbActions.receiveContentUnits(resp2.content_units));
     }
 
@@ -48,12 +64,12 @@ function* search(action) {
 
 function* updatePageInQuery(action) {
   const page = action.payload > 1 ? action.payload : null;
-  yield* updateQuery(query => Object.assign(query, { page }));
+  yield* urlUpdateQuery(query => Object.assign(query, { page }));
 }
 
 function* updateSortByInQuery(action) {
   const sortBy = action.payload;
-  yield* updateQuery(query => Object.assign(query, { sort_by: sortBy }));
+  yield* urlUpdateQuery(query => Object.assign(query, { sort_by: sortBy }));
 }
 
 function* hydrateUrl() {

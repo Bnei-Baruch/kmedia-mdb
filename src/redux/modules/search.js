@@ -9,9 +9,10 @@ const SEARCH               = 'Search/SEARCH';
 const SEARCH_SUCCESS       = 'Search/SEARCH_SUCCESS';
 const SEARCH_FAILURE       = 'Search/SEARCH_FAILURE';
 
-const SET_PAGE    = 'Search/SET_PAGE';
-const SET_SORT_BY = 'Search/SET_SORT_BY';
-const HYDRATE_URL = 'Search/HYDRATE_URL';
+const SET_PAGE     = 'Search/SET_PAGE';
+const SET_SORT_BY  = 'Search/SET_SORT_BY';
+const UPDATE_QUERY = 'Search/UPDATE_QUERY';
+const HYDRATE_URL  = 'Search/HYDRATE_URL';
 
 export const types = {
   AUTOCOMPLETE,
@@ -23,6 +24,7 @@ export const types = {
 
   SET_PAGE,
   SET_SORT_BY,
+  UPDATE_QUERY,
   HYDRATE_URL,
 };
 
@@ -37,6 +39,7 @@ const searchSuccess       = createAction(SEARCH_SUCCESS);
 const searchFailure       = createAction(SEARCH_FAILURE);
 const setPage             = createAction(SET_PAGE);
 const setSortBy           = createAction(SET_SORT_BY);
+const updateQuery         = createAction(UPDATE_QUERY);
 const hydrateUrl          = createAction(HYDRATE_URL);
 
 export const actions = {
@@ -49,6 +52,7 @@ export const actions = {
 
   setPage,
   setSortBy,
+  updateQuery,
   hydrateUrl,
 };
 
@@ -102,6 +106,10 @@ export const reducer = handleActions({
     ...state,
     sortBy: action.payload
   }),
+  [UPDATE_QUERY]: (state, action) => ({
+    ...state,
+    q: action.payload,
+  })
 }, initialState);
 
 /* Selectors */

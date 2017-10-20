@@ -165,7 +165,7 @@ class DeepListFilter extends React.Component {
         </Segment>
         <Segment vertical clearing>
           <Button primary content={t('buttons.apply')} floated="right" onClick={this.apply} />
-          <Button content={t('buttons.cancel')} floated="right" onClick={this.onCancel} />
+          <Button content={t('buttons.close')} floated="right" onClick={this.onCancel} />
         </Segment>
       </Container>
     );

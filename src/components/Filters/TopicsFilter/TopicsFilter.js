@@ -101,6 +101,11 @@ class TopicsFilter extends React.Component {
     let topics;
 
     switch (namespace) {
+    // TODO: Search should have both lessons and programs topics.
+    // The UI should should another layer (similar to sources).
+    case 'search':
+      topics = getTagById(TAG_LESSONS_TOPICS);
+      break;
     case 'lessons':
       topics = getTagById(TAG_LESSONS_TOPICS);
       break;
@@ -121,7 +126,7 @@ class TopicsFilter extends React.Component {
         <Divider />
         <Segment vertical clearing>
           <Button primary content={t('buttons.apply')} floated="right" onClick={this.apply} />
-          <Button content={t('buttons.cancel')} floated="right" onClick={this.onCancel} />
+          <Button content={t('buttons.close')} floated="right" onClick={this.onCancel} />
         </Segment>
       </Segment>
     );

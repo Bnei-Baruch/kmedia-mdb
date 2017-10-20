@@ -34,6 +34,7 @@ class Filters extends Component {
 
   handleApplyActiveFilter = () => {
     this.props.onFilterApplication();
+    this.handleCancelActiveFilter();
   };
 
   render() {

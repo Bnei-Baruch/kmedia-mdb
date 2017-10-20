@@ -21,6 +21,9 @@
     }
   },
   "filters": {
+    "search": {
+      "by": "סנן תוצאות לפי:"
+    },
     "lessons": {
       "by": "סנן שיעורים לפי:"
     },
@@ -118,7 +121,7 @@
     "suggestions": {
       "categories": {
         "search": "חיפוש",
-        "tags": "תגיות",
+        "tags": "נושאים",
         "sources": "מקורות",
         "authors": "מחברים",
         "persons": "אנשים"

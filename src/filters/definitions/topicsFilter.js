@@ -14,7 +14,7 @@ const topicsFilter = {
     // Make sure we have the item.
     // Location hydration probably happens before we receive tags
     const tag = tagsSelectors.getTagById(getState().tags)(value);
-    return tag ? tag.label : '';
+    return tag && tag.label ? tag.label : '';
   }
 };
 

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-duration-format';
@@ -10,6 +11,9 @@ import { ErrorSplash, LoadingSplash } from '../shared/Splash';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import Pagination from '../pagination/Pagination';
+import { selectors as filterSelectors } from '../../redux/modules/filters';
+import { filtersTransformer } from '../../filters';
+import { getQuery } from '../../helpers/url';
 
 class SearchResults extends Component {
   static propTypes = {
@@ -23,6 +27,7 @@ class SearchResults extends Component {
     err: shapes.Error,
     t: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
+    filters: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
 
   static defaultProps = {
@@ -80,7 +85,7 @@ class SearchResults extends Component {
   };
 
   render() {
-    const { wip, err, query, results, pageNo, pageSize, language, t, handlePageChange } = this.props;
+    const { filters, wip, err, query: q, results, pageNo, pageSize, language, t, handlePageChange } = this.props;
 
     if (err) {
       return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
@@ -90,7 +95,7 @@ class SearchResults extends Component {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
-    if (query === '') {
+    if (q === '' && !Object.values(filtersTransformer.toApiParams(filters)).length) {
       return (
         <div>
           {t('search.results.empty-query')}
@@ -103,6 +108,8 @@ class SearchResults extends Component {
     }
 
     const { took, hits: { total, hits } } = results;
+    // Query from URL (not changed until pressed Enter.
+    const query = getQuery(window.location).q;
     if (total === 0) {
       return (
         <div>
@@ -144,4 +151,7 @@ class SearchResults extends Component {
   }
 }
 
-export default translate()(SearchResults);
+export default connect(state => ({
+  filters: filterSelectors.getFilters(state.filters, 'search'),
+}))(translate()(SearchResults));
+
