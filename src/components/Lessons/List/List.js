@@ -103,7 +103,6 @@ class LessonsList extends PureComponent {
                     </List>
                   )
               }
-              <div dangerouslySetInnerHTML={{ __html: unit.description }} />
             </Table.Cell>
           </Table.Row>
         );

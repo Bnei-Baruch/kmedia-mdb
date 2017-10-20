@@ -6,7 +6,7 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as filterSelectors } from '../../../redux/modules/filters';
 import { actions, selectors as eventSelectors } from '../../../redux/modules/events';
 import * as shapes from '../../shapes';
-import Page from './Page';
+import Events from './Events';
 
 class EventsContainer extends Component {
 
@@ -47,7 +47,7 @@ class EventsContainer extends Component {
 
   render() {
     const { filteredItems, wip, err } = this.props;
-    return <Page items={filteredItems} wip={wip} err={err} />;
+    return <Events items={filteredItems} wip={wip} err={err} />;
   }
 }
 

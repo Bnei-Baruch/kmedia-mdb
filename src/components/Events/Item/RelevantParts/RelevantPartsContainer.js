@@ -4,9 +4,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import 'moment-duration-format';
 
-import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../helpers/consts';
+import { EVENT_TYPES } from '../../../../helpers/consts';
 import { selectors as mdb } from '../../../../redux/modules/mdb';
-import { actions, selectors } from '../../../../redux/modules/lessons';
+import { actions, selectors } from '../../../../redux/modules/events';
 import * as shapes from '../../../shapes';
 import RelevantParts from './RelevantParts';
 
@@ -14,8 +14,7 @@ const getRelevantCollectionId = (unit) => {
   if (unit.collections) {
     const collections        = Object.values(unit.collections);
     const relevantCollection = collections.find(collection =>
-      collection.content_type === CT_DAILY_LESSON ||
-      collection.content_type === CT_SPECIAL_LESSON
+      EVENT_TYPES.indexOf(collection.content_type) !== -1
     );
 
     if (relevantCollection) {
@@ -105,11 +104,11 @@ export default connect(
     return {
       collectionID,
       collection: collectionID ? mdb.getDenormCollection(state.mdb, collectionID) : null,
-      wip: selectors.getWip(state.lessons).fulls[collectionID],
-      errors: selectors.getErrors(state.lessons).fulls[collectionID],
+      wip: selectors.getWip(state.events).fulls[collectionID],
+      errors: selectors.getErrors(state.events).fulls[collectionID],
     };
   },
   dispatch => bindActionCreators({
-    fetchCollection: actions.fetchFullLesson,
+    fetchCollection: actions.fetchFullEvent,
   }, dispatch)
 )(RelevantPartsContainer);

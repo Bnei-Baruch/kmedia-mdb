@@ -176,6 +176,13 @@ $text-colors: (
       border-left: 1px solid rgba(34, 36, 38, 0.15);
     }
   }
+  // NOTE (yaniv -> edo) fixes AR-5
+  .logo {
+    h2.header {
+      margin-right:16px;
+    }
+  }
+
   @media only screen and (min-width: $largeMonitorBreakpoint) {
     .layout {
       &__sidebar {

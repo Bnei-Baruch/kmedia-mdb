@@ -8,7 +8,7 @@ import { canonicalLink } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 
-class ProgramsList extends PureComponent {
+class ChaptersList extends PureComponent {
 
   static propTypes = {
     items: PropTypes.arrayOf(shapes.ProgramChapter),
@@ -19,8 +19,8 @@ class ProgramsList extends PureComponent {
     items: []
   };
 
-  renderPart = (part, t) => {
-    const breakdown = new CollectionsBreakdown(Object.values(part.collections || {}));
+  renderChapter = (unit) => {
+    const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
 
     const relatedItems = breakdown.getPrograms().map(x =>
       (
@@ -34,17 +34,24 @@ class ProgramsList extends PureComponent {
       </List.Item>
     )));
 
+    const t = this.props.t;
+
+    let filmDate = '';
+    if (unit.film_date) {
+      filmDate = t('values.date', { date: new Date(unit.film_date) });
+    }
+
     return (
-      <Table.Row key={part.id} verticalAlign="top">
+      <Table.Row key={unit.id} verticalAlign="top">
         <Table.Cell collapsing singleLine width={1}>
-          <strong>{part.film_date || '0000-00-00'}</strong>
+          <strong>{filmDate}</strong>
         </Table.Cell>
         <Table.Cell collapsing width={1}>
           <Image fluid src="http://www.kab.co.il/images/attachments/91/276191_medium.jpg" />
         </Table.Cell>
         <Table.Cell>
-          <Link to={canonicalLink(part)}>
-            <strong>{part.name || '☠ no name'}</strong>
+          <Link to={canonicalLink(unit)}>
+            <strong>{unit.name || '☠ no name'}</strong>
           </Link>
           <List horizontal link size="tiny">
             <List.Item>
@@ -58,7 +65,7 @@ class ProgramsList extends PureComponent {
   };
 
   render() {
-    const { items, t } = this.props;
+    const { items } = this.props;
 
     if (!Array.isArray(items) || items.length === 0) {
       return (<Grid columns={2} celled="internally" />);
@@ -67,13 +74,11 @@ class ProgramsList extends PureComponent {
     return (
       <Table sortable basic="very" className="index-list">
         <Table.Body>
-          {
-            items.map(x => this.renderPart(x, t))
-          }
+          {items.map(this.renderChapter)}
         </Table.Body>
       </Table>
     );
   }
 }
 
-export default translate()(ProgramsList);
+export default translate()(ChaptersList);

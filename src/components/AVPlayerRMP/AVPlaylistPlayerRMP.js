@@ -59,8 +59,13 @@ class AVPlaylistPlayerRMP extends Component {
     const hasPrev = activePart > 0 && items.slice(0, activePart).some(f => !!f.src);
 
     return (
-      <div className={classNames('avbox__player', { audio: currentItem.mediaType === MT_AUDIO })}>
-        <div className="avbox__media-wrapper">
+      <div
+        /* FIXME(yaniv): need to be in css */
+        className={classNames('avbox__player', { audio: currentItem.mediaType === MT_AUDIO })}
+        style={{ height: 'initial', paddingTop: '15px' }}
+      >
+        {/* FIXME(yaniv): need to be in css */}
+        <div className="avbox__media-wrapper" style={{ position: 'relative' }}>
           <Media>
             <AVPlayerRMP
               autoPlay={autoPlay}

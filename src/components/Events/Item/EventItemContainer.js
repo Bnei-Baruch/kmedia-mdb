@@ -38,6 +38,10 @@ class EventItemContainer extends Component {
 
     // We fetch stuff if we don't have it already
     // and a request for it is not in progress or ended with an error.
+    if (wip || err) {
+      return;
+    }
+
     const id = match.params.id;
     if (
       item &&
@@ -46,9 +50,7 @@ class EventItemContainer extends Component {
       return;
     }
 
-    if (!(wip || err)) {
-      fetchEventItem(id);
-    }
+    fetchEventItem(id);
   };
 
   render() {
