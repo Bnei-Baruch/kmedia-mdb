@@ -9,6 +9,7 @@ import { selectors } from '../../../redux/modules/programs';
 import { selectors as mdbSelectors } from '../../../redux/modules/mdb';
 import connectFilter from '../connectFilter';
 import * as shapes from '../../shapes';
+import Link from '../../Language/MultiLanguageLink';
 
 class ProgramsFilter extends Component {
 
@@ -29,6 +30,7 @@ class ProgramsFilter extends Component {
       units_count: PropTypes.number.isRequired,
       collection: shapes.ProgramCollection,
     })),
+    language: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -199,7 +201,7 @@ class ProgramsFilter extends Component {
   };
 
   createRecentlyUpdated = () => {
-    const { recentlyUpdated, t } = this.props;
+    const { recentlyUpdated, language, t } = this.props;
 
     if (!Array.isArray(recentlyUpdated)) {
       return null;
@@ -218,8 +220,10 @@ class ProgramsFilter extends Component {
               return (
                 <Grid.Column key={x.id}>
                   <Card
+                    as={Link}
+                    to={canonicalLink(collection)}
+                    language={language}
                     header={collection.name}
-                    href={canonicalLink(collection)}
                     meta={`${t('filters.programs-filter.last-updated')}: ${t('values.date', { date: new Date(lastUpdate) })}`} />
                 </Grid.Column>
               );

@@ -4,6 +4,10 @@ import { Segment } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import TabsMenu from '../../shared/TabsMenu';
+import Sketches from './Sketches';
+
+import Summary from './Summary/Summary';
+import SourcesContainer from './Sources/SourcesContainer';
 
 const tPrefix = 'materials';
 
@@ -19,27 +23,33 @@ class Materials extends Component {
   };
 
   render() {
-    const { t } = this.props;
+    const { unit, t } = this.props;
+
+    if (!unit) {
+      return null;
+    }
+
     const items = [
       {
         name: 'summary',
-        label: t(`${tPrefix}.summary`),
-        component: <Segment basic>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br/><br/>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br/><br/>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Segment>,
+        label: t('materials.summary.header'),
+        component: <Summary unit={this.props.unit} t={t} />,
       },
       {
         name: 'transcription',
-        label: t(`${tPrefix}.transcription`),
-        component: <Segment basic>{t(`${tPrefix}.transcription`)}</Segment>,
+        label: t('materials.transcription.header'),
+        component: <Segment basic>{t('materials.transcription.header')}</Segment>,
       },
       {
         name: 'sources',
-        label: t(`${tPrefix}.sources`),
-        component: <Segment basic>{t(`${tPrefix}.sources`)}</Segment>,
+        label: t('materials.sources.header'),
+        component: <SourcesContainer unit={this.props.unit} t={t} />
       },
       {
         name: 'sketches',
         label: t(`${tPrefix}.sketches`),
-        component: <Segment basic>{t(`${tPrefix}.sketches`)}</Segment>,
+        component: <div style="outerWidth=200px; outerHeight=200px" visible="true"> <Sketches></Sketches> </div>,
+        //component: <Segment basic>{t(`${tPrefix}.sketches`)}</Segment>,
       },
     ];
 

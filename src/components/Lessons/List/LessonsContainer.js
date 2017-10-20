@@ -1,26 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Container, Divider } from 'semantic-ui-react';
 
 import { CT_LESSON_PART } from '../../../helpers/consts';
-import { actions, selectors as lessonSelectors } from '../../../redux/modules/lessons';
+import { actions, selectors } from '../../../redux/modules/lessons';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as filters } from '../../../redux/modules/filters';
 import * as shapes from '../../shapes';
-import SectionHeader from '../../shared/SectionHeader';
-import LessonsFilters from './LessonsFilters';
-import LessonsList from './LessonsList';
 import withPagination from '../../pagination/withPagination';
+import Lessons from './Lessons';
 
 class LessonsContainer extends withPagination {
 
   static propTypes = {
-    pageSize: PropTypes.number.isRequired,
+    location: shapes.HistoryLocation.isRequired,
     items: PropTypes.arrayOf(PropTypes.oneOfType([shapes.LessonCollection, shapes.LessonPart])),
+    wip: shapes.WIP,
+    err: shapes.Error,
+    pageNo: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired,
+    pageSize: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
     isFiltersHydrated: PropTypes.bool,
+    fetchList: PropTypes.func.isRequired,
+    setPage: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -46,41 +51,57 @@ class LessonsContainer extends withPagination {
     super.componentWillReceiveProps(nextProps);
   }
 
+  handlePageChanged = (pageNo) =>
+    withPagination.handlePageChange(this.props, pageNo);
+
+  handleFiltersChanged = () =>
+    withPagination.handlePageChange(this.props, 1);
+
+  handleFiltersHydrated = () =>
+    withPagination.handlePageChange(this.props);
+
   render() {
-    const { items } = this.props;
+    const { items, wip, err, pageNo, total, pageSize, language } = this.props;
 
     return (
-      <div>
-        <SectionHeader section="lessons" />
-        <Divider fitted />
-        <LessonsFilters
-          onChange={() => withPagination.handlePageChange(this.props, 1)}
-          onHydrated={() => withPagination.handlePageChange(this.props)}
-        />
-        <Container className="padded">
-          <withPagination.ResultsPageHeader {...this.props} />
-          <LessonsList items={items} />
-        </Container>
-        <Divider fitted />
-        <Container className="padded" textAlign="center">
-          <withPagination.Pagination {...this.props} />
-        </Container>
-      </div>
+      <Lessons
+        items={items}
+        wip={wip}
+        err={err}
+        pageNo={pageNo}
+        total={total}
+        pageSize={pageSize}
+        language={language}
+        onPageChange={this.handlePageChanged}
+        onFiltersChanged={this.handleFiltersChanged}
+        onFiltersHydrated={this.handleFiltersHydrated}
+      />
     );
   }
 }
 
 const mapState = (state) => {
-  const parentProps = withPagination.mapState('lessons', state, lessonSelectors, settings);
+  const paging = withPagination.mapState('lessons', state, selectors, settings);
   return {
-    ...parentProps,
-    items: lessonSelectors.getItems(state.lessons)
+    items: selectors.getItems(state.lessons)
       .map(x => (x[1] === CT_LESSON_PART ?
         mdb.getDenormContentUnit(state.mdb, x[0]) :
         mdb.getDenormCollectionWUnits(state.mdb, x[0]))),
+    wip: selectors.getWip(state.lessons).list,
+    err: selectors.getErrors(state.lessons).list,
+    pageNo: paging.pageNo,
+    total: paging.total,
+    pageSize: settings.getPageSize(state.settings),
     language: settings.getLanguage(state.settings),
     isFiltersHydrated: filters.getIsHydrated(state.filters, 'lessons'),
   };
 };
 
-export default connect(mapState, actions)(LessonsContainer);
+function mapDispatch(dispatch) {
+  return bindActionCreators({
+    fetchList: actions.fetchList,
+    setPage: actions.setPage,
+  }, dispatch);
+}
+
+export default connect(mapState, mapDispatch)(LessonsContainer);

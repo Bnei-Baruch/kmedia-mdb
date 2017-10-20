@@ -8,8 +8,8 @@ import { selectors as settings } from '../redux/modules/settings';
 function* fetchTags() {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const resp     = yield call(Api.tags, { language });
-    yield put(actions.fetchTagsSuccess(resp));
+    const { data } = yield call(Api.tags, { language });
+    yield put(actions.fetchTagsSuccess(data));
   } catch (err) {
     yield put(actions.fetchTagsFailure(err));
   }

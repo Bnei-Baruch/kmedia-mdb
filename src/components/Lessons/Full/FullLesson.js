@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
-import { Grid, Container } from 'semantic-ui-react';
-import Link from '../../Language/MultiLanguageLink';
+import { Container, Grid } from 'semantic-ui-react';
 
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
+import Link from '../../Language/MultiLanguageLink';
 import * as shapes from '../../shapes';
 import FullVideoBox from '../../shared/UnitPlayer/FullVideoBox';
 import Materials from '../../shared/UnitMaterials/Materials';
 import MediaDownloads from '../../shared/MediaDownloads';
 import Info from '../Part/Info';
-import FullLessonPlaylist from './FullLessonPlaylist';
+import Playlist from './Playlist';
 
 class FullLesson extends Component {
   static propTypes = {
@@ -40,6 +40,19 @@ class FullLesson extends Component {
     const { fullLesson, wip, err, language, t } = this.props;
 
     if (err) {
+      if (err.response && err.response.status === 404) {
+        return (
+          <FrownSplash
+            text={t('messages.lesson-not-found')}
+            subtext={
+              <Trans i18nKey="messages.lesson-not-found-subtext">
+                Try the <Link to="/lessons">lessons list</Link>...
+              </Trans>
+            }
+          />
+        );
+      }
+
       return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
     }
 
@@ -47,51 +60,42 @@ class FullLesson extends Component {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
-    if (fullLesson) {
-      const { activePart } = this.state;
-      const lesson         = fullLesson.content_units[activePart];
-      return (
-        <div>
-          <div className="avbox">
-            <Container>
-              <Grid padded>
-                <FullVideoBox
-                  collection={fullLesson}
-                  activePart={activePart}
-                  language={language}
-                  t={t}
-                  onActivePartChange={this.handleActivePartChange}
-                  PlayListComponent={FullLessonPlaylist}
-                />
-              </Grid>
-            </Container>
-          </div>
+    if (!fullLesson) {
+      return null;
+    }
+
+    const { activePart } = this.state;
+    const lesson         = fullLesson.content_units[activePart];
+    return (
+      <div>
+        <div className="avbox">
           <Container>
-            <Grid padded reversed="tablet">
-              <Grid.Row reversed="computer">
-                <Grid.Column computer={6} tablet={4} mobile={16}>
-                  <MediaDownloads unit={lesson} language={language} t={t} />
-                </Grid.Column>
-                <Grid.Column computer={10} tablet={12} mobile={16}>
-                  <Info lesson={lesson} t={t} />
-                  <Materials unit={lesson} t={t} />
-                </Grid.Column>
-              </Grid.Row>
+            <Grid padded>
+              <FullVideoBox
+                collection={fullLesson}
+                activePart={activePart}
+                language={language}
+                t={t}
+                onActivePartChange={this.handleActivePartChange}
+                PlayListComponent={Playlist}
+              />
             </Grid>
           </Container>
         </div>
-      );
-    }
-
-    return (
-      <FrownSplash
-        text={t('messages.lesson-not-found')}
-        subtext={
-          <Trans i18nKey="messages.lesson-not-found-subtext">
-            Try the <Link to="/lessons">lessons list</Link>...
-          </Trans>
-        }
-      />
+        <Container>
+          <Grid padded reversed="tablet">
+            <Grid.Row reversed="computer">
+              <Grid.Column computer={6} tablet={4} mobile={16}>
+                <MediaDownloads unit={lesson} language={language} t={t} />
+              </Grid.Column>
+              <Grid.Column computer={10} tablet={12} mobile={16}>
+                <Info lesson={lesson} t={t} />
+                <Materials unit={lesson} t={t} />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Container>
+      </div>
     );
   }
 }

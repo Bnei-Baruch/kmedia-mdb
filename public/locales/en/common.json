@@ -5,7 +5,7 @@
     },
     "sidebar": {
       "lessons": "Daily Lessons",
-      "programs": "TV & Video Programs",
+      "programs": "Programs",
       "lectures": "Lectures & Lessons",
       "sources": "Kabbalah Sources",
       "events": "Events",
@@ -30,6 +30,9 @@
     },
     "programs": {
       "by": "Filter Programs by:"
+    },
+    "full-program": {
+      "by":"Filter Episodes by:"
     },
     "events": {
       "by": "Filter Events by:"
@@ -84,7 +87,7 @@
       "edit-help": "Drag the pointers to share a part of the video"
     },
     "buttons": {
-      "edit-back": "Black to play"
+      "edit-back": "Back to play"
     },
     "error": {
       "loading": "Error loading file."
@@ -110,7 +113,8 @@
     "error-loading-file": "Error loading file.",
     "fallback-language": "Media not found for selected language, selected fallback language.",
     "fallback-to-audio": "Video was not found, using audio.",
-    "fallback-to-video": "Audio was not found, using video."
+    "fallback-to-video": "Audio was not found, using video.",
+    "source-content-not-found": "Source contents wasn't found"
   },
   "search": {
     "sortby": "sort by",
@@ -136,13 +140,22 @@
     }
   },
   "events": {
+    "header": {
+      "text": "Events",
+      "subtext": "Today, the wisdom of Kabbalah is already everywhere in the world. In this section you will be able to see events, conventions and special meetings of the \"Kabbalah L’Am\" association in Israel and abroad."
+    },
     "ALL_EVENTS": "All Events",
-    "no-matches": "No matching events found"
+    "no-matches": "No matching events found",
+    "part": {
+      "relevant-parts": {
+        "title": "Other parts from the same event"
+      }
+    }
   },
   "lessons": {
     "header": {
       "text": "Daily Lessons",
-      "subtext": "The daily acceptance rate is delivered by Rabbi Dr. Michael Laitman to millions of viewers around the world, every night between 3-6 clock Israel, and describes the spiritual flow that humanity today."
+      "subtext": "For thousands of years, Kabbalists have been studying on a daily basis for their and humanity's spiritual progress. Continuing this tradition into today's globally connected world, the Bnei Baruch Kabbalah Education & Research Institute, studies daily from authentic Kabbalistic sources, with commentary by Dr. Michael Laitman."
     },
     "list": {
       "related": "Related to"
@@ -160,6 +173,10 @@
     }
   },
   "programs": {
+    "header": {
+      "text": "Programs",
+      "subtext": "Here you will find a rich variety of programs that include: fascinating conversations about the meaning of life, current events, programs for the whole family and more."
+    },
     "genres": {
       "all": "All Programs",
       "documentary": "Documentary",
@@ -174,11 +191,7 @@
       "episode_from": "Episode from:"
     },
     "full": {
-      "episodes": "Episode(s)",
-      "ccuName": "Content Unit Name",
-      "name": "Program Name",
-      "duration": "Duration",
-      "film_date": "Date of Shooting"
+      "episodes": "Episode(s)"
     },
     "part": {
       "info": {
@@ -197,10 +210,21 @@
     }
   },
   "materials": {
-    "summary": "Summary",
-    "transcription": "Transcription",
-    "sources": "Sources",
-    "sketches": "Sketches"
+    "summary": {
+      "header": "Summary",
+      "no-summary": "Summary is missing"
+    },
+    "transcription": {
+      "header": "Transcription"
+    },
+    "sources": {
+      "header": "Sources",
+      "no-sources": "No sources",
+      "no-source-available": "No source is ready for display"
+    },
+    "sketches": {
+      "header": "Sketches"
+    }
   },
   "media-downloads": {
     "title": "Media Downloads",

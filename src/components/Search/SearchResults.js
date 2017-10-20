@@ -39,7 +39,7 @@ class SearchResults extends Component {
   };
 
   renderHit = (hit) => {
-    const { t }                                      = this.props;
+    const { cuMap, t }                                      = this.props;
     const { _source: src, highlight, _score: score } = hit;
 
     let name = src.name;
@@ -65,7 +65,7 @@ class SearchResults extends Component {
         <Table.Cell>
           <span>
           <Label>{t(`constants.content-types.${src.content_type}`)}</Label>
-          <Link to={canonicalLink({ id: src.mdb_uid, content_type: src.content_type })}>
+          <Link to={canonicalLink(cuMap[src.mdb_uid] || { id: src.mdb_uid, content_type: src.content_type })}>
             {name}
           </Link>
             &nbsp;&nbsp;

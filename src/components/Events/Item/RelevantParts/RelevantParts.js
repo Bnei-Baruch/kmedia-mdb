@@ -35,21 +35,17 @@ const RelevantParts = (props) => {
 
   return (
     <div style={{ marginTop: '50px' }}>
-      <Header as="h3" content={t('programs.part.relevant-parts.title')} />
+      <Header as="h3" content={t('events.part.relevant-parts.title')} />
       <Item.Group divided link>
         {
           otherParts.map(part => (
-            <Item as={Link} key={part.id} to={`/programs/chapter/${part.id}`}>
+            <Item as={Link} key={part.id} to={`/events/item/${part.id}`}>
               <Item.Image src={myimage} size="tiny" />
               <Item.Content>
-                <Header
-                  as="h4"
-                  content={t('programs.part.relevant-parts.item-title', { name: collection.ccuNames[part.id] })}
-                />
+                <Item.Description>{part.name}</Item.Description>
                 <Item.Meta>
                   <small>{moment.duration(part.duration, 'seconds').format('hh:mm:ss')}</small>
                 </Item.Meta>
-                <Item.Description>{part.name}</Item.Description>
               </Item.Content>
             </Item>
           ))
@@ -60,7 +56,7 @@ const RelevantParts = (props) => {
               fluid
               as={Link}
               textAlign="right"
-              to={`/programs/full/${collection.id}`}
+              to={`/events/full/${collection.id}`}
             >
               {t('buttons.more')} &raquo;
             </Container>
