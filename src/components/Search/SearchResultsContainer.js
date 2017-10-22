@@ -50,21 +50,25 @@ class SearchResultsContainer extends Component {
     search(query, pageNo, pageSize);
   }
 
+  onSearch = () => {
+    const { search, query, pageSize, pageNo } = this.props;
+    search(query, pageNo, pageSize);
+  }
+
   render() {
     const { wip, err, query, results, cuMap, pageNo, pageSize, sortBy, language } = this.props;
 
     return (
       <Container className="padded">
-        {wip ? null : (
         <SearchResultsHeader
-          language={language}
           sortBy={sortBy}
           onSortByChange={this.onSortByChange}
-        />)}
+          onHydrated={() => this.handlePageChange(1)}
+          onChange={this.onSearch}
+        />
         <SearchResults
           results={results}
           cuMap={cuMap}
-          query={query}
           wip={wip}
           err={err}
           pageNo={pageNo}

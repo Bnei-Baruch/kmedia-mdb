@@ -11,6 +11,8 @@ import { actions, selectors } from '../../redux/modules/search';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
 import { RTL_LANGUAGES } from '../../helpers/consts';
+import { selectors as filterSelectors } from '../../redux/modules/filters';
+import { filtersTransformer } from '../../filters';
 
 const CATEGORIES_ICONS = {
   'search': 'search',
@@ -33,6 +35,7 @@ class OmniBox extends Component {
     getTagPath: PropTypes.func,
     query: PropTypes.string.isRequired,
     language: PropTypes.string.isRequired,
+    filters: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
 
   static defaultProps = {
@@ -47,16 +50,13 @@ class OmniBox extends Component {
     if (nextProps.suggestions !== this.props.suggestions) {
       this.setState({ suggestionsHelper: new SuggestionsHelper(nextProps.suggestions) });
     }
-    if (nextProps.query !== this.props.query) {
-      this.setState({ query: nextProps.query });
-    }
   }
 
   resetComponent = query =>
     this.setState({ suggestionsHelper: new SuggestionsHelper(), query });
 
   doAutocomplete = debounce(() => {
-    const query = this.state.query;
+    const query = this.props.query;
     if (query) {
       this.props.autocomplete(query);
     } else {
@@ -64,21 +64,28 @@ class OmniBox extends Component {
     }
   }, 100);
 
-  doSearch = () => {
-    const q = this.state.query;
-    if (!q) {
+  emptyQuery = () => {
+    const { query } = this.props;
+    const { filters } = this.props;
+    const params  = filtersTransformer.toApiParams(filters);
+    return !query && !Object.values(params).length;
+  }
+
+  doSearch = (q = null) => {
+    const query = q || this.props.query;
+    console.log('Query: ', query);
+    const { search, location, push } = this.props;
+
+    if (this.emptyQuery()) {
       return;
     }
 
-    const { search, location, push } = this.props;
-
     // redirect to search results page if we're not there
     if (!location.pathname.endsWith('search')) {
-      console.log('pushing:', location.pathname);
       push('search');
     }
 
-    search(q, 1, 10);
+    search(query, 1, 10);
 
     if (this.state.isOpen) {
       this.setState({ isOpen: false });
@@ -86,21 +93,30 @@ class OmniBox extends Component {
   };
 
   handleResultSelect = (e, data) => {
-    console.log('OmniBox selection:', data);
-    this.setState({ query: data.result.title }, this.doSearch);
+    console.log('Result selected.', data.result.title);
+    this.props.updateQuery(data.result.title);
+    this.doSearch(data.result.title);
+  };
+
+  handleSearchKeyDown = (e, data) => {
+    // Fix bug that now allows to handleResultSelect when string is empty
+    // we have meaning for that when filters are not empty.
+    if (e.keyCode === 13) {
+      this.doSearch();
+    }
   };
 
   handleSearchChange = (e, data) => {
-    const diff = { query: data.value };
-    if (!this.state.isOpen) {
-      diff.isOpen = true;
+    this.props.updateQuery(data.value);
+    if (data.value) {
+      this.setState({ isOpen: true }, this.doAutocomplete);
+    } else {
+      this.setState({ isOpen: false });
     }
-    this.setState(diff);
-    this.doAutocomplete();
   };
 
   handleIconClick = () => {
-    this.doSearch(this.state.query);
+    this.doSearch();
   };
 
   suggestionToResult = (type, item) => ({ key: item.id, title: item.text});
@@ -121,6 +137,7 @@ class OmniBox extends Component {
   }
 
   closeSuggestions = (e, data) => {
+    console.log('Blur (close)', this.state);
     if (this.state.dontBlur) {
       this.setState({ dontBlur: false });
     } else {
@@ -128,28 +145,35 @@ class OmniBox extends Component {
     }
   }
 
+  resultRTL = (language, result) => ({
+    ...result,
+    className: RTL_LANGUAGES.includes(language) ? 'search-result-rtl' : undefined,
+  })
+
   render() {
-    const { language } = this.props;
-    const { query, suggestionsHelper, isOpen } = this.state;
+    const { language, query } = this.props;
+    const { suggestionsHelper, isOpen } = this.state;
 
     const categories = ['tags', 'sources', 'authors', 'persons'];
-    const results = !query ? [] : [{
-      name: 'search',
-      results: [{ key: 'search', title: query }],
-      onMouseDown: this.dontBlur
-    }];
-    categories.reduce((acc, val) => {
+    const textResults = new Set([query]);
+    let results = categories.reduce((acc, val) => {
       const searchResults = suggestionsHelper.getSuggestions(val, 5);
       if (searchResults.length > 0) {
+        searchResults.forEach(x => textResults.add(x.text));
         acc.push({
           name: val,
-          results: searchResults.map(x => this.suggestionToResult(val, x)),
+          results: searchResults.map(x => this.resultRTL(x.language, this.suggestionToResult(val, x))),
           onMouseDown: this.dontBlur,
         });
       }
 
       return acc;
-    }, results);
+    }, []);
+    results = [{
+      name: 'search',
+      results: Array.from(textResults).map(q => this.resultRTL(language, { key: `search_${q}`, title: q })),
+      onMouseDown: this.dontBlur
+    }].concat(results);
 
     return (
       <Search
@@ -165,7 +189,7 @@ class OmniBox extends Component {
         onFocus={this.handleSearchChange}
         onResultSelect={this.handleResultSelect}
         onBlur={this.closeSuggestions}
-        input={<Input style={{ width: '100%' }} />}
+        input={<Input onKeyUp={this.handleSearchKeyDown} style={{ width: '100%' }} />}
         icon={<Icon link name="search" onClick={this.handleIconClick} />}
         size="mini"
         showNoResults={false}
@@ -178,11 +202,13 @@ const mapState = state => ({
   suggestions: selectors.getSuggestions(state.search),
   query: selectors.getQuery(state.search),
   language: settingsSelectors.getLanguage(state.settings),
+  filters: filterSelectors.getFilters(state.filters, 'search'),
 });
 
 const mapDispatch = dispatch => bindActionCreators({
   autocomplete: actions.autocomplete,
   search: actions.search,
+  updateQuery: actions.updateQuery,
   push
 }, dispatch);
 

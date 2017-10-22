@@ -402,9 +402,8 @@ $text-colors: (
 
 .filter-tags {
   .buttons {
-    + .buttons {
-      margin-left: 8px;
-    }
+    margin-right: 4px;
+    margin-left: 4px;
   }
 }
 
@@ -445,6 +444,7 @@ $text-colors: (
   text-align: center;
 }
 
-.search-result-rtl {
+.search-result-rtl .title {
   direction: rtl;
+  display: inline-block;
 }

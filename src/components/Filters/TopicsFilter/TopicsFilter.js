@@ -103,6 +103,11 @@ class TopicsFilter extends React.Component {
     let topics;
 
     switch (namespace) {
+    // TODO: Search should have both lessons and programs topics.
+    // The UI should should another layer (similar to sources).
+    case 'search':
+      topics = getTagById(TAG_LESSONS_TOPICS);
+      break;
     case 'lessons':
       topics = getTagById(TAG_LESSONS_TOPICS);
       break;

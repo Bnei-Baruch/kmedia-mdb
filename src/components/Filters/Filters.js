@@ -35,7 +35,7 @@ class Filters extends Component {
   handleApplyActiveFilter = () => {
     const { namespace, activeFilterName } = this.props;
     this.props.onFilterApplication();
-    this.props.closeActiveFilter(namespace, activeFilterName);
+    this.handleCancelActiveFilter();
   };
 
   render() {

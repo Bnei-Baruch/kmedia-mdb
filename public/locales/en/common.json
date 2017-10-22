@@ -22,6 +22,9 @@
     }
   },
   "filters": {
+    "search": {
+      "by": "Filter Results by:"
+    },
     "lessons": {
       "by": "Filter Lessons by:"
     },

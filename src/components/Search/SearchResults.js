@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-duration-format';
@@ -10,10 +11,12 @@ import { ErrorSplash, LoadingSplash } from '../shared/Splash';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import Pagination from '../pagination/Pagination';
+import { selectors as filterSelectors } from '../../redux/modules/filters';
+import { filtersTransformer } from '../../filters';
+import { getQuery } from '../../helpers/url';
 
 class SearchResults extends Component {
   static propTypes = {
-    query: PropTypes.string,
     results: PropTypes.object,
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
     pageNo: PropTypes.number.isRequired,
@@ -23,10 +26,10 @@ class SearchResults extends Component {
     err: shapes.Error,
     t: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
+    filters: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
 
   static defaultProps = {
-    query: '',
     results: null,
     cuMap: {},
     wip: false,
@@ -51,8 +54,6 @@ class SearchResults extends Component {
     if (src.film_date) {
       filmDate = t('values.date', { date: new Date(src.film_date) });
     }
-
-    console.log(src);
 
     return (
       <Table.Row key={src.mdb_uid} verticalAlign="top">
@@ -82,7 +83,9 @@ class SearchResults extends Component {
   };
 
   render() {
-    const { wip, err, query, results, pageNo, pageSize, language, t, handlePageChange } = this.props;
+    const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange } = this.props;
+    // Query from URL (not changed until pressed Enter.
+    const query = getQuery(window.location).q;
 
     if (err) {
       return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
@@ -92,7 +95,7 @@ class SearchResults extends Component {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
-    if (query === '') {
+    if (query === '' && !Object.values(filtersTransformer.toApiParams(filters)).length) {
       return (
         <div>
           {t('search.results.empty-query')}
@@ -146,4 +149,7 @@ class SearchResults extends Component {
   }
 }
 
-export default translate()(SearchResults);
+export default connect(state => ({
+  filters: filterSelectors.getFilters(state.filters, 'search'),
+}))(translate()(SearchResults));
+
