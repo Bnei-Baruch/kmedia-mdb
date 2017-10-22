@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import identity from 'lodash/identity';
 import { withMediaProps } from 'react-media-player';
 import { Icon } from 'semantic-ui-react';
 

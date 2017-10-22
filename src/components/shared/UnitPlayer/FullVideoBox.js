@@ -48,7 +48,7 @@ class FullVideoBox extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { isMobile, collection, language, location, onActivePartChange, history } = nextProps;
+    const { isMobile, collection, language, location, onActivePartChange } = nextProps;
     const {
       collection: oldCollection,
       language: oldLanguage,
