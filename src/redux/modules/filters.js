@@ -62,7 +62,7 @@ const setHydratedFilterValues = createAction(
   SET_HYDRATED_FILTER_VALUES,
   (namespace, filters) => ({ namespace, filters })
 );
-const hydrateFilters          = createAction(HYDRATE_FILTERS, (namespace, from = 'query') => ({ namespace, from }));
+const hydrateFilters          = createAction(HYDRATE_FILTERS, namespace => ({ namespace }));
 const filtersHydrated         = createAction(FILTERS_HYDRATED, namespace => ({ namespace }));
 
 export const actions = {
@@ -202,6 +202,10 @@ const $$setHydratedFilterValues = (state, action) => {
 
   return {
     ...state,
+    isHydrated: {
+      ...state.isHydrated,
+      [action.payload.namespace]: true
+    },
     [namespace]: {
       // ...oldNamespace,  If we're hydrating then we need a fresh state
       ...Object.keys(filters).reduce((acc, name) => {
@@ -228,7 +232,7 @@ const $$filtersHydrated = (state, action) => ({
   ...state,
   isHydrated: {
     ...state.isHydrated,
-    [action.payload.namespace]: true
+    [action.payload.namespace]: false
   }
 });
 
