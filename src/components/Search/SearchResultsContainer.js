@@ -9,7 +9,7 @@ import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
 import * as shapes from '../shapes';
 import SearchResults from './SearchResults';
-import SearchResultsHeader from './SearchResultsHeader';
+import Filters from './Filters';
 
 class SearchResultsContainer extends Component {
   static propTypes = {
@@ -48,35 +48,37 @@ class SearchResultsContainer extends Component {
     const { setSortBy, search, query, pageSize, pageNo } = this.props;
     setSortBy(data.value);
     search(query, pageNo, pageSize);
-  }
+  };
 
   onSearch = () => {
     const { search, query, pageSize, pageNo } = this.props;
     search(query, pageNo, pageSize);
-  }
+  };
 
   render() {
-    const { wip, err, query, results, cuMap, pageNo, pageSize, sortBy, language } = this.props;
+    const { wip, err, results, cuMap, pageNo, pageSize, sortBy, language } = this.props;
 
     return (
-      <Container className="padded">
-        <SearchResultsHeader
+      <div>
+        <Filters
           sortBy={sortBy}
+          onChange={this.onSearch}
           onSortByChange={this.onSortByChange}
           onHydrated={() => this.handlePageChange(1)}
-          onChange={this.onSearch}
         />
-        <SearchResults
-          results={results}
-          cuMap={cuMap}
-          wip={wip}
-          err={err}
-          pageNo={pageNo}
-          pageSize={pageSize}
-          language={language}
-          handlePageChange={this.handlePageChange}
-        />
-      </Container>
+        <Container className="padded">
+          <SearchResults
+            results={results}
+            cuMap={cuMap}
+            wip={wip}
+            err={err}
+            pageNo={pageNo}
+            pageSize={pageSize}
+            language={language}
+            handlePageChange={this.handlePageChange}
+          />
+        </Container>
+      </div>
     );
   }
 }

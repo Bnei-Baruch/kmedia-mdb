@@ -20,7 +20,7 @@ const filters = [
 ];
 
 
-class SearchResultsHeader extends Component {
+class SearchResultsFilters extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     sortBy: PropTypes.string.isRequired,
@@ -63,4 +63,4 @@ class SearchResultsHeader extends Component {
   }
 }
 
-export default translate()(SearchResultsHeader);
+export default translate()(SearchResultsFilters);
