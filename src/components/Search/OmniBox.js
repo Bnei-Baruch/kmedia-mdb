@@ -69,7 +69,7 @@ class OmniBox extends Component {
     const { filters } = this.props;
     const params  = filtersTransformer.toApiParams(filters);
     return !query && !Object.values(params).length;
-  }
+  };
 
   doSearch = (q = null) => {
     const query = q || this.props.query;
@@ -134,7 +134,7 @@ class OmniBox extends Component {
 
   dontBlur = () => {
     this.setState({ dontBlur: true });
-  }
+  };
 
   closeSuggestions = (e, data) => {
     console.log('Blur (close)', this.state);
@@ -143,12 +143,12 @@ class OmniBox extends Component {
     } else {
       this.setState({ isOpen: false, dontBlur: false });
     }
-  }
+  };
 
   resultRTL = (language, result) => ({
     ...result,
     className: RTL_LANGUAGES.includes(language) ? 'search-result-rtl' : undefined,
-  })
+  });
 
   render() {
     const { language, query } = this.props;
@@ -177,7 +177,7 @@ class OmniBox extends Component {
 
     return (
       <Search
-        style={{width: '100%'}}
+        className="search-omnibox"
         category
         fluid
         results={results}
