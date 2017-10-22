@@ -76,18 +76,13 @@ function* hydrateUrl() {
   const { q, page = '1' } = query;
 
   if (q) {
+    yield put(actions.updateQuery(q));
+
     if (query.sort_by) {
       yield put(actions.setSortBy(query.sort_by));
     }
 
-    let pageSize = query.page_size;
-    if (!pageSize) {
-      pageSize = yield select(state => settings.getPageSize(state.settings));
-    }
-
     const pageNo = parseInt(page, 10);
-
-    yield put(actions.search(q, pageNo, pageSize));
     yield put(actions.setPage(pageNo));
   }
 }

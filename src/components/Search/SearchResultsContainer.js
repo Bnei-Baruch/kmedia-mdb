@@ -44,13 +44,17 @@ class SearchResultsContainer extends Component {
     search(query, pageNo, pageSize);
   };
 
-  onSortByChange = (e, data) => {
+  handleSortByChanged = (e, data) => {
     const { setSortBy, search, query, pageSize, pageNo } = this.props;
     setSortBy(data.value);
     search(query, pageNo, pageSize);
   };
 
-  onSearch = () => {
+  handleFiltersChanged = () => {
+    this.handlePageChange(1);
+  };
+
+  handleFiltersHydrated = () => {
     const { search, query, pageSize, pageNo } = this.props;
     search(query, pageNo, pageSize);
   };
@@ -62,9 +66,9 @@ class SearchResultsContainer extends Component {
       <div>
         <Filters
           sortBy={sortBy}
-          onChange={this.onSearch}
-          onSortByChange={this.onSortByChange}
-          onHydrated={() => this.handlePageChange(1)}
+          onChange={this.handleFiltersChanged}
+          onSortByChange={this.handleSortByChanged}
+          onHydrated={this.handleFiltersHydrated}
         />
         <Container className="padded">
           <SearchResults
