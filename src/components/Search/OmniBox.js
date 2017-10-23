@@ -11,7 +11,7 @@ import { actions, selectors } from '../../redux/modules/search';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
 import { RTL_LANGUAGES } from '../../helpers/consts';
-import { selectors as filterSelectors } from '../../redux/modules/filters';
+import { actions as filtersActions, selectors as filterSelectors } from '../../redux/modules/filters';
 import { filtersTransformer } from '../../filters';
 
 const CATEGORIES_ICONS = {
@@ -25,6 +25,7 @@ const CATEGORIES_ICONS = {
 class OmniBox extends Component {
 
   static propTypes = {
+    addFilterValue: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
     autocomplete: PropTypes.func.isRequired,
     search: PropTypes.func.isRequired,
@@ -58,7 +59,7 @@ class OmniBox extends Component {
 
   doAutocomplete = debounce(() => {
     const query = this.props.query;
-    if (query) {
+    if (query.trim()) {
       this.props.autocomplete(query);
     } else {
       this.resetComponent('');
@@ -74,7 +75,6 @@ class OmniBox extends Component {
 
   doSearch = (q = null) => {
     const query = q || this.props.query;
-    console.log('Query: ', query);
     const { search, location, push, pageSize } = this.props;
 
     if (this.emptyQuery()) {
@@ -94,22 +94,29 @@ class OmniBox extends Component {
   };
 
   handleResultSelect = (e, data) => {
-    console.log('Result selected.', data.result.title);
-    this.props.updateQuery(data.result.title);
-    this.doSearch(data.result.title);
+    const key = data.result.key;
+    const category = data.results.find(c => c.results.find(r => r.key === key)).name;
+    if (category === 'search') {
+      this.props.updateQuery(data.result.title);
+      this.doSearch(data.result.title);
+    } else if (category === 'tags') {
+      this.props.addFilterValue('search', 'topics-filter', data.result.key);
+      this.doSearch();
+    }
+    // Currently ignoring anything else (sources for example).
   };
 
   handleSearchKeyDown = (e, data) => {
-    // Fix bug that now allows to handleResultSelect when string is empty
+    // Fix bug that did not allows to handleResultSelect when string is empty
     // we have meaning for that when filters are not empty.
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13 && !this.props.query.trim()) {
       this.doSearch();
     }
   };
 
   handleSearchChange = (e, data) => {
     this.props.updateQuery(data.value);
-    if (data.value) {
+    if (data.value.trim()) {
       this.setState({ isOpen: true }, this.doAutocomplete);
     } else {
       this.setState({ isOpen: false });
@@ -138,7 +145,6 @@ class OmniBox extends Component {
   };
 
   closeSuggestions = (e, data) => {
-    console.log('Blur (close)', this.state);
     if (this.state.dontBlur) {
       this.setState({ dontBlur: false });
     } else {
@@ -155,7 +161,7 @@ class OmniBox extends Component {
     const { language, query } = this.props;
     const { suggestionsHelper, isOpen } = this.state;
 
-    const categories = ['tags', 'sources', 'authors', 'persons'];
+    const categories = ['tags', /*'sources', - ignore sources for now */ 'authors', 'persons'];
     const textResults = new Set([query]);
     let results = categories.reduce((acc, val) => {
       const searchResults = suggestionsHelper.getSuggestions(val, 5);
@@ -190,7 +196,7 @@ class OmniBox extends Component {
         onFocus={this.handleSearchChange}
         onResultSelect={this.handleResultSelect}
         onBlur={this.closeSuggestions}
-        input={<Input onKeyUp={this.handleSearchKeyDown} style={{ width: '100%' }} />}
+        input={<Input onKeyDown={this.handleSearchKeyDown} style={{ width: '100%' }} />}
         icon={<Icon link name="search" onClick={this.handleIconClick} />}
         size="mini"
         showNoResults={false}
@@ -211,6 +217,7 @@ const mapDispatch = dispatch => bindActionCreators({
   autocomplete: actions.autocomplete,
   search: actions.search,
   updateQuery: actions.updateQuery,
+  addFilterValue: filtersActions.addFilterValue,
   push
 }, dispatch);
 
