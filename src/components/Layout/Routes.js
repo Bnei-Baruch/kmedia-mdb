@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 
 import Lessons from '../Lessons/List/LessonsContainer';
@@ -10,6 +11,7 @@ import FullProgram from '../Programs/Full/FullProgramContainer';
 import Events from '../Events/List/EventsContainer';
 import EventItem from '../Events/Item/EventItemContainer';
 import FullEvent from '../Events/Full/FullEventContainer';
+import LibraryContainer from '../Library/LibraryContainer';
 import SearchResults from '../Search/SearchResultsContainer';
 import Design from '../Design/Design';
 
@@ -35,7 +37,7 @@ const Routes = ({ match }) => {
       <Route exact path={`${urlPrefix}/events/item/:id`} component={EventItem} />
       <Route exact path={`${urlPrefix}/events/full/:id`} component={FullEvent} />
       <Route exact path={`${urlPrefix}/lectures`} component={NotImplemented} />
-      <Route exact path={`${urlPrefix}/sources`} component={NotImplemented} />
+      <Route exact path={`${urlPrefix}/sources`} component={LibraryContainer} />
       <Route exact path={`${urlPrefix}/events`} component={NotImplemented} />
       <Route exact path={`${urlPrefix}/books`} component={NotImplemented} />
       <Route exact path={`${urlPrefix}/topics`} component={NotImplemented} />
@@ -47,6 +49,15 @@ const Routes = ({ match }) => {
       <Route component={NotFound} />
     </Switch>
   );
+};
+
+Routes.propTypes = {
+  match: PropTypes.objectOf({
+    params: PropTypes.object,
+    isExact: PropTypes.bool,
+    path: PropTypes.string,
+    url: PropTypes.string,
+  }).isRequired,
 };
 
 export default Routes;
