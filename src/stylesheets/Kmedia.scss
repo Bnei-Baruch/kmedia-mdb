@@ -153,6 +153,7 @@ $text-colors: (
     }
   }
  .logo {
+   min-width: 290px;
     img {
       display: inline-block!important;
     }
@@ -442,6 +443,11 @@ $text-colors: (
 .popup .content {
   width: 200px;
   text-align: center;
+}
+
+.search-omnibox {
+  width: 100%;
+  max-width: 600px;
 }
 
 .search-result-rtl .title {

@@ -35,6 +35,7 @@ class OmniBox extends Component {
     getTagPath: PropTypes.func,
     query: PropTypes.string.isRequired,
     language: PropTypes.string.isRequired,
+    pageSize: PropTypes.number.isRequired,
     filters: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
 
@@ -69,23 +70,23 @@ class OmniBox extends Component {
     const { filters } = this.props;
     const params  = filtersTransformer.toApiParams(filters);
     return !query && !Object.values(params).length;
-  }
+  };
 
   doSearch = (q = null) => {
     const query = q || this.props.query;
     console.log('Query: ', query);
-    const { search, location, push } = this.props;
+    const { search, location, push, pageSize } = this.props;
 
     if (this.emptyQuery()) {
       return;
     }
 
+    search(query, 1, pageSize);
+
     // redirect to search results page if we're not there
     if (!location.pathname.endsWith('search')) {
       push('search');
     }
-
-    search(query, 1, 10);
 
     if (this.state.isOpen) {
       this.setState({ isOpen: false });
@@ -134,7 +135,7 @@ class OmniBox extends Component {
 
   dontBlur = () => {
     this.setState({ dontBlur: true });
-  }
+  };
 
   closeSuggestions = (e, data) => {
     console.log('Blur (close)', this.state);
@@ -143,12 +144,12 @@ class OmniBox extends Component {
     } else {
       this.setState({ isOpen: false, dontBlur: false });
     }
-  }
+  };
 
   resultRTL = (language, result) => ({
     ...result,
     className: RTL_LANGUAGES.includes(language) ? 'search-result-rtl' : undefined,
-  })
+  });
 
   render() {
     const { language, query } = this.props;
@@ -177,7 +178,7 @@ class OmniBox extends Component {
 
     return (
       <Search
-        style={{width: '100%'}}
+        className="search-omnibox"
         category
         fluid
         results={results}
@@ -201,6 +202,7 @@ class OmniBox extends Component {
 const mapState = state => ({
   suggestions: selectors.getSuggestions(state.search),
   query: selectors.getQuery(state.search),
+  pageSize: settingsSelectors.getPageSize(state.settings),
   language: settingsSelectors.getLanguage(state.settings),
   filters: filterSelectors.getFilters(state.filters, 'search'),
 });

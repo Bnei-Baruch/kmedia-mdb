@@ -4,16 +4,16 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
-import { Header, Label, Table, Container, Divider } from 'semantic-ui-react';
+import { Container, Divider, Header, Label, Table } from 'semantic-ui-react';
 
 import { canonicalLink, formatError, isEmpty } from '../../helpers/utils';
-import { ErrorSplash, LoadingSplash } from '../shared/Splash';
-import * as shapes from '../shapes';
-import Link from '../Language/MultiLanguageLink';
-import Pagination from '../pagination/Pagination';
+import { getQuery } from '../../helpers/url';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { filtersTransformer } from '../../filters';
-import { getQuery } from '../../helpers/url';
+import * as shapes from '../shapes';
+import { ErrorSplash, LoadingSplash } from '../shared/Splash';
+import Link from '../Language/MultiLanguageLink';
+import Pagination from '../pagination/Pagination';
 
 class SearchResults extends Component {
   static propTypes = {
@@ -37,7 +37,7 @@ class SearchResults extends Component {
   };
 
   renderHit = (hit) => {
-    const { cuMap, t }                                      = this.props;
+    const { cuMap, t }                               = this.props;
     const { _source: src, highlight, _score: score } = hit;
 
     let name = src.name;
@@ -84,6 +84,7 @@ class SearchResults extends Component {
 
   render() {
     const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange } = this.props;
+
     // Query from URL (not changed until pressed Enter.
     const query = getQuery(window.location).q;
 

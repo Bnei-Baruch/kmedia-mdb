@@ -9,7 +9,7 @@ import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
 import * as shapes from '../shapes';
 import SearchResults from './SearchResults';
-import SearchResultsHeader from './SearchResultsHeader';
+import Filters from './Filters';
 
 class SearchResultsContainer extends Component {
   static propTypes = {
@@ -43,39 +43,45 @@ class SearchResultsContainer extends Component {
     search(query, pageNo, pageSize);
   };
 
-  onSortByChange = (e, data) => {
+  handleSortByChanged = (e, data) => {
     const { setSortBy, search, query, pageSize, pageNo } = this.props;
     setSortBy(data.value);
     search(query, pageNo, pageSize);
-  }
+  };
 
-  onSearch = () => {
+  handleFiltersChanged = () => {
+    this.handlePageChange(1);
+  };
+
+  handleFiltersHydrated = () => {
     const { search, query, pageSize, pageNo } = this.props;
     search(query, pageNo, pageSize);
-  }
+  };
 
   render() {
     const { wip, err, results, cuMap, pageNo, pageSize, sortBy, language } = this.props;
 
     return (
-      <Container className="padded">
-        <SearchResultsHeader
+      <div>
+        <Filters
           sortBy={sortBy}
-          onSortByChange={this.onSortByChange}
-          onHydrated={() => this.handlePageChange(1)}
-          onChange={this.onSearch}
+          onChange={this.handleFiltersChanged}
+          onSortByChange={this.handleSortByChanged}
+          onHydrated={this.handleFiltersHydrated}
         />
-        <SearchResults
-          results={results}
-          cuMap={cuMap}
-          wip={wip}
-          err={err}
-          pageNo={pageNo}
-          pageSize={pageSize}
-          language={language}
-          handlePageChange={this.handlePageChange}
-        />
-      </Container>
+        <Container className="padded">
+          <SearchResults
+            results={results}
+            cuMap={cuMap}
+            wip={wip}
+            err={err}
+            pageNo={pageNo}
+            pageSize={pageSize}
+            language={language}
+            handlePageChange={this.handlePageChange}
+          />
+        </Container>
+      </div>
     );
   }
 }
