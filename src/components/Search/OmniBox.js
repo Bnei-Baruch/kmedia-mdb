@@ -74,7 +74,7 @@ class OmniBox extends Component {
   };
 
   doSearch = (q = null) => {
-    const query = q || this.props.query;
+    const query = q != null ? q : this.props.query;
     const { search, location, push, pageSize } = this.props;
 
     if (this.emptyQuery()) {
@@ -94,14 +94,16 @@ class OmniBox extends Component {
   };
 
   handleResultSelect = (e, data) => {
+    console.log('handleResultSelect');
     const key = data.result.key;
     const category = data.results.find(c => c.results.find(r => r.key === key)).name;
     if (category === 'search') {
       this.props.updateQuery(data.result.title);
       this.doSearch(data.result.title);
     } else if (category === 'tags') {
+      this.props.updateQuery('');
       this.props.addFilterValue('search', 'topics-filter', data.result.key);
-      this.doSearch();
+      this.doSearch('');
     }
     // Currently ignoring anything else (sources for example).
   };
