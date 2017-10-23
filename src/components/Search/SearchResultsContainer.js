@@ -13,7 +13,7 @@ import SearchResultsHeader from './SearchResultsHeader';
 
 class SearchResultsContainer extends Component {
   static propTypes = {
-    query: PropTypes.string,
+    query: PropTypes.string.isRequired,
     results: PropTypes.object,
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
     wip: shapes.WIP,
@@ -28,7 +28,6 @@ class SearchResultsContainer extends Component {
   };
 
   static defaultProps = {
-    query: '',
     results: null,
     wip: false,
     err: null,
@@ -56,7 +55,7 @@ class SearchResultsContainer extends Component {
   }
 
   render() {
-    const { wip, err, query, results, cuMap, pageNo, pageSize, sortBy, language } = this.props;
+    const { wip, err, results, cuMap, pageNo, pageSize, sortBy, language } = this.props;
 
     return (
       <Container className="padded">
