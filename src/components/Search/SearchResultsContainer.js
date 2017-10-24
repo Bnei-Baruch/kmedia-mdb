@@ -13,7 +13,7 @@ import Filters from './Filters';
 
 class SearchResultsContainer extends Component {
   static propTypes = {
-    query: PropTypes.string,
+    query: PropTypes.string.isRequired,
     results: PropTypes.object,
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
     wip: shapes.WIP,
@@ -28,7 +28,6 @@ class SearchResultsContainer extends Component {
   };
 
   static defaultProps = {
-    query: '',
     results: null,
     wip: false,
     err: null,

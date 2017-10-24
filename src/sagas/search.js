@@ -28,9 +28,10 @@ function* search(action) {
     // Prepare filters values.
     const filters = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
     const params  = filtersTransformer.toApiParams(filters);
-    const filterQuery = Object.entries(params).map(([v, k]) => `${v}:${k}`).join(' ')
+    const filterKeyValues = Object.entries(params).map(([v, k]) => `${v}:${k}`).join(' ');
+    const filterParams = filterKeyValues ? ` ${filterKeyValues}` : '';
 
-    const q = action.payload.q ? `${action.payload.q} ${filterQuery}` : filterQuery;
+    const q = action.payload.q.trim() ? `${action.payload.q.trim()}${filterParams}` : filterParams;
     if (!q) {
       // If no query nor filters, silently fail the request, don't sent request to backend.
       yield put(actions.searchFailure(null));

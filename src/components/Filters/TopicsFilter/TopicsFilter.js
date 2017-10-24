@@ -8,7 +8,7 @@ import { TAG_LESSONS_TOPICS, TAG_PROGRAMS_TOPICS } from '../../../helpers/consts
 import { selectors as tags } from '../../../redux/modules/tags';
 import connectFilter from '../connectFilter';
 
-class TopicsFilter extends React.Component {
+class TopicsFilterBase extends React.Component {
 
   static propTypes = {
     onCancel: PropTypes.func,
@@ -136,8 +136,16 @@ class TopicsFilter extends React.Component {
   }
 }
 
-export default connect(
+const TopicsFilter = connect(
   state => ({
     getTagById: tags.getTagById(state.tags),
   })
-)(connectFilter()(TopicsFilter));
+)(connectFilter()(TopicsFilterBase));
+
+const MultiTopicsFilter = connect(
+  state => ({
+    getTagById: tags.getTagById(state.tags),
+  })
+)(connectFilter({ isMultiple: true })(TopicsFilterBase));
+
+export { TopicsFilter, MultiTopicsFilter };
