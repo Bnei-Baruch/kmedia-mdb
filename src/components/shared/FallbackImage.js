@@ -5,12 +5,12 @@ import { Image } from 'semantic-ui-react';
 import imagePlaceholder from '../../images/image.png';
 
 // An adaptation of https://github.com/socialtables/react-image-fallback
-// for react semantic
+// for react semantic-ui
 class FallbackImage extends Component {
 
   static propTypes = {
     src: PropTypes.string,
-    fallbackImage: PropTypes.oneOfType([PropTypes.string, PropTypes.element, PropTypes.array]),
+    fallbackImage: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.element, PropTypes.array])),
     initialImage: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     onLoad: PropTypes.func,
     onError: PropTypes.func
@@ -18,7 +18,7 @@ class FallbackImage extends Component {
 
   static defaultProps = {
     initialImage: null,
-    fallbackImage: imagePlaceholder,
+    fallbackImage: [imagePlaceholder],
   };
 
   constructor(props) {
@@ -30,12 +30,12 @@ class FallbackImage extends Component {
 
   componentDidMount() {
     this.displayImage = new window.Image();
-    this.setDisplayImage({ image: this.props.src, fallbacks: this.props.fallbackImage });
+    this.setDisplayImage(this.props.src, this.props.fallbackImage);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.src !== this.props.src) {
-      this.setDisplayImage({ image: nextProps.src, fallbacks: nextProps.fallbackImage });
+      this.setDisplayImage(nextProps.src, nextProps.fallbackImage);
     }
   }
 
@@ -47,23 +47,24 @@ class FallbackImage extends Component {
     }
   }
 
-  setDisplayImage = ({ image, fallbacks }) => {
-    const imagesArray         = [image].concat(fallbacks).filter(fallback => !!fallback);
+  setDisplayImage = (image, fallbacks) => {
+    const imagesArray = [image].concat(fallbacks).filter(fallback => !!fallback);
+
     this.displayImage.onerror = () => {
       if (imagesArray.length > 2 && typeof imagesArray[1] === 'string') {
         const updatedFallbacks = imagesArray.slice(2);
-        this.setDisplayImage({ image: imagesArray[1], fallbacks: updatedFallbacks });
+        this.setDisplayImage(imagesArray[1], updatedFallbacks);
         return;
       }
-      this.setState({
-        imageSource: imagesArray[1] || null
-      }, () => {
+
+      this.setState({ imageSource: imagesArray[1] || null }, () => {
         if (this.props.onError) {
           this.props.onError(this.props.src);
         }
       });
     };
-    this.displayImage.onload  = () => {
+
+    this.displayImage.onload = () => {
       this.setState({
         imageSource: imagesArray[0]
       }, () => {
@@ -72,10 +73,10 @@ class FallbackImage extends Component {
         }
       });
     };
+
     if (typeof imagesArray[0] === 'string') {
       this.displayImage.src = imagesArray[0];
-    }
-    else {
+    } else {
       this.setState({
         imageSource: imagesArray[0]
       }, () => {

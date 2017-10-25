@@ -4,11 +4,11 @@ import 'moment-duration-format';
 import { translate } from 'react-i18next';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
-import {assetUrl} from '../../../helpers/Api';
 import * as shapes from '../../shapes';
-import FallbackImage from '../../shared/FallbackImage';
+import CollectionLogo from '../../shared/Logo/CollectionLogo';
 
 class PageHeader extends PureComponent {
+
   static propTypes = {
     fullProgram: shapes.ProgramCollection,
     t: PropTypes.func.isRequired,
@@ -27,11 +27,7 @@ class PageHeader extends PureComponent {
           <Grid>
             <Grid.Row>
               <Grid.Column width={3}>
-                <FallbackImage
-                  fluid
-                  shape="rounded"
-                  src={assetUrl(`logos/collections/${fullProgram.id}.png`)}
-                />
+                <CollectionLogo collectionId={fullProgram.id} />
               </Grid.Column>
               <Grid.Column width={8}>
                 <Header as="h1">

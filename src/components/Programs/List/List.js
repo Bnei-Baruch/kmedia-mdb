@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Grid, Image, List, Table } from 'semantic-ui-react';
+import { Grid, List, Table } from 'semantic-ui-react';
 
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { canonicalLink } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
+import UnitLogo from '../../shared/Logo/UnitLogo';
 
 class ProgramsList extends PureComponent {
 
@@ -21,8 +22,9 @@ class ProgramsList extends PureComponent {
 
   renderUnit = (unit) => {
     const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
+    const programs  = breakdown.getPrograms();
 
-    const relatedItems = breakdown.getPrograms().map(x =>
+    const relatedItems = programs.map(x =>
       (
         <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
           {x.name || '☠ no name'}
@@ -47,7 +49,11 @@ class ProgramsList extends PureComponent {
           <strong>{filmDate}</strong>
         </Table.Cell>
         <Table.Cell collapsing width={1}>
-          <Image fluid src="http://www.kab.co.il/images/attachments/91/276191_medium.jpg" />
+          <UnitLogo
+            fluid
+            unitId={unit.id}
+            collectionId={programs.length > 0 ? programs[0].id : null}
+          />
         </Table.Cell>
         <Table.Cell>
           <Link to={canonicalLink(unit)}>
@@ -74,9 +80,7 @@ class ProgramsList extends PureComponent {
     return (
       <Table sortable basic="very" className="index-list">
         <Table.Body>
-          {
-            items.map(this.renderUnit)
-          }
+          {items.map(this.renderUnit)}
         </Table.Body>
       </Table>
     );
