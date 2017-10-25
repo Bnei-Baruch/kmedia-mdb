@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 import {
-  CT_CHILDREN_LESSON_PART,
+  CT_CHILDREN_LESSON,
   CT_CLIP,
   CT_CONGRESS,
   CT_DAILY_LESSON,
@@ -25,7 +25,7 @@ import {
   CT_VIDEO_PROGRAM,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
-  CT_WOMEN_LESSON_PART,
+  CT_WOMEN_LESSON,
   EVENT_TYPES,
   MEDIA_TYPES
 } from './consts';
@@ -232,8 +232,8 @@ export const canonicalLink = (entity) => {
     return `/lessons/part/${entity.id}`;
   case CT_LECTURE:
   case CT_VIRTUAL_LESSON:
-  case CT_CHILDREN_LESSON_PART:
-  case CT_WOMEN_LESSON_PART:
+  case CT_CHILDREN_LESSON:
+  case CT_WOMEN_LESSON:
     return `/lectures/part/${entity.id}`;
   case CT_VIDEO_PROGRAM_CHAPTER:
     return `/programs/chapter/${entity.id}`;
