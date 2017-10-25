@@ -2,9 +2,11 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import 'moment-duration-format';
 import { translate } from 'react-i18next';
-import { Container, Grid, Header, Image } from 'semantic-ui-react';
+import { Container, Grid, Header } from 'semantic-ui-react';
 
+import {assetUrl} from '../../../helpers/Api';
 import * as shapes from '../../shapes';
+import FallbackImage from '../../shared/FallbackImage';
 
 class PageHeader extends PureComponent {
   static propTypes = {
@@ -25,7 +27,11 @@ class PageHeader extends PureComponent {
           <Grid>
             <Grid.Row>
               <Grid.Column width={3}>
-                <Image fluid shape="rounded" src="http://www.kab.co.il/images/attachments/91/276191_medium.jpg" />
+                <FallbackImage
+                  fluid
+                  shape="rounded"
+                  src={assetUrl(`logos/collections/${fullProgram.id}.png`)}
+                />
               </Grid.Column>
               <Grid.Column width={8}>
                 <Header as="h1">
