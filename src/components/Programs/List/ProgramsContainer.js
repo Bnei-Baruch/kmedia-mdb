@@ -53,7 +53,7 @@ class ProgramsContainer extends withPagination {
     super.componentWillReceiveProps(nextProps);
   }
 
-  handlePageChanged = (pageNo) =>
+  handlePageChanged = pageNo =>
     withPagination.handlePageChange(this.props, pageNo);
 
   handleFiltersChanged = () =>

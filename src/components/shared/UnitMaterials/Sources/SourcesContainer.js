@@ -51,11 +51,10 @@ class SourcesContainer extends Component {
   fetchIndices = (props) => {
     const { indexMap, fetchIndex } = props;
     Object.entries(indexMap).forEach(([k, v]) => {
-        if (isEmpty(v)) {
-          fetchIndex(k);
-        }
+      if (isEmpty(v)) {
+        fetchIndex(k);
       }
-    );
+    });
   };
 
   handleContentChange = (id, name) => {

@@ -7,7 +7,7 @@ class GAPageView extends Component {
     super(props);
 
     // Initial page load - only fired once
-    this.sendPageChange(props.location.pathname, props.location.search)
+    this.sendPageChange(props.location.pathname, props.location.search);
   }
 
   componentWillReceiveProps(nextProps) {
