@@ -44,15 +44,9 @@ class Materials extends Component {
       },
       {
         name: 'sketches',
-<<<<<<< Updated upstream
-        label: t('materials.sketches.header'),
-        component: <Segment basic>{t('materials.sketches.header')}</Segment>,
-        // component: <div style="outerWidth=200px; outerHeight=200px" visible="true"><Sketches></Sketches></div>,
-=======
         label: t(`${tPrefix}.sketches`),
         //component: <Segment basic>{t(`${tPrefix}.sketches`)}</Segment>,
         component: <Sketches />,
->>>>>>> Stashed changes
       },
     ];
 
