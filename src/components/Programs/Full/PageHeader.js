@@ -2,11 +2,13 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import 'moment-duration-format';
 import { translate } from 'react-i18next';
-import { Container, Grid, Header, Image } from 'semantic-ui-react';
+import { Container, Grid, Header } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
+import CollectionLogo from '../../shared/Logo/CollectionLogo';
 
 class PageHeader extends PureComponent {
+
   static propTypes = {
     fullProgram: shapes.ProgramCollection,
     t: PropTypes.func.isRequired,
@@ -25,7 +27,7 @@ class PageHeader extends PureComponent {
           <Grid>
             <Grid.Row>
               <Grid.Column width={3}>
-                <Image fluid shape="rounded" src="http://www.kab.co.il/images/attachments/91/276191_medium.jpg" />
+                <CollectionLogo collectionId={fullProgram.id} />
               </Grid.Column>
               <Grid.Column width={8}>
                 <Header as="h1">

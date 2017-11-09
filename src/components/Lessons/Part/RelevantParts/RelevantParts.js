@@ -8,7 +8,7 @@ import { formatError, neighborIndices } from '../../../../helpers/utils';
 import * as shapes from '../../../shapes';
 import { ErrorSplash, LoadingSplash } from '../../../shared/Splash';
 import Link from '../../../Language/MultiLanguageLink';
-import myimage from '../../../../images/image.png';
+import UnitLogo from '../../../shared/Logo/UnitLogo';
 
 const RelevantParts = (props) => {
   const { unit, collection, wip, err, t } = props;
@@ -33,42 +33,44 @@ const RelevantParts = (props) => {
     return null;
   }
 
-    return (
-        <div style={{ marginTop: '50px' }}>
-          <Header as="h3" content={t('lessons.part.relevant-parts.title')} />
-          <Item.Group divided link>
-            {
-              otherParts.map(part => (
-                <Item as={Link} key={part.id} to={`/lessons/part/${part.id}`}>
-                  <Item.Image src={myimage} size="tiny" />
-                  <Item.Content>
-                    <Header
-                      as="h4"
-                      content={t('lessons.part.relevant-parts.item-title', { name: collection.ccuNames[part.id] })}
-                    />
-                    <Item.Meta>
-                      <small>{moment.duration(part.duration, 'seconds').format('hh:mm:ss')}</small>
-                    </Item.Meta>
-                    <Item.Description>{part.name}</Item.Description>
-                  </Item.Content>
-                </Item>
-              ))
-            }
-            <Item>
+  return (
+    <div style={{ marginTop: '50px' }}>
+      <Header as="h3" content={t('lessons.part.relevant-parts.title')} />
+      <Item.Group divided link>
+        {
+          otherParts.map(part => (
+            <Item as={Link} key={part.id} to={`/lessons/part/${part.id}`}>
+              <Item.Image size="tiny">
+                <UnitLogo unitId={part.id} collectionId={collection.id} />
+              </Item.Image>
               <Item.Content>
-                <Container
-                  fluid
-                  as={Link}
-                  textAlign="right"
-                  to={`/lessons/full/${collection.id}`}
-                >
-                  {t('buttons.more')} &raquo;
-                </Container>
+                <Header
+                  as="h4"
+                  content={t('lessons.part.relevant-parts.item-title', { name: collection.ccuNames[part.id] })}
+                />
+                <Item.Meta>
+                  <small>{moment.duration(part.duration, 'seconds').format('hh:mm:ss')}</small>
+                </Item.Meta>
+                <Item.Description>{part.name}</Item.Description>
               </Item.Content>
             </Item>
-          </Item.Group>
-        </div>
-    );
+          ))
+        }
+        <Item>
+          <Item.Content>
+            <Container
+              fluid
+              as={Link}
+              textAlign="right"
+              to={`/lessons/full/${collection.id}`}
+            >
+              {t('buttons.more')} &raquo;
+            </Container>
+          </Item.Content>
+        </Item>
+      </Item.Group>
+    </div>
+  );
 
 };
 

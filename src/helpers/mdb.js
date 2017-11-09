@@ -1,4 +1,5 @@
 import {
+  CT_CHILDREN_LESSONS,
   CT_CONGRESS,
   CT_DAILY_LESSON,
   CT_FRIENDS_GATHERINGS,
@@ -9,6 +10,8 @@ import {
   CT_SPECIAL_LESSON,
   CT_UNITY_DAY,
   CT_VIDEO_PROGRAM,
+  CT_VIRTUAL_LESSONS,
+  CT_WOMEN_LESSONS,
 } from './consts';
 
 export class CollectionsBreakdown {
@@ -38,6 +41,9 @@ export class CollectionsBreakdown {
       CT_FRIENDS_GATHERINGS,
       CT_VIDEO_PROGRAM,
       CT_LECTURE_SERIES,
+      CT_CHILDREN_LESSONS,
+      CT_WOMEN_LESSONS,
+      CT_VIRTUAL_LESSONS,
       CT_MEALS,
       CT_CONGRESS,
       CT_HOLIDAY,
@@ -49,6 +55,9 @@ export class CollectionsBreakdown {
       CT_DAILY_LESSON, CT_SPECIAL_LESSON,
       CT_FRIENDS_GATHERINGS,
       CT_LECTURE_SERIES,
+      CT_CHILDREN_LESSONS,
+      CT_WOMEN_LESSONS,
+      CT_VIRTUAL_LESSONS,
       CT_MEALS,
       CT_CONGRESS,
       CT_HOLIDAY,

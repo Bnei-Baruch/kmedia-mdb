@@ -8,7 +8,7 @@ import { formatError, neighborIndices } from '../../../../helpers/utils';
 import * as shapes from '../../../shapes';
 import { ErrorSplash, LoadingSplash } from '../../../shared/Splash';
 import Link from '../../../Language/MultiLanguageLink';
-import myimage from '../../../../images/image.png';
+import UnitLogo from '../../../shared/Logo/UnitLogo';
 
 const RelevantParts = (props) => {
   const { unit, collection, wip, err, t } = props;
@@ -40,7 +40,9 @@ const RelevantParts = (props) => {
         {
           otherParts.map(part => (
             <Item as={Link} key={part.id} to={`/events/item/${part.id}`}>
-              <Item.Image src={myimage} size="tiny" />
+              <Item.Image size="tiny">
+                <UnitLogo unitId={part.id} collectionId={collection.id} />
+              </Item.Image>
               <Item.Content>
                 <Item.Description>{part.name}</Item.Description>
                 <Item.Meta>

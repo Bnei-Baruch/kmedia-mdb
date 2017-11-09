@@ -8,9 +8,12 @@ const ASSETS_BACKEND = process.env.NODE_ENV === 'production' ?
   '/assets/' :
   process.env.REACT_APP_ASSETS_BACKEND;
 
+
+export const assetUrl = path => `${ASSETS_BACKEND}${path}`;
+
 class Requests {
-  static get        = url => axios(`${API_BACKEND}${url}`);
-  static getAsset   = url => axios(`${ASSETS_BACKEND}${url}`);
+  static get        = path => axios(`${API_BACKEND}${path}`);
+  static getAsset   = path => axios(assetUrl(path));
   static makeParams = params =>
     `${Object.entries(params)
       .filter(([k, v]) => v !== undefined && v !== null)
