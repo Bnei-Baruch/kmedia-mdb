@@ -44,11 +44,28 @@ class SearchResults extends Component {
     if (highlight && Array.isArray(highlight.name) && highlight.name.length > 0) {
       name = <span dangerouslySetInnerHTML={{ __html: highlight.name.join(' ') }} />;
     }
-
     let description = src.description;
     if (highlight && Array.isArray(highlight.description) && highlight.description.length > 0) {
-      description = <span dangerouslySetInnerHTML={{ __html: highlight.description.join(' ') }} />;
+      description = <span dangerouslySetInnerHTML={{ __html: `...${highlight.description.join('.....')}...` }} />;
     }
+    let transcript = null;
+    if (highlight && Array.isArray(highlight.transcript) && highlight.transcript.length > 0) {
+      transcript = <span dangerouslySetInnerHTML={{ __html: `...${highlight.transcript.join('.....')}...` }} />;
+    }
+    const snippet = (<span>
+                       {!description ? null : (
+                         <span>
+                           <Label size="small">{t('search.result.description')}</Label>
+                           {description}
+                         </span>
+                       )}
+                       {!transcript ? null : (
+                         <span>
+                           <Label size="small">{t('search.result.transcript')}</Label>
+                           {transcript}
+                         </span>
+                       )}
+                     </span>)
 
     let filmDate = '';
     if (src.film_date) {
@@ -73,7 +90,7 @@ class SearchResults extends Component {
                 null
             }
           </span>
-          {description ? <div>{description}</div> : null}
+          {snippet ? <div>{snippet}</div> : null}
         </Table.Cell>
         <Table.Cell collapsing textAlign="right">
           {score}
