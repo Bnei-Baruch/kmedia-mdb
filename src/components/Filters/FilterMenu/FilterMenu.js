@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Container, Menu } from 'semantic-ui-react';
+import { Menu } from 'semantic-ui-react';
 
 import { filterPropShape } from '../../shapes';
 import FilterMenuItem from '../FilterMenuItem/FilterMenuItem';
