@@ -138,7 +138,8 @@ class SearchResults extends Component {
         </div>
       );
     }
-
+    console.log(hits);
+    console.log(this.props.cuMap);
     return (
       <div>
         <Header as="h1">

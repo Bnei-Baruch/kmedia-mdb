@@ -42,12 +42,12 @@ class SearchResultsFilters extends Component {
         <FiltersHydrator namespace="search" onHydrated={onHydrated} />
         <Filters namespace="search" filters={filters} onFilterApplication={onChange} />
         <div style={{borderBottom: '2px solid rgba(34,36,38,.15)',
-                     display: 'inline-table',
-                     paddingBottom: '3px'}}>
+                     marginBottom: '13px'}}>
           <span style={{padding: '10px'}}>
             {t('search.sortby')}:
           </span>
           <Dropdown
+            style={{marginTop: '2px'}}
             compact
             selection
             options={options}
