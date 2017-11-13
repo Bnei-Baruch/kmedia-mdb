@@ -39,18 +39,15 @@ class SearchResultsFilters extends Component {
 
     return (
       <div style={{display: 'flex'}}>
-        <div style={{flex: '1', display: 'flex', flexDirection: 'column'}}>
-          <FiltersHydrator namespace="search" onHydrated={onHydrated} />
-          <Filters namespace="search" filters={filters} onFilterApplication={onChange} />
-          <FilterTags namespace="search" onClose={onChange} />
-        </div>
+        <FiltersHydrator namespace="search" onHydrated={onHydrated} />
+        <Filters namespace="search" filters={filters} onFilterApplication={onChange} />
         <div style={{borderBottom: '2px solid rgba(34,36,38,.15)',
-                     display: 'inline-table',
-                     paddingBottom: '3px'}}>
+                     marginBottom: '13px'}}>
           <span style={{padding: '10px'}}>
             {t('search.sortby')}:
           </span>
           <Dropdown
+            style={{marginTop: '2px'}}
             compact
             selection
             options={options}
@@ -58,6 +55,7 @@ class SearchResultsFilters extends Component {
             onChange={onSortByChange}
           />
         </div>
+        <FilterTags namespace="search" onClose={onChange} />
       </div>
     );
   }
