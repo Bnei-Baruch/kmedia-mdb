@@ -44,9 +44,8 @@ class Materials extends Component {
       },
       {
         name: 'sketches',
-        label: t(`${tPrefix}.sketches`),
-        //component: <Segment basic>{t(`${tPrefix}.sketches`)}</Segment>,
-        component: <Sketches />,
+        label: t('materials.sketches.header'),
+        component: <Sketches unit={this.props.unit} t={t} />,
       },
     ];
 
