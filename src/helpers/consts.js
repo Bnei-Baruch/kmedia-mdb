@@ -12,6 +12,7 @@ export const CT_CONGRESS           = 'CONGRESS';
 export const CT_HOLIDAY            = 'HOLIDAY';
 export const CT_PICNIC             = 'PICNIC';
 export const CT_UNITY_DAY          = 'UNITY_DAY';
+export const CT_CLIPS              = 'CLIPS';
 
 // Content Unit Types
 export const CT_LESSON_PART           = 'LESSON_PART';

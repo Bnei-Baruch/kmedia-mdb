@@ -13,16 +13,18 @@ class FilterMenu extends PureComponent {
     active: PropTypes.string,
     onChoose: PropTypes.func,
     t: PropTypes.func.isRequired,
-    namespace: PropTypes.string.isRequired
+    namespace: PropTypes.string.isRequired,
+    rightItems: PropTypes.arrayOf(PropTypes.node),
   };
 
   static defaultProps = {
     active: '',
-    onChoose: undefined
+    onChoose: undefined,
+    rightItems: null,
   };
 
   render() {
-    const { items, active, onChoose, t, namespace } = this.props;
+    const { items, rightItems, active, onChoose, t, namespace } = this.props;
     return (
       <Menu secondary pointing color="blue" className="index-filters" size="large">
         <Container className="padded horizontally">
@@ -38,9 +40,9 @@ class FilterMenu extends PureComponent {
               />
             ))
           }
-          {/* <Menu.Item>
-          <Input size='small' icon icon='search' placeholder='Search Daily Lessons...' />
-        </Menu.Item> */}
+          {
+            rightItems ? <Menu.Menu position="right" children={rightItems} /> : null
+          }
         </Container>
       </Menu>
     );

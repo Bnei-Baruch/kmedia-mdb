@@ -9,6 +9,7 @@ import {
   CT_PICNIC,
   CT_SPECIAL_LESSON,
   CT_UNITY_DAY,
+  CT_CLIPS,
   CT_VIDEO_PROGRAM,
   CT_VIRTUAL_LESSONS,
   CT_WOMEN_LESSONS,
@@ -48,7 +49,8 @@ export class CollectionsBreakdown {
       CT_CONGRESS,
       CT_HOLIDAY,
       CT_PICNIC,
-      CT_UNITY_DAY);
+      CT_UNITY_DAY,
+      CT_CLIPS);
 
   getAllButPrograms = () =>
     this.collectTypes(
@@ -62,7 +64,8 @@ export class CollectionsBreakdown {
       CT_CONGRESS,
       CT_HOLIDAY,
       CT_PICNIC,
-      CT_UNITY_DAY);
+      CT_UNITY_DAY,
+      CT_CLIPS);
 
   collectTypes = (...types) =>
     types.reduce((acc, val) =>

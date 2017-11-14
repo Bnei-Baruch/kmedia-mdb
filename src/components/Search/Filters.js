@@ -19,7 +19,6 @@ const filters = [
   }
 ];
 
-
 class SearchResultsFilters extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
@@ -38,26 +37,26 @@ class SearchResultsFilters extends Component {
     }));
 
     return (
-      <div style={{display: 'flex'}}>
-        <div style={{flex: '1', display: 'flex', flexDirection: 'column'}}>
-          <FiltersHydrator namespace="search" onHydrated={onHydrated} />
-          <Filters namespace="search" filters={filters} onFilterApplication={onChange} />
-          <FilterTags namespace="search" onClose={onChange} />
-        </div>
-        <div style={{borderBottom: '2px solid rgba(34,36,38,.15)',
-                     display: 'inline-table',
-                     paddingBottom: '3px'}}>
-          <span style={{padding: '10px'}}>
+      <div>
+        <FiltersHydrator namespace="search" onHydrated={onHydrated} />
+        <Filters
+          namespace="search"
+          filters={filters}
+          onFilterApplication={onChange}
+          rightItems={[
+            <span style={{ padding: '10px' }}>
             {t('search.sortby')}:
-          </span>
-          <Dropdown
-            compact
-            selection
-            options={options}
-            value={sortBy}
-            onChange={onSortByChange}
-          />
-        </div>
+          </span>,
+            <Dropdown
+              item
+              compact
+              options={options}
+              value={sortBy}
+              onChange={onSortByChange}
+            />
+          ]}
+        />
+        <FilterTags namespace="search" onClose={onChange} />
       </div>
     );
   }

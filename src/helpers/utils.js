@@ -3,6 +3,7 @@ import moment from 'moment';
 import {
   CT_CHILDREN_LESSON,
   CT_CLIP,
+  CT_CLIPS,
   CT_CONGRESS,
   CT_DAILY_LESSON,
   CT_EVENT_PART,
@@ -210,6 +211,7 @@ export const canonicalLink = (entity) => {
     return `/lectures/full/${entity.id}`;
   case CT_FRIENDS_GATHERINGS:
   case CT_MEALS:
+  case CT_CLIPS:
     return '/';
   case CT_CONGRESS:
   case CT_HOLIDAY:
