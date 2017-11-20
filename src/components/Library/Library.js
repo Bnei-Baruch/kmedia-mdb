@@ -1,69 +1,121 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
-import { Segment } from 'semantic-ui-react';
+import { Divider, Grid, Segment } from 'semantic-ui-react';
 
 import * as shapes from '../shapes';
-import { ErrorSplash, LoadingSplash } from '../shared/Splash';
-import { formatError } from '../../helpers/utils';
-import Filters from './Filters';
+import { RTL_LANGUAGES } from '../../helpers/consts';
+import { ErrorSplash, FrownSplash, LoadingSplash } from '../shared/Splash';
+import { formatError, isEmpty } from '../../helpers/utils';
+import LanguageSelector from '../shared/LanguageSelector';
 
 class Library extends Component {
   static propTypes = {
-    source: PropTypes.arrayOf(PropTypes.string),
-    wip: shapes.WIP,
-    err: shapes.Error,
+    content: PropTypes.shape({
+      data: PropTypes.string, // actual content (HTML)
+      wip: shapes.WIP,
+      err: shapes.Error,
+    }).isRequired,
+    language: PropTypes.string,
+    languages: PropTypes.arrayOf(PropTypes.string).isRequired,
     t: PropTypes.func.isRequired,
-    onFiltersChanged: PropTypes.func.isRequired,
-    onFiltersHydrated: PropTypes.func.isRequired,
-    fetchIndex: PropTypes.func.isRequired,
+    handleLanguageChanged: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    source: null,
-    wip: false,
-    err: null,
+    language: null,
   };
 
-  componentDidMount() {
-    this.fetchIndices(this.props);
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.shallowCompare(this, nextProps, nextState);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.source !== this.props.source) {
-      this.fetchIndices(nextProps);
+  shallowEqual = (objA, objB) => {
+    if (objA === objB) {
+      return true;
     }
-  }
 
-  fetchIndices = (props) => {
-    const source = props.source;
-    if (source) {
-      const [realSource] = props.source.slice(-1);
-      props.fetchIndex(realSource);
+    if (typeof objA !== 'object' || objA === null ||
+      typeof objB !== 'object' || objB === null) {
+      return false;
     }
+
+    const keysA = Object.keys(objA);
+    const keysB = Object.keys(objB);
+
+    if (keysA.length !== keysB.length) {
+      return false;
+    }
+
+    // Test for A's keys different from B.
+    const bHasOwnProperty = hasOwnProperty.bind(objB);
+    for (let i = 0; i < keysA.length; i++) {
+      if (!bHasOwnProperty(keysA[i]) || objA[keysA[i]] !== objB[keysA[i]]) {
+        return false;
+      }
+    }
+
+    return true;
   };
+
+  shallowCompare = (instance, nextProps, nextState) => (
+    !this.shallowEqual(instance.props, nextProps) ||
+    !this.shallowEqual(instance.state, nextState)
+  );
 
   render() {
-    const { source, wip, err, t, onFiltersChanged, onFiltersHydrated } = this.props;
+    const { content, language, languages, t, } = this.props;
 
-    if (err) {
-      return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
-    } else if (wip) {
-      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-    } else if (!source) {
-      return (<div>
-        <Filters onChange={onFiltersChanged} onHydrated={onFiltersHydrated} />
-        <Segment>Please select Source from filters above</Segment>
-      </div>);
+    if (isEmpty(content)) {
+      return <Segment basic>{t('materials.sources.no-sources')}</Segment>;
     }
 
-    const [realSource] = source.slice(-1);
+    const { wip: contentWip, err: contentErr, data: contentData } = content;
+
+    let contents;
+
+    if (contentErr) {
+      if (contentErr.response && contentErr.response.status === 404) {
+        contents = (
+          <FrownSplash
+            text={t('messages.source-content-not-found')}
+          />
+        );
+      } else {
+        contents = <ErrorSplash text={t('messages.server-error')} subtext={formatError(contentErr)} />;
+      }
+    } else if (contentWip) {
+      contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
+    } else if (!contentData) {
+      return <Segment basic>{t('materials.sources.no-sources')}</Segment>;
+    } else {
+      const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
+      contents        = <div style={{ direction }} dangerouslySetInnerHTML={{ __html: contentData }} />;
+    }
+
     return (
       <div>
-        {/* <Filters onChange={onFiltersChanged} onHydrated={onFiltersHydrated} /> */}
-        <Segment>{realSource}</Segment>
-      </div>);
+        <Grid stackable>
+          <Grid.Row>
+            <Grid.Column width={8} />
+            {
+              languages.length > 0 ?
+                <Grid.Column width={4}>
+                  <LanguageSelector
+                    languages={languages}
+                    defaultValue={language}
+                    t={t}
+                    onSelect={this.props.handleLanguageChanged}
+                  />
+                </Grid.Column> :
+                null
+            }
+          </Grid.Row>
+        </Grid>
+        <Divider hidden />
+        {contents}
+      </div>
+    );
   }
 }
 
-export default translate()(Library);
+export default Library;

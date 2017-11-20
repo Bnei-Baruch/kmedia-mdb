@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Filters from '../Filters/Filters';
 import filterComponents from '../Filters/filterComponents';
 import FiltersHydrator from '../Filters/FiltersHydrator/FiltersHydrator';
+import FilterTags from '../Filters/FilterTags/FilterTags';
 
 const filters = [
   {
@@ -26,6 +27,7 @@ class LibraryFilters extends PureComponent {
       <div>
         <FiltersHydrator namespace="sources" onHydrated={onHydrated} />
         <Filters namespace="sources" filters={filters} onFilterApplication={onChange} />
+        <FilterTags namespace="sources" onClose={onChange} />
       </div>
     );
   }
