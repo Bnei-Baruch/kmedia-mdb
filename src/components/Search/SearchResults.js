@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
-import { Header, Table, Container, Divider } from 'semantic-ui-react';
+import { Container, Divider, Header, Label, Table } from 'semantic-ui-react';
 
 import { canonicalLink, formatError, isEmpty } from '../../helpers/utils';
-import { ErrorSplash, LoadingSplash } from '../shared/Splash';
+import { getQuery } from '../../helpers/url';
+import { selectors as filterSelectors } from '../../redux/modules/filters';
+import { filtersTransformer } from '../../filters';
 import * as shapes from '../shapes';
+import { ErrorSplash, LoadingSplash } from '../shared/Splash';
 import Link from '../Language/MultiLanguageLink';
 import Pagination from '../pagination/Pagination';
 
 class SearchResults extends Component {
   static propTypes = {
-    query: PropTypes.string,
     results: PropTypes.object,
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
     pageNo: PropTypes.number.isRequired,
@@ -23,10 +26,10 @@ class SearchResults extends Component {
     err: shapes.Error,
     t: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
+    filters: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
 
   static defaultProps = {
-    query: '',
     results: null,
     cuMap: {},
     wip: false,
@@ -34,42 +37,61 @@ class SearchResults extends Component {
   };
 
   renderHit = (hit) => {
-    const { t }                                      = this.props;
-    const { _source: src, highlight, _score: score } = hit;
+    const { cuMap, t }                               = this.props;
+    const { _source: { mdb_uid }, highlight, _score: score } = hit;
+    const cu = cuMap[mdb_uid];
 
-    let name = src.name;
+    let name = cu.name;
     if (highlight && Array.isArray(highlight.name) && highlight.name.length > 0) {
       name = <span dangerouslySetInnerHTML={{ __html: highlight.name.join(' ') }} />;
     }
-
-    let description = src.description;
+    let description = cu.description;
     if (highlight && Array.isArray(highlight.description) && highlight.description.length > 0) {
-      description = <span dangerouslySetInnerHTML={{ __html: highlight.description.join(' ') }} />;
+      description = <span dangerouslySetInnerHTML={{ __html: `...${highlight.description.join('.....')}...` }} />;
     }
+    let transcript = null;
+    if (highlight && Array.isArray(highlight.transcript) && highlight.transcript.length > 0) {
+      transcript = <span dangerouslySetInnerHTML={{ __html: `...${highlight.transcript.join('.....')}...` }} />;
+    }
+    const snippet = (<span>
+                       {!description ? null : (
+                         <span>
+                           <Label size="small">{t('search.result.description')}</Label>
+                           {description}
+                         </span>
+                       )}
+                       {!transcript ? null : (
+                         <span>
+                           <Label size="small">{t('search.result.transcript')}</Label>
+                           {transcript}
+                         </span>
+                       )}
+                     </span>)
 
     let filmDate = '';
-    if (src.film_date) {
-      filmDate = t('values.date', { date: new Date(src.film_date) });
+    if (cu.film_date) {
+      filmDate = t('values.date', { date: new Date(cu.film_date) });
     }
 
     return (
-      <Table.Row key={src.mdb_uid} verticalAlign="top">
+      <Table.Row key={mdb_uid} verticalAlign="top">
         <Table.Cell collapsing singleLine width={1}>
           <strong>{filmDate}</strong>
         </Table.Cell>
         <Table.Cell>
           <span>
-          <Link to={canonicalLink({ id: src.mdb_uid, content_type: src.content_type })}>
+          <Label>{t(`constants.content-types.${cu.content_type}`)}</Label>
+          <Link to={canonicalLink(cu || { id: mdb_uid, content_type: cu.content_type })}>
             {name}
           </Link>
             &nbsp;&nbsp;
             {
-              src.duration ?
-                <small>{moment.duration(src.duration, 'seconds').format('hh:mm:ss')}</small> :
+              cu.duration ?
+                <small>{moment.duration(cu.duration, 'seconds').format('hh:mm:ss')}</small> :
                 null
             }
           </span>
-          {description ? <div>{description}</div> : null}
+          {snippet ? <div>{snippet}</div> : null}
         </Table.Cell>
         <Table.Cell collapsing textAlign="right">
           {score}
@@ -79,7 +101,10 @@ class SearchResults extends Component {
   };
 
   render() {
-    const { wip, err, query, results, pageNo, pageSize, language, t, handlePageChange } = this.props;
+    const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange } = this.props;
+
+    // Query from URL (not changed until pressed Enter.
+    const query = getQuery(window.location).q;
 
     if (err) {
       return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
@@ -89,7 +114,7 @@ class SearchResults extends Component {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
-    if (query === '') {
+    if (query === '' && !Object.values(filtersTransformer.toApiParams(filters)).length) {
       return (
         <div>
           {t('search.results.empty-query')}
@@ -114,7 +139,8 @@ class SearchResults extends Component {
         </div>
       );
     }
-
+    console.log(hits);
+    console.log(this.props.cuMap);
     return (
       <div>
         <Header as="h1">
@@ -143,4 +169,7 @@ class SearchResults extends Component {
   }
 }
 
-export default translate()(SearchResults);
+export default connect(state => ({
+  filters: filterSelectors.getFilters(state.filters, 'search'),
+}))(translate()(SearchResults));
+

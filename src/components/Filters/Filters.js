@@ -15,11 +15,13 @@ class Filters extends Component {
     editNewFilter: PropTypes.func.isRequired,
     closeActiveFilter: PropTypes.func.isRequired,
     filters: PropTypes.arrayOf(filterPropShape).isRequired,
-    activeFilterName: PropTypes.string
+    activeFilterName: PropTypes.string,
+    rightItems: PropTypes.arrayOf(PropTypes.node),
   };
 
   static defaultProps = {
-    activeFilterName: ''
+    activeFilterName: '',
+    rightItems: null,
   };
 
   handleFilterClick = ({ name }) => {
@@ -34,14 +36,21 @@ class Filters extends Component {
 
   handleApplyActiveFilter = () => {
     this.props.onFilterApplication();
+    this.handleCancelActiveFilter();
   };
 
   render() {
-    const { filters, activeFilterName, namespace } = this.props;
+    const { filters, rightItems, activeFilterName, namespace } = this.props;
 
     return (
       <div>
-        <FilterMenu items={filters} namespace={namespace} active={activeFilterName} onChoose={this.handleFilterClick} />
+        <FilterMenu
+          items={filters}
+          rightItems={rightItems}
+          namespace={namespace}
+          active={activeFilterName}
+          onChoose={this.handleFilterClick}
+        />
         <ActiveFilter
           namespace={namespace}
           activeFilterName={activeFilterName}

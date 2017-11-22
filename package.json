@@ -33,6 +33,7 @@
     "regenerator-runtime": "^0.10.5"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "babel-polyfill": "^6.23.0",
     "child_process": "^1.0.2",
     "classnames": "^2.2.5",
@@ -51,8 +52,10 @@
     "react-copy-to-clipboard": "^5.0.0",
     "react-day-picker": "github:Bnei-Baruch/react-day-picker",
     "react-dom": "^15.6.1",
+    "react-ga": "^2.3.5",
     "react-google-maps": "^8.3.0",
     "react-i18next": "^4.7.0",
+    "react-image-gallery": "^0.8.3",
     "react-media-player": "^0.6.2",
     "react-redux": "^5.0.5",
     "react-router": "^4.2.0",
@@ -62,8 +65,7 @@
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
     "redux-saga": "^0.15.6",
-    "semantic-ui-react": "^0.74.2",
-    "zl-fetch": "^1.0.4"
+    "semantic-ui-react": "^0.74.2"
   },
   "jest": {}
 }

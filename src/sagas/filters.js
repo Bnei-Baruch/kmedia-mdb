@@ -1,4 +1,5 @@
 import { put, select, takeEvery } from 'redux-saga/effects';
+
 import { getQuery, updateQuery } from './helpers/url';
 import { actions as filterActions, selectors as filterSelectors, types as filterTypes } from '../redux/modules/filters';
 import { filtersTransformer } from '../filters';
@@ -25,18 +26,9 @@ function* updateFilterValuesInQuery(action) {
 }
 
 function* hydrateFilters(action) {
-  const { namespace, from } = action.payload;
-
-  let filters;
-  if (from === 'query') {
-    const query = yield* getQuery();
-    filters     = filtersTransformer.fromQueryParams(query);
-  }
-
-  if (filters) {
-    yield put(filterActions.setHydratedFilterValues(namespace, filters));
-    yield put(filterActions.filtersHydrated(namespace));
-  }
+  const query   = yield* getQuery();
+  const filters = filtersTransformer.fromQueryParams(query);
+  yield put(filterActions.setHydratedFilterValues(action.payload.namespace, filters));
 }
 
 const valueChangingActions = [

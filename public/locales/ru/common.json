@@ -1,39 +1,45 @@
 {
   "nav": {
     "top": {
-      "header": "Kabbalah Media"
+      "header": "Каббала Медиа"
     },
     "sidebar": {
       "lessons": "Ежедневные уроки",
-      "programs": "ТВ & программы",
-      "lectures": "Лекции и уроки",
-      "sources": "Каббалистические источники",
-      "events": "События",
+      "programs": "Программы",
+      "lectures": "Уроки и Лекции",
+      "sources": "Каббалистические Первоисточники",
+      "events": "Конгрессы, события",
       "books": "Книги",
       "topics": "Темы",
       "publications": "Публикации",
       "photos": "Фотографии",
       "design": "Дизайн",
-      "design2": "Раскладка"
+      "design2": "Планировка"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
-      "rights": "Бней Барух – Ассоциация Каббала ла-ам"
+      "rights": "Бней Барух – Ассоциация Каббала Ла-Ам, Все права защищены"
     }
   },
   "filters": {
+    "search": {
+    "by": "Фильтровать результаты по:"
+  },
     "lessons": {
-      "by": "Сортировать уроки по:"
+      "by": "Фильтровать уроки по:"
     },
     "programs": {
-      "by": "Сортировать программы по:"
+      "by": "Фильтровать программы по:"
+    },
+    "full-program": {
+      "by":"Фильтровать серии по:"
     },
     "events": {
-      "by": "Сортировать по:"
+      "by": "Фильтровать события по:"
     },
     "date-filter": {
       "label": "Дата",
-      "selectTitle": "Выберите временной промежуток",
+      "selectTitle": "Выберите диапазон дат",
       "presets": {
         "TODAY": "Сегодня",
         "YESTERDAY": "Вчера",
@@ -41,30 +47,30 @@
         "LAST_30_DAYS": "Последние 30 дней",
         "LAST_MONTH": "Прошлый месяц",
         "THIS_MONTH": "Этот месяц",
-        "CUSTOM_RANGE": "Промежуток"
+        "CUSTOM_RANGE": "Произвольный диапазон"
       },
       "start": "Начало",
       "end": "Конец"
     },
     "sources-filter": {
-      "label": "Статьи"
+      "label": "Первоисточники"
     },
     "topics-filter": {
       "label": "Темы"
     },
     "programs-filter": {
-      "label": "Жанр/Программа",
+      "label": "Жанр",
       "recently-updated": "Недавно обновленные",
-      "last-updated": "Последний раз обновлен в"
+      "last-updated": "Последнее обновление в"
     },
     "event-types-filter": {
-      "label": "Types",
-      "all": "All Events",
-      "allItem": "All"
+      "label": "Тип",
+      "all": "Все События",
+      "allItem": "Все"
     },
     "years-filter": {
-      "label": "Year",
-      "placeholder": "Select a year"
+      "label": "Год",
+      "placeholder": "Выберите год"
     }
   },
   "buttons": {
@@ -76,6 +82,17 @@
     "more": "Ещё",
     "copy-link": "Копировать линк"
   },
+  "player": {
+    "messages": {
+      "edit-help": "Перемещайте курсор чтоб поделиться частью видео"
+    },
+    "buttons": {
+      "edit-back": "Назад"
+    },
+    "error": {
+      "loading": "Ошибка при загрузке файла."
+    }
+  },
   "messages": {
     "loading": "Загрузка...",
     "loading-subtext": "Ждите...",
@@ -83,20 +100,61 @@
     "lesson-not-found": "Урок не найден",
     "lesson-not-found-subtext": "Попробуйте <1>список уроков</1>...",
     "program-not-found": "Программа не найдена",
-    "program-not-found-subtext": "Попробуйте <1>programs list</1>...",
+    "program-not-found-subtext": "Попробуйте <1>список программ</1>...",
     "event-not-found": "Событие не найдено",
-    "event-not-found-subtext": "Попробуйте <1>events list</1>...",
+    "event-not-found-subtext": "Попробуйте <1>список событий</1>...",
     "no-files": "Нет файлов",
     "no-playable-files": "Не файлов для воспроизведения",
     "no-results": "Нет результатов",
     "pagination-results": "Результаты {{start}} - {{end}} из {{total}}",
-    "link-copied-to-clipboard": "Ссылка переписана!",
+    "link-copied-to-clipboard": "Ссылка скопирована!",
     "unknown": "Неизвестна",
     "unsupported-media-format": "Неподдерживаемый формат.",
-    "error-loading-file": "Ошибка загрузки файла.",
-    "fallback-language": "Медиа не найденa для выбранного языка, выбран резервный язык.",
+    "error-loading-file": "Ошибка при загрузке файла.",
+    "fallback-language": "Медиа не найденa на русском языке, выбран резервный язык.",
     "fallback-to-audio": "Видео не найдено, используется аудио.",
-    "fallback-to-video": "Аудио не найдено, используется видео."
+    "fallback-to-video": "Аудио не найдено, используется видео.",
+    "source-content-not-found": "Первоисточник не найден"
+  },
+  "search": {
+    "sortby": "Сортировать по",
+    "sorts": {
+      "relevance": "актуальности",
+      "newertoolder": "в обратном порядке обновления",
+      "oldertonewer": "в порядке обновления"
+    },
+    "suggestions": {
+      "categories": {
+        "search": "Поиск",
+        "tags": "Теги",
+        "sources": "Первоисточники",
+        "authors": "Авторы",
+        "persons": "Лица"
+      }
+    },
+    "results": {
+      "title": "Результаты поиска",
+      "search-summary": "стр. {{pageNo}} из {{total}} результатов ({{took}} секунд)",
+      "empty-query": "Введите ваш запрос в поле расположенном выше для начала поиска.",
+      "no-results": "Ваш запрос <1><0>{{query}}</0></1> не найден."
+    },
+    "result": {
+      "description": "описание",
+      "transcript": "стенограмма"
+    }
+  },
+  "events": {
+    "header": {
+      "text": "Конгрессы, события",
+      "subtext": "В наше время наука каббала не знает границ. В этом разделе вы получите представление о мероприятиях, конгрессах и особых встречах организации «Каббала ла-ам» в Израиле и по всему миру."
+    },
+    "ALL_EVENTS": "Все События",
+    "no-matches": "Событие не найдено",
+    "part": {
+      "relevant-parts": {
+        "title": "Остальные части того же события"
+      }
+    }
   },
   "lessons": {
     "header": {
@@ -108,7 +166,7 @@
     },
     "part": {
       "info": {
-        "tags": "Таги",
+        "tags": "Теги",
         "sources": "Источники",
         "related-event": "Относится к событию"
       },
@@ -119,25 +177,35 @@
     }
   },
   "programs": {
+    "header": {
+      "text": "Программы",
+      "subtext": "Здесь вы найдете широкий ассортимент программ, включая: захватывающие беседы о смысле жизни, актуальные темы, программы для всей семьи и др."
+    },
+    "genres": {
+      "all": "Все программы",
+      "documentary": "Документальные программы",
+      "late-night": "Ночные программы",
+      "news": "Новости",
+      "talk-show": "Ток-шоу",
+      "educational": "Образовательные программы",
+      "children": "Детские передачи",
+      "movies": "Фильмы"
+    },
     "list": {
       "episode_from": "Часть из:"
     },
     "full": {
-      "episodes": "эпизод(ов)",
-      "ccuName": "Content Unit Name",
-      "name": "Название программы",
-      "duration": "Продолжительность",
-      "film_date": "Дата съёмок"
+      "episodes": "Эпизод(ов)"
     },
     "part": {
       "info": {
-        "tags": "Таги",
+        "tags": "Теги",
         "sources": "Источники",
         "related-event": "Относится к событию"
       },
       "materials": {
         "summary": "Краткое содержание",
-        "transcription": "Конспект"
+        "transcription": "Стенограмма"
       },
       "relevant-parts": {
         "title": "Остальные части той же программы",
@@ -146,25 +214,36 @@
     }
   },
   "materials": {
-    "summary": "Краткое содержание",
-    "transcription": "Конспект",
-    "sources": "Источники",
-    "sketches": "Чертежи"
+    "summary": {
+      "header": "Краткое содержание",
+      "no-summary": "Нет содержания"
+    },
+    "transcription": {
+      "header": "Стенограмма"
+    },
+    "sources": {
+      "header": "Источники",
+      "no-sources": "Нет источника",
+      "no-source-available": "Источник не найден"
+    },
+    "sketches": {
+      "header": "Чертежи"
+    }
   },
   "media-downloads": {
-    "title": "Медиа для скачивания",
+    "title": "Скачать",
     "derived-title": "Производная медиа",
     "type-labels": {
       "video": "Основное видео",
       "audio": "Основное аудио",
-      "text": "Текст",
-      "image": "Изображений"
+      "text": "Стенограмма",
+      "image": "Изображения"
     },
     "lesson": {
       "type-labels": {
         "video": "Видео урока",
         "audio": "Аудио урока",
-        "text": "Текст",
+        "text": "Стенограмма",
         "image": "Чертежи"
       }
     },
@@ -172,60 +251,63 @@
       "type-labels": {
         "video": "Видео программы",
         "audio": "Аудио программы",
-        "text": "Текст",
-        "image": "Изображений"
+        "text": "Стенограмма",
+        "image": "Чертежи"
       }
     }
   },
   "constants": {
     "languages": {
-      "he": "Hebrew",
-      "en": "English",
-      "ru": "Russian",
-      "es": "Spanish",
-      "it": "Italian",
-      "de": "German",
-      "nl": "Dutch",
-      "fr": "French",
-      "pt": "Portuguese",
-      "tr": "Turkish",
-      "pl": "Polish",
-      "ar": "Arabic",
-      "hu": "Hungarian",
-      "fi": "Finnish",
-      "lt": "Lithuanian",
-      "ja": "Japanese",
-      "bg": "Bulgarian",
-      "ka": "Georgian",
-      "no": "Norwegian",
-      "sv": "Swedish",
-      "hr": "Croatian",
-      "zh": "Chinese",
-      "fa": "Persian",
-      "ro": "Romanian",
-      "hi": "Hindi",
-      "ua": "Ukrainian",
-      "mk": "Macedonian",
-      "sl": "Slovenian",
-      "lv": "Latvian",
-      "sk": "Slovak",
-      "cs": "Czech"
+      "he": "Иврит",
+      "en": "Английский",
+      "ru": "Русский",
+      "es": "Испанский",
+      "it": "Итальянский",
+      "de": "Немецкий",
+      "nl": "Голландский",
+      "fr": "Французский",
+      "pt": "Португальский",
+      "tr": "Турецкий",
+      "pl": "Польский",
+      "ar": "Арабский",
+      "hu": "Венгерский",
+      "fi": "Финский",
+      "lt": "Литовский",
+      "ja": "Японский",
+      "bg": "Болгарский",
+      "ka": "Грузинский",
+      "no": "Норвежский",
+      "sv": "Шведский",
+      "hr": "Хорватский",
+      "zh": "Китайский",
+      "fa": "Персидский",
+      "ro": "Румынский",
+      "hi": "Индийский",
+      "ua": "Украинский",
+      "mk": "Македонский",
+      "sl": "Словенский",
+      "lv": "Латышский",
+      "sk": "Словацкий",
+      "cs": "Чешский"
     },
     "content-types": {
       "DAILY_LESSON": "Ежедневный урок",
-      "SPECIAL_LESSON": "Специальный урок",
+      "SPECIAL_LESSON": "Особый урок",
       "FRIENDS_GATHERINGS": "Собрания товарищей",
       "CONGRESS": "Конгресс",
       "VIDEO_PROGRAM": "Видео программа",
       "LECTURE_SERIES": "Серия лекций",
+      "CHILDREN_LESSONS": "Дети Уроки",
+      "WOMEN_LESSONS": "Женщины Уроки",
+      "VIRTUAL_LESSONS": "Виртуальный Уроки",
       "MEALS": "Трапезы",
       "HOLIDAY": "Праздник",
       "PICNIC": "Пикник",
       "UNITY_DAY": "Вечер единства",
-      "LESSON_PART": "Часть урока",
+      "LESSON_PART": "Часть урока №",
       "LECTURE": "Лекция",
-      "CHILDREN_LESSON_PART": "Часть детского урока",
-      "WOMEN_LESSON_PART": "Часть женского урока",
+      "CHILDREN_LESSON": "Дети Урок",
+      "WOMEN_LESSON": "Женщины Урок",
       "VIRTUAL_LESSON": "Виртуальный урок",
       "FRIENDS_GATHERING": "Собрание товарищей",
       "MEAL": "Трапеза",
@@ -236,16 +318,16 @@
       "EVENT_PART": "Часть события",
       "CLIP": "Клип",
       "TRAINING": "Тренировка",
-      "KITEI_MAKOR": "Первоисточники"
+      "KITEI_MAKOR": "Отрывки первоисточников"
     },
     "media-types": {
-      "video": "Video",
-      "audio": "Audio",
-      "image": "Image",
-      "text": "Text",
-      "sheet": "Sheet",
-      "banner": "Banner",
-      "presentation": "Presentation"
+      "video": "Видео",
+      "audio": "Аудио",
+      "image": "Чертежи",
+      "text": "Стенограмма",
+      "sheet": "Cтраница",
+      "banner": "Баннер",
+      "presentation": "Презентация"
     }
   },
   "values": {

@@ -8,6 +8,7 @@ import { actions, selectors } from '../../../redux/modules/filters';
 class FiltersHydrator extends Component {
   static propTypes = {
     hydrateFilters: PropTypes.func.isRequired,
+    filtersHydrated: PropTypes.func.isRequired,
     namespace: PropTypes.string.isRequired,
     onHydrated: PropTypes.func,
     isHydrated: PropTypes.bool
@@ -19,12 +20,21 @@ class FiltersHydrator extends Component {
   };
 
   componentDidMount() {
+    // Filters hydration cycle starts here
     this.props.hydrateFilters(this.props.namespace);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { isHydrated, onHydrated, namespace } = nextProps;
+    const { isHydrated, onHydrated, namespace, filtersHydrated } = nextProps;
+
+    // isHydrated changed from false to true.
     if (!this.props.isHydrated && isHydrated) {
+
+      // End the hydration cycle.
+      // Everything is updated, sagas, redux, react. Down to here.
+      filtersHydrated(namespace);
+
+      // callback our event prop
       onHydrated(namespace);
     }
   }

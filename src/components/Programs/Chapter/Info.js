@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
-import Link from '../../Language/MultiLanguageLink';
 import { intersperse, tracePath } from '../../../helpers/utils';
 import { selectors as sourcesSelectors } from '../../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../../redux/modules/tags';
 import * as shapes from '../../shapes';
+import Link from '../../Language/MultiLanguageLink';
 
 class Info extends Component {
 
@@ -34,7 +34,7 @@ class Info extends Component {
         }
 
         const path    = tracePath(tag, getTagById);
-        const display = path.map(y => y.label).join(' - ');
+        const display = path.map(y => y.label).join(' > ');
         return <Link key={x} to={`/tags/${x}`}>{display}</Link>;
       }), ', '));
 
@@ -45,14 +45,14 @@ class Info extends Component {
           return '';
         }
         const path    = tracePath(source, getSourceById);
-        const display = path.map(y => y.name).join('. ');
+        const display = path.map(y => y.name).join(' > ');
         return <Link key={x} to={`/sources/${x}`}>{display}</Link>;
       }), ', '));
 
     return (
       <div>
-        <Header as="h3">
-          <span className="text grey">{t('values.date', { date: new Date(filmDate) })}</span><br />
+        <Header as="h1">
+          <small className="text grey">{t('values.date', { date: new Date(filmDate) })}</small><br />
           {name}
         </Header>
         <List>

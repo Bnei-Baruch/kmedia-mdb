@@ -17,7 +17,7 @@ class AVMuteUnmute extends Component {
 
   static defaultProps = {
     upward: true,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -45,10 +45,11 @@ class AVMuteUnmute extends Component {
   }
 
   setVolume = (clientY) => {
+    const { media } = this.props;
     const { top, bottom } = this.element.getBoundingClientRect();
     const offset          = Math.min(Math.max(0, clientY - top), bottom - top);
     const newVolume       = 1 - (offset / (bottom - top));
-    this.props.media.setVolume(newVolume);
+    media.setVolume(newVolume);
   };
 
   handleMuteUnmute = () => {

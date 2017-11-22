@@ -9,8 +9,10 @@ const SEARCH               = 'Search/SEARCH';
 const SEARCH_SUCCESS       = 'Search/SEARCH_SUCCESS';
 const SEARCH_FAILURE       = 'Search/SEARCH_FAILURE';
 
-const SET_PAGE = 'Search/SET_PAGE';
-const HYDRATE_URL = 'Search/HYDRATE_URL';
+const SET_PAGE     = 'Search/SET_PAGE';
+const SET_SORT_BY  = 'Search/SET_SORT_BY';
+const UPDATE_QUERY = 'Search/UPDATE_QUERY';
+const HYDRATE_URL  = 'Search/HYDRATE_URL';
 
 export const types = {
   AUTOCOMPLETE,
@@ -21,6 +23,8 @@ export const types = {
   SEARCH_FAILURE,
 
   SET_PAGE,
+  SET_SORT_BY,
+  UPDATE_QUERY,
   HYDRATE_URL,
 };
 
@@ -29,11 +33,14 @@ export const types = {
 const autocomplete        = createAction(AUTOCOMPLETE);
 const autocompleteSuccess = createAction(AUTOCOMPLETE_SUCCESS);
 const autocompleteFailure = createAction(AUTOCOMPLETE_FAILURE);
-const search              = createAction(SEARCH, (q, pageNo, pageSize) => ({ q, pageNo, pageSize }));
+const search              = createAction(SEARCH, (q, pageNo, pageSize) =>
+                                                 ({ q, pageNo, pageSize }));
 const searchSuccess       = createAction(SEARCH_SUCCESS);
 const searchFailure       = createAction(SEARCH_FAILURE);
 const setPage             = createAction(SET_PAGE);
-const hydrateUrl             = createAction(HYDRATE_URL);
+const setSortBy           = createAction(SET_SORT_BY);
+const updateQuery         = createAction(UPDATE_QUERY);
+const hydrateUrl          = createAction(HYDRATE_URL);
 
 export const actions = {
   autocomplete,
@@ -44,6 +51,8 @@ export const actions = {
   searchFailure,
 
   setPage,
+  setSortBy,
+  updateQuery,
   hydrateUrl,
 };
 
@@ -55,6 +64,7 @@ const initialState = {
   q: '',
   results: {},
   pageNo: 1,
+  sortBy: 'relevance',
   wip: false,
   err: null,
 };
@@ -92,6 +102,14 @@ export const reducer = handleActions({
     ...state,
     pageNo: action.payload
   }),
+  [SET_SORT_BY]: (state, action) => ({
+    ...state,
+    sortBy: action.payload
+  }),
+  [UPDATE_QUERY]: (state, action) => ({
+    ...state,
+    q: action.payload,
+  })
 }, initialState);
 
 /* Selectors */
@@ -100,6 +118,7 @@ const getQuery       = state => state.q;
 const getSuggestions = state => state.suggestions;
 const getResults     = state => state.results;
 const getPageNo      = state => state.pageNo;
+const getSortBy      = state => state.sortBy;
 const getWip         = state => state.wip;
 const getError       = state => state.error;
 
@@ -108,6 +127,7 @@ export const selectors = {
   getSuggestions,
   getResults,
   getPageNo,
+  getSortBy,
   getWip,
   getError,
 };

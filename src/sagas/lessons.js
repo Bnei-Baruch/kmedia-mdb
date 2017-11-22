@@ -12,10 +12,10 @@ function* fetchList(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, 'lessons'));
   const params  = filtersTransformer.toApiParams(filters);
   try {
-    const resp = yield call(Api.lessons, { ...action.payload, ...params });
+    const { data } = yield call(Api.lessons, { ...action.payload, ...params });
 
-    if (Array.isArray(resp.collections)) {
-      yield put(mdbActions.receiveCollections(resp.collections));
+    if (Array.isArray(data.collections)) {
+      yield put(mdbActions.receiveCollections(data.collections));
 
       // TODO edo: optimize data fetching
       // Here comes another call for all content_units we got
@@ -24,7 +24,7 @@ function* fetchList(action) {
       // This second round trip to the API is awful,
       // we should strive for a single call to the API and get all the data we need.
       // hmm, relay..., hmm ?
-      const cuIDsToFetch = resp.collections.reduce((acc, val) => {
+      const cuIDsToFetch = data.collections.reduce((acc, val) => {
         if (Array.isArray(val.content_units)) {
           return acc.concat(val.content_units.map(x => x.id));
         }
@@ -32,15 +32,15 @@ function* fetchList(action) {
       }, []);
       const language     = yield select(state => settings.getLanguage(state.settings));
       const pageSize     = cuIDsToFetch.length;
-      const resp2        = yield call(Api.units, { id: cuIDsToFetch, pageSize, language });
-      yield put(mdbActions.receiveContentUnits(resp2.content_units));
+      const resp         = yield call(Api.units, { id: cuIDsToFetch, pageSize, language });
+      yield put(mdbActions.receiveContentUnits(resp.data.content_units));
     }
 
-    if (Array.isArray(resp.content_units)) {
-      yield put(mdbActions.receiveContentUnits(resp.content_units));
+    if (Array.isArray(data.content_units)) {
+      yield put(mdbActions.receiveContentUnits(data.content_units));
     }
 
-    yield put(actions.fetchListSuccess(resp));
+    yield put(actions.fetchListSuccess(data));
   } catch (err) {
     yield put(actions.fetchListFailure(err));
   }
@@ -54,8 +54,8 @@ function* updatePageInQuery(action) {
 function* fetchLessonPart(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const response = yield call(Api.unit, { id: action.payload, language });
-    yield put(mdbActions.receiveContentUnits([response]));
+    const { data } = yield call(Api.unit, { id: action.payload, language });
+    yield put(mdbActions.receiveContentUnits([data]));
     yield put(actions.fetchLessonPartSuccess(action.payload));
   } catch (err) {
     yield put(actions.fetchLessonPartFailure(action.payload, err));
@@ -65,8 +65,8 @@ function* fetchLessonPart(action) {
 function* fetchFullLesson(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const response = yield call(Api.collection, { id: action.payload, language });
-    yield put(mdbActions.receiveCollections([response]));
+    const { data } = yield call(Api.collection, { id: action.payload, language });
+    yield put(mdbActions.receiveCollections([data]));
     yield put(actions.fetchFullLessonSuccess(action.payload));
   } catch (err) {
     yield put(actions.fetchFullLessonFailure(action.payload, err));

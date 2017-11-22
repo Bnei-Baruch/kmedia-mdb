@@ -1,6 +1,9 @@
+import moment from 'moment';
+
 import {
-  CT_CHILDREN_LESSON_PART,
+  CT_CHILDREN_LESSON,
   CT_CLIP,
+  CT_CLIPS,
   CT_CONGRESS,
   CT_DAILY_LESSON,
   CT_EVENT_PART,
@@ -23,9 +26,12 @@ import {
   CT_VIDEO_PROGRAM,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
-  CT_WOMEN_LESSON_PART,
+  CT_WOMEN_LESSON,
+  EVENT_TYPES,
   MEDIA_TYPES
 } from './consts';
+
+import { CollectionsBreakdown } from './mdb';
 
 export const isEmpty = (obj) => {
   // null and undefined are "empty"
@@ -161,11 +167,40 @@ export const physicalFile = (file, ext = false) => {
   return `https://cdn.kabbalahmedia.info/${file.id}${suffix}`;
 };
 
+export const canonicalCollection = (unit) => {
+  if (!unit) {
+    return null;
+  }
+
+  if (isEmpty(unit.collections)) {
+    return null;
+  }
+
+  const collections = Array.isArray(unit.collections) ? unit.collections : Object.values(unit.collections);
+  if (collections.length === 1) {
+    return collections[0];
+  }
+
+  const breakdown = new CollectionsBreakdown(collections);
+  const lessons   = breakdown.getDailyLessons();
+  const events    = breakdown.getEvents();
+  if (lessons.length > 0 && events.length > 0) {
+    const { start_date: start, end_date: end } = events[0];
+    const { film_date: filmDate }              = unit;
+    if (start && end && filmDate) {
+      return (moment(filmDate).isBetween(start, end, 'day', '[]')) ? events[0] : lessons[0];
+    }
+  }
+
+  return collections[0];
+};
+
 export const canonicalLink = (entity) => {
   if (!entity) {
     return '/';
   }
 
+  // collections
   switch (entity.content_type) {
   case CT_DAILY_LESSON:
   case CT_SPECIAL_LESSON:
@@ -176,18 +211,31 @@ export const canonicalLink = (entity) => {
     return `/lectures/full/${entity.id}`;
   case CT_FRIENDS_GATHERINGS:
   case CT_MEALS:
+  case CT_CLIPS:
     return '/';
   case CT_CONGRESS:
   case CT_HOLIDAY:
   case CT_PICNIC:
   case CT_UNITY_DAY:
     return `/events/full/${entity.id}`;
+  default:
+    break;
+  }
+
+  // units whose canonical collection is an event goes as an event item
+  const collection = canonicalCollection(entity);
+  if (collection && EVENT_TYPES.indexOf(collection.content_type) !== -1) {
+    return `/events/item/${entity.id}`;
+  }
+
+  // unit based on type
+  switch (entity.content_type) {
   case CT_LESSON_PART:
     return `/lessons/part/${entity.id}`;
   case CT_LECTURE:
   case CT_VIRTUAL_LESSON:
-  case CT_CHILDREN_LESSON_PART:
-  case CT_WOMEN_LESSON_PART:
+  case CT_CHILDREN_LESSON:
+  case CT_WOMEN_LESSON:
     return `/lectures/part/${entity.id}`;
   case CT_VIDEO_PROGRAM_CHAPTER:
     return `/programs/chapter/${entity.id}`;
@@ -205,4 +253,36 @@ export const canonicalLink = (entity) => {
   default:
     return '/';
   }
+};
+
+/**
+ * Return n adjacent indices in array around idx (excluding idx).
+ * @param idx center neighborhood, in range [-1,len)
+ * @param len array length
+ * @param n size of neighborhood
+ * @returns {Array<int>}
+ */
+export const neighborIndices = (idx, len, n) => {
+  const neighbors = [];
+  let step        = 1;
+
+  while (neighbors.length <= n) {
+    const l = idx - step;
+    if (l >= 0) {
+      neighbors.unshift(l);
+    }
+
+    const r = idx + step;
+    if (r < len) {
+      neighbors.push(r);
+    }
+
+    if (r >= len && l < 0) {
+      break;
+    }
+
+    step++;
+  }
+
+  return neighbors.slice(0, n);
 };

@@ -111,6 +111,7 @@
     }
   }
  .logo {
+   min-width: 290px;
     img {
       display: inline-block!important;
     }
@@ -134,6 +135,13 @@
       border-left: 1px solid rgba(34, 36, 38, 0.15);
     }
   }
+  // NOTE (yaniv -> edo) fixes AR-5
+  .logo {
+    h2.header {
+      margin-right:16px;
+    }
+  }
+
   @media only screen and (min-width: $largeMonitorBreakpoint) {
     .layout {
       &__sidebar {
@@ -353,9 +361,8 @@
 
 .filter-tags {
   .buttons {
-    + .buttons {
-      margin-left: 8px;
-    }
+    margin-right: 4px;
+    margin-left: 4px;
   }
 }
 
@@ -394,4 +401,14 @@
 .popup .content {
   width: 200px;
   text-align: center;
+}
+
+.search-omnibox {
+  width: 100%;
+  max-width: 600px;
+}
+
+.search-result-rtl .title {
+  direction: rtl;
+  display: inline-block;
 }

@@ -5,7 +5,7 @@
     },
     "sidebar": {
       "lessons": "שיעור יומי",
-      "programs": "תוכניות טלוויזיה",
+      "programs": "תוכניות",
       "lectures": "הרצאות ושיעורים",
       "sources": "מקורות",
       "events": "אירועים",
@@ -21,11 +21,17 @@
     }
   },
   "filters": {
+    "search": {
+      "by": "סנן תוצאות לפי:"
+    },
     "lessons": {
       "by": "סנן שיעורים לפי:"
     },
     "programs": {
       "by": "סנן תוכניות לפי:"
+    },
+    "full-program": {
+      "by": "סנן פרקים לפי:"
     },
     "events": {
       "by": "סנן אירועים לפי:"
@@ -106,12 +112,20 @@
     "error-loading-file": "טעות בהעלאת קובץ.",
     "fallback-language": "אין את השפה המבוקשת למדיה, נבחרה שפת ברירת מחדל.",
     "fallback-to-audio": "וידיאו לא נמצא, משתמש באודיו.",
-    "fallback-to-video": "אודיו לא נמצא, משתמש בוידיאו."
+    "fallback-to-video": "אודיו לא נמצא, משתמש בוידיאו.",
+    "source-content-not-found": "לא נמצא תוכן המקור"
   },
   "search": {
+    "sortby": "מיין לפי",
+    "sorts": {
+      "relevance": "רלונטיות",
+      "newertoolder": "חדש לישן",
+      "oldertonewer": "ישן לחדש"
+    },
     "suggestions": {
       "categories": {
-        "tags": "תגיות",
+        "search": "חיפוש",
+        "tags": "נושאים",
         "sources": "מקורות",
         "authors": "מחברים",
         "persons": "אנשים"
@@ -122,11 +136,24 @@
       "search-summary": "דף {{pageNo}} מתוך {{total}} תוצאות ({{took}} שניות)",
       "empty-query": "לא הוזן טקסט לחיפוש. השתמש בתיבת החיפוש למעלה.",
       "no-results": "לא נמצאו תוצאות עבור <1><0>{{query}}</0></1>."
+    },
+    "result": {
+      "description": "תקציר",
+      "transcript": "תמליל"
     }
   },
   "events": {
+    "header": {
+      "text": "אירועים",
+      "subtext": "בימינו, חכמת הקבלה מגיעה כבר לכל מקום בעולם. במדור זה תוכלו להתרשם מאירועים, כנסים ומפגשים מיוחדים של ארגון \"קבלה לעם\" בארץ ובעולם."
+    },
     "ALL_EVENTS": "כל האירועים",
-    "no-matches": "לא נמצאו אירועים מתאימים"
+    "no-matches": "לא נמצאו אירועים מתאימים",
+    "part": {
+      "relevant-parts": {
+        "title": "חלקים נוספים מאותו אירוע"
+      }
+    }
   },
   "lessons": {
     "header": {
@@ -149,6 +176,10 @@
     }
   },
   "programs": {
+    "header": {
+      "text": "תוכניות",
+      "subtext": "כאן תמצאו מגוון עשיר של תוכניות הכולל: שיחות מרתקות על משמעות החיים, אקטואליה, תכניות לכל המשפחה ועוד."
+    },
     "genres": {
       "all": "כל התוכניות",
       "documentary": "דוקומנטרי",
@@ -160,36 +191,43 @@
       "movies": "סרטים"
     },
     "list": {
-      "episode_from": "Episode from:"
+      "episode_from": "פרק מתוך התוכנית:"
     },
     "full": {
-      "episodes": "Episode(s)",
-      "ccuName": "Content Unit Name",
-      "name": "Program Name",
-      "duration": "Duration",
-      "film_date": "Film Date"
+      "episodes": "פרקים"
     },
     "part": {
       "info": {
-        "tags": "Tags",
-        "sources": "Sources",
-        "related-event": "Related to Event"
+        "tags": "תגיות",
+        "sources": "מקורות",
+        "related-event": "אירועים קשורים"
       },
       "materials": {
-        "summary": "Summary",
-        "transcription": "Transcription"
+        "summary": "תקציר",
+        "transcription": "תמליל"
       },
       "relevant-parts": {
-        "title": "Other parts from the same program",
-        "item-title": "Part {{name}}"
+        "title": "פרקים נוספים מאותה תוכנית",
+        "item-title": "פרק {{name}}"
       }
     }
   },
   "materials": {
-    "summary": "תקציר",
-    "transcription": "תמליל",
-    "sources": "מקורות",
-    "sketches": "שרטוטים"
+    "summary": {
+      "header": "תקציר",
+      "no-summary": "חסר תקציר"
+    },
+    "transcription": {
+      "header": "תמליל"
+    },
+    "sources": {
+      "header": "מקורות",
+      "no-sources": "אין מקורות",
+      "no-source-available": "אף מקור לא מוכן לתצוגה"
+    },
+    "sketches": {
+      "header": "שרטוטים"
+    }
   },
   "media-downloads": {
     "title": "קבצים להורדה",
@@ -258,14 +296,17 @@
       "CONGRESS": "כנס",
       "VIDEO_PROGRAM": "תוכנית",
       "LECTURE_SERIES": "סדרת הרצאות",
+      "CHILDREN_LESSONS": "שיעורי ילדים",
+      "WOMEN_LESSONS": "שיעורי נשים",
+      "VIRTUAL_LESSONS": "שיעורים וירטואלים",
       "MEALS": "סעודות",
       "HOLIDAY": "חג \\ מועד",
       "PICNIC": "פיקניק",
       "UNITY_DAY": "יום איחוד",
       "LESSON_PART": "חלק שיעור",
       "LECTURE": "הרצאה",
-      "CHILDREN_LESSON_PART": "שיעור ילדים",
-      "WOMEN_LESSON_PART": "שיעור נשים",
+      "CHILDREN_LESSON": "שיעור ילדים",
+      "WOMEN_LESSON": "שיעור נשים",
       "VIRTUAL_LESSON": "שיעור וירטואלי",
       "FRIENDS_GATHERING": "ישיבת חברים",
       "MEAL": "סעודה",
@@ -287,6 +328,9 @@
       "banner": "באנר",
       "presentation": "מצגת"
     }
+  },
+  "values": {
+    "date": "{{date, l}}"
   }
 }
 

@@ -4,17 +4,21 @@ export const CT_SPECIAL_LESSON     = 'SPECIAL_LESSON';
 export const CT_FRIENDS_GATHERINGS = 'FRIENDS_GATHERINGS';
 export const CT_VIDEO_PROGRAM      = 'VIDEO_PROGRAM';
 export const CT_LECTURE_SERIES     = 'LECTURE_SERIES';
+export const CT_CHILDREN_LESSONS   = 'CHILDREN_LESSONS';
+export const CT_WOMEN_LESSONS      = 'WOMEN_LESSONS';
+export const CT_VIRTUAL_LESSONS    = 'VIRTUAL_LESSONS';
 export const CT_MEALS              = 'MEALS';
 export const CT_CONGRESS           = 'CONGRESS';
 export const CT_HOLIDAY            = 'HOLIDAY';
 export const CT_PICNIC             = 'PICNIC';
 export const CT_UNITY_DAY          = 'UNITY_DAY';
+export const CT_CLIPS              = 'CLIPS';
 
 // Content Unit Types
 export const CT_LESSON_PART           = 'LESSON_PART';
 export const CT_LECTURE               = 'LECTURE';
-export const CT_CHILDREN_LESSON_PART  = 'CHILDREN_LESSON_PART';
-export const CT_WOMEN_LESSON_PART     = 'WOMEN_LESSON_PART';
+export const CT_CHILDREN_LESSON       = 'CHILDREN_LESSON';
+export const CT_WOMEN_LESSON          = 'WOMEN_LESSON';
 export const CT_VIRTUAL_LESSON        = 'VIRTUAL_LESSON';
 export const CT_FRIENDS_GATHERING     = 'FRIENDS_GATHERING';
 export const CT_MEAL                  = 'MEAL';

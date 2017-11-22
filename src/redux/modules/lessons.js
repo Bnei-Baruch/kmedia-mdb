@@ -32,7 +32,7 @@ export const types = {
 /* Actions */
 
 const setPage                = createAction(SET_PAGE);
-const fetchList              = createAction(FETCH_LIST, (pageNo, language, pageSize) => ({
+const fetchList              = createAction(FETCH_LIST, ({ pageNo, language, pageSize }) => ({
   pageNo,
   language,
   pageSize
@@ -176,7 +176,7 @@ export const reducer = handleActions({
 const getTotal  = state => state.total;
 const getItems  = state => state.items;
 const getPageNo = state => state.pageNo;
-const getWip = state => state.wip;
+const getWip    = state => state.wip;
 const getErrors = state => state.errors;
 
 export const selectors = {

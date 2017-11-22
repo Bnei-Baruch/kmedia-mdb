@@ -76,6 +76,8 @@ class DeepListFilter extends React.Component {
     this.props.onApply();
   };
 
+  canApply = () => this.state.selection && this.state.selection.length > 0;
+
   scrollToSelections = (selections) => {
     selections.forEach((selection, depth) => {
       const selectedItems = this.menus[depth].getElementsByClassName('active');
@@ -164,8 +166,8 @@ class DeepListFilter extends React.Component {
           </div>
         </Segment>
         <Segment vertical clearing>
-          <Button primary content={t('buttons.apply')} floated="right" onClick={this.apply} />
-          <Button content={t('buttons.cancel')} floated="right" onClick={this.onCancel} />
+          <Button primary content={t('buttons.apply')} floated="right" disabled={!this.canApply()} onClick={this.apply} />
+          <Button content={t('buttons.close')} floated="right" onClick={this.onCancel} />
         </Segment>
       </Container>
     );

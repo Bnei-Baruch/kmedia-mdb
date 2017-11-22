@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
+import debounce from 'lodash/debounce';
 import { withRouter } from 'react-router-dom';
 import { Player, withMediaProps } from 'react-media-player';
 import classNames from 'classnames';
@@ -22,6 +23,10 @@ import AVAudioVideo from './AVAudioVideo';
 import AvSeekBar from './AvSeekBar';
 import AVEditSlice from './AVEditSlice';
 import AVShareBar from './AVShareBar';
+
+
+const PLAYER_VOLUME_STORAGE_KEY = '@@kmedia_player_volume';
+const DEFAULT_PLAYER_VOLUME = 0.8;
 
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = playback =>
@@ -79,6 +84,7 @@ class AVPlayerRMP extends PureComponent {
     errorReason: '',
     playbackRate: '1x', // this is used only to rerender the component. actual value is saved on the player's instance
     mode: PLAYER_MODE.NORMAL,
+    persistenceFn: noop
   };
 
   componentWillMount() {
@@ -114,6 +120,19 @@ class AVPlayerRMP extends PureComponent {
     }
   }
 
+  activatePersistence = () => {
+    this.setState({ persistenceFn: this.persistVolume });
+    let persistedVolume = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
+
+    if (persistedVolume == null || isNaN(persistedVolume)) {
+      persistedVolume = DEFAULT_PLAYER_VOLUME;
+      localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, persistedVolume);
+    }
+    this.props.media.setVolume(persistedVolume);
+  }
+
+  persistVolume = debounce(media => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, media.volume), 200);
+
   // Remember the current time and isPlaying while switching.
   onSwitchAV = (...params) => {
     const { onSwitchAV, media: { currentTime, isPlaying } } = this.props;
@@ -133,6 +152,9 @@ class AVPlayerRMP extends PureComponent {
   onPlayerReady = () => {
     const { wasCurrentTime, wasPlaying } = this.state;
     const { media }                      = this.props;
+
+    this.activatePersistence();
+
     if (wasCurrentTime) {
       media.seekTo(wasCurrentTime);
     }
@@ -364,6 +386,7 @@ class AVPlayerRMP extends PureComponent {
             onPrev,
             onNext,
             media,
+            isSliceable
           } = this.props;
     const {
             isTopSeekbar,
@@ -435,6 +458,7 @@ class AVPlayerRMP extends PureComponent {
               ref={(c) => {
                 this.player = c;
               }}
+              onVolumeChange={this.state.persistenceFn}
               src={item.src}
               vendor={isVideo ? 'video' : 'audio'}
               autoPlay={autoPlay}
@@ -510,7 +534,7 @@ class AVPlayerRMP extends PureComponent {
                       />
                     )
                   }
-                  { !isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(true)} /> }
+                  { isSliceable && !isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(true)} /> }
                   { !isEditMode && !isAudio && <AVFullScreen container={this.mediaElement} /> }
                 </div>
               <div

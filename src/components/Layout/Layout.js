@@ -9,6 +9,7 @@ import { FLAG_TO_LANGUAGE } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import OmniBox from '../Search/OmniBox';
+import GAPageView from '../GAPageView/GAPageView';
 import Routes from './Routes';
 import MenuItems from './MenuItems';
 import Footer from './Footer';
@@ -30,23 +31,22 @@ class Layout extends Component {
   // Required for handling outhide sidebar on click outside sidebar,
   // i.e, main, header of footer.
   componentDidMount() {
-    window.addEventListener('mousedown', this.clickOutside);
+    document.addEventListener('click', this.clickOutside, true);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('mousedown', this.clickOutside);
+    document.removeEventListener('click', this.clickOutside, true);
   }
 
   clickOutside = (e) => {
-    if (this.state.sidebarActive &&
-        !e.path.find(elem => elem.classList && elem.classList.contains('layout__sidebar'))) {
-      this.toggleSidebar();
+    if (this.state.sidebarActive && e.target !== this.sidebarElement && !this.sidebarElement.contains(e.target)) {
+      this.closeSidebar();
     }
-  }
+  };
 
-  toggleSidebar = () => {
-    this.setState({ sidebarActive: !this.state.sidebarActive });
-  }
+  toggleSidebar = () => this.setState({ sidebarActive: !this.state.sidebarActive });
+
+  closeSidebar = () => this.setState({ sidebarActive: false });
 
   render() {
     const { t, location }   = this.props;
@@ -54,6 +54,7 @@ class Layout extends Component {
 
     return (
       <div className="layout">
+        <GAPageView location={location} />
         {/* Added the width 100vw to better support mobile, please fix as needed */}
         <div className="layout__header" style={{ width: '100vw' }}>
           {/* Added the width 100vw to better support mobile, please fix as needed */}
@@ -65,11 +66,13 @@ class Layout extends Component {
               <img src={logo} alt="logo" />
               <Header inverted as="h2">
                 {t('nav.top.header')}
+                {/*
                 <span className="widescreen-only"> - widescreen</span>
                 <span className="large-screen-only"> - large screen</span>
                 <span className="computer-only"> - computer</span>
                 <span className="tablet-only"> - tablet</span>
                 <span className="mobile-only"> - mobile</span>
+                */}
                 {/* <span> /// </span>
                     <span className="widescreen-hidden"> - widescreen hidden</span>
                     <span className="large-screen-hidden"> - large screen hidden</span>
@@ -79,7 +82,7 @@ class Layout extends Component {
                 */}
               </Header>
             </Menu.Item>
-            <Menu.Item>
+            <Menu.Item style={{flex: 1}}>
               <OmniBox t={t} location={location} />
             </Menu.Item>
             <Menu.Menu position="right">
@@ -95,12 +98,15 @@ class Layout extends Component {
             </Menu.Menu>
           </Menu>
         </div>
-        <div className={classnames({ layout__sidebar: true, 'is-active': sidebarActive })}>
+        <div
+          className={classnames('layout__sidebar', { 'is-active': sidebarActive })}
+          ref={el => this.sidebarElement = el}
+        >
           <Menu inverted borderless size="huge" color="blue">
-            <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.toggleSidebar}>
+            <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.closeSidebar}>
               <Icon name="sidebar" />
             </Menu.Item>
-            <Menu.Item className="logo" header as={Link} to="/">
+            <Menu.Item className="logo" header as={Link} to="/" onClick={this.closeSidebar}>
               <img src={logo} alt="logo" />
               <Header inverted as="h2">
                 {t('nav.top.header')}
@@ -108,7 +114,7 @@ class Layout extends Component {
             </Menu.Item>
           </Menu>
           <div className="layout__sidebar-menu">
-            <MenuItems simple t={t} />
+            <MenuItems simple t={t} onItemClick={this.closeSidebar} />
           </div>
         </div>
         <div className="layout__main">
