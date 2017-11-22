@@ -46,12 +46,11 @@ export default class AVLanguage extends Component {
 
     return (
       <div
-        className="player-control-language"
+        className="mediaplayer__languages"
       >
         {popup}
         <Dropdown
           floating
-          inline
           scrolling
           upward={upward}
           icon={null}
@@ -59,8 +58,7 @@ export default class AVLanguage extends Component {
           options={options}
           value={language}
           onChange={this.handleChange}
-          className={classNames('player-button')}
-          style={{ display: 'flex', textDecoration: 'underline' }}
+          trigger={<button>{language}</button>}
         />
       </div>
     );

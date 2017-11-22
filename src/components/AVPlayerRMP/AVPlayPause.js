@@ -43,52 +43,35 @@ class AVPlayPause extends Component {
     const { media, showNextPrev, hasNext, hasPrev, onNext, onPrev } = this.props;
 
     return (
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row',
-        marginRight: '5px' }}
-      >
+      <div className='buttons-wrapper'>
         { showNextPrev ? (
           <button
             type="button"
             tabIndex="-1"
             disabled={!hasPrev}
-            className={classNames('player-button')}
             onClick={onPrev}
-            style={{ marginRight: '5px' }}
           >
             <Icon
               name={'step backward'}
               disabled={!hasPrev}
-              style={{ margin: 0, height: '100%' }}
             />
           </button>
         ) : null }
         <button
           type="button"
           tabIndex="-1"
-          className={classNames('player-button')}
           onClick={this.handlePlayPause}
         >
-          <Icon
-            name={media.isPlaying ? 'pause' : 'play'}
-            style={{ margin: 0, height: '100%' }}
-          />
+          <Icon name={media.isPlaying ? 'pause' : 'play'} />
         </button>
         { showNextPrev ? (
           <button
             type="button"
             tabIndex="-1"
             disabled={!hasNext}
-            className={classNames('player-button')}
             onClick={onNext}
-            style={{ marginLeft: '5px' }}
           >
-            <Icon
-              name={'step forward'}
-              disabled={!hasNext}
-              style={{ margin: 0, height: '100%' }}
-            />
+            <Icon name={'step forward'} disabled={!hasNext} />
           </button>
         ) : null }
       </div>

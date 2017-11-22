@@ -17,10 +17,7 @@ export default class AVEditSlice extends Component {
         className="player-button player-control-edit-slice"
         onClick={onActivateSlice}
       >
-        <Icon
-          name="share alternate"
-          style={{ margin: 0, height: '100%' }}
-        />
+        <Icon name="share alternate" />
       </button>
     );
   }

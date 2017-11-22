@@ -428,20 +428,9 @@ class AVPlayerRMP extends PureComponent {
           ref={(c) => {
             this.mediaElement = c;
           }}
-          className={classNames('media', { 'media-edit-mode': isEditMode })}
-          style={{
-            minHeight: isAudio ? 200 : 40,
-            minWidth: isVideo ? 380 : 'auto'
-          }}
+          className={classNames('mediaplayer', { 'media-edit-mode': isEditMode })}
+          
         >
-          <div
-            className={classNames('media-player', {
-              'media-player-fullscreen': isFullscreen,
-              fade: !controlsVisible && !forceShowControls,
-              'audio-is-mobile': isTopSeekbar && isAudio,
-              'video-is-mobile': isTopSeekbar && isVideo,
-            })}
-          >
             <Player
               ref={(c) => {
                 this.player = c;
@@ -457,39 +446,14 @@ class AVPlayerRMP extends PureComponent {
               onTimeUpdate={this.handleTimeUpdate}
               defaultCurrentTime={sliceStart || 0}
             />
-            <div
-              className={classNames('media-controls', {
-                fade: !controlsVisible && !forceShowControls,
-                'audio-is-mobile': isTopSeekbar && isAudio,
-                'video-is-mobile': isTopSeekbar && isVideo,
-              })}
-            >
-              <div
-                className="controls-wrapper"
-                onMouseEnter={this.controlsEnter}
-                onMouseLeave={this.controlsLeave}
-              >
-                <div className="controls-container">
-                  {!isTopSeekbar ? null : (
-                    <div style={{
-                      position: 'absolute',
-                      flex: '1 0 auto',
-                      left: 0,
-                      top: isMobile ? '-10px' : 0,
-                      width: '100%',
-                    }}
-                    >
-                      <AvSeekBar
-                        buffers={this.buffers()}
-                        playerMode={mode}
-                        sliceStart={sliceStart}
-                        sliceEnd={sliceEnd}
-                        onSliceStartChange={this.handleSliceStartChange}
-                        onSliceEndChange={this.handleSliceEndChange}
-                        isMobile={isMobile}
-                      />
-                    </div>
-                  )}
+          <div className='mediaplayer__wrapper'>
+            
+                <div className={classNames('mediaplayer__controls', {
+                  'mediaplayer__controls--is-fade': !controlsVisible && !forceShowControls
+                })}
+                  onMouseEnter={this.controlsEnter}
+                  onMouseLeave={this.controlsLeave}
+                >
                   <AVPlayPause
                     showNextPrev={showNextPrev && !isEditMode}
                     hasNext={hasNext}
@@ -501,20 +465,17 @@ class AVPlayerRMP extends PureComponent {
                     start={media.currentTime}
                     end={media.duration}
                   />
-                  <div className="player-seekbar-wrapper">
-                    <AutoSizer onResize={this.onSeekBarResize}>{() => null}</AutoSizer>
-                    {isTopSeekbar ? null : (
-                      <AvSeekBar
-                        buffers={this.buffers()}
-                        playerMode={mode}
-                        sliceStart={sliceStart}
-                        sliceEnd={sliceEnd}
-                        onSliceStartChange={this.handleSliceStartChange}
-                        onSliceEndChange={this.handleSliceEndChange}
-                        isMobile={isMobile}
-                      />
-                    )}
-                  </div>
+                  <div className='mediaplayer__spacer'/>
+                  <AvSeekBar
+                    buffers={this.buffers()}
+                    playerMode={mode}
+                    sliceStart={sliceStart}
+                    sliceEnd={sliceEnd}
+                    onSliceStartChange={this.handleSliceStartChange}
+                    onSliceEndChange={this.handleSliceEndChange}
+                    isMobile={isMobile}
+                  />
+                  
                   {
                     !isEditMode && (
                       <AVPlaybackRate
@@ -552,10 +513,9 @@ class AVPlayerRMP extends PureComponent {
                   { !isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(true)} /> }
                   { !isEditMode && !isAudio && <AVFullScreen container={this.mediaElement} /> }
                 </div>
-              </div>
               <div
-                className="media-center-control"
-                style={!error ? { outline: 'none' } : { backgroundColor: 'black', outline: 'none' }}
+                className="mediaplayer__onscreen-controls"
+                // style={!error ? "{ outline: 'none' }" : { backgroundColor: 'black'}}
                 role="button"
                 tabIndex="0"
                 onClick={this.playPause}
@@ -564,8 +524,8 @@ class AVPlayerRMP extends PureComponent {
               >
                 {centerMediaControl}
               </div>
-            </div>
-          </div>
+              </div>
+            
         </div>
       </div>
     );

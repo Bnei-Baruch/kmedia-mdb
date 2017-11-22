@@ -12,6 +12,7 @@
   	position: absolute;
   	top: 0;
   	width: 100%;
+  	overflow: hidden;
 	}
 
 	&__playlist {
@@ -51,7 +52,7 @@
 		
 	}
 	&__playlist-view {
-		overflow-y: scroll;
+		overflow-y: auto;
 		padding-bottom: 1rem;
 		padding-top: .7rem;
 		

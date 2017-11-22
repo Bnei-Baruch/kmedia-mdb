@@ -16,25 +16,13 @@ const AVAudioVideo = (props) => {
   );
 
   return (
-    <div className={classNames('player-button player-control-audio-video')}>
+    <div className='mediaplayer__audiovideo'>
       { popup }
-      <div
-        style={{ textDecoration: isAudio ? 'underline' : 'none' }}
-        role="button"
-        tabIndex="0"
-        onClick={setAudio}
-      >
-        {t('buttons.audio')}
-      </div>
-      <span>&nbsp;/&nbsp;</span>
-      <div
-        style={{ textDecoration: isVideo ? 'underline' : 'none' }}
-        role="button"
-        tabIndex="0"
-        onClick={setVideo}
-      >
-        {t('buttons.video')}
-      </div>
+      <button onClick={setAudio}>
+        <span className={ isAudio ? 'is-active' : '' }>{t('buttons.audio')}</span>
+        &nbsp;/&nbsp;
+        <span className={ isVideo ? 'is-active' : '' }>{t('buttons.video')}</span>
+      </button>
     </div>
   );
 };

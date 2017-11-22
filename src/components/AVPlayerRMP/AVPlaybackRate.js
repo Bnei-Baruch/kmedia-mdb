@@ -27,7 +27,7 @@ export default class AVPlaybackRate extends Component {
       .map(x => ({ value: x, text: x }));
 
     return (
-      <div style={{ marginLeft: '5px', marginRight: '5px' }}>
+      <div className="mediaplayer__playback-rate">
         <Dropdown
           floating
           scrolling
@@ -37,7 +37,7 @@ export default class AVPlaybackRate extends Component {
           options={options}
           value={value}
           onChange={this.handleChange}
-          className={classNames('player-button')}
+          trigger={<button>{value}</button>}
         />
       </div>
     );

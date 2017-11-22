@@ -251,7 +251,10 @@ class AvSeekBar extends Component {
     };
 
     const stylePlayedKnob = {
-      left: this.toPercentage(playedLeft + playedWidth)
+     
+      // left: this.toPercentage(playedLeft + playedWidth),
+     
+      // background: 'red'
     };
 
     const styleLoaded = {
@@ -265,12 +268,14 @@ class AvSeekBar extends Component {
     return (
       <div
         ref={(el) => { this.element = el; }}
-        className="player-control-seekbar-container"
+        className="mediaplayer__seekbar"
         onMouseDown={this.handleStart}
         onTouchStart={this.handleStart}
         role="button"
         tabIndex="0"
       >
+        
+        <div className="seekbar">
         {
           isSliceEdit && (
             <SliceHandle
@@ -278,6 +283,7 @@ class AvSeekBar extends Component {
               seconds={formatTime(sliceStart)}
               position={sliceStartLeft}
               isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
+              className={classNames('seekbar__slicehandle--left', {'seekbar__slicehandle--onstart': sliceStartLeft === 0 })}
             />
           )
         }
@@ -288,25 +294,30 @@ class AvSeekBar extends Component {
               seconds={formatTime(sliceEnd === Infinity ? duration : sliceEnd)}
               position={sliceEndLeft}
               isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
+              className={"seekbar__slicehandle--right"}
             />
           )
         }
-        <div className="player-control-seekbar">
+          
+          <div className={classNames('seekbar__bar', 'is-empty')} />
+          <div className={classNames('seekbar__bar', 'is-played')} style={stylePlayed}>
+            <div className={classNames('seekbar__knob')} style={stylePlayedKnob} />
+            </div>
+          <div className={classNames('seekbar__bar', 'is-loaded')} style={styleLoaded} />
           {
             isSlice && (
               <div
-                className="player-slice-area"
+                className={classNames('seekbar__bar', 'is-slice')}
                 style={{
+                  // left: sliceStartLeft === 0 ? 'calc('+sliceStartLeft+' + 7px)' : 'calc('+sliceStartLeft+' - 7px)',
                   left: sliceStartLeft,
                   width: this.toPercentage(normalizedSliceEnd - normalizedSliceStart)
+                  // left: this.toPercentage(normalizedSliceStart),
+                  // right: this.toPercentage(normalizedSliceEnd)
                 }}
               />
             )
           }
-          <div className={classNames('bar', 'empty', { mobile: isMobile })} />
-          <div className={classNames('bar', 'played', { mobile: isMobile })} style={stylePlayed} />
-          <div className={classNames('played-knob', { mobile: isMobile })} style={stylePlayedKnob} />
-          <div className={classNames('bar', 'loaded', { mobile: isMobile })} style={styleLoaded} />
         </div>
       </div>
     );
