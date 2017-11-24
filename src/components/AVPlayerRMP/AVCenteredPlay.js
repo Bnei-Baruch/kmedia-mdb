@@ -37,8 +37,8 @@ class AVCenteredPlay extends Component {
         onClick={this.handlePlayPause}
       >
         <Icon
-          name={'video play'}
-          size="massive"
+          name={'play'}
+          size="huge"
         />
       </button>
     );
