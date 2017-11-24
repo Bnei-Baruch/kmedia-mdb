@@ -101,57 +101,40 @@ class AVMuteUnmute extends Component {
     const { volumeHover, wasMouseDown }  = this.state;
 
     const volumePopoverStyle = {
-      position: 'absolute',
       bottom: this.props.upward ? '100%' : 'auto',
       top: this.props.upward ? 'auto' : '100%',
-      background: 'black',
-      opacity: 0.65,
       visibility: volumeHover || wasMouseDown ? 'visible' : 'hidden',
     };
 
-    const styleVolume = {
+    const styleFull = {
       height: `${this.normalize(volume)}px`,
     };
 
-    const styleBlank = {
+    const styleEmpty = {
       height: `${this.normalize(1 - volume)}px`,
     };
 
     return (
-      <div className="player-control-mute-unmute">
+      <div className="mediaplayer__volume">
         <button
           type="button"
-          className="player-button"
           onClick={this.handleMuteUnmute}
           onMouseEnter={this.handleMouseEnter}
           onMouseLeave={this.handleMouseLeave}
-          style={{}}
         >
           {
             isMuted && (
-              <Icon
-                key="mute"
-                name="volume off"
-                style={{ margin: 0, height: '100%' }}
-              />
+              <Icon key="mute" name="volume off"/>
             )
           }
           {
             volume > 0 && volume < 0.5 && (
-              <Icon
-                key="volume-down"
-                name="volume down"
-                style={{ margin: 0, height: '100%' }}
-              />
+              <Icon key="volume-down" name="volume down"/>
             )
           }
           {
             volume >= 0.5 && (
-              <Icon
-                key="volume-up"
-                name="volume up"
-                style={{ margin: 0, height: '100%' }}
-              />
+              <Icon key="volume-up" name="volume up"/>
             )
           }
         </button>
@@ -163,16 +146,16 @@ class AVMuteUnmute extends Component {
         >
           <div
             ref={(c) => { this.element = c; }}
-            className="bar-wrapper"
+            className="volume-popover__wrapper"
             role="button"
             tabIndex="0"
             onMouseDown={this.handleStart}
             onTouchStart={this.handleStart}
           >
-            <div className="bar volume" style={styleVolume}>
-              <div className="knob" />
+            <div className="volume-popover__bar is-full" style={styleFull}>
+              <div className="volume-popover__knob" />
             </div>
-            <div className="bar blank" style={styleBlank} />
+            <div className="volume-popover__bar is-empty" style={styleEmpty} />
           </div>
         </div>
       </div>
