@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withMediaProps } from 'react-media-player';
 import { Icon } from 'semantic-ui-react';
-
-
 
 class AVPlayPause extends Component {
   static propTypes = {
@@ -44,7 +41,7 @@ class AVPlayPause extends Component {
 
     return (
       <div className='buttons-wrapper'>
-        { showNextPrev ? (
+        {showNextPrev ? (
           <button
             type="button"
             tabIndex="-1"
@@ -56,7 +53,7 @@ class AVPlayPause extends Component {
               disabled={!hasPrev}
             />
           </button>
-        ) : null }
+        ) : null}
         <button
           type="button"
           tabIndex="-1"
@@ -64,7 +61,7 @@ class AVPlayPause extends Component {
         >
           <Icon name={media.isPlaying ? 'pause' : 'play'} />
         </button>
-        { showNextPrev ? (
+        {showNextPrev ? (
           <button
             type="button"
             tabIndex="-1"
@@ -73,7 +70,7 @@ class AVPlayPause extends Component {
           >
             <Icon name={'step forward'} disabled={!hasNext} />
           </button>
-        ) : null }
+        ) : null}
       </div>
     );
   }
