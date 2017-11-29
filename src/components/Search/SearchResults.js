@@ -125,7 +125,7 @@ class SearchResults extends Component {
     }
 
     const { took, hits: { total, hits } } = results;
-    if (total === 0 || Object.getOwnPropertyNames(cuMap).length === 0) {
+    if (total === 0 || isEmpty(cuMap)) {
       return (
         <div>
           <Header as="h1" content={t('search.results.title')} />
