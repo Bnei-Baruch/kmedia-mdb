@@ -44,10 +44,11 @@ class SearchResultsFilters extends Component {
           filters={filters}
           onFilterApplication={onChange}
           rightItems={[
-            <span style={{ padding: '10px' }}>
-            {t('search.sortby')}:
-          </span>,
+            <span key="span" style={{ padding: '10px' }}>
+              {t('search.sortby')}:
+            </span>,
             <Dropdown
+              key="dropdown"
               item
               compact
               options={options}

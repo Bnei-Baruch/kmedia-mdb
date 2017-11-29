@@ -99,7 +99,7 @@ class SearchResults extends Component {
   };
 
   render() {
-    const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange } = this.props;
+    const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange, cuMap } = this.props;
 
     // Query from URL (not changed until pressed Enter.
     const query = getQuery(window.location).q;
@@ -125,7 +125,7 @@ class SearchResults extends Component {
     }
 
     const { took, hits: { total, hits } } = results;
-    if (total === 0) {
+    if (total === 0 || Object.getOwnPropertyNames(cuMap).length === 0) {
       return (
         <div>
           <Header as="h1" content={t('search.results.title')} />
