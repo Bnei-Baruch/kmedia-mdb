@@ -4,13 +4,14 @@ import isNumber from 'lodash/isNumber';
 import noop from 'lodash/noop';
 import { withMediaProps } from 'react-media-player';
 import classNames from 'classnames';
+
 import { PLAYER_MODE } from './constants';
 import { playerModeProp } from './propTypes';
 import SliceHandle from './SliceHandle';
 import { formatTime } from '../../helpers/time';
 
 const stickyHandleDelta = 10; // pixel width from which to stick to handle
-const minSliceAreaWidth = '1%';
+const minSliceAreaWidth = 0.01;
 
 class AvSeekBar extends Component {
 
@@ -60,18 +61,18 @@ class AvSeekBar extends Component {
 
   getSeekPositionFromClientX = (clientX) => {
     const { media, playerMode, sliceStart, sliceEnd } = this.props;
-    const { left, right } = this.element.getBoundingClientRect();
-    const { duration }    = media;
-    const offset          = Math.min(Math.max(0, clientX - left), right - left);
+    const { left, right }                             = this.element.getBoundingClientRect();
+    const { duration }                                = media;
+    const offset                                      = Math.min(Math.max(0, clientX - left), right - left);
 
     if (playerMode === PLAYER_MODE.SLICE_EDIT) {
       // try stick to handle
       if (this.sliceStartHandle && this.sliceEndHandle) {
         const { left: startLeft } = this.sliceStartHandle.getHandleElement().getBoundingClientRect();
-        const { left: endLeft } = this.sliceEndHandle.getHandleElement().getBoundingClientRect();
-        const sliceWidth = endLeft - startLeft;
+        const { left: endLeft }   = this.sliceEndHandle.getHandleElement().getBoundingClientRect();
+        const sliceWidth          = endLeft - startLeft;
         // reduce delta if slice is small
-        const fittedStickyDelta = stickyHandleDelta * 2.5 > sliceWidth ? sliceWidth / 4 : stickyHandleDelta;
+        const fittedStickyDelta   = stickyHandleDelta * 2.5 > sliceWidth ? sliceWidth / 4 : stickyHandleDelta;
         if (Math.abs(clientX - startLeft) < fittedStickyDelta) {
           return sliceStart;
         }
@@ -83,7 +84,7 @@ class AvSeekBar extends Component {
     }
 
     return (duration * offset) / (right - left);
-  }
+  };
 
   getNormalizedSliceStart = (duration) => {
     const { sliceEnd } = this.props;
@@ -105,11 +106,11 @@ class AvSeekBar extends Component {
     }
 
     return sliceStart / duration;
-  }
+  };
 
   getNormalizedSliceEnd = (duration) => {
     const { sliceStart } = this.props;
-    let { sliceEnd } = this.props;
+    let { sliceEnd }     = this.props;
 
     if (!isNumber(sliceEnd)) {
       return 1;
@@ -128,7 +129,7 @@ class AvSeekBar extends Component {
     }
 
     return sliceEnd / duration;
-  }
+  };
 
   element              = null;
   wasMouseDown         = false;
@@ -141,7 +142,6 @@ class AvSeekBar extends Component {
     }
     return (ret < 1) ? 0 : `${ret}%`;
   };
-
 
   handleStart = (e) => {
     // regard only left mouse button click (0). touch is undefined
@@ -161,7 +161,7 @@ class AvSeekBar extends Component {
       this.sliceEndActive = true;
     } else {
       this.sliceStartActive = false;
-      this.sliceEndActive = false;
+      this.sliceEndActive   = false;
     }
 
     if (!this.state.seekbarHadInteraction) {
@@ -174,8 +174,8 @@ class AvSeekBar extends Component {
     if (this.wasMouseDown) {
       e.preventDefault();
       // Resolve clientX from mouse or touch event.
-      const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
-      this.touchClientX = clientX; // this is stored for touch because touchend has no coords
+      const clientX      = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
+      this.touchClientX  = clientX; // this is stored for touch because touchend has no coords
       const seekPosition = this.getSeekPositionFromClientX(clientX);
 
       if (this.sliceStartActive) {
@@ -217,27 +217,26 @@ class AvSeekBar extends Component {
       }
 
       this.sliceStartActive = false;
-      this.sliceEndActive = false;
-      this.touchClientX = undefined;
+      this.sliceEndActive   = false;
+      this.touchClientX     = undefined;
     }
   };
 
-
   render() {
-    const { isMobile, sliceStart, sliceEnd } = this.props;
-    const { currentTime, duration } = this.props.media;
-    const current                   = this.state.playPoint / duration;
+    const { sliceStart, sliceEnd } = this.props;
+    const { currentTime, duration }          = this.props.media;
+    const current                            = this.state.playPoint / duration;
     // Overriding progress of native react-media-player as he does not works correctly
     // with buffers.
     const { buffers, playerMode } = this.props;
-    const buf         = buffers.find(b => b.start <= currentTime && b.end >= currentTime);
-    const progress    = (buf && (buf.end / duration));
+    const buf                     = buffers.find(b => b.start <= currentTime && b.end >= currentTime);
+    const progress                = (buf && (buf.end / duration));
 
-    const isSliceEdit = playerMode === PLAYER_MODE.SLICE_EDIT;
-    const isSliceView = playerMode === PLAYER_MODE.SLICE_VIEW;
-    const isSlice = isSliceEdit || isSliceView;
+    const isSliceEdit          = playerMode === PLAYER_MODE.SLICE_EDIT;
+    const isSliceView          = playerMode === PLAYER_MODE.SLICE_VIEW;
+    const isSlice              = isSliceEdit || isSliceView;
     const normalizedSliceStart = this.getNormalizedSliceStart(duration);
-    const normalizedSliceEnd = this.getNormalizedSliceEnd(duration);
+    const normalizedSliceEnd   = this.getNormalizedSliceEnd(duration);
 
     let playedLeft = 0;
     if (isSliceView && !this.state.seekbarHadInteraction) {
@@ -245,14 +244,16 @@ class AvSeekBar extends Component {
     }
     const playedWidth = Math.max(0, current - playedLeft);
 
-
     const stylePlayed = {
       left: this.toPercentage(playedLeft),
       width: this.toPercentage(playedWidth),
     };
 
     const stylePlayedKnob = {
-      left: this.toPercentage(playedLeft + playedWidth)
+
+      // left: this.toPercentage(playedLeft + playedWidth),
+
+      // background: 'red'
     };
 
     const styleLoaded = {
@@ -261,53 +262,68 @@ class AvSeekBar extends Component {
     };
 
     const sliceStartLeft = this.toPercentage(normalizedSliceStart);
-    const sliceEndLeft = this.toPercentage(normalizedSliceEnd);
+    const sliceEndLeft   = this.toPercentage(normalizedSliceEnd);
 
     return (
       <div
-        ref={(el) => { this.element = el; }}
-        className="player-control-seekbar-container"
+        ref={(el) => {
+          this.element = el;
+        }}
+        className="mediaplayer__seekbar"
         onMouseDown={this.handleStart}
         onTouchStart={this.handleStart}
         role="button"
         tabIndex="0"
       >
-        {
-          isSliceEdit && (
-            <SliceHandle
-              ref={(el) => { this.sliceStartHandle = el; }}
-              seconds={formatTime(sliceStart)}
-              position={sliceStartLeft}
-              isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
-            />
-          )
-        }
-        {
-          isSliceEdit && (
-            <SliceHandle
-              ref={(el) => { this.sliceEndHandle = el; }}
-              seconds={formatTime(sliceEnd === Infinity ? duration : sliceEnd)}
-              position={sliceEndLeft}
-              isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
-            />
-          )
-        }
-        <div className="player-control-seekbar">
+
+        <div className="seekbar">
+          {
+            isSliceEdit && (
+              <SliceHandle
+                ref={(el) => {
+                  this.sliceStartHandle = el;
+                }}
+                seconds={formatTime(sliceStart)}
+                position={sliceStartLeft}
+                isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
+                className={classNames('seekbar__slicehandle--left', { 'seekbar__slicehandle--onstart': sliceStartLeft === 0 })}
+              />
+            )
+          }
+          {
+            isSliceEdit && (
+              <SliceHandle
+                ref={(el) => {
+                  this.sliceEndHandle = el;
+                }}
+                seconds={formatTime(sliceEnd === Infinity ? duration : sliceEnd)}
+                position={sliceEndLeft}
+                isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
+                className={'seekbar__slicehandle--right'}
+              />
+            )
+          }
+
+          <div className={classNames('seekbar__bar', 'is-empty')} />
+          <div className={classNames('seekbar__bar', 'is-played')} style={stylePlayed}>
+            <div className={classNames('seekbar__knob')} style={stylePlayedKnob} />
+          </div>
+          <div className={classNames('seekbar__bar', 'is-loaded')} style={styleLoaded} />
           {
             isSlice && (
               <div
-                className="player-slice-area"
+                className={classNames('seekbar__bar', 'is-slice')}
                 style={{
+                  // left: sliceStartLeft === 0 ? 'calc('+sliceStartLeft+' + 7px)' : 'calc('+sliceStartLeft+' - 7px)',
                   left: sliceStartLeft,
-                  width: Math.max(minSliceAreaWidth, this.toPercentage(normalizedSliceEnd - normalizedSliceStart))
+
+                  width: this.toPercentage(Math.max(minSliceAreaWidth, normalizedSliceEnd - normalizedSliceStart))
+                  // width: this.toPercentage(normalizedSliceEnd - normalizedSliceStart)
+
                 }}
               />
             )
           }
-          <div className={classNames('bar', 'empty', { mobile: isMobile })} />
-          <div className={classNames('bar', 'played', { mobile: isMobile })} style={stylePlayed} />
-          <div className={classNames('played-knob', { mobile: isMobile })} style={stylePlayedKnob} />
-          <div className={classNames('bar', 'loaded', { mobile: isMobile })} style={styleLoaded} />
         </div>
       </div>
     );

@@ -38,42 +38,60 @@ class SearchResults extends Component {
 
   renderHit = (hit) => {
     const { cuMap, t }                               = this.props;
-    const { _source: src, highlight, _score: score } = hit;
+    const { _source: { mdb_uid }, highlight, _score: score } = hit;
+    const cu = cuMap[mdb_uid];
 
-    let name = src.name;
+    let name = cu.name;
     if (highlight && Array.isArray(highlight.name) && highlight.name.length > 0) {
       name = <span dangerouslySetInnerHTML={{ __html: highlight.name.join(' ') }} />;
     }
-
-    let description = src.description;
+    let description = cu.description;
     if (highlight && Array.isArray(highlight.description) && highlight.description.length > 0) {
-      description = <span dangerouslySetInnerHTML={{ __html: highlight.description.join(' ') }} />;
+      description = <span dangerouslySetInnerHTML={{ __html: `...${highlight.description.join('.....')}...` }} />;
     }
+    let transcript = null;
+    if (highlight && Array.isArray(highlight.transcript) && highlight.transcript.length > 0) {
+      transcript = <span dangerouslySetInnerHTML={{ __html: `...${highlight.transcript.join('.....')}...` }} />;
+    }
+    const snippet = (<span>
+                       {!description ? null : (
+                         <span>
+                           <Label size="small">{t('search.result.description')}</Label>
+                           {description}
+                         </span>
+                       )}
+                       {!transcript ? null : (
+                         <span>
+                           <Label size="small">{t('search.result.transcript')}</Label>
+                           {transcript}
+                         </span>
+                       )}
+                     </span>)
 
     let filmDate = '';
-    if (src.film_date) {
-      filmDate = t('values.date', { date: new Date(src.film_date) });
+    if (cu.film_date) {
+      filmDate = t('values.date', { date: new Date(cu.film_date) });
     }
 
     return (
-      <Table.Row key={src.mdb_uid} verticalAlign="top">
+      <Table.Row key={mdb_uid} verticalAlign="top">
         <Table.Cell collapsing singleLine width={1}>
           <strong>{filmDate}</strong>
         </Table.Cell>
         <Table.Cell>
           <span>
-          <Label>{t(`constants.content-types.${src.content_type}`)}</Label>
-          <Link to={canonicalLink(cuMap[src.mdb_uid] || { id: src.mdb_uid, content_type: src.content_type })}>
+          <Label>{t(`constants.content-types.${cu.content_type}`)}</Label>
+          <Link to={canonicalLink(cu || { id: mdb_uid, content_type: cu.content_type })}>
             {name}
           </Link>
             &nbsp;&nbsp;
             {
-              src.duration ?
-                <small>{moment.duration(src.duration, 'seconds').format('hh:mm:ss')}</small> :
+              cu.duration ?
+                <small>{moment.duration(cu.duration, 'seconds').format('hh:mm:ss')}</small> :
                 null
             }
           </span>
-          {description ? <div>{description}</div> : null}
+          {snippet ? <div>{snippet}</div> : null}
         </Table.Cell>
         <Table.Cell collapsing textAlign="right">
           {score}
@@ -121,7 +139,8 @@ class SearchResults extends Component {
         </div>
       );
     }
-
+    console.log(hits);
+    console.log(this.props.cuMap);
     return (
       <div>
         <Header as="h1">

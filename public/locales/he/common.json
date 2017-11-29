@@ -139,6 +139,10 @@
       "search-summary": "דף {{pageNo}} מתוך {{total}} תוצאות ({{took}} שניות)",
       "empty-query": "לא הוזן טקסט לחיפוש. השתמש בתיבת החיפוש למעלה.",
       "no-results": "לא נמצאו תוצאות עבור <1><0>{{query}}</0></1>."
+    },
+    "result": {
+      "description": "תקציר",
+      "transcript": "תמליל"
     }
   },
   "events": {
@@ -296,14 +300,17 @@
       "CONGRESS": "כנס",
       "VIDEO_PROGRAM": "תוכנית",
       "LECTURE_SERIES": "סדרת הרצאות",
+      "CHILDREN_LESSONS": "שיעורי ילדים",
+      "WOMEN_LESSONS": "שיעורי נשים",
+      "VIRTUAL_LESSONS": "שיעורים וירטואלים",
       "MEALS": "סעודות",
       "HOLIDAY": "חג \\ מועד",
       "PICNIC": "פיקניק",
       "UNITY_DAY": "יום איחוד",
       "LESSON_PART": "חלק שיעור",
       "LECTURE": "הרצאה",
-      "CHILDREN_LESSON_PART": "שיעור ילדים",
-      "WOMEN_LESSON_PART": "שיעור נשים",
+      "CHILDREN_LESSON": "שיעור ילדים",
+      "WOMEN_LESSON": "שיעור נשים",
       "VIRTUAL_LESSON": "שיעור וירטואלי",
       "FRIENDS_GATHERING": "ישיבת חברים",
       "MEAL": "סעודה",
@@ -325,6 +332,9 @@
       "banner": "באנר",
       "presentation": "מצגת"
     }
+  },
+  "values": {
+    "date": "{{date, l}}"
   }
 }
 

@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import TimedPopup from '../shared/TimedPopup';
 
 const AVAudioVideo = (props) => {
-  const { isAudio, setAudio, isVideo, setVideo, t, fallbackMedia } = props;
+  const { isAudio, isVideo, onSwitch, t, fallbackMedia } = props;
 
   const popup = !fallbackMedia ? null : (
     <TimedPopup
@@ -16,34 +15,21 @@ const AVAudioVideo = (props) => {
   );
 
   return (
-    <div className={classNames('player-button player-control-audio-video')}>
-      { popup }
-      <div
-        style={{ textDecoration: isAudio ? 'underline' : 'none' }}
-        role="button"
-        tabIndex="0"
-        onClick={setAudio}
-      >
-        {t('buttons.audio')}
-      </div>
-      <span>&nbsp;/&nbsp;</span>
-      <div
-        style={{ textDecoration: isVideo ? 'underline' : 'none' }}
-        role="button"
-        tabIndex="0"
-        onClick={setVideo}
-      >
-        {t('buttons.video')}
-      </div>
+    <div className='mediaplayer__audiovideo'>
+      {popup}
+      <button onClick={onSwitch}>
+        <span className={isAudio ? 'is-active' : ''}>{t('buttons.audio')}</span>
+        &nbsp;/&nbsp;
+        <span className={isVideo ? 'is-active' : ''}>{t('buttons.video')}</span>
+      </button>
     </div>
   );
 };
 
 AVAudioVideo.propTypes = {
   isAudio: PropTypes.bool.isRequired,
-  setAudio: PropTypes.func.isRequired,
   isVideo: PropTypes.bool.isRequired,
-  setVideo: PropTypes.func.isRequired,
+  onSwitch: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   fallbackMedia: PropTypes.bool.isRequired,
 };

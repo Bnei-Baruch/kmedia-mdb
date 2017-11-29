@@ -2,16 +2,21 @@
 	background: rgba($black,1);
 	&__player {
 		height: 0;
-  	padding-top: 56.25%;
+  	padding-top: percentage(9 / 16);
   	position: relative;
 	  margin-top: calc( -1rem + 0px );
 	  margin-bottom: calc( -1rem + 0px );
+	  &--is-audio{
+	  	padding-top: percentage(1 / 3);
+	  }
 	}
 
 	&__media-wrapper {
   	position: absolute;
   	top: 0;
   	width: 100%;
+  	height: 100%;
+  	overflow: hidden;
 	}
 
 	&__playlist {
@@ -51,7 +56,7 @@
 		
 	}
 	&__playlist-view {
-		overflow-y: scroll;
+		overflow-y: auto;
 		padding-bottom: 1rem;
 		padding-top: .7rem;
 		
@@ -65,13 +70,13 @@
 .avbox__player {
 
   &.audio {
-    height: 180px;
-    padding-top: 70px;
-    margin-top: 0em;
-    margin-bottom: 0em;
+    // height: 64px !important;
+    // padding-top: 70px;
+    // margin-top: 0em;
+    // margin-bottom: 0em;
     .video_position {
-      bottom: 0;
-      top: initial;
+      // bottom: 0;
+      // top: initial;
     }
   }
  

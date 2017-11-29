@@ -140,6 +140,10 @@
       "search-summary": "Page {{pageNo}} of {{total}} results ({{took}} seconds)",
       "empty-query": "No search term given. Please use the box above to search.",
       "no-results": "Your search for <1><0>{{query}}</0></1> found no results."
+    },
+    "result": {
+      "description": "summary",
+      "transcript": "transcript"
     }
   },
   "events": {
@@ -297,14 +301,17 @@
       "CONGRESS": "Convention",
       "VIDEO_PROGRAM": "Program",
       "LECTURE_SERIES": "Lecture Series",
+      "CHILDREN_LESSONS": "Children Lessons",
+      "WOMEN_LESSONS": "Women Lessons",
+      "VIRTUAL_LESSONS": "Virtual Lessons",
       "MEALS": "Meals",
       "HOLIDAY": "Holiday",
       "PICNIC": "Picnic",
       "UNITY_DAY": "Unity Day",
       "LESSON_PART": "Lesson Part",
       "LECTURE": "Lecture",
-      "CHILDREN_LESSON_PART": "Children Lesson Part",
-      "WOMEN_LESSON_PART": "Women Lesson Part",
+      "CHILDREN_LESSON": "Children Lesson",
+      "WOMEN_LESSON": "Women Lesson",
       "VIRTUAL_LESSON": "Virtual Lesson",
       "FRIENDS_GATHERING": "Gathering Of Friends",
       "MEAL": "Meal",

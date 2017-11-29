@@ -5,7 +5,6 @@ import debounce from 'lodash/debounce';
 import { withRouter } from 'react-router-dom';
 import { Player, withMediaProps } from 'react-media-player';
 import classNames from 'classnames';
-import { AutoSizer } from 'react-virtualized';
 import { Button, Icon } from 'semantic-ui-react';
 
 import withIsMobile from '../../helpers/withIsMobile';
@@ -24,9 +23,8 @@ import AvSeekBar from './AvSeekBar';
 import AVEditSlice from './AVEditSlice';
 import AVShareBar from './AVShareBar';
 
-
 const PLAYER_VOLUME_STORAGE_KEY = '@@kmedia_player_volume';
-const DEFAULT_PLAYER_VOLUME = 0.8;
+const DEFAULT_PLAYER_VOLUME     = 0.8;
 
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = playback =>
@@ -129,7 +127,7 @@ class AVPlayerRMP extends PureComponent {
       localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, persistedVolume);
     }
     this.props.media.setVolume(persistedVolume);
-  }
+  };
 
   persistVolume = debounce(media => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, media.volume), 200);
 
@@ -240,7 +238,6 @@ class AVPlayerRMP extends PureComponent {
     sliceStart: undefined,
     sliceEnd: undefined
   }, cb);
-
 
   handleTimeUpdate = (timeData) => {
     const { media }          = this.props;
@@ -389,7 +386,6 @@ class AVPlayerRMP extends PureComponent {
             isSliceable
           } = this.props;
     const {
-            isTopSeekbar,
             controlsVisible,
             sliceStart,
             sliceEnd,
@@ -401,7 +397,7 @@ class AVPlayerRMP extends PureComponent {
             errorReason,
           } = this.state;
 
-    const { isFullscreen, isPlaying } = media;
+    const { isPlaying } = media;
     const forceShowControls           = item.mediaType === MT_AUDIO || !isPlaying;
 
     const isVideo       = item.mediaType === MT_VIDEO;
@@ -451,145 +447,104 @@ class AVPlayerRMP extends PureComponent {
           ref={(c) => {
             this.mediaElement = c;
           }}
-          className={classNames('media', { 'media-edit-mode': isEditMode })}
-          style={{
-            minHeight: isAudio ? 200 : 40,
-            minWidth: isVideo ? 380 : 'auto'
-          }}
+          className={classNames('mediaplayer', { 'media-edit-mode': isEditMode })}
+
         >
-          <div
-            className={classNames('media-player', {
-              'media-player-fullscreen': isFullscreen,
-              fade: !controlsVisible && !forceShowControls,
-              'audio-is-mobile': isTopSeekbar && isAudio,
-              'video-is-mobile': isTopSeekbar && isVideo,
+          <Player
+            ref={(c) => {
+              this.player = c;
+            }}
+            onVolumeChange={this.state.persistenceFn}
+            src={item.src}
+            vendor={isVideo ? 'video' : 'audio'}
+            autoPlay={autoPlay}
+            onReady={this.onPlayerReady}
+            preload="auto"
+            onError={this.onError}
+            onPause={this.onPause}
+            onPlay={this.onPlay}
+            onTimeUpdate={this.handleTimeUpdate}
+            defaultCurrentTime={sliceStart || 0}
+          />
+          <div className='mediaplayer__wrapper'>
+
+            <div className={classNames('mediaplayer__controls', {
+              'mediaplayer__controls--is-fade': !controlsVisible && !forceShowControls
             })}
-          >
-            <Player
-              ref={(c) => {
-                this.player = c;
-              }}
-              onVolumeChange={this.state.persistenceFn}
-              src={item.src}
-              vendor={isVideo ? 'video' : 'audio'}
-              autoPlay={autoPlay}
-              onReady={this.onPlayerReady}
-              preload="auto"
-              onError={this.onError}
-              onPause={this.onPause}
-              onPlay={this.onPlay}
-              onTimeUpdate={this.handleTimeUpdate}
-              defaultCurrentTime={sliceStart || 0}
-            />
-            <div
-              className={classNames('media-controls', {
-                fade: !controlsVisible && !forceShowControls,
-                'audio-is-mobile': isTopSeekbar && isAudio,
-                'video-is-mobile': isTopSeekbar && isVideo,
-              })}
+                 onMouseEnter={this.controlsEnter}
+                 onMouseLeave={this.controlsLeave}
             >
-              <div
-                className="controls-wrapper"
-                onMouseEnter={this.controlsEnter}
-                onMouseLeave={this.controlsLeave}
-              >
-                <div className="controls-container">
-                  {!isTopSeekbar ? null : (
-                    <div style={{
-                      position: 'absolute',
-                      flex: '1 0 auto',
-                      left: 0,
-                      top: isMobile ? '-10px' : 0,
-                      width: '100%',
-                    }}
-                    >
-                      <AvSeekBar
-                        buffers={this.buffers()}
-                        playerMode={mode}
-                        sliceStart={sliceStart}
-                        sliceEnd={sliceEnd}
-                        onSliceStartChange={this.handleSliceStartChange}
-                        onSliceEndChange={this.handleSliceEndChange}
-                        isMobile={isMobile}
-                      />
-                    </div>
-                  )}
-                  <AVPlayPause
-                    showNextPrev={showNextPrev && !isEditMode}
-                    hasNext={hasNext}
-                    hasPrev={hasPrev}
-                    onPrev={onPrev}
-                    onNext={onNext}
+              <AVPlayPause
+                showNextPrev={showNextPrev && !isEditMode}
+                hasNext={hasNext}
+                hasPrev={hasPrev}
+                onPrev={onPrev}
+                onNext={onNext}
+              />
+              <AVTimeElapsed
+                start={media.currentTime}
+                end={media.duration}
+              />
+              <div className='mediaplayer__spacer' />
+              <AvSeekBar
+                buffers={this.buffers()}
+                playerMode={mode}
+                sliceStart={sliceStart}
+                sliceEnd={sliceEnd}
+                onSliceStartChange={this.handleSliceStartChange}
+                onSliceEndChange={this.handleSliceEndChange}
+                isMobile={isMobile}
+              />
+
+              {
+                !isEditMode && (
+                  <AVPlaybackRate
+                    value={playbackRate}
+                    onSelect={this.playbackRateChange}
+                    upward={isVideo}
                   />
-                  <AVTimeElapsed
-                    start={media.currentTime}
-                    end={media.duration}
+                )
+              }
+              <AVMuteUnmute upward={isVideo} />
+              {
+                !isEditMode && (
+                  <AVAudioVideo
+                    isAudio={isAudio}
+                    isVideo={isVideo}
+                    onSwitch={this.onSwitchAV}
+                    fallbackMedia={fallbackMedia}
+                    t={t}
                   />
-                  <div className="player-seekbar-wrapper">
-                    <AutoSizer onResize={this.onSeekBarResize}>{() => null}</AutoSizer>
-                    {isTopSeekbar ? null : (
-                      <AvSeekBar
-                        buffers={this.buffers()}
-                        playerMode={mode}
-                        sliceStart={sliceStart}
-                        sliceEnd={sliceEnd}
-                        onSliceStartChange={this.handleSliceStartChange}
-                        onSliceEndChange={this.handleSliceEndChange}
-                        isMobile={isMobile}
-                      />
-                    )}
-                  </div>
-                  {
-                    !isEditMode && (
-                      <AVPlaybackRate
-                        value={playbackRate}
-                        onSelect={this.playbackRateChange}
-                        upward={isVideo}
-                      />
-                    )
-                  }
-                  <AVMuteUnmute upward={isVideo} />
-                  {
-                    !isEditMode && (
-                      <AVAudioVideo
-                        isAudio={isAudio}
-                        isVideo={isVideo}
-                        setAudio={this.onSwitchAV}
-                        setVideo={this.onSwitchAV}
-                        fallbackMedia={fallbackMedia}
-                        t={t}
-                      />
-                    )
-                  }
-                  {
-                    !isEditMode && (
-                      <AVLanguage
-                        languages={languages}
-                        language={language}
-                        requestedLanguage={item.requestedLanguage}
-                        onSelect={this.onLanguageChange}
-                        upward={isVideo}
-                        t={t}
-                      />
-                    )
-                  }
-                  { isSliceable && !isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(true)} /> }
-                  { !isEditMode && !isAudio && <AVFullScreen container={this.mediaElement} /> }
-                </div>
-              </div>
-              <div
-                className="media-center-control"
-                style={!error ? { outline: 'none' } : { backgroundColor: 'black', outline: 'none' }}
-                role="button"
-                tabIndex="0"
-                onClick={this.playPause}
-                onKeyDown={this.onKeyDown}
-                onMouseMove={this.centerMove}
-              >
-                {centerMediaControl}
-              </div>
+                )
+              }
+              {
+                !isEditMode && (
+                  <AVLanguage
+                    languages={languages}
+                    language={language}
+                    requestedLanguage={item.requestedLanguage}
+                    onSelect={this.onLanguageChange}
+                    upward={isVideo}
+                    t={t}
+                  />
+                )
+              }
+              {isSliceable && !isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(true)} />}
+              {!isEditMode && !isAudio && <AVFullScreen container={this.mediaElement} />}
+            </div>
+            <div
+              className="mediaplayer__onscreen-controls"
+              // style={!error ? "{ outline: 'none' }" : { backgroundColor: 'black'}}
+              role="button"
+              tabIndex="0"
+              onClick={this.playPause}
+              onKeyDown={this.onKeyDown}
+              onMouseMove={this.centerMove}
+            >
+              {centerMediaControl}
             </div>
           </div>
+
         </div>
       </div>
     );

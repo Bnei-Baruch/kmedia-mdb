@@ -140,6 +140,10 @@
       "search-summary": "стр. {{pageNo}} из {{total}} результатов ({{took}} секунд)",
       "empty-query": "Введите ваш запрос в поле расположенном выше для начала поиска.",
       "no-results": "Ваш запрос <1><0>{{query}}</0></1> не найден."
+    },
+    "result": {
+      "description": "описание",
+      "transcript": "стенограмма"
     }
   },
   "events": {
@@ -297,14 +301,17 @@
       "CONGRESS": "Конгресс",
       "VIDEO_PROGRAM": "Видео программа",
       "LECTURE_SERIES": "Серия лекций",
+      "CHILDREN_LESSONS": "Дети Уроки",
+      "WOMEN_LESSONS": "Женщины Уроки",
+      "VIRTUAL_LESSONS": "Виртуальный Уроки",
       "MEALS": "Трапезы",
       "HOLIDAY": "Праздник",
       "PICNIC": "Пикник",
       "UNITY_DAY": "Вечер единства",
       "LESSON_PART": "Часть урока №",
       "LECTURE": "Лекция",
-      "CHILDREN_LESSON_PART": "Часть детского урока №",
-      "WOMEN_LESSON_PART": "Часть женского урока №",
+      "CHILDREN_LESSON": "Дети Урок",
+      "WOMEN_LESSON": "Женщины Урок",
       "VIRTUAL_LESSON": "Виртуальный урок",
       "FRIENDS_GATHERING": "Собрание товарищей",
       "MEAL": "Трапеза",
