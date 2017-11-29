@@ -226,7 +226,7 @@
     "sources": {
       "header": "מקורות",
       "no-sources": "אין מקורות",
-      "no-source": "מקור לא נבחר",
+      "no-source": "בחר מקור",
       "no-source-available": "אף מקור לא מוכן לתצוגה"
     },
     "sketches": {

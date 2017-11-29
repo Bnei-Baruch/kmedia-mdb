@@ -227,7 +227,7 @@
     "sources": {
       "header": "Источники",
       "no-sources": "Нет источника",
-      "no-source": "Источник не выбран",
+      "no-source": "Выберите источник",
       "no-source-available": "Источник не найден"
     },
     "sketches": {

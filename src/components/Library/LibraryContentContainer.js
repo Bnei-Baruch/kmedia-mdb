@@ -87,12 +87,12 @@ class LibraryContentContainer extends Component {
   };
 
   render() {
-    const { content, t }          = this.props;
+    const { content, index, t }          = this.props;
     const { languages, language } = this.state;
 
     return (
       <Library
-        content={content}
+        content={index && index.data ? content : {}}
         language={language}
         languages={languages}
         t={t}

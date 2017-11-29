@@ -7,7 +7,11 @@ import { translate } from 'react-i18next';
 import LibraryFilters from './Filters';
 import LibraryContentContainer from './LibraryContentContainer';
 import { selectors as settings } from '../../redux/modules/settings';
-import { actions as filterActions, selectors as filterSelectors } from '../../redux/modules/filters';
+import {
+  actions as filterActions,
+  selectors as filters,
+  selectors as filterSelectors
+} from '../../redux/modules/filters';
 import { actions as sourceActions, selectors as sourceSelectors } from '../../redux/modules/sources';
 import * as shapes from '../shapes';
 import { formatError, isEmpty } from '../../helpers/utils';
@@ -20,11 +24,11 @@ class LibraryContainer extends Component {
       data: PropTypes.object, // content index
       wip: shapes.WIP,
       err: shapes.Error,
-    })).isRequired,
+    })),
     language: PropTypes.string.isRequired,
     fetchIndex: PropTypes.func.isRequired,
     isFiltersHydrated: PropTypes.bool.isRequired,
-    shouldOpenSourcesFilter: PropTypes.bool,
+    shouldOpenSourcesFilter: PropTypes.bool.isRequired,
     editNewFilter: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
@@ -36,7 +40,11 @@ class LibraryContainer extends Component {
       wip: false,
       err: null,
     },
-    shouldOpenSourcesFilter: false,
+    indexMap: {
+      data: null,
+      wip: false,
+      err: null,
+    },
   };
 
   componentDidMount() {
@@ -50,10 +58,9 @@ class LibraryContainer extends Component {
   }
 
   fetchIndices = (props) => {
-    const { sourceValue, fetchIndex } = props;
+    const { sourceValue, fetchIndex, } = props;
 
     if (!isEmpty(sourceValue)) {
-      // TODO: clear content
       const [realSource] = sourceValue.slice(-1);
       fetchIndex(realSource);
     }
@@ -99,15 +106,24 @@ class LibraryContainer extends Component {
   }
 }
 
-export default connect(
-  state => ({
+const mapState = (state) => {
+  // we want to open sources-filter if no filter is applied
+  const allFilters              = filters.getFilters(state.filters, 'sources');
+  const shouldOpenSourcesFilter = allFilters.length === 0;
+
+  return {
     indexMap: sourceSelectors.getIndexById(state.sources),
     content: sourceSelectors.getContent(state.sources),
     language: settings.getLanguage(state.settings),
 
     sourceValue: filterSelectors.getActiveValue(state.filters, 'sources', 'sources-filter'),
     isFiltersHydrated: filterSelectors.getIsHydrated(state.filters, 'sources'),
-  }),
+    shouldOpenSourcesFilter
+  };
+};
+
+export default connect(
+  mapState,
   dispatch => bindActionCreators({
     fetchIndex: sourceActions.fetchIndex,
     editNewFilter: filterActions.editNewFilter,

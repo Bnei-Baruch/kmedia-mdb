@@ -227,7 +227,7 @@
     "sources": {
       "header": "Sources",
       "no-sources": "No sources",
-      "no-source": "No source was selected",
+      "no-source": "Please select source",
       "no-source-available": "No source is ready for display"
     },
     "sketches": {

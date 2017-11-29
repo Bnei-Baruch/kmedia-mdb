@@ -161,7 +161,7 @@ class DeepListFilter extends React.Component {
             {
               roots.length > 0 ?
                 this.createLists(0, roots, this.state.selection, this.props.allValues) :
-                { emptyLabel }
+                emptyLabel
             }
           </div>
         </Segment>
