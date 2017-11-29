@@ -14,15 +14,21 @@ class Library extends Component {
       data: PropTypes.string, // actual content (HTML)
       wip: shapes.WIP,
       err: shapes.Error,
-    }).isRequired,
+    }),
     language: PropTypes.string,
-    languages: PropTypes.arrayOf(PropTypes.string).isRequired,
+    languages: PropTypes.arrayOf(PropTypes.string),
     t: PropTypes.func.isRequired,
     handleLanguageChanged: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     language: null,
+    languages: [],
+    content: {
+      data: null,
+      wip: false,
+      err: null,
+    },
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -47,7 +53,7 @@ class Library extends Component {
     }
 
     // Test for A's keys different from B.
-    const bHasOwnProperty = hasOwnProperty.bind(objB);
+    const bHasOwnProperty = Object.hasOwnProperty.bind(objB);
     for (let i = 0; i < keysA.length; i++) {
       if (!bHasOwnProperty(keysA[i]) || objA[keysA[i]] !== objB[keysA[i]]) {
         return false;
@@ -66,7 +72,7 @@ class Library extends Component {
     const { content, language, languages, t, } = this.props;
 
     if (isEmpty(content)) {
-      return <Segment basic>{t('materials.sources.no-sources')}</Segment>;
+      return <Segment basic>{t('materials.sources.no-source')}</Segment>;
     }
 
     const { wip: contentWip, err: contentErr, data: contentData } = content;
@@ -86,7 +92,7 @@ class Library extends Component {
     } else if (contentWip) {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else if (!contentData) {
-      return <Segment basic>{t('materials.sources.no-sources')}</Segment>;
+      return <Segment basic>{t('materials.sources.no-source')}</Segment>;
     } else {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
       contents        = <div style={{ direction }} dangerouslySetInnerHTML={{ __html: contentData }} />;

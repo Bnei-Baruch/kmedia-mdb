@@ -36,6 +36,9 @@
     "events": {
       "by": "סנן אירועים לפי:"
     },
+    "sources": {
+      "by": "בחר מקור:"
+    },
     "date-filter": {
       "label": "תאריך",
       "selectTitle": "בחר טווח תאריכים",
@@ -219,6 +222,7 @@
     "sources": {
       "header": "מקורות",
       "no-sources": "אין מקורות",
+      "no-source": "מקור לא נבחר",
       "no-source-available": "אף מקור לא מוכן לתצוגה"
     },
     "sketches": {

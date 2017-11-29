@@ -37,6 +37,9 @@
     "events": {
       "by": "Filter Events by:"
     },
+    "sources": {
+      "by": "Choose Source:"
+    },
     "date-filter": {
       "label": "Date",
       "selectTitle": "Select a date range",
@@ -220,6 +223,7 @@
     "sources": {
       "header": "Sources",
       "no-sources": "No sources",
+      "no-source": "No source was selected",
       "no-source-available": "No source is ready for display"
     },
     "sketches": {

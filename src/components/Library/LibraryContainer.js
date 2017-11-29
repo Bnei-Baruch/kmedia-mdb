@@ -23,7 +23,7 @@ class LibraryContainer extends Component {
     })).isRequired,
     language: PropTypes.string.isRequired,
     fetchIndex: PropTypes.func.isRequired,
-    isFiltersHydrated: PropTypes.bool,
+    isFiltersHydrated: PropTypes.bool.isRequired,
     shouldOpenSourcesFilter: PropTypes.bool,
     editNewFilter: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
@@ -37,7 +37,6 @@ class LibraryContainer extends Component {
       err: null,
     },
     shouldOpenSourcesFilter: false,
-    isFiltersHydrated: false,
   };
 
   componentDidMount() {
@@ -88,7 +87,7 @@ class LibraryContainer extends Component {
         content = <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
       }
     } else {
-      content =  <LibraryContentContainer source={realSource} index={index} language={language} />;
+      content = <LibraryContentContainer source={realSource} index={index} language={language} />;
     }
 
     return (
@@ -108,7 +107,7 @@ export default connect(
 
     sourceValue: filterSelectors.getActiveValue(state.filters, 'sources', 'sources-filter'),
     isFiltersHydrated: filterSelectors.getIsHydrated(state.filters, 'sources'),
-}),
+  }),
   dispatch => bindActionCreators({
     fetchIndex: sourceActions.fetchIndex,
     editNewFilter: filterActions.editNewFilter,
