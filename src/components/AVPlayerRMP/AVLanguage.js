@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
-import classNames from 'classnames';
 import { Dropdown } from 'semantic-ui-react';
 
 import { LANG_HEBREW, LANGUAGE_OPTIONS } from '../../helpers/consts';
@@ -45,9 +44,7 @@ export default class AVLanguage extends Component {
     );
 
     return (
-      <div
-        className="mediaplayer__languages"
-      >
+      <div className="mediaplayer__languages">
         {popup}
         <Dropdown
           floating

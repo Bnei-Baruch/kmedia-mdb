@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { Dropdown } from 'semantic-ui-react';
-import classNames from 'classnames';
 
 export default class AVPlaybackRate extends Component {
   static propTypes = {

@@ -3,9 +3,7 @@ $player-color: $black;
 $seekbar-color: adjust-hue($player-color, 5deg);
 
 .mediaplayer {
-  position: relative;
   user-select: none;
-  background: $black;
   video,
   audio,
   iframe,
@@ -19,7 +17,6 @@ $seekbar-color: adjust-hue($player-color, 5deg);
     height:100%;
   }
   &__wrapper {
-    // flex: 1 0 auto;
     display: flex;
     flex-direction: column-reverse;
     position: absolute;
@@ -29,12 +26,7 @@ $seekbar-color: adjust-hue($player-color, 5deg);
     right:0;
   }
   &__controls {
-    transition: all 0.15s ;
-    &--is-fade{
-      opacity: 0;
-      bottom: -10px;
-      // opacity: 1;bottom:0;
-    }
+    transition: all .25s ;
     direction: ltr;
     background: rgba($player-color,.90);
     padding: 4px;
@@ -42,9 +34,13 @@ $seekbar-color: adjust-hue($player-color, 5deg);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    // position: absolute;
-    // bottom: 0;
-    // width: 100%;
+    position: relative;
+    top: 0;
+    &--is-fade{
+      opacity: 0;
+      top: 64px;
+      // opacity: 1;
+    }
     .buttons-wrapper {
       display: flex;
       height: 100%;
@@ -122,12 +118,33 @@ $seekbar-color: adjust-hue($player-color, 5deg);
       }
     }
     &-play {
-      outline: 'none';
       pointerEvents: 'auto';
-      background: rgba($black,.9);
-      color:$white;
+      background: rgba($white,.9);
+      color:$black;
       border:none;
-      text-shadow: 0 0 10px rgba($black,.5);
+      // box-shadow: 0 0 8px 5px rgba($black,.5);
+      padding:0;
+      width: 8em;
+      height: 8em;
+
+      padding:1.3em;
+      border: .7em solid rgba($black,.9);
+      border-radius: 50%;
+      // display:flex;
+      // justify-content:center;
+      &:focus {
+        outline:none;
+      }
+      .icon {
+        height:1em;
+        width: 1em;
+        margin-left:.1em;
+        // background:green;
+        // border-radius:50%;
+
+        // width:0;
+        // color:red;
+      }
     }
   }
   
@@ -136,7 +153,7 @@ $seekbar-color: adjust-hue($player-color, 5deg);
 
 .volume-popover {
   width: 100%;
-  background: rgba(lighten($player-color,0),.95);
+  background: rgba(lighten($player-color,0),.90);
   position: absolute;
   display: flex;
   justify-content: center;
@@ -170,7 +187,7 @@ $seekbar-color: adjust-hue($player-color, 5deg);
 .seekbar {
   height: 100%;
   position: relative;
-  z-index:1;
+  // z-index:1;
   &__bar {
     border-radius: 3px;
     top: 7px;
@@ -191,7 +208,6 @@ $seekbar-color: adjust-hue($player-color, 5deg);
       top:13px;
       height:4px;
       border-radius:0;
-      // background-image: repeating-linear-gradient(30deg, rgba($blue,1) 0, rgba($blue,1) 2px, rgba($blue,.4) 2px, rgba($blue,.4) 4px);
       background-color: $blue;
       background-image: linear-gradient(45deg,rgba($white,.25) 25%,transparent 25%,transparent 50%,rgba($white,.25) 50%,rgba($white,.25) 75%,transparent 75%,transparent);
       background-size: 1rem 1rem;
@@ -214,23 +230,16 @@ $seekbar-color: adjust-hue($player-color, 5deg);
     }
   }
   &__slicehandle{
-    //background:rgba(green,.5);
     position: absolute;
-    // padding: 0 20px;
     height: 102px;
-    // top: -100px;
     bottom:0;
     z-index: 100;
     width: 30px;
-    // &--left {
     margin-left:-1px;
     &--right{
       margin-left:-29px;
     }
-    // }
-    // transform: translate(-50%,0);
     &--onstart{
-      // margin-left:5px;
     }
     &-knob{
       width:30px;
@@ -242,25 +251,20 @@ $seekbar-color: adjust-hue($player-color, 5deg);
       margin-bottom:20px;
       cursor: ew-resize;
       position: absolute;
-      // box-shadow: 0 0 5px red;
       border: 2px solid $white;
       border-width: 2px 2px 0;
       .seekbar__slicehandle--right &{
-        // left: -28px;
       }
       &:before{
         border: 2px solid $white;
         z-index:-1;
         position:absolute;
         content:'';
-        // width:100%;
         left:-2px;
         right:-2px;
         height: 40px;
         background:$blue;
-        // background:$red;
         top:20px;
-        // opacity:.5;
         border-radius:6px 6px 6px 2px ;
         transform: skewy(-30deg);
         transform-origin:left bottom;
@@ -281,8 +285,6 @@ $seekbar-color: adjust-hue($player-color, 5deg);
         top: 10px;
         left: 6px;
         box-shadow:
-          // inset 0 1px darken($blue,30%),
-          // 0 1px lighten($blue,15%),
           6px 0 0 $white,
           12px 0 0 $white
         ;
@@ -297,7 +299,6 @@ $seekbar-color: adjust-hue($player-color, 5deg);
       position: absolute;
       left:0;
       .seekbar__slicehandle--right &{
-        // margin: 0 0 0 auto;
         left: auto;
         right: 0;
       }
@@ -341,60 +342,60 @@ $seekbar-color: adjust-hue($player-color, 5deg);
 .media {
   // background-color: red;
   /* In full screen to take full with. */
-  width: 100%;
+  // width: 100%;
 }
 
 .avbox__player {
   &.audio {
     .media-edit-mode {
       .media-center-control {
-        height: 150px;
+        // height: 150px;
       }
     }
   }
 }
 
 .media-player {
-  position: relative;
-   min-height: 40px;  // TODO: oleg, this makes 0 height on audio mode - please fix
+  // position: relative;
+   // min-height: 40px;  // TODO: oleg, this makes 0 height on audio mode - please fix
   // min-width: 380px;
-  user-select: none;
+  // user-select: none;
 
   video,
   audio,
   iframe,
   object,
   embed {
-    display: block;
-    width: 100%;
+    // display: block;
+    // width: 100%;
   }
 
   &.audio-is-mobile {
-    height: 70px;
+    // height: 70px;
   }
 
   .center-media-controls-edit {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    padding: 15px;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+    // width: 100%;
+    // height: 100%;
+    // padding: 15px;
+    // display: flex;
+    // flex-direction: row;
+    // align-items: flex-start;
+    // justify-content: flex-start;
   }
 
   .slice-edit-help {
-    background: rgba(0, 0, 0, 0.6);
-    padding: 10px 20px;
-    margin-left: 10px;
-    font-size: 1.4em;
+    // background: rgba(0, 0, 0, 0.6);
+    // padding: 10px 20px;
+    // margin-left: 10px;
+    // font-size: 1.4em;
   }
 
   .button-close-slice-edit {
-    flex: 0 0 auto;
+    // flex: 0 0 auto;
   }
 }
 
