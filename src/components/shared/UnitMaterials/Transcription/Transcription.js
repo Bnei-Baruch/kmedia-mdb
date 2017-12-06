@@ -27,24 +27,24 @@ class Transcription extends Component {
       return <Segment basic>{t('materials.sources.no-sources')}</Segment>;
     }
 
-    const { wip: contentWip, err: contentErr, data: contentData } = content;
+    const { wip, err, data } = content;
 
     let contents;
-    if (contentErr) {
-      if (contentErr.response && contentErr.response.status === 404) {
+    if (err) {
+      if (err.response && err.response.status === 404) {
         contents = (
           <FrownSplash
             text={t('messages.source-content-not-found')}
           />
         );
       } else {
-        contents = <ErrorSplash text={t('messages.server-error')} subtext={formatError(contentErr)} />;
+        contents = <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
       }
-    } else if (contentWip) {
+    } else if (wip) {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
-      contents        = <div style={{ direction }} dangerouslySetInnerHTML={{ __html: contentData }} />;
+      contents        = <div style={{ direction }} dangerouslySetInnerHTML={{ __html: data }} />;
     }
 
     return (

@@ -15,9 +15,9 @@ export const types = {
 
 /* Actions */
 
-const fetchTranscription        = createAction(FETCH_TRANSCRIPTION, id => ({ id }));
-const fetchTranscriptionSuccess = createAction(FETCH_TRANSCRIPTION_SUCCESS, (id, data) => ({ id, data }));
-const fetchTranscriptionFailure = createAction(FETCH_TRANSCRIPTION_FAILURE, (id, err) => ({ id, err }));
+const fetchTranscription        = createAction(FETCH_TRANSCRIPTION);
+const fetchTranscriptionSuccess = createAction(FETCH_TRANSCRIPTION_SUCCESS);
+const fetchTranscriptionFailure = createAction(FETCH_TRANSCRIPTION_FAILURE);
 
 export const actions = {
   fetchTranscription,
@@ -28,7 +28,8 @@ export const actions = {
 /* Reducer */
 
 const initialState = {
-  transcription: null,
+  data: null,
+  wip: false,
   error: null,
 };
 
@@ -37,14 +38,21 @@ export const reducer = handleActions({
     ...initialState,
   }),
 
+  [FETCH_TRANSCRIPTION]: state => ({
+    ...state,
+    wip: true,
+  }),
+
   [FETCH_TRANSCRIPTION_SUCCESS]: (state, action) => ({
     ...state,
-    transcription: action.payload,
+    data: action.payload,
+    wip: false,
     error: null,
   }),
 
   [FETCH_TRANSCRIPTION_FAILURE]: (state, action) => ({
     ...state,
+    wip: false,
     error: action.payload,
   }),
 
@@ -52,7 +60,7 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getTranscription = state => state.transcription;
+const getTranscription = state => state;
 
 export const selectors = {
   getTranscription,

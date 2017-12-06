@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
 import { actions, selectors } from '../../../../redux/modules/transcription';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import * as shapes from '../../../shapes';
@@ -50,7 +51,7 @@ class TranscriptionContainer extends Component {
 
 export default connect(
   state => ({
-    content: selectors.getTranscription(state),
+    content: selectors.getTranscription(state.transcription),
     language: settings.getLanguage(state.settings),
   }),
   dispatch => bindActionCreators({
