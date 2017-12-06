@@ -7,6 +7,7 @@ import { reducer as events } from './modules/events';
 import { reducer as programs } from './modules/programs';
 import { reducer as filters } from './modules/filters';
 import { reducer as sources } from './modules/sources';
+import { reducer as transcription } from './modules/transcription';
 import { reducer as tags } from './modules/tags';
 import { reducer as mdb } from './modules/mdb';
 import { reducer as search } from './modules/search';
@@ -20,6 +21,7 @@ export default combineReducers({
   events,
   filters,
   sources,
+  transcription,
   tags,
   mdb,
   search,
