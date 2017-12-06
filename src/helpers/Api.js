@@ -58,4 +58,6 @@ export default class Api {
   static sourceIdx = ({ id }) => Requests.getAsset(`sources/${id}/index.json`);
 
   static sourceContent = ({ id, name }) => Requests.getAsset(`sources/${id}/${name}`);
+
+  static doc2Html = ({ id }) => Requests.getAsset(`api/doc2html/${id}`);
 }
