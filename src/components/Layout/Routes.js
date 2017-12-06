@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 
+import * as shapes from '../shapes';
 import Lessons from '../Lessons/List/LessonsContainer';
 import LessonPart from '../Lessons/Part/LessonPartContainer';
 import FullLesson from '../Lessons/Full/FullLessonContainer';
@@ -52,12 +52,7 @@ const Routes = ({ match }) => {
 };
 
 Routes.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.object,
-    isExact: PropTypes.bool,
-    path: PropTypes.string,
-    url: PropTypes.string,
-  }).isRequired,
+  match: shapes.RouterMatch.isRequired,
 };
 
 export default Routes;

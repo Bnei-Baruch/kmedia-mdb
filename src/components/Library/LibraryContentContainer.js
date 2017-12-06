@@ -4,10 +4,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 
+import { isEmpty } from '../../helpers/utils';
+import { actions as sourceActions, selectors as sourceSelectors } from '../../redux/modules/sources';
 import * as shapes from '../shapes';
 import Library from './Library';
-import { actions as sourceActions, selectors as sourceSelectors } from '../../redux/modules/sources';
-import { isEmpty } from '../../helpers/utils';
 
 class LibraryContentContainer extends Component {
   static propTypes = {
@@ -87,7 +87,7 @@ class LibraryContentContainer extends Component {
   };
 
   render() {
-    const { content, index, t }          = this.props;
+    const { content, index, t }   = this.props;
     const { languages, language } = this.state;
 
     return (

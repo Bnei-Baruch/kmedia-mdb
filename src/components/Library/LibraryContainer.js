@@ -4,18 +4,14 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 
-import LibraryFilters from './Filters';
-import LibraryContentContainer from './LibraryContentContainer';
 import { selectors as settings } from '../../redux/modules/settings';
-import {
-  actions as filterActions,
-  selectors as filters,
-  selectors as filterSelectors
-} from '../../redux/modules/filters';
-import { actions as sourceActions, selectors as sourceSelectors } from '../../redux/modules/sources';
+import { actions as filterActions, selectors as filters } from '../../redux/modules/filters';
+import { actions as sourceActions, selectors as sources } from '../../redux/modules/sources';
 import * as shapes from '../shapes';
 import { formatError, isEmpty } from '../../helpers/utils';
 import { ErrorSplash, FrownSplash } from '../shared/Splash';
+import LibraryFilters from './Filters';
+import LibraryContentContainer from './LibraryContentContainer';
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -112,12 +108,12 @@ const mapState = (state) => {
   const shouldOpenSourcesFilter = allFilters.length === 0;
 
   return {
-    indexMap: sourceSelectors.getIndexById(state.sources),
-    content: sourceSelectors.getContent(state.sources),
+    indexMap: sources.getIndexById(state.sources),
+    content: sources.getContent(state.sources),
     language: settings.getLanguage(state.settings),
 
-    sourceValue: filterSelectors.getActiveValue(state.filters, 'sources', 'sources-filter'),
-    isFiltersHydrated: filterSelectors.getIsHydrated(state.filters, 'sources'),
+    sourceValue: filters.getActiveValue(state.filters, 'sources', 'sources-filter'),
+    isFiltersHydrated: filters.getIsHydrated(state.filters, 'sources'),
     shouldOpenSourcesFilter
   };
 };

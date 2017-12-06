@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Divider, Grid, Segment } from 'semantic-ui-react';
 
-import * as shapes from '../shapes';
 import { RTL_LANGUAGES } from '../../helpers/consts';
-import { ErrorSplash, FrownSplash, LoadingSplash } from '../shared/Splash';
 import { formatError, isEmpty, shallowCompare } from '../../helpers/utils';
+import * as shapes from '../shapes';
+import { ErrorSplash, FrownSplash, LoadingSplash } from '../shared/Splash';
 import LanguageSelector from '../shared/LanguageSelector';
 
 class Library extends Component {
