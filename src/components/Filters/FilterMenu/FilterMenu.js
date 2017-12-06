@@ -25,6 +25,7 @@ class FilterMenu extends PureComponent {
 
   render() {
     const { items, rightItems, active, onChoose, t, namespace } = this.props;
+
     return (
       <Menu secondary pointing color="blue" className="index-filters" size="large">
         <Container className="padded horizontally">
