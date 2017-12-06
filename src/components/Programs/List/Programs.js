@@ -54,7 +54,7 @@ class ProgramsPage extends PureComponent {
     } else if (wip) {
       content = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else {
-      content= (
+      content = (
         <div>
           <Container className="padded">
             <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />

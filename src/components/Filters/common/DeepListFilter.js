@@ -30,8 +30,6 @@ class DeepListFilter extends React.Component {
     selection: this.props.value
   };
 
-  menus = {};
-
   componentDidMount() {
     this.scrollToSelections(this.state.selection);
   }
@@ -66,6 +64,8 @@ class DeepListFilter extends React.Component {
   onCancel = () => {
     this.props.onCancel();
   };
+
+  menus = {};
 
   apply = () => {
     const selection = this.state.selection;
@@ -161,7 +161,7 @@ class DeepListFilter extends React.Component {
             {
               roots.length > 0 ?
                 this.createLists(0, roots, this.state.selection, this.props.allValues) :
-                { emptyLabel }
+                emptyLabel
             }
           </div>
         </Segment>
