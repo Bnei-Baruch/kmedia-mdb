@@ -80,7 +80,7 @@ const buildById = (items) => {
     }
     byId[node.id] = {
       ...node,
-      children: node.children ? node.children.map(x => x.id) : node,
+      children: node.children ? node.children.map(x => x.id) : [],
     };
   }
 
