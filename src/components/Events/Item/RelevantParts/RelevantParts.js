@@ -40,8 +40,8 @@ const RelevantParts = (props) => {
         {
           otherParts.map(part => (
             <Item as={Link} key={part.id} to={`/events/item/${part.id}`}>
-              <Item.Image size="tiny">
-                <UnitLogo unitId={part.id} collectionId={collection.id} />
+              <Item.Image className="recommended__thumb">
+                <UnitLogo unitId={part.id} collectionId={collection.id} width={120}/>
               </Item.Image>
               <Item.Content>
                 <Item.Description>{part.name}</Item.Description>
