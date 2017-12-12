@@ -1,6 +1,8 @@
 import moment from 'moment';
 
 import {
+  CT_ARTICLE,
+  CT_ARTICLES,
   CT_CHILDREN_LESSON,
   CT_CLIP,
   CT_CLIPS,
@@ -18,8 +20,8 @@ import {
   CT_MEAL,
   CT_MEALS,
   CT_PICNIC,
+  CT_PUBLICATION,
   CT_SPECIAL_LESSON,
-  CT_TEXT,
   CT_TRAINING,
   CT_UNITY_DAY,
   CT_UNKNOWN,
@@ -28,7 +30,7 @@ import {
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
   EVENT_TYPES,
-  MEDIA_TYPES
+  MEDIA_TYPES,
 } from './consts';
 
 import { CollectionsBreakdown } from './mdb';
@@ -212,6 +214,7 @@ export const canonicalLink = (entity) => {
   case CT_FRIENDS_GATHERINGS:
   case CT_MEALS:
   case CT_CLIPS:
+  case CT_ARTICLES:
     return '/';
   case CT_CONGRESS:
   case CT_HOLIDAY:
@@ -244,11 +247,12 @@ export const canonicalLink = (entity) => {
     return `/events/item/${entity.id}`;
   case CT_FRIENDS_GATHERING:
   case CT_MEAL:
-  case CT_TEXT:
+  case CT_ARTICLE:
   case CT_UNKNOWN:
   case CT_CLIP:
   case CT_TRAINING:
   case CT_KITEI_MAKOR:
+  case CT_PUBLICATION:
     return '/';
   default:
     return '/';
