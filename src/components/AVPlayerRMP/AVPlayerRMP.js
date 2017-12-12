@@ -443,6 +443,11 @@ class AVPlayerRMP extends PureComponent {
 
     return (
       <div>
+      {/*
+        <div style={{ position: 'fixed', background:'yellow', top:'0', left:'0', zIndex:'999999999', padding:'20px' }}>
+          {this.player ? this.player._component._player.videoHeight + 'x' + this.player._component._player.videoWidth : ''}
+        </div>
+      */}
         <div
           ref={(c) => {
             this.mediaElement = c;

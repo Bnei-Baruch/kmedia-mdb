@@ -34,17 +34,19 @@ const RelevantParts = (props) => {
   }
 
   return (
-    <div style={{ marginTop: '50px' }}>
+    <div>
       <Header as="h3" content={t('events.part.relevant-parts.title')} />
       <Item.Group divided link>
         {
           otherParts.map(part => (
             <Item as={Link} key={part.id} to={`/events/item/${part.id}`}>
-              <Item.Image className="recommended__thumb">
-                <UnitLogo unitId={part.id} collectionId={collection.id} width={120}/>
+              <Item.Image size="small">
+                <UnitLogo unitId={part.id} collectionId={collection.id} width={150}/>
               </Item.Image>
-              <Item.Content>
-                <Item.Description>{part.name}</Item.Description>
+              <Item.Content verticalAlign='top'>
+                <Header as="h5">
+                  {part.name}
+                </Header>                
                 <Item.Meta>
                   <small>{moment.duration(part.duration, 'seconds').format('hh:mm:ss')}</small>
                 </Item.Meta>

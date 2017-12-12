@@ -1,6 +1,6 @@
-$player-color: darken($blue,40%);
+
 $player-color: $black;
-$seekbar-color: adjust-hue($player-color, 5deg);
+
 
 .mediaplayer {
   user-select: none;
@@ -28,7 +28,7 @@ $seekbar-color: adjust-hue($player-color, 5deg);
   &__controls {
     transition: all .25s ;
     direction: ltr;
-    background: rgba($player-color,.90);
+    background: linear-gradient(to top, $player-color, rgba($player-color,.85));
     padding: 4px;
     flex: 0 0 auto;
     color: rgba($white,1);
