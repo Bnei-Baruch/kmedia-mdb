@@ -6,6 +6,9 @@
   	position: relative;
 	  margin-top: calc( -1rem + 0px );
 	  margin-bottom: calc( -1rem + 0px );
+	  &--is-4x3 {
+	  	padding-top: percentage(3 / 4);	
+	  }
 	  &--is-audio{
 	  	padding-top: percentage(1 / 3);
 	  }
