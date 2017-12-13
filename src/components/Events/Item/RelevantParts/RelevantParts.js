@@ -45,6 +45,7 @@ const RelevantParts = (props) => {
               </Item.Image>
               <Item.Content verticalAlign='top'>
                 <Header as="h5">
+                  <small className='text grey uppercase'>{t('values.date', { date: new Date(part.film_date) })}</small><br/>
                   {part.name}
                 </Header>                
                 <Item.Meta>

@@ -45,8 +45,8 @@ const RelevantParts = (props) => {
               </Item.Image>
               <Item.Content>
                 <Header as="h5">
-                  <small className='text grey uppercase'>{t('programs.part.relevant-parts.item-title', { name: collection.ccuNames[part.id] })}</small><br/>
-                    {part.name}
+                  <small className='text grey uppercase'>{t('programs.part.relevant-parts.item-title', { name: collection.ccuNames[part.id] })} - {t('values.date', { date: new Date(part.film_date) })}</small><br/>
+                    {part.name}                    
                 </Header>
                 <Item.Meta>
                   <small>{moment.duration(part.duration, 'seconds').format('hh:mm:ss')}</small>
