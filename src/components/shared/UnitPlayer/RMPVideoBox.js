@@ -91,12 +91,12 @@ class RMPVideoBox extends Component {
       <Grid.Row>
         <Grid.Column mobile={16} tablet={12} computer={10}>
           <div
-            /* FIXME(yaniv): need to be in css */
-            className={classNames('avbox__player', { audio: playableItem.mediaType === MT_AUDIO })}
-            style={{ height: 'initial', paddingTop: '15px' }}
+            
+            className={classNames('avbox__player', { 'avbox__player--is-audio': playableItem.mediaType === MT_AUDIO })}
+            
           >
-            { /* FIXME(yaniv): need to be in css */ }
-            <div className="avbox__media-wrapper" style={{ position: 'relative' }}>
+            
+            <div className="avbox__media-wrapper">
               <Media>
                 <AVPlayer
                   isSliceable={isSliceable}

@@ -37,6 +37,13 @@ class SearchResultsContainer extends Component {
     this.props.hydrateUrl();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.language !== this.props.language) {
+      const { search, query, pageSize, pageNo } = this.props;
+      search(query, pageNo, pageSize);
+    }
+  }
+
   handlePageChange = (pageNo) => {
     const { setPage, search, query, pageSize } = this.props;
     setPage(pageNo);
@@ -91,7 +98,10 @@ const mapState = state => {
   const cuMap   = results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
       const cuID = val._source.mdb_uid;
-      acc[cuID]  = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
+      const cu = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
+      if (cu) {
+        acc[cuID] = cu;
+      }
       return acc;
     }, {}) :
     {};

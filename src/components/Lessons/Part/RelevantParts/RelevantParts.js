@@ -34,24 +34,24 @@ const RelevantParts = (props) => {
   }
 
   return (
-    <div style={{ marginTop: '50px' }}>
+    <div>
       <Header as="h3" content={t('lessons.part.relevant-parts.title')} />
       <Item.Group divided link>
         {
           otherParts.map(part => (
             <Item as={Link} key={part.id} to={`/lessons/part/${part.id}`}>
-              <Item.Image size="tiny">
-                <UnitLogo unitId={part.id} collectionId={collection.id} />
+              <Item.Image size='small'>
+                <UnitLogo unitId={part.id} collectionId={collection.id} width={150}/>
               </Item.Image>
-              <Item.Content>
-                <Header
-                  as="h4"
-                  content={t('lessons.part.relevant-parts.item-title', { name: collection.ccuNames[part.id] })}
-                />
+              <Item.Content verticalAlign='top'>
+                <Header as="h5">
+                  <small className='text grey uppercase'>{t('lessons.part.relevant-parts.item-title', { name: collection.ccuNames[part.id] })}</small><br/>
+                  {part.name}
+                </Header>
                 <Item.Meta>
                   <small>{moment.duration(part.duration, 'seconds').format('hh:mm:ss')}</small>
                 </Item.Meta>
-                <Item.Description>{part.name}</Item.Description>
+
               </Item.Content>
             </Item>
           ))

@@ -36,23 +36,21 @@ class SearchResults extends Component {
     err: null,
   };
 
+  // Helper function to get the frist prop in hightlights obj and apply htmlFunc on it.
+  snippetFromHighlight = (highlight, props, htmlFunc) => {
+    const prop = props.find(p => p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
+    return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop])}}></span>;
+  }
+
   renderHit = (hit) => {
+    console.log('hit', hit);
     const { cuMap, t }                               = this.props;
     const { _source: { mdb_uid }, highlight, _score: score } = hit;
     const cu = cuMap[mdb_uid];
 
-    let name = cu.name;
-    if (highlight && Array.isArray(highlight.name) && highlight.name.length > 0) {
-      name = <span dangerouslySetInnerHTML={{ __html: highlight.name.join(' ') }} />;
-    }
-    let description = cu.description;
-    if (highlight && Array.isArray(highlight.description) && highlight.description.length > 0) {
-      description = <span dangerouslySetInnerHTML={{ __html: `...${highlight.description.join('.....')}...` }} />;
-    }
-    let transcript = null;
-    if (highlight && Array.isArray(highlight.transcript) && highlight.transcript.length > 0) {
-      transcript = <span dangerouslySetInnerHTML={{ __html: `...${highlight.transcript.join('.....')}...` }} />;
-    }
+    const name = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || cu.name;
+    const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
+    const transcript = this.snippetFromHighlight(highlight, ['transcript', 'transcript.analyzed'], parts => `...${parts.join('.....')}...`);
     const snippet = (<span>
                        {!description ? null : (
                          <span>
@@ -101,7 +99,7 @@ class SearchResults extends Component {
   };
 
   render() {
-    const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange } = this.props;
+    const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange, cuMap } = this.props;
 
     // Query from URL (not changed until pressed Enter.
     const query = getQuery(window.location).q;
@@ -127,7 +125,7 @@ class SearchResults extends Component {
     }
 
     const { took, hits: { total, hits } } = results;
-    if (total === 0) {
+    if (total === 0 || isEmpty(cuMap)) {
       return (
         <div>
           <Header as="h1" content={t('search.results.title')} />
@@ -139,8 +137,6 @@ class SearchResults extends Component {
         </div>
       );
     }
-    console.log(hits);
-    console.log(this.props.cuMap);
     return (
       <div>
         <Header as="h1">

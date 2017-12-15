@@ -33,13 +33,12 @@ class AVCenteredPlay extends Component {
       <button
         type="button"
         tabIndex="-1"
-        className={classNames('player-button')}
+        className={classNames('mediaplayer__onscreen-play')}
         onClick={this.handlePlayPause}
-        style={{ outline: 'none', pointerEvents: 'auto' }}
       >
         <Icon
-          name={'video play'}
-          size="massive"
+          name={'play'}
+          size="huge"
         />
       </button>
     );

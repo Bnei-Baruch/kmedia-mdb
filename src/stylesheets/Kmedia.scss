@@ -4,53 +4,13 @@
   font-weight: normal;
 }
 
-$border-color: rgba(34, 36, 38, .15);
 
-$red: #DB2828;
-$orange: #F2711C;
-$yellow: #FBBD08;
-$olive: #B5CC18;
-$green: #21BA45;
-$teal: #00B5AD;
-$blue: #2185D0;
-$violet: #6435C9;
-$purple: #A333C8;
-$pink: #E03997;
-$brown: #A5673F;
-$grey: #767676;
-$black: #1B1C1D;
-
-
-// Neutrals
-$fullBlack        : #000000;
-$offWhite         : #F9FAFB;
-$darkWhite        : #F3F4F5;
-$midWhite         : #DCDDDE;
-$white            : #FFFFFF;
-$text-colors: (
-  red : $red,
-  orange : $orange,
-  yellow : #B58105, // Yellow text is difficult to read
-  olive : #8ABC1E, // Olive is difficult to read
-  green : #1EBC30, // Green is difficult to read
-  teal : #10A3A3, // Teal text is difficult to read
-  blue : $blue,
-  violet : $violet,
-  purple : $purple,
-  pink : $pink,
-  brown : $brown,
-  grey : $grey,
-  black : $black
-);
-
-@each $colorname, $colorvalue in $text-colors {
-  .text.#{$colorname} {
-    color: #{$colorvalue};
-  }
-}
+@import 'includes/colors';
 @import 'includes/responsive-helpers';
+@import 'includes/text-helpers';
 @import 'includes/video-player';
 @import 'includes/media-player';
+@import 'includes/recommended-content';
 /// THE NEW LAYOUT
 .layout {
   height: 100vh;

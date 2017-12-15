@@ -28,21 +28,21 @@ export default class SliceHandle extends Component {
 
     return (
       <div
-        className={classNames('player-slice-handle', className)}
+        className={classNames('seekbar__slicehandle', className)}
         style={{ left: position }}
         ref={(el) => { this.handleElement = el; }}
       >
         {
           isEditMode && (
-            <div className="player-slice-handle__time">
-              <span className="player-slice-handle__time__seconds">
+            <div className="seekbar__slicehandle-time">
+              
                 { seconds }
-              </span>
+              
             </div>
           )
         }
-        { isEditMode && <div ref={(el) => { this.knobElement = el; }} className="player-slice-handle__knob" /> }
-        <div className="player-slice-handle__line" />
+        { isEditMode && <div ref={(el) => { this.knobElement = el; }} className="seekbar__slicehandle-knob" /> }
+        <div className="seekbar__slicehandle-line" />
       </div>
     );
   }
