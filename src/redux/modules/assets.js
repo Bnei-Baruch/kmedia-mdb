@@ -32,23 +32,25 @@ const initialState = {
 
 //set wip & errors
 const setStatus = (state, action) => {
-    const wip    = { ...state.wip };
-    const errors = { ...state.errors };
+    let { items, wip, errors } = state;
 
     switch (action.type){
         case FETCH_ASSET:
-            wip: true;
-            errors: null;
+            wip = true;
+            errors = null;
+            items = [];
             break;
 
         case FETCH_ASSET_SUCCESS:
-            wip: false;
-            errors: null;
+            wip = false;
+            errors = null;
+            items = action.payload;
             break;
-
+ 
         case FETCH_ASSET_FAILURE:
-            wip: false;
-            errors: action.payload;
+            wip = false;
+            errors = action.payload;
+            items = [];
             break;
 
         default:
@@ -59,6 +61,7 @@ const setStatus = (state, action) => {
         ...state,
         wip,
         errors,
+        items
     }
 };
 
@@ -70,8 +73,12 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getImages = state => state.items;
+const getItems          = state => state.items;
+const getWip            = state => state.wip; 
+const getErrors         = state => state.errors;
 
 export const selectors = {
-    getImages,
+    getItems,
+    getWip,
+    getErrors,
 };

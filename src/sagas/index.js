@@ -6,6 +6,7 @@ import { sagas as filters } from './filters';
 import { sagas as tags } from './tags';
 import { sagas as settings } from './settings';
 import { sagas as search } from './search';
+import { sagas as assets } from './assets';
 
 export default [
   ...lessons,
@@ -16,4 +17,5 @@ export default [
   ...tags,
   ...settings,
   ...search,
+  ...assets,
 ];
