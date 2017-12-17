@@ -1,69 +1,90 @@
-$mobileBreakpoint            : 320px;
-$tabletBreakpoint            : 768px;
-$computerBreakpoint          : 1200px;
-$largeMonitorBreakpoint      : 1490px;
-$widescreenMonitorBreakpoint : 1920px;
+$mobileBreakpoint: 320px;
+$tabletBreakpoint: 768px;
+$computerBreakpoint: 1200px;
+$largeMonitorBreakpoint: 1490px;
+$widescreenMonitorBreakpoint: 1920px;
 
 /// ALL BREAKING POINTS SHOULD BE IN SYNC WITH THEME
 /// KBB Theme / 'site.variables' file / LINE 183
 
 @media only screen and (max-width: $tabletBreakpoint - 1) {
-  .widescreen,.large-screen,.computer,.tablet {
+  .widescreen,
+  .large-screen,
+  .computer,
+  .tablet {
     &-only {
-      display: none!important;
+      display: none !important;
     }
   }
+
   .mobile {
     &-hidden {
-      display: none!important;
+      display: none !important;
     }
   }
 }
+
 @media only screen and (min-width: $tabletBreakpoint) and (max-width: $computerBreakpoint - 1) {
-  .widescreen,.large-screen,.computer,.mobile {
+  .widescreen,
+  .large-screen,
+  .computer,
+  .mobile {
     &-only {
-      display: none!important;
+      display: none !important;
     }
   }
+
   .tablet {
     &-hidden {
-      display: none!important;
+      display: none !important;
     }
   }
 }
+
 @media only screen and (min-width: $computerBreakpoint) and (max-width: $largeMonitorBreakpoint - 1) {
-  .widescreen,.large-screen,.tablet,.mobile {
+  .widescreen,
+  .large-screen,
+  .tablet,
+  .mobile {
     &-only {
-      display: none!important;
+      display: none !important;
     }
   }
+
   .computer {
     &-hidden {
-      display: none!important;
+      display: none !important;
     }
   }
 }
+
 @media only screen and (min-width: $largeMonitorBreakpoint) and (max-width: $widescreenMonitorBreakpoint - 1) {
-  .widescreen,.tablet,.mobile {
+  .widescreen,
+  .tablet,
+  .mobile {
     &-only {
-      display: none!important;
+      display: none !important;
     }
   }
+
   .large-screen {
     &-hidden {
-      display: none!important;
+      display: none !important;
     }
   }
 }
+
 @media only screen and (min-width: $widescreenMonitorBreakpoint) {
-  .tablet,.mobile {
+  .tablet,
+  .mobile {
     &-only {
-      display: none!important;
+      display: none !important;
     }
   }
+
   .widescreen {
     &-hidden {
-      display: none!important;
+      display: none !important;
     }
   }
 }
