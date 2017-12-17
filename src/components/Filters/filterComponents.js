@@ -1,6 +1,6 @@
 import DateFilter from './DateFilter/DateFilter';
 import SourcesFilter from './SourcesFilter/SourcesFilter';
-import { TopicsFilter, MultiTopicsFilter } from './TopicsFilter/TopicsFilter';
+import TopicsFilter from './TopicsFilter/TopicsFilterNew';
 import ProgramsFilter from './ProgramsFilter/ProgramsFilter';
 import YearsFilter from './YearsFilter/YearsFilter';
 import EventTypesFilter from './EventTypesFilter/EventTypesFilter';
@@ -9,7 +9,6 @@ export default {
   DateFilter,
   SourcesFilter,
   TopicsFilter,
-  MultiTopicsFilter,
   ProgramsFilter,
   YearsFilter,
   EventTypesFilter

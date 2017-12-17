@@ -1,20 +1,24 @@
 import { createFilterDefinition } from './util';
-import { selectors as tagsSelectors } from '../../redux/modules/tags';
+import { selectors as selectors } from '../../redux/modules/tags';
 
 const topicsFilter = {
   name: 'topics-filter',
   queryKey: 'topic',
-  valueToApiParam: value => ({ tag: value }),
+  valueToQuery: value => value.join('_'),
+  queryToValue: queryValue => queryValue.split('_'),
+  valueToApiParam: value => ({ tag: value[value.length - 1] }),
   tagIcon: 'tag',
   valueToTagLabel: (value, props, { getState }) => {
     if (!value) {
       return '';
     }
 
-    // Make sure we have the item.
-    // Location hydration probably happens before we receive tags
-    const tag = tagsSelectors.getTagById(getState().tags)(value);
-    return tag && tag.label ? tag.label : '';
+    const getTagById = selectors.getTagById(getState().tags);
+    const path          = value.map(getTagById);
+
+    // Make sure we have all items.
+    // Location hydration probably happens before we receive sources
+    return path.some(x => !x) ? '' : path.map(x => x.label).join(' > ');
   }
 };
 
