@@ -1,7 +1,12 @@
 {
   "name": "kmedia-mdb",
   "version": "0.1.0",
-  "private": true,
+  "license": "MIT",
+  "homepage": "https://archive.kbb1.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Bnei-Baruch/kmedia-mdb"
+  },
   "scripts": {
     "serve-locals": "node bin/serve-locals",
     "build-css": "node-sass src/ -o src/",
