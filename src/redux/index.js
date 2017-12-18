@@ -11,6 +11,7 @@ import { reducer as transcription } from './modules/transcription';
 import { reducer as tags } from './modules/tags';
 import { reducer as mdb } from './modules/mdb';
 import { reducer as search } from './modules/search';
+import { reducer as assets } from './modules/assets';
 
 export default combineReducers({
   router,
@@ -25,5 +26,6 @@ export default combineReducers({
   tags,
   mdb,
   search,
+  assets,
 });
 
