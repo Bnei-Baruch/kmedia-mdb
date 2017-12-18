@@ -71,6 +71,13 @@
     "years-filter": {
       "label": "Year",
       "placeholder": "Select a year"
+    },
+    "sections-filter": {
+      "label": "section",
+      "all": "all",
+      "lessons": "lessons",
+      "programs": "programs",
+      "events": "events"
     }
   },
   "buttons": {

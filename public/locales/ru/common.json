@@ -72,6 +72,12 @@
       "label": "Год",
       "placeholder": "Выберите год"
     }
+    "sections-filter": {
+      "label": "раздел",
+      "lessons": "уроки",
+      "programs": "программы",
+      "events": "событие"
+    }
   },
   "buttons": {
     "apply": "Применить",

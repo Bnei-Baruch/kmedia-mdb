@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import debounce from 'lodash/debounce';
-import { Icon, Input, Search } from 'semantic-ui-react';
+import { Dropdown, Icon, Input, Search } from 'semantic-ui-react';
 
 import { SuggestionsHelper } from '../../helpers/search';
 import { actions, selectors } from '../../redux/modules/search';
@@ -160,7 +160,7 @@ class OmniBox extends Component {
   });
 
   render() {
-    const { language, query } = this.props;
+    const { language, query, t } = this.props;
     const { suggestionsHelper, isOpen } = this.state;
 
     const categories = ['tags', /*'sources', - ignore sources for now */ 'authors', 'persons'];
@@ -184,6 +184,18 @@ class OmniBox extends Component {
       onMouseDown: this.dontBlur
     }].concat(results);
 
+    const sectionsOptions = [
+      'filters.sections-filter.all',
+      'filters.sections-filter.lessons',
+      'filters.sections-filter.programs',
+      'filters.sections-filter.events',
+    ].map(s => ({key: s, text: t(s), value: s}));
+
+    const input = (
+      <Input onKeyDown={this.handleSearchKeyDown}
+             style={{ width: '100%' }} />
+    );
+
     return (
       <Search
         className="search-omnibox"
@@ -198,7 +210,7 @@ class OmniBox extends Component {
         onFocus={this.handleSearchChange}
         onResultSelect={this.handleResultSelect}
         onBlur={this.closeSuggestions}
-        input={<Input onKeyDown={this.handleSearchKeyDown} style={{ width: '100%' }} />}
+        input={input}
         icon={<Icon link name="search" onClick={this.handleIconClick} />}
         size="mini"
         showNoResults={false}
