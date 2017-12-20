@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { Button, Menu, Segment, Container } from 'semantic-ui-react';
+
 import connectFilter from '../connectFilter';
 
 class DeepListFilter extends React.Component {
@@ -29,8 +30,6 @@ class DeepListFilter extends React.Component {
   state = {
     selection: this.props.value
   };
-
-  menus = {};
 
   componentDidMount() {
     this.scrollToSelections(this.state.selection);
@@ -66,6 +65,8 @@ class DeepListFilter extends React.Component {
   onCancel = () => {
     this.props.onCancel();
   };
+
+  menus = {};
 
   apply = () => {
     const selection = this.state.selection;
@@ -132,7 +133,7 @@ class DeepListFilter extends React.Component {
                     onClick={this.onSelectionChange}
                     style={style}
                   >
-                    {node.name}
+                    {node.name || node.label}
                   </Menu.Item>
                 );
               })
@@ -161,7 +162,7 @@ class DeepListFilter extends React.Component {
             {
               roots.length > 0 ?
                 this.createLists(0, roots, this.state.selection, this.props.allValues) :
-                { emptyLabel }
+                emptyLabel
             }
           </div>
         </Segment>

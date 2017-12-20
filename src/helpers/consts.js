@@ -13,6 +13,7 @@ export const CT_HOLIDAY            = 'HOLIDAY';
 export const CT_PICNIC             = 'PICNIC';
 export const CT_UNITY_DAY          = 'UNITY_DAY';
 export const CT_CLIPS              = 'CLIPS';
+export const CT_ARTICLES           = 'ARTICLES';
 
 // Content Unit Types
 export const CT_LESSON_PART           = 'LESSON_PART';
@@ -24,12 +25,13 @@ export const CT_FRIENDS_GATHERING     = 'FRIENDS_GATHERING';
 export const CT_MEAL                  = 'MEAL';
 export const CT_VIDEO_PROGRAM_CHAPTER = 'VIDEO_PROGRAM_CHAPTER';
 export const CT_FULL_LESSON           = 'FULL_LESSON';
-export const CT_TEXT                  = 'TEXT';
+export const CT_ARTICLE               = 'ARTICLE';
 export const CT_UNKNOWN               = 'UNKNOWN';
 export const CT_EVENT_PART            = 'EVENT_PART';
 export const CT_CLIP                  = 'CLIP';
 export const CT_TRAINING              = 'TRAINING';
 export const CT_KITEI_MAKOR           = 'KITEI_MAKOR';
+export const CT_PUBLICATION           = 'PUBLICATION';
 
 // Source Types
 export const SRC_COLLECTION = 'COLLECTION';
@@ -225,6 +227,7 @@ export const MIME_TYPE_TO_MEDIA_TYPE = Object.values(MEDIA_TYPES).reduce((acc, m
 
 export const TAG_LESSONS_TOPICS  = 'mS7hrYXK';
 export const TAG_PROGRAMS_TOPICS = 'IgSeiMLj';
+export const TOPICS_FOR_DISPLAY = ['VUpFlBnu', '0db5BBS3', 'g3ml0jum'];
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
 

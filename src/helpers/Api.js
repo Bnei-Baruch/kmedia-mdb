@@ -8,12 +8,19 @@ const ASSETS_BACKEND = process.env.NODE_ENV === 'production' ?
   '/assets/' :
   process.env.REACT_APP_ASSETS_BACKEND;
 
+const IMAGINARY_URL = process.env.NODE_ENV === 'production' ?
+  '/imaginary/' :
+  process.env.REACT_APP_IMAGINARY_URL;
 
-export const assetUrl = path => `${ASSETS_BACKEND}${path}`;
+export const backendUrl   = path => `${API_BACKEND}${path}`;
+export const assetUrl     = path => `${ASSETS_BACKEND}${path}`;
+export const imaginaryUrl = path => `${IMAGINARY_URL}${path}`;
 
-class Requests {
-  static get        = path => axios(`${API_BACKEND}${path}`);
-  static getAsset   = path => axios(assetUrl(path));
+export class Requests {
+  static get          = path => axios(backendUrl(path));
+  static getAsset     = path => axios(assetUrl(path));
+  static getImaginary = path => axios(imaginaryUrl(path));
+
   static makeParams = params =>
     `${Object.entries(params)
       .filter(([k, v]) => v !== undefined && v !== null)
@@ -31,7 +38,7 @@ class Requests {
   static encode = encodeURIComponent;
 }
 
-export default class Api {
+class Api {
   static collection = ({ id, language }) => Requests.get(`collections/${id}?${Requests.makeParams({ language })}`);
   static unit       = ({ id, language }) => Requests.get(`content_units/${id}?${Requests.makeParams({ language })}`);
   static sources    = ({ language }) => Requests.get(`sources?${Requests.makeParams({ language })}`);
@@ -55,7 +62,14 @@ export default class Api {
   static search = ({ q, language, pageNo: page_no, pageSize: page_size, sortBy: sort_by }) =>
     Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by })}`);
 
-  static sourceIdx = ({ id }) => Requests.getAsset(`sources/${id}/index.json`);
+  static sourceIdx = ({ id }) =>
+    Requests.getAsset(`sources/${id}/index.json`);
 
-  static sourceContent = ({ id, name }) => Requests.getAsset(`sources/${id}/${name}`);
+  static sourceContent = ({ id, name }) =>
+    Requests.getAsset(`sources/${id}/${name}`);
+
+  static doc2Html = ({ id }) =>
+    Requests.getAsset(`api/doc2html/${id}`);
 }
+
+export default Api;

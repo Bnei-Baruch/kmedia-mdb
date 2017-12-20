@@ -6,6 +6,7 @@ import * as shapes from '../../shapes';
 import TabsMenu from '../../shared/TabsMenu';
 import Summary from './Summary/Summary';
 import SourcesContainer from './Sources/SourcesContainer';
+import TranscriptionContainer from './Transcription/TranscriptionContainer';
 
 class Materials extends Component {
 
@@ -34,7 +35,7 @@ class Materials extends Component {
       {
         name: 'transcription',
         label: t('materials.transcription.header'),
-        component: <Segment basic>{t('materials.transcription.header')}</Segment>,
+        component: <TranscriptionContainer unit={this.props.unit} t={t} />
       },
       {
         name: 'sources',

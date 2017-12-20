@@ -15,7 +15,11 @@ const filters = [
   },
   {
     name: 'topics-filter',
-    component: filterComponents.MultiTopicsFilter,
+    component: filterComponents.TopicsFilter,
+  },
+  {
+    name: 'sources-filter',
+    component: filterComponents.SourcesFilter,
   },
   {
     name: 'sections-filter',
