@@ -26,7 +26,7 @@
   }
 
   &__playlist-wrapper {
-    bottom: calc(-1rem + 0);
+    bottom: -1rem;
     display: flex;
     flex-direction: column;
     left: 1rem;
