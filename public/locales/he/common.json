@@ -73,6 +73,13 @@
     "years-filter": {
       "label": "שנה",
       "placeholder": "בחר שנה"
+    },
+    "sections-filter": {
+      "label": "מדור",
+      "all": "הכל",
+      "lessons": "שיעורים",
+      "programs": "תוכניות",
+      "events": "אירועים"
     }
   },
   "buttons": {

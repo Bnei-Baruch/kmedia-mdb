@@ -38,12 +38,12 @@ class SearchResults extends Component {
 
   // Helper function to get the frist prop in hightlights obj and apply htmlFunc on it.
   snippetFromHighlight = (highlight, props, htmlFunc) => {
-    const prop = props.find(p => p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
+    const prop = props.find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
     return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop])}}></span>;
   }
 
   renderHit = (hit) => {
-    console.log('hit', hit);
+    // console.log('hit', hit);
     const { cuMap, t }                               = this.props;
     const { _source: { mdb_uid }, highlight, _score: score } = hit;
     const cu = cuMap[mdb_uid];
