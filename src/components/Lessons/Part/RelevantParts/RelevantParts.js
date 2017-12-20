@@ -34,7 +34,7 @@ const RelevantParts = (props) => {
   }
 
   return (
-    <div>
+    <div className='content__aside-unit'>
       <Header as="h3" content={t('lessons.part.relevant-parts.title')} />
       <Item.Group divided link>
         {

@@ -85,10 +85,10 @@ class FullLesson extends Component {
         <Container>
           <Grid padded reversed="tablet">
             <Grid.Row reversed="computer">
-              <Grid.Column computer={6} tablet={4} mobile={16}>
+              <Grid.Column computer={6} tablet={8} mobile={16}  className='content__aside'>
                 <MediaDownloads unit={lesson} language={language} t={t} />
               </Grid.Column>
-              <Grid.Column computer={10} tablet={12} mobile={16}>
+              <Grid.Column computer={10} tablet={8} mobile={16} className='content__main'>
                 <Info lesson={lesson} t={t} />
                 <Materials unit={lesson} t={t} />
               </Grid.Column>

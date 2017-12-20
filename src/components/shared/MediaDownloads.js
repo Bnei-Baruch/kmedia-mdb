@@ -236,7 +236,7 @@ class MediaDownloads extends Component {
     }
 
     return (
-      <div>
+      <div className='content__aside-unit'>
         <Grid columns="equal">
           <Grid.Row>
             <Grid.Column>
