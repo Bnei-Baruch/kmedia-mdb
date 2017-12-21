@@ -15,7 +15,7 @@ import {
 } from '../../helpers/consts';
 import { physicalFile } from '../../helpers/utils';
 import * as shapes from '../shapes';
-import LanguageSelector from '../shared/LanguageSelector';
+import DropdownLanguageSelector from '../Language/Selector/DropdownLanguageSelector';
 
 const MEDIA_ORDER = [
   MT_VIDEO,
@@ -243,7 +243,7 @@ class MediaDownloads extends Component {
               <Header as="h3" content={t('media-downloads.title')} />
             </Grid.Column>
             <Grid.Column>
-              <LanguageSelector
+              <DropdownLanguageSelector
                 languages={Array.from(groups.keys())}
                 defaultValue={language}
                 onSelect={this.handleChangeLanguage}
