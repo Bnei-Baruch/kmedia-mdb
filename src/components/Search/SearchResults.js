@@ -46,6 +46,12 @@ class SearchResults extends Component {
     const { _source: { mdb_uid }, highlight, _score: score } = hit;
     const cu                                                 = cuMap[mdb_uid];
 
+    // maybe content_units are still loading ?
+    // maybe stale data in elasticsearch ?
+    if (!cu) {
+      return null;
+    }
+
     const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || cu.name;
     const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
     const transcript  = this.snippetFromHighlight(highlight, ['transcript', 'transcript.analyzed'], parts => `...${parts.join('.....')}...`);
