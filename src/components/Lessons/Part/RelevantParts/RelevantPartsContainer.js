@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import 'moment-duration-format';
 
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../helpers/consts';
 import { selectors as mdb } from '../../../../redux/modules/mdb';

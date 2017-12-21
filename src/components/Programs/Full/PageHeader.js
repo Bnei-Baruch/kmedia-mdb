@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import 'moment-duration-format';
 import { translate } from 'react-i18next';
 import { Container, Grid, Header } from 'semantic-ui-react';
 

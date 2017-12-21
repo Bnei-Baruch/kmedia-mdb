@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import 'moment-duration-format';
 import { Container, Header, Item } from 'semantic-ui-react';
 
-import { formatError, neighborIndices } from '../../../../helpers/utils';
+import { formatDuration, formatError, neighborIndices } from '../../../../helpers/utils';
 import * as shapes from '../../../shapes';
 import { ErrorSplash, LoadingSplash } from '../../../shared/Splash';
 import Link from '../../../Language/MultiLanguageLink';
@@ -41,15 +39,16 @@ const RelevantParts = (props) => {
           otherParts.map(part => (
             <Item as={Link} key={part.id} to={`/lessons/part/${part.id}`}>
               <Item.Image size='small'>
-                <UnitLogo unitId={part.id} collectionId={collection.id} width={150}/>
+                <UnitLogo unitId={part.id} collectionId={collection.id} width={150} />
               </Item.Image>
               <Item.Content verticalAlign='top'>
                 <Header as="h5">
-                  <small className='text grey uppercase'>{t('lessons.part.relevant-parts.item-title', { name: collection.ccuNames[part.id] })}</small><br/>
+                  <small className='text grey uppercase'>{t('lessons.part.relevant-parts.item-title', { name: collection.ccuNames[part.id] })}</small>
+                  <br />
                   {part.name}
                 </Header>
                 <Item.Meta>
-                  <small>{moment.duration(part.duration, 'seconds').format('hh:mm:ss')}</small>
+                  <small>{formatDuration(part.duration)}</small>
                 </Item.Meta>
 
               </Item.Content>
