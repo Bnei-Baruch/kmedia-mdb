@@ -53,7 +53,7 @@ class ChaptersList extends PureComponent {
           <Link to={canonicalLink(unit)}>
             <strong>{unit.name || '☠ no name'}</strong>
           </Link>
-          <List horizontal link size="tiny">
+          <List className="index-list__item-subtitle" size="tiny" divided horizontal link>
             <List.Item>
               <List.Header>{t('programs.list.episode_from')}</List.Header>
             </List.Item>
