@@ -1,16 +1,17 @@
 import DateFilter from './DateFilter/DateFilter';
-import SourcesFilter from './SourcesFilter/SourcesFilter';
-import { TopicsFilter, MultiTopicsFilter } from './TopicsFilter/TopicsFilter';
-import ProgramsFilter from './ProgramsFilter/ProgramsFilter';
-import YearsFilter from './YearsFilter/YearsFilter';
 import EventTypesFilter from './EventTypesFilter/EventTypesFilter';
+import ProgramsFilter from './ProgramsFilter/ProgramsFilter';
+import SectionsFilter from './SectionsFilter/SectionsFilter';
+import SourcesFilter from './SourcesFilter/SourcesFilter';
+import TopicsFilter from './TopicsFilter/TopicsFilterNew';
+import YearsFilter from './YearsFilter/YearsFilter';
 
 export default {
   DateFilter,
+  EventTypesFilter,
+  ProgramsFilter,
+  SectionsFilter,
   SourcesFilter,
   TopicsFilter,
-  MultiTopicsFilter,
-  ProgramsFilter,
   YearsFilter,
-  EventTypesFilter
 };

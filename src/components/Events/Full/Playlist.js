@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import 'moment-duration-format';
 import { Header, Image, Menu } from 'semantic-ui-react';
 
 import { DATE_FORMAT } from '../../../helpers/consts';
 import { fromToLocalized } from '../../../helpers/date';
+import { formatDuration } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import placeholder from './placeholder.png';
 
@@ -31,7 +31,7 @@ class FullEventPlaylist extends Component {
 
     const titles = collection.content_units.map((cu) => {
       const { name, duration } = cu;
-      const durationDisplay    = moment.duration(duration, 'seconds').format('hh:mm:ss');
+      const durationDisplay    = formatDuration(duration);
       return `${name} - ${durationDisplay}`;
     });
 

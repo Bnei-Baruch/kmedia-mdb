@@ -6,7 +6,7 @@ import { RTL_LANGUAGES } from '../../helpers/consts';
 import { formatError, isEmpty, shallowCompare } from '../../helpers/utils';
 import * as shapes from '../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../shared/Splash';
-import LanguageSelector from '../shared/LanguageSelector';
+import DropdownLanguageSelector from '../Language/Selector/DropdownLanguageSelector';
 
 class Library extends Component {
   static propTypes = {
@@ -73,7 +73,7 @@ class Library extends Component {
             {
               languages.length > 0 ?
                 <Grid.Column width={4}>
-                  <LanguageSelector
+                  <DropdownLanguageSelector
                     languages={languages}
                     defaultValue={language}
                     t={t}

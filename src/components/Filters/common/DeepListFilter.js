@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { Button, Menu, Segment, Container } from 'semantic-ui-react';
+
 import connectFilter from '../connectFilter';
 
 class DeepListFilter extends React.Component {
@@ -132,7 +133,7 @@ class DeepListFilter extends React.Component {
                     onClick={this.onSelectionChange}
                     style={style}
                   >
-                    {node.name}
+                    {node.name || node.label}
                   </Menu.Item>
                 );
               })

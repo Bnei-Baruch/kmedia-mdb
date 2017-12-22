@@ -39,7 +39,7 @@ class Info extends Component {
         const path    = tracePath(tag, getTagById);
         const display = path.map(y => y.label).join(' > ');
         const query   = filtersTransformer.toQueryParams(
-          [{ name: 'topics-filter', values: [x] }]);
+          [{ name: 'topics-filter', values: [path.map(y => y.id)] }]);
 
         return <Link key={x} to={{ pathname: '/lessons', search: urlSearchStringify(query) }}>{display}</Link>;
       }), ', '));

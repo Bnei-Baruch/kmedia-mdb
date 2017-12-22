@@ -130,8 +130,7 @@ $player-color: $black;
       border-radius: 50%;
       color: $black;
       height: 8em;
-      padding: 1.3em;
-      pointer-events: auto;
+      padding: 0;
       width: 8em;
 
       &:focus {
@@ -139,9 +138,8 @@ $player-color: $black;
       }
 
       .icon {
-        height: 1em;
-        margin-left: .1em;
-        width: 1em;
+        margin-left: .15em;
+        margin-right: 0;
       }
     }
   }

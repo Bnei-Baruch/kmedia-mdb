@@ -1,0 +1,36 @@
+
+.rtl {
+  .layout__sidebar {
+    left: auto;
+    right: 0;
+    transform: translate(100%, 0);
+
+    &.is-active {
+      transform: none;
+    }
+
+    &-menu {
+      border-left: 1px solid $border-color;
+      border-right: 0;
+    }
+  }
+
+  .logo {
+    h2.header {
+      margin-right: 16px;
+    }
+  }
+
+  @media only screen and (min-width: $largeMonitorBreakpoint) {
+    .layout {
+      &__sidebar {
+        transform: none;
+      }
+
+      &__main {
+        margin-left: auto;
+        margin-right: 290px;
+      }
+    }
+  }
+}
