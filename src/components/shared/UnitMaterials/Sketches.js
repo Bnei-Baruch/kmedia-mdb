@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { Trans } from 'react-i18next';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
-
 import { formatError } from '../../../helpers/utils';
 import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
 import { actions, selectors } from '../../../redux/modules/assets';
@@ -17,46 +16,60 @@ class Sketches extends React.Component {
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     t: PropTypes.func.isRequired,
-    wip: PropTypes.bool,
-    err: shapes.Error,
+    indexById: PropTypes.arrayOf(PropTypes.shape({
+        data: PropTypes.arrayOf(PropTypes.object), 
+        wip: shapes.WIP,
+        err: shapes.Error,
+      })).isRequired,
     fetchAsset: PropTypes.func.isRequired,
-    imageObjs: PropTypes.arrayOf(PropTypes.object),
   };
 
-  static defaultProps = {
+  state = {
+    zipFileId: null,
     wip: false,
     err: null,
-    imageObjs: [],
+    imageObjs: []
   };
 
   componentDidMount() {
-    //load data
-    this.unzipFile(this.props);
+    this.setCurrentItem(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.unit !== this.props.unit)
-      this.unzipFile(nextProps);
+    if (nextProps.indexById !== this.props.indexById || nextProps.unit !== this.props.unit)
+      this.setCurrentItem(nextProps);
   }
 
-  unzipFile(props) {
-    const { wip, err } = props;
+  //load data into state
+  setCurrentItem = (props) => {
+    const { unit, indexById, fetchAsset } = props;
+    const zipFile = this.findZipFile(unit);
+    let zipFileId = null, wip = false, err = null, imageObjs = [];
 
-    if (err)
-      console.log('Error during unzip file ', err);
-    else if (!wip) {
-      const zipFile = this.findZipFile(props);
-      if (zipFile) {
-        props.fetchAsset(zipFile.id);
-      }
+    if (zipFile){
+        zipFileId = zipFile.id;
+
+        if (indexById != null && indexById[zipFileId]){
+            const currentItem = indexById[zipFileId];
+            wip = currentItem.wip;
+            err = currentItem.err;
+            imageObjs = currentItem.data;
+        }
+
+        if (err)
+            console.log('Error during unzip file ', err);
+        else if (!wip && (!imageObjs || imageObjs.length === 0)) {
+            fetchAsset(zipFileId);
+        }
     }
+
+    this.setState({zipFileId, wip, err, imageObjs});
   }
 
-  findZipFile = (props) => {
-    const { unit } = props;
+  findZipFile = (unit) => {
     return Array.isArray(unit.files) ?
-      unit.files.find(this.filterZipFile) :
-      null;
+           unit.files.find(this.filterZipFile) :
+           null;
   };
 
   filterZipFile = (file) => {
@@ -68,7 +81,8 @@ class Sketches extends React.Component {
   }
 
   render() {
-    const { t, wip, err, imageObjs } = this.props;
+    const { t } = this.props;
+    const { wip, err, imageObjs } = this.state; 
 
     if (err) {
       if (err.response && err.response.status === 404) {
@@ -95,7 +109,8 @@ class Sketches extends React.Component {
       //prepare the image array for the gallery and sort it
       const items = imageObjs
         .map(imageGalleryItem)
-        .sort((a, b) => a.original < b.original);
+        .sort((a, b) => a.original < b.original)
+        ;
 
       return (
         <ImageGallery
@@ -114,6 +129,7 @@ class Sketches extends React.Component {
   }
 }
 
+//converts images from server format (path, size) to ImageGallery format
 const imageGalleryItem = (item) => {
   const src = assetUrl(item.path.substr(8));
 
@@ -136,9 +152,7 @@ const imageGalleryItem = (item) => {
 
 const mapState = (state) => {
   return {
-    imageObjs: selectors.getItems(state.assets),
-    wip: selectors.getWip(state.assets),
-    err: selectors.getErrors(state.assets),
+    indexById : selectors.getIndexById(state.assets)
   };
 };
 
