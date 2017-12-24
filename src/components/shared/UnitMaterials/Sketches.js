@@ -2,33 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Trans } from 'react-i18next';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
+
 import { formatError } from '../../../helpers/utils';
 import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
 import { actions, selectors } from '../../../redux/modules/assets';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
-import Link from '../../Language/MultiLanguageLink';
 
 class Sketches extends React.Component {
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     t: PropTypes.func.isRequired,
-    indexById: PropTypes.arrayOf(PropTypes.shape({
-        data: PropTypes.arrayOf(PropTypes.object), 
-        wip: shapes.WIP,
-        err: shapes.Error,
-      })).isRequired,
+    indexById: PropTypes.objectOf(PropTypes.shape({
+      data: PropTypes.arrayOf(PropTypes.object),
+      wip: shapes.WIP,
+      err: shapes.Error,
+    })).isRequired,
     fetchAsset: PropTypes.func.isRequired,
   };
 
   state = {
     zipFileId: null,
-    wip: false,
-    err: null,
-    imageObjs: []
   };
 
   componentDidMount() {
@@ -36,40 +32,33 @@ class Sketches extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.indexById !== this.props.indexById || nextProps.unit !== this.props.unit)
+    if (nextProps.indexById !== this.props.indexById ||
+      nextProps.unit !== this.props.unit) {
       this.setCurrentItem(nextProps);
+    }
   }
 
-  //load data into state
+  // load data into state
   setCurrentItem = (props) => {
     const { unit, indexById, fetchAsset } = props;
-    const zipFile = this.findZipFile(unit);
-    let zipFileId = null, wip = false, err = null, imageObjs = [];
+    const zipFile                         = this.findZipFile(unit);
 
-    if (zipFile){
-        zipFileId = zipFile.id;
+    if (!zipFile) {
+      this.setState({ zipFileId: null });
+    } else {
+      this.setState({ zipFileId: zipFile.id });
 
-        if (indexById != null && indexById[zipFileId]){
-            const currentItem = indexById[zipFileId];
-            wip = currentItem.wip;
-            err = currentItem.err;
-            imageObjs = currentItem.data;
-        }
-
-        if (err)
-            console.log('Error during unzip file ', err);
-        else if (!wip && (!imageObjs || imageObjs.length === 0)) {
-            fetchAsset(zipFileId);
-        }
+      const hasData = indexById && indexById[zipFile.id];
+      if (!hasData) {
+        fetchAsset(zipFile.id);
+      }
     }
-
-    this.setState({zipFileId, wip, err, imageObjs});
-  }
+  };
 
   findZipFile = (unit) => {
     return Array.isArray(unit.files) ?
-           unit.files.find(this.filterZipFile) :
-           null;
+      unit.files.find(this.filterZipFile) :
+      null;
   };
 
   filterZipFile = (file) => {
@@ -81,20 +70,14 @@ class Sketches extends React.Component {
   }
 
   render() {
-    const { t } = this.props;
-    const { wip, err, imageObjs } = this.state; 
+    const { t, indexById }              = this.props;
+    const { zipFileId }                 = this.state;
+    const { wip, err, data: imageObjs } = indexById[zipFileId] || {};
 
     if (err) {
       if (err.response && err.response.status === 404) {
         return (
-          <FrownSplash
-            text={t('messages.program-not-found')}
-            subtext={
-              <Trans i18nKey="messages.program-not-found-subtext">
-                Try the <Link to="/programs">programs list</Link>...
-              </Trans>
-            }
-          />
+          <FrownSplash text={t('messages.sketches-not-found')} />
         );
       }
 
@@ -106,11 +89,19 @@ class Sketches extends React.Component {
     }
 
     if (Array.isArray(imageObjs) && imageObjs.length > 0) {
+
       //prepare the image array for the gallery and sort it
       const items = imageObjs
         .map(imageGalleryItem)
-        .sort((a, b) => a.original < b.original)
-        ;
+        .sort((a, b) => {
+          if (a.original < b.original) {
+            return -1;
+          } else if (a.original > b.original) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
 
       return (
         <ImageGallery
@@ -125,7 +116,7 @@ class Sketches extends React.Component {
       );
     }
 
-    return (<div>No Images found</div>);
+    return (<div>{t('messages.no-images')}</div>);
   }
 }
 
@@ -150,11 +141,9 @@ const imageGalleryItem = (item) => {
   };
 };
 
-const mapState = (state) => {
-  return {
-    indexById : selectors.getIndexById(state.assets)
-  };
-};
+const mapState = (state) => ({
+  indexById: selectors.getIndexById(state.assets)
+});
 
 const mapDispatch = (dispatch) => {
   return bindActionCreators({

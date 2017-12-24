@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import * as shapes from '../../shapes';
 import TabsMenu from '../../shared/TabsMenu';
 import Summary from './Summary/Summary';

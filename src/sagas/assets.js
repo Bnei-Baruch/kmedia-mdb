@@ -7,10 +7,9 @@ function* fetchImages(action) {
   const id = action.payload;
 
   try {
-    const { data } = yield call(Api.unzipImages, {id});
+    const { data } = yield call(Api.unzip, { id });
     yield put(actions.fetchAssetSuccess(id, data));
-  }
-  catch (err) {
+  } catch (err) {
     yield put(actions.fetchAssetFailure(id, err));
   }
 }

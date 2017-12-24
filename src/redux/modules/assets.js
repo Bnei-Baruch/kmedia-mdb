@@ -1,6 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 
-const FETCH_ASSET = 'Assets/FETCH_ASSET';
+const FETCH_ASSET         = 'Assets/FETCH_ASSET';
 const FETCH_ASSET_SUCCESS = 'Assets/FETCH_ASSET_SUCCESS';
 const FETCH_ASSET_FAILURE = 'Assets/FETCH_ASSET_FAILURE';
 
@@ -12,7 +12,7 @@ export const types = {
 
 /* Actions */
 
-const fetchAsset = createAction(FETCH_ASSET);
+const fetchAsset        = createAction(FETCH_ASSET);
 const fetchAssetSuccess = createAction(FETCH_ASSET_SUCCESS, (id, data) => ({ id, data }));
 const fetchAssetFailure = createAction(FETCH_ASSET_FAILURE, (id, err) => ({ id, err }));
 
@@ -44,7 +44,7 @@ const onFetchAssetSuccess = (state, action) => {
       ...state.indexById,
       [id]: { data, wip: false, err: null },
     }
-  }
+  };
 };
 
 const onFetchAssetFailure = (state, action) => {
@@ -55,7 +55,7 @@ const onFetchAssetFailure = (state, action) => {
       ...state.indexById,
       [id]: { data: [], wip: false, err },
     },
-  }
+  };
 };
 
 export const reducer = handleActions({
