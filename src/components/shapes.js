@@ -85,6 +85,11 @@ export const ProgramChapter = PropTypes.shape({
   film_date: PropTypes.string.isRequired,
 });
 
+export const Lecture = PropTypes.shape({
+  ...MDBDenormalizedContentUnit,
+  film_date: PropTypes.string.isRequired,
+});
+
 export const EventCollection = PropTypes.shape({
   ...MDBDenormalizedCollection,
   start_date: PropTypes.string.isRequired,

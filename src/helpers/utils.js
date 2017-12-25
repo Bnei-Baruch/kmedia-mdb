@@ -239,7 +239,7 @@ export const canonicalLink = (entity) => {
   case CT_VIRTUAL_LESSON:
   case CT_CHILDREN_LESSON:
   case CT_WOMEN_LESSON:
-    return `/lectures/part/${entity.id}`;
+    return `/lectures/${entity.id}`;
   case CT_VIDEO_PROGRAM_CHAPTER:
     return `/programs/chapter/${entity.id}`;
   case CT_EVENT_PART:
