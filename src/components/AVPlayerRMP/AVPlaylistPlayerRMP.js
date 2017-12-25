@@ -60,10 +60,12 @@ class AVPlaylistPlayerRMP extends Component {
 
     return (
       <div
-        
-        className={classNames('avbox__player', { 'avbox__player--is-audio': currentItem.mediaType === MT_AUDIO })}       
+        className={classNames('avbox__player', {
+          'avbox__player--is-audio': currentItem.mediaType === MT_AUDIO,
+          'avbox__player--is-4x3': currentItem.film_date < '2014',
+        })}
       >
-        
+
         <div className="avbox__media-wrapper" >
           <Media>
             <AVPlayerRMP

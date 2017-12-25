@@ -30,18 +30,18 @@ class RMPVideoBox extends Component {
 
   componentWillMount() {
     const { isMobile, language, location, history, unit } = this.props;
-    const mediaType = playerHelper.getMediaTypeFromQuery(location, isMobile ? MT_AUDIO : MT_VIDEO);
-    const playerLanguage = playerHelper.getLanguageFromQuery(location, language);
+    const mediaType                                       = playerHelper.getMediaTypeFromQuery(location, isMobile ? MT_AUDIO : MT_VIDEO);
+    const playerLanguage                                  = playerHelper.getLanguageFromQuery(location, language);
     this.setPlayableItem(unit, mediaType, playerLanguage);
     playerHelper.setLanguageInQuery(history, playerLanguage);
   }
 
   componentWillReceiveProps(nextProps) {
     const { isMobile, unit, language } = nextProps;
-    const props                   = this.props;
+    const props                        = this.props;
 
     const prevMediaType = playerHelper.getMediaTypeFromQuery(props.location, isMobile ? MT_AUDIO : MT_VIDEO);
-    const newMediaType = playerHelper.getMediaTypeFromQuery(nextProps.location, isMobile ? MT_AUDIO : MT_VIDEO);
+    const newMediaType  = playerHelper.getMediaTypeFromQuery(nextProps.location, isMobile ? MT_AUDIO : MT_VIDEO);
 
     // no change
     if (unit === props.unit && language === props.language && prevMediaType === newMediaType) {
@@ -58,7 +58,7 @@ class RMPVideoBox extends Component {
   }
 
   handleSwitchAV = () => {
-    const { history } = this.props;
+    const { history }      = this.props;
     const { playableItem } = this.state;
 
     if (playableItem.mediaType === MT_VIDEO && playableItem.availableMediaTypes.includes(MT_AUDIO)) {
@@ -69,7 +69,7 @@ class RMPVideoBox extends Component {
   };
 
   handleChangeLanguage = (e, language) => {
-    const { playableItem } = this.state;
+    const { playableItem }  = this.state;
     const { unit, history } = this.props;
 
     if (language !== playableItem.language) {
@@ -81,7 +81,7 @@ class RMPVideoBox extends Component {
 
   render() {
     const { t, isMobile, isSliceable } = this.props;
-    const { playableItem } = this.state;
+    const { playableItem }             = this.state;
 
     if (!playableItem || !playableItem.src) {
       return (<div>{t('messages.no-playable-files')}</div>);
@@ -91,11 +91,12 @@ class RMPVideoBox extends Component {
       <Grid.Row>
         <Grid.Column mobile={16} tablet={12} computer={10}>
           <div
-            
-            className={classNames('avbox__player', { 'avbox__player--is-audio': playableItem.mediaType === MT_AUDIO })}
-            
+            className={classNames('avbox__player', {
+              'avbox__player--is-audio': playableItem.mediaType === MT_AUDIO,
+              'avbox__player--is-4x3': playableItem.film_date < '2014',
+            })}
           >
-            
+
             <div className="avbox__media-wrapper">
               <Media>
                 <AVPlayer
