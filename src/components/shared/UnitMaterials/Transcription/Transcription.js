@@ -8,7 +8,6 @@ import * as shapes from '../../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../shared/Splash';
 
 class Transcription extends Component {
-
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     content: PropTypes.shape({
@@ -44,6 +43,7 @@ class Transcription extends Component {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
+      // eslint-disable-next-line react/no-danger
       contents        = <div style={{ direction }} dangerouslySetInnerHTML={{ __html: data }} />;
     }
 
