@@ -42,6 +42,17 @@ class FullEventContainer extends Component {
     // We fetch stuff if we don't have it already
     // and a request for it is not in progress or ended with an error.
     const id = match.params.id;
+
+    // TODO: this is rather disgusting.
+    // we should somehow clean wip & err in redux (save memory)
+    // once we do this we should implement this condition differently
+    // see FullLessonContainer for the same problem
+
+    if (!wip.fulls.hasOwnProperty(id)) {
+      // never fetched as full so fetch now
+      fetchFullEvent(id);
+    }
+
     if (fullEvent && fullEvent.id === id && Array.isArray(fullEvent.cuIDs)) {
       fullEvent.cuIDs.forEach((cuID) => {
         const cu = fullEvent.content_units.find(x => x.id === cuID);

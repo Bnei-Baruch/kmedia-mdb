@@ -37,9 +37,21 @@ class FullLessonContainer extends Component {
   askForDataIfNeeded = (props) => {
     const { match, fullLesson, wip, errors, fetchFullLesson, fetchLessonPart } = props;
 
+
     // We fetch stuff if we don't have it already
     // and a request for it is not in progress or ended with an error.
     const id = match.params.id;
+
+    // TODO: this is rather disgusting.
+    // we should somehow clean wip & err in redux (save memory)
+    // once we do this we should implement this condition differently
+    // see FullEventContainer for the same problem
+
+    if (!wip.fulls.hasOwnProperty(id)) {
+      // never fetched as full so fetch now
+      fetchFullLesson(id);
+    }
+
     if (fullLesson && fullLesson.id === id) {
       fullLesson.cuIDs.forEach((cuID) => {
         const cu = fullLesson.content_units.find(x => x.id === cuID);
