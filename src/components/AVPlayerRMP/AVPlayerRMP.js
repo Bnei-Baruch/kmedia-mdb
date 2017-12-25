@@ -22,6 +22,7 @@ import AVAudioVideo from './AVAudioVideo';
 import AvSeekBar from './AvSeekBar';
 import AVEditSlice from './AVEditSlice';
 import AVShareBar from './AVShareBar';
+import AVJumpBack from './AVJumpBack';
 
 const PLAYER_VOLUME_STORAGE_KEY = '@@kmedia_player_volume';
 const DEFAULT_PLAYER_VOLUME     = 0.8;
@@ -491,6 +492,8 @@ class AVPlayerRMP extends PureComponent {
                 end={media.duration}
               />
               <div className='mediaplayer__spacer' />
+              <AVJumpBack jumpSpan={-5} />
+              <AVJumpBack jumpSpan={5} />
               <AvSeekBar
                 buffers={this.buffers()}
                 playerMode={mode}
