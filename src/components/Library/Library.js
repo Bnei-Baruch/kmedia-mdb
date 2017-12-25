@@ -39,7 +39,7 @@ class Library extends Component {
     const { content, language, languages, t, } = this.props;
 
     if (isEmpty(content)) {
-      return <Segment basic>{t('materials.sources.no-source')}</Segment>;
+      return <Segment basic>{t('sources-library.no-source')}</Segment>;
     }
 
     const { wip: contentWip, err: contentErr, data: contentData } = content;
@@ -59,9 +59,10 @@ class Library extends Component {
     } else if (contentWip) {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else if (!contentData) {
-      return <Segment basic>{t('materials.sources.no-source')}</Segment>;
+      return <Segment basic>{t('sources-library.no-source')}</Segment>;
     } else {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
+      // eslint-disable-next-line react/no-danger
       contents        = <div style={{ direction }} dangerouslySetInnerHTML={{ __html: contentData }} />;
     }
 

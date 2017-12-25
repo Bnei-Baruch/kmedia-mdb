@@ -111,6 +111,7 @@ export const reducer = handleActions({
       getByID,
       getPath,
       getPathByID,
+      loaded: true,
       roots: action.payload.map(x => x.id),
       error: null,
     };
@@ -170,15 +171,17 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getSources    = state => state.byId;
-const getRoots      = state => state.roots;
-const getSourceById = state => state.getByID;
-const getPath       = state => state.getPath;
-const getPathByID   = state => state.getPathByID;
-const getIndexById  = state => state.indexById;
-const getContent    = state => state.content;
+const areSourcesLoaded = state => state.loaded;
+const getSources       = state => state.byId;
+const getRoots         = state => state.roots;
+const getSourceById    = state => state.getByID;
+const getPath          = state => state.getPath;
+const getPathByID      = state => state.getPathByID;
+const getIndexById     = state => state.indexById;
+const getContent       = state => state.content;
 
 export const selectors = {
+  areSourcesLoaded,
   getSources,
   getRoots,
   getSourceById,
