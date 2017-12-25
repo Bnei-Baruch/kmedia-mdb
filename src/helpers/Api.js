@@ -68,12 +68,12 @@ class Api {
   static sourceContent = ({ id, name }) =>
     Requests.getAsset(`sources/${id}/${name}`);
 
-  static sourceContent = ({ id, name }) => 
+  static sourceContent = ({ id, name }) =>
     Requests.getAsset(`sources/${id}/${name}`);
 
-  static unzipImages = ({ id }) => 
+  static unzip = ({ id }) =>
     Requests.getAsset(`api/unzip/${id}`);
-  
+
   static doc2Html = ({ id }) =>
     Requests.getAsset(`api/doc2html/${id}`);
 }

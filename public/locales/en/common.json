@@ -124,7 +124,9 @@
     "fallback-language": "Media not found for selected language, selected fallback language.",
     "fallback-to-audio": "Video was not found, using audio.",
     "fallback-to-video": "Audio was not found, using video.",
-    "source-content-not-found": "Source contents wasn't found"
+    "source-content-not-found": "Source contents wasn't found",
+    "no-images": "No images found",
+    "sketches-not-found": "Couldn't find sketches"
   },
   "search": {
     "sortby": "sort by",
