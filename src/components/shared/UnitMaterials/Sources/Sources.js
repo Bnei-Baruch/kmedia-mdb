@@ -162,7 +162,9 @@ class Sources extends Component {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
-      contents        = <div style={{ direction }} dangerouslySetInnerHTML={{ __html: contentData }} />;
+
+      // eslint-disable-next-line react/no-danger
+      contents = <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: contentData }} />;
     }
 
     return (

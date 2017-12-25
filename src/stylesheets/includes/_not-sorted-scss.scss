@@ -32,7 +32,9 @@
   }
 }
 
-// Do not display images in lesson/part/transcription as they are broken
-.transcription img {
-  display: none;
+// Do not display images in doc files converted to html as they are broken
+.doc2html {
+  img {
+    display: none;
+  }
 }

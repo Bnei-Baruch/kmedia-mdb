@@ -12,7 +12,8 @@ class Transcription extends Component {
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     content: PropTypes.shape({
-      data: PropTypes.string, // actual content (HTML)
+      data: PropTypes.string,     // actual content (HTML)
+      language: PropTypes.string, // language of text in file
       wip: shapes.WIP,
       err: shapes.Error,
     }).isRequired,
@@ -28,30 +29,20 @@ class Transcription extends Component {
 
     const { wip, err, data, language } = content;
 
-    let contents;
     if (err) {
       if (err.response && err.response.status === 404) {
-        contents = (
-          <FrownSplash
-            text={t('messages.source-content-not-found')}
-          />
-        );
+        return <FrownSplash text={t('messages.source-content-not-found')} />;
       } else {
-        contents = <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
+        return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
       }
     } else if (wip) {
-      contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
+      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
-      // eslint-disable-next-line react/no-danger
-      contents        = <div className="transcription" style={{ direction }} dangerouslySetInnerHTML={{ __html: data }} />;
-    }
 
-    return (
-      <div>
-        {contents}
-      </div>
-    );
+      // eslint-disable-next-line react/no-danger
+      return <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: data }} />;
+    }
   }
 }
 
