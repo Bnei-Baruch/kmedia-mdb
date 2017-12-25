@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { replace } from 'react-router-redux';
 import { translate } from 'react-i18next';
 import { Accordion, Grid } from 'semantic-ui-react';
 
@@ -27,8 +27,8 @@ class LibraryContainer extends Component {
     getSourceById: PropTypes.func.isRequired,
     getPathByID: PropTypes.func,
     areSourcesLoaded: PropTypes.bool,
-    history: ReactRouterPropTypes.history.isRequired,
     t: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -51,7 +51,7 @@ class LibraryContainer extends Component {
   };
 
   componentDidMount() {
-    const { sourceId, areSourcesLoaded, history } = this.props;
+    const { sourceId, areSourcesLoaded, replace } = this.props;
     if (!areSourcesLoaded) {
       return;
     }
@@ -59,7 +59,7 @@ class LibraryContainer extends Component {
     if (firstLeafId !== sourceId || this.props.sourceId !== sourceId
       || this.state.lastLoadedId !== sourceId) {
       if (firstLeafId !== sourceId) {
-        history.replace(firstLeafId);
+        replace(`sources/${firstLeafId}`);
       } else {
         // eslint-disable-next-line react/no-did-mount-set-state
         this.setState({ lastLoadedId: sourceId, language: this.props.language });
@@ -69,7 +69,7 @@ class LibraryContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { sourceId, areSourcesLoaded, history, language, } = nextProps;
+    const { sourceId, areSourcesLoaded, language, replace } = nextProps;
     if (!areSourcesLoaded) {
       return;
     }
@@ -83,7 +83,7 @@ class LibraryContainer extends Component {
     if (firstLeafId !== sourceId || this.props.sourceId !== sourceId
       || this.state.lastLoadedId !== sourceId) {
       if (firstLeafId !== sourceId) {
-        history.replace(firstLeafId);
+        replace(firstLeafId);
       } else {
         this.setState({ lastLoadedId: sourceId, language: this.props.language });
         this.fetchIndices(sourceId);
@@ -123,9 +123,7 @@ class LibraryContainer extends Component {
 
   selectSourceById = (id, e) => {
     e.preventDefault();
-
-    const { history, } = this.props;
-    history.replace(id);
+    this.props.replace(`sources/${id}`);
   };
 
   subToc = subTree => (
@@ -227,11 +225,11 @@ class LibraryContainer extends Component {
           {this.header(this.properParentId(this.props.sourceId))}
         </Grid.Row>
         <Grid.Row>
-          <Grid.Column width={6}>
+          <Grid.Column width={5}>
             <p>{t('sources-library.toc')}</p>
             <Accordion fluid styled defaultActiveIndex={0} panels={this.toc(parent, true)} />
           </Grid.Column>
-          <Grid.Column width={10}>
+          <Grid.Column width={11}>
             {content}
           </Grid.Column>
         </Grid.Row>
@@ -252,5 +250,6 @@ export default withRouter(connect(
   }),
   dispatch => bindActionCreators({
     fetchIndex: sourceActions.fetchIndex,
+    replace,
   }, dispatch)
 )(translate()(LibraryContainer)));

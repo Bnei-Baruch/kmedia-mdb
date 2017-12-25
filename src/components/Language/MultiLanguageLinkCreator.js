@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
 import hoistStatics from 'hoist-non-react-statics';
 import { Link, withRouter } from 'react-router-dom';
 
 import { prefixWithLanguage } from '../../helpers/url';
+import * as shapes from '../shapes';
 
 /**
  * multiLanguageLinkCreator - an higher order component to create a link that allows navigating
@@ -32,7 +32,7 @@ const multiLanguageLinkCreator = () => (WrappedComponent) => {
         PropTypes.string,
         PropTypes.object
       ]),
-      location: ReactRouterPropTypes.location.isRequired,
+      location: shapes.HistoryLocation.isRequired,
       language: PropTypes.string // language shorthand, for example: "ru"
     };
 
@@ -47,7 +47,7 @@ const multiLanguageLinkCreator = () => (WrappedComponent) => {
     };
 
     render() {
-      // We need to use "unused constatns" in order to get proper "rest"
+      // We need to use "unused constants" in order to get proper "rest"
       // eslint-disable-next-line no-unused-vars
       const { to, language, location, match, history, staticContext, ...rest } = this.props;
       let navigateTo                                                           = to;

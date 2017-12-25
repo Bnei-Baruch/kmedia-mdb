@@ -15,12 +15,17 @@ class Kabbalist extends Component {
     }).isRequired,
   };
 
-  static defaultProps = {};
-
   book = (hex, getSourceById) => {
     const { id, name, description } = getSourceById(hex);
     return (
-      <NavLink key={id} to={`/sources/${id}`} style={{ paddingRight: '20px' }}>{`${name} ${description || ''} `}</NavLink>);
+      <NavLink
+        key={id}
+        to={`/sources/${id}`}
+        style={{ paddingRight: '20px' }}
+      >
+        {`${name} ${description || ''} `}
+      </NavLink>
+    );
   };
 
   render() {

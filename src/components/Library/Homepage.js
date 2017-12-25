@@ -15,11 +15,10 @@ class Homepage extends Component {
     t: PropTypes.func.isRequired,
   };
 
-  static defaultProps = {};
-
   render() {
     const { roots, getSourceById } = this.props;
-    const kabbalists               = roots.map(k =>
+    
+    const kabbalists = roots.map(k =>
       <Kabbalist key={k} items={getSourceById(k)} getSourceById={getSourceById} />
     );
 
