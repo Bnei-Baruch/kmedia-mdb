@@ -242,6 +242,11 @@
       "header": "שרטוטים"
     }
   },
+  "sources-library": {
+    "title": "מקורות",
+    "no-source": "בחר מקור",
+    "toc": "תוכן עניינים"
+  },
   "media-downloads": {
     "title": "קבצים להורדה",
     "derived-title": "נגזרות",

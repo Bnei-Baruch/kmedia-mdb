@@ -7,7 +7,7 @@ import { DATE_FORMAT } from '../../../helpers/consts';
 import { fromToLocalized } from '../../../helpers/date';
 import { formatDuration } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
-import placeholder from './placeholder.png';
+import placeholder from '../../shared/placeholder.png';
 
 class FullEventPlaylist extends Component {
 

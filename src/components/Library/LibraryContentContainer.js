@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { translate } from 'react-i18next';
 
 import { isEmpty } from '../../helpers/utils';
 import { actions as sourceActions, selectors as sourceSelectors } from '../../redux/modules/sources';
@@ -22,15 +21,14 @@ class LibraryContentContainer extends Component {
       wip: shapes.WIP,
       err: shapes.Error,
     }).isRequired,
-    languageUI: PropTypes.string,
     t: PropTypes.func.isRequired,
     fetchContent: PropTypes.func.isRequired,
+    languageUI: PropTypes.string,
   };
 
   static defaultProps = {
     source: null,
     index: {},
-    languageUI: null,
   };
 
   state = {
@@ -65,7 +63,8 @@ class LibraryContentContainer extends Component {
 
   myReplaceState = (nextProps) => {
     const data                    = nextProps.index && nextProps.index.data;
-    const { languages, language } = this.getLanguages(data, nextProps.languageUI);
+    const { languageUI }          = nextProps;
+    const { languages, language } = this.getLanguages(data, languageUI);
 
     this.setState({ languages, language });
 
@@ -87,7 +86,7 @@ class LibraryContentContainer extends Component {
   };
 
   render() {
-    const { content, index, t }   = this.props;
+    const { content, index, t, }  = this.props;
     const { languages, language } = this.state;
 
     return (
@@ -109,4 +108,4 @@ export default connect(
   dispatch => bindActionCreators({
     fetchContent: sourceActions.fetchContent,
   }, dispatch)
-)(translate()(LibraryContentContainer));
+)(LibraryContentContainer);
