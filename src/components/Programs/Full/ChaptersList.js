@@ -7,6 +7,7 @@ import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { canonicalLink } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
+import UnitLogo from '../../shared/Logo/UnitLogo';
 
 class ChaptersList extends PureComponent {
 
@@ -47,7 +48,7 @@ class ChaptersList extends PureComponent {
           <strong>{filmDate}</strong>
         </Table.Cell>
         <Table.Cell collapsing width={1}>
-          <Image fluid src="http://www.kab.co.il/images/attachments/91/276191_medium.jpg" />
+          <UnitLogo fluid unitId={unit.id} />
         </Table.Cell>
         <Table.Cell>
           <Link to={canonicalLink(unit)}>
