@@ -11,12 +11,20 @@ import FilterTags from '../Filters/FilterTags/FilterTags';
 const filters = [
   {
     name: 'date-filter',
-    component: filterComponents.DateFilter
+    component: filterComponents.DateFilter,
   },
   {
     name: 'topics-filter',
-    component: filterComponents.MultiTopicsFilter
-  }
+    component: filterComponents.TopicsFilter,
+  },
+  {
+    name: 'sources-filter',
+    component: filterComponents.SourcesFilter,
+  },
+  {
+    name: 'sections-filter',
+    component: filterComponents.SectionsFilter,
+  },
 ];
 
 class SearchResultsFilters extends Component {

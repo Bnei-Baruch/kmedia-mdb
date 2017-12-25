@@ -1,4 +1,5 @@
 import moment from 'moment';
+import 'moment-duration-format';
 
 import {
   CT_ARTICLE,
@@ -88,6 +89,14 @@ export const formatError = (error) => {
   }
   return error;
 };
+
+/**
+ * Format the given duration (seconds) in the given format
+ * @param duration {numeric} number of seconds in this duration
+ * @param fmt {String} default is 'hh:mm:ss'
+ */
+export const formatDuration = (duration, fmt = 'hh:mm:ss') =>
+  moment.duration(duration, 'seconds').format(fmt);
 
 /**
  * A generator for interspersing a delimiter between items of an iterable.

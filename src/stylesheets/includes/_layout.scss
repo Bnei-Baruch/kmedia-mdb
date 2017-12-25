@@ -1,0 +1,161 @@
+@import 'rtl/layout';
+
+.layout {
+  height: 100vh;
+
+  &__header,
+  &__sidebar {
+    .menu,
+    .item {
+      border-radius: 0 !important;
+    }
+
+    > .menu {
+      height: 60px;
+
+      small {
+        line-height: 1;
+      }
+    }
+  }
+
+  &__header {
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 999999;
+  }
+
+  &__sidebar {
+    background: #fff;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    top: 0;
+    transform: translate(-100%, 0);
+    transition: transform .3s;
+    width: 290px;
+    z-index: 999999;
+
+    &.is-active {
+      transform: none;
+    }
+
+    > .menu {
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    &-menu {
+      border-right: 1px solid $border-color;
+      bottom: 0;
+      left: 0;
+      overflow: auto;
+      position: absolute;
+      right: 0;
+      top: 60px;
+
+      .menu {
+        border: 0;
+        box-shadow: none !important;
+      }
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding-top: 60px;
+  }
+
+  &__content {
+    flex-grow: 1;
+  }
+
+  &__footer {
+    background: $black;
+  }
+}
+
+.logo {
+  img {
+    display: none !important;
+  }
+
+  h2.header {
+    margin-left: 0;
+    margin-top: 0;
+  }
+}
+
+.content {
+  &__main {
+
+  }
+
+  &__aside {
+    &-unit {
+      margin-bottom: 3em;
+    }
+  }
+}
+@media only screen and (min-width: $largeMonitorBreakpoint) {
+  .layout {
+    &__sidebar-toggle {
+      display: none !important;
+    }
+
+    &__sidebar {
+      top: 60px;
+      transform: none;
+
+      > .menu {
+        display: none;
+      }
+
+      &-menu {
+        top: 0;
+      }
+    }
+
+    &__main {
+      margin-left: 290px;
+    }
+  }
+
+  .logo {
+    min-width: 290px;
+
+    img {
+      display: inline-block !important;
+    }
+
+    h2.header {
+      margin-left: 16px;
+      margin-top: 0;
+    }
+  }
+}
+
+
+
+
+.ui.container.padded {
+  padding: 1em;
+
+  &.vertically {
+    padding: 1em 0;
+  }
+
+  &.horizontally {
+    padding: 0 1em;
+
+    &.vertically {
+      padding: 1em;
+    }
+  }
+}

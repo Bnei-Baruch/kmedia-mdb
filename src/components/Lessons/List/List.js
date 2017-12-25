@@ -48,7 +48,7 @@ class LessonsList extends PureComponent {
             relatedItems.length === 0 ?
               null :
               (
-                <List size="tiny" divided horizontal link>
+                <List className="index-list__item-subtitle" size="tiny" divided horizontal link>
                   <List.Item>
                     <List.Header>
                       {t('lessons.list.related')}:
@@ -93,7 +93,7 @@ class LessonsList extends PureComponent {
                 relatedItems.length === 0 ?
                   null :
                   (
-                    <List size="tiny" divided horizontal link>
+                    <List className="index-list__item-subtitle" size="tiny" divided horizontal link>
                       <List.Item>
                         <List.Header>
                           {t('lessons.list.related')}:

@@ -1,23 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import noop from 'lodash/noop';
 import { Button, Divider, List, Segment } from 'semantic-ui-react';
 
-import { TAG_LESSONS_TOPICS, TAG_PROGRAMS_TOPICS } from '../../../helpers/consts';
-import { selectors as tags } from '../../../redux/modules/tags';
 import connectFilter from '../connectFilter';
+import { options } from '../../../filters/definitions/sectionsFilter';
 
-class TopicsFilterBase extends React.Component {
+class SectionsFilter extends React.Component {
 
   static propTypes = {
     onCancel: PropTypes.func,
     onApply: PropTypes.func,
     updateValue: PropTypes.func.isRequired,
     value: PropTypes.string,
-    getTagById: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
-    allValues: PropTypes.arrayOf(PropTypes.string),
     namespace: PropTypes.string.isRequired,
   };
 
@@ -25,7 +21,6 @@ class TopicsFilterBase extends React.Component {
     onCancel: noop,
     onApply: noop,
     value: null,
-    allValues: [],
   };
 
   state = {
@@ -58,37 +53,34 @@ class TopicsFilterBase extends React.Component {
 
   canApply = () => this.state.selection && this.state.selection.length > 0;
 
-  createList = (items, selected) => {
-    if (!Array.isArray(items)) {
+  createList = (sections, selected) => {
+    if (!Array.isArray(sections)) {
       return null;
     }
-
-    const getTagById = this.props.getTagById;
 
     return (
       <div
         style={{
-          height: '250px',
+          height: '90px',
           overflowY: 'scroll'
         }}
       >
         <List divided relaxed selection>
           {
-            items.map((x) => {
-              const node  = getTagById(x);
-              const style = this.props.allValues.includes(x) && selected !== x ?
+            sections.map((x) => {
+              const style = this.props.value === x && selected !== x ?
                 { backgroundColor: 'lightgoldenrodyellow' } :
                 {};
 
               return (
                 <List.Item
-                  key={node.id}
-                  value={node.id}
+                  key={x}
+                  value={x}
                   style={style}
-                  active={selected === node.id}
+                  active={selected === x}
                   onClick={this.onSelectionChange}
                 >
-                  {node.label}
+                  {this.props.t(x)}
                 </List.Item>
               );
             })
@@ -99,33 +91,13 @@ class TopicsFilterBase extends React.Component {
   };
 
   render() {
-    const { t, getTagById, namespace } = this.props;
-    let topics;
+    const { t } = this.props;
 
-    switch (namespace) {
-    // TODO: Search should have both lessons and programs topics.
-    // The UI should should another layer (similar to sources).
-    case 'search':
-      topics = getTagById(TAG_LESSONS_TOPICS);
-      break;
-    case 'lessons':
-      topics = getTagById(TAG_LESSONS_TOPICS);
-      break;
-    case 'programs':
-    case 'full-program':
-      topics = getTagById(TAG_PROGRAMS_TOPICS);
-      break;
-    default:
-      topics = '';
-    }
+    const sections = Object.keys(options);
 
     return (
       <Segment basic clearing attached="bottom" className="tab active">
-        {
-          topics.children ?
-            this.createList(topics.children, this.state.selection) :
-            'No topics'
-        }
+        { this.createList(sections, this.state.selection) }
         <Divider />
         <Segment vertical clearing>
           <Button primary content={t('buttons.apply')} floated="right" disabled={!this.canApply()} onClick={this.apply} />
@@ -136,16 +108,4 @@ class TopicsFilterBase extends React.Component {
   }
 }
 
-const TopicsFilter = connect(
-  state => ({
-    getTagById: tags.getTagById(state.tags),
-  })
-)(connectFilter()(TopicsFilterBase));
-
-const MultiTopicsFilter = connect(
-  state => ({
-    getTagById: tags.getTagById(state.tags),
-  })
-)(connectFilter({ isMultiple: true })(TopicsFilterBase));
-
-export { TopicsFilter, MultiTopicsFilter };
+export default connectFilter()(SectionsFilter);

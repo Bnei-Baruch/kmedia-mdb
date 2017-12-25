@@ -12,8 +12,10 @@ import { reducer as transcription } from './modules/transcription';
 import { reducer as tags } from './modules/tags';
 import { reducer as mdb } from './modules/mdb';
 import { reducer as search } from './modules/search';
+import { reducer as assets } from './modules/assets';
 
 export default combineReducers({
+<<<<<<< HEAD
     router
   , system
   , settings
@@ -27,5 +29,20 @@ export default combineReducers({
   , tags
   , mdb
   , search
+=======
+  router,
+  system,
+  settings,
+  lessons,
+  programs,
+  events,
+  filters,
+  sources,
+  transcription,
+  tags,
+  mdb,
+  search,
+  assets,
+>>>>>>> master
 });
 

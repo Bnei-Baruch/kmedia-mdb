@@ -1,0 +1,44 @@
+$border-color: rgba(34, 36, 38, .15);
+$red: #db2828;
+$orange: #f2711c;
+$yellow: #fbbd08;
+$olive: #b5cc18;
+$green: #21ba45;
+$teal: #00b5ad;
+$blue: #2185d0;
+// $blue: #00aeef; //bb style guide blue 
+$violet: #6435c9;
+$purple: #a333c8;
+$pink: #e03997;
+$brown: #a5673f;
+$grey: #767676;
+$black: #1b1c1d;
+
+
+// Neutrals
+$fullBlack: #000;
+$offWhite: #f9fafb;
+$darkWhite: #f3f4f5;
+$midWhite: #dcddde;
+$white: #fff;
+$text-colors: (
+  red: $red,
+  orange: $orange,
+  yellow: #b58105, // Yellow text is difficult to read
+  olive: #8abc1e, // Olive is difficult to read
+  green: #1ebc30, // Green is difficult to read
+  teal: #10a3a3, // Teal text is difficult to read
+  blue: $blue,
+  violet: $violet,
+  purple: $purple,
+  pink: $pink,
+  brown: $brown,
+  grey: $grey,
+  black: $black
+);
+
+@each $colorname, $colorvalue in $text-colors {
+  .text.#{$colorname} {
+    color: #{$colorvalue};
+  }
+}
