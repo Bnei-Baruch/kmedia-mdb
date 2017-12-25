@@ -25,7 +25,7 @@ export const actions = {
 /* Reducer */
 
 const initialState = {
-  indexById: {}
+  indexById: []
 };
 
 const onFetchAsset = (state, action) => ({

@@ -11,6 +11,7 @@ import { actions, selectors } from '../../../redux/modules/assets';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
 import Link from '../../Language/MultiLanguageLink';
+import { selectors as settings } from '../../../redux/modules/settings';
 
 class Sketches extends React.Component {
   static propTypes = {
@@ -22,6 +23,7 @@ class Sketches extends React.Component {
         err: shapes.Error,
       })).isRequired,
     fetchAsset: PropTypes.func.isRequired,
+    language : PropTypes.string.isRequired
   };
 
   state = {
@@ -67,9 +69,30 @@ class Sketches extends React.Component {
   }
 
   findZipFile = (unit) => {
-    return Array.isArray(unit.files) ?
-           unit.files.find(this.filterZipFile) :
-           null;
+    if (Array.isArray(unit.files)) {
+      //get the zip files
+      const zipFiles = unit.files.filter(this.filterZipFile);
+
+      if (Array.isArray(zipFiles) && zipFiles.length > 1) {
+        //filter by language
+        const zipFile = zipFiles.filter((file) => file.language === this.props.language);
+
+        if (zipFile)
+          return zipFile;
+        else
+          //default zip file
+          return zipFiles[0];
+      }
+      else
+        return zipFiles;
+    }
+    else
+      return null;
+
+
+    // return Array.isArray(unit.files) ?
+    //        unit.files.find(this.filterZipFile) :
+    //        null;
   };
 
   filterZipFile = (file) => {
@@ -152,7 +175,8 @@ const imageGalleryItem = (item) => {
 
 const mapState = (state) => {
   return {
-    indexById : selectors.getIndexById(state.assets)
+    indexById : selectors.getIndexById(state.assets),
+    language: settings.getLanguage(state.settings)
   };
 };
 
