@@ -16,7 +16,6 @@ class TranscriptionContainer extends Component {
       wip: shapes.WIP,
       err: shapes.Error,
     }).isRequired,
-    language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     fetchTranscription: PropTypes.func.isRequired,
   };
@@ -25,24 +24,23 @@ class TranscriptionContainer extends Component {
 
   componentDidMount() {
     this.props.unit.files.filter(file => file.type === 'text').forEach(file =>
-      this.props.fetchTranscription(file.id)
+      this.props.fetchTranscription(file)
     );
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.unit.id !== this.props.unit.id) {
-      this.props.fetchTranscription(nextProps.unit.id);
+      this.props.fetchTranscription(nextProps.unit);
     }
   }
 
   render() {
-    const { unit, content, language, t, } = this.props;
+    const { unit, content, t, } = this.props;
 
     return (
       <Transcription
         unit={unit}
         content={content}
-        language={language}
         t={t}
       />
     );

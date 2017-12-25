@@ -16,18 +16,17 @@ class Transcription extends Component {
       wip: shapes.WIP,
       err: shapes.Error,
     }).isRequired,
-    language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
   };
 
   render() {
-    const { content, language, t } = this.props;
+    const { content, t } = this.props;
 
     if (content === null || content.length === 0) {
       return <Segment basic>{t('materials.sources.no-sources')}</Segment>;
     }
 
-    const { wip, err, data } = content;
+    const { wip, err, data, language } = content;
 
     let contents;
     if (err) {
@@ -44,7 +43,8 @@ class Transcription extends Component {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
-      contents        = <div style={{ direction }} dangerouslySetInnerHTML={{ __html: data }} />;
+      // eslint-disable-next-line react/no-danger
+      contents        = <div className="transcription" style={{ direction }} dangerouslySetInnerHTML={{ __html: data }} />;
     }
 
     return (
