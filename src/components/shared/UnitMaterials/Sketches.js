@@ -6,6 +6,7 @@ import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import { formatError } from '../../../helpers/utils';
 import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
+import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { actions, selectors } from '../../../redux/modules/assets';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
@@ -47,7 +48,8 @@ class Sketches extends React.Component {
 
     if (!zipFile) {
       this.setState({ zipFileId: null });
-    } else {
+    } 
+    else {
       this.setState({ zipFileId: zipFile.id });
 
       const hasData = indexById && indexById[zipFile.id];
@@ -68,13 +70,13 @@ class Sketches extends React.Component {
       //at least one zip file  
       if (zipFiles.length === 1)
         return zipFiles[0];
-      else{
+      else {
         //many zip files - try filter by language
         const langZipFiles = zipFiles.filter((file) => file.language === this.props.language);
 
         if (langZipFiles.length === 1)
           return langZipFiles[0];
-        else{
+        else {
           //no file by language - return default image file
           const originalFile = zipFiles.filter((file) => file.language === unit.original_language);
           return zipFiles[0];
@@ -94,7 +96,7 @@ class Sketches extends React.Component {
   }
 
   render() {
-    const { t, indexById }              = this.props;
+    const { t, indexById, language }    = this.props;
     const { zipFileId }                 = this.state;
     const { wip, err, data: imageObjs } = indexById[zipFileId] || {};
 
@@ -112,16 +114,17 @@ class Sketches extends React.Component {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
-    if (Array.isArray(imageObjs) && imageObjs.length > 0) {
+    const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';      
 
+    if (Array.isArray(imageObjs) && imageObjs.length > 0) {
       //prepare the image array for the gallery and sort it
       const items = imageObjs
         .map(imageGalleryItem)
         .sort((a, b) => {
           if (a.original < b.original) {
-            return -1;
-          } else if (a.original > b.original) {
             return 1;
+          } else if (a.original > b.original) {
+            return -1;
           } else {
             return 0;
           }
@@ -133,14 +136,15 @@ class Sketches extends React.Component {
           thumbnailPosition={'top'}
           lazyLoad={true}
           showPlayButton={false}
-          showBullets={true}
+          showBullets={false}
           showFullscreenButton={false}
+          showIndex={true}
           onImageError={this.handleImageError}
         />
       );
     }
 
-    return (<div>{t('messages.no-images')}</div>);
+    return (<div style={{ direction }}>{t('messages.no-images')}</div>);
   }
 }
 
