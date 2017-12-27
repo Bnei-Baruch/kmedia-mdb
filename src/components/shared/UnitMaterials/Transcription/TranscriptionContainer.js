@@ -23,6 +23,18 @@ class TranscriptionContainer extends Component {
 
   static defaultProps = {};
 
+  f1 = () => {
+    this.props.unit.files.filter(file => file.type === 'text').forEach(file =>
+      this.props.fetchTranscription(file.id)
+    );
+  };
+
+  f2 = () => {
+    this.props.unit.files.filter(file => file.type === 'text').forEach(file =>
+      this.props.fetchTranscription(file.id)
+    );
+  };
+
   componentDidMount() {
     this.props.unit.files.filter(file => file.type === 'text').forEach(file =>
       this.props.fetchTranscription(file.id)
