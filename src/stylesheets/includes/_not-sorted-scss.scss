@@ -1,5 +1,5 @@
 // See TimedPopup.js, solves existing bug:
-// https://github.com/Semantic-Org/Semantic-UI-React/issues/1065 
+// https://github.com/Semantic-Org/Semantic-UI-React/issues/1065
 .popup {
   background: #fff;
   border: 1px solid #d4d4d5;
@@ -30,4 +30,8 @@
     direction: rtl;
     display: inline-block;
   }
+}
+
+em {
+  font-weight: bold;
 }

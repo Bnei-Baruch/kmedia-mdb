@@ -14,7 +14,7 @@ const topicsFilter = {
     }
 
     const getTagById = selectors.getTagById(getState().tags);
-    const path          = value.map(getTagById);
+    const path       = value.map(getTagById);
 
     // Make sure we have all items.
     // Location hydration probably happens before we receive sources

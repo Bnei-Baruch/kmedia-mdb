@@ -86,7 +86,7 @@ class OmniBox extends Component {
     }
 
     // Reset filters for new search (query changed)
-    if (getQuery(location).q !== query) {
+    if (query && getQuery(location).q !== query) {
       resetFilter('search', 'date-filter');
       resetFilter('search', 'topics-filter');
       resetFilter('search', 'sections-filter');
@@ -148,7 +148,6 @@ class OmniBox extends Component {
 
   suggestionToResult = (type, item) => {
     if (type === 'tags') {
-      console.log('tags', item, this.props.getTagPath(item.id));
       return { key: item.id, title: this.props.getTagPath(item.id).map(p => p.label).join(' - ')}
     } else if (type === 'sources') {
       return { key: item.id, title: this.props.getSourcePath(item.id).map(p => p.name).join(' > ')}
