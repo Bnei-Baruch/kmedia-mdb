@@ -1,5 +1,5 @@
 // See TimedPopup.js, solves existing bug:
-// https://github.com/Semantic-Org/Semantic-UI-React/issues/1065 
+// https://github.com/Semantic-Org/Semantic-UI-React/issues/1065
 .popup {
   background: #fff;
   border: 1px solid #d4d4d5;
@@ -29,5 +29,12 @@
   .title {
     direction: rtl;
     display: inline-block;
+  }
+}
+
+// Do not display images in doc files converted to html as they are broken
+.doc2html {
+  img {
+    display: none;
   }
 }

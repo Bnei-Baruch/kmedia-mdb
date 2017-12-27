@@ -11,7 +11,8 @@ import FullProgram from '../Programs/Full/FullProgramContainer';
 import Events from '../Events/List/EventsContainer';
 import EventItem from '../Events/Item/EventItemContainer';
 import FullEvent from '../Events/Full/FullEventContainer';
-import Library from '../Library/LibraryContainer';
+import LibraryHomepage from '../Library/Homepage';
+import LibraryContainer from '../Library/LibraryContainer';
 import SearchResults from '../Search/SearchResultsContainer';
 import Design from '../Design/Design';
 
@@ -37,7 +38,8 @@ const Routes = ({ match }) => {
       <Route exact path={`${urlPrefix}/events/item/:id`} component={EventItem} />
       <Route exact path={`${urlPrefix}/events/full/:id`} component={FullEvent} />
       <Route exact path={`${urlPrefix}/lectures`} component={NotImplemented} />
-      <Route exact path={`${urlPrefix}/sources`} component={Library} />
+      <Route exact path={`${urlPrefix}/sources`} component={LibraryHomepage} />
+      <Route exact path={`${urlPrefix}/sources/:id`} component={LibraryContainer} />
       <Route exact path={`${urlPrefix}/events`} component={NotImplemented} />
       <Route exact path={`${urlPrefix}/books`} component={NotImplemented} />
       <Route exact path={`${urlPrefix}/topics`} component={NotImplemented} />

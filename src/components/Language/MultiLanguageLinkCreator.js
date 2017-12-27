@@ -4,6 +4,7 @@ import hoistStatics from 'hoist-non-react-statics';
 import { Link, withRouter } from 'react-router-dom';
 
 import { prefixWithLanguage } from '../../helpers/url';
+import * as shapes from '../shapes';
 
 /**
  * multiLanguageLinkCreator - an higher order component to create a link that allows navigating
@@ -22,8 +23,6 @@ import { prefixWithLanguage } from '../../helpers/url';
  * i.e - use <Component to="/some-path" language="ru" /> instead of <Component to="/ru/some-path" />
  */
 
-
-
 const multiLanguageLinkCreator = () => (WrappedComponent) => {
   class MultiLanguageLinkHOC extends Component {
 
@@ -33,7 +32,7 @@ const multiLanguageLinkCreator = () => (WrappedComponent) => {
         PropTypes.string,
         PropTypes.object
       ]),
-      location: PropTypes.object.isRequired,
+      location: shapes.HistoryLocation.isRequired,
       language: PropTypes.string // language shorthand, for example: "ru"
     };
 
@@ -48,8 +47,10 @@ const multiLanguageLinkCreator = () => (WrappedComponent) => {
     };
 
     render() {
+      // We need to use "unused constants" in order to get proper "rest"
+      // eslint-disable-next-line no-unused-vars
       const { to, language, location, match, history, staticContext, ...rest } = this.props;
-      let navigateTo = to;
+      let navigateTo                                                           = to;
       let toWithLanguage;
 
       if (typeof navigateTo === 'string') {
@@ -71,6 +72,5 @@ const multiLanguageLinkCreator = () => (WrappedComponent) => {
 
   return withRouter(hoistStatics(MultiLanguageLinkHOC, WrappedComponent));
 };
-
 
 export default multiLanguageLinkCreator;

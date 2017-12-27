@@ -243,6 +243,11 @@
       "header": "Sketches"
     }
   },
+  "sources-library": {
+    "title": "Kabbalah Sources",
+    "no-source": "Please select source",
+    "toc": "Table Of Contents"
+  },
   "media-downloads": {
     "title": "Media Downloads",
     "derived-title": "Derived Media",

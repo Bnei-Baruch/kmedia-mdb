@@ -5,7 +5,7 @@ import { actions, types } from '../redux/modules/transcription';
 function* fetchTranscription(action) {
 
   try {
-    const { data } = yield call(Api.doc2Html, { id: action.payload });
+    const { data } = yield call(Api.doc2Html, { id: action.payload.id });
     yield put(actions.fetchTranscriptionSuccess(data));
   } catch (err) {
     yield put(actions.fetchTranscriptionFailure(err));
