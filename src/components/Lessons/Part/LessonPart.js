@@ -51,16 +51,17 @@ const LessonPart = (props) => {
         </Container>
       </div>
       <Container>
-        <Grid padded>
-          <Grid.Row>
-            <Grid.Column width={10}>
-              <Info lesson={lesson} t={t} />
-              <Materials unit={lesson} t={t} />
-            </Grid.Column>
-            <Grid.Column width={6}>
+        <Grid padded reversed="tablet">
+          <Grid.Row reversed="computer">
+            <Grid.Column computer={6} tablet={8} mobile={16}  className='content__aside'>
               <MediaDownloads unit={lesson} language={language} t={t} />
               <RelevantPartsContainer unit={lesson} t={t} />
             </Grid.Column>
+            <Grid.Column computer={10} tablet={8} mobile={16} className='content__main'>
+              <Info lesson={lesson} t={t} />
+              <Materials unit={lesson} t={t} />
+            </Grid.Column>
+            
           </Grid.Row>
         </Grid>
       </Container>

@@ -32,6 +32,14 @@
   }
 }
 
+/* Make hightlights in search also bold (not only italic).*/
 em {
   font-weight: bold;
+}
+
+/* Do not display images in doc files converted to html as they are broken */
+.doc2html {
+  img {
+    display: none;
+  }
 }

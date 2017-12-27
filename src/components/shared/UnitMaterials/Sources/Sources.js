@@ -6,7 +6,7 @@ import { RTL_LANGUAGES } from '../../../../helpers/consts';
 import { formatError, tracePath } from '../../../../helpers/utils';
 import * as shapes from '../../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../shared/Splash';
-import LanguageSelector from '../../LanguageSelector';
+import ButtonsLanguageSelector from '../../../Language/Selector/ButtonsLanguageSelector';
 
 class Sources extends Component {
 
@@ -162,14 +162,16 @@ class Sources extends Component {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
-      contents        = <div style={{ direction }} dangerouslySetInnerHTML={{ __html: contentData }} />;
+
+      // eslint-disable-next-line react/no-danger
+      contents = <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: contentData }} />;
     }
 
     return (
       <div>
         <Grid stackable>
           <Grid.Row>
-            <Grid.Column width={8}>
+            <Grid.Column width={12}>
               <Dropdown
                 fluid
                 selection
@@ -182,8 +184,8 @@ class Sources extends Component {
             </Grid.Column>
             {
               languages.length > 0 ?
-                <Grid.Column width={4}>
-                  <LanguageSelector
+                <Grid.Column width={4} textAlign="right">
+                  <ButtonsLanguageSelector
                     languages={languages}
                     defaultValue={language}
                     t={t}

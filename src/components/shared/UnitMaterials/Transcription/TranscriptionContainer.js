@@ -12,11 +12,11 @@ class TranscriptionContainer extends Component {
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     content: PropTypes.shape({
-      data: PropTypes.string, // actual content (HTML)
+      data: PropTypes.string,     // actual content (HTML)
+      language: PropTypes.string, // language of text in file
       wip: shapes.WIP,
       err: shapes.Error,
     }).isRequired,
-    language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     fetchTranscription: PropTypes.func.isRequired,
   };
@@ -24,25 +24,31 @@ class TranscriptionContainer extends Component {
   static defaultProps = {};
 
   componentDidMount() {
-    this.props.unit.files.filter(file => file.type === 'text').forEach(file =>
-      this.props.fetchTranscription(file.id)
-    );
+    this.askForData(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.unit.id !== this.props.unit.id) {
-      this.props.fetchTranscription(nextProps.unit.id);
+      this.askForData(nextProps);
     }
   }
 
+  askForData = (props) => {
+    const { unit: { files }, fetchTranscription } = props;
+    if (Array.isArray(files)) {
+      files
+        .filter(file => file.type === 'text')
+        .forEach(fetchTranscription);
+    }
+  };
+
   render() {
-    const { unit, content, language, t, } = this.props;
+    const { unit, content, t, } = this.props;
 
     return (
       <Transcription
         unit={unit}
         content={content}
-        language={language}
         t={t}
       />
     );

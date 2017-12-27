@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Trans } from 'react-i18next';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
 
@@ -11,49 +10,52 @@ import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
 import { actions, selectors } from '../../../redux/modules/assets';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
-import Link from '../../Language/MultiLanguageLink';
 
 class Sketches extends React.Component {
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     t: PropTypes.func.isRequired,
-    wip: PropTypes.bool,
-    err: shapes.Error,
+    indexById: PropTypes.objectOf(PropTypes.shape({
+      data: PropTypes.arrayOf(PropTypes.object),
+      wip: shapes.WIP,
+      err: shapes.Error,
+    })).isRequired,
     fetchAsset: PropTypes.func.isRequired,
-    imageObjs: PropTypes.arrayOf(PropTypes.object),
   };
 
-  static defaultProps = {
-    wip: false,
-    err: null,
-    imageObjs: [],
+  state = {
+    zipFileId: null,
   };
 
   componentDidMount() {
-    //load data
-    this.unzipFile(this.props);
+    this.setCurrentItem(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.unit !== this.props.unit)
-      this.unzipFile(nextProps);
-  }
-
-  unzipFile(props) {
-    const { wip, err } = props;
-
-    if (err)
-      console.log('Error during unzip file ', err);
-    else if (!wip) {
-      const zipFile = this.findZipFile(props);
-      if (zipFile) {
-        props.fetchAsset(zipFile.id);
-      }
+    if (nextProps.indexById !== this.props.indexById ||
+      nextProps.unit !== this.props.unit) {
+      this.setCurrentItem(nextProps);
     }
   }
 
-  findZipFile = (props) => {
-    const { unit } = props;
+  // load data into state
+  setCurrentItem = (props) => {
+    const { unit, indexById, fetchAsset } = props;
+    const zipFile                         = this.findZipFile(unit);
+
+    if (!zipFile) {
+      this.setState({ zipFileId: null });
+    } else {
+      this.setState({ zipFileId: zipFile.id });
+
+      const hasData = indexById && indexById[zipFile.id];
+      if (!hasData) {
+        fetchAsset(zipFile.id);
+      }
+    }
+  };
+
+  findZipFile = (unit) => {
     return Array.isArray(unit.files) ?
       unit.files.find(this.filterZipFile) :
       null;
@@ -68,19 +70,14 @@ class Sketches extends React.Component {
   }
 
   render() {
-    const { t, wip, err, imageObjs } = this.props;
+    const { t, indexById }              = this.props;
+    const { zipFileId }                 = this.state;
+    const { wip, err, data: imageObjs } = indexById[zipFileId] || {};
 
     if (err) {
       if (err.response && err.response.status === 404) {
         return (
-          <FrownSplash
-            text={t('messages.program-not-found')}
-            subtext={
-              <Trans i18nKey="messages.program-not-found-subtext">
-                Try the <Link to="/programs">programs list</Link>...
-              </Trans>
-            }
-          />
+          <FrownSplash text={t('messages.sketches-not-found')} />
         );
       }
 
@@ -92,10 +89,19 @@ class Sketches extends React.Component {
     }
 
     if (Array.isArray(imageObjs) && imageObjs.length > 0) {
+
       //prepare the image array for the gallery and sort it
       const items = imageObjs
         .map(imageGalleryItem)
-        .sort((a, b) => a.original < b.original);
+        .sort((a, b) => {
+          if (a.original < b.original) {
+            return -1;
+          } else if (a.original > b.original) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
 
       return (
         <ImageGallery
@@ -110,10 +116,11 @@ class Sketches extends React.Component {
       );
     }
 
-    return (<div>No Images found</div>);
+    return (<div>{t('messages.no-images')}</div>);
   }
 }
 
+//converts images from server format (path, size) to ImageGallery format
 const imageGalleryItem = (item) => {
   const src = assetUrl(item.path.substr(8));
 
@@ -134,13 +141,9 @@ const imageGalleryItem = (item) => {
   };
 };
 
-const mapState = (state) => {
-  return {
-    imageObjs: selectors.getItems(state.assets),
-    wip: selectors.getWip(state.assets),
-    err: selectors.getErrors(state.assets),
-  };
-};
+const mapState = (state) => ({
+  indexById: selectors.getIndexById(state.assets)
+});
 
 const mapDispatch = (dispatch) => {
   return bindActionCreators({

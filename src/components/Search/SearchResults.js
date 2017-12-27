@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
 import { Container, Divider, Header, Label, Table } from 'semantic-ui-react';
 
-import { canonicalLink, formatError, isEmpty } from '../../helpers/utils';
+import { canonicalLink, formatDuration, formatError, isEmpty } from '../../helpers/utils';
 import { getQuery } from '../../helpers/url';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { filtersTransformer } from '../../filters';
@@ -39,32 +37,38 @@ class SearchResults extends Component {
   // Helper function to get the frist prop in hightlights obj and apply htmlFunc on it.
   snippetFromHighlight = (highlight, props, htmlFunc) => {
     const prop = props.find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
-    return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop])}}></span>;
-  }
+    return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop]) }}></span>;
+  };
 
   renderHit = (hit) => {
     // console.log('hit', hit);
-    const { cuMap, t }                               = this.props;
+    const { cuMap, t }                                       = this.props;
     const { _source: { mdb_uid }, highlight, _score: score } = hit;
-    const cu = cuMap[mdb_uid];
+    const cu                                                 = cuMap[mdb_uid];
 
-    const name = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || cu.name;
+    // maybe content_units are still loading ?
+    // maybe stale data in elasticsearch ?
+    if (!cu) {
+      return null;
+    }
+
+    const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || cu.name;
     const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
-    const transcript = this.snippetFromHighlight(highlight, ['transcript', 'transcript.analyzed'], parts => `...${parts.join('.....')}...`);
-    const snippet = (<span>
+    const transcript  = this.snippetFromHighlight(highlight, ['transcript', 'transcript.analyzed'], parts => `...${parts.join('.....')}...`);
+    const snippet     = (<span>
                        {!description ? null : (
                          <span>
                            <Label size="small">{t('search.result.description')}</Label>
                            {description}
                          </span>
                        )}
-                       {!transcript ? null : (
-                         <span>
+      {!transcript ? null : (
+        <span>
                            <Label size="small">{t('search.result.transcript')}</Label>
-                           {transcript}
+          {transcript}
                          </span>
-                       )}
-                     </span>)
+      )}
+                     </span>);
 
     let filmDate = '';
     if (cu.film_date) {
@@ -85,7 +89,7 @@ class SearchResults extends Component {
             &nbsp;&nbsp;
             {
               cu.duration ?
-                <small>{moment.duration(cu.duration, 'seconds').format('hh:mm:ss')}</small> :
+                <small>{formatDuration(cu.duration)}</small> :
                 null
             }
           </span>

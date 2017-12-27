@@ -38,8 +38,9 @@ export const reducer = handleActions({
     ...initialState,
   }),
 
-  [FETCH_TRANSCRIPTION]: state => ({
+  [FETCH_TRANSCRIPTION]: (state, action) => ({
     ...state,
+    language: action.payload.language,
     wip: true,
   }),
 

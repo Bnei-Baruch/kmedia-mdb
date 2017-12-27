@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import 'moment-duration-format';
 import { Trans, translate } from 'react-i18next';
 import { Container, Divider } from 'semantic-ui-react';
 

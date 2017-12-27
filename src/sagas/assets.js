@@ -4,12 +4,13 @@ import Api from '../helpers/Api';
 import { actions, types } from '../redux/modules/assets';
 
 function* fetchImages(action) {
+  const id = action.payload;
+
   try {
-    const { data } = yield call(Api.unzipImages, { id: action.payload });
-    yield put(actions.fetchAssetSuccess(data));
-  }
-  catch (err) {
-    yield put(actions.fetchAssetFailure(err));
+    const { data } = yield call(Api.unzip, { id });
+    yield put(actions.fetchAssetSuccess(id, data));
+  } catch (err) {
+    yield put(actions.fetchAssetFailure(id, err));
   }
 }
 

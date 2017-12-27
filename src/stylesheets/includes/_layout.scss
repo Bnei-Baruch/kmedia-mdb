@@ -92,6 +92,17 @@
   }
 }
 
+.content {
+  &__main {
+
+  }
+
+  &__aside {
+    &-unit {
+      margin-bottom: 3em;
+    }
+  }
+}
 @media only screen and (min-width: $largeMonitorBreakpoint) {
   .layout {
     &__sidebar-toggle {

@@ -25,12 +25,12 @@ const LanguageSetter = withRouter(connect(
     language: DEFAULT_LANGUAGE
   };
 
-  componentWillReceiveProps(nextProps) {
-    this.catchLanguageChange(nextProps);
-  }
-
   componentDidMount() {
     this.catchLanguageChange(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.catchLanguageChange(nextProps);
   }
 
   catchLanguageChange = (props) => {

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import 'moment-duration-format';
 import { Header, Menu } from 'semantic-ui-react';
 
+import { formatDuration } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 
 class FullLessonPlaylist extends Component {
@@ -29,7 +28,7 @@ class FullLessonPlaylist extends Component {
     const titles = collection.content_units.map((cu) => {
       const { name, duration } = cu;
       const ccuName            = collection.ccuNames[cu.id];
-      const durationDisplay    = moment.duration(duration, 'seconds').format('hh:mm:ss');
+      const durationDisplay    = formatDuration(duration);
       return `${ccuName} - ${name} - ${durationDisplay}`;
     });
 

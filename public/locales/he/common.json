@@ -123,7 +123,9 @@
     "fallback-language": "אין את השפה המבוקשת למדיה, נבחרה שפת ברירת מחדל.",
     "fallback-to-audio": "וידיאו לא נמצא, משתמש באודיו.",
     "fallback-to-video": "אודיו לא נמצא, משתמש בוידיאו.",
-    "source-content-not-found": "לא נמצא תוכן המקור"
+    "source-content-not-found": "לא נמצא תוכן המקור",
+    "no-images": "לא נמצאו תמונות",
+    "sketches-not-found": "קובץ שרטוטים לא קיים"
   },
   "search": {
     "sortby": "מיין לפי",
@@ -239,6 +241,11 @@
     "sketches": {
       "header": "שרטוטים"
     }
+  },
+  "sources-library": {
+    "title": "מקורות",
+    "no-source": "בחר מקור",
+    "toc": "תוכן עניינים"
   },
   "media-downloads": {
     "title": "קבצים להורדה",
