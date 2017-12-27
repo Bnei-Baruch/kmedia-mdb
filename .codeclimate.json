@@ -1,19 +1,6 @@
 {
   "version":          "2",
-  "plugins": {
-    "csslint": {
-      "enabled": true
-    },
-    "eslint": {
-      "enabled": true,
-      "channel": "eslint-3",
-      "config": {
-        "config": ".eslintrc.json"
-      }
-    },
-    "scss-lint": {
-      "enabled": true
-    }
+  "plugins":          {
   },
   "exclude_patterns": [
     "node_modules/"
