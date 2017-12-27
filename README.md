@@ -2,7 +2,8 @@
 
 BB Archive public site front-end.
 
-
+[![Maintainability](https://api.codeclimate.com/v1/badges/0be642c3213449758fb2/maintainability)](https://codeclimate.com/github/Bnei-Baruch/kmedia-mdb/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/0be642c3213449758fb2/test_coverage)](https://codeclimate.com/github/Bnei-Baruch/kmedia-mdb/test_coverage)
 
 ## Contributing
 
