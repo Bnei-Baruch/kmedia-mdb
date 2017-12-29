@@ -85,6 +85,11 @@ class OmniBox extends Component {
       return;
     }
 
+    // First of all redirect to search results page if we're not there
+    if (!location.pathname.endsWith('search')) {
+      push({pathname: 'search'});
+    }
+
     // Reset filters for new search (query changed)
     if (query && getQuery(location).q !== query) {
       resetFilter('search', 'date-filter');
@@ -93,11 +98,6 @@ class OmniBox extends Component {
     }
 
     search(query, 1, pageSize);
-
-    // redirect to search results page if we're not there
-    if (!location.pathname.endsWith('search')) {
-      push('search');
-    }
 
     if (this.state.isOpen) {
       this.setState({ isOpen: false });
