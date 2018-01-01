@@ -4,12 +4,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
-
 import { formatError } from '../../../helpers/utils';
 import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
+import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { actions, selectors } from '../../../redux/modules/assets';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
+import { selectors as settings } from '../../../redux/modules/settings';
 
 class Sketches extends React.Component {
   static propTypes = {
@@ -21,6 +22,7 @@ class Sketches extends React.Component {
       err: shapes.Error,
     })).isRequired,
     fetchAsset: PropTypes.func.isRequired,
+    language : PropTypes.string.isRequired
   };
 
   state = {
@@ -45,7 +47,8 @@ class Sketches extends React.Component {
 
     if (!zipFile) {
       this.setState({ zipFileId: null });
-    } else {
+    } 
+    else {
       this.setState({ zipFileId: zipFile.id });
 
       const hasData = indexById && indexById[zipFile.id];
@@ -56,9 +59,32 @@ class Sketches extends React.Component {
   };
 
   findZipFile = (unit) => {
-    return Array.isArray(unit.files) ?
-      unit.files.find(this.filterZipFile) :
-      null;
+    if (Array.isArray(unit.files)) {
+      //get the zip files
+      const zipFiles = unit.files.filter(this.filterZipFile);
+
+      if (!Array.isArray(zipFiles) || zipFiles.length === 0)
+        return null;
+
+      //at least one zip file  
+      if (zipFiles.length === 1)
+        return zipFiles[0];
+      else {
+        //many zip files - try filter by language
+        const langZipFiles = zipFiles.filter((file) => file.language === this.props.language);
+
+        //sometimes there are many zipfiles for one language, so get the first of them
+        if (langZipFiles.length >= 1)  
+          return langZipFiles[0];
+        else {
+          //no file by language - return the original zip file
+          const originalFile = zipFiles.filter((file) => file.language === unit.original_language);
+          return originalFile ? originalFile[0] : null;
+        }  
+      }  
+    }
+    else
+      return null;
   };
 
   filterZipFile = (file) => {
@@ -70,7 +96,7 @@ class Sketches extends React.Component {
   }
 
   render() {
-    const { t, indexById }              = this.props;
+    const { t, indexById, language }    = this.props;
     const { zipFileId }                 = this.state;
     const { wip, err, data: imageObjs } = indexById[zipFileId] || {};
 
@@ -88,35 +114,43 @@ class Sketches extends React.Component {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
-    if (Array.isArray(imageObjs) && imageObjs.length > 0) {
+    let direction;      
 
+    if (Array.isArray(imageObjs) && imageObjs.length > 0) {
       //prepare the image array for the gallery and sort it
       const items = imageObjs
         .map(imageGalleryItem)
         .sort((a, b) => {
           if (a.original < b.original) {
-            return -1;
-          } else if (a.original > b.original) {
             return 1;
+          } else if (a.original > b.original) {
+            return -1;
           } else {
             return 0;
           }
         });
 
+      //Currently set direction ltr for all languages because ImageGallery doen't support rtl
+      direction = 'ltr'; 
+
       return (
-        <ImageGallery
-          items={items}
-          thumbnailPosition={'top'}
-          lazyLoad={true}
-          showPlayButton={false}
-          showBullets={true}
-          showFullscreenButton={false}
-          onImageError={this.handleImageError}
-        />
+        <div style={{ direction }}>
+          <ImageGallery
+            items={items}
+            thumbnailPosition={'top'}
+            lazyLoad={true}
+            showPlayButton={false}
+            showBullets={false}
+            showFullscreenButton={false}
+            showIndex={true}
+            onImageError={this.handleImageError}
+          />
+        </div>
       );
     }
 
-    return (<div>{t('messages.no-images')}</div>);
+    direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr'; 
+    return (<div style={{ direction }}>{t('messages.no-images')}</div>);
   }
 }
 
@@ -141,9 +175,12 @@ const imageGalleryItem = (item) => {
   };
 };
 
-const mapState = (state) => ({
-  indexById: selectors.getIndexById(state.assets)
-});
+const mapState = (state) => {
+  return {
+    indexById : selectors.getIndexById(state.assets),
+    language: settings.getLanguage(state.settings)
+  };
+};
 
 const mapDispatch = (dispatch) => {
   return bindActionCreators({

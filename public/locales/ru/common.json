@@ -74,7 +74,7 @@
     "years-filter": {
       "label": "Год",
       "placeholder": "Выберите год"
-    }
+    },
     "sections-filter": {
       "label": "раздел",
       "lessons": "уроки",
@@ -123,7 +123,9 @@
     "fallback-language": "Медиа не найденa на русском языке, выбран резервный язык.",
     "fallback-to-audio": "Видео не найдено, используется аудио.",
     "fallback-to-video": "Аудио не найдено, используется видео.",
-    "source-content-not-found": "Первоисточник не найден"
+    "source-content-not-found": "Первоисточник не найден",
+    "no-images": "Картинки не найдены",
+    "sketches-not-found": "Чертежи не найдены"
   },
   "search": {
     "sortby": "Сортировать по",
