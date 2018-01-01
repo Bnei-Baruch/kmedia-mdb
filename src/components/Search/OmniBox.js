@@ -85,19 +85,19 @@ class OmniBox extends Component {
       return;
     }
 
+    // First of all redirect to search results page if we're not there
+    if (!location.pathname.endsWith('search')) {
+      push({pathname: 'search'});
+    }
+
     // Reset filters for new search (query changed)
-    if (getQuery(location).q !== query) {
+    if (query && getQuery(location).q !== query) {
       resetFilter('search', 'date-filter');
       resetFilter('search', 'topics-filter');
       resetFilter('search', 'sections-filter');
     }
 
     search(query, 1, pageSize);
-
-    // redirect to search results page if we're not there
-    if (!location.pathname.endsWith('search')) {
-      push('search');
-    }
 
     if (this.state.isOpen) {
       this.setState({ isOpen: false });
@@ -148,7 +148,6 @@ class OmniBox extends Component {
 
   suggestionToResult = (type, item) => {
     if (type === 'tags') {
-      console.log('tags', item, this.props.getTagPath(item.id));
       return { key: item.id, title: this.props.getTagPath(item.id).map(p => p.label).join(' - ')}
     } else if (type === 'sources') {
       return { key: item.id, title: this.props.getSourcePath(item.id).map(p => p.name).join(' > ')}

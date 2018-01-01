@@ -67,7 +67,7 @@ export const reducer = handleActions({
     // selectors
     // we keep those in state to avoid recreating them every time a selector is called
     const getByID     = id => byId[id];
-    const getPath     = source => { console.log(byId); return tracePath(source, getByID); };
+    const getPath     = source => tracePath(source, getByID);
     const getPathByID = id => getPath(getByID(id));
 
     return {
