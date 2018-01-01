@@ -4,13 +4,14 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
+
+import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { formatError } from '../../../helpers/utils';
 import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
-import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { actions, selectors } from '../../../redux/modules/assets';
+import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
-import { selectors as settings } from '../../../redux/modules/settings';
 
 class Sketches extends React.Component {
   static propTypes = {
@@ -47,7 +48,7 @@ class Sketches extends React.Component {
 
     if (!zipFile) {
       this.setState({ zipFileId: null });
-    } 
+    }
     else {
       this.setState({ zipFileId: zipFile.id });
 
@@ -66,7 +67,7 @@ class Sketches extends React.Component {
       if (!Array.isArray(zipFiles) || zipFiles.length === 0)
         return null;
 
-      //at least one zip file  
+      //at least one zip file
       if (zipFiles.length === 1)
         return zipFiles[0];
       else {
@@ -74,14 +75,14 @@ class Sketches extends React.Component {
         const langZipFiles = zipFiles.filter((file) => file.language === this.props.language);
 
         //sometimes there are many zipfiles for one language, so get the first of them
-        if (langZipFiles.length >= 1)  
+        if (langZipFiles.length >= 1)
           return langZipFiles[0];
         else {
           //no file by language - return the original zip file
           const originalFile = zipFiles.filter((file) => file.language === unit.original_language);
           return originalFile ? originalFile[0] : null;
-        }  
-      }  
+        }
+      }
     }
     else
       return null;
@@ -102,19 +103,14 @@ class Sketches extends React.Component {
 
     if (err) {
       if (err.response && err.response.status === 404) {
-        return (
-          <FrownSplash text={t('messages.sketches-not-found')} />
-        );
+        return <FrownSplash text={t('messages.sketches-not-found')} />;
       }
-
       return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
     }
 
     if (wip) {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
-
-    let direction;      
 
     if (Array.isArray(imageObjs) && imageObjs.length > 0) {
       //prepare the image array for the gallery and sort it
@@ -130,11 +126,8 @@ class Sketches extends React.Component {
           }
         });
 
-      //Currently set direction ltr for all languages because ImageGallery doen't support rtl
-      direction = 'ltr'; 
-
       return (
-        <div style={{ direction }}>
+        <div style={{ direction: 'ltr' }}>
           <ImageGallery
             items={items}
             thumbnailPosition={'top'}
@@ -149,8 +142,8 @@ class Sketches extends React.Component {
       );
     }
 
-    direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr'; 
-    return (<div style={{ direction }}>{t('messages.no-images')}</div>);
+    const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
+    return <div style={{ direction }}>{t('messages.no-images')}</div>;
   }
 }
 
