@@ -37,14 +37,14 @@ class FullEventPlaylist extends Component {
 
     return (
       <div className='avbox__playlist-wrapper'>
-        <Header inverted as="h1">
-          <Image shape="circular" src={placeholder} />
-          <Header.Content>
-            {name}
+        <Header inverted as="h2">
+          <Image circular src={placeholder} floated='left' />{name}
+          
+            
             <Header.Subheader>
               {fromToLocalized(moment.utc(start_date, DATE_FORMAT), moment.utc(end_date, DATE_FORMAT))}
             </Header.Subheader>
-          </Header.Content>
+          
         </Header>
         <div className='avbox__playlist-view'>
           <Menu vertical fluid size="small">
