@@ -3,15 +3,16 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
-import { Divider, Table, Container } from 'semantic-ui-react';
-import SectionHeader from '../shared/SectionHeader';
+import { Container, Divider, Table } from 'semantic-ui-react';
 
 import { actions as sourceActions, selectors as sources } from '../../redux/modules/sources';
 import { selectors as settings } from '../../redux/modules/settings';
+import SectionHeader from '../shared/SectionHeader';
 import Kabbalist from './Kabbalist';
 import placeholder1 from '../shared/portrait1.png';
 import placeholder2 from '../shared/portrait2.png';
 import placeholder3 from '../shared/portrait3.png';
+
 class Homepage extends Component {
   static propTypes = {
     roots: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -21,11 +22,16 @@ class Homepage extends Component {
 
   render() {
     const { roots, getSourceById } = this.props;
-    const placeholders =[placeholder1, placeholder2, placeholder3];
-    let placeholderIndex = 0;
-    const kabbalists = roots.map(k =>
-      
-      <Kabbalist key={k} items={getSourceById(k)} getSourceById={getSourceById} placeholder={placeholders[placeholderIndex++]} />
+    const placeholders             = [placeholder1, placeholder2, placeholder3];
+    let placeholderIndex           = 0;
+    const kabbalists               = roots.map(k => (
+        <Kabbalist
+          key={k}
+          author={getSourceById(k)}
+          getSourceById={getSourceById}
+          placeholder={placeholders[placeholderIndex++]}
+        />
+      )
     );
 
     return (
