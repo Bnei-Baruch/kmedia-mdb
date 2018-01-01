@@ -10,12 +10,14 @@ class AVCenteredPlay extends Component {
   static propTypes = {
     media: PropTypes.shape({
       isPlaying: PropTypes.bool.isRequired,
+      isLoading: PropTypes.bool.isRequired,
       playPause: PropTypes.func.isRequired
     }).isRequired,
   };
 
   shouldComponentUpdate({ media }) {
-    return this.props.media.isPlaying !== media.isPlaying;
+    return this.props.media.isPlaying !== media.isPlaying ||
+      this.props.media.isLoading !== media.isLoading ;
   }
 
   handlePlayPause = () => {
@@ -25,7 +27,7 @@ class AVCenteredPlay extends Component {
   render() {
     const { media } = this.props;
 
-    if (media.isPlaying) {
+    if (media.isPlaying || media.isLoading) {
       return <div />;
     }
 

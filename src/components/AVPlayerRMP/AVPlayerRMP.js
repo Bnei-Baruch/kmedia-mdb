@@ -22,6 +22,7 @@ import AVAudioVideo from './AVAudioVideo';
 import AvSeekBar from './AvSeekBar';
 import AVEditSlice from './AVEditSlice';
 import AVShareBar from './AVShareBar';
+import AVSpinner from './AVSpinner';
 
 const PLAYER_VOLUME_STORAGE_KEY = '@@kmedia_player_volume';
 const DEFAULT_PLAYER_VOLUME     = 0.8;
@@ -438,7 +439,7 @@ class AVPlayerRMP extends PureComponent {
         </div>
       );
     } else if (isVideo) {
-      centerMediaControl = <AVCenteredPlay />;
+      centerMediaControl = <div><AVCenteredPlay /><AVSpinner /></div>;
     }
 
     return (
