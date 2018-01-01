@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import debounce from 'lodash/debounce';
 import { withRouter } from 'react-router-dom';
-import { Player, withMediaProps } from 'react-media-player';
+import { Player, withMediaProps, utils } from 'react-media-player';
 import classNames from 'classnames';
 import { Button, Icon } from 'semantic-ui-react';
 
@@ -22,6 +22,7 @@ import AVAudioVideo from './AVAudioVideo';
 import AvSeekBar from './AvSeekBar';
 import AVEditSlice from './AVEditSlice';
 import AVShareBar from './AVShareBar';
+const { keyboardControls } = utils;
 
 const PLAYER_VOLUME_STORAGE_KEY = '@@kmedia_player_volume';
 const DEFAULT_PLAYER_VOLUME     = 0.8;
@@ -453,7 +454,7 @@ class AVPlayerRMP extends PureComponent {
             this.mediaElement = c;
           }}
           className={classNames('mediaplayer', { 'media-edit-mode': isEditMode })}
-
+          onKeyDown={keyboardControls.bind(null, media)}
         >
           <Player
             ref={(c) => {
