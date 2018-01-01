@@ -3,13 +3,13 @@
     display: block !important;
     margin-top: 0 !important;
 
-    .item {
-      &:first-of-type {
-        border-left: 0 !important;
-        margin-left: 0 !important;
-        padding-left: 0 !important;
-      }
-    }
+    // .item {
+    //   &:first-of-type {
+    //     border-left: 0 !important;
+    //     margin-left: 0 !important;
+    //     padding-left: 0 !important;
+    //   }
+    // }
   }
 }
 
