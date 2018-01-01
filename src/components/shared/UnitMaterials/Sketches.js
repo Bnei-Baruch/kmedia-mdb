@@ -10,7 +10,6 @@ import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { actions, selectors } from '../../../redux/modules/assets';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
-import Link from '../../Language/MultiLanguageLink';
 import { selectors as settings } from '../../../redux/modules/settings';
 
 class Sketches extends React.Component {
@@ -74,12 +73,13 @@ class Sketches extends React.Component {
         //many zip files - try filter by language
         const langZipFiles = zipFiles.filter((file) => file.language === this.props.language);
 
-        if (langZipFiles.length === 1)
+        //sometimes there are many zipfiles for one language, so get the first of them
+        if (langZipFiles.length >= 1)  
           return langZipFiles[0];
         else {
-          //no file by language - return default image file
+          //no file by language - return the original zip file
           const originalFile = zipFiles.filter((file) => file.language === unit.original_language);
-          return zipFiles[0];
+          return originalFile ? originalFile[0] : null;
         }  
       }  
     }
@@ -114,7 +114,7 @@ class Sketches extends React.Component {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
-    const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';      
+    let direction;      
 
     if (Array.isArray(imageObjs) && imageObjs.length > 0) {
       //prepare the image array for the gallery and sort it
@@ -130,20 +130,26 @@ class Sketches extends React.Component {
           }
         });
 
+      //Currently set direction ltr for all languages because ImageGallery doen't support rtl
+      direction = 'ltr'; 
+
       return (
-        <ImageGallery
-          items={items}
-          thumbnailPosition={'top'}
-          lazyLoad={true}
-          showPlayButton={false}
-          showBullets={false}
-          showFullscreenButton={false}
-          showIndex={true}
-          onImageError={this.handleImageError}
-        />
+        <div style={{ direction }}>
+          <ImageGallery
+            items={items}
+            thumbnailPosition={'top'}
+            lazyLoad={true}
+            showPlayButton={false}
+            showBullets={false}
+            showFullscreenButton={false}
+            showIndex={true}
+            onImageError={this.handleImageError}
+          />
+        </div>
       );
     }
 
+    direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr'; 
     return (<div style={{ direction }}>{t('messages.no-images')}</div>);
   }
 }
