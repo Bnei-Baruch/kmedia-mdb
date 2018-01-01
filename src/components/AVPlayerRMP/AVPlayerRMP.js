@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import debounce from 'lodash/debounce';
 import { withRouter } from 'react-router-dom';
-import { Player, withMediaProps } from 'react-media-player';
+import { Player, withMediaProps, utils } from 'react-media-player';
 import classNames from 'classnames';
 import { Button, Icon } from 'semantic-ui-react';
 
@@ -455,7 +455,7 @@ class AVPlayerRMP extends PureComponent {
             this.mediaElement = c;
           }}
           className={classNames('mediaplayer', { 'media-edit-mode': isEditMode })}
-
+          onKeyDown={utils.keyboardControls.bind(null, media)}
         >
           <Player
             ref={(c) => {
