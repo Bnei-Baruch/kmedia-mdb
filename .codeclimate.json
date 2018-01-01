@@ -1,0 +1,8 @@
+{
+  "version":          "2",
+  "plugins":          {
+  },
+  "exclude_patterns": [
+    "node_modules/"
+  ]
+}
