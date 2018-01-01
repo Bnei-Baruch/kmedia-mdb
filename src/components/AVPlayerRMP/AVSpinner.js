@@ -26,7 +26,7 @@ class AVSpinner extends Component {
         loading
         name="spinner"
         color="orange"
-        size=" huge"
+        size="huge"
       />
     );
   }
