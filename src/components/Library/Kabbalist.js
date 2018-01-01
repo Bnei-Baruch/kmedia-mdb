@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Image } from 'semantic-ui-react';
-import placeholder from '../shared/placeholder.png';
+import { Image, Container, Table, List, Header } from 'semantic-ui-react';
+
 import NavLink from '../Language/MultiLanguageNavLink';
 
 class Kabbalist extends Component {
@@ -18,32 +18,41 @@ class Kabbalist extends Component {
   book = (hex, getSourceById) => {
     const { id, name, description } = getSourceById(hex);
     return (
-      <NavLink
-        key={id}
-        to={`/sources/${id}`}
-        style={{ paddingRight: '20px' }}
-      >
-        {`${name} ${description || ''} `}
-      </NavLink>
+      <List.Item key={id}>
+        <NavLink
+          
+          to={`/sources/${id}`}
+          >
+          {`${name} ${description || ''} `}
+        </NavLink>
+      </List.Item>
     );
   };
 
   render() {
-    const { items, getSourceById }                         = this.props;
+    const { items, getSourceById, placeholder }                         = this.props;
     const { name, full_name: fullName, children: volumes } = items;
 
     let displayName = fullName || name;
     if (fullName && name) {
       displayName += ` (${name})`;
     }
-
+ 
     return (
-      <div>
-        <Image style={{ height: '150px', width: '100px' }} verticalAlign="top" inline src={placeholder} />
-        <span style={{ textTransform: 'uppercase' }}>{displayName}</span>
-        <br />
-        {volumes && volumes.map(hex => (this.book(hex, getSourceById)))}
-      </div>
+      
+        <Table.Row verticalAlign='top'>
+          <Table.Cell collapsing width={2}>
+            <Image fluid src={placeholder} />
+          </Table.Cell>
+          <Table.Cell>
+            <Header size='small'>{displayName}</Header>
+            <List bulleted horizontal>
+              {volumes && volumes.map(hex => (this.book(hex, getSourceById)))}
+            </List>
+          </Table.Cell>
+        </Table.Row>
+        
+      
     );
   }
 }

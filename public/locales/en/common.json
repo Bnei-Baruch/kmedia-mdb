@@ -244,7 +244,10 @@
     }
   },
   "sources-library": {
-    "title": "Kabbalah Sources",
+    "header": {
+      "text": "Kabbalah Sources",
+      "subtext": "Subtext for Kabbalah sources"
+    },
     "no-source": "Please select source",
     "toc": "Table Of Contents"
   },
