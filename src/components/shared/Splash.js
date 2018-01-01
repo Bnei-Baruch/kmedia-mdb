@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Header, Icon } from 'semantic-ui-react';
@@ -25,7 +26,6 @@ Splash.propTypes = {
 };
 
 Splash.defaultProps = {
-  text: '',
   subtext: null,
   color: 'black',
   isLoading: false,

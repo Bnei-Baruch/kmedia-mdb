@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Splash should render correctly 1`] = `
+<Header
+  as="h2"
+  icon={true}
+  textAlign="center"
+>
+  <Icon
+    as="i"
+    color="black"
+    loading={false}
+    name="spinner"
+  />
+  <HeaderContent>
+    Still loading...
+  </HeaderContent>
+</Header>
+`;
