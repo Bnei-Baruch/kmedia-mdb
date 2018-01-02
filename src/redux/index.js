@@ -5,6 +5,7 @@ import { reducer as settings } from './modules/settings';
 import { reducer as lessons } from './modules/lessons';
 import { reducer as events } from './modules/events';
 import { reducer as programs } from './modules/programs';
+import { reducer as lectures } from './modules/lectures';
 import { reducer as filters } from './modules/filters';
 import { reducer as sources } from './modules/sources';
 import { reducer as transcription } from './modules/transcription';
@@ -14,6 +15,21 @@ import { reducer as search } from './modules/search';
 import { reducer as assets } from './modules/assets';
 
 export default combineReducers({
+<<<<<<< HEAD
+    router
+  , system
+  , settings
+  , lessons
+  , programs
+  , lectures
+  , events
+  , filters
+  , sources
+  , transcription
+  , tags
+  , mdb
+  , search
+=======
   router,
   system,
   settings,
@@ -27,5 +43,6 @@ export default combineReducers({
   mdb,
   search,
   assets,
+>>>>>>> master
 });
 

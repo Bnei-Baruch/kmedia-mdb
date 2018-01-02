@@ -225,6 +225,33 @@
       }
     }
   },
+  "lectures": {
+    "header": {
+      "text": "Lectures",
+      "subtext": "Here you will find a rich variety of lectures that include: lectures, children's programs, women's programs, etc."
+    },
+    "list": {
+      "episode_from": "Item of:"
+    },
+    "full": {
+      "episodes": "Episode(s)"
+    },
+    "part": {
+      "info": {
+        "tags": "Tags",
+        "sources": "Sources",
+        "related-event": "Related to Event"
+      },
+      "materials": {
+        "summary": "Summary",
+        "transcription": "Transcription"
+      },
+      "relevant-parts": {
+        "title": "Other parts from the same lecture",
+        "item-title": "Part {{name}}"
+      }
+    }
+  },
   "materials": {
     "summary": {
       "header": "Summary",
