@@ -1,6 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 
-import { CT_CONGRESS, EVENT_TYPES } from '../../helpers/consts';
+import { CT_CONGRESS, CT_HOLIDAY, EVENT_TYPES } from '../../helpers/consts';
 import i18n from '../../helpers/i18nnext';
 import { types as settings } from './settings';
 import { selectors as mdb } from './mdb';
@@ -8,6 +8,7 @@ import { selectors as mdb } from './mdb';
 const ALL_EVENTS    = 'ALLEVENTS';
 const ALL_COUNTRIES = 'ALLCOUNTRIES';
 const ALL_CITIES    = 'ALLCITIES';
+const ALL_HOLIDAYS  = 'ALLHOLIDAYS';
 
 /* Types */
 
@@ -147,8 +148,9 @@ const onFetchAllEventsSuccess = (state, action) => {
 
   const allCities    = createItem(ALL_CITIES, i18n.t('filters.event-types-filter.allItem'), [], 'city');
   const allCountries = createItem(ALL_COUNTRIES, i18n.t('filters.event-types-filter.allItem'), [ALL_CITIES], 'country');
+  const allHolidays = createItem(ALL_HOLIDAYS, i18n.t('filters.event-types-filter.allItem'), [], 'holiday');
 
-  const { countries, cities } = action.payload.collections.reduce((acc, collection) => {
+  const { countries, cities, holidays } = action.payload.collections.reduce((acc, collection) => {
     const country = collection.country;
     if (country && !acc.countries[country]) {
       acc.countries[country] = createItem(country, country, [ALL_CITIES], 'country');
@@ -159,8 +161,13 @@ const onFetchAllEventsSuccess = (state, action) => {
       acc.cities[city] = createItem(city, city, [], 'city', { parentId: country });
     }
 
+    const holiday = collection.holiday_id;
+    if (holiday && !acc.holidays[holiday]) {
+      acc.holidays[holiday] = createItem(holiday, holiday, [], 'holiday');
+    }
+
     return acc;
-  }, { countries: {}, cities: {} });
+  }, { countries: {}, cities: {}, holidays: {} });
 
   const events = (EVENT_TYPES.reduce((acc, event) => {
     acc[event] = createItem(event, i18n.t(`constants.content-types.${event}`), [], 'content_type');
@@ -179,9 +186,15 @@ const onFetchAllEventsSuccess = (state, action) => {
 
   Object.keys(countries).forEach(country => countries[country].children.sort());
 
-  const allCountriesListSorted = [ALL_COUNTRIES].concat(Object.keys(countries)).sort();
-  events[CT_CONGRESS].children = allCountriesListSorted;
+  events[CT_CONGRESS].children = [ALL_COUNTRIES].concat(Object.keys(countries)).sort();
+
+  allHolidays.children = holidays;
+
+  events[CT_HOLIDAY].children = [ALL_HOLIDAYS].concat(Object.keys(holidays)).sort();
   // TODO: (yaniv): CT_HOLIDAY data is missing
+
+  const allEvents = allCountries.children.concat(allHolidays.children);
+  allEvents.sort();
 
   return ({
     ...state,
@@ -194,14 +207,16 @@ const onFetchAllEventsSuccess = (state, action) => {
         [ALL_EVENTS]: createItem(
           ALL_EVENTS,
           i18n.t('filters.event-types-filter.all'),
-          allCountriesListSorted,
+          allEvents,
           'content_type'
         ),
         [ALL_CITIES]: allCities,
         [ALL_COUNTRIES]: allCountries,
+        [ALL_HOLIDAYS]: allHolidays,
         ...events,
         ...countries,
-        ...cities
+        ...cities,
+        ...holidays,
       }
     }
   });
