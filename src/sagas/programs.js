@@ -42,9 +42,7 @@ function* fetchList(action, filterName, successAction, failureAction) {
       { ...action.payload, language, ...params, content_type: CT_VIDEO_PROGRAM_CHAPTER };
 
     const { data } = yield call(Api.units, args);
-    if (action.payload.program) {
-      data.program = action.payload.program;
-    }
+
     if (Array.isArray(data.collections)) {
       yield put(mdbActions.receiveCollections(data.collections));
     }

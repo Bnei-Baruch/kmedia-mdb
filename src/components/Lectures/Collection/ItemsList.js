@@ -9,10 +9,10 @@ import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
 
-class LecturesList extends PureComponent {
+class ItemsList extends PureComponent {
 
   static propTypes = {
-    items: PropTypes.arrayOf(shapes.Lecture),
+    items: PropTypes.arrayOf(shapes.ContentUnit),
     t: PropTypes.func.isRequired,
   };
 
@@ -20,7 +20,7 @@ class LecturesList extends PureComponent {
     items: []
   };
 
-  renderUnit = (unit) => {
+  renderItem = (unit) => {
     const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
     const lectures  = breakdown.getLectures();
 
@@ -76,11 +76,11 @@ class LecturesList extends PureComponent {
     return (
       <Table sortable basic="very" className="index-list">
         <Table.Body>
-          {items.map(this.renderUnit)}
+          {items.map(this.renderItem)}
         </Table.Body>
       </Table>
     );
   }
 }
 
-export default translate()(LecturesList);
+export default translate()(ItemsList);

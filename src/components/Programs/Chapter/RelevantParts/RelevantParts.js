@@ -32,18 +32,20 @@ const RelevantParts = (props) => {
   }
 
   return (
-    <div>
+    <div className="content__aside-unit">
       <Header as="h3" content={t('programs.part.relevant-parts.title')} />
       <Item.Group divided link>
         {
-          otherParts.map(part => (
+          otherParts.reverse().map(part => (
             <Item as={Link} key={part.id} to={`/programs/chapter/${part.id}`}>
               <Item.Image size="small">
                 <UnitLogo unitId={part.id} collectionId={collection.id} width={150} />
               </Item.Image>
-              <Item.Content>
+              <Item.Content verticalAlign="top">
                 <Header as="h5">
-                  <small className='text grey uppercase'>{t('programs.part.relevant-parts.item-title', { name: collection.ccuNames[part.id] })} - {t('values.date', { date: new Date(part.film_date) })}</small>
+                  <small className="text grey uppercase">
+                    {t('programs.part.relevant-parts.item-title', { name: collection.ccuNames[part.id] })} - {t('values.date', { date: new Date(part.film_date) })}
+                    </small>
                   <br />
                   {part.name}
                 </Header>

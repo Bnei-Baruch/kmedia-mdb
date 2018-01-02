@@ -5,6 +5,7 @@ import {
   CT_ARTICLE,
   CT_ARTICLES,
   CT_CHILDREN_LESSON,
+  CT_CHILDREN_LESSONS,
   CT_CLIP,
   CT_CLIPS,
   CT_CONGRESS,
@@ -29,7 +30,9 @@ import {
   CT_VIDEO_PROGRAM,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
+  CT_VIRTUAL_LESSONS,
   CT_WOMEN_LESSON,
+  CT_WOMEN_LESSONS,
   EVENT_TYPES,
   MEDIA_TYPES,
 } from './consts';
@@ -219,7 +222,10 @@ export const canonicalLink = (entity) => {
   case CT_VIDEO_PROGRAM:
     return `/programs/full/${entity.id}`;
   case CT_LECTURE_SERIES:
-    return `/lectures/full/${entity.id}`;
+  case CT_VIRTUAL_LESSONS:
+  case CT_WOMEN_LESSONS:
+  case CT_CHILDREN_LESSONS:
+    return `/lectures/c/${entity.id}`;
   case CT_FRIENDS_GATHERINGS:
   case CT_MEALS:
   case CT_CLIPS:
@@ -248,7 +254,7 @@ export const canonicalLink = (entity) => {
   case CT_VIRTUAL_LESSON:
   case CT_CHILDREN_LESSON:
   case CT_WOMEN_LESSON:
-    return `/lectures/${entity.id}`;
+    return `/lectures/cu/${entity.id}`;
   case CT_VIDEO_PROGRAM_CHAPTER:
     return `/programs/chapter/${entity.id}`;
   case CT_EVENT_PART:

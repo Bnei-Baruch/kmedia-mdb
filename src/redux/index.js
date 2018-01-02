@@ -15,27 +15,13 @@ import { reducer as search } from './modules/search';
 import { reducer as assets } from './modules/assets';
 
 export default combineReducers({
-<<<<<<< HEAD
-    router
-  , system
-  , settings
-  , lessons
-  , programs
-  , lectures
-  , events
-  , filters
-  , sources
-  , transcription
-  , tags
-  , mdb
-  , search
-=======
   router,
   system,
   settings,
   lessons,
   programs,
   events,
+  lectures,
   filters,
   sources,
   transcription,
@@ -43,6 +29,5 @@ export default combineReducers({
   mdb,
   search,
   assets,
->>>>>>> master
 });
 

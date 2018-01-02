@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Grid, Image, List, Table } from 'semantic-ui-react';
+import { Grid, List, Table } from 'semantic-ui-react';
 
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { canonicalLink } from '../../../helpers/utils';

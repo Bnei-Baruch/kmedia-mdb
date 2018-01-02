@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import 'moment-duration-format';
 
-import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../helpers/consts';
+import { CT_LECTURE_SERIES, CT_VIRTUAL_LESSONS, CT_WOMEN_LESSONS, CT_CHILDREN_LESSONS } from '../../../../helpers/consts';
 import { selectors as mdb } from '../../../../redux/modules/mdb';
-import { actions, selectors } from '../../../../redux/modules/lessons';
+import { actions, selectors } from '../../../../redux/modules/lectures';
 import * as shapes from '../../../shapes';
 import RelevantParts from './RelevantParts';
 
@@ -14,8 +13,10 @@ const getRelevantCollectionId = (unit) => {
   if (unit.collections) {
     const collections        = Object.values(unit.collections);
     const relevantCollection = collections.find(collection =>
-      collection.content_type === CT_DAILY_LESSON ||
-      collection.content_type === CT_SPECIAL_LESSON
+      collection.content_type === CT_LECTURE_SERIES ||
+      collection.content_type === CT_VIRTUAL_LESSONS ||
+      collection.content_type === CT_WOMEN_LESSONS ||
+      collection.content_type === CT_CHILDREN_LESSONS
     );
 
     if (relevantCollection) {
@@ -105,11 +106,11 @@ export default connect(
     return {
       collectionID,
       collection: collectionID ? mdb.getDenormCollection(state.mdb, collectionID) : null,
-      wip: selectors.getWip(state.lessons).fulls[collectionID],
-      errors: selectors.getErrors(state.lessons).fulls[collectionID],
+      wip: selectors.getWip(state.lectures).collections[collectionID],
+      errors: selectors.getErrors(state.lectures).collections[collectionID],
     };
   },
   dispatch => bindActionCreators({
-    fetchCollection: actions.fetchFullLesson,
+    fetchCollection: actions.fetchCollection,
   }, dispatch)
 )(RelevantPartsContainer);

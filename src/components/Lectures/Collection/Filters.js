@@ -8,10 +8,6 @@ import FilterTags from '../../Filters/FilterTags/FilterTags';
 
 const filters = [
   {
-    name: 'programs-filter',
-    component: filterComponents.ProgramsFilter
-  },
-  {
     name: 'topics-filter',
     component: filterComponents.TopicsFilter
   },
@@ -25,7 +21,7 @@ const filters = [
   },
 ];
 
-class ProgramsFilters extends PureComponent {
+class LectureCollectionFilters extends PureComponent {
 
   static propTypes = {
     onChange: PropTypes.func.isRequired,
@@ -37,16 +33,16 @@ class ProgramsFilters extends PureComponent {
 
     return (
       <div>
-        <FiltersHydrator namespace="programs" onHydrated={onHydrated} />
+        <FiltersHydrator namespace="lectures-collection" onHydrated={onHydrated} />
         <Filters
-          namespace="programs"
+          namespace="lectures-collection"
           filters={filters}
           onFilterApplication={onChange}
         />
-        <FilterTags namespace="programs" onClose={onChange} />
+        <FilterTags namespace="lectures-collection" onClose={onChange} />
       </div>
     );
   }
 }
 
-export default ProgramsFilters;
+export default LectureCollectionFilters;

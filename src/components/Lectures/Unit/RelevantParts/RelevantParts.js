@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import 'moment-duration-format';
 import { Container, Header, Item } from 'semantic-ui-react';
 
-import { formatError, neighborIndices } from '../../../../helpers/utils';
+import { formatDuration, formatError, neighborIndices } from '../../../../helpers/utils';
 import * as shapes from '../../../shapes';
 import { ErrorSplash, LoadingSplash } from '../../../shared/Splash';
 import Link from '../../../Language/MultiLanguageLink';
@@ -34,24 +32,26 @@ const RelevantParts = (props) => {
   }
 
   return (
-    <div>
-      <Header as="h3" content={t('lessons.part.relevant-parts.title')} />
+    <div className="content__aside-unit">
+      <Header as="h3" content={t('lectures.cu.relevant-parts.title')} />
       <Item.Group divided link>
         {
-          otherParts.map(part => (
-            <Item as={Link} key={part.id} to={`/lessons/part/${part.id}`}>
-              <Item.Image size='small'>
-                <UnitLogo unitId={part.id} collectionId={collection.id} width={150}/>
+          otherParts.reverse().map(part => (
+            <Item as={Link} key={part.id} to={`/lectures/cu/${part.id}`}>
+              <Item.Image size="small">
+                <UnitLogo unitId={part.id} collectionId={collection.id} width={150} />
               </Item.Image>
-              <Item.Content verticalAlign='top'>
+              <Item.Content verticalAlign="top">
                 <Header as="h5">
-                  <small className='text grey uppercase'>{t('lessons.part.relevant-parts.item-title', { name: collection.ccuNames[part.id] })}</small><br/>
+                  <small className="text grey uppercase">
+                    {t('values.date', { date: new Date(part.film_date) })}
+                  </small>
+                  <br />
                   {part.name}
                 </Header>
                 <Item.Meta>
-                  <small>{moment.duration(part.duration, 'seconds').format('hh:mm:ss')}</small>
+                  <small>{formatDuration(part.duration)}</small>
                 </Item.Meta>
-
               </Item.Content>
             </Item>
           ))
@@ -62,7 +62,7 @@ const RelevantParts = (props) => {
               fluid
               as={Link}
               textAlign="right"
-              to={`/lessons/full/${collection.id}`}
+              to={`/lectures/c/${collection.id}`}
             >
               {t('buttons.more')} &raquo;
             </Container>

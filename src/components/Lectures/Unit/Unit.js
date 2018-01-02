@@ -13,16 +13,16 @@ import Link from '../../Language/MultiLanguageLink';
 import Info from './Info';
 import RelevantPartsContainer from './RelevantParts/RelevantPartsContainer';
 
-const LectureItem = (props) => {
-  const { lesson, wip, err, language, t } = props;
+const LectureUnit = (props) => {
+  const { unit, wip, err, language, t } = props;
 
   if (err) {
     if (err.response && err.response.status === 404) {
       return (
         <FrownSplash
-          text={t('messages.lesson-not-found')}
+          text={t('messages.lecture-not-found')}
           subtext={
-            <Trans i18nKey="messages.lesson-not-found-subtext">
+            <Trans i18nKey="messages.lecture-not-found-subtext">
               Try the <Link to="/lectures">lectures list</Link>...
             </Trans>
           }
@@ -37,7 +37,7 @@ const LectureItem = (props) => {
     return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
   }
 
-  if (!lesson) {
+  if (!unit) {
     return null;
   }
 
@@ -46,7 +46,7 @@ const LectureItem = (props) => {
       <div className="avbox">
         <Container>
           <Grid centered padded>
-            <RMPVideoBox unit={lesson} language={language} t={t} isSliceable />
+            <RMPVideoBox unit={unit} language={language} t={t} isSliceable />
           </Grid>
         </Container>
       </div>
@@ -54,12 +54,12 @@ const LectureItem = (props) => {
         <Grid padded>
           <Grid.Row>
             <Grid.Column width={10}>
-              <Info lesson={lesson} t={t} />
-              <Materials unit={lesson} t={t} />
+              <Info unit={unit} t={t} />
+              <Materials unit={unit} t={t} />
             </Grid.Column>
             <Grid.Column width={6}>
-              <MediaDownloads unit={lesson} language={language} t={t} />
-              <RelevantPartsContainer unit={lesson} t={t} />
+              <MediaDownloads unit={unit} language={language} t={t} />
+              <RelevantPartsContainer unit={unit} t={t} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -68,18 +68,18 @@ const LectureItem = (props) => {
   );
 };
 
-LectureItem.propTypes = {
-  lecture: shapes.LessonPart,
+LectureUnit.propTypes = {
+  unit: shapes.Lecture,
   language: PropTypes.string.isRequired,
   wip: shapes.WIP,
   err: shapes.Error,
   t: PropTypes.func.isRequired,
 };
 
-LectureItem.defaultProps = {
-  lecture: null,
+LectureUnit.defaultProps = {
+  unit: null,
   wip: false,
   err: null,
 };
 
-export default translate()(LectureItem);
+export default translate()(LectureUnit);

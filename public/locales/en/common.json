@@ -32,10 +32,16 @@
       "by": "Filter Programs by:"
     },
     "full-program": {
-      "by":"Filter Episodes by:"
+      "by": "Filter Episodes by:"
     },
     "events": {
       "by": "Filter Events by:"
+    },
+    "lectures": {
+      "by": "Filter Items by:"
+    },
+    "lectures-collection": {
+      "by": "Filter Items by:"
     },
     "sources": {
       "by": "Choose Source:"
@@ -113,6 +119,8 @@
     "program-not-found-subtext": "Try the <1>programs list</1>...",
     "event-not-found": "Couldn't find event",
     "event-not-found-subtext": "Try the <1>events list</1>...",
+    "lecture-not-found": "Couldn't find lecture",
+    "lecture-not-found-subtext": "Try the <1>lectures list</1>...",
     "no-files": "No Files",
     "no-playable-files": "No Playable Files",
     "no-results": "No results",
@@ -215,10 +223,6 @@
         "sources": "Sources",
         "related-event": "Related to Event"
       },
-      "materials": {
-        "summary": "Summary",
-        "transcription": "Transcription"
-      },
       "relevant-parts": {
         "title": "Other parts from the same program",
         "item-title": "Part {{name}}"
@@ -231,24 +235,18 @@
       "subtext": "Here you will find a rich variety of lectures that include: lectures, children's programs, women's programs, etc."
     },
     "list": {
-      "episode_from": "Item of:"
+      "item_from": "Item of:"
     },
-    "full": {
-      "episodes": "Episode(s)"
+    "c": {
+      "items": "Item(s)"
     },
-    "part": {
+    "cu": {
       "info": {
         "tags": "Tags",
-        "sources": "Sources",
-        "related-event": "Related to Event"
-      },
-      "materials": {
-        "summary": "Summary",
-        "transcription": "Transcription"
+        "sources": "Sources"
       },
       "relevant-parts": {
-        "title": "Other parts from the same lecture",
-        "item-title": "Part {{name}}"
+        "title": "Other items from the same series"
       }
     }
   },

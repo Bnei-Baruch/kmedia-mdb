@@ -4,88 +4,80 @@ import { types as settings } from './settings';
 
 /* Types */
 
-const SET_PAGE              = 'Lectures/SET_PAGE';
-const SET_FULL_LECTURE_PAGE = 'Lectures/SET_FULL_LECTURE_PAGE';
+const SET_PAGE            = 'Lectures/SET_PAGE';
+const SET_COLLECTION_PAGE = 'Lectures/SET_COLLECTION_PAGE';
 
-const FETCH_LIST                      = 'Lectures/FETCH_LIST';
-const FETCH_LIST_SUCCESS              = 'Lectures/FETCH_LIST_SUCCESS';
-const FETCH_LIST_FAILURE              = 'Lectures/FETCH_LIST_FAILURE';
-const FETCH_LECTURE                   = 'Lecture/FETCH_LECTURE';
-const FETCH_LECTURE_SUCCESS           = 'Lecture/FETCH_LECTURE_SUCCESS';
-const FETCH_LECTURE_FAILURE           = 'Lecture/FETCH_LECTURE_FAILURE';
-const FETCH_FULL_LECTURE              = 'Lecture/FETCH_FULL_Lecture';
-const FETCH_FULL_LECTURE_SUCCESS      = 'Lecture/FETCH_FULL_LECTURE_SUCCESS';
-const FETCH_FULL_LECTURE_FAILURE      = 'Lecture/FETCH_FULL_LECTURE_FAILURE';
-const FETCH_FULL_LECTURE_LIST         = 'Lecture/FETCH_FULL_LECTURE_LIST';
-const FETCH_FULL_LECTURE_LIST_SUCCESS = 'Lecture/FETCH_FULL_LECTURE_LIST_SUCCESS';
-const FETCH_FULL_LECTURE_LIST_FAILURE = 'Lecture/FETCH_FULL_LECTURE_LIST_FAILURE';
-const RECEIVE_COLLECTIONS             = 'Lectures/RECEIVE_COLLECTIONS';
-const RECEIVE_RECENTLY_UPDATED        = 'Lectures/RECEIVE_RECENTLY_UPDATED';
+const FETCH_LIST                    = 'Lectures/FETCH_LIST';
+const FETCH_LIST_SUCCESS            = 'Lectures/FETCH_LIST_SUCCESS';
+const FETCH_LIST_FAILURE            = 'Lectures/FETCH_LIST_FAILURE';
+const FETCH_UNIT                    = 'Lecture/FETCH_UNIT';
+const FETCH_UNIT_SUCCESS            = 'Lecture/FETCH_UNIT_SUCCESS';
+const FETCH_UNIT_FAILURE            = 'Lecture/FETCH_UNIT_FAILURE';
+const FETCH_COLLECTION              = 'Lecture/FETCH_COLLECTION';
+const FETCH_COLLECTION_SUCCESS      = 'Lecture/FETCH_COLLECTION_SUCCESS';
+const FETCH_COLLECTION_FAILURE      = 'Lecture/FETCH_COLLECTION_FAILURE';
+const FETCH_COLLECTION_LIST         = 'Lecture/FETCH_COLLECTION_LIST';
+const FETCH_COLLECTION_LIST_SUCCESS = 'Lecture/FETCH_COLLECTION_LIST_SUCCESS';
+const FETCH_COLLECTION_LIST_FAILURE = 'Lecture/FETCH_COLLECTION_LIST_FAILURE';
 
 export const types = {
   SET_PAGE,
-  SET_FULL_LECTURE_PAGE,
+  SET_COLLECTION_PAGE,
   FETCH_LIST,
   FETCH_LIST_SUCCESS,
   FETCH_LIST_FAILURE,
-  FETCH_LECTURE,
-  FETCH_LECTURE_SUCCESS,
-  FETCH_LECTURE_FAILURE,
-  FETCH_FULL_LECTURE,
-  FETCH_FULL_LECTURE_SUCCESS,
-  FETCH_FULL_LECTURE_FAILURE,
-  FETCH_FULL_LECTURE_LIST,
-  FETCH_FULL_LECTURE_LIST_SUCCESS,
-  FETCH_FULL_LECTURE_LIST_FAILURE,
-  RECEIVE_COLLECTIONS,
-  RECEIVE_RECENTLY_UPDATED,
+  FETCH_UNIT,
+  FETCH_UNIT_SUCCESS,
+  FETCH_UNIT_FAILURE,
+  FETCH_COLLECTION,
+  FETCH_COLLECTION_SUCCESS,
+  FETCH_COLLECTION_FAILURE,
+  FETCH_COLLECTION_LIST,
+  FETCH_COLLECTION_LIST_SUCCESS,
+  FETCH_COLLECTION_LIST_FAILURE,
 };
 
 /* Actions */
 
-const setPage                     = createAction(SET_PAGE);
-const setFullLecturePage          = createAction(SET_FULL_LECTURE_PAGE);
-const fetchList                   = createAction(FETCH_LIST, ({ pageNo, language, pageSize }) => ({
+const setPage                    = createAction(SET_PAGE);
+const setCollectionPage          = createAction(SET_COLLECTION_PAGE);
+const fetchList                  = createAction(FETCH_LIST, ({ pageNo, language, pageSize }) => ({
   pageNo,
   language,
   pageSize,
 }));
-const fetchListSuccess            = createAction(FETCH_LIST_SUCCESS);
-const fetchListFailure            = createAction(FETCH_LIST_FAILURE);
-const fetchLecture                = createAction(FETCH_LECTURE);
-const fetchLectureSuccess         = createAction(FETCH_LECTURE_SUCCESS);
-const fetchLectureFailure         = createAction(FETCH_LECTURE_FAILURE, (id, err) => ({ id, err }));
-const fetchFullLecture            = createAction(FETCH_FULL_LECTURE);
-const fetchFullLectureSuccess     = createAction(FETCH_FULL_LECTURE_SUCCESS);
-const fetchFullLectureFailure     = createAction(FETCH_FULL_LECTURE_FAILURE, (id, err) => ({ id, err }));
-const fetchFullLectureList        = createAction(FETCH_FULL_LECTURE_LIST, (pageNo, pageSize, language, id) => ({
+const fetchListSuccess           = createAction(FETCH_LIST_SUCCESS);
+const fetchListFailure           = createAction(FETCH_LIST_FAILURE);
+const fetchUnit                  = createAction(FETCH_UNIT);
+const fetchUnitSuccess           = createAction(FETCH_UNIT_SUCCESS);
+const fetchUnitFailure           = createAction(FETCH_UNIT_FAILURE, (id, err) => ({ id, err }));
+const fetchCollection            = createAction(FETCH_COLLECTION);
+const fetchCollectionSuccess     = createAction(FETCH_COLLECTION_SUCCESS);
+const fetchCollectionFailure     = createAction(FETCH_COLLECTION_FAILURE, (id, err) => ({ id, err }));
+const fetchCollectionList        = createAction(FETCH_COLLECTION_LIST, (pageNo, pageSize, language, id) => ({
   pageNo,
   pageSize,
   language,
-  Lecture: id,
+  collection: id,
 }));
-const fetchFullLectureListSuccess = createAction(FETCH_FULL_LECTURE_LIST_SUCCESS);
-const fetchFullLectureListFailure = createAction(FETCH_FULL_LECTURE_LIST_FAILURE);
-const receiveCollections          = createAction(RECEIVE_COLLECTIONS);
-const receiveRecentlyUpdated      = createAction(RECEIVE_RECENTLY_UPDATED);
+const fetchCollectionListSuccess = createAction(FETCH_COLLECTION_LIST_SUCCESS);
+const fetchCollectionListFailure = createAction(FETCH_COLLECTION_LIST_FAILURE);
 
 export const actions = {
   setPage,
-  setFullLecturePage,
+  setCollectionPage,
   fetchList,
   fetchListSuccess,
   fetchListFailure,
-  fetchLecture,
-  fetchLectureSuccess,
-  fetchLectureFailure,
-  fetchFullLecture,
-  fetchFullLectureSuccess,
-  fetchFullLectureFailure,
-  fetchFullLectureList,
-  fetchFullLectureListSuccess,
-  fetchFullLectureListFailure,
-  receiveCollections,
-  receiveRecentlyUpdated,
+  fetchUnit,
+  fetchUnitSuccess,
+  fetchUnitFailure,
+  fetchCollection,
+  fetchCollectionSuccess,
+  fetchCollectionFailure,
+  fetchCollectionList,
+  fetchCollectionListSuccess,
+  fetchCollectionListFailure,
 };
 
 /* Reducer */
@@ -94,25 +86,22 @@ const initialState = {
   total: 0,
   pageNo: 1,
   items: [],
-  fullPaging: {
+  collectionPaging: {
     total: 0,
     pageNo: 1,
     items: [],
   },
-  genres: [],
-  Lectures: [],
-  recentlyUpdated: [],
   wip: {
     list: false,
-    fullList: false,
-    chapters: {},
-    fulls: {}
+    collectionList: false,
+    units: {},
+    collections: {}
   },
   errors: {
     list: null,
-    fullList: null,
-    chapters: {},
-    fulls: {}
+    collectionList: null,
+    units: {},
+    collections: {}
   },
 };
 
@@ -130,46 +119,46 @@ const setStatus = (state, action) => {
   case FETCH_LIST:
     wip.list = true;
     break;
-  case FETCH_LECTURE:
-    wip.chapters = { ...wip.chapters, [action.payload]: true };
+  case FETCH_UNIT:
+    wip.units = { ...wip.units, [action.payload]: true };
     break;
-  case FETCH_FULL_LECTURE:
-    wip.fulls = { ...wip.fulls, [action.payload]: true };
+  case FETCH_COLLECTION:
+    wip.collections = { ...wip.collections, [action.payload]: true };
     break;
-  case FETCH_FULL_LECTURE_LIST:
-    wip.fullList = true;
+  case FETCH_COLLECTION_LIST:
+    wip.collectionList = true;
     break;
   case FETCH_LIST_SUCCESS:
     wip.list    = false;
     errors.list = null;
     break;
-  case FETCH_LECTURE_SUCCESS:
-    wip.chapters    = { ...wip.chapters, [action.payload]: false };
-    errors.chapters = { ...errors.chapters, [action.payload]: null };
+  case FETCH_UNIT_SUCCESS:
+    wip.units    = { ...wip.units, [action.payload]: false };
+    errors.units = { ...errors.units, [action.payload]: null };
     break;
-  case FETCH_FULL_LECTURE_SUCCESS:
-    wip.fulls    = { ...wip.fulls, [action.payload]: false };
-    errors.fulls = { ...errors.fulls, [action.payload]: null };
+  case FETCH_COLLECTION_SUCCESS:
+    wip.collections    = { ...wip.collections, [action.payload]: false };
+    errors.collections = { ...errors.collections, [action.payload]: null };
     break;
-  case FETCH_FULL_LECTURE_LIST_SUCCESS:
-    wip.fullList    = false;
-    errors.fullList = null;
+  case FETCH_COLLECTION_LIST_SUCCESS:
+    wip.collectionList    = false;
+    errors.collectionList = null;
     break;
   case FETCH_LIST_FAILURE:
     wip.list    = false;
     errors.list = action.payload;
     break;
-  case FETCH_LECTURE_FAILURE:
-    wip.chapters    = { ...wip.chapters, [action.payload.id]: false };
-    errors.chapters = { ...errors.chapters, [action.payload.id]: action.payload.err };
+  case FETCH_UNIT_FAILURE:
+    wip.units    = { ...wip.units, [action.payload.id]: false };
+    errors.units = { ...errors.units, [action.payload.id]: action.payload.err };
     break;
-  case FETCH_FULL_LECTURE_FAILURE:
-    wip.fulls    = { ...wip.fulls, [action.payload.id]: false };
-    errors.fulls = { ...errors.fulls, [action.payload.id]: action.payload.err };
+  case FETCH_COLLECTION_FAILURE:
+    wip.collections    = { ...wip.collections, [action.payload.id]: false };
+    errors.collections = { ...errors.collections, [action.payload.id]: action.payload.err };
     break;
-  case FETCH_FULL_LECTURE_LIST_FAILURE:
-    wip.fullList    = false;
-    errors.fullList = action.payload;
+  case FETCH_COLLECTION_LIST_FAILURE:
+    wip.collectionList    = false;
+    errors.collectionList = action.payload;
     break;
   default:
     break;
@@ -191,12 +180,12 @@ const onFetchListSuccess = (state, action) => {
   };
 };
 
-const onFetchFullLectureListSuccess = (state, action) => {
+const onFetchCollectionListSuccess = (state, action) => {
   const items = action.payload.collections || action.payload.content_units || [];
   return {
     ...state,
-    fullPaging: {
-      ...state.fullPaging,
+    collectionPaging: {
+      ...state.collectionPaging,
       total: action.payload.total,
       items: items.map(x => x.id),
     }
@@ -210,11 +199,11 @@ const onSetPage = (state, action) => (
   }
 );
 
-const onSetFullLecturePage = (state, action) => {
+const onSetCollectionPage = (state, action) => {
   return {
     ...state,
-    fullPaging: {
-      ...state.fullPaging,
+    collectionPaging: {
+      ...state.collectionPaging,
       pageNo: action.payload
     }
   };
@@ -224,34 +213,12 @@ const onSetLanguage = state => (
   {
     ...state,
     items: [],
-    fullPaging: {
-      ...state.fullPaging,
+    collectionPaging: {
+      ...state.collectionPaging,
       items: [],
     },
-    genres: [],
-    Lectures: [],
   }
 );
-
-const onReceiveCollections = (state, action) => {
-  const genres = [...new Set(action.payload.map(x => x.genres).reduce(
-    (acc, cur) => acc.concat(cur),
-    []
-  ))].sort();
-
-  return {
-    ...state,
-    genres,
-    Lectures: action.payload,
-  };
-};
-
-const onReceiveRecentlyUpdated = (state, action) => {
-  return {
-    ...state,
-    recentlyUpdated: action.payload
-  };
-};
 
 export const reducer = handleActions({
   [settings.SET_LANGUAGE]: onSetLanguage,
@@ -260,43 +227,35 @@ export const reducer = handleActions({
   [FETCH_LIST_SUCCESS]: (state, action) =>
     setStatus(onFetchListSuccess(state, action), action),
   [FETCH_LIST_FAILURE]: setStatus,
-  [FETCH_LECTURE_CHAPTER]: setStatus,
-  [FETCH_LECTURE_CHAPTER_SUCCESS]: setStatus,
-  [FETCH_LECTURE_CHAPTER_FAILURE]: setStatus,
-  [FETCH_FULL_LECTURE]: setStatus,
-  [FETCH_FULL_LECTURE_SUCCESS]: setStatus,
-  [FETCH_FULL_LECTURE_FAILURE]: setStatus,
-  [FETCH_FULL_LECTURE_LIST]: setStatus,
-  [FETCH_FULL_LECTURE_LIST_SUCCESS]: (state, action) =>
-    setStatus(onFetchFullLectureListSuccess(state, action), action),
-  [FETCH_FULL_LECTURE_LIST_FAILURE]: setStatus,
+  [FETCH_UNIT]: setStatus,
+  [FETCH_UNIT_SUCCESS]: setStatus,
+  [FETCH_UNIT_FAILURE]: setStatus,
+  [FETCH_COLLECTION]: setStatus,
+  [FETCH_COLLECTION_SUCCESS]: setStatus,
+  [FETCH_COLLECTION_FAILURE]: setStatus,
+  [FETCH_COLLECTION_LIST]: setStatus,
+  [FETCH_COLLECTION_LIST_SUCCESS]: (state, action) =>
+    setStatus(onFetchCollectionListSuccess(state, action), action),
+  [FETCH_COLLECTION_LIST_FAILURE]: setStatus,
 
   [SET_PAGE]: onSetPage,
-  [SET_FULL_LECTURE_PAGE]: onSetFullLecturePage,
-  [RECEIVE_COLLECTIONS]: onReceiveCollections,
-  [RECEIVE_RECENTLY_UPDATED]: onReceiveRecentlyUpdated,
+  [SET_COLLECTION_PAGE]: onSetCollectionPage,
 }, initialState);
 
 /* Selectors */
 
-const getTotal           = state => state.total;
-const getPageNo          = state => state.pageNo;
-const getItems           = state => state.items;
-const getFullPaging      = state => state.fullPaging;
-const getWip             = state => state.wip;
-const getErrors          = state => state.errors;
-const getGenres          = state => state.genres;
-const getLectures        = state => state.Lectures;
-const getRecentlyUpdated = state => state.recentlyUpdated;
+const getTotal            = state => state.total;
+const getPageNo           = state => state.pageNo;
+const getItems            = state => state.items;
+const getCollectionPaging = state => state.collectionPaging;
+const getWip              = state => state.wip;
+const getErrors           = state => state.errors;
 
 export const selectors = {
   getTotal,
   getItems,
-  getFullPaging,
+  getCollectionPaging,
   getPageNo,
   getWip,
   getErrors,
-  getGenres,
-  getLectures,
-  getRecentlyUpdated,
 };

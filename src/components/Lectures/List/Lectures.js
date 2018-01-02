@@ -9,6 +9,7 @@ import { ErrorSplash, LoadingSplash } from '../../shared/Splash';
 import SectionHeader from '../../shared/SectionHeader';
 import Pagination from '../../pagination/Pagination';
 import ResultsPageHeader from '../../pagination/ResultsPageHeader';
+import Filters from './Filters';
 import List from './List';
 
 class LecturesPage extends PureComponent {
@@ -72,10 +73,12 @@ class LecturesPage extends PureComponent {
         </div>
       );
     }
+
     return (
       <div>
         <SectionHeader section="lectures" />
         <Divider fitted />
+        <Filters onChange={onFiltersChanged} onHydrated={onFiltersHydrated} />
         {content}
       </div>
     );
