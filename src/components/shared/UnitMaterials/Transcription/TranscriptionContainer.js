@@ -3,53 +3,39 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { actions, selectors } from '../../../../redux/modules/transcription';
+import { actions, selectors } from '../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import * as shapes from '../../../shapes';
 import Transcription from './Transcription';
 
 class TranscriptionContainer extends Component {
+
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
-    content: PropTypes.shape({
+    doc2htmlById: PropTypes.objectOf(PropTypes.shape({
       data: PropTypes.string,     // actual content (HTML)
-      language: PropTypes.string, // language of text in file
       wip: shapes.WIP,
       err: shapes.Error,
-    }).isRequired,
+    })).isRequired,
+    language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
-    fetchTranscription: PropTypes.func.isRequired,
+    doc2html: PropTypes.func.isRequired,
   };
 
-  static defaultProps = {};
-
-  componentDidMount() {
-    this.askForData(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.unit.id !== this.props.unit.id) {
-      this.askForData(nextProps);
-    }
-  }
-
-  askForData = (props) => {
-    const { unit: { files }, fetchTranscription } = props;
-    if (Array.isArray(files)) {
-      files
-        .filter(file => file.type === 'text')
-        .forEach(fetchTranscription);
-    }
+  handleContentChange = (id) => {
+    this.props.doc2html(id);
   };
 
   render() {
-    const { unit, content, t, } = this.props;
+    const { unit, doc2htmlById, language, t } = this.props;
 
     return (
       <Transcription
         unit={unit}
-        content={content}
+        doc2htmlById={doc2htmlById}
+        language={language}
         t={t}
+        onContentChange={this.handleContentChange}
       />
     );
   }
@@ -57,10 +43,10 @@ class TranscriptionContainer extends Component {
 
 export default connect(
   state => ({
-    content: selectors.getTranscription(state.transcription),
+    doc2htmlById: selectors.getDoc2htmlById(state.assets),
     language: settings.getLanguage(state.settings),
   }),
   dispatch => bindActionCreators({
-    fetchTranscription: actions.fetchTranscription,
+    doc2html: actions.doc2html,
   }, dispatch)
 )(TranscriptionContainer);
