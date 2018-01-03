@@ -1,0 +1,10 @@
+.toc {
+  > div:nth-child(2) {
+    height: calc(100vh - 60px);
+    overflow: scroll;
+  }
+}
+
+.source__content {
+  min-height: calc(100vh - 60px);
+}

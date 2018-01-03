@@ -43,3 +43,12 @@ em {
     display: none;
   }
 }
+
+
+/* Program filters hack (rename, move to filters)*/ 
+.filter-letters{
+  flex-direction: column!important;
+  flex-wrap: wrap!important;
+  height: 600px!important;
+  width: auto!important;
+}
