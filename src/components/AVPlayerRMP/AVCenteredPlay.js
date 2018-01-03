@@ -18,7 +18,8 @@ class AVCenteredPlay extends Component {
   }
 
   handlePlayPause = () => {
-    this.props.media.playPause();
+    if (!this.props.media.isLoading)
+      this.props.media.playPause();
   };
 
   render() {
