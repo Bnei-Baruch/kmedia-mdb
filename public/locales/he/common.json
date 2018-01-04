@@ -72,6 +72,9 @@
     "topics-filter": {
       "label": "נושאים"
     },
+    "publishers-filter": {
+      "label": "מפרסמים"
+    },
     "programs-filter": {
       "label": "ז'אנר \\ תוכנית",
       "recently-updated": "עודכנו לאחרונה",

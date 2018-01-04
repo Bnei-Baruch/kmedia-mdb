@@ -8,6 +8,10 @@ import FilterTags from '../../Filters/FilterTags/FilterTags';
 
 const filters = [
   {
+    name: 'publishers-filter',
+    component: filterComponents.PublishersFilter
+  },
+  {
     name: 'date-filter',
     component: filterComponents.DateFilter
   },

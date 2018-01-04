@@ -73,6 +73,9 @@
     "topics-filter": {
       "label": "Topics"
     },
+    "publishers-filter": {
+      "label": "Publishers"
+    },
     "programs-filter": {
       "label": "Genre/Program",
       "recently-updated": "Recently Updated",
