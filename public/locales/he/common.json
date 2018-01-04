@@ -42,6 +42,12 @@
     "lectures-collection": {
       "by": "סנן הרצאות לפי:"
     },
+    "publications": {
+      "by": "סנן מאמרים לפי:"
+    },
+    "publications-collection": {
+      "by": "סנן מאמרים לפי:"
+    },
     "sources": {
       "by": "בחר מקור:"
     },
@@ -120,6 +126,8 @@
     "event-not-found-subtext": "נסה לחפש ב <1>רשימת האירועים</1>...",
     "lecture-not-found": "הרצאה לא קיימת",
     "lecture-not-found-subtext": "נסה לחפש ב <1>רשימת ההרצאות</1>...",
+    "publication-not-found": "פרסום לא קיים",
+    "publication-not-found-subtext": "נסה לחפש ב <1>רשימת הפרסומים</1>...",
     "no-files": "לא נמצאו קבצים",
     "no-playable-files": "לא נמצאו קבצים מתאימים לתצוגה",
     "no-results": "לא נמצאו תוצאות",
@@ -249,13 +257,31 @@
       }
     }
   },
+  "publications": {
+    "header": {
+      "text": "פרסומים",
+      "subtext": "כאן יבוא התיאור של מדור פרסומים"
+    },
+    "list": {
+      "item_from": "מאמר מתוך:"
+    },
+    "c": {
+      "items": "מאמרים"
+    },
+    "cu": {
+      "relevant-parts": {
+        "title": "מאמרים נוספים מאותו האוסף"
+      }
+    }
+  },
   "materials": {
     "summary": {
       "header": "תקציר",
       "no-summary": "חסר תקציר"
     },
     "transcription": {
-      "header": "תמליל"
+      "header": "תמליל",
+      "no-transcription": "חסר תמליל"
     },
     "sources": {
       "header": "מקורות",
@@ -298,6 +324,14 @@
         "audio": "אודיו של התוכנית",
         "text": "תמליל מלא",
         "image": "תמונות"
+      }
+    },
+    "publication": {
+      "type-labels": {
+        "video": "וידאו",
+        "audio": "אודיו",
+        "text": "טקסט",
+        "image": "צילומי מסך"
       }
     }
   },
@@ -349,6 +383,8 @@
       "HOLIDAY": "חג \\ מועד",
       "PICNIC": "פיקניק",
       "UNITY_DAY": "יום איחוד",
+      "CLIPS": "קליפים",
+      "ARTICLES": "מאמרים",
       "LESSON_PART": "חלק שיעור",
       "LECTURE": "הרצאה",
       "CHILDREN_LESSON": "שיעור ילדים",
@@ -358,12 +394,13 @@
       "MEAL": "סעודה",
       "VIDEO_PROGRAM_CHAPTER": "פרק",
       "FULL_LESSON": "שיעור מלא",
-      "TEXT": "טקסט",
+      "ARTICLE": "מאמר",
       "UNKNOWN": "לא ידוע",
       "EVENT_PART": "חלק אירוע",
       "CLIP": "קליפ",
       "TRAINING": "הכשרה",
-      "KITEI_MAKOR": "קטעי מקור"
+      "KITEI_MAKOR": "קטעי מקור",
+      "PUBLICATION": "פרסום"
     },
     "media-types": {
       "video": "וידאו",

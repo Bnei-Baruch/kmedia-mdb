@@ -3,6 +3,7 @@ import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import Api from '../helpers/Api';
 import { CT_ARTICLE } from '../helpers/consts';
 import { updateQuery } from './helpers/url';
+import { types as system } from '../redux/modules/system';
 import { selectors as settings } from '../redux/modules/settings';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 import { actions as mdbActions } from '../redux/modules/mdb';
@@ -78,6 +79,16 @@ function* fetchCollection(action) {
   }
 }
 
+function* fetchPublishers(action) {
+  try {
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const { data } = yield call(Api.publishers, { language });
+    yield put(actions.fetchPublishersSuccess(data));
+  } catch (err) {
+    yield put(actions.fetchPublishersFailure(err));
+  }
+}
+
 function* updatePageInQuery(action) {
   const page = action.payload > 1 ? action.payload : null;
   yield* updateQuery(query => Object.assign(query, { page }));
@@ -99,6 +110,10 @@ function* watchFetchCollectionList() {
   yield takeEvery(types.FETCH_COLLECTION_LIST, fetchCollectionList);
 }
 
+function* watchFetchPublishers() {
+  yield takeLatest([types.FETCH_PUBLISHERS, system.INIT], fetchPublishers);
+}
+
 function* watchSetPage() {
   yield takeLatest([types.SET_PAGE, types.SET_COLLECTION_PAGE], updatePageInQuery);
 }
@@ -108,5 +123,6 @@ export const sagas = [
   watchFetchUnit,
   watchFetchCollection,
   watchFetchCollectionList,
-  watchSetPage
+  watchFetchPublishers,
+  watchSetPage,
 ];

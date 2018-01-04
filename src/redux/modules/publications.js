@@ -20,9 +20,14 @@ const FETCH_COLLECTION_LIST         = 'Publications/FETCH_COLLECTION_LIST';
 const FETCH_COLLECTION_LIST_SUCCESS = 'Publications/FETCH_COLLECTION_LIST_SUCCESS';
 const FETCH_COLLECTION_LIST_FAILURE = 'Publications/FETCH_COLLECTION_LIST_FAILURE';
 
+const FETCH_PUBLISHERS         = 'Publications/FETCH_PUBLISHERS';
+const FETCH_PUBLISHERS_SUCCESS = 'Publications/FETCH_PUBLISHERS_SUCCESS';
+const FETCH_PUBLISHERS_FAILURE = 'Publications/FETCH_PUBLISHERS_FAILURE';
+
 export const types = {
   SET_PAGE,
   SET_COLLECTION_PAGE,
+
   FETCH_LIST,
   FETCH_LIST_SUCCESS,
   FETCH_LIST_FAILURE,
@@ -35,6 +40,10 @@ export const types = {
   FETCH_COLLECTION_LIST,
   FETCH_COLLECTION_LIST_SUCCESS,
   FETCH_COLLECTION_LIST_FAILURE,
+
+  FETCH_PUBLISHERS,
+  FETCH_PUBLISHERS_SUCCESS,
+  FETCH_PUBLISHERS_FAILURE,
 };
 
 /* Actions */
@@ -62,6 +71,9 @@ const fetchCollectionList        = createAction(FETCH_COLLECTION_LIST, (pageNo, 
 }));
 const fetchCollectionListSuccess = createAction(FETCH_COLLECTION_LIST_SUCCESS);
 const fetchCollectionListFailure = createAction(FETCH_COLLECTION_LIST_FAILURE);
+const fetchPublishers            = createAction(FETCH_PUBLISHERS);
+const fetchPublishersSuccess     = createAction(FETCH_PUBLISHERS_SUCCESS);
+const fetchPublishersFailure     = createAction(FETCH_PUBLISHERS_FAILURE);
 
 export const actions = {
   setPage,
@@ -78,6 +90,9 @@ export const actions = {
   fetchCollectionList,
   fetchCollectionListSuccess,
   fetchCollectionListFailure,
+  fetchPublishers,
+  fetchPublishersSuccess,
+  fetchPublishersFailure,
 };
 
 /* Reducer */
@@ -86,6 +101,7 @@ const initialState = {
   total: 0,
   pageNo: 1,
   items: [],
+  publisherById: {},
   collectionPaging: {
     total: 0,
     pageNo: 1,
@@ -95,13 +111,15 @@ const initialState = {
     list: false,
     collectionList: false,
     units: {},
-    collections: {}
+    collections: {},
+    publishers: false,
   },
   errors: {
     list: null,
     collectionList: null,
     units: {},
-    collections: {}
+    collections: {},
+    publishers: null,
   },
 };
 
@@ -128,6 +146,9 @@ const setStatus = (state, action) => {
   case FETCH_COLLECTION_LIST:
     wip.collectionList = true;
     break;
+  case FETCH_PUBLISHERS:
+    wip.publishers = true;
+    break;
   case FETCH_LIST_SUCCESS:
     wip.list    = false;
     errors.list = null;
@@ -144,6 +165,10 @@ const setStatus = (state, action) => {
     wip.collectionList    = false;
     errors.collectionList = null;
     break;
+  case FETCH_PUBLISHERS_SUCCESS:
+    wip.publishers    = false;
+    errors.publishers = null;
+    break;
   case FETCH_LIST_FAILURE:
     wip.list    = false;
     errors.list = action.payload;
@@ -159,6 +184,10 @@ const setStatus = (state, action) => {
   case FETCH_COLLECTION_LIST_FAILURE:
     wip.collectionList    = false;
     errors.collectionList = action.payload;
+    break;
+  case FETCH_PUBLISHERS_FAILURE:
+    wip.publishers    = false;
+    errors.publishers = action.payload;
     break;
   default:
     break;
@@ -192,6 +221,17 @@ const onFetchCollectionListSuccess = (state, action) => {
   };
 };
 
+const onFetchPublishersSuccess = (state, action) => {
+  return {
+    ...state,
+    total: action.payload.total,
+    publisherById: action.payload.publishers.reduce((acc, val) => {
+      acc[val.id] = val;
+      return acc;
+    }, {}),
+  };
+};
+
 const onSetPage = (state, action) => (
   {
     ...state,
@@ -213,6 +253,7 @@ const onSetLanguage = state => (
   {
     ...state,
     items: [],
+    publisherById: {},
     collectionPaging: {
       ...state.collectionPaging,
       items: [],
@@ -237,6 +278,10 @@ export const reducer = handleActions({
   [FETCH_COLLECTION_LIST_SUCCESS]: (state, action) =>
     setStatus(onFetchCollectionListSuccess(state, action), action),
   [FETCH_COLLECTION_LIST_FAILURE]: setStatus,
+  [FETCH_PUBLISHERS]: setStatus,
+  [FETCH_PUBLISHERS_SUCCESS]: (state, action) =>
+    setStatus(onFetchPublishersSuccess(state, action), action),
+  [FETCH_PUBLISHERS_FAILURE]: setStatus,
 
   [SET_PAGE]: onSetPage,
   [SET_COLLECTION_PAGE]: onSetCollectionPage,
@@ -247,15 +292,17 @@ export const reducer = handleActions({
 const getTotal            = state => state.total;
 const getPageNo           = state => state.pageNo;
 const getItems            = state => state.items;
+const getPublisherById    = state => state.publisherById;
 const getCollectionPaging = state => state.collectionPaging;
 const getWip              = state => state.wip;
 const getErrors           = state => state.errors;
 
 export const selectors = {
   getTotal,
-  getItems,
-  getCollectionPaging,
   getPageNo,
+  getItems,
+  getPublisherById,
+  getCollectionPaging,
   getWip,
   getErrors,
 };

@@ -226,11 +226,11 @@ export const canonicalLink = (entity) => {
   case CT_WOMEN_LESSONS:
   case CT_CHILDREN_LESSONS:
     return `/lectures/c/${entity.id}`;
+  case CT_ARTICLES:
+    return `/publications/c/${entity.id}`;
   case CT_FRIENDS_GATHERINGS:
   case CT_MEALS:
   case CT_CLIPS:
-  case CT_ARTICLES:
-    return '/';
   case CT_CONGRESS:
   case CT_HOLIDAY:
   case CT_PICNIC:
@@ -260,9 +260,10 @@ export const canonicalLink = (entity) => {
   case CT_EVENT_PART:
   case CT_FULL_LESSON:
     return `/events/item/${entity.id}`;
+  case CT_ARTICLE:
+    return `/publications/cu/${entity.id}`;
   case CT_FRIENDS_GATHERING:
   case CT_MEAL:
-  case CT_ARTICLE:
   case CT_UNKNOWN:
   case CT_CLIP:
   case CT_TRAINING:

@@ -43,6 +43,7 @@ class Api {
   static unit       = ({ id, language }) => Requests.get(`content_units/${id}?${Requests.makeParams({ language })}`);
   static sources    = ({ language }) => Requests.get(`sources?${Requests.makeParams({ language })}`);
   static tags       = ({ language }) => Requests.get(`tags?${Requests.makeParams({ language })}`);
+  static publishers = ({ language }) => Requests.get(`publishers?${Requests.makeParams({ language })}`);
 
   static lessons = ({ pageNo: page_no, pageSize: page_size, ...rest }) =>
     Requests.get(`lessons?${Requests.makeParams({ page_no, page_size, ...rest })}`);
@@ -64,9 +65,6 @@ class Api {
 
   static sourceIdx = ({ id }) =>
     Requests.getAsset(`sources/${id}/index.json`);
-
-  static sourceContent = ({ id, name }) =>
-    Requests.getAsset(`sources/${id}/${name}`);
 
   static sourceContent = ({ id, name }) =>
     Requests.getAsset(`sources/${id}/${name}`);
