@@ -12,7 +12,7 @@ import ResultsPageHeader from '../../pagination/ResultsPageHeader';
 import Filters from './Filters';
 import List from './List';
 
-class LecturesPage extends PureComponent {
+class PublicationsPage extends PureComponent {
 
   static propTypes = {
     items: PropTypes.arrayOf(shapes.Article),
@@ -86,4 +86,4 @@ class LecturesPage extends PureComponent {
 
 }
 
-export default translate()(LecturesPage);
+export default translate()(PublicationsPage);
