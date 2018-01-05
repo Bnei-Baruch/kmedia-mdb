@@ -12,6 +12,9 @@ import { actions, selectors } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
+import GridRow from 'semantic-ui-react/dist/commonjs/collections/Grid/GridRow';
+import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
+import ButtonsLanguageSelector from '../../Language/Selector/ButtonsLanguageSelector';
 
 class Sketches extends React.Component {
   static propTypes = {
@@ -28,6 +31,8 @@ class Sketches extends React.Component {
 
   state = {
     zipFileId: null,
+    languages: null,
+    language: null,
   };
 
   componentDidMount() {
@@ -43,14 +48,14 @@ class Sketches extends React.Component {
 
   // load data into state
   setCurrentItem = (props) => {
-    const { unit, indexById, fetchAsset } = props;
-    const zipFile                         = this.findZipFile(unit);
+    const { unit, indexById, fetchAsset, language } = props;
+    const zipFile                                   = this.findZipFile(unit);
 
     if (!zipFile) {
-      this.setState({ zipFileId: null });
+      this.setState({ zipFileId: null, language });
     }
     else {
-      this.setState({ zipFileId: zipFile.id });
+      this.setState({ zipFileId: zipFile.id, language });
 
       const hasData = indexById && indexById[zipFile.id];
       if (!hasData) {
@@ -62,7 +67,7 @@ class Sketches extends React.Component {
   findZipFile = (unit) => {
     if (Array.isArray(unit.files)) {
       //get the zip files
-      const zipFiles = unit.files.filter(this.filterZipFile);
+      const zipFiles = unit.files.filter(this.filterZipFiles);
 
       if (!Array.isArray(zipFiles) || zipFiles.length === 0)
         return null;
@@ -71,7 +76,14 @@ class Sketches extends React.Component {
       if (zipFiles.length === 1)
         return zipFiles[0];
       else {
-        //many zip files - try filter by language
+        //many zip files 
+        //get all existing unique languages of zipFiles 
+        const languages = zipFiles
+                            .map((file) => file.language)
+                            .filter((v, i, a) => a.indexOf(v) === i);
+        this.setState({ languages });
+
+        // try filter by language
         const langZipFiles = zipFiles.filter((file) => file.language === this.props.language);
 
         //sometimes there are many zipfiles for one language, so get the first of them
@@ -88,17 +100,21 @@ class Sketches extends React.Component {
       return null;
   };
 
-  filterZipFile = (file) => {
+  filterZipFiles = (file) => {
     return file.type === 'image';
   };
+
+  handleLanguageChanged = (language) => {
+    this.setState({ language });
+  } 
 
   handleImageError(event) {
     console.log('Image error ', event.target);
   }
 
   render() {
-    const { t, indexById, language }    = this.props;
-    const { zipFileId }                 = this.state;
+    const { t, indexById }                    = this.props;
+    const { zipFileId, languages, language }  = this.state;
     const { wip, err, data: imageObjs } = indexById[zipFileId] || {};
 
     if (err) {
@@ -128,22 +144,43 @@ class Sketches extends React.Component {
 
       return (
         <div style={{ direction: 'ltr' }}>
-          <ImageGallery
-            items={items}
-            thumbnailPosition={'top'}
-            lazyLoad={true}
-            showPlayButton={false}
-            showBullets={false}
-            showFullscreenButton={false}
-            showIndex={true}
-            onImageError={this.handleImageError}
-          />
+          <Grid>
+            {
+              languages && languages.length > 0 ?
+              <Grid.Row>
+                <Grid.Column width={4} textAlign="right">
+                  <ButtonsLanguageSelector
+                      languages={languages}
+                      defaultValue={language}
+                      t={t}
+                      onSelect={this.handleLanguageChanged}
+                    />
+                </Grid.Column>
+              </Grid.Row> :
+              null
+            }
+            <Grid.Row>
+              <Grid.Column>
+                <ImageGallery
+                    items={items}
+                    thumbnailPosition={'top'}
+                    lazyLoad={true}
+                    showPlayButton={false}
+                    showBullets={false}
+                    showFullscreenButton={false}
+                    showIndex={true}
+                    onImageError={this.handleImageError}
+                  />
+                </Grid.Column>
+            </Grid.Row>  
+          </Grid>
+          <Divider hidden />
         </div>
       );
     }
 
     const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
-    return <div style={{ direction }}>{t('messages.no-images')}</div>;
+    return <Segment basic><div style={{ direction }}>{t('messages.no-images')}</div></Segment>;
   }
 }
 
