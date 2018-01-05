@@ -139,6 +139,7 @@ class LibraryContainer extends Component {
   selectSourceById = (id, e) => {
     e.preventDefault();
     this.props.replace(`sources/${id}`);
+    window.scrollTo(0, 0)
   };
 
   subToc = subTree => (
