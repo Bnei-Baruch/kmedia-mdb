@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Grid, Header, Table } from 'semantic-ui-react';
 
 import {
+  CT_ARTICLE,
   CT_FULL_LESSON,
   CT_KITEI_MAKOR,
   CT_LESSON_PART,
+  CT_PUBLICATION,
   CT_VIDEO_PROGRAM_CHAPTER,
   MT_AUDIO,
   MT_IMAGE,
@@ -14,6 +17,7 @@ import {
   MT_VIDEO
 } from '../../helpers/consts';
 import { physicalFile } from '../../helpers/utils';
+import { selectors } from '../../redux/modules/publications';
 import * as shapes from '../shapes';
 import DropdownLanguageSelector from '../Language/Selector/DropdownLanguageSelector';
 
@@ -27,8 +31,9 @@ const MEDIA_ORDER = [
 class MediaDownloads extends Component {
 
   static propTypes = {
-    language: PropTypes.string.isRequired,
     unit: shapes.ContentUnit,
+    publisherById: PropTypes.objectOf(shapes.Publisher).isRequired,
+    language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -139,13 +144,19 @@ class MediaDownloads extends Component {
     return groups;
   };
 
-  getDerivedFilesByContentType = units => (
-    Object.values(units || {})
+  getDerivedFilesByContentType = units => {
+    const allByCT = Object.values(units || {})
       .reduce((acc, val) => {
-        acc[val.content_type] = this.getFilesByLanguage(val.files);
+        acc[val.content_type] = (acc[val.content_type] || []).concat((val.files || []).map(x => ({ ...x, cu: val })));
         return acc;
-      }, {})
-  );
+      }, {});
+
+    return Object.entries(allByCT).reduce((acc, val) => {
+      const [ct, files] = val;
+      acc[ct]           = this.getFilesByLanguage(files);
+      return acc;
+    }, {});
+  };
 
   handleChangeLanguage = (e, language) => {
     this.setState({ language });
@@ -194,17 +205,21 @@ class MediaDownloads extends Component {
       return 'lesson';
     case CT_VIDEO_PROGRAM_CHAPTER:
       return 'program';
+    case CT_ARTICLE:
+      return 'publication';
     default:
       return '';
     }
   };
 
   render() {
-    const { t }                               = this.props;
+    const { t, publisherById }                = this.props;
     const { language, groups, derivedGroups } = this.state;
     const byType                              = groups.get(language) || new Map();
     const kiteiMakor                          = derivedGroups[CT_KITEI_MAKOR];
     const kiteiMakorByType                    = (kiteiMakor && kiteiMakor.get(language)) || new Map();
+    const publications                        = derivedGroups[CT_PUBLICATION];
+    const publicationsByType                  = (publications && publications.get(language)) || new Map();
 
     let typeOverrides = this.getI18nTypeOverridesKey();
     if (typeOverrides) {
@@ -234,9 +249,19 @@ class MediaDownloads extends Component {
         return acc.concat(files);
       }, []);
     }
+    if (publicationsByType.size > 0) {
+      derivedRows = MEDIA_ORDER.reduce((acc, val) => {
+        const label = t(`media-downloads.${typeOverrides}type-labels.${val}`);
+        const files = (publicationsByType.get(val) || []).map(file => {
+          const publisher = publisherById[file.cu.publishers[0]];
+          return this.renderRow(file, `${label} - ${publisher ? publisher.name : '???'}`, t);
+        });
+        return acc.concat(files);
+      }, []);
+    }
 
     return (
-      <div className='content__aside-unit'>
+      <div className="content__aside-unit">
         <Grid columns="equal">
           <Grid.Row>
             <Grid.Column>
@@ -251,7 +276,7 @@ class MediaDownloads extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Table basic="very" compact="very" unstackable>
+        <Table unstackable basic="very" compact="very">
           <Table.Body>
             {rows}
           </Table.Body>
@@ -273,4 +298,8 @@ class MediaDownloads extends Component {
   }
 }
 
-export default MediaDownloads;
+export default connect(state => ({
+    publisherById: selectors.getPublisherById(state.publications),
+  })
+)(MediaDownloads);
+

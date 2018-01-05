@@ -90,6 +90,12 @@ export const Lecture = PropTypes.shape({
   film_date: PropTypes.string.isRequired,
 });
 
+export const Article = PropTypes.shape({
+  ...MDBDenormalizedContentUnit,
+  film_date: PropTypes.string,
+  original_language: PropTypes.string,
+});
+
 export const EventCollection = PropTypes.shape({
   ...MDBDenormalizedCollection,
   start_date: PropTypes.string.isRequired,
@@ -123,6 +129,12 @@ export const Topics = PropTypes.arrayOf(PropTypes.shape({
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
 }));
+
+export const Publisher = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  description: PropTypes.string,
+});
 
 export const filterPropShape = PropTypes.shape({
   name: PropTypes.string.isRequired,

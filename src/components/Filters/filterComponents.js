@@ -3,7 +3,8 @@ import EventTypesFilter from './EventTypesFilter/EventTypesFilter';
 import ProgramsFilter from './ProgramsFilter/ProgramsFilter';
 import SectionsFilter from './SectionsFilter/SectionsFilter';
 import SourcesFilter from './SourcesFilter/SourcesFilter';
-import TopicsFilter from './TopicsFilter/TopicsFilterNew';
+import TopicsFilter from './TopicsFilter/TopicsFilter';
+import PublishersFilter from './PublishersFilter/PublishersFilter';
 import YearsFilter from './YearsFilter/YearsFilter';
 
 export default {
@@ -13,5 +14,6 @@ export default {
   SectionsFilter,
   SourcesFilter,
   TopicsFilter,
+  PublishersFilter,
   YearsFilter,
 };

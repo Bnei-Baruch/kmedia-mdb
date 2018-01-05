@@ -17,16 +17,17 @@ import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
 import ButtonsLanguageSelector from '../../Language/Selector/ButtonsLanguageSelector';
 
 class Sketches extends React.Component {
+
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     t: PropTypes.func.isRequired,
-    indexById: PropTypes.objectOf(PropTypes.shape({
+    zipIndexById: PropTypes.objectOf(PropTypes.shape({
       data: PropTypes.arrayOf(PropTypes.object),
       wip: shapes.WIP,
       err: shapes.Error,
     })).isRequired,
-    fetchAsset: PropTypes.func.isRequired,
-    language : PropTypes.string.isRequired
+    unzip: PropTypes.func.isRequired,
+    language: PropTypes.string.isRequired
   };
 
   state = {
@@ -40,7 +41,7 @@ class Sketches extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.indexById !== this.props.indexById ||
+    if (nextProps.zipIndexById !== this.props.zipIndexById ||
       nextProps.unit !== this.props.unit) {
       this.setCurrentItem(nextProps);
     }
@@ -57,9 +58,9 @@ class Sketches extends React.Component {
     else {
       this.setState({ zipFileId: zipFile.id, language });
 
-      const hasData = indexById && indexById[zipFile.id];
+      const hasData = zipIndexById && zipIndexById[zipFile.id];
       if (!hasData) {
-        fetchAsset(zipFile.id);
+        unzip(zipFile.id);
       }
     }
   };
@@ -207,14 +208,14 @@ const imageGalleryItem = (item) => {
 
 const mapState = (state) => {
   return {
-    indexById : selectors.getIndexById(state.assets),
+    zipIndexById: selectors.getZipIndexById(state.assets),
     language: settings.getLanguage(state.settings)
   };
 };
 
 const mapDispatch = (dispatch) => {
   return bindActionCreators({
-    fetchAsset: actions.fetchAsset
+    unzip: actions.unzip
   }, dispatch);
 };
 

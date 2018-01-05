@@ -43,6 +43,12 @@
     "lectures-collection": {
       "by": "Filter Items by:"
     },
+    "publications": {
+      "by": "Filter Articles by:"
+    },
+    "publications-collection": {
+      "by": "Filter Articles by:"
+    },
     "sources": {
       "by": "Choose Source:"
     },
@@ -66,6 +72,9 @@
     },
     "topics-filter": {
       "label": "Topics"
+    },
+    "publishers-filter": {
+      "label": "Publishers"
     },
     "programs-filter": {
       "label": "Genre/Program",
@@ -121,6 +130,8 @@
     "event-not-found-subtext": "Try the <1>events list</1>...",
     "lecture-not-found": "Couldn't find lecture",
     "lecture-not-found-subtext": "Try the <1>lectures list</1>...",
+    "publication-not-found": "Couldn't find Publication",
+    "publication-not-found-subtext": "Try the <1>publications list</1>...",
     "no-files": "No Files",
     "no-playable-files": "No Playable Files",
     "no-results": "No results",
@@ -250,13 +261,31 @@
       }
     }
   },
+  "publications": {
+    "header": {
+      "text": "Publications",
+      "subtext": "Here comes the publications section subtext"
+    },
+    "list": {
+      "item_from": "Item of:"
+    },
+    "c": {
+      "items": "Articles(s)"
+    },
+    "cu": {
+      "relevant-parts": {
+        "title": "Other published articles in this collection"
+      }
+    }
+  },
   "materials": {
     "summary": {
       "header": "Summary",
       "no-summary": "Summary is missing"
     },
     "transcription": {
-      "header": "Transcription"
+      "header": "Transcription",
+      "no-transcription": "Transcription is missing"
     },
     "sources": {
       "header": "Sources",
@@ -299,6 +328,14 @@
         "audio": "Program Audio",
         "text": "Transcription Text",
         "image": "Sketches"
+      }
+    },
+    "publication": {
+      "type-labels": {
+        "video": "Video",
+        "audio": "Audio",
+        "text": "Article Text",
+        "image": "Snapshots"
       }
     }
   },
@@ -350,6 +387,8 @@
       "HOLIDAY": "Holiday",
       "PICNIC": "Picnic",
       "UNITY_DAY": "Unity Day",
+      "CLIPS": "Clips",
+      "ARTICLES": "Articles",
       "LESSON_PART": "Lesson Part",
       "LECTURE": "Lecture",
       "CHILDREN_LESSON": "Children Lesson",
@@ -359,12 +398,13 @@
       "MEAL": "Meal",
       "VIDEO_PROGRAM_CHAPTER": "Video Program Chapter",
       "FULL_LESSON": "Full Lesson",
-      "TEXT": "Text",
+      "ARTICLE": "Article",
       "UNKNOWN": "Unknown",
       "EVENT_PART": "Event Part",
       "CLIP": "Clip",
       "TRAINING": "Training",
-      "KITEI_MAKOR": "Sources Materials"
+      "KITEI_MAKOR": "Sources Materials",
+      "PUBLICATION": "Publication"
     },
     "media-types": {
       "video": "Video",

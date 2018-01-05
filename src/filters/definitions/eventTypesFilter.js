@@ -1,5 +1,5 @@
 import { createFilterDefinition } from './util';
-import { selectors as eventsSelectors } from '../../redux/modules/events';
+import { selectors } from '../../redux/modules/events';
 
 const eventTypesFilter = {
   name: 'event-types-filter',
@@ -23,8 +23,8 @@ const eventTypesFilter = {
       return '';
     }
 
-    const tree = eventsSelectors.getEventFilterTree(getState().events);
-    const path          = value.map(x => tree.byIds[x]);
+    const tree = selectors.getEventFilterTree(getState().events);
+    const path = value.map(x => tree.byIds[x]);
 
     // Make sure we have all items.
     // Location hydration probably happens before we receive sources

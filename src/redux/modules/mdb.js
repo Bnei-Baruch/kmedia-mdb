@@ -52,7 +52,7 @@ const onReceiveCollections = (state, action) => {
 
         // make a copy of content unit and set this collection ccuName
         const updatedCU = { ...cu, ...state.cuById[cu.id] };
-        updatedCU.cIDs  = { ...updatedCU.cIDs, [`${y.id}____${ccuName}`]: y.id };
+        updatedCU.cIDs  = { ...updatedCU.cIDs, [`${y.id}____${ccuName || ''}`]: y.id };
 
         // we delete it's name_in_collection
         // as it might be overridden by successive calls from different collections

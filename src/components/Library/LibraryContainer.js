@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { replace } from 'react-router-redux';
 import { translate } from 'react-i18next';
-import { Accordion, Grid } from 'semantic-ui-react';
+import { Accordion, Grid, Rail, Segment, Sticky } from 'semantic-ui-react';
 
 import { actions as sourceActions, selectors as sources } from '../../redux/modules/sources';
 import { selectors as settings } from '../../redux/modules/settings';
@@ -15,6 +15,7 @@ import { ErrorSplash, FrownSplash } from '../shared/Splash';
 import LibraryContentContainer from './LibraryContentContainer';
 
 class LibraryContainer extends Component {
+
   static propTypes = {
     sourceId: PropTypes.string.isRequired,
     indexMap: PropTypes.objectOf(PropTypes.shape({
@@ -49,6 +50,9 @@ class LibraryContainer extends Component {
   state = {
     lastLoadedId: null,
   };
+
+  handleContextRef = contextRef =>
+    this.setState({ contextRef });
 
   componentDidMount() {
     const { sourceId, areSourcesLoaded, replace } = this.props;
@@ -201,6 +205,7 @@ class LibraryContainer extends Component {
   };
 
   render() {
+    const { contextRef }                      = this.state;
     const { indexMap, sourceId, language, t } = this.props;
 
     const index = isEmpty(sourceId) ? {} : indexMap[sourceId];
@@ -220,17 +225,23 @@ class LibraryContainer extends Component {
     const parent = this.properParentId(this.props.sourceId);
 
     return (
-      <Grid padded>
+      <Grid centered columns={3}>
         <Grid.Row>
-          {this.header(this.properParentId(this.props.sourceId))}
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column width={5}>
-            <p>{t('sources-library.toc')}</p>
-            <Accordion fluid styled defaultActiveIndex={0} panels={this.toc(parent, true)} />
-          </Grid.Column>
-          <Grid.Column width={11}>
-            {content}
+          <Grid.Column>
+            <div ref={this.handleContextRef}>
+              <Segment>
+                <div className="source__content">
+                  {this.header(this.properParentId(this.props.sourceId))}
+                  {content}
+                </div>
+                <Rail position="left">
+                  <Sticky context={contextRef} offset={60} className="toc">
+                    <p>{t('sources-library.toc')}</p>
+                    <Accordion fluid styled defaultActiveIndex={0} panels={this.toc(parent, true)} />
+                  </Sticky>
+                </Rail>
+              </Segment>
+            </div>
           </Grid.Column>
         </Grid.Row>
       </Grid>

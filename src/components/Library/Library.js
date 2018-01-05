@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Divider, Grid, Segment } from 'semantic-ui-react';
+import { Container, Divider, Segment } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../helpers/consts';
 import { formatError, isEmpty, shallowCompare } from '../../helpers/utils';
 import * as shapes from '../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../shared/Splash';
-import DropdownLanguageSelector from '../Language/Selector/DropdownLanguageSelector';
+import ButtonsLanguageSelector from '../Language/Selector/ButtonsLanguageSelector';
 
 class Library extends Component {
   static propTypes = {
@@ -62,29 +62,32 @@ class Library extends Component {
       return <Segment basic>{t('sources-library.no-source')}</Segment>;
     } else {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
+
       // eslint-disable-next-line react/no-danger
-      contents        = <div style={{ direction }} dangerouslySetInnerHTML={{ __html: contentData }} />;
+      contents = <div
+        style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
+        dangerouslySetInnerHTML={{ __html: contentData }}
+      />;
+    }
+
+    let languageBar = null;
+    if (languages.length > 0) {
+      languageBar = (
+        <Container fluid textAlign="center">
+          <ButtonsLanguageSelector
+            languages={languages}
+            defaultValue={language}
+            t={t}
+            onSelect={this.props.handleLanguageChanged}
+          />
+        </Container>
+      );
     }
 
     return (
       <div>
-        <Grid stackable>
-          <Grid.Row>
-            <Grid.Column width={8} />
-            {
-              languages.length > 0 ?
-                <Grid.Column width={4}>
-                  <DropdownLanguageSelector
-                    languages={languages}
-                    defaultValue={language}
-                    t={t}
-                    onSelect={this.props.handleLanguageChanged}
-                  />
-                </Grid.Column> :
-                null
-            }
-          </Grid.Row>
-        </Grid>
+        <Divider hidden />
+        {languageBar}
         <Divider hidden />
         {contents}
       </div>
