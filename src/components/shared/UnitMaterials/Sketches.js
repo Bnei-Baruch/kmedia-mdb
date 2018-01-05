@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
-
 import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { formatError } from '../../../helpers/utils';
 import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
@@ -12,8 +11,8 @@ import { actions, selectors } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
-import GridRow from 'semantic-ui-react/dist/commonjs/collections/Grid/GridRow';
-import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
+//import GridRow from 'semantic-ui-react/dist/commonjs/collections/Grid/GridRow';
+import { Divider, Grid, Segment } from 'semantic-ui-react';
 import ButtonsLanguageSelector from '../../Language/Selector/ButtonsLanguageSelector';
 
 class Sketches extends React.Component {
@@ -48,9 +47,10 @@ class Sketches extends React.Component {
   }
 
   // load data into state
-  setCurrentItem = (props) => {
-    const { unit, indexById, fetchAsset, language } = props;
-    const zipFile                                   = this.findZipFile(unit);
+  setCurrentItem = (props, selectedLanguage) => {
+    const { unit, zipIndexById, unzip } = props;
+    const language = selectedLanguage ? selectedLanguage : props.language;
+    const zipFile  = this.findZipFile(unit, language);    
 
     if (!zipFile) {
       this.setState({ zipFileId: null, language });
@@ -65,7 +65,7 @@ class Sketches extends React.Component {
     }
   };
 
-  findZipFile = (unit) => {
+  findZipFile = (unit, selectedLanguage) => {
     if (Array.isArray(unit.files)) {
       //get the zip files
       const zipFiles = unit.files.filter(this.filterZipFiles);
@@ -85,7 +85,7 @@ class Sketches extends React.Component {
         this.setState({ languages });
 
         // try filter by language
-        const langZipFiles = zipFiles.filter((file) => file.language === this.props.language);
+        const langZipFiles = zipFiles.filter((file) => file.language === selectedLanguage);
 
         //sometimes there are many zipfiles for one language, so get the first of them
         if (langZipFiles.length >= 1)
@@ -101,22 +101,16 @@ class Sketches extends React.Component {
       return null;
   };
 
-  filterZipFiles = (file) => {
-    return file.type === 'image';
-  };
+  filterZipFiles = (file) => { return file.type === 'image'; }
 
-  handleLanguageChanged = (language) => {
-    this.setState({ language });
-  } 
+  handleLanguageChanged = (e, language) => { this.setCurrentItem(this.props, language); } 
 
-  handleImageError(event) {
-    console.log('Image error ', event.target);
-  }
+  handleImageError(event) { console.log('Image Gallery loading error ', event.target); }
 
   render() {
-    const { t, indexById }                    = this.props;
+    const { t, zipIndexById }                 = this.props;
     const { zipFileId, languages, language }  = this.state;
-    const { wip, err, data: imageObjs } = indexById[zipFileId] || {};
+    const { wip, err, data: imageObjs }       = zipIndexById[zipFileId] || {};
 
     if (err) {
       if (err.response && err.response.status === 404) {
@@ -134,22 +128,21 @@ class Sketches extends React.Component {
       const items = imageObjs
         .map(imageGalleryItem)
         .sort((a, b) => {
-          if (a.original < b.original) {
+          if (a.original < b.original)
             return 1;
-          } else if (a.original > b.original) {
+          else if (a.original > b.original) 
             return -1;
-          } else {
+          else 
             return 0;
-          }
         });
 
       return (
-        <div style={{ direction: 'ltr' }}>
+        <div>
           <Grid>
             {
               languages && languages.length > 0 ?
               <Grid.Row>
-                <Grid.Column width={4} textAlign="right">
+                <Grid.Column width={1} textAlign="right">
                   <ButtonsLanguageSelector
                       languages={languages}
                       defaultValue={language}
@@ -162,17 +155,19 @@ class Sketches extends React.Component {
             }
             <Grid.Row>
               <Grid.Column>
-                <ImageGallery
-                    items={items}
-                    thumbnailPosition={'top'}
-                    lazyLoad={true}
-                    showPlayButton={false}
-                    showBullets={false}
-                    showFullscreenButton={false}
-                    showIndex={true}
-                    onImageError={this.handleImageError}
-                  />
-                </Grid.Column>
+                <div style={{ direction: 'ltr' }}>
+                  <ImageGallery
+                      items={items}
+                      thumbnailPosition={'top'}
+                      lazyLoad={true}
+                      showPlayButton={false}
+                      showBullets={false}
+                      showFullscreenButton={true}
+                      showIndex={true}
+                      onImageError={this.handleImageError}
+                    />
+                </div>  
+              </Grid.Column>
             </Grid.Row>  
           </Grid>
           <Divider hidden />
