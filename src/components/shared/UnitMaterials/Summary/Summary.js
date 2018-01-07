@@ -14,15 +14,15 @@ class Summary extends Component {
   render() {
     const { unit, t } = this.props;
 
-    if (!unit.description) {
-      return <Segment basic>{t('materials.summary.no-summary')}</Segment>;
+    if (unit.description) {
+      return (
+        <Segment basic>
+          <div dangerouslySetInnerHTML={{ __html: unit.description }} />
+        </Segment>
+      );
     }
 
-    return (
-      <Segment basic>
-        <div dangerouslySetInnerHTML={{ __html: unit.description }} />
-      </Segment>
-    );
+    return <Segment basic>{t('materials.summary.no-summary')}</Segment>;
   }
 }
 

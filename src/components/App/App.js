@@ -15,13 +15,13 @@ const Loader = () => (
   <div style={{
     width: '100vw',
     height: '100vh',
-    backgroundColor: 'black',
+    backgroundColor: 'white',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
   }}
   >
-    <h1 style={{ color: 'white' }}>Loading...</h1>
+    <h1 style={{ color: 'black' }}>Loading...</h1>
   </div>
 );
 

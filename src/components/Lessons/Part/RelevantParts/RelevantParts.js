@@ -32,25 +32,26 @@ const RelevantParts = (props) => {
   }
 
   return (
-    <div className='content__aside-unit'>
+    <div className="content__aside-unit">
       <Header as="h3" content={t('lessons.part.relevant-parts.title')} />
       <Item.Group divided link>
         {
           otherParts.map(part => (
             <Item as={Link} key={part.id} to={`/lessons/part/${part.id}`}>
-              <Item.Image size='small'>
+              <Item.Image size="small">
                 <UnitLogo unitId={part.id} collectionId={collection.id} width={150} />
               </Item.Image>
-              <Item.Content verticalAlign='top'>
+              <Item.Content verticalAlign="top">
                 <Header as="h5">
-                  <small className='text grey uppercase'>{t('lessons.part.relevant-parts.item-title', { name: collection.ccuNames[part.id] })}</small>
+                  <small className="text grey uppercase">
+                    {t('lessons.part.relevant-parts.item-title', { name: collection.ccuNames[part.id] })}
+                  </small>
                   <br />
                   {part.name}
                 </Header>
                 <Item.Meta>
                   <small>{formatDuration(part.duration)}</small>
                 </Item.Meta>
-
               </Item.Content>
             </Item>
           ))

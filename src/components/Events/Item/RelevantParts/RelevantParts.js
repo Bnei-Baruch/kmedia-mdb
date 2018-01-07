@@ -32,7 +32,7 @@ const RelevantParts = (props) => {
   }
 
   return (
-    <div>
+    <div className="content__aside-unit">
       <Header as="h3" content={t('events.part.relevant-parts.title')} />
       <Item.Group divided link>
         {
@@ -41,9 +41,11 @@ const RelevantParts = (props) => {
               <Item.Image size="small">
                 <UnitLogo unitId={part.id} collectionId={collection.id} width={150} />
               </Item.Image>
-              <Item.Content verticalAlign='top'>
+              <Item.Content verticalAlign="top">
                 <Header as="h5">
-                  <small className='text grey uppercase'>{t('values.date', { date: new Date(part.film_date) })}</small>
+                  <small className="text grey uppercase">
+                    {t('values.date', { date: new Date(part.film_date) })}
+                  </small>
                   <br />
                   {part.name}
                 </Header>

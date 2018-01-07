@@ -38,6 +38,12 @@ export class CollectionsBreakdown {
   getPrograms = () =>
     this.collectTypes(CT_VIDEO_PROGRAM);
 
+  getLectures = () =>
+    this.collectTypes(CT_LECTURE_SERIES, CT_WOMEN_LESSONS, CT_CHILDREN_LESSONS, CT_VIRTUAL_LESSONS);
+
+  getArticles = () =>
+    this.collectTypes(CT_ARTICLES);
+
   getAllButDailyLessons = () =>
     this.collectTypes(
       CT_FRIENDS_GATHERINGS,

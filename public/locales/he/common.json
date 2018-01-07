@@ -17,7 +17,11 @@
     },
     "footer": {
       "copyright": "© כל הזכויות שמורות 2003-{{year}}",
-      "rights": "בני ברוך - קבלה לעם"
+      "rights": "בני ברוך - קבלה לעם",
+      "study": "לימודי קבלה",
+      "topics": "נושאים",
+      "events": "אירועים",
+      "media": "מדיה"
     }
   },
   "filters": {
@@ -35,6 +39,18 @@
     },
     "events": {
       "by": "סנן אירועים לפי:"
+    },
+    "lectures": {
+      "by": "סנן הרצאות לפי:"
+    },
+    "lectures-collection": {
+      "by": "סנן הרצאות לפי:"
+    },
+    "publications": {
+      "by": "סנן מאמרים לפי:"
+    },
+    "publications-collection": {
+      "by": "סנן מאמרים לפי:"
     },
     "sources": {
       "by": "בחר מקור:"
@@ -59,6 +75,9 @@
     },
     "topics-filter": {
       "label": "נושאים"
+    },
+    "publishers-filter": {
+      "label": "מפרסמים"
     },
     "programs-filter": {
       "label": "ז'אנר \\ תוכנית",
@@ -112,6 +131,10 @@
     "program-not-found-subtext": "נסה לחפש ב <1>רשימת התוכניות</1>...",
     "event-not-found": "אירוע לא קיים",
     "event-not-found-subtext": "נסה לחפש ב <1>רשימת האירועים</1>...",
+    "lecture-not-found": "הרצאה לא קיימת",
+    "lecture-not-found-subtext": "נסה לחפש ב <1>רשימת ההרצאות</1>...",
+    "publication-not-found": "פרסום לא קיים",
+    "publication-not-found-subtext": "נסה לחפש ב <1>רשימת הפרסומים</1>...",
     "no-files": "לא נמצאו קבצים",
     "no-playable-files": "לא נמצאו קבצים מתאימים לתצוגה",
     "no-results": "לא נמצאו תוצאות",
@@ -214,13 +237,47 @@
         "sources": "מקורות",
         "related-event": "אירועים קשורים"
       },
-      "materials": {
-        "summary": "תקציר",
-        "transcription": "תמליל"
-      },
       "relevant-parts": {
         "title": "פרקים נוספים מאותה תוכנית",
         "item-title": "פרק {{name}}"
+      }
+    }
+  },
+  "lectures": {
+    "header": {
+      "text": "הרצאות ושיעורים",
+      "subtext": "כאן תמצאו מגוון עשיר של הרצאות ושיעורים מסוגים שונים הכוללים: הרצאות בפני קהלים שונים, שיעורי נשים, ילדים ועוד"
+    },
+    "list": {
+      "item_from": "חלק מתוך:"
+    },
+    "c": {
+      "items": "חלקים"
+    },
+    "cu": {
+      "info": {
+        "tags": "תגיות",
+        "sources": "מקורות"
+      },
+      "relevant-parts": {
+        "title": "חלקים אחרים מאותה סדרה"
+      }
+    }
+  },
+  "publications": {
+    "header": {
+      "text": "פרסומים",
+      "subtext": "כאן יבוא התיאור של מדור פרסומים"
+    },
+    "list": {
+      "item_from": "מאמר מתוך:"
+    },
+    "c": {
+      "items": "מאמרים"
+    },
+    "cu": {
+      "relevant-parts": {
+        "title": "מאמרים נוספים מאותו האוסף"
       }
     }
   },
@@ -230,7 +287,8 @@
       "no-summary": "חסר תקציר"
     },
     "transcription": {
-      "header": "תמליל"
+      "header": "תמליל",
+      "no-transcription": "חסר תמליל"
     },
     "sources": {
       "header": "מקורות",
@@ -243,7 +301,10 @@
     }
   },
   "sources-library": {
-    "title": "מקורות",
+    "header": {
+      "text": "ספריית מקורות",
+      "subtext": "כתבי קבלה אותנטיים"
+    },
     "no-source": "בחר מקור",
     "toc": "תוכן עניינים"
   },
@@ -270,6 +331,14 @@
         "audio": "אודיו של התוכנית",
         "text": "תמליל מלא",
         "image": "תמונות"
+      }
+    },
+    "publication": {
+      "type-labels": {
+        "video": "וידאו",
+        "audio": "אודיו",
+        "text": "טקסט",
+        "image": "צילומי מסך"
       }
     }
   },
@@ -321,6 +390,8 @@
       "HOLIDAY": "חג \\ מועד",
       "PICNIC": "פיקניק",
       "UNITY_DAY": "יום איחוד",
+      "CLIPS": "קליפים",
+      "ARTICLES": "מאמרים",
       "LESSON_PART": "חלק שיעור",
       "LECTURE": "הרצאה",
       "CHILDREN_LESSON": "שיעור ילדים",
@@ -330,12 +401,13 @@
       "MEAL": "סעודה",
       "VIDEO_PROGRAM_CHAPTER": "פרק",
       "FULL_LESSON": "שיעור מלא",
-      "TEXT": "טקסט",
+      "ARTICLE": "מאמר",
       "UNKNOWN": "לא ידוע",
       "EVENT_PART": "חלק אירוע",
       "CLIP": "קליפ",
       "TRAINING": "הכשרה",
-      "KITEI_MAKOR": "קטעי מקור"
+      "KITEI_MAKOR": "קטעי מקור",
+      "PUBLICATION": "פרסום"
     },
     "media-types": {
       "video": "וידאו",

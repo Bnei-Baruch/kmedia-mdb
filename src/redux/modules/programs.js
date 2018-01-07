@@ -62,7 +62,7 @@ const fetchFullProgramList        = createAction(FETCH_FULL_PROGRAM_LIST, (pageN
   pageNo,
   pageSize,
   language,
-  program: id,
+  collection: id,
 }));
 const fetchFullProgramListSuccess = createAction(FETCH_FULL_PROGRAM_LIST_SUCCESS);
 const fetchFullProgramListFailure = createAction(FETCH_FULL_PROGRAM_LIST_FAILURE);

@@ -4,8 +4,10 @@ import { connect } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
 import { intersperse, tracePath } from '../../../helpers/utils';
+import { stringify as urlSearchStringify } from '../../../helpers/url';
 import { selectors as sourcesSelectors } from '../../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../../redux/modules/tags';
+import { filtersTransformer } from '../../../filters';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 
@@ -23,8 +25,8 @@ class Info extends Component {
   };
 
   render() {
-    const { unit = {}, getSourceById, getTagById, t } = this.props;
-    const { name, film_date: filmDate, sources, tags }   = unit;
+    const { unit = {}, getSourceById, getTagById, t }  = this.props;
+    const { name, film_date: filmDate, sources, tags } = unit;
 
     const tagLinks = Array.from(intersperse(
       (tags || []).map((x) => {
@@ -35,7 +37,10 @@ class Info extends Component {
 
         const path    = tracePath(tag, getTagById);
         const display = path.map(y => y.label).join(' > ');
-        return <Link key={x} to={`/tags/${x}`}>{display}</Link>;
+        const query   = filtersTransformer.toQueryParams(
+          [{ name: 'topics-filter', values: [path.map(y => y.id)] }]);
+
+        return <Link key={x} to={{ pathname: '/programs', search: urlSearchStringify(query) }}>{display}</Link>;
       }), ', '));
 
     const sourcesLinks = Array.from(intersperse(
@@ -44,15 +49,22 @@ class Info extends Component {
         if (!source) {
           return '';
         }
+
         const path    = tracePath(source, getSourceById);
         const display = path.map(y => y.name).join(' > ');
-        return <Link key={x} to={`/sources/${x}`}>{display}</Link>;
+        const query   = filtersTransformer.toQueryParams(
+          [{ name: 'sources-filter', values: [path.map(y => y.id)] }]);
+
+        return <Link key={x} to={{ pathname: '/programs', search: urlSearchStringify(query) }}>{display}</Link>;
       }), ', '));
 
     return (
       <div>
         <Header as="h1">
-          <small className="text grey">{t('values.date', { date: new Date(filmDate) })}</small><br />
+          <small className="text grey">
+            {t('values.date', { date: new Date(filmDate) })}
+          </small>
+          <br />
           {name}
         </Header>
         <List>

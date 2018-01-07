@@ -1,5 +1,5 @@
 import { createFilterDefinition } from './util';
-import { selectors as sourcesSelectors } from '../../redux/modules/sources';
+import { selectors } from '../../redux/modules/sources';
 
 const sourcesFilter = {
   name: 'sources-filter',
@@ -13,8 +13,8 @@ const sourcesFilter = {
       return '';
     }
 
-    const getSourceById = sourcesSelectors.getSourceById(getState().sources);
-    const path          = value.map(x => getSourceById(x));
+    const getSourceById = selectors.getSourceById(getState().sources);
+    const path          = value.map(getSourceById);
 
     // Make sure we have all items.
     // Location hydration probably happens before we receive sources

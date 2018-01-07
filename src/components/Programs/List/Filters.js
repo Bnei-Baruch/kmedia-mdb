@@ -16,6 +16,10 @@ const filters = [
     component: filterComponents.TopicsFilter
   },
   {
+    name: 'sources-filter',
+    component: filterComponents.SourcesFilter
+  },
+  {
     name: 'date-filter',
     component: filterComponents.DateFilter
   },

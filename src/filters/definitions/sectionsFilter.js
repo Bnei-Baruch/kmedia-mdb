@@ -34,5 +34,5 @@ export const options = {
     units_content_types: UNIT_EVENTS_TYPE,
     collections_content_types: COLLECTION_EVENTS_TYPE,
   },
-}
+};
 

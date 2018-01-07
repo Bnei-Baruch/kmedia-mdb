@@ -14,16 +14,17 @@ import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
 
 class Sketches extends React.Component {
+
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     t: PropTypes.func.isRequired,
-    indexById: PropTypes.objectOf(PropTypes.shape({
+    zipIndexById: PropTypes.objectOf(PropTypes.shape({
       data: PropTypes.arrayOf(PropTypes.object),
       wip: shapes.WIP,
       err: shapes.Error,
     })).isRequired,
-    fetchAsset: PropTypes.func.isRequired,
-    language : PropTypes.string.isRequired
+    unzip: PropTypes.func.isRequired,
+    language: PropTypes.string.isRequired
   };
 
   state = {
@@ -35,7 +36,7 @@ class Sketches extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.indexById !== this.props.indexById ||
+    if (nextProps.zipIndexById !== this.props.zipIndexById ||
       nextProps.unit !== this.props.unit) {
       this.setCurrentItem(nextProps);
     }
@@ -43,8 +44,8 @@ class Sketches extends React.Component {
 
   // load data into state
   setCurrentItem = (props) => {
-    const { unit, indexById, fetchAsset } = props;
-    const zipFile                         = this.findZipFile(unit);
+    const { unit, zipIndexById, unzip } = props;
+    const zipFile                       = this.findZipFile(unit);
 
     if (!zipFile) {
       this.setState({ zipFileId: null });
@@ -52,9 +53,9 @@ class Sketches extends React.Component {
     else {
       this.setState({ zipFileId: zipFile.id });
 
-      const hasData = indexById && indexById[zipFile.id];
+      const hasData = zipIndexById && zipIndexById[zipFile.id];
       if (!hasData) {
-        fetchAsset(zipFile.id);
+        unzip(zipFile.id);
       }
     }
   };
@@ -97,9 +98,9 @@ class Sketches extends React.Component {
   }
 
   render() {
-    const { t, indexById, language }    = this.props;
+    const { t, zipIndexById, language } = this.props;
     const { zipFileId }                 = this.state;
-    const { wip, err, data: imageObjs } = indexById[zipFileId] || {};
+    const { wip, err, data: imageObjs } = zipIndexById[zipFileId] || {};
 
     if (err) {
       if (err.response && err.response.status === 404) {
@@ -170,14 +171,14 @@ const imageGalleryItem = (item) => {
 
 const mapState = (state) => {
   return {
-    indexById : selectors.getIndexById(state.assets),
+    zipIndexById: selectors.getZipIndexById(state.assets),
     language: settings.getLanguage(state.settings)
   };
 };
 
 const mapDispatch = (dispatch) => {
   return bindActionCreators({
-    fetchAsset: actions.fetchAsset
+    unzip: actions.unzip
   }, dispatch);
 };
 

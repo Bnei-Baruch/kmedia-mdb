@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ReactDOM from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { replace } from 'react-router-redux';
 import { translate } from 'react-i18next';
-import { Accordion, Grid } from 'semantic-ui-react';
+import { Accordion, Grid, Rail, Segment, Sticky, Ref } from 'semantic-ui-react';
 
 import { actions as sourceActions, selectors as sources } from '../../redux/modules/sources';
 import { selectors as settings } from '../../redux/modules/settings';
@@ -15,6 +16,7 @@ import { ErrorSplash, FrownSplash } from '../shared/Splash';
 import LibraryContentContainer from './LibraryContentContainer';
 
 class LibraryContainer extends Component {
+
   static propTypes = {
     sourceId: PropTypes.string.isRequired,
     indexMap: PropTypes.objectOf(PropTypes.shape({
@@ -48,7 +50,14 @@ class LibraryContainer extends Component {
 
   state = {
     lastLoadedId: null,
+    accordionContext: null,
+    selectedAccordionContext: null,
   };
+
+  handleContextRef = contextRef => this.setState({ contextRef });
+
+  handleAccordionContext         = accordionContext => this.setState({ accordionContext });
+  handleSelectedAccordionContext = selectedAccordionContext => this.setState({ selectedAccordionContext });
 
   componentDidMount() {
     const { sourceId, areSourcesLoaded, replace } = this.props;
@@ -66,10 +75,12 @@ class LibraryContainer extends Component {
         this.fetchIndices(sourceId);
       }
     }
+
   }
 
   componentWillReceiveProps(nextProps) {
     const { sourceId, areSourcesLoaded, language, replace } = nextProps;
+    const { accordionContext, selectedAccordionContext }    = this.state;
     if (!areSourcesLoaded) {
       return;
     }
@@ -88,6 +99,10 @@ class LibraryContainer extends Component {
         this.setState({ lastLoadedId: sourceId, language: this.props.language });
         this.fetchIndices(sourceId);
       }
+    }
+
+    if (accordionContext && selectedAccordionContext && accordionContext.parentElement.scrollTop === 0) {
+      accordionContext.parentElement.scrollTop = ReactDOM.findDOMNode(selectedAccordionContext).offsetTop;
     }
   }
 
@@ -124,6 +139,7 @@ class LibraryContainer extends Component {
   selectSourceById = (id, e) => {
     e.preventDefault();
     this.props.replace(`sources/${id}`);
+    window.scrollTo(0, 0)
   };
 
   subToc = subTree => (
@@ -133,8 +149,17 @@ class LibraryContainer extends Component {
     )
   );
 
-  leaf = (id, title) => (
-    <Accordion.Title key={`lib-leaf-item-${id}`} onClick={e => this.selectSourceById(id, e)}>{title}</Accordion.Title>);
+  leaf = (id, title) => {
+    const { sourceId } = this.props;
+    let props          = {
+      key: `lib-leaf-item-${id}`,
+      onClick: e => this.selectSourceById(id, e),
+    };
+    if (id === sourceId) {
+      props = { ...props, ref: this.handleSelectedAccordionContext, active: true };
+    }
+    return <Accordion.Title {...props}>{title}</Accordion.Title>;
+  };
 
   toc = (sourceId, firstLevel = false) => {
     // 1. Element that has children is CONTAINER
@@ -201,6 +226,7 @@ class LibraryContainer extends Component {
   };
 
   render() {
+    const { contextRef }                      = this.state;
     const { indexMap, sourceId, language, t } = this.props;
 
     const index = isEmpty(sourceId) ? {} : indexMap[sourceId];
@@ -220,17 +246,25 @@ class LibraryContainer extends Component {
     const parent = this.properParentId(this.props.sourceId);
 
     return (
-      <Grid padded>
+      <Grid centered columns={3}>
         <Grid.Row>
-          {this.header(this.properParentId(this.props.sourceId))}
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column width={5}>
-            <p>{t('sources-library.toc')}</p>
-            <Accordion fluid styled defaultActiveIndex={0} panels={this.toc(parent, true)} />
-          </Grid.Column>
-          <Grid.Column width={11}>
-            {content}
+          <Grid.Column>
+            <div ref={this.handleContextRef}>
+              <Segment>
+                <div className="source__content">
+                  {this.header(this.properParentId(this.props.sourceId))}
+                  {content}
+                </div>
+                <Rail position="left">
+                  <Sticky context={contextRef} offset={60} className="toc">
+                    <p>{t('sources-library.toc')}</p>
+                    <Ref innerRef={this.handleAccordionContext}>
+                      <Accordion fluid styled panels={this.toc(parent, true)} />
+                    </Ref>
+                  </Sticky>
+                </Rail>
+              </Segment>
+            </div>
           </Grid.Column>
         </Grid.Row>
       </Grid>
