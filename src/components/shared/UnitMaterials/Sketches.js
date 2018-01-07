@@ -11,8 +11,7 @@ import { actions, selectors } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
-//import GridRow from 'semantic-ui-react/dist/commonjs/collections/Grid/GridRow';
-import { Divider, Grid, Segment } from 'semantic-ui-react';
+import { Container, Divider, Segment } from 'semantic-ui-react';
 import ButtonsLanguageSelector from '../../Language/Selector/ButtonsLanguageSelector';
 
 class Sketches extends React.Component {
@@ -138,40 +137,32 @@ class Sketches extends React.Component {
 
       return (
         <div>
-          <Grid>
-            {
-              languages && languages.length > 0 ?
-              <Grid.Row>
-                <Grid.Column width={1} textAlign="right">
-                  <ButtonsLanguageSelector
-                      languages={languages}
-                      defaultValue={language}
-                      t={t}
-                      onSelect={this.handleLanguageChanged}
-                    />
-                </Grid.Column>
-              </Grid.Row> :
-              null
-            }
-            <Grid.Row>
-              <Grid.Column>
-                <div style={{ direction: 'ltr' }}>
-                  <ImageGallery
-                      items={items}
-                      thumbnailPosition={'top'}
-                      lazyLoad={true}
-                      showPlayButton={false}
-                      showBullets={false}
-                      showFullscreenButton={true}
-                      showIndex={true}
-                      onImageError={this.handleImageError}
-                    />
-                </div>  
-              </Grid.Column>
-            </Grid.Row>  
-          </Grid>
+          {
+            languages && languages.length > 0 ?
+            <Container fluid textAlign="center">
+              <ButtonsLanguageSelector
+                languages={languages}
+                defaultValue={language}
+                t={t}
+                onSelect={this.handleLanguageChanged}
+              />
+            </Container> :
+            null
+          }
+          <div style={{ direction: 'ltr' }}>
+            <ImageGallery
+                items={items}
+                thumbnailPosition={'top'}
+                lazyLoad={true}
+                showPlayButton={false}
+                showBullets={false}
+                showFullscreenButton={true}
+                showIndex={true}
+                onImageError={this.handleImageError}
+              />
+          </div> 
           <Divider hidden />
-        </div>
+       </div>
       );
     }
 
