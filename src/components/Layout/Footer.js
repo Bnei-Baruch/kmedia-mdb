@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
-import { Grid, Header, Menu, Container } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { Container, Grid, Header, Menu } from 'semantic-ui-react';
 
 import { EVENT_TYPES, TOPICS_FOR_DISPLAY } from '../../helpers/consts';
+import { selectors as tags } from '../../redux/modules/tags';
 import Link from '../Language/MultiLanguageLink';
 
 const Footer = (props) => {
@@ -11,19 +12,26 @@ const Footer = (props) => {
   const year  = new Date().getFullYear();
 
   const renderEvents = () => {
-    return EVENT_TYPES.map((event, index) => (<Menu.Item
-      key={index}
-      name={t(`constants.content-types.${event}`)}
-      as={Link}
-      to={{ pathname: '/events', search: `eventType=${event}` }} />));
+    return EVENT_TYPES.map(x => (
+      <Menu.Item
+        key={x}
+        name={t(`constants.content-types.${x}`)}
+        as={Link}
+        to={{ pathname: '/events', search: `eventType=${x}` }}
+      />));
   };
 
   const renderTopics = () => {
-    return TOPICS_FOR_DISPLAY.map((topic, index) => (<Menu.Item
-      key={index}
-      name={t(`constants.content-types.${topic}`)}
-      as={Link}
-      to={{ pathname: `/topics/${topic}` }} />));
+    return TOPICS_FOR_DISPLAY.map(x => {
+      const tag = props.tagById(x);
+      return (
+        <Menu.Item
+          key={x}
+          name={tag ? tag.label : x}
+          as={Link}
+          to={{ pathname: `/topics/${x}` }}
+        />);
+    });
   };
 
   return (
@@ -44,40 +52,32 @@ const Footer = (props) => {
                     </Header>
                   </Grid.Column>
                   <Grid.Column>
-                    <Header inverted as="h3">
-                      Study Materials
-                    </Header>
+                    <Header inverted as="h3" content={t('nav.footer.study')} />
                     <Menu text vertical inverted>
-                      <Menu.Item name={t('nav.sidebar.lessons')} as={Link} to={'/lessons'} />
-                      <Menu.Item name={t('nav.sidebar.lectures')} as={Link} to={'/lectures'} />
-                      <Menu.Item name={t('nav.sidebar.sources')} as={Link} to={'/sources'} />
-                      <Menu.Item name={t('nav.sidebar.books')} as={Link} to={'/books'} />
+                      <Menu.Item content={t('nav.sidebar.lessons')} as={Link} to={'/lessons'} />
+                      <Menu.Item content={t('nav.sidebar.lectures')} as={Link} to={'/lectures'} />
+                      <Menu.Item content={t('nav.sidebar.sources')} as={Link} to={'/sources'} />
+                      <Menu.Item content={t('nav.sidebar.books')} as={Link} to={'/books'} />
                     </Menu>
                   </Grid.Column>
                   <Grid.Column>
-                    <Header inverted as="h3">
-                      Kabbalah Topics
-                    </Header>
+                    <Header inverted as="h3" content={t('nav.footer.topics')} />
                     <Menu text vertical inverted>
                       {renderTopics()}
                     </Menu>
                   </Grid.Column>
                   <Grid.Column>
-                    <Header inverted as="h3">
-                      Kabbalah Events
-                    </Header>
+                    <Header inverted as="h3" content={t('nav.footer.events')} />
                     <Menu text vertical inverted>
                       {renderEvents()}
                     </Menu>
                   </Grid.Column>
                   <Grid.Column>
-                    <Header inverted as="h3">
-                      Media
-                    </Header>
+                    <Header inverted as="h3" content={t('nav.footer.media')} />
                     <Menu text vertical inverted>
-                      <Menu.Item name={t('nav.sidebar.programs')} as={Link} to={'/programs'} />
-                      <Menu.Item name={t('nav.sidebar.publications')} as={Link} to={'/publications'} />
-                      <Menu.Item name={t('nav.sidebar.photos')} as={Link} to={'/photos'} />
+                      <Menu.Item content={t('nav.sidebar.programs')} as={Link} to={'/programs'} />
+                      <Menu.Item content={t('nav.sidebar.publications')} as={Link} to={'/publications'} />
+                      <Menu.Item content={t('nav.sidebar.photos')} as={Link} to={'/photos'} />
                     </Menu>
                   </Grid.Column>
                 </Grid.Row>
@@ -93,6 +93,10 @@ const Footer = (props) => {
 
 Footer.propTypes = {
   t: PropTypes.func.isRequired,
+  tagById: PropTypes.func.isRequired,
 };
 
-export default translate()(Footer);
+export default connect(
+  state => ({
+    tagById: tags.getTagById(state.tags),
+  }))(Footer);

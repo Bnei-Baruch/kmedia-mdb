@@ -18,7 +18,11 @@
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
-      "rights": "Bnei Baruch – Kabbalah L’Am Association, All rights reserved"
+      "rights": "Bnei Baruch – Kabbalah L’Am Association, All rights reserved",
+      "study": "Study Materials",
+      "topics": "Kabbalah Topics",
+      "events": "Kabbalah Events",
+      "media": "Media"
     }
   },
   "filters": {
