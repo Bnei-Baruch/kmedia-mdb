@@ -121,7 +121,7 @@ class Layout extends Component {
           <div className="layout__content">
             <Route component={Routes} />
           </div>
-          <Footer />
+          <Footer t={t}/>
         </div>
       </div>
     );
