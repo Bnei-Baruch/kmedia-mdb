@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import { TOPICS_FOR_DISPLAY } from '../../../helpers/consts';
 import { selectors } from '../../../redux/modules/tags';
-import DeepListFilter from '../common/DeepListFilter';
+import DeepListFilter from './DeepListFilter';
 
 export default connect(
   state => ({

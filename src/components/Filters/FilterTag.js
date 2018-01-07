@@ -30,7 +30,7 @@ class FilterTag extends PureComponent {
 
     return (
       <Button.Group size="mini">
-        <Button basic as="a" color={color} onClick={this.handleClick} ref={el => this.label = el}>
+        <Button basic as="a" color={color} onClick={this.handleClick}>
           <Icon name={icon} />
           {label}
         </Button>

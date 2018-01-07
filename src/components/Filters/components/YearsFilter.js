@@ -4,7 +4,7 @@ import noop from 'lodash/noop';
 import range from 'lodash/range';
 import { Button, Divider, Dropdown, Segment } from 'semantic-ui-react';
 
-import connectFilter from '../connectFilter';
+import connectFilter from './connectFilter';
 
 const buildYearOptions = (fromYear, toYear, order = -1) =>
   range(fromYear, toYear, order).map(year => ({

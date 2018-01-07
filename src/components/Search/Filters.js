@@ -4,9 +4,7 @@ import { Dropdown } from 'semantic-ui-react';
 import { translate } from 'react-i18next';
 
 import Filters from '../Filters/Filters';
-import filterComponents from '../Filters/filterComponents';
-import FiltersHydrator from '../Filters/FiltersHydrator/FiltersHydrator';
-import FilterTags from '../Filters/FilterTags/FilterTags';
+import filterComponents from '../Filters/components';
 
 const filters = [
   {
@@ -45,28 +43,25 @@ class SearchResultsFilters extends Component {
     }));
 
     return (
-      <div>
-        <FiltersHydrator namespace="search" onHydrated={onHydrated} />
-        <Filters
-          namespace="search"
-          filters={filters}
-          onFilterApplication={onChange}
-          rightItems={[
-            <span key="span" style={{ padding: '10px' }}>
+      <Filters
+        namespace="search"
+        filters={filters}
+        onChange={onChange}
+        onHydrated={onHydrated}
+        rightItems={[
+          <span key="span" style={{ padding: '10px' }}>
               {t('search.sortby')}:
             </span>,
-            <Dropdown
-              key="dropdown"
-              item
-              compact
-              options={options}
-              value={sortBy}
-              onChange={onSortByChange}
-            />
-          ]}
-        />
-        <FilterTags namespace="search" onClose={onChange} />
-      </div>
+          <Dropdown
+            key="dropdown"
+            item
+            compact
+            options={options}
+            value={sortBy}
+            onChange={onSortByChange}
+          />
+        ]}
+      />
     );
   }
 }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import noop from 'lodash/noop';
 
-import { actions, selectors } from '../../../redux/modules/filters';
+import { actions, selectors } from '../../redux/modules/filters';
 
 class FiltersHydrator extends Component {
   static propTypes = {

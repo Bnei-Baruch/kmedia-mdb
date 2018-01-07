@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { Button, Menu, Segment, Container } from 'semantic-ui-react';
 
-import connectFilter from '../connectFilter';
+import connectFilter from './connectFilter';
 
 class DeepListFilter extends React.Component {
 

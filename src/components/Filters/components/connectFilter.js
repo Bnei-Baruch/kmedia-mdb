@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 
-import { actions, selectors } from '../../redux/modules/filters';
-import { selectors as settings } from '../../redux/modules/settings';
+import { actions, selectors } from '../../../redux/modules/filters';
+import { selectors as settings } from '../../../redux/modules/settings';
 
 const connectFilter = (options = {}) => (WrappedComponent) => {
   const isMultiple = options.isMultiple;

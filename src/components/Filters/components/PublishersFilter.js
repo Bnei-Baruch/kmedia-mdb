@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import { selectors } from '../../../redux/modules/publications';
-import DeepListFilter from '../common/DeepListFilter';
+import DeepListFilter from './DeepListFilter';
 
 export default connect(
   (state) => {

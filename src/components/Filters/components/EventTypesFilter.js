@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { selectors as eventsSelectors } from '../../../redux/modules/events';
-import DeepListFilter from '../common/DeepListFilter';
+import DeepListFilter from './DeepListFilter';
 
 export default connect(
   (state) => {

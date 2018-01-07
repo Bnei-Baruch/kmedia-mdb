@@ -1,17 +1,16 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Container, Menu } from 'semantic-ui-react';
+import { Container, Icon, Menu } from 'semantic-ui-react';
 
-import { filterPropShape } from '../../shapes';
-import FilterMenuItem from '../FilterMenuItem/FilterMenuItem';
+import { filterPropShape } from '../shapes';
 
 class FilterMenu extends PureComponent {
 
   static propTypes = {
     items: PropTypes.arrayOf(filterPropShape).isRequired,
     active: PropTypes.string,
-    onChoose: PropTypes.func,
+    onChoose: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
     namespace: PropTypes.string.isRequired,
     rightItems: PropTypes.arrayOf(PropTypes.node),
@@ -19,12 +18,15 @@ class FilterMenu extends PureComponent {
 
   static defaultProps = {
     active: '',
-    onChoose: undefined,
     rightItems: null,
   };
 
+  handleClick = (e, data) => {
+    this.props.onChoose({ name: data.name });
+  };
+
   render() {
-    const { items, rightItems, active, onChoose, t, namespace } = this.props;
+    const { items, rightItems, active, t, namespace } = this.props;
 
     return (
       <Menu secondary pointing color="blue" className="index-filters" size="large">
@@ -32,13 +34,14 @@ class FilterMenu extends PureComponent {
           <Menu.Item header content={t(`filters.${namespace}.by`)} />
           {
             items.map(item => (
-              <FilterMenuItem
+              <Menu.Item
                 key={item.name}
                 name={item.name}
-                label={t(`filters.${item.name}.label`)}
-                isActive={item.name === active}
-                onChoose={onChoose}
-              />
+                active={item.name === active}
+                onClick={this.handleClick}>
+                {t(`filters.${item.name}.label`)}
+                <Icon name="dropdown" />
+              </Menu.Item>
             ))
           }
           {

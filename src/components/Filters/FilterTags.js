@@ -4,9 +4,9 @@ import reduce from 'lodash/reduce';
 import { connect } from 'react-redux';
 import { Container } from 'semantic-ui-react';
 
-import { filtersTransformer } from '../../../filters';
-import { actions as filterActions, selectors as filterSelectors } from '../../../redux/modules/filters';
-import FilterTag from '../FilterTag/FilterTag';
+import { filtersTransformer } from '../../filters/index';
+import { actions as filterActions, selectors as filterSelectors } from '../../redux/modules/filters';
+import FilterTag from './FilterTag';
 
 class FilterTags extends Component {
 

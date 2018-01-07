@@ -9,7 +9,7 @@ import { Button, Divider, Dropdown, Grid, Header, Input, Segment } from 'semanti
 import 'react-day-picker/lib/style.css';
 
 import { DATE_FORMAT, RTL_LANGUAGES } from '../../../helpers/consts';
-import connectFilter from '../connectFilter';
+import connectFilter from './connectFilter';
 
 // TODO (yaniv -> oleg): need indication for user when clicking on a bad date (after today) or when typing bad dates
 

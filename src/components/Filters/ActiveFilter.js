@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import find from 'lodash/find';
 import { Container } from 'semantic-ui-react';
-import { filterPropShape } from '../../shapes';
+
+import { filterPropShape } from '../shapes';
 
 class ActiveFilter extends PureComponent {
   static propTypes = {
@@ -18,8 +19,8 @@ class ActiveFilter extends PureComponent {
 
   render() {
     const { activeFilterName, filters, onCancel, onApply, ...rest } = this.props;
-    const activeFilter                                              = find(filters, filter => filter.name === activeFilterName);
 
+    const activeFilter = find(filters, filter => filter.name === activeFilterName);
     if (!activeFilter) {
       return null;
     }

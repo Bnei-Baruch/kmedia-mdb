@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { Button, Divider, List, Segment } from 'semantic-ui-react';
 
-import connectFilter from '../connectFilter';
+import connectFilter from './connectFilter';
 import { options } from '../../../filters/definitions/sectionsFilter';
 
 class SectionsFilter extends React.Component {
