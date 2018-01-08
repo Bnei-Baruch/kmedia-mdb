@@ -35,15 +35,15 @@ const Routes = ({ match }) => {
     <Switch>
       <Route exact path={`${urlPrefix}/`} component={Lessons} />
       <Route exact path={`${urlPrefix}/lessons`} component={Lessons} />
-      <Route exact path={`${urlPrefix}/lessons/part/:id`} component={LessonPart} />
-      <Route exact path={`${urlPrefix}/lessons/full/:id`} component={FullLesson} />
+      <Route exact path={`${urlPrefix}/lessons/cu/:id`} component={LessonPart} />
+      <Route exact path={`${urlPrefix}/lessons/c/:id`} component={FullLesson} />
       <Route exact path={`${urlPrefix}/programs`} component={Programs} />
-      <Route exact path={`${urlPrefix}/programs/chapter/:id`} component={ProgramChapter} />
-      <Route exact path={`${urlPrefix}/programs/full/:id`} component={FullProgram} />
+      <Route exact path={`${urlPrefix}/programs/cu/:id`} component={ProgramChapter} />
+      <Route exact path={`${urlPrefix}/programs/c/:id`} component={FullProgram} />
       <Route exact path={`${urlPrefix}/events`} component={Events} />
       <Route exact path={`${urlPrefix}/events/:tab`} component={Events} />
-      <Route exact path={`${urlPrefix}/events/item/:id`} component={EventItem} />
-      <Route exact path={`${urlPrefix}/events/full/:id`} component={FullEvent} />
+      <Route exact path={`${urlPrefix}/events/cu/:id`} component={EventItem} />
+      <Route exact path={`${urlPrefix}/events/c/:id`} component={FullEvent} />
       <Route exact path={`${urlPrefix}/lectures`} component={Lectures} />
       <Route exact path={`${urlPrefix}/lectures/cu/:id`} component={LectureUnit} />
       <Route exact path={`${urlPrefix}/lectures/c/:id`} component={LectureCollection} />
