@@ -29,6 +29,8 @@ class LecturesContainer extends withPagination {
 
   static defaultProps = {
     items: [],
+    wip: false,
+    err: null,
     isFiltersHydrated: false,
   };
 

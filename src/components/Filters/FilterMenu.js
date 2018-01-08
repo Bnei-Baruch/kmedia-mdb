@@ -12,7 +12,6 @@ class FilterMenu extends PureComponent {
     active: PropTypes.string,
     onChoose: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
-    namespace: PropTypes.string.isRequired,
     rightItems: PropTypes.arrayOf(PropTypes.node),
   };
 
@@ -26,12 +25,12 @@ class FilterMenu extends PureComponent {
   };
 
   render() {
-    const { items, rightItems, active, t, namespace } = this.props;
+    const { items, rightItems, active, t } = this.props;
 
     return (
       <Menu secondary pointing color="blue" className="index-filters" size="large">
         <Container className="padded horizontally">
-          <Menu.Item header content={t(`filters.${namespace}.by`)} />
+          <Menu.Item header content={t(`filters.by`)} />
           {
             items.map(item => (
               <Menu.Item

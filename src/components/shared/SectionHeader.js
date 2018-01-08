@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Container, Grid, Header } from 'semantic-ui-react';
+import { Container, Grid, Header, Menu } from 'semantic-ui-react';
 
 const SectionHeader = (props) => {
-  const { section, t } = props;
+  const { section, submenuItems, t } = props;
 
   return (
     <div className="section-header">
@@ -22,6 +22,15 @@ const SectionHeader = (props) => {
               </Header>
             </Grid.Column>
           </Grid.Row>
+          {
+            Array.isArray(submenuItems) && submenuItems.length > 0 ?
+              <Grid.Row>
+                <Grid.Column>
+                  <Menu secondary color="blue" children={submenuItems} />
+                </Grid.Column>
+              </Grid.Row> :
+              null
+          }
         </Grid>
       </Container>
     </div>
@@ -30,7 +39,12 @@ const SectionHeader = (props) => {
 
 SectionHeader.propTypes = {
   section: PropTypes.string.isRequired,
+  submenuItems: PropTypes.arrayOf(PropTypes.node),
   t: PropTypes.func.isRequired,
+};
+
+SectionHeader.defaultProps = {
+  submenuItems: [],
 };
 
 export default translate()(SectionHeader);

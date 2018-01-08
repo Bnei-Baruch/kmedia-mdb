@@ -8,6 +8,7 @@ import { reducer as programs } from './modules/programs';
 import { reducer as lectures } from './modules/lectures';
 import { reducer as publications } from './modules/publications';
 import { reducer as filters } from './modules/filters';
+import { reducer as lists } from './modules/lists';
 import { reducer as sources } from './modules/sources';
 import { reducer as tags } from './modules/tags';
 import { reducer as mdb } from './modules/mdb';
@@ -24,6 +25,7 @@ export default combineReducers({
   lectures,
   publications,
   filters,
+  lists,
   sources,
   tags,
   mdb,

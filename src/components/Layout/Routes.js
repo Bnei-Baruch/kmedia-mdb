@@ -14,7 +14,7 @@ import LectureCollection from '../Lectures/Collection/CollectionContainer';
 import Publications from '../Publications/List/PublicationsContainer';
 import PublicationUnit from '../Publications/Unit/UnitContainer';
 import PublicationCollection from '../Publications/Collection/CollectionContainer';
-import Events from '../Events/List/EventsContainer';
+import Events from '../Events/MainPage';
 import EventItem from '../Events/Item/EventItemContainer';
 import FullEvent from '../Events/Full/FullEventContainer';
 import LibraryHomepage from '../Library/Homepage';
@@ -41,6 +41,7 @@ const Routes = ({ match }) => {
       <Route exact path={`${urlPrefix}/programs/chapter/:id`} component={ProgramChapter} />
       <Route exact path={`${urlPrefix}/programs/full/:id`} component={FullProgram} />
       <Route exact path={`${urlPrefix}/events`} component={Events} />
+      <Route exact path={`${urlPrefix}/events/:tab`} component={Events} />
       <Route exact path={`${urlPrefix}/events/item/:id`} component={EventItem} />
       <Route exact path={`${urlPrefix}/events/full/:id`} component={FullEvent} />
       <Route exact path={`${urlPrefix}/lectures`} component={Lectures} />

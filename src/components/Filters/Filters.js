@@ -51,7 +51,6 @@ class Filters extends Component {
         <FilterMenu
           items={filters}
           rightItems={rightItems}
-          namespace={namespace}
           active={activeFilterName}
           onChoose={this.handleFilterClick}
         />
