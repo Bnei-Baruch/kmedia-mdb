@@ -14,9 +14,11 @@ import List from './List';
 
 const filters = {
   'conventions': [
-    { name: 'years-filter', component: filterComponents.YearsFilter }
+    { name: 'locations-filter', component: filterComponents.LocationsFilter },
+    { name: 'years-filter', component: filterComponents.YearsFilter },
   ],
   'holidays': [
+    { name: 'holidays-filter', component: filterComponents.HolidaysFilter },
     { name: 'years-filter', component: filterComponents.YearsFilter }
   ],
   'picnics': [

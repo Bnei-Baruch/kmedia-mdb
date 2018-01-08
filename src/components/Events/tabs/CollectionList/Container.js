@@ -62,7 +62,7 @@ class TabContainer extends Component {
 const mapState = (state, ownProps) => {
   const { tabName } = ownProps;
   const filters     = filterSelectors.getFilters(state.filters, `events-${tabName}`);
-  const ids         = selectors.getFilteredData(state.events, TAB_NAME_CT_MAP[tabName], filters, state.mdb) || [];
+  const ids         = selectors.getFilteredData(state.events, TAB_NAME_CT_MAP[tabName], filters, state.mdb);
 
   return {
     items: ids.map(x => mdb.getCollectionById(state.mdb, x)),

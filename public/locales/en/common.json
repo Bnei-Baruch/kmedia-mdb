@@ -56,9 +56,12 @@
       "recently-updated": "Recently Updated",
       "last-updated": "Last updated on"
     },
-    "event-types-filter": {
-      "label": "Types",
-      "all": "All Events",
+    "locations-filter": {
+      "label": "Locations",
+      "allItem": "All"
+    },
+    "holidays-filter": {
+      "label": "Holidays",
       "allItem": "All"
     },
     "years-filter": {

@@ -55,9 +55,12 @@
       "recently-updated": "עודכנו לאחרונה",
       "last-updated": "עודכן לאחרונה ב"
     },
-    "event-types-filter": {
-      "label": "סוגים",
-      "all": "כל האירועים",
+    "locations-filter": {
+      "label": "מיקום",
+      "allItem": "הכל"
+    },
+    "holidays-filter": {
+      "label": "חג \\ מועד",
       "allItem": "הכל"
     },
     "years-filter": {

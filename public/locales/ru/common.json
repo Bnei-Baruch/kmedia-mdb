@@ -49,11 +49,6 @@
       "recently-updated": "Недавно обновленные",
       "last-updated": "Последнее обновление в"
     },
-    "event-types-filter": {
-      "label": "Тип",
-      "all": "Все События",
-      "allItem": "Все"
-    },
     "years-filter": {
       "label": "Год",
       "placeholder": "Выберите год"
