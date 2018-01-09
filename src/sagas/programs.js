@@ -8,6 +8,7 @@ import { selectors as settings } from '../redux/modules/settings';
 import { actions, selectors, types } from '../redux/modules/programs';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as filterSelectors } from '../redux/modules/filters';
+import { types as lists } from '../redux/modules/lists';
 import { filtersTransformer } from '../filters';
 
 function* fetchGenres() {
@@ -69,7 +70,7 @@ function* fetchProgramsList(action) {
     yield fork(fetchRecentlyUpdated);
   }
 
-  yield fetchList(action, 'programs', actions.fetchListSuccess, actions.fetchListFailure);
+  // yield fetchList(action, 'programs', actions.fetchListSuccess, actions.fetchListFailure);
 }
 
 function* fetchFullProgramList(action) {
@@ -104,7 +105,7 @@ function* updatePageInQuery(action) {
 }
 
 function* watchFetchList() {
-  yield takeLatest(types.FETCH_LIST, fetchProgramsList);
+  yield takeLatest(lists.FETCH_LIST, fetchProgramsList);
 }
 
 function* watchFetchProgramChapter() {

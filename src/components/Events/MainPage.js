@@ -24,7 +24,6 @@ const tabs = [
 class MainPage extends PureComponent {
 
   static propTypes = {
-    location: shapes.HistoryLocation.isRequired,
     match: shapes.RouterMatch.isRequired,
     setTab: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
@@ -39,8 +38,8 @@ class MainPage extends PureComponent {
   }
 
   render() {
-    const { location, match, t } = this.props;
-    const active                 = match.params.tab || tabs[0];
+    const { match, t } = this.props;
+    const active       = match.params.tab || tabs[0];
 
     const submenuItems = tabs.map(x => (
       <Menu.Item
@@ -64,7 +63,7 @@ class MainPage extends PureComponent {
       break;
     case 'friends-gatherings':
     case 'meals':
-      content = <UnitList tabName={active} location={location} />;
+      content = <UnitList tab={active} />;
       break;
     default:
       content = <h1>Page not found</h1>;

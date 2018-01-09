@@ -1,141 +1,77 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { List, Table } from 'semantic-ui-react';
 
 import { CT_FRIENDS_GATHERING, CT_MEAL } from '../../../../helpers/consts';
-import { getQuery } from '../../../../helpers/url';
-import { selectors as settings } from '../../../../redux/modules/settings';
-import { selectors as filters } from '../../../../redux/modules/filters';
-import { actions as listsActions, selectors as lists } from '../../../../redux/modules/lists';
-import { selectors as mdb } from '../../../../redux/modules/mdb';
-import * as shapes from '../../../shapes';
-import Page from './Page';
+import { canonicalLink } from '../../../../helpers/utils';
+import { CollectionsBreakdown } from '../../../../helpers/mdb';
+import UnitList from '../../../pages/UnitList/Container';
+import Link from '../../../Language/MultiLanguageLink';
+import UnitLogo from '../../../shared/Logo/UnitLogo';
 
-class UnitListContainer extends Component {
+const renderUnit = (unit, t) => {
+  const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
+  const events    = breakdown.getEvents();
+
+  const relatedItems = events.map(x =>
+    (
+      <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
+        {x.name || '☠ no name'}
+      </List.Item>
+    )
+  );
+
+  let filmDate = '';
+  if (unit.film_date) {
+    filmDate = t('values.date', { date: new Date(unit.film_date) });
+  }
+
+  return (
+    <Table.Row key={unit.id} verticalAlign="top">
+      <Table.Cell collapsing singleLine width={1}>
+        <strong>{filmDate}</strong>
+      </Table.Cell>
+      <Table.Cell collapsing width={1}>
+        <UnitLogo fluid unitId={unit.id} />
+      </Table.Cell>
+      <Table.Cell>
+        <Link to={canonicalLink(unit)}>
+          <strong>{unit.name || '☠ no name'}</strong>
+        </Link>
+        {
+          relatedItems.length > 0 ?
+            <List horizontal divided link className="index-list__item-subtitle" size="tiny">
+              <List.Item>
+                <List.Header>{t('events.list.item_from')}</List.Header>
+              </List.Item>
+              {relatedItems}
+            </List> :
+            null
+        }
+      </Table.Cell>
+    </Table.Row>
+  );
+};
+
+class Container extends Component {
 
   static propTypes = {
-    location: shapes.HistoryLocation.isRequired,
-    tabName: PropTypes.string.isRequired,
-    items: PropTypes.arrayOf(shapes.ContentUnit),
-    wip: shapes.WIP,
-    err: shapes.Error,
-    pageNo: PropTypes.number.isRequired,
-    total: PropTypes.number.isRequired,
-    pageSize: PropTypes.number.isRequired,
-    language: PropTypes.string.isRequired,
-    isFiltersHydrated: PropTypes.bool,
-    fetchList: PropTypes.func.isRequired,
-    setPage: PropTypes.func.isRequired,
+    tab: PropTypes.string.isRequired,
   };
 
-  static defaultProps = {
-    items: [],
-    wip: false,
-    err: null,
-    isFiltersHydrated: false,
-  };
-
-  componentDidMount() {
-    // If filters are already hydrated, handleFiltersHydrated won't be called.
-    // We'll have to ask for data here instead.
-    if (this.props.isFiltersHydrated) {
-      this.askForData(this.props);
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.language !== this.props.language ||
-      nextProps.tabName !== this.props.tabName) {
-      this.askForData(nextProps);
-    }
-
-    if (nextProps.pageSize !== this.props.pageSize) {
-      const { tabName, setPage } = nextProps;
-      setPage(`events-${tabName}`, 1);
-      this.askForData(nextProps, 1);
-    }
-  }
-
-  askForData = (props, pn) => {
-    const { tabName, fetchList, pageSize, pageNo } = props;
-    fetchList(`events-${tabName}`, pn || pageNo, {
-      pageSize,
-      content_type: tabName === 'meals' ? CT_MEAL : CT_FRIENDS_GATHERING
-    });
-  };
-
-  handlePageChanged = (pageNo) => {
-    // withPagination.handlePageChange(this.props, pageNo);
-    const { tabName, setPage } = this.props;
-    setPage(`events-${tabName}`, pageNo);
-    this.askForData(this.props, pageNo);
-  };
-
-  handleFiltersChanged = () => {
-    // withPagination.handlePageChange(this.props, 1);
-    this.handlePageChanged(1);
-  };
-
-  handleFiltersHydrated = () => {
-    // withPagination.handlePageChange(this.props);
-
-    const { location, pageNo } = this.props;
-    let p                      = pageNo;
-
-    const q = getQuery(location);
-    if (q.page) {
-      const pn = parseInt(q.page, 10);
-      if (!isNaN(pn) && pn !== pageNo) {
-        p = pn;
-      }
-    }
-    this.handlePageChanged(p);
-  };
+  extraFetchParams = () => ({
+    content_type: [this.props.tab === 'meals' ? CT_MEAL : CT_FRIENDS_GATHERING]
+  });
 
   render() {
-    const { tabName, items, wip, err, pageNo, total, pageSize, language } = this.props;
-
     return (
-      <Page
-        tabName={tabName}
-        items={items}
-        wip={wip}
-        err={err}
-        pageNo={pageNo}
-        total={total}
-        pageSize={pageSize}
-        language={language}
-        onPageChange={this.handlePageChanged}
-        onFiltersChanged={this.handleFiltersChanged}
-        onFiltersHydrated={this.handleFiltersHydrated}
+      <UnitList
+        namespace={`events-${this.props.tab}`}
+        extraFetchParams={this.extraFetchParams}
+        renderUnit={renderUnit}
       />
     );
   }
 }
 
-const mapState = (state, ownProps) => {
-  const { tabName } = ownProps;
-  const namespace   = `events-${tabName}`;
-  const nsState     = lists.getNamespaceState(state.lists, namespace);
-
-  return {
-    items: (nsState.items || []).map(x => mdb.getDenormContentUnit(state.mdb, x)),
-    wip: nsState.wip,
-    err: nsState.err,
-    pageNo: nsState.pageNo,
-    total: nsState.total,
-    pageSize: settings.getPageSize(state.settings),
-    language: settings.getLanguage(state.settings),
-    isFiltersHydrated: filters.getIsHydrated(state.filters, namespace),
-  };
-};
-
-const mapDispatch = dispatch => (
-  bindActionCreators({
-    fetchList: listsActions.fetchList,
-    setPage: listsActions.setPage,
-  }, dispatch)
-);
-
-export default connect(mapState, mapDispatch)(UnitListContainer);
+export default Container;

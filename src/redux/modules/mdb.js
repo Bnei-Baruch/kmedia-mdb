@@ -5,20 +5,46 @@ import { types as settings } from './settings';
 
 /* Types */
 
+const FETCH_UNIT               = 'MDB/FETCH_UNIT';
+const FETCH_UNIT_SUCCESS       = 'MDB/FETCH_UNIT_SUCCESS';
+const FETCH_UNIT_FAILURE       = 'MDB/FETCH_UNIT_FAILURE';
+const FETCH_COLLECTION         = 'MDB/FETCH_COLLECTION';
+const FETCH_COLLECTION_SUCCESS = 'MDB/FETCH_COLLECTION_SUCCESS';
+const FETCH_COLLECTION_FAILURE = 'MDB/FETCH_COLLECTION_FAILURE';
+
 const RECEIVE_COLLECTIONS         = 'MDB/RECEIVE_COLLECTIONS';
 const RECEIVE_CONTENT_UNITS       = 'MDB/RECEIVE_CONTENT_UNITS';
 
 export const types = {
+  FETCH_UNIT,
+  FETCH_UNIT_SUCCESS,
+  FETCH_UNIT_FAILURE,
+  FETCH_COLLECTION,
+  FETCH_COLLECTION_SUCCESS,
+  FETCH_COLLECTION_FAILURE,
+
   RECEIVE_COLLECTIONS,
   RECEIVE_CONTENT_UNITS,
 };
 
 /* Actions */
 
+const fetchUnit              = createAction(FETCH_UNIT);
+const fetchUnitSuccess       = createAction(FETCH_UNIT_SUCCESS);
+const fetchUnitFailure       = createAction(FETCH_UNIT_FAILURE, (id, err) => ({ id, err }));
+const fetchCollection        = createAction(FETCH_COLLECTION);
+const fetchCollectionSuccess = createAction(FETCH_COLLECTION_SUCCESS);
+const fetchCollectionFailure = createAction(FETCH_COLLECTION_FAILURE, (id, err) => ({ id, err }));
 const receiveCollections        = createAction(RECEIVE_COLLECTIONS);
 const receiveContentUnits       = createAction(RECEIVE_CONTENT_UNITS);
 
 export const actions = {
+  fetchUnit,
+  fetchUnitSuccess,
+  fetchUnitFailure,
+  fetchCollection,
+  fetchCollectionSuccess,
+  fetchCollectionFailure,
   receiveCollections,
   receiveContentUnits,
 };
@@ -28,7 +54,60 @@ export const actions = {
 const freshStore = () => ({
   cById: {},
   cuById: {},
+  wip: {
+    units: {},
+    collections: {},
+  },
+  errors: {
+    units: {},
+    collections: {},
+  },
 });
+
+/**
+ * Set the wip and errors part of the state
+ * @param state
+ * @param action
+ * @returns {{wip: {}, errors: {}}}
+ */
+const setStatus = (state, action) => {
+  const wip    = { ...state.wip };
+  const errors = { ...state.errors };
+
+  switch (action.type) {
+  case FETCH_UNIT:
+    wip.units = { ...wip.units, [action.payload]: true };
+    break;
+  case FETCH_COLLECTION:
+    wip.collections = { ...wip.collections, [action.payload]: true };
+    break;
+  case FETCH_UNIT_SUCCESS:
+    wip.units    = { ...wip.units, [action.payload]: false };
+    errors.units = { ...errors.units, [action.payload]: null };
+    break;
+  case FETCH_COLLECTION_SUCCESS:
+    wip.collections    = { ...wip.collections, [action.payload]: false };
+    errors.collections = { ...errors.collections, [action.payload]: null };
+    break;
+  case FETCH_UNIT_FAILURE:
+    wip.units    = { ...wip.units, [action.payload.id]: false };
+    errors.units = { ...errors.units, [action.payload.id]: action.payload.err };
+    break;
+  case FETCH_COLLECTION_FAILURE:
+    wip.collections    = { ...wip.collections, [action.payload.id]: false };
+    errors.collections = { ...errors.collections, [action.payload.id]: action.payload.err };
+    break;
+  default:
+    break;
+  }
+
+  return {
+    ...state,
+    wip,
+    errors,
+  };
+};
+
 
 const onReceiveCollections = (state, action) => {
   const items = action.payload || [];
@@ -158,6 +237,16 @@ const onReceiveContentUnits = (state, action) => {
 export const reducer = handleActions({
   [system.INIT]: () => freshStore(),
   [settings.SET_LANGUAGE]: () => freshStore(),
+
+  [FETCH_UNIT]: setStatus,
+  [FETCH_UNIT_SUCCESS]: (state, action) =>
+    setStatus(onReceiveContentUnits(state, {payload: [action.payload]}), action),
+  [FETCH_UNIT_FAILURE]: setStatus,
+  [FETCH_COLLECTION]: setStatus,
+  [FETCH_COLLECTION_SUCCESS]: (state, action) =>
+    setStatus(onReceiveCollections(state, {payload: [action.payload]}), action),
+  [FETCH_COLLECTION_FAILURE]: setStatus,
+
   [RECEIVE_COLLECTIONS]: (state, action) => onReceiveCollections(state, action),
   [RECEIVE_CONTENT_UNITS]: (state, action) => onReceiveContentUnits(state, action),
 }, freshStore());
@@ -166,6 +255,8 @@ export const reducer = handleActions({
 
 const getCollectionById = (state, id) => state.cById[id];
 const getUnitById       = (state, id) => state.cuById[id];
+const getWip           = state => state.wip;
+const getErrors        = state => state.errors;
 
 const getDenormCollection = (state, id) => {
   const c = state.cById[id];
@@ -214,6 +305,8 @@ const getDenormCollectionWUnits = (state, id) => {
 export const selectors = {
   getCollectionById,
   getUnitById,
+  getWip,
+  getErrors,
   getDenormCollection,
   getDenormCollectionWUnits,
   getDenormContentUnit

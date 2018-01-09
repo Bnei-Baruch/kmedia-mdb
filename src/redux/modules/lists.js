@@ -20,7 +20,8 @@ export const types = {
 const setPage          = createAction(SET_PAGE, (namespace, pageNo) => ({ namespace, pageNo }));
 const fetchList        = createAction(FETCH_LIST, (namespace, pageNo, params = {}) => ({
   namespace,
-  pageNo, ...params
+  pageNo,
+  ...params,
 }));
 const fetchListSuccess = createAction(FETCH_LIST_SUCCESS, (namespace, data) => ({ namespace, data }));
 const fetchListFailure = createAction(FETCH_LIST_FAILURE, (namespace, err) => ({ namespace, err }));

@@ -1,3 +1,4 @@
+import { sagas as mdb } from './mdb';
 import { sagas as lessons } from './lessons';
 import { sagas as programs } from './programs';
 import { sagas as lectures } from './lectures';
@@ -12,6 +13,7 @@ import { sagas as search } from './search';
 import { sagas as assets } from './assets';
 
 export default [
+  ...mdb,
   ...lessons,
   ...programs,
   ...lectures,

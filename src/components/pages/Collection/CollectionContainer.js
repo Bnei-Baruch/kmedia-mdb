@@ -12,7 +12,7 @@ import * as shapes from '../../shapes';
 import withPagination from '../../pagination/withPagination2';
 import Collection from './Collection';
 
-class PublicationCollectionContainer extends withPagination {
+class CollectionContainer extends withPagination {
 
   static propTypes = {
     namespace: PropTypes.string.isRequired,
@@ -142,4 +142,4 @@ function mapDispatch(dispatch) {
   }, dispatch);
 }
 
-export default connect(mapState, mapDispatch)(PublicationCollectionContainer);
+export default connect(mapState, mapDispatch)(CollectionContainer);
