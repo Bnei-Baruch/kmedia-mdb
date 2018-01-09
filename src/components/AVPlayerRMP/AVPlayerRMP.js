@@ -199,7 +199,8 @@ class AVPlayerRMP extends PureComponent {
 
   onKeyDown = (e) => {
     if (e.keyCode === 32) {
-      this.props.media.playPause();
+      if (!this.props.media.isLoading)
+        this.props.media.playPause();
       e.preventDefault();
     }
   };
@@ -362,12 +363,13 @@ class AVPlayerRMP extends PureComponent {
   };
 
   playPause = () => {
-    const { isMobile, media: { playPause } } = this.props;
+    const { isMobile, media } = this.props;
 
     if (isMobile && !this.state.controlsVisible) {
       this.showControls(() => this.hideControlsTimeout());
     } else {
-      playPause();
+      if (!media.isLoading)
+        media.playPause();
     }
   };
 
