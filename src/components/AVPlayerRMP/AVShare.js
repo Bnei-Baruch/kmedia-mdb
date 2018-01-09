@@ -1,29 +1,31 @@
 import React, {Component} from 'react';
-import { Button, Transition } from 'semantic-ui-react';
 import {
-    ShareButtons,
-    ShareCounts,
-    generateShareIcon,
+  Button,
+  Transition
+} from 'semantic-ui-react';
+import {
+  ShareButtons,
+  ShareCounts,
+  generateShareIcon,
 } from 'react-share';
 
 const {
-    FacebookShareButton,
-    GooglePlusShareButton,
-    LinkedinShareButton,
-    TwitterShareButton,
-    PinterestShareButton,
-    VKShareButton,
-    OKShareButton,
-    TelegramShareButton,
-    WhatsappShareButton,
-    RedditShareButton,
-    EmailShareButton,
-    TumblrShareButton,
-    LivejournalShareButton,
-    MailruShareButton,
+  FacebookShareButton,
+  GooglePlusShareButton,
+  LinkedinShareButton,
+  TwitterShareButton,
+  PinterestShareButton,
+  VKShareButton,
+  OKShareButton,
+  TelegramShareButton,
+  WhatsappShareButton,
+  RedditShareButton,
+  EmailShareButton,
+  TumblrShareButton,
+  LivejournalShareButton,
+  MailruShareButton,
 } = ShareButtons;
 
-    
 const FacebookIcon = generateShareIcon('facebook');
 const TwitterIcon = generateShareIcon('twitter');
 const GooglePlusIcon = generateShareIcon('google');
@@ -31,17 +33,40 @@ const EmailIcon = generateShareIcon('email');
 const WhatsappIcon = generateShareIcon('whatsapp');
 
 class AVShare extends Component {
-    state = {visible: false};
+  state = {
+    shareUrl: '',
+    visible: false
+  };
 
-    handleClick = () => this.setState({ visible: !this.state.visible });
+  componentDidMount() {
+    this.loadUrl();
+  }
 
-    render(){
-        const {visible} = this.state;
-        const shareUrl = 'http://www.kab.co.il';
-        const title = 'facebook title';
-        const buttonSize = 46;
-        return (
-                <div className='social-share'>
+  componentWillReceiveProps() {
+    if (window.location.href !== this.state.shareUrl) {
+      this.loadUrl();
+    }
+  }
+
+  loadUrl = () => {
+    this.setState({
+      shareUrl: window.location.href
+    });
+  };
+
+  handleClick = () => this.setState({
+    visible: !this.state.visible
+  });
+
+  render() {
+    const {
+      visible
+    } = this.state;
+    const {shareUrl} = this.state;
+    const title = 'facebook title';
+    const buttonSize = 46;
+    return (
+      <div className='social-share'>
                     <Button
                         type="button"
                         primary
@@ -70,8 +95,8 @@ class AVShare extends Component {
                         </div>
                     </Transition>
                 </div>
-        );
-    }
+    );
+  }
 }
 
 export default AVShare;
