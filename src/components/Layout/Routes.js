@@ -22,6 +22,8 @@ import LibraryContainer from '../Library/LibraryContainer';
 import SearchResults from '../Search/SearchResultsContainer';
 import Design from '../Design/Design';
 
+import Redirect from './Redirect';
+
 const NotImplemented = () => <h1>Not Implemented Yet</h1>;
 const NotFound       = () => <h1>Page not found</h1>;
 
@@ -58,6 +60,15 @@ const Routes = ({ match }) => {
       <Route exact path={`${urlPrefix}/search`} component={SearchResults} />
       <Route exact path={`${urlPrefix}/design`} component={Design} />
       <Route exact path={`${urlPrefix}/design2`} component={Lessons} />
+
+      /* Old routes - redirect for now */
+      <Redirect from={`${urlPrefix}/lessons/part/:id`} to={`${urlPrefix}/lessons/cu/:id`} />
+      <Redirect from={`${urlPrefix}/lessons/full/:id`} to={`${urlPrefix}/lessons/c/:id`} />
+      <Redirect from={`${urlPrefix}/programs/chapter/:id`} to={`${urlPrefix}/programs/cu/:id`} />
+      <Redirect from={`${urlPrefix}/programs/full/:id`} to={`${urlPrefix}/programs/c/:id`} />
+      <Redirect from={`${urlPrefix}/events/item/:id`} to={`${urlPrefix}/events/cu/:id`} />
+      <Redirect from={`${urlPrefix}/events/full/:id`} to={`${urlPrefix}/events/c/:id`} />
+
       <Route component={NotFound} />
     </Switch>
   );
