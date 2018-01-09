@@ -3,39 +3,26 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { Container, Divider } from 'semantic-ui-react';
 
-import { formatError } from '../../../helpers/utils';
-import * as shapes from '../../shapes';
-import { ErrorSplash, LoadingSplash } from '../../shared/Splash';
-import SectionHeader from '../../shared/SectionHeader';
-import Pagination from '../../pagination/Pagination';
-import Filters from '../../Filters/Filters';
-import filterComponents from '../../Filters/components';
-import ResultsPageHeader from '../../pagination/ResultsPageHeader';
+import { formatError } from '../../../../helpers/utils';
+import * as shapes from '../../../shapes';
+import { ErrorSplash, LoadingSplash } from '../../../shared/Splash';
+import Pagination from '../../../pagination/Pagination';
+import ResultsPageHeader from '../../../pagination/ResultsPageHeader';
+import Filters from '../../../Filters/Filters';
+import filterComponents from '../../../Filters/components';
 import List from './List';
 
 const filters = [
-  {
-    name: 'programs-filter',
-    component: filterComponents.ProgramsFilter
-  },
-  {
-    name: 'topics-filter',
-    component: filterComponents.TopicsFilter
-  },
-  {
-    name: 'sources-filter',
-    component: filterComponents.SourcesFilter
-  },
   {
     name: 'date-filter',
     component: filterComponents.DateFilter
   },
 ];
 
-class ProgramsPage extends PureComponent {
+class UnitListPage extends PureComponent {
 
   static propTypes = {
-    items: PropTypes.arrayOf(shapes.ProgramChapter),
+    items: PropTypes.arrayOf(shapes.ContentUnit),
     wip: shapes.WIP,
     err: shapes.Error,
     pageNo: PropTypes.number.isRequired,
@@ -55,7 +42,8 @@ class ProgramsPage extends PureComponent {
   };
 
   render() {
-    const { items,
+    const { tabName,
+            items,
             wip,
             err,
             pageNo,
@@ -78,7 +66,7 @@ class ProgramsPage extends PureComponent {
         <div>
           <Container className="padded">
             <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
-            <List items={items} />
+            <List items={items} t={t}/>
           </Container>
           <Divider fitted />
           <Container className="padded" textAlign="center">
@@ -96,10 +84,9 @@ class ProgramsPage extends PureComponent {
 
     return (
       <div>
-        <SectionHeader section="programs" />
         <Divider fitted />
         <Filters
-          namespace="programs"
+          namespace={`events-${tabName}`}
           filters={filters}
           onChange={onFiltersChanged}
           onHydrated={onFiltersHydrated}
@@ -111,4 +98,4 @@ class ProgramsPage extends PureComponent {
 
 }
 
-export default translate()(ProgramsPage);
+export default translate()(UnitListPage);

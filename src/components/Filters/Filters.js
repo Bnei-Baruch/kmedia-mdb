@@ -4,16 +4,19 @@ import { connect } from 'react-redux';
 
 import { filterPropShape } from '../shapes';
 import { actions as filterActions, selectors as filterSelectors } from '../../redux/modules/filters';
-import ActiveFilter from './ActiveFilter/ActiveFilter';
-import FilterMenu from './FilterMenu/FilterMenu';
+import ActiveFilter from './ActiveFilter';
+import FilterMenu from './FilterMenu';
+import FiltersHydrator from './FiltersHydrator';
+import FilterTags from './FilterTags';
 
 class Filters extends Component {
 
   static propTypes = {
     namespace: PropTypes.string.isRequired,
-    onFilterApplication: PropTypes.func.isRequired,
     editNewFilter: PropTypes.func.isRequired,
     closeActiveFilter: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onHydrated: PropTypes.func.isRequired,
     filters: PropTypes.arrayOf(filterPropShape).isRequired,
     activeFilterName: PropTypes.string,
     rightItems: PropTypes.arrayOf(PropTypes.node),
@@ -35,19 +38,19 @@ class Filters extends Component {
   };
 
   handleApplyActiveFilter = () => {
-    this.props.onFilterApplication();
+    this.props.onChange();
     this.handleCancelActiveFilter();
   };
 
   render() {
-    const { filters, rightItems, activeFilterName, namespace } = this.props;
+    const { filters, rightItems, activeFilterName, namespace, onHydrated, onChange } = this.props;
 
     return (
       <div>
+        <FiltersHydrator namespace={namespace} onHydrated={onHydrated} />
         <FilterMenu
           items={filters}
           rightItems={rightItems}
-          namespace={namespace}
           active={activeFilterName}
           onChoose={this.handleFilterClick}
         />
@@ -58,6 +61,7 @@ class Filters extends Component {
           onCancel={this.handleCancelActiveFilter}
           onApply={this.handleApplyActiveFilter}
         />
+        <FilterTags namespace={namespace} onClose={onChange} />
       </div>
     );
   }

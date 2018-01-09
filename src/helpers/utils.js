@@ -218,9 +218,9 @@ export const canonicalLink = (entity) => {
   switch (entity.content_type) {
   case CT_DAILY_LESSON:
   case CT_SPECIAL_LESSON:
-    return `/lessons/full/${entity.id}`;
+    return `/lessons/c/${entity.id}`;
   case CT_VIDEO_PROGRAM:
-    return `/programs/full/${entity.id}`;
+    return `/programs/c/${entity.id}`;
   case CT_LECTURE_SERIES:
   case CT_VIRTUAL_LESSONS:
   case CT_WOMEN_LESSONS:
@@ -230,12 +230,13 @@ export const canonicalLink = (entity) => {
     return `/publications/c/${entity.id}`;
   case CT_FRIENDS_GATHERINGS:
   case CT_MEALS:
-  case CT_CLIPS:
   case CT_CONGRESS:
   case CT_HOLIDAY:
   case CT_PICNIC:
   case CT_UNITY_DAY:
-    return `/events/full/${entity.id}`;
+    return `/events/c/${entity.id}`;
+  case CT_CLIPS:
+    return '/';
   default:
     break;
   }
@@ -243,27 +244,27 @@ export const canonicalLink = (entity) => {
   // units whose canonical collection is an event goes as an event item
   const collection = canonicalCollection(entity);
   if (collection && EVENT_TYPES.indexOf(collection.content_type) !== -1) {
-    return `/events/item/${entity.id}`;
+    return `/events/cu/${entity.id}`;
   }
 
   // unit based on type
   switch (entity.content_type) {
   case CT_LESSON_PART:
-    return `/lessons/part/${entity.id}`;
+    return `/lessons/cu/${entity.id}`;
   case CT_LECTURE:
   case CT_VIRTUAL_LESSON:
   case CT_CHILDREN_LESSON:
   case CT_WOMEN_LESSON:
     return `/lectures/cu/${entity.id}`;
   case CT_VIDEO_PROGRAM_CHAPTER:
-    return `/programs/chapter/${entity.id}`;
+    return `/programs/cu/${entity.id}`;
   case CT_EVENT_PART:
   case CT_FULL_LESSON:
-    return `/events/item/${entity.id}`;
-  case CT_ARTICLE:
-    return `/publications/cu/${entity.id}`;
   case CT_FRIENDS_GATHERING:
   case CT_MEAL:
+    return `/events/cu/${entity.id}`;
+  case CT_ARTICLE:
+    return `/publications/cu/${entity.id}`;
   case CT_UNKNOWN:
   case CT_CLIP:
   case CT_TRAINING:

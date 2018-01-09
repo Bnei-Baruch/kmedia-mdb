@@ -4,29 +4,35 @@ import noop from 'lodash/noop';
 import { translate } from 'react-i18next';
 import { Container, Divider } from 'semantic-ui-react';
 
-import { formatError } from '../../../helpers/utils';
-import * as shapes from '../../shapes';
-import { ErrorSplash, LoadingSplash } from '../../shared/Splash';
-import SectionHeader from '../../shared/SectionHeader';
-import ResultsPageHeader from '../../pagination/ResultsPageHeader';
-import Filters from '../../Filters/Filters';
-import filterComponents from '../../Filters/components';
+import { formatError } from '../../../../helpers/utils';
+import * as shapes from '../../../shapes';
+import { ErrorSplash, LoadingSplash } from '../../../shared/Splash';
+import ResultsPageHeader from '../../../pagination/ResultsPageHeader';
+import filterComponents from '../../../Filters/components';
+import Filters from '../../../Filters/Filters';
 import List from './List';
 
-const filters = [
-  {
-    name: 'event-types-filter',
-    component: filterComponents.EventTypesFilter
-  },
-  {
-    name: 'years-filter',
-    component: filterComponents.YearsFilter
-  }
-];
+const filters = {
+  'conventions': [
+    { name: 'locations-filter', component: filterComponents.LocationsFilter },
+    { name: 'years-filter', component: filterComponents.YearsFilter },
+  ],
+  'holidays': [
+    { name: 'holidays-filter', component: filterComponents.HolidaysFilter },
+    { name: 'years-filter', component: filterComponents.YearsFilter }
+  ],
+  'picnics': [
+    { name: 'years-filter', component: filterComponents.YearsFilter }
+  ],
+  'unity-days': [
+    { name: 'years-filter', component: filterComponents.YearsFilter }
+  ],
+};
 
-class EventsPage extends PureComponent {
+class TabPage extends PureComponent {
 
   static propTypes = {
+    tabName: PropTypes.string.isRequired,
     items: PropTypes.arrayOf(shapes.EventCollection),
     wip: shapes.WIP,
     err: shapes.Error,
@@ -40,7 +46,7 @@ class EventsPage extends PureComponent {
   };
 
   render() {
-    const { items, wip, err, t } = this.props;
+    const { tabName, items, wip, err, t } = this.props;
 
     let content;
     if (err) {
@@ -59,11 +65,10 @@ class EventsPage extends PureComponent {
 
     return (
       <div>
-        <SectionHeader section="events" />
         <Divider fitted />
         <Filters
-          namespace="events"
-          filters={filters}
+          namespace={`events-${tabName}`}
+          filters={filters[tabName]}
           onChange={noop}
           onHydrated={noop}
         />
@@ -74,4 +79,4 @@ class EventsPage extends PureComponent {
 
 }
 
-export default translate()(EventsPage);
+export default translate()(TabPage);

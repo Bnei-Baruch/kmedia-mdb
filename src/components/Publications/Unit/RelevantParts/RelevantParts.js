@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Container, Header, Item } from 'semantic-ui-react';
 
-import { formatError, neighborIndices } from '../../../../helpers/utils';
+import { canonicalLink, formatError, neighborIndices } from '../../../../helpers/utils';
 import * as shapes from '../../../shapes';
 import { ErrorSplash, LoadingSplash } from '../../../shared/Splash';
 import Link from '../../../Language/MultiLanguageLink';
@@ -36,7 +36,7 @@ const RelevantParts = (props) => {
       <Item.Group divided link>
         {
           otherParts.reverse().map(part => (
-            <Item as={Link} key={part.id} to={`/publications/cu/${part.id}`}>
+            <Item as={Link} key={part.id} to={canonicalLink(part)}>
               <Item.Content verticalAlign="top">
                 <Header as="h5">
                   <small className="text grey uppercase">
@@ -55,7 +55,7 @@ const RelevantParts = (props) => {
               fluid
               as={Link}
               textAlign="right"
-              to={`/publications/c/${collection.id}`}
+              to={canonicalLink(collection)}
             >
               {t('buttons.more')} &raquo;
             </Container>

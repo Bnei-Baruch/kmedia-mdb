@@ -9,9 +9,21 @@ import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
 import Link from '../../Language/MultiLanguageLink';
 import Pagination from '../../pagination/Pagination';
 import ResultsPageHeader from '../../pagination/ResultsPageHeader';
+import Filters from '../../Filters/Filters';
+import filterComponents from '../../Filters/components';
 import PageHeader from './PageHeader';
-import Filters from './Filters';
 import ChaptersList from './ChaptersList';
+
+const filters = [
+  {
+    name: 'topics-filter',
+    component: filterComponents.TopicsFilter
+  },
+  {
+    name: 'date-filter',
+    component: filterComponents.DateFilter
+  },
+];
 
 class FullProgram extends Component {
   static propTypes = {
@@ -100,7 +112,12 @@ class FullProgram extends Component {
     return (
       <div>
         <PageHeader fullProgram={fullProgram} wip={wip} err={err} />
-        <Filters onChange={onFiltersChanged} onHydrated={onFiltersHydrated} />
+        <Filters
+          namespace="full-program"
+          filters={filters}
+          onChange={onFiltersChanged}
+          onHydrated={onFiltersHydrated}
+        />
         {listContent}
         <Divider fitted />
         <Container className="padded" textAlign="center">
