@@ -5,6 +5,10 @@ import { EVENT_TYPES } from '../helpers/consts';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions, types } from '../redux/modules/events';
 import { actions as mdbActions } from '../redux/modules/mdb';
+import { selectors as filterSelectors } from '../redux/modules/filters';
+import { selectors as listsSelectors } from '../redux/modules/lists';
+import { filtersTransformer } from '../filters';
+import { updateQuery } from './helpers/url';
 
 function* fetchAllEvents(action) {
   try {
@@ -46,6 +50,27 @@ function* fetchFullEvent(action) {
   }
 }
 
+function* setTab(action) {
+  // we have to replace url completely...
+
+  const tab       = action.payload;
+  const namespace = `events-${tab}`;
+  const filters   = yield select(state => filterSelectors.getFilters(state.filters, namespace));
+  const lists     = yield select(state => listsSelectors.getNamespaceState(state.lists, namespace));
+  const q         = {
+    page: lists.pageNo,
+    ...filtersTransformer.toQueryParams(filters),
+  };
+
+  yield* updateQuery(query => {
+    const x = Object.assign(query, q);
+    if (x.page === 1) {
+      delete x.page;
+    }
+    return x;
+  });
+}
+
 function* watchFetchAllEvents() {
   yield takeLatest(types.FETCH_ALL_EVENTS, fetchAllEvents);
 }
@@ -58,8 +83,13 @@ function* watchFetchFullEvent() {
   yield takeLatest(types.FETCH_FULL_EVENT, fetchFullEvent);
 }
 
+function* watchSetTab() {
+  yield takeLatest(types.SET_TAB, setTab);
+}
+
 export const sagas = [
   watchFetchAllEvents,
   watchFetchEventItem,
   watchFetchFullEvent,
+  watchSetTab,
 ];

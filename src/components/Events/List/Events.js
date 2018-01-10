@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import noop from 'lodash/noop';
 import { translate } from 'react-i18next';
 import { Container, Divider } from 'semantic-ui-react';
 
@@ -8,8 +9,20 @@ import * as shapes from '../../shapes';
 import { ErrorSplash, LoadingSplash } from '../../shared/Splash';
 import SectionHeader from '../../shared/SectionHeader';
 import ResultsPageHeader from '../../pagination/ResultsPageHeader';
-import Filters from './Filters';
+import Filters from '../../Filters/Filters';
+import filterComponents from '../../Filters/components';
 import List from './List';
+
+const filters = [
+  {
+    name: 'event-types-filter',
+    component: filterComponents.EventTypesFilter
+  },
+  {
+    name: 'years-filter',
+    component: filterComponents.YearsFilter
+  }
+];
 
 class EventsPage extends PureComponent {
 
@@ -48,7 +61,12 @@ class EventsPage extends PureComponent {
       <div>
         <SectionHeader section="events" />
         <Divider fitted />
-        <Filters />
+        <Filters
+          namespace="events"
+          filters={filters}
+          onChange={noop}
+          onHydrated={noop}
+        />
         {content}
       </div>
     );

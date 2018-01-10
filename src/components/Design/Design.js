@@ -35,11 +35,64 @@ const results ={
   }
 const categoryRenderer = ({ name, icon }) => <div><Icon name={icon}/>{name}</div>
 const resultRenderer = ({ title }) => <div>{title}</div>
+
 class Design extends Component {
 
   render() {
     return (
       <div>
+          <div className='homepage'>
+            <Container className='padded'>
+              <div className='homepage__header'>
+                <Grid centered>
+                  <Grid.Row>
+                    <Grid.Column computer={10} tablet={12} mobile={16}>
+                      <Header as="h1" color="blue" className='homepage__title'>
+                        <Header.Content>
+                          Explore the wisdom of Kabbalah
+                        </Header.Content>
+                      </Header>
+                    </Grid.Column>
+                    <Grid.Column computer={10} tablet={12} mobile={16}>
+                      <div className='homepage__search'>
+                        <Input fluid action='Search' placeholder='Search...' />
+                      </div>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </div>
+            </Container>
+            <div className='homepage__featured'>
+              <Container className='padded'>
+                <Grid centered>
+                  <Grid.Row>
+                    <Grid.Column computer={5} tablet={6} mobile={8}>
+                    <Image
+    src='https://via.placeholder.com/1280x720/767676/ffffff?text=Latest+Daily+Lesson'
+    as='a'
+    fluid
+    href='http://google.com'
+    target='_blank'
+  />
+                    </Grid.Column>
+                    <Grid.Column computer={5} tablet={6} mobile={8}>
+                    <Image
+    src='https://via.placeholder.com/1280x720/767676/ffffff?text=Featured+Banner'
+    as='a'
+    fluid
+    href='http://google.com'
+    target='_blank'
+  />
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </Container>
+            </div>
+            <Container className='padded'>            
+              <div className='homepage__sections'></div>
+            </Container>
+          </div>
+        <Header size='large' color='pink' inverted>Homepage End</Header>
         <div className='section-header'>
           <Container className='padded'>
             <Grid>

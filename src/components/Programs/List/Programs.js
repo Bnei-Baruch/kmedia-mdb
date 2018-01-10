@@ -8,9 +8,29 @@ import * as shapes from '../../shapes';
 import { ErrorSplash, LoadingSplash } from '../../shared/Splash';
 import SectionHeader from '../../shared/SectionHeader';
 import Pagination from '../../pagination/Pagination';
+import Filters from '../../Filters/Filters';
+import filterComponents from '../../Filters/components';
 import ResultsPageHeader from '../../pagination/ResultsPageHeader';
-import Filters from './Filters';
 import List from './List';
+
+const filters = [
+  {
+    name: 'programs-filter',
+    component: filterComponents.ProgramsFilter
+  },
+  {
+    name: 'topics-filter',
+    component: filterComponents.TopicsFilter
+  },
+  {
+    name: 'sources-filter',
+    component: filterComponents.SourcesFilter
+  },
+  {
+    name: 'date-filter',
+    component: filterComponents.DateFilter
+  },
+];
 
 class ProgramsPage extends PureComponent {
 
@@ -78,7 +98,12 @@ class ProgramsPage extends PureComponent {
       <div>
         <SectionHeader section="programs" />
         <Divider fitted />
-        <Filters onChange={onFiltersChanged} onHydrated={onFiltersHydrated} />
+        <Filters
+          namespace="programs"
+          filters={filters}
+          onChange={onFiltersChanged}
+          onHydrated={onFiltersHydrated}
+        />
         {content}
       </div>
     );

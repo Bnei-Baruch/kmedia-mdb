@@ -1,0 +1,15 @@
+.homepage {
+  &__header {
+    padding-top: 3em;
+  }
+
+  &__title {
+    margin-bottom: .4em !important;
+  }
+
+  &__featured {
+    // background: $darkWhite;
+    padding-bottom: 3em;
+    padding-top: 3em;
+  }
+}

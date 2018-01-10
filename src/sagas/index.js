@@ -5,6 +5,7 @@ import { sagas as publications } from './publications';
 import { sagas as events } from './events';
 import { sagas as sources } from './sources';
 import { sagas as filters } from './filters';
+import { sagas as lists } from './lists';
 import { sagas as tags } from './tags';
 import { sagas as settings } from './settings';
 import { sagas as search } from './search';
@@ -18,6 +19,7 @@ export default [
   ...events,
   ...sources,
   ...filters,
+  ...lists,
   ...tags,
   ...settings,
   ...search,
