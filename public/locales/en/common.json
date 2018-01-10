@@ -18,40 +18,15 @@
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
-      "rights": "Bnei Baruch – Kabbalah L’Am Association, All rights reserved"
+      "rights": "Bnei Baruch – Kabbalah L’Am Association, All rights reserved",
+      "study": "Study Materials",
+      "topics": "Kabbalah Topics",
+      "events": "Kabbalah Events",
+      "media": "Media"
     }
   },
   "filters": {
-    "search": {
-      "by": "Filter Results by:"
-    },
-    "lessons": {
-      "by": "Filter Lessons by:"
-    },
-    "programs": {
-      "by": "Filter Programs by:"
-    },
-    "full-program": {
-      "by": "Filter Episodes by:"
-    },
-    "events": {
-      "by": "Filter Events by:"
-    },
-    "lectures": {
-      "by": "Filter Items by:"
-    },
-    "lectures-collection": {
-      "by": "Filter Items by:"
-    },
-    "publications": {
-      "by": "Filter Articles by:"
-    },
-    "publications-collection": {
-      "by": "Filter Articles by:"
-    },
-    "sources": {
-      "by": "Choose Source:"
-    },
+    "by": "Filter by:",
     "date-filter": {
       "label": "Date",
       "selectTitle": "Select a date range",
@@ -81,9 +56,12 @@
       "recently-updated": "Recently Updated",
       "last-updated": "Last updated on"
     },
-    "event-types-filter": {
-      "label": "Types",
-      "all": "All Events",
+    "locations-filter": {
+      "label": "Locations",
+      "allItem": "All"
+    },
+    "holidays-filter": {
+      "label": "Holidays",
       "allItem": "All"
     },
     "years-filter": {
@@ -178,6 +156,17 @@
     "header": {
       "text": "Events",
       "subtext": "Today, the wisdom of Kabbalah is already everywhere in the world. In this section you will be able to see events, conventions and special meetings of the \"Kabbalah L’Am\" association in Israel and abroad."
+    },
+    "tabs": {
+      "conventions": "Conventions",
+      "holidays": "Holidays",
+      "picnics": "Picnics",
+      "unity-days": "Unity Days",
+      "friends-gatherings": "Friends Gatherings",
+      "meals": "Meals"
+    },
+    "list": {
+      "item_from": "Item of:"
     },
     "ALL_EVENTS": "All Events",
     "no-matches": "No matching events found",

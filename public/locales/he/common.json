@@ -17,40 +17,15 @@
     },
     "footer": {
       "copyright": "© כל הזכויות שמורות 2003-{{year}}",
-      "rights": "בני ברוך - קבלה לעם"
+      "rights": "בני ברוך - קבלה לעם",
+      "study": "לימודי קבלה",
+      "topics": "נושאים",
+      "events": "אירועים",
+      "media": "מדיה"
     }
   },
   "filters": {
-    "search": {
-      "by": "סנן תוצאות לפי:"
-    },
-    "lessons": {
-      "by": "סנן שיעורים לפי:"
-    },
-    "programs": {
-      "by": "סנן תוכניות לפי:"
-    },
-    "full-program": {
-      "by": "סנן פרקים לפי:"
-    },
-    "events": {
-      "by": "סנן אירועים לפי:"
-    },
-    "lectures": {
-      "by": "סנן הרצאות לפי:"
-    },
-    "lectures-collection": {
-      "by": "סנן הרצאות לפי:"
-    },
-    "publications": {
-      "by": "סנן מאמרים לפי:"
-    },
-    "publications-collection": {
-      "by": "סנן מאמרים לפי:"
-    },
-    "sources": {
-      "by": "בחר מקור:"
-    },
+    "by": "סנן לפי:",
     "date-filter": {
       "label": "תאריך",
       "selectTitle": "בחר טווח תאריכים",
@@ -80,9 +55,12 @@
       "recently-updated": "עודכנו לאחרונה",
       "last-updated": "עודכן לאחרונה ב"
     },
-    "event-types-filter": {
-      "label": "סוגים",
-      "all": "כל האירועים",
+    "locations-filter": {
+      "label": "מיקום",
+      "allItem": "הכל"
+    },
+    "holidays-filter": {
+      "label": "חג \\ מועד",
       "allItem": "הכל"
     },
     "years-filter": {
@@ -177,6 +155,17 @@
     "header": {
       "text": "אירועים",
       "subtext": "בימינו, חכמת הקבלה מגיעה כבר לכל מקום בעולם. במדור זה תוכלו להתרשם מאירועים, כנסים ומפגשים מיוחדים של ארגון \"קבלה לעם\" בארץ ובעולם."
+    },
+    "tabs": {
+      "conventions": "כנסים",
+      "holidays": "חגים ומועדים",
+      "picnics": "פיקניקים",
+      "unity-days": "ערבי איחוד",
+      "friends-gatherings": "ישיבות חברים",
+      "meals": "סעודות"
+    },
+    "list": {
+      "item_from": "חלק מתוך:"
     },
     "ALL_EVENTS": "כל האירועים",
     "no-matches": "לא נמצאו אירועים מתאימים",

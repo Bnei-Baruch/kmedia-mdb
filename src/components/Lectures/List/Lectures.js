@@ -9,8 +9,24 @@ import { ErrorSplash, LoadingSplash } from '../../shared/Splash';
 import SectionHeader from '../../shared/SectionHeader';
 import Pagination from '../../pagination/Pagination';
 import ResultsPageHeader from '../../pagination/ResultsPageHeader';
-import Filters from './Filters';
+import Filters from '../../Filters/Filters';
+import filterComponents from '../../Filters/components';
 import List from './List';
+
+const filters = [
+  {
+    name: 'topics-filter',
+    component: filterComponents.TopicsFilter
+  },
+  {
+    name: 'sources-filter',
+    component: filterComponents.SourcesFilter
+  },
+  {
+    name: 'date-filter',
+    component: filterComponents.DateFilter
+  },
+];
 
 class LecturesPage extends PureComponent {
 
@@ -78,7 +94,12 @@ class LecturesPage extends PureComponent {
       <div>
         <SectionHeader section="lectures" />
         <Divider fitted />
-        <Filters onChange={onFiltersChanged} onHydrated={onFiltersHydrated} />
+        <Filters
+          namespace="lectures"
+          filters={filters}
+          onChange={onFiltersChanged}
+          onHydrated={onFiltersHydrated}
+        />
         {content}
       </div>
     );

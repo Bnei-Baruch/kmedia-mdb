@@ -14,13 +14,15 @@ import LectureCollection from '../Lectures/Collection/CollectionContainer';
 import Publications from '../Publications/List/PublicationsContainer';
 import PublicationUnit from '../Publications/Unit/UnitContainer';
 import PublicationCollection from '../Publications/Collection/CollectionContainer';
-import Events from '../Events/List/EventsContainer';
+import Events from '../Events/MainPage';
 import EventItem from '../Events/Item/EventItemContainer';
 import FullEvent from '../Events/Full/FullEventContainer';
 import LibraryHomepage from '../Library/Homepage';
 import LibraryContainer from '../Library/LibraryContainer';
 import SearchResults from '../Search/SearchResultsContainer';
 import Design from '../Design/Design';
+
+import Redirect from './Redirect';
 
 const NotImplemented = () => <h1>Not Implemented Yet</h1>;
 const NotFound       = () => <h1>Page not found</h1>;
@@ -35,14 +37,15 @@ const Routes = ({ match }) => {
     <Switch>
       <Route exact path={`${urlPrefix}/`} component={Lessons} />
       <Route exact path={`${urlPrefix}/lessons`} component={Lessons} />
-      <Route exact path={`${urlPrefix}/lessons/part/:id`} component={LessonPart} />
-      <Route exact path={`${urlPrefix}/lessons/full/:id`} component={FullLesson} />
+      <Route exact path={`${urlPrefix}/lessons/cu/:id`} component={LessonPart} />
+      <Route exact path={`${urlPrefix}/lessons/c/:id`} component={FullLesson} />
       <Route exact path={`${urlPrefix}/programs`} component={Programs} />
-      <Route exact path={`${urlPrefix}/programs/chapter/:id`} component={ProgramChapter} />
-      <Route exact path={`${urlPrefix}/programs/full/:id`} component={FullProgram} />
+      <Route exact path={`${urlPrefix}/programs/cu/:id`} component={ProgramChapter} />
+      <Route exact path={`${urlPrefix}/programs/c/:id`} component={FullProgram} />
       <Route exact path={`${urlPrefix}/events`} component={Events} />
-      <Route exact path={`${urlPrefix}/events/item/:id`} component={EventItem} />
-      <Route exact path={`${urlPrefix}/events/full/:id`} component={FullEvent} />
+      <Route exact path={`${urlPrefix}/events/:tab`} component={Events} />
+      <Route exact path={`${urlPrefix}/events/cu/:id`} component={EventItem} />
+      <Route exact path={`${urlPrefix}/events/c/:id`} component={FullEvent} />
       <Route exact path={`${urlPrefix}/lectures`} component={Lectures} />
       <Route exact path={`${urlPrefix}/lectures/cu/:id`} component={LectureUnit} />
       <Route exact path={`${urlPrefix}/lectures/c/:id`} component={LectureCollection} />
@@ -57,6 +60,15 @@ const Routes = ({ match }) => {
       <Route exact path={`${urlPrefix}/search`} component={SearchResults} />
       <Route exact path={`${urlPrefix}/design`} component={Design} />
       <Route exact path={`${urlPrefix}/design2`} component={Lessons} />
+
+      /* Old routes - redirect for now */
+      <Redirect from={`${urlPrefix}/lessons/part/:id`} to={`${urlPrefix}/lessons/cu/:id`} />
+      <Redirect from={`${urlPrefix}/lessons/full/:id`} to={`${urlPrefix}/lessons/c/:id`} />
+      <Redirect from={`${urlPrefix}/programs/chapter/:id`} to={`${urlPrefix}/programs/cu/:id`} />
+      <Redirect from={`${urlPrefix}/programs/full/:id`} to={`${urlPrefix}/programs/c/:id`} />
+      <Redirect from={`${urlPrefix}/events/item/:id`} to={`${urlPrefix}/events/cu/:id`} />
+      <Redirect from={`${urlPrefix}/events/full/:id`} to={`${urlPrefix}/events/c/:id`} />
+
       <Route component={NotFound} />
     </Switch>
   );

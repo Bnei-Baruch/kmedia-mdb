@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Container, Header, Item } from 'semantic-ui-react';
 
-import { formatDuration, formatError, neighborIndices } from '../../../../helpers/utils';
+import { canonicalLink, formatDuration, formatError, neighborIndices } from '../../../../helpers/utils';
 import * as shapes from '../../../shapes';
 import { ErrorSplash, LoadingSplash } from '../../../shared/Splash';
 import Link from '../../../Language/MultiLanguageLink';
@@ -37,7 +37,7 @@ const RelevantParts = (props) => {
       <Item.Group divided link>
         {
           otherParts.reverse().map(part => (
-            <Item as={Link} key={part.id} to={`/programs/chapter/${part.id}`}>
+            <Item as={Link} key={part.id} to={canonicalLink(part)}>
               <Item.Image size="small">
                 <UnitLogo unitId={part.id} collectionId={collection.id} width={150} />
               </Item.Image>
@@ -45,7 +45,7 @@ const RelevantParts = (props) => {
                 <Header as="h5">
                   <small className="text grey uppercase">
                     {t('programs.part.relevant-parts.item-title', { name: collection.ccuNames[part.id] })} - {t('values.date', { date: new Date(part.film_date) })}
-                    </small>
+                  </small>
                   <br />
                   {part.name}
                 </Header>
@@ -62,7 +62,7 @@ const RelevantParts = (props) => {
               fluid
               as={Link}
               textAlign="right"
-              to={`/programs/full/${collection.id}`}
+              to={canonicalLink(collection)}
             >
               {t('buttons.more')} &raquo;
             </Container>

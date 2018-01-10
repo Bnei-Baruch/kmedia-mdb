@@ -153,8 +153,6 @@ class AvSeekBar extends Component {
     this.wasMouseDown         = true;
     this.isPlayingOnMouseDown = this.props.media.isPlaying;
 
-    this.props.media.pause();
-
     if (this.sliceStartHandle && e.target === this.sliceStartHandle.getKnobElement()) {
       this.sliceStartActive = true;
     } else if (this.sliceEndHandle && e.target === this.sliceEndHandle.getKnobElement()) {
@@ -202,18 +200,10 @@ class AvSeekBar extends Component {
 
       if (typeof clientX !== 'undefined') {
         // pause when dragging handles
-        if (this.sliceStartActive === true || this.sliceEndActive === true) {
-          this.props.media.pause();
-        }
 
         const seekPosition = this.getSeekPositionFromClientX(clientX);
         media.seekTo(seekPosition);
         this.setState({ playPoint: seekPosition });
-      }
-
-      // only play if media was playing prior to mouseDown
-      if (!this.sliceStartActive && !this.sliceEndActive && this.isPlayingOnMouseDown) {
-        this.props.media.play();
       }
 
       this.sliceStartActive = false;
