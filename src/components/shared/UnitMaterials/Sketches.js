@@ -4,6 +4,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
+import { Container, Divider, Segment } from 'semantic-ui-react';
+
 import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { formatError } from '../../../helpers/utils';
 import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
@@ -12,7 +14,6 @@ import { actions, selectors } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
-import { Container, Divider, Segment } from 'semantic-ui-react';
 import ButtonsLanguageSelector from '../../Language/Selector/ButtonsLanguageSelector';
 
 class Sketches extends React.Component {
