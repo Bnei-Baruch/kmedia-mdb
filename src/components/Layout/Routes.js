@@ -5,15 +5,15 @@ import * as shapes from '../shapes';
 import Lessons from '../Lessons/List/LessonsContainer';
 import LessonPart from '../Lessons/Part/LessonPartContainer';
 import FullLesson from '../Lessons/Full/FullLessonContainer';
-import Programs from '../Programs/List/Container2';
+import Programs from '../Programs/List';
 import ProgramChapter from '../Programs/Chapter/ProgramChapterContainer';
-import FullProgram from '../Programs/Full/FullProgramContainer';
-import Lectures from '../Lectures/List/LecturesContainer';
+import ProgramCollection from '../Programs/Collection';
+import Lectures from '../Lectures/List';
 import LectureUnit from '../Lectures/Unit/UnitContainer';
-import LectureCollection from '../Lectures/Collection/CollectionContainer';
-import Publications from '../Publications/List/Container2';
+import LectureCollection from '../Lectures/Collection';
+import Publications from '../Publications/List';
 import PublicationUnit from '../Publications/Unit/UnitContainer';
-import PublicationCollection from '../Publications/Collection/CollectionContainer';
+import PublicationCollection from '../Publications/Collection';
 import Events from '../Events/MainPage';
 import EventItem from '../Events/Item/EventItemContainer';
 import FullEvent from '../Events/Full/FullEventContainer';
@@ -41,7 +41,7 @@ const Routes = ({ match }) => {
       <Route exact path={`${urlPrefix}/lessons/c/:id`} component={FullLesson} />
       <Route exact path={`${urlPrefix}/programs`} component={Programs} />
       <Route exact path={`${urlPrefix}/programs/cu/:id`} component={ProgramChapter} />
-      <Route exact path={`${urlPrefix}/programs/c/:id`} component={FullProgram} />
+      <Route exact path={`${urlPrefix}/programs/c/:id`} component={ProgramCollection} />
       <Route exact path={`${urlPrefix}/events`} component={Events} />
       <Route exact path={`${urlPrefix}/events/:tab`} component={Events} />
       <Route exact path={`${urlPrefix}/events/cu/:id`} component={EventItem} />

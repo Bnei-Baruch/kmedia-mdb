@@ -18,6 +18,20 @@ const filters = {
     { name: 'sources-filter', component: filterComponents.SourcesFilter },
     { name: 'date-filter', component: filterComponents.DateFilter },
   ],
+  'programs-collection': [
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter },
+  ],
+  'lectures': [
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
+    { name: 'sources-filter', component: filterComponents.SourcesFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter },
+  ],
+  'lectures-collection': [
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
+    { name: 'sources-filter', component: filterComponents.SourcesFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter },
+  ],
   'events-friends-gatherings': [
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
@@ -25,6 +39,9 @@ const filters = {
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
   'publications': [
+    { name: 'date-filter', component: filterComponents.DateFilter }
+  ],
+  'publications-collection': [
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
 };

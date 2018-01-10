@@ -99,16 +99,8 @@
     "loading": "טוען",
     "loading-subtext": "תיכף מגיע",
     "server-error": "שגיאת שרת",
-    "lesson-not-found": "שיעור לא קיים",
-    "lesson-not-found-subtext": "נסה לחפש ב <1>רשימת השיעורים</1>...",
-    "program-not-found": "תוכנית לא קיימת",
-    "program-not-found-subtext": "נסה לחפש ב <1>רשימת התוכניות</1>...",
-    "event-not-found": "אירוע לא קיים",
-    "event-not-found-subtext": "נסה לחפש ב <1>רשימת האירועים</1>...",
-    "lecture-not-found": "הרצאה לא קיימת",
-    "lecture-not-found-subtext": "נסה לחפש ב <1>רשימת ההרצאות</1>...",
-    "publication-not-found": "פרסום לא קיים",
-    "publication-not-found-subtext": "נסה לחפש ב <1>רשימת הפרסומים</1>...",
+    "not-found": "אופס!",
+    "not-found-subtext": "אנחנו לא מצליחים למצוא את מה שאת מחפש",
     "no-files": "לא נמצאו קבצים",
     "no-playable-files": "לא נמצאו קבצים מתאימים לתצוגה",
     "no-results": "לא נמצאו תוצאות",
@@ -263,6 +255,15 @@
     "cu": {
       "relevant-parts": {
         "title": "מאמרים נוספים מאותו האוסף"
+      }
+    }
+  },
+  "pages": {
+    "collection": {
+      "items": {
+        "programs-collection": "פרקים",
+        "lectures-collection": "חלקים",
+        "publications-collection": "מאמרים"
       }
     }
   },

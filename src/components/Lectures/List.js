@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import { List, Table } from 'semantic-ui-react';
 
-import { CT_ARTICLE } from '../../../helpers/consts';
-import { canonicalLink } from '../../../helpers/utils';
-import { CollectionsBreakdown } from '../../../helpers/mdb';
-import UnitList from '../../pages/UnitList/Container';
-import Link from '../../Language/MultiLanguageLink';
+import { CT_CHILDREN_LESSON, CT_LECTURE, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON } from '../../helpers/consts';
+import { canonicalLink } from '../../helpers/utils';
+import { CollectionsBreakdown } from '../../helpers/mdb';
+import UnitList from '../pages/UnitList/Container';
+import Link from '../Language/MultiLanguageLink';
+import UnitLogo from '../shared/Logo/UnitLogo';
 
-const renderUnit = (unit, t) => {
+export const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
-  const articles  = breakdown.getArticles();
+  const lectures  = breakdown.getLectures();
 
-  const relatedItems = articles.map(x =>
+  const relatedItems = lectures.map(x =>
     (
       <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
         {x.name || '☠ no name'}
@@ -29,13 +30,20 @@ const renderUnit = (unit, t) => {
       <Table.Cell collapsing singleLine width={1}>
         <strong>{filmDate}</strong>
       </Table.Cell>
+      <Table.Cell collapsing width={1}>
+        <UnitLogo
+          fluid
+          unitId={unit.id}
+          collectionId={lectures.length > 0 ? lectures[0].id : null}
+        />
+      </Table.Cell>
       <Table.Cell>
         <Link to={canonicalLink(unit)}>
           <strong>{unit.name || '☠ no name'}</strong>
         </Link>
         <List horizontal divided link className="index-list__item-subtitle" size="tiny">
           <List.Item>
-            <List.Header>{t('publications.list.item_from')}</List.Header>
+            <List.Header>{t('lectures.list.item_from')}</List.Header>
           </List.Item>
           {relatedItems}
         </List>
@@ -44,14 +52,16 @@ const renderUnit = (unit, t) => {
   );
 };
 
-class PublicationsContainer extends Component {
+class LecturesList extends Component {
 
-  extraFetchParams = () => ({ content_type: [CT_ARTICLE] });
+  extraFetchParams = () => ({
+    content_type: [CT_LECTURE, CT_WOMEN_LESSON, CT_CHILDREN_LESSON, CT_VIRTUAL_LESSON]
+  });
 
   render() {
     return (
       <UnitList
-        namespace="publications"
+        namespace="lectures"
         extraFetchParams={this.extraFetchParams}
         renderUnit={renderUnit}
       />
@@ -59,4 +69,4 @@ class PublicationsContainer extends Component {
   }
 }
 
-export default PublicationsContainer;
+export default LecturesList;

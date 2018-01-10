@@ -1,15 +1,15 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import CollectionLogo from '../../shared/Logo/CollectionLogo';
 
-class PageHeader extends PureComponent {
+class CollectionPageHeader extends PureComponent {
 
   static propTypes = {
     collection: shapes.GenericCollection,
+    namespace: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -18,7 +18,7 @@ class PageHeader extends PureComponent {
   };
 
   render() {
-    const { collection, t } = this.props;
+    const { collection, namespace, t } = this.props;
 
     return (
       <div className="section-header">
@@ -33,7 +33,7 @@ class PageHeader extends PureComponent {
                   <Header.Content>
                     {collection.name}
                     <Header.Subheader>
-                      {collection.content_units.length}&nbsp;{t('publications.c.items')}
+                      {collection.content_units.length}&nbsp;{t(`pages.collection.items.${namespace}`)}
                     </Header.Subheader>
                   </Header.Content>
                 </Header>
@@ -47,6 +47,6 @@ class PageHeader extends PureComponent {
   }
 }
 
-export default translate()(PageHeader);
+export default CollectionPageHeader;
 
 

@@ -4,19 +4,19 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { List, Table } from 'semantic-ui-react';
 
-import { CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
-import { canonicalLink } from '../../../helpers/utils';
-import { CollectionsBreakdown } from '../../../helpers/mdb';
-import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
+import { CT_VIDEO_PROGRAM_CHAPTER } from '../../helpers/consts';
+import { canonicalLink } from '../../helpers/utils';
+import { CollectionsBreakdown } from '../../helpers/mdb';
+import { actions as filtersActions, selectors as filters } from '../../redux/modules/filters';
 import {
   mapDispatch as baseMapDispatch,
   mapState as baseMapState,
   UnitListContainer
-} from '../../pages/UnitList/Container';
-import Link from '../../Language/MultiLanguageLink';
-import UnitLogo from '../../shared/Logo/UnitLogo';
+} from '../pages/UnitList/Container';
+import Link from '../Language/MultiLanguageLink';
+import UnitLogo from '../shared/Logo/UnitLogo';
 
-class ProgramsContainer extends UnitListContainer {
+class ProgramsList extends UnitListContainer {
 
   static propTypes = {
     ...UnitListContainer.propTypes,
@@ -100,7 +100,7 @@ const mapState = (state, ownProps) => {
 
   return {
     ...baseMapState(state, { ...ownProps, namespace }),
-    renderUnit: ProgramsContainer.renderUnit,
+    renderUnit: ProgramsList.renderUnit,
     shouldOpenProgramsFilter
   };
 };
@@ -114,4 +114,4 @@ function mapDispatch(dispatch) {
   };
 }
 
-export default connect(mapState, mapDispatch)(ProgramsContainer);
+export default connect(mapState, mapDispatch)(ProgramsList);

@@ -131,6 +131,4 @@ export const mapDispatch = dispatch => (
   }, dispatch)
 );
 
-export const wrap = WrappedComponent => connect(mapState, mapDispatch)(WrappedComponent);
-
-export default withRouter(wrap(UnitListContainer));
+export default withRouter(connect(mapState, mapDispatch)(UnitListContainer));
