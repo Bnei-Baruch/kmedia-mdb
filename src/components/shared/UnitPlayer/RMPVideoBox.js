@@ -107,6 +107,7 @@ class RMPVideoBox extends Component {
                   language={playableItem.language}
                   onLanguageChange={this.handleChangeLanguage}
                   t={t}
+                  preImageUrl={playableItem.preImageUrl}
                   isMobile={isMobile}
                 />
               </Media>

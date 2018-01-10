@@ -11,6 +11,7 @@ import {
   MT_VIDEO,
   PLAYABLE_MEDIA_TYPES,
 } from './consts';
+import {assetUrl} from "./Api";
 
 function calcAvailableMediaTypes(contentUnit, language) {
   if (!contentUnit) {
@@ -90,6 +91,7 @@ function playableItem(contentUnit, mediaType, language) {
     language,
     requestedLanguage,
     src: file ? physicalFile(file, true) : '',
+    preImageUrl: assetUrl(`api/thumbnail/${contentUnit.id}`),
     mediaType,
     requestedMediaType,
     availableMediaTypes,

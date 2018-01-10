@@ -24,6 +24,7 @@ import AVEditSlice from './AVEditSlice';
 import AVShareBar from './AVShareBar';
 import AVJumpBack from './AVJumpBack';
 import AVSpinner from './AVSpinner';
+import AVPreImage from './AVPreImage';
 
 const PLAYER_VOLUME_STORAGE_KEY = '@@kmedia_player_volume';
 const DEFAULT_PLAYER_VOLUME     = 0.8;
@@ -459,6 +460,7 @@ class AVPlayerRMP extends PureComponent {
           className={classNames('mediaplayer', { 'media-edit-mode': isEditMode })}
           onKeyDown={utils.keyboardControls.bind(null, media)}
         >
+          <AVPreImage src={item.preImageUrl} />
           <Player
             ref={(c) => {
               this.player = c;
