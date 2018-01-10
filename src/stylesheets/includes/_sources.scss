@@ -1,10 +1,24 @@
-.toc {
-  > div:nth-child(2) {
-    height: calc(100vh - 60px);
-    overflow: scroll;
+.source {
+  // background:pink;
+  // &.is-readble {
+  //   position: fixed;
+  //   top: 0;
+  //   left: 0;
+  //   right: 0;
+  //   bottom: 0;
+  //   z-index: 999999;
+  //   overflow: scroll;
+  // }
+  &__toc {
+    > div:nth-child(2) {
+      height: calc(100vh - 60px);
+      overflow: scroll;
+      padding: 10px;
+    }
   }
-}
-
-.source__content {
-  min-height: calc(100vh - 60px);
+  
+  &__content {
+    min-height: calc(100vh - 60px);
+  }
+  
 }

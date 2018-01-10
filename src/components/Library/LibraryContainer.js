@@ -225,7 +225,7 @@ class LibraryContainer extends Component {
     const parent = this.properParentId(this.props.sourceId);
 
     return (
-      <Grid centered columns={3}>
+      <Grid centered columns={2} className="source is-readble">
         <Grid.Row>
           <Grid.Column>
             <div ref={this.handleContextRef}>
@@ -235,9 +235,9 @@ class LibraryContainer extends Component {
                   {content}
                 </div>
                 <Rail position="left">
-                  <Sticky context={contextRef} offset={60} className="toc">
+                  <Sticky context={contextRef} offset={60} className="source__toc">
                     <p>{t('sources-library.toc')}</p>
-                    <Accordion fluid styled defaultActiveIndex={0} panels={this.toc(parent, true)} />
+                    <Accordion fluid defaultActiveIndex={0} panels={this.toc(parent, true)} />
                   </Sticky>
                 </Rail>
               </Segment>
