@@ -7,6 +7,7 @@ import 'react-image-gallery/styles/css/image-gallery.css';
 import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { formatError } from '../../../helpers/utils';
 import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
+import { physicalFile } from '../../../helpers/utils';
 import { actions, selectors } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
@@ -30,6 +31,7 @@ class Sketches extends React.Component {
 
   state = {
     zipFileId: null,
+    imageFiles: null,
     languages: null,
     language: null,
   };
@@ -49,67 +51,78 @@ class Sketches extends React.Component {
   setCurrentItem = (props, selectedLanguage) => {
     const { unit, zipIndexById, unzip } = props;
     const language = selectedLanguage ? selectedLanguage : props.language;
-    const zipFile  = this.findZipFile(unit, language);    
+    const files  = this.findZipOrImageFiles(unit, language);    
 
-    if (!zipFile) {
+    if (!files) {
       this.setState({ zipFileId: null, language });
     }
+    else if (files[0] && !files[0].name.endsWith(".zip")){
+        this.setState({ imageFiles: files, language }); //not zip, image files only
+    }
     else {
-      this.setState({ zipFileId: zipFile.id, language });
+        this.setState({ zipFileId: files.id, language });
 
-      const hasData = zipIndexById && zipIndexById[zipFile.id];
-      if (!hasData) {
-        unzip(zipFile.id);
-      }
+        const hasData = zipIndexById && zipIndexById[files.id];
+        if (!hasData) {
+          unzip(files.id);
+        }
     }
   };
 
-  findZipFile = (unit, selectedLanguage) => {
+  findZipOrImageFiles = (unit, selectedLanguage) => {
     if (Array.isArray(unit.files)) {
       //get the zip files
-      const zipFiles = unit.files.filter(this.filterZipFiles);
+      const zipFiles = unit.files.filter(this.filterZipOrImageFiles);
 
       if (!Array.isArray(zipFiles) || zipFiles.length === 0)
         return null;
 
-      //at least one zip file
+      //at least one file
       if (zipFiles.length === 1)
         return zipFiles[0];
       else {
-        //many zip files 
-        //get all existing unique languages of zipFiles 
+        //many files - get all existing unique languages
         const languages = zipFiles
                             .map((file) => file.language)
                             .filter((v, i, a) => a.indexOf(v) === i);
         this.setState({ languages });
 
         // try filter by language
-        const langZipFiles = zipFiles.filter((file) => file.language === selectedLanguage);
-
-        //sometimes there are many zipfiles for one language, so get the first of them
-        if (langZipFiles.length >= 1)
-          return langZipFiles[0];
-        else {
-          //no file by language - return the original zip file
-          const originalFile = zipFiles.filter((file) => file.language === unit.original_language);
-          return originalFile ? originalFile[0] : null;
+        let files; 
+        const langZipFiles = zipFiles.filter((file) => file.language === selectedLanguage); 
+        
+        if (Array.isArray(langZipFiles) && langZipFiles.length > 0){
+          files = this.zipOrImageFiles(langZipFiles);  
         }
+        else {
+          //no file by language - return the original file
+          const originalFiles = zipFiles.filter((file) => file.language === unit.original_language);
+          files = this.zipOrImageFiles(originalFiles);
+        }
+
+        return files;
       }
     }
-    else
+    else{
       return null;
+    }
   };
 
-  filterZipFiles = (file) => { return file.type === 'image'; }
+  filterZipOrImageFiles = (file) => { return file.type === 'image'; }
+
+  //if not zip return all image files, otherwise the first zip file 
+  zipOrImageFiles = (files) => { return !(Array.isArray(files) && files.length > 0) ? 
+                                        null : 
+                                        !files[0].name.endsWith(".zip") ? files : files[0]; }
 
   handleLanguageChanged = (e, language) => { this.setCurrentItem(this.props, language); } 
 
   handleImageError(event) { console.log('Image Gallery loading error ', event.target); }
 
   render() {
-    const { t, zipIndexById }                 = this.props;
-    const { zipFileId, languages, language }  = this.state;
-    const { wip, err, data: imageObjs }       = zipIndexById[zipFileId] || {};
+    const { t, zipIndexById }      = this.props;
+    const { zipFileId, languages, language, imageFiles }  = this.state;
+    const { wip, err, data }       = zipIndexById[zipFileId] || {};
 
     if (err) {
       if (err.response && err.response.status === 404) {
@@ -122,23 +135,28 @@ class Sketches extends React.Component {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
+    const imageObjs = imageFiles ? imageFiles : data;
+    
     if (Array.isArray(imageObjs) && imageObjs.length > 0) {
       //prepare the image array for the gallery and sort it
       const items = imageObjs
-        .map(imageGalleryItem)
+        .map(this.imageGalleryItem)
         .sort((a, b) => {
-          if (a.original < b.original)
+          if (a.original < b.original){
             return 1;
-          else if (a.original > b.original) 
+          }
+          else if (a.original > b.original){ 
             return -1;
-          else 
+          }
+          else{ 
             return 0;
+          }
         });
 
       return (
         <div>
           {
-            languages && languages.length > 0 ?
+            languages && languages.length > 1 ?
             <Container fluid textAlign="center">
               <ButtonsLanguageSelector
                 languages={languages}
@@ -158,6 +176,7 @@ class Sketches extends React.Component {
                 showBullets={false}
                 showFullscreenButton={true}
                 showIndex={true}
+                showThumbnails={items.length > 1}
                 onImageError={this.handleImageError}
               />
           </div> 
@@ -169,28 +188,37 @@ class Sketches extends React.Component {
     const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
     return <Segment basic><div style={{ direction }}>{t('messages.no-images')}</div></Segment>;
   }
-}
 
-//converts images from server format (path, size) to ImageGallery format
-const imageGalleryItem = (item) => {
-  const src = assetUrl(item.path.substr(8));
+  //converts images from server format (path, size) to ImageGallery format
+  imageGalleryItem = (item) => {
+    let src, thumbSrc, alt;
 
-  let thumbSrc = src;
-  if (!thumbSrc.startsWith('http')) {
-    thumbSrc = 'http://localhost' + thumbSrc;
+    if (item.path){
+      //opened zip file
+      src = assetUrl(item.path.substr(8));
+      alt = item.path.substr(item.path.lastIndexOf('_') + 1);
+    }
+    else{
+      //image file
+      src = physicalFile(item);
+      alt = item.name;
+    }
+
+    thumbSrc = src;
+    if (!thumbSrc.startsWith('http')){
+        thumbSrc = 'http://localhost' + src;
+    }  
+    thumbSrc = `${imaginaryUrl('thumbnail')}?${Requests.makeParams({ url: thumbSrc, width: 100 })}`;
+    
+    return {
+      original: src,
+      thumbnail: thumbSrc,
+      originalAlt: alt,
+      thumbnailAlt: `${alt}-thumbnail`,
+      thumbnailTitle: `${alt}`,
+    }
   }
-  thumbSrc = `${imaginaryUrl('thumbnail')}?${Requests.makeParams({ url: thumbSrc, width: 100 })}`;
-
-  const alt = item.path.substr(item.path.lastIndexOf('_') + 1);
-
-  return {
-    original: src,
-    thumbnail: thumbSrc,
-    originalAlt: alt,
-    thumbnailAlt: `${alt}-thumbnail`,
-    thumbnailTitle: `${alt}`,
-  };
-};
+}; //Sketches
 
 const mapState = (state) => {
   return {
