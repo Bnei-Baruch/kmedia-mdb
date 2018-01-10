@@ -10,7 +10,8 @@ import * as shapes from '../../shapes';
 import FullVideoBox from '../../shared/UnitPlayer/FullVideoBox';
 import Materials from '../../shared/UnitMaterials/Materials';
 import MediaDownloads from '../../shared/MediaDownloads';
-import Info from '../Part/Info';
+import Info from '../../pages/Unit/widgets/Info/Info';
+// import Info from '../Part/Info';
 import Playlist from './Playlist';
 
 class FullLesson extends Component {
@@ -88,7 +89,7 @@ class FullLesson extends Component {
                 <MediaDownloads unit={lesson} language={language} t={t} />
               </Grid.Column>
               <Grid.Column computer={10} tablet={8} mobile={16} className='content__main'>
-                <Info lesson={lesson} t={t} />
+                <Info unit={lesson} section="lessons" t={t} />
                 <Materials unit={lesson} t={t} />
               </Grid.Column>
             </Grid.Row>

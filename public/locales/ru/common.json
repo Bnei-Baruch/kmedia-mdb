@@ -133,9 +133,11 @@
     },
     "ALL_EVENTS": "Все События",
     "no-matches": "Событие не найдено",
-    "part": {
-      "relevant-parts": {
-        "title": "Остальные части того же события"
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Остальные части того же события"
+        }
       }
     }
   },
@@ -147,15 +149,12 @@
     "list": {
       "related": "Относятся к"
     },
-    "part": {
-      "info": {
-        "tags": "Теги",
-        "sources": "Источники",
-        "related-event": "Относится к событию"
-      },
-      "relevant-parts": {
-        "title": "Остальные части того же урока",
-        "item-title": "Часть {{name}}"
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Остальные части того же урока",
+          "item-title": "Часть {{name}}"
+        }
       }
     }
   },
@@ -177,22 +176,34 @@
     "list": {
       "episode_from": "Часть из:"
     },
-    "full": {
-      "episodes": "Эпизод(ов)"
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Остальные части той же программы",
+          "item-title": "Часть {{name}}"
+        }
+      }
+    }
+  },
+  "pages": {
+    "collection": {
+      "items": {
+        "programs-collection": "Эпизод(ов)",
+        "lectures-collection": "Item(s)",
+        "publications-collection": "Articles(s)"
+      }
     },
-    "part": {
+    "unit": {
       "info": {
-        "tags": "Теги",
         "sources": "Источники",
-        "related-event": "Относится к событию"
+        "topics": "Теги",
+        "collections": "Относится к событию"
       },
-      "materials": {
-        "summary": "Краткое содержание",
-        "transcription": "Стенограмма"
-      },
-      "relevant-parts": {
-        "title": "Остальные части той же программы",
-        "item-title": "Часть {{name}}"
+      "recommended": {
+        "same-collection": {
+          "title": "Other item from the same collection",
+          "item-title": "Item {{name}}"
+        }
       }
     }
   },

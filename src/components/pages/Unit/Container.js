@@ -2,20 +2,22 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
-import { actions, selectors } from '../../../redux/modules/lectures';
+import { actions, selectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as mdb } from '../../../redux/modules/mdb';
 import * as shapes from '../../shapes';
-import Unit from './Unit';
+import Page from './Page';
 
-class LectureUnitContainer extends Component {
+export class UnitContainer extends Component {
+
   static propTypes = {
     match: shapes.RouterMatch.isRequired,
-    language: PropTypes.string.isRequired,
-    unit: shapes.Lecture,
+    unit: shapes.ContentUnit,
     wip: shapes.WIP,
     err: shapes.Error,
+    section: PropTypes.string,
+    language: PropTypes.string.isRequired,
     fetchUnit: PropTypes.func.isRequired,
   };
 
@@ -23,6 +25,7 @@ class LectureUnitContainer extends Component {
     unit: null,
     wip: false,
     err: null,
+    section: '',
   };
 
   componentDidMount() {
@@ -54,29 +57,34 @@ class LectureUnitContainer extends Component {
   };
 
   render() {
-    const { language, unit, wip, err } = this.props;
+    const { language, unit, wip, err, section } = this.props;
     return (
-      <Unit
+      <Page
         unit={wip || err ? null : unit}
         language={language}
         wip={wip}
         err={err}
+        section={section}
       />
     );
   }
 }
 
-export default connect(
-  (state, ownProps) => {
-    const id = ownProps.match.params.id;
-    return {
-      unit: mdb.getDenormContentUnit(state.mdb, id),
-      wip: selectors.getWip(state.lectures).units[id],
-      err: selectors.getErrors(state.lectures).units[id],
-      language: settings.getLanguage(state.settings),
-    };
-  },
-  dispatch => bindActionCreators({
+const mapState = (state, ownProps) => {
+  const id = ownProps.match.params.id;
+  return {
+    unit: selectors.getDenormContentUnit(state.mdb, id),
+    wip: selectors.getWip(state.mdb).units[id],
+    err: selectors.getErrors(state.mdb).units[id],
+    language: settings.getLanguage(state.settings),
+  };
+};
+
+const mapDispatch = dispatch =>
+  bindActionCreators({
     fetchUnit: actions.fetchUnit,
-  }, dispatch)
-)(LectureUnitContainer);
+  }, dispatch);
+
+export const wrap = WrappedComponent => withRouter(connect(mapState, mapDispatch)(WrappedComponent));
+
+export default wrap(UnitContainer);

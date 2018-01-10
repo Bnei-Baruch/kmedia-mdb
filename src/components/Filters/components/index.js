@@ -1,5 +1,4 @@
 import DateFilter from './DateFilter';
-import EventTypesFilter from './EventTypesFilter';
 import LocationsFilter from './LocationsFilter';
 import HolidaysFilter from './HolidaysFilter';
 import ProgramsFilter from './ProgramsFilter';
@@ -11,7 +10,6 @@ import YearsFilter from './YearsFilter';
 
 export default {
   DateFilter,
-  EventTypesFilter,
   LocationsFilter,
   HolidaysFilter,
   ProgramsFilter,

@@ -162,9 +162,11 @@
     },
     "ALL_EVENTS": "All Events",
     "no-matches": "No matching events found",
-    "part": {
-      "relevant-parts": {
-        "title": "Other parts from the same event"
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Other parts from the same event"
+        }
       }
     }
   },
@@ -176,15 +178,12 @@
     "list": {
       "related": "Related to"
     },
-    "part": {
-      "info": {
-        "tags": "Tags",
-        "sources": "Sources",
-        "related-event": "Related to Event"
-      },
-      "relevant-parts": {
-        "title": "Other parts from the same lesson",
-        "item-title": "Part {{name}}"
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Other parts from the same lesson",
+          "item-title": "Part {{name}}"
+        }
       }
     }
   },
@@ -206,18 +205,12 @@
     "list": {
       "episode_from": "Episode from:"
     },
-    "full": {
-      "episodes": "Episode(s)"
-    },
-    "part": {
-      "info": {
-        "tags": "Tags",
-        "sources": "Sources",
-        "related-event": "Related to Event"
-      },
-      "relevant-parts": {
-        "title": "Other parts from the same program",
-        "item-title": "Part {{name}}"
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Other parts from the same program",
+          "item-title": "Episode {{name}}"
+        }
       }
     }
   },
@@ -229,16 +222,11 @@
     "list": {
       "item_from": "Item of:"
     },
-    "c": {
-      "items": "Item(s)"
-    },
-    "cu": {
-      "info": {
-        "tags": "Tags",
-        "sources": "Sources"
-      },
-      "relevant-parts": {
-        "title": "Other items from the same series"
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Other items from the same series"
+        }
       }
     }
   },
@@ -250,12 +238,11 @@
     "list": {
       "item_from": "Item of:"
     },
-    "c": {
-      "items": "Articles(s)"
-    },
-    "cu": {
-      "relevant-parts": {
-        "title": "Other published articles in this collection"
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Other published articles in this collection"
+        }
       }
     }
   },
@@ -265,6 +252,19 @@
         "programs-collection": "Episode(s)",
         "lectures-collection": "Item(s)",
         "publications-collection": "Articles(s)"
+      }
+    },
+    "unit": {
+      "info": {
+        "sources": "Sources",
+        "topics": "Topics",
+        "collections": "Related to"
+      },
+      "recommended": {
+        "same-collection": {
+          "title": "Other item from the same collection",
+          "item-title": "Item {{name}}"
+        }
       }
     }
   },

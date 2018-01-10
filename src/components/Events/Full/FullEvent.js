@@ -10,7 +10,8 @@ import FullVideoBox from '../../shared/UnitPlayer/FullVideoBox';
 import Materials from '../../shared/UnitMaterials/Materials';
 import MediaDownloads from '../../shared/MediaDownloads';
 import Link from '../../Language/MultiLanguageLink';
-import Info from '../Item/Info';
+import Info from '../../pages/Unit/widgets/Info/Info';
+// import Info from '../Item/Info';
 // import PageHeader from './PageHeader';
 // import EventMap from './EventMap';
 import Playlist from './Playlist';
@@ -18,14 +19,14 @@ import Playlist from './Playlist';
 class FullEvent extends Component {
   static propTypes = {
     language: PropTypes.string.isRequired,
-    fullEvent: shapes.EventCollection,
+    collection: shapes.EventCollection,
     wip: shapes.WIP,
     err: shapes.Error,
     t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    fullEvent: null,
+    collection: null,
     wip: false,
     err: null,
   };
@@ -38,7 +39,7 @@ class FullEvent extends Component {
     this.setState({ activePart });
 
   render() {
-    const { language, fullEvent, wip, err, t } = this.props;
+    const { language, collection, wip, err, t } = this.props;
     const { activePart }                       = this.state;
 
     if (err) {
@@ -62,25 +63,25 @@ class FullEvent extends Component {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
-    if (!fullEvent || !Array.isArray(fullEvent.content_units)) {
+    if (!collection || !Array.isArray(collection.content_units)) {
       return null;
     }
 
-    const activeUnit = fullEvent.content_units[activePart];
+    const unit = collection.content_units[activePart];
     return (
       <div>
-        {/*<PageHeader item={fullEvent} />
+        {/*<PageHeader item={collection} />
           <EventMap
             language={language}
-            address={fullEvent.full_address}
-            city={fullEvent.city}
-            country={fullEvent.country}
+            address={collection.full_address}
+            city={collection.city}
+            country={collection.country}
           />*/}
         <div className="avbox">
           <Container>
             <Grid padded>
               <FullVideoBox
-                collection={fullEvent}
+                collection={collection}
                 activePart={activePart}
                 language={language}
                 t={t}
@@ -94,11 +95,11 @@ class FullEvent extends Component {
           <Grid padded reversed="tablet">
             <Grid.Row reversed="computer">
               <Grid.Column computer={6} tablet={4} mobile={16}>
-                <MediaDownloads unit={activeUnit} language={language} t={t} />
+                <MediaDownloads unit={unit} language={language} t={t} />
               </Grid.Column>
               <Grid.Column computer={10} tablet={12} mobile={16}>
-                <Info unit={activeUnit} t={t} />
-                <Materials unit={activeUnit} t={t} />
+                <Info unit={unit} t={t} />
+                <Materials unit={unit} t={t} />
               </Grid.Column>
             </Grid.Row>
           </Grid>

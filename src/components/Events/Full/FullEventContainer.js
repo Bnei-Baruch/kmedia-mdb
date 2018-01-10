@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { actions, selectors } from '../../../redux/modules/events';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { actions, selectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
 import FullEvent from './FullEvent';
@@ -13,18 +12,15 @@ class FullEventContainer extends Component {
   static propTypes = {
     match: shapes.RouterMatch.isRequired,
     language: PropTypes.string.isRequired,
-    fullEvent: shapes.EventCollection,
+    collection: shapes.EventCollection,
     wip: shapes.WipMap,
     errors: shapes.ErrorsMap,
-    fetchFullEvent: PropTypes.func.isRequired,
-    fetchEventItem: PropTypes.func.isRequired,
+    fetchCollection: PropTypes.func.isRequired,
+    fetchUnit: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    fullEvent: null,
-    // Fix: chapters to units and parts to units everywhere!!!
-    wip: { fulls: {}, items: {} },
-    errors: { fulls: {}, items: {} },
+    collection: null,
   };
 
   // TODO: Following 3 methods are copy/paste from full lesson. Consider reuse by some HOC.
@@ -37,7 +33,7 @@ class FullEventContainer extends Component {
   }
 
   askForDataIfNeeded = (props) => {
-    const { match, fullEvent, wip, errors, fetchFullEvent, fetchEventItem } = props;
+    const { match, collection, wip, errors, fetchCollection, fetchUnit } = props;
 
     // We fetch stuff if we don't have it already
     // and a request for it is not in progress or ended with an error.
@@ -48,59 +44,59 @@ class FullEventContainer extends Component {
     // once we do this we should implement this condition differently
     // see FullLessonContainer for the same problem
 
-    if (!wip.fulls.hasOwnProperty(id)) {
+    if (!wip.collections.hasOwnProperty(id)) {
       // never fetched as full so fetch now
-      fetchFullEvent(id);
+      fetchCollection(id);
     }
 
-    if (fullEvent && fullEvent.id === id && Array.isArray(fullEvent.cuIDs)) {
-      fullEvent.cuIDs.forEach((cuID) => {
-        const cu = fullEvent.content_units.find(x => x.id === cuID);
+    if (collection && collection.id === id && Array.isArray(collection.cuIDs)) {
+      collection.cuIDs.forEach((cuID) => {
+        const cu = collection.content_units.find(x => x.id === cuID);
         if (!cu || !cu.files) {
-          if (!(wip.items[cuID] || errors.items[cuID])) {
-            fetchEventItem(cuID);
+          if (!(wip.units[cuID] || errors.units[cuID])) {
+            fetchUnit(cuID);
           }
         }
       });
-    } else if (!(wip.fulls[id] || errors.fulls[id])) {
-      fetchFullEvent(id);
+    } else if (!(wip.collections[id] || errors.collections[id])) {
+      fetchCollection(id);
     }
   };
 
   render() {
-    const { match, language, fullEvent, wip: wipMap, errors } = this.props;
+    const { match, language, collection, wip: wipMap, errors } = this.props;
 
     // We're wip / err if some request is wip / err
     const id = match.params.id;
-    let wip  = wipMap.fulls[id];
-    let err  = errors.fulls[id];
-    if (fullEvent) {
-      wip = wip || (Array.isArray(fullEvent.cuIDs) && fullEvent.cuIDs.some(cuID => wipMap.items[cuID]));
+    let wip  = wipMap.collections[id];
+    let err  = errors.collections[id];
+    if (collection) {
+      wip = wip || (Array.isArray(collection.cuIDs) && collection.cuIDs.some(cuID => wipMap.units[cuID]));
       if (!err) {
-        const cuIDwithError = Array.isArray(fullEvent.cuIDs) && fullEvent.cuIDs.find(cuID => errors.items[cuID]);
-        err                 = cuIDwithError ? errors.items[cuIDwithError] : null;
+        const cuIDwithError = Array.isArray(collection.cuIDs) && collection.cuIDs.find(cuID => errors.units[cuID]);
+        err                 = cuIDwithError ? errors.units[cuIDwithError] : null;
       }
     }
 
-    return <FullEvent fullEvent={fullEvent} wip={wip} err={err} language={language} />;
+    return <FullEvent collection={collection} wip={wip} err={err} language={language} />;
   }
 }
 
 function mapState(state, props) {
-  const fullEvent = mdb.getDenormCollectionWUnits(state.mdb, props.match.params.id);
+  const collection = selectors.getDenormCollectionWUnits(state.mdb, props.match.params.id);
 
   return {
-    fullEvent,
-    wip: selectors.getWip(state.events),
-    errors: selectors.getErrors(state.events),
+    collection,
+    wip: selectors.getWip(state.mdb),
+    errors: selectors.getErrors(state.mdb),
     language: settings.getLanguage(state.settings),
   };
 }
 
 function mapDispatch(dispatch) {
   return bindActionCreators({
-    fetchFullEvent: actions.fetchFullEvent,
-    fetchEventItem: actions.fetchEventItem,
+    fetchCollection: actions.fetchCollection,
+    fetchUnit: actions.fetchUnit,
   }, dispatch);
 }
 

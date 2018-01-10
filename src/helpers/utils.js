@@ -309,6 +309,21 @@ export const neighborIndices = (idx, len, n) => {
 };
 
 /**
+ * Compare two strings for use with Array.sort
+ * @param a {string}
+ * @param b {string}
+ */
+export const strCmp = (a, b) => {
+  if (a < b) {
+    return -1;
+  } else if (a > b) {
+    return 1;
+  } else {
+    return 0;
+  }
+};
+
+/**
  * Used by shallowCompare
  * @param objA
  * @param objB

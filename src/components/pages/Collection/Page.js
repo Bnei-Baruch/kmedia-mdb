@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Table } from 'semantic-ui-react';
 
-import { canonicalLink, formatError } from '../../../helpers/utils';
+import { formatError } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
-import Link from '../../Language/MultiLanguageLink';
 import UnitList from '../../pages/UnitList/Container';
 import PageHeader from './Header';
 
