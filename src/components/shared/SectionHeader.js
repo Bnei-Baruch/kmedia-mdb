@@ -26,7 +26,7 @@ const SectionHeader = (props) => {
             Array.isArray(submenuItems) && submenuItems.length > 0 ?
               <Grid.Row>
                 <Grid.Column>
-                  <Menu secondary color="blue" children={submenuItems} />
+                  <Menu tabular size='huge' children={submenuItems} />
                 </Grid.Column>
               </Grid.Row> :
               null
