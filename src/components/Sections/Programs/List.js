@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
@@ -11,10 +10,12 @@ import { actions as filtersActions, selectors as filters } from '../../../redux/
 import {
   mapDispatch as baseMapDispatch,
   mapState as baseMapState,
-  UnitListContainer
+  UnitListContainer,
+  wrap
 } from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
+import SectionHeader from '../../shared/SectionHeader';
 
 export const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
@@ -64,7 +65,7 @@ export const renderUnit = (unit, t) => {
   );
 };
 
-class ProgramsList extends UnitListContainer {
+class MyUnitListContainer extends UnitListContainer {
 
   static propTypes = {
     ...UnitListContainer.propTypes,
@@ -84,22 +85,15 @@ class ProgramsList extends UnitListContainer {
     }
   };
 
-  extraFetchParams() {
-    return { content_type: [CT_VIDEO_PROGRAM_CHAPTER] };
-  };
-
 }
 
 const mapState = (state, ownProps) => {
-  const namespace = 'programs';
-
   // we want to open programs-filter if no filter is applied
-  const allFilters               = filters.getFilters(state.filters, namespace);
+  const allFilters               = filters.getFilters(state.filters, ownProps.namespace);
   const shouldOpenProgramsFilter = allFilters.length === 0;
 
   return {
-    ...baseMapState(state, { ...ownProps, namespace }),
-    renderUnit,
+    ...baseMapState(state, ownProps),
     shouldOpenProgramsFilter
   };
 };
@@ -113,4 +107,26 @@ function mapDispatch(dispatch) {
   };
 }
 
-export default connect(mapState, mapDispatch)(ProgramsList);
+const MyUnitList = wrap(MyUnitListContainer, mapState, mapDispatch);
+
+class ProgramsList extends Component {
+
+  extraFetchParams = () => {
+    return { content_type: [CT_VIDEO_PROGRAM_CHAPTER] };
+  };
+
+  render() {
+    return (
+      <div>
+        <SectionHeader section="programs" />
+        <MyUnitList
+          namespace="programs"
+          renderUnit={renderUnit}
+          extraFetchParams={this.extraFetchParams}
+        />
+      </div>
+    );
+  }
+}
+
+export default ProgramsList;

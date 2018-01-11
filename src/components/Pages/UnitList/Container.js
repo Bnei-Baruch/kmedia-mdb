@@ -49,7 +49,6 @@ export class UnitListContainer extends withPagination {
   componentDidMount() {
     // If filters are already hydrated, handleFiltersHydrated won't be called.
     // We'll have to ask for data here instead.
-    console.log('UnitListContainer.componentDidMount');
     if (this.props.isFiltersHydrated) {
       this.askForData(this.props);
     }
@@ -60,17 +59,14 @@ export class UnitListContainer extends withPagination {
   }
 
   handlePageChanged(pageNo) {
-    console.log('UnitListContainer.handlePageChanged');
     this.setPage(this.props, pageNo);
   }
 
   handleFiltersChanged() {
-    console.log('UnitListContainer.handleFiltersChanged');
     this.handlePageChanged(1);
   }
 
   handleFiltersHydrated() {
-    console.log('UnitListContainer.handleFiltersHydrated');
     const p = this.getPageFromLocation(this.props.location);
     this.handlePageChanged(p);
   }
@@ -131,4 +127,7 @@ export const mapDispatch = dispatch => (
   }, dispatch)
 );
 
-export default withRouter(connect(mapState, mapDispatch)(UnitListContainer));
+export const wrap = (WrappedComponent, ms=mapState, md=mapDispatch) =>
+  withRouter(connect(ms, md)(UnitListContainer));
+
+export default wrap(UnitListContainer);

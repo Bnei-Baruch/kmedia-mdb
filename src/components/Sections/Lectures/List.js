@@ -7,6 +7,7 @@ import { CollectionsBreakdown } from '../../../helpers/mdb';
 import UnitList from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
+import SectionHeader from '../../shared/SectionHeader';
 
 export const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
@@ -60,11 +61,14 @@ class LecturesList extends Component {
 
   render() {
     return (
-      <UnitList
-        namespace="lectures"
-        extraFetchParams={this.extraFetchParams}
-        renderUnit={renderUnit}
-      />
+      <div>
+        <SectionHeader section="lectures" />
+        <UnitList
+          namespace="lectures"
+          extraFetchParams={this.extraFetchParams}
+          renderUnit={renderUnit}
+        />
+      </div>
     );
   }
 }

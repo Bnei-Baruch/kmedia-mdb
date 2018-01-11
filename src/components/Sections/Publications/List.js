@@ -6,6 +6,7 @@ import { canonicalLink } from '../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import UnitList from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
+import SectionHeader from '../../shared/SectionHeader';
 
 export const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
@@ -50,11 +51,14 @@ class PublicationsList extends Component {
 
   render() {
     return (
-      <UnitList
-        namespace="publications"
-        extraFetchParams={this.extraFetchParams}
-        renderUnit={renderUnit}
-      />
+      <div>
+        <SectionHeader section="publications" />
+        <UnitList
+          namespace="publications"
+          extraFetchParams={this.extraFetchParams}
+          renderUnit={renderUnit}
+        />
+      </div>
     );
   }
 }

@@ -1,5 +1,4 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from 'react';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_DAILY_LESSON, CT_LESSON_PART } from '../../../helpers/consts';
@@ -7,12 +6,9 @@ import { canonicalLink } from '../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as lists } from '../../../redux/modules/lists';
-import {
-  mapDispatch as baseMapDispatch,
-  mapState as baseMapState,
-  UnitListContainer
-} from '../../Pages/UnitList/Container';
+import { mapState as baseMapState, UnitListContainer, wrap } from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
+import SectionHeader from '../../shared/SectionHeader';
 
 const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
 
@@ -131,12 +127,10 @@ export const renderUnitOrCollection = (item, t) => {
 };
 
 const mapState = (state, ownProps) => {
-  const namespace = 'lessons';
-  const nsState   = lists.getNamespaceState(state.lists, namespace);
+  const nsState = lists.getNamespaceState(state.lists, ownProps.namespace);
 
   return {
-    ...baseMapState(state, { ...ownProps, namespace }),
-    renderUnit: renderUnitOrCollection,
+    ...baseMapState(state, ownProps),
     items: (nsState.items || []).map(x =>
       x[1] === CT_LESSON_PART ?
         mdb.getDenormContentUnit(state.mdb, x[0]) :
@@ -144,4 +138,21 @@ const mapState = (state, ownProps) => {
   };
 };
 
-export default connect(mapState, baseMapDispatch)(UnitListContainer);
+const MyUnitList = wrap(UnitListContainer, mapState);
+
+class LessonsList extends Component {
+
+  render() {
+    return (
+      <div>
+        <SectionHeader section="lessons" />
+        <MyUnitList
+          namespace="lessons"
+          renderUnit={renderUnitOrCollection}
+        />
+      </div>
+    );
+  }
+}
+
+export default LessonsList;
