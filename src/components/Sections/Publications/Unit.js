@@ -3,14 +3,14 @@ import { Container, Grid, Header, Item } from 'semantic-ui-react';
 
 import { canonicalLink, neighborIndices, strCmp } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
-import { UnitContainer, wrap as wrapContainer } from '../../pages/Unit/Container';
-import { UnitPage, wrap as wrapPage } from '../../pages/Unit/Page';
+import { UnitContainer, wrap as wrapContainer } from '../../Pages/Unit/Container';
+import { UnitPage, wrap as wrapPage } from '../../Pages/Unit/Page';
 import {
   SameCollectionContainer,
   wrap as wrapSameCollectionContainer
-} from '../../pages/Unit/widgets/Recommended/SameCollection/Container';
-import SameCollectionWidget from '../../pages/Unit/widgets/Recommended/SameCollection/Widget';
-import TranscriptionContainer from '../../pages/Unit/widgets/UnitMaterials/Transcription/TranscriptionContainer';
+} from '../../Pages/Unit/widgets/Recommended/SameCollection/Container';
+import SameCollectionWidget from '../../Pages/Unit/widgets/Recommended/SameCollection/Widget';
+import TranscriptionContainer from '../../Pages/Unit/widgets/UnitMaterials/Transcription/TranscriptionContainer';
 
 class MySameCollectionWidget extends SameCollectionWidget {
 

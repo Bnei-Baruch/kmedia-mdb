@@ -4,14 +4,14 @@ import { Container, Header, Item } from 'semantic-ui-react';
 import { canonicalLink, formatDuration, neighborIndices } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
-import { UnitContainer, wrap as wrapContainer } from '../../pages/Unit/Container';
-import { UnitPage, wrap as wrapPage } from '../../pages/Unit/Page';
+import { UnitContainer, wrap as wrapContainer } from '../../Pages/Unit/Container';
+import { UnitPage, wrap as wrapPage } from '../../Pages/Unit/Page';
 import {
   SameCollectionContainer,
   wrap as wrapSameCollectionContainer
-} from '../../pages/Unit/widgets/Recommended/SameCollection/Container';
-import Info from '../../pages/Unit/widgets/Info/Info';
-import SameCollectionWidget from '../../pages/Unit/widgets/Recommended/SameCollection/Widget';
+} from '../../Pages/Unit/widgets/Recommended/SameCollection/Container';
+import Info from '../../Pages/Unit/widgets/Info/Info';
+import SameCollectionWidget from '../../Pages/Unit/widgets/Recommended/SameCollection/Widget';
 
 class MySameCollectionWidget extends SameCollectionWidget {
 

@@ -4,7 +4,7 @@ import { Table } from 'semantic-ui-react';
 import { canonicalLink } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
-import Collection from '../../pages/Collection/Container';
+import Collection from '../../Pages/Collection/Container';
 
 export const renderUnit = (unit, t) => {
   let filmDate = '';

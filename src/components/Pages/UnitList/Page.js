@@ -6,8 +6,8 @@ import { Container, Divider, Table } from 'semantic-ui-react';
 import { formatError } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import { ErrorSplash, LoadingSplash } from '../../shared/Splash';
-import Pagination from '../../pagination/Pagination';
-import ResultsPageHeader from '../../pagination/ResultsPageHeader';
+import Pagination from '../../Pagination/Pagination';
+import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import Filters from '../../Filters/Filters';
 import filterComponents from '../../Filters/components';
 

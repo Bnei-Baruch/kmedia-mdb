@@ -4,7 +4,7 @@ import { List, Table } from 'semantic-ui-react';
 import { CT_CHILDREN_LESSON, CT_LECTURE, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
-import UnitList from '../../pages/UnitList/Container';
+import UnitList from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
 

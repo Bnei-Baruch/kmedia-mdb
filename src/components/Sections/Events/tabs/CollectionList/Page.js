@@ -7,7 +7,7 @@ import { Container, Divider } from 'semantic-ui-react';
 import { formatError } from '../../../../../helpers/utils';
 import * as shapes from '../../../../shapes';
 import { ErrorSplash, LoadingSplash } from '../../../../shared/Splash';
-import ResultsPageHeader from '../../../../pagination/ResultsPageHeader';
+import ResultsPageHeader from '../../../../Pagination/ResultsPageHeader';
 import filterComponents from '../../../../Filters/components/index';
 import Filters from '../../../../Filters/Filters';
 import List from './List';

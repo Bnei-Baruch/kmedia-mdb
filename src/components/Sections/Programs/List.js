@@ -12,7 +12,7 @@ import {
   mapDispatch as baseMapDispatch,
   mapState as baseMapState,
   UnitListContainer
-} from '../../pages/UnitList/Container';
+} from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
 

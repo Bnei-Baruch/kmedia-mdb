@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PlaylistCollection from '../../pages/PlaylistCollection/Container';
+import PlaylistCollection from '../../Pages/PlaylistCollection/Container';
 
 class LessonCollection extends Component {
 

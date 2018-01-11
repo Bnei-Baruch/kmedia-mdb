@@ -11,7 +11,7 @@ import {
   mapDispatch as baseMapDispatch,
   mapState as baseMapState,
   UnitListContainer
-} from '../../pages/UnitList/Container';
+} from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
 
 const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;

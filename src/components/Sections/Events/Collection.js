@@ -4,8 +4,8 @@ import { Header, Image } from 'semantic-ui-react';
 
 import { DATE_FORMAT } from '../../../helpers/consts';
 import { fromToLocalized } from '../../../helpers/date';
-import PlaylistCollection from '../../pages/PlaylistCollection/Container';
-import PlaylistWidget from '../../pages/PlaylistCollection/widgets/Playlist/Playlist';
+import PlaylistCollection from '../../Pages/PlaylistCollection/Container';
+import PlaylistWidget from '../../Pages/PlaylistCollection/widgets/Playlist/Playlist';
 import logo from '../../../images/event_logo.png';
 
 class MyPlaylistWidget extends PlaylistWidget {

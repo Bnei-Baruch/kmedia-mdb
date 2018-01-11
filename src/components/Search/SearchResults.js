@@ -11,7 +11,7 @@ import { filtersTransformer } from '../../filters';
 import * as shapes from '../shapes';
 import { ErrorSplash, LoadingSplash } from '../shared/Splash';
 import Link from '../Language/MultiLanguageLink';
-import Pagination from '../pagination/Pagination';
+import Pagination from '../Pagination/Pagination';
 
 class SearchResults extends Component {
   static propTypes = {

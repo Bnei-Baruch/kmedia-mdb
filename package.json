@@ -16,7 +16,8 @@
     "build": "npm run build-css && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "deploy": "npm run build && scp -r build/* archive@app.archive.bbdomain.org:/sites/archive-frontend "
+    "deploy": "npm run build && scp -r build/* archive@app.archive.bbdomain.org:/sites/archive-frontend ",
+    "deploy-dev": "yarn build && scp -r build/* archive@archive-dev.bbdomain.org:/sites/archive-frontend "
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

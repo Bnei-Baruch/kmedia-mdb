@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { UnitContainer, wrap as wrapContainer } from '../../pages/Unit/Container';
-import Page from '../../pages/Unit/Page';
+import { UnitContainer, wrap as wrapContainer } from '../../Pages/Unit/Container';
+import Page from '../../Pages/Unit/Page';
 
 class MyUnitContainer extends UnitContainer {
   render() {

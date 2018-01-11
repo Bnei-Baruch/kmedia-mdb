@@ -5,7 +5,7 @@ import { translate } from 'react-i18next';
 import { formatError } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
-import UnitList from '../../pages/UnitList/Container';
+import UnitList from '../../Pages/UnitList/Container';
 import PageHeader from './Header';
 
 class CollectionPage extends Component {

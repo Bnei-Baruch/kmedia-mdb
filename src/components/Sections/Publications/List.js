@@ -4,7 +4,7 @@ import { List, Table } from 'semantic-ui-react';
 import { CT_ARTICLE } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
-import UnitList from '../../pages/UnitList/Container';
+import UnitList from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
 
 export const renderUnit = (unit, t) => {
