@@ -1,16 +1,8 @@
 import axios from 'axios';
 
-const API_BACKEND = process.env.NODE_ENV === 'production' ?
-  '/backend/' :
-  process.env.REACT_APP_API_BACKEND;
-
-const ASSETS_BACKEND = process.env.NODE_ENV === 'production' ?
-  '/assets/' :
-  process.env.REACT_APP_ASSETS_BACKEND;
-
-const IMAGINARY_URL = process.env.NODE_ENV === 'production' ?
-  '/imaginary/' :
-  process.env.REACT_APP_IMAGINARY_URL;
+const API_BACKEND    = process.env.REACT_APP_API_BACKEND;
+const ASSETS_BACKEND = process.env.REACT_APP_ASSETS_BACKEND;
+const IMAGINARY_URL  = process.env.REACT_APP_IMAGINARY_URL;
 
 export const backendUrl   = path => `${API_BACKEND}${path}`;
 export const assetUrl     = path => `${ASSETS_BACKEND}${path}`;

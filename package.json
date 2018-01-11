@@ -13,11 +13,13 @@
     "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js serve-locals",
-    "build": "npm run build-css && react-scripts build",
+    "build": "sh -ac '. ./.env.${REACT_APP_ENV}; yarn build-css && react-scripts build'",
+    "build:staging": "REACT_APP_ENV=staging yarn build",
+    "build:production": "REACT_APP_ENV=production yarn build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "deploy": "npm run build && scp -r build/* archive@app.archive.bbdomain.org:/sites/archive-frontend ",
-    "deploy-dev": "yarn build && scp -r build/* archive@archive-dev.bbdomain.org:/sites/archive-frontend "
+    "deploy": "yarn build:production && scp -r build/* archive@app.archive.bbdomain.org:/sites/archive-frontend ",
+    "deploy-dev": "yarn build:staging && scp -r build/* archive@archive-dev.bbdomain.org:/sites/archive-frontend "
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

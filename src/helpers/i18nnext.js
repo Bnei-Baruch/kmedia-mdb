@@ -9,9 +9,7 @@ import { DEFAULT_LANGUAGE } from './consts';
 // import Cache from 'i18next-localstorage-cache';
 // import LanguageDetector from 'i18next-browser-languagedetector';
 
-const LOCALES_BACKEND = process.env.NODE_ENV === 'production' ?
-  process.env.PUBLIC_URL :
-  process.env.REACT_APP_LOCALES_BACKEND;
+const LOCALES_BACKEND = process.env.REACT_APP_LOCALES_BACKEND;
 
 // Initialize moment global locale to default language
 moment.locale(DEFAULT_LANGUAGE);
@@ -23,7 +21,7 @@ i18n
   .init({
 
     backend: {
-      loadPath: `${LOCALES_BACKEND}/locales/{{lng}}/{{ns}}.json`,
+      loadPath: `${LOCALES_BACKEND}locales/{{lng}}/{{ns}}.json`,
       crossDomain: true
     },
 
