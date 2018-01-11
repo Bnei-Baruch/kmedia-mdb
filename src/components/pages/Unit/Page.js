@@ -6,7 +6,7 @@ import { Container, Grid } from 'semantic-ui-react';
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
 import * as shapes from '../../shapes';
-import RMPVideoBox from '../../shared/UnitPlayer/RMPVideoBox';
+import AVBox from './widgets/AVBox/AVBox';
 import Materials from '../../shared/UnitMaterials/Materials';
 import MediaDownloads from '../../shared/MediaDownloads';
 import Info from './widgets/Info/Info';
@@ -36,7 +36,7 @@ export class UnitPage extends Component {
       <div className="avbox">
         <Container>
           <Grid centered padded>
-            <RMPVideoBox unit={unit} language={language} t={t} isSliceable />
+            <AVBox unit={unit} language={language} t={t} isSliceable />
           </Grid>
         </Container>
       </div>

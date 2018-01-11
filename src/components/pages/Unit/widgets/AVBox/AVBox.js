@@ -5,13 +5,13 @@ import { Grid } from 'semantic-ui-react';
 import { Media } from 'react-media-player';
 
 import classNames from 'classnames';
-import withIsMobile from '../../../helpers/withIsMobile';
-import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
-import playerHelper from '../../../helpers/player';
-import * as shapes from '../../shapes';
-import AVPlayer from '../../AVPlayerRMP/AVPlayerRMP';
+import withIsMobile from '../../../../../helpers/withIsMobile';
+import { MT_AUDIO, MT_VIDEO } from '../../../../../helpers/consts';
+import playerHelper from '../../../../../helpers/player';
+import * as shapes from '../../../../shapes';
+import AVPlayer from '../../../../AVPlayerRMP/AVPlayerRMP';
 
-class RMPVideoBox extends Component {
+class AVBox extends Component {
 
   static propTypes = {
     history: PropTypes.object.isRequired,
@@ -118,4 +118,4 @@ class RMPVideoBox extends Component {
   }
 }
 
-export default withIsMobile(withRouter(RMPVideoBox));
+export default withIsMobile(withRouter(AVBox));

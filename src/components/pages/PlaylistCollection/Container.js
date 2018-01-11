@@ -2,25 +2,29 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
-import FullLesson from './FullLesson';
+import Page from './Page';
 
-class FullLessonContainer extends Component {
+class PlaylistCollectionContainer extends Component {
+
   static propTypes = {
     match: shapes.RouterMatch.isRequired,
-    language: PropTypes.string.isRequired,
-    collection: shapes.LessonCollection,
+    collection: shapes.GenericCollection,
     wip: shapes.WipMap,
     errors: shapes.ErrorsMap,
+    language: PropTypes.string.isRequired,
+    PlaylistComponent: PropTypes.func,
     fetchCollection: PropTypes.func.isRequired,
     fetchUnit: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     collection: null,
+    PlaylistComponent: undefined,
   };
 
   componentDidMount() {
@@ -41,7 +45,6 @@ class FullLessonContainer extends Component {
     // TODO: this is rather disgusting.
     // we should somehow clean wip & err in redux (save memory)
     // once we do this we should implement this condition differently
-    // see FullEventContainer for the same problem
 
     if (!wip.collections.hasOwnProperty(id)) {
       // never fetched as full so fetch now
@@ -63,7 +66,7 @@ class FullLessonContainer extends Component {
   };
 
   render() {
-    const { match, language, collection, wip: wipMap, errors } = this.props;
+    const { match, language, collection, wip: wipMap, errors, PlaylistComponent } = this.props;
 
     // We're wip / err if some request is wip / err
     const id = match.params.id;
@@ -77,7 +80,15 @@ class FullLessonContainer extends Component {
       }
     }
 
-    return <FullLesson collection={collection} wip={wip} err={err} language={language} />;
+    return (
+      <Page
+        collection={collection}
+        wip={wip}
+        err={err}
+        language={language}
+        PlaylistComponent={PlaylistComponent}
+      />
+    );
   }
 }
 
@@ -99,4 +110,4 @@ function mapDispatch(dispatch) {
   }, dispatch);
 }
 
-export default connect(mapState, mapDispatch)(FullLessonContainer);
+export default withRouter(connect(mapState, mapDispatch)(PlaylistCollectionContainer));

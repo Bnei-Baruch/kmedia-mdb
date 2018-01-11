@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 
-import withIsMobile from '../../../helpers/withIsMobile';
-import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
-import { getQuery, updateQuery } from '../../../helpers/url';
-import playerHelper from '../../../helpers/player';
-import * as shapes from '../../shapes';
-import AVPlaylistPlayerRMP from '../../AVPlayerRMP/AVPlaylistPlayerRMP';
+import { MT_AUDIO, MT_VIDEO } from '../../../../../helpers/consts';
+import { getQuery, updateQuery } from '../../../../../helpers/url';
+import withIsMobile from '../../../../../helpers/withIsMobile';
+import playerHelper from '../../../../../helpers/player';
+import * as shapes from '../../../../shapes';
+import AVPlaylistPlayerRMP from '../../../../AVPlayerRMP/AVPlaylistPlayerRMP';
 
-class FullVideoBox extends Component {
+class PlaylistAVBox extends Component {
 
   static propTypes = {
     history: PropTypes.object.isRequired,
@@ -91,7 +91,7 @@ class FullVideoBox extends Component {
     }
 
     playerHelper.setLanguageInQuery(history, language);
-  }
+  };
 
   handleSwitchAV = () => {
     const { activePart, history } = this.props;
@@ -124,18 +124,16 @@ class FullVideoBox extends Component {
           />
         </Grid.Column>
         <Grid.Column className="avbox__playlist" computer={6} mobile={16}>
-
             <PlayListComponent
               collection={collection}
-              activePart={activePart}
+              selected={activePart}
               t={t}
               onItemClick={this.handlePartClick}
             />
-
         </Grid.Column>
       </Grid.Row>
     );
   }
 }
 
-export default withIsMobile(withRouter(FullVideoBox));
+export default withIsMobile(withRouter(PlaylistAVBox));

@@ -196,8 +196,8 @@
     "unit": {
       "info": {
         "sources": "Источники",
-        "topics": "Теги",
-        "collections": "Относится к событию"
+        "topics": "Темы",
+        "collections": "Относится к"
       },
       "recommended": {
         "same-collection": {

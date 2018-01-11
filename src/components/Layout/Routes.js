@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import * as shapes from '../shapes';
 import Lessons from '../Lessons/List';
 import LessonUnit from '../Lessons/Unit';
-import FullLesson from '../Lessons/Full/FullLessonContainer';
+import LessonCollection from '../Lessons/Collection';
 import Programs from '../Programs/List';
 import ProgramChapter from '../Programs/Unit';
 import ProgramCollection from '../Programs/Collection';
@@ -15,8 +15,8 @@ import Publications from '../Publications/List';
 import PublicationUnit from '../Publications/Unit';
 import PublicationCollection from '../Publications/Collection';
 import Events from '../Events/MainPage';
-import EventItem from '../Events/Unit';
-import FullEvent from '../Events/Full/FullEventContainer';
+import EventUnit from '../Events/Unit';
+import EventCollection from '../Events/Collection';
 import LibraryHomepage from '../Library/Homepage';
 import LibraryContainer from '../Library/LibraryContainer';
 import SearchResults from '../Search/SearchResultsContainer';
@@ -38,14 +38,14 @@ const Routes = ({ match }) => {
       <Route exact path={`${urlPrefix}/`} component={Lessons} />
       <Route exact path={`${urlPrefix}/lessons`} component={Lessons} />
       <Route exact path={`${urlPrefix}/lessons/cu/:id`} component={LessonUnit} />
-      <Route exact path={`${urlPrefix}/lessons/c/:id`} component={FullLesson} />
+      <Route exact path={`${urlPrefix}/lessons/c/:id`} component={LessonCollection} />
       <Route exact path={`${urlPrefix}/programs`} component={Programs} />
       <Route exact path={`${urlPrefix}/programs/cu/:id`} component={ProgramChapter} />
       <Route exact path={`${urlPrefix}/programs/c/:id`} component={ProgramCollection} />
       <Route exact path={`${urlPrefix}/events`} component={Events} />
       <Route exact path={`${urlPrefix}/events/:tab`} component={Events} />
-      <Route exact path={`${urlPrefix}/events/cu/:id`} component={EventItem} />
-      <Route exact path={`${urlPrefix}/events/c/:id`} component={FullEvent} />
+      <Route exact path={`${urlPrefix}/events/cu/:id`} component={EventUnit} />
+      <Route exact path={`${urlPrefix}/events/c/:id`} component={EventCollection} />
       <Route exact path={`${urlPrefix}/lectures`} component={Lectures} />
       <Route exact path={`${urlPrefix}/lectures/cu/:id`} component={LectureUnit} />
       <Route exact path={`${urlPrefix}/lectures/c/:id`} component={LectureCollection} />

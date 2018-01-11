@@ -1,27 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Trans, translate } from 'react-i18next';
+import { translate } from 'react-i18next';
 import { Container, Grid } from 'semantic-ui-react';
 
 import { formatError } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
-import FullVideoBox from '../../shared/UnitPlayer/FullVideoBox';
+import PlaylistAVBox from './widgets/PlaylistAVBox/PlaylistAVBox';
 import Materials from '../../shared/UnitMaterials/Materials';
 import MediaDownloads from '../../shared/MediaDownloads';
-import Link from '../../Language/MultiLanguageLink';
 import Info from '../../pages/Unit/widgets/Info/Info';
-// import Info from '../Item/Info';
-// import PageHeader from './PageHeader';
-// import EventMap from './EventMap';
-import Playlist from './Playlist';
+import Playlist from './widgets/Playlist/Playlist';
 
-class FullEvent extends Component {
+class PlaylistCollectionPage extends Component {
+
   static propTypes = {
-    language: PropTypes.string.isRequired,
-    collection: shapes.EventCollection,
+    collection: shapes.GenericCollection,
     wip: shapes.WIP,
     err: shapes.Error,
+    PlaylistComponent: PropTypes.func,
+    language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -29,64 +27,58 @@ class FullEvent extends Component {
     collection: null,
     wip: false,
     err: null,
+    PlaylistComponent: Playlist
   };
 
   state = {
-    activePart: 0,
+    selected: 0,
   };
 
-  handleActivePartChange = activePart =>
-    this.setState({ activePart });
+  handleActivePartChange = selected =>
+    this.setState({ selected });
 
   render() {
-    const { language, collection, wip, err, t } = this.props;
+    const { language, collection, wip, err, t, PlaylistComponent } = this.props;
 
     if (err) {
       if (err.response && err.response.status === 404) {
-        return (
-          <FrownSplash
-            text={t('messages.event-not-found')}
-            subtext={
-              <Trans i18nKey="messages.event-not-found-subtext">
-                Try the <Link to="/events">events list</Link>...
-              </Trans>
-            }
-          />
-        );
+        return <FrownSplash
+          text={t('messages.not-found')}
+          subtext={t('messages.not-found-subtext')}
+        />;
       }
 
-      return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
+      return <ErrorSplash
+        text={t('messages.server-error')}
+        subtext={formatError(err)}
+      />;
     }
 
     if (wip) {
-      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
+      return <LoadingSplash
+        text={t('messages.loading')}
+        subtext={t('messages.loading-subtext')}
+      />;
     }
 
     if (!collection || !Array.isArray(collection.content_units)) {
       return null;
     }
 
-    const { activePart } = this.state;
-    const unit           = collection.content_units[activePart];
+    const { selected } = this.state;
+    const unit         = collection.content_units[selected];
     return (
       <div>
-        {/*<PageHeader item={collection} />
-          <EventMap
-            language={language}
-            address={collection.full_address}
-            city={collection.city}
-            country={collection.country}
-          />*/}
         <div className="avbox">
           <Container>
             <Grid padded>
-              <FullVideoBox
+              <PlaylistAVBox
                 collection={collection}
-                activePart={activePart}
+                activePart={selected}
                 language={language}
                 t={t}
                 onActivePartChange={this.handleActivePartChange}
-                PlayListComponent={Playlist}
+                PlayListComponent={PlaylistComponent}
               />
             </Grid>
           </Container>
@@ -109,4 +101,4 @@ class FullEvent extends Component {
   }
 }
 
-export default translate()(FullEvent);
+export default translate()(PlaylistCollectionPage);

@@ -101,7 +101,7 @@ class Info extends Component {
         switch (x.content_type) {
         case CT_DAILY_LESSON:
         case CT_SPECIAL_LESSON:
-          const ct = t(`constants.content-types.${x.content_type}`);
+          const ct = t(`constants.content-types.${CT_DAILY_LESSON}`);
           const fd = t('values.date', { date: new Date(x.film_date) });
           display  = `${ct} ${fd}`;
           break;
