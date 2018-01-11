@@ -66,6 +66,10 @@ const onFailure = (state, action) => ({
 
 const onSuccess = (state, action) => {
   const { namespace, data } = action.payload;
+  const itemNormalizer      = namespace === 'lessons' ?
+    x => [x.id, x.content_type] :
+    x => x.id;
+
   return {
     ...state,
     [namespace]: {
@@ -73,7 +77,7 @@ const onSuccess = (state, action) => {
       wip: false,
       err: null,
       total: data.total,
-      items: (data.collections || data.content_units || []).map(x => x.id),
+      items: (data.collections || data.content_units || []).map(itemNormalizer),
     }
   };
 };

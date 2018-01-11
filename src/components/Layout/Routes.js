@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import * as shapes from '../shapes';
-import Lessons from '../Lessons/List/LessonsContainer';
+import Lessons from '../Lessons/List';
 import LessonUnit from '../Lessons/Unit';
 import FullLesson from '../Lessons/Full/FullLessonContainer';
 import Programs from '../Programs/List';

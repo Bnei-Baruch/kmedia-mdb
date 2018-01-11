@@ -4,9 +4,9 @@ import { Trans, translate } from 'react-i18next';
 import { Container, Grid } from 'semantic-ui-react';
 
 import { formatError } from '../../../helpers/utils';
+import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
 import Link from '../../Language/MultiLanguageLink';
-import * as shapes from '../../shapes';
 import FullVideoBox from '../../shared/UnitPlayer/FullVideoBox';
 import Materials from '../../shared/UnitMaterials/Materials';
 import MediaDownloads from '../../shared/MediaDownloads';
@@ -17,14 +17,14 @@ import Playlist from './Playlist';
 class FullLesson extends Component {
   static propTypes = {
     language: PropTypes.string.isRequired,
-    fullLesson: shapes.LessonCollection,
+    collection: shapes.LessonCollection,
     wip: shapes.WIP,
     err: shapes.Error,
     t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    fullLesson: null,
+    collection: null,
     wip: false,
     err: null,
   };
@@ -37,7 +37,7 @@ class FullLesson extends Component {
     this.setState({ activePart });
 
   render() {
-    const { fullLesson, wip, err, language, t } = this.props;
+    const { language, collection, wip, err, t } = this.props;
 
     if (err) {
       if (err.response && err.response.status === 404) {
@@ -60,19 +60,19 @@ class FullLesson extends Component {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
 
-    if (!fullLesson) {
+    if (!collection || !Array.isArray(collection.content_units)) {
       return null;
     }
 
     const { activePart } = this.state;
-    const lesson         = fullLesson.content_units[activePart];
+    const unit           = collection.content_units[activePart];
     return (
       <div>
         <div className="avbox">
           <Container>
             <Grid padded>
               <FullVideoBox
-                collection={fullLesson}
+                collection={collection}
                 activePart={activePart}
                 language={language}
                 t={t}
@@ -85,12 +85,12 @@ class FullLesson extends Component {
         <Container>
           <Grid padded reversed="tablet">
             <Grid.Row reversed="computer">
-              <Grid.Column computer={6} tablet={8} mobile={16}  className='content__aside'>
-                <MediaDownloads unit={lesson} language={language} t={t} />
+              <Grid.Column computer={6} tablet={8} mobile={16} className="content__aside">
+                <MediaDownloads unit={unit} language={language} t={t} />
               </Grid.Column>
-              <Grid.Column computer={10} tablet={8} mobile={16} className='content__main'>
-                <Info unit={lesson} section="lessons" t={t} />
-                <Materials unit={lesson} t={t} />
+              <Grid.Column computer={10} tablet={8} mobile={16} className="content__main">
+                <Info unit={unit} section="lessons" t={t} />
+                <Materials unit={unit} t={t} />
               </Grid.Column>
             </Grid.Row>
           </Grid>

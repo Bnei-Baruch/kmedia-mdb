@@ -1,5 +1,4 @@
 import { sagas as mdb } from './mdb';
-import { sagas as lessons } from './lessons';
 import { sagas as programs } from './programs';
 import { sagas as publications } from './publications';
 import { sagas as events } from './events';
@@ -13,7 +12,6 @@ import { sagas as assets } from './assets';
 
 export default [
   ...mdb,
-  ...lessons,
   ...programs,
   ...publications,
   ...events,

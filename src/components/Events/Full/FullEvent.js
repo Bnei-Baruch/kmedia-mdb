@@ -40,7 +40,6 @@ class FullEvent extends Component {
 
   render() {
     const { language, collection, wip, err, t } = this.props;
-    const { activePart }                       = this.state;
 
     if (err) {
       if (err.response && err.response.status === 404) {
@@ -67,7 +66,8 @@ class FullEvent extends Component {
       return null;
     }
 
-    const unit = collection.content_units[activePart];
+    const { activePart } = this.state;
+    const unit           = collection.content_units[activePart];
     return (
       <div>
         {/*<PageHeader item={collection} />
@@ -94,10 +94,10 @@ class FullEvent extends Component {
         <Container>
           <Grid padded reversed="tablet">
             <Grid.Row reversed="computer">
-              <Grid.Column computer={6} tablet={4} mobile={16}>
+              <Grid.Column computer={6} tablet={8} mobile={16} className="content__aside">
                 <MediaDownloads unit={unit} language={language} t={t} />
               </Grid.Column>
-              <Grid.Column computer={10} tablet={12} mobile={16}>
+              <Grid.Column computer={10} tablet={8} mobile={16} className="content__main">
                 <Info unit={unit} t={t} />
                 <Materials unit={unit} t={t} />
               </Grid.Column>
@@ -110,4 +110,3 @@ class FullEvent extends Component {
 }
 
 export default translate()(FullEvent);
-

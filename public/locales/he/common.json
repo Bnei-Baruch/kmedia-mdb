@@ -181,7 +181,7 @@
       "recommended": {
         "same-collection": {
           "title": "חלקים נוספים מאותו שיעור",
-          "item-title": "Episode {{name}}"
+          "item-title": "חלק {{name}}"
         }
       }
     }

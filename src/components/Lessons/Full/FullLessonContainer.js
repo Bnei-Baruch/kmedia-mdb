@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { actions, selectors } from '../../../redux/modules/lessons';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { actions, selectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
 import FullLesson from './FullLesson';
@@ -13,17 +12,15 @@ class FullLessonContainer extends Component {
   static propTypes = {
     match: shapes.RouterMatch.isRequired,
     language: PropTypes.string.isRequired,
-    fullLesson: shapes.LessonCollection,
+    collection: shapes.LessonCollection,
     wip: shapes.WipMap,
     errors: shapes.ErrorsMap,
-    fetchFullLesson: PropTypes.func.isRequired,
-    fetchLessonPart: PropTypes.func.isRequired,
+    fetchCollection: PropTypes.func.isRequired,
+    fetchUnit: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    fullLesson: null,
-    wip: { fulls: {}, parts: {} },
-    errors: { fulls: {}, parts: {} },
+    collection: null,
   };
 
   componentDidMount() {
@@ -35,8 +32,7 @@ class FullLessonContainer extends Component {
   }
 
   askForDataIfNeeded = (props) => {
-    const { match, fullLesson, wip, errors, fetchFullLesson, fetchLessonPart } = props;
-
+    const { match, collection, wip, errors, fetchCollection, fetchUnit } = props;
 
     // We fetch stuff if we don't have it already
     // and a request for it is not in progress or ended with an error.
@@ -47,59 +43,59 @@ class FullLessonContainer extends Component {
     // once we do this we should implement this condition differently
     // see FullEventContainer for the same problem
 
-    if (!wip.fulls.hasOwnProperty(id)) {
+    if (!wip.collections.hasOwnProperty(id)) {
       // never fetched as full so fetch now
-      fetchFullLesson(id);
+      fetchCollection(id);
     }
 
-    if (fullLesson && fullLesson.id === id) {
-      fullLesson.cuIDs.forEach((cuID) => {
-        const cu = fullLesson.content_units.find(x => x.id === cuID);
+    if (collection && collection.id === id && Array.isArray(collection.cuIDs)) {
+      collection.cuIDs.forEach((cuID) => {
+        const cu = collection.content_units.find(x => x.id === cuID);
         if (!cu || !cu.files) {
-          if (!(wip.parts[cuID] || errors.parts[cuID])) {
-            fetchLessonPart(cuID);
+          if (!(wip.units[cuID] || errors.units[cuID])) {
+            fetchUnit(cuID);
           }
         }
       });
-    } else if (!(wip.fulls[id] || errors.fulls[id])) {
-      fetchFullLesson(id);
+    } else if (!(wip.collections[id] || errors.collections[id])) {
+      fetchCollection(id);
     }
   };
 
   render() {
-    const { match, language, fullLesson, wip: wipMap, errors } = this.props;
+    const { match, language, collection, wip: wipMap, errors } = this.props;
 
     // We're wip / err if some request is wip / err
     const id = match.params.id;
-    let wip  = wipMap.fulls[id];
-    let err  = errors.fulls[id];
-    if (fullLesson) {
-      wip = wip || fullLesson.cuIDs.some(cuID => wipMap.parts[cuID]);
+    let wip  = wipMap.collections[id];
+    let err  = errors.collections[id];
+    if (collection) {
+      wip = wip || (Array.isArray(collection.cuIDs) && collection.cuIDs.some(cuID => wipMap.units[cuID]));
       if (!err) {
-        const cuIDwithError = fullLesson.cuIDs.find(cuID => errors.parts[cuID]);
-        err                 = cuIDwithError ? errors.parts[cuIDwithError] : null;
+        const cuIDwithError = Array.isArray(collection.cuIDs) && collection.cuIDs.find(cuID => errors.units[cuID]);
+        err                 = cuIDwithError ? errors.units[cuIDwithError] : null;
       }
     }
 
-    return <FullLesson fullLesson={fullLesson} wip={wip} err={err} language={language} />;
+    return <FullLesson collection={collection} wip={wip} err={err} language={language} />;
   }
 }
 
 function mapState(state, props) {
-  const fullLesson = mdb.getDenormCollectionWUnits(state.mdb, props.match.params.id);
+  const collection = selectors.getDenormCollectionWUnits(state.mdb, props.match.params.id);
 
   return {
-    fullLesson,
-    wip: selectors.getWip(state.lessons),
-    errors: selectors.getErrors(state.lessons),
+    collection,
+    wip: selectors.getWip(state.mdb),
+    errors: selectors.getErrors(state.mdb),
     language: settings.getLanguage(state.settings),
   };
 }
 
 function mapDispatch(dispatch) {
   return bindActionCreators({
-    fetchFullLesson: actions.fetchFullLesson,
-    fetchLessonPart: actions.fetchLessonPart,
+    fetchCollection: actions.fetchCollection,
+    fetchUnit: actions.fetchUnit,
   }, dispatch);
 }
 

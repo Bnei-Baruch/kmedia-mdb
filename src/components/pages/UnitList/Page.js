@@ -12,6 +12,11 @@ import Filters from '../../Filters/Filters';
 import filterComponents from '../../Filters/components';
 
 const filters = {
+  'lessons': [
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
+    { name: 'sources-filter', component: filterComponents.SourcesFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter },
+  ],
   'programs': [
     { name: 'programs-filter', component: filterComponents.ProgramsFilter },
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
