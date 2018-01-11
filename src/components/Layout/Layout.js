@@ -9,7 +9,7 @@ import { FLAG_TO_LANGUAGE } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import OmniBox from '../Search/OmniBox';
-import GAPageView from '../GAPageView/GAPageView';
+import GAPageView from './GAPageView/GAPageView';
 import Routes from './Routes';
 import MenuItems from './MenuItems';
 import Footer from './Footer';
