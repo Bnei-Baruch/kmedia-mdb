@@ -92,6 +92,9 @@
     "buttons": {
       "edit-back": "Back to play"
     },
+    "share": {
+      "title": "watch this video"
+     },
     "error": {
       "loading": "Error loading file."
     }

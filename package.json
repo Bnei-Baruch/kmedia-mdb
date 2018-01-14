@@ -78,6 +78,7 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.1.2",
     "react-router-redux": "^5.0.0-alpha.6",
+    "react-share": "^1.19.0",
     "react-virtualized": "^9.9.0",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",

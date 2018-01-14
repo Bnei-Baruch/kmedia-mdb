@@ -91,6 +91,9 @@
     "buttons": {
       "edit-back": "חזור"
     },
+    "share": {
+      "title": "צפה בסרטון"
+     },
     "error": {
       "loading": "שגיאה בטעינת קובץ"
     }
