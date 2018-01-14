@@ -4,13 +4,16 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
+import { Container, Divider, Segment } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../../../helpers/consts';
 import { assetUrl, imaginaryUrl, Requests } from '../../../../../helpers/Api';
+import { physicalFile, strCmp } from '../../../../../helpers/utils';
 import { actions, selectors } from '../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import * as shapes from '../../../../shapes';
 import WipErr from '../../../../shared/WipErr/WipErr';
+import ButtonsLanguageSelector from '../../../../Language/Selector/ButtonsLanguageSelector';
 
 class Sketches extends React.Component {
 
@@ -28,6 +31,9 @@ class Sketches extends React.Component {
 
   state = {
     zipFileId: null,
+    imageFiles: null,
+    languages: null,
+    language: null,
   };
 
   componentDidMount() {
@@ -42,125 +48,175 @@ class Sketches extends React.Component {
   }
 
   // load data into state
-  setCurrentItem = (props) => {
+  setCurrentItem = (props, selectedLanguage) => {
     const { unit, zipIndexById, unzip } = props;
-    const zipFile                       = this.findZipFile(unit);
+    const language                      = selectedLanguage ? selectedLanguage : props.language;
+    const files                         = this.findZipOrImageFiles(unit, language);
 
-    if (!zipFile) {
-      this.setState({ zipFileId: null });
+    if (!files) {
+      this.setState({ zipFileId: null, language });
+    }
+    else if (files[0] && !files[0].name.endsWith('.zip')) {
+      this.setState({ imageFiles: files, language }); //not zip, image files only
     }
     else {
-      this.setState({ zipFileId: zipFile.id });
+      this.setState({ zipFileId: files.id, language });
 
-      const hasData = zipIndexById && zipIndexById[zipFile.id];
+      const hasData = zipIndexById && zipIndexById[files.id];
       if (!hasData) {
-        unzip(zipFile.id);
+        unzip(files.id);
       }
     }
   };
 
-  findZipFile = (unit) => {
+  findZipOrImageFiles = (unit, selectedLanguage) => {
     if (Array.isArray(unit.files)) {
       //get the zip files
-      const zipFiles = unit.files.filter(this.filterZipFile);
+      const zipFiles = unit.files.filter(this.filterZipOrImageFiles);
 
       if (!Array.isArray(zipFiles) || zipFiles.length === 0)
         return null;
 
-      //at least one zip file
+      //at least one file
       if (zipFiles.length === 1)
         return zipFiles[0];
       else {
-        //many zip files - try filter by language
-        const langZipFiles = zipFiles.filter((file) => file.language === this.props.language);
+        //many files - get all existing unique languages
+        const languages = zipFiles
+          .map((file) => file.language)
+          .filter((v, i, a) => a.indexOf(v) === i);
+        this.setState({ languages });
 
-        //sometimes there are many zipfiles for one language, so get the first of them
-        if (langZipFiles.length >= 1)
-          return langZipFiles[0];
-        else {
-          //no file by language - return the original zip file
-          const originalFile = zipFiles.filter((file) => file.language === unit.original_language);
-          return originalFile ? originalFile[0] : null;
+        // try filter by language
+        let files;
+        const langZipFiles = zipFiles.filter((file) => file.language === selectedLanguage);
+
+        if (Array.isArray(langZipFiles) && langZipFiles.length > 0) {
+          files = this.zipOrImageFiles(langZipFiles);
         }
+        else {
+          //no file by language - return the original file
+          const originalFiles = zipFiles.filter((file) => file.language === unit.original_language);
+          files               = this.zipOrImageFiles(originalFiles);
+        }
+
+        return files;
       }
     }
-    else
+    else {
       return null;
+    }
   };
 
-  filterZipFile = (file) => {
+  filterZipOrImageFiles = (file) => {
     return file.type === 'image';
   };
 
+  //if not zip return all image files, otherwise the first zip file
+  zipOrImageFiles = (files) => {
+    return !(Array.isArray(files) && files.length > 0) ?
+      null :
+      !files[0].name.endsWith('.zip') ? files : files[0];
+  };
+
+  //converts images from server format (path, size) to ImageGallery format
+  imageGalleryItem = (item) => {
+    let src, thumbSrc, alt;
+
+    if (item.path) {
+      //opened zip file
+      src = assetUrl(item.path.substr(8));
+      alt = item.path.substr(item.path.lastIndexOf('_') + 1);
+    }
+    else {
+      //image file
+      src = physicalFile(item);
+      alt = item.name;
+    }
+
+    thumbSrc = src;
+    if (!thumbSrc.startsWith('http')) {
+      thumbSrc = 'http://localhost' + src;
+    }
+    thumbSrc = `${imaginaryUrl('thumbnail')}?${Requests.makeParams({ url: thumbSrc, width: 100 })}`;
+
+    return {
+      original: src,
+      thumbnail: thumbSrc,
+      originalAlt: alt,
+      thumbnailAlt: `${alt}-thumbnail`,
+      thumbnailTitle: `${alt}`,
+    };
+  };
+
+  handleLanguageChanged = (e, language) => {
+    this.setCurrentItem(this.props, language);
+  };
+
   handleImageError(event) {
-    console.log('Image error ', event.target);
+    console.log('Image Gallery loading error ', event.target);
   }
 
   render() {
-    const { t, zipIndexById, language } = this.props;
-    const { zipFileId }                 = this.state;
-    const { wip, err, data: imageObjs } = zipIndexById[zipFileId] || {};
+    const { t, zipIndexById }                            = this.props;
+    const { zipFileId, languages, language, imageFiles } = this.state;
+    const { wip, err, data }                             = zipIndexById[zipFileId] || {};
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
       return wipErr;
     }
 
+    const imageObjs = imageFiles ? imageFiles : data;
+
     if (Array.isArray(imageObjs) && imageObjs.length > 0) {
+
       //prepare the image array for the gallery and sort it
       const items = imageObjs
-        .map(imageGalleryItem)
-        .sort((a, b) => {
-          if (a.original < b.original) {
-            return 1;
-          } else if (a.original > b.original) {
-            return -1;
-          } else {
-            return 0;
-          }
-        });
+        .map(this.imageGalleryItem)
+        .sort((a, b) => strCmp(a.original, b.original));
 
       return (
-        <div style={{ direction: 'ltr' }}>
-          <ImageGallery
-            items={items}
-            thumbnailPosition={'top'}
-            lazyLoad={true}
-            showPlayButton={false}
-            showBullets={false}
-            showFullscreenButton={false}
-            showIndex={true}
-            onImageError={this.handleImageError}
-          />
+        <div>
+          {
+            languages && languages.length > 1 ?
+              <Container fluid textAlign="center">
+                <ButtonsLanguageSelector
+                  languages={languages}
+                  defaultValue={language}
+                  t={t}
+                  onSelect={this.handleLanguageChanged}
+                />
+              </Container> :
+              null
+          }
+          <div style={{ direction: 'ltr' }}>
+            <ImageGallery
+              items={items}
+              thumbnailPosition={'top'}
+              lazyLoad={true}
+              showPlayButton={false}
+              showBullets={false}
+              showFullscreenButton={true}
+              showIndex={true}
+              showThumbnails={items.length > 1}
+              onImageError={this.handleImageError}
+            />
+          </div>
+          <Divider hidden />
         </div>
       );
     }
 
     const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
-    return <div style={{ direction }}>{t('messages.no-images')}</div>;
+    return (
+      <Segment basic>
+        <div style={{ direction }}>{t('messages.no-images')}</div>
+      </Segment>
+    );
   }
+
 }
-
-//converts images from server format (path, size) to ImageGallery format
-const imageGalleryItem = (item) => {
-  const src = assetUrl(item.path.substr(8));
-
-  let thumbSrc = src;
-  if (!thumbSrc.startsWith('http')) {
-    thumbSrc = 'http://localhost' + thumbSrc;
-  }
-  thumbSrc = `${imaginaryUrl('thumbnail')}?${Requests.makeParams({ url: thumbSrc, width: 100 })}`;
-
-  const alt = item.path.substr(item.path.lastIndexOf('_') + 1);
-
-  return {
-    original: src,
-    thumbnail: thumbSrc,
-    originalAlt: alt,
-    thumbnailAlt: `${alt}-thumbnail`,
-    thumbnailTitle: `${alt}`,
-  };
-};
 
 const mapState = (state) => {
   return {
