@@ -74,6 +74,7 @@ class AVPlaylistPlayerRMP extends Component {
               onSwitchAV={onSwitchAV}
               languages={currentItem.availableLanguages}
               language={playlist.language}
+              preImageUrl={currentItem.preImageUrl}
               onLanguageChange={onLanguageChange}
               t={t}
               // Playlist props
