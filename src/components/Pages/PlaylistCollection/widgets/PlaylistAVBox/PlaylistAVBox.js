@@ -108,14 +108,15 @@ class PlaylistAVBox extends Component {
     this.setActivePartInQuery(parseInt(data.name, 10));
 
   render() {
-    const { t, activePart, collection, PlayListComponent } = this.props;
+    const { t, activePart, PlayListComponent } = this.props;
     const { playlist } = this.state;
 
     return (
       <Grid.Row>
         <Grid.Column computer={10} mobile={16}>
           <AVPlaylistPlayer
-            playlist={playlist}
+            items={playlist.items}
+            language={playlist.language}
             activePart={activePart}
             onActivePartChange={this.setActivePartInQuery}
             onLanguageChange={this.handleChangeLanguage}
@@ -125,10 +126,10 @@ class PlaylistAVBox extends Component {
         </Grid.Column>
         <Grid.Column className="avbox__playlist" computer={6} mobile={16}>
             <PlayListComponent
-              collection={collection}
+              playlist={playlist}
               selected={activePart}
-              t={t}
               onItemClick={this.handlePartClick}
+              t={t}
             />
         </Grid.Column>
       </Grid.Row>

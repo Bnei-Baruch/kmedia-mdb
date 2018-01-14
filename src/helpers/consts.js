@@ -226,6 +226,7 @@ export const MIME_TYPE_TO_MEDIA_TYPE = Object.values(MEDIA_TYPES).reduce((acc, m
 }, {});
 
 export const TOPICS_FOR_DISPLAY = ['VUpFlBnu', '0db5BBS3', 'g3ml0jum'];
+export const EVENT_PREPARATION_TAG = 'Salvk5yF';
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
 
@@ -241,3 +242,4 @@ export const UNIT_LESSONS_TYPE        = [CT_LESSON_PART, CT_CHILDREN_LESSON, CT_
 export const UNIT_PROGRAMS_TYPE       = [CT_VIDEO_PROGRAM_CHAPTER];
 export const UNIT_EVENTS_TYPE         = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
 
+export const NO_NAME = '☠ no name';

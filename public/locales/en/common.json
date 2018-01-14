@@ -170,6 +170,14 @@
           "title": "Other parts from the same event"
         }
       }
+    },
+    "collection": {
+      "playlist": {
+        "preparation": "Preparation",
+        "lessons": "Lessons",
+        "other_parts": "Other Event Parts",
+        "after_parties": "Appendices"
+      }
     }
   },
   "lessons": {
@@ -253,7 +261,8 @@
       "items": {
         "programs-collection": "Episode(s)",
         "lectures-collection": "Item(s)",
-        "publications-collection": "Articles(s)"
+        "publications-collection": "Articles(s)",
+        "event": "Item(s)"
       }
     },
     "unit": {

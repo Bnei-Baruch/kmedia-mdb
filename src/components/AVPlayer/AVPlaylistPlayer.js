@@ -4,12 +4,13 @@ import classNames from 'classnames';
 import { Media } from 'react-media-player';
 
 import { MT_AUDIO } from '../../helpers/consts';
-import AVPlayerRMP from './AVPlayer';
+import AVPlayer from './AVPlayer';
 
-class AVPlaylistPlayerRMP extends Component {
+class AVPlaylistPlayer extends Component {
 
   static propTypes = {
-    playlist: PropTypes.object.isRequired,
+    items: PropTypes.array.isRequired,
+    language: PropTypes.string.isRequired,
     activePart: PropTypes.number.isRequired,
     onActivePartChange: PropTypes.func.isRequired,
     onLanguageChange: PropTypes.func.isRequired,
@@ -22,16 +23,16 @@ class AVPlaylistPlayerRMP extends Component {
   };
 
   onFinish = () => {
-    const { activePart, onActivePartChange, playlist } = this.props;
-    if (activePart < playlist.items.length - 1) {
+    const { activePart, onActivePartChange, items } = this.props;
+    if (activePart < items.length - 1) {
       onActivePartChange(activePart + 1);
     }
     this.setState({ autoPlay: true });
   };
 
   onNext = () => {
-    const { activePart, onActivePartChange, playlist } = this.props;
-    if (activePart < playlist.items.length - 1) {
+    const { activePart, onActivePartChange, items } = this.props;
+    if (activePart < items.length - 1) {
       onActivePartChange(activePart + 1);
     }
   };
@@ -43,14 +44,13 @@ class AVPlaylistPlayerRMP extends Component {
     }
   };
 
-  onPlay = () => this.setState({ autoPlay: true });
+  onPlay  = () => this.setState({ autoPlay: true });
   onPause = () => this.setState({ autoPlay: false });
 
   render() {
-    const { t, activePart, playlist, onSwitchAV, onLanguageChange } = this.props;
-    const { autoPlay } = this.state;
+    const { t, activePart, items, language, onSwitchAV, onLanguageChange } = this.props;
+    const { autoPlay }                                                     = this.state;
 
-    const items = playlist.items;
     const currentItem = items[activePart];
 
     // hasNext, hasPrev are not trivial as checking the indexes due to fact
@@ -65,15 +65,14 @@ class AVPlaylistPlayerRMP extends Component {
           'avbox__player--is-4x3': currentItem.film_date < '2014',
         })}
       >
-
-        <div className="avbox__media-wrapper" >
+        <div className="avbox__media-wrapper">
           <Media>
-            <AVPlayerRMP
+            <AVPlayer
               autoPlay={autoPlay}
               item={currentItem}
               onSwitchAV={onSwitchAV}
               languages={currentItem.availableLanguages}
-              language={playlist.language}
+              language={language}
               preImageUrl={currentItem.preImageUrl}
               onLanguageChange={onLanguageChange}
               t={t}
@@ -94,5 +93,4 @@ class AVPlaylistPlayerRMP extends Component {
   }
 }
 
-export default AVPlaylistPlayerRMP;
-
+export default AVPlaylistPlayer;

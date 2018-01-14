@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Table } from 'semantic-ui-react';
 
-import { DATE_FORMAT } from '../../../../../helpers/consts';
+import { DATE_FORMAT, NO_NAME } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/utils';
 import { fromToLocalized } from '../../../../../helpers/date';
 import * as shapes from '../../../../shapes';
@@ -33,7 +33,7 @@ class EventsList extends PureComponent {
         </Table.Cell>
         <Table.Cell>
           <Link to={canonicalLink(collection)}>
-            <strong>{collection.name || '⛔ NO NAME'}</strong>
+            <strong>{collection.name || NO_NAME}</strong>
           </Link>
         </Table.Cell>
       </Table.Row>
