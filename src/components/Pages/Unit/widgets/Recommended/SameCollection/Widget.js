@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Container, Header, Item } from 'semantic-ui-react';
 
-import { canonicalLink, formatDuration, formatError, neighborIndices } from '../../../../../../helpers/utils';
+import { canonicalLink, formatDuration, neighborIndices } from '../../../../../../helpers/utils';
 import * as shapes from '../../../../../shapes';
-import { ErrorSplash, LoadingSplash } from '../../../../../shared/Splash';
 import Link from '../../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../../shared/Logo/UnitLogo';
+import WipErr from '../../../../../shared/WipErr/WipErr';
 
 class SameCollection extends Component {
 
@@ -82,12 +82,9 @@ class SameCollection extends Component {
   render() {
     const { collection, wip, err, t } = this.props;
 
-    if (err) {
-      return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
-    }
-
-    if (wip) {
-      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
+    const wipErr = WipErr({ wip, err, t });
+    if (wipErr) {
+      return wipErr;
     }
 
     if (!collection || !Array.isArray(collection.content_units)) {

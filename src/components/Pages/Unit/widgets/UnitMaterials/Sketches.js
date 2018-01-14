@@ -6,12 +6,11 @@ import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
 
 import { RTL_LANGUAGES } from '../../../../../helpers/consts';
-import { formatError } from '../../../../../helpers/utils';
 import { assetUrl, imaginaryUrl, Requests } from '../../../../../helpers/Api';
 import { actions, selectors } from '../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import * as shapes from '../../../../shapes';
-import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../shared/Splash';
+import WipErr from '../../../../shared/WipErr/WipErr';
 
 class Sketches extends React.Component {
 
@@ -102,15 +101,9 @@ class Sketches extends React.Component {
     const { zipFileId }                 = this.state;
     const { wip, err, data: imageObjs } = zipIndexById[zipFileId] || {};
 
-    if (err) {
-      if (err.response && err.response.status === 404) {
-        return <FrownSplash text={t('messages.sketches-not-found')} />;
-      }
-      return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
-    }
-
-    if (wip) {
-      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
+    const wipErr = WipErr({ wip, err, t });
+    if (wipErr) {
+      return wipErr;
     }
 
     if (Array.isArray(imageObjs) && imageObjs.length > 0) {

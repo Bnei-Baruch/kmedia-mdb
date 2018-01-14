@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 
-import { formatError } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
-import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
+import WipErr from '../../shared/WipErr/WipErr';
 import UnitList from '../../Pages/UnitList/Container';
 import PageHeader from './Header';
 
@@ -30,25 +29,9 @@ class CollectionPage extends Component {
   render() {
     const { collection, wip, err, namespace, t, renderUnit } = this.props;
 
-    if (err) {
-      if (err.response && err.response.status === 404) {
-        return <FrownSplash
-          text={t('messages.not-found')}
-          subtext={t('messages.not-found-subtext')}
-        />;
-      }
-
-      return <ErrorSplash
-        text={t('messages.server-error')}
-        subtext={formatError(err)}
-      />;
-    }
-
-    if (wip) {
-      return <LoadingSplash
-        text={t('messages.loading')}
-        subtext={t('messages.loading-subtext')}
-      />;
+    const wipErr = WipErr({ wip, err, t });
+    if (wipErr) {
+      return wipErr;
     }
 
     if (!collection) {

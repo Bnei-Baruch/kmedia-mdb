@@ -4,14 +4,14 @@ import PropTypes from 'prop-types';
 import { Trans, translate } from 'react-i18next';
 import { Container, Divider, Header, Label, Table } from 'semantic-ui-react';
 
-import { canonicalLink, formatDuration, formatError, isEmpty } from '../../helpers/utils';
+import { canonicalLink, formatDuration, isEmpty } from '../../helpers/utils';
 import { getQuery } from '../../helpers/url';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { filtersTransformer } from '../../filters';
 import * as shapes from '../shapes';
-import { ErrorSplash, LoadingSplash } from '../shared/Splash';
 import Link from '../Language/MultiLanguageLink';
 import Pagination from '../Pagination/Pagination';
+import WipErr from '../shared/WipErr/WipErr';
 
 class SearchResults extends Component {
   static propTypes = {
@@ -105,23 +105,16 @@ class SearchResults extends Component {
   render() {
     const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange, cuMap } = this.props;
 
+    const wipErr = WipErr({ wip, err, t });
+    if (wipErr) {
+      return wipErr;
+    }
+
     // Query from URL (not changed until pressed Enter.
     const query = getQuery(window.location).q;
 
-    if (err) {
-      return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
-    }
-
-    if (wip) {
-      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-    }
-
     if (query === '' && !Object.values(filtersTransformer.toApiParams(filters)).length) {
-      return (
-        <div>
-          {t('search.results.empty-query')}
-        </div>
-      );
+      return <div>{t('search.results.empty-query')}</div>;
     }
 
     if (isEmpty(results)) {

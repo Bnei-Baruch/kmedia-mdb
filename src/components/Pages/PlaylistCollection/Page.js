@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { Container, Grid } from 'semantic-ui-react';
 
-import { formatError } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
-import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
-import PlaylistAVBox from './widgets/PlaylistAVBox/PlaylistAVBox';
+import WipErr from '../../shared/WipErr/WipErr';
 import Materials from '../Unit/widgets/UnitMaterials/Materials';
 import Info from '../Unit/widgets/Info/Info';
 import MediaDownloads from '../Unit/widgets/Downloads/MediaDownloads';
+import PlaylistAVBox from './widgets/PlaylistAVBox/PlaylistAVBox';
 import Playlist from './widgets/Playlist/Playlist';
 
 class PlaylistCollectionPage extends Component {
@@ -40,25 +39,9 @@ class PlaylistCollectionPage extends Component {
   render() {
     const { language, collection, wip, err, t, PlaylistComponent } = this.props;
 
-    if (err) {
-      if (err.response && err.response.status === 404) {
-        return <FrownSplash
-          text={t('messages.not-found')}
-          subtext={t('messages.not-found-subtext')}
-        />;
-      }
-
-      return <ErrorSplash
-        text={t('messages.server-error')}
-        subtext={formatError(err)}
-      />;
-    }
-
-    if (wip) {
-      return <LoadingSplash
-        text={t('messages.loading')}
-        subtext={t('messages.loading-subtext')}
-      />;
+    const wipErr = WipErr({ wip, err, t });
+    if (wipErr) {
+      return wipErr;
     }
 
     if (!collection || !Array.isArray(collection.content_units)) {

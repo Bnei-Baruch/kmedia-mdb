@@ -3,14 +3,12 @@ import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { translate } from 'react-i18next';
 import { Container, Divider } from 'semantic-ui-react';
-
-import { formatError } from '../../../../../helpers/utils';
 import * as shapes from '../../../../shapes';
-import { ErrorSplash, LoadingSplash } from '../../../../shared/Splash';
 import ResultsPageHeader from '../../../../Pagination/ResultsPageHeader';
 import filterComponents from '../../../../Filters/components/index';
 import Filters from '../../../../Filters/Filters';
 import List from './List';
+import WipErr from '../../../../shared/WipErr/WipErr';
 
 const filters = {
   'conventions': [
@@ -48,20 +46,13 @@ class TabPage extends PureComponent {
   render() {
     const { tabName, items, wip, err, t } = this.props;
 
-    let content;
-    if (err) {
-      content = <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
-    } else if (wip) {
-      content = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-    } else {
-      content = (
-        <Container className="padded">
-          <ResultsPageHeader pageNo={1} pageSize={1000} total={items.length} />
-          <Divider fitted />
-          <List items={items} t={t} />
-        </Container>
-      );
-    }
+    const content = WipErr({ wip, err, t }) || (
+      <Container className="padded">
+        <ResultsPageHeader pageNo={1} pageSize={1000} total={items.length} />
+        <Divider fitted />
+        <List items={items} t={t} />
+      </Container>
+    );
 
     return (
       <div>

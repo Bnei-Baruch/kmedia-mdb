@@ -4,10 +4,9 @@ import uniq from 'lodash/uniq';
 import { Container, Divider, Segment } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../../../../helpers/consts';
-import { formatError } from '../../../../../../helpers/utils';
 import * as shapes from '../../../../../shapes';
-import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
+import WipErr from '../../../../../shared/WipErr/WipErr';
 
 class Transcription extends Component {
 
@@ -101,16 +100,9 @@ class Transcription extends Component {
 
     const { data, wip, err } = doc2htmlById[selected.id] || {};
 
-    if (err) {
-      if (err.response && err.response.status === 404) {
-        return <FrownSplash text={t('messages.source-content-not-found')} />;
-      } else {
-        return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
-      }
-    }
-
-    if (wip) {
-      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
+    const wipErr = WipErr({ wip, err, t });
+    if (wipErr) {
+      return wipErr;
     }
 
     if (data) {
