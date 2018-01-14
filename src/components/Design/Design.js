@@ -2,6 +2,8 @@
 
 import React, { Component } from 'react';
 import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, List, Popup, Table, Card, Image, Input, Search, Label, Container, Embed, Segment } from 'semantic-ui-react';
+import DailyLessonPlaceholder from '../../images/hp_lesson_temp.png';
+import FeaturedPlaceholder from '../../images/hp_featured_temp.jpg';
 const results ={
     "search": {
       "icon": "search",
@@ -35,11 +37,78 @@ const results ={
   }
 const categoryRenderer = ({ name, icon }) => <div><Icon name={icon}/>{name}</div>
 const resultRenderer = ({ title }) => <div>{title}</div>
+
 class Design extends Component {
 
   render() {
     return (
       <div>
+          <div className='homepage'>
+            <Container className='padded'>
+              <div className='homepage__header'>
+                <Grid centered>
+                  <Grid.Row>
+                    <Grid.Column computer={12} tablet={14} mobile={16}>
+                      <Header as="h1" color="blue" className='homepage__title'>
+                        <Header.Content>
+                          Explore the wisdom of Kabbalah
+                        </Header.Content>
+                      </Header>
+                    </Grid.Column>
+                    <Grid.Column computer={12} tablet={14} mobile={16}>
+                      <div className='homepage__search'>
+                        <Input fluid action='Search' placeholder='Search...' />
+                      </div>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </div>
+            </Container>
+            <div className='homepage__featured'>
+              <Container className='padded'>
+                <Grid centered>
+                  <Grid.Row>
+                    <Grid.Column computer={6} tablet={7} mobile={16}>
+                      <div className='thumbnail'>
+                        <a href='#'>
+                          <Image className='thumbnail__image' src={DailyLessonPlaceholder} fluid />
+                          <Header as='h2' className='thumbnail__header'>
+                            <Header.Content>
+                              
+                              <Header.Subheader>
+                                1/10/2018
+                              </Header.Subheader>
+                              The Latest Daily Lesson
+                            </Header.Content>
+                          </Header>
+                        </a>
+                      </div>                    
+                    </Grid.Column>
+                    <Grid.Column computer={6} tablet={7} mobile={16}>
+                      <div className='thumbnail'>
+                        <a href='#'>
+                          <Image className='thumbnail__image' src={FeaturedPlaceholder} fluid />
+                          <Header as='h2' className='thumbnail__header'>
+                            <Header.Content>
+                              
+                              <Header.Subheader>
+                                February 2018
+                              </Header.Subheader>
+                              The World Kabbalah Congress
+                            </Header.Content>
+                          </Header>
+                        </a>
+                      </div> 
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </Container>
+            </div>
+            <Container className='padded'>            
+              <div className='homepage__sections'></div>
+            </Container>
+          </div>
+        <Header size='large' color='pink' inverted>Homepage End</Header>
         <div className='section-header'>
           <Container className='padded'>
             <Grid>
