@@ -9,6 +9,8 @@
   },
   "scripts": {
     "serve-locals": "node bin/serve-locals",
+    "cosmos": "cosmos",
+    "cosmos::export": "cosmos-export",
     "build-css": "node-sass src/ -o src/",
     "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
@@ -37,9 +39,12 @@
     "jest": "^20.0.4",
     "node-sass": "^4.5.3",
     "npm-run-all": "^4.0.2",
+    "react-cosmos": "^3.2.0",
+    "react-cosmos-test": "^3.2.0",
     "react-scripts": "1.0.17",
     "react-test-renderer": "15",
-    "regenerator-runtime": "^0.11.1"
+    "regenerator-runtime": "^0.11.1",
+    "sinon": "^4.1.3"
   },
   "dependencies": {
     "axios": "^0.17.1",
