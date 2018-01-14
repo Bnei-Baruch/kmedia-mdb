@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import * as shapes from '../../shapes';
 import { formatError } from '../../../helpers/utils';
-import { ErrorSplash, FrownSplash, LoadingSplash } from '../Splash';
+import { ErrorSplash, FrownSplash, LoadingSplash } from '../Splash/Splash';
 
 export const WipErr = (props) => {
   const { wip, err, t} = props;

@@ -5,7 +5,7 @@ import { Container, Divider, Segment } from 'semantic-ui-react';
 import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { formatError, isEmpty, shallowCompare } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
-import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash';
+import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
 import ButtonsLanguageSelector from '../../Language/Selector/ButtonsLanguageSelector';
 
 class Library extends Component {

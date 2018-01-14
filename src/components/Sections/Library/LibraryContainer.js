@@ -12,7 +12,7 @@ import { actions as sourceActions, selectors as sources } from '../../../redux/m
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
 import { formatError, isEmpty } from '../../../helpers/utils';
-import { ErrorSplash, FrownSplash } from '../../shared/Splash';
+import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import LibraryContentContainer from './LibraryContentContainer';
 
 class LibraryContainer extends Component {
