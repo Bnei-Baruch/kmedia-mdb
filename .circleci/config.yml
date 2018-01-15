@@ -2,13 +2,13 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:latest yarn
+      - image: circleci/node:latest
     steps:
       - checkout
       - run: yarn
   test:
     docker:
-      - image: circleci/node:latest yarn
+      - image: circleci/node:latest
     steps:
       - checkout
       - run: yarn
