@@ -55,16 +55,6 @@ class MyPlaylistWidget extends PlaylistWidget {
             items.map((item, index) => {
                 const { unit } = item;
 
-                let prefix = '';
-                switch (section) {
-                case 'preparation':
-                case 'appendices':
-                  prefix = t('values.date', { date: new Date(unit.film_date) });
-                  break;
-                default:
-                  break;
-                }
-
                 const mItem = (
                   <Menu.Item
                     key={unit.id}

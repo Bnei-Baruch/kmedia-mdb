@@ -169,6 +169,14 @@
           "title": "חלקים נוספים מאותו אירוע"
         }
       }
+    },
+    "collection": {
+      "playlist": {
+        "preparation": "הכנה",
+        "lessons": "שיעורים",
+        "other_parts": "חלקים שונים",
+        "appendices": "תוספות"
+      }
     }
   },
   "lessons": {
@@ -252,7 +260,8 @@
       "items": {
         "programs-collection": "פרקים",
         "lectures-collection": "חלקים",
-        "publications-collection": "מאמרים"
+        "publications-collection": "מאמרים",
+        "event": "חלקים"
       }
     },
     "unit": {

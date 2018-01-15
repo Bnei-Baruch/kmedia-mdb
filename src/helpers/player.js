@@ -125,7 +125,7 @@ function playlist(collection, mediaType, language) {
       if (fDate.isBefore(mSDate)) {
         k = 'preparation';
       } else if (fDate.isAfter(mEDate)) {
-        k = 'after_parties';
+        k = 'appendices';
       } else if (val.content_type === CT_LESSON_PART || val.content_type === CT_FULL_LESSON) {
         k = 'lessons';
 
@@ -147,11 +147,26 @@ function playlist(collection, mediaType, language) {
       return acc;
     }, {});
 
-    Object.values(breakdown).forEach(x => x.sort((a, b) => strCmp(a.unit.film_date, b.unit.film_date)));
+    // We better of sort things in the server...
+
+    // Object.values(breakdown).forEach(x => x.sort((a, b) => {
+    //   const fdCmp = strCmp(a.unit.film_date, b.unit.film_date);
+    //   if (fdCmp !== 0) {
+    //     return fdCmp;
+    //   }
+    //
+    //   // same film_date, try by ccuName
+    //   let aCcu = Object.keys(a.unit.collections || {}).find(x => x.startsWith(collection.id));
+    //   let bCcu = Object.keys(b.unit.collections || {}).find(x => x.startsWith(collection.id));
+    //
+    //   console.log('aCcu, bCcu', aCcu, bCcu);
+    //
+    //   return strCmp(aCcu, bCcu);
+    // }));
 
     let offset = 0;
     groups     = {};
-    items      = ['preparation', 'lessons', 'other_parts', 'after_parties'].reduce((acc, val) => {
+    items      = ['lessons', 'other_parts', 'preparation', 'appendices'].reduce((acc, val) => {
       const v = breakdown[val];
       if (isEmpty(v)) {
         return acc;
