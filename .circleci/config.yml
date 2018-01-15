@@ -13,6 +13,7 @@ jobs:
       - checkout
       - run: yarn
       - run: yarn test
+      - run: yarn cosmos
 workflows:
   version: 2
   test:
