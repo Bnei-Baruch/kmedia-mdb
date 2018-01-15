@@ -3,14 +3,12 @@ jobs:
   build:
     steps:
       - checkout
-      - run: |
-        yarn
+      - run: yarn
   test:
     steps:
       - checkout
-      - run: |
-        yarn
-        yarn test
+      - run: yarn
+      - run: yarn test
 workflows:
   version: 2
   test:
