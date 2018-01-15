@@ -1,21 +1,20 @@
+version: 2
 jobs:
-  docker:
-    environment:
-      PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
-
-  dependencies:
-    override:
-      - yarn
-    cache_directories:
-      - ~/.cache/yarn
-
+  build:
+    docker:
+      - image: circleci/node:latest yarn
+    steps:
+      - checkout
+      - run: yarn
   test:
-    override:
-      - yarn test
-
+    docker:
+      - image: circleci/node:latest yarn
+    steps:
+      - checkout
+      - run: yarn
+      - run: yarn test
 workflows:
   version: 2
   test:
     jobs:
       - test
-
