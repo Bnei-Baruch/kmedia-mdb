@@ -1,6 +1,8 @@
 version: 2
 jobs:
   build:
+    docker:
+      - image: buildpack-deps:trusty
     steps:
       - checkout
       - run: yarn
