@@ -1,18 +1,19 @@
 version: 2
 jobs:
-  build:
-    docker:
-      - image: circleci/node:latest yarn
-    steps:
-      - checkout
-      - run: yarn
+  docker:
+    environment:
+      PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
+
+  dependencies:
+    override:
+      - yarn
+    cache_directories:
+      - ~/.cache/yarn
+
   test:
-    docker:
-      - image: buildpack-deps:trusty
-    steps:
-      - checkout
-      - run: yarn
-      - run: yarn test
+    override:
+      - yarn test
+
 workflows:
   version: 2
   test:
