@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Table } from 'semantic-ui-react';
 
+import { NO_NAME } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
@@ -22,7 +23,7 @@ export const renderUnit = (unit, t) => {
       </Table.Cell>
       <Table.Cell>
         <Link to={canonicalLink(unit)}>
-          <strong>{unit.name || '☠ no name'}</strong>
+          <strong>{unit.name || NO_NAME}</strong>
         </Link>
       </Table.Cell>
     </Table.Row>

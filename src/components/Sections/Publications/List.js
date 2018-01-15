@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { List, Table } from 'semantic-ui-react';
 
-import { CT_ARTICLE } from '../../../helpers/consts';
+import { CT_ARTICLE, NO_NAME } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import UnitList from '../../Pages/UnitList/Container';
@@ -15,7 +15,7 @@ export const renderUnit = (unit, t) => {
   const relatedItems = articles.map(x =>
     (
       <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-        {x.name || '☠ no name'}
+        {x.name || NO_NAME}
       </List.Item>
     )
   );
@@ -32,7 +32,7 @@ export const renderUnit = (unit, t) => {
       </Table.Cell>
       <Table.Cell>
         <Link to={canonicalLink(unit)}>
-          <strong>{unit.name || '☠ no name'}</strong>
+          <strong>{unit.name || NO_NAME}</strong>
         </Link>
         <List horizontal divided link className="index-list__item-subtitle" size="tiny">
           <List.Item>
