@@ -16,7 +16,7 @@ import {
   PLAYABLE_MEDIA_TYPES,
 } from './consts';
 import { getQuery, updateQuery } from './url';
-import { isEmpty, physicalFile, strCmp } from './utils';
+import { isEmpty, physicalFile } from './utils';
 
 function calcAvailableMediaTypes(contentUnit, language) {
   if (!contentUnit) {
