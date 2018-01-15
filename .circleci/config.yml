@@ -1,0 +1,5 @@
+jobs:
+  steps:
+    - run: |
+      yarn
+      yarn tests
