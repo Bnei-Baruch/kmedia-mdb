@@ -1,5 +1,18 @@
+version: 2
 jobs:
-  steps:
-    - run: |
-      yarn
-      yarn tests
+  build:
+    steps:
+      - checkout
+      - run: |
+        yarn
+  test:
+    steps:
+      - checkout
+      - run: |
+        yarn
+        yarn test
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
