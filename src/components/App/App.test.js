@@ -48,6 +48,3 @@ describe('basic', () => {
 // * Behaviour tests
 // * Integration tests
 // * System tests (https://www.cypress.io/; jest-str -- jest system test runner, https://github.com/segmentio/nightmare; http://nightwatchjs.org/)
-
-
-
