@@ -47,8 +47,7 @@ class MyPlaylistWidget extends PlaylistWidget {
     return (
       <div key={section} className="avbox__playlist-view-section">
         <Header inverted as="h3">
-          {t(`events.collection.playlist.${section}`)}&nbsp;&nbsp;
-          <small>{items.length} {t(`pages.collection.items.event`)}</small>
+          {t(`events.collection.playlist.${section}`)}
         </Header>
         <Menu vertical fluid size="small">
           {

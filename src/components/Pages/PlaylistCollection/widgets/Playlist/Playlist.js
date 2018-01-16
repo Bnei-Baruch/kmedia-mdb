@@ -12,7 +12,7 @@ class PlaylistWidget extends Component {
   static propTypes = {
     playlist: PropTypes.object.isRequired,
     selected: PropTypes.number,
-    onItemClick: PropTypes.func.isRequired,
+    onSelectedChange: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired
   };
 
@@ -21,7 +21,7 @@ class PlaylistWidget extends Component {
   };
 
   handleItemClick = (e, data) => {
-    this.props.onItemClick(e, data);
+    this.props.onSelectedChange(parseInt(data.name, 10));
   };
 
   renderHeader() {

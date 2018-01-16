@@ -216,11 +216,26 @@ function setLanguageInQuery(history, language) {
   }));
 }
 
+function getActivePartFromQuery(location) {
+  const q = getQuery(location);
+  const p = q.ap ? parseInt(q.ap, 10) : 0;
+  return isNaN(p) || p < 0 ? 0 : p;
+}
+
+function setActivePartInQuery(history, ap) {
+  updateQuery(history, query => ({
+    ...query,
+    ap
+  }));
+}
+
 export default {
   playableItem,
   playlist,
   getMediaTypeFromQuery,
   setMediaTypeInQuery,
   getLanguageFromQuery,
-  setLanguageInQuery
+  setLanguageInQuery,
+  getActivePartFromQuery,
+  setActivePartInQuery,
 };

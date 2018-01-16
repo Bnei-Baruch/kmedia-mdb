@@ -30,10 +30,10 @@ class PlaylistCollectionPage extends Component {
   };
 
   state = {
-    selected: 0,
+    selected: null,
   };
 
-  handleActivePartChange = selected =>
+  handleSelectedChange = selected =>
     this.setState({ selected });
 
   render() {
@@ -48,8 +48,7 @@ class PlaylistCollectionPage extends Component {
       return null;
     }
 
-    const { selected } = this.state;
-    const unit         = collection.content_units[selected];
+    const { selected: unit } = this.state;
     return (
       <div>
         <div className="avbox">
@@ -57,28 +56,32 @@ class PlaylistCollectionPage extends Component {
             <Grid padded>
               <PlaylistAVBox
                 collection={collection}
-                activePart={selected}
                 language={language}
                 t={t}
-                onActivePartChange={this.handleActivePartChange}
+                onSelectedChange={this.handleSelectedChange}
                 PlayListComponent={PlaylistComponent}
               />
             </Grid>
           </Container>
         </div>
-        <Container>
-          <Grid padded reversed="tablet">
-            <Grid.Row reversed="computer">
-              <Grid.Column computer={6} tablet={8} mobile={16} className="content__aside">
-                <MediaDownloads unit={unit} language={language} t={t} />
-              </Grid.Column>
-              <Grid.Column computer={10} tablet={8} mobile={16} className="content__main">
-                <Info unit={unit} t={t} />
-                <Materials unit={unit} t={t} />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Container>
+        {
+          unit ?
+            <Container>
+              <Grid padded reversed="tablet">
+                <Grid.Row reversed="computer">
+                  <Grid.Column computer={6} tablet={8} mobile={16} className="content__aside">
+                    <MediaDownloads unit={unit} language={language} t={t} />
+                  </Grid.Column>
+                  <Grid.Column computer={10} tablet={8} mobile={16} className="content__main">
+                    <Info unit={unit} t={t} />
+                    <Materials unit={unit} t={t} />
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Container>
+            :
+            null
+        }
       </div>
     );
   }

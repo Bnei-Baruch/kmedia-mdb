@@ -10,9 +10,9 @@ class AVPlaylistPlayer extends Component {
 
   static propTypes = {
     items: PropTypes.array.isRequired,
+    selected: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
-    activePart: PropTypes.number.isRequired,
-    onActivePartChange: PropTypes.func.isRequired,
+    onSelectedChange: PropTypes.func.isRequired,
     onLanguageChange: PropTypes.func.isRequired,
     onSwitchAV: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
@@ -23,24 +23,24 @@ class AVPlaylistPlayer extends Component {
   };
 
   onFinish = () => {
-    const { activePart, onActivePartChange, items } = this.props;
-    if (activePart < items.length - 1) {
-      onActivePartChange(activePart + 1);
+    const { selected, onSelectedChange, items } = this.props;
+    if (selected < items.length - 1) {
+      onSelectedChange(selected + 1);
     }
     this.setState({ autoPlay: true });
   };
 
   onNext = () => {
-    const { activePart, onActivePartChange, items } = this.props;
-    if (activePart < items.length - 1) {
-      onActivePartChange(activePart + 1);
+    const { selected, onSelectedChange, items } = this.props;
+    if (selected < items.length - 1) {
+      onSelectedChange(selected + 1);
     }
   };
 
   onPrev = () => {
-    const { activePart, onActivePartChange } = this.props;
-    if (activePart > 0) {
-      onActivePartChange(activePart - 1);
+    const { selected, onSelectedChange } = this.props;
+    if (selected > 0) {
+      onSelectedChange(selected - 1);
     }
   };
 
@@ -48,15 +48,15 @@ class AVPlaylistPlayer extends Component {
   onPause = () => this.setState({ autoPlay: false });
 
   render() {
-    const { t, activePart, items, language, onSwitchAV, onLanguageChange } = this.props;
+    const { t, selected, items, language, onSwitchAV, onLanguageChange } = this.props;
     const { autoPlay }                                                     = this.state;
 
-    const currentItem = items[activePart];
+    const currentItem = items[selected];
 
     // hasNext, hasPrev are not trivial as checking the indexes due to fact
     // that in some languages there might be missing audio or video file.
-    const hasNext = activePart < items.length - 1 && items.slice(activePart).some(f => !!f.src);
-    const hasPrev = activePart > 0 && items.slice(0, activePart).some(f => !!f.src);
+    const hasNext = selected < items.length - 1 && items.slice(selected).some(f => !!f.src);
+    const hasPrev = selected > 0 && items.slice(0, selected).some(f => !!f.src);
 
     return (
       <div
