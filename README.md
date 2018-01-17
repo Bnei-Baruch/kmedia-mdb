@@ -40,7 +40,3 @@ Open `.env` in your favorite editor and set all variables to their appropriate v
 $ yarn start
 ```
 
-
-## License
-
-MIT
