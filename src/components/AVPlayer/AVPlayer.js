@@ -3,15 +3,14 @@ import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import debounce from 'lodash/debounce';
 import { withRouter } from 'react-router-dom';
-import { Player, withMediaProps, utils } from 'react-media-player';
+import { Player, utils, withMediaProps } from 'react-media-player';
 import classNames from 'classnames';
 import { Button, Icon } from 'semantic-ui-react';
 
-import { toHumanReadableTime, fromHumanReadableTime } from '../../helpers/time';
-
-import withIsMobile from '../../helpers/withIsMobile';
-import { parse, stringify } from '../../helpers/url';
 import { MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
+import withIsMobile from '../../helpers/withIsMobile';
+import { getQuery, updateQuery } from '../../helpers/url';
+import { fromHumanReadableTime, toHumanReadableTime } from '../../helpers/time';
 import { PLAYER_MODE } from './constants';
 import AVPlayPause from './AVPlayPause';
 import AVPlaybackRate from './AVPlaybackRate';
@@ -94,7 +93,7 @@ class AVPlayer extends PureComponent {
     let send   = Infinity;
 
     let playerMode = PLAYER_MODE.NORMAL;
-    const query    = parse(history.location.search.slice(1));
+    const query    = getQuery(history.location);
 
     if (query.sstart) {
       playerMode = PLAYER_MODE.SLICE_VIEW;
@@ -288,11 +287,12 @@ class AVPlayer extends PureComponent {
   };
 
   resetSliceQuery = () => {
-    const { history } = this.props;
-    const query       = parse(history.location.search.slice(1));
-    query.sstart      = undefined;
-    query.send        = undefined;
-    history.replace({ search: stringify(query) });
+    updateQuery(this.props.history, q => ({ ...q, sstart: undefined, send: undefined }));
+    //
+    // const query       = parse(history.location.search.slice(1));
+    // query.sstart      = undefined;
+    // query.send        = undefined;
+    // history.replace({ search: stringify(query) });
   };
 
   // Correctly fetch loaded buffers from video to show loading progress.
@@ -315,24 +315,42 @@ class AVPlayer extends PureComponent {
     const { history, media }       = this.props;
     const { sliceStart, sliceEnd } = this.state;
 
-    const query = parse(history.location.search.slice(1));
+    updateQuery(history, query => {
+      if (typeof values.sliceStart === 'undefined') {
+        query.sstart = sliceStart || 0;
+      } else {
+        query.sstart = values.sliceStart;
+      }
 
-    if (typeof values.sliceStart === 'undefined') {
-      query.sstart = sliceStart || 0;
-    } else {
-      query.sstart = values.sliceStart;
-    }
+      if (typeof values.sliceEnd === 'undefined') {
+        query.send = (!sliceEnd || sliceEnd === Infinity) ? media.duration : sliceEnd;
+      } else {
+        query.send = values.sliceEnd;
+      }
 
-    if (typeof values.sliceEnd === 'undefined') {
-      query.send = (!sliceEnd || sliceEnd === Infinity) ? media.duration : sliceEnd;
-    } else {
-      query.send = values.sliceEnd;
-    }
+      query.sstart = toHumanReadableTime(query.sstart);
+      query.send   = toHumanReadableTime(query.send);
+      return query;
+    });
 
-    query.sstart = toHumanReadableTime(query.sstart);
-    query.send   = toHumanReadableTime(query.send);
-
-    history.replace({ search: stringify(query) });
+    // const query = parse(history.location.search.slice(1));
+    //
+    // if (typeof values.sliceStart === 'undefined') {
+    //   query.sstart = sliceStart || 0;
+    // } else {
+    //   query.sstart = values.sliceStart;
+    // }
+    //
+    // if (typeof values.sliceEnd === 'undefined') {
+    //   query.send = (!sliceEnd || sliceEnd === Infinity) ? media.duration : sliceEnd;
+    // } else {
+    //   query.send = values.sliceEnd;
+    // }
+    //
+    // query.sstart = toHumanReadableTime(query.sstart);
+    // query.send   = toHumanReadableTime(query.send);
+    //
+    // history.replace({ search: stringify(query) });
   };
 
   showControls = (callback) => {
