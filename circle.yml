@@ -1,15 +1,25 @@
 machine:
   node:
     version: 8.0.0
+
   environment:
     CC_TEST_REPORTER_ID: c4fca403424186ad9d84ef75219a2efaf4fa9d0994bf3a5f501bc0bbe64ec81c
 
   dependencies:
+    override:
+      - yarn
+
+    cache_directories:
+      - ~/.cache/yarn
+
     post:
       - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
       - chmod +x ./cc-test-reporter
 
   test:
+    override:
+      - yarn
+
     pre:
       - ./cc-test-reporter before-build
 
