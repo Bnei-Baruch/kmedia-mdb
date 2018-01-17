@@ -6,6 +6,11 @@ BB Archive public site front-end.
 [![Maintainability](https://api.codeclimate.com/v1/badges/0be642c3213449758fb2/maintainability)](https://codeclimate.com/github/Bnei-Baruch/kmedia-mdb/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/0be642c3213449758fb2/test_coverage)](https://codeclimate.com/github/Bnei-Baruch/kmedia-mdb/test_coverage)
 
+## License
+   [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Bnei-Baruch/kmedia-mdb/blob/master/LICENSE)
+           
+   This project is licensed under the terms of the [MIT license](/LICENSE.md).
+
 ## Contributing
 
 Develop your feature locally and submit a pull request.

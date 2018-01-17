@@ -1,17 +1,14 @@
-import React from 'react';
 import { shallowToJson } from 'enzyme-to-json';
 
 import { Header, Icon } from 'semantic-ui-react';
 
 import createTestContext from 'react-cosmos-test/enzyme';
 
-import SplashFixture from './__fixtures__/Splash.fixture';
-import SplashWOSubtext from './__fixtures__/SplashWOSubtext.fixture';
-import { Init, shallowRender } from './../../../helpers/tests/test-utils';
+import SplashFixture from '../__fixtures__/Splash.fixture';
+import SplashWOSubtext from '../__fixtures__/SplashWOSubtext.fixture';
+import { shallowRender } from '../../../../setupTests';
 
-import { ErrorSplash, FrownSplash, LoadingSplash, Splash } from './Splash';
-
-Init();
+import { ErrorSplash, FrownSplash, LoadingSplash, Splash } from '../Splash';
 
 [SplashFixture, SplashWOSubtext].forEach((fixture) => {
   describe('Splash', () => {
@@ -22,7 +19,7 @@ Init();
     it('renders error', () => {
       const { text, subtext } = fixture.props;
       const message           = `${text}${subtext || ''}`;
-      expect(getWrapper().text()).toBe(message);
+      expect(getWrapper()).toHaveText(message);
     });
 
     it('always render exactly one Header', () => {
@@ -33,29 +30,22 @@ Init();
     describe('the rendered Header', () => {
       it('always renders an Icon', () => {
         const icons = getWrapper().find(Icon);
-        expect(icons).toHaveLength(1);
+        expect(icons).toBePresent();
       });
 
       it('Icon has proper params', () => {
-        const icon                                                = getWrapper().find(Icon);
-        const { color: iColor, name: iIcon, loading: iLoading }   = icon.props();
-        const { color: fColor, icon: fIcon, isLoading: fLoading } = fixture.props;
-        expect({
-          color: fColor,
-          icon: fIcon,
-          isLoading: fLoading,
-        }).toEqual({
-          color: iColor,
-          icon: iIcon,
-          isLoading: iLoading,
-        });
+        const icon                             = getWrapper().find(Icon);
+        const { color, icon: name, isLoading } = fixture.props;
+        expect(icon).toHaveProp('color', color);
+        expect(icon).toHaveProp('name', name);
+        expect(icon).toHaveProp('loading', isLoading);
       });
 
       it('always renders an Header.Content', () => {
         const header = getWrapper().find(Header.Content);
-        expect(header).toHaveLength(1);
+        expect(header).toBePresent();
         it('Header.Content does not receive any props', () => {
-          expect(Object.keys(header.props())).toHaveLength(0);
+          expect(Object.keys(header.props())).toBeEmpty();
         });
       });
     });
@@ -65,7 +55,7 @@ Init();
         describe('when subtext is not supplied', () => {
           it('does not render Header.Subheader', () => {
             const subheader = getWrapper().find(Header.Subheader);
-            expect(subheader).toHaveLength(0);
+            expect(subheader).toBeEmpty();
           });
         });
       }
@@ -74,11 +64,11 @@ Init();
         describe('when subtext is supplied', () => {
           it('renders Header.Subheader', () => {
             const subheader = getWrapper().find(Header.Subheader);
-            expect(subheader).toHaveLength(1);
+            expect(subheader).toBePresent();
           });
           it('renders Header.Subheader with this subtext', () => {
             const subheader = getWrapper().find(Header.Subheader);
-            expect(subheader.text()).toBe(fixture.props.subtext);
+            expect(subheader).toHaveText(fixture.props.subtext);
           });
         });
       }
