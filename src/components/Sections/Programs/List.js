@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { List, Table } from 'semantic-ui-react';
 
-import { CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
+import { CT_VIDEO_PROGRAM_CHAPTER, NO_NAME } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
@@ -24,7 +24,7 @@ export const renderUnit = (unit, t) => {
   const relatedItems = programs.map(x =>
     (
       <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-        {x.name || '☠ no name'}
+        {x.name || NO_NAME}
       </List.Item>
     )
   ).concat(breakdown.getAllButPrograms().map(x => (
@@ -52,7 +52,7 @@ export const renderUnit = (unit, t) => {
       </Table.Cell>
       <Table.Cell>
         <Link to={canonicalLink(unit)}>
-          <strong>{unit.name || '☠ no name'}</strong>
+          <strong>{unit.name || NO_NAME}</strong>
         </Link>
         <List className="index-list__item-subtitle" horizontal divided link size="tiny">
           <List.Item>
