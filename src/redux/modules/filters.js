@@ -274,10 +274,17 @@ const getFilters = (state, namespace) => {
     return [];
   }
 
-  return Object.keys(filters).filter(filterName => filterName !== 'activeFilter').map(filterName => ({
+  /*return Object.keys(filters).filter(filterName => filterName !== 'activeFilter').map(filterName => ({
+    name: filterName,
+    ...filters[filterName],
+  }));*/
+
+  return Object.keys(filters).filter(filterName => filterName !== 'activeFilter' 
+    && filters[filterName].values && filters[filterName].values.length > 0).map(filterName => ({
     name: filterName,
     ...filters[filterName],
   }));
+  
 };
 
 const getFilterAllValues = (state, namespace, name) =>

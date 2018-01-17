@@ -85,6 +85,11 @@ class MyUnitListContainer extends UnitListContainer {
     }
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.shouldOpenProgramsFilter && nextProps.shouldOpenProgramsFilter) {
+      this.props.editNewFilter('programs', 'programs-filter');
+    }
+  };
 }
 
 const mapState = (state, ownProps) => {
