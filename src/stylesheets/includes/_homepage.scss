@@ -9,8 +9,19 @@
 
   &__featured {
     // background: $darkWhite;
-    padding-bottom: 3em;
+    padding-bottom: 2em;
     padding-top: 3em;
+  }
+
+  &__section {
+    margin-bottom: 3em;
+  }
+
+  &__iconsrow {
+    img {
+      width: auto!important;
+      margin-bottom: .2em;
+    }
   }
 }
 
@@ -20,6 +31,12 @@
   padding-top: percentage(9/16);
   overflow: hidden;
   margin-bottom: 1em;
+  .label {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    text-transform: uppercase;
+  }
   a {
     position: absolute;
     top:0;

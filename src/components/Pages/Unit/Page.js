@@ -35,7 +35,7 @@ export class UnitPage extends Component {
       <div className="avbox">
         <Container>
           <Grid centered padded>
-            <AVBox unit={unit} language={language} t={t} isSliceable />
+            <AVBox unit={unit} language={language} t={t} />
           </Grid>
         </Container>
       </div>

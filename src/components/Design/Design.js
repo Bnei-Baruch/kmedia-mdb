@@ -4,6 +4,13 @@ import React, { Component } from 'react';
 import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, List, Popup, Table, Card, Image, Input, Search, Label, Container, Embed, Segment } from 'semantic-ui-react';
 import DailyLessonPlaceholder from '../../images/hp_lesson_temp.png';
 import FeaturedPlaceholder from '../../images/hp_featured_temp.jpg';
+import DailyLessonsIcon from '../../images/icons/dailylessons.svg';
+import ProgramsIcon from '../../images/icons/programs.svg';
+import LecturesIcon from '../../images/icons/lectures.svg';
+import SourcesIcon from '../../images/icons/sources.svg';
+import EventsIcon from '../../images/icons/events.svg';
+import PublicationsIcon from '../../images/icons/publications.svg';
+// import GridColumn from 'semantic-ui-react/dist/commonjs/collections/Grid/GridColumn';
 const results ={
     "search": {
       "icon": "search",
@@ -81,6 +88,9 @@ class Design extends Component {
                               The Latest Daily Lesson
                             </Header.Content>
                           </Header>
+                          <Label color='orange' size='mini'>
+                            Daily Lessons
+                          </Label>
                         </a>
                       </div>                    
                     </Grid.Column>
@@ -97,6 +107,9 @@ class Design extends Component {
                               The World Kabbalah Congress
                             </Header.Content>
                           </Header>
+                          <Label color='orange' size='mini'>
+                            Events
+                          </Label>
                         </a>
                       </div> 
                     </Grid.Column>
@@ -104,10 +117,104 @@ class Design extends Component {
                 </Grid>
               </Container>
             </div>
-            <Container className='padded'>            
-              <div className='homepage__sections'></div>
+            <Container className='padded homepage__sections'>            
+              <div className='homepage__section homepage__iconsrow'>
+                <Grid centered padded='vertically'>
+                  <Grid.Row>
+                    <Grid.Column computer={12} tablet={14} mobile={16}>
+                      <Divider horizontal fitted>Archive Sections</Divider>
+                    </Grid.Column>
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Grid.Column computer={12} tablet={14} mobile={16}>
+                      <Grid doubling columns={6}>
+                        <Grid.Row>
+                          <Grid.Column textAlign='center'><Header as='a' href=''><Image src={DailyLessonsIcon} /><br/>Daily Lessons</Header></Grid.Column>
+                          <Grid.Column textAlign='center'><Header as='a' href=''><Image src={ProgramsIcon} /><br/>Programms</Header></Grid.Column>
+                          <Grid.Column textAlign='center'><Header as='a' href=''><Image src={LecturesIcon} /><br/>Lectures</Header></Grid.Column>
+                          <Grid.Column textAlign='center'><Header as='a' href=''><Image src={SourcesIcon} /><br/>Sources</Header></Grid.Column>
+                          <Grid.Column textAlign='center'><Header as='a' href=''><Image src={EventsIcon} /><br/>Events</Header></Grid.Column>
+                          <Grid.Column textAlign='center'><Header as='a' href=''><Image src={PublicationsIcon} /><br/>Publications</Header></Grid.Column>
+                        </Grid.Row>
+                      </Grid>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </div>
+              <div className='homepage__section'>
+                <Grid centered padded='vertically'>
+                  <Grid.Row>
+                    <Grid.Column computer={12} tablet={14} mobile={16}>
+                      <Divider horizontal fitted>Latest Updates</Divider>
+                    </Grid.Column>
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Grid.Column computer={12} tablet={14} mobile={16}>
+                      <Card.Group itemsPerRow='4' doubling >
+                        <Card href='#'>
+                          <Image src='https://archive.kbb1.com/assets/api/thumbnail/64RFGZR6' />
+                          <Card.Content>
+                            <Card.Header as='h5'>
+                              <small className='text grey'>1/16/2018</small><br/>
+                              Baal HaSulam. Introduction to The Book of Zohar
+                            </Card.Header>
+                            
+                            <Card.Description>
+                              <Label color='orange' size='small'>Daily Lessons</Label>
+                            </Card.Description>
+                          </Card.Content>
+                        </Card>
+                        <Card href='#'>
+                          <Image src='https://archive.kbb1.com/assets/api/thumbnail/tSmGoUDU' />
+                          <Card.Content>
+                            
+                            <Card.Header>
+                              <small className='text grey'>12/24/2017</small><br/>
+                              Webinar with Dr. Michael Laitman
+                            </Card.Header>
+
+                            <Card.Description>
+                              <Label color='orange' size='small'>Lectures & Lessons</Label>
+                            </Card.Description>
+                          </Card.Content>
+                        </Card>            
+                        <Card href='#'>
+                          <Image src='https://archive.kbb1.com/assets/api/thumbnail/fc3bAksF' />
+                          <Card.Content>
+                            <Card.Header>
+                              <small className='text grey'>1/16/2018</small><br/>
+                              A New Life 949
+                            </Card.Header>
+                            
+                            <Card.Description>
+                            <Label color='orange' size='small'>Programs</Label>
+                            </Card.Description>
+                          </Card.Content>
+                        </Card>            
+                        <Card href='#'>
+                          <Image src='http://www.kab.co.il/images/attachments/21/209721_medium.jpg' />
+                          <Card.Content>
+                            <Card.Header>
+                              Matthew
+                            </Card.Header>
+                            <Card.Meta>
+                              <span className='date'>
+                                Joined in ccc
+                              </span>
+                            </Card.Meta>
+                            <Card.Description>
+                              Matthew is a musician living in Nashville.
+                            </Card.Description>
+                          </Card.Content>
+                        </Card>  
+                      </Card.Group>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </div>
             </Container>
           </div>
+        {/*
         <Header size='large' color='pink' inverted>Homepage End</Header>
         <div className='section-header'>
           <Container className='padded'>
@@ -500,9 +607,9 @@ class Design extends Component {
             <Search  category results={results} size='mini' placeholder='Search Programs...'categoryRenderer={categoryRenderer} resultRenderer={resultRenderer} />
           </Menu.Item>
         </Menu>
-        {/*<Header size='large' color='pink' inverted>video collection collapsed (๏㉨๏)</Header>*/}
+        <Header size='large' color='pink' inverted>video collection collapsed (๏㉨๏)</Header>
 
-        {/*
+        
         <div className='collapsed_video_container'>
         	<Grid >
             <Grid.Row>
@@ -574,7 +681,7 @@ class Design extends Component {
             </Grid.Row>
           </Grid>
         </div>
-        */}
+        
         
       	<Header size='large' color='pink' inverted>video collection ☼.☼</Header>
         <Grid>
@@ -681,6 +788,7 @@ class Design extends Component {
           </Grid.Row>
         </Grid>
       </Grid.Column>
+      */}
       </div>
     );
   }
