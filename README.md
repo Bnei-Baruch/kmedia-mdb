@@ -40,3 +40,12 @@ Open `.env` in your favorite editor and set all variables to their appropriate v
 $ yarn start
 ```
 
+## Thanks
+
+
+<a href="https://www.browserstack.com" target="_blank" title="BrowserStack">
+<img alt="BrowserStack logo" src="https://www.browserstack.com/images/layout/browserstack-logo-600x315.png" width="180" height="95">
+</a>
+
+We send our thanks to the wonderful folks at [BrowserStack](https://www.browserstack.com) for granting us free access to their excellent testing platform.
+
