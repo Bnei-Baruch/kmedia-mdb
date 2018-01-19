@@ -23,6 +23,14 @@
       width: 50px !important;
     }
   }
+
+  &-posters {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    .column {
+      padding: 0!important;
+    }
+  }
 }
 
 .thumbnail {
@@ -49,27 +57,31 @@
       content:'';
       bottom: 0;
       width: 100%;
-      background-image: linear-gradient(to top, rgba($black,.8), transparent);
+      background-image: linear-gradient(to top, rgba($black,.9), transparent);
       height: 50%;
       z-index: 1;
-      // transition: height .3s ease-in-out;
+      opacity: 0.8;
+      transition: opacity .3s;
     }
-  
+
   }
   // background-image: linear-gradient(to bottom, $blue, darken($blue, 20%));
   &:hover {
     .thumbnail__header {
-      bottom: .7em;
+      bottom: 1em;
     }
-    &:before {
-      // height: 60%;
+    a {
+      &:before {
+        opacity: 1;
+      }
     }
+    
   }
 
   
   &__header {
     // background: red;
-    transition: bottom .1s ease-out;
+    transition: bottom .5s ;
     bottom: .5em;
     left: .5em;
     margin: 0 !important;
@@ -90,8 +102,22 @@
   &__image{
     position: absolute !important;
     top:0;
-    z-index: 0;// mix-blend-mode: screen;
+    z-index: 0;
+    // mix-blend-mode: screen;
     // filter: grayscale(20%) contrast(100%);
     // opacity: .5;
   }
+  .homepage-posters & {
+    padding-top: percentage(1.6/1); 
+    
+
+    &__image{
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right:0;
+      background-size: cover;
+      background-position: center center;
+    }
+  }  
 }
