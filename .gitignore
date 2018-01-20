@@ -25,6 +25,7 @@ yarn-error.log*
 src/**/*.css
 
 #babel generated
+/babel-src
 
 
 # do not ignore main theme
