@@ -1,0 +1,458 @@
+
+.layout__header span {
+  font-size: 12px;
+  font-weight: normal;
+}
+
+$border-color: rgba(34, 36, 38, .15);
+
+$red: #DB2828;
+$orange: #F2711C;
+$yellow: #FBBD08;
+$olive: #B5CC18;
+$green: #21BA45;
+$teal: #00B5AD;
+$blue: #2185D0;
+$violet: #6435C9;
+$purple: #A333C8;
+$pink: #E03997;
+$brown: #A5673F;
+$grey: #767676;
+$black: #1B1C1D;
+
+
+// Neutrals
+$fullBlack        : #000000;
+$offWhite         : #F9FAFB;
+$darkWhite        : #F3F4F5;
+$midWhite         : #DCDDDE;
+$white            : #FFFFFF;
+$text-colors: (
+  red : $red,
+  orange : $orange,
+  yellow : #B58105, // Yellow text is difficult to read
+  olive : #8ABC1E, // Olive is difficult to read
+  green : #1EBC30, // Green is difficult to read
+  teal : #10A3A3, // Teal text is difficult to read
+  blue : $blue,
+  violet : $violet,
+  purple : $purple,
+  pink : $pink,
+  brown : $brown,
+  grey : $grey,
+  black : $black
+);
+
+@each $colorname, $colorvalue in $text-colors {
+  .text.#{$colorname} {
+    color: #{$colorvalue};
+  }
+}
+@import 'includes/responsive-helpers';
+@import 'includes/video-player';
+@import 'includes/media-player';
+/// THE NEW LAYOUT
+.layout {
+  height: 100vh;
+
+
+  &__header,
+  &__sidebar {
+    .menu,
+    .item {
+      border-radius: 0 !important;
+    }
+    > .menu {
+      height: 60px;
+      small {
+        line-height: 1;
+      }
+    }
+  }
+  &__header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999999;
+  }
+  &__sidebar {
+    z-index: 999999;
+    background: #fff;
+    position: fixed;
+    transform: translate(-100%, 0);
+    transition: transform .3s;
+    width: 290px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    &.is-active {
+      transform: none;
+    }
+    > .menu {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
+    &-menu {
+      position: absolute;
+      top: 60px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      overflow: auto;
+      border-right: 1px solid rgba(34, 36, 38, 0.15);
+
+      .menu {
+        border: 0;
+        box-shadow: none !important;
+      }
+    }
+  }
+  &__main {
+    padding-top: 60px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+  &__content {
+    flex-grow: 1;
+  }
+  &__footer {
+    background: $black;
+
+  }
+}
+.logo {
+  img {
+    display: none!important;
+  }
+  h2.header {
+    margin-top:0;
+    margin-left:0;
+  }
+}
+@media only screen and (min-width: $largeMonitorBreakpoint) {
+  .layout {
+    &__sidebar-toggle {
+      display: none !important;
+    }
+    &__sidebar {
+      > .menu {
+        display: none;
+      }
+      top: 60px;
+      transform: none;
+      &-menu {
+        top: 0;
+      }
+    }
+    &__main {
+      margin-left: 290px;
+    }
+  }
+ .logo {
+   min-width: 290px;
+    img {
+      display: inline-block!important;
+    }
+    h2.header {
+      margin-top:0;
+      margin-left:16px;
+    }
+  }
+}
+
+.rtl {
+  direction: rtl;
+
+  .layout__sidebar {
+    transform: translate(100%, 0);
+    left: auto;
+    right: 0;
+    &.is-active {
+      transform: none;
+    }
+    &-menu {
+      border-right: none;
+      border-left: 1px solid rgba(34, 36, 38, 0.15);
+    }
+  }
+  // NOTE (yaniv -> edo) fixes AR-5
+  .logo {
+    h2.header {
+      margin-right:16px;
+    }
+  }
+
+  @media only screen and (min-width: $largeMonitorBreakpoint) {
+    .layout {
+      &__sidebar {
+        transform: none;
+      }
+      &__main {
+        margin-left: auto;
+        margin-right: 290px;
+      }
+    }
+  }
+}
+
+.ui.container.padded{
+  padding: 1em;
+  &.vertically{
+    padding: 1em 0;
+  }
+  &.horizontally{
+    padding: 0 1em;
+    &.vertically {
+      padding: 1em;
+    }
+  }
+}
+.section-header {
+  background: $darkWhite;
+  h1.header{
+    font-size: 3em;
+    font-weight: 400;
+    .sub.header {
+      margin: .2em 0 .5em;
+    }
+  }
+
+}
+/// END OF THE NEW LAYOUT
+
+/// INDEX
+.index-list {
+  .list {
+    display: block!important;
+    margin: 0;
+    .item:nth-child(2){
+      border: 0!important;
+    }
+  }
+  em {
+    font-weight: bold;
+  }
+}
+/// END OF INDEX
+
+/// INDEX FILTERS
+.index-filters {
+  &__search
+   {
+    .input {
+      width: 300px!important;
+      top:0.8em!important;
+    }
+  }
+}
+/// END OF INDEX FILTERS
+/// FEATURED UNIT
+.featured-unit2 {
+  .card {
+    overflow: hidden;
+     .content {
+      position: absolute;
+      bottom: 0;
+      * {
+        color: #fff!important;
+      }
+      background: linear-gradient(to top, rgba(0,0,0,.7) 50%, rgba(0,0,0,0) 100%)!important;
+      width: 100%;
+      border:0!important;
+      padding:3em 1em 1em!important;
+     }
+  }
+}
+/// END OF FEATURED UNIT
+
+.wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1 0 auto;
+  .vertical.menu {
+    // border-radius: 0!important;
+    .item {
+      // border-radius: 10px!important;
+    }
+  }
+}
+
+// .wrapper > .footer {
+//   flex: 0 0 auto;
+// }
+
+// .main-title {
+//   line-height: 14px;
+// }
+
+// .main-menu {
+//   display: flex !important;
+//   align-items: stretch;
+// }
+
+// .ui.fixed.menu + .wrapper {
+//   padding-top: 42px
+// }
+
+// .grid.video_player {
+//   margin-left:-2rem;
+//   margin-right:-2rem;
+//   margin-bottom: 0;
+//   >.row {
+//     padding-left: 2rem;
+//     padding-right: 2rem;
+//   }
+//   video{
+//     display:block;
+//     margin-top: -1rem;
+//     margin-bottom: -1rem;
+//   }
+// }
+
+// .grid .video_player {
+//   height: 0;
+//   padding-top: 56.25%;
+//   position: relative;
+//   background:red;
+//   // margin-left:-2rem;
+//   // margin-right:-2rem;
+//     >.row {
+//       position: absolute;
+//       top:0;
+//     // padding-left: 1rem;
+//     // padding-right: 1rem;
+//   }
+//    video{
+//     display:block;
+//     // margin-top: -1rem;
+//     // margin-bottom: -1rem;
+//   }
+// }
+
+
+
+.filter_tab {
+  // margin-top: -1rem !important;
+
+  .menu {
+    border: 0 !important;
+    border-bottom: 0 !important;
+  }
+}
+
+.filter-steps {
+  display: flex;
+  height: 400px;
+  overflow: hidden;
+  // margin-top: -1em;
+  // border-top: 1px solid $border-color;
+  margin-top: -1em;
+
+  &__column-wrapper {
+    // height: 100%;
+    overflow-y: scroll;
+    // min-width:25%;
+    // &:nth-child(n+3){
+    &:first-child {
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+    &:last-child {
+      flex: 1 1 auto;
+    }
+    max-width: 100%;
+    border: 1px solid $border-color;
+    border-width: 0 1px 0 0;
+    &:last-child {
+      border: 0;
+    }
+  }
+  &__lists {
+    .divider {
+      margin: .2rem 0 0;
+    }
+    .list {
+      margin-bottom: 2em!important;
+    }
+
+    .column > .header {
+      // color: red!important;
+      margin-bottom: 1em;
+      text-transform: uppercase;
+      color: $grey!important;
+    }
+  }
+
+  .ui.menu {
+    border-radius: 0;
+    box-shadow: none !important;
+    border: none !important;
+    display: block;
+    .item {
+      border-radius: 0 !important;
+    }
+    // display: block;
+  }
+}
+
+.filter-tags {
+  .buttons {
+    margin-right: 4px;
+    margin-left: 4px;
+  }
+}
+
+.player-minimize .video_position {
+  background-color: white;
+  border-radius: 2px;
+  top: 110px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.25);
+  left: 20px;
+  padding: 7px;
+  position: fixed;
+  width: 300px;
+  z-index: 1;
+  transition: all 0.4s ease-in-out;
+}
+
+
+
+/* See TimedPopup.js, solves existing bug:
+ * https://github.com/Semantic-Org/Semantic-UI-React/issues/1065 */
+.popup {
+  margin: 0 0 .71428571em;
+  z-index: 1900;
+  border: 1px solid #d4d4d5;
+  line-height: 1.4285em;
+  max-width: 250px;
+  background: #fff;
+  padding: .833em 1em;
+  font-weight: 400;
+  font-style: normal;
+  color: rgba(0,0,0,.87);
+  border-radius: .28571429rem;
+  box-shadow: 1px 1px 0 0 #bababc;
+}
+
+.popup .content {
+  width: 200px;
+  text-align: center;
+}
+
+.search-omnibox {
+  width: 100%;
+  max-width: 600px;
+}
+
+.search-result-rtl .title {
+  direction: rtl;
+  display: inline-block;
+}

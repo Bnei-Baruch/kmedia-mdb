@@ -1,0 +1,459 @@
+/* This is required for full screen as the default is white background. */
+.media {
+  // background-color: red;
+  /* In full screen to take full with. */
+  width: 100%;
+}
+
+.avbox__player {
+  &.audio {
+    .media-edit-mode {
+      .media-center-control {
+        height: 150px;
+      }
+    }
+  }
+}
+
+.media-player {
+  position: relative;
+   min-height: 40px;  // TODO: oleg, this makes 0 height on audio mode - please fix
+  // min-width: 380px;
+  user-select: none;
+
+  video,
+  audio,
+  iframe,
+  object,
+  embed {
+    display: block;
+    width: 100%;
+  }
+
+  &.audio-is-mobile {
+    height: 70px;
+  }
+
+  .center-media-controls-edit {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .slice-edit-help {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 20px;
+    margin-left: 10px;
+    font-size: 1.4em;
+  }
+
+  .button-close-slice-edit {
+    flex: 0 0 auto;
+  }
+}
+
+.media-edit-mode {
+  .media-player {
+    min-height: 200px;
+  }
+}
+
+.player-share-bar {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(-50%);
+
+  &__action {
+    &:not(:first-child) {
+      margin-top: 10px;
+    }
+
+    .ui.button {
+      border: 2px solid #ffffff;
+    }
+  }
+}
+
+.player-control-link-share,
+.player-control-edit-slice,
+.player-control-fullscreen {
+  cursor: pointer;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.player-seekbar-wrapper {
+  position: relative;
+  height: 100%;
+  flex: 1 0 auto;
+}
+
+.player-control-seekbar-container {
+  position: relative;
+  height: 100%;
+  margin-left: 10px;
+  margin-right: 10px;
+
+  .player-slice-handle {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: absolute;
+    bottom: 0;
+    z-index: 10;
+
+    &__time {
+      display: flex;
+      flex-direction: row;
+      position: relative;
+      left: 0;
+      transform: translateX(-50%);
+      align-items: center;
+      padding: 5px;
+      margin-bottom: 10px;
+      color: #ffffff;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 20%;
+    }
+
+    &__knob {
+      position: relative;
+      background: #0066ff;
+      width: 26px;
+      height: 25px;
+      transform: translateX(-50%);
+      margin-bottom: 12px;
+      border-top-left-radius: 20%;
+      border-top-right-radius: 20%;
+
+      &:hover {
+        cursor: ew-resize;
+      }
+
+      &:after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-left: 13px solid transparent;
+        border-right: 13px solid transparent;
+        border-top: 8px solid #0066ff;
+      }
+
+      &:before {
+        content: "| | |";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        font-weight: bold;
+        text-align: center;
+        font-size: 12px;
+      }
+    }
+
+    &__line {
+      background: #ffffff;
+      height: 40px;
+      width: 2px;
+      transform: translateX(-50%);
+    }
+  }
+}
+
+.player-control-seekbar {
+  position: relative;
+  bottom: 0;
+  height: 100%;
+
+  .bar {
+    position: absolute;
+    top: 50%;
+    height: 4px;
+    width: 0;
+    transform: translateY(-50%);
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: 2px;
+
+    /* Mobile support for seekbar, make it thick. */
+    &.mobile {
+      height: 10px;
+      border-radius: 5px;
+    }
+  }
+
+  .player-slice-area {
+    position: absolute;
+    bottom: 0;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.25);
+    z-index: 4;
+  }
+
+  .empty {
+    width: 100%;
+    background-color: rgb(118, 118, 118);
+    z-index: 1;
+  }
+
+  .loaded {
+    background-color: rgb(214, 214, 214);
+    z-index: 2;
+  }
+
+  .played {
+    left: 0;
+    background-color: rgb(66, 133, 244);
+    z-index: 5;
+  }
+
+  .played-knob {
+    position: absolute;
+    top: 50%;
+    height: 10px;
+    width: 10px;
+    transform: translate(-50%, -50%);
+    background-color: rgb(66, 133, 244);
+    border-radius: 50%;
+    z-index: 40;
+
+    &.mobile {
+      height: 16px;
+      width: 16px;
+    }
+  }
+
+  &.mobile {
+    height: 10px;
+  }
+
+}
+
+.player-control-mute-unmute {
+  margin-left: 5px;
+  margin-right: 5px;
+  display: flex;
+  position: relative;
+  flex-direction: column-reverse;
+
+  .volume-popover {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000000;
+    opacity: 0.65;
+    visibility: hidden;
+  }
+
+  .bar-wrapper {
+    display: flex;
+    flex-direction: column-reverse;
+    flex-wrap: nowrap;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+
+    .bar {
+      width: 4px;
+      margin-top: 0;
+      margin-bottom: 0;
+
+      &.blank {
+        background-color: rgb(118, 118, 118);
+      }
+
+      &.volume {
+        position: relative;
+        background-color: rgb(66, 133, 244);
+
+        .knob {
+          position: absolute;
+          height: 10px;
+          width: 10px;
+          border-radius: 50%;
+          background-color: rgb(66, 133, 244);
+          left: 50%;
+          transform: translateX(-50%);
+          top: -5px;
+        }
+      }
+    }
+  }
+}
+
+.player-control-language {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.player-control-audio-video {
+  cursor: pointer;
+  display: flex;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.player-button {
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  line-height: 1.2;
+
+  .icon {
+    height: 100%;
+  }
+}
+
+.media-center-control {
+  flex: 1 0 auto;
+  position: relative;
+
+  .player-button {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.media-controls {
+  direction: ltr;
+  display: flex;
+  flex-direction: column-reverse;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  color: #ffffff;
+  opacity: 1;
+  transition: 0.25s linear;
+
+  &.fade {
+    opacity: 0;
+  }
+
+  .controls-wrapper {
+    flex: 0 0 40px;
+    position: relative;
+
+    .controls-container {
+      display: flex;
+      position: relative;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+
+      &.audio-top-seekbar {
+        margin-top: 2em;
+      }
+    }
+
+    &:before {
+      content: "";
+      display: block;
+      background: rgba(0, 0, 0, 65%);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.65;
+      z-index: 0;
+    }
+  }
+
+  &.video-is-mobile {
+    .controls-wrapper {
+      padding-top: 25px;
+      flex: 0 0 65px;
+    }
+  }
+}
+
+.media-player-fullscreen {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  min-height: 60px;
+
+  ::-webkit-media-controls {
+    display: none !important;
+  }
+
+  .media-center-control {
+    .player-button {
+      z-index: 2147483647;
+    }
+  }
+
+  .media-controls,
+  .controls-wrapper {
+    z-index: 2147483647;
+  }
+
+  .icon {
+    font-size: 2em;
+  }
+
+  .player-control-audio-video,
+  .player-control-language,
+  .player-control-time-elapsed {
+    font-size: 1.25em;
+  }
+
+  .player-control-audio-video {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  .player-control-mute-unmute {
+
+    .bar-wrapper {
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-bottom: 20px;
+      margin-top: 10px;
+      z-index: 2147483647;
+
+      .bar {
+        width: 6px;
+
+        &.volume {
+
+          .knob {
+            height: 20px;
+            width: 20px;
+            top: -5px;
+          }
+        }
+      }
+    }
+  }
+
+  .media-controls {
+    .controls-wrapper {
+      flex: 0 0 60px;
+    }
+  }
+}
