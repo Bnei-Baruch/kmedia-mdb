@@ -94,7 +94,6 @@ class AVBox extends Component {
               'avbox__player--is-4x3': playableItem.unit.film_date < '2014',
             })}
           >
-
             <div className="avbox__media-wrapper">
               <Media>
                 <AVPlayer
