@@ -2,17 +2,18 @@
   "name": "kmedia-mdb",
   "version": "0.1.0",
   "license": "MIT",
-  "homepage": "https://archive.kbb1.com",
+  "homepage": "https://archive.kbb1.com/",
   "repository": {
     "type": "git",
     "url": "https://github.com/Bnei-Baruch/kmedia-mdb"
   },
   "scripts": {
+    "analyze": "REACT_APP_ENV=production yarn build && source-map-explorer build/static/js/main.*",
     "serve-locals": "node bin/serve-locals",
     "cosmos": "cosmos",
     "cosmos::export": "cosmos-export",
-    "build-css": "node-sass src/ -o src/",
-    "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
+    "build-css": "node-sass-chokidar src/ -o src/",
+    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js serve-locals",
     "build": "sh -ac '. ./.env.${REACT_APP_ENV}; yarn build-css && react-scripts build'",
@@ -47,7 +48,8 @@
     "react-scripts": "1.0.17",
     "react-test-renderer": "^15.6.2",
     "regenerator-runtime": "^0.11.1",
-    "sinon": "^4.1.3"
+    "sinon": "^4.1.3",
+    "source-map-explorer": "^1.5.0"
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -84,5 +86,25 @@
     "redux-actions": "^2.2.1",
     "redux-saga": "^0.16.0",
     "semantic-ui-react": "^0.77.1"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!<rootDir>/node_modules/",
+      "!**/__tests__/**"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    },
+    "coverageReporters": [
+      "text-summary",
+      "lcov"
+    ],
+    "snapshotSerializers": []
   }
 }

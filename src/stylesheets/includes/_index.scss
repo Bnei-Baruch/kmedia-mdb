@@ -13,6 +13,7 @@
   }
 }
 
+.collection-header,
 .section-header {
   background: $darkWhite;
 
@@ -26,7 +27,7 @@
   }
 
   .menu {
-    margin-bottom: calc(-1em + 1px)!important;
+    margin-bottom: calc(-1em + 1px) !important;
     // margin-top: 1em!important;
   }
 }

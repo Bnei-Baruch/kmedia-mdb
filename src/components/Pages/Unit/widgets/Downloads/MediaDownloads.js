@@ -167,9 +167,9 @@ class MediaDownloads extends Component {
     const url = physicalFile(file);
 
     return (
-      <Table.Row key={file.id} verticalAlign="top">
+      <Table.Row key={file.id} className="media-downloads__file" verticalAlign="top">
         <Table.Cell>
-          {label}
+          <span className="media-downloads__file-label">{label}</span>
         </Table.Cell>
         <Table.Cell collapsing>
           <Button
@@ -178,6 +178,7 @@ class MediaDownloads extends Component {
             as="a"
             href={url}
             target="_blank"
+            className="media-downloads__file-download-btn"
             size="mini"
             color="orange"
             content={ext.toUpperCase()}
@@ -188,6 +189,7 @@ class MediaDownloads extends Component {
             <Button
               compact
               fluid
+              className="media-downloads__file-copy-link-btn"
               size="mini"
               color="orange"
               content={t('buttons.copy-link')}
@@ -261,7 +263,7 @@ class MediaDownloads extends Component {
     }
 
     return (
-      <div className="content__aside-unit">
+      <div className="media-downloads content__aside-unit">
         <Grid columns="equal">
           <Grid.Row>
             <Grid.Column>
@@ -276,14 +278,14 @@ class MediaDownloads extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Table unstackable basic="very" compact="very">
+        <Table unstackable className="media-downloads__files" basic="very" compact="very">
           <Table.Body>
             {rows}
           </Table.Body>
         </Table>
         {
           derivedRows ?
-            <div>
+            <div className="media-downloads__derivations">
               <Header size="tiny" content={t('media-downloads.derived-title')} />
               <Table basic="very" compact="very">
                 <Table.Body>

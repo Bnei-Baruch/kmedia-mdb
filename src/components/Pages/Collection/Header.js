@@ -21,7 +21,7 @@ class CollectionPageHeader extends PureComponent {
     const { collection, namespace, t } = this.props;
 
     return (
-      <div className="section-header">
+      <div className="collection-header">
         <Container className="padded">
           <Grid>
             <Grid.Row>
@@ -31,13 +31,15 @@ class CollectionPageHeader extends PureComponent {
               <Grid.Column width={8}>
                 <Header as="h1">
                   <Header.Content>
-                    {collection.name}
-                    <Header.Subheader>
+                    <span className="collection-header__title">
+                      {collection.name}
+                    </span>
+                    <Header.Subheader className="section-header__subtitle">
                       {collection.content_units.length}&nbsp;{t(`pages.collection.items.${namespace}`)}
                     </Header.Subheader>
                   </Header.Content>
                 </Header>
-                <p>{collection.description}</p>
+                <p className="section-header__description">{collection.description}</p>
               </Grid.Column>
             </Grid.Row>
           </Grid>

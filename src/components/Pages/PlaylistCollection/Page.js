@@ -50,7 +50,7 @@ class PlaylistCollectionPage extends Component {
 
     const { selected: unit } = this.state;
     return (
-      <div>
+      <div className="playlist-collection-page">
         <div className="avbox">
           <Container>
             <Grid padded>

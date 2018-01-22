@@ -20,12 +20,10 @@ class AVBox extends Component {
     unit: shapes.ContentUnit,
     t: PropTypes.func.isRequired,
     isMobile: PropTypes.bool.isRequired,
-    isSliceable: PropTypes.bool
   };
 
   static defaultProps = {
     unit: undefined,
-    isSliceable: false
   };
 
   componentWillMount() {
@@ -80,7 +78,7 @@ class AVBox extends Component {
   };
 
   render() {
-    const { t, isMobile, isSliceable } = this.props;
+    const { t, isMobile } = this.props;
     const { playableItem }             = this.state;
 
     if (!playableItem || !playableItem.src) {
@@ -93,14 +91,12 @@ class AVBox extends Component {
           <div
             className={classNames('avbox__player', {
               'avbox__player--is-audio': playableItem.mediaType === MT_AUDIO,
-              'avbox__player--is-4x3': playableItem.film_date < '2014',
+              'avbox__player--is-4x3': playableItem.unit.film_date < '2014',
             })}
           >
-
             <div className="avbox__media-wrapper">
               <Media>
                 <AVPlayer
-                  isSliceable={isSliceable}
                   item={playableItem}
                   onSwitchAV={this.handleSwitchAV}
                   languages={playableItem.availableLanguages}

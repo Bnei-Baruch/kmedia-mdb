@@ -20,6 +20,7 @@ class CollectionLogo extends PureComponent {
     return (
       <FallbackImage
         fluid
+        className="collection-logo"
         shape="rounded"
         initialImage={imagePlaceholder}
         src={assetUrl(`logos/collections/${collectionId}.png`)}

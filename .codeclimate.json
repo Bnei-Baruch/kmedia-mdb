@@ -3,6 +3,7 @@
   "plugins":          {
   },
   "exclude_patterns": [
-    "node_modules/"
+    "node_modules/",
+    "__tests__"
   ]
 }

@@ -38,22 +38,29 @@ class SameCollection extends Component {
     }
 
     return (
-      <div className="content__aside-unit">
+      <div className="recommended-same-collection content__aside-unit">
         <Header as="h3" content={t(`${section || 'pages'}.unit.recommended.same-collection.title`)} />
         <Item.Group divided link>
           {
             otherParts.reverse().map(part => (
-              <Item as={Link} key={part.id} to={canonicalLink(part)}>
+              <Item
+                key={part.id}
+                as={Link}
+                to={canonicalLink(part)}
+                className="recommended-same-collection__item"
+              >
                 <Item.Image size="small">
                   <UnitLogo unitId={part.id} collectionId={collection.id} width={150} />
                 </Item.Image>
                 <Item.Content verticalAlign="top">
                   <Header as="h5">
-                    <small className="text grey uppercase">
+                    <small className="text grey uppercase recommended-same-collection__item-title">
                       {t(`${section || 'pages'}.unit.recommended.same-collection.item-title`, { name: collection.ccuNames[part.id] })} - {t('values.date', { date: new Date(part.film_date) })}
                     </small>
                     <br />
-                    {part.name}
+                    <span className="recommended-same-collection__item-name">
+                      {part.name}
+                    </span>
                   </Header>
                   <Item.Meta>
                     <small>{formatDuration(part.duration)}</small>
@@ -67,8 +74,8 @@ class SameCollection extends Component {
               <Container
                 fluid
                 as={Link}
-                textAlign="right"
                 to={canonicalLink(collection)}
+                textAlign="right"
               >
                 {t('buttons.more')} &raquo;
               </Container>

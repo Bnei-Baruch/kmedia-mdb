@@ -1,11 +1,12 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React from 'react';
 import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15';
+import React from 'react';
+import 'jest-enzyme';
+
+configure({ adapter: new Adapter() });
 
 global.requestAnimationFrame = cb => setTimeout(cb, 0);
-
-export const Init = () => configure({ adapter: new Adapter() });
 
 let shallowScreen;
 export const shallowRender = (component, props) => {
