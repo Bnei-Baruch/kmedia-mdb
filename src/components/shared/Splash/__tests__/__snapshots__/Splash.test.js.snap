@@ -2,19 +2,19 @@
 
 exports[`ErrorSplash matches snapshot 1`] = `
 <Component
-  color="black"
-  icon="spinner"
-  isLoading={true}
+  color="red"
+  icon="warning sign"
+  isLoading={false}
   subtext={null}
-  text="Still loading..."
+  text="Nasty error..."
 />
 `;
 
 exports[`FrownSplash matches snapshot 1`] = `
 <Component
-  color="black"
-  icon="spinner"
-  isLoading={true}
+  color="orange"
+  icon="frown"
+  isLoading={false}
   subtext={null}
   text="Still loading..."
 />

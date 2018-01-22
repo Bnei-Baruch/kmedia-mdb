@@ -62,10 +62,12 @@
     "hoist-non-react-statics": "^2.2.2",
     "i18next": "^8.4.3",
     "i18next-xhr-backend": "^1.4.2",
+    "invariant": "^2.2.2",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "moment-duration-format": "^2.0.1",
     "node-sass-chokidar": "^0.0.3",
+    "path-to-regexp": "^2.1.0",
     "prop-types": "^15.5.10",
     "qs": "^6.5.0",
     "react": "^15.6.1",
@@ -86,7 +88,8 @@
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
     "redux-saga": "^0.16.0",
-    "semantic-ui-react": "^0.77.1"
+    "semantic-ui-react": "^0.77.1",
+    "warning": "^3.0.0"
   },
   "jest": {
     "collectCoverageFrom": [
