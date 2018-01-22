@@ -39,7 +39,7 @@ class CollectionPage extends Component {
     }
 
     return (
-      <div>
+      <div className="collection-page">
         <PageHeader collection={collection} namespace={namespace} t={t} />
         <UnitList
           namespace={namespace}

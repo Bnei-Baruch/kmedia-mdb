@@ -114,19 +114,19 @@ class Info extends Component {
       }), ', '));
 
     return (
-      <div>
+      <div className="unit-info">
         <Header as="h1">
-          <small className="text grey">
+          <small className="text grey unit-info__film-date">
             {t('values.date', { date: new Date(filmDate) })}
           </small>
           <br />
-          {name}
+          <span className="unit-info__name">{name}</span>
         </Header>
         <List>
           {
             tagLinks.length === 0 ?
               null :
-              <List.Item>
+              <List.Item className="unit-info__topics">
                 <strong>{t('pages.unit.info.topics')}:</strong>
                 &nbsp;{tagLinks}
               </List.Item>
@@ -134,7 +134,7 @@ class Info extends Component {
           {
             sourcesLinks.length === 0 ?
               null :
-              <List.Item>
+              <List.Item className="unit-info__sources">
                 <strong>{t('pages.unit.info.sources')}:</strong>
                 &nbsp;{sourcesLinks}
               </List.Item>
@@ -142,7 +142,7 @@ class Info extends Component {
           {
             collectionsLinks.length === 0 ?
               null :
-              <List.Item>
+              <List.Item className="unit-info__collections">
                 <strong>{t('pages.unit.info.collections')}:</strong>
                 &nbsp;{collectionsLinks}
               </List.Item>
