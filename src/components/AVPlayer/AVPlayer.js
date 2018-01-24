@@ -540,11 +540,10 @@ class AVPlayer extends PureComponent {
                   <AVPlaybackRate
                     value={playbackRate}
                     onSelect={this.playbackRateChange}
-                    upward={isVideo}
                   />
                 )
               }
-              <AVMuteUnmute upward={isVideo} />
+              <AVMuteUnmute />
               {
                 !isEditMode && (
                   <AVAudioVideo
@@ -563,7 +562,6 @@ class AVPlayer extends PureComponent {
                     language={language}
                     requestedLanguage={item.requestedLanguage}
                     onSelect={this.onLanguageChange}
-                    upward={isVideo}
                     t={t}
                   />
                 )
