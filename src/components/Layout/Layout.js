@@ -28,7 +28,7 @@ class Layout extends Component {
     sidebarActive: false
   };
 
-  // Required for handling outhide sidebar on click outside sidebar,
+  // Required for handling outside sidebar on click outside sidebar,
   // i.e, main, header of footer.
   componentDidMount() {
     document.addEventListener('click', this.clickOutside, true);
@@ -82,13 +82,14 @@ class Layout extends Component {
                 */}
               </Header>
             </Menu.Item>
-            <Menu.Item style={{flex: 1}}>
+            <Menu.Item style={{ flex: 1 }}>
               <OmniBox t={t} location={location} />
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
                 {
                   flags.map(flag => (
+                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
                     <Link language={FLAG_TO_LANGUAGE[flag]} key={flag}>
                       <Flag name={flag} />
                     </Link>
@@ -100,7 +101,9 @@ class Layout extends Component {
         </div>
         <div
           className={classnames('layout__sidebar', { 'is-active': sidebarActive })}
-          ref={el => this.sidebarElement = el}
+          ref={(el) => {
+            this.sidebarElement = el;
+          }}
         >
           <Menu inverted borderless size="huge" color="blue">
             <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.closeSidebar}>
@@ -121,7 +124,7 @@ class Layout extends Component {
           <div className="layout__content">
             <Route component={Routes} />
           </div>
-          <Footer t={t}/>
+          <Footer t={t} />
         </div>
       </div>
     );

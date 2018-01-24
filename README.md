@@ -5,6 +5,7 @@ BB Archive public site front-end.
 [![CircleCI](https://circleci.com/gh/Bnei-Baruch/kmedia-mdb.svg?style=shield&circle-token=eca42e6b560ebed2a45ee2c737457c1006ff4a59)](https://circleci.com/gh/Bnei-Baruch/kmedia-mdb)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0be642c3213449758fb2/maintainability)](https://codeclimate.com/github/Bnei-Baruch/kmedia-mdb/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/0be642c3213449758fb2/test_coverage)](https://codeclimate.com/github/Bnei-Baruch/kmedia-mdb/test_coverage)
+[![Coverage Status](https://coveralls.io/repos/github/Bnei-Baruch/kmedia-mdb/badge.svg?branch=master)](https://coveralls.io/github/Bnei-Baruch/kmedia-mdb?branch=master)
 
 ## License
    [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Bnei-Baruch/kmedia-mdb/blob/master/LICENSE)

@@ -11,28 +11,24 @@ const Footer = (props) => {
   const { t } = props;
   const year  = new Date().getFullYear();
 
-  const renderEvents = () => {
-    return EVENT_TYPES.map(x => (
+  const renderEvents = () => EVENT_TYPES.map(x => (
+    <Menu.Item
+      key={x}
+      name={t(`constants.content-types.${x}`)}
+      as={Link}
+      to={{ pathname: '/events', search: `eventType=${x}` }}
+    />));
+
+  const renderTopics = () => TOPICS_FOR_DISPLAY.map((x) => {
+    const tag = props.tagById(x);
+    return (
       <Menu.Item
         key={x}
-        name={t(`constants.content-types.${x}`)}
+        name={tag ? tag.label : x}
         as={Link}
-        to={{ pathname: '/events', search: `eventType=${x}` }}
-      />));
-  };
-
-  const renderTopics = () => {
-    return TOPICS_FOR_DISPLAY.map(x => {
-      const tag = props.tagById(x);
-      return (
-        <Menu.Item
-          key={x}
-          name={tag ? tag.label : x}
-          as={Link}
-          to={{ pathname: `/topics/${x}` }}
-        />);
-    });
-  };
+        to={{ pathname: `/topics/${x}` }}
+      />);
+  });
 
   return (
     <div className="layout__footer">
@@ -54,10 +50,10 @@ const Footer = (props) => {
                   <Grid.Column>
                     <Header inverted as="h3" content={t('nav.footer.study')} />
                     <Menu text vertical inverted>
-                      <Menu.Item content={t('nav.sidebar.lessons')} as={Link} to={'/lessons'} />
-                      <Menu.Item content={t('nav.sidebar.lectures')} as={Link} to={'/lectures'} />
-                      <Menu.Item content={t('nav.sidebar.sources')} as={Link} to={'/sources'} />
-                      <Menu.Item content={t('nav.sidebar.books')} as={Link} to={'/books'} />
+                      <Menu.Item content={t('nav.sidebar.lessons')} as={Link} to="/lessons" />
+                      <Menu.Item content={t('nav.sidebar.lectures')} as={Link} to="/lectures" />
+                      <Menu.Item content={t('nav.sidebar.sources')} as={Link} to="/sources" />
+                      <Menu.Item content={t('nav.sidebar.books')} as={Link} to="/books" />
                     </Menu>
                   </Grid.Column>
                   <Grid.Column>
@@ -75,9 +71,9 @@ const Footer = (props) => {
                   <Grid.Column>
                     <Header inverted as="h3" content={t('nav.footer.media')} />
                     <Menu text vertical inverted>
-                      <Menu.Item content={t('nav.sidebar.programs')} as={Link} to={'/programs'} />
-                      <Menu.Item content={t('nav.sidebar.publications')} as={Link} to={'/publications'} />
-                      <Menu.Item content={t('nav.sidebar.photos')} as={Link} to={'/photos'} />
+                      <Menu.Item content={t('nav.sidebar.programs')} as={Link} to="/programs" />
+                      <Menu.Item content={t('nav.sidebar.publications')} as={Link} to="/publications" />
+                      <Menu.Item content={t('nav.sidebar.photos')} as={Link} to="/photos" />
                     </Menu>
                   </Grid.Column>
                 </Grid.Row>
