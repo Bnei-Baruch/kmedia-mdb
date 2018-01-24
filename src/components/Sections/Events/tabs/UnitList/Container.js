@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { List, Table } from 'semantic-ui-react';
 
-import { CT_FRIENDS_GATHERING, CT_MEAL } from '../../../../../helpers/consts';
+import { CT_FRIENDS_GATHERING, CT_MEAL, NO_NAME } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../../../helpers/mdb';
 import UnitList from '../../../../Pages/UnitList/Container';
@@ -16,7 +16,7 @@ const renderUnit = (unit, t) => {
   const relatedItems = events.map(x =>
     (
       <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-        {x.name || '☠ no name'}
+        {x.name || NO_NAME}
       </List.Item>
     )
   );
@@ -36,7 +36,7 @@ const renderUnit = (unit, t) => {
       </Table.Cell>
       <Table.Cell>
         <Link to={canonicalLink(unit)}>
-          <strong>{unit.name || '☠ no name'}</strong>
+          <strong>{unit.name || NO_NAME}</strong>
         </Link>
         {
           relatedItems.length > 0 ?

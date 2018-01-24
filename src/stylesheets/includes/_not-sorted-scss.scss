@@ -44,11 +44,29 @@ em {
   }
 }
 
-
 /* Program filters hack (rename, move to filters)*/
-.filter-letters{
-  flex-direction: column!important;
-  flex-wrap: wrap!important;
-  height: 600px!important;
-  width: auto!important;
+.filter-letters {
+  flex-direction: column !important;
+  flex-wrap: wrap !important;
+  height: 600px !important;
+  width: auto !important;
+}
+
+/* space between groups in playlist (events) */
+.avbox__playlist-view-section {
+  padding-bottom: 2rem !important;
+}
+
+/* application loader screen */
+#app-loader {
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  h1 {
+    color: black;
+  }
 }

@@ -1,6 +1,7 @@
 $player-color: $black;
 
 .mediaplayer {
+  background: transparent;
   user-select: none;
 
   video,
@@ -10,6 +11,7 @@ $player-color: $black;
   embed {
     display: block;
     width: 100%;
+    max-height: 100%;
   }
 
   &:-webkit-full-screen { // sass-lint:disable no-vendor-prefixes

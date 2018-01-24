@@ -2,8 +2,14 @@
 
 BB Archive public site front-end.
 
+[![CircleCI](https://circleci.com/gh/Bnei-Baruch/kmedia-mdb.svg?style=shield&circle-token=eca42e6b560ebed2a45ee2c737457c1006ff4a59)](https://circleci.com/gh/Bnei-Baruch/kmedia-mdb)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0be642c3213449758fb2/maintainability)](https://codeclimate.com/github/Bnei-Baruch/kmedia-mdb/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/0be642c3213449758fb2/test_coverage)](https://codeclimate.com/github/Bnei-Baruch/kmedia-mdb/test_coverage)
+
+## License
+   [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Bnei-Baruch/kmedia-mdb/blob/master/LICENSE)
+           
+   This project is licensed under the terms of the [MIT license](/LICENSE.md).
 
 ## Contributing
 
@@ -34,7 +40,12 @@ Open `.env` in your favorite editor and set all variables to their appropriate v
 $ yarn start
 ```
 
+## Thanks
 
-## License
 
-MIT
+<a href="https://www.browserstack.com" target="_blank" title="BrowserStack">
+<img alt="BrowserStack logo" src="https://www.browserstack.com/images/layout/browserstack-logo-600x315.png" width="180" height="95">
+</a>
+
+We send our thanks to the wonderful folks at [BrowserStack](https://www.browserstack.com) for granting us free access to their excellent testing platform.
+

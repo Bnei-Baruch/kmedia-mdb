@@ -43,6 +43,7 @@ const filters = {
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
   'publications': [
+    { name: 'publishers-filter', component: filterComponents.PublishersFilter },
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
   'publications-collection': [
@@ -123,7 +124,7 @@ class UnitListPage extends PureComponent {
     const nsFilters = filters[namespace] || [];
 
     return (
-      <div>
+      <div className="unit-list">
         <Divider fitted />
         {
           nsFilters.length > 0 ?

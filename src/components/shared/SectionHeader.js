@@ -14,8 +14,10 @@ const SectionHeader = (props) => {
             <Grid.Column computer={10} tablet={12} mobile={16}>
               <Header as="h1" color="blue">
                 <Header.Content>
-                  {t(`${section}.header.text`)}
-                  <Header.Subheader>
+                  <span className="section-header__title">
+                    {t(`${section}.header.text`)}
+                  </span>
+                  <Header.Subheader className="section-header__subtitle">
                     {t(`${section}.header.subtext`)}
                   </Header.Subheader>
                 </Header.Content>
@@ -26,7 +28,7 @@ const SectionHeader = (props) => {
             Array.isArray(submenuItems) && submenuItems.length > 0 ?
               <Grid.Row>
                 <Grid.Column>
-                  <Menu tabular size='huge' children={submenuItems} />
+                  <Menu tabular className="section-header__menu" size="huge" children={submenuItems} />
                 </Grid.Column>
               </Grid.Row> :
               null

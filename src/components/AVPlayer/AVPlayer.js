@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import debounce from 'lodash/debounce';
 import { withRouter } from 'react-router-dom';
-import { Player, withMediaProps, utils } from 'react-media-player';
+import { Player, utils, withMediaProps } from 'react-media-player';
 import classNames from 'classnames';
 import { Button, Icon } from 'semantic-ui-react';
 
-import withIsMobile from '../../helpers/withIsMobile';
-import { parse, stringify } from '../../helpers/url';
 import { MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
+import withIsMobile from '../../helpers/withIsMobile';
+import { getQuery, updateQuery } from '../../helpers/url';
+import { fromHumanReadableTime, toHumanReadableTime } from '../../helpers/time';
 import { PLAYER_MODE } from './constants';
 import AVPlayPause from './AVPlayPause';
 import AVPlaybackRate from './AVPlaybackRate';
@@ -34,7 +35,6 @@ const playbackToValue = playback =>
   parseFloat(playback.slice(0, -1));
 
 class AVPlayer extends PureComponent {
-
   static propTypes = {
     t: PropTypes.func.isRequired,
     media: PropTypes.object.isRequired,
@@ -50,7 +50,6 @@ class AVPlayer extends PureComponent {
     onSwitchAV: PropTypes.func.isRequired,
 
     // Slice props
-    isSliceable: PropTypes.bool,
     history: PropTypes.object.isRequired,
 
     // Playlist props
@@ -66,7 +65,6 @@ class AVPlayer extends PureComponent {
   };
 
   static defaultProps = {
-    isSliceable: false,
     autoPlay: false,
     showNextPrev: false,
     hasNext: false,
@@ -89,18 +87,27 @@ class AVPlayer extends PureComponent {
   };
 
   componentWillMount() {
-    const { isSliceable, history } = this.props;
+    const { history } = this.props;
 
-    if (isSliceable) {
-      const query = parse(history.location.search.slice(1));
+    let sstart = 0;
+    let send   = Infinity;
 
-      if (query.sstart || query.send) {
-        this.setSliceMode(!!query.sliceEdit, {
-          sliceStart: query.sstart ? parseFloat(query.sstart) : 0,
-          sliceEnd: query.send ? parseFloat(query.send) : Infinity
-        });
-      }
+    let playerMode = PLAYER_MODE.NORMAL;
+    const query    = getQuery(history.location);
+
+    if (query.sstart) {
+      playerMode = PLAYER_MODE.SLICE_VIEW;
+      sstart     = fromHumanReadableTime(query.sstart).asSeconds();
     }
+    if (query.send) {
+      playerMode = PLAYER_MODE.SLICE_VIEW;
+      send       = fromHumanReadableTime(query.send).asSeconds();
+    }
+
+    this.setSliceMode(playerMode, {
+      sliceStart: sstart,
+      sliceEnd: send
+    });
   }
 
   componentDidMount() {
@@ -200,8 +207,9 @@ class AVPlayer extends PureComponent {
 
   onKeyDown = (e) => {
     if (e.keyCode === 32) {
-      if (!this.props.media.isLoading)
+      if (!this.props.media.isLoading) {
         this.props.media.playPause();
+      }
       e.preventDefault();
     }
   };
@@ -213,14 +221,10 @@ class AVPlayer extends PureComponent {
     }
   };
 
-  setSliceMode = (isEdit, properties = {}, cb) => {
+  setSliceMode = (playerMode, properties = {}, cb) => {
     let sliceStart  = properties.sliceStart;
     let sliceEnd    = properties.sliceEnd;
     const { media } = this.props;
-
-    if (isEdit) {
-      media.pause();
-    }
 
     if (typeof sliceStart === 'undefined') {
       sliceStart = this.state.sliceStart || 0;
@@ -230,7 +234,7 @@ class AVPlayer extends PureComponent {
       sliceEnd = this.state.sliceEnd || media.duration || Infinity;
     }
     this.setState({
-      mode: isEdit ? PLAYER_MODE.SLICE_EDIT : PLAYER_MODE.SLICE_VIEW,
+      mode: playerMode,
       ...properties,
       sliceStart,
       sliceEnd
@@ -283,11 +287,12 @@ class AVPlayer extends PureComponent {
   };
 
   resetSliceQuery = () => {
-    const { history } = this.props;
-    const query       = parse(history.location.search.slice(1));
-    query.sstart      = undefined;
-    query.send        = undefined;
-    history.replace({ search: stringify(query) });
+    updateQuery(this.props.history, q => ({ ...q, sstart: undefined, send: undefined }));
+    //
+    // const query       = parse(history.location.search.slice(1));
+    // query.sstart      = undefined;
+    // query.send        = undefined;
+    // history.replace({ search: stringify(query) });
   };
 
   // Correctly fetch loaded buffers from video to show loading progress.
@@ -310,21 +315,42 @@ class AVPlayer extends PureComponent {
     const { history, media }       = this.props;
     const { sliceStart, sliceEnd } = this.state;
 
-    const query = parse(history.location.search.slice(1));
-    if (!values) {
-      query.sstart = sliceStart || 0;
-      query.send   = (!sliceEnd || sliceEnd === Infinity) ? media.duration : sliceEnd;
-    } else {
-      if (typeof values.sliceEnd !== 'undefined') {
-        query.send = +values.sliceEnd.toFixed(3);
+    updateQuery(history, query => {
+      if (typeof values.sliceStart === 'undefined') {
+        query.sstart = sliceStart || 0;
+      } else {
+        query.sstart = values.sliceStart;
       }
 
-      if (typeof values.sliceStart !== 'undefined') {
-        query.sstart = +values.sliceStart.toFixed(3);
+      if (typeof values.sliceEnd === 'undefined') {
+        query.send = (!sliceEnd || sliceEnd === Infinity) ? media.duration : sliceEnd;
+      } else {
+        query.send = values.sliceEnd;
       }
-    }
 
-    history.replace({ search: stringify(query) });
+      query.sstart = toHumanReadableTime(query.sstart);
+      query.send   = toHumanReadableTime(query.send);
+      return query;
+    });
+
+    // const query = parse(history.location.search.slice(1));
+    //
+    // if (typeof values.sliceStart === 'undefined') {
+    //   query.sstart = sliceStart || 0;
+    // } else {
+    //   query.sstart = values.sliceStart;
+    // }
+    //
+    // if (typeof values.sliceEnd === 'undefined') {
+    //   query.send = (!sliceEnd || sliceEnd === Infinity) ? media.duration : sliceEnd;
+    // } else {
+    //   query.send = values.sliceEnd;
+    // }
+    //
+    // query.sstart = toHumanReadableTime(query.sstart);
+    // query.send   = toHumanReadableTime(query.send);
+    //
+    // history.replace({ search: stringify(query) });
   };
 
   showControls = (callback) => {
@@ -368,9 +394,8 @@ class AVPlayer extends PureComponent {
 
     if (isMobile && !this.state.controlsVisible) {
       this.showControls(() => this.hideControlsTimeout());
-    } else {
-      if (!media.isLoading)
-        media.playPause();
+    } else if (!media.isLoading) {
+      media.playPause();
     }
   };
 
@@ -388,7 +413,6 @@ class AVPlayer extends PureComponent {
             onPrev,
             onNext,
             media,
-            isSliceable
           } = this.props;
     const {
             controlsVisible,
@@ -402,8 +426,8 @@ class AVPlayer extends PureComponent {
             errorReason,
           } = this.state;
 
-    const { isPlaying } = media;
-    const forceShowControls           = item.mediaType === MT_AUDIO || !isPlaying;
+    const { isPlaying }     = media;
+    const forceShowControls = item.mediaType === MT_AUDIO || !isPlaying;
 
     const isVideo       = item.mediaType === MT_VIDEO;
     const isAudio       = item.mediaType === MT_AUDIO;
@@ -448,7 +472,7 @@ class AVPlayer extends PureComponent {
 
     return (
       <div>
-      {/*
+        {/*
         <div style={{ position: 'fixed', background:'yellow', top:'0', left:'0', zIndex:'999999999', padding:'20px' }}>
           {this.player ? this.player._component._player.videoHeight + 'x' + this.player._component._player.videoWidth : ''}
         </div>
@@ -477,13 +501,14 @@ class AVPlayer extends PureComponent {
             onTimeUpdate={this.handleTimeUpdate}
             defaultCurrentTime={sliceStart || 0}
           />
-          <div className='mediaplayer__wrapper'>
+          <div className="mediaplayer__wrapper">
 
-            <div className={classNames('mediaplayer__controls', {
-              'mediaplayer__controls--is-fade': !controlsVisible && !forceShowControls
-            })}
-                 onMouseEnter={this.controlsEnter}
-                 onMouseLeave={this.controlsLeave}
+            <div
+              className={classNames('mediaplayer__controls', {
+                'mediaplayer__controls--is-fade': !controlsVisible && !forceShowControls
+              })}
+              onMouseEnter={this.controlsEnter}
+              onMouseLeave={this.controlsLeave}
             >
               <AVPlayPause
                 showNextPrev={showNextPrev && !isEditMode}
@@ -496,7 +521,7 @@ class AVPlayer extends PureComponent {
                 start={media.currentTime}
                 end={media.duration}
               />
-              <div className='mediaplayer__spacer' />
+              <div className="mediaplayer__spacer" />
               <AVJumpBack jumpSpan={-5} />
               <AVJumpBack jumpSpan={5} />
               <AvSeekBar
@@ -542,7 +567,7 @@ class AVPlayer extends PureComponent {
                   />
                 )
               }
-              {isSliceable && !isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(true)} />}
+              {!isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.SLICE_EDIT)} />}
               {!isEditMode && !isAudio && <AVFullScreen container={this.mediaElement} />}
             </div>
             <div

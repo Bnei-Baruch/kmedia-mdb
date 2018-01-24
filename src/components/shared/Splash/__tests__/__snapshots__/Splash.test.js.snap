@@ -1,5 +1,35 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ErrorSplash matches snapshot 1`] = `
+<Component
+  color="black"
+  icon="spinner"
+  isLoading={true}
+  subtext={null}
+  text="Still loading..."
+/>
+`;
+
+exports[`FrownSplash matches snapshot 1`] = `
+<Component
+  color="black"
+  icon="spinner"
+  isLoading={true}
+  subtext={null}
+  text="Still loading..."
+/>
+`;
+
+exports[`LoadingSplash matches snapshot 1`] = `
+<Component
+  color="black"
+  icon="spinner"
+  isLoading={true}
+  subtext={null}
+  text="Still loading..."
+/>
+`;
+
 exports[`Splash Renders the same as the last time Matches snapshot 1`] = `
 <Component
   color="red"

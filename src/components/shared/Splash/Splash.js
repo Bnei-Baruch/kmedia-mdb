@@ -7,7 +7,7 @@ export const Splash = (props) => {
   const { text, subtext, icon, color, isLoading } = props;
 
   return (
-    <Header as="h2" icon textAlign="center">
+    <Header icon className="splash" as="h2" textAlign="center">
       <Icon name={icon} loading={isLoading} color={color} />
       <Header.Content>
         {text}

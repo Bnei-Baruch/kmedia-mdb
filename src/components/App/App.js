@@ -12,16 +12,8 @@ import Routes from './Routes';
 import '../../stylesheets/Kmedia.css';
 
 const Loader = () => (
-  <div style={{
-    width: '100vw',
-    height: '100vh',
-    backgroundColor: 'white',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }}
-  >
-    <h1 style={{ color: 'black' }}>Loading...</h1>
+  <div id="app-loader">
+    <h1>Loading...</h1>
   </div>
 );
 
@@ -41,7 +33,7 @@ class App extends Component {
 
     if (isAppReady) {
       return (
-        <div>
+        <div id="app">
           <I18nextProvider i18n={i18n} initialLanguage={DEFAULT_LANGUAGE}>
             <Provider store={store}>
               <ConnectedRouter history={history}>

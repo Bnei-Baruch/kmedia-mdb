@@ -120,7 +120,7 @@ class Pagination extends PureComponent {
     const hideNextSet  = visibleRange[visibleRange.length - 1] === totalBlocks;
 
     return (
-      <Menu compact color="blue">
+      <Menu compact className="pagination-menu" color="blue">
         {this.renderPage(titles(isRTL ? 'last' : 'first'), 1, 'first', prevDisabled)}
         {this.renderPage(titles(isRTL ? 'next' : 'prev'), current - 1, 'prev', prevDisabled)}
         {

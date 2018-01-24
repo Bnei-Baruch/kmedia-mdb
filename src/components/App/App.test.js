@@ -1,8 +1,4 @@
 import React from 'react';
-import Adapter from 'enzyme-adapter-react-15';
-import { configure } from 'enzyme/build/index';
-
-configure({ adapter: new Adapter() });
 
 describe('basic', () => {
   beforeEach(() => {
@@ -35,19 +31,18 @@ describe('basic', () => {
 // Tools
 // https://facebook.github.io/jest/
 // https://github.com/airbnb/enzyme/
+// https://github.com/airbnb/enzyme-matchers/ -- Jest assertions for enzyme
 // http://sinonjs.org/ -- spies, stubs and mocks, sandbox
 // https://cheerio.js.org/ -- enzyme wrapper for Static HTML rendering
 // https://github.com/ctimmerm/axios-mock-adapter -- Stubbing network requests
 
+// https://github.com/cypress-io/cypress -- system (in browser) tests
 // https://github.com/react-cosmos/react-cosmos
 // https://github.com/skidding/async-until -- wait until callback returns true
 
 // Types of component tests
-// * Snapshot tests
-// * Rendering tests
-// * Behaviour tests
-// * Integration tests
+// * Snapshot tests (jest)
+// * Rendering tests (enzyme/shallow; cosmos)
+// * Behaviour tests (sinon)
+// * Integration tests (enzyme/mount)
 // * System tests (https://www.cypress.io/; jest-str -- jest system test runner, https://github.com/segmentio/nightmare; http://nightwatchjs.org/)
-
-
-

@@ -78,7 +78,7 @@
     },
     "share": {
       "title": "Посмотри это видео"
-     },
+    },
     "error": {
       "loading": "Ошибка при загрузке файла."
     }
@@ -190,9 +190,7 @@
   "pages": {
     "collection": {
       "items": {
-        "programs-collection": "Эпизод(ов)",
-        "lectures-collection": "Item(s)",
-        "publications-collection": "Articles(s)"
+        "programs-collection": "Эпизод(ов)"
       }
     },
     "unit": {
