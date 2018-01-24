@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { replace } from 'react-router-redux';
 import { translate } from 'react-i18next';
-import { Accordion, Grid, Rail, Segment, Sticky, Ref } from 'semantic-ui-react';
+import { Accordion, Grid, Rail, Ref, Segment, Sticky } from 'semantic-ui-react';
 
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -139,7 +139,7 @@ class LibraryContainer extends Component {
   selectSourceById = (id, e) => {
     e.preventDefault();
     this.props.replace(`sources/${id}`);
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
   };
 
   subToc = subTree => (
@@ -166,7 +166,11 @@ class LibraryContainer extends Component {
     // 2. Element that has NO children is NOT CONTAINER (though really it may be empty container)
     // 3. If all children of first level element are NOT CONTAINERs, than it is also NOT CONTAINER
 
-    const avoidSortingForSourceIds = ["qMUUn22b"];
+    const BS_SHAMATI               = 'qMUUn22b';
+    const BS_IGROT                 = 'DVSS0xAR';
+    const RB_IGROT                 = 'b8SHlrfH';
+    const MR_TORA                  = 'bvA8ZB1w';
+    const avoidSortingForSourceIds = [BS_SHAMATI, BS_IGROT, RB_IGROT, MR_TORA];
 
     const { getSourceById } = this.props;
 
@@ -181,9 +185,13 @@ class LibraryContainer extends Component {
     const hasNoGrandsons = children.reduce((acc, curr) => acc && isEmpty(getSourceById(curr).children), true);
     let panels;
     if (hasNoGrandsons) {
-      panels = children.map((leafId) => {
-        const { name: leafTitle, } = getSourceById(leafId);
-        const item                 = this.leaf(leafId, leafTitle);
+      panels = children.map((leafId, idx) => {
+        let { name: leafTitle, } = getSourceById(leafId);
+        if (sourceId === BS_SHAMATI) {
+          leafTitle = `${idx + 1}. ${leafTitle}`;
+        }
+
+        const item = this.leaf(leafId, leafTitle);
         return { title: item, key: `lib-leaf-${leafId}` };
       });
     } else {
@@ -191,15 +199,11 @@ class LibraryContainer extends Component {
     }
 
     if (firstLevel) {
-
-      if (!avoidSortingForSourceIds.some((a) => a === sourceId)){
-
-        let sortedPanels = panels.sort((a,b) => typeof a.title === "string" ? (a.title > b.title ? 1 
+      if (!avoidSortingForSourceIds.some((a) => a === sourceId)) {
+        panels.sort((a, b) => typeof a.title === 'string' ? (a.title > b.title ? 1
           : ((b.title > a.title) ? -1 : 0))
-        : (a.title.props.children > b.title.props.children ? 1 
-             : ((b.title.props.children > a.title.props.children) ? -1 : 0)));
-             
-        return sortedPanels;
+          : (a.title.props.children > b.title.props.children ? 1
+            : ((b.title.props.children > a.title.props.children) ? -1 : 0)));
       }
 
       return panels;
