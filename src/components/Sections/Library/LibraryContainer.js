@@ -166,6 +166,8 @@ class LibraryContainer extends Component {
     // 2. Element that has NO children is NOT CONTAINER (though really it may be empty container)
     // 3. If all children of first level element are NOT CONTAINERs, than it is also NOT CONTAINER
 
+    const avoidSortingForSourceIds = ["qMUUn22b"];
+
     const { getSourceById } = this.props;
 
     const { name: title, children } = getSourceById(sourceId);
@@ -189,6 +191,17 @@ class LibraryContainer extends Component {
     }
 
     if (firstLevel) {
+
+      if (!avoidSortingForSourceIds.some((a) => a === sourceId)){
+
+        let sortedPanels = panels.sort((a,b) => typeof a.title === "string" ? (a.title > b.title ? 1 
+          : ((b.title > a.title) ? -1 : 0))
+        : (a.title.props.children > b.title.props.children ? 1 
+             : ((b.title.props.children > a.title.props.children) ? -1 : 0)));
+             
+        return sortedPanels;
+      }
+
       return panels;
     }
 
