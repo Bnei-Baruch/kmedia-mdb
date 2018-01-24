@@ -101,10 +101,10 @@ class LibraryContainer extends Component {
       }
     }
 
-
+//@TODO - David, can be state that change scroll to many times.
     if (accordionContext && selectedAccordionContext) {
       const elScrollTop = ReactDOM.findDOMNode(selectedAccordionContext).offsetTop;
-      if(accordionContext.parentElement.scrollTop !== elScrollTop){
+      if (accordionContext.parentElement.scrollTop !== elScrollTop) {
         accordionContext.parentElement.scrollTop = elScrollTop;
       }
     }
@@ -143,7 +143,7 @@ class LibraryContainer extends Component {
   selectSourceById = (id, e) => {
     e.preventDefault();
     this.props.replace(`sources/${id}`);
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
   };
 
   subToc = subTree => (
