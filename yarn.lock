@@ -6734,9 +6734,9 @@ react-image-gallery@^0.8.3:
     prop-types "^15.5.8"
     react-swipeable "^4.0.0"
 
-react-media-player@^0.7.0:
+"react-media-player@github:Bnei-Baruch/react-media-player":
   version "0.7.0"
-  resolved "https://registry.yarnpkg.com/react-media-player/-/react-media-player-0.7.0.tgz#d4d0a0863f1a642024126c3fec64890db0d8cd47"
+  resolved "https://codeload.github.com/Bnei-Baruch/react-media-player/tar.gz/66d6ed4500c44ce7f3d20e49cd96d9531d86c3ac"
   dependencies:
     prop-types "^15.5.10"
 
