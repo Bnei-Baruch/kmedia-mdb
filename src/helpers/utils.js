@@ -18,6 +18,7 @@ import {
   CT_KITEI_MAKOR,
   CT_LECTURE,
   CT_LECTURE_SERIES,
+  CT_LELO_MIKUD,
   CT_LESSON_PART,
   CT_MEAL,
   CT_MEALS,
@@ -270,6 +271,7 @@ export const canonicalLink = (entity) => {
   case CT_TRAINING:
   case CT_KITEI_MAKOR:
   case CT_PUBLICATION:
+  case CT_LELO_MIKUD:
     return '/';
   default:
     return '/';

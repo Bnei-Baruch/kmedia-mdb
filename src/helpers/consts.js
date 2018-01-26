@@ -32,6 +32,7 @@ export const CT_CLIP                  = 'CLIP';
 export const CT_TRAINING              = 'TRAINING';
 export const CT_KITEI_MAKOR           = 'KITEI_MAKOR';
 export const CT_PUBLICATION           = 'PUBLICATION';
+export const CT_LELO_MIKUD            = 'LELO_MIKUD';
 
 // Source Types
 export const SRC_COLLECTION = 'COLLECTION';
@@ -225,7 +226,7 @@ export const MIME_TYPE_TO_MEDIA_TYPE = Object.values(MEDIA_TYPES).reduce((acc, m
   return acc;
 }, {});
 
-export const TOPICS_FOR_DISPLAY = ['VUpFlBnu', '0db5BBS3', 'g3ml0jum'];
+export const TOPICS_FOR_DISPLAY    = ['VUpFlBnu', '0db5BBS3', 'g3ml0jum'];
 export const EVENT_PREPARATION_TAG = 'Salvk5yF';
 
 export const DATE_FORMAT = 'YYYY-MM-DD';

@@ -405,7 +405,8 @@
       "CLIP": "Clip",
       "TRAINING": "Training",
       "KITEI_MAKOR": "Sources Materials",
-      "PUBLICATION": "Publication"
+      "PUBLICATION": "Publication",
+      "LELO_MIKUD": "Edited - No Focus Group"
     },
     "media-types": {
       "video": "Video",

@@ -2,19 +2,19 @@
 
 exports[`ErrorSplash matches snapshot 1`] = `
 <Component
-  color="black"
-  icon="spinner"
-  isLoading={true}
+  color="red"
+  icon="warning sign"
+  isLoading={false}
   subtext={null}
-  text="Still loading..."
+  text="Nasty error..."
 />
 `;
 
 exports[`FrownSplash matches snapshot 1`] = `
 <Component
-  color="black"
-  icon="spinner"
-  isLoading={true}
+  color="orange"
+  icon="frown"
+  isLoading={false}
   subtext={null}
   text="Still loading..."
 />
@@ -40,11 +40,12 @@ exports[`Splash Renders the same as the last time Matches snapshot 1`] = `
 >
   <Header
     as="h2"
+    className="splash"
     icon={true}
     textAlign="center"
   >
     <h2
-      className="ui icon center aligned header"
+      className="ui icon center aligned header splash"
     >
       <Icon
         as="i"
@@ -86,11 +87,12 @@ exports[`Splash Renders the same as the last time Matches snapshot 2`] = `
 >
   <Header
     as="h2"
+    className="splash"
     icon={true}
     textAlign="center"
   >
     <h2
-      className="ui icon center aligned header"
+      className="ui icon center aligned header splash"
     >
       <Icon
         as="i"
