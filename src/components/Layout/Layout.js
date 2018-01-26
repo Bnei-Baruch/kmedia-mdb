@@ -39,7 +39,10 @@ class Layout extends Component {
   }
 
   clickOutside = (e) => {
-    if (this.state.sidebarActive && e.target !== this.sidebarElement && !this.sidebarElement.contains(e.target)) {
+    if (this.state &&
+        this.state.sidebarActive && 
+        e.target !== this.sidebarElement && 
+        !this.sidebarElement.contains(e.target)) {
       this.closeSidebar();
     }
   };
