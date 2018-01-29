@@ -79,6 +79,19 @@
     overflow-y: auto;
     padding-bottom: 1rem;
     padding-top: .7rem;
+    .header {
+      color: $blue;
+    }
+    .item .item {
+      // background: red!important;
+      padding-left: 1.14285714em * 2;
+      margin-left: -1.14285714em;
+      padding-right: 1.14285714em * 2;
+      margin-right: -1.14285714em;
+    }
+    .menu > .item {
+      // padding-bottom: 0;
+    }
   }
 }
 
