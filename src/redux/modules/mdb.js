@@ -1,7 +1,9 @@
+import groupBy from 'lodash/groupBy';
 import { createAction, handleActions } from 'redux-actions';
 
 import { types as system } from './system';
 import { types as settings } from './settings';
+import { MEDIA_TYPES } from '../../helpers/consts';
 
 /* Types */
 
@@ -136,7 +138,7 @@ const onReceiveCollections = (state, action) => {
         // as it might be overridden by successive calls from different collections
         delete updatedCU.name_in_collection;
 
-        cuById[cu.id] = updatedCU;
+        cuById[cu.id] = stripOldFiles(updatedCU);
 
         return cu.id;
       });
@@ -199,7 +201,7 @@ const onReceiveContentUnits = (state, action) => {
         // make a copy of derived unit and set this unit as source name
         const updatedDU  = { ...v, ...state.cuById[v.id] };
         updatedDU.sduIDs = { ...updatedDU.sduIDs, [y.id]: relName };
-        cuById[v.id]     = updatedDU;
+        cuById[v.id]     = stripOldFiles(updatedDU);
 
         acc[k] = cuID;
         return acc;
@@ -216,7 +218,7 @@ const onReceiveContentUnits = (state, action) => {
         // make a copy of source unit and set this unit as derived name
         const updatedDU  = { ...v, ...state.cuById[v.id] };
         updatedDU.dduIDs = { ...updatedDU.dduIDs, [y.id]: relName };
-        cuById[v.id]     = updatedDU;
+        cuById[v.id]     = stripOldFiles(updatedDU);
 
         acc[k] = cuID;
         return acc;
@@ -224,13 +226,51 @@ const onReceiveContentUnits = (state, action) => {
       delete y.source_units;
     }
 
-    cuById[y.id] = { ...state.cuById[y.id], ...y };
+    cuById[y.id] = stripOldFiles({ ...state.cuById[y.id], ...y });
   });
   return {
     ...state,
     cById,
     cuById,
   };
+};
+
+// We remove old wmv and flv files which have been converted to mp4
+const stripOldFiles = (unit) => {
+  const { files } = unit;
+
+  // no files in unit
+  if (!Array.isArray(files)) {
+    return unit;
+  }
+
+  // no old files in unit
+  if (!files.some(x => x.mimetype === MEDIA_TYPES.wmv.mime_type ||
+      x.mimetype === MEDIA_TYPES.flv.mime_type)) {
+    return unit;
+  }
+
+  // group by language and type
+  const sMap = groupBy(files, x => `${x.language}_${x.type}`.toLowerCase());
+
+  // filter old files which have been converted
+  const nFiles = Object.values(sMap).reduce((acc, val) => {
+
+    // not interesting - only video files have been converted.
+    if (val.length < 2 || val[0].type !== 'video') {
+      return acc.concat(val);
+    }
+
+    // find mp4 file if present
+    const mp4Files = val.filter(x => x.mimetype === MEDIA_TYPES.mp4.mime_type);
+    if (mp4Files.length > 0) {
+      return acc.concat(mp4Files); // we have some, take only them
+    }
+
+    return acc.concat(val);
+  }, []);
+
+  return { ...unit, files: nFiles };
 };
 
 export const reducer = handleActions({
