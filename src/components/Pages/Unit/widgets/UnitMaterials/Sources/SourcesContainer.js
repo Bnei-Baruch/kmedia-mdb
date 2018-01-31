@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import { isEmpty } from '../../../../../../helpers/utils';
 import { actions, selectors } from '../../../../../../redux/modules/sources';
+import { actions as assetsActions, selectors as assetsSelectors } from '../../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
 import * as shapes from '../../../../../shapes';
 import Sources from './Sources';
@@ -57,19 +58,24 @@ class SourcesContainer extends Component {
     });
   };
 
-  handleContentChange = (id, name) => {
-    this.props.fetchContent(id, name);
+  handleContentChange = (id, name, deriveId) => {
+    if (deriveId) {
+      this.props.deriveDoc2htmlById(deriveId);
+    } else {
+      this.props.fetchContent(id, name);
+    }
   };
 
   render() {
-    const { unit, indexMap, content, language, t, getSourceById } = this.props;
+    const { unit, indexMap, content, deriveContentById, language, t, getSourceById } = this.props;
 
     return (
       <Sources
         unit={unit}
         indexMap={indexMap}
         content={content}
-        language={language}
+        deriveContentById={deriveContentById}
+        defaultLanguage={language}
         t={t}
         getSourceById={getSourceById}
         onContentChange={this.handleContentChange}
@@ -89,11 +95,13 @@ export default connect(
     return {
       indexMap,
       content: selectors.getContent(state.sources),
+      deriveContentById: assetsSelectors.getDoc2htmlById(state.assets),
       language: settings.getLanguage(state.settings),
       getSourceById: selectors.getSourceById(state.sources),
     };
   },
   dispatch => bindActionCreators({
+    deriveDoc2htmlById: assetsActions.doc2html,
     fetchIndex: actions.fetchIndex,
     fetchContent: actions.fetchContent,
   }, dispatch)
