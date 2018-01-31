@@ -22,6 +22,11 @@ class Sources extends Component {
       wip: shapes.WIP,
       err: shapes.Error,
     }).isRequired,
+    doc2htmlById: PropTypes.shape({
+      data: PropTypes.string, // actual content (HTML)
+      wip: shapes.WIP,
+      err: shapes.Error,
+    }).isRequired,
     defaultLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     onContentChange: PropTypes.func.isRequired,
@@ -197,8 +202,10 @@ class Sources extends Component {
   };
 
   render() {
-    const { content, deriveContentById, t }                   = this.props;
+    const { unit, content, doc2htmlById, t }                        = this.props;
     const { options, selected, isMakor, languages, language } = this.state;
+
+    // console.log('render', { props: this.props, state: this.state });
 
     if (options.length === 0) {
       return <Segment basic>{t('materials.sources.no-sources')}</Segment>;
@@ -208,7 +215,12 @@ class Sources extends Component {
       return <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
     }
 
-    const { wip: contentWip, err: contentErr, data: contentData } = isMakor ? deriveContentById[Object.keys(deriveContentById)[0]] || {} : content;
+    let contentStatus = content;
+    if (isMakor) {
+      const actualFile = this.getDerived(unit.derived_units, selected).find(x => x.language === language);
+      contentStatus    = doc2htmlById[actualFile.id] || {};
+    }
+    const { wip: contentWip, err: contentErr, data: contentData } = contentStatus;
 
     let contents;
     if (contentErr) {

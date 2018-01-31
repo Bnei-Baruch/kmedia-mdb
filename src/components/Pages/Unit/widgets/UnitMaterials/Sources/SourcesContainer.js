@@ -23,11 +23,17 @@ class SourcesContainer extends Component {
       wip: shapes.WIP,
       err: shapes.Error,
     }),
+    doc2htmlById: PropTypes.shape({
+      data: PropTypes.string, // actual content (HTML)
+      wip: shapes.WIP,
+      err: shapes.Error,
+    }),
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     fetchIndex: PropTypes.func.isRequired,
     fetchContent: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,
+    doc2html: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -60,21 +66,21 @@ class SourcesContainer extends Component {
 
   handleContentChange = (id, name, deriveId) => {
     if (deriveId) {
-      this.props.deriveDoc2htmlById(deriveId);
+      this.props.doc2html(deriveId);
     } else {
       this.props.fetchContent(id, name);
     }
   };
 
   render() {
-    const { unit, indexMap, content, deriveContentById, language, t, getSourceById } = this.props;
+    const { unit, indexMap, content, doc2htmlById, language, t, getSourceById } = this.props;
 
     return (
       <Sources
         unit={unit}
         indexMap={indexMap}
         content={content}
-        deriveContentById={deriveContentById}
+        doc2htmlById={doc2htmlById}
         defaultLanguage={language}
         t={t}
         getSourceById={getSourceById}
@@ -95,13 +101,13 @@ export default connect(
     return {
       indexMap,
       content: selectors.getContent(state.sources),
-      deriveContentById: assetsSelectors.getDoc2htmlById(state.assets),
+      doc2htmlById: assetsSelectors.getDoc2htmlById(state.assets),
       language: settings.getLanguage(state.settings),
       getSourceById: selectors.getSourceById(state.sources),
     };
   },
   dispatch => bindActionCreators({
-    deriveDoc2htmlById: assetsActions.doc2html,
+    doc2html: assetsActions.doc2html,
     fetchIndex: actions.fetchIndex,
     fetchContent: actions.fetchContent,
   }, dispatch)
