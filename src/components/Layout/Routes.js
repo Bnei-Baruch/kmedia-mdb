@@ -20,6 +20,7 @@ import EventCollection from '../Sections/Events/Collection';
 import LibraryHomepage from '../Sections/Library/Homepage';
 import LibraryContainer from '../Sections/Library/LibraryContainer';
 import SearchResults from '../Search/SearchResultsContainer';
+import HomePage from '../Sections/Home/HomePage';
 import Design from '../Design/Design';
 
 import Redirect from './Redirect';
@@ -35,7 +36,7 @@ const Routes = ({ match }) => {
 
   return (
     <Switch>
-      <Route exact path={`${urlPrefix}/`} component={Lessons} />
+      <Route exact path={`${urlPrefix}/`} component={HomePage} />
       <Route exact path={`${urlPrefix}/lessons`} component={Lessons} />
       <Route exact path={`${urlPrefix}/lessons/cu/:id`} component={LessonUnit} />
       <Route exact path={`${urlPrefix}/lessons/c/:id`} component={LessonCollection} />
