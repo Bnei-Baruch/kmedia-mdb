@@ -57,15 +57,18 @@ class Sources extends Component {
     }
 
     if (this.state.isMakor) {
-
+// if makor not changed don't do nothing
       if (this.props.deriveContentById === nextProps.deriveContentById) {
         return;
       }
-      const derive  = this.props.deriveContentById[Object.keys(this.props.deriveContentById)[0]];
-      const nDerive = nextProps.deriveContentById[Object.keys(nextProps.deriveContentById)[0]];
+
+      const { languages, language } = this.getMakorLanguages(this.getDerived(nextProps.unit.derived_units), nextProps.defaultLanguage);
+      const deriveId                = this.getDerived(nextProps.unit.derived_units, selected).find(x => x.language === language).id;
+      const derive                  = this.props.deriveContentById[deriveId];
+      const nDerive                 = nextProps.deriveContentById[deriveId];
+      //if makor was loaded update state
       if (nDerive && nDerive.data && !(derive && derive.data)) {
-        const options                 = this.getSourceOptions(nextProps);
-        const { languages, language } = this.getMakorLanguages(this.getDerived(nextProps.unit.derived_units), nextProps.defaultLanguage);
+        const options = this.getSourceOptions(nextProps);
         this.setState({ options, languages, language });
       }
     } else {
@@ -138,12 +141,13 @@ class Sources extends Component {
     return { languages, language };
   };
 
-  changeContent = (selected, language, props) => {
+  changeContent = (params) => {
+    const { selected = this.state.selected, language = this.state.language, props = this.props, isMakor = this.state.isMakor } = params;
     if (!selected || !language) return;
 
-    const { unit, indexMap, onContentChange } = props || this.props;
+    const { unit, indexMap, onContentChange } = props;
 
-    if (this.state.isMakor) {
+    if (isMakor) {
       const derived = this.getDerived(unit.derived_units, selected).find(x => x.language === language);
       onContentChange(null, null, derived.id);
     } else if (indexMap[selected].data) {
@@ -159,13 +163,8 @@ class Sources extends Component {
     const derives                 = this.getDerived(nextProps.unit.derived_units);
     const { languages, language } = isMakor ? this.getMakorLanguages(derives, nextProps.defaultLanguage) : this.getSourceLanguages(nextProps.indexMap[selected], nextProps.defaultLanguage);
 
-    this.setState({
-      options,
-      languages,
-      language,
-      selected,
-      isMakor
-    }, () => this.changeContent(selected, language, nextProps));
+    this.setState({ options, languages, language, selected, isMakor });
+    this.changeContent({ selected, language, nextProps, isMakor });
   };
 
   handleSourceChanged = (e, data) => {
@@ -180,11 +179,12 @@ class Sources extends Component {
 
     const { languages, language } = isMakor ? this.getMakorLanguages(this.getDerived(unit.derived_units), defaultLanguage) : this.getSourceLanguages(indexMap[selected], defaultLanguage);
 
-    this.setState({ selected, languages, language, isMakor }, () => this.changeContent(selected, language));
+    this.setState({ selected, languages, language, isMakor });
+    this.changeContent({ selected, language, isMakor });
   };
 
   handleLanguageChanged = (e, language) => {
-    this.changeContent(this.state.selected, language);
+    this.changeContent({ language });
     this.setState({ language });
   };
 
