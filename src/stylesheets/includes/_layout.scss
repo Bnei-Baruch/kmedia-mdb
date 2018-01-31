@@ -1,3 +1,5 @@
+$sidebar-width: 290px;
+
 @import 'rtl/layout';
 
 .layout {
@@ -35,7 +37,7 @@
     top: 0;
     transform: translate(-100%, 0);
     transition: transform .3s;
-    width: 290px;
+    width: $sidebar-width;
     z-index: 999999;
 
     &.is-active {
@@ -78,6 +80,19 @@
 
   &__footer {
     background: $black;
+  }
+
+  &__secondary-header{
+    background: $white;
+    height: 70px;
+    left: 0;
+    position: fixed;
+    right: 0;
+    z-index: 1;
+    
+    +.ui.container {
+      padding-top: 70px;
+    }
   }
 }
 
@@ -123,12 +138,16 @@
     }
 
     &__main {
-      margin-left: 290px;
+      margin-left: $sidebar-width;
+    }
+
+    &__secondary-header {
+      left: $sidebar-width;
     }
   }
 
   .logo {
-    min-width: 290px;
+    min-width: $sidebar-width;
 
     img {
       display: inline-block !important;
