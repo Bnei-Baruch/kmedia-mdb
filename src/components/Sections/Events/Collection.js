@@ -45,11 +45,14 @@ class MyPlaylistWidget extends PlaylistWidget {
     const { t, selected } = this.props;
 
     return (
-      <div key={section} className="avbox__playlist-view-section">
-        <Header inverted as="h3">
+      
+        <Menu.Item key={section}>
+        {/* <Header inverted as="h3">
           {t(`events.collection.playlist.${section}`)}
-        </Header>
-        <Menu vertical fluid size="small">
+        </Header> */}
+        
+          <Menu.Header >{t(`events.collection.playlist.${section}`)}</Menu.Header>
+          {/* <Menu.Menu> */}
           {
             items.map((item, index) => {
                 const { unit } = item;
@@ -77,8 +80,9 @@ class MyPlaylistWidget extends PlaylistWidget {
               }
             )
           }
-        </Menu>
-      </div>
+        {/* </Menu.Menu> */}
+        </Menu.Item>
+      
     );
   }
 
@@ -90,6 +94,7 @@ class MyPlaylistWidget extends PlaylistWidget {
         ref={c => this.playlistView = c}
         className="avbox__playlist-view"
       >
+      <Menu vertical fluid size="small">
         {
           ['lessons', 'other_parts', 'preparation', 'appendices']
             .map(x => {
@@ -102,6 +107,7 @@ class MyPlaylistWidget extends PlaylistWidget {
               return this.renderPlaylistSection(x, items.slice(offset, offset + len), offset);
             })
         }
+        </Menu>
       </div>
     );
   }

@@ -241,7 +241,7 @@ class Design extends Component {
                           </Grid.Column>
                           <Grid.Column >
                             <div className='thumbnail'>
-                              <div className='thumbnail__image' style={{backgroundImage:'url(https://assets4.bigthink.com/system/idea_thumbnails/53104/size_1024/shutterstock_84089224.jpg?1381781657)'}}></div>
+                              <div className='thumbnail__image' style={{backgroundImage:'url(http://assets4.bigthink.com/system/idea_thumbnails/53104/size_1024/shutterstock_84089224.jpg?1381781657)'}}></div>
                               <a href='#'>
                                 <Header as='h3' className='thumbnail__header'>
                                   <Header.Content>
@@ -265,8 +265,19 @@ class Design extends Component {
                             
                           </Grid.Column>
                           <Grid.Column >
-                            <Image src='/assets/images/wireframe/image.png' />
+                            <div className='thumbnail'>
+                              <div className='thumbnail__image' style={{backgroundImage:'url(https://cdn-images-1.medium.com/max/2000/1*4mYgGvtkKmQQP6vdDObq5g.png)'}}></div>
+                              <a href='#'>
+                                <Header as='h3' className='thumbnail__header'>
+                                  <Header.Content>
+                                    Nullification
+                                  </Header.Content>
+                                </Header>
+                              </a>
+                            </div> 
+                            
                           </Grid.Column>
+                        
                         </Grid.Row>
                       </Grid>
                     </Grid.Column>
@@ -275,7 +286,7 @@ class Design extends Component {
               </div>
             </Container>
           </div>
-        {/*
+        
         <Header size='large' color='pink' inverted>Homepage End</Header>
         <div className='section-header'>
           <Container className='padded'>
@@ -849,7 +860,7 @@ class Design extends Component {
           </Grid.Row>
         </Grid>
       </Grid.Column>
-      */}
+      
       </div>
     );
   }
