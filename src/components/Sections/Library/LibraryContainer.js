@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { replace } from 'react-router-redux';
 import { translate } from 'react-i18next';
-import { Accordion, Grid, Ref, Sticky, Container } from 'semantic-ui-react';
+import { Accordion, Container, Grid, Ref, Sticky } from 'semantic-ui-react';
 
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -14,7 +14,6 @@ import * as shapes from '../../shapes';
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import LibraryContentContainer from './LibraryContentContainer';
-import GridColumn from 'semantic-ui-react/dist/commonjs/collections/Grid/GridColumn';
 
 class LibraryContainer extends Component {
 
@@ -283,7 +282,7 @@ class LibraryContainer extends Component {
             </Grid>
           </Container>
         </div>
-        <Container> 
+        <Container>
           <Grid padded>
             <Grid.Row>
               <Grid.Column width={3}>
