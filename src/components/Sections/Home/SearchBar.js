@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Header, Input } from 'semantic-ui-react';
+import * as shapes from '../../shapes';
+import OmniBox from '../../Search/OmniBox';
 
 class SearchBar extends Component {
 
   static propTypes = {
+    t: PropTypes.func.isRequired,
+    location: shapes.HistoryLocation.isRequired,
   };
 
   static defaultProps = {
@@ -12,6 +16,8 @@ class SearchBar extends Component {
 
 
   render() {
+    const { t, location } = this.props;
+
     return (
       <div className='homepage__header'>
         <Grid centered>
@@ -25,7 +31,7 @@ class SearchBar extends Component {
             </Grid.Column>
             <Grid.Column computer={12} tablet={14} mobile={16}>
               <div className='homepage__search'>
-                <Input fluid action='Search' placeholder='Search...' />
+                <OmniBox t={t} location={location} />
               </div>
             </Grid.Column>
           </Grid.Row>

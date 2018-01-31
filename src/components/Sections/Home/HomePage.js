@@ -21,6 +21,7 @@ import Topic from './Topic';
 import Section from './Section';
 import LatestUpdate from './LatestUpdate';
 import Link from '../../Language/MultiLanguageLink';
+import { translate } from 'react-i18next';
 
 //
 // const Data = {
@@ -109,10 +110,12 @@ import Link from '../../Language/MultiLanguageLink';
 class HomePage extends Component {
 
   render() {
+    const { t, location }   = this.props;
+
     return (
       <div className='homepage'>
         <Container className='padded'>
-          <SearchBar />
+          <SearchBar t={t} location={location}/>
         </Container>
         <div className='homepage__featured'>
           <Container className='padded'>
@@ -208,4 +211,4 @@ class HomePage extends Component {
   }
 }
 
-export default HomePage;
+export default translate()(HomePage);
