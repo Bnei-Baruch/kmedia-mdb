@@ -12,6 +12,7 @@ import { reducer as tags } from './modules/tags';
 import { reducer as mdb } from './modules/mdb';
 import { reducer as search } from './modules/search';
 import { reducer as assets } from './modules/assets';
+import { reducer as home } from './modules/home';
 
 export default combineReducers({
   router,
@@ -27,5 +28,6 @@ export default combineReducers({
   mdb,
   search,
   assets,
+  home,
 });
 

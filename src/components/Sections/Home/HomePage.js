@@ -1,14 +1,8 @@
 /* eslint-disable */
 
 import React, { Component } from 'react';
-import {
-  Grid,
-  Card,
-  Search,
-  Container, Image, Header,
-} from 'semantic-ui-react';
+import { Card, Container, Grid, } from 'semantic-ui-react';
 import DailyLessonPlaceholder from '../../../images/hp_lesson_temp.png';
-import FeaturedPlaceholder from '../../../images/hp_featured_temp.jpg';
 import DailyLessonsIcon from '../../../images/icons/dailylessons.svg';
 import ProgramsIcon from '../../../images/icons/programs.svg';
 import LecturesIcon from '../../../images/icons/lectures.svg';
@@ -20,8 +14,10 @@ import Featured from './Featured';
 import Topic from './Topic';
 import Section from './Section';
 import LatestUpdate from './LatestUpdate';
-import Link from '../../Language/MultiLanguageLink';
 import { translate } from 'react-i18next';
+import { connect } from 'react-redux';
+import { actions, selectors } from '../../../redux/modules/home';
+import { bindActionCreators } from 'redux';
 
 //
 // const Data = {
@@ -109,17 +105,24 @@ import { translate } from 'react-i18next';
 
 class HomePage extends Component {
 
+  componentDidMount() {
+
+    // TODO: this should be much smarter...
+    // we should try to avoid loading data as much as possible
+    this.props.fetchData();
+  }
+
   render() {
-    const { t, location }   = this.props;
+    const { t, location } = this.props;
 
     return (
       <div className='homepage'>
         <Container className='padded'>
-          <SearchBar t={t} location={location}/>
+          <SearchBar t={t} location={location} />
         </Container>
         <div className='homepage__featured'>
           <Container className='padded'>
-            <Grid centered >
+            <Grid centered>
               <Grid.Row>
                 <Grid.Column computer={6} tablet={7} mobile={16}>
                   <Featured
@@ -133,11 +136,11 @@ class HomePage extends Component {
                 </Grid.Column>
                 <Grid.Column computer={6} tablet={7} mobile={16}>
                   {/*<Featured*/}
-                    {/*thumbnail={Data.PropTypes.Image}*/}
-                    {/*title={Data.PropTypes.Header}*/}
-                    {/*subTitle={Data.PropTypes.SubHeader}*/}
-                    {/*label={Data.PropTypes.Section}*/}
-                    {/*href={Data.PropTypes.Url}*/}
+                  {/*thumbnail={Data.PropTypes.Image}*/}
+                  {/*title={Data.PropTypes.Header}*/}
+                  {/*subTitle={Data.PropTypes.SubHeader}*/}
+                  {/*label={Data.PropTypes.Section}*/}
+                  {/*href={Data.PropTypes.Url}*/}
                   {/*/>*/}
                 </Grid.Column>
               </Grid.Row>
@@ -149,25 +152,25 @@ class HomePage extends Component {
             title='Archive Sections'
             className='homepage__iconsrow'
           >
-            <Grid doubling columns={6} >
+            <Grid doubling columns={6}>
               <Grid.Row>
                 <Grid.Column>
                   <Topic title='Daily Lessons' img={DailyLessonsIcon} href='/lessons' />
                 </Grid.Column>
                 <Grid.Column>
-                  <Topic title='Programs' img={ProgramsIcon} href='/programs'/>
+                  <Topic title='Programs' img={ProgramsIcon} href='/programs' />
                 </Grid.Column>
                 <Grid.Column>
-                  <Topic title='Lectures' img={LecturesIcon} href='/lectures'/>
+                  <Topic title='Lectures' img={LecturesIcon} href='/lectures' />
                 </Grid.Column>
                 <Grid.Column>
-                  <Topic title='Sources' img={SourcesIcon} href='/sources'/>
+                  <Topic title='Sources' img={SourcesIcon} href='/sources' />
                 </Grid.Column>
                 <Grid.Column>
                   <Topic title='Events' img={EventsIcon} href='/events' />
                 </Grid.Column>
                 <Grid.Column>
-                  <Topic title='Publications' img={PublicationsIcon} href='/publications'/></Grid.Column>
+                  <Topic title='Publications' img={PublicationsIcon} href='/publications' /></Grid.Column>
               </Grid.Row>
             </Grid>
           </Section>
@@ -182,25 +185,25 @@ class HomePage extends Component {
                 href=''
               />
               {/*<LatestUpdate*/}
-                {/*img='https://archive.kbb1.com/assets/api/thumbnail/tSmGoUDU'*/}
-                {/*title='Webinar with Dr. Michael Laitman'*/}
-                {/*subTitle='12/24/2017'*/}
-                {/*label='Lectures & Lessons'*/}
+              {/*img='https://archive.kbb1.com/assets/api/thumbnail/tSmGoUDU'*/}
+              {/*title='Webinar with Dr. Michael Laitman'*/}
+              {/*subTitle='12/24/2017'*/}
+              {/*label='Lectures & Lessons'*/}
 
               {/*/>*/}
               {/*<LatestUpdate*/}
-                {/*img='https://archive.kbb1.com/assets/api/thumbnail/fc3bAksF'*/}
-                {/*title='A New Life 949'*/}
-                {/*subTitle='1/16/2018'*/}
-                {/*label='Programs'*/}
-                {/*href=''*/}
+              {/*img='https://archive.kbb1.com/assets/api/thumbnail/fc3bAksF'*/}
+              {/*title='A New Life 949'*/}
+              {/*subTitle='1/16/2018'*/}
+              {/*label='Programs'*/}
+              {/*href=''*/}
               {/*/>*/}
               {/*<LatestUpdate*/}
-                {/*img='https://archive.kbb1.com/assets/api/thumbnail/JnAbkx0l'*/}
-                {/*title='World Convention 2018'*/}
-                {/*subTitle='1/16/2018'*/}
-                {/*label='Events'*/}
-                {/*href=''*/}
+              {/*img='https://archive.kbb1.com/assets/api/thumbnail/JnAbkx0l'*/}
+              {/*title='World Convention 2018'*/}
+              {/*subTitle='1/16/2018'*/}
+              {/*label='Events'*/}
+              {/*href=''*/}
               {/*/>*/}
             </Card.Group>
           </Section>
@@ -211,4 +214,14 @@ class HomePage extends Component {
   }
 }
 
-export default translate()(HomePage);
+const mapState = state => ({
+  data: selectors.getData(state.home),
+  wip: selectors.getWip(state.home),
+  err: selectors.getError(state.home),
+});
+
+const mapDispatch = dispatch => bindActionCreators({
+  fetchData: actions.fetchData,
+}, dispatch);
+
+export default connect(mapState, mapDispatch)(translate()(HomePage));
