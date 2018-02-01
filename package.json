@@ -63,6 +63,7 @@
     "i18next": "^8.4.3",
     "i18next-xhr-backend": "^1.4.2",
     "invariant": "^2.2.2",
+    "iphone-inline-video": "^2.2.2",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "moment-duration-format": "^2.0.1",
