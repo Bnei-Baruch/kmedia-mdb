@@ -7,12 +7,15 @@ import { MEDIA_TYPES } from '../../helpers/consts';
 
 /* Types */
 
-const FETCH_UNIT               = 'MDB/FETCH_UNIT';
-const FETCH_UNIT_SUCCESS       = 'MDB/FETCH_UNIT_SUCCESS';
-const FETCH_UNIT_FAILURE       = 'MDB/FETCH_UNIT_FAILURE';
-const FETCH_COLLECTION         = 'MDB/FETCH_COLLECTION';
-const FETCH_COLLECTION_SUCCESS = 'MDB/FETCH_COLLECTION_SUCCESS';
-const FETCH_COLLECTION_FAILURE = 'MDB/FETCH_COLLECTION_FAILURE';
+const FETCH_UNIT                  = 'MDB/FETCH_UNIT';
+const FETCH_UNIT_SUCCESS          = 'MDB/FETCH_UNIT_SUCCESS';
+const FETCH_UNIT_FAILURE          = 'MDB/FETCH_UNIT_FAILURE';
+const FETCH_COLLECTION            = 'MDB/FETCH_COLLECTION';
+const FETCH_COLLECTION_SUCCESS    = 'MDB/FETCH_COLLECTION_SUCCESS';
+const FETCH_COLLECTION_FAILURE    = 'MDB/FETCH_COLLECTION_FAILURE';
+const FETCH_LATEST_LESSON         = 'MDB/LATEST_LESSON';
+const FETCH_LATEST_LESSON_SUCCESS = 'MDB/FETCH_LATEST_LESSON_SUCCESS';
+const FETCH_LATEST_LESSON_FAILURE = 'MDB/FETCH_LATEST_LESSON_FAILURE';
 
 const RECEIVE_COLLECTIONS   = 'MDB/RECEIVE_COLLECTIONS';
 const RECEIVE_CONTENT_UNITS = 'MDB/RECEIVE_CONTENT_UNITS';
@@ -24,6 +27,9 @@ export const types = {
   FETCH_COLLECTION,
   FETCH_COLLECTION_SUCCESS,
   FETCH_COLLECTION_FAILURE,
+  FETCH_LATEST_LESSON,
+  FETCH_LATEST_LESSON_SUCCESS,
+  FETCH_LATEST_LESSON_FAILURE,
 
   RECEIVE_COLLECTIONS,
   RECEIVE_CONTENT_UNITS,
@@ -31,14 +37,17 @@ export const types = {
 
 /* Actions */
 
-const fetchUnit              = createAction(FETCH_UNIT);
-const fetchUnitSuccess       = createAction(FETCH_UNIT_SUCCESS, (id, data) => ({ id, data }));
-const fetchUnitFailure       = createAction(FETCH_UNIT_FAILURE, (id, err) => ({ id, err }));
-const fetchCollection        = createAction(FETCH_COLLECTION);
-const fetchCollectionSuccess = createAction(FETCH_COLLECTION_SUCCESS, (id, data) => ({ id, data }));
-const fetchCollectionFailure = createAction(FETCH_COLLECTION_FAILURE, (id, err) => ({ id, err }));
-const receiveCollections     = createAction(RECEIVE_COLLECTIONS);
-const receiveContentUnits    = createAction(RECEIVE_CONTENT_UNITS);
+const fetchUnit                = createAction(FETCH_UNIT);
+const fetchUnitSuccess         = createAction(FETCH_UNIT_SUCCESS, (id, data) => ({ id, data }));
+const fetchUnitFailure         = createAction(FETCH_UNIT_FAILURE, (id, err) => ({ id, err }));
+const fetchCollection          = createAction(FETCH_COLLECTION);
+const fetchCollectionSuccess   = createAction(FETCH_COLLECTION_SUCCESS, (id, data) => ({ id, data }));
+const fetchCollectionFailure   = createAction(FETCH_COLLECTION_FAILURE, (id, err) => ({ id, err }));
+const fetchLatestLesson        = createAction(FETCH_LATEST_LESSON);
+const fetchLatestLessonSuccess = createAction(FETCH_LATEST_LESSON_SUCCESS);
+const fetchLatestLessonFailure = createAction(FETCH_LATEST_LESSON_FAILURE);
+const receiveCollections       = createAction(RECEIVE_COLLECTIONS);
+const receiveContentUnits      = createAction(RECEIVE_CONTENT_UNITS);
 
 export const actions = {
   fetchUnit,
@@ -47,6 +56,9 @@ export const actions = {
   fetchCollection,
   fetchCollectionSuccess,
   fetchCollectionFailure,
+  fetchLatestLesson,
+  fetchLatestLessonSuccess,
+  fetchLatestLessonFailure,
   receiveCollections,
   receiveContentUnits,
 };
@@ -59,10 +71,12 @@ const freshStore = () => ({
   wip: {
     units: {},
     collections: {},
+    lastLesson: true,
   },
   errors: {
     units: {},
     collections: {},
+    lastLesson: {}
   },
 });
 
@@ -82,6 +96,17 @@ const setStatus = (state, action) => {
     break;
   case FETCH_COLLECTION:
     wip.collections = { ...wip.collections, [action.payload]: true };
+    break;
+  case FETCH_LATEST_LESSON:
+    wip.lastLesson = true;
+    break;
+  case FETCH_LATEST_LESSON_SUCCESS:
+    wip.lastLesson    = false;
+    errors.lastLesson = null;
+    break;
+  case FETCH_LATEST_LESSON_FAILURE:
+    wip.lastLesson    = false;
+    errors.lastLesson = action.payload.err;
     break;
   case FETCH_UNIT_SUCCESS:
     wip.units    = { ...wip.units, [action.payload.id]: false };
@@ -151,7 +176,7 @@ const onReceiveCollections = (state, action) => {
   return {
     ...state,
     cById,
-    cuById,
+    cuById
   };
 };
 
@@ -285,6 +310,12 @@ export const reducer = handleActions({
   [FETCH_COLLECTION_SUCCESS]: (state, action) =>
     setStatus(onReceiveCollections(state, { payload: [action.payload.data] }), action),
   [FETCH_COLLECTION_FAILURE]: setStatus,
+  [FETCH_LATEST_LESSON]: setStatus,
+  [FETCH_LATEST_LESSON_SUCCESS]: (state, action) => {
+    state.lastLessonId = action.payload.id;
+    return setStatus(onReceiveCollections(state, { payload: [action.payload] }), action);
+  },
+  [FETCH_LATEST_LESSON_FAILURE]: setStatus,
 
   [RECEIVE_COLLECTIONS]: (state, action) => onReceiveCollections(state, action),
   [RECEIVE_CONTENT_UNITS]: (state, action) => onReceiveContentUnits(state, action),
@@ -293,6 +324,7 @@ export const reducer = handleActions({
 /* Selectors */
 
 const getCollectionById = (state, id) => state.cById[id];
+const getLastLessonId   = (state) => state.lastLessonId;
 const getUnitById       = (state, id) => state.cuById[id];
 const getWip            = state => state.wip;
 const getErrors         = state => state.errors;
@@ -348,5 +380,6 @@ export const selectors = {
   getErrors,
   getDenormCollection,
   getDenormCollectionWUnits,
-  getDenormContentUnit
+  getDenormContentUnit,
+  getLastLessonId
 };

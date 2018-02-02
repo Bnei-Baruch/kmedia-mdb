@@ -111,3 +111,4 @@ function mapDispatch(dispatch) {
 }
 
 export default withRouter(connect(mapState, mapDispatch)(PlaylistCollectionContainer));
+export { PlaylistCollectionContainer };

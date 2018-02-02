@@ -26,6 +26,16 @@ function* fetchCollection(action) {
   }
 }
 
+function* fetchLatestLesson() {
+  try {
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const { data } = yield call(Api.latestLesson, { language });
+    yield put(actions.fetchLatestLessonSuccess(data));
+  } catch (err) {
+    yield put(actions.fetchCollectionFailure(err.id, err));
+  }
+}
+
 function* watchFetchUnit() {
   yield takeEvery(types.FETCH_UNIT, fetchUnit);
 }
@@ -34,7 +44,12 @@ function* watchFetchCollection() {
   yield takeEvery(types.FETCH_COLLECTION, fetchCollection);
 }
 
+function* watchFetchLatestLesson() {
+  yield takeEvery(types.FETCH_LATEST_LESSON, fetchLatestLesson);
+}
+
 export const sagas = [
   watchFetchUnit,
   watchFetchCollection,
+  watchFetchLatestLesson,
 ];

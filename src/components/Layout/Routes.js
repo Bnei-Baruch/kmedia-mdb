@@ -5,6 +5,7 @@ import * as shapes from '../shapes';
 import Lessons from '../Sections/Lessons/List';
 import LessonUnit from '../Sections/Lessons/Unit';
 import LessonCollection from '../Sections/Lessons/Collection';
+import LastLessonCollection from '../Sections/Lessons/LastCollection';
 import Programs from '../Sections/Programs/List';
 import ProgramChapter from '../Sections/Programs/Unit';
 import ProgramCollection from '../Sections/Programs/Collection';
@@ -39,6 +40,8 @@ const Routes = ({ match }) => {
       <Route exact path={`${urlPrefix}/lessons`} component={Lessons} />
       <Route exact path={`${urlPrefix}/lessons/cu/:id`} component={LessonUnit} />
       <Route exact path={`${urlPrefix}/lessons/c/:id`} component={LessonCollection} />
+      <Route exact path={`${urlPrefix}/lessons/last`} component={LastLessonCollection} />
+      <Route exact path={`${urlPrefix}/:lang/lessons/last`} component={LastLessonCollection} />
       <Route exact path={`${urlPrefix}/programs`} component={Programs} />
       <Route exact path={`${urlPrefix}/programs/cu/:id`} component={ProgramChapter} />
       <Route exact path={`${urlPrefix}/programs/c/:id`} component={ProgramCollection} />
