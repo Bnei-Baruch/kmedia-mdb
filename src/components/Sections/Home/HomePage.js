@@ -118,7 +118,7 @@ class HomePage extends Component {
     return (
       <div className='homepage'>
         <Container className='padded'>
-          <SearchBar t={t} location={location} />
+          <SearchBar t={t} location={location} title={t('homePage.searchTitle')} />
         </Container>
         <div className='homepage__featured'>
           <Container className='padded'>
@@ -129,7 +129,7 @@ class HomePage extends Component {
                     thumbnail={DailyLessonPlaceholder}
                     title='The Latest Daily Lesson'
                     subTitle='1/10/2018'
-                    label='Daily Lessons'
+                    label={t('nav.sidebar.lessons')}
                     href='/programs'
 
                   />
@@ -149,33 +149,33 @@ class HomePage extends Component {
         </div>
         <Container className='padded homepage__sections'>
           <Section
-            title='Archive Sections'
+            title={t('homePage.archiveSection')}
             className='homepage__iconsrow'
           >
             <Grid doubling columns={6}>
               <Grid.Row>
                 <Grid.Column>
-                  <Topic title='Daily Lessons' img={DailyLessonsIcon} href='/lessons' />
+                  <Topic title={t('nav.sidebar.lessons')} img={DailyLessonsIcon} href='/lessons' />
                 </Grid.Column>
                 <Grid.Column>
-                  <Topic title='Programs' img={ProgramsIcon} href='/programs' />
+                  <Topic title={t('nav.sidebar.programs')} img={ProgramsIcon} href='/programs' />
                 </Grid.Column>
                 <Grid.Column>
-                  <Topic title='Lectures' img={LecturesIcon} href='/lectures' />
+                  <Topic title={t('nav.sidebar.lectures')} img={LecturesIcon} href='/lectures' />
                 </Grid.Column>
                 <Grid.Column>
-                  <Topic title='Sources' img={SourcesIcon} href='/sources' />
+                  <Topic title={t('nav.sidebar.sources')} img={SourcesIcon} href='/sources' />
                 </Grid.Column>
                 <Grid.Column>
-                  <Topic title='Events' img={EventsIcon} href='/events' />
+                  <Topic title={t('nav.sidebar.events')} img={EventsIcon} href='/events' />
                 </Grid.Column>
                 <Grid.Column>
-                  <Topic title='Publications' img={PublicationsIcon} href='/publications' /></Grid.Column>
+                  <Topic title={t('nav.sidebar.publications')} img={PublicationsIcon} href='/publications' /></Grid.Column>
               </Grid.Row>
             </Grid>
           </Section>
 
-          <Section title='Latest Updates'>
+          <Section title={t('homePage.latestUpdates')}>
             <Card.Group itemsPerRow='4' doubling>
               <LatestUpdate
                 img='https://archive.kbb1.com/assets/api/thumbnail/64RFGZR6'
@@ -184,27 +184,27 @@ class HomePage extends Component {
                 label='Daily Lessons'
                 href=''
               />
-              {/*<LatestUpdate*/}
-              {/*img='https://archive.kbb1.com/assets/api/thumbnail/tSmGoUDU'*/}
-              {/*title='Webinar with Dr. Michael Laitman'*/}
-              {/*subTitle='12/24/2017'*/}
-              {/*label='Lectures & Lessons'*/}
+              <LatestUpdate
+                img='https://archive.kbb1.com/assets/api/thumbnail/tSmGoUDU'
+                title='Webinar with Dr. Michael Laitman'
+                subTitle='12/24/2017'
+                label='Lectures & Lessons'
 
-              {/*/>*/}
-              {/*<LatestUpdate*/}
-              {/*img='https://archive.kbb1.com/assets/api/thumbnail/fc3bAksF'*/}
-              {/*title='A New Life 949'*/}
-              {/*subTitle='1/16/2018'*/}
-              {/*label='Programs'*/}
-              {/*href=''*/}
-              {/*/>*/}
-              {/*<LatestUpdate*/}
-              {/*img='https://archive.kbb1.com/assets/api/thumbnail/JnAbkx0l'*/}
-              {/*title='World Convention 2018'*/}
-              {/*subTitle='1/16/2018'*/}
-              {/*label='Events'*/}
-              {/*href=''*/}
-              {/*/>*/}
+              />
+              <LatestUpdate
+                img='https://archive.kbb1.com/assets/api/thumbnail/fc3bAksF'
+                title='A New Life 949'
+                subTitle='1/16/2018'
+                label='Programs'
+                href=''
+              />
+              <LatestUpdate
+                img='https://archive.kbb1.com/assets/api/thumbnail/JnAbkx0l'
+                title='World Convention 2018'
+                subTitle='1/16/2018'
+                label='Events'
+                href=''
+              />
             </Card.Group>
           </Section>
 

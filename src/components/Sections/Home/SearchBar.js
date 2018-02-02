@@ -9,14 +9,13 @@ class SearchBar extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
+    title: PropTypes.string
   };
 
-  static defaultProps = {
-  };
-
+  static defaultProps = {};
 
   render() {
-    const { t, location } = this.props;
+    const { t, location, title } = this.props;
 
     return (
       <div className='homepage__header'>
@@ -25,7 +24,7 @@ class SearchBar extends Component {
             <Grid.Column computer={12} tablet={14} mobile={16}>
               <Header as="h1" color="blue" className='homepage__title'>
                 <Header.Content>
-                  Explore the wisdom of Kabbalah
+                  {title}
                 </Header.Content>
               </Header>
             </Grid.Column>

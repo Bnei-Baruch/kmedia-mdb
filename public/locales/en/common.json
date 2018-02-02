@@ -94,7 +94,7 @@
     },
     "share": {
       "title": "watch this video"
-     },
+    },
     "error": {
       "loading": "Error loading file."
     }
@@ -179,6 +179,11 @@
         "appendices": "Appendices"
       }
     }
+  },
+  "homePage": {
+    "searchTitle": "Explore the wisdom of Kabbalah",
+    "archiveSection": "Archive Sections",
+    "latestUpdates": "Latest Updates"
   },
   "lessons": {
     "header": {
