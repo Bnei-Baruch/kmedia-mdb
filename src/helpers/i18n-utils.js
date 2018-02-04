@@ -1,3 +1,6 @@
+import { DEFAULT_LANGUAGE } from './consts';
+import { getCookie } from './utils';
+
 export const getCurrentDirection = () =>
   document.getElementById('root').style.getPropertyValue('direction');
 
@@ -21,4 +24,28 @@ export const changeDirection = (direction) => {
   } else {
     root.classList.remove('rtl');
   }
+};
+
+
+const lngLookup = () => {
+  const localStoregeLng = localStorage.getItem('i18nextLng');
+
+  if (localStoregeLng) {
+    return localStoregeLng;
+  }
+
+  const cookieLng    = getCookie('i18nextLng');
+  const navigatorLng = window.navigator.languages[0];
+
+  return cookieLng || navigatorLng;
+};
+
+export const initialLng = () => {
+  let lng = lngLookup();
+
+  if (lng.length > 2) {
+    [lng] = lng.split('-');
+  }
+
+  return lng;
 };

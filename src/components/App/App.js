@@ -4,7 +4,7 @@ import { connect, Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { I18nextProvider } from 'react-i18next';
 
-import { DEFAULT_LANGUAGE } from '../../helpers/consts';
+import { initialLng } from '../../helpers/i18n-utils';
 import i18n from '../../helpers/i18nnext';
 import { selectors as system } from '../../redux/modules/system';
 import MultiLanguageRouteProvider from '../Language/MultiLanguageRouteProvider';
@@ -42,7 +42,7 @@ class App extends Component {
     if (isAppReady) {
       return (
         <div>
-          <I18nextProvider i18n={i18n} initialLanguage={DEFAULT_LANGUAGE}>
+          <I18nextProvider i18n={i18n} initialLanguage={initialLng()}>
             <Provider store={store}>
               <ConnectedRouter history={history}>
                 <MultiLanguageRouteProvider>

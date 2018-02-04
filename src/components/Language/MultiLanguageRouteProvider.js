@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import LanguageSetter from '../Language/LanguageSetter';
 import { DEFAULT_LANGUAGE } from '../../helpers/consts';
+import { initialLng } from '../../helpers/i18n-utils';
 
 /**
  * Automatically sets the appropriate language if the url's pathname starts with /<LANGUAGE>/
@@ -24,7 +25,7 @@ const MultiLanguageRouteProvider = ({ children }) => (
       )}
     />
     <Route render={() => (
-      <LanguageSetter language={DEFAULT_LANGUAGE}>
+      <LanguageSetter language={initialLng()}>
         { children }
       </LanguageSetter>
       )

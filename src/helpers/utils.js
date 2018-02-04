@@ -353,3 +353,21 @@ export const shallowCompare = (instance, nextProps, nextState) => (
   !shallowEqual(instance.props, nextProps) ||
   !shallowEqual(instance.state, nextState)
 );
+
+export const getCookie = (name) => {
+  const start = document.cookie.indexOf(name + '=');
+
+  const len = start + name.length + 1;
+
+  if ((!start) && (name !== document.cookie.substring(0, name.length))) {
+    return null;
+  }
+
+  if (start === -1) return null;
+
+  let end = document.cookie.indexOf(';', len);
+
+  if (end === -1) end = document.cookie.length;
+
+  return unescape(document.cookie.substring(len, end));
+};

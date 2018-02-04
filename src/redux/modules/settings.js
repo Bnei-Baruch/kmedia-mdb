@@ -1,7 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 
 import { DEFAULT_LANGUAGE } from '../../helpers/consts';
-
+import { initialLng } from '../../helpers/i18n-utils';
 /* Types */
 
 const SET_LANGUAGE  = 'Settings/SET_LANGUAGE';
@@ -25,7 +25,7 @@ export const actions = {
 /* Reducer */
 
 const initialState = {
-  language: DEFAULT_LANGUAGE,
+  language: initialLng(),
   pageSize: 10,
 };
 
