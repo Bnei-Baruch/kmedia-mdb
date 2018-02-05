@@ -12,7 +12,7 @@ import { actions, selectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { PlaylistCollectionContainer } from '../../Pages/PlaylistCollection/Container';
 
-class LessonCollection extends Component {
+class LastLessonCollection extends Component {
 
   static propTypes = {
     t: PropTypes.func.isRequired,
@@ -62,4 +62,4 @@ function mapDispatch(dispatch) {
   }, dispatch);
 }
 
-export default withRouter(connect(mapState, mapDispatch)(translate()(LessonCollection)));
+export default withRouter(connect(mapState, mapDispatch)(translate()(LastLessonCollection)));

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PlaylistCollection from '../../Pages/PlaylistCollection/Container';
 
-class LastLessonCollection extends Component {
+class LessonCollection extends Component {
 
   render() {
     return <PlaylistCollection />;
   }
 }
 
-export default LastLessonCollection;
+export default LessonCollection;
