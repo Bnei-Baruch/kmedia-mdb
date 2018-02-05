@@ -146,6 +146,14 @@
       "transcript": "transcript"
     }
   },
+  "homePage": {
+    "searchTitle": "Explore the wisdom of Kabbalah",
+    "latestDailyLesson": {
+      "title": "The Latest Daily Lesson"
+    },
+    "archiveSection": "Archive Sections",
+    "latestUpdates": "Latest Updates"
+  },
   "events": {
     "header": {
       "text": "Events",
@@ -179,11 +187,6 @@
         "appendices": "Appendices"
       }
     }
-  },
-  "homePage": {
-    "searchTitle": "Explore the wisdom of Kabbalah",
-    "archiveSection": "Archive Sections",
-    "latestUpdates": "Latest Updates"
   },
   "lessons": {
     "header": {

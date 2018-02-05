@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Header, Image, Label } from 'semantic-ui-react';
 import Link from '../../Language/MultiLanguageLink';
-import UnitLogo from '../../shared/Logo/UnitLogo';
 
-class Featured extends Component {
+class Promoted extends Component {
 
   static propTypes = {
-    thumbnail: PropTypes.string.isRequired,
+    image: PropTypes.string,
     title: PropTypes.string,
     subTitle: PropTypes.string,
     label: PropTypes.string,
@@ -18,13 +17,12 @@ class Featured extends Component {
 
   render() {
 
-    const { thumbnail, title, subTitle, label, href } = this.props;
+    const { image, title, subTitle, label, href } = this.props;
 
     return (
       <div className='thumbnail'>
         <Link to={href}>
-          <UnitLogo width={150} />
-          {/*<Image className='thumbnail__image' src={thumbnail} fluid />*/}
+          <Image className='thumbnail__image' src={image} fluid />
           <Header className='thumbnail__header'>
             <Header.Content>
               <Header.Subheader>
@@ -42,4 +40,4 @@ class Featured extends Component {
   }
 }
 
-export default Featured;
+export default Promoted;

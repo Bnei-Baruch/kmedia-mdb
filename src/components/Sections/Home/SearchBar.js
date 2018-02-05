@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Header, Input } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
 import * as shapes from '../../shapes';
 import OmniBox from '../../Search/OmniBox';
 

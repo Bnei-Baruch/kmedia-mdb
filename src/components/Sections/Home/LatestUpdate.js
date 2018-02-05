@@ -1,33 +1,33 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Header, Image, Label, Card } from 'semantic-ui-react';
+import { Header, Label, Card } from 'semantic-ui-react';
 import Link from '../../Language/MultiLanguageLink';
+import UnitLogo from '../../shared/Logo/UnitLogo';
+import * as shapes from '../../shapes';
+import { canonicalLink } from '../../../helpers/utils';
 
 
 class LatestUpdate extends Component {
 
   static propTypes = {
-    img: PropTypes.string.isRequired,
-    title: PropTypes.string,
-    subTitle: PropTypes.string,
+    unit: shapes.ContentUnit.isRequired,
     label: PropTypes.string,
-    href: PropTypes.string
   };
 
   static defaultProps = {};
 
   render() {
 
-    const { img, title, subTitle, label, href } = this.props;
+    const { unit, label } = this.props;
 
     return (
-      <Card as={Link} to={href}>
-        <Image src={img} />
+      <Card as={Link} to={canonicalLink(unit)}>
+        <UnitLogo width={512} unitId={unit.id} />
         <Card.Content>
           <Header size='small'>
-            <small className='text grey'>{subTitle}</small>
+            <small className='text grey'>{unit.file_date}</small>
             <br />
-            {title}
+            {unit.name}
           </Header>
         </Card.Content>
         <Card.Content extra>

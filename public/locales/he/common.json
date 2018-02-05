@@ -145,6 +145,14 @@
       "transcript": "תמליל"
     }
   },
+  "homePage": {
+    "searchTitle": "חקור את חכמת הקבלה",
+    "archiveSection": "נושאים",
+    "latestUpdates": "עדכונים אחרונים",
+    "latestDailyLesson": {
+      "title": "שיעור הקבלה היומי"
+    }
+  },
   "events": {
     "header": {
       "text": "אירועים",
