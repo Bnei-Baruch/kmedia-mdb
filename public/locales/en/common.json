@@ -83,7 +83,8 @@
     "audio": "Audio",
     "video": "Video",
     "more": "More",
-    "copy-link": "Copy Link"
+    "copy-link": "Copy Link",
+    "search": "Search"
   },
   "player": {
     "messages": {
@@ -146,13 +147,11 @@
       "transcript": "transcript"
     }
   },
-  "homePage": {
-    "searchTitle": "Explore the wisdom of Kabbalah",
-    "latestDailyLesson": {
-      "title": "The Latest Daily Lesson"
-    },
-    "archiveSection": "Archive Sections",
-    "latestUpdates": "Latest Updates"
+  "home": {
+    "search": "Explore the wisdom of Kabbalah",
+    "sections": "Archive Sections",
+    "updates": "Latest Updates",
+    "last-lesson": "The Latest Daily Lesson"
   },
   "events": {
     "header": {

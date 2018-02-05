@@ -15,12 +15,10 @@ class Topic extends Component {
     const { title, img, href } = this.props;
 
     return (
-      <div style={{textAlign: 'center'}}>
-        <Header size="small" as={Link} to={href}>
-          <Image src={img} />
-          <br />{title}
-        </Header>
-      </div>
+      <Header size="small" as={Link} to={href}>
+        <Image src={img} />
+        <br />{title}
+      </Header>
     );
   }
 }

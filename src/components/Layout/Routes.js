@@ -20,7 +20,7 @@ import EventCollection from '../Sections/Events/Collection';
 import LibraryHomepage from '../Sections/Library/Homepage';
 import LibraryContainer from '../Sections/Library/LibraryContainer';
 import SearchResults from '../Search/SearchResultsContainer';
-import HomePage from '../Sections/Home/HomePage';
+import HomePage from '../Sections/Home/Container';
 import Design from '../Design/Design';
 
 import Redirect from './Redirect';

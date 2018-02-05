@@ -136,6 +136,14 @@ export const Publisher = PropTypes.shape({
   description: PropTypes.string,
 });
 
+export const Banner = PropTypes.shape({
+  section: PropTypes.string.isRequired,
+  header: PropTypes.string.isRequired,
+  sub_header: PropTypes.string,
+  url: PropTypes.string.isRequired,
+  image: PropTypes.string,
+});
+
 export const filterPropShape = PropTypes.shape({
   name: PropTypes.string.isRequired,
   component: PropTypes.any.isRequired

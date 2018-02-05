@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Divider } from 'semantic-ui-react';
+import { Divider, Grid } from 'semantic-ui-react';
 
 class Section extends Component {
 
@@ -8,14 +8,12 @@ class Section extends Component {
     title: PropTypes.string.isRequired,
   };
 
-  static defaultProps = {};
-
   render() {
     const { title, children } = this.props;
 
     return (
-      <div className='homepage__section'>
-        <Grid centered padded='vertically'>
+      <div className="homepage__section">
+        <Grid centered padded="vertically">
           <Grid.Row>
             <Grid.Column computer={12} tablet={14} mobile={16}>
               <Divider horizontal fitted>{title}</Divider>

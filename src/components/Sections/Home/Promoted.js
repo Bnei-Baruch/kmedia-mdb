@@ -1,39 +1,39 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Header, Image, Label } from 'semantic-ui-react';
+
+import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 
 class Promoted extends Component {
 
   static propTypes = {
-    image: PropTypes.string,
-    title: PropTypes.string,
-    subTitle: PropTypes.string,
-    label: PropTypes.string,
-    href: PropTypes.string
+    banner: shapes.Banner,
   };
 
-  static defaultProps = {};
+  static defaultProps = {
+    banner: null,
+  };
 
   render() {
+    if (!this.props.banner) {
+      return null;
+    }
 
-    const { image, title, subTitle, label, href } = this.props;
+    const { image, header, sub_header: subHeader, section, href } = this.props.banner;
 
     return (
-      <div className='thumbnail'>
+      <div className="thumbnail">
         <Link to={href}>
-          <Image className='thumbnail__image' src={image} fluid />
-          <Header className='thumbnail__header'>
+          <Image fluid src={image} className="thumbnail__image" />
+          <Header as="h2" className="thumbnail__header">
             <Header.Content>
               <Header.Subheader>
-                {subTitle}
+                {subHeader}
               </Header.Subheader>
-              {title}
+              {header}
             </Header.Content>
           </Header>
-          <Label color='orange' size='mini'>
-            {label}
-          </Label>
+          <Label content={section} color="orange" size="mini" />
         </Link>
       </div>
     );

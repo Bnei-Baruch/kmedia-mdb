@@ -28,33 +28,48 @@ export const actions = {
 /* Reducer */
 
 const initialState = {
-  data: null,
+  latestLesson: null,
+  latestUnits: null,
+  banner: null,
   wip: false,
   err: null,
 };
 
-const onSetLanguage = state => (
+const onSetLanguage = () => (
   {
     ...initialState,
   }
 );
 
+const onData = (state, action) => ({
+  ...state,
+  wip: false,
+  err: null,
+  latestLesson: action.payload.latest_daily_lesson.id,
+  latestUnits: action.payload.latest_units.map(x => x.id),
+  banner: action.payload.banner,
+});
+
 export const reducer = handleActions({
   [settings.SET_LANGUAGE]: onSetLanguage,
 
   [FETCH_DATA]: state => ({ ...state, wip: true }),
-  [FETCH_DATA_SUCCESS]: (state, action) => ({ ...state, wip: false, data: action.payload, err: null }),
+  [FETCH_DATA_SUCCESS]: onData,
   [FETCH_DATA_FAILURE]: (state, action) => ({ ...state, wip: false, data: null, err: action.payload }),
 }, initialState);
 
 /* Selectors */
 
-const getData  = state => state.data;
-const getWip   = state => state.wip;
-const getError = state => state.err;
+const getLatestLesson = state => state.latestLesson;
+const getLatestUnits  = state => state.latestUnits;
+const getBanner       = state => state.banner;
+const getWip          = state => state.wip;
+const getError        = state => state.err;
 
 export const selectors = {
-  getData,
+  getLatestLesson,
+  getLatestUnits,
+  getBanner,
   getWip,
   getError,
 };

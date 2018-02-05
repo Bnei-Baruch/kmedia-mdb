@@ -82,7 +82,8 @@
     "audio": "אודיו",
     "video": "וידאו",
     "more": "עוד",
-    "copy-link": "העתק קישור"
+    "copy-link": "העתק קישור",
+    "search": "חפש"
   },
   "player": {
     "messages": {
@@ -145,13 +146,11 @@
       "transcript": "תמליל"
     }
   },
-  "homePage": {
-    "searchTitle": "חקור את חכמת הקבלה",
-    "archiveSection": "נושאים",
-    "latestUpdates": "עדכונים אחרונים",
-    "latestDailyLesson": {
-      "title": "שיעור הקבלה היומי"
-    }
+  "home": {
+    "search": "גלה את חכמת הקבלה",
+    "sections": "נושאים",
+    "updates": "עדכונים אחרונים",
+    "last-lesson": "שיעור הקבלה היומי"
   },
   "events": {
     "header": {

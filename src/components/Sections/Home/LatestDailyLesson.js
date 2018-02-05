@@ -1,35 +1,34 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
-import { Header, Label, Image } from 'semantic-ui-react';
-import Link from '../../Language/MultiLanguageLink';
-import * as shapes from '../../shapes';
-import { canonicalLink } from '../../../helpers/utils';
-import DailyLessonPlaceholder from '../../../images/hp_lesson_temp.png';
+import { Header, Image, Label } from 'semantic-ui-react';
 
+import { canonicalLink } from '../../../helpers/utils';
+import * as shapes from '../../shapes';
+import Link from '../../Language/MultiLanguageLink';
+import DailyLessonPlaceholder from '../../../images/hp_lesson_temp.png';
 
 class LatestDailyLesson extends Component {
 
   static propTypes = {
-    unit: shapes.ContentUnit.isRequired,
+    collection: shapes.LessonCollection.isRequired,
     t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {};
 
   render() {
-    const { t, unit } = this.props;
+    const { t, collection } = this.props;
 
     return (
       <div className="thumbnail">
-        <Link to={canonicalLink(unit)}>
-          <Image className="thumbnail__image" src={DailyLessonPlaceholder} width={512} fluid />
-          <Header className="thumbnail__header">
+        <Link to={canonicalLink(collection)}>
+          <Image fluid src={DailyLessonPlaceholder} className="thumbnail__image" width={512} />
+          <Header as="h2" className="thumbnail__header">
             <Header.Content>
               <Header.Subheader>
-                {t('values.date', { date: new Date(unit.film_date) })}
+                {t('values.date', { date: new Date(collection.film_date) })}
               </Header.Subheader>
-              {t('homePage.latestDailyLesson.title')}
+              {t('home.last-lesson')}
             </Header.Content>
           </Header>
           <Label color="orange" size="mini">
@@ -41,4 +40,4 @@ class LatestDailyLesson extends Component {
   }
 }
 
-export default translate()(LatestDailyLesson);
+export default LatestDailyLesson;

@@ -1,37 +1,37 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Header, Label, Card } from 'semantic-ui-react';
+import { Card, Header, Label } from 'semantic-ui-react';
+
+import { canonicalLink } from '../../../helpers/utils';
+import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
-import * as shapes from '../../shapes';
-import { canonicalLink } from '../../../helpers/utils';
-
 
 class LatestUpdate extends Component {
 
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
-    label: PropTypes.string,
+    label: PropTypes.string.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
-  static defaultProps = {};
-
   render() {
-
-    const { unit, label } = this.props;
+    const { unit, label, t } = this.props;
 
     return (
       <Card as={Link} to={canonicalLink(unit)}>
         <UnitLogo width={512} unitId={unit.id} />
         <Card.Content>
-          <Header size='small'>
-            <small className='text grey'>{unit.file_date}</small>
+          <Header size="small">
+            <small className="text grey">
+              {t('values.date', { date: new Date(unit.film_date) })}
+            </small>
             <br />
             {unit.name}
           </Header>
         </Card.Content>
         <Card.Content extra>
-          <Label size='small'>{label}</Label>
+          <Label content={label} size="small" />
         </Card.Content>
       </Card>
     );
