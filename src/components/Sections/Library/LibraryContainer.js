@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { replace } from 'react-router-redux';
 import { translate } from 'react-i18next';
-import { Accordion, Grid, Rail, Ref, Segment, Sticky } from 'semantic-ui-react';
+import { Accordion, Container, Grid, Ref, Sticky } from 'semantic-ui-react';
 
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -267,28 +267,42 @@ class LibraryContainer extends Component {
     const parent = this.properParentId(this.props.sourceId);
 
     return (
-      <Grid centered columns={2} className="source is-readble">
-        <Grid.Row>
-          <Grid.Column>
-            <div ref={this.handleContextRef}>
-              <Segment>
-                <div className="source__content">
+      <div className="source is-readble">
+        <div className="layout__secondary-header">
+          <Container>
+            <Grid padded>
+              <Grid.Row>
+                <Grid.Column width={3}>
+                  {t('sources-library.toc')}
+                </Grid.Column>
+                <Grid.Column width={8}>
                   {this.header(this.properParentId(this.props.sourceId))}
-                  {content}
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Container>
+        </div>
+        <Container>
+          <Grid padded>
+            <Grid.Row>
+              <Grid.Column width={3}>
+                <Sticky context={contextRef} offset={144} className="source__toc">
+                  <Ref innerRef={this.handleAccordionContext}>
+                    <Accordion fluid panels={this.toc(parent, true)} />
+                  </Ref>
+                </Sticky>
+              </Grid.Column>
+              <Grid.Column width={8}>
+                <div ref={this.handleContextRef}>
+                  <div className="source__content">
+                    {content}
+                  </div>
                 </div>
-                <Rail position="left">
-                  <Sticky context={contextRef} offset={60} className="source__toc">
-                    <p>{t('sources-library.toc')}</p>
-                    <Ref innerRef={this.handleAccordionContext}>
-                      <Accordion fluid panels={this.toc(parent, true)} />
-                    </Ref>
-                  </Sticky>
-                </Rail>
-              </Segment>
-            </div>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Container>
+      </div>
     );
   }
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
 
-import { RTL_LANGUAGES } from '../../../../../../helpers/consts';
+import { CT_KITEI_MAKOR, MT_TEXT, RTL_LANGUAGES } from '../../../../../../helpers/consts';
 import { formatError, tracePath } from '../../../../../../helpers/utils';
 import * as shapes from '../../../../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash/Splash';
@@ -22,7 +22,12 @@ class Sources extends Component {
       wip: shapes.WIP,
       err: shapes.Error,
     }).isRequired,
-    language: PropTypes.string.isRequired,
+    doc2htmlById: PropTypes.shape({
+      data: PropTypes.string, // actual content (HTML)
+      wip: shapes.WIP,
+      err: shapes.Error,
+    }).isRequired,
+    defaultLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     onContentChange: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,
@@ -32,6 +37,7 @@ class Sources extends Component {
     options: [],
     languages: [],
     selected: null,
+    isMakor: false,
     language: null,
   };
 
@@ -41,51 +47,66 @@ class Sources extends Component {
 
   componentWillReceiveProps(nextProps) {
     // unit has changed - replace all state
-    if (nextProps.unit.sources !== this.props.unit.sources) {
+    if (nextProps.unit.id !== this.props.unit.id) {
       this.myReplaceState(nextProps);
       return;
     }
 
-    // index data changed
-    if (nextProps.indexMap !== this.props.indexMap) {
-      const selected = this.state.selected;
+    const selected = this.state.selected;
 
-      // if no previous selection - replace all state
-      if (!selected) {
-        this.myReplaceState(nextProps);
+    // if no previous selection - replace all state
+    if (!selected) {
+      this.myReplaceState(nextProps);
+      return;
+    }
+
+    if (!this.state.isMakor) {
+      const idx  = this.props.indexMap[selected];
+      const nIdx = nextProps.indexMap[selected];
+
+      if (nIdx === idx) {
+        return;
+      }
+
+      // if prev idx for current selection is missing and now we have it - use it
+      if (nIdx && nIdx.data && !(idx && idx.data)) {
+        const options                 = this.getSourceOptions(nextProps);
+        const { languages, language } = this.getSourceLanguages(nIdx, nextProps.defaultLanguage);
+        this.setState({ options, languages, language });
+        this.changeContent({ selected, language, props: nextProps });
       } else {
-        const idx  = this.props.indexMap[selected];
-        const nIdx = nextProps.indexMap[selected];
-
-        // if prev idx for current selection is missing and now we have it - use it
-        if (nIdx && nIdx.data && !(idx && idx.data)) {
-          const options                 = this.getSourceOptions(nextProps);
-          const { languages, language } = this.getLanguages(nIdx, nextProps.language);
-          this.setState({ options, languages, language });
-          if (language) {
-            this.changeContent(selected, language, nextProps.indexMap);
-          }
-        } else {
-          // we keep previous selection. Source options must be updated anyway
-          this.setState({ options: this.getSourceOptions(nextProps) });
-        }
+        // we keep previous selection. Source options must be updated anyway
+        this.setState({ options: this.getSourceOptions(nextProps) });
       }
     }
   }
 
   getSourceOptions = (props) => {
-    const { unit, indexMap, getSourceById } = props;
-    return (unit.sources || []).map(getSourceById).filter(x => !!x).map(x => ({
+    const { unit, indexMap, getSourceById, t } = props;
+
+    const sourceOptions = (unit.sources || []).map(getSourceById).filter(x => !!x).map(x => ({
       value: x.id,
       text: tracePath(x, getSourceById).map(y => y.name).join(' > '),
-      disabled: !indexMap[x.id] || !indexMap[x.id].data,
+      disabled: indexMap[x.id] && !indexMap[x.id].data && !indexMap[x.id].wip,
     }));
+
+    const derivedOptions = Object.values(unit.derived_units || {})
+      .filter(x => ((x.files || []).some(f => f.type === MT_TEXT)))
+      .map(x => ({
+        value: x.id,
+        text: t(`constants.content-types.${x.content_type}`),
+        type: x.content_type,
+        disabled: false,
+      })) || [];
+
+    return [...sourceOptions, ...derivedOptions];
   };
 
-  getLanguages = (idx, preferred) => {
+  getSourceLanguages = (idx, defaultLanguage) => {
     if (!idx || !idx.data) {
       return { languages: [], language: null };
     }
+    const preferred = this.state.language ? this.state.language : defaultLanguage;
 
     let language    = null;
     const languages = Array.from(Object.keys(idx.data));
@@ -96,21 +117,53 @@ class Sources extends Component {
     return { languages, language };
   };
 
-  changeContent = (selected, language, idxMap) => {
-    this.props.onContentChange(selected, idxMap[selected].data[language].html);
+  getMakorLanguages = (derives, defaultLanguage) => {
+    if (!derives) {
+      return { languages: [], language: null };
+    }
+
+    let { language } = this.state;
+    const preferred  = language ? language : defaultLanguage;
+    const languages  = derives.map(f => f.language);
+    if (languages.length > 0) {
+      language = languages.indexOf(preferred) === -1 ? languages[0] : preferred;
+    }
+
+    return { languages, language };
+  };
+
+  changeContent = (params) => {
+    const {
+            selected = this.state.selected,
+            language = this.state.language,
+            props    = this.props,
+            isMakor  = this.state.isMakor
+          } = params;
+
+    if (!selected || !language) return;
+
+    const { unit, indexMap, onContentChange } = props;
+
+    if (isMakor) {
+      const derived = this.getDerived(unit.derived_units, selected).find(x => x.language === language);
+      onContentChange(null, null, derived.id);
+    } else if (indexMap[selected].data) {
+      onContentChange(selected, indexMap[selected].data[language].html);
+    }
   };
 
   myReplaceState = (nextProps) => {
     const options                 = this.getSourceOptions(nextProps);
     const available               = options.filter(x => !x.disabled);
     const selected                = (available.length > 0) ? available[0].value : null;
-    const { languages, language } = this.getLanguages(nextProps.indexMap[selected], nextProps.language);
+    const isMakor                 = this.checkIsMakor(options, selected);
+    const derives                 = this.getDerived(nextProps.unit.derived_units);
+    const { languages, language } = isMakor ?
+      this.getMakorLanguages(derives, nextProps.defaultLanguage) :
+      this.getSourceLanguages(nextProps.indexMap[selected], nextProps.defaultLanguage);
 
-    this.setState({ options, languages, language, selected });
-
-    if (selected && language) {
-      this.changeContent(selected, language, nextProps.indexMap);
-    }
+    this.setState({ options, languages, language, selected, isMakor });
+    this.changeContent({ selected, language, nextProps, isMakor });
   };
 
   handleSourceChanged = (e, data) => {
@@ -120,22 +173,39 @@ class Sources extends Component {
       e.preventDefault();
       return;
     }
+    const { indexMap, defaultLanguage, unit } = this.props;
+    const isMakor                             = this.checkIsMakor(this.state.options, selected);
 
-    const { languages, language } = this.getLanguages(this.props.indexMap[selected], this.props.language);
-    this.setState({ selected, languages, language });
-    if (selected && language) {
-      this.changeContent(selected, language, this.props.indexMap);
-    }
+    const { languages, language } = isMakor ?
+      this.getMakorLanguages(this.getDerived(unit.derived_units), defaultLanguage) :
+      this.getSourceLanguages(indexMap[selected], defaultLanguage);
+
+    this.setState({ selected, languages, language, isMakor });
+    this.changeContent({ selected, language, isMakor });
   };
 
   handleLanguageChanged = (e, language) => {
-    this.changeContent(this.state.selected, language, this.props.indexMap);
+    this.changeContent({ language });
     this.setState({ language });
   };
 
+  checkIsMakor = (options, selected) => {
+    const val = options.find(o => o.value === selected);
+    return val && val.type === CT_KITEI_MAKOR;
+  };
+
+  getDerived = (derived_units, dId) => {
+    const key = dId ?
+      Object.keys(derived_units).find(k => derived_units[k].id === dId) :
+      Object.keys(derived_units)[0];
+    return !key ? null : derived_units[key].files.filter(f => f.type === MT_TEXT);
+  };
+
   render() {
-    const { content, t }                             = this.props;
-    const { options, selected, languages, language } = this.state;
+    const { unit, content, doc2htmlById, t }                        = this.props;
+    const { options, selected, isMakor, languages, language } = this.state;
+
+    // console.log('render', { props: this.props, state: this.state });
 
     if (options.length === 0) {
       return <Segment basic>{t('materials.sources.no-sources')}</Segment>;
@@ -145,7 +215,12 @@ class Sources extends Component {
       return <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
     }
 
-    const { wip: contentWip, err: contentErr, data: contentData } = content;
+    let contentStatus = content;
+    if (isMakor) {
+      const actualFile = this.getDerived(unit.derived_units, selected).find(x => x.language === language);
+      contentStatus    = doc2htmlById[actualFile.id] || {};
+    }
+    const { wip: contentWip, err: contentErr, data: contentData } = contentStatus;
 
     let contents;
     if (contentErr) {
