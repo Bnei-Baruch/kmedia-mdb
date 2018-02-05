@@ -1,20 +1,36 @@
 .source {
   // background:pink;
-  // &.is-readble {
-  //   position: fixed;
-  //   top: 0;
-  //   left: 0;
-  //   right: 0;
-  //   bottom: 0;
-  //   z-index: 999999;
-  //   overflow: scroll;
-  // }
+  &.is-readbe {
+    background: $white;
+    bottom: 0;
+    left: 0;
+    overflow: scroll;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 999999;
+
+    .layout__secondary-header {
+      left:0;
+      right:0;
+    }
+    .source__toc {
+      > div:nth-child(2) {
+        height: calc(100vh - #{$secondary-header-height} - 1em);
+        
+        // overflow: scroll;
+        // padding: 10px;
+      }
+    }
+  }
 
   &__toc {
+    
     > div:nth-child(2) {
-      height: calc(100vh - 60px);
+      height: calc(100vh - #{$main-menu-height} - #{$secondary-header-height} - 1em);
       overflow: scroll;
-      padding: 10px;
+      // background: pink;
+      // padding: 10px;
     }
     .title {
       &.active {
@@ -24,7 +40,8 @@
   }
   
   &__content {
-    min-height: calc(100vh - 60px);
+    min-height: calc(100vh - #{$main-menu-height});
+    // background: lime;
   }
   
 }

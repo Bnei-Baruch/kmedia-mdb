@@ -1,4 +1,12 @@
 $sidebar-width: 290px;
+$main-menu-height: 60px;
+$secondary-header-height: 70px;
+
+$test: '400';
+
+:export {
+  MainMenuHeight: $test;
+}
 
 @import 'rtl/layout';
 
@@ -13,7 +21,7 @@ $sidebar-width: 290px;
     }
 
     > .menu {
-      height: 60px;
+      height: $main-menu-height;
 
       small {
         line-height: 1;
@@ -58,7 +66,7 @@ $sidebar-width: 290px;
       overflow: auto;
       position: absolute;
       right: 0;
-      top: 60px;
+      top: $main-menu-height;
 
       .menu {
         border: 0;
@@ -71,7 +79,7 @@ $sidebar-width: 290px;
     display: flex;
     flex-direction: column;
     min-height: 100%;
-    padding-top: 60px;
+    padding-top: $main-menu-height;
   }
 
   &__content {
@@ -84,14 +92,15 @@ $sidebar-width: 290px;
 
   &__secondary-header{
     background: $white;
-    height: 70px;
+    height: $secondary-header-height;
     left: 0;
     position: fixed;
     right: 0;
     z-index: 1;
-    
+
     +.ui.container {
-      padding-top: 70px;
+      padding-top: $secondary-header-height;
+      background-clip: content-box;
     }
   }
 }
@@ -125,7 +134,7 @@ $sidebar-width: 290px;
     }
 
     &__sidebar {
-      top: 60px;
+      top: $main-menu-height;
       transform: none;
 
       > .menu {

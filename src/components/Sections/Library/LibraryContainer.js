@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { replace } from 'react-router-redux';
 import { translate } from 'react-i18next';
-import { Accordion, Container, Grid, Ref, Sticky } from 'semantic-ui-react';
+import { Accordion, Container, Grid, Ref, Sticky, Header, Button } from 'semantic-ui-react';
 
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -14,6 +14,10 @@ import * as shapes from '../../shapes';
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import LibraryContentContainer from './LibraryContentContainer';
+
+import styles from '../../../stylesheets/includes/_layout.scss';
+console.log("styles",styles);
+const MainMenuHeight2 = parseInt(styles.MainMenuHeight);
 
 class LibraryContainer extends Component {
 
@@ -104,9 +108,11 @@ class LibraryContainer extends Component {
 //@TODO - David, can be state that change scroll to many times.
     if (accordionContext && selectedAccordionContext) {
       const elScrollTop = ReactDOM.findDOMNode(selectedAccordionContext).offsetTop;
-      if (accordionContext.parentElement.scrollTop !== elScrollTop) {
-        accordionContext.parentElement.scrollTop = elScrollTop;
+      const p = accordionContext.parentElement;
+      if (p.scrollTop !== elScrollTop) {
+        p.scrollTop = elScrollTop;
       }
+      // p.style['background-color'] = 'blue';
     }
   }
 
@@ -121,7 +127,8 @@ class LibraryContainer extends Component {
   header = (sourceId) => {
     const { getSourceById } = this.props;
 
-    const { name, description, parent_id: parentId } = getSourceById(sourceId);
+    const { name: sourceName } = getSourceById(sourceId);
+    const { name: parentName, description, parent_id: parentId } = getSourceById(this.properParentId(sourceId));
     if (parentId === undefined) {
       return <div />;
     }
@@ -131,12 +138,15 @@ class LibraryContainer extends Component {
     if (kabFullName && kabName) {
       displayName += ` (${kabName})`;
     }
-
+    
     return (
-      <div>
-        <div style={{ textTransform: 'uppercase' }}>{displayName}</div>
-        <div>{`${name} ${description || ''} `}</div>
-      </div>
+      <Header size='large'>  
+        <Header.Subheader><small>
+          {displayName} / {`${parentName} ${description || ''} `}
+          </small>
+        </Header.Subheader>
+        {sourceName}
+      </Header>
     );
   };
 
@@ -270,22 +280,29 @@ class LibraryContainer extends Component {
       <div className="source is-readble">
         <div className="layout__secondary-header">
           <Container>
-            <Grid padded>
+            <Grid padded >
               <Grid.Row>
-                <Grid.Column width={3}>
-                  {t('sources-library.toc')}
+                <Grid.Column width={4}>
+                  <Header size='medium'>
+                    {t('sources-library.toc')}
+                  </Header>
                 </Grid.Column>
-                <Grid.Column width={8}>
-                  {this.header(this.properParentId(this.props.sourceId))}
+                <Grid.Column width={6}>
+                  {this.header(this.props.sourceId)}
+                </Grid.Column>
+                <Grid.Column width={2}>
+                  <Button.Group basic size='tiny' floated='right'>
+                    <Button icon='expand' />
+                  </Button.Group>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
           </Container>
         </div>
         <Container>
-          <Grid padded>
+          <Grid padded divided>
             <Grid.Row>
-              <Grid.Column width={3}>
+              <Grid.Column width={4}>
                 <Sticky context={contextRef} offset={144} className="source__toc">
                   <Ref innerRef={this.handleAccordionContext}>
                     <Accordion fluid panels={this.toc(parent, true)} />
@@ -293,6 +310,7 @@ class LibraryContainer extends Component {
                 </Sticky>
               </Grid.Column>
               <Grid.Column width={8}>
+              {/* {MainMenuHeight2} */}
                 <div ref={this.handleContextRef}>
                   <div className="source__content">
                     {content}
