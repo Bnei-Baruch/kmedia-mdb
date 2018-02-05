@@ -9,11 +9,17 @@
   //   z-index: 999999;
   //   overflow: scroll;
   // }
+
   &__toc {
     > div:nth-child(2) {
       height: calc(100vh - 60px);
       overflow: scroll;
       padding: 10px;
+    }
+    .title {
+      &.active {
+        font-weight: bold;
+      }
     }
   }
   

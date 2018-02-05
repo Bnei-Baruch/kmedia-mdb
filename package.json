@@ -62,6 +62,8 @@
     "hoist-non-react-statics": "^2.2.2",
     "i18next": "^8.4.3",
     "i18next-xhr-backend": "^1.5.1",
+    "invariant": "^2.2.2",
+    "iphone-inline-video": "^2.2.2",
     "lodash": "^4.17.4",
     "moment": "^2.20.1",
     "moment-duration-format": "^2.0.1",

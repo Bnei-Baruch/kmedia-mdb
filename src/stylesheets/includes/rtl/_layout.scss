@@ -29,7 +29,12 @@
 
       &__main {
         margin-left: auto;
-        margin-right: 290px;
+        margin-right: $sidebar-width;
+      }
+      
+      &__secondary-header {
+        left: 0;
+        right: $sidebar-width;
       }
     }
   }
