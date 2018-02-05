@@ -1,5 +1,4 @@
 .source {
-  // background:pink;
   &.is-readbe {
     background: $white;
     bottom: 0;
@@ -23,7 +22,6 @@
       }
     }
   }
-
   &__toc {
     
     > div:nth-child(2) {
@@ -38,10 +36,10 @@
       }
     }
   }
-  
+
   &__content {
     min-height: calc(100vh - #{$main-menu-height});
     // background: lime;
   }
-  
+
 }
