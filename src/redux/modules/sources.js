@@ -72,7 +72,9 @@ const notToSort = [BS_SHAMATI, BS_IGROT, RB_IGROT, MR_TORA, RH_ZOHAR];
 
 const sortTree = (root) => {
   if (root.children) {
-    root.children.sort((a, b) => strCmp(a.name, b.name)).forEach(r => sortTree(r));
+    root.children
+      .sort((a, b) => strCmp(a.name, b.name))
+      .forEach(sortTree);
   }
 };
 
@@ -98,7 +100,6 @@ const sortSources = (items) => {
 const buildById = (items) => {
   const byId = {};
 
-  console.log('Sources');
   // Yes, this is not good, but...
   // We sort sources according to Mizrachi's request
   // and this __changes__ data
