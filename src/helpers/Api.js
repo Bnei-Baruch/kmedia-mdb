@@ -31,12 +31,13 @@ export class Requests {
 }
 
 class Api {
-  static collection = ({ id, language }) => Requests.get(`collections/${id}?${Requests.makeParams({ language })}`);
-  static unit       = ({ id, language }) => Requests.get(`content_units/${id}?${Requests.makeParams({ language })}`);
-  static sources    = ({ language }) => Requests.get(`sources?${Requests.makeParams({ language })}`);
-  static tags       = ({ language }) => Requests.get(`tags?${Requests.makeParams({ language })}`);
-  static publishers = ({ language }) => Requests.get(`publishers?${Requests.makeParams({ language })}`);
-  static home       = ({ language }) => Requests.get(`home?${Requests.makeParams({ language })}`);
+  static collection   = ({ id, language }) => Requests.get(`collections/${id}?${Requests.makeParams({ language })}`);
+  static unit         = ({ id, language }) => Requests.get(`content_units/${id}?${Requests.makeParams({ language })}`);
+  static sources      = ({ language }) => Requests.get(`sources?${Requests.makeParams({ language })}`);
+  static tags         = ({ language }) => Requests.get(`tags?${Requests.makeParams({ language })}`);
+  static publishers   = ({ language }) => Requests.get(`publishers?${Requests.makeParams({ language })}`);
+  static home         = ({ language }) => Requests.get(`home?${Requests.makeParams({ language })}`);
+  static latestLesson = ({ language }) => Requests.get(`latestLesson?${Requests.makeParams({ language })}`);
 
   static lessons = ({ pageNo: page_no, pageSize: page_size, ...rest }) =>
     Requests.get(`lessons?${Requests.makeParams({ page_no, page_size, ...rest })}`);

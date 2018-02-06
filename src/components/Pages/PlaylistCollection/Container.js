@@ -9,7 +9,7 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
 import Page from './Page';
 
-class PlaylistCollectionContainer extends Component {
+export class PlaylistCollectionContainer extends Component {
 
   static propTypes = {
     match: shapes.RouterMatch.isRequired,
@@ -111,3 +111,4 @@ function mapDispatch(dispatch) {
 }
 
 export default withRouter(connect(mapState, mapDispatch)(PlaylistCollectionContainer));
+
