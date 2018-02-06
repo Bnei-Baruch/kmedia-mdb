@@ -37,14 +37,14 @@ class SearchResults extends Component {
   // Helper function to get the frist prop in hightlights obj and apply htmlFunc on it.
   snippetFromHighlight = (highlight, props, htmlFunc) => {
     const prop = props.find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
-    return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop]) }}></span>;
+    return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop]) }} />;
   };
 
   renderHit = (hit) => {
     // console.log('hit', hit);
     const { cuMap, t }                                       = this.props;
-    const { _source: { mdb_uid }, highlight, _score: score } = hit;
-    const cu                                                 = cuMap[mdb_uid];
+    const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
+    const cu                                                 = cuMap[mdbUid];
 
     // maybe content_units are still loading ?
     // maybe stale data in elasticsearch ?
@@ -55,20 +55,21 @@ class SearchResults extends Component {
     const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || cu.name;
     const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
     const transcript  = this.snippetFromHighlight(highlight, ['transcript', 'transcript.analyzed'], parts => `...${parts.join('.....')}...`);
-    const snippet     = (<div>
-                      {!description ? null : (
-                         <small>
-                            <strong>{t('search.result.description')}: </strong>
-                            {description}
-                         </small>
-                       )}
-                      {!transcript ? null : (
-                          <small>
-                            <strong>{t('search.result.transcript')}: </strong>
-                            {transcript}
-                          </small>
-                      )}
-                     </div>);
+    const snippet     = (
+      <div>
+        {!description ? null : (
+          <small>
+            <strong>{t('search.result.description')}: </strong>
+            {description}
+          </small>
+        )}
+        {!transcript ? null : (
+          <small>
+            <strong>{t('search.result.transcript')}: </strong>
+            {transcript}
+          </small>
+        )}
+      </div>);
 
     let filmDate = '';
     if (cu.film_date) {
@@ -76,7 +77,7 @@ class SearchResults extends Component {
     }
 
     return (
-      <Table.Row key={mdb_uid} verticalAlign="top">
+      <Table.Row key={mdbUid} verticalAlign="top">
         <Table.Cell collapsing singleLine width={1}>
           <strong>{filmDate}</strong>
         </Table.Cell>
@@ -84,17 +85,17 @@ class SearchResults extends Component {
           <Label size="tiny">{t(`constants.content-types.${cu.content_type}`)}</Label>
         </Table.Cell>
         <Table.Cell>
-          <Link to={canonicalLink(cu || { id: mdb_uid, content_type: cu.content_type })}>
+          <Link to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}>
             {name}
           </Link>
-            &nbsp;&nbsp;
-            {
-              cu.duration ?
-                <small>{formatDuration(cu.duration)}</small> :
-                null
-            }
-          
-          {snippet ? snippet : null}
+          &nbsp;&nbsp;
+          {
+            cu.duration ?
+              <small>{formatDuration(cu.duration)}</small> :
+              null
+          }
+
+          {snippet || null}
         </Table.Cell>
         <Table.Cell collapsing textAlign="right">
           {score}
