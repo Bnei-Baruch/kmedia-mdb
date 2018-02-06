@@ -74,18 +74,16 @@ class LibraryContainer extends Component {
       return;
     }
     if (this.state.language && language !== this.state.language) {
-      this.setState({ lastLoadedId: sourceId, language: this.props.language });
-      this.fetchIndices(sourceId);
+      this.loadNewIndices(sourceId, this.props.language);
       return;
     }
 
     const firstLeafId = this.firstLeafId(sourceId);
     if (firstLeafId !== sourceId || this.props.sourceId !== sourceId || this.state.lastLoadedId !== sourceId) {
-      if (firstLeafId !== sourceId) {
-        replace(firstLeafId);
+      if (firstLeafId === sourceId) {
+        this.loadNewIndices(sourceId, this.props.language);
       } else {
-        this.setState({ lastLoadedId: sourceId, language: this.props.language });
-        this.fetchIndices(sourceId);
+        replace(firstLeafId);
       }
     }
 
@@ -109,6 +107,11 @@ class LibraryContainer extends Component {
     }
 
     return getPathByID(sourceId);
+  };
+
+  loadNewIndices = (sourceId, language) => {
+    this.setState({ lastLoadedId: sourceId, language });
+    this.fetchIndices(sourceId);
   };
 
   handleContextRef               = contextRef => this.setState({ contextRef });
