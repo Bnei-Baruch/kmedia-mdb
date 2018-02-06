@@ -16,14 +16,9 @@ import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import LibraryContentContainer from './LibraryContentContainer';
 
 import styles from '../../../stylesheets/includes/_layout.scss';
+import { BS_SHAMATI, } from '../../../helpers/consts';
 
 const MainMenuHeight2 = parseInt(styles.MainMenuHeight, 10);
-
-const BS_SHAMATI               = 'qMUUn22b';
-const BS_IGROT                 = 'DVSS0xAR';
-const RB_IGROT                 = 'b8SHlrfH';
-const MR_TORA                  = 'bvA8ZB1w';
-const avoidSortingForSourceIds = [BS_SHAMATI, BS_IGROT, RB_IGROT, MR_TORA];
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -213,20 +208,7 @@ class LibraryContainer extends Component {
     }
 
     if (firstLevel) {
-      if (avoidSortingForSourceIds.findIndex(a => a === sourceId) === -1) {
-        const compare = (a, b) => {
-          return a.title.localeCompare(b.title);
-        };
-        panels.sort(compare);
-        // typeof a.title === 'string' ? (a.title > b.title ? 1
-        // : ((b.title > a.title) ? -1 : 0))
-        // : (a.title.props.children > b.title.props.children ? 1
-        //   : ((b.title.props.children > a.title.props.children) ? -1 : 0)));
-      }
-
       return panels;
-      // node: panels,
-      // defaultActiveIndex: path.findIndex(id => id === sourceId)
     }
 
     return {
@@ -235,14 +217,6 @@ class LibraryContainer extends Component {
         content: <Accordion.Accordion panels={panels} />,
         key: `lib-content-${sourceId}`,
       }
-      // node: {
-      //   title,
-      //   content: {
-      //     content: <Accordion.Accordion panels={panels} />,
-      //     key: `lib-content-${sourceId}`,
-      //   }
-      // },
-      // defaultActiveIndex: path.findIndex(id => id === sourceId)
     };
   };
 
