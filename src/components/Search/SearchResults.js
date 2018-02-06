@@ -57,13 +57,13 @@ class SearchResults extends Component {
     const transcript  = this.snippetFromHighlight(highlight, ['transcript', 'transcript.analyzed'], parts => `...${parts.join('.....')}...`);
     const snippet     = (
       <div>
-        {!description ? null : (
+        {description && (
           <small>
             <strong>{t('search.result.description')}: </strong>
             {description}
           </small>
         )}
-        {!transcript ? null : (
+        {transcript && (
           <small>
             <strong>{t('search.result.transcript')}: </strong>
             {transcript}
