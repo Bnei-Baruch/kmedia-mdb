@@ -41,7 +41,7 @@ const Routes = ({ match }) => {
       <Route exact path={`${urlPrefix}/lessons`} component={Lessons} />
       <Route exact path={`${urlPrefix}/lessons/cu/:id`} component={LessonUnit} />
       <Route exact path={`${urlPrefix}/lessons/c/:id`} component={LessonCollection} />
-      <Route exact path={`${urlPrefix}/lessons/last`} component={LastLessonCollection} />
+      <Route exact path={`${urlPrefix}/lessons/latest`} component={LastLessonCollection} />
       <Route exact path={`${urlPrefix}/programs`} component={Programs} />
       <Route exact path={`${urlPrefix}/programs/cu/:id`} component={ProgramChapter} />
       <Route exact path={`${urlPrefix}/programs/c/:id`} component={ProgramCollection} />
