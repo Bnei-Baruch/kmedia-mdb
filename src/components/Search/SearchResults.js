@@ -55,20 +55,20 @@ class SearchResults extends Component {
     const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || cu.name;
     const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
     const transcript  = this.snippetFromHighlight(highlight, ['transcript', 'transcript.analyzed'], parts => `...${parts.join('.....')}...`);
-    const snippet     = (<span>
-                       {!description ? null : (
-                         <span>
-                           <Label size="small">{t('search.result.description')}</Label>
-                           {description}
-                         </span>
+    const snippet     = (<div>
+                      {!description ? null : (
+                         <small>
+                            <strong>{t('search.result.description')}: </strong>
+                            {description}
+                         </small>
                        )}
-      {!transcript ? null : (
-        <span>
-                           <Label size="small">{t('search.result.transcript')}</Label>
-          {transcript}
-                         </span>
-      )}
-                     </span>);
+                      {!transcript ? null : (
+                          <small>
+                            <strong>{t('search.result.transcript')}: </strong>
+                            {transcript}
+                          </small>
+                      )}
+                     </div>);
 
     let filmDate = '';
     if (cu.film_date) {
@@ -80,9 +80,10 @@ class SearchResults extends Component {
         <Table.Cell collapsing singleLine width={1}>
           <strong>{filmDate}</strong>
         </Table.Cell>
+        <Table.Cell collapsing singleLine>
+          <Label size="tiny">{t(`constants.content-types.${cu.content_type}`)}</Label>
+        </Table.Cell>
         <Table.Cell>
-          <span>
-          <Label>{t(`constants.content-types.${cu.content_type}`)}</Label>
           <Link to={canonicalLink(cu || { id: mdb_uid, content_type: cu.content_type })}>
             {name}
           </Link>
@@ -92,8 +93,8 @@ class SearchResults extends Component {
                 <small>{formatDuration(cu.duration)}</small> :
                 null
             }
-          </span>
-          {snippet ? <div>{snippet}</div> : null}
+          
+          {snippet ? snippet : null}
         </Table.Cell>
         <Table.Cell collapsing textAlign="right">
           {score}
