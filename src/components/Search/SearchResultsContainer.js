@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Container } from 'semantic-ui-react';
+import { Container, Divider } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../redux/modules/search';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
@@ -10,6 +10,7 @@ import { selectors as mdbSelectors } from '../../redux/modules/mdb';
 import * as shapes from '../shapes';
 import SearchResults from './SearchResults';
 import Filters from './Filters';
+import SectionHeader from '../shared/SectionHeader';
 
 class SearchResultsContainer extends Component {
   static propTypes = {
@@ -70,6 +71,8 @@ class SearchResultsContainer extends Component {
 
     return (
       <div>
+        <SectionHeader section="search" />
+        <Divider fitted />
         <Filters
           sortBy={sortBy}
           onChange={this.handleFiltersChanged}

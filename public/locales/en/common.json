@@ -121,6 +121,10 @@
     "no-images": "No images found"
   },
   "search": {
+    "header": {
+      "text": "Search Results",
+      "subtext": ""
+    },
     "sortby": "sort by",
     "sorts": {
       "relevance": "relevance",
@@ -143,8 +147,8 @@
       "no-results": "Your search for <1><0>{{query}}</0></1> found no results."
     },
     "result": {
-      "description": "summary",
-      "transcript": "transcript"
+      "description": "Summary",
+      "transcript": "Transcript"
     }
   },
   "home": {

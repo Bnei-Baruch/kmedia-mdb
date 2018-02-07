@@ -17,9 +17,13 @@ const SectionHeader = (props) => {
                   <span className="section-header__title">
                     {t(`${section}.header.text`)}
                   </span>
-                  <Header.Subheader className="section-header__subtitle">
-                    {t(`${section}.header.subtext`)}
-                  </Header.Subheader>
+                  {
+                     t(`${section}.header.subtext`) ? 
+                      <Header.Subheader className="section-header__subtitle">
+                        {t(`${section}.header.subtext`)}
+                      </Header.Subheader>
+                      : ''
+                  }
                 </Header.Content>
               </Header>
             </Grid.Column>
