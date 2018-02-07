@@ -58,18 +58,22 @@ class SearchResults extends Component {
     const transcript  = this.snippetFromHighlight(highlight, ['transcript', 'transcript.analyzed'], parts => `...${parts.join('.....')}...`);
     const snippet     = (
       <div className="search__snippet">
-        {description && (
-          <div>
-            <strong>{t('search.result.description')}: </strong>
-            {description}
-          </div>
-        )}
-        {transcript && (
-          <div>
-            <strong>{t('search.result.transcript')}: </strong>
-            {transcript}
-          </div>
-        )}
+        {
+          description ?
+            <div>
+              <strong>{t('search.result.description')}: </strong>
+              {description}
+            </div> :
+            null
+        }
+        {
+          transcript ?
+            <div>
+              <strong>{t('search.result.transcript')}: </strong>
+              {transcript}
+            </div> :
+            null
+        }
       </div>);
 
     let filmDate = '';
@@ -141,12 +145,6 @@ class SearchResults extends Component {
         <div>
           <Container>
             <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
-            {/* <Header as="h1">
-          {t('search.results.title')}
-          <Header.Subheader>
-            {t('search.results.search-summary', { total, pageNo, took: took / 1000 })}
-          </Header.Subheader>
-        </Header> */}
             <Table sortable basic="very" className="index-list">
               <Table.Body>
                 {hits.map(this.renderHit)}

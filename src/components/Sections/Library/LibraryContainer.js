@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import { replace as routerReplace } from 'react-router-redux';
 import { translate } from 'react-i18next';
 import { Button, Container, Grid, Header, } from 'semantic-ui-react';
 
+import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
-import { formatError, isEmpty } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
@@ -56,7 +56,9 @@ class LibraryContainer extends Component {
       return;
     }
     const firstLeafId = this.firstLeafId(sourceId);
-    if (firstLeafId !== sourceId || this.props.sourceId !== sourceId || this.state.lastLoadedId !== sourceId) {
+    if (firstLeafId !== sourceId ||
+      this.props.sourceId !== sourceId ||
+      this.state.lastLoadedId !== sourceId) {
       if (firstLeafId !== sourceId) {
         replace(`sources/${firstLeafId}`);
       } else {
@@ -78,7 +80,9 @@ class LibraryContainer extends Component {
     }
 
     const firstLeafId = this.firstLeafId(sourceId);
-    if (firstLeafId !== sourceId || this.props.sourceId !== sourceId || this.state.lastLoadedId !== sourceId) {
+    if (firstLeafId !== sourceId ||
+      this.props.sourceId !== sourceId ||
+      this.state.lastLoadedId !== sourceId) {
       if (firstLeafId === sourceId) {
         this.loadNewIndices(sourceId, this.props.language);
       } else {
@@ -174,12 +178,12 @@ class LibraryContainer extends Component {
   };
 
   render() {
-    const { sourceId, t } = this.props;
+    const { sourceId, indexMap, getSourceById, language, t } = this.props;
 
     const fullPath = this.getFullPath(sourceId);
     const parent   = this.properParentId(fullPath);
 
-    const index = isEmpty(sourceId) ? {} : this.props.indexMap[sourceId];
+    const index = isEmpty(sourceId) ? {} : indexMap[sourceId];
 
     let content;
     const { err } = index || {};
@@ -190,7 +194,14 @@ class LibraryContainer extends Component {
         content = <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
       }
     } else {
-      content = <LibraryContentContainer source={sourceId} index={index} languageUI={this.props.language} t={t} />;
+      content = (
+        <LibraryContentContainer
+          source={sourceId}
+          index={index}
+          languageUI={language}
+          t={t}
+        />
+      );
     }
 
     return (
@@ -205,7 +216,7 @@ class LibraryContainer extends Component {
                   </Header>
                 </Grid.Column>
                 <Grid.Column width={6}>
-                  {this.header(this.props.sourceId, fullPath)}
+                  {this.header(sourceId, fullPath)}
                 </Grid.Column>
                 <Grid.Column width={2}>
                   <Button.Group basic size="tiny" floated="right">
@@ -220,7 +231,13 @@ class LibraryContainer extends Component {
           <Grid padded divided>
             <Grid.Row>
               <Grid.Column width={4}>
-                <TOC fullPath={fullPath} rootId={parent} contextRef={this.contextRef} getSourceById={this.props.getSourceById} replace={this.props.replace} />
+                <TOC
+                  fullPath={fullPath}
+                  rootId={parent}
+                  contextRef={this.contextRef}
+                  getSourceById={getSourceById}
+                  replace={this.props.replace}
+                />
               </Grid.Column>
               <Grid.Column width={8}>
                 {/* {MainMenuHeight2} */}

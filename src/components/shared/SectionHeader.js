@@ -18,11 +18,11 @@ const SectionHeader = (props) => {
                     {t(`${section}.header.text`)}
                   </span>
                   {
-                     t(`${section}.header.subtext`) ? 
+                    t(`${section}.header.subtext`) ?
                       <Header.Subheader className="section-header__subtitle">
                         {t(`${section}.header.subtext`)}
                       </Header.Subheader>
-                      : ''
+                      : null
                   }
                 </Header.Content>
               </Header>
