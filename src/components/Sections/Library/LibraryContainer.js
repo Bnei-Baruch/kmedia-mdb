@@ -174,12 +174,12 @@ class LibraryContainer extends Component {
   };
 
   render() {
-    const { indexMap, sourceId, language, getSourceById, replace, t } = this.props;
+    const { sourceId, t } = this.props;
 
     const fullPath = this.getFullPath(sourceId);
     const parent   = this.properParentId(fullPath);
 
-    const index = isEmpty(sourceId) ? {} : indexMap[sourceId];
+    const index = isEmpty(sourceId) ? {} : this.props.indexMap[sourceId];
 
     let content;
     const { err } = index || {};
@@ -190,7 +190,7 @@ class LibraryContainer extends Component {
         content = <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
       }
     } else {
-      content = <LibraryContentContainer source={sourceId} index={index} languageUI={language} t={t} />;
+      content = <LibraryContentContainer source={sourceId} index={index} languageUI={this.props.language} t={t} />;
     }
 
     return (
@@ -220,7 +220,7 @@ class LibraryContainer extends Component {
           <Grid padded divided>
             <Grid.Row>
               <Grid.Column width={4}>
-                <TOC fullPath={fullPath} rootId={parent} contextRef={this.contextRef} getSourceById={getSourceById} replace={replace} />
+                <TOC fullPath={fullPath} rootId={parent} contextRef={this.contextRef} getSourceById={this.props.getSourceById} replace={this.props.replace} />
               </Grid.Column>
               <Grid.Column width={8}>
                 {/* {MainMenuHeight2} */}
