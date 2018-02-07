@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { replace as routerReplace } from 'react-router-redux';
 import { translate } from 'react-i18next';
-import { Accordion, Button, Container, Grid, Header, Ref, Sticky } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, } from 'semantic-ui-react';
 
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -14,11 +14,10 @@ import * as shapes from '../../shapes';
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import LibraryContentContainer from './LibraryContentContainer';
+import TOC from './TOC';
+// import styles from '../../../stylesheets/includes/_layout.scss';
 
-import styles from '../../../stylesheets/includes/_layout.scss';
-import { BS_SHAMATI, } from '../../../helpers/consts';
-
-const MainMenuHeight2 = parseInt(styles.MainMenuHeight, 10);
+// const MainMenuHeight2 = parseInt(styles.MainMenuHeight, 10);
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -103,21 +102,31 @@ class LibraryContainer extends Component {
     const { getPathByID } = this.props;
 
     if (getPathByID === undefined) {
-      return [{ id: 0 }, { id: sourceId }];
+      return [{ id: '0' }, { id: sourceId }];
     }
 
     return getPathByID(sourceId);
   };
 
-  loadNewIndices = (sourceId, language) => {
-    this.setState({ lastLoadedId: sourceId, language });
-    this.fetchIndices(sourceId);
+  firstLeafId = (sourceId) => {
+    const { getSourceById } = this.props;
+
+    const { children } = getSourceById(sourceId) || { children: [] };
+    if (isEmpty(children)) {
+      return sourceId;
+    }
+
+    return this.firstLeafId(children[0]);
   };
 
-  handleContextRef               = contextRef => this.setState({ contextRef });
-  handleAccordionContext         = (ref) => {
+  handleContextRef = (ref) => {
+    this.contextRef = ref;
+  };
+
+  handleAccordionContext = (ref) => {
     this.accordionContext = ref;
   };
+
   handleSelectedAccordionContext = (ref) => {
     this.selectedAccordionContext = ref;
   };
@@ -157,88 +166,15 @@ class LibraryContainer extends Component {
     );
   };
 
-  selectSourceById = (id, e) => {
-    e.preventDefault();
-    this.props.replace(`sources/${id}`);
-    window.scrollTo(0, 0);
-  };
-
-  subToc = (subTree, path) => (
-    subTree.map(sourceId => (this.toc(sourceId, path)))
-  );
-
-  leaf = (id, title) => {
-    const { sourceId } = this.props;
-    let props          = {
-      key: `lib-leaf-item-${id}`,
-      onClick: e => this.selectSourceById(id, e),
-    };
-    if (id === sourceId) {
-      props = { ...props, ref: this.handleSelectedAccordionContext, active: true };
-    }
-    return <Accordion.Title {...props}>{title}</Accordion.Title>;
-  };
-
-  toc = (sourceId, path, firstLevel = false) => {
-    // 1. Element that has children is CONTAINER
-    // 2. Element that has NO children is NOT CONTAINER (though really it may be empty container)
-    // 3. If all children of first level element are NOT CONTAINERs, than it is also NOT CONTAINER
-
-    const { getSourceById } = this.props;
-
-    const { name: title, children } = getSourceById(sourceId);
-
-    if (isEmpty(children)) { // Leaf
-      const item   = this.leaf(sourceId, title);
-      const result = { title: item, key: `lib-leaf-${sourceId}` };
-      return [result];
-    }
-
-    const hasNoGrandsons = children.reduce((acc, curr) => acc && isEmpty(getSourceById(curr).children), true);
-    let panels;
-    if (hasNoGrandsons) {
-      panels = children.map((leafId, idx) => {
-        let { name: leafTitle, } = getSourceById(leafId);
-        if (sourceId === BS_SHAMATI) {
-          leafTitle = `${idx + 1}. ${leafTitle}`;
-        }
-
-        const item = this.leaf(leafId, leafTitle);
-        return { title: item, key: `lib-leaf-${leafId}` };
-      });
-    } else {
-      panels = this.subToc(children, path);
-    }
-
-    if (firstLevel) {
-      return panels;
-    }
-
-    return {
-      title,
-      content: {
-        content: <Accordion.Accordion panels={panels} />,
-        key: `lib-content-${sourceId}`,
-      }
-    };
-  };
-
-  firstLeafId = (sourceId) => {
-    const { getSourceById } = this.props;
-
-    const { children } = getSourceById(sourceId) || { children: [] };
-    if (isEmpty(children)) {
-      return sourceId;
-    }
-
-    return this.firstLeafId(children[0]);
-  };
-
   properParentId = path => (path[1].id);
 
+  loadNewIndices = (sourceId, language) => {
+    this.setState({ lastLoadedId: sourceId, language });
+    this.fetchIndices(sourceId);
+  };
+
   render() {
-    const { contextRef }                      = this.state;
-    const { indexMap, sourceId, language, t } = this.props;
+    const { indexMap, sourceId, language, getSourceById, replace, t } = this.props;
 
     const fullPath = this.getFullPath(sourceId);
     const parent   = this.properParentId(fullPath);
@@ -257,7 +193,6 @@ class LibraryContainer extends Component {
       content = <LibraryContentContainer source={sourceId} index={index} languageUI={language} t={t} />;
     }
 
-    const toc = this.toc(parent, fullPath, true);
     return (
       <div className="source is-readble">
         <div className="layout__secondary-header">
@@ -285,11 +220,7 @@ class LibraryContainer extends Component {
           <Grid padded divided>
             <Grid.Row>
               <Grid.Column width={4}>
-                <Sticky context={contextRef} offset={144} className="source__toc">
-                  <Ref innerRef={this.handleAccordionContext}>
-                    <Accordion fluid panels={toc} />
-                  </Ref>
-                </Sticky>
+                <TOC fullPath={fullPath} rootId={parent} contextRef={this.contextRef} getSourceById={getSourceById} replace={replace} />
               </Grid.Column>
               <Grid.Column width={8}>
                 {/* {MainMenuHeight2} */}
