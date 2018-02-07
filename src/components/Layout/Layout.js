@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { Route } from 'react-router-dom';
 import { Flag, Header, Icon, Menu } from 'semantic-ui-react';
 
-import { FLAG_TO_LANGUAGE } from '../../helpers/consts';
+import { FLAG_TO_LANGUAGE, ALL_LANGUAGES } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import OmniBox from '../Search/OmniBox';
@@ -51,10 +51,26 @@ class Layout extends Component {
 
   closeSidebar = () => this.setState({ sidebarActive: false });
 
+  shouldShowSearch = (location) => {
+
+    const parts = location.pathname.split('/').filter(x => {
+      return (x !== '');
+    });
+
+    if (parts.length === 0) {
+      return false;
+    }
+    if (parts.length === 1) {
+      return !ALL_LANGUAGES.includes(parts[0]);
+    }
+    return true;
+  };
+
   render() {
     const { t, location }   = this.props;
     const { sidebarActive } = this.state;
 
+    const showSearch = this.shouldShowSearch(location);
     return (
       <div className="layout">
         <GAPageView location={location} />
@@ -86,7 +102,12 @@ class Layout extends Component {
               </Header>
             </Menu.Item>
             <Menu.Item style={{ flex: 1 }}>
-              <OmniBox t={t} location={location} />
+              {
+                showSearch && (
+                  <OmniBox t={t} location={location} />
+                )
+              }
+
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>

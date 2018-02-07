@@ -4,9 +4,9 @@ import ReactDOM from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { replace } from 'react-router-redux';
+import { replace as routerReplace } from 'react-router-redux';
 import { translate } from 'react-i18next';
-import { Accordion, Container, Grid, Ref, Sticky } from 'semantic-ui-react';
+import { Accordion, Button, Container, Grid, Header, Ref, Sticky } from 'semantic-ui-react';
 
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -15,8 +15,12 @@ import { formatError, isEmpty } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import LibraryContentContainer from './LibraryContentContainer';
 
-class LibraryContainer extends Component {
+import styles from '../../../stylesheets/includes/_layout.scss';
+import { BS_SHAMATI, } from '../../../helpers/consts';
 
+const MainMenuHeight2 = parseInt(styles.MainMenuHeight, 10);
+
+class LibraryContainer extends Component {
   static propTypes = {
     sourceId: PropTypes.string.isRequired,
     indexMap: PropTypes.objectOf(PropTypes.shape({
@@ -34,11 +38,6 @@ class LibraryContainer extends Component {
   };
 
   static defaultProps = {
-    content: {
-      data: null,
-      wip: false,
-      err: null,
-    },
     indexMap: {
       data: null,
       wip: false,
@@ -50,14 +49,7 @@ class LibraryContainer extends Component {
 
   state = {
     lastLoadedId: null,
-    accordionContext: null,
-    selectedAccordionContext: null,
   };
-
-  handleContextRef = contextRef => this.setState({ contextRef });
-
-  handleAccordionContext         = accordionContext => this.setState({ accordionContext });
-  handleSelectedAccordionContext = selectedAccordionContext => this.setState({ selectedAccordionContext });
 
   componentDidMount() {
     const { sourceId, areSourcesLoaded, replace } = this.props;
@@ -65,8 +57,7 @@ class LibraryContainer extends Component {
       return;
     }
     const firstLeafId = this.firstLeafId(sourceId);
-    if (firstLeafId !== sourceId || this.props.sourceId !== sourceId
-      || this.state.lastLoadedId !== sourceId) {
+    if (firstLeafId !== sourceId || this.props.sourceId !== sourceId || this.state.lastLoadedId !== sourceId) {
       if (firstLeafId !== sourceId) {
         replace(`sources/${firstLeafId}`);
       } else {
@@ -75,40 +66,61 @@ class LibraryContainer extends Component {
         this.fetchIndices(sourceId);
       }
     }
-
   }
 
   componentWillReceiveProps(nextProps) {
     const { sourceId, areSourcesLoaded, language, replace } = nextProps;
-    const { accordionContext, selectedAccordionContext }    = this.state;
     if (!areSourcesLoaded) {
       return;
     }
     if (this.state.language && language !== this.state.language) {
-      this.setState({ lastLoadedId: sourceId, language: this.props.language });
-      this.fetchIndices(sourceId);
+      this.loadNewIndices(sourceId, this.props.language);
       return;
     }
 
     const firstLeafId = this.firstLeafId(sourceId);
-    if (firstLeafId !== sourceId || this.props.sourceId !== sourceId
-      || this.state.lastLoadedId !== sourceId) {
-      if (firstLeafId !== sourceId) {
-        replace(firstLeafId);
+    if (firstLeafId !== sourceId || this.props.sourceId !== sourceId || this.state.lastLoadedId !== sourceId) {
+      if (firstLeafId === sourceId) {
+        this.loadNewIndices(sourceId, this.props.language);
       } else {
-        this.setState({ lastLoadedId: sourceId, language: this.props.language });
-        this.fetchIndices(sourceId);
+        replace(firstLeafId);
       }
     }
 
-//@TODO - David, can be state that change scroll to many times.
-    if (accordionContext && selectedAccordionContext) {
-      const elScrollTop = ReactDOM.findDOMNode(selectedAccordionContext).offsetTop;
-      if (accordionContext.parentElement.scrollTop !== elScrollTop) {
-        accordionContext.parentElement.scrollTop = elScrollTop;
+    // @TODO - David, can be state that change scroll to many times.
+    if (!isEmpty(this.accordionContext) && !isEmpty(this.selectedAccordionContext)) {
+      // eslint-disable-next-line react/no-find-dom-node
+      const elScrollTop = ReactDOM.findDOMNode(this.selectedAccordionContext).offsetTop;
+      const p           = this.accordionContext.parentElement;
+      if (p.scrollTop !== elScrollTop) {
+        p.scrollTop = elScrollTop;
       }
     }
   }
+
+  getFullPath = (sourceId) => {
+    // Go to the root of this sourceId
+    const { getPathByID } = this.props;
+
+    if (getPathByID === undefined) {
+      return [{ id: 0 }, { id: sourceId }];
+    }
+
+    return getPathByID(sourceId);
+  };
+
+  loadNewIndices = (sourceId, language) => {
+    this.setState({ lastLoadedId: sourceId, language });
+    this.fetchIndices(sourceId);
+  };
+
+  handleContextRef               = contextRef => this.setState({ contextRef });
+  handleAccordionContext         = (ref) => {
+    this.accordionContext = ref;
+  };
+  handleSelectedAccordionContext = (ref) => {
+    this.selectedAccordionContext = ref;
+  };
 
   fetchIndices = (sourceId) => {
     if (isEmpty(sourceId)) {
@@ -118,10 +130,11 @@ class LibraryContainer extends Component {
     this.props.fetchIndex(sourceId);
   };
 
-  header = (sourceId) => {
+  header = (sourceId, fullPath) => {
     const { getSourceById } = this.props;
 
-    const { name, description, parent_id: parentId } = getSourceById(sourceId);
+    const { name: sourceName }                                   = getSourceById(sourceId);
+    const { name: parentName, description, parent_id: parentId } = getSourceById(this.properParentId(fullPath));
     if (parentId === undefined) {
       return <div />;
     }
@@ -133,10 +146,14 @@ class LibraryContainer extends Component {
     }
 
     return (
-      <div>
-        <div style={{ textTransform: 'uppercase' }}>{displayName}</div>
-        <div>{`${name} ${description || ''} `}</div>
-      </div>
+      <Header size="large">
+        <Header.Subheader>
+          <small>
+            {displayName} / {`${parentName} ${description || ''} `}
+          </small>
+        </Header.Subheader>
+        {sourceName}
+      </Header>
     );
   };
 
@@ -146,11 +163,8 @@ class LibraryContainer extends Component {
     window.scrollTo(0, 0);
   };
 
-  subToc = subTree => (
-    subTree.map(sourceId => (
-        this.toc(sourceId)
-      )
-    )
+  subToc = (subTree, path) => (
+    subTree.map(sourceId => (this.toc(sourceId, path)))
   );
 
   leaf = (id, title) => {
@@ -165,16 +179,10 @@ class LibraryContainer extends Component {
     return <Accordion.Title {...props}>{title}</Accordion.Title>;
   };
 
-  toc = (sourceId, firstLevel = false) => {
+  toc = (sourceId, path, firstLevel = false) => {
     // 1. Element that has children is CONTAINER
     // 2. Element that has NO children is NOT CONTAINER (though really it may be empty container)
     // 3. If all children of first level element are NOT CONTAINERs, than it is also NOT CONTAINER
-
-    const BS_SHAMATI               = 'qMUUn22b';
-    const BS_IGROT                 = 'DVSS0xAR';
-    const RB_IGROT                 = 'b8SHlrfH';
-    const MR_TORA                  = 'bvA8ZB1w';
-    const avoidSortingForSourceIds = [BS_SHAMATI, BS_IGROT, RB_IGROT, MR_TORA];
 
     const { getSourceById } = this.props;
 
@@ -199,17 +207,10 @@ class LibraryContainer extends Component {
         return { title: item, key: `lib-leaf-${leafId}` };
       });
     } else {
-      panels = this.subToc(children);
+      panels = this.subToc(children, path);
     }
 
     if (firstLevel) {
-      if (!avoidSortingForSourceIds.some((a) => a === sourceId)) {
-        panels.sort((a, b) => typeof a.title === 'string' ? (a.title > b.title ? 1
-          : ((b.title > a.title) ? -1 : 0))
-          : (a.title.props.children > b.title.props.children ? 1
-            : ((b.title.props.children > a.title.props.children) ? -1 : 0)));
-      }
-
       return panels;
     }
 
@@ -233,22 +234,14 @@ class LibraryContainer extends Component {
     return this.firstLeafId(children[0]);
   };
 
-  properParentId = (sourceId) => {
-    // Go to the root of this sourceId
-    const { getPathByID } = this.props;
-
-    if (getPathByID === undefined) {
-      return sourceId;
-    }
-
-    const path = getPathByID(sourceId);
-
-    return path[1] ? path[1].id : sourceId;
-  };
+  properParentId = path => (path[1].id);
 
   render() {
     const { contextRef }                      = this.state;
     const { indexMap, sourceId, language, t } = this.props;
+
+    const fullPath = this.getFullPath(sourceId);
+    const parent   = this.properParentId(fullPath);
 
     const index = isEmpty(sourceId) ? {} : indexMap[sourceId];
 
@@ -261,38 +254,45 @@ class LibraryContainer extends Component {
         content = <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
       }
     } else {
-      content = <LibraryContentContainer source={this.props.sourceId} index={index} languageUI={language} t={t} />;
+      content = <LibraryContentContainer source={sourceId} index={index} languageUI={language} t={t} />;
     }
 
-    const parent = this.properParentId(this.props.sourceId);
-
+    const toc = this.toc(parent, fullPath, true);
     return (
       <div className="source is-readble">
         <div className="layout__secondary-header">
           <Container>
             <Grid padded>
               <Grid.Row>
-                <Grid.Column width={3}>
-                  {t('sources-library.toc')}
+                <Grid.Column width={4}>
+                  <Header size="medium">
+                    {t('sources-library.toc')}
+                  </Header>
                 </Grid.Column>
-                <Grid.Column width={8}>
-                  {this.header(this.properParentId(this.props.sourceId))}
+                <Grid.Column width={6}>
+                  {this.header(this.props.sourceId, fullPath)}
+                </Grid.Column>
+                <Grid.Column width={2}>
+                  <Button.Group basic size="tiny" floated="right">
+                    <Button icon="expand" />
+                  </Button.Group>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
           </Container>
         </div>
         <Container>
-          <Grid padded>
+          <Grid padded divided>
             <Grid.Row>
-              <Grid.Column width={3}>
+              <Grid.Column width={4}>
                 <Sticky context={contextRef} offset={144} className="source__toc">
                   <Ref innerRef={this.handleAccordionContext}>
-                    <Accordion fluid panels={this.toc(parent, true)} />
+                    <Accordion fluid panels={toc} />
                   </Ref>
                 </Sticky>
               </Grid.Column>
               <Grid.Column width={8}>
+                {/* {MainMenuHeight2} */}
                 <div ref={this.handleContextRef}>
                   <div className="source__content">
                     {content}
@@ -319,6 +319,6 @@ export default withRouter(connect(
   }),
   dispatch => bindActionCreators({
     fetchIndex: sourceActions.fetchIndex,
-    replace,
+    replace: routerReplace,
   }, dispatch)
 )(translate()(LibraryContainer)));
