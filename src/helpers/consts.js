@@ -244,3 +244,10 @@ export const UNIT_PROGRAMS_TYPE       = [CT_VIDEO_PROGRAM_CHAPTER];
 export const UNIT_EVENTS_TYPE         = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
 
 export const NO_NAME = '☠ no name';
+
+// Sources
+export const BS_SHAMATI = 'qMUUn22b';
+export const BS_IGROT   = 'DVSS0xAR';
+export const RB_IGROT   = 'b8SHlrfH';
+export const MR_TORA    = 'bvA8ZB1w';
+export const RH_ZOHAR   = 'AwGBQX2L';

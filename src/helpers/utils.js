@@ -35,7 +35,6 @@ import {
   CT_WOMEN_LESSON,
   CT_WOMEN_LESSONS,
   EVENT_TYPES,
-  MEDIA_TYPES,
 } from './consts';
 
 import { CollectionsBreakdown } from './mdb';
@@ -302,9 +301,8 @@ export const strCmp = (a, b) => {
     return -1;
   } else if (a > b) {
     return 1;
-  } else {
-    return 0;
   }
+  return 0;
 };
 
 /**

@@ -33,9 +33,9 @@ class AVPlayPause extends Component {
   }
 
   handlePlayPause = () => {
-    if (!this.props.media.isLoading) {
+    // if (!this.props.media.isLoading) {
       this.props.media.playPause();
-    }
+    // }
   };
 
   handleMainBtnRef = ref => {

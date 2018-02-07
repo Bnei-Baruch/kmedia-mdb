@@ -9,6 +9,7 @@ import { sagas as tags } from './tags';
 import { sagas as settings } from './settings';
 import { sagas as search } from './search';
 import { sagas as assets } from './assets';
+import { sagas as home } from './home';
 
 export default [
   ...mdb,
@@ -22,4 +23,5 @@ export default [
   ...settings,
   ...search,
   ...assets,
+  ...home,
 ];

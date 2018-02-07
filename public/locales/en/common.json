@@ -83,7 +83,8 @@
     "audio": "Audio",
     "video": "Video",
     "more": "More",
-    "copy-link": "Copy Link"
+    "copy-link": "Copy Link",
+    "search": "Search"
   },
   "player": {
     "messages": {
@@ -94,7 +95,7 @@
     },
     "share": {
       "title": "watch this video"
-     },
+    },
     "error": {
       "loading": "Error loading file."
     }
@@ -145,6 +146,12 @@
       "description": "summary",
       "transcript": "transcript"
     }
+  },
+  "home": {
+    "search": "Explore the wisdom of Kabbalah",
+    "sections": "Archive Sections",
+    "updates": "Latest Updates",
+    "last-lesson": "The Latest Daily Lesson"
   },
   "events": {
     "header": {
