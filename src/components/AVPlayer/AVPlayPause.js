@@ -3,17 +3,18 @@ import PropTypes from 'prop-types';
 import { withMediaProps } from 'react-media-player';
 import { Icon } from 'semantic-ui-react';
 
-class AVPlayPause extends Component {
+export class AVPlayPause extends Component {
   static propTypes = {
     media: PropTypes.shape({
-      isPlaying: PropTypes.bool.isRequired,
-      playPause: PropTypes.func.isRequired,
+      isPlaying: PropTypes.bool,
+      playPause: PropTypes.func,
     }).isRequired,
     showNextPrev: PropTypes.bool,
     hasNext: PropTypes.bool,
     hasPrev: PropTypes.bool,
     onNext: PropTypes.func,
     onPrev: PropTypes.func,
+    withoutPlay: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -49,7 +50,7 @@ class AVPlayPause extends Component {
   };
 
   render() {
-    const { media, showNextPrev, hasNext, hasPrev, onNext, onPrev } = this.props;
+    const { media, showNextPrev, hasNext, hasPrev, onNext, onPrev, withoutPlay } = this.props;
 
     return (
       <div className='buttons-wrapper'>
@@ -66,13 +67,14 @@ class AVPlayPause extends Component {
             />
           </button>
         ) : null}
-        <button
-          ref={this.handleMainBtnRef}
-          type="button"
-          tabIndex="-1"
-        >
-          <Icon name={media.isPlaying ? 'pause' : 'play'} />
-        </button>
+        {withoutPlay ? null : (
+          <button
+            ref={this.handleMainBtnRef}
+            type="button"
+            tabIndex="-1"
+          >
+            <Icon name={media.isPlaying ? 'pause' : 'play'} />
+          </button>)}
         {showNextPrev ? (
           <button
             type="button"
