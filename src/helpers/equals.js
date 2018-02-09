@@ -25,13 +25,15 @@ const compare = (item1, item2) => {
 };
 
 const compareOwnProperties = (value, other) => {
-  for (const key in value) {
-    if (value.hasOwnProperty(key)) {
-      if (compare(value[key], other[key]) === false) {
-        return false;
-      }
+  const values = Object.values(value);
+  const others = Object.values(other);
+
+  for (let key = 0; key < values.length; key++) {
+    if (compare(value[key], others[key]) === false) {
+      return false;
     }
   }
+
   return true;
 };
 
