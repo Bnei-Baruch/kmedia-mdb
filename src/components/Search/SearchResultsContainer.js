@@ -8,9 +8,9 @@ import { actions, selectors } from '../../redux/modules/search';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
 import * as shapes from '../shapes';
+import SectionHeader from '../shared/SectionHeader';
 import SearchResults from './SearchResults';
 import Filters from './Filters';
-import SectionHeader from '../shared/SectionHeader';
 
 class SearchResultsContainer extends Component {
   static propTypes = {
@@ -101,7 +101,7 @@ const mapState = state => {
   const cuMap   = results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
       const cuID = val._source.mdb_uid;
-      const cu = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
+      const cu   = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
       if (cu) {
         acc[cuID] = cu;
       }

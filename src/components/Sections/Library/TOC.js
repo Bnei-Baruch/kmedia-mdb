@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
 
-import { isEmpty } from '../../../helpers/utils';
 import { BS_SHAMATI } from '../../../helpers/consts';
+import { isEmpty } from '../../../helpers/utils';
 
 class TOC extends Component {
   static propTypes = {
