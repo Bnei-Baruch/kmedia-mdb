@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { Flag, Header, Icon, Menu } from 'semantic-ui-react';
 import { renderRoutes } from 'react-router-config';
 
-import { FLAG_TO_LANGUAGE } from '../../helpers/consts';
+import { FLAG_TO_LANGUAGE, ALL_LANGUAGES } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import OmniBox from '../Search/OmniBox';
@@ -27,7 +27,7 @@ class Layout extends Component {
     sidebarActive: false
   };
 
-  // Required for handling outhide sidebar on click outside sidebar,
+  // Required for handling outside sidebar on click outside sidebar,
   // i.e, main, header of footer.
   componentDidMount() {
     document.addEventListener('click', this.clickOutside, true);
@@ -47,10 +47,26 @@ class Layout extends Component {
 
   closeSidebar = () => this.setState({ sidebarActive: false });
 
+  shouldShowSearch = (location) => {
+
+    const parts = location.pathname.split('/').filter(x => {
+      return (x !== '');
+    });
+
+    if (parts.length === 0) {
+      return false;
+    }
+    if (parts.length === 1) {
+      return !ALL_LANGUAGES.includes(parts[0]);
+    }
+    return true;
+  };
+
   render() {
     const { t, location, route }   = this.props;
     const { sidebarActive } = this.state;
 
+    const showSearch = this.shouldShowSearch(location);
     return (
       <div className="layout">
         <GAPageView location={location} />
@@ -81,13 +97,19 @@ class Layout extends Component {
                 */}
               </Header>
             </Menu.Item>
-            <Menu.Item style={{flex: 1}}>
-              <OmniBox t={t} location={location} />
+            <Menu.Item style={{ flex: 1 }}>
+              {
+                showSearch && (
+                  <OmniBox t={t} location={location} />
+                )
+              }
+
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
                 {
                   flags.map(flag => (
+                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
                     <Link language={FLAG_TO_LANGUAGE[flag]} key={flag}>
                       <Flag name={flag} />
                     </Link>
@@ -99,7 +121,9 @@ class Layout extends Component {
         </div>
         <div
           className={classnames('layout__sidebar', { 'is-active': sidebarActive })}
-          ref={el => this.sidebarElement = el}
+          ref={(el) => {
+            this.sidebarElement = el;
+          }}
         >
           <Menu inverted borderless size="huge" color="blue">
             <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.closeSidebar}>
@@ -120,7 +144,7 @@ class Layout extends Component {
           <div className="layout__content">
             { renderRoutes(route.routes) }
           </div>
-          <Footer t={t}/>
+          <Footer t={t} />
         </div>
       </div>
     );

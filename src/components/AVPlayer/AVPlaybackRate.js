@@ -7,20 +7,18 @@ export default class AVPlaybackRate extends Component {
   static propTypes = {
     onSelect: PropTypes.func,
     value: PropTypes.string,
-    upward: PropTypes.bool,
   };
 
   static defaultProps = {
     onSelect: noop,
     value: '1x',
-    upward: true,
   };
 
   handleChange = (e, data) =>
     this.props.onSelect(e, data.value);
 
   render() {
-    const { value, upward } = this.props;
+    const { value } = this.props;
 
     const options = ['1x', '1.5x', '2x']
       .map(x => ({ value: x, text: x }));
@@ -30,7 +28,7 @@ export default class AVPlaybackRate extends Component {
         <Dropdown
           floating
           scrolling
-          upward={upward}
+          upward={true}
           icon={null}
           selectOnBlur={false}
           options={options}

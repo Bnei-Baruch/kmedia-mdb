@@ -46,7 +46,7 @@ class Filters extends Component {
     const { filters, rightItems, activeFilterName, namespace, onHydrated, onChange } = this.props;
 
     return (
-      <div>
+      <div className="filter-panel">
         <FiltersHydrator namespace={namespace} onHydrated={onHydrated} />
         <FilterMenu
           items={filters}

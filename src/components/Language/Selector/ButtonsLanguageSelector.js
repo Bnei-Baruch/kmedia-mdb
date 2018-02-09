@@ -15,7 +15,7 @@ class ButtonsLanguageSelector extends BaseLanguageSelector {
     const options          = this.getOptions(this.props);
 
     return (
-      <Button.Group basic size="small">
+      <Button.Group basic className="buttons-language-selector" size="small">
         {
           options.map(x => (
             <Button

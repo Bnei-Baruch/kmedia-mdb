@@ -3,7 +3,9 @@
 import React from 'react';
 import { renderRoutes } from 'react-router-config';
 import { DEFAULT_LANGUAGE } from './helpers/consts';
+import HomePage from './components/Sections/Home/Container';
 import LanguageSetter from './components/Language/LanguageSetter';
+import LastLessonCollection from '../Sections/Lessons/LastCollection';
 import Layout from './components/Layout/Layout';
 import Lessons from './components/Sections/Lessons/List';
 import LessonUnit from './components/Sections/Lessons/Unit';
@@ -75,10 +77,11 @@ const createMainRoutes = (prefix) => {
   return [{
     component: Layout,
     routes: [
-      defaultPageRoute('', Lessons),
+      defaultPageRoute('', HomePage),
       defaultPageRoute('lessons', Lessons),
       defaultPageRoute('lessons/cu/:id', LessonUnit),
       defaultPageRoute('lessons/c/:id', LessonCollection),
+      defaultPageRoute('lessons/latest', LastLessonCollection),
       defaultPageRoute('programs', Programs),
       defaultPageRoute('programs/cu/:id', ProgramChapter),
       defaultPageRoute('programs/c/:id', ProgramCollection),

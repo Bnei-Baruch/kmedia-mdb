@@ -124,7 +124,7 @@ class UnitListPage extends PureComponent {
     const nsFilters = filters[namespace] || [];
 
     return (
-      <div>
+      <div className="unit-list">
         <Divider fitted />
         {
           nsFilters.length > 0 ?

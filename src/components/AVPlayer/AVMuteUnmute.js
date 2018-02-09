@@ -12,7 +12,6 @@ class AVMuteUnmute extends Component {
       muteUnmute: PropTypes.func.isRequired,
       setVolume: PropTypes.func.isRequired,
     }).isRequired,
-    upward: PropTypes.bool,
   };
 
   static defaultProps = {

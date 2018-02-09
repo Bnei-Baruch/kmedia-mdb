@@ -8,6 +8,7 @@ import {
   CT_ARTICLE,
   CT_FULL_LESSON,
   CT_KITEI_MAKOR,
+  CT_LELO_MIKUD,
   CT_LESSON_PART,
   CT_PUBLICATION,
   CT_VIDEO_PROGRAM_CHAPTER,
@@ -167,9 +168,9 @@ class MediaDownloads extends Component {
     const url = physicalFile(file);
 
     return (
-      <Table.Row key={file.id} verticalAlign="top">
+      <Table.Row key={file.id} className="media-downloads__file" verticalAlign="top">
         <Table.Cell>
-          {label}
+          <span className="media-downloads__file-label">{label}</span>
         </Table.Cell>
         <Table.Cell collapsing>
           <Button
@@ -178,6 +179,7 @@ class MediaDownloads extends Component {
             as="a"
             href={url}
             target="_blank"
+            className="media-downloads__file-download-btn"
             size="mini"
             color="orange"
             content={ext.toUpperCase()}
@@ -188,6 +190,7 @@ class MediaDownloads extends Component {
             <Button
               compact
               fluid
+              className="media-downloads__file-copy-link-btn"
               size="mini"
               color="orange"
               content={t('buttons.copy-link')}
@@ -218,6 +221,8 @@ class MediaDownloads extends Component {
     const byType                              = groups.get(language) || new Map();
     const kiteiMakor                          = derivedGroups[CT_KITEI_MAKOR];
     const kiteiMakorByType                    = (kiteiMakor && kiteiMakor.get(language)) || new Map();
+    const leloMikud                           = derivedGroups[CT_LELO_MIKUD];
+    const leloMikudByType                     = (leloMikud && leloMikud.get(language)) || new Map();
     const publications                        = derivedGroups[CT_PUBLICATION];
     const publicationsByType                  = (publications && publications.get(language)) || new Map();
 
@@ -249,6 +254,13 @@ class MediaDownloads extends Component {
         return acc.concat(files);
       }, []);
     }
+    if (leloMikudByType.size > 0) {
+      derivedRows = (derivedRows || []).concat(MEDIA_ORDER.reduce((acc, val) => {
+        const label = `${t('constants.content-types.LELO_MIKUD')} - ${t(`constants.media-types.${val}`)}`;
+        const files = (leloMikudByType.get(val) || []).map(file => this.renderRow(file, label, t));
+        return acc.concat(files);
+      }, []));
+    }
     if (publicationsByType.size > 0) {
       derivedRows = MEDIA_ORDER.reduce((acc, val) => {
         const label = t(`media-downloads.${typeOverrides}type-labels.${val}`);
@@ -261,7 +273,7 @@ class MediaDownloads extends Component {
     }
 
     return (
-      <div className="content__aside-unit">
+      <div className="media-downloads content__aside-unit">
         <Grid columns="equal">
           <Grid.Row>
             <Grid.Column>
@@ -276,14 +288,14 @@ class MediaDownloads extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Table unstackable basic="very" compact="very">
+        <Table unstackable className="media-downloads__files" basic="very" compact="very">
           <Table.Body>
             {rows}
           </Table.Body>
         </Table>
         {
           derivedRows ?
-            <div>
+            <div className="media-downloads__derivations">
               <Header size="tiny" content={t('media-downloads.derived-title')} />
               <Table basic="very" compact="very">
                 <Table.Body>

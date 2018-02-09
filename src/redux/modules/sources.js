@@ -1,8 +1,9 @@
 import { createAction, handleActions } from 'redux-actions';
 import identity from 'lodash/identity';
 
-import { tracePath } from '../../helpers/utils';
+import { tracePath, strCmp } from '../../helpers/utils';
 import { types as settings } from './settings';
+import { BS_IGROT, BS_SHAMATI, MR_TORA, RB_IGROT, RH_ZOHAR, } from '../../helpers/consts';
 
 /* Types */
 
@@ -67,8 +68,42 @@ const initialState = {
   },
 };
 
+const notToSort = [BS_SHAMATI, BS_IGROT, RB_IGROT, MR_TORA, RH_ZOHAR];
+
+const sortTree = (root) => {
+  if (root.children) {
+    root.children
+      .sort((a, b) => strCmp(a.name, b.name))
+      .forEach(sortTree);
+  }
+};
+
+const sortSources = (items) => {
+  items.forEach((i) => {
+    // We not going to sort the upper level [i.e. 'kabbalists'],
+    // especially if it doesn't have children
+    if (!i.children) {
+      return;
+    }
+    i.children.forEach((c) => {
+      // The second level's id is the one that is used to distinguish
+      // between sortable and not sortable sources
+      const shouldSort = notToSort.findIndex(a => a === c.id);
+      if (shouldSort !== -1) {
+        return;
+      }
+      sortTree(c);
+    });
+  });
+};
+
 const buildById = (items) => {
   const byId = {};
+
+  // Yes, this is not good, but...
+  // We sort sources according to Mizrachi's request
+  // and this __changes__ data
+  sortSources(items);
 
   // We BFS the tree, extracting each item by it's ID
   // and normalizing it's children

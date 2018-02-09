@@ -45,40 +45,39 @@ class MyPlaylistWidget extends PlaylistWidget {
     const { t, selected } = this.props;
 
     return (
-      <div key={section} className="avbox__playlist-view-section">
-        <Header inverted as="h3">
+
+      <Menu.Item key={section}>
+        <Menu.Header>
           {t(`events.collection.playlist.${section}`)}
-        </Header>
-        <Menu vertical fluid size="small">
-          {
-            items.map((item, index) => {
-                const { unit } = item;
+        </Menu.Header>
+        {
+          items.map((item, index) => {
+              const { unit } = item;
 
-                const mItem = (
-                  <Menu.Item
-                    key={unit.id}
-                    name={`${offset + index}`}
-                    active={(offset + index) === selected}
-                    onClick={this.handleItemClick}
-                  >
-                    {
-                      section === 'preparation' || section === 'appendices' ?
-                        <strong>{t('values.date', { date: new Date(unit.film_date) })} &nbsp;</strong> :
-                        null
-                    }
-                    {unit.name || NO_NAME} - {formatDuration(unit.duration)}
-                  </Menu.Item>
-                );
+              const mItem = (
+                <Menu.Item
+                  key={unit.id}
+                  name={`${offset + index}`}
+                  active={(offset + index) === selected}
+                  onClick={this.handleItemClick}
+                >
+                  {
+                    section === 'preparation' || section === 'appendices' ?
+                      <strong>{t('values.date', { date: new Date(unit.film_date) })} &nbsp;</strong> :
+                      null
+                  }
+                  {unit.name || NO_NAME} - {formatDuration(unit.duration)}
+                </Menu.Item>
+              );
 
-                if ((offset + index) === selected) {
-                  return <Ref innerRef={this.handleSelectedRef} key={unit.id}>{mItem}</Ref>;
-                }
-                return mItem;
+              if ((offset + index) === selected) {
+                return <Ref innerRef={this.handleSelectedRef} key={unit.id}>{mItem}</Ref>;
               }
-            )
-          }
-        </Menu>
-      </div>
+              return mItem;
+            }
+          )
+        }
+      </Menu.Item>
     );
   }
 
@@ -90,18 +89,20 @@ class MyPlaylistWidget extends PlaylistWidget {
         ref={c => this.playlistView = c}
         className="avbox__playlist-view"
       >
-        {
-          ['lessons', 'other_parts', 'preparation', 'appendices']
-            .map(x => {
-              const offsets = groups[x];
-              if (!offsets) {
-                return null;
-              }
+        <Menu vertical fluid size="small">
+          {
+            ['lessons', 'other_parts', 'preparation', 'appendices']
+              .map(x => {
+                const offsets = groups[x];
+                if (!offsets) {
+                  return null;
+                }
 
-              const [offset, len] = offsets;
-              return this.renderPlaylistSection(x, items.slice(offset, offset + len), offset);
-            })
-        }
+                const [offset, len] = offsets;
+                return this.renderPlaylistSection(x, items.slice(offset, offset + len), offset);
+              })
+          }
+        </Menu>
       </div>
     );
   }

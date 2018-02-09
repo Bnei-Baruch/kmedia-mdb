@@ -25,7 +25,7 @@ const CATEGORIES_ICONS = {
   'persons': 'user',
 };
 
-class OmniBox extends Component {
+export class OmniBox extends Component {
 
   static propTypes = {
     addFilterValue: PropTypes.func.isRequired,
@@ -71,14 +71,14 @@ class OmniBox extends Component {
   }, 100);
 
   emptyQuery = () => {
-    const { query } = this.props;
+    const { query }   = this.props;
     const { filters } = this.props;
-    const params  = filtersTransformer.toApiParams(filters);
+    const params      = filtersTransformer.toApiParams(filters);
     return !query && !Object.values(params).length;
   };
 
   doSearch = (q = null) => {
-    const query = q != null ? q : this.props.query;
+    const query                                             = q != null ? q : this.props.query;
     const { search, location, push, pageSize, resetFilter } = this.props;
 
     if (this.emptyQuery()) {
@@ -87,7 +87,7 @@ class OmniBox extends Component {
 
     // First of all redirect to search results page if we're not there
     if (!location.pathname.endsWith('search')) {
-      push({pathname: 'search'});
+      push({ pathname: 'search' });
     }
 
     // Reset filters for new search (query changed)
@@ -105,20 +105,17 @@ class OmniBox extends Component {
   };
 
   handleResultSelect = (e, data) => {
-    console.log('handleResultSelect');
-    const key = data.result.key;
+    const key      = data.result.key;
     const category = data.results.find(c => c.results.find(r => r.key === key)).name;
     if (category === 'search') {
       this.props.updateQuery(data.result.title);
       this.doSearch(data.result.title);
     } else if (category === 'tags') {
       this.props.updateQuery('');
-      console.log(this.props.getTagPath(data.result.key));
       this.props.addFilterValue('search', 'topics-filter', this.props.getTagPath(data.result.key).map(p => p.id));
       this.doSearch('');
     } else if (category === 'sources') {
       this.props.updateQuery('');
-      console.log(this.props.getSourcePath(data.result.key));
       this.props.setFilterValue('search', 'sources-filter', this.props.getSourcePath(data.result.key).map(p => p.id));
       this.doSearch('');
     }
@@ -148,11 +145,11 @@ class OmniBox extends Component {
 
   suggestionToResult = (type, item) => {
     if (type === 'tags') {
-      return { key: item.id, title: this.props.getTagPath(item.id).map(p => p.label).join(' - ')}
+      return { key: item.id, title: this.props.getTagPath(item.id).map(p => p.label).join(' - ') };
     } else if (type === 'sources') {
-      return { key: item.id, title: this.props.getSourcePath(item.id).map(p => p.name).join(' > ')}
+      return { key: item.id, title: this.props.getSourcePath(item.id).map(p => p.name).join(' > ') };
     } else {
-      return { key: item.id, title: item.text}
+      return { key: item.id, title: item.text };
     }
   };
 
@@ -160,7 +157,7 @@ class OmniBox extends Component {
     const { name } = category;
     const icon     = CATEGORIES_ICONS[name];
     return (
-      <div style={{paddingTop: '0.5em'}}>
+      <div style={{ paddingTop: '0.5em' }}>
         <Icon name={icon} />
         {this.props.t(`search.suggestions.categories.${name}`)}
       </div>
@@ -184,13 +181,22 @@ class OmniBox extends Component {
     className: RTL_LANGUAGES.includes(language) ? 'search-result-rtl' : undefined,
   });
 
+  renderInput() {
+    return (
+      <Input
+        style={{ width: '100%' }}
+        onKeyDown={this.handleSearchKeyDown}
+      />
+    );
+  }
+
   render() {
-    const { language, query } = this.props;
+    const { language, query }           = this.props;
     const { suggestionsHelper, isOpen } = this.state;
 
-    const categories = ['tags', 'sources', 'authors', 'persons'];
+    const categories  = ['tags', 'sources', 'authors', 'persons'];
     const textResults = new Set([query]);
-    let results = categories.reduce((acc, val) => {
+    let results       = categories.reduce((acc, val) => {
       const searchResults = suggestionsHelper.getSuggestions(val, 5);
       if (searchResults.length > 0) {
         searchResults.forEach(x => textResults.add(x.text));
@@ -203,16 +209,12 @@ class OmniBox extends Component {
 
       return acc;
     }, []);
+
     results = [{
       name: 'search',
       results: Array.from(textResults).map(q => this.resultRTL(language, { key: `search_${q}`, title: q })),
       onMouseDown: this.dontBlur
     }].concat(results);
-
-    const input = (
-      <Input onKeyDown={this.handleSearchKeyDown}
-             style={{ width: '100%' }} />
-    );
 
     return (
       <Search
@@ -228,7 +230,7 @@ class OmniBox extends Component {
         onFocus={this.handleSearchChange}
         onResultSelect={this.handleResultSelect}
         onBlur={this.closeSuggestions}
-        input={input}
+        input={this.renderInput()}
         icon={<Icon link name="search" onClick={this.handleIconClick} />}
         size="mini"
         showNoResults={false}
@@ -257,4 +259,6 @@ const mapDispatch = dispatch => bindActionCreators({
   push,
 }, dispatch);
 
-export default connect(mapState, mapDispatch)(OmniBox);
+export const wrap = WrappedComponent => connect(mapState, mapDispatch)(WrappedComponent);
+
+export default wrap(OmniBox);

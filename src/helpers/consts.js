@@ -32,6 +32,7 @@ export const CT_CLIP                  = 'CLIP';
 export const CT_TRAINING              = 'TRAINING';
 export const CT_KITEI_MAKOR           = 'KITEI_MAKOR';
 export const CT_PUBLICATION           = 'PUBLICATION';
+export const CT_LELO_MIKUD            = 'LELO_MIKUD';
 
 // Source Types
 export const SRC_COLLECTION = 'COLLECTION';
@@ -225,7 +226,7 @@ export const MIME_TYPE_TO_MEDIA_TYPE = Object.values(MEDIA_TYPES).reduce((acc, m
   return acc;
 }, {});
 
-export const TOPICS_FOR_DISPLAY = ['VUpFlBnu', '0db5BBS3', 'g3ml0jum'];
+export const TOPICS_FOR_DISPLAY    = ['VUpFlBnu', '0db5BBS3', 'g3ml0jum'];
 export const EVENT_PREPARATION_TAG = 'Salvk5yF';
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
@@ -243,3 +244,10 @@ export const UNIT_PROGRAMS_TYPE       = [CT_VIDEO_PROGRAM_CHAPTER];
 export const UNIT_EVENTS_TYPE         = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
 
 export const NO_NAME = '☠ no name';
+
+// Sources
+export const BS_SHAMATI = 'qMUUn22b';
+export const BS_IGROT   = 'DVSS0xAR';
+export const RB_IGROT   = 'b8SHlrfH';
+export const MR_TORA    = 'bvA8ZB1w';
+export const RH_ZOHAR   = 'AwGBQX2L';

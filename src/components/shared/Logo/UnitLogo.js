@@ -33,6 +33,7 @@ class UnitLogo extends PureComponent {
       <FallbackImage
         {...rest}
         src={src}
+        className="unit-logo"
         initialImage={imagePlaceholder}
         fallbackImage={[
           collectionId ? assetUrl(`logos/collections/${collectionId}.png`) : null,

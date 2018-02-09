@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Divider, Segment } from 'semantic-ui-react';
+import { Container, Segment } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { formatError, isEmpty, shallowCompare } from '../../../helpers/utils';
@@ -86,9 +86,7 @@ class Library extends Component {
 
     return (
       <div>
-        <Divider hidden />
         {languageBar}
-        <Divider hidden />
         {contents}
       </div>
     );

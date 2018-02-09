@@ -17,9 +17,6 @@ machine:
       - chmod +x ./cc-test-reporter
 
   test:
-    override:
-      - yarn
-
     pre:
       - ./cc-test-reporter before-build
 

@@ -50,7 +50,9 @@ class Materials extends Component {
     ];
 
     return (
-      <TabsMenu items={items} />
+      <div className="unit-materials">
+        <TabsMenu items={items} />
+      </div>
     );
   }
 }

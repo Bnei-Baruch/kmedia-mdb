@@ -33,8 +33,19 @@ class AVPlayPause extends Component {
   }
 
   handlePlayPause = () => {
-     if (!this.props.media.isLoading)
+    // if (!this.props.media.isLoading) {
       this.props.media.playPause();
+    // }
+  };
+
+  handleMainBtnRef = ref => {
+    if (ref) {
+      this.mainBtn = ref;
+      this.mainBtn.addEventListener('click', this.handlePlayPause);
+    } else if (this.mainBtn) {
+      this.mainBtn.removeEventListener('click', this.handlePlayPause);
+      this.mainBtn = ref;
+    }
   };
 
   render() {
@@ -56,9 +67,9 @@ class AVPlayPause extends Component {
           </button>
         ) : null}
         <button
+          ref={this.handleMainBtnRef}
           type="button"
           tabIndex="-1"
-          onClick={this.handlePlayPause}
         >
           <Icon name={media.isPlaying ? 'pause' : 'play'} />
         </button>

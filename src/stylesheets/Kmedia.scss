@@ -6,6 +6,7 @@
 @import 'includes/video-player';
 @import 'includes/media-player';
 @import 'includes/sources';
+@import 'includes/search';
 @import 'includes/homepage';
 //////////ALL YOUR CSS IS HERE ↴
 @import 'includes/not-sorted-scss';
@@ -68,6 +69,13 @@
       color: $grey !important;
       margin-bottom: 1em;
       text-transform: uppercase;
+    }
+
+    .item {
+      cursor: pointer;
+      &:hover {
+        background: rgba(0,0,0,.05);
+      }
     }
   }
 

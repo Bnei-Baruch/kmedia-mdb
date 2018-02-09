@@ -13,7 +13,6 @@ export default class AVLanguage extends Component {
     language: PropTypes.string,
     requestedLanguage: PropTypes.string,
     languages: PropTypes.arrayOf(PropTypes.string),
-    upward: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -21,14 +20,13 @@ export default class AVLanguage extends Component {
     language: LANG_HEBREW,
     requestedLanguage: LANG_HEBREW,
     languages: [],
-    upward: true,
   };
 
   handleChange = (e, data) =>
     this.props.onSelect(e, data.value);
 
   render() {
-    const { t, languages, language, requestedLanguage, upward } = this.props;
+    const { t, languages, language, requestedLanguage } = this.props;
 
     const options = LANGUAGE_OPTIONS
       .filter(x => languages.includes(x.value))
@@ -38,7 +36,7 @@ export default class AVLanguage extends Component {
       <TimedPopup
         openOnInit
         message={t('messages.fallback-language')}
-        downward={!upward}
+        downward={false}
         timeout={7000}
       />
     );
@@ -49,7 +47,7 @@ export default class AVLanguage extends Component {
         <Dropdown
           floating
           scrolling
-          upward={upward}
+          upward={true}
           icon={null}
           selectOnBlur={false}
           options={options}

@@ -83,7 +83,8 @@
     "audio": "Audio",
     "video": "Video",
     "more": "More",
-    "copy-link": "Copy Link"
+    "copy-link": "Copy Link",
+    "search": "Search"
   },
   "player": {
     "messages": {
@@ -94,7 +95,7 @@
     },
     "share": {
       "title": "watch this video"
-     },
+    },
     "error": {
       "loading": "Error loading file."
     }
@@ -120,6 +121,10 @@
     "no-images": "No images found"
   },
   "search": {
+    "header": {
+      "text": "Search Results",
+      "subtext": ""
+    },
     "sortby": "sort by",
     "sorts": {
       "relevance": "relevance",
@@ -136,15 +141,19 @@
       }
     },
     "results": {
-      "title": "Search Results",
-      "search-summary": "Page {{pageNo}} of {{total}} results ({{took}} seconds)",
       "empty-query": "No search term given. Please use the box above to search.",
       "no-results": "Your search for <1><0>{{query}}</0></1> found no results."
     },
     "result": {
-      "description": "summary",
-      "transcript": "transcript"
+      "description": "Summary",
+      "transcript": "Transcript"
     }
+  },
+  "home": {
+    "search": "Explore the wisdom of Kabbalah",
+    "sections": "Archive Sections",
+    "updates": "Latest Updates",
+    "last-lesson": "The Latest Daily Lesson"
   },
   "events": {
     "header": {
@@ -405,7 +414,8 @@
       "CLIP": "Clip",
       "TRAINING": "Training",
       "KITEI_MAKOR": "Sources Materials",
-      "PUBLICATION": "Publication"
+      "PUBLICATION": "Publication",
+      "LELO_MIKUD": "Edited - No Focus Group"
     },
     "media-types": {
       "video": "Video",

@@ -82,7 +82,8 @@
     "audio": "אודיו",
     "video": "וידאו",
     "more": "עוד",
-    "copy-link": "העתק קישור"
+    "copy-link": "העתק קישור",
+    "search": "חפש"
   },
   "player": {
     "messages": {
@@ -93,7 +94,7 @@
     },
     "share": {
       "title": "צפה בסרטון"
-     },
+    },
     "error": {
       "loading": "שגיאה בטעינת קובץ"
     }
@@ -119,6 +120,10 @@
     "no-images": "לא נמצאו תמונות"
   },
   "search": {
+    "header": {
+      "text": "תוצאות חיפוש",
+      "subtext": ""
+    },
     "sortby": "מיין לפי",
     "sorts": {
       "relevance": "רלונטיות",
@@ -135,8 +140,6 @@
       }
     },
     "results": {
-      "title": "תוצאות חיפוש",
-      "search-summary": "דף {{pageNo}} מתוך {{total}} תוצאות ({{took}} שניות)",
       "empty-query": "לא הוזן טקסט לחיפוש. השתמש בתיבת החיפוש למעלה.",
       "no-results": "לא נמצאו תוצאות עבור <1><0>{{query}}</0></1>."
     },
@@ -144,6 +147,12 @@
       "description": "תקציר",
       "transcript": "תמליל"
     }
+  },
+  "home": {
+    "search": "גלה את חכמת הקבלה",
+    "sections": "נושאים",
+    "updates": "עדכונים אחרונים",
+    "last-lesson": "שיעור הקבלה היומי"
   },
   "events": {
     "header": {
@@ -404,7 +413,8 @@
       "CLIP": "קליפ",
       "TRAINING": "הכשרה",
       "KITEI_MAKOR": "קטעי מקור",
-      "PUBLICATION": "פרסום"
+      "PUBLICATION": "פרסום",
+      "LELO_MIKUD": "ערוך - ללא קבוצת מיקוד"
     },
     "media-types": {
       "video": "וידאו",

@@ -1,3 +1,13 @@
+$sidebar-width: 290px;
+$main-menu-height: 60px;
+$secondary-header-height: 70px;
+
+$test: '400';
+
+:export {
+  MainMenuHeight: $test;
+}
+
 @import 'rtl/layout';
 
 .layout {
@@ -11,7 +21,7 @@
     }
 
     > .menu {
-      height: 60px;
+      height: $main-menu-height;
 
       small {
         line-height: 1;
@@ -35,7 +45,7 @@
     top: 0;
     transform: translate(-100%, 0);
     transition: transform .3s;
-    width: 290px;
+    width: $sidebar-width;
     z-index: 999999;
 
     &.is-active {
@@ -56,7 +66,7 @@
       overflow: auto;
       position: absolute;
       right: 0;
-      top: 60px;
+      top: $main-menu-height;
 
       .menu {
         border: 0;
@@ -69,7 +79,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100%;
-    padding-top: 60px;
+    padding-top: $main-menu-height;
   }
 
   &__content {
@@ -78,6 +88,20 @@
 
   &__footer {
     background: $black;
+  }
+
+  &__secondary-header{
+    background: $white;
+    height: $secondary-header-height;
+    left: 0;
+    position: fixed;
+    right: 0;
+    z-index: 1;
+
+    +.ui.container {
+      padding-top: $secondary-header-height;
+      background-clip: content-box;
+    }
   }
 }
 
@@ -110,7 +134,7 @@
     }
 
     &__sidebar {
-      top: 60px;
+      top: $main-menu-height;
       transform: none;
 
       > .menu {
@@ -123,12 +147,16 @@
     }
 
     &__main {
-      margin-left: 290px;
+      margin-left: $sidebar-width;
+    }
+
+    &__secondary-header {
+      left: $sidebar-width;
     }
   }
 
   .logo {
-    min-width: 290px;
+    min-width: $sidebar-width;
 
     img {
       display: inline-block !important;
