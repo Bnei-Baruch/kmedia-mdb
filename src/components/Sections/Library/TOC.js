@@ -4,7 +4,6 @@ import { Accordion, Ref, Sticky } from 'semantic-ui-react';
 
 import { BS_SHAMATI } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
-import { isEqual } from '../../../helpers/equals';
 
 class TOC extends Component {
   static propTypes = {
@@ -29,10 +28,6 @@ class TOC extends Component {
   componentWillReceiveProps(nextProps) {
     const { fullPath } = nextProps;
     this.setState({ activeId: fullPath[fullPath.length - 1].id });
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return !(isEqual(this.props, nextProps) && isEqual(this.state, nextState));
   }
 
   getIndex = (node1, node2) => {
