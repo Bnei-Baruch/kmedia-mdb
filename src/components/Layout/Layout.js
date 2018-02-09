@@ -2,15 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import classnames from 'classnames';
-import { Route } from 'react-router-dom';
 import { Flag, Header, Icon, Menu } from 'semantic-ui-react';
+import { renderRoutes } from 'react-router-config';
 
 import { FLAG_TO_LANGUAGE, ALL_LANGUAGES } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import OmniBox from '../Search/OmniBox';
 import GAPageView from './GAPageView/GAPageView';
-import Routes from './Routes';
 import MenuItems from './MenuItems';
 import Footer from './Footer';
 import logo from '../../images/logo.svg';
@@ -64,7 +63,7 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location }   = this.props;
+    const { t, location, route }   = this.props;
     const { sidebarActive } = this.state;
 
     const showSearch = this.shouldShowSearch(location);
@@ -143,7 +142,7 @@ class Layout extends Component {
         </div>
         <div className="layout__main">
           <div className="layout__content">
-            <Route component={Routes} />
+            { renderRoutes(route.routes) }
           </div>
           <Footer t={t} />
         </div>

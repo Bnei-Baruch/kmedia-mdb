@@ -24,6 +24,9 @@ yarn-error.log*
 /assets/
 src/**/*.css
 
+#babel generated
+/babel-src
+
 
 # do not ignore main theme
 !src/**/semantic.min.css
