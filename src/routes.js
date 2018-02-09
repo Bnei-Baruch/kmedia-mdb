@@ -5,7 +5,7 @@ import { renderRoutes } from 'react-router-config';
 import { DEFAULT_LANGUAGE } from './helpers/consts';
 import HomePage from './components/Sections/Home/Container';
 import LanguageSetter from './components/Language/LanguageSetter';
-import LastLessonCollection from '../Sections/Lessons/LastCollection';
+import LastLessonCollection from './components/Sections/Lessons/LastCollection';
 import Layout from './components/Layout/Layout';
 import Lessons from './components/Sections/Lessons/List';
 import LessonUnit from './components/Sections/Lessons/Unit';
