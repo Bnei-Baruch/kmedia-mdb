@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
 
 import { BS_SHAMATI } from '../../../helpers/consts';
-import { isEmpty, isEqual } from '../../../helpers/utils';
+import { isEmpty } from '../../../helpers/utils';
+import { isEqual } from '../../../helpers/equals';
 
 class TOC extends Component {
   static propTypes = {
@@ -26,9 +27,6 @@ class TOC extends Component {
   state = {};
 
   componentWillReceiveProps(nextProps) {
-    if (isEqual(this.props, nextProps)) {
-      return;
-    }
     const { fullPath } = nextProps;
     this.setState({ activeId: fullPath[fullPath.length - 1].id });
   }
