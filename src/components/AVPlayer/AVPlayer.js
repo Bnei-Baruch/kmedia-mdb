@@ -108,8 +108,6 @@ class AVPlayer extends PureComponent {
       playerMode = PLAYER_MODE.NORMAL;
     }
 
-    console.log(sstart, send);
-
     this.setSliceMode(playerMode, {
       sliceStart: sstart,
       sliceEnd: send
