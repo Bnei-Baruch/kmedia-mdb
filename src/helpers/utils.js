@@ -71,26 +71,22 @@ const compare = (item1, item2) => {
 
   // If an object or array, compare recursively
   if (['[object Array]', '[object Object]'].indexOf(itemType) >= 0) {
-    if (!isEqual(item1, item2)) {
-      return false;
-    }
-  } else {
-    // Otherwise, do a simple comparison
+    return (isEqual(item1, item2));
+  }
 
-    // If the two items are not the same type, return false
-    if (itemType !== Object.prototype.toString.call(item2)) {
-      return false;
-    }
+  // If the two items are not the same type, return false
+  if (itemType !== Object.prototype.toString.call(item2)) {
+    return false;
+  }
 
-    // Else if it's a function, convert to a string and compare
-    // Otherwise, just compare
-    if (itemType === '[object Function]') {
-      if (item1.toString() !== item2.toString()) {
-        return false;
-      }
-    } else if (item1 !== item2) {
+  // Else if it's a function, convert to a string and compare
+  // Otherwise, just compare
+  if (itemType === '[object Function]') {
+    if (item1.toString() !== item2.toString()) {
       return false;
     }
+  } else if (item1 !== item2) {
+    return false;
   }
 
   return true;
@@ -124,17 +120,17 @@ export const isEqual = (value, other) => {
         return false;
       }
     }
-  } else {
-    for (let key in value) {
-      if (value.hasOwnProperty(key)) {
-        if (compare(value[key], other[key]) === false) {
-          return false;
-        }
+    return true;
+  }
+
+  for (let key in value) {
+    if (value.hasOwnProperty(key)) {
+      if (compare(value[key], other[key]) === false) {
+        return false;
       }
     }
   }
 
-  // If nothing failed, return true
   return true;
 };
 
