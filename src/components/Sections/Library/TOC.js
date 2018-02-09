@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
 
 import { BS_SHAMATI } from '../../../helpers/consts';
-import { isEmpty } from '../../../helpers/utils';
+import { isEmpty, isEqual } from '../../../helpers/utils';
 
 class TOC extends Component {
   static propTypes = {
@@ -23,6 +23,20 @@ class TOC extends Component {
     contextRef: null
   };
 
+  state = {};
+
+  componentWillReceiveProps(nextProps) {
+    if (isEqual(this.props, nextProps)) {
+      return;
+    }
+    const { fullPath } = nextProps;
+    this.setState({ activeId: fullPath[fullPath.length - 1].id });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return !(isEqual(this.props, nextProps) && isEqual(this.state, nextState));
+  }
+
   getIndex = (node1, node2) => {
     if (!node1 || !node2 || !node1.children) {
       return -1;
@@ -30,26 +44,16 @@ class TOC extends Component {
     return node1.children.findIndex(x => x === node2.id);
   };
 
-  selectSourceById = (id, e) => {
-    e.preventDefault();
-    this.props.replace(`sources/${id}`);
-    window.scrollTo(0, 0);
-  };
-
   subToc = (subTree, path) => (
     subTree.map(sourceId => (this.toc(sourceId, path)))
   );
 
   leaf = (id, title) => {
-    const { rootId } = this.props;
-    let props        = {
+    const props = {
       key: `lib-leaf-item-${id}`,
       onClick: e => this.selectSourceById(id, e),
     };
-    if (id === rootId) {
-      props = { ...props, ref: this.handleSelectedAccordionContext, active: true };
-    }
-    return <Accordion.Title {...props}>{title}</Accordion.Title>;
+    return <Accordion.Title {...props} active={id === this.state.activeId}>{title}</Accordion.Title>;
   };
 
   toc = (sourceId, path, firstLevel = false) => {
@@ -95,6 +99,13 @@ class TOC extends Component {
         key: `lib-content-${sourceId}`,
       }
     };
+  };
+
+  selectSourceById = (id, e) => {
+    e.preventDefault();
+    this.setState({ activeId: id });
+    this.props.replace(`sources/${id}`);
+    window.scrollTo(0, 0);
   };
 
   render() {
