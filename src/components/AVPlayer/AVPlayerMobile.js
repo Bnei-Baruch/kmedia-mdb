@@ -177,11 +177,6 @@ class AVPlayerMobile extends PureComponent {
     }
   };
 
-  playPause = () => {
-    this.media.paused ? this.media.play() : this.media.pause();
-    this.updateMedia();
-  };
-
   seekTo = (t) => {
     this.media.currentTime = t;
     this.updateMedia();
