@@ -104,6 +104,12 @@ class AVPlayer extends PureComponent {
       send       = fromHumanReadableTime(query.send).asSeconds();
     }
 
+    if (sstart > send) {
+      playerMode = PLAYER_MODE.NORMAL;
+    }
+
+    console.log(sstart, send);
+
     this.setSliceMode(playerMode, {
       sliceStart: sstart,
       sliceEnd: send
@@ -434,8 +440,8 @@ class AVPlayer extends PureComponent {
             errorReason,
           } = this.state;
 
-    const { isPlaying } = media;
-    const forceShowControls        = item.mediaType === MT_AUDIO || !isPlaying;
+    const { isPlaying }     = media;
+    const forceShowControls = item.mediaType === MT_AUDIO || !isPlaying;
 
     const isVideo       = item.mediaType === MT_VIDEO;
     const isAudio       = item.mediaType === MT_AUDIO;
