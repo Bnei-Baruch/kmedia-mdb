@@ -57,9 +57,9 @@ const Routes = ({ match }) => {
       <Route exact path={`${urlPrefix}/publications/c/:id`} component={PublicationCollection} />
       <Route exact path={`${urlPrefix}/sources`} component={LibraryHomepage} />
       <Route exact path={`${urlPrefix}/sources/:id`} component={LibraryContainer} />
-      <Route exact path={`${urlPrefix}/books`} component={NotImplemented} />
+      {/*<Route exact path={`${urlPrefix}/books`} component={NotImplemented} />*/}
       <Route exact path={`${urlPrefix}/topics`} component={NotImplemented} />
-      <Route exact path={`${urlPrefix}/photos`} component={NotImplemented} />
+      {/*<Route exact path={`${urlPrefix}/photos`} component={NotImplemented} />*/}
       <Route exact path={`${urlPrefix}/search`} component={SearchResults} />
       <Route exact path={`${urlPrefix}/design`} component={Design} />
       <Route exact path={`${urlPrefix}/design2`} component={Lessons} />
