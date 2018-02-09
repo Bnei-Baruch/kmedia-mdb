@@ -513,7 +513,7 @@ class AVPlayer extends PureComponent {
           }}
           onVolumeChange={this.state.persistenceFn}
           src={item.src}
-          poster={item.preImageUrl}
+          poster={isVideo ? item.preImageUrl : null}
           vendor={isVideo ? 'video' : 'audio'}
           autoPlay={autoPlay}
           onReady={this.onPlayerReady}
