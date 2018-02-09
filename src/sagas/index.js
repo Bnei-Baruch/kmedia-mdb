@@ -1,3 +1,5 @@
+import { all } from 'redux-saga/effects';
+
 import { sagas as mdb } from './mdb';
 import { sagas as programs } from './programs';
 import { sagas as publications } from './publications';
@@ -11,7 +13,7 @@ import { sagas as search } from './search';
 import { sagas as assets } from './assets';
 import { sagas as home } from './home';
 
-export default [
+const allSagas = [
   ...mdb,
   ...programs,
   ...publications,
@@ -25,3 +27,9 @@ export default [
   ...assets,
   ...home,
 ];
+
+export default allSagas;
+
+export function* rootSaga() {
+  yield all(allSagas.map(s => s()));
+}
