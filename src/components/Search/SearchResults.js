@@ -12,6 +12,7 @@ import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import Pagination from '../Pagination/Pagination';
 import WipErr from '../shared/WipErr/WipErr';
+import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 
 class SearchResults extends Component {
   static propTypes = {
@@ -42,9 +43,9 @@ class SearchResults extends Component {
 
   renderHit = (hit) => {
     // console.log('hit', hit);
-    const { cuMap, t }                                       = this.props;
+    const { cuMap, t }                                               = this.props;
     const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
-    const cu                                                 = cuMap[mdbUid];
+    const cu                                                         = cuMap[mdbUid];
 
     // maybe content_units are still loading ?
     // maybe stale data in elasticsearch ?
@@ -56,19 +57,23 @@ class SearchResults extends Component {
     const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
     const transcript  = this.snippetFromHighlight(highlight, ['transcript', 'transcript.analyzed'], parts => `...${parts.join('.....')}...`);
     const snippet     = (
-      <div>
-        {description && (
-          <small>
-            <strong>{t('search.result.description')}: </strong>
-            {description}
-          </small>
-        )}
-        {transcript && (
-          <small>
-            <strong>{t('search.result.transcript')}: </strong>
-            {transcript}
-          </small>
-        )}
+      <div className="search__snippet">
+        {
+          description ?
+            <div>
+              <strong>{t('search.result.description')}: </strong>
+              {description}
+            </div> :
+            null
+        }
+        {
+          transcript ?
+            <div>
+              <strong>{t('search.result.transcript')}: </strong>
+              {transcript}
+            </div> :
+            null
+        }
       </div>);
 
     let filmDate = '';
@@ -85,7 +90,7 @@ class SearchResults extends Component {
           <Label size="tiny">{t(`constants.content-types.${cu.content_type}`)}</Label>
         </Table.Cell>
         <Table.Cell>
-          <Link to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}>
+          <Link className="search__link" to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}>
             {name}
           </Link>
           &nbsp;&nbsp;
@@ -123,9 +128,10 @@ class SearchResults extends Component {
       return null;
     }
 
-    const { took, hits: { total, hits } } = results;
+    const { /* took, */ hits: { total, hits } } = results;
+    let content;
     if (total === 0 || isEmpty(cuMap)) {
-      return (
+      content = (
         <div>
           <Header as="h1" content={t('search.results.title')} />
           <div>
@@ -133,34 +139,31 @@ class SearchResults extends Component {
               Your search for <strong style={{ fontStyle: 'italic' }}>{{ query }}</strong> found no results.
             </Trans>
           </div>
-        </div>
-      );
+        </div>);
+    } else {
+      content = (
+        <div>
+          <Container>
+            <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
+            <Table sortable basic="very" className="index-list">
+              <Table.Body>
+                {hits.map(this.renderHit)}
+              </Table.Body>
+            </Table>
+          </Container>
+          <Divider fitted />
+          <Container className="padded" textAlign="center">
+            <Pagination
+              pageNo={pageNo}
+              pageSize={pageSize}
+              total={total}
+              language={language}
+              onChange={handlePageChange}
+            />
+          </Container>
+        </div>);
     }
-    return (
-      <div>
-        <Header as="h1">
-          {t('search.results.title')}
-          <Header.Subheader>
-            {t('search.results.search-summary', { total, pageNo, took: took / 1000 })}
-          </Header.Subheader>
-        </Header>
-        <Table sortable basic="very" className="index-list">
-          <Table.Body>
-            {hits.map(this.renderHit)}
-          </Table.Body>
-        </Table>
-        <Divider fitted />
-        <Container className="padded" textAlign="center">
-          <Pagination
-            pageNo={pageNo}
-            pageSize={pageSize}
-            total={total}
-            language={language}
-            onChange={handlePageChange}
-          />
-        </Container>
-      </div>
-    );
+    return content;
   }
 }
 
