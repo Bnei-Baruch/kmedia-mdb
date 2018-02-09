@@ -7,7 +7,7 @@ import AVPlayerMobile from './AVPlayerMobile';
 import AVPlayer from './AVPlayer';
 
 const AVMobileCheck = (props) => {
-  return props.isMobile ? <AVPlayerMobile {...props} /> : <AVPlayer {...props} />;
+  return props.isMobileDevice ? <AVPlayerMobile {...props} /> : <AVPlayer {...props} />;
 };
 
 AVMobileCheck.propTypes = {
@@ -21,9 +21,6 @@ AVMobileCheck.propTypes = {
   // Audio/Video switch props.
   item: PropTypes.object.isRequired, // TODO: (yaniv) add shape fo this
   onSwitchAV: PropTypes.func.isRequired,
-
-  // Slice props
-  history: PropTypes.object.isRequired,
 
   // Playlist props
   autoPlay: PropTypes.bool,

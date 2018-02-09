@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import UAParser from 'ua-parser-js';
+
+const parser = new UAParser().getResult();
+const isMobileDevice = parser.device.type === 'mobile';
 
 const MOBILE_WIDTH = 768;
-
 export default function withIsMobile(SomeComponent) {
   return class extends Component {
     constructor() {
@@ -30,13 +33,15 @@ export default function withIsMobile(SomeComponent) {
       }
     };
 
-    render() {
-      const { isMobile } = this.state;
 
+    render() {
+
+      const { isMobile } = this.state;
       return (
         <SomeComponent
           {...this.props}
           isMobile={isMobile}
+          isMobileDevice={isMobileDevice}
         />
       );
     }

@@ -90,7 +90,8 @@
     "redux-actions": "^2.2.1",
     "redux-saga": "^0.16.0",
     "semantic-ui-react": "^0.77.1",
-    "warning": "^3.0.0"
+    "warning": "^3.0.0",
+    "ua-parser-js": "^0.7.17"
   },
   "jest": {
     "collectCoverageFrom": [
