@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Media } from 'react-media-player';
 
 import { MT_AUDIO } from '../../helpers/consts';
-import AVPlayer from './AVPlayer';
+import AVMobileCheck from './AVMobileCheck';
 
 class AVPlaylistPlayer extends Component {
 
@@ -67,7 +67,7 @@ class AVPlaylistPlayer extends Component {
       >
         <div className="avbox__media-wrapper">
           <Media>
-            <AVPlayer
+            <AVMobileCheck
               autoPlay={autoPlay}
               item={currentItem}
               onSwitchAV={onSwitchAV}

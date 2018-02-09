@@ -9,7 +9,7 @@ import withIsMobile from '../../../../../helpers/withIsMobile';
 import { MT_AUDIO, MT_VIDEO } from '../../../../../helpers/consts';
 import playerHelper from '../../../../../helpers/player';
 import * as shapes from '../../../../shapes';
-import AVPlayer from '../../../../AVPlayer/AVPlayer';
+import AVMobileCheck from '../../../../AVPlayer/AVMobileCheck';
 
 class AVBox extends Component {
 
@@ -78,8 +78,8 @@ class AVBox extends Component {
   };
 
   render() {
-    const { t, isMobile } = this.props;
-    const { playableItem }             = this.state;
+    const { t, isMobile }  = this.props;
+    const { playableItem } = this.state;
 
     if (!playableItem || !playableItem.src) {
       return (<div>{t('messages.no-playable-files')}</div>);
@@ -96,7 +96,7 @@ class AVBox extends Component {
           >
             <div className="avbox__media-wrapper">
               <Media>
-                <AVPlayer
+                <AVMobileCheck
                   item={playableItem}
                   onSwitchAV={this.handleSwitchAV}
                   languages={playableItem.availableLanguages}
@@ -104,7 +104,6 @@ class AVBox extends Component {
                   onLanguageChange={this.handleChangeLanguage}
                   t={t}
                   preImageUrl={playableItem.preImageUrl}
-                  isMobile={isMobile}
                 />
               </Media>
             </div>
