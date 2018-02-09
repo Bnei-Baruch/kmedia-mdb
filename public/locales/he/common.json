@@ -117,7 +117,7 @@
     "fallback-to-audio": "וידיאו לא נמצא, משתמש באודיו.",
     "fallback-to-video": "אודיו לא נמצא, משתמש בוידיאו.",
     "source-content-not-found": "לא נמצא תוכן המקור",
-    "no-images": "לא נמצאו תמונות"
+    "no-images":"לא נמצאו שרטוטים"
   },
   "search": {
     "header": {
