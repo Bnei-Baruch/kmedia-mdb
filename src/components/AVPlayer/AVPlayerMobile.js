@@ -212,6 +212,7 @@ class AVPlayerMobile extends PureComponent {
 
     if (isVideo) {
       medeaEl = <video
+        style={{ width: 'calc(100% - 90px)' }}
         ref={this.handleMediaHtmlInit}
         controls
         src={item.src}
@@ -238,7 +239,7 @@ class AVPlayerMobile extends PureComponent {
       );
     } else if (this.state.isReady) {
       control = (
-        <div className="mediaplayer__wrapper" style={{ bottom: 'auto' }}>
+        <div className="mediaplayer__wrapper" style={{ top: 'auto' }}>
           <div className="mediaplayer__controls">
             <AVPlayPause
               withoutPlay={true}
