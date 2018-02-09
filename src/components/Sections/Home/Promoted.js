@@ -19,11 +19,11 @@ class Promoted extends Component {
       return null;
     }
 
-    const { header, sub_header: subHeader, section, href } = this.props.banner;
+    const { header, sub_header: subHeader, section, url } = this.props.banner;
 
     return (
       <div className="thumbnail">
-        <Link to={href}>
+        <a href={url}>
           <Image fluid src={'/static/media/hp_featured_temp.cca39640.jpg'} className="thumbnail__image" />
           <Header as="h2" className="thumbnail__header">
             <Header.Content>
@@ -34,7 +34,7 @@ class Promoted extends Component {
             </Header.Content>
           </Header>
           <Label content={section} color="orange" size="mini" />
-        </Link>
+        </a>
       </div>
     );
   }
