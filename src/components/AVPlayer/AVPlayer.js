@@ -397,7 +397,9 @@ class AVPlayer extends PureComponent {
     if (isMobile && !this.state.controlsVisible) {
       this.showControls();
     } else if (!media.isLoading) {
-      media.playPause();
+      if (this.state.mode === PLAYER_MODE.NORMAL) {
+        media.playPause();
+      }
     }
   };
 
