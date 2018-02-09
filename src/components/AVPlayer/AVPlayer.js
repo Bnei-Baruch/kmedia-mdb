@@ -397,6 +397,9 @@ class AVPlayer extends PureComponent {
     if (isMobile && !this.state.controlsVisible) {
       this.showControls();
     } else if (!media.isLoading) {
+      // toggle play only if we in normal mode
+      // because we don't want the slice mode on screen buttons
+      // to toggle play/pause
       if (this.state.mode === PLAYER_MODE.NORMAL) {
         media.playPause();
       }
