@@ -15,13 +15,12 @@ class withPagination extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.language !== this.props.language ||
-      nextProps.namespace !== this.props.namespace) {
-      this.askForData(nextProps);
-    }
-
     if (nextProps.pageSize !== this.props.pageSize) {
       this.setPage(nextProps, 1);
+    }
+    else if (nextProps.language !== this.props.language ||
+             nextProps.namespace !== this.props.namespace) {
+        this.askForData(nextProps);
     }
   }
 

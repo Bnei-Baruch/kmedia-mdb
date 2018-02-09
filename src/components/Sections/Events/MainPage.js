@@ -11,6 +11,7 @@ import NavLink from '../../Language/MultiLanguageNavLink';
 import SectionHeader from '../../shared/SectionHeader';
 import CollectionList from './tabs/CollectionList/Container';
 import UnitList from './tabs/UnitList/Container';
+import { actions as filterActions } from '../../../redux/modules/filters';
 
 const tabs = [
   'conventions',
@@ -27,14 +28,29 @@ class MainPage extends PureComponent {
     match: shapes.RouterMatch.isRequired,
     setTab: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    resetNamespace: PropTypes.func.isRequired
   };
 
   componentWillReceiveProps(nextProps) {
     const tab     = this.props.match.params.tab || tabs[0];
     const nextTab = nextProps.match.params.tab || tabs[0];
-    if (nextTab !== tab) {
+
+    //clear filters if location search parameter is changed by Menu click
+    if (nextProps.location.search !== this.props.location.search &&
+        !nextProps.location.search){
+          const filterNamespace = `events-${tab}`;
+          this.clearAllFilters(filterNamespace);
+          nextProps.setTab(nextTab);
+    }
+    else if (nextTab !== tab) {
       nextProps.setTab(nextTab);
     }
+  }
+
+  //clear all filters when location's search is cleared by Menu click
+  clearAllFilters(namespace){
+    const { resetNamespace } = this.props;
+    resetNamespace(namespace);
   }
 
   render() {
@@ -55,19 +71,19 @@ class MainPage extends PureComponent {
 
     let content = null;
     switch (active) {
-    case 'conventions':
-    case 'holidays':
-    case 'picnics':
-    case 'unity-days':
-      content = <CollectionList tabName={active} />;
-      break;
-    case 'friends-gatherings':
-    case 'meals':
-      content = <UnitList tab={active} />;
-      break;
-    default:
-      content = <h1>Page not found</h1>;
-      break;
+      case 'conventions':
+      case 'holidays':
+      case 'picnics':
+      case 'unity-days':
+        content = <CollectionList tabName={active} />;
+        break;
+      case 'friends-gatherings':
+      case 'meals':
+        content = <UnitList tab={active} />;
+        break;
+      default:
+        content = <h1>Page not found</h1>;
+        break;
     }
 
     return (
@@ -83,6 +99,7 @@ class MainPage extends PureComponent {
 const mapDispatch = dispatch => (
   bindActionCreators({
     setTab: actions.setTab,
+    resetNamespace: filterActions.resetNamespace
   }, dispatch)
 );
 
