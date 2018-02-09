@@ -18,7 +18,11 @@
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
-      "rights": "Бней Барух – Ассоциация Каббала Ла-Ам, Все права защищены"
+      "rights": "Бней Барух – Ассоциация Каббала Ла-Ам, Все права защищены",
+      "study": "Учебные Материалы",
+      "topics": "Каббалистические Темы",
+      "events": "Каббалистические Конгрессы, события",
+      "media": "Медиа"
     }
   },
   "filters": {
@@ -44,10 +48,21 @@
     "topics-filter": {
       "label": "Темы"
     },
+    "publishers-filter": {
+      "label": "Издатели"
+    },
     "programs-filter": {
       "label": "Жанр",
       "recently-updated": "Недавно обновленные",
       "last-updated": "Последнее обновление в"
+    },
+    "locations-filter": {
+      "label": "Место проведения",
+      "allItem": "Все"
+    },
+    "holidays-filter": {
+      "label": "Праздники",
+      "allItem": "Все"
     },
     "years-filter": {
       "label": "Год",
@@ -55,6 +70,7 @@
     },
     "sections-filter": {
       "label": "раздел",
+      "all": "все",
       "lessons": "уроки",
       "programs": "программы",
       "events": "событие"
@@ -67,7 +83,8 @@
     "audio": "Аудио",
     "video": "Видео",
     "more": "Ещё",
-    "copy-link": "Копировать линк"
+    "copy-link": "Копировать линк",
+    "search": "Поиск"
   },
   "player": {
     "messages": {
@@ -87,6 +104,8 @@
     "loading": "Загрузка...",
     "loading-subtext": "Ждите...",
     "server-error": "Ошибка сервера",
+    "not-found": "Ой!",
+    "not-found-subtext": "Мы не можем найти то что вы ищете",
     "no-files": "Нет файлов",
     "no-playable-files": "Не файлов для воспроизведения",
     "no-results": "Нет результатов",
@@ -130,10 +149,27 @@
       "transcript": "стенограмма"
     }
   },
+  "home": {
+    "search": "Раскрой Каббалу",
+    "sections": "Разделы Архива",
+    "updates": "Последние обновления",
+    "last-lesson": "Последний Урок"
+  },
   "events": {
     "header": {
       "text": "Конгрессы, события",
       "subtext": "В наше время наука каббала не знает границ. В этом разделе вы получите представление о мероприятиях, конгрессах и особых встречах организации «Каббала ла-ам» в Израиле и по всему миру."
+    },
+    "tabs": {
+      "conventions": "Конгрессы",
+      "holidays": "Праздники",
+      "picnics": "Пикники",
+      "unity-days": "Дни Единства",
+      "friends-gatherings": "Собрания Товарищей",
+      "meals": "Трапезы"
+    },
+    "list": {
+      "item_from": "Часть из:"
     },
     "ALL_EVENTS": "Все События",
     "no-matches": "Событие не найдено",
@@ -142,6 +178,14 @@
         "same-collection": {
           "title": "Остальные части того же события"
         }
+      }
+    },
+    "collection": {
+      "playlist": {
+        "preparation": "Подготовка",
+        "lessons": "Уроки",
+        "other_parts": "Разное",
+        "appendices": "Приложения"
       }
     }
   },
@@ -178,13 +222,45 @@
       "movies": "Фильмы"
     },
     "list": {
+      "episode_from": "Эпизод из:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Остальные части программы",
+          "item-title": "Эпизод {{name}}"
+        }
+      }
+    }
+  },
+  "lectures": {
+    "header": {
+      "text": "Лекции",
+      "subtext": "Здесь вы найдете множество лекций, детских и женских передач и.т.д."
+    },
+    "list": {
+      "item_from": "Часть из:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Из той же серии"
+        }
+      }
+    }
+  },
+  "publications": {
+    "header": {
+      "text": "Публикации",
+      "subtext": "Раздел Публикаций суб-текст"
+    },
+    "list": {
       "episode_from": "Часть из:"
     },
     "unit": {
       "recommended": {
         "same-collection": {
           "title": "Остальные части той же программы",
-          "item-title": "Часть {{name}}"
         }
       }
     }
@@ -192,7 +268,10 @@
   "pages": {
     "collection": {
       "items": {
-        "programs-collection": "Эпизод(ов)"
+        "programs-collection": "Эпизод(ов)",
+        "lectures-collection": "Часть(ей)",
+        "publications-collection": "Статьи(s)",
+        "event": "Часть(ей)"
       }
     },
     "unit": {
@@ -203,8 +282,8 @@
       },
       "recommended": {
         "same-collection": {
-          "title": "Other item from the same collection",
-          "item-title": "Item {{name}}"
+          "title": "Из той же серии",
+          "item-title": "Часть {{name}}"
         }
       }
     }
@@ -215,7 +294,8 @@
       "no-summary": "Нет содержания"
     },
     "transcription": {
-      "header": "Стенограмма"
+      "header": "Стенограмма",
+      "no-transcription": "Нет стенограммы"
     },
     "sources": {
       "header": "Источники",
@@ -228,7 +308,10 @@
     }
   },
   "sources-library": {
-    "title": "Каббалистические Первоисточники",
+    "header": {
+      "text": "Каббалистические Первоисточники",
+      "subtext": "суб-текст Первоисточники"
+    },
     "no-source": "Выберите источник",
     "toc": "Содержание"
   },
@@ -255,6 +338,14 @@
         "audio": "Аудио программы",
         "text": "Стенограмма",
         "image": "Чертежи"
+      }
+    },
+    "publication": {
+      "type-labels": {
+        "video": "Видео",
+        "audio": "Аудио",
+        "text": "Текст статьи",
+        "image": "Снимки"
       }
     }
   },
@@ -306,6 +397,8 @@
       "HOLIDAY": "Праздник",
       "PICNIC": "Пикник",
       "UNITY_DAY": "Вечер единства",
+      "CLIPS": "Клипы",
+      "ARTICLES": "Статьи",
       "LESSON_PART": "Часть урока №",
       "LECTURE": "Лекция",
       "CHILDREN_LESSON": "Дети Урок",
@@ -315,12 +408,13 @@
       "MEAL": "Трапеза",
       "VIDEO_PROGRAM_CHAPTER": "Часть программы",
       "FULL_LESSON": "Полный урок",
-      "TEXT": "Текст",
+      "ARTICLE": "Статья",
       "UNKNOWN": "Неизвестное",
       "EVENT_PART": "Часть события",
       "CLIP": "Клип",
       "TRAINING": "Тренировка",
       "KITEI_MAKOR": "Отрывки первоисточников",
+      "PUBLICATION": "Публикация",
       "LELO_MIKUD": "Отредактировано - Без Фокус-Группы"
     },
     "media-types": {
