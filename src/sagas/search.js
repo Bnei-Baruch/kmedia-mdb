@@ -47,13 +47,25 @@ function* search(action) {
       // This second round trip to the API is awful,
       // we should strive for a single call to the API and get all the data we need.
       // hmm, relay..., hmm ?
+      const cIDsToFetch = data.hits.hits.reduce((acc, val) => {
+        if (val._type == 'collections') {
+          return acc.concat(val._source.mdb_uid);
+        } else {
+          return acc;
+        }
+      }, []);
       const cuIDsToFetch = data.hits.hits.reduce((acc, val) => {
-        return acc.concat(val._source.mdb_uid);
+        if (val._type == 'content_units') {
+          return acc.concat(val._source.mdb_uid);
+        } else {
+          return acc;
+        }
       }, []);
       const language     = yield select(state => settings.getLanguage(state.settings));
-      const pageSize     = cuIDsToFetch.length;
-      const resp         = yield call(Api.units, { id: cuIDsToFetch, pageSize, language });
-      yield put(mdbActions.receiveContentUnits(resp.data.content_units));
+      const respCU       = yield call(Api.units, { id: cuIDsToFetch, pageSize: cuIDsToFetch.length, language });
+      const respC        = yield call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, language });
+      yield put(mdbActions.receiveContentUnits(respCU.data.content_units));
+      yield put(mdbActions.receiveCollections(respC.data.collections));
     }
 
     yield put(actions.searchSuccess(data));
