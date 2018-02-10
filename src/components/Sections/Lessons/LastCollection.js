@@ -6,10 +6,9 @@ import { withRouter } from 'react-router-dom';
 
 import { translate } from 'react-i18next';
 
-import WipErr from '../../shared/WipErr/WipErr';
-
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
+import WipErr from '../../shared/WipErr/WipErr';
 import { PlaylistCollectionContainer } from '../../Pages/PlaylistCollection/Container';
 
 class LastLessonCollection extends Component {
@@ -32,12 +31,23 @@ class LastLessonCollection extends Component {
 
   render() {
     const { wip, err, t, lastLessonId, language } = this.props;
-    const wipErr                                  = WipErr({ wip: wip.lastLesson, err, t });
+
+    const wipErr = WipErr({ wip: wip.lastLesson, err, t });
     if (wipErr) {
       return wipErr;
     }
 
-    const props = { ...this.props, match: { ...this.props.match, params: { id: lastLessonId, language } } };
+    const props = {
+      ...this.props,
+      match: {
+        ...this.props.match,
+        params: {
+          language,
+          id: lastLessonId,
+        }
+      }
+    };
+
     return <PlaylistCollectionContainer {...props} />;
   }
 }

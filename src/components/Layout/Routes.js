@@ -21,6 +21,7 @@ import EventCollection from '../Sections/Events/Collection';
 import LibraryHomepage from '../Sections/Library/Homepage';
 import LibraryContainer from '../Sections/Library/LibraryContainer';
 import SearchResults from '../Search/SearchResultsContainer';
+import HomePage from '../Sections/Home/Container';
 import Design from '../Design/Design';
 
 import Redirect from './Redirect';
@@ -36,11 +37,11 @@ const Routes = ({ match }) => {
 
   return (
     <Switch>
-      <Route exact path={`${urlPrefix}/`} component={Lessons} />
+      <Route exact path={`${urlPrefix}/`} component={HomePage} />
       <Route exact path={`${urlPrefix}/lessons`} component={Lessons} />
       <Route exact path={`${urlPrefix}/lessons/cu/:id`} component={LessonUnit} />
       <Route exact path={`${urlPrefix}/lessons/c/:id`} component={LessonCollection} />
-      <Route exact path={`${urlPrefix}/lessons/last`} component={LastLessonCollection} />
+      <Route exact path={`${urlPrefix}/lessons/latest`} component={LastLessonCollection} />
       <Route exact path={`${urlPrefix}/programs`} component={Programs} />
       <Route exact path={`${urlPrefix}/programs/cu/:id`} component={ProgramChapter} />
       <Route exact path={`${urlPrefix}/programs/c/:id`} component={ProgramCollection} />
@@ -56,9 +57,9 @@ const Routes = ({ match }) => {
       <Route exact path={`${urlPrefix}/publications/c/:id`} component={PublicationCollection} />
       <Route exact path={`${urlPrefix}/sources`} component={LibraryHomepage} />
       <Route exact path={`${urlPrefix}/sources/:id`} component={LibraryContainer} />
-      <Route exact path={`${urlPrefix}/books`} component={NotImplemented} />
+      {/*<Route exact path={`${urlPrefix}/books`} component={NotImplemented} />*/}
       <Route exact path={`${urlPrefix}/topics`} component={NotImplemented} />
-      <Route exact path={`${urlPrefix}/photos`} component={NotImplemented} />
+      {/*<Route exact path={`${urlPrefix}/photos`} component={NotImplemented} />*/}
       <Route exact path={`${urlPrefix}/search`} component={SearchResults} />
       <Route exact path={`${urlPrefix}/design`} component={Design} />
       <Route exact path={`${urlPrefix}/design2`} component={Lessons} />

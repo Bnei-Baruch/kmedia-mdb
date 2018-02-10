@@ -80,6 +80,7 @@
     "react-i18next": "^4.7.0",
     "react-image-gallery": "^0.8.3",
     "react-media-player": "github:Bnei-Baruch/react-media-player",
+    "react-pdf": "^2.5.3",
     "react-redux": "^5.0.5",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.1.2",
