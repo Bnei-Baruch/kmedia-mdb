@@ -253,21 +253,21 @@ export const RB_IGROT   = 'b8SHlrfH';
 export const MR_TORA    = 'bvA8ZB1w';
 export const RH_ZOHAR   = 'AwGBQX2L';
 
-export const BS_TAAS_PARTS = [
-  { id: '9xNFLSSp', startsFrom: 1, },
-  { id: 'XlukqLH8', startsFrom: 37, },
-  { id: 'AerA1hNN', startsFrom: 1, },
-  { id: '1kDKQxJb', startsFrom: 1, },
-  { id: 'o5lXptLo', startsFrom: 1, },
-  { id: 'eNwJXy4s', startsFrom: 1, },
-  { id: 'ahipVtPu', startsFrom: 1, },
-  { id: 'Pscnn3pP', startsFrom: 1, },
-  { id: 'Lfu7W3CD', startsFrom: 1, },
-  { id: 'n03vXCJl', startsFrom: 1, },
-  { id: 'UGcGGSpP', startsFrom: 1, },
-  { id: 'NpLQT0LX', startsFrom: 1, },
-  { id: 'AUArdCkH', startsFrom: 1, },
-  { id: 'tit6XNAo', startsFrom: 1, },
-  { id: 'FaKUG7ru', startsFrom: 1, },
-  { id: 'mW6eON0z', startsFrom: 1, },
-];
+export const BS_TAAS_PARTS = {
+  '9xNFLSSp': 1,
+  XlukqLH8: 37,
+  AerA1hNN: 101,
+  '1kDKQxJb': 209,
+  o5lXptLo: 291,
+  eNwJXy4s: 389,
+  ahipVtPu: 485,
+  Pscnn3pP: 599,
+  Lfu7W3CD: 731,
+  n03vXCJl: 865,
+  UGcGGSpP: 1011,
+  NpLQT0LX: 1127,
+  AUArdCkH: 1297,
+  tit6XNAo: 1493,
+  FaKUG7ru: 1687,
+  mW6eON0z: 1887,
+};

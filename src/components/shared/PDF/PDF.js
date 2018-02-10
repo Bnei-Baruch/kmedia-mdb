@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import throttle from 'lodash/throttle';
 import { Document, Page } from 'react-pdf/build/entry.webpack';
+import { Container } from 'semantic-ui-react';
 
 import PDFMenu from './PDFMenu';
 import { BS_TAAS_PARTS } from '../../../helpers/consts';
@@ -15,12 +16,9 @@ class PDF extends Component {
 
   static defaultProps = {};
 
-  static isTaas = source => (BS_TAAS_PARTS.findIndex(a => a.id === source) !== -1);
+  static isTaas = source => (BS_TAAS_PARTS[source] !== undefined);
 
-  static startsFrom = (source) => {
-    const taas = BS_TAAS_PARTS.find(a => a.id === source);
-    return (taas ? taas.startsFrom : null);
-  };
+  static startsFrom = source => BS_TAAS_PARTS[source];
 
   constructor(props) {
     super(props);
@@ -28,9 +26,7 @@ class PDF extends Component {
     const pageNumber = props.pageNumber + props.startsFrom + -1;
     this.state       = {
       pageNumber,
-      inputValue: pageNumber,
       numPages: null,
-      inputError: false,
       width: null,
     };
   }
@@ -49,7 +45,6 @@ class PDF extends Component {
       const pageNumber = nextProps.pageNumber + nextProps.startsFrom + -1;
       this.setState({
         pageNumber,
-        inputValue: pageNumber,
         numPages: null,
       });
     }
@@ -61,54 +56,24 @@ class PDF extends Component {
 
   setDivSize = () => this.setState({ width: document.getElementById('pdfWrapper').getBoundingClientRect().width });
 
-  setPage = pageNo => this.setState({ pageNumber: pageNo }, () => {
-    this.setState({ inputValue: pageNo });
-  });
+  setPage = pageNo => this.setState({ pageNumber: pageNo });
 
   throttledSetDivSize = () => throttle(this.setDivSize, 500);
-
-  restoreError = () => setTimeout(() => this.setState({ inputError: false }), 1000);
-
-  validateValue(value) {
-    if (value === '') {
-      this.setState({ inputError: true }, this.restoreError);
-      return false;
-    }
-
-    if (Number.isNaN(value)) {
-      this.setState({ inputError: true }, this.restoreError);
-      return false;
-    }
-    const realValue = value + -this.props.startsFrom + 1;
-    if (realValue < 1 || realValue > this.state.numPages) {
-      this.setState({ inputError: true }, this.restoreError);
-      return false;
-    }
-
-    this.setState({ inputError: false });
-    return true;
-  }
-
-  handleChange = (e, { value }) => {
-    this.setState({ inputValue: value });
-  };
 
   render() {
     const { numPages, pageNumber, width, } = this.state;
     const { startsFrom, }                  = this.props;
 
     return (
-      <div id="pdfWrapper">
-        <PDFMenu
-          numPages={numPages}
-          pageNumber={pageNumber}
-          startsFrom={startsFrom}
-          inputValue={this.state.inputValue}
-          inputError={this.state.inputError}
-          handleChange={this.handleChange}
-          validateValue={this.validateValue}
-          setPage={this.setPage}
-        />
+      <div id="pdfWrapper" style={{ marginTop: '10px' }}>
+        <Container fluid textAlign="center">
+          <PDFMenu
+            numPages={numPages}
+            pageNumber={pageNumber}
+            startsFrom={startsFrom}
+            setPage={this.setPage}
+          />
+        </Container>
         <div style={{ direction: 'ltr' }}>
           <Document
             file={this.props.pdfFile}

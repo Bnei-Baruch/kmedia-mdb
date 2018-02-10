@@ -68,11 +68,11 @@ class Library extends Component {
     } else if (!contentData) {
       return <Segment basic>{t('sources-library.no-source')}</Segment>;
     } else if (isTaas && this.props.pdfFile) {
-      contents = <PDF
+      contents = (<PDF
         pdfFile={assetUrl(`sources/${this.props.pdfFile}`)}
         pageNumber={1}
         startsFrom={this.props.startsFrom}
-      />;
+      />);
     } else {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
       contents        = (<div
@@ -85,7 +85,7 @@ class Library extends Component {
     let languageBar = null;
     if (languages.length > 0) {
       languageBar = (
-        <Container fluid textAlign="center">
+        <Container fluid textAlign="right">
           <ButtonsLanguageSelector
             languages={languages}
             defaultValue={language}
