@@ -1,0 +1,11 @@
+.search {
+  &__link {
+    font-weight: bold;
+  }
+  &__snippet {
+    font-size: .85714286em;
+    br {
+      display: none;
+    }
+  }
+}

@@ -4,7 +4,7 @@
       "header": "Kabbalah Media"
     },
     "sidebar": {
-      "lessons": "Daily Lessons",
+      "lessons": "Daily Kabbalah Lesson",
       "programs": "Programs",
       "lectures": "Lectures & Lessons",
       "sources": "Kabbalah Sources",
@@ -83,7 +83,8 @@
     "audio": "Audio",
     "video": "Video",
     "more": "More",
-    "copy-link": "Copy Link"
+    "copy-link": "Copy Link",
+    "search": "Search"
   },
   "player": {
     "messages": {
@@ -96,7 +97,7 @@
     },
     "share": {
       "title": "watch this video"
-     },
+    },
     "error": {
       "loading": "Error loading file."
     }
@@ -119,9 +120,13 @@
     "fallback-to-audio": "Video was not found, using audio.",
     "fallback-to-video": "Audio was not found, using video.",
     "source-content-not-found": "Source contents wasn't found",
-    "no-images": "No images found"
+    "no-images": "No sketches found"
   },
   "search": {
+    "header": {
+      "text": "Search Results",
+      "subtext": ""
+    },
     "sortby": "sort by",
     "sorts": {
       "relevance": "relevance",
@@ -138,15 +143,19 @@
       }
     },
     "results": {
-      "title": "Search Results",
-      "search-summary": "Page {{pageNo}} of {{total}} results ({{took}} seconds)",
       "empty-query": "No search term given. Please use the box above to search.",
       "no-results": "Your search for <1><0>{{query}}</0></1> found no results."
     },
     "result": {
-      "description": "summary",
-      "transcript": "transcript"
+      "description": "Summary",
+      "transcript": "Transcript"
     }
+  },
+  "home": {
+    "search": "Explore the wisdom of Kabbalah",
+    "sections": "Archive Sections",
+    "updates": "Latest Updates",
+    "last-lesson": "The Latest Daily Lesson"
   },
   "events": {
     "header": {
@@ -245,7 +254,7 @@
   "publications": {
     "header": {
       "text": "Publications",
-      "subtext": "Here comes the publications section subtext"
+      "subtext": "Articles on current events, culture, popular science, relationships and more, presented from the unique perspective of the wisdom of Kabbalah"
     },
     "list": {
       "item_from": "Item of:"

@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Divider, Segment } from 'semantic-ui-react';
+import { Container, Segment } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { formatError, isEmpty, shallowCompare } from '../../../helpers/utils';
+import { assetUrl } from '../../../helpers/Api';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
 import ButtonsLanguageSelector from '../../Language/Selector/ButtonsLanguageSelector';
+import PDF from '../../shared/PDF/PDF';
 
 class Library extends Component {
   static propTypes = {
@@ -15,6 +17,9 @@ class Library extends Component {
       wip: shapes.WIP,
       err: shapes.Error,
     }),
+    isTaas: PropTypes.bool.isRequired,
+    pdfFile: PropTypes.string,
+    startsFrom: PropTypes.number,
     language: PropTypes.string,
     languages: PropTypes.arrayOf(PropTypes.string),
     t: PropTypes.func.isRequired,
@@ -29,6 +34,8 @@ class Library extends Component {
       wip: false,
       err: null,
     },
+    pdfFile: null,
+    startsFrom: 1,
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -36,7 +43,7 @@ class Library extends Component {
   }
 
   render() {
-    const { content, language, languages, t, } = this.props;
+    const { content, language, languages, t, isTaas, } = this.props;
 
     if (isEmpty(content)) {
       return <Segment basic>{t('sources-library.no-source')}</Segment>;
@@ -60,14 +67,19 @@ class Library extends Component {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else if (!contentData) {
       return <Segment basic>{t('sources-library.no-source')}</Segment>;
+    } else if (isTaas && this.props.pdfFile) {
+      contents = <PDF
+        pdfFile={assetUrl(`sources/${this.props.pdfFile}`)}
+        pageNumber={1}
+        startsFrom={this.props.startsFrom}
+      />;
     } else {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
-
-      // eslint-disable-next-line react/no-danger
-      contents = <div
+      contents        = (<div
         style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
+        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: contentData }}
-      />;
+      />);
     }
 
     let languageBar = null;
@@ -86,9 +98,7 @@ class Library extends Component {
 
     return (
       <div>
-        <Divider hidden />
         {languageBar}
-        <Divider hidden />
         {contents}
       </div>
     );

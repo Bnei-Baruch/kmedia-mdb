@@ -71,7 +71,7 @@ const freshStore = () => ({
   wip: {
     units: {},
     collections: {},
-    lastLesson: true,
+    lastLesson: false,
   },
   errors: {
     units: {},
@@ -100,14 +100,6 @@ const setStatus = (state, action) => {
   case FETCH_LATEST_LESSON:
     wip.lastLesson = true;
     break;
-  case FETCH_LATEST_LESSON_SUCCESS:
-    wip.lastLesson    = false;
-    errors.lastLesson = null;
-    break;
-  case FETCH_LATEST_LESSON_FAILURE:
-    wip.lastLesson    = false;
-    errors.lastLesson = action.payload.err;
-    break;
   case FETCH_UNIT_SUCCESS:
     wip.units    = { ...wip.units, [action.payload.id]: false };
     errors.units = { ...errors.units, [action.payload.id]: null };
@@ -116,6 +108,10 @@ const setStatus = (state, action) => {
     wip.collections    = { ...wip.collections, [action.payload.id]: false };
     errors.collections = { ...errors.collections, [action.payload.id]: null };
     break;
+  case FETCH_LATEST_LESSON_SUCCESS:
+    wip.lastLesson    = false;
+    errors.lastLesson = null;
+    break;
   case FETCH_UNIT_FAILURE:
     wip.units    = { ...wip.units, [action.payload.id]: false };
     errors.units = { ...errors.units, [action.payload.id]: action.payload.err };
@@ -123,6 +119,10 @@ const setStatus = (state, action) => {
   case FETCH_COLLECTION_FAILURE:
     wip.collections    = { ...wip.collections, [action.payload.id]: false };
     errors.collections = { ...errors.collections, [action.payload.id]: action.payload.err };
+    break;
+  case FETCH_LATEST_LESSON_FAILURE:
+    wip.lastLesson    = false;
+    errors.lastLesson = action.payload.err;
     break;
   default:
     break;

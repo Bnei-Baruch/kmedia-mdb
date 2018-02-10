@@ -15,6 +15,7 @@ import { fromHumanReadableTime, toHumanReadableTime } from '../../helpers/time';
 import { PLAYER_MODE } from './constants';
 import AVPlayPause from './AVPlayPause';
 import AVPlaybackRate from './AVPlaybackRate';
+import AVCenteredPlay from './AVCenteredPlay';
 import AVTimeElapsed from './AVTimeElapsed';
 import AVFullScreen from './AVFullScreen';
 import AVMuteUnmute from './AVMuteUnmute';
@@ -24,6 +25,7 @@ import AvSeekBar from './AvSeekBar';
 import AVEditSlice from './AVEditSlice';
 import AVShareBar from './AVShareBar';
 import AVJumpBack from './AVJumpBack';
+import AVSpinner from './AVSpinner';
 
 const PLAYER_VOLUME_STORAGE_KEY = '@@kmedia_player_volume';
 const DEFAULT_PLAYER_VOLUME     = 0.8;
@@ -100,6 +102,10 @@ class AVPlayer extends PureComponent {
     if (query.send) {
       playerMode = PLAYER_MODE.SLICE_VIEW;
       send       = fromHumanReadableTime(query.send).asSeconds();
+    }
+
+    if (sstart > send) {
+      playerMode = PLAYER_MODE.NORMAL;
     }
 
     this.setSliceMode(playerMode, {
@@ -368,9 +374,9 @@ class AVPlayer extends PureComponent {
 
   handleWrapperKeyDown = (e) => {
     if (e.keyCode === 32) {
-      if (!this.props.media.isLoading) {
-        this.props.media.playPause();
-      }
+      // if (!this.props.media.isLoading) {
+      this.props.media.playPause();
+      // }
       e.preventDefault();
     }
   };
@@ -391,7 +397,12 @@ class AVPlayer extends PureComponent {
     if (isMobile && !this.state.controlsVisible) {
       this.showControls();
     } else if (!media.isLoading) {
-      media.playPause();
+      // toggle play only if we in normal mode
+      // because we don't want the slice mode on screen buttons
+      // to toggle play/pause
+      if (this.state.mode === PLAYER_MODE.NORMAL) {
+        media.playPause();
+      }
     }
   };
 
@@ -432,8 +443,8 @@ class AVPlayer extends PureComponent {
             errorReason,
           } = this.state;
 
-    const { isPlaying, isLoading } = media;
-    const forceShowControls        = item.mediaType === MT_AUDIO || !isPlaying;
+    const { isPlaying }     = media;
+    const forceShowControls = item.mediaType === MT_AUDIO || !isPlaying;
 
     const isVideo       = item.mediaType === MT_VIDEO;
     const isAudio       = item.mediaType === MT_AUDIO;
@@ -473,26 +484,7 @@ class AVPlayer extends PureComponent {
         </div>
       );
     } else if (isVideo) {
-      centerMediaControl = (
-        <div>
-          {
-            isLoading ?
-              <Icon loading name="spinner" color="orange" size="huge" />
-              : null
-          }
-          {
-            !isLoading && !isPlaying ?
-              <button
-                type="button"
-                tabIndex="-1"
-                className="mediaplayer__onscreen-play"
-              >
-                <Icon name="play" size="huge" />
-              </button>
-              : null
-          }
-        </div>
-      );
+      centerMediaControl = <div><AVCenteredPlay /><AVSpinner /></div>;
     }
 
     return (
@@ -513,11 +505,11 @@ class AVPlayer extends PureComponent {
           }}
           onVolumeChange={this.state.persistenceFn}
           src={item.src}
-          poster={item.preImageUrl}
+          poster={isVideo ? item.preImageUrl : null}
           vendor={isVideo ? 'video' : 'audio'}
           autoPlay={autoPlay}
           onReady={this.onPlayerReady}
-          preload="metadata"
+          preload="auto"
           controls={false}
           onError={this.onError}
           onPause={this.onPause}
