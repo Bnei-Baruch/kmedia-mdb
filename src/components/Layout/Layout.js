@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import classnames from 'classnames';
 import { Route } from 'react-router-dom';
-import { Flag, Header, Icon, Menu } from 'semantic-ui-react';
+import { Flag, Header, Icon, Menu, Search } from 'semantic-ui-react';
 
 import { FLAG_TO_LANGUAGE, ALL_LANGUAGES } from '../../helpers/consts';
 import * as shapes from '../shapes';
@@ -70,25 +70,27 @@ class Layout extends Component {
     const showSearch = this.shouldShowSearch(location);
     return (
       <div className="layout">
+
         <GAPageView location={location} />
+        <div className='debug'>
+                <span className="widescreen-only">widescreen</span>
+                <span className="large-screen-only">large screen</span>
+                <span className="computer-only">computer</span>
+                <span className="tablet-only">tablet</span>
+                <span className="mobile-only">mobile</span>
+        </div>
         {/* Added the width 100vw to better support mobile, please fix as needed */}
-        <div className="layout__header" style={{ width: '100vw' }}>
+        <div className="layout__header">
           {/* Added the width 100vw to better support mobile, please fix as needed */}
-          <Menu inverted borderless size="huge" color="blue" style={{ width: '100vw' }}>
+          <Menu inverted borderless size="huge" color="blue" >
             <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.toggleSidebar}>
               <Icon name="sidebar" />
             </Menu.Item>
             <Menu.Item className="logo" header as={Link} to="/">
               <img src={logo} alt="logo" />
-              <Header inverted as="h2">
+              <Header inverted as='h1'>
                 {t('nav.top.header')}
-                {/*
-                <span className="widescreen-only"> - widescreen</span>
-                <span className="large-screen-only"> - large screen</span>
-                <span className="computer-only"> - computer</span>
-                <span className="tablet-only"> - tablet</span>
-                <span className="mobile-only"> - mobile</span>
-                */}
+                
                 {/* <span> /// </span>
                     <span className="widescreen-hidden"> - widescreen hidden</span>
                     <span className="large-screen-hidden"> - large screen hidden</span>
@@ -98,7 +100,7 @@ class Layout extends Component {
                 */}
               </Header>
             </Menu.Item>
-            <Menu.Item style={{ flex: 1 }}>
+            <Menu.Item className='layout__search mobile-hidden'>
               {
                 showSearch && (
                   <OmniBox t={t} location={location} />
@@ -130,12 +132,20 @@ class Layout extends Component {
             <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.closeSidebar}>
               <Icon name="sidebar" />
             </Menu.Item>
-            <Menu.Item className="logo" header as={Link} to="/" onClick={this.closeSidebar}>
+            <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={this.closeSidebar}>
               <img src={logo} alt="logo" />
-              <Header inverted as="h2">
+              <Header inverted as='h1'>
                 {t('nav.top.header')}
               </Header>
             </Menu.Item>
+            <Menu.Item className='mobile-only layout__sidebar-search'>
+                <Search
+                  className="search-omnibox"
+                  fluid
+                  icon={<Icon link name="search" onClick={this.handleIconClick} />}
+                  size="mini" 
+                />
+              </Menu.Item>
           </Menu>
           <div className="layout__sidebar-menu">
             <MenuItems simple t={t} onItemClick={this.closeSidebar} />

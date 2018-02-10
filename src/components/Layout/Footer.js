@@ -36,18 +36,18 @@ const Footer = (props) => {
         <Grid padded inverted>
           <Grid.Row>
             <Grid.Column>
-              <Grid columns="equal">
-                <Grid.Row>
-                  <Grid.Column>
-                    <Header inverted as="h3">
+              {/* <Grid columns="equal"> */}
+                {/* <Grid.Row> */}
+                  {/* <Grid.Column> */}
+                    <Header inverted as="h5">
                       {t('nav.top.header')}
                       <br />
                       <small className="text grey">
                         {t('nav.footer.copyright', { year })} {t('nav.footer.rights')}
                       </small>
                     </Header>
-                  </Grid.Column>
-                  <Grid.Column>
+                  {/* </Grid.Column> */}
+                  {/* <Grid.Column>
                     <Header inverted as="h3" content={t('nav.footer.study')} />
                     <Menu text vertical inverted>
                       <Menu.Item content={t('nav.sidebar.lessons')} as={Link} to="/lessons" />

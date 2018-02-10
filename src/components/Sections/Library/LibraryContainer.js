@@ -210,15 +210,15 @@ class LibraryContainer extends Component {
           <Container>
             <Grid padded>
               <Grid.Row>
-                <Grid.Column width={4}>
+                <Grid.Column computer={4}>
                   <Header size="medium">
                     {t('sources-library.toc')}
                   </Header>
                 </Grid.Column>
-                <Grid.Column width={6}>
+                <Grid.Column computer={6}>
                   {this.header(sourceId, fullPath)}
                 </Grid.Column>
-                <Grid.Column width={2}>
+                <Grid.Column computer={2}>
                   <Button.Group basic size="tiny" floated="right">
                     <Button icon="expand" />
                   </Button.Group>
@@ -230,7 +230,7 @@ class LibraryContainer extends Component {
         <Container>
           <Grid padded divided>
             <Grid.Row>
-              <Grid.Column width={4}>
+              <Grid.Column computer={4}>
                 <TOC
                   fullPath={fullPath}
                   rootId={parent}
@@ -239,7 +239,7 @@ class LibraryContainer extends Component {
                   replace={this.props.replace}
                 />
               </Grid.Column>
-              <Grid.Column width={8}>
+              <Grid.Column computer={8}>
                 {/* {MainMenuHeight2} */}
                 <div ref={this.handleContextRef}>
                   <div className="source__content">
