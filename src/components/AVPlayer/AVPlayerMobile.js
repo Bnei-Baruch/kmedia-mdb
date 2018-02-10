@@ -13,6 +13,8 @@ import { PLAYER_MODE } from './constants';
 import { AVPlayPause } from './AVPlayPause';
 import AVLanguage from './AVLanguage';
 import AVAudioVideo from './AVAudioVideo';
+import AVEditSlice from './AVEditSlice';
+import SliceFormMobile from './SliceFormMobile';
 
 const PLAYER_VOLUME_STORAGE_KEY = '@@kmedia_player_volume';
 const DEFAULT_PLAYER_VOLUME     = 0.8;
@@ -57,12 +59,14 @@ class AVPlayerMobile extends PureComponent {
     onNext: noop,
   };
 
-  state = {
+  state                      = {
     error: false,
     errorReason: '',
     mode: PLAYER_MODE.NORMAL,
-    persistenceFn: noop
+    persistenceFn: noop,
+    isSliceMode: false,
   };
+  static currentTimePosition = 0;
 
   componentWillMount() {
     const { history } = this.props;
@@ -154,8 +158,12 @@ class AVPlayerMobile extends PureComponent {
 
   handleTimeUpdate = (timeData) => {
     const { mode, sliceEnd } = this.state;
-
-    const lowerTime = Math.min(sliceEnd, timeData.currentTarget.currentTime);
+    const time               = timeData.currentTarget.currentTime;
+    if (Math.floor(time) - this.currentTimePosition !== 0) {
+      this.currentTimePosition = Math.floor(time);
+      this.setState({ updateMedia: {} });
+    }
+    const lowerTime = Math.min(sliceEnd, time);
     if (mode === PLAYER_MODE.SLICE_VIEW && lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
       this.media.pause();
       this.seekTo(sliceEnd);
@@ -183,6 +191,8 @@ class AVPlayerMobile extends PureComponent {
   };
 
   updateMedia = () => this.setState({ updateMedia: {} });
+
+  toggleSliceMode = () => this.setState({ isSliceMode: !this.state.isSliceMode });
 
   render() {
     const {
@@ -212,7 +222,7 @@ class AVPlayerMobile extends PureComponent {
 
     if (isVideo) {
       medeaEl = <video
-        style={{ width: 'calc(100% - 90px)' }}
+        style={{ width: 'calc(100% - 190px)' }}
         ref={this.handleMediaHtmlInit}
         controls
         src={item.src}
@@ -228,6 +238,7 @@ class AVPlayerMobile extends PureComponent {
     }
 
     let control;
+    let slicer;
     if (error) {
       control = (
         <div className="player-button">
@@ -239,7 +250,7 @@ class AVPlayerMobile extends PureComponent {
       );
     } else if (this.state.isReady) {
       control = (
-        <div className="mediaplayer__wrapper" style={{ top: 'auto' }}>
+        <div className="mediaplayer__wrapper" style={{ bottom: 'auto' }}>
           <div className="mediaplayer__controls">
             <AVPlayPause
               withoutPlay={true}
@@ -253,6 +264,8 @@ class AVPlayerMobile extends PureComponent {
               onNext={onNext}
             />
             <div className="mediaplayer__spacer" />
+            <AVEditSlice onActivateSlice={this.toggleSliceMode} />
+
             <AVAudioVideo
               isAudio={isAudio}
               isVideo={isVideo}
@@ -270,11 +283,13 @@ class AVPlayerMobile extends PureComponent {
           </div>
         </div>
       );
+      slicer  = this.toggleSliceMode ? <SliceFormMobile currentTime={this.media.currentTime || 0} /> : null;
     }
     return (
       <div className={classNames('mediaplayer')}>
-        <div style={{ marginBottom: '30px' }}>{medeaEl}</div>
+        <div style={{ marginBottom: '0px' }}>{medeaEl}</div>
         {control}
+        {slicer}
       </div>
     );
   }

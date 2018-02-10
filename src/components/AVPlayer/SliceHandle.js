@@ -35,9 +35,9 @@ export default class SliceHandle extends Component {
         {
           isEditMode && (
             <div className="seekbar__slicehandle-time">
-              
+
                 { seconds }
-              
+
             </div>
           )
         }
