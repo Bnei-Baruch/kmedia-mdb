@@ -120,18 +120,16 @@ class SearchResults extends Component {
         }
       </div>);
 
-    // let filmDate = '';
+    let filmDate = '';
     // if (c.film_date) {
     //   filmDate = t('values.date', { date: new Date(c.film_date) });
     // }
 
     return (
       <Table.Row key={mdbUid} verticalAlign="top">
-        {
-        // <Table.Cell collapsing singleLine width={1}>
-        //   <strong>{filmDate}</strong>
-        // </Table.Cell>
-        }
+        <Table.Cell collapsing singleLine width={1}>
+          <strong>{filmDate}</strong>
+        </Table.Cell>
         <Table.Cell collapsing singleLine>
           <Label size="tiny">{t(`constants.content-types.${c.content_type}`)}</Label>
         </Table.Cell>
