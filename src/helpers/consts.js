@@ -248,6 +248,26 @@ export const NO_NAME = '☠ no name';
 // Sources
 export const BS_SHAMATI = 'qMUUn22b';
 export const BS_IGROT   = 'DVSS0xAR';
+export const BS_TAAS    = 'xtKmrbb9';
 export const RB_IGROT   = 'b8SHlrfH';
 export const MR_TORA    = 'bvA8ZB1w';
 export const RH_ZOHAR   = 'AwGBQX2L';
+
+export const BS_TAAS_PARTS = [
+  { id: '9xNFLSSp', startsFrom: 1, },
+  { id: 'XlukqLH8', startsFrom: 37, },
+  { id: 'AerA1hNN', startsFrom: 1, },
+  { id: '1kDKQxJb', startsFrom: 1, },
+  { id: 'o5lXptLo', startsFrom: 1, },
+  { id: 'eNwJXy4s', startsFrom: 1, },
+  { id: 'ahipVtPu', startsFrom: 1, },
+  { id: 'Pscnn3pP', startsFrom: 1, },
+  { id: 'Lfu7W3CD', startsFrom: 1, },
+  { id: 'n03vXCJl', startsFrom: 1, },
+  { id: 'UGcGGSpP', startsFrom: 1, },
+  { id: 'NpLQT0LX', startsFrom: 1, },
+  { id: 'AUArdCkH', startsFrom: 1, },
+  { id: 'tit6XNAo', startsFrom: 1, },
+  { id: 'FaKUG7ru', startsFrom: 1, },
+  { id: 'mW6eON0z', startsFrom: 1, },
+];
