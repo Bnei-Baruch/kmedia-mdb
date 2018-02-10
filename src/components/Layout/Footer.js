@@ -75,9 +75,9 @@ const Footer = (props) => {
                       <Menu.Item content={t('nav.sidebar.publications')} as={Link} to="/publications" />
                       <Menu.Item content={t('nav.sidebar.photos')} as={Link} to="/photos" />
                     </Menu>
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
+                  </Grid.Column> */}
+                {/* </Grid.Row> */}
+              {/* </Grid> */}
 
             </Grid.Column>
           </Grid.Row>
