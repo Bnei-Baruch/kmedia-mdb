@@ -120,15 +120,15 @@ class SearchResults extends Component {
         }
       </div>);
 
-    let filmDate = '';
-    // if (c.film_date) {
-    //   filmDate = t('values.date', { date: new Date(c.film_date) });
-    // }
+    let startDate = '';
+    if (c.start_date) {
+      startDate = t('values.date', { date: new Date(c.start_date) });
+    }
 
     return (
       <Table.Row key={mdbUid} verticalAlign="top">
         <Table.Cell collapsing singleLine width={1}>
-          <strong>{filmDate}</strong>
+          <strong>{startDate}</strong>
         </Table.Cell>
         <Table.Cell collapsing singleLine>
           <Label size="tiny">{t(`constants.content-types.${c.content_type}`)}</Label>
@@ -149,7 +149,7 @@ class SearchResults extends Component {
 
   renderHit = (hit) => {
     // console.log('hit', hit);
-    const { cMap, cuMap, t }               = this.props;
+    const { cMap, cuMap }               = this.props;
     const { _source: { mdb_uid: mdbUid } } = hit;
     const cu                               = cuMap[mdbUid];
     const c                                = cMap[mdbUid];
@@ -185,8 +185,6 @@ class SearchResults extends Component {
     }
 
     const { /* took, */ hits: { total, hits } } = results;
-
-    console.log(hits);
 
     let content;
     if (total === 0 || (isEmpty(cMap) && isEmpty(cuMap))) {

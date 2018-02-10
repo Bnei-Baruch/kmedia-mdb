@@ -102,7 +102,7 @@ const mapState = state => {
   const results = selectors.getResults(state.search);
   const cMap    = results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
-      if (val._type == 'collections') {
+      if (val._type === 'collections') {
         const cID = val._source.mdb_uid;
         const c   = mdbSelectors.getDenormCollection(state.mdb, cID);
         if (c) {
@@ -114,7 +114,7 @@ const mapState = state => {
     {};
   const cuMap   = results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
-      if (val._type == 'content_units') {
+      if (val._type === 'content_units') {
         const cuID = val._source.mdb_uid;
         const cu   = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
         if (cu) {

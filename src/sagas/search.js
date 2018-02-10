@@ -48,14 +48,14 @@ function* search(action) {
       // we should strive for a single call to the API and get all the data we need.
       // hmm, relay..., hmm ?
       const cIDsToFetch = data.hits.hits.reduce((acc, val) => {
-        if (val._type == 'collections') {
+        if (val._type === 'collections') {
           return acc.concat(val._source.mdb_uid);
         } else {
           return acc;
         }
       }, []);
       const cuIDsToFetch = data.hits.hits.reduce((acc, val) => {
-        if (val._type == 'content_units') {
+        if (val._type === 'content_units') {
           return acc.concat(val._source.mdb_uid);
         } else {
           return acc;
