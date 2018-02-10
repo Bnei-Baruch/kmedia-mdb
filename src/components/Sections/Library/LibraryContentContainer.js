@@ -84,7 +84,8 @@ class LibraryContentContainer extends Component {
     this.fetchContent(source, data[language]);
   };
 
-  isTaas     = source => (BS_TAAS_PARTS.findIndex(a => a.id === source) !== -1);
+  isTaas = source => (BS_TAAS_PARTS.findIndex(a => a.id === source) !== -1);
+
   startsFrom = (source) => {
     const taas = BS_TAAS_PARTS.find(a => a.id === source);
     return (taas ? taas.startsFrom : null);

@@ -7,7 +7,7 @@ import { formatError, isEmpty, shallowCompare } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
 import ButtonsLanguageSelector from '../../Language/Selector/ButtonsLanguageSelector';
-import PDF from './PDF';
+import PDF from '../../shared/PDF';
 
 class Library extends Component {
   static propTypes = {

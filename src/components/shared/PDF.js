@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Document, Page } from 'react-pdf/build/entry.webpack';
 import throttle from 'lodash.throttle';
-import { Form, Header, Icon, Input, Menu } from 'semantic-ui-react';
+import { Form, Icon, Input, Menu } from 'semantic-ui-react';
 
 class PDF extends Component {
   static propTypes = {
@@ -97,7 +97,6 @@ class PDF extends Component {
 
     return (
       <div id="pdfWrapper">
-        <Header>Total {numPages} pages</Header>
         <Menu compact className="taas-pagination-menu" color="grey">
           <Menu.Item onClick={this.firstPage}>{startsFrom} &laquo;</Menu.Item>
           <Menu.Item onClick={this.prevPage}>&lsaquo;</Menu.Item>
