@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Form, Label } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { translate } from 'react-i18next';
+
 import { toHumanReadableTime, fromHumanReadableTime } from '../../helpers/time';
 import { getQuery, stringify } from '../../helpers/url';
 
 import AVShare from './AVShare';
 
-export default class SliceFormMobile extends Component {
+class ShareFormMobile extends Component {
   static propTypes = {
     currentTime: PropTypes.number.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -61,7 +64,7 @@ export default class SliceFormMobile extends Component {
           <Form.Group inline width={6}>
             <Form.Field width={3}>
               <Button
-                content={'Start position'}
+                content={this.props.t('player.buttons.select-start-position')}
                 onClick={this.setStart} />
             </Form.Field>
             <Form.Field width={3}>
@@ -75,7 +78,7 @@ export default class SliceFormMobile extends Component {
           <Form.Group inline width={6}>
             <Form.Field width={3}>
               <Button
-                content={'End position'}
+                content={this.props.t('player.buttons.select-end-position')}
                 onClick={this.setEnd} />
             </Form.Field>
             <Form.Field width={3}>
@@ -90,3 +93,6 @@ export default class SliceFormMobile extends Component {
     );
   }
 }
+
+
+export default translate()(ShareFormMobile);

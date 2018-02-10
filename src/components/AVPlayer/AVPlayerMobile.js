@@ -14,7 +14,7 @@ import { AVPlayPause } from './AVPlayPause';
 import AVLanguage from './AVLanguage';
 import AVAudioVideo from './AVAudioVideo';
 import AVEditSlice from './AVEditSlice';
-import SliceFormMobile from './SliceFormMobile';
+import ShareFormMobile from './ShareFormMobile';
 
 const PLAYER_VOLUME_STORAGE_KEY = '@@kmedia_player_volume';
 const DEFAULT_PLAYER_VOLUME     = 0.8;
@@ -283,7 +283,7 @@ class AVPlayerMobile extends PureComponent {
           </div>
         </div>
       );
-      slicer  = this.toggleSliceMode ? <SliceFormMobile currentTime={this.media.currentTime || 0} /> : null;
+      slicer  = this.toggleSliceMode ? <ShareFormMobile currentTime={this.media.currentTime || 0} /> : null;
     }
     return (
       <div className={classNames('mediaplayer')}>
