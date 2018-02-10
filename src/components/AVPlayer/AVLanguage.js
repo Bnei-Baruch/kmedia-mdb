@@ -26,7 +26,7 @@ export default class AVLanguage extends Component {
     this.props.onSelect(e, data.value);
 
   render() {
-    const { t, languages, language, requestedLanguage } = this.props;
+    const { t, languages, language, requestedLanguage, position = 'top' } = this.props;
 
     const options = LANGUAGE_OPTIONS
       .filter(x => languages.includes(x.value))
@@ -50,6 +50,7 @@ export default class AVLanguage extends Component {
           upward={true}
           icon={null}
           selectOnBlur={false}
+          additionPosition={position}
           options={options}
           value={language}
           onChange={this.handleChange}

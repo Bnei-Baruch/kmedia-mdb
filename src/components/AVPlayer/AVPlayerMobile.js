@@ -207,7 +207,7 @@ class AVPlayerMobile extends PureComponent {
             onPrev,
             onNext,
           }                     = this.props;
-    let { error, errorReason, } = this.state;
+    let { error, errorReason, isSliceMode} = this.state;
 
     const isVideo       = item.mediaType === MT_VIDEO;
     const isAudio       = item.mediaType === MT_AUDIO;
@@ -250,7 +250,7 @@ class AVPlayerMobile extends PureComponent {
       );
     } else if (this.state.isReady) {
       control = (
-        <div className="mediaplayer__wrapper" style={{ bottom: 'auto' }}>
+        <div className="mediaplayer__wrapper" style={{ top: 'auto' }}>
           <div className="mediaplayer__controls">
             <AVPlayPause
               withoutPlay={true}
@@ -264,7 +264,7 @@ class AVPlayerMobile extends PureComponent {
               onNext={onNext}
             />
             <div className="mediaplayer__spacer" />
-            <AVEditSlice onActivateSlice={this.toggleSliceMode} />
+            <AVEditSlice onActivateSlice={this.toggleSliceMode} isActive={isSliceMode} />
 
             <AVAudioVideo
               isAudio={isAudio}
@@ -276,6 +276,7 @@ class AVPlayerMobile extends PureComponent {
             <AVLanguage
               languages={languages}
               language={language}
+              position={'bottom'}
               requestedLanguage={item.requestedLanguage}
               onSelect={this.onLanguageChange}
               t={t}
@@ -283,7 +284,7 @@ class AVPlayerMobile extends PureComponent {
           </div>
         </div>
       );
-      slicer  = this.toggleSliceMode ? <ShareFormMobile currentTime={this.media.currentTime || 0} /> : null;
+      slicer  = isSliceMode ? <ShareFormMobile currentTime={this.media.currentTime || 0} /> : null;
     }
     return (
       <div className={classNames('mediaplayer')}>
