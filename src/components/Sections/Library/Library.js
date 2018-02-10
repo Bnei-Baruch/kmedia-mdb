@@ -68,7 +68,11 @@ class Library extends Component {
     } else if (!contentData) {
       return <Segment basic>{t('sources-library.no-source')}</Segment>;
     } else if (isTaas && this.props.pdfFile) {
-      contents = <PDF pdfFile={assetUrl(`sources/${this.props.pdfFile}`)} pageNumber={1} startsFrom={this.props.startsFrom} />;
+      contents = <PDF
+        pdfFile={assetUrl(`sources/${this.props.pdfFile}`)}
+        pageNumber={1}
+        startsFrom={this.props.startsFrom}
+      />;
     } else {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
       contents        = (<div

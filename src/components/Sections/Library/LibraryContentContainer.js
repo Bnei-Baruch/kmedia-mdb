@@ -71,7 +71,7 @@ class LibraryContentContainer extends Component {
 
     if (isTaas && index && index.data) {
       const data = index.data[language];
-      if (data.pdf) {
+      if (data && data.pdf) {
         pdfFile = `${source}/${data.pdf}`;
       }
     }

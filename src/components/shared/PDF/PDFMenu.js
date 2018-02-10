@@ -7,7 +7,7 @@ class PDFMenu extends Component {
     numPages: PropTypes.number,
     pageNumber: PropTypes.number.isRequired,
     startsFrom: PropTypes.number.isRequired,
-    inputValue: PropTypes.string.isRequired,
+    inputValue: PropTypes.number.isRequired,
     inputError: PropTypes.bool.isRequired,
     handleChange: PropTypes.func.isRequired,
     validateValue: PropTypes.func.isRequired,
@@ -19,7 +19,7 @@ class PDFMenu extends Component {
   };
 
   handleSubmit = () => {
-    const value = Number.parseInt(this.props.inputValue, 10);
+    const value = this.props.inputValue;
     if (this.props.validateValue(value)) {
       this.props.setPage(value);
     }

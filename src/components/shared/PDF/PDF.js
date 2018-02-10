@@ -22,13 +22,18 @@ class PDF extends Component {
     return (taas ? taas.startsFrom : null);
   };
 
-  state = {
-    numPages: null,
-    inputError: false,
-    pageNumber: this.props.pageNumber + this.props.startsFrom + -1,
-    width: null,
-    inputValue: 0
-  };
+  constructor(props) {
+    super(props);
+
+    const pageNumber = props.pageNumber + props.startsFrom + -1;
+    this.state       = {
+      pageNumber,
+      inputValue: pageNumber,
+      numPages: null,
+      inputError: false,
+      width: null,
+    };
+  }
 
   componentWillMount() {
     window.removeEventListener('resize', this.throttledSetDivSize);
@@ -39,9 +44,19 @@ class PDF extends Component {
     window.addEventListener('resize', this.throttledSetDivSize);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.pdfFile !== nextProps.pdfFile) {
+      const pageNumber = nextProps.pageNumber + nextProps.startsFrom + -1;
+      this.setState({
+        pageNumber,
+        inputValue: pageNumber,
+        numPages: null,
+      });
+    }
+  }
+
   onDocumentLoadSuccess = ({ numPages }) => {
-    const page = this.props.pageNumber + this.props.startsFrom + -1;
-    this.setState({ numPages, pageNumber: page, inputValue: page });
+    this.setState({ numPages });
   };
 
   setDivSize = () => this.setState({ width: document.getElementById('pdfWrapper').getBoundingClientRect().width });
@@ -99,12 +114,15 @@ class PDF extends Component {
             file={this.props.pdfFile}
             onLoadSuccess={this.onDocumentLoadSuccess}
           >
-            <Page
-              width={width}
-              pageNumber={pageNumber + (-startsFrom) + 1}
-              renderAnnotations={false}
-              renderTextLayer={false}
-            />
+            {
+              numPages ?
+                <Page
+                  width={width}
+                  pageNumber={pageNumber + (-startsFrom) + 1}
+                  renderAnnotations={false}
+                  renderTextLayer={false}
+                /> : null
+            }
           </Document>
         </div>
       </div>
