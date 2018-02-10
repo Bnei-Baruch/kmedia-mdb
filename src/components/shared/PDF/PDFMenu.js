@@ -7,9 +7,6 @@ class PDFMenu extends Component {
     numPages: PropTypes.number,
     pageNumber: PropTypes.number.isRequired,
     startsFrom: PropTypes.number.isRequired,
-    inputValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-    handleChange: PropTypes.func.isRequired,
-    validateValue: PropTypes.func.isRequired,
     setPage: PropTypes.func.isRequired,
   };
 
@@ -18,18 +15,26 @@ class PDFMenu extends Component {
   };
 
   state = {
-    inputError: false,
+    inputValue: this.props.pageNumber,
+    inputError: true,
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.pageNumber !== this.props.pageNumber) {
+      this.setState({ inputValue: nextProps.pageNumber });
+    }
+  }
+
   handleSubmit = () => {
-    const value = this.props.inputValue;
-    if (this.props.validateValue(value)) {
-      this.props.setPage(value);
+    const value                 = this.state.inputValue;
+    const { validated, parsed } = this.validateValue(value);
+    if (validated) {
+      this.props.setPage(parsed);
     }
   };
 
-  handleChange = (e, data) => {
-    this.props.handleChange(data.value);
+  handleChange = (e, { value }) => {
+    this.setState({ inputValue: value });
   };
 
   firstPage = () => this.props.setPage(this.props.startsFrom);
@@ -48,9 +53,35 @@ class PDFMenu extends Component {
 
   lastPage = () => this.props.setPage(this.props.numPages + this.props.startsFrom + -1);
 
+  restoreError = () => setTimeout(() => this.setState({ inputError: false }), 5000);
+
+  validateValue = (value) => {
+    const bad = { validated: false, parsed: 0 };
+
+    if (value === '') {
+      this.setState({ inputError: true }, this.restoreError);
+      return bad;
+    }
+
+    const parsed = Number.parseInt(value, 10);
+    if (Number.isNaN(parsed)) {
+      this.setState({ inputError: true }, this.restoreError);
+      return bad;
+    }
+
+    const realValue = parsed + -this.props.startsFrom + 1;
+    if (realValue < 1 || realValue > this.state.numPages) {
+      this.setState({ inputError: true }, this.restoreError);
+      return bad;
+    }
+
+    this.setState({ inputError: false });
+    return { validated: true, parsed };
+  };
+
   render() {
-    const { startsFrom, inputValue, numPages, handleChange } = this.props;
-    const { inputError }                                     = this.state;
+    const { startsFrom, numPages }   = this.props;
+    const { inputValue, inputError } = this.state;
 
     return (
       <Menu compact className="taas-pagination-menu" color="grey">
@@ -61,7 +92,7 @@ class PDFMenu extends Component {
             icon={<Icon name="search" circular />}
             value={inputValue}
             error={inputError}
-            onChange={handleChange}
+            onChange={this.handleChange}
           />
         </Form>
         <Menu.Item onClick={this.nextPage}>&rsaquo;</Menu.Item>
