@@ -42,10 +42,10 @@ class App extends Component {
     if (isAppReady) {
       return (
         <div>
-          <I18nextProvider i18n={i18n} initialLanguage={initialLng()}>
+          <I18nextProvider i18n={i18n} >
             <Provider store={store}>
               <ConnectedRouter history={history}>
-                <MultiLanguageRouteProvider>
+                <MultiLanguageRouteProvider initialLanguage={initialLng()}>
                   <Routes />
                 </MultiLanguageRouteProvider>
               </ConnectedRouter>
