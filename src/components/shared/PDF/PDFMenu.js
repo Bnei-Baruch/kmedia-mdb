@@ -7,8 +7,7 @@ class PDFMenu extends Component {
     numPages: PropTypes.number,
     pageNumber: PropTypes.number.isRequired,
     startsFrom: PropTypes.number.isRequired,
-    inputValue: PropTypes.number.isRequired,
-    inputError: PropTypes.bool.isRequired,
+    inputValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     handleChange: PropTypes.func.isRequired,
     validateValue: PropTypes.func.isRequired,
     setPage: PropTypes.func.isRequired,
@@ -18,11 +17,19 @@ class PDFMenu extends Component {
     numPages: null
   };
 
+  state = {
+    inputError: false,
+  };
+
   handleSubmit = () => {
     const value = this.props.inputValue;
     if (this.props.validateValue(value)) {
       this.props.setPage(value);
     }
+  };
+
+  handleChange = (e, data) => {
+    this.props.handleChange(data.value);
   };
 
   firstPage = () => this.props.setPage(this.props.startsFrom);
@@ -42,14 +49,14 @@ class PDFMenu extends Component {
   lastPage = () => this.props.setPage(this.props.numPages + this.props.startsFrom + -1);
 
   render() {
-    const { startsFrom, inputValue, inputError, numPages } = this.props;
-    const { handleChange, }                                = this.props;
+    const { startsFrom, inputValue, numPages, handleChange } = this.props;
+    const { inputError }                                     = this.state;
 
     return (
       <Menu compact className="taas-pagination-menu" color="grey">
         <Menu.Item onClick={this.firstPage}>{startsFrom} &laquo;</Menu.Item>
         <Menu.Item onClick={this.prevPage}>&lsaquo;</Menu.Item>
-        <Form onSubmit={this.props.handleSubmit}>
+        <Form onSubmit={this.handleSubmit}>
           <Input
             icon={<Icon name="search" circular />}
             value={inputValue}

@@ -30,7 +30,6 @@ class PDF extends Component {
       pageNumber,
       inputValue: pageNumber,
       numPages: null,
-      inputError: false,
       width: null,
     };
   }
@@ -67,9 +66,9 @@ class PDF extends Component {
 
   throttledSetDivSize = () => throttle(this.setDivSize, 500);
 
-  restoreError = () => setTimeout(() => this.setState({ inputError: false }), 1000);
+  restoreError = () => setTimeout(()  => this.setState({ inputError: false }), 1000);
 
-  validateValue(value) {
+  validateValue = (value) => {
     if (value === '') {
       this.setState({ inputError: true }, this.restoreError);
       return false;
@@ -87,7 +86,7 @@ class PDF extends Component {
 
     this.setState({ inputError: false });
     return true;
-  }
+  };
 
   handleChange = (e, { value }) => {
     this.setState({ inputValue: value });
@@ -104,7 +103,6 @@ class PDF extends Component {
           pageNumber={pageNumber}
           startsFrom={startsFrom}
           inputValue={this.state.inputValue}
-          inputError={this.state.inputError}
           handleChange={this.handleChange}
           validateValue={this.validateValue}
           setPage={this.setPage}
