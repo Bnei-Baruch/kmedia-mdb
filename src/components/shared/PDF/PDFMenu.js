@@ -7,7 +7,7 @@ class PDFMenu extends Component {
     numPages: PropTypes.number,
     pageNumber: PropTypes.number.isRequired,
     startsFrom: PropTypes.number.isRequired,
-    inputValue: PropTypes.number.isRequired,
+    inputValue: PropTypes.string.isRequired,
     inputError: PropTypes.bool.isRequired,
     handleChange: PropTypes.func.isRequired,
     validateValue: PropTypes.func.isRequired,
@@ -34,8 +34,8 @@ class PDFMenu extends Component {
   };
 
   nextPage = () => {
-    const page = this.state.pageNumber + 1;
-    const last = this.state.numPages + this.props.startsFrom + -1;
+    const page = this.props.pageNumber + 1;
+    const last = this.props.numPages + this.props.startsFrom + -1;
     this.props.setPage(page < last ? page : last);
   };
 
