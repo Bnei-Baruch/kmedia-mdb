@@ -4,6 +4,7 @@ import { Container, Segment } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { formatError, isEmpty, shallowCompare } from '../../../helpers/utils';
+import { assetUrl } from '../../../helpers/Api';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
 import ButtonsLanguageSelector from '../../Language/Selector/ButtonsLanguageSelector';
@@ -67,7 +68,7 @@ class Library extends Component {
     } else if (!contentData) {
       return <Segment basic>{t('sources-library.no-source')}</Segment>;
     } else if (isTaas && this.props.pdfFile) {
-      contents = <PDF pdfFile={`https://archive.kbb1.com/assets/sources/${this.props.pdfFile}`} pageNumber={1} startsFrom={this.props.startsFrom} />;
+      contents = <PDF pdfFile={assetUrl(`sources/${this.props.pdfFile}`)} pageNumber={1} startsFrom={this.props.startsFrom} />;
     } else {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
       contents        = (<div

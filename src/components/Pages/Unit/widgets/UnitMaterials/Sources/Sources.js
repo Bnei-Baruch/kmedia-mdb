@@ -4,6 +4,7 @@ import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
 
 import { CT_KITEI_MAKOR, MT_TEXT, RTL_LANGUAGES } from '../../../../../../helpers/consts';
 import { formatError, tracePath } from '../../../../../../helpers/utils';
+import { assetUrl } from '../../../../../../helpers/Api';
 import * as shapes from '../../../../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash/Splash';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
@@ -247,7 +248,7 @@ class Sources extends Component {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else if (isTaas && pdfFile) {
       contents =
-        <PDF pdfFile={`https://archive.kbb1.com/assets/sources/${selected}/${pdfFile}`} pageNumber={1} startsFrom={startsFrom} />;
+        <PDF pdfFile={assetUrl(`sources/${selected}/${pdfFile}`)} pageNumber={1} startsFrom={startsFrom} />;
     } else {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
 

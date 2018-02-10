@@ -24,13 +24,12 @@ class LibraryContentContainer extends Component {
     }).isRequired,
     t: PropTypes.func.isRequired,
     fetchContent: PropTypes.func.isRequired,
-    languageUI: PropTypes.string,
+    languageUI: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
     source: null,
     index: {},
-    languageUI: 'en',
   };
 
   state = {
