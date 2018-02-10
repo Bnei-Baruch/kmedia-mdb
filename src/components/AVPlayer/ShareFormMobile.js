@@ -45,54 +45,35 @@ class ShareFormMobile extends Component {
     return (
       <div>
         <AVShare shareUrl={url} />
-        <Form>
-          <Form.Group inline>
-            <Form.Field width={10}>
-              <Label>{url}</Label>
-            </Form.Field>
-            <Form.Field width={2}>
-              <CopyToClipboard text={this.state.url}>
-                <Button
-                  circular
-                  type="button"
-                  primary
-                  icon="chain" />
-              </CopyToClipboard>
-            </Form.Field>
-          </Form.Group>
-
-          <Form.Group inline width={6}>
-            <Form.Field width={3}>
-              <Button
-                content={this.props.t('player.buttons.select-start-position')}
-                onClick={this.setStart} />
-            </Form.Field>
-            <Form.Field width={3}>
-              <Input
-                fluid
-                value={start}
-                onChange={this.setStart} />
-            </Form.Field>
-          </Form.Group>
-
-          <Form.Group inline width={6}>
-            <Form.Field width={3}>
-              <Button
-                content={this.props.t('player.buttons.select-end-position')}
-                onClick={this.setEnd} />
-            </Form.Field>
-            <Form.Field width={3}>
-              <Input
-                fluid
-                value={end}
-                onChange={this.setEnd} />
-            </Form.Field>
-          </Form.Group>
-        </Form>
+        <div>
+          <Label>{url}</Label>
+          <CopyToClipboard text={this.state.url}>
+            <Button
+              circular
+              type="button"
+              primary
+              icon="chain" />
+          </CopyToClipboard>
+        </div>
+        <div>
+          <Button
+            content={this.props.t('player.buttons.select-start-position')}
+            onClick={this.setStart} />
+          <Input
+            value={start}
+            onChange={this.setStart} />
+        </div>
+        <div>
+          <Button
+            content={this.props.t('player.buttons.select-end-position')}
+            onClick={this.setEnd} />
+          <Input
+            value={end}
+            onChange={this.setEnd} />
+        </div>
       </div>
     );
   }
 }
-
 
 export default translate()(ShareFormMobile);

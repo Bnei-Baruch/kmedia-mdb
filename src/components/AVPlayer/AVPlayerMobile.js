@@ -231,6 +231,7 @@ class AVPlayerMobile extends PureComponent {
       medeaEl = <video
         ref={this.handleMediaHtmlInit}
         controls
+        playsInline
         src={item.src}
         poster={item.preImageUrl}
         autoPlay={autoPlay}
