@@ -146,7 +146,11 @@ class AVPlayerMobile extends PureComponent {
   };
 
   handleCanPlayThrough = () => {
-    const { wasCurrentTime, wasPlaying, sliceStart } = this.state;
+    const { wasCurrentTime, wasPlaying, sliceStart, isReady } = this.state;
+    if (isReady) {
+      return;
+    }
+
     if (wasCurrentTime) {
       this.media.currentTime = wasCurrentTime;
     } else if (sliceStart) {
@@ -155,7 +159,7 @@ class AVPlayerMobile extends PureComponent {
     /*** start to play for init upload on iphone */
     this.media.play();
     if (!wasPlaying) {
-      this.media.pause();
+      debounce(this.media.pause, 200);
     }
 
     this.setState({ wasCurrentTime: undefined, wasPlaying: undefined, isReady: true });
