@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import UAParser from 'ua-parser-js';
 
 const parser = new UAParser().getResult();
-const isMobileDevice = parser.device.type !== 'mobile';
+const isMobileDevice = parser.device.type === 'mobile';
 
 const MOBILE_WIDTH = 768;
 export default function withIsMobile(SomeComponent) {

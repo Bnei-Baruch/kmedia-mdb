@@ -20,6 +20,7 @@ class AVBox extends Component {
     unit: shapes.ContentUnit,
     t: PropTypes.func.isRequired,
     isMobile: PropTypes.bool.isRequired,
+    isMobileDevice: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -78,7 +79,7 @@ class AVBox extends Component {
   };
 
   render() {
-    const { t, isMobile }  = this.props;
+    const { t, isMobileDevice }  = this.props;
     const { playableItem } = this.state;
 
     if (!playableItem || !playableItem.src) {
@@ -92,6 +93,7 @@ class AVBox extends Component {
             className={classNames('avbox__player', {
               'avbox__player--is-audio': playableItem.mediaType === MT_AUDIO,
               'avbox__player--is-4x3': playableItem.unit.film_date < '2014',
+              'isMobileDevice': isMobileDevice
             })}
           >
             <div className="avbox__media-wrapper">
