@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
 
-import { BS_TAAS_PARTS, CT_KITEI_MAKOR, MT_TEXT, RTL_LANGUAGES } from '../../../../../../helpers/consts';
+import { CT_KITEI_MAKOR, MT_TEXT, RTL_LANGUAGES } from '../../../../../../helpers/consts';
 import { formatError, tracePath } from '../../../../../../helpers/utils';
 import * as shapes from '../../../../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash/Splash';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
-import PDF from '../../../../../shared/PDF';
+import PDF from '../../../../../shared/PDF/PDF';
 
 class Sources extends Component {
   static propTypes = {
@@ -139,13 +139,6 @@ class Sources extends Component {
     return !key ? null : derivedUnits[key].files.filter(f => f.type === MT_TEXT);
   };
 
-  isTaas = source => (BS_TAAS_PARTS.findIndex(a => a.id === source) !== -1);
-
-  startsFrom = (source) => {
-    const taas = BS_TAAS_PARTS.find(a => a.id === source);
-    return (taas ? taas.startsFrom : null);
-  };
-
   checkIsMakor = (options, selected) => {
     const val = options.find(o => o.value === selected);
     return val && val.type === CT_KITEI_MAKOR;
@@ -224,8 +217,8 @@ class Sources extends Component {
       return <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
     }
 
-    const isTaas     = this.isTaas(selected);
-    const startsFrom = this.startsFrom(selected);
+    const isTaas     = PDF.isTaas(selected);
+    const startsFrom = PDF.startsFrom(selected);
     let pdfFile;
 
     if (isTaas && indexMap[selected] && indexMap[selected].data) {

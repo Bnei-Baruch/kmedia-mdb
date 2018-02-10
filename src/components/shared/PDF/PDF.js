@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Document, Page } from 'react-pdf/build/entry.webpack';
 import throttle from 'lodash.throttle';
-import { Form, Icon, Input, Menu } from 'semantic-ui-react';
+
+import PDFMenu from './PDFMenu';
+import { BS_TAAS_PARTS } from '../../../helpers/consts';
 
 class PDF extends Component {
   static propTypes = {
@@ -13,8 +15,16 @@ class PDF extends Component {
 
   static defaultProps = {};
 
+  static isTaas = source => (BS_TAAS_PARTS.findIndex(a => a.id === source) !== -1);
+
+  static startsFrom = (source) => {
+    const taas = BS_TAAS_PARTS.find(a => a.id === source);
+    return (taas ? taas.startsFrom : null);
+  };
+
   state = {
     numPages: null,
+    inputError: false,
     pageNumber: this.props.pageNumber + this.props.startsFrom + -1,
     width: null,
     inputValue: 0
@@ -40,21 +50,6 @@ class PDF extends Component {
     this.setState({ inputValue: pageNo });
   });
 
-  firstPage = () => this.setPage(this.props.startsFrom);
-
-  prevPage = () => {
-    const page = this.state.pageNumber - 1;
-    this.setPage(page > this.props.startsFrom ? page : this.props.startsFrom);
-  };
-
-  nextPage = () => {
-    const page = this.state.pageNumber + 1;
-    const last = this.state.numPages + this.props.startsFrom + -1;
-    this.setPage(page < last ? page : last);
-  };
-
-  lastPage = () => this.setPage(this.state.numPages + this.props.startsFrom + -1);
-
   throttledSetDivSize = () => throttle(this.setDivSize, 500);
 
   restoreError = () => setTimeout(() => this.setState({ inputError: false }), 1000);
@@ -79,16 +74,8 @@ class PDF extends Component {
     return true;
   }
 
-  // this.setState({ pageNumber: parsed, inputError: false });
   handleChange = (e, { value }) => {
     this.setState({ inputValue: value });
-  };
-
-  handleSubmit = () => {
-    const value = Number.parseInt(this.state.inputValue, 10);
-    if (this.validateValue(value)) {
-      this.setPage(value);
-    }
   };
 
   render() {
@@ -97,20 +84,16 @@ class PDF extends Component {
 
     return (
       <div id="pdfWrapper">
-        <Menu compact className="taas-pagination-menu" color="grey">
-          <Menu.Item onClick={this.firstPage}>{startsFrom} &laquo;</Menu.Item>
-          <Menu.Item onClick={this.prevPage}>&lsaquo;</Menu.Item>
-          <Form onSubmit={this.handleSubmit}>
-            <Input
-              icon={<Icon name="search" circular />}
-              value={this.state.inputValue}
-              error={this.state.inputError}
-              onChange={this.handleChange}
-            />
-          </Form>
-          <Menu.Item onClick={this.nextPage}>&rsaquo;</Menu.Item>
-          <Menu.Item onClick={this.lastPage}>&raquo; {numPages + startsFrom + -1}</Menu.Item>
-        </Menu>
+        <PDFMenu
+          numPages={numPages}
+          pageNumber={pageNumber}
+          startsFrom={startsFrom}
+          inputValue={this.state.inputValue}
+          inputError={this.state.inputError}
+          handleChange={this.handleChange}
+          validateValue={this.validateValue}
+          setPage={this.setPage}
+        />
         <div style={{ direction: 'ltr' }}>
           <Document
             file={this.props.pdfFile}
