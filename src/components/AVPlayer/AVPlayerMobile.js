@@ -150,12 +150,19 @@ class AVPlayerMobile extends PureComponent {
 
   initEventListeners = (el) => {
     el.onplay         = this.updateMedia;
-    el.onpause        = this.updateMedia;
+    el.onpause        = this.handlePause;
     el.onerror        = this.onError;
     el.ontimeupdate   = this.handleTimeUpdate;
     el.onvolumechange = debounce(media => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, this.media.volume), 200);
   };
 
+  handlePause      = () => {
+    if (Math.abs(this.media.currentTime - this.media.duration) < 0.1 && this.props.onFinish) {
+      this.props.onFinish();
+    } else {
+      this.updateMedia();
+    }
+  };
   handleTimeUpdate = (timeData) => {
     const { mode, sliceEnd } = this.state;
     const time               = timeData.currentTarget.currentTime;
@@ -206,8 +213,8 @@ class AVPlayerMobile extends PureComponent {
             hasPrev,
             onPrev,
             onNext,
-          }                     = this.props;
-    let { error, errorReason, isSliceMode} = this.state;
+          }                                 = this.props;
+    let { error, errorReason, isSliceMode } = this.state;
 
     const isVideo       = item.mediaType === MT_VIDEO;
     const isAudio       = item.mediaType === MT_AUDIO;
