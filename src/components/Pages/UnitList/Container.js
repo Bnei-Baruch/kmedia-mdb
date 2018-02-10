@@ -59,17 +59,9 @@ export class UnitListContainer extends withPagination {
     if (nextProps.location.search !== this.props.location.search &&
        !nextProps.location.search){
       this.clearAllFilters(nextProps.namespace);
+    }
 
-      if (nextProps.pageSize !== this.props.pageSize){
-        this.setPage(nextProps,1);
-      }
-      else{
-        this.askForData(nextProps);
-      }
-    }
-    else{
-      super.componentWillReceiveProps(nextProps);
-    }
+    super.componentWillReceiveProps(nextProps);
   }
 
   //clear all filters when location's search is cleared by Menu click
