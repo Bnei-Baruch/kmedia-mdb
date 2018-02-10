@@ -260,7 +260,7 @@ class Sources extends Component {
       <div>
         <Grid stackable>
           <Grid.Row>
-            <Grid.Column width={12}>
+            <Grid.Column width={16 - languages.length}>
               <Dropdown
                 fluid
                 selection
@@ -273,7 +273,7 @@ class Sources extends Component {
             </Grid.Column>
             {
               languages.length > 0 ?
-                <Grid.Column width={4} textAlign="right">
+                <Grid.Column width={languages.length} textAlign="right">
                   <ButtonsLanguageSelector
                     languages={languages}
                     defaultValue={language}
