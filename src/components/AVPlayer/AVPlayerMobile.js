@@ -130,12 +130,23 @@ class AVPlayerMobile extends PureComponent {
     if (!el || this.media) {
       return;
     }
-    const { wasCurrentTime, wasPlaying, sliceStart } = this.state;
-    this.media                                       = el;
+    this.media = el;
     this.initEventListeners(el);
 
     this.activatePersistence();
+  };
 
+  initEventListeners = (el) => {
+    el.onplay           = this.updateMedia;
+    el.onpause          = this.handlePause;
+    el.onerror          = this.onError;
+    el.ontimeupdate     = this.handleTimeUpdate;
+    el.onvolumechange   = debounce(media => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, this.media.volume), 200);
+    el.oncanplaythrough = this.handleCanPlayThrough;
+  };
+
+  handleCanPlayThrough = () => {
+    const { wasCurrentTime, wasPlaying, sliceStart } = this.state;
     if (wasCurrentTime) {
       this.media.currentTime = wasCurrentTime;
     } else if (sliceStart) {
@@ -146,14 +157,6 @@ class AVPlayerMobile extends PureComponent {
     }
 
     this.setState({ wasCurrentTime: undefined, wasPlaying: undefined, isReady: true });
-  };
-
-  initEventListeners = (el) => {
-    el.onplay         = this.updateMedia;
-    el.onpause        = this.handlePause;
-    el.onerror        = this.onError;
-    el.ontimeupdate   = this.handleTimeUpdate;
-    el.onvolumechange = debounce(media => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, this.media.volume), 200);
   };
 
   handlePause      = () => {
