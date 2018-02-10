@@ -1,34 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Container, Grid, Header, Menu } from 'semantic-ui-react';
-
-import { EVENT_TYPES, TOPICS_FOR_DISPLAY } from '../../helpers/consts';
+import { Container, Grid, Header } from 'semantic-ui-react';
 import { selectors as tags } from '../../redux/modules/tags';
-import Link from '../Language/MultiLanguageLink';
 
 const Footer = (props) => {
   const { t } = props;
   const year  = new Date().getFullYear();
-
-  const renderEvents = () => EVENT_TYPES.map(x => (
-    <Menu.Item
-      key={x}
-      name={t(`constants.content-types.${x}`)}
-      as={Link}
-      to={{ pathname: '/events', search: `eventType=${x}` }}
-    />));
-
-  const renderTopics = () => TOPICS_FOR_DISPLAY.map((x) => {
-    const tag = props.tagById(x);
-    return (
-      <Menu.Item
-        key={x}
-        name={tag ? tag.label : x}
-        as={Link}
-        to={{ pathname: `/topics/${x}` }}
-      />);
-  });
 
   return (
     <div className="layout__footer">
