@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sourceSelectors } from '../../../redux/modules/sources';
 import * as shapes from '../../shapes';
+import { BS_TAAS_PARTS, } from '../../../helpers/consts';
 import Library from './Library';
 
 class LibraryContentContainer extends Component {
@@ -29,10 +30,10 @@ class LibraryContentContainer extends Component {
   static defaultProps = {
     source: null,
     index: {},
+    languageUI: 'en',
   };
 
   state = {
-    source: null,
     languages: [],
     language: null,
   };
@@ -72,25 +73,51 @@ class LibraryContentContainer extends Component {
       const { source } = nextProps;
 
       if (!isEmpty(source)) {
-        const name = data[language].html;
-        this.props.fetchContent(source, name);
+        this.fetchContent(source, data[language]);
       }
     }
   };
 
   handleLanguageChanged = (e, language) => {
-    const { index: { data }, source, fetchContent } = this.props;
+    const { index: { data }, source } = this.props;
     this.setState({ language });
-    const name = data[language].html;
-    fetchContent(source, name);
+    this.fetchContent(source, data[language]);
+  };
+
+  isTaas     = source => (BS_TAAS_PARTS.findIndex(a => a.id === source) !== -1);
+  startsFrom = (source) => {
+    const taas = BS_TAAS_PARTS.find(a => a.id === source);
+    return (taas ? taas.startsFrom : null);
+  };
+
+  fetchContent = (source, data) => {
+    // In case of TAS we prefer PDF, otherwise HTML
+    let name = data.html;
+    if (data.pdf && this.isTaas(source)) {
+      name = data.pdf;
+    }
+
+    this.props.fetchContent(source, name);
   };
 
   render() {
-    const { content, index, t, }  = this.props;
-    const { languages, language } = this.state;
+    const { content, index, source, t, } = this.props;
+    const { languages, language }        = this.state;
+    let file;
+    if (index && index.data) {
+      const data = index.data[language];
+      let name   = data.html;
+      if (data.pdf && this.isTaas(source)) {
+        name = data.pdf;
+        file = `${source}/${name}`;
+      }
+    }
 
     return (
       <Library
+        pdfFile={file}
+        isTaas={this.isTaas(source)}
+        startsFrom={this.startsFrom(source)}
         content={index && index.data ? content : {}}
         language={language}
         languages={languages}
