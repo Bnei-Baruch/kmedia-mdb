@@ -152,8 +152,10 @@ class AVPlayerMobile extends PureComponent {
     } else if (sliceStart) {
       this.media.currentTime = sliceStart;
     }
-    if (wasPlaying) {
-      this.media.play();
+    /*** start to play for init upload on iphone */
+    this.media.play();
+    if (!wasPlaying) {
+      this.media.pause();
     }
 
     this.setState({ wasCurrentTime: undefined, wasPlaying: undefined, isReady: true });
