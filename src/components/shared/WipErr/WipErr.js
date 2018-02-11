@@ -10,23 +10,14 @@ const WipErr = (props) => {
 
   if (err) {
     if (err.response && err.response.status === 404) {
-      return (<FrownSplash
-        text={t('messages.not-found')}
-        subtext={t('messages.not-found-subtext')}
-      />);
+      return <FrownSplash text={t('messages.not-found')} subtext={t('messages.not-found-subtext')} />;
     }
 
-    return (<ErrorSplash
-      text={t('messages.server-error')}
-      subtext={formatError(err)}
-    />);
+    return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
   }
 
   if (wip) {
-    return (<LoadingSplash
-      text={t('messages.loading')}
-      subtext={t('messages.loading-subtext')}
-    />);
+    return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
   }
 
   return null;
