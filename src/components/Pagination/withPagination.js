@@ -24,8 +24,7 @@ class withPagination extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.language !== this.props.language ||
       nextProps.namespace !== this.props.namespace) {
-      const pageNo = withPagination.getPageFromLocation(nextProps.location);
-      this.setPage(nextProps, pageNo);
+      this.askForData(nextProps);
     }
 
     if (nextProps.pageSize !== this.props.pageSize) {
@@ -43,7 +42,11 @@ class withPagination extends React.Component {
     fetchList(namespace, page || pageNo, { ...params, ...this.extraFetchParams(), pageSize });
   }
 
-  extraFetchParams = () => ({});
+  // eslint-disable-next-line class-methods-use-this
+  extraFetchParams() {
+    // this is overridden in subclasses. Try not to modify...
+    return {};
+  }
 }
 
 export default withPagination;
