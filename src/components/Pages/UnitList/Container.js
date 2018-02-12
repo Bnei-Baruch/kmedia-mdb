@@ -57,8 +57,9 @@ export class UnitListContainer extends withPagination {
   componentWillReceiveProps(nextProps) {
     // clear all filters when location's search is cleared by Menu click
     if (nextProps.location.search !== this.props.location.search &&
-       !nextProps.location.search) {
+      !nextProps.location.search) {
       nextProps.resetNamespace(nextProps.namespace);
+      this.handleFiltersChanged();
     }
 
     super.componentWillReceiveProps(nextProps);
