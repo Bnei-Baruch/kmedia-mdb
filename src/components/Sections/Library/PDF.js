@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Document, Page } from 'react-pdf/build/entry.webpack';
-import throttle from 'lodash.throttle';
+import throttle from 'lodash/throttle';
 import { Form, Header, Icon, Input, Menu } from 'semantic-ui-react';
 
 class PDF extends Component {
