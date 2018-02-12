@@ -17,6 +17,7 @@ import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 class SearchResults extends Component {
   static propTypes = {
     results: PropTypes.object,
+    cMap: PropTypes.objectOf(shapes.Collection),
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
     pageNo: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
@@ -30,6 +31,7 @@ class SearchResults extends Component {
 
   static defaultProps = {
     results: null,
+    cMap: {},
     cuMap: {},
     wip: false,
     err: null,
@@ -42,17 +44,9 @@ class SearchResults extends Component {
     return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop]) }} />;
   };
 
-  renderHit = (hit) => {
-    // console.log('hit', hit);
-    const { cuMap, t }                                               = this.props;
+  renderContentUnit = (cu, hit) => {
+    const { t }                                                      = this.props;
     const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
-    const cu                                                         = cuMap[mdbUid];
-
-    // maybe content_units are still loading ?
-    // maybe stale data in elasticsearch ?
-    if (!cu) {
-      return null;
-    }
 
     const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || cu.name;
     const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
@@ -100,7 +94,6 @@ class SearchResults extends Component {
               <small>{formatDuration(cu.duration)}</small> :
               null
           }
-
           {snippet || null}
         </Table.Cell>
         <Table.Cell collapsing textAlign="right">
@@ -108,10 +101,73 @@ class SearchResults extends Component {
         </Table.Cell>
       </Table.Row>
     );
+  }
+
+  renderCollection = (c, hit) => {
+    const { t }                                                      = this.props;
+    const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
+
+    const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || c.name;
+    const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
+    const snippet     = (
+      <div className="search__snippet">
+        {
+          description ?
+            <div>
+              <strong>{t('search.result.description')}: </strong>
+              {description}
+            </div> :
+            null
+        }
+      </div>);
+
+    let startDate = '';
+    if (c.start_date) {
+      startDate = t('values.date', { date: new Date(c.start_date) });
+    }
+
+    return (
+      <Table.Row key={mdbUid} verticalAlign="top">
+        <Table.Cell collapsing singleLine width={1}>
+          <strong>{startDate}</strong>
+        </Table.Cell>
+        <Table.Cell collapsing singleLine>
+          <Label size="tiny">{t(`constants.content-types.${c.content_type}`)}</Label>
+        </Table.Cell>
+        <Table.Cell>
+          <Link className="search__link" to={canonicalLink(c || { id: mdbUid, content_type: c.content_type })}>
+            {name}
+          </Link>
+          &nbsp;&nbsp;
+          {snippet || null}
+        </Table.Cell>
+        <Table.Cell collapsing textAlign="right">
+          {score}
+        </Table.Cell>
+      </Table.Row>
+    );
+  }
+
+  renderHit = (hit) => {
+    // console.log('hit', hit);
+    const { cMap, cuMap }               = this.props;
+    const { _source: { mdb_uid: mdbUid } } = hit;
+    const cu                               = cuMap[mdbUid];
+    const c                                = cMap[mdbUid];
+
+    if (cu) {
+      return this.renderContentUnit(cu, hit);
+    } else if (c) {
+      return this.renderCollection(c, hit)
+    } else {
+      // maybe content_units are still loading ?
+      // maybe stale data in elasticsearch ?
+      return null;
+    }
   };
 
   render() {
-    const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange, cuMap } = this.props;
+    const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange, cMap, cuMap } = this.props;
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
@@ -130,8 +186,9 @@ class SearchResults extends Component {
     }
 
     const { /* took, */ hits: { total, hits } } = results;
+
     let content;
-    if (total === 0 || isEmpty(cuMap)) {
+    if (total === 0 || (isEmpty(cMap) && isEmpty(cuMap))) {
       content = (
         <div>
           <Header as="h1" content={t('search.results.title')} />
