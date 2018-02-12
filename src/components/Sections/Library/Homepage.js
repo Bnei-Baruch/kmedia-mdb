@@ -13,6 +13,8 @@ import portraitBS from '../../../images/portrait_bs.png';
 import portraitRB from '../../../images/portrait_rb.png';
 import portraitML from '../../../images/portrait_ml.png';
 
+import { isEmpty } from '../../../helpers/utils';
+
 class Homepage extends Component {
   static propTypes = {
     roots: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -24,14 +26,18 @@ class Homepage extends Component {
     const { roots, getSourceById } = this.props;
     const placeholders             = [portraitBS, portraitRB, portraitML];
     let placeholderIndex           = 0;
-    const kabbalists               = roots.map(k => (
+    
+    const kabbalists               = roots.map(k => {
+      { const author = getSourceById(k);
+        return isEmpty(author.children) ? null :
         <Kabbalist
           key={k}
-          author={getSourceById(k)}
+          author={author}
           getSourceById={getSourceById}
           placeholder={placeholders[placeholderIndex++]}
         />
-      )
+      }
+    }
     );
 
     return (
@@ -39,7 +45,7 @@ class Homepage extends Component {
         <SectionHeader section="sources-library" />
         <Divider fitted />
         <Container className="padded">
-          <Table basic="very" sortable className="index-list">
+          <Table basic="very"  className="index-list sources__authors">
             <Table.Body>
               {kabbalists}
             </Table.Body>

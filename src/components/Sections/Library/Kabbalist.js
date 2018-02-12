@@ -33,13 +33,13 @@ class Kabbalist extends Component {
     }
 
     return (
-      <Table.Row verticalAlign='top'>
+      <Table.Row  verticalAlign='top'>
         <Table.Cell collapsing width={2}>
-          <Image fluid src={placeholder} />
+          {placeholder ? <Image src={placeholder} /> : null}
         </Table.Cell>
         <Table.Cell>
           <Header size='small'>{displayName}</Header>
-          <List bulleted horizontal>
+          <List bulleted className='sources__list'>
             {volumes && volumes.map(x => (this.renderBook(getSourceById(x))))}
           </List>
         </Table.Cell>
