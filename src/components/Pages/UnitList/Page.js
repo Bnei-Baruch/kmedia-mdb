@@ -11,12 +11,12 @@ import filterComponents from '../../Filters/components';
 import WipErr from '../../shared/WipErr/WipErr';
 
 const filters = {
-  'lessons': [
+  lessons: [
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'sources-filter', component: filterComponents.SourcesFilter },
     { name: 'date-filter', component: filterComponents.DateFilter },
   ],
-  'programs': [
+  programs: [
     { name: 'programs-filter', component: filterComponents.ProgramsFilter },
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'sources-filter', component: filterComponents.SourcesFilter },
@@ -26,7 +26,7 @@ const filters = {
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'date-filter', component: filterComponents.DateFilter },
   ],
-  'lectures': [
+  lectures: [
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'sources-filter', component: filterComponents.SourcesFilter },
     { name: 'date-filter', component: filterComponents.DateFilter },
@@ -42,7 +42,7 @@ const filters = {
   'events-meals': [
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
-  'publications': [
+  publications: [
     { name: 'publishers-filter', component: filterComponents.PublishersFilter },
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Header, Image, Label } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
-import Link from '../../Language/MultiLanguageLink';
 
 class Promoted extends Component {
 

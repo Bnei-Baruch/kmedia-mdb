@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import { replace as routerReplace } from 'react-router-redux';
 import { translate } from 'react-i18next';
-import { Button, Container, Grid, Header, } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Icon, Modal } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
@@ -48,6 +48,7 @@ class LibraryContainer extends Component {
 
   state = {
     lastLoadedId: null,
+    modalOpen: false,
   };
 
   componentDidMount() {
@@ -111,6 +112,9 @@ class LibraryContainer extends Component {
 
     return getPathByID(sourceId);
   };
+
+  handleOpenModal  = () => this.setState({ modalOpen: true });
+  handleCloseModal = () => this.setState({ modalOpen: false });
 
   firstLeafId = (sourceId) => {
     const { getSourceById } = this.props;
@@ -204,6 +208,28 @@ class LibraryContainer extends Component {
       );
     }
 
+    const header = this.header(sourceId, fullPath);
+
+    const modal = (
+      <Modal
+        closeIcon
+        open={this.state.modalOpen}
+        trigger={
+          <Button.Group basic size="tiny" floated="right">
+            <Button icon="expand" onClick={this.handleOpenModal} />
+          </Button.Group>}
+        onClose={this.handleCloseModal}
+      >
+        <Modal.Header>{header}</Modal.Header>
+        <Modal.Content>{content}</Modal.Content>
+        <Modal.Actions>
+          <Button color="blue" onClick={this.handleCloseModal}>
+            <Icon name="close" /> Close
+          </Button>
+        </Modal.Actions>
+      </Modal>
+    );
+
     return (
       <div className="source is-readble">
         <div className="layout__secondary-header">
@@ -215,14 +241,8 @@ class LibraryContainer extends Component {
                     {t('sources-library.toc')}
                   </Header>
                 </Grid.Column>
-                <Grid.Column width={6}>
-                  {this.header(sourceId, fullPath)}
-                </Grid.Column>
-                <Grid.Column width={2}>
-                  <Button.Group basic size="tiny" floated="right">
-                    <Button icon="expand" />
-                  </Button.Group>
-                </Grid.Column>
+                <Grid.Column width={6}>{header}</Grid.Column>
+                <Grid.Column width={2}>{modal}</Grid.Column>
               </Grid.Row>
             </Grid>
           </Container>

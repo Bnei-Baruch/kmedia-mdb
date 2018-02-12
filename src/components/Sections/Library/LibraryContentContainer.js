@@ -7,6 +7,7 @@ import { isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sourceSelectors } from '../../../redux/modules/sources';
 import * as shapes from '../../shapes';
 import Library from './Library';
+import PDF from '../../shared/PDF/PDF';
 
 class LibraryContentContainer extends Component {
   static propTypes = {
@@ -23,7 +24,7 @@ class LibraryContentContainer extends Component {
     }).isRequired,
     t: PropTypes.func.isRequired,
     fetchContent: PropTypes.func.isRequired,
-    languageUI: PropTypes.string,
+    languageUI: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -32,7 +33,6 @@ class LibraryContentContainer extends Component {
   };
 
   state = {
-    source: null,
     languages: [],
     language: null,
   };
@@ -61,6 +61,40 @@ class LibraryContentContainer extends Component {
     return { languages, language };
   };
 
+  getTaasPdf = () => {
+    const { index, source, } = this.props;
+    const { language }       = this.state;
+
+    const isTaas     = PDF.isTaas(source);
+    const startsFrom = PDF.startsFrom(source);
+    let pdfFile;
+
+    if (isTaas && index && index.data) {
+      const data = index.data[language];
+      if (data && data.pdf) {
+        pdfFile = `${source}/${data.pdf}`;
+      }
+    }
+
+    return { isTaas, startsFrom, pdfFile };
+  };
+
+  handleLanguageChanged = (e, language) => {
+    const { index: { data }, source } = this.props;
+    this.setState({ language });
+    this.fetchContent(source, data[language]);
+  };
+
+  fetchContent = (source, data) => {
+    // In case of TAS we prefer PDF, otherwise HTML
+    let name = data.html;
+    if (data.pdf && PDF.isTaas(source)) {
+      name = data.pdf;
+    }
+
+    this.props.fetchContent(source, name);
+  };
+
   myReplaceState = (nextProps) => {
     const data                    = nextProps.index && nextProps.index.data;
     const { languageUI }          = nextProps;
@@ -72,25 +106,21 @@ class LibraryContentContainer extends Component {
       const { source } = nextProps;
 
       if (!isEmpty(source)) {
-        const name = data[language].html;
-        this.props.fetchContent(source, name);
+        this.fetchContent(source, data[language]);
       }
     }
   };
 
-  handleLanguageChanged = (e, language) => {
-    const { index: { data }, source, fetchContent } = this.props;
-    this.setState({ language });
-    const name = data[language].html;
-    fetchContent(source, name);
-  };
-
   render() {
     const { content, index, t, }  = this.props;
-    const { languages, language } = this.state;
+    const { languages, language }         = this.state;
+    const { isTaas, startsFrom, pdfFile } = this.getTaasPdf();
 
     return (
       <Library
+        isTaas={isTaas}
+        pdfFile={pdfFile}
+        startsFrom={startsFrom}
         content={index && index.data ? content : {}}
         language={language}
         languages={languages}

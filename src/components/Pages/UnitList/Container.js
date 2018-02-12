@@ -13,7 +13,6 @@ import * as shapes from '../../shapes';
 import Page from './Page';
 
 export class UnitListContainer extends withPagination {
-
   static propTypes = {
     namespace: PropTypes.string.isRequired,
     location: shapes.HistoryLocation.isRequired,
@@ -83,22 +82,12 @@ export class UnitListContainer extends withPagination {
   }
 
   handleFiltersHydrated() {
-    const p = this.getPageFromLocation(this.props.location);
+    const p = withPagination.getPageFromLocation(this.props.location);
     this.handlePageChanged(p);
   }
 
   render() {
-    const {
-            namespace,
-            items,
-            wip,
-            err,
-            pageNo,
-            total,
-            pageSize,
-            language,
-            renderUnit
-          } = this.props;
+    const { namespace, items, wip, err, pageNo, total, pageSize, language, renderUnit } = this.props;
 
     return (
       <Page
@@ -144,7 +133,7 @@ export const mapDispatch = dispatch => (
   }, dispatch)
 );
 
-export const wrap = (WrappedComponent, ms=mapState, md=mapDispatch) =>
+export const wrap = (WrappedComponent, ms = mapState, md = mapDispatch) =>
   withRouter(connect(ms, md)(WrappedComponent));
 
 export default wrap(UnitListContainer);

@@ -52,7 +52,6 @@ class Layout extends Component {
   closeSidebar = () => this.setState({ sidebarActive: false });
 
   shouldShowSearch = (location) => {
-
     const parts = location.pathname.split('/').filter(x => {
       return (x !== '');
     });

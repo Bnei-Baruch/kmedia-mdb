@@ -248,6 +248,26 @@ export const NO_NAME = '☠ no name';
 // Sources
 export const BS_SHAMATI = 'qMUUn22b';
 export const BS_IGROT   = 'DVSS0xAR';
+export const BS_TAAS    = 'xtKmrbb9';
 export const RB_IGROT   = 'b8SHlrfH';
 export const MR_TORA    = 'bvA8ZB1w';
 export const RH_ZOHAR   = 'AwGBQX2L';
+
+export const BS_TAAS_PARTS = {
+  '9xNFLSSp': 1,
+  XlukqLH8: 37,
+  AerA1hNN: 101,
+  '1kDKQxJb': 209,
+  o5lXptLo: 291,
+  eNwJXy4s: 389,
+  ahipVtPu: 485,
+  Pscnn3pP: 599,
+  Lfu7W3CD: 731,
+  n03vXCJl: 865,
+  UGcGGSpP: 1011,
+  NpLQT0LX: 1127,
+  AUArdCkH: 1297,
+  tit6XNAo: 1493,
+  FaKUG7ru: 1687,
+  mW6eON0z: 1887,
+};
