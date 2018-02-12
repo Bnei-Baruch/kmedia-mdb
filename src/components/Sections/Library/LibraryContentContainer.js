@@ -106,14 +106,13 @@ class LibraryContentContainer extends Component {
       const { source } = nextProps;
 
       if (!isEmpty(source)) {
-        const name = data[language].html;
-        this.props.fetchContent(source, name);
+        this.fetchContent(source, data[language]);
       }
     }
   };
 
   render() {
-    const { content, index, t, }  = this.props;
+    const { content, index, t, }          = this.props;
     const { languages, language }         = this.state;
     const { isTaas, startsFrom, pdfFile } = this.getTaasPdf();
 
