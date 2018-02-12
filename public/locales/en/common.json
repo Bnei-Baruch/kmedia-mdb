@@ -73,7 +73,10 @@
       "all": "all",
       "lessons": "lessons",
       "programs": "programs",
-      "events": "events"
+      "lectures": "lectures",
+      "sources": "sources",
+      "events": "events",
+      "publications": "publications"
     }
   },
   "buttons": {

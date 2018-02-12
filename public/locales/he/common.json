@@ -72,7 +72,10 @@
       "all": "הכל",
       "lessons": "שיעורים",
       "programs": "תוכניות",
-      "events": "אירועים"
+      "lectures": "הרצאות ושיעורים",
+      "sources": "מקורות",
+      "events": "אירועים",
+      "publications": "פרסומים"
     }
   },
   "buttons": {
