@@ -45,30 +45,30 @@ const editExistingFilter = createAction(EDIT_EXISTING_FILTER, (namespace, name, 
   index
 }));
 
-const addFilterValue    = createAction(ADD_FILTER_VALUE, (namespace, name, value) => ({
+const addFilterValue          = createAction(ADD_FILTER_VALUE, (namespace, name, value) => ({
   namespace,
   name,
   value
 }));
-const setFilterValue    = createAction(SET_FILTER_VALUE, (namespace, name, value, index) => ({
+const setFilterValue          = createAction(SET_FILTER_VALUE, (namespace, name, value, index) => ({
   namespace,
   name,
   value,
   index
 }));
-const removeFilterValue = createAction(REMOVE_FILTER_VALUE, (namespace, name, value) => ({
+const removeFilterValue       = createAction(REMOVE_FILTER_VALUE, (namespace, name, value) => ({
   namespace,
   name,
   value
 }));
-const resetFilter       = createAction(RESET_FILTER, (namespace, name) => ({
+const resetFilter             = createAction(RESET_FILTER, (namespace, name) => ({
   namespace,
   name
 }));
 const resetNamespace          = createAction(RESET_NAMESPACE, namespace => ({ namespace }));
-const setHydratedFilterValues = createAction(SET_HYDRATED_FILTER_VALUES, (namespace, filters) => ({ 
-  namespace, 
-  filters 
+const setHydratedFilterValues = createAction(SET_HYDRATED_FILTER_VALUES, (namespace, filters) => ({
+  namespace,
+  filters
 }));
 const hydrateFilters          = createAction(HYDRATE_FILTERS, namespace => ({ namespace }));
 const filtersHydrated         = createAction(FILTERS_HYDRATED, namespace => ({ namespace }));
@@ -207,22 +207,22 @@ const $$removeFilterValue = (state, action) => {
 
 const $$resetFilter = (state, action) => {
   const { namespace, name } = action.payload;
-
-  return setFilterState(state, namespace, name, (filterState) => {
-    return { values: [] };
-  });
+  return setFilterState(state, namespace, name, () => ({ values: [] }));
 };
 
 const $$resetNamespace = (state, action) => {
   const { namespace } = action.payload;
 
-  //remove the namespace from state if it exists there
-  if (state && state[namespace]){
-    state[namespace] = {};
+  // remove the namespace from state if it exists there
+  if (state && state[namespace]) {
+    return {
+      ...state,
+      [namespace]: {},
+    };
   }
 
   return state;
-}
+};
 
 const $$setHydratedFilterValues = (state, action) => {
   const { namespace, filters } = action.payload;
@@ -309,7 +309,7 @@ const getLastFilterValue = (state, namespace, name) => {
     state[namespace][name].values &&
     state[namespace][name].values.length > 0
   ) {
-    const values = state[namespace][name].values;
+    const { values } = state[namespace][name];
     return values[values.length - 1];
   }
 
