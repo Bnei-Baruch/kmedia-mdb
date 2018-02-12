@@ -24,28 +24,28 @@ class Homepage extends Component {
 
   render() {
     const { roots, getSourceById } = this.props;
-    const placeholders             = [portraitBS, portraitRB, portraitML];
-    let placeholderIndex           = 0;
-    
-    const kabbalists               = roots.map(k => {
-      { const author = getSourceById(k);
-        return isEmpty(author.children) ? null :
+    const portraits             = [portraitBS, portraitRB, portraitML];
+    let portraitIndex           = 0;
+
+    const kabbalists = roots.map((k) => {
+      const author = getSourceById(k);
+
+      return isEmpty(author.children) ?
+        null :
         <Kabbalist
           key={k}
           author={author}
           getSourceById={getSourceById}
-          placeholder={placeholders[placeholderIndex++]}
-        />
-      }
-    }
-    );
+          portrait={portraits[portraitIndex++]}
+        />;
+    });
 
     return (
       <div>
         <SectionHeader section="sources-library" />
         <Divider fitted />
         <Container className="padded">
-          <Table basic="very"  className="index-list sources__authors">
+          <Table basic="very" className="index-list sources__authors">
             <Table.Body>
               {kabbalists}
             </Table.Body>

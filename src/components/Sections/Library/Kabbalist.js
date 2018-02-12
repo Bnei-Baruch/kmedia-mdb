@@ -6,10 +6,14 @@ import * as shapes from '../../shapes';
 import NavLink from '../../Language/MultiLanguageNavLink';
 
 class Kabbalist extends Component {
-
   static propTypes = {
     getSourceById: PropTypes.func.isRequired,
     author: shapes.Author.isRequired,
+    portrait: PropTypes.string,
+  };
+
+  static defaultProps = {
+    portrait: '',
   };
 
   renderBook = (book) => {
@@ -24,7 +28,7 @@ class Kabbalist extends Component {
   };
 
   render() {
-    const { author, getSourceById, placeholder }           = this.props;
+    const { author, getSourceById, portrait }              = this.props;
     const { name, full_name: fullName, children: volumes } = author;
 
     let displayName = fullName || name;
@@ -33,14 +37,18 @@ class Kabbalist extends Component {
     }
 
     return (
-      <Table.Row  verticalAlign='top'>
+      <Table.Row verticalAlign="top">
         <Table.Cell collapsing width={2}>
-          {placeholder ? <Image src={placeholder} /> : null}
+          {portrait ? <Image src={portrait} /> : null}
         </Table.Cell>
         <Table.Cell>
-          <Header size='small'>{displayName}</Header>
-          <List bulleted className='sources__list'>
-            {volumes && volumes.map(x => (this.renderBook(getSourceById(x))))}
+          <Header size="small">{displayName}</Header>
+          <List bulleted className="sources__list">
+            {
+              volumes ?
+                volumes.map(x => (this.renderBook(getSourceById(x)))) :
+                null
+            }
           </List>
         </Table.Cell>
       </Table.Row>
