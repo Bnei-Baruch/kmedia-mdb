@@ -8,7 +8,7 @@ import { Flag, Header, Icon, Menu, Search } from 'semantic-ui-react';
 import { ALL_LANGUAGES, FLAG_TO_LANGUAGE } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
-import OmniBox from '../Search/OmniBox';
+import WrappedOmniBox from '../Search/OmniBox';
 import GAPageView from './GAPageView/GAPageView';
 import Routes from './Routes';
 import MenuItems from './MenuItems';
@@ -51,6 +51,7 @@ class Layout extends Component {
   closeSidebar = () => this.setState({ sidebarActive: false });
 
   shouldShowSearch = (location) => {
+    // we don't show the search on home page
     const parts = location.pathname.split('/').filter(x => (x !== ''));
     if (parts.length === 0) {
       return false;
@@ -78,9 +79,7 @@ class Layout extends Component {
           <span className="mobile-only">mobile</span>
           </div>
         */}
-        {/* Added the width 100vw to better support mobile, please fix as needed */}
         <div className="layout__header">
-          {/* Added the width 100vw to better support mobile, please fix as needed */}
           <Menu inverted borderless size="huge" color="blue">
             <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.toggleSidebar}>
               <Icon name="sidebar" />
@@ -102,7 +101,7 @@ class Layout extends Component {
             <Menu.Item className="layout__search mobile-hidden">
               {
                 showSearch ?
-                  <OmniBox t={t} location={location} /> :
+                  <WrappedOmniBox t={t} location={location} /> :
                   null
               }
             </Menu.Item>
@@ -137,12 +136,15 @@ class Layout extends Component {
               </Header>
             </Menu.Item>
             <Menu.Item className="mobile-only layout__sidebar-search">
+              <WrappedOmniBox t={t} location={location} />
+              {/*
               <Search
                 className="search-omnibox"
                 fluid
                 icon={<Icon link name="search" onClick={this.handleIconClick} />}
                 size="mini"
               />
+              */}
             </Menu.Item>
           </Menu>
           <div className="layout__sidebar-menu">
