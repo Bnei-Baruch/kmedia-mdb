@@ -69,11 +69,11 @@
       "placeholder": "Выберите год"
     },
     "sections-filter": {
-      "label": "раздел",
-      "all": "все",
-      "lessons": "уроки",
-      "programs": "программы",
-      "events": "событие"
+      "label": "Раздел",
+      "all": "Все",
+      "lessons": "Уроки",
+      "programs": "Программы",
+      "events": "Событие"
     }
   },
   "buttons": {
