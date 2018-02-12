@@ -16,6 +16,7 @@ const RESET_FILTER               = 'Filters/RESET_FILTER';
 const SET_HYDRATED_FILTER_VALUES = 'Filters/SET_HYDRATED_FILTER_VALUES';
 const HYDRATE_FILTERS            = 'Filters/HYDRATE_FILTERS';
 const FILTERS_HYDRATED           = 'Filters/FILTERS_HYDRATED';
+const RESET_NAMESPACE            = 'Filters/RESET_NAMESPACE';
 
 export const types = {
   STOP_EDITING_FILTER,
@@ -27,6 +28,7 @@ export const types = {
   SET_FILTER_VALUE,
   REMOVE_FILTER_VALUE,
   RESET_FILTER,
+  RESET_NAMESPACE,
   SET_HYDRATED_FILTER_VALUES,
   HYDRATE_FILTERS,
   FILTERS_HYDRATED
@@ -43,31 +45,31 @@ const editExistingFilter = createAction(EDIT_EXISTING_FILTER, (namespace, name, 
   index
 }));
 
-const addFilterValue    = createAction(ADD_FILTER_VALUE, (namespace, name, value) => ({
+const addFilterValue          = createAction(ADD_FILTER_VALUE, (namespace, name, value) => ({
   namespace,
   name,
   value
 }));
-const setFilterValue    = createAction(SET_FILTER_VALUE, (namespace, name, value, index) => ({
+const setFilterValue          = createAction(SET_FILTER_VALUE, (namespace, name, value, index) => ({
   namespace,
   name,
   value,
   index
 }));
-const removeFilterValue = createAction(REMOVE_FILTER_VALUE, (namespace, name, value) => ({
+const removeFilterValue       = createAction(REMOVE_FILTER_VALUE, (namespace, name, value) => ({
   namespace,
   name,
   value
 }));
-const resetFilter       = createAction(RESET_FILTER, (namespace, name) => ({
+const resetFilter             = createAction(RESET_FILTER, (namespace, name) => ({
   namespace,
   name
 }));
-
-const setHydratedFilterValues = createAction(
-  SET_HYDRATED_FILTER_VALUES,
-  (namespace, filters) => ({ namespace, filters })
-);
+const resetNamespace          = createAction(RESET_NAMESPACE, namespace => ({ namespace }));
+const setHydratedFilterValues = createAction(SET_HYDRATED_FILTER_VALUES, (namespace, filters) => ({
+  namespace,
+  filters
+}));
 const hydrateFilters          = createAction(HYDRATE_FILTERS, namespace => ({ namespace }));
 const filtersHydrated         = createAction(FILTERS_HYDRATED, namespace => ({ namespace }));
 
@@ -76,11 +78,11 @@ export const actions = {
   closeActiveFilter,
   editNewFilter,
   editExistingFilter,
-
   addFilterValue,
   setFilterValue,
   removeFilterValue,
   resetFilter,
+  resetNamespace,
   setHydratedFilterValues,
   hydrateFilters,
   filtersHydrated
@@ -205,10 +207,21 @@ const $$removeFilterValue = (state, action) => {
 
 const $$resetFilter = (state, action) => {
   const { namespace, name } = action.payload;
+  return setFilterState(state, namespace, name, () => ({ values: [] }));
+};
 
-  return setFilterState(state, namespace, name, (filterState) => {
-    return { values: [] };
-  });
+const $$resetNamespace = (state, action) => {
+  const { namespace } = action.payload;
+
+  // remove the namespace from state if it exists there
+  if (state && state[namespace]) {
+    return {
+      ...state,
+      [namespace]: {},
+    };
+  }
+
+  return state;
 };
 
 const $$setHydratedFilterValues = (state, action) => {
@@ -256,11 +269,11 @@ export const reducer = handleActions({
   [CLOSE_ACTIVE_FILTER]: $$closeActiveFilter,
   [EDIT_NEW_FILTER]: $$editNewFilter,
   [EDIT_EXISTING_FILTER]: $$editExistingFilter,
-
   [ADD_FILTER_VALUE]: $$addFilterValue,
   [SET_FILTER_VALUE]: $$setFilterValue,
   [REMOVE_FILTER_VALUE]: $$removeFilterValue,
   [RESET_FILTER]: $$resetFilter,
+  [RESET_NAMESPACE]: $$resetNamespace,
   [SET_HYDRATED_FILTER_VALUES]: $$setHydratedFilterValues,
   [HYDRATE_FILTERS]: $$hydrateFilters,
   [FILTERS_HYDRATED]: $$filtersHydrated
@@ -296,7 +309,7 @@ const getLastFilterValue = (state, namespace, name) => {
     state[namespace][name].values &&
     state[namespace][name].values.length > 0
   ) {
-    const values = state[namespace][name].values;
+    const { values } = state[namespace][name];
     return values[values.length - 1];
   }
 

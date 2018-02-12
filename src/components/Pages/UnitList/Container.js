@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as filters } from '../../../redux/modules/filters';
+import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
 import { actions as listsActions, selectors as lists } from '../../../redux/modules/lists';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import withPagination from '../../Pagination/withPagination';
@@ -28,6 +28,7 @@ export class UnitListContainer extends withPagination {
     setPage: PropTypes.func.isRequired,
     extraFetchParams: PropTypes.func,
     renderUnit: PropTypes.func.isRequired,
+    resetNamespace: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -51,6 +52,17 @@ export class UnitListContainer extends withPagination {
     if (this.props.isFiltersHydrated) {
       this.askForData(this.props);
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // clear all filters when location's search is cleared by Menu click
+    if (nextProps.location.search !== this.props.location.search &&
+      !nextProps.location.search) {
+      nextProps.resetNamespace(nextProps.namespace);
+      this.handleFiltersChanged();
+    }
+
+    super.componentWillReceiveProps(nextProps);
   }
 
   extraFetchParams() {
@@ -113,6 +125,7 @@ export const mapDispatch = dispatch => (
   bindActionCreators({
     fetchList: listsActions.fetchList,
     setPage: listsActions.setPage,
+    resetNamespace: filtersActions.resetNamespace,
   }, dispatch)
 );
 

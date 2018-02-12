@@ -64,6 +64,8 @@ export const GenericCollection = PropTypes.shape(MDBDenormalizedCollection);
 
 export const ContentUnit = PropTypes.shape(MDBBaseContentUnit);
 
+export const Collection = PropTypes.shape(MDBBaseCollection);
+
 export const LessonCollection = PropTypes.shape({
   ...MDBDenormalizedCollection,
   film_date: PropTypes.string.isRequired,

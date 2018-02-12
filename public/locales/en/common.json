@@ -69,11 +69,14 @@
       "placeholder": "Select a year"
     },
     "sections-filter": {
-      "label": "section",
-      "all": "all",
-      "lessons": "lessons",
-      "programs": "programs",
-      "events": "events"
+      "label": "Section",
+      "all": "All",
+      "lessons": "Lessons",
+      "programs": "Programs",
+      "lectures": "Lectures",
+      "sources": "Sources",
+      "events": "Events",
+      "publications": "Publications"
     }
   },
   "buttons": {

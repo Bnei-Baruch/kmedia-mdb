@@ -69,11 +69,14 @@
       "placeholder": "Выберите год"
     },
     "sections-filter": {
-      "label": "раздел",
-      "all": "все",
-      "lessons": "уроки",
-      "programs": "программы",
-      "events": "событие"
+      "label": "Раздел",
+      "all": "Все",
+      "lessons": "Уроки",
+      "programs": "Программы",
+      "lectures": "Уроки и Лекции",
+      "sources": "Каббалистические Первоисточники",
+      "events": "Событие",
+      "publications": "Публикации"
     }
   },
   "buttons": {
