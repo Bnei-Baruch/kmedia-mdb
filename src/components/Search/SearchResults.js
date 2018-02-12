@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Trans, translate } from 'react-i18next';
-import { Container, Divider, Header, Label, Table } from 'semantic-ui-react';
+import { Container, Divider, Label, Table } from 'semantic-ui-react';
 
 import { canonicalLink, formatDuration, isEmpty } from '../../helpers/utils';
 import { getQuery } from '../../helpers/url';
@@ -101,7 +101,7 @@ class SearchResults extends Component {
         </Table.Cell>
       </Table.Row>
     );
-  }
+  };
 
   renderCollection = (c, hit) => {
     const { t }                                                      = this.props;
@@ -146,11 +146,11 @@ class SearchResults extends Component {
         </Table.Cell>
       </Table.Row>
     );
-  }
+  };
 
   renderHit = (hit) => {
     // console.log('hit', hit);
-    const { cMap, cuMap }               = this.props;
+    const { cMap, cuMap }                  = this.props;
     const { _source: { mdb_uid: mdbUid } } = hit;
     const cu                               = cuMap[mdbUid];
     const c                                = cMap[mdbUid];
@@ -158,7 +158,7 @@ class SearchResults extends Component {
     if (cu) {
       return this.renderContentUnit(cu, hit);
     } else if (c) {
-      return this.renderCollection(c, hit)
+      return this.renderCollection(c, hit);
     } else {
       // maybe content_units are still loading ?
       // maybe stale data in elasticsearch ?
@@ -190,14 +190,10 @@ class SearchResults extends Component {
     let content;
     if (total === 0 || (isEmpty(cMap) && isEmpty(cuMap))) {
       content = (
-        <div>
-          <Header as="h1" content={t('search.results.title')} />
-          <div>
-            <Trans i18nKey="search.results.no-results">
-              Your search for <strong style={{ fontStyle: 'italic' }}>{{ query }}</strong> found no results.
-            </Trans>
-          </div>
-        </div>);
+        <Trans i18nKey="search.results.no-results">
+          Your search for <strong style={{ fontStyle: 'italic' }}>{{ query }}</strong> found no results.
+        </Trans>
+      );
     } else {
       content = (
         <div>
