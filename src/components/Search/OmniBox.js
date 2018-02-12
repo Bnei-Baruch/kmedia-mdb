@@ -184,7 +184,7 @@ export class OmniBox extends Component {
   renderInput() {
     return (
       <Input
-        style={{ width: '100%' }}
+
         onKeyDown={this.handleSearchKeyDown}
       />
     );

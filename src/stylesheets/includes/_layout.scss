@@ -36,17 +36,24 @@ $test: '400';
     top: 0;
     z-index: 999999;
   }
-
+  &__search {
+    flex: 1 0 auto!important;
+  }
   &__sidebar {
     background: #fff;
     bottom: 0;
     left: 0;
+    overflow: hidden;
     position: fixed;
     top: 0;
     transform: translate(-100%, 0);
     transition: transform .3s;
     width: $sidebar-width;
     z-index: 999999;
+
+    @include small-mobile {
+      width: 100%;
+    }
 
     &.is-active {
       transform: none;
@@ -72,6 +79,9 @@ $test: '400';
         border: 0;
         box-shadow: none !important;
       }
+    }
+    &-search {
+      flex: 1 0 auto!important;
     }
   }
 
@@ -106,21 +116,24 @@ $test: '400';
 }
 
 .logo {
+  flex: 0 1 auto!important;
   img {
     display: none !important;
   }
 
-  h2.header {
+  h1.header {
+    font-size: 1.71428571rem;
     margin-left: 0;
     margin-top: 0;
+    @include mobile {
+      font-size: 1.28571429rem!important;
+    }
   }
 }
 
+
+
 .content {
-  &__main {
-
-  }
-
   &__aside {
     &-unit {
       margin-bottom: 3em;
@@ -162,7 +175,7 @@ $test: '400';
       display: inline-block !important;
     }
 
-    h2.header {
+    h1.header {
       margin-left: 16px;
       margin-top: 0;
     }

@@ -1,4 +1,4 @@
-$mobileBreakpoint: 320px;
+$mobileBreakpoint: 400px;
 $tabletBreakpoint: 768px;
 $computerBreakpoint: 1200px;
 $largeMonitorBreakpoint: 1490px;
@@ -7,83 +7,133 @@ $widescreenMonitorBreakpoint: 1920px;
 /// ALL BREAKING POINTS SHOULD BE IN SYNC WITH THEME
 /// KBB Theme / 'site.variables' file / LINE 183
 
-@media only screen and (max-width: $tabletBreakpoint - 1) {
-  .widescreen,
-  .large-screen,
-  .computer,
-  .tablet {
-    &-only {
-      display: none !important;
-    }
-  }
+// MIXINGS
 
-  .mobile {
-    &-hidden {
+@mixin small-mobile {
+  @media only screen and (max-width: $mobileBreakpoint) {
+    @content;
+  }
+}
+@mixin mobile {
+  @media only screen and (max-width: $tabletBreakpoint - 1) {
+    @content;
+  }
+}
+@mixin tablet {
+  @media only screen and (min-width: $tabletBreakpoint) and (max-width: $computerBreakpoint - 1) {
+    @content;
+  }
+}
+@mixin computer {
+  @media only screen and (min-width: $computerBreakpoint) and (max-width: $largeMonitorBreakpoint - 1) {
+    @content;
+  }
+}
+@mixin large-screen {
+  @media only screen and (min-width: $largeMonitorBreakpoint) and (max-width: $widescreenMonitorBreakpoint - 1) {
+    @content;
+  }
+}
+@mixin widescreen {
+  @media only screen and (min-width: $widescreenMonitorBreakpoint) {
+    @content;
+  }
+}
+
+
+// helper classes
+
+
+.widescreen,
+.large-screen,
+.computer,
+.tablet {
+  &-only {
+    @include mobile {
       display: none !important;
     }
   }
 }
 
-@media only screen and (min-width: $tabletBreakpoint) and (max-width: $computerBreakpoint - 1) {
-  .widescreen,
-  .large-screen,
-  .computer,
-  .mobile {
-    &-only {
-      display: none !important;
-    }
-  }
-
-  .tablet {
-    &-hidden {
+.mobile {
+  &-hidden {
+    @include mobile {
       display: none !important;
     }
   }
 }
 
-@media only screen and (min-width: $computerBreakpoint) and (max-width: $largeMonitorBreakpoint - 1) {
-  .widescreen,
-  .large-screen,
-  .tablet,
-  .mobile {
-    &-only {
-      display: none !important;
-    }
-  }
 
-  .computer {
-    &-hidden {
+.widescreen,
+.large-screen,
+.computer,
+.mobile {
+  &-only {
+    @include tablet {
       display: none !important;
     }
   }
 }
 
-@media only screen and (min-width: $largeMonitorBreakpoint) and (max-width: $widescreenMonitorBreakpoint - 1) {
-  .widescreen,
-  .tablet,
-  .mobile {
-    &-only {
-      display: none !important;
-    }
-  }
-
-  .large-screen {
-    &-hidden {
+.tablet {
+  &-hidden {
+    @include tablet {
       display: none !important;
     }
   }
 }
 
-@media only screen and (min-width: $widescreenMonitorBreakpoint) {
-  .tablet,
-  .mobile {
-    &-only {
+.widescreen,
+.large-screen,
+.tablet,
+.mobile {
+  &-only {
+    @include computer {
       display: none !important;
     }
   }
+}
 
-  .widescreen {
-    &-hidden {
+.computer {
+  &-hidden {
+    @include computer {
+      display: none !important;
+    }
+  }
+}
+
+
+.widescreen,
+.tablet,
+.mobile {
+  &-only {
+    @include large-screen {
+      display: none !important;
+    }
+  }
+}
+
+.large-screen {
+  &-hidden {
+    @include large-screen {
+      display: none !important;
+    }
+  }
+}
+
+
+.tablet,
+.mobile {
+  &-only {
+    @include widescreen {
+      display: none !important;
+    }
+  }
+}
+
+.widescreen {
+  &-hidden {
+    @include widescreen {
       display: none !important;
     }
   }
