@@ -27,6 +27,7 @@ class SearchResultsContainer extends Component {
     sortBy: PropTypes.string.isRequired,
     hydrateUrl: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
+    location: shapes.HistoryLocation.isRequired,
   };
 
   static defaultProps = {
@@ -68,7 +69,7 @@ class SearchResultsContainer extends Component {
   };
 
   render() {
-    const { wip, err, results, cMap, cuMap, pageNo, pageSize, sortBy, language } = this.props;
+    const { wip, err, results, cMap, cuMap, pageNo, pageSize, sortBy, language, location } = this.props;
 
     return (
       <div>
@@ -91,6 +92,7 @@ class SearchResultsContainer extends Component {
             pageSize={pageSize}
             language={language}
             handlePageChange={this.handlePageChange}
+            location={location}
           />
         </Container>
       </div>

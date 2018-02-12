@@ -61,7 +61,7 @@ class SectionsFilter extends React.Component {
     return (
       <div
         style={{
-          height: '90px',
+          height: '180px',
           overflowY: 'scroll'
         }}
       >

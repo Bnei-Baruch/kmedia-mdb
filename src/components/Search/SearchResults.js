@@ -27,6 +27,7 @@ class SearchResults extends Component {
     t: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
     filters: PropTypes.arrayOf(PropTypes.object).isRequired,
+    location: shapes.HistoryLocation.isRequired,
   };
 
   static defaultProps = {
@@ -47,6 +48,9 @@ class SearchResults extends Component {
   renderContentUnit = (cu, hit) => {
     const { t }                                                      = this.props;
     const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
+
+    console.log('query!', this.props.location);
+    // CONTINUE HERE!!!! should parse &deb from url and hide score!!!
 
     const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || cu.name;
     const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
