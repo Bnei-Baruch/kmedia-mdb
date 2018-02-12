@@ -23,8 +23,8 @@ const tabs = [
 ];
 
 class MainPage extends PureComponent {
-
   static propTypes = {
+    location: shapes.HistoryLocation.isRequired,
     match: shapes.RouterMatch.isRequired,
     setTab: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
@@ -35,22 +35,15 @@ class MainPage extends PureComponent {
     const tab     = this.props.match.params.tab || tabs[0];
     const nextTab = nextProps.match.params.tab || tabs[0];
 
-    //clear filters if location search parameter is changed by Menu click
+    // clear filters if location search parameter is changed by Menu click
     if (nextProps.location.search !== this.props.location.search &&
-        !nextProps.location.search){
-          const filterNamespace = `events-${tab}`;
-          this.clearAllFilters(filterNamespace);
-          nextProps.setTab(nextTab);
+      !nextProps.location.search) {
+      nextProps.resetNamespace(`events-${tab}`);
     }
-    else if (nextTab !== tab) {
+
+    if (nextTab !== tab) {
       nextProps.setTab(nextTab);
     }
-  }
-
-  //clear all filters when location's search is cleared by Menu click
-  clearAllFilters(namespace){
-    const { resetNamespace } = this.props;
-    resetNamespace(namespace);
   }
 
   render() {
@@ -71,19 +64,19 @@ class MainPage extends PureComponent {
 
     let content = null;
     switch (active) {
-      case 'conventions':
-      case 'holidays':
-      case 'picnics':
-      case 'unity-days':
-        content = <CollectionList tabName={active} />;
-        break;
-      case 'friends-gatherings':
-      case 'meals':
-        content = <UnitList tab={active} />;
-        break;
-      default:
-        content = <h1>Page not found</h1>;
-        break;
+    case 'conventions':
+    case 'holidays':
+    case 'picnics':
+    case 'unity-days':
+      content = <CollectionList tabName={active} />;
+      break;
+    case 'friends-gatherings':
+    case 'meals':
+      content = <UnitList tab={active} />;
+      break;
+    default:
+      content = <h1>Page not found</h1>;
+      break;
     }
 
     return (
@@ -93,7 +86,6 @@ class MainPage extends PureComponent {
       </div>
     );
   }
-
 }
 
 const mapDispatch = dispatch => (

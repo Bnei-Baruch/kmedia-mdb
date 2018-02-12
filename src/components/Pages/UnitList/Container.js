@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import { selectors as settings } from '../../../redux/modules/settings';
-import { actions as filtersActions, selectors as filterSelectors } from '../../../redux/modules/filters';
+import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
 import { actions as listsActions, selectors as lists } from '../../../redux/modules/lists';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import withPagination from '../../Pagination/withPagination';
@@ -54,19 +54,14 @@ export class UnitListContainer extends withPagination {
     }
   }
 
-  componentWillReceiveProps(nextProps){
+  componentWillReceiveProps(nextProps) {
+    // clear all filters when location's search is cleared by Menu click
     if (nextProps.location.search !== this.props.location.search &&
-       !nextProps.location.search){
-      this.clearAllFilters(nextProps.namespace);
+       !nextProps.location.search) {
+      nextProps.resetNamespace(nextProps.namespace);
     }
 
     super.componentWillReceiveProps(nextProps);
-  }
-
-  //clear all filters when location's search is cleared by Menu click
-  clearAllFilters(namespace){
-    const { resetNamespace } = this.props;
-    resetNamespace(namespace);
   }
 
   extraFetchParams() {
@@ -121,7 +116,7 @@ export const mapState = (state, ownProps) => {
     total: nsState.total,
     pageSize: settings.getPageSize(state.settings),
     language: settings.getLanguage(state.settings),
-    isFiltersHydrated: filterSelectors.getIsHydrated(state.filters, namespace),
+    isFiltersHydrated: filters.getIsHydrated(state.filters, namespace),
   };
 };
 
