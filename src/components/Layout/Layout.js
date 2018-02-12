@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { Route } from 'react-router-dom';
 import { Flag, Header, Icon, Menu } from 'semantic-ui-react';
 
-import { FLAG_TO_LANGUAGE, ALL_LANGUAGES } from '../../helpers/consts';
+import { ALL_LANGUAGES, FLAG_TO_LANGUAGE } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import OmniBox from '../Search/OmniBox';
@@ -39,7 +39,10 @@ class Layout extends Component {
   }
 
   clickOutside = (e) => {
-    if (this.state.sidebarActive && e.target !== this.sidebarElement && !this.sidebarElement.contains(e.target)) {
+    if (this.state &&
+      this.state.sidebarActive &&
+      e.target !== this.sidebarElement &&
+      !this.sidebarElement.contains(e.target)) {
       this.closeSidebar();
     }
   };

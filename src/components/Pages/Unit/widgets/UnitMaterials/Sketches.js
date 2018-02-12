@@ -50,22 +50,28 @@ class Sketches extends React.Component {
   // load data into state
   setCurrentItem = (props, selectedLanguage) => {
     const { unit, zipIndexById, unzip } = props;
-    const language                      = selectedLanguage ? selectedLanguage : props.language;
-    const files                         = this.findZipOrImageFiles(unit, language);
+    const language = selectedLanguage ? selectedLanguage : props.language;
+    
+    //get one zip file or array of image files or one image file
+    const files = this.findZipOrImageFiles(unit, language);
 
-    if (!files) {
-      this.setState({ zipFileId: null, language });
-    }
-    else if (files[0] && !files[0].name.endsWith('.zip')) {
-      this.setState({ imageFiles: files, language }); //not zip, image files only
-    }
-    else {
-      this.setState({ zipFileId: files.id, language });
-
-      const hasData = zipIndexById && zipIndexById[files.id];
-      if (!hasData) {
-        unzip(files.id);
+    if (files) {
+      //not zip, image files only
+      if (Array.isArray(files) || !files.name.endsWith('.zip')){
+        this.setState({ imageFiles: files, language });   
       }
+      //zip file
+      else{
+        this.setState({ zipFileId: files.id, language });
+
+        const hasData = zipIndexById && zipIndexById[files.id];
+        if (!hasData) {
+          unzip(files.id);
+        }
+      }
+    }
+    else{
+      this.setState({ zipFileId: null, language });
     }
   };
 
@@ -88,16 +94,17 @@ class Sketches extends React.Component {
         this.setState({ languages });
 
         // try filter by language
-        let files;
-        const langZipFiles = zipFiles.filter((file) => file.language === selectedLanguage);
-
-        if (Array.isArray(langZipFiles) && langZipFiles.length > 0) {
-          files = this.zipOrImageFiles(langZipFiles);
+        let files = zipFiles.filter((file) => file.language === selectedLanguage);
+        
+        //if no files by language - return original language files
+        if (!files){
+          files = zipFiles.filter((file) => file.language === unit.original_language);
         }
-        else {
-          //no file by language - return the original file
-          const originalFiles = zipFiles.filter((file) => file.language === unit.original_language);
-          files               = this.zipOrImageFiles(originalFiles);
+
+        //if there are many zip files - use the first one
+        if (Array.isArray(files) && files.length > 0){
+          const zipFileArr = files.filter((file) => file.name.endsWith('.zip'));
+          files = zipFileArr && zipFileArr.length > 0 ? zipFileArr[0] : files;
         }
 
         return files;
@@ -110,13 +117,6 @@ class Sketches extends React.Component {
 
   filterZipOrImageFiles = (file) => {
     return file.type === 'image';
-  };
-
-  //if not zip return all image files, otherwise the first zip file
-  zipOrImageFiles = (files) => {
-    return !(Array.isArray(files) && files.length > 0) ?
-      null :
-      !files[0].name.endsWith('.zip') ? files : files[0];
   };
 
   //converts images from server format (path, size) to ImageGallery format
@@ -169,10 +169,18 @@ class Sketches extends React.Component {
 
     const imageObjs = imageFiles ? imageFiles : data;
 
-    if (Array.isArray(imageObjs) && imageObjs.length > 0) {
+    //if imageObjs is not an array - create it
+    let imageObjsArr = [];
+    if (imageObjs && !Array.isArray(imageObjs)){
+      imageObjsArr.push(imageObjs);
+    }
+    else{
+      imageObjsArr = imageObjs;
+    }
 
+    if (Array.isArray(imageObjsArr) && imageObjsArr.length > 0){
       //prepare the image array for the gallery and sort it
-      const items = imageObjs
+      const items = imageObjsArr
         .map(this.imageGalleryItem)
         .sort((a, b) => strCmp(a.original, b.original));
 
@@ -215,7 +223,6 @@ class Sketches extends React.Component {
       </Segment>
     );
   }
-
 }
 
 const mapState = (state) => {
