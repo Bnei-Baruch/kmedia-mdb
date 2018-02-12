@@ -18,7 +18,6 @@ import logo from '../../images/logo.svg';
 const flags = ['us', 'ru', 'il'];
 
 class Layout extends Component {
-
   static propTypes = {
     t: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
@@ -52,10 +51,7 @@ class Layout extends Component {
   closeSidebar = () => this.setState({ sidebarActive: false });
 
   shouldShowSearch = (location) => {
-    const parts = location.pathname.split('/').filter(x => {
-      return (x !== '');
-    });
-
+    const parts = location.pathname.split('/').filter(x => (x !== ''));
     if (parts.length === 0) {
       return false;
     }
@@ -72,27 +68,28 @@ class Layout extends Component {
     const showSearch = this.shouldShowSearch(location);
     return (
       <div className="layout">
-
         <GAPageView location={location} />
-        <div className='debug'>
-                <span className="widescreen-only">widescreen</span>
-                <span className="large-screen-only">large screen</span>
-                <span className="computer-only">computer</span>
-                <span className="tablet-only">tablet</span>
-                <span className="mobile-only">mobile</span>
-        </div>
+        {/*
+          <div className="debug">
+          <span className="widescreen-only">widescreen</span>
+          <span className="large-screen-only">large screen</span>
+          <span className="computer-only">computer</span>
+          <span className="tablet-only">tablet</span>
+          <span className="mobile-only">mobile</span>
+          </div>
+        */}
         {/* Added the width 100vw to better support mobile, please fix as needed */}
         <div className="layout__header">
           {/* Added the width 100vw to better support mobile, please fix as needed */}
-          <Menu inverted borderless size="huge" color="blue" >
+          <Menu inverted borderless size="huge" color="blue">
             <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.toggleSidebar}>
               <Icon name="sidebar" />
             </Menu.Item>
             <Menu.Item className="logo" header as={Link} to="/">
               <img src={logo} alt="logo" />
-              <Header inverted as='h1'>
+              <Header inverted as="h1">
                 {t('nav.top.header')}
-                
+
                 {/* <span> /// </span>
                     <span className="widescreen-hidden"> - widescreen hidden</span>
                     <span className="large-screen-hidden"> - large screen hidden</span>
@@ -102,13 +99,12 @@ class Layout extends Component {
                 */}
               </Header>
             </Menu.Item>
-            <Menu.Item className='layout__search mobile-hidden'>
+            <Menu.Item className="layout__search mobile-hidden">
               {
-                showSearch && (
-                  <OmniBox t={t} location={location} />
-                )
+                showSearch ?
+                  <OmniBox t={t} location={location} /> :
+                  null
               }
-
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
@@ -136,18 +132,18 @@ class Layout extends Component {
             </Menu.Item>
             <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={this.closeSidebar}>
               <img src={logo} alt="logo" />
-              <Header inverted as='h1'>
+              <Header inverted as="h1">
                 {t('nav.top.header')}
               </Header>
             </Menu.Item>
-            <Menu.Item className='mobile-only layout__sidebar-search'>
-                <Search
-                  className="search-omnibox"
-                  fluid
-                  icon={<Icon link name="search" onClick={this.handleIconClick} />}
-                  size="mini" 
-                />
-              </Menu.Item>
+            <Menu.Item className="mobile-only layout__sidebar-search">
+              <Search
+                className="search-omnibox"
+                fluid
+                icon={<Icon link name="search" onClick={this.handleIconClick} />}
+                size="mini"
+              />
+            </Menu.Item>
           </Menu>
           <div className="layout__sidebar-menu">
             <MenuItems simple t={t} onItemClick={this.closeSidebar} />
