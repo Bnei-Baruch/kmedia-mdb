@@ -4,7 +4,7 @@
       "header": "Kabbalah Media"
     },
     "sidebar": {
-      "lessons": "Daily Lessons",
+      "lessons": "Daily Kabbalah Lesson",
       "programs": "Programs",
       "lectures": "Lectures & Lessons",
       "sources": "Kabbalah Sources",
@@ -118,7 +118,7 @@
     "fallback-to-audio": "Video was not found, using audio.",
     "fallback-to-video": "Audio was not found, using video.",
     "source-content-not-found": "Source contents wasn't found",
-    "no-images": "No images found"
+    "no-images": "No sketches found"
   },
   "search": {
     "header": {
@@ -252,7 +252,7 @@
   "publications": {
     "header": {
       "text": "Publications",
-      "subtext": "Here comes the publications section subtext"
+      "subtext": "Articles on current events, culture, popular science, relationships and more, presented from the unique perspective of the wisdom of Kabbalah"
     },
     "list": {
       "item_from": "Item of:"

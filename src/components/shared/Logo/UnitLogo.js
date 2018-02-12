@@ -24,7 +24,7 @@ class UnitLogo extends PureComponent {
     let src = assetUrl(`api/thumbnail/${unitId}`);
 
     if (!src.startsWith('http')) {
-      src = 'http://localhost' + src;
+      src = `http://localhost${src}`;
     }
 
     src = `${imaginaryUrl('thumbnail')}?${Requests.makeParams({ url: src, width })}`;
@@ -45,5 +45,3 @@ class UnitLogo extends PureComponent {
 }
 
 export default UnitLogo;
-
-

@@ -3,7 +3,7 @@ import identity from 'lodash/identity';
 
 import { tracePath, strCmp } from '../../helpers/utils';
 import { types as settings } from './settings';
-import { BS_IGROT, BS_SHAMATI, MR_TORA, RB_IGROT, RH_ZOHAR, } from '../../helpers/consts';
+import { BS_IGROT, BS_SHAMATI, BS_TAAS, MR_TORA, RB_IGROT, RH_ZOHAR, } from '../../helpers/consts';
 
 /* Types */
 
@@ -68,7 +68,7 @@ const initialState = {
   },
 };
 
-const notToSort = [BS_SHAMATI, BS_IGROT, RB_IGROT, MR_TORA, RH_ZOHAR];
+const notToSort = [BS_SHAMATI, BS_IGROT, BS_TAAS, RB_IGROT, MR_TORA, RH_ZOHAR];
 
 const sortTree = (root) => {
   if (root.children) {

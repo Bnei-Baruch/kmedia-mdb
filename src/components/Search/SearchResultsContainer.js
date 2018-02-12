@@ -98,7 +98,7 @@ class SearchResultsContainer extends Component {
   }
 }
 
-const mapState = state => {
+const mapState = (state) => {
   const results = selectors.getResults(state.search);
   const cMap    = results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
