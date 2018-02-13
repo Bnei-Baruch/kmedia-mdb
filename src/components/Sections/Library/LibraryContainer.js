@@ -215,11 +215,11 @@ class LibraryContainer extends Component {
                     {t('sources-library.toc')}
                   </Header>
                 </Grid.Column>
-                <Grid.Column computer={6}>
+                <Grid.Column computer={8}>
                   {this.header(sourceId, fullPath)}
                 </Grid.Column>
                 <Grid.Column computer={2}>
-                  <Button.Group basic size="tiny" floated="right">
+                  <Button.Group basic size="tiny" >
                     <Button icon="expand" />
                   </Button.Group>
                 </Grid.Column>
