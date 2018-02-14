@@ -134,18 +134,20 @@ class AVPlayerMobile extends PureComponent {
     this.initEventListeners(el);
 
     this.activatePersistence();
+
+    this.initCurrentTime();
+
   };
 
   initEventListeners = (el) => {
-    el.onplay           = this.updateMedia;
-    el.onpause          = this.handlePause;
-    el.onerror          = this.onError;
-    el.ontimeupdate     = this.handleTimeUpdate;
-    el.onvolumechange   = debounce(media => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, this.media.volume), 200);
-    el.oncanplaythrough = this.handleCanPlayThrough;
+    el.onplay         = this.updateMedia;
+    el.onpause        = this.handlePause;
+    el.onerror        = this.onError;
+    el.ontimeupdate   = this.handleTimeUpdate;
+    el.onvolumechange = debounce(media => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, this.media.volume), 200);
   };
 
-  handleCanPlayThrough = () => {
+  initCurrentTime = () => {
     const { wasCurrentTime, wasPlaying, sliceStart, isReady } = this.state;
     if (isReady) {
       return;
@@ -156,10 +158,9 @@ class AVPlayerMobile extends PureComponent {
     } else if (sliceStart) {
       this.media.currentTime = sliceStart;
     }
-    /*** start to play for init upload on iphone */
-    this.media.play();
-    if (!wasPlaying) {
-      debounce(this.media.pause, 200);
+
+    if (wasPlaying) {
+      this.media.play();
     }
 
     this.setState({ wasCurrentTime: undefined, wasPlaying: undefined, isReady: true });
@@ -172,6 +173,7 @@ class AVPlayerMobile extends PureComponent {
       this.updateMedia();
     }
   };
+
   handleTimeUpdate = (timeData) => {
     const { mode, sliceEnd } = this.state;
     const time               = timeData.currentTarget.currentTime;
