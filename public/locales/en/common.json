@@ -7,8 +7,8 @@
       "lessons": "Daily Kabbalah Lesson",
       "programs": "Programs",
       "lectures": "Lectures & Lessons",
-      "sources": "Kabbalah Sources",
-      "events": "Events",
+      "sources": "Library",
+      "events": "Conventions & Events",
       "books": "Books",
       "topics": "Topics",
       "publications": "Publications",
@@ -71,11 +71,10 @@
     "sections-filter": {
       "label": "Section",
       "all": "All",
-      "lessons": "Lessons",
+      "lessons": "Daily Kabbalah Lesson",
       "programs": "Programs",
-      "lectures": "Lectures",
-      "sources": "Sources",
-      "events": "Events",
+      "lectures": "Lectures & Lessons",
+      "events": "Conventions & Events",
       "publications": "Publications"
     }
   },
@@ -160,7 +159,7 @@
   },
   "events": {
     "header": {
-      "text": "Events",
+      "text": "Conventions & Events",
       "subtext": "Today, the wisdom of Kabbalah is already everywhere in the world. In this section you will be able to see events, conventions and special meetings of the \"Kabbalah L’Am\" association in Israel and abroad."
     },
     "tabs": {
@@ -238,7 +237,7 @@
   },
   "lectures": {
     "header": {
-      "text": "Lectures",
+      "text": "Lectures & Lessons",
       "subtext": "Here you will find a rich variety of lectures that include: lectures, children's programs, women's programs, etc."
     },
     "list": {
