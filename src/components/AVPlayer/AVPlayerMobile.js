@@ -10,7 +10,7 @@ import { getQuery } from '../../helpers/url';
 import { fromHumanReadableTime } from '../../helpers/time';
 import { PLAYER_MODE } from './constants';
 import AVPlayPause from './AVPlayPause';
-import AVLanguage from './AVLanguage';
+import AVLanguageMobile from './AVLanguageMobile';
 import AVAudioVideo from './AVAudioVideo';
 import AVEditSlice from './AVEditSlice';
 import ShareFormMobile from './ShareFormMobile';
@@ -103,29 +103,24 @@ class AVPlayerMobile extends PureComponent {
     this.media.volume = persistedVolume;
   };
 
-  // Remember the current time and not paused while switching.
   onSwitchAV = (...params) => {
-    const { currentTime, paused } = this.media;
-    const { onSwitchAV }          = this.props;
-    this.media                    = null;
-    this.setState({ wasCurrentTime: currentTime, wasPlaying: !paused, isReady: false }, () => {
-      onSwitchAV(...params);
-    });
+    // Keeping the current time and playing state while switching
+    // is not possible on mobile due to user gesture is prior to
+    // media element presence on the page
+    this.props.onSwitchAV(...params);
   };
 
-  // Remember the current time and not paused while switching.
+  // Remember the current time and playing state while switching.
   onLanguageChange = (...params) => {
-    const { currentTime, paused } = this.media;
-    const { onLanguageChange }    = this.props;
-    this.media                    = null;
-    this.setState({ wasCurrentTime: currentTime, wasPlaying: !paused, isReady: false }, () => {
-      onLanguageChange(...params);
-    });
+    this.wasCurrentTime = this.media.currentTime;
+    this.media.autoplay = !this.media.paused;
+    this.props.onLanguageChange(...params);
   };
 
   handleMediaRef = (ref) => {
     if (ref) {
       this.media = ref;
+      console.log('media mounted', this.media);
       this.media.addEventListener('play', this.handlePlay);
       this.media.addEventListener('pause', this.handlePause);
       this.media.addEventListener('error', this.handleError);
@@ -133,8 +128,8 @@ class AVPlayerMobile extends PureComponent {
       this.media.addEventListener('volumechange', this.handleVolumeChange);
 
       this.activatePersistence();
-      this.initCurrentTime();
     } else if (this.media) {
+      console.log('media unmounted');
       this.media.removeEventListener('play', this.handlePlay);
       this.media.removeEventListener('pause', this.handlePause);
       this.media.removeEventListener('error', this.handleError);
@@ -144,29 +139,24 @@ class AVPlayerMobile extends PureComponent {
     }
   };
 
-  handlePlay         = () => {
+  handlePlay = () => {
+    console.log('media.play');
+    this.seekIfNeeded(this.state);
   };
+
   handleVolumeChange = () => {
     debounce(() => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, this.media.volume), 200);
   };
 
-  initCurrentTime = () => {
-    const { wasCurrentTime, wasPlaying, sliceStart, isReady } = this.state;
-    if (isReady) {
-      return;
+  seekIfNeeded = () => {
+    if (this.wasCurrentTime) {
+      console.log('seekIfNeeded wasCurrentTime', this.wasCurrentTime);
+      this.media.currentTime = this.wasCurrentTime;
+      this.wasCurrentTime    = undefined;
+    } else if (this.state.sliceStart) {
+      console.log('seekIfNeeded sliceStart', this.state.sliceStart);
+      this.media.currentTime = this.state.sliceStart;
     }
-
-    if (wasCurrentTime) {
-      this.media.currentTime = wasCurrentTime;
-    } else if (sliceStart) {
-      this.media.currentTime = sliceStart;
-    }
-
-    if (wasPlaying) {
-      this.media.play();
-    }
-
-    this.setState({ wasCurrentTime: undefined, wasPlaying: undefined, isReady: true });
   };
 
   handlePause = () => {
@@ -213,7 +203,6 @@ class AVPlayerMobile extends PureComponent {
 
   render() {
     const {
-            autoPlay,
             item,
             languages,
             language,
@@ -244,8 +233,8 @@ class AVPlayerMobile extends PureComponent {
           playsInline
           ref={this.handleMediaRef}
           src={item.src}
+          preload="metadata"
           poster={item.preImageUrl}
-          autoPlay={autoPlay}
         />
       );
     } else {
@@ -254,23 +243,25 @@ class AVPlayerMobile extends PureComponent {
           controls
           ref={this.handleMediaRef}
           src={item.src}
+          preload="metadata"
         />
       );
     }
 
-    let control;
-    let slicer;
-    if (error) {
-      control = (
-        <div className="player-button">
-          {t('player.error.loading')}
-          {errorReason ? ` ${errorReason}` : ''}
-          &nbsp;
-          <Icon name="warning sign" size="large" />
-        </div>
-      );
-    } else if (this.state.isReady) {
-      control = (
+    return (
+      <div className="mediaplayer">
+        <div style={{ marginBottom: '0px' }}>{mediaEl}</div>
+        {
+          error ?
+            <div className="player-button">
+              {t('player.error.loading')}
+              {errorReason ? ` ${errorReason}` : ''}
+              &nbsp;
+              <Icon name="warning sign" size="large" />
+            </div> :
+            null
+        }
+
         <div className="mediaplayer__wrapper">
           <div className="mediaplayer__controls">
             <AVPlayPause
@@ -294,24 +285,21 @@ class AVPlayerMobile extends PureComponent {
               fallbackMedia={fallbackMedia}
               t={t}
             />
-            <AVLanguage
+            <AVLanguageMobile
               languages={languages}
               language={language}
-              position="bottom"
               requestedLanguage={item.requestedLanguage}
               onSelect={this.onLanguageChange}
               t={t}
             />
           </div>
         </div>
-      );
-      slicer  = isSliceMode ? <ShareFormMobile currentTime={this.media.currentTime || 0} /> : null;
-    }
-    return (
-      <div className="mediaplayer">
-        <div style={{ marginBottom: '0px' }}>{mediaEl}</div>
-        {control}
-        {slicer}
+
+        {
+          isSliceMode ?
+            <ShareFormMobile currentTime={this.media.currentTime || 0} /> :
+            null
+        }
       </div>
     );
   }

@@ -15,7 +15,7 @@ const AVAudioVideo = (props) => {
   );
 
   return (
-    <div className='mediaplayer__audiovideo'>
+    <div className="mediaplayer__audiovideo">
       {popup}
       <button onClick={onSwitch}>
         <span className={isAudio ? 'is-active' : ''}>{t('buttons.audio')}</span>

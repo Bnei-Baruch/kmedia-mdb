@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
-import { Dropdown } from 'semantic-ui-react';
 
 import { LANG_HEBREW, LANGUAGE_OPTIONS } from '../../helpers/consts';
 import TimedPopup from '../shared/TimedPopup';
 
-export default class AVLanguage extends Component {
+export default class AVLanguageMobile extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     onSelect: PropTypes.func,
@@ -22,15 +21,16 @@ export default class AVLanguage extends Component {
     languages: [],
   };
 
-  handleChange = (e, data) =>
-    this.props.onSelect(e, data.value);
+  handleChange = (e) => {
+    this.props.onSelect(e, e.currentTarget.value);
+  };
 
   render() {
     const { t, languages, language, requestedLanguage } = this.props;
 
     const options = LANGUAGE_OPTIONS
       .filter(x => languages.includes(x.value))
-      .map(x => ({ value: x.value, text: x.value }));
+      .map(x => x.value);
 
     const popup = language === requestedLanguage ? null : (
       <TimedPopup
@@ -44,17 +44,15 @@ export default class AVLanguage extends Component {
     return (
       <div className="mediaplayer__languages">
         {popup}
-        <Dropdown
-          floating
-          scrolling
-          upward
-          icon={null}
-          selectOnBlur={false}
-          options={options}
-          value={language}
-          onChange={this.handleChange}
-          trigger={<button>{language}</button>}
-        />
+        <select value={language} onChange={this.handleChange}>
+          {
+            options.map(x => (
+              <option key={x} value={x}>
+                {t(`constants.languages.${x}`)}
+              </option>
+            ))
+          }
+        </select>
       </div>
     );
   }
