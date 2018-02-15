@@ -16,6 +16,7 @@ class SearchResultsContainer extends Component {
   static propTypes = {
     query: PropTypes.string.isRequired,
     results: PropTypes.object,
+    cMap: PropTypes.objectOf(shapes.Collection),
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
     wip: shapes.WIP,
     err: shapes.Error,
@@ -26,6 +27,7 @@ class SearchResultsContainer extends Component {
     sortBy: PropTypes.string.isRequired,
     hydrateUrl: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
+    location: shapes.HistoryLocation.isRequired,
   };
 
   static defaultProps = {
@@ -67,7 +69,7 @@ class SearchResultsContainer extends Component {
   };
 
   render() {
-    const { wip, err, results, cuMap, pageNo, pageSize, sortBy, language } = this.props;
+    const { wip, err, results, cMap, cuMap, pageNo, pageSize, sortBy, language, location } = this.props;
 
     return (
       <div>
@@ -82,6 +84,7 @@ class SearchResultsContainer extends Component {
         <Container className="padded">
           <SearchResults
             results={results}
+            cMap={cMap}
             cuMap={cuMap}
             wip={wip}
             err={err}
@@ -89,6 +92,7 @@ class SearchResultsContainer extends Component {
             pageSize={pageSize}
             language={language}
             handlePageChange={this.handlePageChange}
+            location={location}
           />
         </Container>
       </div>
@@ -96,14 +100,28 @@ class SearchResultsContainer extends Component {
   }
 }
 
-const mapState = state => {
+const mapState = (state) => {
   const results = selectors.getResults(state.search);
+  const cMap    = results && results.hits && Array.isArray(results.hits.hits) ?
+    results.hits.hits.reduce((acc, val) => {
+      if (val._type === 'collections') {
+        const cID = val._source.mdb_uid;
+        const c   = mdbSelectors.getDenormCollection(state.mdb, cID);
+        if (c) {
+          acc[cID] = c;
+        }
+      }
+      return acc;
+    }, {}) :
+    {};
   const cuMap   = results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
-      const cuID = val._source.mdb_uid;
-      const cu   = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
-      if (cu) {
-        acc[cuID] = cu;
+      if (val._type === 'content_units') {
+        const cuID = val._source.mdb_uid;
+        const cu   = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
+        if (cu) {
+          acc[cuID] = cu;
+        }
       }
       return acc;
     }, {}) :
@@ -111,6 +129,7 @@ const mapState = state => {
 
   return {
     results,
+    cMap,
     cuMap,
     query: selectors.getQuery(state.search),
     pageNo: selectors.getPageNo(state.search),

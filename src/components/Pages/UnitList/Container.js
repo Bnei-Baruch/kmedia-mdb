@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as filters } from '../../../redux/modules/filters';
+import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
 import { actions as listsActions, selectors as lists } from '../../../redux/modules/lists';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import withPagination from '../../Pagination/withPagination';
@@ -13,7 +13,6 @@ import * as shapes from '../../shapes';
 import Page from './Page';
 
 export class UnitListContainer extends withPagination {
-
   static propTypes = {
     namespace: PropTypes.string.isRequired,
     location: shapes.HistoryLocation.isRequired,
@@ -29,6 +28,7 @@ export class UnitListContainer extends withPagination {
     setPage: PropTypes.func.isRequired,
     extraFetchParams: PropTypes.func,
     renderUnit: PropTypes.func.isRequired,
+    resetNamespace: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -54,6 +54,17 @@ export class UnitListContainer extends withPagination {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    // clear all filters when location's search is cleared by Menu click
+    if (nextProps.location.search !== this.props.location.search &&
+      !nextProps.location.search) {
+      nextProps.resetNamespace(nextProps.namespace);
+      this.handleFiltersChanged();
+    }
+
+    super.componentWillReceiveProps(nextProps);
+  }
+
   extraFetchParams() {
     return this.props.extraFetchParams ? this.props.extraFetchParams(this.props) : {};
   }
@@ -67,22 +78,12 @@ export class UnitListContainer extends withPagination {
   }
 
   handleFiltersHydrated() {
-    const p = this.getPageFromLocation(this.props.location);
+    const p = withPagination.getPageFromLocation(this.props.location);
     this.handlePageChanged(p);
   }
 
   render() {
-    const {
-            namespace,
-            items,
-            wip,
-            err,
-            pageNo,
-            total,
-            pageSize,
-            language,
-            renderUnit
-          } = this.props;
+    const { namespace, items, wip, err, pageNo, total, pageSize, language, renderUnit } = this.props;
 
     return (
       <Page
@@ -124,10 +125,11 @@ export const mapDispatch = dispatch => (
   bindActionCreators({
     fetchList: listsActions.fetchList,
     setPage: listsActions.setPage,
+    resetNamespace: filtersActions.resetNamespace,
   }, dispatch)
 );
 
-export const wrap = (WrappedComponent, ms=mapState, md=mapDispatch) =>
+export const wrap = (WrappedComponent, ms = mapState, md = mapDispatch) =>
   withRouter(connect(ms, md)(WrappedComponent));
 
 export default wrap(UnitListContainer);

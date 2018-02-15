@@ -7,8 +7,8 @@
       "lessons": "Daily Kabbalah Lesson",
       "programs": "Programs",
       "lectures": "Lectures & Lessons",
-      "sources": "Kabbalah Sources",
-      "events": "Events",
+      "sources": "Library",
+      "events": "Conventions & Events",
       "books": "Books",
       "topics": "Topics",
       "publications": "Publications",
@@ -69,11 +69,13 @@
       "placeholder": "Select a year"
     },
     "sections-filter": {
-      "label": "section",
-      "all": "all",
-      "lessons": "lessons",
-      "programs": "programs",
-      "events": "events"
+      "label": "Section",
+      "all": "All",
+      "lessons": "Daily Kabbalah Lesson",
+      "programs": "Programs",
+      "lectures": "Lectures & Lessons",
+      "events": "Conventions & Events",
+      "publications": "Publications"
     }
   },
   "buttons": {
@@ -159,7 +161,7 @@
   },
   "events": {
     "header": {
-      "text": "Events",
+      "text": "Conventions & Events",
       "subtext": "Today, the wisdom of Kabbalah is already everywhere in the world. In this section you will be able to see events, conventions and special meetings of the \"Kabbalah L’Am\" association in Israel and abroad."
     },
     "tabs": {
@@ -237,7 +239,7 @@
   },
   "lectures": {
     "header": {
-      "text": "Lectures",
+      "text": "Lectures & Lessons",
       "subtext": "Here you will find a rich variety of lectures that include: lectures, children's programs, women's programs, etc."
     },
     "list": {
@@ -311,8 +313,8 @@
   },
   "sources-library": {
     "header": {
-      "text": "Kabbalah Sources",
-      "subtext": "Subtext for Kabbalah sources"
+      "text": "Library",
+      "subtext": "A collection of all the most important original texts for the study of Kabbalah, written by the greatest Kabbalists."
     },
     "no-source": "Please select source",
     "toc": "Table Of Contents"
