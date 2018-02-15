@@ -20,7 +20,7 @@ export default class SliceHandle extends Component {
     className: ''
   };
 
-  getKnobElement = () => this.knobElement;
+  getKnobElement   = () => this.knobElement;
   getHandleElement = () => this.handleElement;
 
   render() {
@@ -33,15 +33,21 @@ export default class SliceHandle extends Component {
         ref={(el) => { this.handleElement = el; }}
       >
         {
-          isEditMode && (
+          isEditMode ?
             <div className="seekbar__slicehandle-time">
-
-                { seconds }
-
-            </div>
-          )
+              {seconds}
+            </div> :
+            null
         }
-        { isEditMode && <div ref={(el) => { this.knobElement = el; }} className="seekbar__slicehandle-knob" /> }
+        {
+          isEditMode ?
+            <div
+              ref={(el) => { this.knobElement = el; }}
+              className="seekbar__slicehandle-knob"
+            /> :
+            null
+        }
+
         <div className="seekbar__slicehandle-line" />
       </div>
     );

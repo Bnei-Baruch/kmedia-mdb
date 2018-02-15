@@ -103,21 +103,3 @@
     margin-right: 4px;
   }
 }
-
-
-.isMobileDevice.avbox__player {
-  height: auto;
-  padding-top: 0;
-
-  .avbox__media-wrapper {
-    overflow: visible;
-    padding-top: 0;
-    position: relative;
-  }
-  .mediaplayer__wrapper {
-    position: relative;
-  }
-  audio {
-    margin-top: 30px;
-  }
-}

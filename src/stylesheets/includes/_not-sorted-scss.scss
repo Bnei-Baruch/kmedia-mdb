@@ -24,7 +24,7 @@
   max-width: 600px;
   width: 100%;
   .input {
-    
+
     width: 100%;
   }
 }
@@ -81,4 +81,22 @@ em {
     opacity: 0;
     pointer-events: none;
     width: 5px;
+}
+
+/* player on mobile devices */
+.avbox__player.mobile-device {
+  height: auto;
+  padding-top: 0;
+
+  .avbox__media-wrapper {
+    overflow: visible;
+    padding-top: 0;
+    position: relative;
+  }
+  .mediaplayer__wrapper {
+    position: relative;
+  }
+  audio {
+    margin-top: 30px;
+  }
 }

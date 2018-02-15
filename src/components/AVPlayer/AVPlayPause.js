@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withMediaProps } from 'react-media-player';
 import { Icon } from 'semantic-ui-react';
 
-export class AVPlayPause extends Component {
+class AVPlayPause extends Component {
   static propTypes = {
     media: PropTypes.shape({
       isPlaying: PropTypes.bool,
@@ -23,6 +23,7 @@ export class AVPlayPause extends Component {
     hasPrev: null,
     onNext: null,
     onPrev: null,
+    withoutPlay: false,
   };
 
   shouldComponentUpdate(prevProps) {
@@ -35,11 +36,11 @@ export class AVPlayPause extends Component {
 
   handlePlayPause = () => {
     // if (!this.props.media.isLoading) {
-      this.props.media.playPause();
+    this.props.media.playPause();
     // }
   };
 
-  handleMainBtnRef = ref => {
+  handleMainBtnRef = (ref) => {
     if (ref) {
       this.mainBtn = ref;
       this.mainBtn.addEventListener('click', this.handlePlayPause);
@@ -53,38 +54,46 @@ export class AVPlayPause extends Component {
     const { media, showNextPrev, hasNext, hasPrev, onNext, onPrev, withoutPlay } = this.props;
 
     return (
-      <div className='buttons-wrapper'>
-        {showNextPrev ? (
-          <button
-            type="button"
-            tabIndex="-1"
-            disabled={!hasPrev}
-            onClick={onPrev}
-          >
-            <Icon
-              name={'step backward'}
+      <div className="buttons-wrapper">
+        {
+          showNextPrev ? (
+            <button
+              type="button"
+              tabIndex="-1"
               disabled={!hasPrev}
-            />
-          </button>
-        ) : null}
-        {withoutPlay ? null : (
-          <button
-            ref={this.handleMainBtnRef}
-            type="button"
-            tabIndex="-1"
-          >
-            <Icon name={media.isPlaying ? 'pause' : 'play'} />
-          </button>)}
-        {showNextPrev ? (
-          <button
-            type="button"
-            tabIndex="-1"
-            disabled={!hasNext}
-            onClick={onNext}
-          >
-            <Icon name={'step forward'} disabled={!hasNext} />
-          </button>
-        ) : null}
+              onClick={onPrev}
+            >
+              <Icon
+                name="step backward"
+                disabled={!hasPrev}
+              />
+            </button>
+          ) : null
+        }
+        {
+          withoutPlay ?
+            null :
+            (
+              <button
+                ref={this.handleMainBtnRef}
+                type="button"
+                tabIndex="-1"
+              >
+                <Icon name={media.isPlaying ? 'pause' : 'play'} />
+              </button>
+            )}
+        {
+          showNextPrev ? (
+            <button
+              type="button"
+              tabIndex="-1"
+              disabled={!hasNext}
+              onClick={onNext}
+            >
+              <Icon name="step forward" disabled={!hasNext} />
+            </button>
+          ) : null
+        }
       </div>
     );
   }

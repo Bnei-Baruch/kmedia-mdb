@@ -94,8 +94,8 @@
     },
     "buttons": {
       "edit-back": "Back to play",
-      "select-start-position": "Select start position",
-      "select-end-position": "Select end position"
+      "start-position": "Start position",
+      "end-position": "End position"
     },
     "share": {
       "title": "watch this video"
