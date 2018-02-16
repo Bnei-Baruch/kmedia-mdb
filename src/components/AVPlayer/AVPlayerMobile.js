@@ -63,6 +63,7 @@ class AVPlayerMobile extends PureComponent {
     errorReason: '',
     mode: PLAYER_MODE.NORMAL,
     isSliceMode: false,
+    currentTime: 0,
   };
 
   componentWillMount() {
@@ -175,16 +176,18 @@ class AVPlayerMobile extends PureComponent {
 
   handleTimeUpdate = (e) => {
     const { mode, sliceEnd } = this.state;
+    const time               = e.currentTarget.currentTime;
     if (mode !== PLAYER_MODE.SLICE_VIEW) {
+      this.setState({ currentTime: time });
       return;
     }
 
-    const time      = e.currentTarget.currentTime;
     const lowerTime = Math.min(sliceEnd, time);
     if (lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
       this.media.pause();
       this.seekTo(sliceEnd);
     }
+    this.setState({ currentTime: time });
   };
 
   handleError = (e) => {
@@ -305,7 +308,7 @@ class AVPlayerMobile extends PureComponent {
 
         {
           isSliceMode ?
-            <ShareFormMobile currentTime={this.media.currentTime || 0} /> :
+            <ShareFormMobile currentTime={this.media.currentTime || 0} playerDuration={this.media.duration || 0} /> :
             null
         }
       </div>
