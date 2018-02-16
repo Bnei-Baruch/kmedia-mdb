@@ -166,7 +166,7 @@ export class OmniBox extends Component {
     const { name } = category;
     const icon     = CATEGORIES_ICONS[name];
     return (
-      <div style={{ paddingTop: '0.5em' }}>
+      <div>
         <Icon name={icon} />
         {this.props.t(`search.suggestions.categories.${name}`)}
       </div>
