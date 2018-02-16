@@ -9,7 +9,6 @@ import classNames from 'classnames';
 import { Button, Icon } from 'semantic-ui-react';
 
 import { MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
-import withIsMobile from '../../helpers/withIsMobile';
 import { getQuery, updateQuery } from '../../helpers/url';
 import { fromHumanReadableTime, toHumanReadableTime } from '../../helpers/time';
 import { PLAYER_MODE } from './constants';
@@ -38,7 +37,6 @@ class AVPlayer extends PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
     media: PropTypes.object.isRequired,
-    isMobile: PropTypes.bool.isRequired,
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -359,7 +357,7 @@ class AVPlayer extends PureComponent {
   };
 
   handleWrapperMouseMove = () => {
-    if (!this.state.controlsVisible && !this.props.isMobile) {
+    if (!this.state.controlsVisible) {
       this.showControls();
     }
   };
@@ -392,9 +390,9 @@ class AVPlayer extends PureComponent {
   };
 
   handleOnScreenClick = () => {
-    const { isMobile, media } = this.props;
+    const { media } = this.props;
 
-    if (isMobile && !this.state.controlsVisible) {
+    if (!this.state.controlsVisible) {
       this.showControls();
     } else if (!media.isLoading) {
       // toggle play only if we in normal mode
@@ -418,7 +416,6 @@ class AVPlayer extends PureComponent {
 
   render() {
     const {
-            isMobile,
             autoPlay,
             item,
             languages,
@@ -552,7 +549,6 @@ class AVPlayer extends PureComponent {
               sliceEnd={sliceEnd}
               onSliceStartChange={this.handleSliceStartChange}
               onSliceEndChange={this.handleSliceEndChange}
-              isMobile={isMobile}
             />
 
             {
@@ -605,4 +601,4 @@ class AVPlayer extends PureComponent {
   }
 }
 
-export default withIsMobile(withMediaProps(withRouter(AVPlayer)));
+export default withMediaProps(withRouter(AVPlayer));
