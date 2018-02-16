@@ -136,7 +136,7 @@ class Layout extends Component {
               </Header>
             </Menu.Item>
             <Menu.Item className="mobile-only layout__sidebar-search">
-              <WrappedOmniBox t={t} location={location} />
+              <WrappedOmniBox t={t} location={location} onSearch={this.closeSidebar} />
               {/*
               <Search
                 className="search-omnibox"
