@@ -10,10 +10,10 @@ const ITEMS = [
   'lectures',
   'sources',
   'events',
-  'books',
+  // 'books',
   'topics',
   'publications',
-  'photos',
+  // 'photos',
   // 'design',
   // 'design2',
 ];
@@ -26,6 +26,7 @@ const MenuItems = (props) => {
       key={x}
       as={NavLink}
       to={`/${x}`}
+      className="sidebar-item"
       activeClassName="active"
       content={t(`nav.sidebar.${x}`)}
       onClick={onItemClick}

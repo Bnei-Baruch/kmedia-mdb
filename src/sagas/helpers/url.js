@@ -1,11 +1,11 @@
 import { put, select } from 'redux-saga/effects';
 import { replace } from 'react-router-redux';
 
-import { parse, stringify } from '../../helpers/url';
+import { getQuery as urlGetQuery, stringify } from '../../helpers/url';
 
 export function* getQuery() {
   const router = yield select(state => state.router);
-  return parse(router.location.search.slice(1));
+  return urlGetQuery(router.location);
 }
 
 export function* updateQuery(updater) {

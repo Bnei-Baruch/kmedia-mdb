@@ -23,6 +23,10 @@
 .search-omnibox {
   max-width: 600px;
   width: 100%;
+  .input {
+    
+    width: 100%;
+  }
 }
 
 .search-result-rtl {
@@ -44,11 +48,37 @@ em {
   }
 }
 
-
 /* Program filters hack (rename, move to filters)*/
-.filter-letters{
-  flex-direction: column!important;
-  flex-wrap: wrap!important;
-  height: 600px!important;
-  width: auto!important;
+.filter-letters {
+  flex-direction: column !important;
+  flex-wrap: wrap !important;
+  height: 600px !important;
+  width: auto !important;
+}
+
+/* space between groups in playlist (events) */
+// .avbox__playlist-view-section {
+//   padding-bottom: 2rem !important;
+// }
+
+/* application loader screen */
+#app-loader {
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  h1 {
+    color: black;
+  }
+}
+
+/* hide iPhone native controls - see iphone-inline-video */
+.IIV::-webkit-media-controls-play-button,
+.IIV::-webkit-media-controls-start-playback-button {
+    opacity: 0;
+    pointer-events: none;
+    width: 5px;
 }

@@ -47,7 +47,7 @@ class TabsMenu extends Component {
     const activeItem = items.find(x => x.name === active);
 
     return (
-      <div>
+      <div className="tabs-menu">
         <Menu secondary pointing color="blue">
           {
             items.map((item) => {
@@ -56,6 +56,7 @@ class TabsMenu extends Component {
                 <Menu.Item
                   key={name}
                   name={name}
+                  className={`tab-${name}`}
                   active={active === name}
                   onClick={this.handleActiveChange}
                 >

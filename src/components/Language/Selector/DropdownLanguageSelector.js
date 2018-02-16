@@ -20,6 +20,7 @@ class DropdownLanguageSelector extends BaseLanguageSelector {
         labeled
         selection
         scrolling
+        className="dropdown-language-selector"
         defaultValue={defaultValue}
         options={options}
         onChange={this.handleSelect}

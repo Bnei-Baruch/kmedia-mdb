@@ -1,3 +1,13 @@
+$sidebar-width: 290px;
+$main-menu-height: 60px;
+$secondary-header-height: 70px;
+
+$test: '400';
+
+:export {
+  MainMenuHeight: $test;
+}
+
 @import 'rtl/layout';
 
 .layout {
@@ -11,7 +21,7 @@
     }
 
     > .menu {
-      height: 60px;
+      height: $main-menu-height;
 
       small {
         line-height: 1;
@@ -26,17 +36,24 @@
     top: 0;
     z-index: 999999;
   }
-
+  &__search {
+    flex: 1 0 auto!important;
+  }
   &__sidebar {
     background: #fff;
     bottom: 0;
     left: 0;
+    overflow: hidden;
     position: fixed;
     top: 0;
     transform: translate(-100%, 0);
     transition: transform .3s;
-    width: 290px;
+    width: $sidebar-width;
     z-index: 999999;
+
+    @include small-mobile {
+      width: 100%;
+    }
 
     &.is-active {
       transform: none;
@@ -56,12 +73,15 @@
       overflow: auto;
       position: absolute;
       right: 0;
-      top: 60px;
+      top: $main-menu-height;
 
       .menu {
         border: 0;
         box-shadow: none !important;
       }
+    }
+    &-search {
+      flex: 1 0 auto!important;
     }
   }
 
@@ -69,7 +89,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100%;
-    padding-top: 60px;
+    padding-top: $main-menu-height;
   }
 
   &__content {
@@ -79,24 +99,41 @@
   &__footer {
     background: $black;
   }
+
+  &__secondary-header{
+    background: $white;
+    height: $secondary-header-height;
+    left: 0;
+    position: fixed;
+    right: 0;
+    z-index: 1;
+
+    +.ui.container {
+      padding-top: $secondary-header-height;
+      background-clip: content-box;
+    }
+  }
 }
 
 .logo {
+  flex: 0 1 auto!important;
   img {
     display: none !important;
   }
 
-  h2.header {
+  h1.header {
+    font-size: 1.71428571rem;
     margin-left: 0;
     margin-top: 0;
+    @include mobile {
+      font-size: 1.28571429rem!important;
+    }
   }
 }
 
+
+
 .content {
-  &__main {
-
-  }
-
   &__aside {
     &-unit {
       margin-bottom: 3em;
@@ -110,7 +147,7 @@
     }
 
     &__sidebar {
-      top: 60px;
+      top: $main-menu-height;
       transform: none;
 
       > .menu {
@@ -123,18 +160,22 @@
     }
 
     &__main {
-      margin-left: 290px;
+      margin-left: $sidebar-width;
+    }
+
+    &__secondary-header {
+      left: $sidebar-width;
     }
   }
 
   .logo {
-    min-width: 290px;
+    min-width: $sidebar-width;
 
     img {
       display: inline-block !important;
     }
 
-    h2.header {
+    h1.header {
       margin-left: 16px;
       margin-top: 0;
     }

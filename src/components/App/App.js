@@ -12,16 +12,8 @@ import Routes from './Routes';
 import '../../stylesheets/Kmedia.css';
 
 const Loader = () => (
-  <div style={{
-    width: '100vw',
-    height: '100vh',
-    backgroundColor: 'white',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }}
-  >
-    <h1 style={{ color: 'black' }}>Loading...</h1>
+  <div id="app-loader">
+    <h1>Loading...</h1>
   </div>
 );
 

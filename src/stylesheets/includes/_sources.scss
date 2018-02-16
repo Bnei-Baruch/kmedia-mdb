@@ -1,24 +1,84 @@
-.source {
-  // background:pink;
-  // &.is-readble {
-  //   position: fixed;
-  //   top: 0;
-  //   left: 0;
-  //   right: 0;
-  //   bottom: 0;
-  //   z-index: 999999;
-  //   overflow: scroll;
-  // }
-  &__toc {
-    > div:nth-child(2) {
-      height: calc(100vh - 60px);
-      overflow: scroll;
-      padding: 10px;
+.sources {
+  &__authors {
+    .image {
+      @include mobile { margin: 0 0 1em; }
+      @include small-mobile { margin: 0 auto 1em; }
     }
   }
-  
-  &__content {
-    min-height: calc(100vh - 60px);
+  &__list {
+    @include mobile {
+      margin-left: 0 !important;
+    }
+    .item {
+      @include mobile { display: inline-block !important; }
+      &:before {
+        @include mobile {
+          content: '' !important;
+        }
+      }
+      &:after {
+        @include mobile {
+          display: inline !important;
+          content:'|' !important;
+          position: static !important;
+          padding: 0 .5em !important;
+          visibility: visible !important;
+        }
+      }
+      &:last-child {
+        &:after {
+          @include mobile {
+            display: none !important;
+          }
+        }
+      }
+    }
   }
-  
+}
+
+
+.source {
+  &.is-readbe {
+    background: $white;
+    bottom: 0;
+    left: 0;
+    overflow: scroll;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 999999;
+
+    .layout__secondary-header {
+      left:0;
+      right:0;
+    }
+    .source__toc {
+      > div:nth-child(2) {
+        height: calc(100vh - #{$secondary-header-height} - 1em);
+        
+        // overflow: scroll;
+        // padding: 10px;
+      }
+    }
+  }
+  &__toc {
+    
+    > div:nth-child(2) {
+      height: calc(100vh - #{$main-menu-height} - #{$secondary-header-height} - 1em);
+      overflow: scroll;
+      // background: pink;
+      // padding: 10px;
+    }
+    .title {
+      &.active {
+        font-weight: bold;
+      }
+    }
+  }
+
+  &__content {
+    min-height: calc(100vh - #{$main-menu-height});
+    // background: lime;
+  }
+
 }

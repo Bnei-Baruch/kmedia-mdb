@@ -64,6 +64,8 @@ export const GenericCollection = PropTypes.shape(MDBDenormalizedCollection);
 
 export const ContentUnit = PropTypes.shape(MDBBaseContentUnit);
 
+export const Collection = PropTypes.shape(MDBBaseCollection);
+
 export const LessonCollection = PropTypes.shape({
   ...MDBDenormalizedCollection,
   film_date: PropTypes.string.isRequired,
@@ -134,6 +136,14 @@ export const Publisher = PropTypes.shape({
   id: PropTypes.string.isRequired,
   name: PropTypes.string,
   description: PropTypes.string,
+});
+
+export const Banner = PropTypes.shape({
+  section: PropTypes.string.isRequired,
+  header: PropTypes.string.isRequired,
+  sub_header: PropTypes.string,
+  url: PropTypes.string.isRequired,
+  image: PropTypes.string,
 });
 
 export const filterPropShape = PropTypes.shape({

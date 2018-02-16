@@ -2,21 +2,27 @@
   "name": "kmedia-mdb",
   "version": "0.1.0",
   "license": "MIT",
-  "homepage": "https://archive.kbb1.com",
+  "homepage": "https://archive.kbb1.com/",
   "repository": {
     "type": "git",
     "url": "https://github.com/Bnei-Baruch/kmedia-mdb"
   },
   "scripts": {
+    "analyze": "REACT_APP_ENV=production yarn build && source-map-explorer build/static/js/main.*",
     "serve-locals": "node bin/serve-locals",
-    "build-css": "node-sass src/ -o src/",
-    "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
+    "cosmos": "cosmos",
+    "cosmos::export": "cosmos-export",
+    "build-css": "node-sass-chokidar src/ -o src/",
+    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js serve-locals",
-    "build": "npm run build-css && react-scripts build",
+    "build": "sh -ac '. ./.env.${REACT_APP_ENV}; yarn build-css && react-scripts build'",
+    "build:staging": "REACT_APP_ENV=staging yarn build",
+    "build:production": "REACT_APP_ENV=production yarn build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "deploy": "npm run build && scp -r build/* archive@app.archive.bbdomain.org:/sites/archive-frontend "
+    "deploy": "yarn build:production && scp -r build/* archive@app.archive.bbdomain.org:/sites/archive-frontend ",
+    "deploy-dev": "yarn build:staging && scp -r build/* archive@archive-dev.bbdomain.org:/sites/archive-frontend "
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -34,12 +40,16 @@
     "eslint-plugin-jest": "^21.5.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.1.0",
-    "jest": "^20.0.4",
+    "jest-enzyme": "^4.0.2",
     "node-sass": "^4.5.3",
     "npm-run-all": "^4.0.2",
+    "react-cosmos": "^3.2.0",
+    "react-cosmos-test": "^3.2.0",
     "react-scripts": "1.0.17",
     "react-test-renderer": "15",
-    "regenerator-runtime": "^0.11.1"
+    "regenerator-runtime": "^0.11.1",
+    "sinon": "^4.1.3",
+    "source-map-explorer": "^1.5.0"
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -53,9 +63,13 @@
     "i18next": "^8.4.3",
     "i18next-browser-languagedetector": "^2.1.0",
     "i18next-xhr-backend": "^1.4.2",
+    "invariant": "^2.2.2",
+    "iphone-inline-video": "^2.2.2",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "moment-duration-format": "^2.0.1",
+    "node-sass-chokidar": "^0.0.3",
+    "path-to-regexp": "^2.1.0",
     "prop-types": "^15.5.10",
     "qs": "^6.5.0",
     "react": "^15.6.1",
@@ -66,15 +80,38 @@
     "react-google-maps": "^8.3.0",
     "react-i18next": "^4.7.0",
     "react-image-gallery": "^0.8.3",
-    "react-media-player": "^0.7.0",
+    "react-media-player": "github:Bnei-Baruch/react-media-player",
+    "react-pdf": "^2.5.3",
     "react-redux": "^5.0.5",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.1.2",
     "react-router-redux": "^5.0.0-alpha.6",
+    "react-share": "^1.19.0",
     "react-virtualized": "^9.9.0",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
     "redux-saga": "^0.16.0",
-    "semantic-ui-react": "^0.77.1"
+    "semantic-ui-react": "^0.77.1",
+    "warning": "^3.0.0"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!<rootDir>/node_modules/",
+      "!**/__tests__/**"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    },
+    "coverageReporters": [
+      "text-summary",
+      "lcov"
+    ],
+    "snapshotSerializers": []
   }
 }

@@ -1,3 +1,5 @@
+import pickBy from 'lodash/pickBy';
+
 import { createFilterDefinition } from './util';
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
 import { isEmpty } from '../../helpers/utils';
@@ -10,7 +12,7 @@ const programsFilter = {
     const [genre, program] = queryValue.split('|');
     return { genre, program };
   },
-  valueToApiParam: value => (value),
+  valueToApiParam: value => pickBy(value, x => !!x),
   tagIcon: 'tv',
   valueToTagLabel: (value, props, store, t) => {
     if (!value) {
