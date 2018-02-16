@@ -9,7 +9,7 @@ const AVAudioVideo = (props) => {
     <TimedPopup
       openOnInit
       message={isAudio ? t('messages.fallback-to-audio') : t('messages.fallback-to-video')}
-      downward={isAudio}
+      downward={false}
       timeout={7000}
     />
   );
