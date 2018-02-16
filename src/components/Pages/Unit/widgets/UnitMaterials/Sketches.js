@@ -80,7 +80,7 @@ class Sketches extends React.Component {
       //get the zip files
       const zipFiles = unit.files.filter(this.filterZipOrImageFiles);
 
-      if (!Array.isArray(zipFiles) || zipFiles.length === 0)
+      if (zipFiles.length === 0)
         return null;
 
       //at least one file
@@ -91,20 +91,21 @@ class Sketches extends React.Component {
         const languages = zipFiles
           .map((file) => file.language)
           .filter((v, i, a) => a.indexOf(v) === i);
+        
         this.setState({ languages });
 
         // try filter by language
         let files = zipFiles.filter((file) => file.language === selectedLanguage);
         
         //if no files by language - return original language files
-        if (!files){
+        if (files.length === 0){
           files = zipFiles.filter((file) => file.language === unit.original_language);
         }
 
         //if there are many zip files - use the first one
-        if (Array.isArray(files) && files.length > 0){
+        if (files.length > 0){
           const zipFileArr = files.filter((file) => file.name.endsWith('.zip'));
-          files = zipFileArr && zipFileArr.length > 0 ? zipFileArr[0] : files;
+          files = zipFileArr.length > 0 ? zipFileArr[0] : files;
         }
 
         return files;
