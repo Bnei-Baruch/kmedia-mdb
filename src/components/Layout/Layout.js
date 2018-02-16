@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import classnames from 'classnames';
 import { Route } from 'react-router-dom';
-import { Flag, Header, Icon, Menu, Search } from 'semantic-ui-react';
+import { Flag, Header, Icon, Menu /*, Search */ } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES, FLAG_TO_LANGUAGE } from '../../helpers/consts';
 import * as shapes from '../shapes';
