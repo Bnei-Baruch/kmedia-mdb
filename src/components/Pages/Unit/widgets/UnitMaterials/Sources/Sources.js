@@ -199,7 +199,7 @@ class Sources extends Component {
     if (isMakor) {
       const derived = this.getDerived(unit.derived_units, selected).find(x => x.language === language);
       onContentChange(null, null, derived.id);
-    } else if (indexMap[selected].data) {
+    } else if (indexMap[selected] != null && indexMap[selected].data) {
       onContentChange(selected, indexMap[selected].data[language].html);
     }
   };
