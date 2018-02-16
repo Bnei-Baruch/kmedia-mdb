@@ -103,7 +103,7 @@ $test: '400';
 
   &__secondary-header{
     background: $white;
-    height: $secondary-header-height;
+    min-height: $secondary-header-height;
     left: 0;
     position: fixed;
     right: 0;
