@@ -93,16 +93,6 @@ class AVPlayerMobile extends PureComponent {
     }
   }
 
-  activatePersistence = () => {
-    let persistedVolume = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
-
-    if (persistedVolume == null || Number.isNaN(persistedVolume)) {
-      persistedVolume = DEFAULT_PLAYER_VOLUME;
-      localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, persistedVolume);
-    }
-    this.media.volume = persistedVolume;
-  };
-
   onSwitchAV = (...params) => {
     // Keeping the current time and playing state while switching
     // is not possible on mobile due to user gesture is prior to
@@ -127,7 +117,7 @@ class AVPlayerMobile extends PureComponent {
       this.media.addEventListener('timeupdate', this.handleTimeUpdate);
       this.media.addEventListener('volumechange', this.handleVolumeChange);
 
-      this.activatePersistence();
+      this.restoreVolume();
     } else if (this.media) {
       console.log('media unmounted');
       this.media.removeEventListener('play', this.handlePlay);
@@ -139,13 +129,31 @@ class AVPlayerMobile extends PureComponent {
     }
   };
 
-  handlePlay = () => {
-    console.log('media.play');
-    this.seekIfNeeded(this.state);
+  handlePlay = (e) => {
+    console.log('media.play', e);
+    this.seekIfNeeded();
   };
 
-  handleVolumeChange = () => {
-    debounce(() => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, this.media.volume), 200);
+  handleVolumeChange = (e) => {
+    console.log('media.volumechange', e);
+    this.persistVolume(e.currentTarget.volume);
+  };
+
+  persistVolume = debounce((value) => {
+    console.log('persistVolume', value);
+    localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, value);
+  }, 200);
+
+  restoreVolume = () => {
+    let value = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
+    console.log('restoreVolume.value', value);
+
+    if (value == null || Number.isNaN(value)) {
+      value = DEFAULT_PLAYER_VOLUME;
+      localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, value);
+    }
+
+    this.media.volume = value;
   };
 
   seekIfNeeded = () => {
