@@ -13,6 +13,7 @@ import AVShare from './AVShare';
 class ShareFormMobile extends Component {
   static propTypes = {
     currentTime: PropTypes.number.isRequired,
+    playerDuration: PropTypes.number,
     t: PropTypes.func.isRequired,
   };
 
@@ -22,32 +23,34 @@ class ShareFormMobile extends Component {
   }
 
   setStart = (e, data) => {
-    const start = data && data.value ?
-      this.colonStrToMls(data.value) :
+    const playerDuration = (this.props.playerDuration - 5);
+    let start            = data && data.value ?
+      this.colonStrToSecond(data.value) :
       Math.round(this.props.currentTime);
 
-    const end = this.state.end > start ?
+    start   = start > playerDuration ? playerDuration : start;
+    let end = this.state.end > start ?
       this.state.end :
-      start + (5 * 100);
+      start + 5;
 
     const state = { start, end };
-    if (!end) {
+    if (!this.state.end) {
       delete state.end;
+      end = null;
     }
 
     this.setState({ ...state, url: this.getUrl(start, end) });
   };
 
   setEnd = (e, data) => {
-    const end = data && data.value ?
-      this.colonStrToMls(data.value) :
+    const playerDuration = this.props.playerDuration;
+    let end              = data && data.value !== undefined ?
+      this.colonStrToSecond(data.value) :
       Math.round(this.props.currentTime);
-
-    let start = 0;
-    if (this.state.start) {
-      start = this.state.start < end ?
-        this.state.start :
-        end - (5 * 100);
+    end                  = end > playerDuration ? playerDuration : end;
+    let start            = this.state.start || 0;
+    if (end) {
+      start = this.state.start < end ? this.state.start : end - 5;
     }
 
     this.setState({ end, start, url: this.getUrl(start, end) });
@@ -60,22 +63,24 @@ class ShareFormMobile extends Component {
     };
 
     if (end) {
-      search.send = end;
+      search.send = toHumanReadableTime(end);
     }
 
     return `${window.location.href.split('?')[0]}?${stringify(search)}`;
   };
 
-  colonStrToMls = str => (
-    str.splice(':')
-      .map(s => s.replace(/^\D+/g, ''))
-      .map(t => parseInt(t, 10))
+  colonStrToSecond = str => {
+    str = str.replace(/[^\d:]+/g, '');
+    return str.split(':')
+      .map((t) => t ? parseInt(t, 10) : 0)
       .reverse()
-      .reduce((t, i, result) => result + (t * Math.pow(60, i + 1) * 100), 0) // eslint-disable-line no-restricted-properties
-  );
+      .reduce((result, t, i) => (result + t * Math.pow(60, i)), 0); // eslint-disable-line no-restricted-properties
+  };
 
-  mlsToStrColon = mls =>
-    moment.duration(mls, 'mili').humanize('HH:mm:ss');
+  mlsToStrColon = sec => {
+    const duration = moment.duration({ 'seconds': sec });
+    return `${duration.hours()}:${duration.minutes()}:${duration.seconds()}`;
+  };
 
   render() {
     const { t }               = this.props;
