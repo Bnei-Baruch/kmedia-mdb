@@ -191,12 +191,7 @@ export class OmniBox extends Component {
   });
 
   renderInput() {
-    return (
-      <Input
-
-        onKeyDown={this.handleSearchKeyDown}
-      />
-    );
+    return (<Input onKeyDown={this.handleSearchKeyDown} />);
   }
 
   render() {

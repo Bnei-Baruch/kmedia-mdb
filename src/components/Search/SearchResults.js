@@ -45,12 +45,17 @@ class SearchResults extends Component {
     return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop]) }} />;
   };
 
+  isDebMode = () => {
+    const params = this.props.location.search.substring(1).split('&');
+    return !!params.find(p => {
+      const pair = p.split('=');
+      return decodeURIComponent(pair[0]) == 'deb';
+    });
+  }
+
   renderContentUnit = (cu, hit) => {
     const { t }                                                      = this.props;
     const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
-
-    console.log('query!', this.props.location);
-    // CONTINUE HERE!!!! should parse &deb from url and hide score!!!
 
     const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || cu.name;
     const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
@@ -100,9 +105,11 @@ class SearchResults extends Component {
           }
           {snippet || null}
         </Table.Cell>
-        <Table.Cell collapsing textAlign="right">
-          {score}
-        </Table.Cell>
+        { !this.isDebMode() ? null :
+          <Table.Cell collapsing textAlign="right">
+            {score}
+          </Table.Cell>
+        }
       </Table.Row>
     );
   };
