@@ -29,10 +29,7 @@ const renderUnit = (unit, t) => {
   return (
     <Table.Row key={unit.id} verticalAlign="top">
       <Table.Cell collapsing width={1}>
-        <UnitLogo
-          className='index__thumbnail'
-          unitId={unit.id}
-        />
+        <UnitLogo className="index__thumbnail" unitId={unit.id} />
       </Table.Cell>
       <Table.Cell>
         <span className="index__date">{filmDate}</span>

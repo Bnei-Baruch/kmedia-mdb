@@ -30,14 +30,11 @@ export const renderUnit = (unit, t) => {
     <Table.Row key={unit.id} verticalAlign="top">
       <Table.Cell collapsing singleLine >
         <UnitLogo
-          className='index__thumbnail'
+          className="index__thumbnail"
           unitId={unit.id}
           collectionId={lectures.length > 0 ? lectures[0].id : null}
         />
       </Table.Cell>
-      {/* <Table.Cell collapsing >
-        
-      </Table.Cell> */}
       <Table.Cell>
         <span className="index__date">{filmDate}</span>
         <Link className="index__title" to={canonicalLink(unit)}>
