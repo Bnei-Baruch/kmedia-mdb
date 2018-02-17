@@ -35,25 +35,25 @@ class AVPlayerMobile extends PureComponent {
     history: PropTypes.object.isRequired,
 
     // Playlist props
-    autoPlay: PropTypes.bool,
+    // autoPlay: PropTypes.bool,
     showNextPrev: PropTypes.bool,
     hasNext: PropTypes.bool,
     hasPrev: PropTypes.bool,
     onFinish: PropTypes.func,
-    onPlay: PropTypes.func,
-    onPause: PropTypes.func,
+    // onPlay: PropTypes.func,
+    // onPause: PropTypes.func,
     onPrev: PropTypes.func,
     onNext: PropTypes.func,
   };
 
   static defaultProps = {
-    autoPlay: false,
+    // autoPlay: false,
     showNextPrev: false,
     hasNext: false,
     hasPrev: false,
     onFinish: noop,
-    onPlay: noop,
-    onPause: noop,
+    // onPlay: noop,
+    // onPause: noop,
     onPrev: noop,
     onNext: noop,
   };
