@@ -100,7 +100,7 @@ class UnitListPage extends PureComponent {
           <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
           {
             items.length > 0 ?
-              <Table sortable basic="very" className="index-list">
+              <Table unstackable basic="very" className="index">
                 <Table.Body>
                   {items.map(x => renderUnit(x, t))}
                 </Table.Body>

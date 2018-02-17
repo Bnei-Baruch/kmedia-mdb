@@ -27,14 +27,14 @@ export const renderUnit = (unit, t) => {
 
   return (
     <Table.Row key={unit.id} verticalAlign="top">
-      <Table.Cell collapsing singleLine width={1}>
-        <strong>{filmDate}</strong>
+      <Table.Cell collapsing singleLine>
+        <span className="index__date">{filmDate}</span>
       </Table.Cell>
       <Table.Cell>
-        <Link to={canonicalLink(unit)}>
+        <Link className="index__title" to={canonicalLink(unit)}>
           <strong>{unit.name || NO_NAME}</strong>
         </Link>
-        <List horizontal divided link className="index-list__item-subtitle" size="tiny">
+        <List horizontal divided link className="index__collections" size="tiny">
           <List.Item>
             <List.Header>{t('publications.list.item_from')}</List.Header>
           </List.Item>

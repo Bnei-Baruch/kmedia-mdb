@@ -28,21 +28,19 @@ export const renderUnit = (unit, t) => {
 
   return (
     <Table.Row key={unit.id} verticalAlign="top">
-      <Table.Cell collapsing singleLine width={1}>
-        <strong>{filmDate}</strong>
-      </Table.Cell>
-      <Table.Cell collapsing width={1}>
+      <Table.Cell collapsing singleLine>
         <UnitLogo
-          fluid
+          className="index__thumbnail"
           unitId={unit.id}
           collectionId={lectures.length > 0 ? lectures[0].id : null}
         />
       </Table.Cell>
       <Table.Cell>
-        <Link to={canonicalLink(unit)}>
-          <strong>{unit.name || NO_NAME}</strong>
+        <span className="index__date">{filmDate}</span>
+        <Link className="index__title" to={canonicalLink(unit)}>
+          {unit.name || NO_NAME}
         </Link>
-        <List horizontal divided link className="index-list__item-subtitle" size="tiny">
+        <List horizontal divided link className="index__collections" size="tiny">
           <List.Item>
             <List.Header>{t('lectures.list.item_from')}</List.Header>
           </List.Item>

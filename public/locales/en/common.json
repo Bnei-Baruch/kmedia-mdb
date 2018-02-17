@@ -93,7 +93,9 @@
       "edit-help": "Drag the pointers to share a part of the video"
     },
     "buttons": {
-      "edit-back": "Back to play"
+      "edit-back": "Back to play",
+      "start-position": "Start",
+      "end-position": "End"
     },
     "share": {
       "title": "watch this video"

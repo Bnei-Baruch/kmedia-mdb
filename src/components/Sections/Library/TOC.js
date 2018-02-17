@@ -17,10 +17,12 @@ class TOC extends Component {
     contextRef: PropTypes.object,
     getSourceById: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
+    stickyOffset: PropTypes.number,
   };
 
   static defaultProps = {
-    contextRef: null
+    contextRef: null,
+    stickyOffset: 144, // 60 + 70 + 14 (top navbar + library secondary header + 1em)
   };
 
   state = {};
@@ -28,6 +30,14 @@ class TOC extends Component {
   componentWillReceiveProps(nextProps) {
     const { fullPath } = nextProps;
     this.setState({ activeId: fullPath[fullPath.length - 1].id });
+  }
+
+  componentDidUpdate() {
+    // make actual TOC content proper height
+    const el = document.querySelector('.source__toc > div:nth-child(2)');
+    if (el) {
+      el.style.height = `calc(100vh - ${this.props.stickyOffset}px)`;
+    }
   }
 
   getIndex = (node1, node2) => {
@@ -102,7 +112,7 @@ class TOC extends Component {
   };
 
   render() {
-    const { fullPath, rootId, contextRef } = this.props;
+    const { fullPath, rootId, contextRef, stickyOffset } = this.props;
 
     const activeIndex = this.getIndex(fullPath[1], fullPath[2]);
     if (activeIndex === -1) {
@@ -113,7 +123,7 @@ class TOC extends Component {
     const toc  = this.toc(rootId, path, true);
 
     return (
-      <Sticky context={contextRef} offset={144} className="source__toc">
+      <Sticky context={contextRef} offset={stickyOffset} className="source__toc">
         <Ref innerRef={this.handleAccordionContext}>
           <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} />
         </Ref>

@@ -9,7 +9,6 @@ import classNames from 'classnames';
 import { Button, Icon } from 'semantic-ui-react';
 
 import { MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
-import withIsMobile from '../../helpers/withIsMobile';
 import { getQuery, updateQuery } from '../../helpers/url';
 import { fromHumanReadableTime, toHumanReadableTime } from '../../helpers/time';
 import { PLAYER_MODE } from './constants';
@@ -38,7 +37,6 @@ class AVPlayer extends PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
     media: PropTypes.object.isRequired,
-    isMobile: PropTypes.bool.isRequired,
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -136,7 +134,7 @@ class AVPlayer extends PureComponent {
     this.setState({ persistenceFn: this.persistVolume });
     let persistedVolume = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
 
-    if (persistedVolume == null || isNaN(persistedVolume)) {
+    if (persistedVolume == null || Number.isNaN(persistedVolume)) {
       persistedVolume = DEFAULT_PLAYER_VOLUME;
       localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, persistedVolume);
     }
@@ -222,17 +220,16 @@ class AVPlayer extends PureComponent {
   };
 
   setSliceMode = (playerMode, properties = {}, cb) => {
-    let sliceStart  = properties.sliceStart;
-    let sliceEnd    = properties.sliceEnd;
     const { media } = this.props;
 
+    let { sliceStart, sliceEnd } = properties;
     if (typeof sliceStart === 'undefined') {
       sliceStart = this.state.sliceStart || 0;
     }
-
     if (typeof sliceEnd === 'undefined') {
       sliceEnd = this.state.sliceEnd || media.duration || Infinity;
     }
+
     this.setState({
       mode: playerMode,
       ...properties,
@@ -310,22 +307,24 @@ class AVPlayer extends PureComponent {
     const { history, media }       = this.props;
     const { sliceStart, sliceEnd } = this.state;
 
-    updateQuery(history, query => {
+    updateQuery(history, (query) => {
+      const q = { ...query };
+
       if (typeof values.sliceStart === 'undefined') {
-        query.sstart = sliceStart || 0;
+        q.sstart = sliceStart || 0;
       } else {
-        query.sstart = values.sliceStart;
+        q.sstart = values.sliceStart;
       }
 
       if (typeof values.sliceEnd === 'undefined') {
-        query.send = (!sliceEnd || sliceEnd === Infinity) ? media.duration : sliceEnd;
+        q.send = (!sliceEnd || sliceEnd === Infinity) ? media.duration : sliceEnd;
       } else {
-        query.send = values.sliceEnd;
+        q.send = values.sliceEnd;
       }
 
-      query.sstart = toHumanReadableTime(query.sstart);
-      query.send   = toHumanReadableTime(query.send);
-      return query;
+      q.sstart = toHumanReadableTime(q.sstart);
+      q.send   = toHumanReadableTime(q.send);
+      return q;
     });
   };
 
@@ -359,7 +358,7 @@ class AVPlayer extends PureComponent {
   };
 
   handleWrapperMouseMove = () => {
-    if (!this.state.controlsVisible && !this.props.isMobile) {
+    if (!this.state.controlsVisible) {
       this.showControls();
     }
   };
@@ -374,9 +373,9 @@ class AVPlayer extends PureComponent {
 
   handleWrapperKeyDown = (e) => {
     if (e.keyCode === 32) {
-      // if (!this.props.media.isLoading) {
-      this.props.media.playPause();
-      // }
+      if (!this.props.media.isLoading) {
+        this.props.media.playPause();
+      }
       e.preventDefault();
     }
   };
@@ -392,9 +391,9 @@ class AVPlayer extends PureComponent {
   };
 
   handleOnScreenClick = () => {
-    const { isMobile, media } = this.props;
+    const { media } = this.props;
 
-    if (isMobile && !this.state.controlsVisible) {
+    if (!this.state.controlsVisible) {
       this.showControls();
     } else if (!media.isLoading) {
       // toggle play only if we in normal mode
@@ -403,6 +402,13 @@ class AVPlayer extends PureComponent {
       if (this.state.mode === PLAYER_MODE.NORMAL) {
         media.playPause();
       }
+    }
+  };
+
+  handleOnScreenKeyDown = (e) => {
+    if (e.keyCode === 32) {
+      this.handleOnScreenClick();
+      e.preventDefault();
     }
   };
 
@@ -418,7 +424,6 @@ class AVPlayer extends PureComponent {
 
   render() {
     const {
-            isMobile,
             autoPlay,
             item,
             languages,
@@ -494,6 +499,8 @@ class AVPlayer extends PureComponent {
         }}
         className={classNames('mediaplayer', { 'media-edit-mode': isEditMode })}
         onKeyDown={utils.keyboardControls.bind(null, media)}
+        role="button"
+        tabIndex="-1"
       >
         <Player
           playsInline
@@ -552,7 +559,6 @@ class AVPlayer extends PureComponent {
               sliceEnd={sliceEnd}
               onSliceStartChange={this.handleSliceStartChange}
               onSliceEndChange={this.handleSliceEndChange}
-              isMobile={isMobile}
             />
 
             {
@@ -595,6 +601,7 @@ class AVPlayer extends PureComponent {
             role="button"
             tabIndex="0"
             onClick={this.handleOnScreenClick}
+            onKeyPress={this.handleOnScreenKeyDown}
           >
             {centerMediaControl}
           </div>
@@ -605,4 +612,4 @@ class AVPlayer extends PureComponent {
   }
 }
 
-export default withIsMobile(withMediaProps(withRouter(AVPlayer)));
+export default withMediaProps(withRouter(AVPlayer));

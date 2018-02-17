@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Media } from 'react-media-player';
 
+import withIsMobile from '../../helpers/withIsMobile';
 import { MT_AUDIO } from '../../helpers/consts';
-import AVPlayer from './AVPlayer';
+import AVMobileCheck from './AVMobileCheck';
 
 class AVPlaylistPlayer extends Component {
 
@@ -16,6 +17,7 @@ class AVPlaylistPlayer extends Component {
     onLanguageChange: PropTypes.func.isRequired,
     onSwitchAV: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    isMobileDevice: PropTypes.bool.isRequired,
   };
 
   state = {
@@ -48,7 +50,7 @@ class AVPlaylistPlayer extends Component {
   onPause = () => this.setState({ autoPlay: false });
 
   render() {
-    const { t, selected, items, language, onSwitchAV, onLanguageChange } = this.props;
+    const { t, selected, items, language, onSwitchAV, onLanguageChange,isMobileDevice } = this.props;
     const { autoPlay }                                                     = this.state;
 
     const currentItem = items[selected];
@@ -63,11 +65,12 @@ class AVPlaylistPlayer extends Component {
         className={classNames('avbox__player', {
           'avbox__player--is-audio': currentItem.mediaType === MT_AUDIO,
           'avbox__player--is-4x3': currentItem.unit.film_date < '2014',
+          'mobile-device': isMobileDevice
         })}
       >
         <div className="avbox__media-wrapper">
           <Media>
-            <AVPlayer
+            <AVMobileCheck
               autoPlay={autoPlay}
               item={currentItem}
               onSwitchAV={onSwitchAV}
@@ -92,4 +95,4 @@ class AVPlaylistPlayer extends Component {
   }
 }
 
-export default AVPlaylistPlayer;
+export default withIsMobile(AVPlaylistPlayer);

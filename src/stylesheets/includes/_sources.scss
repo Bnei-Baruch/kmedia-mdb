@@ -38,7 +38,7 @@
 
 
 .source {
-  &.is-readbe {
+  &.is-readable {
     background: $white;
     bottom: 0;
     left: 0;
@@ -54,17 +54,17 @@
     }
     .source__toc {
       > div:nth-child(2) {
-        height: calc(100vh - #{$secondary-header-height} - 1em);
-        
+        // height: calc(100vh - #{$secondary-header-height} - 1em);
+
         // overflow: scroll;
         // padding: 10px;
       }
     }
   }
   &__toc {
-    
+
     > div:nth-child(2) {
-      height: calc(100vh - #{$main-menu-height} - #{$secondary-header-height} - 1em);
+      // height: calc(100vh - #{$main-menu-height} - #{$secondary-header-height} - 1em);
       overflow: scroll;
       // background: pink;
       // padding: 10px;

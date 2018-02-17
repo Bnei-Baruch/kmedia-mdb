@@ -29,18 +29,18 @@ export const renderUnit = (unit, t) => {
 
   return (
     <Table.Row verticalAlign="top" key={unit.id}>
-      <Table.Cell collapsing singleLine width={1}>
-        <strong>{t('values.date', { date: new Date(unit.film_date) })}</strong>
+      <Table.Cell collapsing singleLine>
+        <span className="index__date">{t('values.date', { date: new Date(unit.film_date) })}</span>
       </Table.Cell>
       <Table.Cell>
-        <Link to={canonicalLink(unit)}>
+        <Link className="index__title" to={canonicalLink(unit)}>
           <strong>{unit.name}</strong>
         </Link>
         {
           relatedItems.length === 0 ?
             null :
             (
-              <List divided horizontal link className="index-list__item-subtitle" size="tiny">
+              <List horizontal divided link className="index__collections" size="tiny">
                 <List.Item>
                   <List.Header>
                     {t('lessons.list.related')}:
@@ -78,14 +78,14 @@ export const renderCollection = (collection, t) => {
       return (
         <Table.Row key={`u-${unit.id}`} verticalAlign="top">
           <Table.Cell>
-            <Link to={canonicalLink(unit)}>
+            <Link style={{ display: 'block' }} to={canonicalLink(unit)}>
               {unit.name}
             </Link>
             {
               relatedItems.length === 0 ?
                 null :
                 (
-                  <List className="index-list__item-subtitle" size="tiny" divided horizontal link>
+                  <List horizontal divided link className="index__collections" size="tiny">
                     <List.Item>
                       <List.Header>
                         {t('lessons.list.related')}:
@@ -110,7 +110,7 @@ export const renderCollection = (collection, t) => {
         <strong>{t('values.date', { date: new Date(collection.film_date) })}</strong>
       </Table.Cell>
       <Table.Cell>
-        <Link to={canonicalLink(collection)}>
+        <Link style={{ marginLeft: '-11px', marginRight: '-11px'}} to={canonicalLink(collection)}>
           <strong>{t(CT_DAILY_LESSON_I18N_KEY)}</strong>
         </Link>
       </Table.Cell>

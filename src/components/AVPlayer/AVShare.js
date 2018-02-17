@@ -1,83 +1,91 @@
-import React, {Component} from 'react';
-import { Button, Transition } from 'semantic-ui-react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { ShareButtons, generateShareIcon, } from 'react-share';
+import { Button, Transition } from 'semantic-ui-react';
+import { generateShareIcon, ShareButtons, } from 'react-share';
 
 const {
   FacebookShareButton,
   GooglePlusShareButton,
   TwitterShareButton,
-  //PinterestShareButton,
-  //VKShareButton,
-  //OKShareButton,
-  //TelegramShareButton,
+  // PinterestShareButton,
+  // VKShareButton,
+  // OKShareButton,
+  // TelegramShareButton,
   WhatsappShareButton,
-  //RedditShareButton,
+  // RedditShareButton,
   EmailShareButton,
-  //TumblrShareButton,
-  //LivejournalShareButton,
-  //MailruShareButton,
+  // TumblrShareButton,
+  // LivejournalShareButton,
+  // MailruShareButton,
 } = ShareButtons;
 
-const FacebookIcon = generateShareIcon('facebook');
-const TwitterIcon = generateShareIcon('twitter');
+const FacebookIcon   = generateShareIcon('facebook');
+const TwitterIcon    = generateShareIcon('twitter');
 const GooglePlusIcon = generateShareIcon('google');
-const EmailIcon = generateShareIcon('email');
-const WhatsappIcon = generateShareIcon('whatsapp');
+const EmailIcon      = generateShareIcon('email');
+const WhatsappIcon   = generateShareIcon('whatsapp');
 
 class AVShare extends Component {
+  static propTypes = {
+    shareUrl: PropTypes.string,
+    t: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    shareUrl: '',
+  };
+
   state = {
     shareUrl: '',
     visible: false
   };
 
   componentDidMount() {
-    this.loadUrl();
+    this.loadUrl(this.props.shareUrl);
   }
 
-  componentWillReceiveProps() {
-    if (window.location.href !== this.state.shareUrl) {
-      this.loadUrl();
+  componentWillReceiveProps(nextProps) {
+    if ((nextProps.shareUrl !== this.props.shareUrl) ||
+      (window.location.href !== this.state.shareUrl)) {
+      this.loadUrl(nextProps.shareUrl);
     }
   }
 
-  loadUrl = () => {
-    this.setState({
-      shareUrl: window.location.href
-    });
-  };
+  loadUrl = url =>
+    this.setState({ shareUrl: url || window.location.href });
 
-  handleClick = () => this.setState({
-    visible: !this.state.visible
-  });
+  handleClick = () =>
+    this.setState({ visible: !this.state.visible });
 
   render() {
-    const {visible, shareUrl} = this.state;
-    const { t } = this.props;
-    const title = t('player.share.title');
-    const buttonSize = 46;
+    const { visible, shareUrl } = this.state;
+    const { t }                 = this.props;
+    const title                 = t('player.share.title');
+    const buttonSize            = 46;
+
     return (
-      <div className='social-share'>
+      <div className="social-share">
         <Button
-          type="button"
           primary
-          size="big"
           circular
-          icon={'share alternate'}
+          type="button"
+          size="big"
+          icon="share alternate"
           onClick={this.handleClick}
         />
-        <Transition visible={visible} animation='scale' duration={500}>
-          <div className='social-buttons'>
-            <FacebookShareButton url={shareUrl} quote={title} >
+        <Transition visible={visible} animation="scale" duration={500}>
+          <div className="social-buttons">
+            <FacebookShareButton url={shareUrl} quote={title}>
               <FacebookIcon size={buttonSize} round />
             </FacebookShareButton>
-            <TwitterShareButton url={shareUrl} title={title} >
+            <TwitterShareButton url={shareUrl} title={title}>
               <TwitterIcon size={buttonSize} round />
             </TwitterShareButton>
-            <WhatsappShareButton url={shareUrl} title={title} separator=":: " >
+            <WhatsappShareButton url={shareUrl} title={title} separator=":: ">
               <WhatsappIcon size={buttonSize} round />
             </WhatsappShareButton>
-            <GooglePlusShareButton url={shareUrl} >
+            <GooglePlusShareButton url={shareUrl}>
               <GooglePlusIcon size={buttonSize} round />
             </GooglePlusShareButton>
             <EmailShareButton url={shareUrl} subject={title} body="body">

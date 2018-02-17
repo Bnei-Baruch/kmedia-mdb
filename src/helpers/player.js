@@ -18,6 +18,10 @@ import {
 import { getQuery, updateQuery } from './url';
 import { isEmpty, physicalFile } from './utils';
 
+function getMimeType(mediaType) {
+  return mediaType === MT_VIDEO ? MEDIA_TYPES.mp4.mime_type : MEDIA_TYPES.mp3.mime_type;
+}
+
 function calcAvailableMediaTypes(contentUnit, language) {
   if (!contentUnit) {
     return [];
@@ -33,8 +37,12 @@ function calcAvailableMediaTypes(contentUnit, language) {
   }, new Set()));
 }
 
-function getMimeType(mediaType) {
-  return mediaType === MT_VIDEO ? MEDIA_TYPES.mp4.mime_type : MEDIA_TYPES.mp3.mime_type;
+function restorePreferredMediaType() {
+  return localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO;
+}
+
+function persistPreferredMediaType(mediaType) {
+  localStorage.setItem('@@kmedia_player_media_type', mediaType);
 }
 
 /**
@@ -219,7 +227,7 @@ function setLanguageInQuery(history, language) {
 function getActivePartFromQuery(location) {
   const q = getQuery(location);
   const p = q.ap ? parseInt(q.ap, 10) : 0;
-  return isNaN(p) || p < 0 ? 0 : p;
+  return Number.isNaN(p) || p < 0 ? 0 : p;
 }
 
 function setActivePartInQuery(history, ap) {
@@ -238,4 +246,6 @@ export default {
   setLanguageInQuery,
   getActivePartFromQuery,
   setActivePartInQuery,
+  restorePreferredMediaType,
+  persistPreferredMediaType,
 };

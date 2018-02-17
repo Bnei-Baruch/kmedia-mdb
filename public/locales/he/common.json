@@ -92,7 +92,9 @@
       "edit-help": "משוך את הידיות על מנת לשתף חלק מהוידאו"
     },
     "buttons": {
-      "edit-back": "חזור"
+      "edit-back": "חזור",
+      "start-position": "התחלה",
+      "end-position": "סיום"
     },
     "share": {
       "title": "צפה בסרטון"

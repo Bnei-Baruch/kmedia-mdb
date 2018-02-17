@@ -28,7 +28,6 @@ $test: '400';
       }
     }
   }
-
   &__header {
     left: 0;
     position: fixed;
@@ -37,7 +36,9 @@ $test: '400';
     z-index: 999999;
   }
   &__search {
-    flex: 1 0 auto!important;
+    flex: 1 0 auto !important;
+    font-size: 1rem;
+    line-height: 1.4285em !important;
   }
   &__sidebar {
     background: #fff;
@@ -102,7 +103,7 @@ $test: '400';
 
   &__secondary-header{
     background: $white;
-    height: $secondary-header-height;
+    min-height: $secondary-header-height;
     left: 0;
     position: fixed;
     right: 0;

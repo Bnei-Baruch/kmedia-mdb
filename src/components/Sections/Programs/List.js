@@ -40,21 +40,19 @@ export const renderUnit = (unit, t) => {
 
   return (
     <Table.Row key={unit.id} verticalAlign="top">
-      <Table.Cell collapsing singleLine width={1}>
-        <strong>{filmDate}</strong>
-      </Table.Cell>
-      <Table.Cell collapsing width={1}>
+      <Table.Cell collapsing singleLine>
         <UnitLogo
-          fluid
+          className="index__thumbnail"
           unitId={unit.id}
           collectionId={programs.length > 0 ? programs[0].id : null}
         />
       </Table.Cell>
       <Table.Cell>
-        <Link to={canonicalLink(unit)}>
+        <span className="index__date">{filmDate}</span>
+        <Link className="index__title" to={canonicalLink(unit)}>
           <strong>{unit.name || NO_NAME}</strong>
         </Link>
-        <List className="index-list__item-subtitle" horizontal divided link size="tiny">
+        <List horizontal divided link className="index__collections" size="tiny">
           <List.Item>
             <List.Header>{t('programs.list.episode_from')}</List.Header>
           </List.Item>
@@ -66,7 +64,6 @@ export const renderUnit = (unit, t) => {
 };
 
 class MyUnitListContainer extends UnitListContainer {
-
   static propTypes = {
     ...UnitListContainer.propTypes,
     shouldOpenProgramsFilter: PropTypes.bool,
@@ -83,8 +80,7 @@ class MyUnitListContainer extends UnitListContainer {
     if (this.props.shouldOpenProgramsFilter) {
       this.props.editNewFilter('programs', 'programs-filter');
     }
-  };
-
+  }
 }
 
 const mapState = (state, ownProps) => {
