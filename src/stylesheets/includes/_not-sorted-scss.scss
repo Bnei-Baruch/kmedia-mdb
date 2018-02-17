@@ -83,6 +83,10 @@ em {
     width: 5px;
 }
 
+.transparent {
+  opacity: 0;
+}
+
 /* player on mobile devices */
 .avbox__player.mobile-device {
   height: auto;

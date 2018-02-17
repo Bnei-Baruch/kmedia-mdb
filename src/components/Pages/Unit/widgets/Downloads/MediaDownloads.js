@@ -291,20 +291,24 @@ class MediaDownloads extends Component {
         <Table unstackable className="media-downloads__files" basic="very" compact="very">
           <Table.Body>
             {rows}
+            {
+              derivedRows ? derivedRows: null
+            }
           </Table.Body>
         </Table>
-        {
+        {/* moved "derived media to the main downloads table" */}
+        {/* {
           derivedRows ?
             <div className="media-downloads__derivations">
               <Header size="tiny" content={t('media-downloads.derived-title')} />
-              <Table basic="very" compact="very">
+              <Table unstackable basic="very" compact="very">
                 <Table.Body>
                   {derivedRows}
                 </Table.Body>
               </Table>
             </div>
             : null
-        }
+        } */}
       </div>
     );
   }

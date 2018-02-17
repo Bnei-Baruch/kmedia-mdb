@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import { replace as routerReplace } from 'react-router-redux';
+import classnames from 'classnames';
 import { translate } from 'react-i18next';
 import { Button, Container, Grid, Header, } from 'semantic-ui-react';
 
@@ -48,9 +49,14 @@ class LibraryContainer extends Component {
 
   state = {
     lastLoadedId: null,
+    isReadable: false,
   };
 
   componentDidMount() {
+    this.updateSticky();
+    window.addEventListener('resize', this.updateSticky);
+    window.addEventListener('load', this.updateSticky);
+
     const { sourceId, areSourcesLoaded, replace } = this.props;
     if (!areSourcesLoaded) {
       return;
@@ -101,6 +107,15 @@ class LibraryContainer extends Component {
     }
   }
 
+  componentDidUpdate() {
+    this.updateSticky();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateSticky);
+    window.removeEventListener('load', this.updateSticky);
+  }
+
   getFullPath = (sourceId) => {
     // Go to the root of this sourceId
     const { getPathByID } = this.props;
@@ -110,6 +125,16 @@ class LibraryContainer extends Component {
     }
 
     return getPathByID(sourceId);
+  };
+
+  updateSticky = () => {
+    // take the secondary header height for sticky stuff calculations
+    if (this.secondaryHeaderRef) {
+      const { height } = this.secondaryHeaderRef.getBoundingClientRect();
+      if (this.state.secondaryHeaderHeight !== height) {
+        this.setState({ secondaryHeaderHeight: height });
+      }
+    }
   };
 
   firstLeafId = (sourceId) => {
@@ -133,6 +158,14 @@ class LibraryContainer extends Component {
 
   handleSelectedAccordionContext = (ref) => {
     this.selectedAccordionContext = ref;
+  };
+
+  handleSecondaryHeaderRef = (ref) => {
+    this.secondaryHeaderRef = ref;
+  };
+
+  handleIsReadable = () => {
+    this.setState({ isReadable: !this.state.isReadable });
   };
 
   fetchIndices = (sourceId) => {
@@ -204,9 +237,11 @@ class LibraryContainer extends Component {
       );
     }
 
+    const { isReadable, secondaryHeaderHeight } = this.state;
+
     return (
-      <div className="source is-readble">
-        <div className="layout__secondary-header">
+      <div className={classnames({ source: true, 'is-readable': isReadable })}>
+        <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
           <Container>
             <Grid padded>
               <Grid.Row>
@@ -219,15 +254,15 @@ class LibraryContainer extends Component {
                   {this.header(sourceId, fullPath)}
                 </Grid.Column>
                 <Grid.Column computer={2}>
-                  <Button.Group basic size="tiny" >
-                    <Button icon="expand" />
+                  <Button.Group basic size="tiny">
+                    <Button icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                   </Button.Group>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
           </Container>
         </div>
-        <Container>
+        <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
           <Grid padded divided>
             <Grid.Row>
               <Grid.Column computer={4}>
@@ -237,10 +272,10 @@ class LibraryContainer extends Component {
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
                   replace={this.props.replace}
+                  stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}
                 />
               </Grid.Column>
               <Grid.Column computer={8}>
-                {/* {MainMenuHeight2} */}
                 <div ref={this.handleContextRef}>
                   <div className="source__content">
                     {content}
