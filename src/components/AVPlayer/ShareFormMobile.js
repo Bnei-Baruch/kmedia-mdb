@@ -106,11 +106,11 @@ class ShareFormMobile extends Component {
         </div>
         <div>
           <Button content={t('player.buttons.start-position')} onClick={this.setStart} />
-          <Input value={this.mlsToStrColon(start)} onChange={this.setStart} />
+          <Input value={this.mlsToStrColon(start)} onChange={this.setStart} autoComplete="off" />
         </div>
         <div>
           <Button content={t('player.buttons.end-position')} onClick={this.setEnd} />
-          <Input value={end ? this.mlsToStrColon(end) : ''} onChange={this.setEnd} />
+          <Input value={end ? this.mlsToStrColon(end) : ''} onChange={this.setEnd} autoComplete="off" />
         </div>
       </div>
     );
