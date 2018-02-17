@@ -63,7 +63,6 @@ class AVPlayerMobile extends PureComponent {
     errorReason: '',
     mode: PLAYER_MODE.NORMAL,
     isSliceMode: false,
-    currentTime: 0,
   };
 
   componentWillMount() {
@@ -95,9 +94,10 @@ class AVPlayerMobile extends PureComponent {
   }
 
   onSwitchAV = (...params) => {
-    // Keeping the current time and playing state while switching
-    // is not possible on mobile due to user gesture is prior to
-    // media element presence on the page
+    // We only keep the current time.
+    // Playing state is irrelevant on mobile due to user gesture finish
+    // prior to media element presence on the page
+    this.wasCurrentTime = this.media.currentTime;
     this.props.onSwitchAV(...params);
   };
 
@@ -178,7 +178,6 @@ class AVPlayerMobile extends PureComponent {
     const { mode, sliceEnd } = this.state;
     const time               = e.currentTarget.currentTime;
     if (mode !== PLAYER_MODE.SLICE_VIEW) {
-      this.setState({ currentTime: time });
       return;
     }
 
@@ -187,7 +186,6 @@ class AVPlayerMobile extends PureComponent {
       this.media.pause();
       this.seekTo(sliceEnd);
     }
-    this.setState({ currentTime: time });
   };
 
   handleError = (e) => {
