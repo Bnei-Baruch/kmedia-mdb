@@ -28,7 +28,7 @@ export const renderUnit = (unit, t) => {
 
   return (
     <Table.Row key={unit.id} verticalAlign="top">
-      <Table.Cell collapsing singleLine >
+      <Table.Cell collapsing singleLine>
         <UnitLogo
           className="index__thumbnail"
           unitId={unit.id}

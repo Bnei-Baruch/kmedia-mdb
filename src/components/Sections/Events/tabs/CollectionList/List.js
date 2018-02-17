@@ -29,7 +29,7 @@ class EventsList extends PureComponent {
     return (
       <Table.Row verticalAlign="top" key={collection.id}>
         <Table.Cell collapsing singleLine>
-        <span className="index__date">{localDate}</span>
+          <span className="index__date">{localDate}</span>
         </Table.Cell>
         <Table.Cell>
           <Link className="index__title" to={canonicalLink(collection)}>
