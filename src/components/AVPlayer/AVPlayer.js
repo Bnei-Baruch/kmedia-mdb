@@ -134,7 +134,7 @@ class AVPlayer extends PureComponent {
     this.setState({ persistenceFn: this.persistVolume });
     let persistedVolume = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
 
-    if (persistedVolume == null || isNaN(persistedVolume)) {
+    if (persistedVolume == null || Number.isNaN(persistedVolume)) {
       persistedVolume = DEFAULT_PLAYER_VOLUME;
       localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, persistedVolume);
     }
@@ -220,17 +220,16 @@ class AVPlayer extends PureComponent {
   };
 
   setSliceMode = (playerMode, properties = {}, cb) => {
-    let sliceStart  = properties.sliceStart;
-    let sliceEnd    = properties.sliceEnd;
     const { media } = this.props;
 
+    let { sliceStart, sliceEnd } = properties;
     if (typeof sliceStart === 'undefined') {
       sliceStart = this.state.sliceStart || 0;
     }
-
     if (typeof sliceEnd === 'undefined') {
       sliceEnd = this.state.sliceEnd || media.duration || Infinity;
     }
+
     this.setState({
       mode: playerMode,
       ...properties,
@@ -308,22 +307,24 @@ class AVPlayer extends PureComponent {
     const { history, media }       = this.props;
     const { sliceStart, sliceEnd } = this.state;
 
-    updateQuery(history, query => {
+    updateQuery(history, (query) => {
+      const q = { ...query };
+
       if (typeof values.sliceStart === 'undefined') {
-        query.sstart = sliceStart || 0;
+        q.sstart = sliceStart || 0;
       } else {
-        query.sstart = values.sliceStart;
+        q.sstart = values.sliceStart;
       }
 
       if (typeof values.sliceEnd === 'undefined') {
-        query.send = (!sliceEnd || sliceEnd === Infinity) ? media.duration : sliceEnd;
+        q.send = (!sliceEnd || sliceEnd === Infinity) ? media.duration : sliceEnd;
       } else {
-        query.send = values.sliceEnd;
+        q.send = values.sliceEnd;
       }
 
-      query.sstart = toHumanReadableTime(query.sstart);
-      query.send   = toHumanReadableTime(query.send);
-      return query;
+      q.sstart = toHumanReadableTime(q.sstart);
+      q.send   = toHumanReadableTime(q.send);
+      return q;
     });
   };
 
@@ -401,6 +402,13 @@ class AVPlayer extends PureComponent {
       if (this.state.mode === PLAYER_MODE.NORMAL) {
         media.playPause();
       }
+    }
+  };
+
+  handleOnScreenKeyDown = (e) => {
+    if (e.keyCode === 32) {
+      this.handleOnScreenClick();
+      e.preventDefault();
     }
   };
 
@@ -491,6 +499,8 @@ class AVPlayer extends PureComponent {
         }}
         className={classNames('mediaplayer', { 'media-edit-mode': isEditMode })}
         onKeyDown={utils.keyboardControls.bind(null, media)}
+        role="button"
+        tabIndex="-1"
       >
         <Player
           playsInline
@@ -591,6 +601,7 @@ class AVPlayer extends PureComponent {
             role="button"
             tabIndex="0"
             onClick={this.handleOnScreenClick}
+            onKeyPress={this.handleOnScreenKeyDown}
           >
             {centerMediaControl}
           </div>
