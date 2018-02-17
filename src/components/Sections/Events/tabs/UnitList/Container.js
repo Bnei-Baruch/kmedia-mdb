@@ -28,15 +28,16 @@ const renderUnit = (unit, t) => {
 
   return (
     <Table.Row key={unit.id} verticalAlign="top">
-      <Table.Cell collapsing singleLine width={1}>
-        <strong>{filmDate}</strong>
-      </Table.Cell>
       <Table.Cell collapsing width={1}>
-        <UnitLogo fluid unitId={unit.id} />
+        <UnitLogo
+          className='index__thumbnail'
+          unitId={unit.id}
+        />
       </Table.Cell>
       <Table.Cell>
-        <Link to={canonicalLink(unit)}>
-          <strong>{unit.name || NO_NAME}</strong>
+        <span className="index__date">{filmDate}</span>
+        <Link className="index__title" to={canonicalLink(unit)}>
+          {unit.name || NO_NAME}
         </Link>
         {
           relatedItems.length > 0 ?

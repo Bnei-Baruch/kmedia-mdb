@@ -28,12 +28,12 @@ class EventsList extends PureComponent {
 
     return (
       <Table.Row verticalAlign="top" key={collection.id}>
-        <Table.Cell collapsing singleLine width={1}>
-          <strong>{localDate}</strong>
+        <Table.Cell collapsing singleLine>
+        <span className="index__date">{localDate}</span>
         </Table.Cell>
         <Table.Cell>
-          <Link to={canonicalLink(collection)}>
-            <strong>{collection.name || NO_NAME}</strong>
+          <Link className="index__title" to={canonicalLink(collection)}>
+            {collection.name || NO_NAME}
           </Link>
         </Table.Cell>
       </Table.Row>
@@ -48,7 +48,7 @@ class EventsList extends PureComponent {
     }
 
     return (
-      <Table basic="very" sortable>
+      <Table unstackable basic="very" className="index">
         <Table.Body>
           {items.map(this.renderCollection)}
         </Table.Body>
