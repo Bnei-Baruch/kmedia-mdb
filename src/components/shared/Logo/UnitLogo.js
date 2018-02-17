@@ -10,16 +10,18 @@ class UnitLogo extends PureComponent {
     unitId: PropTypes.string,
     collectionId: PropTypes.string,
     width: PropTypes.number,
+    className: PropTypes.string,
   };
 
   static defaultProps = {
     unitId: null,
     collectionId: null,
     width: 120,
+    className: '',
   };
 
   render() {
-    const { unitId, collectionId, width, ...rest } = this.props;
+    const { unitId, collectionId, width,className, ...rest } = this.props;
 
     let src = assetUrl(`api/thumbnail/${unitId}`);
 
@@ -33,7 +35,7 @@ class UnitLogo extends PureComponent {
       <FallbackImage
         {...rest}
         src={src}
-        className="unit-logo"
+        className={`unit-logo ${className}`}
         initialImage={imagePlaceholder}
         fallbackImage={[
           collectionId ? assetUrl(`logos/collections/${collectionId}.png`) : null,
