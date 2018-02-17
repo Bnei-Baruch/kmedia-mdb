@@ -372,9 +372,9 @@ class AVPlayer extends PureComponent {
 
   handleWrapperKeyDown = (e) => {
     if (e.keyCode === 32) {
-      // if (!this.props.media.isLoading) {
-      this.props.media.playPause();
-      // }
+      if (!this.props.media.isLoading) {
+        this.props.media.playPause();
+      }
       e.preventDefault();
     }
   };
