@@ -306,7 +306,10 @@ class AVPlayerMobile extends PureComponent {
 
         {
           isSliceMode ?
-            <ShareFormMobile currentTime={this.media.currentTime || 0} playerDuration={this.media.duration || 0} /> :
+            <ShareFormMobile
+              currentTime={this.media.currentTime || 0}
+              playerDuration={this.media.duration || 0}
+            /> :
             null
         }
       </div>
