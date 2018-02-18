@@ -19,7 +19,6 @@ import EventsIcon from '../../../images/icons/events.svg';
 import PublicationsIcon from '../../../images/icons/publications.svg';
 
 class HomePage extends Component {
-
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
     latestLesson: shapes.LessonCollection,
@@ -53,7 +52,7 @@ class HomePage extends Component {
       }
 
       const section = s[1];
-      let v         = acc[section];
+      const v       = acc[section];
       if (v) {
         if (v.film_date < val.film_date) {
           acc[section] = val;
@@ -119,7 +118,7 @@ class HomePage extends Component {
           <Section title={t('home.updates')}>
             <Card.Group itemsPerRow={4} doubling>
               {
-                sortedCUs.slice(0, 4).map(x => {
+                sortedCUs.slice(0, 4).map((x) => {
                   const [section, unit] = x;
                   return <LatestUpdate key={section} unit={unit} label={t(`nav.sidebar.${section}`)} t={t} />;
                 })
