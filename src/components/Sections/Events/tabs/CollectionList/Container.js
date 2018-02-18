@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY } from '../../../../../helpers/consts';
+import { CT_CONGRESS, CT_HOLIDAY, CT_UNITY_DAY } from '../../../../../helpers/consts';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors as filterSelectors } from '../../../../../redux/modules/filters';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';

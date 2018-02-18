@@ -47,11 +47,11 @@ class SearchResults extends Component {
 
   isDebMode = () => {
     const params = this.props.location.search.substring(1).split('&');
-    return !!params.find(p => {
+    return !!params.find((p) => {
       const pair = p.split('=');
-      return decodeURIComponent(pair[0]) == 'deb';
+      return decodeURIComponent(pair[0]) === 'deb';
     });
-  }
+  };
 
   renderContentUnit = (cu, hit) => {
     const { t }                                                      = this.props;
@@ -105,10 +105,12 @@ class SearchResults extends Component {
           }
           {snippet || null}
         </Table.Cell>
-        { !this.isDebMode() ? null :
-          <Table.Cell collapsing textAlign="right">
-            {score}
-          </Table.Cell>
+        {
+          !this.isDebMode() ?
+            null :
+            <Table.Cell collapsing textAlign="right">
+              {score}
+            </Table.Cell>
         }
       </Table.Row>
     );
@@ -170,11 +172,11 @@ class SearchResults extends Component {
       return this.renderContentUnit(cu, hit);
     } else if (c) {
       return this.renderCollection(c, hit);
-    } else {
-      // maybe content_units are still loading ?
-      // maybe stale data in elasticsearch ?
-      return null;
     }
+
+    // maybe content_units are still loading ?
+    // maybe stale data in elasticsearch ?
+    return null;
   };
 
   render() {
