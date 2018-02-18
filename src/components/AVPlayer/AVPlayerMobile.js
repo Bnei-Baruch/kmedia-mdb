@@ -210,6 +210,20 @@ class AVPlayerMobile extends PureComponent {
   toggleSliceMode = () =>
     this.setState({ isSliceMode: !this.state.isSliceMode });
 
+  handleJumpBack = () => {
+    const { currentTime, duration } = this.media;
+
+    const jumpTo = Math.max(0, Math.min(currentTime - 5, duration));
+    this.seekTo(jumpTo);
+  };
+
+  handleJumpForward = () => {
+    const { currentTime, duration } = this.media;
+
+    const jumpTo = Math.max(0, Math.min(currentTime + 5, duration));
+    this.seekTo(jumpTo);
+  };
+
   render() {
     const {
             item,
@@ -286,7 +300,12 @@ class AVPlayerMobile extends PureComponent {
             />
             <div className="mediaplayer__spacer" />
             <AVEditSlice onActivateSlice={this.toggleSliceMode} isActive={isSliceMode} />
-
+            <button type="button" tabIndex="-1" onClick={this.handleJumpBack}>
+              <Icon name="backward" />
+            </button>
+            <button type="button" tabIndex="-1" onClick={this.handleJumpForward}>
+              <Icon name="forward" />
+            </button>
             <AVAudioVideo
               isAudio={isAudio}
               isVideo={isVideo}
