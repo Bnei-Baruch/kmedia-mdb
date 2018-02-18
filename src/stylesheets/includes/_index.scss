@@ -2,6 +2,7 @@
 //extands
 @mixin small-date {
   font-size: .9em;
+
   &::after {
     background-color: #e9eaea;
     content: '';
@@ -44,23 +45,34 @@
 
 .index {
   @include small-mobile {
-    td {
-      display: block;
-      padding: 0 !important;
-      white-space: normal !important;
-      width: auto !important;
+    .no-thumbnail {
+      border: 0 !important;
+      display: block !important;
 
       &:first-child {
-        padding-top: 0.785714em !important;
+        margin-top: -.785714em !important;
       }
 
-      &:last-child {
-        border: 0 !important;
-        padding-bottom: 0.785714em !important;
+      td {
+        display: block;
+        padding: 0 !important;
+        white-space: normal !important;
+        width: auto !important;
+
+        &:first-child {
+          &:not(:only-child) {
+            margin-top: .785714em !important;
+            padding-top: .785714em !important;
+          }
+        }
+
+        &:last-child {
+          border: 0 !important;
+        }
       }
     }
   }
-  
+
   &__date {
     @include small-mobile {
       @include small-date;
@@ -76,6 +88,13 @@
   &__title {
     display: block;
     font-weight: bold;
+  }
+
+  &__item {
+    @include small-mobile {
+      padding: .785714em 0 0;
+    }
+    display: block;
   }
 
   &__thumbnail {
