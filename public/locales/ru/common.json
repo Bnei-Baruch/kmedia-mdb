@@ -93,7 +93,10 @@
       "edit-help": "Перемещайте курсор чтобы поделиться частью видео"
     },
     "buttons": {
-      "edit-back": "Назад"
+      "edit-back": "Назад",
+      "start-position": "Начало",
+      "end-position": "Конец",
+      "click-to-set": "Жми"
     },
     "share": {
       "title": "Посмотри это видео"
