@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { List, Table } from 'semantic-ui-react';
 
-import { CT_DAILY_LESSON, CT_LESSON_PART } from '../../../helpers/consts';
+import { CT_DAILY_LESSON, CT_LESSON_PART, NO_NAME } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { selectors as mdb } from '../../../redux/modules/mdb';
@@ -23,7 +23,7 @@ export const renderUnit = (unit, t) => {
     )
   ).concat(breakdown.getAllButDailyLessons().map(x => (
     <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-      {x.name}
+      {x.name || NO_NAME}
     </List.Item>
   )));
 
@@ -34,7 +34,7 @@ export const renderUnit = (unit, t) => {
       </Table.Cell>
       <Table.Cell>
         <Link className="index__title" to={canonicalLink(unit)}>
-          {unit.name}
+          {unit.name || NO_NAME}
         </Link>
         {
           relatedItems.length === 0 ?
@@ -71,7 +71,7 @@ export const renderCollection = (collection, t) => {
           )
         ).concat(breakdown.getAllButDailyLessons().map(x => (
           <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-            {x.name}
+            {x.name || NO_NAME}
           </List.Item>
         )));
 
@@ -79,7 +79,7 @@ export const renderCollection = (collection, t) => {
         <Table.Row key={`u-${unit.id}`} verticalAlign="top" className="no-thumbnail">
           <Table.Cell>
             <Link className="index__item" to={canonicalLink(unit)}>
-              {unit.name}
+              {unit.name || NO_NAME}
             </Link>
             {
               relatedItems.length === 0 ?

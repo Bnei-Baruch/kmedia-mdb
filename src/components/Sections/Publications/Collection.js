@@ -14,12 +14,12 @@ export const renderUnit = (unit, t) => {
 
   return (
     <Table.Row key={unit.id} verticalAlign="top">
-      <Table.Cell collapsing singleLine width={1}>
-        <strong>{filmDate}</strong>
+      <Table.Cell collapsing singleLine>
+        <span className="index__date">{filmDate}</span>
       </Table.Cell>
       <Table.Cell>
-        <Link to={canonicalLink(unit)}>
-          <strong>{unit.name || NO_NAME}</strong>
+        <Link className="index__title" to={canonicalLink(unit)}>
+          {unit.name || NO_NAME}
         </Link>
       </Table.Cell>
     </Table.Row>

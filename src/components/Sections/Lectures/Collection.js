@@ -17,17 +17,15 @@ export const renderUnit = (unit, t) => {
 
   return (
     <Table.Row key={unit.id} verticalAlign="top">
-      <Table.Cell collapsing singleLine width={1}>
-        <strong>{filmDate}</strong>
-      </Table.Cell>
-      <Table.Cell collapsing width={1}>
+      <Table.Cell collapsing singleLine>
         <Link to={link}>
-          <UnitLogo fluid unitId={unit.id} />
+          <UnitLogo className="index__thumbnail" unitId={unit.id} />
         </Link>
       </Table.Cell>
       <Table.Cell>
-        <Link to={link}>
-          <strong>{unit.name || NO_NAME}</strong>
+        <span className="index__date">{filmDate}</span>
+        <Link className="index__title" to={link}>
+          {unit.name || NO_NAME}
         </Link>
       </Table.Cell>
     </Table.Row>
