@@ -95,7 +95,8 @@
     "buttons": {
       "edit-back": "Back to play",
       "start-position": "Start",
-      "end-position": "End"
+      "end-position": "End",
+      "click-to-set": "Click to set"
     },
     "share": {
       "title": "watch this video"

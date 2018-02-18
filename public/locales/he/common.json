@@ -94,7 +94,8 @@
     "buttons": {
       "edit-back": "חזור",
       "start-position": "התחלה",
-      "end-position": "סיום"
+      "end-position": "סיום",
+      "click-to-set": "לחץ לסימון"
     },
     "share": {
       "title": "צפה בסרטון"

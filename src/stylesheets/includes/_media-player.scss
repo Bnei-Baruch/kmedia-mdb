@@ -42,6 +42,10 @@ $player-color: $black;
     top: 0;
     transition: opacity .25s, top .25s;
 
+    *{
+      color: inherit;
+    }
+
     &--is-fade {
       opacity: 0;
       top: 64px;
