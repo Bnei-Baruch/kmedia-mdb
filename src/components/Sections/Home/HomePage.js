@@ -5,6 +5,7 @@ import { Card, Container, Grid, } from 'semantic-ui-react';
 
 import { canonicalLink, strCmp } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
+import WipErr from '../../shared/WipErr/WipErr';
 import SearchBar from './SearchBar';
 import Promoted from './Promoted';
 import Topic from './Topic';
@@ -38,7 +39,12 @@ class HomePage extends Component {
   };
 
   render() {
-    const { t, location, latestLesson, latestUnits, banner } = this.props;
+    const { latestLesson, latestUnits, banner, wip, err, t, location } = this.props;
+
+    const wipErr = WipErr({ wip, err, t });
+    if (wipErr) {
+      return wipErr;
+    }
 
     if (!latestLesson) {
       return null;
