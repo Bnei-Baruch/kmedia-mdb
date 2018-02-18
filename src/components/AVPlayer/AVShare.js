@@ -88,7 +88,7 @@ class AVShare extends Component {
             <GooglePlusShareButton url={shareUrl}>
               <GooglePlusIcon size={buttonSize} round />
             </GooglePlusShareButton>
-            <EmailShareButton url={shareUrl} subject={title} body="body">
+            <EmailShareButton url={shareUrl} subject={title} body={shareUrl}>
               <EmailIcon size={buttonSize} round />
             </EmailShareButton>
           </div>
