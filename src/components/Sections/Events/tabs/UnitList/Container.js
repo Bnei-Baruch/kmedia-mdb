@@ -26,14 +26,18 @@ const renderUnit = (unit, t) => {
     filmDate = t('values.date', { date: new Date(unit.film_date) });
   }
 
+  const link = canonicalLink(unit);
+
   return (
     <Table.Row key={unit.id} verticalAlign="top">
       <Table.Cell collapsing width={1}>
-        <UnitLogo className="index__thumbnail" unitId={unit.id} />
+        <Link to={link}>
+          <UnitLogo className="index__thumbnail" unitId={unit.id} />
+        </Link>
       </Table.Cell>
       <Table.Cell>
         <span className="index__date">{filmDate}</span>
-        <Link className="index__title" to={canonicalLink(unit)}>
+        <Link className="index__title" to={link}>
           {unit.name || NO_NAME}
         </Link>
         {
