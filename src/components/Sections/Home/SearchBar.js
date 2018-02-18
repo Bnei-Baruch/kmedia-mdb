@@ -6,18 +6,11 @@ import * as shapes from '../../shapes';
 import { OmniBox, wrap } from '../../Search/OmniBox';
 
 class MyOmniBox extends OmniBox {
-
-  componentDidMount() {
-    this.input.focus();
-  }
-
   renderInput() {
-    const {t} = this.props;
+    const { t } = this.props;
     return (
       <Input
-        ref={(c) => {
-          this.input = c;
-        }}
+        autoFocus
         onKeyDown={this.handleSearchKeyDown}
         action={{ content: t('buttons.search').toLowerCase(), onClick: this.handleIconClick }}
         icon={null}
@@ -36,7 +29,6 @@ class SearchBar extends Component {
     t: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
   };
-
 
   render() {
     const { t, location } = this.props;
