@@ -96,7 +96,7 @@ class ShareFormMobile extends Component {
       <div>
         <ShareBar url={url} t={t} buttonSize="medium" />
         <Message content={url} size="mini" style={{ userSelect: 'all', textAlign: 'left' }} />
-        <Form>
+        <Form size="mini">
           <Form.Group unstackable widths={2}>
             <Form.Input
               value={start ? this.mlsToStrColon(start) : ''}
