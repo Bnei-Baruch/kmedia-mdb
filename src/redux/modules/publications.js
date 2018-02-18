@@ -71,16 +71,14 @@ const setStatus = (state, action) => {
   };
 };
 
-const onFetchPublishersSuccess = (state, action) => {
-  return {
-    ...state,
-    total: action.payload.total,
-    publisherById: action.payload.publishers.reduce((acc, val) => {
-      acc[val.id] = val;
-      return acc;
-    }, {}),
-  };
-};
+const onFetchPublishersSuccess = (state, action) => ({
+  ...state,
+  total: action.payload.total,
+  publisherById: action.payload.publishers.reduce((acc, val) => {
+    acc[val.id] = val;
+    return acc;
+  }, {}),
+});
 
 const onSetLanguage = state => ({
   ...state,
