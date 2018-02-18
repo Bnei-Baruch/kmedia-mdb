@@ -16,7 +16,6 @@ import { actions as filterActions } from '../../../redux/modules/filters';
 const tabs = [
   'conventions',
   'holidays',
-  'picnics',
   'unity-days',
   'friends-gatherings',
   'meals',
@@ -66,7 +65,6 @@ class MainPage extends PureComponent {
     switch (active) {
     case 'conventions':
     case 'holidays':
-    case 'picnics':
     case 'unity-days':
       content = <CollectionList tabName={active} />;
       break;

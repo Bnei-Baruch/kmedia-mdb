@@ -12,14 +12,12 @@ import * as shapes from '../../../../shapes';
 import Page from './Page';
 
 const TAB_NAME_CT_MAP = {
-  'conventions': CT_CONGRESS,
-  'holidays': CT_HOLIDAY,
-  'picnics': CT_PICNIC,
+  conventions: CT_CONGRESS,
+  holidays: CT_HOLIDAY,
   'unity-days': CT_UNITY_DAY,
 };
 
 class TabContainer extends Component {
-
   static propTypes = {
     tabName: PropTypes.string.isRequired,
     language: PropTypes.string.isRequired,
