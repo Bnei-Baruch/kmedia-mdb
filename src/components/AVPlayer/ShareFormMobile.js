@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { translate } from 'react-i18next';
-import CopyToClipboard from 'react-copy-to-clipboard';
-import { Button, Input, Label } from 'semantic-ui-react';
+import { Grid, Input, Message } from 'semantic-ui-react';
 
 import { toHumanReadableTime } from '../../helpers/time';
 import { getQuery, stringify } from '../../helpers/url';
 
-import AVShare from './AVShare';
+import ShareBar from './ShareBar';
 
 class ShareFormMobile extends Component {
   static propTypes = {
@@ -97,21 +96,42 @@ class ShareFormMobile extends Component {
 
     return (
       <div>
-        <AVShare shareUrl={url} />
-        <div>
-          <Label>{url}</Label>
-          <CopyToClipboard text={url}>
-            <Button primary circular type="button" icon="chain" />
-          </CopyToClipboard>
-        </div>
-        <div>
-          <Button content={t('player.buttons.start-position')} onClick={this.setStart} />
-          <Input value={this.mlsToStrColon(start)} onChange={this.setStart} autoComplete="off" />
-        </div>
-        <div>
-          <Button content={t('player.buttons.end-position')} onClick={this.setEnd} />
-          <Input value={end ? this.mlsToStrColon(end) : ''} onChange={this.setEnd} autoComplete="off" />
-        </div>
+        <ShareBar url={url} t={t} buttonSize="medium" />
+        <Message content={url} size="mini" style={{ 'user-select': 'all' }} />
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={8}>
+              <Input
+                fluid
+                value={this.mlsToStrColon(start)}
+                onChange={this.setStart}
+                action={{
+                  content: t('player.buttons.start-position'),
+                  onClick: this.setStart,
+                  icon: 'hourglass start',
+                  iconPosition: 'left'
+                }}
+                actionPosition="left"
+                autoComplete="off"
+              />
+            </Grid.Column>
+            <Grid.Column width={8}>
+              <Input
+                fluid
+                value={end ? this.mlsToStrColon(end) : ''}
+                onChange={this.setEnd}
+                action={{
+                  content: t('player.buttons.end-position'),
+                  onClick: this.setEnd,
+                  icon: 'hourglass end',
+                  iconPosition: 'left'
+                }}
+                actionPosition="left"
+                autoComplete="off"
+              />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </div>
     );
   }
