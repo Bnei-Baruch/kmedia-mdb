@@ -63,10 +63,7 @@ class AVPlayPause extends Component {
               disabled={!hasPrev}
               onClick={onPrev}
             >
-              <Icon
-                name="step backward"
-                disabled={!hasPrev}
-              />
+              <Icon name="step backward" disabled={!hasPrev} />
             </button>
           ) : null
         }
