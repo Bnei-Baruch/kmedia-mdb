@@ -10,7 +10,7 @@ export const changeDirection = (direction) => {
   newlink.setAttribute('rel', 'stylesheet');
   newlink.setAttribute('type', 'text/css');
   newlink.setAttribute('id', 'semantic-ui');
-  newlink.setAttribute('href', `/semantic${isRTL ? '.rtl' : ''}_v2.min.css`);
+  newlink.setAttribute('href', `/semantic_v2${isRTL ? '.rtl' : ''}.min.css`);
   document.getElementsByTagName('head').item(0).replaceChild(newlink, oldlink);
 
   // change root element direction
