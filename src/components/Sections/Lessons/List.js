@@ -28,13 +28,13 @@ export const renderUnit = (unit, t) => {
   )));
 
   return (
-    <Table.Row verticalAlign="top" key={unit.id}>
+    <Table.Row verticalAlign="top" key={unit.id} className="no-thumbnail">
       <Table.Cell collapsing singleLine>
         <span className="index__date">{t('values.date', { date: new Date(unit.film_date) })}</span>
       </Table.Cell>
       <Table.Cell>
         <Link className="index__title" to={canonicalLink(unit)}>
-          <strong>{unit.name}</strong>
+          {unit.name}
         </Link>
         {
           relatedItems.length === 0 ?
@@ -76,9 +76,9 @@ export const renderCollection = (collection, t) => {
         )));
 
       return (
-        <Table.Row key={`u-${unit.id}`} verticalAlign="top">
+        <Table.Row key={`u-${unit.id}`} verticalAlign="top" className="no-thumbnail">
           <Table.Cell>
-            <Link style={{ display: 'block' }} to={canonicalLink(unit)}>
+            <Link className="index__item" to={canonicalLink(unit)}>
               {unit.name}
             </Link>
             {
@@ -105,13 +105,13 @@ export const renderCollection = (collection, t) => {
   const cuSpan = collection.content_units ? collection.content_units.length + 1 : 1;
 
   rows.push((
-    <Table.Row key={`l-${collection.id}`} verticalAlign="top">
-      <Table.Cell collapsing singleLine width={1} rowSpan={cuSpan}>
-        <strong>{t('values.date', { date: new Date(collection.film_date) })}</strong>
+    <Table.Row key={`l-${collection.id}`} verticalAlign="top" className="no-thumbnail">
+      <Table.Cell collapsing singleLine rowSpan={cuSpan}>
+      <span className="index__date">{t('values.date', { date: new Date(collection.film_date) })}</span>
       </Table.Cell>
       <Table.Cell>
-        <Link style={{ marginLeft: '-11px', marginRight: '-11px'}} to={canonicalLink(collection)}>
-          <strong>{t(CT_DAILY_LESSON_I18N_KEY)}</strong>
+        <Link className="index__title" to={canonicalLink(collection)}>
+          {t(CT_DAILY_LESSON_I18N_KEY)}
         </Link>
       </Table.Cell>
     </Table.Row>
