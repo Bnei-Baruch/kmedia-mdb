@@ -67,23 +67,20 @@ export class UnitPage extends Component {
       <div className="unit-page">
         {this.renderPlayer()}
         <Container>
-          <Grid padded >
-            <Grid.Row >
+          <Grid padded>
+            <Grid.Row>
               <Grid.Column mobile={16} tablet={16} computer={11} className="content__main">
                 {this.renderInfo()}
                 {this.renderMaterials()}
               </Grid.Column>
               <Grid.Column mobile={16} tablet={16} computer={5} className="content__aside">
-                <Grid >
+                <Grid>
                   <Grid.Row>
-                    <Grid.Column computer={16} only="computer">
+                    <Grid.Column mobile={16} tablet={8} computer={16}>
                       {this.renderDownloads()}
                     </Grid.Column>
-                    <Grid.Column mobile={16}  tablet={8} computer={16}>
+                    <Grid.Column mobile={16} tablet={8} computer={16}>
                       {this.renderRecommendations()}
-                    </Grid.Column>
-                    <Grid.Column mobile={16}  tablet={8} only="tablet mobile">
-                      {this.renderDownloads()}
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
