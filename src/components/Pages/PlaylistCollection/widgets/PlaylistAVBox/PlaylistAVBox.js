@@ -39,7 +39,7 @@ class PlaylistAVBox extends Component {
       }
       onSelectedChange(playlist.items[selected].unit);
     }
-
+console.log('componentDidMount',playlist);
     // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ playlist, selected });
 
@@ -55,12 +55,13 @@ class PlaylistAVBox extends Component {
           }                                  = this.props;
 
     const preferredMT   = playerHelper.restorePreferredMediaType();
-    const prevMediaType = playerHelper.getMediaTypeFromQuery(oldLocation, preferredMT);
+    const prevMediaType = playerHelper.getMediaTypeFromQuery(oldLocation);
     const newMediaType  = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    console.log('componentWillReceiveProps',this.state);
 
     if (oldCollection !== collection ||
-      oldLanguage !== language ||
-      prevMediaType !== newMediaType) {
+        oldLanguage !== language ||
+        prevMediaType !== newMediaType) {
       // Persist language in playableItem
       this.setPlaylist(collection, newMediaType, this.state.playlist.language);
     }
@@ -110,8 +111,10 @@ class PlaylistAVBox extends Component {
     if (!playlist ||
       !Array.isArray(playlist.items) ||
       playlist.items.length === 0) {
+    console.log('render no playlist', playlist);
       return null;
     }
+    console.log('render with playlist', playlist);
 
     return (
       <Grid.Row>
