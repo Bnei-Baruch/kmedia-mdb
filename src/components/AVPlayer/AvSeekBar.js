@@ -10,11 +10,10 @@ import { PLAYER_MODE } from './constants';
 import { playerModeProp } from './propTypes';
 import SliceHandle from './SliceHandle';
 
-const stickyHandleDelta = 10; // pixel width from which to stick to handle
+const stickyHandleDelta = 5; // pixel width from which to stick to handle
 const minSliceAreaWidth = 0.01;
 
 class AvSeekBar extends Component {
-
   static propTypes = {
     media: PropTypes.object.isRequired, // TODO: (yaniv) use right propType
     buffers: PropTypes.array,
@@ -288,7 +287,7 @@ class AvSeekBar extends Component {
                 seconds={formatTime(sliceEnd === Infinity ? duration : sliceEnd)}
                 position={sliceEndLeft}
                 isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
-                className={'seekbar__slicehandle--right'}
+                className="seekbar__slicehandle--right"
               />
             )
           }

@@ -6880,9 +6880,9 @@ react-scripts@1.0.17:
   optionalDependencies:
     fsevents "1.1.2"
 
-react-share@^1.19.0:
-  version "1.19.0"
-  resolved "https://registry.yarnpkg.com/react-share/-/react-share-1.19.0.tgz#546b152231b7fc16e57b299f8a0d7e400264280b"
+react-share@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-share/-/react-share-2.0.0.tgz#be07224dfe01ea0613e84e9412dddf0a1ed07a20"
   dependencies:
     babel-runtime "^6.6.1"
     classnames "^2.2.5"
@@ -7452,9 +7452,9 @@ selfsigned@^1.9.1:
   dependencies:
     node-forge "0.6.33"
 
-semantic-ui-react@^0.77.1:
-  version "0.77.1"
-  resolved "https://registry.yarnpkg.com/semantic-ui-react/-/semantic-ui-react-0.77.1.tgz#38d4009cc8c7c20efac6ad8ba4497de3bb3287e2"
+semantic-ui-react@^0.78.2:
+  version "0.78.2"
+  resolved "https://registry.yarnpkg.com/semantic-ui-react/-/semantic-ui-react-0.78.2.tgz#2337097b16f0770d91dded2625db30e49390d3c1"
   dependencies:
     babel-runtime "^6.25.0"
     classnames "^2.2.5"

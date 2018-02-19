@@ -5,6 +5,7 @@ import { Card, Container, Grid, } from 'semantic-ui-react';
 
 import { canonicalLink, strCmp } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
+import WipErr from '../../shared/WipErr/WipErr';
 import SearchBar from './SearchBar';
 import Promoted from './Promoted';
 import Topic from './Topic';
@@ -19,7 +20,6 @@ import EventsIcon from '../../../images/icons/events.svg';
 import PublicationsIcon from '../../../images/icons/publications.svg';
 
 class HomePage extends Component {
-
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
     latestLesson: shapes.LessonCollection,
@@ -39,7 +39,12 @@ class HomePage extends Component {
   };
 
   render() {
-    const { t, location, latestLesson, latestUnits, banner } = this.props;
+    const { latestLesson, latestUnits, banner, wip, err, t, location } = this.props;
+
+    const wipErr = WipErr({ wip, err, t });
+    if (wipErr) {
+      return wipErr;
+    }
 
     if (!latestLesson) {
       return null;
@@ -53,7 +58,7 @@ class HomePage extends Component {
       }
 
       const section = s[1];
-      let v         = acc[section];
+      const v       = acc[section];
       if (v) {
         if (v.film_date < val.film_date) {
           acc[section] = val;
@@ -119,7 +124,7 @@ class HomePage extends Component {
           <Section title={t('home.updates')}>
             <Card.Group itemsPerRow={4} doubling>
               {
-                sortedCUs.slice(0, 4).map(x => {
+                sortedCUs.slice(0, 4).map((x) => {
                   const [section, unit] = x;
                   return <LatestUpdate key={section} unit={unit} label={t(`nav.sidebar.${section}`)} t={t} />;
                 })

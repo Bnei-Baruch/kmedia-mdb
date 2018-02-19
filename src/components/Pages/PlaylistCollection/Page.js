@@ -67,14 +67,20 @@ class PlaylistCollectionPage extends Component {
         {
           unit ?
             <Container>
-              <Grid padded reversed="tablet">
-                <Grid.Row reversed="computer">
-                  <Grid.Column computer={6} tablet={8} mobile={16} className="content__aside">
-                    <MediaDownloads unit={unit} language={language} t={t} />
-                  </Grid.Column>
-                  <Grid.Column computer={10} tablet={8} mobile={16} className="content__main">
+              <Grid padded>
+                <Grid.Row>
+                  <Grid.Column mobile={16} tablet={16} computer={11} className="content__main">
                     <Info unit={unit} t={t} />
                     <Materials unit={unit} t={t} />
+                  </Grid.Column>
+                  <Grid.Column mobile={16} tablet={16} computer={5} className="content__aside">
+                    <Grid>
+                      <Grid.Row>
+                        <Grid.Column mobile={16} tablet={8} computer={16}>
+                          <MediaDownloads unit={unit} language={language} t={t} />
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
                   </Grid.Column>
                 </Grid.Row>
               </Grid>

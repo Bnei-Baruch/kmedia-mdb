@@ -22,7 +22,7 @@ import AVLanguage from './AVLanguage';
 import AVAudioVideo from './AVAudioVideo';
 import AvSeekBar from './AvSeekBar';
 import AVEditSlice from './AVEditSlice';
-import AVShareBar from './AVShareBar';
+import ShareBar from './ShareBar';
 import AVJumpBack from './AVJumpBack';
 import AVSpinner from './AVSpinner';
 
@@ -473,19 +473,15 @@ class AVPlayer extends PureComponent {
       );
     } else if (isEditMode) {
       centerMediaControl = (
-        <div className="center-media-controls-edit">
+        <div>
           <Button
-            icon="chevron left"
             content={t('player.buttons.edit-back')}
             size="large"
             color="blue"
-            className="button-close-slice-edit"
+            icon="chevron left"
             onClick={this.handleToggleMode}
           />
-          <div className="slice-edit-help">
-            {t('player.messages.edit-help')}
-          </div>
-          <AVShareBar />
+          <ShareBar url={window.location.href} t={t} />
         </div>
       );
     } else if (isVideo) {

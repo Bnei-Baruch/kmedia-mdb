@@ -35,25 +35,19 @@ class AVPlayerMobile extends PureComponent {
     history: PropTypes.object.isRequired,
 
     // Playlist props
-    // autoPlay: PropTypes.bool,
     showNextPrev: PropTypes.bool,
     hasNext: PropTypes.bool,
     hasPrev: PropTypes.bool,
     onFinish: PropTypes.func,
-    // onPlay: PropTypes.func,
-    // onPause: PropTypes.func,
     onPrev: PropTypes.func,
     onNext: PropTypes.func,
   };
 
   static defaultProps = {
-    // autoPlay: false,
     showNextPrev: false,
     hasNext: false,
     hasPrev: false,
     onFinish: noop,
-    // onPlay: noop,
-    // onPause: noop,
     onPrev: noop,
     onNext: noop,
   };
@@ -104,25 +98,24 @@ class AVPlayerMobile extends PureComponent {
   // Remember the current time and playing state while switching.
   onLanguageChange = (...params) => {
     this.wasCurrentTime = this.media.currentTime;
-    this.media.autoplay = !this.media.paused;
     this.props.onLanguageChange(...params);
   };
 
   handleMediaRef = (ref) => {
     if (ref) {
       this.media = ref;
-      console.log('media mounted', this.media);
       this.media.addEventListener('play', this.handlePlay);
       this.media.addEventListener('pause', this.handlePause);
+      this.media.addEventListener('ended', this.handleEnded);
       this.media.addEventListener('error', this.handleError);
       this.media.addEventListener('timeupdate', this.handleTimeUpdate);
       this.media.addEventListener('volumechange', this.handleVolumeChange);
 
       this.restoreVolume();
     } else if (this.media) {
-      console.log('media unmounted');
       this.media.removeEventListener('play', this.handlePlay);
       this.media.removeEventListener('pause', this.handlePause);
+      this.media.removeEventListener('ended', this.handleEnded);
       this.media.removeEventListener('error', this.handleError);
       this.media.removeEventListener('timeupdate', this.handleTimeUpdate);
       this.media.removeEventListener('volumechange', this.handleVolumeChange);
@@ -130,25 +123,23 @@ class AVPlayerMobile extends PureComponent {
     }
   };
 
-  handlePlay = (e) => {
-    console.log('media.play', e);
+  handlePlay = () => {
     this.seekIfNeeded();
+
+    // make future src changes autoplay
+    this.media.autoplay = true;
   };
 
   handleVolumeChange = (e) => {
-    console.log('media.volumechange', e);
     this.persistVolume(e.currentTarget.volume);
   };
 
   persistVolume = debounce((value) => {
-    console.log('persistVolume', value);
     localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, value);
   }, 200);
 
   restoreVolume = () => {
     let value = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
-    console.log('restoreVolume.value', value);
-
     if (value == null || Number.isNaN(value)) {
       value = DEFAULT_PLAYER_VOLUME;
       localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, value);
@@ -159,24 +150,33 @@ class AVPlayerMobile extends PureComponent {
 
   seekIfNeeded = () => {
     if (this.wasCurrentTime) {
-      console.log('seekIfNeeded wasCurrentTime', this.wasCurrentTime);
       this.media.currentTime = this.wasCurrentTime;
       this.wasCurrentTime    = undefined;
     } else if (this.state.sliceStart) {
-      console.log('seekIfNeeded sliceStart', this.state.sliceStart);
       this.media.currentTime = this.state.sliceStart;
     }
   };
 
   handlePause = () => {
-    if (this.props.onFinish && Math.abs(this.media.currentTime - this.media.duration) < 0.1) {
+    // stop future src changes from autoplay.
+    // The exception is paused event fires before ended event
+    // In playlist mode we need to move on to next item.
+    // so we don't change the autoplay value in such cases.
+    if (Math.abs(this.media.currentTime - this.media.duration) > 0.1) {
+      this.media.autoplay = false;
+    }
+  };
+
+  handleEnded = () => {
+    if (this.props.onFinish) {
       this.props.onFinish();
     }
   };
 
   handleTimeUpdate = (e) => {
     const { mode, sliceEnd } = this.state;
-    const time               = e.currentTarget.currentTime;
+
+    const time = e.currentTarget.currentTime;
     if (mode !== PLAYER_MODE.SLICE_VIEW) {
       return;
     }
@@ -209,6 +209,20 @@ class AVPlayerMobile extends PureComponent {
 
   toggleSliceMode = () =>
     this.setState({ isSliceMode: !this.state.isSliceMode });
+
+  handleJumpBack = () => {
+    const { currentTime, duration } = this.media;
+
+    const jumpTo = Math.max(0, Math.min(currentTime - 5, duration));
+    this.seekTo(jumpTo);
+  };
+
+  handleJumpForward = () => {
+    const { currentTime, duration } = this.media;
+
+    const jumpTo = Math.max(0, Math.min(currentTime + 5, duration));
+    this.seekTo(jumpTo);
+  };
 
   render() {
     const {
@@ -285,8 +299,13 @@ class AVPlayerMobile extends PureComponent {
               onNext={onNext}
             />
             <div className="mediaplayer__spacer" />
-            <AVEditSlice onActivateSlice={this.toggleSliceMode} isActive={isSliceMode} />
-
+            <AVEditSlice onActivateSlice={this.toggleSliceMode} />
+            <button type="button" tabIndex="-1" onClick={this.handleJumpBack}>
+              <Icon name="backward" />
+            </button>
+            <button type="button" tabIndex="-1" onClick={this.handleJumpForward}>
+              <Icon name="forward" />
+            </button>
             <AVAudioVideo
               isAudio={isAudio}
               isVideo={isVideo}
@@ -306,10 +325,7 @@ class AVPlayerMobile extends PureComponent {
 
         {
           isSliceMode ?
-            <ShareFormMobile
-              currentTime={this.media.currentTime || 0}
-              playerDuration={this.media.duration || 0}
-            /> :
+            <ShareFormMobile media={this.media} /> :
             null
         }
       </div>

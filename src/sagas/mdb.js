@@ -1,8 +1,12 @@
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { actions, types } from '../redux/modules/mdb';
+import { types as system } from '../redux/modules/system';
 import { selectors as settings } from '../redux/modules/settings';
+import { actions as sources } from '../redux/modules/sources';
+import { actions as tags } from '../redux/modules/tags';
+import { actions as publications } from '../redux/modules/publications';
 
 function* fetchUnit(action) {
   const id = action.payload;
@@ -36,6 +40,18 @@ function* fetchLatestLesson() {
   }
 }
 
+function* fetchSQData() {
+  try {
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const { data } = yield call(Api.sqdata, { language });
+    yield put(sources.fetchSourcesSuccess(data.sources));
+    yield put(tags.fetchTagsSuccess(data.tags));
+    yield put(publications.fetchPublishersSuccess({ publishers: data.publishers, total: data.publishers.length }));
+  } catch (err) {
+    console.error('Error loading Semi-Quasi data', err);
+  }
+}
+
 function* watchFetchUnit() {
   yield takeEvery(types.FETCH_UNIT, fetchUnit);
 }
@@ -48,8 +64,13 @@ function* watchFetchLatestLesson() {
   yield takeEvery(types.FETCH_LATEST_LESSON, fetchLatestLesson);
 }
 
+function* watchFetchSQData() {
+  yield takeLatest([types.FETCH_SQDATA, system.INIT], fetchSQData);
+}
+
 export const sagas = [
   watchFetchUnit,
   watchFetchCollection,
   watchFetchLatestLesson,
+  watchFetchSQData
 ];

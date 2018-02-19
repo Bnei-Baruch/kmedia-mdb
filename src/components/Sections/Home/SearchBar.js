@@ -2,41 +2,38 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Header, Input } from 'semantic-ui-react';
 
+import withIsMobile from '../../../helpers/withIsMobile';
 import * as shapes from '../../shapes';
 import { OmniBox, wrap } from '../../Search/OmniBox';
 
 class MyOmniBox extends OmniBox {
-
-  componentDidMount() {
-    this.input.focus();
-  }
+  static propTypes = {
+    isMobileDevice: PropTypes.bool.isRequired,
+  };
 
   renderInput() {
-    const {t} = this.props;
+    const { t, isMobileDevice } = this.props;
     return (
       <Input
-        ref={(c) => {
-          this.input = c;
-        }}
+        autoFocus={!isMobileDevice}
         onKeyDown={this.handleSearchKeyDown}
         action={{ content: t('buttons.search').toLowerCase(), onClick: this.handleIconClick }}
         icon={null}
         placeholder={`${t('buttons.search')}...`}
         style={{ width: '100%' }}
+        type="search"
       />
     );
   }
 }
 
-const MyWrappedOmniBox = wrap(MyOmniBox);
+const MyWrappedOmniBox = withIsMobile(wrap(MyOmniBox));
 
 class SearchBar extends Component {
-
   static propTypes = {
-    t: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
+    t: PropTypes.func.isRequired,
   };
-
 
   render() {
     const { t, location } = this.props;

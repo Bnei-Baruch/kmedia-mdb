@@ -95,7 +95,8 @@
     "buttons": {
       "edit-back": "Back to play",
       "start-position": "Start",
-      "end-position": "End"
+      "end-position": "End",
+      "click-to-set": "Click to set"
     },
     "share": {
       "title": "watch this video"
@@ -167,7 +168,6 @@
     "tabs": {
       "conventions": "Conventions",
       "holidays": "Holidays",
-      "picnics": "Picnics",
       "unity-days": "Unity Days",
       "friends-gatherings": "Friends Gatherings",
       "meals": "Meals"

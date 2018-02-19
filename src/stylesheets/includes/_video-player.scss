@@ -18,26 +18,20 @@
   }
 
   &__media-wrapper {
-      height: 100%;
-      overflow: hidden;
-      position: absolute;
-      top: 0;
-      width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    width: 100%;
 
-      .social-share {
-          position:relative;
-          width: 320px;
-          .social-buttons {
-              position: absolute;
-              top: 0;
-              left: 64px;
-              .SocialMediaShareButton {
-                  float: left;
-                  margin-left: 5px;
-                  cursor: pointer;
-              }
-          }
+    .social-buttons {
+      margin: 1em auto;
+      .SocialMediaShareButton {
+        float: left;
+        margin-left: 5px;
+        cursor: pointer;
       }
+    }
   }
 
   &__playlist-wrapper {
