@@ -49,7 +49,7 @@ class SearchResults extends Component {
     const params = this.props.location.search.substring(1).split('&');
     return !!params.find(p => {
       const pair = p.split('=');
-      return decodeURIComponent(pair[0]) == 'deb';
+      return decodeURIComponent(pair[0]) === 'deb';
     });
   }
 
