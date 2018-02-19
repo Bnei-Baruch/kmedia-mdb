@@ -199,7 +199,7 @@ function playlist(collection, mediaType, language) {
   };
 }
 
-function getMediaTypeFromQuery(location, defaultMediaType = MT_VIDEO) {
+function getMediaTypeFromQuery(location, defaultMediaType) {
   const query = getQuery(location);
   return PLAYABLE_MEDIA_TYPES.find(media => media === (query.mediaType || '').toLowerCase()) || defaultMediaType;
 }
