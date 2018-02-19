@@ -38,7 +38,7 @@ class AVBox extends Component {
     const { unit, language } = nextProps;
 
     const preferredMT   = playerHelper.restorePreferredMediaType();
-    const prevMediaType = playerHelper.getMediaTypeFromQuery(this.props.location, preferredMT);
+    const prevMediaType = playerHelper.getMediaTypeFromQuery(this.props.location);
     const newMediaType  = playerHelper.getMediaTypeFromQuery(nextProps.location, preferredMT);
 
     // no change

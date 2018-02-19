@@ -46,9 +46,11 @@ export class PlaylistCollectionContainer extends Component {
     // we should somehow clean wip & err in redux (save memory)
     // once we do this we should implement this condition differently
 
+    let fetchedSingle = false;
     if (!wip.collections.hasOwnProperty(id)) {
       // never fetched as full so fetch now
       fetchCollection(id);
+      fetchedSingle = true;
     }
 
     if (collection && collection.id === id && Array.isArray(collection.cuIDs)) {
@@ -60,7 +62,7 @@ export class PlaylistCollectionContainer extends Component {
           }
         }
       });
-    } else if (!(wip.collections[id] || errors.collections[id])) {
+    } else if (!fetchedSingle && !(wip.collections[id] || errors.collections[id])) {
       fetchCollection(id);
     }
   };
