@@ -14,8 +14,8 @@ export class PlaylistCollectionContainer extends Component {
   static propTypes = {
     match: shapes.RouterMatch.isRequired,
     collection: shapes.GenericCollection,
-    wip: shapes.WipMap,
-    errors: shapes.ErrorsMap,
+    wip: shapes.WipMap.isRequired,
+    errors: shapes.ErrorsMap.isRequired,
     language: PropTypes.string.isRequired,
     PlaylistComponent: PropTypes.func,
     fetchCollection: PropTypes.func.isRequired,
