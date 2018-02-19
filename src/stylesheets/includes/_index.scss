@@ -1,5 +1,5 @@
 
-//extands
+//mixings
 @mixin small-date {
   font-size: .9em;
 
@@ -12,7 +12,7 @@
     width: 1.5em;
   }
 }
-
+@import 'rtl/index';
 // 
 .collection-header,
 .section-header {
@@ -50,48 +50,46 @@
       font-size: .92857143rem !important;
     }
 
-    .item {
-      @include mobile {
-
-        white-space: nowrap;
-        overflow: hidden;
-        padding: .928571em !important;
-        
-        border-radius: .28571429rem .28571429rem 0 0 !important;
-        
-        margin: 0 1px;
-      }
-      &:not(.active) {
-        @include mobile {
-          flex: 0 1 auto;
-          border-color: #d4d4d5 !important;
-          border-width: 1px !important;
-        
-          &::after {
-            content: '';
-            width: .928571em;
-            height: 100%;
-            position: absolute;
-            right: 0;
-            top: 0;
-            background-image: linear-gradient(to left, $darkWhite 30%, transparent);
-            // opacity: .5;
-          } 
-          // @include small-mobile {
-          //   &::after {
-          //     width: .5em;
-          //   }
-          // }
-        }
-      }
-
-      @include small-mobile {
-        padding: .5em !important;
-      }
-    }
     margin-bottom: calc(-1rem - 1px) !important;
     margin-top: -1rem !important;
   }
+  .item {
+    @include mobile {
+
+      white-space: nowrap;
+      overflow: hidden;
+      padding: .928571em !important;
+      
+      border-radius: .28571429rem .28571429rem 0 0 !important;
+      
+      margin: 0 1px;
+    }
+    &:not(.active) {
+      @include mobile {
+        flex: 0 1 auto;
+        border-color: #d4d4d5 !important;
+        border-width: 1px !important;
+      
+        &::after {
+          content: '';
+          width: .928571em;
+          height: 100%;
+          position: absolute;
+          right: 0;
+          top: 0;
+          background-image: linear-gradient(to left, $darkWhite 20%, transparent);
+          // opacity: .5;
+        } 
+        // @include small-mobile {
+        //   &::after {
+        //     width: .5em;
+        //   }
+        // }
+      }
+    }
+  }
+
+  
 }
 
 .index {
