@@ -1,0 +1,29 @@
+.rtl{
+  .collection-header,
+  .section-header {
+    .item {
+      &:not(.active) {
+        @include mobile {
+          &::after {
+            right: auto;
+            left: 0;
+            background-image: linear-gradient(to right, $darkWhite 20%, transparent);
+          } 
+        }
+      }
+    }
+  }
+
+  .index {
+    &__collections {
+      margin-top: 0 !important;
+      vertical-align: top;
+
+      .item:nth-child(2) {
+        border-right: 0 !important;
+        padding-right: 0 !important;
+        padding-left: .5em !important;
+      }
+    }
+  }
+}

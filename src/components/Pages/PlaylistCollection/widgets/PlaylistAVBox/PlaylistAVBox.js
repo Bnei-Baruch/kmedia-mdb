@@ -114,7 +114,7 @@ class PlaylistAVBox extends Component {
 
     return (
       <Grid.Row>
-        <Grid.Column computer={10} mobile={16}>
+        <Grid.Column mobile={16} tablet={10} computer={10}>
           <AVPlaylistPlayer
             items={playlist.items}
             selected={selected}
@@ -125,7 +125,7 @@ class PlaylistAVBox extends Component {
             t={t}
           />
         </Grid.Column>
-        <Grid.Column className="avbox__playlist" computer={6} mobile={16}>
+        <Grid.Column className="avbox__playlist" mobile={16} tablet={6} computer={6}>
           <PlayListComponent
             playlist={playlist}
             selected={selected}
