@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
-import { Container, Divider, Segment } from 'semantic-ui-react';
+import { Container, Segment } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../../../helpers/consts';
 import { assetUrl, imaginaryUrl, Requests } from '../../../../../helpers/Api';
@@ -212,7 +212,6 @@ class Sketches extends React.Component {
               onImageError={this.handleImageError}
             />
           </div>
-          <Divider hidden />
         </div>
       );
     }
