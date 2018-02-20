@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { Card, Header, Label } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../../helpers/utils';
+import { sectionThumbnailFallback } from '../../../helpers/images';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
 
 class LatestUpdate extends Component {
-
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     label: PropTypes.string.isRequired,
@@ -18,9 +18,17 @@ class LatestUpdate extends Component {
   render() {
     const { unit, label, t } = this.props;
 
+    const link = canonicalLink(unit);
+
+    let canonicalSection = null;
+    const s              = link.split('/');
+    if (s.length > 2) {
+      canonicalSection = s[1];
+    }
+
     return (
-      <Card as={Link} to={canonicalLink(unit)}>
-        <UnitLogo width={512} unitId={unit.id} />
+      <Card as={Link} to={link}>
+        <UnitLogo width={512} unitId={unit.id} fallbackImg={sectionThumbnailFallback[canonicalSection]} />
         <Card.Content>
           <Header size="small">
             <small className="text grey">

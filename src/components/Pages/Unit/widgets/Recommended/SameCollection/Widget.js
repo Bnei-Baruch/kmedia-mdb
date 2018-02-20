@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Container, Header, Item } from 'semantic-ui-react';
 
 import { canonicalLink, formatDuration, neighborIndices } from '../../../../../../helpers/utils';
+import { sectionThumbnailFallback } from '../../../../../../helpers/images';
 import * as shapes from '../../../../../shapes';
 import Link from '../../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../../shared/Logo/UnitLogo';
@@ -50,7 +51,12 @@ class SameCollection extends Component {
                 className="recommended-same-collection__item"
               >
                 <Item.Image size="small">
-                  <UnitLogo unitId={part.id} collectionId={collection.id} width={150} />
+                  <UnitLogo
+                    unitId={part.id}
+                    collectionId={collection.id}
+                    width={150}
+                    fallbackImg={sectionThumbnailFallback.programs}
+                  />
                 </Item.Image>
                 <Item.Content verticalAlign="top">
                   <Header as="h5">

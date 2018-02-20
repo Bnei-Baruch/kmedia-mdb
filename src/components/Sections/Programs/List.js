@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_VIDEO_PROGRAM_CHAPTER, NO_NAME } from '../../../helpers/consts';
+import { sectionThumbnailFallback } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
@@ -48,6 +49,7 @@ export const renderUnit = (unit, t) => {
             className="index__thumbnail"
             unitId={unit.id}
             collectionId={programs.length > 0 ? programs[0].id : null}
+            fallbackImg={sectionThumbnailFallback.programs}
           />
         </Link>
       </Table.Cell>
