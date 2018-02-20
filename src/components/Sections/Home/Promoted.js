@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Header, Image, Label } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
+import img from '../../../images/hp_featured_temp.jpg';
 
 class Promoted extends Component {
-
   static propTypes = {
     banner: shapes.Banner,
   };
@@ -23,16 +23,24 @@ class Promoted extends Component {
     return (
       <div className="thumbnail">
         <a href={url}>
-          <Image fluid src={'/static/media/hp_featured_temp.cca39640.jpg'} className="thumbnail__image" />
-          <Header as="h2" className="thumbnail__header">
-            <Header.Content>
-              <Header.Subheader>
-                {subHeader}
-              </Header.Subheader>
-              {header}
-            </Header.Content>
-          </Header>
-          <Label content={section} color="orange" size="mini" />
+          <Image fluid src={img} className="thumbnail__image" />
+          {
+            header ?
+              <Header as="h2" className="thumbnail__header">
+                <Header.Content>
+                  <Header.Subheader>
+                    {subHeader}
+                  </Header.Subheader>
+                  {header}
+                </Header.Content>
+              </Header> :
+              null
+          }
+          {
+            section ?
+              <Label content={section} color="orange" size="mini" /> :
+              null
+          }
         </a>
       </div>
     );
