@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header, Image, Label } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
-import img from '../../../images/hp_featured_temp.jpg';
+import img from '../../../images/archive_banner.jpg';
 
 class Promoted extends Component {
   static propTypes = {
@@ -38,8 +38,8 @@ class Promoted extends Component {
           }
           {
             section ?
-              <Label content={section} color="orange" size="mini" /> :
-              null
+              <Label content={section} color="orange" /> :
+              <Label content="DONATE NOW" color="orange" />
           }
         </a>
       </div>

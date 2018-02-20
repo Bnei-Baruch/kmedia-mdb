@@ -31,7 +31,7 @@ class LatestDailyLesson extends Component {
               {t('home.last-lesson')}
             </Header.Content>
           </Header>
-          <Label color="orange" size="mini">
+          <Label color="orange" >
             {t('nav.sidebar.lessons')}
           </Label>
         </Link>
