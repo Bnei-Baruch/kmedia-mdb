@@ -64,32 +64,25 @@
       
       margin: 0 1px;
     }
+
     &:not(.active) {
       @include mobile {
-        flex: 0 1 auto;
         border-color: #d4d4d5 !important;
         border-width: 1px !important;
-      
+        flex: 0 1 auto;
+
         &::after {
+          background-image: linear-gradient(to left, $darkWhite 20%, rgba(0, 0, 0, 0));
           content: '';
-          width: .928571em;
           height: 100%;
           position: absolute;
           right: 0;
           top: 0;
-          background-image: linear-gradient(to left, $darkWhite 20%, transparent);
-          // opacity: .5;
-        } 
-        // @include small-mobile {
-        //   &::after {
-        //     width: .5em;
-        //   }
-        // }
+          width: .928571em;
+        }
       }
     }
   }
-
-  
 }
 
 .index {

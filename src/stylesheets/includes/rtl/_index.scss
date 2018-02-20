@@ -1,14 +1,14 @@
-.rtl{
+.rtl {
   .collection-header,
   .section-header {
     .item {
       &:not(.active) {
         @include mobile {
           &::after {
-            right: auto;
+            background-image: linear-gradient(to right, $darkWhite 20%, rgba(0, 0, 0, 0));
             left: 0;
-            background-image: linear-gradient(to right, $darkWhite 20%, transparent);
-          } 
+            right: auto;
+          }
         }
       }
     }
