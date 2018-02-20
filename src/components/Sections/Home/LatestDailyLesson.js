@@ -5,7 +5,7 @@ import { Header, Image, Label } from 'semantic-ui-react';
 import { canonicalLink } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
-import DailyLessonPlaceholder from '../../../images/hp_lesson_temp.png';
+import DailyLessonPlaceholder from '../../../images/hp_lesson_temp.jpg';
 
 class LatestDailyLesson extends Component {
 
