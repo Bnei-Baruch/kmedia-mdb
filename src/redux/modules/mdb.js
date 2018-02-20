@@ -13,7 +13,7 @@ const FETCH_UNIT_FAILURE          = 'MDB/FETCH_UNIT_FAILURE';
 const FETCH_COLLECTION            = 'MDB/FETCH_COLLECTION';
 const FETCH_COLLECTION_SUCCESS    = 'MDB/FETCH_COLLECTION_SUCCESS';
 const FETCH_COLLECTION_FAILURE    = 'MDB/FETCH_COLLECTION_FAILURE';
-const FETCH_LATEST_LESSON         = 'MDB/LATEST_LESSON';
+const FETCH_LATEST_LESSON         = 'MDB/FETCH_LATEST_LESSON';
 const FETCH_LATEST_LESSON_SUCCESS = 'MDB/FETCH_LATEST_LESSON_SUCCESS';
 const FETCH_LATEST_LESSON_FAILURE = 'MDB/FETCH_LATEST_LESSON_FAILURE';
 const FETCH_SQDATA                = 'MDB/FETCH_SQDATA';
@@ -90,7 +90,7 @@ const freshStore = () => ({
   errors: {
     units: {},
     collections: {},
-    lastLesson: {}
+    lastLesson: null,
   },
 });
 
@@ -125,6 +125,10 @@ const setStatus = (state, action) => {
   case FETCH_LATEST_LESSON_SUCCESS:
     wip.lastLesson    = false;
     errors.lastLesson = null;
+
+    // update wip & errors map to mark this collection was requested fully (single)
+    wip.collections    = { ...wip.collections, [action.payload.id]: false };
+    errors.collections = { ...errors.collections, [action.payload.id]: null };
     break;
   case FETCH_UNIT_FAILURE:
     wip.units    = { ...wip.units, [action.payload.id]: false };
