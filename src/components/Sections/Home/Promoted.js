@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Header, Image, Label } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
@@ -7,6 +8,7 @@ import img from '../../../images/archive_banner.jpg';
 class Promoted extends Component {
   static propTypes = {
     banner: shapes.Banner,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -18,7 +20,9 @@ class Promoted extends Component {
       return null;
     }
 
-    const { header, sub_header: subHeader, section, url } = this.props.banner;
+    const { banner, t } = this.props;
+
+    const { header, sub_header: subHeader, section, url } = banner;
 
     return (
       <div className="thumbnail">
@@ -39,7 +43,7 @@ class Promoted extends Component {
           {
             section ?
               <Label content={section} color="orange" /> :
-              <Label content="DONATE NOW" color="orange" />
+              <Label content={t('home.donate')} color="orange" />
           }
         </a>
       </div>
