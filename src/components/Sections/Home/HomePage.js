@@ -4,6 +4,7 @@ import { translate } from 'react-i18next';
 import { Card, Container, Grid, } from 'semantic-ui-react';
 
 import { canonicalLink, strCmp } from '../../../helpers/utils';
+import { sectionLogo } from '../../../helpers/images';
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 import SearchBar from './SearchBar';
@@ -12,12 +13,6 @@ import Topic from './Topic';
 import Section from './Section';
 import LatestUpdate from './LatestUpdate';
 import LatestDailyLesson from './LatestDailyLesson';
-import DailyLessonsIcon from '../../../images/icons/dailylessons.svg';
-import ProgramsIcon from '../../../images/icons/programs.svg';
-import LecturesIcon from '../../../images/icons/lectures.svg';
-import SourcesIcon from '../../../images/icons/sources.svg';
-import EventsIcon from '../../../images/icons/events.svg';
-import PublicationsIcon from '../../../images/icons/publications.svg';
 
 class HomePage extends Component {
   static propTypes = {
@@ -99,24 +94,15 @@ class HomePage extends Component {
           <Section title={t('home.sections')}>
             <Grid doubling columns={6} className="homepage__iconsrow">
               <Grid.Row>
-                <Grid.Column textAlign="center">
-                  <Topic title={t('nav.sidebar.lessons')} img={DailyLessonsIcon} href="/lessons" />
-                </Grid.Column>
-                <Grid.Column textAlign="center">
-                  <Topic title={t('nav.sidebar.programs')} img={ProgramsIcon} href="/programs" />
-                </Grid.Column>
-                <Grid.Column textAlign="center">
-                  <Topic title={t('nav.sidebar.lectures')} img={LecturesIcon} href="/lectures" />
-                </Grid.Column>
-                <Grid.Column textAlign="center">
-                  <Topic title={t('nav.sidebar.sources')} img={SourcesIcon} href="/sources" />
-                </Grid.Column>
-                <Grid.Column textAlign="center">
-                  <Topic title={t('nav.sidebar.events')} img={EventsIcon} href="/events" />
-                </Grid.Column>
-                <Grid.Column textAlign="center">
-                  <Topic title={t('nav.sidebar.publications')} img={PublicationsIcon} href="/publications" />
-                </Grid.Column>
+                {
+                  ['lessons', 'programs', 'lectures', 'sources', 'events', 'publications'].map(x =>
+                    (
+                      <Grid.Column key={x} textAlign="center">
+                        <Topic title={t(`nav.sidebar.${x}`)} img={sectionLogo[x]} href={`/${x}`} />
+                      </Grid.Column>
+                    )
+                  )
+                }
               </Grid.Row>
             </Grid>
           </Section>
