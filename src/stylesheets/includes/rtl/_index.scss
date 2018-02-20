@@ -5,7 +5,7 @@
       &:not(.active) {
         @include mobile {
           &::after {
-            background-image: linear-gradient(to right, $darkWhite 20%, rgba(0, 0, 0, 0));
+            background-image: linear-gradient(to right, $darkWhite 20%, rgba($darkWhite, 0));
             left: 0;
             right: auto;
           }
