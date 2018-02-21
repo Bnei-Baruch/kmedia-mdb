@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { replace as routerReplace } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Grid, Header, Flag } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Ref } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
@@ -161,6 +161,11 @@ class LibraryContainer extends Component {
     this.secondaryHeaderRef = ref;
   };
 
+  handleHeaderMenuRef = (ref) => {
+    console.log('handleHeaderMenuRef', ref);
+    this.headerMenuRef = ref;
+  };
+
   handleIsReadable = () => {
     this.setState({ isReadable: !this.state.isReadable });
   };
@@ -229,6 +234,7 @@ class LibraryContainer extends Component {
           source={sourceId}
           index={index}
           languageUI={language}
+          langSelectorMount={this.headerMenuRef}
           t={t}
         />
       );
@@ -253,12 +259,14 @@ class LibraryContainer extends Component {
                       <Grid.Column width={12} floated="left">
                         {this.header(sourceId, fullPath)}
                       </Grid.Column>
-                      <Grid.Column width={4} floated="right" textAlign="right">
-                        <Button.Group basic size="tiny">
-                          <Button icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
-                          <Button icon="list" className="mobile-only" />
-                        </Button.Group>
-                      </Grid.Column>
+                      <Ref innerRef={this.handleHeaderMenuRef}>
+                        <Grid.Column width={4} floated="right" textAlign="right">
+                          <Button.Group basic size="tiny">
+                            <Button icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
+                            <Button icon="list" className="mobile-only" />
+                          </Button.Group>
+                        </Grid.Column>
+                      </Ref>
                     </Grid.Row>
                   </Grid>
                 </Grid.Column>

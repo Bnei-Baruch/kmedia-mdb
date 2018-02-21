@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Segment } from 'semantic-ui-react';
+import { Container, Segment, Portal } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { formatError, isEmpty, shallowCompare } from '../../../helpers/utils';
@@ -22,6 +22,7 @@ class Library extends Component {
     startsFrom: PropTypes.number,
     language: PropTypes.string,
     languages: PropTypes.arrayOf(PropTypes.string),
+    langSelectorMount: PropTypes.any,
     t: PropTypes.func.isRequired,
     handleLanguageChanged: PropTypes.func.isRequired,
   };
@@ -29,6 +30,7 @@ class Library extends Component {
   static defaultProps = {
     language: null,
     languages: [],
+    langSelectorMount: null,
     content: {
       data: null,
       wip: false,
@@ -43,7 +45,7 @@ class Library extends Component {
   }
 
   render() {
-    const { content, language, languages, t, isTaas, } = this.props;
+    const { content, language, languages, t, isTaas, langSelectorMount } = this.props;
 
     if (isEmpty(content)) {
       return <Segment basic>{t('sources-library.no-source')}</Segment>;
@@ -96,9 +98,18 @@ class Library extends Component {
       );
     }
 
+    console.log('Library.render', langSelectorMount);
+
     return (
       <div>
-        {languageBar}
+        {
+          langSelectorMount && languageBar ?
+            <Portal open preprend mountNode={langSelectorMount}>
+              {languageBar}
+            </Portal>
+            :
+            languageBar
+        }
         {contents}
       </div>
     );
