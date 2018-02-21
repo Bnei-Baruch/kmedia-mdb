@@ -8,6 +8,7 @@ import { Icon, Message } from 'semantic-ui-react';
 import { MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
 import { getQuery } from '../../helpers/url';
 import { fromHumanReadableTime } from '../../helpers/time';
+import * as shapes from '../shapes';
 import { PLAYER_MODE } from './constants';
 import AVPlayPause from './AVPlayPause';
 import AVLanguageMobile from './AVLanguageMobile';
@@ -41,6 +42,8 @@ class AVPlayerMobile extends PureComponent {
     onFinish: PropTypes.func,
     onPrev: PropTypes.func,
     onNext: PropTypes.func,
+
+    uaParser: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -110,6 +113,8 @@ class AVPlayerMobile extends PureComponent {
       this.media.addEventListener('error', this.handleError);
       this.media.addEventListener('timeupdate', this.handleTimeUpdate);
       this.media.addEventListener('volumechange', this.handleVolumeChange);
+      this.media.addEventListener('playing', this.handlePlaying);
+      this.media.addEventListener('seeking', this.handleSeeking);
 
       this.restoreVolume();
     } else if (this.media) {
@@ -119,6 +124,8 @@ class AVPlayerMobile extends PureComponent {
       this.media.removeEventListener('error', this.handleError);
       this.media.removeEventListener('timeupdate', this.handleTimeUpdate);
       this.media.removeEventListener('volumechange', this.handleVolumeChange);
+      this.media.removeEventListener('playing', this.handlePlaying);
+      this.media.removeEventListener('seeking', this.handleSeeking);
       this.media = ref;
     }
   };
@@ -157,6 +164,64 @@ class AVPlayerMobile extends PureComponent {
     }
   };
 
+  iosSliceFix = () => {
+    const { sliceStart } = this.state;
+    if (!sliceStart) {
+      return;
+    }
+
+    const { uaParser } = this.props;
+    if (uaParser.os.name !== 'iOS') {
+      console.log('iosSliceFix: not iOS');
+      return;
+    }
+
+    console.log('iosSliceFix: iOS detected');
+
+    // if the player has enough data we can set the currentTime and be done with it
+    if (this.media.readyState > 3) {
+      console.log('readyState > 3');
+      this.media.currentTime = sliceStart;
+      return;
+    }
+
+    console.log('readyState:', this.media.readyState);
+
+    const canplaythroughHandler = () => {
+      console.log('iosSliceFix: canplaythrough');
+      const progressHandler = () => {
+        console.log('iosSliceFix: progress');
+        this.media.currentTime = sliceStart;
+      };
+
+      this.media.addEventListener('progress', progressHandler, { once: true });
+    };
+
+    this.media.addEventListener('canplaythrough', canplaythroughHandler, { once: true });
+  };
+
+  handlePlaying = () => {
+    this.iosSliceFix();
+  };
+
+  handleSeeking = (e) => {
+    const { mode, sliceStart, sliceEnd } = this.state;
+
+    if (mode !== PLAYER_MODE.SLICE_VIEW) {
+      return;
+    }
+
+    // break slice view mode once the user is seeking out side of slice
+    const time = e.currentTarget.currentTime;
+    if (time < sliceStart || time > sliceEnd) {
+      this.setState({
+        mode: PLAYER_MODE.NORMAL,
+        sliceStart: undefined,
+        sliceEnd: undefined,
+      });
+    }
+  };
+
   handlePause = () => {
     // stop future src changes from autoplay.
     // The exception is paused event fires before ended event
@@ -176,15 +241,13 @@ class AVPlayerMobile extends PureComponent {
   handleTimeUpdate = (e) => {
     const { mode, sliceEnd } = this.state;
 
-    const time = e.currentTarget.currentTime;
     if (mode !== PLAYER_MODE.SLICE_VIEW) {
       return;
     }
 
-    const lowerTime = Math.min(sliceEnd, time);
-    if (lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
+    const time = e.currentTarget.currentTime;
+    if (time > sliceEnd) {
       this.media.pause();
-      this.seekTo(sliceEnd);
     }
   };
 
