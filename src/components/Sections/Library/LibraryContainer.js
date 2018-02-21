@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { replace as routerReplace } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Grid, Header, } from 'semantic-ui-react';
+import GridColumn, { Button, Container, Grid, Header, Flag } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
@@ -243,29 +243,47 @@ class LibraryContainer extends Component {
       <div className={classnames({ source: true, 'is-readable': isReadable })}>
         <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
           <Container>
-            <Grid padded>
-              <Grid.Row>
-                <Grid.Column computer={4}>
+            <Grid padded centered>
+              <Grid.Row verticalAlign='bottom'>
+                <Grid.Column tablet={5} computer={4} className="mobile-hidden">
                   <Header size="medium">
                     {t('sources-library.toc')}
                   </Header>
                 </Grid.Column>
-                <Grid.Column computer={8}>
-                  {this.header(sourceId, fullPath)}
-                </Grid.Column>
-                <Grid.Column computer={2}>
-                  <Button.Group basic size="tiny">
-                    <Button icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
-                  </Button.Group>
+                <Grid.Column mobile={14} tablet={11} computer={8} className="source__content-wrapper">
+                  <Grid>
+                    <Grid.Row>
+                      <Grid.Column width={12} floated="left">
+                        {this.header(sourceId, fullPath)}
+                      </Grid.Column>
+                      <Grid.Column width={4} floated="right" textAlign="right">
+                        <Button.Group basic size="tiny">
+                          <Button icon>
+                            <Flag name="il" as="i" style={{ margin: 0 }}/>
+                          </Button>
+                          <Button icon>
+                            <Flag name="br" as="i" style={{ margin: 0 }}/>
+                          </Button>
+                          <Button icon>
+                            <Flag name="ru" as="i" style={{ margin: 0 }}/>
+                          </Button>
+                        </Button.Group>&nbsp;   
+                        <Button.Group basic size="tiny">
+                          <Button icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
+                          <Button icon='list' className="mobile-only" />
+                        </Button.Group>
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
           </Container>
         </div>
         <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
-          <Grid padded divided>
+          <Grid padded centered>
             <Grid.Row>
-              <Grid.Column computer={4}>
+              <Grid.Column tablet={5} computer={4} className="mobile-hidden">
                 <TOC
                   fullPath={fullPath}
                   rootId={parent}
@@ -275,7 +293,7 @@ class LibraryContainer extends Component {
                   stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}
                 />
               </Grid.Column>
-              <Grid.Column mobile={12} tablet={12} computer={8}>
+              <Grid.Column mobile={14} tablet={11} computer={8} className="source__content-wrapper">
                 <div ref={this.handleContextRef}>
                   <div className="source__content">
                     {content}

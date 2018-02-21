@@ -97,6 +97,7 @@ $secondary-header-height: 70px;
 
   &__secondary-header{
     background: $white;
+    border-bottom: 1px solid $border-color;
     min-height: $secondary-header-height;
     left: 0;
     position: fixed;
