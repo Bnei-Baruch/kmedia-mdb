@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { replace as routerReplace } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import GridColumn, { Button, Container, Grid, Header, Flag } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Flag } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
@@ -16,9 +16,6 @@ import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
-// import styles from '../../../stylesheets/includes/_layout.scss';
-
-// const MainMenuHeight2 = parseInt(styles.MainMenuHeight, 10);
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -244,7 +241,7 @@ class LibraryContainer extends Component {
         <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
           <Container>
             <Grid padded centered>
-              <Grid.Row verticalAlign='bottom'>
+              <Grid.Row verticalAlign="bottom">
                 <Grid.Column tablet={5} computer={4} className="mobile-hidden">
                   <Header size="medium">
                     {t('sources-library.toc')}
@@ -258,19 +255,8 @@ class LibraryContainer extends Component {
                       </Grid.Column>
                       <Grid.Column width={4} floated="right" textAlign="right">
                         <Button.Group basic size="tiny">
-                          <Button icon>
-                            <Flag name="il" as="i" style={{ margin: 0 }}/>
-                          </Button>
-                          <Button icon>
-                            <Flag name="br" as="i" style={{ margin: 0 }}/>
-                          </Button>
-                          <Button icon>
-                            <Flag name="ru" as="i" style={{ margin: 0 }}/>
-                          </Button>
-                        </Button.Group>&nbsp;   
-                        <Button.Group basic size="tiny">
                           <Button icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
-                          <Button icon='list' className="mobile-only" />
+                          <Button icon="list" className="mobile-only" />
                         </Button.Group>
                       </Grid.Column>
                     </Grid.Row>
