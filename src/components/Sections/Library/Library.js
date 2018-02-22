@@ -7,7 +7,7 @@ import { formatError, isEmpty, shallowCompare } from '../../../helpers/utils';
 import { assetUrl } from '../../../helpers/Api';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
-import ButtonsLanguageSelector from '../../Language/Selector/ButtonsLanguageSelector';
+import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
 import PDF from '../../shared/PDF/PDF';
 
 class Library extends Component {
@@ -88,7 +88,7 @@ class Library extends Component {
     if (languages.length > 0) {
       languageBar = (
         <Container fluid textAlign="right">
-          <ButtonsLanguageSelector
+          <AnchorsLanguageSelector
             languages={languages}
             defaultValue={language}
             t={t}
