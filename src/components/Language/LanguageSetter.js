@@ -38,8 +38,12 @@ const LanguageSetter = withRouter(connect(
   catchLanguageChange = (props) => {
     const { language: newLanguage, currentLanguage } = props;
 
+    // change page direction and fetch css
+    // NOTE: yaniv -> edo (i18n object has a dir getter)
+    // https://github.com/i18next/i18next/blob/master/src/i18next.js#L281
+    changeDirectionIfNeeded(newLanguage);
+
     if (currentLanguage === newLanguage) {
-      changeDirectionIfNeeded(newLanguage);
       return;
     }
 
