@@ -5,10 +5,8 @@ export const changeDirectionIfNeeded = (language) => {
   const currentDirection = el.style.getPropertyValue('direction');
   const newDirection     = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
 
-  if (currentDirection !== newDirection || (currentDirection === 'rtl' && el.getAttribute('rel') === 'preload')) {
+  if (currentDirection !== newDirection) {
     changeDirection(newDirection);
-  } else {
-    el.setAttribute('rel', 'stylesheet');
   }
 };
 
@@ -16,10 +14,18 @@ const changeDirection = (direction) => {
   const isRTL = direction === 'rtl';
 
   // replace semantic-ui css
-  const el = document.getElementById('semantic-ui');
-  el.setAttribute('rel', 'preload');
-  el.setAttribute('href', `/semantic_v2${isRTL ? '.rtl' : ''}.min.css`);
-  el.onload = () => el.setAttribute('rel', 'stylesheet');
+  const oldlink = document.getElementById('semantic-ui');
+
+  const newlink = document.createElement('link');
+  newlink.setAttribute('rel', 'preload');
+  newlink.setAttribute('type', 'text/css');
+  newlink.setAttribute('id', 'semantic-ui');
+  newlink.setAttribute('href', `/semantic_v2${isRTL ? '.rtl' : ''}.min.css`);
+  newlink.onload = () => {
+    newlink.setAttribute('rel', 'stylesheet');
+    oldlink.remove();
+  };
+  document.getElementsByTagName('head').item(0).appendChild(newlink);
 
   // change root element direction
   const root = document.getElementById('root');
