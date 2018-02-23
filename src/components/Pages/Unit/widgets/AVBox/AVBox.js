@@ -37,9 +37,10 @@ class AVBox extends Component {
   componentWillReceiveProps(nextProps) {
     const { unit, language } = nextProps;
 
-    const preferredMT   = playerHelper.restorePreferredMediaType();
-    const prevMediaType = playerHelper.getMediaTypeFromQuery(this.props.location);
-    const newMediaType  = playerHelper.getMediaTypeFromQuery(nextProps.location, preferredMT);
+    const preferredMT     = playerHelper.restorePreferredMediaType();
+    const prevMediaType   = playerHelper.getMediaTypeFromQuery(this.props.location);
+    const newMediaType    = playerHelper.getMediaTypeFromQuery(nextProps.location, preferredMT);
+    const newItemLanguage = playerHelper.getLanguageFromQuery(nextProps.location, this.state.playableItem.language);
 
     // no change
     if (unit === this.props.unit &&
@@ -49,7 +50,7 @@ class AVBox extends Component {
     }
 
     // Persist language in playableItem
-    this.setPlayableItem(unit, newMediaType, this.state.playableItem.language);
+    this.setPlayableItem(unit, newMediaType, newItemLanguage);
   }
 
   setPlayableItem(unit, mediaType, language, cb) {
@@ -71,14 +72,7 @@ class AVBox extends Component {
   };
 
   handleChangeLanguage = (e, language) => {
-    const { playableItem }  = this.state;
-    const { unit, history } = this.props;
-
-    if (language !== playableItem.language) {
-      this.setPlayableItem(unit, playableItem.mediaType, language);
-    }
-
-    playerHelper.setLanguageInQuery(history, language);
+    playerHelper.setLanguageInQuery(this.props.history, language);
   };
 
   render() {
