@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actions as settingActions, selectors as settingSelectors } from '../../redux/modules/settings';
 import { LANGUAGES, DEFAULT_LANGUAGE } from '../../helpers/consts';
+import { changeDirectionIfNeeded } from '../../helpers/i18n-utils';
+
 
 // NOTE: yaniv -> edo: should we block rendering until language changed?
 
@@ -37,6 +39,7 @@ const LanguageSetter = withRouter(connect(
     const { language: newLanguage, currentLanguage } = props;
 
     if (currentLanguage === newLanguage) {
+      changeDirectionIfNeeded(newLanguage);
       return;
     }
 

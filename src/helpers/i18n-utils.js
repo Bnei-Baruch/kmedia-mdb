@@ -1,5 +1,22 @@
-export const getCurrentDirection = () =>
-  document.getElementById('root').style.getPropertyValue('direction');
+import { RTL_LANGUAGES } from '../helpers/consts';
+
+export const getCurrentDirection = () => {
+  const el = document.getElementById('root');
+  //check if it's first load
+  if (el.getAttribute('rel') !== 'stylesheet') {
+    return null;
+  }
+  return el.style.getPropertyValue('direction') || 'ltr';
+};
+
+export const changeDirectionIfNeeded = (language) => {
+  const currentDirection = getCurrentDirection();
+  const newDirection     = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
+
+  if (currentDirection !== newDirection) {
+    changeDirection(newDirection);
+  }
+};
 
 export const changeDirection = (direction) => {
   const isRTL = direction === 'rtl';
