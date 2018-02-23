@@ -179,7 +179,7 @@ class Sources extends Component {
       this.getSourceLanguages(nextProps.indexMap[selected], nextProps.defaultLanguage);
 
     this.setState({ options, languages, language, selected, isMakor, });
-    this.changeContent({ selected, language, nextProps, isMakor, });
+    this.changeContent({ selected, language, props: nextProps, isMakor, });
   };
 
   changeContent = (params) => {
@@ -199,8 +199,13 @@ class Sources extends Component {
     if (isMakor) {
       const derived = this.getDerived(unit.derived_units, selected).find(x => x.language === language);
       onContentChange(null, null, derived.id);
-    } else if (indexMap[selected] != null && indexMap[selected].data) {
-      onContentChange(selected, indexMap[selected].data[language].html);
+    } else if (indexMap[selected] && indexMap[selected].data) {
+      const data = indexMap[selected].data[language];
+      let name   = data.html;
+      if (data.pdf && PDF.isTaas(selected)) {
+        name = data.pdf;
+      }
+      onContentChange(selected, name);
     }
   };
 

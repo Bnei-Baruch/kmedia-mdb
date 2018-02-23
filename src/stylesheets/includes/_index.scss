@@ -1,10 +1,10 @@
 
-//extands
+//mixings
 @mixin small-date {
   font-size: .9em;
 
   &::after {
-    background-color: #e9eaea;
+    background-color: $darkWhite;
     content: '';
     display: block;
     height: 1px;
@@ -12,7 +12,7 @@
     width: 1.5em;
   }
 }
-
+@import 'rtl/index';
 // 
 .collection-header,
 .section-header {
@@ -38,8 +38,50 @@
   }
 
   .menu {
-    margin-bottom: calc(-1em + 1px) !important;
-    margin-top: -1em !important;
+    @include tablet {
+      font-size: 1rem !important;
+    }
+    
+    @include mobile {
+      font-size: 1rem !important;
+    }
+
+    @include small-mobile {
+      font-size: .92857143rem !important;
+    }
+
+    margin-bottom: calc(-1rem - 1px) !important;
+    margin-top: -1rem !important;
+  }
+  .item {
+    @include mobile {
+
+      white-space: nowrap;
+      overflow: hidden;
+      padding: .928571em !important;
+      
+      border-radius: .28571429rem .28571429rem 0 0 !important;
+      
+      margin: 0 1px;
+    }
+
+    &:not(.active) {
+      @include mobile {
+        border-color: #d4d4d5 !important;
+        border-width: 1px !important;
+        flex: 0 1 auto;
+
+        &::after {
+          background-image: linear-gradient(to left, $darkWhite 20%, rgba($darkWhite, 0));
+          content: '';
+          height: 100%;
+          position: absolute;
+          right: 0;
+          top: 0;
+          width: .928571em;
+        }
+      }
+    }
   }
 }
 

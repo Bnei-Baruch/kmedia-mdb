@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_CHILDREN_LESSON, CT_LECTURE, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, NO_NAME } from '../../../helpers/consts';
+import { sectionThumbnailFallback } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import UnitList from '../../Pages/UnitList/Container';
@@ -35,6 +36,7 @@ export const renderUnit = (unit, t) => {
             className="index__thumbnail"
             unitId={unit.id}
             collectionId={lectures.length > 0 ? lectures[0].id : null}
+            fallbackImg={sectionThumbnailFallback.lectures}
           />
         </Link>
       </Table.Cell>

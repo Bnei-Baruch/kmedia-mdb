@@ -2,12 +2,6 @@ $sidebar-width: 290px;
 $main-menu-height: 60px;
 $secondary-header-height: 70px;
 
-$test: '400';
-
-:export {
-  MainMenuHeight: $test;
-}
-
 @import 'rtl/layout';
 
 .layout {

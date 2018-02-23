@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Header, Image, Label } from 'semantic-ui-react';
 
-import { canonicalLink } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
-import DailyLessonPlaceholder from '../../../images/hp_lesson_temp.png';
+import DailyLessonPlaceholder from '../../../images/hp_lesson_temp.jpg';
 
 class LatestDailyLesson extends Component {
-
   static propTypes = {
     collection: shapes.LessonCollection.isRequired,
     t: PropTypes.func.isRequired,
@@ -31,7 +29,7 @@ class LatestDailyLesson extends Component {
               {t('home.last-lesson')}
             </Header.Content>
           </Header>
-          <Label color="orange" size="mini">
+          <Label color="orange" >
             {t('nav.sidebar.lessons')}
           </Label>
         </Link>

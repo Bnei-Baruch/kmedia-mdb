@@ -275,7 +275,7 @@ class LibraryContainer extends Component {
                   stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}
                 />
               </Grid.Column>
-              <Grid.Column computer={8}>
+              <Grid.Column mobile={12} tablet={12} computer={8}>
                 <div ref={this.handleContextRef}>
                   <div className="source__content">
                     {content}

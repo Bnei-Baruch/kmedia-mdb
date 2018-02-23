@@ -23,7 +23,7 @@ class PlaylistAVBox extends Component {
     selected: 0,
   };
 
-  componentDidMount() {
+  componentWillMount() {
     const { collection, language, history, location, onSelectedChange } = this.props;
 
     const preferredMT    = playerHelper.restorePreferredMediaType();
@@ -39,8 +39,6 @@ class PlaylistAVBox extends Component {
       }
       onSelectedChange(playlist.items[selected].unit);
     }
-
-    // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ playlist, selected });
 
     playerHelper.setLanguageInQuery(history, playerLanguage);
@@ -55,12 +53,12 @@ class PlaylistAVBox extends Component {
           }                                  = this.props;
 
     const preferredMT   = playerHelper.restorePreferredMediaType();
-    const prevMediaType = playerHelper.getMediaTypeFromQuery(oldLocation, preferredMT);
+    const prevMediaType = playerHelper.getMediaTypeFromQuery(oldLocation);
     const newMediaType  = playerHelper.getMediaTypeFromQuery(location, preferredMT);
 
     if (oldCollection !== collection ||
-      oldLanguage !== language ||
-      prevMediaType !== newMediaType) {
+        oldLanguage !== language ||
+        prevMediaType !== newMediaType) {
       // Persist language in playableItem
       this.setPlaylist(collection, newMediaType, this.state.playlist.language);
     }
@@ -110,12 +108,13 @@ class PlaylistAVBox extends Component {
     if (!playlist ||
       !Array.isArray(playlist.items) ||
       playlist.items.length === 0) {
+    console.log('render no playlist', playlist);
       return null;
     }
 
     return (
       <Grid.Row>
-        <Grid.Column computer={10} mobile={16}>
+        <Grid.Column mobile={16} tablet={10} computer={10}>
           <AVPlaylistPlayer
             items={playlist.items}
             selected={selected}
@@ -126,7 +125,7 @@ class PlaylistAVBox extends Component {
             t={t}
           />
         </Grid.Column>
-        <Grid.Column className="avbox__playlist" computer={6} mobile={16}>
+        <Grid.Column className="avbox__playlist" mobile={16} tablet={6} computer={6}>
           <PlayListComponent
             playlist={playlist}
             selected={selected}

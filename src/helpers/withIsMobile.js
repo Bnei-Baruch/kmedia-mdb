@@ -41,6 +41,7 @@ export default function withIsMobile(WrappedComponent) {
           {...this.props}
           isMobile={isMobile}
           isMobileDevice={isMobileDevice}
+          uaParser={parser}
         />
       );
     }
