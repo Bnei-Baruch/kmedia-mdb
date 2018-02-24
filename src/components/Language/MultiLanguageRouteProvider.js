@@ -13,7 +13,7 @@ import { DEFAULT_LANGUAGE } from '../../helpers/consts';
  * You should wrap all routes that should be aware of the current language with this component.
  */
 
-const MultiLanguageRouteProvider = ({ children }) => (
+const MultiLanguageRouteProvider = ({ children, initialLanguage }) => (
   <Switch>
     <Route
       path="/:language([a-z]{2})"
@@ -24,7 +24,7 @@ const MultiLanguageRouteProvider = ({ children }) => (
       )}
     />
     <Route render={() => (
-      <LanguageSetter language={DEFAULT_LANGUAGE}>
+      <LanguageSetter language={initialLanguage}>
         { children }
       </LanguageSetter>
       )
@@ -34,7 +34,8 @@ const MultiLanguageRouteProvider = ({ children }) => (
 );
 
 MultiLanguageRouteProvider.propTypes = {
-  children: PropTypes.any.isRequired
+  children: PropTypes.node.isRequired,
+  initialLanguage: PropTypes.string.isRequired
 };
 
 export default MultiLanguageRouteProvider;

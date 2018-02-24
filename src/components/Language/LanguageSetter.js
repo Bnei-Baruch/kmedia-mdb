@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actions as settingActions, selectors as settingSelectors } from '../../redux/modules/settings';
 import { LANGUAGES, DEFAULT_LANGUAGE } from '../../helpers/consts';
-
 // NOTE: yaniv -> edo: should we block rendering until language changed?
 
 const LanguageSetter = withRouter(connect(
@@ -18,7 +17,8 @@ const LanguageSetter = withRouter(connect(
     currentLanguage: PropTypes.string.isRequired,
     language: PropTypes.string,
     setLanguage: PropTypes.func.isRequired,
-    location: PropTypes.object.isRequired
+    location: PropTypes.object.isRequired,
+    children: PropTypes.node.isRequired,
   };
 
   static defaultProps = {
@@ -33,19 +33,14 @@ const LanguageSetter = withRouter(connect(
     this.catchLanguageChange(nextProps);
   }
 
-  catchLanguageChange = (props) => {
-    const { language: newLanguage, currentLanguage } = props;
-
+  catchLanguageChange = ({ language: newLanguage, currentLanguage, setLanguage }) => {
     if (currentLanguage === newLanguage) {
       return;
     }
 
-    let actualLanguage = DEFAULT_LANGUAGE;
     if (LANGUAGES[newLanguage]) {
-      actualLanguage = newLanguage;
+      setLanguage(newLanguage);
     }
-
-    props.setLanguage(actualLanguage);
   };
 
   render() {

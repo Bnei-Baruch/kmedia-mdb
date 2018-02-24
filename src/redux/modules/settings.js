@@ -1,7 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 
 import { DEFAULT_LANGUAGE } from '../../helpers/consts';
-
 /* Types */
 
 const SET_LANGUAGE  = 'Settings/SET_LANGUAGE';

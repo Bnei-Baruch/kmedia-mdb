@@ -61,6 +61,7 @@
     "history": "^4.6.3",
     "hoist-non-react-statics": "^2.2.2",
     "i18next": "^8.4.3",
+    "i18next-browser-languagedetector": "^2.1.0",
     "i18next-xhr-backend": "^1.4.2",
     "invariant": "^2.2.2",
     "iphone-inline-video": "^2.2.2",
