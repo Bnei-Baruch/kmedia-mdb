@@ -43,7 +43,7 @@ class AVPlayerMobile extends PureComponent {
     onPrev: PropTypes.func,
     onNext: PropTypes.func,
 
-    uaParser: shapes.UserAgentParserResults.isRequired,
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -170,8 +170,8 @@ class AVPlayerMobile extends PureComponent {
       return;
     }
 
-    const { uaParser } = this.props;
-    if (uaParser.os.name !== 'iOS') {
+    const { deviceInfo } = this.props;
+    if (deviceInfo.os.name !== 'iOS') {
       console.log('iosSliceFix: not iOS');
       return;
     }

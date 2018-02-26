@@ -436,6 +436,7 @@ class AVPlayer extends PureComponent {
             onNext,
             media,
           } = this.props;
+
     const {
             controlsVisible,
             sliceStart,
@@ -443,18 +444,18 @@ class AVPlayer extends PureComponent {
             mode,
             playbackRate,
           } = this.state;
+
     let {
-            error,
-            errorReason,
-          } = this.state;
+          error,
+          errorReason,
+        } = this.state;
 
     const { isPlaying }     = media;
     const forceShowControls = item.mediaType === MT_AUDIO || !isPlaying;
-
-    const isVideo       = item.mediaType === MT_VIDEO;
-    const isAudio       = item.mediaType === MT_AUDIO;
-    const isEditMode    = mode === PLAYER_MODE.SLICE_EDIT;
-    const fallbackMedia = item.mediaType !== item.requestedMediaType;
+    const isVideo           = item.mediaType === MT_VIDEO;
+    const isAudio           = item.mediaType === MT_AUDIO;
+    const isEditMode        = mode === PLAYER_MODE.SLICE_EDIT;
+    const fallbackMedia     = item.mediaType !== item.requestedMediaType;
 
     if (!item.src) {
       error       = true;

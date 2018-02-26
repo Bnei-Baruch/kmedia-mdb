@@ -1,24 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
 import { Grid } from 'semantic-ui-react';
 import { Media } from 'react-media-player';
 
-import withIsMobile from '../../../../../helpers/withIsMobile';
 import { MT_AUDIO, MT_VIDEO } from '../../../../../helpers/consts';
 import playerHelper from '../../../../../helpers/player';
+import { selectors as system } from '../../../../../redux/modules/system';
 import * as shapes from '../../../../shapes';
 import AVMobileCheck from '../../../../AVPlayer/AVMobileCheck';
 
 class AVBox extends Component {
   static propTypes = {
+    unit: shapes.ContentUnit,
     history: PropTypes.object.isRequired,
     location: shapes.HistoryLocation.isRequired,
     language: PropTypes.string.isRequired,
-    unit: shapes.ContentUnit,
+    autoPlayAllowed: PropTypes.bool.isRequired,
     t: PropTypes.func.isRequired,
-    isMobileDevice: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -82,8 +83,8 @@ class AVBox extends Component {
   };
 
   render() {
-    const { t, isMobileDevice } = this.props;
-    const { playableItem }      = this.state;
+    const { t, autoPlayAllowed } = this.props;
+    const { playableItem }       = this.state;
 
     if (!playableItem || !playableItem.src) {
       return (<div>{t('messages.no-playable-files')}</div>);
@@ -96,7 +97,7 @@ class AVBox extends Component {
             className={classNames('avbox__player', {
               'avbox__player--is-audio': playableItem.mediaType === MT_AUDIO,
               'avbox__player--is-4x3': playableItem.unit.film_date < '2014',
-              'mobile-device': isMobileDevice
+              'mobile-device': !autoPlayAllowed,
             })}
           >
             <div className="avbox__media-wrapper">
@@ -119,4 +120,8 @@ class AVBox extends Component {
   }
 }
 
-export default withIsMobile(withRouter(AVBox));
+const mapState = state => ({
+  autoPlayAllowed: system.getAutoPlayAllowed(state.system),
+});
+
+export default withRouter(connect(mapState)(AVBox));

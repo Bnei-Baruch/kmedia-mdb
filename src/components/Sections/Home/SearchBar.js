@@ -2,20 +2,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Header, Input } from 'semantic-ui-react';
 
-import withIsMobile from '../../../helpers/withIsMobile';
+import { selectors as system } from '../../../redux/modules/system';
 import * as shapes from '../../shapes';
-import { OmniBox, wrap } from '../../Search/OmniBox';
+import { mapState as obMS, OmniBox, wrap } from '../../Search/OmniBox';
 
 class MyOmniBox extends OmniBox {
   static propTypes = {
-    isMobileDevice: PropTypes.bool.isRequired,
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   renderInput() {
-    const { t, isMobileDevice } = this.props;
+    const { t, deviceInfo } = this.props;
     return (
       <Input
-        autoFocus={!isMobileDevice}
+        autoFocus={deviceInfo.device.type === undefined}  // desktop only
         onKeyDown={this.handleSearchKeyDown}
         action={{ content: t('buttons.search').toLowerCase(), onClick: this.handleIconClick }}
         icon={null}
@@ -27,7 +27,10 @@ class MyOmniBox extends OmniBox {
   }
 }
 
-const MyWrappedOmniBox = withIsMobile(wrap(MyOmniBox));
+const MyWrappedOmniBox = wrap(MyOmniBox, state => ({
+  ...obMS(state),
+  deviceInfo: system.getDeviceInfo(state.system),
+}));
 
 class SearchBar extends Component {
   static propTypes = {
