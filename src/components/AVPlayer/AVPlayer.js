@@ -519,7 +519,7 @@ class AVPlayer extends PureComponent {
           onPause={this.onPause}
           onPlay={this.onPlay}
           onTimeUpdate={this.handleTimeUpdate}
-          defaultCurrentTime={sliceStart || 0}
+          defaultCurrentTime={sliceStart || -1}  // -1 so RMP won't seek to 0 (browser won't fire seeked so we'll hang)
         />
         <div
           ref={this.handleWrapperRef}
