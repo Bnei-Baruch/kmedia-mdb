@@ -46,7 +46,8 @@ class AVBox extends Component {
     // no change
     if (unit === this.props.unit &&
       language === this.props.language &&
-      prevMediaType === newMediaType) {
+      prevMediaType === newMediaType &&
+      newItemLanguage === this.state.playableItem.language) {
       return;
     }
 
@@ -54,9 +55,9 @@ class AVBox extends Component {
     this.setPlayableItem(unit, newMediaType, newItemLanguage);
   }
 
-  setPlayableItem(unit, mediaType, language, cb) {
+  setPlayableItem(unit, mediaType, language) {
     const playableItem = playerHelper.playableItem(unit, mediaType, language);
-    this.setState({ playableItem }, cb);
+    this.setState({ playableItem });
   }
 
   handleSwitchAV = () => {
