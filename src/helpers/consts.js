@@ -226,6 +226,17 @@ export const MIME_TYPE_TO_MEDIA_TYPE = Object.values(MEDIA_TYPES).reduce((acc, m
   return acc;
 }, {});
 
+export const VS_NHD     = 'nHD';
+export const VS_HD      = 'HD';
+export const VS_FHD     = 'FHD';
+export const VS_DEFAULT = VS_NHD;
+
+export const VS_NAMES = {
+  [VS_NHD]: '360p',
+  [VS_HD]: '720p',
+  [VS_FHD]: '1080p',
+};
+
 export const TOPICS_FOR_DISPLAY    = ['VUpFlBnu', '0db5BBS3', 'g3ml0jum'];
 export const EVENT_PREPARATION_TAG = 'Salvk5yF';
 

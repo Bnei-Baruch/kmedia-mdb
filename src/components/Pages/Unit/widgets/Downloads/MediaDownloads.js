@@ -15,7 +15,8 @@ import {
   MT_AUDIO,
   MT_IMAGE,
   MT_TEXT,
-  MT_VIDEO
+  MT_VIDEO,
+  VS_NAMES
 } from '../../../../../helpers/consts';
 import { physicalFile } from '../../../../../helpers/utils';
 import { selectors } from '../../../../../redux/modules/publications';
@@ -62,8 +63,7 @@ class MediaDownloads extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { unit, language } = nextProps;
-    const props              = this.props;
-    const state              = this.state;
+    const { props, state }   = this;
 
     // no change
     if (unit === props.unit && language === props.language) {
@@ -112,7 +112,7 @@ class MediaDownloads extends Component {
     // However, since they might contain text in them we do have language attached to such files.
     // For other languages, whom don't have a dedicated translation of these images
     // we give them the images of their fallback language.
-    let images = [];
+    const images = [];
 
     (files || []).forEach((file) => {
       if (!groups.has(file.language)) {
@@ -145,7 +145,7 @@ class MediaDownloads extends Component {
     return groups;
   };
 
-  getDerivedFilesByContentType = units => {
+  getDerivedFilesByContentType = (units) => {
     const allByCT = Object.values(units || {})
       .reduce((acc, val) => {
         acc[val.content_type] = (acc[val.content_type] || []).concat((val.files || []).map(x => ({ ...x, cu: val })));
@@ -240,8 +240,13 @@ class MediaDownloads extends Component {
       ];
     } else {
       rows = MEDIA_ORDER.reduce((acc, val) => {
-        const label = t(`media-downloads.${typeOverrides}type-labels.${val}`);
-        const files = (byType.get(val) || []).map(file => this.renderRow(file, label, t));
+        let label   = t(`media-downloads.${typeOverrides}type-labels.${val}`);
+        const files = (byType.get(val) || []).map((file) => {
+          if (file.video_size) {
+            label = `${label} ${VS_NAMES[file.video_size]}]`;
+          }
+          return this.renderRow(file, label, t);
+        });
         return acc.concat(files);
       }, []);
     }
@@ -264,7 +269,7 @@ class MediaDownloads extends Component {
     if (publicationsByType.size > 0) {
       derivedRows = MEDIA_ORDER.reduce((acc, val) => {
         const label = t(`media-downloads.${typeOverrides}type-labels.${val}`);
-        const files = (publicationsByType.get(val) || []).map(file => {
+        const files = (publicationsByType.get(val) || []).map((file) => {
           const publisher = publisherById[file.cu.publishers[0]];
           return this.renderRow(file, `${label} - ${publisher ? publisher.name : '???'}`, t);
         });
@@ -291,9 +296,7 @@ class MediaDownloads extends Component {
         <Table unstackable className="media-downloads__files" basic="very" compact="very">
           <Table.Body>
             {rows}
-            {
-              derivedRows ? derivedRows: null
-            }
+            {derivedRows || null}
           </Table.Body>
         </Table>
         {/* moved "derived media to the main downloads table" */}
@@ -314,7 +317,8 @@ class MediaDownloads extends Component {
   }
 }
 
-export default connect(state => ({
+export default connect(state => (
+  {
     publisherById: selectors.getPublisherById(state.publications),
   })
 )(MediaDownloads);

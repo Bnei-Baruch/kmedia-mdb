@@ -81,7 +81,7 @@ class AVBox extends Component {
     const { t, autoPlayAllowed } = this.props;
     const { playableItem }       = this.state;
 
-    if (!playableItem || !playableItem.src) {
+    if (!playableItem) {
       return (<div>{t('messages.no-playable-files')}</div>);
     }
 
@@ -99,12 +99,12 @@ class AVBox extends Component {
               <Media>
                 <AVMobileCheck
                   item={playableItem}
+                  preImageUrl={playableItem.preImageUrl}
                   onSwitchAV={this.handleSwitchAV}
                   languages={playableItem.availableLanguages}
                   language={playableItem.language}
                   onLanguageChange={this.handleChangeLanguage}
                   t={t}
-                  preImageUrl={playableItem.preImageUrl}
                 />
               </Media>
             </div>
