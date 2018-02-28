@@ -3,6 +3,12 @@ import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { Dropdown } from 'semantic-ui-react';
 
+const options = [
+  { value: '2x', text: '2x' },
+  { value: '1.5x', text: '1.5x' },
+  { value: '1.25x', text: '1.25x' },
+  { value: '1x', text: '1x' }];
+
 export default class AVPlaybackRate extends Component {
   static propTypes = {
     onSelect: PropTypes.func,
@@ -20,15 +26,12 @@ export default class AVPlaybackRate extends Component {
   render() {
     const { value } = this.props;
 
-    const options = ['1x', '1.5x', '2x']
-      .map(x => ({ value: x, text: x }));
-
     return (
       <div className="mediaplayer__playback-rate">
         <Dropdown
           floating
           scrolling
-          upward={true}
+          upward
           icon={null}
           selectOnBlur={false}
           options={options}
