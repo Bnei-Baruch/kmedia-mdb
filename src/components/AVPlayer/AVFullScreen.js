@@ -46,7 +46,7 @@ class AVFullscreen extends Component {
       <button
         type="button"
         className="player-button player-control-fullscreen"
-        disabled={!element || fscreen.fullscreenEnabled}
+        disabled={!element || !fscreen.fullscreenEnabled}
         onClick={this.handleFullscreen}
       >
         <Icon name={fullScreen ? 'compress' : 'expand'} />
