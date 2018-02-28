@@ -590,7 +590,7 @@ class AVPlayer extends PureComponent {
               )
             }
             {!isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.SLICE_EDIT)} />}
-            {!isEditMode && !isAudio && <AVFullScreen container={this.mediaElement} />}
+            {!isEditMode && !isAudio && <AVFullScreen element={this.mediaElement} />}
           </div>
           <div
             ref={this.handleOnScreenRef}
