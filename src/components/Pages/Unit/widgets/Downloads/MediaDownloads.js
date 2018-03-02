@@ -240,10 +240,11 @@ class MediaDownloads extends Component {
       ];
     } else {
       rows = MEDIA_ORDER.reduce((acc, val) => {
-        let label   = t(`media-downloads.${typeOverrides}type-labels.${val}`);
-        const files = (byType.get(val) || []).map((file) => {
+        const baseLabel = t(`media-downloads.${typeOverrides}type-labels.${val}`);
+        const files     = (byType.get(val) || []).map((file) => {
+          let label = baseLabel;
           if (file.video_size) {
-            label = `${label} ${VS_NAMES[file.video_size]}]`;
+            label = `${label} [${VS_NAMES[file.video_size]}]`;
           }
           return this.renderRow(file, label, t);
         });
