@@ -219,8 +219,15 @@ class AVPlayer extends PureComponent {
 
   videoSizeChange = (e, vs) => {
     playerHelper.persistPreferredVideoSize(vs);
+
     if (vs !== this.state.videoSize) {
-      this.setState({ videoSize: vs, src: this.props.item.byQuality[vs] });
+      const { media: { currentTime, isPlaying } } = this.props;
+      this.setState({
+        videoSize: vs,
+        src: this.props.item.byQuality[vs],
+        wasCurrentTime: currentTime,
+        wasPlaying: isPlaying
+      });
     }
   };
 
