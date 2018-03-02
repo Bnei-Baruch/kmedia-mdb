@@ -17,8 +17,6 @@ import {
   MT_VIDEO,
   PLAYABLE_MEDIA_TYPES,
   VS_DEFAULT,
-  VS_FHD,
-  VS_HD,
 } from './consts';
 import { getQuery, updateQuery } from './url';
 import { isEmpty, physicalFile } from './utils';
@@ -115,25 +113,6 @@ function playableItem(unit, mediaType, language) {
   const files     = (unit.files || []).filter(f => f.language === language && f.mimetype === mimeType);
   const byQuality = mapValues(groupBy(files, x => x.video_size || VS_DEFAULT),
     val => physicalFile(val[0], true));
-
-  // DEBUG - REMOVE THIS !!!
-  // if (files.length > 0 && files[0].language === 'he') {
-  //   byQuality[VS_HD]  = byQuality[VS_DEFAULT];
-  //   byQuality[VS_FHD] = byQuality[VS_DEFAULT];
-  // }
-  // if (files.length > 0 && files[0].language === 'en') {
-  //   byQuality[VS_HD] = byQuality[VS_DEFAULT];
-  //   // byQuality[VS_FHD] = byQuality[VS_DEFAULT];
-  // }
-  // if (files.length > 0 && files[0].language === 'ru') {
-  //   // byQuality[VS_HD]  = byQuality[VS_DEFAULT];
-  //   byQuality[VS_FHD] = byQuality[VS_DEFAULT];
-  // }
-  // if (files.length > 0 && files[0].language === 'es') {
-  //   // byQuality[VS_HD]  = byQuality[VS_DEFAULT];
-  //   byQuality[VS_FHD] = byQuality[VS_DEFAULT];
-  //   delete byQuality[VS_DEFAULT];
-  // }
 
   return {
     unit,
