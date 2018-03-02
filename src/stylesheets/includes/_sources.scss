@@ -65,7 +65,7 @@
 
     > div:nth-child(2) {
       // height: calc(100vh - #{$main-menu-height} - #{$secondary-header-height} - 1em);
-      overflow: scroll;
+      overflow: auto;
       // background: pink;
       // padding: 10px;
     }
