@@ -3,6 +3,7 @@ import XHR from 'i18next-xhr-backend';
 import moment from 'moment';
 import 'moment/locale/he';
 import 'moment/locale/ru';
+import 'moment/locale/es';
 
 import { DEFAULT_LANGUAGE } from './consts';
 

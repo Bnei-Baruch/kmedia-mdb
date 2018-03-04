@@ -6,8 +6,9 @@ import ReactDOM from 'react-dom';
 import ReactGA from 'react-ga';
 import { applyMiddleware, compose, createStore } from 'redux';
 import createSagaMiddleware, { delay } from 'redux-saga';
-import { put } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 import createHistory from 'history/createBrowserHistory';
+import UAParser from 'ua-parser-js';
 
 import createMultiLanguageRouterMiddleware from './redux/middleware/multiLanguageRouterMiddleware';
 import reducer from './redux';
@@ -57,9 +58,34 @@ function* application() {
   // Future: Do Whatever bootstrap logic here
   // Load configuration, load translations, etc...
 
+  const deviceInfo = new UAParser().getResult();
+
+  // determine if user gesture is required for play
+  // if so we use native player else we use our beloved custom one.
+
+  // default to us being on desktop or not
+  let autoPlayAllowed = deviceInfo.device.type === undefined;
+
+  try {
+    yield call(() => {
+      const v = document.createElement('video');
+      v.src   = 'someting-meant-to-throw-NotSupportedError-when-play-is-allowed';
+      return v.play();
+    });
+  } catch (error) {
+    if (error.name === 'NotAllowedError') {
+      autoPlayAllowed = false;
+    } else if (error.name === 'NotSupportedError') {
+      autoPlayAllowed = true;
+    }
+  }
+
   // Future: Hydrate server state
   // Deep merges state fetched from server with the state saved in the local storage
-  yield put(system.init({}));
+  yield put(system.init({
+    deviceInfo,
+    autoPlayAllowed
+  }));
 
   //
   // Just make sure that everybody does their initialization homework

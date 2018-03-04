@@ -34,7 +34,8 @@ class PDF extends Component {
     this.setState({ numPages, pageNumber: page, inputValue: page });
   };
 
-  setDivSize = () => this.setState({ width: document.getElementById('pdfWrapper').getBoundingClientRect().width });
+  setDivSize = () =>
+    this.setState({ width: document.getElementById('pdfWrapper').getBoundingClientRect().width });
 
   setPage = pageNo => this.setState({ pageNumber: pageNo }, () => {
     this.setState({ inputValue: pageNo });
@@ -98,7 +99,7 @@ class PDF extends Component {
     return (
       <div id="pdfWrapper">
         <Header>Total {numPages} pages</Header>
-        <Menu compact className="taas-pagination-menu" color="grey">
+        <Menu compact className="taas-pagination-menu" color="grey" size="mini">
           <Menu.Item onClick={this.firstPage}>{startsFrom} &laquo;</Menu.Item>
           <Menu.Item onClick={this.prevPage}>&lsaquo;</Menu.Item>
           <Form onSubmit={this.handleSubmit}>

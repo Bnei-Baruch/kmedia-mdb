@@ -90,7 +90,7 @@ const freshStore = () => ({
   errors: {
     units: {},
     collections: {},
-    lastLesson: {}
+    lastLesson: null,
   },
 });
 
@@ -125,6 +125,10 @@ const setStatus = (state, action) => {
   case FETCH_LATEST_LESSON_SUCCESS:
     wip.lastLesson    = false;
     errors.lastLesson = null;
+
+    // update wip & errors map to mark this collection was requested fully (single)
+    wip.collections    = { ...wip.collections, [action.payload.id]: false };
+    errors.collections = { ...errors.collections, [action.payload.id]: null };
     break;
   case FETCH_UNIT_FAILURE:
     wip.units    = { ...wip.units, [action.payload.id]: false };

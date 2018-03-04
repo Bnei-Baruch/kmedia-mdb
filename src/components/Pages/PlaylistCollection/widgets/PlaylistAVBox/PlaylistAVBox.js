@@ -29,7 +29,7 @@ class PlaylistAVBox extends Component {
     const preferredMT    = playerHelper.restorePreferredMediaType();
     const mediaType      = playerHelper.getMediaTypeFromQuery(history.location, preferredMT);
     const playerLanguage = playerHelper.getLanguageFromQuery(location, language);
-    const playlist       = playerHelper.playlist(collection, mediaType, language);
+    const playlist       = playerHelper.playlist(collection, mediaType, playerLanguage);
     let selected         = playerHelper.getActivePartFromQuery(location);
 
     if (Array.isArray(playlist.items) && playlist.items.length > 0) {
@@ -52,16 +52,21 @@ class PlaylistAVBox extends Component {
             location: oldLocation
           }                                  = this.props;
 
-    const preferredMT   = playerHelper.restorePreferredMediaType();
-    const prevMediaType = playerHelper.getMediaTypeFromQuery(oldLocation);
-    const newMediaType  = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const preferredMT     = playerHelper.restorePreferredMediaType();
+    const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);
+    const newMediaType    = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const newItemLanguage = playerHelper.getLanguageFromQuery(location, this.state.playlist.language);
 
-    if (oldCollection !== collection ||
-        oldLanguage !== language ||
-        prevMediaType !== newMediaType) {
-      // Persist language in playableItem
-      this.setPlaylist(collection, newMediaType, this.state.playlist.language);
+    // no change
+    if (oldCollection === collection &&
+      oldLanguage === language &&
+      prevMediaType === newMediaType &&
+      newItemLanguage === this.state.playlist.language) {
+      return;
     }
+
+    // Persist language in playableItem
+    this.setPlaylist(collection, newMediaType, newItemLanguage);
   }
 
   setPlaylist = (collection, mediaType, language) => {
@@ -76,15 +81,7 @@ class PlaylistAVBox extends Component {
   };
 
   handleLanguageChange = (e, language) => {
-    const { collection, history } = this.props;
-    const { playlist, selected }  = this.state;
-
-    const playableItem = playlist.items[selected];
-    if (language !== playableItem.language) {
-      this.setPlaylist(collection, playableItem.mediaType, language);
-    }
-
-    playerHelper.setLanguageInQuery(history, language);
+    playerHelper.setLanguageInQuery(this.props.history, language);
   };
 
   handleSwitchAV = () => {
@@ -108,13 +105,12 @@ class PlaylistAVBox extends Component {
     if (!playlist ||
       !Array.isArray(playlist.items) ||
       playlist.items.length === 0) {
-    console.log('render no playlist', playlist);
       return null;
     }
 
     return (
       <Grid.Row>
-        <Grid.Column computer={10} mobile={16}>
+        <Grid.Column mobile={16} tablet={10} computer={10}>
           <AVPlaylistPlayer
             items={playlist.items}
             selected={selected}
@@ -125,7 +121,7 @@ class PlaylistAVBox extends Component {
             t={t}
           />
         </Grid.Column>
-        <Grid.Column className="avbox__playlist" computer={6} mobile={16}>
+        <Grid.Column className="avbox__playlist" mobile={16} tablet={6} computer={6}>
           <PlayListComponent
             playlist={playlist}
             selected={selected}

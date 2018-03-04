@@ -3359,6 +3359,10 @@ fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
 
+fscreen@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/fscreen/-/fscreen-1.0.2.tgz#c4c51d96d819d75a19d728e0df445f9be9bb984f"
+
 fsevents@1.1.2, fsevents@^1.0.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-1.1.2.tgz#3282b713fb3ad80ede0e9fcf4611b5aa6fc033f4"
@@ -6779,7 +6783,7 @@ react-image-gallery@^0.8.3:
 
 "react-media-player@github:Bnei-Baruch/react-media-player":
   version "0.7.0"
-  resolved "https://codeload.github.com/Bnei-Baruch/react-media-player/tar.gz/66d6ed4500c44ce7f3d20e49cd96d9531d86c3ac"
+  resolved "https://codeload.github.com/Bnei-Baruch/react-media-player/tar.gz/39341291a2643b2ae74133c8388438d35c158624"
   dependencies:
     prop-types "^15.5.10"
 

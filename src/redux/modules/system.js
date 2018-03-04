@@ -27,10 +27,18 @@ export const actions = {
 /* Reducer */
 
 const initialState = {
-  isReady: false
+  isReady: false,
+  deviceInfo: null,
+  autoPlayAllowed: false,
 };
 
 export const reducer = handleActions({
+  [INIT]: (state, action) => ({
+    ...state,
+    deviceInfo: action.payload.deviceInfo,
+    autoPlayAllowed: action.payload.autoPlayAllowed,
+  }),
+
   [READY]: state => ({
     ...state,
     isReady: true
@@ -39,8 +47,12 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const isReady = state => state.isReady;
+const isReady            = state => state.isReady;
+const getDeviceInfo      = state => state.deviceInfo;
+const getAutoPlayAllowed = state => state.autoPlayAllowed;
 
 export const selectors = {
-  isReady
+  isReady,
+  getDeviceInfo,
+  getAutoPlayAllowed,
 };
