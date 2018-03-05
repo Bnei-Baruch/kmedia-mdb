@@ -10,10 +10,10 @@ const ITEMS = [
   'lectures',
   'sources',
   'events',
-  'books',
+  // 'books',
   'topics',
   'publications',
-  'photos',
+  // 'photos',
   // 'design',
   // 'design2',
 ];

@@ -16,21 +16,35 @@ export const changeDirection = (direction) => {
   const isRTL = direction === 'rtl';
 
   // replace semantic-ui css
-  const oldlink = document.getElementById('semantic-ui');
-  const newlink = document.createElement('link');
-  newlink.setAttribute('rel', 'stylesheet');
-  newlink.setAttribute('type', 'text/css');
-  newlink.setAttribute('id', 'semantic-ui');
-  newlink.setAttribute('href', `/semantic${isRTL ? '.rtl' : ''}.min.css`);
-  document.getElementsByTagName('head').item(0).replaceChild(newlink, oldlink);
+  // We remove current loaded css once new css finish loading.
+  // Something in the spirit of https://github.com/filamentgroup/loadCSS
 
-  // change root element direction
-  const root = document.getElementById('root');
-  root.setAttribute('style', `direction: ${direction};`);
-  if (isRTL) {
-    root.classList.add('rtl');
-  } else {
-    root.classList.remove('rtl');
+  const oldCSS = document.getElementById('semantic-ui');
+
+  const href = `/semantic_v2${isRTL ? '.rtl' : ''}.min.css`;
+  const ss   = document.createElement('link');
+  ss.rel     = 'stylesheet';
+  ss.href    = href;
+  oldCSS.parentNode.insertBefore(ss, oldCSS);
+
+  function loadCB() {
+    oldCSS.remove();
+
+    ss.id = 'semantic-ui';
+    ss.removeEventListener('load', loadCB);
+
+    // change root element direction
+    const root = document.getElementById('root');
+    root.setAttribute('style', `direction: ${direction};`);
+    if (isRTL) {
+      root.classList.add('rtl');
+    } else {
+      root.classList.remove('rtl');
+    }
+  }
+
+  if (ss.addEventListener) {
+    ss.addEventListener('load', loadCB);
   }
 };
 

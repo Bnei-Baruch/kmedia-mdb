@@ -2,41 +2,41 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Header, Input } from 'semantic-ui-react';
 
+import { selectors as system } from '../../../redux/modules/system';
 import * as shapes from '../../shapes';
-import { OmniBox, wrap } from '../../Search/OmniBox';
+import { mapState as obMS, OmniBox, wrap } from '../../Search/OmniBox';
 
 class MyOmniBox extends OmniBox {
-
-  componentDidMount() {
-    this.input.focus();
-  }
+  static propTypes = {
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
+  };
 
   renderInput() {
-    const {t} = this.props;
+    const { t, deviceInfo } = this.props;
     return (
       <Input
-        ref={(c) => {
-          this.input = c;
-        }}
+        autoFocus={deviceInfo.device.type === undefined}  // desktop only
         onKeyDown={this.handleSearchKeyDown}
         action={{ content: t('buttons.search').toLowerCase(), onClick: this.handleIconClick }}
         icon={null}
         placeholder={`${t('buttons.search')}...`}
         style={{ width: '100%' }}
+        type="search"
       />
     );
   }
 }
 
-const MyWrappedOmniBox = wrap(MyOmniBox);
+const MyWrappedOmniBox = wrap(MyOmniBox, state => ({
+  ...obMS(state),
+  deviceInfo: system.getDeviceInfo(state.system),
+}));
 
 class SearchBar extends Component {
-
   static propTypes = {
-    t: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
+    t: PropTypes.func.isRequired,
   };
-
 
   render() {
     const { t, location } = this.props;

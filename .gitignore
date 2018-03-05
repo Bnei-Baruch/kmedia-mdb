@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+semantic/
 
 # testing
 /coverage
@@ -23,6 +24,7 @@ yarn-error.log*
 .vscode/
 /assets/
 src/**/*.css
+babel-src/
 
 
 # do not ignore main theme

@@ -9,7 +9,6 @@ import * as shapes from '../../../../../shapes';
 import Transcription from './Transcription';
 
 class TranscriptionContainer extends Component {
-
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     doc2htmlById: PropTypes.objectOf(PropTypes.shape({

@@ -80,14 +80,16 @@ class DeepListFilter extends React.Component {
   canApply = () => this.state.selection && this.state.selection.length > 0;
 
   scrollToSelections = (selections) => {
-    selections.forEach((selection, depth) => {
-      const selectedItems = this.menus[depth].getElementsByClassName('active');
+    if (this.menus[0]) {
+      selections.forEach((selection, depth) => {
+        const selectedItems = this.menus[depth].getElementsByClassName('active');
 
-      if (selectedItems.length) {
-        const firstItem = selectedItems[0];
-        this.menus[depth].scrollTop = firstItem.offsetTop;
-      }
-    });
+        if (selectedItems.length) {
+          const firstItem = selectedItems[0];
+          this.menus[depth].scrollTop = firstItem.offsetTop;
+        }
+      });
+    }
   };
 
   // Return all lists of selected sources.

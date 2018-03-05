@@ -210,19 +210,9 @@ const makeLocationsPredicate = values => x =>
   isEmpty(values) ||
   values.some(v => {
     const [country, city] = v;
-    if (country === ALL_COUNTRIES) {
-      return true;
-    }
-
-    if (country !== x.country) {
-      return false;
-    }
-
-    if (!city || city === ALL_CITIES) {
-      return true;
-    }
-
-    return city === x.city;
+    
+    return (country === ALL_COUNTRIES || country === x.country) && 
+            (!city || city === ALL_CITIES || city === x.city);
   });
 
 const makeHolidaysPredicate = values => x =>

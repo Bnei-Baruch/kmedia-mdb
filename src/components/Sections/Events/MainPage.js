@@ -11,27 +11,35 @@ import NavLink from '../../Language/MultiLanguageNavLink';
 import SectionHeader from '../../shared/SectionHeader';
 import CollectionList from './tabs/CollectionList/Container';
 import UnitList from './tabs/UnitList/Container';
+import { actions as filterActions } from '../../../redux/modules/filters';
 
 const tabs = [
   'conventions',
   'holidays',
-  'picnics',
   'unity-days',
   'friends-gatherings',
   'meals',
 ];
 
 class MainPage extends PureComponent {
-
   static propTypes = {
+    location: shapes.HistoryLocation.isRequired,
     match: shapes.RouterMatch.isRequired,
     setTab: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    resetNamespace: PropTypes.func.isRequired
   };
 
   componentWillReceiveProps(nextProps) {
     const tab     = this.props.match.params.tab || tabs[0];
     const nextTab = nextProps.match.params.tab || tabs[0];
+
+    // clear filters if location search parameter is changed by Menu click
+    if (nextProps.location.search !== this.props.location.search &&
+      !nextProps.location.search) {
+      nextProps.resetNamespace(`events-${tab}`);
+    }
+
     if (nextTab !== tab) {
       nextProps.setTab(nextTab);
     }
@@ -57,7 +65,6 @@ class MainPage extends PureComponent {
     switch (active) {
     case 'conventions':
     case 'holidays':
-    case 'picnics':
     case 'unity-days':
       content = <CollectionList tabName={active} />;
       break;
@@ -77,12 +84,12 @@ class MainPage extends PureComponent {
       </div>
     );
   }
-
 }
 
 const mapDispatch = dispatch => (
   bindActionCreators({
     setTab: actions.setTab,
+    resetNamespace: filterActions.resetNamespace
   }, dispatch)
 );
 

@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import debounce from 'lodash/debounce';
+import noop from 'lodash/noop';
 import { Icon, Input, Search } from 'semantic-ui-react';
 
 import { SuggestionsHelper } from '../../helpers/search';
@@ -42,10 +43,12 @@ export class OmniBox extends Component {
     language: PropTypes.string.isRequired,
     pageSize: PropTypes.number.isRequired,
     filters: PropTypes.arrayOf(PropTypes.object).isRequired,
+    onSearch: PropTypes.func,
   };
 
   static defaultProps = {
     suggestions: [],
+    onSearch: noop,
   };
 
   componentWillMount() {
@@ -78,8 +81,8 @@ export class OmniBox extends Component {
   };
 
   doSearch = (q = null) => {
-    const query                                             = q != null ? q : this.props.query;
-    const { search, location, push, pageSize, resetFilter } = this.props;
+    const query                                                       = q != null ? q : this.props.query;
+    const { search, location, push, pageSize, resetFilter, onSearch } = this.props;
 
     if (this.emptyQuery()) {
       return;
@@ -87,13 +90,17 @@ export class OmniBox extends Component {
 
     // First of all redirect to search results page if we're not there
     if (!location.pathname.endsWith('search')) {
-      push({ pathname: 'search' });
+      // In case a filter was updated React location object is not updated yet
+      // so we just use window location to get the search part (to persist filters
+      // to the search page when we redirect).
+      push({ pathname: 'search', search: window.location.search });
     }
 
     // Reset filters for new search (query changed)
     if (query && getQuery(location).q !== query) {
       resetFilter('search', 'date-filter');
       resetFilter('search', 'topics-filter');
+      resetFilter('search', 'sources-filter');
       resetFilter('search', 'sections-filter');
     }
 
@@ -102,6 +109,8 @@ export class OmniBox extends Component {
     if (this.state.isOpen) {
       this.setState({ isOpen: false });
     }
+
+    onSearch();
   };
 
   handleResultSelect = (e, data) => {
@@ -157,7 +166,7 @@ export class OmniBox extends Component {
     const { name } = category;
     const icon     = CATEGORIES_ICONS[name];
     return (
-      <div style={{ paddingTop: '0.5em' }}>
+      <div>
         <Icon name={icon} />
         {this.props.t(`search.suggestions.categories.${name}`)}
       </div>
@@ -182,12 +191,7 @@ export class OmniBox extends Component {
   });
 
   renderInput() {
-    return (
-      <Input
-        style={{ width: '100%' }}
-        onKeyDown={this.handleSearchKeyDown}
-      />
-    );
+    return (<Input onKeyDown={this.handleSearchKeyDown} />);
   }
 
   render() {
@@ -239,7 +243,7 @@ export class OmniBox extends Component {
   }
 }
 
-const mapState = state => ({
+export const mapState = state => ({
   suggestions: selectors.getSuggestions(state.search),
   query: selectors.getQuery(state.search),
   pageSize: settingsSelectors.getPageSize(state.settings),
@@ -249,7 +253,7 @@ const mapState = state => ({
   getTagPath: tagsSelectors.getPathByID(state.tags),
 });
 
-const mapDispatch = dispatch => bindActionCreators({
+export const mapDispatch = dispatch => bindActionCreators({
   autocomplete: actions.autocomplete,
   search: actions.search,
   updateQuery: actions.updateQuery,
@@ -259,6 +263,7 @@ const mapDispatch = dispatch => bindActionCreators({
   push,
 }, dispatch);
 
-export const wrap = WrappedComponent => connect(mapState, mapDispatch)(WrappedComponent);
+export const wrap = (WrappedComponent, ms = mapState, md = mapDispatch) =>
+  connect(ms, md)(WrappedComponent);
 
 export default wrap(OmniBox);

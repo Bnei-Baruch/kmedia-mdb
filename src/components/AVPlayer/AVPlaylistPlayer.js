@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { Media } from 'react-media-player';
 
 import { MT_AUDIO } from '../../helpers/consts';
-import AVPlayer from './AVPlayer';
+import { selectors as system } from '../../redux/modules/system';
+import AVMobileCheck from './AVMobileCheck';
 
 class AVPlaylistPlayer extends Component {
-
   static propTypes = {
     items: PropTypes.array.isRequired,
     selected: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
+    autoPlayAllowed: PropTypes.bool.isRequired,
     onSelectedChange: PropTypes.func.isRequired,
     onLanguageChange: PropTypes.func.isRequired,
     onSwitchAV: PropTypes.func.isRequired,
@@ -48,8 +50,8 @@ class AVPlaylistPlayer extends Component {
   onPause = () => this.setState({ autoPlay: false });
 
   render() {
-    const { t, selected, items, language, onSwitchAV, onLanguageChange } = this.props;
-    const { autoPlay }                                                     = this.state;
+    const { t, selected, items, language, onSwitchAV, onLanguageChange, autoPlayAllowed } = this.props;
+    const { autoPlay }                                                                    = this.state;
 
     const currentItem = items[selected];
 
@@ -63,11 +65,12 @@ class AVPlaylistPlayer extends Component {
         className={classNames('avbox__player', {
           'avbox__player--is-audio': currentItem.mediaType === MT_AUDIO,
           'avbox__player--is-4x3': currentItem.unit.film_date < '2014',
+          'mobile-device': !autoPlayAllowed,
         })}
       >
         <div className="avbox__media-wrapper">
           <Media>
-            <AVPlayer
+            <AVMobileCheck
               autoPlay={autoPlay}
               item={currentItem}
               onSwitchAV={onSwitchAV}
@@ -92,4 +95,8 @@ class AVPlaylistPlayer extends Component {
   }
 }
 
-export default AVPlaylistPlayer;
+const mapState = state => ({
+  autoPlayAllowed: system.getAutoPlayAllowed(state.system),
+});
+
+export default connect(mapState)(AVPlaylistPlayer);

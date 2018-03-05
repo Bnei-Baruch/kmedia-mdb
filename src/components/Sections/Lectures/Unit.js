@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Header, Item } from 'semantic-ui-react';
 
 import { canonicalLink, formatDuration, neighborIndices } from '../../../helpers/utils';
+import { sectionThumbnailFallback } from '../../../helpers/images';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
 import { UnitContainer, wrap as wrapContainer } from '../../Pages/Unit/Container';
@@ -28,7 +29,7 @@ class MySameCollectionWidget extends SameCollectionWidget {
     return (
       <div className="recommended-same-collection content__aside-unit">
         <Header as="h3" content={t('lectures.unit.recommended.same-collection.title')} />
-        <Item.Group divided link>
+        <Item.Group divided unstackable link>
           {
             otherParts.reverse().map(part => (
               <Item
@@ -38,7 +39,12 @@ class MySameCollectionWidget extends SameCollectionWidget {
                 className="recommended-same-collection__item"
               >
                 <Item.Image size="small">
-                  <UnitLogo unitId={part.id} collectionId={collection.id} width={150} />
+                  <UnitLogo
+                    unitId={part.id}
+                    collectionId={collection.id}
+                    width={150}
+                    fallbackImg={sectionThumbnailFallback.lectures}
+                  />
                 </Item.Image>
                 <Item.Content verticalAlign="top">
                   <Header as="h5">

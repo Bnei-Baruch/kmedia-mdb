@@ -17,11 +17,28 @@ class TOC extends Component {
     contextRef: PropTypes.object,
     getSourceById: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
+    stickyOffset: PropTypes.number,
   };
 
   static defaultProps = {
-    contextRef: null
+    contextRef: null,
+    stickyOffset: 144, // 60 + 70 + 14 (top navbar + library secondary header + 1em)
   };
+
+  state = {};
+
+  componentWillReceiveProps(nextProps) {
+    const { fullPath } = nextProps;
+    this.setState({ activeId: fullPath[fullPath.length - 1].id });
+  }
+
+  componentDidUpdate() {
+    // make actual TOC content proper height
+    const el = document.querySelector('.source__toc > div:nth-child(2)');
+    if (el) {
+      el.style.height = `calc(100vh - ${this.props.stickyOffset}px)`;
+    }
+  }
 
   getIndex = (node1, node2) => {
     if (!node1 || !node2 || !node1.children) {
@@ -30,26 +47,16 @@ class TOC extends Component {
     return node1.children.findIndex(x => x === node2.id);
   };
 
-  selectSourceById = (id, e) => {
-    e.preventDefault();
-    this.props.replace(`sources/${id}`);
-    window.scrollTo(0, 0);
-  };
-
   subToc = (subTree, path) => (
     subTree.map(sourceId => (this.toc(sourceId, path)))
   );
 
   leaf = (id, title) => {
-    const { rootId } = this.props;
-    let props        = {
+    const props = {
       key: `lib-leaf-item-${id}`,
       onClick: e => this.selectSourceById(id, e),
     };
-    if (id === rootId) {
-      props = { ...props, ref: this.handleSelectedAccordionContext, active: true };
-    }
-    return <Accordion.Title {...props}>{title}</Accordion.Title>;
+    return <Accordion.Title {...props} active={id === this.state.activeId}>{title}</Accordion.Title>;
   };
 
   toc = (sourceId, path, firstLevel = false) => {
@@ -97,8 +104,15 @@ class TOC extends Component {
     };
   };
 
+  selectSourceById = (id, e) => {
+    e.preventDefault();
+    this.setState({ activeId: id });
+    this.props.replace(`sources/${id}`);
+    window.scrollTo(0, 0);
+  };
+
   render() {
-    const { fullPath, rootId, contextRef } = this.props;
+    const { fullPath, rootId, contextRef, stickyOffset } = this.props;
 
     const activeIndex = this.getIndex(fullPath[1], fullPath[2]);
     if (activeIndex === -1) {
@@ -109,7 +123,7 @@ class TOC extends Component {
     const toc  = this.toc(rootId, path, true);
 
     return (
-      <Sticky context={contextRef} offset={144} className="source__toc">
+      <Sticky context={contextRef} offset={stickyOffset} className="source__toc">
         <Ref innerRef={this.handleAccordionContext}>
           <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} />
         </Ref>

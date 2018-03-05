@@ -47,7 +47,7 @@ export default class AVLanguage extends Component {
         <Dropdown
           floating
           scrolling
-          upward={true}
+          upward
           icon={null}
           selectOnBlur={false}
           options={options}

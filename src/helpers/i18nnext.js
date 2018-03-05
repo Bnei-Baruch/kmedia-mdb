@@ -4,6 +4,7 @@ import SERVER_BACKEND from 'i18next-node-remote-backend';
 import moment from 'moment';
 import 'moment/locale/he';
 import 'moment/locale/ru';
+import 'moment/locale/es';
 
 import { DEFAULT_LANGUAGE } from './consts';
 

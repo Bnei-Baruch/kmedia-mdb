@@ -4,9 +4,7 @@ import moment from 'moment';
 import { RTL_LANGUAGES } from '../helpers/consts';
 import { changeDirection, getCurrentDirection } from '../helpers/i18n-utils';
 import { types } from '../redux/modules/settings';
-import { actions as sources } from '../redux/modules/sources';
-import { actions as tags } from '../redux/modules/tags';
-import { actions as publications } from '../redux/modules/publications';
+import { actions as mdb } from '../redux/modules/mdb';
 import i18n from '../helpers/i18nnext';
 
 function changeDirectionIfNeeded(language) {
@@ -33,9 +31,7 @@ function* setLanguage(action) {
   // https://github.com/i18next/i18next/blob/master/src/i18next.js#L281
   changeDirectionIfNeeded(language);
 
-  yield put(sources.fetchSources());
-  yield put(tags.fetchTags());
-  yield put(publications.fetchPublishers());
+  yield put(mdb.fetchSQData());
 }
 
 function* watchSetLanguages() {

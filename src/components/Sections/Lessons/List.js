@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { List, Table } from 'semantic-ui-react';
 
-import { CT_DAILY_LESSON, CT_LESSON_PART } from '../../../helpers/consts';
+import { CT_DAILY_LESSON, CT_LESSON_PART, NO_NAME } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { selectors as mdb } from '../../../redux/modules/mdb';
@@ -23,24 +23,24 @@ export const renderUnit = (unit, t) => {
     )
   ).concat(breakdown.getAllButDailyLessons().map(x => (
     <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-      {x.name}
+      {x.name || NO_NAME}
     </List.Item>
   )));
 
   return (
-    <Table.Row verticalAlign="top" key={unit.id}>
-      <Table.Cell collapsing singleLine width={1}>
-        <strong>{t('values.date', { date: new Date(unit.film_date) })}</strong>
+    <Table.Row verticalAlign="top" key={unit.id} className="no-thumbnail">
+      <Table.Cell collapsing singleLine>
+        <span className="index__date">{t('values.date', { date: new Date(unit.film_date) })}</span>
       </Table.Cell>
       <Table.Cell>
-        <Link to={canonicalLink(unit)}>
-          <strong>{unit.name}</strong>
+        <Link className="index__title" to={canonicalLink(unit)}>
+          {unit.name || NO_NAME}
         </Link>
         {
           relatedItems.length === 0 ?
             null :
             (
-              <List divided horizontal link className="index-list__item-subtitle" size="tiny">
+              <List horizontal divided link className="index__collections" size="tiny">
                 <List.Item>
                   <List.Header>
                     {t('lessons.list.related')}:
@@ -71,21 +71,21 @@ export const renderCollection = (collection, t) => {
           )
         ).concat(breakdown.getAllButDailyLessons().map(x => (
           <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-            {x.name}
+            {x.name || NO_NAME}
           </List.Item>
         )));
 
       return (
-        <Table.Row key={`u-${unit.id}`} verticalAlign="top">
+        <Table.Row key={`u-${unit.id}`} verticalAlign="top" className="no-thumbnail">
           <Table.Cell>
-            <Link to={canonicalLink(unit)}>
-              {unit.name}
+            <Link className="index__item" to={canonicalLink(unit)}>
+              {unit.name || NO_NAME}
             </Link>
             {
               relatedItems.length === 0 ?
                 null :
                 (
-                  <List className="index-list__item-subtitle" size="tiny" divided horizontal link>
+                  <List horizontal divided link className="index__collections" size="tiny">
                     <List.Item>
                       <List.Header>
                         {t('lessons.list.related')}:
@@ -105,13 +105,13 @@ export const renderCollection = (collection, t) => {
   const cuSpan = collection.content_units ? collection.content_units.length + 1 : 1;
 
   rows.push((
-    <Table.Row key={`l-${collection.id}`} verticalAlign="top">
-      <Table.Cell collapsing singleLine width={1} rowSpan={cuSpan}>
-        <strong>{t('values.date', { date: new Date(collection.film_date) })}</strong>
+    <Table.Row key={`l-${collection.id}`} verticalAlign="top" className="no-thumbnail">
+      <Table.Cell collapsing singleLine rowSpan={cuSpan}>
+      <span className="index__date">{t('values.date', { date: new Date(collection.film_date) })}</span>
       </Table.Cell>
       <Table.Cell>
-        <Link to={canonicalLink(collection)}>
-          <strong>{t(CT_DAILY_LESSON_I18N_KEY)}</strong>
+        <Link className="index__title" to={canonicalLink(collection)}>
+          {t(CT_DAILY_LESSON_I18N_KEY)}
         </Link>
       </Table.Cell>
     </Table.Row>

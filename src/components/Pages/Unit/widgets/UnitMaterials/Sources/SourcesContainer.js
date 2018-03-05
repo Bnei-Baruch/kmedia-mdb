@@ -43,6 +43,7 @@ class SourcesContainer extends Component {
       wip: false,
       err: null,
     },
+    doc2htmlById: null
   };
 
   componentDidMount() {

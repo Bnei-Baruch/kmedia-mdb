@@ -226,6 +226,17 @@ export const MIME_TYPE_TO_MEDIA_TYPE = Object.values(MEDIA_TYPES).reduce((acc, m
   return acc;
 }, {});
 
+export const VS_NHD     = 'nHD';
+export const VS_HD      = 'HD';
+export const VS_FHD     = 'FHD';
+export const VS_DEFAULT = VS_NHD;
+
+export const VS_NAMES = {
+  [VS_NHD]: '360p',
+  [VS_HD]: '720p',
+  [VS_FHD]: '1080p',
+};
+
 export const TOPICS_FOR_DISPLAY    = ['VUpFlBnu', '0db5BBS3', 'g3ml0jum'];
 export const EVENT_PREPARATION_TAG = 'Salvk5yF';
 
@@ -236,18 +247,42 @@ export const EVENT_TYPES = [
 ];
 
 // Required for Sections filter.
-export const COLLECTION_LESSONS_TYPE  = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, CT_CHILDREN_LESSONS, CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS];
-export const COLLECTION_PROGRAMS_TYPE = [CT_VIDEO_PROGRAM];
-export const COLLECTION_EVENTS_TYPE   = [CT_FRIENDS_GATHERINGS, CT_MEALS, ...EVENT_TYPES];
-export const UNIT_LESSONS_TYPE        = [CT_LESSON_PART, CT_CHILDREN_LESSON, CT_WOMEN_LESSON, CT_VIRTUAL_LESSON, CT_FULL_LESSON];
-export const UNIT_PROGRAMS_TYPE       = [CT_VIDEO_PROGRAM_CHAPTER];
-export const UNIT_EVENTS_TYPE         = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
+export const COLLECTION_LESSONS_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, CT_CHILDREN_LESSONS, CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS];
+export const COLLECTION_PROGRAMS_TYPE     = [CT_VIDEO_PROGRAM];
+export const COLLECTION_LECTURES_TYPE     = [CT_LECTURE_SERIES];
+export const COLLECTION_EVENTS_TYPE       = [CT_FRIENDS_GATHERINGS, CT_MEALS, ...EVENT_TYPES];
+export const COLLECTION_PUBLICATIONS_TYPE = [CT_ARTICLES];
+export const UNIT_LESSONS_TYPE            = [CT_LESSON_PART, CT_CHILDREN_LESSON, CT_WOMEN_LESSON, CT_VIRTUAL_LESSON, CT_FULL_LESSON];
+export const UNIT_PROGRAMS_TYPE           = [CT_VIDEO_PROGRAM_CHAPTER];
+export const UNIT_LECTURES_TYPE           = [CT_LECTURE];
+export const UNIT_EVENTS_TYPE             = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
+export const UNIT_PUBLICATIONS_TYPE       = [CT_PUBLICATION];
 
 export const NO_NAME = '☠ no name';
 
 // Sources
 export const BS_SHAMATI = 'qMUUn22b';
 export const BS_IGROT   = 'DVSS0xAR';
+export const BS_TAAS    = 'xtKmrbb9';
 export const RB_IGROT   = 'b8SHlrfH';
 export const MR_TORA    = 'bvA8ZB1w';
 export const RH_ZOHAR   = 'AwGBQX2L';
+
+export const BS_TAAS_PARTS = {
+  '9xNFLSSp': 1,
+  XlukqLH8: 37,
+  AerA1hNN: 101,
+  '1kDKQxJb': 209,
+  o5lXptLo: 291,
+  eNwJXy4s: 389,
+  ahipVtPu: 485,
+  Pscnn3pP: 599,
+  Lfu7W3CD: 731,
+  n03vXCJl: 865,
+  UGcGGSpP: 1011,
+  NpLQT0LX: 1127,
+  AUArdCkH: 1297,
+  tit6XNAo: 1493,
+  FaKUG7ru: 1687,
+  mW6eON0z: 1887,
+};

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_CHILDREN_LESSON, CT_LECTURE, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, NO_NAME } from '../../../helpers/consts';
+import { sectionThumbnailFallback } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import UnitList from '../../Pages/UnitList/Container';
@@ -25,24 +26,26 @@ export const renderUnit = (unit, t) => {
   if (unit.film_date) {
     filmDate = t('values.date', { date: new Date(unit.film_date) });
   }
+  const link = canonicalLink(unit);
 
   return (
     <Table.Row key={unit.id} verticalAlign="top">
-      <Table.Cell collapsing singleLine width={1}>
-        <strong>{filmDate}</strong>
-      </Table.Cell>
-      <Table.Cell collapsing width={1}>
-        <UnitLogo
-          fluid
-          unitId={unit.id}
-          collectionId={lectures.length > 0 ? lectures[0].id : null}
-        />
+      <Table.Cell collapsing singleLine>
+        <Link to={link}>
+          <UnitLogo
+            className="index__thumbnail"
+            unitId={unit.id}
+            collectionId={lectures.length > 0 ? lectures[0].id : null}
+            fallbackImg={sectionThumbnailFallback.lectures}
+          />
+        </Link>
       </Table.Cell>
       <Table.Cell>
-        <Link to={canonicalLink(unit)}>
-          <strong>{unit.name || NO_NAME}</strong>
+        <span className="index__date">{filmDate}</span>
+        <Link className="index__title" to={link}>
+          {unit.name || NO_NAME}
         </Link>
-        <List horizontal divided link className="index-list__item-subtitle" size="tiny">
+        <List horizontal divided link className="index__collections" size="tiny">
           <List.Item>
             <List.Header>{t('lectures.list.item_from')}</List.Header>
           </List.Item>

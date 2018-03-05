@@ -10,7 +10,6 @@ import * as shapes from '../../shapes';
 import HomePage from './HomePage';
 
 class HomePageContainer extends Component {
-
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
     latestLesson: shapes.LessonCollection,
@@ -19,6 +18,7 @@ class HomePageContainer extends Component {
     wip: shapes.WIP,
     err: shapes.Error,
     language: PropTypes.string.isRequired,
+    fetchData: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -57,7 +57,7 @@ class HomePageContainer extends Component {
   }
 }
 
-const mapState = state => {
+const mapState = (state) => {
   const latestLessonID = selectors.getLatestLesson(state.home);
   const latestLesson   = latestLessonID ? mdb.getCollectionById(state.mdb, latestLessonID) : null;
 
