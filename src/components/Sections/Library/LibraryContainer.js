@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { replace as routerReplace } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Grid, Header, Ref, Menu, Dropdown, Icon } from 'semantic-ui-react';
+import { Button, Container, Dropdown, Grid, Header } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
@@ -47,6 +47,8 @@ class LibraryContainer extends Component {
   state = {
     lastLoadedId: null,
     isReadable: false,
+    fontSize: 0,
+    theme: 'light',
   };
 
   componentDidMount() {
@@ -170,6 +172,30 @@ class LibraryContainer extends Component {
     this.setState({ isReadable: !this.state.isReadable });
   };
 
+  handleIncreaseFontSize = (e, data) => {
+    if (this.state.fontSize < 3) {
+      this.setState({ fontSize: this.state.fontSize + 1 });
+    }
+  };
+
+  handleDecreaseFontSize = (e, data) => {
+    if (this.state.fontSize > -3) {
+      this.setState({ fontSize: this.state.fontSize - 1 });
+    }
+  };
+
+  handleLightTheme = () => {
+    this.setState({ theme: 'light' });
+  };
+
+  handleDarkTheme = () => {
+    this.setState({ theme: 'dark' });
+  };
+
+  handleSepiaTheme = () => {
+    this.setState({ theme: 'sepia' });
+  };
+
   fetchIndices = (sourceId) => {
     if (isEmpty(sourceId)) {
       return;
@@ -240,13 +266,13 @@ class LibraryContainer extends Component {
       );
     }
 
-    const { isReadable, secondaryHeaderHeight } = this.state;
+    const { isReadable, fontSize, theme, secondaryHeaderHeight } = this.state;
 
     return (
       <div className={classnames({ source: true, 'is-readable': isReadable })}>
         <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
           <Container>
-            <Grid padded centered >
+            <Grid padded centered>
               <Grid.Row verticalAlign="bottom">
                 <Grid.Column tablet={5} computer={4} className="mobile-hidden">
                   <Header size="medium">
@@ -255,30 +281,54 @@ class LibraryContainer extends Component {
                 </Grid.Column>
                 <Grid.Column mobile={14} tablet={11} computer={12} className="source__content-header">
                   <div>
-                    {this.header(sourceId, fullPath)}             
-                    
-                      <Dropdown trigger={<Button icon='setting'/>} icon >
-                        <Dropdown.Menu className='left'>
-                          <Dropdown.Header>font size</Dropdown.Header>
-                          <Dropdown.Item icon='plus' text='Increase font size' />
-                          <Dropdown.Item icon='minus' text='Decrease font size' />
-                          <Dropdown.Divider />
-                          <Dropdown.Header>theme</Dropdown.Header>
-                          <Dropdown.Item label={{ color: 'white', empty: true, circular: true }} text='Light theme' />
-                          <Dropdown.Item label={{ color: 'black', empty: true, circular: true }} text='Dark theme' />
-                          <Dropdown.Item label={{ color: 'sepia', empty: true, circular: true }} text='Sepia theme' />
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    
-                      <Button icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
-                    </div>
+                    {this.header(sourceId, fullPath)}
+
+                    <Dropdown trigger={<Button icon="setting" />} icon>
+                      <Dropdown.Menu className="left">
+                        <Dropdown.Header>font size</Dropdown.Header>
+                        <Dropdown.Item icon="plus" text="Increase font size" onClick={this.handleIncreaseFontSize} />
+                        <Dropdown.Item icon="minus" text="Decrease font size" onClick={this.handleDecreaseFontSize} />
+                        <Dropdown.Divider />
+                        <Dropdown.Header>theme</Dropdown.Header>
+                        <Dropdown.Item
+                          label={{
+                            color: 'white',
+                            empty: true,
+                            circular: true
+                          }}
+                          text="Light theme"
+                          onClick={this.handleLightTheme}
+                        />
+                        <Dropdown.Item
+                          label={{
+                            color: 'black',
+                            empty: true,
+                            circular: true
+                          }}
+                          text="Dark theme"
+                          onClick={this.handleDarkTheme}
+                        />
+                        <Dropdown.Item
+                          label={{
+                            color: 'sepia',
+                            empty: true,
+                            circular: true
+                          }}
+                          text="Sepia theme"
+                          onClick={this.handleSepiaTheme}
+                        />
+                      </Dropdown.Menu>
+                    </Dropdown>
+
+                    <Button icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
+                  </div>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
           </Container>
         </div>
         <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
-          <Grid padded centered >
+          <Grid padded centered>
             <Grid.Row>
               <Grid.Column tablet={5} computer={4} className="mobile-hidden">
                 <TOC
@@ -290,10 +340,21 @@ class LibraryContainer extends Component {
                   stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}
                 />
               </Grid.Column>
-              <Grid.Column mobile={14} tablet={11} computer={12} className="source__content-wrapper">
+              <Grid.Column
+                mobile={14}
+                tablet={11}
+                computer={12}
+                className={classnames({
+                  'source__content-wrapper': true,
+                  [`is-${theme}`]: true,
+                  [`size${fontSize}`]: true,
+                })}
+              >
                 <div ref={this.handleContextRef}>
-                  <div className="source__content" 
-                  style={{minHeight: `calc(100vh - ${secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}px)`}}>
+                  <div
+                    className="source__content"
+                    style={{ minHeight: `calc(100vh - ${secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}px)` }}
+                  >
                     {content}
                   </div>
                 </div>
