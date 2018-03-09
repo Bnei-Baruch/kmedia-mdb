@@ -102,15 +102,8 @@ const sortSources = (items) => {
   });
 };
 
-const buildById = (items, sort = false) => {
+const buildById = (items) => {
   const byId = {};
-
-  if (sort) {
-    // Yes, this is not good, but...
-    // We sort sources according to Mizrachi's request
-    // and this __changes__ data
-    sortSources(items);
-  }
 
   // We BFS the tree, extracting each item by it's ID
   // and normalizing it's children
@@ -142,6 +135,10 @@ export const reducer = handleActions({
     const book   = JSON.parse(JSON.stringify(action.payload)); // Deep copy
     const byId   = buildById(book);
     const az     = JSON.parse(JSON.stringify(action.payload)); // Deep copy
+    // Yes, this is not good, but...
+    // We sort sources according to Mizrachi's request
+    // and this __changes__ data
+    sortSources(az);
     const byIdAZ = buildById(az, true);
 
     // selectors
