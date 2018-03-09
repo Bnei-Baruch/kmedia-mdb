@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import classnames from 'classnames';
-import { Flag, Header, Icon, Menu /*, Search */ } from 'semantic-ui-react';
+import { Flag, Header, Icon, Menu } from 'semantic-ui-react';
 import { renderRoutes } from 'react-router-config';
 
 import { ALL_LANGUAGES, FLAG_TO_LANGUAGE } from '../../helpers/consts';
@@ -62,8 +62,8 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location, route }   = this.props;
-    const { sidebarActive } = this.state;
+    const { t, location, route } = this.props;
+    const { sidebarActive }      = this.state;
 
     const showSearch = this.shouldShowSearch(location);
     return (
@@ -152,7 +152,7 @@ class Layout extends Component {
         </div>
         <div className="layout__main">
           <div className="layout__content">
-            { renderRoutes(route.routes) }
+            {renderRoutes(route.routes)}
           </div>
           <Footer t={t} />
         </div>

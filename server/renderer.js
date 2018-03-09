@@ -1,79 +1,119 @@
 import path from 'path';
 import fs from 'fs';
+import pick from 'lodash/pick';
+import moment from 'moment';
 import serialize from 'serialize-javascript';
+import UAParser from 'ua-parser-js';
 
-import { renderApp, renderHead } from './serverRender';
-import createStore from '../src/redux/createStore';
-import applicationSaga from '../src/sagas/application';
-import { actions as settings } from '../src/redux/modules/settings';
 import { getLanguageFromPath } from '../src/helpers/url';
 import { getLanguageDirection } from '../src/helpers/i18n-utils';
-import i18n from '../src/helpers/i18nnext';
+import createStore from '../src/redux/createStore';
+import { actions as settings } from '../src/redux/modules/settings';
+import { renderApp, renderHead } from './serverRender';
+import i18nnext from './i18nnext';
 
-// this does most of the heavy lifting
-async function serverRender(req, res, htmlData) {
-  const context = { data: {}, head: [], req };
-  const store   = createStore();
-  // first render
-  // uncomment when we can make async actions aware there are no sagas because they will never resolve
-  // render(req, store, context);
+function serverRender2(req, res, htmlData) {
+  console.log('serverRender2', req.originalUrl);
 
-  if (context.url) {
-    // Somewhere a `<Redirect>` was rendered
-    res.redirect(301, context.url);
-  }
+  let hrstart = process.hrtime();
 
-  await store
-    .sagaMiddleWare.run(applicationSaga).done
-    .catch((error) => {
-      console.log('application saga error: ', error);
-    }) // keep going if application saga throws
-    .then(() => {
-      const locale     = getLanguageFromPath(req.url);
-      const resources  = i18n.getResourceBundle(locale, 'common');
-      const i18nClient = { locale, resources };
-      const i18nServer = i18n.cloneInstance();
+  const language = getLanguageFromPath(req.originalUrl);
+  console.log('getLanguageFromPath', language);
 
-      return new Promise((resolve) => {
-        i18nServer.changeLanguage(locale, () => {
-          store.dispatch(settings.setLanguage(locale));
+  moment.locale(language);
+  const i18nServer = i18nnext.cloneInstance();
+  i18nServer.changeLanguage(language, () => {
+    let hrend = process.hrtime(hrstart);
+    console.log('serverRender: i18nServer.changeLanguage %ds %dms', hrend[0], hrend[1] / 1000000);
+    hrstart = process.hrtime();
 
-          context.i18n = i18nServer;
+    const deviceInfo = new UAParser(req.get('user-agent')).getResult();
+    console.log('deviceInfo', req.get('user-agent'), deviceInfo);
+    const store      = createStore({ device: { deviceInfo } });
+    store.dispatch(settings.setLanguage(language));
 
-          // second render
-          const markup     = renderApp(req, store, context);
-          // TODO(yaniv): render head as part of the entire application or create a react component for it
-          const headMarkup = renderHead(context);
+    const context = {
+      req,
+      data: {},
+      head: [],
+      i18n: i18nServer,
+    };
 
-          if (context.url) {
-            // Somewhere a `<Redirect>` was rendered
-            res.redirect(301, context.url);
-          } else {
-            // we're good, add in markup, send the response
-            const direction    = getLanguageDirection(locale);
-            const cssDirection = direction === 'ltr' ? '' : '.rtl';
+    store.rootSagaPromise
+      .catch((error) => {
+        console.log('root saga error: ', error);
+      }) // keep going if root saga throws
+      .then(() => {
+        hrend = process.hrtime(hrstart);
+        console.log('serverRender: Promise.all resolved %ds %dms', hrend[0], hrend[1] / 1000000);
+        hrstart = process.hrtime();
 
-            const RenderedApp = htmlData
-              .replace('{{rootDirection}}', direction)
-              .replace('{{cssDirection}}', cssDirection)
-              .replace('{{SSR}}', markup)
-              .replace('<meta-head/>', headMarkup)
-              .replace('{{data}}', serialize(store.getState()))
-              .replace('{{i18n}}', serialize(i18nClient));
+        // second render
+        const markup = renderApp(req, store, context);
+        hrend        = process.hrtime(hrstart);
+        console.log('serverRender: render #2 %ds %dms', hrend[0], hrend[1] / 1000000);
+        hrstart = process.hrtime();
 
-            if (context.code) {
-              res.status(context.code);
-            }
+        // TODO(yaniv): render head as part of the entire application or create a react component for it
+        const headMarkup = renderHead(context);
+        hrend            = process.hrtime(hrstart);
+        console.log('serverRender: renderHead %ds %dms', hrend[0], hrend[1] / 1000000);
+        hrstart = process.hrtime();
 
-            res.send(RenderedApp);
+        if (context.url) {
+          // Somewhere a `<Redirect>` was rendered
+          res.redirect(301, context.url);
+        } else {
+          // we're good, add in markup, send the response
+          const direction    = getLanguageDirection(language);
+          const cssDirection = direction === 'ltr' ? '' : '.rtl';
+
+          const RenderedApp = htmlData
+            .replace('{{rootDirection}}', `${direction}" style="direction: ${direction}`)
+            .replace(/{{cssDirection}}/g, cssDirection)
+            .replace('{{SSR}}', markup)
+            .replace('<meta-head/>', headMarkup)
+            // .replace('{{data}}', 'null')
+            // .replace('{{data}}', serialize(store.getState()))
+            .replace('{{data}}', serialize(pick(store.getState(), [
+              'router',
+              'device',
+              'settings',
+              'mdb',
+              'filters',
+              'lists',
+              'home',
+            ])))
+            .replace('{{i18n}}', serialize(
+              {
+                initialLanguage: context.i18n.language,
+                initialI18nStore: pick(context.i18n.services.resourceStore.data, [
+                  context.i18n.language,
+                  context.i18n.options.fallbackLng,
+                ]),
+              }
+            ));
+
+          if (context.code) {
+            res.status(context.code);
           }
 
-          store.stopSagas();
-          resolve();
-        });
+          res.send(RenderedApp);
+          hrend = process.hrtime(hrstart);
+          console.log('serverRender: res.send %ds %dms', hrend[0], hrend[1] / 1000000);
+        }
       });
 
-    });
+    renderApp(req, store, context);
+    hrend = process.hrtime(hrstart);
+    console.log('serverRender: render #1 %ds %dms', hrend[0], hrend[1] / 1000000);
+    hrstart = process.hrtime();
+
+    store.stopSagas();
+    hrend = process.hrtime(hrstart);
+    console.log('serverRender: store.stopSagas() %ds %dms', hrend[0], hrend[1] / 1000000);
+    hrstart = process.hrtime();
+  });
 }
 
 export default function universalLoader(req, res) {
@@ -85,10 +125,6 @@ export default function universalLoader(req, res) {
       return res.status(404).end();
     }
 
-    serverRender(req, res, htmlData)
-      .catch((err) => {
-        console.error('Render Error', err);
-        return res.status(500).json({ message: 'Render Error' });
-      });
+    serverRender2(req, res, htmlData);
   });
-};
+}

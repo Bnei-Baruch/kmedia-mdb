@@ -1,5 +1,6 @@
 import { all } from 'redux-saga/effects';
 
+import { sagas as device } from './device';
 import { sagas as mdb } from './mdb';
 import { sagas as programs } from './programs';
 import { sagas as publications } from './publications';
@@ -14,6 +15,7 @@ import { sagas as assets } from './assets';
 import { sagas as home } from './home';
 
 const allSagas = [
+  ...device,
   ...mdb,
   ...programs,
   ...publications,

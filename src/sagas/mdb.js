@@ -2,7 +2,6 @@ import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { actions, types } from '../redux/modules/mdb';
-import { types as system } from '../redux/modules/system';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions as sources } from '../redux/modules/sources';
 import { actions as tags } from '../redux/modules/tags';
@@ -65,7 +64,7 @@ function* watchFetchLatestLesson() {
 }
 
 function* watchFetchSQData() {
-  yield takeLatest([types.FETCH_SQDATA, system.INIT], fetchSQData);
+  yield takeLatest(types.FETCH_SQDATA, fetchSQData);
 }
 
 export const sagas = [

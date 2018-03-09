@@ -9,9 +9,9 @@ import '../../stylesheets/Kmedia.css';
 
 class App extends Component {
   render() {
-    const { i18n, store, history } = this.props;
+    const { i18n, store, history, initialI18nStore, initialLanguage } = this.props;
     return (
-      <I18nextProvider i18n={i18n}>
+      <I18nextProvider i18n={i18n} initialI18nStore={initialI18nStore} initialLanguage={initialLanguage}>
         <Provider store={store}>
           <ConnectedRouter history={history}>
             {renderRoutes(routes)}

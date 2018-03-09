@@ -1,30 +1,41 @@
 import 'core-js/shim';
 import 'regenerator-runtime/runtime';
 import 'babel-polyfill';
+import moment from 'moment';
+import 'moment/locale/he';
+import 'moment/locale/ru';
+import 'moment/locale/es';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactGA from 'react-ga';
 import createHistory from 'history/createBrowserHistory';
 
-import createStore from './redux/createStore';
-import i18n from './helpers/i18nnext';
-import App from './components/App/App';
 import { DEFAULT_LANGUAGE } from './helpers/consts';
+import i18n from './helpers/i18nnext';
+import createStore from './redux/createStore';
+import { actions as mdb } from './redux/modules/mdb';
+import { sagas as deviceSagas } from './sagas/device';
+import App from './components/App/App';
 
 ReactGA.initialize('UA-108372395-1');
 
 const history = createHistory();
 const store   = createStore(window.__data, history);
 
-const i18nData = window.__i18n || { locale: DEFAULT_LANGUAGE };
-i18n.changeLanguage(i18nData.locale);
-if (i18nData.resources) {
-  i18n.addResourceBundle(i18nData.locale, 'common', i18nData.resources, true);
-} else {
-  console.log('Note: No i18n resources from server.');
-}
+// eslint-disable-next-line no-underscore-dangle
+const i18nData = window.__i18n || {};
+
+// Initialize moment global locale to default language
+moment.locale(i18nData.initialLanguage || DEFAULT_LANGUAGE);
 
 ReactDOM.render(
-  <App i18n={i18n} store={store} history={history} />,
+  <App i18n={i18n} store={store} history={history} {...i18nData} />,
   document.getElementById('root')
 );
+
+// We ask for semi-quasi static data here since
+// we strip it from SSR to save initial network bandwidth
+store.dispatch(mdb.fetchSQData());
+
+// init device related sagas
+store.sagaMiddleWare.run(...deviceSagas);

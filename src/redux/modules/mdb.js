@@ -1,7 +1,5 @@
 import groupBy from 'lodash/groupBy';
 import { createAction, handleActions } from 'redux-actions';
-
-import { types as system } from './system';
 import { types as settings } from './settings';
 import { MEDIA_TYPES } from '../../helpers/consts';
 
@@ -316,7 +314,6 @@ const onReceiveContentUnits = (state, action) => {
 };
 
 export const reducer = handleActions({
-  [system.INIT]: () => freshStore(),
   [settings.SET_LANGUAGE]: () => freshStore(),
 
   [FETCH_UNIT]: setStatus,
