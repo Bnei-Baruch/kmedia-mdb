@@ -15,7 +15,7 @@ import MenuItems from './MenuItems';
 import Footer from './Footer';
 import logo from '../../images/logo.svg';
 
-const flags = ['us', 'ru', 'il'];
+const flags = ['us', 'ru', 'es', 'il'];
 
 class Layout extends Component {
   static propTypes = {

@@ -7,6 +7,7 @@ class AVPlayPause extends Component {
   static propTypes = {
     media: PropTypes.shape({
       isPlaying: PropTypes.bool,
+      isLoading: PropTypes.bool,
       playPause: PropTypes.func,
     }).isRequired,
     showNextPrev: PropTypes.bool,

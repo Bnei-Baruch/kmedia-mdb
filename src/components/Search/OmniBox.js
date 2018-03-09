@@ -81,7 +81,7 @@ export class OmniBox extends Component {
   };
 
   doSearch = (q = null) => {
-    const query = q != null ? q : this.props.query;
+    const query                                                       = q != null ? q : this.props.query;
     const { search, location, push, pageSize, resetFilter, onSearch } = this.props;
 
     if (this.emptyQuery()) {
@@ -243,7 +243,7 @@ export class OmniBox extends Component {
   }
 }
 
-const mapState = state => ({
+export const mapState = state => ({
   suggestions: selectors.getSuggestions(state.search),
   query: selectors.getQuery(state.search),
   pageSize: settingsSelectors.getPageSize(state.settings),
@@ -253,7 +253,7 @@ const mapState = state => ({
   getTagPath: tagsSelectors.getPathByID(state.tags),
 });
 
-const mapDispatch = dispatch => bindActionCreators({
+export const mapDispatch = dispatch => bindActionCreators({
   autocomplete: actions.autocomplete,
   search: actions.search,
   updateQuery: actions.updateQuery,
@@ -263,6 +263,7 @@ const mapDispatch = dispatch => bindActionCreators({
   push,
 }, dispatch);
 
-export const wrap = WrappedComponent => connect(mapState, mapDispatch)(WrappedComponent);
+export const wrap = (WrappedComponent, ms = mapState, md = mapDispatch) =>
+  connect(ms, md)(WrappedComponent);
 
 export default wrap(OmniBox);

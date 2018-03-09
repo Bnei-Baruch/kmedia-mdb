@@ -58,6 +58,7 @@
     "classnames": "^2.2.5",
     "core-js": "^2.4.1",
     "dotenv": "^4.0.0",
+    "fscreen": "^1.0.2",
     "history": "^4.6.3",
     "hoist-non-react-statics": "^2.2.2",
     "i18next": "^8.4.3",

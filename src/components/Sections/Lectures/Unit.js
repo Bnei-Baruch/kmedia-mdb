@@ -29,7 +29,7 @@ class MySameCollectionWidget extends SameCollectionWidget {
     return (
       <div className="recommended-same-collection content__aside-unit">
         <Header as="h3" content={t('lectures.unit.recommended.same-collection.title')} />
-        <Item.Group divided link>
+        <Item.Group divided unstackable link>
           {
             otherParts.reverse().map(part => (
               <Item

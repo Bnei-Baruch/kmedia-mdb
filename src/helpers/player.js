@@ -1,4 +1,6 @@
 import moment from 'moment/moment';
+import groupBy from 'lodash/groupBy';
+import mapValues from 'lodash/mapValues';
 
 import { assetUrl } from './Api';
 import {
@@ -14,24 +16,30 @@ import {
   MT_AUDIO,
   MT_VIDEO,
   PLAYABLE_MEDIA_TYPES,
+  VS_DEFAULT,
 } from './consts';
 import { getQuery, updateQuery } from './url';
 import { isEmpty, physicalFile } from './utils';
 
+const fallbacksLanguages = [LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN];
+
 function getMimeType(mediaType) {
-  return mediaType === MT_VIDEO ? MEDIA_TYPES.mp4.mime_type : MEDIA_TYPES.mp3.mime_type;
+  return mediaType === MT_VIDEO ?
+    MEDIA_TYPES.mp4.mime_type :
+    MEDIA_TYPES.mp3.mime_type;
 }
 
-function calcAvailableMediaTypes(contentUnit, language) {
-  if (!contentUnit) {
+function calcAvailableMediaTypes(unit, language) {
+  if (!unit || !Array.isArray(unit.files)) {
     return [];
   }
 
-  return Array.from((contentUnit.files || []).reduce((acc, file) => {
-    if (file.language === language &&
-      (file.mimetype === getMimeType(MT_VIDEO) ||
-        file.mimetype === getMimeType(MT_AUDIO))) {
-      acc.add(MIME_TYPE_TO_MEDIA_TYPE[file.mimetype]);
+  const vMime = getMimeType(MT_VIDEO);
+  const aMime = getMimeType(MT_AUDIO);
+  return Array.from(unit.files.reduce((acc, val) => {
+    if (val.language === language &&
+      (val.mimetype === vMime || val.mimetype === aMime)) {
+      acc.add(MIME_TYPE_TO_MEDIA_TYPE[val.mimetype]);
     }
     return acc;
   }, new Set()));
@@ -41,29 +49,35 @@ function restorePreferredMediaType() {
   return localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO;
 }
 
-function persistPreferredMediaType(mediaType) {
-  localStorage.setItem('@@kmedia_player_media_type', mediaType);
+function persistPreferredMediaType(value) {
+  localStorage.setItem('@@kmedia_player_media_type', value);
+}
+
+function restorePreferredVideoSize() {
+  return localStorage.getItem('@@kmedia_player_video_size') || VS_DEFAULT;
+}
+
+function persistPreferredVideoSize(value) {
+  localStorage.setItem('@@kmedia_player_video_size', value);
 }
 
 /**
  * Calculates available languages for content unit for specific language
  * is language is not provided calculates both video and audio available
  * languages.
- * @param {object} contentUnit
- * @param {string|null} mediaType if null will check available languages
- *    for both audio and video.
+ * @param {object} unit
  * @return {!Array<string>}
  */
-function calcAvailableLanguages(contentUnit, mediaType = null) {
-  if (!contentUnit) {
+function calcAvailableLanguages(unit) {
+  if (!unit || !Array.isArray(unit.files)) {
     return [];
   }
 
-  const mediaTypes = mediaType ? [mediaType] : [MT_VIDEO, MT_AUDIO];
-  const mimeTypes  = mediaTypes.map(mt => getMimeType(mt));
-  return Array.from((contentUnit.files || []).reduce((acc, file) => {
-    if (mediaTypes.includes(file.type) || mimeTypes.includes(file.mimetype)) {
-      acc.add(file.language);
+  const mediaTypes = [MT_VIDEO, MT_AUDIO];
+  const mimeTypes  = mediaTypes.map(getMimeType);
+  return Array.from(unit.files.reduce((acc, val) => {
+    if (mediaTypes.includes(val.type) || mimeTypes.includes(val.mimetype)) {
+      acc.add(val.language);
     }
     return acc;
   }, new Set()));
@@ -74,14 +88,13 @@ function playableItem(unit, mediaType, language) {
     return null;
   }
 
-  const allAvailableLanguages = calcAvailableLanguages(unit);
-  const requestedLanguage     = language;
+  const availableLanguages = calcAvailableLanguages(unit);
+  const requestedLanguage  = language;
   // Fallback to English, if not, then to Hebrew (most probably source) then to
   // Russian (second most probable source), then to any other language.
-  if (!allAvailableLanguages.includes(language)) {
-    const fallbacks = [LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN];
-    language        = fallbacks.find(f => allAvailableLanguages.includes(f)) ||
-      (allAvailableLanguages.length && allAvailableLanguages[0]);
+  if (!availableLanguages.includes(language)) {
+    language = fallbacksLanguages.find(f => availableLanguages.includes(f)) ||
+      (availableLanguages.length && availableLanguages[0]);
   }
 
   const availableMediaTypes = calcAvailableMediaTypes(unit, language);
@@ -90,25 +103,28 @@ function playableItem(unit, mediaType, language) {
   if (!availableMediaTypes.includes(mediaType)) {
     if (mediaType === MT_AUDIO) {
       mediaType = MT_VIDEO;
-    }
-    if (mediaType === MT_VIDEO) {
+    } else if (mediaType === MT_VIDEO) {
       mediaType = MT_AUDIO;
     }
   }
 
-  const file = (unit.files || []).find(f =>
-    f.language === language && f.mimetype === getMimeType(mediaType));
+  const mimeType = getMimeType(mediaType);
+
+  const files     = (unit.files || []).filter(f => f.language === language && f.mimetype === mimeType);
+  const byQuality = mapValues(groupBy(files, x => x.video_size || VS_DEFAULT),
+    val => physicalFile(val[0], true));
 
   return {
     unit,
     language,
-    requestedLanguage,
-    src: file ? physicalFile(file, true) : '',
-    preImageUrl: assetUrl(`api/thumbnail/${unit.id}`),
     mediaType,
+    src: byQuality[VS_DEFAULT] || '',
+    preImageUrl: assetUrl(`api/thumbnail/${unit.id}`),
+    requestedLanguage,
     requestedMediaType,
+    availableLanguages,
     availableMediaTypes,
-    availableLanguages: allAvailableLanguages,
+    byQuality,
   };
 }
 
@@ -185,7 +201,6 @@ function playlist(collection, mediaType, language) {
 
       return acc.concat(v);
     }, []);
-
   } else {
     items = units.map(x => playableItem(x, mediaType, language));
   }
@@ -248,4 +263,6 @@ export default {
   setActivePartInQuery,
   restorePreferredMediaType,
   persistPreferredMediaType,
+  restorePreferredVideoSize,
+  persistPreferredVideoSize,
 };
