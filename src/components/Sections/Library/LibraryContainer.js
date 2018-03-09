@@ -30,8 +30,11 @@ class LibraryContainer extends Component {
     })),
     language: PropTypes.string.isRequired,
     fetchIndex: PropTypes.func.isRequired,
+    sourcesSortBy: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,
     getPathByID: PropTypes.func,
+    sortBy: PropTypes.string.isRequired,
+    NotToSort: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     areSourcesLoaded: PropTypes.bool,
     t: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
@@ -210,11 +213,37 @@ class LibraryContainer extends Component {
     this.fetchIndices(sourceId);
   };
 
+  switchSortingOrder = (parentId, t) => {
+    if (this.props.NotToSort.findIndex(a => a === parentId) !== -1) {
+      return null;
+    }
+    return (
+      <Button.Group basic className="buttons-language-selector" size="small">
+        <Button
+          icon
+          active={this.props.sortBy === 'AZ'}
+          title={t('sources-library.az')}
+          onClick={() => this.props.sourcesSortBy('AZ')}
+        >
+          {t('sources-library.az')}
+        </Button>
+        <Button
+          icon
+          active={this.props.sortBy === 'Book'}
+          title={t('sources-library.default')}
+          onClick={() => this.props.sourcesSortBy('Book')}
+        >
+          {t('sources-library.default')}
+        </Button>
+      </Button.Group>
+    );
+  };
+
   render() {
     const { sourceId, indexMap, getSourceById, language, t } = this.props;
 
     const fullPath = this.getFullPath(sourceId);
-    const parent   = this.properParentId(fullPath);
+    const parentId = this.properParentId(fullPath);
 
     const index = isEmpty(sourceId) ? {} : indexMap[sourceId];
 
@@ -246,9 +275,8 @@ class LibraryContainer extends Component {
             <Grid padded>
               <Grid.Row>
                 <Grid.Column computer={4}>
-                  <Header size="medium">
-                    {t('sources-library.toc')}
-                  </Header>
+                  <Header size="medium">{t('sources-library.toc')}</Header>
+                  {this.switchSortingOrder(parentId, t)}
                 </Grid.Column>
                 <Grid.Column computer={8}>
                   {this.header(sourceId, fullPath)}
@@ -268,7 +296,7 @@ class LibraryContainer extends Component {
               <Grid.Column computer={4}>
                 <TOC
                   fullPath={fullPath}
-                  rootId={parent}
+                  rootId={parentId}
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
                   replace={this.props.replace}
@@ -298,10 +326,13 @@ export default withRouter(connect(
     language: settings.getLanguage(state.settings),
     getSourceById: sources.getSourceById(state.sources),
     getPathByID: sources.getPathByID(state.sources),
+    sortBy: sources.sortBy(state.sources),
     areSourcesLoaded: sources.areSourcesLoaded(state.sources),
+    NotToSort: sources.NotToSort
   }),
   dispatch => bindActionCreators({
     fetchIndex: sourceActions.fetchIndex,
+    sourcesSortBy: sourceActions.sourcesSortBy,
     replace: routerReplace,
   }, dispatch)
 )(translate()(LibraryContainer)));
