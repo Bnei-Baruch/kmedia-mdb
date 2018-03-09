@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { replace as routerReplace } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Grid, Header, Ref } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Ref, Menu, Dropdown, Icon } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
@@ -194,7 +194,7 @@ class LibraryContainer extends Component {
     }
 
     return (
-      <Header size="large">
+      <Header size="medium" className="">
         <Header.Subheader>
           <small>
             {displayName} / {`${parentName} ${description || ''} `}
@@ -246,36 +246,39 @@ class LibraryContainer extends Component {
       <div className={classnames({ source: true, 'is-readable': isReadable })}>
         <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
           <Container>
-            <Grid padded centered>
+            <Grid padded centered >
               <Grid.Row verticalAlign="bottom">
                 <Grid.Column tablet={5} computer={4} className="mobile-hidden">
                   <Header size="medium">
                     {t('sources-library.toc')}
                   </Header>
                 </Grid.Column>
-                <Grid.Column mobile={14} tablet={11} computer={8} className="source__content-wrapper">
-                  <Grid>
-                    <Grid.Row>
-                      <Grid.Column width={12} floated="left">
-                        {this.header(sourceId, fullPath)}
-                      </Grid.Column>
-                      <Ref innerRef={this.handleHeaderMenuRef}>
-                        <Grid.Column width={4} floated="right" textAlign="right">
-                          <Button.Group basic size="tiny">
-                            <Button icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
-                            <Button icon="list" className="mobile-only" />
-                          </Button.Group>
-                        </Grid.Column>
-                      </Ref>
-                    </Grid.Row>
-                  </Grid>
+                <Grid.Column mobile={14} tablet={11} computer={12} className="source__content-header">
+                  <div>
+                    {this.header(sourceId, fullPath)}             
+                    
+                      <Dropdown trigger={<Button icon='setting'/>} icon >
+                        <Dropdown.Menu className='left'>
+                          <Dropdown.Header>font size</Dropdown.Header>
+                          <Dropdown.Item icon='plus' text='Increase font size' />
+                          <Dropdown.Item icon='minus' text='Decrease font size' />
+                          <Dropdown.Divider />
+                          <Dropdown.Header>theme</Dropdown.Header>
+                          <Dropdown.Item label={{ color: 'white', empty: true, circular: true }} text='Light theme' />
+                          <Dropdown.Item label={{ color: 'black', empty: true, circular: true }} text='Dark theme' />
+                          <Dropdown.Item label={{ color: 'sepia', empty: true, circular: true }} text='Sepia theme' />
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    
+                      <Button icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
+                    </div>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
           </Container>
         </div>
         <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
-          <Grid padded centered>
+          <Grid padded centered >
             <Grid.Row>
               <Grid.Column tablet={5} computer={4} className="mobile-hidden">
                 <TOC
@@ -287,9 +290,10 @@ class LibraryContainer extends Component {
                   stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}
                 />
               </Grid.Column>
-              <Grid.Column mobile={14} tablet={11} computer={8} className="source__content-wrapper">
+              <Grid.Column mobile={14} tablet={11} computer={12} className="source__content-wrapper">
                 <div ref={this.handleContextRef}>
-                  <div className="source__content">
+                  <div className="source__content" 
+                  style={{minHeight: `calc(100vh - ${secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}px)`}}>
                     {content}
                   </div>
                 </div>
