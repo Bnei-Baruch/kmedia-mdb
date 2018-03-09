@@ -122,6 +122,19 @@ const buildById = (items) => {
   return byId;
 };
 
+const prepareById = (payload) => {
+  const book = JSON.parse(JSON.stringify(payload)); // Deep copy
+  const byId = buildById(book);
+  const az   = JSON.parse(JSON.stringify(payload)); // Deep copy
+  // Yes, this is not good, but...
+  // We sort sources according to Mizrachi's request
+  // and this __changes__ data
+  sortSources(az);
+  const byIdAZ = buildById(az, true);
+
+  return [byId, byIdAZ];
+};
+
 export const reducer = handleActions({
   [settings.SET_LANGUAGE]: (state) => {
     const indexById = state.indexById || initialState.indexById;
@@ -132,14 +145,7 @@ export const reducer = handleActions({
   },
 
   [FETCH_SOURCES_SUCCESS]: (state, action) => {
-    const book   = JSON.parse(JSON.stringify(action.payload)); // Deep copy
-    const byId   = buildById(book);
-    const az     = JSON.parse(JSON.stringify(action.payload)); // Deep copy
-    // Yes, this is not good, but...
-    // We sort sources according to Mizrachi's request
-    // and this __changes__ data
-    sortSources(az);
-    const byIdAZ = buildById(az, true);
+    const [byId, byIdAZ] = prepareById(action.payload);
 
     // selectors
     // we keep those in state to avoid recreating them every time a selector is called
