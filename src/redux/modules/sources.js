@@ -135,6 +135,13 @@ const prepareById = (payload) => {
   return [byId, byIdAZ];
 };
 
+const getIdFuncs = (byId) => {
+  const getByID     = id => byId[id];
+  const getPath     = source => tracePath(source, getByID);
+  const getPathByID = id => getPath(getByID(id));
+  return { getByID, getPath, getPathByID };
+};
+
 export const reducer = handleActions({
   [settings.SET_LANGUAGE]: (state) => {
     const indexById = state.indexById || initialState.indexById;
@@ -147,24 +154,9 @@ export const reducer = handleActions({
   [FETCH_SOURCES_SUCCESS]: (state, action) => {
     const [byId, byIdAZ] = prepareById(action.payload);
 
-    // selectors
-    // we keep those in state to avoid recreating them every time a selector is called
-    const getByID       = id => byId[id];
-    const getPath       = source => tracePath(source, getByID);
-    const getPathByID   = id => getPath(getByID(id));
-    const sortedByBook  = {
-      getByID,
-      getPath,
-      getPathByID
-    };
-    const getByIDAZ     = id => byIdAZ[id];
-    const getPathAZ     = source => tracePath(source, getByID);
-    const getPathByIDAZ = id => getPath(getByID(id));
-    const sortedByAZ    = {
-      getByID: getByIDAZ,
-      getPath: getPathAZ,
-      getPathByID: getPathByIDAZ
-    };
+    // we keep selectors in state to avoid recreating them every time a selector is called
+    const sortedByBook = getIdFuncs(byId);
+    const sortedByAZ   = getIdFuncs(byIdAZ);
 
     return {
       ...state,
@@ -212,8 +204,7 @@ export const reducer = handleActions({
     };
   },
 
-  // eslint-disable-next-line no-unused-vars
-  [FETCH_CONTENT]: (state, action) => ({
+  [FETCH_CONTENT]: (state) => ({
     ...state,
     content: { wip: true }
   }),
@@ -240,18 +231,13 @@ export const reducer = handleActions({
 const areSourcesLoaded = state => state.loaded;
 const getSources       = state => state.byId;
 const getRoots         = state => state.roots;
-const getSourceById    = (state) => {
+const getSourceBy      = (state, idx) => {
   const f = state.sortBy === 'AZ' ? state.sortedByAZ : state.sortedByBook;
-  return f ? f.getByID : identity;
+  return f ? f[idx] : identity;
 };
-const getPath          = (state) => {
-  const f = state.sortBy === 'AZ' ? state.sortedByAZ : state.sortedByBook;
-  return f ? f.getPath : identity;
-};
-const getPathByID      = (state) => {
-  const f = state.sortBy === 'AZ' ? state.sortedByAZ : state.sortedByBook;
-  return f ? f.getPathByID : undefined;
-};
+const getSourceById    = state => getSourceBy(state, 'getByID');
+const getPath          = state => getSourceBy(state, 'getPath');
+const getPathByID      = state => getSourceBy(state, 'getPathByID');
 const getIndexById     = state => state.indexById;
 const getContent       = state => state.content;
 const sortBy           = state => state.sortBy;
