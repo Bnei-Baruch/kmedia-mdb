@@ -213,28 +213,25 @@ class LibraryContainer extends Component {
     this.fetchIndices(sourceId);
   };
 
+  sortButton = (sortOrder, title) => (
+    <Button
+      icon
+      active={this.props.sortBy === sortOrder}
+      title={title}
+      onClick={() => this.props.sourcesSortBy(sortOrder)}
+    >
+      {title}
+    </Button>
+  );
+
   switchSortingOrder = (parentId, t) => {
     if (this.props.NotToSort.findIndex(a => a === parentId) !== -1) {
       return null;
     }
     return (
       <Button.Group basic className="buttons-language-selector" size="small">
-        <Button
-          icon
-          active={this.props.sortBy === 'AZ'}
-          title={t('sources-library.az')}
-          onClick={() => this.props.sourcesSortBy('AZ')}
-        >
-          {t('sources-library.az')}
-        </Button>
-        <Button
-          icon
-          active={this.props.sortBy === 'Book'}
-          title={t('sources-library.default')}
-          onClick={() => this.props.sourcesSortBy('Book')}
-        >
-          {t('sources-library.default')}
-        </Button>
+        {this.sortButton('AZ', t('sources-library.az'))}
+        {this.sortButton('Book', t('sources-library.default'))}
       </Button.Group>
     );
   };
