@@ -5,19 +5,20 @@ import moment from 'moment';
 import 'moment/locale/he';
 import 'moment/locale/ru';
 import 'moment/locale/es';
+import 'moment/locale/uk';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactGA from 'react-ga';
 import createHistory from 'history/createBrowserHistory';
 
-import { DEFAULT_LANGUAGE } from './helpers/consts';
+import { DEFAULT_LANGUAGE, LANG_UKRAINIAN } from './helpers/consts';
 import i18n from './helpers/i18nnext';
 import createStore from './redux/createStore';
 import { actions as mdb } from './redux/modules/mdb';
 import { sagas as deviceSagas } from './sagas/device';
 import App from './components/App/App';
 
-ReactGA.initialize('UA-108372395-1');
+ReactGA.initialize('UA-108372395-1', { gaOptions: { transport: 'beacon' } });
 
 const history = createHistory();
 const store   = createStore(window.__data, history);
@@ -26,7 +27,8 @@ const store   = createStore(window.__data, history);
 const i18nData = window.__i18n || {};
 
 // Initialize moment global locale to default language
-moment.locale(i18nData.initialLanguage || DEFAULT_LANGUAGE);
+const language = i18nData.initialLanguage || DEFAULT_LANGUAGE;
+moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
 
 ReactDOM.render(
   <App i18n={i18n} store={store} history={history} {...i18nData} />,
