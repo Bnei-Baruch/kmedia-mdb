@@ -10,7 +10,7 @@
   <title>Kabbalah Media</title>
 
   <!-- Preload -->
-  <link rel="preload" as="style" href="%PUBLIC_URL%/semantic_v2{{cssDirection}}.min.css">
+  <link rel="preload" as="style" href="%PUBLIC_URL%/semantic_v2.min.css">
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin">
 
   <!-- Preconnect -->
@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://cdn.kabbalahmedia.info">
   <link rel="preconnect" href="https://files.kabbalahmedia.info">
 
-  <link rel="stylesheet" href="%PUBLIC_URL%/semantic_v2{{cssDirection}}.min.css" id="semantic-ui">
+  <link rel="stylesheet" href="%PUBLIC_URL%/semantic_v2.min.css" id="semantic-ui">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin">
 
   <!--
@@ -30,10 +30,6 @@
 
 </head>
 <body>
-<div id="root" class="{{rootDirection}}">{{SSR}}</div>
-<script>
-  window.__data = {{data}};
-  window.__i18n = {{i18n}};
-</script>
+<div id="root"></div>
 </body>
 </html>

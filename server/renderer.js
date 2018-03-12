@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs';
+import http from 'http';
 import pick from 'lodash/pick';
 import moment from 'moment';
 import serialize from 'serialize-javascript';
@@ -11,6 +12,9 @@ import createStore from '../src/redux/createStore';
 import { actions as settings } from '../src/redux/modules/settings';
 import { renderApp, renderHead } from './serverRender';
 import i18nnext from './i18nnext';
+import { LANG_UKRAINIAN } from '../src/helpers/consts';
+
+const CRA_CLIENT_PORT = process.env.CRA_CLIENT_PORT || 3000;
 
 function serverRender2(req, res, htmlData) {
   console.log('serverRender2', req.originalUrl);
@@ -20,7 +24,7 @@ function serverRender2(req, res, htmlData) {
   const language = getLanguageFromPath(req.originalUrl);
   console.log('getLanguageFromPath', language);
 
-  moment.locale(language);
+  moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
   const i18nServer = i18nnext.cloneInstance();
   i18nServer.changeLanguage(language, () => {
     let hrend = process.hrtime(hrstart);
@@ -29,7 +33,7 @@ function serverRender2(req, res, htmlData) {
 
     const deviceInfo = new UAParser(req.get('user-agent')).getResult();
     console.log('deviceInfo', req.get('user-agent'), deviceInfo);
-    const store      = createStore({ device: { deviceInfo } });
+    const store = createStore({ device: { deviceInfo } });
     store.dispatch(settings.setLanguage(language));
 
     const context = {
@@ -68,37 +72,51 @@ function serverRender2(req, res, htmlData) {
           const direction    = getLanguageDirection(language);
           const cssDirection = direction === 'ltr' ? '' : '.rtl';
 
-          const RenderedApp = htmlData
-            .replace('{{rootDirection}}', `${direction}" style="direction: ${direction}`)
-            .replace(/{{cssDirection}}/g, cssDirection)
-            .replace('{{SSR}}', markup)
-            .replace('<meta-head/>', headMarkup)
-            // .replace('{{data}}', 'null')
-            // .replace('{{data}}', serialize(store.getState()))
-            .replace('{{data}}', serialize(pick(store.getState(), [
-              'router',
-              'device',
-              'settings',
-              'mdb',
-              'filters',
-              'lists',
-              'home',
-            ])))
-            .replace('{{i18n}}', serialize(
-              {
-                initialLanguage: context.i18n.language,
-                initialI18nStore: pick(context.i18n.services.resourceStore.data, [
-                  context.i18n.language,
-                  context.i18n.options.fallbackLng,
-                ]),
-              }
-            ));
+          const storeData = serialize(pick(store.getState(), [
+            'router',
+            'device',
+            'settings',
+            'mdb',
+            'filters',
+            'lists',
+            'home',
+          ]));
+
+          const i18nData = serialize(
+            {
+              initialLanguage: context.i18n.language,
+              initialI18nStore: pick(context.i18n.services.resourceStore.data, [
+                context.i18n.language,
+                context.i18n.options.fallbackLng,
+              ]),
+            }
+          );
+
+          const rootDiv = `<div id="root" class="${direction}" style="direction: ${direction}">
+  ${markup}
+</div>
+<script>
+  window.__data = ${storeData};
+  window.__i18n = ${i18nData};
+</script>`;
+
+          const html = htmlData
+            .replace(/semantic_v2.min.css/g, `semantic_v2${cssDirection}.min.css`)
+            .replace(/<div id="root"><\/div>/, rootDiv);
+
+          // const RenderedApp = htmlData
+          //   .replace('{{rootDirection}}', `${direction}" style="direction: ${direction}`)
+          //   .replace(/{{cssDirection}}/g, cssDirection)
+          //   .replace('{{SSR}}', markup)
+          //   .replace('<meta-head/>', headMarkup)
+          //   .replace('{{data}}', storeData)
+          //   .replace('{{i18n}}', i18nData);
 
           if (context.code) {
             res.status(context.code);
           }
 
-          res.send(RenderedApp);
+          res.send(html);
           hrend = process.hrtime(hrstart);
           console.log('serverRender: res.send %ds %dms', hrend[0], hrend[1] / 1000000);
         }
@@ -116,9 +134,31 @@ function serverRender2(req, res, htmlData) {
   });
 }
 
+function handleDevMode(req, res) {
+  http.get(`http://localhost:${CRA_CLIENT_PORT}/index.html`, (result) => {
+    result.setEncoding('utf8');
+    let htmlData = '';
+    result.on('data', (chunk) => {
+      htmlData += chunk;
+    });
+    result.on('end', () => {
+      serverRender2(req, res, htmlData);
+    });
+  }).on('error', (e) => {
+    console.error(e.message);
+    return res.status(404).end();
+  });
+}
+
 export default function universalLoader(req, res) {
+  if (process.env.NODE_ENV === 'development') {
+    handleDevMode(req, res);
+    return;
+  }
+
   const filePath = path.resolve(__dirname, '..', 'build', 'index.html');
 
+  // eslint-disable-next-line consistent-return
   fs.readFile(filePath, 'utf8', (err, htmlData) => {
     if (err) {
       console.error('read err', err);

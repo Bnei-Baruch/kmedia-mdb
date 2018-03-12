@@ -1,10 +1,16 @@
 import { call, put, select } from 'redux-saga/effects';
+import UAParser from 'ua-parser-js';
 
 import { actions, selectors } from '../redux/modules/device';
 
 function* onDeviceInit() {
   // we expect the server to set this for us
-  const deviceInfo = yield select(state => selectors.getDeviceInfo(state.device));
+  let deviceInfo = yield select(state => selectors.getDeviceInfo(state.device));
+
+  if (!deviceInfo) {
+    deviceInfo = new UAParser().getResult();
+    yield put(actions.setDeviceInfo(deviceInfo));
+  }
 
   // determine if user gesture is required for play
   // if so we use native player else we use our beloved custom one.
@@ -15,7 +21,8 @@ function* onDeviceInit() {
   try {
     yield call(() => {
       const v = document.createElement('video');
-      v.src   = 'someting-meant-to-throw-NotSupportedError-when-play-is-allowed';
+      v.src   = '';
+      // v.src   = 'someting-meant-to-throw-NotSupportedError-when-play-is-allowed';
       return v.play();
     });
   } catch (error) {

@@ -15,7 +15,6 @@ import { DEFAULT_LANGUAGE, LANG_UKRAINIAN } from './helpers/consts';
 import i18n from './helpers/i18nnext';
 import createStore from './redux/createStore';
 import { actions as mdb } from './redux/modules/mdb';
-import { sagas as deviceSagas } from './sagas/device';
 import App from './components/App/App';
 
 ReactGA.initialize('UA-108372395-1', { gaOptions: { transport: 'beacon' } });
@@ -38,6 +37,3 @@ ReactDOM.render(
 // We ask for semi-quasi static data here since
 // we strip it from SSR to save initial network bandwidth
 store.dispatch(mdb.fetchSQData());
-
-// init device related sagas
-store.sagaMiddleWare.run(...deviceSagas);
