@@ -95,7 +95,7 @@ class HomePage extends Component {
             <Grid doubling columns={6} className="homepage__iconsrow">
               <Grid.Row>
                 {
-                  ['lessons', 'programs', 'lectures', 'sources', 'events', 'publications'].map(x =>
+                  ['lessons', 'programs', 'lectures', 'sources', 'events', 'topics', 'publications'].map(x =>
                     (
                       <Grid.Column key={x} textAlign="center">
                         <Topic title={t(`nav.sidebar.${x}`)} img={sectionLogo[x]} href={`/${x}`} />

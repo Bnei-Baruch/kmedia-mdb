@@ -42,6 +42,11 @@ const filters = {
   'events-meals': [
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
+  topics: [
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter },
+    { name: 'sources-filter', component: filterComponents.SourcesFilter },
+  ],
   publications: [
     { name: 'publishers-filter', component: filterComponents.PublishersFilter },
     { name: 'date-filter', component: filterComponents.DateFilter }

@@ -23,6 +23,7 @@ import LibraryContainer from '../Sections/Library/LibraryContainer';
 import SearchResults from '../Search/SearchResultsContainer';
 import HomePage from '../Sections/Home/Container';
 import Design from '../Design/Design';
+import TopicsContainer from '../Sections/Topics/TopicContainer';
 
 import Redirect from './Redirect';
 
@@ -58,7 +59,7 @@ const Routes = ({ match }) => {
       <Route exact path={`${urlPrefix}/sources`} component={LibraryHomepage} />
       <Route exact path={`${urlPrefix}/sources/:id`} component={LibraryContainer} />
       {/*<Route exact path={`${urlPrefix}/books`} component={NotImplemented} />*/}
-      <Route exact path={`${urlPrefix}/topics`} component={NotImplemented} />
+      <Route exact path={`${urlPrefix}/topics`} component={TopicsContainer} />
       {/*<Route exact path={`${urlPrefix}/photos`} component={NotImplemented} />*/}
       <Route exact path={`${urlPrefix}/search`} component={SearchResults} />
       <Route exact path={`${urlPrefix}/design`} component={Design} />

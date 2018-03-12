@@ -62,7 +62,8 @@ export class CollectionsBreakdown {
 
   getAllButPrograms = () =>
     this.collectTypes(
-      CT_DAILY_LESSON, CT_SPECIAL_LESSON,
+      CT_DAILY_LESSON, 
+      CT_SPECIAL_LESSON,
       CT_FRIENDS_GATHERINGS,
       CT_LECTURE_SERIES,
       CT_CHILDREN_LESSONS,
@@ -75,6 +76,25 @@ export class CollectionsBreakdown {
       CT_UNITY_DAY,
       CT_CLIPS,
       CT_ARTICLES);
+
+  getAllTopicUnits = () =>
+     this.collectTypes(
+      CT_CHILDREN_LESSONS,
+      CT_CONGRESS,
+      CT_DAILY_LESSON,
+      CT_FRIENDS_GATHERINGS,
+      CT_HOLIDAY,
+      CT_LECTURE_SERIES,
+      CT_MEALS,
+      CT_PICNIC,
+      CT_SPECIAL_LESSON,
+      CT_UNITY_DAY,
+      CT_CLIPS,
+      CT_ARTICLES,
+      CT_VIDEO_PROGRAM,
+      CT_VIRTUAL_LESSONS,
+      CT_WOMEN_LESSONS
+     ); 
 
   collectTypes = (...types) =>
     types.reduce((acc, val) =>

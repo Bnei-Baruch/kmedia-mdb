@@ -200,7 +200,7 @@
       "subtext": "For thousands of years, Kabbalists have been studying on a daily basis for their and humanity's spiritual progress. Continuing this tradition into today's globally connected world, the Bnei Baruch Kabbalah Education & Research Institute, studies daily from authentic Kabbalistic sources, with commentary by Dr. Michael Laitman."
     },
     "list": {
-      "related": "Related to"
+      "related": "Related to:"
     },
     "unit": {
       "recommended": {
@@ -245,6 +245,22 @@
     },
     "list": {
       "item_from": "Item of:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Other items from the same series"
+        }
+      }
+    }
+  },
+  "topics":{
+    "header":{
+      "text": "Topics",
+      "subtext": "Files by selected topics"
+    },
+    "list": {
+      "related": "Related to"
     },
     "unit": {
       "recommended": {
