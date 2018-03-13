@@ -66,7 +66,7 @@ class Library extends Component {
     } else if (contentWip) {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else if (!contentData) {
-      return <Segment basic>{t('sources-library.no-sources')}</Segment>;
+      return <Segment basic>{t('sources-library.no-source')}</Segment>;
     } else if (isTaas && this.props.pdfFile) {
       contents = (<PDF
         pdfFile={assetUrl(`sources/${this.props.pdfFile}`)}

@@ -63,7 +63,12 @@ const initialState = {
   byId: {},
   roots: [],
   error: null,
-  getByID: identity,
+  sortedByAZ: {
+    getByID: identity
+  },
+  sortedByBook: {
+    getByID: identity
+  },
   indexById: {},
   sortBy: 'AZ',
   content: {
@@ -204,7 +209,7 @@ export const reducer = handleActions({
     };
   },
 
-  [FETCH_CONTENT]: (state) => ({
+  [FETCH_CONTENT]: state => ({
     ...state,
     content: { wip: true }
   }),
@@ -228,23 +233,22 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const areSourcesLoaded = state => state.loaded;
-const getSources       = state => state.byId;
-const getRoots         = state => state.roots;
-const getSourceBy      = (state, idx) => {
+const $$getSourceBy = (state, idx) => {
   const f = state.sortBy === 'AZ' ? state.sortedByAZ : state.sortedByBook;
-  return f ? f[idx] : identity;
+  return f[idx];
 };
-const getSourceById    = state => getSourceBy(state, 'getByID');
-const getPath          = state => getSourceBy(state, 'getPath');
-const getPathByID      = state => getSourceBy(state, 'getPathByID');
+
+const areSourcesLoaded = state => state.loaded;
+const getRoots         = state => state.roots;
+const getSourceById    = state => $$getSourceBy(state, 'getByID');
+const getPath          = state => $$getSourceBy(state, 'getPath');
+const getPathByID      = state => $$getSourceBy(state, 'getPathByID');
 const getIndexById     = state => state.indexById;
 const getContent       = state => state.content;
 const sortBy           = state => state.sortBy;
 
 export const selectors = {
   areSourcesLoaded,
-  getSources,
   getRoots,
   getIndexById,
   getSourceById,
