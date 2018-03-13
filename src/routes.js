@@ -24,7 +24,7 @@ import EventCollection from './components/Sections/Events/Collection';
 import LibraryHomepage from './components/Sections/Library/Homepage';
 import LibraryContainer from './components/Sections/Library/LibraryContainer';
 import SearchResults from './components/Search/SearchResultsContainer';
-import Design from './components/Design/Design';
+// import Design from './components/Design/Design';
 
 import Redirect from './components/Layout/Redirect';
 import HomePage from './components/Sections/Home/Container';
@@ -102,8 +102,8 @@ const createMainRoutes = (prefix) => {
       defaultPageRoute('topics', NotImplemented),
       defaultPageRoute('photos', NotImplemented),
       defaultPageRoute('search', SearchResults),
-      defaultPageRoute('design', Design),
-      defaultPageRoute('design2', Lessons),
+      // defaultPageRoute('design', Design),
+      // defaultPageRoute('design2', Lessons),
 
       // Old routes - redirect for now
       defaultRedirect('lessons/part/:id', 'lessons/cu/:id'),
