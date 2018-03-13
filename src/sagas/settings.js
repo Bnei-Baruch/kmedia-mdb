@@ -1,7 +1,7 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import moment from 'moment';
 
-import { RTL_LANGUAGES } from '../helpers/consts';
+import { LANG_UKRAINIAN, RTL_LANGUAGES } from '../helpers/consts';
 import { changeDirection, getCurrentDirection } from '../helpers/i18n-utils';
 import { types } from '../redux/modules/settings';
 import { actions as mdb } from '../redux/modules/mdb';
@@ -23,7 +23,8 @@ function* setLanguage(action) {
   i18n.changeLanguage(language);
 
   // change global moment.js locale
-  moment.locale(language);
+  moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
+  console.log('moment.locale', moment.locale());
 
   // change page direction and fetch css
 

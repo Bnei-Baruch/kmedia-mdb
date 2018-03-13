@@ -8,7 +8,7 @@ import { Button, Divider, Dropdown, Grid, Header, Input, Segment } from 'semanti
 
 import 'react-day-picker/lib/style.css';
 
-import { DATE_FORMAT, RTL_LANGUAGES } from '../../../helpers/consts';
+import { DATE_FORMAT, LANG_UKRAINIAN, RTL_LANGUAGES } from '../../../helpers/consts';
 import connectFilter from './connectFilter';
 
 // TODO (yaniv -> oleg): need indication for user when clicking on a bad date (after today) or when typing bad dates
@@ -297,7 +297,7 @@ class DateFilter extends Component {
                 disabledDays={{ after: new Date() }}
                 toMonth={now()}
                 localeUtils={LocaleUtils}
-                locale={language}
+                locale={language === LANG_UKRAINIAN ? 'uk' : language}
                 dir={isRTL ? 'rtl' : 'ltr'}
                 onDayClick={this.handleDayClick}
                 // eslint-disable-next-line no-return-assign
