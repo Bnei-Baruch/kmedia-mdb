@@ -23,12 +23,10 @@ class CollectionLogo extends PureComponent {
         className="collection-logo"
         shape="rounded"
         initialImage={imagePlaceholder}
-        src={assetUrl(`logos/collections/${collectionId}.png`)}
+        src={assetUrl(`logos/collections/${collectionId}.jpg`)}
       />
     );
   }
 }
 
 export default CollectionLogo;
-
-
