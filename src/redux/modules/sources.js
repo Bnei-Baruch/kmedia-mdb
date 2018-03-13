@@ -1,7 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 import identity from 'lodash/identity';
 
-import { tracePath, strCmp } from '../../helpers/utils';
+import { strCmp, tracePath } from '../../helpers/utils';
 import { types as settings } from './settings';
 import { BS_IGROT, BS_SHAMATI, BS_TAAS, MR_TORA, RB_IGROT, RH_ZOHAR, } from '../../helpers/consts';
 
@@ -16,6 +16,7 @@ const FETCH_INDEX_FAILURE   = 'Sources/FETCH_INDEX_FAILURE';
 const FETCH_CONTENT         = 'Sources/FETCH_CONTENT';
 const FETCH_CONTENT_SUCCESS = 'Sources/FETCH_CONTENT_SUCCESS';
 const FETCH_CONTENT_FAILURE = 'Sources/FETCH_CONTENT_FAILURE';
+const SOURCES_SORT_BY       = 'Sources/SOURCES_SORT_BY';
 
 export const types = {
   FETCH_SOURCES,
@@ -27,6 +28,7 @@ export const types = {
   FETCH_CONTENT,
   FETCH_CONTENT_SUCCESS,
   FETCH_CONTENT_FAILURE,
+  SOURCES_SORT_BY,
 };
 
 /* Actions */
@@ -40,6 +42,7 @@ const fetchIndexFailure   = createAction(FETCH_INDEX_FAILURE, (id, err) => ({ id
 const fetchContent        = createAction(FETCH_CONTENT, (id, name) => ({ id, name }));
 const fetchContentSuccess = createAction(FETCH_CONTENT_SUCCESS);
 const fetchContentFailure = createAction(FETCH_CONTENT_FAILURE);
+const sourcesSortBy       = createAction(SOURCES_SORT_BY);
 
 export const actions = {
   fetchSources,
@@ -51,6 +54,7 @@ export const actions = {
   fetchContent,
   fetchContentSuccess,
   fetchContentFailure,
+  sourcesSortBy,
 };
 
 /* Reducer */
@@ -61,6 +65,7 @@ const initialState = {
   error: null,
   getByID: identity,
   indexById: {},
+  sortBy: 'AZ',
   content: {
     data: null,
     wip: false,
@@ -68,7 +73,7 @@ const initialState = {
   },
 };
 
-const notToSort = [BS_SHAMATI, BS_IGROT, BS_TAAS, RB_IGROT, MR_TORA, RH_ZOHAR];
+const NotToSort = [BS_SHAMATI, BS_IGROT, BS_TAAS, RB_IGROT, MR_TORA, RH_ZOHAR];
 
 const sortTree = (root) => {
   if (root.children) {
@@ -88,7 +93,7 @@ const sortSources = (items) => {
     i.children.forEach((c) => {
       // The second level's id is the one that is used to distinguish
       // between sortable and not sortable sources
-      const shouldSort = notToSort.findIndex(a => a === c.id);
+      const shouldSort = NotToSort.findIndex(a => a === c.id);
       if (shouldSort !== -1) {
         return;
       }
@@ -99,11 +104,6 @@ const sortSources = (items) => {
 
 const buildById = (items) => {
   const byId = {};
-
-  // Yes, this is not good, but...
-  // We sort sources according to Mizrachi's request
-  // and this __changes__ data
-  sortSources(items);
 
   // We BFS the tree, extracting each item by it's ID
   // and normalizing it's children
@@ -122,6 +122,26 @@ const buildById = (items) => {
   return byId;
 };
 
+const prepareById = (payload) => {
+  const book = JSON.parse(JSON.stringify(payload)); // Deep copy
+  const byId = buildById(book);
+  const az   = JSON.parse(JSON.stringify(payload)); // Deep copy
+  // Yes, this is not good, but...
+  // We sort sources according to Mizrachi's request
+  // and this __changes__ data
+  sortSources(az);
+  const byIdAZ = buildById(az, true);
+
+  return [byId, byIdAZ];
+};
+
+const getIdFuncs = (byId) => {
+  const getByID     = id => byId[id];
+  const getPath     = source => tracePath(source, getByID);
+  const getPathByID = id => getPath(getByID(id));
+  return { getByID, getPath, getPathByID };
+};
+
 export const reducer = handleActions({
   [settings.SET_LANGUAGE]: (state) => {
     const indexById = state.indexById || initialState.indexById;
@@ -132,20 +152,17 @@ export const reducer = handleActions({
   },
 
   [FETCH_SOURCES_SUCCESS]: (state, action) => {
-    const byId = buildById(action.payload);
+    const [byId, byIdAZ] = prepareById(action.payload);
 
-    // selectors
-    // we keep those in state to avoid recreating them every time a selector is called
-    const getByID     = id => byId[id];
-    const getPath     = source => tracePath(source, getByID);
-    const getPathByID = id => getPath(getByID(id));
+    // we keep selectors in state to avoid recreating them every time a selector is called
+    const sortedByBook = getIdFuncs(byId);
+    const sortedByAZ   = getIdFuncs(byIdAZ);
 
     return {
       ...state,
       byId,
-      getByID,
-      getPath,
-      getPathByID,
+      sortedByBook,
+      sortedByAZ,
       loaded: true,
       roots: action.payload.map(x => x.id),
       error: null,
@@ -187,7 +204,7 @@ export const reducer = handleActions({
     };
   },
 
-  [FETCH_CONTENT]: (state, action) => ({
+  [FETCH_CONTENT]: (state) => ({
     ...state,
     content: { wip: true }
   }),
@@ -202,6 +219,11 @@ export const reducer = handleActions({
     content: { wip: false, err: action.payload }
   }),
 
+  [SOURCES_SORT_BY]: (state, action) => ({
+    ...state,
+    sortBy: action.payload,
+  }),
+
 }, initialState);
 
 /* Selectors */
@@ -209,19 +231,26 @@ export const reducer = handleActions({
 const areSourcesLoaded = state => state.loaded;
 const getSources       = state => state.byId;
 const getRoots         = state => state.roots;
-const getSourceById    = state => state.getByID;
-const getPath          = state => state.getPath;
-const getPathByID      = state => state.getPathByID;
+const getSourceBy      = (state, idx) => {
+  const f = state.sortBy === 'AZ' ? state.sortedByAZ : state.sortedByBook;
+  return f ? f[idx] : identity;
+};
+const getSourceById    = state => getSourceBy(state, 'getByID');
+const getPath          = state => getSourceBy(state, 'getPath');
+const getPathByID      = state => getSourceBy(state, 'getPathByID');
 const getIndexById     = state => state.indexById;
 const getContent       = state => state.content;
+const sortBy           = state => state.sortBy;
 
 export const selectors = {
   areSourcesLoaded,
   getSources,
   getRoots,
+  getIndexById,
   getSourceById,
   getPath,
   getPathByID,
-  getIndexById,
   getContent,
+  sortBy,
+  NotToSort,
 };

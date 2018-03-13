@@ -19,13 +19,12 @@ class Homepage extends Component {
   static propTypes = {
     roots: PropTypes.arrayOf(PropTypes.string).isRequired,
     getSourceById: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired,
   };
 
   render() {
     const { roots, getSourceById } = this.props;
-    const portraits             = [portraitBS, portraitRB, portraitML];
-    let portraitIndex           = 0;
+    const portraits                = [portraitBS, portraitRB, portraitML];
+    let portraitIndex              = 0;
 
     const kabbalists = roots.map((k) => {
       const author = getSourceById(k);
