@@ -316,7 +316,9 @@
       "subtext": "Colección de todos los textos originales más importantes para el estudio de la Cabalá, escritos por los más grandes cabalistas."
     },
     "no-source": "Seleccione fuente",
-    "toc": "Tabla de Contenido"
+    "toc": "Tabla de Contenido",
+    "az":        "AZ",
+    "default":   "Por Omisión"
   },
   "media-downloads": {
     "title": "Descargar archivos",

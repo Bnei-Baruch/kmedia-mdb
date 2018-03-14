@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import { Icon, Message } from 'semantic-ui-react';
 
 import { MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
-import { getQuery } from '../../helpers/url';
+import { getQuery, updateQuery } from '../../helpers/url';
 import { fromHumanReadableTime } from '../../helpers/time';
 import * as shapes from '../shapes';
 import { PLAYER_MODE } from './constants';
@@ -70,6 +70,8 @@ class AVPlayerMobile extends PureComponent {
 
     let mode    = PLAYER_MODE.NORMAL;
     const query = getQuery(history.location);
+
+    this.wasCurrentTime = this.wasCurrentTime || query.currentTime;
 
     if (query.sstart) {
       mode       = PLAYER_MODE.SLICE_VIEW;
@@ -229,6 +231,7 @@ class AVPlayerMobile extends PureComponent {
     // so we don't change the autoplay value in such cases.
     if (Math.abs(this.media.currentTime - this.media.duration) > 0.1) {
       this.media.autoplay = false;
+      updateQuery(this.props.history, q => ({ ...q, currentTime: this.media.currentTime }));
     }
   };
 

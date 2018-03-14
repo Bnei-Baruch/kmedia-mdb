@@ -46,7 +46,7 @@ class Library extends Component {
     const { content, language, languages, t, isTaas, } = this.props;
 
     if (isEmpty(content)) {
-      return <Segment basic>{t('sources-library.no-source')}</Segment>;
+      return <Segment basic>&nbsp;</Segment>;
     }
 
     const { wip: contentWip, err: contentErr, data: contentData } = content;
