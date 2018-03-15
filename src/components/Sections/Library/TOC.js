@@ -14,6 +14,7 @@ class TOC extends Component {
       children: PropTypes.arrayOf(PropTypes.string),
     })).isRequired,
     rootId: PropTypes.string.isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
     contextRef: PropTypes.object,
     getSourceById: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
