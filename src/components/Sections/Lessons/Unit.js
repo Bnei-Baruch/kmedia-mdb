@@ -13,6 +13,9 @@ import {
 } from '../../Pages/Unit/widgets/Recommended/SameCollection/Container';
 import SameCollectionWidget from '../../Pages/Unit/widgets/Recommended/SameCollection/Widget';
 
+import Helmets from '../../shared/Helmets';
+import PropTypes from 'prop-types';
+
 class MySameCollectionWidget extends SameCollectionWidget {
   renderContent() {
     const { unit, collection, t } = this.props;
@@ -99,6 +102,22 @@ class MySameCollectionContainer extends SameCollectionContainer {
 const MyWrappedSameCollectionContainer = wrapSameCollectionContainer(MySameCollectionContainer);
 
 class MyUnitPage extends UnitPage {
+
+  renderHelmet() {
+    const { unit } = this.props;
+
+    console.log(unit);
+    return (
+      <div>
+        <Helmets.Basic title={unit.name} />
+        <Helmets.Image unitId={unit.id} />
+        {/* Todo: add video type, video tags*/}
+        <Helmets.Video releaseDate={unit.film_date} duration={unit.duration}  />
+        <Helmets.Locale mainLang={unit.original_language}/>
+      </div>
+    );
+  }
+
   renderRecommendations() {
     const { unit, t } = this.props;
     return <MyWrappedSameCollectionContainer unit={unit} t={t} />;

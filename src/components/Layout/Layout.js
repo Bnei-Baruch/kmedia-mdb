@@ -4,7 +4,7 @@ import { translate } from 'react-i18next';
 import classnames from 'classnames';
 import { Route } from 'react-router-dom';
 import { Flag, Header, Icon, Menu /*, Search */ } from 'semantic-ui-react';
-
+import Helmets from '../shared/Helmets';
 import { ALL_LANGUAGES, FLAG_TO_LANGUAGE } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
@@ -69,6 +69,7 @@ class Layout extends Component {
     const showSearch = this.shouldShowSearch(location);
     return (
       <div className="layout">
+        <Helmets.Basic title={t('nav.top.header')} />
         <GAPageView location={location} />
         {/*
           <div className="debug">

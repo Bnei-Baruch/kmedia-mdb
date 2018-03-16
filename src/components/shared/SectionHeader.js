@@ -2,12 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { Container, Grid, Header, Menu } from 'semantic-ui-react';
+import Helmets from './Helmets';
 
 const SectionHeader = (props) => {
   const { section, submenuItems, t } = props;
 
   return (
     <div className="section-header">
+      {/*Todo: dont use image fixed url*/}
+      <Helmets.Basic
+        title={t(`${section}.header.text`)}
+        description={t(`${section}.header.subtext`)}
+        image="https://archive.kbb1.com/static/media/event_logo.d123ade4.png"
+      />
       <Container className="padded">
         <Grid>
           <Grid.Row>
