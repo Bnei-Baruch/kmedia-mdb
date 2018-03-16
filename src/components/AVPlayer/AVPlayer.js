@@ -13,6 +13,7 @@ import playerHelper from '../../helpers/player';
 import { fromHumanReadableTime, toHumanReadableTime } from '../../helpers/time';
 import { getQuery, updateQuery } from '../../helpers/url';
 import { isEmpty } from '../../helpers/utils';
+import * as shapes from '../shapes';
 import { PLAYER_MODE } from './constants';
 import AVPlayPause from './AVPlayPause';
 import AVPlaybackRate from './AVPlaybackRate';
