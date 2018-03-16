@@ -154,9 +154,13 @@ class SearchResults extends Component {
           &nbsp;&nbsp;
           {snippet || null}
         </Table.Cell>
-        <Table.Cell collapsing textAlign="right">
-          {score}
-        </Table.Cell>
+        {
+          !this.isDebMode() ?
+            null :
+            <Table.Cell collapsing textAlign="right">
+              {score}
+            </Table.Cell>
+        }
       </Table.Row>
     );
   };
