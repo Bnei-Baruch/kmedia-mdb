@@ -10,34 +10,40 @@ class UnitLogo extends PureComponent {
     unitId: PropTypes.string,
     collectionId: PropTypes.string,
     width: PropTypes.number,
+    className: PropTypes.string,
+    fallbackImg: PropTypes.any,
   };
 
   static defaultProps = {
     unitId: null,
     collectionId: null,
     width: 120,
+    className: '',
+    fallbackImg: imagePlaceholder,
   };
 
   render() {
-    const { unitId, collectionId, width, ...rest } = this.props;
+    const { unitId, collectionId, width, className, fallbackImg, ...rest } = this.props;
 
     let src = assetUrl(`api/thumbnail/${unitId}`);
 
     if (!src.startsWith('http')) {
-      src = 'http://localhost' + src;
+      src = `http://localhost${src}`;
     }
 
     src = `${imaginaryUrl('thumbnail')}?${Requests.makeParams({ url: src, width })}`;
+
+    const fallback = fallbackImg || imagePlaceholder;
 
     return (
       <FallbackImage
         {...rest}
         src={src}
-        className="unit-logo"
-        initialImage={imagePlaceholder}
+        className={`unit-logo ${className}`}
+        initialImage={fallback}
         fallbackImage={[
           collectionId ? assetUrl(`logos/collections/${collectionId}.png`) : null,
-          imagePlaceholder
+          fallback
         ]}
       />
     );
@@ -45,5 +51,3 @@ class UnitLogo extends PureComponent {
 }
 
 export default UnitLogo;
-
-

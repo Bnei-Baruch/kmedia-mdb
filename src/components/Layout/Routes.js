@@ -71,6 +71,8 @@ const Routes = ({ match }) => {
       <Redirect from={`${urlPrefix}/programs/full/:id`} to={`${urlPrefix}/programs/c/:id`} />
       <Redirect from={`${urlPrefix}/events/item/:id`} to={`${urlPrefix}/events/cu/:id`} />
       <Redirect from={`${urlPrefix}/events/full/:id`} to={`${urlPrefix}/events/c/:id`} />
+      {/* Old versions "saved on screen" in Android still point to /index.html */}
+      <Redirect from={`${urlPrefix}/index.html`} to={`${urlPrefix}/`} />
 
       <Route component={NotFound} />
     </Switch>

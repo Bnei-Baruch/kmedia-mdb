@@ -1,7 +1,6 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import { types as system } from '../redux/modules/system';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions, types } from '../redux/modules/publications';
 
@@ -16,7 +15,7 @@ function* fetchPublishers(action) {
 }
 
 function* watchFetchPublishers() {
-  yield takeLatest([types.FETCH_PUBLISHERS, system.INIT], fetchPublishers);
+  yield takeLatest(types.FETCH_PUBLISHERS, fetchPublishers);
 }
 
 export const sagas = [

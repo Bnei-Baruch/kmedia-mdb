@@ -179,7 +179,7 @@ class Sources extends Component {
       this.getSourceLanguages(nextProps.indexMap[selected], nextProps.defaultLanguage);
 
     this.setState({ options, languages, language, selected, isMakor, });
-    this.changeContent({ selected, language, nextProps, isMakor, });
+    this.changeContent({ selected, language, props: nextProps, isMakor, });
   };
 
   changeContent = (params) => {
@@ -199,8 +199,13 @@ class Sources extends Component {
     if (isMakor) {
       const derived = this.getDerived(unit.derived_units, selected).find(x => x.language === language);
       onContentChange(null, null, derived.id);
-    } else if (indexMap[selected].data) {
-      onContentChange(selected, indexMap[selected].data[language].html);
+    } else if (indexMap[selected] && indexMap[selected].data) {
+      const data = indexMap[selected].data[language];
+      let name   = data.html;
+      if (data.pdf && PDF.isTaas(selected)) {
+        name = data.pdf;
+      }
+      onContentChange(selected, name);
     }
   };
 
@@ -260,7 +265,7 @@ class Sources extends Component {
       <div>
         <Grid stackable>
           <Grid.Row>
-            <Grid.Column width={12}>
+            <Grid.Column width={16 - languages.length}>
               <Dropdown
                 fluid
                 selection
@@ -273,7 +278,7 @@ class Sources extends Component {
             </Grid.Column>
             {
               languages.length > 0 ?
-                <Grid.Column width={4} textAlign="right">
+                <Grid.Column width={languages.length} textAlign="right">
                   <ButtonsLanguageSelector
                     languages={languages}
                     defaultValue={language}

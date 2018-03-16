@@ -82,7 +82,15 @@ const onSuccess = (state, action) => {
   };
 };
 
-const onSetLanguage = () => ({});
+const onSetLanguage = state => (
+  Object.keys(state).reduce((acc, val) => {
+    acc[val] = {
+      pageNo: state[val].pageNo,
+      total: state[val].total
+    };
+    return acc;
+  }, {})
+);
 
 export const reducer = handleActions({
   [settings.SET_LANGUAGE]: onSetLanguage,

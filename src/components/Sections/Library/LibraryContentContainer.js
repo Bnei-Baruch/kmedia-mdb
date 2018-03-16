@@ -112,7 +112,7 @@ class LibraryContentContainer extends Component {
   };
 
   render() {
-    const { content, index, t, }  = this.props;
+    const { content, index, t, }          = this.props;
     const { languages, language }         = this.state;
     const { isTaas, startsFrom, pdfFile } = this.getTaasPdf();
 

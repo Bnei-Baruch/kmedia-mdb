@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withMediaProps } from 'react-media-player';
 import { Icon } from 'semantic-ui-react';
+import classNames from 'classnames';
 
 class AVCenteredPlay extends Component {
   static propTypes = {
     media: PropTypes.shape({
       isPlaying: PropTypes.bool.isRequired,
       isLoading: PropTypes.bool.isRequired,
-      playPause: PropTypes.func.isRequired
+      playPause: PropTypes.func.isRequired,
     }).isRequired,
   };
 
@@ -18,22 +19,24 @@ class AVCenteredPlay extends Component {
   }
 
   handlePlayPause = () => {
-    if (!this.props.media.isLoading)
+    if (!this.props.media.isLoading) {
       this.props.media.playPause();
+    }
   };
 
   render() {
     const { media } = this.props;
+    let isHidden = false;
 
     if (media.isPlaying || media.isLoading) {
-      return null;
+      isHidden = true;
     }
 
     return (
       <button
         type="button"
         tabIndex="-1"
-        className="mediaplayer__onscreen-play"
+        className={classNames('mediaplayer__onscreen-play', { transparent: isHidden })}
         onClick={this.handlePlayPause}
       >
         <Icon name="play" size="huge" />

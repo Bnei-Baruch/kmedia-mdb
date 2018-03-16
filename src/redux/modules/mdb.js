@@ -13,9 +13,12 @@ const FETCH_UNIT_FAILURE          = 'MDB/FETCH_UNIT_FAILURE';
 const FETCH_COLLECTION            = 'MDB/FETCH_COLLECTION';
 const FETCH_COLLECTION_SUCCESS    = 'MDB/FETCH_COLLECTION_SUCCESS';
 const FETCH_COLLECTION_FAILURE    = 'MDB/FETCH_COLLECTION_FAILURE';
-const FETCH_LATEST_LESSON         = 'MDB/LATEST_LESSON';
+const FETCH_LATEST_LESSON         = 'MDB/FETCH_LATEST_LESSON';
 const FETCH_LATEST_LESSON_SUCCESS = 'MDB/FETCH_LATEST_LESSON_SUCCESS';
 const FETCH_LATEST_LESSON_FAILURE = 'MDB/FETCH_LATEST_LESSON_FAILURE';
+const FETCH_SQDATA                = 'MDB/FETCH_SQDATA';
+const FETCH_SQDATA_SUCCESS        = 'MDB/FETCH_SQDATA_SUCCESS';
+const FETCH_SQDATA_FAILURE        = 'MDB/FETCH_SQDATA_FAILURE';
 
 const RECEIVE_COLLECTIONS   = 'MDB/RECEIVE_COLLECTIONS';
 const RECEIVE_CONTENT_UNITS = 'MDB/RECEIVE_CONTENT_UNITS';
@@ -30,6 +33,9 @@ export const types = {
   FETCH_LATEST_LESSON,
   FETCH_LATEST_LESSON_SUCCESS,
   FETCH_LATEST_LESSON_FAILURE,
+  FETCH_SQDATA,
+  FETCH_SQDATA_SUCCESS,
+  FETCH_SQDATA_FAILURE,
 
   RECEIVE_COLLECTIONS,
   RECEIVE_CONTENT_UNITS,
@@ -46,8 +52,12 @@ const fetchCollectionFailure   = createAction(FETCH_COLLECTION_FAILURE, (id, err
 const fetchLatestLesson        = createAction(FETCH_LATEST_LESSON);
 const fetchLatestLessonSuccess = createAction(FETCH_LATEST_LESSON_SUCCESS);
 const fetchLatestLessonFailure = createAction(FETCH_LATEST_LESSON_FAILURE);
-const receiveCollections       = createAction(RECEIVE_COLLECTIONS);
-const receiveContentUnits      = createAction(RECEIVE_CONTENT_UNITS);
+const fetchSQData              = createAction(FETCH_SQDATA);
+const fetchSQDataSuccess       = createAction(FETCH_SQDATA_SUCCESS);
+const fetchSQDataFailure       = createAction(FETCH_SQDATA_FAILURE);
+
+const receiveCollections  = createAction(RECEIVE_COLLECTIONS);
+const receiveContentUnits = createAction(RECEIVE_CONTENT_UNITS);
 
 export const actions = {
   fetchUnit,
@@ -59,6 +69,10 @@ export const actions = {
   fetchLatestLesson,
   fetchLatestLessonSuccess,
   fetchLatestLessonFailure,
+  fetchSQData,
+  fetchSQDataSuccess,
+  fetchSQDataFailure,
+
   receiveCollections,
   receiveContentUnits,
 };
@@ -76,7 +90,7 @@ const freshStore = () => ({
   errors: {
     units: {},
     collections: {},
-    lastLesson: {}
+    lastLesson: null,
   },
 });
 
@@ -111,6 +125,10 @@ const setStatus = (state, action) => {
   case FETCH_LATEST_LESSON_SUCCESS:
     wip.lastLesson    = false;
     errors.lastLesson = null;
+
+    // update wip & errors map to mark this collection was requested fully (single)
+    wip.collections    = { ...wip.collections, [action.payload.id]: false };
+    errors.collections = { ...errors.collections, [action.payload.id]: null };
     break;
   case FETCH_UNIT_FAILURE:
     wip.units    = { ...wip.units, [action.payload.id]: false };
@@ -133,6 +151,43 @@ const setStatus = (state, action) => {
     wip,
     errors,
   };
+};
+
+// We remove old wmv and flv files which have been converted to mp4
+const stripOldFiles = (unit) => {
+  const { files } = unit;
+
+  // no files in unit
+  if (!Array.isArray(files)) {
+    return unit;
+  }
+
+  // no old files in unit
+  if (!files.some(x => x.mimetype === MEDIA_TYPES.wmv.mime_type ||
+      x.mimetype === MEDIA_TYPES.flv.mime_type)) {
+    return unit;
+  }
+
+  // group by language and type
+  const sMap = groupBy(files, x => `${x.language}_${x.type}`.toLowerCase());
+
+  // filter old files which have been converted
+  const nFiles = Object.values(sMap).reduce((acc, val) => {
+    // not interesting - only video files have been converted.
+    if (val.length < 2 || val[0].type !== 'video') {
+      return acc.concat(val);
+    }
+
+    // find mp4 file if present
+    const mp4Files = val.filter(x => x.mimetype === MEDIA_TYPES.mp4.mime_type);
+    if (mp4Files.length > 0) {
+      return acc.concat(mp4Files); // we have some, take only them
+    }
+
+    return acc.concat(val);
+  }, []);
+
+  return { ...unit, files: nFiles };
 };
 
 const onReceiveCollections = (state, action) => {
@@ -260,44 +315,6 @@ const onReceiveContentUnits = (state, action) => {
   };
 };
 
-// We remove old wmv and flv files which have been converted to mp4
-const stripOldFiles = (unit) => {
-  const { files } = unit;
-
-  // no files in unit
-  if (!Array.isArray(files)) {
-    return unit;
-  }
-
-  // no old files in unit
-  if (!files.some(x => x.mimetype === MEDIA_TYPES.wmv.mime_type ||
-      x.mimetype === MEDIA_TYPES.flv.mime_type)) {
-    return unit;
-  }
-
-  // group by language and type
-  const sMap = groupBy(files, x => `${x.language}_${x.type}`.toLowerCase());
-
-  // filter old files which have been converted
-  const nFiles = Object.values(sMap).reduce((acc, val) => {
-
-    // not interesting - only video files have been converted.
-    if (val.length < 2 || val[0].type !== 'video') {
-      return acc.concat(val);
-    }
-
-    // find mp4 file if present
-    const mp4Files = val.filter(x => x.mimetype === MEDIA_TYPES.mp4.mime_type);
-    if (mp4Files.length > 0) {
-      return acc.concat(mp4Files); // we have some, take only them
-    }
-
-    return acc.concat(val);
-  }, []);
-
-  return { ...unit, files: nFiles };
-};
-
 export const reducer = handleActions({
   [system.INIT]: () => freshStore(),
   [settings.SET_LANGUAGE]: () => freshStore(),
@@ -311,10 +328,10 @@ export const reducer = handleActions({
     setStatus(onReceiveCollections(state, { payload: [action.payload.data] }), action),
   [FETCH_COLLECTION_FAILURE]: setStatus,
   [FETCH_LATEST_LESSON]: setStatus,
-  [FETCH_LATEST_LESSON_SUCCESS]: (state, action) => {
-    state.lastLessonId = action.payload.id;
-    return setStatus(onReceiveCollections(state, { payload: [action.payload] }), action);
-  },
+  [FETCH_LATEST_LESSON_SUCCESS]: (state, action) => ({
+    ...setStatus(onReceiveCollections(state, { payload: [action.payload] }), action),
+    lastLessonId: action.payload.id,
+  }),
   [FETCH_LATEST_LESSON_FAILURE]: setStatus,
 
   [RECEIVE_COLLECTIONS]: (state, action) => onReceiveCollections(state, action),
@@ -324,8 +341,8 @@ export const reducer = handleActions({
 /* Selectors */
 
 const getCollectionById = (state, id) => state.cById[id];
-const getLastLessonId   = (state) => state.lastLessonId;
 const getUnitById       = (state, id) => state.cuById[id];
+const getLastLessonId   = state => state.lastLessonId;
 const getWip            = state => state.wip;
 const getErrors         = state => state.errors;
 

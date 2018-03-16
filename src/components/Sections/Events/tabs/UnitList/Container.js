@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_FRIENDS_GATHERING, CT_MEAL, NO_NAME } from '../../../../../helpers/consts';
+import { sectionThumbnailFallback } from '../../../../../helpers/images';
 import { canonicalLink } from '../../../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../../../helpers/mdb';
 import UnitList from '../../../../Pages/UnitList/Container';
@@ -26,17 +27,19 @@ const renderUnit = (unit, t) => {
     filmDate = t('values.date', { date: new Date(unit.film_date) });
   }
 
+  const link = canonicalLink(unit);
+
   return (
     <Table.Row key={unit.id} verticalAlign="top">
-      <Table.Cell collapsing singleLine width={1}>
-        <strong>{filmDate}</strong>
-      </Table.Cell>
       <Table.Cell collapsing width={1}>
-        <UnitLogo fluid unitId={unit.id} />
+        <Link to={link}>
+          <UnitLogo className="index__thumbnail" unitId={unit.id} fallbackImg={sectionThumbnailFallback.events} />
+        </Link>
       </Table.Cell>
       <Table.Cell>
-        <Link to={canonicalLink(unit)}>
-          <strong>{unit.name || NO_NAME}</strong>
+        <span className="index__date">{filmDate}</span>
+        <Link className="index__title" to={link}>
+          {unit.name || NO_NAME}
         </Link>
         {
           relatedItems.length > 0 ?

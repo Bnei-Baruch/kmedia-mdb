@@ -2,6 +2,11 @@
   "version":          "2",
   "plugins":          {
   },
+  "checks":          {
+		"smilar-code": {
+			"enabled": false
+		}
+  },
   "exclude_patterns": [
     "node_modules/",
     "__tests__"

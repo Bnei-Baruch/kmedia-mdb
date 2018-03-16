@@ -2,19 +2,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isNumber from 'lodash/isNumber';
 import noop from 'lodash/noop';
-import { withMediaProps } from 'react-media-player';
 import classNames from 'classnames';
+import { withMediaProps } from 'react-media-player';
 
+import { formatTime } from '../../helpers/time';
 import { PLAYER_MODE } from './constants';
 import { playerModeProp } from './propTypes';
 import SliceHandle from './SliceHandle';
-import { formatTime } from '../../helpers/time';
 
-const stickyHandleDelta = 10; // pixel width from which to stick to handle
+const stickyHandleDelta = 5; // pixel width from which to stick to handle
 const minSliceAreaWidth = 0.01;
 
 class AvSeekBar extends Component {
-
   static propTypes = {
     media: PropTypes.object.isRequired, // TODO: (yaniv) use right propType
     buffers: PropTypes.array,
@@ -23,7 +22,6 @@ class AvSeekBar extends Component {
     sliceEnd: PropTypes.number,
     onSliceStartChange: PropTypes.func,
     onSliceEndChange: PropTypes.func,
-    isMobile: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -289,7 +287,7 @@ class AvSeekBar extends Component {
                 seconds={formatTime(sliceEnd === Infinity ? duration : sliceEnd)}
                 position={sliceEndLeft}
                 isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
-                className={'seekbar__slicehandle--right'}
+                className="seekbar__slicehandle--right"
               />
             )
           }

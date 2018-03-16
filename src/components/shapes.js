@@ -69,6 +69,8 @@ export const GenericCollection = PropTypes.shape(MDBDenormalizedCollection);
 
 export const ContentUnit = PropTypes.shape(MDBBaseContentUnit);
 
+export const Collection = PropTypes.shape(MDBBaseCollection);
+
 export const LessonCollection = PropTypes.shape({
   ...MDBDenormalizedCollection,
   film_date: PropTypes.string.isRequired,
@@ -159,3 +161,27 @@ export const WipMap = PropTypes.objectOf(PropTypes.oneOfType([WIP, PropTypes.obj
 
 export const Error     = PropTypes.object;
 export const ErrorsMap = PropTypes.objectOf(PropTypes.oneOfType([Error, PropTypes.objectOf(Error)]));
+
+export const UserAgentParserResults = PropTypes.shape({
+  ua: PropTypes.string,
+  browser: PropTypes.shape({
+    name: PropTypes.string,
+    version: PropTypes.string,
+  }),
+  cpu: PropTypes.shape({
+    architecture: PropTypes.string,
+  }),
+  device: PropTypes.shape({
+    model: PropTypes.string,
+    type: PropTypes.string,
+    vendor: PropTypes.string,
+  }),
+  engine: PropTypes.shape({
+    name: PropTypes.string,
+    version: PropTypes.string,
+  }),
+  os: PropTypes.shape({
+    name: PropTypes.string,
+    version: PropTypes.string,
+  }),
+});

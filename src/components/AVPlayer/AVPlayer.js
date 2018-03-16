@@ -8,13 +8,15 @@ import enableInlineVideo from 'iphone-inline-video';
 import classNames from 'classnames';
 import { Button, Icon } from 'semantic-ui-react';
 
-import { MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
-import withIsMobile from '../../helpers/withIsMobile';
-import { getQuery, updateQuery } from '../../helpers/url';
+import { MT_AUDIO, MT_VIDEO, VS_DEFAULT, VS_FHD, VS_HD, VS_NHD } from '../../helpers/consts';
+import playerHelper from '../../helpers/player';
 import { fromHumanReadableTime, toHumanReadableTime } from '../../helpers/time';
+import { getQuery, updateQuery } from '../../helpers/url';
+import { isEmpty } from '../../helpers/utils';
 import { PLAYER_MODE } from './constants';
 import AVPlayPause from './AVPlayPause';
 import AVPlaybackRate from './AVPlaybackRate';
+import AVVideoSize from './AVVideoSize';
 import AVCenteredPlay from './AVCenteredPlay';
 import AVTimeElapsed from './AVTimeElapsed';
 import AVFullScreen from './AVFullScreen';
@@ -23,7 +25,7 @@ import AVLanguage from './AVLanguage';
 import AVAudioVideo from './AVAudioVideo';
 import AvSeekBar from './AvSeekBar';
 import AVEditSlice from './AVEditSlice';
-import AVShareBar from './AVShareBar';
+import ShareBar from './ShareBar';
 import AVJumpBack from './AVJumpBack';
 import AVSpinner from './AVSpinner';
 
@@ -38,7 +40,6 @@ class AVPlayer extends PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
     media: PropTypes.object.isRequired,
-    isMobile: PropTypes.bool.isRequired,
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -82,6 +83,7 @@ class AVPlayer extends PureComponent {
     error: false,
     errorReason: '',
     playbackRate: '1x', // this is used only to rerender the component. actual value is saved on the player's instance
+    videoSize: VS_DEFAULT,
     mode: PLAYER_MODE.NORMAL,
     persistenceFn: noop
   };
@@ -112,6 +114,10 @@ class AVPlayer extends PureComponent {
       sliceStart: sstart,
       sliceEnd: send
     });
+
+    this.setState({
+      ...this.chooseSource(this.props)
+    });
   }
 
   componentDidMount() {
@@ -121,7 +127,11 @@ class AVPlayer extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.item !== this.props.item) {
-      this.setState({ error: false, errorReason: '' });
+      this.setState({
+        error: false,
+        errorReason: '',
+        ...this.chooseSource(nextProps),
+      });
     }
   }
 
@@ -136,7 +146,7 @@ class AVPlayer extends PureComponent {
     this.setState({ persistenceFn: this.persistVolume });
     let persistedVolume = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
 
-    if (persistedVolume == null || isNaN(persistedVolume)) {
+    if (persistedVolume == null || Number.isNaN(persistedVolume)) {
       persistedVolume = DEFAULT_PLAYER_VOLUME;
       localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, persistedVolume);
     }
@@ -144,6 +154,29 @@ class AVPlayer extends PureComponent {
   };
 
   persistVolume = debounce(media => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, media.volume), 200);
+
+  chooseSource = (props) => {
+    const { item, t } = props;
+    if (isEmpty(item.byQuality)) {
+      return { error: true, errorReason: t('messages.no-playable-files') };
+    }
+
+    let videoSize = playerHelper.restorePreferredVideoSize();
+    let src       = item.byQuality[videoSize];
+
+    // if we can't find the user preferred video size we fallback.
+    // first we try to go down from where he was.
+    // if we can't find anything on our way down we start go up.
+    if (!src) {
+      const vss = [VS_NHD, VS_HD, VS_FHD];
+      const idx = vss.indexOf(videoSize);
+      const o   = vss.slice(0, idx).reverse().concat(vss.slice(idx + 1));
+      videoSize = o.find(x => !!item.byQuality[x]);
+      src       = item.byQuality[videoSize];
+    }
+
+    return { src, videoSize };
+  };
 
   // Remember the current time and isPlaying while switching.
   onSwitchAV = (...params) => {
@@ -184,17 +217,29 @@ class AVPlayer extends PureComponent {
     this.setState({ playbackRate: rate });
   };
 
+  videoSizeChange = (e, vs) => {
+    playerHelper.persistPreferredVideoSize(vs);
+
+    if (vs !== this.state.videoSize) {
+      const { media: { currentTime, isPlaying } } = this.props;
+      this.setState({
+        videoSize: vs,
+        src: this.props.item.byQuality[vs],
+        wasCurrentTime: currentTime,
+        wasPlaying: isPlaying
+      });
+    }
+  };
+
   onError = (e) => {
     const { t } = this.props;
     // Show error only on loading of video.
     if (!e.currentTime && !e.isPlaying) {
-      const { item }  = this.props;
-      let errorReason = '';
-      if (item.src.endsWith('wmv') || item.src.endsWith('flv')) {
-        errorReason = t('messages.unsupported-media-format');
-      } else {
-        errorReason = t('messages.unknown');
-      }
+      const errorReason = t('messages.unknown');
+      // const { item }  = this.props;
+      // if (item.src.endsWith('wmv') || item.src.endsWith('flv')) {
+      //   errorReason = t('messages.unsupported-media-format');
+      // }
       this.setState({ error: true, errorReason });
     }
   };
@@ -222,17 +267,16 @@ class AVPlayer extends PureComponent {
   };
 
   setSliceMode = (playerMode, properties = {}, cb) => {
-    let sliceStart  = properties.sliceStart;
-    let sliceEnd    = properties.sliceEnd;
     const { media } = this.props;
 
+    let { sliceStart, sliceEnd } = properties;
     if (typeof sliceStart === 'undefined') {
       sliceStart = this.state.sliceStart || 0;
     }
-
     if (typeof sliceEnd === 'undefined') {
       sliceEnd = this.state.sliceEnd || media.duration || Infinity;
     }
+
     this.setState({
       mode: playerMode,
       ...properties,
@@ -310,22 +354,24 @@ class AVPlayer extends PureComponent {
     const { history, media }       = this.props;
     const { sliceStart, sliceEnd } = this.state;
 
-    updateQuery(history, query => {
+    updateQuery(history, (query) => {
+      const q = { ...query };
+
       if (typeof values.sliceStart === 'undefined') {
-        query.sstart = sliceStart || 0;
+        q.sstart = sliceStart || 0;
       } else {
-        query.sstart = values.sliceStart;
+        q.sstart = values.sliceStart;
       }
 
       if (typeof values.sliceEnd === 'undefined') {
-        query.send = (!sliceEnd || sliceEnd === Infinity) ? media.duration : sliceEnd;
+        q.send = (!sliceEnd || sliceEnd === Infinity) ? media.duration : sliceEnd;
       } else {
-        query.send = values.sliceEnd;
+        q.send = values.sliceEnd;
       }
 
-      query.sstart = toHumanReadableTime(query.sstart);
-      query.send   = toHumanReadableTime(query.send);
-      return query;
+      q.sstart = toHumanReadableTime(q.sstart);
+      q.send   = toHumanReadableTime(q.send);
+      return q;
     });
   };
 
@@ -359,7 +405,7 @@ class AVPlayer extends PureComponent {
   };
 
   handleWrapperMouseMove = () => {
-    if (!this.state.controlsVisible && !this.props.isMobile) {
+    if (!this.state.controlsVisible) {
       this.showControls();
     }
   };
@@ -374,9 +420,9 @@ class AVPlayer extends PureComponent {
 
   handleWrapperKeyDown = (e) => {
     if (e.keyCode === 32) {
-      // if (!this.props.media.isLoading) {
-      this.props.media.playPause();
-      // }
+      if (!this.props.media.isLoading) {
+        this.props.media.playPause();
+      }
       e.preventDefault();
     }
   };
@@ -392,9 +438,9 @@ class AVPlayer extends PureComponent {
   };
 
   handleOnScreenClick = () => {
-    const { isMobile, media } = this.props;
+    const { media } = this.props;
 
-    if (isMobile && !this.state.controlsVisible) {
+    if (!this.state.controlsVisible) {
       this.showControls();
     } else if (!media.isLoading) {
       // toggle play only if we in normal mode
@@ -403,6 +449,13 @@ class AVPlayer extends PureComponent {
       if (this.state.mode === PLAYER_MODE.NORMAL) {
         media.playPause();
       }
+    }
+  };
+
+  handleOnScreenKeyDown = (e) => {
+    if (e.keyCode === 32) {
+      this.handleOnScreenClick();
+      e.preventDefault();
     }
   };
 
@@ -418,7 +471,6 @@ class AVPlayer extends PureComponent {
 
   render() {
     const {
-            isMobile,
             autoPlay,
             item,
             languages,
@@ -431,30 +483,25 @@ class AVPlayer extends PureComponent {
             onNext,
             media,
           } = this.props;
+
     const {
             controlsVisible,
             sliceStart,
             sliceEnd,
             mode,
             playbackRate,
-          } = this.state;
-    let {
+            videoSize,
+            src,
             error,
-            errorReason,
+            errorReason
           } = this.state;
 
     const { isPlaying }     = media;
     const forceShowControls = item.mediaType === MT_AUDIO || !isPlaying;
-
-    const isVideo       = item.mediaType === MT_VIDEO;
-    const isAudio       = item.mediaType === MT_AUDIO;
-    const isEditMode    = mode === PLAYER_MODE.SLICE_EDIT;
-    const fallbackMedia = item.mediaType !== item.requestedMediaType;
-
-    if (!item.src) {
-      error       = true;
-      errorReason = t('messages.no-playable-files');
-    }
+    const isVideo           = item.mediaType === MT_VIDEO;
+    const isAudio           = item.mediaType === MT_AUDIO;
+    const isEditMode        = mode === PLAYER_MODE.SLICE_EDIT;
+    const fallbackMedia     = item.mediaType !== item.requestedMediaType;
 
     let centerMediaControl;
     if (error) {
@@ -468,19 +515,15 @@ class AVPlayer extends PureComponent {
       );
     } else if (isEditMode) {
       centerMediaControl = (
-        <div className="center-media-controls-edit">
+        <div>
           <Button
-            icon="chevron left"
             content={t('player.buttons.edit-back')}
             size="large"
             color="blue"
-            className="button-close-slice-edit"
+            icon="chevron left"
             onClick={this.handleToggleMode}
           />
-          <div className="slice-edit-help">
-            {t('player.messages.edit-help')}
-          </div>
-          <AVShareBar />
+          <ShareBar url={window.location.href} t={t} />
         </div>
       );
     } else if (isVideo) {
@@ -494,6 +537,8 @@ class AVPlayer extends PureComponent {
         }}
         className={classNames('mediaplayer', { 'media-edit-mode': isEditMode })}
         onKeyDown={utils.keyboardControls.bind(null, media)}
+        role="button"
+        tabIndex="-1"
       >
         <Player
           playsInline
@@ -504,7 +549,7 @@ class AVPlayer extends PureComponent {
             }
           }}
           onVolumeChange={this.state.persistenceFn}
-          src={item.src}
+          src={src}
           poster={isVideo ? item.preImageUrl : null}
           vendor={isVideo ? 'video' : 'audio'}
           autoPlay={autoPlay}
@@ -515,7 +560,7 @@ class AVPlayer extends PureComponent {
           onPause={this.onPause}
           onPlay={this.onPlay}
           onTimeUpdate={this.handleTimeUpdate}
-          defaultCurrentTime={sliceStart || 0}
+          defaultCurrentTime={sliceStart || -1}  // -1 so RMP won't seek to 0 (browser won't fire seeked so we'll hang)
         />
         <div
           ref={this.handleWrapperRef}
@@ -552,7 +597,6 @@ class AVPlayer extends PureComponent {
               sliceEnd={sliceEnd}
               onSliceStartChange={this.handleSliceStartChange}
               onSliceEndChange={this.handleSliceEndChange}
-              isMobile={isMobile}
             />
 
             {
@@ -560,6 +604,15 @@ class AVPlayer extends PureComponent {
                 <AVPlaybackRate
                   value={playbackRate}
                   onSelect={this.playbackRateChange}
+                />
+              )
+            }
+            {
+              !isEditMode && isVideo && (
+                <AVVideoSize
+                  value={videoSize}
+                  qualities={Object.keys(item.byQuality)}
+                  onSelect={this.videoSizeChange}
                 />
               )
             }
@@ -587,7 +640,7 @@ class AVPlayer extends PureComponent {
               )
             }
             {!isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.SLICE_EDIT)} />}
-            {!isEditMode && !isAudio && <AVFullScreen container={this.mediaElement} />}
+            {!isEditMode && !isAudio && <AVFullScreen element={this.mediaElement} />}
           </div>
           <div
             ref={this.handleOnScreenRef}
@@ -595,6 +648,7 @@ class AVPlayer extends PureComponent {
             role="button"
             tabIndex="0"
             onClick={this.handleOnScreenClick}
+            onKeyPress={this.handleOnScreenKeyDown}
           >
             {centerMediaControl}
           </div>
@@ -605,4 +659,4 @@ class AVPlayer extends PureComponent {
   }
 }
 
-export default withIsMobile(withMediaProps(withRouter(AVPlayer)));
+export default withMediaProps(withRouter(AVPlayer));

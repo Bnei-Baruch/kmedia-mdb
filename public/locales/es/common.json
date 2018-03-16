@@ -1,8 +1,438 @@
 {
+  "nav": {
+    "top": {
+      "header": "Cabalá Media"
+    },
+    "sidebar": {
+      "lessons": "Lección Diaria de Cabalá",
+      "programs": "Programas",
+      "lectures": "Charlas y Lecciones",
+      "sources": "Biblioteca",
+      "events": "Congresos y Eventos",
+      "books": "Libros",
+      "topics": "Temas",
+      "publications": "Publicaciones",
+      "photos": "Fotos",
+      "design": "Diseño"
+    },
+    "footer": {
+      "copyright": "Derecho de autor 2003-{{year}}",
+      "rights": "Benei Baruj ‘ Cabalá LaAm",
+      "study": "Estudios de Cabalá",
+      "topics": "Temas",
+      "events": "Eventos",
+      "media": "Medio de comunicación"
+    }
+  },
+  "filters": {
+    "by": "Filtrar por:",
+    "date-filter": {
+      "label": "Fecha",
+      "selectTitle": "Seleccione un rango de fechas",
+      "presets": {
+        "TODAY": "Hoy",
+        "YESTERDAY": "Mañana",
+        "LAST_7_DAYS": "Últimos 7 Días",
+        "LAST_30_DAYS": "Últimos 30 Días",
+        "LAST_MONTH": "Mes Pasado",
+        "THIS_MONTH": "Este Mes",
+        "CUSTOM_RANGE": "Elección Flexible"
+      },
+      "start": "Inicio",
+      "end": "Final"
+    },
+    "sources-filter": {
+      "label": "Fuentes"
+    },
+    "topics-filter": {
+      "label": "Temas"
+    },
+    "publishers-filter": {
+      "label": "Editores"
+    },
+    "programs-filter": {
+      "label": "Genero / Programa",
+      "recently-updated": "Recientemente actualizado",
+      "last-updated": "Ultima actualización en"
+    },
+    "locations-filter": {
+      "label": "Ubicaciones",
+      "allItem": "Todo"
+    },
+    "holidays-filter": {
+      "label": "Fiesta",
+      "allItem": "Todo"
+    },
+    "years-filter": {
+      "label": "Año",
+      "placeholder": "Seleccione año"
+    },
+    "sections-filter": {
+      "label": "Sección",
+      "all": "Todo",
+      "lessons": "Lección Diaria de Cabalá",
+      "programs": "Programas",
+      "lectures": "Charlas y Lecciones",
+      "events": "Congresos y Eventos",
+      "publications": "Publicaciones"
+    }
+  },
+  "buttons": {
+    "apply": "Aplicar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "audio": "Audio",
+    "video": "Video",
+    "more": "Mas",
+    "copy-link": "Copiar enlace",
+    "search": "Buscar"
+  },
+  "player": {
+    "messages": {
+      "edit-help": "Arrastra los punteros para compartir una parte del video "
+    },
+    "buttons": {
+      "edit-back": "Regreso",
+      "start-position": "Inicio",
+      "end-position": "Final",
+      "click-to-set": "Clic para marcar"
+    },
+    "share": {
+      "title": "Mira el video"
+    },
+    "error": {
+      "loading": "Error al cargar el video"
+    }
+  },
+  "messages": {
+    "loading": "Cargando",
+    "loading-subtext": "Enseguida llega",
+    "server-error": "Error del servidor",
+    "not-found": "¡Oops!",
+    "not-found-subtext": "No podemos encontrar lo que esta buscando",
+    "no-files": "No se encontraron archivos",
+    "no-playable-files": "No hay archivos adecuados para su visualización",
+    "no-results": "No se encontraron resultados",
+    "pagination-results": "Resultados {{start}} - {{end}} de {{total}}",
+    "link-copied-to-clipboard": "¡Enlace copiado al portapapeles!",
+    "unknown": "desconocido",
+    "unsupported-media-format": " formato no compatible.",
+    "error-loading-file": "Error al cargar el archivo.",
+    "fallback-language": " Medios no encontrados para el idioma seleccionado, se eligió el idioma preseleccionado.",
+    "fallback-to-audio": "Video no encontrado, usa audio.",
+    "fallback-to-video": "Audio no encontrado, usa video.",
+    "source-content-not-found": " Contenido de fuente no fue encontrado ",
+    "no-images":"No se encontraron dibujos"
+  },
+  "search": {
+    "header": {
+      "text": "Resultados de búsqueda",
+      "subtext": ""
+    },
+    "sortby": "ordenar por",
+    "sorts": {
+      "relevance": "Relevante",
+      "newertoolder": "Nuevo a viejo",
+      "oldertonewer": "Viejo a nuevo"
+    },
+    "suggestions": {
+      "categories": {
+        "search": "Buscar",
+        "tags": "Temas",
+        "sources": "Fuentes",
+        "authors": "Autores",
+        "persons": "Personas"
+      }
+    },
+    "results": {
+      "empty-query": "No se ingresó texto de búsqueda. Use el cuadro de búsqueda de arriba.",
+      "no-results": "No se encontraron resultados para <1><0>{{query}}</0></1>."
+    },
+    "result": {
+      "description": "Sumario",
+      "transcript": "Transcripción"
+    }
+  },
+  "home": {
+    "search": "Descubre la sabiduría de la Cabalá",
+    "sections": "Temas",
+    "updates": "Actualizaciones recientes",
+    "last-lesson": "Lección diaria de Cabalá"
+  },
+  "events": {
+    "header": {
+      "text": "Congresos y Eventos",
+      "subtext": "Hoy en día, la sabiduría de la Cabalá llega a todas las partes del mundo. En esta sección podrá ver eventos, congresos y encuentros especiales de la Organización \"Benei Baruj - Cabalá LaAm\" en Israel y en el mundo."
+    },
+    "tabs": {
+      "conventions": "Congresos",
+      "holidays": "Fiestas",
+      "unity-days": "Eventos de Unión",
+      "friends-gatherings": "Asamblea de Amigos",
+      "meals": "Comidas"
+    },
+    "list": {
+      "item_from": "Parte de:"
+    },
+    "ALL_EVENTS": "Todos Los Eventos",
+    "no-matches": "No se encontraron eventos adecuados",
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Partes adicionales del mismo evento"
+        }
+      }
+    },
+    "collection": {
+      "playlist": {
+        "preparation": "Preparación",
+        "lessons": "Lecciones",
+        "other_parts": "Otras Partes",
+        "appendices": "Apéndices"
+      }
+    }
+  },
   "lessons": {
     "header": {
-      "text": "",
-      "subtext": "Durante miles de años, los cabalistas se consagraron a estudiar día tras día para alcanzar el progreso espiritual de la humanidad y el suyo propio. En el Instituto Bnei Baruj para la Educación y la Investigación de la Cabalá continuamos con esta tradición en el mundo globalizado de hoy, estudiando diariamente las fuentes auténticas cabalísticas, enriquecidas con los comentarios del Rav doctor Michael Laitman"
+      "text": "Lección Diaria de Cabalá",
+      "subtext": "Durante miles de años, los cabalistas estudiaban diariamente, para su propio desarrollo espiritual y para el progreso espiritual de la humanidad. Hoy en día, continúan la misma tradición los cabalistas de \"Benei Baruj\", quienes estudian a diario a partir de las auténticas escrituras cabalísticas, estudios acompañados del comentario y la instrucción del Rav Dr. Michael Laitman"
+    },
+    "list": {
+      "related": "Relacionado con"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Parte adicional de la misma lección",
+          "item-title": "Parte {{name}}"
+        }
+      }
     }
+  },
+  "programs": {
+    "header": {
+      "text": "Programas",
+      "subtext": "Aquí encontrará una gran variedad de programas que incluyen: conversaciones fascinantes sobre el significado de la vida, eventos actuales, programas para toda la familia y más."
+    },
+    "genres": {
+      "all": "Todos Los Programas",
+      "documentary": "Documental",
+      "late-night": "Tarde en la Noche",
+      "news": "Noticias",
+      "talk-show": "Programas de Entrevistas",
+      "educational": "Educacional",
+      "children": "Niños",
+      "movies": "Películas"
+    },
+    "list": {
+      "episode_from": "Capítulo del programa:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Capítulos adicionales del mismo programa",
+          "item-title": "Capitulo {{name}}"
+        }
+      }
+    }
+  },
+  "lectures": {
+    "header": {
+      "text": "Charlas y Lecciones",
+      "subtext": "Aquí encontrará una rica variedad de conferencias y clases de varios tipos, que incluyen conferencias para diferentes públicos, clases para mujeres, niños y más."
+    },
+    "list": {
+      "item_from": "Parte de:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Otras partes de la misma serie"
+        }
+      }
+    }
+  },
+  "publications": {
+    "header": {
+      "text": "Publicaciones",
+      "subtext": "Artículos sobre eventos actuales, cultura, ciencia popular, relaciones y más, presentados desde la perspectiva única de la sabiduría de la Cabalá"
+    },
+    "list": {
+      "item_from": "Artículo de:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Más artículos de la misma colección"
+        }
+      }
+    }
+  },
+  "pages": {
+    "collection": {
+      "items": {
+        "programs-collection": "Capítulos",
+        "lectures-collection": "Partes",
+        "publications-collection": "Artículos",
+        "event": "Partes"
+      }
+    },
+    "unit": {
+      "info": {
+        "sources": "Fuentes",
+        "topics": "Temas",
+        "collections": "Relacionado a"
+      },
+      "recommended": {
+        "same-collection": {
+          "title": "Partes adicionales de la misma colección",
+          "item-title": "Parte {{name}}"
+        }
+      }
+    }
+  },
+  "materials": {
+    "summary": {
+      "header": "Sumario",
+      "no-summary": "Falta sumario"
+    },
+    "transcription": {
+      "header": "Transcripción",
+      "no-transcription": "Falta transcripción"
+    },
+    "sources": {
+      "header": "Fuentes",
+      "no-sources": "No hay fuentes",
+      "no-source": "Seleccione fuente",
+      "no-source-available": "Ninguna fuente está lista para mostrar"
+    },
+    "sketches": {
+      "header": "Dibujos"
+    }
+  },
+  "sources-library": {
+    "header": {
+      "text": "Biblioteca",
+      "subtext": "Colección de todos los textos originales más importantes para el estudio de la Cabalá, escritos por los más grandes cabalistas."
+    },
+    "no-source": "Seleccione fuente",
+    "toc": "Tabla de Contenido",
+    "az":        "AZ",
+    "default":   "Por Omisión"
+  },
+  "media-downloads": {
+    "title": "Descargar archivos",
+    "derived-title": "Derivados",
+    "type-labels": {
+      "video": "Video Principal",
+      "audio": "Audio Principal",
+      "text": "Transcripción Completa",
+      "image": "Fotos"
+    },
+    "lesson": {
+      "type-labels": {
+        "video": "Video de la Lección",
+        "audio": "Audio de la Lección",
+        "text": "Transcripción Completa",
+        "image": "Dibujos"
+      }
+    },
+    "program": {
+      "type-labels": {
+        "video": "Video del Programa",
+        "audio": "audio del Programa",
+        "text": "Transcripción Completa",
+        "image": "Fotos"
+      }
+    },
+    "publication": {
+      "type-labels": {
+        "video": "Video",
+        "audio": "Audio",
+        "text": "Texto",
+        "image": "Capturas de Pantalla"
+      }
+    }
+  },
+  "constants": {
+    "languages": {
+      "he": "Hebreo",
+      "en": "Ingles",
+      "ru": "Ruso",
+      "es": "Español",
+      "it": "Italiano",
+      "de": "Alemán",
+      "nl": "Holandés",
+      "fr": "Francés",
+      "pt": "Portugués",
+      "tr": "Turco",
+      "pl": "Polaco",
+      "ar": "Árabe",
+      "hu": "Húngaro",
+      "fi": "Finlandés",
+      "lt": "Lituano",
+      "ja": "Japonés",
+      "bg": "Búlgaro",
+      "ka": "Georgiano",
+      "no": "Noruego",
+      "sv": "Sueco",
+      "hr": "Croata",
+      "zh": "Chino",
+      "fa": "Persa",
+      "ro": "Rumano",
+      "hi": "Hindi",
+      "ua": "Ucraniano",
+      "mk": "Macedonio",
+      "sl": "Esloveno",
+      "lv": "Letón",
+      "sk": "eslovaco",
+      "cs": "Checo"
+    },
+    "content-types": {
+      "DAILY_LESSON": "Lección Diaria",
+      "SPECIAL_LESSON": "Lección Especial",
+      "FRIENDS_GATHERINGS": "Asamblea de Amigos",
+      "CONGRESS": "Congreso",
+      "VIDEO_PROGRAM": "Programa",
+      "LECTURE_SERIES": "Serie de Charlas",
+      "CHILDREN_LESSONS": "Lección de Niños",
+      "WOMEN_LESSONS": "Lección de Mujeres",
+      "VIRTUAL_LESSONS": "Lecciones Virtuales",
+      "MEALS": "Comidas",
+      "HOLIDAY": "Fiestas",
+      "PICNIC": "Picnic",
+      "UNITY_DAY": "Día de Unión",
+      "CLIPS": " Clips ",
+      "ARTICLES": "Artículos",
+      "LESSON_PART": "Parte de la Lección",
+      "LECTURE": "Charla",
+      "CHILDREN_LESSON": "Lección de Niños",
+      "WOMEN_LESSON": "Lección de Mujeres",
+      "VIRTUAL_LESSON": "Lección Virtual",
+      "FRIENDS_GATHERING": "Asamblea de Amigos",
+      "MEAL": "Comida",
+      "VIDEO_PROGRAM_CHAPTER": "Capitulo",
+      "FULL_LESSON": "Lección Completa",
+      "ARTICLE": "Articulo",
+      "UNKNOWN": "Desconocido",
+      "EVENT_PART": "Parte del Evento",
+      "CLIP": "Clip",
+      "TRAINING": "Entrenamiento",
+      "KITEI_MAKOR": "Extractos de Fuentes",
+      "PUBLICATION": "Publicidad",
+      "LELO_MIKUD": "Editado - sin grupo de enfoque"
+    },
+    "media-types": {
+      "video": "Video",
+      "audio": "Audio",
+      "image": "Foto",
+      "text": "Texto",
+      "sheet": "Hoja",
+      "banner": "Banner",
+      "presentation": "Presentación"
+    }
+  },
+  "values": {
+    "date": "{{date, l}}"
   }
 }

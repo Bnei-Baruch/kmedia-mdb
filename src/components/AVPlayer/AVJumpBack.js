@@ -17,7 +17,6 @@ class AVJumpBack extends Component {
     jumpSpan: 5,
   };
 
-
   onJumpBack = () => {
     let jumpTo = this.props.media.currentTime + this.props.jumpSpan;
 
@@ -30,15 +29,10 @@ class AVJumpBack extends Component {
   isBack = () => this.props.jumpSpan < 0;
 
   render() {
-
     return (
-        <button
-          type="button"
-          tabIndex="-1"
-          onClick={this.onJumpBack}
-        >
-          <Icon name={this.isBack() ? 'step backward' : 'step forward'} />
-        </button>
+      <button type="button" tabIndex="-1" onClick={this.onJumpBack}>
+        <Icon name={this.isBack() ? 'backward' : 'forward'} />
+      </button>
     );
   }
 }

@@ -3359,6 +3359,10 @@ fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
 
+fscreen@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/fscreen/-/fscreen-1.0.2.tgz#c4c51d96d819d75a19d728e0df445f9be9bb984f"
+
 fsevents@1.1.2, fsevents@^1.0.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-1.1.2.tgz#3282b713fb3ad80ede0e9fcf4611b5aa6fc033f4"
@@ -6779,7 +6783,7 @@ react-image-gallery@^0.8.3:
 
 "react-media-player@github:Bnei-Baruch/react-media-player":
   version "0.7.0"
-  resolved "https://codeload.github.com/Bnei-Baruch/react-media-player/tar.gz/66d6ed4500c44ce7f3d20e49cd96d9531d86c3ac"
+  resolved "https://codeload.github.com/Bnei-Baruch/react-media-player/tar.gz/39341291a2643b2ae74133c8388438d35c158624"
   dependencies:
     prop-types "^15.5.10"
 
@@ -6880,9 +6884,9 @@ react-scripts@1.0.17:
   optionalDependencies:
     fsevents "1.1.2"
 
-react-share@^1.19.0:
-  version "1.19.0"
-  resolved "https://registry.yarnpkg.com/react-share/-/react-share-1.19.0.tgz#546b152231b7fc16e57b299f8a0d7e400264280b"
+react-share@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-share/-/react-share-2.0.0.tgz#be07224dfe01ea0613e84e9412dddf0a1ed07a20"
   dependencies:
     babel-runtime "^6.6.1"
     classnames "^2.2.5"
@@ -7452,9 +7456,9 @@ selfsigned@^1.9.1:
   dependencies:
     node-forge "0.6.33"
 
-semantic-ui-react@^0.77.1:
-  version "0.77.1"
-  resolved "https://registry.yarnpkg.com/semantic-ui-react/-/semantic-ui-react-0.77.1.tgz#38d4009cc8c7c20efac6ad8ba4497de3bb3287e2"
+semantic-ui-react@^0.78.2:
+  version "0.78.2"
+  resolved "https://registry.yarnpkg.com/semantic-ui-react/-/semantic-ui-react-0.78.2.tgz#2337097b16f0770d91dded2625db30e49390d3c1"
   dependencies:
     babel-runtime "^6.25.0"
     classnames "^2.2.5"
@@ -8283,7 +8287,7 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-ua-parser-js@^0.7.9:
+ua-parser-js@^0.7.17, ua-parser-js@^0.7.9:
   version "0.7.17"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.17.tgz#e9ec5f9498b9ec910e7ae3ac626a805c4d09ecac"
 

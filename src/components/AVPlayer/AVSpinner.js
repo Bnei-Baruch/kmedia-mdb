@@ -25,7 +25,7 @@ class AVSpinner extends Component {
       <Icon
         loading
         name="spinner"
-        color="orange"
+        color="grey"
         size="huge"
       />
     );

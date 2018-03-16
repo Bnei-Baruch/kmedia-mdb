@@ -1,3 +1,4 @@
+@import 'rtl/homepage';
 .homepage {
   &__header {
     padding-top: 3em;
@@ -21,6 +22,23 @@
     img {
       margin-bottom: .2em;
       width: 50px !important;
+    }
+
+    .row .center.aligned.column {
+      display: flex !important;
+      justify-content: center;
+      align-items: stretch;
+
+    }
+    
+    a {
+      flex: 1 1 auto;
+      border-radius: 4px;
+      padding: 4px 4px 8px !important;
+      
+      &:hover {
+        background-image: linear-gradient(to bottom, $darkWhite, rgba($darkWhite, 0));
+      }
     }
   }
 
@@ -90,6 +108,10 @@
 
 
   &__header {
+    text-shadow:
+      0 1px $black,
+      0 2px $black
+    ;
     // background: red;
     transition: transform .5s ;
     bottom: .5em;

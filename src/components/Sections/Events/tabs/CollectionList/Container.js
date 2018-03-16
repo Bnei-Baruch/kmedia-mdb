@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY } from '../../../../../helpers/consts';
+import { CT_CONGRESS, CT_HOLIDAY, CT_UNITY_DAY } from '../../../../../helpers/consts';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors as filterSelectors } from '../../../../../redux/modules/filters';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
@@ -12,14 +12,12 @@ import * as shapes from '../../../../shapes';
 import Page from './Page';
 
 const TAB_NAME_CT_MAP = {
-  'conventions': CT_CONGRESS,
-  'holidays': CT_HOLIDAY,
-  'picnics': CT_PICNIC,
+  conventions: CT_CONGRESS,
+  holidays: CT_HOLIDAY,
   'unity-days': CT_UNITY_DAY,
 };
 
 class TabContainer extends Component {
-
   static propTypes = {
     tabName: PropTypes.string.isRequired,
     language: PropTypes.string.isRequired,

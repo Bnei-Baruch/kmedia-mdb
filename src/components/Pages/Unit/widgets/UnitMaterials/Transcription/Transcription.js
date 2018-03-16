@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import uniq from 'lodash/uniq';
 import { Container, Divider, Segment } from 'semantic-ui-react';
 
-import { RTL_LANGUAGES } from '../../../../../../helpers/consts';
+import { MEDIA_TYPES, RTL_LANGUAGES } from '../../../../../../helpers/consts';
 import * as shapes from '../../../../../shapes';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 
 class Transcription extends Component {
-
   static propTypes = {
     unit: shapes.ContentUnit,
     doc2htmlById: PropTypes.objectOf(PropTypes.shape({
@@ -20,6 +19,10 @@ class Transcription extends Component {
     language: PropTypes.string.isRequired, // UI language
     t: PropTypes.func.isRequired,
     onContentChange: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    unit: null,
   };
 
   state = {
@@ -48,15 +51,14 @@ class Transcription extends Component {
       return [];
     }
 
-    return unit.files.filter(x => x.type === 'text');
+    return unit.files.filter(x => x.type === 'text' && x.mimetype !== MEDIA_TYPES.html.mime_type);
   };
 
-  setCurrentItem = (nextProps) => {
-    const textFiles = this.getTextFiles(nextProps);
+  setCurrentItem = (props) => {
+    const textFiles = this.getTextFiles(props);
     const languages = uniq(textFiles.map(x => x.language));
     let selected    = null;
     if (languages.length > 0) {
-
       // try to stay on the same language we have in state if possible
       if (this.state.language) {
         selected = textFiles.find(x => x.language === this.state.language);
@@ -64,7 +66,7 @@ class Transcription extends Component {
 
       // if not then choose by UI language or first
       if (!selected) {
-        selected = textFiles.find(x => x.language === nextProps.language) || textFiles[0];
+        selected = textFiles.find(x => x.language === props.language) || textFiles[0];
       }
     }
 
@@ -109,11 +111,13 @@ class Transcription extends Component {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
 
       // eslint-disable-next-line react/no-danger
-      const content = <div
-        className="doc2html"
-        style={{ direction }}
-        dangerouslySetInnerHTML={{ __html: data }}
-      />;
+      const content = (
+        <div
+          className="doc2html"
+          style={{ direction }}
+          dangerouslySetInnerHTML={{ __html: data }}
+        />
+      );
 
       if (languages.length === 1) {
         return content;

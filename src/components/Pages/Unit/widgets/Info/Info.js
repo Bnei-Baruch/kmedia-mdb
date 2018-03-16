@@ -39,7 +39,7 @@ class Info extends Component {
         }
 
         const path    = tracePath(tag, getTagById);
-        const display = path.map(y => y.label).join(' > ');
+        const display = path[path.length - 1].label;
 
         if (section) {
           const query = filtersTransformer.toQueryParams([

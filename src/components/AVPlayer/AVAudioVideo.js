@@ -1,37 +1,52 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TimedPopup from '../shared/TimedPopup';
 
-const AVAudioVideo = (props) => {
-  const { isAudio, isVideo, onSwitch, t, fallbackMedia } = props;
+class AVAudioVideo extends Component {
+  static propTypes = {
+    isAudio: PropTypes.bool.isRequired,
+    isVideo: PropTypes.bool.isRequired,
+    onSwitch: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
+    fallbackMedia: PropTypes.bool.isRequired,
+  };
 
-  const popup = !fallbackMedia ? null : (
-    <TimedPopup
-      openOnInit
-      message={isAudio ? t('messages.fallback-to-audio') : t('messages.fallback-to-video')}
-      downward={isAudio}
-      timeout={7000}
-    />
-  );
+  handleSwitch = () =>
+    this.props.onSwitch();
 
-  return (
-    <div className='mediaplayer__audiovideo'>
-      {popup}
-      <button onClick={onSwitch}>
-        <span className={isAudio ? 'is-active' : ''}>{t('buttons.audio')}</span>
-        &nbsp;/&nbsp;
-        <span className={isVideo ? 'is-active' : ''}>{t('buttons.video')}</span>
-      </button>
-    </div>
-  );
-};
+  handleBtnRef = (ref) => {
+    if (ref) {
+      this.mainBtn = ref;
+      this.mainBtn.addEventListener('click', this.handleSwitch);
+    } else if (this.mainBtn) {
+      this.mainBtn.removeEventListener('click', this.handleSwitch);
+      this.mainBtn = ref;
+    }
+  };
 
-AVAudioVideo.propTypes = {
-  isAudio: PropTypes.bool.isRequired,
-  isVideo: PropTypes.bool.isRequired,
-  onSwitch: PropTypes.func.isRequired,
-  t: PropTypes.func.isRequired,
-  fallbackMedia: PropTypes.bool.isRequired,
-};
+  render() {
+    const { isAudio, isVideo, t, fallbackMedia } = this.props;
+
+    const popup = !fallbackMedia ? null : (
+      <TimedPopup
+        openOnInit
+        message={isAudio ? t('messages.fallback-to-audio') : t('messages.fallback-to-video')}
+        downward={false}
+        timeout={7000}
+      />
+    );
+
+    return (
+      <div className="mediaplayer__audiovideo">
+        {popup}
+        <button ref={this.handleBtnRef}>
+          <span className={isAudio ? 'is-active' : ''}>{t('buttons.audio')}</span>
+          &nbsp;/&nbsp;
+          <span className={isVideo ? 'is-active' : ''}>{t('buttons.video')}</span>
+        </button>
+      </div>
+    );
+  }
+}
 
 export default AVAudioVideo;

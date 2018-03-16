@@ -35,10 +35,6 @@ class PDF extends Component {
     };
   }
 
-  componentWillMount() {
-    window.removeEventListener('resize', this.throttledSetDivSize);
-  }
-
   componentDidMount() {
     this.setDivSize();
     window.addEventListener('resize', this.throttledSetDivSize);
@@ -52,6 +48,10 @@ class PDF extends Component {
         numPages: null,
       });
     }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.throttledSetDivSize);
   }
 
   onDocumentLoadSuccess = ({ numPages }) => {

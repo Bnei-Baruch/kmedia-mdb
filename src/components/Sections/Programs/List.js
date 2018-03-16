@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_VIDEO_PROGRAM_CHAPTER, NO_NAME } from '../../../helpers/consts';
+import { sectionThumbnailFallback } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
@@ -38,23 +39,26 @@ export const renderUnit = (unit, t) => {
     filmDate = t('values.date', { date: new Date(unit.film_date) });
   }
 
+  const link = canonicalLink(unit);
+
   return (
     <Table.Row key={unit.id} verticalAlign="top">
-      <Table.Cell collapsing singleLine width={1}>
-        <strong>{filmDate}</strong>
-      </Table.Cell>
-      <Table.Cell collapsing width={1}>
-        <UnitLogo
-          fluid
-          unitId={unit.id}
-          collectionId={programs.length > 0 ? programs[0].id : null}
-        />
+      <Table.Cell collapsing singleLine>
+        <Link to={link}>
+          <UnitLogo
+            className="index__thumbnail"
+            unitId={unit.id}
+            collectionId={programs.length > 0 ? programs[0].id : null}
+            fallbackImg={sectionThumbnailFallback.programs}
+          />
+        </Link>
       </Table.Cell>
       <Table.Cell>
-        <Link to={canonicalLink(unit)}>
-          <strong>{unit.name || NO_NAME}</strong>
+        <span className="index__date">{filmDate}</span>
+        <Link className="index__title" to={link}>
+          {unit.name || NO_NAME}
         </Link>
-        <List className="index-list__item-subtitle" horizontal divided link size="tiny">
+        <List horizontal divided link className="index__collections" size="tiny">
           <List.Item>
             <List.Header>{t('programs.list.episode_from')}</List.Header>
           </List.Item>
@@ -66,7 +70,6 @@ export const renderUnit = (unit, t) => {
 };
 
 class MyUnitListContainer extends UnitListContainer {
-
   static propTypes = {
     ...UnitListContainer.propTypes,
     shouldOpenProgramsFilter: PropTypes.bool,
@@ -83,8 +86,7 @@ class MyUnitListContainer extends UnitListContainer {
     if (this.props.shouldOpenProgramsFilter) {
       this.props.editNewFilter('programs', 'programs-filter');
     }
-  };
-
+  }
 }
 
 const mapState = (state, ownProps) => {

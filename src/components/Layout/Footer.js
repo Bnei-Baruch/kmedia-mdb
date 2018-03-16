@@ -14,7 +14,7 @@ const Footer = (props) => {
         <Grid padded inverted>
           <Grid.Row>
             <Grid.Column>
-              <Header inverted as="h3">
+              <Header inverted as="h5">
                 {t('nav.top.header')}
                 <br />
                 <small className="text grey">
