@@ -14,7 +14,7 @@ import AVPlayer from '../../../../AVPlayer/AVPlayer';
 class AVBox extends Component {
 
   static propTypes = {
-    history: PropTypes.object.isRequired,
+    history: shapes.History.isRequired,
     location: shapes.HistoryLocation.isRequired,
     language: PropTypes.string.isRequired,
     unit: shapes.ContentUnit,

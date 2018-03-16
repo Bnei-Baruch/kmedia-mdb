@@ -12,7 +12,7 @@ import AVPlaylistPlayer from '../../../../AVPlayer/AVPlaylistPlayer';
 class PlaylistAVBox extends Component {
 
   static propTypes = {
-    history: PropTypes.object.isRequired,
+    history: shapes.History.isRequired,
     location: shapes.HistoryLocation.isRequired,
     collection: shapes.GenericCollection.isRequired,
     PlayListComponent: PropTypes.any.isRequired,

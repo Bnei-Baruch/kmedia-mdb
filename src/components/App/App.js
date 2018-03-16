@@ -10,6 +10,7 @@ import { selectors as system } from '../../redux/modules/system';
 import MultiLanguageRouteProvider from '../Language/MultiLanguageRouteProvider';
 import Routes from './Routes';
 import '../../stylesheets/Kmedia.css';
+import * as shapes from '../shapes';
 
 const Loader = () => (
   <div id="app-loader">
@@ -20,7 +21,7 @@ const Loader = () => (
 class App extends Component {
   static propTypes = {
     store: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
+    history: shapes.History.isRequired,
     isAppReady: PropTypes.bool,
   };
 
