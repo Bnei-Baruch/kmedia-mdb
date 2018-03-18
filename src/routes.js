@@ -95,7 +95,7 @@ const createMainRoutes = (prefix) => {
       defaultPageRoute('lectures/cu/:id', LectureUnit, { ssrData: ssrDataLoaders.cuPage }),
       defaultPageRoute('lectures/c/:id', LectureCollection, { ssrData: ssrDataLoaders.collectionPage('lectures-collection') }),
       defaultPageRoute('publications', Publications, { ssrData: ssrDataLoaders.cuListPage('publications') }),
-      defaultPageRoute('publications/cu/:id', PublicationUnit),
+      defaultPageRoute('publications/cu/:id', PublicationUnit, { ssrData: ssrDataLoaders.publicationCUPage }),
       defaultPageRoute('publications/c/:id', PublicationCollection, { ssrData: ssrDataLoaders.collectionPage('publications-collection') }),
       defaultPageRoute('sources', LibraryHomepage),
       defaultPageRoute('sources/:id', LibraryContainer, { ssrData: ssrDataLoaders.libraryPage }),

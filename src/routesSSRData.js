@@ -1,3 +1,5 @@
+import uniq from 'lodash/uniq';
+
 import {
   CT_ARTICLE,
   CT_CHILDREN_LESSON,
@@ -6,7 +8,8 @@ import {
   CT_MEAL,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
-  CT_WOMEN_LESSON
+  CT_WOMEN_LESSON,
+  MEDIA_TYPES
 } from './helpers/consts';
 import { selectors as settingsSelectors } from './redux/modules/settings';
 import { actions as mdbActions, selectors as mdbSelectors } from './redux/modules/mdb';
@@ -16,11 +19,12 @@ import { actions as homeActions } from './redux/modules/home';
 import { actions as eventsActions } from './redux/modules/events';
 import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
 import { actions as sourcesActions, selectors as sourcesSelectors } from './redux/modules/sources';
+import { actions as assetsActions } from './redux/modules/assets';
 import * as mdbSagas from './sagas/mdb';
 import * as filtersSagas from './sagas/filters';
 import * as eventsSagas from './sagas/events';
 import * as searchSagas from './sagas/search';
-import * as sourceshSagas from './sagas/sources';
+import * as sourcesSagas from './sagas/sources';
 import withPagination from './components/Pagination/withPagination';
 
 import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
@@ -161,7 +165,7 @@ export const libraryPage = (store, match) => {
   // TODO: consider firstLeafID
   const sourceID = match.params.id;
 
-  return store.sagaMiddleWare.run(sourceshSagas.fetchIndex, sourcesActions.fetchIndex(sourceID)).done
+  return store.sagaMiddleWare.run(sourcesSagas.fetchIndex, sourcesActions.fetchIndex(sourceID)).done
     .then(() => {
       const state    = store.getState();
       const { data } = sourcesSelectors.getIndexById(state.sources)[sourceID];
@@ -183,6 +187,32 @@ export const libraryPage = (store, match) => {
 
         const name = data[language].html;
         store.dispatch(sourcesActions.fetchContent(sourceID, name));
+      }
+    });
+};
+
+export const publicationCUPage = (store, match) => {
+  console.log('ssrData: publicationCUPage', match);
+
+  // TODO: fetch recommended content data as well
+  const cuID = match.params.id;
+  return store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(cuID)).done
+    .then(() => {
+      const state = store.getState();
+
+      let language = null;
+      const uiLang = settingsSelectors.getLanguage(state.settings);
+
+      const unit      = mdbSelectors.getUnitById(state.mdb, cuID);
+      const textFiles = (unit.files || []).filter(x => x.type === 'text' && x.mimetype !== MEDIA_TYPES.html.mime_type);
+      const languages = uniq(textFiles.map(x => x.language));
+      if (languages.length > 0) {
+        language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;
+      }
+
+      if (language) {
+        const selected = textFiles.find(x => x.language === language) || textFiles[0];
+        store.dispatch(assetsActions.doc2html(selected.id));
       }
     });
 };

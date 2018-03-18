@@ -115,6 +115,7 @@ function serverRender2(req, res, htmlData) {
               'events',
               'publications',
               'search',
+              'assets',
             ]);
 
             storePick.mdb.errors = {

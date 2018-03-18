@@ -31,8 +31,19 @@ class Transcription extends Component {
     language: null,
   };
 
-  componentDidMount() {
+  componentWillMount() {
     this.setCurrentItem(this.props);
+  }
+
+  componentDidMount() {
+    const { selected, language } = this.state;
+    if (selected && language) {
+      const { doc2htmlById, onContentChange } = this.props;
+      const { data }                          = doc2htmlById[selected.id] || {};
+      if (!data) {
+        onContentChange(selected.id);
+      }
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -41,7 +52,10 @@ class Transcription extends Component {
       (nextProps.unit.id !== this.props.unit.id) ||
       (nextProps.unit.files !== this.props.unit.files)
     ) {
-      this.setCurrentItem(nextProps);
+      const { selected, language } = this.setCurrentItem(nextProps);
+      if (selected && language) {
+        this.props.onContentChange(selected.id);
+      }
     }
   }
 
@@ -72,11 +86,10 @@ class Transcription extends Component {
 
     const language = selected ? selected.language : null;
 
-    this.setState({ selected, languages, language });
+    const sUpdate = { selected, languages, language };
+    this.setState(sUpdate);
 
-    if (selected && language) {
-      this.props.onContentChange(selected.id);
-    }
+    return sUpdate;
   };
 
   handleLanguageChanged = (e, language) => {
