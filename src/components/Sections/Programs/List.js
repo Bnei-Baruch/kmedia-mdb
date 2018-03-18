@@ -81,9 +81,7 @@ class MyUnitListContainer extends UnitListContainer {
     shouldOpenProgramsFilter: true,
   };
 
-  handleFiltersHydrated() {
-    console.log('Programs.handleFiltersHydrated', this.props.shouldOpenProgramsFilter);
-    super.handleFiltersHydrated();
+  componentDidMount() {
     if (this.props.shouldOpenProgramsFilter) {
       this.props.editNewFilter('programs', 'programs-filter');
     }
@@ -93,7 +91,6 @@ class MyUnitListContainer extends UnitListContainer {
 const mapState = (state, ownProps) => {
   // we want to open programs-filter if no filter is applied
   const allFilters               = filters.getFilters(state.filters, ownProps.namespace);
-  console.log('Programs.mapState', allFilters);
   const shouldOpenProgramsFilter = allFilters.length === 0;
 
   return {
