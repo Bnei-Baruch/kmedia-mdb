@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import throttle from 'lodash/throttle';
-import { Document, Page } from 'react-pdf';
+import { Document, Page } from 'react-pdf/build/entry.webpack';
 import { Container } from 'semantic-ui-react';
 
 import PDFMenu from './PDFMenu';

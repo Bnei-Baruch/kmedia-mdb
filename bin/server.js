@@ -10,8 +10,14 @@ require('ignore-styles').default(undefined, (module, filename) => {
 });
 
 require('babel-register')({
-  // ignore: [ /(node_modules)/ ],
-  presets: ['env', 'react-app']
+  presets: ['env', 'react-app'],
+  plugins: [
+    ['module-resolver', {
+      alias: {
+        'react-pdf/build/entry.webpack': 'react-pdf'
+      }
+    }]
+  ],
 });
 
 require('dotenv').config();
