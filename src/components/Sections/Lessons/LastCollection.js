@@ -28,7 +28,9 @@ class LastLessonCollection extends Component {
   };
 
   componentDidMount() {
-    this.props.fetchLatestLesson();
+    if (!this.props.lastLessonId) {
+      this.props.fetchLatestLesson();
+    }
   }
 
   componentWillReceiveProps(nextProps) {

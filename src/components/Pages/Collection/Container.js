@@ -30,7 +30,9 @@ class CollectionContainer extends Component {
   };
 
   componentDidMount() {
-    this.fetchCollection(this.props);
+    if (!this.props.collection) {
+      this.fetchCollection(this.props);
+    }
   }
 
   componentWillReceiveProps(nextProps) {

@@ -6,7 +6,7 @@ import App from '../src/components/App/App';
 
 export function renderApp(req, store, context) {
   const memoryHistory = createMemoryHistory({
-    initialEntries: [req.url],
+    initialEntries: [req.originalUrl],
   });
 
   return renderToString(<App i18n={context.i18n} store={store} history={memoryHistory} />);

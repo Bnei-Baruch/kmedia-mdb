@@ -10,7 +10,7 @@ import Lessons from './components/Sections/Lessons/List';
 import LessonUnit from './components/Sections/Lessons/Unit';
 import LessonCollection from './components/Sections/Lessons/Collection';
 import Programs from './components/Sections/Programs/List';
-import ProgramChapter from './components/Sections/Programs/Unit';
+import ProgramUnit from './components/Sections/Programs/Unit';
 import ProgramCollection from './components/Sections/Programs/Collection';
 import Lectures from './components/Sections/Lectures/List';
 import LectureUnit from './components/Sections/Lectures/Unit';
@@ -24,11 +24,11 @@ import EventCollection from './components/Sections/Events/Collection';
 import LibraryHomepage from './components/Sections/Library/Homepage';
 import LibraryContainer from './components/Sections/Library/LibraryContainer';
 import SearchResults from './components/Search/SearchResultsContainer';
-// import Design from './components/Design/Design';
-
 import Redirect from './components/Layout/Redirect';
 import HomePage from './components/Sections/Home/Container';
 import LastLessonCollection from './components/Sections/Lessons/LastCollection';
+// import Design from './components/Design/Design';
+import * as ssrDataLoaders from './routesSSRData';
 
 const NotImplemented = () => <h1>Not Implemented Yet</h1>;
 const NotFound       = () => <h1>Page not found</h1>;
@@ -41,11 +41,12 @@ const Root           = ({ route }) => renderRoutes(route.routes);
  * @param {React.Component|function} component
  * @param {object} subRoutes{array} prefix=''{string}
  */
-const pageRoute = (path, component, { subRoutes, prefix = '' } = {}) => ({
+const pageRoute = (path, component, { subRoutes, ssrData, prefix = '' } = {}) => ({
   exact: true,
   path: `${prefix}/${path}`,
   component,
-  routes: subRoutes
+  routes: subRoutes,
+  ssrData,
 });
 
 /**
@@ -57,7 +58,7 @@ const pageRoute = (path, component, { subRoutes, prefix = '' } = {}) => ({
  */
 const redirect = (from, to, { prefix = '' }) => {
   const fullFrom = `${prefix}/${from}`;
-  const fullTo = `${prefix}/${to}`;
+  const fullTo   = `${prefix}/${to}`;
   return ({
     path: fullFrom,
     component: () => <Redirect to={fullTo} />
@@ -65,43 +66,43 @@ const redirect = (from, to, { prefix = '' }) => {
 };
 
 const createMainRoutes = (prefix) => {
-  const pageOptions = { prefix };
+  const defaultPageOptions = { prefix };
 
   // for convenience
-  const defaultPageRoute = (path, component) =>
-    pageRoute(path, component, pageOptions);
+  const defaultPageRoute = (path, component, options = {}) =>
+    pageRoute(path, component, { ...defaultPageOptions, ...options });
 
   // for convenience
   const defaultRedirect = (from, to) =>
-    redirect(from, to, pageOptions);
+    redirect(from, to, defaultPageOptions);
 
   return [{
     component: Layout,
     routes: [
-      defaultPageRoute('', HomePage),
-      defaultPageRoute('lessons', Lessons),
-      defaultPageRoute('lessons/cu/:id', LessonUnit),
-      defaultPageRoute('lessons/c/:id', LessonCollection),
-      defaultPageRoute('lessons/latest', LastLessonCollection),
-      defaultPageRoute('programs', Programs),
-      defaultPageRoute('programs/cu/:id', ProgramChapter),
-      defaultPageRoute('programs/c/:id', ProgramCollection),
-      defaultPageRoute('events', Events),
-      defaultPageRoute('events/:tab', Events),
-      defaultPageRoute('events/cu/:id', EventUnit),
-      defaultPageRoute('events/c/:id', EventCollection),
-      defaultPageRoute('lectures', Lectures),
-      defaultPageRoute('lectures/cu/:id', LectureUnit),
-      defaultPageRoute('lectures/c/:id', LectureCollection),
-      defaultPageRoute('publications', Publications),
+      defaultPageRoute('', HomePage, { ssrData: ssrDataLoaders.home }),
+      defaultPageRoute('lessons', Lessons, { ssrData: ssrDataLoaders.cuListPage('lessons') }),
+      defaultPageRoute('lessons/cu/:id', LessonUnit, { ssrData: ssrDataLoaders.cuPage }),
+      defaultPageRoute('lessons/c/:id', LessonCollection, { ssrData: ssrDataLoaders.playlistCollectionPage }),
+      defaultPageRoute('lessons/latest', LastLessonCollection, { ssrData: ssrDataLoaders.latestLesson }),
+      defaultPageRoute('programs', Programs, { ssrData: ssrDataLoaders.cuListPage('programs') }),
+      defaultPageRoute('programs/cu/:id', ProgramUnit, { ssrData: ssrDataLoaders.cuPage }),
+      defaultPageRoute('programs/c/:id', ProgramCollection, { ssrData: ssrDataLoaders.collectionPage('programs-collection') }),
+      defaultPageRoute('events', Events, { ssrData: ssrDataLoaders.eventsPage }),
+      defaultPageRoute('events/:tab', Events, { ssrData: ssrDataLoaders.eventsPage }),
+      defaultPageRoute('events/cu/:id', EventUnit, { ssrData: ssrDataLoaders.cuPage }),
+      defaultPageRoute('events/c/:id', EventCollection, { ssrData: ssrDataLoaders.playlistCollectionPage }),
+      defaultPageRoute('lectures', Lectures, { ssrData: ssrDataLoaders.cuListPage('lectures') }),
+      defaultPageRoute('lectures/cu/:id', LectureUnit, { ssrData: ssrDataLoaders.cuPage }),
+      defaultPageRoute('lectures/c/:id', LectureCollection, { ssrData: ssrDataLoaders.collectionPage('lectures-collection') }),
+      defaultPageRoute('publications', Publications, { ssrData: ssrDataLoaders.cuListPage('publications') }),
       defaultPageRoute('publications/cu/:id', PublicationUnit),
-      defaultPageRoute('publications/c/:id', PublicationCollection),
+      defaultPageRoute('publications/c/:id', PublicationCollection, { ssrData: ssrDataLoaders.collectionPage('publications-collection') }),
       defaultPageRoute('sources', LibraryHomepage),
-      defaultPageRoute('sources/:id', LibraryContainer),
+      defaultPageRoute('sources/:id', LibraryContainer, { ssrData: ssrDataLoaders.libraryPage }),
       defaultPageRoute('books', NotImplemented),
       defaultPageRoute('topics', NotImplemented),
       defaultPageRoute('photos', NotImplemented),
-      defaultPageRoute('search', SearchResults),
+      defaultPageRoute('search', SearchResults, { ssrData: ssrDataLoaders.searchPage }),
       // defaultPageRoute('design', Design),
       // defaultPageRoute('design2', Lessons),
 
@@ -125,7 +126,7 @@ const createMainRoutes = (prefix) => {
  */
 const RoutedLanguageSetter = ({ match, route }) => (
   <LanguageSetter language={match.params.language || route.defaultLanguage}>
-    { renderRoutes(route.routes) }
+    {renderRoutes(route.routes)}
   </LanguageSetter>
 );
 

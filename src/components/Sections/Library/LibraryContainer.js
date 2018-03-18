@@ -172,7 +172,7 @@ class LibraryContainer extends Component {
   };
 
   fetchIndices = (sourceId) => {
-    if (isEmpty(sourceId)) {
+    if (isEmpty(sourceId) || !isEmpty(this.props.indexMap[sourceId])) {
       return;
     }
 

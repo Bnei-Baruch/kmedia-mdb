@@ -78,6 +78,7 @@ export class UnitListContainer extends withPagination {
   }
 
   handleFiltersHydrated() {
+    console.log('UnitList.handleFiltersHydrated');
     const p = withPagination.getPageFromLocation(this.props.location);
     this.handlePageChanged(p);
   }

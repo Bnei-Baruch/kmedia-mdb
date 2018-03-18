@@ -29,7 +29,7 @@ class HomePageContainer extends Component {
     err: null,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     if (!this.props.latestLesson) {
       this.props.fetchData();
     }

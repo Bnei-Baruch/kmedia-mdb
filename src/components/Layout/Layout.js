@@ -65,6 +65,8 @@ class Layout extends Component {
     const { t, location, route } = this.props;
     const { sidebarActive }      = this.state;
 
+    console.log('Layout.render');
+
     const showSearch = this.shouldShowSearch(location);
     return (
       <div className="layout">

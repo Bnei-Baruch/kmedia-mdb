@@ -13,7 +13,7 @@ function* fetchSources() {
   }
 }
 
-function* fetchIndex(action) {
+export function* fetchIndex(action) {
   const id = action.payload;
 
   try {
@@ -24,7 +24,7 @@ function* fetchIndex(action) {
   }
 }
 
-function* fetchContent(action) {
+export function* fetchContent(action) {
   try {
     const { data } = yield call(Api.sourceContent, action.payload);
     yield put(actions.fetchContentSuccess(data));

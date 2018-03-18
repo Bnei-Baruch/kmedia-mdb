@@ -1,6 +1,6 @@
 import { applyMiddleware, compose, createStore as reduxCreateStore } from 'redux';
 import createSagaMiddleware, { END } from 'redux-saga';
-// import { createLogger } from 'redux-logger';
+import { createLogger } from 'redux-logger';
 
 import sagaMonitor from '../sagas/helpers/sagaMonitor';
 import createMultiLanguageRouterMiddleware from './middleware/multiLanguageRouterMiddleware';
@@ -23,22 +23,22 @@ export default function createStore(initialState, history) {
   const sagaMiddleWare        = createSagaMiddleware(sagaMiddlewareOptions);
   middlewares.push(sagaMiddleWare);
 
-  // if (!isBrowser && !isProduction) {
-  //   const logger = createLogger({
-  //     // stateTransformer: () => {
-  //     // },
-  //     // actionTransformer: ({ type }) => ({ type }),
-  //     // colors: {
-  //     //   title: () => false,
-  //     //   prevState: () => false,
-  //     //   action: () => false,
-  //     //   nextState: () => false,
-  //     //   error: () => false,
-  //     // }
-  //   });
-  //
-  //   middlewares.push(logger);
-  // }
+  if (!isBrowser && !isProduction) {
+    const logger = createLogger({
+      stateTransformer: () => {
+      },
+      actionTransformer: ({ type }) => ({ type }),
+      colors: {
+        title: () => false,
+        prevState: () => false,
+        action: () => false,
+        nextState: () => false,
+        error: () => false,
+      }
+    });
+
+    middlewares.push(logger);
+  }
 
   const store = reduxCreateStore(reducer, initialState, compose(
     applyMiddleware(...middlewares),

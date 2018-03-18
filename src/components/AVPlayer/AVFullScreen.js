@@ -16,7 +16,7 @@ class AVFullscreen extends Component {
     fullScreen: false,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     fscreen.addEventListener('fullscreenchange', this.fullScreenChange);
   }
 

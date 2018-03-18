@@ -5,7 +5,7 @@ import { selectors as settings } from '../redux/modules/settings';
 import { actions, types } from '../redux/modules/home';
 import { actions as mdb } from '../redux/modules/mdb';
 
-function* fetchData(action) {
+export function* fetchData(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.home, { language });

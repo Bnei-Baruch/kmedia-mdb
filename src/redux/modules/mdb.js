@@ -344,8 +344,11 @@ const getWip            = state => state.wip;
 const getErrors         = state => state.errors;
 
 const getDenormCollection = (state, id) => {
-  const c = state.cById[id];
+  let c = state.cById[id];
   if (c && Array.isArray(c.cuIDs)) {
+    // make a fresh copy so we won't mess up normalized storage
+    c = { ...c };
+
     c.content_units = c.cuIDs.map(x => state.cuById[x]).filter(x => !!x);
   }
   return c;
@@ -363,9 +366,12 @@ const denormalizeObject = (byID, obj) => (
 );
 
 const getDenormContentUnit = (state, id) => {
-  const cu = state.cuById[id];
+  let cu = state.cuById[id];
 
   if (cu) {
+    // make a fresh copy so we won't mess up normalized storage
+    cu = { ...cu };
+
     // denormalize collections
     cu.collections = denormalizeObject(state.cById, cu.cIDs);
 
@@ -380,8 +386,11 @@ const getDenormContentUnit = (state, id) => {
 };
 
 const getDenormCollectionWUnits = (state, id) => {
-  const c = state.cById[id];
+  let c = state.cById[id];
   if (c && Array.isArray(c.cuIDs)) {
+    // make a fresh copy so we won't mess up normalized storage
+    c = { ...c };
+
     c.content_units = c.cuIDs.map(x => getDenormContentUnit(state, x)).filter(x => !!x);
   }
   return c;
