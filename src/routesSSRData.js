@@ -31,22 +31,17 @@ import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
 import PDF from './components/shared/PDF/PDF';
 
 export const home = (store, match) => {
-  console.log('ssrData: home');
   store.dispatch(homeActions.fetchData());
   return Promise.resolve(null);
 };
 
 export const cuPage = (store, match) => {
-  console.log('ssrData: cuPage', match);
-
   // TODO: fetch recommended content data as well
   store.dispatch(mdbActions.fetchUnit(match.params.id));
   return Promise.resolve(null);
 };
 
 export const cuListPage = (ns, collectionID = 0) => (store, match) => {
-  console.log('ssrData: cuListPage', match);
-
   // hydrate filters
   store.dispatch(filtersActions.hydrateFilters(ns));
 
@@ -55,7 +50,6 @@ export const cuListPage = (ns, collectionID = 0) => (store, match) => {
   store.dispatch(listsActions.setPage(ns, page));
 
   const pageSize = settingsSelectors.getPageSize(store.getState().settings);
-  console.log('ssrData: cuListPage', page, pageSize);
 
   // extraFetchParams
   const extraFetchParams = {};
@@ -80,7 +74,6 @@ export const cuListPage = (ns, collectionID = 0) => (store, match) => {
 };
 
 export const collectionPage = ns => (store, match) => {
-  console.log('ssrData: collectionPage', match);
   const cID = match.params.id;
   return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done
     .then(() => {
@@ -89,8 +82,6 @@ export const collectionPage = ns => (store, match) => {
 };
 
 export const playlistCollectionPage = (store, match) => {
-  console.log('ssrData: playlistCollectionPage', match);
-
   // TODO: fetch recommended content data as well
   const cID = match.params.id;
   return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done
@@ -105,8 +96,6 @@ export const playlistCollectionPage = (store, match) => {
 };
 
 export const latestLesson = (store, match) => {
-  console.log('ssrData: latestLesson', match);
-
   // TODO: fetch recommended content data as well
   return store.sagaMiddleWare.run(mdbSagas.fetchLatestLesson).done
     .then(() => {
@@ -122,11 +111,8 @@ export const latestLesson = (store, match) => {
 };
 
 export const eventsPage = (store, match) => {
-  console.log('ssrData: eventsPage', match);
-
   // hydrate tab
   const tab = match.params.tab || eventsTabs[0];
-  console.log('ssrData: eventsPage', tab);
   if (tab !== eventsTabs[0]) {
     store.dispatch(eventsActions.setTab(tab));
   }
@@ -143,8 +129,6 @@ export const eventsPage = (store, match) => {
 };
 
 export const searchPage = (store, match) => {
-  console.log('ssrData: searchPage', match);
-
   return Promise.all([
     store.sagaMiddleWare.run(searchSagas.hydrateUrl).done,
     store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done
@@ -160,8 +144,6 @@ export const searchPage = (store, match) => {
 };
 
 export const libraryPage = (store, match) => {
-  console.log('ssrData: libraryPage', match);
-
   // TODO: consider firstLeafID
   const sourceID = match.params.id;
 
@@ -192,8 +174,6 @@ export const libraryPage = (store, match) => {
 };
 
 export const publicationCUPage = (store, match) => {
-  console.log('ssrData: publicationCUPage', match);
-
   // TODO: fetch recommended content data as well
   const cuID = match.params.id;
   return store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(cuID)).done

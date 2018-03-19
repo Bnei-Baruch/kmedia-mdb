@@ -1,3 +1,4 @@
+import path from 'path';
 import express from 'express';
 import compression from 'compression';
 import proxy from 'http-proxy-middleware';
@@ -26,13 +27,13 @@ if (process.env.NODE_ENV === 'development') {
     ws: true
   }));
   console.log('Connected to CRA Client dev server');
+} else {
+  // other static resources should just be served as they are
+  router.use(express.static(
+    path.resolve(__dirname, '..', 'build'),
+    { maxAge: '30d' },
+  ));
 }
-
-// other static resources should just be served as they are
-// router.use(express.static(
-//   path.resolve(__dirname, '..', 'public'),
-//   { maxAge: '30d' },
-// ));
 
 // anything else should act as our index page
 // react-router will take care of everything

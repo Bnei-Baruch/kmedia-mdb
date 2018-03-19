@@ -14,7 +14,7 @@ require('babel-register')({
   plugins: [
     ['module-resolver', {
       alias: {
-        'react-pdf/build/entry.webpack': 'react-pdf'
+        'react-pdf/dist/entry.webpack': 'react-pdf'
       }
     }]
   ],

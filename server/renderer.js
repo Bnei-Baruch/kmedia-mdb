@@ -9,7 +9,7 @@ import UAParser from 'ua-parser-js';
 import localStorage from 'mock-local-storage';
 import { createMemoryHistory } from 'history';
 import React from 'react';
-import { renderToString } from 'react-dom/server';
+import ReactDOMServer from 'react-dom/server';
 import { matchRoutes } from 'react-router-config';
 
 import routes from '../src/routes';
@@ -45,12 +45,28 @@ function serverRender2(req, res, htmlData) {
       initialEntries: [req.originalUrl],
     });
 
+
+    hrend = process.hrtime(hrstart);
+    console.log('serverRender: createMemoryHistory %ds %dms', hrend[0], hrend[1] / 1000000);
+    hrstart = process.hrtime();
+
     const initialState = {
       router: { location: history.location },
       device: { deviceInfo: new UAParser(req.get('user-agent')).getResult() },
     };
 
+
+    hrend = process.hrtime(hrstart);
+    console.log('serverRender: initialState %ds %dms', hrend[0], hrend[1] / 1000000);
+    hrstart = process.hrtime();
+
     const store = createStore(initialState, history);
+
+
+    hrend = process.hrtime(hrstart);
+    console.log('serverRender: createStore %ds %dms', hrend[0], hrend[1] / 1000000);
+    hrstart = process.hrtime();
+
     store.dispatch(settings.setLanguage(language));
 
     const context = {
@@ -60,14 +76,26 @@ function serverRender2(req, res, htmlData) {
       i18n: i18nServer,
     };
 
+    hrend = process.hrtime(hrstart);
+    console.log('serverRender: prep %ds %dms', hrend[0], hrend[1] / 1000000);
+    hrstart = process.hrtime();
+
     const reqPath = req.originalUrl.split('?')[0];
     const branch  = matchRoutes(routes, reqPath);
+
+    hrend = process.hrtime(hrstart);
+    console.log('serverRender: matchRoutes %ds %dms', hrend[0], hrend[1] / 1000000);
+    hrstart = process.hrtime();
 
     const promises = branch.map(({ route, match }) => (
       route.ssrData
         ? route.ssrData(store, { ...match, parsedURL: new URL(req.originalUrl, 'https://example.com') })
         : Promise.resolve(null)
     ));
+
+    hrend = process.hrtime(hrstart);
+    console.log('serverRender: fire ssrLoaders %ds %dms', hrend[0], hrend[1] / 1000000);
+    hrstart = process.hrtime();
 
     Promise.all(promises)
       .then(() => {
@@ -82,10 +110,10 @@ function serverRender2(req, res, htmlData) {
           hrstart = process.hrtime();
 
           // second render
-          const markup = renderToString(<App i18n={context.i18n} store={store} history={history} />);
+          const markup = ReactDOMServer.renderToString(<App i18n={context.i18n} store={store} history={history} />);
           // const markup = renderApp(req, store, context);
           hrend        = process.hrtime(hrstart);
-          console.log('serverRender: renderApp %ds %dms', hrend[0], hrend[1] / 1000000);
+          console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
           hrstart = process.hrtime();
 
           // TODO(yaniv): render head as part of the entire application or create a react component for it

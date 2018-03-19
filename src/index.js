@@ -30,7 +30,7 @@ const i18nData = window.__i18n || {};
 const language = i18nData.initialLanguage || DEFAULT_LANGUAGE;
 moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
 
-ReactDOM.render(
+ReactDOM.hydrate(
   <App i18n={i18n} store={store} history={history} {...i18nData} />,
   document.getElementById('root')
 );
