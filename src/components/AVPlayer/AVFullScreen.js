@@ -5,7 +5,7 @@ import { Icon } from 'semantic-ui-react';
 
 class AVFullscreen extends Component {
   static propTypes = {
-    element: PropTypes.instanceOf(PropTypes.Element),
+    element: PropTypes.object,
   };
 
   static defaultProps = {
