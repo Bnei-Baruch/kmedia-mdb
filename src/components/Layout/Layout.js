@@ -8,6 +8,7 @@ import { renderRoutes } from 'react-router-config';
 import { ALL_LANGUAGES, FLAG_TO_LANGUAGE } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
+import Helmets from '../shared/Helmets';
 import WrappedOmniBox from '../Search/OmniBox';
 import GAPageView from './GAPageView/GAPageView';
 import MenuItems from './MenuItems';
@@ -65,11 +66,10 @@ class Layout extends Component {
     const { t, location, route } = this.props;
     const { sidebarActive }      = this.state;
 
-    console.log('Layout.render');
-
     const showSearch = this.shouldShowSearch(location);
     return (
       <div className="layout">
+        <Helmets.Basic title={t('nav.top.header')} />
         <GAPageView location={location} />
         {/*
           <div className="debug">

@@ -11,6 +11,7 @@ import {
 } from '../../Pages/Unit/widgets/Recommended/SameCollection/Container';
 import SameCollectionWidget from '../../Pages/Unit/widgets/Recommended/SameCollection/Widget';
 import TranscriptionContainer from '../../Pages/Unit/widgets/UnitMaterials/Transcription/TranscriptionContainer';
+import Helmets from '../../shared/Helmets';
 
 class MySameCollectionWidget extends SameCollectionWidget {
 
@@ -123,6 +124,19 @@ class MyUnitPage extends UnitPage {
 
   renderInfo() {
     return null;
+  }
+
+  renderHelmet() {
+    const { unit } = this.props;
+
+    console.log(unit);
+    return (
+      <div>
+        <Helmets.Basic title={unit.name} />
+        {/*TODO: add tags from unit (tags=unit.tags) ? */}
+        <Helmets.Article publishedTime={unit.film_date} />
+      </div>
+    );
   }
 
   renderMaterials() {
