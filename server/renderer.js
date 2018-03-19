@@ -11,6 +11,7 @@ import { createMemoryHistory } from 'history';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { matchRoutes } from 'react-router-config';
+import { Helmet } from 'react-helmet';
 
 import routes from '../src/routes';
 import { LANG_UKRAINIAN } from '../src/helpers/consts';
@@ -111,16 +112,14 @@ function serverRender2(req, res, htmlData) {
 
           // second render
           const markup = ReactDOMServer.renderToString(<App i18n={context.i18n} store={store} history={history} />);
-          // const markup = renderApp(req, store, context);
           hrend        = process.hrtime(hrstart);
           console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
           hrstart = process.hrtime();
 
-          // TODO(yaniv): render head as part of the entire application or create a react component for it
-          // const headMarkup = renderHead(context);
-          // hrend            = process.hrtime(hrstart);
-          // console.log('serverRender: renderHead %ds %dms', hrend[0], hrend[1] / 1000000);
-          // hrstart = process.hrtime();
+          const helmet = Helmet.renderStatic();
+          hrend        = process.hrtime(hrstart);
+          console.log('serverRender:  Helmet.renderStatic %ds %dms', hrend[0], hrend[1] / 1000000);
+          hrstart = process.hrtime();
 
           if (context.url) {
             // Somewhere a `<Redirect>` was rendered
@@ -174,6 +173,10 @@ function serverRender2(req, res, htmlData) {
 </script>`;
 
             const html = htmlData
+              .replace(/<html lang="en">/, `<html ${helmet.htmlAttributes.toString()} >`)
+              .replace(/<title>.*<\/title>/, helmet.title.toString())
+              .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}</head>`)
+              .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
               .replace(/semantic_v2.min.css/g, `semantic_v2${cssDirection}.min.css`)
               .replace(/<div id="root"><\/div>/, rootDiv);
 
