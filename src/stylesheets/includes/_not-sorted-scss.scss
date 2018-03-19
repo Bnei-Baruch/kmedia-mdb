@@ -114,3 +114,7 @@ em {
     }
   }
 }
+/* limit the height of the media player languages dropdown in order to not get out of the screen */
+.mediaplayer__languages .ui.floating.dropdown>.menu {
+	max-height:220px;
+}
