@@ -24,12 +24,8 @@ class PDF extends Component {
   constructor(props) {
     super(props);
 
-    let pageNumber = props.pageNumber + props.startsFrom + -1;
-    if (pageNumber > props.startsFrom) {
-      pageNumber = props.startsFrom;
-    }
     this.state = {
-      pageNumber,
+      pageNumber: props.pageNumber,
       numPages: null,
       width: null,
     };
@@ -56,14 +52,23 @@ class PDF extends Component {
 
   onDocumentLoadSuccess = ({ numPages }) => {
     const { pageNumber } = this.state;
-    const pageNo         = pageNumber <= numPages ? pageNumber : numPages;
-    this.setState({ numPages, pageNumber: pageNo }, this.props.pageNumberHandler(pageNo));
+    const { startsFrom } = this.props;
+
+    let pageNo;
+    if (pageNumber >= startsFrom && pageNumber <= (startsFrom + numPages + -1)) {
+      pageNo = pageNumber;
+    } else {
+      pageNo = startsFrom;
+    }
+    this.setState({ numPages, pageNumber: pageNo });
+    this.props.pageNumberHandler(pageNo);
   };
 
   setDivSize = () => this.setState({ width: document.getElementById('pdfWrapper').getBoundingClientRect().width });
 
   setPage = (pageNo) => {
-    this.setState({ pageNumber: pageNo }, this.props.pageNumberHandler(pageNo));
+    this.setState({ pageNumber: pageNo });
+    this.props.pageNumberHandler(pageNo);
   };
 
   throttledSetDivSize = () => throttle(this.setDivSize, 500);
