@@ -7345,12 +7345,11 @@ react-cosmos@^3.2.0:
     webpack-hot-middleware "^2.18.2"
     yargs "^8.0.1"
 
-"react-day-picker@github:Bnei-Baruch/react-day-picker":
-  version "6.1.0"
-  resolved "https://codeload.github.com/Bnei-Baruch/react-day-picker/tar.gz/2e0aae974b8c08bd6f5aaa5ea39762f48f4fa7bf"
+react-day-picker@^7.1.4:
+  version "7.1.4"
+  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-7.1.4.tgz#abd187ba4baea524f765fd4cd0055bcb45c33edc"
   dependencies:
-    object-assign "^4.1.1"
-    prop-types "^15.5.10"
+    prop-types "^15.6.1"
 
 react-dev-utils@^4.2.1:
   version "4.2.1"

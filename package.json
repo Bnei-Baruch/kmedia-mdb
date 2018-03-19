@@ -87,7 +87,7 @@
     "qs": "^6.5.0",
     "react": "^15.6.1",
     "react-copy-to-clipboard": "^5.0.0",
-    "react-day-picker": "github:Bnei-Baruch/react-day-picker",
+    "react-day-picker": "^7.1.4",
     "react-dom": "^15.6.1",
     "react-ga": "^2.4.1",
     "react-i18next": "^7.5.0",
