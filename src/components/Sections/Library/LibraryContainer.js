@@ -217,6 +217,7 @@ class LibraryContainer extends Component {
       active={this.props.sortBy === sortOrder}
       title={title}
       onClick={() => this.props.sourcesSortBy(sortOrder)}
+      compact
     >
       {title}
     </Button>
@@ -227,7 +228,7 @@ class LibraryContainer extends Component {
       return null;
     }
     return (
-      <Button.Group basic className="buttons-language-selector" size="small">
+      <Button.Group basic className="buttons-language-selector" size="mini">
         {this.sortButton('AZ', t('sources-library.az'))}
         {this.sortButton('Book', t('sources-library.default'))}
       </Button.Group>
@@ -259,6 +260,8 @@ class LibraryContainer extends Component {
         value={this.state.match}
         onChange={this.handleFilterChange}
         onKeyDown={this.handleFilterKeyDown}
+        size="mini"
+        fluid
       />
     );
   };
