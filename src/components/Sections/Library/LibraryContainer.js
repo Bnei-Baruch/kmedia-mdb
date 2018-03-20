@@ -16,9 +16,6 @@ import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
-// import styles from '../../../stylesheets/includes/_layout.scss';
-
-// const MainMenuHeight2 = parseInt(styles.MainMenuHeight, 10);
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -237,7 +234,6 @@ class LibraryContainer extends Component {
     );
   };
 
-  // TODO: debounce
   handleFilterChange = (e, data) => {
     this.setState({ match: data.value });
   };
