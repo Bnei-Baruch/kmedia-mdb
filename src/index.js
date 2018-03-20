@@ -1,5 +1,5 @@
-import 'core-js/shim';
-import 'regenerator-runtime/runtime';
+// import 'core-js/shim';
+// import 'regenerator-runtime/runtime';
 import 'babel-polyfill';
 import moment from 'moment';
 import 'moment/locale/he';

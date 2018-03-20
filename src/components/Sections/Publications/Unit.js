@@ -3,6 +3,7 @@ import { Container, Grid, Header, Item } from 'semantic-ui-react';
 
 import { canonicalLink, neighborIndices, strCmp } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
+import Helmets from '../../shared/Helmets';
 import { UnitContainer, wrap as wrapContainer } from '../../Pages/Unit/Container';
 import { UnitPage, wrap as wrapPage } from '../../Pages/Unit/Page';
 import {
@@ -11,7 +12,6 @@ import {
 } from '../../Pages/Unit/widgets/Recommended/SameCollection/Container';
 import SameCollectionWidget from '../../Pages/Unit/widgets/Recommended/SameCollection/Widget';
 import TranscriptionContainer from '../../Pages/Unit/widgets/UnitMaterials/Transcription/TranscriptionContainer';
-import Helmets from '../../shared/Helmets';
 
 class MySameCollectionWidget extends SameCollectionWidget {
 
@@ -129,11 +129,10 @@ class MyUnitPage extends UnitPage {
   renderHelmet() {
     const { unit } = this.props;
 
-    console.log(unit);
     return (
       <div>
         <Helmets.Basic title={unit.name} />
-        {/*TODO: add tags from unit (tags=unit.tags) ? */}
+        {/* TODO: add tags from unit (tags=unit.tags) ? */}
         <Helmets.Article publishedTime={unit.film_date} />
       </div>
     );
