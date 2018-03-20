@@ -261,7 +261,6 @@ class LibraryContainer extends Component {
         onChange={this.handleFilterChange}
         onKeyDown={this.handleFilterKeyDown}
         size="mini"
-        fluid
       />
     );
   };
