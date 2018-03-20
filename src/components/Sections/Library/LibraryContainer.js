@@ -259,10 +259,11 @@ class LibraryContainer extends Component {
     return (
       <Input
         icon="search"
-        placeholder={t('Filter...')}
+        placeholder={t('sources-library.filter')}
         value={this.state.match}
         onChange={this.handleFilterChange}
-        onKeyDown={this.handleFilterKeyDown} />
+        onKeyDown={this.handleFilterKeyDown}
+      />
     );
   };
 

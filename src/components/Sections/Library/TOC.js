@@ -32,8 +32,9 @@ class TOC extends Component {
   state = {};
 
   componentWillReceiveProps(nextProps) {
-    const { fullPath } = nextProps;
-    this.setState({ activeId: fullPath[fullPath.length - 1].id });
+    const { fullPath }     = nextProps;
+    const { id: activeId } = fullPath[fullPath.length - 1];
+    this.setState({ activeId });
   }
 
   componentDidUpdate() {
@@ -42,6 +43,7 @@ class TOC extends Component {
     if (el) {
       el.style.height = `calc(100vh - ${this.props.stickyOffset}px)`;
     }
+    this.scrollToActive();
   }
 
   getIndex = (node1, node2) => {
@@ -61,7 +63,7 @@ class TOC extends Component {
       onClick: e => this.selectSourceById(id, e),
     };
 
-    return <Accordion.Title {...props} active={id === this.state.activeId}>{title}</Accordion.Title>;
+    return <Accordion.Title {...props} active={id === this.state.activeId} id={`title-${id}`}>{title}</Accordion.Title>;
   };
 
   toc = (sourceId, path, firstLevel = false) => {
@@ -111,10 +113,20 @@ class TOC extends Component {
 
   selectSourceById = (id, e) => {
     e.preventDefault();
-    this.setState({ activeId: id });
-    this.props.replace(`sources/${id}`);
+    // scroll to top of new document
     window.scrollTo(0, 0);
+    this.props.replace(`sources/${id}`);
     this.props.matchApplied();
+    this.setState({ activeId: id });
+  };
+
+  scrollToActive = () => {
+    const { activeId } = this.state;
+    const element = document.getElementById(`title-${activeId}`);
+    if (element === null) {
+      return;
+    }
+    element.scrollIntoView(false);
   };
 
   filterSources = (path) => {
@@ -124,7 +136,7 @@ class TOC extends Component {
       return path;
     }
 
-    const reg = new RegExp(match);
+    const reg = new RegExp(match, 'i');
     return path.map(leafId => (
       getSourceById(leafId)
     )).reduce((acc, el) => {
