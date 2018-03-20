@@ -19,11 +19,10 @@ import { actions as settings } from '../src/redux/modules/settings';
 import App from '../src/components/App/App';
 import i18nnext from './i18nnext';
 
-
 // eslint-disable-next-line no-unused-expressions
 localStorage; // DO NOT REMOVE - the import above does all the work
 
-export default function serverRender(req, res, htmlData) {
+export default function serverRender(req, res, htmlData, criticalCSS) {
   console.log('serverRender', req.originalUrl);
 
   let hrstart = process.hrtime();
@@ -42,7 +41,6 @@ export default function serverRender(req, res, htmlData) {
       initialEntries: [req.originalUrl],
     });
 
-
     hrend = process.hrtime(hrstart);
     console.log('serverRender: createMemoryHistory %ds %dms', hrend[0], hrend[1] / 1000000);
     hrstart = process.hrtime();
@@ -52,13 +50,11 @@ export default function serverRender(req, res, htmlData) {
       device: { deviceInfo: new UAParser(req.get('user-agent')).getResult() },
     };
 
-
     hrend = process.hrtime(hrstart);
     console.log('serverRender: initialState %ds %dms', hrend[0], hrend[1] / 1000000);
     hrstart = process.hrtime();
 
     const store = createStore(initialState, history);
-
 
     hrend = process.hrtime(hrstart);
     console.log('serverRender: createStore %ds %dms', hrend[0], hrend[1] / 1000000);
@@ -125,7 +121,7 @@ export default function serverRender(req, res, htmlData) {
             const direction    = getLanguageDirection(language);
             const cssDirection = direction === 'ltr' ? '' : '.rtl';
 
-            const state = store.getState();
+            const state     = store.getState();
             const storePick = pick(state, [
               'router',
               'device',
@@ -171,7 +167,7 @@ export default function serverRender(req, res, htmlData) {
             const html = htmlData
               .replace(/<html lang="en">/, `<html ${helmet.htmlAttributes.toString()} >`)
               .replace(/<title>.*<\/title>/, helmet.title.toString())
-              .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}</head>`)
+              .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}<style type="text/css">${criticalCSS}</style></head>`)
               .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
               .replace(/semantic_v2.min.css/g, `semantic_v2${cssDirection}.min.css`)
               .replace(/<div id="root"><\/div>/, rootDiv);

@@ -4,18 +4,11 @@ import express from 'express';
 
 import serverRender from './renderer';
 
+const indexHtml   = fs.readFileSync(path.resolve(__dirname, '..', 'build', 'index.html'), 'utf8');
+const criticalCSS = fs.readFileSync(path.resolve(__dirname, '..', 'build', 'critical.css'), 'utf8');
+
 function handler(req, res) {
-  const filePath = path.resolve(__dirname, '..', 'build', 'index.html');
-
-  // eslint-disable-next-line consistent-return
-  fs.readFile(filePath, 'utf8', (err, htmlData) => {
-    if (err) {
-      console.error('read err', err);
-      return res.status(404).end();
-    }
-
-    serverRender(req, res, htmlData);
-  });
+  serverRender(req, res, indexHtml, criticalCSS);
 }
 
 // initialize the application and create the routes

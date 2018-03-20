@@ -71,15 +71,6 @@ class Layout extends Component {
       <div className="layout">
         <Helmets.Basic title={t('nav.top.header')} />
         <GAPageView location={location} />
-        {/*
-          <div className="debug">
-          <span className="widescreen-only">widescreen</span>
-          <span className="large-screen-only">large screen</span>
-          <span className="computer-only">computer</span>
-          <span className="tablet-only">tablet</span>
-          <span className="mobile-only">mobile</span>
-          </div>
-        */}
         <div className="layout__header">
           <Menu inverted borderless size="huge" color="blue">
             <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.toggleSidebar}>
@@ -87,17 +78,7 @@ class Layout extends Component {
             </Menu.Item>
             <Menu.Item className="logo" header as={Link} to="/">
               <img src={logo} alt="logo" />
-              <Header inverted as="h1">
-                {t('nav.top.header')}
-
-                {/* <span> /// </span>
-                    <span className="widescreen-hidden"> - widescreen hidden</span>
-                    <span className="large-screen-hidden"> - large screen hidden</span>
-                    <span className="computer-hidden"> - computer hidden</span>
-                    <span className="tablet-hidden"> - tablet hidden</span>
-                    <span className="mobile-hidden"> - mobile hidden</span>
-                */}
-              </Header>
+              <Header inverted as="h1" content={t('nav.top.header')} />
             </Menu.Item>
             <Menu.Item className="layout__search mobile-hidden">
               {
@@ -132,20 +113,10 @@ class Layout extends Component {
             </Menu.Item>
             <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={this.closeSidebar}>
               <img src={logo} alt="logo" />
-              <Header inverted as="h1">
-                {t('nav.top.header')}
-              </Header>
+              <Header inverted as="h1" content={t('nav.top.header')} />
             </Menu.Item>
             <Menu.Item className="mobile-only layout__sidebar-search">
               <WrappedOmniBox t={t} location={location} onSearch={this.closeSidebar} />
-              {/*
-              <Search
-                className="search-omnibox"
-                fluid
-                icon={<Icon link name="search" onClick={this.handleIconClick} />}
-                size="mini"
-              />
-              */}
             </Menu.Item>
           </Menu>
           <div className="layout__sidebar-menu">
