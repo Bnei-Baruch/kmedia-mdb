@@ -113,8 +113,6 @@ class TOC extends Component {
 
   selectSourceById = (id, e) => {
     e.preventDefault();
-    // scroll to top of new document
-    window.scrollTo(0, 0);
     this.props.replace(`sources/${id}`);
     this.props.matchApplied();
     this.setState({ activeId: id });
@@ -126,7 +124,8 @@ class TOC extends Component {
     if (element === null) {
       return;
     }
-    element.scrollIntoView(false);
+    element.scrollIntoView();
+    window.scrollTo(0, 0);
   };
 
   filterSources = (path) => {
