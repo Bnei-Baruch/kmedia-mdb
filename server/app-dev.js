@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import http from 'http';
+import path from 'path';
 import express from 'express';
 import compression from 'compression';
 import proxy from 'http-proxy-middleware';
@@ -36,8 +37,12 @@ const router = express.Router();
 // root (/) should always serve our server rendered page
 router.use('^/$', handler);
 
-// serve static assets
-// We proxy these to create-react-app dev server
+// serve locales
+router.use('/locales', express.static(
+  path.resolve(__dirname, '..', 'public', 'locales'),
+));
+
+// proxy other static assets to create-react-app dev server
 router.use(['**/*.*', '/static', '/sockjs-node'], proxy({
   target: 'http://localhost:3000',
   changeOrigin: true,
