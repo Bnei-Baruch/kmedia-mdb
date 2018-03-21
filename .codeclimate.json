@@ -3,12 +3,22 @@
   "plugins":          {
   },
   "checks":          {
-		"smilar-code": {
+		"method-complxity": {
+			"threshold": 7
+		},
+		"method-count": {
+			"threshold": 30
+		},
+		"method-lines": {
+			"threshold": 50
+		},
+		"similar-code": {
 			"enabled": false
 		}
   },
   "exclude_patterns": [
-    "node_modules/",
-    "__tests__"
+    "dist/",
+    "**/node_modules/",
+    "**/__tests__"
   ]
 }
