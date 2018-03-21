@@ -16,7 +16,7 @@
 				"threshold": 50
 			}
 		},
-		"similar-code": {
+		"identical-code": {
 			"enabled": false
 		}
   },
