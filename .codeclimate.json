@@ -17,9 +17,7 @@
 			}
 		},
 		"similar-code": {
-			"config": {
-				"enabled": false
-			}
+			"enabled": false
 		}
   },
   "exclude_patterns": [
