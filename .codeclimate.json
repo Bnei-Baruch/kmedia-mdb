@@ -1,19 +1,25 @@
 {
   "version":          "2",
-  "plugins":          {
-  },
   "checks":          {
-		"method-complxity": {
-			"threshold": 7
+		"method-complexity": {
+			"config": {
+				"threshold": 7
+			}
 		},
 		"method-count": {
-			"threshold": 30
+			"config": {
+				"threshold": 30
+			}
 		},
 		"method-lines": {
-			"threshold": 50
+			"config": {
+				"threshold": 50
+			}
 		},
 		"similar-code": {
-			"enabled": false
+			"config": {
+				"enabled": false
+			}
 		}
   },
   "exclude_patterns": [
