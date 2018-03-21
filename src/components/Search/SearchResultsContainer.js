@@ -25,6 +25,7 @@ class SearchResultsContainer extends Component {
     pageNo: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
     sortBy: PropTypes.string.isRequired,
+    deb: PropTypes.bool.isRequired,
     hydrateUrl: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
     location: shapes.HistoryLocation.isRequired,
@@ -42,21 +43,21 @@ class SearchResultsContainer extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.language !== this.props.language) {
-      const { search, query, pageSize, pageNo } = this.props;
-      search(query, pageNo, pageSize);
+      const { search, query, pageSize, pageNo, deb } = this.props;
+      search(query, pageNo, pageSize, deb);
     }
   }
 
   handlePageChange = (pageNo) => {
-    const { setPage, search, query, pageSize } = this.props;
+    const { setPage, search, query, pageSize, deb } = this.props;
     setPage(pageNo);
-    search(query, pageNo, pageSize);
+    search(query, pageNo, pageSize, deb);
   };
 
   handleSortByChanged = (e, data) => {
-    const { setSortBy, search, query, pageSize, pageNo } = this.props;
+    const { setSortBy, search, query, pageSize, pageNo, deb } = this.props;
     setSortBy(data.value);
-    search(query, pageNo, pageSize);
+    search(query, pageNo, pageSize, deb);
   };
 
   handleFiltersChanged = () => {
@@ -64,8 +65,8 @@ class SearchResultsContainer extends Component {
   };
 
   handleFiltersHydrated = () => {
-    const { search, query, pageSize, pageNo } = this.props;
-    search(query, pageNo, pageSize);
+    const { search, query, pageSize, pageNo, deb } = this.props;
+    search(query, pageNo, pageSize, deb);
   };
 
   render() {
@@ -134,6 +135,7 @@ const mapState = (state) => {
     query: selectors.getQuery(state.search),
     pageNo: selectors.getPageNo(state.search),
     sortBy: selectors.getSortBy(state.search),
+    deb: selectors.getDeb(state.search),
     pageSize: settingsSelectors.getPageSize(state.settings),
     language: settingsSelectors.getLanguage(state.settings),
     wip: selectors.getWip(state.search),
