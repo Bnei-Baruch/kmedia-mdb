@@ -90,6 +90,14 @@ class PDF extends Component {
             }
           </Document>
         </div>
+        <Container fluid textAlign="center">
+          <PDFMenu
+            numPages={numPages}
+            pageNumber={pageNumber}
+            startsFrom={startsFrom}
+            setPage={this.setPage}
+          />
+        </Container>
       </div>
     );
   }
