@@ -16,6 +16,7 @@ import { getLanguageDirection } from '../src/helpers/i18n-utils';
 import { getLanguageFromPath } from '../src/helpers/url';
 import createStore from '../src/redux/createStore';
 import { actions as settings } from '../src/redux/modules/settings';
+import { actions as ssr } from '../src/redux/modules/ssr';
 import App from '../src/components/App/App';
 import i18nnext from './i18nnext';
 
@@ -90,7 +91,6 @@ export default function serverRender(req, res, next, htmlData, criticalCSS) {
             const helmet = Helmet.renderStatic();
             hrend        = process.hrtime(hrstart);
             console.log('serverRender:  Helmet.renderStatic %ds %dms', hrend[0], hrend[1] / 1000000);
-            hrstart = process.hrtime();
 
             if (context.url) {
               // Somewhere a `<Redirect>` was rendered
@@ -100,30 +100,9 @@ export default function serverRender(req, res, next, htmlData, criticalCSS) {
               const direction    = getLanguageDirection(language);
               const cssDirection = direction === 'ltr' ? '' : '.rtl';
 
-              const state     = store.getState();
-              const storePick = pick(state, [
-                'router',
-                'device',
-                'settings',
-                'mdb',
-                'filters',
-                'lists',
-                'home',
-                'programs',
-                'events',
-                'publications',
-                'search',
-                'assets',
-              ]);
-
-              storePick.mdb.errors = {
-                units: {},
-                collections: {},
-                lastLesson: null,
-              };
-
-              // console.log(util.inspect(storePick, { showHidden: true, depth: null }));
-              const storeData = serialize(storePick);
+              store.dispatch(ssr.prepare());
+              // console.log(util.inspect(store.getState(), { showHidden: true, depth: 2 }));
+              const storeData = serialize(store.getState());
 
               const i18nData = serialize(
                 {
@@ -156,8 +135,6 @@ export default function serverRender(req, res, next, htmlData, criticalCSS) {
               }
 
               res.send(html);
-              hrend = process.hrtime(hrstart);
-              console.log('serverRender: res.send %ds %dms', hrend[0], hrend[1] / 1000000);
             }
           })
           .catch(next);

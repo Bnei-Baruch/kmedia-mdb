@@ -1,5 +1,8 @@
 import { createAction, handleActions } from 'redux-actions';
+import mapValues from 'lodash/mapValues';
+
 import { types as settings } from './settings';
+import { types as ssr } from './ssr';
 
 /* Types */
 
@@ -92,7 +95,11 @@ const onSetLanguage = state => (
   }, {})
 );
 
+const onSSRPrepare = state =>
+  mapValues(state, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
+
 export const reducer = handleActions({
+  [ssr.PREPARE]: onSSRPrepare,
   [settings.SET_LANGUAGE]: onSetLanguage,
 
   [SET_PAGE]: onSetPage,

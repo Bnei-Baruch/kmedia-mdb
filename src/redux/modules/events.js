@@ -3,6 +3,7 @@ import { createAction, handleActions } from 'redux-actions';
 import { isEmpty } from '../../helpers/utils';
 import i18n from '../../helpers/i18nnext';
 import { types as settings } from './settings';
+import { types as ssr } from './ssr';
 import { selectors as mdb } from './mdb';
 
 const ALL_COUNTRIES = 'ALLCOUNTRIES';
@@ -44,9 +45,6 @@ export const actions = {
 /* Reducer */
 
 const initialState = {
-  total: 0,
-  items: [],
-  pageNo: 1,
   wip: {
     collections: false,
   },
@@ -101,7 +99,7 @@ const createItem = (id, name, children, typeName, extra) =>
   ({ id, name, children, typeName, ...extra });
 
 const onFetchAllEventsSuccess = (state, action) => {
-  const collections = action.payload.collections;
+  const { collections } = action.payload;
 
   // Map event IDs by content_type
   const eventsByType = collections.reduce((acc, val) => {
@@ -120,12 +118,12 @@ const onFetchAllEventsSuccess = (state, action) => {
   const allCountries = createItem(ALL_COUNTRIES, i18n.t('filters.locations-filter.allItem'), [ALL_CITIES], 'country');
 
   const { countries, cities } = collections.reduce((acc, collection) => {
-    const country = collection.country;
+    const { country, city } = collection;
+
     if (country && !acc.countries[country]) {
       acc.countries[country] = createItem(country, country, [ALL_CITIES], 'country');
     }
 
-    const city = collection.city;
     if (city && !acc.cities[city]) {
       acc.cities[city] = createItem(city, city, [], 'city', { parentId: country });
     }
@@ -190,7 +188,15 @@ const onSetLanguage = state => (
   }
 );
 
+const onSSRPrepare = state => ({
+  ...state,
+  errors: {
+    collections: state.errors.collections ? state.errors.collections.toString() : state.errors.collections
+  }
+});
+
 export const reducer = handleActions({
+  [ssr.PREPARE]: onSSRPrepare,
   [settings.SET_LANGUAGE]: onSetLanguage,
 
   [FETCH_ALL_EVENTS]: setStatus,
@@ -208,11 +214,11 @@ const makeYearsPredicate = values => x =>
 
 const makeLocationsPredicate = values => x =>
   isEmpty(values) ||
-  values.some(v => {
+  values.some((v) => {
     const [country, city] = v;
-    
-    return (country === ALL_COUNTRIES || country === x.country) && 
-            (!city || city === ALL_CITIES || city === x.city);
+
+    return (country === ALL_COUNTRIES || country === x.country) &&
+      (!city || city === ALL_CITIES || city === x.city);
   });
 
 const makeHolidaysPredicate = values => x =>
@@ -230,16 +236,16 @@ const predicateMap = {
 const getFilteredData = (state, type, filtersState, mdbState) => {
   const predicates = filtersState.map(x => predicateMap[x.name](x.values)) || [];
 
-  return (state.eventsByType[type] || []).filter(x => {
+  return (state.eventsByType[type] || []).filter((x) => {
     const collection = mdb.getCollectionById(mdbState, x);
     return predicates.every(p => p(collection));
   });
 };
 
-const getWip    = state => state.wip;
-const getErrors = state => state.errors;
-const getLocationsTree   = state => state.locationsTree;
-const getHolidaysTree    = state => state.holidaysTree;
+const getWip           = state => state.wip;
+const getErrors        = state => state.errors;
+const getLocationsTree = state => state.locationsTree;
+const getHolidaysTree  = state => state.holidaysTree;
 
 export const selectors = {
   getWip,

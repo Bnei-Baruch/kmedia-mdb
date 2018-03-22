@@ -1,7 +1,10 @@
-import groupBy from 'lodash/groupBy';
 import { createAction, handleActions } from 'redux-actions';
-import { types as settings } from './settings';
+import groupBy from 'lodash/groupBy';
+import mapValues from 'lodash/mapValues';
+
 import { MEDIA_TYPES } from '../../helpers/consts';
+import { types as settings } from './settings';
+import { types as ssr } from './ssr';
 
 /* Types */
 
@@ -313,7 +316,17 @@ const onReceiveContentUnits = (state, action) => {
   };
 };
 
+const onSSRPrepare = state => ({
+  ...state,
+  errors: {
+    units: mapValues(state.errors.units, x => (x ? x.toString() : x)),
+    collections: mapValues(state.errors.collections, x => (x ? x.toString() : x)),
+    lastLesson: state.errors.lastLesson ? state.errors.lastLesson.toString() : state.errors.lastLesson,
+  }
+});
+
 export const reducer = handleActions({
+  [ssr.PREPARE]: onSSRPrepare,
   [settings.SET_LANGUAGE]: () => freshStore(),
 
   [FETCH_UNIT]: setStatus,

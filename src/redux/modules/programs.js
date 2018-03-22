@@ -50,12 +50,10 @@ const onReceiveCollections = (state, action) => {
   };
 };
 
-const onReceiveRecentlyUpdated = (state, action) => {
-  return {
-    ...state,
-    recentlyUpdated: action.payload
-  };
-};
+const onReceiveRecentlyUpdated = (state, action) => ({
+  ...state,
+  recentlyUpdated: action.payload
+});
 
 export const reducer = handleActions({
   [settings.SET_LANGUAGE]: onSetLanguage,
