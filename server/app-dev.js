@@ -6,11 +6,12 @@ import compression from 'compression';
 import proxy from 'http-proxy-middleware';
 import { resourceMonitorMiddleware } from 'express-watcher';
 
+import * as middleware from './middleware';
 import serverRender from './renderer';
 
 const CRA_CLIENT_PORT = process.env.CRA_CLIENT_PORT || 3000;
 
-function handler(req, res) {
+function handler(req, res, next) {
   http.get(`http://localhost:${CRA_CLIENT_PORT}/index.html`, (result) => {
     result.setEncoding('utf8');
     let htmlData = '';
@@ -18,12 +19,9 @@ function handler(req, res) {
       htmlData += chunk;
     });
     result.on('end', () => {
-      serverRender(req, res, htmlData);
+      serverRender(req, res, next, htmlData);
     });
-  }).on('error', (e) => {
-    console.error(e.message);
-    return res.status(404).end();
-  });
+  }).on('error', next);
 }
 
 // initialize the application and create the routes
@@ -55,5 +53,8 @@ router.use('*', handler);
 
 // tell the app to use the above rules
 app.use(router);
+
+app.use(middleware.logErrors);
+app.use(middleware.errorHandler);
 
 module.exports = app;
