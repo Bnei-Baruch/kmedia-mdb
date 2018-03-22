@@ -164,9 +164,11 @@ export const reducer = handleActions({
 
   [settings.SET_LANGUAGE]: (state) => {
     const indexById = state.indexById || initialState.indexById;
+    const content   = state.content || initialState.content;
     return {
       ...initialState,
-      indexById
+      indexById,
+      content,
     };
   },
 

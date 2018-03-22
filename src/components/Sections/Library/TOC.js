@@ -30,7 +30,10 @@ class TOC extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { fullPath } = nextProps;
-    this.setState({ activeId: fullPath[fullPath.length - 1].id });
+    const activeId     = fullPath[fullPath.length - 1].id;
+    if (activeId !== this.state.activeId) {
+      this.setState({ activeId });
+    }
   }
 
   componentDidUpdate() {
