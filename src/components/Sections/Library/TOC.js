@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Accordion, Ref, Sticky } from 'semantic-ui-react';
+import { Accordion, Ref, Sticky, Button, Header } from 'semantic-ui-react';
 
 import { BS_SHAMATI } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
@@ -18,6 +18,7 @@ class TOC extends Component {
     getSourceById: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
     stickyOffset: PropTypes.number,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -112,7 +113,7 @@ class TOC extends Component {
   };
 
   render() {
-    const { fullPath, rootId, contextRef, stickyOffset } = this.props;
+    const { fullPath, rootId, contextRef, stickyOffset, t } = this.props;
 
     const activeIndex = this.getIndex(fullPath[1], fullPath[2]);
     if (activeIndex === -1) {
@@ -125,7 +126,13 @@ class TOC extends Component {
     return (
       <Sticky context={contextRef} offset={stickyOffset} className="source__toc">
         <Ref innerRef={this.handleAccordionContext}>
-          <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} />
+          <div>
+            <div className="toc__mobile-header mobile-only">
+            <Header size="medium">{t('sources-library.toc')}</Header>
+              <Button icon="list layout" />
+            </div>
+            <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} />
+          </div>
         </Ref>
       </Sticky>
     );

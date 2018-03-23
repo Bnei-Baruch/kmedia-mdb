@@ -70,15 +70,15 @@ class Layout extends Component {
     return (
       <div className="layout">
         <GAPageView location={location} />
-        {/*
-          <div className="debug">
-          <span className="widescreen-only">widescreen</span>
-          <span className="large-screen-only">large screen</span>
-          <span className="computer-only">computer</span>
-          <span className="tablet-only">tablet</span>
-          <span className="mobile-only">mobile</span>
-          </div>
-        */}
+        
+          {/* <div className="debug">
+            <span className="widescreen-only">widescreen</span>
+            <span className="large-screen-only">large screen</span>
+            <span className="computer-only">computer</span>
+            <span className="tablet-only">tablet</span>
+            <span className="mobile-only">mobile</span>
+          </div> */}
+       
         <div className="layout__header">
           <Menu inverted borderless size="huge" color="blue">
             <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.toggleSidebar}>
@@ -88,14 +88,6 @@ class Layout extends Component {
               <img src={logo} alt="logo" />
               <Header inverted as="h1">
                 {t('nav.top.header')}
-
-                {/* <span> /// </span>
-                    <span className="widescreen-hidden"> - widescreen hidden</span>
-                    <span className="large-screen-hidden"> - large screen hidden</span>
-                    <span className="computer-hidden"> - computer hidden</span>
-                    <span className="tablet-hidden"> - tablet hidden</span>
-                    <span className="mobile-hidden"> - mobile hidden</span>
-                */}
               </Header>
             </Menu.Item>
             <Menu.Item className="layout__search mobile-hidden">

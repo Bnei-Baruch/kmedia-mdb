@@ -68,7 +68,7 @@
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "moment-duration-format": "^2.0.1",
-    "node-sass-chokidar": "^0.0.3",
+    "node-sass-chokidar": "^1.1.0",
     "path-to-regexp": "^2.1.0",
     "prop-types": "^15.5.10",
     "qs": "^6.5.0",

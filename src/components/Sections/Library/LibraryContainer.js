@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { replace as routerReplace } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Dropdown, Grid, Header } from 'semantic-ui-react';
+import { Button, Container, Dropdown, Grid, Header, Popup, Menu, Label } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
@@ -47,6 +47,7 @@ class LibraryContainer extends Component {
   state = {
     lastLoadedId: null,
     isReadable: false,
+    tocisactive: false,
     fontSize: 0,
     theme: 'light',
   };
@@ -168,18 +169,22 @@ class LibraryContainer extends Component {
     this.headerMenuRef = ref;
   };
 
+  handleTocIsActive = () => {
+    this.setState({ tocisactive: !this.state.tocisactive });
+  }
+
   handleIsReadable = () => {
     this.setState({ isReadable: !this.state.isReadable });
   };
 
   handleIncreaseFontSize = (e, data) => {
-    if (this.state.fontSize < 3) {
+    if (this.state.fontSize < 6) {
       this.setState({ fontSize: this.state.fontSize + 1 });
     }
   };
 
   handleDecreaseFontSize = (e, data) => {
-    if (this.state.fontSize > -3) {
+    if (this.state.fontSize > -2) {
       this.setState({ fontSize: this.state.fontSize - 1 });
     }
   };
@@ -220,7 +225,7 @@ class LibraryContainer extends Component {
     }
 
     return (
-      <Header size="medium" className="">
+      <Header size="small" className="">
         <Header.Subheader>
           <small>
             {displayName} / {`${parentName} ${description || ''} `}
@@ -266,61 +271,61 @@ class LibraryContainer extends Component {
       );
     }
 
-    const { isReadable, fontSize, theme, secondaryHeaderHeight } = this.state;
+    const { isReadable, fontSize, theme, secondaryHeaderHeight, tocisactive } = this.state;
 
     return (
-      <div className={classnames({ source: true, 'is-readable': isReadable })}>
+      <div className={classnames({ 
+        source: true,
+        'is-readable': isReadable,
+        'toc--is-active': tocisactive,
+        [`is-${theme}`]: true,
+         })}>
         <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
           <Container>
             <Grid padded centered>
               <Grid.Row verticalAlign="bottom">
-                <Grid.Column tablet={5} computer={4} className="mobile-hidden">
-                  <Header size="medium">
+                <Grid.Column tablet={5} computer={4}  className="mobile-hidden">
+                  <Header size="small">
                     {t('sources-library.toc')}
                   </Header>
                 </Grid.Column>
-                <Grid.Column mobile={14} tablet={11} computer={12} className="source__content-header">
+                <Grid.Column mobile={16} tablet={11} computer={12} className="source__content-header">
                   <div>
-                    {this.header(sourceId, fullPath)}
-
-                    <Dropdown trigger={<Button icon="setting" />} icon>
-                      <Dropdown.Menu className="left">
-                        <Dropdown.Header>font size</Dropdown.Header>
-                        <Dropdown.Item icon="plus" text="Increase font size" onClick={this.handleIncreaseFontSize} />
-                        <Dropdown.Item icon="minus" text="Decrease font size" onClick={this.handleDecreaseFontSize} />
-                        <Dropdown.Divider />
-                        <Dropdown.Header>theme</Dropdown.Header>
-                        <Dropdown.Item
-                          label={{
-                            color: 'white',
-                            empty: true,
-                            circular: true
-                          }}
-                          text="Light theme"
-                          onClick={this.handleLightTheme}
-                        />
-                        <Dropdown.Item
-                          label={{
-                            color: 'black',
-                            empty: true,
-                            circular: true
-                          }}
-                          text="Dark theme"
-                          onClick={this.handleDarkTheme}
-                        />
-                        <Dropdown.Item
-                          label={{
-                            color: 'sepia',
-                            empty: true,
-                            circular: true
-                          }}
-                          text="Sepia theme"
-                          onClick={this.handleSepiaTheme}
-                        />
-                      </Dropdown.Menu>
-                    </Dropdown>
-
+                    <div className="mobile-hidden">{this.header(sourceId, fullPath)}</div>
+                    <Popup
+                      trigger={<Button icon='setting' />}
+                      
+                      on='click'
+                      position='bottom right'
+                    >
+                      <Popup.Content>
+                        <Menu vertical>
+                        
+                        <Menu.Header>font size</Menu.Header>
+                        
+                        <Menu.Item icon="plus" name="Increase font size" onClick={this.handleIncreaseFontSize} />
+                        <Menu.Item icon="minus" name="Decrease font size" onClick={this.handleDecreaseFontSize} />
+                        
+                        <Menu.Header>theme</Menu.Header>
+                        <Menu.Item onClick={this.handleLightTheme}>
+                          <Label color="white" empty circular/>
+                          Light theme
+                        </Menu.Item>
+                        <Menu.Item onClick={this.handleDarkTheme}>
+                          <Label color="black" empty circular/>
+                          Dark theme
+                        </Menu.Item>
+                        <Menu.Item onClick={this.handleSepiaTheme}>
+                          <Label color="sepia" empty circular/>
+                          Sepia theme
+                        </Menu.Item>
+                      
+                        </Menu>
+                      </Popup.Content>
+                    </Popup>
                     <Button icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
+                    <Button className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
+                    
                   </div>
                 </Grid.Column>
               </Grid.Row>
@@ -330,14 +335,16 @@ class LibraryContainer extends Component {
         <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
           <Grid padded centered>
             <Grid.Row>
-              <Grid.Column tablet={5} computer={4} className="mobile-hidden">
+              <Grid.Column mobile={16} tablet={5} computer={4} onClick={this.handleTocIsActive}>
                 <TOC
+
                   fullPath={fullPath}
                   rootId={parent}
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
                   replace={this.props.replace}
                   stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}
+                  t={t}
                 />
               </Grid.Column>
               <Grid.Column
@@ -346,7 +353,6 @@ class LibraryContainer extends Component {
                 computer={12}
                 className={classnames({
                   'source__content-wrapper': true,
-                  [`is-${theme}`]: true,
                   [`size${fontSize}`]: true,
                 })}
               >

@@ -1,6 +1,6 @@
 $sidebar-width: 290px;
 $main-menu-height: 60px;
-$secondary-header-height: 70px;
+$secondary-header-height: 10px;
 
 @import 'rtl/layout';
 
@@ -27,7 +27,7 @@ $secondary-header-height: 70px;
     position: fixed;
     right: 0;
     top: 0;
-    z-index: 999999;
+    z-index: 900;
   }
   &__search {
     flex: 1 0 auto !important;
@@ -44,7 +44,7 @@ $secondary-header-height: 70px;
     transform: translate(-100%, 0);
     transition: transform .3s;
     width: $sidebar-width;
-    z-index: 999999;
+    z-index: 900;
 
     @include small-mobile {
       width: 100%;
@@ -103,6 +103,11 @@ $secondary-header-height: 70px;
     position: fixed;
     right: 0;
     z-index: 1;
+
+    .row {
+      padding-bottom: .5rem !important;
+      padding-top: .5rem !important;
+    }
 
     +.ui.container {
       padding-top: $secondary-header-height;
