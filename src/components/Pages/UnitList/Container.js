@@ -50,6 +50,8 @@ export class UnitListContainer extends withPagination {
   // that filters are already hydrated on didMount.
   // Anyway, now with SSR. It's for sure that isFiltersHydrated is true.
   // but we don't want to askForData. Server did that part for us...
+  // Note: found out one such possible flow (collection page):
+  // mount -> unmount -> mount again
 
   // componentDidMount() {
   //   // If filters are already hydrated, handleFiltersHydrated won't be called.

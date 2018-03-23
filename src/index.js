@@ -15,12 +15,14 @@ import { DEFAULT_LANGUAGE, LANG_UKRAINIAN } from './helpers/consts';
 import i18n from './helpers/i18nnext';
 import createStore from './redux/createStore';
 import { actions as mdb } from './redux/modules/mdb';
+import { actions as ssr } from './redux/modules/ssr';
 import App from './components/App/App';
 
 ReactGA.initialize('UA-108372395-1', { gaOptions: { transport: 'beacon' } });
 
 const history = createHistory();
 const store   = createStore(window.__data, history);
+store.dispatch(ssr.hydrate());
 console.log('window.__data', window.__data);
 
 // eslint-disable-next-line no-underscore-dangle

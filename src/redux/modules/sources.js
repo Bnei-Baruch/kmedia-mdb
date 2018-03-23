@@ -1,8 +1,10 @@
 import { createAction, handleActions } from 'redux-actions';
 import identity from 'lodash/identity';
+import mapValues from 'lodash/mapValues';
 
 import { strCmp, tracePath } from '../../helpers/utils';
 import { types as settings } from './settings';
+import { types as ssr } from './ssr';
 import { BS_IGROT, BS_SHAMATI, BS_TAAS, MR_TORA, RB_IGROT, RH_ZOHAR, } from '../../helpers/consts';
 
 /* Types */
@@ -147,12 +149,26 @@ const getIdFuncs = (byId) => {
   return { getByID, getPath, getPathByID };
 };
 
+const onSSRPrepare = state => ({
+  ...initialState,
+  error: state.error ? state.error.toString() : state.error,
+  indexById: mapValues(state.indexById, x => ({ ...x, err: x.err ? x.err.toString() : x.err })),
+  content: {
+    ...state.content,
+    err: state.content.err ? state.content.err.toString() : state.content.err,
+  },
+});
+
 export const reducer = handleActions({
+  [ssr.PREPARE]: onSSRPrepare,
+
   [settings.SET_LANGUAGE]: (state) => {
     const indexById = state.indexById || initialState.indexById;
+    const content   = state.content || initialState.content;
     return {
       ...initialState,
-      indexById
+      indexById,
+      content,
     };
   },
 

@@ -1,5 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 
+import { types as ssr } from './ssr';
+
 /* Types */
 
 const AUTOCOMPLETE         = 'Search/AUTOCOMPLETE';
@@ -34,7 +36,7 @@ const autocomplete        = createAction(AUTOCOMPLETE);
 const autocompleteSuccess = createAction(AUTOCOMPLETE_SUCCESS);
 const autocompleteFailure = createAction(AUTOCOMPLETE_FAILURE);
 const search              = createAction(SEARCH, (q, pageNo, pageSize) =>
-                                                 ({ q, pageNo, pageSize }));
+  ({ q, pageNo, pageSize }));
 const searchSuccess       = createAction(SEARCH_SUCCESS);
 const searchFailure       = createAction(SEARCH_FAILURE);
 const setPage             = createAction(SET_PAGE);
@@ -66,10 +68,17 @@ const initialState = {
   pageNo: 1,
   sortBy: 'relevance',
   wip: false,
-  err: null,
+  error: null,
 };
 
+const onSSRPrepare = state => ({
+  ...state,
+  error: state.error ? state.error.toString() : state.error,
+});
+
 export const reducer = handleActions({
+  [ssr.PREPARE]: onSSRPrepare,
+
   [AUTOCOMPLETE]: (state, action) => ({
     ...state,
     acQ: action.payload,

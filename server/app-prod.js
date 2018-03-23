@@ -2,13 +2,14 @@ import fs from 'fs';
 import path from 'path';
 import express from 'express';
 
+import * as middleware from './middleware';
 import serverRender from './renderer';
 
 const indexHtml   = fs.readFileSync(path.resolve(__dirname, '..', 'build', 'index.html'), 'utf8');
 const criticalCSS = fs.readFileSync(path.resolve(__dirname, '..', 'build', 'critical.css'), 'utf8');
 
-function handler(req, res) {
-  serverRender(req, res, indexHtml, criticalCSS);
+function handler(req, res, next) {
+  serverRender(req, res, next, indexHtml, criticalCSS);
 }
 
 // initialize the application and create the routes
@@ -34,5 +35,8 @@ router.use('*', handler);
 
 // tell the app to use the above rules
 app.use(router);
+
+app.use(middleware.logErrors);
+app.use(middleware.errorHandler);
 
 module.exports = app;
