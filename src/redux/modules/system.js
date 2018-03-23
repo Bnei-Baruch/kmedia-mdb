@@ -9,7 +9,7 @@ const READY = 'System/READY';
 export const types = {
   BOOT,
   INIT,
-  READY
+  READY,
 };
 
 /* Actions */
@@ -21,7 +21,7 @@ const ready = createAction(READY);
 export const actions = {
   boot,
   init,
-  ready
+  ready,
 };
 
 /* Reducer */
@@ -30,6 +30,7 @@ const initialState = {
   isReady: false,
   deviceInfo: null,
   autoPlayAllowed: false,
+  visibilityState: false
 };
 
 export const reducer = handleActions({
@@ -42,7 +43,7 @@ export const reducer = handleActions({
   [READY]: state => ({
     ...state,
     isReady: true
-  })
+  }),
 }, initialState);
 
 /* Selectors */
@@ -56,3 +57,4 @@ export const selectors = {
   getDeviceInfo,
   getAutoPlayAllowed,
 };
+

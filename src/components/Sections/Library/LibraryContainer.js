@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { replace as routerReplace } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Dropdown, Grid, Header, Popup, Menu, Label } from 'semantic-ui-react';
+import { Button, Container, Dropdown, Grid, Header, Popup, Menu, Label, Input, } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
@@ -27,8 +27,11 @@ class LibraryContainer extends Component {
     })),
     language: PropTypes.string.isRequired,
     fetchIndex: PropTypes.func.isRequired,
+    sourcesSortBy: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,
     getPathByID: PropTypes.func,
+    sortBy: PropTypes.string.isRequired,
+    NotToSort: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     areSourcesLoaded: PropTypes.bool,
     t: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
@@ -50,6 +53,7 @@ class LibraryContainer extends Component {
     tocisactive: false,
     fontSize: 0,
     theme: 'light',
+    match: '',
   };
 
   componentDidMount() {
@@ -225,7 +229,7 @@ class LibraryContainer extends Component {
     }
 
     return (
-      <Header size="small" className="">
+      <Header size="small">
         <Header.Subheader>
           <small>
             {displayName} / {`${parentName} ${description || ''} `}
@@ -243,11 +247,65 @@ class LibraryContainer extends Component {
     this.fetchIndices(sourceId);
   };
 
+  sortButton = (sortOrder, title) => (
+    <Button
+      icon
+      active={this.props.sortBy === sortOrder}
+      title={title}
+      onClick={() => this.props.sourcesSortBy(sortOrder)}
+      compact
+    >
+      {title}
+    </Button>
+  );
+
+  switchSortingOrder = (parentId, t) => {
+    if (this.props.NotToSort.findIndex(a => a === parentId) !== -1) {
+      return null;
+    }
+    return (
+      <Button.Group basic className="buttons-language-selector" size="mini">
+        {this.sortButton('AZ', t('sources-library.az'))}
+        {this.sortButton('Book', t('sources-library.default'))}
+      </Button.Group>
+    );
+  };
+
+  handleFilterChange = (e, data) => {
+    this.setState({ match: data.value });
+  };
+
+  handleFilterKeyDown = (e) => {
+    if (e.keyCode === 27) { // Esc
+      this.handleFilterClear();
+    }
+  };
+
+  handleFilterClear = () => {
+    this.setState({ match: '' });
+  };
+
+  matchString = (parentId, t) => {
+    if (this.props.NotToSort.findIndex(a => a === parentId) !== -1) {
+      return null;
+    }
+    return (
+      <Input
+        icon="search"
+        placeholder={t('sources-library.filter')}
+        value={this.state.match}
+        onChange={this.handleFilterChange}
+        onKeyDown={this.handleFilterKeyDown}
+        size="mini"
+      />
+    );
+  };
+
   render() {
     const { sourceId, indexMap, getSourceById, language, t } = this.props;
 
     const fullPath = this.getFullPath(sourceId);
-    const parent   = this.properParentId(fullPath);
+    const parentId = this.properParentId(fullPath);
 
     const index = isEmpty(sourceId) ? {} : indexMap[sourceId];
 
@@ -271,7 +329,8 @@ class LibraryContainer extends Component {
       );
     }
 
-    const { isReadable, fontSize, theme, secondaryHeaderHeight, tocisactive } = this.state;
+    const { isReadable, fontSize, theme, secondaryHeaderHeight, tocisactive, match, } = this.state;
+    const matchString = this.matchString(parentId, t);
 
     return (
       <div className={classnames({ 
@@ -285,9 +344,9 @@ class LibraryContainer extends Component {
             <Grid padded centered>
               <Grid.Row verticalAlign="bottom">
                 <Grid.Column tablet={5} computer={4}  className="mobile-hidden">
-                  <Header size="small">
-                    {t('sources-library.toc')}
-                  </Header>
+                  <Header size="small">{t('sources-library.toc')}</Header>
+                  {this.switchSortingOrder(parentId, t)}
+                  {matchString}
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={11} computer={12} className="source__content-header">
                   <div>
@@ -337,9 +396,10 @@ class LibraryContainer extends Component {
             <Grid.Row>
               <Grid.Column mobile={16} tablet={5} computer={4} onClick={this.handleTocIsActive}>
                 <TOC
-
+                  match={matchString ? match : ''}
+                  matchApplied={this.handleFilterClear}
                   fullPath={fullPath}
-                  rootId={parent}
+                  rootId={parentId}
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
                   replace={this.props.replace}
@@ -381,10 +441,13 @@ export default withRouter(connect(
     language: settings.getLanguage(state.settings),
     getSourceById: sources.getSourceById(state.sources),
     getPathByID: sources.getPathByID(state.sources),
+    sortBy: sources.sortBy(state.sources),
     areSourcesLoaded: sources.areSourcesLoaded(state.sources),
+    NotToSort: sources.NotToSort
   }),
   dispatch => bindActionCreators({
     fetchIndex: sourceActions.fetchIndex,
+    sourcesSortBy: sourceActions.sourcesSortBy,
     replace: routerReplace,
   }, dispatch)
 )(translate()(LibraryContainer)));

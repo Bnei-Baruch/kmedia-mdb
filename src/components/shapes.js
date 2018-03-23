@@ -7,6 +7,11 @@ export const RouterMatch = PropTypes.shape({
   isExact: PropTypes.bool,
 });
 
+export const History = PropTypes.shape({
+  push: PropTypes.func.isRequired,
+  replace: PropTypes.func.isRequired
+});
+
 export const HistoryLocation = PropTypes.shape({
   pathname: PropTypes.string,
   search: PropTypes.string,

@@ -13,6 +13,7 @@ import playerHelper from '../../helpers/player';
 import { fromHumanReadableTime, toHumanReadableTime } from '../../helpers/time';
 import { getQuery, updateQuery } from '../../helpers/url';
 import { isEmpty } from '../../helpers/utils';
+import * as shapes from '../shapes';
 import { PLAYER_MODE } from './constants';
 import AVPlayPause from './AVPlayPause';
 import AVPlaybackRate from './AVPlaybackRate';
@@ -51,7 +52,7 @@ class AVPlayer extends PureComponent {
     onSwitchAV: PropTypes.func.isRequired,
 
     // Slice props
-    history: PropTypes.object.isRequired,
+    history: shapes.History.isRequired,
 
     // Playlist props
     autoPlay: PropTypes.bool,

@@ -70,7 +70,7 @@ class PDFMenu extends Component {
     }
 
     const realValue = parsed + -this.props.startsFrom + 1;
-    if (realValue < 1 || realValue > this.state.numPages) {
+    if (realValue < 1 || realValue > this.props.numPages) {
       this.setState({ inputError: true }, this.restoreError);
       return bad;
     }
@@ -84,7 +84,7 @@ class PDFMenu extends Component {
     const { inputValue, inputError } = this.state;
 
     return (
-      <Menu compact className="taas-pagination-menu" color="grey">
+      <Menu compact className="taas-pagination-menu" color="grey" size="mini">
         <Menu.Item onClick={this.firstPage}>{startsFrom} &laquo;</Menu.Item>
         <Menu.Item onClick={this.prevPage}>&lsaquo;</Menu.Item>
         <Form onSubmit={this.handleSubmit}>
