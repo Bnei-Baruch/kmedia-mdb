@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { replace as routerReplace } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Dropdown, Grid, Header, Popup, Menu, Label, Input, } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Input, Label, Menu, Popup, } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
@@ -175,7 +175,7 @@ class LibraryContainer extends Component {
 
   handleTocIsActive = () => {
     this.setState({ tocisactive: !this.state.tocisactive });
-  }
+  };
 
   handleIsReadable = () => {
     this.setState({ isReadable: !this.state.isReadable });
@@ -330,20 +330,20 @@ class LibraryContainer extends Component {
     }
 
     const { isReadable, fontSize, theme, secondaryHeaderHeight, tocisactive, match, } = this.state;
-    const matchString = this.matchString(parentId, t);
+    const matchString                                                                 = this.matchString(parentId, t);
 
     return (
-      <div className={classnames({ 
+      <div className={classnames({
         source: true,
         'is-readable': isReadable,
         'toc--is-active': tocisactive,
         [`is-${theme}`]: true,
-         })}>
+      })}>
         <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
           <Container>
             <Grid padded centered>
               <Grid.Row verticalAlign="bottom">
-                <Grid.Column tablet={5} computer={4}  className="mobile-hidden">
+                <Grid.Column tablet={5} computer={4} className="mobile-hidden">
                   <Header size="small">{t('sources-library.toc')}</Header>
                   {this.switchSortingOrder(parentId, t)}
                   {matchString}
@@ -353,38 +353,38 @@ class LibraryContainer extends Component {
                     <div className="mobile-hidden">{this.header(sourceId, fullPath)}</div>
                     <Popup
                       trigger={<Button icon='setting' />}
-                      
+
                       on='click'
                       position='bottom right'
                     >
                       <Popup.Content>
                         <Menu vertical>
-                        
-                        <Menu.Header>font size</Menu.Header>
-                        
-                        <Menu.Item icon="plus" name="Increase font size" onClick={this.handleIncreaseFontSize} />
-                        <Menu.Item icon="minus" name="Decrease font size" onClick={this.handleDecreaseFontSize} />
-                        
-                        <Menu.Header>theme</Menu.Header>
-                        <Menu.Item onClick={this.handleLightTheme}>
-                          <Label color="white" empty circular/>
-                          Light theme
-                        </Menu.Item>
-                        <Menu.Item onClick={this.handleDarkTheme}>
-                          <Label color="black" empty circular/>
-                          Dark theme
-                        </Menu.Item>
-                        <Menu.Item onClick={this.handleSepiaTheme}>
-                          <Label color="sepia" empty circular/>
-                          Sepia theme
-                        </Menu.Item>
-                      
+
+                          <Menu.Header>font size</Menu.Header>
+
+                          <Menu.Item icon="plus" name="Increase font size" onClick={this.handleIncreaseFontSize} />
+                          <Menu.Item icon="minus" name="Decrease font size" onClick={this.handleDecreaseFontSize} />
+
+                          <Menu.Header>theme</Menu.Header>
+                          <Menu.Item onClick={this.handleLightTheme}>
+                            <Label color="white" empty circular />
+                            Light theme
+                          </Menu.Item>
+                          <Menu.Item onClick={this.handleDarkTheme}>
+                            <Label color="black" empty circular />
+                            Dark theme
+                          </Menu.Item>
+                          <Menu.Item onClick={this.handleSepiaTheme}>
+                            <Label color="sepia" empty circular />
+                            Sepia theme
+                          </Menu.Item>
+
                         </Menu>
                       </Popup.Content>
                     </Popup>
                     <Button icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
-                    
+
                   </div>
                 </Grid.Column>
               </Grid.Row>

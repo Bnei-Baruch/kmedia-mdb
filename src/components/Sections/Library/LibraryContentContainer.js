@@ -118,8 +118,6 @@ class LibraryContentContainer extends Component {
     const { languages, language }                  = this.state;
     const { isTaas, startsFrom, pdfFile }          = this.getTaasPdf();
 
-    console.log('LibraryContentContainer.render', langSelectorMount);
-
     return (
       <Library
         isTaas={isTaas}

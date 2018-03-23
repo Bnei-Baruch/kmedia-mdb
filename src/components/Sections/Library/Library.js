@@ -123,8 +123,6 @@ class Library extends Component {
       );
     }
 
-    console.log('Library.render', langSelectorMount);
-
     return (
       <div>
         {
