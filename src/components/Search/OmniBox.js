@@ -156,9 +156,19 @@ export class OmniBox extends Component {
 
   suggestionToResult = (type, item) => {
     if (type === 'tags') {
-      return { key: item.id, title: this.props.getTagPath(item.id).map(p => p.label).join(' - ') };
+      return {
+        key: item.id,
+        title: (this.props.getTagPath(item.id) || [])
+          .map(p => p.label)
+          .join(' - ')
+      };
     } else if (type === 'sources') {
-      return { key: item.id, title: this.props.getSourcePath(item.id).map(p => p.name).join(' > ') };
+      return {
+        key: item.id,
+        title: (this.props.getSourcePath(item.id) || [])
+          .map(p => p.name)
+          .join(' > ')
+      };
     }
 
     return { key: item.id, title: item.text };
