@@ -120,7 +120,7 @@ class TOC extends Component {
 
   scrollToActive = () => {
     const { activeId } = this.state;
-    const element = document.getElementById(`title-${activeId}`);
+    const element      = document.getElementById(`title-${activeId}`);
     if (element === null) {
       return;
     }
@@ -136,9 +136,8 @@ class TOC extends Component {
     }
 
     const reg = new RegExp(match, 'i');
-    return path.map(leafId => (
-      getSourceById(leafId)
-    )).reduce((acc, el) => {
+    return path.reduce((acc, leafId) => {
+      const el = getSourceById(leafId);
       if (reg.test(el.name)) {
         acc.push(el.id);
       }
