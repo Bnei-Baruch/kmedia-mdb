@@ -265,6 +265,10 @@ class LibraryContainer extends Component {
     );
   };
 
+  backToTop = () => {
+    window.scrollTo(0, 0);
+  };
+
   render() {
     const { sourceId, indexMap, getSourceById, language, t } = this.props;
 
@@ -340,6 +344,16 @@ class LibraryContainer extends Component {
                     {content}
                   </div>
                 </div>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Container>
+        <Container>
+          <Grid padded>
+            <Grid.Row>
+              <Grid.Column computer={12} />
+              <Grid.Column computer={2}>
+                <Button basic size="tiny" icon="arrow up" onClick={this.backToTop} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
