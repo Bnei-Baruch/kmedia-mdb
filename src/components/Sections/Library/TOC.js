@@ -19,6 +19,9 @@ class TOC extends Component {
     getSourceById: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
     stickyOffset: PropTypes.number,
+    // eslint-disable-next-line react/forbid-prop-types
+    match: PropTypes.string.isRequired,
+    matchApplied: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -29,8 +32,9 @@ class TOC extends Component {
   state = {};
 
   componentWillReceiveProps(nextProps) {
-    const { fullPath } = nextProps;
-    this.setState({ activeId: fullPath[fullPath.length - 1].id });
+    const { fullPath }     = nextProps;
+    const { id: activeId } = fullPath[fullPath.length - 1];
+    this.setState({ activeId });
   }
 
   componentDidUpdate() {
@@ -39,6 +43,7 @@ class TOC extends Component {
     if (el) {
       el.style.height = `calc(100vh - ${this.props.stickyOffset}px)`;
     }
+    this.scrollToActive();
   }
 
   getIndex = (node1, node2) => {
@@ -57,7 +62,8 @@ class TOC extends Component {
       key: `lib-leaf-item-${id}`,
       onClick: e => this.selectSourceById(id, e),
     };
-    return <Accordion.Title {...props} active={id === this.state.activeId}>{title}</Accordion.Title>;
+
+    return <Accordion.Title {...props} active={id === this.state.activeId} id={`title-${id}`}>{title}</Accordion.Title>;
   };
 
   toc = (sourceId, path, firstLevel = false) => {
@@ -78,7 +84,7 @@ class TOC extends Component {
     const hasNoGrandsons = children.reduce((acc, curr) => acc && isEmpty(getSourceById(curr).children), true);
     let panels;
     if (hasNoGrandsons) {
-      panels = children.map((leafId, idx) => {
+      panels = this.filterSources(children).map((leafId, idx) => {
         let { name: leafTitle, } = getSourceById(leafId);
         if (sourceId === BS_SHAMATI) {
           leafTitle = `${idx + 1}. ${leafTitle}`;
@@ -107,9 +113,37 @@ class TOC extends Component {
 
   selectSourceById = (id, e) => {
     e.preventDefault();
-    this.setState({ activeId: id });
     this.props.replace(`sources/${id}`);
+    this.props.matchApplied();
+    this.setState({ activeId: id });
+  };
+
+  scrollToActive = () => {
+    const { activeId } = this.state;
+    const element = document.getElementById(`title-${activeId}`);
+    if (element === null) {
+      return;
+    }
+    element.scrollIntoView();
     window.scrollTo(0, 0);
+  };
+
+  filterSources = (path) => {
+    const { getSourceById, match } = this.props;
+
+    if (isEmpty(match)) {
+      return path;
+    }
+
+    const reg = new RegExp(match, 'i');
+    return path.map(leafId => (
+      getSourceById(leafId)
+    )).reduce((acc, el) => {
+      if (reg.test(el.name)) {
+        acc.push(el.id);
+      }
+      return acc;
+    }, []);
   };
 
   render() {
