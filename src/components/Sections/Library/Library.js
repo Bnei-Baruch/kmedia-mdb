@@ -56,13 +56,11 @@ class Library extends Component {
   }
 
   pageNumberHandler = (pageNumber) => {
-    const { history } = this.props;
-    this.setState({ pageNumber },
-      updateQuery(history, query => ({
-        ...query,
-        page: pageNumber,
-      }))
-    );
+    this.setState({ pageNumber });
+    updateQuery(this.props.history, query => ({
+      ...query,
+      page: pageNumber,
+    }));
   };
 
   render() {
