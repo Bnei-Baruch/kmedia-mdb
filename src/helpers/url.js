@@ -48,7 +48,9 @@ export const prefixWithLanguage = (path, location, toLanguage) => {
 
 export const getQuery = (location) => {
   if (location && location.search) {
-    return parse(location.search.slice(1));
+    const q = parse(location.search.slice(1));
+    q.deb = 'deb' in q;
+    return q;
   }
 
   return {};
@@ -61,4 +63,12 @@ export const updateQuery = (history, updater) => {
 
   const query = getQuery(history.location);
   history.replace({ search: stringify(updater(query)) });
+};
+
+export const isDebMode = (location) => {
+  const params = location.search.substring(1).split('&');
+  return !!params.find((p) => {
+    const pair = p.split('=');
+    return decodeURIComponent(pair[0]) === 'deb';
+  });
 };

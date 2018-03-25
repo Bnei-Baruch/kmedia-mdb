@@ -5,7 +5,7 @@ import { Trans, translate } from 'react-i18next';
 import { Container, Divider, Label, Table } from 'semantic-ui-react';
 
 import { canonicalLink, formatDuration, isEmpty } from '../../helpers/utils';
-import { getQuery } from '../../helpers/url';
+import { getQuery, isDebMode } from '../../helpers/url';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { filtersTransformer } from '../../filters';
 import * as shapes from '../shapes';
@@ -13,6 +13,7 @@ import Link from '../Language/MultiLanguageLink';
 import Pagination from '../Pagination/Pagination';
 import WipErr from '../shared/WipErr/WipErr';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
+import ScoreDebug from './ScoreDebug'
 
 class SearchResults extends Component {
   static propTypes = {
@@ -45,16 +46,8 @@ class SearchResults extends Component {
     return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop]) }} />;
   };
 
-  isDebMode = () => {
-    const params = this.props.location.search.substring(1).split('&');
-    return !!params.find((p) => {
-      const pair = p.split('=');
-      return decodeURIComponent(pair[0]) === 'deb';
-    });
-  };
-
   renderContentUnit = (cu, hit) => {
-    const { t }                                                      = this.props;
+    const { t, location }                                            = this.props;
     const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
 
     const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || cu.name;
@@ -106,10 +99,10 @@ class SearchResults extends Component {
           {snippet || null}
         </Table.Cell>
         {
-          !this.isDebMode() ?
+          !isDebMode(location) ?
             null :
             <Table.Cell collapsing textAlign="right">
-              {score}
+              <ScoreDebug score={score} explanation={hit._explanation} />
             </Table.Cell>
         }
       </Table.Row>
@@ -117,7 +110,7 @@ class SearchResults extends Component {
   };
 
   renderCollection = (c, hit) => {
-    const { t }                                                      = this.props;
+    const { t, location }                                            = this.props;
     const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
 
     const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || c.name;
@@ -154,9 +147,13 @@ class SearchResults extends Component {
           &nbsp;&nbsp;
           {snippet || null}
         </Table.Cell>
-        <Table.Cell collapsing textAlign="right">
-          {score}
-        </Table.Cell>
+        {
+          !isDebMode(location) ?
+            null :
+            <Table.Cell collapsing textAlign="right">
+              <ScoreDebug score={score} explanation={hit._explanation} />
+            </Table.Cell>
+        }
       </Table.Row>
     );
   };

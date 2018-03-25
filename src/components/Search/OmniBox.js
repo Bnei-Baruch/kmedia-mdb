@@ -16,7 +16,7 @@ import { actions as filtersActions, selectors as filterSelectors } from '../../r
 import { filtersTransformer } from '../../filters';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
-import { getQuery } from '../../helpers/url';
+import { getQuery, isDebMode } from '../../helpers/url';
 
 const CATEGORIES_ICONS = {
   'search': 'search',
@@ -104,7 +104,7 @@ export class OmniBox extends Component {
       resetFilter('search', 'sections-filter');
     }
 
-    search(query, 1, pageSize);
+    search(query, 1, pageSize, isDebMode(location));
 
     if (this.state.isOpen) {
       this.setState({ isOpen: false });
