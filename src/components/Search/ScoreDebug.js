@@ -4,6 +4,7 @@ import { Button, Modal, Icon } from 'semantic-ui-react';
 
 class ScoreDebug extends Component {
   static propTypes = {
+      name: PropTypes.string.isRequired,
       score: PropTypes.number.isRequired,
       explanation: PropTypes.object.isRequired,
     };
@@ -39,7 +40,7 @@ class ScoreDebug extends Component {
   }
 
   render() {
-      const { score, explanation } = this.props;
+      const { name, score, explanation } = this.props;
       const { open, treeOpen } = this.state;
 
       return (
@@ -47,6 +48,7 @@ class ScoreDebug extends Component {
               <Button color='red' icon='flask' content={score} onClick={() => this.setState({open: true})}/>
               <Modal dimmer='inverted' open={open} onClose={() => this.setState({open: false})}>
                 <Modal.Content style={{textAlign: 'left'}}>
+                  <h2>{name}</h2>
                   {this.reduceExplanation(explanation, treeOpen, 0)}
                 </Modal.Content>
               </Modal>
