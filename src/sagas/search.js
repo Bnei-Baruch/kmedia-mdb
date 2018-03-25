@@ -87,7 +87,7 @@ function* updateSortByInQuery(action) {
 
 function* hydrateUrl() {
   const query             = yield* getQuery();
-  const { q, page = '1' } = query;
+  const { q, page = '1', deb = false } = query;
 
   if (q) {
     yield put(actions.updateQuery(q));
@@ -99,7 +99,6 @@ function* hydrateUrl() {
     const pageNo = parseInt(page, 10);
     yield put(actions.setPage(pageNo));
 
-    const deb = 'deb' in query;
     yield put(actions.setDeb(deb));
   }
 }

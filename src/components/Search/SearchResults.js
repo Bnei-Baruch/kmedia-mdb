@@ -102,7 +102,7 @@ class SearchResults extends Component {
           !isDebMode(location) ?
             null :
             <Table.Cell collapsing textAlign="right">
-              <ScoreDebug score={score} explanation={hit._explanation} />
+              <ScoreDebug name={cu.name} score={score} explanation={hit._explanation} />
             </Table.Cell>
         }
       </Table.Row>
@@ -151,7 +151,7 @@ class SearchResults extends Component {
           !isDebMode(location) ?
             null :
             <Table.Cell collapsing textAlign="right">
-              <ScoreDebug score={score} explanation={hit._explanation} />
+              <ScoreDebug name={c.name} score={score} explanation={hit._explanation} />
             </Table.Cell>
         }
       </Table.Row>
