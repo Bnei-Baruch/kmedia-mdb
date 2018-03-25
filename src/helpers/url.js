@@ -70,6 +70,5 @@ export const updateQuery = (history, updater) => {
   history.replace({ search: stringify(updater(query)) });
 };
 
-export const isDebMode = (location) => {
-  return getQuery(location).deb || false;
-};
+export const isDebMode = location =>
+  getQuery(location).deb || false;
