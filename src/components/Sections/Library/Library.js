@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { Container, Segment } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../helpers/consts';
@@ -9,6 +10,8 @@ import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
 import ButtonsLanguageSelector from '../../Language/Selector/ButtonsLanguageSelector';
 import PDF from '../../shared/PDF/PDF';
+import { updateQuery } from '../../../helpers/url';
+import withPagination from '../../Pagination/withPagination';
 
 class Library extends Component {
   static propTypes = {
@@ -24,6 +27,7 @@ class Library extends Component {
     languages: PropTypes.arrayOf(PropTypes.string),
     t: PropTypes.func.isRequired,
     handleLanguageChanged: PropTypes.func.isRequired,
+    history: shapes.History.isRequired,
   };
 
   static defaultProps = {
@@ -38,9 +42,26 @@ class Library extends Component {
     startsFrom: 1,
   };
 
+  state = {};
+
+  componentWillMount() {
+    const { history: { location } } = this.props;
+    const pageNumber                = withPagination.getPageFromLocation(location);
+
+    this.setState({ pageNumber });
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     return shallowCompare(this, nextProps, nextState);
   }
+
+  pageNumberHandler = (pageNumber) => {
+    this.setState({ pageNumber });
+    updateQuery(this.props.history, query => ({
+      ...query,
+      page: pageNumber,
+    }));
+  };
 
   render() {
     const { content, language, languages, t, isTaas, } = this.props;
@@ -70,8 +91,9 @@ class Library extends Component {
     } else if (isTaas && this.props.pdfFile) {
       contents = (<PDF
         pdfFile={assetUrl(`sources/${this.props.pdfFile}`)}
-        pageNumber={1}
+        pageNumber={this.state.pageNumber || 1}
         startsFrom={this.props.startsFrom}
+        pageNumberHandler={this.pageNumberHandler}
       />);
     } else {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
@@ -105,4 +127,4 @@ class Library extends Component {
   }
 }
 
-export default Library;
+export default withRouter(Library);

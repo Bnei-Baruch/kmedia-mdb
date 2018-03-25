@@ -55,7 +55,11 @@ export const prefixWithLanguage = (path, location, toLanguage) => {
 
 export const getQuery = (location) => {
   if (location && location.search) {
-    return parse(location.search.slice(1));
+    const q = parse(location.search.slice(1));
+    if ('deb' in q) {
+      q.deb = q.deb !== 'false';
+    }
+    return q;
   }
 
   return {};
@@ -67,5 +71,11 @@ export const updateQuery = (history, updater) => {
   }
 
   const query = getQuery(history.location);
+  if (!query.deb) {
+    delete query.deb;
+  }
   history.replace({ search: stringify(updater(query)) });
 };
+
+export const isDebMode = location =>
+  getQuery(location).deb || false;

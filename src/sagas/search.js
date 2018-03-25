@@ -24,6 +24,7 @@ export function* search(action) {
 
     const language = yield select(state => settings.getLanguage(state.settings));
     const sortBy   = yield select(state => selectors.getSortBy(state.search));
+    const deb      = yield select(state => selectors.getDeb(state.search));
 
     // Prepare filters values.
     const filters = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
@@ -37,7 +38,7 @@ export function* search(action) {
       yield put(actions.searchFailure(null));
       return
     }
-    const { data } = yield call(Api.search, { ...action.payload, q, sortBy, language });
+    const { data } = yield call(Api.search, { ...action.payload, q, sortBy, language, deb });
 
     if (Array.isArray(data.hits.hits) && data.hits.hits.length > 0) {
       // TODO edo: optimize data fetching
@@ -86,7 +87,7 @@ function* updateSortByInQuery(action) {
 
 export function* hydrateUrl() {
   const query             = yield* getQuery();
-  const { q, page = '1' } = query;
+  const { q, page = '1', deb = false } = query;
 
   if (q) {
     yield put(actions.updateQuery(q));
@@ -97,6 +98,8 @@ export function* hydrateUrl() {
 
     const pageNo = parseInt(page, 10);
     yield put(actions.setPage(pageNo));
+
+    yield put(actions.setDeb(deb));
   }
 }
 

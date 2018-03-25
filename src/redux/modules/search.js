@@ -14,6 +14,7 @@ const SEARCH_FAILURE       = 'Search/SEARCH_FAILURE';
 const SET_PAGE     = 'Search/SET_PAGE';
 const SET_SORT_BY  = 'Search/SET_SORT_BY';
 const UPDATE_QUERY = 'Search/UPDATE_QUERY';
+const SET_DEB      = 'Search/SET_DEB';
 const HYDRATE_URL  = 'Search/HYDRATE_URL';
 
 export const types = {
@@ -27,6 +28,7 @@ export const types = {
   SET_PAGE,
   SET_SORT_BY,
   UPDATE_QUERY,
+  SET_DEB,
   HYDRATE_URL,
 };
 
@@ -35,13 +37,14 @@ export const types = {
 const autocomplete        = createAction(AUTOCOMPLETE);
 const autocompleteSuccess = createAction(AUTOCOMPLETE_SUCCESS);
 const autocompleteFailure = createAction(AUTOCOMPLETE_FAILURE);
-const search              = createAction(SEARCH, (q, pageNo, pageSize) =>
-  ({ q, pageNo, pageSize }));
+const search              = createAction(SEARCH, (q, pageNo, pageSize, deb=false) =>
+                                                 ({q, pageNo, pageSize, deb}));
 const searchSuccess       = createAction(SEARCH_SUCCESS);
 const searchFailure       = createAction(SEARCH_FAILURE);
 const setPage             = createAction(SET_PAGE);
 const setSortBy           = createAction(SET_SORT_BY);
 const updateQuery         = createAction(UPDATE_QUERY);
+const setDeb              = createAction(SET_DEB);
 const hydrateUrl          = createAction(HYDRATE_URL);
 
 export const actions = {
@@ -55,6 +58,7 @@ export const actions = {
   setPage,
   setSortBy,
   updateQuery,
+  setDeb,
   hydrateUrl,
 };
 
@@ -67,6 +71,7 @@ const initialState = {
   results: {},
   pageNo: 1,
   sortBy: 'relevance',
+  deb: false,
   wip: false,
   error: null,
 };
@@ -118,7 +123,11 @@ export const reducer = handleActions({
   [UPDATE_QUERY]: (state, action) => ({
     ...state,
     q: action.payload,
-  })
+  }),
+  [SET_DEB]: (state, action) => ({
+    ...state,
+    deb: action.payload,
+  }),
 }, initialState);
 
 /* Selectors */
@@ -128,6 +137,7 @@ const getSuggestions = state => state.suggestions;
 const getResults     = state => state.results;
 const getPageNo      = state => state.pageNo;
 const getSortBy      = state => state.sortBy;
+const getDeb         = state => state.deb;
 const getWip         = state => state.wip;
 const getError       = state => state.error;
 
@@ -137,6 +147,7 @@ export const selectors = {
   getResults,
   getPageNo,
   getSortBy,
+  getDeb,
   getWip,
   getError,
 };

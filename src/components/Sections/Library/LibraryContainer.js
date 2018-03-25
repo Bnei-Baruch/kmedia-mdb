@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { replace as routerReplace } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Grid, Header, } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Input, } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
@@ -16,9 +16,6 @@ import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
-// import styles from '../../../stylesheets/includes/_layout.scss';
-
-// const MainMenuHeight2 = parseInt(styles.MainMenuHeight, 10);
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -53,6 +50,7 @@ class LibraryContainer extends Component {
   state = {
     lastLoadedId: null,
     isReadable: false,
+    match: '',
   };
 
   componentDidMount() {
@@ -219,6 +217,7 @@ class LibraryContainer extends Component {
       active={this.props.sortBy === sortOrder}
       title={title}
       onClick={() => this.props.sourcesSortBy(sortOrder)}
+      compact
     >
       {title}
     </Button>
@@ -229,10 +228,40 @@ class LibraryContainer extends Component {
       return null;
     }
     return (
-      <Button.Group basic className="buttons-language-selector" size="small">
+      <Button.Group basic className="buttons-language-selector" size="mini">
         {this.sortButton('AZ', t('sources-library.az'))}
         {this.sortButton('Book', t('sources-library.default'))}
       </Button.Group>
+    );
+  };
+
+  handleFilterChange = (e, data) => {
+    this.setState({ match: data.value });
+  };
+
+  handleFilterKeyDown = (e) => {
+    if (e.keyCode === 27) { // Esc
+      this.handleFilterClear();
+    }
+  };
+
+  handleFilterClear = () => {
+    this.setState({ match: '' });
+  };
+
+  matchString = (parentId, t) => {
+    if (this.props.NotToSort.findIndex(a => a === parentId) !== -1) {
+      return null;
+    }
+    return (
+      <Input
+        icon="search"
+        placeholder={t('sources-library.filter')}
+        value={this.state.match}
+        onChange={this.handleFilterChange}
+        onKeyDown={this.handleFilterKeyDown}
+        size="mini"
+      />
     );
   };
 
@@ -263,7 +292,9 @@ class LibraryContainer extends Component {
       );
     }
 
-    const { isReadable, secondaryHeaderHeight } = this.state;
+    const { isReadable, secondaryHeaderHeight, match } = this.state;
+
+    const matchString = this.matchString(parentId, t);
 
     return (
       <div className={classnames({ source: true, 'is-readable': isReadable })}>
@@ -274,6 +305,7 @@ class LibraryContainer extends Component {
                 <Grid.Column computer={4}>
                   <Header size="medium">{t('sources-library.toc')}</Header>
                   {this.switchSortingOrder(parentId, t)}
+                  {matchString}
                 </Grid.Column>
                 <Grid.Column computer={8}>
                   {this.header(sourceId, fullPath)}
@@ -292,6 +324,8 @@ class LibraryContainer extends Component {
             <Grid.Row>
               <Grid.Column computer={4}>
                 <TOC
+                  match={matchString ? match : ''}
+                  matchApplied={this.handleFilterClear}
                   fullPath={fullPath}
                   rootId={parentId}
                   contextRef={this.contextRef}

@@ -274,6 +274,7 @@ export const RB_IGROT   = 'b8SHlrfH';
 export const MR_TORA    = 'bvA8ZB1w';
 export const RH_ZOHAR   = 'AwGBQX2L';
 
+// This is exptected to be sorted by values
 export const BS_TAAS_PARTS = {
   '9xNFLSSp': 1,
   XlukqLH8: 37,

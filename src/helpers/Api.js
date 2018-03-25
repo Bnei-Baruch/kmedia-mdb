@@ -55,8 +55,8 @@ class Api {
   static autocomplete = ({ q, language }) =>
     Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 
-  static search = ({ q, language, pageNo: page_no, pageSize: page_size, sortBy: sort_by }) =>
-    Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by })}`);
+  static search = ({ q, language, pageNo: page_no, pageSize: page_size, sortBy: sort_by, deb }) =>
+    Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb })}`);
 
   static sourceIdx = ({ id }) =>
     Requests.getAsset(`sources/${id}/index.json`);
