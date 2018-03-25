@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
-import { replace as routerReplace } from 'react-router-redux';
+import { push as routerPush } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
 import { Button, Container, Grid, Header, } from 'semantic-ui-react';
@@ -37,7 +37,7 @@ class LibraryContainer extends Component {
     NotToSort: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     areSourcesLoaded: PropTypes.bool,
     t: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
+    apply: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -60,7 +60,7 @@ class LibraryContainer extends Component {
     window.addEventListener('resize', this.updateSticky);
     window.addEventListener('load', this.updateSticky);
 
-    const { sourceId, areSourcesLoaded, replace } = this.props;
+    const { sourceId, areSourcesLoaded, apply } = this.props;
     if (!areSourcesLoaded) {
       return;
     }
@@ -69,7 +69,7 @@ class LibraryContainer extends Component {
       this.props.sourceId !== sourceId ||
       this.state.lastLoadedId !== sourceId) {
       if (firstLeafId !== sourceId) {
-        replace(`sources/${firstLeafId}`);
+        apply(`sources/${firstLeafId}`);
       } else {
         // eslint-disable-next-line react/no-did-mount-set-state
         this.setState({ lastLoadedId: sourceId, language: this.props.language });
@@ -79,7 +79,7 @@ class LibraryContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { sourceId, areSourcesLoaded, language, replace } = nextProps;
+    const { sourceId, areSourcesLoaded, language, apply } = nextProps;
     if (!areSourcesLoaded) {
       return;
     }
@@ -95,7 +95,7 @@ class LibraryContainer extends Component {
       if (firstLeafId === sourceId) {
         this.loadNewIndices(sourceId, this.props.language);
       } else {
-        replace(firstLeafId);
+        apply(firstLeafId);
       }
     }
 
@@ -296,7 +296,7 @@ class LibraryContainer extends Component {
                   rootId={parentId}
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
-                  replace={this.props.replace}
+                  apply={this.props.apply}
                   stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}
                 />
               </Grid.Column>
@@ -330,6 +330,6 @@ export default withRouter(connect(
   dispatch => bindActionCreators({
     fetchIndex: sourceActions.fetchIndex,
     sourcesSortBy: sourceActions.sourcesSortBy,
-    replace: routerReplace,
+    apply: routerPush,
   }, dispatch)
 )(translate()(LibraryContainer)));

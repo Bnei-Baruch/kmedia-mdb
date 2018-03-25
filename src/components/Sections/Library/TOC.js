@@ -17,7 +17,7 @@ class TOC extends Component {
     // eslint-disable-next-line react/forbid-prop-types
     contextRef: PropTypes.object,
     getSourceById: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
+    apply: PropTypes.func.isRequired,
     stickyOffset: PropTypes.number,
   };
 
@@ -111,7 +111,7 @@ class TOC extends Component {
   selectSourceById = (id, e) => {
     e.preventDefault();
     this.setState({ activeId: id });
-    this.props.replace(`sources/${id}`);
+    this.props.apply(`sources/${id}`);
     window.scrollTo(0, 0);
   };
 
