@@ -41,6 +41,27 @@ export const cuPage = (store, match) => {
   return Promise.resolve(null);
 };
 
+const getExtraFetchParams = (ns, collectionID) => {
+  switch (ns) {
+  case 'programs':
+    return { content_type: [CT_VIDEO_PROGRAM_CHAPTER] };
+  case 'lectures':
+    return { content_type: [CT_LECTURE, CT_WOMEN_LESSON, CT_CHILDREN_LESSON, CT_VIRTUAL_LESSON] };
+  case 'publications':
+    return { content_type: [CT_ARTICLE] };
+  case 'events-meals':
+    return { content_type: [CT_MEAL] };
+  case 'events-friends-gatherings':
+    return { content_type: [CT_FRIENDS_GATHERING] };
+  default:
+    if (collectionID) {
+      return { collection: collectionID };
+    }
+  }
+
+  return {};
+};
+
 export const cuListPage = (ns, collectionID = 0) => (store, match) => {
   // hydrate filters
   store.dispatch(filtersActions.hydrateFilters(ns));
@@ -52,20 +73,7 @@ export const cuListPage = (ns, collectionID = 0) => (store, match) => {
   const pageSize = settingsSelectors.getPageSize(store.getState().settings);
 
   // extraFetchParams
-  const extraFetchParams = {};
-  if (ns === 'programs') {
-    extraFetchParams.content_type = [CT_VIDEO_PROGRAM_CHAPTER];
-  } else if (ns === 'lectures') {
-    extraFetchParams.content_type = [CT_LECTURE, CT_WOMEN_LESSON, CT_CHILDREN_LESSON, CT_VIRTUAL_LESSON];
-  } else if (ns === 'publications') {
-    extraFetchParams.content_type = [CT_ARTICLE];
-  } else if (ns === 'events-meals') {
-    extraFetchParams.content_type = [CT_MEAL];
-  } else if (ns === 'events-friends-gatherings') {
-    extraFetchParams.content_type = [CT_FRIENDS_GATHERING];
-  } else if (collectionID) {
-    extraFetchParams.collection = collectionID;
-  }
+  const extraFetchParams = getExtraFetchParams(ns, collectionID);
 
   // dispatch fetchList
   store.dispatch(listsActions.fetchList(ns, page, { ...extraFetchParams, pageSize }));

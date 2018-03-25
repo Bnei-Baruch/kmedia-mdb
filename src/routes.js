@@ -65,6 +65,55 @@ const redirect = (from, to, { prefix = '' }) => {
   });
 };
 
+const routes = [
+  { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
+  { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.cuListPage('lessons') } },
+  { path: 'lessons/cu/:id', component: LessonUnit, options: { ssrData: ssrDataLoaders.cuPage } },
+  { path: 'lessons/c/:id', component: LessonCollection, options: { ssrData: ssrDataLoaders.playlistCollectionPage } },
+  { path: 'lessons/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
+  { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.cuListPage('programs') } },
+  { path: 'programs/cu/:id', component: ProgramUnit, options: { ssrData: ssrDataLoaders.cuPage } },
+  {
+    path: 'programs/c/:id',
+    component: ProgramCollection,
+    options: { ssrData: ssrDataLoaders.collectionPage('programs-collection') }
+  },
+  { path: 'events', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
+  { path: 'events/:tab', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
+  { path: 'events/cu/:id', component: EventUnit, options: { ssrData: ssrDataLoaders.cuPage } },
+  { path: 'events/c/:id', component: EventCollection, options: { ssrData: ssrDataLoaders.playlistCollectionPage } },
+  { path: 'lectures', component: Lectures, options: { ssrData: ssrDataLoaders.cuListPage('lectures') } },
+  { path: 'lectures/cu/:id', component: LectureUnit, options: { ssrData: ssrDataLoaders.cuPage } },
+  {
+    path: 'lectures/c/:id',
+    component: LectureCollection,
+    options: { ssrData: ssrDataLoaders.collectionPage('lectures-collection') }
+  },
+  { path: 'publications', component: Publications, options: { ssrData: ssrDataLoaders.cuListPage('publications') } },
+  { path: 'publications/cu/:id', component: PublicationUnit, options: { ssrData: ssrDataLoaders.publicationCUPage } },
+  {
+    path: 'publications/c/:id',
+    component: PublicationCollection,
+    options: { ssrData: ssrDataLoaders.collectionPage('publications-collection') }
+  },
+  { path: 'sources', component: LibraryHomepage },
+  { path: 'sources/:id', component: LibraryContainer, options: { ssrData: ssrDataLoaders.libraryPage } },
+  { path: 'books', component: NotImplemented },
+  { path: 'topics', component: NotImplemented },
+  { path: 'photos', component: NotImplemented },
+  { path: 'search', component: SearchResults, options: { ssrData: ssrDataLoaders.searchPage } },
+  // { path: 'design', component: Design },
+  // { path: 'design2', component: Design2 },
+];
+
+const redirects        = [
+  { from: 'lessons/part/:id', to: 'lessons/cu/:id' },
+  { from: 'lessons/full/:id', to: 'lessons/c/:id' },
+  { from: 'programs/chapter/:id', to: 'programs/cu/:id' },
+  { from: 'programs/full/:id', to: 'programs/c/:id' },
+  { from: 'events/item/:id', to: 'events/cu/:id' },
+  { from: 'events/full/:id', to: 'events/c/:id' },
+];
 const createMainRoutes = (prefix) => {
   const defaultPageOptions = { prefix };
 
@@ -79,40 +128,11 @@ const createMainRoutes = (prefix) => {
   return [{
     component: Layout,
     routes: [
-      defaultPageRoute('', HomePage, { ssrData: ssrDataLoaders.home }),
-      defaultPageRoute('lessons', Lessons, { ssrData: ssrDataLoaders.cuListPage('lessons') }),
-      defaultPageRoute('lessons/cu/:id', LessonUnit, { ssrData: ssrDataLoaders.cuPage }),
-      defaultPageRoute('lessons/c/:id', LessonCollection, { ssrData: ssrDataLoaders.playlistCollectionPage }),
-      defaultPageRoute('lessons/latest', LastLessonCollection, { ssrData: ssrDataLoaders.latestLesson }),
-      defaultPageRoute('programs', Programs, { ssrData: ssrDataLoaders.cuListPage('programs') }),
-      defaultPageRoute('programs/cu/:id', ProgramUnit, { ssrData: ssrDataLoaders.cuPage }),
-      defaultPageRoute('programs/c/:id', ProgramCollection, { ssrData: ssrDataLoaders.collectionPage('programs-collection') }),
-      defaultPageRoute('events', Events, { ssrData: ssrDataLoaders.eventsPage }),
-      defaultPageRoute('events/:tab', Events, { ssrData: ssrDataLoaders.eventsPage }),
-      defaultPageRoute('events/cu/:id', EventUnit, { ssrData: ssrDataLoaders.cuPage }),
-      defaultPageRoute('events/c/:id', EventCollection, { ssrData: ssrDataLoaders.playlistCollectionPage }),
-      defaultPageRoute('lectures', Lectures, { ssrData: ssrDataLoaders.cuListPage('lectures') }),
-      defaultPageRoute('lectures/cu/:id', LectureUnit, { ssrData: ssrDataLoaders.cuPage }),
-      defaultPageRoute('lectures/c/:id', LectureCollection, { ssrData: ssrDataLoaders.collectionPage('lectures-collection') }),
-      defaultPageRoute('publications', Publications, { ssrData: ssrDataLoaders.cuListPage('publications') }),
-      defaultPageRoute('publications/cu/:id', PublicationUnit, { ssrData: ssrDataLoaders.publicationCUPage }),
-      defaultPageRoute('publications/c/:id', PublicationCollection, { ssrData: ssrDataLoaders.collectionPage('publications-collection') }),
-      defaultPageRoute('sources', LibraryHomepage),
-      defaultPageRoute('sources/:id', LibraryContainer, { ssrData: ssrDataLoaders.libraryPage }),
-      defaultPageRoute('books', NotImplemented),
-      defaultPageRoute('topics', NotImplemented),
-      defaultPageRoute('photos', NotImplemented),
-      defaultPageRoute('search', SearchResults, { ssrData: ssrDataLoaders.searchPage }),
-      // defaultPageRoute('design', Design),
-      // defaultPageRoute('design2', Lessons),
+      ...routes.map(route => defaultPageRoute(route.path, route.component, route.options)),
 
       // Old routes - redirect for now
-      defaultRedirect('lessons/part/:id', 'lessons/cu/:id'),
-      defaultRedirect('lessons/full/:id', 'lessons/c/:id'),
-      defaultRedirect('programs/chapter/:id', 'programs/cu/:id'),
-      defaultRedirect('programs/full/:id', 'programs/c/:id'),
-      defaultRedirect('events/item/:id', 'events/cu/:id'),
-      defaultRedirect('events/full/:id', 'events/c/:id'),
+      ...redirects.map(r => defaultRedirect(r.from, r.to)),
+
       {
         path: '*',
         component: NotFound

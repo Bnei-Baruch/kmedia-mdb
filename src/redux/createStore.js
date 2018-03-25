@@ -8,12 +8,12 @@ import createMultiLanguageRouterMiddleware from './middleware/multiLanguageRoute
 import reducer from './index';
 import { rootSaga } from '../sagas';
 
-export default function createStore(initialState, history) {
-  const isBrowser             = (typeof window !== 'undefined' && window.document);
-  const isProduction          = process.env.NODE_ENV === 'production';
-  const devToolsArePresent    = typeof window === 'object' && typeof window.devToolsExtension !== 'undefined';
-  const devToolsStoreEnhancer = () => (isBrowser && devToolsArePresent ? window.devToolsExtension() : f => f);
+const isBrowser             = (typeof window !== 'undefined' && window.document);
+const isProduction          = process.env.NODE_ENV === 'production';
+const devToolsArePresent    = typeof window === 'object' && typeof window.devToolsExtension !== 'undefined';
+const devToolsStoreEnhancer = () => (isBrowser && devToolsArePresent ? window.devToolsExtension() : f => f);
 
+export default function createStore(initialState, history) {
   const middlewares = [
     // createDeferredSagasMiddleware(),
     createMultiLanguageRouterMiddleware(history)
