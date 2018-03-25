@@ -26,7 +26,7 @@ import Design from '../Design/Design';
 
 import Redirect from './Redirect';
 
-const NotImplemented = () => <h1>Not Implemented Yet</h1>;
+//const NotImplemented = () => <h1>Not Implemented Yet</h1>;
 const NotFound       = () => <h1>Page not found</h1>;
 
 const Routes = ({ match }) => {

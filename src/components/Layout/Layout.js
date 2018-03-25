@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import classnames from 'classnames';
 import { Route } from 'react-router-dom';
-import { Flag, Header, Icon, Menu /*, Search */ } from 'semantic-ui-react';
+import { Flag, Header, Icon, Menu, Dropdown } from 'semantic-ui-react';
 
-import { ALL_LANGUAGES, FLAG_TO_LANGUAGE } from '../../helpers/consts';
+import { ALL_LANGUAGES, LANGUAGES, LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_UKRAINIAN, LANG_SPANISH } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import WrappedOmniBox from '../Search/OmniBox';
@@ -15,7 +15,7 @@ import MenuItems from './MenuItems';
 import Footer from './Footer';
 import logo from '../../images/logo.svg';
 
-const flags = ['us', 'ru', 'ua', 'es', 'il'];
+const menuLangs = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN];
 
 class Layout extends Component {
   static propTypes = {
@@ -107,14 +107,28 @@ class Layout extends Component {
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
-                {
-                  flags.map(flag => (
-                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                    <Link language={FLAG_TO_LANGUAGE[flag]} key={flag}>
-                      <Flag name={flag} />
-                    </Link>
-                  ))
-                }
+                <Dropdown
+                    fluid
+                    selection
+                    scrolling
+                    //defaultValue={'ru'}
+                    text = 'Select Language'
+                    options={
+                        menuLangs.map(langParam => {
+                          const lang = LANGUAGES[langParam].value;
+                          const flag = LANGUAGES[langParam].flag;
+                          return (
+                             // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                            <Dropdown.Header key={lang} >
+                              <Link language={lang}>
+                                <Flag name={flag} /> 
+                                {t(`constants.languages.${lang}`)}
+                              </Link>
+                            </Dropdown.Header>
+                          );
+                        })
+                      }
+                  />
               </Menu.Item>
             </Menu.Menu>
           </Menu>
