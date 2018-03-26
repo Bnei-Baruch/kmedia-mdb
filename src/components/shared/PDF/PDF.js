@@ -66,7 +66,7 @@ class PDF extends Component {
 
   setDivSize = () =>
     this.setState({
-      width: document.getElementById('pdfWrapper').getBoundingClientRect().width * 3
+      width: document.getElementById('pdfWrapper').getBoundingClientRect().width
     });
 
   setPage = (pageNo) => {
@@ -102,6 +102,7 @@ class PDF extends Component {
                   pageNumber={pageNumber + (-startsFrom) + 1}
                   renderAnnotations={false}
                   renderTextLayer={false}
+                  renderMode="svg"
                 /> : null
             }
           </Document>
