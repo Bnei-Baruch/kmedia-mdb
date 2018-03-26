@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import throttle from 'lodash/throttle';
-import { Document, Page } from 'react-pdf';
+import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import { Container } from 'semantic-ui-react';
 
 import PDFMenu from './PDFMenu';
@@ -64,7 +64,10 @@ class PDF extends Component {
     this.props.pageNumberHandler(pageNo);
   };
 
-  setDivSize = () => this.setState({ width: document.getElementById('pdfWrapper').getBoundingClientRect().width * 3 });
+  setDivSize = () =>
+    this.setState({
+      width: document.getElementById('pdfWrapper').getBoundingClientRect().width * 3
+    });
 
   setPage = (pageNo) => {
     this.setState({ pageNumber: pageNo });
