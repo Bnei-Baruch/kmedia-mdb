@@ -3,16 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-  <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="Kabbalah Media">
   <meta name="theme-color" content="#000000">
   <meta name="robots" content="noindex">
-  <!--
-    manifest.json provides metadata used when your web app is added to the
-    homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
-  -->
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-  <link rel="stylesheet" href="%PUBLIC_URL%/semantic_v2.min.css" id="semantic-ui" title="Left-to-Right">
+
+  <title>Kabbalah Media</title>
+
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+  <link rel="search" type="application/opensearchdescription+xml" href="%PUBLIC_URL%/opensearch.xml" title="Kabbalah Media">
+
+  <!-- Preload -->
+  <link rel="preload" as="style" href="%PUBLIC_URL%/semantic_v2.min.css">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin">
 
   <!-- Preconnect -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,10 +21,14 @@
   <link rel="preconnect" href="https://cdn.kabbalahmedia.info">
   <link rel="preconnect" href="https://files.kabbalahmedia.info">
 
-  <!-- Preload -->
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin">
+  <link rel="stylesheet" href="%PUBLIC_URL%/semantic_v2.min.css" id="semantic-ui">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin">
 
-  <title>Kabbalah Media</title>
+  <!--
+    manifest.json provides metadata used when your web app is added to the
+    homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+  -->
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
 </head>
 <body>
 <div id="root"></div>

@@ -1,7 +1,9 @@
 import { createAction, handleActions } from 'redux-actions';
 import identity from 'lodash/identity';
+
 import { tracePath } from '../../helpers/utils';
 import { types as settings } from './settings';
+import { types as ssr } from './ssr';
 
 /* Types */
 
@@ -32,7 +34,6 @@ export const actions = {
 const initialState = {
   byId: {},
   roots: [],
-  tags: {},
   tagIdsByPattern: {},
   error: null,
   getByID: identity
@@ -58,7 +59,14 @@ const buildById = (items) => {
   return byId;
 };
 
+const onSSRPrepare = state => ({
+  ...initialState,
+  error: state.error ? state.error.toString() : state.error,
+});
+
 export const reducer = handleActions({
+  [ssr.PREPARE]: onSSRPrepare,
+
   [settings.SET_LANGUAGE]: () => initialState,
 
   [FETCH_TAGS_SUCCESS]: (state, action) => {

@@ -46,13 +46,20 @@ export class UnitListContainer extends withPagination {
     this.handleFiltersHydrated = this.handleFiltersHydrated.bind(this);
   }
 
-  componentDidMount() {
-    // If filters are already hydrated, handleFiltersHydrated won't be called.
-    // We'll have to ask for data here instead.
-    if (this.props.isFiltersHydrated) {
-      this.askForData(this.props);
-    }
-  }
+  // Edo: not sure why we may get into such state
+  // that filters are already hydrated on didMount.
+  // Anyway, now with SSR. It's for sure that isFiltersHydrated is true.
+  // but we don't want to askForData. Server did that part for us...
+  // Note: found out one such possible flow (collection page):
+  // mount -> unmount -> mount again
+
+  // componentDidMount() {
+  //   // If filters are already hydrated, handleFiltersHydrated won't be called.
+  //   // We'll have to ask for data here instead.
+  //   if (this.props.isFiltersHydrated) {
+  //     this.askForData(this.props);
+  //   }
+  // }
 
   componentWillReceiveProps(nextProps) {
     // clear all filters when location's search is cleared by Menu click

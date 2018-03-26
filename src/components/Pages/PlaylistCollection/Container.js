@@ -10,7 +10,6 @@ import * as shapes from '../../shapes';
 import Page from './Page';
 
 export class PlaylistCollectionContainer extends Component {
-
   static propTypes = {
     match: shapes.RouterMatch.isRequired,
     collection: shapes.GenericCollection,
@@ -40,14 +39,10 @@ export class PlaylistCollectionContainer extends Component {
 
     // We fetch stuff if we don't have it already
     // and a request for it is not in progress or ended with an error.
-    const id = match.params.id;
-
-    // TODO: this is rather disgusting.
-    // we should somehow clean wip & err in redux (save memory)
-    // once we do this we should implement this condition differently
+    const { id } = match.params;
 
     let fetchedSingle = false;
-    if (!wip.collections.hasOwnProperty(id)) {
+    if (!Object.prototype.hasOwnProperty.call(wip.collections, id)) {
       // never fetched as full so fetch now
       fetchCollection(id);
       fetchedSingle = true;
@@ -71,7 +66,7 @@ export class PlaylistCollectionContainer extends Component {
     const { match, language, collection, wip: wipMap, errors, PlaylistComponent } = this.props;
 
     // We're wip / err if some request is wip / err
-    const id = match.params.id;
+    const { id } = match.params;
     let wip  = wipMap.collections[id];
     let err  = errors.collections[id];
     if (collection) {

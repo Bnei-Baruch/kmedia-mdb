@@ -3,6 +3,7 @@ import { Container, Grid, Header, Item } from 'semantic-ui-react';
 
 import { canonicalLink, neighborIndices, strCmp } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
+import Helmets from '../../shared/Helmets';
 import { UnitContainer, wrap as wrapContainer } from '../../Pages/Unit/Container';
 import { UnitPage, wrap as wrapPage } from '../../Pages/Unit/Page';
 import {
@@ -123,6 +124,18 @@ class MyUnitPage extends UnitPage {
 
   renderInfo() {
     return null;
+  }
+
+  renderHelmet() {
+    const { unit } = this.props;
+
+    return (
+      <div>
+        <Helmets.Basic title={unit.name} />
+        {/* TODO: add tags from unit (tags=unit.tags) ? */}
+        <Helmets.Article publishedTime={unit.film_date} />
+      </div>
+    );
   }
 
   renderMaterials() {

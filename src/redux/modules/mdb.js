@@ -1,9 +1,10 @@
-import groupBy from 'lodash/groupBy';
 import { createAction, handleActions } from 'redux-actions';
+import groupBy from 'lodash/groupBy';
+import mapValues from 'lodash/mapValues';
 
-import { types as system } from './system';
-import { types as settings } from './settings';
 import { MEDIA_TYPES } from '../../helpers/consts';
+import { types as settings } from './settings';
+import { types as ssr } from './ssr';
 
 /* Types */
 
@@ -315,8 +316,17 @@ const onReceiveContentUnits = (state, action) => {
   };
 };
 
+const onSSRPrepare = state => ({
+  ...state,
+  errors: {
+    units: mapValues(state.errors.units, x => (x ? x.toString() : x)),
+    collections: mapValues(state.errors.collections, x => (x ? x.toString() : x)),
+    lastLesson: state.errors.lastLesson ? state.errors.lastLesson.toString() : state.errors.lastLesson,
+  }
+});
+
 export const reducer = handleActions({
-  [system.INIT]: () => freshStore(),
+  [ssr.PREPARE]: onSSRPrepare,
   [settings.SET_LANGUAGE]: () => freshStore(),
 
   [FETCH_UNIT]: setStatus,
@@ -347,8 +357,11 @@ const getWip            = state => state.wip;
 const getErrors         = state => state.errors;
 
 const getDenormCollection = (state, id) => {
-  const c = state.cById[id];
+  let c = state.cById[id];
   if (c && Array.isArray(c.cuIDs)) {
+    // make a fresh copy so we won't mess up normalized storage
+    c = { ...c };
+
     c.content_units = c.cuIDs.map(x => state.cuById[x]).filter(x => !!x);
   }
   return c;
@@ -366,9 +379,12 @@ const denormalizeObject = (byID, obj) => (
 );
 
 const getDenormContentUnit = (state, id) => {
-  const cu = state.cuById[id];
+  let cu = state.cuById[id];
 
   if (cu) {
+    // make a fresh copy so we won't mess up normalized storage
+    cu = { ...cu };
+
     // denormalize collections
     cu.collections = denormalizeObject(state.cById, cu.cIDs);
 
@@ -383,8 +399,11 @@ const getDenormContentUnit = (state, id) => {
 };
 
 const getDenormCollectionWUnits = (state, id) => {
-  const c = state.cById[id];
+  let c = state.cById[id];
   if (c && Array.isArray(c.cuIDs)) {
+    // make a fresh copy so we won't mess up normalized storage
+    c = { ...c };
+
     c.content_units = c.cuIDs.map(x => getDenormContentUnit(state, x)).filter(x => !!x);
   }
   return c;

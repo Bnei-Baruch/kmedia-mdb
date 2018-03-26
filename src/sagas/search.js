@@ -18,7 +18,7 @@ function* autocomplete(action) {
   }
 }
 
-function* search(action) {
+export function* search(action) {
   try {
     yield* urlUpdateQuery(query => Object.assign(query, { q: action.payload.q }));
 
@@ -85,7 +85,7 @@ function* updateSortByInQuery(action) {
   yield* urlUpdateQuery(query => Object.assign(query, { sort_by: sortBy }));
 }
 
-function* hydrateUrl() {
+export function* hydrateUrl() {
   const query             = yield* getQuery();
   const { q, page = '1', deb = false } = query;
 

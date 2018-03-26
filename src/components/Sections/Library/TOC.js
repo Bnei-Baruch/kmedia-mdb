@@ -17,7 +17,7 @@ class TOC extends Component {
     // eslint-disable-next-line react/forbid-prop-types
     contextRef: PropTypes.object,
     getSourceById: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
+    apply: PropTypes.func.isRequired,
     stickyOffset: PropTypes.number,
     // eslint-disable-next-line react/forbid-prop-types
     match: PropTypes.string.isRequired,
@@ -32,9 +32,11 @@ class TOC extends Component {
   state = {};
 
   componentWillReceiveProps(nextProps) {
-    const { fullPath }     = nextProps;
-    const { id: activeId } = fullPath[fullPath.length - 1];
-    this.setState({ activeId });
+    const { fullPath } = nextProps;
+    const activeId     = fullPath[fullPath.length - 1].id;
+    if (activeId !== this.state.activeId) {
+      this.setState({ activeId });
+    }
   }
 
   componentDidUpdate() {
@@ -113,7 +115,7 @@ class TOC extends Component {
 
   selectSourceById = (id, e) => {
     e.preventDefault();
-    this.props.replace(`sources/${id}`);
+    this.props.apply(`sources/${id}`);
     this.props.matchApplied();
     this.setState({ activeId: id });
   };

@@ -21,7 +21,16 @@ class FiltersHydrator extends Component {
 
   componentDidMount() {
     // Filters hydration cycle starts here
-    this.props.hydrateFilters(this.props.namespace);
+    const { namespace, isHydrated, hydrateFilters, filtersHydrated } = this.props;
+
+    // Filters were hydrated on SSR ?
+    if (isHydrated) {
+      // Short the circuit here.
+      // We'll continue next time we mount.
+      filtersHydrated(namespace);
+    } else {
+      hydrateFilters(namespace);
+    }
   }
 
   componentWillReceiveProps(nextProps) {

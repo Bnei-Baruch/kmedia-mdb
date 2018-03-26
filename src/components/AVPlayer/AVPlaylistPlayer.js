@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { Media } from 'react-media-player';
 
 import { MT_AUDIO } from '../../helpers/consts';
-import { selectors as system } from '../../redux/modules/system';
+import { selectors as device } from '../../redux/modules/device';
 import AVMobileCheck from './AVMobileCheck';
 
 class AVPlaylistPlayer extends Component {
@@ -96,7 +96,7 @@ class AVPlaylistPlayer extends Component {
 }
 
 const mapState = state => ({
-  autoPlayAllowed: system.getAutoPlayAllowed(state.system),
+  autoPlayAllowed: device.getAutoPlayAllowed(state.device),
 });
 
 export default connect(mapState)(AVPlaylistPlayer);

@@ -24,7 +24,6 @@ function* setLanguage(action) {
 
   // change global moment.js locale
   moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
-  console.log('moment.locale', moment.locale());
 
   // change page direction and fetch css
 

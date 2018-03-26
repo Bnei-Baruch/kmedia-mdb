@@ -1,6 +1,6 @@
 import qs from 'qs';
 
-import { LANGUAGES } from './consts';
+import { DEFAULT_LANGUAGE, LANGUAGES } from './consts';
 
 export const parse = str =>
   qs.parse(str);
@@ -16,6 +16,7 @@ export const stringify = obj =>
 export const isAbsoluteUrl = url => /^(?:[a-z]+:)?\/\//i.test(url);
 
 const ensureStartsWithSlash = str => str && (str[0] === '/' ? str : `/${str}`);
+
 const splitPathByLanguage   = (path) => {
   const pathWithSlash = ensureStartsWithSlash(path);
   const parts         = pathWithSlash.split('/');
@@ -30,6 +31,12 @@ const splitPathByLanguage   = (path) => {
   return {
     path: pathWithSlash
   };
+};
+
+export const getLanguageFromPath = (_path) => {
+  const path  = ensureStartsWithSlash(_path);
+  const parts = splitPathByLanguage(path);
+  return LANGUAGES[parts.language] ? parts.language : DEFAULT_LANGUAGE;
 };
 
 export const prefixWithLanguage = (path, location, toLanguage) => {

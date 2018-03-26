@@ -8,7 +8,6 @@ import UnitList from '../../Pages/UnitList/Container';
 import PageHeader from './Header';
 
 class CollectionPage extends Component {
-
   static propTypes = {
     namespace: PropTypes.string.isRequired,
     collection: shapes.GenericCollection,
@@ -29,13 +28,10 @@ class CollectionPage extends Component {
   render() {
     const { collection, wip, err, namespace, t, renderUnit } = this.props;
 
-    const wipErr = WipErr({ wip, err, t });
-    if (wipErr) {
-      return wipErr;
-    }
-
+    // Most chances we already have the collection either SSR or some nav link.
+    // Only in case we don't, we'll show wipErr.
     if (!collection) {
-      return null;
+      return WipErr({ wip, err, t });
     }
 
     return (

@@ -11,6 +11,8 @@ import Info from './widgets/Info/Info';
 import MediaDownloads from './widgets/Downloads/MediaDownloads';
 import SameCollection from './widgets/Recommended/SameCollection/Container';
 
+import Helmets from '../../shared/Helmets';
+
 export class UnitPage extends Component {
 
   static propTypes = {
@@ -28,6 +30,19 @@ export class UnitPage extends Component {
     err: null,
     section: '',
   };
+
+  renderHelmet() {
+    const { unit } = this.props;
+
+    return (
+      <div>
+        {/*All the unit types can be derived from UnitPage, so we use
+        here only the basic helmet (as a default), the derived UnitPages should override thid function according
+        to its content */}
+        <Helmets.Basic title={unit.name} description={unit.description} />
+      </div>
+    );
+  }
 
   renderPlayer() {
     const { unit, language, t } = this.props;
@@ -65,6 +80,7 @@ export class UnitPage extends Component {
   renderContent() {
     return (
       <div className="unit-page">
+        {this.renderHelmet()}
         {this.renderPlayer()}
         <Container>
           <Grid padded>

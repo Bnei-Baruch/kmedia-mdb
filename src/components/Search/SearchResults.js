@@ -177,7 +177,7 @@ class SearchResults extends Component {
   };
 
   render() {
-    const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange, cMap, cuMap } = this.props;
+    const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange, cMap, cuMap, location } = this.props;
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
@@ -185,7 +185,7 @@ class SearchResults extends Component {
     }
 
     // Query from URL (not changed until pressed Enter.
-    const query = getQuery(window.location).q;
+    const query = getQuery(location).q;
 
     if (query === '' && !Object.values(filtersTransformer.toApiParams(filters)).length) {
       return <div>{t('search.results.empty-query')}</div>;
