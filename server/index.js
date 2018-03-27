@@ -5,7 +5,7 @@ require('ignore-styles').default(undefined, (module, filename) => {
   if (filename.endsWith('.png') ||
     filename.endsWith('.jpg') ||
     filename.endsWith('.svg')) {
-    module.exports = `/${manifest[`static/media/${path.basename(filename)}`]}`;
+    module.exports = `/${manifest[path.join('static','media',path.basename(filename))]}`;
   }
 });
 
