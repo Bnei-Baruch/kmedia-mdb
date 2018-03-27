@@ -39,7 +39,7 @@ class TOC extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     return (
       this.props.rootId !== nextProps.rootId ||
       this.props.match !== nextProps.match ||
