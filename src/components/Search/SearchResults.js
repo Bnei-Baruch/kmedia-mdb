@@ -29,6 +29,7 @@ class SearchResults extends Component {
     handlePageChange: PropTypes.func.isRequired,
     filters: PropTypes.arrayOf(PropTypes.object).isRequired,
     location: shapes.HistoryLocation.isRequired,
+    click: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -46,9 +47,14 @@ class SearchResults extends Component {
     return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop]) }} />;
   };
 
-  renderContentUnit = (cu, hit) => {
-    const { t, location }                                            = this.props;
-    const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
+  click = (mdb_uid, index, type, rank, searchId) => {
+    const { click } = this.props;
+    click(mdb_uid, index, type, rank, searchId);
+  }
+
+  renderContentUnit = (cu, hit, rank) => {
+    const { t, location, results: { searchId } } = this.props;
+    const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
 
     const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || cu.name;
     const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
@@ -87,7 +93,11 @@ class SearchResults extends Component {
           <Label size="tiny">{t(`constants.content-types.${cu.content_type}`)}</Label>
         </Table.Cell>
         <Table.Cell>
-          <Link className="search__link" to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}>
+          <Link
+            className="search__link"
+            onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+            to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}
+          >
             {name}
           </Link>
           &nbsp;&nbsp;
@@ -109,9 +119,9 @@ class SearchResults extends Component {
     );
   };
 
-  renderCollection = (c, hit) => {
-    const { t, location }                                            = this.props;
-    const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
+  renderCollection = (c, hit, rank) => {
+    const { t, location, results: { searchId } } = this.props;
+    const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
 
     const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || c.name;
     const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
@@ -141,7 +151,11 @@ class SearchResults extends Component {
           <Label size="tiny">{t(`constants.content-types.${c.content_type}`)}</Label>
         </Table.Cell>
         <Table.Cell>
-          <Link className="search__link" to={canonicalLink(c || { id: mdbUid, content_type: c.content_type })}>
+          <Link
+            className="search__link"
+            onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+            to={canonicalLink(c || { id: mdbUid, content_type: c.content_type })}
+          >
             {name}
           </Link>
           &nbsp;&nbsp;
@@ -158,7 +172,7 @@ class SearchResults extends Component {
     );
   };
 
-  renderHit = (hit) => {
+  renderHit = (hit, rank) => {
     // console.log('hit', hit);
     const { cMap, cuMap }                  = this.props;
     const { _source: { mdb_uid: mdbUid } } = hit;
@@ -166,9 +180,9 @@ class SearchResults extends Component {
     const c                                = cMap[mdbUid];
 
     if (cu) {
-      return this.renderContentUnit(cu, hit);
+      return this.renderContentUnit(cu, hit, rank);
     } else if (c) {
-      return this.renderCollection(c, hit);
+      return this.renderCollection(c, hit, rank);
     }
 
     // maybe content_units are still loading ?

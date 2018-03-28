@@ -21,6 +21,7 @@ class SearchResultsContainer extends Component {
     wip: shapes.WIP,
     err: shapes.Error,
     search: PropTypes.func.isRequired,
+    click: PropTypes.func.isRequired,
     setPage: PropTypes.func.isRequired,
     pageNo: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
@@ -70,7 +71,7 @@ class SearchResultsContainer extends Component {
   };
 
   render() {
-    const { wip, err, results, cMap, cuMap, pageNo, pageSize, sortBy, language, location } = this.props;
+    const { wip, err, results, cMap, cuMap, pageNo, pageSize, sortBy, language, location, click } = this.props;
 
     return (
       <div>
@@ -94,6 +95,7 @@ class SearchResultsContainer extends Component {
             language={language}
             handlePageChange={this.handlePageChange}
             location={location}
+            click={click}
           />
         </Container>
       </div>
@@ -145,6 +147,7 @@ const mapState = (state) => {
 
 const mapDispatch = dispatch => bindActionCreators({
   search: actions.search,
+  click: actions.click,
   setPage: actions.setPage,
   setSortBy: actions.setSortBy,
   hydrateUrl: actions.hydrateUrl,

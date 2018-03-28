@@ -1,7 +1,8 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { getQuery, updateQuery as urlUpdateQuery } from './helpers/url';
+import { GenerateSearchId } from '../helpers/search';
 import { actions, selectors, types } from '../redux/modules/search';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions as mdbActions } from '../redux/modules/mdb';
@@ -38,7 +39,9 @@ function* search(action) {
       yield put(actions.searchFailure(null));
       return
     }
-    const { data } = yield call(Api.search, { ...action.payload, q, sortBy, language, deb });
+    const searchId = GenerateSearchId();
+    const { data } = yield call(Api.search, { ...action.payload, q, sortBy, language, deb, searchId });
+    data.searchId = searchId;
 
     if (Array.isArray(data.hits.hits) && data.hits.hits.length > 0) {
       // TODO edo: optimize data fetching
@@ -73,6 +76,10 @@ function* search(action) {
   } catch (err) {
     yield put(actions.searchFailure(err));
   }
+}
+
+function* click(action) {
+  yield call(Api.click, action.payload);
 }
 
 function* updatePageInQuery(action) {
@@ -111,6 +118,10 @@ function* watchSearch() {
   yield takeLatest(types.SEARCH, search);
 }
 
+function* watchClick() {
+  yield takeEvery(types.CLICK, click);
+}
+
 function* watchSetPage() {
   yield takeLatest(types.SET_PAGE, updatePageInQuery);
 }
@@ -126,6 +137,7 @@ function* watchHydrateUrl() {
 export const sagas = [
   watchAutocomplete,
   watchSearch,
+  watchClick,
   watchSetPage,
   watchSetSortBy,
   watchHydrateUrl,

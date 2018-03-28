@@ -8,6 +8,7 @@ const AUTOCOMPLETE_FAILURE = 'Search/AUTOCOMPLETE_FAILURE';
 const SEARCH               = 'Search/SEARCH';
 const SEARCH_SUCCESS       = 'Search/SEARCH_SUCCESS';
 const SEARCH_FAILURE       = 'Search/SEARCH_FAILURE';
+const CLICK                = 'Search/CLICK';
 
 const SET_PAGE     = 'Search/SET_PAGE';
 const SET_SORT_BY  = 'Search/SET_SORT_BY';
@@ -22,6 +23,7 @@ export const types = {
   SEARCH,
   SEARCH_SUCCESS,
   SEARCH_FAILURE,
+  CLICK,
 
   SET_PAGE,
   SET_SORT_BY,
@@ -39,6 +41,8 @@ const search              = createAction(SEARCH, (q, pageNo, pageSize, deb=false
                                                  ({q, pageNo, pageSize, deb}));
 const searchSuccess       = createAction(SEARCH_SUCCESS);
 const searchFailure       = createAction(SEARCH_FAILURE);
+const click               = createAction(CLICK, (mdbUid, index, type, rank, searchId) =>
+                                                ({mdbUid, index, type, rank, searchId}));
 const setPage             = createAction(SET_PAGE);
 const setSortBy           = createAction(SET_SORT_BY);
 const updateQuery         = createAction(UPDATE_QUERY);
@@ -52,6 +56,7 @@ export const actions = {
   search,
   searchSuccess,
   searchFailure,
+  click,
 
   setPage,
   setSortBy,
