@@ -182,13 +182,13 @@ class LibraryContainer extends Component {
   };
 
   handleIncreaseFontSize = (e, data) => {
-    if (this.state.fontSize < 6) {
+    if (this.state.fontSize < 5) {
       this.setState({ fontSize: this.state.fontSize + 1 });
     }
   };
 
   handleDecreaseFontSize = (e, data) => {
-    if (this.state.fontSize > -2) {
+    if (this.state.fontSize > -3) {
       this.setState({ fontSize: this.state.fontSize - 1 });
     }
   };
@@ -247,27 +247,31 @@ class LibraryContainer extends Component {
     this.fetchIndices(sourceId);
   };
 
-  sortButton = (sortOrder, title) => (
-    <Button
-      icon
-      active={this.props.sortBy === sortOrder}
-      title={title}
-      onClick={() => this.props.sourcesSortBy(sortOrder)}
-      compact
-    >
-      {title}
-    </Button>
-  );
+  sortButton = () => {
+    let sortOrder;
+    if (this.props.sortBy === 'AZ') {
+      sortOrder = 'Book';
+    } else {
+      sortOrder = 'AZ';
+    }
+    this.props.sourcesSortBy(sortOrder);
+  };
 
   switchSortingOrder = (parentId, t) => {
     if (this.props.NotToSort.findIndex(a => a === parentId) !== -1) {
       return null;
     }
     return (
-      <Button.Group basic className="buttons-language-selector" size="mini">
-        {this.sortButton('AZ', t('sources-library.az'))}
-        {this.sortButton('Book', t('sources-library.default'))}
-      </Button.Group>
+      <Button
+      color={this.props.sortBy === 'AZ' ? 'blue' : ''}
+      icon="sort alphabet ascending"
+      active={this.props.sortBy === 'AZ'}
+      onClick={() => this.sortButton()}
+      size="small"
+      compact
+      basic={this.props.sortBy !== 'AZ'}
+    />
+      
     );
   };
 
@@ -297,6 +301,7 @@ class LibraryContainer extends Component {
         onChange={this.handleFilterChange}
         onKeyDown={this.handleFilterKeyDown}
         size="mini"
+        fluid
       />
     );
   };
@@ -343,17 +348,23 @@ class LibraryContainer extends Component {
           <Container>
             <Grid padded centered>
               <Grid.Row verticalAlign="bottom">
-                <Grid.Column tablet={5} computer={4} className="mobile-hidden">
-                  <Header size="small">{t('sources-library.toc')}</Header>
-                  {this.switchSortingOrder(parentId, t)}
-                  {matchString}
+                <Grid.Column mobile={16} tablet={5} computer={4} className="source__toc-header">
+                  <div className="source__header-title computer-only">
+                    <Header size="small">{t('sources-library.toc')}</Header>
+                  </div>
+                  <div className="source__header-toolbar">
+                    {matchString}
+                    {this.switchSortingOrder(parentId, t)}
+                    <Button compact size="small" className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
+                  </div>
+                  
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={11} computer={12} className="source__content-header">
-                  <div>
-                    <div className="mobile-hidden">{this.header(sourceId, fullPath)}</div>
+                  
+                  <div className="source__header-title mobile-hidden">{this.header(sourceId, fullPath)}</div>
+                  <div className="source__header-toolbar">
                     <Popup
-                      trigger={<Button icon='setting' />}
-
+                      trigger={<Button size="small" compact icon="setting" />}
                       on='click'
                       position='bottom right'
                     >
@@ -382,8 +393,8 @@ class LibraryContainer extends Component {
                         </Menu>
                       </Popup.Content>
                     </Popup>
-                    <Button icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
-                    <Button className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
+                    <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
+                    <Button compact size="small" className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
 
                   </div>
                 </Grid.Column>
@@ -393,7 +404,7 @@ class LibraryContainer extends Component {
         </div>
         <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
           <Grid padded centered>
-            <Grid.Row>
+            <Grid.Row className="is-fitted">
               <Grid.Column mobile={16} tablet={5} computer={4} onClick={this.handleTocIsActive}>
                 <TOC
                   match={matchString ? match : ''}
@@ -403,7 +414,7 @@ class LibraryContainer extends Component {
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
                   replace={this.props.replace}
-                  stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}
+                  stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
                   t={t}
                 />
               </Grid.Column>

@@ -119,13 +119,14 @@
       left:0;
       right:0;
     }
-    .source__toc {
-      > div:nth-child(2) {
-      }
-    }
   }
 
   &.toc--is-active{
+    .source__toc-header {
+      @include mobile {
+        transform: none;
+      }
+    }
     .source__toc {
       > div:nth-child(2) {
         @include mobile {
@@ -136,15 +137,18 @@
   }
 
   &__toc {
-    
+    // margin: 0 0 0 -1em !important;
+    // background: lime;
     > div:nth-child(2) {
+      // background: rgba($red,.2);
       overflow-y: auto;
-      padding: 0 1em 0 0;
+      padding: 1em 1em 1em 0;
+      
       @include mobile {
         position: fixed !important;
         width: 100% !important;
-        height: 100% !important;
-        top: 0 !important;
+        // height: 100% !important;
+        top: auto !important;
         bottom: 0 !important;
         left: 0 !important;
         right: 0 !important;
@@ -153,6 +157,7 @@
         transition: transform .3s;
         z-index: 1;
         padding: calc( 60px + 1em ) 1em 1em;
+        padding: 1em;
       }
     }
     .title {
@@ -171,53 +176,109 @@
     }
   }
   &__content-wrapper {
+    font-size: 1.1428571429rem;
 
 
-    &.size6 {font-size: (20 / 14) + em;}
-    &.size5 {font-size: (19 / 14) + em;}
-    &.size4 {font-size: (18 / 14) + em;}
-    &.size3 {font-size: (17 / 14) + em;}
-    &.size2 {font-size: (16 / 14) + em;}
-    &.size1 {font-size: (15 / 14) + em;}
-    &.size0 {font-size: (14 / 14) + em;}
-    &.size-1 {font-size: (13 / 14) + em;}
-    &.size-2 {font-size: (12 / 14) + em;}
 
   }
-  &__content-header {
-    
-    > div {
 
-      display: flex;
-      align-items: flex-end;
-      // flex-direction: row !important;
-      // background: blue;
-      > div:first-child {
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-        flex: 1 1 auto;
+  &__content-header,
+  &__toc-header {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-end;
+    background: $white;
+  }
+
+  &__header-toolbar {
+    justify-content: flex-end;
+    > * {
+      margin: 0 !important;
+      + * {
+        margin-left: 0.25em !important;
       }
     }
+  }
+  &__toc-header {
+    // background: red;
+    @include mobile {
+      position: fixed !important;
+    //   // width: 100% !important;
+    //   // height: 100% !important;
+    //   // top: 0 !important;
+    //   // bottom: 0 !important;
+    //   left: 0 !important;
+    //   right: 0 !important;
+    //   // background: $white !important;
+      transform: translate(100%, 0);
+      transition: transform .3s;
+      z-index: 10;
+    //   // padding: calc( 60px + 1em ) 1em 1em;
+    }
+    .source__header-toolbar {
+      flex: 1 1 auto;
+    }
+  }
+  &__content-header {
+    .source__header-title {
+      flex: 1 1 auto;
+    }
+  }
+  &__header-title {
+    padding: 0 1em 0 0 !important;
+  }
 
+  &__header-toolbar {
+    align-items: center;
+    display: flex;
+    .input {
+      flex: 1 1 auto;
+      // margin: 0 .25em 0 0 !important;
+      // min-width: 4em;
+      // width: auto !important;
+    }
   }
 
   &__content {
     // background: pink;
-    
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     margin: 0 auto;
-    max-width: 800px;
+    max-width: 700px;
+
+    .size5 & {font-size: (21 / 16) + em;}
+    .size4 & {font-size: (20 / 16) + em;}
+    .size3 & {font-size: (19 / 16) + em;}
+    .size2 & {font-size: (18 / 16) + em;}
+    .size1 & {font-size: (17 / 16) + em;}
+    .size0 & {font-size: (16 / 16) + em;}
+    .size-1 & {font-size: (15 / 16) + em;}
+    .size-2 & {font-size: (14 / 16) + em;}
+    .size-3 & {font-size: (13 / 16) + em;}
     * {
       line-height: 1.9;
     }
+    h1, h2, h3, h4, h5 {
+      line-height: 1.28571429em;
+      em {
+        font-weight: bold;
+      }
+    }
+    h1 {font-size: 2em;}
+    h2 {font-size: 1.71428571em;}
+    h3 {font-size: 1.28571429em;}
+    h4 {font-size: 1.07142857em;}
+    h5 {font-size: 1em;}
     em {
       font-weight: normal; // Kolmans overwrite
     }
   }
 }
 
-.toc__mobile-header {
-  display: flex;
-}
+// .toc__mobile-header {
+//   display: flex;
+// }
 .ui.sepia.label,
 .ui.sepia.labels .label {
   background-color: $sepia-bg !important;

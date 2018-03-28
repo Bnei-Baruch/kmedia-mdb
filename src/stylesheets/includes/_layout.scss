@@ -201,3 +201,9 @@ $secondary-header-height: 10px;
     }
   }
 }
+
+
+.ui.grid>.row.is-fitted {
+  padding-bottom: 0;
+  padding-top: 0;
+}
