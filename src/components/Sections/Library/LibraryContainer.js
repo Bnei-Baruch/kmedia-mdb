@@ -32,6 +32,7 @@ class LibraryContainer extends Component {
     getPathByID: PropTypes.func,
     sortBy: PropTypes.string.isRequired,
     NotToSort: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    NotToSearch: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     areSourcesLoaded: PropTypes.bool,
     t: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
@@ -50,7 +51,7 @@ class LibraryContainer extends Component {
   state = {
     lastLoadedId: null,
     isReadable: false,
-    tocisactive: false,
+    tocIsActive: false,
     fontSize: 0,
     theme: 'light',
     match: '',
@@ -169,12 +170,11 @@ class LibraryContainer extends Component {
   };
 
   handleHeaderMenuRef = (ref) => {
-    console.log('handleHeaderMenuRef', ref);
     this.headerMenuRef = ref;
   };
 
   handleTocIsActive = () => {
-    this.setState({ tocisactive: !this.state.tocisactive });
+    this.setState({ tocIsActive: !this.state.tocIsActive });
   };
 
   handleIsReadable = () => {
@@ -290,7 +290,7 @@ class LibraryContainer extends Component {
   };
 
   matchString = (parentId, t) => {
-    if (this.props.NotToSort.findIndex(a => a === parentId) !== -1) {
+    if (this.props.NotToSearch.findIndex(a => a === parentId) !== -1) {
       return null;
     }
     return (
@@ -334,16 +334,18 @@ class LibraryContainer extends Component {
       );
     }
 
-    const { isReadable, fontSize, theme, secondaryHeaderHeight, tocisactive, match, } = this.state;
+    const { isReadable, fontSize, theme, secondaryHeaderHeight, tocIsActive, match, } = this.state;
     const matchString                                                                 = this.matchString(parentId, t);
 
     return (
-      <div className={classnames({
-        source: true,
-        'is-readable': isReadable,
-        'toc--is-active': tocisactive,
-        [`is-${theme}`]: true,
-      })}>
+      <div
+        className={classnames({
+          source: true,
+          'is-readable': isReadable,
+          'toc--is-active': tocIsActive,
+          [`is-${theme}`]: true,
+        })}
+      >
         <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
           <Container>
             <Grid padded centered>
@@ -454,7 +456,8 @@ export default withRouter(connect(
     getPathByID: sources.getPathByID(state.sources),
     sortBy: sources.sortBy(state.sources),
     areSourcesLoaded: sources.areSourcesLoaded(state.sources),
-    NotToSort: sources.NotToSort
+    NotToSort: sources.NotToSort,
+    NotToSearch: sources.NotToSearch,
   }),
   dispatch => bindActionCreators({
     fetchIndex: sourceActions.fetchIndex,
