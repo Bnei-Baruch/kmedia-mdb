@@ -470,6 +470,13 @@ class AVPlayer extends PureComponent {
     }
   };
 
+  // Get the video share url from shareUrl or from current address if shareUrl not found
+  getShareUrl = () => {
+    return (this.props && this.props.item && this.props.item.shareUrl) ?
+    window.location.origin + this.props.item.shareUrl + window.location.search : 
+    window.location.href;
+  };
+
   render() {
     const {
             autoPlay,
@@ -524,7 +531,7 @@ class AVPlayer extends PureComponent {
             icon="chevron left"
             onClick={this.handleToggleMode}
           />
-          <ShareBar url={window.location.href} t={t} />
+          <ShareBar url={this.getShareUrl()} t={t} />
         </div>
       );
     } else if (isVideo) {

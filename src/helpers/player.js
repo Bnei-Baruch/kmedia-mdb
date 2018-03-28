@@ -20,7 +20,7 @@ import {
   VS_DEFAULT,
 } from './consts';
 import { getQuery, updateQuery } from './url';
-import { isEmpty, physicalFile } from './utils';
+import { isEmpty, physicalFile, canonicalLink } from './utils';
 
 const fallbacksLanguages = [LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN];
 
@@ -204,7 +204,12 @@ function playlist(collection, mediaType, language) {
       return acc.concat(v);
     }, []);
   } else {
-    items = units.map(x => playableItem(x, mediaType, language));
+    items = units.map(x => {
+      const p = playableItem(x, mediaType, language);
+      if (p.unit)
+        p.shareUrl = canonicalLink(p.unit);
+      return p;
+    });
   }
 
   return {
