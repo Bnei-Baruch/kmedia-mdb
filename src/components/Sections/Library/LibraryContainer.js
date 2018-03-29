@@ -32,6 +32,7 @@ class LibraryContainer extends Component {
     getPathByID: PropTypes.func,
     sortBy: PropTypes.string.isRequired,
     NotToSort: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    NotToFilter: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     areSourcesLoaded: PropTypes.bool,
     t: PropTypes.func.isRequired,
     apply: PropTypes.func.isRequired,
@@ -250,7 +251,7 @@ class LibraryContainer extends Component {
   };
 
   matchString = (parentId, t) => {
-    if (this.props.NotToSort.findIndex(a => a === parentId) !== -1) {
+    if (this.props.NotToFilter.findIndex(a => a === parentId) !== -1) {
       return null;
     }
     return (
@@ -373,7 +374,8 @@ export default withRouter(connect(
     getPathByID: sources.getPathByID(state.sources),
     sortBy: sources.sortBy(state.sources),
     areSourcesLoaded: sources.areSourcesLoaded(state.sources),
-    NotToSort: sources.NotToSort
+    NotToSort: sources.NotToSort,
+    NotToFilter: sources.NotToFilter,
   }),
   dispatch => bindActionCreators({
     fetchIndex: sourceActions.fetchIndex,
