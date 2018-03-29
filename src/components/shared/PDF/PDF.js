@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import throttle from 'lodash/throttle';
-import { Document, Page } from 'react-pdf/build/entry.webpack';
+import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import { Container } from 'semantic-ui-react';
 
 import PDFMenu from './PDFMenu';
@@ -12,6 +12,7 @@ class PDF extends Component {
     pdfFile: PropTypes.string.isRequired,
     startsFrom: PropTypes.number.isRequired,
     pageNumber: PropTypes.number.isRequired,
+    pageNumberHandler: PropTypes.func.isRequired,
   };
 
   static defaultProps = {};
@@ -23,9 +24,8 @@ class PDF extends Component {
   constructor(props) {
     super(props);
 
-    const pageNumber = props.pageNumber + props.startsFrom + -1;
-    this.state       = {
-      pageNumber,
+    this.state = {
+      pageNumber: props.pageNumber,
       numPages: null,
       width: null,
     };
@@ -51,12 +51,28 @@ class PDF extends Component {
   }
 
   onDocumentLoadSuccess = ({ numPages }) => {
-    this.setState({ numPages });
+    const { pageNumber } = this.state;
+    const { startsFrom } = this.props;
+
+    let pageNo;
+    if (pageNumber >= startsFrom && pageNumber <= (startsFrom + numPages + -1)) {
+      pageNo = pageNumber;
+    } else {
+      pageNo = startsFrom;
+    }
+    this.setState({ numPages, pageNumber: pageNo });
+    this.props.pageNumberHandler(pageNo);
   };
 
-  setDivSize = () => this.setState({ width: document.getElementById('pdfWrapper').getBoundingClientRect().width });
+  setDivSize = () =>
+    this.setState({
+      width: document.getElementById('pdfWrapper').getBoundingClientRect().width
+    });
 
-  setPage = pageNo => this.setState({ pageNumber: pageNo });
+  setPage = (pageNo) => {
+    this.setState({ pageNumber: pageNo });
+    this.props.pageNumberHandler(pageNo);
+  };
 
   throttledSetDivSize = () => throttle(this.setDivSize, 500);
 
@@ -86,10 +102,19 @@ class PDF extends Component {
                   pageNumber={pageNumber + (-startsFrom) + 1}
                   renderAnnotations={false}
                   renderTextLayer={false}
+                  renderMode="svg"
                 /> : null
             }
           </Document>
         </div>
+        <Container fluid textAlign="center">
+          <PDFMenu
+            numPages={numPages}
+            pageNumber={pageNumber}
+            startsFrom={startsFrom}
+            setPage={this.setPage}
+          />
+        </Container>
       </div>
     );
   }

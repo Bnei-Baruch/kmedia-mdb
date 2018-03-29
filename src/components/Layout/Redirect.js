@@ -13,6 +13,7 @@ import warning from 'warning';
 import invariant from 'invariant';
 import { createLocation, locationsAreEqual } from 'history';
 import pathToRegexp from 'path-to-regexp';
+import * as shapes from '../shapes';
 
 const patternCache = {};
 const cacheLimit   = 10000;
@@ -68,10 +69,7 @@ class Redirect extends React.Component {
 
   static contextTypes = {
     router: PropTypes.shape({
-      history: PropTypes.shape({
-        push: PropTypes.func.isRequired,
-        replace: PropTypes.func.isRequired
-      }).isRequired,
+      history: shapes.History.isRequired,
       staticContext: PropTypes.object
     }).isRequired
   };

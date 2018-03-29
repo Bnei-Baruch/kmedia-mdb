@@ -16,8 +16,8 @@ class SearchResultsContainer extends Component {
   static propTypes = {
     query: PropTypes.string.isRequired,
     results: PropTypes.object,
-    cMap: PropTypes.objectOf(shapes.Collection),
-    cuMap: PropTypes.objectOf(shapes.ContentUnit),
+    cMap: PropTypes.objectOf(shapes.Collection).isRequired,
+    cuMap: PropTypes.objectOf(shapes.ContentUnit).isRequired,
     wip: shapes.WIP,
     err: shapes.Error,
     search: PropTypes.func.isRequired,
@@ -28,6 +28,7 @@ class SearchResultsContainer extends Component {
     sortBy: PropTypes.string.isRequired,
     deb: PropTypes.bool.isRequired,
     hydrateUrl: PropTypes.func.isRequired,
+    setSortBy: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
     location: shapes.HistoryLocation.isRequired,
   };
@@ -105,7 +106,8 @@ class SearchResultsContainer extends Component {
 
 const mapState = (state) => {
   const results = selectors.getResults(state.search);
-  const cMap    = results && results.hits && Array.isArray(results.hits.hits) ?
+
+  const cMap = results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
       if (val._type === 'collections') {
         const cID = val._source.mdb_uid;
@@ -117,7 +119,8 @@ const mapState = (state) => {
       return acc;
     }, {}) :
     {};
-  const cuMap   = results && results.hits && Array.isArray(results.hits.hits) ?
+
+  const cuMap = results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
       if (val._type === 'content_units') {
         const cuID = val._source.mdb_uid;

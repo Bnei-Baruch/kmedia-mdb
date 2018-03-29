@@ -160,6 +160,7 @@ $player-color: $black;
   justify-content: center;
   position: absolute;
   width: 100%;
+  z-index: 1;
 
   &__wrapper {
     background: rgba(darken($player-color, 20%), 1);

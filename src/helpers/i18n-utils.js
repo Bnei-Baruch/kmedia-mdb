@@ -1,7 +1,18 @@
-export const getCurrentDirection = () =>
-  document.getElementById('root').style.getPropertyValue('direction');
+import { RTL_LANGUAGES } from '../helpers/consts';
+
+export const getCurrentDirection = () => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  return document.getElementById('root').style.getPropertyValue('direction');
+};
 
 export const changeDirection = (direction) => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
   const isRTL = direction === 'rtl';
 
   // replace semantic-ui css
@@ -36,3 +47,5 @@ export const changeDirection = (direction) => {
     ss.addEventListener('load', loadCB);
   }
 };
+
+export const getLanguageDirection = language => RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';

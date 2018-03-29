@@ -318,7 +318,8 @@
     "no-source": "Seleccione fuente",
     "toc": "Tabla de Contenido",
     "az":        "AZ",
-    "default":   "Por Omisión"
+    "default":   "Por Omisión",
+    "filter": "Filtro..."
   },
   "media-downloads": {
     "title": "Descargar archivos",

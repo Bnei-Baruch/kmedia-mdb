@@ -1,4 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
+import mapValues from 'lodash/mapValues';
+
+import { types as ssr } from './ssr';
 
 const UNZIP            = 'Assets/UNZIP';
 const UNZIP_SUCCESS    = 'Assets/UNZIP_SUCCESS';
@@ -41,7 +44,14 @@ const initialState = {
   doc2htmlById: {},
 };
 
+const onSSRPrepare = state => ({
+  zipIndexById: mapValues(state.zipIndexById, x => ({ ...x, err: x.err ? x.err.toString() : x.err })),
+  doc2htmlById: mapValues(state.doc2htmlById, x => ({ ...x, err: x.err ? x.err.toString() : x.err })),
+});
+
 export const reducer = handleActions({
+  [ssr.PREPARE]: onSSRPrepare,
+
   [UNZIP]: (state, action) => ({
     ...state,
     zipIndexById: {

@@ -107,7 +107,7 @@ export const renderCollection = (collection, t) => {
   rows.push((
     <Table.Row key={`l-${collection.id}`} verticalAlign="top" className="no-thumbnail">
       <Table.Cell collapsing singleLine rowSpan={cuSpan}>
-      <span className="index__date">{t('values.date', { date: new Date(collection.film_date) })}</span>
+        <span className="index__date">{t('values.date', { date: new Date(collection.film_date) })}</span>
       </Table.Cell>
       <Table.Cell>
         <Link className="index__title" to={canonicalLink(collection)}>
@@ -131,17 +131,17 @@ const mapState = (state, ownProps) => {
 
   return {
     ...baseMapState(state, ownProps),
-    items: (nsState.items || []).map(x =>
+    items: (nsState.items || []).map(x => (
       x[1] === CT_LESSON_PART ?
         mdb.getDenormContentUnit(state.mdb, x[0]) :
-        mdb.getDenormCollectionWUnits(state.mdb, x[0])),
+        mdb.getDenormCollectionWUnits(state.mdb, x[0]))
+    ),
   };
 };
 
 const MyUnitList = wrap(UnitListContainer, mapState);
 
 class LessonsList extends Component {
-
   render() {
     return (
       <div>

@@ -3,23 +3,24 @@ import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { translate } from 'react-i18next';
 import { Container, Divider } from 'semantic-ui-react';
+
 import * as shapes from '../../../../shapes';
 import ResultsPageHeader from '../../../../Pagination/ResultsPageHeader';
 import filterComponents from '../../../../Filters/components/index';
 import Filters from '../../../../Filters/Filters';
-import List from './List';
 import WipErr from '../../../../shared/WipErr/WipErr';
+import List from './List';
 
 const filters = {
-  'conventions': [
+  conventions: [
     { name: 'locations-filter', component: filterComponents.LocationsFilter },
     { name: 'years-filter', component: filterComponents.YearsFilter },
   ],
-  'holidays': [
+  holidays: [
     { name: 'holidays-filter', component: filterComponents.HolidaysFilter },
     { name: 'years-filter', component: filterComponents.YearsFilter }
   ],
-  'picnics': [
+  picnics: [
     { name: 'years-filter', component: filterComponents.YearsFilter }
   ],
   'unity-days': [
@@ -28,7 +29,6 @@ const filters = {
 };
 
 class TabPage extends PureComponent {
-
   static propTypes = {
     tabName: PropTypes.string.isRequired,
     items: PropTypes.arrayOf(shapes.EventCollection),
@@ -67,7 +67,6 @@ class TabPage extends PureComponent {
       </div>
     );
   }
-
 }
 
 export default translate()(TabPage);

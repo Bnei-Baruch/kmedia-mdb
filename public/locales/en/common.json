@@ -320,7 +320,8 @@
     "no-source": "Please select source",
     "toc": "Table Of Contents",
     "az":        "AZ",
-    "default":   "Default"
+    "default":   "Default",
+    "filter": "Filter..."
   },
   "media-downloads": {
     "title": "Media Downloads",

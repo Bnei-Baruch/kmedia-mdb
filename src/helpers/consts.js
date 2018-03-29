@@ -80,42 +80,48 @@ export const LANG_SLOVAK     = 'sk';
 export const LANG_CZECH      = 'cs';
 export const LANG_UNKNOWN    = 'xx';
 
+// TODO: complete locale list
 export const LANGUAGES = {
-  [LANG_HEBREW]: { value: LANG_HEBREW, flag: 'il' },
-  [LANG_ENGLISH]: { value: LANG_ENGLISH, flag: 'us' },
-  [LANG_RUSSIAN]: { value: LANG_RUSSIAN, flag: 'ru' },
-  [LANG_SPANISH]: { value: LANG_SPANISH, flag: 'es' },
-  [LANG_ITALIAN]: { value: LANG_ITALIAN, flag: 'it' },
-  [LANG_GERMAN]: { value: LANG_GERMAN, flag: 'de' },
-  [LANG_DUTCH]: { value: LANG_DUTCH, flag: 'nl' },
-  [LANG_FRENCH]: { value: LANG_FRENCH, flag: 'fr' },
-  [LANG_PORTUGUESE]: { value: LANG_PORTUGUESE, flag: 'pt' },
-  [LANG_TURKISH]: { value: LANG_TURKISH, flag: 'tr' },
-  [LANG_POLISH]: { value: LANG_POLISH, flag: 'pl' },
-  [LANG_ARABIC]: { value: LANG_ARABIC, flag: 'sa' },
-  [LANG_HUNGARIAN]: { value: LANG_HUNGARIAN, flag: 'hu' },
-  [LANG_FINNISH]: { value: LANG_FINNISH, flag: 'fi' },
-  [LANG_LITHUANIAN]: { value: LANG_LITHUANIAN, flag: 'lt' },
-  [LANG_JAPANESE]: { value: LANG_JAPANESE, flag: 'jp' },
-  [LANG_BULGARIAN]: { value: LANG_BULGARIAN, flag: 'bg' },
-  [LANG_GEORGIAN]: { value: LANG_GEORGIAN, flag: 'ge' },
-  [LANG_NORWEGIAN]: { value: LANG_NORWEGIAN, flag: 'no' },
-  [LANG_SWEDISH]: { value: LANG_SWEDISH, flag: 'se' },
-  [LANG_CROATIAN]: { value: LANG_CROATIAN, flag: 'hr' },
-  [LANG_CHINESE]: { value: LANG_CHINESE, flag: 'cn' },
-  [LANG_PERSIAN]: { value: LANG_PERSIAN, flag: 'ir' },
-  [LANG_ROMANIAN]: { value: LANG_ROMANIAN, flag: 'ro' },
-  [LANG_HINDI]: { value: LANG_HINDI, flag: 'in' },
-  [LANG_UKRAINIAN]: { value: LANG_UKRAINIAN, flag: 'ua' },
-  [LANG_MACEDONIAN]: { value: LANG_MACEDONIAN, flag: 'mk' },
-  [LANG_SLOVENIAN]: { value: LANG_SLOVENIAN, flag: 'si' },
-  [LANG_LATVIAN]: { value: LANG_LATVIAN, flag: 'lv' },
-  [LANG_SLOVAK]: { value: LANG_SLOVAK, flag: 'sk' },
-  [LANG_CZECH]: { value: LANG_CZECH, flag: 'cz' },
+  [LANG_HEBREW]: { value: LANG_HEBREW, flag: 'il', locale: 'he_IL' },
+  [LANG_ENGLISH]: { value: LANG_ENGLISH, flag: 'us', locale: 'en_US' },
+  [LANG_RUSSIAN]: { value: LANG_RUSSIAN, flag: 'ru', locale: 'ru_RU' },
+  [LANG_SPANISH]: { value: LANG_SPANISH, flag: 'es', locale: '' },
+  [LANG_ITALIAN]: { value: LANG_ITALIAN, flag: 'it', locale: '' },
+  [LANG_GERMAN]: { value: LANG_GERMAN, flag: 'de', locale: '' },
+  [LANG_DUTCH]: { value: LANG_DUTCH, flag: 'nl', locale: '' },
+  [LANG_FRENCH]: { value: LANG_FRENCH, flag: 'fr', locale: '' },
+  [LANG_PORTUGUESE]: { value: LANG_PORTUGUESE, flag: 'pt', locale: '' },
+  [LANG_TURKISH]: { value: LANG_TURKISH, flag: 'tr', locale: '' },
+  [LANG_POLISH]: { value: LANG_POLISH, flag: 'pl', locale: '' },
+  [LANG_ARABIC]: { value: LANG_ARABIC, flag: 'sa', locale: '' },
+  [LANG_HUNGARIAN]: { value: LANG_HUNGARIAN, flag: 'hu', locale: '' },
+  [LANG_FINNISH]: { value: LANG_FINNISH, flag: 'fi', locale: '' },
+  [LANG_LITHUANIAN]: { value: LANG_LITHUANIAN, flag: 'lt', locale: '' },
+  [LANG_JAPANESE]: { value: LANG_JAPANESE, flag: 'jp', locale: '' },
+  [LANG_BULGARIAN]: { value: LANG_BULGARIAN, flag: 'bg', locale: '' },
+  [LANG_GEORGIAN]: { value: LANG_GEORGIAN, flag: 'ge', locale: '' },
+  [LANG_NORWEGIAN]: { value: LANG_NORWEGIAN, flag: 'no', locale: '' },
+  [LANG_SWEDISH]: { value: LANG_SWEDISH, flag: 'se', locale: '' },
+  [LANG_CROATIAN]: { value: LANG_CROATIAN, flag: 'hr', locale: '' },
+  [LANG_CHINESE]: { value: LANG_CHINESE, flag: 'cn', locale: '' },
+  [LANG_PERSIAN]: { value: LANG_PERSIAN, flag: 'ir', locale: '' },
+  [LANG_ROMANIAN]: { value: LANG_ROMANIAN, flag: 'ro', locale: '' },
+  [LANG_HINDI]: { value: LANG_HINDI, flag: 'in', locale: '' },
+  [LANG_UKRAINIAN]: { value: LANG_UKRAINIAN, flag: 'ua', locale: '' },
+  [LANG_MACEDONIAN]: { value: LANG_MACEDONIAN, flag: 'mk', locale: '' },
+  [LANG_SLOVENIAN]: { value: LANG_SLOVENIAN, flag: 'si', locale: '' },
+  [LANG_LATVIAN]: { value: LANG_LATVIAN, flag: 'lv', locale: '' },
+  [LANG_SLOVAK]: { value: LANG_SLOVAK, flag: 'sk', locale: '' },
+  [LANG_CZECH]: { value: LANG_CZECH, flag: 'cz', locale: '' },
 };
 
 export const FLAG_TO_LANGUAGE = Object.values(LANGUAGES).reduce((acc, language) => {
   acc[language.flag] = language.value;
+  return acc;
+}, {});
+
+export const LANGUAGE_TO_LOCALE = Object.values(LANGUAGES).reduce((acc, language) => {
+  acc[language.value] = language.locale;
   return acc;
 }, {});
 
@@ -268,6 +274,7 @@ export const RB_IGROT   = 'b8SHlrfH';
 export const MR_TORA    = 'bvA8ZB1w';
 export const RH_ZOHAR   = 'AwGBQX2L';
 
+// This is exptected to be sorted by values
 export const BS_TAAS_PARTS = {
   '9xNFLSSp': 1,
   XlukqLH8: 37,

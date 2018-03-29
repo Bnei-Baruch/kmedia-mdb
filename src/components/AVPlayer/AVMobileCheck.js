@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withMediaProps } from 'react-media-player';
 
-import { selectors as system } from '../../redux/modules/system';
+import { selectors as device } from '../../redux/modules/device';
 import * as shapes from '../shapes';
 import AVPlayerMobile from './AVPlayerMobile';
 import AVPlayer from './AVPlayer';
@@ -20,8 +20,8 @@ AVMobileCheck.propTypes = {
 };
 
 const mapState = state => ({
-  deviceInfo: system.getDeviceInfo(state.system),
-  autoPlayAllowed: system.getAutoPlayAllowed(state.system),
+  deviceInfo: device.getDeviceInfo(state.device),
+  autoPlayAllowed: device.getAutoPlayAllowed(state.device),
 });
 
 // withMediaProps is here to make the changes in the media context

@@ -1,5 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 
+import { types as ssr } from './ssr';
+
 /* Types */
 
 const AUTOCOMPLETE         = 'Search/AUTOCOMPLETE';
@@ -76,10 +78,17 @@ const initialState = {
   sortBy: 'relevance',
   deb: false,
   wip: false,
-  err: null,
+  error: null,
 };
 
+const onSSRPrepare = state => ({
+  ...state,
+  error: state.error ? state.error.toString() : state.error,
+});
+
 export const reducer = handleActions({
+  [ssr.PREPARE]: onSSRPrepare,
+
   [AUTOCOMPLETE]: (state, action) => ({
     ...state,
     acQ: action.payload,

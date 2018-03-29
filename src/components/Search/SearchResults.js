@@ -10,10 +10,10 @@ import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { filtersTransformer } from '../../filters';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
-import Pagination from '../Pagination/Pagination';
 import WipErr from '../shared/WipErr/WipErr';
+import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
-import ScoreDebug from './ScoreDebug'
+import ScoreDebug from './ScoreDebug';
 
 class SearchResults extends Component {
   static propTypes = {
@@ -162,11 +162,11 @@ class SearchResults extends Component {
           {snippet || null}
         </Table.Cell>
         {
-          !isDebMode(location) ?
-            null :
+          isDebMode(location) ?
             <Table.Cell collapsing textAlign="right">
               <ScoreDebug name={c.name} score={score} explanation={hit._explanation} />
-            </Table.Cell>
+            </Table.Cell> :
+            null
         }
       </Table.Row>
     );
@@ -191,7 +191,7 @@ class SearchResults extends Component {
   };
 
   render() {
-    const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange, cMap, cuMap } = this.props;
+    const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange, cMap, cuMap, location } = this.props;
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
@@ -199,7 +199,7 @@ class SearchResults extends Component {
     }
 
     // Query from URL (not changed until pressed Enter.
-    const query = getQuery(window.location).q;
+    const query = getQuery(location).q;
 
     if (query === '' && !Object.values(filtersTransformer.toApiParams(filters)).length) {
       return <div>{t('search.results.empty-query')}</div>;

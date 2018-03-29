@@ -2,59 +2,50 @@ import { createAction, handleActions } from 'redux-actions';
 
 /* Types */
 
-const BOOT  = 'System/BOOT';
-const INIT  = 'System/INIT';
-const READY = 'System/READY';
+const SET_DEVICE_INFO       = 'Device/SET_DEVICE_INFO';
+const SET_AUTO_PLAY_ALLOWED = 'Device/SET_AUTO_PLAY_ALLOWED';
 
 export const types = {
-  BOOT,
-  INIT,
-  READY,
+  SET_DEVICE_INFO,
+  SET_AUTO_PLAY_ALLOWED,
 };
 
 /* Actions */
 
-const boot  = createAction(BOOT);
-const init  = createAction(INIT);
-const ready = createAction(READY);
+const setDeviceInfo      = createAction(SET_DEVICE_INFO);
+const setAutoPlayAllowed = createAction(SET_AUTO_PLAY_ALLOWED);
 
 export const actions = {
-  boot,
-  init,
-  ready,
+  setDeviceInfo,
+  setAutoPlayAllowed,
 };
 
 /* Reducer */
 
 const initialState = {
-  isReady: false,
   deviceInfo: null,
   autoPlayAllowed: false,
-  visibilityState: false
 };
 
 export const reducer = handleActions({
-  [INIT]: (state, action) => ({
+  [SET_DEVICE_INFO]: (state, action) => ({
     ...state,
-    deviceInfo: action.payload.deviceInfo,
-    autoPlayAllowed: action.payload.autoPlayAllowed,
+    deviceInfo: action.payload,
   }),
 
-  [READY]: state => ({
+  [SET_AUTO_PLAY_ALLOWED]: (state, action) => ({
     ...state,
-    isReady: true
+    autoPlayAllowed: action.payload,
   }),
+
 }, initialState);
 
 /* Selectors */
 
-const isReady            = state => state.isReady;
 const getDeviceInfo      = state => state.deviceInfo;
 const getAutoPlayAllowed = state => state.autoPlayAllowed;
 
 export const selectors = {
-  isReady,
   getDeviceInfo,
   getAutoPlayAllowed,
 };
-

@@ -4,10 +4,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
-import { replace as routerReplace } from 'react-router-redux';
+import { push as routerPush } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Grid, Header, } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Input, } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
@@ -16,9 +16,6 @@ import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
-// import styles from '../../../stylesheets/includes/_layout.scss';
-
-// const MainMenuHeight2 = parseInt(styles.MainMenuHeight, 10);
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -37,7 +34,7 @@ class LibraryContainer extends Component {
     NotToSort: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     areSourcesLoaded: PropTypes.bool,
     t: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
+    apply: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -53,6 +50,7 @@ class LibraryContainer extends Component {
   state = {
     lastLoadedId: null,
     isReadable: false,
+    match: '',
   };
 
   componentDidMount() {
@@ -60,7 +58,7 @@ class LibraryContainer extends Component {
     window.addEventListener('resize', this.updateSticky);
     window.addEventListener('load', this.updateSticky);
 
-    const { sourceId, areSourcesLoaded, replace } = this.props;
+    const { sourceId, areSourcesLoaded, apply } = this.props;
     if (!areSourcesLoaded) {
       return;
     }
@@ -69,7 +67,7 @@ class LibraryContainer extends Component {
       this.props.sourceId !== sourceId ||
       this.state.lastLoadedId !== sourceId) {
       if (firstLeafId !== sourceId) {
-        replace(`sources/${firstLeafId}`);
+        apply(`sources/${firstLeafId}`);
       } else {
         // eslint-disable-next-line react/no-did-mount-set-state
         this.setState({ lastLoadedId: sourceId, language: this.props.language });
@@ -79,7 +77,7 @@ class LibraryContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { sourceId, areSourcesLoaded, language, replace } = nextProps;
+    const { sourceId, areSourcesLoaded, language, apply } = nextProps;
     if (!areSourcesLoaded) {
       return;
     }
@@ -95,7 +93,7 @@ class LibraryContainer extends Component {
       if (firstLeafId === sourceId) {
         this.loadNewIndices(sourceId, this.props.language);
       } else {
-        replace(firstLeafId);
+        apply(firstLeafId);
       }
     }
 
@@ -172,7 +170,7 @@ class LibraryContainer extends Component {
   };
 
   fetchIndices = (sourceId) => {
-    if (isEmpty(sourceId)) {
+    if (isEmpty(sourceId) || !isEmpty(this.props.indexMap[sourceId])) {
       return;
     }
 
@@ -219,6 +217,7 @@ class LibraryContainer extends Component {
       active={this.props.sortBy === sortOrder}
       title={title}
       onClick={() => this.props.sourcesSortBy(sortOrder)}
+      compact
     >
       {title}
     </Button>
@@ -229,11 +228,45 @@ class LibraryContainer extends Component {
       return null;
     }
     return (
-      <Button.Group basic className="buttons-language-selector" size="small">
+      <Button.Group basic className="buttons-language-selector" size="mini">
         {this.sortButton('AZ', t('sources-library.az'))}
         {this.sortButton('Book', t('sources-library.default'))}
       </Button.Group>
     );
+  };
+
+  handleFilterChange = (e, data) => {
+    this.setState({ match: data.value });
+  };
+
+  handleFilterKeyDown = (e) => {
+    if (e.keyCode === 27) { // Esc
+      this.handleFilterClear();
+    }
+  };
+
+  handleFilterClear = () => {
+    this.setState({ match: '' });
+  };
+
+  matchString = (parentId, t) => {
+    if (this.props.NotToSort.findIndex(a => a === parentId) !== -1) {
+      return null;
+    }
+    return (
+      <Input
+        icon="search"
+        placeholder={t('sources-library.filter')}
+        value={this.state.match}
+        onChange={this.handleFilterChange}
+        onKeyDown={this.handleFilterKeyDown}
+        size="mini"
+      />
+    );
+  };
+
+  backToTop = () => {
+    window.scrollTo(0, 0);
   };
 
   render() {
@@ -263,7 +296,9 @@ class LibraryContainer extends Component {
       );
     }
 
-    const { isReadable, secondaryHeaderHeight } = this.state;
+    const { isReadable, secondaryHeaderHeight, match } = this.state;
+
+    const matchString = this.matchString(parentId, t);
 
     return (
       <div className={classnames({ source: true, 'is-readable': isReadable })}>
@@ -274,6 +309,7 @@ class LibraryContainer extends Component {
                 <Grid.Column computer={4}>
                   <Header size="medium">{t('sources-library.toc')}</Header>
                   {this.switchSortingOrder(parentId, t)}
+                  {matchString}
                 </Grid.Column>
                 <Grid.Column computer={8}>
                   {this.header(sourceId, fullPath)}
@@ -292,11 +328,13 @@ class LibraryContainer extends Component {
             <Grid.Row>
               <Grid.Column computer={4}>
                 <TOC
+                  match={matchString ? match : ''}
+                  matchApplied={this.handleFilterClear}
                   fullPath={fullPath}
                   rootId={parentId}
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
-                  replace={this.props.replace}
+                  apply={this.props.apply}
                   stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}
                 />
               </Grid.Column>
@@ -306,6 +344,16 @@ class LibraryContainer extends Component {
                     {content}
                   </div>
                 </div>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Container>
+        <Container>
+          <Grid padded>
+            <Grid.Row>
+              <Grid.Column computer={12} />
+              <Grid.Column computer={2}>
+                <Button basic size="tiny" icon="arrow up" onClick={this.backToTop} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -330,6 +378,6 @@ export default withRouter(connect(
   dispatch => bindActionCreators({
     fetchIndex: sourceActions.fetchIndex,
     sourcesSortBy: sourceActions.sourcesSortBy,
-    replace: routerReplace,
+    apply: routerPush,
   }, dispatch)
 )(translate()(LibraryContainer)));

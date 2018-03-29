@@ -2,13 +2,12 @@ import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { actions, types } from '../redux/modules/mdb';
-import { types as system } from '../redux/modules/system';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions as sources } from '../redux/modules/sources';
 import { actions as tags } from '../redux/modules/tags';
 import { actions as publications } from '../redux/modules/publications';
 
-function* fetchUnit(action) {
+export function* fetchUnit(action) {
   const id = action.payload;
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
@@ -19,7 +18,7 @@ function* fetchUnit(action) {
   }
 }
 
-function* fetchCollection(action) {
+export function* fetchCollection(action) {
   const id = action.payload;
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
@@ -30,7 +29,7 @@ function* fetchCollection(action) {
   }
 }
 
-function* fetchLatestLesson() {
+export function* fetchLatestLesson() {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.latestLesson, { language });
@@ -40,7 +39,7 @@ function* fetchLatestLesson() {
   }
 }
 
-function* fetchSQData() {
+export function* fetchSQData() {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.sqdata, { language });
@@ -65,7 +64,7 @@ function* watchFetchLatestLesson() {
 }
 
 function* watchFetchSQData() {
-  yield takeLatest([types.FETCH_SQDATA, system.INIT], fetchSQData);
+  yield takeLatest(types.FETCH_SQDATA, fetchSQData);
 }
 
 export const sagas = [

@@ -6,7 +6,6 @@ import * as shapes from '../../shapes';
 import CollectionLogo from '../../shared/Logo/CollectionLogo';
 
 class CollectionPageHeader extends PureComponent {
-
   static propTypes = {
     collection: shapes.GenericCollection,
     namespace: PropTypes.string.isRequired,
@@ -19,6 +18,7 @@ class CollectionPageHeader extends PureComponent {
 
   render() {
     const { collection, namespace, t } = this.props;
+    const itemCount = Array.isArray(collection.cuIDs) ? collection.cuIDs.length : 0;
 
     return (
       <div className="collection-header">
@@ -35,7 +35,7 @@ class CollectionPageHeader extends PureComponent {
                       {collection.name}
                     </span>
                     <Header.Subheader className="section-header__subtitle">
-                      {collection.content_units.length}&nbsp;{t(`pages.collection.items.${namespace}`)}
+                      {itemCount}&nbsp;{t(`pages.collection.items.${namespace}`)}
                     </Header.Subheader>
                   </Header.Content>
                 </Header>
@@ -50,5 +50,3 @@ class CollectionPageHeader extends PureComponent {
 }
 
 export default CollectionPageHeader;
-
-
