@@ -19,7 +19,7 @@ class TOC extends Component {
     getSourceById: PropTypes.func.isRequired,
     apply: PropTypes.func.isRequired,
     stickyOffset: PropTypes.number,
-    // eslint-disable-next-line react/forbid-prop-types
+    
     match: PropTypes.string.isRequired,
     matchApplied: PropTypes.func.isRequired,
   };

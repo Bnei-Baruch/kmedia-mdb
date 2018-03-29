@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Container, Segment } from 'semantic-ui-react';
+import { Container, Segment, Portal } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { formatError, isEmpty, shallowCompare } from '../../../helpers/utils';
 import { assetUrl } from '../../../helpers/Api';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
-import ButtonsLanguageSelector from '../../Language/Selector/ButtonsLanguageSelector';
+import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
 import PDF from '../../shared/PDF/PDF';
 import { updateQuery } from '../../../helpers/url';
 import withPagination from '../../Pagination/withPagination';
@@ -25,6 +25,7 @@ class Library extends Component {
     startsFrom: PropTypes.number,
     language: PropTypes.string,
     languages: PropTypes.arrayOf(PropTypes.string),
+    langSelectorMount: PropTypes.any,
     t: PropTypes.func.isRequired,
     handleLanguageChanged: PropTypes.func.isRequired,
     history: shapes.History.isRequired,
@@ -33,6 +34,7 @@ class Library extends Component {
   static defaultProps = {
     language: null,
     languages: [],
+    langSelectorMount: null,
     content: {
       data: null,
       wip: false,
@@ -64,7 +66,7 @@ class Library extends Component {
   };
 
   render() {
-    const { content, language, languages, t, isTaas, } = this.props;
+    const { content, language, languages, t, isTaas, langSelectorMount } = this.props;
 
     if (isEmpty(content)) {
       return <Segment basic>&nbsp;</Segment>;
@@ -108,7 +110,7 @@ class Library extends Component {
     if (languages.length > 0) {
       languageBar = (
         <Container fluid textAlign="right">
-          <ButtonsLanguageSelector
+          <AnchorsLanguageSelector
             languages={languages}
             defaultValue={language}
             t={t}
@@ -120,7 +122,14 @@ class Library extends Component {
 
     return (
       <div>
-        {languageBar}
+        {
+          langSelectorMount && languageBar ?
+            <Portal open preprend mountNode={langSelectorMount}>
+              {languageBar}
+            </Portal>
+            :
+            languageBar
+        }
         {contents}
       </div>
     );

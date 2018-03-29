@@ -1,0 +1,40 @@
+.rtl {
+  // Library index - Collections
+  .sources {
+    &__list {
+      left: 0;
+      right: .78571429em;
+    }
+  }
+
+  // Library item - Unit
+  .source {
+    &__toc {
+      > div:nth-child(2) {
+        @include mobile {
+          transform: translate(-100%, 0);
+        }
+        padding: 1em 0 1em 1em;
+      }
+    }
+
+    &__header-toolbar {
+      > * {
+        + * {
+          margin-left: 0 !important;
+          margin-right: .25em !important;
+        }
+      }
+    }
+
+    &__toc-header {
+      @include mobile {
+        transform: translate(-100%, 0);
+      }
+    }
+
+    &__header-title {
+      padding: 0 0 0 1em !important;
+    }
+  }
+}
