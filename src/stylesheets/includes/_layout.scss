@@ -22,6 +22,7 @@ $secondary-header-height: 10px;
       }
     }
   }
+
   &__header {
     left: 0;
     position: fixed;
@@ -29,13 +30,18 @@ $secondary-header-height: 10px;
     top: 0;
     z-index: 900;
   }
+
   &__search {
     flex: 1 0 auto !important;
     font-size: 1rem;
     line-height: 1.4285em !important;
   }
+
   &__sidebar {
-    background: #fff;
+    @include small-mobile {
+      width: 100%;
+    }
+    background: $white;
     bottom: 0;
     left: 0;
     overflow: hidden;
@@ -45,10 +51,6 @@ $secondary-header-height: 10px;
     transition: transform .3s;
     width: $sidebar-width;
     z-index: 900;
-
-    @include small-mobile {
-      width: 100%;
-    }
 
     &.is-active {
       transform: none;
@@ -75,8 +77,9 @@ $secondary-header-height: 10px;
         box-shadow: none !important;
       }
     }
+
     &-search {
-      flex: 1 0 auto!important;
+      flex: 1 0 auto !important;
     }
   }
 
@@ -95,11 +98,11 @@ $secondary-header-height: 10px;
     background: $black;
   }
 
-  &__secondary-header{
+  &__secondary-header {
     background: $white;
     border-bottom: 1px solid $border-color;
-    min-height: $secondary-header-height;
     left: 0;
+    min-height: $secondary-header-height;
     position: fixed;
     right: 0;
     z-index: 1;
@@ -110,29 +113,28 @@ $secondary-header-height: 10px;
     }
 
     +.ui.container {
-      padding-top: $secondary-header-height;
       background-clip: content-box;
+      padding-top: $secondary-header-height;
     }
   }
 }
 
 .logo {
-  flex: 0 1 auto!important;
+  flex: 0 1 auto !important;
+
   img {
     display: none !important;
   }
 
   h1.header {
+    @include mobile {
+      font-size: 1.28571429rem !important;
+    }
     font-size: 1.71428571rem;
     margin-left: 0;
     margin-top: 0;
-    @include mobile {
-      font-size: 1.28571429rem!important;
-    }
   }
 }
-
-
 
 .content {
   &__aside {
@@ -183,9 +185,6 @@ $secondary-header-height: 10px;
   }
 }
 
-
-
-
 .ui.container.padded {
   padding: 1em;
 
@@ -201,7 +200,6 @@ $secondary-header-height: 10px;
     }
   }
 }
-
 
 .ui.grid>.row.is-fitted {
   padding-bottom: 0;
