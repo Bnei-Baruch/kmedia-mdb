@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Container, Segment, Portal } from 'semantic-ui-react';
 
+import { assetUrl } from '../../../helpers/Api';
 import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { formatError, isEmpty, shallowCompare } from '../../../helpers/utils';
-import { assetUrl } from '../../../helpers/Api';
 import * as shapes from '../../shapes';
-import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
 import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
+import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
 import PDF from '../../shared/PDF/PDF';
 import { updateQuery } from '../../../helpers/url';
 import withPagination from '../../Pagination/withPagination';

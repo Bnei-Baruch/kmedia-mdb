@@ -9,6 +9,7 @@ import classnames from 'classnames';
 import { translate } from 'react-i18next';
 import { Button, Container, Grid, Header, Input, Label, Menu, Popup, } from 'semantic-ui-react';
 
+import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -17,7 +18,6 @@ import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import BackToTop from '../../shared/BackToTop';
 import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
-import { RTL_LANGUAGES } from '../../../helpers/consts';
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -68,6 +68,7 @@ class LibraryContainer extends Component {
     if (!areSourcesLoaded) {
       return;
     }
+
     const firstLeafId = this.firstLeafId(sourceId);
     if (firstLeafId !== sourceId ||
       this.props.sourceId !== sourceId ||
@@ -183,13 +184,13 @@ class LibraryContainer extends Component {
     this.setState({ isReadable: !this.state.isReadable });
   };
 
-  handleIncreaseFontSize = (e, data) => {
+  handleIncreaseFontSize = () => {
     if (this.state.fontSize < 5) {
       this.setState({ fontSize: this.state.fontSize + 1 });
     }
   };
 
-  handleDecreaseFontSize = (e, data) => {
+  handleDecreaseFontSize = () => {
     if (this.state.fontSize > -3) {
       this.setState({ fontSize: this.state.fontSize - 1 });
     }
@@ -259,21 +260,21 @@ class LibraryContainer extends Component {
     this.props.sourcesSortBy(sortOrder);
   };
 
-  switchSortingOrder = (parentId, t) => {
+  switchSortingOrder = (parentId) => {
     if (this.props.NotToSort.findIndex(a => a === parentId) !== -1) {
       return null;
     }
+
     return (
       <Button
-      color={this.props.sortBy === 'AZ' ? 'blue' : ''}
-      icon="sort alphabet ascending"
-      active={this.props.sortBy === 'AZ'}
-      onClick={() => this.sortButton()}
-      size="small"
-      compact
-      basic={this.props.sortBy !== 'AZ'}
-    />
-
+        compact
+        size="small"
+        icon="sort alphabet ascending"
+        active={this.props.sortBy === 'AZ'}
+        color={this.props.sortBy === 'AZ' ? 'blue' : ''}
+        basic={this.props.sortBy !== 'AZ'}
+        onClick={this.sortButton}
+      />
     );
   };
 
@@ -297,13 +298,13 @@ class LibraryContainer extends Component {
     }
     return (
       <Input
+        fluid
+        size="mini"
         icon="search"
         placeholder={t('sources-library.filter')}
         value={this.state.match}
         onChange={this.handleFilterChange}
         onKeyDown={this.handleFilterKeyDown}
-        size="mini"
-        fluid
       />
     );
   };
@@ -337,9 +338,14 @@ class LibraryContainer extends Component {
     }
 
     const { isReadable, secondaryHeaderHeight, match, fontSize, theme, tocIsActive } = this.state;
-    const matchString                                  = this.matchString(parentId, t);
-    const isRTL                                        = RTL_LANGUAGES.includes(language);
-    const offset                                       = secondaryHeaderHeight + (isReadable ? 0 : 60);
+
+    const matchString = this.matchString(parentId, t);
+    const isRTL       = RTL_LANGUAGES.includes(language);
+    const offset      = secondaryHeaderHeight + (isReadable ? 0 : 60);
+
+    const tocCtxRef = typeof window !== 'undefined' ?
+      document.querySelector('.library-container') :
+      null;
 
     return (
       <div
@@ -360,7 +366,7 @@ class LibraryContainer extends Component {
                   </div>
                   <div className="source__header-toolbar">
                     {matchString}
-                    {this.switchSortingOrder(parentId, t)}
+                    {this.switchSortingOrder(parentId)}
                     <Button compact size="small" className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
                   </div>
 
@@ -370,15 +376,13 @@ class LibraryContainer extends Component {
                   <div className="source__header-title mobile-hidden">{this.header(sourceId, fullPath)}</div>
                   <div className="source__header-toolbar">
                     <Popup
-                      trigger={<Button size="small" compact icon="setting" />}
-                      on='click'
-                      position='bottom right'
+                      trigger={<Button compact size="small" icon="setting" />}
+                      on="click"
+                      position="bottom right"
                     >
                       <Popup.Content>
                         <Menu vertical>
-
                           <Menu.Header>font size</Menu.Header>
-
                           <Menu.Item icon="plus" name="Increase font size" onClick={this.handleIncreaseFontSize} />
                           <Menu.Item icon="minus" name="Decrease font size" onClick={this.handleDecreaseFontSize} />
 
@@ -395,13 +399,12 @@ class LibraryContainer extends Component {
                             <Label color="sepia" empty circular />
                             Sepia theme
                           </Menu.Item>
-
                         </Menu>
                       </Popup.Content>
                     </Popup>
+
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button compact size="small" className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
-
                   </div>
                 </Grid.Column>
               </Grid.Row>
@@ -417,7 +420,7 @@ class LibraryContainer extends Component {
                   matchApplied={this.handleFilterClear}
                   fullPath={fullPath}
                   rootId={parentId}
-                  contextRef={document.querySelector('.library-container')}
+                  contextRef={tocCtxRef}
                   getSourceById={getSourceById}
                   apply={this.props.apply}
                   stickyOffset={offset}

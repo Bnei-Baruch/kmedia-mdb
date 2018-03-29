@@ -19,7 +19,7 @@ class TOC extends Component {
     getSourceById: PropTypes.func.isRequired,
     apply: PropTypes.func.isRequired,
     stickyOffset: PropTypes.number,
-    
+
     match: PropTypes.string.isRequired,
     matchApplied: PropTypes.func.isRequired,
   };
