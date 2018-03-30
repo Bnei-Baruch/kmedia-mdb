@@ -14,8 +14,10 @@ import { actions as sourceActions, selectors as sources } from '../../../redux/m
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
+import BackToTop from '../../shared/BackToTop';
 import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
+import { RTL_LANGUAGES } from '../../../helpers/consts';
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -32,6 +34,7 @@ class LibraryContainer extends Component {
     getPathByID: PropTypes.func,
     sortBy: PropTypes.string.isRequired,
     NotToSort: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    NotToFilter: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     areSourcesLoaded: PropTypes.bool,
     t: PropTypes.func.isRequired,
     apply: PropTypes.func.isRequired,
@@ -250,7 +253,7 @@ class LibraryContainer extends Component {
   };
 
   matchString = (parentId, t) => {
-    if (this.props.NotToSort.findIndex(a => a === parentId) !== -1) {
+    if (this.props.NotToFilter.findIndex(a => a === parentId) !== -1) {
       return null;
     }
     return (
@@ -263,10 +266,6 @@ class LibraryContainer extends Component {
         size="mini"
       />
     );
-  };
-
-  backToTop = () => {
-    window.scrollTo(0, 0);
   };
 
   render() {
@@ -297,8 +296,9 @@ class LibraryContainer extends Component {
     }
 
     const { isReadable, secondaryHeaderHeight, match } = this.state;
-
-    const matchString = this.matchString(parentId, t);
+    const matchString                                  = this.matchString(parentId, t);
+    const isRTL                                        = RTL_LANGUAGES.includes(language);
+    const offset                                       = secondaryHeaderHeight + (isReadable ? 0 : 60) + 14;
 
     return (
       <div className={classnames({ source: true, 'is-readable': isReadable })}>
@@ -332,28 +332,19 @@ class LibraryContainer extends Component {
                   matchApplied={this.handleFilterClear}
                   fullPath={fullPath}
                   rootId={parentId}
-                  contextRef={this.contextRef}
+                  contextRef={document.querySelector('.library-container')}
                   getSourceById={getSourceById}
                   apply={this.props.apply}
-                  stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}
+                  stickyOffset={offset}
                 />
               </Grid.Column>
               <Grid.Column mobile={12} tablet={12} computer={8}>
+                <BackToTop isRTL={isRTL} offset={offset} />
                 <div ref={this.handleContextRef}>
                   <div className="source__content">
                     {content}
                   </div>
                 </div>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Container>
-        <Container>
-          <Grid padded>
-            <Grid.Row>
-              <Grid.Column computer={12} />
-              <Grid.Column computer={2}>
-                <Button basic size="tiny" icon="arrow up" onClick={this.backToTop} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -373,7 +364,8 @@ export default withRouter(connect(
     getPathByID: sources.getPathByID(state.sources),
     sortBy: sources.sortBy(state.sources),
     areSourcesLoaded: sources.areSourcesLoaded(state.sources),
-    NotToSort: sources.NotToSort
+    NotToSort: sources.NotToSort,
+    NotToFilter: sources.NotToFilter,
   }),
   dispatch => bindActionCreators({
     fetchIndex: sourceActions.fetchIndex,

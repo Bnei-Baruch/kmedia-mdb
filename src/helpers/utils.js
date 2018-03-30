@@ -311,7 +311,7 @@ export const strCmp = (a, b) => {
  * @param objB
  * @returns {bool}
  */
-const shallowEqual = (objA, objB) => {
+export const shallowEqual = (objA, objB) => {
   if (objA === objB) {
     return true;
   }
