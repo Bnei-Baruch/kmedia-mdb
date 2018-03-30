@@ -35,6 +35,7 @@ import {
   CT_WOMEN_LESSON,
   CT_WOMEN_LESSONS,
   EVENT_TYPES,
+  SRC
 } from './consts';
 
 import { CollectionsBreakdown } from './mdb';

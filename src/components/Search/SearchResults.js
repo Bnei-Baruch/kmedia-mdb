@@ -163,7 +163,7 @@ class SearchResults extends Component {
     const { t, location }                                            = this.props;
     const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
 
-    const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || cu.name;
+    const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || s.name;
     const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
     const authors = this.snippetFromHighlight(highlight, ['authors', 'authors.analyzed'], parts => `...${parts.join('.....')}...`);
     const content  = this.snippetFromHighlight(highlight, ['content', 'transcript.analyzed'], parts => `...${parts.join('.....')}...`);
