@@ -46,6 +46,9 @@ export const SRC_TITLE      = 'TITLE';
 export const SRC_LETTER     = 'LETTER';
 export const SRC_ITEM       = 'ITEM';
 
+//General source
+export const SRC            = 'SOURCE';
+
 // Languages
 export const LANG_HEBREW     = 'he';
 export const LANG_ENGLISH    = 'en';

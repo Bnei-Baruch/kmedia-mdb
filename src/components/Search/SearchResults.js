@@ -14,6 +14,7 @@ import WipErr from '../shared/WipErr/WipErr';
 import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import ScoreDebug from './ScoreDebug';
+import { constants } from 'os';
 
 class SearchResults extends Component {
   static propTypes = {
@@ -158,17 +159,80 @@ class SearchResults extends Component {
     );
   };
 
+  renderSource = (s, hit) => {
+    const { t, location }                                            = this.props;
+    const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
+
+    const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || cu.name;
+    const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
+    const authors = this.snippetFromHighlight(highlight, ['authors', 'authors.analyzed'], parts => `...${parts.join('.....')}...`);
+    const content  = this.snippetFromHighlight(highlight, ['content', 'transcript.analyzed'], parts => `...${parts.join('.....')}...`);
+    const snippet     = (
+      <div className="search__snippet">
+        {
+          description ?
+            <div>
+              <strong>{t('search.result.description')}: </strong>
+              {description}
+            </div> :
+            null
+        }
+        {
+          content ?
+            <div>
+              <strong>{t('search.result.content')}: </strong>
+              {content}
+            </div> :
+            null
+        }
+      </div>);
+
+    /*let filmDate = '';
+    if (cu.film_date) {
+      filmDate = t('values.date', { date: new Date(cu.film_date) });
+    }*/
+
+    //TBD authors?
+
+    return (
+      <Table.Row key={mdbUid} verticalAlign="top">
+        {/*<Table.Cell collapsing singleLine width={1}>
+          <strong>{filmDate}</strong>
+        </Table.Cell>
+         <Table.Cell collapsing singleLine>
+          <Label size="tiny">{t(`constants.content-types.${cu.content_type}`)}</Label>
+        </Table.Cell> */}
+        <Table.Cell>
+          <Link className="search__link" to={canonicalLink({ id: mdbUid, content_type: 'SOURCE' })}>
+            {name}
+          </Link>
+          {snippet || null}
+        </Table.Cell>
+        {
+          !isDebMode(location) ?
+            null :
+            <Table.Cell collapsing textAlign="right">
+              <ScoreDebug name={s.name} score={score} explanation={hit._explanation} />
+            </Table.Cell>
+        }
+      </Table.Row>
+    );
+  };
+
   renderHit = (hit) => {
     // console.log('hit', hit);
-    const { cMap, cuMap }                  = this.props;
+    const { cMap, cuMap, sMap }            = this.props;
     const { _source: { mdb_uid: mdbUid } } = hit;
     const cu                               = cuMap[mdbUid];
     const c                                = cMap[mdbUid];
+    const s                                = sMap[mdbUid];
 
     if (cu) {
       return this.renderContentUnit(cu, hit);
     } else if (c) {
       return this.renderCollection(c, hit);
+    } else if (s) {
+      return this.renderSource(s, hit);
     }
 
     // maybe content_units are still loading ?

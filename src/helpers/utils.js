@@ -196,6 +196,11 @@ export const canonicalLink = (entity) => {
     return '/';
   }
 
+  // source
+  if (entity.content_type == SRC){
+    return `/sources/${entity.id}`;
+  }
+
   // collections
   switch (entity.content_type) {
   case CT_DAILY_LESSON:
