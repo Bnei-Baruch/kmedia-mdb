@@ -66,6 +66,7 @@ class LibraryContainer extends Component {
     if (!areSourcesLoaded) {
       return;
     }
+
     const firstLeafId = this.firstLeafId(sourceId);
     if (firstLeafId !== sourceId ||
       this.props.sourceId !== sourceId ||
@@ -272,7 +273,6 @@ class LibraryContainer extends Component {
         basic={this.props.sortBy !== 'AZ'}
         onClick={this.sortButton}
       />
-
     );
   };
 
@@ -296,13 +296,13 @@ class LibraryContainer extends Component {
     }
     return (
       <Input
+        fluid
+        size="mini"
         icon="search"
         placeholder={t('sources-library.filter')}
         value={this.state.match}
         onChange={this.handleFilterChange}
         onKeyDown={this.handleFilterKeyDown}
-        size="mini"
-        fluid
       />
     );
   };
@@ -312,6 +312,7 @@ class LibraryContainer extends Component {
 
     const fullPath = this.getFullPath(sourceId);
     const parentId = this.properParentId(fullPath);
+    const hasTOC   = fullPath.length > 2;
 
     const index = isEmpty(sourceId) ? {} : indexMap[sourceId];
 
@@ -351,31 +352,32 @@ class LibraryContainer extends Component {
           <Container>
             <Grid padded centered>
               <Grid.Row verticalAlign="bottom">
-                <Grid.Column mobile={16} tablet={5} computer={4} className="source__toc-header">
-                  <div className="source__header-title computer-only">
-                    <Header size="small">{t('sources-library.toc')}</Header>
-                  </div>
-                  <div className="source__header-toolbar">
-                    {matchString}
-                    {this.switchSortingOrder(parentId)}
-                    <Button compact size="small" className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
-                  </div>
-
-                </Grid.Column>
+                {
+                  hasTOC ?
+                    <Grid.Column mobile={16} tablet={5} computer={4} className="source__toc-header">
+                      <div className="source__header-title computer-only">
+                        <Header size="small">{t('sources-library.toc')}</Header>
+                      </div>
+                      <div className="source__header-toolbar">
+                        {matchString}
+                        {this.switchSortingOrder(parentId)}
+                        <Button compact size="small" className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
+                      </div>
+                    </Grid.Column> :
+                    null
+                }
                 <Grid.Column mobile={16} tablet={11} computer={12} className="source__content-header">
 
                   <div className="source__header-title mobile-hidden">{this.header(sourceId, fullPath)}</div>
                   <div className="source__header-toolbar">
                     <Popup
-                      trigger={<Button size="small" compact icon="setting" />}
+                      trigger={<Button compact size="small" icon="setting" />}
                       on="click"
                       position="bottom right"
                     >
                       <Popup.Content>
                         <Menu vertical>
-
                           <Menu.Header>font size</Menu.Header>
-
                           <Menu.Item icon="plus" name="Increase font size" onClick={this.handleIncreaseFontSize} />
                           <Menu.Item icon="minus" name="Decrease font size" onClick={this.handleDecreaseFontSize} />
 
@@ -392,13 +394,12 @@ class LibraryContainer extends Component {
                             <Label color="sepia" empty circular />
                             Sepia theme
                           </Menu.Item>
-
                         </Menu>
                       </Popup.Content>
                     </Popup>
+
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button compact size="small" className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
-
                   </div>
                 </Grid.Column>
               </Grid.Row>
@@ -408,19 +409,23 @@ class LibraryContainer extends Component {
         <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
           <Grid padded centered>
             <Grid.Row className="is-fitted">
-              <Grid.Column mobile={16} tablet={5} computer={4} onClick={this.handleTocIsActive}>
-                <TOC
-                  match={matchString ? match : ''}
-                  matchApplied={this.handleFilterClear}
-                  fullPath={fullPath}
-                  rootId={parentId}
-                  contextRef={this.contextRef}
-                  getSourceById={getSourceById}
-                  apply={this.props.apply}
-                  stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
-                  t={t}
-                />
-              </Grid.Column>
+              {
+                hasTOC ?
+                  <Grid.Column mobile={16} tablet={5} computer={4} onClick={this.handleTocIsActive}>
+                    <TOC
+                      match={matchString ? match : ''}
+                      matchApplied={this.handleFilterClear}
+                      fullPath={fullPath}
+                      rootId={parentId}
+                      contextRef={this.contextRef}
+                      getSourceById={getSourceById}
+                      apply={this.props.apply}
+                      stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
+                      t={t}
+                    />
+                  </Grid.Column> :
+                  null
+              }
               <Grid.Column
                 mobile={14}
                 tablet={11}
