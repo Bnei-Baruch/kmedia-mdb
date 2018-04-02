@@ -21,6 +21,7 @@ class SearchResults extends Component {
     results: PropTypes.object,
     cMap: PropTypes.objectOf(shapes.Collection),
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
+    sMap: PropTypes.objectOf(shapes.Source),
     pageNo: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
@@ -36,6 +37,7 @@ class SearchResults extends Component {
     results: null,
     cMap: {},
     cuMap: {},
+    sMap: {},
     wip: false,
     err: null,
   };
@@ -241,7 +243,7 @@ class SearchResults extends Component {
   };
 
   render() {
-    const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange, cMap, cuMap, location } = this.props;
+    const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange, cMap, cuMap, sMap, location } = this.props;
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
@@ -262,7 +264,7 @@ class SearchResults extends Component {
     const { /* took, */ hits: { total, hits } } = results;
 
     let content;
-    if (total === 0 || (isEmpty(cMap) && isEmpty(cuMap))) {
+    if (total === 0 || (isEmpty(cMap) && isEmpty(cuMap) && isEmpty(sMap))) {
       content = (
         <Trans i18nKey="search.results.no-results">
           Your search for <strong style={{ fontStyle: 'italic' }}>{{ query }}</strong> found no results.
