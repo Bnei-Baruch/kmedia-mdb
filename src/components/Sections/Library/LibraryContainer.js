@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
-import { replace as routerReplace } from 'react-router-redux';
+import { push as routerPush } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
 import { Button, Container, Grid, Header, Input, Label, Menu, Popup, } from 'semantic-ui-react';
@@ -14,8 +14,10 @@ import { actions as sourceActions, selectors as sources } from '../../../redux/m
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
+import BackToTop from '../../shared/BackToTop';
 import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
+import { RTL_LANGUAGES } from '../../../helpers/consts';
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -32,10 +34,10 @@ class LibraryContainer extends Component {
     getPathByID: PropTypes.func,
     sortBy: PropTypes.string.isRequired,
     NotToSort: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    NotToSearch: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    NotToFilter: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     areSourcesLoaded: PropTypes.bool,
     t: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
+    apply: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -62,7 +64,7 @@ class LibraryContainer extends Component {
     window.addEventListener('resize', this.updateSticky);
     window.addEventListener('load', this.updateSticky);
 
-    const { sourceId, areSourcesLoaded, replace } = this.props;
+    const { sourceId, areSourcesLoaded, apply } = this.props;
     if (!areSourcesLoaded) {
       return;
     }
@@ -71,7 +73,7 @@ class LibraryContainer extends Component {
       this.props.sourceId !== sourceId ||
       this.state.lastLoadedId !== sourceId) {
       if (firstLeafId !== sourceId) {
-        replace(`sources/${firstLeafId}`);
+        apply(`sources/${firstLeafId}`);
       } else {
         // eslint-disable-next-line react/no-did-mount-set-state
         this.setState({ lastLoadedId: sourceId, language: this.props.language });
@@ -81,7 +83,7 @@ class LibraryContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { sourceId, areSourcesLoaded, language, replace } = nextProps;
+    const { sourceId, areSourcesLoaded, language, apply } = nextProps;
     if (!areSourcesLoaded) {
       return;
     }
@@ -97,7 +99,7 @@ class LibraryContainer extends Component {
       if (firstLeafId === sourceId) {
         this.loadNewIndices(sourceId, this.props.language);
       } else {
-        replace(firstLeafId);
+        apply(firstLeafId);
       }
     }
 
@@ -206,7 +208,7 @@ class LibraryContainer extends Component {
   };
 
   fetchIndices = (sourceId) => {
-    if (isEmpty(sourceId)) {
+    if (isEmpty(sourceId) || !isEmpty(this.props.indexMap[sourceId])) {
       return;
     }
 
@@ -271,7 +273,7 @@ class LibraryContainer extends Component {
       compact
       basic={this.props.sortBy !== 'AZ'}
     />
-      
+
     );
   };
 
@@ -290,7 +292,7 @@ class LibraryContainer extends Component {
   };
 
   matchString = (parentId, t) => {
-    if (this.props.NotToSearch.findIndex(a => a === parentId) !== -1) {
+    if (this.props.NotToFilter.findIndex(a => a === parentId) !== -1) {
       return null;
     }
     return (
@@ -359,10 +361,10 @@ class LibraryContainer extends Component {
                     {this.switchSortingOrder(parentId, t)}
                     <Button compact size="small" className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
                   </div>
-                  
+
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={11} computer={12} className="source__content-header">
-                  
+
                   <div className="source__header-title mobile-hidden">{this.header(sourceId, fullPath)}</div>
                   <div className="source__header-toolbar">
                     <Popup
@@ -415,7 +417,7 @@ class LibraryContainer extends Component {
                   rootId={parentId}
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
-                  replace={this.props.replace}
+                  apply={this.props.apply}
                   stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
                   t={t}
                 />
@@ -457,11 +459,11 @@ export default withRouter(connect(
     sortBy: sources.sortBy(state.sources),
     areSourcesLoaded: sources.areSourcesLoaded(state.sources),
     NotToSort: sources.NotToSort,
-    NotToSearch: sources.NotToSearch,
+    NotToFilter: sources.NotToFilter,
   }),
   dispatch => bindActionCreators({
     fetchIndex: sourceActions.fetchIndex,
     sourcesSortBy: sourceActions.sourcesSortBy,
-    replace: routerReplace,
+    apply: routerPush,
   }, dispatch)
 )(translate()(LibraryContainer)));

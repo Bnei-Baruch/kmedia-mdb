@@ -16,8 +16,8 @@ class SearchResultsContainer extends Component {
   static propTypes = {
     query: PropTypes.string.isRequired,
     results: PropTypes.object,
-    cMap: PropTypes.objectOf(shapes.Collection),
-    cuMap: PropTypes.objectOf(shapes.ContentUnit),
+    cMap: PropTypes.objectOf(shapes.Collection).isRequired,
+    cuMap: PropTypes.objectOf(shapes.ContentUnit).isRequired,
     wip: shapes.WIP,
     err: shapes.Error,
     search: PropTypes.func.isRequired,
@@ -25,7 +25,9 @@ class SearchResultsContainer extends Component {
     pageNo: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
     sortBy: PropTypes.string.isRequired,
+    deb: PropTypes.bool.isRequired,
     hydrateUrl: PropTypes.func.isRequired,
+    setSortBy: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
     location: shapes.HistoryLocation.isRequired,
   };
@@ -42,21 +44,21 @@ class SearchResultsContainer extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.language !== this.props.language) {
-      const { search, query, pageSize, pageNo } = this.props;
-      search(query, pageNo, pageSize);
+      const { search, query, pageSize, pageNo, deb } = this.props;
+      search(query, pageNo, pageSize, deb);
     }
   }
 
   handlePageChange = (pageNo) => {
-    const { setPage, search, query, pageSize } = this.props;
+    const { setPage, search, query, pageSize, deb } = this.props;
     setPage(pageNo);
-    search(query, pageNo, pageSize);
+    search(query, pageNo, pageSize, deb);
   };
 
   handleSortByChanged = (e, data) => {
-    const { setSortBy, search, query, pageSize, pageNo } = this.props;
+    const { setSortBy, search, query, pageSize, pageNo, deb } = this.props;
     setSortBy(data.value);
-    search(query, pageNo, pageSize);
+    search(query, pageNo, pageSize, deb);
   };
 
   handleFiltersChanged = () => {
@@ -64,8 +66,8 @@ class SearchResultsContainer extends Component {
   };
 
   handleFiltersHydrated = () => {
-    const { search, query, pageSize, pageNo } = this.props;
-    search(query, pageNo, pageSize);
+    const { search, query, pageSize, pageNo, deb } = this.props;
+    search(query, pageNo, pageSize, deb);
   };
 
   render() {
@@ -102,7 +104,8 @@ class SearchResultsContainer extends Component {
 
 const mapState = (state) => {
   const results = selectors.getResults(state.search);
-  const cMap    = results && results.hits && Array.isArray(results.hits.hits) ?
+
+  const cMap = results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
       if (val._type === 'collections') {
         const cID = val._source.mdb_uid;
@@ -114,7 +117,8 @@ const mapState = (state) => {
       return acc;
     }, {}) :
     {};
-  const cuMap   = results && results.hits && Array.isArray(results.hits.hits) ?
+
+  const cuMap = results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
       if (val._type === 'content_units') {
         const cuID = val._source.mdb_uid;
@@ -134,6 +138,7 @@ const mapState = (state) => {
     query: selectors.getQuery(state.search),
     pageNo: selectors.getPageNo(state.search),
     sortBy: selectors.getSortBy(state.search),
+    deb: selectors.getDeb(state.search),
     pageSize: settingsSelectors.getPageSize(state.settings),
     language: settingsSelectors.getLanguage(state.settings),
     wip: selectors.getWip(state.search),

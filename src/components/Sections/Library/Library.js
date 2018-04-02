@@ -10,7 +10,8 @@ import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
 import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
 import PDF from '../../shared/PDF/PDF';
-import { getQuery, updateQuery } from '../../../helpers/url';
+import { updateQuery } from '../../../helpers/url';
+import withPagination from '../../Pagination/withPagination';
 
 class Library extends Component {
   static propTypes = {
@@ -46,10 +47,8 @@ class Library extends Component {
   state = {};
 
   componentWillMount() {
-    const { history } = this.props;
-    const query       = getQuery(history.location);
-    const p           = query.page ? Number.parseInt(query.page, 10) : 1;
-    const pageNumber  = Number.isNaN(p) || p <= 0 ? 1 : p;
+    const { history: { location } } = this.props;
+    const pageNumber                = withPagination.getPageFromLocation(location);
 
     this.setState({ pageNumber });
   }
@@ -59,13 +58,11 @@ class Library extends Component {
   }
 
   pageNumberHandler = (pageNumber) => {
-    const { history } = this.props;
-    this.setState({ pageNumber },
-      updateQuery(history, query => ({
-        ...query,
-        page: pageNumber,
-      }))
-    );
+    this.setState({ pageNumber });
+    updateQuery(this.props.history, query => ({
+      ...query,
+      page: pageNumber,
+    }));
   };
 
   render() {

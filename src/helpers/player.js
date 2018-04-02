@@ -11,6 +11,7 @@ import {
   LANG_ENGLISH,
   LANG_HEBREW,
   LANG_RUSSIAN,
+  LANG_UNKNOWN,
   MEDIA_TYPES,
   MIME_TYPE_TO_MEDIA_TYPE,
   MT_AUDIO,
@@ -94,7 +95,8 @@ function playableItem(unit, mediaType, language) {
   // Russian (second most probable source), then to any other language.
   if (!availableLanguages.includes(language)) {
     language = fallbacksLanguages.find(f => availableLanguages.includes(f)) ||
-      (availableLanguages.length && availableLanguages[0]);
+      (availableLanguages.length && availableLanguages[0]) ||
+      LANG_UNKNOWN;
   }
 
   const availableMediaTypes = calcAvailableMediaTypes(unit, language);

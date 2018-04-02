@@ -25,7 +25,7 @@ function* updateFilterValuesInQuery(action) {
   yield* updateQuery(query => Object.assign(query, filtersTransformer.toQueryParams(filters)));
 }
 
-function* hydrateFilters(action) {
+export function* hydrateFilters(action) {
   const query   = yield* getQuery();
   const filters = filtersTransformer.fromQueryParams(query);
   yield put(filterActions.setHydratedFilterValues(action.payload.namespace, filters));

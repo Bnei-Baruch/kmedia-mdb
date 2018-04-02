@@ -159,7 +159,7 @@ export const filterPropShape = PropTypes.shape({
 export const WIP    = PropTypes.bool;
 export const WipMap = PropTypes.objectOf(PropTypes.oneOfType([WIP, PropTypes.objectOf(WIP)]));
 
-export const Error     = PropTypes.object;
+export const Error     = PropTypes.oneOfType([PropTypes.object, PropTypes.string]);
 export const ErrorsMap = PropTypes.objectOf(PropTypes.oneOfType([Error, PropTypes.objectOf(Error)]));
 
 export const UserAgentParserResults = PropTypes.shape({

@@ -81,8 +81,7 @@ class MyUnitListContainer extends UnitListContainer {
     shouldOpenProgramsFilter: true,
   };
 
-  handleFiltersHydrated() {
-    super.handleFiltersHydrated();
+  componentDidMount() {
     if (this.props.shouldOpenProgramsFilter) {
       this.props.editNewFilter('programs', 'programs-filter');
     }

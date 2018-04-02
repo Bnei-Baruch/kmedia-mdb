@@ -13,7 +13,7 @@ import CollectionList from './tabs/CollectionList/Container';
 import UnitList from './tabs/UnitList/Container';
 import { actions as filterActions } from '../../../redux/modules/filters';
 
-const tabs = [
+export const tabs = [
   'conventions',
   'holidays',
   'unity-days',

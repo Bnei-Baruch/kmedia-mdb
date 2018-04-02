@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
 
 import { BS_SHAMATI } from '../../../helpers/consts';
-import { isEmpty } from '../../../helpers/utils';
+import { isEmpty, shallowEqual } from '../../../helpers/utils';
 
 class TOC extends Component {
   static propTypes = {
@@ -17,7 +17,7 @@ class TOC extends Component {
     // eslint-disable-next-line react/forbid-prop-types
     contextRef: PropTypes.object,
     getSourceById: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
+    apply: PropTypes.func.isRequired,
     stickyOffset: PropTypes.number,
     
     match: PropTypes.string.isRequired,
@@ -32,9 +32,19 @@ class TOC extends Component {
   state = {};
 
   componentWillReceiveProps(nextProps) {
-    const { fullPath }     = nextProps;
-    const { id: activeId } = fullPath[fullPath.length - 1];
-    this.setState({ activeId });
+    const { fullPath } = nextProps;
+    const activeId     = fullPath[fullPath.length - 1].id;
+    if (activeId !== this.state.activeId) {
+      this.setState({ activeId });
+    }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return (
+      this.props.rootId !== nextProps.rootId ||
+      this.props.match !== nextProps.match ||
+      !shallowEqual(this.props.fullPath, nextProps.fullPath)
+    );
   }
 
   componentDidUpdate() {
@@ -84,12 +94,16 @@ class TOC extends Component {
     const hasNoGrandsons = children.reduce((acc, curr) => acc && isEmpty(getSourceById(curr).children), true);
     let panels;
     if (hasNoGrandsons) {
-      panels = this.filterSources(children).map((leafId, idx) => {
-        let { name: leafTitle, } = getSourceById(leafId);
+      const tree = children.reduce((acc, leafId, idx) => {
+        let { name } = getSourceById(leafId);
         if (sourceId === BS_SHAMATI) {
-          leafTitle = `${idx + 1}. ${leafTitle}`;
+          name = `${idx + 1}. ${name}`;
         }
+        acc.push({ leafId, leafTitle: name });
+        return acc;
+      }, []);
 
+      panels = this.filterSources(tree).map(({ leafId, leafTitle, }) => {
         const item = this.leaf(leafId, leafTitle);
         return { title: item, key: `lib-leaf-${leafId}` };
       });
@@ -113,14 +127,14 @@ class TOC extends Component {
 
   selectSourceById = (id, e) => {
     e.preventDefault();
-    this.props.replace(`sources/${id}`);
+    this.props.apply(`sources/${id}`);
     this.props.matchApplied();
     this.setState({ activeId: id });
   };
 
   scrollToActive = () => {
     const { activeId } = this.state;
-    const element = document.getElementById(`title-${activeId}`);
+    const element      = document.getElementById(`title-${activeId}`);
     if (element === null) {
       return;
     }
@@ -129,18 +143,16 @@ class TOC extends Component {
   };
 
   filterSources = (path) => {
-    const { getSourceById, match } = this.props;
+    const { match } = this.props;
 
     if (isEmpty(match)) {
       return path;
     }
 
     const reg = new RegExp(match, 'i');
-    return path.map(leafId => (
-      getSourceById(leafId)
-    )).reduce((acc, el) => {
-      if (reg.test(el.name)) {
-        acc.push(el.id);
+    return path.reduce((acc, el) => {
+      if (reg.test(el.leafTitle)) {
+        acc.push(el);
       }
       return acc;
     }, []);

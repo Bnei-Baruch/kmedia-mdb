@@ -10,7 +10,7 @@ import { selectors as filterSelectors } from '../redux/modules/filters';
 import { selectors as listsSelectors } from '../redux/modules/lists';
 import { filtersTransformer } from '../filters';
 
-function* fetchAllEvents(action) {
+export function* fetchAllEvents(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.collections, {
