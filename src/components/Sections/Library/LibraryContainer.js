@@ -14,10 +14,8 @@ import { actions as sourceActions, selectors as sources } from '../../../redux/m
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
-import BackToTop from '../../shared/BackToTop';
 import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
-import { RTL_LANGUAGES } from '../../../helpers/consts';
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -183,13 +181,13 @@ class LibraryContainer extends Component {
     this.setState({ isReadable: !this.state.isReadable });
   };
 
-  handleIncreaseFontSize = (e, data) => {
+  handleIncreaseFontSize = () => {
     if (this.state.fontSize < 5) {
       this.setState({ fontSize: this.state.fontSize + 1 });
     }
   };
 
-  handleDecreaseFontSize = (e, data) => {
+  handleDecreaseFontSize = () => {
     if (this.state.fontSize > -3) {
       this.setState({ fontSize: this.state.fontSize - 1 });
     }
@@ -259,20 +257,21 @@ class LibraryContainer extends Component {
     this.props.sourcesSortBy(sortOrder);
   };
 
-  switchSortingOrder = (parentId, t) => {
+  switchSortingOrder = (parentId) => {
     if (this.props.NotToSort.findIndex(a => a === parentId) !== -1) {
       return null;
     }
+
     return (
       <Button
-      color={this.props.sortBy === 'AZ' ? 'blue' : ''}
-      icon="sort alphabet ascending"
-      active={this.props.sortBy === 'AZ'}
-      onClick={() => this.sortButton()}
-      size="small"
-      compact
-      basic={this.props.sortBy !== 'AZ'}
-    />
+        compact
+        size="small"
+        icon="sort alphabet ascending"
+        color={this.props.sortBy === 'AZ' ? 'blue' : ''}
+        active={this.props.sortBy === 'AZ'}
+        basic={this.props.sortBy !== 'AZ'}
+        onClick={this.sortButton}
+      />
 
     );
   };
@@ -358,7 +357,7 @@ class LibraryContainer extends Component {
                   </div>
                   <div className="source__header-toolbar">
                     {matchString}
-                    {this.switchSortingOrder(parentId, t)}
+                    {this.switchSortingOrder(parentId)}
                     <Button compact size="small" className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
                   </div>
 
@@ -369,8 +368,8 @@ class LibraryContainer extends Component {
                   <div className="source__header-toolbar">
                     <Popup
                       trigger={<Button size="small" compact icon="setting" />}
-                      on='click'
-                      position='bottom right'
+                      on="click"
+                      position="bottom right"
                     >
                       <Popup.Content>
                         <Menu vertical>
