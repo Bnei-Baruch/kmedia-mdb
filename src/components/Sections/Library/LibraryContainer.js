@@ -360,17 +360,20 @@ class LibraryContainer extends Component {
           <Container>
             <Grid padded centered>
               <Grid.Row verticalAlign="bottom">
-                <Grid.Column mobile={16} tablet={5} computer={4} className="source__toc-header">
-                  <div className="source__header-title computer-only">
-                    <Header size="small">{t('sources-library.toc')}</Header>
-                  </div>
-                  <div className="source__header-toolbar">
-                    {matchString}
-                    {this.switchSortingOrder(parentId)}
-                    <Button compact size="small" className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
-                  </div>
+                {
+                  fullPath.length > 2 &&
+                  <Grid.Column mobile={16} tablet={5} computer={4} className="source__toc-header">
+                    <div className="source__header-title computer-only">
+                      <Header size="small">{t('sources-library.toc')}</Header>
+                    </div>
+                    <div className="source__header-toolbar">
+                      {matchString}
+                      {this.switchSortingOrder(parentId)}
+                      <Button compact size="small" className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
+                    </div>
 
-                </Grid.Column>
+                  </Grid.Column>
+                }
                 <Grid.Column mobile={16} tablet={11} computer={12} className="source__content-header">
 
                   <div className="source__header-title mobile-hidden">{this.header(sourceId, fullPath)}</div>
@@ -414,19 +417,22 @@ class LibraryContainer extends Component {
         <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
           <Grid padded centered>
             <Grid.Row className="is-fitted">
-              <Grid.Column mobile={16} tablet={5} computer={4} onClick={this.handleTocIsActive}>
-                <TOC
-                  match={matchString ? match : ''}
-                  matchApplied={this.handleFilterClear}
-                  fullPath={fullPath}
-                  rootId={parentId}
-                  contextRef={tocCtxRef}
-                  getSourceById={getSourceById}
-                  apply={this.props.apply}
-                  stickyOffset={offset}
-                  t={t}
-                />
-              </Grid.Column>
+              {
+                fullPath.length > 2 &&
+                <Grid.Column mobile={16} tablet={5} computer={4} onClick={this.handleTocIsActive}>
+                  <TOC
+                    match={matchString ? match : ''}
+                    matchApplied={this.handleFilterClear}
+                    fullPath={fullPath}
+                    rootId={parentId}
+                    contextRef={tocCtxRef}
+                    getSourceById={getSourceById}
+                    apply={this.props.apply}
+                    stickyOffset={offset}
+                    t={t}
+                  />
+                </Grid.Column>
+              }
               <Grid.Column
                 mobile={14}
                 tablet={11}
