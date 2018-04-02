@@ -51,7 +51,6 @@ class BackToTop extends Component {
         <Visibility
           onUpdate={this.handleUpdate}
           offset={this.props.offset}
-          fireOnMount
         />
         {
           this.state.backToTop &&
