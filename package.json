@@ -112,7 +112,8 @@
     "semantic-ui-react": "^0.78.3",
     "serialize-javascript": "^1.4.0",
     "ua-parser-js": "^0.7.17",
-    "warning": "^3.0.0"
+    "warning": "^3.0.0",
+    "worker-loader": "^1.1.1"
   },
   "jest": {
     "collectCoverageFrom": [
