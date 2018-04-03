@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import noop from 'lodash/noop';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
 
 import { BS_SHAMATI } from '../../../helpers/consts';
@@ -64,6 +65,12 @@ class TOC extends Component {
     return node1.children.findIndex(x => x === node2.id);
   };
 
+  handleTitleClick = (e) => {
+    // stop propagation so tocIsActive in LibraryContainer won't call
+    // this breaks navigation in nested TOCs (TES, Zohar, etc...)
+    e.stopPropagation();
+  };
+
   subToc = (subTree, path) => (
     subTree.map(sourceId => (this.toc(sourceId, path)))
   );
@@ -87,9 +94,10 @@ class TOC extends Component {
     const { name: title, children } = getSourceById(sourceId);
 
     if (isEmpty(children)) { // Leaf
-      const item   = this.leaf(sourceId, title);
-      const result = { title: item, key: `lib-leaf-${sourceId}` };
-      return [result];
+      return [{
+        title: this.leaf(sourceId, title),
+        key: `lib-leaf-${sourceId}`
+      }];
     }
 
     const hasNoGrandsons = children.reduce((acc, curr) => acc && isEmpty(getSourceById(curr).children), true);
@@ -104,10 +112,11 @@ class TOC extends Component {
         return acc;
       }, []);
 
-      panels = this.filterSources(tree).map(({ leafId, leafTitle, }) => {
-        const item = this.leaf(leafId, leafTitle);
-        return { title: item, key: `lib-leaf-${leafId}` };
-      });
+      panels = this.filterSources(tree)
+        .map(({ leafId, leafTitle }) => ({
+          title: this.leaf(leafId, leafTitle),
+          key: `lib-leaf-${leafId}`
+        }));
     } else {
       panels = this.subToc(children, path.slice(1));
     }
@@ -120,7 +129,13 @@ class TOC extends Component {
     return {
       title,
       content: {
-        content: <Accordion.Accordion panels={panels} defaultActiveIndex={activeIndex} />,
+        content: (
+          <Accordion.Accordion
+            panels={panels}
+            defaultActiveIndex={activeIndex}
+            onTitleClick={hasNoGrandsons ? noop : this.handleTitleClick}
+          />
+        ),
         key: `lib-content-${sourceId}`,
       }
     };
@@ -173,7 +188,7 @@ class TOC extends Component {
     return (
       <Sticky context={contextRef} offset={stickyOffset} className="source__toc">
         <Ref innerRef={this.handleAccordionContext}>
-          <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} />
+          <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} onTitleClick={this.handleTitleClick} />
         </Ref>
       </Sticky>
     );
