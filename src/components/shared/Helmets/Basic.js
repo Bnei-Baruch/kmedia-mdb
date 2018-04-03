@@ -21,6 +21,29 @@ class Basic extends Component {
     keywords: null,
   };
 
+  buildTitle(title) {
+    return (
+      <Helmet>
+        <title>{title}</title>
+        {/* Open Graph */}
+        <meta property="og:title" content={title} />
+        {/* Schema.org */}
+        {/*<meta itemProp="name" content={title} />*/}
+      </Helmet>
+    );
+  }
+
+  buildDescription(description) {
+    return (
+      <Helmet>
+        <meta name="description" content={description} />
+        <meta property="og:description" content={description} />
+        {/*<meta itemProp="description" content={description} />*/}
+        {/*<meta name="twitter:description" content={description} />*/}
+      </Helmet>
+    );
+  }
+
   render() {
     const { title, description, keywords, url, imageUrl } = this.props;
 
@@ -53,52 +76,30 @@ class Basic extends Component {
 
     // og:determiner
 
-    // facebook blocked http://files.kbb1.com/orineden/
-    // should we unblocked it ?
-
-    {/*<link rel=�author� href=�https://plus.google.com/[YOUR PERSONAL G+ PROFILE HERE]�/>*/
-    }
+    /*<link rel=�author� href=�https://plus.google.com/[YOUR PERSONAL G+ PROFILE HERE]�/>*/
 
     //TODO:  Publication have the word pirsum at the title, it should be removed.
-    // let resizedImage = null;
-    // if (imageUrl) {
-    //   resizedImage = `${imaginaryUrl('thumbnail')}?${Requests.makeParams({ url: imageUrl, width: 1200, height: 630 })}`;
     // }
 
     // TODO (orin): Add basic helmets for keywords and stuff.
+    // TODO (orin): Add microdata
+    // TODO (orin): JSON-LD
 
     return (
       <div>
+        {!isEmpty(title) ? this.buildTitle(title) : null}
+        {!isEmpty(description) ? this.buildDescription(description) : null}
         <Helmet>
-          {!isEmpty(title) ? <title>{title}</title> : null}
-          {!isEmpty(description) ? <meta name="description" content={description} /> : null}
           {!isEmpty(keywords) ? <meta name="keywords" content={keywords} /> : null}
           {/*<meta name="author" content={author} />*/}
 
-
-          {/* Schema.org for Google */}
-          {!isEmpty(title) ? <meta itemprop="name" content={title} /> : null}
-          {!isEmpty(description) ? <meta itemprop="description" content={description} /> : null}
-          {/*{resizedImage ? <meta itemprop="image" content={resizedImage} /> : null}*/}
-
-          {/* Open Graph general (Facebook, Pinterest & Google+) */}
-          {/* minimum required: title, image, url */}
-          {!isEmpty(title) ? <meta property="og:title" content={title} /> : null}
-          {/*{resizedImage ? <meta property="og:image" content={resizedImage} /> : null}*/}
           {/*{url ? <meta property="og:url" content={url} /> : null}*/}
 
-          {/* optional Open Graph */}
-          {!isEmpty(description) ? <meta property="og:description" content={description} /> : null}
           <meta property="og:site_name" content="Kabbalah Media" />
-
-
           <meta property="og:type" content="website" />
-
 
           {/* Twitter */}
           {/*<meta name="twitter:card" content="summary" />*/}
-          {/*{title ? <meta name="twitter:title" content={title} /> : null}*/}
-          {/*{description ? <meta name="twitter:description" content={description} /> : null}*/}
 
 
           {/*Whatsapp*/}

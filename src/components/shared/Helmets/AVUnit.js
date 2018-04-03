@@ -3,7 +3,6 @@ import * as shapes from '../../shapes';
 import Basic from './Basic';
 import Image from './Image';
 import Video from './Video';
-import Locale from './Locale';
 import { isEmpty } from '../../../helpers/utils';
 
 class AVUnit extends Component {

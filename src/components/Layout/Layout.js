@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import classnames from 'classnames';
-import { Helmet } from 'react-helmet';
 import { Flag, Header, Icon, Menu } from 'semantic-ui-react';
 import { renderRoutes } from 'react-router-config';
 
-import { ALL_LANGUAGES, FLAG_TO_LANGUAGE } from '../../helpers/consts';
+import { ALL_LANGUAGES, FLAG_TO_LANGUAGE, LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import Helmets from '../shared/Helmets';
@@ -16,6 +15,9 @@ import MenuItems from './MenuItems';
 import Footer from './Footer';
 import logo from '../../images/logo.svg';
 
+/* CR: it is better to save here the implemented languages,
+   instead of the flags, (and the the the flags can be calculated from it.
+   as you do in FLAG_TO_LANGUAGE */
 const flags = ['us', 'ru', 'ua', 'es', 'il'];
 
 class Layout extends Component {
@@ -69,17 +71,13 @@ class Layout extends Component {
 
     const showSearch = this.shouldShowSearch(location);
 
-    const defaultTitle  = t('nav.top.header');
-    const titleTemplate = `%s | ${defaultTitle}`;
-
     return (
       <div className="layout">
-        {/* TODO (orin): move this helmet to Helmet.TopMost */}
-        <Helmet
-          defaultTitle={defaultTitle}
-          titleTemplate={titleTemplate}
+        <Helmets.TopMost
+          titlePostfix={t('nav.top.header')}
+          mainLang={LANG_HEBREW}
+          alternateLang={[LANG_ENGLISH, LANG_RUSSIAN]}
         />
-        <Helmets.Basic />
 
         <GAPageView location={location} />
         <div className="layout__header">

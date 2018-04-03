@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import * as shapes from '../../shapes';
 import Basic from './Basic';
 import Article from './Article';
-import Locale from './Locale';
 
 class ArticleUnit extends Component {
   static propTypes = {
@@ -20,7 +19,7 @@ class ArticleUnit extends Component {
       return null;
     }
 
-    console.log('ARTICLE UNIT:', unit);
+    // console.log('ARTICLE UNIT:', unit);
     return (
       <div>
         {/*TODO (orin): add Helmets.Basic:url ? */}
