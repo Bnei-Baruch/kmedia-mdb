@@ -69,6 +69,13 @@ class Layout extends Component {
     const showSearch = this.shouldShowSearch(location);
     return (
       <div className="layout">
+        {/* <div className="debug">
+          <span className="widescreen-only">widescreen</span>
+          <span className="large-screen-only">large screen</span>
+          <span className="computer-only">computer</span>
+          <span className="tablet-only">tablet</span>
+          <span className="mobile-only">mobile</span>
+        </div> */}
         <Helmets.Basic title={t('nav.top.header')} />
         <GAPageView location={location} />
         <div className="layout__header">

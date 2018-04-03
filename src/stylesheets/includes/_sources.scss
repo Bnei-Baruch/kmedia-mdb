@@ -64,15 +64,7 @@
 
 // Library item - Unit
 .source {
-  &.is-dark {
-    background: $black !important;
-    color: $white !important;
-  }
 
-  &.is-sepia {
-    background: $sepia-bg !important;
-    color: $sepia-text !important;
-  }
 
   &.is-readable {
     background: $white;
@@ -113,6 +105,7 @@
         bottom: 0 !important;
         left: 0 !important;
         padding: calc(60px + 1em) 1em 1em;
+        padding: 1em;
         position: fixed !important;
         right: 0 !important;
         top: auto !important;
@@ -143,6 +136,15 @@
 
   &__content-wrapper {
     font-size: 1.1428571429rem;
+    .is-dark & {
+      background: $black !important;
+      color: $white !important;
+    }
+  
+    .is-sepia & {
+      background: $sepia-bg !important;
+      color: $sepia-text !important;
+    }
   }
 
   &__content-header,
@@ -178,6 +180,9 @@
       transform: translate(100%, 0);
       transition: transform .3s;
       z-index: 10;
+      padding-bottom: .5rem !important;
+      padding-top: .5rem !important;
+      top: $main-menu-height;
     }
 
     .source__header-toolbar {
@@ -192,7 +197,22 @@
   }
 
   &__header-title {
+    overflow: hidden;
     padding: 0 1em 0 0 !important;
+
+    span {
+      @include mobile {
+        font-size: calc(1.07142857em * .8);
+      }
+    }
+
+    span,
+    small {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 
 
@@ -201,7 +221,7 @@
     max-width: 700px;
     padding-bottom: 1rem;
     padding-top: 1rem;
-
+    .is-serif & { font-family: Georgia, “Times New Roman”, Times, serif;}
     .size5 & {font-size: (21 / 16) + em;}
     .size4 & {font-size: (20 / 16) + em;}
     .size3 & {font-size: (19 / 16) + em;}
@@ -221,6 +241,7 @@
     h3,
     h4,
     h5 {
+      .is-serif & { font-family: $serif-family;}
       line-height: 1.28571429em;
 
       em {
@@ -241,4 +262,29 @@
 .ui.sepia.labels .label {
   background-color: $sepia-bg !important;
   border-color: $sepia-bg !important;
+}
+
+.sources-settings {
+  padding: 0 !important;
+  
+  .icon {
+    margin: 0 !important;
+  }
+  
+  .menu {
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    background: none;
+    border-radius: 0;
+    white-space: nowrap;
+    + .menu {
+      border-top: 1px solid rgba(34,36,38,.1) !important;
+    }
+
+    &.ui.item .item{
+      padding-right: 1em !important;
+      padding-left: 1em !important;
+    }
+  }
 }

@@ -43,6 +43,7 @@ class TOC extends Component {
     return (
       this.props.rootId !== nextProps.rootId ||
       this.props.match !== nextProps.match ||
+      this.props.stickyOffset !== nextProps.stickyOffset ||
       !shallowEqual(this.props.fullPath, nextProps.fullPath)
     );
   }
@@ -51,6 +52,7 @@ class TOC extends Component {
     // make actual TOC content proper height
     const el = document.querySelector('.source__toc > div:nth-child(2)');
     if (el) {
+      console.log('TOC.componentDidUpdate', this.props.stickyOffset);
       el.style.height = `calc(100vh - ${this.props.stickyOffset}px)`;
     }
     this.scrollToActive();
@@ -160,6 +162,8 @@ class TOC extends Component {
 
   render() {
     const { fullPath, rootId, contextRef, stickyOffset } = this.props;
+
+console.log('TOC.render', stickyOffset);
 
     const activeIndex = this.getIndex(fullPath[1], fullPath[2]);
     if (activeIndex === -1) {

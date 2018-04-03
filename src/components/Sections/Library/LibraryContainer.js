@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { push as routerPush } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Grid, Header, Input, Label, Menu, Popup, } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Input, Label, Menu, Popup, Ref, Icon} from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
@@ -137,8 +137,18 @@ class LibraryContainer extends Component {
     // take the secondary header height for sticky stuff calculations
     if (this.secondaryHeaderRef) {
       const { height } = this.secondaryHeaderRef.getBoundingClientRect();
+      console.log('updpateSticky', this.state.secondaryHeaderHeight, height);
+      
       if (this.state.secondaryHeaderHeight !== height) {
         this.setState({ secondaryHeaderHeight: height });
+      }
+    }
+
+    // check fixed header width in pixels for text-overflow:ellipsis
+    if(this.contentHeaderRef) {
+      const { width } = this.contentHeaderRef.getBoundingClientRect();
+      if (this.state.contentHeaderWidth !== width) {
+        this.setState({ contentHeaderWidth: width });
       }
     }
   };
@@ -169,7 +179,12 @@ class LibraryContainer extends Component {
   handleSecondaryHeaderRef = (ref) => {
     this.secondaryHeaderRef = ref;
   };
-
+  
+  handleContentHeaderRef = (ref) => {
+    this.contentHeaderRef = ref;
+  };
+  
+  
   handleHeaderMenuRef = (ref) => {
     this.headerMenuRef = ref;
   };
@@ -192,6 +207,14 @@ class LibraryContainer extends Component {
     if (this.state.fontSize > -3) {
       this.setState({ fontSize: this.state.fontSize - 1 });
     }
+  };
+  
+  handleSerifFont = () => {
+    this.setState({ fontType: 'serif' });
+  };
+  
+  handleSansSerifFont = () => {
+    this.setState({ fontType: 'sans-serif' });
   };
 
   handleLightTheme = () => {
@@ -228,16 +251,19 @@ class LibraryContainer extends Component {
     if (kabFullName && kabName) {
       displayName += ` (${kabName})`;
     }
-
+    const { contentHeaderWidth, } = this.state;
     return (
-      <Header size="small">
-        <Header.Subheader>
-          <small>
-            {displayName} / {`${parentName} ${description || ''} `}
-          </small>
-        </Header.Subheader>
-        {sourceName}
-      </Header>
+      
+        <Header size="small">
+          <Ref innerRef={this.handleContentHeaderRef}><div></div></Ref>
+          <Header.Subheader>
+            <small style={{ width: `${contentHeaderWidth}px` }}>
+              {displayName} / {`${parentName} ${description || ''} `}
+            </small>
+          </Header.Subheader>
+          <span style={{ width: `${contentHeaderWidth}px` }}>{sourceName}</span>
+        </Header>
+      
     );
   };
 
@@ -336,7 +362,7 @@ class LibraryContainer extends Component {
       );
     }
 
-    const { isReadable, fontSize, theme, secondaryHeaderHeight, tocIsActive, match, } = this.state;
+    const { isReadable, fontSize, theme, fontType, secondaryHeaderHeight, contentHeaderWidth, tocIsActive, match, } = this.state;
     const matchString                                                                 = this.matchString(parentId, t);
 
     return (
@@ -346,58 +372,57 @@ class LibraryContainer extends Component {
           'is-readable': isReadable,
           'toc--is-active': tocIsActive,
           [`is-${theme}`]: true,
+          [`is-${fontType}`]: true,
         })}
       >
         <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
           <Container>
             <Grid padded centered>
               <Grid.Row verticalAlign="bottom">
-                {
-                  hasTOC ?
-                    <Grid.Column mobile={16} tablet={5} computer={4} className="source__toc-header">
-                      <div className="source__header-title computer-only">
-                        <Header size="small">{t('sources-library.toc')}</Header>
-                      </div>
-                      <div className="source__header-toolbar">
-                        {matchString}
-                        {this.switchSortingOrder(parentId)}
-                        <Button compact size="small" className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
-                      </div>
-                    </Grid.Column> :
-                    null
-                }
+                <Grid.Column mobile={16} tablet={5} computer={4} className="source__toc-header">
+                  <div className="source__header-title computer-only">
+                    <Header size="small">{t('sources-library.toc')}</Header>
+                  </div>
+                  <div className="source__header-toolbar">
+                    {matchString}
+                    {this.switchSortingOrder(parentId)}
+                    <Button compact size="small" className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
+                  </div>
+                </Grid.Column>
                 <Grid.Column mobile={16} tablet={11} computer={12} className="source__content-header">
-
-                  <div className="source__header-title mobile-hidden">{this.header(sourceId, fullPath)}</div>
+                  <div className="source__header-title">{this.header(sourceId, fullPath)}</div>
                   <div className="source__header-toolbar">
                     <Popup
-                      trigger={<Button compact size="small" icon="setting" />}
+                      trigger={<Button compact size="small" icon="options" />}
                       on="click"
                       position="bottom right"
+                      className="sources-settings"
+                      flowing
                     >
-                      <Popup.Content>
-                        <Menu vertical>
-                          <Menu.Header>font size</Menu.Header>
-                          <Menu.Item icon="plus" name="Increase font size" onClick={this.handleIncreaseFontSize} />
-                          <Menu.Item icon="minus" name="Decrease font size" onClick={this.handleDecreaseFontSize} />
-
-                          <Menu.Header>theme</Menu.Header>
-                          <Menu.Item onClick={this.handleLightTheme}>
-                            <Label color="white" empty circular />
-                            Light theme
+                      <Popup.Content>                        
+                        <Menu fluid widths={2}>
+                          <Menu.Item onClick={this.handleIncreaseFontSize}>
+                            <Icon name='font' size='large'/>
+                            <Icon name='plus' size='small'/>
                           </Menu.Item>
-                          <Menu.Item onClick={this.handleDarkTheme}>
-                            <Label color="black" empty circular />
-                            Dark theme
+                          <Menu.Item onClick={this.handleDecreaseFontSize}>
+                            <Icon name='font' size='large'/>
+                            <Icon name='minus' size='small'/>
                           </Menu.Item>
-                          <Menu.Item onClick={this.handleSepiaTheme}>
-                            <Label color="sepia" empty circular />
-                            Sepia theme
-                          </Menu.Item>
+                        </Menu>
+                        <Menu fluid widths={2}>
+                          <Menu.Item className="is-serif" name="Serif"
+                          onClick={this.handleSerifFont}/>
+                          <Menu.Item name="Sans-serif" onClick={this.handleSansSerifFont} />
+                        </Menu>
+                        <Menu fluid widths={3}>
+                          <Menu.Item name="Light"
+                          onClick={this.handleLightTheme}/>
+                          <Menu.Item name="Dark" onClick={this.handleDarkTheme} />
+                          <Menu.Item name="Sepia" onClick={this.handleSepiaTheme} />
                         </Menu>
                       </Popup.Content>
                     </Popup>
-
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button compact size="small" className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
                   </div>
@@ -409,23 +434,19 @@ class LibraryContainer extends Component {
         <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
           <Grid padded centered>
             <Grid.Row className="is-fitted">
-              {
-                hasTOC ?
-                  <Grid.Column mobile={16} tablet={5} computer={4} onClick={this.handleTocIsActive}>
-                    <TOC
-                      match={matchString ? match : ''}
-                      matchApplied={this.handleFilterClear}
-                      fullPath={fullPath}
-                      rootId={parentId}
-                      contextRef={this.contextRef}
-                      getSourceById={getSourceById}
-                      apply={this.props.apply}
-                      stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
-                      t={t}
-                    />
-                  </Grid.Column> :
-                  null
-              }
+              <Grid.Column mobile={16} tablet={5} computer={4} onClick={this.handleTocIsActive}>
+                <TOC
+                  match={matchString ? match : ''}
+                  matchApplied={this.handleFilterClear}
+                  fullPath={fullPath}
+                  rootId={parentId}
+                  contextRef={this.contextRef}
+                  getSourceById={getSourceById}
+                  apply={this.props.apply}
+                  stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
+                  t={t}
+                />
+              </Grid.Column>
               <Grid.Column
                 mobile={14}
                 tablet={11}
