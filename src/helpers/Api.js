@@ -21,10 +21,10 @@ export class Requests {
         const value = pair[1];
 
         if (Array.isArray(value)) {
-          return value.map(val => `${key}=${val}`).join('&');
+          return value.map(val => `${key}=${Requests.encode(val)}`).join('&');
         }
 
-        return `${key}=${value}`;
+        return `${key}=${Requests.encode(value)}`;
       }).join('&')}`;
 
   static encode = encodeURIComponent;
