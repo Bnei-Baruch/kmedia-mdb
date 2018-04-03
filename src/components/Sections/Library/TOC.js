@@ -1,9 +1,124 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Accordion, Ref, Sticky } from 'semantic-ui-react';
-
-import { BS_SHAMATI } from '../../../helpers/consts';
+import { Accordion, Icon, Ref, Sticky } from 'semantic-ui-react';
+import cx from 'classnames';
+import _ from 'lodash';
 import { isEmpty, shallowEqual } from '../../../helpers/utils';
+import { BS_SHAMATI, } from '../../../helpers/consts';
+
+// Stolen from SemanticUI
+export const useKeyOnly = (val, key) => val && key;
+const getUnhandledProps = (ComponentFunc, props) => {
+  const { handledProps = [] } = ComponentFunc;
+
+  return Object.keys(props).reduce((acc, prop) => {
+    if (prop === 'childKey') {
+      return acc;
+    }
+    if (handledProps.indexOf(prop) === -1) {
+      acc[prop] = props[prop];
+    }
+    return acc;
+  }, {});
+};
+
+function getElementType(ComponentFunc, props, getDefault) {
+  const { defaultProps = {} } = ComponentFunc;
+  if (props.as && props.as !== defaultProps.as) {
+    return props.as;
+  }
+  if (getDefault) {
+    const computedDefault = getDefault();
+    if (computedDefault) {
+      return computedDefault;
+    }
+  }
+  if (props.href) {
+    return 'a';
+  }
+
+  return defaultProps.as || 'div';
+}
+
+class AccordionTitleDanger extends Component {
+  static propTypes = {
+    /** An element type to render as (string or function). */
+    as: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.string,
+      PropTypes.symbol,
+    ]),
+
+    /** Whether or not the title is in the open state. */
+    active: PropTypes.bool,
+
+    /** Primary content. */
+    children: PropTypes.node,
+
+    /** Additional classes. */
+    className: PropTypes.string,
+
+    /** Shorthand for primary content. */
+    // eslint-disable-next-line react/forbid-prop-types
+    content: PropTypes.object,
+
+    /** AccordionTitle index inside Accordion. */
+    index: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
+
+    /**
+     * Called on click.
+     *
+     * @param {SyntheticEvent} event - React's original SyntheticEvent.
+     * @param {object} data - All props.
+     */
+    onClick: PropTypes.func,
+
+    match: PropTypes.bool.isRequired,
+  };
+
+  static defaultProps = {
+    as: 'div',
+    active: false,
+    children: null,
+    className: '',
+    content: null,
+    index: 0,
+    onClick: () => {
+    },
+  };
+
+  static handledProps = ['active', 'as', 'children', 'className', 'content', 'index', 'onClick', 'match'];
+
+  handleClick = e => _.invoke(this.props, 'onClick', e, this.props);
+
+  render() {
+    const { active, children, className, content, match } = this.props;
+
+    const classes     = cx(
+      useKeyOnly(active && !match, 'active'),
+      'title',
+      className,
+    );
+    const rest        = getUnhandledProps(AccordionTitleDanger, this.props);
+    const ElementType = getElementType(AccordionTitleDanger, this.props);
+
+    if (_.isNil(content)) {
+      return (
+        <ElementType {...rest} className={classes} onClick={this.handleClick} dangerouslySetInnerHTML={{ __html: children.props.children }} />
+      );
+    }
+
+    return (
+      <ElementType {...rest} className={classes} onClick={this.handleClick}>
+        <Icon name="dropdown" />
+        {content}
+      </ElementType>
+    );
+  }
+}
 
 class TOC extends Component {
   static propTypes = {
@@ -87,14 +202,14 @@ class TOC extends Component {
 
     if (isEmpty(children)) { // Leaf
       const item   = this.leaf(sourceId, title);
-      const result = { title: item, key: `lib-leaf-${sourceId}` };
+      const result = { as: 'span', title: item, key: `lib-leaf-${sourceId}` };
       return [result];
     }
 
     const hasNoGrandsons = children.reduce((acc, curr) => acc && isEmpty(getSourceById(curr).children), true);
     let panels;
     if (hasNoGrandsons) {
-      const tree = children.reduce((acc, leafId, idx) => {
+      const tree      = children.reduce((acc, leafId, idx) => {
         let { name } = getSourceById(leafId);
         if (sourceId === BS_SHAMATI) {
           name = `${idx + 1}. ${name}`;
@@ -102,10 +217,14 @@ class TOC extends Component {
         acc.push({ leafId, leafTitle: name });
         return acc;
       }, []);
-
-      panels = this.filterSources(tree).map(({ leafId, leafTitle, }) => {
-        const item = this.leaf(leafId, leafTitle);
-        return { title: item, key: `lib-leaf-${leafId}` };
+      const { match } = this.props;
+      panels          = this.filterSources(tree, match).map(({ leafId, leafTitle, }) => {
+        const item   = this.leaf(leafId, leafTitle);
+        const danger = <AccordionTitleDanger match={!isEmpty(match)} key={`lib-leaf-title-${leafId}`}>{item}</AccordionTitleDanger>;
+        return {
+          title: danger,
+          key: `lib-leaf-${leafId}`
+        };
       });
     } else {
       panels = this.subToc(children, path.slice(1));
@@ -142,17 +261,17 @@ class TOC extends Component {
     window.scrollTo(0, 0);
   };
 
-  filterSources = (path) => {
-    const { match } = this.props;
-
+  filterSources = (path, match) => {
     if (isEmpty(match)) {
       return path;
     }
 
-    const reg = new RegExp(match, 'i');
+    const escapedMatch = match.replace(/[/)(]/g, '\\$&');
+    const reg          = new RegExp(escapedMatch, 'i');
     return path.reduce((acc, el) => {
       if (reg.test(el.leafTitle)) {
-        acc.push(el);
+        const name = el.leafTitle.replace(reg, '<em style="color: darkred">$&</em>');
+        acc.push({ leafId: el.leafId, leafTitle: name });
       }
       return acc;
     }, []);
