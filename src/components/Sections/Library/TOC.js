@@ -1,124 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Accordion, Icon, Ref, Sticky } from 'semantic-ui-react';
-import cx from 'classnames';
-import _ from 'lodash';
-import { isEmpty, shallowEqual } from '../../../helpers/utils';
+import { Accordion, Ref, Sticky } from 'semantic-ui-react';
+import noop from 'lodash/noop';
 import { BS_SHAMATI, } from '../../../helpers/consts';
 
-// Stolen from SemanticUI
-export const useKeyOnly = (val, key) => val && key;
-const getUnhandledProps = (ComponentFunc, props) => {
-  const { handledProps = [] } = ComponentFunc;
-
-  return Object.keys(props).reduce((acc, prop) => {
-    if (prop === 'childKey') {
-      return acc;
-    }
-    if (handledProps.indexOf(prop) === -1) {
-      acc[prop] = props[prop];
-    }
-    return acc;
-  }, {});
-};
-
-function getElementType(ComponentFunc, props, getDefault) {
-  const { defaultProps = {} } = ComponentFunc;
-  if (props.as && props.as !== defaultProps.as) {
-    return props.as;
-  }
-  if (getDefault) {
-    const computedDefault = getDefault();
-    if (computedDefault) {
-      return computedDefault;
-    }
-  }
-  if (props.href) {
-    return 'a';
-  }
-
-  return defaultProps.as || 'div';
-}
-
-class AccordionTitleDanger extends Component {
-  static propTypes = {
-    /** An element type to render as (string or function). */
-    as: PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.string,
-      PropTypes.symbol,
-    ]),
-
-    /** Whether or not the title is in the open state. */
-    active: PropTypes.bool,
-
-    /** Primary content. */
-    children: PropTypes.node,
-
-    /** Additional classes. */
-    className: PropTypes.string,
-
-    /** Shorthand for primary content. */
-    // eslint-disable-next-line react/forbid-prop-types
-    content: PropTypes.object,
-
-    /** AccordionTitle index inside Accordion. */
-    index: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
-
-    /**
-     * Called on click.
-     *
-     * @param {SyntheticEvent} event - React's original SyntheticEvent.
-     * @param {object} data - All props.
-     */
-    onClick: PropTypes.func,
-
-    match: PropTypes.bool.isRequired,
-  };
-
-  static defaultProps = {
-    as: 'div',
-    active: false,
-    children: null,
-    className: '',
-    content: null,
-    index: 0,
-    onClick: () => {
-    },
-  };
-
-  static handledProps = ['active', 'as', 'children', 'className', 'content', 'index', 'onClick', 'match'];
-
-  handleClick = e => _.invoke(this.props, 'onClick', e, this.props);
-
-  render() {
-    const { active, children, className, content, match } = this.props;
-
-    const classes     = cx(
-      useKeyOnly(active && !match, 'active'),
-      'title',
-      className,
-    );
-    const rest        = getUnhandledProps(AccordionTitleDanger, this.props);
-    const ElementType = getElementType(AccordionTitleDanger, this.props);
-
-    if (_.isNil(content)) {
-      return (
-        <ElementType {...rest} className={classes} onClick={this.handleClick} dangerouslySetInnerHTML={{ __html: children.props.children }} />
-      );
-    }
-
-    return (
-      <ElementType {...rest} className={classes} onClick={this.handleClick}>
-        <Icon name="dropdown" />
-        {content}
-      </ElementType>
-    );
-  }
-}
+import AccordionTitleDanger from './AccordionTitleDanger';
+import { isEmpty, shallowEqual } from '../../../helpers/utils';
 
 class TOC extends Component {
   static propTypes = {
@@ -134,7 +21,7 @@ class TOC extends Component {
     getSourceById: PropTypes.func.isRequired,
     apply: PropTypes.func.isRequired,
     stickyOffset: PropTypes.number,
-    // eslint-disable-next-line react/forbid-prop-types
+
     match: PropTypes.string.isRequired,
     matchApplied: PropTypes.func.isRequired,
   };
@@ -158,6 +45,7 @@ class TOC extends Component {
     return (
       this.props.rootId !== nextProps.rootId ||
       this.props.match !== nextProps.match ||
+      this.props.stickyOffset !== nextProps.stickyOffset ||
       !shallowEqual(this.props.fullPath, nextProps.fullPath)
     );
   }
@@ -176,6 +64,12 @@ class TOC extends Component {
       return -1;
     }
     return node1.children.findIndex(x => x === node2.id);
+  };
+
+  handleTitleClick = (e) => {
+    // stop propagation so tocIsActive in LibraryContainer won't call
+    // this breaks navigation in nested TOCs (TES, Zohar, etc...)
+    e.stopPropagation();
   };
 
   subToc = (subTree, path) => (
@@ -217,6 +111,7 @@ class TOC extends Component {
         acc.push({ leafId, leafTitle: name });
         return acc;
       }, []);
+
       const { match } = this.props;
       panels          = this.filterSources(tree, match).map(({ leafId, leafTitle, }) => {
         const item   = this.leaf(leafId, leafTitle);
@@ -238,7 +133,13 @@ class TOC extends Component {
     return {
       title,
       content: {
-        content: <Accordion.Accordion panels={panels} defaultActiveIndex={activeIndex} />,
+        content: (
+          <Accordion.Accordion
+            panels={panels}
+            defaultActiveIndex={activeIndex}
+            onTitleClick={hasNoGrandsons ? noop : this.handleTitleClick}
+          />
+        ),
         key: `lib-content-${sourceId}`,
       }
     };
@@ -291,7 +192,7 @@ class TOC extends Component {
     return (
       <Sticky context={contextRef} offset={stickyOffset} className="source__toc">
         <Ref innerRef={this.handleAccordionContext}>
-          <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} />
+          <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} onTitleClick={this.handleTitleClick} />
         </Ref>
       </Sticky>
     );

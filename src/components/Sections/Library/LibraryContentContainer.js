@@ -25,11 +25,13 @@ class LibraryContentContainer extends Component {
     t: PropTypes.func.isRequired,
     fetchContent: PropTypes.func.isRequired,
     languageUI: PropTypes.string.isRequired,
+    langSelectorMount: PropTypes.any,
   };
 
   static defaultProps = {
     source: null,
     index: {},
+    langSelectorMount: null,
   };
 
   state = {
@@ -135,9 +137,9 @@ class LibraryContentContainer extends Component {
   };
 
   render() {
-    const { content, index, t, }          = this.props;
-    const { languages, language }         = this.state;
-    const { isTaas, startsFrom, pdfFile } = this.getTaasPdf();
+    const { content, index, t, langSelectorMount } = this.props;
+    const { languages, language }                  = this.state;
+    const { isTaas, startsFrom, pdfFile }          = this.getTaasPdf();
 
     return (
       <Library
@@ -149,6 +151,7 @@ class LibraryContentContainer extends Component {
         languages={languages}
         t={t}
         handleLanguageChanged={this.handleLanguageChanged}
+        langSelectorMount={langSelectorMount}
       />
     );
   }
