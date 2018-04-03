@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { push as routerPush } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Grid, Header, Input, Label, Menu, Popup, Ref, Icon} from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Icon, Input, Menu, Popup, Ref } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
@@ -137,15 +137,13 @@ class LibraryContainer extends Component {
     // take the secondary header height for sticky stuff calculations
     if (this.secondaryHeaderRef) {
       const { height } = this.secondaryHeaderRef.getBoundingClientRect();
-      console.log('updpateSticky', this.state.secondaryHeaderHeight, height);
-      
       if (this.state.secondaryHeaderHeight !== height) {
         this.setState({ secondaryHeaderHeight: height });
       }
     }
 
     // check fixed header width in pixels for text-overflow:ellipsis
-    if(this.contentHeaderRef) {
+    if (this.contentHeaderRef) {
       const { width } = this.contentHeaderRef.getBoundingClientRect();
       if (this.state.contentHeaderWidth !== width) {
         this.setState({ contentHeaderWidth: width });
@@ -179,12 +177,11 @@ class LibraryContainer extends Component {
   handleSecondaryHeaderRef = (ref) => {
     this.secondaryHeaderRef = ref;
   };
-  
+
   handleContentHeaderRef = (ref) => {
     this.contentHeaderRef = ref;
   };
-  
-  
+
   handleHeaderMenuRef = (ref) => {
     this.headerMenuRef = ref;
   };
@@ -208,11 +205,11 @@ class LibraryContainer extends Component {
       this.setState({ fontSize: this.state.fontSize - 1 });
     }
   };
-  
+
   handleSerifFont = () => {
     this.setState({ fontType: 'serif' });
   };
-  
+
   handleSansSerifFont = () => {
     this.setState({ fontType: 'sans-serif' });
   };
@@ -253,17 +250,19 @@ class LibraryContainer extends Component {
     }
     const { contentHeaderWidth, } = this.state;
     return (
-      
-        <Header size="small">
-          <Ref innerRef={this.handleContentHeaderRef}><div></div></Ref>
-          <Header.Subheader>
-            <small style={{ width: `${contentHeaderWidth}px` }}>
-              {displayName} / {`${parentName} ${description || ''} `}
-            </small>
-          </Header.Subheader>
-          <span style={{ width: `${contentHeaderWidth}px` }}>{sourceName}</span>
-        </Header>
-      
+
+      <Header size="small">
+        <Ref innerRef={this.handleContentHeaderRef}>
+          <div />
+        </Ref>
+        <Header.Subheader>
+          <small style={{ width: `${contentHeaderWidth}px` }}>
+            {displayName} / {`${parentName} ${description || ''} `}
+          </small>
+        </Header.Subheader>
+        <span style={{ width: `${contentHeaderWidth}px` }}>{sourceName}</span>
+      </Header>
+
     );
   };
 
@@ -338,7 +337,6 @@ class LibraryContainer extends Component {
 
     const fullPath = this.getFullPath(sourceId);
     const parentId = this.properParentId(fullPath);
-    const hasTOC   = fullPath.length > 2;
 
     const index = isEmpty(sourceId) ? {} : indexMap[sourceId];
 
@@ -362,8 +360,9 @@ class LibraryContainer extends Component {
       );
     }
 
-    const { isReadable, fontSize, theme, fontType, secondaryHeaderHeight, contentHeaderWidth, tocIsActive, match, } = this.state;
-    const matchString                                                                 = this.matchString(parentId, t);
+    const { isReadable, fontSize, theme, fontType, secondaryHeaderHeight, tocIsActive, match, } = this.state;
+
+    const matchString = this.matchString(parentId, t);
 
     return (
       <div
@@ -399,25 +398,30 @@ class LibraryContainer extends Component {
                       className="sources-settings"
                       flowing
                     >
-                      <Popup.Content>                        
+                      <Popup.Content>
                         <Menu fluid widths={2}>
                           <Menu.Item onClick={this.handleIncreaseFontSize}>
-                            <Icon name='font' size='large'/>
-                            <Icon name='plus' size='small'/>
+                            <Icon name="font" size="large" />
+                            <Icon name="plus" size="small" />
                           </Menu.Item>
                           <Menu.Item onClick={this.handleDecreaseFontSize}>
-                            <Icon name='font' size='large'/>
-                            <Icon name='minus' size='small'/>
+                            <Icon name="font" size="large" />
+                            <Icon name="minus" size="small" />
                           </Menu.Item>
                         </Menu>
                         <Menu fluid widths={2}>
-                          <Menu.Item className="is-serif" name="Serif"
-                          onClick={this.handleSerifFont}/>
+                          <Menu.Item
+                            className="is-serif"
+                            name="Serif"
+                            onClick={this.handleSerifFont}
+                          />
                           <Menu.Item name="Sans-serif" onClick={this.handleSansSerifFont} />
                         </Menu>
                         <Menu fluid widths={3}>
-                          <Menu.Item name="Light"
-                          onClick={this.handleLightTheme}/>
+                          <Menu.Item
+                            name="Light"
+                            onClick={this.handleLightTheme}
+                          />
                           <Menu.Item name="Dark" onClick={this.handleDarkTheme} />
                           <Menu.Item name="Sepia" onClick={this.handleSepiaTheme} />
                         </Menu>
