@@ -119,3 +119,9 @@ em {
 	max-height:220px;
 }
 
+// fix the bug that mouse cursor changes on button when using edge browser - we have to set it explicitly 
+// because it derives some default browser functionality
+button{
+  cursor: pointer;
+}
+
