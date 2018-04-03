@@ -4,6 +4,7 @@ import Basic from './Basic';
 import Image from './Image';
 import Video from './Video';
 import Locale from './Locale';
+import { isEmpty } from '../../../helpers/utils';
 
 class AVUnit extends Component {
   static propTypes = {
@@ -21,11 +22,13 @@ class AVUnit extends Component {
       return null;
     }
 
-    // TODO (orin): if unit.description doesn't exist, use the collection description
+    // TODO (orin): unit should have a short description field
+    // if unit.description doesn't exist, use the collection description
+    const description = isEmpty(unit.description) ? Object.values(unit.collections)[0].description : unit.description;
 
     return (
       <div>
-        <Basic title={unit.name} description={unit.description} />
+        <Basic title={unit.name} description={description} />
         <Image unitOrUrl={unit} />
 
         {/*// /!*TODO: add Helmets.Basic:url ? *!/*/}
