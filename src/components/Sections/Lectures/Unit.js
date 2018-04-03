@@ -13,6 +13,8 @@ import {
 } from '../../Pages/Unit/widgets/Recommended/SameCollection/Container';
 import SameCollectionWidget from '../../Pages/Unit/widgets/Recommended/SameCollection/Widget';
 
+import Helmets from '../../shared/Helmets';
+
 class MySameCollectionWidget extends SameCollectionWidget {
 
   renderContent() {
@@ -100,6 +102,11 @@ class MySameCollectionContainer extends SameCollectionContainer {
 const MyWrappedSameCollectionContainer = wrapSameCollectionContainer(MySameCollectionContainer);
 
 class MyUnitPage extends UnitPage {
+  renderHelmet() {
+    const { unit } = this.props;
+    return <Helmets.AVUnit  unit={unit} />;
+  }
+
   renderRecommendations() {
     const { unit, t } = this.props;
     return <MyWrappedSameCollectionContainer unit={unit} t={t} />;

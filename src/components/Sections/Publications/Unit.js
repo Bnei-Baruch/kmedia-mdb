@@ -130,11 +130,7 @@ class MyUnitPage extends UnitPage {
     const { unit } = this.props;
 
     return (
-      <div>
-        <Helmets.Basic title={unit.name} />
-        {/* TODO: add tags from unit (tags=unit.tags) ? */}
-        <Helmets.Article publishedTime={unit.film_date} />
-      </div>
+      <Helmets.ArticleUnit unit={unit} />
     );
   }
 

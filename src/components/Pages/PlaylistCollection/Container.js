@@ -19,6 +19,7 @@ export class PlaylistCollectionContainer extends Component {
     PlaylistComponent: PropTypes.func,
     fetchCollection: PropTypes.func.isRequired,
     fetchUnit: PropTypes.func.isRequired,
+    shouldRenderHelmet: PropTypes.bool
   };
 
   static defaultProps = {
@@ -63,7 +64,7 @@ export class PlaylistCollectionContainer extends Component {
   };
 
   render() {
-    const { match, language, collection, wip: wipMap, errors, PlaylistComponent } = this.props;
+    const { match, language, collection, wip: wipMap, errors, PlaylistComponent, shouldRenderHelmet } = this.props;
 
     // We're wip / err if some request is wip / err
     const { id } = match.params;
@@ -84,6 +85,7 @@ export class PlaylistCollectionContainer extends Component {
         err={err}
         language={language}
         PlaylistComponent={PlaylistComponent}
+        shouldRenderHelmet={shouldRenderHelmet}
       />
     );
   }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import classnames from 'classnames';
+import { Helmet } from 'react-helmet';
 import { Flag, Header, Icon, Menu } from 'semantic-ui-react';
 import { renderRoutes } from 'react-router-config';
 
@@ -67,9 +68,19 @@ class Layout extends Component {
     const { sidebarActive }      = this.state;
 
     const showSearch = this.shouldShowSearch(location);
+
+    const defaultTitle  = t('nav.top.header');
+    const titleTemplate = `%s | ${defaultTitle}`;
+
     return (
       <div className="layout">
-        <Helmets.Basic title={t('nav.top.header')} />
+        {/* TODO (orin): move this helmet to Helmet.TopMost */}
+        <Helmet
+          defaultTitle={defaultTitle}
+          titleTemplate={titleTemplate}
+        />
+        <Helmets.Basic />
+
         <GAPageView location={location} />
         <div className="layout__header">
           <Menu inverted borderless size="huge" color="blue">

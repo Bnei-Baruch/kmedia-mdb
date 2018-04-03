@@ -12,6 +12,8 @@ import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 import { PlaylistCollectionContainer } from '../../Pages/PlaylistCollection/Container';
 
+import Helmets from "../../shared/Helmets";
+
 class LastLessonCollection extends Component {
   static propTypes = {
     match: shapes.RouterMatch.isRequired,
@@ -61,10 +63,18 @@ class LastLessonCollection extends Component {
           language,
           id: lastLessonId,
         }
-      }
+      },
+      shouldRenderHelmet: false,
     };
 
-    return <PlaylistCollectionContainer {...props} />;
+    // TODO (orin): is this the right place for the helmet?
+    return (
+      <div>
+        <Helmets.Basic title={t('lessons.last.text')} description={t('lessons.header.subtext')} />
+        <Helmets.Image />
+        <PlaylistCollectionContainer {...props} />
+      </div>
+    );
   }
 }
 

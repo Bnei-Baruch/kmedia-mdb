@@ -5,6 +5,8 @@ import Video from './Video';
 import Profile from './Profile';
 import Book from './Book';
 import Locale from './Locale';
+import AVUnit from './AVUnit';
+import ArticleUnit from './ArticleUnit';
 
 
 export default {
@@ -14,5 +16,7 @@ export default {
   Video,
   Profile,
   Book,
-  Locale
+  Locale,
+  AVUnit,
+  ArticleUnit,
 };

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+import { isEmpty } from '../../../helpers/utils';
 
 class Profile extends Component {
   static propTypes = {
@@ -17,8 +18,8 @@ class Profile extends Component {
     return (
       <Helmet>
         <meta property="og:type" content="profile" />
-        {firstName ? <meta property="profile:first_name" content={firstName} /> : null}
-        {lastName ? <meta property="profile:last_name" content={lastName} /> : null}
+        {isEmpty(firstName) ? <meta property="profile:first_name" content={firstName} /> : null}
+        {isEmpty(lastName) ? <meta property="profile:last_name" content={lastName} /> : null}
       </Helmet>
     );
   }

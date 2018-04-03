@@ -155,6 +155,10 @@
     }
   },
   "home": {
+    "header": {
+      "text": "Home",
+      "subText": ""
+    },
     "search": "Explore the wisdom of Kabbalah",
     "sections": "Archive Sections",
     "updates": "Latest Updates",

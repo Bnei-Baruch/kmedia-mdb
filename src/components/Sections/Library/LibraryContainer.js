@@ -18,6 +18,7 @@ import BackToTop from '../../shared/BackToTop';
 import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
 import { RTL_LANGUAGES } from '../../../helpers/consts';
+import Helmets from '../../shared/Helmets';
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -195,15 +196,21 @@ class LibraryContainer extends Component {
       displayName += ` (${kabName})`;
     }
 
+    // const title = `${kabName} - ${parentName} - ${sourceName}`;
+    const title = `${sourceName} - ${parentName} - ${kabName}`;
+
     return (
-      <Header size="large">
-        <Header.Subheader>
-          <small>
-            {displayName} / {`${parentName} ${description || ''} `}
-          </small>
-        </Header.Subheader>
-        {sourceName}
-      </Header>
+      <div>
+        <Helmets.Basic title={title} description={description} />
+        <Header size="large">
+          <Header.Subheader>
+            <small>
+              {displayName} / {`${parentName} ${description || ''} `}
+            </small>
+          </Header.Subheader>
+          {sourceName}
+        </Header>
+      </div>
     );
   };
 

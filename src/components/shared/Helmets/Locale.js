@@ -18,10 +18,10 @@ class Locale extends Component {
 
     return (
       <Helmet>
+        {/*TODO (orin): <link rel="canonical" href="">*/}
         {<meta property="og:locale" content={mainLang} />}
         {alternateLang.map((lang, index) =>
           <meta name="og:locale:alternate" content={LANGUAGE_TO_LOCALE[lang]} key={index} />)}
-
       </Helmet>
     );
   }

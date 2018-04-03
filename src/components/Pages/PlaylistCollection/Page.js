@@ -10,6 +10,7 @@ import Info from '../Unit/widgets/Info/Info';
 import MediaDownloads from '../Unit/widgets/Downloads/MediaDownloads';
 import PlaylistAVBox from './widgets/PlaylistAVBox/PlaylistAVBox';
 import Playlist from './widgets/Playlist/Playlist';
+import Helmets from '../../shared/Helmets';
 
 class PlaylistCollectionPage extends Component {
 
@@ -20,13 +21,15 @@ class PlaylistCollectionPage extends Component {
     PlaylistComponent: PropTypes.func,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
+    shouldRenderHelmet: PropTypes.bool
   };
 
   static defaultProps = {
     collection: null,
     wip: false,
     err: null,
-    PlaylistComponent: Playlist
+    PlaylistComponent: Playlist,
+    shouldRenderHelmet: true
   };
 
   state = {
@@ -35,6 +38,28 @@ class PlaylistCollectionPage extends Component {
 
   handleSelectedChange = selected =>
     this.setState({ selected });
+
+  renderHelmet() {
+    const { collection, t, shouldRenderHelmet } = this.props;
+
+    if (!shouldRenderHelmet) {
+      return null;
+    }
+
+    let title = collection.name;
+    // if the collection doesn't have a name, use a default.
+    if (title === undefined) {
+      title = t(`constants.content-types.${collection.content_type}`);
+    }
+
+    if (collection.film_date) {
+      const filmDate = t('values.date', { date: new Date(collection.film_date) });
+      title          = `${title} - ${filmDate}`;
+    }
+
+    return <Helmets.Basic title={title} />;
+
+  }
 
   render() {
     const { language, collection, wip, err, t, PlaylistComponent } = this.props;
@@ -49,8 +74,10 @@ class PlaylistCollectionPage extends Component {
     }
 
     const { selected: unit } = this.state;
+
     return (
       <div className="playlist-collection-page">
+        {this.renderHelmet()}
         <div className="avbox">
           <Container>
             <Grid padded>
