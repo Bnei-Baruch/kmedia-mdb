@@ -18,22 +18,32 @@ class Image extends Component {
   };
 
   buildImage(url, width, height) {
-    const imageUrl = `${imaginaryUrl('resize')}?${Requests.makeParams({ url, width, height })}`;
+    const imageUrl = `${imaginaryUrl('enlarge')}?${Requests.makeParams({ url, width, height, nocrop: true })}`;
 
-    {/* TODO (orin): should we use ?*/}
-    {/*<meta property="og:image:secure_url" content="https://secure.example.com/ogp.jpg" />*/}
+    {/* TODO (orin): should we use ?*/
+    }
+    {/*<meta property="og:image:secure_url" content="https://secure.example.com/ogp.jpg" />*/
+    }
 
-    {/* Schema.org for Google */}
-    {/*{resizedImage ? <meta itemprop="image" content={resizedImage} /> : null}*/}
+    {/* Schema.org for Google */
+    }
+    {/*{resizedImage ? <meta itemprop="image" content={resizedImage} /> : null}*/
+    }
 
-    {/* Open Graph general (Facebook, Pinterest & Google+) */}
-    {/* minimum required: title, image, url */}
+    {/* Open Graph general (Facebook, Pinterest & Google+) */
+    }
+    {/* minimum required: title, image, url */
+    }
 
-    return [
-      <meta property="og:image" content={imageUrl} key="0" />,
-      <meta property="og:image:width" content={width} key="1" />,
-      <meta property="og:image:height" content={height} key="2" />
-    ];
+    // TODO (orin): BUG !!!, when a new image overrides the old one,
+    // it breaks the helmet structure (separate the image properties
+    // to different places at the HTML head (is all should be close to each other)
+    return <meta property="og:image" content={imageUrl} key="1" />;
+    // return [
+      {/*<meta property="og:image" content={imageUrl} key="1" />,*/}
+      {/*<meta property="og:image:width" content={width} key="2" />,*/}
+      {/*<meta property="og:image:height" content={height} key="3" />*/}
+    // ];
   }
 
   render() {
@@ -49,9 +59,7 @@ class Image extends Component {
       imageUrl = assetUrl(`api/thumbnail/${unitOrUrl.id}`);
     }
 
-    // TODO (orin): BUG !!!, when a new image overrides the old one,
-    // it breaks the helmet structure (separate the image properties
-    // to different places at the HTML head (is all should be close to each other)
+
     return (
       <Helmet>
         {/* Facebook */}
