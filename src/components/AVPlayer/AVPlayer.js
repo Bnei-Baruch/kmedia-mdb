@@ -26,9 +26,10 @@ import AVLanguage from './AVLanguage';
 import AVAudioVideo from './AVAudioVideo';
 import AvSeekBar from './AvSeekBar';
 import AVEditSlice from './AVEditSlice';
-import ShareBar from './ShareBar';
+// import ShareBar from './ShareBar';
 import AVJumpBack from './AVJumpBack';
 import AVSpinner from './AVSpinner';
+import ShareFormDekstop from './ShareFormDekstop';
 
 const PLAYER_VOLUME_STORAGE_KEY = '@@kmedia_player_volume';
 const DEFAULT_PLAYER_VOLUME     = 0.8;
@@ -331,6 +332,15 @@ class AVPlayer extends PureComponent {
     this.updateSliceQuery(newState);
   };
 
+  handleSliceChange = (start, end) => {
+    const newState = {
+      sliceEnd: end,
+      sliceStart: start
+    };
+    this.setState(newState);
+    this.updateSliceQuery(newState);
+  };
+
   resetSliceQuery = () => {
     updateQuery(this.props.history, q => ({ ...q, sstart: undefined, send: undefined }));
   };
@@ -498,10 +508,10 @@ class AVPlayer extends PureComponent {
           } = this.state;
 
     const { isPlaying }     = media;
-    const forceShowControls = item.mediaType === MT_AUDIO || !isPlaying;
     const isVideo           = item.mediaType === MT_VIDEO;
     const isAudio           = item.mediaType === MT_AUDIO;
     const isEditMode        = mode === PLAYER_MODE.SLICE_EDIT;
+    const forceShowControls = item.mediaType === MT_AUDIO || !isPlaying || isEditMode;
     const fallbackMedia     = item.mediaType !== item.requestedMediaType;
 
     let centerMediaControl;
@@ -518,13 +528,16 @@ class AVPlayer extends PureComponent {
       centerMediaControl = (
         <div>
           <Button
-            content={t('player.buttons.edit-back')}
-            size="large"
+            content={t('player.buttons.edit-back')}           
             color="blue"
             icon="chevron left"
             onClick={this.handleToggleMode}
           />
-          <ShareBar url={window.location.href} t={t} />
+          {/* <ShareBar url={window.location.href} t={t} /> */}
+          <ShareFormDekstop 
+            media={this.props.media}
+            onSliceChange={this.handleSliceChange}
+          />
         </div>
       );
     } else if (isVideo) {
@@ -653,8 +666,8 @@ class AVPlayer extends PureComponent {
           >
             {centerMediaControl}
           </div>
+          
         </div>
-
       </div>
     );
   }
