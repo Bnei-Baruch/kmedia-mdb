@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Container, Segment, Portal } from 'semantic-ui-react';
+import { Container, Portal, Segment } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { formatError, isEmpty, shallowCompare } from '../../../helpers/utils';
@@ -68,36 +68,34 @@ class Library extends Component {
   render() {
     const { content, language, languages, t, isTaas, langSelectorMount } = this.props;
 
-    if (isEmpty(content)) {
-      return <Segment basic>&nbsp;</Segment>;
-    }
-
-    const { wip: contentWip, err: contentErr, data: contentData } = content;
-
+    // PDF.js will fetch file by itself
+    const usePdfFile = isTaas && this.props.pdfFile;
     let contents;
 
-    if (contentErr) {
-      if (contentErr.response && contentErr.response.status === 404) {
-        contents = (
-          <FrownSplash
-            text={t('messages.source-content-not-found')}
-          />
-        );
-      } else {
-        contents = <ErrorSplash text={t('messages.server-error')} subtext={formatError(contentErr)} />;
-      }
-    } else if (contentWip) {
-      contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-    } else if (!contentData) {
-      return <Segment basic>{t('sources-library.no-source')}</Segment>;
-    } else if (isTaas && this.props.pdfFile) {
+    if (usePdfFile) {
       contents = (<PDF
         pdfFile={assetUrl(`sources/${this.props.pdfFile}`)}
         pageNumber={this.state.pageNumber || 1}
         startsFrom={this.props.startsFrom}
         pageNumberHandler={this.pageNumberHandler}
       />);
-    } else {
+    } else if (isEmpty(content)) {
+      return <Segment basic>&nbsp;</Segment>;
+    }
+
+    const { wip: contentWip, err: contentErr, data: contentData } = content;
+
+    if (contentErr) {
+      if (contentErr.response && contentErr.response.status === 404) {
+        contents = <FrownSplash text={t('messages.source-content-not-found')} />;
+      } else {
+        contents = <ErrorSplash text={t('messages.server-error')} subtext={formatError(contentErr)} />;
+      }
+    } else if (contentWip) {
+      contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
+    } else if (!contentData && !usePdfFile) {
+      return <Segment basic>{t('sources-library.no-source')}</Segment>;
+    } else if (!usePdfFile) {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
       contents        = (<div
         style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}

@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import throttle from 'lodash/throttle';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import { Container } from 'semantic-ui-react';
+import { translate } from 'react-i18next';
 
 import PDFMenu from './PDFMenu';
 import { BS_TAAS_PARTS } from '../../../helpers/consts';
+import { ErrorSplash, LoadingSplash, } from '../../shared/Splash/Splash';
 
 class PDF extends Component {
   static propTypes = {
@@ -13,6 +15,7 @@ class PDF extends Component {
     startsFrom: PropTypes.number.isRequired,
     pageNumber: PropTypes.number.isRequired,
     pageNumberHandler: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {};
@@ -78,7 +81,7 @@ class PDF extends Component {
 
   render() {
     const { numPages, pageNumber, width, } = this.state;
-    const { startsFrom, }                  = this.props;
+    const { startsFrom, t, }               = this.props;
 
     return (
       <div id="pdfWrapper" style={{ marginTop: '10px' }}>
@@ -94,6 +97,8 @@ class PDF extends Component {
           <Document
             file={this.props.pdfFile}
             onLoadSuccess={this.onDocumentLoadSuccess}
+            error={<ErrorSplash text={t('messages.server-error')} subtext={t('messages.failed-to-load-pdf-file')} />}
+            loading={<LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />}
           >
             {
               numPages ?
@@ -120,4 +125,4 @@ class PDF extends Component {
   }
 }
 
-export default PDF;
+export default translate()(PDF);
