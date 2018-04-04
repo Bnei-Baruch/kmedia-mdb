@@ -19,6 +19,11 @@ $widescreenMonitorBreakpoint: 1920px;
     @content;
   }
 }
+@mixin tablet-mobile {
+  @media only screen and (max-width: $computerBreakpoint - 1) {
+    @content;
+  }
+}
 @mixin tablet {
   @media only screen and (min-width: $tabletBreakpoint) and (max-width: $computerBreakpoint - 1) {
     @content;
