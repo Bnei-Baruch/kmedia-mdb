@@ -6,8 +6,8 @@ import { withRouter } from 'react-router-dom';
 import { Player, utils, withMediaProps } from 'react-media-player';
 import enableInlineVideo from 'iphone-inline-video';
 import classNames from 'classnames';
-import { Button, Icon } from 'semantic-ui-react';
 import qs from 'qs';
+import { Button, Icon } from 'semantic-ui-react';
 
 import { MT_AUDIO, MT_VIDEO, VS_DEFAULT, VS_FHD, VS_HD, VS_NHD } from '../../helpers/consts';
 import playerHelper from '../../helpers/player';
@@ -476,20 +476,18 @@ class AVPlayer extends PureComponent {
     // Set the share url as the current url as default
     let shareUrl = window.location.href;
 
-    if (this.props && this.props.item)
-    {
-      let item = this.props.item;
-
-      // Get the share url from shareUrl if availbale
-      if (item.shareUrl)
+    const { item } = this.props;
+    if (item) {
+      // Get the share url from shareUrl if available
+      if (item.shareUrl) {
         shareUrl = window.location.origin + item.shareUrl + window.location.search;
+      }
 
       // Set the media type in the share url
-      if (item.mediaType)
-      {
-        var parsed = qs.parse(shareUrl);
-        parsed.mediaType = item.mediaType;     
-        shareUrl = qs.stringify(parsed, { encode:false });  
+      if (item.mediaType) {
+        const parsed     = qs.parse(shareUrl);
+        parsed.mediaType = item.mediaType;
+        shareUrl         = qs.stringify(parsed, { encode: false });
       }
     }
 

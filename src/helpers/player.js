@@ -20,7 +20,7 @@ import {
   VS_DEFAULT,
 } from './consts';
 import { getQuery, updateQuery } from './url';
-import { isEmpty, physicalFile, canonicalLink } from './utils';
+import { canonicalLink, isEmpty, physicalFile } from './utils';
 
 const fallbacksLanguages = [LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN];
 
@@ -204,13 +204,11 @@ function playlist(collection, mediaType, language) {
       return acc.concat(v);
     }, []);
   } else {
-    items = units.map(x => {
-      const p = playableItem(x, mediaType, language);
-      if (p.unit)
-        p.shareUrl = canonicalLink(p.unit);
-      return p;
-    });
+    items = units.map(x => playableItem(x, mediaType, language));
   }
+
+  const shareUrl = canonicalLink(collection);
+  items.forEach((x) => { x.shareUrl = shareUrl; }); // eslint-disable-line no-param-reassign
 
   return {
     collection,
