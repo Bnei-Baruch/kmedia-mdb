@@ -257,7 +257,6 @@ class Sources extends Component {
         <PDF pdfFile={assetUrl(`sources/${selected}/${pdfFile}`)} pageNumber={1} startsFrom={startsFrom} pageNumberHandler={noop} />;
     } else {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
-
       // eslint-disable-next-line react/no-danger
       contents = <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: contentData }} />;
     }
