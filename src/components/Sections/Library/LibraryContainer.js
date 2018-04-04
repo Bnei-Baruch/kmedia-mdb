@@ -385,7 +385,7 @@ class LibraryContainer extends Component {
                   <div className="source__header-toolbar">
                     {matchString}
                     {this.switchSortingOrder(parentId)}
-                    <Button compact size="small" className="computer-hidden" icon="list layout" onClick={this.handleTocIsActive} />
+                    <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
                   </div>
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
@@ -428,7 +428,7 @@ class LibraryContainer extends Component {
                       </Popup.Content>
                     </Popup>
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
-                    <Button compact size="small" className="computer-hidden" icon="list layout" onClick={this.handleTocIsActive} />
+                    <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
                   </div>
                 </Grid.Column>
               </Grid.Row>
