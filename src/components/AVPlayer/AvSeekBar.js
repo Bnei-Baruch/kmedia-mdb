@@ -5,10 +5,10 @@ import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { withMediaProps } from 'react-media-player';
 
-import { formatTime } from '../../helpers/time';
+// import { formatTime } from '../../helpers/time';
 import { PLAYER_MODE } from './constants';
 import { playerModeProp } from './propTypes';
-import SliceHandle from './SliceHandle';
+// import SliceHandle from './SliceHandle';
 
 const stickyHandleDelta = 5; // pixel width from which to stick to handle
 const minSliceAreaWidth = 0.01;
@@ -211,7 +211,7 @@ class AvSeekBar extends Component {
   };
 
   render() {
-    const { sliceStart, sliceEnd } = this.props;
+    // const { sliceStart, sliceEnd } = this.props;
     const { currentTime, duration }          = this.props.media;
     const current                            = this.state.playPoint / duration;
     // Overriding progress of native react-media-player as he does not works correctly
@@ -250,7 +250,7 @@ class AvSeekBar extends Component {
     };
 
     const sliceStartLeft = this.toPercentage(normalizedSliceStart);
-    const sliceEndLeft   = this.toPercentage(normalizedSliceEnd);
+    //const sliceEndLeft   = this.toPercentage(normalizedSliceEnd);
 
     return (
       <div
@@ -265,7 +265,7 @@ class AvSeekBar extends Component {
       >
 
         <div className="seekbar">
-          {
+          {/* {
             isSliceEdit && (
               <SliceHandle
                 ref={(el) => {
@@ -290,7 +290,7 @@ class AvSeekBar extends Component {
                 className="seekbar__slicehandle--right"
               />
             )
-          }
+          } */}
 
           <div className={classNames('seekbar__bar', 'is-empty')} />
           <div className={classNames('seekbar__bar', 'is-played')} style={stylePlayed}>
