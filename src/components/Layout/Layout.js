@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import classnames from 'classnames';
-import { Flag, Header, Icon, Menu } from 'semantic-ui-react';
+import { Flag, Header, Icon, Menu, Dropdown } from 'semantic-ui-react';
 import { renderRoutes } from 'react-router-config';
+import { connect } from 'react-redux';
 
-import { ALL_LANGUAGES, FLAG_TO_LANGUAGE } from '../../helpers/consts';
+import { ALL_LANGUAGES, LANGUAGES, LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_UKRAINIAN, LANG_SPANISH } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import Helmets from '../shared/Helmets';
@@ -14,8 +15,9 @@ import GAPageView from './GAPageView/GAPageView';
 import MenuItems from './MenuItems';
 import Footer from './Footer';
 import logo from '../../images/logo.svg';
+import { selectors as settings } from '../../redux/modules/settings';
 
-const flags = ['us', 'ru', 'ua', 'es', 'il'];
+const dropdownLangs = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN];
 
 class Layout extends Component {
   static propTypes = {
@@ -63,7 +65,7 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location, route } = this.props;
+    const { t, location, route, language } = this.props;
     const { sidebarActive }      = this.state;
 
     const showSearch = this.shouldShowSearch(location);
@@ -96,14 +98,27 @@ class Layout extends Component {
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item>
-                {
-                  flags.map(flag => (
-                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                    <Link language={FLAG_TO_LANGUAGE[flag]} key={flag}>
-                      <Flag name={flag} />
-                    </Link>
-                  ))
-                }
+                <Dropdown
+                    fluid
+                    selection
+                    scrolling
+                    text = {t(`constants.languages.${language}`)}
+                    options={
+                        dropdownLangs.map(langParam => {
+                          const lang = LANGUAGES[langParam].value;
+                          const flag = LANGUAGES[langParam].flag;
+                          return (
+                             // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                            <Dropdown.Header key={lang} >
+                              <Link language={lang}>
+                                <Flag name={flag} /> 
+                                {t(`constants.languages.${lang}`)}
+                              </Link>
+                            </Dropdown.Header>
+                          );
+                        })
+                      }
+                  />
               </Menu.Item>
             </Menu.Menu>
           </Menu>
@@ -141,4 +156,8 @@ class Layout extends Component {
   }
 }
 
-export default translate()(Layout);
+export default connect(
+  (state) => ({ 
+      language: settings.getLanguage(state.settings),
+  })
+)(translate()(Layout));
