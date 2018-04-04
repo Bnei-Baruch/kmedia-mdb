@@ -167,7 +167,7 @@ class TOC extends Component {
       return path;
     }
 
-    const escapedMatch = match.replace(/[/)(]/g, '\\$&');
+    const escapedMatch = match.replace(/[/)(.+\\]/g, '\\$&');
     const reg          = new RegExp(escapedMatch, 'i');
     return path.reduce((acc, el) => {
       if (reg.test(el.leafTitle)) {
