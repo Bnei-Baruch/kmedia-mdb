@@ -96,6 +96,8 @@ export function* hydrateUrl() {
   const query             = yield* getQuery();
   const { q, page = '1', deb = false } = query;
 
+  yield put(actions.setDeb(deb));
+
   if (q) {
     yield put(actions.updateQuery(q));
 
@@ -105,8 +107,6 @@ export function* hydrateUrl() {
 
     const pageNo = parseInt(page, 10);
     yield put(actions.setPage(pageNo));
-
-    yield put(actions.setDeb(deb));
   }
 }
 
