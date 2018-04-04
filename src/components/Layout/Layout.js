@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import classnames from 'classnames';
-import { Dropdown, Flag, Header, Icon, Menu } from 'semantic-ui-react';
 import { renderRoutes } from 'react-router-config';
 import { connect } from 'react-redux';
+import { Dropdown, Header, Icon, Menu, Flag } from 'semantic-ui-react';
 
 import {
   ALL_LANGUAGES,
@@ -106,28 +106,30 @@ class Layout extends Component {
               }
             </Menu.Item>
             <Menu.Menu position="right">
-              <Menu.Item>
-                <Dropdown
-                  fluid
-                  selection
-                  scrolling
-                  text={t(`constants.languages.${language}`)}
-                  options={
-                    dropdownLangs.map((langParam) => {
-                      const { value, flag } = LANGUAGES[langParam];
-                      return (
-                        // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                        <Dropdown.Header key={value}>
-                          <Link language={value}>
-                            <Flag name={flag} />
-                            {t(`constants.languages.${value}`)}
-                          </Link>
-                        </Dropdown.Header>
-                      );
-                    })
+              <Dropdown item text={t(`constants.languages.${language}`)}>
+                <Dropdown.Menu>
+                  {
+                    /* We do this style chaos here for the link to occupy
+                     the maximal area in the dropdown for the user to click on */
+                    dropdownLangs.map(x => (
+                      <Dropdown.Item key={x} style={{ padding: '0 !important' }}>
+                        <Link
+                          language={x}
+                          style={{
+                            color: 'black',
+                            width: '100%',
+                            display: 'inline-block',
+                            padding: '.78571429em 1.14285714em'
+                          }}
+                        >
+                          <Flag name={LANGUAGES[x].flag} />
+                          {t(`constants.languages.${x}`)}
+                        </Link>
+                      </Dropdown.Item>
+                    ))
                   }
-                />
-              </Menu.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </Menu.Menu>
           </Menu>
         </div>
