@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import noop from 'lodash/noop';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
 
 import { BS_SHAMATI } from '../../../helpers/consts';
@@ -65,7 +64,13 @@ class TOC extends Component {
     return node1.children.findIndex(x => x === node2.id);
   };
 
-  handleTitleClick = (e) => {
+  handleTitleClick = (e, data) => {
+    // don't stop propagation on leaf nodes
+    const { id } = data;
+    if (id && id.startsWith('title')) {
+      return;
+    }
+
     // stop propagation so tocIsActive in LibraryContainer won't call
     // this breaks navigation in nested TOCs (TES, Zohar, etc...)
     e.stopPropagation();
@@ -133,7 +138,7 @@ class TOC extends Component {
           <Accordion.Accordion
             panels={panels}
             defaultActiveIndex={activeIndex}
-            onTitleClick={hasNoGrandsons ? noop : this.handleTitleClick}
+            onTitleClick={this.handleTitleClick}
           />
         ),
         key: `lib-content-${sourceId}`,
