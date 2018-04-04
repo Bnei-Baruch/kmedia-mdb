@@ -96,9 +96,9 @@ export class OmniBox extends Component {
       // so we just use window location to get the search part (to persist filters
       // to the search page when we redirect).
 
-      // 'search: window.location.search' has been removed because 
+      // 'search: window.location.search' has been removed because
       // filters are not cleared when searching from a section (see bug AR-234)
-      push({ pathname: 'search'/*, search: window.location.search */});
+      push({ pathname: 'search' /* , search: window.location.search */});
     }
 
     // Reset filters for new search (query changed)
