@@ -7,25 +7,20 @@ class AVDuration extends Component {
   static propTypes = {
     name: PropTypes.string,
     value: PropTypes.number,
-    style: PropTypes.object,
     media: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
     name: undefined,
-    value: undefined
-  };
-
-  static defaultProps = {
-    style: undefined
+    value: undefined,
   };
 
   render() {
-    const { style, name, value } = this.props;
-    const time            = typeof value !== 'undefined' ? value : this.props.media[name];
+    const { name, value, media } = this.props;
+    const time                   = typeof value !== 'undefined' ? value : media[name];
 
     return (
-      <time style={style}>
+      <time>
         {formatTime(time)}
       </time>
     );
