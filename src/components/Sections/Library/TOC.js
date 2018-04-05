@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
-import noop from 'lodash/noop';
-import { BS_SHAMATI, } from '../../../helpers/consts';
 
+import { BS_SHAMATI, } from '../../../helpers/consts';
 import AccordionTitleDanger from './AccordionTitleDanger';
 import { isEmpty, shallowEqual } from '../../../helpers/utils';
 
@@ -68,8 +67,9 @@ class TOC extends Component {
 
   handleTitleClick = (e, data) => {
     // don't stop propagation on leaf nodes
-    const { id } = data;
-    if (id && id.startsWith('title')) {
+    const { id = '' } = data;
+
+    if (id.startsWith('title')) {
       return;
     }
 
@@ -88,7 +88,7 @@ class TOC extends Component {
       onClick: e => this.selectSourceById(id, e),
     };
 
-    return <Accordion.Title {...props} active={id === this.state.activeId} id={`title-${id}`}>{title}</Accordion.Title>;
+    return <AccordionTitleDanger {...props} active={id === this.state.activeId} id={`title-${id}`}>{title}</AccordionTitleDanger>;
   };
 
   toc = (sourceId, path, firstLevel = false) => {
@@ -109,7 +109,7 @@ class TOC extends Component {
     const hasNoGrandsons = children.reduce((acc, curr) => acc && isEmpty(getSourceById(curr).children), true);
     let panels;
     if (hasNoGrandsons) {
-      const tree      = children.reduce((acc, leafId, idx) => {
+      const tree = children.reduce((acc, leafId, idx) => {
         let { name } = getSourceById(leafId);
         if (sourceId === BS_SHAMATI) {
           name = `${idx + 1}. ${name}`;
@@ -121,7 +121,7 @@ class TOC extends Component {
       const { match } = this.props;
       panels          = this.filterSources(tree, match).map(({ leafId, leafTitle, }) => {
         const item   = this.leaf(leafId, leafTitle);
-        const danger = <AccordionTitleDanger match={!isEmpty(match)} key={`lib-leaf-title-${leafId}`}>{item}</AccordionTitleDanger>;
+        const danger = <AccordionTitleDanger match={!isEmpty(match)} key={`lib-leaf-title-${leafId}`} id={`title-${leafId}`}>{item}</AccordionTitleDanger>;
         return {
           title: danger,
           key: `lib-leaf-${leafId}`

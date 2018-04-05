@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import _ from 'lodash';
+import noop from 'lodash/noop';
 import { Icon, } from 'semantic-ui-react';
 
 // Stolen from SemanticUI
@@ -74,7 +75,7 @@ class AccordionTitleDanger extends Component {
      */
     onClick: PropTypes.func,
 
-    match: PropTypes.bool.isRequired,
+    match: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -83,9 +84,9 @@ class AccordionTitleDanger extends Component {
     children: null,
     className: '',
     content: null,
+    match: false,
     index: 0,
-    onClick: () => {
-    },
+    onClick: noop,
   };
 
   static handledProps = ['active', 'as', 'children', 'className', 'content', 'index', 'onClick', 'match'];
@@ -104,9 +105,11 @@ class AccordionTitleDanger extends Component {
     const ElementType = getElementType(AccordionTitleDanger, this.props);
 
     if (_.isNil(content)) {
-      return (
-        <ElementType {...rest} className={classes} onClick={this.handleClick} dangerouslySetInnerHTML={{ __html: children.props.children }} />
-      );
+      if (typeof children === 'string') {
+        return (<ElementType {...rest} className={classes} onClick={this.handleClick} dangerouslySetInnerHTML={{ __html: children }} />);
+      } else {
+        return (<ElementType {...rest} className={classes} onClick={this.handleClick}>{children}</ElementType>);
+      }
     }
 
     return (
