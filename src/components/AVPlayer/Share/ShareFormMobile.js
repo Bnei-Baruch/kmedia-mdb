@@ -18,7 +18,7 @@ class ShareFormMobile extends BaseShareForm {
     return (
       <div>
         <ShareBar url={url} t={t} buttonSize="medium" />
-        <Message content={url} size="mini" style={{ userSelect: 'all', textAlign: 'left' }} />
+        <Message content={url} size="mini" style={{ userSelect: 'text', textAlign: 'left' }} />
         <Form size="mini">
           <Form.Group unstackable widths={2}>
             <Form.Input

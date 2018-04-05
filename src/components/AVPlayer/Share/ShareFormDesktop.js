@@ -30,7 +30,7 @@ class ShareFormDesktop extends BaseShareForm {
           onClick={onExit}
         />
         <ShareBar url={url} t={t} buttonSize="medium" />
-        <Message content={url} size="mini" style={{ maxWidth: '400px' }} />
+        <Message content={url} size="mini" style={{ textAlign: 'left' }} />
         <Form size="mini">
           <Form.Group unstackable widths={2}>
             <Form.Input
