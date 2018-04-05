@@ -99,7 +99,7 @@ export const LANGUAGES = {
   [LANG_JAPANESE]: { value: LANG_JAPANESE, flag: 'jp', locale: 'ja_JP' },
   [LANG_BULGARIAN]: { value: LANG_BULGARIAN, flag: 'bg', locale: 'bg_BG' },
   [LANG_GEORGIAN]: { value: LANG_GEORGIAN, flag: 'ge', locale: 'ka_GE' },
-  // TODO (orin): choose from Norwegian Bokmål / Norwegian Nynorsk
+  // TODO: choose from Norwegian Bokmål / Norwegian Nynorsk
   [LANG_NORWEGIAN]: { value: LANG_NORWEGIAN, flag: 'no', locale: 'nb_NO' },
   [LANG_SWEDISH]: { value: LANG_SWEDISH, flag: 'se', locale: 'sv_SE' },
   [LANG_CROATIAN]: { value: LANG_CROATIAN, flag: 'hr', locale: 'hr_HR' },

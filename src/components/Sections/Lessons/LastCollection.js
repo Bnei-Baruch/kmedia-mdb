@@ -71,7 +71,8 @@ class LastLessonCollection extends Component {
     return (
       <div>
         <Helmets.Basic title={t('lessons.last.text')} description={t('lessons.header.subtext')} />
-        <Helmets.Image />
+
+        {/*<Helmets.Image unitOrUrl="https://archive.kbb1.com/images/hp_lesson_temp.jpg" />*/}
         <PlaylistCollectionContainer {...props} />
       </div>
     );

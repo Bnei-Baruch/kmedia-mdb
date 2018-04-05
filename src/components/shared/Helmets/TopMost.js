@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import Basic from './Basic';
-import { LANGUAGE_TO_LOCALE } from '../../../helpers/consts';
+import Locale from './Locale';
 
 class TopMost extends Component {
   static propTypes = {
@@ -16,7 +16,7 @@ class TopMost extends Component {
   };
 
   render() {
-    const { titlePostfix, mainLang, alternateLang } = this.props;
+    const { titlePostfix } = this.props;
 
     const titleTemplate = `%s | ${titlePostfix}`;
 
@@ -27,10 +27,9 @@ class TopMost extends Component {
           <meta property="og:site_name" content="Kabbalah Media" />
 
           {/*TODO (orin): <link rel="canonical" href="">*/}
-          <meta property="og:locale" content={LANGUAGE_TO_LOCALE[mainLang]} />
-          {alternateLang.map((lang, index) =>
-            <meta name="og:locale:alternate" content={LANGUAGE_TO_LOCALE[lang]} key={index} />)}
+
         </Helmet>
+        <Locale {...this.props} />
         <Basic />
       </div>
     );

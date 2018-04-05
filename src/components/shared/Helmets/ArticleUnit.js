@@ -19,19 +19,12 @@ class ArticleUnit extends Component {
       return null;
     }
 
-    // console.log('ARTICLE UNIT:', unit);
     return (
       <div>
         {/*TODO (orin): add Helmets.Basic:url ? */}
-        <Basic title={unit.name} description={unit.description} />
         {/*TODO (orin): add tags from unit (tags=unit.tags) ? */}
-        {/*TODO (orin): add profile helmet */}
-        {/*TODO (orin): add* Helmets.Article:section */}
+        <Basic title={unit.name} description={unit.description} />
         <Article publishedTime={unit.film_date} />
-        {/* TODO (orin): add alternate lang */}
-        {/* <Helmets.Locale mainLang={unit.original_language} /> */}
-
-
       </div>
     );
   }

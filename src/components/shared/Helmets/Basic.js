@@ -15,7 +15,9 @@ class Basic extends Component {
   };
 
   static defaultProps = {
+    title: null,
     description: null,
+    // TODO (orin): we should not use a const path.
     imageUrl: 'https://archive.kbb1.com/logo_temp.png',
     url: null,
     keywords: null,
@@ -50,6 +52,7 @@ class Basic extends Component {
     // ALL TODOS:
     // publication: language should be implemented
 
+    //TODO (orin): throw away keywords!!
     // Schema.org
 
     // article/book/audio/video/website

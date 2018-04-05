@@ -18,22 +18,17 @@ class Image extends Component {
   };
 
   buildImage(url, width, height) {
+    // TODO (orin): enlarge is the most expensive op, use another one!
     const imageUrl = `${imaginaryUrl('enlarge')}?${Requests.makeParams({ url, width, height, nocrop: true })}`;
 
-    {/* TODO (orin): should we use ?*/
-    }
-    {/*<meta property="og:image:secure_url" content="https://secure.example.com/ogp.jpg" />*/
-    }
+    {/* TODO (orin): should we use ? */}
+    {/* <meta property="og:image:secure_url" content="https://secure.example.com/ogp.jpg" /> */}
 
-    {/* Schema.org for Google */
-    }
-    {/*{resizedImage ? <meta itemprop="image" content={resizedImage} /> : null}*/
-    }
+    {/* Schema.org for Google */}
+    {/* {resizedImage ? <meta itemprop="image" content={resizedImage} /> : null} */}
 
-    {/* Open Graph general (Facebook, Pinterest & Google+) */
-    }
-    {/* minimum required: title, image, url */
-    }
+    {/* Open Graph general (Facebook, Pinterest & Google+) */}
+    {/* minimum required: title, image, url */}
 
     // TODO (orin): BUG !!!, when a new image overrides the old one,
     // it breaks the helmet structure (separate the image properties
