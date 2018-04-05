@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import throttle from 'lodash/throttle';
+import noop from 'lodash/noop';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import { Container } from 'semantic-ui-react';
 
@@ -12,10 +13,12 @@ class PDF extends Component {
     pdfFile: PropTypes.string.isRequired,
     startsFrom: PropTypes.number.isRequired,
     pageNumber: PropTypes.number.isRequired,
-    pageNumberHandler: PropTypes.func.isRequired,
+    pageNumberHandler: PropTypes.func,
   };
 
-  static defaultProps = {};
+  static defaultProps = {
+    pageNumberHandler: noop,
+  };
 
   static isTaas = source => (BS_TAAS_PARTS[source] !== undefined);
 
