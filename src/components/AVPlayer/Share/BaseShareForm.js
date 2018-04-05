@@ -79,7 +79,7 @@ class BaseShareForm extends React.Component {
     const { protocol, hostname, port, pathname } = window.location;
 
     const { item } = props;
-    const shareUrl = `${protocol}://${hostname}${port ? `:${port}` : ''}${item.shareUrl || pathname}`;
+    const shareUrl = `${protocol}//${hostname}${port ? `:${port}` : ''}${item.shareUrl || pathname}`;
 
     const q = getQuery(window.location);
 
