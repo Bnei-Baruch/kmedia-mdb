@@ -109,22 +109,10 @@ class Layout extends Component {
               <Dropdown item text={t(`constants.languages.${language}`)}>
                 <Dropdown.Menu>
                   {
-                    /* We do this style chaos here for the link to occupy
-                     the maximal area in the dropdown for the user to click on */
                     dropdownLangs.map(x => (
-                      <Dropdown.Item key={x} style={{ padding: '0 !important' }}>
-                        <Link
-                          language={x}
-                          style={{
-                            color: 'black',
-                            width: '100%',
-                            display: 'inline-block',
-                            padding: '.78571429em 1.14285714em'
-                          }}
-                        >
-                          <Flag name={LANGUAGES[x].flag} />
-                          {t(`constants.languages.${x}`)}
-                        </Link>
+                      <Dropdown.Item key={x} as={Link} language={x}>
+                        <Flag name={LANGUAGES[x].flag} />
+                        {t(`constants.languages.${x}`)}
                       </Dropdown.Item>
                     ))
                   }
