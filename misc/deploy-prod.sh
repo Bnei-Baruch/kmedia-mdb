@@ -18,7 +18,4 @@ echo "Restarting SSR server"
 ssh archive@app.archive.bbdomain.org "supervisorctl restart archive-ssr"
 
 echo "cleaning previous deployments"
-ssh archive@app.archive.bbdomain.org "find /sites/archive-frontend -mtime +30 rm {} -rf \;"
-
-https://archive.kbb1.com/imaginary/thumbnail?url=https://localhost/assets/api/thumbnail/3utl0wz3&width=120
-https://archive.kbb1.com/imaginary/thumbnail?url=http://localhost/assets/api/thumbnail/nIaiQopH&width=120
+ssh archive@app.archive.bbdomain.org "find /sites/archive-frontend -mtime +30 -type f -exec rm -rf {} \;"

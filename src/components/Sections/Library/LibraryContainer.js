@@ -378,17 +378,17 @@ class LibraryContainer extends Component {
           <Container>
             <Grid padded centered>
               <Grid.Row verticalAlign="bottom">
-                <Grid.Column mobile={16} tablet={5} computer={4} className="source__toc-header">
-                  <div className="source__header-title computer-only">
+                <Grid.Column mobile={16} tablet={16} computer={4} className="source__toc-header">
+                  <div className="source__header-title mobile-hidden">
                     <Header size="small">{t('sources-library.toc')}</Header>
                   </div>
                   <div className="source__header-toolbar">
                     {matchString}
                     {this.switchSortingOrder(parentId)}
-                    <Button compact size="small" className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
+                    <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
                   </div>
                 </Grid.Column>
-                <Grid.Column mobile={16} tablet={11} computer={12} className="source__content-header">
+                <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
                   <div className="source__header-title">{this.header(sourceId, fullPath)}</div>
                   <div className="source__header-toolbar">
                     <Popup
@@ -428,7 +428,7 @@ class LibraryContainer extends Component {
                       </Popup.Content>
                     </Popup>
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
-                    <Button compact size="small" className="mobile-only" icon="list layout" onClick={this.handleTocIsActive} />
+                    <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
                   </div>
                 </Grid.Column>
               </Grid.Row>
@@ -438,7 +438,7 @@ class LibraryContainer extends Component {
         <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
           <Grid padded centered>
             <Grid.Row className="is-fitted">
-              <Grid.Column mobile={16} tablet={5} computer={4} onClick={this.handleTocIsActive}>
+              <Grid.Column mobile={16} tablet={16} computer={4} onClick={this.handleTocIsActive}>
                 <TOC
                   match={matchString ? match : ''}
                   matchApplied={this.handleFilterClear}
@@ -452,8 +452,8 @@ class LibraryContainer extends Component {
                 />
               </Grid.Column>
               <Grid.Column
-                mobile={14}
-                tablet={11}
+                mobile={16}
+                tablet={16}
                 computer={12}
                 className={classnames({
                   'source__content-wrapper': true,
