@@ -23,6 +23,7 @@ const FETCH_SQDATA_FAILURE        = 'MDB/FETCH_SQDATA_FAILURE';
 
 const RECEIVE_COLLECTIONS   = 'MDB/RECEIVE_COLLECTIONS';
 const RECEIVE_CONTENT_UNITS = 'MDB/RECEIVE_CONTENT_UNITS';
+const RECEIVE_SOURCES = 'MDB/SOURCES';
 
 export const types = {
   FETCH_UNIT,
@@ -59,6 +60,7 @@ const fetchSQDataFailure       = createAction(FETCH_SQDATA_FAILURE);
 
 const receiveCollections  = createAction(RECEIVE_COLLECTIONS);
 const receiveContentUnits = createAction(RECEIVE_CONTENT_UNITS);
+const receiveSources = createAction(RECEIVE_SOURCES);
 
 export const actions = {
   fetchUnit,
@@ -76,6 +78,7 @@ export const actions = {
 
   receiveCollections,
   receiveContentUnits,
+  receiveSources,
 };
 
 /* Reducer */
@@ -83,6 +86,7 @@ export const actions = {
 const freshStore = () => ({
   cById: {},
   cuById: {},
+  sById: {},
   wip: {
     units: {},
     collections: {},
@@ -191,6 +195,22 @@ const stripOldFiles = (unit) => {
   return { ...unit, files: nFiles };
 };
 
+const flatSources = (items) => {
+  let ret = [];
+  items.forEach((x) => {
+    const y = { ...x };
+    ret.push(y);
+    if (y.children){
+      let children = flatSources(y.children);
+      children.forEach((c)=>{
+        ret.push(c);
+      })
+    }
+  });
+
+  return ret;
+}
+
 const onReceiveCollections = (state, action) => {
   const items = action.payload || [];
 
@@ -200,6 +220,7 @@ const onReceiveCollections = (state, action) => {
 
   const cById  = { ...state.cById };
   const cuById = { ...state.cuById };
+  const sById = { ...state.sById };
   items.forEach((x) => {
     // make a copy of incoming data since we're about to mutate it
     const y = { ...x };
@@ -232,7 +253,8 @@ const onReceiveCollections = (state, action) => {
   return {
     ...state,
     cById,
-    cuById
+    cuById,
+    sById
   };
 };
 
@@ -245,6 +267,7 @@ const onReceiveContentUnits = (state, action) => {
 
   const cById  = { ...state.cById };
   const cuById = { ...state.cuById };
+  const sById = { ...state.sById };
   items.forEach((x) => {
     // make a copy of incoming data since we're about to mutate it
     const y = { ...x };
@@ -313,8 +336,39 @@ const onReceiveContentUnits = (state, action) => {
     ...state,
     cById,
     cuById,
+    sById
   };
 };
+
+const onReceiveSources = (state, action) => {
+  const items = action.payload || [];
+
+  if (items.length === 0) {
+    return state;
+  }
+
+  const cById  = { ...state.cById };
+  const cuById = { ...state.cuById };
+  const sById =  { ...state.sById };
+
+  const fitems = flatSources(items);
+
+  fitems.forEach((x) => {
+    const y = { ...x };
+
+    // update source in store
+    sById[y.id] = { ...state.sById[y.id], ...y };
+  });
+
+  return {
+    ...state,
+    cById,
+    cuById,
+    sById
+  };
+};
+
+
 
 const onSSRPrepare = state => ({
   ...state,
@@ -346,6 +400,7 @@ export const reducer = handleActions({
 
   [RECEIVE_COLLECTIONS]: (state, action) => onReceiveCollections(state, action),
   [RECEIVE_CONTENT_UNITS]: (state, action) => onReceiveContentUnits(state, action),
+  [RECEIVE_SOURCES]: (state, action) => onReceiveSources(state, action),
 }, freshStore());
 
 /* Selectors */
@@ -398,6 +453,18 @@ const getDenormContentUnit = (state, id) => {
   return cu;
 };
 
+const getDenormSource = (state, id) => {
+  let s = state.sById[id];
+
+  if (s) {
+    // make a fresh copy so we won't mess up normalized storage
+    s = { ...s };
+
+  }
+
+  return s;
+};
+
 const getDenormCollectionWUnits = (state, id) => {
   let c = state.cById[id];
   if (c && Array.isArray(c.cuIDs)) {
@@ -417,5 +484,6 @@ export const selectors = {
   getDenormCollection,
   getDenormCollectionWUnits,
   getDenormContentUnit,
+  getDenormSource,
   getLastLessonId
 };

@@ -18,6 +18,7 @@ class SearchResultsContainer extends Component {
     results: PropTypes.object,
     cMap: PropTypes.objectOf(shapes.Collection).isRequired,
     cuMap: PropTypes.objectOf(shapes.ContentUnit).isRequired,
+    sMap: PropTypes.objectOf(shapes.ContentUnit).isRequired,
     wip: shapes.WIP,
     err: shapes.Error,
     search: PropTypes.func.isRequired,
@@ -71,7 +72,7 @@ class SearchResultsContainer extends Component {
   };
 
   render() {
-    const { wip, err, results, cMap, cuMap, pageNo, pageSize, sortBy, language, location } = this.props;
+    const { wip, err, results, cMap, cuMap, sMap, pageNo, pageSize, sortBy, language, location } = this.props;
 
     return (
       <div>
@@ -88,6 +89,7 @@ class SearchResultsContainer extends Component {
             results={results}
             cMap={cMap}
             cuMap={cuMap}
+            sMap={sMap}
             wip={wip}
             err={err}
             pageNo={pageNo}
@@ -131,10 +133,25 @@ const mapState = (state) => {
     }, {}) :
     {};
 
+  const sMap = results && results.hits && Array.isArray(results.hits.hits) ?
+    results.hits.hits.reduce((acc, val) => {
+      if (val._type === 'sources') {
+        const sID = val._source.mdb_uid;
+        const s   = mdbSelectors.getDenormSource(state.mdb, sID);
+        console.log(s)
+        if (s) {
+          acc[sID] = s;
+        }
+      }
+      return acc;
+    }, {}) :
+    {};
+
   return {
     results,
     cMap,
     cuMap,
+    sMap,
     query: selectors.getQuery(state.search),
     pageNo: selectors.getPageNo(state.search),
     sortBy: selectors.getSortBy(state.search),
