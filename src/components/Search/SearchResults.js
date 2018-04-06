@@ -168,7 +168,7 @@ class SearchResults extends Component {
     const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || s.name;
     const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
     const authors = this.snippetFromHighlight(highlight, ['authors', 'authors.analyzed'], parts => `...${parts.join('.....')}...`);
-    const content  = this.snippetFromHighlight(highlight, ['content', 'transcript.analyzed'], parts => `...${parts.join('.....')}...`);
+    const content  = this.snippetFromHighlight(highlight, ['content', 'content.analyzed'], parts => `...${parts.join('.....')}...`);
     const snippet     = (
       <div className="search__snippet">
         {
@@ -189,11 +189,6 @@ class SearchResults extends Component {
         }
       </div>);
 
-    /*let filmDate = '';
-    if (cu.film_date) {
-      filmDate = t('values.date', { date: new Date(cu.film_date) });
-    }*/
-
     //TBD authors?
 
     return (
@@ -204,6 +199,12 @@ class SearchResults extends Component {
          <Table.Cell collapsing singleLine>
           <Label size="tiny">{t(`constants.content-types.${cu.content_type}`)}</Label>
         </Table.Cell> */}
+        <Table.Cell collapsing singleLine width={1}>
+          <strong>לפני 1992</strong>
+        </Table.Cell>
+        <Table.Cell collapsing singleLine>
+          <Label size="tiny">{t(`constants.content-types.KITEI_MAKOR`)}</Label>
+        </Table.Cell>
         <Table.Cell>
           <Link className="search__link" to={canonicalLink({ id: mdbUid, content_type: 'SOURCE' })}>
             {name}

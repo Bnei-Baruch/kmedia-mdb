@@ -74,7 +74,8 @@
       "programs": "Programas",
       "lectures": "Charlas y Lecciones",
       "events": "Congresos y Eventos",
-      "publications": "Publicaciones"
+      "publications": "Publicaciones",
+      "sources": "Fuentes"
     }
   },
   "buttons": {
@@ -150,7 +151,8 @@
     },
     "result": {
       "description": "Sumario",
-      "transcript": "Transcripción"
+      "transcript": "Transcripción",
+      "content": "Contenido"
     }
   },
   "home": {

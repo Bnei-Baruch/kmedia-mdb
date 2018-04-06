@@ -75,7 +75,8 @@
       "programs": "Програми",
       "lectures": "Уроки та Лекції",
       "events": "Конгреси, події",
-      "publications": "Публікації"
+      "publications": "Публікації",
+      "sources": "Першоджерела"
     }
   },
   "buttons": {
@@ -151,7 +152,8 @@
     },
     "result": {
       "description": "опис",
-      "transcript": "стенограма"
+      "transcript": "стенограма",
+      "content": "текст"
     }
   },
   "home": {
