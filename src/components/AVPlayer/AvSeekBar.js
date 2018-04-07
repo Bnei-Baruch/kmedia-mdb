@@ -1,17 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isNumber from 'lodash/isNumber';
-import noop from 'lodash/noop';
-import classNames from 'classnames';
 import { withMediaProps } from 'react-media-player';
 
-import { formatTime } from '../../helpers/time';
 import { PLAYER_MODE } from './constants';
 import { playerModeProp } from './propTypes';
-import SliceHandle from './SliceHandle';
-
-const stickyHandleDelta = 5; // pixel width from which to stick to handle
-const minSliceAreaWidth = 0.01;
 
 class AvSeekBar extends Component {
   static propTypes = {
@@ -20,16 +13,12 @@ class AvSeekBar extends Component {
     playerMode: playerModeProp.isRequired,
     sliceStart: PropTypes.number,
     sliceEnd: PropTypes.number,
-    onSliceStartChange: PropTypes.func,
-    onSliceEndChange: PropTypes.func,
   };
 
   static defaultProps = {
     buffers: [],
     sliceStart: 0,
     sliceEnd: Infinity,
-    onSliceStartChange: noop,
-    onSliceEndChange: noop
   };
 
   state = {
@@ -45,7 +34,7 @@ class AvSeekBar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.sliceStartActive && !this.sliceEndActive && this.props.media.currentTime !== nextProps.media.currentTime) {
+    if (this.props.media.currentTime !== nextProps.media.currentTime) {
       this.setState({ playPoint: nextProps.media.currentTime });
     }
   }
@@ -58,34 +47,17 @@ class AvSeekBar extends Component {
   }
 
   getSeekPositionFromClientX = (clientX) => {
-    const { media, playerMode, sliceStart, sliceEnd } = this.props;
-    const { left, right }                             = this.element.getBoundingClientRect();
-    const { duration }                                = media;
-    const offset                                      = Math.min(Math.max(0, clientX - left), right - left);
-
-    if (playerMode === PLAYER_MODE.SLICE_EDIT) {
-      // try stick to handle
-      if (this.sliceStartHandle && this.sliceEndHandle) {
-        const { left: startLeft } = this.sliceStartHandle.getHandleElement().getBoundingClientRect();
-        const { left: endLeft }   = this.sliceEndHandle.getHandleElement().getBoundingClientRect();
-        const sliceWidth          = endLeft - startLeft;
-        // reduce delta if slice is small
-        const fittedStickyDelta   = stickyHandleDelta * 2.5 > sliceWidth ? sliceWidth / 4 : stickyHandleDelta;
-        if (Math.abs(clientX - startLeft) < fittedStickyDelta) {
-          return sliceStart;
-        }
-
-        if (Math.abs(clientX - endLeft) < fittedStickyDelta) {
-          return sliceEnd > duration ? duration : sliceEnd;
-        }
-      }
-    }
+    const { media }       = this.props;
+    const { left, right } = this.element.getBoundingClientRect();
+    const { duration }    = media;
+    const offset          = Math.min(Math.max(0, clientX - left), right - left);
 
     return (duration * offset) / (right - left);
   };
 
   getNormalizedSliceStart = (duration) => {
     const { sliceEnd } = this.props;
+
     let { sliceStart } = this.props;
     if (!isNumber(sliceStart)) {
       return 0;
@@ -108,8 +80,8 @@ class AvSeekBar extends Component {
 
   getNormalizedSliceEnd = (duration) => {
     const { sliceStart } = this.props;
-    let { sliceEnd }     = this.props;
 
+    let { sliceEnd } = this.props;
     if (!isNumber(sliceEnd)) {
       return 1;
     }
@@ -151,39 +123,19 @@ class AvSeekBar extends Component {
     this.wasMouseDown         = true;
     this.isPlayingOnMouseDown = this.props.media.isPlaying;
 
-    if (this.sliceStartHandle && e.target === this.sliceStartHandle.getKnobElement()) {
-      this.sliceStartActive = true;
-    } else if (this.sliceEndHandle && e.target === this.sliceEndHandle.getKnobElement()) {
-      this.sliceEndActive = true;
-    } else {
-      this.sliceStartActive = false;
-      this.sliceEndActive   = false;
-    }
-
     if (!this.state.seekbarHadInteraction) {
       this.setState({ seekbarHadInteraction: true });
     }
   };
 
   handleMove = (e) => {
-    const { onSliceStartChange, onSliceEndChange, sliceStart, sliceEnd, media } = this.props;
+    const { media } = this.props;
     if (this.wasMouseDown) {
       e.preventDefault();
       // Resolve clientX from mouse or touch event.
       const clientX      = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
       this.touchClientX  = clientX; // this is stored for touch because touchend has no coords
       const seekPosition = this.getSeekPositionFromClientX(clientX);
-
-      if (this.sliceStartActive) {
-        if (seekPosition < sliceEnd) {
-          onSliceStartChange(seekPosition);
-        }
-      } else if (this.sliceEndActive) {
-        if (seekPosition > sliceStart) {
-          onSliceEndChange(seekPosition);
-        }
-      }
-
       media.seekTo(seekPosition);
     }
   };
@@ -197,23 +149,18 @@ class AvSeekBar extends Component {
       const clientX = e.clientX || this.touchClientX;
 
       if (typeof clientX !== 'undefined') {
-        // pause when dragging handles
-
         const seekPosition = this.getSeekPositionFromClientX(clientX);
         media.seekTo(seekPosition);
         this.setState({ playPoint: seekPosition });
       }
 
-      this.sliceStartActive = false;
-      this.sliceEndActive   = false;
-      this.touchClientX     = undefined;
+      this.touchClientX = undefined;
     }
   };
 
   render() {
-    const { sliceStart, sliceEnd } = this.props;
-    const { currentTime, duration }          = this.props.media;
-    const current                            = this.state.playPoint / duration;
+    const { currentTime, duration } = this.props.media;
+    const current                   = this.state.playPoint / duration;
     // Overriding progress of native react-media-player as he does not works correctly
     // with buffers.
     const { buffers, playerMode } = this.props;
@@ -237,20 +184,10 @@ class AvSeekBar extends Component {
       width: this.toPercentage(playedWidth),
     };
 
-    const stylePlayedKnob = {
-
-      // left: this.toPercentage(playedLeft + playedWidth),
-
-      // background: 'red'
-    };
-
     const styleLoaded = {
+      left: 0,
       width: this.toPercentage(progress),
-      left: 0
     };
-
-    const sliceStartLeft = this.toPercentage(normalizedSliceStart);
-    const sliceEndLeft   = this.toPercentage(normalizedSliceEnd);
 
     return (
       <div
@@ -263,51 +200,19 @@ class AvSeekBar extends Component {
         role="button"
         tabIndex="0"
       >
-
         <div className="seekbar">
-          {
-            isSliceEdit && (
-              <SliceHandle
-                ref={(el) => {
-                  this.sliceStartHandle = el;
-                }}
-                seconds={formatTime(sliceStart)}
-                position={sliceStartLeft}
-                isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
-                className={classNames('seekbar__slicehandle--left', { 'seekbar__slicehandle--onstart': sliceStartLeft === 0 })}
-              />
-            )
-          }
-          {
-            isSliceEdit && (
-              <SliceHandle
-                ref={(el) => {
-                  this.sliceEndHandle = el;
-                }}
-                seconds={formatTime(sliceEnd === Infinity ? duration : sliceEnd)}
-                position={sliceEndLeft}
-                isEditMode={playerMode === PLAYER_MODE.SLICE_EDIT}
-                className="seekbar__slicehandle--right"
-              />
-            )
-          }
-
-          <div className={classNames('seekbar__bar', 'is-empty')} />
-          <div className={classNames('seekbar__bar', 'is-played')} style={stylePlayed}>
-            <div className={classNames('seekbar__knob')} style={stylePlayedKnob} />
+          <div className="seekbar__bar is-empty" />
+          <div className="seekbar__bar is-played" style={stylePlayed}>
+            <div className="seekbar__knob" />
           </div>
-          <div className={classNames('seekbar__bar', 'is-loaded')} style={styleLoaded} />
+          <div className="seekbar__bar is-loaded" style={styleLoaded} />
           {
-            isSlice && (
+            isSlice && !(normalizedSliceStart === 0 && normalizedSliceEnd === 1) && (
               <div
-                className={classNames('seekbar__bar', 'is-slice')}
+                className="seekbar__bar is-slice"
                 style={{
-                  // left: sliceStartLeft === 0 ? 'calc('+sliceStartLeft+' + 7px)' : 'calc('+sliceStartLeft+' - 7px)',
-                  left: sliceStartLeft,
-
-                  width: this.toPercentage(Math.max(minSliceAreaWidth, normalizedSliceEnd - normalizedSliceStart))
-                  // width: this.toPercentage(normalizedSliceEnd - normalizedSliceStart)
-
+                  left: this.toPercentage(normalizedSliceStart),
+                  width: this.toPercentage(normalizedSliceEnd - normalizedSliceStart)
                 }}
               />
             )

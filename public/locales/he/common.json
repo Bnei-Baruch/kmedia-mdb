@@ -13,7 +13,8 @@
       "topics": "נושאים",
       "publications": "פרסומים",
       "photos": "תמונות",
-      "design": "עיצוב"
+      "design": "עיצוב",
+      "project-status": "סטאטוס הפרוייקט"
     },
     "footer": {
       "copyright": "© כל הזכויות שמורות 2003-{{year}}",

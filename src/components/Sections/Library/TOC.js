@@ -19,7 +19,7 @@ class TOC extends Component {
     getSourceById: PropTypes.func.isRequired,
     apply: PropTypes.func.isRequired,
     stickyOffset: PropTypes.number,
-    // eslint-disable-next-line react/forbid-prop-types
+
     match: PropTypes.string.isRequired,
     matchApplied: PropTypes.func.isRequired,
   };
@@ -43,6 +43,7 @@ class TOC extends Component {
     return (
       this.props.rootId !== nextProps.rootId ||
       this.props.match !== nextProps.match ||
+      this.props.stickyOffset !== nextProps.stickyOffset ||
       !shallowEqual(this.props.fullPath, nextProps.fullPath)
     );
   }
@@ -61,6 +62,18 @@ class TOC extends Component {
       return -1;
     }
     return node1.children.findIndex(x => x === node2.id);
+  };
+
+  handleTitleClick = (e, data) => {
+    // don't stop propagation on leaf nodes
+    const { id } = data;
+    if (id && id.startsWith('title')) {
+      return;
+    }
+
+    // stop propagation so tocIsActive in LibraryContainer won't call
+    // this breaks navigation in nested TOCs (TES, Zohar, etc...)
+    e.stopPropagation();
   };
 
   subToc = (subTree, path) => (
@@ -86,9 +99,10 @@ class TOC extends Component {
     const { name: title, children } = getSourceById(sourceId);
 
     if (isEmpty(children)) { // Leaf
-      const item   = this.leaf(sourceId, title);
-      const result = { title: item, key: `lib-leaf-${sourceId}` };
-      return [result];
+      return [{
+        title: this.leaf(sourceId, title),
+        key: `lib-leaf-${sourceId}`
+      }];
     }
 
     const hasNoGrandsons = children.reduce((acc, curr) => acc && isEmpty(getSourceById(curr).children), true);
@@ -103,10 +117,11 @@ class TOC extends Component {
         return acc;
       }, []);
 
-      panels = this.filterSources(tree).map(({ leafId, leafTitle, }) => {
-        const item = this.leaf(leafId, leafTitle);
-        return { title: item, key: `lib-leaf-${leafId}` };
-      });
+      panels = this.filterSources(tree)
+        .map(({ leafId, leafTitle }) => ({
+          title: this.leaf(leafId, leafTitle),
+          key: `lib-leaf-${leafId}`
+        }));
     } else {
       panels = this.subToc(children, path.slice(1));
     }
@@ -119,7 +134,13 @@ class TOC extends Component {
     return {
       title,
       content: {
-        content: <Accordion.Accordion panels={panels} defaultActiveIndex={activeIndex} />,
+        content: (
+          <Accordion.Accordion
+            panels={panels}
+            defaultActiveIndex={activeIndex}
+            onTitleClick={this.handleTitleClick}
+          />
+        ),
         key: `lib-content-${sourceId}`,
       }
     };
@@ -172,7 +193,7 @@ class TOC extends Component {
     return (
       <Sticky context={contextRef} offset={stickyOffset} className="source__toc">
         <Ref innerRef={this.handleAccordionContext}>
-          <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} />
+          <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} onTitleClick={this.handleTitleClick} />
         </Ref>
       </Sticky>
     );

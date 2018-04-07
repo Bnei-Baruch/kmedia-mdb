@@ -14,7 +14,8 @@
       "publications": "Публикации",
       "photos": "Фотографии",
       "design": "Дизайн",
-      "design2": "Планировка"
+      "design2": "Планировка",
+      "project-status": "Статус проекта"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
