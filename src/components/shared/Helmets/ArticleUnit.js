@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import * as shapes from '../../shapes';
 import Basic from './Basic';
 import Article from './Article';
@@ -15,14 +16,14 @@ class ArticleUnit extends Component {
   render() {
     const { unit } = this.props;
 
-    if (unit === null) {
+    if (!unit) {
       return null;
     }
 
     return (
       <div>
-        {/*TODO (orin): add Helmets.Basic:url ? */}
-        {/*TODO (orin): add tags from unit (tags=unit.tags) ? */}
+        {/* TODO (orin): add Helmets.Basic:url ? */}
+        {/* TODO (orin): add tags from unit (tags=unit.tags) ? */}
         <Basic title={unit.name} description={unit.description} />
         <Article publishedTime={unit.film_date} />
       </div>

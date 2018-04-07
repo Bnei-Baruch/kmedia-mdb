@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+
 import { isEmpty } from '../../../helpers/utils';
 
 class Article extends Component {
@@ -13,7 +14,7 @@ class Article extends Component {
   static defaultProps = {
     publishedTime: null,
     tags: [],
-    // section: TODO: Kaballah ? Spirituality
+    section: '', // TODO: Kabbalah ? Spirituality
   };
 
   render() {
@@ -22,10 +23,19 @@ class Article extends Component {
     return (
       <Helmet>
         <meta property="og:type" content="article" />
-        {!isEmpty(section) ? <meta property="article:section" content={section} /> : null}
+        {
+          !isEmpty(section) ?
+            <meta property="article:section" content={section} /> :
+            null
+        }
 
-        {!isEmpty(publishedTime) ? <meta name="article:published_time" content={publishedTime} /> : null}
-        {tags.map((tag, index) => <meta name="article:tag" content={tag} key={index} />)}
+        {
+          !isEmpty(publishedTime) ?
+            <meta name="article:published_time" content={publishedTime} /> :
+            null
+        }
+
+        {tags.map(tag => <meta name="article:tag" key={tag} content={tag} />)}
       </Helmet>
     );
   }

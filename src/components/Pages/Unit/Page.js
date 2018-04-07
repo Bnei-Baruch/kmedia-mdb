@@ -11,10 +11,7 @@ import Info from './widgets/Info/Info';
 import MediaDownloads from './widgets/Downloads/MediaDownloads';
 import SameCollection from './widgets/Recommended/SameCollection/Container';
 
-import Helmets from '../../shared/Helmets';
-
 export class UnitPage extends Component {
-
   static propTypes = {
     unit: shapes.ContentUnit,
     wip: shapes.WIP,
@@ -31,6 +28,7 @@ export class UnitPage extends Component {
     section: '',
   };
 
+  // eslint-disable-next-line class-methods-use-this
   renderHelmet() {
     return null;
   }

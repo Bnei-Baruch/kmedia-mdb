@@ -5,15 +5,14 @@ import { Container, Grid } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
+import Helmets from '../../shared/Helmets';
 import Materials from '../Unit/widgets/UnitMaterials/Materials';
 import Info from '../Unit/widgets/Info/Info';
 import MediaDownloads from '../Unit/widgets/Downloads/MediaDownloads';
 import PlaylistAVBox from './widgets/PlaylistAVBox/PlaylistAVBox';
 import Playlist from './widgets/Playlist/Playlist';
-import Helmets from '../../shared/Helmets';
 
 class PlaylistCollectionPage extends Component {
-
   static propTypes = {
     collection: shapes.GenericCollection,
     wip: shapes.WIP,
@@ -58,7 +57,6 @@ class PlaylistCollectionPage extends Component {
     }
 
     return <Helmets.Basic title={title} />;
-
   }
 
   render() {

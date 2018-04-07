@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+
 import Basic from './Basic';
 import Locale from './Locale';
 
@@ -26,7 +27,7 @@ class TopMost extends Component {
           <meta property="og:type" content="website" />
           <meta property="og:site_name" content="Kabbalah Media" />
 
-          {/*TODO (orin): <link rel="canonical" href="">*/}
+          {/* TODO (orin): <link rel="canonical" href=""> */}
 
         </Helmet>
         <Locale {...this.props} />

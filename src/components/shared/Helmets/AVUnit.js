@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+
+import { isEmpty } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import Basic from './Basic';
 import Image from './Image';
-import Video from './Video';
-import { isEmpty } from '../../../helpers/utils';
 
 class AVUnit extends Component {
   static propTypes = {
@@ -17,23 +17,29 @@ class AVUnit extends Component {
   render() {
     const { unit } = this.props;
 
-    if (unit === null) {
+    if (!unit) {
       return null;
     }
 
     // if unit.description doesn't exist, use the collection description
-    const description = isEmpty(unit.description) ? Object.values(unit.collections)[0].description : unit.description;
+    let { description } = unit;
+    if (isEmpty(description)) {
+      const collections = Object.values(unit.collections);
+      if (collections.length > 0) {
+        description = collections[0].description;
+      }
+    }
 
     return (
       <div>
         <Basic title={unit.name} description={description} />
         <Image unitOrUrl={unit} />
 
-        {/*// /!*TODO: add Helmets.Basic:url ? *!/*/}
-        {/*// /!*TODO: add tags from unit (tags=unit.tags) ? *!/*/}
-        {/*// /!*TODO: add profile helmet *!/*/}
-        {/*// /!*TODO: add* Helmets.Article:section *!/*/}
-        {/*// <Article publishedTime={unit.film_date} />*/}
+        {/* // /!*TODO: add Helmets.Basic:url ? *!/ */}
+        {/* // /!*TODO: add tags from unit (tags=unit.tags) ? *!/ */}
+        {/* // /!*TODO: add profile helmet *!/ */}
+        {/* // /!*TODO: add* Helmets.Article:section *!/ */}
+        {/* // <Article publishedTime={unit.film_date} /> */}
 
       </div>
     );

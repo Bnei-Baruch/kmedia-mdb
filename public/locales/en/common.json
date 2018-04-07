@@ -214,6 +214,9 @@
           "item-title": "Part {{name}}"
         }
       }
+    },
+    "last": {
+      "text": "Daily Kabbalah Lesson - updated"
     }
   },
   "programs": {

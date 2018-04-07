@@ -101,10 +101,7 @@ const MyWrappedSameCollectionContainer = wrapSameCollectionContainer(MySameColle
 
 class MyUnitPage extends UnitPage {
   renderHelmet() {
-    const { unit } = this.props;
-    return (
-      <Helmets.AVUnit unit={unit} />
-    );
+    return <Helmets.AVUnit unit={this.props.unit} />;
   }
 
   renderRecommendations() {

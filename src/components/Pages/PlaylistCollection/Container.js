@@ -25,6 +25,7 @@ export class PlaylistCollectionContainer extends Component {
   static defaultProps = {
     collection: null,
     PlaylistComponent: undefined,
+    shouldRenderHelmet: true,
   };
 
   componentDidMount() {
