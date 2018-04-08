@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+import { isEmpty } from '../../../helpers/utils';
 
 class Video extends Component {
   static propTypes = {
+    url: PropTypes.string.isRequired,
     releaseDate: PropTypes.string,
     duration: PropTypes.number,
     type: PropTypes.oneOf(['movie', 'tv_show', 'episode', 'other']),
@@ -32,14 +34,13 @@ class Video extends Component {
       <Helmet>
         <meta property="og:type" content={`video.${type}`} />
 
-        {tvShowUrl ? <meta name="video:series" content={tvShowUrl} /> : null}
+        {!isEmpty(tvShowUrl) ? <meta name="video:series" content={tvShowUrl} /> : null}
 
-        {/*TODO: Should we use (direct link to the file, the og:url is the link to the page?*/}
         {/*<meta property="og:video" content="http://example.com/movie.swf" />*/}
         {/*<meta property="og:video:secure_url" content="https://secure.example.com/movie.swf" />*/}
 
-        {releaseDate ? <meta name="video:release_date" content={releaseDate} /> : null}
-        {duration ? <meta name="video:duration" content={duration} /> : null}
+        {!isEmpty(releaseDate) ? <meta name="video:release_date" content={releaseDate} /> : null}
+        {!isEmpty(duration) ? <meta name="video:duration" content={duration} /> : null}
         {tags.map((tag, index) => <meta name="video:tag" content={tag} key={index} />)}
       </Helmet>
     );

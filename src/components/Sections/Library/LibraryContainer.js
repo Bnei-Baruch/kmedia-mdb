@@ -14,6 +14,7 @@ import { actions as sourceActions, selectors as sources } from '../../../redux/m
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
+import Helmets from '../../shared/Helmets';
 import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
 
@@ -250,8 +251,8 @@ class LibraryContainer extends Component {
     }
     const { contentHeaderWidth, } = this.state;
     return (
-
       <Header size="small">
+        <Helmets.Basic title={`${sourceName} - ${parentName} - ${kabName}`} description={description} />
         <Ref innerRef={this.handleContentHeaderRef}>
           <div />
         </Ref>

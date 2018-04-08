@@ -7,12 +7,14 @@ import Helmets from './Helmets';
 const SectionHeader = (props) => {
   const { section, submenuItems, t } = props;
 
+  const sectionHeader = t(`${section}.header.text`);
+  const sectionSubText =  t(`${section}.header.subtext`);
   return (
     <div className="section-header">
-      {/*Todo: dont use image fixed url*/}
+      {/* TODO (orin): dont use image fixed url*/}
       <Helmets.Basic
-        title={t(`${section}.header.text`)}
-        description={t(`${section}.header.subtext`)}
+        title={sectionHeader}
+        description={sectionSubText}
         image="https://archive.kbb1.com/static/media/event_logo.d123ade4.png"
       />
       <Container className="padded">
@@ -22,12 +24,12 @@ const SectionHeader = (props) => {
               <Header as="h1" color="blue">
                 <Header.Content>
                   <span className="section-header__title">
-                    {t(`${section}.header.text`)}
+                    {sectionHeader}
                   </span>
                   {
-                    t(`${section}.header.subtext`) ?
+                    sectionSubText ?
                       <Header.Subheader className="section-header__subtitle">
-                        {t(`${section}.header.subtext`)}
+                        {sectionSubText}
                       </Header.Subheader>
                       : null
                   }
