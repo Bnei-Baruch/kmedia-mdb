@@ -69,7 +69,7 @@ class LibraryContentContainer extends Component {
 
   getFullUrl = (pdf, data, language) => {
     if (pdf) {
-      return pdf;
+      return assetUrl(`sources/${pdf}`);
     }
 
     if (isEmpty(data) || isEmpty(data[language])) {

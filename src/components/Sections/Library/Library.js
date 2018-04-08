@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Container, Portal, Segment } from 'semantic-ui-react';
+import { assetUrl } from '../../../helpers/Api';
 
 import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { formatError, isEmpty, shallowCompare } from '../../../helpers/utils';
@@ -25,7 +26,7 @@ class Library extends Component {
     startsFrom: PropTypes.number,
     language: PropTypes.string,
     languages: PropTypes.arrayOf(PropTypes.string),
-    langSelectorMount: PropTypes.instanceOf(Element),
+    langSelectorMount: PropTypes.instanceOf(PropTypes.element),
     t: PropTypes.func.isRequired,
     handleLanguageChanged: PropTypes.func.isRequired,
     history: shapes.History.isRequired,
@@ -70,6 +71,8 @@ class Library extends Component {
   render() {
     const { content, language, languages, t, isTaas, langSelectorMount, fullUrlPath } = this.props;
 
+    const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
+
     // PDF.js will fetch file by itself
     const usePdfFile = isTaas && this.props.pdfFile;
     let contents;
@@ -87,11 +90,6 @@ class Library extends Component {
 
     const { wip: contentWip, err: contentErr, data: contentData } = content;
 
-    const path      = fullUrlPath;
-    const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
-
-    let contents;
-
     if (contentErr) {
       if (contentErr.response && contentErr.response.status === 404) {
         contents = <FrownSplash text={t('messages.source-content-not-found')} />;
@@ -102,15 +100,7 @@ class Library extends Component {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else if (!contentData && !usePdfFile) {
       return <Segment basic>{t('sources-library.no-source')}</Segment>;
-    } else if (isTaas && this.props.pdfFile) {
-      contents = (<PDF
-        pdfFile={path}
-        pageNumber={this.state.pageNumber || 1}
-        startsFrom={this.props.startsFrom}
-        pageNumberHandler={this.pageNumberHandler}
-      />);
     } else if (!usePdfFile) {
-      const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
       contents        = (<div
         style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
         // eslint-disable-next-line react/no-danger
@@ -142,7 +132,7 @@ class Library extends Component {
             :
             languageBar
         }
-        <Download path={path} mimeType="application/pdf" />
+        <Download path={fullUrlPath} mimeType="application/pdf" />
         {contents}
       </div>
     );

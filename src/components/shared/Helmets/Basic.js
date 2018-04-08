@@ -50,7 +50,7 @@ class Basic extends Component {
   }
 
   render() {
-    const { title, description, keywords, url, imageUrl } = this.props;
+    const { title, description, keywords, /* url, */ imageUrl } = this.props;
 
     // ALL TODOS:
     // publication: language should be implemented
