@@ -76,8 +76,10 @@ class Library extends Component {
 
     const { wip: contentWip, err: contentErr, data: contentData } = content;
 
+    const path      = fullUrlPath;
+    const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
+
     let contents;
-    const path = fullUrlPath;
 
     if (contentErr) {
       if (contentErr.response && contentErr.response.status === 404) {
@@ -101,8 +103,7 @@ class Library extends Component {
         pageNumberHandler={this.pageNumberHandler}
       />);
     } else {
-      const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
-      contents        = (<div
+      contents = (<div
         style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: contentData }}
