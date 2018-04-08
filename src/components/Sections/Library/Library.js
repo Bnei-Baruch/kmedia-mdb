@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Container, Segment, Portal } from 'semantic-ui-react';
+import { Container, Portal, Segment } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { formatError, isEmpty, shallowCompare } from '../../../helpers/utils';
@@ -25,7 +25,7 @@ class Library extends Component {
     startsFrom: PropTypes.number,
     language: PropTypes.string,
     languages: PropTypes.arrayOf(PropTypes.string),
-    langSelectorMount: PropTypes.any,
+    langSelectorMount: PropTypes.instanceOf(Element),
     t: PropTypes.func.isRequired,
     handleLanguageChanged: PropTypes.func.isRequired,
     history: shapes.History.isRequired,

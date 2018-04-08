@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import throttle from 'lodash/throttle';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
-import { Container } from 'semantic-ui-react';
+import { Container, } from 'semantic-ui-react';
 
 import PDFMenu from './PDFMenu';
 import { BS_TAAS_PARTS } from '../../../helpers/consts';
+import Download from '../Download/Download';
 
 class PDF extends Component {
   static propTypes = {
@@ -78,10 +79,11 @@ class PDF extends Component {
 
   render() {
     const { numPages, pageNumber, width, } = this.state;
-    const { startsFrom, }                  = this.props;
+    const { startsFrom, pdfFile, }         = this.props;
 
     return (
       <div id="pdfWrapper" style={{ marginTop: '10px' }}>
+        <Download path={pdfFile} mimeType="application/pdf" />
         <Container fluid textAlign="center">
           <PDFMenu
             numPages={numPages}
@@ -92,7 +94,7 @@ class PDF extends Component {
         </Container>
         <div style={{ direction: 'ltr' }}>
           <Document
-            file={this.props.pdfFile}
+            file={pdfFile}
             onLoadSuccess={this.onDocumentLoadSuccess}
           >
             {
