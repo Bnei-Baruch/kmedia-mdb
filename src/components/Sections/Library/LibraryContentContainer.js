@@ -76,7 +76,7 @@ class LibraryContentContainer extends Component {
       return null;
     }
 
-    return assetUrl(data[language].docx);
+    return assetUrl(`sources/${this.props.source}/${data[language].docx}`);
   };
 
   getLanguages = (data, preferred) => {
