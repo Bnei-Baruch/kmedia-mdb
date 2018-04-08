@@ -8,6 +8,7 @@ import { actions as sourceActions, selectors as sourceSelectors } from '../../..
 import * as shapes from '../../shapes';
 import Library from './Library';
 import PDF from '../../shared/PDF/PDF';
+import { assetUrl } from '../../../helpers/Api';
 
 class LibraryContentContainer extends Component {
   static propTypes = {
@@ -65,6 +66,18 @@ class LibraryContentContainer extends Component {
       this.myReplaceState(nextProps);
     }
   }
+
+  getFullUrl = (pdf, data, language) => {
+    if (pdf) {
+      return pdf;
+    }
+
+    if (isEmpty(data) || isEmpty(data[language])) {
+      return null;
+    }
+
+    return assetUrl(data[language].docx);
+  };
 
   getLanguages = (data, preferred) => {
     if (!data) {
@@ -145,6 +158,7 @@ class LibraryContentContainer extends Component {
       <Library
         isTaas={isTaas}
         pdfFile={pdfFile}
+        fullUrlPath={this.getFullUrl(pdfFile, index.data, language)}
         startsFrom={startsFrom}
         content={index && index.data ? content : {}}
         language={language}

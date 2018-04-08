@@ -5,13 +5,13 @@ import { Container, Portal, Segment } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { formatError, isEmpty, shallowCompare } from '../../../helpers/utils';
-import { assetUrl } from '../../../helpers/Api';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
 import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
 import PDF from '../../shared/PDF/PDF';
 import { updateQuery } from '../../../helpers/url';
 import withPagination from '../../Pagination/withPagination';
+import Download from '../../shared/Download/Download';
 
 class Library extends Component {
   static propTypes = {
@@ -29,6 +29,7 @@ class Library extends Component {
     t: PropTypes.func.isRequired,
     handleLanguageChanged: PropTypes.func.isRequired,
     history: shapes.History.isRequired,
+    fullUrlPath: PropTypes.string,
   };
 
   static defaultProps = {
@@ -42,6 +43,7 @@ class Library extends Component {
     },
     pdfFile: null,
     startsFrom: 1,
+    fullUrlPath: null,
   };
 
   state = {};
@@ -66,7 +68,7 @@ class Library extends Component {
   };
 
   render() {
-    const { content, language, languages, t, isTaas, langSelectorMount } = this.props;
+    const { content, language, languages, t, isTaas, langSelectorMount, fullUrlPath } = this.props;
 
     if (isEmpty(content)) {
       return <Segment basic>&nbsp;</Segment>;
@@ -75,6 +77,7 @@ class Library extends Component {
     const { wip: contentWip, err: contentErr, data: contentData } = content;
 
     let contents;
+    const path = fullUrlPath;
 
     if (contentErr) {
       if (contentErr.response && contentErr.response.status === 404) {
@@ -92,7 +95,7 @@ class Library extends Component {
       return <Segment basic>{t('sources-library.no-source')}</Segment>;
     } else if (isTaas && this.props.pdfFile) {
       contents = (<PDF
-        pdfFile={assetUrl(`sources/${this.props.pdfFile}`)}
+        pdfFile={path}
         pageNumber={this.state.pageNumber || 1}
         startsFrom={this.props.startsFrom}
         pageNumberHandler={this.pageNumberHandler}
@@ -130,6 +133,7 @@ class Library extends Component {
             :
             languageBar
         }
+        <Download path={path} mimeType="application/pdf" />
         {contents}
       </div>
     );

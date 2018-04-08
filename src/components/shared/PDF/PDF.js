@@ -6,7 +6,6 @@ import { Container, } from 'semantic-ui-react';
 
 import PDFMenu from './PDFMenu';
 import { BS_TAAS_PARTS } from '../../../helpers/consts';
-import Download from '../Download/Download';
 
 class PDF extends Component {
   static propTypes = {
@@ -83,7 +82,6 @@ class PDF extends Component {
 
     return (
       <div id="pdfWrapper" style={{ marginTop: '10px' }}>
-        <Download path={pdfFile} mimeType="application/pdf" />
         <Container fluid textAlign="center">
           <PDFMenu
             numPages={numPages}

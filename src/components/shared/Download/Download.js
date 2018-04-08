@@ -5,7 +5,7 @@ import { Button, } from 'semantic-ui-react';
 
 class Download extends Component {
   static propTypes = {
-    path: PropTypes.string.isRequired,
+    path: PropTypes.string,
     mimeType: PropTypes.string.isRequired,
     children: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),
@@ -14,6 +14,7 @@ class Download extends Component {
   };
 
   static defaultProps = {
+    path: null,
     children: null,
   };
 
@@ -62,7 +63,10 @@ class Download extends Component {
 
   render() {
     const { children, path, mimeType, } = this.props;
-    const [filename]                    = path.split('/').slice(-1);
+    if (path === null) {
+      return null;
+    }
+    const [filename] = path.split('/').slice(-1);
 
     return typeof filename !== 'undefined' &&
       <Button compact size="small" icon="download" onClick={() => Download.downloadAsset(path, mimeType)}>{children}</Button>;
