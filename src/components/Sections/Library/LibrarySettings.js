@@ -47,7 +47,7 @@ class LibrarySettings extends Component {
   handleFontSize = (amount) => {
     const { fontSize, } = this.props;
 
-    if ((amount > 0 && fontSize >= 7) || (amount < 0 && fontSize <= -3)) {
+    if ((amount > 0 && fontSize >= 8) || (amount < 0 && fontSize <= -3)) {
       return;
     }
 
