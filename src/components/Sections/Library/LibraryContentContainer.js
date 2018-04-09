@@ -26,7 +26,7 @@ class LibraryContentContainer extends Component {
     t: PropTypes.func.isRequired,
     fetchContent: PropTypes.func.isRequired,
     languageUI: PropTypes.string.isRequired,
-    langSelectorMount: PropTypes.instanceOf(Element),
+    langSelectorMount: PropTypes.object,
   };
 
   static defaultProps = {
