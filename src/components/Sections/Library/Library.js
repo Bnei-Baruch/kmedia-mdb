@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Container, Portal, Segment } from 'semantic-ui-react';
 
-import { RTL_LANGUAGES } from '../../../helpers/consts';
+import { RTL_LANGUAGES, } from '../../../helpers/consts';
 import { formatError, isEmpty, shallowCompare } from '../../../helpers/utils';
 import { assetUrl } from '../../../helpers/Api';
 import * as shapes from '../../shapes';

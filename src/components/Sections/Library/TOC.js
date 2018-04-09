@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
 
-import { BS_SHAMATI } from '../../../helpers/consts';
+import { BS_SHAMATI, } from '../../../helpers/consts';
 import { isEmpty, shallowEqual } from '../../../helpers/utils';
 
 class TOC extends Component {
@@ -14,8 +14,7 @@ class TOC extends Component {
       children: PropTypes.arrayOf(PropTypes.string),
     })).isRequired,
     rootId: PropTypes.string.isRequired,
-    // eslint-disable-next-line react/forbid-prop-types
-    contextRef: PropTypes.object,
+    contextRef: PropTypes.instanceOf(Element),
     getSourceById: PropTypes.func.isRequired,
     apply: PropTypes.func.isRequired,
     stickyOffset: PropTypes.number,
@@ -66,8 +65,9 @@ class TOC extends Component {
 
   handleTitleClick = (e, data) => {
     // don't stop propagation on leaf nodes
-    const { id } = data;
-    if (id && id.startsWith('title')) {
+    const { id = '' } = data;
+
+    if (id.startsWith('title')) {
       return;
     }
 
@@ -80,29 +80,34 @@ class TOC extends Component {
     subTree.map(sourceId => (this.toc(sourceId, path)))
   );
 
-  leaf = (id, title) => {
+  titleKey = id => `title-${id}`;
+
+  leaf = (id, title, match) => {
     const props = {
-      key: `lib-leaf-item-${id}`,
+      id: this.titleKey(id),
+      key: this.titleKey(id),
+      active: id === this.state.activeId,
       onClick: e => this.selectSourceById(id, e),
     };
 
-    return <Accordion.Title {...props} active={id === this.state.activeId} id={`title-${id}`}>{title}</Accordion.Title>;
+    // eslint-disable-next-line react/no-danger
+    const realTitle = isEmpty(match) ? title : <span dangerouslySetInnerHTML={{ __html: title }} />;
+    return <Accordion.Title {...props}>{realTitle}</Accordion.Title>;
   };
 
   toc = (sourceId, path, firstLevel = false) => {
     // 1. Element that has children is CONTAINER
-    // 2. Element that has NO children is NOT CONTAINER (though really it may be empty container)
-    // 3. If all children of first level element are NOT CONTAINERs, than it is also NOT CONTAINER
+    // 2. Element that has NO children is NOT CONTAINER (though really it may be an empty container)
+    // 3. If all children of the first level element are NOT CONTAINERS, than it is also NOT CONTAINER
 
     const { getSourceById } = this.props;
 
     const { name: title, children } = getSourceById(sourceId);
 
     if (isEmpty(children)) { // Leaf
-      return [{
-        title: this.leaf(sourceId, title),
-        key: `lib-leaf-${sourceId}`
-      }];
+      const item   = this.leaf(sourceId, title);
+      const result = { as: 'span', title: item, key: `lib-leaf-${sourceId}` };
+      return [result];
     }
 
     const hasNoGrandsons = children.reduce((acc, curr) => acc && isEmpty(getSourceById(curr).children), true);
@@ -117,11 +122,11 @@ class TOC extends Component {
         return acc;
       }, []);
 
-      panels = this.filterSources(tree)
-        .map(({ leafId, leafTitle }) => ({
-          title: this.leaf(leafId, leafTitle),
-          key: `lib-leaf-${leafId}`
-        }));
+      const { match } = this.props;
+      panels          = this.filterSources(tree, match).map(({ leafId, leafTitle, }) => ({
+        title: this.leaf(leafId, leafTitle, match),
+        key: `lib-leaf-${leafId}`
+      }));
     } else {
       panels = this.subToc(children, path.slice(1));
     }
@@ -155,7 +160,7 @@ class TOC extends Component {
 
   scrollToActive = () => {
     const { activeId } = this.state;
-    const element      = document.getElementById(`title-${activeId}`);
+    const element      = document.getElementById(this.titleKey(activeId));
     if (element === null) {
       return;
     }
@@ -163,17 +168,19 @@ class TOC extends Component {
     window.scrollTo(0, 0);
   };
 
-  filterSources = (path) => {
-    const { match } = this.props;
-
+  filterSources = (path, match) => {
     if (isEmpty(match)) {
       return path;
     }
 
-    const reg = new RegExp(match, 'i');
+    // We don't check validity of regular expression,
+    // so let's excape all special symbols
+    const escapedMatch = match.replace(/[/)(.+\\]/g, '\\$&');
+    const reg          = new RegExp(escapedMatch, 'i');
     return path.reduce((acc, el) => {
       if (reg.test(el.leafTitle)) {
-        acc.push(el);
+        const name = el.leafTitle.replace(reg, '<em class="blue text">$&</em>');
+        acc.push({ leafId: el.leafId, leafTitle: name });
       }
       return acc;
     }, []);
@@ -187,7 +194,7 @@ class TOC extends Component {
       return null;
     }
 
-    const path = fullPath.slice(1); // Remove kabbalist
+    const path = fullPath.slice(1); // Remove first element (i.e. kabbalist)
     const toc  = this.toc(rootId, path, true);
 
     return (
