@@ -95,7 +95,10 @@ export class OmniBox extends Component {
       // In case a filter was updated React location object is not updated yet
       // so we just use window location to get the search part (to persist filters
       // to the search page when we redirect).
-      push({ pathname: 'search', search: window.location.search });
+
+      // 'search: window.location.search' has been removed because
+      // filters are not cleared when searching from a section (see bug AR-234)
+      push({ pathname: 'search' /* , search: window.location.search */});
     }
 
     // Reset filters for new search (query changed)
@@ -139,6 +142,14 @@ export class OmniBox extends Component {
     if (e.keyCode === 13 && !this.props.query.trim()) {
       this.doSearch();
     }
+    if (e.keyCode === 27) { // Esc
+      this.handleFilterClear();
+    }
+  };
+
+  handleFilterClear = () => {
+    this.props.updateQuery('');
+    this.closeSuggestions();
   };
 
   handleSearchChange = (e, data) => {

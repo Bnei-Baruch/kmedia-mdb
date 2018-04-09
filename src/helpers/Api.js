@@ -9,9 +9,9 @@ export const assetUrl     = path => `${ASSETS_BACKEND}${path}`;
 export const imaginaryUrl = path => `${IMAGINARY_URL}${path}`;
 
 export class Requests {
-  static get          = path => axios(backendUrl(path));
-  static getAsset     = path => axios(assetUrl(path));
-  static getImaginary = path => axios(imaginaryUrl(path));
+  static get           = path => axios(backendUrl(path));
+  static getAsset      = path => axios(assetUrl(path));
+  static getImaginary  = path => axios(imaginaryUrl(path));
 
   static makeParams = params =>
     `${Object.entries(params)
@@ -38,7 +38,7 @@ class Api {
   static publishers   = ({ language }) => Requests.get(`publishers?${Requests.makeParams({ language })}`);
   static home         = ({ language }) => Requests.get(`home?${Requests.makeParams({ language })}`);
   static latestLesson = ({ language }) => Requests.get(`latestLesson?${Requests.makeParams({ language })}`);
-  static sqdata = ({ language }) => Requests.get(`sqdata?${Requests.makeParams({ language })}`);
+  static sqdata       = ({ language }) => Requests.get(`sqdata?${Requests.makeParams({ language })}`);
 
   static lessons = ({ pageNo: page_no, pageSize: page_size, ...rest }) =>
     Requests.get(`lessons?${Requests.makeParams({ page_no, page_size, ...rest })}`);
