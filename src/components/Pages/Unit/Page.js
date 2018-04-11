@@ -11,12 +11,9 @@ import Info from './widgets/Info/Info';
 import MediaDownloads from './widgets/Downloads/MediaDownloads';
 import SameCollection from './widgets/Recommended/SameCollection/Container';
 
-import Helmets from '../../shared/Helmets';
-
 export class UnitPage extends Component {
-
   static propTypes = {
-    unit: shapes.ProgramChapter,
+    unit: shapes.ContentUnit,
     wip: shapes.WIP,
     err: shapes.Error,
     section: PropTypes.string,
@@ -31,17 +28,9 @@ export class UnitPage extends Component {
     section: '',
   };
 
+  // eslint-disable-next-line class-methods-use-this
   renderHelmet() {
-    const { unit } = this.props;
-
-    return (
-      <div>
-        {/*All the unit types can be derived from UnitPage, so we use
-        here only the basic helmet (as a default), the derived UnitPages should override thid function according
-        to its content */}
-        <Helmets.Basic title={unit.name} description={unit.description} />
-      </div>
-    );
+    return null;
   }
 
   renderPlayer() {

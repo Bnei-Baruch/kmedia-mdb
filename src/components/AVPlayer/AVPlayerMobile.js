@@ -14,7 +14,7 @@ import AVPlayPause from './AVPlayPause';
 import AVLanguageMobile from './AVLanguageMobile';
 import AVAudioVideo from './AVAudioVideo';
 import AVEditSlice from './AVEditSlice';
-import ShareFormMobile from './ShareFormMobile';
+import ShareFormMobile from './Share/ShareFormMobile';
 
 const PLAYER_VOLUME_STORAGE_KEY = '@@kmedia_player_volume';
 const DEFAULT_PLAYER_VOLUME     = 0.8;
@@ -291,17 +291,18 @@ class AVPlayerMobile extends PureComponent {
   };
 
   render() {
-    const {
-            item,
-            languages,
-            language,
-            t,
-            showNextPrev,
-            hasNext,
-            hasPrev,
-            onPrev,
-            onNext,
-          } = this.props;
+    const
+      {
+        item,
+        languages,
+        language,
+        t,
+        showNextPrev,
+        hasNext,
+        hasPrev,
+        onPrev,
+        onNext,
+      } = this.props;
 
     const { error, errorReason, isSliceMode } = this.state;
 
@@ -391,7 +392,7 @@ class AVPlayerMobile extends PureComponent {
 
         {
           isSliceMode ?
-            <ShareFormMobile media={this.media} /> :
+            <ShareFormMobile media={this.media} item={item} t={t} /> :
             null
         }
       </div>

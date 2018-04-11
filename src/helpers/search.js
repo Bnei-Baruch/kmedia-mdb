@@ -38,4 +38,17 @@ export class SuggestionsHelper {
       this.byType[type] = { [field]: [item] };
     }
   };
-}
+};
+
+const uidBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+const GenerateUID = (n) => {
+  const ret = new Array(n);
+  while (n--) {
+    ret[n] = uidBytes.charAt(Math.floor(Math.random() * uidBytes.length));
+  }
+  return ret.join('');
+};
+
+export const GenerateSearchId = () => GenerateUID(16);
+

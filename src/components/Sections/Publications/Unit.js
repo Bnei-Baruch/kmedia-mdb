@@ -14,7 +14,6 @@ import SameCollectionWidget from '../../Pages/Unit/widgets/Recommended/SameColle
 import TranscriptionContainer from '../../Pages/Unit/widgets/UnitMaterials/Transcription/TranscriptionContainer';
 
 class MySameCollectionWidget extends SameCollectionWidget {
-
   renderContent() {
     const { unit, collection, t } = this.props;
 
@@ -92,7 +91,6 @@ class MySameCollectionContainer extends SameCollectionContainer {
 const MyWrappedSameCollectionContainer = wrapSameCollectionContainer(MySameCollectionContainer);
 
 class MyUnitPage extends UnitPage {
-
   renderPlayer() {
     const { unit, t } = this.props;
     return (
@@ -122,20 +120,13 @@ class MyUnitPage extends UnitPage {
     );
   }
 
+  // eslint-disable-next-line class-methods-use-this
   renderInfo() {
     return null;
   }
 
   renderHelmet() {
-    const { unit } = this.props;
-
-    return (
-      <div>
-        <Helmets.Basic title={unit.name} />
-        {/* TODO: add tags from unit (tags=unit.tags) ? */}
-        <Helmets.Article publishedTime={unit.film_date} />
-      </div>
-    );
+    return <Helmets.ArticleUnit unit={this.props.unit} />;
   }
 
   renderMaterials() {

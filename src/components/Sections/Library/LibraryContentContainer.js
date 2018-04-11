@@ -8,6 +8,7 @@ import { actions as sourceActions, selectors as sourceSelectors } from '../../..
 import * as shapes from '../../shapes';
 import Library from './Library';
 import PDF from '../../shared/PDF/PDF';
+import { assetUrl } from '../../../helpers/Api';
 
 class LibraryContentContainer extends Component {
   static propTypes = {
@@ -25,7 +26,7 @@ class LibraryContentContainer extends Component {
     t: PropTypes.func.isRequired,
     fetchContent: PropTypes.func.isRequired,
     languageUI: PropTypes.string.isRequired,
-    langSelectorMount: PropTypes.any,
+    langSelectorMount: PropTypes.object,
   };
 
   static defaultProps = {
@@ -65,6 +66,18 @@ class LibraryContentContainer extends Component {
       this.myReplaceState(nextProps);
     }
   }
+
+  getFullUrl = (pdf, data, language) => {
+    if (pdf) {
+      return assetUrl(`sources/${pdf}`);
+    }
+
+    if (isEmpty(data) || isEmpty(data[language])) {
+      return null;
+    }
+
+    return assetUrl(`sources/${this.props.source}/${data[language].docx}`);
+  };
 
   getLanguages = (data, preferred) => {
     if (!data) {
@@ -106,17 +119,12 @@ class LibraryContentContainer extends Component {
 
   fetchContent = (source, data) => {
     // In case of TAS we prefer PDF, otherwise HTML
-    let name = data.html;
     if (data.pdf && PDF.isTaas(source)) {
-      name = data.pdf;
+      // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
+      return;
     }
 
-    // TODO: we can optimize things here for pdf
-    // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
-    // Problem is if we don't fetch it ourselves,
-    // we wouldn't know if we're ready to render since we check content.data (redux)
-    // which will be empty
-
+    const name = data.html;
     this.props.fetchContent(source, name);
   };
 
@@ -145,6 +153,7 @@ class LibraryContentContainer extends Component {
       <Library
         isTaas={isTaas}
         pdfFile={pdfFile}
+        fullUrlPath={this.getFullUrl(pdfFile, index.data, language)}
         startsFrom={startsFrom}
         content={index && index.data ? content : {}}
         language={language}

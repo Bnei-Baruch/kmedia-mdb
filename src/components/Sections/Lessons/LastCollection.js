@@ -9,6 +9,7 @@ import { translate } from 'react-i18next';
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
+import Helmets from '../../shared/Helmets';
 import WipErr from '../../shared/WipErr/WipErr';
 import { PlaylistCollectionContainer } from '../../Pages/PlaylistCollection/Container';
 
@@ -61,10 +62,19 @@ class LastLessonCollection extends Component {
           language,
           id: lastLessonId,
         }
-      }
+      },
+      shouldRenderHelmet: false,
     };
 
-    return <PlaylistCollectionContainer {...props} />;
+    // TODO (orin): is this the right place for the helmet?
+    return (
+      <div>
+        <Helmets.Basic title={t('lessons.last.text')} description={t('lessons.header.subtext')} />
+        {/* <Helmets.Image unitOrUrl="https://archive.kbb1.com/images/hp_lesson_temp.jpg" /> */}
+
+        <PlaylistCollectionContainer {...props} />
+      </div>
+    );
   }
 }
 

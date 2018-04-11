@@ -16,6 +16,7 @@
     "critical-css": "npx postcss src/stylesheets/Kmedia.css --use autoprefixer --use cssnano --no-map -o build/critical.css",
     "start-js": "react-scripts start",
     "start-server:live": "NODE_ENV=development npx nodemon server/index.js",
+    "ws-start-server:live": "set \"NODE_ENV=development\" && npx nodemon server/index.js",
     "start-server": "NODE_ENV=development node server/index.js",
     "ws-start-server": "set \"NODE_ENV=development\" && node server/index.js",
     "start": "npm-run-all -p watch-css start-js start-server",
@@ -112,7 +113,8 @@
     "semantic-ui-react": "^0.78.3",
     "serialize-javascript": "^1.4.0",
     "ua-parser-js": "^0.7.17",
-    "warning": "^3.0.0"
+    "warning": "^3.0.0",
+    "worker-loader": "^1.1.1"
   },
   "jest": {
     "collectCoverageFrom": [

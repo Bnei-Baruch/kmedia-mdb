@@ -101,16 +101,7 @@ const MyWrappedSameCollectionContainer = wrapSameCollectionContainer(MySameColle
 
 class MyUnitPage extends UnitPage {
   renderHelmet() {
-    const { unit } = this.props;
-    return (
-      <div>
-        <Helmets.Basic title={unit.name} />
-        <Helmets.Image unitId={unit.id} />
-        {/* Todo: add video type, video tags */}
-        <Helmets.Video releaseDate={unit.film_date} duration={unit.duration} />
-        <Helmets.Locale mainLang={unit.original_language} />
-      </div>
-    );
+    return <Helmets.AVUnit unit={this.props.unit} />;
   }
 
   renderRecommendations() {
