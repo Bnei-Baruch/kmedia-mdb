@@ -79,7 +79,11 @@ export function* search(action) {
 }
 
 function* click(action) {
-  yield call(Api.click, action.payload);
+  try {
+    yield call(Api.click, action.payload);
+  } catch (err) {
+    console.error('search click logging error:', err); // eslint-disable-line no-console
+  }
 }
 
 function* updatePageInQuery(action) {
