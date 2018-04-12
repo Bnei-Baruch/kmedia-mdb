@@ -22,7 +22,7 @@ class Homepage extends Component {
   };
 
   render() {
-    const { roots, getSourceById } = this.props;
+    const { roots, getSourceById, language } = this.props;
     const portraits                = [portraitBS, portraitRB, portraitML];
     let portraitIndex              = 0;
 
@@ -36,6 +36,7 @@ class Homepage extends Component {
           author={author}
           getSourceById={getSourceById}
           portrait={portraits[portraitIndex++]}
+          language={language}
         />;
     });
 

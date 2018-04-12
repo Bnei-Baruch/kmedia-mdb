@@ -10,11 +10,20 @@ class Kabbalist extends Component {
   static propTypes = {
     getSourceById: PropTypes.func.isRequired,
     author: shapes.Author.isRequired,
+    language: PropTypes.string.isRequired,
     portrait: PropTypes.string,
   };
 
   static defaultProps = {
     portrait: '',
+  };
+
+  static mapLinks = {
+    ar: 'ari',
+    bs: 'baal-hasulam',
+    ml: 'michael-laitman',
+    rb: 'rabash',
+    rh: 'rashbi',
   };
 
   renderBook = (book) => {
@@ -29,13 +38,15 @@ class Kabbalist extends Component {
   };
 
   render() {
-    const { author, getSourceById, portrait }              = this.props;
-    const { name, full_name: fullName, children: volumes } = author;
+    const { author, getSourceById, portrait, language }        = this.props;
+    const { id, name, full_name: fullName, children: volumes } = author;
 
     let displayName = fullName || name;
     if (fullName && name) {
       displayName += ` (${name})`;
     }
+
+    const kabbalist = Kabbalist.mapLinks[id];
 
     return (
       <Table.Row verticalAlign="top">
@@ -43,8 +54,12 @@ class Kabbalist extends Component {
           {portrait ? <Image src={portrait} /> : null}
         </Table.Cell>
         <Table.Cell>
-          <div className={classnames({'sources__list': true, "sources__list--image": !!portrait })}>
-            <Header size="small">{displayName}</Header>
+          <div className={classnames({ sources__list: true, 'sources__list--image': !!portrait })}>
+            <Header size="small">
+              {
+                kabbalist ? <a href={`/persons/${kabbalist}-${language}.html`} alt={fullName}>{displayName}</a> : displayName
+              }
+            </Header>
             <div>
               <List bulleted>
                 {
