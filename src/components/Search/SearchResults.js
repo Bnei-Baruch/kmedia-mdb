@@ -213,7 +213,7 @@ class SearchResults extends Component {
           <strong>&nbsp;&nbsp;&nbsp;&nbsp;</strong>
         </Table.Cell>
         <Table.Cell collapsing singleLine>
-          <Label size="tiny">{t(`constants.content-types.KITEI_MAKOR`)}</Label>
+          <Label size="tiny">{t(`filters.sections-filter.sources`)}</Label>
         </Table.Cell>
         <Table.Cell>
           <Link className="search__link" to={canonicalLink({ id: mdbUid, content_type: 'SOURCE' })}>
