@@ -7,6 +7,7 @@ import { Container, Divider, Label, Table } from 'semantic-ui-react';
 import { canonicalLink, formatDuration, isEmpty } from '../../helpers/utils';
 import { getQuery, isDebMode } from '../../helpers/url';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
+import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { filtersTransformer } from '../../filters';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
@@ -29,7 +30,8 @@ class SearchResults extends Component {
     err: shapes.Error,
     t: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
-    filters: PropTypes.arrayOf(PropTypes.object).isRequired,
+    filters: PropTypes.array.isRequired,
+    sources: PropTypes.arrayOf(PropTypes.object).isRequired,
     location: shapes.HistoryLocation.isRequired,
     click: PropTypes.func.isRequired,
   };
@@ -176,10 +178,12 @@ class SearchResults extends Component {
   };
 
   renderSource = (s, hit) => {
-    const { t, location }                                            = this.props;
+    const { t, location, sources }                                            = this.props;
     const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
 
-    const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || s.name;
+    const name  = sources ? sources(mdbUid).map(p => p.name).join(', ') :
+     this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || s.name;
+
     const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
     const authors = this.snippetFromHighlight(highlight, ['authors', 'authors.analyzed'], parts => `...${parts.join('.....')}...`);
     const content  = this.snippetFromHighlight(highlight, ['content', 'content.analyzed'], parts => `...${parts.join('.....')}...`);
@@ -203,16 +207,8 @@ class SearchResults extends Component {
         }
       </div>);
 
-    //TBD authors?
-
     return (
       <Table.Row key={mdbUid} verticalAlign="top">
-        {/*<Table.Cell collapsing singleLine width={1}>
-          <strong>{filmDate}</strong>
-        </Table.Cell>
-         <Table.Cell collapsing singleLine>
-          <Label size="tiny">{t(`constants.content-types.${cu.content_type}`)}</Label>
-        </Table.Cell> */}
         <Table.Cell collapsing singleLine width={1}>
           <strong>לפני 1992</strong>
         </Table.Cell>
@@ -314,5 +310,6 @@ class SearchResults extends Component {
 
 export default connect(state => ({
   filters: filterSelectors.getFilters(state.filters, 'search'),
+  sources: sourcesSelectors.getPathByID(state.sources)
 }))(translate()(SearchResults));
 
