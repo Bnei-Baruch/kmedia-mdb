@@ -7,6 +7,7 @@ import { CollectionsBreakdown } from '../../../helpers/mdb';
 import UnitList from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
 import SectionHeader from '../../shared/SectionHeader';
+import { createDate } from '../../../helpers/date';
 
 export const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
@@ -22,7 +23,7 @@ export const renderUnit = (unit, t) => {
 
   let filmDate = '';
   if (unit.film_date) {
-    filmDate = t('values.date', { date: new Date(unit.film_date) });
+    filmDate = t('values.date', { date: createDate(unit.film_date) });
   }
 
   return (

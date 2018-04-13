@@ -11,6 +11,7 @@ import { filtersTransformer } from '../../../../../filters/index';
 import * as shapes from '../../../../shapes';
 import Link from '../../../../Language/MultiLanguageLink';
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../../helpers/consts';
+import { createDate } from '../../../../../helpers/date';
 
 class Info extends Component {
 
@@ -102,7 +103,7 @@ class Info extends Component {
         case CT_DAILY_LESSON:
         case CT_SPECIAL_LESSON:
           const ct = t(`constants.content-types.${CT_DAILY_LESSON}`);
-          const fd = t('values.date', { date: new Date(x.film_date) });
+          const fd = t('values.date', { date: new createDate(x.film_date) });
           display  = `${ct} ${fd}`;
           break;
         default:
@@ -117,7 +118,7 @@ class Info extends Component {
       <div className="unit-info">
         <Header as="h1">
           <small className="text grey unit-info__film-date">
-            {t('values.date', { date: new Date(filmDate) })}
+            {t('values.date', { date: new createDate(filmDate) })}
           </small>
           <br />
           <span className="unit-info__name">{name}</span>

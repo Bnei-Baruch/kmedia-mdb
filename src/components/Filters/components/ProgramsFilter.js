@@ -10,6 +10,7 @@ import { selectors as mdbSelectors } from '../../../redux/modules/mdb';
 import connectFilter from './connectFilter';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
+import { createDate } from '../../../helpers/date';
 
 class ProgramsFilter extends Component {
 
@@ -224,7 +225,7 @@ class ProgramsFilter extends Component {
                     to={canonicalLink(collection)}
                     language={language}
                     header={collection.name}
-                    meta={`${t('filters.programs-filter.last-updated')}: ${t('values.date', { date: new Date(lastUpdate) })}`} />
+                    meta={`${t('filters.programs-filter.last-updated')}: ${t('values.date', { date: createDate(lastUpdate) })}`} />
                 </Grid.Column>
               );
             })

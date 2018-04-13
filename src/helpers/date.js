@@ -17,6 +17,20 @@ export function fromToLocalized(from, to) {
   return toStr;
 }
 
+/**
+ * use this function to create new Date and convert string date into Date 
+ * to avoid timezone differences
+ *
+ * @param {*} stringDate 
+ */
+export function createDate(stringDate){
+  let date = Date.parse(stringDate) ? new Date(stringDate + ' GMT ') : new Date();
+ 
+  //remove the local timezone offset
+  date.setTime(date.getTime() + date.getTimezoneOffset()*60*1000);
+  return date;
+}
+
 
 /**
  * Compares two dates, returns true is both defined and are the same date.

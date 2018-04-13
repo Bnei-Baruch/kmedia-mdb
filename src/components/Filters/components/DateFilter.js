@@ -10,6 +10,7 @@ import 'react-day-picker/lib/style.css';
 
 import { DATE_FORMAT, LANG_UKRAINIAN, RTL_LANGUAGES } from '../../../helpers/consts';
 import connectFilter from './connectFilter';
+import { createDate } from '../../../helpers/date';
 
 // TODO (yaniv -> oleg): need indication for user when clicking on a bad date (after today) or when typing bad dates
 
@@ -17,7 +18,7 @@ import connectFilter from './connectFilter';
 const DATE_DISPLAY_FORMAT = 'l';
 
 const now = () =>
-  moment(new Date())
+  moment(utcDate)
     .hours(12)
     .minutes(0)
     .seconds(0)
@@ -42,25 +43,27 @@ const datePresets = [
   CUSTOM_RANGE,
 ];
 
+const utcDate = createDate();
+
 const presetToRange = {
   [TODAY]: () => {
-    const today = moment().toDate();
+    const today = moment(utcDate).toDate();
     return ({ from: today, to: today });
   },
   [YESTERDAY]: () => {
-    const yesterday = moment().subtract(1, 'days').toDate();
+    const yesterday = moment(utcDate).subtract(1, 'days').toDate();
     return ({ from: yesterday, to: yesterday });
   },
   [LAST_7_DAYS]: () => ({
     from: moment().subtract(6, 'days').toDate(),
-    to: moment().toDate()
+    to: moment(utcDate).toDate()
   }),
   [LAST_30_DAYS]: () => ({
     from: moment().subtract(30, 'days').toDate(),
-    to: moment().toDate()
+    to: moment(utcDate).toDate()
   }),
   [LAST_MONTH]: () => {
-    const todayMinusMonthMoment = moment().subtract(1, 'months');
+    const todayMinusMonthMoment = moment(utcDate).subtract(1, 'months');
     return ({
       from: todayMinusMonthMoment.startOf('month').toDate(),
       to: todayMinusMonthMoment.endOf('month').toDate()
@@ -68,7 +71,7 @@ const presetToRange = {
   },
   [THIS_MONTH]: () => ({
     from: moment().startOf('month').toDate(),
-    to: moment().toDate()
+    to: moment(utcDate).toDate()
   })
 };
 
@@ -163,7 +166,7 @@ class DateFilter extends Component {
     }
 
     const momentFrom = moment(new Date(range.from));
-    const momentTo   = moment(new Date(range.to));
+    const momentTo   = moment(createDate(range.to));
 
     this.setState({
       ...range,
@@ -294,7 +297,7 @@ class DateFilter extends Component {
               <DayPicker
                 numberOfMonths={2}
                 selectedDays={{ from, to }}
-                disabledDays={{ after: new Date() }}
+                disabledDays={{ after: utcDate }}
                 toMonth={now()}
                 localeUtils={LocaleUtils}
                 locale={language === LANG_UKRAINIAN ? 'uk' : language}

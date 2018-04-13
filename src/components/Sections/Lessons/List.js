@@ -9,6 +9,7 @@ import { selectors as lists } from '../../../redux/modules/lists';
 import { mapState as baseMapState, UnitListContainer, wrap } from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
 import SectionHeader from '../../shared/SectionHeader';
+import { createDate } from '../../../helpers/date';
 
 const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
 
@@ -18,7 +19,7 @@ export const renderUnit = (unit, t) => {
   const relatedItems = breakdown.getDailyLessons().map(x =>
     (
       <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-        {t(CT_DAILY_LESSON_I18N_KEY)} {t('values.date', { date: new Date(x.film_date) })}
+        {t(CT_DAILY_LESSON_I18N_KEY)} {t('values.date', { date: createDate(x.film_date) })}
       </List.Item>
     )
   ).concat(breakdown.getAllButDailyLessons().map(x => (
@@ -30,7 +31,7 @@ export const renderUnit = (unit, t) => {
   return (
     <Table.Row verticalAlign="top" key={unit.id} className="no-thumbnail">
       <Table.Cell collapsing singleLine>
-        <span className="index__date">{t('values.date', { date: new Date(unit.film_date) })}</span>
+        <span className="index__date">{t('values.date', { date: createDate(unit.film_date) })}</span>
       </Table.Cell>
       <Table.Cell>
         <Link className="index__title" to={canonicalLink(unit)}>
@@ -66,7 +67,7 @@ export const renderCollection = (collection, t) => {
         .map(x =>
           (
             <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-              {t(CT_DAILY_LESSON_I18N_KEY)} {t('values.date', { date: new Date(x.film_date) })}
+              {t(CT_DAILY_LESSON_I18N_KEY)} {t('values.date', { date: createDate(x.film_date) })}
             </List.Item>
           )
         ).concat(breakdown.getAllButDailyLessons().map(x => (
@@ -107,7 +108,7 @@ export const renderCollection = (collection, t) => {
   rows.push((
     <Table.Row key={`l-${collection.id}`} verticalAlign="top" className="no-thumbnail">
       <Table.Cell collapsing singleLine rowSpan={cuSpan}>
-        <span className="index__date">{t('values.date', { date: new Date(collection.film_date) })}</span>
+        <span className="index__date">{t('values.date', { date: createDate(collection.film_date) })}</span>
       </Table.Cell>
       <Table.Cell>
         <Link className="index__title" to={canonicalLink(collection)}>

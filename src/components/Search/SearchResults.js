@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Trans, translate } from 'react-i18next';
 import { Container, Divider, Label, Table } from 'semantic-ui-react';
 
+import { createDate } from '../../helpers/date';
 import { canonicalLink, formatDuration, isEmpty } from '../../helpers/utils';
 import { getQuery, isDebMode } from '../../helpers/url';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
@@ -81,7 +82,7 @@ class SearchResults extends Component {
 
     let filmDate = '';
     if (cu.film_date) {
-      filmDate = t('values.date', { date: new Date(cu.film_date) });
+      filmDate = t('values.date', { date: createDate(cu.film_date) });
     }
 
     return (
@@ -139,7 +140,7 @@ class SearchResults extends Component {
 
     let startDate = '';
     if (c.start_date) {
-      startDate = t('values.date', { date: new Date(c.start_date) });
+      startDate = t('values.date', { date: createDate(c.start_date) });
     }
 
     return (

@@ -5,7 +5,7 @@ import { Header, Menu } from 'semantic-ui-react';
 
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, DATE_FORMAT, NO_NAME } from '../../../../../helpers/consts';
 import { formatDuration } from '../../../../../helpers/utils';
-import { fromToLocalized } from '../../../../../helpers/date';
+import { fromToLocalized, createDate } from '../../../../../helpers/date';
 
 class PlaylistWidget extends Component {
 
@@ -36,7 +36,7 @@ class PlaylistWidget extends Component {
 
     let subheader = '';
     if (collection.film_date) {
-      subheader = t('values.date', { date: new Date(collection.film_date) });
+      subheader = t('values.date', { date: createDate(collection.film_date) });
     } else if (collection.start_date && collection.end_date) {
       subheader = fromToLocalized(
         moment.utc(collection.start_date, DATE_FORMAT),

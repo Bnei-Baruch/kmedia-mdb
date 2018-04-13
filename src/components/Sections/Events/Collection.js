@@ -3,7 +3,7 @@ import moment from 'moment/moment';
 import { Header, Image, Menu, Ref } from 'semantic-ui-react';
 
 import { DATE_FORMAT, NO_NAME } from '../../../helpers/consts';
-import { fromToLocalized } from '../../../helpers/date';
+import { fromToLocalized, createDate } from '../../../helpers/date';
 import { formatDuration } from '../../../helpers/utils';
 import PlaylistCollection from '../../Pages/PlaylistCollection/Container';
 import PlaylistWidget from '../../Pages/PlaylistCollection/widgets/Playlist/Playlist';
@@ -63,7 +63,7 @@ class MyPlaylistWidget extends PlaylistWidget {
                 >
                   {
                     section === 'preparation' || section === 'appendices' ?
-                      <strong>{t('values.date', { date: new Date(unit.film_date) })} &nbsp;</strong> :
+                      <strong>{t('values.date', { date: createDate(unit.film_date) })} &nbsp;</strong> :
                       null
                   }
                   {unit.name || NO_NAME} - {formatDuration(unit.duration)}
