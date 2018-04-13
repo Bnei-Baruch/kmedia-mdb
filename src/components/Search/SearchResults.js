@@ -210,7 +210,7 @@ class SearchResults extends Component {
     return (
       <Table.Row key={mdbUid} verticalAlign="top">
         <Table.Cell collapsing singleLine width={1}>
-          <strong>לפני 1992</strong>
+          <strong>&nbsp;&nbsp;&nbsp;&nbsp;</strong>
         </Table.Cell>
         <Table.Cell collapsing singleLine>
           <Label size="tiny">{t(`constants.content-types.KITEI_MAKOR`)}</Label>
