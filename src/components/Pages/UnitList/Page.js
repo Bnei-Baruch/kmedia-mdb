@@ -52,7 +52,6 @@ const filters = {
 };
 
 class UnitListPage extends PureComponent {
-
   static propTypes = {
     namespace: PropTypes.string.isRequired,
     items: PropTypes.arrayOf(shapes.ContentUnit),
@@ -63,7 +62,6 @@ class UnitListPage extends PureComponent {
     pageSize: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
-    filters: PropTypes.arrayOf(shapes.filterPropShape),
     onPageChange: PropTypes.func.isRequired,
     onFiltersChanged: PropTypes.func.isRequired,
     onFiltersHydrated: PropTypes.func.isRequired,
@@ -74,7 +72,6 @@ class UnitListPage extends PureComponent {
     items: [],
     wip: false,
     err: null,
-    filters: [],
   };
 
   render() {
@@ -140,7 +137,6 @@ class UnitListPage extends PureComponent {
       </div>
     );
   }
-
 }
 
 export default translate()(UnitListPage);
