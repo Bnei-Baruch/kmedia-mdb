@@ -51,45 +51,6 @@ class Basic extends Component {
   render() {
     const { title, description, keywords, url, imageUrl } = this.props;
 
-    // ALL TODOS:
-    // publication: language should be implemented
-
-    // TODO (orin): throw away keywords!!
-    // Schema.org
-
-    // article/book/audio/video/website
-    // language, image, url,
-
-    // use https://richpreview.com to validate tags
-    // https://d2eeipcrcdle6.cloudfront.net/seo-cheat-sheet.pdf
-    // link canonical tag is very important !!!!
-
-    // author
-    // article:section
-    // article:tag
-
-    // for video clips we should use video.other
-    // og:updated_time ??
-    // og:ttl ??
-
-    // episode distinction ?
-
-    // Programs original language is always en !!!
-
-    // The four required properties for every page are:
-    // og:title, og:type, og:image, og:url
-
-    // og:determiner
-
-    /* <link rel=�author� href=�https://plus.google.com/[YOUR PERSONAL G+ PROFILE HERE]�/> */
-
-    // TODO:  Publication have the word pirsum at the title, it should be removed.
-    // }
-
-    // TODO (orin): Add basic helmets for keywords and stuff.
-    // TODO (orin): Add microdata
-    // TODO (orin): JSON-LD
-
     return (
       <div>
         {!isEmpty(title) ? this.buildTitle(title) : null}
