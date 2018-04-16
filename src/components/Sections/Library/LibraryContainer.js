@@ -4,20 +4,20 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
-import { push as routerPush } from 'react-router-redux';
+import { push as routerPush, replace as routerReplace } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Grid, Header, Input, } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
-import BackToTop from '../../shared/BackToTop';
+import Helmets from '../../shared/Helmets';
 import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
-import { RTL_LANGUAGES } from '../../../helpers/consts';
+import LibrarySettings from './LibrarySettings';
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -37,7 +37,8 @@ class LibraryContainer extends Component {
     NotToFilter: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     areSourcesLoaded: PropTypes.bool,
     t: PropTypes.func.isRequired,
-    apply: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -53,6 +54,9 @@ class LibraryContainer extends Component {
   state = {
     lastLoadedId: null,
     isReadable: false,
+    tocIsActive: false,
+    fontSize: 0,
+    theme: 'light',
     match: '',
   };
 
@@ -61,16 +65,17 @@ class LibraryContainer extends Component {
     window.addEventListener('resize', this.updateSticky);
     window.addEventListener('load', this.updateSticky);
 
-    const { sourceId, areSourcesLoaded, apply } = this.props;
+    const { sourceId, areSourcesLoaded, push } = this.props;
     if (!areSourcesLoaded) {
       return;
     }
+
     const firstLeafId = this.firstLeafId(sourceId);
     if (firstLeafId !== sourceId ||
       this.props.sourceId !== sourceId ||
       this.state.lastLoadedId !== sourceId) {
       if (firstLeafId !== sourceId) {
-        apply(`sources/${firstLeafId}`);
+        push(`sources/${firstLeafId}`);
       } else {
         // eslint-disable-next-line react/no-did-mount-set-state
         this.setState({ lastLoadedId: sourceId, language: this.props.language });
@@ -80,7 +85,7 @@ class LibraryContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { sourceId, areSourcesLoaded, language, apply } = nextProps;
+    const { sourceId, areSourcesLoaded, language, replace } = nextProps;
     if (!areSourcesLoaded) {
       return;
     }
@@ -96,7 +101,7 @@ class LibraryContainer extends Component {
       if (firstLeafId === sourceId) {
         this.loadNewIndices(sourceId, this.props.language);
       } else {
-        apply(firstLeafId);
+        replace(`sources/${firstLeafId}`);
       }
     }
 
@@ -139,6 +144,14 @@ class LibraryContainer extends Component {
         this.setState({ secondaryHeaderHeight: height });
       }
     }
+
+    // check fixed header width in pixels for text-overflow:ellipsis
+    if (this.contentHeaderRef) {
+      const { width } = this.contentHeaderRef.getBoundingClientRect();
+      if (this.state.contentHeaderWidth !== width) {
+        this.setState({ contentHeaderWidth: width });
+      }
+    }
   };
 
   firstLeafId = (sourceId) => {
@@ -168,8 +181,20 @@ class LibraryContainer extends Component {
     this.secondaryHeaderRef = ref;
   };
 
+  handleContentHeaderRef = (ref) => {
+    this.contentHeaderRef = ref;
+  };
+
+  handleTocIsActive = () => {
+    this.setState({ tocIsActive: !this.state.tocIsActive });
+  };
+
   handleIsReadable = () => {
     this.setState({ isReadable: !this.state.isReadable });
+  };
+
+  handleSettings = (setting) => {
+    this.setState(setting);
   };
 
   fetchIndices = (sourceId) => {
@@ -194,16 +219,21 @@ class LibraryContainer extends Component {
     if (kabFullName && kabName) {
       displayName += ` (${kabName})`;
     }
-
+    const { contentHeaderWidth, } = this.state;
     return (
-      <Header size="large">
+      <Header size="small">
+        <Helmets.Basic title={`${sourceName} - ${parentName} - ${kabName}`} description={description} />
+        <Ref innerRef={this.handleContentHeaderRef}>
+          <div />
+        </Ref>
         <Header.Subheader>
-          <small>
+          <small style={{ width: `${contentHeaderWidth}px` }}>
             {displayName} / {`${parentName} ${description || ''} `}
           </small>
         </Header.Subheader>
-        {sourceName}
+        <span style={{ width: `${contentHeaderWidth}px` }}>{sourceName}</span>
       </Header>
+
     );
   };
 
@@ -214,27 +244,31 @@ class LibraryContainer extends Component {
     this.fetchIndices(sourceId);
   };
 
-  sortButton = (sortOrder, title) => (
-    <Button
-      icon
-      active={this.props.sortBy === sortOrder}
-      title={title}
-      onClick={() => this.props.sourcesSortBy(sortOrder)}
-      compact
-    >
-      {title}
-    </Button>
-  );
+  sortButton = () => {
+    let sortOrder;
+    if (this.props.sortBy === 'AZ') {
+      sortOrder = 'Book';
+    } else {
+      sortOrder = 'AZ';
+    }
+    this.props.sourcesSortBy(sortOrder);
+  };
 
-  switchSortingOrder = (parentId, t) => {
+  switchSortingOrder = (parentId) => {
     if (this.props.NotToSort.findIndex(a => a === parentId) !== -1) {
       return null;
     }
+
     return (
-      <Button.Group basic className="buttons-language-selector" size="mini">
-        {this.sortButton('AZ', t('sources-library.az'))}
-        {this.sortButton('Book', t('sources-library.default'))}
-      </Button.Group>
+      <Button
+        compact
+        size="small"
+        icon="sort alphabet ascending"
+        color={this.props.sortBy === 'AZ' ? 'blue' : ''}
+        active={this.props.sortBy === 'AZ'}
+        basic={this.props.sortBy !== 'AZ'}
+        onClick={this.sortButton}
+      />
     );
   };
 
@@ -258,12 +292,13 @@ class LibraryContainer extends Component {
     }
     return (
       <Input
+        fluid
+        size="mini"
         icon="search"
         placeholder={t('sources-library.filter')}
         value={this.state.match}
         onChange={this.handleFilterChange}
         onKeyDown={this.handleFilterKeyDown}
-        size="mini"
       />
     );
   };
@@ -290,58 +325,82 @@ class LibraryContainer extends Component {
           source={sourceId}
           index={index}
           languageUI={language}
+          langSelectorMount={this.headerMenuRef}
           t={t}
         />
       );
     }
 
-    const { isReadable, secondaryHeaderHeight, match } = this.state;
-    const matchString                                  = this.matchString(parentId, t);
-    const isRTL                                        = RTL_LANGUAGES.includes(language);
-    const offset                                       = secondaryHeaderHeight + (isReadable ? 0 : 60) + 14;
+    const { isReadable, fontSize, theme, fontType, secondaryHeaderHeight, tocIsActive, match, } = this.state;
+
+    const matchString = this.matchString(parentId, t);
 
     return (
-      <div className={classnames({ source: true, 'is-readable': isReadable })}>
+      <div
+        className={classnames({
+          source: true,
+          'is-readable': isReadable,
+          'toc--is-active': tocIsActive,
+          [`is-${theme}`]: true,
+          [`is-${fontType}`]: true,
+        })}
+      >
         <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
           <Container>
-            <Grid padded>
-              <Grid.Row>
-                <Grid.Column computer={4}>
-                  <Header size="medium">{t('sources-library.toc')}</Header>
-                  {this.switchSortingOrder(parentId, t)}
-                  {matchString}
+            <Grid padded centered>
+              <Grid.Row verticalAlign="bottom">
+                <Grid.Column mobile={16} tablet={16} computer={4} className="source__toc-header">
+                  <div className="source__header-title mobile-hidden">
+                    <Header size="small">{t('sources-library.toc')}</Header>
+                  </div>
+                  <div className="source__header-toolbar">
+                    {matchString}
+                    {this.switchSortingOrder(parentId)}
+                    <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
+                  </div>
                 </Grid.Column>
-                <Grid.Column computer={8}>
-                  {this.header(sourceId, fullPath)}
-                </Grid.Column>
-                <Grid.Column computer={2}>
-                  <Button.Group basic size="tiny">
-                    <Button icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
-                  </Button.Group>
+                <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
+                  <div className="source__header-title">{this.header(sourceId, fullPath)}</div>
+                  <div className="source__header-toolbar">
+                    <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
+                    <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
+                    <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
+                  </div>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
           </Container>
         </div>
         <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
-          <Grid padded divided>
-            <Grid.Row>
-              <Grid.Column computer={4}>
+          <Grid padded centered>
+            <Grid.Row className="is-fitted">
+              <Grid.Column mobile={16} tablet={16} computer={4} onClick={this.handleTocIsActive}>
                 <TOC
                   match={matchString ? match : ''}
                   matchApplied={this.handleFilterClear}
                   fullPath={fullPath}
                   rootId={parentId}
-                  contextRef={document.querySelector('.library-container')}
+                  contextRef={this.contextRef}
                   getSourceById={getSourceById}
-                  apply={this.props.apply}
-                  stickyOffset={offset}
+                  apply={this.props.push}
+                  stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
+                  t={t}
                 />
               </Grid.Column>
-              <Grid.Column mobile={12} tablet={12} computer={8}>
-                <BackToTop isRTL={isRTL} offset={offset} />
+              <Grid.Column
+                mobile={16}
+                tablet={16}
+                computer={12}
+                className={classnames({
+                  'source__content-wrapper': true,
+                  [`size${fontSize}`]: true,
+                })}
+              >
                 <div ref={this.handleContextRef}>
-                  <div className="source__content">
+                  <div
+                    className="source__content"
+                    style={{ minHeight: `calc(100vh - ${secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}px)` }}
+                  >
                     {content}
                   </div>
                 </div>
@@ -370,6 +429,7 @@ export default withRouter(connect(
   dispatch => bindActionCreators({
     fetchIndex: sourceActions.fetchIndex,
     sourcesSortBy: sourceActions.sourcesSortBy,
-    apply: routerPush,
+    push: routerPush,
+    replace: routerReplace,
   }, dispatch)
 )(translate()(LibraryContainer)));

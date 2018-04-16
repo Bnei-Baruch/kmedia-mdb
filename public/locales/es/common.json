@@ -13,7 +13,8 @@
       "topics": "Temas",
       "publications": "Publicaciones",
       "photos": "Fotos",
-      "design": "Diseño"
+      "design": "Diseño",
+      "project-status": "Projekto Statuso"
     },
     "footer": {
       "copyright": "Derecho de autor 2003-{{year}}",
@@ -156,6 +157,10 @@
     }
   },
   "home": {
+    "header": {
+      "text": "Página de inicio",
+      "subText": ""
+    },
     "search": "Descubre la sabiduría de la Cabalá",
     "sections": "Temas",
     "updates": "Actualizaciones recientes",
@@ -209,6 +214,9 @@
           "item-title": "Parte {{name}}"
         }
       }
+    },
+    "last": {
+      "text": "Lección Diaria de Cabalá - Actualizado"
     }
   },
   "programs": {
