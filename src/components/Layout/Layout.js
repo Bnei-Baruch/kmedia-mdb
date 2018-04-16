@@ -2,10 +2,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import classnames from 'classnames';
-import { Flag, Header, Icon, Menu } from 'semantic-ui-react';
 import { renderRoutes } from 'react-router-config';
+import { connect } from 'react-redux';
+import { Dropdown, Header, Icon, Menu, Flag } from 'semantic-ui-react';
 
-import { ALL_LANGUAGES, FLAG_TO_LANGUAGE } from '../../helpers/consts';
+import {
+  ALL_LANGUAGES,
+  LANG_ENGLISH,
+  LANG_HEBREW,
+  LANG_RUSSIAN,
+  LANG_SPANISH,
+  LANG_UKRAINIAN,
+  LANGUAGES
+} from '../../helpers/consts';
+import { selectors as settings } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import Helmets from '../shared/Helmets';
@@ -15,12 +25,13 @@ import MenuItems from './MenuItems';
 import Footer from './Footer';
 import logo from '../../images/logo.svg';
 
-const flags = ['us', 'ru', 'ua', 'es', 'il'];
+const dropdownLangs = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN];
 
 class Layout extends Component {
   static propTypes = {
-    t: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
+    language: PropTypes.string.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   state = {
@@ -63,13 +74,25 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location, route } = this.props;
-    const { sidebarActive }      = this.state;
+    const { t, location, route, language } = this.props;
+    const { sidebarActive }                = this.state;
 
     const showSearch = this.shouldShowSearch(location);
+
     return (
       <div className="layout">
-        <Helmets.Basic title={t('nav.top.header')} />
+        {/* <div className="debug">
+          <span className="widescreen-only">widescreen</span>
+          <span className="large-screen-only">large screen</span>
+          <span className="computer-only">computer</span>
+          <span className="tablet-only">tablet</span>
+          <span className="mobile-only">mobile</span>
+        </div> */}
+        <Helmets.TopMost
+          titlePostfix={t('nav.top.header')}
+          mainLang={language}
+          alternateLang={dropdownLangs}
+        />
         <GAPageView location={location} />
         <div className="layout__header">
           <Menu inverted borderless size="huge" color="blue">
@@ -88,16 +111,18 @@ class Layout extends Component {
               }
             </Menu.Item>
             <Menu.Menu position="right">
-              <Menu.Item>
-                {
-                  flags.map(flag => (
-                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                    <Link language={FLAG_TO_LANGUAGE[flag]} key={flag}>
-                      <Flag name={flag} />
-                    </Link>
-                  ))
-                }
-              </Menu.Item>
+              <Dropdown item text={t(`constants.languages.${language}`)}>
+                <Dropdown.Menu>
+                  {
+                    dropdownLangs.map(x => (
+                      <Dropdown.Item key={x} as={Link} language={x}>
+                        <Flag name={LANGUAGES[x].flag} />
+                        {t(`constants.languages.${x}`)}
+                      </Dropdown.Item>
+                    ))
+                  }
+                </Dropdown.Menu>
+              </Dropdown>
             </Menu.Menu>
           </Menu>
         </div>
@@ -134,4 +159,8 @@ class Layout extends Component {
   }
 }
 
-export default translate()(Layout);
+export default connect(
+  state => ({
+    language: settings.getLanguage(state.settings),
+  })
+)(translate()(Layout));

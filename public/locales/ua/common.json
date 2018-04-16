@@ -14,7 +14,8 @@
       "publications": "Публікації",
       "photos": "Фотографії",
       "design": "Дизайн",
-      "design2": "Планування"
+      "design2": "Планування",
+      "project-status": "Статус проекту"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
@@ -155,6 +156,10 @@
     }
   },
   "home": {
+    "header": {
+      "text": "Головна сторінка",
+      "subText": ""
+    },
     "search": "Відкрий Кабалу",
     "sections": "Розділи Архіву",
     "updates": "Останні оновлення",
@@ -209,6 +214,9 @@
           "item-title": "Частина {{name}}"
         }
       }
+    },
+    "last": {
+      "text": "Щоденний урок Кабали - Оновлено"
     }
   },
   "programs": {

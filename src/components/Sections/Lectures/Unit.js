@@ -1,10 +1,12 @@
 import React from 'react';
 import { Container, Header, Item } from 'semantic-ui-react';
 
-import { canonicalLink, formatDuration, neighborIndices } from '../../../helpers/utils';
+import { createDate } from '../../../helpers/date';
 import { sectionThumbnailFallback } from '../../../helpers/images';
+import { canonicalLink, formatDuration, neighborIndices } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
+import Helmets from '../../shared/Helmets';
 import { UnitContainer, wrap as wrapContainer } from '../../Pages/Unit/Container';
 import { UnitPage, wrap as wrapPage } from '../../Pages/Unit/Page';
 import {
@@ -13,8 +15,8 @@ import {
 } from '../../Pages/Unit/widgets/Recommended/SameCollection/Container';
 import SameCollectionWidget from '../../Pages/Unit/widgets/Recommended/SameCollection/Widget';
 
-class MySameCollectionWidget extends SameCollectionWidget {
 
+class MySameCollectionWidget extends SameCollectionWidget {
   renderContent() {
     const { unit, collection, t } = this.props;
 
@@ -49,7 +51,7 @@ class MySameCollectionWidget extends SameCollectionWidget {
                 <Item.Content verticalAlign="top">
                   <Header as="h5">
                     <small className="text grey uppercase recommended-same-collection__item-title">
-                      {t('values.date', { date: new Date(part.film_date) })}
+                      {t('values.date', { date: createDate(part.film_date) })}
                     </small>
                     <br />
                     <span className="recommended-same-collection__item-name">
@@ -100,6 +102,10 @@ class MySameCollectionContainer extends SameCollectionContainer {
 const MyWrappedSameCollectionContainer = wrapSameCollectionContainer(MySameCollectionContainer);
 
 class MyUnitPage extends UnitPage {
+  renderHelmet() {
+    return <Helmets.AVUnit  unit={this.props.unit} language={this.props.language} />;
+  }
+
   renderRecommendations() {
     const { unit, t } = this.props;
     return <MyWrappedSameCollectionContainer unit={unit} t={t} />;

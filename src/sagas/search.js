@@ -1,7 +1,8 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { getQuery, updateQuery as urlUpdateQuery } from './helpers/url';
+import { GenerateSearchId } from '../helpers/search';
 import { actions, selectors, types } from '../redux/modules/search';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions as mdbActions } from '../redux/modules/mdb';
@@ -38,7 +39,9 @@ export function* search(action) {
       yield put(actions.searchFailure(null));
       return
     }
-    const { data } = yield call(Api.search, { ...action.payload, q, sortBy, language, deb });
+    const searchId = GenerateSearchId();
+    const { data } = yield call(Api.search, { ...action.payload, q, sortBy, language, deb, searchId });
+    data.searchId = searchId;
 
     if (Array.isArray(data.hits.hits) && data.hits.hits.length > 0) {
       // TODO edo: optimize data fetching
@@ -75,6 +78,14 @@ export function* search(action) {
   }
 }
 
+function* click(action) {
+  try {
+    yield call(Api.click, action.payload);
+  } catch (err) {
+    console.error('search click logging error:', err); // eslint-disable-line no-console
+  }
+}
+
 function* updatePageInQuery(action) {
   const page = action.payload > 1 ? action.payload : null;
   yield* urlUpdateQuery(query => Object.assign(query, { page }));
@@ -89,6 +100,8 @@ export function* hydrateUrl() {
   const query             = yield* getQuery();
   const { q, page = '1', deb = false } = query;
 
+  yield put(actions.setDeb(deb));
+
   if (q) {
     yield put(actions.updateQuery(q));
 
@@ -98,8 +111,6 @@ export function* hydrateUrl() {
 
     const pageNo = parseInt(page, 10);
     yield put(actions.setPage(pageNo));
-
-    yield put(actions.setDeb(deb));
   }
 }
 
@@ -109,6 +120,10 @@ function* watchAutocomplete() {
 
 function* watchSearch() {
   yield takeLatest(types.SEARCH, search);
+}
+
+function* watchClick() {
+  yield takeEvery(types.CLICK, click);
 }
 
 function* watchSetPage() {
@@ -126,6 +141,7 @@ function* watchHydrateUrl() {
 export const sagas = [
   watchAutocomplete,
   watchSearch,
+  watchClick,
   watchSetPage,
   watchSetSortBy,
   watchHydrateUrl,

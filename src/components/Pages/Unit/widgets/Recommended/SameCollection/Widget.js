@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Container, Header, Item } from 'semantic-ui-react';
 
+import { createDate } from '../../../../../../helpers/date';
 import { canonicalLink, formatDuration, neighborIndices } from '../../../../../../helpers/utils';
 import { sectionThumbnailFallback } from '../../../../../../helpers/images';
 import * as shapes from '../../../../../shapes';
@@ -10,7 +11,6 @@ import UnitLogo from '../../../../../shared/Logo/UnitLogo';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 
 class SameCollection extends Component {
-
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     collection: shapes.GenericCollection,
@@ -61,7 +61,7 @@ class SameCollection extends Component {
                 <Item.Content verticalAlign="top">
                   <Header as="h5">
                     <small className="text grey uppercase recommended-same-collection__item-title">
-                      {t(`${section || 'pages'}.unit.recommended.same-collection.item-title`, { name: collection.ccuNames[part.id] })} - {t('values.date', { date: new Date(part.film_date) })}
+                      {t(`${section || 'pages'}.unit.recommended.same-collection.item-title`, { name: collection.ccuNames[part.id] })} - {t('values.date', { date: createDate(part.film_date) })}
                     </small>
                     <br />
                     <span className="recommended-same-collection__item-name">

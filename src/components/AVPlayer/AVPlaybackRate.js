@@ -7,7 +7,8 @@ const options = [
   { value: '2x', text: '2x' },
   { value: '1.5x', text: '1.5x' },
   { value: '1.25x', text: '1.25x' },
-  { value: '1x', text: '1x' }];
+  { value: '1x', text: '1x' },
+  { value: '0.75x', text: '0.75x' }];
 
 export default class AVPlaybackRate extends Component {
   static propTypes = {

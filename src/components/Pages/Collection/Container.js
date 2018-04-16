@@ -12,12 +12,10 @@ import Page from './Page';
 class CollectionContainer extends Component {
   static propTypes = {
     namespace: PropTypes.string.isRequired,
-    location: shapes.HistoryLocation.isRequired,
     match: shapes.RouterMatch.isRequired,
     collection: shapes.GenericCollection,
     wip: shapes.WipMap.isRequired,
     errors: shapes.ErrorsMap.isRequired,
-    language: PropTypes.string.isRequired,
     fetchCollection: PropTypes.func.isRequired,
     renderUnit: PropTypes.func.isRequired,
   };
@@ -48,14 +46,16 @@ class CollectionContainer extends Component {
   };
 
   render() {
-    const { collection, wip, errors, namespace, renderUnit } = this.props;
+    const { collection, match, wip, errors, namespace, renderUnit } = this.props;
+
+    const { id } = match.params;
 
     return (
       <Page
         namespace={namespace}
         collection={collection}
-        wip={wip.collections[collection.id]}
-        err={errors.collections[collection.id]}
+        wip={wip.collections[id]}
+        err={errors.collections[id]}
         renderUnit={renderUnit}
       />
     );

@@ -9,8 +9,10 @@ import { translate } from 'react-i18next';
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
+import Helmets from '../../shared/Helmets';
 import WipErr from '../../shared/WipErr/WipErr';
 import { PlaylistCollectionContainer } from '../../Pages/PlaylistCollection/Container';
+import { publicFile } from '../../../helpers/utils';
 
 class LastLessonCollection extends Component {
   static propTypes = {
@@ -61,10 +63,18 @@ class LastLessonCollection extends Component {
           language,
           id: lastLessonId,
         }
-      }
+      },
+      shouldRenderHelmet: false,
     };
 
-    return <PlaylistCollectionContainer {...props} />;
+    return (
+      <div>
+        <Helmets.Basic title={t('lessons.last.text')} description={t('lessons.header.subtext')} />
+        <Helmets.Image unitOrUrl={publicFile('seo/last_lesson.jpg')} />
+
+        <PlaylistCollectionContainer {...props} />
+      </div>
+    );
   }
 }
 
