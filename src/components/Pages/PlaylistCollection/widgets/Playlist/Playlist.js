@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment/moment';
-import { Header, Menu } from 'semantic-ui-react';
+import { Header, Menu, Icon } from 'semantic-ui-react';
 
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, DATE_FORMAT, NO_NAME } from '../../../../../helpers/consts';
 import { formatDuration } from '../../../../../helpers/utils';
@@ -22,6 +22,14 @@ class PlaylistWidget extends Component {
 
   handleItemClick = (e, data) => {
     this.props.onSelectedChange(parseInt(data.name, 10));
+  };
+
+  handlePrevLessonClick = (e, data) => {
+    alert('prev');
+  };
+
+  handleNextLessonClick = (e, data) => {
+    alert('next');
   };
 
   renderHeader() {
@@ -51,6 +59,14 @@ class PlaylistWidget extends Component {
 
     return (
       <div className="avbox__playlist-view">
+        <div dir="ltr">
+          <button type="button" tabIndex="-1" title="שיעור הקודם" onClick={this.handlePrevLessonClick} style={{marginRight: '0.5em'}}>            
+            <Icon name="backward" />
+          </button>
+          <button type="button" tabIndex="-1" title="שיעור הבא" onClick={this.handleNextLessonClick} style={{marginLeft: '0.5em'}}>
+            <Icon name="forward" />            
+          </button>
+        </div>
         <Menu vertical fluid size="small">
           {
             playlist.items.map((playableItem, index) => (
