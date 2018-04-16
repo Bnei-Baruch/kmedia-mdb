@@ -38,26 +38,26 @@ class PlaylistCollectionPage extends Component {
   handleSelectedChange = selected =>
     this.setState({ selected });
 
-  renderHelmet() {
-    const { collection, t, shouldRenderHelmet } = this.props;
-
-    if (!shouldRenderHelmet) {
-      return null;
-    }
-
-    let title = collection.name;
-    // if the collection doesn't have a name, use a default.
-    if (title === undefined) {
-      title = t(`constants.content-types.${collection.content_type}`);
-    }
-
-    if (collection.film_date) {
-      const filmDate = t('values.date', { date: new Date(collection.film_date) });
-      title          = `${title} - ${filmDate}`;
-    }
-
-    return <Helmets.Basic title={title} />;
-  }
+  // renderCollectionHelmet() {
+  //   const { collection, t, shouldRenderHelmet } = this.props;
+  //
+  //   if (!shouldRenderHelmet) {
+  //     return null;
+  //   }
+  //
+  //   let title = collection.name;
+  //   // if the collection doesn't have a name, use a default.
+  //   if (title === undefined) {
+  //     title = t(`constants.content-types.${collection.content_type}`);
+  //   }
+  //
+  //   if (collection.film_date) {
+  //     const filmDate = t('values.date', { date: new Date(collection.film_date) });
+  //     title          = `${title} - ${filmDate}`;
+  //   }
+  //
+  //   return <Helmets.Basic title={title} />;
+  // }
 
   render() {
     const { language, collection, wip, err, t, PlaylistComponent } = this.props;
@@ -71,11 +71,12 @@ class PlaylistCollectionPage extends Component {
       return null;
     }
 
+    // const unit = this.state.selected;
     const { selected: unit } = this.state;
 
     return (
       <div className="playlist-collection-page">
-        {this.renderHelmet()}
+        {/*{this.renderCollectionHelmet()}*/}
         <div className="avbox">
           <Container>
             <Grid padded>
@@ -92,6 +93,7 @@ class PlaylistCollectionPage extends Component {
         {
           unit ?
             <Container>
+              <Helmets.AVUnit unit={unit} language={language} />
               <Grid padded>
                 <Grid.Row>
                   <Grid.Column mobile={16} tablet={16} computer={11} className="content__main">
