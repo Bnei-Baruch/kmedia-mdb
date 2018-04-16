@@ -11,6 +11,7 @@ import Info from '../Unit/widgets/Info/Info';
 import MediaDownloads from '../Unit/widgets/Downloads/MediaDownloads';
 import PlaylistAVBox from './widgets/PlaylistAVBox/PlaylistAVBox';
 import Playlist from './widgets/Playlist/Playlist';
+import { createDate } from '../../../helpers/date';
 
 class PlaylistCollectionPage extends Component {
   static propTypes = {
@@ -52,7 +53,7 @@ class PlaylistCollectionPage extends Component {
     }
 
     if (collection.film_date) {
-      const filmDate = t('values.date', { date: new Date(collection.film_date) });
+      const filmDate = t('values.date', { date: createDate(collection.film_date) });
       title          = `${title} - ${filmDate}`;
     }
 
