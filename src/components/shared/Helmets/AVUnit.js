@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
+import { getVideoRes } from '../../../helpers/consts';
+import { createDate } from '../../../helpers/date';
 import { isEmpty, physicalFile } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import Basic from './Basic';
 import Image from './Image';
 import Video from './Video';
-import { getVideoRes } from '../../../helpers/consts';
-import PropTypes from 'prop-types';
 
 class AVUnit extends Component {
   static propTypes = {
@@ -39,17 +40,16 @@ class AVUnit extends Component {
       }
     }
 
-    const videoDate = new Date(unit.film_date);
+    const videoDate = createDate(unit.film_date);
 
     // Todo: secure Url ?
     const videoFiles = unit.files
       .filter(file => (file.type === 'video' && file.language === language))
       .map(file => ({
-          ...file,
-          ...getVideoRes(file.video_size, videoDate),
-          url: physicalFile(file, true)
-        }
-      ));
+        ...file,
+        ...getVideoRes(file.video_size, videoDate),
+        url: physicalFile(file, true)
+      }));
 
     return (
       <div>

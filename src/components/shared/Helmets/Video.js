@@ -40,23 +40,23 @@ class Video extends Component {
     // video:series - a url to the tv show
     return (
       <Helmet>
-        {/*<meta property="og:type" content={`video.${category}`} />*/}
+        {/* <meta property="og:type" content={`video.${category}`} /> */}
         <meta property="og:type" content="video.other" />
         <meta property="og:video" content={url} />
         <meta property="og:video:secure_url" content={url} />
 
-        {/*<meta property="og:video:secure_url" content="https://secure.example.com/movie.swf" />*/}
+        {/* <meta property="og:video:secure_url" content="https://secure.example.com/movie.swf" /> */}
         {!isEmpty(mimetype) ? <meta property="og:video:type" content={mimetype} /> : null}
         {width ? <meta property="og:video:width" content={width} /> : null}
         {height ? <meta property="og:video:height" content={height} /> : null}
 
 
-        {/*{!isEmpty(tvShowUrl) ? <meta name="video:series" content={tvShowUrl} /> : null}*/}
+        {/* {!isEmpty(tvShowUrl) ? <meta name="video:series" content={tvShowUrl} /> : null} */}
 
 
         {!isEmpty(releaseDate) ? <meta name="og:video:release_date" content={releaseDate} /> : null}
         {duration ? <meta name="og:video:duration" content={duration} /> : null}
-        {/*{tags.map((tag, index) => <meta name="og:video:tag" content={tag} key={index} />)}*/}
+        {/* {tags.map((tag, index) => <meta name="og:video:tag" content={tag} key={index} />)} */}
       </Helmet>
     );
   }
