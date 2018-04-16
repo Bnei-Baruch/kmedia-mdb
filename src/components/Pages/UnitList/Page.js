@@ -75,21 +75,22 @@ class UnitListPage extends PureComponent {
   };
 
   render() {
-    const {
-            namespace,
-            items,
-            wip,
-            err,
-            pageNo,
-            total,
-            pageSize,
-            language,
-            t,
-            onPageChange,
-            onFiltersChanged,
-            onFiltersHydrated,
-            renderUnit
-          } = this.props;
+    const
+      {
+        namespace,
+        items,
+        wip,
+        err,
+        pageNo,
+        total,
+        pageSize,
+        language,
+        t,
+        onPageChange,
+        onFiltersChanged,
+        onFiltersHydrated,
+        renderUnit
+      } = this.props;
 
     const content = WipErr({ wip, err, t }) || (
       <div>
