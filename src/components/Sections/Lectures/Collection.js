@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
+import { createDate } from '../../../helpers/date';
 import { sectionThumbnailFallback } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/utils';
-import { createDate } from '../../../helpers/date';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
 import Collection from '../../Pages/Collection/Container';
@@ -35,7 +35,6 @@ export const renderUnit = (unit, t) => {
 };
 
 class LectureCollection extends Component {
-
   render() {
     return <Collection namespace="lectures-collection" renderUnit={renderUnit} />;
   }

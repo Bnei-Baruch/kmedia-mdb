@@ -4,9 +4,10 @@ import { bindActionCreators } from 'redux';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_VIDEO_PROGRAM_CHAPTER, NO_NAME } from '../../../helpers/consts';
+import { createDate } from '../../../helpers/date';
 import { sectionThumbnailFallback } from '../../../helpers/images';
-import { canonicalLink } from '../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
+import { canonicalLink } from '../../../helpers/utils';
 import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
 import {
   mapDispatch as baseMapDispatch,
@@ -17,7 +18,6 @@ import {
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
 import SectionHeader from '../../shared/SectionHeader';
-import { createDate } from '../../../helpers/date';
 
 export const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
@@ -112,10 +112,9 @@ function mapDispatch(dispatch) {
 const MyUnitList = wrap(MyUnitListContainer, mapState, mapDispatch);
 
 class ProgramsList extends Component {
-
-  extraFetchParams = () => {
-    return { content_type: [CT_VIDEO_PROGRAM_CHAPTER] };
-  };
+  extraFetchParams = () => (
+    { content_type: [CT_VIDEO_PROGRAM_CHAPTER] }
+  );
 
   render() {
     return (

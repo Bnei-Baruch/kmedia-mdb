@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_CHILDREN_LESSON, CT_LECTURE, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, NO_NAME } from '../../../helpers/consts';
-import { sectionThumbnailFallback } from '../../../helpers/images';
-import { canonicalLink } from '../../../helpers/utils';
-import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { createDate } from '../../../helpers/date';
+import { sectionThumbnailFallback } from '../../../helpers/images';
+import { CollectionsBreakdown } from '../../../helpers/mdb';
+import { canonicalLink } from '../../../helpers/utils';
 import UnitList from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
@@ -58,7 +58,6 @@ export const renderUnit = (unit, t) => {
 };
 
 class LecturesList extends Component {
-
   extraFetchParams = () => ({
     content_type: [CT_LECTURE, CT_WOMEN_LESSON, CT_CHILDREN_LESSON, CT_VIRTUAL_LESSON]
   });

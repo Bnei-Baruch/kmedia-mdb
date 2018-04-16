@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Grid, Header, Item } from 'semantic-ui-react';
 
+import { createDate } from '../../../helpers/date';
 import { canonicalLink, neighborIndices, strCmp } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 import Helmets from '../../shared/Helmets';
@@ -12,7 +13,6 @@ import {
 } from '../../Pages/Unit/widgets/Recommended/SameCollection/Container';
 import SameCollectionWidget from '../../Pages/Unit/widgets/Recommended/SameCollection/Widget';
 import TranscriptionContainer from '../../Pages/Unit/widgets/UnitMaterials/Transcription/TranscriptionContainer';
-import { createDate } from '../../../helpers/date';
 
 class MySameCollectionWidget extends SameCollectionWidget {
   renderContent() {

@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
+import { createDate } from '../../../helpers/date';
 import { sectionThumbnailFallback } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
 import Collection from '../../Pages/Collection/Container';
-import { createDate } from '../../../helpers/date';
 
 export const renderUnit = (unit, t) => {
   let filmDate = '';

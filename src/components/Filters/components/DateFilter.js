@@ -9,8 +9,8 @@ import { Button, Divider, Dropdown, Grid, Header, Input, Segment } from 'semanti
 import 'react-day-picker/lib/style.css';
 
 import { DATE_FORMAT, LANG_UKRAINIAN, RTL_LANGUAGES } from '../../../helpers/consts';
-import connectFilter from './connectFilter';
 import { createDate } from '../../../helpers/date';
+import connectFilter from './connectFilter';
 
 // TODO (yaniv -> oleg): need indication for user when clicking on a bad date (after today) or when typing bad dates
 
@@ -18,7 +18,7 @@ import { createDate } from '../../../helpers/date';
 const DATE_DISPLAY_FORMAT = 'l';
 
 const now = () =>
-  moment(utcDate)
+  moment(createDate())
     .hours(12)
     .minutes(0)
     .seconds(0)
@@ -43,27 +43,25 @@ const datePresets = [
   CUSTOM_RANGE,
 ];
 
-const utcDate = createDate();
-
 const presetToRange = {
   [TODAY]: () => {
-    const today = moment(utcDate).toDate();
+    const today = moment(createDate()).toDate();
     return ({ from: today, to: today });
   },
   [YESTERDAY]: () => {
-    const yesterday = moment(utcDate).subtract(1, 'days').toDate();
+    const yesterday = moment(createDate()).subtract(1, 'days').toDate();
     return ({ from: yesterday, to: yesterday });
   },
   [LAST_7_DAYS]: () => ({
     from: moment().subtract(6, 'days').toDate(),
-    to: moment(utcDate).toDate()
+    to: moment(createDate()).toDate()
   }),
   [LAST_30_DAYS]: () => ({
     from: moment().subtract(30, 'days').toDate(),
-    to: moment(utcDate).toDate()
+    to: moment(createDate()).toDate()
   }),
   [LAST_MONTH]: () => {
-    const todayMinusMonthMoment = moment(utcDate).subtract(1, 'months');
+    const todayMinusMonthMoment = moment(createDate()).subtract(1, 'months');
     return ({
       from: todayMinusMonthMoment.startOf('month').toDate(),
       to: todayMinusMonthMoment.endOf('month').toDate()
@@ -71,7 +69,7 @@ const presetToRange = {
   },
   [THIS_MONTH]: () => ({
     from: moment().startOf('month').toDate(),
-    to: moment(utcDate).toDate()
+    to: moment(createDate()).toDate()
   })
 };
 
@@ -238,7 +236,7 @@ class DateFilter extends Component {
   handleDatePresetsChange = (event, data) => this.setRange(data.value);
 
   handleFromInputChange = (event) => {
-    const value       = event.target.value;
+    const { value }       = event.target;
     const momentValue = moment(value, DATE_DISPLAY_FORMAT, true);
 
     const isValid = momentValue.isValid();
@@ -258,7 +256,7 @@ class DateFilter extends Component {
   };
 
   handleToInputChange = (event) => {
-    const value       = event.target.value;
+    const { value }       = event.target;
     const momentValue = moment(value, DATE_DISPLAY_FORMAT, true);
 
     const isValid = momentValue.isValid();
@@ -297,7 +295,7 @@ class DateFilter extends Component {
               <DayPicker
                 numberOfMonths={2}
                 selectedDays={{ from, to }}
-                disabledDays={{ after: utcDate }}
+                disabledDays={{ after: createDate() }}
                 toMonth={now()}
                 localeUtils={LocaleUtils}
                 locale={language === LANG_UKRAINIAN ? 'uk' : language}

@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_DAILY_LESSON, CT_LESSON_PART, NO_NAME } from '../../../helpers/consts';
-import { canonicalLink } from '../../../helpers/utils';
+import { createDate } from '../../../helpers/date';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
+import { canonicalLink } from '../../../helpers/utils';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as lists } from '../../../redux/modules/lists';
 import { mapState as baseMapState, UnitListContainer, wrap } from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
 import SectionHeader from '../../shared/SectionHeader';
-import { createDate } from '../../../helpers/date';
 
 const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
 
@@ -121,11 +121,11 @@ export const renderCollection = (collection, t) => {
   return rows.concat(units);
 };
 
-export const renderUnitOrCollection = (item, t) => {
-  return item.content_type === CT_LESSON_PART ?
+export const renderUnitOrCollection = (item, t) => (
+  item.content_type === CT_LESSON_PART ?
     renderUnit(item, t) :
-    renderCollection(item, t);
-};
+    renderCollection(item, t)
+);
 
 const mapState = (state, ownProps) => {
   const nsState = lists.getNamespaceState(state.lists, ownProps.namespace);

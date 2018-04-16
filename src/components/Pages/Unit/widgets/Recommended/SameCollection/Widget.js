@@ -11,7 +11,6 @@ import UnitLogo from '../../../../../shared/Logo/UnitLogo';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 
 class SameCollection extends Component {
-
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     collection: shapes.GenericCollection,

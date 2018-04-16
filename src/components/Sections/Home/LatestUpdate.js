@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Header, Label } from 'semantic-ui-react';
 
-import { canonicalLink } from '../../../helpers/utils';
-import { sectionThumbnailFallback } from '../../../helpers/images';
 import { createDate } from '../../../helpers/date';
+import { sectionThumbnailFallback } from '../../../helpers/images';
+import { canonicalLink } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';

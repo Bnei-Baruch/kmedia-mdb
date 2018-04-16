@@ -2,8 +2,8 @@ import React from 'react';
 import { Container, Header, Item } from 'semantic-ui-react';
 
 import { createDate } from '../../../helpers/date';
-import { canonicalLink, formatDuration, neighborIndices } from '../../../helpers/utils';
 import { sectionThumbnailFallback } from '../../../helpers/images';
+import { canonicalLink, formatDuration, neighborIndices } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
 import Helmets from '../../shared/Helmets';

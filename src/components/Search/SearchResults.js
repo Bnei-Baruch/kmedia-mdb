@@ -51,7 +51,7 @@ class SearchResults extends Component {
   click = (mdb_uid, index, type, rank, searchId) => {
     const { click } = this.props;
     click(mdb_uid, index, type, rank, searchId);
-  }
+  };
 
   renderContentUnit = (cu, hit, rank) => {
     const { t, location, results: { searchId } } = this.props;

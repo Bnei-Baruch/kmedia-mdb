@@ -4,11 +4,10 @@ import moment from 'moment/moment';
 import { Header, Menu } from 'semantic-ui-react';
 
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, DATE_FORMAT, NO_NAME } from '../../../../../helpers/consts';
-import { formatDuration } from '../../../../../helpers/utils';
 import { fromToLocalized, createDate } from '../../../../../helpers/date';
+import { formatDuration } from '../../../../../helpers/utils';
 
 class PlaylistWidget extends Component {
-
   static propTypes = {
     playlist: PropTypes.object.isRequired,
     selected: PropTypes.number,
@@ -70,7 +69,7 @@ class PlaylistWidget extends Component {
 
   render() {
     return (
-      <div className='avbox__playlist-wrapper'>
+      <div className="avbox__playlist-wrapper">
         {this.renderHeader()}
         {this.renderContents()}
       </div>

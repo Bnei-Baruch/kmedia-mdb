@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
+import { createDate } from '../../../helpers/date';
 import { canonicalLink } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 import Collection from '../../Pages/Collection/Container';
-import { createDate } from '../../../helpers/date';
 
 export const renderUnit = (unit, t) => {
   let filmDate = '';
@@ -28,7 +28,6 @@ export const renderUnit = (unit, t) => {
 };
 
 class PublicationCollection extends Component {
-
   render() {
     return <Collection namespace="publications-collection" renderUnit={renderUnit} />;
   }

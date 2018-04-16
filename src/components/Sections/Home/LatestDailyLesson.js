@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Header, Image, Label } from 'semantic-ui-react';
 
+import { createDate } from '../../../helpers/date';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 import DailyLessonPlaceholder from '../../../images/hp_lesson_temp.jpg';
-import { createDate } from '../../../helpers/date';
 
 class LatestDailyLesson extends Component {
   static propTypes = {
