@@ -1,4 +1,3 @@
-
 //mixings
 @mixin small-date {
   font-size: .9em;
@@ -12,8 +11,9 @@
     width: 1.5em;
   }
 }
+
 @import 'rtl/index';
-// 
+//
 .collection-header,
 .section-header {
   background: $darkWhite;
@@ -41,7 +41,7 @@
     @include tablet {
       font-size: 1rem !important;
     }
-    
+
     @include mobile {
       font-size: 1rem !important;
     }
@@ -59,9 +59,9 @@
       white-space: nowrap;
       overflow: hidden;
       padding: .928571em !important;
-      
+
       border-radius: .28571429rem .28571429rem 0 0 !important;
-      
+
       margin: 0 1px;
     }
 

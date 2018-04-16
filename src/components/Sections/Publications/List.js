@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_ARTICLE, NO_NAME } from '../../../helpers/consts';
-import { canonicalLink } from '../../../helpers/utils';
+import { createDate } from '../../../helpers/date';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
+import { canonicalLink } from '../../../helpers/utils';
 import UnitList from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
 import SectionHeader from '../../shared/SectionHeader';
@@ -22,7 +23,7 @@ export const renderUnit = (unit, t) => {
 
   let filmDate = '';
   if (unit.film_date) {
-    filmDate = t('values.date', { date: new Date(unit.film_date) });
+    filmDate = t('values.date', { date: createDate(unit.film_date) });
   }
 
   return (
@@ -46,7 +47,6 @@ export const renderUnit = (unit, t) => {
 };
 
 class PublicationsList extends Component {
-
   extraFetchParams = () => ({ content_type: [CT_ARTICLE] });
 
   render() {
