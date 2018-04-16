@@ -45,7 +45,7 @@ export class UnitContainer extends Component {
       return;
     }
 
-    const id = match.params.id;
+    const { id } = match.params;
     if (
       unit &&
       unit.id === id &&
