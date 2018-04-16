@@ -18,7 +18,7 @@ class Basic extends Component {
   static defaultProps = {
     title: null,
     description: null,
-    imageUrl: publicFile('seo/default.png'),
+    imageUrl: publicFile('seo/default2.png'),
     url: null,
     keywords: null,
   };
