@@ -45,20 +45,22 @@ export const renderUnit = (unit, t) => {
         <Link className="index__title" to={link}>
           {unit.name || NO_NAME}
         </Link>
-        {unit.description ?
-          <span className="index__description mobile-hidden">
-            <span>{unit.description}</span>
-          </span>
-          : null
+        {
+          unit.description ?
+            <span className="index__description mobile-hidden">
+              {unit.description}
+            </span>
+            : null
         }
-        {relatedItems.length > 0 ?
-          <List horizontal divided link className="index__collections" size="tiny">
-            <List.Item>
-              <List.Header>{t('lectures.list.item_from')}</List.Header>
-            </List.Item>
-            {relatedItems}
-          </List>
-          : null
+        {
+          relatedItems.length > 0 ?
+            <List horizontal divided link className="index__collections" size="tiny">
+              <List.Item>
+                <List.Header>{t('lectures.list.item_from')}</List.Header>
+              </List.Item>
+              {relatedItems}
+            </List>
+            : null
         }
       </Table.Cell>
     </Table.Row>
