@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 
-import { isEmpty } from '../../../helpers/utils';
+import { isEmpty, publicFile } from '../../../helpers/utils';
 import Image from './Image';
 
 class Basic extends Component {
@@ -18,8 +18,7 @@ class Basic extends Component {
   static defaultProps = {
     title: null,
     description: null,
-    // TODO (orin): we should not use a const path.
-    imageUrl: 'https://archive.kbb1.com/logo_temp.png',
+    imageUrl: publicFile('seo/default.png'),
     url: null,
     keywords: null,
   };
