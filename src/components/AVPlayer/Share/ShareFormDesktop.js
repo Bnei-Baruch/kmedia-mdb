@@ -21,50 +21,52 @@ class ShareFormDesktop extends BaseShareForm {
     const { start, end, url } = this.state;
 
     return (
-      <div className="mediaplayer__onscreen-share-form">
+      <div className="mediaplayer__onscreen-share">
         <Button
-          compact
+          className="mediaplayer__onscreen-share-back"
           content={t('player.buttons.edit-back')}
-          color="grey"
+          primary
           icon="chevron left"
           onClick={onExit}
         />
         <ShareBar url={url} t={t} buttonSize="medium" />
-        <Message content={url} size="mini" style={{ textAlign: 'left' }} />
-        <Form size="mini">
-          <Form.Group unstackable widths={2}>
-            <Form.Input
-              value={start ? this.mlsToStrColon(start) : ''}
-              onClick={this.setStart}
-              action={{
-                content: t('player.buttons.start-position'),
-                onClick: this.setStart,
-                icon: 'hourglass start',
-                color: 'blue',
-                size: 'mini',
-                compact: true,
-              }}
-              input={{ readOnly: true }}
-              actionPosition="left"
-              placeholder={t('player.buttons.click-to-set')}
-            />
-            <Form.Input
-              value={end ? this.mlsToStrColon(end) : ''}
-              onClick={this.setEnd}
-              action={{
-                content: t('player.buttons.end-position'),
-                onClick: this.setEnd,
-                icon: 'hourglass end',
-                color: 'blue',
-                size: 'mini',
-                compact: true,
-              }}
-              input={{ readOnly: true }}
-              actionPosition="left"
-              placeholder={t('player.buttons.click-to-set')}
-            />
-          </Form.Group>
-        </Form>
+        <div className="mediaplayer__onscreen-share-form">
+          <Message content={url} size="mini" />
+          <Form size="mini">
+            <Form.Group widths='equal'>
+              <Form.Input
+                value={start ? this.mlsToStrColon(start) : ''}
+                onClick={this.setStart}
+                action={{
+                  content: t('player.buttons.start-position'),
+                  onClick: this.setStart,
+                  icon: 'hourglass start',
+                  color: 'blue',
+                  size: 'mini',
+                  compact: true,
+                }}
+                input={{ readOnly: true }}
+                actionPosition="left"
+                placeholder={t('player.buttons.click-to-set')}
+              />
+              <Form.Input
+                value={end ? this.mlsToStrColon(end) : ''}
+                onClick={this.setEnd}
+                action={{
+                  content: t('player.buttons.end-position'),
+                  onClick: this.setEnd,
+                  icon: 'hourglass end',
+                  color: 'blue',
+                  size: 'mini',
+                  compact: true,
+                }}
+                input={{ readOnly: true }}
+                actionPosition="left"
+                placeholder={t('player.buttons.click-to-set')}
+              />
+            </Form.Group>
+          </Form>
+        </div>
       </div>
     );
   }
