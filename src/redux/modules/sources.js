@@ -80,7 +80,7 @@ const initialState = {
   },
 };
 
-const NotToSort = [BS_SHAMATI, BS_IGROT, BS_TAAS, RB_IGROT, MR_TORA, RH_ZOHAR];
+const NotToSort   = [BS_SHAMATI, BS_IGROT, BS_TAAS, RB_IGROT, MR_TORA, RH_ZOHAR];
 const NotToFilter = [BS_TAAS];
 
 const sortTree = (root) => {
@@ -102,10 +102,9 @@ const sortSources = (items) => {
       // The second level's id is the one that is used to distinguish
       // between sortable and not sortable sources
       const shouldSort = NotToSort.findIndex(a => a === c.id);
-      if (shouldSort !== -1) {
-        return;
+      if (shouldSort === -1) {
+        sortTree(c);
       }
-      sortTree(c);
     });
   });
 };
@@ -197,11 +196,11 @@ export const reducer = handleActions({
   }),
 
   [FETCH_INDEX]: (state, action) => ({
-    ...state,
-    indexById: {
-      ...state.indexById,
-      [action.payload]: { wip: true },
-    }
+      ...state,
+      indexById: {
+        ...state.indexById,
+        [action.payload]: { wip: true },
+      }
   }),
 
   [FETCH_INDEX_SUCCESS]: (state, action) => {

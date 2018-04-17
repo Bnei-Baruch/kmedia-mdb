@@ -51,14 +51,12 @@ class Kabbalist extends Component {
     return (
       <Table.Row verticalAlign="top">
         <Table.Cell collapsing width={2}>
-          {portrait ? <Image src={portrait} /> : null}
+          {portrait ? <Image src={portrait} alt={fullName} /> : null}
         </Table.Cell>
         <Table.Cell>
           <div className={classnames({ sources__list: true, 'sources__list--image': !!portrait })}>
             <Header size="small">
-              {
-                kabbalist ? <a href={`/persons/${kabbalist}-${language}.html`} alt={fullName}>{displayName}</a> : displayName
-              }
+              {kabbalist ? <a href={`/assets/persons/${kabbalist}-${language}.html`} title={fullName}>{displayName}</a> : displayName}
             </Header>
             <div>
               <List bulleted>
