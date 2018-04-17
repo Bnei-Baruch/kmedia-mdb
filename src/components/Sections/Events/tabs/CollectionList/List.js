@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { Table } from 'semantic-ui-react';
 
-import { DATE_FORMAT, NO_NAME } from '../../../../../helpers/consts';
+import { NO_NAME } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/utils';
 import { fromToLocalized } from '../../../../../helpers/date';
 import * as shapes from '../../../../shapes';
@@ -21,10 +20,7 @@ class EventsList extends PureComponent {
   };
 
   renderCollection = (collection) => {
-    const localDate = fromToLocalized(
-      moment.utc(collection.start_date, DATE_FORMAT),
-      moment.utc(collection.end_date, DATE_FORMAT)
-    );
+    const localDate = fromToLocalized(collection.start_date, collection.end_date);
 
     return (
       <Table.Row className="no-thumbnail" verticalAlign="top" key={collection.id}>

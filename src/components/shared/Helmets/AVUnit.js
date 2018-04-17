@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 
 import { getVideoRes } from '../../../helpers/consts';
-import { createDate } from '../../../helpers/date';
 import { isEmpty, physicalFile } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import Basic from './Basic';
@@ -40,7 +40,7 @@ class AVUnit extends Component {
       }
     }
 
-    const videoDate = createDate(unit.film_date);
+    const videoDate = moment.utc(unit.film_date).toDate();
 
     // Todo: secure Url ?
     const videoFiles = unit.files

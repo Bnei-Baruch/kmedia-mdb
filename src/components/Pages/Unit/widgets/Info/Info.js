@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../../helpers/consts';
-import { createDate } from '../../../../../helpers/date';
 import { canonicalLink, intersperse, tracePath } from '../../../../../helpers/utils';
 import { stringify as urlSearchStringify } from '../../../../../helpers/url';
 import { selectors as sourcesSelectors } from '../../../../../redux/modules/sources';
@@ -100,7 +99,7 @@ class Info extends Component {
         case CT_DAILY_LESSON:
         case CT_SPECIAL_LESSON: {
           const ct = t(`constants.content-types.${CT_DAILY_LESSON}`);
-          const fd = t('values.date', { date: createDate(x.film_date) });
+          const fd = t('values.date', { date: x.film_date });
           display  = `${ct} ${fd}`;
           break;
         }
@@ -116,7 +115,7 @@ class Info extends Component {
       <div className="unit-info">
         <Header as="h1">
           <small className="text grey unit-info__film-date">
-            {t('values.date', { date: createDate(filmDate) })}
+            {t('values.date', { date: filmDate })}
           </small>
           <br />
           <span className="unit-info__name">{name}</span>
