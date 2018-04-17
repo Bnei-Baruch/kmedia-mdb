@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_FRIENDS_GATHERING, CT_MEAL, NO_NAME } from '../../../../../helpers/consts';
+import { createDate } from '../../../../../helpers/date';
 import { sectionThumbnailFallback } from '../../../../../helpers/images';
 import { canonicalLink } from '../../../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../../../helpers/mdb';
@@ -24,7 +25,7 @@ const renderUnit = (unit, t) => {
 
   let filmDate = '';
   if (unit.film_date) {
-    filmDate = t('values.date', { date: new Date(unit.film_date) });
+    filmDate = t('values.date', { date: createDate(unit.film_date) });
   }
 
   const link = canonicalLink(unit);
@@ -57,7 +58,6 @@ const renderUnit = (unit, t) => {
 };
 
 class Container extends Component {
-
   static propTypes = {
     tab: PropTypes.string.isRequired,
   };

@@ -1,23 +1,33 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import { isEmpty } from '../../../helpers/utils';
+import { getVideoRes } from '../../../helpers/consts';
+import { createDate } from '../../../helpers/date';
+import { isEmpty, physicalFile } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import Basic from './Basic';
 import Image from './Image';
+import Video from './Video';
 
 class AVUnit extends Component {
   static propTypes = {
     unit: shapes.ContentUnit,
+    language: PropTypes.string
   };
 
   static defaultProps = {
     unit: undefined,
+    language: undefined,
   };
 
   render() {
-    const { unit } = this.props;
+    const { unit, language } = this.props;
 
-    if (!unit) {
+    if (!unit || !unit.files) {
+      return null;
+    }
+
+    if (!language) {
       return null;
     }
 
@@ -30,10 +40,22 @@ class AVUnit extends Component {
       }
     }
 
+    const videoDate = createDate(unit.film_date);
+
+    // Todo: secure Url ?
+    const videoFiles = unit.files
+      .filter(file => (file.type === 'video' && file.language === language))
+      .map(file => ({
+        ...file,
+        ...getVideoRes(file.video_size, videoDate),
+        url: physicalFile(file, true)
+      }));
+
     return (
       <div>
         <Basic title={unit.name} description={description} />
         <Image unitOrUrl={unit} />
+        {videoFiles.map(file => <Video key={file.id} releaseDate={unit.film_date} {...file} />)}
 
         {/* // /!*TODO: add Helmets.Basic:url ? *!/ */}
         {/* // /!*TODO: add tags from unit (tags=unit.tags) ? *!/ */}

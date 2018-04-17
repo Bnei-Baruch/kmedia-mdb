@@ -94,6 +94,9 @@ class BaseShareForm extends React.Component {
       q.mediaType = item.mediaType;
     }
 
+    // Remove the currentTime param from the share url
+    q.currentTime = null;
+
     return `${shareUrl}?${stringify(q)}`;
   }
 

@@ -4,9 +4,10 @@ import { bindActionCreators } from 'redux';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_VIDEO_PROGRAM_CHAPTER, NO_NAME } from '../../../helpers/consts';
+import { createDate } from '../../../helpers/date';
 import { sectionThumbnailFallback } from '../../../helpers/images';
-import { canonicalLink } from '../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
+import { canonicalLink } from '../../../helpers/utils';
 import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
 import {
   mapDispatch as baseMapDispatch,
@@ -36,7 +37,7 @@ export const renderUnit = (unit, t) => {
 
   let filmDate = '';
   if (unit.film_date) {
-    filmDate = t('values.date', { date: new Date(unit.film_date) });
+    filmDate = t('values.date', { date: createDate(unit.film_date) });
   }
 
   const link = canonicalLink(unit);
@@ -111,10 +112,9 @@ function mapDispatch(dispatch) {
 const MyUnitList = wrap(MyUnitListContainer, mapState, mapDispatch);
 
 class ProgramsList extends Component {
-
-  extraFetchParams = () => {
-    return { content_type: [CT_VIDEO_PROGRAM_CHAPTER] };
-  };
+  extraFetchParams = () => (
+    { content_type: [CT_VIDEO_PROGRAM_CHAPTER] }
+  );
 
   render() {
     return (

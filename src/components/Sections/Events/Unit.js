@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Header, Item } from 'semantic-ui-react';
 
+import { createDate } from '../../../helpers/date';
 import { canonicalLink, formatDuration, neighborIndices } from '../../../helpers/utils';
 import { sectionThumbnailFallback } from '../../../helpers/images';
 import Link from '../../Language/MultiLanguageLink';
@@ -44,7 +45,7 @@ class MySameCollectionWidget extends SameCollectionWidget {
                 <Item.Content verticalAlign="top">
                   <Header as="h5">
                     <small className="text grey uppercase recommended-same-collection__item-title">
-                      {t('values.date', { date: new Date(part.film_date) })}
+                      {t('values.date', { date: createDate(part.film_date) })}
                     </small>
                     <br />
                     <span className="recommended-same-collection__item-name">
