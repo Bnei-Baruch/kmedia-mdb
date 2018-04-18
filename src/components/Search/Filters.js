@@ -43,7 +43,7 @@ class SearchResultsFilters extends Component {
       value: o,
     }));
 
-    const rightItemsDisabled =
+    const sortingDisabled =
      selectedFilters.some(i => i.name == "sections-filter" && i.values && i.values.indexOf("filters.sections-filter.sources") > -1);
     
     return (
@@ -57,7 +57,7 @@ class SearchResultsFilters extends Component {
               {t('search.sortby')}:
             </span>,
           <Dropdown
-            disabled={rightItemsDisabled}
+            disabled={sortingDisabled}
             key="dropdown"
             item
             compact
