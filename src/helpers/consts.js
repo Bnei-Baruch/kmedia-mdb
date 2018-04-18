@@ -237,6 +237,22 @@ export const VS_HD      = 'HD';
 export const VS_FHD     = 'FHD';
 export const VS_DEFAULT = VS_NHD;
 
+export const getVideoRes = (vsType, date) => {
+  // date: Date object
+  // before 2014 return 360p
+  if (date.getFullYear() < 2014) {
+    return { width: 480, height: 360 };
+  }
+  if (vsType === VS_NHD) {
+    return { width: 640, height: 360 };
+  }
+  if (vsType === VS_HD) {
+    return { width: 1280, height: 720 };
+  }
+  // fHD
+  return { width: 1920, height: 980 };
+};
+
 export const VS_NAMES = {
   [VS_NHD]: '360p',
   [VS_HD]: '720p',

@@ -50,10 +50,11 @@ class SearchResults extends Component {
   click = (mdb_uid, index, type, rank, searchId) => {
     const { click } = this.props;
     click(mdb_uid, index, type, rank, searchId);
-  }
+  };
 
   renderContentUnit = (cu, hit, rank) => {
     const { t, location, results: { searchId } } = this.props;
+
     const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
 
     const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || cu.name;
@@ -81,7 +82,7 @@ class SearchResults extends Component {
 
     let filmDate = '';
     if (cu.film_date) {
-      filmDate = t('values.date', { date: new Date(cu.film_date) });
+      filmDate = t('values.date', { date: cu.film_date });
     }
 
     return (
@@ -120,7 +121,7 @@ class SearchResults extends Component {
   };
 
   renderCollection = (c, hit, rank) => {
-    const { t, location, results: { searchId } } = this.props;
+    const { t, location, results: { searchId } }                                                 = this.props;
     const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
 
     const name        = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || c.name;
@@ -139,7 +140,7 @@ class SearchResults extends Component {
 
     let startDate = '';
     if (c.start_date) {
-      startDate = t('values.date', { date: new Date(c.start_date) });
+      startDate = t('values.date', { date: c.start_date });
     }
 
     return (

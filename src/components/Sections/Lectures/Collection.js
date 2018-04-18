@@ -11,7 +11,7 @@ import Collection from '../../Pages/Collection/Container';
 export const renderUnit = (unit, t) => {
   let filmDate = '';
   if (unit.film_date) {
-    filmDate = t('values.date', { date: new Date(unit.film_date) });
+    filmDate = t('values.date', { date: unit.film_date });
   }
 
   const link = canonicalLink(unit);
@@ -34,7 +34,6 @@ export const renderUnit = (unit, t) => {
 };
 
 class LectureCollection extends Component {
-
   render() {
     return <Collection namespace="lectures-collection" renderUnit={renderUnit} />;
   }
