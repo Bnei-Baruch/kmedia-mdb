@@ -146,8 +146,9 @@ export const searchPage = (store, match) => {
       const q        = searchSelectors.getQuery(state.search);
       const page     = searchSelectors.getPageNo(state.search);
       const pageSize = settingsSelectors.getPageSize(state.settings);
+      const deb      = searchSelectors.getDeb(state.search);
 
-      store.dispatch(searchActions.search(q, page, pageSize));
+      store.dispatch(searchActions.search(q, page, pageSize, deb));
     });
 };
 

@@ -4,7 +4,7 @@ import throttle from 'lodash/throttle';
 import noop from 'lodash/noop';
 import { translate } from 'react-i18next';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
-import { Container } from 'semantic-ui-react';
+import { Container, } from 'semantic-ui-react';
 
 import { BS_TAAS_PARTS } from '../../../helpers/consts';
 import { ErrorSplash, LoadingSplash, } from '../../shared/Splash/Splash';
@@ -84,7 +84,7 @@ class PDF extends Component {
 
   render() {
     const { numPages, pageNumber, width, } = this.state;
-    const { startsFrom, t, }               = this.props;
+    const { startsFrom, pdfFile, t, }      = this.props;
 
     return (
       <div id="pdfWrapper" style={{ marginTop: '10px' }}>
@@ -98,7 +98,7 @@ class PDF extends Component {
         </Container>
         <div style={{ direction: 'ltr' }}>
           <Document
-            file={this.props.pdfFile}
+            file={pdfFile}
             onLoadSuccess={this.onDocumentLoadSuccess}
             error={<ErrorSplash text={t('messages.server-error')} subtext={t('messages.failed-to-load-pdf-file')} />}
             loading={<LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />}

@@ -142,6 +142,14 @@ export class OmniBox extends Component {
     if (e.keyCode === 13 && !this.props.query.trim()) {
       this.doSearch();
     }
+    if (e.keyCode === 27) { // Esc
+      this.handleFilterClear();
+    }
+  };
+
+  handleFilterClear = () => {
+    this.props.updateQuery('');
+    this.closeSuggestions();
   };
 
   handleSearchChange = (e, data) => {

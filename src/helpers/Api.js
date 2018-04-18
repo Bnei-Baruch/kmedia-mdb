@@ -9,9 +9,9 @@ export const assetUrl     = path => `${ASSETS_BACKEND}${path}`;
 export const imaginaryUrl = path => `${IMAGINARY_URL}${path}`;
 
 export class Requests {
-  static get          = path => axios(backendUrl(path));
-  static getAsset     = path => axios(assetUrl(path));
-  static getImaginary = path => axios(imaginaryUrl(path));
+  static get           = path => axios(backendUrl(path));
+  static getAsset      = path => axios(assetUrl(path));
+  static getImaginary  = path => axios(imaginaryUrl(path));
 
   static makeParams = params =>
     `${Object.entries(params)
@@ -21,10 +21,10 @@ export class Requests {
         const value = pair[1];
 
         if (Array.isArray(value)) {
-          return value.map(val => `${key}=${val}`).join('&');
+          return value.map(val => `${key}=${Requests.encode(val)}`).join('&');
         }
 
-        return `${key}=${value}`;
+        return `${key}=${Requests.encode(value)}`;
       }).join('&')}`;
 
   static encode = encodeURIComponent;
@@ -55,8 +55,11 @@ class Api {
   static autocomplete = ({ q, language }) =>
     Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 
-  static search = ({ q, language, pageNo: page_no, pageSize: page_size, sortBy: sort_by, deb }) =>
-    Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb })}`);
+  static search = ({ q, language, pageNo: page_no, pageSize: page_size, sortBy: sort_by, deb, searchId: search_id }) =>
+    Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb, search_id })}`);
+
+  static click = ({ mdbUid: mdb_uid, index, type, rank, searchId: search_id }) =>
+    Requests.get(`click?${Requests.makeParams({ mdb_uid, index, type, rank, search_id })}`);
 
   static sourceIdx = ({ id }) =>
     Requests.getAsset(`sources/${id}/index.json`);
