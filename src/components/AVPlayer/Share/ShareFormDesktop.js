@@ -33,7 +33,7 @@ class ShareFormDesktop extends BaseShareForm {
         <div className="mediaplayer__onscreen-share-form">
           <Message content={url} size="mini" />
           <Form size="mini">
-            <Form.Group widths='equal'>
+            <Form.Group widths="equal">
               <Form.Input
                 value={start ? this.mlsToStrColon(start) : ''}
                 onClick={this.setStart}
