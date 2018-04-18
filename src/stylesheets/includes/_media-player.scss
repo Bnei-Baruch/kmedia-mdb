@@ -63,6 +63,7 @@ $player-color: $black;
       min-width: 40px;
       padding: 0 .5rem;
       text-transform: lowercase;
+      cursor: pointer;
       &:hover {background: rgba($white, .2);}
       &:focus {outline: none;}
       i {margin: 0 !important;}
@@ -141,6 +142,7 @@ $player-color: $black;
       height: 8em;
       padding: 0;
       width: 8em;
+      cursor: pointer;
 
       &:focus {
         outline: none;
