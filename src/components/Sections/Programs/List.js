@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_VIDEO_PROGRAM_CHAPTER, NO_NAME } from '../../../helpers/consts';
-import { createDate } from '../../../helpers/date';
 import { sectionThumbnailFallback } from '../../../helpers/images';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { canonicalLink } from '../../../helpers/utils';
@@ -37,7 +36,7 @@ export const renderUnit = (unit, t) => {
 
   let filmDate = '';
   if (unit.film_date) {
-    filmDate = t('values.date', { date: createDate(unit.film_date) });
+    filmDate = t('values.date', { date: unit.film_date });
   }
 
   const link = canonicalLink(unit);

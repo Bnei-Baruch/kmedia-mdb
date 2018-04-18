@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
-import { createDate } from '../../../helpers/date';
 import { sectionThumbnailFallback } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
@@ -12,7 +11,7 @@ import Collection from '../../Pages/Collection/Container';
 export const renderUnit = (unit, t) => {
   let filmDate = '';
   if (unit.film_date) {
-    filmDate = t('values.date', { date: createDate(unit.film_date) });
+    filmDate = t('values.date', { date: unit.film_date });
   }
 
   const link = canonicalLink(unit);
