@@ -9,7 +9,6 @@ import { Button, Divider, Dropdown, Grid, Header, Input, Segment } from 'semanti
 import 'react-day-picker/lib/style.css';
 
 import { DATE_FORMAT, LANG_UKRAINIAN, RTL_LANGUAGES } from '../../../helpers/consts';
-import { createDate } from '../../../helpers/date';
 import connectFilter from './connectFilter';
 
 // TODO (yaniv -> oleg): need indication for user when clicking on a bad date (after today) or when typing bad dates
@@ -18,7 +17,7 @@ import connectFilter from './connectFilter';
 const DATE_DISPLAY_FORMAT = 'l';
 
 const now = () =>
-  moment(createDate())
+  moment.utc()
     .hours(12)
     .minutes(0)
     .seconds(0)
@@ -45,51 +44,56 @@ const datePresets = [
 
 const presetToRange = {
   [TODAY]: () => {
-    const today = moment(createDate()).toDate();
+    const today = moment.utc().toDate();
     return ({ from: today, to: today });
   },
   [YESTERDAY]: () => {
-    const yesterday = moment(createDate()).subtract(1, 'days').toDate();
+    const yesterday = moment.utc().subtract(1, 'days').toDate();
     return ({ from: yesterday, to: yesterday });
   },
   [LAST_7_DAYS]: () => ({
-    from: moment().subtract(6, 'days').toDate(),
-    to: moment(createDate()).toDate()
+    from: moment.utc().subtract(6, 'days').toDate(),
+    to: moment.utc().toDate()
   }),
   [LAST_30_DAYS]: () => ({
-    from: moment().subtract(30, 'days').toDate(),
-    to: moment(createDate()).toDate()
+    from: moment.utc().subtract(30, 'days').toDate(),
+    to: moment.utc().toDate()
   }),
   [LAST_MONTH]: () => {
-    const todayMinusMonthMoment = moment(createDate()).subtract(1, 'months');
+    const todayMinusMonthMoment = moment.utc().subtract(1, 'months');
     return ({
       from: todayMinusMonthMoment.startOf('month').toDate(),
       to: todayMinusMonthMoment.endOf('month').toDate()
     });
   },
   [THIS_MONTH]: () => ({
-    from: moment().startOf('month').toDate(),
-    to: moment(createDate()).toDate()
+    from: moment.utc().startOf('month').toDate(),
+    to: moment.utc().toDate()
   })
 };
 
 const rangeToPreset = (from, to) => {
-  if (moment(from, 'day').isSame(to, 'day')) {
-    if (moment(to).isSame(now(), 'day')) {
+  const mFrom = moment.utc(from);
+  const mTo   = moment.utc(to);
+  const mNow = moment.utc();
+
+  if (mFrom.isSame(mTo, 'day')) {
+    if (mTo.isSame(now(), 'day')) {
       return TODAY;
-    } else if (moment(to).isSame(moment().subtract(1, 'days'), 'days')) {
+    } else if (mTo.isSame(mNow.subtract(1, 'days'), 'days')) {
       return YESTERDAY;
     }
-  } else if (moment(to).subtract(6, 'days').isSame(from, 'day')) {
+  } else if (mTo.subtract(6, 'days').isSame(mFrom, 'day')) {
     return LAST_7_DAYS;
-  } else if (moment(to).subtract(30, 'days').isSame(from, 'day') && moment(to).isSame(moment(), 'day')) {
+  } else if (mTo.subtract(30, 'days').isSame(mFrom, 'day') && mTo.isSame(mNow, 'day')) {
     return LAST_30_DAYS;
-  } else if (moment().startOf('month').isSame(from, 'day') && moment().isSame(to, 'day')) {
+  } else if (mNow.startOf('month').isSame(mFrom, 'day') && mNow.isSame(to, 'day')) {
     return THIS_MONTH;
   }
 
-  const todayMinusMonthMoment = moment().subtract(1, 'months');
-  if (todayMinusMonthMoment.startOf('month').isSame(from, 'day') && todayMinusMonthMoment.endOf('month').isSame(to, 'day')) {
+  const todayMinusMonthMoment = mNow.subtract(1, 'months');
+  if (todayMinusMonthMoment.startOf('month').isSame(mFrom, 'day') &&
+    todayMinusMonthMoment.endOf('month').isSame(to, 'day')) {
     return LAST_MONTH;
   }
 
@@ -97,8 +101,8 @@ const rangeToPreset = (from, to) => {
 };
 
 const isValidDateRange = (fromValue, toValue) => {
-  const fromMoment = moment(fromValue, DATE_DISPLAY_FORMAT, true);
-  const toMoment   = moment(toValue, DATE_DISPLAY_FORMAT, true);
+  const fromMoment = moment.utc(fromValue, DATE_DISPLAY_FORMAT, true);
+  const toMoment   = moment.utc(toValue, DATE_DISPLAY_FORMAT, true);
 
   return fromMoment.isValid() &&
     toMoment.isValid() &&
@@ -107,7 +111,6 @@ const isValidDateRange = (fromValue, toValue) => {
 };
 
 class DateFilter extends Component {
-
   static propTypes = {
     value: PropTypes.shape({
       from: PropTypes.objectOf(Date),
@@ -163,14 +166,14 @@ class DateFilter extends Component {
       this.showMonth(datePreset, range.from, range.to);
     }
 
-    const momentFrom = moment(new Date(range.from));
-    const momentTo   = moment(createDate(range.to));
+    const mFrom = moment.utc(range.from);
+    const mTo   = moment.utc(range.to);
 
     this.setState({
       ...range,
       datePreset,
-      fromInputValue: fromInputValue || (momentFrom.isValid() ? momentFrom.format(DATE_DISPLAY_FORMAT) : ''),
-      toInputValue: toInputValue || (momentTo.isValid() ? momentTo.format(DATE_DISPLAY_FORMAT) : '')
+      fromInputValue: fromInputValue || (mFrom.isValid() ? mFrom.format(DATE_DISPLAY_FORMAT) : ''),
+      toInputValue: toInputValue || (mTo.isValid() ? mTo.format(DATE_DISPLAY_FORMAT) : '')
     });
   };
 
@@ -181,8 +184,8 @@ class DateFilter extends Component {
       from,
       to,
       datePreset: datePreset || rangeToPreset(from, to),
-      fromInputValue: moment(from, DATE_FORMAT).format(DATE_DISPLAY_FORMAT),
-      toInputValue: moment(to, DATE_FORMAT).format(DATE_DISPLAY_FORMAT)
+      fromInputValue: moment.utc(from, DATE_FORMAT).format(DATE_DISPLAY_FORMAT),
+      toInputValue: moment.utc(to, DATE_FORMAT).format(DATE_DISPLAY_FORMAT)
     });
   };
 
@@ -195,21 +198,21 @@ class DateFilter extends Component {
     switch (preset) {
     case TODAY:
     case YESTERDAY:
-      dateToShow = moment(from).subtract(1, 'month').toDate();
+      dateToShow = moment.utc(from).subtract(1, 'month').toDate();
       break;
     case LAST_7_DAYS:
     case LAST_30_DAYS:
-      if (moment(from).month() < moment(to).month()) {
+      if (moment.utc(from).month() < moment.utc(to).month()) {
         dateToShow = from;
       } else {
-        dateToShow = moment(from).subtract(1, 'month').toDate();
+        dateToShow = moment.utc(from).subtract(1, 'month').toDate();
       }
       break;
     case LAST_MONTH:
-      dateToShow = moment(now()).subtract(2, 'month').toDate();
+      dateToShow = moment.utc(now()).subtract(2, 'month').toDate();
       break;
     case THIS_MONTH:
-      dateToShow = moment(now()).subtract(1, 'month').toDate();
+      dateToShow = moment.utc(now()).subtract(1, 'month').toDate();
       break;
     }
 
@@ -223,7 +226,7 @@ class DateFilter extends Component {
   };
 
   handleDayClick = (day) => {
-    if (moment(day).isAfter(now())) {
+    if (moment.utc(day).isAfter(now())) {
       return;
     }
 
@@ -236,15 +239,15 @@ class DateFilter extends Component {
   handleDatePresetsChange = (event, data) => this.setRange(data.value);
 
   handleFromInputChange = (event) => {
-    const { value }       = event.target;
-    const momentValue = moment(value, DATE_DISPLAY_FORMAT, true);
+    const { value }   = event.target;
+    const mValue = moment.utc(value, DATE_DISPLAY_FORMAT, true);
 
-    const isValid = momentValue.isValid();
+    const isValid = mValue.isValid();
     if (isValid && isValidDateRange(value, this.state.toInputValue)) {
       this.setRange(
         CUSTOM_RANGE,
-        momentValue.toDate(),
-        moment(this.state.toInputValue, DATE_DISPLAY_FORMAT, true).toDate(),
+        mValue.toDate(),
+        moment.utc(this.state.toInputValue, DATE_DISPLAY_FORMAT, true).toDate(),
         value,
         this.state.toInputValue
       );
@@ -256,15 +259,15 @@ class DateFilter extends Component {
   };
 
   handleToInputChange = (event) => {
-    const { value }       = event.target;
-    const momentValue = moment(value, DATE_DISPLAY_FORMAT, true);
+    const { value }   = event.target;
+    const mValue = moment.utc(value, DATE_DISPLAY_FORMAT, true);
 
-    const isValid = momentValue.isValid();
+    const isValid = mValue.isValid();
     if (isValid && isValidDateRange(this.state.fromInputValue, value)) {
       this.setRange(
         CUSTOM_RANGE,
-        moment(this.state.fromInputValue, DATE_DISPLAY_FORMAT, true).toDate(),
-        momentValue.toDate(),
+        moment.utc(this.state.fromInputValue, DATE_DISPLAY_FORMAT, true).toDate(),
+        mValue.toDate(),
         this.state.fromInputValue,
         value
       );
@@ -295,7 +298,7 @@ class DateFilter extends Component {
               <DayPicker
                 numberOfMonths={2}
                 selectedDays={{ from, to }}
-                disabledDays={{ after: createDate() }}
+                disabledDays={{ after: now() }}
                 toMonth={now()}
                 localeUtils={LocaleUtils}
                 locale={language === LANG_UKRAINIAN ? 'uk' : language}

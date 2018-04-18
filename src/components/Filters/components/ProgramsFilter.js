@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import noop from 'lodash/noop';
 import { Button, Card, Divider, Grid, Header, List, Menu, Segment } from 'semantic-ui-react';
 
-import { createDate } from '../../../helpers/date';
 import { canonicalLink, isEmpty } from '../../../helpers/utils';
 import { selectors } from '../../../redux/modules/programs';
 import { selectors as mdbSelectors } from '../../../redux/modules/mdb';
@@ -223,7 +222,7 @@ class ProgramsFilter extends Component {
                     to={canonicalLink(collection)}
                     language={language}
                     header={collection.name}
-                    meta={`${t('filters.programs-filter.last-updated')}: ${t('values.date', { date: createDate(lastUpdate) })}`}
+                    meta={`${t('filters.programs-filter.last-updated')}: ${t('values.date', { date: lastUpdate })}`}
                   />
                 </Grid.Column>
               );

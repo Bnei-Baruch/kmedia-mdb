@@ -1,7 +1,6 @@
 import React from 'react';
 import { Container, Grid, Header, Item } from 'semantic-ui-react';
 
-import { createDate } from '../../../helpers/date';
 import { canonicalLink, neighborIndices, strCmp } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 import Helmets from '../../shared/Helmets';
@@ -44,7 +43,7 @@ class MySameCollectionWidget extends SameCollectionWidget {
                 <Item.Content verticalAlign="top">
                   <Header as="h5">
                     <small className="text grey uppercase recommended-same-collection__item-title">
-                      {t('values.date', { date: createDate(part.film_date) })}
+                      {t('values.date', { date: part.film_date })}
                     </small>
                     <br />
                     <span className="recommended-same-collection__item-name">
@@ -111,7 +110,7 @@ class MyUnitPage extends UnitPage {
                   </Header.Content>
                 </Header>
                 <Header as="h4" color="grey">
-                  {t('values.date', { date: createDate(unit.film_date) })}
+                  {t('values.date', { date: unit.film_date })}
                 </Header>
               </Grid.Column>
             </Grid.Row>

@@ -22,12 +22,10 @@ export const options = {
 
   interpolation: {
     escapeValue: false, // not needed for react!!
-    format: (value, format) => {
-      if (value instanceof Date) {
-        return moment(value).format(format);
-      }
-      return value;
-    },
+    format: (value, format) => (
+      // Our beloved backend is using UTC so we do it here as well
+      moment.utc(value).format(format)
+    ),
   },
 };
 

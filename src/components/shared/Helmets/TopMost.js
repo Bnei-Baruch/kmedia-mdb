@@ -27,8 +27,6 @@ class TopMost extends Component {
           <meta property="og:type" content="website" />
           <meta property="og:site_name" content="Kabbalah Media" />
 
-          {/* TODO (orin): <link rel="canonical" href=""> */}
-
         </Helmet>
         <Locale {...this.props} />
         <Basic />

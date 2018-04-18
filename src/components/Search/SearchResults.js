@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Trans, translate } from 'react-i18next';
 import { Container, Divider, Label, Table } from 'semantic-ui-react';
 
-import { createDate } from '../../helpers/date';
 import { canonicalLink, formatDuration, isEmpty } from '../../helpers/utils';
 import { getQuery, isDebMode } from '../../helpers/url';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
@@ -55,6 +54,7 @@ class SearchResults extends Component {
 
   renderContentUnit = (cu, hit, rank) => {
     const { t, location, results: { searchId } } = this.props;
+
     const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
 
     const name        = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || cu.name;
@@ -82,7 +82,7 @@ class SearchResults extends Component {
 
     let filmDate = '';
     if (cu.film_date) {
-      filmDate = t('values.date', { date: createDate(cu.film_date) });
+      filmDate = t('values.date', { date: cu.film_date });
     }
 
     return (
@@ -121,7 +121,7 @@ class SearchResults extends Component {
   };
 
   renderCollection = (c, hit, rank) => {
-    const { t, location, results: { searchId } } = this.props;
+    const { t, location, results: { searchId } }                                                 = this.props;
     const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
 
     const name        = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || c.name;
@@ -140,7 +140,7 @@ class SearchResults extends Component {
 
     let startDate = '';
     if (c.start_date) {
-      startDate = t('values.date', { date: createDate(c.start_date) });
+      startDate = t('values.date', { date: c.start_date });
     }
 
     return (
