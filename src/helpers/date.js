@@ -1,22 +1,31 @@
+import moment from 'moment';
+
+import { DATE_FORMAT } from './consts';
+
 /**
  * Prints a localized from-to date string, i.e., [25-27 of August 2017], [25-27 Августа 2017], [25-27 לאוגוסט 2017]
- * @param {!moment} from
- * @param {!moment} to
+ * @param {moment | string} from
+ * @param {moment | string} to
  * @return {string}
  */
 export function fromToLocalized(from, to) {
-  const toStr = to.format('DD MMMM YYYY');
-  const SEPARATOR = ' - ';
-  if (from.year() !== to.year()) {
-    return from.format('DD MMMM YYYY') + SEPARATOR + toStr;
-  } else if (from.month() !== to.month()) {
-    return from.format('DD MMMM') + SEPARATOR + toStr;
-  } else if (from.date() !== to.date()) {
-    return from.format('DD') + SEPARATOR + toStr;
-  }
-  return toStr;
-}
+  const mFrom = moment.utc(from, DATE_FORMAT);
+  const mTo   = moment.utc(to, DATE_FORMAT);
 
+  const toStr     = mTo.format('DD MMMM YYYY');
+  const SEPARATOR = ' - ';
+
+  let fromFormat;
+  if (mFrom.year() !== mTo.year()) {
+    fromFormat = 'DD MMMM YYYY';
+  } else if (mFrom.month() !== mTo.month()) {
+    fromFormat = 'DD MMMM';
+  } else if (mFrom.date() !== mTo.date()) {
+    fromFormat = 'DD';
+  }
+
+  return fromFormat ? mFrom.format(fromFormat) + SEPARATOR + toStr : toStr;
+}
 
 /**
  * Compares two dates, returns true is both defined and are the same date.
@@ -29,5 +38,5 @@ export function sameDate(a, b) {
     return false;
   }
 
-  return a.getYear() === b.getYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 }

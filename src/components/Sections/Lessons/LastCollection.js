@@ -12,6 +12,7 @@ import * as shapes from '../../shapes';
 import Helmets from '../../shared/Helmets';
 import WipErr from '../../shared/WipErr/WipErr';
 import { PlaylistCollectionContainer } from '../../Pages/PlaylistCollection/Container';
+import { publicFile } from '../../../helpers/utils';
 
 class LastLessonCollection extends Component {
   static propTypes = {
@@ -66,11 +67,10 @@ class LastLessonCollection extends Component {
       shouldRenderHelmet: false,
     };
 
-    // TODO (orin): is this the right place for the helmet?
     return (
       <div>
         <Helmets.Basic title={t('lessons.last.text')} description={t('lessons.header.subtext')} />
-        {/* <Helmets.Image unitOrUrl="https://archive.kbb1.com/images/hp_lesson_temp.jpg" /> */}
+        <Helmets.Image unitOrUrl={publicFile('seo/last_lesson.jpg')} />
 
         <PlaylistCollectionContainer {...props} />
       </div>

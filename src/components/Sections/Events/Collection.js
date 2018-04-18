@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import moment from 'moment/moment';
 import { Header, Image, Menu, Ref } from 'semantic-ui-react';
 
-import { DATE_FORMAT, NO_NAME } from '../../../helpers/consts';
+import { NO_NAME } from '../../../helpers/consts';
 import { fromToLocalized } from '../../../helpers/date';
 import { formatDuration } from '../../../helpers/utils';
 import PlaylistCollection from '../../Pages/PlaylistCollection/Container';
@@ -10,7 +9,6 @@ import PlaylistWidget from '../../Pages/PlaylistCollection/widgets/Playlist/Play
 import logo from '../../../images/event_logo.png';
 
 class MyPlaylistWidget extends PlaylistWidget {
-
   handleSelectedRef = x => this.setState({ selectedRef: x });
 
   componentDidUpdate(prevProps, prevState) {
@@ -35,7 +33,7 @@ class MyPlaylistWidget extends PlaylistWidget {
       <Header inverted as="h2">
         <Image circular src={logo} floated="left" />{name}
         <Header.Subheader>
-          {fromToLocalized(moment.utc(start_date, DATE_FORMAT), moment.utc(end_date, DATE_FORMAT))}
+          {fromToLocalized(start_date, end_date)}
         </Header.Subheader>
       </Header>
     );
@@ -52,30 +50,29 @@ class MyPlaylistWidget extends PlaylistWidget {
         </Menu.Header>
         {
           items.map((item, index) => {
-              const { unit } = item;
+            const { unit } = item;
 
-              const mItem = (
-                <Menu.Item
-                  key={unit.id}
-                  name={`${offset + index}`}
-                  active={(offset + index) === selected}
-                  onClick={this.handleItemClick}
-                >
-                  {
-                    section === 'preparation' || section === 'appendices' ?
-                      <strong>{t('values.date', { date: new Date(unit.film_date) })} &nbsp;</strong> :
-                      null
-                  }
-                  {unit.name || NO_NAME} - {formatDuration(unit.duration)}
-                </Menu.Item>
-              );
+            const mItem = (
+              <Menu.Item
+                key={unit.id}
+                name={`${offset + index}`}
+                active={(offset + index) === selected}
+                onClick={this.handleItemClick}
+              >
+                {
+                  section === 'preparation' || section === 'appendices' ?
+                    <strong>{t('values.date', { date: unit.film_date })} &nbsp;</strong> :
+                    null
+                }
+                {unit.name || NO_NAME} - {formatDuration(unit.duration)}
+              </Menu.Item>
+            );
 
-              if ((offset + index) === selected) {
-                return <Ref innerRef={this.handleSelectedRef} key={unit.id}>{mItem}</Ref>;
-              }
-              return mItem;
+            if ((offset + index) === selected) {
+              return <Ref innerRef={this.handleSelectedRef} key={unit.id}>{mItem}</Ref>;
             }
-          )
+            return mItem;
+          })
         }
       </Menu.Item>
     );
@@ -86,13 +83,15 @@ class MyPlaylistWidget extends PlaylistWidget {
 
     return (
       <div
-        ref={c => this.playlistView = c}
+        ref={(c) => {
+          this.playlistView = c;
+        }}
         className="avbox__playlist-view"
       >
         <Menu vertical fluid size="small">
           {
             ['lessons', 'other_parts', 'preparation', 'appendices']
-              .map(x => {
+              .map((x) => {
                 const offsets = groups[x];
                 if (!offsets) {
                   return null;
