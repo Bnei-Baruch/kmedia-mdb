@@ -181,11 +181,20 @@ class SearchResults extends Component {
     const { t, location, sources }                                            = this.props;
     const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
 
-    const name =  this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || s.name;
-    const path = sources ? sources(mdbUid).slice(0,-1).map(n => n.name).join(', ') + ', ' : "";
-    
+    const name = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || s.name;
+    let path="", authors="";
+
+    if (sources) {
+        const sourcesArr = sources(mdbUid);
+        authors = this.snippetFromHighlight(highlight, ['authors', 'authors.analyzed'], parts => parts[0]);
+        if (authors){
+          // Remove author from path in order to replace with highlight value.
+          sourcesArr.pop();
+        }
+        path = sourcesArr.slice(0,-1).map(n => n.name).join(' > ') + ' >';
+    }
+
     const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
-    //const authors = this.snippetFromHighlight(highlight, ['authors', 'authors.analyzed'], parts => `...${parts.join('.....')}...`);
     const content  = this.snippetFromHighlight(highlight, ['content', 'content.analyzed'], parts => `...${parts.join('.....')}...`);
     const snippet     = (
       <div className="search__snippet">
@@ -217,7 +226,7 @@ class SearchResults extends Component {
         </Table.Cell>
         <Table.Cell>
           <Link className="search__link" to={canonicalLink({ id: mdbUid, content_type: 'SOURCE' })}>
-            {path}{name}
+            {authors}&nbsp;{path}&nbsp;{name}
           </Link>
           {snippet || null}
         </Table.Cell>
