@@ -56,7 +56,7 @@ class Kabbalist extends Component {
         <Table.Cell>
           <div className={classnames({ sources__list: true, 'sources__list--image': !!portrait })}>
             <Header size="small">
-              {kabbalist ? <a href={`/assets/persons/${kabbalist}-${language}.html`} title={fullName}>{displayName}</a> : displayName}
+              {kabbalist ? <NavLink to={`/persons/${kabbalist}-${language}.html`} title={fullName}>{displayName}</NavLink> : displayName}
             </Header>
             <div>
               <List bulleted>

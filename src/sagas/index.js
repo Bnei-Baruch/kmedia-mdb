@@ -13,7 +13,7 @@ import { sagas as settings } from './settings';
 import { sagas as search } from './search';
 import { sagas as assets } from './assets';
 import { sagas as home } from './home';
-import { sagas as staticFile } from './static';
+import { sagas as staticFile } from './staticFiles';
 
 const allSagas = [
   ...device,

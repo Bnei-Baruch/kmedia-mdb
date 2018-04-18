@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import { actions, types } from '../redux/modules/static';
+import { actions, types } from '../redux/modules/staticFiles';
 
 export function* fetchStatic(action) {
   try {

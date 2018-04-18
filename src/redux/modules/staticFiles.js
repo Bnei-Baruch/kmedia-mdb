@@ -61,10 +61,13 @@ export const reducer = handleActions({
     content: { data: action.payload, wip: false, err: null }
   }),
 
-  [FETCH_STATIC_FAILURE]: (state, action) => ({
-    ...state,
-    content: { wip: false, err: action.payload }
-  }),
+  [FETCH_STATIC_FAILURE]: (state, action) => {
+    console.log(FETCH_STATIC_FAILURE, action.payload);
+    return {
+      ...state,
+      content: { wip: false, err: action.payload }
+    };
+  },
 
 }, initialState);
 

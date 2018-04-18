@@ -183,10 +183,6 @@ class LibraryContainer extends Component {
     this.contentHeaderRef = ref;
   };
 
-  handleHeaderMenuRef = (ref) => {
-    this.headerMenuRef = ref;
-  };
-
   handleTocIsActive = () => {
     this.setState({ tocIsActive: !this.state.tocIsActive });
   };
