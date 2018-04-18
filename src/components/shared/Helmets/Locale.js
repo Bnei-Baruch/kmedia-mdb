@@ -20,8 +20,12 @@ class Locale extends Component {
     return (
       <Helmet>
         {<meta property="og:locale" content={LANGUAGE_TO_LOCALE[mainLang]} />}
-        {alternateLang.map(lang =>
-          <meta name="og:locale:alternate" content={LANGUAGE_TO_LOCALE[lang]} key={lang} />)}
+        {
+          alternateLang
+            .filter(x => x !== mainLang)
+            .map(lang =>
+              <meta name="og:locale:alternate" content={LANGUAGE_TO_LOCALE[lang]} key={lang} />)
+        }
         {/* Google use This */}
         {/* <link rel="alternate" hreflang="es" href="http://es.example.com/" /> */}
       </Helmet>

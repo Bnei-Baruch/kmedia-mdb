@@ -17,6 +17,10 @@ const app = express();
 
 const router = express.Router();
 
+router.use('^/health_check$', (req, res) => {
+  res.status(200).send({ status: 'ok' });
+});
+
 // root (/) should always serve our server rendered page
 router.use('^/$', handler);
 
