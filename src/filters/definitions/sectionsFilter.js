@@ -47,7 +47,7 @@ export const options = {
     collections_content_types: COLLECTION_PUBLICATIONS_TYPE,
   },
   'filters.sections-filter.sources': {
-    filter_section_sources: []
+    filter_section_sources: [],  // No meaning for value.
   },
 };
 

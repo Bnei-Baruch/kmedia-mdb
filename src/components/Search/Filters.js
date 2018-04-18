@@ -44,7 +44,7 @@ class SearchResultsFilters extends Component {
     }));
 
     const sortingDisabled =
-     selectedFilters.some(i => i.name == "sections-filter" && i.values && i.values.indexOf("filters.sections-filter.sources") > -1);
+     selectedFilters.some(f => f.name == "sections-filter" && f.values && f.values.includes("filters.sections-filter.sources"));
     
     return (
       <Filters

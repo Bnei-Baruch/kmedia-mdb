@@ -139,8 +139,7 @@ const mapState = (state) => {
     results.hits.hits.reduce((acc, val) => {
       if (val._type === 'sources') {
         const sID = val._source.mdb_uid;
-        const s   = mdbSelectors.getDenormSource(state.mdb, sID);
-        console.log(s)
+        const s   = mdbSelectors.getDenormSource(state.mdb, sID);        
         if (s) {
           acc[sID] = s;
         }

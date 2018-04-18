@@ -23,7 +23,7 @@ const FETCH_SQDATA_FAILURE        = 'MDB/FETCH_SQDATA_FAILURE';
 
 const RECEIVE_COLLECTIONS   = 'MDB/RECEIVE_COLLECTIONS';
 const RECEIVE_CONTENT_UNITS = 'MDB/RECEIVE_CONTENT_UNITS';
-const RECEIVE_SOURCES = 'MDB/SOURCES';
+const RECEIVE_SOURCES       = 'MDB/RECEIVE_SOURCES';
 
 export const types = {
   FETCH_UNIT,
@@ -196,15 +196,13 @@ const stripOldFiles = (unit) => {
 };
 
 const flatSources = (items) => {
-  let ret = [];
+  const ret = [];
   items.forEach((x) => {
     const y = { ...x };
     ret.push(y);
     if (y.children){
-      let children = flatSources(y.children);
-      children.forEach((c)=>{
-        ret.push(c);
-      })
+      const children = flatSources(y.children);
+      children.forEach(c => ret.push(c));
     }
   });
 

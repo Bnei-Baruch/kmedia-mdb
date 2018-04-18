@@ -34,6 +34,9 @@ export const CT_KITEI_MAKOR           = 'KITEI_MAKOR';
 export const CT_PUBLICATION           = 'PUBLICATION';
 export const CT_LELO_MIKUD            = 'LELO_MIKUD';
 
+// Source content type
+export const CT_SRC          = 'SOURCE';
+
 // Source Types
 export const SRC_COLLECTION = 'COLLECTION';
 export const SRC_BOOK       = 'BOOK';
@@ -45,9 +48,6 @@ export const SRC_ARTICLE    = 'ARTICLE';
 export const SRC_TITLE      = 'TITLE';
 export const SRC_LETTER     = 'LETTER';
 export const SRC_ITEM       = 'ITEM';
-
-//General source
-export const SRC            = 'SOURCE';
 
 // Languages
 export const LANG_HEBREW     = 'he';

@@ -35,7 +35,7 @@ import {
   CT_WOMEN_LESSON,
   CT_WOMEN_LESSONS,
   EVENT_TYPES,
-  SRC
+  CT_SRC,
 } from './consts';
 
 import { CollectionsBreakdown } from './mdb';
@@ -198,7 +198,7 @@ export const canonicalLink = (entity) => {
   }
 
   // source
-  if (entity.content_type == SRC){
+  if (entity.content_type == CT_SRC){
     return `/sources/${entity.id}`;
   }
 
