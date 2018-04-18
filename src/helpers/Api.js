@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const API_BACKEND    = process.env.REACT_APP_API_BACKEND;
+const API_BACKEND           = process.env.REACT_APP_API_BACKEND;
 const ASSETS_BACKEND = process.env.REACT_APP_ASSETS_BACKEND;
-const IMAGINARY_URL  = process.env.REACT_APP_IMAGINARY_URL;
+const IMAGINARY_URL         = process.env.REACT_APP_IMAGINARY_URL;
 
 export const backendUrl   = path => `${API_BACKEND}${path}`;
 export const assetUrl     = path => `${ASSETS_BACKEND}${path}`;
@@ -38,7 +38,7 @@ class Api {
   static publishers   = ({ language }) => Requests.get(`publishers?${Requests.makeParams({ language })}`);
   static home         = ({ language }) => Requests.get(`home?${Requests.makeParams({ language })}`);
   static latestLesson = ({ language }) => Requests.get(`latestLesson?${Requests.makeParams({ language })}`);
-  static sqdata = ({ language }) => Requests.get(`sqdata?${Requests.makeParams({ language })}`);
+  static sqdata       = ({ language }) => Requests.get(`sqdata?${Requests.makeParams({ language })}`);
 
   static lessons = ({ pageNo: page_no, pageSize: page_size, ...rest }) =>
     Requests.get(`lessons?${Requests.makeParams({ page_no, page_size, ...rest })}`);
@@ -69,6 +69,10 @@ class Api {
 
   static doc2Html = ({ id }) =>
     Requests.getAsset(`api/doc2html/${id}`);
+
+  static staticFile = ({ id }) => {
+    Requests.getAsset(id);
+  };
 }
 
 export default Api;

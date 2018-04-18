@@ -13,6 +13,7 @@ import { sagas as settings } from './settings';
 import { sagas as search } from './search';
 import { sagas as assets } from './assets';
 import { sagas as home } from './home';
+import { sagas as staticFile } from './static';
 
 const allSagas = [
   ...device,
@@ -28,9 +29,8 @@ const allSagas = [
   ...search,
   ...assets,
   ...home,
+  ...staticFile,
 ];
-
-export default allSagas;
 
 export function* rootSaga() {
   yield all(allSagas.map(s => s()));

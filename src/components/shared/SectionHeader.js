@@ -11,7 +11,7 @@ const SectionHeader = (props) => {
   const sectionSubText =  t(`${section}.header.subtext`);
   return (
     <div className="section-header">
-      {/* TODO (orin): dont use image fixed url*/}
+      {/* TODO (orin): dont use image fixed url */}
       <Helmets.Basic
         title={sectionHeader}
         description={sectionSubText}
