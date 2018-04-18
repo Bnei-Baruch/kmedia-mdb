@@ -47,7 +47,8 @@ class LibraryPerson extends Component {
     const { content, t }                                          = this.props;
     const { wip: contentWip, err: contentErr, data: contentData } = content;
 
-    let result;
+    // eslint-disable-next-line react/no-danger
+    let result = <div dangerouslySetInnerHTML={{ __html: contentData }} />;
     if (contentErr) {
       if (contentErr.response && contentErr.response.status === 404) {
         result = <FrownSplash text={t('messages.source-content-not-found')} />;
@@ -58,9 +59,6 @@ class LibraryPerson extends Component {
       result = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else if (!contentData) {
       result = <Segment basic>{t('sources-library.no-source')}</Segment>;
-    } else {
-      // eslint-disable-next-line react/no-danger
-      result = <div dangerouslySetInnerHTML={{ __html: contentData }} />;
     }
 
     return result;
