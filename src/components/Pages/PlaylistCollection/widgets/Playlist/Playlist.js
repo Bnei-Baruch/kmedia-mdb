@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment/moment';
 import { Header, Menu } from 'semantic-ui-react';
 
-import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, DATE_FORMAT, NO_NAME } from '../../../../../helpers/consts';
-import { fromToLocalized, createDate } from '../../../../../helpers/date';
+import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, NO_NAME } from '../../../../../helpers/consts';
+import { fromToLocalized } from '../../../../../helpers/date';
 import { formatDuration } from '../../../../../helpers/utils';
 
 class PlaylistWidget extends Component {
@@ -35,11 +34,9 @@ class PlaylistWidget extends Component {
 
     let subheader = '';
     if (collection.film_date) {
-      subheader = t('values.date', { date: createDate(collection.film_date) });
+      subheader = t('values.date', { date: collection.film_date });
     } else if (collection.start_date && collection.end_date) {
-      subheader = fromToLocalized(
-        moment.utc(collection.start_date, DATE_FORMAT),
-        moment.utc(collection.end_date, DATE_FORMAT));
+      subheader = fromToLocalized(collection.start_date, collection.end_date);
     }
 
     return <Header inverted as="h1" content={content} subheader={subheader} />;

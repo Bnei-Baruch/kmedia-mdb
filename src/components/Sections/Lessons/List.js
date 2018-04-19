@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_DAILY_LESSON, CT_LESSON_PART, NO_NAME } from '../../../helpers/consts';
-import { createDate } from '../../../helpers/date';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { canonicalLink } from '../../../helpers/utils';
 import { selectors as mdb } from '../../../redux/modules/mdb';
@@ -19,7 +18,7 @@ export const renderUnit = (unit, t) => {
   const relatedItems = breakdown.getDailyLessons().map(x =>
     (
       <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-        {t(CT_DAILY_LESSON_I18N_KEY)} {t('values.date', { date: createDate(x.film_date) })}
+        {t(CT_DAILY_LESSON_I18N_KEY)} {t('values.date', { date: x.film_date })}
       </List.Item>
     )
   ).concat(breakdown.getAllButDailyLessons().map(x => (
@@ -31,7 +30,7 @@ export const renderUnit = (unit, t) => {
   return (
     <Table.Row verticalAlign="top" key={unit.id} className="no-thumbnail">
       <Table.Cell collapsing singleLine>
-        <span className="index__date">{t('values.date', { date: createDate(unit.film_date) })}</span>
+        <span className="index__date">{t('values.date', { date: unit.film_date })}</span>
       </Table.Cell>
       <Table.Cell>
         <Link className="index__title" to={canonicalLink(unit)}>
@@ -67,7 +66,7 @@ export const renderCollection = (collection, t) => {
         .map(x =>
           (
             <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-              {t(CT_DAILY_LESSON_I18N_KEY)} {t('values.date', { date: createDate(x.film_date) })}
+              {t(CT_DAILY_LESSON_I18N_KEY)} {t('values.date', { date: x.film_date })}
             </List.Item>
           )
         ).concat(breakdown.getAllButDailyLessons().map(x => (
@@ -108,7 +107,7 @@ export const renderCollection = (collection, t) => {
   rows.push((
     <Table.Row key={`l-${collection.id}`} verticalAlign="top" className="no-thumbnail">
       <Table.Cell collapsing singleLine rowSpan={cuSpan}>
-        <span className="index__date">{t('values.date', { date: createDate(collection.film_date) })}</span>
+        <span className="index__date">{t('values.date', { date: collection.film_date })}</span>
       </Table.Cell>
       <Table.Cell>
         <Link className="index__title" to={canonicalLink(collection)}>
