@@ -119,38 +119,3 @@ em {
 .mediaplayer__languages .ui.floating.dropdown > .menu {
   max-height: 220px;
 }
-
-.index {
-  &__description {
-    display: block;
-    max-width: 500px;
-    font-size: 90%;
-    line-height: 1.2;
-    max-height: 2.4em;
-    overflow: hidden;
-    position: relative;
-    background: white; // or other color
-    &:after {
-      content: '...'; // the ellipsis
-      position: absolute; // positioned in bottom-right
-      bottom: 0; // ...
-      right: 0; // ...
-      padding: 0 0.1em; // give some separation from text
-      background: inherit; // same color as container
-    }
-    & span:after {
-      content: '\0000a0'; // a space
-      position: absolute; // to cover up ellipsis if needed
-      width: 1000px; // ...
-      z-index: 1; // ...
-      background: white; // must match container's color. can't use inherit here.
-    }
-  }
-}
-
-.rtl {
-  .index {
-    &__description {
-    }
-  }
-}

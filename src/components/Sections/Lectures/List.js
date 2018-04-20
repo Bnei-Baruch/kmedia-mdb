@@ -27,6 +27,18 @@ export const renderUnit = (unit, t) => {
     filmDate = t('values.date', { date: unit.film_date });
   }
   const link = canonicalLink(unit);
+  
+  let shortdescription;
+  if (unit.description){
+    let maxLen = 200;
+    shortdescription = unit.description;
+    if (shortdescription.length <= maxLen) {
+      shortdescription = unit.description;
+    }else{
+      shortdescription = shortdescription.substr(0, shortdescription.lastIndexOf(' ', maxLen));
+      shortdescription += "...";
+    }
+  }
 
   return (
     <Table.Row key={unit.id} verticalAlign="top">
@@ -47,9 +59,9 @@ export const renderUnit = (unit, t) => {
         </Link>
         {
           unit.description ?
-            <span className="index__description mobile-hidden">
-              {unit.description}
-            </span>
+            <div className="index__description mobile-hidden">
+              {shortdescription}
+            </div>
             : null
         }
         {
