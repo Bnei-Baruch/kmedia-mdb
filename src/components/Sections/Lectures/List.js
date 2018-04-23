@@ -27,16 +27,13 @@ export const renderUnit = (unit, t) => {
     filmDate = t('values.date', { date: unit.film_date });
   }
   const link = canonicalLink(unit);
-  
-  let shortdescription;
-  if (unit.description){
-    let maxLen = 200;
-    shortdescription = unit.description;
-    if (shortdescription.length <= maxLen) {
-      shortdescription = unit.description;
-    }else{
-      shortdescription = shortdescription.substr(0, shortdescription.lastIndexOf(' ', maxLen));
-      shortdescription += "...";
+
+  let { description } = unit;
+  if (description) {
+    const maxLen = 200;
+    if (description.length > maxLen) {
+      description = description.substr(0, description.lastIndexOf(' ', maxLen));
+      description += '...';
     }
   }
 
@@ -60,7 +57,7 @@ export const renderUnit = (unit, t) => {
         {
           unit.description ?
             <div className="index__description mobile-hidden">
-              {shortdescription}
+              {description}
             </div>
             : null
         }
