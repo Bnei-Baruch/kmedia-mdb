@@ -28,6 +28,7 @@ import Redirect from './components/Layout/Redirect';
 import HomePage from './components/Sections/Home/Container';
 import LastLessonCollection from './components/Sections/Lessons/LastCollection';
 import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
+import TopicsContainer from './components/Sections/Topics/TopicContainer';
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 
@@ -100,7 +101,7 @@ const routes = [
   { path: 'sources', component: LibraryHomepage },
   { path: 'sources/:id', component: LibraryContainer, options: { ssrData: ssrDataLoaders.libraryPage } },
   { path: 'books', component: NotImplemented },
-  { path: 'topics', component: NotImplemented },
+  { path: 'topics', component: TopicsContainer },
   { path: 'photos', component: NotImplemented },
   { path: 'search', component: SearchResults, options: { ssrData: ssrDataLoaders.searchPage } },
   { path: 'project-status', component: ProjectStatus },
