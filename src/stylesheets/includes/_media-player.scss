@@ -10,8 +10,8 @@ $player-color: $black;
   object,
   embed {
     display: block;
-    width: 100%;
     max-height: 100%;
+    width: 100%;
   }
 
   &:-webkit-full-screen { // sass-lint:disable no-vendor-prefixes
@@ -42,7 +42,7 @@ $player-color: $black;
     top: 0;
     transition: opacity .25s, top .25s;
 
-    *{
+    * {
       color: inherit;
     }
 
@@ -151,6 +151,40 @@ $player-color: $black;
         margin-right: 0;
       }
     }
+
+    &-share {
+      align-items: center;
+      align-self: stretch;
+      background: rgba($black, .3);
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+      padding: 1rem;
+      user-select: text;
+
+      input {
+        cursor: pointer;
+      }
+
+      &-back {
+        align-self: flex-start;
+        margin-bottom: 2rem !important;
+      }
+
+      .social-buttons {
+        align-items: center;
+        background: rgba($black, .8);
+        border-radius: calc(36px / 2 + .5rem);
+        display: flex;
+        margin: auto 0 1rem;
+        padding: .5rem .25rem;
+
+        .SocialMediaShareButton {
+          cursor: pointer;
+          margin: 0 .25rem;
+        }
+      }
+    }
   }
 }
 
@@ -160,6 +194,7 @@ $player-color: $black;
   justify-content: center;
   position: absolute;
   width: 100%;
+  z-index: 1;
 
   &__wrapper {
     background: rgba(darken($player-color, 20%), 1);
@@ -243,90 +278,4 @@ $player-color: $black;
     }
   }
 
-  &__slicehandle {
-    bottom: 0;
-    height: 102px;
-    margin-left: -1px;
-    position: absolute;
-    width: 30px;
-    z-index: 100;
-
-    &--right {
-      margin-left: -29px;
-    }
-
-    &-knob {
-      background: $blue;
-      border: 2px solid $white;
-      border-radius: 6px 6px 0 0;
-      border-width: 2px 2px 0;
-      cursor: ew-resize;
-      height: 30px;
-      margin-bottom: 20px;
-      position: absolute;
-      top: 24px;
-      width: 30px;
-
-      &::before {
-        background: $blue;
-        border: 2px solid $white;
-        border-radius: 6px 6px 6px 2px;
-        content: '';
-        height: 40px;
-        left: -2px;
-        position: absolute;
-        right: -2px;
-        top: 20px;
-        transform: skewy(-30deg);
-        transform-origin: left bottom;
-        z-index: -1;
-
-        .seekbar__slicehandle--right & {
-          border-radius: 6px 6px 2px;
-          transform: skewy(30deg);
-          transform-origin: right bottom;
-        }
-      }
-
-      &::after {
-        background: $white;
-        border-radius: 2px;
-        box-shadow: 6px 0 0 $white, 12px 0 0 $white;
-        content: '';
-        height: 16px;
-        left: 6px;
-        position: absolute;
-        top: 10px;
-        width: 2px;
-      }
-    }
-
-    &-line {
-      background: $white;
-      border-radius: 1px;
-      bottom: 0;
-      height: 20px;
-      left: 0;
-      position: absolute;
-      width: 2px;
-
-      .seekbar__slicehandle--right & {
-        left: auto;
-        right: 0;
-      }
-    }
-
-    &-time {
-      background: rgba($black, .9);
-      border-radius: 10px;
-      font-size: 12px;
-      line-height: 20px;
-      padding: 0 16px;
-      position: absolute;
-      right: 50%;
-      top: 0;
-      transform: translate(50%, 0);
-      white-space: nowrap;
-    }
-  }
 }

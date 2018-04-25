@@ -1,6 +1,7 @@
 $sidebar-width: 290px;
 $main-menu-height: 60px;
-$secondary-header-height: 70px;
+$secondary-header-height: 10px;
+$max-readble-width: 700px;
 
 @import 'rtl/layout';
 
@@ -22,20 +23,26 @@ $secondary-header-height: 70px;
       }
     }
   }
+
   &__header {
     left: 0;
     position: fixed;
     right: 0;
     top: 0;
-    z-index: 999999;
+    z-index: 900;
   }
+
   &__search {
     flex: 1 0 auto !important;
     font-size: 1rem;
     line-height: 1.4285em !important;
   }
+
   &__sidebar {
-    background: #fff;
+    @include small-mobile {
+      width: 100%;
+    }
+    background: $white;
     bottom: 0;
     left: 0;
     overflow: hidden;
@@ -44,11 +51,7 @@ $secondary-header-height: 70px;
     transform: translate(-100%, 0);
     transition: transform .3s;
     width: $sidebar-width;
-    z-index: 999999;
-
-    @include small-mobile {
-      width: 100%;
-    }
+    z-index: 900;
 
     &.is-active {
       transform: none;
@@ -75,8 +78,9 @@ $secondary-header-height: 70px;
         box-shadow: none !important;
       }
     }
+
     &-search {
-      flex: 1 0 auto!important;
+      flex: 1 0 auto !important;
     }
   }
 
@@ -95,38 +99,43 @@ $secondary-header-height: 70px;
     background: $black;
   }
 
-  &__secondary-header{
+  &__secondary-header {
     background: $white;
-    min-height: $secondary-header-height;
+    border-bottom: 1px solid $border-color;
     left: 0;
+    min-height: $secondary-header-height;
     position: fixed;
     right: 0;
     z-index: 1;
 
+    .row {
+      padding-bottom: .5rem !important;
+      padding-top: .5rem !important;
+    }
+
     +.ui.container {
-      padding-top: $secondary-header-height;
       background-clip: content-box;
+      padding-top: $secondary-header-height;
     }
   }
 }
 
 .logo {
-  flex: 0 1 auto!important;
+  flex: 0 1 auto !important;
+
   img {
     display: none !important;
   }
 
   h1.header {
+    @include mobile {
+      font-size: 1.28571429rem !important;
+    }
     font-size: 1.71428571rem;
     margin-left: 0;
     margin-top: 0;
-    @include mobile {
-      font-size: 1.28571429rem!important;
-    }
   }
 }
-
-
 
 .content {
   &__aside {
@@ -177,9 +186,6 @@ $secondary-header-height: 70px;
   }
 }
 
-
-
-
 .ui.container.padded {
   padding: 1em;
 
@@ -194,4 +200,9 @@ $secondary-header-height: 70px;
       padding: 1em;
     }
   }
+}
+
+.ui.grid>.row.is-fitted {
+  padding-bottom: 0;
+  padding-top: 0;
 }

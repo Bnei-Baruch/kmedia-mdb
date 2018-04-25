@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Header, Input } from 'semantic-ui-react';
 
-import { selectors as system } from '../../../redux/modules/system';
+import { selectors as device } from '../../../redux/modules/device';
 import * as shapes from '../../shapes';
 import { mapState as obMS, OmniBox, wrap } from '../../Search/OmniBox';
 
@@ -29,7 +29,7 @@ class MyOmniBox extends OmniBox {
 
 const MyWrappedOmniBox = wrap(MyOmniBox, state => ({
   ...obMS(state),
-  deviceInfo: system.getDeviceInfo(state.system),
+  deviceInfo: device.getDeviceInfo(state.device),
 }));
 
 class SearchBar extends Component {

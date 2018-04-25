@@ -13,6 +13,7 @@ import Topic from './Topic';
 import Section from './Section';
 import LatestUpdate from './LatestUpdate';
 import LatestDailyLesson from './LatestDailyLesson';
+import Helmets from '../../shared/Helmets';
 
 class HomePage extends Component {
   static propTypes = {
@@ -71,6 +72,7 @@ class HomePage extends Component {
 
     return (
       <div className="homepage">
+        <Helmets.Basic title={t('home.header.text')} description={t('home.header.subtext')} />
         <Container className="padded">
           <SearchBar t={t} location={location} />
         </Container>

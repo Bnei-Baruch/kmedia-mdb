@@ -1,6 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 
 import { types as settings } from './settings';
+import { types as ssr } from './ssr';
 
 /* Types */
 const FETCH_DATA         = 'Home/FETCH_DATA';
@@ -35,11 +36,9 @@ const initialState = {
   err: null,
 };
 
-const onSetLanguage = () => (
-  {
-    ...initialState,
-  }
-);
+const onSetLanguage = () => ({
+  ...initialState,
+});
 
 const onData = (state, action) => ({
   ...state,
@@ -50,7 +49,14 @@ const onData = (state, action) => ({
   banner: action.payload.banner,
 });
 
+const onSSRPrepare = state => ({
+  ...state,
+  err: state.err ? state.err.toString() : state.err,
+});
+
 export const reducer = handleActions({
+  [ssr.PREPARE]: onSSRPrepare,
+
   [settings.SET_LANGUAGE]: onSetLanguage,
 
   [FETCH_DATA]: state => ({ ...state, wip: true }),

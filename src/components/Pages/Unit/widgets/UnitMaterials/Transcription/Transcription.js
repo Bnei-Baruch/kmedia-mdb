@@ -31,17 +31,32 @@ class Transcription extends Component {
     language: null,
   };
 
-  componentDidMount() {
+  componentWillMount() {
     this.setCurrentItem(this.props);
   }
 
+  componentDidMount() {
+    const { selected, language } = this.state;
+    if (selected && language) {
+      const { doc2htmlById, onContentChange } = this.props;
+      const { data }                          = doc2htmlById[selected.id] || {};
+      if (!data) {
+        onContentChange(selected.id);
+      }
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
-    if (
-      (nextProps.unit && !this.props.unit) ||
-      (nextProps.unit.id !== this.props.unit.id) ||
-      (nextProps.unit.files !== this.props.unit.files)
-    ) {
-      this.setCurrentItem(nextProps);
+    const toUpdate =
+            (nextProps.unit && !this.props.unit) ||
+            (nextProps.unit.id !== this.props.unit.id) ||
+            (nextProps.unit.files !== this.props.unit.files);
+
+    if (toUpdate) {
+      const { selected, language } = this.setCurrentItem(nextProps);
+      if (selected && language) {
+        this.props.onContentChange(selected.id);
+      }
     }
   }
 
@@ -57,27 +72,37 @@ class Transcription extends Component {
   setCurrentItem = (props) => {
     const textFiles = this.getTextFiles(props);
     const languages = uniq(textFiles.map(x => x.language));
-    let selected    = null;
-    if (languages.length > 0) {
-      // try to stay on the same language we have in state if possible
-      if (this.state.language) {
-        selected = textFiles.find(x => x.language === this.state.language);
-      }
-
-      // if not then choose by UI language or first
-      if (!selected) {
-        selected = textFiles.find(x => x.language === props.language) || textFiles[0];
-      }
-    }
-
+    const selected = this.selectFile(textFiles, this.state.language || props.language);
     const language = selected ? selected.language : null;
 
-    this.setState({ selected, languages, language });
+    const sUpdate = { selected, languages, language };
+    this.setState(sUpdate);
 
-    if (selected && language) {
-      this.props.onContentChange(selected.id);
-    }
+    return sUpdate;
   };
+
+  selectFile = (textFiles, language) => {
+    let selected = textFiles.filter(x => x.language === language);
+
+    switch(selected.length){
+      case 0:
+        //no files by language - use first text file
+        selected = textFiles[0];
+        break;
+      
+      case 1:
+        //use the only file found
+        selected = selected[0];
+        break;
+
+      default:
+        //many files by language - get the largest - it is probably the transcription
+        selected = selected.reduce((acc, file) => acc.size < file.size ? file : acc);
+        break;
+    }
+
+    return selected;
+  }
 
   handleLanguageChanged = (e, language) => {
     if (language === this.state.language) {
@@ -86,7 +111,7 @@ class Transcription extends Component {
     }
 
     const textFiles = this.getTextFiles(this.props);
-    const selected  = textFiles.find(x => x.language === language);
+    const selected = this.selectFile(textFiles, language);
 
     this.props.onContentChange(selected.id);
     this.setState({ selected, language });
@@ -110,11 +135,11 @@ class Transcription extends Component {
     if (data) {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
 
-      // eslint-disable-next-line react/no-danger
       const content = (
         <div
           className="doc2html"
           style={{ direction }}
+          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: data }}
         />
       );

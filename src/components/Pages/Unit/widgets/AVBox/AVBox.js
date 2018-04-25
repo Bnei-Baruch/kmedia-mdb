@@ -8,14 +8,14 @@ import { Media } from 'react-media-player';
 
 import { MT_AUDIO, MT_VIDEO } from '../../../../../helpers/consts';
 import playerHelper from '../../../../../helpers/player';
-import { selectors as system } from '../../../../../redux/modules/system';
+import { selectors as device } from '../../../../../redux/modules/device';
 import * as shapes from '../../../../shapes';
 import AVMobileCheck from '../../../../AVPlayer/AVMobileCheck';
 
 class AVBox extends Component {
   static propTypes = {
     unit: shapes.ContentUnit,
-    history: PropTypes.object.isRequired,
+    history: shapes.History.isRequired,
     location: shapes.HistoryLocation.isRequired,
     language: PropTypes.string.isRequired,
     autoPlayAllowed: PropTypes.bool.isRequired,
@@ -116,7 +116,7 @@ class AVBox extends Component {
 }
 
 const mapState = state => ({
-  autoPlayAllowed: system.getAutoPlayAllowed(state.system),
+  autoPlayAllowed: device.getAutoPlayAllowed(state.device),
 });
 
 export default withRouter(connect(mapState)(AVBox));

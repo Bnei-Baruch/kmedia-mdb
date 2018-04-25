@@ -6,13 +6,14 @@ import { withRouter } from 'react-router-dom';
 import { Player, utils, withMediaProps } from 'react-media-player';
 import enableInlineVideo from 'iphone-inline-video';
 import classNames from 'classnames';
-import { Button, Icon } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 
 import { MT_AUDIO, MT_VIDEO, VS_DEFAULT, VS_FHD, VS_HD, VS_NHD } from '../../helpers/consts';
 import playerHelper from '../../helpers/player';
-import { fromHumanReadableTime, toHumanReadableTime } from '../../helpers/time';
-import { getQuery, updateQuery } from '../../helpers/url';
+import { fromHumanReadableTime } from '../../helpers/time';
+import { getQuery } from '../../helpers/url';
 import { isEmpty } from '../../helpers/utils';
+import * as shapes from '../shapes';
 import { PLAYER_MODE } from './constants';
 import AVPlayPause from './AVPlayPause';
 import AVPlaybackRate from './AVPlaybackRate';
@@ -25,9 +26,9 @@ import AVLanguage from './AVLanguage';
 import AVAudioVideo from './AVAudioVideo';
 import AvSeekBar from './AvSeekBar';
 import AVEditSlice from './AVEditSlice';
-import ShareBar from './ShareBar';
 import AVJumpBack from './AVJumpBack';
 import AVSpinner from './AVSpinner';
+import ShareFormDesktop from './Share/ShareFormDesktop';
 
 const PLAYER_VOLUME_STORAGE_KEY = '@@kmedia_player_volume';
 const DEFAULT_PLAYER_VOLUME     = 0.8;
@@ -51,7 +52,7 @@ class AVPlayer extends PureComponent {
     onSwitchAV: PropTypes.func.isRequired,
 
     // Slice props
-    history: PropTypes.object.isRequired,
+    history: shapes.History.isRequired,
 
     // Playlist props
     autoPlay: PropTypes.bool,
@@ -110,10 +111,12 @@ class AVPlayer extends PureComponent {
       playerMode = PLAYER_MODE.NORMAL;
     }
 
-    this.setSliceMode(playerMode, {
-      sliceStart: sstart,
-      sliceEnd: send
-    });
+    if (playerMode === PLAYER_MODE.SLICE_VIEW) {
+      this.setSliceMode(playerMode, {
+        sliceStart: sstart,
+        sliceEnd: send
+      });
+    }
 
     this.setState({
       ...this.chooseSource(this.props)
@@ -266,7 +269,7 @@ class AVPlayer extends PureComponent {
     }
   };
 
-  setSliceMode = (playerMode, properties = {}, cb) => {
+  setSliceMode = (mode, properties = {}) => {
     const { media } = this.props;
 
     let { sliceStart, sliceEnd } = properties;
@@ -278,24 +281,17 @@ class AVPlayer extends PureComponent {
     }
 
     this.setState({
-      mode: playerMode,
-      ...properties,
+      mode,
       sliceStart,
       sliceEnd
-    }, cb);
+    });
   };
-
-  setNormalMode = cb => this.setState({
-    mode: PLAYER_MODE.NORMAL,
-    sliceStart: undefined,
-    sliceEnd: undefined
-  }, cb);
 
   handleTimeUpdate = (timeData) => {
     const { media }          = this.props;
     const { mode, sliceEnd } = this.state;
 
-    const isSliceMode = mode === PLAYER_MODE.SLICE_EDIT || mode === PLAYER_MODE.SLICE_VIEW;
+    const isSliceMode = mode === PLAYER_MODE.SLICE_VIEW;
 
     const lowerTime = Math.min(sliceEnd, timeData.currentTime);
     if (isSliceMode && lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
@@ -304,34 +300,16 @@ class AVPlayer extends PureComponent {
     }
   };
 
-  handleToggleMode = () => {
-    const { mode } = this.state;
-
-    if (mode === PLAYER_MODE.SLICE_EDIT || mode === PLAYER_MODE.SLICE_VIEW) {
-      this.setNormalMode(this.resetSliceQuery);
-    } else {
-      this.setSliceMode(this.updateSliceQuery);
-    }
+  handleEditBack = () => {
+    this.setState({
+      mode: PLAYER_MODE.NORMAL,
+      sliceStart: undefined,
+      sliceEnd: undefined
+    });
   };
 
-  handleSliceEndChange = (value) => {
-    const newState = {
-      sliceEnd: value
-    };
-    this.setState(newState);
-    this.updateSliceQuery(newState);
-  };
-
-  handleSliceStartChange = (value) => {
-    const newState = {
-      sliceStart: value
-    };
-    this.setState(newState);
-    this.updateSliceQuery(newState);
-  };
-
-  resetSliceQuery = () => {
-    updateQuery(this.props.history, q => ({ ...q, sstart: undefined, send: undefined }));
+  handleSliceChange = (sliceStart, sliceEnd) => {
+    this.setState({ sliceStart, sliceEnd });
   };
 
   // Correctly fetch loaded buffers from video to show loading progress.
@@ -348,31 +326,6 @@ class AVPlayer extends PureComponent {
       }
     }
     return ret;
-  };
-
-  updateSliceQuery = (values) => {
-    const { history, media }       = this.props;
-    const { sliceStart, sliceEnd } = this.state;
-
-    updateQuery(history, (query) => {
-      const q = { ...query };
-
-      if (typeof values.sliceStart === 'undefined') {
-        q.sstart = sliceStart || 0;
-      } else {
-        q.sstart = values.sliceStart;
-      }
-
-      if (typeof values.sliceEnd === 'undefined') {
-        q.send = (!sliceEnd || sliceEnd === Infinity) ? media.duration : sliceEnd;
-      } else {
-        q.send = values.sliceEnd;
-      }
-
-      q.sstart = toHumanReadableTime(q.sstart);
-      q.send   = toHumanReadableTime(q.send);
-      return q;
-    });
   };
 
   showControls = (hideLater = true) => {
@@ -470,37 +423,39 @@ class AVPlayer extends PureComponent {
   };
 
   render() {
-    const {
-            autoPlay,
-            item,
-            languages,
-            language,
-            t,
-            showNextPrev,
-            hasNext,
-            hasPrev,
-            onPrev,
-            onNext,
-            media,
-          } = this.props;
+    const
+      {
+        autoPlay,
+        item,
+        languages,
+        language,
+        t,
+        showNextPrev,
+        hasNext,
+        hasPrev,
+        onPrev,
+        onNext,
+        media,
+      } = this.props;
 
-    const {
-            controlsVisible,
-            sliceStart,
-            sliceEnd,
-            mode,
-            playbackRate,
-            videoSize,
-            src,
-            error,
-            errorReason
-          } = this.state;
+    const
+      {
+        controlsVisible,
+        sliceStart,
+        sliceEnd,
+        mode,
+        playbackRate,
+        videoSize,
+        src,
+        error,
+        errorReason
+      } = this.state;
 
     const { isPlaying }     = media;
-    const forceShowControls = item.mediaType === MT_AUDIO || !isPlaying;
     const isVideo           = item.mediaType === MT_VIDEO;
     const isAudio           = item.mediaType === MT_AUDIO;
     const isEditMode        = mode === PLAYER_MODE.SLICE_EDIT;
+    const forceShowControls = item.mediaType === MT_AUDIO || !isPlaying || isEditMode;
     const fallbackMedia     = item.mediaType !== item.requestedMediaType;
 
     let centerMediaControl;
@@ -515,16 +470,13 @@ class AVPlayer extends PureComponent {
       );
     } else if (isEditMode) {
       centerMediaControl = (
-        <div>
-          <Button
-            content={t('player.buttons.edit-back')}
-            size="large"
-            color="blue"
-            icon="chevron left"
-            onClick={this.handleToggleMode}
-          />
-          <ShareBar url={window.location.href} t={t} />
-        </div>
+        <ShareFormDesktop
+          media={media}
+          item={item}
+          onSliceChange={this.handleSliceChange}
+          onExit={this.handleEditBack}
+          t={t}
+        />
       );
     } else if (isVideo) {
       centerMediaControl = <div><AVCenteredPlay /><AVSpinner /></div>;
@@ -595,8 +547,6 @@ class AVPlayer extends PureComponent {
               playerMode={mode}
               sliceStart={sliceStart}
               sliceEnd={sliceEnd}
-              onSliceStartChange={this.handleSliceStartChange}
-              onSliceEndChange={this.handleSliceEndChange}
             />
 
             {
@@ -653,7 +603,6 @@ class AVPlayer extends PureComponent {
             {centerMediaControl}
           </div>
         </div>
-
       </div>
     );
   }

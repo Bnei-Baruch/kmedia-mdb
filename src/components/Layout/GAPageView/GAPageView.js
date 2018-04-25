@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
+
 import { HistoryLocation } from '../../shapes';
 
 class GAPageView extends Component {
-  constructor(props) {
-    super(props);
-
+  componentDidMount() {
     // Initial page load - only fired once
-    this.sendPageChange(props.location.pathname, props.location.search);
+    const { location } = this.props;
+    this.sendPageChange(location.pathname, location.search);
   }
 
   componentWillReceiveProps(nextProps) {

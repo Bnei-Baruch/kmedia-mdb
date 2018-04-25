@@ -7,23 +7,23 @@ import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import { Icon, Input, Search } from 'semantic-ui-react';
 
+import { RTL_LANGUAGES } from '../../helpers/consts';
 import { SuggestionsHelper } from '../../helpers/search';
+import { getQuery, isDebMode } from '../../helpers/url';
+import { actions as filtersActions, selectors as filterSelectors } from '../../redux/modules/filters';
 import { actions, selectors } from '../../redux/modules/search';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
-import * as shapes from '../shapes';
-import { RTL_LANGUAGES } from '../../helpers/consts';
-import { actions as filtersActions, selectors as filterSelectors } from '../../redux/modules/filters';
-import { filtersTransformer } from '../../filters';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
-import { getQuery } from '../../helpers/url';
+import { filtersTransformer } from '../../filters';
+import * as shapes from '../shapes';
 
 const CATEGORIES_ICONS = {
-  'search': 'search',
-  'tags': 'tags',
-  'sources': 'book',
-  'authors': 'student',
-  'persons': 'user',
+  search: 'search',
+  tags: 'tags',
+  sources: 'book',
+  authors: 'student',
+  persons: 'user',
 };
 
 export class OmniBox extends Component {
@@ -40,9 +40,11 @@ export class OmniBox extends Component {
     getSourcePath: PropTypes.func,
     getTagPath: PropTypes.func,
     query: PropTypes.string.isRequired,
+    updateQuery: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
     pageSize: PropTypes.number.isRequired,
     filters: PropTypes.arrayOf(PropTypes.object).isRequired,
+    resetFilter: PropTypes.func.isRequired,
     onSearch: PropTypes.func,
   };
 
@@ -61,11 +63,11 @@ export class OmniBox extends Component {
     }
   }
 
-  resetComponent = query =>
-    this.setState({ suggestionsHelper: new SuggestionsHelper(), query });
+  resetComponent = () =>
+    this.setState({ suggestionsHelper: new SuggestionsHelper() });
 
   doAutocomplete = debounce(() => {
-    const query = this.props.query;
+    const { query } = this.props;
     if (query.trim()) {
       this.props.autocomplete(query);
     } else {
@@ -93,7 +95,10 @@ export class OmniBox extends Component {
       // In case a filter was updated React location object is not updated yet
       // so we just use window location to get the search part (to persist filters
       // to the search page when we redirect).
-      push({ pathname: 'search', search: window.location.search });
+
+      // 'search: window.location.search' has been removed because
+      // filters are not cleared when searching from a section (see bug AR-234)
+      push({ pathname: 'search' /* , search: window.location.search */});
     }
 
     // Reset filters for new search (query changed)
@@ -104,7 +109,7 @@ export class OmniBox extends Component {
       resetFilter('search', 'sections-filter');
     }
 
-    search(query, 1, pageSize);
+    search(query, 1, pageSize, isDebMode(location));
 
     if (this.state.isOpen) {
       this.setState({ isOpen: false });
@@ -114,7 +119,7 @@ export class OmniBox extends Component {
   };
 
   handleResultSelect = (e, data) => {
-    const key      = data.result.key;
+    const { key }  = data.result;
     const category = data.results.find(c => c.results.find(r => r.key === key)).name;
     if (category === 'search') {
       this.props.updateQuery(data.result.title);
@@ -131,12 +136,20 @@ export class OmniBox extends Component {
     // Currently ignoring anything else.
   };
 
-  handleSearchKeyDown = (e, data) => {
+  handleSearchKeyDown = (e) => {
     // Fix bug that did not allows to handleResultSelect when string is empty
     // we have meaning for that when filters are not empty.
     if (e.keyCode === 13 && !this.props.query.trim()) {
       this.doSearch();
     }
+    if (e.keyCode === 27) { // Esc
+      this.handleFilterClear();
+    }
+  };
+
+  handleFilterClear = () => {
+    this.props.updateQuery('');
+    this.closeSuggestions();
   };
 
   handleSearchChange = (e, data) => {
@@ -154,30 +167,29 @@ export class OmniBox extends Component {
 
   suggestionToResult = (type, item) => {
     if (type === 'tags') {
-      return { key: item.id, title: this.props.getTagPath(item.id).map(p => p.label).join(' - ') };
+      return {
+        key: item.id,
+        title: (this.props.getTagPath(item.id) || [])
+          .map(p => p.label)
+          .join(' - ')
+      };
     } else if (type === 'sources') {
-      return { key: item.id, title: this.props.getSourcePath(item.id).map(p => p.name).join(' > ') };
-    } else {
-      return { key: item.id, title: item.text };
+      return {
+        key: item.id,
+        title: (this.props.getSourcePath(item.id) || [])
+          .map(p => p.name)
+          .join(' > ')
+      };
     }
-  };
 
-  renderCategory = (category) => {
-    const { name } = category;
-    const icon     = CATEGORIES_ICONS[name];
-    return (
-      <div>
-        <Icon name={icon} />
-        {this.props.t(`search.suggestions.categories.${name}`)}
-      </div>
-    );
+    return { key: item.id, title: item.text };
   };
 
   dontBlur = () => {
     this.setState({ dontBlur: true });
   };
 
-  closeSuggestions = (e, data) => {
+  closeSuggestions = () => {
     if (this.state.dontBlur) {
       this.setState({ dontBlur: false });
     } else {
@@ -189,6 +201,17 @@ export class OmniBox extends Component {
     ...result,
     className: RTL_LANGUAGES.includes(language) ? 'search-result-rtl' : undefined,
   });
+
+  renderCategory = (category) => {
+    const { name } = category;
+    const icon     = CATEGORIES_ICONS[name];
+    return (
+      <div>
+        <Icon name={icon} />
+        {this.props.t(`search.suggestions.categories.${name}`)}
+      </div>
+    );
+  };
 
   renderInput() {
     return (<Input onKeyDown={this.handleSearchKeyDown} />);

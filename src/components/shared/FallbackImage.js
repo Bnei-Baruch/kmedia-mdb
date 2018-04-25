@@ -11,20 +11,18 @@ class FallbackImage extends Component {
   static propTypes = {
     src: PropTypes.string,
     fallbackImage: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.element, PropTypes.array])),
-    initialImage: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     onLoad: PropTypes.func,
     onError: PropTypes.func
   };
 
   static defaultProps = {
-    initialImage: null,
     fallbackImage: [imagePlaceholder],
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      imageSource: props.initialImage
+      imageSource: props.src
     };
   }
 
@@ -92,7 +90,7 @@ class FallbackImage extends Component {
       return this.state.imageSource;
     }
 
-    const { initialImage, fallbackImage, onLoad, onError, ...rest } = this.props;
+    const { fallbackImage, onLoad, onError, ...rest } = this.props;
     return <Image {...rest} src={this.state.imageSource} />;
   }
 }

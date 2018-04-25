@@ -1,20 +1,27 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import throttle from 'lodash/throttle';
-import { Document, Page } from 'react-pdf/build/entry.webpack';
-import { Container } from 'semantic-ui-react';
+import noop from 'lodash/noop';
+import { translate } from 'react-i18next';
+import { Document, Page } from 'react-pdf/dist/entry.webpack';
+import { Container, } from 'semantic-ui-react';
 
-import PDFMenu from './PDFMenu';
 import { BS_TAAS_PARTS } from '../../../helpers/consts';
+import { ErrorSplash, LoadingSplash, } from '../../shared/Splash/Splash';
+import PDFMenu from './PDFMenu';
 
 class PDF extends Component {
   static propTypes = {
     pdfFile: PropTypes.string.isRequired,
     startsFrom: PropTypes.number.isRequired,
     pageNumber: PropTypes.number.isRequired,
+    pageNumberHandler: PropTypes.func,
+    t: PropTypes.func.isRequired,
   };
 
-  static defaultProps = {};
+  static defaultProps = {
+    pageNumberHandler: noop,
+  };
 
   static isTaas = source => (BS_TAAS_PARTS[source] !== undefined);
 
@@ -23,9 +30,8 @@ class PDF extends Component {
   constructor(props) {
     super(props);
 
-    const pageNumber = props.pageNumber + props.startsFrom + -1;
-    this.state       = {
-      pageNumber,
+    this.state = {
+      pageNumber: props.pageNumber,
       numPages: null,
       width: null,
     };
@@ -51,18 +57,34 @@ class PDF extends Component {
   }
 
   onDocumentLoadSuccess = ({ numPages }) => {
-    this.setState({ numPages });
+    const { pageNumber } = this.state;
+    const { startsFrom } = this.props;
+
+    let pageNo;
+    if (pageNumber >= startsFrom && pageNumber <= (startsFrom + numPages + -1)) {
+      pageNo = pageNumber;
+    } else {
+      pageNo = startsFrom;
+    }
+    this.setState({ numPages, pageNumber: pageNo });
+    this.props.pageNumberHandler(pageNo);
   };
 
-  setDivSize = () => this.setState({ width: document.getElementById('pdfWrapper').getBoundingClientRect().width });
+  setDivSize = () =>
+    this.setState({
+      width: document.getElementById('pdfWrapper').getBoundingClientRect().width
+    });
 
-  setPage = pageNo => this.setState({ pageNumber: pageNo });
+  setPage = (pageNo) => {
+    this.setState({ pageNumber: pageNo });
+    this.props.pageNumberHandler(pageNo);
+  };
 
   throttledSetDivSize = () => throttle(this.setDivSize, 500);
 
   render() {
     const { numPages, pageNumber, width, } = this.state;
-    const { startsFrom, }                  = this.props;
+    const { startsFrom, pdfFile, t, }      = this.props;
 
     return (
       <div id="pdfWrapper" style={{ marginTop: '10px' }}>
@@ -76,8 +98,10 @@ class PDF extends Component {
         </Container>
         <div style={{ direction: 'ltr' }}>
           <Document
-            file={this.props.pdfFile}
+            file={pdfFile}
             onLoadSuccess={this.onDocumentLoadSuccess}
+            error={<ErrorSplash text={t('messages.server-error')} subtext={t('messages.failed-to-load-pdf-file')} />}
+            loading={<LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />}
           >
             {
               numPages ?
@@ -86,13 +110,22 @@ class PDF extends Component {
                   pageNumber={pageNumber + (-startsFrom) + 1}
                   renderAnnotations={false}
                   renderTextLayer={false}
+                  renderMode="svg"
                 /> : null
             }
           </Document>
         </div>
+        <Container fluid textAlign="center">
+          <PDFMenu
+            numPages={numPages}
+            pageNumber={pageNumber}
+            startsFrom={startsFrom}
+            setPage={this.setPage}
+          />
+        </Container>
       </div>
     );
   }
 }
 
-export default PDF;
+export default translate()(PDF);

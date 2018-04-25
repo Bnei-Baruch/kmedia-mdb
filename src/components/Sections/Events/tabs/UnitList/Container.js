@@ -24,7 +24,7 @@ const renderUnit = (unit, t) => {
 
   let filmDate = '';
   if (unit.film_date) {
-    filmDate = t('values.date', { date: new Date(unit.film_date) });
+    filmDate = t('values.date', { date: unit.film_date });
   }
 
   const link = canonicalLink(unit);
@@ -57,7 +57,6 @@ const renderUnit = (unit, t) => {
 };
 
 class Container extends Component {
-
   static propTypes = {
     tab: PropTypes.string.isRequired,
   };

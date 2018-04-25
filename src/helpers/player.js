@@ -11,6 +11,7 @@ import {
   LANG_ENGLISH,
   LANG_HEBREW,
   LANG_RUSSIAN,
+  LANG_UNKNOWN,
   MEDIA_TYPES,
   MIME_TYPE_TO_MEDIA_TYPE,
   MT_AUDIO,
@@ -19,7 +20,7 @@ import {
   VS_DEFAULT,
 } from './consts';
 import { getQuery, updateQuery } from './url';
-import { isEmpty, physicalFile } from './utils';
+import { canonicalLink, isEmpty, physicalFile } from './utils';
 
 const fallbacksLanguages = [LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN];
 
@@ -94,7 +95,8 @@ function playableItem(unit, mediaType, language) {
   // Russian (second most probable source), then to any other language.
   if (!availableLanguages.includes(language)) {
     language = fallbacksLanguages.find(f => availableLanguages.includes(f)) ||
-      (availableLanguages.length && availableLanguages[0]);
+      (availableLanguages.length && availableLanguages[0]) ||
+      LANG_UNKNOWN;
   }
 
   const availableMediaTypes = calcAvailableMediaTypes(unit, language);
@@ -204,6 +206,9 @@ function playlist(collection, mediaType, language) {
   } else {
     items = units.map(x => playableItem(x, mediaType, language));
   }
+
+  const shareUrl = canonicalLink(collection);
+  items.forEach((x) => { x.shareUrl = shareUrl; }); // eslint-disable-line no-param-reassign
 
   return {
     collection,

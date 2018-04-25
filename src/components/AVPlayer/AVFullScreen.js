@@ -5,7 +5,7 @@ import { Icon } from 'semantic-ui-react';
 
 class AVFullscreen extends Component {
   static propTypes = {
-    element: PropTypes.instanceOf(Element),
+    element: PropTypes.object,
   };
 
   static defaultProps = {
@@ -16,7 +16,7 @@ class AVFullscreen extends Component {
     fullScreen: false,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     fscreen.addEventListener('fullscreenchange', this.fullScreenChange);
   }
 

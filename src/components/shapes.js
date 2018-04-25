@@ -7,6 +7,11 @@ export const RouterMatch = PropTypes.shape({
   isExact: PropTypes.bool,
 });
 
+export const History = PropTypes.shape({
+  push: PropTypes.func.isRequired,
+  replace: PropTypes.func.isRequired
+});
+
 export const HistoryLocation = PropTypes.shape({
   pathname: PropTypes.string,
   search: PropTypes.string,
@@ -154,7 +159,7 @@ export const filterPropShape = PropTypes.shape({
 export const WIP    = PropTypes.bool;
 export const WipMap = PropTypes.objectOf(PropTypes.oneOfType([WIP, PropTypes.objectOf(WIP)]));
 
-export const Error     = PropTypes.object;
+export const Error     = PropTypes.oneOfType([PropTypes.object, PropTypes.string]);
 export const ErrorsMap = PropTypes.objectOf(PropTypes.oneOfType([Error, PropTypes.objectOf(Error)]));
 
 export const UserAgentParserResults = PropTypes.shape({

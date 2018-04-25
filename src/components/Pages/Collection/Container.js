@@ -10,49 +10,52 @@ import * as shapes from '../../shapes';
 import Page from './Page';
 
 class CollectionContainer extends Component {
-
   static propTypes = {
     namespace: PropTypes.string.isRequired,
-    location: shapes.HistoryLocation.isRequired,
     match: shapes.RouterMatch.isRequired,
     collection: shapes.GenericCollection,
-    wip: PropTypes.bool,
-    err: shapes.Error,
-    language: PropTypes.string.isRequired,
+    wip: shapes.WipMap.isRequired,
+    errors: shapes.ErrorsMap.isRequired,
     fetchCollection: PropTypes.func.isRequired,
     renderUnit: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     collection: null,
-    wip: false,
-    err: null,
   };
 
   componentDidMount() {
-    this.fetchCollection(this.props);
+    this.askForDataIfNeeded(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.match.params.id !== this.props.match.params.id ||
-      nextProps.language !== this.props.language) {
-      this.fetchCollection(nextProps);
-    }
+    this.askForDataIfNeeded(nextProps);
   }
 
-  fetchCollection = (props) => {
-    props.fetchCollection(props.match.params.id);
+  askForDataIfNeeded = (props) => {
+    const { match, wip, fetchCollection } = props;
+
+    // TODO (edo): maybe fetch with total unit count instead of loading all units ?
+
+    // We fetch stuff if we don't have it already
+    // and a request for it is not in progress or ended with an error.
+    const { id } = match.params;
+    if (!Object.prototype.hasOwnProperty.call(wip.collections, id)) {
+      fetchCollection(id);
+    }
   };
 
   render() {
-    const { collection, wip, err, namespace, renderUnit } = this.props;
+    const { collection, match, wip, errors, namespace, renderUnit } = this.props;
+
+    const { id } = match.params;
 
     return (
       <Page
         namespace={namespace}
         collection={collection}
-        wip={wip}
-        err={err}
+        wip={wip.collections[id]}
+        err={errors.collections[id]}
         renderUnit={renderUnit}
       />
     );
@@ -60,16 +63,12 @@ class CollectionContainer extends Component {
 }
 
 function mapState(state, ownProps) {
-  const id         = ownProps.match.params.id;
-  const collection = mdb.getDenormCollection(state.mdb, id);
-  const wipMap     = mdb.getWip(state.mdb);
-  const errMap     = mdb.getErrors(state.mdb);
-
+  const { id } = ownProps.match.params;
   return {
     namespace: ownProps.namespace,
-    collection,
-    wip: wipMap.collections[id],
-    err: errMap.collections[id],
+    collection: mdb.getCollectionById(state.mdb, id),
+    wip: mdb.getWip(state.mdb),
+    errors: mdb.getErrors(state.mdb),
     language: settings.getLanguage(state.settings),
   };
 }

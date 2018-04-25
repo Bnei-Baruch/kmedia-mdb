@@ -1,7 +1,8 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { getQuery, updateQuery as urlUpdateQuery } from './helpers/url';
+import { GenerateSearchId } from '../helpers/search';
 import { actions, selectors, types } from '../redux/modules/search';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions as mdbActions } from '../redux/modules/mdb';
@@ -18,12 +19,13 @@ function* autocomplete(action) {
   }
 }
 
-function* search(action) {
+export function* search(action) {
   try {
     yield* urlUpdateQuery(query => Object.assign(query, { q: action.payload.q }));
 
     const language = yield select(state => settings.getLanguage(state.settings));
     const sortBy   = yield select(state => selectors.getSortBy(state.search));
+    const deb      = yield select(state => selectors.getDeb(state.search));
 
     // Prepare filters values.
     const filters = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
@@ -37,7 +39,9 @@ function* search(action) {
       yield put(actions.searchFailure(null));
       return
     }
-    const { data } = yield call(Api.search, { ...action.payload, q, sortBy, language });
+    const searchId = GenerateSearchId();
+    const { data } = yield call(Api.search, { ...action.payload, q, sortBy, language, deb, searchId });
+    data.searchId = searchId;
 
     if (Array.isArray(data.hits.hits) && data.hits.hits.length > 0) {
       // TODO edo: optimize data fetching
@@ -74,6 +78,14 @@ function* search(action) {
   }
 }
 
+function* click(action) {
+  try {
+    yield call(Api.click, action.payload);
+  } catch (err) {
+    console.error('search click logging error:', err); // eslint-disable-line no-console
+  }
+}
+
 function* updatePageInQuery(action) {
   const page = action.payload > 1 ? action.payload : null;
   yield* urlUpdateQuery(query => Object.assign(query, { page }));
@@ -84,9 +96,11 @@ function* updateSortByInQuery(action) {
   yield* urlUpdateQuery(query => Object.assign(query, { sort_by: sortBy }));
 }
 
-function* hydrateUrl() {
+export function* hydrateUrl() {
   const query             = yield* getQuery();
-  const { q, page = '1' } = query;
+  const { q, page = '1', deb = false } = query;
+
+  yield put(actions.setDeb(deb));
 
   if (q) {
     yield put(actions.updateQuery(q));
@@ -108,6 +122,10 @@ function* watchSearch() {
   yield takeLatest(types.SEARCH, search);
 }
 
+function* watchClick() {
+  yield takeEvery(types.CLICK, click);
+}
+
 function* watchSetPage() {
   yield takeLatest(types.SET_PAGE, updatePageInQuery);
 }
@@ -123,6 +141,7 @@ function* watchHydrateUrl() {
 export const sagas = [
   watchAutocomplete,
   watchSearch,
+  watchClick,
   watchSetPage,
   watchSetSortBy,
   watchHydrateUrl,

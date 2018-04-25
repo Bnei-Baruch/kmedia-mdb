@@ -13,7 +13,8 @@
       "topics": "נושאים",
       "publications": "פרסומים",
       "photos": "תמונות",
-      "design": "עיצוב"
+      "design": "עיצוב",
+      "project-status": "סטאטוס הפרוייקט"
     },
     "footer": {
       "copyright": "© כל הזכויות שמורות 2003-{{year}}",
@@ -154,6 +155,10 @@
     }
   },
   "home": {
+    "header": {
+      "text": "דף הבית",
+      "subtext": ""
+    },
     "search": "גלה את חכמת הקבלה",
     "sections": "נושאים",
     "updates": "עדכונים אחרונים",
@@ -208,6 +213,9 @@
           "item-title": "חלק {{name}}"
         }
       }
+    },
+    "last": {
+      "text": "שיעור הקבלה היומי - מתעדכן"
     }
   },
   "programs": {
@@ -319,7 +327,8 @@
     "no-source": "בחר מקור",
     "toc": "תוכן עניינים",
     "az":        "אב",
-    "default":   "ברירת מחדל"
+    "default":   "ברירת מחדל",
+    "filter": "סנן..."
   },
   "media-downloads": {
     "title": "קבצים להורדה",
@@ -390,7 +399,7 @@
       "cs": "צ'כית"
     },
     "content-types": {
-      "DAILY_LESSON": "שיעור יומי",
+      "DAILY_LESSON": "השיעור היומי",
       "SPECIAL_LESSON": "שיעור מיוחד",
       "FRIENDS_GATHERINGS": "ישיבות חברים",
       "CONGRESS": "כנס",

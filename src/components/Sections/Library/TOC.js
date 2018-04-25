@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
 
-import { BS_SHAMATI } from '../../../helpers/consts';
-import { isEmpty } from '../../../helpers/utils';
+import { BS_SHAMATI, } from '../../../helpers/consts';
+import { isEmpty, shallowEqual } from '../../../helpers/utils';
 
 class TOC extends Component {
   static propTypes = {
@@ -14,11 +14,13 @@ class TOC extends Component {
       children: PropTypes.arrayOf(PropTypes.string),
     })).isRequired,
     rootId: PropTypes.string.isRequired,
-    // eslint-disable-next-line react/forbid-prop-types
     contextRef: PropTypes.object,
     getSourceById: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
+    apply: PropTypes.func.isRequired,
     stickyOffset: PropTypes.number,
+
+    match: PropTypes.string.isRequired,
+    matchApplied: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -30,7 +32,19 @@ class TOC extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { fullPath } = nextProps;
-    this.setState({ activeId: fullPath[fullPath.length - 1].id });
+    const activeId     = fullPath[fullPath.length - 1].id;
+    if (activeId !== this.state.activeId) {
+      this.setState({ activeId });
+    }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return (
+      this.props.rootId !== nextProps.rootId ||
+      this.props.match !== nextProps.match ||
+      this.props.stickyOffset !== nextProps.stickyOffset ||
+      !shallowEqual(this.props.fullPath, nextProps.fullPath)
+    );
   }
 
   componentDidUpdate() {
@@ -39,6 +53,7 @@ class TOC extends Component {
     if (el) {
       el.style.height = `calc(100vh - ${this.props.stickyOffset}px)`;
     }
+    this.scrollToActive();
   }
 
   getIndex = (node1, node2) => {
@@ -48,22 +63,42 @@ class TOC extends Component {
     return node1.children.findIndex(x => x === node2.id);
   };
 
+  handleTitleClick = (e, data) => {
+    // don't stop propagation on leaf nodes
+    const { id = '' } = data;
+
+    if (id.startsWith('title')) {
+      return;
+    }
+
+    // stop propagation so tocIsActive in LibraryContainer won't call
+    // this breaks navigation in nested TOCs (TES, Zohar, etc...)
+    e.stopPropagation();
+  };
+
   subToc = (subTree, path) => (
     subTree.map(sourceId => (this.toc(sourceId, path)))
   );
 
-  leaf = (id, title) => {
+  titleKey = id => `title-${id}`;
+
+  leaf = (id, title, match) => {
     const props = {
-      key: `lib-leaf-item-${id}`,
+      id: this.titleKey(id),
+      key: this.titleKey(id),
+      active: id === this.state.activeId,
       onClick: e => this.selectSourceById(id, e),
     };
-    return <Accordion.Title {...props} active={id === this.state.activeId}>{title}</Accordion.Title>;
+
+    // eslint-disable-next-line react/no-danger
+    const realTitle = isEmpty(match) ? title : <span dangerouslySetInnerHTML={{ __html: title }} />;
+    return <Accordion.Title {...props}>{realTitle}</Accordion.Title>;
   };
 
   toc = (sourceId, path, firstLevel = false) => {
     // 1. Element that has children is CONTAINER
-    // 2. Element that has NO children is NOT CONTAINER (though really it may be empty container)
-    // 3. If all children of first level element are NOT CONTAINERs, than it is also NOT CONTAINER
+    // 2. Element that has NO children is NOT CONTAINER (though really it may be an empty container)
+    // 3. If all children of the first level element are NOT CONTAINERS, than it is also NOT CONTAINER
 
     const { getSourceById } = this.props;
 
@@ -71,22 +106,27 @@ class TOC extends Component {
 
     if (isEmpty(children)) { // Leaf
       const item   = this.leaf(sourceId, title);
-      const result = { title: item, key: `lib-leaf-${sourceId}` };
+      const result = { as: 'span', title: item, key: `lib-leaf-${sourceId}` };
       return [result];
     }
 
     const hasNoGrandsons = children.reduce((acc, curr) => acc && isEmpty(getSourceById(curr).children), true);
     let panels;
     if (hasNoGrandsons) {
-      panels = children.map((leafId, idx) => {
-        let { name: leafTitle, } = getSourceById(leafId);
+      const tree = children.reduce((acc, leafId, idx) => {
+        let { name } = getSourceById(leafId);
         if (sourceId === BS_SHAMATI) {
-          leafTitle = `${idx + 1}. ${leafTitle}`;
+          name = `${idx + 1}. ${name}`;
         }
+        acc.push({ leafId, leafTitle: name });
+        return acc;
+      }, []);
 
-        const item = this.leaf(leafId, leafTitle);
-        return { title: item, key: `lib-leaf-${leafId}` };
-      });
+      const { match } = this.props;
+      panels          = this.filterSources(tree, match).map(({ leafId, leafTitle, }) => ({
+        title: this.leaf(leafId, leafTitle, match),
+        key: `lib-leaf-${leafId}`
+      }));
     } else {
       panels = this.subToc(children, path.slice(1));
     }
@@ -99,7 +139,13 @@ class TOC extends Component {
     return {
       title,
       content: {
-        content: <Accordion.Accordion panels={panels} defaultActiveIndex={activeIndex} />,
+        content: (
+          <Accordion.Accordion
+            panels={panels}
+            defaultActiveIndex={activeIndex}
+            onTitleClick={this.handleTitleClick}
+          />
+        ),
         key: `lib-content-${sourceId}`,
       }
     };
@@ -107,9 +153,37 @@ class TOC extends Component {
 
   selectSourceById = (id, e) => {
     e.preventDefault();
+    this.props.apply(`sources/${id}`);
+    this.props.matchApplied();
     this.setState({ activeId: id });
-    this.props.replace(`sources/${id}`);
+  };
+
+  scrollToActive = () => {
+    const { activeId } = this.state;
+    const element      = document.getElementById(this.titleKey(activeId));
+    if (element === null) {
+      return;
+    }
+    element.scrollIntoView();
     window.scrollTo(0, 0);
+  };
+
+  filterSources = (path, match) => {
+    if (isEmpty(match)) {
+      return path;
+    }
+
+    // We don't check validity of regular expression,
+    // so let's excape all special symbols
+    const escapedMatch = match.replace(/[/)(.+\\]/g, '\\$&');
+    const reg          = new RegExp(escapedMatch, 'i');
+    return path.reduce((acc, el) => {
+      if (reg.test(el.leafTitle)) {
+        const name = el.leafTitle.replace(reg, '<em class="blue text">$&</em>');
+        acc.push({ leafId: el.leafId, leafTitle: name });
+      }
+      return acc;
+    }, []);
   };
 
   render() {
@@ -120,13 +194,13 @@ class TOC extends Component {
       return null;
     }
 
-    const path = fullPath.slice(1); // Remove kabbalist
+    const path = fullPath.slice(1); // Remove first element (i.e. kabbalist)
     const toc  = this.toc(rootId, path, true);
 
     return (
       <Sticky context={contextRef} offset={stickyOffset} className="source__toc">
         <Ref innerRef={this.handleAccordionContext}>
-          <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} />
+          <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} onTitleClick={this.handleTitleClick} />
         </Ref>
       </Sticky>
     );

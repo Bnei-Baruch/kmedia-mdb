@@ -2,12 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { Container, Grid, Header, Menu } from 'semantic-ui-react';
+import Helmets from './Helmets';
 
 const SectionHeader = (props) => {
   const { section, submenuItems, t } = props;
 
+  const sectionHeader = t(`${section}.header.text`);
+  const sectionSubText =  t(`${section}.header.subtext`);
   return (
     <div className="section-header">
+      {/* TODO: dont use image fixed url*/}
+      <Helmets.Basic
+        title={sectionHeader}
+        description={sectionSubText}
+      />
       <Container className="padded">
         <Grid>
           <Grid.Row>
@@ -15,12 +23,12 @@ const SectionHeader = (props) => {
               <Header as="h1" color="blue">
                 <Header.Content>
                   <span className="section-header__title">
-                    {t(`${section}.header.text`)}
+                    {sectionHeader}
                   </span>
                   {
-                    t(`${section}.header.subtext`) ?
+                    sectionSubText ?
                       <Header.Subheader className="section-header__subtitle">
-                        {t(`${section}.header.subtext`)}
+                        {sectionSubText}
                       </Header.Subheader>
                       : null
                   }

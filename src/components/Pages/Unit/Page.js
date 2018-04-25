@@ -12,9 +12,8 @@ import MediaDownloads from './widgets/Downloads/MediaDownloads';
 import SameCollection from './widgets/Recommended/SameCollection/Container';
 
 export class UnitPage extends Component {
-
   static propTypes = {
-    unit: shapes.ProgramChapter,
+    unit: shapes.ContentUnit,
     wip: shapes.WIP,
     err: shapes.Error,
     section: PropTypes.string,
@@ -28,6 +27,11 @@ export class UnitPage extends Component {
     err: null,
     section: '',
   };
+
+  // eslint-disable-next-line class-methods-use-this
+  renderHelmet() {
+    return null;
+  }
 
   renderPlayer() {
     const { unit, language, t } = this.props;
@@ -65,6 +69,7 @@ export class UnitPage extends Component {
   renderContent() {
     return (
       <div className="unit-page">
+        {this.renderHelmet()}
         {this.renderPlayer()}
         <Container>
           <Grid padded>

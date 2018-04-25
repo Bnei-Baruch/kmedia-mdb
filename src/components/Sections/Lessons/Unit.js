@@ -5,6 +5,7 @@ import { canonicalLink, formatDuration, neighborIndices } from '../../../helpers
 import { sectionThumbnailFallback } from '../../../helpers/images';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
+import Helmets from '../../shared/Helmets';
 import { UnitContainer, wrap as wrapContainer } from '../../Pages/Unit/Container';
 import { UnitPage, wrap as wrapPage } from '../../Pages/Unit/Page';
 import {
@@ -99,6 +100,10 @@ class MySameCollectionContainer extends SameCollectionContainer {
 const MyWrappedSameCollectionContainer = wrapSameCollectionContainer(MySameCollectionContainer);
 
 class MyUnitPage extends UnitPage {
+  renderHelmet() {
+    return <Helmets.AVUnit unit={this.props.unit} language={this.props.language} />;
+  }
+
   renderRecommendations() {
     const { unit, t } = this.props;
     return <MyWrappedSameCollectionContainer unit={unit} t={t} />;
