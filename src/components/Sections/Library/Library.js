@@ -75,6 +75,7 @@ class Library extends Component {
 
     // PDF.js will fetch file by itself
     const usePdfFile = isTaas && this.props.pdfFile;
+    const mimeType = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
     let contents;
 
     if (usePdfFile) {
@@ -132,7 +133,7 @@ class Library extends Component {
             :
             languageBar
         }
-        <Download path={fullUrlPath} mimeType="application/pdf" />
+        <Download path={fullUrlPath} mimeType={mimeType} />
         {contents}
       </div>
     );

@@ -392,6 +392,7 @@ class LibraryContainer extends Component {
                 <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
                   <div className="source__header-title">{this.header(sourceId, fullPath)}</div>
                   <div className="source__header-toolbar">
+                    <div id="download-button" />
                     <Popup
                       trigger={<Button compact size="small" icon="options" />}
                       on="click"
