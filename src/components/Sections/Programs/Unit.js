@@ -9,7 +9,7 @@ class MyUnitContainer extends UnitContainer {
     const { language, unit, wip, err } = this.props;
     return (
       <div>
-        <Helmets.AVUnit unit={unit} />
+        <Helmets.AVUnit unit={unit} language={language} />
         <Page
           section="programs"
           unit={wip || err ? null : unit}

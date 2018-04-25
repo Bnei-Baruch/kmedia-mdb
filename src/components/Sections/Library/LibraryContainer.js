@@ -4,10 +4,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
-import { push as routerPush } from 'react-router-redux';
+import { push as routerPush, replace as routerReplace } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Grid, Header, Icon, Input, Menu, Popup, Ref } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
@@ -17,6 +17,7 @@ import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import Helmets from '../../shared/Helmets';
 import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
+import LibrarySettings from './LibrarySettings';
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -36,7 +37,8 @@ class LibraryContainer extends Component {
     NotToFilter: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     areSourcesLoaded: PropTypes.bool,
     t: PropTypes.func.isRequired,
-    apply: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -63,7 +65,7 @@ class LibraryContainer extends Component {
     window.addEventListener('resize', this.updateSticky);
     window.addEventListener('load', this.updateSticky);
 
-    const { sourceId, areSourcesLoaded, apply } = this.props;
+    const { sourceId, areSourcesLoaded, push } = this.props;
     if (!areSourcesLoaded) {
       return;
     }
@@ -73,7 +75,7 @@ class LibraryContainer extends Component {
       this.props.sourceId !== sourceId ||
       this.state.lastLoadedId !== sourceId) {
       if (firstLeafId !== sourceId) {
-        apply(`sources/${firstLeafId}`);
+        push(`sources/${firstLeafId}`);
       } else {
         // eslint-disable-next-line react/no-did-mount-set-state
         this.setState({ lastLoadedId: sourceId, language: this.props.language });
@@ -83,7 +85,7 @@ class LibraryContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { sourceId, areSourcesLoaded, language, apply } = nextProps;
+    const { sourceId, areSourcesLoaded, language, replace } = nextProps;
     if (!areSourcesLoaded) {
       return;
     }
@@ -99,7 +101,7 @@ class LibraryContainer extends Component {
       if (firstLeafId === sourceId) {
         this.loadNewIndices(sourceId, this.props.language);
       } else {
-        apply(firstLeafId);
+        replace(`sources/${firstLeafId}`);
       }
     }
 
@@ -183,10 +185,6 @@ class LibraryContainer extends Component {
     this.contentHeaderRef = ref;
   };
 
-  handleHeaderMenuRef = (ref) => {
-    this.headerMenuRef = ref;
-  };
-
   handleTocIsActive = () => {
     this.setState({ tocIsActive: !this.state.tocIsActive });
   };
@@ -195,36 +193,8 @@ class LibraryContainer extends Component {
     this.setState({ isReadable: !this.state.isReadable });
   };
 
-  handleIncreaseFontSize = () => {
-    if (this.state.fontSize < 5) {
-      this.setState({ fontSize: this.state.fontSize + 1 });
-    }
-  };
-
-  handleDecreaseFontSize = () => {
-    if (this.state.fontSize > -3) {
-      this.setState({ fontSize: this.state.fontSize - 1 });
-    }
-  };
-
-  handleSerifFont = () => {
-    this.setState({ fontType: 'serif' });
-  };
-
-  handleSansSerifFont = () => {
-    this.setState({ fontType: 'sans-serif' });
-  };
-
-  handleLightTheme = () => {
-    this.setState({ theme: 'light' });
-  };
-
-  handleDarkTheme = () => {
-    this.setState({ theme: 'dark' });
-  };
-
-  handleSepiaTheme = () => {
-    this.setState({ theme: 'sepia' });
+  handleSettings = (setting) => {
+    this.setState(setting);
   };
 
   fetchIndices = (sourceId) => {
@@ -393,42 +363,7 @@ class LibraryContainer extends Component {
                   <div className="source__header-title">{this.header(sourceId, fullPath)}</div>
                   <div className="source__header-toolbar">
                     <div id="download-button" />
-                    <Popup
-                      trigger={<Button compact size="small" icon="options" />}
-                      on="click"
-                      position="bottom right"
-                      className="sources-settings"
-                      flowing
-                    >
-                      <Popup.Content>
-                        <Menu fluid widths={2}>
-                          <Menu.Item onClick={this.handleIncreaseFontSize}>
-                            <Icon name="font" size="large" />
-                            <Icon name="plus" size="small" />
-                          </Menu.Item>
-                          <Menu.Item onClick={this.handleDecreaseFontSize}>
-                            <Icon name="font" size="large" />
-                            <Icon name="minus" size="small" />
-                          </Menu.Item>
-                        </Menu>
-                        <Menu fluid widths={2}>
-                          <Menu.Item
-                            className="is-serif"
-                            name="Serif"
-                            onClick={this.handleSerifFont}
-                          />
-                          <Menu.Item name="Sans-serif" onClick={this.handleSansSerifFont} />
-                        </Menu>
-                        <Menu fluid widths={3}>
-                          <Menu.Item
-                            name="Light"
-                            onClick={this.handleLightTheme}
-                          />
-                          <Menu.Item name="Dark" onClick={this.handleDarkTheme} />
-                          <Menu.Item name="Sepia" onClick={this.handleSepiaTheme} />
-                        </Menu>
-                      </Popup.Content>
-                    </Popup>
+                    <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
                   </div>
@@ -448,7 +383,7 @@ class LibraryContainer extends Component {
                   rootId={parentId}
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
-                  apply={this.props.apply}
+                  apply={this.props.push}
                   stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
                   t={t}
                 />
@@ -495,6 +430,7 @@ export default withRouter(connect(
   dispatch => bindActionCreators({
     fetchIndex: sourceActions.fetchIndex,
     sourcesSortBy: sourceActions.sourcesSortBy,
-    apply: routerPush,
+    push: routerPush,
+    replace: routerReplace,
   }, dispatch)
 )(translate()(LibraryContainer)));

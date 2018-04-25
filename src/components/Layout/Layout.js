@@ -90,8 +90,8 @@ class Layout extends Component {
         </div> */}
         <Helmets.TopMost
           titlePostfix={t('nav.top.header')}
-          mainLang={LANG_HEBREW}
-          alternateLang={[LANG_ENGLISH, LANG_RUSSIAN]}
+          mainLang={language}
+          alternateLang={dropdownLangs}
         />
         <GAPageView location={location} />
         <div className="layout__header">

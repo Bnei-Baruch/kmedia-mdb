@@ -144,7 +144,7 @@
       background: $black !important;
       color: $white !important;
     }
-  
+
     .is-sepia & {
       background: $sepia-bg !important;
       color: $sepia-text !important;
@@ -225,10 +225,13 @@
 
   &__content {
     margin: 0 auto;
-    max-width: 700px;
+    max-width: $max-readble-width;
     padding-bottom: 1rem;
     padding-top: 1rem;
     .is-serif & { font-family: Georgia, “Times New Roman”, Times, serif;}
+    .size8 & {font-size: (24 / 16) + em;}
+    .size7 & {font-size: (23 / 16) + em;}
+    .size6 & {font-size: (22 / 16) + em;}
     .size5 & {font-size: (21 / 16) + em;}
     .size4 & {font-size: (20 / 16) + em;}
     .size3 & {font-size: (19 / 16) + em;}
@@ -240,7 +243,7 @@
     .size-3 & {font-size: (13 / 16) + em;}
 
     * {
-      line-height: 1.9;
+      line-height: 1.65;
     }
 
     h1,
@@ -255,7 +258,16 @@
         font-weight: bold;
       }
     }
-
+    p {
+      text-indent: 2.5em;
+      margin-bottom: 2em;
+    }
+    ul,
+    ol {
+      p {
+        text-indent: 0;
+      }
+    }
     h1 {font-size: 2em;}
     h2 {font-size: 1.71428571em;}
     h3 {font-size: 1.28571429em;}
@@ -273,11 +285,11 @@
 
 .sources-settings {
   padding: 0 !important;
-  
+
   .icon {
     margin: 0 !important;
   }
-  
+
   .menu {
     border: none !important;
     box-shadow: none !important;

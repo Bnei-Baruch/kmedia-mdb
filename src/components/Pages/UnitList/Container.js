@@ -77,6 +77,7 @@ export class UnitListContainer extends withPagination {
   }
 
   handlePageChanged(pageNo) {
+    window.scrollTo(0, 0);
     this.setPage(this.props, pageNo);
   }
 

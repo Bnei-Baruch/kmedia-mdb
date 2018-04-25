@@ -3,8 +3,9 @@ import { List, Table } from 'semantic-ui-react';
 
 import { CT_CHILDREN_LESSON, CT_LECTURE, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, NO_NAME } from '../../../helpers/consts';
 import { sectionThumbnailFallback } from '../../../helpers/images';
-import { canonicalLink } from '../../../helpers/utils';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
+import { ellipsize } from '../../../helpers/strings';
+import { canonicalLink } from '../../../helpers/utils';
 import UnitList from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
@@ -24,7 +25,7 @@ export const renderUnit = (unit, t) => {
 
   let filmDate = '';
   if (unit.film_date) {
-    filmDate = t('values.date', { date: new Date(unit.film_date) });
+    filmDate = t('values.date', { date: unit.film_date });
   }
   const link = canonicalLink(unit);
 
@@ -45,19 +46,29 @@ export const renderUnit = (unit, t) => {
         <Link className="index__title" to={link}>
           {unit.name || NO_NAME}
         </Link>
-        <List horizontal divided link className="index__collections" size="tiny">
-          <List.Item>
-            <List.Header>{t('lectures.list.item_from')}</List.Header>
-          </List.Item>
-          {relatedItems}
-        </List>
+        {
+          unit.description ?
+            <div className="index__description mobile-hidden">
+              {ellipsize(unit.description)}
+            </div>
+            : null
+        }
+        {
+          relatedItems.length > 0 ?
+            <List horizontal divided link className="index__collections" size="tiny">
+              <List.Item>
+                <List.Header>{t('lectures.list.item_from')}</List.Header>
+              </List.Item>
+              {relatedItems}
+            </List>
+            : null
+        }
       </Table.Cell>
     </Table.Row>
   );
 };
 
 class LecturesList extends Component {
-
   extraFetchParams = () => ({
     content_type: [CT_LECTURE, CT_WOMEN_LESSON, CT_CHILDREN_LESSON, CT_VIRTUAL_LESSON]
   });
