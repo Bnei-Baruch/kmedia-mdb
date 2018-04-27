@@ -4,9 +4,12 @@ import PropTypes from 'prop-types';
 import { Trans, translate } from 'react-i18next';
 import { Container, Divider, Label, Table } from 'semantic-ui-react';
 
-import { canonicalLink, formatDuration, isEmpty } from '../../helpers/utils';
+import { canonicalLink, sectionLink } from '../../helpers/links';
+import { tracePath, formatDuration, isEmpty } from '../../helpers/utils';
 import { getQuery, isDebMode } from '../../helpers/url';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
+import { selectors as sourcesSelectors } from '../../redux/modules/sources';
+import { selectors as tagsSelectors } from '../../redux/modules/tags';
 import { filtersTransformer } from '../../filters';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
@@ -14,10 +17,16 @@ import WipErr from '../shared/WipErr/WipErr';
 import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import ScoreDebug from './ScoreDebug';
+import {
+  SEARCH_I_FILTER_NAMES,
+  SEARCH_I_NAMES,
+  SEARCH_I_SOURCE,
+  SEARCH_I_TOPIC,
+} from '../../helpers/consts';
 
 class SearchResults extends Component {
   static propTypes = {
-    results: PropTypes.object,
+    queryResult: PropTypes.object,
     cMap: PropTypes.objectOf(shapes.Collection),
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
     pageNo: PropTypes.number.isRequired,
@@ -33,7 +42,7 @@ class SearchResults extends Component {
   };
 
   static defaultProps = {
-    results: null,
+    queryResult: null,
     cMap: {},
     cuMap: {},
     wip: false,
@@ -50,11 +59,11 @@ class SearchResults extends Component {
   click = (mdb_uid, index, type, rank, searchId) => {
     const { click } = this.props;
     click(mdb_uid, index, type, rank, searchId);
-  };
+  }
 
   renderContentUnit = (cu, hit, rank) => {
-    const { t, location, results: { searchId } } = this.props;
-
+    const { t, location, queryResult } = this.props;
+    const { search_result: { searchId } } = queryResult;
     const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
 
     const name        = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || cu.name;
@@ -82,7 +91,7 @@ class SearchResults extends Component {
 
     let filmDate = '';
     if (cu.film_date) {
-      filmDate = t('values.date', { date: cu.film_date });
+      filmDate = t('values.date', { date: new Date(cu.film_date) });
     }
 
     return (
@@ -121,7 +130,8 @@ class SearchResults extends Component {
   };
 
   renderCollection = (c, hit, rank) => {
-    const { t, location, results: { searchId } }                                                 = this.props;
+    const { t, location, queryResult } = this.props;
+    const { search_result: { searchId } } = queryResult;
     const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
 
     const name        = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || c.name;
@@ -140,7 +150,7 @@ class SearchResults extends Component {
 
     let startDate = '';
     if (c.start_date) {
-      startDate = t('values.date', { date: c.start_date });
+      startDate = t('values.date', { date: new Date(c.start_date) });
     }
 
     return (
@@ -163,11 +173,10 @@ class SearchResults extends Component {
           {snippet || null}
         </Table.Cell>
         {
-          isDebMode(location) ?
+          !isDebMode(location) ? null :
             <Table.Cell collapsing textAlign="right">
               <ScoreDebug name={c.name} score={score} explanation={hit._explanation} />
-            </Table.Cell> :
-            null
+            </Table.Cell>
         }
       </Table.Row>
     );
@@ -191,8 +200,126 @@ class SearchResults extends Component {
     return null;
   };
 
+  renderIntentLinks = (section, intents) => {
+    const { t, getTagById, getSourceById } = this.props;
+    const intentsData = intents.map(intent => {
+      const intentType = SEARCH_I_NAMES[intent.type];
+      const filterName = SEARCH_I_FILTER_NAMES[intent.type];
+      let getFilterById = null;
+      switch (intent.type) {
+        case SEARCH_I_TOPIC:
+          getFilterById = getTagById;
+          break;
+        case SEARCH_I_SOURCE:
+          getFilterById = getSourceById
+          break;
+        default:
+          getFilterById = (x) => x;
+      }
+      const path = tracePath(getFilterById(intent.value.mdb_uid), getFilterById);
+      let display = '';
+      switch (intent.type) {
+        case SEARCH_I_TOPIC:
+          display = path[path.length - 1].label;
+          break;
+        case SEARCH_I_SOURCE:
+          display = path.map(y => y.name).join(' > ');
+          break;
+        default:
+          display = intent.value.name;
+      }
+      return {intentType, name: filterName, value: intent.value.mdb_uid, getFilterById, display};
+    });
+
+    const compareIntentsData = (a, b) => {
+      if (a.display === b.display) {
+        return 0;
+      }
+      return a.display > b.display ? 1 : -1;
+    };
+    return intentsData.sort(compareIntentsData).map(data => {
+      return (
+        <Link
+          key={data.value}
+          className="search__link"
+          style={{paddingLeft: "50px", display: "block"}} /* INLINE CSS, NEED CORRECTION */
+          to={sectionLink(section, [data])}
+        >
+          {t(`search.intent-prefix.${data.intentType.toLowerCase()}`)} {data.display}
+        </Link>
+      );
+    });
+  };
+
+  renderIntentsDeb = (intents) => {
+    return (
+      <Table.Row key="intents-debug" verticalAlign="top">
+        <Table.Cell collapsing singleLine width={1}></Table.Cell>
+        <Table.Cell collapsing singleLine></Table.Cell>
+        <Table.Cell>
+          <Table>
+            <Table.Body>
+            {intents.map(intent => {
+              const intentType = SEARCH_I_NAMES[intent.type];
+              return (
+                <Table.Row key={intent.type + intent.value.mdb_uid}>
+                  <Table.Cell>
+                    {intent.value.name} {intentType} {intent.value.mdb_uid}
+                  </Table.Cell>
+                  <Table.Cell>
+                    <div style={{display: 'inline-block'}}>
+                      <ScoreDebug
+                        name={intent.value.name}
+                        score={intent.value.score}
+                        explanation={intent.value.explanation} />
+                    </div>
+                    <div style={{display: 'inline-block'}}>
+                      <ScoreDebug
+                        name="Max"
+                        score={intent.value.max_score}
+                        explanation={intent.value.max_explanation} />
+                    </div>
+                  </Table.Cell>
+                </Table.Row>
+              );
+            })}
+            </Table.Body>
+          </Table>
+        </Table.Cell>
+      </Table.Row>
+    );
+  }
+
+  renderIntents = (intents) => {
+    const { t } = this.props;
+    const sections = ['lessons', 'programs'];
+    return sections.map(section => {
+      const tagIntents = intents.filter(i => i.type === SEARCH_I_TOPIC);
+      const sourceIntents = intents.filter(i => i.type === SEARCH_I_SOURCE);
+      return (
+        <Table.Row key={section} verticalAlign="top">
+          <Table.Cell collapsing singleLine width={1}>
+            {/*<strong>date if applicable</strong>*/}
+          </Table.Cell>
+          <Table.Cell collapsing singleLine>
+            <Label size="tiny">{t(`search.intent-types.${section}`)}</Label>
+          </Table.Cell>
+          <Table.Cell>
+            <div style={{display: "inline-block", verticalAlign: "top"}} /* INLINE CSS, NEED CORRECTION */ >
+              {this.renderIntentLinks(section, tagIntents)}
+            </div>
+            <div style={{display: "inline-block", verticalAlign: "top"}} /* INLINE CSS, NEED CORRECTION */ >
+              {this.renderIntentLinks(section, sourceIntents)}
+            </div>
+          </Table.Cell>
+        </Table.Row>
+      );
+    });
+  };
+
   render() {
-    const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange, cMap, cuMap, location } = this.props;
+    const { filters, wip, err, queryResult, pageNo, pageSize, language, t, handlePageChange, cMap, cuMap, location } = this.props;
+    const { search_result: results, intents = []} = queryResult;
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
@@ -226,6 +353,8 @@ class SearchResults extends Component {
             <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
             <Table sortable basic="very" className="index-list">
               <Table.Body>
+                {isDebMode(location) ? this.renderIntentsDeb(intents) : null}
+                {pageNo === 1 && intents.length ? this.renderIntents(intents) : null}
                 {hits.map(this.renderHit)}
               </Table.Body>
             </Table>
@@ -248,5 +377,7 @@ class SearchResults extends Component {
 
 export default connect(state => ({
   filters: filterSelectors.getFilters(state.filters, 'search'),
+  getSourceById: sourcesSelectors.getSourceById(state.sources),
+  getTagById: tagsSelectors.getTagById(state.tags),
 }))(translate()(SearchResults));
 

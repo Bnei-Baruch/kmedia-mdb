@@ -20,7 +20,8 @@ import {
   VS_DEFAULT,
 } from './consts';
 import { getQuery, updateQuery } from './url';
-import { canonicalLink, isEmpty, physicalFile } from './utils';
+import { canonicalLink } from './links';
+import { isEmpty, physicalFile } from './utils';
 
 const fallbacksLanguages = [LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN];
 
