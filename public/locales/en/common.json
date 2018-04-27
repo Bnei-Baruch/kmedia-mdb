@@ -234,6 +234,12 @@
       "text": "Lectures",
       "subtext": "Here you will find a rich variety of lectures that include: lectures, children's programs, women's programs, etc."
     },
+    "tabs" : {
+      "virtual-lessons" : "Virtual Lessons",
+      "lectures": "Lectures",
+      "women-lessons": "Women lessons",
+      "children-lessons": "Children lessons"
+    },
     "list": {
       "item_from": "Item of:"
     },
