@@ -54,7 +54,7 @@ class LibraryContainer extends Component {
   state = {
     lastLoadedId: null,
     isReadable: false,
-    tocIsActive: false,
+    tocIsActive: true,
     fontSize: 0,
     theme: 'light',
     match: '',
