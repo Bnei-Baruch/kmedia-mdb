@@ -4,6 +4,7 @@ import { List, Table } from 'semantic-ui-react';
 import { CT_CHILDREN_LESSON, CT_LECTURE, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, NO_NAME } from '../../../helpers/consts';
 import { sectionThumbnailFallback } from '../../../helpers/images';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
+import { ellipsize } from '../../../helpers/strings';
 import { canonicalLink } from '../../../helpers/utils';
 import UnitList from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
@@ -47,9 +48,9 @@ export const renderUnit = (unit, t) => {
         </Link>
         {
           unit.description ?
-            <span className="index__description mobile-hidden">
-              {unit.description}
-            </span>
+            <div className="index__description mobile-hidden">
+              {ellipsize(unit.description)}
+            </div>
             : null
         }
         {
