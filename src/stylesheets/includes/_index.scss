@@ -146,6 +146,12 @@
     width: 120px;
   }
 
+  &__description {
+    font-size: .85714286em;
+    margin: .2em 0 .5em;
+    max-width: $max-readble-width;
+  }
+
   &__collections {
     margin-top: 0 !important;
     vertical-align: top;

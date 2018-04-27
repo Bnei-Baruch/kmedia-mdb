@@ -5,6 +5,7 @@ import { CT_CHILDREN_LESSON, CT_LECTURE, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, NO_
 import { sectionThumbnailFallback } from '../../../helpers/images';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { canonicalLink } from '../../../helpers/links';
+import { ellipsize } from '../../../helpers/strings';
 import UnitList from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
@@ -47,9 +48,9 @@ export const renderUnit = (unit, t) => {
         </Link>
         {
           unit.description ?
-            <span className="index__description mobile-hidden">
-              {unit.description}
-            </span>
+            <div className="index__description mobile-hidden">
+              {ellipsize(unit.description)}
+            </div>
             : null
         }
         {
