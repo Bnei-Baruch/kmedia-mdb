@@ -241,3 +241,24 @@ export const UNIT_LESSONS_TYPE        = [CT_LESSON_PART, CT_CHILDREN_LESSON, CT_
 export const UNIT_PROGRAMS_TYPE       = [CT_VIDEO_PROGRAM_CHAPTER];
 export const UNIT_EVENTS_TYPE         = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
 
+
+export const MAP_TAB_TO_CONTENT_TYPE = (contentType, tabName) => {
+  if (contentType === 'lectures') {
+    switch (tabName) {
+    case 'virtual-lessons':
+      return CT_VIRTUAL_LESSON;
+
+    case 'lectures':
+      return CT_LECTURE;
+
+    case 'women-lessons':
+      return CT_WOMEN_LESSON;
+
+    case 'children-lessons':
+      return CT_CHILDREN_LESSON;
+    default:
+      return CT_VIRTUAL_LESSON;
+    }
+  }
+};
+

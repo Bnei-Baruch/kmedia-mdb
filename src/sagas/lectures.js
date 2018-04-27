@@ -1,37 +1,38 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import { CT_CHILDREN_LESSON, CT_LECTURE, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON } from '../helpers/consts';
 import { updateQuery } from './helpers/url';
 import { selectors as settings } from '../redux/modules/settings';
 import { selectors as filterSelectors } from '../redux/modules/filters';
+import { selectors as listsSelectors } from '../redux/modules/lists';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { actions, types } from '../redux/modules/lectures';
 import { filtersTransformer } from '../filters';
 
-function* fetchList(action) {
-  const filters = yield select(state => filterSelectors.getFilters(state.filters, 'lectures'));
-  const params  = filtersTransformer.toApiParams(filters) || {};
-  try {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const args     = {
-      ...action.payload,
-      ...params,
-      language,
-      content_type: [CT_LECTURE, CT_WOMEN_LESSON, CT_CHILDREN_LESSON, CT_VIRTUAL_LESSON]
-    };
+// TODO: remove it (no longer use it)
+// function* fetchList(action) {
+//   const filters = yield select(state => filterSelectors.getFilters(state.filters, 'lectures'));
+//   const params  = filtersTransformer.toApiParams(filters) || {};
+//   try {
+//     const language = yield select(state => settings.getLanguage(state.settings));
+//     const args     = {
+//       ...action.payload,
+//       ...params,
+//       language,
+      // content_type: 
+//     };
 
-    const { data } = yield call(Api.units, args);
+//     const { data } = yield call(Api.units, args);
 
-    if (Array.isArray(data.content_units)) {
-      yield put(mdbActions.receiveContentUnits(data.content_units));
-    }
+//     if (Array.isArray(data.content_units)) {
+//       yield put(mdbActions.receiveContentUnits(data.content_units));
+//     }
 
-    yield put(actions.fetchListSuccess(data));
-  } catch (err) {
-    yield put(actions.fetchListFailure(err));
-  }
-}
+//     yield put(actions.fetchListSuccess(data));
+//   } catch (err) {
+//     yield put(actions.fetchListFailure(err));
+//   }
+// }
 
 function* fetchCollectionList(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, 'lectures-collection'));
@@ -83,9 +84,9 @@ function* updatePageInQuery(action) {
   yield* updateQuery(query => Object.assign(query, { page }));
 }
 
-function* watchFetchList() {
-  yield takeLatest(types.FETCH_LIST, fetchList);
-}
+// function* watchFetchList() {
+//   yield takeLatest(types.FETCH_LIST, fetchList);
+// }
 
 function* watchFetchUnit() {
   yield takeEvery(types.FETCH_UNIT, fetchUnit);
@@ -103,10 +104,11 @@ function* watchSetPage() {
   yield takeLatest([types.SET_PAGE, types.SET_COLLECTION_PAGE], updatePageInQuery);
 }
 
+
 export const sagas = [
-  watchFetchList,
+  // watchFetchList,
   watchFetchUnit,
   watchFetchCollection,
   watchFetchCollectionList,
-  watchSetPage
+  watchSetPage,
 ];
