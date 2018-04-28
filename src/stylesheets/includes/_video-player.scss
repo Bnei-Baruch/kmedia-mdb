@@ -7,8 +7,8 @@
     }
 
     height: 0;
-    margin-bottom: -1rem;
-    margin-top: -1rem;
+    // margin-bottom: -1rem;
+    // margin-top: -1rem;
     padding-top: percentage(9 / 16);
     position: relative;
 
@@ -27,15 +27,6 @@
     position: absolute;
     top: 0;
     width: 100%;
-
-    .social-buttons {
-      margin: 1em auto;
-      .SocialMediaShareButton {
-        float: left;
-        margin-left: 5px;
-        cursor: pointer;
-      }
-    }
   }
 
   &__playlist-wrapper {

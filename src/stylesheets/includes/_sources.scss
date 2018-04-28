@@ -225,7 +225,7 @@
 
   &__content {
     margin: 0 auto;
-    max-width: 700px;
+    max-width: $max-readble-width;
     padding-bottom: 1rem;
     padding-top: 1rem;
     .is-serif & { font-family: Georgia, “Times New Roman”, Times, serif;}
@@ -243,7 +243,7 @@
     .size-3 & {font-size: (13 / 16) + em;}
 
     * {
-      line-height: 1.9;
+      line-height: 1.65;
     }
 
     h1,
@@ -258,7 +258,16 @@
         font-weight: bold;
       }
     }
-
+    p {
+      text-indent: 2.5em;
+      margin-bottom: 2em;
+    }
+    ul,
+    ol {
+      p {
+        text-indent: 0;
+      }
+    }
     h1 {font-size: 2em;}
     h2 {font-size: 1.71428571em;}
     h3 {font-size: 1.28571429em;}

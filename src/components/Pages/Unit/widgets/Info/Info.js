@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
+import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../../helpers/consts';
 import { canonicalLink, intersperse, tracePath } from '../../../../../helpers/utils';
 import { stringify as urlSearchStringify } from '../../../../../helpers/url';
 import { selectors as sourcesSelectors } from '../../../../../redux/modules/sources';
@@ -10,10 +11,8 @@ import { selectors as tagsSelectors } from '../../../../../redux/modules/tags';
 import { filtersTransformer } from '../../../../../filters/index';
 import * as shapes from '../../../../shapes';
 import Link from '../../../../Language/MultiLanguageLink';
-import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../../helpers/consts';
 
 class Info extends Component {
-
   static propTypes = {
     unit: shapes.ContentUnit,
     section: PropTypes.string,
@@ -57,10 +56,9 @@ class Info extends Component {
               {display}
             </Link>
           );
-        } else {
-          return <span key={x}>{display}</span>;
         }
 
+        return <span key={x}>{display}</span>;
       }), ', '));
 
     const sourcesLinks = Array.from(intersperse(
@@ -89,10 +87,9 @@ class Info extends Component {
               {display}
             </Link>
           );
-        } else {
-          return <span key={x}>{display}</span>;
         }
 
+        return <span key={x}>{display}</span>;
       }), ', '));
 
     const collectionsLinks = Array.from(intersperse(
@@ -100,11 +97,12 @@ class Info extends Component {
         let display;
         switch (x.content_type) {
         case CT_DAILY_LESSON:
-        case CT_SPECIAL_LESSON:
+        case CT_SPECIAL_LESSON: {
           const ct = t(`constants.content-types.${CT_DAILY_LESSON}`);
-          const fd = t('values.date', { date: new Date(x.film_date) });
+          const fd = t('values.date', { date: x.film_date });
           display  = `${ct} ${fd}`;
           break;
+        }
         default:
           display = x.name;
           break;
@@ -117,7 +115,7 @@ class Info extends Component {
       <div className="unit-info">
         <Header as="h1">
           <small className="text grey unit-info__film-date">
-            {t('values.date', { date: new Date(filmDate) })}
+            {t('values.date', { date: filmDate })}
           </small>
           <br />
           <span className="unit-info__name">{name}</span>

@@ -64,7 +64,7 @@ export default class ShareBarMobile extends Component {
     const title = t('player.share.title');
 
     return (
-      <div className="social-buttons" style={{ height: bsPixels }}>
+      <div className="social-buttons">
         <FacebookShareButton url={url} quote={title}>
           <FacebookIcon size={bsPixels} round />
         </FacebookShareButton>

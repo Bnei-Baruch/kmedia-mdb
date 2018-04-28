@@ -24,7 +24,7 @@ class LatestDailyLesson extends Component {
           <Header as="h2" className="thumbnail__header">
             <Header.Content>
               <Header.Subheader>
-                {t('values.date', { date: new Date(collection.film_date) })}
+                {t('values.date', { date: collection.film_date })}
               </Header.Subheader>
               {t('home.last-lesson')}
             </Header.Content>
