@@ -31,7 +31,7 @@ class SearchResults extends Component {
     t: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
     filters: PropTypes.array.isRequired,
-    sources: PropTypes.arrayOf(PropTypes.object).isRequired,
+    sources: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
     click: PropTypes.func.isRequired,
   };
@@ -182,12 +182,12 @@ class SearchResults extends Component {
     const { t, location, sources }                                            = this.props;
     const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
 
-    const name = this.snippetFromHighlight(highlight, ['name', 'name.analyzed'], parts => parts.join(' ')) || s.name;
+    const name = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || s.name;
     let path="", authors="";
 
     if (sources) {
         const sourcesArr = sources(mdbUid);
-        authors = this.snippetFromHighlight(highlight, ['authors', 'authors.analyzed'], parts => parts[0]);
+        authors = this.snippetFromHighlight(highlight, ['authors', 'authors_analyzed'], parts => parts[0]);
         if (authors){
           // Remove author from path in order to replace with highlight value.
           sourcesArr.pop();
@@ -195,8 +195,8 @@ class SearchResults extends Component {
         path = sourcesArr.slice(0,-1).map(n => n.name).join(' > ') + ' >';
     }
 
-    const description = this.snippetFromHighlight(highlight, ['description', 'description.analyzed'], parts => `...${parts.join('.....')}...`);
-    const content  = this.snippetFromHighlight(highlight, ['content', 'content.analyzed'], parts => `...${parts.join('.....')}...`);
+    const description = this.snippetFromHighlight(highlight, ['description', 'description_analyzed'], parts => `...${parts.join('.....')}...`);
+    const content  = this.snippetFromHighlight(highlight, ['content', 'content_analyzed'], parts => `...${parts.join('.....')}...`);
     const snippet     = (
       <div className="search__snippet">
         {
