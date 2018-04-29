@@ -249,6 +249,12 @@
       "text": "Charlas y Lecciones",
       "subtext": "Aquí encontrará una rica variedad de conferencias y clases de varios tipos, que incluyen conferencias para diferentes públicos, clases para mujeres, niños y más."
     },
+    "tabs" : {
+      "virtual-lessons" : "Lecciones Virtuales",
+      "lectures": "Charlas",
+      "women-lessons": "Lección de Mujeres",
+      "children-lessons": "Lección de Niños"
+    },
     "list": {
       "item_from": "Parte de:"
     },

@@ -17,6 +17,7 @@ import { actions as filtersActions } from './redux/modules/filters';
 import { actions as listsActions } from './redux/modules/lists';
 import { actions as homeActions } from './redux/modules/home';
 import { actions as eventsActions } from './redux/modules/events';
+import { actions as lecturesActions } from './redux/modules/lectures';
 import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
 import { actions as sourcesActions, selectors as sourcesSelectors } from './redux/modules/sources';
 import { actions as assetsActions } from './redux/modules/assets';
@@ -28,6 +29,7 @@ import * as sourcesSagas from './sagas/sources';
 import withPagination from './components/Pagination/withPagination';
 
 import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
+import { tabs as lecturesTabs } from './components/Sections/Lectures/MainPage';
 import PDF from './components/shared/PDF/PDF';
 
 export const home = (store, match) => {
@@ -45,14 +47,20 @@ const getExtraFetchParams = (ns, collectionID) => {
   switch (ns) {
   case 'programs':
     return { content_type: [CT_VIDEO_PROGRAM_CHAPTER] };
-  case 'lectures':
-    return { content_type: [CT_LECTURE, CT_WOMEN_LESSON, CT_CHILDREN_LESSON, CT_VIRTUAL_LESSON] };
   case 'publications':
     return { content_type: [CT_ARTICLE] };
   case 'events-meals':
     return { content_type: [CT_MEAL] };
   case 'events-friends-gatherings':
     return { content_type: [CT_FRIENDS_GATHERING] };
+  case 'lectures-virtual-lessons':
+    return { content_type: [CT_VIRTUAL_LESSON] };
+  case 'lectures-lectures':
+    return { content_type: [CT_LECTURE] };
+  case 'lectures-women-lessons':
+    return { content_type: [CT_WOMEN_LESSON] };
+  case 'lectures-children-lessons':
+    return { content_type: [CT_CHILDREN_LESSON] };
   default:
     if (collectionID) {
       return { collection: collectionID };
@@ -103,9 +111,9 @@ export const playlistCollectionPage = (store, match) => {
     });
 };
 
-export const latestLesson = (store, match) => {
+export const latestLesson = store =>
   // TODO: fetch recommended content data as well
-  return store.sagaMiddleWare.run(mdbSagas.fetchLatestLesson).done
+  store.sagaMiddleWare.run(mdbSagas.fetchLatestLesson).done
     .then(() => {
       // TODO: replace this with a single call to backend with all IDs
       // I don't think we need all files of every unit. Just for active one.
@@ -116,7 +124,6 @@ export const latestLesson = (store, match) => {
         store.dispatch(mdbActions.fetchUnit(cuID));
       });
     });
-};
 
 export const eventsPage = (store, match) => {
   // hydrate tab
@@ -136,8 +143,19 @@ export const eventsPage = (store, match) => {
   return store.sagaMiddleWare.run(eventsSagas.fetchAllEvents, eventsActions.fetchAllEvents()).done;
 };
 
-export const searchPage = (store, match) => {
-  return Promise.all([
+export const lecturesPage = (store, match) => {
+  // hydrate tab
+  const tab = match.params.tab || lecturesTabs[0];
+  if (tab !== lecturesTabs[0]) {
+    store.dispatch(lecturesActions.setTab(tab));
+  }
+  const ns = `lectures-${tab}`;
+
+  return cuListPage(ns)(store, match);
+};
+
+export const searchPage = store =>
+  Promise.all([
     store.sagaMiddleWare.run(searchSagas.hydrateUrl).done,
     store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done
   ])
@@ -150,7 +168,6 @@ export const searchPage = (store, match) => {
 
       store.dispatch(searchActions.search(q, page, pageSize, deb));
     });
-};
 
 export const libraryPage = (store, match) => {
   // TODO: consider firstLeafID
