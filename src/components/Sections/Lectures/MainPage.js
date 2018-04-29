@@ -62,7 +62,7 @@ class MainPage extends PureComponent {
     let content = null;
     switch (active) {
     case 'virtual-lessons':
-    case  'lectures':
+    case 'lectures':
     case 'women-lessons':
     case 'children-lessons':
       content = <UnitList tab={active} />;
