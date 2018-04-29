@@ -1,7 +1,7 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
+
 import Api from '../helpers/Api';
 import { actions, types } from '../redux/modules/sources';
-import { types as system } from '../redux/modules/system';
 import { selectors as settings } from '../redux/modules/settings';
 
 function* fetchSources() {
@@ -14,7 +14,7 @@ function* fetchSources() {
   }
 }
 
-function* fetchIndex(action) {
+export function* fetchIndex(action) {
   const id = action.payload;
 
   try {
@@ -25,7 +25,7 @@ function* fetchIndex(action) {
   }
 }
 
-function* fetchContent(action) {
+export function* fetchContent(action) {
   try {
     const { data } = yield call(Api.sourceContent, action.payload);
     yield put(actions.fetchContentSuccess(data));
@@ -35,7 +35,7 @@ function* fetchContent(action) {
 }
 
 function* watchFetchSources() {
-  yield takeLatest([types.FETCH_SOURCES, system.INIT], fetchSources);
+  yield takeLatest(types.FETCH_SOURCES, fetchSources);
 }
 
 function* watchFetchIndex() {

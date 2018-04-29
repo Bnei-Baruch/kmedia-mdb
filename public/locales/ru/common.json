@@ -4,21 +4,26 @@
       "header": "Каббала Медиа"
     },
     "sidebar": {
-      "lessons": "Ежедневные уроки",
+      "lessons": "Ежедневный урок Каббалы",
       "programs": "Программы",
       "lectures": "Уроки и Лекции",
-      "sources": "Каббалистические Первоисточники",
+      "sources": "Библиотека",
       "events": "Конгрессы, события",
       "books": "Книги",
       "topics": "Темы",
       "publications": "Публикации",
       "photos": "Фотографии",
       "design": "Дизайн",
-      "design2": "Планировка"
+      "design2": "Планировка",
+      "project-status": "Статус проекта"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
-      "rights": "Бней Барух – Ассоциация Каббала Ла-Ам, Все права защищены"
+      "rights": "Бней Барух – Ассоциация Каббала Ла-Ам, Все права защищены",
+      "study": "Учебные Материалы",
+      "topics": "Каббалистические Темы",
+      "events": "Каббалистические Конгрессы, события",
+      "media": "Медиа"
     }
   },
   "filters": {
@@ -44,20 +49,34 @@
     "topics-filter": {
       "label": "Темы"
     },
+    "publishers-filter": {
+      "label": "Издатели"
+    },
     "programs-filter": {
       "label": "Жанр",
       "recently-updated": "Недавно обновленные",
       "last-updated": "Последнее обновление в"
+    },
+    "locations-filter": {
+      "label": "Место проведения",
+      "allItem": "Все"
+    },
+    "holidays-filter": {
+      "label": "Праздники",
+      "allItem": "Все"
     },
     "years-filter": {
       "label": "Год",
       "placeholder": "Выберите год"
     },
     "sections-filter": {
-      "label": "раздел",
-      "lessons": "уроки",
-      "programs": "программы",
-      "events": "событие"
+      "label": "Раздел",
+      "all": "Все",
+      "lessons": "Ежедневный урок Каббалы",
+      "programs": "Программы",
+      "lectures": "Уроки и Лекции",
+      "events": "Конгрессы, события",
+      "publications": "Публикации"
     }
   },
   "buttons": {
@@ -67,14 +86,21 @@
     "audio": "Аудио",
     "video": "Видео",
     "more": "Ещё",
-    "copy-link": "Копировать линк"
+    "copy-link": "Копировать линк",
+    "search": "Поиск"
   },
   "player": {
     "messages": {
       "edit-help": "Перемещайте курсор чтобы поделиться частью видео"
     },
     "buttons": {
-      "edit-back": "Назад"
+      "edit-back": "Назад",
+      "start-position": "Начало",
+      "end-position": "Конец",
+      "click-to-set": "Жми"
+    },
+    "share": {
+      "title": "Посмотри это видео"
     },
     "error": {
       "loading": "Ошибка при загрузке файла."
@@ -84,12 +110,8 @@
     "loading": "Загрузка...",
     "loading-subtext": "Ждите...",
     "server-error": "Ошибка сервера",
-    "lesson-not-found": "Урок не найден",
-    "lesson-not-found-subtext": "Попробуйте <1>список уроков</1>...",
-    "program-not-found": "Программа не найдена",
-    "program-not-found-subtext": "Попробуйте <1>список программ</1>...",
-    "event-not-found": "Событие не найдено",
-    "event-not-found-subtext": "Попробуйте <1>список событий</1>...",
+    "not-found": "Ой!",
+    "not-found-subtext": "Мы не можем найти то что вы ищете",
     "no-files": "Нет файлов",
     "no-playable-files": "Не файлов для воспроизведения",
     "no-results": "Нет результатов",
@@ -102,10 +124,13 @@
     "fallback-to-audio": "Видео не найдено, используется аудио.",
     "fallback-to-video": "Аудио не найдено, используется видео.",
     "source-content-not-found": "Первоисточник не найден",
-    "no-images": "Картинки не найдены",
-    "sketches-not-found": "Чертежи не найдены"
+    "no-images": "Чертежи не найдены"
   },
   "search": {
+    "header": {
+      "text": "Результаты поиска",
+      "subtext": ""
+    },
     "sortby": "Сортировать по",
     "sorts": {
       "relevance": "актуальности",
@@ -122,8 +147,6 @@
       }
     },
     "results": {
-      "title": "Результаты поиска",
-      "search-summary": "стр. {{pageNo}} из {{total}} результатов ({{took}} секунд)",
       "empty-query": "Введите ваш запрос в поле расположенном выше для начала поиска.",
       "no-results": "Ваш запрос <1><0>{{query}}</0></1> не найден."
     },
@@ -132,16 +155,47 @@
       "transcript": "стенограмма"
     }
   },
+  "home": {
+    "header": {
+      "text": "Главная страница",
+      "subText": ""
+    },
+    "search": "Раскрой Каббалу",
+    "sections": "Разделы Архива",
+    "updates": "Последние обновления",
+    "last-lesson": "Последний Урок",
+    "donate": "ВНЕСИТЕ ВКЛАД"
+  },
   "events": {
     "header": {
       "text": "Конгрессы, события",
       "subtext": "В наше время наука каббала не знает границ. В этом разделе вы получите представление о мероприятиях, конгрессах и особых встречах организации «Каббала ла-ам» в Израиле и по всему миру."
     },
+    "tabs": {
+      "conventions": "Конгрессы",
+      "holidays": "Праздники",
+      "unity-days": "Дни Единства",
+      "friends-gatherings": "Собрания Товарищей",
+      "meals": "Трапезы"
+    },
+    "list": {
+      "item_from": "Часть из:"
+    },
     "ALL_EVENTS": "Все События",
     "no-matches": "Событие не найдено",
-    "part": {
-      "relevant-parts": {
-        "title": "Остальные части того же события"
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Остальные части того же события"
+        }
+      }
+    },
+    "collection": {
+      "playlist": {
+        "preparation": "Подготовка",
+        "lessons": "Уроки",
+        "other_parts": "Разное",
+        "appendices": "Приложения"
       }
     }
   },
@@ -153,16 +207,16 @@
     "list": {
       "related": "Относятся к"
     },
-    "part": {
-      "info": {
-        "tags": "Теги",
-        "sources": "Источники",
-        "related-event": "Относится к событию"
-      },
-      "relevant-parts": {
-        "title": "Остальные части того же урока",
-        "item-title": "Часть {{name}}"
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Остальные части того же урока",
+          "item-title": "Часть {{name}}"
+        }
       }
+    },
+    "last": {
+      "text": "Ежедневный урок Каббалы - обновленный"
     }
   },
   "programs": {
@@ -181,24 +235,69 @@
       "movies": "Фильмы"
     },
     "list": {
+      "episode_from": "Эпизод из:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Остальные части программы",
+          "item-title": "Эпизод {{name}}"
+        }
+      }
+    }
+  },
+  "lectures": {
+    "header": {
+      "text": "Уроки и Лекции",
+      "subtext": "Здесь вы найдете множество лекций, детских и женских передач и.т.д."
+    },
+    "list": {
+      "item_from": "Часть из:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Из той же серии"
+        }
+      }
+    }
+  },
+  "publications": {
+    "header": {
+      "text": "Публикации",
+      "subtext": "Статьи о текущих событиях, культуре, народных науках, отношениях и многом другом, представленные с уникальной точки зрения мудрости Каббалы"
+    },
+    "list": {
       "episode_from": "Часть из:"
     },
-    "full": {
-      "episodes": "Эпизод(ов)"
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Остальные части той же программы"
+        }
+      }
+    }
+  },
+  "pages": {
+    "collection": {
+      "items": {
+        "programs-collection": "Эпизод(ов)",
+        "lectures-collection": "Часть(ей)",
+        "publications-collection": "Статьи(s)",
+        "event": "Часть(ей)"
+      }
     },
-    "part": {
+    "unit": {
       "info": {
-        "tags": "Теги",
         "sources": "Источники",
-        "related-event": "Относится к событию"
+        "topics": "Темы",
+        "collections": "Относится к"
       },
-      "materials": {
-        "summary": "Краткое содержание",
-        "transcription": "Стенограмма"
-      },
-      "relevant-parts": {
-        "title": "Остальные части той же программы",
-        "item-title": "Часть {{name}}"
+      "recommended": {
+        "same-collection": {
+          "title": "Из той же серии",
+          "item-title": "Часть {{name}}"
+        }
       }
     }
   },
@@ -208,7 +307,8 @@
       "no-summary": "Нет содержания"
     },
     "transcription": {
-      "header": "Стенограмма"
+      "header": "Стенограмма",
+      "no-transcription": "Нет стенограммы"
     },
     "sources": {
       "header": "Источники",
@@ -221,9 +321,15 @@
     }
   },
   "sources-library": {
-    "title": "Каббалистические Первоисточники",
+    "header": {
+      "text": "Библиотека",
+      "subtext": "Сборник самых важных оригинальных текстов для изучения Каббалы, написанных величайшими Каббалистами."
+    },
     "no-source": "Выберите источник",
-    "toc": "Содержание"
+    "toc": "Содержание",
+    "az": "А-Я",
+    "default": "По умолчанию",
+    "filter": "Фильтр..."
   },
   "media-downloads": {
     "title": "Скачать",
@@ -248,6 +354,14 @@
         "audio": "Аудио программы",
         "text": "Стенограмма",
         "image": "Чертежи"
+      }
+    },
+    "publication": {
+      "type-labels": {
+        "video": "Видео",
+        "audio": "Аудио",
+        "text": "Текст статьи",
+        "image": "Снимки"
       }
     }
   },
@@ -299,6 +413,8 @@
       "HOLIDAY": "Праздник",
       "PICNIC": "Пикник",
       "UNITY_DAY": "Вечер единства",
+      "CLIPS": "Клипы",
+      "ARTICLES": "Статьи",
       "LESSON_PART": "Часть урока №",
       "LECTURE": "Лекция",
       "CHILDREN_LESSON": "Дети Урок",
@@ -308,12 +424,14 @@
       "MEAL": "Трапеза",
       "VIDEO_PROGRAM_CHAPTER": "Часть программы",
       "FULL_LESSON": "Полный урок",
-      "TEXT": "Текст",
+      "ARTICLE": "Статья",
       "UNKNOWN": "Неизвестное",
       "EVENT_PART": "Часть события",
       "CLIP": "Клип",
       "TRAINING": "Тренировка",
-      "KITEI_MAKOR": "Отрывки первоисточников"
+      "KITEI_MAKOR": "Отрывки первоисточников",
+      "PUBLICATION": "Публикация",
+      "LELO_MIKUD": "Отредактировано - Без Фокус-Группы"
     },
     "media-types": {
       "video": "Видео",

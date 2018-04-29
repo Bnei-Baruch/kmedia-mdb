@@ -1,5 +1,8 @@
 import { createAction, handleActions } from 'redux-actions';
+import mapValues from 'lodash/mapValues';
+
 import { types as settings } from './settings';
+import { types as ssr } from './ssr';
 
 /* Types */
 
@@ -20,7 +23,8 @@ export const types = {
 const setPage          = createAction(SET_PAGE, (namespace, pageNo) => ({ namespace, pageNo }));
 const fetchList        = createAction(FETCH_LIST, (namespace, pageNo, params = {}) => ({
   namespace,
-  pageNo, ...params
+  pageNo,
+  ...params,
 }));
 const fetchListSuccess = createAction(FETCH_LIST_SUCCESS, (namespace, data) => ({ namespace, data }));
 const fetchListFailure = createAction(FETCH_LIST_FAILURE, (namespace, err) => ({ namespace, err }));
@@ -65,6 +69,10 @@ const onFailure = (state, action) => ({
 
 const onSuccess = (state, action) => {
   const { namespace, data } = action.payload;
+  const itemNormalizer      = namespace === 'lessons' ?
+    x => [x.id, x.content_type] :
+    x => x.id;
+
   return {
     ...state,
     [namespace]: {
@@ -72,14 +80,26 @@ const onSuccess = (state, action) => {
       wip: false,
       err: null,
       total: data.total,
-      items: (data.collections || data.content_units || []).map(x => x.id),
+      items: (data.collections || data.content_units || []).map(itemNormalizer),
     }
   };
 };
 
-const onSetLanguage = () => ({});
+const onSetLanguage = state => (
+  Object.keys(state).reduce((acc, val) => {
+    acc[val] = {
+      pageNo: state[val].pageNo,
+      total: state[val].total
+    };
+    return acc;
+  }, {})
+);
+
+const onSSRPrepare = state =>
+  mapValues(state, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
 
 export const reducer = handleActions({
+  [ssr.PREPARE]: onSSRPrepare,
   [settings.SET_LANGUAGE]: onSetLanguage,
 
   [SET_PAGE]: onSetPage,

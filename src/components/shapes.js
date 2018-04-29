@@ -7,6 +7,11 @@ export const RouterMatch = PropTypes.shape({
   isExact: PropTypes.bool,
 });
 
+export const History = PropTypes.shape({
+  push: PropTypes.func.isRequired,
+  replace: PropTypes.func.isRequired
+});
+
 export const HistoryLocation = PropTypes.shape({
   pathname: PropTypes.string,
   search: PropTypes.string,
@@ -63,6 +68,8 @@ const MDBDenormalizedCollection = {
 export const GenericCollection = PropTypes.shape(MDBDenormalizedCollection);
 
 export const ContentUnit = PropTypes.shape(MDBBaseContentUnit);
+
+export const Collection = PropTypes.shape(MDBBaseCollection);
 
 export const LessonCollection = PropTypes.shape({
   ...MDBDenormalizedCollection,
@@ -136,6 +143,14 @@ export const Publisher = PropTypes.shape({
   description: PropTypes.string,
 });
 
+export const Banner = PropTypes.shape({
+  section: PropTypes.string.isRequired,
+  header: PropTypes.string.isRequired,
+  sub_header: PropTypes.string,
+  url: PropTypes.string.isRequired,
+  image: PropTypes.string,
+});
+
 export const filterPropShape = PropTypes.shape({
   name: PropTypes.string.isRequired,
   component: PropTypes.any.isRequired
@@ -144,5 +159,29 @@ export const filterPropShape = PropTypes.shape({
 export const WIP    = PropTypes.bool;
 export const WipMap = PropTypes.objectOf(PropTypes.oneOfType([WIP, PropTypes.objectOf(WIP)]));
 
-export const Error     = PropTypes.object;
+export const Error     = PropTypes.oneOfType([PropTypes.object, PropTypes.string]);
 export const ErrorsMap = PropTypes.objectOf(PropTypes.oneOfType([Error, PropTypes.objectOf(Error)]));
+
+export const UserAgentParserResults = PropTypes.shape({
+  ua: PropTypes.string,
+  browser: PropTypes.shape({
+    name: PropTypes.string,
+    version: PropTypes.string,
+  }),
+  cpu: PropTypes.shape({
+    architecture: PropTypes.string,
+  }),
+  device: PropTypes.shape({
+    model: PropTypes.string,
+    type: PropTypes.string,
+    vendor: PropTypes.string,
+  }),
+  engine: PropTypes.shape({
+    name: PropTypes.string,
+    version: PropTypes.string,
+  }),
+  os: PropTypes.shape({
+    name: PropTypes.string,
+    version: PropTypes.string,
+  }),
+});

@@ -32,6 +32,7 @@ export const CT_CLIP                  = 'CLIP';
 export const CT_TRAINING              = 'TRAINING';
 export const CT_KITEI_MAKOR           = 'KITEI_MAKOR';
 export const CT_PUBLICATION           = 'PUBLICATION';
+export const CT_LELO_MIKUD            = 'LELO_MIKUD';
 
 // Source Types
 export const SRC_COLLECTION = 'COLLECTION';
@@ -80,41 +81,47 @@ export const LANG_CZECH      = 'cs';
 export const LANG_UNKNOWN    = 'xx';
 
 export const LANGUAGES = {
-  [LANG_HEBREW]: { value: LANG_HEBREW, flag: 'il' },
-  [LANG_ENGLISH]: { value: LANG_ENGLISH, flag: 'us' },
-  [LANG_RUSSIAN]: { value: LANG_RUSSIAN, flag: 'ru' },
-  [LANG_SPANISH]: { value: LANG_SPANISH, flag: 'es' },
-  [LANG_ITALIAN]: { value: LANG_ITALIAN, flag: 'it' },
-  [LANG_GERMAN]: { value: LANG_GERMAN, flag: 'de' },
-  [LANG_DUTCH]: { value: LANG_DUTCH, flag: 'nl' },
-  [LANG_FRENCH]: { value: LANG_FRENCH, flag: 'fr' },
-  [LANG_PORTUGUESE]: { value: LANG_PORTUGUESE, flag: 'pt' },
-  [LANG_TURKISH]: { value: LANG_TURKISH, flag: 'tr' },
-  [LANG_POLISH]: { value: LANG_POLISH, flag: 'pl' },
-  [LANG_ARABIC]: { value: LANG_ARABIC, flag: 'sa' },
-  [LANG_HUNGARIAN]: { value: LANG_HUNGARIAN, flag: 'hu' },
-  [LANG_FINNISH]: { value: LANG_FINNISH, flag: 'fi' },
-  [LANG_LITHUANIAN]: { value: LANG_LITHUANIAN, flag: 'lt' },
-  [LANG_JAPANESE]: { value: LANG_JAPANESE, flag: 'jp' },
-  [LANG_BULGARIAN]: { value: LANG_BULGARIAN, flag: 'bg' },
-  [LANG_GEORGIAN]: { value: LANG_GEORGIAN, flag: 'ge' },
-  [LANG_NORWEGIAN]: { value: LANG_NORWEGIAN, flag: 'no' },
-  [LANG_SWEDISH]: { value: LANG_SWEDISH, flag: 'se' },
-  [LANG_CROATIAN]: { value: LANG_CROATIAN, flag: 'hr' },
-  [LANG_CHINESE]: { value: LANG_CHINESE, flag: 'cn' },
-  [LANG_PERSIAN]: { value: LANG_PERSIAN, flag: 'ir' },
-  [LANG_ROMANIAN]: { value: LANG_ROMANIAN, flag: 'ro' },
-  [LANG_HINDI]: { value: LANG_HINDI, flag: 'in' },
-  [LANG_UKRAINIAN]: { value: LANG_UKRAINIAN, flag: 'ua' },
-  [LANG_MACEDONIAN]: { value: LANG_MACEDONIAN, flag: 'mk' },
-  [LANG_SLOVENIAN]: { value: LANG_SLOVENIAN, flag: 'si' },
-  [LANG_LATVIAN]: { value: LANG_LATVIAN, flag: 'lv' },
-  [LANG_SLOVAK]: { value: LANG_SLOVAK, flag: 'sk' },
-  [LANG_CZECH]: { value: LANG_CZECH, flag: 'cz' },
+  [LANG_HEBREW]: { value: LANG_HEBREW, flag: 'il', locale: 'he_IL' },
+  [LANG_ENGLISH]: { value: LANG_ENGLISH, flag: 'us', locale: 'en_US' },
+  [LANG_RUSSIAN]: { value: LANG_RUSSIAN, flag: 'ru', locale: 'ru_RU' },
+  [LANG_SPANISH]: { value: LANG_SPANISH, flag: 'es', locale: 'es_ES' },
+  [LANG_ITALIAN]: { value: LANG_ITALIAN, flag: 'it', locale: 'it_IT' },
+  [LANG_GERMAN]: { value: LANG_GERMAN, flag: 'de', locale: 'de_DE' },
+  [LANG_DUTCH]: { value: LANG_DUTCH, flag: 'nl', locale: 'nl_NL' },
+  [LANG_FRENCH]: { value: LANG_FRENCH, flag: 'fr', locale: 'fr_FR' },
+  [LANG_PORTUGUESE]: { value: LANG_PORTUGUESE, flag: 'pt', locale: 'pt_PT' },
+  [LANG_TURKISH]: { value: LANG_TURKISH, flag: 'tr', locale: 'tr_TR' },
+  [LANG_POLISH]: { value: LANG_POLISH, flag: 'pl', locale: 'pl_PL' },
+  [LANG_ARABIC]: { value: LANG_ARABIC, flag: 'sa', locale: 'ar_AR' },
+  [LANG_HUNGARIAN]: { value: LANG_HUNGARIAN, flag: 'hu', locale: 'hu_HU' },
+  [LANG_FINNISH]: { value: LANG_FINNISH, flag: 'fi', locale: 'fi_FI' },
+  [LANG_LITHUANIAN]: { value: LANG_LITHUANIAN, flag: 'lt', locale: 'lt_LT' },
+  [LANG_JAPANESE]: { value: LANG_JAPANESE, flag: 'jp', locale: 'ja_JP' },
+  [LANG_BULGARIAN]: { value: LANG_BULGARIAN, flag: 'bg', locale: 'bg_BG' },
+  [LANG_GEORGIAN]: { value: LANG_GEORGIAN, flag: 'ge', locale: 'ka_GE' },
+  // TODO: choose from Norwegian Bokmål / Norwegian Nynorsk
+  [LANG_NORWEGIAN]: { value: LANG_NORWEGIAN, flag: 'no', locale: 'nb_NO' },
+  [LANG_SWEDISH]: { value: LANG_SWEDISH, flag: 'se', locale: 'sv_SE' },
+  [LANG_CROATIAN]: { value: LANG_CROATIAN, flag: 'hr', locale: 'hr_HR' },
+  [LANG_CHINESE]: { value: LANG_CHINESE, flag: 'cn', locale: 'zh_CN' },
+  [LANG_PERSIAN]: { value: LANG_PERSIAN, flag: 'ir', locale: 'fa_IR' },
+  [LANG_ROMANIAN]: { value: LANG_ROMANIAN, flag: 'ro', locale: 'ro_RO' },
+  [LANG_HINDI]: { value: LANG_HINDI, flag: 'in', locale: 'hi_IN' },
+  [LANG_UKRAINIAN]: { value: LANG_UKRAINIAN, flag: 'ua', locale: 'uk_UA' },
+  [LANG_MACEDONIAN]: { value: LANG_MACEDONIAN, flag: 'mk', locale: 'mk_MK' },
+  [LANG_SLOVENIAN]: { value: LANG_SLOVENIAN, flag: 'si', locale: 'sl_SI' },
+  [LANG_LATVIAN]: { value: LANG_LATVIAN, flag: 'lv', locale: 'lv_LV' },
+  [LANG_SLOVAK]: { value: LANG_SLOVAK, flag: 'sk', locale: 'sk_SK' },
+  [LANG_CZECH]: { value: LANG_CZECH, flag: 'cz', locale: 'cs_CZ' },
 };
 
 export const FLAG_TO_LANGUAGE = Object.values(LANGUAGES).reduce((acc, language) => {
   acc[language.flag] = language.value;
+  return acc;
+}, {});
+
+export const LANGUAGE_TO_LOCALE = Object.values(LANGUAGES).reduce((acc, language) => {
+  acc[language.value] = language.locale;
   return acc;
 }, {});
 
@@ -225,7 +232,35 @@ export const MIME_TYPE_TO_MEDIA_TYPE = Object.values(MEDIA_TYPES).reduce((acc, m
   return acc;
 }, {});
 
-export const TOPICS_FOR_DISPLAY = ['VUpFlBnu', '0db5BBS3', 'g3ml0jum'];
+export const VS_NHD     = 'nHD';
+export const VS_HD      = 'HD';
+export const VS_FHD     = 'FHD';
+export const VS_DEFAULT = VS_NHD;
+
+export const getVideoRes = (vsType, date) => {
+  // date: Date object
+  // before 2014 return 360p
+  if (date.getFullYear() < 2014) {
+    return { width: 480, height: 360 };
+  }
+  if (vsType === VS_NHD) {
+    return { width: 640, height: 360 };
+  }
+  if (vsType === VS_HD) {
+    return { width: 1280, height: 720 };
+  }
+  // fHD
+  return { width: 1920, height: 980 };
+};
+
+export const VS_NAMES = {
+  [VS_NHD]: '360p',
+  [VS_HD]: '720p',
+  [VS_FHD]: '1080p',
+};
+
+export const TOPICS_FOR_DISPLAY    = ['VUpFlBnu', '0db5BBS3', 'g3ml0jum'];
+export const EVENT_PREPARATION_TAG = 'Salvk5yF';
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
 
@@ -234,13 +269,46 @@ export const EVENT_TYPES = [
 ];
 
 // Required for Sections filter.
-export const COLLECTION_LESSONS_TYPE  = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, CT_CHILDREN_LESSONS, CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS];
-export const COLLECTION_PROGRAMS_TYPE = [CT_VIDEO_PROGRAM];
-export const COLLECTION_EVENTS_TYPE   = [CT_FRIENDS_GATHERINGS, CT_MEALS, ...EVENT_TYPES];
-export const UNIT_LESSONS_TYPE        = [CT_LESSON_PART, CT_CHILDREN_LESSON, CT_WOMEN_LESSON, CT_VIRTUAL_LESSON, CT_FULL_LESSON];
-export const UNIT_PROGRAMS_TYPE       = [CT_VIDEO_PROGRAM_CHAPTER];
-export const UNIT_EVENTS_TYPE         = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
+export const COLLECTION_LESSONS_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, CT_CHILDREN_LESSONS, CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS];
+export const COLLECTION_PROGRAMS_TYPE     = [CT_VIDEO_PROGRAM];
+export const COLLECTION_LECTURES_TYPE     = [CT_LECTURE_SERIES];
+export const COLLECTION_EVENTS_TYPE       = [CT_FRIENDS_GATHERINGS, CT_MEALS, ...EVENT_TYPES];
+export const COLLECTION_PUBLICATIONS_TYPE = [CT_ARTICLES];
+export const UNIT_LESSONS_TYPE            = [CT_LESSON_PART, CT_CHILDREN_LESSON, CT_WOMEN_LESSON, CT_VIRTUAL_LESSON, CT_FULL_LESSON];
+export const UNIT_PROGRAMS_TYPE           = [CT_VIDEO_PROGRAM_CHAPTER];
+export const UNIT_LECTURES_TYPE           = [CT_LECTURE];
+export const UNIT_EVENTS_TYPE             = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
+export const UNIT_PUBLICATIONS_TYPE       = [CT_PUBLICATION];
 
+export const NO_NAME = '☠ no name';
+
+// Sources
+export const BS_SHAMATI = 'qMUUn22b';
+export const BS_IGROT   = 'DVSS0xAR';
+export const BS_TAAS    = 'xtKmrbb9';
+export const RB_IGROT   = 'b8SHlrfH';
+export const MR_TORA    = 'bvA8ZB1w';
+export const RH_ZOHAR   = 'AwGBQX2L';
+
+// This is exptected to be sorted by values
+export const BS_TAAS_PARTS = {
+  '9xNFLSSp': 1,
+  XlukqLH8: 37,
+  AerA1hNN: 101,
+  '1kDKQxJb': 209,
+  o5lXptLo: 291,
+  eNwJXy4s: 389,
+  ahipVtPu: 485,
+  Pscnn3pP: 599,
+  Lfu7W3CD: 731,
+  n03vXCJl: 865,
+  UGcGGSpP: 1011,
+  NpLQT0LX: 1127,
+  AUArdCkH: 1297,
+  tit6XNAo: 1493,
+  FaKUG7ru: 1687,
+  mW6eON0z: 1887,
+};
 
 export const MAP_TAB_TO_CONTENT_TYPE = (contentType, tabName) => {
   if (contentType === 'lectures') {

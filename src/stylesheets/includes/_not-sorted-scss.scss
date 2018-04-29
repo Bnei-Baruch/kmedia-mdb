@@ -1,28 +1,32 @@
 // See TimedPopup.js, solves existing bug:
 // https://github.com/Semantic-Org/Semantic-UI-React/issues/1065
 .popup {
-  background: #fff;
-  border: 1px solid #d4d4d5;
-  border-radius: .28571429rem;
-  box-shadow: 1px 1px 0 0 #bababc;
-  color: rgba(0, 0, 0, .87);
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.4285em;
-  margin: 0 0 .71428571em;
-  max-width: 250px;
-  padding: .833em 1em;
-  z-index: 1900;
+  // background: #fff;
+  // border: 1px solid #d4d4d5;
+  // border-radius: .28571429rem;
+  // box-shadow: 1px 1px 0 0 #bababc;
+  // color: rgba(0, 0, 0, .87);
+  // font-style: normal;
+  // font-weight: 400;
+  // line-height: 1.4285em;
+  // margin: 0 0 .71428571em;
+  // max-width: 250px;
+  // padding: .833em 1em;
+  // z-index: 1900;
 
   .content {
-    text-align: center;
-    width: 200px;
+    // text-align: center;
+    // width: 200px;
   }
 }
 
 .search-omnibox {
   max-width: 600px;
   width: 100%;
+  .input {
+
+    width: 100%;
+  }
 }
 
 .search-result-rtl {
@@ -44,11 +48,74 @@ em {
   }
 }
 
-
 /* Program filters hack (rename, move to filters)*/
-.filter-letters{
-  flex-direction: column!important;
-  flex-wrap: wrap!important;
-  height: 600px!important;
-  width: auto!important;
+.filter-letters {
+  flex-direction: column !important;
+  flex-wrap: wrap !important;
+  height: 600px !important;
+  width: auto !important;
+}
+
+/* space between groups in playlist (events) */
+// .avbox__playlist-view-section {
+//   padding-bottom: 2rem !important;
+// }
+
+/* application loader screen */
+#app-loader {
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  h1 {
+    color: black;
+  }
+}
+
+/* hide iPhone native controls - see iphone-inline-video */
+.IIV::-webkit-media-controls-play-button,
+.IIV::-webkit-media-controls-start-playback-button {
+  opacity: 0;
+  pointer-events: none;
+  width: 5px;
+}
+
+.transparent {
+  opacity: 0;
+}
+
+/* player on mobile devices */
+.avbox__player.mobile-device {
+  height: auto;
+  padding-top: 0;
+
+  .avbox__media-wrapper {
+    overflow: visible;
+    padding-top: 0;
+    position: relative;
+  }
+  .mediaplayer__wrapper {
+    position: relative;
+  }
+  audio {
+    margin-top: 30px;
+  }
+
+  select {
+    background: transparent;
+    border-width: 0;
+    padding: 0.8em 0;
+    max-width: 8rem;
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+/* limit the height of the media player languages dropdown in order to not get out of the screen */
+.mediaplayer__languages .ui.floating.dropdown > .menu {
+  max-height: 220px;
 }

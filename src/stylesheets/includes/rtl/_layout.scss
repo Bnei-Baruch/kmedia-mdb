@@ -1,35 +1,44 @@
-
 .rtl {
-  .layout__sidebar {
-    left: auto;
-    right: 0;
-    transform: translate(100%, 0);
-
-    &.is-active {
-      transform: none;
-    }
-
-    &-menu {
-      border-left: 1px solid $border-color;
-      border-right: 0;
+  .layout {
+    &__sidebar {
+      left: auto;
+      right: 0;
+      transform: translate(100%, 0);
+  
+      &-menu {
+        border-left: 1px solid $border-color;
+        border-right: 0;
+      }
     }
   }
-
+  
   .logo {
-    h2.header {
-      margin-right: 16px;
+    h1.header {
+      margin-left: 0;
     }
   }
-
+  
   @media only screen and (min-width: $largeMonitorBreakpoint) {
     .layout {
       &__sidebar {
         transform: none;
       }
-
+  
       &__main {
-        margin-left: auto;
-        margin-right: 290px;
+        margin-left: 0;
+        margin-right: $sidebar-width;
+      }
+  
+      &__secondary-header {
+        left: 0;
+        right: $sidebar-width;
+      }
+    }
+
+    .logo {
+      h1.header {
+        margin-left: 0;
+        margin-right: 16px;
       }
     }
   }

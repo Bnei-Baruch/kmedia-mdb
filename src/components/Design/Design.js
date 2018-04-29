@@ -2,8 +2,15 @@
 
 import React, { Component } from 'react';
 import { Grid, Header, Menu, Icon, Button, Dropdown, Divider, List, Popup, Table, Card, Image, Input, Search, Label, Container, Embed, Segment } from 'semantic-ui-react';
-import DailyLessonPlaceholder from '../../images/hp_lesson_temp.png';
+import DailyLessonPlaceholder from '../../images/hp_lesson_temp.jpg';
 import FeaturedPlaceholder from '../../images/hp_featured_temp.jpg';
+import DailyLessonsIcon from '../../images/icons/dailylessons.svg';
+import ProgramsIcon from '../../images/icons/programs.svg';
+import LecturesIcon from '../../images/icons/lectures.svg';
+import SourcesIcon from '../../images/icons/sources.svg';
+import EventsIcon from '../../images/icons/events.svg';
+import PublicationsIcon from '../../images/icons/publications.svg';
+// import GridColumn from 'semantic-ui-react/dist/commonjs/collections/Grid/GridColumn';
 const results ={
     "search": {
       "icon": "search",
@@ -74,15 +81,18 @@ class Design extends Component {
                           <Image className='thumbnail__image' src={DailyLessonPlaceholder} fluid />
                           <Header as='h2' className='thumbnail__header'>
                             <Header.Content>
-                              
+
                               <Header.Subheader>
                                 1/10/2018
                               </Header.Subheader>
                               The Latest Daily Lesson
                             </Header.Content>
                           </Header>
+                          <Label color='orange' size='mini'>
+                            Daily Lessons
+                          </Label>
                         </a>
-                      </div>                    
+                      </div>
                     </Grid.Column>
                     <Grid.Column computer={6} tablet={7} mobile={16}>
                       <div className='thumbnail'>
@@ -90,24 +100,193 @@ class Design extends Component {
                           <Image className='thumbnail__image' src={FeaturedPlaceholder} fluid />
                           <Header as='h2' className='thumbnail__header'>
                             <Header.Content>
-                              
                               <Header.Subheader>
                                 February 2018
                               </Header.Subheader>
                               The World Kabbalah Congress
                             </Header.Content>
                           </Header>
+                          <Label color='orange' size='mini'>
+                            Events
+                          </Label>
                         </a>
-                      </div> 
+                      </div>
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
               </Container>
             </div>
-            <Container className='padded'>            
-              <div className='homepage__sections'></div>
+            <Container className='padded homepage__sections'>
+              <div className='homepage__section homepage__iconsrow'>
+                <Grid centered padded='vertically'>
+                  <Grid.Row>
+                    <Grid.Column computer={12} tablet={14} mobile={16}>
+                      <Divider horizontal fitted>Archive Sections</Divider>
+                    </Grid.Column>
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Grid.Column computer={12} tablet={14} mobile={16}>
+                      <Grid doubling columns={6}>
+                        <Grid.Row>
+                          <Grid.Column textAlign='center'><Header size='small' as='a' href=''><Image src={DailyLessonsIcon} /><br/>Daily Lessons</Header></Grid.Column>
+                          <Grid.Column textAlign='center'><Header size='small' as='a' href=''><Image src={ProgramsIcon} /><br/>Programms</Header></Grid.Column>
+                          <Grid.Column textAlign='center'><Header size='small' as='a' href=''><Image src={LecturesIcon} /><br/>Lectures</Header></Grid.Column>
+                          <Grid.Column textAlign='center'><Header size='small' as='a' href=''><Image src={SourcesIcon} /><br/>Sources</Header></Grid.Column>
+                          <Grid.Column textAlign='center'><Header size='small' as='a' href=''><Image src={EventsIcon} /><br/>Events</Header></Grid.Column>
+                          <Grid.Column textAlign='center'><Header size='small' as='a' href=''><Image src={PublicationsIcon} /><br/>Publications</Header></Grid.Column>
+                        </Grid.Row>
+                      </Grid>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </div>
+              <div className='homepage__section'>
+                <Grid centered padded='vertically'>
+                  <Grid.Row>
+                    <Grid.Column computer={12} tablet={14} mobile={16}>
+                      <Divider horizontal fitted>Latest Updates</Divider>
+                    </Grid.Column>
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Grid.Column computer={12} tablet={14} mobile={16}>
+                      <Card.Group itemsPerRow='4' doubling >
+                        <Card href='#'>
+                          <Image src='https://archive.kbb1.com/assets/api/thumbnail/64RFGZR6' />
+                          <Card.Content>
+                            <Header size='small'>
+                              <small className='text grey'>1/16/2018</small><br/>
+                                Baal HaSulam. Introduction to The Book of Zohar
+                            </Header>
+                          </Card.Content>
+                          <Card.Content extra>
+                            <Label size='small'>Daily Lessons</Label>
+                          </Card.Content>
+                        </Card>
+                        <Card href='#'>
+                          <Image src='https://archive.kbb1.com/assets/api/thumbnail/tSmGoUDU' />
+                          <Card.Content>
+                            <Header size='small'>
+                              <small className='text grey'>12/24/2017</small><br/>
+                              Webinar with Dr. Michael Laitman
+                            </Header>
+                          </Card.Content>
+                          <Card.Content extra>
+                            <Label size='small'>Lectures & Lessons</Label>
+                          </Card.Content>
+                        </Card>
+                        <Card href='#'>
+                          <Image src='https://archive.kbb1.com/assets/api/thumbnail/fc3bAksF' />
+                          <Card.Content>
+                            <Header size='small'>
+                              <small className='text grey'>1/16/2018</small><br/>
+                              A New Life 949
+                            </Header>
+                          </Card.Content>
+                          <Card.Content extra>
+                            <Label size='small'>Programs</Label>
+                          </Card.Content>
+                        </Card>
+                        <Card href='#'>
+                          <Image src='https://archive.kbb1.com/assets/api/thumbnail/JnAbkx0l' />
+                          <Card.Content>
+                            <Header size='small'>
+                              <small className='text grey'>1/16/2018</small><br/>
+                              World Convention 2018
+                            </Header>
+                          </Card.Content>
+                          <Card.Content extra>
+                            <Label size='small'>Events</Label>
+                          </Card.Content>
+                        </Card>
+                      </Card.Group>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </div>
+              <div className='homepage__section'>
+                <Grid centered padded='vertically'>
+                  <Grid.Row>
+                    <Grid.Column computer={12} tablet={14} mobile={16}>
+                      <Divider horizontal fitted>Popular Topics</Divider>
+                    </Grid.Column>
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Grid.Column computer={12} tablet={14} mobile={16}>
+                      <Grid>
+                        <Grid.Row columns={5}  className='homepage-posters'>
+                          <Grid.Column >
+                            <div className='thumbnail'>
+                              <div className='thumbnail__image' style={{backgroundImage:'url(http://www.thefertilebody.com/Content/Images/UploadedImages/a931e8de-3798-4332-8055-ea5b041dc0b0/ShopItemImage/conception.jpg)'}}></div>
+                              <a href='#'>
+                                <Header as='h3' className='thumbnail__header'>
+                                  <Header.Content>
+                                    Conception
+                                  </Header.Content>
+                                </Header>
+                              </a>
+                            </div>
+                          </Grid.Column>
+
+                          <Grid.Column >
+                            <div className='thumbnail'>
+                              <div className='thumbnail__image' style={{backgroundImage:'url(https://images-na.ssl-images-amazon.com/images/I/71mpCuqBFaL._SY717_.jpg)'}}></div>
+                              <a href='#'>
+                                <Header as='h3' className='thumbnail__header'>
+                                  <Header.Content>
+                                    The role of women in the spiritual system
+                                  </Header.Content>
+                                </Header>
+                              </a>
+                            </div>
+                          </Grid.Column>
+                          <Grid.Column >
+                            <div className='thumbnail'>
+                              <div className='thumbnail__image' style={{backgroundImage:'url(http://assets4.bigthink.com/system/idea_thumbnails/53104/size_1024/shutterstock_84089224.jpg?1381781657)'}}></div>
+                              <a href='#'>
+                                <Header as='h3' className='thumbnail__header'>
+                                  <Header.Content>
+                                    Parenting &amp; Family
+                                  </Header.Content>
+                                </Header>
+                              </a>
+                            </div>
+                          </Grid.Column>
+                          <Grid.Column >
+                            <div className='thumbnail'>
+                              <div className='thumbnail__image' style={{backgroundImage:'url(https://hpba.pl/wp-content/uploads/2015/09/Amazing-Wallpapers206-1020x816.jpg)'}}></div>
+                              <a href='#'>
+                                <Header as='h3' className='thumbnail__header'>
+                                  <Header.Content>
+                                    Happiness
+                                  </Header.Content>
+                                </Header>
+                              </a>
+                            </div>
+
+                          </Grid.Column>
+                          <Grid.Column >
+                            <div className='thumbnail'>
+                              <div className='thumbnail__image' style={{backgroundImage:'url(https://cdn-images-1.medium.com/max/2000/1*4mYgGvtkKmQQP6vdDObq5g.png)'}}></div>
+                              <a href='#'>
+                                <Header as='h3' className='thumbnail__header'>
+                                  <Header.Content>
+                                    Nullification
+                                  </Header.Content>
+                                </Header>
+                              </a>
+                            </div>
+
+                          </Grid.Column>
+
+                        </Grid.Row>
+                      </Grid>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </div>
             </Container>
           </div>
+
         <Header size='large' color='pink' inverted>Homepage End</Header>
         <div className='section-header'>
           <Container className='padded'>
@@ -141,7 +320,7 @@ class Design extends Component {
                 Topics
                 <Icon name='dropdown'/>
               </Menu.Item>
-              <Menu.Item > 
+              <Menu.Item >
                 Date
                 <Icon name='dropdown'/>
               </Menu.Item>
@@ -204,12 +383,12 @@ class Design extends Component {
                           meta='A new parts added: Today'
                         />
                       </Grid.Column>
-                      
+
                     </Grid.Row>
                     <Grid.Row >
                       <Grid.Column width={16}>
                         <Header as='h6' color='grey'>All Programs</Header>
-                        
+
                       </Grid.Column>
                       <Grid.Column>
                         <List size='tiny'>
@@ -269,13 +448,13 @@ class Design extends Component {
                           <List.Item>Education Issues</List.Item>
                           <List.Item>Essentials of education</List.Item>
                           <List.Item>Experts</List.Item>
-                        </List>                      
+                        </List>
                       </Grid.Column>
                       <Grid.Column>
                         <List size='tiny'>
                           <List.Item><List.Header>F<Divider/></List.Header></List.Item>
                           <List.Item>Films</List.Item>
-                        </List>                      
+                        </List>
                       </Grid.Column>
                       <Grid.Column>
                         <List size='tiny'>
@@ -285,7 +464,7 @@ class Design extends Component {
                           <List.Item>Good environment</List.Item>
                           <List.Item>Good time</List.Item>
                           <List.Item>Great Kabbalists</List.Item>
-                        </List>                      
+                        </List>
                       </Grid.Column>
                       <Grid.Column>
                         <List size='tiny'>
@@ -293,12 +472,12 @@ class Design extends Component {
                           <List.Item>Hasidism</List.Item>
                           <List.Item>Hot Topic</List.Item>
                           <List.Item>HR Secrets Revealed</List.Item>
-                        </List>                      
+                        </List>
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>
-                  
-                  
+
+
                 </div>
               </div>
             </div>
@@ -369,7 +548,7 @@ class Design extends Component {
               <p>
                 A series of conversations with Rabbi Dr. Michael Laitman, whose purpose is to create the infrastructure to promote every person, organization, society or country, to better understand the reality of our lives and to achieve a good life
               </p>
-              
+
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
@@ -391,7 +570,7 @@ class Design extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        
+
         <Header size='large' color='pink' inverted>Programs Collection</Header>
         <Divider/>
         <Grid>
@@ -414,10 +593,10 @@ class Design extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        
+
         <Header size='large' color='pink' inverted>TV & Video Programs</Header>
         <Divider/>
-      
+
         <div className='featured-unit'>
           <Header
             as="h2"
@@ -455,7 +634,7 @@ class Design extends Component {
                   Matthew is a musician living in Nashville.
                 </Card.Description>
               </Card.Content>
-            </Card>            
+            </Card>
             <Card href='#'>
               <Image fluid src='http://www.kab.co.il/images/attachments/37/269137_medium.jpg' />
               <Card.Content>
@@ -471,7 +650,7 @@ class Design extends Component {
                   Matthew is a musician living in Nashville.
                 </Card.Description>
               </Card.Content>
-            </Card>            
+            </Card>
             <Card href='#'>
               <Image fluid src='http://www.kab.co.il/images/attachments/21/209721_medium.jpg' />
               <Card.Content>
@@ -487,7 +666,7 @@ class Design extends Component {
                   Matthew is a musician living in Nashville.
                 </Card.Description>
               </Card.Content>
-            </Card>  
+            </Card>
           </Card.Group>
         </div>
         <Menu secondary pointing color="blue" className="index-filters" size="large">
@@ -500,9 +679,9 @@ class Design extends Component {
             <Search  category results={results} size='mini' placeholder='Search Programs...'categoryRenderer={categoryRenderer} resultRenderer={resultRenderer} />
           </Menu.Item>
         </Menu>
-        {/*<Header size='large' color='pink' inverted>video collection collapsed (๏㉨๏)</Header>*/}
+        <Header size='large' color='pink' inverted>video collection collapsed (๏㉨๏)</Header>
 
-        {/*
+
         <div className='collapsed_video_container'>
         	<Grid >
             <Grid.Row>
@@ -574,8 +753,8 @@ class Design extends Component {
             </Grid.Row>
           </Grid>
         </div>
-        */}
-        
+
+
       	<Header size='large' color='pink' inverted>video collection ☼.☼</Header>
         <Grid>
           <Grid.Row className='video_box'>
@@ -681,6 +860,7 @@ class Design extends Component {
           </Grid.Row>
         </Grid>
       </Grid.Column>
+
       </div>
     );
   }

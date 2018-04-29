@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import { assetUrl } from '../../../helpers/Api';
 import FallbackImage from '../FallbackImage';
-import imagePlaceholder from '../../../images/image.png';
 
 class CollectionLogo extends PureComponent {
   static propTypes = {
@@ -20,14 +19,12 @@ class CollectionLogo extends PureComponent {
     return (
       <FallbackImage
         fluid
+        className="collection-logo"
         shape="rounded"
-        initialImage={imagePlaceholder}
-        src={assetUrl(`logos/collections/${collectionId}.png`)}
+        src={assetUrl(`logos/collections/${collectionId}.jpg`)}
       />
     );
   }
 }
 
 export default CollectionLogo;
-
-

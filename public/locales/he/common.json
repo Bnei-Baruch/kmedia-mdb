@@ -4,16 +4,17 @@
       "header": "קבלה מדיה"
     },
     "sidebar": {
-      "lessons": "שיעור יומי",
+      "lessons": "שיעור הקבלה היומי",
       "programs": "תוכניות",
       "lectures": "הרצאות ושיעורים",
-      "sources": "מקורות",
-      "events": "אירועים",
+      "sources": "ספרייה",
+      "events": "כנסים ואירועים",
       "books": "ספרים",
       "topics": "נושאים",
       "publications": "פרסומים",
       "photos": "תמונות",
-      "design": "עיצוב"
+      "design": "עיצוב",
+      "project-status": "סטאטוס הפרוייקט"
     },
     "footer": {
       "copyright": "© כל הזכויות שמורות 2003-{{year}}",
@@ -70,9 +71,11 @@
     "sections-filter": {
       "label": "מדור",
       "all": "הכל",
-      "lessons": "שיעורים",
+      "lessons": "שיעור הקבלה היומי",
       "programs": "תוכניות",
-      "events": "אירועים"
+      "lectures": "הרצאות ושיעורים",
+      "events": "כנסים ואירועים",
+      "publications": "פרסומים"
     }
   },
   "buttons": {
@@ -82,14 +85,21 @@
     "audio": "אודיו",
     "video": "וידאו",
     "more": "עוד",
-    "copy-link": "העתק קישור"
+    "copy-link": "העתק קישור",
+    "search": "חפש"
   },
   "player": {
     "messages": {
       "edit-help": "משוך את הידיות על מנת לשתף חלק מהוידאו"
     },
     "buttons": {
-      "edit-back": "חזור"
+      "edit-back": "חזור",
+      "start-position": "התחלה",
+      "end-position": "סיום",
+      "click-to-set": "לחץ לסימון"
+    },
+    "share": {
+      "title": "צפה בסרטון"
     },
     "error": {
       "loading": "שגיאה בטעינת קובץ"
@@ -99,16 +109,8 @@
     "loading": "טוען",
     "loading-subtext": "תיכף מגיע",
     "server-error": "שגיאת שרת",
-    "lesson-not-found": "שיעור לא קיים",
-    "lesson-not-found-subtext": "נסה לחפש ב <1>רשימת השיעורים</1>...",
-    "program-not-found": "תוכנית לא קיימת",
-    "program-not-found-subtext": "נסה לחפש ב <1>רשימת התוכניות</1>...",
-    "event-not-found": "אירוע לא קיים",
-    "event-not-found-subtext": "נסה לחפש ב <1>רשימת האירועים</1>...",
-    "lecture-not-found": "הרצאה לא קיימת",
-    "lecture-not-found-subtext": "נסה לחפש ב <1>רשימת ההרצאות</1>...",
-    "publication-not-found": "פרסום לא קיים",
-    "publication-not-found-subtext": "נסה לחפש ב <1>רשימת הפרסומים</1>...",
+    "not-found": "אופס!",
+    "not-found-subtext": "אנחנו לא מצליחים למצוא את מה שאת מחפש",
     "no-files": "לא נמצאו קבצים",
     "no-playable-files": "לא נמצאו קבצים מתאימים לתצוגה",
     "no-results": "לא נמצאו תוצאות",
@@ -121,10 +123,13 @@
     "fallback-to-audio": "וידיאו לא נמצא, משתמש באודיו.",
     "fallback-to-video": "אודיו לא נמצא, משתמש בוידיאו.",
     "source-content-not-found": "לא נמצא תוכן המקור",
-    "no-images": "לא נמצאו תמונות",
-    "sketches-not-found": "קובץ שרטוטים לא קיים"
+    "no-images":"לא נמצאו שרטוטים"
   },
   "search": {
+    "header": {
+      "text": "תוצאות חיפוש",
+      "subtext": ""
+    },
     "sortby": "מיין לפי",
     "sorts": {
       "relevance": "רלונטיות",
@@ -141,8 +146,6 @@
       }
     },
     "results": {
-      "title": "תוצאות חיפוש",
-      "search-summary": "דף {{pageNo}} מתוך {{total}} תוצאות ({{took}} שניות)",
       "empty-query": "לא הוזן טקסט לחיפוש. השתמש בתיבת החיפוש למעלה.",
       "no-results": "לא נמצאו תוצאות עבור <1><0>{{query}}</0></1>."
     },
@@ -151,15 +154,25 @@
       "transcript": "תמליל"
     }
   },
+  "home": {
+    "header": {
+      "text": "דף הבית",
+      "subtext": ""
+    },
+    "search": "גלה את חכמת הקבלה",
+    "sections": "נושאים",
+    "updates": "עדכונים אחרונים",
+    "last-lesson": "שיעור הקבלה היומי",
+    "donate": "תרום עכשיו"
+  },
   "events": {
     "header": {
-      "text": "אירועים",
-      "subtext": "בימינו, חכמת הקבלה מגיעה כבר לכל מקום בעולם. במדור זה תוכלו להתרשם מאירועים, כנסים ומפגשים מיוחדים של ארגון \"קבלה לעם\" בארץ ובעולם."
+      "text": "כנסים ואירועים",
+      "subtext": "בימינו חכמת הקבלה מגיעה לכל מקום בעולם. במדור זה תוכלו להתרשם מאירועים, כנסים ומפגשים מיוחדים של עמותת \"בני ברוך - קבלה לעם\" בארץ ובעולם."
     },
     "tabs": {
       "conventions": "כנסים",
       "holidays": "חגים ומועדים",
-      "picnics": "פיקניקים",
       "unity-days": "ערבי איחוד",
       "friends-gatherings": "ישיבות חברים",
       "meals": "סעודות"
@@ -169,36 +182,46 @@
     },
     "ALL_EVENTS": "כל האירועים",
     "no-matches": "לא נמצאו אירועים מתאימים",
-    "part": {
-      "relevant-parts": {
-        "title": "חלקים נוספים מאותו אירוע"
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "חלקים נוספים מאותו אירוע"
+        }
+      }
+    },
+    "collection": {
+      "playlist": {
+        "preparation": "הכנה",
+        "lessons": "שיעורים",
+        "other_parts": "חלקים שונים",
+        "appendices": "תוספות"
       }
     }
   },
   "lessons": {
     "header": {
-      "text": "שיעורים יומיים",
+      "text": "שיעור הקבלה היומי",
       "subtext": "במשך אלפי שנים, היו המקובלים לומדים על בסיס יומי, למען התפתחותם הרוחנית הפרטית ולמען התקדמותה הרוחנית של האנושות. בימינו, ממשיכים את אותה המסורת קבוצת המקובלים \"בני ברוך\", הלומדים מדי יום מתוך כתבי הקבלה האותנטיים, לימודים המלווים בביאור והדרכה מפי הרב ד\"ר מיכאל לייטמן."
     },
     "list": {
       "related": "קשור ל"
     },
-    "part": {
-      "info": {
-        "tags": "תגיות",
-        "sources": "מקורות",
-        "related-event": "אירועים קשורים"
-      },
-      "relevant-parts": {
-        "title": "חלקים נוספים מאותו שיעור",
-        "item-title": "חלק {{name}}"
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "חלקים נוספים מאותו שיעור",
+          "item-title": "חלק {{name}}"
+        }
       }
+    },
+    "last": {
+      "text": "שיעור הקבלה היומי - מתעדכן"
     }
   },
   "programs": {
     "header": {
       "text": "תוכניות",
-      "subtext": "כאן תמצאו מגוון עשיר של תוכניות הכולל: שיחות מרתקות על משמעות החיים, אקטואליה, תכניות לכל המשפחה ועוד."
+      "subtext": "כאן תמצאו מגוון עשיר של תוכניות הכולל: שיחות מרתקות על משמעות החיים, אקטואליה, תוכניות לכל המשפחה ועוד."
     },
     "genres": {
       "all": "כל התוכניות",
@@ -213,18 +236,12 @@
     "list": {
       "episode_from": "פרק מתוך התוכנית:"
     },
-    "full": {
-      "episodes": "פרקים"
-    },
-    "part": {
-      "info": {
-        "tags": "תגיות",
-        "sources": "מקורות",
-        "related-event": "אירועים קשורים"
-      },
-      "relevant-parts": {
-        "title": "פרקים נוספים מאותה תוכנית",
-        "item-title": "פרק {{name}}"
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "פרקים נוספים מאותה התוכנית",
+          "item-title": "פרק {{name}}"
+        }
       }
     }
   },
@@ -236,33 +253,50 @@
     "list": {
       "item_from": "חלק מתוך:"
     },
-    "c": {
-      "items": "חלקים"
-    },
-    "cu": {
-      "info": {
-        "tags": "תגיות",
-        "sources": "מקורות"
-      },
-      "relevant-parts": {
-        "title": "חלקים אחרים מאותה סדרה"
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "חלקים אחרים מאותה סדרה"
+        }
       }
     }
   },
   "publications": {
     "header": {
       "text": "פרסומים",
-      "subtext": "כאן יבוא התיאור של מדור פרסומים"
+      "subtext": "מאמרים בנושאי אקטואליה, תרבות, מדע פופולארי, זוגיות ועוד, המוגשים מתוך נקודת המבט הייחודית של חכמת הקבלה"
     },
     "list": {
       "item_from": "מאמר מתוך:"
     },
-    "c": {
-      "items": "מאמרים"
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "מאמרים נוספים מאותו האוסף"
+        }
+      }
+    }
+  },
+  "pages": {
+    "collection": {
+      "items": {
+        "programs-collection": "פרקים",
+        "lectures-collection": "חלקים",
+        "publications-collection": "מאמרים",
+        "event": "חלקים"
+      }
     },
-    "cu": {
-      "relevant-parts": {
-        "title": "מאמרים נוספים מאותו האוסף"
+    "unit": {
+      "info": {
+        "sources": "מקורות",
+        "topics": "נושאים",
+        "collections": "קשור ל"
+      },
+      "recommended": {
+        "same-collection": {
+          "title": "חלקים נוספים מאותו האוסף",
+          "item-title": "חלק {{name}}"
+        }
       }
     }
   },
@@ -287,11 +321,14 @@
   },
   "sources-library": {
     "header": {
-      "text": "ספריית מקורות",
-      "subtext": "כתבי קבלה אותנטיים"
+      "text": "ספרייה",
+      "subtext": "אוסף של כל הכתבים המקוריים החשובים ביותר ללימוד הקבלה, שנכתבו על ידי גדולי המקובלים."
     },
     "no-source": "בחר מקור",
-    "toc": "תוכן עניינים"
+    "toc": "תוכן עניינים",
+    "az":        "אב",
+    "default":   "ברירת מחדל",
+    "filter": "סנן..."
   },
   "media-downloads": {
     "title": "קבצים להורדה",
@@ -362,7 +399,7 @@
       "cs": "צ'כית"
     },
     "content-types": {
-      "DAILY_LESSON": "שיעור יומי",
+      "DAILY_LESSON": "השיעור היומי",
       "SPECIAL_LESSON": "שיעור מיוחד",
       "FRIENDS_GATHERINGS": "ישיבות חברים",
       "CONGRESS": "כנס",
@@ -392,7 +429,8 @@
       "CLIP": "קליפ",
       "TRAINING": "הכשרה",
       "KITEI_MAKOR": "קטעי מקור",
-      "PUBLICATION": "פרסום"
+      "PUBLICATION": "פרסום",
+      "LELO_MIKUD": "ערוך - ללא קבוצת מיקוד"
     },
     "media-types": {
       "video": "וידאו",
@@ -408,4 +446,3 @@
     "date": "{{date, l}}"
   }
 }
-

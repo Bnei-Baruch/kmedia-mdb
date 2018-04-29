@@ -1,5 +1,4 @@
 export { default as dateFilterDefinition } from './dateFilter';
-export { default as evenTypesFilterDefinition } from './eventTypesFilter';
 export { default as locationsFilterDefinition } from './locationsFilter';
 export { default as holidaysFilterDefinition } from './holidaysFilter';
 export { default as programsFilterDefinition } from './programsFilter';

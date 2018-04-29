@@ -13,7 +13,7 @@ import warning from 'warning';
 import invariant from 'invariant';
 import { createLocation, locationsAreEqual } from 'history';
 import pathToRegexp from 'path-to-regexp';
-
+import * as shapes from '../shapes';
 
 const patternCache = {};
 const cacheLimit   = 10000;
@@ -23,8 +23,9 @@ const compileGenerator = (pattern) => {
   const cacheKey = pattern;
   const cache    = patternCache[cacheKey] || (patternCache[cacheKey] = {});
 
-  if (cache[pattern])
+  if (cache[pattern]) {
     return cache[pattern];
+  }
 
   const compiledGenerator = pathToRegexp.compile(pattern);
 
@@ -68,17 +69,10 @@ class Redirect extends React.Component {
 
   static contextTypes = {
     router: PropTypes.shape({
-      history: PropTypes.shape({
-        push: PropTypes.func.isRequired,
-        replace: PropTypes.func.isRequired
-      }).isRequired,
+      history: shapes.History.isRequired,
       staticContext: PropTypes.object
     }).isRequired
   };
-
-  isStatic() {
-    return this.context.router && this.context.router.staticContext;
-  }
 
   componentWillMount() {
     invariant(
@@ -86,13 +80,15 @@ class Redirect extends React.Component {
       'You should not use <Redirect> outside a <Router>'
     );
 
-    if (this.isStatic())
+    if (this.isStatic()) {
       this.perform();
+    }
   }
 
   componentDidMount() {
-    if (!this.isStatic())
+    if (!this.isStatic()) {
       this.perform();
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -100,8 +96,7 @@ class Redirect extends React.Component {
     const nextTo = createLocation(this.props.to);
 
     if (locationsAreEqual(prevTo, nextTo)) {
-      warning(false, `You tried to redirect to the same route you're currently on: ` +
-        `"${nextTo.pathname}${nextTo.search}"`);
+      warning(false, `You tried to redirect to the same route you're currently on: "${nextTo.pathname}${nextTo.search}"`);
       return;
     }
 
@@ -112,15 +107,19 @@ class Redirect extends React.Component {
     if (computedMatch) {
       if (typeof to === 'string') {
         return generatePath(to, computedMatch.params);
-      } else {
-        return {
-          ...to,
-          pathname: generatePath(to.pathname, computedMatch.params)
-        };
       }
+
+      return {
+        ...to,
+        pathname: generatePath(to.pathname, computedMatch.params)
+      };
     }
 
     return to;
+  }
+
+  isStatic() {
+    return this.context.router && this.context.router.staticContext;
   }
 
   perform() {

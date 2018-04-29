@@ -1,3 +1,7 @@
+$serif-family: "Georgia, 'Times New Roman', Times, serif";
 .uppercase {
   text-transform: uppercase;
+}
+.is-serif {
+  font-family: $serif-family !important;
 }

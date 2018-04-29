@@ -2,9 +2,13 @@
   background: $black;
 
   &__player {
+    @include mobile {
+       margin-bottom: 1rem;
+    }
+
     height: 0;
-    margin-bottom: -1rem;
-    margin-top: -1rem;
+    // margin-bottom: -1rem;
+    // margin-top: -1rem;
     padding-top: percentage(9 / 16);
     position: relative;
 
@@ -26,6 +30,21 @@
   }
 
   &__playlist-wrapper {
+    @include mobile {
+      display: block;
+      position: static;
+
+      &::before {
+        content: none;
+      }
+
+      > .header {
+        &::before {
+          content: none;
+        }
+      }
+    }
+
     bottom: -1rem;
     display: flex;
     flex-direction: column;
@@ -61,38 +80,28 @@
   }
 
   &__playlist-view {
+    @include mobile {
+      padding-bottom: 0;
+      padding-top: 0;
+    }
+
+    clear: both;
     overflow-y: auto;
     padding-bottom: 1rem;
     padding-top: .7rem;
-  }
-}
 
-// Responsive
-
-@media only screen and (max-width: $computerBreakpoint - 1) {
-  .avbox {
-    &__player {
-      margin-bottom: 1rem;
+    .header {
+      color: $blue;
     }
 
-    &__playlist-wrapper {
-      display: block;
-      position: static;
-
-      &::before {
-        content: none;
-      }
-
-      > .header {
-        &::before {
-          content: none;
-        }
-      }
+    .item .item {
+      margin-left: -1.14285714em;
+      margin-right: -1.14285714em;
+      padding-left: 1.14285714em * 2;
+      padding-right: 1.14285714em * 2;
     }
-
-    &__playlist-view {
-      padding-bottom: 0;
-      padding-top: 0;
+    .menu > .item {
+      // padding-bottom: 0;
     }
   }
 }

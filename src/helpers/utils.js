@@ -18,6 +18,7 @@ import {
   CT_KITEI_MAKOR,
   CT_LECTURE,
   CT_LECTURE_SERIES,
+  CT_LELO_MIKUD,
   CT_LESSON_PART,
   CT_MEAL,
   CT_MEALS,
@@ -34,7 +35,6 @@ import {
   CT_WOMEN_LESSON,
   CT_WOMEN_LESSONS,
   EVENT_TYPES,
-  MEDIA_TYPES,
 } from './consts';
 
 import { CollectionsBreakdown } from './mdb';
@@ -151,24 +151,6 @@ export const filenameExtension = (name) => {
 };
 
 /**
- * Extract type, sub_type and mime_type from a file
- * or infer based file name extension.
- * @param file
- * @returns {{type: String, sub_type: String, mime_type: String}}
- */
-export const fileTypes = (file) => {
-  let { type, sub_type, mime_type } = file;
-
-  // infer from file extension in DB has nothing
-  if (!type) {
-    const ext = filenameExtension(file.name);
-    ({ type, sub_type, mime_type } = MEDIA_TYPES[ext] || {});
-  }
-
-  return { type, sub_type, mime_type };
-};
-
-/**
  * Returns the url to the physical file
  * @param file
  * @param ext {boolean} include file name extension in url or not
@@ -179,6 +161,10 @@ export const physicalFile = (file, ext = false) => {
     suffix = `.${filenameExtension(file.name)}`;
   }
   return `https://cdn.kabbalahmedia.info/${file.id}${suffix}`;
+};
+
+export const publicFile = (relativePath) => {
+  return `https://archive.kbb1.com/${relativePath}`;
 };
 
 export const canonicalCollection = (unit) => {
@@ -270,6 +256,7 @@ export const canonicalLink = (entity) => {
   case CT_TRAINING:
   case CT_KITEI_MAKOR:
   case CT_PUBLICATION:
+  case CT_LELO_MIKUD:
     return '/';
   default:
     return '/';
@@ -309,12 +296,26 @@ export const neighborIndices = (idx, len, n) => {
 };
 
 /**
+ * Compare two strings for use with Array.sort
+ * @param a {string}
+ * @param b {string}
+ */
+export const strCmp = (a, b) => {
+  if (a < b) {
+    return -1;
+  } else if (a > b) {
+    return 1;
+  }
+  return 0;
+};
+
+/**
  * Used by shallowCompare
  * @param objA
  * @param objB
  * @returns {bool}
  */
-const shallowEqual = (objA, objB) => {
+export const shallowEqual = (objA, objB) => {
   if (objA === objB) {
     return true;
   }

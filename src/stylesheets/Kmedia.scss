@@ -3,15 +3,25 @@
 @import 'includes/responsive-helpers';
 @import 'includes/layout';
 @import 'includes/index';
+@import 'includes/unit';
 @import 'includes/video-player';
 @import 'includes/media-player';
 @import 'includes/sources';
+@import 'includes/search';
 @import 'includes/homepage';
+// @import 'gallery/image-gallery-no-icon';
+@import 'gallery/image-gallery';
 //////////ALL YOUR CSS IS HERE ↴
 @import 'includes/not-sorted-scss';
 
 
-
+.debug {
+  position: fixed;
+  background: yellow;
+  z-index: 999999999999;
+  bottom: 0;
+  left:0;
+}
 /// INDEX FILTERS
 .index-filters {
   &__search {
@@ -69,6 +79,13 @@
       margin-bottom: 1em;
       text-transform: uppercase;
     }
+
+    .item {
+      cursor: pointer;
+      &:hover {
+        background: rgba(0,0,0,.05);
+      }
+    }
   }
 
   .ui.menu {
@@ -89,3 +106,4 @@
     margin-right: 4px;
   }
 }
+
