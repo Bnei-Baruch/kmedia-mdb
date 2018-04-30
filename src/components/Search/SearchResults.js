@@ -351,10 +351,14 @@ class SearchResults extends Component {
         <div>
           <Container>
             <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
-            <Table sortable basic="very" className="index-list">
+            <Table sortable basic="very" className="index-list search-results">
               <Table.Body>
                 {isDebMode(location) ? this.renderIntentsDeb(intents) : null}
-                {pageNo === 1 && intents.length ? this.renderIntents(intents) : null}
+                {
+                  // Dark launch intents, i.e., not show the user until quality is good enough.
+                  // Remove isDebMode of following line when quality is good.
+                }
+                {isDebMode(location) && pageNo === 1 && intents.length ? this.renderIntents(intents) : null}
                 {hits.map(this.renderHit)}
               </Table.Body>
             </Table>
