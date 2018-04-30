@@ -21,7 +21,13 @@ class Kabbalist extends Component {
     const { id, name, description } = book;
     return (
       <List.Item key={id}>
-        <NavLink to={`/sources/${id}`}>
+        <NavLink to={{
+          pathname: `/sources/${id}`,
+          state: {
+            tocIsActive: true,
+          },
+        }}
+        >
           {name} {description ? ` - ${description}` : ''}
         </NavLink>
       </List.Item>
@@ -43,7 +49,7 @@ class Kabbalist extends Component {
           {portrait ? <Image src={portrait} /> : null}
         </Table.Cell>
         <Table.Cell>
-          <div className={classnames({'sources__list': true, "sources__list--image": !!portrait })}>
+          <div className={classnames({ sources__list: true, 'sources__list--image': !!portrait })}>
             <Header size="small">{displayName}</Header>
             <div>
               <List bulleted>
