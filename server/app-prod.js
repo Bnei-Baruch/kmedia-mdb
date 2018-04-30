@@ -31,6 +31,7 @@ app.use(helmet({
         '\'self\'',
         '*.kbb1.com',
         '*.kabbalahmedia.info',
+        '*.usersnap.com',
       ],
       'script-src': [
         '\'self\'',
@@ -55,6 +56,7 @@ app.use(helmet({
         '*.kbb1.com',
         '*.kabbalahmedia.info',
         '*.google-analytics.com',
+        '*.usersnap.com',
       ]
     },
     browserSniff: false       // we're not targeting really old browsers
