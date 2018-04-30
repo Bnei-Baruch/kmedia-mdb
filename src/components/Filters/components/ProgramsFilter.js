@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import noop from 'lodash/noop';
 import { Button, Card, Divider, Grid, Header, List, Menu, Segment } from 'semantic-ui-react';
 
-import { canonicalLink, isEmpty } from '../../../helpers/utils';
+import { canonicalLink } from '../../../helpers/links';
+import { isEmpty } from '../../../helpers/utils';
 import { selectors } from '../../../redux/modules/programs';
 import { selectors as mdbSelectors } from '../../../redux/modules/mdb';
 import connectFilter from './connectFilter';

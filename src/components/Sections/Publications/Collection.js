@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
-import { canonicalLink } from '../../../helpers/utils';
+import { canonicalLink } from '../../../helpers/links';
 import Link from '../../Language/MultiLanguageLink';
 import Collection from '../../Pages/Collection/Container';
 

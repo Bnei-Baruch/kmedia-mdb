@@ -114,11 +114,9 @@
         width: 100% !important;
         z-index: 1;
       }
-      .is-readable & {
-        // position: fixed;
-      }
-      overflow-y: auto;
+
       -webkit-overflow-scrolling: touch;
+      overflow-y: auto;
       padding: 1em 1em 1em 0;
     }
 
@@ -140,6 +138,7 @@
 
   &__content-wrapper {
     font-size: 1.1428571429rem;
+
     .is-dark & {
       background: $black !important;
       color: $white !important;
@@ -180,13 +179,14 @@
 
   &__toc-header {
     @include tablet-mobile {
+      padding-bottom: .5rem !important;
+      padding-top: .5rem !important;
       position: fixed !important;
+      top: $main-menu-height;
       transform: translate(100%, 0);
       transition: transform .3s;
       z-index: 10;
-      padding-bottom: .5rem !important;
-      padding-top: .5rem !important;
-      top: $main-menu-height;
+
       .is-readable & {
         top: 0;
       }
@@ -251,23 +251,26 @@
     h3,
     h4,
     h5 {
-      .is-serif & { font-family: $serif-family;}
       line-height: 1.28571429em;
+
+      .is-serif & { font-family: $serif-family;}
 
       em {
         font-weight: bold;
       }
     }
+
     p {
-      text-indent: 2.5em;
       margin-bottom: 2em;
     }
+
     ul,
     ol {
       p {
         text-indent: 0;
       }
     }
+
     h1 {font-size: 2em;}
     h2 {font-size: 1.71428571em;}
     h3 {font-size: 1.28571429em;}
@@ -291,19 +294,20 @@
   }
 
   .menu {
-    border: none !important;
+    background: none;
+    border: 0 !important;
+    border-radius: 0;
     box-shadow: none !important;
     margin: 0 !important;
-    background: none;
-    border-radius: 0;
     white-space: nowrap;
+
     + .menu {
-      border-top: 1px solid rgba(34,36,38,.1) !important;
+      border-top: 1px solid rgba(34, 36, 38, .1) !important;
     }
 
-    &.ui.item .item{
-      padding-right: 1em !important;
+    &.ui.item .item {
       padding-left: 1em !important;
+      padding-right: 1em !important;
     }
   }
 }
