@@ -35,7 +35,7 @@ const splitPathByLanguage = (path) => {
 
 export const getLanguageFromPath = (path) => {
   const parts = splitPathByLanguage(path);
-  return parts.language || DEFAULT_LANGUAGE;
+  return LANGUAGES[parts.language] ? parts.language : DEFAULT_LANGUAGE;
 };
 
 export const prefixWithLanguage = (path, location, toLanguage) => {
