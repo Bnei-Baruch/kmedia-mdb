@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Card, Header, Label } from 'semantic-ui-react';
 
 import { sectionThumbnailFallback } from '../../../helpers/images';
-import { canonicalLink } from '../../../helpers/utils';
+import { canonicalLink } from '../../../helpers/links';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';

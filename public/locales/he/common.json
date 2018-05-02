@@ -154,6 +154,14 @@
       "description": "תקציר",
       "transcript": "תמליל",
       "content": "תוכן"
+    },
+    "intent-types": {
+      "lessons": "שיעורי קבלה יומיים",
+      "programs": "תוכניות"
+    },
+    "intent-prefix": {
+      "topic": "בנושא:",
+      "source": "לפי מקור:"
     }
   },
   "home": {

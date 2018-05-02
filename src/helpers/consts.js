@@ -312,3 +312,18 @@ export const BS_TAAS_PARTS = {
   FaKUG7ru: 1687,
   mW6eON0z: 1887,
 };
+
+// Search
+export const SEARCH_I_TOPIC = 0;
+export const SEARCH_I_SOURCE = 1;
+
+export const SEARCH_I_NAMES = {
+  [SEARCH_I_TOPIC]: 'Topic',
+  [SEARCH_I_SOURCE]: 'Source',
+}
+
+export const SEARCH_I_FILTER_NAMES = {
+  [SEARCH_I_TOPIC]: 'topics-filter',
+  [SEARCH_I_SOURCE]: 'sources-filter',
+}
+

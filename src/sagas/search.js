@@ -41,9 +41,9 @@ export function* search(action) {
     }
     const searchId = GenerateSearchId();
     const { data } = yield call(Api.search, { ...action.payload, q, sortBy, language, deb, searchId });
-    data.searchId = searchId;
+    data.search_result.searchId = searchId;
 
-    if (Array.isArray(data.hits.hits) && data.hits.hits.length > 0) {
+    if (Array.isArray(data.search_result.hits.hits) && data.search_result.hits.hits.length > 0) {
       // TODO edo: optimize data fetching
       // Here comes another call for all content_units we got
       // in order to fetch their possible additional collections.
@@ -51,21 +51,21 @@ export function* search(action) {
       // This second round trip to the API is awful,
       // we should strive for a single call to the API and get all the data we need.
       // hmm, relay..., hmm ?
-      const cIDsToFetch = data.hits.hits.reduce((acc, val) => {
+      const cIDsToFetch = data.search_result.hits.hits.reduce((acc, val) => {
         if (val._type === 'collections') {
           return acc.concat(val._source.mdb_uid);
         } else {
           return acc;
         }
       }, []);
-      const cuIDsToFetch = data.hits.hits.reduce((acc, val) => {
+      const cuIDsToFetch = data.search_result.hits.hits.reduce((acc, val) => {
         if (val._type === 'content_units') {
           return acc.concat(val._source.mdb_uid);
         } else {
           return acc;
         }
       }, []);
-      const sIDsToFetch = data.hits.hits.reduce((acc, val) => {
+      const sIDsToFetch = data.search_result.hits.hits.reduce((acc, val) => {
         if (val._type === 'sources') {
           return acc.concat(val._source.mdb_uid);
         } else {

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Container, Grid, Header, Item } from 'semantic-ui-react';
 
-import { canonicalLink, neighborIndices, strCmp } from '../../../helpers/utils';
+import { canonicalLink } from '../../../helpers/links';
+import { neighborIndices, strCmp } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 import Helmets from '../../shared/Helmets';
 import { UnitContainer, wrap as wrapContainer } from '../../Pages/Unit/Container';
