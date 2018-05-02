@@ -7,7 +7,6 @@ import { Container, Divider, Label, Table } from 'semantic-ui-react';
 import { canonicalLink, formatDuration, isEmpty } from '../../helpers/utils';
 import { getQuery, isDebMode } from '../../helpers/url';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
-import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { filtersTransformer } from '../../filters';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
@@ -20,9 +19,9 @@ import { constants } from 'os';
 class SearchResults extends Component {
   static propTypes = {
     results: PropTypes.object,
+    getSourcePath: PropTypes.func,
     cMap: PropTypes.objectOf(shapes.Collection),
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
-    sMap: PropTypes.objectOf(shapes.Source),
     pageNo: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
@@ -31,7 +30,6 @@ class SearchResults extends Component {
     t: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
     filters: PropTypes.array.isRequired,
-    sources: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
     click: PropTypes.func.isRequired,
   };
@@ -40,9 +38,9 @@ class SearchResults extends Component {
     results: null,
     cMap: {},
     cuMap: {},
-    sMap: {},
     wip: false,
     err: null,
+    getSourcePath: undefined,
   };
 
   // Helper function to get the frist prop in hightlights obj and apply htmlFunc on it.
@@ -178,22 +176,21 @@ class SearchResults extends Component {
     );
   };
 
-  renderSource = (s, hit) => {
-    const { t, location, sources }                                            = this.props;
+  renderSource = (hit) => {
+    const { t, location, getSourcePath } = this.props;
     const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
 
-    const name = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || s.name;
+    const srcPath = getSourcePath(mdbUid)
+    
+    const name = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || srcPath[srcPath.length-1].name;
     let path="", authors="";
 
-    if (sources) {
-        const sourcesArr = sources(mdbUid);
         authors = this.snippetFromHighlight(highlight, ['authors', 'authors_analyzed'], parts => parts[0]);
         if (authors){
           // Remove author from path in order to replace with highlight value.
-          sourcesArr.pop();
+          srcPath.pop();
         }
-        path = sourcesArr.slice(0,-1).map(n => n.name).join(' > ') + ' >';
-    }
+        path = srcPath.slice(0,-1).map(n => n.name).join(' > ') + ' >';
 
     const description = this.snippetFromHighlight(highlight, ['description', 'description_analyzed'], parts => `...${parts.join('.....')}...`);
     const content  = this.snippetFromHighlight(highlight, ['content', 'content_analyzed'], parts => `...${parts.join('.....')}...`);
@@ -235,7 +232,7 @@ class SearchResults extends Component {
           !isDebMode(location) ?
             null :
             <Table.Cell collapsing textAlign="right">
-              <ScoreDebug name={s.name} score={score} explanation={hit._explanation} />
+              <ScoreDebug name={hit.name} score={score} explanation={hit._explanation} />
             </Table.Cell>
         }
       </Table.Row>
@@ -244,18 +241,17 @@ class SearchResults extends Component {
 
   renderHit = (hit, rank) => {
     // console.log('hit', hit);
-    const { cMap, cuMap, sMap }            = this.props;
-    const { _source: { mdb_uid: mdbUid } } = hit;
+    const { cMap, cuMap }            = this.props;
+    const { _source: { mdb_uid: mdbUid }, _type: hitType } = hit;
     const cu                               = cuMap[mdbUid];
     const c                                = cMap[mdbUid];
-    const s                                = sMap[mdbUid];
 
     if (cu) {
       return this.renderContentUnit(cu, hit, rank);
     } else if (c) {
       return this.renderCollection(c, hit, rank);
-    } else if (s) {
-      return this.renderSource(s, hit, rank);
+    } else if (hitType === 'sources') {
+      return this.renderSource(hit, rank);
     }
 
     // maybe content_units are still loading ?
@@ -264,9 +260,9 @@ class SearchResults extends Component {
   };
 
   render() {
-    const { filters, wip, err, results, pageNo, pageSize, language, t, handlePageChange, cMap, cuMap, sMap, location } = this.props;
+    const { filters, wip, err, getSourcePath, results, pageNo, pageSize, language, t, handlePageChange, location } = this.props;
 
-    const wipErr = WipErr({ wip, err, t });
+    const wipErr = WipErr({ wip: wip || getSourcePath == undefined, err, t });
     if (wipErr) {
       return wipErr;
     }
@@ -285,7 +281,7 @@ class SearchResults extends Component {
     const { /* took, */ hits: { total, hits } } = results;
 
     let content;
-    if (total === 0 || (isEmpty(cMap) && isEmpty(cuMap) && isEmpty(sMap))) {
+    if (total === 0) {
       content = (
         <Trans i18nKey="search.results.no-results">
           Your search for <strong style={{ fontStyle: 'italic' }}>{{ query }}</strong> found no results.
@@ -320,6 +316,5 @@ class SearchResults extends Component {
 
 export default connect(state => ({
   filters: filterSelectors.getFilters(state.filters, 'search'),
-  sources: sourcesSelectors.getPathByID(state.sources)
 }))(translate()(SearchResults));
 

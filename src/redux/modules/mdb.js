@@ -90,11 +90,13 @@ const freshStore = () => ({
   wip: {
     units: {},
     collections: {},
+    source: {},
     lastLesson: false,
   },
   errors: {
     units: {},
     collections: {},
+    source: {},
     lastLesson: null,
   },
 });
@@ -451,18 +453,6 @@ const getDenormContentUnit = (state, id) => {
   return cu;
 };
 
-const getDenormSource = (state, id) => {
-  let s = state.sById[id];
-
-  if (s) {
-    // make a fresh copy so we won't mess up normalized storage
-    s = { ...s };
-
-  }
-
-  return s;
-};
-
 const getDenormCollectionWUnits = (state, id) => {
   let c = state.cById[id];
   if (c && Array.isArray(c.cuIDs)) {
@@ -482,6 +472,5 @@ export const selectors = {
   getDenormCollection,
   getDenormCollectionWUnits,
   getDenormContentUnit,
-  getDenormSource,
   getLastLessonId
 };
