@@ -20,6 +20,7 @@ import {
   CT_LECTURE_SERIES,
   CT_LELO_MIKUD,
   CT_LESSON_PART,
+  CT_LESSONS_SERIES,
   CT_MEAL,
   CT_MEALS,
   CT_PICNIC,
@@ -221,6 +222,8 @@ export const canonicalLink = (entity) => {
   case CT_PICNIC:
   case CT_UNITY_DAY:
     return `/events/c/${entity.id}`;
+  case CT_LESSONS_SERIES:
+    return `/series/c/${entity.id}`;
   case CT_CLIPS:
     return '/';
   default:

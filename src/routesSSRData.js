@@ -18,12 +18,14 @@ import { actions as listsActions } from './redux/modules/lists';
 import { actions as homeActions } from './redux/modules/home';
 import { actions as eventsActions } from './redux/modules/events';
 import { actions as lecturesActions } from './redux/modules/lectures';
+import { actions as seriesActions } from './redux/modules/series';
 import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
 import { actions as sourcesActions, selectors as sourcesSelectors } from './redux/modules/sources';
 import { actions as assetsActions } from './redux/modules/assets';
 import * as mdbSagas from './sagas/mdb';
 import * as filtersSagas from './sagas/filters';
 import * as eventsSagas from './sagas/events';
+import * as seriesSagas from './sagas/series';
 import * as searchSagas from './sagas/search';
 import * as sourcesSagas from './sagas/sources';
 import withPagination from './components/Pagination/withPagination';
@@ -153,6 +155,9 @@ export const lecturesPage = (store, match) => {
 
   return cuListPage(ns)(store, match);
 };
+
+export const seriesPage = (store, match) =>
+  store.sagaMiddleWare.run(seriesSagas.fetchAll, seriesActions.fetchAll()).done;
 
 export const searchPage = store =>
   Promise.all([

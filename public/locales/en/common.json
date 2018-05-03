@@ -13,6 +13,7 @@
       "topics": "Topics",
       "publications": "Publications",
       "photos": "Photos",
+      "series": "Selected Series",
       "design": "Design",
       "design2": "Layout",
       "project-status": "Project Status"
@@ -282,6 +283,12 @@
           "title": "Other published articles in this collection"
         }
       }
+    }
+  },
+  "series": {
+    "header": {
+      "text": "Selected Series",
+      "subtext": "Here comes the wonderful description for the selected series section"
     }
   },
   "pages": {

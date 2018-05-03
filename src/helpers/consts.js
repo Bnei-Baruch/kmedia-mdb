@@ -14,6 +14,7 @@ export const CT_PICNIC             = 'PICNIC';
 export const CT_UNITY_DAY          = 'UNITY_DAY';
 export const CT_CLIPS              = 'CLIPS';
 export const CT_ARTICLES           = 'ARTICLES';
+export const CT_LESSONS_SERIES     = 'LESSONS_SERIES';
 
 // Content Unit Types
 export const CT_LESSON_PART           = 'LESSON_PART';
@@ -310,23 +311,4 @@ export const BS_TAAS_PARTS = {
   mW6eON0z: 1887,
 };
 
-export const MAP_TAB_TO_CONTENT_TYPE = (contentType, tabName) => {
-  if (contentType === 'lectures') {
-    switch (tabName) {
-    case 'virtual-lessons':
-      return CT_VIRTUAL_LESSON;
-
-    case 'lectures':
-      return CT_LECTURE;
-
-    case 'women-lessons':
-      return CT_WOMEN_LESSON;
-
-    case 'children-lessons':
-      return CT_CHILDREN_LESSON;
-    default:
-      return CT_VIRTUAL_LESSON;
-    }
-  }
-};
 
