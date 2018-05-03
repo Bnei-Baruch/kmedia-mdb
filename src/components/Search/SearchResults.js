@@ -17,7 +17,6 @@ import WipErr from '../shared/WipErr/WipErr';
 import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import ScoreDebug from './ScoreDebug';
-import { constants } from 'os';
 import {
   SEARCH_I_FILTER_NAMES,
   SEARCH_I_NAMES,
@@ -191,7 +190,7 @@ class SearchResults extends Component {
     const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
 
     const srcPath = getSourcePath(mdbUid)
-    
+
     const name = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || srcPath[srcPath.length-1].name;
     let path="", authors="";
 
@@ -387,10 +386,10 @@ class SearchResults extends Component {
   };
 
   render() {
-    const { filters, wip, err, queryResult, getSourcePath, pageNo, pageSize, language, t, handlePageChange, cMap, cuMap, location } = this.props;
+    const { filters, wip, err, queryResult, getSourcePath, pageNo, pageSize, language, t, handlePageChange, location } = this.props;
     const { search_result: results, intents = []} = queryResult;
 
-    const wipErr = WipErr({ wip: wip || getSourcePath == undefined, err, t });
+    const wipErr = WipErr({ wip: wip || getSourcePath === undefined, err, t });
     if (wipErr) {
       return wipErr;
     }

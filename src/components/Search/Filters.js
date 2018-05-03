@@ -44,8 +44,8 @@ class SearchResultsFilters extends Component {
     }));
 
     const sortingDisabled =
-     selectedFilters.some(f => f.name == "sections-filter" && f.values && f.values.includes("filters.sections-filter.sources"));
-    
+     selectedFilters.some(f => f.name === "sections-filter" && f.values && f.values.includes("filters.sections-filter.sources"));
+
     return (
       <Filters
         namespace="search"

@@ -202,7 +202,7 @@ export const canonicalLink = (entity) => {
   }
 
   // source
-  if (entity.content_type == CT_SRC){
+  if (entity.content_type === CT_SRC){
     return `/sources/${entity.id}`;
   }
 
