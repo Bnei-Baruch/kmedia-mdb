@@ -13,7 +13,7 @@
       "topics": "Topics",
       "publications": "Publications",
       "photos": "Photos",
-      "series": "Selected Series",
+      "series": "Selected Study Series",
       "design": "Design",
       "design2": "Layout",
       "project-status": "Project Status"
@@ -287,8 +287,8 @@
   },
   "series": {
     "header": {
-      "text": "Selected Series",
-      "subtext": "Here comes the wonderful description for the selected series section"
+      "text": "Selected Study Series",
+      "subtext": "In this section we have gathered for you the best series of lessons we have studied over the years, grouped by the authentic Kabbalah sources."
     }
   },
   "pages": {
