@@ -36,6 +36,7 @@ import {
   CT_WOMEN_LESSON,
   CT_WOMEN_LESSONS,
   EVENT_TYPES,
+  CT_SRC,
 } from './consts';
 
 export const sectionLink = (section, filters) => {
@@ -58,6 +59,11 @@ export const sectionLink = (section, filters) => {
 export const canonicalLink = (entity) => {
   if (!entity) {
     return '/';
+  }
+
+  // source
+  if (entity.content_type == CT_SRC){
+    return `/sources/${entity.id}`;
   }
 
   // collections

@@ -242,7 +242,7 @@ class SearchResults extends Component {
           !isDebMode(location) ?
             null :
             <Table.Cell collapsing textAlign="right">
-              <ScoreDebug name={hit.name} score={score} explanation={hit._explanation} />
+              <ScoreDebug name={srcPath[srcPath.length-1].name} score={score} explanation={hit._explanation} />
             </Table.Cell>
         }
       </Table.Row>
