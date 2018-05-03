@@ -3,6 +3,7 @@ import { routerReducer as router } from 'react-router-redux';
 import { reducer as device } from './modules/device';
 import { reducer as settings } from './modules/settings';
 import { reducer as events } from './modules/events';
+import { reducer as lectures } from './modules/lectures';
 import { reducer as programs } from './modules/programs';
 import { reducer as publications } from './modules/publications';
 import { reducer as filters } from './modules/filters';
@@ -20,6 +21,7 @@ export default combineReducers({
   settings,
   programs,
   events,
+  lectures,
   publications,
   filters,
   lists,

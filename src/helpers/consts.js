@@ -327,3 +327,23 @@ export const SEARCH_I_FILTER_NAMES = {
   [SEARCH_I_SOURCE]: 'sources-filter',
 }
 
+export const MAP_TAB_TO_CONTENT_TYPE = (contentType, tabName) => {
+  if (contentType === 'lectures') {
+    switch (tabName) {
+    case 'virtual-lessons':
+      return CT_VIRTUAL_LESSON;
+
+    case 'lectures':
+      return CT_LECTURE;
+
+    case 'women-lessons':
+      return CT_WOMEN_LESSON;
+
+    case 'children-lessons':
+      return CT_CHILDREN_LESSON;
+    default:
+      return CT_VIRTUAL_LESSON;
+    }
+  }
+};
+
