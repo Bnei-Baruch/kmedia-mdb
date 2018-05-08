@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import { Container, Divider, Header, List } from 'semantic-ui-react';
 
-import { canonicalLink, isEmpty } from '../../../helpers/utils';
+import { canonicalLink } from '../../../helpers/links';
+import { isEmpty } from '../../../helpers/utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { actions, selectors } from '../../../redux/modules/series';
 import * as shapes from '../../shapes';
