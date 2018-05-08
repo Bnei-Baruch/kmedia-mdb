@@ -36,6 +36,7 @@ app.use(helmet({
       'script-src': [
         '\'self\'',
         '\'unsafe-inline\'',
+        '\'unsafe-eval\'',
         '*.google-analytics.com',
         '*.usersnap.com',
       ],

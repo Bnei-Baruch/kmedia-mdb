@@ -27,6 +27,8 @@ import SearchResults from './components/Search/SearchResultsContainer';
 import Redirect from './components/Layout/Redirect';
 import HomePage from './components/Sections/Home/Container';
 import LastLessonCollection from './components/Sections/Lessons/LastCollection';
+import Series from './components/Sections/Series/Container';
+import LessonsSeriesCollection from './components/Sections/Series/Collection';
 import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
@@ -104,12 +106,18 @@ const routes = [
   { path: 'topics', component: NotImplemented },
   { path: 'photos', component: NotImplemented },
   { path: 'search', component: SearchResults, options: { ssrData: ssrDataLoaders.searchPage } },
+  { path: 'series', component: Series, options: { ssrData: ssrDataLoaders.seriesPage } },
+  {
+    path: 'series/c/:id',
+    component: LessonsSeriesCollection,
+    options: { ssrData: ssrDataLoaders.playlistCollectionPage }
+  },
   { path: 'project-status', component: ProjectStatus },
   // { path: 'design', component: Design },
   // { path: 'design2', component: Design2 },
 ];
 
-const redirects        = [
+const redirects = [
   { from: 'lessons/part/:id', to: 'lessons/cu/:id' },
   { from: 'lessons/full/:id', to: 'lessons/c/:id' },
   { from: 'programs/chapter/:id', to: 'programs/cu/:id' },

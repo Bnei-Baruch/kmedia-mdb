@@ -13,6 +13,7 @@ const ITEMS = [
   // 'books',
   'topics',
   'publications',
+  'series',
   'project-status'
   // 'photos',
   // 'design',
