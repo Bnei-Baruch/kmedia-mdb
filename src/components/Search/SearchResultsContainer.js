@@ -7,7 +7,6 @@ import { Container, Divider } from 'semantic-ui-react';
 import { actions, selectors } from '../../redux/modules/search';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
-import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import * as shapes from '../shapes';
 import SectionHeader from '../shared/SectionHeader';
 import SearchResults from './SearchResults';
@@ -38,7 +37,6 @@ class SearchResultsContainer extends Component {
     queryResult: null,
     wip: false,
     err: null,
-    getSourcePath: undefined,
   };
 
   componentDidMount() {
@@ -74,7 +72,7 @@ class SearchResultsContainer extends Component {
   };
 
   render() {
-    const { wip, err, queryResult, getSourcePath, cMap, cuMap, pageNo, pageSize, sortBy, language, location, click } = this.props;
+    const { wip, err, queryResult, cMap, cuMap, pageNo, pageSize, sortBy, language, location, click } = this.props;
     return (
       <div>
         <SectionHeader section="search" />
@@ -92,7 +90,6 @@ class SearchResultsContainer extends Component {
             cuMap={cuMap}
             wip={wip}
             err={err}
-            getSourcePath={getSourcePath}
             pageNo={pageNo}
             pageSize={pageSize}
             language={language}
@@ -140,7 +137,6 @@ const mapState = (state) => {
     queryResult,
     cMap,
     cuMap,
-    getSourcePath: sourcesSelectors.getPathByID(state.sources),
     query: selectors.getQuery(state.search),
     pageNo: selectors.getPageNo(state.search),
     sortBy: selectors.getSortBy(state.search),

@@ -28,6 +28,7 @@ class SearchResults extends Component {
   static propTypes = {
     results: PropTypes.object,
     getSourcePath: PropTypes.func,
+    areSourcesLoaded: PropTypes.bool.isRequired,
     queryResult: PropTypes.object,
     cMap: PropTypes.objectOf(shapes.Collection),
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
@@ -386,10 +387,10 @@ class SearchResults extends Component {
   };
 
   render() {
-    const { filters, wip, err, queryResult, getSourcePath, pageNo, pageSize, language, t, handlePageChange, location } = this.props;
+    const { filters, wip, err, queryResult, areSourcesLoaded, pageNo, pageSize, language, t, handlePageChange, location } = this.props;
     const { search_result: results, intents = []} = queryResult;
 
-    const wipErr = WipErr({ wip: wip || getSourcePath === undefined, err, t });
+    const wipErr = WipErr({ wip: wip || !areSourcesLoaded, err, t });
     if (wipErr) {
       return wipErr;
     }
@@ -449,6 +450,8 @@ class SearchResults extends Component {
 
 export default connect(state => ({
   filters: filterSelectors.getFilters(state.filters, 'search'),
+  areSourcesLoaded: sourcesSelectors.areSourcesLoaded(state.sources),
+  getSourcePath: sourcesSelectors.getPathByID(state.sources),
   getSourceById: sourcesSelectors.getSourceById(state.sources),
   getTagById: tagsSelectors.getTagById(state.tags),
 }))(translate()(SearchResults));
