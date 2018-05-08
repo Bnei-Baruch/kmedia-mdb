@@ -34,9 +34,6 @@ export const CT_KITEI_MAKOR           = 'KITEI_MAKOR';
 export const CT_PUBLICATION           = 'PUBLICATION';
 export const CT_LELO_MIKUD            = 'LELO_MIKUD';
 
-// Source content type
-export const CT_SRC          = 'SOURCE';
-
 // Source Types
 export const SRC_COLLECTION = 'COLLECTION';
 export const SRC_BOOK       = 'BOOK';
@@ -320,12 +317,12 @@ export const SEARCH_I_SOURCE = 1;
 export const SEARCH_I_NAMES = {
   [SEARCH_I_TOPIC]: 'Topic',
   [SEARCH_I_SOURCE]: 'Source',
-}
+};
 
 export const SEARCH_I_FILTER_NAMES = {
   [SEARCH_I_TOPIC]: 'topics-filter',
   [SEARCH_I_SOURCE]: 'sources-filter',
-}
+};
 
 export const MAP_TAB_TO_CONTENT_TYPE = (contentType, tabName) => {
   if (contentType === 'lectures') {

@@ -36,7 +36,6 @@ import {
   CT_WOMEN_LESSON,
   CT_WOMEN_LESSONS,
   EVENT_TYPES,
-  CT_SRC,
 } from './consts';
 
 export const sectionLink = (section, filters) => {
@@ -48,13 +47,13 @@ export const sectionLink = (section, filters) => {
       }
       const path = tracePath(tag, getFilterById);
       return { name, values: [path.map(y => y.id)] };
-    } else {
-      return { name, values: [value] };
     }
+
+    return { name, values: [value] };
   });
   const query = filtersTransformer.toQueryParams(filterValues.filter(f => !!f));
   return `/${section}?${urlSearchStringify(query)}`;
-}
+};
 
 export const canonicalLink = (entity) => {
   if (!entity) {
@@ -62,7 +61,7 @@ export const canonicalLink = (entity) => {
   }
 
   // source
-  if (entity.content_type === CT_SRC){
+  if (entity.content_type === 'SOURCE') {
     return `/sources/${entity.id}`;
   }
 
