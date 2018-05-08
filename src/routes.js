@@ -12,7 +12,7 @@ import LessonCollection from './components/Sections/Lessons/Collection';
 import Programs from './components/Sections/Programs/List';
 import ProgramUnit from './components/Sections/Programs/Unit';
 import ProgramCollection from './components/Sections/Programs/Collection';
-import Lectures from './components/Sections/Lectures/List';
+import Lectures from './components/Sections/Lectures/MainPage';
 import LectureUnit from './components/Sections/Lectures/Unit';
 import LectureCollection from './components/Sections/Lectures/Collection';
 import Publications from './components/Sections/Publications/List';
@@ -83,7 +83,8 @@ const routes = [
   { path: 'events/:tab', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
   { path: 'events/cu/:id', component: EventUnit, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'events/c/:id', component: EventCollection, options: { ssrData: ssrDataLoaders.playlistCollectionPage } },
-  { path: 'lectures', component: Lectures, options: { ssrData: ssrDataLoaders.cuListPage('lectures') } },
+  { path: 'lectures', component: Lectures, options: { ssrData: ssrDataLoaders.lecturesPage } },
+  { path: 'lectures/:tab', component: Lectures, options: { ssrData: ssrDataLoaders.lecturesPage } },
   { path: 'lectures/cu/:id', component: LectureUnit, options: { ssrData: ssrDataLoaders.cuPage } },
   {
     path: 'lectures/c/:id',

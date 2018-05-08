@@ -65,11 +65,20 @@ export function* search(action) {
           return acc;
         }
       }, []);
+      const sIDsToFetch = data.search_result.hits.hits.reduce((acc, val) => {
+        if (val._type === 'sources') {
+          return acc.concat(val._source.mdb_uid);
+        } else {
+          return acc;
+        }
+      }, []);
       const language     = yield select(state => settings.getLanguage(state.settings));
       const respCU       = yield call(Api.units, { id: cuIDsToFetch, pageSize: cuIDsToFetch.length, language });
       const respC        = yield call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, language });
+      const respS        = yield call(Api.sources, { id: sIDsToFetch, pageSize: sIDsToFetch.length, language  })
       yield put(mdbActions.receiveContentUnits(respCU.data.content_units));
       yield put(mdbActions.receiveCollections(respC.data.collections));
+      yield put(mdbActions.receiveSources(respS.data));
     }
 
     yield put(actions.searchSuccess(data));

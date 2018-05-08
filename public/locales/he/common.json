@@ -75,7 +75,8 @@
       "programs": "תוכניות",
       "lectures": "הרצאות ושיעורים",
       "events": "כנסים ואירועים",
-      "publications": "פרסומים"
+      "publications": "פרסומים",
+      "sources": "מקורות"
     }
   },
   "buttons": {
@@ -151,7 +152,8 @@
     },
     "result": {
       "description": "תקציר",
-      "transcript": "תמליל"
+      "transcript": "תמליל",
+      "content": "תוכן"
     },
     "intent-types": {
       "lessons": "שיעורי קבלה יומיים",
@@ -257,6 +259,12 @@
     "header": {
       "text": "הרצאות ושיעורים",
       "subtext": "כאן תמצאו מגוון עשיר של הרצאות ושיעורים מסוגים שונים הכוללים: הרצאות בפני קהלים שונים, שיעורי נשים, ילדים ועוד"
+    },
+    "tabs" : {
+      "virtual-lessons" : "שיעורים וירטואלים",
+      "lectures": "הרצאות",
+      "women-lessons": "שיעורי נשים",
+      "children-lessons": "שיעורי ילדים"
     },
     "list": {
       "item_from": "חלק מתוך:"

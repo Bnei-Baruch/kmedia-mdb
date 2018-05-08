@@ -76,7 +76,8 @@
       "programs": "Программы",
       "lectures": "Уроки и Лекции",
       "events": "Конгрессы, события",
-      "publications": "Публикации"
+      "publications": "Публикации",
+      "sources": "Первоисточники"
     }
   },
   "buttons": {
@@ -152,7 +153,8 @@
     },
     "result": {
       "description": "описание",
-      "transcript": "стенограмма"
+      "transcript": "стенограмма",
+      "content": "текст"
     }
   },
   "home": {
@@ -250,6 +252,12 @@
     "header": {
       "text": "Уроки и Лекции",
       "subtext": "Здесь вы найдете множество лекций, детских и женских передач и.т.д."
+    },
+    "tabs" : {
+      "virtual-lessons" : "Виртуальные уроки",
+      "lectures": "Лекции",
+      "women-lessons": "Уроки для женщин",
+      "children-lessons": "Уроки для детей"
     },
     "list": {
       "item_from": "Часть из:"

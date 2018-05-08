@@ -76,7 +76,8 @@
       "programs": "Programs",
       "lectures": "Lectures & Lessons",
       "events": "Conventions & Events",
-      "publications": "Publications"
+      "publications": "Publications",
+      "sources": "Sources"
     }
   },
   "buttons": {
@@ -152,7 +153,8 @@
     },
     "result": {
       "description": "Summary",
-      "transcript": "Transcript"
+      "transcript": "Transcript",
+      "content": "Content"
     }
   },
   "home": {
@@ -250,6 +252,12 @@
     "header": {
       "text": "Lectures & Lessons",
       "subtext": "Here you will find a rich variety of lectures that include: lectures, children's programs, women's programs, etc."
+    },
+    "tabs" : {
+      "virtual-lessons" : "Virtual Lessons",
+      "lectures": "Lectures",
+      "women-lessons": "Women Lessons",
+      "children-lessons": "Children Lessons"
     },
     "list": {
       "item_from": "Item of:"
