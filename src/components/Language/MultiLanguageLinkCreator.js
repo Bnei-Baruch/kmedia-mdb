@@ -25,7 +25,6 @@ import * as shapes from '../shapes';
 
 const multiLanguageLinkCreator = () => (WrappedComponent) => {
   class MultiLanguageLinkHOC extends Component {
-
     static propTypes = {
       ...Link.propTypes,
       to: PropTypes.oneOfType([
@@ -50,7 +49,7 @@ const multiLanguageLinkCreator = () => (WrappedComponent) => {
       // We need to use "unused constants" in order to get proper "rest"
       // eslint-disable-next-line no-unused-vars
       const { to, language, location, match, history, staticContext, ...rest } = this.props;
-      let navigateTo                                                           = to;
+      let navigateTo                                                                    = to;
       let toWithLanguage;
 
       if (typeof navigateTo === 'string') {
