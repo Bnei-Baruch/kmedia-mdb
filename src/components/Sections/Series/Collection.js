@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 
 import PlaylistCollection from '../../Pages/PlaylistCollection/Container';
 
-class LessonCollection extends Component {
+class LessonsSeriesCollection extends Component {
   render() {
     return <PlaylistCollection />;
   }
 }
 
-export default LessonCollection;
+export default LessonsSeriesCollection;

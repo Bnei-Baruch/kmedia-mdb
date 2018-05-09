@@ -4,7 +4,6 @@ import { withMediaProps } from 'react-media-player';
 import { Icon } from 'semantic-ui-react';
 
 class AVMuteUnmute extends Component {
-
   static propTypes = {
     media: PropTypes.shape({
       isMuted: PropTypes.bool.isRequired,
@@ -12,6 +11,7 @@ class AVMuteUnmute extends Component {
       muteUnmute: PropTypes.func.isRequired,
       setVolume: PropTypes.func.isRequired,
     }).isRequired,
+    upward: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -123,17 +123,17 @@ class AVMuteUnmute extends Component {
         >
           {
             isMuted && (
-              <Icon key="mute" name="volume off"/>
+              <Icon key="mute" name="volume off" />
             )
           }
           {
             volume > 0 && volume < 0.5 && (
-              <Icon key="volume-down" name="volume down"/>
+              <Icon key="volume-down" name="volume down" />
             )
           }
           {
             volume >= 0.5 && (
-              <Icon key="volume-up" name="volume up"/>
+              <Icon key="volume-up" name="volume up" />
             )
           }
         </button>

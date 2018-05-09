@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Dropdown } from 'semantic-ui-react';
 import { translate } from 'react-i18next';
-
+import { selectors as filterSelectors } from '../../redux/modules/filters';
 import Filters from '../Filters/Filters';
 import filterComponents from '../Filters/components';
 
@@ -35,12 +36,15 @@ class SearchResultsFilters extends Component {
   };
 
   render() {
-    const { t, sortBy, onSortByChange, onHydrated, onChange } = this.props;
+    const { t, selectedFilters, sortBy, onSortByChange, onHydrated, onChange } = this.props;
 
     const options = ['relevance', 'newertoolder', 'oldertonewer'].map(o => ({
       text: t(`search.sorts.${o}`),
       value: o,
     }));
+
+    const sortingDisabled =
+     selectedFilters.some(f => f.name === "sections-filter" && f.values && f.values.includes("filters.sections-filter.sources"));
 
     return (
       <Filters
@@ -53,6 +57,7 @@ class SearchResultsFilters extends Component {
               {t('search.sortby')}:
             </span>,
           <Dropdown
+            disabled={sortingDisabled}
             key="dropdown"
             item
             compact
@@ -66,4 +71,6 @@ class SearchResultsFilters extends Component {
   }
 }
 
-export default translate()(SearchResultsFilters);
+export default connect(state => ({
+  selectedFilters: filterSelectors.getFilters(state.filters, 'search'),
+}))(translate()(SearchResultsFilters));

@@ -4,7 +4,7 @@ import { List, Table } from 'semantic-ui-react';
 
 import { CT_FRIENDS_GATHERING, CT_MEAL, NO_NAME } from '../../../../../helpers/consts';
 import { sectionThumbnailFallback } from '../../../../../helpers/images';
-import { canonicalLink } from '../../../../../helpers/utils';
+import { canonicalLink } from '../../../../../helpers/links';
 import { CollectionsBreakdown } from '../../../../../helpers/mdb';
 import UnitList from '../../../../Pages/UnitList/Container';
 import Link from '../../../../Language/MultiLanguageLink';

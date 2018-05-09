@@ -73,7 +73,7 @@ const initialState = {
   acQ: '',
   suggestions: [],
   q: '',
-  results: {},
+  queryResult: {},
   pageNo: 1,
   sortBy: 'relevance',
   deb: false,
@@ -110,7 +110,7 @@ export const reducer = handleActions({
     ...state,
     wip: false,
     error: null,
-    results: action.payload,
+    queryResult: action.payload,
   }),
   [SEARCH_FAILURE]: (state, action) => ({
     ...state,
@@ -139,7 +139,7 @@ export const reducer = handleActions({
 
 const getQuery       = state => state.q;
 const getSuggestions = state => state.suggestions;
-const getResults     = state => state.results;
+const getQueryResult = state => state.queryResult;
 const getPageNo      = state => state.pageNo;
 const getSortBy      = state => state.sortBy;
 const getDeb         = state => state.deb;
@@ -149,7 +149,7 @@ const getError       = state => state.error;
 export const selectors = {
   getQuery,
   getSuggestions,
-  getResults,
+  getQueryResult,
   getPageNo,
   getSortBy,
   getDeb,

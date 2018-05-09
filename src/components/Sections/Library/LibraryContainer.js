@@ -39,6 +39,7 @@ class LibraryContainer extends Component {
     t: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
+    history: shapes.History.isRequired,
   };
 
   static defaultProps = {
@@ -54,7 +55,7 @@ class LibraryContainer extends Component {
   state = {
     lastLoadedId: null,
     isReadable: false,
-    tocIsActive: true,
+    tocIsActive: false,
     fontSize: 0,
     theme: 'light',
     match: '',
@@ -65,7 +66,14 @@ class LibraryContainer extends Component {
     window.addEventListener('resize', this.updateSticky);
     window.addEventListener('load', this.updateSticky);
 
-    const { sourceId, areSourcesLoaded, push } = this.props;
+    const { sourceId, areSourcesLoaded, push, history }                                = this.props;
+    const { location: { state: { tocIsActive } = { state: { tocIsActive: false } } } } = history;
+
+    if (tocIsActive) {
+      // eslint-disable-next-line react/no-did-mount-set-state
+      this.setState({ tocIsActive });
+    }
+
     if (!areSourcesLoaded) {
       return;
     }
@@ -165,39 +173,31 @@ class LibraryContainer extends Component {
     return this.firstLeafId(children[0]);
   };
 
-  handleContextRef = (ref) => {
+  handleContextRef               = (ref) => {
     this.contextRef = ref;
   };
-
-  handleAccordionContext = (ref) => {
+  handleAccordionContext         = (ref) => {
     this.accordionContext = ref;
   };
-
   handleSelectedAccordionContext = (ref) => {
     this.selectedAccordionContext = ref;
   };
-
-  handleSecondaryHeaderRef = (ref) => {
+  handleSecondaryHeaderRef       = (ref) => {
     this.secondaryHeaderRef = ref;
   };
-
-  handleContentHeaderRef = (ref) => {
+  handleContentHeaderRef         = (ref) => {
     this.contentHeaderRef = ref;
   };
-
-  handleTocIsActive = () => {
+  handleTocIsActive              = () => {
     this.setState({ tocIsActive: !this.state.tocIsActive });
   };
-
-  handleIsReadable = () => {
+  handleIsReadable               = () => {
     this.setState({ isReadable: !this.state.isReadable });
   };
-
-  handleSettings = (setting) => {
+  handleSettings                 = (setting) => {
     this.setState(setting);
   };
-
-  fetchIndices = (sourceId) => {
+  fetchIndices                   = (sourceId) => {
     if (isEmpty(sourceId) || !isEmpty(this.props.indexMap[sourceId])) {
       return;
     }
@@ -362,6 +362,7 @@ class LibraryContainer extends Component {
                 <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
                   <div className="source__header-title">{this.header(sourceId, fullPath)}</div>
                   <div className="source__header-toolbar">
+                    <div id="download-button" />
                     <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
@@ -432,4 +433,4 @@ export default withRouter(connect(
     push: routerPush,
     replace: routerReplace,
   }, dispatch)
-)(translate()(LibraryContainer)));
+)(translate()(withRouter(LibraryContainer))));
