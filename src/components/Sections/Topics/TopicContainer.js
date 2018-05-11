@@ -1,120 +1,113 @@
 import React, { Component } from 'react';
-import { List, Table } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
+import { List, Container } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 
 import SectionHeader from '../../shared/SectionHeader';
-import UnitLogo from '../../shared/Logo/UnitLogo';
-import UnitListContainer from '../../Pages/UnitList/Container';
-import { CollectionsBreakdown } from '../../../helpers/mdb';
+import { TOPICS_FOR_DISPLAY } from '../../../helpers/consts';
+import { selectors } from '../../../redux/modules/tags';
 import Link from '../../Language/MultiLanguageLink';
-import { sectionThumbnailFallback } from '../../../helpers/images';
-import { canonicalLink } from '../../../helpers/utils';
-import { NO_NAME, CT_DAILY_LESSON } from '../../../helpers/consts';
 
 class TopicContainer extends Component{
 
-  getSectionType = (unit) => {
-    const s = canonicalLink(unit).split('/');
-    const section = s.length > 0 ? s[1] : null;
-
-    return section;
-  }
-
-  getItemOfCaption = (unit, t) => {
-    const sectionType = this.getSectionType(unit);
-
-    let itemOfCaption;
-    switch (sectionType){
-      case 'lessons':
-        itemOfCaption = t('lessons.list.related');
-        break;
-      case 'programs':
-        itemOfCaption = t('programs.list.episode_from');
-        break;
-      case 'lectures':
-        itemOfCaption = t('lectures.list.item_from');
-        break;
-      case 'events':
-        itemOfCaption = t('events.list.item_from');
-        break;
-      case 'publications':
-        itemOfCaption = t('publications.list.item_from');
-        break;
-      default:
-        break;
-    }
-
-    return itemOfCaption;
-  }
-
-  getUnitTitle = (unit, t) => (
-    this.getSectionType(unit) === 'lessons' ?
-    t(`constants.content-types.${CT_DAILY_LESSON}`) :
-    null
-  )
-  
-  renderUnit = (unit, t) => {
-    const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
-    const topicUnits  = breakdown.getAllTopicUnits();
-  
-    const relatedItems = topicUnits.map(x =>
-      (
-        <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-          {x.name || this.getUnitTitle(x, t)}
-        </List.Item>
-      )
-    );
-      
-    let filmDate = '';
-    if (unit.film_date) {
-      filmDate = t('values.date', { date: new Date(unit.film_date) });
-    }
-  
-    const link = canonicalLink(unit);
-    const itemOfCaption = this.getItemOfCaption(unit, t);
-  
-    return (
-      <Table.Row key={unit.id} verticalAlign="top">
-        <Table.Cell collapsing singleLine>
-          <Link to={link}>
-            <UnitLogo
-              className="index__thumbnail"
-              unitId={unit.id}
-              collectionId={topicUnits.length > 0 ? topicUnits[0].id : null}
-              fallbackImg={sectionThumbnailFallback.programs}
-            />
-          </Link>
-        </Table.Cell>
-        <Table.Cell>
-          <span className="index__date">{filmDate}</span>
-          <Link className="index__title" to={link}>
-            {unit.name || NO_NAME}
-          </Link>
-          {relatedItems.length === 0 ?
-          null :
-          <List horizontal divided link className="index__collections" size="tiny">
-            <List.Item>
-              <List.Header>{itemOfCaption}</List.Header>
-            </List.Item>
-            {relatedItems}
-          </List>
-          }
-        </Table.Cell>
-      </Table.Row>
-    );
+  static propTypes = {
+    roots: PropTypes.arrayOf(PropTypes.string).isRequired,
+    byId: PropTypes.object.isRequired,
   };
 
-  render(){
+  static defaultProps = {
+    roots: []
+  };
+
+  //root will be main title
+  //subroot will be subtitle
+  //the rest will be a tree - List of Lists
+
+  renderNodeChildren(node, showThis){
+    const byId = this.props.byId;
+
+    return(
+      <div>
+        { showThis ? node.label : null }
+        <List.Content>
+          <List relaxed size='large'>
+            {node.children.map(id => this.renderNode(byId[id]))}
+          </List> 
+        </List.Content> 
+      </div>
+    );
+  }
+
+  renderLeaf(node){
+    return(
+    <Link /*to={node}*/>
+      {node.label}
+    </Link>
+    );
+  }
+
+  renderNode(node){
+    return(
+        <List.Item key={node.id}>
+          {
+            (Array.isArray(node.children) && node.children.length > 0) ?
+              this.renderNodeChildren(node, true) :
+              this.renderLeaf(node)
+          }
+        </List.Item>
+    );
+  }
+
+  renderSubHeader(node){
+    return(
+      <List.Item key={node.id}>
+        <List.Header as='h3'> {node.label} </List.Header>
+        {this.renderNodeChildren(node)}
+      </List.Item>
+    );
+  }
+
+  renderBranch(rootId){
+    const byId = this.props.byId;
+    const rootNode = byId[rootId];
+    const rootChildren = rootNode.children;
+
     return (
       <div>
-        <SectionHeader section="topics" />
-        <UnitListContainer
-            namespace="topics"
-            renderUnit={this.renderUnit}  
-        />
+        <List relaxed>
+          <List.Header as='h2'>{rootNode.label}</List.Header>
+          {
+            Array.isArray(rootChildren) && rootChildren.length > 0 ?
+              rootChildren.map(id => this.renderSubHeader(byId[id])) :
+              this.renderSubHeader(rootChildren)
+          }
+        </List>
       </div>
+    );
+  }
+  
+  render(){
+    return(
+      <Container text>
+        <SectionHeader section="topics" />
+        <List divided relaxed='very'>
+           {
+             this.props.roots.map(r => 
+              <List.Item key={r}> 
+                {this.renderBranch(r)} 
+                <br/>
+              </List.Item>)
+           }
+        </List>
+      </Container>
     );
   }
 
 }
 
-export default TopicContainer;
+export default connect(
+  state => ({
+    roots: selectors.getRoots(state.tags).filter(x => TOPICS_FOR_DISPLAY.indexOf(x) !== -1), 
+    byId: selectors.getTags(state.tags),
+  })
+)(TopicContainer);

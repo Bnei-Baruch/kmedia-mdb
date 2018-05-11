@@ -33,7 +33,7 @@ class Video extends Component {
   };
 
   render() {
-    const { url, releaseDate, duration, mimetype, width, height, tags } = this.props;
+    const { url, releaseDate, duration, mimetype, width, height /*, tags */ } = this.props;
 
     // tv_show - to be used in the main page of tv show.
     // episode - to be used for a specific episode
