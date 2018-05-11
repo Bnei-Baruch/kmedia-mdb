@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../../../helpers/consts';
-import { canonicalLink } from '../../../../../helpers/utils';
+import { canonicalLink } from '../../../../../helpers/links';
 import { fromToLocalized } from '../../../../../helpers/date';
 import * as shapes from '../../../../shapes';
 import Link from '../../../../Language/MultiLanguageLink';

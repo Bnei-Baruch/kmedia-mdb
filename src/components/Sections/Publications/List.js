@@ -3,7 +3,7 @@ import { List, Table } from 'semantic-ui-react';
 
 import { CT_ARTICLE, NO_NAME } from '../../../helpers/consts';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
-import { canonicalLink } from '../../../helpers/utils';
+import { canonicalLink } from '../../../helpers/links';
 import UnitList from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
 import SectionHeader from '../../shared/SectionHeader';

@@ -20,6 +20,14 @@ export const HistoryLocation = PropTypes.shape({
   state: PropTypes.object,
 });
 
+export const Route = PropTypes.shape({
+  path: PropTypes.string,
+  exact: PropTypes.bool,
+  strict: PropTypes.bool,
+  sensitive: PropTypes.bool,
+  component: PropTypes.func,
+});
+
 export const MDBFile = PropTypes.shape({
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,

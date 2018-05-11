@@ -15,7 +15,7 @@ import Filters from './Filters';
 class SearchResultsContainer extends Component {
   static propTypes = {
     query: PropTypes.string.isRequired,
-    results: PropTypes.object,
+    queryResult: PropTypes.object,
     cMap: PropTypes.objectOf(shapes.Collection).isRequired,
     cuMap: PropTypes.objectOf(shapes.ContentUnit).isRequired,
     wip: shapes.WIP,
@@ -34,7 +34,7 @@ class SearchResultsContainer extends Component {
   };
 
   static defaultProps = {
-    results: null,
+    queryResult: null,
     wip: false,
     err: null,
   };
@@ -72,8 +72,7 @@ class SearchResultsContainer extends Component {
   };
 
   render() {
-    const { wip, err, results, cMap, cuMap, pageNo, pageSize, sortBy, language, location, click } = this.props;
-
+    const { wip, err, queryResult, cMap, cuMap, pageNo, pageSize, sortBy, language, location, click } = this.props;
     return (
       <div>
         <SectionHeader section="search" />
@@ -86,7 +85,7 @@ class SearchResultsContainer extends Component {
         />
         <Container className="padded">
           <SearchResults
-            results={results}
+            queryResult={queryResult}
             cMap={cMap}
             cuMap={cuMap}
             wip={wip}
@@ -105,7 +104,8 @@ class SearchResultsContainer extends Component {
 }
 
 const mapState = (state) => {
-  const results = selectors.getResults(state.search);
+  const queryResult = selectors.getQueryResult(state.search);
+  const results = queryResult.search_result;
 
   const cMap = results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
@@ -134,7 +134,7 @@ const mapState = (state) => {
     {};
 
   return {
-    results,
+    queryResult,
     cMap,
     cuMap,
     query: selectors.getQuery(state.search),
