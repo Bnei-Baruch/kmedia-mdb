@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { translate } from 'react-i18next';
 import { Dropdown, Flag, } from 'semantic-ui-react';
 
 import { COOKIE_UI_LANG, LANG_UI_LANGUAGES, LANGUAGES } from '../../helpers/consts';
@@ -19,7 +18,7 @@ class UILanguage extends Component {
     if (language === '' || language === undefined) {
       return;
     }
-    const expires   = new Date(Date.now() + (365 * 1000 * 60 * 60 * 24)).toUTCString();
+    const expires   = new Date(Date.now() + (365 * 24 * 60 * 60 * 1000)).toUTCString();
     document.cookie = `${COOKIE_UI_LANG}=${language}; path=/; expires=${expires}`;
   };
 
@@ -54,4 +53,4 @@ export default connect(
   state => ({
     language: settings.getLanguage(state.settings),
   })
-)(translate()(UILanguage));
+)(UILanguage);

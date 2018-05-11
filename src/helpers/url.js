@@ -47,8 +47,8 @@ export const getLanguageFromPath = (path, headers) => {
   language      = cookies[COOKIE_UI_LANG];
   // Only existing languages...
   if (language !== undefined && LANG_UI_LANGUAGES.includes(language)) {
-    console.log(`language: ${language}, redirect: ${language !== DEFAULT_LANGUAGE }`);
-    return { language, redirect: language !== DEFAULT_LANGUAGE };
+    console.log(`language: ${language}, redirect: ${language !== DEFAULT_LANGUAGE}`);
+    return { language, redirect: true };
   }
 
   // Educated guess: HTTP header
