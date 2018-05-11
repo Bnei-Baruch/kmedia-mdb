@@ -5,7 +5,7 @@ const ASSETS_BACKEND = process.env.REACT_APP_ASSETS_BACKEND;
 const IMAGINARY_URL  = process.env.REACT_APP_IMAGINARY_URL;
 
 export const backendUrl   = path => `${API_BACKEND}${path}`;
-export const assetUrl     = path => `${ASSETS_BACKEND}${path}`;
+export const assetUrl     = path => `${path}`;
 export const imaginaryUrl = path => `${IMAGINARY_URL}${path}`;
 
 export class Requests {

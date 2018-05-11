@@ -1,7 +1,50 @@
-$serif-family: "Georgia, 'Times New Roman', Times, serif";
+$serif-family: 'Georgia, 'Times New Roman', Times, serif';
+$max-readble-width: 700px;
+@import 'rtl/text-helpers';
 .uppercase {
   text-transform: uppercase;
 }
+
 .is-serif {
   font-family: $serif-family !important;
+}
+
+.readble-width {
+  max-width: $max-readble-width;
+  // margin: 0 auto;
+}
+
+.static-page {
+  margin-bottom: 3em;
+  margin-top: 1em;
+}
+
+blockquote {
+  border: 2px solid $midWhite;
+  border-width: 0 0 0 2px;
+  margin: 2em 0 2em 2em;
+  padding: 0 0 0 1em;
+
+  p {
+    font-size: 1.15em;
+    line-height: 1.5;
+  }
+
+  > em {color: $grey;}
+
+  &.following-text {
+    margin-top: -.5em !important;
+  }
+}
+
+.inline-img {
+  float: left;
+  margin: 0 1.5em 1em 0;
+}
+
+.block-img {
+  em {
+    color: $grey;
+    display: block;
+  }
 }

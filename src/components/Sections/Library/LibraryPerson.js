@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { Segment } from 'semantic-ui-react';
+import { Segment, Container, Grid } from 'semantic-ui-react';
 import { translate } from 'react-i18next';
+import { selectors as settings } from '../../../redux/modules/settings';
 
 import { actions as staticActions, selectors as staticSelectors } from '../../../redux/modules/staticFiles';
 import * as shapes from '../../shapes';
@@ -32,14 +33,14 @@ class LibraryPerson extends Component {
   };
 
   componentDidMount() {
-    const { fetchContent, sourceId } = this.props;
-    fetchContent(`/persons/${sourceId}`);
+    const { fetchContent, sourceId, language } = this.props;
+    fetchContent(`/persons/${sourceId}-${language}.html`);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { fetchContent, sourceId } = this.props;
+    const { fetchContent, sourceId, language } = this.props;
     if (nextProps.sourceId !== sourceId) {
-      fetchContent(`/persons/${nextProps.sourceId}`);
+      fetchContent(`/persons/${nextProps.sourceId}-${language}.html`);
     }
   }
 
@@ -48,7 +49,17 @@ class LibraryPerson extends Component {
     const { wip: contentWip, err: contentErr, data: contentData } = content;
 
     // eslint-disable-next-line react/no-danger
-    let result = <div dangerouslySetInnerHTML={{ __html: contentData }} />;
+    let result = 
+      <Container className="padded">
+        <Grid>
+          <Grid.Row>
+            <Grid.Column>
+              <div className="readble-width" dangerouslySetInnerHTML={{ __html: contentData }} />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Container>
+    ;
     if (contentErr) {
       if (contentErr.response && contentErr.response.status === 404) {
         result = <FrownSplash text={t('messages.source-content-not-found')} />;
@@ -69,6 +80,7 @@ export default withRouter(connect(
   (state, ownProps) => ({
     sourceId: ownProps.match.params.id,
     content: staticSelectors.getContent(state.staticFiles),
+    language: settings.getLanguage(state.settings),
   }),
   dispatch => bindActionCreators({
     fetchContent: staticActions.fetchStatic,
