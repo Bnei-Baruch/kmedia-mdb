@@ -26,11 +26,6 @@ const filters = {
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'date-filter', component: filterComponents.DateFilter },
   ],
-  lectures: [
-    { name: 'topics-filter', component: filterComponents.TopicsFilter },
-    { name: 'sources-filter', component: filterComponents.SourcesFilter },
-    { name: 'date-filter', component: filterComponents.DateFilter },
-  ],
   'lectures-collection': [
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'sources-filter', component: filterComponents.SourcesFilter },
@@ -42,10 +37,22 @@ const filters = {
   'events-meals': [
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
-  topics: [
+  'lectures-virtual-lessons': [
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
-    { name: 'date-filter', component: filterComponents.DateFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter }
+  ],
+  'lectures-lectures': [
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'sources-filter', component: filterComponents.SourcesFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter }
+  ],
+  'lectures-women-lessons': [
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter }
+  ],
+  'lectures-children-lessons': [
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter }
   ],
   publications: [
     { name: 'publishers-filter', component: filterComponents.PublishersFilter },

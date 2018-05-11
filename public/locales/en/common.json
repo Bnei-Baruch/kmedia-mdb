@@ -13,6 +13,7 @@
       "topics": "Topics",
       "publications": "Publications",
       "photos": "Photos",
+      "series": "Selected Study Series",
       "design": "Design",
       "design2": "Layout",
       "project-status": "Project Status"
@@ -76,7 +77,8 @@
       "programs": "Programs",
       "lectures": "Lectures & Lessons",
       "events": "Conventions & Events",
-      "publications": "Publications"
+      "publications": "Publications",
+      "sources": "Sources"
     }
   },
   "buttons": {
@@ -152,7 +154,8 @@
     },
     "result": {
       "description": "Summary",
-      "transcript": "Transcript"
+      "transcript": "Transcript",
+      "content": "Content"
     }
   },
   "home": {
@@ -251,6 +254,12 @@
       "text": "Lectures & Lessons",
       "subtext": "Here you will find a rich variety of lectures that include: lectures, children's programs, women's programs, etc."
     },
+    "tabs" : {
+      "virtual-lessons" : "Virtual Lessons",
+      "lectures": "Lectures",
+      "women-lessons": "Women Lessons",
+      "children-lessons": "Children Lessons"
+    },
     "list": {
       "item_from": "Item of:"
     },
@@ -292,6 +301,12 @@
           "title": "Other published articles in this collection"
         }
       }
+    }
+  },
+  "series": {
+    "header": {
+      "text": "Selected Study Series",
+      "subtext": "In this section we have gathered for you the best series of lessons we have studied over the years, grouped by the authentic Kabbalah sources."
     }
   },
   "pages": {

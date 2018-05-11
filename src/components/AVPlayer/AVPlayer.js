@@ -86,7 +86,8 @@ class AVPlayer extends PureComponent {
     playbackRate: '1x', // this is used only to rerender the component. actual value is saved on the player's instance
     videoSize: VS_DEFAULT,
     mode: PLAYER_MODE.NORMAL,
-    persistenceFn: noop
+    persistenceFn: noop,
+    isClient: false,
   };
 
   componentWillMount() {
@@ -126,6 +127,7 @@ class AVPlayer extends PureComponent {
   componentDidMount() {
     // By default hide controls after a while if player playing.
     this.hideControlsTimeout();
+    this.setState({ isClient:true });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -448,7 +450,8 @@ class AVPlayer extends PureComponent {
         videoSize,
         src,
         error,
-        errorReason
+        errorReason,
+        isClient
       } = this.state;
 
     const { isPlaying }     = media;
@@ -506,7 +509,7 @@ class AVPlayer extends PureComponent {
           vendor={isVideo ? 'video' : 'audio'}
           autoPlay={autoPlay}
           onReady={this.onPlayerReady}
-          preload="auto"
+          preload={isClient ? 'auto' : 'none'}
           controls={false}
           onError={this.onError}
           onPause={this.onPause}

@@ -12,7 +12,7 @@ import LessonCollection from './components/Sections/Lessons/Collection';
 import Programs from './components/Sections/Programs/List';
 import ProgramUnit from './components/Sections/Programs/Unit';
 import ProgramCollection from './components/Sections/Programs/Collection';
-import Lectures from './components/Sections/Lectures/List';
+import Lectures from './components/Sections/Lectures/MainPage';
 import LectureUnit from './components/Sections/Lectures/Unit';
 import LectureCollection from './components/Sections/Lectures/Collection';
 import Publications from './components/Sections/Publications/List';
@@ -27,6 +27,8 @@ import SearchResults from './components/Search/SearchResultsContainer';
 import Redirect from './components/Layout/Redirect';
 import HomePage from './components/Sections/Home/Container';
 import LastLessonCollection from './components/Sections/Lessons/LastCollection';
+import Series from './components/Sections/Series/Container';
+import LessonsSeriesCollection from './components/Sections/Series/Collection';
 import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import TopicsContainer from './components/Sections/Topics/TopicContainer';
 // import Design from './components/Design/Design';
@@ -84,7 +86,8 @@ const routes = [
   { path: 'events/:tab', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
   { path: 'events/cu/:id', component: EventUnit, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'events/c/:id', component: EventCollection, options: { ssrData: ssrDataLoaders.playlistCollectionPage } },
-  { path: 'lectures', component: Lectures, options: { ssrData: ssrDataLoaders.cuListPage('lectures') } },
+  { path: 'lectures', component: Lectures, options: { ssrData: ssrDataLoaders.lecturesPage } },
+  { path: 'lectures/:tab', component: Lectures, options: { ssrData: ssrDataLoaders.lecturesPage } },
   { path: 'lectures/cu/:id', component: LectureUnit, options: { ssrData: ssrDataLoaders.cuPage } },
   {
     path: 'lectures/c/:id',
@@ -104,12 +107,18 @@ const routes = [
   { path: 'topics', component: TopicsContainer },
   { path: 'photos', component: NotImplemented },
   { path: 'search', component: SearchResults, options: { ssrData: ssrDataLoaders.searchPage } },
+  { path: 'series', component: Series, options: { ssrData: ssrDataLoaders.seriesPage } },
+  {
+    path: 'series/c/:id',
+    component: LessonsSeriesCollection,
+    options: { ssrData: ssrDataLoaders.playlistCollectionPage }
+  },
   { path: 'project-status', component: ProjectStatus },
   // { path: 'design', component: Design },
   // { path: 'design2', component: Design2 },
 ];
 
-const redirects        = [
+const redirects = [
   { from: 'lessons/part/:id', to: 'lessons/cu/:id' },
   { from: 'lessons/full/:id', to: 'lessons/c/:id' },
   { from: 'programs/chapter/:id', to: 'programs/cu/:id' },

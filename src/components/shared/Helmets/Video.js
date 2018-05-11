@@ -20,7 +20,7 @@ class Video extends Component {
     //     }
     //   }
     // },
-    tags: PropTypes.arrayOf(PropTypes.string),
+    // tags: PropTypes.arrayOf(PropTypes.string),
   };
 
   static defaultProps = {
@@ -29,11 +29,11 @@ class Video extends Component {
     mimetype: undefined,
     width: undefined,
     height: undefined,
-    tags: []
+    // tags: [],
   };
 
   render() {
-    const { url, releaseDate, duration, mimetype, width, height /*, tags */ } = this.props;
+    const { url, releaseDate, duration, mimetype, width, height, /* tags, */ } = this.props;
 
     // tv_show - to be used in the main page of tv show.
     // episode - to be used for a specific episode

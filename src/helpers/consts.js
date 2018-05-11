@@ -14,6 +14,7 @@ export const CT_PICNIC             = 'PICNIC';
 export const CT_UNITY_DAY          = 'UNITY_DAY';
 export const CT_CLIPS              = 'CLIPS';
 export const CT_ARTICLES           = 'ARTICLES';
+export const CT_LESSONS_SERIES     = 'LESSONS_SERIES';
 
 // Content Unit Types
 export const CT_LESSON_PART           = 'LESSON_PART';
@@ -309,3 +310,18 @@ export const BS_TAAS_PARTS = {
   FaKUG7ru: 1687,
   mW6eON0z: 1887,
 };
+
+// Search
+export const SEARCH_I_TOPIC = 0;
+export const SEARCH_I_SOURCE = 1;
+
+export const SEARCH_I_NAMES = {
+  [SEARCH_I_TOPIC]: 'Topic',
+  [SEARCH_I_SOURCE]: 'Source',
+};
+
+export const SEARCH_I_FILTER_NAMES = {
+  [SEARCH_I_TOPIC]: 'topics-filter',
+  [SEARCH_I_SOURCE]: 'sources-filter',
+};
+

@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { Card, Container, Grid, } from 'semantic-ui-react';
 
-import { canonicalLink, strCmp } from '../../../helpers/utils';
+import { canonicalLink } from '../../../helpers/links';
+import { strCmp } from '../../../helpers/utils';
 import { sectionLogo } from '../../../helpers/images';
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';

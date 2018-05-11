@@ -6,7 +6,7 @@ import { List, Table } from 'semantic-ui-react';
 import { CT_VIDEO_PROGRAM_CHAPTER, NO_NAME } from '../../../helpers/consts';
 import { sectionThumbnailFallback } from '../../../helpers/images';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
-import { canonicalLink } from '../../../helpers/utils';
+import { canonicalLink } from '../../../helpers/links';
 import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
 import {
   mapDispatch as baseMapDispatch,
