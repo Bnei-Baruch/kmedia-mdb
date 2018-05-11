@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../../helpers/consts';
-import { canonicalLink, intersperse, tracePath } from '../../../../../helpers/utils';
+import { canonicalLink } from '../../../../../helpers/links';
+import { intersperse, tracePath } from '../../../../../helpers/utils';
 import { stringify as urlSearchStringify } from '../../../../../helpers/url';
 import { selectors as sourcesSelectors } from '../../../../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../../../../redux/modules/tags';

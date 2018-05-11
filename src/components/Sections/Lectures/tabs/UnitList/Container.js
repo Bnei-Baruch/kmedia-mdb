@@ -1,16 +1,23 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { List, Table } from 'semantic-ui-react';
 
-import { CT_CHILDREN_LESSON, CT_LECTURE, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, NO_NAME } from '../../../helpers/consts';
-import { sectionThumbnailFallback } from '../../../helpers/images';
-import { CollectionsBreakdown } from '../../../helpers/mdb';
-import { canonicalLink } from '../../../helpers/utils';
-import UnitList from '../../Pages/UnitList/Container';
-import Link from '../../Language/MultiLanguageLink';
-import UnitLogo from '../../shared/Logo/UnitLogo';
-import SectionHeader from '../../shared/SectionHeader';
+import {
+  CT_CHILDREN_LESSON,
+  CT_LECTURE,
+  CT_VIRTUAL_LESSON,
+  CT_WOMEN_LESSON,
+  NO_NAME
+} from '../../../../../helpers/consts';
+import { sectionThumbnailFallback } from '../../../../../helpers/images';
+import { CollectionsBreakdown } from '../../../../../helpers/mdb';
+import { canonicalLink } from '../../../../../helpers/links';
+import { ellipsize } from '../../../../../helpers/strings';
+import UnitList from '../../../../Pages/UnitList/Container';
+import Link from '../../../../Language/MultiLanguageLink';
+import UnitLogo from '../../../../shared/Logo/UnitLogo';
 
-export const renderUnit = (unit, t) => {
+const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
   const lectures  = breakdown.getLectures();
 
@@ -27,18 +34,6 @@ export const renderUnit = (unit, t) => {
     filmDate = t('values.date', { date: unit.film_date });
   }
   const link = canonicalLink(unit);
-  
-  let shortdescription;
-  if (unit.description){
-    let maxLen = 200;
-    shortdescription = unit.description;
-    if (shortdescription.length <= maxLen) {
-      shortdescription = unit.description;
-    }else{
-      shortdescription = shortdescription.substr(0, shortdescription.lastIndexOf(' ', maxLen));
-      shortdescription += "...";
-    }
-  }
 
   return (
     <Table.Row key={unit.id} verticalAlign="top">
@@ -60,7 +55,7 @@ export const renderUnit = (unit, t) => {
         {
           unit.description ?
             <div className="index__description mobile-hidden">
-              {shortdescription}
+              {ellipsize(unit.description)}
             </div>
             : null
         }
@@ -79,23 +74,43 @@ export const renderUnit = (unit, t) => {
   );
 };
 
-class LecturesList extends Component {
-  extraFetchParams = () => ({
-    content_type: [CT_LECTURE, CT_WOMEN_LESSON, CT_CHILDREN_LESSON, CT_VIRTUAL_LESSON]
-  });
+class Container extends Component {
+  static propTypes = {
+    tab: PropTypes.string.isRequired,
+  };
+
+  extraFetchParams = () => {
+    let ct;
+    switch (this.props.tab) {
+    case 'virtual-lessons':
+      ct = [CT_VIRTUAL_LESSON];
+      break;
+    case 'lectures':
+      ct = [CT_LECTURE];
+      break;
+    case 'women-lessons':
+      ct = [CT_WOMEN_LESSON];
+      break;
+    case 'children-lessons':
+      ct = [CT_CHILDREN_LESSON];
+      break;
+    default:
+      ct = [CT_VIRTUAL_LESSON];
+      break;
+    }
+
+    return { content_type: ct };
+  };
 
   render() {
     return (
-      <div>
-        <SectionHeader section="lectures" />
-        <UnitList
-          namespace="lectures"
-          extraFetchParams={this.extraFetchParams}
-          renderUnit={renderUnit}
-        />
-      </div>
+      <UnitList
+        namespace={`lectures-${this.props.tab}`}
+        extraFetchParams={this.extraFetchParams}
+        renderUnit={renderUnit}
+      />
     );
   }
 }
 
-export default LecturesList;
+export default Container;

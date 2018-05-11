@@ -30,7 +30,13 @@ class Kabbalist extends Component {
     const { id, name, description } = book;
     return (
       <List.Item key={id}>
-        <NavLink to={`/sources/${id}`}>
+        <NavLink to={{
+          pathname: `/sources/${id}`,
+          state: {
+            tocIsActive: true,
+          },
+        }}
+        >
           {name} {description ? ` - ${description}` : ''}
         </NavLink>
       </List.Item>

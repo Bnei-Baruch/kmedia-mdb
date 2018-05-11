@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // ignore styles and replace images with their final path from webpack manifest
 const path     = require('path');
 const manifest = require('../build/asset-manifest');
@@ -5,7 +6,8 @@ require('ignore-styles').default(undefined, (module, filename) => {
   if (filename.endsWith('.png') ||
     filename.endsWith('.jpg') ||
     filename.endsWith('.svg')) {
-    module.exports = `/${manifest[path.join('static','media',path.basename(filename))]}`;
+    // eslint-disable-next-line no-param-reassign
+    module.exports = `/${manifest[path.join('static', 'media', path.basename(filename))]}`;
   }
 });
 
