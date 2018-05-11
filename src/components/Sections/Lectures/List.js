@@ -4,6 +4,7 @@ import { List, Table } from 'semantic-ui-react';
 import { CT_CHILDREN_LESSON, CT_LECTURE, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, NO_NAME } from '../../../helpers/consts';
 import { sectionThumbnailFallback } from '../../../helpers/images';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
+import { ellipsize } from '../../../helpers/strings';
 import { canonicalLink } from '../../../helpers/utils';
 import UnitList from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
@@ -27,18 +28,6 @@ export const renderUnit = (unit, t) => {
     filmDate = t('values.date', { date: unit.film_date });
   }
   const link = canonicalLink(unit);
-  
-  let shortdescription;
-  if (unit.description){
-    let maxLen = 200;
-    shortdescription = unit.description;
-    if (shortdescription.length <= maxLen) {
-      shortdescription = unit.description;
-    }else{
-      shortdescription = shortdescription.substr(0, shortdescription.lastIndexOf(' ', maxLen));
-      shortdescription += "...";
-    }
-  }
 
   return (
     <Table.Row key={unit.id} verticalAlign="top">
@@ -60,7 +49,7 @@ export const renderUnit = (unit, t) => {
         {
           unit.description ?
             <div className="index__description mobile-hidden">
-              {shortdescription}
+              {ellipsize(unit.description)}
             </div>
             : null
         }
