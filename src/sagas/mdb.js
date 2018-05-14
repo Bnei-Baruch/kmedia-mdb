@@ -29,6 +29,22 @@ export function* fetchCollection(action) {
   }
 }
 
+export function* fetchCollections(action) {
+  try {
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const args     = {
+      ...action.payload,
+      language,
+    };
+    const { data } = yield call(Api.lessons, args);
+    data.payload = action.payload;
+    yield put(actions.fetchCollectionsSuccess(data));
+  } catch (err) {
+    err.payload = action.payload;
+    yield put(actions.fetchCollectionsFailure(err));
+  }
+}
+
 export function* fetchLatestLesson() {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
@@ -59,6 +75,10 @@ function* watchFetchCollection() {
   yield takeEvery(types.FETCH_COLLECTION, fetchCollection);
 }
 
+function* watchFetchCollections() {
+  yield takeEvery(types.FETCH_COLLECTIONS, fetchCollections);
+}
+
 function* watchFetchLatestLesson() {
   yield takeEvery(types.FETCH_LATEST_LESSON, fetchLatestLesson);
 }
@@ -70,6 +90,7 @@ function* watchFetchSQData() {
 export const sagas = [
   watchFetchUnit,
   watchFetchCollection,
+  watchFetchCollections,
   watchFetchLatestLesson,
   watchFetchSQData
 ];

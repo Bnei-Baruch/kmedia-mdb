@@ -20,7 +20,9 @@ class PlaylistCollectionPage extends Component {
     PlaylistComponent: PropTypes.func,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
-    shouldRenderHelmet: PropTypes.bool
+    shouldRenderHelmet: PropTypes.bool,
+    fetchCollections: PropTypes.func.isRequired,
+    collectionsByDate: PropTypes.any,
   };
 
   static defaultProps = {
@@ -60,7 +62,7 @@ class PlaylistCollectionPage extends Component {
   }
 
   render() {
-    const { language, collection, wip, err, t, PlaylistComponent } = this.props;
+    const { language, collection, wip, err, t, PlaylistComponent, fetchCollections, collectionsByDate } = this.props;
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
@@ -85,6 +87,8 @@ class PlaylistCollectionPage extends Component {
                 t={t}
                 onSelectedChange={this.handleSelectedChange}
                 PlayListComponent={PlaylistComponent}
+                fetchCollections={fetchCollections}
+                collectionsByDate={collectionsByDate}
               />
             </Grid>
           </Container>

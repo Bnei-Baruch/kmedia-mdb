@@ -4,7 +4,7 @@ import moment from 'moment/moment';
 import { Header, Menu, Icon } from 'semantic-ui-react';
 
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, DATE_FORMAT, NO_NAME } from '../../../../../helpers/consts';
-import { formatDuration } from '../../../../../helpers/utils';
+import { formatDuration, canonicalLink } from '../../../../../helpers/utils';
 import { fromToLocalized } from '../../../../../helpers/date';
 
 class PlaylistWidget extends Component {
@@ -13,7 +13,9 @@ class PlaylistWidget extends Component {
     playlist: PropTypes.object.isRequired,
     selected: PropTypes.number,
     onSelectedChange: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired
+    t: PropTypes.func.isRequired,
+    fetchCollections: PropTypes.func.isRequired,
+    collectionsByDate: PropTypes.any,
   };
 
   static defaultProps = {
@@ -25,12 +27,88 @@ class PlaylistWidget extends Component {
   };
 
   handlePrevLessonClick = (e, data) => {
-    alert('prev');
+    if (this.props.playlist.collection.film_date && this.props.fetchCollections)
+    {
+      let toDate = new Date(this.props.playlist.collection.film_date);
+      let fromDate = new Date(toDate);
+      fromDate.setDate(fromDate.getDate() - 5);
+      this.props.fetchCollections({start_date:this.formatDate(fromDate), end_date:this.formatDate(toDate), isNext:false});
+    }   
   };
 
   handleNextLessonClick = (e, data) => {
-    alert('next');
+    if (this.props.playlist.collection.film_date && this.props.fetchCollections)
+    {
+      let fromDate = new Date(this.props.playlist.collection.film_date);
+      let toDate = new Date(fromDate);
+      toDate.setDate(toDate.getDate() + 5);
+      this.props.fetchCollections({start_date:this.formatDate(fromDate), end_date:this.formatDate(toDate), isNext:true});
+    }  
   };
+
+
+  formatDate = (date) => {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
+
+
+  componentWillReceiveProps(nextProps) {
+
+    if (this.props.collectionsByDate !== nextProps.collectionsByDate) {
+      if (nextProps.collectionsByDate && nextProps.collectionsByDate.length > 0) {
+        let result = nextProps.collectionsByDate["0"];
+        let collections = result.collections;      
+        let curIndex = collections.findIndex(x => {
+          return x.id == this.props.playlist.collection.id;
+        });
+        let nextUrl = this.getNextUrl(collections, curIndex, result.payload.isNext);
+        if (nextUrl != null)
+        {
+          window.location = nextUrl;
+        }
+        else
+        {
+          alert('לא נמצא שיעור קודם/הבא');
+        }
+      }
+    }
+
+    this.setState({
+      selection: nextProps.value
+    });
+  }
+
+  getNextUrl(collections, curIndex, isNext)
+  {
+    if (isNext)
+    {
+        // Goto next lesson        
+        if (curIndex > 1)
+        {
+          let collection = collections[curIndex - 1];
+          return canonicalLink(collection);
+        }         
+    }
+    else
+    {
+        // Goto prev lesson
+        if (collections.length > curIndex + 1)
+        {
+          let collection = collections[curIndex + 1];
+          return canonicalLink(collection);
+        }
+    }                    
+    return null;    
+  }
 
   renderHeader() {
     const { playlist, selected, t } = this.props;
@@ -57,9 +135,12 @@ class PlaylistWidget extends Component {
   renderContents() {
     const { playlist, selected } = this.props;
 
+  
+
     return (
       <div className="avbox__playlist-view">
         <div dir="ltr">
+
           <button type="button" tabIndex="-1" title="שיעור הקודם" onClick={this.handlePrevLessonClick} style={{marginRight: '0.5em'}}>            
             <Icon name="backward" />
           </button>
@@ -83,6 +164,8 @@ class PlaylistWidget extends Component {
       </div>
     );
   }
+
+ 
 
   render() {
     return (

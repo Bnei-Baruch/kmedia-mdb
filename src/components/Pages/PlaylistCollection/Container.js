@@ -19,7 +19,9 @@ export class PlaylistCollectionContainer extends Component {
     PlaylistComponent: PropTypes.func,
     fetchCollection: PropTypes.func.isRequired,
     fetchUnit: PropTypes.func.isRequired,
-    shouldRenderHelmet: PropTypes.bool
+    shouldRenderHelmet: PropTypes.bool,
+    fetchCollections: PropTypes.func.isRequired,
+    collectionsByDate: PropTypes.any,
   };
 
   static defaultProps = {
@@ -65,7 +67,7 @@ export class PlaylistCollectionContainer extends Component {
   };
 
   render() {
-    const { match, language, collection, wip: wipMap, errors, PlaylistComponent, shouldRenderHelmet } = this.props;
+    const { match, language, collection, wip: wipMap, errors, PlaylistComponent, shouldRenderHelmet, fetchCollections, collectionsByDate } = this.props;
 
     // We're wip / err if some request is wip / err
     const { id } = match.params;
@@ -87,6 +89,8 @@ export class PlaylistCollectionContainer extends Component {
         language={language}
         PlaylistComponent={PlaylistComponent}
         shouldRenderHelmet={shouldRenderHelmet}
+        fetchCollections={fetchCollections}       
+        collectionsByDate={collectionsByDate}
       />
     );
   }
@@ -100,6 +104,8 @@ function mapState(state, props) {
     wip: selectors.getWip(state.mdb),
     errors: selectors.getErrors(state.mdb),
     language: settings.getLanguage(state.settings),
+    items: selectors.getCollections(state.mdb),
+    collectionsByDate: selectors.getCollectionsByDate(state.mdb),
   };
 }
 
@@ -107,6 +113,7 @@ function mapDispatch(dispatch) {
   return bindActionCreators({
     fetchCollection: actions.fetchCollection,
     fetchUnit: actions.fetchUnit,
+    fetchCollections: actions.fetchCollections,
   }, dispatch);
 }
 

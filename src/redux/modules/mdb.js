@@ -14,6 +14,9 @@ const FETCH_UNIT_FAILURE          = 'MDB/FETCH_UNIT_FAILURE';
 const FETCH_COLLECTION            = 'MDB/FETCH_COLLECTION';
 const FETCH_COLLECTION_SUCCESS    = 'MDB/FETCH_COLLECTION_SUCCESS';
 const FETCH_COLLECTION_FAILURE    = 'MDB/FETCH_COLLECTION_FAILURE';
+const FETCH_COLLECTIONS            = 'MDB/FETCH_COLLECTIONS';
+const FETCH_COLLECTIONS_SUCCESS    = 'MDB/FETCH_COLLECTIONS_SUCCESS';
+const FETCH_COLLECTIONS_FAILURE    = 'MDB/FETCH_COLLECTIONS_FAILURE';
 const FETCH_LATEST_LESSON         = 'MDB/FETCH_LATEST_LESSON';
 const FETCH_LATEST_LESSON_SUCCESS = 'MDB/FETCH_LATEST_LESSON_SUCCESS';
 const FETCH_LATEST_LESSON_FAILURE = 'MDB/FETCH_LATEST_LESSON_FAILURE';
@@ -31,6 +34,9 @@ export const types = {
   FETCH_COLLECTION,
   FETCH_COLLECTION_SUCCESS,
   FETCH_COLLECTION_FAILURE,
+  FETCH_COLLECTIONS,
+  FETCH_COLLECTIONS_SUCCESS,
+  FETCH_COLLECTIONS_FAILURE,
   FETCH_LATEST_LESSON,
   FETCH_LATEST_LESSON_SUCCESS,
   FETCH_LATEST_LESSON_FAILURE,
@@ -50,6 +56,9 @@ const fetchUnitFailure         = createAction(FETCH_UNIT_FAILURE, (id, err) => (
 const fetchCollection          = createAction(FETCH_COLLECTION);
 const fetchCollectionSuccess   = createAction(FETCH_COLLECTION_SUCCESS, (id, data) => ({ id, data }));
 const fetchCollectionFailure   = createAction(FETCH_COLLECTION_FAILURE, (id, err) => ({ id, err }));
+const fetchCollections          = createAction(FETCH_COLLECTIONS);
+const fetchCollectionsSuccess   = createAction(FETCH_COLLECTIONS_SUCCESS, (data) => ({ data }));
+const fetchCollectionsFailure   = createAction(FETCH_COLLECTIONS_FAILURE, (err) => ({ err }));
 const fetchLatestLesson        = createAction(FETCH_LATEST_LESSON);
 const fetchLatestLessonSuccess = createAction(FETCH_LATEST_LESSON_SUCCESS);
 const fetchLatestLessonFailure = createAction(FETCH_LATEST_LESSON_FAILURE);
@@ -67,6 +76,9 @@ export const actions = {
   fetchCollection,
   fetchCollectionSuccess,
   fetchCollectionFailure,
+  fetchCollections,
+  fetchCollectionsSuccess,
+  fetchCollectionsFailure,
   fetchLatestLesson,
   fetchLatestLessonSuccess,
   fetchLatestLessonFailure,
@@ -83,6 +95,7 @@ export const actions = {
 const freshStore = () => ({
   cById: {},
   cuById: {},
+  collectionsByDate: {},
   wip: {
     units: {},
     collections: {},
@@ -142,6 +155,17 @@ const setStatus = (state, action) => {
   case FETCH_LATEST_LESSON_FAILURE:
     wip.lastLesson    = false;
     errors.lastLesson = action.payload.err;
+    break;
+  case FETCH_COLLECTIONS:
+    wip.collections = { ...wip.collections, [action.payload]: true };
+    break;
+  case FETCH_COLLECTIONS_SUCCESS:
+    wip.collections    = { ...wip.collections, [action.payload.id]: false };
+    errors.collections = { ...errors.collections, [action.payload.id]: null };
+    break;
+  case FETCH_COLLECTIONS_FAILURE:
+    wip.collections    = { ...wip.collections, [action.payload.id]: false };
+    errors.collections = { ...errors.collections, [action.payload.id]: action.payload.err };
     break;
   default:
     break;
@@ -235,6 +259,20 @@ const onReceiveCollections = (state, action) => {
     cuById
   };
 };
+
+const onFetchCollections = (state, action) => {
+  const collectionsByDate = action.payload || [];
+
+  if (collectionsByDate.length === 0) {
+    return state;
+  }
+  
+  return {
+    ...state,
+    collectionsByDate
+  };
+};
+
 
 const onReceiveContentUnits = (state, action) => {
   const items = action.payload || [];
@@ -346,6 +384,10 @@ export const reducer = handleActions({
 
   [RECEIVE_COLLECTIONS]: (state, action) => onReceiveCollections(state, action),
   [RECEIVE_CONTENT_UNITS]: (state, action) => onReceiveContentUnits(state, action),
+  [FETCH_COLLECTIONS]: setStatus,
+  [FETCH_COLLECTIONS_SUCCESS]: (state, action) =>
+    setStatus(onFetchCollections(state, { payload: [action.payload.data] }), action),
+  [FETCH_COLLECTIONS_FAILURE]: setStatus,
 }, freshStore());
 
 /* Selectors */
@@ -355,6 +397,8 @@ const getUnitById       = (state, id) => state.cuById[id];
 const getLastLessonId   = state => state.lastLessonId;
 const getWip            = state => state.wip;
 const getErrors         = state => state.errors;
+const getCollections   = state => state.items;
+const getCollectionsByDate   = state => state.collectionsByDate;
 
 const getDenormCollection = (state, id) => {
   let c = state.cById[id];
@@ -417,5 +461,7 @@ export const selectors = {
   getDenormCollection,
   getDenormCollectionWUnits,
   getDenormContentUnit,
-  getLastLessonId
+  getLastLessonId,
+  getCollections,
+  getCollectionsByDate
 };
