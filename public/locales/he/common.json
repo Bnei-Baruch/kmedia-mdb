@@ -161,8 +161,10 @@
       "programs": "תוכניות"
     },
     "intent-prefix": {
-      "topic": "בנושא:",
-      "source": "לפי מקור:"
+      "lessons-topic": "שיעורים בנושא:",
+      "lessons-source": "שיעורים לפי מקור:",
+      "programs-topic": "תוכניות בנושא:",
+      "programs-source": "תוכניות לפי מקור:"
     }
   },
   "home": {

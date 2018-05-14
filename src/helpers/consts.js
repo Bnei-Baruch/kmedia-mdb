@@ -312,8 +312,8 @@ export const BS_TAAS_PARTS = {
 };
 
 // Search
-export const SEARCH_I_TOPIC = 0;
-export const SEARCH_I_SOURCE = 1;
+export const SEARCH_I_TOPIC = 'intent-tag';
+export const SEARCH_I_SOURCE = 'intent-source';
 
 export const SEARCH_I_NAMES = {
   [SEARCH_I_TOPIC]: 'Topic',
@@ -325,3 +325,7 @@ export const SEARCH_I_FILTER_NAMES = {
   [SEARCH_I_SOURCE]: 'sources-filter',
 };
 
+export const SEARCH_I_SECTIONS = {
+  [CT_LESSON_PART]: 'lessons',
+  [CT_VIDEO_PROGRAM_CHAPTER]: 'programs',
+};

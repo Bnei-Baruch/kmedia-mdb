@@ -17,7 +17,13 @@ import WipErr from '../shared/WipErr/WipErr';
 import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import ScoreDebug from './ScoreDebug';
-import { SEARCH_I_FILTER_NAMES, SEARCH_I_NAMES, SEARCH_I_SOURCE, SEARCH_I_TOPIC, } from '../../helpers/consts';
+import {
+  SEARCH_I_FILTER_NAMES,
+  SEARCH_I_NAMES,
+  SEARCH_I_SOURCE,
+  SEARCH_I_SECTIONS,
+  SEARCH_I_TOPIC,
+} from '../../helpers/consts';
 
 class SearchResults extends Component {
   static propTypes = {
@@ -244,6 +250,94 @@ class SearchResults extends Component {
     );
   };
 
+  renderIntent = (hit, rank) => {
+    const { t, location, queryResult, getTagById, getSourceById} = this.props;
+    const { search_result: { searchId } } = queryResult;
+    const {
+      _index: index,
+      _type: type,
+      _source: {
+        content_type: contentType,
+        mdb_uid: mdbUid,
+        name,
+        explanation,
+        score: originalScore,
+        max_explanation: maxExplanation,
+        max_score: maxScore
+      },
+      _score: score,
+    } = hit;
+    const section    = SEARCH_I_SECTIONS[contentType];
+    const intentType = SEARCH_I_NAMES[type];
+    const filterName = SEARCH_I_FILTER_NAMES[type];
+
+    let getFilterById = null;
+    switch (type) {
+    case SEARCH_I_TOPIC:
+      getFilterById = getTagById;
+      break;
+    case SEARCH_I_SOURCE:
+      getFilterById = getSourceById;
+      break;
+    default:
+      console.log('Using default filter:', type);
+      getFilterById = x => x;
+    }
+
+    const path  = tracePath(getFilterById(mdbUid), getFilterById);
+    let display = '';
+    switch (type) {
+    case SEARCH_I_TOPIC:
+      display = path[path.length - 1].label;
+      break;
+    case SEARCH_I_SOURCE:
+      display = path.map(y => y.name).join(' > ');
+      break;
+    default:
+      display = name;
+    }
+
+    return (
+      <Table.Row key={mdbUid + contentType} verticalAlign="top">
+        <Table.Cell collapsing singleLine width={1}>
+          {/*<strong>date if applicable</strong>*/}
+        </Table.Cell>
+        <Table.Cell collapsing singleLine>
+          <Label size="tiny">{t(`search.intent-types.${section}`)}</Label>
+        </Table.Cell>
+        <Table.Cell>
+          <Link
+            className="search__link"
+            onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+            to={sectionLink(section, [{name: filterName, value: mdbUid, getFilterById}])}
+          >
+            {t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`)} {display}
+          </Link>
+        </Table.Cell>
+        {
+          !isDebMode(location) ?
+            null :
+            <Table.Cell collapsing textAlign="right">
+              <div style={{ display: 'inline-block' }}>
+                <ScoreDebug
+                  name={`${name} (${originalScore})`}
+                  score={score}
+                  explanation={explanation}
+                />
+              </div>
+              <div style={{ display: 'inline-block' }}>
+                <ScoreDebug
+                  name="Max"
+                  score={maxScore}
+                  explanation={maxExplanation}
+                />
+              </div>
+            </Table.Cell>
+        }
+      </Table.Row>
+    );
+  };
+
   renderHit = (hit, rank) => {
     // console.log('hit', hit);
     const { cMap, cuMap }                                  = this.props;
@@ -257,6 +351,8 @@ class SearchResults extends Component {
       return this.renderCollection(c, hit, rank);
     } else if (hitType === 'sources') {
       return this.renderSource(hit, rank);
+    } else if (hitType.startsWith('intent')) {
+      return this.renderIntent(hit, rank)
     }
 
     // maybe content_units are still loading ?
@@ -264,143 +360,22 @@ class SearchResults extends Component {
     return null;
   };
 
-  renderIntentLinks = (section, intents) => {
-    const { t, getTagById, getSourceById } = this.props;
-
-    const intentsData = intents.map((intent) => {
-      const intentType = SEARCH_I_NAMES[intent.type];
-      const filterName = SEARCH_I_FILTER_NAMES[intent.type];
-
-      let getFilterById = null;
-      switch (intent.type) {
-      case SEARCH_I_TOPIC:
-        getFilterById = getTagById;
-        break;
-      case SEARCH_I_SOURCE:
-        getFilterById = getSourceById;
-        break;
-      default:
-        getFilterById = x => x;
-      }
-
-      const path  = tracePath(getFilterById(intent.value.mdb_uid), getFilterById);
-      let display = '';
-      switch (intent.type) {
-      case SEARCH_I_TOPIC:
-        display = path[path.length - 1].label;
-        break;
-      case SEARCH_I_SOURCE:
-        display = path.map(y => y.name).join(' > ');
-        break;
-      default:
-        display = intent.value.name;
-      }
-
-      return { intentType, name: filterName, value: intent.value.mdb_uid, getFilterById, display };
-    });
-
-    const compareIntentsData = (a, b) => {
-      if (a.display === b.display) {
-        return 0;
-      }
-      return a.display > b.display ? 1 : -1;
-    };
-
-    return intentsData.sort(compareIntentsData).map(data => (
-      <Link
-        key={data.value}
-        className="search__link"
-        style={{ paddingLeft: '50px', display: 'block' }} /* INLINE CSS, NEED CORRECTION */
-        to={sectionLink(section, [data])}
-      >
-        {t(`search.intent-prefix.${data.intentType.toLowerCase()}`)} {data.display}
-      </Link>
-    ));
-  };
-
-  renderIntentsDeb = intents => (
-    <Table.Row key="intents-debug" verticalAlign="top">
-      <Table.Cell collapsing singleLine width={1} />
-      <Table.Cell collapsing singleLine />
-      <Table.Cell>
-        <Table>
-          <Table.Body>
-            {intents.map((intent) => {
-              const intentType = SEARCH_I_NAMES[intent.type];
-              return (
-                <Table.Row key={intent.type + intent.value.mdb_uid}>
-                  <Table.Cell>
-                    {intent.value.name} {intentType} {intent.value.mdb_uid}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div style={{ display: 'inline-block' }}>
-                      <ScoreDebug
-                        name={intent.value.name}
-                        score={intent.value.score}
-                        explanation={intent.value.explanation}
-                      />
-                    </div>
-                    <div style={{ display: 'inline-block' }}>
-                      <ScoreDebug
-                        name="Max"
-                        score={intent.value.max_score}
-                        explanation={intent.value.max_explanation}
-                      />
-                    </div>
-                  </Table.Cell>
-                </Table.Row>
-              );
-            })}
-          </Table.Body>
-        </Table>
-      </Table.Cell>
-    </Table.Row>
-  );
-
-  renderIntents = (intents) => {
-    const { t }    = this.props;
-    const sections = ['lessons', 'programs'];
-    return sections.map((section) => {
-      const tagIntents    = intents.filter(i => i.type === SEARCH_I_TOPIC);
-      const sourceIntents = intents.filter(i => i.type === SEARCH_I_SOURCE);
-      return (
-        <Table.Row key={section} verticalAlign="top">
-          <Table.Cell collapsing singleLine width={1}>
-            {/*<strong>date if applicable</strong>*/}
-          </Table.Cell>
-          <Table.Cell collapsing singleLine>
-            <Label size="tiny">{t(`search.intent-types.${section}`)}</Label>
-          </Table.Cell>
-          <Table.Cell>
-            <div style={{ display: 'inline-block', verticalAlign: 'top' }} /* INLINE CSS, NEED CORRECTION */ >
-              {this.renderIntentLinks(section, tagIntents)}
-            </div>
-            <div style={{ display: 'inline-block', verticalAlign: 'top' }} /* INLINE CSS, NEED CORRECTION */ >
-              {this.renderIntentLinks(section, sourceIntents)}
-            </div>
-          </Table.Cell>
-        </Table.Row>
-      );
-    });
-  };
-
   render() {
-    const
-      {
-        filters,
-        wip,
-        err,
-        queryResult,
-        areSourcesLoaded,
-        pageNo,
-        pageSize,
-        language,
-        t,
-        handlePageChange,
-        location
-      } = this.props;
+    const {
+      filters,
+      wip,
+      err,
+      queryResult,
+      areSourcesLoaded,
+      pageNo,
+      pageSize,
+      language,
+      t,
+      handlePageChange,
+      location,
+    } = this.props;
 
-    const { search_result: results, intents = [] } = queryResult;
+    const { search_result: results } = queryResult;
 
     const wipErr = WipErr({ wip: wip || !areSourcesLoaded, err, t });
     if (wipErr) {
@@ -434,12 +409,6 @@ class SearchResults extends Component {
             <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
             <Table sortable basic="very" className="index-list search-results">
               <Table.Body>
-                {isDebMode(location) ? this.renderIntentsDeb(intents) : null}
-                {
-                  // Dark launch intents, i.e., not show the user until quality is good enough.
-                  // Remove isDebMode of following line when quality is good.
-                }
-                {isDebMode(location) && pageNo === 1 && intents.length ? this.renderIntents(intents) : null}
                 {hits.map(this.renderHit)}
               </Table.Body>
             </Table>
