@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import ImageGallery from 'react-image-gallery';
+import ImageGallery, {fullScreen} from 'react-image-gallery';
 // import 'react-image-gallery/styles/css/image-gallery.css';
-import { Container, Segment } from 'semantic-ui-react';
+import { Container, Segment, Button } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../../../helpers/consts';
 import { assetUrl, imaginaryUrl, Requests } from '../../../../../helpers/Api';
@@ -158,6 +158,12 @@ class Sketches extends React.Component {
     console.log('Image Gallery loading error ', event.target);
   }
 
+  renderLeftNav = (onClick, disabled) => <Button color="blue" size="tiny" className="image-gallery-left-nav" icon='chevron left' disabled={disabled} onClick={onClick}/>;
+
+  renderRightNav = (onClick, disabled) => <Button color="blue" size="tiny" className="image-gallery-right-nav" icon='chevron right' disabled={disabled} onClick={onClick}/>;
+
+  renderFullscreenButton = (onClick, isFullscreen) => <Button color="blue" size="tiny" className="image-gallery-fullscreen-button" icon={isFullscreen ? 'compress' : 'expand'} onClick={onClick}/>;
+
   render() {
     const { t, zipIndexById }                            = this.props;
     const { zipFileId, languages, language, imageFiles } = this.state;
@@ -207,9 +213,12 @@ class Sketches extends React.Component {
               showPlayButton={false}
               showBullets={false}
               showFullscreenButton={true}
-              showIndex={true}
+              showIndex={items.length > 1}
               showThumbnails={items.length > 1}
               onImageError={this.handleImageError}
+              renderLeftNav={this.renderLeftNav}
+              renderRightNav={this.renderRightNav}
+              renderFullscreenButton={this.renderFullscreenButton}
             />
           </div>
         </div>
