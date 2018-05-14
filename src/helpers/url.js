@@ -52,14 +52,17 @@ export const getLanguageFromPath = (path, headers) => {
   }
 
   // Educated guess: HTTP header
-  const languages = headers['accept-language'].match(/[a-zA-Z-]{2,10}/g) || [];
-  console.log(`accept-languages: ${headers['accept-language']}\nlanguages: ${languages}\n`);
-  const headerLanguages = languages.filter(lang => LANG_UI_LANGUAGES.includes(lang));
-  if (headerLanguages.length > 0) {
-    // THAT'S NOT STRUCTURE, THAT'S ARRAY OF LANGUAGES
-    // eslint-disable-next-line prefer-destructuring
-    language = headerLanguages[0];
-    return { language, redirect: language !== DEFAULT_LANGUAGE };
+  const acceptLanguage = headers['accept-language'];
+  if (acceptLanguage) {
+    const languages = acceptLanguage.match(/[a-zA-Z-]{2,10}/g) || [];
+    console.log(`accept-languages: ${headers['accept-language']}\nlanguages: ${languages}\n`);
+    const headerLanguages = languages.filter(lang => LANG_UI_LANGUAGES.includes(lang));
+    if (headerLanguages.length > 0) {
+      // THAT'S NOT STRUCTURE, THAT'S ARRAY OF LANGUAGES
+      // eslint-disable-next-line prefer-destructuring
+      language = headerLanguages[0];
+      return { language, redirect: language !== DEFAULT_LANGUAGE };
+    }
   }
 
   // English
