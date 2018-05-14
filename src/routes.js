@@ -31,6 +31,7 @@ import Series from './components/Sections/Series/Container';
 import LessonsSeriesCollection from './components/Sections/Series/Collection';
 import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import TopicsContainer from './components/Sections/Topics/TopicContainer';
+import TopicPage from './components/Sections/Topics/TopicPage';
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 
@@ -105,6 +106,7 @@ const routes = [
   { path: 'sources/:id', component: LibraryContainer, options: { ssrData: ssrDataLoaders.libraryPage } },
   { path: 'books', component: NotImplemented },
   { path: 'topics', component: TopicsContainer },
+  { path: 'topics/:id', component: TopicPage },
   { path: 'photos', component: NotImplemented },
   { path: 'search', component: SearchResults, options: { ssrData: ssrDataLoaders.searchPage } },
   { path: 'series', component: Series, options: { ssrData: ssrDataLoaders.seriesPage } },

@@ -61,6 +61,11 @@ const filters = {
   'publications-collection': [
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
+  topics: [
+    // { name: 'publishers-filter', component: filterComponents.PublishersFilter },
+    // { name: 'date-filter', component: filterComponents.DateFilter },
+    // { name: 'sources-filter', component: filterComponents.SourcesFilter },
+  ],
 };
 
 class UnitListPage extends PureComponent {

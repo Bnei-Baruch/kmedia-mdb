@@ -40,9 +40,9 @@ class TopicContainer extends Component{
 
   renderLeaf(node){
     return(
-    <Link /*to={node}*/>
-      {node.label}
-    </Link>
+      <Link to={`/topics/${node.id}`}>
+        {node.label}
+      </Link>
     );
   }
 
@@ -88,7 +88,7 @@ class TopicContainer extends Component{
   
   render(){
     return(
-      <Container text>
+      <Container fluid>
         <SectionHeader section="topics" />
         <List divided relaxed='very'>
            {
@@ -102,7 +102,6 @@ class TopicContainer extends Component{
       </Container>
     );
   }
-
 }
 
 export default connect(
