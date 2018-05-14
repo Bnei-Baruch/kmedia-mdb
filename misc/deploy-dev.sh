@@ -13,7 +13,7 @@ scp -r build/* archive@archive-dev.bbdomain.org:/sites/archive-frontend
 
 echo "Updating SSR server"
 ssh archive@archive-dev.bbdomain.org "cd /sites/kmedia-mdb && git pull"
-ssh archive@archive-dev.bbdomain.org "cd /sites/kmedia-mdb && yarn && yarn cache clean"
+ssh archive@archive-dev.bbdomain.org "cd /sites/kmedia-mdb && yarn --frozen-lockfile && yarn cache clean"
 
 echo "Restarting SSR server"
 ssh archive@archive-dev.bbdomain.org "supervisorctl restart archive-ssr"

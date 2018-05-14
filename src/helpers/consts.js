@@ -311,6 +311,9 @@ export const BS_TAAS_PARTS = {
   mW6eON0z: 1887,
 };
 
+export const COOKIE_UI_LANG = 'archive_UIlang';
+export const LANG_UI_LANGUAGES = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN];
+
 // Search
 export const SEARCH_I_TOPIC = 'intent-tag';
 export const SEARCH_I_SOURCE = 'intent-source';
