@@ -7,10 +7,14 @@ import { COOKIE_UI_LANG, LANG_UI_LANGUAGES, LANGUAGES } from '../../helpers/cons
 import Link from '../Language/MultiLanguageLink';
 import { selectors as settings } from '../../redux/modules/settings';
 import Helmets from '../shared/Helmets';
+import * as shapes from '../shapes';
 
 class UILanguage extends Component {
   static propTypes = {
     language: PropTypes.string.isRequired,
+    // We need dependency on location in order to change Link every time url changes
+    // eslint-disable-next-line react/no-unused-prop-types
+    location: shapes.HistoryLocation.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -36,7 +40,7 @@ class UILanguage extends Component {
           <Dropdown.Menu>
             {
               LANG_UI_LANGUAGES.map(x => (
-                <Dropdown.Item key={x} as={Link} onClick={() => this.storeUILanguage(x)} language={x}>
+                <Dropdown.Item key={x} as={Link} onClick={() => this.storeUILanguage(x)} language={`${x}`}>
                   <Flag name={LANGUAGES[x].flag} />
                   {t(`constants.languages.${x}`)}
                 </Dropdown.Item>

@@ -94,7 +94,7 @@ class Layout extends Component {
               }
             </Menu.Item>
             <Menu.Menu position="right">
-              <UILanguage t={t} />
+              <UILanguage t={t} location={location} />
             </Menu.Menu>
           </Menu>
         </div>

@@ -1,4 +1,4 @@
-import { call, put, select } from 'redux-saga/effects';
+import { /* call, */ put, select } from 'redux-saga/effects';
 import UAParser from 'ua-parser-js';
 
 import { actions, selectors } from '../redux/modules/device';
