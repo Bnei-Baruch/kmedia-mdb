@@ -3,34 +3,22 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import classnames from 'classnames';
 import { renderRoutes } from 'react-router-config';
-import { connect } from 'react-redux';
-import { Dropdown, Header, Icon, Menu, Flag } from 'semantic-ui-react';
+import { Header, Icon, Menu } from 'semantic-ui-react';
 
-import {
-  ALL_LANGUAGES,
-  LANG_ENGLISH,
-  LANG_HEBREW,
-  LANG_RUSSIAN,
-  LANG_SPANISH,
-  LANG_UKRAINIAN,
-  LANGUAGES
-} from '../../helpers/consts';
-import { selectors as settings } from '../../redux/modules/settings';
+import { ALL_LANGUAGES } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
-import Helmets from '../shared/Helmets';
 import WrappedOmniBox from '../Search/OmniBox';
 import GAPageView from './GAPageView/GAPageView';
 import MenuItems from './MenuItems';
 import Footer from './Footer';
+import UILanguage from './UILanguage';
 import logo from '../../images/logo.svg';
-
-const dropdownLangs = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN];
 
 class Layout extends Component {
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
-    language: PropTypes.string.isRequired,
+    route: shapes.Route.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -38,8 +26,6 @@ class Layout extends Component {
     sidebarActive: false
   };
 
-  // Required for handling outside sidebar on click outside sidebar,
-  // i.e, main, header of footer.
   componentDidMount() {
     document.addEventListener('click', this.clickOutside, true);
   }
@@ -48,7 +34,9 @@ class Layout extends Component {
     document.removeEventListener('click', this.clickOutside, true);
   }
 
-  clickOutside = (e) => {
+  // Required for handling outside sidebar on click outside sidebar,
+  // i.e, main, header of footer.
+  clickOutside     = (e) => {
     if (this.state &&
       this.state.sidebarActive &&
       e.target !== this.sidebarElement &&
@@ -57,9 +45,9 @@ class Layout extends Component {
     }
   };
 
-  toggleSidebar = () => this.setState({ sidebarActive: !this.state.sidebarActive });
+  toggleSidebar    = () => this.setState({ sidebarActive: !this.state.sidebarActive });
 
-  closeSidebar = () => this.setState({ sidebarActive: false });
+  closeSidebar     = () => this.setState({ sidebarActive: false });
 
   shouldShowSearch = (location) => {
     // we don't show the search on home page
@@ -74,8 +62,8 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location, route, language } = this.props;
-    const { sidebarActive }                = this.state;
+    const { t, location, route } = this.props;
+    const { sidebarActive }      = this.state;
 
     const showSearch = this.shouldShowSearch(location);
 
@@ -88,11 +76,6 @@ class Layout extends Component {
           <span className="tablet-only">tablet</span>
           <span className="mobile-only">mobile</span>
         </div> */}
-        <Helmets.TopMost
-          titlePostfix={t('nav.top.header')}
-          mainLang={language}
-          alternateLang={dropdownLangs}
-        />
         <GAPageView location={location} />
         <div className="layout__header">
           <Menu inverted borderless size="huge" color="blue">
@@ -111,18 +94,7 @@ class Layout extends Component {
               }
             </Menu.Item>
             <Menu.Menu position="right">
-              <Dropdown item text={t(`constants.languages.${language}`)}>
-                <Dropdown.Menu>
-                  {
-                    dropdownLangs.map(x => (
-                      <Dropdown.Item key={x} as={Link} language={x}>
-                        <Flag name={LANGUAGES[x].flag} />
-                        {t(`constants.languages.${x}`)}
-                      </Dropdown.Item>
-                    ))
-                  }
-                </Dropdown.Menu>
-              </Dropdown>
+              <UILanguage t={t} location={location} />
             </Menu.Menu>
           </Menu>
         </div>
@@ -159,8 +131,4 @@ class Layout extends Component {
   }
 }
 
-export default connect(
-  state => ({
-    language: settings.getLanguage(state.settings),
-  })
-)(translate()(Layout));
+export default translate()(Layout);

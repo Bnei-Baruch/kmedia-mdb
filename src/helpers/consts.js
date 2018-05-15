@@ -325,3 +325,5 @@ export const SEARCH_I_FILTER_NAMES = {
   [SEARCH_I_SOURCE]: 'sources-filter',
 };
 
+export const COOKIE_UI_LANG = 'archive_UIlang';
+export const LANG_UI_LANGUAGES = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN];

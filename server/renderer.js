@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { URL } from 'url';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
@@ -23,10 +24,21 @@ import i18nnext from './i18nnext';
 // eslint-disable-next-line no-unused-expressions
 localStorage; // DO NOT REMOVE - the import above does all the work
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 export default function serverRender(req, res, next, htmlData, criticalCSS) {
   console.log('serverRender', req.originalUrl);
 
-  const language = getLanguageFromPath(req.originalUrl);
+  const result = getLanguageFromPath(req.originalUrl, req.headers);
+  if (result.redirect) {
+    const newUrl = `${BASE_URL}${result.language}${req.originalUrl}`;
+    console.log(`serverRender: redirect (${result.language}) => ${newUrl}`);
+    res.writeHead(307, { Location: newUrl });
+    res.end();
+    return;
+  }
+
+  const { language } = result;
   moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
   const i18nServer = i18nnext.cloneInstance();
   i18nServer.changeLanguage(language, (err) => {
