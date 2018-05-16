@@ -55,9 +55,10 @@ export const getLanguageFromPath = (path, headers) => {
   const acceptLanguage = headers['accept-language'];
   if (acceptLanguage) {
     const languages = acceptLanguage.match(/[a-zA-Z-]{2,10}/g) || [];
-    console.log(`accept-languages: ${headers['accept-language']}\nlanguages: ${languages}\n`);
-    const headerLanguages = languages.filter(lang => LANG_UI_LANGUAGES.includes(lang));
+    console.log(`accept-languages: ${headers['accept-language']}\nlanguages: ${languages}`);
+    const headerLanguages = languages.map(lang => lang.substr(0, 2)).filter(lang => LANG_UI_LANGUAGES.includes(lang));
     if (headerLanguages.length > 0) {
+      console.log(`header-languages: ${headerLanguages}\n`);
       // THAT'S NOT STRUCTURE, THAT'S ARRAY OF LANGUAGES
       // eslint-disable-next-line prefer-destructuring
       language = headerLanguages[0];
