@@ -10,7 +10,6 @@ class Kabbalist extends Component {
   static propTypes = {
     getSourceById: PropTypes.func.isRequired,
     author: shapes.Author.isRequired,
-    language: PropTypes.string.isRequired,
     portrait: PropTypes.string,
   };
 
@@ -44,7 +43,7 @@ class Kabbalist extends Component {
   };
 
   render() {
-    const { author, getSourceById, portrait, language }        = this.props;
+    const { author, getSourceById, portrait }        = this.props;
     const { id, name, full_name: fullName, children: volumes } = author;
 
     let displayName = fullName || name;

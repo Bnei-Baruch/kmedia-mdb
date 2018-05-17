@@ -6,7 +6,6 @@ import { translate } from 'react-i18next';
 import { Container, Divider, Table } from 'semantic-ui-react';
 
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
-import { selectors as settings } from '../../../redux/modules/settings';
 import SectionHeader from '../../shared/SectionHeader';
 import Kabbalist from './Kabbalist';
 import portraitBS from '../../../images/portrait_bs.png';
@@ -22,7 +21,7 @@ class Homepage extends Component {
   };
 
   render() {
-    const { roots, getSourceById, language } = this.props;
+    const { roots, getSourceById } = this.props;
     const portraits                = [portraitBS, portraitRB, portraitML];
     let portraitIndex              = 0;
 
@@ -36,7 +35,6 @@ class Homepage extends Component {
           author={author}
           getSourceById={getSourceById}
           portrait={portraits[portraitIndex++]}
-          language={language}
         />;
     });
 
@@ -58,7 +56,6 @@ class Homepage extends Component {
 
 export default connect(
   state => ({
-    language: settings.getLanguage(state.settings),
     indexMap: sources.getIndexById(state.sources),
     roots: sources.getRoots(state.sources),
     getSourceById: sources.getSourceById(state.sources),

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { Segment, Container, Grid } from 'semantic-ui-react';
+import { Container, Grid, Segment } from 'semantic-ui-react';
 import { translate } from 'react-i18next';
 import { selectors as settings } from '../../../redux/modules/settings';
 
@@ -15,6 +15,7 @@ import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Spl
 class LibraryPerson extends Component {
   static propTypes = {
     sourceId: PropTypes.string.isRequired,
+    language: PropTypes.string.isRequired,
     content: PropTypes.shape({
       data: PropTypes.string, // actual content (HTML)
       wip: shapes.WIP,
@@ -48,18 +49,18 @@ class LibraryPerson extends Component {
     const { content, t }                                          = this.props;
     const { wip: contentWip, err: contentErr, data: contentData } = content;
 
-    // eslint-disable-next-line react/no-danger
-    let result = 
+    let result = (
       <Container className="padded">
         <Grid>
           <Grid.Row>
             <Grid.Column>
+              { /* eslint-disable-next-line react/no-danger */ }
               <div className="readble-width" dangerouslySetInnerHTML={{ __html: contentData }} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
       </Container>
-    ;
+    );
     if (contentErr) {
       if (contentErr.response && contentErr.response.status === 404) {
         result = <FrownSplash text={t('messages.source-content-not-found')} />;
