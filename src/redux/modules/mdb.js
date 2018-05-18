@@ -14,15 +14,15 @@ const FETCH_UNIT_FAILURE          = 'MDB/FETCH_UNIT_FAILURE';
 const FETCH_COLLECTION            = 'MDB/FETCH_COLLECTION';
 const FETCH_COLLECTION_SUCCESS    = 'MDB/FETCH_COLLECTION_SUCCESS';
 const FETCH_COLLECTION_FAILURE    = 'MDB/FETCH_COLLECTION_FAILURE';
-const FETCH_COLLECTIONS            = 'MDB/FETCH_COLLECTIONS';
-const FETCH_COLLECTIONS_SUCCESS    = 'MDB/FETCH_COLLECTIONS_SUCCESS';
-const FETCH_COLLECTIONS_FAILURE    = 'MDB/FETCH_COLLECTIONS_FAILURE';
 const FETCH_LATEST_LESSON         = 'MDB/FETCH_LATEST_LESSON';
 const FETCH_LATEST_LESSON_SUCCESS = 'MDB/FETCH_LATEST_LESSON_SUCCESS';
 const FETCH_LATEST_LESSON_FAILURE = 'MDB/FETCH_LATEST_LESSON_FAILURE';
 const FETCH_SQDATA                = 'MDB/FETCH_SQDATA';
 const FETCH_SQDATA_SUCCESS        = 'MDB/FETCH_SQDATA_SUCCESS';
 const FETCH_SQDATA_FAILURE        = 'MDB/FETCH_SQDATA_FAILURE';
+const FETCH_WINDOW                = 'MDB/FETCH_WINDOW';
+const FETCH_WINDOW_SUCCESS        = 'MDB/FETCH_WINDOW_SUCCESS';
+const FETCH_WINDOW_FAILURE        = 'MDB/FETCH_WINDOW_FAILURE';
 
 const RECEIVE_COLLECTIONS   = 'MDB/RECEIVE_COLLECTIONS';
 const RECEIVE_CONTENT_UNITS = 'MDB/RECEIVE_CONTENT_UNITS';
@@ -34,15 +34,15 @@ export const types = {
   FETCH_COLLECTION,
   FETCH_COLLECTION_SUCCESS,
   FETCH_COLLECTION_FAILURE,
-  FETCH_COLLECTIONS,
-  FETCH_COLLECTIONS_SUCCESS,
-  FETCH_COLLECTIONS_FAILURE,
   FETCH_LATEST_LESSON,
   FETCH_LATEST_LESSON_SUCCESS,
   FETCH_LATEST_LESSON_FAILURE,
   FETCH_SQDATA,
   FETCH_SQDATA_SUCCESS,
   FETCH_SQDATA_FAILURE,
+  FETCH_WINDOW,
+  FETCH_WINDOW_SUCCESS,
+  FETCH_WINDOW_FAILURE,
 
   RECEIVE_COLLECTIONS,
   RECEIVE_CONTENT_UNITS,
@@ -56,15 +56,15 @@ const fetchUnitFailure         = createAction(FETCH_UNIT_FAILURE, (id, err) => (
 const fetchCollection          = createAction(FETCH_COLLECTION);
 const fetchCollectionSuccess   = createAction(FETCH_COLLECTION_SUCCESS, (id, data) => ({ id, data }));
 const fetchCollectionFailure   = createAction(FETCH_COLLECTION_FAILURE, (id, err) => ({ id, err }));
-const fetchCollections          = createAction(FETCH_COLLECTIONS);
-const fetchCollectionsSuccess   = createAction(FETCH_COLLECTIONS_SUCCESS, (data) => ({ data }));
-const fetchCollectionsFailure   = createAction(FETCH_COLLECTIONS_FAILURE, (err) => ({ err }));
 const fetchLatestLesson        = createAction(FETCH_LATEST_LESSON);
 const fetchLatestLessonSuccess = createAction(FETCH_LATEST_LESSON_SUCCESS);
 const fetchLatestLessonFailure = createAction(FETCH_LATEST_LESSON_FAILURE);
 const fetchSQData              = createAction(FETCH_SQDATA);
 const fetchSQDataSuccess       = createAction(FETCH_SQDATA_SUCCESS);
 const fetchSQDataFailure       = createAction(FETCH_SQDATA_FAILURE);
+const fetchWindow              = createAction(FETCH_WINDOW);
+const fetchWindowSuccess       = createAction(FETCH_WINDOW_SUCCESS, (id, data) => ({ id, data }));
+const fetchWindowFailure       = createAction(FETCH_WINDOW_FAILURE, (id, err) => ({ id, err }));
 
 const receiveCollections  = createAction(RECEIVE_COLLECTIONS);
 const receiveContentUnits = createAction(RECEIVE_CONTENT_UNITS);
@@ -76,15 +76,15 @@ export const actions = {
   fetchCollection,
   fetchCollectionSuccess,
   fetchCollectionFailure,
-  fetchCollections,
-  fetchCollectionsSuccess,
-  fetchCollectionsFailure,
   fetchLatestLesson,
   fetchLatestLessonSuccess,
   fetchLatestLessonFailure,
   fetchSQData,
   fetchSQDataSuccess,
   fetchSQDataFailure,
+  fetchWindow,
+  fetchWindowSuccess,
+  fetchWindowFailure,
 
   receiveCollections,
   receiveContentUnits,
@@ -95,7 +95,7 @@ export const actions = {
 const freshStore = () => ({
   cById: {},
   cuById: {},
-  collectionsByDate: {},
+  window: [],
   wip: {
     units: {},
     collections: {},
@@ -155,18 +155,20 @@ const setStatus = (state, action) => {
   case FETCH_LATEST_LESSON_FAILURE:
     wip.lastLesson    = false;
     errors.lastLesson = action.payload.err;
-    break;
-  case FETCH_COLLECTIONS:
-    wip.collections = { ...wip.collections, [action.payload]: true };
-    break;
-  case FETCH_COLLECTIONS_SUCCESS:
-    wip.collections    = { ...wip.collections, [action.payload.id]: false };
-    errors.collections = { ...errors.collections, [action.payload.id]: null };
-    break;
-  case FETCH_COLLECTIONS_FAILURE:
-    wip.collections    = { ...wip.collections, [action.payload.id]: false };
-    errors.collections = { ...errors.collections, [action.payload.id]: action.payload.err };
-    break;
+    break; 
+
+  case FETCH_WINDOW:
+    wip.window = { ...wip.window, [action.payload.id]: true };
+  break;
+  case FETCH_WINDOW_SUCCESS:
+    wip.window    = { ...wip.window, [action.payload.id]: false };
+    errors.window = { ...errors.window, [action.payload.id]: null };
+  break;
+  case FETCH_WINDOW_FAILURE:
+    wip.window    = { ...wip.window, [action.payload.id]: false };
+    errors.window = { ...errors.window, [action.payload.id]: action.payload.err };
+  break;
+  
   default:
     break;
   }
@@ -260,16 +262,16 @@ const onReceiveCollections = (state, action) => {
   };
 };
 
-const onFetchCollections = (state, action) => {
-  const collectionsByDate = action.payload || [];
+const onFetchWindow = (state, action) => {
+  const window = action.payload || [];
 
-  if (collectionsByDate.length === 0) {
+  if (window.length === 0) {
     return state;
   }
   
   return {
     ...state,
-    collectionsByDate
+    window
   };
 };
 
@@ -384,10 +386,10 @@ export const reducer = handleActions({
 
   [RECEIVE_COLLECTIONS]: (state, action) => onReceiveCollections(state, action),
   [RECEIVE_CONTENT_UNITS]: (state, action) => onReceiveContentUnits(state, action),
-  [FETCH_COLLECTIONS]: setStatus,
-  [FETCH_COLLECTIONS_SUCCESS]: (state, action) =>
-    setStatus(onFetchCollections(state, { payload: [action.payload.data] }), action),
-  [FETCH_COLLECTIONS_FAILURE]: setStatus,
+  [FETCH_WINDOW]: setStatus,
+  [FETCH_WINDOW_SUCCESS]: (state, action) =>
+    setStatus(onFetchWindow(state, { payload: [action.payload.data] }), action),
+  [FETCH_WINDOW_FAILURE]: setStatus,
 }, freshStore());
 
 /* Selectors */
@@ -397,8 +399,8 @@ const getUnitById       = (state, id) => state.cuById[id];
 const getLastLessonId   = state => state.lastLessonId;
 const getWip            = state => state.wip;
 const getErrors         = state => state.errors;
-const getCollections   = state => state.items;
-const getCollectionsByDate   = state => state.collectionsByDate;
+const getCollections    = state => state.items;
+const getWindow   = state => state.window;
 
 const getDenormCollection = (state, id) => {
   let c = state.cById[id];
@@ -463,5 +465,5 @@ export const selectors = {
   getDenormContentUnit,
   getLastLessonId,
   getCollections,
-  getCollectionsByDate
+  getWindow
 };

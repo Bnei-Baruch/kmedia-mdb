@@ -29,19 +29,18 @@ export function* fetchCollection(action) {
   }
 }
 
-export function* fetchCollections(action) {
+export function* fetchWindow(action) {
+  const id = action.payload.id;
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const args     = {
       ...action.payload,
       language,
     };
-    const { data } = yield call(Api.lessons, args);
-    data.payload = action.payload;
-    yield put(actions.fetchCollectionsSuccess(data));
+    const { data } = yield call(Api.lessons, args);    
+    yield put(actions.fetchWindowSuccess(id, {id:id, data:data}));
   } catch (err) {
-    err.payload = action.payload;
-    yield put(actions.fetchCollectionsFailure(err));
+    yield put(actions.fetchWindowFailure(id, err));
   }
 }
 
@@ -75,10 +74,6 @@ function* watchFetchCollection() {
   yield takeEvery(types.FETCH_COLLECTION, fetchCollection);
 }
 
-function* watchFetchCollections() {
-  yield takeEvery(types.FETCH_COLLECTIONS, fetchCollections);
-}
-
 function* watchFetchLatestLesson() {
   yield takeEvery(types.FETCH_LATEST_LESSON, fetchLatestLesson);
 }
@@ -87,10 +82,14 @@ function* watchFetchSQData() {
   yield takeLatest(types.FETCH_SQDATA, fetchSQData);
 }
 
+function* watchFetchWindow() {
+  yield takeEvery(types.FETCH_WINDOW, fetchWindow);
+}
+
 export const sagas = [
   watchFetchUnit,
-  watchFetchCollection,
-  watchFetchCollections,
+  watchFetchCollection,  
   watchFetchLatestLesson,
-  watchFetchSQData
+  watchFetchSQData,
+  watchFetchWindow,
 ];

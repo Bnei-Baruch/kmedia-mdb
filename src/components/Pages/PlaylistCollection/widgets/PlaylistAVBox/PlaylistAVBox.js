@@ -17,7 +17,8 @@ class PlaylistAVBox extends Component {
     language: PropTypes.string.isRequired,
     onSelectedChange: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
-    collectionsByDate: PropTypes.any,
+    nextLink: PropTypes.string,
+    prevLink: PropTypes.string,
   };
 
   state = {
@@ -100,7 +101,7 @@ class PlaylistAVBox extends Component {
   };
 
   render() {
-    const { t, PlayListComponent, fetchCollections, collectionsByDate } = this.props;
+    const { t, PlayListComponent, nextLink, prevLink } = this.props;
     const { playlist, selected }   = this.state;
 
     if (!playlist ||
@@ -127,9 +128,9 @@ class PlaylistAVBox extends Component {
             playlist={playlist}
             selected={selected}
             onSelectedChange={this.handleSelectedChange}
-            fetchCollections={fetchCollections}
-            collectionsByDate={collectionsByDate}
             t={t}
+            nextLink={nextLink}
+            prevLink={prevLink}
           />
         </Grid.Column>
       </Grid.Row>

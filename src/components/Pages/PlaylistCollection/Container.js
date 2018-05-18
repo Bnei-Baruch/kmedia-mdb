@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom';
 
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
+import { canonicalLink } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import Page from './Page';
 
@@ -20,14 +21,19 @@ export class PlaylistCollectionContainer extends Component {
     fetchCollection: PropTypes.func.isRequired,
     fetchUnit: PropTypes.func.isRequired,
     shouldRenderHelmet: PropTypes.bool,
-    fetchCollections: PropTypes.func.isRequired,
-    collectionsByDate: PropTypes.any,
+    fetchWindow: PropTypes.func.isRequired,
+    window: PropTypes.any,
   };
 
   static defaultProps = {
     collection: null,
     PlaylistComponent: undefined,
     shouldRenderHelmet: true,
+  };
+
+  state = {
+    nextLink: null,
+    prevLink: null,
   };
 
   componentDidMount() {
@@ -64,10 +70,70 @@ export class PlaylistCollectionContainer extends Component {
     } else if (!fetchedSingle && !(wip.collections[id] || errors.collections[id])) {
       fetchCollection(id);
     }
+  
+    if (collection) {
+      this.getNextPrevLinks(props);
+    }
+  
   };
+  
+  getNextPrevLinks = (props) => {
+    const { match, wip, window } = props;
+    const { id } = match.params;
+
+    if (window.length === 0) {      
+      if (!wip.window) {
+        this.getWindow(props);   
+      }
+      return;
+    }
+
+    let result = window[0];
+    let windowId = result.id;
+    let collections = result.data.collections;      
+    let curIndex = collections.findIndex(x => {
+      return x.id === id;
+    });
+    if (id !== windowId && (curIndex === 0 || curIndex === collections.length-1) && !wip.window[id]) {
+      this.getWindow(props);
+    }
+    else {
+      let prevCollection = curIndex < collections.length-1 ? collections[curIndex + 1] : null;
+      let prevLink = prevCollection ? canonicalLink(prevCollection) : null;
+      let nextCollection = curIndex > 0 ? collections[curIndex - 1] : null;
+      let nextLink = nextCollection ? canonicalLink(nextCollection) : null;
+      this.setState({nextLink, prevLink})
+    }           
+  }
+
+  getWindow = (props) => {
+    const { match, collection, fetchWindow } = props;
+    const { id } = match.params;    
+    let fromDate = new Date(collection.film_date);
+    fromDate.setDate(fromDate.getDate() - 5);
+    let toDate = new Date(collection.film_date);
+    toDate.setDate(toDate.getDate() + 5);
+    /*console.log("fetch window");
+    console.log({start_date:this.formatDate(fromDate), end_date:this.formatDate(toDate)});*/
+    fetchWindow({id:id ,start_date:this.formatDate(fromDate), end_date:this.formatDate(toDate)});       
+  }
+
+  formatDate = (date) => {
+    let d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    let year = d.getFullYear();
+    if (month.length < 2) {
+      month = '0' + month;
+    }
+    if (day.length < 2) {
+      day = '0' + day;
+    }
+    return [year, month, day].join('-');
+  }
 
   render() {
-    const { match, language, collection, wip: wipMap, errors, PlaylistComponent, shouldRenderHelmet, fetchCollections, collectionsByDate } = this.props;
+    const { match, language, collection, wip: wipMap, errors, PlaylistComponent, shouldRenderHelmet } = this.props;
 
     // We're wip / err if some request is wip / err
     const { id } = match.params;
@@ -80,6 +146,8 @@ export class PlaylistCollectionContainer extends Component {
         err                 = cuIDwithError ? errors.units[cuIDwithError] : null;
       }
     }
+    
+    const { nextLink, prevLink } = this.state;
 
     return (
       <Page
@@ -89,8 +157,8 @@ export class PlaylistCollectionContainer extends Component {
         language={language}
         PlaylistComponent={PlaylistComponent}
         shouldRenderHelmet={shouldRenderHelmet}
-        fetchCollections={fetchCollections}       
-        collectionsByDate={collectionsByDate}
+        nextLink={nextLink}
+        prevLink={prevLink}
       />
     );
   }
@@ -105,7 +173,7 @@ function mapState(state, props) {
     errors: selectors.getErrors(state.mdb),
     language: settings.getLanguage(state.settings),
     items: selectors.getCollections(state.mdb),
-    collectionsByDate: selectors.getCollectionsByDate(state.mdb),
+    window: selectors.getWindow(state.mdb),
   };
 }
 
@@ -113,7 +181,7 @@ function mapDispatch(dispatch) {
   return bindActionCreators({
     fetchCollection: actions.fetchCollection,
     fetchUnit: actions.fetchUnit,
-    fetchCollections: actions.fetchCollections,
+    fetchWindow: actions.fetchWindow,
   }, dispatch);
 }
 
