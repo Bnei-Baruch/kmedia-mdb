@@ -158,11 +158,11 @@ class Sketches extends React.Component {
     console.log('Image Gallery loading error ', event.target);
   }
 
-  renderLeftNav = (onClick, disabled) => <Button color="blue" size="tiny" className="image-gallery-left-nav" icon='chevron left' disabled={disabled} onClick={onClick}/>;
+  renderLeftNav = (onClick, disabled) => <Button color="black" size="tiny" className="image-gallery-left-nav" icon='chevron left' disabled={disabled} onClick={onClick}/>;
 
-  renderRightNav = (onClick, disabled) => <Button color="blue" size="tiny" className="image-gallery-right-nav" icon='chevron right' disabled={disabled} onClick={onClick}/>;
+  renderRightNav = (onClick, disabled) => <Button color="black" size="tiny" className="image-gallery-right-nav" icon='chevron right' disabled={disabled} onClick={onClick}/>;
 
-  renderFullscreenButton = (onClick, isFullscreen) => <Button color="blue" size="tiny" className="image-gallery-fullscreen-button" icon={isFullscreen ? 'compress' : 'expand'} onClick={onClick}/>;
+  renderFullscreenButton = (onClick, isFullscreen) => <Button color="black" size="tiny" className="image-gallery-fullscreen-button" icon={isFullscreen ? 'compress' : 'expand'} onClick={onClick}/>;
 
   render() {
     const { t, zipIndexById }                            = this.props;

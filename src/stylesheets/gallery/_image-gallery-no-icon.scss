@@ -57,14 +57,13 @@ $transparent: rgba($fullBlack, 0) !default;
 .image-gallery-play-button,
 .image-gallery-left-nav,
 .image-gallery-right-nav {
-  // appearance: none;
-  // background-color: transparent;
-  // border: 0;
-  // cursor: pointer;
-  // outline: none;
+  background: rgba($black, .4) !important;
+  margin: 0 !important;
   position: absolute;
   z-index: 4;
-  margin: 0 !important;
+  &:hover { background: rgba(lighten($black, 5), .4) !important;}
+  &:focus { background: rgba(lighten($black, 8), .4) !important;}
+  &:active { background: rgba(lighten($black, 10), .4) !important; }
 }
 
 .image-gallery-fullscreen-button,
@@ -108,11 +107,13 @@ $transparent: rgba($fullBlack, 0) !default;
 }
 
 .image-gallery-left-nav {
-  left: .5rem;
+  border-radius: 0 .28571429rem .28571429rem 0 !important;
+  left: 0;
 }
 
 .image-gallery-right-nav {
-  right: .5rem;
+  border-radius: .28571429rem 0 0 .28571429rem !important;
+  right: 0;
 }
 
 .image-gallery-slides {
@@ -120,12 +121,14 @@ $transparent: rgba($fullBlack, 0) !default;
   overflow: hidden;
   position: relative;
   white-space: nowrap;
+  // display: flex;
 }
 
 .image-gallery-slide {
   background: $white;
   left: 0;
   position: absolute;
+  height: 100%;
   top: 0;
   width: 100%;
 
