@@ -22,7 +22,7 @@ export class PlaylistCollectionContainer extends Component {
     fetchUnit: PropTypes.func.isRequired,
     shouldRenderHelmet: PropTypes.bool,
     fetchWindow: PropTypes.func.isRequired,
-    window: PropTypes.any,
+    cWindow: PropTypes.any,
   };
 
   static defaultProps = {
@@ -78,23 +78,23 @@ export class PlaylistCollectionContainer extends Component {
   };
   
   getNextPrevLinks = (props) => {
-    const { match, wip, window } = props;
+    const { match, wip, cWindow } = props;
     const { id } = match.params;
 
-    if (window.length === 0) {      
-      if (!wip.window) {
+    if (cWindow.length === 0) {      
+      if (!wip.cWindow) {
         this.getWindow(props);   
       }
       return;
     }
 
-    let result = window[0];
-    let windowId = result.id;
+    let result = cWindow[0];
+    let cWindowId = result.id;
     let collections = result.data.collections;      
     let curIndex = collections.findIndex(x => {
       return x.id === id;
     });
-    if (id !== windowId && (curIndex === 0 || curIndex === collections.length-1) && !wip.window[id]) {
+    if (id !== cWindowId && (curIndex === 0 || curIndex === collections.length-1) && !wip.cWindow[id]) {
       this.getWindow(props);
     }
     else {
@@ -173,7 +173,7 @@ function mapState(state, props) {
     errors: selectors.getErrors(state.mdb),
     language: settings.getLanguage(state.settings),
     items: selectors.getCollections(state.mdb),
-    window: selectors.getWindow(state.mdb),
+    cWindow: selectors.getWindow(state.mdb),
   };
 }
 

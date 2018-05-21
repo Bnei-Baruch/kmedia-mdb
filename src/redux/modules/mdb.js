@@ -95,7 +95,7 @@ export const actions = {
 const freshStore = () => ({
   cById: {},
   cuById: {},
-  window: [],
+  cWindow: [],
   sById: {},
   wip: {
     units: {},
@@ -161,15 +161,15 @@ const setStatus = (state, action) => {
     break; 
 
   case FETCH_WINDOW:
-    wip.window = { ...wip.window, [action.payload.id]: true };
+    wip.cWindow = { ...wip.cWindow, [action.payload.id]: true };
   break;
   case FETCH_WINDOW_SUCCESS:
-    wip.window    = { ...wip.window, [action.payload.id]: false };
-    errors.window = { ...errors.window, [action.payload.id]: null };
+    wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
+    errors.cWindow = { ...errors.cWindow, [action.payload.id]: null };
   break;
   case FETCH_WINDOW_FAILURE:
-    wip.window    = { ...wip.window, [action.payload.id]: false };
-    errors.window = { ...errors.window, [action.payload.id]: action.payload.err };
+    wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
+    errors.cWindow = { ...errors.cWindow, [action.payload.id]: action.payload.err };
   break;
   
   default:
@@ -268,15 +268,15 @@ const onReceiveCollections = (state, action) => {
 };
 
 const onFetchWindow = (state, action) => {
-  const window = action.payload || [];
+  const cWindow = action.payload || [];
 
-  if (window.length === 0) {
+  if (cWindow.length === 0) {
     return state;
   }
   
   return {
     ...state,
-    window
+    cWindow
   };
 };
 
@@ -407,7 +407,7 @@ const getLastLessonId   = state => state.lastLessonId;
 const getWip            = state => state.wip;
 const getErrors         = state => state.errors;
 const getCollections    = state => state.items;
-const getWindow   = state => state.window;
+const getWindow   = state => state.cWindow;
 
 const getDenormCollection = (state, id) => {
   let c = state.cById[id];
