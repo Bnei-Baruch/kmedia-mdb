@@ -82,7 +82,7 @@ export class OmniBox extends Component {
     return !query && !Object.values(params).length;
   };
 
-  doSearch = (q = null) => {
+  doSearch = (q = null, locationSearch = '') => {
     const query                                                       = q != null ? q : this.props.query;
     const { search, location, push, pageSize, resetFilter, onSearch } = this.props;
 
@@ -92,13 +92,11 @@ export class OmniBox extends Component {
 
     // First of all redirect to search results page if we're not there
     if (!location.pathname.endsWith('search')) {
-      // In case a filter was updated React location object is not updated yet
-      // so we just use window location to get the search part (to persist filters
+      // In case a filter was updated, React location object is not updated yet
+      // so we use the second function parameter to pass the search part (to persist filters
       // to the search page when we redirect).
 
-      // 'search: window.location.search' has been removed because
-      // filters are not cleared when searching from a section (see bug AR-234)
-      push({ pathname: 'search' /* , search: window.location.search */});
+      push({ pathname: 'search', search: locationSearch});
     }
 
     // Reset filters for new search (query changed)
@@ -127,11 +125,11 @@ export class OmniBox extends Component {
     } else if (category === 'tags') {
       this.props.updateQuery('');
       this.props.addFilterValue('search', 'topics-filter', this.props.getTagPath(data.result.key).map(p => p.id));
-      this.doSearch('');
+      this.doSearch('', this.props.location.search);
     } else if (category === 'sources') {
       this.props.updateQuery('');
       this.props.setFilterValue('search', 'sources-filter', this.props.getSourcePath(data.result.key).map(p => p.id));
-      this.doSearch('');
+      this.doSearch('', this.props.location.search);
     }
     // Currently ignoring anything else.
   };
