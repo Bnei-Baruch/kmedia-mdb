@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ImageGallery from 'react-image-gallery';
-import 'react-image-gallery/styles/css/image-gallery.css';
-import { Container, Segment } from 'semantic-ui-react';
+import { Button, Container, Segment } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../../../helpers/consts';
 import { assetUrl, imaginaryUrl, Requests } from '../../../../../helpers/Api';
@@ -16,7 +15,6 @@ import WipErr from '../../../../shared/WipErr/WipErr';
 import ButtonsLanguageSelector from '../../../../Language/Selector/ButtonsLanguageSelector';
 
 class Sketches extends React.Component {
-
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     t: PropTypes.func.isRequired,
@@ -50,18 +48,17 @@ class Sketches extends React.Component {
   // load data into state
   setCurrentItem = (props, selectedLanguage) => {
     const { unit, zipIndexById, unzip } = props;
-    const language = selectedLanguage ? selectedLanguage : props.language;
-    
-    //get one zip file or array of image files or one image file
+    const language                      = selectedLanguage || props.language;
+
+    // get one zip file or array of image files or one image file
     const files = this.findZipOrImageFiles(unit, language);
 
     if (files) {
-      //not zip, image files only
-      if (Array.isArray(files) || !files.name.endsWith('.zip')){
-        this.setState({ imageFiles: files, language });   
-      }
-      //zip file
-      else{
+      // not zip, image files only
+      if (Array.isArray(files) || !files.name.endsWith('.zip')) {
+        this.setState({ imageFiles: files, language });
+      } else {
+        // zip file
         this.setState({ zipFileId: files.id, language });
 
         const hasData = zipIndexById && zipIndexById[files.id];
@@ -69,75 +66,70 @@ class Sketches extends React.Component {
           unzip(files.id);
         }
       }
-    }
-    else{
+    } else {
       this.setState({ zipFileId: null, language });
     }
   };
 
   findZipOrImageFiles = (unit, selectedLanguage) => {
-    if (Array.isArray(unit.files)) {
-      //get the zip files
-      const zipFiles = unit.files.filter(this.filterZipOrImageFiles);
-
-      if (zipFiles.length === 0)
-        return null;
-
-      //at least one file
-      if (zipFiles.length === 1)
-        return zipFiles[0];
-      else {
-        //many files - get all existing unique languages
-        const languages = zipFiles
-          .map((file) => file.language)
-          .filter((v, i, a) => a.indexOf(v) === i);
-        
-        this.setState({ languages });
-
-        // try filter by language
-        let files = zipFiles.filter((file) => file.language === selectedLanguage);
-        
-        //if no files by language - return original language files
-        if (files.length === 0){
-          files = zipFiles.filter((file) => file.language === unit.original_language);
-        }
-
-        //if there are many zip files - use the first one
-        if (files.length > 0){
-          const zipFileArr = files.filter((file) => file.name.endsWith('.zip'));
-          files = zipFileArr.length > 0 ? zipFileArr[0] : files;
-        }
-
-        return files;
-      }
-    }
-    else {
+    if (!Array.isArray(unit.files)) {
       return null;
     }
+
+    // get the zip files
+    const zipFiles = unit.files.filter(this.filterZipOrImageFiles);
+    if (zipFiles.length === 0) {
+      return null;
+    }
+
+    // at least one file
+    if (zipFiles.length === 1) {
+      return zipFiles[0];
+    }
+
+    // many files - get all existing unique languages
+    const languages = zipFiles
+      .map(file => file.language)
+      .filter((v, i, a) => a.indexOf(v) === i);
+
+    this.setState({ languages });
+
+    // try filter by language
+    let files = zipFiles.filter(file => file.language === selectedLanguage);
+
+    // if no files by language - return original language files
+    if (files.length === 0) {
+      files = zipFiles.filter(file => file.language === unit.original_language);
+    }
+
+    // if there are many zip files - use the first one
+    if (files.length > 0) {
+      const zipFileArr = files.filter(file => file.name.endsWith('.zip'));
+      files            = zipFileArr.length > 0 ? zipFileArr[0] : files;
+    }
+
+    return files;
   };
 
-  filterZipOrImageFiles = (file) => {
-    return file.type === 'image';
-  };
+  filterZipOrImageFiles = file => file.type === 'image';
 
-  //converts images from server format (path, size) to ImageGallery format
+  // converts images from server format (path, size) to ImageGallery format
   imageGalleryItem = (item) => {
-    let src, thumbSrc, alt;
-
+    let src;
+    let alt;
     if (item.path) {
-      //opened zip file
+      // opened zip file
       src = assetUrl(item.path.substr(8));
       alt = item.path.substr(item.path.lastIndexOf('_') + 1);
-    }
-    else {
-      //image file
+    } else {
+      // image file
       src = physicalFile(item);
       alt = item.name;
     }
 
-    thumbSrc = src;
+    let thumbSrc = src;
     if (!thumbSrc.startsWith('http')) {
-      thumbSrc = 'http://localhost' + src;
+      thumbSrc = `http://localhost${src}`;
     }
     thumbSrc = `${imaginaryUrl('thumbnail')}?${Requests.makeParams({ url: thumbSrc, width: 100 })}`;
 
@@ -154,9 +146,37 @@ class Sketches extends React.Component {
     this.setCurrentItem(this.props, language);
   };
 
-  handleImageError(event) {
+  handleImageError = event =>
     console.log('Image Gallery loading error ', event.target);
-  }
+
+  renderLeftNav = (onClick, disabled) => (
+    <Button
+      color="blue"
+      size="tiny"
+      className="image-gallery-left-nav"
+      icon="chevron left"
+      disabled={disabled}
+      onClick={onClick}
+    />);
+
+  renderRightNav = (onClick, disabled) => (
+    <Button
+      color="blue"
+      size="tiny"
+      className="image-gallery-right-nav"
+      icon="chevron right"
+      disabled={disabled}
+      onClick={onClick}
+    />);
+
+  renderFullscreenButton = (onClick, isFullscreen) => (
+    <Button
+      color="blue"
+      size="tiny"
+      className="image-gallery-fullscreen-button"
+      icon={isFullscreen ? 'compress' : 'expand'}
+      onClick={onClick}
+    />);
 
   render() {
     const { t, zipIndexById }                            = this.props;
@@ -168,19 +188,18 @@ class Sketches extends React.Component {
       return wipErr;
     }
 
-    const imageObjs = imageFiles ? imageFiles : data;
+    const imageObjs = imageFiles || data;
 
-    //if imageObjs is not an array - create it
+    // if imageObjs is not an array - create it
     let imageObjsArr = [];
-    if (imageObjs && !Array.isArray(imageObjs)){
+    if (imageObjs && !Array.isArray(imageObjs)) {
       imageObjsArr.push(imageObjs);
-    }
-    else{
+    } else {
       imageObjsArr = imageObjs;
     }
 
-    if (Array.isArray(imageObjsArr) && imageObjsArr.length > 0){
-      //prepare the image array for the gallery and sort it
+    if (Array.isArray(imageObjsArr) && imageObjsArr.length > 0) {
+      // prepare the image array for the gallery and sort it
       const items = imageObjsArr
         .map(this.imageGalleryItem)
         .sort((a, b) => strCmp(a.original, b.original));
@@ -201,15 +220,18 @@ class Sketches extends React.Component {
           }
           <div style={{ direction: 'ltr' }}>
             <ImageGallery
+              lazyLoad
+              showFullscreenButton
               items={items}
-              thumbnailPosition={'top'}
-              lazyLoad={true}
+              thumbnailPosition="top"
               showPlayButton={false}
               showBullets={false}
-              showFullscreenButton={true}
-              showIndex={true}
+              showIndex={items.length > 1}
               showThumbnails={items.length > 1}
               onImageError={this.handleImageError}
+              renderLeftNav={this.renderLeftNav}
+              renderRightNav={this.renderRightNav}
+              renderFullscreenButton={this.renderFullscreenButton}
             />
           </div>
         </div>
@@ -225,17 +247,14 @@ class Sketches extends React.Component {
   }
 }
 
-const mapState = (state) => {
-  return {
-    zipIndexById: selectors.getZipIndexById(state.assets),
-    language: settings.getLanguage(state.settings)
-  };
-};
+const mapState = state => ({
+  zipIndexById: selectors.getZipIndexById(state.assets),
+  language: settings.getLanguage(state.settings)
+});
 
-const mapDispatch = (dispatch) => {
-  return bindActionCreators({
+const mapDispatch = dispatch =>
+  bindActionCreators({
     unzip: actions.unzip
   }, dispatch);
-};
 
 export default connect(mapState, mapDispatch)(Sketches);

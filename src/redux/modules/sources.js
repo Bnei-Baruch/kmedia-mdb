@@ -71,6 +71,7 @@ const initialState = {
   sortedByBook: {
     getByID: identity
   },
+  loaded: false,
   indexById: {},
   sortBy: 'AZ',
   content: {

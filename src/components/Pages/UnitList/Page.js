@@ -26,11 +26,6 @@ const filters = {
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'date-filter', component: filterComponents.DateFilter },
   ],
-  lectures: [
-    { name: 'topics-filter', component: filterComponents.TopicsFilter },
-    { name: 'sources-filter', component: filterComponents.SourcesFilter },
-    { name: 'date-filter', component: filterComponents.DateFilter },
-  ],
   'lectures-collection': [
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'sources-filter', component: filterComponents.SourcesFilter },
@@ -40,6 +35,23 @@ const filters = {
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
   'events-meals': [
+    { name: 'date-filter', component: filterComponents.DateFilter }
+  ],
+  'lectures-virtual-lessons': [
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter }
+  ],
+  'lectures-lectures': [
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
+    { name: 'sources-filter', component: filterComponents.SourcesFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter }
+  ],
+  'lectures-women-lessons': [
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter }
+  ],
+  'lectures-children-lessons': [
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
   publications: [
@@ -52,7 +64,6 @@ const filters = {
 };
 
 class UnitListPage extends PureComponent {
-
   static propTypes = {
     namespace: PropTypes.string.isRequired,
     items: PropTypes.arrayOf(shapes.ContentUnit),
@@ -63,7 +74,6 @@ class UnitListPage extends PureComponent {
     pageSize: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
-    filters: PropTypes.arrayOf(shapes.filterPropShape),
     onPageChange: PropTypes.func.isRequired,
     onFiltersChanged: PropTypes.func.isRequired,
     onFiltersHydrated: PropTypes.func.isRequired,
@@ -74,25 +84,25 @@ class UnitListPage extends PureComponent {
     items: [],
     wip: false,
     err: null,
-    filters: [],
   };
 
   render() {
-    const {
-            namespace,
-            items,
-            wip,
-            err,
-            pageNo,
-            total,
-            pageSize,
-            language,
-            t,
-            onPageChange,
-            onFiltersChanged,
-            onFiltersHydrated,
-            renderUnit
-          } = this.props;
+    const
+      {
+        namespace,
+        items,
+        wip,
+        err,
+        pageNo,
+        total,
+        pageSize,
+        language,
+        t,
+        onPageChange,
+        onFiltersChanged,
+        onFiltersHydrated,
+        renderUnit
+      } = this.props;
 
     const content = WipErr({ wip, err, t }) || (
       <div>
@@ -140,7 +150,6 @@ class UnitListPage extends PureComponent {
       </div>
     );
   }
-
 }
 
 export default translate()(UnitListPage);

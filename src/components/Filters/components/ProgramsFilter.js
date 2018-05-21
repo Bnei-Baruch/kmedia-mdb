@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import noop from 'lodash/noop';
 import { Button, Card, Divider, Grid, Header, List, Menu, Segment } from 'semantic-ui-react';
 
-import { canonicalLink, isEmpty } from '../../../helpers/utils';
+import { canonicalLink } from '../../../helpers/links';
+import { isEmpty } from '../../../helpers/utils';
 import { selectors } from '../../../redux/modules/programs';
 import { selectors as mdbSelectors } from '../../../redux/modules/mdb';
 import connectFilter from './connectFilter';
@@ -12,7 +13,6 @@ import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 
 class ProgramsFilter extends Component {
-
   static propTypes = {
     onCancel: PropTypes.func,
     onApply: PropTypes.func,
@@ -41,7 +41,6 @@ class ProgramsFilter extends Component {
     genres: [],
     programs: [],
     recentlyUpdated: [],
-    recentlyUpdatedCollections: [],
   };
 
   state = {
@@ -72,7 +71,7 @@ class ProgramsFilter extends Component {
   };
 
   apply = () => {
-    const selection = this.state.selection;
+    const { selection } = this.state;
     if (!isEmpty(selection)) {
       this.props.updateValue(selection);
       this.props.onApply();
@@ -215,7 +214,7 @@ class ProgramsFilter extends Component {
         {
           recentlyUpdated.slice(0, 5)
             .filter(x => x.collection)
-            .map(x => {
+            .map((x) => {
               const { collection, last_update: lastUpdate } = x;
               return (
                 <Grid.Column key={x.id}>
@@ -224,7 +223,8 @@ class ProgramsFilter extends Component {
                     to={canonicalLink(collection)}
                     language={language}
                     header={collection.name}
-                    meta={`${t('filters.programs-filter.last-updated')}: ${t('values.date', { date: new Date(lastUpdate) })}`} />
+                    meta={`${t('filters.programs-filter.last-updated')}: ${t('values.date', { date: lastUpdate })}`}
+                  />
                 </Grid.Column>
               );
             })
@@ -268,9 +268,10 @@ class ProgramsFilter extends Component {
 }
 
 export default connect(
-  state => {
+  (state) => {
     const recentlyUpdated = selectors.getRecentlyUpdated(state.programs)
-      .map(x => ({
+      .map(x => (
+        {
           ...x,
           collection: mdbSelectors.getCollectionById(state.mdb, x.id),
         }

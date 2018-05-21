@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { canonicalLink } from '../../../helpers/utils';
+import { canonicalLink } from '../../../helpers/links';
 import * as shapes from '../../shapes';
 import Page from './Page';
 

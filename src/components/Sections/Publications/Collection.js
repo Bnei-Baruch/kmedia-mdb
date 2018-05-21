@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
-import { canonicalLink } from '../../../helpers/utils';
+import { canonicalLink } from '../../../helpers/links';
 import Link from '../../Language/MultiLanguageLink';
 import Collection from '../../Pages/Collection/Container';
 
 export const renderUnit = (unit, t) => {
   let filmDate = '';
   if (unit.film_date) {
-    filmDate = t('values.date', { date: new Date(unit.film_date) });
+    filmDate = t('values.date', { date: unit.film_date });
   }
 
   return (
@@ -27,7 +27,6 @@ export const renderUnit = (unit, t) => {
 };
 
 class PublicationCollection extends Component {
-
   render() {
     return <Collection namespace="publications-collection" renderUnit={renderUnit} />;
   }

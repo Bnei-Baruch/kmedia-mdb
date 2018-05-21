@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import express from 'express';
+import helmet from 'helmet';
 
 import * as middleware from './middleware';
 import serverRender from './renderer';
@@ -16,6 +17,56 @@ function handler(req, res, next) {
 const app = express();
 
 const router = express.Router();
+
+// middleware
+app.use(middleware.logErrors);
+app.use(middleware.errorHandler);
+
+// security headers
+app.use(helmet({
+  dnsPrefetchControl: false,  // we use dns prefetch in index.html to speed things up.
+  contentSecurityPolicy: {
+    directives: {
+      'default-src': [
+        '\'self\'',
+        '*.kbb1.com',
+        '*.kabbalahmedia.info',
+        '*.usersnap.com',
+      ],
+      'script-src': [
+        '\'self\'',
+        '\'unsafe-inline\'',
+        '\'unsafe-eval\'',
+        '*.google-analytics.com',
+        '*.usersnap.com',
+      ],
+      'style-src': [
+        '\'self\'',
+        '\'unsafe-inline\'',
+        '*.googleapis.com',
+      ],
+      'font-src': [
+        '\'self\'',
+        'data:',
+        'fonts.gstatic.com',
+        'cdnjs.cloudflare.com',  // for sketches ionic icons. remove when possible
+      ],
+      'img-src': [
+        '\'self\'',
+        'data:',
+        '*.kbb1.com',
+        '*.kabbalahmedia.info',
+        '*.google-analytics.com',
+        '*.usersnap.com',
+      ]
+    },
+    browserSniff: false       // we're not targeting really old browsers
+  }
+}));
+
+router.use('^/health_check$', (req, res) => {
+  res.status(200).send({ status: 'ok' });
+});
 
 // root (/) should always serve our server rendered page
 router.use('^/$', handler);
@@ -35,8 +86,5 @@ router.use('*', handler);
 
 // tell the app to use the above rules
 app.use(router);
-
-app.use(middleware.logErrors);
-app.use(middleware.errorHandler);
 
 module.exports = app;

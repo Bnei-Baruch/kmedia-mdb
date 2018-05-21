@@ -14,6 +14,7 @@ export const CT_PICNIC             = 'PICNIC';
 export const CT_UNITY_DAY          = 'UNITY_DAY';
 export const CT_CLIPS              = 'CLIPS';
 export const CT_ARTICLES           = 'ARTICLES';
+export const CT_LESSONS_SERIES     = 'LESSONS_SERIES';
 
 // Content Unit Types
 export const CT_LESSON_PART           = 'LESSON_PART';
@@ -237,6 +238,22 @@ export const VS_HD      = 'HD';
 export const VS_FHD     = 'FHD';
 export const VS_DEFAULT = VS_NHD;
 
+export const getVideoRes = (vsType, date) => {
+  // date: Date object
+  // before 2014 return 360p
+  if (date.getFullYear() < 2014) {
+    return { width: 480, height: 360 };
+  }
+  if (vsType === VS_NHD) {
+    return { width: 640, height: 360 };
+  }
+  if (vsType === VS_HD) {
+    return { width: 1280, height: 720 };
+  }
+  // fHD
+  return { width: 1920, height: 980 };
+};
+
 export const VS_NAMES = {
   [VS_NHD]: '360p',
   [VS_HD]: '720p',
@@ -293,3 +310,20 @@ export const BS_TAAS_PARTS = {
   FaKUG7ru: 1687,
   mW6eON0z: 1887,
 };
+
+// Search
+export const SEARCH_I_TOPIC = 0;
+export const SEARCH_I_SOURCE = 1;
+
+export const SEARCH_I_NAMES = {
+  [SEARCH_I_TOPIC]: 'Topic',
+  [SEARCH_I_SOURCE]: 'Source',
+};
+
+export const SEARCH_I_FILTER_NAMES = {
+  [SEARCH_I_TOPIC]: 'topics-filter',
+  [SEARCH_I_SOURCE]: 'sources-filter',
+};
+
+export const COOKIE_UI_LANG = 'archive_UIlang';
+export const LANG_UI_LANGUAGES = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN];

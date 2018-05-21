@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { Button, } from 'semantic-ui-react';
+
+// The component renders itself in DOM:
+//    <div id="download-button" />
 
 class Download extends Component {
   static propTypes = {
@@ -67,9 +71,19 @@ class Download extends Component {
       return null;
     }
     const [filename] = path.split('/').slice(-1);
+    if (typeof filename === 'undefined') {
+      return null;
+    }
 
-    return typeof filename !== 'undefined' &&
-      <Button compact size="small" icon="download" onClick={() => Download.downloadAsset(path, mimeType)}>{children}</Button>;
+    const mountPoint = document.getElementById('download-button');
+    if (mountPoint === null) {
+      return null;
+    }
+
+    return ReactDOM.createPortal(
+      <Button compact size="small" icon="download" onClick={() => Download.downloadAsset(path, mimeType)}>{children}</Button>,
+      mountPoint,
+    );
   }
 }
 

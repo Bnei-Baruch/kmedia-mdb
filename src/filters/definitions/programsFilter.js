@@ -8,7 +8,7 @@ const programsFilter = {
   name: 'programs-filter',
   queryKey: 'program',
   valueToQuery: value => [value.genre, value.program].map(x => x ? x : '').join('|'),
-  queryToValue: queryValue => {
+  queryToValue: (queryValue) => {
     const [genre, program] = queryValue.split('|');
     return { genre, program };
   },
@@ -25,7 +25,7 @@ const programsFilter = {
       return program ? program.name : programName;
     }
 
-    const genre = value.genre;
+    const { genre } = value;
     if (!isEmpty(genre)) {
       return t(`programs.genres.${genre}`);
     }

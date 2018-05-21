@@ -22,8 +22,6 @@ class ArticleUnit extends Component {
 
     return (
       <div>
-        {/* TODO (orin): add Helmets.Basic:url ? */}
-        {/* TODO (orin): add tags from unit (tags=unit.tags) ? */}
         <Basic title={unit.name} description={unit.description} />
         <Article publishedTime={unit.film_date} />
       </div>

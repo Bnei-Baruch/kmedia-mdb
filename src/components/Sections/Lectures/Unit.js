@@ -1,8 +1,9 @@
 import React from 'react';
 import { Container, Header, Item } from 'semantic-ui-react';
 
-import { canonicalLink, formatDuration, neighborIndices } from '../../../helpers/utils';
 import { sectionThumbnailFallback } from '../../../helpers/images';
+import { canonicalLink } from '../../../helpers/links';
+import { formatDuration, neighborIndices } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
 import Helmets from '../../shared/Helmets';
@@ -50,7 +51,7 @@ class MySameCollectionWidget extends SameCollectionWidget {
                 <Item.Content verticalAlign="top">
                   <Header as="h5">
                     <small className="text grey uppercase recommended-same-collection__item-title">
-                      {t('values.date', { date: new Date(part.film_date) })}
+                      {t('values.date', { date: part.film_date })}
                     </small>
                     <br />
                     <span className="recommended-same-collection__item-name">
@@ -102,7 +103,7 @@ const MyWrappedSameCollectionContainer = wrapSameCollectionContainer(MySameColle
 
 class MyUnitPage extends UnitPage {
   renderHelmet() {
-    return <Helmets.AVUnit  unit={this.props.unit} />;
+    return <Helmets.AVUnit  unit={this.props.unit} language={this.props.language} />;
   }
 
   renderRecommendations() {

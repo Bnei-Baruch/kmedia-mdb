@@ -33,7 +33,7 @@ class AVPlayerMobile extends PureComponent {
     onSwitchAV: PropTypes.func.isRequired,
 
     // Slice props
-    history: PropTypes.object.isRequired,
+    history: shapes.History.isRequired,
 
     // Playlist props
     showNextPrev: PropTypes.bool,

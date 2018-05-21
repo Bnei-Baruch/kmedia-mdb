@@ -1,4 +1,4 @@
-/* eslint-disable consistent-return */
+/* eslint-disable consistent-return,no-console */
 
 export function logErrors(err, req, res, next) {
   console.error(err.stack);

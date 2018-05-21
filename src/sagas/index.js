@@ -5,6 +5,8 @@ import { sagas as mdb } from './mdb';
 import { sagas as programs } from './programs';
 import { sagas as publications } from './publications';
 import { sagas as events } from './events';
+import { sagas as series } from './series';
+import { sagas as lectures } from './lectures';
 import { sagas as sources } from './sources';
 import { sagas as filters } from './filters';
 import { sagas as lists } from './lists';
@@ -20,6 +22,8 @@ const allSagas = [
   ...programs,
   ...publications,
   ...events,
+  ...series,
+  ...lectures,
   ...sources,
   ...filters,
   ...lists,

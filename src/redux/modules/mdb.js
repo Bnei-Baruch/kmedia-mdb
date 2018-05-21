@@ -96,14 +96,17 @@ const freshStore = () => ({
   cById: {},
   cuById: {},
   window: [],
+  sById: {},
   wip: {
     units: {},
     collections: {},
+    source: {},
     lastLesson: false,
   },
   errors: {
     units: {},
     collections: {},
+    source: {},
     lastLesson: null,
   },
 });
@@ -226,6 +229,7 @@ const onReceiveCollections = (state, action) => {
 
   const cById  = { ...state.cById };
   const cuById = { ...state.cuById };
+  const sById = { ...state.sById };
   items.forEach((x) => {
     // make a copy of incoming data since we're about to mutate it
     const y = { ...x };
@@ -258,7 +262,8 @@ const onReceiveCollections = (state, action) => {
   return {
     ...state,
     cById,
-    cuById
+    cuById,
+    sById
   };
 };
 
@@ -285,6 +290,7 @@ const onReceiveContentUnits = (state, action) => {
 
   const cById  = { ...state.cById };
   const cuById = { ...state.cuById };
+  const sById = { ...state.sById };
   items.forEach((x) => {
     // make a copy of incoming data since we're about to mutate it
     const y = { ...x };
@@ -353,6 +359,7 @@ const onReceiveContentUnits = (state, action) => {
     ...state,
     cById,
     cuById,
+    sById
   };
 };
 

@@ -1,6 +1,8 @@
+/* eslint-disable no-console */
 import qs from 'qs';
+import { parse as cookieParse } from 'cookie';
 
-import { DEFAULT_LANGUAGE, LANGUAGES } from './consts';
+import { COOKIE_UI_LANG, DEFAULT_LANGUAGE, LANG_UI_LANGUAGES, LANGUAGES } from './consts';
 
 export const parse = str =>
   qs.parse(str);
@@ -17,7 +19,7 @@ export const isAbsoluteUrl = url => /^(?:[a-z]+:)?\/\//i.test(url);
 
 const ensureStartsWithSlash = str => str && (str[0] === '/' ? str : `/${str}`);
 
-const splitPathByLanguage   = (path) => {
+const splitPathByLanguage = (path) => {
   const pathWithSlash = ensureStartsWithSlash(path);
   const parts         = pathWithSlash.split('/');
 
@@ -33,10 +35,39 @@ const splitPathByLanguage   = (path) => {
   };
 };
 
-export const getLanguageFromPath = (_path) => {
-  const path  = ensureStartsWithSlash(_path);
-  const parts = splitPathByLanguage(path);
-  return LANGUAGES[parts.language] ? parts.language : DEFAULT_LANGUAGE;
+export const getLanguageFromPath = (path, headers) => {
+  let { language } = splitPathByLanguage(path);
+  if (language && LANG_UI_LANGUAGES.includes(language)) {
+    // UI lang is set as first part of the url path. i,e, /:lang/...
+    return { language, redirect: false };
+  }
+
+  // UI lang is set in cookie - redirect 302 to /:lang/...
+  const cookies = cookieParse(headers.cookie || '');
+  language      = cookies[COOKIE_UI_LANG];
+  // Only existing languages...
+  if (language !== undefined && LANG_UI_LANGUAGES.includes(language)) {
+    console.log(`language: ${language}, redirect: ${language !== DEFAULT_LANGUAGE}`);
+    return { language, redirect: true };
+  }
+
+  // Educated guess: HTTP header
+  const acceptLanguage = headers['accept-language'];
+  if (acceptLanguage) {
+    const languages = acceptLanguage.match(/[a-zA-Z-]{2,10}/g) || [];
+    console.log(`accept-languages: ${headers['accept-language']}\nlanguages: ${languages}`);
+    const headerLanguages = languages.map(lang => lang.substr(0, 2)).filter(lang => LANG_UI_LANGUAGES.includes(lang));
+    if (headerLanguages.length > 0) {
+      console.log(`header-languages: ${headerLanguages}\n`);
+      // THAT'S NOT STRUCTURE, THAT'S ARRAY OF LANGUAGES
+      // eslint-disable-next-line prefer-destructuring
+      language = headerLanguages[0];
+      return { language, redirect: language !== DEFAULT_LANGUAGE };
+    }
+  }
+
+  // English
+  return { language: DEFAULT_LANGUAGE, redirect: false };
 };
 
 export const prefixWithLanguage = (path, location, toLanguage) => {
