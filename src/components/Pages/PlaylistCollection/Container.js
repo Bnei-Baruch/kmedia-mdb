@@ -21,7 +21,7 @@ export class PlaylistCollectionContainer extends Component {
     fetchCollection: PropTypes.func.isRequired,
     fetchUnit: PropTypes.func.isRequired,
     shouldRenderHelmet: PropTypes.bool,
-    fetchWindow: PropTypes.func.isRequired,
+    fetchWindow: PropTypes.func,
     cWindow: PropTypes.any,
   };
 
