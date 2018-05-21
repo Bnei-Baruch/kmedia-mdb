@@ -81,7 +81,7 @@ export class PlaylistCollectionContainer extends Component {
     const { match, wip, cWindow } = props;
     const { id } = match.params;
 
-    if (cWindow.length === 0) {      
+    if (!cWindow || cWindow.length === 0) {      
       if (!wip.cWindow) {
         this.getWindow(props);   
       }
@@ -109,12 +109,13 @@ export class PlaylistCollectionContainer extends Component {
   getWindow = (props) => {
     const { match, collection, fetchWindow } = props;
     const { id } = match.params;    
+    if (!fetchWindow) {
+      return;
+    }
     let fromDate = new Date(collection.film_date);
     fromDate.setDate(fromDate.getDate() - 5);
     let toDate = new Date(collection.film_date);
     toDate.setDate(toDate.getDate() + 5);
-    /*console.log("fetch window");
-    console.log({start_date:this.formatDate(fromDate), end_date:this.formatDate(toDate)});*/
     fetchWindow({id:id ,start_date:this.formatDate(fromDate), end_date:this.formatDate(toDate)});       
   }
 
