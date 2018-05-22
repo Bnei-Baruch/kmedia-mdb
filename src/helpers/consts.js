@@ -315,20 +315,25 @@ export const COOKIE_UI_LANG = 'archive_UIlang';
 export const LANG_UI_LANGUAGES = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN];
 
 // Search
-export const SEARCH_I_TOPIC = 'intent-tag';
-export const SEARCH_I_SOURCE = 'intent-source';
+export const SEARCH_INTENT_INDEX_TOPIC = 'intent-tag';
+export const SEARCH_INTENT_INDEX_SOURCE = 'intent-source';
+export const SEARCH_INTENT_HIT_TYPE_PROGRAMS = "programs"
+export const SEARCH_INTENT_HIT_TYPE_LESSONS  = "lessons"
 
-export const SEARCH_I_NAMES = {
-  [SEARCH_I_TOPIC]: 'Topic',
-  [SEARCH_I_SOURCE]: 'Source',
+export const SEARCH_INTENT_HIT_TYPES = [SEARCH_INTENT_HIT_TYPE_PROGRAMS, SEARCH_INTENT_HIT_TYPE_LESSONS];
+
+export const SEARCH_INTENT_NAMES = {
+  [SEARCH_INTENT_INDEX_TOPIC]: 'Topic',
+  [SEARCH_INTENT_INDEX_SOURCE]: 'Source',
 };
 
-export const SEARCH_I_FILTER_NAMES = {
-  [SEARCH_I_TOPIC]: 'topics-filter',
-  [SEARCH_I_SOURCE]: 'sources-filter',
+export const SEARCH_INTENT_FILTER_NAMES = {
+  [SEARCH_INTENT_INDEX_TOPIC]: 'topics-filter',
+  [SEARCH_INTENT_INDEX_SOURCE]: 'sources-filter',
 };
 
-export const SEARCH_I_SECTIONS = {
-  [CT_LESSON_PART]: 'lessons',
-  [CT_VIDEO_PROGRAM_CHAPTER]: 'programs',
+export const SEARCH_INTENT_SECTIONS = {
+  [SEARCH_INTENT_HIT_TYPE_LESSONS]: 'lessons',
+  [SEARCH_INTENT_HIT_TYPE_PROGRAMS]: 'programs',
 };
+

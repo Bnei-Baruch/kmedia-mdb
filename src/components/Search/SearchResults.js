@@ -18,11 +18,12 @@ import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import ScoreDebug from './ScoreDebug';
 import {
-  SEARCH_I_FILTER_NAMES,
-  SEARCH_I_NAMES,
-  SEARCH_I_SOURCE,
-  SEARCH_I_SECTIONS,
-  SEARCH_I_TOPIC,
+  SEARCH_INTENT_FILTER_NAMES,
+  SEARCH_INTENT_NAMES,
+  SEARCH_INTENT_SECTIONS,
+  SEARCH_INTENT_INDEX_TOPIC,
+  SEARCH_INTENT_INDEX_SOURCE,
+  SEARCH_INTENT_HIT_TYPES,
 } from '../../helpers/consts';
 
 class SearchResults extends Component {
@@ -267,30 +268,30 @@ class SearchResults extends Component {
       },
       _score: score,
     } = hit;
-    const section    = SEARCH_I_SECTIONS[contentType];
-    const intentType = SEARCH_I_NAMES[type];
-    const filterName = SEARCH_I_FILTER_NAMES[type];
+    const section    = SEARCH_INTENT_SECTIONS[type];
+    const intentType = SEARCH_INTENT_NAMES[index];
+    const filterName = SEARCH_INTENT_FILTER_NAMES[index];
 
     let getFilterById = null;
-    switch (type) {
-    case SEARCH_I_TOPIC:
+    switch (index) {
+    case SEARCH_INTENT_INDEX_TOPIC:
       getFilterById = getTagById;
       break;
-    case SEARCH_I_SOURCE:
+    case SEARCH_INTENT_INDEX_SOURCE:
       getFilterById = getSourceById;
       break;
     default:
-      console.log('Using default filter:', type);
+      console.log('Using default filter:', index);
       getFilterById = x => x;
     }
 
     const path  = tracePath(getFilterById(mdbUid), getFilterById);
     let display = '';
-    switch (type) {
-    case SEARCH_I_TOPIC:
+    switch (index) {
+    case SEARCH_INTENT_INDEX_TOPIC:
       display = path[path.length - 1].label;
       break;
-    case SEARCH_I_SOURCE:
+    case SEARCH_INTENT_INDEX_SOURCE:
       display = path.map(y => y.name).join(' > ');
       break;
     default:
@@ -351,7 +352,7 @@ class SearchResults extends Component {
       return this.renderCollection(c, hit, rank);
     } else if (hitType === 'sources') {
       return this.renderSource(hit, rank);
-    } else if (hitType.startsWith('intent')) {
+    } else if (SEARCH_INTENT_HIT_TYPES.includes(hitType)) {
       return this.renderIntent(hit, rank)
     }
 
