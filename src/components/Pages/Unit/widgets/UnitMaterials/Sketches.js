@@ -151,7 +151,7 @@ class Sketches extends React.Component {
 
   renderLeftNav = (onClick, disabled) => (
     <Button
-      color="blue"
+      color="black"
       size="tiny"
       className="image-gallery-left-nav"
       icon="chevron left"
@@ -161,7 +161,7 @@ class Sketches extends React.Component {
 
   renderRightNav = (onClick, disabled) => (
     <Button
-      color="blue"
+      color="black"
       size="tiny"
       className="image-gallery-right-nav"
       icon="chevron right"
@@ -171,7 +171,7 @@ class Sketches extends React.Component {
 
   renderFullscreenButton = (onClick, isFullscreen) => (
     <Button
-      color="blue"
+      color="black"
       size="tiny"
       className="image-gallery-fullscreen-button"
       icon={isFullscreen ? 'compress' : 'expand'}
