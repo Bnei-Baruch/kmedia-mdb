@@ -170,6 +170,12 @@ export const WipMap = PropTypes.objectOf(PropTypes.oneOfType([WIP, PropTypes.obj
 export const Error     = PropTypes.oneOfType([PropTypes.object, PropTypes.string]);
 export const ErrorsMap = PropTypes.objectOf(PropTypes.oneOfType([Error, PropTypes.objectOf(Error)]));
 
+export const DataWipErr = PropTypes.shape({
+  data: PropTypes.any,
+  wip: WIP,
+  err: Error,
+});
+
 export const UserAgentParserResults = PropTypes.shape({
   ua: PropTypes.string,
   browser: PropTypes.shape({

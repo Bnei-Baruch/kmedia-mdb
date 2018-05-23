@@ -1,6 +1,6 @@
 @import 'includes/colors-helpers';
-@import 'includes/text-helpers';
 @import 'includes/responsive-helpers';
+@import 'includes/text-helpers';
 @import 'includes/layout';
 @import 'includes/index';
 @import 'includes/unit';
@@ -14,14 +14,16 @@
 //////////ALL YOUR CSS IS HERE ↴
 @import 'includes/not-sorted-scss';
 
+body { overflow-y: scroll; }
 
 .debug {
-  position: fixed;
   background: yellow;
-  z-index: 999999999999;
   bottom: 0;
-  left:0;
+  left: 0;
+  position: fixed;
+  z-index: 999999999999;
 }
+
 /// INDEX FILTERS
 .index-filters {
   &__search {
@@ -82,8 +84,9 @@
 
     .item {
       cursor: pointer;
+
       &:hover {
-        background: rgba(0,0,0,.05);
+        background: rgba(0, 0, 0, .05);
       }
     }
   }

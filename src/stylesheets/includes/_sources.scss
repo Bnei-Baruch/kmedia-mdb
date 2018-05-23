@@ -255,9 +255,7 @@
 
       .is-serif & { font-family: $serif-family;}
 
-      em {
-        font-weight: bold;
-      }
+
     }
 
     p {
@@ -276,7 +274,7 @@
     h3 {font-size: 1.28571429em;}
     h4 {font-size: 1.07142857em;}
     h5 {font-size: 1em;}
-    em {font-weight: normal;} // Kolmans overwrite
+
   }
 }
 

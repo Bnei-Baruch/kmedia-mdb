@@ -37,7 +37,7 @@
 }
 
 /* Make hightlights in search also bold (not only italic).*/
-em {
+.search-results em {
   font-weight: bold;
 }
 

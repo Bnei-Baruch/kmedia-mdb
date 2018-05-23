@@ -7,7 +7,6 @@ import { sagas as publications } from './publications';
 import { sagas as events } from './events';
 import { sagas as series } from './series';
 import { sagas as lectures } from './lectures';
-import { sagas as sources } from './sources';
 import { sagas as filters } from './filters';
 import { sagas as lists } from './lists';
 import { sagas as tags } from './tags';
@@ -24,7 +23,6 @@ const allSagas = [
   ...events,
   ...series,
   ...lectures,
-  ...sources,
   ...filters,
   ...lists,
   ...tags,
@@ -33,8 +31,6 @@ const allSagas = [
   ...assets,
   ...home,
 ];
-
-export default allSagas;
 
 export function* rootSaga() {
   yield all(allSagas.map(s => s()));
