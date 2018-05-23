@@ -419,6 +419,8 @@ class SearchResults extends Component {
     }
 
     const { /* took, */ hits: { total, hits } } = results;
+    const maxForPagination = 10000; // Elastic fails on more than 10k results.
+    let totalForPagination = total > maxForPagination ? maxForPagination : total;
 
     let content;
     if (total === 0) {
@@ -449,7 +451,7 @@ class SearchResults extends Component {
             <Pagination
               pageNo={pageNo}
               pageSize={pageSize}
-              total={total}
+              total={totalForPagination}
               language={language}
               onChange={handlePageChange}
             />
