@@ -124,12 +124,18 @@ export class OmniBox extends Component {
       this.doSearch(data.result.title);
     } else if (category === 'tags') {
       this.props.updateQuery('');
-      this.props.addFilterValue('search', 'topics-filter', this.props.getTagPath(data.result.key).map(p => p.id));
-      this.doSearch('', this.props.location.search);
+      const path = this.props.getTagPath(data.result.key).map(p => p.id)
+      const queryValue = path.join('_');
+      const queryKey = "topic=";
+      this.props.addFilterValue('search', 'topics-filter', path);
+      this.doSearch('', queryKey.concat(queryValue));
     } else if (category === 'sources') {
       this.props.updateQuery('');
-      this.props.setFilterValue('search', 'sources-filter', this.props.getSourcePath(data.result.key).map(p => p.id));
-      this.doSearch('', this.props.location.search);
+      const path = this.props.getSourcePath(data.result.key).map(p => p.id)
+      const queryValue = path.join('_');
+      const queryKey = "source=";
+      this.props.setFilterValue('search', 'sources-filter', path);
+      this.doSearch('', queryKey.concat(queryValue));
     }
     // Currently ignoring anything else.
   };
