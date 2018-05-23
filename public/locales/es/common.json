@@ -104,7 +104,9 @@
     },
     "error": {
       "loading": "Error al cargar el video"
-    }
+    },
+    "prev-lesson": "Previous",
+    "next-lesson": "Next"
   },
   "messages": {
     "loading": "Cargando",

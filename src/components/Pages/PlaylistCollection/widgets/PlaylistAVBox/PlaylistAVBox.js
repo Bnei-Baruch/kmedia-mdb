@@ -19,6 +19,7 @@ class PlaylistAVBox extends Component {
     t: PropTypes.func.isRequired,
     nextLink: PropTypes.string,
     prevLink: PropTypes.string,
+    langDir: PropTypes.string,
   };
 
   state = {
@@ -101,7 +102,7 @@ class PlaylistAVBox extends Component {
   };
 
   render() {
-    const { t, PlayListComponent, nextLink, prevLink } = this.props;
+    const { t, PlayListComponent, nextLink, prevLink, langDir } = this.props;
     const { playlist, selected }   = this.state;
 
     if (!playlist ||
@@ -127,10 +128,12 @@ class PlaylistAVBox extends Component {
           <PlayListComponent
             playlist={playlist}
             selected={selected}
+            language={playlist.language}
             onSelectedChange={this.handleSelectedChange}
             t={t}
             nextLink={nextLink}
             prevLink={prevLink}
+            langDir={langDir}
           />
         </Grid.Column>
       </Grid.Row>

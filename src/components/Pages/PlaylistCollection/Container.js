@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom';
 
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { canonicalLink } from '../../../helpers/links';
 import * as shapes from '../../shapes';
 import Page from './Page';
@@ -34,6 +35,7 @@ export class PlaylistCollectionContainer extends Component {
   state = {
     nextLink: null,
     prevLink: null,
+    langDir: null,
   };
 
   componentDidMount() {
@@ -73,8 +75,7 @@ export class PlaylistCollectionContainer extends Component {
   
     if (collection) {
       this.getNextPrevLinks(props);
-    }
-  
+    }   
   };
   
   getNextPrevLinks = (props) => {
@@ -134,7 +135,7 @@ export class PlaylistCollectionContainer extends Component {
   }
 
   render() {
-    const { match, language, collection, wip: wipMap, errors, PlaylistComponent, shouldRenderHelmet } = this.props;
+    const { match, language, collection, wip: wipMap, errors, PlaylistComponent, shouldRenderHelmet, langDir } = this.props;
 
     // We're wip / err if some request is wip / err
     const { id } = match.params;
@@ -160,6 +161,7 @@ export class PlaylistCollectionContainer extends Component {
         shouldRenderHelmet={shouldRenderHelmet}
         nextLink={nextLink}
         prevLink={prevLink}
+        langDir={langDir}
       />
     );
   }
@@ -167,12 +169,14 @@ export class PlaylistCollectionContainer extends Component {
 
 function mapState(state, props) {
   const collection = selectors.getDenormCollectionWUnits(state.mdb, props.match.params.id);
-
+  const language = settings.getLanguage(state.settings);
+  const langDir = getLanguageDirection(language);
   return {
     collection,
     wip: selectors.getWip(state.mdb),
     errors: selectors.getErrors(state.mdb),
-    language: settings.getLanguage(state.settings),
+    language: language,
+    langDir: langDir,
     items: selectors.getCollections(state.mdb),
     cWindow: selectors.getWindow(state.mdb),
   };

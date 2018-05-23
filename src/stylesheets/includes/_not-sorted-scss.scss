@@ -119,3 +119,20 @@ em {
 .mediaplayer__languages .ui.floating.dropdown > .menu {
   max-height: 220px;
 }
+
+.avbox__playlist-next-prev-buttons a, .avbox__playlist-next-prev-buttons a:hover {
+  color: #fff;
+}
+
+.avbox__playlist-next-prev-buttons .button {
+  background: none;
+  border: 0;
+  border-radius: 4px;
+  height: 40px;
+  min-width: 40px;
+  padding: .5rem;
+}
+
+.avbox__playlist-next-prev-buttons .button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}

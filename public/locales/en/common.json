@@ -106,7 +106,9 @@
     },
     "error": {
       "loading": "Error loading file."
-    }
+    },
+    "prev-lesson": "Previous",
+    "next-lesson": "Next"
   },
   "messages": {
     "loading": "Loading",

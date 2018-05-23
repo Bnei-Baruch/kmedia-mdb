@@ -16,6 +16,7 @@ class PlaylistWidget extends Component {
     t: PropTypes.func.isRequired,
     nextLink: PropTypes.string,
     prevLink: PropTypes.string,
+    langDir: PropTypes.string,
   };
 
   static defaultProps = {
@@ -47,16 +48,17 @@ class PlaylistWidget extends Component {
   }
 
   renderNextPrevLinks() {
-    const { nextLink, prevLink, t } = this.props;    
+    const { nextLink, prevLink, t, langDir } = this.props;  
+
     let prevLinkHtml = '';
     if (prevLink) {
       prevLinkHtml = (
         <Item as={Link} 
           to={prevLink} 
-          className="avbox__playlist-prev-collection" 
-          title={t('prev')}
+          className="button" 
+          title={t('player.prev-lesson')}
           >
-          <Icon  name="backward" />
+          <Icon name={langDir === 'ltr' ? 'backward' : 'forward'} />
         </Item>
       );      
     }
@@ -65,19 +67,20 @@ class PlaylistWidget extends Component {
       nextLinkHtml = (
         <Item as={Link} 
           to={nextLink} 
-          className="avbox__playlist-next-collection" 
-          title={t('next')}
+          className="button" 
+          title={t('player.next-lesson')}
         >
-            <Icon name="forward" />            
+            <Icon name={langDir === 'ltr' ? 'forward' : 'backward'} />
         </Item>
       );      
     }
-    return (
-      <div className="avbox__playlist-next-prev-collection">
-        {prevLinkHtml}
-        {nextLinkHtml}
+
+    return (      
+      <div className="avbox__playlist-next-prev-buttons">         
+        {prevLinkHtml}          
+        {nextLinkHtml}  
       </div>
-    );    
+    );
   }
 
   renderContents() {

@@ -105,7 +105,9 @@
     },
     "error": {
       "loading": "שגיאה בטעינת קובץ"
-    }
+    },
+    "prev-lesson": "הקודם",
+    "next-lesson": "הבא"
   },
   "messages": {
     "loading": "טוען",

@@ -106,7 +106,9 @@
     },
     "error": {
       "loading": "Ошибка при загрузке файла."
-    }
+    },
+    "prev-lesson": "Previous",
+    "next-lesson": "Next"
   },
   "messages": {
     "loading": "Загрузка...",
