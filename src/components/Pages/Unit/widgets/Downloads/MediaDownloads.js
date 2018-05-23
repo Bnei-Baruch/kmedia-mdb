@@ -31,7 +31,6 @@ const MEDIA_ORDER = [
 ];
 
 class MediaDownloads extends Component {
-
   static propTypes = {
     unit: shapes.ContentUnit,
     publisherById: PropTypes.objectOf(shapes.Publisher).isRequired,
@@ -53,7 +52,7 @@ class MediaDownloads extends Component {
     const groups        = this.getFilesByLanguage(unit.files);
     const derivedGroups = this.getDerivedFilesByContentType(unit.derived_units);
 
-    let language = props.language;
+    let { language } = props;
     if (!groups.has(language)) {
       language = groups.keys().next().value;
     }
@@ -89,7 +88,7 @@ class MediaDownloads extends Component {
       lang = groups.keys().next().value;
     }
 
-    let derivedGroups = state.derivedGroups;
+    let { derivedGroups } = state;
     if (unit.derived_units !== props.unit.derived_units) {
       derivedGroups = this.getDerivedFilesByContentType(unit.derived_units);
     }
@@ -101,10 +100,7 @@ class MediaDownloads extends Component {
     });
   }
 
-  // TODO: implement once fallback language is known
-  fallbackImages = (images, language) => images[0];
-
-  getFilesByLanguage = (files) => {
+  getFilesByLanguage = (files = []) => {
     const groups = new Map();
 
     // keep track of image files. These are a special case.
@@ -114,7 +110,7 @@ class MediaDownloads extends Component {
     // we give them the images of their fallback language.
     const images = [];
 
-    (files || []).forEach((file) => {
+    files.forEach((file) => {
       if (!groups.has(file.language)) {
         groups.set(file.language, new Map());
       }
@@ -137,7 +133,7 @@ class MediaDownloads extends Component {
     if (images.length > 0) {
       groups.forEach((byType, language) => {
         if (!byType.has(MT_IMAGE)) {
-          byType.set(MT_IMAGE, [this.fallbackImages(images, language)]);
+          byType.set(MT_IMAGE, this.fallbackImages(images, language));
         }
       });
     }
@@ -159,9 +155,26 @@ class MediaDownloads extends Component {
     }, {});
   };
 
+  getI18nTypeOverridesKey = () => {
+    switch (this.props.unit.content_type) {
+    case CT_LESSON_PART:
+    case CT_FULL_LESSON:
+      return 'lesson';
+    case CT_VIDEO_PROGRAM_CHAPTER:
+      return 'program';
+    case CT_ARTICLE:
+      return 'publication';
+    default:
+      return '';
+    }
+  };
+
   handleChangeLanguage = (e, language) => {
     this.setState({ language });
   };
+
+  // TODO: implement once fallback language is known
+  fallbackImages = (images, language) => [images[0]];
 
   renderRow = (file, label, t) => {
     const ext = file.name.substring(file.name.lastIndexOf('.') + 1);
@@ -199,20 +212,6 @@ class MediaDownloads extends Component {
         </Table.Cell>
       </Table.Row>
     );
-  };
-
-  getI18nTypeOverridesKey = () => {
-    switch (this.props.unit.content_type) {
-    case CT_LESSON_PART:
-    case CT_FULL_LESSON:
-      return 'lesson';
-    case CT_VIDEO_PROGRAM_CHAPTER:
-      return 'program';
-    case CT_ARTICLE:
-      return 'publication';
-    default:
-      return '';
-    }
   };
 
   render() {
