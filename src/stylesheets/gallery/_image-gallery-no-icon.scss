@@ -1,90 +1,61 @@
-$ig-screen-sm-min: 768px !default;
-$ig-screen-xsm-min: 480px !default;
-$ig-white: #fff !default;
-$ig-black: #000 !default;
-$ig-blue: #337ab7 !default;
-$ig-background-black: rgba(0, 0, 0, .4) !default;
-$ig-transparent: rgba(0, 0, 0, 0) !default;
-
-@mixin vendor-prefix($name, $value) {
-  @each $vendor in ('-webkit-', '-moz-', '-ms-', '-o-', '') {
-    #{$vendor}#{$name}: #{$value};
-  }
-}
+$bg-black: rgba($fullBlack, .4) !default;
+$transparent: rgba($fullBlack, 0) !default;
 
 .image-gallery {
-  @include vendor-prefix('user-select', none);
-  -webkit-tap-highlight-color: $ig-transparent;
+  user-select: none;
+  -webkit-tap-highlight-color: $transparent;
 
-  &.fullscreen-modal {
-    background: $ig-black;
-    bottom: 0;
-    height: 100%;
-    left: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
-    width: 100%;
-    z-index: 5;
-
-    .image-gallery-content {
-      top: 50%;
-      transform: translateY(-50%);
-    }
+  &:-webkit-full-screen {
+    height: 100vh;
+    overflow: hidden;
+    width: 100vw;
   }
-
 }
 
 .image-gallery-content {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   line-height: 0;
   top: 0;
 
   &.fullscreen {
-    background: $ig-black;
+    background: $black;
+    height: 100%;
 
     .image-gallery-slide {
-      background: $ig-black;
+      background: $black;
     }
   }
 }
 
 .image-gallery-slide-wrapper {
+  display: flex;
+  flex: 1 1 auto;
+  overflow: hidden;
   position: relative;
-
-  &.left,
-  &.right {
-    display: inline-block;
-    width: calc(100% - 113px); // 100px + 8px for border + 5px for padding
-    
-
-    @media (max-width: $ig-screen-sm-min) {
-      width: calc(100% - 84px); // 75px + 6px for border + 3px for padding
-    }
-  }
 }
 
 .image-gallery-fullscreen-button,
 .image-gallery-play-button,
 .image-gallery-left-nav,
 .image-gallery-right-nav {
-  appearance: none;
-  background-color: transparent;
-  background-color: pink;
-  border: 0;
-  cursor: pointer;
-  outline: none;
+  background: rgba($black, .4) !important;
+  margin: 0 !important;
   position: absolute;
   z-index: 4;
+  &:hover { background: rgba(lighten($black, 5), .4) !important;}
+  &:focus { background: rgba(lighten($black, 8), .4) !important;}
+  &:active { background: rgba(lighten($black, 10), .4) !important; }
 }
 
 .image-gallery-fullscreen-button,
 .image-gallery-play-button {
-  bottom: 0;
+  top: .5rem;
 }
 
 .image-gallery-fullscreen-button {
-  right: 0;
+  right: .5rem;
 }
 
 .image-gallery-play-button {
@@ -93,12 +64,8 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
 .image-gallery-left-nav,
 .image-gallery-right-nav {
-  color: $ig-white;
-  font-size: 5em;
-  padding: 50px 15px;
   top: 50%;
   transform: translateY(-50%);
-  background: yellow;
 
   &[disabled] {
     cursor: disabled;
@@ -106,26 +73,32 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     pointer-events: none;
   }
 
-  @media (max-width: $ig-screen-sm-min) {
-    font-size: 3.4em;
-    padding: 20px 15px;
-  }
+  // @media (max-width: $tabletBreakpoint) {
+  // }
 
-  @media (max-width: $ig-screen-xsm-min) {
-    font-size: 2.4em;
-    padding: 0 15px;
+  @media (max-width: $mobileBreakpoint) {
+    display: none !important;
   }
 }
 
 .image-gallery-left-nav {
+  border-radius: 0 .28571429rem .28571429rem 0 !important;
   left: 0;
 }
 
 .image-gallery-right-nav {
+  border-radius: .28571429rem 0 0 .28571429rem !important;
   right: 0;
 }
 
+.image-gallery-swipe {
+  display: flex;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
 .image-gallery-slides {
+  flex: 1 1 auto;
   line-height: 0;
   overflow: hidden;
   position: relative;
@@ -133,7 +106,10 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 }
 
 .image-gallery-slide {
-  background: $ig-white;
+  background: $white;
+  display: flex;
+  height: 100%;
+  justify-content: center;
   left: 0;
   position: absolute;
   top: 0;
@@ -143,21 +119,28 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     position: relative;
   }
 
+  .image-gallery-image {
+    display: flex;
+    flex: 1 1 auto;
+  }
+
   img {
+    height: 100%;
+    object-fit: contain;
     width: 100%;
   }
 
   .image-gallery-description {
-    background: $ig-background-black;
+    background: $bg-black;
     bottom: 70px;
-    color: $ig-white;
+    color: $white;
     left: 0;
     line-height: 1;
     padding: 10px 20px;
     position: absolute;
     white-space: normal;
 
-    @media (max-width: $ig-screen-sm-min) {
+    @media (max-width: $tabletBreakpoint) {
       bottom: 45px;
       font-size: .8em;
       padding: 8px 15px;
@@ -184,85 +167,40 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   .image-gallery-bullet {
     appearance: none;
     background-color: transparent;
-    border: 1px solid $ig-white;
+    border: 1px solid $white;
     border-radius: 50%;
-    box-shadow: 0 1px 0 lighten($ig-black, 10%);
+    box-shadow: 0 1px 0 lighten($black, 10%);
     cursor: pointer;
     display: inline-block;
     margin: 0 5px;
     outline: none;
     padding: 5px;
 
-    @media (max-width: $ig-screen-sm-min) {
+    @media (max-width: $tabletBreakpoint) {
       margin: 0 3px;
       padding: 3px;
     }
 
-    @media (max-width: $ig-screen-xsm-min) {
+    @media (max-width: $tabletBreakpoint) {
       padding: 2.7px;
     }
 
     &.active {
-      background: $ig-white;
+      background: $white;
     }
   }
 }
 
 .image-gallery-thumbnails-wrapper {
+  flex: 0 0 auto;
   position: relative;
-
-  &.left,
-  &.right {
-    display: inline-block;
-    vertical-align: top;
-    width: 108px; // 100px + 8px for border
-
-    @media (max-width: $ig-screen-sm-min) {
-      width: 81px; // 75px + 6px for border
-    }
-
-    .image-gallery-thumbnails {
-      height: 100%;
-      width: 100%;
-      left: 0;
-      padding: 0;
-      position: absolute;
-      top: 0;
-
-      .image-gallery-thumbnail {
-        display: block;
-        margin-right: 0;
-        padding: 0;
-
-        + .image-gallery-thumbnail {
-          margin-left: 0;
-        }
-      }
-    }
-  }
-
-  &.left {
-    margin-right: 5px;
-
-    @media (max-width: $ig-screen-sm-min) {
-      margin-right: 3px;
-    }
-  }
-
-  &.right {
-    margin-left: 5px;
-
-    @media (max-width: $ig-screen-sm-min) {
-      margin-left: 3px;
-    }
-  }
 }
 
 .image-gallery-thumbnails {
   overflow: hidden;
   padding: 5px 0;
 
-  @media (max-width: $ig-screen-sm-min) {
+  @media (max-width: $tabletBreakpoint) {
     padding: 3px 0;
   }
 
@@ -276,13 +214,12 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 }
 
 .image-gallery-thumbnail {
+  border: 2px solid transparent;
   display: inline-block;
-  border: 4px solid transparent;
   transition: border .3s ease-out;
   width: 100px;
 
-  @media (max-width: $ig-screen-sm-min) {
-    border: 3px solid transparent;
+  @media (max-width: $tabletBreakpoint) {
     width: 75px;
   }
 
@@ -296,34 +233,33 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   }
 
   &.active {
-    border: 4px solid $ig-blue;
-
-    @media (max-width: $ig-screen-sm-min) {
-      border: 3px solid $ig-blue;
-    }
+    border: 2px solid $blue;
+    // @media (max-width: $tabletBreakpoint) {
+    // }
   }
 }
 
 .image-gallery-thumbnail-label {
-  color: lighten($ig-black, 10%);
+  color: lighten($black, 10%);
   font-size: 1em;
 
-  @media(max-width: $ig-screen-sm-min) {
+  @media(max-width: $tabletBreakpoint) {
     font-size: .8em;
   }
 }
 
 .image-gallery-index {
-  background: $ig-background-black;
-  color: $ig-white;
+  background: $bg-black;
+  bottom: .5rem;
+  color: $white;
   line-height: 1;
   padding: 10px 20px;
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 50%;
+  transform: translateX(50%);
   z-index: 4;
 
-  @media(max-width: $ig-screen-sm-min) {
+  @media(max-width: $tabletBreakpoint) {
     font-size: .8em;
     padding: 5px 10px;
   }
