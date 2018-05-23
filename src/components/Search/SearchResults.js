@@ -419,7 +419,8 @@ class SearchResults extends Component {
     }
 
     const { /* took, */ hits: { total, hits } } = results;
-    const totalForPagination = Math.min(10000, total);  // Elastic fails on more than 10k results
+    // Elastic too slow and might fails on more than 1k results.
+    const totalForPagination = Math.min(1000, total);
 
     let content;
     if (total === 0) {
