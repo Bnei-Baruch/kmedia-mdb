@@ -89,7 +89,9 @@
     "video": "Видео",
     "more": "Ещё",
     "copy-link": "Копировать линк",
-    "search": "Поиск"
+    "search": "Поиск",
+    "previous": "Предыдущий",
+    "next": "Следующий"
   },
   "player": {
     "messages": {
@@ -106,9 +108,7 @@
     },
     "error": {
       "loading": "Ошибка при загрузке файла."
-    },
-    "prev-lesson": "Previous",
-    "next-lesson": "Next"
+    }
   },
   "messages": {
     "loading": "Загрузка...",

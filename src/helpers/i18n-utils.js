@@ -48,4 +48,4 @@ export const changeDirection = (direction) => {
   }
 };
 
-export const getLanguageDirection = language => RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
+export const getLanguageDirection = language => (RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr');

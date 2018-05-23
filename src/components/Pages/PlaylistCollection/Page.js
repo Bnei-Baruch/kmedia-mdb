@@ -20,10 +20,9 @@ class PlaylistCollectionPage extends Component {
     PlaylistComponent: PropTypes.func,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
-    shouldRenderHelmet: PropTypes.bool,
+    // shouldRenderHelmet: PropTypes.bool,
     nextLink: PropTypes.string,
     prevLink: PropTypes.string,
-    langDir: PropTypes.string,
   };
 
   static defaultProps = {
@@ -31,7 +30,9 @@ class PlaylistCollectionPage extends Component {
     wip: false,
     err: null,
     PlaylistComponent: Playlist,
-    shouldRenderHelmet: true
+    // shouldRenderHelmet: true,
+    nextLink: null,
+    prevLink: null,
   };
 
   state = {
@@ -63,7 +64,7 @@ class PlaylistCollectionPage extends Component {
   // }
 
   render() {
-    const { language, collection, wip, err, t, PlaylistComponent, nextLink, prevLink, langDir } = this.props;
+    const { language, collection, wip, err, t, PlaylistComponent, nextLink, prevLink } = this.props;
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
@@ -87,10 +88,9 @@ class PlaylistCollectionPage extends Component {
                 language={language}
                 t={t}
                 onSelectedChange={this.handleSelectedChange}
-                PlayListComponent={PlaylistComponent}       
+                PlayListComponent={PlaylistComponent}
                 nextLink={nextLink}
-                prevLink={prevLink}    
-                langDir={langDir}   
+                prevLink={prevLink}
               />
             </Grid>
           </Container>

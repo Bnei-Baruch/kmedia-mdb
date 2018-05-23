@@ -89,7 +89,9 @@
     "video": "Відео",
     "more": "Ще",
     "copy-link": "Копіювати лінк",
-    "search": "Пошук"
+    "search": "Пошук",
+    "previous": "Попередній",
+    "next": "Наступний"
   },
   "player": {
     "messages": {
@@ -106,9 +108,7 @@
     },
     "error": {
       "loading": "Помилка при завантаженні файлу."
-    },
-    "prev-lesson": "Previous",
-    "next-lesson": "Next"
+    }
   },
   "messages": {
     "loading": "Завантаження...",

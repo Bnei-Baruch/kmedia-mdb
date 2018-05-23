@@ -89,7 +89,9 @@
     "video": "Video",
     "more": "More",
     "copy-link": "Copy Link",
-    "search": "Search"
+    "search": "Search",
+    "previous": "Previous",
+    "next": "Next"
   },
   "player": {
     "messages": {
@@ -106,9 +108,7 @@
     },
     "error": {
       "loading": "Error loading file."
-    },
-    "prev-lesson": "Previous",
-    "next-lesson": "Next"
+    }
   },
   "messages": {
     "loading": "Loading",

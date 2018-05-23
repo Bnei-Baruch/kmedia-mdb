@@ -19,7 +19,11 @@ class PlaylistAVBox extends Component {
     t: PropTypes.func.isRequired,
     nextLink: PropTypes.string,
     prevLink: PropTypes.string,
-    langDir: PropTypes.string,
+  };
+
+  static defaultProps = {
+    nextLink: null,
+    prevLink: null,
   };
 
   state = {
@@ -49,11 +53,13 @@ class PlaylistAVBox extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { collection, language, location } = nextProps;
-    const {
-            collection: oldCollection,
-            language: oldLanguage,
-            location: oldLocation
-          }                                  = this.props;
+
+    const
+      {
+        collection: oldCollection,
+        language: oldLanguage,
+        location: oldLocation
+      } = this.props;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();
     const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);
@@ -102,8 +108,8 @@ class PlaylistAVBox extends Component {
   };
 
   render() {
-    const { t, PlayListComponent, nextLink, prevLink, langDir } = this.props;
-    const { playlist, selected }   = this.state;
+    const { t, PlayListComponent, language, nextLink, prevLink } = this.props;
+    const { playlist, selected }                                 = this.state;
 
     if (!playlist ||
       !Array.isArray(playlist.items) ||
@@ -128,12 +134,11 @@ class PlaylistAVBox extends Component {
           <PlayListComponent
             playlist={playlist}
             selected={selected}
-            language={playlist.language}
+            language={language}
             onSelectedChange={this.handleSelectedChange}
             t={t}
             nextLink={nextLink}
             prevLink={prevLink}
-            langDir={langDir}
           />
         </Grid.Column>
       </Grid.Row>

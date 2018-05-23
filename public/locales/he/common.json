@@ -88,7 +88,9 @@
     "video": "וידאו",
     "more": "עוד",
     "copy-link": "העתק קישור",
-    "search": "חפש"
+    "search": "חפש",
+    "previous": "הקודם",
+    "next": "הבא"
   },
   "player": {
     "messages": {
@@ -105,9 +107,7 @@
     },
     "error": {
       "loading": "שגיאה בטעינת קובץ"
-    },
-    "prev-lesson": "הקודם",
-    "next-lesson": "הבא"
+    }
   },
   "messages": {
     "loading": "טוען",

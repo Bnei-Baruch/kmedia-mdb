@@ -87,7 +87,9 @@
     "video": "Video",
     "more": "Mas",
     "copy-link": "Copiar enlace",
-    "search": "Buscar"
+    "search": "Buscar",
+    "previous": "Anterior",
+    "next": "Siguiente"
   },
   "player": {
     "messages": {
@@ -104,9 +106,7 @@
     },
     "error": {
       "loading": "Error al cargar el video"
-    },
-    "prev-lesson": "Previous",
-    "next-lesson": "Next"
+    }
   },
   "messages": {
     "loading": "Cargando",

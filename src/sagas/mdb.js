@@ -30,15 +30,15 @@ export function* fetchCollection(action) {
 }
 
 export function* fetchWindow(action) {
-  const id = action.payload.id;
+  const { id } = action.payload;
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const args     = {
       ...action.payload,
       language,
     };
-    const { data } = yield call(Api.lessons, args);    
-    yield put(actions.fetchWindowSuccess(id, {id:id, data:data}));
+    const { data } = yield call(Api.lessons, args);
+    yield put(actions.fetchWindowSuccess(id, { id, data }));
   } catch (err) {
     yield put(actions.fetchWindowFailure(id, err));
   }
@@ -88,7 +88,7 @@ function* watchFetchWindow() {
 
 export const sagas = [
   watchFetchUnit,
-  watchFetchCollection,  
+  watchFetchCollection,
   watchFetchLatestLesson,
   watchFetchSQData,
   watchFetchWindow,
