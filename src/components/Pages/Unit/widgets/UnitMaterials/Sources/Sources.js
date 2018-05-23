@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
 
+import { assetUrl } from '../../../../../../helpers/Api';
 import { CT_KITEI_MAKOR, MT_TEXT, RTL_LANGUAGES } from '../../../../../../helpers/consts';
 import { formatError, tracePath } from '../../../../../../helpers/utils';
-import { assetUrl } from '../../../../../../helpers/Api';
 import * as shapes from '../../../../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash/Splash';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
@@ -13,21 +13,9 @@ import PDF from '../../../../../shared/PDF/PDF';
 class Sources extends Component {
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
-    indexMap: PropTypes.objectOf(PropTypes.shape({
-      data: PropTypes.object, // content index
-      wip: shapes.WIP,
-      err: shapes.Error,
-    })).isRequired,
-    content: PropTypes.shape({
-      data: PropTypes.string, // actual content (HTML)
-      wip: shapes.WIP,
-      err: shapes.Error,
-    }).isRequired,
-    doc2htmlById: PropTypes.shape({
-      data: PropTypes.string, // actual content (HTML)
-      wip: shapes.WIP,
-      err: shapes.Error,
-    }).isRequired,
+    indexMap: PropTypes.objectOf(shapes.DataWipErr).isRequired,
+    content: shapes.DataWipErr.isRequired,
+    doc2htmlById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
     defaultLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     onContentChange: PropTypes.func.isRequired,
@@ -213,11 +201,11 @@ class Sources extends Component {
       onContentChange(null, null, derived.id);
     } else if (indexMap[selected] && indexMap[selected].data) {
       const data = indexMap[selected].data[language];
-      let name   = data.html;
       if (data.pdf && PDF.isTaas(selected)) {
-        name = data.pdf;
+        // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
+        return;
       }
-      onContentChange(selected, name);
+      onContentChange(selected, data.html);
     }
   };
 

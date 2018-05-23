@@ -5,23 +5,19 @@ import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { Container, Grid, Segment } from 'semantic-ui-react';
 import { translate } from 'react-i18next';
-import { selectors as settings } from '../../../redux/modules/settings';
 
-import { actions as staticActions, selectors as staticSelectors } from '../../../redux/modules/staticFiles';
-import * as shapes from '../../shapes';
 import { formatError } from '../../../helpers/utils';
+import { actions, selectors } from '../../../redux/modules/assets';
+import { selectors as settings } from '../../../redux/modules/settings';
+import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
 
 class LibraryPerson extends Component {
   static propTypes = {
     sourceId: PropTypes.string.isRequired,
     language: PropTypes.string.isRequired,
-    content: PropTypes.shape({
-      data: PropTypes.string, // actual content (HTML)
-      wip: shapes.WIP,
-      err: shapes.Error,
-    }),
-    fetchContent: PropTypes.func.isRequired,
+    content: shapes.DataWipErr,
+    fetchAsset: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -34,14 +30,15 @@ class LibraryPerson extends Component {
   };
 
   componentDidMount() {
-    const { fetchContent, sourceId, language } = this.props;
-    fetchContent(`/persons/${sourceId}-${language}.html`);
+    const { fetchAsset, sourceId, language } = this.props;
+    fetchAsset(`persons/${sourceId}-${language}.html`);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { fetchContent, sourceId, language } = this.props;
-    if (nextProps.sourceId !== sourceId) {
-      fetchContent(`/persons/${nextProps.sourceId}-${language}.html`);
+    const { fetchAsset, sourceId, language } = this.props;
+    if (nextProps.sourceId !== sourceId ||
+      nextProps.language !== language) {
+      fetchAsset(`persons/${nextProps.sourceId}-${nextProps.language}.html`);
     }
   }
 
@@ -54,7 +51,7 @@ class LibraryPerson extends Component {
         <Grid>
           <Grid.Row>
             <Grid.Column>
-              { /* eslint-disable-next-line react/no-danger */ }
+              {/* eslint-disable-next-line react/no-danger */}
               <div className="readble-width" dangerouslySetInnerHTML={{ __html: contentData }} />
             </Grid.Column>
           </Grid.Row>
@@ -80,10 +77,10 @@ class LibraryPerson extends Component {
 export default withRouter(connect(
   (state, ownProps) => ({
     sourceId: ownProps.match.params.id,
-    content: staticSelectors.getContent(state.staticFiles),
+    content: selectors.getAsset(state.assets),
     language: settings.getLanguage(state.settings),
   }),
   dispatch => bindActionCreators({
-    fetchContent: staticActions.fetchStatic,
+    fetchAsset: actions.fetchAsset,
   }, dispatch)
 )(translate()(LibraryPerson)));
