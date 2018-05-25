@@ -23,6 +23,7 @@ import EventUnit from './components/Sections/Events/Unit';
 import EventCollection from './components/Sections/Events/Collection';
 import LibraryHomepage from './components/Sections/Library/Homepage';
 import LibraryContainer from './components/Sections/Library/LibraryContainer';
+import LibraryPerson from './components/Sections/Library/LibraryPerson';
 import SearchResults from './components/Search/SearchResultsContainer';
 import Redirect from './components/Layout/Redirect';
 import HomePage from './components/Sections/Home/Container';
@@ -104,6 +105,7 @@ const routes = [
   },
   { path: 'sources', component: LibraryHomepage },
   { path: 'sources/:id', component: LibraryContainer, options: { ssrData: ssrDataLoaders.libraryPage } },
+  { path: 'persons/:id', component: LibraryPerson, options: { ssrData: ssrDataLoaders.libraryPage } },
   { path: 'books', component: NotImplemented },
   { path: 'topics', component: TopicsContainer },
   { path: 'topics/:id', component: TopicPage },

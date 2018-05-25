@@ -9,9 +9,9 @@ export const assetUrl     = path => `${ASSETS_BACKEND}${path}`;
 export const imaginaryUrl = path => `${IMAGINARY_URL}${path}`;
 
 export class Requests {
-  static get           = path => axios(backendUrl(path));
-  static getAsset      = path => axios(assetUrl(path));
-  static getImaginary  = path => axios(imaginaryUrl(path));
+  static get          = path => axios(backendUrl(path));
+  static getAsset     = path => axios(assetUrl(path));
+  static getImaginary = path => axios(imaginaryUrl(path));
 
   static makeParams = params =>
     `${Object.entries(params)
@@ -75,6 +75,9 @@ class Api {
 
   static tagDashboard = ({ id, language }) => 
     Requests.get(`tags/${id}/dashboard?${Requests.makeParams({ language })}`);  
+    
+  static getAsset = path =>
+    Requests.getAsset(path);
 }
 
 export default Api;

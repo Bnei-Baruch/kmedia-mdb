@@ -20,14 +20,13 @@ import { actions as eventsActions } from './redux/modules/events';
 import { actions as lecturesActions } from './redux/modules/lectures';
 import { actions as seriesActions } from './redux/modules/series';
 import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
-import { actions as sourcesActions, selectors as sourcesSelectors } from './redux/modules/sources';
-import { actions as assetsActions } from './redux/modules/assets';
+import { actions as assetsActions, selectors as assetsSelectors } from './redux/modules/assets';
 import * as mdbSagas from './sagas/mdb';
 import * as filtersSagas from './sagas/filters';
 import * as eventsSagas from './sagas/events';
 import * as seriesSagas from './sagas/series';
 import * as searchSagas from './sagas/search';
-import * as sourcesSagas from './sagas/sources';
+import * as assetsSagas from './sagas/assets';
 import withPagination from './components/Pagination/withPagination';
 
 import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
@@ -178,10 +177,10 @@ export const libraryPage = (store, match) => {
   // TODO: consider firstLeafID
   const sourceID = match.params.id;
 
-  return store.sagaMiddleWare.run(sourcesSagas.fetchIndex, sourcesActions.fetchIndex(sourceID)).done
+  return store.sagaMiddleWare.run(assetsSagas.sourceIndex, assetsActions.sourceIndex(sourceID)).done
     .then(() => {
       const state    = store.getState();
-      const { data } = sourcesSelectors.getIndexById(state.sources)[sourceID];
+      const { data } = assetsSelectors.getSourceIndexById(state.assets)[sourceID];
       if (!data) {
         return;
       }
@@ -199,7 +198,7 @@ export const libraryPage = (store, match) => {
         }
 
         const name = data[language].html;
-        store.dispatch(sourcesActions.fetchContent(sourceID, name));
+        store.dispatch(assetsActions.fetchAsset(`sources/${sourceID}/${name}`));
       }
     });
 };

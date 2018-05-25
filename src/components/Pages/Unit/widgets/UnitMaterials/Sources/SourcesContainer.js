@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { isEmpty } from '../../../../../../helpers/utils';
-import { actions, selectors } from '../../../../../../redux/modules/sources';
+import { selectors } from '../../../../../../redux/modules/sources';
 import { actions as assetsActions, selectors as assetsSelectors } from '../../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
 import * as shapes from '../../../../../shapes';
@@ -13,25 +13,13 @@ import Sources from './Sources';
 class SourcesContainer extends Component {
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
-    indexMap: PropTypes.objectOf(PropTypes.shape({
-      data: PropTypes.object, // content index
-      wip: shapes.WIP,
-      err: shapes.Error,
-    })),
-    content: PropTypes.shape({
-      data: PropTypes.string, // actual content (HTML)
-      wip: shapes.WIP,
-      err: shapes.Error,
-    }),
-    doc2htmlById: PropTypes.shape({
-      data: PropTypes.string, // actual content (HTML)
-      wip: shapes.WIP,
-      err: shapes.Error,
-    }),
+    indexMap: PropTypes.objectOf(shapes.DataWipErr),
+    content: shapes.DataWipErr,
+    doc2htmlById: PropTypes.objectOf(shapes.DataWipErr),
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     fetchIndex: PropTypes.func.isRequired,
-    fetchContent: PropTypes.func.isRequired,
+    fetchAsset: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,
     doc2html: PropTypes.func.isRequired,
   };
@@ -43,7 +31,7 @@ class SourcesContainer extends Component {
       wip: false,
       err: null,
     },
-    doc2htmlById: null
+    doc2htmlById: {},
   };
 
   componentDidMount() {
@@ -69,7 +57,7 @@ class SourcesContainer extends Component {
     if (deriveId) {
       this.props.doc2html(deriveId);
     } else {
-      this.props.fetchContent(id, name);
+      this.props.fetchAsset(`sources/${id}/${name}`);
     }
   };
 
@@ -93,7 +81,7 @@ class SourcesContainer extends Component {
 
 export default connect(
   (state, ownProps) => {
-    const indexById = selectors.getIndexById(state.sources);
+    const indexById = assetsSelectors.getSourceIndexById(state.assets);
     const indexMap  = (ownProps.unit.sources || []).reduce((acc, val) => {
       acc[val] = indexById[val];
       return acc;
@@ -101,7 +89,7 @@ export default connect(
 
     return {
       indexMap,
-      content: selectors.getContent(state.sources),
+      content: assetsSelectors.getAsset(state.assets),
       doc2htmlById: assetsSelectors.getDoc2htmlById(state.assets),
       language: settings.getLanguage(state.settings),
       getSourceById: selectors.getSourceById(state.sources),
@@ -109,7 +97,7 @@ export default connect(
   },
   dispatch => bindActionCreators({
     doc2html: assetsActions.doc2html,
-    fetchIndex: actions.fetchIndex,
-    fetchContent: actions.fetchContent,
+    fetchIndex: assetsActions.sourceIndex,
+    fetchAsset: assetsActions.fetchAsset,
   }, dispatch)
 )(SourcesContainer);
