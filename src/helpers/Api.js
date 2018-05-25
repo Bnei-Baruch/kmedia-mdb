@@ -72,6 +72,9 @@ class Api {
 
   static doc2Html = ({ id }) =>
     Requests.getAsset(`api/doc2html/${id}`);
+
+  static tagDashboard = ({ id, language }) => 
+    Requests.get(`tags/${id}/dashboard?${Requests.makeParams({ language })}`);  
 }
 
 export default Api;
