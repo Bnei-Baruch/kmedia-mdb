@@ -82,6 +82,7 @@ export const Collection = PropTypes.shape(MDBBaseCollection);
 export const LessonCollection = PropTypes.shape({
   ...MDBDenormalizedCollection,
   film_date: PropTypes.string.isRequired,
+  number: PropTypes.number,
 });
 
 export const LessonPart = PropTypes.shape({

@@ -95,7 +95,7 @@ export const actions = {
 const freshStore = () => ({
   cById: {},
   cuById: {},
-  cWindow: [],
+  cWindow: {},
   sById: {},
   wip: {
     units: {},
@@ -158,20 +158,20 @@ const setStatus = (state, action) => {
   case FETCH_LATEST_LESSON_FAILURE:
     wip.lastLesson    = false;
     errors.lastLesson = action.payload.err;
-    break; 
+    break;
 
   case FETCH_WINDOW:
     wip.cWindow = { ...wip.cWindow, [action.payload.id]: true };
-  break;
+    break;
   case FETCH_WINDOW_SUCCESS:
     wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
     errors.cWindow = { ...errors.cWindow, [action.payload.id]: null };
-  break;
+    break;
   case FETCH_WINDOW_FAILURE:
     wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
     errors.cWindow = { ...errors.cWindow, [action.payload.id]: action.payload.err };
-  break;
-  
+    break;
+
   default:
     break;
   }
@@ -194,7 +194,7 @@ const stripOldFiles = (unit) => {
 
   // no old files in unit
   if (!files.some(x => x.mimetype === MEDIA_TYPES.wmv.mime_type ||
-      x.mimetype === MEDIA_TYPES.flv.mime_type)) {
+    x.mimetype === MEDIA_TYPES.flv.mime_type)) {
     return unit;
   }
 
@@ -229,7 +229,7 @@ const onReceiveCollections = (state, action) => {
 
   const cById  = { ...state.cById };
   const cuById = { ...state.cuById };
-  const sById = { ...state.sById };
+  const sById  = { ...state.sById };
   items.forEach((x) => {
     // make a copy of incoming data since we're about to mutate it
     const y = { ...x };
@@ -267,20 +267,6 @@ const onReceiveCollections = (state, action) => {
   };
 };
 
-const onFetchWindow = (state, action) => {
-  const cWindow = action.payload || [];
-
-  if (cWindow.length === 0) {
-    return state;
-  }
-  
-  return {
-    ...state,
-    cWindow
-  };
-};
-
-
 const onReceiveContentUnits = (state, action) => {
   const items = action.payload || [];
 
@@ -290,7 +276,7 @@ const onReceiveContentUnits = (state, action) => {
 
   const cById  = { ...state.cById };
   const cuById = { ...state.cuById };
-  const sById = { ...state.sById };
+  const sById  = { ...state.sById };
   items.forEach((x) => {
     // make a copy of incoming data since we're about to mutate it
     const y = { ...x };
@@ -363,6 +349,14 @@ const onReceiveContentUnits = (state, action) => {
   };
 };
 
+const onFetchWindow = (state, action) => {
+  const { id, data } = action.payload;
+  return {
+    ...state,
+    cWindow: { id, data: (data.collections || []).map(x => x.id) },
+  };
+};
+
 const onSSRPrepare = state => ({
   ...state,
   errors: {
@@ -395,7 +389,7 @@ export const reducer = handleActions({
   [RECEIVE_CONTENT_UNITS]: (state, action) => onReceiveContentUnits(state, action),
   [FETCH_WINDOW]: setStatus,
   [FETCH_WINDOW_SUCCESS]: (state, action) =>
-    setStatus(onFetchWindow(state, { payload: [action.payload.data] }), action),
+    setStatus(onFetchWindow(onReceiveCollections(state, action.payload.data), action), action),
   [FETCH_WINDOW_FAILURE]: setStatus,
 }, freshStore());
 
@@ -407,7 +401,7 @@ const getLastLessonId   = state => state.lastLessonId;
 const getWip            = state => state.wip;
 const getErrors         = state => state.errors;
 const getCollections    = state => state.items;
-const getWindow   = state => state.cWindow;
+const getWindow         = state => state.cWindow;
 
 const getDenormCollection = (state, id) => {
   let c = state.cById[id];

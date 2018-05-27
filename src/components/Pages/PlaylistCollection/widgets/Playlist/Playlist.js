@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Header, Icon, Item, Menu } from 'semantic-ui-react';
+import { Header, Icon, Menu } from 'semantic-ui-react';
 
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, NO_NAME } from '../../../../../helpers/consts';
 import { fromToLocalized } from '../../../../../helpers/date';
@@ -30,13 +30,13 @@ class PlaylistWidget extends Component {
   };
 
   renderHeader() {
-    const { playlist, selected, t } = this.props;
+    const { playlist, t, nextLink, prevLink, language  } = this.props;
     const { collection }            = playlist;
 
     let content = collection.name;
     if (!content) {
       const ct = collection.content_type === CT_SPECIAL_LESSON ? CT_DAILY_LESSON : collection.content_type;
-      content  = `${t(`constants.content-types.${ct}`)} - ${(selected + 1)}/${collection.content_units.length}`;
+      content  = `${t(`constants.content-types.${ct}`)}${collection.number && collection.number !== 1 ? ` #${collection.number}` : ''}`;
     }
 
     let subheader = '';
@@ -46,46 +46,43 @@ class PlaylistWidget extends Component {
       subheader = fromToLocalized(collection.start_date, collection.end_date);
     }
 
-    return <Header inverted as="h1" content={content} subheader={subheader} />;
-  }
-
-  renderNextPrevLinks() {
-    const { nextLink, prevLink, t, language } = this.props;
     const langDir = getLanguageDirection(language);
 
     let prevLinkHtml;
     if (prevLink) {
       prevLinkHtml = (
-        <Item
-          as={Link}
+        <Link
           to={prevLink}
-          className="button"
+          className="avbox__playlist-prev-button"
           title={t('buttons.previous')}
         >
           <Icon name={langDir === 'ltr' ? 'backward' : 'forward'} />
-        </Item>
+        </Link>
       );
     }
 
     let nextLinkHtml;
     if (nextLink) {
       nextLinkHtml = (
-        <Item
-          as={Link}
+        <Link
           to={nextLink}
-          className="button"
+          className="avbox__playlist-next-button"
           title={t('buttons.next')}
         >
           <Icon name={langDir === 'ltr' ? 'forward' : 'backward'} />
-        </Item>
+        </Link>
       );
     }
 
     return (
-      <div className="avbox__playlist-next-prev-buttons">
-        {prevLinkHtml}
-        {nextLinkHtml}
-      </div>
+      <Header inverted as="h1">
+        {content}
+        <Header.Subheader>
+          {prevLinkHtml}
+          {subheader}
+          {nextLinkHtml}
+        </Header.Subheader>
+      </Header>
     );
   }
 
@@ -94,7 +91,6 @@ class PlaylistWidget extends Component {
 
     return (
       <div className="avbox__playlist-view">
-        {this.renderNextPrevLinks()}
         <Menu vertical fluid size="small">
           {
             playlist.items.map((playableItem, index) => (

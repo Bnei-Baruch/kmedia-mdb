@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
+import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, DATE_FORMAT } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -21,7 +23,7 @@ export class PlaylistCollectionContainer extends Component {
     fetchCollection: PropTypes.func.isRequired,
     fetchUnit: PropTypes.func.isRequired,
     shouldRenderHelmet: PropTypes.bool,
-    fetchWindow: PropTypes.func,
+    fetchWindow: PropTypes.func.isRequired,
     cWindow: PropTypes.any,
   };
 
@@ -71,7 +73,10 @@ export class PlaylistCollectionContainer extends Component {
       fetchCollection(id);
     }
 
-    if (collection) {
+    // next prev links only for lessons
+    if (collection &&
+      (collection.content_type === CT_DAILY_LESSON ||
+        collection.content_type === CT_SPECIAL_LESSON)) {
       this.getNextPrevLinks(props);
     }
   };
@@ -80,53 +85,52 @@ export class PlaylistCollectionContainer extends Component {
     const { match, wip, cWindow } = props;
     const { id }                  = match.params;
 
-    if (!cWindow || cWindow.length === 0) {
+    // empty or no window
+    if (!cWindow.data || cWindow.data.length === 0) {
       if (!wip.cWindow) {
+        // no wip, go fetch
         this.getWindow(props);
       }
       return;
     }
 
-    const result          = cWindow[0];
-    const cWindowId       = result.id;
-    const { collections } = result.data;
-    const curIndex        = collections.findIndex(x => (x.id === id));
-    if (id !== cWindowId && (curIndex === 0 || curIndex === collections.length - 1) && !wip.cWindow[id]) {
+    const { id: cWindowId, data: collections } = cWindow;
+
+    const curIndex = collections.indexOf(id);
+    if (id !== cWindowId &&
+      (curIndex <= 0 || curIndex === collections.length - 1) &&
+      !wip.cWindow[id]) {
+      // it's not our window,
+      // we're not in it (at least not in the middle, we could reuse it otherwise)
+      // and our window is not wip
       this.getWindow(props);
     } else {
+      // it's a good window, extract the previous and next links
       const prevCollection = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
-      const prevLink       = prevCollection ? canonicalLink(prevCollection) : null;
+      const prevLink       = prevCollection ? canonicalLink({
+        id: prevCollection,
+        content_type: CT_DAILY_LESSON
+      }) : null;
+
       const nextCollection = curIndex > 0 ? collections[curIndex - 1] : null;
-      const nextLink       = nextCollection ? canonicalLink(nextCollection) : null;
+      const nextLink       = nextCollection ? canonicalLink({
+        id: nextCollection,
+        content_type: CT_DAILY_LESSON
+      }) : null;
+
       this.setState({ nextLink, prevLink });
     }
   };
 
   getWindow = (props) => {
-    const { match, collection, fetchWindow } = props;
-    const { id }                             = match.params;
-    if (!fetchWindow) {
-      return;
-    }
-    const fromDate = new Date(collection.film_date);
-    fromDate.setDate(fromDate.getDate() - 5);
-    const toDate = new Date(collection.film_date);
-    toDate.setDate(toDate.getDate() + 5);
-    fetchWindow({ id, start_date: this.formatDate(fromDate), end_date: this.formatDate(toDate) });
-  };
+    const { collection, fetchWindow } = props;
 
-  formatDate = (date) => {
-    let d     = new Date(date);
-    let month = '' + (d.getMonth() + 1);
-    let day   = '' + d.getDate();
-    let year  = d.getFullYear();
-    if (month.length < 2) {
-      month = '0' + month;
-    }
-    if (day.length < 2) {
-      day = '0' + day;
-    }
-    return [year, month, day].join('-');
+    const filmDate = moment.utc(collection.film_date);
+    fetchWindow({
+      id: collection.id,
+      start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
+      end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
+    });
   };
 
   render() {

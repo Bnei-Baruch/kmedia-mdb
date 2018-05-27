@@ -111,7 +111,7 @@ export const renderCollection = (collection, t) => {
       </Table.Cell>
       <Table.Cell>
         <Link className="index__title" to={canonicalLink(collection)}>
-          {t(CT_DAILY_LESSON_I18N_KEY)}
+          {`${t(CT_DAILY_LESSON_I18N_KEY)}${collection.number && collection.number !== 1 ? ` #${collection.number}` : ''}`}
         </Link>
       </Table.Cell>
     </Table.Row>

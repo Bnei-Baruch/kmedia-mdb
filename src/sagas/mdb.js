@@ -38,7 +38,7 @@ export function* fetchWindow(action) {
       language,
     };
     const { data } = yield call(Api.lessons, args);
-    yield put(actions.fetchWindowSuccess(id, { id, data }));
+    yield put(actions.fetchWindowSuccess(id, data));
   } catch (err) {
     yield put(actions.fetchWindowFailure(id, err));
   }
