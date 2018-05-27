@@ -216,7 +216,8 @@
       "children-lessons": "Уроки для дітей"
     },
     "list": {
-      "related": "Відносяться до"
+      "related": "Відносяться до",
+      "number": "№ "
     },
     "unit": {
       "recommended": {

@@ -36,7 +36,7 @@ class PlaylistWidget extends Component {
     let content = collection.name;
     if (!content) {
       const ct = collection.content_type === CT_SPECIAL_LESSON ? CT_DAILY_LESSON : collection.content_type;
-      content  = `${t(`constants.content-types.${ct}`)}${collection.number ? ` #${collection.number}` : ''}`;
+      content  = `${t(`constants.content-types.${ct}`)}${collection.number ? ` ${t('lessons.list.number')}${collection.number}` : ''}`;
     }
 
     let subheader = '';
