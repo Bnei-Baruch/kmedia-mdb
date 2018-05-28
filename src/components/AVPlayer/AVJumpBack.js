@@ -29,7 +29,7 @@ class AVJumpBack extends Component {
   isBack = () => this.props.jumpSpan < 0;
 
   render() {
-    const backwardText = this.props.jumpSpan < 0 ? '-' + this.props.jumpSpan + 's' : '';
+    const backwardText = this.props.jumpSpan < 0 ? this.props.jumpSpan + 's' : '';
     const farwardText = this.props.jumpSpan > 0 ? '+' + this.props.jumpSpan + 's' : '';    
     return (
       <button type="button" tabIndex="-1" onClick={this.onJumpBack}>
