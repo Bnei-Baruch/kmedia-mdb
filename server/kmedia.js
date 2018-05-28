@@ -45,7 +45,7 @@ export async function kmediaContainer(req, res, next) {
 
 export async function kmediaSearch(req, res, next) {
   console.log('kmediaSearch', req.query);
-  const { search } = req.query || {};
+  const { search } = req.query || { search: {} };
 
   if (search.query_string) {
     // free text search
