@@ -18,7 +18,7 @@ const LANG_MAP = {
 
 function kmRedirect(req, res, path) {
   const lang = LANG_MAP[req.params.lang || ''];
-  res.redirect(301, `${BASE_URL}${lang}${path}`);
+  res.redirect(301, `${BASE_URL}${lang}${path === '/' && lang === '' ? '' : path}`);
 }
 
 export async function kmediaContainer(req, res, next) {
