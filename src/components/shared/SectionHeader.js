@@ -7,11 +7,11 @@ import Helmets from './Helmets';
 const SectionHeader = (props) => {
   const { section, submenuItems, t } = props;
 
-  const sectionHeader = t(`${section}.header.text`);
-  const sectionSubText =  t(`${section}.header.subtext`);
+  const sectionHeader  = t(`${section}.header.text`);
+  const sectionSubText = t(`${section}.header.subtext`);
   return (
     <div className="section-header">
-      {/* TODO: dont use image fixed url*/}
+      {/* TODO: dont use image fixed url */}
       <Helmets.Basic
         title={sectionHeader}
         description={sectionSubText}
@@ -40,7 +40,7 @@ const SectionHeader = (props) => {
             Array.isArray(submenuItems) && submenuItems.length > 0 ?
               <Grid.Row>
                 <Grid.Column>
-                  <Menu tabular className="section-header__menu" size="huge" children={submenuItems} />
+                  <Menu tabular className="section-header__menu" size="huge">{submenuItems}</Menu>
                 </Grid.Column>
               </Grid.Row> :
               null

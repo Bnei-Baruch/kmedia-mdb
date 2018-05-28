@@ -14,7 +14,7 @@ class Kabbalist extends Component {
   };
 
   static defaultProps = {
-    portrait: '',
+    portrait: undefined,
   };
 
   renderBook = (book) => {
@@ -35,8 +35,7 @@ class Kabbalist extends Component {
   };
 
   render() {
-    const { author, getSourceById, portrait }              = this.props;
-    const { name, full_name: fullName, children: volumes } = author;
+    const { author: { name, full_name: fullName, children: volumes }, getSourceById, portrait } = this.props;
 
     let displayName = fullName || name;
     if (fullName && name) {

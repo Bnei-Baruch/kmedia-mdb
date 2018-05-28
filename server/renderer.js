@@ -10,9 +10,10 @@ import moment from 'moment';
 import serialize from 'serialize-javascript';
 import UAParser from 'ua-parser-js';
 import localStorage from 'mock-local-storage';
+import { parse as cookieParse } from 'cookie';
 
 import routes from '../src/routes';
-import { LANG_UKRAINIAN } from '../src/helpers/consts';
+import { COOKIE_CONTENT_LANG, LANG_UKRAINIAN } from '../src/helpers/consts';
 import { getLanguageDirection } from '../src/helpers/i18n-utils';
 import { getLanguageFromPath } from '../src/helpers/url';
 import createStore from '../src/redux/createStore';
@@ -59,6 +60,8 @@ export default function serverRender(req, res, next, htmlData, criticalCSS) {
     const store = createStore(initialState, history);
 
     store.dispatch(settings.setLanguage(language));
+    const cookies = cookieParse(req.headers.cookie || { COOKIE_CONTENT_LANG: language });
+    store.dispatch(settings.setContentLanguage(cookies[COOKIE_CONTENT_LANG]));
 
     const context = {
       req,

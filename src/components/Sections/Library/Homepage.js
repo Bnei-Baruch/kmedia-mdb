@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import { Container, Divider, Table } from 'semantic-ui-react';
 
-import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as sources } from '../../../redux/modules/sources';
 import SectionHeader from '../../shared/SectionHeader';
 import Kabbalist from './Kabbalist';
 import portraitBS from '../../../images/portrait_bs.png';
@@ -15,18 +13,18 @@ import portraitML from '../../../images/portrait_ml.png';
 
 import { isEmpty } from '../../../helpers/utils';
 
+const portraits = { bs: portraitBS, rb: portraitRB, ml: portraitML };
+
 class Homepage extends Component {
   static propTypes = {
     roots: PropTypes.arrayOf(PropTypes.string).isRequired,
     getSourceById: PropTypes.func.isRequired,
   };
 
-  render() {
+  kabbalists = () => {
     const { roots, getSourceById } = this.props;
-    const portraits                = [portraitBS, portraitRB, portraitML];
-    let portraitIndex              = 0;
 
-    const kabbalists = roots.map((k) => {
+    return roots.map((k) => {
       const author = getSourceById(k);
 
       return isEmpty(author.children) ?
@@ -35,10 +33,12 @@ class Homepage extends Component {
           key={k}
           author={author}
           getSourceById={getSourceById}
-          portrait={portraits[portraitIndex++]}
+          portrait={portraits[k]}
         />;
     });
+  };
 
+  render() {
     return (
       <div>
         <SectionHeader section="sources-library" />
@@ -46,7 +46,7 @@ class Homepage extends Component {
         <Container className="padded">
           <Table basic="very" className="index-list sources__authors">
             <Table.Body>
-              {kabbalists}
+              {this.kabbalists()}
             </Table.Body>
           </Table>
         </Container>
@@ -57,12 +57,7 @@ class Homepage extends Component {
 
 export default connect(
   state => ({
-    language: settings.getLanguage(state.settings),
-    indexMap: sources.getIndexById(state.sources),
     roots: sources.getRoots(state.sources),
     getSourceById: sources.getSourceById(state.sources),
-  }),
-  dispatch => bindActionCreators({
-    fetchIndex: sourceActions.fetchIndex,
-  }, dispatch)
+  })
 )(translate()(Homepage));

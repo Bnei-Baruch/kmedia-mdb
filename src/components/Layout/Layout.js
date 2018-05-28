@@ -12,7 +12,9 @@ import WrappedOmniBox from '../Search/OmniBox';
 import GAPageView from './GAPageView/GAPageView';
 import MenuItems from './MenuItems';
 import Footer from './Footer';
+import TopMost from './TopMost';
 import UILanguage from './UILanguage';
+import ContentLanguage from './ContentLanguage';
 import logo from '../../images/logo.svg';
 
 class Layout extends Component {
@@ -22,19 +24,9 @@ class Layout extends Component {
     t: PropTypes.func.isRequired,
   };
 
-  state = {
+  state            = {
     sidebarActive: false
   };
-
-  componentDidMount() {
-    document.addEventListener('click', this.clickOutside, true);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.clickOutside, true);
-  }
-
-  // Required for handling outside sidebar on click outside sidebar,
   // i.e, main, header of footer.
   clickOutside     = (e) => {
     if (this.state &&
@@ -46,7 +38,7 @@ class Layout extends Component {
   };
 
   toggleSidebar    = () => this.setState({ sidebarActive: !this.state.sidebarActive });
-
+  // Required for handling outside sidebar on click outside sidebar,
   closeSidebar     = () => this.setState({ sidebarActive: false });
 
   shouldShowSearch = (location) => {
@@ -60,6 +52,14 @@ class Layout extends Component {
     }
     return true;
   };
+
+  componentDidMount() {
+    document.addEventListener('click', this.clickOutside, true);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.clickOutside, true);
+  }
 
   render() {
     const { t, location, route } = this.props;
@@ -94,6 +94,8 @@ class Layout extends Component {
               }
             </Menu.Item>
             <Menu.Menu position="right">
+              <TopMost t={t} />
+              <ContentLanguage t={t} />
               <UILanguage t={t} location={location} />
             </Menu.Menu>
           </Menu>

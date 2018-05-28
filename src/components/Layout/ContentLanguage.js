@@ -3,17 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Dropdown, Flag, } from 'semantic-ui-react';
 
-import { COOKIE_UI_LANG, LANG_UI_LANGUAGES, LANGUAGES } from '../../helpers/consts';
+import { COOKIE_CONTENT_LANG, LANGUAGES } from '../../helpers/consts';
 import Link from '../Language/MultiLanguageLink';
 import { selectors as settings } from '../../redux/modules/settings';
-import * as shapes from '../shapes';
 
-class UILanguage extends Component {
+class ContentLanguage extends Component {
   static propTypes = {
-    language: PropTypes.string.isRequired,
-    // We need dependency on location in order to change Link every time url changes
-    // eslint-disable-next-line react/no-unused-prop-types
-    location: shapes.HistoryLocation.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -22,20 +18,20 @@ class UILanguage extends Component {
       return;
     }
     const expires   = new Date(Date.now() + (365 * 24 * 60 * 60 * 1000)).toUTCString();
-    document.cookie = `${COOKIE_UI_LANG}=${language}; path=/; expires=${expires}`;
+    document.cookie = `${COOKIE_CONTENT_LANG}=${language}; path=/; expires=${expires}`;
   };
 
   render() {
-    const { t, language } = this.props;
+    const { t, contentLanguage } = this.props;
 
     return (
-      <Dropdown item text={t(`constants.languages.${language}`)}>
+      <Dropdown item scrolling text={t(`constants.languages.${contentLanguage}`)}>
         <Dropdown.Menu>
           {
-            LANG_UI_LANGUAGES.map(x => (
+            Object.values(LANGUAGES).map(({ value: x, flag, name = t(`constants.languages.${x}`) }) => (
               <Dropdown.Item key={x} as={Link} onClick={() => this.storeUILanguage(x)} language={`${x}`}>
-                <Flag name={LANGUAGES[x].flag} />
-                {t(`constants.languages.${x}`)}
+                <Flag name={flag} />
+                {name}
               </Dropdown.Item>
             ))
           }
@@ -47,6 +43,6 @@ class UILanguage extends Component {
 
 export default connect(
   state => ({
-    language: settings.getLanguage(state.settings),
+    contentLanguage: settings.getContentLanguage(state.settings),
   })
-)(UILanguage);
+)(ContentLanguage);
