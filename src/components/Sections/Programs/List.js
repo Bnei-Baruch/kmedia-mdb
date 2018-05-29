@@ -7,6 +7,7 @@ import { CT_VIDEO_PROGRAM_CHAPTER, NO_NAME } from '../../../helpers/consts';
 import { sectionThumbnailFallback } from '../../../helpers/images';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { canonicalLink } from '../../../helpers/links';
+import { ellipsize } from '../../../helpers/strings';
 import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
 import {
   mapDispatch as baseMapDispatch,
@@ -58,6 +59,13 @@ export const renderUnit = (unit, t) => {
         <Link className="index__title" to={link}>
           {unit.name || NO_NAME}
         </Link>
+        {
+          unit.description ?
+            <div className="index__description mobile-hidden">
+              {ellipsize(unit.description)}
+            </div>
+            : null
+        }
         <List horizontal divided link className="index__collections" size="tiny">
           <List.Item>
             <List.Header>{t('programs.list.episode_from')}</List.Header>
