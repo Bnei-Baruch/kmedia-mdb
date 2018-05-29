@@ -11,6 +11,7 @@ import {
   CT_WOMEN_LESSON,
   MEDIA_TYPES
 } from './helpers/consts';
+import { canonicalCollection } from './helpers/utils';
 import { selectors as settingsSelectors } from './redux/modules/settings';
 import { actions as mdbActions, selectors as mdbSelectors } from './redux/modules/mdb';
 import { actions as filtersActions } from './redux/modules/filters';
@@ -39,9 +40,17 @@ export const home = (store, match) => {
 };
 
 export const cuPage = (store, match) => {
-  // TODO: fetch recommended content data as well
-  store.dispatch(mdbActions.fetchUnit(match.params.id));
-  return Promise.resolve(null);
+  const cuID = match.params.id;
+  return store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(cuID)).done
+    .then(() => {
+      const state = store.getState();
+
+      const unit = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
+      const c    = canonicalCollection(unit);
+      if (c) {
+        store.dispatch(mdbActions.fetchCollection(c.id));
+      }
+    });
 };
 
 const getExtraFetchParams = (ns, collectionID) => {
@@ -99,7 +108,6 @@ export const collectionPage = ns => (store, match) => {
 };
 
 export const playlistCollectionPage = (store, match) => {
-  // TODO: fetch recommended content data as well
   const cID = match.params.id;
   return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done
     .then(() => {
@@ -113,7 +121,6 @@ export const playlistCollectionPage = (store, match) => {
 };
 
 export const latestLesson = store =>
-  // TODO: fetch recommended content data as well
   store.sagaMiddleWare.run(mdbSagas.fetchLatestLesson).done
     .then(() => {
       // TODO: replace this with a single call to backend with all IDs
@@ -204,7 +211,6 @@ export const libraryPage = (store, match) => {
 };
 
 export const publicationCUPage = (store, match) => {
-  // TODO: fetch recommended content data as well
   const cuID = match.params.id;
   return store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(cuID)).done
     .then(() => {
@@ -213,7 +219,7 @@ export const publicationCUPage = (store, match) => {
       let language = null;
       const uiLang = settingsSelectors.getLanguage(state.settings);
 
-      const unit      = mdbSelectors.getUnitById(state.mdb, cuID);
+      const unit      = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
       const textFiles = (unit.files || []).filter(x => x.type === 'text' && x.mimetype !== MEDIA_TYPES.html.mime_type);
       const languages = uniq(textFiles.map(x => x.language));
       if (languages.length > 0) {
@@ -223,6 +229,11 @@ export const publicationCUPage = (store, match) => {
       if (language) {
         const selected = textFiles.find(x => x.language === language) || textFiles[0];
         store.dispatch(assetsActions.doc2html(selected.id));
+      }
+
+      const c = canonicalCollection(unit);
+      if (c) {
+        store.dispatch(mdbActions.fetchCollection(c.id));
       }
     });
 };
