@@ -16,6 +16,7 @@ import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
 import { filtersTransformer } from '../../filters';
+import { stringify as urlSearchStringify } from '../../helpers/url';
 import * as shapes from '../shapes';
 
 const CATEGORIES_ICONS = {
@@ -125,17 +126,21 @@ export class OmniBox extends Component {
     } else if (category === 'tags') {
       this.props.updateQuery('');
       const path = this.props.getTagPath(data.result.key).map(p => p.id)
-      const queryValue = path.join('_');
-      const queryKey = "topic=";
+      const query = filtersTransformer.toQueryParams([
+        { name: 'topics-filter', values: [path], queryKey: 'topic' }
+      ]);
+      const queryString = urlSearchStringify(query);
       this.props.addFilterValue('search', 'topics-filter', path);
-      this.doSearch('', queryKey.concat(queryValue));
+      this.doSearch('', queryString);
     } else if (category === 'sources') {
       this.props.updateQuery('');
       const path = this.props.getSourcePath(data.result.key).map(p => p.id)
-      const queryValue = path.join('_');
-      const queryKey = "source=";
+      const query = filtersTransformer.toQueryParams([
+        { name: 'sources-filter', values: [path], queryKey: 'source' }
+      ]);
+      const queryString = urlSearchStringify(query);
       this.props.setFilterValue('search', 'sources-filter', path);
-      this.doSearch('', queryKey.concat(queryValue));
+      this.doSearch('', queryString);
     }
     // Currently ignoring anything else.
   };
