@@ -87,7 +87,9 @@
     "video": "Video",
     "more": "Mas",
     "copy-link": "Copiar enlace",
-    "search": "Buscar"
+    "search": "Buscar",
+    "previous": "Anterior",
+    "next": "Siguiente"
   },
   "player": {
     "messages": {
@@ -205,7 +207,8 @@
       "subtext": "Durante miles de años, los cabalistas estudiaban diariamente, para su propio desarrollo espiritual y para el progreso espiritual de la humanidad. Hoy en día, continúan la misma tradición los cabalistas de \"Benei Baruj\", quienes estudian a diario a partir de las auténticas escrituras cabalísticas, estudios acompañados del comentario y la instrucción del Rav Dr. Michael Laitman"
     },
     "list": {
-      "related": "Relacionado con"
+      "related": "Relacionado con",
+      "number": "#"
     },
     "unit": {
       "recommended": {

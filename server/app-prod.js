@@ -5,6 +5,7 @@ import helmet from 'helmet';
 
 import * as middleware from './middleware';
 import serverRender from './renderer';
+import { kmediaContainer, kmediaSearch } from './kmedia';
 
 const indexHtml   = fs.readFileSync(path.resolve(__dirname, '..', 'build', 'index.html'), 'utf8');
 const criticalCSS = fs.readFileSync(path.resolve(__dirname, '..', 'build', 'critical.css'), 'utf8');
@@ -79,6 +80,9 @@ router.use(express.static(
   path.resolve(__dirname, '..', 'build'),
   { maxAge: '30d' },
 ));
+
+router.use('/:lang(en|he|ru|es|de|tr|ua)?/ui/:cnID', kmediaContainer);
+router.use('/:lang(en|he|ru|es|de|tr|ua)?/ui/?', kmediaSearch);
 
 // anything else should act as our index page
 // react-router will take care of everything

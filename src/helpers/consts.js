@@ -121,11 +121,6 @@ export const FLAG_TO_LANGUAGE = Object.values(LANGUAGES).reduce((acc, language) 
   return acc;
 }, {});
 
-export const LANGUAGE_TO_LOCALE = Object.values(LANGUAGES).reduce((acc, language) => {
-  acc[language.value] = language.locale;
-  return acc;
-}, {});
-
 export const ALL_LANGUAGES = [
   LANG_HEBREW,
   LANG_ENGLISH,

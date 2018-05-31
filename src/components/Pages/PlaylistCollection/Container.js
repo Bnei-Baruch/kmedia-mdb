@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
+import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, DATE_FORMAT } from '../../../helpers/consts';
+import { canonicalLink } from '../../../helpers/links';
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
@@ -19,13 +22,20 @@ export class PlaylistCollectionContainer extends Component {
     PlaylistComponent: PropTypes.func,
     fetchCollection: PropTypes.func.isRequired,
     fetchUnit: PropTypes.func.isRequired,
-    shouldRenderHelmet: PropTypes.bool
+    shouldRenderHelmet: PropTypes.bool,
+    fetchWindow: PropTypes.func.isRequired,
+    cWindow: PropTypes.any,
   };
 
   static defaultProps = {
     collection: null,
     PlaylistComponent: undefined,
     shouldRenderHelmet: true,
+  };
+
+  state = {
+    nextLink: null,
+    prevLink: null,
   };
 
   componentDidMount() {
@@ -62,6 +72,65 @@ export class PlaylistCollectionContainer extends Component {
     } else if (!fetchedSingle && !(wip.collections[id] || errors.collections[id])) {
       fetchCollection(id);
     }
+
+    // next prev links only for lessons
+    if (collection &&
+      (collection.content_type === CT_DAILY_LESSON ||
+        collection.content_type === CT_SPECIAL_LESSON)) {
+      this.getNextPrevLinks(props);
+    }
+  };
+
+  getNextPrevLinks = (props) => {
+    const { match, wip, cWindow } = props;
+    const { id }                  = match.params;
+
+    // empty or no window
+    if (!cWindow.data || cWindow.data.length === 0) {
+      if (!wip.cWindow) {
+        // no wip, go fetch
+        this.getWindow(props);
+      }
+      return;
+    }
+
+    const { id: cWindowId, data: collections } = cWindow;
+
+    const curIndex = collections.indexOf(id);
+    if (id !== cWindowId &&
+      (curIndex <= 0 || curIndex === collections.length - 1) &&
+      !wip.cWindow[id]) {
+      // it's not our window,
+      // we're not in it (at least not in the middle, we could reuse it otherwise)
+      // and our window is not wip
+      this.getWindow(props);
+    } else {
+      // it's a good window, extract the previous and next links
+      const prevCollection = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
+      const prevLink       = prevCollection ? canonicalLink({
+        id: prevCollection,
+        content_type: CT_DAILY_LESSON
+      }) : null;
+
+      const nextCollection = curIndex > 0 ? collections[curIndex - 1] : null;
+      const nextLink       = nextCollection ? canonicalLink({
+        id: nextCollection,
+        content_type: CT_DAILY_LESSON
+      }) : null;
+
+      this.setState({ nextLink, prevLink });
+    }
+  };
+
+  getWindow = (props) => {
+    const { collection, fetchWindow } = props;
+
+    const filmDate = moment.utc(collection.film_date);
+    fetchWindow({
+      id: collection.id,
+      start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
+      end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
+    });
   };
 
   render() {
@@ -69,8 +138,8 @@ export class PlaylistCollectionContainer extends Component {
 
     // We're wip / err if some request is wip / err
     const { id } = match.params;
-    let wip  = wipMap.collections[id];
-    let err  = errors.collections[id];
+    let wip      = wipMap.collections[id];
+    let err      = errors.collections[id];
     if (collection) {
       wip = wip || (Array.isArray(collection.cuIDs) && collection.cuIDs.some(cuID => wipMap.units[cuID]));
       if (!err) {
@@ -78,6 +147,8 @@ export class PlaylistCollectionContainer extends Component {
         err                 = cuIDwithError ? errors.units[cuIDwithError] : null;
       }
     }
+
+    const { nextLink, prevLink } = this.state;
 
     return (
       <Page
@@ -87,6 +158,8 @@ export class PlaylistCollectionContainer extends Component {
         language={language}
         PlaylistComponent={PlaylistComponent}
         shouldRenderHelmet={shouldRenderHelmet}
+        nextLink={nextLink}
+        prevLink={prevLink}
       />
     );
   }
@@ -94,12 +167,14 @@ export class PlaylistCollectionContainer extends Component {
 
 function mapState(state, props) {
   const collection = selectors.getDenormCollectionWUnits(state.mdb, props.match.params.id);
-
+  const language   = settings.getLanguage(state.settings);
   return {
     collection,
+    language,
     wip: selectors.getWip(state.mdb),
     errors: selectors.getErrors(state.mdb),
-    language: settings.getLanguage(state.settings),
+    items: selectors.getCollections(state.mdb),
+    cWindow: selectors.getWindow(state.mdb),
   };
 }
 
@@ -107,6 +182,7 @@ function mapDispatch(dispatch) {
   return bindActionCreators({
     fetchCollection: actions.fetchCollection,
     fetchUnit: actions.fetchUnit,
+    fetchWindow: actions.fetchWindow,
   }, dispatch);
 }
 
