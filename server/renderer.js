@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { URL } from 'url';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
@@ -6,14 +7,16 @@ import { createMemoryHistory } from 'history';
 import { Helmet } from 'react-helmet';
 import pick from 'lodash/pick';
 import moment from 'moment';
+import qs from 'qs';
 import serialize from 'serialize-javascript';
 import UAParser from 'ua-parser-js';
 import localStorage from 'mock-local-storage';
 
 import routes from '../src/routes';
-import { LANG_UKRAINIAN } from '../src/helpers/consts';
-import { getLanguageDirection } from '../src/helpers/i18n-utils';
+import { LANG_UI_LANGUAGES, LANG_UKRAINIAN } from '../src/helpers/consts';
+import { getLanguageDirection, getLanguageLocaleWORegion } from '../src/helpers/i18n-utils';
 import { getLanguageFromPath } from '../src/helpers/url';
+import { isEmpty } from '../src/helpers/utils';
 import createStore from '../src/redux/createStore';
 import { actions as settings } from '../src/redux/modules/settings';
 import { actions as ssr } from '../src/redux/modules/ssr';
@@ -23,10 +26,88 @@ import i18nnext from './i18nnext';
 // eslint-disable-next-line no-unused-expressions
 localStorage; // DO NOT REMOVE - the import above does all the work
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+// see https://yoast.com/rel-canonical/
+function canonicalLink(req, lang) {
+  // strip ui language from path
+  let cPath = req.originalUrl;
+  if (lang && cPath.startsWith(`/${lang}`)) {
+    cPath = cPath.substring(3);
+  }
+
+  const s = cPath.split('?');
+
+  // start with path part
+  cPath = s[0];
+
+  // strip leading slash as it comes from BASE_URL
+  if (cPath.startsWith('/')) {
+    cPath = cPath.substring(1);
+  }
+
+  // strip trailing slash as we don't use those
+  if (cPath.endsWith('/')) {
+    cPath = cPath.substring(0, cPath.length - 1);
+  }
+
+  // clean content invariant keys from search part (query)
+  if (s.length > 1) {
+    const q = qs.parse(s[1]);
+    delete q.sstart;      // player slice start
+    delete q.send;        // player slice end
+    delete q.language;    // content language
+
+    // This one is conceptually wrong.
+    // As changing the active part in a playlist would most definitely
+    // change the page's content.
+    // Most of the content would seem to duplicate the CU page.
+    // However, it's logically not easy and some units may not
+    // have their own CU page so we skip it.
+    delete q.ap;          // playlist active part
+
+    if (!isEmpty(q)) {
+      cPath = `${cPath}?${qs.stringify(q)}`;
+    }
+  }
+
+  return `<link rel="canonical" href="${BASE_URL}${cPath}" />`;
+}
+
+// see https://yoast.com/hreflang-ultimate-guide/
+function alternateLinks(req, lang) {
+  // strip ui language from path
+  let aPath = req.originalUrl;
+  if (lang && aPath.startsWith(`/${lang}`)) {
+    aPath = aPath.substring(3);
+  }
+
+  // strip leading slash as it comes from BASE_URL
+  if (aPath.startsWith('/')) {
+    aPath = aPath.substring(1);
+  }
+
+  return LANG_UI_LANGUAGES
+    .map((x) => {
+      const l = getLanguageLocaleWORegion(x);
+      return `<link rel="alternate" href="${BASE_URL}${x}/${aPath}" hreflang="${l}" />`;
+    })
+    .join('');
+}
+
 export default function serverRender(req, res, next, htmlData, criticalCSS) {
   console.log('serverRender', req.originalUrl);
 
-  const language = getLanguageFromPath(req.originalUrl);
+  const result = getLanguageFromPath(req.originalUrl, req.headers);
+  if (result.redirect) {
+    const newUrl = `${BASE_URL}${result.language}${req.originalUrl}`;
+    console.log(`serverRender: redirect (${result.language}) => ${newUrl}`);
+    res.writeHead(307, { Location: newUrl });
+    res.end();
+    return;
+  }
+
+  const { language } = result;
   moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
   const i18nServer = i18nnext.cloneInstance();
   i18nServer.changeLanguage(language, (err) => {
@@ -125,7 +206,7 @@ export default function serverRender(req, res, next, htmlData, criticalCSS) {
               const html = htmlData
                 .replace(/<html lang="en">/, `<html ${helmet.htmlAttributes.toString()} >`)
                 .replace(/<title>.*<\/title>/, helmet.title.toString())
-                .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}<style type="text/css">${criticalCSS}</style></head>`)
+                .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, language)}${alternateLinks(req, language)}<style type="text/css">${criticalCSS}</style></head>`)
                 .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
                 .replace(/semantic_v2.min.css/g, `semantic_v2${cssDirection}.min.css`)
                 .replace(/<div id="root"><\/div>/, rootDiv);

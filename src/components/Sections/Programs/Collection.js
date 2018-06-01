@@ -4,6 +4,7 @@ import { Table } from 'semantic-ui-react';
 import { NO_NAME } from '../../../helpers/consts';
 import { sectionThumbnailFallback } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
+import { ellipsize } from '../../../helpers/strings';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
 import Collection from '../../Pages/Collection/Container';
@@ -28,6 +29,13 @@ export const renderUnit = (unit, t) => {
         <Link className="index__title" to={link}>
           {unit.name || NO_NAME}
         </Link>
+        {
+          unit.description ?
+            <div className="index__description mobile-hidden">
+              {ellipsize(unit.description)}
+            </div>
+            : null
+        }
       </Table.Cell>
     </Table.Row>
   );

@@ -89,7 +89,9 @@
     "video": "Відео",
     "more": "Ще",
     "copy-link": "Копіювати лінк",
-    "search": "Пошук"
+    "search": "Пошук",
+    "previous": "Попередній",
+    "next": "Наступний"
   },
   "player": {
     "messages": {
@@ -214,7 +216,8 @@
       "children-lessons": "Уроки для дітей"
     },
     "list": {
-      "related": "Відносяться до"
+      "related": "Відносяться до",
+      "number": "№ "
     },
     "unit": {
       "recommended": {

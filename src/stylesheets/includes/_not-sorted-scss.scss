@@ -37,7 +37,7 @@
 }
 
 /* Make hightlights in search also bold (not only italic).*/
-em {
+.search-results em {
   font-weight: bold;
 }
 
@@ -118,4 +118,30 @@ em {
 /* limit the height of the media player languages dropdown in order to not get out of the screen */
 .mediaplayer__languages .ui.floating.dropdown > .menu {
   max-height: 220px;
+}
+
+.avbox__playlist-prev-button {
+  i.icon {
+    margin: 0 .25rem 0 0 !important;
+  }
+}
+
+.avbox__playlist-next-button {
+  i.icon {
+    margin: 0 0 0 .25rem !important;
+  }
+}
+
+.rtl {
+  .avbox__playlist-prev-button {
+    i.icon {
+      margin: 0 0 0 .25rem !important;
+    }
+  }
+
+  .avbox__playlist-next-button {
+    i.icon {
+      margin: 0 .25rem 0 0 !important;
+    }
+  }
 }

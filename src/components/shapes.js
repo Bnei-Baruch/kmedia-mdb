@@ -20,6 +20,14 @@ export const HistoryLocation = PropTypes.shape({
   state: PropTypes.object,
 });
 
+export const Route = PropTypes.shape({
+  path: PropTypes.string,
+  exact: PropTypes.bool,
+  strict: PropTypes.bool,
+  sensitive: PropTypes.bool,
+  component: PropTypes.func,
+});
+
 export const MDBFile = PropTypes.shape({
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
@@ -74,6 +82,7 @@ export const Collection = PropTypes.shape(MDBBaseCollection);
 export const LessonCollection = PropTypes.shape({
   ...MDBDenormalizedCollection,
   film_date: PropTypes.string.isRequired,
+  number: PropTypes.number,
 });
 
 export const LessonPart = PropTypes.shape({
@@ -161,6 +170,12 @@ export const WipMap = PropTypes.objectOf(PropTypes.oneOfType([WIP, PropTypes.obj
 
 export const Error     = PropTypes.oneOfType([PropTypes.object, PropTypes.string]);
 export const ErrorsMap = PropTypes.objectOf(PropTypes.oneOfType([Error, PropTypes.objectOf(Error)]));
+
+export const DataWipErr = PropTypes.shape({
+  data: PropTypes.any,
+  wip: WIP,
+  err: Error,
+});
 
 export const UserAgentParserResults = PropTypes.shape({
   ua: PropTypes.string,
