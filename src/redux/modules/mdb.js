@@ -96,18 +96,19 @@ const freshStore = () => ({
   cById: {},
   cuById: {},
   cWindow: {},
-  sById: {},
   wip: {
     units: {},
     collections: {},
-    source: {},
+    cWindow: {},
     lastLesson: false,
+    sqData: false,
   },
   errors: {
     units: {},
     collections: {},
-    source: {},
+    cWindow: {},
     lastLesson: null,
+    sqData: null,
   },
 });
 
@@ -131,6 +132,13 @@ const setStatus = (state, action) => {
   case FETCH_LATEST_LESSON:
     wip.lastLesson = true;
     break;
+  case FETCH_WINDOW:
+    wip.cWindow = { ...wip.cWindow, [action.payload.id]: true };
+    break;
+  case FETCH_SQDATA:
+    wip.sqData = true;
+    break;
+
   case FETCH_UNIT_SUCCESS:
     wip.units    = { ...wip.units, [action.payload.id]: false };
     errors.units = { ...errors.units, [action.payload.id]: null };
@@ -147,6 +155,15 @@ const setStatus = (state, action) => {
     wip.collections    = { ...wip.collections, [action.payload.id]: false };
     errors.collections = { ...errors.collections, [action.payload.id]: null };
     break;
+  case FETCH_WINDOW_SUCCESS:
+    wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
+    errors.cWindow = { ...errors.cWindow, [action.payload.id]: null };
+    break;
+  case FETCH_SQDATA_SUCCESS:
+    wip.sqData    = false;
+    errors.sqData = null;
+    break;
+
   case FETCH_UNIT_FAILURE:
     wip.units    = { ...wip.units, [action.payload.id]: false };
     errors.units = { ...errors.units, [action.payload.id]: action.payload.err };
@@ -159,17 +176,13 @@ const setStatus = (state, action) => {
     wip.lastLesson    = false;
     errors.lastLesson = action.payload.err;
     break;
-
-  case FETCH_WINDOW:
-    wip.cWindow = { ...wip.cWindow, [action.payload.id]: true };
-    break;
-  case FETCH_WINDOW_SUCCESS:
-    wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
-    errors.cWindow = { ...errors.cWindow, [action.payload.id]: null };
-    break;
   case FETCH_WINDOW_FAILURE:
     wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
     errors.cWindow = { ...errors.cWindow, [action.payload.id]: action.payload.err };
+    break;
+  case FETCH_SQDATA_FAILURE:
+    wip.sqData    = false;
+    errors.sqData = action.payload.err;
     break;
 
   default:
@@ -229,7 +242,6 @@ const onReceiveCollections = (state, action) => {
 
   const cById  = { ...state.cById };
   const cuById = { ...state.cuById };
-  const sById  = { ...state.sById };
   items.forEach((x) => {
     // make a copy of incoming data since we're about to mutate it
     const y = { ...x };
@@ -262,8 +274,7 @@ const onReceiveCollections = (state, action) => {
   return {
     ...state,
     cById,
-    cuById,
-    sById
+    cuById
   };
 };
 
@@ -276,7 +287,6 @@ const onReceiveContentUnits = (state, action) => {
 
   const cById  = { ...state.cById };
   const cuById = { ...state.cuById };
-  const sById  = { ...state.sById };
   items.forEach((x) => {
     // make a copy of incoming data since we're about to mutate it
     const y = { ...x };
@@ -344,8 +354,7 @@ const onReceiveContentUnits = (state, action) => {
   return {
     ...state,
     cById,
-    cuById,
-    sById
+    cuById
   };
 };
 
@@ -384,13 +393,16 @@ export const reducer = handleActions({
     lastLessonId: action.payload.id,
   }),
   [FETCH_LATEST_LESSON_FAILURE]: setStatus,
-
-  [RECEIVE_COLLECTIONS]: (state, action) => onReceiveCollections(state, action),
-  [RECEIVE_CONTENT_UNITS]: (state, action) => onReceiveContentUnits(state, action),
   [FETCH_WINDOW]: setStatus,
   [FETCH_WINDOW_SUCCESS]: (state, action) =>
     setStatus(onFetchWindow(onReceiveCollections(state, action.payload.data), action), action),
   [FETCH_WINDOW_FAILURE]: setStatus,
+  [FETCH_SQDATA]: setStatus,
+  [FETCH_SQDATA_SUCCESS]: setStatus,
+  [FETCH_SQDATA_FAILURE]: setStatus,
+
+  [RECEIVE_COLLECTIONS]: (state, action) => onReceiveCollections(state, action),
+  [RECEIVE_CONTENT_UNITS]: (state, action) => onReceiveContentUnits(state, action),
 }, freshStore());
 
 /* Selectors */
@@ -402,6 +414,7 @@ const getWip            = state => state.wip;
 const getErrors         = state => state.errors;
 const getCollections    = state => state.items;
 const getWindow         = state => state.cWindow;
+const getSQDataWipErr         = state => !(getWip(state).sqData || getErrors(state).sqData);
 
 const getDenormCollection = (state, id) => {
   let c = state.cById[id];
@@ -466,5 +479,6 @@ export const selectors = {
   getDenormContentUnit,
   getLastLessonId,
   getCollections,
-  getWindow
+  getWindow,
+  getSQDataWipErr
 };

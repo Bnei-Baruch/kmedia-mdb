@@ -280,6 +280,9 @@ export const reducer = handleActions({
 }, initialState);
 
 /* Selectors */
+
+const getNSFilters = (state, namespace) => state[namespace] || {};
+
 const getFilters = (state, namespace) => {
   const filters = state[namespace] ? state[namespace] : null;
 
@@ -339,6 +342,7 @@ const getActiveFilter = (state, namespace) => (
 );
 
 export const selectors = {
+  getNSFilters,
   getFilters,
   getFilterValue,
   getFilterAllValues,
