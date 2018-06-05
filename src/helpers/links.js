@@ -42,17 +42,17 @@ import {
 export const sectionLink = (section, filters) => {
   const filterValues = filters.map(({ name, value, getFilterById }) => {
     if (['topics-filter', 'sources-filter'].includes(name)) {
-      const tag = getFilterById(value);
-      if (!tag) {
+      const tagOrSource = getFilterById(value);
+      if (!tagOrSource) {
         return null;
       }
-      const path = tracePath(tag, getFilterById);
+      const path = tracePath(tagOrSource, getFilterById);
       return { name, values: [path.map(y => y.id)] };
     }
 
     return { name, values: [value] };
   });
-  const query        = filtersTransformer.toQueryParams(filterValues.filter(f => !!f));
+  const query = filtersTransformer.toQueryParams(filterValues.filter(f => !!f));
   return `/${section}?${urlSearchStringify(query)}`;
 };
 

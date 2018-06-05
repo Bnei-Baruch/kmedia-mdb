@@ -79,7 +79,7 @@ class HomePage extends Component {
         </Container>
 
         <div className="homepage__featured">
-          <Container className="padded">
+          <Container className="padded horizontally">
             <Grid centered>
               <Grid.Row>
                 <Grid.Column computer={6} tablet={7} mobile={16}>
