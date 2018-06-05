@@ -172,15 +172,25 @@
       flex-grow: 2;
     }
   }
+
   &__body {
     max-height: 350px;
     min-width: 300px;
     overflow-y: auto;
+
+    &.segment {
+      padding: 0;
+    }
+
     &.date-filter {
       max-height: 450px;
       .DayPickerInput {
         display: block;
       }
+    }
+
+    > .menu {
+      border-radius: 0;
     }
   }
 }
