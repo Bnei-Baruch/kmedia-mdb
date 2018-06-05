@@ -16,6 +16,7 @@ import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
 import { filtersTransformer } from '../../filters';
+import { stringify as urlSearchStringify } from '../../helpers/url';
 import * as shapes from '../shapes';
 
 const CATEGORIES_ICONS = {
@@ -82,7 +83,7 @@ export class OmniBox extends Component {
     return !query && !Object.values(params).length;
   };
 
-  doSearch = (q = null) => {
+  doSearch = (q = null, locationSearch = '') => {
     const query                                                       = q != null ? q : this.props.query;
     const { search, location, push, pageSize, resetFilter, onSearch } = this.props;
 
@@ -92,13 +93,11 @@ export class OmniBox extends Component {
 
     // First of all redirect to search results page if we're not there
     if (!location.pathname.endsWith('search')) {
-      // In case a filter was updated React location object is not updated yet
-      // so we just use window location to get the search part (to persist filters
+      // In case a filter was updated, React location object is not updated yet
+      // so we use the second function parameter to pass the search part (to persist filters
       // to the search page when we redirect).
 
-      // 'search: window.location.search' has been removed because
-      // filters are not cleared when searching from a section (see bug AR-234)
-      push({ pathname: 'search' /* , search: window.location.search */});
+      push({ pathname: 'search', search: locationSearch});
     }
 
     // Reset filters for new search (query changed)
@@ -126,12 +125,22 @@ export class OmniBox extends Component {
       this.doSearch(data.result.title);
     } else if (category === 'tags') {
       this.props.updateQuery('');
-      this.props.addFilterValue('search', 'topics-filter', this.props.getTagPath(data.result.key).map(p => p.id));
-      this.doSearch('');
+      const path = this.props.getTagPath(data.result.key).map(p => p.id)
+      const query = filtersTransformer.toQueryParams([
+        { name: 'topics-filter', values: [path], queryKey: 'topic' }
+      ]);
+      const queryString = urlSearchStringify(query);
+      this.props.addFilterValue('search', 'topics-filter', path);
+      this.doSearch('', queryString);
     } else if (category === 'sources') {
       this.props.updateQuery('');
-      this.props.setFilterValue('search', 'sources-filter', this.props.getSourcePath(data.result.key).map(p => p.id));
-      this.doSearch('');
+      const path = this.props.getSourcePath(data.result.key).map(p => p.id)
+      const query = filtersTransformer.toQueryParams([
+        { name: 'sources-filter', values: [path], queryKey: 'source' }
+      ]);
+      const queryString = urlSearchStringify(query);
+      this.props.setFilterValue('search', 'sources-filter', path);
+      this.doSearch('', queryString);
     }
     // Currently ignoring anything else.
   };

@@ -4,6 +4,7 @@ import { List, Table } from 'semantic-ui-react';
 import { CT_ARTICLE, NO_NAME } from '../../../helpers/consts';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { canonicalLink } from '../../../helpers/links';
+import { ellipsize } from '../../../helpers/strings';
 import UnitList from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
 import SectionHeader from '../../shared/SectionHeader';
@@ -34,6 +35,13 @@ export const renderUnit = (unit, t) => {
         <Link className="index__title" to={canonicalLink(unit)}>
           {unit.name || NO_NAME}
         </Link>
+        {
+          unit.description ?
+            <div className="index__description mobile-hidden">
+              {ellipsize(unit.description)}
+            </div>
+            : null
+        }
         <List horizontal divided link className="index__collections" size="tiny">
           <List.Item>
             <List.Header>{t('publications.list.item_from')}</List.Header>
