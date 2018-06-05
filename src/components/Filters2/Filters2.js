@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import { Container, Header, Icon, Menu, Popup } from 'semantic-ui-react';
 
 import { filtersTransformer } from '../../filters/index';
-import { selectors } from '../../redux/modules/filters';
+import { actions, selectors } from '../../redux/modules/filters';
 import { selectors as mdb } from '../../redux/modules/mdb';
 import { filterPropShape } from '../shapes';
 import FiltersHydrator from '../Filters/FiltersHydrator';
@@ -13,19 +14,16 @@ import FiltersHydrator from '../Filters/FiltersHydrator';
 class Filters2 extends Component {
   static propTypes = {
     namespace: PropTypes.string.isRequired,
-    // editNewFilter: PropTypes.func.isRequired,
-    // closeActiveFilter: PropTypes.func.isRequired,
+    resetFilter: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
     onHydrated: PropTypes.func.isRequired,
     filters: PropTypes.arrayOf(filterPropShape).isRequired,
-    // activeFilterName: PropTypes.string,
     filtersData: PropTypes.objectOf(PropTypes.object).isRequired,
     rightItems: PropTypes.arrayOf(PropTypes.node),
     t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    // activeFilterName: '',
     rightItems: null,
   };
 
@@ -37,16 +35,6 @@ class Filters2 extends Component {
     activeFilter: null,
   };
 
-  // handleFilterClick = ({ name }) => {
-  //   const { namespace } = this.props;
-  //   this.props.editNewFilter(namespace, name);
-  // };
-
-  // handleCancelActiveFilter = () => {
-  //   const { namespace, activeFilterName } = this.props;
-  //   this.props.closeActiveFilter(namespace, activeFilterName);
-  // };
-
   handleApply = () => {
     this.props.onChange();
     this.handlePopupClose();
@@ -57,6 +45,11 @@ class Filters2 extends Component {
 
   handlePopupOpen = activeFilter =>
     this.setState({ activeFilter });
+
+  handleResetFilter = (e, name) => {
+    e.stopPropagation();
+    this.props.resetFilter(this.props.namespace, name);
+  };
 
   render() {
     const { filters, namespace, onHydrated, t, filtersData } = this.props;
@@ -78,12 +71,10 @@ class Filters2 extends Component {
                 const isActive = name === activeFilter;
                 const data     = filtersData[name] || {};
                 const values   = data.values || [];
-                let label;
-                if (Array.isArray(values) && values.length > 0) {
-                  label = filtersTransformer.valueToTagLabel(name, values[0], this.props, store, t);
-                } else {
-                  label = t('filters.holidays-filter.allItem');
-                }
+                const value    = Array.isArray(values) && values.length > 0 ? values[0] : null;
+                const label    = value ?
+                  filtersTransformer.valueToTagLabel(name, values[0], this.props, store, t) :
+                  t('filters.holidays-filter.allItem');
 
                 return (
                   <Popup
@@ -98,6 +89,14 @@ class Filters2 extends Component {
                           subheader={label}
                         />
                         <Icon size="large" name={`triangle ${isActive ? 'up' : 'down'}`} />
+                        {
+                          value ?
+                            <Icon
+                              name="trash outline"
+                              onClick={e => this.handleResetFilter(e, item.name)}
+                            /> :
+                            null
+                        }
                       </Menu.Item>
                     }
                     on="click"
@@ -134,4 +133,5 @@ export default connect(
     // DO NOT REMOVE, this triggers a necessary re-render for filter tags
     sqDataWipErr: mdb.getSQDataWipErr(state.mdb),
   }),
+  disptach => bindActionCreators({ resetFilter: actions.resetFilter }, disptach)
 )(translate()(Filters2));
