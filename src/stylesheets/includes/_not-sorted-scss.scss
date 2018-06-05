@@ -166,10 +166,16 @@
 
 .filter-popup {
   &__header {
-    display: flex;
-    .header {
-      margin: 0 1rem;
-      flex-grow: 2;
+    .title {
+      display: flex;
+      .header {
+        margin: 0 1rem;
+        flex-grow: 2;
+      }
+    }
+
+    .autocomplete {
+      margin-top: .75em;
     }
   }
 
@@ -191,6 +197,38 @@
 
     > .menu {
       border-radius: 0;
+
+      .item {
+        color: $blue;
+        .count{
+          color: $grey;
+        }
+      }
+    }
+
+    .hierarchy {
+      .item {
+
+        &.l1 {
+          padding-left: 1rem;
+        }
+        &.l2 {
+          padding-left: 2rem;
+        }
+        &.l3 {
+          padding-left: 3rem;
+        }
+        &.l4 {
+          padding-left: 4rem;
+        }
+        &.l5 {
+          padding-left: 5rem;
+        }
+        &.l6 {
+          padding-left: 6rem;
+        }
+
+      }
     }
   }
 }

@@ -202,21 +202,23 @@ class DateFilter extends Component {
     return (
       <Segment.Group>
         <Segment secondary className="filter-popup__header">
-          <Button
-            basic
-            compact
-            icon="remove"
-            onClick={this.onCancel}
-          />
-          <Header size="small" textAlign="center" content={t('filters.date-filter.label')} />
-          <Button
-            primary
-            compact
-            size="small"
-            content={t('buttons.apply')}
-            disabled={!this.canApply()}
-            onClick={this.apply}
-          />
+          <div className="title">
+            <Button
+              basic
+              compact
+              icon="remove"
+              onClick={this.onCancel}
+            />
+            <Header size="small" textAlign="center" content={t('filters.date-filter.label')} />
+            <Button
+              primary
+              compact
+              size="small"
+              content={t('buttons.apply')}
+              disabled={!this.canApply()}
+              onClick={this.apply}
+            />
+          </div>
         </Segment>
         <Segment className="filter-popup__body date-filter">
           <Accordion as={Menu} vertical fluid size="small">

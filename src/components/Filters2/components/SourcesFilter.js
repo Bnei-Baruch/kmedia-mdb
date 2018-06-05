@@ -1,12 +1,23 @@
-import { connect } from 'react-redux';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { selectors } from '../../../redux/modules/sources';
-import DeepListFilter from './DeepListFilter';
+import HierarchicalFilter from './HierarchicalFilter';
 
-export default connect(
-  state => ({
-    emptyLabel: 'No Sources',
-    roots: selectors.getRoots(state.sources),
-    getSubItemById: selectors.getSourceById(state.sources),
-  })
-)(DeepListFilter);
+class SourcesFilter extends React.Component {
+  static propTypes = {
+    fromYear: PropTypes.number,
+    toYear: PropTypes.number,
+  };
+
+  static defaultProps = {
+    fromYear: 1995,
+    toYear: (new Date()).getFullYear(),
+  };
+
+  render() {
+
+    return <HierarchicalFilter {...this.props} />;
+  }
+}
+
+export default SourcesFilter;

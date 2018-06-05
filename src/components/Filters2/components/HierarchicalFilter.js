@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
-import { Button, Header, Menu, Segment } from 'semantic-ui-react';
+import { Button, Header, Menu, Segment, Icon, Input } from 'semantic-ui-react';
 
 import connectFilter from './connectFilter';
 
-class FlatListFilter extends React.Component {
+class HierarchicalFilter extends React.Component {
   static propTypes = {
     namespace: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
@@ -77,21 +77,33 @@ class FlatListFilter extends React.Component {
               onClick={this.apply}
             />
           </div>
+          <Input fluid className="autocomplete" size="small" icon="search" placeholder="Search..." />
         </Segment>
         <Segment className="filter-popup__body">
-          <Menu vertical fluid size="small">
-            {
-              options.map(x => (
-                <Menu.Item
-                  key={x.value}
-                  name={x.text}
-                  active={sValue === x.value}
-                  onClick={this.onSelectionChange}
-                >
-                  {renderItem(x)}
-                </Menu.Item>
-              ))
-            }
+          <Menu vertical fluid size="small" className="hierarchy">
+            <Menu.Item className="l1">Cats</Menu.Item>
+            <Menu.Item className="l1">Horses</Menu.Item>
+            <Menu.Item className="l1">Dogs</Menu.Item>
+            <Menu.Item className="l2">Shiba Inu</Menu.Item>
+            <Menu.Item className="l2">Mastiff</Menu.Item>
+            <Menu.Item className="l3">Mastiff 3</Menu.Item>
+            <Menu.Item className="l3">Mastiff <span className="count">(4)</span></Menu.Item>
+            <Menu.Item className="l3">Mastiff 3</Menu.Item>
+            <Menu.Item className="l3">Mastiff 4</Menu.Item>
+            <Menu.Item className="l3">Mastiff 3</Menu.Item>
+            <Menu.Item className="l3">Mastiff 4</Menu.Item>
+            <Menu.Item className="l3">Mastiff 3</Menu.Item>
+            <Menu.Item className="l3">Mastiff 4</Menu.Item>
+            <Menu.Item className="l3">Mastiff 3</Menu.Item>
+            <Menu.Item className="l3" active>Mastiff 4</Menu.Item>
+            <Menu.Item className="l3">Mastiff 3</Menu.Item>
+            <Menu.Item className="l3">Mastiff 4</Menu.Item>
+            <Menu.Item className="l3">Mastiff 3</Menu.Item>
+            <Menu.Item className="l3">Mastiff 4</Menu.Item>
+            <Menu.Item className="l3">Mastiff 3</Menu.Item>
+            <Menu.Item className="l3">Mastiff 4</Menu.Item>
+            <Menu.Item className="l3">Mastiff 3</Menu.Item>
+            <Menu.Item className="l3">Mastiff 4</Menu.Item>
           </Menu>
         </Segment>
       </Segment.Group>
@@ -99,4 +111,4 @@ class FlatListFilter extends React.Component {
   }
 }
 
-export default connectFilter()(FlatListFilter);
+export default connectFilter()(HierarchicalFilter);
