@@ -233,6 +233,7 @@ class AVPlayerMobile extends PureComponent {
       this.media.autoplay = false;
       updateQuery(this.props.history, q => ({ ...q, currentTime: this.media.currentTime }));
     }
+    this.wasCurrentTime = this.media.currentTime;
   };
 
   handleEnded = () => {
