@@ -406,10 +406,12 @@ class AVPlayerMobile extends PureComponent {
             <div className="mediaplayer__spacer" />
             <AVEditSlice onActivateSlice={this.toggleSliceMode} />
             <button type="button" tabIndex="-1" onClick={this.handleJumpBack}>
+              -5s
               <Icon name="backward" />
             </button>
-            <button type="button" tabIndex="-1" onClick={this.handleJumpForward}>
+            <button type="button" tabIndex="-1" onClick={this.handleJumpForward}>              
               <Icon name="forward" />
+              +5s
             </button>
             <AVAudioVideo
               isAudio={isAudio}
