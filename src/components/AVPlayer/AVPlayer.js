@@ -343,10 +343,24 @@ class AVPlayer extends PureComponent {
     }
   };
 
+  hideControls = () => {
+    if (this.wrapperMouseY < this.wrapperRect.height - this.controlsRect.height) {
+      this.setState({ controlsVisible: false });
+    }
+    else
+    {
+      if (this.autohideTimeoutId) {
+        clearTimeout(this.autohideTimeoutId);
+        this.autohideTimeoutId = null;
+      }
+      this.hideControlsTimeout();
+    }
+  }
+
   hideControlsTimeout = () => {
     if (!this.autohideTimeoutId) {
-      this.autohideTimeoutId = setTimeout(() => {
-        this.setState({ controlsVisible: false });
+      this.autohideTimeoutId = setTimeout(() => {        
+        this.hideControls();
       }, 2000);
     }
   };
@@ -356,13 +370,14 @@ class AVPlayer extends PureComponent {
   };
 
   handleWrapperMouseLeave = () => {
-    this.setState({ controlsVisible: false });
+    this.hideControls();
   };
 
-  handleWrapperMouseMove = () => {
+  handleWrapperMouseMove = (e) => {
     if (!this.state.controlsVisible) {
       this.showControls();
-    }
+    }    
+    this.wrapperMouseY = e.pageY - this.wrapperRect.top;   
   };
 
   handleControlsMouseEnter = () => {
@@ -386,11 +401,19 @@ class AVPlayer extends PureComponent {
     if (ref) {
       this.wrapper = ref;
       this.wrapper.addEventListener('keydown', this.handleWrapperKeyDown);
+      this.wrapperRect = this.wrapper.getBoundingClientRect();
     } else if (this.wrapper) {
       this.wrapper.removeEventListener('keydown', this.handleWrapperKeyDown);
       this.wrapper = ref;
-    }
+    }        
   };
+
+  handlePlayerControlsRef = (ref) => {   
+    this.playerControls = ref;    
+    if (this.playerControls) {
+      this.controlsRect = ref.getBoundingClientRect();
+    }
+  }
 
   handleOnScreenClick = () => {
     const { media } = this.props;
@@ -525,6 +548,7 @@ class AVPlayer extends PureComponent {
           onMouseMove={this.handleWrapperMouseMove}
         >
           <div
+            ref={this.handlePlayerControlsRef}
             className={classNames('mediaplayer__controls', {
               'mediaplayer__controls--is-fade': !controlsVisible && !forceShowControls
             })}
