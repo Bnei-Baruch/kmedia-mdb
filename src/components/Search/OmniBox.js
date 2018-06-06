@@ -227,11 +227,17 @@ export class OmniBox extends Component {
   }
 
   render() {
-    const { language, query }           = this.props;
+    const { language, location}           = this.props;
     const { suggestionsHelper, isOpen } = this.state;
 
     const categories  = ['tags', 'sources', 'authors', 'persons'];
+
+    let query = this.props.query;
     const textResults = new Set([query]);
+    if (!isOpen && !location.pathname.endsWith('search')){
+      query = '';
+    }
+    
     let results       = categories.reduce((acc, val) => {
       const searchResults = suggestionsHelper.getSuggestions(val, 5);
       if (searchResults.length > 0) {
