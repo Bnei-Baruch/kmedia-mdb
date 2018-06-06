@@ -240,6 +240,7 @@ class AVPlayerMobile extends PureComponent {
       this.saveCurrentTime(this.media.currentTime);
       //updateQuery(this.props.history, q => ({ ...q, currentTime: this.media.currentTime }));
     }
+    this.wasCurrentTime = this.media.currentTime;
   };
 
   handleEnded = () => {
@@ -372,7 +373,7 @@ class AVPlayerMobile extends PureComponent {
           preload="metadata"
         />
       );
-    }
+    }  
 
     return (
       <div className="mediaplayer">
@@ -401,14 +402,16 @@ class AVPlayerMobile extends PureComponent {
               onPrev={onPrev}
               onNext={onNext}
             />
-            <div className="mediaplayer__spacer" />
-            <AVEditSlice onActivateSlice={this.toggleSliceMode} />
             <button type="button" tabIndex="-1" onClick={this.handleJumpBack}>
+              -5s
               <Icon name="backward" />
             </button>
             <button type="button" tabIndex="-1" onClick={this.handleJumpForward}>
               <Icon name="forward" />
+              +5s
             </button>
+            <div className="mediaplayer__spacer" />
+            <AVEditSlice onActivateSlice={this.toggleSliceMode} />         
             <AVAudioVideo
               isAudio={isAudio}
               isVideo={isVideo}

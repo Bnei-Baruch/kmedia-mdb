@@ -2,20 +2,37 @@
 .homepage {
   &__header {
     padding-top: 3em;
+    @include tablet { padding-top: 1em; }
+    @include mobile { padding-top: 0; }
   }
 
   &__title {
     margin-bottom: .4em !important;
+    @include mobile {display: none;}
   }
 
   &__featured {
     // background: $darkWhite;
     padding-bottom: 2em;
     padding-top: 3em;
+    @include tablet { 
+      padding-top: 1em;
+      padding-bottom: 0;
+     }
+    @include mobile { 
+      padding-top: 0; 
+      padding-bottom: 0;
+    }
+    .label {
+      @include mobile {
+        font-size: .64285714rem !important;
+      }
+    }
   }
 
   &__section {
     margin-bottom: 3em;
+    @include mobile { margin-bottom: 0; }
   }
 
   &__iconsrow {
@@ -65,6 +82,9 @@
   position: relative;
   height: 0;
   padding-top: percentage(9/16);
+  @include mobile {
+    padding-top: percentage(1/2.5);
+  }
   overflow: hidden;
   margin-bottom: 1em;
   .label {

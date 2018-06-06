@@ -158,6 +158,16 @@
       "description": "описание",
       "transcript": "стенограмма",
       "content": "текст"
+    },
+    "intent-types": {
+      "lessons": "Ежедневные уроки",
+      "programs": "Программы"
+    },
+    "intent-prefix": {
+      "lessons-topic": "Уроки по теме:",
+      "lessons-source": "Уроки по первоисточнику:",
+      "programs-topic": "Программы по теме:",
+      "programs-source": "Программы по первоисточнику:"
     }
   },
   "home": {
