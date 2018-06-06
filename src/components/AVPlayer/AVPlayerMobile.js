@@ -115,9 +115,10 @@ class AVPlayerMobile extends PureComponent {
       this.media.addEventListener('timeupdate', this.handleTimeUpdate);
       this.media.addEventListener('volumechange', this.handleVolumeChange);
       this.media.addEventListener('playing', this.handlePlaying);
-      this.media.addEventListener('seeking', this.handleSeeking);
-
+      this.media.addEventListener('seeking', this.handleSeeking);      
+      this.media.addEventListener('canplay', this.seekIfNeeded);
       this.restoreVolume();
+      
     } else if (this.media) {
       this.media.removeEventListener('play', this.handlePlay);
       this.media.removeEventListener('pause', this.handlePause);
@@ -127,12 +128,13 @@ class AVPlayerMobile extends PureComponent {
       this.media.removeEventListener('volumechange', this.handleVolumeChange);
       this.media.removeEventListener('playing', this.handlePlaying);
       this.media.removeEventListener('seeking', this.handleSeeking);
+      this.media.removeEventListener('canplay', this.seekIfNeeded);
       this.media = ref;
     }
   };
 
   handlePlay = () => {
-    this.seekIfNeeded();
+    //this.seekIfNeeded();
 
     // make future src changes autoplay
     this.media.autoplay = true;
@@ -157,22 +159,22 @@ class AVPlayerMobile extends PureComponent {
   };
 
   seekIfNeeded = () => {
-    const { media }      = this.props;
     const { sliceStart } = this.state;
     if (this.wasCurrentTime) {
-      media.currentTime = this.wasCurrentTime;
+      this.media.currentTime = this.wasCurrentTime;
       this.wasCurrentTime    = undefined;
-    } else if (!sliceStart && media.currentTime === 0) {
+    } else if (!sliceStart && this.media.currentTime === 0) {
       const savedTime = this.getSavedTime();
       if (savedTime) {
-        media.currentTime = savedTime;
+        this.media.currentTime = savedTime;
       }
-    } else if (sliceStart) {
-      media.currentTime = sliceStart;
+    } else if (sliceStart && this.media.currentTime === 0) {
+      this.media.currentTime = sliceStart;
     }
   };
 
-  iosSliceFix = () => {
+  // iosSliceFix is not relevant anymore because the seek has been change to 'canplay' event instead of 'play' event
+  /*iosSliceFix = () => {
     const { sliceStart } = this.state;
     if (!sliceStart) {
       return;
@@ -206,10 +208,10 @@ class AVPlayerMobile extends PureComponent {
     };
 
     this.media.addEventListener('canplaythrough', canplaythroughHandler, { once: true });
-  };
+  };*/
 
   handlePlaying = () => {
-    this.iosSliceFix();
+    //this.iosSliceFix();
   };
 
   handleSeeking = (e) => {
@@ -240,7 +242,6 @@ class AVPlayerMobile extends PureComponent {
       this.saveCurrentTime(this.media.currentTime);
       //updateQuery(this.props.history, q => ({ ...q, currentTime: this.media.currentTime }));
     }
-    this.wasCurrentTime = this.media.currentTime;
   };
 
   handleEnded = () => {
@@ -373,7 +374,7 @@ class AVPlayerMobile extends PureComponent {
           preload="metadata"
         />
       );
-    }  
+    }
 
     return (
       <div className="mediaplayer">
@@ -402,16 +403,14 @@ class AVPlayerMobile extends PureComponent {
               onPrev={onPrev}
               onNext={onNext}
             />
+            <div className="mediaplayer__spacer" />
+            <AVEditSlice onActivateSlice={this.toggleSliceMode} />
             <button type="button" tabIndex="-1" onClick={this.handleJumpBack}>
-              -5s
               <Icon name="backward" />
             </button>
             <button type="button" tabIndex="-1" onClick={this.handleJumpForward}>
               <Icon name="forward" />
-              +5s
             </button>
-            <div className="mediaplayer__spacer" />
-            <AVEditSlice onActivateSlice={this.toggleSliceMode} />         
             <AVAudioVideo
               isAudio={isAudio}
               isVideo={isVideo}
