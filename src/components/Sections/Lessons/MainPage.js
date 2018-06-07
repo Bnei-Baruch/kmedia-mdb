@@ -5,18 +5,22 @@ import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import { Menu } from 'semantic-ui-react';
 
-import { actions } from '../../../redux/modules/lectures';
+import { actions } from '../../../redux/modules/lessons';
 import { actions as filterActions } from '../../../redux/modules/filters';
 import * as shapes from '../../shapes';
 import NavLink from '../../Language/MultiLanguageNavLink';
 import SectionHeader from '../../shared/SectionHeader';
-import UnitList from './tabs/UnitList/Container';
+import Daily from './tabs/Daily/Container';
+import Series from './tabs/Series/Container';
+import Lectures from './tabs/Lectures/Container';
 
 export const tabs = [
-  'virtual-lessons',
+  'daily',
+  'virtual',
   'lectures',
-  'women-lessons',
-  'children-lessons'
+  'women',
+  'children',
+  'series',
 ];
 
 class MainPage extends PureComponent {
@@ -35,7 +39,7 @@ class MainPage extends PureComponent {
     // clear filters if location search parameter is changed by Menu click
     if (nextProps.location.search !== this.props.location.search &&
       !nextProps.location.search) {
-      nextProps.resetNamespace(`lectures-${tab}`);
+      nextProps.resetNamespace(`lessons-${tab}`);
     }
 
     if (nextTab !== tab) {
@@ -52,20 +56,26 @@ class MainPage extends PureComponent {
         key={x}
         name={x}
         as={NavLink}
-        to={`/lectures/${x}`}
+        to={`/lessons/${x}`}
         active={active === x}
       >
-        {t(`lectures.tabs.${x}`)}
+        {t(`lessons.tabs.${x}`)}
       </Menu.Item>
     ));
 
     let content = null;
     switch (active) {
-    case 'virtual-lessons':
+    case 'daily':
+      content = <Daily />;
+      break;
+    case 'virtual':
     case 'lectures':
-    case 'women-lessons':
-    case 'children-lessons':
-      content = <UnitList tab={active} />;
+    case 'women':
+    case 'children':
+      content = <Lectures tab={active} />;
+      break;
+    case 'series':
+      content = <Series />;
       break;
     default:
       content = <h1>Page not found</h1>;
@@ -74,7 +84,7 @@ class MainPage extends PureComponent {
 
     return (
       <div>
-        <SectionHeader section="lectures" submenuItems={submenuItems} />
+        <SectionHeader section="lessons" submenuItems={submenuItems} />
         {content}
       </div>
     );

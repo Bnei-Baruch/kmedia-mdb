@@ -63,7 +63,7 @@ const renderUnit = (unit, t) => {
           relatedItems.length > 0 ?
             <List horizontal divided link className="index__collections" size="tiny">
               <List.Item>
-                <List.Header>{t('lectures.list.item_from')}</List.Header>
+                <List.Header>{t('lessons.list.item_from')}</List.Header>
               </List.Item>
               {relatedItems}
             </List>
@@ -82,16 +82,16 @@ class Container extends Component {
   extraFetchParams = () => {
     let ct;
     switch (this.props.tab) {
-    case 'virtual-lessons':
+    case 'virtual':
       ct = [CT_VIRTUAL_LESSON];
       break;
     case 'lectures':
       ct = [CT_LECTURE];
       break;
-    case 'women-lessons':
+    case 'women':
       ct = [CT_WOMEN_LESSON];
       break;
-    case 'children-lessons':
+    case 'children':
       ct = [CT_CHILDREN_LESSON];
       break;
     default:
@@ -105,7 +105,7 @@ class Container extends Component {
   render() {
     return (
       <UnitList
-        namespace={`lectures-${this.props.tab}`}
+        namespace={`lessons-${this.props.tab}`}
         extraFetchParams={this.extraFetchParams}
         renderUnit={renderUnit}
       />

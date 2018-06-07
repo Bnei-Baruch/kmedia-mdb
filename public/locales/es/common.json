@@ -4,9 +4,8 @@
       "header": "Cabalá Media"
     },
     "sidebar": {
-      "lessons": "Lección Diaria de Cabalá",
+      "lessons": "Lecciones y Charlas",
       "programs": "Programas",
-      "lectures": "Charlas y Lecciones",
       "sources": "Biblioteca",
       "events": "Congresos y Eventos",
       "books": "Libros",
@@ -18,11 +17,7 @@
     },
     "footer": {
       "copyright": "Derecho de autor 2003-{{year}}",
-      "rights": "Benei Baruj ‘ Cabalá LaAm",
-      "study": "Estudios de Cabalá",
-      "topics": "Temas",
-      "events": "Eventos",
-      "media": "Medio de comunicación"
+      "rights": "Benei Baruj ‘ Cabalá LaAm"
     }
   },
   "filters": {
@@ -71,9 +66,8 @@
     "sections-filter": {
       "label": "Sección",
       "all": "Todo",
-      "lessons": "Lección Diaria de Cabalá",
+      "lessons": "Lecciones y Charlas",
       "programs": "Programas",
-      "lectures": "Charlas y Lecciones",
       "events": "Congresos y Eventos",
       "publications": "Publicaciones",
       "sources": "Fuentes"
@@ -126,7 +120,7 @@
     "fallback-to-audio": "Video no encontrado, usa audio.",
     "fallback-to-video": "Audio no encontrado, usa video.",
     "source-content-not-found": " Contenido de fuente no fue encontrado ",
-    "no-images":"No se encontraron dibujos"
+    "no-images": "No se encontraron dibujos"
   },
   "search": {
     "header": {
@@ -157,7 +151,7 @@
       "transcript": "Transcripción",
       "content": "Contenido"
     },
-     "intent-types": {
+    "intent-types": {
       "lessons": "Lecciones diarias de Cabalá",
       "programs": "Programas"
     },
@@ -213,14 +207,30 @@
   },
   "lessons": {
     "header": {
-      "text": "Lección Diaria de Cabalá",
-      "subtext": "Durante miles de años, los cabalistas estudiaban diariamente, para su propio desarrollo espiritual y para el progreso espiritual de la humanidad. Hoy en día, continúan la misma tradición los cabalistas de \"Benei Baruj\", quienes estudian a diario a partir de las auténticas escrituras cabalísticas, estudios acompañados del comentario y la instrucción del Rav Dr. Michael Laitman"
+      "text": "Lecciones y Charlas",
+      "subtext": "Aquí encontrará una rica variedad de conferencias y clases de varios tipos, que incluyen conferencias para diferentes públicos, clases para mujeres, niños y más."
+    },
+    "tabs": {
+      "daily": "Lecciones Diarias",
+      "virtual": "Lecciones Virtuales",
+      "lectures": "Charlas",
+      "women": "Lección de Mujeres",
+      "children": "Lección de Niños",
+      "series": "Serie de Estudios"
     },
     "list": {
       "related": "Relacionado con",
-      "number": "#"
+      "number": "#",
+      "item_from": "Parte de:"
     },
     "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Otras partes de la misma serie"
+        }
+      }
+    },
+    "unit-lesson-part": {
       "recommended": {
         "same-collection": {
           "title": "Parte adicional de la misma lección",
@@ -259,28 +269,6 @@
       }
     }
   },
-  "lectures": {
-    "header": {
-      "text": "Charlas y Lecciones",
-      "subtext": "Aquí encontrará una rica variedad de conferencias y clases de varios tipos, que incluyen conferencias para diferentes públicos, clases para mujeres, niños y más."
-    },
-    "tabs" : {
-      "virtual-lessons" : "Lecciones Virtuales",
-      "lectures": "Charlas",
-      "women-lessons": "Lección de Mujeres",
-      "children-lessons": "Lección de Niños"
-    },
-    "list": {
-      "item_from": "Parte de:"
-    },
-    "unit": {
-      "recommended": {
-        "same-collection": {
-          "title": "Otras partes de la misma serie"
-        }
-      }
-    }
-  },
   "publications": {
     "header": {
       "text": "Publicaciones",
@@ -301,7 +289,7 @@
     "collection": {
       "items": {
         "programs-collection": "Capítulos",
-        "lectures-collection": "Partes",
+        "lessons-collection": "Partes",
         "publications-collection": "Artículos",
         "event": "Partes"
       }
@@ -346,8 +334,8 @@
     },
     "no-source": "Seleccione fuente",
     "toc": "Tabla de Contenido",
-    "az":        "AZ",
-    "default":   "Por Omisión",
+    "az": "AZ",
+    "default": "Por Omisión",
     "filter": "Filtro..."
   },
   "media-downloads": {

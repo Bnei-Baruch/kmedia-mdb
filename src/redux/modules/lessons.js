@@ -8,37 +8,41 @@ import { types as ssr } from './ssr';
 
 /* Types */
 
-const FETCH_ALL         = 'Series/FETCH_ALL';
-const FETCH_ALL_SUCCESS = 'Series/FETCH_ALL_SUCCESS';
-const FETCH_ALL_FAILURE = 'Series/FETCH_ALL_FAILURE';
+const FETCH_ALL_SERIES         = 'Lessons/FETCH_ALL_SERIES';
+const FETCH_ALL_SERIES_SUCCESS = 'Lessons/FETCH_ALL_SERIES_SUCCESS';
+const FETCH_ALL_SERIES_FAILURE = 'Lessons/FETCH_ALL_SERIES_FAILURE';
+const SET_TAB                  = 'Lessons/SET_TAB';
 
 export const types = {
-  FETCH_ALL,
-  FETCH_ALL_SUCCESS,
-  FETCH_ALL_FAILURE,
+  FETCH_ALL_SERIES,
+  FETCH_ALL_SERIES_SUCCESS,
+  FETCH_ALL_SERIES_FAILURE,
+  SET_TAB
 };
 
 /* Actions */
 
-const fetchAll        = createAction(FETCH_ALL);
-const fetchAllSuccess = createAction(FETCH_ALL_SUCCESS);
-const fetchAllFailure = createAction(FETCH_ALL_FAILURE);
+const fetchAllSeries        = createAction(FETCH_ALL_SERIES);
+const fetchAllSeriesSuccess = createAction(FETCH_ALL_SERIES_SUCCESS);
+const fetchAllSeriesFailure = createAction(FETCH_ALL_SERIES_FAILURE);
+const setTab                = createAction(SET_TAB);
 
 export const actions = {
-  fetchAll,
-  fetchAllSuccess,
-  fetchAllFailure,
+  fetchAllSeries,
+  fetchAllSeriesSuccess,
+  fetchAllSeriesFailure,
+  setTab
 };
 
 /* Reducer */
 
 const initialState = {
-  allIDs: [],
+  seriesIDs: [],
   wip: {
-    all: false,
+    series: false,
   },
   errors: {
-    all: null,
+    series: null,
   },
 };
 
@@ -53,16 +57,16 @@ const setStatus = (state, action) => {
   const errors = { ...state.errors };
 
   switch (action.type) {
-  case FETCH_ALL:
-    wip.all = true;
+  case FETCH_ALL_SERIES:
+    wip.series = true;
     break;
-  case FETCH_ALL_SUCCESS:
-    wip.all    = false;
-    errors.all = null;
+  case FETCH_ALL_SERIES_SUCCESS:
+    wip.series    = false;
+    errors.series = null;
     break;
-  case FETCH_ALL_FAILURE:
-    wip.all    = false;
-    errors.all = action.payload;
+  case FETCH_ALL_SERIES_FAILURE:
+    wip.series    = false;
+    errors.series = action.payload;
     break;
   default:
     break;
@@ -75,22 +79,22 @@ const setStatus = (state, action) => {
   };
 };
 
-const onFetchAllSuccess = (state, action) => ({
+const onFetchAllSeriesSuccess = (state, action) => ({
   ...state,
-  allIDs: action.payload.collections.map(x => x.id),
+  seriesIDs: action.payload.collections.map(x => x.id),
 });
 
 const onSetLanguage = state => (
   {
     ...state,
-    allIDs: [],
+    seriesIDs: [],
   }
 );
 
 const onSSRPrepare = state => ({
   ...state,
   errors: {
-    all: state.errors.all ? state.errors.all.toString() : state.errors.all
+    series: state.errors.series ? state.errors.series.toString() : state.errors.series
   }
 });
 
@@ -98,9 +102,9 @@ export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
   [settings.SET_LANGUAGE]: onSetLanguage,
 
-  [FETCH_ALL]: setStatus,
-  [FETCH_ALL_SUCCESS]: (state, action) => setStatus(onFetchAllSuccess(state, action), action),
-  [FETCH_ALL_FAILURE]: setStatus,
+  [FETCH_ALL_SERIES]: setStatus,
+  [FETCH_ALL_SERIES_SUCCESS]: (state, action) => setStatus(onFetchAllSeriesSuccess(state, action), action),
+  [FETCH_ALL_SERIES_FAILURE]: setStatus,
 }, initialState);
 
 /* Selectors */
@@ -133,7 +137,7 @@ const $$sortTree = (node) => {
   };
 };
 
-const getBySource = (state, mdbState, sourcesState) => {
+const getSeriesBySource = (state, mdbState, sourcesState) => {
   const srcPathById = sources.getPathByID(sourcesState);
 
   // sources might not have been loaded by now
@@ -142,7 +146,7 @@ const getBySource = (state, mdbState, sourcesState) => {
   }
 
   // construct the folder-like tree
-  const tree = state.allIDs.reduce((acc, val) => {
+  const tree = state.seriesIDs.reduce((acc, val) => {
     const series = mdb.getCollectionById(mdbState, val);
 
     // mdb might not have been loaded by now
@@ -182,5 +186,5 @@ const getBySource = (state, mdbState, sourcesState) => {
 export const selectors = {
   getWip,
   getErrors,
-  getBySource,
+  getSeriesBySource,
 };

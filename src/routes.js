@@ -6,15 +6,13 @@ import { renderRoutes } from 'react-router-config';
 import { DEFAULT_LANGUAGE } from './helpers/consts';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
-import Lessons from './components/Sections/Lessons/List';
-import LessonUnit from './components/Sections/Lessons/Unit';
-import LessonCollection from './components/Sections/Lessons/Collection';
+import Lessons from './components/Sections/Lessons/MainPage';
+import LessonUnit from './components/Sections/Lessons/Unit/Container';
+import LessonCollection from './components/Sections/Lessons/Collection/MainPage';
+import LastLessonCollection from './components/Sections/Lessons/Collection/LastDaily';
 import Programs from './components/Sections/Programs/List';
 import ProgramUnit from './components/Sections/Programs/Unit';
 import ProgramCollection from './components/Sections/Programs/Collection';
-import Lectures from './components/Sections/Lectures/MainPage';
-import LectureUnit from './components/Sections/Lectures/Unit';
-import LectureCollection from './components/Sections/Lectures/Collection';
 import Publications from './components/Sections/Publications/List';
 import PublicationUnit from './components/Sections/Publications/Unit';
 import PublicationCollection from './components/Sections/Publications/Collection';
@@ -27,9 +25,6 @@ import LibraryPerson from './components/Sections/Library/LibraryPerson';
 import SearchResults from './components/Search/SearchResultsContainer';
 import Redirect from './components/Layout/Redirect';
 import HomePage from './components/Sections/Home/Container';
-import LastLessonCollection from './components/Sections/Lessons/LastCollection';
-import Series from './components/Sections/Series/Container';
-import LessonsSeriesCollection from './components/Sections/Series/Collection';
 import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
@@ -71,10 +66,11 @@ const redirect = (from, to, { prefix = '' }) => {
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
-  { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.cuListPage('lessons') } },
+  { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
+  { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
+  { path: 'lessons/:tab/c/:id', component: LessonCollection, options: { ssrData: ssrDataLoaders.lessonsCollectionPage } },
   { path: 'lessons/cu/:id', component: LessonUnit, options: { ssrData: ssrDataLoaders.cuPage } },
-  { path: 'lessons/c/:id', component: LessonCollection, options: { ssrData: ssrDataLoaders.playlistCollectionPage } },
-  { path: 'lessons/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
+  { path: 'lessons/daily/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
   { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.cuListPage('programs') } },
   { path: 'programs/cu/:id', component: ProgramUnit, options: { ssrData: ssrDataLoaders.cuPage } },
   {
@@ -86,14 +82,6 @@ const routes = [
   { path: 'events/:tab', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
   { path: 'events/cu/:id', component: EventUnit, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'events/c/:id', component: EventCollection, options: { ssrData: ssrDataLoaders.playlistCollectionPage } },
-  { path: 'lectures', component: Lectures, options: { ssrData: ssrDataLoaders.lecturesPage } },
-  { path: 'lectures/:tab', component: Lectures, options: { ssrData: ssrDataLoaders.lecturesPage } },
-  { path: 'lectures/cu/:id', component: LectureUnit, options: { ssrData: ssrDataLoaders.cuPage } },
-  {
-    path: 'lectures/c/:id',
-    component: LectureCollection,
-    options: { ssrData: ssrDataLoaders.collectionPage('lectures-collection') }
-  },
   { path: 'publications', component: Publications, options: { ssrData: ssrDataLoaders.cuListPage('publications') } },
   { path: 'publications/cu/:id', component: PublicationUnit, options: { ssrData: ssrDataLoaders.publicationCUPage } },
   {
@@ -108,12 +96,6 @@ const routes = [
   { path: 'topics', component: NotImplemented },
   { path: 'photos', component: NotImplemented },
   { path: 'search', component: SearchResults, options: { ssrData: ssrDataLoaders.searchPage } },
-  { path: 'series', component: Series, options: { ssrData: ssrDataLoaders.seriesPage } },
-  {
-    path: 'series/c/:id',
-    component: LessonsSeriesCollection,
-    options: { ssrData: ssrDataLoaders.playlistCollectionPage }
-  },
   { path: 'project-status', component: ProjectStatus },
   // { path: 'design', component: Design },
   // { path: 'design2', component: Design2 },

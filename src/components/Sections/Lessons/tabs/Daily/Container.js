@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { List, Table } from 'semantic-ui-react';
 
-import { CT_DAILY_LESSON, CT_LESSON_PART, NO_NAME } from '../../../helpers/consts';
-import { CollectionsBreakdown } from '../../../helpers/mdb';
-import { canonicalLink } from '../../../helpers/links';
-import { selectors as mdb } from '../../../redux/modules/mdb';
-import { selectors as lists } from '../../../redux/modules/lists';
-import { mapState as baseMapState, UnitListContainer, wrap } from '../../Pages/UnitList/Container';
-import Link from '../../Language/MultiLanguageLink';
-import SectionHeader from '../../shared/SectionHeader';
+import { CT_DAILY_LESSON, CT_LESSON_PART, NO_NAME } from '../../../../../helpers/consts';
+import { CollectionsBreakdown } from '../../../../../helpers/mdb';
+import { canonicalLink } from '../../../../../helpers/links';
+import { selectors as mdb } from '../../../../../redux/modules/mdb';
+import { selectors as lists } from '../../../../../redux/modules/lists';
+import { mapState as baseMapState, UnitListContainer, wrap } from '../../../../Pages/UnitList/Container';
+import Link from '../../../../Language/MultiLanguageLink';
 
 const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
 
@@ -144,13 +143,10 @@ const MyUnitList = wrap(UnitListContainer, mapState);
 class LessonsList extends Component {
   render() {
     return (
-      <div>
-        <SectionHeader section="lessons" />
-        <MyUnitList
-          namespace="lessons"
-          renderUnit={renderUnitOrCollection}
-        />
-      </div>
+      <MyUnitList
+        namespace="lessons-daily"
+        renderUnit={renderUnitOrCollection}
+      />
     );
   }
 }

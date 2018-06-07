@@ -1,21 +1,15 @@
 import React from 'react';
 import { Container, Header, Item } from 'semantic-ui-react';
 
-import { canonicalLink } from '../../../helpers/links';
-import { formatDuration, neighborIndices } from '../../../helpers/utils';
-import { sectionThumbnailFallback } from '../../../helpers/images';
-import Link from '../../Language/MultiLanguageLink';
-import UnitLogo from '../../shared/Logo/UnitLogo';
-import Helmets from '../../shared/Helmets';
-import { UnitContainer, wrap as wrapContainer } from '../../Pages/Unit/Container';
-import { UnitPage, wrap as wrapPage } from '../../Pages/Unit/Page';
-import {
-  SameCollectionContainer,
-  wrap as wrapSameCollectionContainer
-} from '../../Pages/Unit/widgets/Recommended/SameCollection/Container';
-import SameCollectionWidget from '../../Pages/Unit/widgets/Recommended/SameCollection/Widget';
+import { canonicalLink } from '../../../../helpers/links';
+import { formatDuration, neighborIndices } from '../../../../helpers/utils';
+import { sectionThumbnailFallback } from '../../../../helpers/images';
+import Link from '../../../Language/MultiLanguageLink';
+import UnitLogo from '../../../shared/Logo/UnitLogo';
+import { wrap as wrapContainer } from '../../../Pages/Unit/Container';
+import SameCollectionWidget from '../../../Pages/Unit/widgets/Recommended/SameCollection/Widget';
 
-class MySameCollectionWidget extends SameCollectionWidget {
+class SameCollectionLessonPart extends SameCollectionWidget {
   renderContent() {
     const { unit, collection, t } = this.props;
 
@@ -29,7 +23,7 @@ class MySameCollectionWidget extends SameCollectionWidget {
 
     return (
       <div className="recommended-same-collection content__aside-unit">
-        <Header as="h3" content={t('lessons.unit.recommended.same-collection.title')} />
+        <Header as="h3" content={t('lessons.unit-lesson-part.recommended.same-collection.title')} />
         <Item.Group divided unstackable link>
           {
             otherParts.map(part => (
@@ -50,7 +44,7 @@ class MySameCollectionWidget extends SameCollectionWidget {
                 <Item.Content verticalAlign="top">
                   <Header as="h5">
                     <small className="text grey uppercase recommended-same-collection__item-title">
-                      {t('lessons.unit.recommended.same-collection.item-title', { name: collection.ccuNames[part.id] })}
+                      {t('lessons.unit-lesson-part.recommended.same-collection.item-title', { name: collection.ccuNames[part.id] })}
                     </small>
                     <br />
                     <span className="recommended-same-collection__item-name">
@@ -82,50 +76,4 @@ class MySameCollectionWidget extends SameCollectionWidget {
   }
 }
 
-class MySameCollectionContainer extends SameCollectionContainer {
-  render() {
-    const { unit, collection, wip, err, t } = this.props;
-
-    return (
-      <MySameCollectionWidget
-        unit={unit}
-        wip={wip}
-        err={err}
-        collection={wip || err ? null : collection}
-        t={t}
-      />
-    );
-  }
-}
-
-const MyWrappedSameCollectionContainer = wrapSameCollectionContainer(MySameCollectionContainer);
-
-class MyUnitPage extends UnitPage {
-  renderHelmet() {
-    return <Helmets.AVUnit unit={this.props.unit} language={this.props.language} />;
-  }
-
-  renderRecommendations() {
-    const { unit, t } = this.props;
-    return <MyWrappedSameCollectionContainer unit={unit} t={t} />;
-  }
-}
-
-const MyWrappedUnitPage = wrapPage(MyUnitPage);
-
-class MyUnitContainer extends UnitContainer {
-  render() {
-    const { language, unit, wip, err } = this.props;
-    return (
-      <MyWrappedUnitPage
-        section="lessons"
-        unit={wip || err ? null : unit}
-        language={language}
-        wip={wip}
-        err={err}
-      />
-    );
-  }
-}
-
-export default wrapContainer(MyUnitContainer);
+export default wrapContainer(SameCollectionLessonPart);

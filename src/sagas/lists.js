@@ -21,7 +21,7 @@ function* fetchList(action) {
     };
     delete args.namespace;
 
-    const endpoint = namespace === 'lessons' ? Api.lessons : Api.units;
+    const endpoint = namespace === 'lessons-daily' ? Api.lessons : Api.units;
     const { data } = yield call(endpoint, args);
 
     if (Array.isArray(data.content_units)) {

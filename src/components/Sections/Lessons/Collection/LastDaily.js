@@ -6,13 +6,13 @@ import { withRouter } from 'react-router-dom';
 
 import { translate } from 'react-i18next';
 
-import { actions, selectors } from '../../../redux/modules/mdb';
-import { selectors as settings } from '../../../redux/modules/settings';
-import * as shapes from '../../shapes';
-import Helmets from '../../shared/Helmets';
-import WipErr from '../../shared/WipErr/WipErr';
-import { PlaylistCollectionContainer } from '../../Pages/PlaylistCollection/Container';
-import { publicFile } from '../../../helpers/utils';
+import { actions, selectors } from '../../../../redux/modules/mdb';
+import { selectors as settings } from '../../../../redux/modules/settings';
+import * as shapes from '../../../shapes';
+import Helmets from '../../../shared/Helmets';
+import WipErr from '../../../shared/WipErr/WipErr';
+import { PlaylistCollectionContainer } from '../../../Pages/PlaylistCollection/Container';
+import { publicFile } from '../../../../helpers/utils';
 
 class LastLessonCollection extends Component {
   static propTypes = {
