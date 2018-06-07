@@ -19,7 +19,7 @@ class LatestDailyLesson extends Component {
 
     return (
       <div className="thumbnail">
-        <Link to="/lessons/latest">
+        <Link to="/lessons/daily/latest">
           <Image fluid src={DailyLessonPlaceholder} className="thumbnail__image" width={512} />
           <Header as="h2" className="thumbnail__header">
             <Header.Content>

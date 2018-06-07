@@ -69,7 +69,7 @@ const onFailure = (state, action) => ({
 
 const onSuccess = (state, action) => {
   const { namespace, data } = action.payload;
-  const itemNormalizer      = namespace === 'lessons' ?
+  const itemNormalizer      = namespace === 'lessons-daily' ?
     x => [x.id, x.content_type] :
     x => x.id;
 

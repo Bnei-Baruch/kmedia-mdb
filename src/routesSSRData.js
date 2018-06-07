@@ -18,20 +18,19 @@ import { actions as filtersActions } from './redux/modules/filters';
 import { actions as listsActions } from './redux/modules/lists';
 import { actions as homeActions } from './redux/modules/home';
 import { actions as eventsActions } from './redux/modules/events';
-import { actions as lecturesActions } from './redux/modules/lectures';
-import { actions as seriesActions } from './redux/modules/series';
+import { actions as lessonsActions } from './redux/modules/lessons';
 import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
 import { actions as assetsActions, selectors as assetsSelectors } from './redux/modules/assets';
 import * as mdbSagas from './sagas/mdb';
 import * as filtersSagas from './sagas/filters';
 import * as eventsSagas from './sagas/events';
-import * as seriesSagas from './sagas/series';
+import * as lessonsSagas from './sagas/lessons';
 import * as searchSagas from './sagas/search';
 import * as assetsSagas from './sagas/assets';
 import withPagination from './components/Pagination/withPagination';
 
 import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
-import { tabs as lecturesTabs } from './components/Sections/Lectures/MainPage';
+import { tabs as lessonsTabs } from './components/Sections/Lessons/MainPage';
 import PDF from './components/shared/PDF/PDF';
 
 export const home = (store, match) => {
@@ -63,13 +62,13 @@ const getExtraFetchParams = (ns, collectionID) => {
     return { content_type: [CT_MEAL] };
   case 'events-friends-gatherings':
     return { content_type: [CT_FRIENDS_GATHERING] };
-  case 'lectures-virtual-lessons':
+  case 'lessons-virtual':
     return { content_type: [CT_VIRTUAL_LESSON] };
-  case 'lectures-lectures':
+  case 'lessons-lectures':
     return { content_type: [CT_LECTURE] };
-  case 'lectures-women-lessons':
+  case 'lessons-women':
     return { content_type: [CT_WOMEN_LESSON] };
-  case 'lectures-children-lessons':
+  case 'lessons-children':
     return { content_type: [CT_CHILDREN_LESSON] };
   default:
     if (collectionID) {
@@ -92,6 +91,7 @@ export const cuListPage = (ns, collectionID = 0) => (store, match) => {
 
   // extraFetchParams
   const extraFetchParams = getExtraFetchParams(ns, collectionID);
+  console.log('SSR.cuListPage', extraFetchParams);
 
   // dispatch fetchList
   store.dispatch(listsActions.fetchList(ns, page, { ...extraFetchParams, pageSize }));
@@ -101,6 +101,7 @@ export const cuListPage = (ns, collectionID = 0) => (store, match) => {
 
 export const collectionPage = ns => (store, match) => {
   const cID = match.params.id;
+  console.log('SSR.collectionPage', cID);
   return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done
     .then(() => {
       cuListPage(ns, cID)(store, match);
@@ -151,19 +152,34 @@ export const eventsPage = (store, match) => {
   return store.sagaMiddleWare.run(eventsSagas.fetchAllEvents, eventsActions.fetchAllEvents()).done;
 };
 
-export const lecturesPage = (store, match) => {
+export const lessonsPage = (store, match) => {
   // hydrate tab
-  const tab = match.params.tab || lecturesTabs[0];
-  if (tab !== lecturesTabs[0]) {
-    store.dispatch(lecturesActions.setTab(tab));
+  const tab = match.params.tab || lessonsTabs[0];
+  if (tab !== lessonsTabs[0]) {
+    store.dispatch(lessonsActions.setTab(tab));
   }
-  const ns = `lectures-${tab}`;
 
+  if (tab === 'series') {
+    return store.sagaMiddleWare.run(lessonsSagas.fetchAllSeries, lessonsActions.fetchAllSeries).done;
+  }
+
+  const ns = `lessons-${tab}`;
   return cuListPage(ns)(store, match);
 };
 
-export const seriesPage = (store, match) =>
-  store.sagaMiddleWare.run(seriesSagas.fetchAll, seriesActions.fetchAll()).done;
+export const lessonsCollectionPage = (store, match) => {
+  // hydrate tab
+  const tab = match.params.tab || lessonsTabs[0];
+  if (tab !== lessonsTabs[0]) {
+    store.dispatch(lessonsActions.setTab(tab));
+  }
+
+  if (tab === 'daily' || tab === 'series') {
+    return playlistCollectionPage(store, match);
+  }
+
+  return collectionPage('lessons-collection')(store, match);
+};
 
 export const searchPage = store =>
   Promise.all([

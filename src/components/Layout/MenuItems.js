@@ -7,13 +7,11 @@ import NavLink from '../Language/MultiLanguageNavLink';
 const ITEMS = [
   'lessons',
   'programs',
-  'lectures',
   'sources',
   'events',
   // 'books',
   'topics',
   'publications',
-  'series',
   'project-status'
   // 'photos',
   // 'design',

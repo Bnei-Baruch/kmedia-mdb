@@ -5,14 +5,13 @@ import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import { Container, Divider, Header, List } from 'semantic-ui-react';
 
-import { canonicalLink } from '../../../helpers/links';
-import { isEmpty } from '../../../helpers/utils';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { actions, selectors } from '../../../redux/modules/series';
-import * as shapes from '../../shapes';
-import NavLink from '../../Language/MultiLanguageNavLink';
-import SectionHeader from '../../shared/SectionHeader';
-import WipErr from '../../shared/WipErr/WipErr';
+import { canonicalLink } from '../../../../../helpers/links';
+import { isEmpty } from '../../../../../helpers/utils';
+import { selectors as settings } from '../../../../../redux/modules/settings';
+import { actions, selectors } from '../../../../../redux/modules/lessons';
+import * as shapes from '../../../../shapes';
+import NavLink from '../../../../Language/MultiLanguageNavLink';
+import WipErr from '../../../../shared/WipErr/WipErr';
 
 class SeriesContainer extends Component {
   static propTypes = {
@@ -81,7 +80,6 @@ class SeriesContainer extends Component {
 
     return (
       <div>
-        <SectionHeader section="series" />
         <Divider fitted />
         {content}
       </div>
@@ -90,15 +88,15 @@ class SeriesContainer extends Component {
 }
 
 const mapState = state => ({
-  bySource: selectors.getBySource(state.series, state.mdb, state.sources),
+  bySource: selectors.getSeriesBySource(state.lessons, state.mdb, state.sources),
   language: settings.getLanguage(state.settings),
-  wip: selectors.getWip(state.series).all,
-  err: selectors.getErrors(state.series).all,
+  wip: selectors.getWip(state.lessons).series,
+  err: selectors.getErrors(state.lessons).series,
 });
 
 const mapDispatch = dispatch => (
   bindActionCreators({
-    fetchAll: actions.fetchAll,
+    fetchAll: actions.fetchAllSeries,
   }, dispatch)
 );
 

@@ -76,6 +76,14 @@ class PlaylistAVBox extends Component {
 
     // Persist language in playableItem
     this.setPlaylist(collection, newMediaType, newItemLanguage);
+
+    // When moving from playlist to another playlist
+    // we're already mounted.
+    // We have to make sure to change selected as well.
+    const nSelected = playerHelper.getActivePartFromQuery(location);
+    if (nSelected !== this.state.selected) {
+      this.handleSelectedChange(nSelected);
+    }
   }
 
   setPlaylist = (collection, mediaType, language) => {
