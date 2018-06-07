@@ -71,9 +71,9 @@ export const canonicalLink = (entity) => {
   case CT_DAILY_LESSON:
   case CT_SPECIAL_LESSON:
     return `/lessons/daily/c/${entity.id}`;
-  case CT_LECTURE_SERIES:
-    return `/lessons/virtual/c/${entity.id}`;
   case CT_VIRTUAL_LESSONS:
+    return `/lessons/virtual/c/${entity.id}`;
+  case CT_LECTURE_SERIES:
     return `/lessons/lectures/c/${entity.id}`;
   case CT_WOMEN_LESSONS:
     return `/lessons/women/c/${entity.id}`;
