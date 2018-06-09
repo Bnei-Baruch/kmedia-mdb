@@ -62,12 +62,10 @@ export class OmniBox extends Component {
     if (nextProps.suggestions !== this.props.suggestions) {
       this.setState({ suggestionsHelper: new SuggestionsHelper(nextProps.suggestions) });
     }
-  }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.query && !this.props.location.pathname.endsWith('search') && prevProps.location.pathname !== this.props.location.pathname){
-        this.props.updateQuery('');
-        console.log("Inside componentDidUpdate. Query cleared. Page is ", prevProps.location.pathname)
+    // Clear search query when navigating from the search page into other pages (AS-38)
+    if (this.props.query && !nextProps.location.pathname.endsWith('search') && nextProps.location.pathname !== this.props.location.pathname){
+      this.handleFilterClear();
     }
   }
 
@@ -234,16 +232,11 @@ export class OmniBox extends Component {
   }
 
   render() {
-    const { language, location}           = this.props;
+    const { language, query }           = this.props;
     const { suggestionsHelper, isOpen } = this.state;
 
     const categories  = ['tags', 'sources', 'authors', 'persons'];
-
-    let query = this.props.query;
     const textResults = new Set([query]);
-    /*if (!isOpen && !location.pathname.endsWith('search')){
-      query = '';
-    }*/
     
     let results       = categories.reduce((acc, val) => {
       const searchResults = suggestionsHelper.getSuggestions(val, 5);
