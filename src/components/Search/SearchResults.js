@@ -17,9 +17,6 @@ import WipErr from '../shared/WipErr/WipErr';
 import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import ScoreDebug from './ScoreDebug';
-import SearchResultCU from './SearchResultCU';
-import SearchResultCollection from './SearchResultCollection';
-import SearchResultIntent from './SearchResultIntent';
 import {
   SEARCH_INTENT_FILTER_NAMES,
   SEARCH_INTENT_NAMES,
@@ -65,14 +62,78 @@ class SearchResults extends Component {
     return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop]) }} />;
   };
 
-  click = (mdb_uid, index, type, rank, searchId) => {
+  resultClick = (mdb_uid, index, resultType, rank, searchId) => {
     const { click } = this.props;
-    click(mdb_uid, index, type, rank, searchId);
+    click(mdb_uid, index, resultType, rank, searchId);
   };
 
-  filterByHitType = (hit) => {
-    const { hitType } = this.props;
-    return hitType ? hit.type === hitType : true;
+  renderContentUnit = (cu, hit, rank) => {
+    const { t, location, queryResult }                                                           = this.props;
+    const { search_result: { searchId } }                                                        = queryResult;
+    const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, highlight, _score: score } = hit;
+    console.log('renderContentUnit', hit, resultType);
+
+    const name        = this.snippetFromHighlight(highlight, ['title', 'title_language'], parts => parts.join(' ')) || cu.name;
+    const description = this.snippetFromHighlight(highlight, ['description', 'description_language'], parts => `...${parts.join('.....')}...`);
+    const transcript  = this.snippetFromHighlight(highlight, ['content', 'content_language'], parts => `...${parts.join('.....')}...`);
+    const snippet     = (
+      <div className="search__snippet">
+        {
+          description ?
+            <div>
+              <strong>{t('search.result.description')}: </strong>
+              {description}
+            </div> :
+            null
+        }
+        {
+          transcript ?
+            <div>
+              <strong>{t('search.result.transcript')}: </strong>
+              {transcript}
+            </div> :
+            null
+        }
+      </div>);
+
+    let filmDate = '';
+    if (cu.film_date) {
+      filmDate = t('values.date', { date: cu.film_date });
+    }
+
+    return (
+      <Table.Row key={mdbUid} verticalAlign="top">
+        <Table.Cell collapsing singleLine width={1}>
+          <strong>{filmDate}</strong>
+        </Table.Cell>
+        <Table.Cell collapsing singleLine>
+          <Label size="tiny">{t(`constants.content-types.${cu.content_type}`)}</Label>
+        </Table.Cell>
+        <Table.Cell>
+          <Link
+            className="search__link"
+            onClick={() => this.resultClick(mdbUid, index, resultType, rank, searchId)}
+            to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}
+          >
+            {name}
+          </Link>
+          &nbsp;&nbsp;
+          {
+            cu.duration ?
+              <small>{formatDuration(cu.duration)}</small> :
+              null
+          }
+          {snippet || null}
+        </Table.Cell>
+        {
+          !isDebMode(location) ?
+            null :
+            <Table.Cell collapsing textAlign="right">
+              <ScoreDebug name={cu.name} score={score} explanation={hit._explanation} />
+            </Table.Cell>
+        }
+      </Table.Row>
+    );
   };
 
   renderCollection = (c, hit, rank) => {
@@ -110,7 +171,7 @@ class SearchResults extends Component {
         <Table.Cell>
           <Link
             className="search__link"
-            onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+            onClick={() => this.resultClick(mdbUid, index, type, rank, searchId)}
             to={canonicalLink(c || { id: mdbUid, content_type: c.content_type })}
           >
             {name}
@@ -191,38 +252,109 @@ class SearchResults extends Component {
     );
   };
 
+  renderIntent = (hit, rank) => {
+    const { t, location, queryResult, getTagById, getSourceById} = this.props;
+    const { search_result: { searchId } } = queryResult;
+    const {
+      _index: index,
+      _type: type,
+      _source: {
+        content_type: contentType,
+        mdb_uid: mdbUid,
+        name,
+        explanation,
+        score: originalScore,
+        max_explanation: maxExplanation,
+        max_score: maxScore
+      },
+      _score: score,
+    } = hit;
+    const section    = SEARCH_INTENT_SECTIONS[type];
+    const intentType = SEARCH_INTENT_NAMES[index];
+    const filterName = SEARCH_INTENT_FILTER_NAMES[index];
+
+    let getFilterById = null;
+    switch (index) {
+    case SEARCH_INTENT_INDEX_TOPIC:
+      getFilterById = getTagById;
+      break;
+    case SEARCH_INTENT_INDEX_SOURCE:
+      getFilterById = getSourceById;
+      break;
+    default:
+      console.log('Using default filter:', index);
+      getFilterById = x => x;
+    }
+
+    const path  = tracePath(getFilterById(mdbUid), getFilterById);
+    let display = '';
+    switch (index) {
+    case SEARCH_INTENT_INDEX_TOPIC:
+      display = path[path.length - 1].label;
+      break;
+    case SEARCH_INTENT_INDEX_SOURCE:
+      display = path.map(y => y.name).join(' > ');
+      break;
+    default:
+      display = name;
+    }
+
+    return (
+      <Table.Row key={mdbUid + contentType} verticalAlign="top">
+        <Table.Cell collapsing singleLine width={1}>
+          {/*<strong>date if applicable</strong>*/}
+        </Table.Cell>
+        <Table.Cell collapsing singleLine>
+          <Label size="tiny">{t(`search.intent-types.${section}`)}</Label>
+        </Table.Cell>
+        <Table.Cell>
+          <Link
+            className="search__link"
+            onClick={() => this.resultClick(mdbUid, index, type, rank, searchId)}
+            to={sectionLink(section, [{name: filterName, value: mdbUid, getFilterById}])}
+          >
+            {t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`)} {display}
+          </Link>
+        </Table.Cell>
+        {
+          !isDebMode(location) ?
+            null :
+            <Table.Cell collapsing textAlign="right">
+              <div style={{ display: 'inline-block' }}>
+                <ScoreDebug
+                  name={`${name} (${originalScore})`}
+                  score={score}
+                  explanation={explanation}
+                />
+              </div>
+              <div style={{ display: 'inline-block' }}>
+                <ScoreDebug
+                  name="Max"
+                  score={maxScore}
+                  explanation={maxExplanation}
+                />
+              </div>
+            </Table.Cell>
+        }
+      </Table.Row>
+    );
+  };
+
   renderHit = (hit, rank) => {
-    const { cMap, cuMap }                                                             = this.props;
-    const { _source: { mdb_uid: mdbUid, content_type: contentType }, _type: hitType } = hit;
-    const cu                                                                          = cuMap[mdbUid];
-    const c                                                                           = cMap[mdbUid];
+    console.log('hit', hit);
+    const { cMap, cuMap }                                  = this.props;
+    const { _source: { mdb_uid: mdbUid }, _type: hitType } = hit;
+    const cu                                               = cuMap[mdbUid];
+    const c                                                = cMap[mdbUid];
 
     if (cu) {
-      return (
-        <Table.Row key={`${mdbUid}_${contentType}`} verticalAlign="top">
-          <Table.Cell colSpan="4">
-            <SearchResultCU hit={hit} rank={rank} {...this.props} cu={cu} />
-          </Table.Cell>
-        </Table.Row>
-      );
+      return this.renderContentUnit(cu, hit, rank);
     } else if (c) {
-      return (
-        <Table.Row key={`${mdbUid}_${contentType}`} verticalAlign="top">
-          <Table.Cell colSpan="4">
-            <SearchResultCollection hit={hit} rank={rank} c={c}  {...this.props} />
-          </Table.Cell>
-        </Table.Row>
-      );
+      return this.renderCollection(c, hit, rank);
     } else if (hitType === 'sources') {
       return this.renderSource(hit, rank);
     } else if (SEARCH_INTENT_HIT_TYPES.includes(hitType)) {
-      return (
-        <Table.Row key={`${mdbUid}_${contentType}`} verticalAlign="top">
-          <Table.Cell colSpan="5">
-            <SearchResultIntent hit={hit} rank={rank} {...this.props} />
-          </Table.Cell>
-        </Table.Row>
-      );
+      return this.renderIntent(hit, rank)
     }
 
     // maybe content_units are still loading ?
@@ -232,18 +364,18 @@ class SearchResults extends Component {
 
   render() {
     const {
-            filters,
-            wip,
-            err,
-            queryResult,
-            areSourcesLoaded,
-            pageNo,
-            pageSize,
-            language,
-            t,
-            handlePageChange,
-            location,
-          } = this.props;
+      filters,
+      wip,
+      err,
+      queryResult,
+      areSourcesLoaded,
+      pageNo,
+      pageSize,
+      language,
+      t,
+      handlePageChange,
+      location,
+    } = this.props;
 
     const { search_result: results } = queryResult;
 
@@ -264,8 +396,7 @@ class SearchResults extends Component {
     }
 
     const { /* took, */ hits: { total, hits } } = results;
-    // Elastic too slow and might fails on more than 1k results.
-    const totalForPagination                    = Math.min(1000, total);
+    const totalForPagination = Math.min(10000, total);  // Elastic fails on more than 10k results
 
     let content;
     if (total === 0) {
@@ -281,12 +412,12 @@ class SearchResults extends Component {
             <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
             <Table sortable basic="very" className="index-list search-results">
               <Table.Body>
-                {hits.filter(this.filterByHitType).map(this.renderHit)}
+                {hits.map(this.renderHit)}
               </Table.Body>
             </Table>
           </Container>
           <Divider fitted />
-          <Container className="padded pagination-wrapper" textAlign="center">
+          <Container className="padded" textAlign="center">
             <Pagination
               pageNo={pageNo}
               pageSize={pageSize}
