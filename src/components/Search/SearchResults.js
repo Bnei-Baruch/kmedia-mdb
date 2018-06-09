@@ -62,19 +62,20 @@ class SearchResults extends Component {
     return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop]) }} />;
   };
 
-  click = (mdb_uid, index, type, rank, searchId) => {
+  resultClick = (mdb_uid, index, resultType, rank, searchId) => {
     const { click } = this.props;
-    click(mdb_uid, index, type, rank, searchId);
+    click(mdb_uid, index, resultType, rank, searchId);
   };
 
   renderContentUnit = (cu, hit, rank) => {
     const { t, location, queryResult }                                                           = this.props;
     const { search_result: { searchId } }                                                        = queryResult;
-    const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
+    const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, highlight, _score: score } = hit;
+    console.log('renderContentUnit', hit, resultType);
 
-    const name        = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || cu.name;
-    const description = this.snippetFromHighlight(highlight, ['description', 'description_analyzed'], parts => `...${parts.join('.....')}...`);
-    const transcript  = this.snippetFromHighlight(highlight, ['transcript', 'transcript_analyzed'], parts => `...${parts.join('.....')}...`);
+    const name        = this.snippetFromHighlight(highlight, ['title', 'title_language'], parts => parts.join(' ')) || cu.name;
+    const description = this.snippetFromHighlight(highlight, ['description', 'description_language'], parts => `...${parts.join('.....')}...`);
+    const transcript  = this.snippetFromHighlight(highlight, ['content', 'content_language'], parts => `...${parts.join('.....')}...`);
     const snippet     = (
       <div className="search__snippet">
         {
@@ -111,7 +112,7 @@ class SearchResults extends Component {
         <Table.Cell>
           <Link
             className="search__link"
-            onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+            onClick={() => this.resultClick(mdbUid, index, resultType, rank, searchId)}
             to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}
           >
             {name}
@@ -170,7 +171,7 @@ class SearchResults extends Component {
         <Table.Cell>
           <Link
             className="search__link"
-            onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+            onClick={() => this.resultClick(mdbUid, index, type, rank, searchId)}
             to={canonicalLink(c || { id: mdbUid, content_type: c.content_type })}
           >
             {name}
@@ -309,7 +310,7 @@ class SearchResults extends Component {
         <Table.Cell>
           <Link
             className="search__link"
-            onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+            onClick={() => this.resultClick(mdbUid, index, type, rank, searchId)}
             to={sectionLink(section, [{name: filterName, value: mdbUid, getFilterById}])}
           >
             {t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`)} {display}
@@ -340,7 +341,7 @@ class SearchResults extends Component {
   };
 
   renderHit = (hit, rank) => {
-    // console.log('hit', hit);
+    console.log('hit', hit);
     const { cMap, cuMap }                                  = this.props;
     const { _source: { mdb_uid: mdbUid }, _type: hitType } = hit;
     const cu                                               = cuMap[mdbUid];

@@ -59,7 +59,7 @@ export function* search(action) {
         }
       }, []);
       const cuIDsToFetch = data.search_result.hits.hits.reduce((acc, val) => {
-        if (val._type === 'content_units') {
+        if (val._source.result_type === 'units') {
           return acc.concat(val._source.mdb_uid);
         } else {
           return acc;

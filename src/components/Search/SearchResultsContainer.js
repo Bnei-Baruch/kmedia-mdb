@@ -122,7 +122,7 @@ const mapState = (state) => {
 
   const cuMap = results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
-      if (val._type === 'content_units') {
+      if (val._source.result_type === 'units') {
         const cuID = val._source.mdb_uid;
         const cu   = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
         if (cu) {
