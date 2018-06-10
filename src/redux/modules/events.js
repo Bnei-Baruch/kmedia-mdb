@@ -1,14 +1,9 @@
 import { createAction, handleActions } from 'redux-actions';
 
 import { isEmpty } from '../../helpers/utils';
-import i18n from '../../helpers/i18nnext';
 import { types as settings } from './settings';
 import { types as ssr } from './ssr';
 import { selectors as mdb } from './mdb';
-
-const ALL_COUNTRIES = 'ALLCOUNTRIES';
-const ALL_CITIES    = 'ALLCITIES';
-const ALL_HOLIDAYS  = 'ALLHOLIDAYS';
 
 /* Types */
 
@@ -95,89 +90,26 @@ const setStatus = (state, action) => {
   };
 };
 
-const createItem = (id, name, children, typeName, extra) =>
-  ({ id, name, children, typeName, ...extra });
-
 const onFetchAllEventsSuccess = (state, action) => {
   const { collections } = action.payload;
 
   // Map event IDs by content_type
   const eventsByType = collections.reduce((acc, val) => {
     const { id, content_type: ct } = val;
-    let v                          = acc[ct];
+
+    let v = acc[ct];
     if (!v) {
       v = [];
     }
     v.push(id);
     acc[ct] = v;
-    return acc;
-  }, {});
-
-  // build locations tree (country, city)
-  const allCities    = createItem(ALL_CITIES, i18n.t('filters.locations-filter.allItem'), [], 'city');
-  const allCountries = createItem(ALL_COUNTRIES, i18n.t('filters.locations-filter.allItem'), [ALL_CITIES], 'country');
-
-  const { countries, cities } = collections.reduce((acc, collection) => {
-    const { country, city } = collection;
-
-    if (country && !acc.countries[country]) {
-      acc.countries[country] = createItem(country, country, [ALL_CITIES], 'country');
-    }
-
-    if (city && !acc.cities[city]) {
-      acc.cities[city] = createItem(city, city, [], 'city', { parentId: country });
-    }
-
-    return acc;
-  }, { countries: {}, cities: {} });
-
-  // populate cities as children of their parent countries
-  Object.keys(cities).forEach((city) => {
-    const parent = cities[city].parentId;
-    if (parent) {
-      countries[parent].children.push(city);
-    }
-
-    allCountries.children.push(city);
-  });
-
-  Object.keys(countries).forEach(country => countries[country].children.sort());
-
-  const locationsTree = {
-    roots: [ALL_COUNTRIES].concat(Object.keys(countries).sort()),
-    byIds: {
-      [ALL_CITIES]: allCities,
-      [ALL_COUNTRIES]: allCountries,
-      ...countries,
-      ...cities
-    }
-  };
-
-  // build holidays tree (holiday)
-  const allHolidays = createItem(ALL_HOLIDAYS, i18n.t('filters.holidays-filter.allItem'), [], 'holiday');
-
-  const holidays = collections.reduce((acc, collection) => {
-    const { holiday_id: holiday } = collection;
-    if (holiday && !acc[holiday]) {
-      acc[holiday] = createItem(holiday, holiday, [], 'holiday');
-    }
 
     return acc;
   }, {});
-
-  const holidaysTree = {
-    roots: [ALL_HOLIDAYS].concat(Object.keys(holidays).sort()),
-    byIds: {
-      [ALL_HOLIDAYS]: allHolidays,
-      ...holidays,
-    }
-  };
 
   return {
     ...state,
     eventsByType,
-    locationsTree,
-    holidaysTree,
   };
 };
 
@@ -216,16 +148,12 @@ const makeLocationsPredicate = values => x =>
   isEmpty(values) ||
   values.some((v) => {
     const [country, city] = v;
-
-    return (country === ALL_COUNTRIES || country === x.country) &&
-      (!city || city === ALL_CITIES || city === x.city);
+    return country === x.country && (!city || city === x.city);
   });
 
 const makeHolidaysPredicate = values => x =>
   isEmpty(values) ||
-  values.some(v =>
-    v[0] === ALL_HOLIDAYS || x.holiday_id === v[0]
-  );
+  values.some(v => x.holiday_id === v[0]);
 
 const predicateMap = {
   'years-filter': makeYearsPredicate,
@@ -244,12 +172,14 @@ const getFilteredData = (state, type, filtersState, mdbState) => {
 
 const getWip           = state => state.wip;
 const getErrors        = state => state.errors;
+const getEventsByType  = state => state.eventsByType;
 const getLocationsTree = state => state.locationsTree;
 const getHolidaysTree  = state => state.holidaysTree;
 
 export const selectors = {
   getWip,
   getErrors,
+  getEventsByType,
   getFilteredData,
   getLocationsTree,
   getHolidaysTree,

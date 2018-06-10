@@ -97,7 +97,7 @@ class SourcesFilter extends Component {
       {
         value: 'root',
         text: 'All Sources',
-        count: 123456,
+        // count: 123456,
         children: roots ? roots.map(x => this.buildNode(x, getSourceById)) : null,
       }
     ];
@@ -108,7 +108,7 @@ class SourcesFilter extends Component {
     return {
       value: id,
       text: name,
-      count: 0,
+      // count: 0,
       children: children ? children.map(x => this.buildNode(x, getSourceById)) : null,
     };
   };

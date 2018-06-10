@@ -49,6 +49,7 @@ class Filters2 extends Component {
   handleResetFilter = (e, name) => {
     e.stopPropagation();
     this.props.resetFilter(this.props.namespace, name);
+    this.props.onChange();
   };
 
   render() {
@@ -113,6 +114,7 @@ class Filters2 extends Component {
                         name={item.name}
                         onCancel={this.handlePopupClose}
                         onApply={this.handleApply}
+                        t={t}
                       />
                     </Popup.Content>
                   </Popup>

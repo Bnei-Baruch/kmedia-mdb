@@ -92,7 +92,7 @@ class HierarchicalFilter extends React.Component {
         {text}
         {
           Number.isInteger(count) ?
-            <span className="count">({count})</span> :
+            <span className="count">&nbsp;({count})</span> :
             null
         }
       </Menu.Item>
