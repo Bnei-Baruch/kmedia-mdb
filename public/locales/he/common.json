@@ -22,6 +22,7 @@
   },
   "filters": {
     "by": "סנן לפי:",
+    "all": "הכל",
     "date-filter": {
       "label": "תאריך",
       "selectTitle": "בחר טווח תאריכים",
@@ -38,26 +39,29 @@
       "end": "סיום"
     },
     "sources-filter": {
-      "label": "מקורות"
+      "label": "מקורות",
+      "all": "כל המקורות"
     },
     "topics-filter": {
-      "label": "נושאים"
+      "label": "נושאים",
+      "all": "כל הנושאים"
     },
     "publishers-filter": {
       "label": "מפרסמים"
     },
     "programs-filter": {
       "label": "ז'אנר \\ תוכנית",
+      "all": "כל התוכניות",
       "recently-updated": "עודכנו לאחרונה",
       "last-updated": "עודכן לאחרונה ב"
     },
     "locations-filter": {
       "label": "מיקום",
-      "allItem": "הכל"
+      "all": "כל המקומות"
     },
     "holidays-filter": {
       "label": "חג \\ מועד",
-      "allItem": "הכל"
+      "all": "כל החגים והמועדים"
     },
     "years-filter": {
       "label": "שנה",
@@ -65,7 +69,6 @@
     },
     "sections-filter": {
       "label": "מדור",
-      "all": "הכל",
       "lessons": "שיעורים והרצאות",
       "programs": "תוכניות",
       "events": "כנסים ואירועים",
@@ -249,14 +252,14 @@
       "subtext": "כאן תמצאו מגוון עשיר של תוכניות הכולל: שיחות מרתקות על משמעות החיים, אקטואליה, תוכניות לכל המשפחה ועוד."
     },
     "genres": {
-      "all": "כל התוכניות",
       "documentary": "דוקומנטרי",
       "late-night": "מאוחר בלילה",
       "news": "אקטואליה",
       "talk-show": "תוכניות אירוח",
       "educational": "לימודי",
       "children": "ילדים",
-      "movies": "סרטים"
+      "movies": "סרטים",
+      "other": "אחר"
     },
     "list": {
       "episode_from": "פרק מתוך התוכנית:"

@@ -23,6 +23,7 @@
   },
   "filters": {
     "by": "Filter by:",
+    "all": "All",
     "date-filter": {
       "label": "Date",
       "selectTitle": "Select a date range",
@@ -39,26 +40,29 @@
       "end": "End"
     },
     "sources-filter": {
-      "label": "Sources"
+      "label": "Sources",
+      "all": "All Sources"
     },
     "topics-filter": {
-      "label": "Topics"
+      "label": "Topics",
+      "all": "All Topics"
     },
     "publishers-filter": {
       "label": "Publishers"
     },
     "programs-filter": {
       "label": "Genre/Program",
+      "all": "All Programs",
       "recently-updated": "Recently Updated",
       "last-updated": "Last updated on"
     },
     "locations-filter": {
       "label": "Locations",
-      "allItem": "All"
+      "all": "All Locations"
     },
     "holidays-filter": {
       "label": "Holidays",
-      "allItem": "All"
+      "all": "All Holidays"
     },
     "years-filter": {
       "label": "Year",
@@ -250,14 +254,14 @@
       "subtext": "Here you will find a rich variety of programs that include: fascinating conversations about the meaning of life, current events, programs for the whole family and more."
     },
     "genres": {
-      "all": "All Programs",
       "documentary": "Documentary",
       "late-night": "Late Night",
       "news": "News",
       "talk-show": "Talk Show",
       "educational": "Educational",
       "children": "Children",
-      "movies": "Movies"
+      "movies": "Movies",
+      "other": "Other"
     },
     "list": {
       "episode_from": "Episode from:"

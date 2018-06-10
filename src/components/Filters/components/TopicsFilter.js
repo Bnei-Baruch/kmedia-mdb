@@ -10,6 +10,7 @@ class TagsFilter extends Component {
   static propTypes = {
     roots: PropTypes.array,
     getTagById: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -29,11 +30,11 @@ class TagsFilter extends Component {
   }
 
   getTree = (props) => {
-    const { roots, getTagById } = props;
+    const { roots, getTagById, t } = props;
     return [
       {
         value: 'root',
-        text: 'All Tags',
+        text: t('filters.topics-filter.all'),
         // count: 1234,
         children: roots ?
           roots

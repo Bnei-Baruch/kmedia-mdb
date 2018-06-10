@@ -63,7 +63,7 @@ class ProgramsFilter extends Component {
     return [
       {
         value: 'root',
-        text: 'All Programs',
+        text: t('filters.programs-filter.all'),
         children: byGenre.map(([genre, items]) => ({
           ...this.buildNode(genre, t(`programs.genres.${genre}`)),
           children: items.map(x => this.buildNode(x.id, x.name || 'NO NAME'))

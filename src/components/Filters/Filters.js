@@ -5,9 +5,11 @@ import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import { Container, Header, Icon, Menu, Popup } from 'semantic-ui-react';
 
+import { getLanguageDirection } from '../../helpers/i18n-utils';
 import { filtersTransformer } from '../../filters/index';
 import { actions, selectors } from '../../redux/modules/filters';
 import { selectors as mdb } from '../../redux/modules/mdb';
+import { selectors as settings } from '../../redux/modules/settings';
 import { filterPropShape } from '../shapes';
 import FiltersHydrator from './FiltersHydrator';
 
@@ -20,6 +22,7 @@ class Filters extends Component {
     filters: PropTypes.arrayOf(filterPropShape).isRequired,
     filtersData: PropTypes.objectOf(PropTypes.object).isRequired,
     rightItems: PropTypes.arrayOf(PropTypes.node),
+    language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -53,9 +56,9 @@ class Filters extends Component {
   };
 
   render() {
-    const { filters, namespace, onHydrated, t, filtersData, rightItems } = this.props;
-    const { activeFilter }                                               = this.state;
-    const { store }                                                      = this.context;
+    const { filters, namespace, onHydrated, t, filtersData, rightItems, language } = this.props;
+    const { activeFilter }                                                         = this.state;
+    const { store }                                                                = this.context;
 
     return (
       <div className="filter-panel">
@@ -73,7 +76,7 @@ class Filters extends Component {
                 const value    = Array.isArray(values) && values.length > 0 ? values[0] : null;
                 const label    = value ?
                   filtersTransformer.valueToTagLabel(name, values[0], this.props, store, t) :
-                  t('filters.holidays-filter.allItem');
+                  t('filters.all');
 
                 return (
                   <Popup
@@ -104,9 +107,12 @@ class Filters extends Component {
                     open={isActive}
                     onClose={this.handlePopupClose}
                     onOpen={() => this.handlePopupOpen(item.name)}
-                    style={{ padding: 0 }}
+                    style={{
+                      padding: 0,
+                      direction: getLanguageDirection(language)
+                    }}
                   >
-                    <Popup.Content className="filter-popup">
+                    <Popup.Content className={`filter-popup ${getLanguageDirection(language)}`}>
                       <FilterComponent
                         namespace={namespace}
                         name={item.name}
@@ -134,6 +140,7 @@ class Filters extends Component {
 export default connect(
   (state, ownProps) => ({
     filtersData: selectors.getNSFilters(state.filters, ownProps.namespace),
+    language: settings.getLanguage(state.settings),
 
     // DO NOT REMOVE, this triggers a necessary re-render for filter tags
     sqDataWipErr: mdb.getSQDataWipErr(state.mdb),

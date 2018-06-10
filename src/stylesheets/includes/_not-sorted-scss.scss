@@ -188,13 +188,6 @@
       padding: 0;
     }
 
-    &.date-filter {
-      max-height: 450px;
-      .DayPickerInput {
-        display: block;
-      }
-    }
-
     > .menu {
       border-radius: 0;
 
@@ -206,27 +199,10 @@
       }
     }
 
-    .hierarchy {
-      .item {
-
-        &.l1 {
-          padding-left: 1rem;
-        }
-        &.l2 {
-          padding-left: 2rem;
-        }
-        &.l3 {
-          padding-left: 3rem;
-        }
-        &.l4 {
-          padding-left: 4rem;
-        }
-        &.l5 {
-          padding-left: 5rem;
-        }
-        &.l6 {
-          padding-left: 6rem;
-        }
+    &.date-filter {
+      max-height: 450px;
+      .DayPickerInput {
+        display: block;
       }
     }
 
@@ -253,6 +229,56 @@
 
         &.active {
           background-image: linear-gradient(to bottom, rgba($blue, 0.3), rgba($blue, 0));
+        }
+      }
+    }
+  }
+
+  &.ltr {
+    .hierarchy {
+      .item {
+        &.l1 {
+          padding-left: 1rem;
+        }
+        &.l2 {
+          padding-left: 2rem;
+        }
+        &.l3 {
+          padding-left: 3rem;
+        }
+        &.l4 {
+          padding-left: 4rem;
+        }
+        &.l5 {
+          padding-left: 5rem;
+        }
+        &.l6 {
+          padding-left: 6rem;
+        }
+      }
+    }
+  }
+
+  &.rtl {
+    .hierarchy {
+      .item {
+        &.l1 {
+          padding-right: 1rem;
+        }
+        &.l2 {
+          padding-right: 2rem;
+        }
+        &.l3 {
+          padding-right: 3rem;
+        }
+        &.l4 {
+          padding-right: 4rem;
+        }
+        &.l5 {
+          padding-right: 5rem;
+        }
+        &.l6 {
+          padding-right: 6rem;
         }
       }
     }

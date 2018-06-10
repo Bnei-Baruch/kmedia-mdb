@@ -9,6 +9,7 @@ class SourcesFilter extends Component {
   static propTypes = {
     roots: PropTypes.array,
     getSourceById: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -28,11 +29,11 @@ class SourcesFilter extends Component {
   }
 
   getTree = (props) => {
-    const { roots, getSourceById } = props;
+    const { roots, getSourceById, t } = props;
     return [
       {
         value: 'root',
-        text: 'All Sources',
+        text: t('filters.sources-filter.all'),
         // count: 123456,
         children: roots ? roots.map(x => this.buildNode(x, getSourceById)) : null,
       }

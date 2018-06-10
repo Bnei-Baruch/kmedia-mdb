@@ -14,6 +14,7 @@ class HolidaysFilter extends Component {
   static propTypes = {
     holidayEvents: PropTypes.arrayOf(shapes.EventCollection).isRequired,
     getTagById: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -29,13 +30,13 @@ class HolidaysFilter extends Component {
   }
 
   getTree = (props) => {
-    const { holidayEvents, getTagById } = props;
+    const { holidayEvents, getTagById, t } = props;
 
     const counts = countBy(holidayEvents, x => x.holiday_id);
     return [
       {
         value: 'root',
-        text: 'All Holidays',
+        text: t('filters.holidays-filter.all'),
         count: holidayEvents.length,
         children: Object.entries(counts).map(([tagID, count]) => this.buildNode(tagID, count, getTagById))
       }

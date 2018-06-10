@@ -30,6 +30,7 @@ const cmpFn = (a, b) => {
 class LocationsFilter extends Component {
   static propTypes = {
     congressEvents: PropTypes.arrayOf(shapes.EventCollection).isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -44,7 +45,7 @@ class LocationsFilter extends Component {
   }
 
   getTree = (props) => {
-    const { congressEvents } = props;
+    const { congressEvents, t } = props;
 
     let byCountry = groupBy(congressEvents, x => x.country || 'Unknown');
 
@@ -63,7 +64,7 @@ class LocationsFilter extends Component {
     return [
       {
         value: 'root',
-        text: 'All Locations',
+        text: t('filters.locations-filter.all'),
         count: congressEvents.length,
         children: byCountry
           .map(([country, { count, byCity }]) => ({

@@ -22,6 +22,7 @@
   },
   "filters": {
     "by": "Filtrar por:",
+    "all": "Todo",
     "date-filter": {
       "label": "Fecha",
       "selectTitle": "Seleccione un rango de fechas",
@@ -38,26 +39,29 @@
       "end": "Final"
     },
     "sources-filter": {
-      "label": "Fuentes"
+      "label": "Fuentes",
+      "all": "Todos Los Fuentes"
     },
     "topics-filter": {
-      "label": "Temas"
+      "label": "Temas",
+      "all": "Todos Los Temas"
     },
     "publishers-filter": {
       "label": "Editores"
     },
     "programs-filter": {
       "label": "Genero / Programa",
+      "all": "Todos Los Programas",
       "recently-updated": "Recientemente actualizado",
       "last-updated": "Ultima actualización en"
     },
     "locations-filter": {
       "label": "Ubicaciones",
-      "allItem": "Todo"
+      "all": "Todas las ubicaciones"
     },
     "holidays-filter": {
       "label": "Fiesta",
-      "allItem": "Todo"
+      "all": "Todas las vacaciones"
     },
     "years-filter": {
       "label": "Año",
@@ -65,7 +69,6 @@
     },
     "sections-filter": {
       "label": "Sección",
-      "all": "Todo",
       "lessons": "Lecciones y Charlas",
       "programs": "Programas",
       "events": "Congresos y Eventos",
@@ -248,14 +251,14 @@
       "subtext": "Aquí encontrará una gran variedad de programas que incluyen: conversaciones fascinantes sobre el significado de la vida, eventos actuales, programas para toda la familia y más."
     },
     "genres": {
-      "all": "Todos Los Programas",
       "documentary": "Documental",
       "late-night": "Tarde en la Noche",
       "news": "Noticias",
       "talk-show": "Programas de Entrevistas",
       "educational": "Educacional",
       "children": "Niños",
-      "movies": "Películas"
+      "movies": "Películas",
+      "other": "Otro"
     },
     "list": {
       "episode_from": "Capítulo del programa:"
