@@ -9,7 +9,7 @@ import { filtersTransformer } from '../../filters/index';
 import { actions, selectors } from '../../redux/modules/filters';
 import { selectors as mdb } from '../../redux/modules/mdb';
 import { filterPropShape } from '../shapes';
-import FiltersHydrator from '../Filters/FiltersHydrator';
+import FiltersHydrator from './FiltersHydrator';
 
 class Filters2 extends Component {
   static propTypes = {
@@ -53,9 +53,9 @@ class Filters2 extends Component {
   };
 
   render() {
-    const { filters, namespace, onHydrated, t, filtersData } = this.props;
-    const { activeFilter }                                   = this.state;
-    const { store }                                          = this.context;
+    const { filters, namespace, onHydrated, t, filtersData, rightItems } = this.props;
+    const { activeFilter }                                               = this.state;
+    const { store }                                                      = this.context;
 
     console.log('Filters2.render', filtersData);
 
@@ -120,6 +120,11 @@ class Filters2 extends Component {
                   </Popup>
                 );
               })
+            }
+            {
+              rightItems ?
+                <Menu.Menu position="right">{rightItems}</Menu.Menu>
+                : null
             }
           </Container>
         </Menu>

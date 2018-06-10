@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { Button, Header, Menu, Segment } from 'semantic-ui-react';
 
 import connectFilter from './connectFilter';
 
-class FlatListFilter extends React.Component {
+class FlatListFilter extends Component {
   static propTypes = {
     namespace: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,

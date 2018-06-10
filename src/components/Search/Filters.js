@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { Dropdown } from 'semantic-ui-react';
 import { translate } from 'react-i18next';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
-import Filters from '../Filters/Filters';
-import filterComponents from '../Filters/components';
+import Filters from '../Filters2/Filters2';
+import filterComponents from '../Filters2/components';
 
 const filters = [
   {
@@ -33,10 +33,11 @@ class SearchResultsFilters extends Component {
     onSortByChange: PropTypes.func.isRequired,
     onHydrated: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
+    filtersValues: PropTypes.objectOf(PropTypes.object).isRequired,
   };
 
   render() {
-    const { t, selectedFilters, sortBy, onSortByChange, onHydrated, onChange } = this.props;
+    const { t, filtersValues, sortBy, onSortByChange, onHydrated, onChange } = this.props;
 
     const options = ['relevance', 'newertoolder', 'oldertonewer'].map(o => ({
       text: t(`search.sorts.${o}`),
@@ -44,7 +45,10 @@ class SearchResultsFilters extends Component {
     }));
 
     const sortingDisabled =
-     selectedFilters.some(f => f.name === "sections-filter" && f.values && f.values.includes("filters.sections-filter.sources"));
+            (filtersValues.values || []).some(f =>
+              f.name === 'sections-filter' &&
+              f.values &&
+              f.values.includes('filters.sections-filter.sources'));
 
     return (
       <Filters
@@ -54,17 +58,16 @@ class SearchResultsFilters extends Component {
         onHydrated={onHydrated}
         rightItems={[
           <span key="span" style={{ padding: '10px' }}>
-              {t('search.sortby')}:
-            </span>,
-          <Dropdown
-            disabled={sortingDisabled}
-            key="dropdown"
-            item
-            compact
-            options={options}
-            value={sortBy}
-            onChange={onSortByChange}
-          />
+            {t('search.sortby')}:&nbsp;&nbsp;
+            <Dropdown
+              inline
+              disabled={sortingDisabled}
+              key="dropdown"
+              options={options}
+              value={sortBy}
+              onChange={onSortByChange}
+            />
+          </span>,
         ]}
       />
     );
@@ -72,5 +75,5 @@ class SearchResultsFilters extends Component {
 }
 
 export default connect(state => ({
-  selectedFilters: filterSelectors.getFilters(state.filters, 'search'),
+  filtersValues: filterSelectors.getNSFilters(state.filters, 'search') || {},
 }))(translate()(SearchResultsFilters));

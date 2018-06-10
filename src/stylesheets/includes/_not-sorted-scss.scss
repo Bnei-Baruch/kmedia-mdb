@@ -227,7 +227,33 @@
         &.l6 {
           padding-left: 6rem;
         }
+      }
+    }
 
+    &.sections-filter {
+      img {
+        margin-bottom: .2em;
+        width: 50px !important;
+      }
+
+      .row .center.aligned.column {
+        display: flex !important;
+        justify-content: center;
+        align-items: stretch;
+      }
+
+      .header {
+        flex: 1 1 auto;
+        border-radius: 4px;
+        padding: 4px 4px 8px !important;
+
+        &:hover {
+          background-image: linear-gradient(to bottom, $darkWhite, rgba($darkWhite, 0));
+        }
+
+        &.active {
+          background-image: linear-gradient(to bottom, rgba($blue, 0.3), rgba($blue, 0));
+        }
       }
     }
   }
