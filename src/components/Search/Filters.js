@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { Dropdown } from 'semantic-ui-react';
 import { translate } from 'react-i18next';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
-import Filters from '../Filters2/Filters2';
-import filterComponents from '../Filters2/components';
+import Filters from '../Filters/Filters';
+import filterComponents from '../Filters/components';
 
 const filters = [
   {

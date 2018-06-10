@@ -6,8 +6,8 @@ import { Container, Divider, Table } from 'semantic-ui-react';
 import * as shapes from '../../shapes';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
-import Filters from '../../Filters2/Filters2';
-import filterComponents from '../../Filters2/components';
+import Filters from '../../Filters/Filters';
+import filterComponents from '../../Filters/components';
 import WipErr from '../../shared/WipErr/WipErr';
 
 const filters = {

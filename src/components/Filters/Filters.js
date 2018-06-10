@@ -11,7 +11,7 @@ import { selectors as mdb } from '../../redux/modules/mdb';
 import { filterPropShape } from '../shapes';
 import FiltersHydrator from './FiltersHydrator';
 
-class Filters2 extends Component {
+class Filters extends Component {
   static propTypes = {
     namespace: PropTypes.string.isRequired,
     resetFilter: PropTypes.func.isRequired,
@@ -56,8 +56,6 @@ class Filters2 extends Component {
     const { filters, namespace, onHydrated, t, filtersData, rightItems } = this.props;
     const { activeFilter }                                               = this.state;
     const { store }                                                      = this.context;
-
-    console.log('Filters2.render', filtersData);
 
     return (
       <div className="filter-panel">
@@ -141,4 +139,4 @@ export default connect(
     sqDataWipErr: mdb.getSQDataWipErr(state.mdb),
   }),
   disptach => bindActionCreators({ resetFilter: actions.resetFilter }, disptach)
-)(translate()(Filters2));
+)(translate()(Filters));

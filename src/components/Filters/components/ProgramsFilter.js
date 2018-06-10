@@ -23,11 +23,6 @@ const cmpFn = (a, b) => {
   return strCmp(x, y);
 };
 
-const prepareValue = (value) => {
-  const [genre, program] = value;
-  return { genre, program };
-};
-
 class ProgramsFilter extends Component {
   static propTypes = {
     programs: PropTypes.arrayOf(shapes.ProgramCollection).isRequired,
@@ -64,8 +59,6 @@ class ProgramsFilter extends Component {
     byGenre = Object.entries(byGenre);
     byGenre.sort(cmpFn);
     byGenre.forEach(x => x[1].sort((a, b) => strCmp(a.name, b.name)));
-
-    console.log('ProgramsFilter.getTree:', byGenre);
 
     return [
       {

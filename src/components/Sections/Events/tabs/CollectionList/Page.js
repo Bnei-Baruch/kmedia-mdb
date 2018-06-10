@@ -6,8 +6,8 @@ import { Container, Divider } from 'semantic-ui-react';
 
 import * as shapes from '../../../../shapes';
 import ResultsPageHeader from '../../../../Pagination/ResultsPageHeader';
-import filterComponents from '../../../../Filters2/components/index';
-import Filters from '../../../../Filters2/Filters2';
+import filterComponents from '../../../../Filters/components/index';
+import Filters from '../../../../Filters/Filters';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import List from './List';
 
