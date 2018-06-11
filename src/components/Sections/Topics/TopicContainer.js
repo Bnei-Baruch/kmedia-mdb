@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { List, Container } from 'semantic-ui-react';
+import { /*Grid,*/ List, Container, Item } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import SectionHeader from '../../shared/SectionHeader';
@@ -23,21 +23,6 @@ class TopicContainer extends Component{
   //subroot will be subtitle
   //the rest will be a tree - List of Lists
 
-  renderNodeChildren(node, showThis){
-    const byId = this.props.byId;
-
-    return(
-      <div>
-        { showThis ? node.label : null }
-        <List.Content>
-          <List relaxed size='large'>
-            {node.children.map(id => this.renderNode(byId[id]))}
-          </List> 
-        </List.Content> 
-      </div>
-    );
-  }
-
   renderLeaf(node){
     return(
       <Link to={`/topics/${node.id}`}>
@@ -47,58 +32,89 @@ class TopicContainer extends Component{
   }
 
   renderNode(node){
+    const {byId} = this.props;
+
     return(
-        <List.Item key={node.id}>
+        <List.Description>
           {
             (Array.isArray(node.children) && node.children.length > 0) ?
-              this.renderNodeChildren(node, true) :
+              <List relaxed>
+                {
+                  node.children.map(id => 
+                    <List.Item key={id}>
+                      <List.Content>
+                        {this.renderNode(byId[id])}
+                      </List.Content>  
+                    </List.Item>  
+                  )
+                }
+             </List> :
               this.renderLeaf(node)
           }
-        </List.Item>
+        </List.Description>
     );
   }
 
   renderSubHeader(node){
     return(
-      <List.Item key={node.id}>
-        <List.Header as='h3'> {node.label} </List.Header>
-        {this.renderNodeChildren(node)}
-      </List.Item>
+      <List key={node.id} relaxed='very'>
+        <List.Item>
+          <List.Content>
+            <List.Header as='h3'> 
+              {node.label} 
+            </List.Header>
+            { this.renderNode(node) }
+          </List.Content>
+        </List.Item>
+      </List>
     );
   }
 
   renderBranch(rootId){
-    const byId = this.props.byId;
+    const { byId } = this.props;
     const rootNode = byId[rootId];
     const rootChildren = rootNode.children;
 
     return (
-      <div>
-        <List relaxed>
-          <List.Header as='h2'>{rootNode.label}</List.Header>
+      <Item.Content key={rootId}>
+        <Item.Header as='h2'> {rootNode.label} </Item.Header>
+        <Item.Description>
           {
             Array.isArray(rootChildren) && rootChildren.length > 0 ?
               rootChildren.map(id => this.renderSubHeader(byId[id])) :
               this.renderSubHeader(rootChildren)
           }
-        </List>
-      </div>
+        </Item.Description>
+      </Item.Content>
     );
   }
   
   render(){
+    const {roots} = this.props;
+    console.log('roots:',roots);
+
     return(
       <Container fluid>
         <SectionHeader section="topics" />
-        <List divided relaxed='very'>
-           {
-             this.props.roots.map(r => 
-              <List.Item key={r}> 
-                {this.renderBranch(r)} 
-                <br/>
-              </List.Item>)
-           }
-        </List>
+        <Item.Group divided relaxed unstackable>
+            {
+              roots.map(r => 
+                <Item key={r}> 
+                  {this.renderBranch(r)}
+                </Item>
+              )
+            }
+        </Item.Group>  
+
+        {/* <Grid container doubling divided relaxed>
+          {
+            this.props.roots.map(r => 
+              <Grid.Column key={r} mobile={16} tablet={8} computer={4}> 
+                {this.renderBranch(r)}
+              )
+              </Grid.Column>)
+          }
+        </Grid> */}
       </Container>
     );
   }
