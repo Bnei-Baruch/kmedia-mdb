@@ -52,7 +52,7 @@ class SourcesFilter extends Component {
 
   render() {
     const { tree } = this.state;
-    return <HierarchicalFilter tree={tree} {...this.props} />;
+    return <HierarchicalFilter name="sources-filter" tree={tree} {...this.props} />;
   }
 }
 

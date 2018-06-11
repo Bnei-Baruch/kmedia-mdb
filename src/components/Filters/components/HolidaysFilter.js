@@ -54,7 +54,7 @@ class HolidaysFilter extends Component {
 
   render() {
     const { tree } = this.state;
-    return <HierarchicalFilter tree={tree} {...this.props} />;
+    return <HierarchicalFilter name="holidays-filter" tree={tree} {...this.props} />;
   }
 }
 

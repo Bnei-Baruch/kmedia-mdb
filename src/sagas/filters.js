@@ -32,9 +32,7 @@ export function* hydrateFilters(action) {
 }
 
 const valueChangingActions = [
-  filterTypes.ADD_FILTER_VALUE,
   filterTypes.SET_FILTER_VALUE,
-  filterTypes.REMOVE_FILTER_VALUE,
   filterTypes.RESET_FILTER,
   filterTypes.RESET_NAMESPACE,
 ];

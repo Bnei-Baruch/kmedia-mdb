@@ -1,13 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { Button, Header, Input, Menu, Segment } from 'semantic-ui-react';
 
-import connectFilter from './connectFilter';
-
-class HierarchicalFilter extends React.Component {
+class HierarchicalFilter extends Component {
   static propTypes = {
-    namespace: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     tree: PropTypes.arrayOf(PropTypes.shape({
       text: PropTypes.string.isRequired,
@@ -18,7 +15,6 @@ class HierarchicalFilter extends React.Component {
     value: PropTypes.arrayOf(PropTypes.string),
     onCancel: PropTypes.func,
     onApply: PropTypes.func,
-    updateValue: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
     renderItem: PropTypes.func,
   };
@@ -47,8 +43,7 @@ class HierarchicalFilter extends React.Component {
   };
 
   apply = () => {
-    this.props.updateValue(this.state.sValue || []);
-    this.props.onApply();
+    this.props.onApply(this.state.sValue || []);
   };
 
   handleClick = (e, data) => {
@@ -60,8 +55,9 @@ class HierarchicalFilter extends React.Component {
       return;
     }
 
-    const { sValue: oldSelection } = this.state;
-    const newSelection             = [...oldSelection];
+    const { sValue }   = this.state;
+    const oldSelection = sValue || [];
+    const newSelection = [...oldSelection];
     newSelection.splice(depth, oldSelection.length - depth);
     newSelection.push(data.name);
 
@@ -116,10 +112,11 @@ class HierarchicalFilter extends React.Component {
     const root = tree[0];
 
     const { sValue, term } = this.state;
+    const selection        = sValue || [];
 
     const nodes = [root];
     const items = [this.nodeToItem(root, 1)];
-    sValue.forEach((x, i) => {
+    selection.forEach((x, i) => {
       const node = nodes[nodes.length - 1].children.find(y => y.value === x);
       nodes.push(node);
       items.push(this.nodeToItem(node, 2 + i));
@@ -127,11 +124,11 @@ class HierarchicalFilter extends React.Component {
 
     let lastNode = nodes[nodes.length - 1];
     if (Array.isArray(lastNode.children) && lastNode.children.length > 0) {
-      lastNode.children.forEach(x => items.push(this.nodeToItem(x, 2 + sValue.length)));
+      lastNode.children.forEach(x => items.push(this.nodeToItem(x, 2 + selection.length)));
     } else if (nodes.length > 1) {
       items.splice(items.length - 1, 1);
       lastNode = nodes[nodes.length - 2];
-      lastNode.children.forEach(x => items.push(this.nodeToItem(x, 1 + sValue.length)));
+      lastNode.children.forEach(x => items.push(this.nodeToItem(x, 1 + selection.length)));
     }
 
     // if (term) {
@@ -170,7 +167,13 @@ class HierarchicalFilter extends React.Component {
               onClick={this.apply}
             />
           </div>
-          <Input fluid className="autocomplete" size="small" icon="search" placeholder={`${t('buttons.search')}...`} />
+          <Input
+            fluid
+            className="autocomplete"
+            size="small"
+            icon="search"
+            placeholder={`${t('buttons.search')}...`}
+          />
         </Segment>
         <Segment className="filter-popup__body">
           <Menu vertical fluid size="small" className="hierarchy">
@@ -182,4 +185,4 @@ class HierarchicalFilter extends React.Component {
   }
 }
 
-export default connectFilter()(HierarchicalFilter);
+export default HierarchicalFilter;

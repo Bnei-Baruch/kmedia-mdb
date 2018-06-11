@@ -6,7 +6,6 @@ import { Accordion, Button, Header, Menu, Segment } from 'semantic-ui-react';
 
 import 'react-day-picker/lib/style.css';
 import { today } from '../../../../helpers/date';
-import connectFilter from '../connectFilter';
 import FastDayPicker from './FastDayPicker';
 
 const TODAY        = 'TODAY';
@@ -104,7 +103,6 @@ class DateFilter extends Component {
     }),
     onCancel: PropTypes.func,
     onApply: PropTypes.func,
-    updateValue: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
   };
@@ -151,13 +149,17 @@ class DateFilter extends Component {
 
   apply = () => {
     const { from, to, datePreset } = this.state;
-    this.props.updateValue({ from, to, datePreset });
-    this.props.onApply();
+    this.props.onApply({ from, to, datePreset });
   };
 
   convertToStateObject = (props) => {
-    const { value: { from, to, datePreset } } = props;
-    const preset                              = datePreset || rangeToPreset(from, to);
+    const { value } = props;
+    if (!value) {
+      return {};
+    }
+
+    const { from, to, datePreset } = value;
+    const preset                   = datePreset || rangeToPreset(from, to);
     return ({
       from,
       to,
@@ -166,7 +168,8 @@ class DateFilter extends Component {
     });
   };
 
-  handleDatePresetsChange = (event, data) => this.setRange(data.name);
+  handleDatePresetsChange = (event, data) =>
+    this.setRange(data.name);
 
   handleFromInputChange = (value) => {
     if (!value) {
@@ -257,4 +260,4 @@ class DateFilter extends Component {
   }
 }
 
-export default connectFilter()(DateFilter);
+export default DateFilter;

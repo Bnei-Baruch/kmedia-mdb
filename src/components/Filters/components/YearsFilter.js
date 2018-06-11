@@ -23,7 +23,7 @@ class YearsFilter extends React.Component {
       text: `${x}`
     }));
 
-    return <FlatListFilter options={options} {...rest} />;
+    return <FlatListFilter name="years-filter" options={options} {...rest} />;
   }
 }
 

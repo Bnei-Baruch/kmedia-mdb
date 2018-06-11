@@ -1,13 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { Button, Header, Menu, Segment } from 'semantic-ui-react';
 
-import connectFilter from './connectFilter';
-
 class FlatListFilter extends Component {
   static propTypes = {
-    namespace: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(PropTypes.shape({
       text: PropTypes.string.isRequired,
@@ -16,7 +13,6 @@ class FlatListFilter extends Component {
     value: PropTypes.any,
     onCancel: PropTypes.func,
     onApply: PropTypes.func,
-    updateValue: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
     renderItem: PropTypes.func,
   };
@@ -49,8 +45,7 @@ class FlatListFilter extends Component {
   };
 
   apply = () => {
-    this.props.updateValue(this.state.sValue);
-    this.props.onApply();
+    this.props.onApply(this.state.sValue);
   };
 
   render() {
@@ -99,4 +94,4 @@ class FlatListFilter extends Component {
   }
 }
 
-export default connectFilter()(FlatListFilter);
+export default FlatListFilter;

@@ -19,7 +19,7 @@ class PublishersFilter extends React.Component {
     }));
 
     return (
-      <FlatListFilter options={options} {...rest} />
+      <FlatListFilter name="publishers-filter" options={options} {...rest} />
     );
   }
 }

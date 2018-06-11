@@ -9,14 +9,13 @@ import { Icon, Input, Search } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../helpers/consts';
 import { SuggestionsHelper } from '../../helpers/search';
-import { getQuery, isDebMode } from '../../helpers/url';
+import { getQuery, isDebMode, stringify as urlSearchStringify } from '../../helpers/url';
 import { actions as filtersActions, selectors as filterSelectors } from '../../redux/modules/filters';
 import { actions, selectors } from '../../redux/modules/search';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
 import { filtersTransformer } from '../../filters';
-import { stringify as urlSearchStringify } from '../../helpers/url';
 import * as shapes from '../shapes';
 
 const CATEGORIES_ICONS = {
@@ -28,9 +27,7 @@ const CATEGORIES_ICONS = {
 };
 
 export class OmniBox extends Component {
-
   static propTypes = {
-    addFilterValue: PropTypes.func.isRequired,
     setFilterValue: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
     autocomplete: PropTypes.func.isRequired,
@@ -125,16 +122,16 @@ export class OmniBox extends Component {
       this.doSearch(data.result.title);
     } else if (category === 'tags') {
       this.props.updateQuery('');
-      const path = this.props.getTagPath(data.result.key).map(p => p.id)
+      const path = this.props.getTagPath(data.result.key).map(p => p.id);
       const query = filtersTransformer.toQueryParams([
         { name: 'topics-filter', values: [path], queryKey: 'topic' }
       ]);
       const queryString = urlSearchStringify(query);
-      this.props.addFilterValue('search', 'topics-filter', path);
+      this.props.setFilterValue('search', 'topics-filter', path);
       this.doSearch('', queryString);
     } else if (category === 'sources') {
       this.props.updateQuery('');
-      const path = this.props.getSourcePath(data.result.key).map(p => p.id)
+      const path = this.props.getSourcePath(data.result.key).map(p => p.id);
       const query = filtersTransformer.toQueryParams([
         { name: 'sources-filter', values: [path], queryKey: 'source' }
       ]);
@@ -289,7 +286,6 @@ export const mapDispatch = dispatch => bindActionCreators({
   autocomplete: actions.autocomplete,
   search: actions.search,
   updateQuery: actions.updateQuery,
-  addFilterValue: filtersActions.addFilterValue,
   setFilterValue: filtersActions.setFilterValue,
   resetFilter: filtersActions.resetFilter,
   push,

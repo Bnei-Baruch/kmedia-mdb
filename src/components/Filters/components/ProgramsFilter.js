@@ -76,7 +76,7 @@ class ProgramsFilter extends Component {
 
   render() {
     const { tree } = this.state;
-    return <HierarchicalFilter tree={tree} {...this.props} />;
+    return <HierarchicalFilter name="programs-filter" tree={tree} {...this.props} />;
   }
 }
 

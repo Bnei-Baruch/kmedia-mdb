@@ -4,16 +4,12 @@ import noop from 'lodash/noop';
 import { Button, Header, Grid, Image, Segment } from 'semantic-ui-react';
 
 import { sectionLogo } from '../../../helpers/images';
-import connectFilter from './connectFilter';
 
 class SectionsFilter extends Component {
   static propTypes = {
-    namespace: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    value: PropTypes.any,
+    value: PropTypes.string,
     onCancel: PropTypes.func,
     onApply: PropTypes.func,
-    updateValue: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -42,13 +38,12 @@ class SectionsFilter extends Component {
   };
 
   apply = () => {
-    this.props.updateValue(this.state.sValue);
-    this.props.onApply();
+    this.props.onApply(this.state.sValue);
   };
 
   render() {
-    const { name, t } = this.props;
-    const { sValue }  = this.state;
+    const { t }      = this.props;
+    const { sValue } = this.state;
 
     return (
       <Segment.Group>
@@ -60,7 +55,7 @@ class SectionsFilter extends Component {
               icon="remove"
               onClick={this.onCancel}
             />
-            <Header size="small" textAlign="center" content={t(`filters.${name}.label`)} />
+            <Header size="small" textAlign="center" content={t('filters.sections-filter.label')} />
             <Button
               primary
               compact
@@ -98,4 +93,4 @@ class SectionsFilter extends Component {
   }
 }
 
-export default connectFilter()(SectionsFilter);
+export default SectionsFilter;

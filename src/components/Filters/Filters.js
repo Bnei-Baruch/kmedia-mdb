@@ -10,18 +10,19 @@ import { filtersTransformer } from '../../filters/index';
 import { actions, selectors } from '../../redux/modules/filters';
 import { selectors as mdb } from '../../redux/modules/mdb';
 import { selectors as settings } from '../../redux/modules/settings';
-import { filterPropShape } from '../shapes';
+import * as shapes from '../shapes';
 import FiltersHydrator from './FiltersHydrator';
 
 class Filters extends Component {
   static propTypes = {
     namespace: PropTypes.string.isRequired,
-    resetFilter: PropTypes.func.isRequired,
+    filters: PropTypes.arrayOf(shapes.filterPropShape).isRequired,
+    rightItems: PropTypes.arrayOf(PropTypes.node),
     onChange: PropTypes.func.isRequired,
     onHydrated: PropTypes.func.isRequired,
-    filters: PropTypes.arrayOf(filterPropShape).isRequired,
+    setFilterValue: PropTypes.func.isRequired,
+    resetFilter: PropTypes.func.isRequired,
     filtersData: PropTypes.objectOf(PropTypes.object).isRequired,
-    rightItems: PropTypes.arrayOf(PropTypes.node),
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
   };
@@ -38,16 +39,17 @@ class Filters extends Component {
     activeFilter: null,
   };
 
-  handleApply = () => {
-    this.props.onChange();
-    this.handlePopupClose();
-  };
-
   handlePopupClose = () =>
     this.setState({ activeFilter: null });
 
   handlePopupOpen = activeFilter =>
     this.setState({ activeFilter });
+
+  handleApply = (name, value) => {
+    this.handlePopupClose();
+    this.props.setFilterValue(this.props.namespace, name, value);
+    this.props.onChange();
+  };
 
   handleResetFilter = (e, name) => {
     e.stopPropagation();
@@ -75,7 +77,7 @@ class Filters extends Component {
                 const values   = data.values || [];
                 const value    = Array.isArray(values) && values.length > 0 ? values[0] : null;
                 const label    = value ?
-                  filtersTransformer.valueToTagLabel(name, values[0], this.props, store, t) :
+                  filtersTransformer.valueToTagLabel(name, value, this.props, store, t) :
                   t('filters.all');
 
                 return (
@@ -95,7 +97,7 @@ class Filters extends Component {
                           value ?
                             <Icon
                               name="trash outline"
-                              onClick={e => this.handleResetFilter(e, item.name)}
+                              onClick={e => this.handleResetFilter(e, name)}
                             /> :
                             null
                         }
@@ -106,7 +108,7 @@ class Filters extends Component {
                     verticalOffset={-12}
                     open={isActive}
                     onClose={this.handlePopupClose}
-                    onOpen={() => this.handlePopupOpen(item.name)}
+                    onOpen={() => this.handlePopupOpen(name)}
                     style={{
                       padding: 0,
                       direction: getLanguageDirection(language)
@@ -114,10 +116,10 @@ class Filters extends Component {
                   >
                     <Popup.Content className={`filter-popup ${getLanguageDirection(language)}`}>
                       <FilterComponent
-                        namespace={namespace}
-                        name={item.name}
+                        value={value}
                         onCancel={this.handlePopupClose}
-                        onApply={this.handleApply}
+                        onApply={x => this.handleApply(name, x)}
+                        language={language}
                         t={t}
                       />
                     </Popup.Content>
@@ -145,5 +147,8 @@ export default connect(
     // DO NOT REMOVE, this triggers a necessary re-render for filter tags
     sqDataWipErr: mdb.getSQDataWipErr(state.mdb),
   }),
-  disptach => bindActionCreators({ resetFilter: actions.resetFilter }, disptach)
+  disptach => bindActionCreators({
+    setFilterValue: actions.setFilterValue,
+    resetFilter: actions.resetFilter,
+  }, disptach)
 )(translate()(Filters));

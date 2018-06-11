@@ -83,7 +83,7 @@ class LocationsFilter extends Component {
 
   render() {
     const { tree } = this.state;
-    return <HierarchicalFilter tree={tree} {...this.props} />;
+    return <HierarchicalFilter name="locations-filter" tree={tree} {...this.props} />;
   }
 }
 

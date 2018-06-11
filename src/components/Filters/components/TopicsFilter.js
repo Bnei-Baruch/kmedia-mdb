@@ -57,7 +57,7 @@ class TagsFilter extends Component {
 
   render() {
     const { tree } = this.state;
-    return <HierarchicalFilter tree={tree} {...this.props} />;
+    return <HierarchicalFilter name="topics-filter" tree={tree} {...this.props} />;
   }
 }
 
