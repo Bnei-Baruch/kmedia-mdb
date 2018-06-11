@@ -9,6 +9,7 @@ jobs:
         key: dependency-cache-{{ checksum "package.json" }}
       - run:
         name: Setup Dependencies
+        command: |
           yarn --ignore-engines
       - run:
         name: Setup Code Climate test-reporter
