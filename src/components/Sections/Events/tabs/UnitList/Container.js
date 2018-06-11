@@ -6,6 +6,7 @@ import { CT_FRIENDS_GATHERING, CT_MEAL, NO_NAME } from '../../../../../helpers/c
 import { sectionThumbnailFallback } from '../../../../../helpers/images';
 import { canonicalLink } from '../../../../../helpers/links';
 import { CollectionsBreakdown } from '../../../../../helpers/mdb';
+import { ellipsize } from '../../../../../helpers/strings';
 import UnitList from '../../../../Pages/UnitList/Container';
 import Link from '../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
@@ -41,6 +42,13 @@ const renderUnit = (unit, t) => {
         <Link className="index__title" to={link}>
           {unit.name || NO_NAME}
         </Link>
+        {
+          unit.description ?
+            <div className="index__description mobile-hidden">
+              {ellipsize(unit.description)}
+            </div>
+            : null
+        }
         {
           relatedItems.length > 0 ?
             <List horizontal divided link className="index-list__item-subtitle" size="tiny">

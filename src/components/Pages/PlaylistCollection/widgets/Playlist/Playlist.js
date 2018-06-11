@@ -1,21 +1,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Header, Menu } from 'semantic-ui-react';
+import { Header, Icon, Menu } from 'semantic-ui-react';
 
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, NO_NAME } from '../../../../../helpers/consts';
 import { fromToLocalized } from '../../../../../helpers/date';
+import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import { formatDuration } from '../../../../../helpers/utils';
+import Link from '../../../../Language/MultiLanguageLink';
 
 class PlaylistWidget extends Component {
   static propTypes = {
     playlist: PropTypes.object.isRequired,
     selected: PropTypes.number,
     onSelectedChange: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired
+    t: PropTypes.func.isRequired,
+    language: PropTypes.string.isRequired,
+    nextLink: PropTypes.string,
+    prevLink: PropTypes.string,
   };
 
   static defaultProps = {
-    selected: 0
+    selected: 0,
+    nextLink: null,
+    prevLink: null,
   };
 
   handleItemClick = (e, data) => {
@@ -23,13 +30,13 @@ class PlaylistWidget extends Component {
   };
 
   renderHeader() {
-    const { playlist, selected, t } = this.props;
+    const { playlist, t, nextLink, prevLink, language  } = this.props;
     const { collection }            = playlist;
 
     let content = collection.name;
     if (!content) {
       const ct = collection.content_type === CT_SPECIAL_LESSON ? CT_DAILY_LESSON : collection.content_type;
-      content  = `${t(`constants.content-types.${ct}`)} - ${(selected + 1)}/${collection.content_units.length}`;
+      content  = `${t(`constants.content-types.${ct}`)}${collection.number ? ` ${t('lessons.list.number')}${collection.number}` : ''}`;
     }
 
     let subheader = '';
@@ -39,7 +46,44 @@ class PlaylistWidget extends Component {
       subheader = fromToLocalized(collection.start_date, collection.end_date);
     }
 
-    return <Header inverted as="h1" content={content} subheader={subheader} />;
+    const langDir = getLanguageDirection(language);
+
+    let prevLinkHtml;
+    if (prevLink) {
+      prevLinkHtml = (
+        <Link
+          to={prevLink}
+          className="avbox__playlist-prev-button"
+          title={t('buttons.previous')}
+        >
+          <Icon name={langDir === 'ltr' ? 'backward' : 'forward'} />
+        </Link>
+      );
+    }
+
+    let nextLinkHtml;
+    if (nextLink) {
+      nextLinkHtml = (
+        <Link
+          to={nextLink}
+          className="avbox__playlist-next-button"
+          title={t('buttons.next')}
+        >
+          <Icon name={langDir === 'ltr' ? 'forward' : 'backward'} />
+        </Link>
+      );
+    }
+
+    return (
+      <Header inverted as="h1">
+        {content}
+        <Header.Subheader>
+          {prevLinkHtml}
+          {subheader}
+          {nextLinkHtml}
+        </Header.Subheader>
+      </Header>
+    );
   }
 
   renderContents() {

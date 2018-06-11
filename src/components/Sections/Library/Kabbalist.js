@@ -17,6 +17,14 @@ class Kabbalist extends Component {
     portrait: undefined,
   };
 
+  static mapLinks = {
+    ar: 'ari',
+    bs: 'baal-hasulam',
+    ml: 'michael-laitman',
+    rb: 'rabash',
+    rh: 'rashbi',
+  };
+
   renderBook = (book) => {
     const { id, name, description } = book;
     return (
@@ -35,21 +43,25 @@ class Kabbalist extends Component {
   };
 
   render() {
-    const { author: { name, full_name: fullName, children: volumes }, getSourceById, portrait } = this.props;
+    const { author: { name, full_name: fullName, children: volumes, id }, getSourceById, portrait } = this.props;
 
     let displayName = fullName || name;
     if (fullName && name) {
       displayName += ` (${name})`;
     }
 
+    const kabbalist = Kabbalist.mapLinks[id];
+
     return (
       <Table.Row verticalAlign="top">
         <Table.Cell collapsing width={2}>
-          {portrait ? <Image src={portrait} /> : null}
+          {portrait ? <Image src={portrait} alt={fullName} /> : null}
         </Table.Cell>
         <Table.Cell>
           <div className={classnames({ sources__list: true, 'sources__list--image': !!portrait })}>
-            <Header size="small">{displayName}</Header>
+            <Header size="small">
+              {kabbalist ? <NavLink to={`/persons/${kabbalist}`} title={fullName}>{displayName}</NavLink> : displayName}
+            </Header>
             <div>
               <List bulleted>
                 {

@@ -26,7 +26,6 @@ class TopMost extends Component {
         <Helmet defaultTitle={titlePostfix} titleTemplate={titleTemplate}>
           <meta property="og:type" content="website" />
           <meta property="og:site_name" content="Kabbalah Media" />
-
         </Helmet>
         <Locale {...this.props} />
         <Basic />

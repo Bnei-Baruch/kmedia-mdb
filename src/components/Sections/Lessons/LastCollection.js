@@ -23,6 +23,8 @@ class LastLessonCollection extends Component {
     language: PropTypes.string.isRequired,
     fetchLatestLesson: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    fetchWindow: PropTypes.func,
+    cWindow: PropTypes.any,
   };
 
   static defaultProps = {
@@ -87,6 +89,7 @@ function mapState(state) {
     wip: selectors.getWip(state.mdb),
     errors: selectors.getErrors(state.mdb),
     language: settings.getLanguage(state.settings),
+    cWindow: selectors.getWindow(state.mdb),
   };
 }
 
@@ -95,6 +98,7 @@ function mapDispatch(dispatch) {
     fetchLatestLesson: actions.fetchLatestLesson,
     fetchCollection: actions.fetchCollection,
     fetchUnit: actions.fetchUnit,
+    fetchWindow: actions.fetchWindow,
   }, dispatch);
 }
 

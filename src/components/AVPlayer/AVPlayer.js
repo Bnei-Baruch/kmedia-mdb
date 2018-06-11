@@ -541,10 +541,10 @@ class AVPlayer extends PureComponent {
             <AVTimeElapsed
               start={media.currentTime}
               end={media.duration}
-            />
-            <div className="mediaplayer__spacer" />
+            />            
             <AVJumpBack jumpSpan={-5} />
             <AVJumpBack jumpSpan={5} />
+            <div className="mediaplayer__spacer" />
             <AvSeekBar
               buffers={this.buffers()}
               playerMode={mode}
@@ -552,16 +552,14 @@ class AVPlayer extends PureComponent {
               sliceEnd={sliceEnd}
             />
 
-            {
-              !isEditMode && (
+         
                 <AVPlaybackRate
                   value={playbackRate}
                   onSelect={this.playbackRateChange}
                 />
-              )
-            }
+          
             {
-              !isEditMode && isVideo && (
+              isVideo && (
                 <AVVideoSize
                   value={videoSize}
                   qualities={Object.keys(item.byQuality)}
@@ -570,19 +568,13 @@ class AVPlayer extends PureComponent {
               )
             }
             <AVMuteUnmute />
-            {
-              !isEditMode && (
                 <AVAudioVideo
                   isAudio={isAudio}
                   isVideo={isVideo}
                   onSwitch={this.onSwitchAV}
                   fallbackMedia={fallbackMedia}
                   t={t}
-                />
-              )
-            }
-            {
-              !isEditMode && (
+                />              
                 <AVLanguage
                   languages={languages}
                   language={language}
@@ -590,10 +582,9 @@ class AVPlayer extends PureComponent {
                   onSelect={this.onLanguageChange}
                   t={t}
                 />
-              )
-            }
             {!isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.SLICE_EDIT)} />}
-            {!isEditMode && !isAudio && <AVFullScreen element={this.mediaElement} />}
+            {isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.NORMAL)} />}
+            {!isAudio && <AVFullScreen element={this.mediaElement} />}
           </div>
           <div
             ref={this.handleOnScreenRef}

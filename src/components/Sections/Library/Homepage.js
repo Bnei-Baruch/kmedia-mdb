@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import { Container, Divider, Table } from 'semantic-ui-react';
+import { isEmpty } from '../../../helpers/utils';
 
 import { selectors as sources } from '../../../redux/modules/sources';
 import SectionHeader from '../../shared/SectionHeader';
@@ -10,8 +11,6 @@ import Kabbalist from './Kabbalist';
 import portraitBS from '../../../images/portrait_bs.png';
 import portraitRB from '../../../images/portrait_rb.png';
 import portraitML from '../../../images/portrait_ml.png';
-
-import { isEmpty } from '../../../helpers/utils';
 
 const portraits = { bs: portraitBS, rb: portraitRB, ml: portraitML };
 

@@ -3,28 +3,20 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import { assetUrl } from '../../../helpers/Api';
 import { isEmpty } from '../../../helpers/utils';
-import { actions as sourceActions, selectors as sourceSelectors } from '../../../redux/modules/sources';
+import { actions, selectors } from '../../../redux/modules/assets';
 import * as shapes from '../../shapes';
 import Library from './Library';
 import PDF from '../../shared/PDF/PDF';
-import { assetUrl } from '../../../helpers/Api';
 
 class LibraryContentContainer extends Component {
   static propTypes = {
     source: PropTypes.string,
-    index: PropTypes.shape({
-      data: PropTypes.object, // content index
-      wip: shapes.WIP,
-      err: shapes.Error,
-    }),
-    content: PropTypes.shape({
-      data: PropTypes.string, // actual content (HTML)
-      wip: shapes.WIP,
-      err: shapes.Error,
-    }).isRequired,
+    index: shapes.DataWipErr,
+    content: shapes.DataWipErr.isRequired,
     t: PropTypes.func.isRequired,
-    fetchContent: PropTypes.func.isRequired,
+    fetchAsset: PropTypes.func.isRequired,
     languageUI: PropTypes.string.isRequired,
     langSelectorMount: PropTypes.object,
   };
@@ -124,8 +116,7 @@ class LibraryContentContainer extends Component {
       return;
     }
 
-    const name = data.html;
-    this.props.fetchContent(source, name);
+    this.props.fetchAsset(`sources/${source}/${data.html}`);
   };
 
   myReplaceState = (nextProps) => {
@@ -168,9 +159,9 @@ class LibraryContentContainer extends Component {
 
 export default connect(
   state => ({
-    content: sourceSelectors.getContent(state.sources),
+    content: selectors.getAsset(state.assets),
   }),
   dispatch => bindActionCreators({
-    fetchContent: sourceActions.fetchContent,
+    fetchAsset: actions.fetchAsset,
   }, dispatch)
 )(LibraryContentContainer);
