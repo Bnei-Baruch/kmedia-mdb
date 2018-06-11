@@ -35,8 +35,8 @@ class Pagination extends PureComponent {
   static TITLES = {
     first: <Icon name="angle double left" />,
     prev: <Icon name="angle left" />,
-    prevSet: <Icon name="ellipsis horizontal" />,
-    nextSet: <Icon name="ellipsis horizontal" />,
+    prevSet: "…",
+    nextSet: "…",
     next: <Icon name="angle right" />,
     last: <Icon name="angle double right" />,
   };
@@ -120,7 +120,7 @@ class Pagination extends PureComponent {
     const hideNextSet  = visibleRange[visibleRange.length - 1] === totalBlocks;
 
     return (
-      <Menu compact className="pagination-menu" color="blue">
+      <Menu icon compact className="pagination-menu" color="blue" size="tiny">
         {this.renderPage(titles(isRTL ? 'last' : 'first'), 1, 'first', prevDisabled)}
         {this.renderPage(titles(isRTL ? 'next' : 'prev'), current - 1, 'prev', prevDisabled)}
         {
