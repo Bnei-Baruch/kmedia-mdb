@@ -1,6 +1,8 @@
 version: 2
 jobs:
   build:
+    environment:
+      CC_TEST_REPORTER_ID: 8365dea482c5ff4ab1c4a69de8d8b614af8e5c0c
     docker:
       - image: circleci/node:8
     steps:
@@ -26,3 +28,4 @@ jobs:
             ./cc-test-reporter before-build
             yarn test --coverage
             ./cc-test-reporter after-build --exit-code $?
+- CC_TEST_REPORTER_ID
