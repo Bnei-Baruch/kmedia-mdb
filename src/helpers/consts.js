@@ -313,8 +313,8 @@ export const COOKIE_CONTENT_LANG = 'archive_ContentLang';
 // Search
 export const SEARCH_INTENT_INDEX_TOPIC = 'intent-tag';
 export const SEARCH_INTENT_INDEX_SOURCE = 'intent-source';
-export const SEARCH_INTENT_HIT_TYPE_PROGRAMS = "programs"
-export const SEARCH_INTENT_HIT_TYPE_LESSONS  = "lessons"
+export const SEARCH_INTENT_HIT_TYPE_PROGRAMS = 'programs';
+export const SEARCH_INTENT_HIT_TYPE_LESSONS  = 'lessons';
 
 export const SEARCH_INTENT_HIT_TYPES = [SEARCH_INTENT_HIT_TYPE_PROGRAMS, SEARCH_INTENT_HIT_TYPE_LESSONS];
 
