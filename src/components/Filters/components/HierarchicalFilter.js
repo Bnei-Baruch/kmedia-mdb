@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { Button, Header, Input, Menu, Segment } from 'semantic-ui-react';
@@ -32,6 +33,13 @@ class HierarchicalFilter extends Component {
     term: '',
   };
 
+  componentDidMount() {
+    if (this.activeRef) {
+      // eslint-disable-next-line react/no-find-dom-node
+      ReactDOM.findDOMNode(this.activeRef).scrollIntoView();
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.value !== nextProps.value) {
       this.setState({ sValue: nextProps.value });
@@ -43,7 +51,12 @@ class HierarchicalFilter extends Component {
   };
 
   apply = () => {
+    console.log('HierarchicalFilter.apply()');
     this.props.onApply(this.state.sValue || []);
+  };
+
+  handleActiveRef = (ref) => {
+    this.activeRef = ref;
   };
 
   handleClick = (e, data) => {
@@ -63,24 +76,21 @@ class HierarchicalFilter extends Component {
 
     console.log('handleClick', data.name, depth, oldSelection, newSelection);
     this.setState({ sValue: newSelection });
-
-    // const menu = this.menus[depth];
-    // const prevScrollTop = menu.scrollTop;
-    // this.setState({ selection: newSelection }, () => {
-    //   this.menus[depth].scrollTop = prevScrollTop;
-    // });
   };
 
   nodeToItem = (node, level) => {
     const { text, value, count } = node;
     const { sValue }             = this.state;
     const selected               = Array.isArray(sValue) && sValue.length > 0 ? sValue[sValue.length - 1] : null;
+    const active                 = value === selected;
+    const ref                    = active ? this.handleActiveRef : null;
 
     return (
       <Menu.Item
         key={value}
         name={value}
-        active={value === selected}
+        ref={ref}
+        active={active}
         data-level={level}
         className={`l${level}`}
         onClick={this.handleClick}

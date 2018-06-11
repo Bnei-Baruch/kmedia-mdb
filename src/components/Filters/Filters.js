@@ -80,6 +80,8 @@ class Filters extends Component {
                   filtersTransformer.valueToTagLabel(name, value, this.props, store, t) :
                   t('filters.all');
 
+                const langDir = getLanguageDirection(language);
+
                 return (
                   <Popup
                     basic
@@ -104,17 +106,17 @@ class Filters extends Component {
                       </Menu.Item>
                     }
                     on="click"
-                    position="bottom left"
+                    position={`bottom ${langDir === 'ltr' ? 'left' : 'right'}`}
                     verticalOffset={-12}
                     open={isActive}
                     onClose={this.handlePopupClose}
                     onOpen={() => this.handlePopupOpen(name)}
                     style={{
                       padding: 0,
-                      direction: getLanguageDirection(language)
+                      direction: langDir
                     }}
                   >
-                    <Popup.Content className={`filter-popup ${getLanguageDirection(language)}`}>
+                    <Popup.Content className={`filter-popup ${langDir}`}>
                       <FilterComponent
                         value={value}
                         onCancel={this.handlePopupClose}
