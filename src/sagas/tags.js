@@ -25,16 +25,19 @@ function* fetchDashboard(action){
   try{
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.tagDashboard, {id, language });
-    console.log('SAGA fetchDashboard data', data);
 
     if (data && Array.isArray(data.latest_units)){
       yield put(mdb.receiveContentUnits(data.latest_units));
       //yield put(mdb.receiveContentUnits(data.promoted_units));
+
+      yield put(actions.fetchDashboardSuccess(id, data));
+    }
+    else{
+      const err = 'No latest units were found';
+      yield put(actions.fetchDashboardFailure(id, err));
     }
    
-    yield put(actions.fetchDashboardSuccess(id, data));
   } catch (err) {
-    console.log('SAGA fetchDashboard error', err);
     yield put(actions.fetchDashboardFailure(id, err));
   }
 }

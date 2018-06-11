@@ -2,7 +2,7 @@ import { createAction, handleActions } from 'redux-actions';
 import identity from 'lodash/identity';
 
 import { tracePath } from '../../helpers/utils';
-import * as consts from '../../helpers/consts';
+import { canonicalLink } from '../../helpers/links';
 import { types as settings } from './settings';
 import { types as ssr } from './ssr';
 
@@ -53,10 +53,10 @@ const initialState = {
   wip: false,
   error: null,
   getByID: identity,
-  lessons: [],
-  programs: [],
-  lectures: [],
-  publications: []
+  sections: [],
+  units: [],
+  cuBySection: {},
+  getSectionUnits: identity
 };
 
 const buildById = (items) => {
@@ -109,44 +109,71 @@ const onDashboard = () => {
   return {...initialState, wip: true} 
 }
 
+// const compareUnits = (a,b) => {
+//   let ans = -1;
+//   if (a && b && a.film_date <= b.film_date){
+//     ans = 1;
+//   }
+  
+//   return ans;
+// }
+
+// const getUnitIds = (units) => {
+//   let unitIds = [];
+//   if (units && units.length > 0){
+//     unitIds = units.sort(compareUnits)
+//                    .map(u => u.id);
+//   }
+
+//   return unitIds;
+// }
+
+const getSectionOfUnit = (unit) => {
+  const s = canonicalLink(unit).split('/');
+  return s.length >= 3 ? s[1] : null;
+}
+
 const onDashboardSuccess = (state, action) => {
-  const {id, data} = action.payload;
-  const latestUnitsArr = data.latest_units;
-  //const promotedUnits = action.payload.promoted_units;
+  const { data } = action.payload;
+  const { latest_units: latestUnitsArr, promoted_units } = data;
 
   if(Array.isArray(latestUnitsArr)){
-      const publications = latestUnitsArr.filter(x => [consts.CT_PUBLICATION, 
-                                                      consts.CT_ARTICLE].includes(x.content_type));
+    const uniqueSectionsArr = [...new Set(latestUnitsArr.map(u => getSectionOfUnit(u))
+                                                        .filter(x => !!x)
+    )].sort(); 
 
-      const lessons = latestUnitsArr.filter(x => [consts.CT_LESSON_PART, 
-                                                  consts.CT_FULL_LESSON, 
-                                                  consts.CT_LELO_MIKUD,
-                                                  consts.CT_KITEI_MAKOR].includes(x.content_type));
-      
-      const lectures = latestUnitsArr.filter(x => [consts.CT_LECTURE,
-                                                  consts.CT_CHILDREN_LESSON,
-                                                  consts.CT_VIRTUAL_LESSON,
-                                                  consts.CT_WOMEN_LESSON].includes(x.content_type));
-
-      const programs = latestUnitsArr.filter(x => [consts.CT_FRIENDS_GATHERING, 
-                                                  consts.CT_MEAL, 
-                                                  consts.CT_VIDEO_PROGRAM_CHAPTER,
-                                                  consts.CT_EVENT_PART,
-                                                  consts.CT_UNKNOWN,
-                                                  consts.CT_TRAINING,
-                                                  consts.CT_CLIP].includes(x.content_type));    
-                                                  
-      return{
-        ...state,
-        wip: false,
-        lessons,
-        programs,
-        lectures,
-        publications
+    // map units to sections
+    const cuBySection = latestUnitsArr.reduce((acc, u) => {
+      const section = getSectionOfUnit(u);
+      if (acc[section]) {
+        acc[section].push(u);
+      } else {
+        acc[section] = [u];
       }
+
+      return acc;
+    }, {});
+
+    console.log('cuBySection:', cuBySection);
+
+    const getSectionUnits = section => cuBySection[section];
+
+    return {
+      ...state,
+      wip: false,
+      error: null,
+      sections: uniqueSectionsArr,
+      units: latestUnitsArr,
+      cuBySection,
+      getSectionUnits
+    }
   }
   else{
-    return {...state, wip: false};
+    return {
+      ...state, 
+      wip: false, 
+      err: 'No latest units were found'
+    };
   }
 }
 
@@ -174,11 +201,9 @@ const getRoots    = state => state.roots;
 const getTagById  = state => state.getByID;
 const getPath     = state => state.getPath;
 const getPathByID = state => state.getPathByID;
-
-const getLessons = state => state.lessons;
-const getPrograms = state => state.programs;
-const getLectures = state => state.lectures;
-const getPublications = state => state.publications;
+const getSections = state => state.sections;
+const getUnits = state => state.units;
+const getSectionUnits = state => state.getSectionUnits;
 
 export const selectors = {
   getTags,
@@ -186,9 +211,8 @@ export const selectors = {
   getTagById,
   getPath,
   getPathByID,
-  getLessons,
-  getLectures,
-  getPrograms,
-  getPublications
+  getSections,
+  getUnits,
+  getSectionUnits
 };
 

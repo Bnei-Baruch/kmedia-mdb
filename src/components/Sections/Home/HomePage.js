@@ -6,6 +6,8 @@ import { Card, Container, Grid, } from 'semantic-ui-react';
 import { canonicalLink } from '../../../helpers/links';
 import { strCmp } from '../../../helpers/utils';
 import { sectionLogo } from '../../../helpers/images';
+import { ST_LESSONS, ST_PROGRAMS, ST_LECTURES, ST_PUBLICATIONS, ST_SOURCES, ST_EVENTS} 
+        from '../../../helpers/consts';
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 import SearchBar from './SearchBar';
@@ -15,6 +17,7 @@ import Section from './Section';
 import LatestUpdate from './LatestUpdate';
 import LatestDailyLesson from './LatestDailyLesson';
 import Helmets from '../../shared/Helmets';
+
 
 class HomePage extends Component {
   static propTypes = {
@@ -98,7 +101,7 @@ class HomePage extends Component {
             <Grid doubling columns={6} className="homepage__iconsrow">
               <Grid.Row>
                 {
-                  ['lessons', 'programs', 'lectures', 'sources', 'events', 'topics', 'publications'].map(x =>
+                  [ST_LESSONS, ST_PROGRAMS, ST_LECTURES, ST_SOURCES, ST_EVENTS, ST_PUBLICATIONS].map(x =>
                     (
                       <Grid.Column key={x} textAlign="center">
                         <Topic title={t(`nav.sidebar.${x}`)} img={sectionLogo[x]} href={`/${x}`} />
