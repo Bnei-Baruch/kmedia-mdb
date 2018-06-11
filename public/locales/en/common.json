@@ -158,6 +158,16 @@
       "description": "Summary",
       "transcript": "Transcript",
       "content": "Content"
+    },
+    "intent-types": {
+      "lessons": "Daily morning lesssons",
+      "programs": "Programs"
+    },
+    "intent-prefix": {
+      "lessons-topic": "Lessons on topic:",
+      "lessons-source": "Lessons by source:",
+      "programs-topic": "Programs on topic:",
+      "programs-source": "Programs by source:"
     }
   },
   "home": {

@@ -1,4 +1,4 @@
-import { RTL_LANGUAGES } from '../helpers/consts';
+import { RTL_LANGUAGES, LANGUAGES } from '../helpers/consts';
 
 export const getCurrentDirection = () => {
   if (typeof window === 'undefined') {
@@ -49,3 +49,7 @@ export const changeDirection = (direction) => {
 };
 
 export const getLanguageDirection = language => (RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr');
+
+export const getLanguageLocale = language => LANGUAGES[language].locale;
+
+export const getLanguageLocaleWORegion = language => LANGUAGES[language].locale.substring(0, 2);

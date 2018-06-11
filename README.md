@@ -44,6 +44,14 @@ $ yarn start
 ## Thanks
 
 
+<a href="https://www.jetbrains.com" target="_blank" title="JetBrains">
+<img alt="JetBrains logo" src="https://cdn.rawgit.com/JetBrains/logos/706c8cc4/web/jetbrains/jetbrains-variant-3.svg">
+</a>
+
+<strong>Thank You </strong> [JetBrains](https://www.jetbrains.com) **!** 
+For your most generous support. The best IDEs and dev tools ever.
+
+
 <a href="https://www.browserstack.com" target="_blank" title="BrowserStack">
 <img alt="BrowserStack logo" src="https://www.browserstack.com/images/layout/browserstack-logo-600x315.png" width="180" height="95">
 </a>

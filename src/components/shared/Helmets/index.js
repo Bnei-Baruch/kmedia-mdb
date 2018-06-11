@@ -6,6 +6,7 @@ import Video from './Video';
 import Locale from './Locale';
 import AVUnit from './AVUnit';
 import ArticleUnit from './ArticleUnit';
+import NoIndex from './NoIndex';
 
 export default {
   TopMost,
@@ -16,4 +17,5 @@ export default {
   Locale,
   AVUnit,
   ArticleUnit,
+  NoIndex,
 };
