@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import { Button, Header, Input, Menu, Segment } from 'semantic-ui-react';
+
+import { isEmpty } from '../../../helpers/utils';
 
 class HierarchicalFilter extends Component {
   static propTypes = {
@@ -51,8 +54,24 @@ class HierarchicalFilter extends Component {
   };
 
   apply = () => {
-    console.log('HierarchicalFilter.apply()');
     this.props.onApply(this.state.sValue || []);
+  };
+
+  tracepath = (node, value) => {
+    if (node.value === value) {
+      return [node.value];
+    }
+
+    if (!isEmpty(node.children)) {
+      for (let i = 0; i < node.children.length; i++) {
+        const path = this.tracepath(node.children[i], value);
+        if (!isEmpty(path)) {
+          return [node.value].concat(path);
+        }
+      }
+    }
+
+    return [];
   };
 
   handleActiveRef = (ref) => {
@@ -68,15 +87,27 @@ class HierarchicalFilter extends Component {
       return;
     }
 
+    // in term mode we trace path
+    if (this.state.term) {
+      const path = this.tracepath(this.props.tree[0], data.name);
+      this.setState({ sValue: path.slice(1) });
+      return;
+    }
+
+    // in normal selection mode we insert
+    // the new value at it's relevant, depth based, index
     const { sValue }   = this.state;
     const oldSelection = sValue || [];
     const newSelection = [...oldSelection];
     newSelection.splice(depth, oldSelection.length - depth);
     newSelection.push(data.name);
 
-    console.log('handleClick', data.name, depth, oldSelection, newSelection);
     this.setState({ sValue: newSelection });
   };
+
+  handleTermChange = debounce((e, data) => {
+    this.setState({ term: data.value });
+  }, 200);
 
   nodeToItem = (node, level) => {
     const { text, value, count } = node;
@@ -105,33 +136,69 @@ class HierarchicalFilter extends Component {
     );
   };
 
+  nodeToItemRec = (node, level) => {
+    let items = [this.nodeToItem(node, level)];
+
+    if (!isEmpty(node.children)) {
+      items = node.children.reduce((acc, val) =>
+        acc.concat(this.nodeToItemRec(val, level + 1)), items);
+    }
+
+    return items;
+  };
+
+  filterNode = (node, reg, selected) => {
+    let children = (node.children || [])
+      .map(x => this.filterNode(x, reg, selected))
+      .filter(x => !!x);
+
+    // if this node is selected we keep all it's original children
+    if (selected === node.value && isEmpty(children)) {
+      children = [...(node.children || [])];
+    }
+
+    if (selected === node.value || !isEmpty(children) || reg.test(node.text)) {
+      return { ...node, children };
+    }
+
+    return null;
+  };
+
   getFlatList = () => {
-    // modes:
-    // 1. no term, no selection: first 2 levels (all + first data level)
-    // 2. no term, yes selection: selected path + selected node children
-    // 3. yes term, no selection: every match with it's path
-    // 4. yes term, yes selection: same as 3
-    // In addition, we add "all" root to all of the above modes.
-
     const { tree } = this.props;
-
     if (!Array.isArray(tree) || tree.length === 0) {
       return [];
     }
 
-    const root = tree[0];
-
     const { sValue, term } = this.state;
     const selection        = sValue || [];
 
+    // start with root node
+    const root = tree[0];
     const nodes = [root];
     const items = [this.nodeToItem(root, 1)];
+
+    // if we have a search term we use it and stop
+    if (term) {
+      const escapedMatch = term.replace(/[/)(.+\\]/g, '\\$&');
+      const reg          = new RegExp(escapedMatch, 'i');
+      const selected     = Array.isArray(sValue) && sValue.length > 0 ? sValue[sValue.length - 1] : null;
+      const filteredRoot = this.filterNode(root, reg, selected);
+
+      return filteredRoot ? this.nodeToItemRec(filteredRoot, 1) : items;
+    }
+
+    // no search term, we just show by selection
+
+    // add in selection path
     selection.forEach((x, i) => {
       const node = nodes[nodes.length - 1].children.find(y => y.value === x);
       nodes.push(node);
       items.push(this.nodeToItem(node, 2 + i));
     });
 
+    // Add children of last node in selection (if any)
+    // or replace it with its siblings (including himself)
     let lastNode = nodes[nodes.length - 1];
     if (Array.isArray(lastNode.children) && lastNode.children.length > 0) {
       lastNode.children.forEach(x => items.push(this.nodeToItem(x, 2 + selection.length)));
@@ -140,17 +207,6 @@ class HierarchicalFilter extends Component {
       lastNode = nodes[nodes.length - 2];
       lastNode.children.forEach(x => items.push(this.nodeToItem(x, 1 + selection.length)));
     }
-
-    // if (term) {
-    //   // mode 3 and 4
-    // } else if (sValue) {
-    //   // mode 2
-    // } else {
-    //   // mode 1
-    //   items = (root.children || []).map(x => this.nodeToItem(x, 2));
-    // }
-
-    // items.unshift(this.nodeToItem(root, 1));
 
     return items;
   };
@@ -183,6 +239,7 @@ class HierarchicalFilter extends Component {
             size="small"
             icon="search"
             placeholder={`${t('buttons.search')}...`}
+            onChange={this.handleTermChange}
           />
         </Segment>
         <Segment className="filter-popup__body">
