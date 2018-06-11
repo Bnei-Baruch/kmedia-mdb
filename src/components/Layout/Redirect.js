@@ -64,7 +64,8 @@ class Redirect extends React.Component {
   };
 
   static defaultProps = {
-    push: false
+    push: false,
+    from: undefined
   };
 
   static contextTypes = {

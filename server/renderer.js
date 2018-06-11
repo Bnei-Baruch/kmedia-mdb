@@ -17,7 +17,6 @@ import { COOKIE_CONTENT_LANG, LANG_UKRAINIAN } from '../src/helpers/consts';
 import { getLanguageDirection } from '../src/helpers/i18n-utils';
 import { getLanguageFromPath } from '../src/helpers/url';
 import createStore from '../src/redux/createStore';
-import { actions as settings } from '../src/redux/modules/settings';
 import { actions as ssr } from '../src/redux/modules/ssr';
 import App from '../src/components/App/App';
 import i18nnext from './i18nnext';
@@ -30,17 +29,18 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function serverRender(req, res, next, htmlData, criticalCSS) {
   console.log('serverRender', req.originalUrl);
 
-  const result = getLanguageFromPath(req.originalUrl, req.headers);
-  if (result.redirect) {
-    const newUrl = `${BASE_URL}${result.language}${req.originalUrl}`;
-    console.log(`serverRender: redirect (${result.language}) => ${newUrl}`);
+  const { language, redirect } = getLanguageFromPath(req.originalUrl, req.headers);
+  if (redirect) {
+    const newUrl = `${BASE_URL}${language}${req.originalUrl}`;
+    console.log(`serverRender: redirect (${language}) => ${newUrl}`);
     res.writeHead(307, { Location: newUrl });
     res.end();
     return;
   }
 
-  const { language } = result;
   moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
+  const cookies = cookieParse(req.headers.cookie || { COOKIE_CONTENT_LANG: language });
+
   const i18nServer = i18nnext.cloneInstance();
   i18nServer.changeLanguage(language, (err) => {
     if (err) {
@@ -55,13 +55,10 @@ export default function serverRender(req, res, next, htmlData, criticalCSS) {
     const initialState = {
       router: { location: history.location },
       device: { deviceInfo: new UAParser(req.get('user-agent')).getResult() },
+      settings: { language, contentLanguage: cookies[COOKIE_CONTENT_LANG] },
     };
 
     const store = createStore(initialState, history);
-
-    store.dispatch(settings.setLanguage(language));
-    const cookies = cookieParse(req.headers.cookie || { COOKIE_CONTENT_LANG: language });
-    store.dispatch(settings.setContentLanguage(cookies[COOKIE_CONTENT_LANG]));
 
     const context = {
       req,

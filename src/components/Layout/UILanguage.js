@@ -21,6 +21,7 @@ class UILanguage extends Component {
     if (language === '' || language === undefined) {
       return;
     }
+    console.log('UI language: ', language);
     const expires   = new Date(Date.now() + (365 * 24 * 60 * 60 * 1000)).toUTCString();
     document.cookie = `${COOKIE_UI_LANG}=${language}; path=/; expires=${expires}`;
   };
@@ -29,7 +30,7 @@ class UILanguage extends Component {
     const { t, language } = this.props;
 
     return (
-      <Dropdown item text={t(`constants.languages.${language}`)}>
+      <Dropdown item text={`UI: ${t(`constants.languages.${language}`)}`}>
         <Dropdown.Menu>
           {
             LANG_UI_LANGUAGES.map(x => (
