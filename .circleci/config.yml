@@ -24,5 +24,5 @@ jobs:
           name: Run Test and Coverage
           command: |
             ./cc-test-reporter before-build
-            yarn test -- --coverage
+            yarn test --coverage
             ./cc-test-reporter after-build --exit-code $?
