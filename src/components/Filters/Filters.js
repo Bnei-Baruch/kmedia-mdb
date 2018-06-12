@@ -118,6 +118,7 @@ class Filters extends Component {
                   >
                     <Popup.Content className={`filter-popup ${langDir}`}>
                       <FilterComponent
+                        namespace={namespace}
                         value={value}
                         onCancel={this.handlePopupClose}
                         onApply={x => this.handleApply(name, x)}

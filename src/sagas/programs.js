@@ -12,25 +12,28 @@ function* fetchProgramsList(action) {
   if (action.payload.namespace !== 'programs') {
     return;
   }
+  try {
+    // fetch once
+    const programs = yield select(state => selectors.getPrograms(state.programs));
+    if (!isEmpty(programs)) {
+      return;
+    }
 
-  // fetch once
-  const programs = yield select(state => selectors.getPrograms(state.programs));
-  if (!isEmpty(programs)) {
-    return;
-  }
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const { data } = yield call(Api.collections, {
+      language,
+      content_type: CT_VIDEO_PROGRAM,
+      pageNo: 1,
+      pageSize: 1000,
+      with_units: false,
+    });
 
-  const language = yield select(state => settings.getLanguage(state.settings));
-  const { data } = yield call(Api.collections, {
-    language,
-    content_type: CT_VIDEO_PROGRAM,
-    pageNo: 1,
-    pageSize: 1000,
-    with_units: false,
-  });
-
-  if (Array.isArray(data.collections)) {
-    yield put(mdbActions.receiveCollections(data.collections));
-    yield put(actions.receiveCollections(data.collections));
+    if (Array.isArray(data.collections)) {
+      yield put(mdbActions.receiveCollections(data.collections));
+      yield put(actions.receiveCollections(data.collections));
+    }
+  } catch (err) {
+    console.log('fetch programs error', err);
   }
 }
 

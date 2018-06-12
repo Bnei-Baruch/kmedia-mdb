@@ -3,18 +3,22 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { TOPICS_FOR_DISPLAY } from '../../../helpers/consts';
+import { isEmpty } from '../../../helpers/utils';
 import { selectors } from '../../../redux/modules/tags';
+import { selectors as stats } from '../../../redux/modules/stats';
 import HierarchicalFilter from './HierarchicalFilter';
 
 class TagsFilter extends Component {
   static propTypes = {
     roots: PropTypes.array,
     getTagById: PropTypes.func.isRequired,
+    cuStats: PropTypes.objectOf(PropTypes.number),
     t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     roots: [],
+    cuStats: {},
   };
 
   constructor(props) {
@@ -23,35 +27,35 @@ class TagsFilter extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.roots !== nextProps.roots &&
-      this.props.getTagById !== nextProps.getTagById) {
+    if ((this.props.roots !== nextProps.roots &&
+      this.props.getTagById !== nextProps.getTagById) ||
+      this.props.cuStats !== nextProps.cuStats) {
       this.setState({ tree: this.getTree(nextProps) });
     }
   }
 
   getTree = (props) => {
-    const { roots, getTagById, t } = props;
+    const { roots, getTagById, cuStats, t } = props;
     return [
       {
         value: 'root',
         text: t('filters.topics-filter.all'),
-        // count: 1234,
         children: roots ?
           roots
             .filter(x => TOPICS_FOR_DISPLAY.indexOf(x) !== -1)
-            .map(x => this.buildNode(x, getTagById)) :
+            .map(x => this.buildNode(x, getTagById, cuStats)) :
           null,
       }
     ];
   };
 
-  buildNode = (id, getTagById) => {
+  buildNode = (id, getTagById, cuStats) => {
     const { label, children } = getTagById(id);
     return {
       value: id,
       text: label,
-      // count: 0,
-      children: children ? children.map(x => this.buildNode(x, getTagById)) : null,
+      count: cuStats[id] || 0,
+      children: children ? children.map(x => this.buildNode(x, getTagById, cuStats)) : null,
     };
   };
 
@@ -62,8 +66,14 @@ class TagsFilter extends Component {
 }
 
 export default connect(
-  state => ({
-    roots: selectors.getRoots(state.tags),
-    getTagById: selectors.getTagById(state.tags),
-  })
+  (state, ownProps) => {
+    let cuStats = stats.getCUStats(state.stats, ownProps.namespace) || { data: { tags: {} } };
+    cuStats     = isEmpty(cuStats) || isEmpty(cuStats.data) ? {} : cuStats.data.tags;
+
+    return {
+      roots: selectors.getRoots(state.tags),
+      getTagById: selectors.getTagById(state.tags),
+      cuStats,
+    };
+  }
 )(TagsFilter);
