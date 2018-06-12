@@ -12,7 +12,6 @@ const programsFilter = {
     const [genre, program] = value;
     return pickBy({ genre, program }, x => !!x);
   },
-  tagIcon: 'tv',
   valueToTagLabel: (value, props, store, t) => {
     if (!value) {
       return '';

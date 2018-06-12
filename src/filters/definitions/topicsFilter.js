@@ -7,7 +7,6 @@ const topicsFilter = {
   valueToQuery: value => value.join('_'),
   queryToValue: queryValue => queryValue.split('_'),
   valueToApiParam: value => ({ tag: value[value.length - 1] }),
-  tagIcon: 'tag',
   valueToTagLabel: (value, props, { getState }) => {
     if (!value) {
       return '';

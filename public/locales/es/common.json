@@ -67,6 +67,9 @@
       "label": "Año",
       "placeholder": "Seleccione año"
     },
+    "collections-filter": {
+      "label": "Colecciones"
+    },
     "sections-filter": {
       "label": "Sección",
       "lessons": "Lecciones y Charlas",

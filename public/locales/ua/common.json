@@ -68,6 +68,9 @@
       "label": "Рік",
       "placeholder": "Виберіть рік"
     },
+    "collections-filter": {
+      "label": "Колекції"
+    },
     "sections-filter": {
       "label": "Розділ",
       "lessons": "Уроки та Лекції",

@@ -29,7 +29,6 @@ const dateFilter = {
       end_date: moment(to).format(DATE_FORMAT)
     };
   },
-  tagIcon: 'calendar',
   valueToTagLabel: (value) => {
     if (!value) {
       return '';

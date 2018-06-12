@@ -23,12 +23,10 @@ const initialState = {
   programs: [],
 };
 
-const onSetLanguage = state => (
-  {
-    ...state,
-    programs: [],
-  }
-);
+const onSetLanguage = state => ({
+  ...state,
+  programs: [],
+});
 
 const onReceiveCollections = (state, action) => ({
   ...state,

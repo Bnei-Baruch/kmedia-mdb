@@ -67,6 +67,9 @@
       "label": "שנה",
       "placeholder": "בחר שנה"
     },
+    "collections-filter": {
+      "label": "אוספים"
+    },
     "sections-filter": {
       "label": "מדור",
       "lessons": "שיעורים והרצאות",

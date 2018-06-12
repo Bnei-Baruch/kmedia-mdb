@@ -36,7 +36,6 @@ export const sectionsFilter = createFilterDefinition({
   name: 'sections-filter',
   queryKey: 'section',
   valueToApiParam: value => options[value],
-  tagIcon: 'wpforms',
   valueToTagLabel: (value, props, store, t) => {
     if (!value) {
       return '';

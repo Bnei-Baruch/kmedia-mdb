@@ -1,4 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
+import groupBy from 'lodash/groupBy';
+import mapValues from 'lodash/mapValues';
 
 import { isEmpty, strCmp } from '../../helpers/utils';
 import { selectors as mdb } from './mdb';
@@ -8,40 +10,51 @@ import { types as ssr } from './ssr';
 
 /* Types */
 
+const SET_TAB = 'Lessons/SET_TAB';
+
+const RECEIVE_LECTURES         = 'Lessons/RECEIVE_LECTURES';
 const FETCH_ALL_SERIES         = 'Lessons/FETCH_ALL_SERIES';
 const FETCH_ALL_SERIES_SUCCESS = 'Lessons/FETCH_ALL_SERIES_SUCCESS';
 const FETCH_ALL_SERIES_FAILURE = 'Lessons/FETCH_ALL_SERIES_FAILURE';
-const SET_TAB                  = 'Lessons/SET_TAB';
 
 export const types = {
+  SET_TAB,
+
+  RECEIVE_LECTURES,
   FETCH_ALL_SERIES,
   FETCH_ALL_SERIES_SUCCESS,
   FETCH_ALL_SERIES_FAILURE,
-  SET_TAB
 };
 
 /* Actions */
 
+const setTab = createAction(SET_TAB);
+
+const receiveLectures       = createAction(RECEIVE_LECTURES);
 const fetchAllSeries        = createAction(FETCH_ALL_SERIES);
 const fetchAllSeriesSuccess = createAction(FETCH_ALL_SERIES_SUCCESS);
 const fetchAllSeriesFailure = createAction(FETCH_ALL_SERIES_FAILURE);
-const setTab                = createAction(SET_TAB);
 
 export const actions = {
+  setTab,
+
+  receiveLectures,
   fetchAllSeries,
   fetchAllSeriesSuccess,
   fetchAllSeriesFailure,
-  setTab
 };
 
 /* Reducer */
 
 const initialState = {
   seriesIDs: [],
+  lecturesByType: {},
   wip: {
+    lectures: false,
     series: false,
   },
   errors: {
+    lectures: null,
     series: null,
   },
 };
@@ -79,6 +92,11 @@ const setStatus = (state, action) => {
   };
 };
 
+const onReceiveLectures = (state, action) => ({
+  ...state,
+  lecturesByType: mapValues(groupBy(action.payload, x => x.content_type), x => x.map(y => y.id)),
+});
+
 const onFetchAllSeriesSuccess = (state, action) => ({
   ...state,
   seriesIDs: action.payload.collections.map(x => x.id),
@@ -87,6 +105,7 @@ const onFetchAllSeriesSuccess = (state, action) => ({
 const onSetLanguage = state => (
   {
     ...state,
+    lecturesByType: {},
     seriesIDs: [],
   }
 );
@@ -94,7 +113,8 @@ const onSetLanguage = state => (
 const onSSRPrepare = state => ({
   ...state,
   errors: {
-    series: state.errors.series ? state.errors.series.toString() : state.errors.series
+    lectures: state.errors.lectures ? state.errors.lectures.toString() : state.errors.lectures,
+    series: state.errors.series ? state.errors.series.toString() : state.errors.series,
   }
 });
 
@@ -102,6 +122,7 @@ export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
   [settings.SET_LANGUAGE]: onSetLanguage,
 
+  [RECEIVE_LECTURES]: onReceiveLectures,
   [FETCH_ALL_SERIES]: setStatus,
   [FETCH_ALL_SERIES_SUCCESS]: (state, action) => setStatus(onFetchAllSeriesSuccess(state, action), action),
   [FETCH_ALL_SERIES_FAILURE]: setStatus,
@@ -109,8 +130,9 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getWip    = state => state.wip;
-const getErrors = state => state.errors;
+const getWip            = state => state.wip;
+const getErrors         = state => state.errors;
+const getLecturesByType = state => state.lecturesByType;
 
 const $$sortTree = (node) => {
   if (isEmpty(node)) {
@@ -186,5 +208,6 @@ const getSeriesBySource = (state, mdbState, sourcesState) => {
 export const selectors = {
   getWip,
   getErrors,
+  getLecturesByType,
   getSeriesBySource,
 };

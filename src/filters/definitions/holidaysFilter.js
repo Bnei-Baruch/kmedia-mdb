@@ -6,7 +6,6 @@ const holidaysFilter = {
   queryKey: 'holidays',
   valueToQuery: value => value.join('|'),
   queryToValue: queryValue => queryValue.split('|'),
-  tagIcon: 'birthday',
   valueToTagLabel: (value, props, { getState }) => {
     if (!value) {
       return '';

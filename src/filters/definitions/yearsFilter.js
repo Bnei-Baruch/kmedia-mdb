@@ -5,7 +5,6 @@ const yearsFilter = {
   queryKey: 'year',
   queryToValue: value => parseInt(value, 10),
   valueToApiParam: value => ({ year: value }),
-  tagIcon: 'calendar',
   valueToTagLabel: value => (`${value}`)
 };
 
