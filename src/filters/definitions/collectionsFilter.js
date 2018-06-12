@@ -4,7 +4,9 @@ import { createFilterDefinition } from './util';
 const collectionsFilter = {
   name: 'collections-filter',
   queryKey: 'collection',
-  valueToApiParam: value => ({ collection: value }),
+  valueToQuery: value => value.join('|'),
+  queryToValue: queryValue => queryValue.split('|'),
+  valueToApiParam: value => ({ collection: value[0] }),
   valueToTagLabel: (value, props, store) => {
     if (!value) {
       return '';

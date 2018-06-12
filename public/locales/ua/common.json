@@ -69,7 +69,8 @@
       "placeholder": "Виберіть рік"
     },
     "collections-filter": {
-      "label": "Колекції"
+      "label": "Колекції",
+      "all": "Усі колекції"
     },
     "sections-filter": {
       "label": "Розділ",

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
+import scrollIntoView from 'scroll-into-view';
 import { Button, Header, Input, Menu, Segment } from 'semantic-ui-react';
 
 import { isEmpty } from '../../../helpers/utils';
@@ -39,7 +40,10 @@ class HierarchicalFilter extends Component {
   componentDidMount() {
     if (this.activeRef) {
       // eslint-disable-next-line react/no-find-dom-node
-      ReactDOM.findDOMNode(this.activeRef).scrollIntoView();
+      scrollIntoView(ReactDOM.findDOMNode(this.activeRef), {
+        time: 150, // half a second
+        validTarget: (target, parentsScrolled) => (parentsScrolled < 1),
+      });
     }
   }
 
@@ -109,12 +113,22 @@ class HierarchicalFilter extends Component {
     this.setState({ term: data.value });
   }, 200);
 
-  nodeToItem = (node, level) => {
+  nodeToItem = (node, level, reg) => {
     const { text, value, count } = node;
     const { sValue }             = this.state;
     const selected               = Array.isArray(sValue) && sValue.length > 0 ? sValue[sValue.length - 1] : null;
     const active                 = value === selected;
     const ref                    = active ? this.handleActiveRef : null;
+
+    let content = text;
+    if (reg && reg.test(text)) {
+      content = (
+        <span dangerouslySetInnerHTML={{
+          __html: content.replace(reg, '<span class="highlight">$&</span>')
+        }}
+        />
+      );
+    }
 
     return (
       <Menu.Item
@@ -126,7 +140,7 @@ class HierarchicalFilter extends Component {
         className={`l${level}`}
         onClick={this.handleClick}
       >
-        {text}
+        {content}
         {
           Number.isInteger(count) ?
             <span className="count">&nbsp;({count})</span> :
@@ -136,12 +150,12 @@ class HierarchicalFilter extends Component {
     );
   };
 
-  nodeToItemRec = (node, level) => {
-    let items = [this.nodeToItem(node, level)];
+  nodeToItemRec = (node, level, reg) => {
+    let items = [this.nodeToItem(node, level, reg)];
 
     if (!isEmpty(node.children)) {
       items = node.children.reduce((acc, val) =>
-        acc.concat(this.nodeToItemRec(val, level + 1)), items);
+        acc.concat(this.nodeToItemRec(val, level + 1, reg )), items);
     }
 
     return items;
@@ -174,7 +188,7 @@ class HierarchicalFilter extends Component {
     const selection        = sValue || [];
 
     // start with root node
-    const root = tree[0];
+    const root  = tree[0];
     const nodes = [root];
     const items = [this.nodeToItem(root, 1)];
 
@@ -185,7 +199,7 @@ class HierarchicalFilter extends Component {
       const selected     = Array.isArray(sValue) && sValue.length > 0 ? sValue[sValue.length - 1] : null;
       const filteredRoot = this.filterNode(root, reg, selected);
 
-      return filteredRoot ? this.nodeToItemRec(filteredRoot, 1) : items;
+      return filteredRoot ? this.nodeToItemRec(filteredRoot, 1, reg) : items;
     }
 
     // no search term, we just show by selection

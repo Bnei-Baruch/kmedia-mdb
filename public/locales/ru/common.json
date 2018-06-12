@@ -69,7 +69,8 @@
       "placeholder": "Выберите год"
     },
     "collections-filter": {
-      "label": "Коллекции"
+      "label": "Коллекции",
+      "all": "Все коллекции"
     },
     "sections-filter": {
       "label": "Раздел",

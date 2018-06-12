@@ -7,25 +7,44 @@ import { strCmp } from '../../../helpers/utils';
 import { selectors } from '../../../redux/modules/lessons';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import * as shapes from '../../shapes';
-import FlatListFilter from './FlatListFilter';
+import HierarchicalFilter from './HierarchicalFilter';
 
 class CollectionsFilter extends React.Component {
   static propTypes = {
     collections: PropTypes.arrayOf(shapes.GenericCollection).isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = { tree: this.getTree(this.props) };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.collections !== nextProps.collections) {
+      this.setState({ tree: this.getTree(nextProps) });
+    }
+  }
+
+  getTree = (props) => {
+    const { collections, t } = props;
+
+    collections.sort((a, b) => strCmp(a.name, b.name));
+
+    return [
+      {
+        value: 'root',
+        text: t('filters.collections-filter.all'),
+        children: collections.map(x => ({
+          text: x.name,
+          value: x.id,
+        }))
+      }
+    ];
+  };
+
   render() {
-    const { collections, ...rest } = this.props;
-
-    const options = collections.map(x => ({
-      text: x.name,
-      value: x.id,
-    }));
-    options.sort((a, b) => strCmp(a.text, b.text));
-
-    return (
-      <FlatListFilter name="collections-filter" options={options} {...rest} />
-    );
+    const { tree } = this.state;
+    return <HierarchicalFilter name="collections-filter" tree={tree} {...this.props} />;
   }
 }
 

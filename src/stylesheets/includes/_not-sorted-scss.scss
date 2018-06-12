@@ -199,6 +199,10 @@
       }
     }
 
+    .highlight {
+      background-color: rgba($yellow, 0.2);
+    }
+
     &.date-filter {
       max-height: 450px;
       .DayPickerInput {

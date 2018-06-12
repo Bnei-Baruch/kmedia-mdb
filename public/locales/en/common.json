@@ -69,7 +69,8 @@
       "placeholder": "Select a year"
     },
     "collections-filter": {
-      "label": "Collections"
+      "label": "Collections",
+      "all": "All Collections"
     },
     "sections-filter": {
       "label": "Section",

@@ -62,7 +62,7 @@ export default connect(
   (state) => {
     const cIDs = selectors.getEventsByType(state.events)[CT_HOLIDAY];
     return {
-      holidayEvents: (cIDs || []).map(x => mdb.getDenormCollection(state.mdb, x)),
+      holidayEvents: (cIDs || []).map(x => mdb.getCollectionById(state.mdb, x)),
       getTagById: tags.getTagById(state.tags),
     };
   },

@@ -68,7 +68,8 @@
       "placeholder": "בחר שנה"
     },
     "collections-filter": {
-      "label": "אוספים"
+      "label": "אוספים",
+      "all": "כל האוספים"
     },
     "sections-filter": {
       "label": "מדור",
