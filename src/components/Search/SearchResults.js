@@ -197,11 +197,11 @@ class SearchResults extends Component {
 
     const name = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || srcPath[srcPath.length - 1].name;
 
-    const authors = this.snippetFromHighlight(highlight, ['authors', 'authors_analyzed'], parts => parts[0]);
+    /*const authors = this.snippetFromHighlight(highlight, ['authors', 'authors_analyzed'], parts => parts[0]);
     if (authors) {
       // Remove author from path in order to replace with highlight value.
       srcPath.pop();
-    }
+    }*/
 
     const path = `${srcPath.slice(0, -1).map(n => n.name).join(' > ')} >`;
 
@@ -237,7 +237,7 @@ class SearchResults extends Component {
         </Table.Cell>
         <Table.Cell>
           <Link className="search__link" to={canonicalLink({ id: mdbUid, content_type: 'SOURCE' })}>
-            {authors}&nbsp;{path}&nbsp;{name}
+            {path}&nbsp;{name}
           </Link>
           {snippet || null}
         </Table.Cell>
