@@ -73,7 +73,14 @@ const setFilterState = (state, namespace, name, newFilterStateReducer) => {
 
 const $$setFilterValue = (state, action) => {
   const { namespace, name, value } = action.payload;
-  return setFilterState(state, namespace, name, () => ({ values: isEmpty(value) ? [] : [value] }));
+  return setFilterState(state, namespace, name, () => {
+    const arrayObjectOrString = Array.isArray(value) ||
+      typeof value === 'object' ||
+      typeof value === 'string';
+    return {
+      values: arrayObjectOrString && isEmpty(value) ? [] : [value],
+    };
+  });
 };
 
 const $$resetFilter = (state, action) => {
