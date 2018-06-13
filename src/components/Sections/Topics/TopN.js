@@ -1,22 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, Image, Button } from 'semantic-ui-react';
-//import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 
 import { NO_NAME } from '../../../helpers/consts';
 import { sectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
+import { stringify as urlSearchStringify } from '../../../helpers/url';
 import Link from '../../Language/MultiLanguageLink';
 import * as shapes from '../../shapes';
-// import { selectors } from '../../../redux/modules/tags';
-// import { selectors as mdbSelectors } from '../../../redux/modules/mdb';
+import { filtersTransformer } from '../../../filters/index';
 
 class TopN extends React.PureComponent{
   static propTypes = {
     section: PropTypes.string.isRequired,
     N: PropTypes.number.isRequired,
-    units: PropTypes.arrayOf(shapes.ContentUnit),
+    tagId: PropTypes.string.isRequired,
+    tagPath: PropTypes.arrayOf(PropTypes.object).isRequired,
+    units: PropTypes.arrayOf(shapes.ContentUnit).isRequired,
     t: PropTypes.func.isRequired, 
   }
 
@@ -47,10 +48,6 @@ class TopN extends React.PureComponent{
     );
   }
 
-  displayAllItems = () => {
-    alert('all items');
-  }
-
   compareUnits = (a,b) => {
     let ans = -1;
     if (a && b && a.film_date <= b.film_date){
@@ -73,16 +70,34 @@ class TopN extends React.PureComponent{
     }
 
     this.setState({topNUnits});
-   
+  }
+
+  getTopicUrl = () => {
+    const {section, tagPath} = this.props;
+
+    const query = filtersTransformer.toQueryParams([
+      { name: 'topics-filter', values: [tagPath.map(y => y.id)] }
+    ]);
+
+    const search = urlSearchStringify(query);
+    const url = `/${section}?${search}`;
+
+    // console.log('tagPath:', tagPath);
+    // console.log('query:', query);
+    // console.log('search;', search);
+    console.log('url:', url);
+
+    return url;
   }
 
   render(){
     const { section, t } = this.props;
-    const units = this.state.topNUnits;
+    const { topNUnits: units } = this.state;
+    const url = this.getTopicUrl();
 
     return (
       Array.isArray(units) && units.length > 0 ?
-      <Table fixed unstackable basic="very" >
+      <Table unstackable basic="very" >
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>
@@ -97,39 +112,15 @@ class TopN extends React.PureComponent{
         <Table.Footer fullWidth>
           <Table.Row>
             <Table.HeaderCell>
-              <Button primary size='small' onClick={this.displayAllItems}>View Rest</Button>
+              <Button primary size='medium' href={url} >View All</Button>
             </Table.HeaderCell>
           </Table.Row>
         </Table.Footer>
       </Table> :
       null
-    );
+    )
   }
 
 }
 
-// const mapState = (state, ownProps) => {
-//   const {contentType, N} = ownProps;
-//   const getUnitIdsByContentType = selectors.getUnitIdsByContentType(state.tags);
-  
-//   let units = [];
-
-//   if (getUnitIdsByContentType){
-//     const unitIds = getUnitIdsByContentType(contentType);
-//     const topNUnitIds = Array.isArray(unitIds) ?
-//                           unitIds.length > N ?
-//                           unitIds.slice(0, N) :
-//                           unitIds :
-//                         [];
-
-//     units = topNUnitIds.length > 0 ?
-//             topNUnitIds.map(id => mdbSelectors.getDenormContentUnit(state.mdb, id)) :
-//             [];
-//   }
-
-//   return { units };
-  
-// }
-
 export default translate()(TopN);
-//connect(mapState)(translate()(TopN));

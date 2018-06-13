@@ -109,25 +109,6 @@ const onDashboard = () => {
   return {...initialState, wip: true} 
 }
 
-// const compareUnits = (a,b) => {
-//   let ans = -1;
-//   if (a && b && a.film_date <= b.film_date){
-//     ans = 1;
-//   }
-  
-//   return ans;
-// }
-
-// const getUnitIds = (units) => {
-//   let unitIds = [];
-//   if (units && units.length > 0){
-//     unitIds = units.sort(compareUnits)
-//                    .map(u => u.id);
-//   }
-
-//   return unitIds;
-// }
-
 const getSectionOfUnit = (unit) => {
   const s = canonicalLink(unit).split('/');
   return s.length >= 3 ? s[1] : null;
