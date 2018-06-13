@@ -11,6 +11,7 @@ class YearMonthForm extends Component {
     date: PropTypes.any.isRequired,
     localeUtils: PropTypes.any.isRequired,
     onChange: PropTypes.func.isRequired,
+    language: PropTypes.string.isRequired,
   };
 
   state = {
@@ -36,8 +37,8 @@ class YearMonthForm extends Component {
   };
 
   render() {
-    const { localeUtils } = this.props;
-    const months          = localeUtils.getMonths();
+    const { localeUtils, language } = this.props;
+    const months                    = localeUtils.getMonths(language);
 
     const years = [];
     for (let i = toMonth.getFullYear(); i >= fromMonth.getFullYear(); i -= 1) {
@@ -54,6 +55,7 @@ class YearMonthForm extends Component {
           value={this.state.month}
           onChange={this.handleMonthChange}
         />
+        &nbsp;&nbsp;
         <Dropdown
           compact
           inline

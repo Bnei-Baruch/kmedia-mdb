@@ -208,6 +208,9 @@
       .DayPickerInput {
         display: block;
       }
+      .DayPicker-Caption > div {
+        font-size: 1rem;
+      }
     }
 
     &.sections-filter {

@@ -247,10 +247,19 @@ class DateFilter extends Component {
                 onClick={this.toggleCustom}
               />
               <Accordion.Content active={this.state.showCustom}>
-                <p>From:</p>
-                <FastDayPicker value={from} language={language} onDayChange={this.handleFromInputChange} />
-                <p>To:</p>
-                <FastDayPicker value={to} language={language} onDayChange={this.handleToInputChange} />
+                <FastDayPicker
+                  label={t('filters.date-filter.start')}
+                  value={from}
+                  language={language}
+                  onDayChange={this.handleFromInputChange}
+                />
+                <br />
+                <FastDayPicker
+                  label={t('filters.date-filter.end')}
+                  value={to}
+                  language={language}
+                  onDayChange={this.handleToInputChange}
+                />
               </Accordion.Content>
             </Menu.Item>
           </Accordion>

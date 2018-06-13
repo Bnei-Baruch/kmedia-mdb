@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
+import scrollIntoView from 'scroll-into-view';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import MomentLocaleUtils, { formatDate, parseDate } from 'react-day-picker/moment';
 import { Input } from 'semantic-ui-react';
@@ -13,12 +15,14 @@ import YearMonthForm from './YearMonthForm';
 class FastDayPicker extends Component {
   static propTypes = {
     value: PropTypes.instanceOf(Date),
+    label: PropTypes.string,
     onDayChange: PropTypes.func,
     language: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
     value: null,
+    label: '',
     onDayChange: noop,
   };
 
@@ -29,8 +33,18 @@ class FastDayPicker extends Component {
   handleYearMonthChange = month =>
     this.setState({ month });
 
+  handleDayPickerRef = (ref) => {
+    if (ref) {
+      // eslint-disable-next-line react/no-find-dom-node
+      scrollIntoView(ReactDOM.findDOMNode(ref), {
+        time: 150, // half a second
+        validTarget: target => target !== window,
+      });
+    }
+  };
+
   render() {
-    const { language, onDayChange, value } = this.props;
+    const { language, onDayChange, value, label } = this.props;
     const { month }                        = this.state;
     const selected                         = value || today().toDate();
     const locale                           = getLanguageLocaleWORegion(language);
@@ -41,8 +55,9 @@ class FastDayPicker extends Component {
         value={selected}
         onDayChange={onDayChange}
         inputProps={{
+          label,
           fluid: true,
-          size: 'small'
+          size: 'small',
         }}
         format="l"
         formatDate={formatDate}
@@ -55,9 +70,11 @@ class FastDayPicker extends Component {
           locale,
           localeUtils: MomentLocaleUtils,
           dir: getLanguageDirection(language),
+          ref: this.handleDayPickerRef,
           captionElement: ({ date, localeUtils }) => (
             <YearMonthForm
               date={date}
+              language={language}
               localeUtils={localeUtils}
               onChange={this.handleYearMonthChange}
             />
