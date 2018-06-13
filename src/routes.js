@@ -23,7 +23,6 @@ import LibraryHomepage from './components/Sections/Library/Homepage';
 import LibraryContainer from './components/Sections/Library/LibraryContainer';
 import LibraryPerson from './components/Sections/Library/LibraryPerson';
 import SearchResults from './components/Search/SearchResultsContainer';
-import Redirect from './components/Layout/Redirect';
 import HomePage from './components/Sections/Home/Container';
 import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 // import Design from './components/Design/Design';
@@ -47,22 +46,6 @@ const pageRoute = (path, component, { subRoutes, ssrData, prefix = '' } = {}) =>
   routes: subRoutes,
   ssrData,
 });
-
-/**
- * Creates a redirect route config
- *
- * @param {string} from
- * @param {string} to
- * @param {string} prefix='' will be prepended to both the 'from' and the 'to' params
- */
-const redirect = (from, to, { prefix = '' }) => {
-  const fullFrom = `${prefix}/${from}`;
-  const fullTo   = `${prefix}/${to}`;
-  return ({
-    path: fullFrom,
-    component: () => <Redirect to={fullTo} />
-  });
-};
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
@@ -101,14 +84,6 @@ const routes = [
   // { path: 'design2', component: Design2 },
 ];
 
-const redirects = [
-  { from: 'lessons/part/:id', to: 'lessons/cu/:id' },
-  { from: 'lessons/full/:id', to: 'lessons/c/:id' },
-  { from: 'programs/chapter/:id', to: 'programs/cu/:id' },
-  { from: 'programs/full/:id', to: 'programs/c/:id' },
-  { from: 'events/item/:id', to: 'events/cu/:id' },
-  { from: 'events/full/:id', to: 'events/c/:id' },
-];
 const createMainRoutes = (prefix) => {
   const defaultPageOptions = { prefix };
 
@@ -116,17 +91,10 @@ const createMainRoutes = (prefix) => {
   const defaultPageRoute = (path, component, options = {}) =>
     pageRoute(path, component, { ...defaultPageOptions, ...options });
 
-  // for convenience
-  const defaultRedirect = (from, to) =>
-    redirect(from, to, defaultPageOptions);
-
   return [{
     component: Layout,
     routes: [
       ...routes.map(route => defaultPageRoute(route.path, route.component, route.options)),
-
-      // Old routes - redirect for now
-      ...redirects.map(r => defaultRedirect(r.from, r.to)),
 
       {
         path: '*',
