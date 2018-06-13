@@ -1,0 +1,41 @@
+.pagination-wrapper {
+  @include small-mobile {
+    margin-top: -1px;
+    padding: 0 !important;
+  }
+}
+
+.pagination-menu {
+  @include tablet {
+    @for $i from 5 through 6 {
+      .distance-#{$i} { display: none !important;}
+    }
+  }
+
+  @include mobile {
+    @for $i from 3 through 6 {
+      .distance-#{$i} { display: none !important;}
+    }
+  }
+
+  @include small-mobile {
+    border-radius: 0;
+    width: 100%;
+    // border-color: red!important;
+    border-width: 0!important;
+    .item {
+      border-radius: 0 !important;
+      display: block;
+      flex: 1 1 auto !important;
+    }
+
+    @for $i from 2 through 6 {
+      .distance-#{$i} { display: none !important;}
+    }
+
+    .prev-page,
+    .next-page {
+      display: none !important;
+    }
+  }
+}

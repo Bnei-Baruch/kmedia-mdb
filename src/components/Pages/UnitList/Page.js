@@ -121,7 +121,7 @@ class UnitListPage extends PureComponent {
           }
         </Container>
         <Divider fitted />
-        <Container className="padded" textAlign="center">
+        <Container className="padded pagination-wrapper" textAlign="center">
           <Pagination
             pageNo={pageNo}
             pageSize={pageSize}
