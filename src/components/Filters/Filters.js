@@ -10,6 +10,7 @@ import { filtersTransformer } from '../../filters/index';
 import { actions, selectors } from '../../redux/modules/filters';
 import { selectors as mdb } from '../../redux/modules/mdb';
 import { selectors as settings } from '../../redux/modules/settings';
+import { selectors as device } from '../../redux/modules/device';
 import * as shapes from '../shapes';
 import FiltersHydrator from './FiltersHydrator';
 
@@ -25,6 +26,7 @@ class Filters extends Component {
     filtersData: PropTypes.objectOf(PropTypes.object).isRequired,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -58,9 +60,25 @@ class Filters extends Component {
   };
 
   render() {
-    const { filters, namespace, onHydrated, t, filtersData, rightItems, language } = this.props;
-    const { activeFilter }                                                         = this.state;
-    const { store }                                                                = this.context;
+    const { filters, namespace, onHydrated, t, filtersData, rightItems, language, deviceInfo } = this.props;
+    const { activeFilter }                                                                     = this.state;
+    const { store }                                                                            = this.context;
+
+    const langDir = getLanguageDirection(language);
+
+    let popupStyle = {
+      padding: 0,
+      direction: langDir,
+    };
+    if (deviceInfo.device && deviceInfo.device.type === 'mobile') {
+      popupStyle = {
+        ...popupStyle,
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+      };
+    }
 
     return (
       <div className="filter-panel">
@@ -79,8 +97,6 @@ class Filters extends Component {
                 const label    = value ?
                   filtersTransformer.valueToTagLabel(name, value, this.props, store, t) :
                   t('filters.all');
-
-                const langDir = getLanguageDirection(language);
 
                 return (
                   <Popup
@@ -111,10 +127,7 @@ class Filters extends Component {
                     open={isActive}
                     onClose={this.handlePopupClose}
                     onOpen={() => this.handlePopupOpen(name)}
-                    style={{
-                      padding: 0,
-                      direction: langDir
-                    }}
+                    style={popupStyle}
                   >
                     <Popup.Content className={`filter-popup ${langDir}`}>
                       <FilterComponent
@@ -146,6 +159,7 @@ export default connect(
   (state, ownProps) => ({
     filtersData: selectors.getNSFilters(state.filters, ownProps.namespace),
     language: settings.getLanguage(state.settings),
+    deviceInfo: device.getDeviceInfo(state.device),
 
     // DO NOT REMOVE, this triggers a necessary re-render for filter tags
     sqDataWipErr: mdb.getSQDataWipErr(state.mdb),
