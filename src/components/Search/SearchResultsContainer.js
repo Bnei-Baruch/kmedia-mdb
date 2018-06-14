@@ -21,6 +21,7 @@ class SearchResultsContainer extends Component {
     wip: shapes.WIP,
     err: shapes.Error,
     search: PropTypes.func.isRequired,
+    updateQuery: PropTypes.func.isRequired,
     click: PropTypes.func.isRequired,
     setPage: PropTypes.func.isRequired,
     pageNo: PropTypes.number.isRequired,
@@ -48,6 +49,10 @@ class SearchResultsContainer extends Component {
       const { search, query, pageSize, pageNo, deb } = this.props;
       search(query, pageNo, pageSize, deb);
     }
+  }
+
+  componentWillUnmount() {
+    this.props.updateQuery(''); // reset query for next page
   }
 
   handlePageChange = (pageNo) => {
@@ -105,7 +110,7 @@ class SearchResultsContainer extends Component {
 
 const mapState = (state) => {
   const queryResult = selectors.getQueryResult(state.search);
-  const results = queryResult.search_result;
+  const results     = queryResult.search_result;
 
   const cMap = results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
@@ -150,6 +155,7 @@ const mapState = (state) => {
 
 const mapDispatch = dispatch => bindActionCreators({
   search: actions.search,
+  updateQuery: actions.updateQuery,
   click: actions.click,
   setPage: actions.setPage,
   setSortBy: actions.setSortBy,

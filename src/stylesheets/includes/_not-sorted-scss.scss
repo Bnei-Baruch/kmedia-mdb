@@ -24,8 +24,36 @@
   max-width: 600px;
   width: 100%;
   .input {
-
     width: 100%;
+  }
+  >.results {
+    &.visible {
+      display: table !important;
+    }
+
+    // this falls sub-pixel apart from the category name table-cell,
+    // it doesn't look good. so we cancel it
+    > .category {
+      > .name {
+        border-bottom: none !important;
+      }
+
+      .result:last-child {
+        border-bottom: 1px solid rgba(34,36,38,.1) !important;
+      }
+
+      &:last-child {
+        .result:last-child {
+          border-bottom: none !important;
+          margin-bottom: 1px;
+        }
+      }
+
+      .result:hover {
+        background-color: rgba($blue, .1) !important;
+        //background-image: linear-gradient(to bottom, rgba($blue, 0.3), rgba($blue, 0)) !important;
+      }
+    }
   }
 }
 
@@ -146,11 +174,10 @@
   }
 }
 
-
 // filters redesign
 .index-filters {
   margin-top: .5rem !important;
-  .item{
+  .item {
     &.header {
       padding: .95714286em 1.14285714em !important;
     }
@@ -193,7 +220,7 @@
 
       .item {
         color: $blue;
-        .count{
+        .count {
           color: $grey;
         }
       }
