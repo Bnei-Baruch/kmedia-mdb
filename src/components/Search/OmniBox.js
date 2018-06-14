@@ -62,6 +62,11 @@ export class OmniBox extends Component {
     if (nextProps.suggestions !== this.props.suggestions) {
       this.setState({ suggestionsHelper: new SuggestionsHelper(nextProps.suggestions) });
     }
+
+    // Clear search query when navigating from the search page into other pages (AS-38)
+    if (this.props.query && !nextProps.location.pathname.endsWith('search') && nextProps.location.pathname !== this.props.location.pathname){
+      this.handleFilterClear();
+    }
   }
 
   resetComponent = () =>
@@ -232,6 +237,7 @@ export class OmniBox extends Component {
 
     const categories  = ['tags', 'sources', 'authors', 'persons'];
     const textResults = new Set([query]);
+    
     let results       = categories.reduce((acc, val) => {
       const searchResults = suggestionsHelper.getSuggestions(val, 5);
       if (searchResults.length > 0) {
