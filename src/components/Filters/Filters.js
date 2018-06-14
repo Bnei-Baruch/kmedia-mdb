@@ -114,7 +114,7 @@ class Filters extends Component {
                         {
                           value ?
                             <Icon
-                              name="trash outline"
+                              name="trash alternate outline"
                               onClick={e => this.handleResetFilter(e, name)}
                             /> :
                             null
