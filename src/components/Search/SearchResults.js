@@ -195,7 +195,7 @@ class SearchResults extends Component {
 
     const srcPath = getSourcePath(mdbUid);
 
-    const name = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || srcPath[srcPath.length - 1].name;
+    const name = this.snippetFromHighlight(highlight, ['title', 'title_analyzed'], parts => parts.join(' ')) || srcPath[srcPath.length - 1].name;
 
     /*const authors = this.snippetFromHighlight(highlight, ['authors', 'authors_analyzed'], parts => parts[0]);
     if (authors) {
@@ -343,7 +343,7 @@ class SearchResults extends Component {
   renderHit = (hit, rank) => {
     // console.log('hit', hit);
     const { cMap, cuMap }                                  = this.props;
-    const { _source: { mdb_uid: mdbUid }, _type: hitType } = hit;
+    const { _source: { mdb_uid: mdbUid,  result_type: resultType}, _type: hitType } = hit;
     const cu                                               = cuMap[mdbUid];
     const c                                                = cMap[mdbUid];
 
@@ -351,7 +351,7 @@ class SearchResults extends Component {
       return this.renderContentUnit(cu, hit, rank);
     } else if (c) {
       return this.renderCollection(c, hit, rank);
-    } else if (hitType === 'sources') {
+    } else if (resultType === 'sources') {
       return this.renderSource(hit, rank);
     } else if (SEARCH_INTENT_HIT_TYPES.includes(hitType)) {
       return this.renderIntent(hit, rank)
