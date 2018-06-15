@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { /*Grid,*/ List, Container, Item, Segment, Header } from 'semantic-ui-react';
+import { List, Container, Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import SectionHeader from '../../shared/SectionHeader';
@@ -42,13 +42,11 @@ class TopicContainer extends Component{
                 {
                   node.children.map(id => 
                     <List.Item key={id}>
-                      <List.Content>
-                        {this.renderNode(byId[id])}
-                      </List.Content>  
+                      {this.renderNode(byId[id])}
                     </List.Item>  
                   )
                 }
-             </List> :
+              </List> :
               this.renderLeaf(node)
           }
         </div>
@@ -57,9 +55,11 @@ class TopicContainer extends Component{
 
   renderSubHeader(node){
     return(
-      <div key={node.id}>
-        <Header as='h4'> {node.label}  </Header>
-          { this.renderNode(node) }
+      <div key={node.id} >
+        <Header as='h4'> 
+          {node.label}  
+        </Header>
+        { this.renderNode(node) }
       </div>  
     );
   }
@@ -74,14 +74,12 @@ class TopicContainer extends Component{
     }
 
     return (
-      <Item.Content key={rootId}>
-        <Item.Header as='h2'> {rootNode.label} </Item.Header>
-        <Item.Description>
-          {
-            rootChildren.map(id => this.renderSubHeader(byId[id])) 
-          }
-        </Item.Description>
-      </Item.Content>
+      <div key={rootId} >
+        <Header as='h2'> {rootNode.label} </Header>
+        {
+          rootChildren.map(id => this.renderSubHeader(byId[id])) 
+        }
+      </div>
     );
   }
   
@@ -92,25 +90,11 @@ class TopicContainer extends Component{
     return(
       <Container fluid>
         <SectionHeader section="topics" />
-        <Item.Group divided relaxed unstackable>
+        <div>
             {
-              roots.map(r => 
-                <Item key={r}> 
-                  {this.renderBranch(r)}
-                </Item>
-              )
+              roots.map(r => this.renderBranch(r))
             }
-        </Item.Group>  
-
-        {/* <Grid container doubling divided relaxed>
-          {
-            this.props.roots.map(r => 
-              <Grid.Column key={r} mobile={16} tablet={8} computer={4}> 
-                {this.renderBranch(r)}
-              )
-              </Grid.Column>)
-          }
-        </Grid> */}
+        </div>  
       </Container>
     );
   }
