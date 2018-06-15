@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { /*Grid,*/ List, Container, Item } from 'semantic-ui-react';
+import { /*Grid,*/ List, Container, Item, Segment, Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import SectionHeader from '../../shared/SectionHeader';
@@ -35,7 +35,7 @@ class TopicContainer extends Component{
     const {byId} = this.props;
 
     return(
-        <List.Description>
+        <div>
           {
             (Array.isArray(node.children) && node.children.length > 0) ?
               <List relaxed>
@@ -51,22 +51,16 @@ class TopicContainer extends Component{
              </List> :
               this.renderLeaf(node)
           }
-        </List.Description>
+        </div>
     );
   }
 
   renderSubHeader(node){
     return(
-      <List key={node.id} relaxed='very'>
-        <List.Item>
-          <List.Content>
-            <List.Header as='h3'> 
-              {node.label} 
-            </List.Header>
-            { this.renderNode(node) }
-          </List.Content>
-        </List.Item>
-      </List>
+      <div key={node.id}>
+        <Header as='h4'> {node.label}  </Header>
+          { this.renderNode(node) }
+      </div>  
     );
   }
 
@@ -75,14 +69,16 @@ class TopicContainer extends Component{
     const rootNode = byId[rootId];
     const rootChildren = rootNode.children;
 
+    if (!rootChildren){
+      return null;
+    }
+
     return (
       <Item.Content key={rootId}>
         <Item.Header as='h2'> {rootNode.label} </Item.Header>
         <Item.Description>
           {
-            Array.isArray(rootChildren) && rootChildren.length > 0 ?
-              rootChildren.map(id => this.renderSubHeader(byId[id])) :
-              this.renderSubHeader(rootChildren)
+            rootChildren.map(id => this.renderSubHeader(byId[id])) 
           }
         </Item.Description>
       </Item.Content>
