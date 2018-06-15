@@ -37,7 +37,7 @@ export class OmniBox extends Component {
     search: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
-    suggestions: PropTypes.array,
+    suggestions: PropTypes.object,
     getSourcePath: PropTypes.func,
     getTagPath: PropTypes.func,
     query: PropTypes.string.isRequired,
@@ -50,7 +50,7 @@ export class OmniBox extends Component {
   };
 
   static defaultProps = {
-    suggestions: [],
+    suggestions: {},
     onSearch: noop,
   };
 
