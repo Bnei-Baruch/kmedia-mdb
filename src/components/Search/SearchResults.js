@@ -71,7 +71,7 @@ class SearchResults extends Component {
     const { t, location, queryResult }                                                           = this.props;
     const { search_result: { searchId } }                                                        = queryResult;
     const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, highlight, _score: score } = hit;
-    console.log('renderContentUnit', hit, resultType);
+    // console.log('renderContentUnit', hit, resultType);
 
     const name        = this.snippetFromHighlight(highlight, ['title', 'title_language'], parts => parts.join(' ')) || cu.name;
     const description = this.snippetFromHighlight(highlight, ['description', 'description_language'], parts => `...${parts.join('.....')}...`);
@@ -341,7 +341,7 @@ class SearchResults extends Component {
   };
 
   renderHit = (hit, rank) => {
-    console.log('hit', hit);
+    // console.log('hit', hit);
     const { cMap, cuMap }                                  = this.props;
     const { _source: { mdb_uid: mdbUid }, _type: hitType } = hit;
     const cu                                               = cuMap[mdbUid];
