@@ -1,15 +1,40 @@
 import React from 'react';
-import { Form, Message } from 'semantic-ui-react';
+import { Form, Button, Popup, Input } from 'semantic-ui-react';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 import BaseShareForm from './BaseShareForm';
 import ShareBar from './ShareBar';
+
+const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
 class ShareFormMobile extends BaseShareForm {
   constructor(props) {
     super(props);
     this.setStart = this.setStart.bind(this);
     this.setEnd   = this.setEnd.bind(this);
+    this.state.isCopyPopupOpen = false;
   }
+
+  timeout = null;
+
+  clearTimeout = () => {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+      this.timeout = null;
+    }
+  };
+
+  handleCopied = () => {
+    this.clearTimeout();
+    this.setState({ isCopyPopupOpen: true }, () => {
+      this.timeout = setTimeout(() => this.setState({ isCopyPopupOpen: false }), POPOVER_CONFIRMATION_TIMEOUT);
+    });
+  };
+
+  componentWillUnmount() {
+    this.clearTimeout();
+  }
+
 
   render() {
     const { t }               = this.props;
@@ -17,9 +42,25 @@ class ShareFormMobile extends BaseShareForm {
 
     return (
       <div className="mediaplayer__onscreen-share">
-        <ShareBar url={url} t={t} buttonSize="medium" />
+        <ShareBar url={url} t={t} showCopy={false} buttonSize="medium" />
         <div className="mediaplayer__onscreen-share-form">
-          <Message content={url} size="mini" style={{ userSelect: 'text', textAlign: 'left' }} />
+          <div className="mediaplayer__onscreen-share-bar-mobile">
+            <Input 
+              className="mediaplayer__onscreen-share-bar-mobile-link" 
+              value={url} 
+              input={{ readOnly: true }} 
+              style={{ textAlign: 'left' }} />
+            <Popup
+              open={this.state.isCopyPopupOpen}
+              content={t('messages.link-copied-to-clipboard')}
+              position="bottom right"
+              trigger={
+                <CopyToClipboard text={url} onCopy={this.handleCopied}>
+                  <Button className="mobileShareCopyLinkButton" content={t('buttons.copy')} />
+                </CopyToClipboard>
+              }
+            />
+          </div>
           <Form size="mini">
             <Form.Group widths="equal">
               <Form.Input
@@ -35,6 +76,7 @@ class ShareFormMobile extends BaseShareForm {
                 input={{ readOnly: true }}
                 actionPosition="left"
                 placeholder={t('player.buttons.click-to-set')}
+                className="slice-button-mobile"
               />
               <Form.Input
                 value={end ? this.mlsToStrColon(end) : ''}
@@ -49,6 +91,7 @@ class ShareFormMobile extends BaseShareForm {
                 input={{ readOnly: true }}
                 actionPosition="left"
                 placeholder={t('player.buttons.click-to-set')}
+                className="slice-button-mobile"
               />
             </Form.Group>
           </Form>

@@ -89,7 +89,8 @@
     "copy-link": "Copiar enlace",
     "search": "Buscar",
     "previous": "Anterior",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "copy": "Copiar"
   },
   "player": {
     "messages": {

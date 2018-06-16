@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CopyToClipboard from 'react-copy-to-clipboard';
-import { Button, Popup } from 'semantic-ui-react';
 
 import {
   EmailIcon,
@@ -20,8 +18,6 @@ import {
   WhatsappShareButton,
 } from 'react-share';
 
-const POPOVER_CONFIRMATION_TIMEOUT = 2500;
-
 export default class ShareBarMobile extends Component {
   static propTypes = {
     url: PropTypes.string.isRequired,
@@ -38,24 +34,7 @@ export default class ShareBarMobile extends Component {
   };
 
   componentWillUnmount() {
-    this.clearTimeout();
   }
-
-  timeout = null;
-
-  clearTimeout = () => {
-    if (this.timeout) {
-      clearTimeout(this.timeout);
-      this.timeout = null;
-    }
-  };
-
-  handleCopied = () => {
-    this.clearTimeout();
-    this.setState({ isOpen: true }, () => {
-      this.timeout = setTimeout(() => this.setState({ isOpen: false }), POPOVER_CONFIRMATION_TIMEOUT);
-    });
-  };
 
   render() {
     const { url, buttonSize, t } = this.props;
@@ -86,16 +65,6 @@ export default class ShareBarMobile extends Component {
         <EmailShareButton url={url} subject={title} body={url}>
           <EmailIcon size={bsPixels} round />
         </EmailShareButton>
-        <Popup
-          open={this.state.isOpen}
-          content={t('messages.link-copied-to-clipboard')}
-          position="bottom right"
-          trigger={
-            <CopyToClipboard text={url} onCopy={this.handleCopied}>
-              <Button primary circular as="div" size={buttonSize} icon="chain" className="SocialMediaShareButton" />
-            </CopyToClipboard>
-          }
-        />
       </div>
     );
   }

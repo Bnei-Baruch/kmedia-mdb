@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Form, Message } from 'semantic-ui-react';
-
+import { Button, Form, Message, Popup } from 'semantic-ui-react';
+import CopyToClipboard from 'react-copy-to-clipboard';
 import BaseShareForm from './BaseShareForm';
 import ShareBar from './ShareBar';
+
+const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
 class ShareFormDesktop extends BaseShareForm {
   static propTypes = {
@@ -14,6 +16,27 @@ class ShareFormDesktop extends BaseShareForm {
     super(props);
     this.setStart = this.setStart.bind(this);
     this.setEnd   = this.setEnd.bind(this);
+    this.state.isCopyPopupOpen = false;
+  }
+
+  timeout = null;
+
+  clearTimeout = () => {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+      this.timeout = null;
+    }
+  };
+
+  handleCopied = () => {
+    this.clearTimeout();
+    this.setState({ isCopyPopupOpen: true }, () => {
+      this.timeout = setTimeout(() => this.setState({ isCopyPopupOpen: false }), POPOVER_CONFIRMATION_TIMEOUT);
+    });
+  };
+
+  componentWillUnmount() {
+    this.clearTimeout();
   }
 
   render() {
@@ -31,8 +54,20 @@ class ShareFormDesktop extends BaseShareForm {
         />
         <ShareBar url={url} t={t} buttonSize="medium" />
         <div className="mediaplayer__onscreen-share-form">
+          <div className="mediaplayer__onscreen-share-bar">
           <Message content={url} size="mini" />
-          <Form size="mini">
+          <Popup
+              open={this.state.isCopyPopupOpen}              
+              content={t('messages.link-copied-to-clipboard')}
+              position="bottom right"
+              trigger={
+                <CopyToClipboard text={url} onCopy={this.handleCopied}>
+                  <Button className="shareCopyLinkButton" size="mini" content={t('buttons.copy')} />
+                </CopyToClipboard>
+              }
+            />
+          </div>
+          <Form>
             <Form.Group widths="equal">
               <Form.Input
                 value={start ? this.mlsToStrColon(start) : ''}
