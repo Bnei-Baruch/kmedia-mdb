@@ -30,8 +30,9 @@ import AVJumpBack from './AVJumpBack';
 import AVSpinner from './AVSpinner';
 import ShareFormDesktop from './Share/ShareFormDesktop';
 
-const PLAYER_VOLUME_STORAGE_KEY = '@@kmedia_player_volume';
-const DEFAULT_PLAYER_VOLUME     = 0.8;
+const DEFAULT_PLAYER_VOLUME       = 0.8;
+const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
+const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
 
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = playback =>
@@ -203,7 +204,7 @@ class AVPlayer extends PureComponent {
 
   onPlayerReady = () => {
     const { wasCurrentTime, wasPlaying, sliceStart } = this.state;
-    const { media }                      = this.props;
+    const { media }                                  = this.props;
 
     this.activatePersistence();
 
@@ -301,7 +302,7 @@ class AVPlayer extends PureComponent {
       media.seekTo(sliceEnd);
     }
 
-    this.saveCurrentTime();   
+    this.saveCurrentTime();
   };
 
   handleEditBack = () => {
@@ -447,31 +448,30 @@ class AVPlayer extends PureComponent {
   };
 
   saveCurrentTime = () => {
-    const { src, currentTime } = this.state;    
-    const { media } = this.props;    
-    if (media && media.currentTime)
-    {
+    const { src, currentTime } = this.state;
+    const { media }            = this.props;
+    if (media && media.currentTime) {
       const currentMediaTime = Math.round(media.currentTime);
-      if (currentMediaTime > 0 && currentMediaTime !== currentTime)
-      {        
-        this.setState({ currentTime:currentMediaTime });
+      if (currentMediaTime > 0 && currentMediaTime !== currentTime) {
+        this.setState({ currentTime: currentMediaTime });
         if (src) {
-          localStorage.setItem("kmedia_videotime_" + src, currentMediaTime);
-        }       
+          localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${src}`, currentMediaTime);
+        }
       }
-    } 
-  }
+    }
+  };
 
   getSavedTime = () => {
-   const { src } = this.state;      
-    // Try to get the current time from local storage if avalible
+    const { src } = this.state;
+    // Try to get the current time from local storage if available
     if (src) {
-      const savedTime = localStorage.getItem("kmedia_videotime_" + src);
-      if (savedTime)
-        return parseInt(savedTime);
+      const savedTime = localStorage.getItem(`${PLAYER_POSITION_STORAGE_KEY}_${src}`);
+      if (savedTime) {
+        return parseInt(savedTime, 10);
+      }
     }
-    return null; 
-  }
+    return null;
+  };
 
   render() {
     const
