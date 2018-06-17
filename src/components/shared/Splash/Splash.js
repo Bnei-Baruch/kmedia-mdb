@@ -31,6 +31,6 @@ Splash.defaultProps = {
   isLoading: false,
 };
 
-export const LoadingSplash = props => (<Splash isLoading icon="spinner" {...props} />);
+export const LoadingSplash = props => (<Splash isLoading icon="circle notch" color="blue" {...props} />);
 export const FrownSplash   = props => (<Splash icon="frown" color="orange" {...props} />);
 export const ErrorSplash   = props => (<Splash icon="warning sign" color="red" {...props} />);

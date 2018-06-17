@@ -38,8 +38,17 @@
         border-bottom: none !important;
       }
 
-      .result:last-child {
-        border-bottom: 1px solid rgba(34,36,38,.1) !important;
+      .result{
+        background-color: $white;
+        //border-bottom: none !important;
+        &:last-child {
+          border-bottom: 1px solid rgba(34,36,38,.1) !important;
+          margin-bottom: 1px;
+        }
+        &:hover {
+          //background-color: rgba($blue, .075) !important;
+          background-image: linear-gradient(to bottom, rgba($blue, 0.125), rgba($blue, 0)) !important;
+        }
       }
 
       &:last-child {
@@ -47,11 +56,6 @@
           border-bottom: none !important;
           margin-bottom: 1px;
         }
-      }
-
-      .result:hover {
-        background-color: rgba($blue, .1) !important;
-        //background-image: linear-gradient(to bottom, rgba($blue, 0.3), rgba($blue, 0)) !important;
       }
     }
   }
