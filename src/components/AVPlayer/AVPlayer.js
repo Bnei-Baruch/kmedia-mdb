@@ -87,6 +87,7 @@ class AVPlayer extends PureComponent {
     mode: PLAYER_MODE.NORMAL,
     persistenceFn: noop,
     isClient: false,
+    currentTime: 0
   };
 
   componentWillMount() {
@@ -201,13 +202,18 @@ class AVPlayer extends PureComponent {
   };
 
   onPlayerReady = () => {
-    const { wasCurrentTime, wasPlaying } = this.state;
+    const { wasCurrentTime, wasPlaying, sliceStart } = this.state;
     const { media }                      = this.props;
 
     this.activatePersistence();
 
     if (wasCurrentTime) {
       media.seekTo(wasCurrentTime);
+    } else if (!sliceStart && media.currentTime === 0) {
+      const savedTime = this.getSavedTime();
+      if (savedTime) {
+        media.seekTo(savedTime);
+      }
     }
     if (wasPlaying) {
       media.play();
@@ -294,6 +300,8 @@ class AVPlayer extends PureComponent {
       media.pause();
       media.seekTo(sliceEnd);
     }
+
+    this.saveCurrentTime();   
   };
 
   handleEditBack = () => {
@@ -437,6 +445,33 @@ class AVPlayer extends PureComponent {
       this.onScreen = ref;
     }
   };
+
+  saveCurrentTime = () => {
+    const { src, currentTime } = this.state;    
+    const { media } = this.props;    
+    if (media && media.currentTime)
+    {
+      const currentMediaTime = Math.round(media.currentTime);
+      if (currentMediaTime > 0 && currentMediaTime !== currentTime)
+      {        
+        this.setState({ currentTime:currentMediaTime });
+        if (src) {
+          localStorage.setItem("kmedia_videotime_" + src, currentMediaTime);
+        }       
+      }
+    } 
+  }
+
+  getSavedTime = () => {
+   const { src } = this.state;      
+    // Try to get the current time from local storage if avalible
+    if (src) {
+      const savedTime = localStorage.getItem("kmedia_videotime_" + src);
+      if (savedTime)
+        return parseInt(savedTime);
+    }
+    return null; 
+  }
 
   render() {
     const

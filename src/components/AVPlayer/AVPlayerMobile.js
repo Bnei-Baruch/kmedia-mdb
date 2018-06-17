@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import { Icon, Message } from 'semantic-ui-react';
 
 import { MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
-import { getQuery, updateQuery } from '../../helpers/url';
+import { getQuery } from '../../helpers/url';
 import { fromHumanReadableTime } from '../../helpers/time';
 import * as shapes from '../shapes';
 import { PLAYER_MODE } from './constants';
@@ -60,6 +60,7 @@ class AVPlayerMobile extends PureComponent {
     errorReason: '',
     mode: PLAYER_MODE.NORMAL,
     isSliceMode: false,
+    currentTime: 0,
   };
 
   componentWillMount() {
@@ -70,8 +71,6 @@ class AVPlayerMobile extends PureComponent {
 
     let mode    = PLAYER_MODE.NORMAL;
     const query = getQuery(history.location);
-
-    this.wasCurrentTime = this.wasCurrentTime || query.currentTime;
 
     if (query.sstart) {
       mode       = PLAYER_MODE.SLICE_VIEW;
@@ -116,9 +115,10 @@ class AVPlayerMobile extends PureComponent {
       this.media.addEventListener('timeupdate', this.handleTimeUpdate);
       this.media.addEventListener('volumechange', this.handleVolumeChange);
       this.media.addEventListener('playing', this.handlePlaying);
-      this.media.addEventListener('seeking', this.handleSeeking);
-
+      this.media.addEventListener('seeking', this.handleSeeking);      
+      this.media.addEventListener('canplay', this.seekIfNeeded);
       this.restoreVolume();
+      
     } else if (this.media) {
       this.media.removeEventListener('play', this.handlePlay);
       this.media.removeEventListener('pause', this.handlePause);
@@ -128,12 +128,13 @@ class AVPlayerMobile extends PureComponent {
       this.media.removeEventListener('volumechange', this.handleVolumeChange);
       this.media.removeEventListener('playing', this.handlePlaying);
       this.media.removeEventListener('seeking', this.handleSeeking);
+      this.media.removeEventListener('canplay', this.seekIfNeeded);
       this.media = ref;
     }
   };
 
   handlePlay = () => {
-    this.seekIfNeeded();
+    //this.seekIfNeeded();
 
     // make future src changes autoplay
     this.media.autoplay = true;
@@ -158,15 +159,22 @@ class AVPlayerMobile extends PureComponent {
   };
 
   seekIfNeeded = () => {
+    const { sliceStart } = this.state;
     if (this.wasCurrentTime) {
       this.media.currentTime = this.wasCurrentTime;
       this.wasCurrentTime    = undefined;
-    } else if (this.state.sliceStart) {
-      this.media.currentTime = this.state.sliceStart;
+    } else if (!sliceStart && this.media.currentTime === 0) {
+      const savedTime = this.getSavedTime();
+      if (savedTime) {
+        this.media.currentTime = savedTime;
+      }
+    } else if (sliceStart && this.media.currentTime === 0) {
+      this.media.currentTime = sliceStart;
     }
   };
 
-  iosSliceFix = () => {
+  // iosSliceFix is not relevant anymore because the seek has been change to 'canplay' event instead of 'play' event
+  /*iosSliceFix = () => {
     const { sliceStart } = this.state;
     if (!sliceStart) {
       return;
@@ -200,10 +208,10 @@ class AVPlayerMobile extends PureComponent {
     };
 
     this.media.addEventListener('canplaythrough', canplaythroughHandler, { once: true });
-  };
+  };*/
 
   handlePlaying = () => {
-    this.iosSliceFix();
+    //this.iosSliceFix();
   };
 
   handleSeeking = (e) => {
@@ -231,9 +239,9 @@ class AVPlayerMobile extends PureComponent {
     // so we don't change the autoplay value in such cases.
     if (Math.abs(this.media.currentTime - this.media.duration) > 0.1) {
       this.media.autoplay = false;
-      updateQuery(this.props.history, q => ({ ...q, currentTime: this.media.currentTime }));
+      this.saveCurrentTime(this.media.currentTime);
+      //updateQuery(this.props.history, q => ({ ...q, currentTime: this.media.currentTime }));
     }
-    this.wasCurrentTime = this.media.currentTime;
   };
 
   handleEnded = () => {
@@ -245,14 +253,18 @@ class AVPlayerMobile extends PureComponent {
   handleTimeUpdate = (e) => {
     const { mode, sliceEnd } = this.state;
 
+    const time = e.currentTarget.currentTime;
+
+    this.saveCurrentTime(time);
+
     if (mode !== PLAYER_MODE.SLICE_VIEW) {
       return;
     }
 
-    const time = e.currentTarget.currentTime;
     if (time > sliceEnd) {
       this.media.pause();
     }
+
   };
 
   handleError = (e) => {
@@ -290,6 +302,31 @@ class AVPlayerMobile extends PureComponent {
     const jumpTo = Math.max(0, Math.min(currentTime + 5, duration));
     this.seekTo(jumpTo);
   };
+
+  saveCurrentTime = (mediaTime) => {
+    const { currentTime } = this.state;      
+    const { item }        = this.props;
+    const currentMediaTime = Math.round(mediaTime);
+    if (currentMediaTime > 0 && currentMediaTime !== currentTime)
+    {        
+      this.setState({ currentTime:currentMediaTime });
+      if (item.src) {
+        localStorage.setItem("kmedia_videotime_" + item.src, currentMediaTime);
+      }       
+    }
+   
+  }
+
+  getSavedTime = () => {
+    const { item } = this.props;
+    // Try to get the current time from local storage if avalible
+    if (item.src) {
+      const savedTime = localStorage.getItem("kmedia_videotime_" + item.src);
+      if (savedTime)
+        return parseInt(savedTime);
+    }
+    return null; 
+  }
 
   render() {
     const
@@ -337,7 +374,7 @@ class AVPlayerMobile extends PureComponent {
           preload="metadata"
         />
       );
-    }  
+    }
 
     return (
       <div className="mediaplayer">
@@ -366,16 +403,16 @@ class AVPlayerMobile extends PureComponent {
               onPrev={onPrev}
               onNext={onNext}
             />
+            <div className="mediaplayer__spacer" />
+            <AVEditSlice onActivateSlice={this.toggleSliceMode} />
             <button type="button" tabIndex="-1" onClick={this.handleJumpBack}>
               -5s
               <Icon name="backward" />
             </button>
-            <button type="button" tabIndex="-1" onClick={this.handleJumpForward}>
+            <button type="button" tabIndex="-1" onClick={this.handleJumpForward}>              
               <Icon name="forward" />
               +5s
             </button>
-            <div className="mediaplayer__spacer" />
-            <AVEditSlice onActivateSlice={this.toggleSliceMode} />         
             <AVAudioVideo
               isAudio={isAudio}
               isVideo={isVideo}
