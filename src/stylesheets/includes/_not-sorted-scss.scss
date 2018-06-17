@@ -23,9 +23,11 @@
 .search-omnibox {
   max-width: 600px;
   width: 100%;
+
   .input {
     width: 100%;
   }
+
   >.results {
     &.visible {
       display: table !important;
@@ -321,4 +323,48 @@
       }
     }
   }
+}
+
+.field.slice-button-mobile input {
+  font-size: 16px !important;
+}
+
+.shareCopyLinkButton {
+  width: 10em;
+  height: 37px;
+  margin: 0 0 0 10px !important;
+}
+
+.mobileShareCopyLinkButton {
+  width: 10em;
+  height: 100%;
+  margin: 0 0 0 10px !important;
+}
+
+.rtl {
+  .mobileShareCopyLinkButton, .shareCopyLinkButton {
+    margin: 0 10px 0 0 !important;
+  }
+}
+
+.mediaplayer__onscreen-share-bar-mobile {
+  display: flex;
+  padding-bottom: 10px;
+  height: 3.5em;
+}
+
+.mediaplayer__onscreen-share-bar-mobile-link {
+  width:100%;
+}
+
+.slice-button-mobile .input {
+  height: 3.5em;
+}
+
+.slice-button-mobile .input .button {
+  width: 7em;
+}
+
+.mediaplayer__onscreen-share-bar {
+  display: flex;
 }

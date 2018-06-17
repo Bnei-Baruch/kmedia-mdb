@@ -48,7 +48,7 @@ export default class AVLanguageMobile extends Component {
           {
             options.map(x => (
               <option key={x} value={x}>
-                {t(`constants.languages.${x}`)}
+                {x}
               </option>
             ))
           }
