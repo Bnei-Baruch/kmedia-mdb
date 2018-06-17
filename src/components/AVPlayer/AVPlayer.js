@@ -79,7 +79,6 @@ class AVPlayer extends PureComponent {
   };
 
   state = {
-    isTopSeekbar: false,
     controlsVisible: true,
     error: false,
     errorReason: '',
@@ -127,7 +126,9 @@ class AVPlayer extends PureComponent {
   componentDidMount() {
     // By default hide controls after a while if player playing.
     this.hideControlsTimeout();
-    this.setState({ isClient:true });
+
+    // eslint-disable-next-line react/no-did-mount-set-state
+    this.setState({ isClient: true });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -264,13 +265,6 @@ class AVPlayer extends PureComponent {
     }
   };
 
-  onSeekBarResize = ({ width }) => {
-    const MIN_SEEKBAR_SIZE = 100;
-    if (this.state.isTopSeekbar !== (width < MIN_SEEKBAR_SIZE)) {
-      this.setState({ isTopSeekbar: width < MIN_SEEKBAR_SIZE });
-    }
-  };
-
   setSliceMode = (mode, properties = {}) => {
     const { media } = this.props;
 
@@ -347,21 +341,18 @@ class AVPlayer extends PureComponent {
     if (this.wrapperMouseY < this.wrapperRect.height - this.controlsRect.height) {
       this.setState({ controlsVisible: false });
     }
-    else
-    {
+    else {
       if (this.autohideTimeoutId) {
         clearTimeout(this.autohideTimeoutId);
         this.autohideTimeoutId = null;
       }
       this.hideControlsTimeout();
     }
-  }
+  };
 
   hideControlsTimeout = () => {
     if (!this.autohideTimeoutId) {
-      this.autohideTimeoutId = setTimeout(() => {        
-        this.hideControls();
-      }, 2000);
+      this.autohideTimeoutId = setTimeout(this.hideControls, 2000);
     }
   };
 
@@ -376,8 +367,8 @@ class AVPlayer extends PureComponent {
   handleWrapperMouseMove = (e) => {
     if (!this.state.controlsVisible) {
       this.showControls();
-    }    
-    this.wrapperMouseY = e.pageY - this.wrapperRect.top;   
+    }
+    this.wrapperMouseY = e.pageY - this.wrapperRect.top;
   };
 
   handleControlsMouseEnter = () => {
@@ -405,15 +396,15 @@ class AVPlayer extends PureComponent {
     } else if (this.wrapper) {
       this.wrapper.removeEventListener('keydown', this.handleWrapperKeyDown);
       this.wrapper = ref;
-    }        
+    }
   };
 
-  handlePlayerControlsRef = (ref) => {   
-    this.playerControls = ref;    
+  handlePlayerControlsRef = (ref) => {
+    this.playerControls = ref;
     if (this.playerControls) {
       this.controlsRect = ref.getBoundingClientRect();
     }
-  }
+  };
 
   handleOnScreenClick = () => {
     const { media } = this.props;
@@ -565,7 +556,7 @@ class AVPlayer extends PureComponent {
             <AVTimeElapsed
               start={media.currentTime}
               end={media.duration}
-            />            
+            />
             <AVJumpBack jumpSpan={-5} />
             <AVJumpBack jumpSpan={5} />
             <div className="mediaplayer__spacer" />
@@ -576,12 +567,11 @@ class AVPlayer extends PureComponent {
               sliceEnd={sliceEnd}
             />
 
-         
-                <AVPlaybackRate
-                  value={playbackRate}
-                  onSelect={this.playbackRateChange}
-                />
-          
+            <AVPlaybackRate
+              value={playbackRate}
+              onSelect={this.playbackRateChange}
+            />
+
             {
               isVideo && (
                 <AVVideoSize
@@ -592,20 +582,20 @@ class AVPlayer extends PureComponent {
               )
             }
             <AVMuteUnmute />
-                <AVAudioVideo
-                  isAudio={isAudio}
-                  isVideo={isVideo}
-                  onSwitch={this.onSwitchAV}
-                  fallbackMedia={fallbackMedia}
-                  t={t}
-                />              
-                <AVLanguage
-                  languages={languages}
-                  language={language}
-                  requestedLanguage={item.requestedLanguage}
-                  onSelect={this.onLanguageChange}
-                  t={t}
-                />
+            <AVAudioVideo
+              isAudio={isAudio}
+              isVideo={isVideo}
+              onSwitch={this.onSwitchAV}
+              fallbackMedia={fallbackMedia}
+              t={t}
+            />
+            <AVLanguage
+              languages={languages}
+              language={language}
+              requestedLanguage={item.requestedLanguage}
+              onSelect={this.onLanguageChange}
+              t={t}
+            />
             {!isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.SLICE_EDIT)} />}
             {isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.NORMAL)} />}
             {!isAudio && <AVFullScreen element={this.mediaElement} />}
