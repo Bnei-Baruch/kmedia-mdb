@@ -18,7 +18,7 @@ class TagsFilter extends Component {
 
   static defaultProps = {
     roots: [],
-    cuStats: {},
+    cuStats: null,
   };
 
   constructor(props) {
@@ -54,7 +54,7 @@ class TagsFilter extends Component {
     return {
       value: id,
       text: label,
-      count: cuStats[id] || 0,
+      count: cuStats ? cuStats[id] : null,
       children: children ? children.map(x => this.buildNode(x, getTagById, cuStats)) : null,
     };
   };
@@ -68,7 +68,7 @@ class TagsFilter extends Component {
 export default connect(
   (state, ownProps) => {
     let cuStats = stats.getCUStats(state.stats, ownProps.namespace) || { data: { tags: {} } };
-    cuStats     = isEmpty(cuStats) || isEmpty(cuStats.data) ? {} : cuStats.data.tags;
+    cuStats     = isEmpty(cuStats) || isEmpty(cuStats.data) ? null : cuStats.data.tags;
 
     return {
       roots: selectors.getRoots(state.tags),

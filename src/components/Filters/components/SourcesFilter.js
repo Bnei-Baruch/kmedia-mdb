@@ -17,7 +17,7 @@ class SourcesFilter extends Component {
 
   static defaultProps = {
     roots: [],
-    cuStats: {},
+    cuStats: null,
   };
 
   constructor(props) {
@@ -50,7 +50,7 @@ class SourcesFilter extends Component {
     return {
       value: id,
       text: name,
-      count: cuStats[id] || 0,
+      count: cuStats ? cuStats[id] : null,
       children: children ? children.map(x => this.buildNode(x, getSourceById, cuStats)) : null,
     };
   };
@@ -64,7 +64,7 @@ class SourcesFilter extends Component {
 export default connect(
   (state, ownProps) => {
     let cuStats = stats.getCUStats(state.stats, ownProps.namespace) || { data: { sources: {} } };
-    cuStats     = isEmpty(cuStats) || isEmpty(cuStats.data) ? {} : cuStats.data.sources;
+    cuStats     = isEmpty(cuStats) || isEmpty(cuStats.data) ? null : cuStats.data.sources;
 
     return {
       roots: selectors.getRoots(state.sources),
