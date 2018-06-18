@@ -101,11 +101,7 @@ class HomePage extends Component {
             <Grid doubling columns={5} className="homepage__iconsrow">
               <Grid.Row>
                 {
-<<<<<<< HEAD
                   [ST_LESSONS, ST_PROGRAMS, ST_LECTURES, ST_SOURCES, ST_EVENTS, ST_PUBLICATIONS].map(x =>
-=======
-                  ['lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
->>>>>>> origin/master
                     (
                       <Grid.Column key={x} textAlign="center">
                         <Topic title={t(`nav.sidebar.${x}`)} img={sectionLogo[x]} href={`/${x}`} />
