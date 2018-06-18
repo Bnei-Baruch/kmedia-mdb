@@ -37,7 +37,7 @@ class TopicContainer extends Component{
     return(
         <div>
           {
-            (Array.isArray(node.children) && node.children.length > 0) ?
+            Array.isArray(node.children) && node.children.length > 0 ?
               <List relaxed>
                 {
                   node.children.map(id => 
@@ -55,7 +55,7 @@ class TopicContainer extends Component{
 
   renderSubHeader(node){
     return(
-      <div key={node.id} >
+      <div key={node.id} className="topics__list">
         <Header as='h4'> 
           {node.label}  
         </Header>
@@ -91,9 +91,9 @@ class TopicContainer extends Component{
       <Container fluid>
         <SectionHeader section="topics" />
         <div>
-            {
-              roots.map(r => this.renderBranch(r))
-            }
+        {
+          roots.map(r => this.renderBranch(r))
+        }
         </div>  
       </Container>
     );

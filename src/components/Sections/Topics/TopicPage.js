@@ -54,7 +54,7 @@ class TopicPage extends Component {
         return(
           <Container>
             <SectionHeader section="topics" />
-            <Grid container doubling columns={2} className="homepage__iconsrow">
+            <Grid container doubling columns={sections.length} className="homepage__iconsrow">
               {
                 sections.map(s => {
                   const sectionUnits = getSectionUnits(s);
