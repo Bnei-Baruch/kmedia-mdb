@@ -71,7 +71,7 @@ export const actions = {
 
 const initialState = {
   acQ: '',
-  suggestions: [],
+  suggestions: {},
   q: '',
   queryResult: {},
   pageNo: 1,
