@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_VIDEO_PROGRAM_CHAPTER, NO_NAME } from '../../../helpers/consts';
 import { sectionThumbnailFallback } from '../../../helpers/images';
 import { CollectionsBreakdown } from '../../../helpers/mdb';
 import { canonicalLink } from '../../../helpers/links';
-import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
-import {
-  mapDispatch as baseMapDispatch,
-  mapState as baseMapState,
-  UnitListContainer,
-  wrap
-} from '../../Pages/UnitList/Container';
+import { ellipsize } from '../../../helpers/strings';
+import UnitList from '../../Pages/UnitList/Container';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
 import SectionHeader from '../../shared/SectionHeader';
@@ -58,6 +51,13 @@ export const renderUnit = (unit, t) => {
         <Link className="index__title" to={link}>
           {unit.name || NO_NAME}
         </Link>
+        {
+          unit.description ?
+            <div className="index__description mobile-hidden">
+              {ellipsize(unit.description)}
+            </div>
+            : null
+        }
         <List horizontal divided link className="index__collections" size="tiny">
           <List.Item>
             <List.Header>{t('programs.list.episode_from')}</List.Header>
@@ -69,47 +69,6 @@ export const renderUnit = (unit, t) => {
   );
 };
 
-class MyUnitListContainer extends UnitListContainer {
-  static propTypes = {
-    ...UnitListContainer.propTypes,
-    shouldOpenProgramsFilter: PropTypes.bool,
-    editNewFilter: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    ...UnitListContainer.defaultProps,
-    shouldOpenProgramsFilter: true,
-  };
-
-  componentDidMount() {
-    if (this.props.shouldOpenProgramsFilter) {
-      this.props.editNewFilter('programs', 'programs-filter');
-    }
-  }
-}
-
-const mapState = (state, ownProps) => {
-  // we want to open programs-filter if no filter is applied
-  const allFilters               = filters.getFilters(state.filters, ownProps.namespace);
-  const shouldOpenProgramsFilter = allFilters.length === 0;
-
-  return {
-    ...baseMapState(state, ownProps),
-    shouldOpenProgramsFilter
-  };
-};
-
-function mapDispatch(dispatch) {
-  return {
-    ...baseMapDispatch(dispatch),
-    ...bindActionCreators({
-      editNewFilter: filtersActions.editNewFilter,
-    }, dispatch),
-  };
-}
-
-const MyUnitList = wrap(MyUnitListContainer, mapState, mapDispatch);
-
 class ProgramsList extends Component {
   extraFetchParams = () => (
     { content_type: [CT_VIDEO_PROGRAM_CHAPTER] }
@@ -119,7 +78,7 @@ class ProgramsList extends Component {
     return (
       <div>
         <SectionHeader section="programs" />
-        <MyUnitList
+        <UnitList
           namespace="programs"
           renderUnit={renderUnit}
           extraFetchParams={this.extraFetchParams}

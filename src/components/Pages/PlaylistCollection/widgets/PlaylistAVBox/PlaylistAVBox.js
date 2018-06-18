@@ -17,6 +17,13 @@ class PlaylistAVBox extends Component {
     language: PropTypes.string.isRequired,
     onSelectedChange: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    nextLink: PropTypes.string,
+    prevLink: PropTypes.string,
+  };
+
+  static defaultProps = {
+    nextLink: null,
+    prevLink: null,
   };
 
   state = {
@@ -46,11 +53,13 @@ class PlaylistAVBox extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { collection, language, location } = nextProps;
-    const {
-            collection: oldCollection,
-            language: oldLanguage,
-            location: oldLocation
-          }                                  = this.props;
+
+    const
+      {
+        collection: oldCollection,
+        language: oldLanguage,
+        location: oldLocation
+      } = this.props;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();
     const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);
@@ -67,6 +76,14 @@ class PlaylistAVBox extends Component {
 
     // Persist language in playableItem
     this.setPlaylist(collection, newMediaType, newItemLanguage);
+
+    // When moving from playlist to another playlist
+    // we're already mounted.
+    // We have to make sure to change selected as well.
+    const nSelected = playerHelper.getActivePartFromQuery(location);
+    if (nSelected !== this.state.selected) {
+      this.handleSelectedChange(nSelected);
+    }
   }
 
   setPlaylist = (collection, mediaType, language) => {
@@ -99,8 +116,8 @@ class PlaylistAVBox extends Component {
   };
 
   render() {
-    const { t, PlayListComponent } = this.props;
-    const { playlist, selected }   = this.state;
+    const { t, PlayListComponent, language, nextLink, prevLink } = this.props;
+    const { playlist, selected }                                 = this.state;
 
     if (!playlist ||
       !Array.isArray(playlist.items) ||
@@ -125,8 +142,11 @@ class PlaylistAVBox extends Component {
           <PlayListComponent
             playlist={playlist}
             selected={selected}
+            language={language}
             onSelectedChange={this.handleSelectedChange}
             t={t}
+            nextLink={nextLink}
+            prevLink={prevLink}
           />
         </Grid.Column>
       </Grid.Row>

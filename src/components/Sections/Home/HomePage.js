@@ -95,10 +95,10 @@ class HomePage extends Component {
 
         <Container className="padded homepage__sections">
           <Section title={t('home.sections')}>
-            <Grid doubling columns={6} className="homepage__iconsrow">
+            <Grid doubling columns={5} className="homepage__iconsrow">
               <Grid.Row>
                 {
-                  ['lessons', 'programs', 'lectures', 'sources', 'events', 'publications'].map(x =>
+                  ['lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
                     (
                       <Grid.Column key={x} textAlign="center">
                         <Topic title={t(`nav.sidebar.${x}`)} img={sectionLogo[x]} href={`/${x}`} />

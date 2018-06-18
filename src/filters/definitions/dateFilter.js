@@ -1,7 +1,6 @@
 import moment from 'moment';
 
 import { DATE_FORMAT } from '../../helpers/consts';
-import { sameDate } from '../../helpers/date';
 import { createFilterDefinition } from './util';
 
 const dateFilter = {
@@ -12,7 +11,8 @@ const dateFilter = {
       return null;
     }
 
-    return `${moment(value.from).format(DATE_FORMAT)}_${moment(value.to).format(DATE_FORMAT)}`;
+    const { from, to } = value;
+    return `${moment(from).format(DATE_FORMAT)}_${moment(to).format(DATE_FORMAT)}`;
   },
   queryToValue: (queryValue) => {
     const parts = queryValue.split('_');
@@ -25,24 +25,24 @@ const dateFilter = {
   valueToApiParam: (value) => {
     const { from, to } = value;
     return {
-      start_date: moment(new Date(from)).format(DATE_FORMAT),
-      end_date: moment(new Date(to)).format(DATE_FORMAT)
+      start_date: moment(from).format(DATE_FORMAT),
+      end_date: moment(to).format(DATE_FORMAT)
     };
   },
-  tagIcon: 'calendar',
   valueToTagLabel: (value) => {
     if (!value) {
       return '';
     }
 
     const { from, to } = value;
-    const dateFormat   = date => moment(new Date(date)).format('D MMM YYYY');
+    const mFrom        = moment(from);
+    const mTo          = moment(to);
 
-    if (sameDate(value.from, value.to)) {
-      return dateFormat(from);
+    if (mFrom.isSame(mTo, 'day')) {
+      return mFrom.format('D MMM YYYY');
     }
 
-    return `${dateFormat(from)} - ${dateFormat(to)}`;
+    return `${mFrom.format('D MMM YYYY')} - ${mTo.format('D MMM YYYY')}`;
   }
 };
 

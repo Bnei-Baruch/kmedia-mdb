@@ -3,7 +3,6 @@ import identity from 'lodash/identity';
 const definitionPrototype = {
   valueToQuery: identity,
   queryToValue: identity,
-  tagIcon: 'tag',
   valueToTagLabel: identity,
   valueToApiParam: () => null
 };

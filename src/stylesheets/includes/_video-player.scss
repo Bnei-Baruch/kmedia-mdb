@@ -103,6 +103,9 @@
       padding-right: 1.14285714em * 2;
     }
     .menu > .item {
+      &.active {
+        background-color: rgba($blue, .2) !important;
+      }
       // padding-bottom: 0;
     }
   }

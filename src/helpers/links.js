@@ -42,17 +42,17 @@ import {
 export const sectionLink = (section, filters) => {
   const filterValues = filters.map(({ name, value, getFilterById }) => {
     if (['topics-filter', 'sources-filter'].includes(name)) {
-      const tag = getFilterById(value);
-      if (!tag) {
+      const tagOrSource = getFilterById(value);
+      if (!tagOrSource) {
         return null;
       }
-      const path = tracePath(tag, getFilterById);
+      const path = tracePath(tagOrSource, getFilterById);
       return { name, values: [path.map(y => y.id)] };
     }
 
     return { name, values: [value] };
   });
-  const query        = filtersTransformer.toQueryParams(filterValues.filter(f => !!f));
+  const query = filtersTransformer.toQueryParams(filterValues.filter(f => !!f));
   return `/${section}?${urlSearchStringify(query)}`;
 };
 
@@ -70,14 +70,19 @@ export const canonicalLink = (entity) => {
   switch (entity.content_type) {
   case CT_DAILY_LESSON:
   case CT_SPECIAL_LESSON:
-    return `/lessons/c/${entity.id}`;
+    return `/lessons/daily/c/${entity.id}`;
+  case CT_VIRTUAL_LESSONS:
+    return `/lessons/virtual/c/${entity.id}`;
+  case CT_LECTURE_SERIES:
+    return `/lessons/lectures/c/${entity.id}`;
+  case CT_WOMEN_LESSONS:
+    return `/lessons/women/c/${entity.id}`;
+  case CT_CHILDREN_LESSONS:
+    return `/lessons/children/c/${entity.id}`;
+  case CT_LESSONS_SERIES:
+    return `/lessons/series/c/${entity.id}`;
   case CT_VIDEO_PROGRAM:
     return `/programs/c/${entity.id}`;
-  case CT_LECTURE_SERIES:
-  case CT_VIRTUAL_LESSONS:
-  case CT_WOMEN_LESSONS:
-  case CT_CHILDREN_LESSONS:
-    return `/lectures/c/${entity.id}`;
   case CT_ARTICLES:
     return `/publications/c/${entity.id}`;
   case CT_FRIENDS_GATHERINGS:
@@ -87,8 +92,6 @@ export const canonicalLink = (entity) => {
   case CT_PICNIC:
   case CT_UNITY_DAY:
     return `/events/c/${entity.id}`;
-  case CT_LESSONS_SERIES:
-    return `/series/c/${entity.id}`;
   case CT_CLIPS:
     return '/';
   default:
@@ -104,12 +107,11 @@ export const canonicalLink = (entity) => {
   // unit based on type
   switch (entity.content_type) {
   case CT_LESSON_PART:
-    return `/lessons/cu/${entity.id}`;
   case CT_LECTURE:
   case CT_VIRTUAL_LESSON:
   case CT_CHILDREN_LESSON:
   case CT_WOMEN_LESSON:
-    return `/lectures/cu/${entity.id}`;
+    return `/lessons/cu/${entity.id}`;
   case CT_VIDEO_PROGRAM_CHAPTER:
     return `/programs/cu/${entity.id}`;
   case CT_EVENT_PART:

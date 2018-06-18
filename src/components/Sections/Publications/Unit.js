@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Container, Grid, Header, Item } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../../helpers/links';
@@ -127,7 +127,12 @@ class MyUnitPage extends UnitPage {
   }
 
   renderHelmet() {
-    return <Helmets.ArticleUnit unit={this.props.unit} />;
+    return (
+      <Fragment>
+        <Helmets.NoIndex />
+        <Helmets.ArticleUnit unit={this.props.unit} />
+      </Fragment>
+    );
   }
 
   renderMaterials() {

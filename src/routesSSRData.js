@@ -11,27 +11,26 @@ import {
   CT_WOMEN_LESSON,
   MEDIA_TYPES
 } from './helpers/consts';
+import { canonicalCollection } from './helpers/utils';
 import { selectors as settingsSelectors } from './redux/modules/settings';
 import { actions as mdbActions, selectors as mdbSelectors } from './redux/modules/mdb';
 import { actions as filtersActions } from './redux/modules/filters';
 import { actions as listsActions } from './redux/modules/lists';
 import { actions as homeActions } from './redux/modules/home';
 import { actions as eventsActions } from './redux/modules/events';
-import { actions as lecturesActions } from './redux/modules/lectures';
-import { actions as seriesActions } from './redux/modules/series';
+import { actions as lessonsActions } from './redux/modules/lessons';
 import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
-import { actions as sourcesActions, selectors as sourcesSelectors } from './redux/modules/sources';
-import { actions as assetsActions } from './redux/modules/assets';
+import { actions as assetsActions, selectors as assetsSelectors } from './redux/modules/assets';
 import * as mdbSagas from './sagas/mdb';
 import * as filtersSagas from './sagas/filters';
 import * as eventsSagas from './sagas/events';
-import * as seriesSagas from './sagas/series';
+import * as lessonsSagas from './sagas/lessons';
 import * as searchSagas from './sagas/search';
-import * as sourcesSagas from './sagas/sources';
+import * as assetsSagas from './sagas/assets';
 import withPagination from './components/Pagination/withPagination';
 
 import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
-import { tabs as lecturesTabs } from './components/Sections/Lectures/MainPage';
+import { tabs as lessonsTabs } from './components/Sections/Lessons/MainPage';
 import PDF from './components/shared/PDF/PDF';
 
 export const home = (store, match) => {
@@ -40,9 +39,17 @@ export const home = (store, match) => {
 };
 
 export const cuPage = (store, match) => {
-  // TODO: fetch recommended content data as well
-  store.dispatch(mdbActions.fetchUnit(match.params.id));
-  return Promise.resolve(null);
+  const cuID = match.params.id;
+  return store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(cuID)).done
+    .then(() => {
+      const state = store.getState();
+
+      const unit = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
+      const c    = canonicalCollection(unit);
+      if (c) {
+        store.dispatch(mdbActions.fetchCollection(c.id));
+      }
+    });
 };
 
 const getExtraFetchParams = (ns, collectionID) => {
@@ -55,13 +62,13 @@ const getExtraFetchParams = (ns, collectionID) => {
     return { content_type: [CT_MEAL] };
   case 'events-friends-gatherings':
     return { content_type: [CT_FRIENDS_GATHERING] };
-  case 'lectures-virtual-lessons':
+  case 'lessons-virtual':
     return { content_type: [CT_VIRTUAL_LESSON] };
-  case 'lectures-lectures':
+  case 'lessons-lectures':
     return { content_type: [CT_LECTURE] };
-  case 'lectures-women-lessons':
+  case 'lessons-women':
     return { content_type: [CT_WOMEN_LESSON] };
-  case 'lectures-children-lessons':
+  case 'lessons-children':
     return { content_type: [CT_CHILDREN_LESSON] };
   default:
     if (collectionID) {
@@ -84,6 +91,7 @@ export const cuListPage = (ns, collectionID = 0) => (store, match) => {
 
   // extraFetchParams
   const extraFetchParams = getExtraFetchParams(ns, collectionID);
+  console.log('SSR.cuListPage', extraFetchParams);
 
   // dispatch fetchList
   store.dispatch(listsActions.fetchList(ns, page, { ...extraFetchParams, pageSize }));
@@ -93,6 +101,7 @@ export const cuListPage = (ns, collectionID = 0) => (store, match) => {
 
 export const collectionPage = ns => (store, match) => {
   const cID = match.params.id;
+  console.log('SSR.collectionPage', cID);
   return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done
     .then(() => {
       cuListPage(ns, cID)(store, match);
@@ -100,7 +109,6 @@ export const collectionPage = ns => (store, match) => {
 };
 
 export const playlistCollectionPage = (store, match) => {
-  // TODO: fetch recommended content data as well
   const cID = match.params.id;
   return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done
     .then(() => {
@@ -114,7 +122,6 @@ export const playlistCollectionPage = (store, match) => {
 };
 
 export const latestLesson = store =>
-  // TODO: fetch recommended content data as well
   store.sagaMiddleWare.run(mdbSagas.fetchLatestLesson).done
     .then(() => {
       // TODO: replace this with a single call to backend with all IDs
@@ -145,19 +152,34 @@ export const eventsPage = (store, match) => {
   return store.sagaMiddleWare.run(eventsSagas.fetchAllEvents, eventsActions.fetchAllEvents()).done;
 };
 
-export const lecturesPage = (store, match) => {
+export const lessonsPage = (store, match) => {
   // hydrate tab
-  const tab = match.params.tab || lecturesTabs[0];
-  if (tab !== lecturesTabs[0]) {
-    store.dispatch(lecturesActions.setTab(tab));
+  const tab = match.params.tab || lessonsTabs[0];
+  if (tab !== lessonsTabs[0]) {
+    store.dispatch(lessonsActions.setTab(tab));
   }
-  const ns = `lectures-${tab}`;
 
+  if (tab === 'series') {
+    return store.sagaMiddleWare.run(lessonsSagas.fetchAllSeries, lessonsActions.fetchAllSeries).done;
+  }
+
+  const ns = `lessons-${tab}`;
   return cuListPage(ns)(store, match);
 };
 
-export const seriesPage = (store, match) =>
-  store.sagaMiddleWare.run(seriesSagas.fetchAll, seriesActions.fetchAll()).done;
+export const lessonsCollectionPage = (store, match) => {
+  // hydrate tab
+  const tab = match.params.tab || lessonsTabs[0];
+  if (tab !== lessonsTabs[0]) {
+    store.dispatch(lessonsActions.setTab(tab));
+  }
+
+  if (tab === 'daily' || tab === 'series') {
+    return playlistCollectionPage(store, match);
+  }
+
+  return collectionPage('lessons-collection')(store, match);
+};
 
 export const searchPage = store =>
   Promise.all([
@@ -178,10 +200,10 @@ export const libraryPage = (store, match) => {
   // TODO: consider firstLeafID
   const sourceID = match.params.id;
 
-  return store.sagaMiddleWare.run(sourcesSagas.fetchIndex, sourcesActions.fetchIndex(sourceID)).done
+  return store.sagaMiddleWare.run(assetsSagas.sourceIndex, assetsActions.sourceIndex(sourceID)).done
     .then(() => {
       const state    = store.getState();
-      const { data } = sourcesSelectors.getIndexById(state.sources)[sourceID];
+      const { data } = assetsSelectors.getSourceIndexById(state.assets)[sourceID];
       if (!data) {
         return;
       }
@@ -199,13 +221,12 @@ export const libraryPage = (store, match) => {
         }
 
         const name = data[language].html;
-        store.dispatch(sourcesActions.fetchContent(sourceID, name));
+        store.dispatch(assetsActions.fetchAsset(`sources/${sourceID}/${name}`));
       }
     });
 };
 
 export const publicationCUPage = (store, match) => {
-  // TODO: fetch recommended content data as well
   const cuID = match.params.id;
   return store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(cuID)).done
     .then(() => {
@@ -214,7 +235,7 @@ export const publicationCUPage = (store, match) => {
       let language = null;
       const uiLang = settingsSelectors.getLanguage(state.settings);
 
-      const unit      = mdbSelectors.getUnitById(state.mdb, cuID);
+      const unit      = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
       const textFiles = (unit.files || []).filter(x => x.type === 'text' && x.mimetype !== MEDIA_TYPES.html.mime_type);
       const languages = uniq(textFiles.map(x => x.language));
       if (languages.length > 0) {
@@ -224,6 +245,11 @@ export const publicationCUPage = (store, match) => {
       if (language) {
         const selected = textFiles.find(x => x.language === language) || textFiles[0];
         store.dispatch(assetsActions.doc2html(selected.id));
+      }
+
+      const c = canonicalCollection(unit);
+      if (c) {
+        store.dispatch(mdbActions.fetchCollection(c.id));
       }
     });
 };

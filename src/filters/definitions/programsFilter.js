@@ -1,32 +1,30 @@
 import pickBy from 'lodash/pickBy';
 
-import { createFilterDefinition } from './util';
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
-import { isEmpty } from '../../helpers/utils';
+import { createFilterDefinition } from './util';
 
 const programsFilter = {
   name: 'programs-filter',
   queryKey: 'program',
-  valueToQuery: value => [value.genre, value.program].map(x => x ? x : '').join('|'),
-  queryToValue: (queryValue) => {
-    const [genre, program] = queryValue.split('|');
-    return { genre, program };
+  valueToQuery: value => value.join('_'),
+  queryToValue: value => value.split('_'),
+  valueToApiParam: (value) => {
+    const [genre, program] = value;
+    return pickBy({ genre, program }, x => !!x);
   },
-  valueToApiParam: value => pickBy(value, x => !!x),
-  tagIcon: 'tv',
   valueToTagLabel: (value, props, store, t) => {
     if (!value) {
       return '';
     }
 
-    const programName = value.program;
-    if (!isEmpty(programName)) {
-      const program = mdbSelectors.getCollectionById(store.getState().mdb, programName);
-      return program ? program.name : programName;
+    const [genre, program] = value;
+
+    if (program) {
+      const collection = mdbSelectors.getCollectionById(store.getState().mdb, program);
+      return collection ? collection.name : program;
     }
 
-    const { genre } = value;
-    if (!isEmpty(genre)) {
+    if (genre) {
       return t(`programs.genres.${genre}`);
     }
 

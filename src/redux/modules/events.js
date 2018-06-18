@@ -1,14 +1,11 @@
 import { createAction, handleActions } from 'redux-actions';
+import groupBy from 'lodash/groupBy';
+import mapValues from 'lodash/mapValues';
 
 import { isEmpty } from '../../helpers/utils';
-import i18n from '../../helpers/i18nnext';
 import { types as settings } from './settings';
 import { types as ssr } from './ssr';
 import { selectors as mdb } from './mdb';
-
-const ALL_COUNTRIES = 'ALLCOUNTRIES';
-const ALL_CITIES    = 'ALLCITIES';
-const ALL_HOLIDAYS  = 'ALLHOLIDAYS';
 
 /* Types */
 
@@ -45,163 +42,35 @@ export const actions = {
 /* Reducer */
 
 const initialState = {
-  wip: {
-    collections: false,
-  },
-  errors: {
-    collections: null,
-  },
+  wip: false,
+  err: null,
   eventsByType: {},
-  locationsTree: {
-    byIds: {},
-    roots: []
-  },
-  holidaysTree: {
-    byIds: {},
-    roots: []
-  },
 };
 
-/**
- * Set the wip and errors part of the state
- * @param state
- * @param action
- * @returns {{wip: {}, errors: {}}}
- */
-const setStatus = (state, action) => {
-  const wip    = { ...state.wip };
-  const errors = { ...state.errors };
+const onSuccess = (state, action) => ({
+  ...state,
+  wip: false,
+  err: null,
+  eventsByType: mapValues(groupBy(action.payload.collections, x => x.content_type), x => x.map(y => y.id))
+});
 
-  switch (action.type) {
-  case FETCH_ALL_EVENTS:
-    wip.collections = true;
-    break;
-  case FETCH_ALL_EVENTS_SUCCESS:
-    wip.collections    = false;
-    errors.collections = null;
-    break;
-  case FETCH_ALL_EVENTS_FAILURE:
-    wip.collections    = false;
-    errors.collections = action.payload;
-    break;
-  default:
-    break;
-  }
-
-  return {
-    ...state,
-    wip,
-    errors,
-  };
-};
-
-const createItem = (id, name, children, typeName, extra) =>
-  ({ id, name, children, typeName, ...extra });
-
-const onFetchAllEventsSuccess = (state, action) => {
-  const { collections } = action.payload;
-
-  // Map event IDs by content_type
-  const eventsByType = collections.reduce((acc, val) => {
-    const { id, content_type: ct } = val;
-    let v                          = acc[ct];
-    if (!v) {
-      v = [];
-    }
-    v.push(id);
-    acc[ct] = v;
-    return acc;
-  }, {});
-
-  // build locations tree (country, city)
-  const allCities    = createItem(ALL_CITIES, i18n.t('filters.locations-filter.allItem'), [], 'city');
-  const allCountries = createItem(ALL_COUNTRIES, i18n.t('filters.locations-filter.allItem'), [ALL_CITIES], 'country');
-
-  const { countries, cities } = collections.reduce((acc, collection) => {
-    const { country, city } = collection;
-
-    if (country && !acc.countries[country]) {
-      acc.countries[country] = createItem(country, country, [ALL_CITIES], 'country');
-    }
-
-    if (city && !acc.cities[city]) {
-      acc.cities[city] = createItem(city, city, [], 'city', { parentId: country });
-    }
-
-    return acc;
-  }, { countries: {}, cities: {} });
-
-  // populate cities as children of their parent countries
-  Object.keys(cities).forEach((city) => {
-    const parent = cities[city].parentId;
-    if (parent) {
-      countries[parent].children.push(city);
-    }
-
-    allCountries.children.push(city);
-  });
-
-  Object.keys(countries).forEach(country => countries[country].children.sort());
-
-  const locationsTree = {
-    roots: [ALL_COUNTRIES].concat(Object.keys(countries).sort()),
-    byIds: {
-      [ALL_CITIES]: allCities,
-      [ALL_COUNTRIES]: allCountries,
-      ...countries,
-      ...cities
-    }
-  };
-
-  // build holidays tree (holiday)
-  const allHolidays = createItem(ALL_HOLIDAYS, i18n.t('filters.holidays-filter.allItem'), [], 'holiday');
-
-  const holidays = collections.reduce((acc, collection) => {
-    const { holiday_id: holiday } = collection;
-    if (holiday && !acc[holiday]) {
-      acc[holiday] = createItem(holiday, holiday, [], 'holiday');
-    }
-
-    return acc;
-  }, {});
-
-  const holidaysTree = {
-    roots: [ALL_HOLIDAYS].concat(Object.keys(holidays).sort()),
-    byIds: {
-      [ALL_HOLIDAYS]: allHolidays,
-      ...holidays,
-    }
-  };
-
-  return {
-    ...state,
-    eventsByType,
-    locationsTree,
-    holidaysTree,
-  };
-};
-
-const onSetLanguage = state => (
-  {
-    ...state,
-    eventsByType: {},
-  }
-);
+const onSetLanguage = state => ({
+  ...state,
+  eventsByType: {},
+});
 
 const onSSRPrepare = state => ({
   ...state,
-  errors: {
-    collections: state.errors.collections ? state.errors.collections.toString() : state.errors.collections
-  }
+  err: state.err ? state.err.toString() : state.err,
 });
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
   [settings.SET_LANGUAGE]: onSetLanguage,
 
-  [FETCH_ALL_EVENTS]: setStatus,
-  [FETCH_ALL_EVENTS_SUCCESS]: (state, action) => setStatus(onFetchAllEventsSuccess(state, action), action),
-  [FETCH_ALL_EVENTS_FAILURE]: setStatus,
+  [FETCH_ALL_EVENTS]: state => ({ ...state, wip: true }),
+  [FETCH_ALL_EVENTS_SUCCESS]: (state, action) => onSuccess(state, action),
+  [FETCH_ALL_EVENTS_FAILURE]: (state, action) => ({ ...state, wip: false, err: action.payload }),
 }, initialState);
 
 /* Selectors */
@@ -216,16 +85,12 @@ const makeLocationsPredicate = values => x =>
   isEmpty(values) ||
   values.some((v) => {
     const [country, city] = v;
-
-    return (country === ALL_COUNTRIES || country === x.country) &&
-      (!city || city === ALL_CITIES || city === x.city);
+    return country === x.country && (!city || city === x.city);
   });
 
 const makeHolidaysPredicate = values => x =>
   isEmpty(values) ||
-  values.some(v =>
-    v[0] === ALL_HOLIDAYS || x.holiday_id === v[0]
-  );
+  values.some(v => x.holiday_id === v[0]);
 
 const predicateMap = {
   'years-filter': makeYearsPredicate,
@@ -242,15 +107,13 @@ const getFilteredData = (state, type, filtersState, mdbState) => {
   });
 };
 
-const getWip           = state => state.wip;
-const getErrors        = state => state.errors;
-const getLocationsTree = state => state.locationsTree;
-const getHolidaysTree  = state => state.holidaysTree;
+const getWip          = state => state.wip;
+const getError        = state => state.err;
+const getEventsByType = state => state.eventsByType;
 
 export const selectors = {
   getWip,
-  getErrors,
+  getError,
+  getEventsByType,
   getFilteredData,
-  getLocationsTree,
-  getHolidaysTree,
 };

@@ -4,31 +4,26 @@
       "header": "Kabbalah Media"
     },
     "sidebar": {
-      "lessons": "Daily Kabbalah Lesson",
+      "lessons": "Lessons & Lectures",
       "programs": "Programs",
-      "lectures": "Lectures & Lessons",
       "sources": "Library",
       "events": "Conventions & Events",
       "books": "Books",
       "topics": "Topics",
       "publications": "Publications",
       "photos": "Photos",
-      "series": "Selected Study Series",
       "design": "Design",
       "design2": "Layout",
       "project-status": "Project Status"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
-      "rights": "Bnei Baruch – Kabbalah L’Am Association, All rights reserved",
-      "study": "Study Materials",
-      "topics": "Kabbalah Topics",
-      "events": "Kabbalah Events",
-      "media": "Media"
+      "rights": "Bnei Baruch – Kabbalah L’Am Association, All rights reserved"
     }
   },
   "filters": {
     "by": "Filter by:",
+    "all": "All",
     "date-filter": {
       "label": "Date",
       "selectTitle": "Select a date range",
@@ -45,37 +40,43 @@
       "end": "End"
     },
     "sources-filter": {
-      "label": "Sources"
+      "label": "Sources",
+      "all": "All Sources"
     },
     "topics-filter": {
-      "label": "Topics"
+      "label": "Topics",
+      "all": "All Topics"
     },
     "publishers-filter": {
       "label": "Publishers"
     },
     "programs-filter": {
       "label": "Genre/Program",
+      "all": "All Programs",
       "recently-updated": "Recently Updated",
       "last-updated": "Last updated on"
     },
     "locations-filter": {
       "label": "Locations",
-      "allItem": "All"
+      "all": "All Locations"
     },
     "holidays-filter": {
       "label": "Holidays",
-      "allItem": "All"
+      "all": "All Holidays"
     },
     "years-filter": {
       "label": "Year",
       "placeholder": "Select a year"
     },
+    "collections-filter": {
+      "label": "Collections",
+      "all": "All Collections"
+    },
     "sections-filter": {
       "label": "Section",
       "all": "All",
-      "lessons": "Daily Kabbalah Lesson",
+      "lessons": "Lessons & Lectures",
       "programs": "Programs",
-      "lectures": "Lectures & Lessons",
       "events": "Conventions & Events",
       "publications": "Publications",
       "sources": "Sources"
@@ -89,7 +90,10 @@
     "video": "Video",
     "more": "More",
     "copy-link": "Copy Link",
-    "search": "Search"
+    "search": "Search",
+    "previous": "Previous",
+    "next": "Next",
+    "copy": "Copy"
   },
   "player": {
     "messages": {
@@ -156,6 +160,16 @@
       "description": "Summary",
       "transcript": "Transcript",
       "content": "Content"
+    },
+    "intent-types": {
+      "lessons": "Daily morning lesssons",
+      "programs": "Programs"
+    },
+    "intent-prefix": {
+      "lessons-topic": "Lessons on topic:",
+      "lessons-source": "Lessons by source:",
+      "programs-topic": "Programs on topic:",
+      "programs-source": "Programs by source:"
     }
   },
   "home": {
@@ -204,13 +218,30 @@
   },
   "lessons": {
     "header": {
-      "text": "Daily Lessons",
-      "subtext": "For thousands of years, Kabbalists have been studying on a daily basis for their and humanity's spiritual progress. Continuing this tradition into today's globally connected world, the Bnei Baruch Kabbalah Education & Research Institute, studies daily from authentic Kabbalistic sources, with commentary by Dr. Michael Laitman."
+      "text": "Lectures & Lessons",
+      "subtext": "Here you will find a rich variety of lessons that include: lectures, children's programs, women's programs, etc."
+    },
+    "tabs": {
+      "daily": "Daily Lessons",
+      "virtual": "Virtual Lessons",
+      "lectures": "Lectures",
+      "women": "Women Lessons",
+      "children": "Children Lessons",
+      "series": "Selected Study Series"
     },
     "list": {
-      "related": "Related to"
+      "related": "Related to",
+      "number": "#",
+      "item_from": "Item of:"
     },
     "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Other items from the same series"
+        }
+      }
+    },
+    "unit-lesson-part": {
       "recommended": {
         "same-collection": {
           "title": "Other parts from the same lesson",
@@ -228,14 +259,14 @@
       "subtext": "Here you will find a rich variety of programs that include: fascinating conversations about the meaning of life, current events, programs for the whole family and more."
     },
     "genres": {
-      "all": "All Programs",
       "documentary": "Documentary",
       "late-night": "Late Night",
       "news": "News",
       "talk-show": "Talk Show",
       "educational": "Educational",
       "children": "Children",
-      "movies": "Movies"
+      "movies": "Movies",
+      "other": "Other"
     },
     "list": {
       "episode_from": "Episode from:"
@@ -245,28 +276,6 @@
         "same-collection": {
           "title": "Other parts from the same program",
           "item-title": "Episode {{name}}"
-        }
-      }
-    }
-  },
-  "lectures": {
-    "header": {
-      "text": "Lectures & Lessons",
-      "subtext": "Here you will find a rich variety of lectures that include: lectures, children's programs, women's programs, etc."
-    },
-    "tabs" : {
-      "virtual-lessons" : "Virtual Lessons",
-      "lectures": "Lectures",
-      "women-lessons": "Women Lessons",
-      "children-lessons": "Children Lessons"
-    },
-    "list": {
-      "item_from": "Item of:"
-    },
-    "unit": {
-      "recommended": {
-        "same-collection": {
-          "title": "Other items from the same series"
         }
       }
     }
@@ -287,17 +296,11 @@
       }
     }
   },
-  "series": {
-    "header": {
-      "text": "Selected Study Series",
-      "subtext": "In this section we have gathered for you the best series of lessons we have studied over the years, grouped by the authentic Kabbalah sources."
-    }
-  },
   "pages": {
     "collection": {
       "items": {
         "programs-collection": "Episode(s)",
-        "lectures-collection": "Item(s)",
+        "lessons-collection": "Item(s)",
         "publications-collection": "Articles(s)",
         "event": "Item(s)"
       }
@@ -342,8 +345,8 @@
     },
     "no-source": "Please select source",
     "toc": "Table of contents",
-    "az":        "AZ",
-    "default":   "Default",
+    "az": "AZ",
+    "default": "Default",
     "filter": "Filter..."
   },
   "media-downloads": {

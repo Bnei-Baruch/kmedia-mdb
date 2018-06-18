@@ -10,6 +10,7 @@ import { translate } from 'react-i18next';
 import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
+import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
@@ -22,11 +23,7 @@ import LibrarySettings from './LibrarySettings';
 class LibraryContainer extends Component {
   static propTypes = {
     sourceId: PropTypes.string.isRequired,
-    indexMap: PropTypes.objectOf(PropTypes.shape({
-      data: PropTypes.object, // content index
-      wip: shapes.WIP,
-      err: shapes.Error,
-    })),
+    indexMap: PropTypes.objectOf(shapes.DataWipErr),
     language: PropTypes.string.isRequired,
     fetchIndex: PropTypes.func.isRequired,
     sourcesSortBy: PropTypes.func.isRequired,
@@ -417,8 +414,7 @@ class LibraryContainer extends Component {
 export default withRouter(connect(
   (state, ownProps) => ({
     sourceId: ownProps.match.params.id,
-    indexMap: sources.getIndexById(state.sources),
-    content: sources.getContent(state.sources),
+    indexMap: assets.getSourceIndexById(state.assets),
     language: settings.getLanguage(state.settings),
     getSourceById: sources.getSourceById(state.sources),
     getPathByID: sources.getPathByID(state.sources),
@@ -428,7 +424,7 @@ export default withRouter(connect(
     NotToFilter: sources.NotToFilter,
   }),
   dispatch => bindActionCreators({
-    fetchIndex: sourceActions.fetchIndex,
+    fetchIndex: assetsActions.sourceIndex,
     sourcesSortBy: sourceActions.sourcesSortBy,
     push: routerPush,
     replace: routerReplace,

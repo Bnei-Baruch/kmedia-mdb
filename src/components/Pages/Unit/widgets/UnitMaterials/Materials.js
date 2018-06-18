@@ -9,7 +9,6 @@ import Sketches from './Sketches';
 import TranscriptionContainer from './Transcription/TranscriptionContainer';
 
 class Materials extends Component {
-
   static propTypes = {
     unit: shapes.ContentUnit,
     t: PropTypes.func.isRequired,

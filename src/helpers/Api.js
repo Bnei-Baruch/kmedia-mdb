@@ -9,9 +9,9 @@ export const assetUrl     = path => `${ASSETS_BACKEND}${path}`;
 export const imaginaryUrl = path => `${IMAGINARY_URL}${path}`;
 
 export class Requests {
-  static get           = path => axios(backendUrl(path));
-  static getAsset      = path => axios(assetUrl(path));
-  static getImaginary  = path => axios(imaginaryUrl(path));
+  static get          = path => axios(backendUrl(path));
+  static getAsset     = path => axios(assetUrl(path));
+  static getImaginary = path => axios(imaginaryUrl(path));
 
   static makeParams = params =>
     `${Object.entries(params)
@@ -49,6 +49,9 @@ class Api {
   static units = ({ contentTypes: content_type, pageNo: page_no, pageSize: page_size, ...rest }) =>
     Requests.get(`content_units?${Requests.makeParams({ page_no, page_size, content_type, ...rest })}`);
 
+  static unitsStats = ({ contentTypes: content_type, ...rest }) =>
+    Requests.get(`/stats/cu_class?${Requests.makeParams({ content_type, ...rest })}`);
+
   static recentlyUpdated = () =>
     Requests.get('recently_updated');
 
@@ -61,17 +64,8 @@ class Api {
   static click = ({ mdbUid: mdb_uid, index, type, rank, searchId: search_id }) =>
     Requests.get(`click?${Requests.makeParams({ mdb_uid, index, type, rank, search_id })}`);
 
-  static sourceIdx = ({ id }) =>
-    Requests.getAsset(`sources/${id}/index.json`);
-
-  static sourceContent = ({ id, name }) =>
-    Requests.getAsset(`sources/${id}/${name}`);
-
-  static unzip = ({ id }) =>
-    Requests.getAsset(`api/unzip/${id}`);
-
-  static doc2Html = ({ id }) =>
-    Requests.getAsset(`api/doc2html/${id}`);
+  static getAsset = path =>
+    Requests.getAsset(path);
 }
 
 export default Api;

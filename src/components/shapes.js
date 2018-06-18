@@ -82,6 +82,7 @@ export const Collection = PropTypes.shape(MDBBaseCollection);
 export const LessonCollection = PropTypes.shape({
   ...MDBDenormalizedCollection,
   film_date: PropTypes.string.isRequired,
+  number: PropTypes.number,
 });
 
 export const LessonPart = PropTypes.shape({
@@ -118,6 +119,7 @@ export const EventCollection = PropTypes.shape({
   city: PropTypes.string,
   country: PropTypes.string,
   full_address: PropTypes.string,
+  holiday_id: PropTypes.string,
 });
 
 export const EventItem = PropTypes.shape({
@@ -169,6 +171,12 @@ export const WipMap = PropTypes.objectOf(PropTypes.oneOfType([WIP, PropTypes.obj
 
 export const Error     = PropTypes.oneOfType([PropTypes.object, PropTypes.string]);
 export const ErrorsMap = PropTypes.objectOf(PropTypes.oneOfType([Error, PropTypes.objectOf(Error)]));
+
+export const DataWipErr = PropTypes.shape({
+  data: PropTypes.any,
+  wip: WIP,
+  err: Error,
+});
 
 export const UserAgentParserResults = PropTypes.shape({
   ua: PropTypes.string,

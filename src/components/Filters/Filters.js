@@ -1,67 +1,155 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { translate } from 'react-i18next';
+import { Container, Header, Icon, Menu, Popup } from 'semantic-ui-react';
 
-import { filterPropShape } from '../shapes';
-import { actions as filterActions, selectors as filterSelectors } from '../../redux/modules/filters';
-import ActiveFilter from './ActiveFilter';
-import FilterMenu from './FilterMenu';
+import { getLanguageDirection } from '../../helpers/i18n-utils';
+import { filtersTransformer } from '../../filters/index';
+import { actions, selectors } from '../../redux/modules/filters';
+import { selectors as mdb } from '../../redux/modules/mdb';
+import { selectors as settings } from '../../redux/modules/settings';
+import { selectors as device } from '../../redux/modules/device';
+import * as shapes from '../shapes';
 import FiltersHydrator from './FiltersHydrator';
-import FilterTags from './FilterTags';
 
 class Filters extends Component {
-
   static propTypes = {
     namespace: PropTypes.string.isRequired,
-    editNewFilter: PropTypes.func.isRequired,
-    closeActiveFilter: PropTypes.func.isRequired,
+    filters: PropTypes.arrayOf(shapes.filterPropShape).isRequired,
+    rightItems: PropTypes.arrayOf(PropTypes.node),
     onChange: PropTypes.func.isRequired,
     onHydrated: PropTypes.func.isRequired,
-    filters: PropTypes.arrayOf(filterPropShape).isRequired,
-    activeFilterName: PropTypes.string,
-    rightItems: PropTypes.arrayOf(PropTypes.node),
+    setFilterValue: PropTypes.func.isRequired,
+    resetFilter: PropTypes.func.isRequired,
+    filtersData: PropTypes.objectOf(PropTypes.object).isRequired,
+    language: PropTypes.string.isRequired,
+    t: PropTypes.func.isRequired,
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
-    activeFilterName: '',
     rightItems: null,
   };
 
-  handleFilterClick = ({ name }) => {
-    const { namespace } = this.props;
-    this.props.editNewFilter(namespace, name);
+  static contextTypes = {
+    store: PropTypes.object.isRequired,
   };
 
-  handleCancelActiveFilter = () => {
-    const { namespace, activeFilterName } = this.props;
-    this.props.closeActiveFilter(namespace, activeFilterName);
+  state = {
+    activeFilter: null,
   };
 
-  handleApplyActiveFilter = () => {
+  handlePopupClose = () =>
+    this.setState({ activeFilter: null });
+
+  handlePopupOpen = activeFilter =>
+    this.setState({ activeFilter });
+
+  handleApply = (name, value) => {
+    this.handlePopupClose();
+    this.props.setFilterValue(this.props.namespace, name, value);
     this.props.onChange();
-    this.handleCancelActiveFilter();
+  };
+
+  handleResetFilter = (e, name) => {
+    e.stopPropagation();
+    this.props.resetFilter(this.props.namespace, name);
+    this.props.onChange();
   };
 
   render() {
-    const { filters, rightItems, activeFilterName, namespace, onHydrated, onChange } = this.props;
+    const { filters, namespace, onHydrated, t, filtersData, rightItems, language, deviceInfo } = this.props;
+    const { activeFilter }                                                                     = this.state;
+    const { store }                                                                            = this.context;
+
+    const langDir = getLanguageDirection(language);
+
+    let popupStyle = {
+      padding: 0,
+      direction: langDir,
+    };
+    if (deviceInfo.device && deviceInfo.device.type === 'mobile') {
+      popupStyle = {
+        ...popupStyle,
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+      };
+    }
 
     return (
       <div className="filter-panel">
         <FiltersHydrator namespace={namespace} onHydrated={onHydrated} />
-        <FilterMenu
-          items={filters}
-          rightItems={rightItems}
-          active={activeFilterName}
-          onChoose={this.handleFilterClick}
-        />
-        <ActiveFilter
-          namespace={namespace}
-          activeFilterName={activeFilterName}
-          filters={filters}
-          onCancel={this.handleCancelActiveFilter}
-          onApply={this.handleApplyActiveFilter}
-        />
-        <FilterTags namespace={namespace} onClose={onChange} />
+        <Menu secondary pointing stackable className="index-filters" size="large">
+          <Container className="padded horizontally">
+            <Menu.Item header content={t('filters.by')} />
+            {
+              filters.map((item) => {
+                const { component: FilterComponent, name } = item;
+
+                const isActive = name === activeFilter;
+                const data     = filtersData[name] || {};
+                const values   = data.values || [];
+                const value    = Array.isArray(values) && values.length > 0 ? values[0] : null;
+                const label    = value ?
+                  filtersTransformer.valueToTagLabel(name, value, this.props, store, t) :
+                  t('filters.all');
+
+                return (
+                  <Popup
+                    basic
+                    flowing
+                    key={name}
+                    trigger={
+                      <Menu.Item name={name}>
+                        <Header
+                          size="tiny"
+                          content={t(`filters.${name}.label`)}
+                          subheader={label}
+                        />
+                        <Icon size="large" name={`triangle ${isActive ? 'up' : 'down'}`} />
+                        {
+                          value ?
+                            <Icon
+                              name="trash alternate outline"
+                              onClick={e => this.handleResetFilter(e, name)}
+                            /> :
+                            null
+                        }
+                      </Menu.Item>
+                    }
+                    on="click"
+                    position={`bottom ${langDir === 'ltr' ? 'left' : 'right'}`}
+                    verticalOffset={-12}
+                    open={isActive}
+                    onClose={this.handlePopupClose}
+                    onOpen={() => this.handlePopupOpen(name)}
+                    style={popupStyle}
+                  >
+                    <Popup.Content className={`filter-popup ${langDir}`}>
+                      <FilterComponent
+                        namespace={namespace}
+                        value={value}
+                        onCancel={this.handlePopupClose}
+                        onApply={x => this.handleApply(name, x)}
+                        language={language}
+                        t={t}
+                      />
+                    </Popup.Content>
+                  </Popup>
+                );
+              })
+            }
+            {
+              rightItems ?
+                <Menu.Menu position="right">{rightItems}</Menu.Menu>
+                : null
+            }
+          </Container>
+        </Menu>
       </div>
     );
   }
@@ -69,7 +157,15 @@ class Filters extends Component {
 
 export default connect(
   (state, ownProps) => ({
-    activeFilterName: filterSelectors.getActiveFilter(state.filters, ownProps.namespace),
+    filtersData: selectors.getNSFilters(state.filters, ownProps.namespace),
+    language: settings.getLanguage(state.settings),
+    deviceInfo: device.getDeviceInfo(state.device),
+
+    // DO NOT REMOVE, this triggers a necessary re-render for filter tags
+    sqDataWipErr: mdb.getSQDataWipErr(state.mdb),
   }),
-  filterActions
-)(Filters);
+  disptach => bindActionCreators({
+    setFilterValue: actions.setFilterValue,
+    resetFilter: actions.resetFilter,
+  }, disptach)
+)(translate()(Filters));

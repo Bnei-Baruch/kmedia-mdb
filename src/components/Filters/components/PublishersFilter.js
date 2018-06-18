@@ -1,15 +1,31 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { selectors } from '../../../redux/modules/publications';
-import DeepListFilter from './DeepListFilter';
+import FlatListFilter from './FlatListFilter';
+
+class PublishersFilter extends React.Component {
+  static propTypes = {
+    publisherById: PropTypes.objectOf(PropTypes.object).isRequired,
+  };
+
+  render() {
+    const { publisherById, ...rest } = this.props;
+
+    const options = Object.values(publisherById).map(x => ({
+      text: x.name,
+      value: x.id,
+    }));
+
+    return (
+      <FlatListFilter name="publishers-filter" options={options} {...rest} />
+    );
+  }
+}
 
 export default connect(
-  (state) => {
-    const publisherById = selectors.getPublisherById(state.publications);
-    return {
-      emptyLabel: 'No Publishers',
-      roots: Object.keys(publisherById),
-      getSubItemById: id => publisherById[id],
-    };
-  }
-)(DeepListFilter);
+  state => ({
+    publisherById: selectors.getPublisherById(state.publications),
+  }),
+)(PublishersFilter);
