@@ -74,22 +74,39 @@ class PlaylistAVBox extends Component {
       return;
     }
 
-    // Persist language in playableItem
-    this.setPlaylist(collection, newMediaType, newItemLanguage);
+    // Recalculate playlist
+    const nPlaylist = playerHelper.playlist(collection, newMediaType, newItemLanguage);
+    this.setState({ playlist: nPlaylist });
+
+    const { selected, playlist } = this.state;
 
     // When moving from playlist to another playlist
-    // we're already mounted.
-    // We have to make sure to change selected as well.
+    // we're already mounted. We have to make sure to change selected as well.
+    // There are 2 cases:
+    //   1. Active part changed in query
+    //   2. Active part hasn't change in query but playlist has changed
+    //      and it's no longer the same unit
+
     const nSelected = playerHelper.getActivePartFromQuery(location);
-    if (nSelected !== this.state.selected) {
-      this.handleSelectedChange(nSelected);
+    if (nSelected !== selected) {
+      // case # 1
+      this.setState({ selected: nSelected });
+      playerHelper.setActivePartInQuery(nextProps.history, nSelected);
+      nextProps.onSelectedChange(nPlaylist.items[nSelected].unit);
+    } else if (
+      playlist &&
+      nPlaylist &&
+      playlist.items[selected] &&
+      nPlaylist.items[selected] &&
+      playlist.items[selected].unit &&
+      nPlaylist.items[selected].unit &&
+      playlist.items[selected].unit !== nPlaylist.items[selected].unit
+    ) {
+      // case # 2
+      this.setState({ selected: nSelected });
+      nextProps.onSelectedChange(nPlaylist.items[nSelected].unit);
     }
   }
-
-  setPlaylist = (collection, mediaType, language) => {
-    const playlist = playerHelper.playlist(collection, mediaType, language);
-    this.setState({ playlist });
-  };
 
   handleSelectedChange = (selected) => {
     this.setState({ selected });

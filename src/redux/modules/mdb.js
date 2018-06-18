@@ -414,7 +414,7 @@ const getWip            = state => state.wip;
 const getErrors         = state => state.errors;
 const getCollections    = state => state.items;
 const getWindow         = state => state.cWindow;
-const getSQDataWipErr         = state => !(getWip(state).sqData || getErrors(state).sqData);
+const getSQDataWipErr   = state => !(getWip(state).sqData || getErrors(state).sqData);
 
 const getDenormCollection = (state, id) => {
   let c = state.cById[id];
