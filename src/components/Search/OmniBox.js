@@ -16,7 +16,6 @@ import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
 import { filtersTransformer } from '../../filters';
-import { stringify as urlSearchStringify } from '../../helpers/url';
 import * as shapes from '../shapes';
 
 const CATEGORIES_ICONS = {
@@ -42,6 +41,7 @@ export class OmniBox extends Component {
     getTagPath: PropTypes.func,
     query: PropTypes.string.isRequired,
     updateQuery: PropTypes.func.isRequired,
+    setSuggest: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
     pageSize: PropTypes.number.isRequired,
     filters: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -61,11 +61,6 @@ export class OmniBox extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.suggestions !== this.props.suggestions) {
       this.setState({ suggestionsHelper: new SuggestionsHelper(nextProps.suggestions) });
-    }
-
-    // Clear search query when navigating from the search page into other pages (AS-38)
-    if (this.props.query && !nextProps.location.pathname.endsWith('search') && nextProps.location.pathname !== this.props.location.pathname){
-      this.handleFilterClear();
     }
   }
 
@@ -88,7 +83,7 @@ export class OmniBox extends Component {
     return !query && !Object.values(params).length;
   };
 
-  doSearch = (q = null, locationSearch = '') => {
+  doSearch = (q = null, suggest = '') => {
     const query                                                       = q != null ? q : this.props.query;
     const { search, location, push, pageSize, resetFilter, onSearch } = this.props;
 
@@ -98,11 +93,13 @@ export class OmniBox extends Component {
 
     // First of all redirect to search results page if we're not there
     if (!location.pathname.endsWith('search')) {
-      // In case a filter was updated, React location object is not updated yet
-      // so we use the second function parameter to pass the search part (to persist filters
+      // In case a filter was updated React location object is not updated yet
+      // so we just use window location to get the search part (to persist filters
       // to the search page when we redirect).
 
-      push({ pathname: 'search', search: locationSearch});
+      // 'search: window.location.search' has been removed because
+      // filters are not cleared when searching from a section (see bug AR-234)
+      push({ pathname: 'search' /* , search: window.location.search */});
     }
 
     // Reset filters for new search (query changed)
@@ -113,7 +110,7 @@ export class OmniBox extends Component {
       resetFilter('search', 'sections-filter');
     }
 
-    search(query, 1, pageSize, isDebMode(location));
+    search(query, 1, pageSize, suggest, isDebMode(location));
 
     if (this.state.isOpen) {
       this.setState({ isOpen: false });
@@ -125,32 +122,27 @@ export class OmniBox extends Component {
   handleResultSelect = (e, data) => {
     const { key }  = data.result;
     const category = data.results.find(c => c.results.find(r => r.key === key)).name;
+    const prevQuery = this.props.query;
     if (category === 'search') {
       this.props.updateQuery(data.result.title);
-      this.doSearch(data.result.title);
+      this.props.setSuggest(prevQuery);
+      this.doSearch(data.result.title, prevQuery);
     } else if (category === 'tags') {
       this.props.updateQuery('');
-      const path = this.props.getTagPath(data.result.key).map(p => p.id)
-      const query = filtersTransformer.toQueryParams([
-        { name: 'topics-filter', values: [path], queryKey: 'topic' }
-      ]);
-      const queryString = urlSearchStringify(query);
-      this.props.addFilterValue('search', 'topics-filter', path);
-      this.doSearch('', queryString);
+      this.props.setSuggest(prevQuery);
+      this.props.addFilterValue('search', 'topics-filter', this.props.getTagPath(data.result.key).map(p => p.id));
+      this.doSearch('', prevQuery);
     } else if (category === 'sources') {
       this.props.updateQuery('');
-      const path = this.props.getSourcePath(data.result.key).map(p => p.id)
-      const query = filtersTransformer.toQueryParams([
-        { name: 'sources-filter', values: [path], queryKey: 'source' }
-      ]);
-      const queryString = urlSearchStringify(query);
-      this.props.setFilterValue('search', 'sources-filter', path);
-      this.doSearch('', queryString);
+      this.props.setSuggest(prevQuery);
+      this.props.setFilterValue('search', 'sources-filter', this.props.getSourcePath(data.result.key).map(p => p.id));
+      this.doSearch('', prevQuery);
     }
     // Currently ignoring anything else.
   };
 
   handleSearchKeyDown = (e) => {
+    console.log('key down', this.props.query);
     // Fix bug that did not allows to handleResultSelect when string is empty
     // we have meaning for that when filters are not empty.
     if (e.keyCode === 13 && !this.props.query.trim()) {
@@ -163,11 +155,14 @@ export class OmniBox extends Component {
 
   handleFilterClear = () => {
     this.props.updateQuery('');
+    this.props.setSuggest('');
     this.closeSuggestions();
   };
 
   handleSearchChange = (e, data) => {
+    console.log('handleSearchChange');
     this.props.updateQuery(data.value);
+    this.props.setSuggest(this.props.query);
     if (data.value.trim()) {
       this.setState({ isOpen: true }, this.doAutocomplete);
     } else {
@@ -237,7 +232,6 @@ export class OmniBox extends Component {
 
     const categories  = ['tags', 'sources', 'authors', 'persons'];
     const textResults = new Set([query]);
-    
     let results       = categories.reduce((acc, val) => {
       const searchResults = suggestionsHelper.getSuggestions(val, 5);
       if (searchResults.length > 0) {
@@ -295,6 +289,7 @@ export const mapDispatch = dispatch => bindActionCreators({
   autocomplete: actions.autocomplete,
   search: actions.search,
   updateQuery: actions.updateQuery,
+  setSuggest: actions.setSuggest,
   addFilterValue: filtersActions.addFilterValue,
   setFilterValue: filtersActions.setFilterValue,
   resetFilter: filtersActions.resetFilter,

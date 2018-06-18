@@ -21,28 +21,28 @@ function* autocomplete(action) {
 
 export function* search(action) {
   try {
-
-    yield* console.log('search sagas', action);
     yield* urlUpdateQuery(query => Object.assign(query, { q: action.payload.q }));
 
     const language = yield select(state => settings.getLanguage(state.settings));
     const sortBy   = yield select(state => selectors.getSortBy(state.search));
+    const suggest  = yield select(state => selectors.getSuggest(state.search))
     const deb      = yield select(state => selectors.getDeb(state.search));
 
     // Prepare filters values.
-    const filters         = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
-    const params          = filtersTransformer.toApiParams(filters);
+    const filters = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
+    const params  = filtersTransformer.toApiParams(filters);
     const filterKeyValues = Object.entries(params).map(([v, k]) => `${v}:${k}`).join(' ');
-    const filterParams    = filterKeyValues ? ` ${filterKeyValues}` : '';
+    const filterParams = filterKeyValues ? ` ${filterKeyValues}` : '';
 
     const q = action.payload.q.trim() ? `${action.payload.q.trim()}${filterParams}` : filterParams;
     if (!q) {
       // If no query nor filters, silently fail the request, don't sent request to backend.
       yield put(actions.searchFailure(null));
-      return;
+      return
     }
-    const searchId              = GenerateSearchId();
-    const { data }              = yield call(Api.search, { ...action.payload, q, sortBy, language, deb, searchId });
+    const searchId = GenerateSearchId();
+
+    const { data } = yield call(Api.search, { ...action.payload, q, sortBy, language, deb, suggest: suggest === q ? '' : suggest, searchId });
     data.search_result.searchId = searchId;
 
     if (Array.isArray(data.search_result.hits.hits) && data.search_result.hits.hits.length > 0) {
@@ -53,7 +53,7 @@ export function* search(action) {
       // This second round trip to the API is awful,
       // we should strive for a single call to the API and get all the data we need.
       // hmm, relay..., hmm ?
-      const cIDsToFetch  = data.search_result.hits.hits.reduce((acc, val) => {
+      const cIDsToFetch = data.search_result.hits.hits.reduce((acc, val) => {
         if (val._type === 'collections') {
           return acc.concat(val._source.mdb_uid);
         } else {
@@ -68,12 +68,7 @@ export function* search(action) {
         }
       }, []);
       const language     = yield select(state => settings.getLanguage(state.settings));
-      const respCU       = yield call(Api.units, {
-        id: cuIDsToFetch,
-        pageSize: cuIDsToFetch.length,
-        language,
-        with_files: true
-      });
+      const respCU       = yield call(Api.units, { id: cuIDsToFetch, pageSize: cuIDsToFetch.length, language });
       const respC        = yield call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, language });
       yield put(mdbActions.receiveContentUnits(respCU.data.content_units));
       yield put(mdbActions.receiveCollections(respC.data.collections));
@@ -104,10 +99,11 @@ function* updateSortByInQuery(action) {
 }
 
 export function* hydrateUrl() {
-  const query                          = yield* getQuery();
-  const { q, page = '1', deb = false } = query;
+  const query             = yield* getQuery();
+  const { q, page = '1', deb = false, suggest = ''} = query;
 
   yield put(actions.setDeb(deb));
+  yield put(actions.setSuggest(suggest));
 
   if (q) {
     yield put(actions.updateQuery(q));
