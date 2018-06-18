@@ -62,6 +62,7 @@ class AVPlayerMobile extends PureComponent {
     mode: PLAYER_MODE.NORMAL,
     isSliceMode: false,
     currentTime: 0,
+    firstSeek: true,
   };
 
   componentWillMount() {
@@ -83,12 +84,12 @@ class AVPlayerMobile extends PureComponent {
       sliceEnd = fromHumanReadableTime(query.send).asSeconds();
     }
 
-    this.setState({ sliceStart, sliceEnd, mode });
+    this.setState({ sliceStart, sliceEnd, mode, firstSeek: true });
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.item !== this.props.item) {
-      this.setState({ error: false, errorReason: '' });
+      this.setState({ error: false, errorReason: '', firstSeek: true });
     }
   }
 
@@ -160,61 +161,26 @@ class AVPlayerMobile extends PureComponent {
   };
 
   seekIfNeeded = () => {
-    const { sliceStart } = this.state;
+    const { sliceStart, firstSeek } = this.state;
     if (this.wasCurrentTime) {
       this.media.currentTime = this.wasCurrentTime;
       this.wasCurrentTime    = undefined;
-    } else if (!sliceStart && this.media.currentTime === 0) {
-      const savedTime = this.getSavedTime();
-      if (savedTime) {
-        this.media.currentTime = savedTime;
-      }
-    } else if (sliceStart && this.media.currentTime === 0) {
-      this.media.currentTime = sliceStart;
-    }
-  };
-
-  // iosSliceFix is not relevant anymore because the seek has been change to 'canplay' event instead of 'play' event
-  /*
-    iosSliceFix = () => {
-    const { sliceStart } = this.state;
-    if (!sliceStart) {
-      return;
-    }
-
-    const { deviceInfo } = this.props;
-    if (deviceInfo.os.name !== 'iOS') {
-      console.log('iosSliceFix: not iOS');
-      return;
-    }
-
-    console.log('iosSliceFix: iOS detected');
-
-    // if the player has enough data we can set the currentTime and be done with it
-    if (this.media.readyState > 3) {
-      console.log('readyState > 3');
-      this.media.currentTime = sliceStart;
-      return;
-    }
-
-    console.log('readyState:', this.media.readyState);
-
-    const canplaythroughHandler = () => {
-      console.log('iosSliceFix: canplaythrough');
-      const progressHandler = () => {
-        console.log('iosSliceFix: progress');
+    } else 
+    if (firstSeek) {
+      if (sliceStart) {
         this.media.currentTime = sliceStart;
-      };
-
-      this.media.addEventListener('progress', progressHandler, { once: true });
-    };
-
-    this.media.addEventListener('canplaythrough', canplaythroughHandler, { once: true });
+      }
+      else {
+        const savedTime = this.getSavedTime();
+        if (savedTime) {
+          this.media.currentTime = savedTime;
+        }
+      }
+      this.setState({firstSeek:false});
+    }
   };
-  */
 
   handlePlaying = () => {
-    // this.iosSliceFix();
   };
 
   handleSeeking = (e) => {
@@ -306,10 +272,10 @@ class AVPlayerMobile extends PureComponent {
   };
 
   saveCurrentTime = (mediaTime) => {
-    const { currentTime }  = this.state;
+    const { currentTime, firstSeek }  = this.state;
     const { item }         = this.props;
     const currentMediaTime = Math.round(mediaTime);
-    if (currentMediaTime > 0 && currentMediaTime !== currentTime) {
+    if (!firstSeek && currentMediaTime !== currentTime) {
       this.setState({ currentTime: currentMediaTime });
       if (item.src) {
         localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.src}`, currentMediaTime);

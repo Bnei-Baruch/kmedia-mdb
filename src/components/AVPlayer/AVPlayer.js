@@ -88,7 +88,8 @@ class AVPlayer extends PureComponent {
     mode: PLAYER_MODE.NORMAL,
     persistenceFn: noop,
     isClient: false,
-    currentTime: 0
+    currentTime: 0,
+    firstSeek: true,
   };
 
   componentWillMount() {
@@ -121,6 +122,7 @@ class AVPlayer extends PureComponent {
     }
 
     this.setState({
+      firstSeek:true,
       ...this.chooseSource(this.props)
     });
   }
@@ -138,7 +140,8 @@ class AVPlayer extends PureComponent {
       this.setState({
         error: false,
         errorReason: '',
-        ...this.chooseSource(nextProps),
+        firstSeek:true,
+        ...this.chooseSource(nextProps)
       });
     }
   }
@@ -203,23 +206,24 @@ class AVPlayer extends PureComponent {
   };
 
   onPlayerReady = () => {
-    const { wasCurrentTime, wasPlaying, sliceStart } = this.state;
+    const { wasCurrentTime, wasPlaying, sliceStart, firstSeek } = this.state;
     const { media }                                  = this.props;
 
     this.activatePersistence();
 
     if (wasCurrentTime) {
       media.seekTo(wasCurrentTime);
-    } else if (!sliceStart && media.currentTime === 0) {
+    } else if (!sliceStart && firstSeek) {
       const savedTime = this.getSavedTime();
       if (savedTime) {
         media.seekTo(savedTime);
       }
+      this.setState({firstSeek:false});
     }
     if (wasPlaying) {
       media.play();
     }
-
+    
     // restore playback from state when player instance changed (when src changes, e.g., playlist).
     this.player.instance.playbackRate = playbackToValue(this.state.playbackRate);
     this.setState({ wasCurrentTime: undefined, wasPlaying: undefined });
@@ -301,7 +305,7 @@ class AVPlayer extends PureComponent {
       media.pause();
       media.seekTo(sliceEnd);
     }
-
+    
     this.saveCurrentTime();
   };
 
@@ -448,11 +452,11 @@ class AVPlayer extends PureComponent {
   };
 
   saveCurrentTime = () => {
-    const { src, currentTime } = this.state;
+    const { src, currentTime, firstSeek } = this.state;
     const { media }            = this.props;
-    if (media && media.currentTime) {
+    if (media && !firstSeek) {
       const currentMediaTime = Math.round(media.currentTime);
-      if (currentMediaTime > 0 && currentMediaTime !== currentTime) {
+      if (currentMediaTime !== currentTime) {
         this.setState({ currentTime: currentMediaTime });
         if (src) {
           localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${src}`, currentMediaTime);
