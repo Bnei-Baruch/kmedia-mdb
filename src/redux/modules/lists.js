@@ -21,11 +21,8 @@ export const types = {
 /* Actions */
 
 const setPage          = createAction(SET_PAGE, (namespace, pageNo) => ({ namespace, pageNo }));
-const fetchList        = createAction(FETCH_LIST, (namespace, pageNo, params = {}) => ({
-  namespace,
-  pageNo,
-  ...params,
-}));
+const fetchList        = createAction(FETCH_LIST,
+  (namespace, pageNo, params = {}) => ({ namespace, pageNo, ...params, }));
 const fetchListSuccess = createAction(FETCH_LIST_SUCCESS, (namespace, data) => ({ namespace, data }));
 const fetchListFailure = createAction(FETCH_LIST_FAILURE, (namespace, err) => ({ namespace, err }));
 
@@ -69,7 +66,7 @@ const onFailure = (state, action) => ({
 
 const onSuccess = (state, action) => {
   const { namespace, data } = action.payload;
-  const itemNormalizer      = namespace === 'lessons' ?
+  const itemNormalizer      = namespace === 'lessons-daily' ?
     x => [x.id, x.content_type] :
     x => x.id;
 

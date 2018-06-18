@@ -3,8 +3,7 @@ import { routerReducer as router } from 'react-router-redux';
 import { reducer as device } from './modules/device';
 import { reducer as settings } from './modules/settings';
 import { reducer as events } from './modules/events';
-import { reducer as series } from './modules/series';
-import { reducer as lectures } from './modules/lectures';
+import { reducer as lessons } from './modules/lessons';
 import { reducer as programs } from './modules/programs';
 import { reducer as publications } from './modules/publications';
 import { reducer as filters } from './modules/filters';
@@ -15,6 +14,7 @@ import { reducer as mdb } from './modules/mdb';
 import { reducer as search } from './modules/search';
 import { reducer as assets } from './modules/assets';
 import { reducer as home } from './modules/home';
+import { reducer as stats } from './modules/stats';
 
 export default combineReducers({
   router,
@@ -22,8 +22,7 @@ export default combineReducers({
   settings,
   programs,
   events,
-  series,
-  lectures,
+  lessons,
   publications,
   filters,
   lists,
@@ -33,5 +32,6 @@ export default combineReducers({
   search,
   assets,
   home,
+  stats,
 });
 

@@ -7,7 +7,6 @@ const sourcesFilter = {
   valueToQuery: value => value.join('_'),
   queryToValue: queryValue => queryValue.split('_'),
   valueToApiParam: value => ({ [value.length === 1 ? 'author' : 'source']: value[value.length - 1] }),
-  tagIcon: 'book',
   valueToTagLabel: (value, props, { getState }) => {
     if (!value) {
       return '';

@@ -174,7 +174,7 @@ class TOC extends Component {
     }
 
     // We don't check validity of regular expression,
-    // so let's excape all special symbols
+    // so let's escape all special symbols
     const escapedMatch = match.replace(/[/)(.+\\]/g, '\\$&');
     const reg          = new RegExp(escapedMatch, 'i');
     return path.reduce((acc, el) => {

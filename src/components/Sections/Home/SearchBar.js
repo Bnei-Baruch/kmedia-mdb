@@ -11,13 +11,17 @@ class MyOmniBox extends OmniBox {
     deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
+  componentWillMount() {
+    this.props.updateQuery('');  // reset the query from search page
+  }
+
   renderInput() {
     const { t, deviceInfo } = this.props;
     return (
       <Input
         autoFocus={deviceInfo.device.type === undefined}  // desktop only
         onKeyDown={this.handleSearchKeyDown}
-        action={{ content: t('buttons.search').toLowerCase(), onClick: this.handleIconClick }}
+        action={{ content: t('buttons.search').toLowerCase(), onClick: this.doSearch }}
         icon={null}
         placeholder={`${t('buttons.search')}...`}
         style={{ width: '100%' }}

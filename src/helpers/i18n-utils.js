@@ -21,7 +21,7 @@ export const changeDirection = (direction) => {
 
   const oldCSS = document.getElementById('semantic-ui');
 
-  const href = `/semantic_v2${isRTL ? '.rtl' : ''}.min.css`;
+  const href = `/semantic_v3${isRTL ? '.rtl' : ''}.min.css`;
   const ss   = document.createElement('link');
   ss.rel     = 'stylesheet';
   ss.href    = href;

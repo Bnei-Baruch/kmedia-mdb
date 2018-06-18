@@ -1,4 +1,4 @@
-import DateFilter from './DateFilter';
+import DateFilter from './Date/DateFilter';
 import LocationsFilter from './LocationsFilter';
 import HolidaysFilter from './HolidaysFilter';
 import ProgramsFilter from './ProgramsFilter';
@@ -7,6 +7,7 @@ import SourcesFilter from './SourcesFilter';
 import TopicsFilter from './TopicsFilter';
 import PublishersFilter from './PublishersFilter';
 import YearsFilter from './YearsFilter';
+import CollectionsFilter from './CollectionsFilter';
 
 export default {
   DateFilter,
@@ -18,4 +19,5 @@ export default {
   TopicsFilter,
   PublishersFilter,
   YearsFilter,
+  CollectionsFilter,
 };

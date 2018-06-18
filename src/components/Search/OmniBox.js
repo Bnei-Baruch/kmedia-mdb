@@ -2,21 +2,21 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import { push as routerPush } from 'react-router-redux';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import { Icon, Input, Search } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../helpers/consts';
 import { SuggestionsHelper } from '../../helpers/search';
-import { getQuery, isDebMode } from '../../helpers/url';
+import { getQuery, isDebMode, stringify as urlSearchStringify } from '../../helpers/url';
+import { isEmpty } from '../../helpers/utils';
+import { filtersTransformer } from '../../filters';
 import { actions as filtersActions, selectors as filterSelectors } from '../../redux/modules/filters';
 import { actions, selectors } from '../../redux/modules/search';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
-import { filtersTransformer } from '../../filters';
-import { stringify as urlSearchStringify } from '../../helpers/url';
 import * as shapes from '../shapes';
 
 const CATEGORIES_ICONS = {
@@ -28,16 +28,14 @@ const CATEGORIES_ICONS = {
 };
 
 export class OmniBox extends Component {
-
   static propTypes = {
-    addFilterValue: PropTypes.func.isRequired,
     setFilterValue: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
     autocomplete: PropTypes.func.isRequired,
     search: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
-    suggestions: PropTypes.array,
+    suggestions: PropTypes.arrayOf(PropTypes.object),
     getSourcePath: PropTypes.func,
     getTagPath: PropTypes.func,
     query: PropTypes.string.isRequired,
@@ -54,9 +52,9 @@ export class OmniBox extends Component {
     onSearch: noop,
   };
 
-  componentWillMount() {
-    this.resetComponent(this.props.query);
-  }
+  state = {
+    suggestionsHelper: new SuggestionsHelper(),
+  };
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.suggestions !== this.props.suggestions) {
@@ -64,32 +62,27 @@ export class OmniBox extends Component {
     }
   }
 
-  resetComponent = () =>
-    this.setState({ suggestionsHelper: new SuggestionsHelper() });
-
   doAutocomplete = debounce(() => {
     const { query } = this.props;
     if (query.trim()) {
       this.props.autocomplete(query);
     } else {
-      this.resetComponent('');
+      this.setState({ suggestionsHelper: new SuggestionsHelper() });
     }
   }, 100);
 
-  emptyQuery = () => {
-    const { query }   = this.props;
-    const { filters } = this.props;
-    const params      = filtersTransformer.toApiParams(filters);
-    return !query && !Object.values(params).length;
+  isEmptyQuery = () => {
+    const { query, filters } = this.props;
+    const params             = filtersTransformer.toApiParams(filters);
+    return isEmpty(query) && isEmpty(params);
   };
 
   doSearch = (q = null, locationSearch = '') => {
-    const query                                                       = q != null ? q : this.props.query;
-    const { search, location, push, pageSize, resetFilter, onSearch } = this.props;
-
-    if (this.emptyQuery()) {
+    if (this.isEmptyQuery()) {
       return;
     }
+
+    const { search, location, push, pageSize, resetFilter, onSearch } = this.props;
 
     // First of all redirect to search results page if we're not there
     if (!location.pathname.endsWith('search')) {
@@ -97,8 +90,10 @@ export class OmniBox extends Component {
       // so we use the second function parameter to pass the search part (to persist filters
       // to the search page when we redirect).
 
-      push({ pathname: 'search', search: locationSearch});
+      push({ pathname: 'search', search: locationSearch });
     }
+
+    const query = q != null ? q : this.props.query;
 
     // Reset filters for new search (query changed)
     if (query && getQuery(location).q !== query) {
@@ -109,74 +104,71 @@ export class OmniBox extends Component {
     }
 
     search(query, 1, pageSize, isDebMode(location));
-
-    if (this.state.isOpen) {
-      this.setState({ isOpen: false });
-    }
-
     onSearch();
+
+    // so as to close the suggestions on "enter search" (KeyDown 13)
+    this.setState({ suggestionsHelper: new SuggestionsHelper() });
   };
 
   handleResultSelect = (e, data) => {
-    const { key }  = data.result;
-    const category = data.results.find(c => c.results.find(r => r.key === key)).name;
-    if (category === 'search') {
-      this.props.updateQuery(data.result.title);
-      this.doSearch(data.result.title);
-    } else if (category === 'tags') {
-      this.props.updateQuery('');
-      const path = this.props.getTagPath(data.result.key).map(p => p.id)
-      const query = filtersTransformer.toQueryParams([
+    const { key, title, category } = data.result;
+
+    switch (category) {
+    case 'search':
+      this.props.updateQuery(title);
+      this.doSearch(title);
+      break;
+
+    case 'tags': {
+      const path        = this.props.getTagPath(key).map(p => p.id);
+      const query       = filtersTransformer.toQueryParams([
         { name: 'topics-filter', values: [path], queryKey: 'topic' }
       ]);
       const queryString = urlSearchStringify(query);
-      this.props.addFilterValue('search', 'topics-filter', path);
-      this.doSearch('', queryString);
-    } else if (category === 'sources') {
+      this.props.setFilterValue('search', 'topics-filter', path);
       this.props.updateQuery('');
-      const path = this.props.getSourcePath(data.result.key).map(p => p.id)
-      const query = filtersTransformer.toQueryParams([
+      this.doSearch('', queryString);
+      break;
+    }
+
+    case 'sources': {
+      const path        = this.props.getSourcePath(key).map(p => p.id);
+      const query       = filtersTransformer.toQueryParams([
         { name: 'sources-filter', values: [path], queryKey: 'source' }
       ]);
       const queryString = urlSearchStringify(query);
       this.props.setFilterValue('search', 'sources-filter', path);
+      this.props.updateQuery('');
       this.doSearch('', queryString);
+      break;
     }
-    // Currently ignoring anything else.
+
+    default:
+      break;  // Currently ignoring anything else.
+    }
   };
 
   handleSearchKeyDown = (e) => {
-    // Fix bug that did not allows to handleResultSelect when string is empty
-    // we have meaning for that when filters are not empty.
-    if (e.keyCode === 13 && !this.props.query.trim()) {
+    if (e.keyCode === 13) {
       this.doSearch();
     }
-    if (e.keyCode === 27) { // Esc
-      this.handleFilterClear();
-    }
-  };
 
-  handleFilterClear = () => {
-    this.props.updateQuery('');
-    this.closeSuggestions();
+    if (e.keyCode === 27) { // Esc
+      this.props.updateQuery('');
+    }
   };
 
   handleSearchChange = (e, data) => {
     this.props.updateQuery(data.value);
     if (data.value.trim()) {
-      this.setState({ isOpen: true }, this.doAutocomplete);
-    } else {
-      this.setState({ isOpen: false });
+      this.doAutocomplete();
     }
-  };
-
-  handleIconClick = () => {
-    this.doSearch();
   };
 
   suggestionToResult = (type, item) => {
     if (type === 'tags') {
       return {
+        category: type,
         key: item.id,
         title: (this.props.getTagPath(item.id) || [])
           .map(p => p.label)
@@ -184,6 +176,7 @@ export class OmniBox extends Component {
       };
     } else if (type === 'sources') {
       return {
+        category: type,
         key: item.id,
         title: (this.props.getSourcePath(item.id) || [])
           .map(p => p.name)
@@ -191,85 +184,88 @@ export class OmniBox extends Component {
       };
     }
 
-    return { key: item.id, title: item.text };
+    return { category: type, key: item.id, title: item.text };
   };
 
-  dontBlur = () => {
-    this.setState({ dontBlur: true });
-  };
-
-  closeSuggestions = () => {
-    if (this.state.dontBlur) {
-      this.setState({ dontBlur: false });
-    } else {
-      this.setState({ isOpen: false, dontBlur: false });
-    }
-  };
-
-  resultRTL = (language, result) => ({
+  makeResult = (language, result) => ({
     ...result,
-    className: RTL_LANGUAGES.includes(language) ? 'search-result-rtl' : undefined,
+    className: RTL_LANGUAGES.includes(language) ? 'search-result-rtl' : '',
   });
 
   renderCategory = (category) => {
     const { name } = category;
-    const icon     = CATEGORIES_ICONS[name];
     return (
       <div>
-        <Icon name={icon} />
+        <Icon name={CATEGORIES_ICONS[name]} />
         {this.props.t(`search.suggestions.categories.${name}`)}
       </div>
     );
   };
 
   renderInput() {
-    return (<Input onKeyDown={this.handleSearchKeyDown} />);
+    return <Input onKeyDown={this.handleSearchKeyDown} />;
   }
 
   render() {
-    const { language, query }           = this.props;
-    const { suggestionsHelper, isOpen } = this.state;
+    const { language, query }   = this.props;
+    const { suggestionsHelper } = this.state;
 
+    // build suggestions categories
     const categories  = ['tags', 'sources', 'authors', 'persons'];
-    const textResults = new Set([query]);
-    let results       = categories.reduce((acc, val) => {
+    const textResults = new Set();
+    const results     = categories.reduce((acc, val) => {
       const searchResults = suggestionsHelper.getSuggestions(val, 5);
       if (searchResults.length > 0) {
-        searchResults.forEach(x => textResults.add(x.text));
-        acc.push({
+        searchResults.map(x => x.text)
+          .filter(x => !!x)
+          .forEach(x => textResults.add(x));
+
+        acc[val] = {
           name: val,
-          results: searchResults.map(x => this.resultRTL(x.language, this.suggestionToResult(val, x))),
-          onMouseDown: this.dontBlur,
-        });
+          results: searchResults.map(x =>
+            this.makeResult(x.language, this.suggestionToResult(val, x))),
+        };
       }
 
       return acc;
-    }, []);
+    }, {});
 
-    results = [{
-      name: 'search',
-      results: Array.from(textResults).map(q => this.resultRTL(language, { key: `search_${q}`, title: q })),
-      onMouseDown: this.dontBlur
-    }].concat(results);
+    // blend in text results
+    const finalResults = {};
+    if (textResults.size > 0) {
+      finalResults.search = {
+        name: 'search',
+        results: Array.from(textResults).map(q =>
+          this.makeResult(language, {
+            category: 'search',
+            key: `search_${q}`,
+            title: q
+          })),
+      };
+    }
+
+    // Object property creation order is important for us here
+    // (even though not a js spec most browsers implement it)
+    categories.map(x => results[x])
+      .filter(x => !!x)
+      .forEach((x) => {
+        finalResults[x.name] = x;
+      });
 
     return (
       <Search
-        className="search-omnibox"
         category
         fluid
-        results={results}
+        className="search-omnibox"
+        size="mini"
+        results={finalResults}
         value={query}
-        open={isOpen}
-        selectFirstResult
+        input={this.renderInput()}
+        icon={<Icon link name="search" onClick={this.doSearch} />}
+        showNoResults={false}
         categoryRenderer={this.renderCategory}
         onSearchChange={this.handleSearchChange}
-        onFocus={this.handleSearchChange}
         onResultSelect={this.handleResultSelect}
-        onBlur={this.closeSuggestions}
-        input={this.renderInput()}
-        icon={<Icon link name="search" onClick={this.handleIconClick} />}
-        size="mini"
-        showNoResults={false}
       />
     );
   }
@@ -289,10 +285,9 @@ export const mapDispatch = dispatch => bindActionCreators({
   autocomplete: actions.autocomplete,
   search: actions.search,
   updateQuery: actions.updateQuery,
-  addFilterValue: filtersActions.addFilterValue,
   setFilterValue: filtersActions.setFilterValue,
   resetFilter: filtersActions.resetFilter,
-  push,
+  push: routerPush,
 }, dispatch);
 
 export const wrap = (WrappedComponent, ms = mapState, md = mapDispatch) =>

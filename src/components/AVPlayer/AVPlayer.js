@@ -30,8 +30,9 @@ import AVJumpBack from './AVJumpBack';
 import AVSpinner from './AVSpinner';
 import ShareFormDesktop from './Share/ShareFormDesktop';
 
-const PLAYER_VOLUME_STORAGE_KEY = '@@kmedia_player_volume';
-const DEFAULT_PLAYER_VOLUME     = 0.8;
+const DEFAULT_PLAYER_VOLUME       = 0.8;
+const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
+const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
 
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = playback =>
@@ -79,7 +80,6 @@ class AVPlayer extends PureComponent {
   };
 
   state = {
-    isTopSeekbar: false,
     controlsVisible: true,
     error: false,
     errorReason: '',
@@ -88,6 +88,7 @@ class AVPlayer extends PureComponent {
     mode: PLAYER_MODE.NORMAL,
     persistenceFn: noop,
     isClient: false,
+    currentTime: 0
   };
 
   componentWillMount() {
@@ -127,7 +128,9 @@ class AVPlayer extends PureComponent {
   componentDidMount() {
     // By default hide controls after a while if player playing.
     this.hideControlsTimeout();
-    this.setState({ isClient:true });
+
+    // eslint-disable-next-line react/no-did-mount-set-state
+    this.setState({ isClient: true });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -200,13 +203,18 @@ class AVPlayer extends PureComponent {
   };
 
   onPlayerReady = () => {
-    const { wasCurrentTime, wasPlaying } = this.state;
-    const { media }                      = this.props;
+    const { wasCurrentTime, wasPlaying, sliceStart } = this.state;
+    const { media }                                  = this.props;
 
     this.activatePersistence();
 
     if (wasCurrentTime) {
       media.seekTo(wasCurrentTime);
+    } else if (!sliceStart && media.currentTime === 0) {
+      const savedTime = this.getSavedTime();
+      if (savedTime) {
+        media.seekTo(savedTime);
+      }
     }
     if (wasPlaying) {
       media.play();
@@ -264,13 +272,6 @@ class AVPlayer extends PureComponent {
     }
   };
 
-  onSeekBarResize = ({ width }) => {
-    const MIN_SEEKBAR_SIZE = 100;
-    if (this.state.isTopSeekbar !== (width < MIN_SEEKBAR_SIZE)) {
-      this.setState({ isTopSeekbar: width < MIN_SEEKBAR_SIZE });
-    }
-  };
-
   setSliceMode = (mode, properties = {}) => {
     const { media } = this.props;
 
@@ -300,6 +301,8 @@ class AVPlayer extends PureComponent {
       media.pause();
       media.seekTo(sliceEnd);
     }
+
+    this.saveCurrentTime();
   };
 
   handleEditBack = () => {
@@ -343,11 +346,22 @@ class AVPlayer extends PureComponent {
     }
   };
 
+  hideControls = () => {
+    if (this.wrapperMouseY < this.wrapperRect.height - this.controlsRect.height) {
+      this.setState({ controlsVisible: false });
+    }
+    else {
+      if (this.autohideTimeoutId) {
+        clearTimeout(this.autohideTimeoutId);
+        this.autohideTimeoutId = null;
+      }
+      this.hideControlsTimeout();
+    }
+  };
+
   hideControlsTimeout = () => {
     if (!this.autohideTimeoutId) {
-      this.autohideTimeoutId = setTimeout(() => {
-        this.setState({ controlsVisible: false });
-      }, 2000);
+      this.autohideTimeoutId = setTimeout(this.hideControls, 2000);
     }
   };
 
@@ -356,13 +370,14 @@ class AVPlayer extends PureComponent {
   };
 
   handleWrapperMouseLeave = () => {
-    this.setState({ controlsVisible: false });
+    this.hideControls();
   };
 
-  handleWrapperMouseMove = () => {
+  handleWrapperMouseMove = (e) => {
     if (!this.state.controlsVisible) {
       this.showControls();
     }
+    this.wrapperMouseY = e.pageY - this.wrapperRect.top;
   };
 
   handleControlsMouseEnter = () => {
@@ -386,9 +401,17 @@ class AVPlayer extends PureComponent {
     if (ref) {
       this.wrapper = ref;
       this.wrapper.addEventListener('keydown', this.handleWrapperKeyDown);
+      this.wrapperRect = this.wrapper.getBoundingClientRect();
     } else if (this.wrapper) {
       this.wrapper.removeEventListener('keydown', this.handleWrapperKeyDown);
       this.wrapper = ref;
+    }
+  };
+
+  handlePlayerControlsRef = (ref) => {
+    this.playerControls = ref;
+    if (this.playerControls) {
+      this.controlsRect = ref.getBoundingClientRect();
     }
   };
 
@@ -422,6 +445,32 @@ class AVPlayer extends PureComponent {
       this.onScreen.removeEventListener('click', this.handleOnScreenClick);
       this.onScreen = ref;
     }
+  };
+
+  saveCurrentTime = () => {
+    const { src, currentTime } = this.state;
+    const { media }            = this.props;
+    if (media && media.currentTime) {
+      const currentMediaTime = Math.round(media.currentTime);
+      if (currentMediaTime > 0 && currentMediaTime !== currentTime) {
+        this.setState({ currentTime: currentMediaTime });
+        if (src) {
+          localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${src}`, currentMediaTime);
+        }
+      }
+    }
+  };
+
+  getSavedTime = () => {
+    const { src } = this.state;
+    // Try to get the current time from local storage if available
+    if (src) {
+      const savedTime = localStorage.getItem(`${PLAYER_POSITION_STORAGE_KEY}_${src}`);
+      if (savedTime) {
+        return parseInt(savedTime, 10);
+      }
+    }
+    return null;
   };
 
   render() {
@@ -525,6 +574,7 @@ class AVPlayer extends PureComponent {
           onMouseMove={this.handleWrapperMouseMove}
         >
           <div
+            ref={this.handlePlayerControlsRef}
             className={classNames('mediaplayer__controls', {
               'mediaplayer__controls--is-fade': !controlsVisible && !forceShowControls
             })}
@@ -541,7 +591,7 @@ class AVPlayer extends PureComponent {
             <AVTimeElapsed
               start={media.currentTime}
               end={media.duration}
-            />            
+            />
             <AVJumpBack jumpSpan={-5} />
             <AVJumpBack jumpSpan={5} />
             <div className="mediaplayer__spacer" />
@@ -552,12 +602,11 @@ class AVPlayer extends PureComponent {
               sliceEnd={sliceEnd}
             />
 
-         
-                <AVPlaybackRate
-                  value={playbackRate}
-                  onSelect={this.playbackRateChange}
-                />
-          
+            <AVPlaybackRate
+              value={playbackRate}
+              onSelect={this.playbackRateChange}
+            />
+
             {
               isVideo && (
                 <AVVideoSize
@@ -568,20 +617,20 @@ class AVPlayer extends PureComponent {
               )
             }
             <AVMuteUnmute />
-                <AVAudioVideo
-                  isAudio={isAudio}
-                  isVideo={isVideo}
-                  onSwitch={this.onSwitchAV}
-                  fallbackMedia={fallbackMedia}
-                  t={t}
-                />              
-                <AVLanguage
-                  languages={languages}
-                  language={language}
-                  requestedLanguage={item.requestedLanguage}
-                  onSelect={this.onLanguageChange}
-                  t={t}
-                />
+            <AVAudioVideo
+              isAudio={isAudio}
+              isVideo={isVideo}
+              onSwitch={this.onSwitchAV}
+              fallbackMedia={fallbackMedia}
+              t={t}
+            />
+            <AVLanguage
+              languages={languages}
+              language={language}
+              requestedLanguage={item.requestedLanguage}
+              onSelect={this.onLanguageChange}
+              t={t}
+            />
             {!isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.SLICE_EDIT)} />}
             {isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.NORMAL)} />}
             {!isAudio && <AVFullScreen element={this.mediaElement} />}

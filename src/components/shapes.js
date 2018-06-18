@@ -119,6 +119,7 @@ export const EventCollection = PropTypes.shape({
   city: PropTypes.string,
   country: PropTypes.string,
   full_address: PropTypes.string,
+  holiday_id: PropTypes.string,
 });
 
 export const EventItem = PropTypes.shape({

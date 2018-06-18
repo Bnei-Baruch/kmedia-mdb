@@ -65,8 +65,8 @@ const mapState = (state, ownProps) => {
   return {
     items: ids.map(x => mdb.getCollectionById(state.mdb, x)),
     language: settings.getLanguage(state.settings),
-    wip: selectors.getWip(state.events).collections,
-    err: selectors.getErrors(state.events).collections,
+    wip: selectors.getWip(state.events),
+    err: selectors.getError(state.events),
   };
 };
 

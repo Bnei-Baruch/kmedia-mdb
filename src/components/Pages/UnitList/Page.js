@@ -11,7 +11,31 @@ import filterComponents from '../../Filters/components';
 import WipErr from '../../shared/WipErr/WipErr';
 
 const filters = {
-  lessons: [
+  'lessons-daily': [
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
+    { name: 'sources-filter', component: filterComponents.SourcesFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter },
+  ],
+  'lessons-virtual': [
+    { name: 'collections-filter', component: filterComponents.CollectionsFilter },
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter }
+  ],
+  'lessons-lectures': [
+    { name: 'collections-filter', component: filterComponents.CollectionsFilter },
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
+    { name: 'sources-filter', component: filterComponents.SourcesFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter }
+  ],
+  'lessons-women': [
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter }
+  ],
+  'lessons-children': [
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter }
+  ],
+  'lessons-collection': [
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'sources-filter', component: filterComponents.SourcesFilter },
     { name: 'date-filter', component: filterComponents.DateFilter },
@@ -26,32 +50,10 @@ const filters = {
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'date-filter', component: filterComponents.DateFilter },
   ],
-  'lectures-collection': [
-    { name: 'topics-filter', component: filterComponents.TopicsFilter },
-    { name: 'sources-filter', component: filterComponents.SourcesFilter },
-    { name: 'date-filter', component: filterComponents.DateFilter },
-  ],
   'events-friends-gatherings': [
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
   'events-meals': [
-    { name: 'date-filter', component: filterComponents.DateFilter }
-  ],
-  'lectures-virtual-lessons': [
-    { name: 'topics-filter', component: filterComponents.TopicsFilter },
-    { name: 'date-filter', component: filterComponents.DateFilter }
-  ],
-  'lectures-lectures': [
-    { name: 'topics-filter', component: filterComponents.TopicsFilter },
-    { name: 'sources-filter', component: filterComponents.SourcesFilter },
-    { name: 'date-filter', component: filterComponents.DateFilter }
-  ],
-  'lectures-women-lessons': [
-    { name: 'topics-filter', component: filterComponents.TopicsFilter },
-    { name: 'date-filter', component: filterComponents.DateFilter }
-  ],
-  'lectures-children-lessons': [
-    { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
   publications: [
@@ -124,7 +126,7 @@ class UnitListPage extends PureComponent {
           }
         </Container>
         <Divider fitted />
-        <Container className="padded" textAlign="center">
+        <Container className="padded pagination-wrapper" textAlign="center">
           <Pagination
             pageNo={pageNo}
             pageSize={pageSize}
