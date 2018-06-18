@@ -21,12 +21,14 @@ import { actions as eventsActions } from './redux/modules/events';
 import { actions as lessonsActions } from './redux/modules/lessons';
 import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
 import { actions as assetsActions, selectors as assetsSelectors } from './redux/modules/assets';
+import { actions as tagsActions } from './redux/modules/tags';
 import * as mdbSagas from './sagas/mdb';
 import * as filtersSagas from './sagas/filters';
 import * as eventsSagas from './sagas/events';
 import * as lessonsSagas from './sagas/lessons';
 import * as searchSagas from './sagas/search';
 import * as assetsSagas from './sagas/assets';
+import * as tagsSagas from './sagas/tags';
 import withPagination from './components/Pagination/withPagination';
 
 import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
@@ -253,3 +255,11 @@ export const publicationCUPage = (store, match) => {
       }
     });
 };
+
+export const topicsPage = (store, match) => {
+  const tagID = match.params.id;
+  Promise.all([
+    store.sagaMiddleWare.run(tagsSagas.fetchDashboard, tagsActions.fetchDashboard(tagID)).done,
+    store.sagaMiddleWare.run(tagsSagas.fetchTags, tagsActions.fetchTags).done
+  ]);
+}

@@ -79,7 +79,7 @@ const routes = [
   { path: 'persons/:id', component: LibraryPerson, options: { ssrData: ssrDataLoaders.libraryPage } },
   { path: 'books', component: NotImplemented },
   { path: 'topics', component: TopicsContainer },
-  { path: 'topics/:id', component: TopicPage },
+  { path: 'topics/:id', component: TopicPage, options: {ssrData: ssrDataLoaders.topicsPage } },
   { path: 'photos', component: NotImplemented },
   { path: 'search', component: SearchResults, options: { ssrData: ssrDataLoaders.searchPage } },
   { path: 'project-status', component: ProjectStatus },

@@ -5,7 +5,7 @@ import { actions, types } from '../redux/modules/tags';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions as mdb } from '../redux/modules/mdb';
 
-function* fetchTags() {
+export function* fetchTags() {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.tags, { language });
@@ -19,7 +19,7 @@ function* watchFetchTags() {
   yield takeLatest(types.FETCH_TAGS, fetchTags);
 }
 
-function* fetchDashboard(action){
+export function* fetchDashboard(action){
   const id = action.payload; 
 
   try{
