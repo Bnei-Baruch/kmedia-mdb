@@ -29,7 +29,6 @@ import {
 class SearchResults extends Component {
   static propTypes = {
     results: PropTypes.object,
-    getSourcePath: PropTypes.func,
     areSourcesLoaded: PropTypes.bool.isRequired,
     queryResult: PropTypes.object,
     cMap: PropTypes.objectOf(shapes.Collection),
@@ -52,7 +51,6 @@ class SearchResults extends Component {
     cuMap: {},
     wip: false,
     err: null,
-    getSourcePath: undefined,
   };
 
   // Helper function to get the frist prop in hightlights obj and apply htmlFunc on it.
@@ -190,21 +188,9 @@ class SearchResults extends Component {
   };
 
   renderSource = (hit) => {
-    const { t, location, getSourcePath }                             = this.props;
+    const { t, location }                             = this.props;
     const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
-
-    const srcPath = getSourcePath(mdbUid);
-
-    const name = this.snippetFromHighlight(highlight, ['title', 'title_analyzed'], parts => parts.join(' ')) || srcPath[srcPath.length - 1].name;
-
-    /*const authors = this.snippetFromHighlight(highlight, ['authors', 'authors_analyzed'], parts => parts[0]);
-    if (authors) {
-      // Remove author from path in order to replace with highlight value.
-      srcPath.pop();
-    }*/
-
-    const path = `${srcPath.slice(0, -1).map(n => n.name).join(' > ')} >`;
-
+    const title = this.snippetFromHighlight(highlight, ['title', 'title_analyzed'], parts => parts.join(' '));
     const description = this.snippetFromHighlight(highlight, ['description', 'description_analyzed'], parts => `...${parts.join('.....')}...`);
     const content     = this.snippetFromHighlight(highlight, ['content', 'content_analyzed'], parts => `...${parts.join('.....')}...`);
     const snippet     = (
@@ -237,7 +223,7 @@ class SearchResults extends Component {
         </Table.Cell>
         <Table.Cell>
           <Link className="search__link" to={canonicalLink({ id: mdbUid, content_type: 'SOURCE' })}>
-            {path}&nbsp;{name}
+            {title}
           </Link>
           {snippet || null}
         </Table.Cell>
@@ -245,7 +231,7 @@ class SearchResults extends Component {
           !isDebMode(location) ?
             null :
             <Table.Cell collapsing textAlign="right">
-              <ScoreDebug name={srcPath[srcPath.length - 1].name} score={score} explanation={hit._explanation} />
+              <ScoreDebug name={title} score={score} explanation={hit._explanation} />
             </Table.Cell>
         }
       </Table.Row>
@@ -435,7 +421,6 @@ class SearchResults extends Component {
 export default connect(state => ({
   filters: filterSelectors.getFilters(state.filters, 'search'),
   areSourcesLoaded: sourcesSelectors.areSourcesLoaded(state.sources),
-  getSourcePath: sourcesSelectors.getPathByID(state.sources),
   getSourceById: sourcesSelectors.getSourceById(state.sources),
   getTagById: tagsSelectors.getTagById(state.tags),
 }))(translate()(SearchResults));
