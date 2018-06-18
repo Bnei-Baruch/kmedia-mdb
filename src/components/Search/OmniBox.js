@@ -41,6 +41,7 @@ export class OmniBox extends Component {
     getTagPath: PropTypes.func,
     query: PropTypes.string.isRequired,
     updateQuery: PropTypes.func.isRequired,
+    setSuggest: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
     pageSize: PropTypes.number.isRequired,
     filters: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -82,7 +83,7 @@ export class OmniBox extends Component {
     return !query && !Object.values(params).length;
   };
 
-  doSearch = (q = null) => {
+  doSearch = (q = null, suggest = '') => {
     const query                                                       = q != null ? q : this.props.query;
     const { search, location, push, pageSize, resetFilter, onSearch } = this.props;
 
@@ -109,7 +110,7 @@ export class OmniBox extends Component {
       resetFilter('search', 'sections-filter');
     }
 
-    search(query, 1, pageSize, isDebMode(location));
+    search(query, 1, pageSize, suggest, isDebMode(location));
 
     if (this.state.isOpen) {
       this.setState({ isOpen: false });
@@ -121,22 +122,27 @@ export class OmniBox extends Component {
   handleResultSelect = (e, data) => {
     const { key }  = data.result;
     const category = data.results.find(c => c.results.find(r => r.key === key)).name;
+    const prevQuery = this.props.query;
     if (category === 'search') {
       this.props.updateQuery(data.result.title);
-      this.doSearch(data.result.title);
+      this.props.setSuggest(prevQuery);
+      this.doSearch(data.result.title, prevQuery);
     } else if (category === 'tags') {
       this.props.updateQuery('');
+      this.props.setSuggest(prevQuery);
       this.props.addFilterValue('search', 'topics-filter', this.props.getTagPath(data.result.key).map(p => p.id));
-      this.doSearch('');
+      this.doSearch('', prevQuery);
     } else if (category === 'sources') {
       this.props.updateQuery('');
+      this.props.setSuggest(prevQuery);
       this.props.setFilterValue('search', 'sources-filter', this.props.getSourcePath(data.result.key).map(p => p.id));
-      this.doSearch('');
+      this.doSearch('', prevQuery);
     }
     // Currently ignoring anything else.
   };
 
   handleSearchKeyDown = (e) => {
+    console.log('key down', this.props.query);
     // Fix bug that did not allows to handleResultSelect when string is empty
     // we have meaning for that when filters are not empty.
     if (e.keyCode === 13 && !this.props.query.trim()) {
@@ -149,11 +155,14 @@ export class OmniBox extends Component {
 
   handleFilterClear = () => {
     this.props.updateQuery('');
+    this.props.setSuggest('');
     this.closeSuggestions();
   };
 
   handleSearchChange = (e, data) => {
+    console.log('handleSearchChange');
     this.props.updateQuery(data.value);
+    this.props.setSuggest(this.props.query);
     if (data.value.trim()) {
       this.setState({ isOpen: true }, this.doAutocomplete);
     } else {
@@ -280,6 +289,7 @@ export const mapDispatch = dispatch => bindActionCreators({
   autocomplete: actions.autocomplete,
   search: actions.search,
   updateQuery: actions.updateQuery,
+  setSuggest: actions.setSuggest,
   addFilterValue: filtersActions.addFilterValue,
   setFilterValue: filtersActions.setFilterValue,
   resetFilter: filtersActions.resetFilter,

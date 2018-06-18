@@ -25,6 +25,7 @@ export function* search(action) {
 
     const language = yield select(state => settings.getLanguage(state.settings));
     const sortBy   = yield select(state => selectors.getSortBy(state.search));
+    const suggest  = yield select(state => selectors.getSuggest(state.search))
     const deb      = yield select(state => selectors.getDeb(state.search));
 
     // Prepare filters values.
@@ -40,7 +41,8 @@ export function* search(action) {
       return
     }
     const searchId = GenerateSearchId();
-    const { data } = yield call(Api.search, { ...action.payload, q, sortBy, language, deb, searchId });
+
+    const { data } = yield call(Api.search, { ...action.payload, q, sortBy, language, deb, suggest: suggest === q ? '' : suggest, searchId });
     data.search_result.searchId = searchId;
 
     if (Array.isArray(data.search_result.hits.hits) && data.search_result.hits.hits.length > 0) {
@@ -98,9 +100,10 @@ function* updateSortByInQuery(action) {
 
 export function* hydrateUrl() {
   const query             = yield* getQuery();
-  const { q, page = '1', deb = false } = query;
+  const { q, page = '1', deb = false, suggest = ''} = query;
 
   yield put(actions.setDeb(deb));
+  yield put(actions.setSuggest(suggest));
 
   if (q) {
     yield put(actions.updateQuery(q));
