@@ -4,9 +4,8 @@
       "header": "Cabalá Media"
     },
     "sidebar": {
-      "lessons": "Lección Diaria de Cabalá",
+      "lessons": "Lecciones y Charlas",
       "programs": "Programas",
-      "lectures": "Charlas y Lecciones",
       "sources": "Biblioteca",
       "events": "Congresos y Eventos",
       "books": "Libros",
@@ -18,15 +17,12 @@
     },
     "footer": {
       "copyright": "Derecho de autor 2003-{{year}}",
-      "rights": "Benei Baruj ‘ Cabalá LaAm",
-      "study": "Estudios de Cabalá",
-      "topics": "Temas",
-      "events": "Eventos",
-      "media": "Medio de comunicación"
+      "rights": "Benei Baruj ‘ Cabalá LaAm"
     }
   },
   "filters": {
     "by": "Filtrar por:",
+    "all": "Todo",
     "date-filter": {
       "label": "Fecha",
       "selectTitle": "Seleccione un rango de fechas",
@@ -43,37 +39,42 @@
       "end": "Final"
     },
     "sources-filter": {
-      "label": "Fuentes"
+      "label": "Fuentes",
+      "all": "Todos Los Fuentes"
     },
     "topics-filter": {
-      "label": "Temas"
+      "label": "Temas",
+      "all": "Todos Los Temas"
     },
     "publishers-filter": {
       "label": "Editores"
     },
     "programs-filter": {
       "label": "Genero / Programa",
+      "all": "Todos Los Programas",
       "recently-updated": "Recientemente actualizado",
       "last-updated": "Ultima actualización en"
     },
     "locations-filter": {
       "label": "Ubicaciones",
-      "allItem": "Todo"
+      "all": "Todas las ubicaciones"
     },
     "holidays-filter": {
       "label": "Fiesta",
-      "allItem": "Todo"
+      "all": "Todas las vacaciones"
     },
     "years-filter": {
       "label": "Año",
       "placeholder": "Seleccione año"
     },
+    "collections-filter": {
+      "label": "Colecciones",
+      "all": "Todas las colecciones"
+    },
     "sections-filter": {
       "label": "Sección",
-      "all": "Todo",
-      "lessons": "Lección Diaria de Cabalá",
+      "lessons": "Lecciones y Charlas",
       "programs": "Programas",
-      "lectures": "Charlas y Lecciones",
       "events": "Congresos y Eventos",
       "publications": "Publicaciones",
       "sources": "Fuentes"
@@ -89,7 +90,8 @@
     "copy-link": "Copiar enlace",
     "search": "Buscar",
     "previous": "Anterior",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "copy": "Copiar"
   },
   "player": {
     "messages": {
@@ -126,7 +128,7 @@
     "fallback-to-audio": "Video no encontrado, usa audio.",
     "fallback-to-video": "Audio no encontrado, usa video.",
     "source-content-not-found": " Contenido de fuente no fue encontrado ",
-    "no-images":"No se encontraron dibujos"
+    "no-images": "No se encontraron dibujos"
   },
   "search": {
     "header": {
@@ -157,7 +159,7 @@
       "transcript": "Transcripción",
       "content": "Contenido"
     },
-     "intent-types": {
+    "intent-types": {
       "lessons": "Lecciones diarias de Cabalá",
       "programs": "Programas"
     },
@@ -213,14 +215,30 @@
   },
   "lessons": {
     "header": {
-      "text": "Lección Diaria de Cabalá",
-      "subtext": "Durante miles de años, los cabalistas estudiaban diariamente, para su propio desarrollo espiritual y para el progreso espiritual de la humanidad. Hoy en día, continúan la misma tradición los cabalistas de \"Benei Baruj\", quienes estudian a diario a partir de las auténticas escrituras cabalísticas, estudios acompañados del comentario y la instrucción del Rav Dr. Michael Laitman"
+      "text": "Lecciones y Charlas",
+      "subtext": "Aquí encontrará una rica variedad de conferencias y clases de varios tipos, que incluyen conferencias para diferentes públicos, clases para mujeres, niños y más."
+    },
+    "tabs": {
+      "daily": "Lecciones Diarias",
+      "virtual": "Lecciones Virtuales",
+      "lectures": "Charlas",
+      "women": "Lección de Mujeres",
+      "children": "Lección de Niños",
+      "series": "Serie de Estudios"
     },
     "list": {
       "related": "Relacionado con",
-      "number": "#"
+      "number": "#",
+      "item_from": "Parte de:"
     },
     "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Otras partes de la misma serie"
+        }
+      }
+    },
+    "unit-lesson-part": {
       "recommended": {
         "same-collection": {
           "title": "Parte adicional de la misma lección",
@@ -238,14 +256,14 @@
       "subtext": "Aquí encontrará una gran variedad de programas que incluyen: conversaciones fascinantes sobre el significado de la vida, eventos actuales, programas para toda la familia y más."
     },
     "genres": {
-      "all": "Todos Los Programas",
       "documentary": "Documental",
       "late-night": "Tarde en la Noche",
       "news": "Noticias",
       "talk-show": "Programas de Entrevistas",
       "educational": "Educacional",
       "children": "Niños",
-      "movies": "Películas"
+      "movies": "Películas",
+      "other": "Otro"
     },
     "list": {
       "episode_from": "Capítulo del programa:"
@@ -255,28 +273,6 @@
         "same-collection": {
           "title": "Capítulos adicionales del mismo programa",
           "item-title": "Capitulo {{name}}"
-        }
-      }
-    }
-  },
-  "lectures": {
-    "header": {
-      "text": "Charlas y Lecciones",
-      "subtext": "Aquí encontrará una rica variedad de conferencias y clases de varios tipos, que incluyen conferencias para diferentes públicos, clases para mujeres, niños y más."
-    },
-    "tabs" : {
-      "virtual-lessons" : "Lecciones Virtuales",
-      "lectures": "Charlas",
-      "women-lessons": "Lección de Mujeres",
-      "children-lessons": "Lección de Niños"
-    },
-    "list": {
-      "item_from": "Parte de:"
-    },
-    "unit": {
-      "recommended": {
-        "same-collection": {
-          "title": "Otras partes de la misma serie"
         }
       }
     }
@@ -301,7 +297,7 @@
     "collection": {
       "items": {
         "programs-collection": "Capítulos",
-        "lectures-collection": "Partes",
+        "lessons-collection": "Partes",
         "publications-collection": "Artículos",
         "event": "Partes"
       }
@@ -346,8 +342,8 @@
     },
     "no-source": "Seleccione fuente",
     "toc": "Tabla de Contenido",
-    "az":        "AZ",
-    "default":   "Por Omisión",
+    "az": "AZ",
+    "default": "Por Omisión",
     "filter": "Filtro..."
   },
   "media-downloads": {
