@@ -19,14 +19,19 @@
   }
 
   @include small-mobile {
-    border-radius: 0;
+    margin: -1px -1px 0 0!important; 
+    border-radius: 0!important;
     width: 100%;
-    // border-color: red!important;
-    border-width: 0!important;
     .item {
       border-radius: 0 !important;
-      display: block;
+      
       flex: 1 1 auto !important;
+      padding: 0 !important;
+      
+      
+      display: flex !important;
+      justify-content: center;
+      // text-align: right !important;
     }
 
     @for $i from 2 through 6 {
@@ -35,7 +40,7 @@
 
     .prev-page,
     .next-page {
-      display: none !important;
+      // display: none !important;
     }
   }
 }
