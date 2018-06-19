@@ -9,8 +9,8 @@ import {
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
-  MEDIA_TYPES
 } from './helpers/consts';
+import MediaHelper from './helpers/media';
 import { canonicalCollection } from './helpers/utils';
 import { selectors as settingsSelectors } from './redux/modules/settings';
 import { actions as mdbActions, selectors as mdbSelectors } from './redux/modules/mdb';
@@ -236,7 +236,7 @@ export const publicationCUPage = (store, match) => {
       const uiLang = settingsSelectors.getLanguage(state.settings);
 
       const unit      = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
-      const textFiles = (unit.files || []).filter(x => x.type === 'text' && x.mimetype !== MEDIA_TYPES.html.mime_type);
+      const textFiles = (unit.files || []).filter(x => MediaHelper.IsText(x) && !MediaHelper.IsHtml(x));
       const languages = uniq(textFiles.map(x => x.language));
       if (languages.length > 0) {
         language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;
