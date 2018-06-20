@@ -9,9 +9,9 @@ import {
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
-  MEDIA_TYPES
 } from './helpers/consts';
-import { canonicalCollection } from './helpers/utils';
+import MediaHelper from './helpers/media';
+import { canonicalCollection, isEmpty } from './helpers/utils';
 import { selectors as settingsSelectors } from './redux/modules/settings';
 import { actions as mdbActions, selectors as mdbSelectors } from './redux/modules/mdb';
 import { actions as filtersActions } from './redux/modules/filters';
@@ -20,6 +20,7 @@ import { actions as homeActions } from './redux/modules/home';
 import { actions as eventsActions } from './redux/modules/events';
 import { actions as lessonsActions } from './redux/modules/lessons';
 import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
+import { selectors as sourcesSelectors } from './redux/modules/sources';
 import { actions as assetsActions, selectors as assetsSelectors } from './redux/modules/assets';
 import { actions as tagsActions } from './redux/modules/tags';
 import * as mdbSagas from './sagas/mdb';
@@ -198,9 +199,36 @@ export const searchPage = store =>
       store.dispatch(searchActions.search(q, page, pageSize, deb));
     });
 
-export const libraryPage = (store, match) => {
-  // TODO: consider firstLeafID
-  const sourceID = match.params.id;
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function firstLeafId(sourceId, getSourceById) {
+  const { children } = getSourceById(sourceId) || { children: [] };
+  if (isEmpty(children)) {
+    return sourceId;
+  }
+
+  return firstLeafId(children[0], getSourceById);
+}
+
+export const libraryPage = async (store, match) => {
+  // This is a rather ugly, timeout, sleep, loop.
+  // We wait for sources to be loaded so we could
+  // determine the firstLeadfID for redirection.
+  // Fix for AR-356
+  let timeout = 5000;
+  while (timeout && !sourcesSelectors.areSourcesLoaded(store.getState().sources)) {
+    timeout -= 10;
+    await sleep(10); // eslint-disable-line no-await-in-loop
+  }
+
+  const sourcesState = store.getState().sources;
+  let sourceID       = match.params.id;
+  if (sourcesSelectors.areSourcesLoaded(sourcesState)) {
+    const getSourceById = sourcesSelectors.getSourceById(sourcesState);
+    sourceID            = firstLeafId(sourceID, getSourceById);
+  }
 
   return store.sagaMiddleWare.run(assetsSagas.sourceIndex, assetsActions.sourceIndex(sourceID)).done
     .then(() => {
@@ -238,7 +266,7 @@ export const publicationCUPage = (store, match) => {
       const uiLang = settingsSelectors.getLanguage(state.settings);
 
       const unit      = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
-      const textFiles = (unit.files || []).filter(x => x.type === 'text' && x.mimetype !== MEDIA_TYPES.html.mime_type);
+      const textFiles = (unit.files || []).filter(x => MediaHelper.IsText(x) && !MediaHelper.IsHtml(x));
       const languages = uniq(textFiles.map(x => x.language));
       if (languages.length > 0) {
         language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;

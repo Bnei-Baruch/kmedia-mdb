@@ -27,13 +27,11 @@ export const toHumanReadableTime = (current) => {
   const s = Math.floor(current % 60);
 
   let result = '';
-  result += (h !== 0) ? (h + 'h') : '';
-  result += (m !== 0) ? (m + 'm') : '';
-  result += (s !== 0) ? (s + 's') : '';
+  result += (h !== 0) ? `${h}h` : '';
+  result += (m !== 0) ? `${m}m` : '';
+  result += (s !== 0) ? `${s}s` : '';
 
   return result;
-
-
 };
 
 export const fromHumanReadableTime = (str) => {

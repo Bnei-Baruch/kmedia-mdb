@@ -2,7 +2,7 @@ import { createAction, handleActions } from 'redux-actions';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 
-import { MEDIA_TYPES } from '../../helpers/consts';
+import MediaHelper from '../../helpers/media';
 import { types as settings } from './settings';
 import { types as ssr } from './ssr';
 
@@ -206,8 +206,7 @@ const stripOldFiles = (unit) => {
   }
 
   // no old files in unit
-  if (!files.some(x => x.mimetype === MEDIA_TYPES.wmv.mime_type ||
-    x.mimetype === MEDIA_TYPES.flv.mime_type)) {
+  if (!files.some(x => MediaHelper.IsWmv(x) || MediaHelper.IsFlv(x))) {
     return unit;
   }
 
@@ -217,12 +216,12 @@ const stripOldFiles = (unit) => {
   // filter old files which have been converted
   const nFiles = Object.values(sMap).reduce((acc, val) => {
     // not interesting - only video files have been converted.
-    if (val.length < 2 || val[0].type !== 'video') {
+    if (val.length < 2 || !MediaHelper.IsVideo(val[0])) {
       return acc.concat(val);
     }
 
     // find mp4 file if present
-    const mp4Files = val.filter(x => x.mimetype === MEDIA_TYPES.mp4.mime_type);
+    const mp4Files = val.filter(MediaHelper.IsMp4);
     if (mp4Files.length > 0) {
       return acc.concat(mp4Files); // we have some, take only them
     }
@@ -414,7 +413,7 @@ const getWip            = state => state.wip;
 const getErrors         = state => state.errors;
 const getCollections    = state => state.items;
 const getWindow         = state => state.cWindow;
-const getSQDataWipErr         = state => !(getWip(state).sqData || getErrors(state).sqData);
+const getSQDataWipErr   = state => !(getWip(state).sqData || getErrors(state).sqData);
 
 const getDenormCollection = (state, id) => {
   let c = state.cById[id];

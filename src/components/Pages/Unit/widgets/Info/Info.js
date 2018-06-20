@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
-import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../../helpers/consts';
+import {
+  CT_CHILDREN_LESSON,
+  CT_DAILY_LESSON, CT_LECTURE,
+  CT_LESSON_PART,
+  CT_SPECIAL_LESSON,
+  CT_VIRTUAL_LESSON,
+  CT_WOMEN_LESSON
+} from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
 import { intersperse, tracePath } from '../../../../../helpers/utils';
 import { stringify as urlSearchStringify } from '../../../../../helpers/url';
@@ -28,8 +35,32 @@ class Info extends Component {
   };
 
   render() {
-    const { unit = {}, section, getSourceById, getTagById, t }      = this.props;
-    const { name, film_date: filmDate, sources, tags, collections } = unit;
+    const { unit = {}, section, getSourceById, getTagById, t }                        = this.props;
+    const { name, film_date: filmDate, sources, tags, collections, content_type: ct } = unit;
+
+    // take lessons section tabs into consideration
+    let filteredListPath = section;
+    if (filteredListPath === 'lessons') {
+      switch (ct) {
+      case CT_LESSON_PART:
+        filteredListPath += '/daily';
+        break;
+      case CT_VIRTUAL_LESSON:
+        filteredListPath += '/virtual';
+        break;
+      case CT_LECTURE:
+        filteredListPath += '/lectures';
+        break;
+      case CT_WOMEN_LESSON:
+        filteredListPath += '/women';
+        break;
+      case CT_CHILDREN_LESSON:
+        filteredListPath += '/children';
+        break;
+      default:
+        break;
+      }
+    }
 
     const tagLinks = Array.from(intersperse(
       (tags || []).map((x) => {
@@ -41,7 +72,7 @@ class Info extends Component {
         const path    = tracePath(tag, getTagById);
         const display = path[path.length - 1].label;
 
-        if (section) {
+        if (filteredListPath) {
           const query = filtersTransformer.toQueryParams([
             { name: 'topics-filter', values: [path.map(y => y.id)] }
           ]);
@@ -50,7 +81,7 @@ class Info extends Component {
             <Link
               key={x}
               to={{
-                pathname: `/${section}`,
+                pathname: `/${filteredListPath}`,
                 search: urlSearchStringify(query)
               }}
             >
@@ -72,7 +103,7 @@ class Info extends Component {
         const path    = tracePath(source, getSourceById);
         const display = path.map(y => y.name).join(' > ');
 
-        if (section) {
+        if (filteredListPath) {
           const query = filtersTransformer.toQueryParams([
             { name: 'sources-filter', values: [path.map(y => y.id)] }
           ]);
@@ -81,7 +112,7 @@ class Info extends Component {
             <Link
               key={x}
               to={{
-                pathname: `/${section}`,
+                pathname: `/${filteredListPath}`,
                 search: urlSearchStringify(query)
               }}
             >
