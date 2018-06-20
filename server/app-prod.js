@@ -34,6 +34,7 @@ app.use(helmet({
         '*.kabbalahmedia.info',
         '*.usersnap.com',
         'fullstory.com',
+        '*.fullstory.com',
       ],
       'script-src': [
         '\'self\'',
@@ -42,6 +43,7 @@ app.use(helmet({
         '*.google-analytics.com',
         '*.usersnap.com',
         'fullstory.com',
+        '*.fullstory.com',
       ],
       'style-src': [
         '\'self\'',
