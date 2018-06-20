@@ -33,7 +33,7 @@ app.use(helmet({
         '*.kbb1.com',
         '*.kabbalahmedia.info',
         '*.usersnap.com',
-        '*.fullstory.com',
+        'fullstory.com',
       ],
       'script-src': [
         '\'self\'',
@@ -41,7 +41,7 @@ app.use(helmet({
         '\'unsafe-eval\'',
         '*.google-analytics.com',
         '*.usersnap.com',
-        '*.fullstory.com',
+        'fullstory.com',
       ],
       'style-src': [
         '\'self\'',
