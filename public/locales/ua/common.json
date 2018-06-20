@@ -348,6 +348,12 @@
     "default": "За замовчуванням",
     "filter": "Фiльтр..."
   },
+  "topics": {
+    "header": {
+      "text": "Topics",
+      "subtext": "A collection of all items for a selected topic."
+    }
+  },
   "media-downloads": {
     "title": "Скачати",
     "derived-title": "Медіа відтворення",

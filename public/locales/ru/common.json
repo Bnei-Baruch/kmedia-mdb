@@ -348,6 +348,12 @@
     "default": "По умолчанию",
     "filter": "Фильтр..."
   },
+  "topics": {
+    "header": {
+      "text": "Topics",
+      "subtext": "A collection of all items for a selected topic."
+    }
+  },
   "media-downloads": {
     "title": "Скачать",
     "derived-title": "Производная медиа",

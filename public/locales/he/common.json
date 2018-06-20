@@ -347,6 +347,12 @@
     "default": "ברירת מחדל",
     "filter": "סנן..."
   },
+  "topics": {
+    "header": {
+      "text": "Topics",
+      "subtext": "A collection of all items for a selected topic."
+    }
+  },
   "media-downloads": {
     "title": "קבצים להורדה",
     "derived-title": "נגזרות",

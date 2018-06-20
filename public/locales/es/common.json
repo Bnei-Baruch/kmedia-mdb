@@ -346,6 +346,12 @@
     "default": "Por Omisión",
     "filter": "Filtro..."
   },
+  "topics": {
+    "header": {
+      "text": "Topics",
+      "subtext": "A collection of all items for a selected topic."
+    }
+  },
   "media-downloads": {
     "title": "Descargar archivos",
     "derived-title": "Derivados",

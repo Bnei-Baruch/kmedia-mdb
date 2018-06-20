@@ -349,6 +349,12 @@
     "default": "Default",
     "filter": "Filter..."
   },
+  "topics": {
+    "header": {
+      "text": "Topics",
+      "subtext": "A collection of all items for a selected topic."
+    }
+  },
   "media-downloads": {
     "title": "Media Downloads",
     "derived-title": "Derived Media",
