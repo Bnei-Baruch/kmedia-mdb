@@ -4,6 +4,7 @@ import identity from 'lodash/identity';
 import { Menu, Sidebar } from 'semantic-ui-react';
 
 import NavLink from '../Language/MultiLanguageNavLink';
+import DonateNow from './DonateNow';
 
 const ITEMS = [
   'lessons',
@@ -44,6 +45,9 @@ const MenuItems = (props) => {
           className="sidebar-item"
           content={t('nav.sidebar.old-site')}
         />
+        <Menu.Item className="mobile-only">
+          <DonateNow t={t} />
+        </Menu.Item>
       </Menu>
     );
   }
