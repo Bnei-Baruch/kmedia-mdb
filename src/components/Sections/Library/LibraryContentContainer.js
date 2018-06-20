@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import { assetUrl } from '../../../helpers/Api';
 import { isEmpty } from '../../../helpers/utils';
+import { selectSuitableLanguage } from '../../../helpers/language';
 import { actions, selectors } from '../../../redux/modules/assets';
 import * as shapes from '../../shapes';
 import Library from './Library';
@@ -17,8 +18,9 @@ class LibraryContentContainer extends Component {
     content: shapes.DataWipErr.isRequired,
     t: PropTypes.func.isRequired,
     fetchAsset: PropTypes.func.isRequired,
-    languageUI: PropTypes.string.isRequired,
-    langSelectorMount: PropTypes.object,
+    uiLanguage: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
+    langSelectorMount: PropTypes.instanceOf(PropTypes.element),
   };
 
   static defaultProps = {
@@ -33,30 +35,20 @@ class LibraryContentContainer extends Component {
   };
 
   componentDidMount() {
-    this.myReplaceState(this.props);
+    this.setStateFromProps(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
+    let useStateLanguages = false;
     if (nextProps.index === this.props.index) {
-      if (nextProps.languageUI !== this.props.languageUI) {
-        // UI language changed
-        const { language, languages } = this.state;
-        if (nextProps.languageUI !== language) {
-          // New UI language is not the currently displayed version
-          if ((languages || []).indexOf(nextProps.languageUI) === -1) {
-            // we don't have data for new UI language. Let's stay as we are.
-            // TODO: use language fallback if we have them
-          } else {
-            // we have data for new UI language. Let's switch.
-            const { index: { data }, source, languageUI } = nextProps;
-            this.setState({ language: languageUI });
-            this.fetchContent(source, data[languageUI]);
-          }
-        }
+      if (nextProps.uiLanguage !== this.props.uiLanguage || nextProps.contentLanguage !== this.props.contentLanguage) {
+        // UI or Content language was changed
+        useStateLanguages = true;
+      } else {
+        return false;
       }
-    } else {
-      this.myReplaceState(nextProps);
     }
+    return this.setStateFromProps(nextProps, useStateLanguages);
   }
 
   getFullUrl = (pdf, data, language) => {
@@ -69,20 +61,6 @@ class LibraryContentContainer extends Component {
     }
 
     return assetUrl(`sources/${this.props.source}/${data[language].docx}`);
-  };
-
-  getLanguages = (data, preferred) => {
-    if (!data) {
-      return { languages: [], language: null };
-    }
-
-    let language    = null;
-    const languages = Array.from(Object.keys(data));
-    if (languages.length > 0) {
-      language = languages.indexOf(preferred) === -1 ? languages[0] : preferred;
-    }
-
-    return { languages, language };
   };
 
   getTaasPdf = () => {
@@ -103,6 +81,32 @@ class LibraryContentContainer extends Component {
     return { isTaas, startsFrom, pdfFile };
   };
 
+  setStateFromProps = (nextProps, useStateLanguages = false) => {
+    const { index: { data } = { index: { data: null } }, source, uiLanguage, contentLanguage } = nextProps;
+
+    if (!data) {
+      return { languages: [], language: null };
+    }
+
+    let { languages } = this.state;
+    if (!useStateLanguages && data) {
+      languages = Array.from(Object.keys(data));
+    }
+    const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+
+    if (!newLanguage) {
+      return false;
+    }
+
+    this.setState({ languages, language: newLanguage });
+
+    if (!isEmpty(source)) {
+      this.fetchContent(source, data[newLanguage]);
+    }
+
+    return true;
+  };
+
   handleLanguageChanged = (e, language) => {
     const { index: { data }, source } = this.props;
     this.setState({ language });
@@ -117,22 +121,6 @@ class LibraryContentContainer extends Component {
     }
 
     this.props.fetchAsset(`sources/${source}/${data.html}`);
-  };
-
-  myReplaceState = (nextProps) => {
-    const data                    = nextProps.index && nextProps.index.data;
-    const { languageUI }          = nextProps;
-    const { languages, language } = this.getLanguages(data, languageUI);
-
-    this.setState({ languages, language });
-
-    if (language) {
-      const { source } = nextProps;
-
-      if (!isEmpty(source)) {
-        this.fetchContent(source, data[language]);
-      }
-    }
   };
 
   render() {

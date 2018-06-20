@@ -10,17 +10,16 @@ import { actions, selectors as settings } from '../../redux/modules/settings';
 class ContentLanguage extends Component {
   static propTypes = {
     contentLanguage: PropTypes.string.isRequired,
+    setContentLanguage: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
 
-  storeContentLanguage = (language) => {
-    if (language === '' || language === undefined) {
-      return;
-    }
+  storeContentLanguage = (language, event) => {
+    event.preventDefault();
+
     const expires   = new Date(Date.now() + (365 * 24 * 60 * 60 * 1000)).toUTCString();
     document.cookie = `${COOKIE_CONTENT_LANG}=${language}; path=/; expires=${expires}`;
-    console.log('Content language: ', language);
-    actions.setContentLanguage(language);
+    this.props.setContentLanguage(language);
   };
 
   render() {
@@ -31,7 +30,15 @@ class ContentLanguage extends Component {
         <Dropdown.Menu>
           {
             Object.values(LANGUAGES).map(({ value: x, flag, name = t(`constants.languages.${x}`) }) => (
-              <Dropdown.Item key={x} as={Link} onClick={() => this.storeContentLanguage(x)} language={`${x}`}>
+              <Dropdown.Item
+                key={x}
+                as={Link}
+                active={x === contentLanguage}
+                onClick={(e) => {
+                  this.storeContentLanguage(x, e);
+                }}
+                language={`${x}`}
+              >
                 <Flag name={flag} />
                 {name}
               </Dropdown.Item>
@@ -47,5 +54,5 @@ export default connect(
   state => ({
     contentLanguage: settings.getContentLanguage(state.settings),
   }),
-  actions
+  { setContentLanguage: actions.setContentLanguage }
 )(ContentLanguage);

@@ -23,8 +23,7 @@ import { actions as ssr } from '../src/redux/modules/ssr';
 import App from '../src/components/App/App';
 import i18nnext from './i18nnext';
 
-// eslint-disable-next-line no-underscore-dangle
-const _DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all the work
+const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all the work
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 

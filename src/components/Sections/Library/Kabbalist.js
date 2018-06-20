@@ -66,7 +66,7 @@ class Kabbalist extends Component {
               <List bulleted>
                 {
                   volumes ?
-                    volumes.map(x => (this.renderBook(getSourceById(x)))) :
+                    volumes.map(volume => (this.renderBook(getSourceById(volume)))) :
                     null
                 }
               </List>

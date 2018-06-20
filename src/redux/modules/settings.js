@@ -38,6 +38,10 @@ export const reducer = handleActions({
     ...state,
     language: action.payload,
   }),
+  [SET_CONTENT_LANGUAGE]: (state, action) => ({
+    ...state,
+    contentLanguage: action.payload,
+  }),
   [SET_PAGE_SIZE]: (state, action) => ({
     ...state,
     pageSize: action.payload,

@@ -11,6 +11,7 @@ import * as shapes from '../shapes';
 class UILanguage extends Component {
   static propTypes = {
     language: PropTypes.string.isRequired,
+
     // We need dependency on location in order to change Link every time url changes
     // eslint-disable-next-line react/no-unused-prop-types
     location: shapes.HistoryLocation.isRequired,
@@ -21,7 +22,6 @@ class UILanguage extends Component {
     if (language === '' || language === undefined) {
       return;
     }
-    console.log('UI language: ', language);
     const expires   = new Date(Date.now() + (365 * 24 * 60 * 60 * 1000)).toUTCString();
     document.cookie = `${COOKIE_UI_LANG}=${language}; path=/; expires=${expires}`;
   };

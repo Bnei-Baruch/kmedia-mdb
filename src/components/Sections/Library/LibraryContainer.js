@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import { push as routerPush, replace as routerReplace } from 'react-router-redux';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { translate } from 'react-i18next';
 import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
 
@@ -25,6 +25,7 @@ class LibraryContainer extends Component {
     sourceId: PropTypes.string.isRequired,
     indexMap: PropTypes.objectOf(shapes.DataWipErr),
     language: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
     fetchIndex: PropTypes.func.isRequired,
     sourcesSortBy: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,
@@ -170,31 +171,39 @@ class LibraryContainer extends Component {
     return this.firstLeafId(children[0]);
   };
 
-  handleContextRef               = (ref) => {
+  handleContextRef = (ref) => {
     this.contextRef = ref;
   };
-  handleAccordionContext         = (ref) => {
+
+  handleAccordionContext = (ref) => {
     this.accordionContext = ref;
   };
+
   handleSelectedAccordionContext = (ref) => {
     this.selectedAccordionContext = ref;
   };
-  handleSecondaryHeaderRef       = (ref) => {
+
+  handleSecondaryHeaderRef = (ref) => {
     this.secondaryHeaderRef = ref;
   };
-  handleContentHeaderRef         = (ref) => {
+
+  handleContentHeaderRef = (ref) => {
     this.contentHeaderRef = ref;
   };
-  handleTocIsActive              = () => {
+
+  handleTocIsActive = () => {
     this.setState({ tocIsActive: !this.state.tocIsActive });
   };
-  handleIsReadable               = () => {
+
+  handleIsReadable = () => {
     this.setState({ isReadable: !this.state.isReadable });
   };
-  handleSettings                 = (setting) => {
+
+  handleSettings = (setting) => {
     this.setState(setting);
   };
-  fetchIndices                   = (sourceId) => {
+
+  fetchIndices = (sourceId) => {
     if (isEmpty(sourceId) || !isEmpty(this.props.indexMap[sourceId])) {
       return;
     }
@@ -301,7 +310,7 @@ class LibraryContainer extends Component {
   };
 
   render() {
-    const { sourceId, indexMap, getSourceById, language, t } = this.props;
+    const { sourceId, indexMap, getSourceById, language, contentLanguage, t } = this.props;
 
     const fullPath = this.getFullPath(sourceId);
     const parentId = this.properParentId(fullPath);
@@ -321,7 +330,8 @@ class LibraryContainer extends Component {
         <LibraryContentContainer
           source={sourceId}
           index={index}
-          languageUI={language}
+          uiLanguage={language}
+          contentLanguage={contentLanguage}
           langSelectorMount={this.headerMenuRef}
           t={t}
         />
@@ -334,7 +344,7 @@ class LibraryContainer extends Component {
 
     return (
       <div
-        className={classnames({
+        className={classNames({
           source: true,
           'is-readable': isReadable,
           'toc--is-active': tocIsActive,
@@ -389,7 +399,7 @@ class LibraryContainer extends Component {
                 mobile={16}
                 tablet={16}
                 computer={12}
-                className={classnames({
+                className={classNames({
                   'source__content-wrapper': true,
                   [`size${fontSize}`]: true,
                 })}
@@ -416,6 +426,7 @@ export default withRouter(connect(
     sourceId: ownProps.match.params.id,
     indexMap: assets.getSourceIndexById(state.assets),
     language: settings.getLanguage(state.settings),
+    contentLanguage: settings.getContentLanguage(state.settings),
     getSourceById: sources.getSourceById(state.sources),
     getPathByID: sources.getPathByID(state.sources),
     sortBy: sources.sortBy(state.sources),
