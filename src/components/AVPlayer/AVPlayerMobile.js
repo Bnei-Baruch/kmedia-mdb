@@ -215,6 +215,7 @@ class AVPlayerMobile extends PureComponent {
 
   handleEnded = () => {
     if (this.props.onFinish) {
+      this.clearCurrentTime();
       this.props.onFinish();
     }
   };
@@ -280,6 +281,13 @@ class AVPlayerMobile extends PureComponent {
       if (item.src) {
         localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.src}`, currentMediaTime);
       }
+    }
+  };
+
+  clearCurrentTime = () => {
+    const { item } = this.props;
+    if (item && item.unit && item.unit.id) {    
+        localStorage.removeItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
     }
   };
 

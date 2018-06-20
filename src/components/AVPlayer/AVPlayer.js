@@ -270,6 +270,7 @@ class AVPlayer extends PureComponent {
   onPause = (e) => {
     // when we're close to the end regard this as finished
     if (Math.abs(e.currentTime - e.duration) < 0.1 && this.props.onFinish) {
+      this.clearCurrentTime();
       this.props.onFinish();
     } else if (this.props.onPause) {
       this.props.onPause();
@@ -462,6 +463,13 @@ class AVPlayer extends PureComponent {
           localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${src}`, currentMediaTime);
         }
       }
+    }
+  };
+
+  clearCurrentTime = () => {
+    const { item } = this.props;
+    if (item && item.unit && item.unit.id) {    
+        localStorage.removeItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
     }
   };
 
