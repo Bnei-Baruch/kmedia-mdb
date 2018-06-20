@@ -14,7 +14,8 @@
       "photos": "Photos",
       "design": "Design",
       "design2": "Layout",
-      "project-status": "Project Status"
+      "project-status": "Project Status",
+      "old-site": "Old Site"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",

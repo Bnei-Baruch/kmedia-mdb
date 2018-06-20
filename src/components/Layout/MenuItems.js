@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import identity from 'lodash/identity';
 import { Menu, Sidebar } from 'semantic-ui-react';
+
 import NavLink from '../Language/MultiLanguageNavLink';
 
 const ITEMS = [
@@ -37,6 +38,12 @@ const MenuItems = (props) => {
     return (
       <Menu vertical borderless fluid color="blue" size="huge">
         {items}
+        <Menu.Item
+          as="a"
+          href="http://kabbalahmedia.info/"
+          className="sidebar-item"
+          content={t('nav.sidebar.old-site')}
+        />
       </Menu>
     );
   }

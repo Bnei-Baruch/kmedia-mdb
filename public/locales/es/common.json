@@ -13,7 +13,8 @@
       "publications": "Publicaciones",
       "photos": "Fotos",
       "design": "Diseño",
-      "project-status": "Projekto Statuso"
+      "project-status": "Projekto Statuso",
+      "old-site": "Viejo Sitio"
     },
     "footer": {
       "copyright": "Derecho de autor 2003-{{year}}",

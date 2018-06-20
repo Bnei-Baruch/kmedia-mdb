@@ -14,7 +14,8 @@
       "photos": "Фотографии",
       "design": "Дизайн",
       "design2": "Планировка",
-      "project-status": "Статус проекта"
+      "project-status": "Статус проекта",
+      "old-site": "Старый сайт"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
