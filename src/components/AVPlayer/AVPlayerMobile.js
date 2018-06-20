@@ -277,8 +277,8 @@ class AVPlayerMobile extends PureComponent {
     const currentMediaTime = Math.round(mediaTime);
     if (!firstSeek && currentMediaTime !== currentTime) {
       this.setState({ currentTime: currentMediaTime });
-      if (item.src) {
-        localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.src}`, currentMediaTime);
+      if (item && item.unit && item.unit.id) {
+        localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`, currentMediaTime);
       }
     }
   };
@@ -286,8 +286,8 @@ class AVPlayerMobile extends PureComponent {
   getSavedTime = () => {
     const { item } = this.props;
     // Try to get the current time from local storage if available
-    if (item.src) {
-      const savedTime = localStorage.getItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.src}`);
+    if (item && item.unit && item.unit.id) {
+      const savedTime = localStorage.getItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
       if (savedTime) {
         return parseInt(savedTime, 10);
       }
