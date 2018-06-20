@@ -179,7 +179,11 @@
     "sections": "מדורים",
     "updates": "עדכונים אחרונים",
     "last-lesson": "שיעור הקבלה היומי",
-    "donate": "תרום עכשיו"
+    "donate": "תרום עכשיו",
+    "promoted": {
+      "header": "כנס עולמי ברומא, איטליה.",
+      "subheader": "27-29/7/2018"
+    }
   },
   "events": {
     "header": {

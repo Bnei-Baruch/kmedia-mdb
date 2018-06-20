@@ -181,7 +181,11 @@
     "sections": "Archive Sections",
     "updates": "Latest Updates",
     "last-lesson": "The Latest Daily Lesson",
-    "donate": "DONATE NOW"
+    "donate": "DONATE NOW",
+    "promoted": {
+      "header": "World Convention in Rome, Italy.",
+      "subheader": "27-29 July, 2018"
+    }
   },
   "events": {
     "header": {
