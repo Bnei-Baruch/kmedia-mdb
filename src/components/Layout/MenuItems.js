@@ -14,7 +14,8 @@ const ITEMS = [
   // 'books',
   'topics',
   'publications',
-  'project-status'
+  'project-status',
+  'help',
   // 'photos',
   // 'design',
   // 'design2',

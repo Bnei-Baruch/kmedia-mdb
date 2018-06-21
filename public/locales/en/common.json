@@ -15,6 +15,7 @@
       "design": "Design",
       "design2": "Layout",
       "project-status": "Project Status",
+      "help": "Help",
       "old-site": "Old Site"
     },
     "footer": {
@@ -176,7 +177,7 @@
   "home": {
     "header": {
       "text": "Home",
-      "subText": ""
+      "subtext": ""
     },
     "search": "Explore the wisdom of Kabbalah",
     "sections": "Archive Sections",
@@ -299,6 +300,12 @@
           "title": "Other published articles in this collection"
         }
       }
+    }
+  },
+  "help": {
+    "header": {
+      "text": "Help",
+      "subtext": "In this section you will find video tutorials and best practices on how to use the site"
     }
   },
   "pages": {
