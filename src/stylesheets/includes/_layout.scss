@@ -206,3 +206,12 @@ $secondary-header-height: 10px;
   padding-bottom: 0;
   padding-top: 0;
 }
+
+.ui.menu .donate-button {
+  &.ui.button,
+  &.ui.button:hover,
+  &.ui.button:focus {
+    background: $white !important;
+    font-size: .92857143rem !important;
+  }
+}

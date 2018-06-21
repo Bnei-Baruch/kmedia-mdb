@@ -18,9 +18,12 @@ class DonateNow extends Component {
     return (
       <Button
         compact
-        color="teal"
+        basic
+        size="small"
+        color="blue"
         icon="heart"
         content={t('home.donate')}
+        className="donate-button"
         as="a"
         href={`http://kab1.com/${(language === LANG_UKRAINIAN) ? LANG_RUSSIAN : language}`}
       />
