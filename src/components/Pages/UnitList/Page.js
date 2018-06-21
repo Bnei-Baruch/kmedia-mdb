@@ -19,6 +19,7 @@ const filters = {
   'lessons-virtual': [
     { name: 'collections-filter', component: filterComponents.CollectionsFilter },
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
+    { name: 'sources-filter', component: filterComponents.SourcesFilter },
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
   'lessons-lectures': [

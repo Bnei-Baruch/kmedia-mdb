@@ -14,7 +14,8 @@
       "photos": "Фотографии",
       "design": "Дизайн",
       "design2": "Планировка",
-      "project-status": "Статус проекта"
+      "project-status": "Статус проекта",
+      "old-site": "Старый сайт"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
@@ -180,7 +181,11 @@
     "sections": "Разделы Архива",
     "updates": "Последние обновления",
     "last-lesson": "Последний Урок",
-    "donate": "ВНЕСИТЕ ВКЛАД"
+    "donate": "ВНЕСИТЕ ВКЛАД",
+    "promoted": {
+      "header": "Всемирный конгресс в Риме, Италия.",
+      "subheader": "27-29.7.2018"
+    }
   },
   "events": {
     "header": {

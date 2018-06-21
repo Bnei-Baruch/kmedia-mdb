@@ -87,7 +87,7 @@ export class PlaylistCollectionContainer extends Component {
 
     // empty or no window
     if (!cWindow.data || cWindow.data.length === 0) {
-      if (!wip.cWindow) {
+      if (!wip.cWindow[id]) {
         // no wip, go fetch
         this.getWindow(props);
       }
@@ -108,8 +108,7 @@ export class PlaylistCollectionContainer extends Component {
       // it's a good window, extract the previous and next links
       const prevCollection = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
       const prevLink       = prevCollection ? canonicalLink({
-        id: prevCollection,
-        content_type: CT_DAILY_LESSON
+        id: prevCollection,        content_type: CT_DAILY_LESSON
       }) : null;
 
       const nextCollection = curIndex > 0 ? collections[curIndex - 1] : null;

@@ -13,6 +13,7 @@ import GAPageView from './GAPageView/GAPageView';
 import MenuItems from './MenuItems';
 import Footer from './Footer';
 import UILanguage from './UILanguage';
+import DonateNow from './DonateNow';
 import logo from '../../images/logo.svg';
 
 class Layout extends Component {
@@ -92,6 +93,9 @@ class Layout extends Component {
                   <WrappedOmniBox t={t} location={location} /> :
                   null
               }
+            </Menu.Item>
+            <Menu.Item className="mobile-hidden">
+              <DonateNow t={t} />
             </Menu.Item>
             <Menu.Menu position="right">
               <UILanguage t={t} location={location} />

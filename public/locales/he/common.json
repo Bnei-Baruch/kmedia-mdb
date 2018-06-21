@@ -13,7 +13,8 @@
       "publications": "פרסומים",
       "photos": "תמונות",
       "design": "עיצוב",
-      "project-status": "סטאטוס הפרוייקט"
+      "project-status": "סטאטוס הפרוייקט",
+      "old-site": "לאתר הישן"
     },
     "footer": {
       "copyright": "© כל הזכויות שמורות 2003-{{year}}",
@@ -175,11 +176,15 @@
       "text": "דף הבית",
       "subtext": ""
     },
-    "search": "גלה את חכמת הקבלה",
+    "search": "גלו את חכמת הקבלה",
     "sections": "מדורים",
     "updates": "עדכונים אחרונים",
     "last-lesson": "שיעור הקבלה היומי",
-    "donate": "תרום עכשיו"
+    "donate": "תרום עכשיו",
+    "promoted": {
+      "header": "כנס עולמי ברומא, איטליה.",
+      "subheader": "27-29/7/2018"
+    }
   },
   "events": {
     "header": {
