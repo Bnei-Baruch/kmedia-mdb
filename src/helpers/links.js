@@ -5,8 +5,8 @@ import { stringify as urlSearchStringify } from './url';
 import {
   CT_ARTICLE,
   CT_ARTICLES,
-  CT_CHILDREN_LESSON,
-  CT_CHILDREN_LESSONS,
+  // CT_CHILDREN_LESSON,
+  // CT_CHILDREN_LESSONS,
   CT_CLIP,
   CT_CLIPS,
   CT_CONGRESS,
@@ -77,8 +77,8 @@ export const canonicalLink = (entity) => {
     return `/lessons/lectures/c/${entity.id}`;
   case CT_WOMEN_LESSONS:
     return `/lessons/women/c/${entity.id}`;
-  case CT_CHILDREN_LESSONS:
-    return `/lessons/children/c/${entity.id}`;
+  // case CT_CHILDREN_LESSONS:
+  //   return `/lessons/children/c/${entity.id}`;
   case CT_LESSONS_SERIES:
     return `/lessons/series/c/${entity.id}`;
   case CT_VIDEO_PROGRAM:
@@ -109,8 +109,8 @@ export const canonicalLink = (entity) => {
   case CT_LESSON_PART:
   case CT_LECTURE:
   case CT_VIRTUAL_LESSON:
-  case CT_CHILDREN_LESSON:
   case CT_WOMEN_LESSON:
+  // case CT_CHILDREN_LESSON:
     return `/lessons/cu/${entity.id}`;
   case CT_VIDEO_PROGRAM_CHAPTER:
     return `/programs/cu/${entity.id}`;

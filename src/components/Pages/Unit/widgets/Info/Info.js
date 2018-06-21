@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
 import {
-  CT_CHILDREN_LESSON,
-  CT_DAILY_LESSON, CT_LECTURE,
+  // CT_CHILDREN_LESSON,
+  CT_DAILY_LESSON,
+  CT_LECTURE,
   CT_LESSON_PART,
   CT_SPECIAL_LESSON,
   CT_VIRTUAL_LESSON,
@@ -54,9 +55,9 @@ class Info extends Component {
       case CT_WOMEN_LESSON:
         filteredListPath += '/women';
         break;
-      case CT_CHILDREN_LESSON:
-        filteredListPath += '/children';
-        break;
+      // case CT_CHILDREN_LESSON:
+      //   filteredListPath += '/children';
+      //   break;
       default:
         break;
       }

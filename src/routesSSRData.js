@@ -2,7 +2,7 @@ import uniq from 'lodash/uniq';
 
 import {
   CT_ARTICLE,
-  CT_CHILDREN_LESSON,
+  // CT_CHILDREN_LESSON,
   CT_FRIENDS_GATHERING,
   CT_LECTURE,
   CT_MEAL,
@@ -69,8 +69,8 @@ const getExtraFetchParams = (ns, collectionID) => {
     return { content_type: [CT_LECTURE] };
   case 'lessons-women':
     return { content_type: [CT_WOMEN_LESSON] };
-  case 'lessons-children':
-    return { content_type: [CT_CHILDREN_LESSON] };
+  // case 'lessons-children':
+  //   return { content_type: [CT_CHILDREN_LESSON] };
   default:
     if (collectionID) {
       return { collection: collectionID };
