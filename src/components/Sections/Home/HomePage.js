@@ -73,7 +73,7 @@ class HomePage extends Component {
 
     return (
       <div className="homepage">
-        <Helmets.Basic title={t('home.header.text')} description={t('home.header.subtext')} />
+        <Helmets.Basic title={t('home.header.text')} description={t('nav.top.header')} />
         <Container className="padded">
           <SearchBar t={t} location={location} />
         </Container>
