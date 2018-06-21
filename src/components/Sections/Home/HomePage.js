@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Card, Container, Grid, GridColumn, } from 'semantic-ui-react';
+import { Card, Container, Grid } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../../helpers/links';
 import { strCmp } from '../../../helpers/utils';
@@ -100,20 +100,19 @@ class HomePage extends Component {
                   {
                     ['lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
                       (
-                        <Grid.Column mobile={5} tablet={3} computer={3}  key={x} textAlign="center">
+                        <Grid.Column mobile={5} tablet={3} computer={3} key={x} textAlign="center">
                           <Topic title={t(`nav.sidebar.${x}`)} img={sectionLogo[x]} href={`/${x}`} />
                         </Grid.Column>
-
                       )
                     )
                   }
-                  <Grid.Column mobile={5} tablet={3} computer={3} only='mobile'></Grid.Column>
+                  <Grid.Column mobile={5} tablet={3} computer={3} only="mobile" />
                 </Grid.Row>
               </Grid>
             </Section>
-            </Container>
+          </Container>
         </div>
-          <Container className="padded horizontally">
+        <Container className="padded horizontally">
           <Section title={t('home.updates')}>
             <Card.Group itemsPerRow={4} doubling>
               {

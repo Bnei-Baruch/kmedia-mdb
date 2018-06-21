@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 
 import { selectors as settings } from '../../redux/modules/settings';
-import { LANG_RUSSIAN, LANG_UKRAINIAN } from '../../helpers/consts';
+import { LANG_ENGLISH, LANG_RUSSIAN, LANG_UKRAINIAN } from '../../helpers/consts';
 
 class DonateNow extends Component {
   static propTypes = {
@@ -14,6 +14,18 @@ class DonateNow extends Component {
 
   render() {
     const { t, language } = this.props;
+
+    let lang = language;
+    switch (lang) {
+    case LANG_UKRAINIAN:
+      lang = LANG_RUSSIAN;
+      break;
+    case LANG_ENGLISH:
+      lang = '';
+      break;
+    default:
+      break;
+    }
 
     return (
       <Button
@@ -25,7 +37,7 @@ class DonateNow extends Component {
         content={t('home.donate')}
         className="donate-button"
         as="a"
-        href={`http://kab1.com/${(language === LANG_UKRAINIAN) ? LANG_RUSSIAN : language}`}
+        href={`http://kab1.com/${lang}`}
       />
     );
   }

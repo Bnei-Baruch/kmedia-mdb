@@ -19,16 +19,16 @@
   }
 
   @include small-mobile {
-    margin: -1px -1px 0 0!important; 
+    margin: -1px -1px 0 0!important;
     border-radius: 0!important;
     width: 100%;
     .item {
       border-radius: 0 !important;
-      
+
       flex: 1 1 auto !important;
       padding: 0 !important;
-      
-      
+
+
       display: flex !important;
       justify-content: center;
       // text-align: right !important;
