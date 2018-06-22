@@ -9,8 +9,6 @@
  *        titles={{
  *            first:   "First",
  *            prev:    "Prev",
- *            prevSet: "<<<",
- *            nextSet: ">>>",
  *            next:    "Next",
  *            last:    "Last"
  *        }} />
@@ -27,16 +25,14 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { Icon, Menu } from 'semantic-ui-react';
+import classNames from 'classnames';
 
 import { DEFAULT_LANGUAGE, RTL_LANGUAGES } from '../../helpers/consts';
 
 class Pagination extends PureComponent {
-
   static TITLES = {
     first: <Icon name="angle double left" />,
     prev: <Icon name="angle left" />,
-    prevSet: <Icon name="ellipsis horizontal" />,
-    nextSet: <Icon name="ellipsis horizontal" />,
     next: <Icon name="angle right" />,
     last: <Icon name="angle double right" />,
   };
@@ -51,8 +47,6 @@ class Pagination extends PureComponent {
     titles: PropTypes.shape({
       first: PropTypes.node,
       prev: PropTypes.node,
-      prevSet: PropTypes.node,
-      nextSet: PropTypes.node,
       next: PropTypes.node,
       last: PropTypes.node,
     }),
@@ -63,7 +57,7 @@ class Pagination extends PureComponent {
     total: 0,
     language: DEFAULT_LANGUAGE,
     onChange: noop,
-    windowSize: 3,
+    windowSize: 6,
     titles: Pagination.TITLES,
   };
 
@@ -87,9 +81,9 @@ class Pagination extends PureComponent {
 
   getTitle = key => this.props.titles[key] || Pagination.TITLES[key];
 
-  renderPage = (content, value, key, disabled, active = false) => {
+  renderPage = (content, value, key, disabled, active = false, exClass = []) => {
     if (disabled) {
-      return <Menu.Item disabled>{content}</Menu.Item>;
+      return <Menu.Item disabled className={classNames(exClass)}>{content}</Menu.Item>;
     }
 
     return (
@@ -97,6 +91,7 @@ class Pagination extends PureComponent {
         key={key}
         active={active}
         content={content}
+        className={classNames(exClass)}
         onClick={() => this.props.onChange(value)}
       />
     );
@@ -116,27 +111,19 @@ class Pagination extends PureComponent {
     const titles       = this.getTitle;
     const prevDisabled = current === 1;
     const nextDisabled = current === totalBlocks;
-    const hidePrevSet  = visibleRange[0] === 1;
-    const hideNextSet  = visibleRange[visibleRange.length - 1] === totalBlocks;
 
     return (
-      <Menu compact className="pagination-menu" color="blue">
+      <Menu icon compact className="pagination-menu" color="blue" size="tiny">
         {this.renderPage(titles(isRTL ? 'last' : 'first'), 1, 'first', prevDisabled)}
-        {this.renderPage(titles(isRTL ? 'next' : 'prev'), current - 1, 'prev', prevDisabled)}
-        {
-          hidePrevSet ?
-            null :
-            this.renderPage(titles(isRTL ? 'nextSet' : 'prevSet'), -100, 'prevSet', true)
-        }
-
-        {visibleRange.map(x => (this.renderPage(x, x, x, false, x === current)))}
+        {this.renderPage(titles(isRTL ? 'next' : 'prev'), current - 1, 'prev', prevDisabled, false, ['prev-page'])}
 
         {
-          hideNextSet ?
-            null :
-            this.renderPage(titles(isRTL ? 'prevSet' : 'nextSet'), -101, 'nextSet', true)
+          visibleRange.map(x =>
+            this.renderPage(x, x, x, false, x === current,
+              x === current ? [] : [`distance-${Math.abs(x - current)}`]))
         }
-        {this.renderPage(titles(isRTL ? 'prev' : 'next'), current + 1, 'next', nextDisabled)}
+
+        {this.renderPage(titles(isRTL ? 'prev' : 'next'), current + 1, 'next', nextDisabled, false, ['next-page'])}
         {this.renderPage(titles(isRTL ? 'first' : 'last'), totalBlocks, 'last', nextDisabled)}
       </Menu>
     );

@@ -7,4 +7,5 @@ export { default as sourcesFilterDefinition } from './sourcesFilter';
 export { default as topicsFilterDefinition } from './topicsFilter';
 export { default as publishersFilterDefinition } from './publishersFilter';
 export { default as yearsFilterDefinition } from './yearsFilter';
+export { default as collectionsFilterDefinition } from './collectionsFilter';
 

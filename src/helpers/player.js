@@ -12,40 +12,16 @@ import {
   LANG_HEBREW,
   LANG_RUSSIAN,
   LANG_UNKNOWN,
-  MEDIA_TYPES,
-  MIME_TYPE_TO_MEDIA_TYPE,
   MT_AUDIO,
   MT_VIDEO,
-  PLAYABLE_MEDIA_TYPES,
   VS_DEFAULT,
 } from './consts';
 import { getQuery, updateQuery } from './url';
 import { canonicalLink } from './links';
+import MediaHelper from './media';
 import { isEmpty, physicalFile } from './utils';
 
 const fallbacksLanguages = [LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN];
-
-function getMimeType(mediaType) {
-  return mediaType === MT_VIDEO ?
-    MEDIA_TYPES.mp4.mime_type :
-    MEDIA_TYPES.mp3.mime_type;
-}
-
-function calcAvailableMediaTypes(unit, language) {
-  if (!unit || !Array.isArray(unit.files)) {
-    return [];
-  }
-
-  const vMime = getMimeType(MT_VIDEO);
-  const aMime = getMimeType(MT_AUDIO);
-  return Array.from(unit.files.reduce((acc, val) => {
-    if (val.language === language &&
-      (val.mimetype === vMime || val.mimetype === aMime)) {
-      acc.add(MIME_TYPE_TO_MEDIA_TYPE[val.mimetype]);
-    }
-    return acc;
-  }, new Set()));
-}
 
 function restorePreferredMediaType() {
   return localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO;
@@ -63,22 +39,30 @@ function persistPreferredVideoSize(value) {
   localStorage.setItem('@@kmedia_player_video_size', value);
 }
 
-/**
- * Calculates available languages for content unit for specific language
- * is language is not provided calculates both video and audio available
- * languages.
- * @param {object} unit
- * @return {!Array<string>}
- */
+function isPlayable(file) {
+  return MediaHelper.IsMp4(file) || MediaHelper.IsMp3(file);
+}
+
+function calcAvailableMediaTypes(unit, language) {
+  if (!unit || !Array.isArray(unit.files)) {
+    return [];
+  }
+
+  return Array.from(unit.files.reduce((acc, val) => {
+    if (val.language === language && isPlayable(val)) {
+      acc.add(val.type);
+    }
+    return acc;
+  }, new Set()));
+}
+
 function calcAvailableLanguages(unit) {
   if (!unit || !Array.isArray(unit.files)) {
     return [];
   }
 
-  const mediaTypes = [MT_VIDEO, MT_AUDIO];
-  const mimeTypes  = mediaTypes.map(getMimeType);
   return Array.from(unit.files.reduce((acc, val) => {
-    if (mediaTypes.includes(val.type) || mimeTypes.includes(val.mimetype)) {
+    if (isPlayable(val)) {
       acc.add(val.language);
     }
     return acc;
@@ -111,9 +95,9 @@ function playableItem(unit, mediaType, language) {
     }
   }
 
-  const mimeType = getMimeType(mediaType);
-
-  const files     = (unit.files || []).filter(f => f.language === language && f.mimetype === mimeType);
+  const files     = (unit.files || []).filter(f => (
+    f.language === language &&
+    (mediaType === MT_VIDEO ? MediaHelper.IsMp4(f) : MediaHelper.IsMp3(f))));
   const byQuality = mapValues(groupBy(files, x => x.video_size || VS_DEFAULT),
     val => physicalFile(val[0], true));
 
@@ -209,7 +193,9 @@ function playlist(collection, mediaType, language) {
   }
 
   const shareUrl = canonicalLink(collection);
-  items.forEach((x) => { x.shareUrl = shareUrl; }); // eslint-disable-line no-param-reassign
+  items.forEach((x) => {
+    x.shareUrl = shareUrl;
+  }); // eslint-disable-line no-param-reassign
 
   return {
     collection,
@@ -222,7 +208,8 @@ function playlist(collection, mediaType, language) {
 
 function getMediaTypeFromQuery(location, defaultMediaType) {
   const query = getQuery(location);
-  return PLAYABLE_MEDIA_TYPES.find(media => media === (query.mediaType || '').toLowerCase()) || defaultMediaType;
+  const mt = (query.mediaType || '').toLowerCase();
+  return mt === MT_VIDEO || mt === MT_AUDIO ? mt : defaultMediaType;
 }
 
 function setMediaTypeInQuery(history, mediaType = MT_VIDEO) {

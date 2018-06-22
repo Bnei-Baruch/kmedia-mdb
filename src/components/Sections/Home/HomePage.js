@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Card, Container, Grid, } from 'semantic-ui-react';
+import { Card, Container, Grid } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../../helpers/links';
 import { strCmp } from '../../../helpers/utils';
@@ -73,7 +73,7 @@ class HomePage extends Component {
 
     return (
       <div className="homepage">
-        <Helmets.Basic title={t('home.header.text')} description={t('home.header.subtext')} />
+        <Helmets.Basic title={t('home.header.text')} description={t('nav.top.header')} />
         <Container className="padded">
           <SearchBar t={t} location={location} />
         </Container>
@@ -92,24 +92,27 @@ class HomePage extends Component {
             </Grid>
           </Container>
         </div>
-
-        <Container className="padded homepage__sections">
-          <Section title={t('home.sections')}>
-            <Grid doubling columns={6} className="homepage__iconsrow">
-              <Grid.Row>
-                {
-                  ['lessons', 'programs', 'lectures', 'sources', 'events', 'publications'].map(x =>
-                    (
-                      <Grid.Column key={x} textAlign="center">
-                        <Topic title={t(`nav.sidebar.${x}`)} img={sectionLogo[x]} href={`/${x}`} />
-                      </Grid.Column>
+        <div className="homepage__website-sections">
+          <Container className="padded horizontally">
+            <Section title={t('home.sections')}>
+              <Grid width={15} centered className="homepage__iconsrow">
+                <Grid.Row>
+                  {
+                    ['lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
+                      (
+                        <Grid.Column mobile={5} tablet={3} computer={3} key={x} textAlign="center">
+                          <Topic title={t(`nav.sidebar.${x}`)} img={sectionLogo[x]} href={`/${x}`} />
+                        </Grid.Column>
+                      )
                     )
-                  )
-                }
-              </Grid.Row>
-            </Grid>
-          </Section>
-
+                  }
+                  <Grid.Column mobile={5} tablet={3} computer={3} only="mobile" />
+                </Grid.Row>
+              </Grid>
+            </Section>
+          </Container>
+        </div>
+        <Container className="padded horizontally">
           <Section title={t('home.updates')}>
             <Card.Group itemsPerRow={4} doubling>
               {

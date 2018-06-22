@@ -61,9 +61,11 @@ export function* fetchSQData() {
     yield put(sources.receiveSources(data.sources));
     yield put(tags.fetchTagsSuccess(data.tags));
     yield put(publications.fetchPublishersSuccess({ publishers: data.publishers, total: data.publishers.length }));
+    yield put(actions.fetchSQDataSuccess());
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error('Error loading Semi-Quasi data', err);
+    yield put(actions.fetchSQDataFailure(err));
   }
 }
 

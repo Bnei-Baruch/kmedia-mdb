@@ -7,7 +7,7 @@ import { Button, Container, Segment } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../../../helpers/consts';
 import { assetUrl, imaginaryUrl, Requests } from '../../../../../helpers/Api';
-import { physicalFile, strCmp } from '../../../../../helpers/utils';
+import { physicalFile, strCmp, isEmpty } from '../../../../../helpers/utils';
 import { actions, selectors } from '../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import * as shapes from '../../../../shapes';
@@ -18,11 +18,7 @@ class Sketches extends React.Component {
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     t: PropTypes.func.isRequired,
-    zipIndexById: PropTypes.objectOf(PropTypes.shape({
-      data: PropTypes.arrayOf(PropTypes.object),
-      wip: shapes.WIP,
-      err: shapes.Error,
-    })).isRequired,
+    zipIndexById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
     unzip: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired
   };
@@ -46,9 +42,10 @@ class Sketches extends React.Component {
   }
 
   // load data into state
-  setCurrentItem = (props, selectedLanguage) => {
+  setCurrentItem = (props) => {
     const { unit, zipIndexById, unzip } = props;
-    const language                      = selectedLanguage || props.language;
+    const language                      = this.state.language || props.language;
+    // const language                      = selectedLanguage || props.language;
 
     // get one zip file or array of image files or one image file
     const files = this.findZipOrImageFiles(unit, language);
@@ -61,8 +58,8 @@ class Sketches extends React.Component {
         // zip file
         this.setState({ zipFileId: files.id, language });
 
-        const hasData = zipIndexById && zipIndexById[files.id];
-        if (!hasData) {
+        const { data, wip, err } = zipIndexById[files.id] || {};
+        if (!(wip || err) && isEmpty(data) && !Object.prototype.hasOwnProperty.call(zipIndexById, files.id)) {
           unzip(files.id);
         }
       }
@@ -143,7 +140,9 @@ class Sketches extends React.Component {
   };
 
   handleLanguageChanged = (e, language) => {
-    this.setCurrentItem(this.props, language);
+    this.setState({ language }, () =>
+      this.setCurrentItem(this.props)
+    );
   };
 
   handleImageError = event =>

@@ -2,8 +2,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
+import { assetUrl } from '../../../helpers/Api';
 import * as shapes from '../../shapes';
 import CollectionLogo from '../../shared/Logo/CollectionLogo';
+import Helmets from '../../shared/Helmets';
 
 class CollectionPageHeader extends PureComponent {
   static propTypes = {
@@ -18,10 +20,13 @@ class CollectionPageHeader extends PureComponent {
 
   render() {
     const { collection, namespace, t } = this.props;
-    const itemCount = Array.isArray(collection.cuIDs) ? collection.cuIDs.length : 0;
+    const itemCount                    = Array.isArray(collection.cuIDs) ? collection.cuIDs.length : 0;
 
     return (
       <div className="collection-header">
+        <Helmets.Basic title={collection.name} description={collection.description} />
+        <Helmets.Image unitOrUrl={assetUrl(`logos/collections/${collection.id}.jpg`)} />
+
         <Container className="padded">
           <Grid>
             <Grid.Row>

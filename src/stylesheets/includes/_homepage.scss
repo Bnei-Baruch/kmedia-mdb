@@ -34,7 +34,10 @@
     margin-bottom: 3em;
     @include mobile { margin-bottom: 0; }
   }
-
+  &__website-sections {
+    // background: linear-gradient(to bottom, $midWhite , $midWhite);
+    background: $midWhite;
+  }
   &__iconsrow {
     img {
       margin-bottom: .2em;
@@ -54,7 +57,7 @@
       padding: 4px 4px 8px !important;
       
       &:hover {
-        background-image: linear-gradient(to bottom, $darkWhite, rgba($darkWhite, 0));
+        background-image: linear-gradient(to bottom, $white, rgba($white, 0));
       }
     }
   }

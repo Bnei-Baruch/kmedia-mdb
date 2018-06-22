@@ -208,7 +208,7 @@ export default function serverRender(req, res, next, htmlData, criticalCSS) {
                 .replace(/<title>.*<\/title>/, helmet.title.toString())
                 .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, language)}${alternateLinks(req, language)}<style type="text/css">${criticalCSS}</style></head>`)
                 .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
-                .replace(/semantic_v2.min.css/g, `semantic_v2${cssDirection}.min.css`)
+                .replace(/semantic_v3.min.css/g, `semantic_v3${cssDirection}.min.css`)
                 .replace(/<div id="root"><\/div>/, rootDiv);
 
               if (context.code) {

@@ -40,3 +40,12 @@ export function sameDate(a, b) {
 
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 }
+
+export function today() {
+  return moment()
+    .hours(0)
+    .minutes(0)
+    .seconds(0)
+    .milliseconds(0);
+}
+

@@ -4,10 +4,7 @@ import { selectors } from '../../redux/modules/publications';
 const publishersFilter = {
   name: 'publishers-filter',
   queryKey: 'publisher',
-  valueToQuery: value => value.join('_'),
-  queryToValue: queryValue => queryValue.split('_'),
-  valueToApiParam: value => ({ publisher: value[value.length - 1] }),
-  tagIcon: 'announcement',
+  valueToApiParam: value => ({ publisher: value }),
   valueToTagLabel: (value, props, { getState }) => {
     if (!value) {
       return '';

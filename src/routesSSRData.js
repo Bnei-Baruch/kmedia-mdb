@@ -2,36 +2,36 @@ import uniq from 'lodash/uniq';
 
 import {
   CT_ARTICLE,
-  CT_CHILDREN_LESSON,
+  // CT_CHILDREN_LESSON,
   CT_FRIENDS_GATHERING,
   CT_LECTURE,
   CT_MEAL,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
-  MEDIA_TYPES
 } from './helpers/consts';
-import { canonicalCollection } from './helpers/utils';
+import MediaHelper from './helpers/media';
+import { canonicalCollection, isEmpty } from './helpers/utils';
 import { selectors as settingsSelectors } from './redux/modules/settings';
 import { actions as mdbActions, selectors as mdbSelectors } from './redux/modules/mdb';
 import { actions as filtersActions } from './redux/modules/filters';
 import { actions as listsActions } from './redux/modules/lists';
 import { actions as homeActions } from './redux/modules/home';
 import { actions as eventsActions } from './redux/modules/events';
-import { actions as lecturesActions } from './redux/modules/lectures';
-import { actions as seriesActions } from './redux/modules/series';
+import { actions as lessonsActions } from './redux/modules/lessons';
 import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
+import { selectors as sourcesSelectors } from './redux/modules/sources';
 import { actions as assetsActions, selectors as assetsSelectors } from './redux/modules/assets';
 import * as mdbSagas from './sagas/mdb';
 import * as filtersSagas from './sagas/filters';
 import * as eventsSagas from './sagas/events';
-import * as seriesSagas from './sagas/series';
+import * as lessonsSagas from './sagas/lessons';
 import * as searchSagas from './sagas/search';
 import * as assetsSagas from './sagas/assets';
 import withPagination from './components/Pagination/withPagination';
 
 import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
-import { tabs as lecturesTabs } from './components/Sections/Lectures/MainPage';
+import { tabs as lessonsTabs } from './components/Sections/Lessons/MainPage';
 import PDF from './components/shared/PDF/PDF';
 
 export const home = (store, match) => {
@@ -63,14 +63,14 @@ const getExtraFetchParams = (ns, collectionID) => {
     return { content_type: [CT_MEAL] };
   case 'events-friends-gatherings':
     return { content_type: [CT_FRIENDS_GATHERING] };
-  case 'lectures-virtual-lessons':
+  case 'lessons-virtual':
     return { content_type: [CT_VIRTUAL_LESSON] };
-  case 'lectures-lectures':
+  case 'lessons-lectures':
     return { content_type: [CT_LECTURE] };
-  case 'lectures-women-lessons':
+  case 'lessons-women':
     return { content_type: [CT_WOMEN_LESSON] };
-  case 'lectures-children-lessons':
-    return { content_type: [CT_CHILDREN_LESSON] };
+  // case 'lessons-children':
+  //   return { content_type: [CT_CHILDREN_LESSON] };
   default:
     if (collectionID) {
       return { collection: collectionID };
@@ -92,6 +92,7 @@ export const cuListPage = (ns, collectionID = 0) => (store, match) => {
 
   // extraFetchParams
   const extraFetchParams = getExtraFetchParams(ns, collectionID);
+  console.log('SSR.cuListPage', extraFetchParams);
 
   // dispatch fetchList
   store.dispatch(listsActions.fetchList(ns, page, { ...extraFetchParams, pageSize }));
@@ -101,6 +102,7 @@ export const cuListPage = (ns, collectionID = 0) => (store, match) => {
 
 export const collectionPage = ns => (store, match) => {
   const cID = match.params.id;
+  console.log('SSR.collectionPage', cID);
   return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done
     .then(() => {
       cuListPage(ns, cID)(store, match);
@@ -151,19 +153,34 @@ export const eventsPage = (store, match) => {
   return store.sagaMiddleWare.run(eventsSagas.fetchAllEvents, eventsActions.fetchAllEvents()).done;
 };
 
-export const lecturesPage = (store, match) => {
+export const lessonsPage = (store, match) => {
   // hydrate tab
-  const tab = match.params.tab || lecturesTabs[0];
-  if (tab !== lecturesTabs[0]) {
-    store.dispatch(lecturesActions.setTab(tab));
+  const tab = match.params.tab || lessonsTabs[0];
+  if (tab !== lessonsTabs[0]) {
+    store.dispatch(lessonsActions.setTab(tab));
   }
-  const ns = `lectures-${tab}`;
 
+  if (tab === 'series') {
+    return store.sagaMiddleWare.run(lessonsSagas.fetchAllSeries, lessonsActions.fetchAllSeries).done;
+  }
+
+  const ns = `lessons-${tab}`;
   return cuListPage(ns)(store, match);
 };
 
-export const seriesPage = (store, match) =>
-  store.sagaMiddleWare.run(seriesSagas.fetchAll, seriesActions.fetchAll()).done;
+export const lessonsCollectionPage = (store, match) => {
+  // hydrate tab
+  const tab = match.params.tab || lessonsTabs[0];
+  if (tab !== lessonsTabs[0]) {
+    store.dispatch(lessonsActions.setTab(tab));
+  }
+
+  if (tab === 'daily' || tab === 'series') {
+    return playlistCollectionPage(store, match);
+  }
+
+  return collectionPage('lessons-collection')(store, match);
+};
 
 export const searchPage = store =>
   Promise.all([
@@ -180,9 +197,36 @@ export const searchPage = store =>
       store.dispatch(searchActions.search(q, page, pageSize, deb));
     });
 
-export const libraryPage = (store, match) => {
-  // TODO: consider firstLeafID
-  const sourceID = match.params.id;
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function firstLeafId(sourceId, getSourceById) {
+  const { children } = getSourceById(sourceId) || { children: [] };
+  if (isEmpty(children)) {
+    return sourceId;
+  }
+
+  return firstLeafId(children[0], getSourceById);
+}
+
+export const libraryPage = async (store, match) => {
+  // This is a rather ugly, timeout, sleep, loop.
+  // We wait for sources to be loaded so we could
+  // determine the firstLeadfID for redirection.
+  // Fix for AR-356
+  let timeout = 5000;
+  while (timeout && !sourcesSelectors.areSourcesLoaded(store.getState().sources)) {
+    timeout -= 10;
+    await sleep(10); // eslint-disable-line no-await-in-loop
+  }
+
+  const sourcesState = store.getState().sources;
+  let sourceID       = match.params.id;
+  if (sourcesSelectors.areSourcesLoaded(sourcesState)) {
+    const getSourceById = sourcesSelectors.getSourceById(sourcesState);
+    sourceID            = firstLeafId(sourceID, getSourceById);
+  }
 
   return store.sagaMiddleWare.run(assetsSagas.sourceIndex, assetsActions.sourceIndex(sourceID)).done
     .then(() => {
@@ -220,7 +264,7 @@ export const publicationCUPage = (store, match) => {
       const uiLang = settingsSelectors.getLanguage(state.settings);
 
       const unit      = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
-      const textFiles = (unit.files || []).filter(x => x.type === 'text' && x.mimetype !== MEDIA_TYPES.html.mime_type);
+      const textFiles = (unit.files || []).filter(x => MediaHelper.IsText(x) && !MediaHelper.IsHtml(x));
       const languages = uniq(textFiles.map(x => x.language));
       if (languages.length > 0) {
         language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;
