@@ -8,6 +8,7 @@ import MediaHelper from '../../../../../../helpers/media';
 import * as shapes from '../../../../../shapes';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import WipErr from '../../../../../shared/WipErr/WipErr';
+import { selectSuitableLanguage } from '../../../../../../helpers/language';
 
 class Transcription extends Component {
   static propTypes = {
@@ -17,7 +18,8 @@ class Transcription extends Component {
       wip: shapes.WIP,
       err: shapes.Error,
     })).isRequired,
-    language: PropTypes.string.isRequired, // UI language
+    uiLanguage: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     onContentChange: PropTypes.func.isRequired,
   };
@@ -49,6 +51,8 @@ class Transcription extends Component {
 
   componentWillReceiveProps(nextProps) {
     const toUpdate =
+            (nextProps.uiLanguage !== this.props.uiLanguage) ||
+            (nextProps.contentLanguage !== this.props.contentLanguage) ||
             (nextProps.unit && !this.props.unit) ||
             (nextProps.unit.id !== this.props.unit.id) ||
             (nextProps.unit.files !== this.props.unit.files);
@@ -71,38 +75,33 @@ class Transcription extends Component {
   };
 
   setCurrentItem = (props) => {
-    const textFiles = this.getTextFiles(props);
-    const languages = uniq(textFiles.map(x => x.language));
-    const selected  = this.selectFile(textFiles, this.state.language || props.language);
-    const language  = selected ? selected.language : null;
+    const { contentLanguage, uiLanguage } = props;
 
-    const sUpdate = { selected, languages, language };
+    const textFiles   = this.getTextFiles(props);
+    const languages   = uniq(textFiles.map(x => x.language));
+    const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+    if (!newLanguage) {
+      return { selected: textFiles[0], languages, language: textFiles[0].language };
+    }
+
+    const selected = this.selectFile(textFiles, newLanguage);
+
+    const sUpdate = { selected, languages, language: newLanguage, textFiles };
     this.setState(sUpdate);
 
     return sUpdate;
   };
 
   selectFile = (textFiles, language) => {
-    let selected = textFiles.filter(x => x.language === language);
+    const selected = textFiles.filter(x => x.language === language);
 
-    switch (selected.length) {
-    case 0:
-      // no files by language - use first text file
-      selected = textFiles[0];
-      break;
-
-    case 1:
+    if (selected.length === 1) {
       // use the only file found
-      selected = selected[0];
-      break;
-
-    default:
-      // many files by language - get the largest - it is probably the transcription
-      selected = selected.reduce((acc, file) => (acc.size < file.size ? file : acc));
-      break;
+      return selected[0];
     }
 
-    return selected;
+    // many files by language - get the largest - it is probably the transcription
+    return selected.reduce((acc, file) => (acc.size < file.size ? file : acc));
   };
 
   handleLanguageChanged = (e, language) => {
@@ -111,8 +110,7 @@ class Transcription extends Component {
       return;
     }
 
-    const textFiles = this.getTextFiles(this.props);
-    const selected  = this.selectFile(textFiles, language);
+    const selected  = this.selectFile(this.state.textFiles, language);
 
     this.props.onContentChange(selected.id);
     this.setState({ selected, language });
