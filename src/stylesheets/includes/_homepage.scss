@@ -1,9 +1,9 @@
 @import 'rtl/homepage';
 .homepage {
   &__header {
-    padding-top: 3em;
-    @include tablet { padding-top: 1em; }
-    @include mobile { padding-top: 0; }
+    // padding-top: 3em;
+    // @include tablet { padding-top: 1em; }
+    // @include mobile { padding-top: 0; }
   }
 
   &__title {
@@ -12,16 +12,17 @@
   }
 
   &__featured {
+    background: linear-gradient(to bottom, $midWhite, $darkWhite);
     // background: $darkWhite;
-    padding-bottom: 2em;
-    padding-top: 3em;
+    // padding-bottom: 2em;
+    // padding-top: 3em;
     @include tablet { 
-      padding-top: 1em;
-      padding-bottom: 0;
+      // padding-top: 1em;
+      // padding-bottom: 0;
      }
     @include mobile { 
-      padding-top: 0; 
-      padding-bottom: 0;
+      // padding-top: 0; 
+      // padding-bottom: 0;
     }
     .label {
       @include mobile {
@@ -31,12 +32,14 @@
   }
 
   &__section {
-    margin-bottom: 3em;
-    @include mobile { margin-bottom: 0; }
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    // margin-bottom: 3em;
+    // @include mobile { margin-bottom: 0; }
   }
   &__website-sections {
     // background: linear-gradient(to bottom, $midWhite , $midWhite);
-    background: $midWhite;
+    // background: $midWhite;
   }
   &__iconsrow {
     img {
@@ -79,6 +82,11 @@
       padding: 0!important;
     }
   }
+  &__thumnails{
+    padding-top: 1rem;
+    background: linear-gradient(to bottom, $midWhite, $darkWhite);
+    // background: linear-gradient(to bottom, $darkWhite, $offWhite);
+  }
 }
 
 .thumbnail {
@@ -89,7 +97,7 @@
     padding-top: percentage(1/2.5);
   }
   overflow: hidden;
-  margin-bottom: 1em;
+  // margin-bottom: 1em;
   .label {
     position: absolute;
     top: 1em;

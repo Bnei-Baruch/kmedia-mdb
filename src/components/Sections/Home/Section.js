@@ -12,20 +12,18 @@ class Section extends Component {
     const { title, children } = this.props;
 
     return (
-      <div className="homepage__section">
-        <Grid centered padded="vertically">
-          <Grid.Row>
-            <Grid.Column computer={12} tablet={14} mobile={16}>
-              <Divider horizontal fitted>{title}</Divider>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column computer={12} tablet={14} mobile={16}>
-              {children}
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </div>
+      <Grid centered padded="vertically">
+        <Grid.Row>
+          <Grid.Column computer={12} tablet={14} mobile={16}>
+            <Divider horizontal fitted>{title}</Divider>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column computer={12} tablet={14} mobile={16}>
+            {children}
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     );
   }
 }

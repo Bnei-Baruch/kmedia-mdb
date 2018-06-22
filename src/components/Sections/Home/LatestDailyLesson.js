@@ -41,9 +41,9 @@ class LatestDailyLesson extends Component {
               {t('home.last-lesson')}
             </Header.Content>
           </Header>
-          <Label color="orange">
+          {/* <Label color="black" size="tiny">
             {t('nav.sidebar.lessons')}
-          </Label>
+          </Label> */}
         </Link>
       </div>
     );
