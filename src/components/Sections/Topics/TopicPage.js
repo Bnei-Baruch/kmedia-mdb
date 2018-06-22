@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, /*Card,*/ Container } from 'semantic-ui-react';
+import { Grid, Container } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -36,7 +36,6 @@ class TopicPage extends Component {
       const { fetchDashboard, fetchTags } = nextProps;
       const tagId = nextProps.match.params.id;
 
-      console.log('load topic:', tagId);
       fetchTags();
       fetchDashboard(tagId);
     }
@@ -45,9 +44,6 @@ class TopicPage extends Component {
       const {sections, getSectionUnits, getPathByID} = this.props;
       const tagId = this.props.match.params.id;
 
-      console.log('sections:', sections);
-      console.log('getPathByID:', getPathByID);
-      
       if (getPathByID && !isEmpty(sections)){
         const tagPath = getPathByID(tagId);
 

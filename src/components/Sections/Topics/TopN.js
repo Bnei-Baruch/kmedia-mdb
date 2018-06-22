@@ -82,9 +82,6 @@ class TopN extends React.PureComponent{
     const search = urlSearchStringify(query);
     const url = `/${section}?${search}`;
 
-    // console.log('tagPath:', tagPath);
-    // console.log('query:', query);
-    // console.log('search;', search);
     console.log('url:', url);
 
     return url;
