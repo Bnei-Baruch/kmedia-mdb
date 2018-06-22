@@ -137,9 +137,9 @@ class SearchResults extends Component {
   renderCollection = (c, hit, rank) => {
     const { t, location, queryResult }                                                           = this.props;
     const { search_result: { searchId } }                                                        = queryResult;
-    const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
+    const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, highlight, _score: score } = hit;
 
-    const name        = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || c.name;
+    const name        = this.snippetFromHighlight(highlight, ['title', 'title_analyzed'], parts => parts.join(' ')) || c.title;
     const description = this.snippetFromHighlight(highlight, ['description', 'description_analyzed'], parts => `...${parts.join('.....')}...`);
     const snippet     = (
       <div className="search__snippet">
@@ -169,7 +169,7 @@ class SearchResults extends Component {
         <Table.Cell>
           <Link
             className="search__link"
-            onClick={() => this.resultClick(mdbUid, index, type, rank, searchId)}
+            onClick={() => this.resultClick(mdbUid, index, resultType, rank, searchId)}
             to={canonicalLink(c || { id: mdbUid, content_type: c.content_type })}
           >
             {name}
