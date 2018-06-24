@@ -74,11 +74,14 @@ class HomePage extends Component {
     return (
       <div className="homepage">
         <Helmets.Basic title={t('home.header.text')} description={t('nav.top.header')} />
-        <Container className="padded">
-          <SearchBar t={t} location={location} />
-        </Container>
+        
+        <div className="homepage__header homepage__section">
+          <Container className="padded horizontally">
+            <SearchBar t={t} location={location} />
+          </Container>
+        </div>
 
-        <div className="homepage__featured">
+        <div className="homepage__featured homepage__section">
           <Container className="padded horizontally">
             <Grid centered>
               <Grid.Row>
@@ -92,7 +95,8 @@ class HomePage extends Component {
             </Grid>
           </Container>
         </div>
-        <div className="homepage__website-sections">
+
+        <div className="homepage__website-sections homepage__section">
           <Container className="padded horizontally">
             <Section title={t('home.sections')}>
               <Grid width={15} centered className="homepage__iconsrow">
@@ -112,19 +116,21 @@ class HomePage extends Component {
             </Section>
           </Container>
         </div>
-        <Container className="padded horizontally">
-          <Section title={t('home.updates')}>
-            <Card.Group itemsPerRow={4} doubling>
-              {
-                sortedCUs.slice(0, 4).map((x) => {
-                  const [section, unit] = x;
-                  return <LatestUpdate key={section} unit={unit} label={t(`nav.sidebar.${section}`)} t={t} />;
-                })
-              }
-            </Card.Group>
-          </Section>
 
-        </Container>
+        <div className="homepage__thumbnails homepage__section">
+          <Container className="padded horizontally">
+            <Section title={t('home.updates')}>
+              <Card.Group itemsPerRow={4} doubling>
+                {
+                  sortedCUs.slice(0, 4).map((x) => {
+                    const [section, unit] = x;
+                    return <LatestUpdate key={section} unit={unit} label={t(`nav.sidebar.${section}`)} t={t} />;
+                  })
+                }
+              </Card.Group>
+            </Section>
+          </Container>
+        </div>
       </div>
     );
   }

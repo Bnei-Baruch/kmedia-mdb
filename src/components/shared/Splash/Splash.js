@@ -7,13 +7,15 @@ export const Splash = (props) => {
   const { text, subtext, icon, color, isLoading } = props;
 
   return (
-    <Header icon className="splash" as="h2" textAlign="center">
-      <Icon name={icon} loading={isLoading} color={color} />
-      <Header.Content>
-        {text}
-        {subtext ? <Header.Subheader>{subtext}</Header.Subheader> : null}
-      </Header.Content>
-    </Header>
+    <div className="splash">
+      <Header icon as="h2" textAlign="center">
+        <Icon name={icon} loading={isLoading} color={color} />
+        <Header.Content>
+          {text}
+          {subtext ? <Header.Subheader>{subtext}</Header.Subheader> : null}
+        </Header.Content>
+      </Header>
+    </div>
   );
 };
 
