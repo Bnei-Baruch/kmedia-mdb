@@ -151,7 +151,7 @@ class Design extends Component {
                     <Grid.Column computer={12} tablet={14} mobile={16}>
                       <Card.Group itemsPerRow='4' doubling >
                         <Card href='#'>
-                          <Image src='https://archive.kbb1.com/assets/api/thumbnail/64RFGZR6' />
+                          <Image src='https://kabbalahmedia.info/assets/api/thumbnail/64RFGZR6' />
                           <Card.Content>
                             <Header size='small'>
                               <small className='text grey'>1/16/2018</small><br/>
@@ -163,7 +163,7 @@ class Design extends Component {
                           </Card.Content>
                         </Card>
                         <Card href='#'>
-                          <Image src='https://archive.kbb1.com/assets/api/thumbnail/tSmGoUDU' />
+                          <Image src='https://kabbalahmedia.info/assets/api/thumbnail/tSmGoUDU' />
                           <Card.Content>
                             <Header size='small'>
                               <small className='text grey'>12/24/2017</small><br/>
@@ -175,7 +175,7 @@ class Design extends Component {
                           </Card.Content>
                         </Card>
                         <Card href='#'>
-                          <Image src='https://archive.kbb1.com/assets/api/thumbnail/fc3bAksF' />
+                          <Image src='https://kabbalahmedia.info/assets/api/thumbnail/fc3bAksF' />
                           <Card.Content>
                             <Header size='small'>
                               <small className='text grey'>1/16/2018</small><br/>
@@ -187,7 +187,7 @@ class Design extends Component {
                           </Card.Content>
                         </Card>
                         <Card href='#'>
-                          <Image src='https://archive.kbb1.com/assets/api/thumbnail/JnAbkx0l' />
+                          <Image src='https://kabbalahmedia.info/assets/api/thumbnail/JnAbkx0l' />
                           <Card.Content>
                             <Header size='small'>
                               <small className='text grey'>1/16/2018</small><br/>
