@@ -14,7 +14,7 @@ class Section extends Component {
     return (
       <Grid centered padded="vertically">
         <Grid.Row>
-          <Grid.Column computer={12} tablet={14} mobile={16}>
+          <Grid.Column computer={15} tablet={15} mobile={16}>
             <Divider horizontal fitted>{title}</Divider>
           </Grid.Column>
         </Grid.Row>

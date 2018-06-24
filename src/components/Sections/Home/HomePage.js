@@ -117,7 +117,7 @@ class HomePage extends Component {
           </Container>
         </div>
 
-        <div className="homepage__thumnails homepage__section">
+        <div className="homepage__thumbnails homepage__section">
           <Container className="padded horizontally">
             <Section title={t('home.updates')}>
               <Card.Group itemsPerRow={4} doubling>

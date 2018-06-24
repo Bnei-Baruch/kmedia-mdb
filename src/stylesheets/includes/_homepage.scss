@@ -1,9 +1,40 @@
 @import 'rtl/homepage';
 .homepage {
+  flex: 1 1 auto;
+  &__section {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    // margin-bottom: 3em;
+    @include mobile {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+    // @include mobile { margin-bottom: 0; }
+    .ui.horizontal.divider:after, .ui.horizontal.divider:before {
+      background-image: linear-gradient(to right,  lighten($blue, 40%));
+      background-size: 100% 1px;
+    }
+
+  }  
   &__header {
-    // padding-top: 3em;
-    // @include tablet { padding-top: 1em; }
-    // @include mobile { padding-top: 0; }
+    margin-top: 0;
+    padding-bottom: 4rem;
+    padding-top: 2rem;
+    @include mobile {
+      padding-bottom: 2rem;
+      padding-top: 1rem;
+    }
+    background-image:
+    radial-gradient(ellipse farthest-corner at center bottom, lighten($blue, 10%) 0%, transparent 50%),
+    linear-gradient(to bottom, $blue, lighten($blue, 5%))
+    ;
+    // background-size:
+    //   50% 100%,
+    //   100% 100%;
+    // background-position:
+    //  left bottom,
+    //  center center;
+
   }
 
   &__title {
@@ -12,10 +43,11 @@
   }
 
   &__featured {
-    background: linear-gradient(to bottom, $midWhite, $darkWhite);
+    // background: linear-gradient(to bottom, $midWhite, $darkWhite);
     // background: $darkWhite;
-    // padding-bottom: 2em;
-    // padding-top: 3em;
+    // padding-bottom: 4em;
+    // padding-top: 4rem;
+
     @include tablet { 
       // padding-top: 1em;
       // padding-bottom: 0;
@@ -31,20 +63,24 @@
     }
   }
 
-  &__section {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    // margin-bottom: 3em;
-    // @include mobile { margin-bottom: 0; }
-  }
+
+  
   &__website-sections {
-    // background: linear-gradient(to bottom, $midWhite , $midWhite);
-    // background: $midWhite;
+    .header{ 
+      color:darken($blue, 20%);
+      transition: color .2s ease-out;
+      &:hover {
+        color: $blue;
+      }
+    }
   }
+  
+  
   &__iconsrow {
     img {
       margin-bottom: .2em;
       width: 50px !important;
+      transition: transform .2s ease-out;
     }
 
     .row .center.aligned.column {
@@ -60,7 +96,10 @@
       padding: 4px 4px 8px !important;
       
       &:hover {
-        background-image: linear-gradient(to bottom, $white, rgba($white, 0));
+        img {
+          transform: translateY(-.3rem);
+        }
+        // background-image: linear-gradient(to bottom, $white, rgba($white, 0));
       }
     }
   }
@@ -82,9 +121,11 @@
       padding: 0!important;
     }
   }
-  &__thumnails{
-    padding-top: 1rem;
-    background: linear-gradient(to bottom, $midWhite, $darkWhite);
+  &__thumbnails{
+    // padding-top: 1rem;
+    // padding-bottom: 4em;
+    // padding-top: 4rem;
+    // background: linear-gradient(to bottom, $midWhite, $darkWhite);
     // background: linear-gradient(to bottom, $darkWhite, $offWhite);
   }
 }
@@ -95,6 +136,7 @@
   padding-top: percentage(9/16);
   @include mobile {
     padding-top: percentage(1/2.5);
+    margin-bottom: 1rem;
   }
   overflow: hidden;
   // margin-bottom: 1em;

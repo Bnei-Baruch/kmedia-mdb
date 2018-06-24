@@ -49,7 +49,7 @@ class SearchBar extends Component {
       <Grid centered>
         <Grid.Row>
           <Grid.Column computer={12} tablet={14} mobile={16}>
-            <Header as="h1" content={t('home.search')} color="blue" className="homepage__title" />
+            <Header as="h1" content={t('home.search')} className="homepage__title text white" />
           </Grid.Column>
           <Grid.Column computer={12} tablet={14} mobile={16}>
             <div className="homepage__search">
