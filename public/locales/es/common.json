@@ -252,7 +252,8 @@
       }
     },
     "last": {
-      "text": "Lección Diaria de Cabalá - Actualizado"
+      "title": "Lección Diaria de Cabalá - Actualizado",
+      "description": "Un acceso directo actualizado a la última lección diaria"
     }
   },
   "programs": {

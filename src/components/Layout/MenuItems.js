@@ -42,7 +42,7 @@ const MenuItems = (props) => {
         {items}
         <Menu.Item
           as="a"
-          href="http://kabbalahmedia.info/"
+          href="https://old.kabbalahmedia.info/"
           className="sidebar-item"
           content={t('nav.sidebar.old-site')}
         />

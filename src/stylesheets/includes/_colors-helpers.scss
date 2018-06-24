@@ -38,7 +38,8 @@ $text-colors: (
   pink: $pink,
   brown: $brown,
   grey: $grey,
-  black: $black
+  black: $black,
+  white: $white
 );
 
 @each $colorname, $colorvalue in $text-colors {

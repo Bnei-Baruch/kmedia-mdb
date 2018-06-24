@@ -256,7 +256,8 @@
       }
     },
     "last": {
-      "text": "Daily Kabbalah Lesson - updated"
+      "title": "Daily Kabbalah Lesson - updated",
+      "description": "An up to date shortcut to the latest Daily Lesson"
     }
   },
   "programs": {
