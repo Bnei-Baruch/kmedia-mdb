@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 
-import { selectors as settings } from '../../redux/modules/settings';
 import { LANG_ENGLISH, LANG_RUSSIAN, LANG_UKRAINIAN } from '../../helpers/consts';
 
 class DonateNow extends Component {
@@ -43,8 +41,4 @@ class DonateNow extends Component {
   }
 }
 
-export default connect(
-  state => ({
-    language: settings.getLanguage(state.settings),
-  })
-)(DonateNow);
+export default DonateNow;

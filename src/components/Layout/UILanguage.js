@@ -1,11 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Dropdown, Flag, } from 'semantic-ui-react';
 
 import { COOKIE_UI_LANG, LANG_UI_LANGUAGES, LANGUAGES } from '../../helpers/consts';
 import Link from '../Language/MultiLanguageLink';
-import { selectors as settings } from '../../redux/modules/settings';
 import Helmets from '../shared/Helmets';
 import * as shapes from '../shapes';
 
@@ -53,8 +51,4 @@ class UILanguage extends Component {
   }
 }
 
-export default connect(
-  state => ({
-    language: settings.getLanguage(state.settings),
-  })
-)(UILanguage);
+export default UILanguage;
