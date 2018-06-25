@@ -60,6 +60,11 @@ export class OmniBox extends Component {
     if (nextProps.suggestions !== this.props.suggestions) {
       this.setState({ suggestionsHelper: new SuggestionsHelper(nextProps.suggestions) });
     }
+
+    // Clear search query when navigating from the search page into other pages (AS-38)
+    if (this.props.query && !nextProps.location.pathname.endsWith('search') && nextProps.location.pathname !== this.props.location.pathname){
+      this.handleFilterClear();
+    }
   }
 
   doAutocomplete = debounce(() => {
