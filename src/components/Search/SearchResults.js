@@ -69,7 +69,7 @@ class SearchResults extends Component {
     const { t, location, queryResult }                                                           = this.props;
     const { search_result: { searchId } }                                                        = queryResult;
     const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, highlight, _score: score } = hit;
-    // console.log('renderContentUnit', hit, resultType);
+    console.log('renderContentUnit', hit, resultType);
 
     const name        = this.snippetFromHighlight(highlight, ['title', 'title_language'], parts => parts.join(' ')) || cu.name;
     const description = this.snippetFromHighlight(highlight, ['description', 'description_language'], parts => `...${parts.join('.....')}...`);
@@ -138,6 +138,7 @@ class SearchResults extends Component {
     const { t, location, queryResult }                                                           = this.props;
     const { search_result: { searchId } }                                                        = queryResult;
     const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, highlight, _score: score } = hit;
+    console.log('hit', hit, resultType);
 
     const name        = this.snippetFromHighlight(highlight, ['title', 'title_analyzed'], parts => parts.join(' ')) || c.title;
     const description = this.snippetFromHighlight(highlight, ['description', 'description_analyzed'], parts => `...${parts.join('.....')}...`);
@@ -189,10 +190,11 @@ class SearchResults extends Component {
 
   renderSource = (hit) => {
     const { t, location }                             = this.props;
-    const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
+    const { _source: { mdb_uid: mdbUid, result_type: resultType }, highlight, _score: score } = hit;
     const title = this.snippetFromHighlight(highlight, ['title', 'title_analyzed'], parts => parts.join(' ')) || hit._source.title;
     const description = this.snippetFromHighlight(highlight, ['description', 'description_analyzed'], parts => `...${parts.join('.....')}...`);
     const content     = this.snippetFromHighlight(highlight, ['content', 'content_analyzed'], parts => `...${parts.join('.....')}...`);
+    console.log('hit', hit, resultType);
     const snippet     = (
       <div className="search__snippet">
         {
@@ -239,6 +241,7 @@ class SearchResults extends Component {
   };
 
   renderIntent = (hit, rank) => {
+    console.log('hit', hit, 'intent');
     const { t, location, queryResult, getTagById, getSourceById} = this.props;
     const { search_result: { searchId } } = queryResult;
     const {
