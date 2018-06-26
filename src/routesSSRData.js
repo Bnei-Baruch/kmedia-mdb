@@ -176,8 +176,9 @@ export const searchPage = store =>
       const page     = searchSelectors.getPageNo(state.search);
       const pageSize = settingsSelectors.getPageSize(state.settings);
       const deb      = searchSelectors.getDeb(state.search);
+      const suggest  = searchSelectors.getSuggest(state.search);
 
-      store.dispatch(searchActions.search(q, page, pageSize, deb));
+      store.dispatch(searchActions.search(q, page, pageSize, suggest, deb));
     });
 
 export const libraryPage = (store, match) => {
