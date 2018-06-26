@@ -15,34 +15,32 @@ export function* fetchTags() {
   }
 }
 
-function* watchFetchTags() {
-  yield takeLatest(types.FETCH_TAGS, fetchTags);
-}
+export function* fetchDashboard(action) {
+  const id = action.payload;
 
-export function* fetchDashboard(action){
-  const id = action.payload; 
-
-  try{
+  try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const { data } = yield call(Api.tagDashboard, {id, language });
+    const { data } = yield call(Api.tagDashboard, { id, language });
 
-    if (data && Array.isArray(data.latest_units)){
+    if (data && Array.isArray(data.latest_units)) {
       yield put(mdb.receiveContentUnits(data.latest_units));
-      //yield put(mdb.receiveContentUnits(data.promoted_units));
+      //  yield put(mdb.receiveContentUnits(data.promoted_units));
 
       yield put(actions.fetchDashboardSuccess(id, data));
-    }
-    else{
+    } else {
       const err = 'No latest units were found';
       yield put(actions.fetchDashboardFailure(id, err));
     }
-   
   } catch (err) {
     yield put(actions.fetchDashboardFailure(id, err));
   }
 }
 
-function* watchFetchDashboard(){
+function* watchFetchTags() {
+  yield takeLatest(types.FETCH_TAGS, fetchTags);
+}
+
+function* watchFetchDashboard() {
   yield takeLatest(types.FETCH_DASHBOARD, fetchDashboard);
 }
 

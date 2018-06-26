@@ -1,85 +1,87 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Container } from 'semantic-ui-react';
-import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { Grid, Container, Divider } from 'semantic-ui-react';
 
-import SectionHeader from '../../shared/SectionHeader';
-import {actions, selectors} from '../../../redux/modules/tags';
 import { isEmpty } from '../../../helpers/utils';
+import { actions, selectors } from '../../../redux/modules/tags';
+import * as shapes from '../../shapes';
+import SectionHeader from '../../shared/SectionHeader';
 import TopN from './TopN';
 
 export const topNItems = 5;
 
 class TopicPage extends Component {
+  static propTypes = {
+    match: shapes.RouterMatch.isRequired,
+    sections: PropTypes.arrayOf(PropTypes.string),
+    getSectionUnits: PropTypes.func.isRequired,
+    getPathByID: PropTypes.func,
+    fetchDashboard: PropTypes.func.isRequired,
+    fetchTags: PropTypes.func.isRequired,
+  };
 
-    static propTypes = {
-      sections: PropTypes.arrayOf(PropTypes.string),
-      getSectionUnits: PropTypes.func.isRequired,
-      getPathByID: PropTypes.func,
-      fetchDashboard: PropTypes.func.isRequired,
-      fetchTags: PropTypes.func.isRequired,
+  componentDidMount() {
+    this.loadTopic(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.match.params.id !== nextProps.match.params.id) {
+      this.loadTopic(nextProps);
     }
+  }
 
-    componentDidMount(){
-      this.loadTopic(this.props);
-    }
+  loadTopic(nextProps) {
+    const { match, fetchDashboard, fetchTags } = nextProps;
+    fetchTags();
+    fetchDashboard(match.params.id);
+  }
 
-    componentWillReceiveProps(nextProps){
-      if (this.props.match.params.id !== nextProps.match.params.id){
-        this.loadTopic(nextProps);
-      }
-    }
+  render() {
+    const { match, sections, getSectionUnits, getPathByID } = this.props;
+    const tagId                                             = match.params.id;
 
-    loadTopic(nextProps){
-      const { fetchDashboard, fetchTags } = nextProps;
-      const tagId = nextProps.match.params.id;
+    if (getPathByID && !isEmpty(sections)) {
+      const tagPath = getPathByID(tagId);
 
-      fetchTags();
-      fetchDashboard(tagId);
-    }
-        
-    render(){
-      const {sections, getSectionUnits, getPathByID} = this.props;
-      const tagId = this.props.match.params.id;
-
-      if (getPathByID && !isEmpty(sections)){
-        const tagPath = getPathByID(tagId);
-
-        return(
+      return (
+        <div>
+          <SectionHeader section="topics" />
+          <Divider hidden />
           <Container>
-            <SectionHeader section="topics" />
             <Grid container doubling columns={sections.length} className="homepage__iconsrow">
               {
-                sections.map(s => {
+                sections.map((s) => {
                   const sectionUnits = getSectionUnits(s);
-                  const retVal = isEmpty(sectionUnits) ? 
-                                 null :
-                                 <Grid.Column key={s}>
-                                    <TopN section={s} 
-                                          units={sectionUnits} 
-                                          N={topNItems} 
-                                          tagId={tagId} 
-                                          tagPath={tagPath}
-                                    />
-                                 </Grid.Column> 
-
-                  return retVal
+                  return isEmpty(sectionUnits) ?
+                    null :
+                    (
+                      <Grid.Column key={s}>
+                        <TopN
+                          section={s}
+                          units={sectionUnits}
+                          N={topNItems}
+                          tagId={tagId}
+                          tagPath={tagPath}
+                        />
+                      </Grid.Column>
+                    );
                 })
               }
             </Grid>
           </Container>
-        );
-      }
-      else{
-        return <div>Topic {tagId} Not Found</div>
-      }
+        </div>
+      );
     }
+
+    return <div>Topic {tagId} Not Found</div>;
+  }
 }
 
 export default withRouter(connect(
-  (state) => ({
+  state => ({
     sections: selectors.getSections(state.tags),
     getSectionUnits: selectors.getSectionUnits(state.tags),
     getPathByID: selectors.getPathByID(state.tags)
