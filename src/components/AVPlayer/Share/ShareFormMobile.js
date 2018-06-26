@@ -49,7 +49,7 @@ class ShareFormMobile extends BaseShareForm {
               className="mediaplayer__onscreen-share-bar-mobile-link"
               value={url}
               input={{ readOnly: true }}
-              style={{ textAlign: 'left' }}
+              style={{ textAlign: 'left', direction: 'ltr' }}
             />
             <Popup
               open={isCopyPopupOpen}

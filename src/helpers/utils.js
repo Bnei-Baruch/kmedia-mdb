@@ -128,7 +128,7 @@ export const physicalFile = (file, ext = false) => {
 };
 
 export const publicFile = relativePath =>
-  `https://archive.kbb1.com/${relativePath}`;
+  `https://kabbalahmedia.info/${relativePath}`;
 
 export const canonicalCollection = (unit) => {
   if (!unit) {

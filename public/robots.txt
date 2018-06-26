@@ -1,0 +1,11 @@
+# robots.txt for kabbalahmedia.info
+
+User-agent: *
+
+# new library is not fully ready to replace old one
+Disallow: /sources/*
+Disallow: /en/sources/*
+Disallow: /he/sources/*
+Disallow: /ru/sources/*
+Disallow: /es/sources/*
+Disallow: /ua/sources/*

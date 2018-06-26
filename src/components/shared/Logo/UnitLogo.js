@@ -26,11 +26,9 @@ class UnitLogo extends PureComponent {
     const { unitId, collectionId, width, className, fallbackImg, ...rest } = this.props;
 
     let src = assetUrl(`api/thumbnail/${unitId}`);
-
     if (!src.startsWith('http')) {
       src = `http://localhost${src}`;
     }
-
     src = `${imaginaryUrl('thumbnail')}?${Requests.makeParams({ url: src, width })}`;
 
     const fallback = fallbackImg || imagePlaceholder;

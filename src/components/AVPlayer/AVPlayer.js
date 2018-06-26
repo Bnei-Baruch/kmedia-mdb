@@ -270,6 +270,7 @@ class AVPlayer extends PureComponent {
   onPause = (e) => {
     // when we're close to the end regard this as finished
     if (Math.abs(e.currentTime - e.duration) < 0.1 && this.props.onFinish) {
+      this.clearCurrentTime();
       this.props.onFinish();
     } else if (this.props.onPause) {
       this.props.onPause();
@@ -452,24 +453,29 @@ class AVPlayer extends PureComponent {
   };
 
   saveCurrentTime = () => {
-    const { src, currentTime, firstSeek } = this.state;
-    const { media }            = this.props;
-    if (media && !firstSeek) {
+    const { currentTime, firstSeek } = this.state;
+    const { media, item }            = this.props;
+    if (media && item && item.unit && item.unit.id && !firstSeek) {
       const currentMediaTime = Math.round(media.currentTime);
       if (currentMediaTime !== currentTime) {
         this.setState({ currentTime: currentMediaTime });
-        if (src) {
-          localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${src}`, currentMediaTime);
-        }
+        localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`, currentMediaTime);
       }
     }
   };
 
+  clearCurrentTime = () => {
+    const { item } = this.props;
+    if (item && item.unit && item.unit.id) {    
+        localStorage.removeItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
+    }
+  };
+
   getSavedTime = () => {
-    const { src } = this.state;
+    const { item } = this.props;
     // Try to get the current time from local storage if available
-    if (src) {
-      const savedTime = localStorage.getItem(`${PLAYER_POSITION_STORAGE_KEY}_${src}`);
+    if (item && item.unit && item.unit.id) {
+      const savedTime = localStorage.getItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
       if (savedTime) {
         return parseInt(savedTime, 10);
       }

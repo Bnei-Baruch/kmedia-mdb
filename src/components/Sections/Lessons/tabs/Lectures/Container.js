@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { List, Table } from 'semantic-ui-react';
 
 import {
-  CT_CHILDREN_LESSON,
+  // CT_CHILDREN_LESSON,
   CT_LECTURE,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
@@ -91,9 +91,9 @@ class Container extends Component {
     case 'women':
       ct = [CT_WOMEN_LESSON];
       break;
-    case 'children':
-      ct = [CT_CHILDREN_LESSON];
-      break;
+    // case 'children':
+    //   ct = [CT_CHILDREN_LESSON];
+    //   break;
     default:
       ct = [CT_VIRTUAL_LESSON];
       break;

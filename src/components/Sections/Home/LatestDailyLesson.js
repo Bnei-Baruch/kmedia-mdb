@@ -2,9 +2,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Header, Image, Label } from 'semantic-ui-react';
 
+import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
-import DailyLessonPlaceholder from '../../../images/hp_lesson_temp.jpg';
+
+const getRandomImage = () => {
+  const rand = Math.floor(Math.random() * Math.floor(9)) + 1;
+  let src    = assetUrl(`lessons/latest_lesson_${rand}.jpg`);
+  if (!src.startsWith('http')) {
+    src = `http://localhost${src}`;
+  }
+  return `${imaginaryUrl('resize')}?${Requests.makeParams({ url: src, width: 512, height:288 })}`;
+};
 
 class LatestDailyLesson extends Component {
   static propTypes = {
@@ -12,15 +21,18 @@ class LatestDailyLesson extends Component {
     t: PropTypes.func.isRequired,
   };
 
-  static defaultProps = {};
+  state = {
+    imageSrc: getRandomImage(),
+  };
 
   render() {
     const { t, collection } = this.props;
+    const { imageSrc }      = this.state;
 
     return (
       <div className="thumbnail">
         <Link to="/lessons/daily/latest">
-          <Image fluid src={DailyLessonPlaceholder} className="thumbnail__image" width={512} />
+          <Image fluid src={imageSrc} className="thumbnail__image" width={512} />
           <Header as="h2" className="thumbnail__header">
             <Header.Content>
               <Header.Subheader>
@@ -29,9 +41,9 @@ class LatestDailyLesson extends Component {
               {t('home.last-lesson')}
             </Header.Content>
           </Header>
-          <Label color="orange" >
+          {/* <Label color="black" size="tiny">
             {t('nav.sidebar.lessons')}
-          </Label>
+          </Label> */}
         </Link>
       </div>
     );

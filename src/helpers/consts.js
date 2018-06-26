@@ -35,14 +35,6 @@ export const CT_KITEI_MAKOR           = 'KITEI_MAKOR';
 export const CT_PUBLICATION           = 'PUBLICATION';
 export const CT_LELO_MIKUD            = 'LELO_MIKUD';
 
-//Section Types
-export const ST_LESSONS = 'lessons';
-export const ST_PROGRAMS = 'programs';
-export const ST_LECTURES = 'lectures';
-export const ST_PUBLICATIONS = 'publications';
-export const ST_SOURCES = 'sources';
-export const ST_EVENTS = 'events';
-
 // Source Types
 export const SRC_COLLECTION = 'COLLECTION';
 export const SRC_BOOK       = 'BOOK';
@@ -218,11 +210,11 @@ export const EVENT_TYPES = [
 ];
 
 // Required for Sections filter.
-export const COLLECTION_LESSONS_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, CT_CHILDREN_LESSONS, CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS, CT_LECTURE_SERIES];
+export const COLLECTION_LESSONS_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, /* CT_CHILDREN_LESSONS, */ CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS, CT_LECTURE_SERIES];
 export const COLLECTION_PROGRAMS_TYPE     = [CT_VIDEO_PROGRAM];
 export const COLLECTION_EVENTS_TYPE       = [CT_FRIENDS_GATHERINGS, CT_MEALS, ...EVENT_TYPES];
 export const COLLECTION_PUBLICATIONS_TYPE = [CT_ARTICLES];
-export const UNIT_LESSONS_TYPE            = [CT_LESSON_PART, CT_CHILDREN_LESSON, CT_WOMEN_LESSON, CT_VIRTUAL_LESSON, CT_FULL_LESSON, CT_LECTURE];
+export const UNIT_LESSONS_TYPE            = [CT_LESSON_PART, /* CT_CHILDREN_LESSON, */ CT_WOMEN_LESSON, CT_VIRTUAL_LESSON, CT_FULL_LESSON, CT_LECTURE];
 export const UNIT_PROGRAMS_TYPE           = [CT_VIDEO_PROGRAM_CHAPTER];
 export const UNIT_EVENTS_TYPE             = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
 export const UNIT_PUBLICATIONS_TYPE       = [CT_PUBLICATION];

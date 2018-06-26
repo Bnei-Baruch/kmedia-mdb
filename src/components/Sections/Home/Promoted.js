@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import { Header, Image, Label } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
-import img from '../../../images/archive_banner.jpg';
+import Link from '../../Language/MultiLanguageLink';
+import img from '../../../images/hp_featured_temp.jpg';
+// import img from '../../../images/KKLO_ITALY_18_logo2.svg';
+
+// import img from '../../../images/archive_banner.jpg';
 
 class Promoted extends Component {
   static propTypes = {
@@ -16,17 +20,21 @@ class Promoted extends Component {
   };
 
   render() {
-    if (!this.props.banner) {
-      return null;
-    }
+    // if (!this.props.banner) {
+    //   return null;
+    // }
 
-    const { banner, t } = this.props;
+    const { t } = this.props;
 
-    const { header, sub_header: subHeader, section, url } = banner;
+    // const { header, sub_header: subHeader, section, url } = banner;
+
+    const header    = t('home.promoted.header');
+    const subHeader = t('home.promoted.subheader');
+    const section   = t('events.header.text');
 
     return (
       <div className="thumbnail">
-        <a href={url}>
+        <Link to="/events/c/KWdBwCaH">
           <Image fluid src={img} className="thumbnail__image" />
           {
             header ?
@@ -40,12 +48,12 @@ class Promoted extends Component {
               </Header> :
               null
           }
-          {
+          {/* {
             section ?
-              <Label content={section} color="orange" /> :
-              <Label content={t('home.donate')} color="orange" />
-          }
-        </a>
+              <Label content={section} color="black" size="tiny"/> :
+              <Label content={t('home.donate')} color="black" size="tiny"/>
+          } */}
+        </Link>
       </div>
     );
   }

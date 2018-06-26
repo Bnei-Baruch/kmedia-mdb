@@ -15,7 +15,7 @@ class Topic extends Component {
     const { title, img, href } = this.props;
 
     return (
-      <Header size="small" as={Link} to={href}>
+      <Header size="tiny" as={Link} to={href} >
         <Image src={img} />
         <br />{title}
       </Header>
