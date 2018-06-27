@@ -27,19 +27,17 @@ class LatestUpdate extends Component {
     }
 
     return (
-      <Card as={Link} to={link}>
+      <Card as={Link} to={link} raised>
         <UnitLogo width={512} unitId={unit.id} fallbackImg={sectionThumbnailFallback[canonicalSection]} />
         <Card.Content>
-          <Header size="small">
-            <small className="text grey">
-              {t('values.date', { date: unit.film_date })}
-            </small>
-            <br />
+          {/* <Card.Meta content={t('values.date', { date: unit.film_date })}/> */}
+          <Header size="tiny">
             {unit.name}
           </Header>
         </Card.Content>
         <Card.Content extra>
-          <Label content={label} size="small" />
+          <Card.Meta content={`${t('values.date', { date: unit.film_date })} - ${label}`} />
+          {/* <Label content={label} size="small" /> */}
         </Card.Content>
       </Card>
     );

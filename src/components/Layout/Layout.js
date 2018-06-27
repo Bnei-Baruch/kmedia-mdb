@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
 import classnames from 'classnames';
+import { connect } from 'react-redux';
+import { translate } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
 import { Header, Icon, Menu } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
+import { selectors as settings } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import WrappedOmniBox from '../Search/OmniBox';
@@ -13,12 +15,14 @@ import GAPageView from './GAPageView/GAPageView';
 import MenuItems from './MenuItems';
 import Footer from './Footer';
 import UILanguage from './UILanguage';
+import DonateNow from './DonateNow';
 import logo from '../../images/logo.svg';
 
 class Layout extends Component {
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
     route: shapes.Route.isRequired,
+    language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -62,7 +66,7 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location, route } = this.props;
+    const { t, location, route, language } = this.props;
     const { sidebarActive }      = this.state;
 
     const showSearch = this.shouldShowSearch(location);
@@ -93,8 +97,11 @@ class Layout extends Component {
                   null
               }
             </Menu.Item>
+            <Menu.Item className="mobile-hidden">
+              <DonateNow t={t} language={language}/>
+            </Menu.Item>
             <Menu.Menu position="right">
-              <UILanguage t={t} location={location} />
+              <UILanguage language={language} t={t} location={location} />
             </Menu.Menu>
           </Menu>
         </div>
@@ -117,7 +124,7 @@ class Layout extends Component {
             </Menu.Item>
           </Menu>
           <div className="layout__sidebar-menu">
-            <MenuItems simple t={t} onItemClick={this.closeSidebar} />
+            <MenuItems simple language={language} t={t} onItemClick={this.closeSidebar} />
           </div>
         </div>
         <div className="layout__main">
@@ -131,4 +138,8 @@ class Layout extends Component {
   }
 }
 
-export default translate()(Layout);
+export default connect(
+  state => ({
+    language: settings.getLanguage(state.settings),
+  })
+)(translate()(Layout));

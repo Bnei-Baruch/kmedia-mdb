@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Card, Container, Grid, } from 'semantic-ui-react';
+import { Card, Container, Grid } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../../helpers/links';
 import { strCmp } from '../../../helpers/utils';
@@ -77,11 +77,14 @@ class HomePage extends Component {
     return (
       <div className="homepage">
         <Helmets.Basic title={t('home.header.text')} description={t('home.header.subtext')} />
-        <Container className="padded">
-          <SearchBar t={t} location={location} />
-        </Container>
 
-        <div className="homepage__featured">
+        <div className="homepage__header homepage__section">
+          <Container className="padded horizontally">
+            <SearchBar t={t} location={location} />
+          </Container>
+        </div>
+
+        <div className="homepage__featured homepage__section">
           <Container className="padded horizontally">
             <Grid centered>
               <Grid.Row>
@@ -96,35 +99,41 @@ class HomePage extends Component {
           </Container>
         </div>
 
-        <Container className="padded homepage__sections">
-          <Section title={t('home.sections')}>
-            <Grid doubling columns={5} className="homepage__iconsrow">
-              <Grid.Row>
-                {
-                  [ST_LESSONS, ST_PROGRAMS, ST_LECTURES, ST_SOURCES, ST_EVENTS, ST_PUBLICATIONS].map(x =>
-                    (
-                      <Grid.Column key={x} textAlign="center">
-                        <Topic title={t(`nav.sidebar.${x}`)} img={sectionLogo[x]} href={`/${x}`} />
-                      </Grid.Column>
+        <div className="homepage__website-sections homepage__section">
+          <Container className="padded horizontally">
+            <Section title={t('home.sections')}>
+              <Grid width={15} centered className="homepage__iconsrow">
+                <Grid.Row>
+                  {
+                    ['lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
+                      (
+                        <Grid.Column mobile={5} tablet={3} computer={3} key={x} textAlign="center">
+                          <Topic title={t(`nav.sidebar.${x}`)} img={sectionLogo[x]} href={`/${x}`} />
+                        </Grid.Column>
+                      )
                     )
-                  )
+                  }
+                  <Grid.Column mobile={5} tablet={3} computer={3} only="mobile" />
+                </Grid.Row>
+              </Grid>
+            </Section>
+          </Container>
+        </div>
+
+        <div className="homepage__thumbnails homepage__section">
+          <Container className="padded horizontally">
+            <Section title={t('home.updates')}>
+              <Card.Group itemsPerRow={4} doubling>
+                {
+                  sortedCUs.slice(0, 4).map((x) => {
+                    const [section, unit] = x;
+                    return <LatestUpdate key={section} unit={unit} label={t(`nav.sidebar.${section}`)} t={t} />;
+                  })
                 }
-              </Grid.Row>
-            </Grid>
-          </Section>
-
-          <Section title={t('home.updates')}>
-            <Card.Group itemsPerRow={4} doubling>
-              {
-                sortedCUs.slice(0, 4).map((x) => {
-                  const [section, unit] = x;
-                  return <LatestUpdate key={section} unit={unit} label={t(`nav.sidebar.${section}`)} t={t} />;
-                })
-              }
-            </Card.Group>
-          </Section>
-
-        </Container>
+              </Card.Group>
+            </Section>
+          </Container>
+        </div>
       </div>
     );
   }

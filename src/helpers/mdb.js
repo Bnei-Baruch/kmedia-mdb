@@ -39,7 +39,7 @@ export class CollectionsBreakdown {
     this.collectTypes(CT_VIDEO_PROGRAM);
 
   getLectures = () =>
-    this.collectTypes(CT_LECTURE_SERIES, CT_WOMEN_LESSONS, CT_CHILDREN_LESSONS, CT_VIRTUAL_LESSONS);
+    this.collectTypes(CT_LECTURE_SERIES, CT_WOMEN_LESSONS, /* CT_CHILDREN_LESSONS, */ CT_VIRTUAL_LESSONS);
 
   getArticles = () =>
     this.collectTypes(CT_ARTICLES);
@@ -49,7 +49,7 @@ export class CollectionsBreakdown {
       CT_FRIENDS_GATHERINGS,
       CT_VIDEO_PROGRAM,
       CT_LECTURE_SERIES,
-      CT_CHILDREN_LESSONS,
+      // CT_CHILDREN_LESSONS,
       CT_WOMEN_LESSONS,
       CT_VIRTUAL_LESSONS,
       CT_MEALS,
@@ -66,7 +66,7 @@ export class CollectionsBreakdown {
       CT_SPECIAL_LESSON,
       CT_FRIENDS_GATHERINGS,
       CT_LECTURE_SERIES,
-      CT_CHILDREN_LESSONS,
+      // CT_CHILDREN_LESSONS,
       CT_WOMEN_LESSONS,
       CT_VIRTUAL_LESSONS,
       CT_MEALS,

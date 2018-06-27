@@ -14,7 +14,9 @@
       "photos": "Photos",
       "design": "Design",
       "design2": "Layout",
-      "project-status": "Project Status"
+      "project-status": "Project Status",
+      "help": "Help",
+      "old-site": "Old Site"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
@@ -175,13 +177,17 @@
   "home": {
     "header": {
       "text": "Home",
-      "subText": ""
+      "subtext": "Huge content repository on the Wisdom of Kabbalah: Kabbalah lessons with PhD Rav Michael Laitman, download source books (including The Book of Zohar), a series of programs on education, health, relationships, security and economy."
     },
     "search": "Explore the wisdom of Kabbalah",
     "sections": "Archive Sections",
     "updates": "Latest Updates",
     "last-lesson": "The Latest Daily Lesson",
-    "donate": "DONATE NOW"
+    "donate": "DONATE NOW",
+    "promoted": {
+      "header": "World Convention in Rome, Italy.",
+      "subheader": "27-29 July, 2018"
+    }
   },
   "events": {
     "header": {
@@ -250,7 +256,8 @@
       }
     },
     "last": {
-      "text": "Daily Kabbalah Lesson - updated"
+      "title": "Daily Kabbalah Lesson - updated",
+      "description": "An up to date shortcut to the latest Daily Lesson"
     }
   },
   "programs": {
@@ -294,6 +301,12 @@
           "title": "Other published articles in this collection"
         }
       }
+    }
+  },
+  "help": {
+    "header": {
+      "text": "Help",
+      "subtext": "In this section you will find video tutorials and best practices on how to use the site"
     }
   },
   "pages": {

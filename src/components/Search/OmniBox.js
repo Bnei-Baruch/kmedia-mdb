@@ -71,14 +71,14 @@ export class OmniBox extends Component {
     }
   }, 100);
 
-  isEmptyQuery = () => {
-    const { query, filters } = this.props;
+  isEmptyQuery = (q) => {
+    const { query = q, filters } = this.props;
     const params             = filtersTransformer.toApiParams(filters);
     return isEmpty(query) && isEmpty(params);
   };
 
   doSearch = (q = null, locationSearch = '') => {
-    if (this.isEmptyQuery()) {
+    if (this.isEmptyQuery(q)) {
       return;
     }
 
@@ -261,7 +261,7 @@ export class OmniBox extends Component {
         results={finalResults}
         value={query}
         input={this.renderInput()}
-        icon={<Icon link name="search" onClick={this.doSearch} />}
+        icon={<Icon link name="search" onClick={() => this.doSearch()} />}
         showNoResults={false}
         categoryRenderer={this.renderCategory}
         onSearchChange={this.handleSearchChange}

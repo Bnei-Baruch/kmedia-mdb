@@ -27,6 +27,7 @@ import HomePage from './components/Sections/Home/Container';
 import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import TopicsContainer from './components/Sections/Topics/TopicContainer';
 import TopicPage from './components/Sections/Topics/TopicPage';
+import Help from './components/Sections/Help/Help';
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 
@@ -83,6 +84,7 @@ const routes = [
   { path: 'photos', component: NotImplemented },
   { path: 'search', component: SearchResults, options: { ssrData: ssrDataLoaders.searchPage } },
   { path: 'project-status', component: ProjectStatus },
+  { path: 'help', component: Help },
   // { path: 'design', component: Design },
   // { path: 'design2', component: Design2 },
 ];

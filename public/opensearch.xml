@@ -2,9 +2,9 @@
     <ShortName>Kabbalah Media</ShortName>
     <Description>Explore the wisdom of Kabbalah</Description>
     <Tags>Kabbalah Science Meaning</Tags>
-    <Url type="text/html" method="GET" template="https://archive.kbb1.com/search/?q={searchTerms}"/>
+    <Url type="text/html" method="GET" template="https://kabbalahmedia.info/search/?q={searchTerms}"/>
     <LongName>Bnei Baruch – Archive Search Engine</LongName>
-    <Image height="16" width="16" type="image/vnd.microsoft.icon">https://archive.kbb1.com/favicon.ico</Image>
+    <Image height="16" width="16" type="image/vnd.microsoft.icon">https://kabbalahmedia.info/favicon.ico</Image>
     <Query role="example" searchTerms="Mutual Guarantee"/>
     <Attribution>Copyright 2003-2018 Bnei Baruch – Kabbalah L’Am Association</Attribution>
     <SyndicationRight>open</SyndicationRight>
