@@ -32,8 +32,8 @@ const fetchTagsSuccess = createAction(FETCH_TAGS_SUCCESS);
 const fetchTagsFailure = createAction(FETCH_TAGS_FAILURE);
 
 const fetchDashboard        = createAction(FETCH_DASHBOARD);
-const fetchDashboardSuccess = createAction(FETCH_DASHBOARD_SUCCESS, (id, data) => ({id, data}));
-const fetchDashboardFailure = createAction(FETCH_DASHBOARD_FAILURE, (id, err) => ({id, err}));
+const fetchDashboardSuccess = createAction(FETCH_DASHBOARD_SUCCESS, (id, data) => ({ id, data }));
+const fetchDashboardFailure = createAction(FETCH_DASHBOARD_FAILURE, (id, err) => ({ id, err }));
 
 export const actions = {
   fetchTags,
@@ -103,28 +103,27 @@ const onFetchTagsSuccess = (state, action) => {
     wip: false,
     error: null
   };
-}
+};
 
-const onDashboard = () => { 
-  return {...initialState, wip: true} 
-}
+const onDashboard = state => ({
+  ...state,
+  wip: true
+});
 
 const getSectionOfUnit = (unit) => {
   const s = canonicalLink(unit).split('/');
   return s.length >= 3 ? s[1] : null;
-}
+};
 
 const onDashboardSuccess = (state, action) => {
-  const { data } = action.payload;
-  const { latest_units: latestUnitsArr, promoted_units } = data;
+  const { data }                                         = action.payload;
+  const { latest_units: latest, promoted_units } = data;
 
-  if(Array.isArray(latestUnitsArr)){
-    const uniqueSectionsArr = [...new Set(latestUnitsArr.map(u => getSectionOfUnit(u))
-                                                        .filter(x => !!x)
-    )].sort(); 
+  if (Array.isArray(latest)) {
+    const uniqueSectionsArr = [...new Set(latest.map(u => getSectionOfUnit(u)).filter(x => !!x))].sort();
 
     // map units to sections
-    const cuBySection = latestUnitsArr.reduce((acc, u) => {
+    const cuBySection = latest.reduce((acc, u) => {
       const section = getSectionOfUnit(u);
       if (acc[section]) {
         acc[section].push(u);
@@ -135,7 +134,7 @@ const onDashboardSuccess = (state, action) => {
       return acc;
     }, {});
 
-    console.log('cuBySection:', cuBySection);
+    console.log('REDUX.tags: cuBySection', cuBySection);
 
     const getSectionUnits = section => cuBySection[section];
 
@@ -144,46 +143,40 @@ const onDashboardSuccess = (state, action) => {
       wip: false,
       error: null,
       sections: uniqueSectionsArr,
-      units: latestUnitsArr,
+      units: latest,
       cuBySection,
       getSectionUnits
-    }
-  }
-  else{
-    return {
-      ...state, 
-      wip: false, 
-      err: 'No latest units were found'
     };
   }
-}
+
+  return {
+    ...state,
+    wip: false,
+    err: 'No latest units were found'
+  };
+};
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
-
   [settings.SET_LANGUAGE]: () => initialState,
 
   [FETCH_TAGS_SUCCESS]: onFetchTagsSuccess,
 
-  [FETCH_TAGS_FAILURE]: (state, action) => ({...state, error: action.payload }),
-
   [FETCH_DASHBOARD]: onDashboard,
-
   [FETCH_DASHBOARD_SUCCESS]: onDashboardSuccess,
-
-  [FETCH_DASHBOARD_FAILURE]: (state, action) => ({...state, error: action.payload.err }),
+  [FETCH_DASHBOARD_FAILURE]: (state, action) => ({ ...state, error: action.payload.err }),
 
 }, initialState);
 
 /* Selectors */
 
-const getTags     = state => state.byId;
-const getRoots    = state => state.roots;
-const getTagById  = state => state.getByID;
-const getPath     = state => state.getPath;
-const getPathByID = state => state.getPathByID;
-const getSections = state => state.sections;
-const getUnits = state => state.units;
+const getTags         = state => state.byId;
+const getRoots        = state => state.roots;
+const getTagById      = state => state.getByID;
+const getPath         = state => state.getPath;
+const getPathByID     = state => state.getPathByID;
+const getSections     = state => state.sections;
+const getUnits        = state => state.units;
 const getSectionUnits = state => state.getSectionUnits;
 
 export const selectors = {

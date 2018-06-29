@@ -55,6 +55,9 @@ class Api {
   static recentlyUpdated = () =>
     Requests.get('recently_updated');
 
+  static tagDashboard = ({ id, language }) =>
+    Requests.get(`tags/${id}/dashboard?${Requests.makeParams({ language })}`);
+
   static autocomplete = ({ q, language }) =>
     Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 
@@ -64,21 +67,6 @@ class Api {
   static click = ({ mdbUid: mdb_uid, index, type, rank, searchId: search_id }) =>
     Requests.get(`click?${Requests.makeParams({ mdb_uid, index, type, rank, search_id })}`);
 
-  static sourceIdx = ({ id }) =>
-    Requests.getAsset(`sources/${id}/index.json`);
-
-  static sourceContent = ({ id, name }) =>
-    Requests.getAsset(`sources/${id}/${name}`);
-
-  static unzip = ({ id }) =>
-    Requests.getAsset(`api/unzip/${id}`);
-
-  static doc2Html = ({ id }) =>
-    Requests.getAsset(`api/doc2html/${id}`);
-
-  static tagDashboard = ({ id, language }) => 
-    Requests.get(`tags/${id}/dashboard?${Requests.makeParams({ language })}`);  
-    
   static getAsset = path =>
     Requests.getAsset(path);
 }

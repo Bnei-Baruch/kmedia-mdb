@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Container } from 'semantic-ui-react';
-import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { Grid, Container, Divider } from 'semantic-ui-react';
 
 import SectionHeader from '../../shared/SectionHeader';
 import { actions, selectors } from '../../../redux/modules/tags';
 import { isEmpty } from '../../../helpers/utils';
+import * as shapes from '../../shapes';
+import SectionHeader from '../../shared/SectionHeader';
 import TopN from './TopN';
 
 export const topNItems = 5;
@@ -17,6 +19,7 @@ class TopicPage extends Component {
       sections: PropTypes.arrayOf(PropTypes.string).isRequired,
       getSectionUnits: PropTypes.func.isRequired,
       getPathByID: PropTypes.func.isRequired,
+      match: shapes.RouterMatch.isRequired,
       fetchDashboard: PropTypes.func.isRequired,
       // fetchTags: PropTypes.func.isRequired,
     }
@@ -40,15 +43,14 @@ class TopicPage extends Component {
     }
 
     render() {
-      const { sections, getSectionUnits, getPathByID } = this.props;
-      const tagId = this.props.match.params.id;
+      const { sections, getSectionUnits, getPathByID, match } = this.props;
+      const tagId = match.params.id;
 
       if (getPathByID && !isEmpty(sections)) {
         const tagPath = getPathByID(tagId);
 
         return (
           <Container>
-            <SectionHeader section="topics" />
             <Grid container doubling columns={sections.length} className="homepage__iconsrow">
               {
                 sections.map((s) => {

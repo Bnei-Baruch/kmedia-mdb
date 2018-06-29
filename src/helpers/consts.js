@@ -35,14 +35,6 @@ export const CT_KITEI_MAKOR           = 'KITEI_MAKOR';
 export const CT_PUBLICATION           = 'PUBLICATION';
 export const CT_LELO_MIKUD            = 'LELO_MIKUD';
 
-//Section Types
-export const ST_LESSONS = 'lessons';
-export const ST_PROGRAMS = 'programs';
-export const ST_LECTURES = 'lectures';
-export const ST_PUBLICATIONS = 'publications';
-export const ST_SOURCES = 'sources';
-export const ST_EVENTS = 'events';
-
 // Source Types
 export const SRC_COLLECTION = 'COLLECTION';
 export const SRC_BOOK       = 'BOOK';

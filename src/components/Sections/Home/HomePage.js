@@ -6,8 +6,6 @@ import { Card, Container, Grid } from 'semantic-ui-react';
 import { canonicalLink } from '../../../helpers/links';
 import { strCmp } from '../../../helpers/utils';
 import { sectionLogo } from '../../../helpers/images';
-import { ST_LESSONS, ST_PROGRAMS, ST_LECTURES, ST_PUBLICATIONS, ST_SOURCES, ST_EVENTS} 
-        from '../../../helpers/consts';
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 import SearchBar from './SearchBar';
@@ -17,7 +15,6 @@ import Section from './Section';
 import LatestUpdate from './LatestUpdate';
 import LatestDailyLesson from './LatestDailyLesson';
 import Helmets from '../../shared/Helmets';
-
 
 class HomePage extends Component {
   static propTypes = {
