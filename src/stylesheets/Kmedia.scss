@@ -10,6 +10,7 @@
 @import 'includes/search';
 @import 'includes/homepage';
 @import 'includes/pagination';
+@import 'includes/filters';
 @import 'gallery/image-gallery-no-icon';
 // @import 'gallery/image-gallery';
 //////////ALL YOUR CSS IS HERE ↴
@@ -25,17 +26,17 @@ body { overflow-y: scroll; }
   z-index: 999999999999;
 }
 
-/// INDEX FILTERS
-.index-filters {
-  &__search {
-    .input {
-      top: .8em !important;
-      width: 300px !important;
-    }
-  }
-}
+// /// INDEX FILTERS
+// .index-filters {
+//   &__search {
+//     .input {
+//       top: .8em !important;
+//       width: 300px !important;
+//     }
+//   }
+// }
 
-/// END OF INDEX FILTERS
+// /// END OF INDEX FILTERS
 
 .filter_tab {
   .menu {
