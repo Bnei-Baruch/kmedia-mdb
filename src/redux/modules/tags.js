@@ -117,7 +117,7 @@ const getSectionOfUnit = (unit) => {
 
 const onDashboardSuccess = (state, action) => {
   const { data }                                         = action.payload;
-  const { latest_units: latest, promoted_units } = data;
+  const { latest_units: latest, /* promoted_units */ } = data;
 
   if (Array.isArray(latest)) {
     const uniqueSectionsArr = [...new Set(latest.map(u => getSectionOfUnit(u)).filter(x => !!x))].sort();
@@ -133,8 +133,6 @@ const onDashboardSuccess = (state, action) => {
 
       return acc;
     }, {});
-
-    console.log('REDUX.tags: cuBySection', cuBySection);
 
     const getSectionUnits = section => cuBySection[section];
 

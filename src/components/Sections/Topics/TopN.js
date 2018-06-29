@@ -82,8 +82,6 @@ class TopN extends React.PureComponent {
     const search = urlSearchStringify(query);
     const url    = `/${section}?${search}`;
 
-    console.log('url:', url);
-
     return url;
   };
 
@@ -106,13 +104,16 @@ class TopN extends React.PureComponent {
           <Table.Body>
             {units.map(x => this.renderUnit(x, t))}
           </Table.Body>
-          <Table.Footer fullWidth>
-            <Table.Row>
-              <Table.HeaderCell>
-                <Button primary size="medium" href={url}>View All</Button>
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Footer>
+          { !url.includes('events') ? // exclude button to events - page not exists
+            <Table.Footer fullWidth>
+              <Table.Row>
+                <Table.HeaderCell>
+                  <Button primary size="medium" href={url}>View All</Button>
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Footer> :
+            null
+          }
         </Table> :
         null
     );

@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Grid, Container, Divider } from 'semantic-ui-react';
+import { Grid, Container, Breadcrumb } from 'semantic-ui-react';
 
-import SectionHeader from '../../shared/SectionHeader';
 import { actions, selectors } from '../../../redux/modules/tags';
 import { isEmpty } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
@@ -18,10 +17,9 @@ class TopicPage extends Component {
     static propTypes = {
       sections: PropTypes.arrayOf(PropTypes.string).isRequired,
       getSectionUnits: PropTypes.func.isRequired,
-      getPathByID: PropTypes.func.isRequired,
+      getPathByID: PropTypes.func,
       match: shapes.RouterMatch.isRequired,
       fetchDashboard: PropTypes.func.isRequired,
-      // fetchTags: PropTypes.func.isRequired,
     }
 
     componentDidMount() {
@@ -35,10 +33,9 @@ class TopicPage extends Component {
     }
 
     loadTopic = (nextProps) => {
-      const { fetchDashboard, fetchTags } = nextProps;
+      const { fetchDashboard } = nextProps;
       const tagId = nextProps.match.params.id;
 
-      // fetchTags();
       fetchDashboard(tagId);
     }
 
@@ -49,8 +46,15 @@ class TopicPage extends Component {
       if (getPathByID && !isEmpty(sections)) {
         const tagPath = getPathByID(tagId);
 
+        // create breadCrumb sections from tagPath
+        const breadCrumbSections = tagPath ? 
+                                   tagPath.map(p => ({ key: p.id, content: p.label, link: false })) :
+                                   null;
+
         return (
           <Container>
+            <Breadcrumb sections={breadCrumbSections} size="small" className="section-header"/>
+            <SectionHeader section="topics" />
             <Grid container doubling columns={sections.length} className="homepage__iconsrow">
               {
                 sections.map((s) => {
@@ -84,7 +88,6 @@ export default withRouter(connect(
     getPathByID: selectors.getPathByID(state.tags)
   }),
   dispatch => bindActionCreators({
-    fetchDashboard: actions.fetchDashboard,
-    // fetchTags: actions.fetchTags
+    fetchDashboard: actions.fetchDashboard
   }, dispatch)
 )(TopicPage));
