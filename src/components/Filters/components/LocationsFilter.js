@@ -12,20 +12,7 @@ import { selectors as mdb } from '../../../redux/modules/mdb';
 import * as shapes from '../../shapes';
 import HierarchicalFilter from './HierarchicalFilter';
 
-const cmpFn = (a, b) => {
-  const x = a[0];
-  const y = b[0];
-
-  if (x === 'Unknown') {
-    return 1;
-  }
-
-  if (y === 'Unknown') {
-    return -1;
-  }
-
-  return strCmp(x, y);
-};
+const cmpFn = (a, b) => strCmp(a.text, b.text);
 
 class LocationsFilter extends Component {
   static propTypes = {
@@ -49,9 +36,8 @@ class LocationsFilter extends Component {
 
     let byCountry = groupBy(congressEvents, x => x.country || 'Unknown');
 
-    byCountry     = mapValues(byCountry, (v) => {
+    byCountry = mapValues(byCountry, (v) => {
       const byCity = Object.entries(countBy(v, x => x.city || 'Unknown'));
-      byCity.sort(cmpFn);
       return {
         byCity,
         count: v.length,
@@ -59,25 +45,34 @@ class LocationsFilter extends Component {
     });
 
     byCountry = Object.entries(byCountry);
-    byCountry.sort(cmpFn);
+
+    const children = byCountry
+      .map(([country, { count, byCity }]) => {
+        const res = {
+          ...this.buildNode(country, count, t),
+          children: byCity.map(([city, cityCount]) => this.buildNode(city, cityCount, t))
+        };
+        if (byCity.length > 1) {
+          res.children.sort(cmpFn);
+        }
+        return res;
+      });
+
+    children.sort(cmpFn);
 
     return [
       {
         value: 'root',
         text: t('filters.locations-filter.all'),
         count: congressEvents.length,
-        children: byCountry
-          .map(([country, { count, byCity }]) => ({
-            ...this.buildNode(country, count),
-            children: byCity.map(([city, cityCount]) => this.buildNode(city, cityCount))
-          }))
+        children
       }
     ];
   };
 
-  buildNode = (id, count) => ({
+  buildNode = (id, count, t) => ({
     value: id,
-    text: id,
+    text: t(`locations.${id.trim().toLowerCase().replace(/[\s_.]+/g, '-')}`, { defaultValue: id }),
     count,
   });
 

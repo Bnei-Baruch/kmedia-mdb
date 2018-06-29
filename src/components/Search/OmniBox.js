@@ -91,17 +91,17 @@ export class OmniBox extends Component {
       // to the search page when we redirect).
 
       push({ pathname: 'search', search: locationSearch });
+
+      // Reset filters for new search (query changed)
+      if (query && getQuery(location).q !== query) {
+        resetFilter('search', 'date-filter');
+        resetFilter('search', 'topics-filter');
+        resetFilter('search', 'sources-filter');
+        resetFilter('search', 'sections-filter');
+      }
     }
 
     const query = q != null ? q : this.props.query;
-
-    // Reset filters for new search (query changed)
-    if (query && getQuery(location).q !== query) {
-      resetFilter('search', 'date-filter');
-      resetFilter('search', 'topics-filter');
-      resetFilter('search', 'sources-filter');
-      resetFilter('search', 'sections-filter');
-    }
 
     search(query, 1, pageSize, isDebMode(location));
     onSearch();
