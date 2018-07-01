@@ -5,7 +5,15 @@ const locationsFilter = {
   queryKey: 'location',
   valueToQuery: value => value.join('|'),
   queryToValue: queryValue => queryValue.split('|'),
-  valueToTagLabel: value => (Array.isArray(value) ? [...value].reverse().join(', ') : '')
+  valueToTagLabel: (value, props, store, t) => {
+    if (!value || !Array.isArray(value)) {
+      return '';
+    }
+
+    return [...value].reverse()
+      .map(x => t(`locations.${x.trim().toLowerCase().replace(/[\s_.]+/g, '-')}`, { defaultValue: x }))
+      .join(', ');
+  }
 };
 
 export default createFilterDefinition(locationsFilter);
