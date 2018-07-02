@@ -17,6 +17,7 @@ import WipErr from '../shared/WipErr/WipErr';
 import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import ScoreDebug from './ScoreDebug';
+import SearchResultCU from './SearchResultCU';
 import {
   SEARCH_INTENT_FILTER_NAMES,
   SEARCH_INTENT_NAMES,
@@ -29,6 +30,7 @@ import {
 class SearchResults extends Component {
   static propTypes = {
     results: PropTypes.object,
+    getSourcePath: PropTypes.func,
     areSourcesLoaded: PropTypes.bool.isRequired,
     queryResult: PropTypes.object,
     cMap: PropTypes.objectOf(shapes.Collection),
@@ -51,6 +53,7 @@ class SearchResults extends Component {
     cuMap: {},
     wip: false,
     err: null,
+    getSourcePath: undefined,
   };
 
   // Helper function to get the frist prop in hightlights obj and apply htmlFunc on it.
@@ -60,87 +63,22 @@ class SearchResults extends Component {
     return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop]) }} />;
   };
 
-  resultClick = (mdb_uid, index, resultType, rank, searchId) => {
+  click = (mdb_uid, index, type, rank, searchId) => {
     const { click } = this.props;
-    click(mdb_uid, index, resultType, rank, searchId);
+    click(mdb_uid, index, type, rank, searchId);
   };
 
-  renderContentUnit = (cu, hit, rank) => {
-    const { t, location, queryResult }                                                           = this.props;
-    const { search_result: { searchId } }                                                        = queryResult;
-    const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, highlight, _score: score } = hit;
-    console.log('renderContentUnit', hit, resultType);
-
-    const name        = this.snippetFromHighlight(highlight, ['title', 'title_language'], parts => parts.join(' ')) || cu.name;
-    const description = this.snippetFromHighlight(highlight, ['description', 'description_language'], parts => `...${parts.join('.....')}...`);
-    const transcript  = this.snippetFromHighlight(highlight, ['content', 'content_language'], parts => `...${parts.join('.....')}...`);
-    const snippet     = (
-      <div className="search__snippet">
-        {
-          description ?
-            <div>
-              <strong>{t('search.result.description')}: </strong>
-              {description}
-            </div> :
-            null
-        }
-        {
-          transcript ?
-            <div>
-              <strong>{t('search.result.transcript')}: </strong>
-              {transcript}
-            </div> :
-            null
-        }
-      </div>);
-
-    let filmDate = '';
-    if (cu.film_date) {
-      filmDate = t('values.date', { date: cu.film_date });
-    }
-
-    return (
-      <Table.Row key={mdbUid} verticalAlign="top">
-        <Table.Cell collapsing singleLine width={1}>
-          <strong>{filmDate}</strong>
-        </Table.Cell>
-        <Table.Cell collapsing singleLine>
-          <Label size="tiny">{t(`constants.content-types.${cu.content_type}`)}</Label>
-        </Table.Cell>
-        <Table.Cell>
-          <Link
-            className="search__link"
-            onClick={() => this.resultClick(mdbUid, index, resultType, rank, searchId)}
-            to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}
-          >
-            {name}
-          </Link>
-          &nbsp;&nbsp;
-          {
-            cu.duration ?
-              <small>{formatDuration(cu.duration)}</small> :
-              null
-          }
-          {snippet || null}
-        </Table.Cell>
-        {
-          !isDebMode(location) ?
-            null :
-            <Table.Cell collapsing textAlign="right">
-              <ScoreDebug name={cu.name} score={score} explanation={hit._explanation} />
-            </Table.Cell>
-        }
-      </Table.Row>
-    );
+  filterByHitType = (hit) => {
+    const { hitType } = this.props;
+    return hitType ? hit.type === hitType : true;
   };
 
   renderCollection = (c, hit, rank) => {
     const { t, location, queryResult }                                                           = this.props;
     const { search_result: { searchId } }                                                        = queryResult;
-    const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, highlight, _score: score } = hit;
-    console.log('hit', hit, resultType);
+    const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
 
-    const name        = this.snippetFromHighlight(highlight, ['title', 'title_analyzed'], parts => parts.join(' ')) || c.title;
+    const name        = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || c.name;
     const description = this.snippetFromHighlight(highlight, ['description', 'description_analyzed'], parts => `...${parts.join('.....')}...`);
     const snippet     = (
       <div className="search__snippet">
@@ -170,7 +108,7 @@ class SearchResults extends Component {
         <Table.Cell>
           <Link
             className="search__link"
-            onClick={() => this.resultClick(mdbUid, index, resultType, rank, searchId)}
+            onClick={() => this.click(mdbUid, index, type, rank, searchId)}
             to={canonicalLink(c || { id: mdbUid, content_type: c.content_type })}
           >
             {name}
@@ -189,12 +127,23 @@ class SearchResults extends Component {
   };
 
   renderSource = (hit) => {
-    const { t, location }                             = this.props;
-    const { _source: { mdb_uid: mdbUid, result_type: resultType }, highlight, _score: score } = hit;
-    const title = this.snippetFromHighlight(highlight, ['title', 'title_analyzed'], parts => parts.join(' ')) || hit._source.title;
+    const { t, location, getSourcePath }                             = this.props;
+    const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
+
+    const srcPath = getSourcePath(mdbUid);
+
+    const name = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || srcPath[srcPath.length - 1].name;
+
+    const authors = this.snippetFromHighlight(highlight, ['authors', 'authors_analyzed'], parts => parts[0]);
+    if (authors) {
+      // Remove author from path in order to replace with highlight value.
+      srcPath.pop();
+    }
+
+    const path = `${srcPath.slice(0, -1).map(n => n.name).join(' > ')} >`;
+
     const description = this.snippetFromHighlight(highlight, ['description', 'description_analyzed'], parts => `...${parts.join('.....')}...`);
     const content     = this.snippetFromHighlight(highlight, ['content', 'content_analyzed'], parts => `...${parts.join('.....')}...`);
-    console.log('hit', hit, resultType);
     const snippet     = (
       <div className="search__snippet">
         {
@@ -225,7 +174,7 @@ class SearchResults extends Component {
         </Table.Cell>
         <Table.Cell>
           <Link className="search__link" to={canonicalLink({ id: mdbUid, content_type: 'SOURCE' })}>
-            {title}
+            {authors}&nbsp;{path}&nbsp;{name}
           </Link>
           {snippet || null}
         </Table.Cell>
@@ -233,7 +182,7 @@ class SearchResults extends Component {
           !isDebMode(location) ?
             null :
             <Table.Cell collapsing textAlign="right">
-              <ScoreDebug name={title} score={score} explanation={hit._explanation} />
+              <ScoreDebug name={srcPath[srcPath.length - 1].name} score={score} explanation={hit._explanation} />
             </Table.Cell>
         }
       </Table.Row>
@@ -241,26 +190,25 @@ class SearchResults extends Component {
   };
 
   renderIntent = (hit, rank) => {
-    console.log('hit', hit, 'intent');
-    const { t, location, queryResult, getTagById, getSourceById} = this.props;
-    const { search_result: { searchId } } = queryResult;
+    const { t, location, queryResult, getTagById, getSourceById } = this.props;
+    const { search_result: { searchId } }                         = queryResult;
     const {
-      _index: index,
-      _type: type,
-      _source: {
-        content_type: contentType,
-        mdb_uid: mdbUid,
-        name,
-        explanation,
-        score: originalScore,
-        max_explanation: maxExplanation,
-        max_score: maxScore
-      },
-      _score: score,
-    } = hit;
-    const section    = SEARCH_INTENT_SECTIONS[type];
-    const intentType = SEARCH_INTENT_NAMES[index];
-    const filterName = SEARCH_INTENT_FILTER_NAMES[index];
+            _index: index,
+            _type: type,
+            _source: {
+              content_type: contentType,
+              mdb_uid: mdbUid,
+              name,
+              explanation,
+              score: originalScore,
+              max_explanation: maxExplanation,
+              max_score: maxScore
+            },
+            _score: score,
+          }                                                       = hit;
+    const section                                                 = SEARCH_INTENT_SECTIONS[type];
+    const intentType                                              = SEARCH_INTENT_NAMES[index];
+    const filterName                                              = SEARCH_INTENT_FILTER_NAMES[index];
 
     let getFilterById = null;
     switch (index) {
@@ -299,8 +247,8 @@ class SearchResults extends Component {
         <Table.Cell>
           <Link
             className="search__link"
-            onClick={() => this.resultClick(mdbUid, index, type, rank, searchId)}
-            to={sectionLink(section, [{name: filterName, value: mdbUid, getFilterById}])}
+            onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+            to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}
           >
             {t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`)} {display}
           </Link>
@@ -332,18 +280,24 @@ class SearchResults extends Component {
   renderHit = (hit, rank) => {
     // console.log('hit', hit);
     const { cMap, cuMap }                                  = this.props;
-    const { _source: { mdb_uid: mdbUid,  result_type: resultType}, _type: hitType } = hit;
+    const { _source: { mdb_uid: mdbUid }, _type: hitType } = hit;
     const cu                                               = cuMap[mdbUid];
     const c                                                = cMap[mdbUid];
 
     if (cu) {
-      return this.renderContentUnit(cu, hit, rank);
+      return (
+        <Table.Row key={mdbUid} verticalAlign="top">
+          <Table.Cell colspan="4">
+            <SearchResultCU hit={hit} rank={rank} {...this.props} cu={cu} />
+          </Table.Cell>
+        </Table.Row>
+      );
     } else if (c) {
       return this.renderCollection(c, hit, rank);
-    } else if (resultType === 'sources') {
+    } else if (hitType === 'sources') {
       return this.renderSource(hit, rank);
     } else if (SEARCH_INTENT_HIT_TYPES.includes(hitType)) {
-      return this.renderIntent(hit, rank)
+      return this.renderIntent(hit, rank);
     }
 
     // maybe content_units are still loading ?
@@ -353,18 +307,18 @@ class SearchResults extends Component {
 
   render() {
     const {
-      filters,
-      wip,
-      err,
-      queryResult,
-      areSourcesLoaded,
-      pageNo,
-      pageSize,
-      language,
-      t,
-      handlePageChange,
-      location,
-    } = this.props;
+            filters,
+            wip,
+            err,
+            queryResult,
+            areSourcesLoaded,
+            pageNo,
+            pageSize,
+            language,
+            t,
+            handlePageChange,
+            location,
+          } = this.props;
 
     const { search_result: results } = queryResult;
 
@@ -385,7 +339,8 @@ class SearchResults extends Component {
     }
 
     const { /* took, */ hits: { total, hits } } = results;
-    const totalForPagination = Math.min(10000, total);  // Elastic fails on more than 10k results
+    // Elastic too slow and might fails on more than 1k results.
+    const totalForPagination                    = Math.min(1000, total);
 
     let content;
     if (total === 0) {
@@ -401,12 +356,12 @@ class SearchResults extends Component {
             <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
             <Table sortable basic="very" className="index-list search-results">
               <Table.Body>
-                {hits.map(this.renderHit)}
+                {hits.filter(this.filterByHitType).map(this.renderHit)}
               </Table.Body>
             </Table>
           </Container>
           <Divider fitted />
-          <Container className="padded" textAlign="center">
+          <Container className="padded pagination-wrapper" textAlign="center">
             <Pagination
               pageNo={pageNo}
               pageSize={pageSize}
@@ -424,6 +379,7 @@ class SearchResults extends Component {
 export default connect(state => ({
   filters: filterSelectors.getFilters(state.filters, 'search'),
   areSourcesLoaded: sourcesSelectors.areSourcesLoaded(state.sources),
+  getSourcePath: sourcesSelectors.getPathByID(state.sources),
   getSourceById: sourcesSelectors.getSourceById(state.sources),
   getTagById: tagsSelectors.getTagById(state.tags),
 }))(translate()(SearchResults));
