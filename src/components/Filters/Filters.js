@@ -29,12 +29,12 @@ class Filters extends Component {
     deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
-  static defaultProps = {
-    rightItems: null,
-  };
-
   static contextTypes = {
     store: PropTypes.object.isRequired,
+  };
+
+  static defaultProps = {
+    rightItems: null,
   };
 
   state = {
@@ -105,20 +105,27 @@ class Filters extends Component {
                     flowing
                     key={name}
                     trigger={
-                      <Menu.Item  className="filter" name={name}>
+                      <Menu.Item className="filter" name={name}>
                         <div className="filter__content">
                           <small className="blue text">
-                          {t(`filters.${name}.label`)}
+                            {t(`filters.${name}.label`)}
                           </small>
                           <span>
                             {label}
-                            <Icon name="dropdown" flipped={isActive ? 'vertically' : ''}/>
+                            <Icon name="dropdown" flipped={isActive ? 'vertically' : ''} />
                           </span>
                         </div>
-                        
+
                         {
                           value ?
-                          <Label circular size="tiny" color="black" onClick={e => this.handleResetFilter(e, name)}><Icon name='times' /></Label>
+                            <Label
+                              circular
+                              size="tiny"
+                              color="black"
+                              onClick={e => this.handleResetFilter(e, name)}
+                            >
+                              <Icon name="times" />
+                            </Label>
                             :
                             null
                         }

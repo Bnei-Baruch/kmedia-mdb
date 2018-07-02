@@ -26,7 +26,7 @@ import SearchResults from './components/Search/SearchResultsContainer';
 import HomePage from './components/Sections/Home/Container';
 import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import Help from './components/Sections/Help/Help';
-import Design from './components/Design/Design';
+// import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 
 const NotImplemented = () => <h1>Not Implemented Yet</h1>;
