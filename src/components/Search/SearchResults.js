@@ -17,6 +17,7 @@ import WipErr from '../shared/WipErr/WipErr';
 import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import ScoreDebug from './ScoreDebug';
+import SearchResultCU from './SearchResultCU';
 import {
   SEARCH_INTENT_FILTER_NAMES,
   SEARCH_INTENT_NAMES,
@@ -67,72 +68,9 @@ class SearchResults extends Component {
     click(mdb_uid, index, type, rank, searchId);
   };
 
-  renderContentUnit = (cu, hit, rank) => {
-    const { t, location, queryResult }                                                           = this.props;
-    const { search_result: { searchId } }                                                        = queryResult;
-    const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
-
-    const name        = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || cu.name;
-    const description = this.snippetFromHighlight(highlight, ['description', 'description_analyzed'], parts => `...${parts.join('.....')}...`);
-    const transcript  = this.snippetFromHighlight(highlight, ['transcript', 'transcript_analyzed'], parts => `...${parts.join('.....')}...`);
-    const snippet     = (
-      <div className="search__snippet">
-        {
-          description ?
-            <div>
-              <strong>{t('search.result.description')}: </strong>
-              {description}
-            </div> :
-            null
-        }
-        {
-          transcript ?
-            <div>
-              <strong>{t('search.result.transcript')}: </strong>
-              {transcript}
-            </div> :
-            null
-        }
-      </div>);
-
-    let filmDate = '';
-    if (cu.film_date) {
-      filmDate = t('values.date', { date: cu.film_date });
-    }
-
-    return (
-      <Table.Row key={mdbUid} verticalAlign="top">
-        <Table.Cell collapsing singleLine width={1}>
-          <strong>{filmDate}</strong>
-        </Table.Cell>
-        <Table.Cell collapsing singleLine>
-          <Label size="tiny">{t(`constants.content-types.${cu.content_type}`)}</Label>
-        </Table.Cell>
-        <Table.Cell>
-          <Link
-            className="search__link"
-            onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-            to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}
-          >
-            {name}
-          </Link>
-          &nbsp;&nbsp;
-          {
-            cu.duration ?
-              <small>{formatDuration(cu.duration)}</small> :
-              null
-          }
-          {snippet || null}
-        </Table.Cell>
-        {
-          !isDebMode(location) ?
-            null :
-            <Table.Cell collapsing textAlign="right">
-              <ScoreDebug name={cu.name} score={score} explanation={hit._explanation} />
-            </Table.Cell>
-        }
-      </Table.Row>
-    );
+  filterByHitType = (hit) => {
+    const { hitType } = this.props;
+    return hitType ? hit.type === hitType : true;
   };
 
   renderCollection = (c, hit, rank) => {
@@ -252,25 +190,25 @@ class SearchResults extends Component {
   };
 
   renderIntent = (hit, rank) => {
-    const { t, location, queryResult, getTagById, getSourceById} = this.props;
-    const { search_result: { searchId } } = queryResult;
+    const { t, location, queryResult, getTagById, getSourceById } = this.props;
+    const { search_result: { searchId } }                         = queryResult;
     const {
-      _index: index,
-      _type: type,
-      _source: {
-        content_type: contentType,
-        mdb_uid: mdbUid,
-        name,
-        explanation,
-        score: originalScore,
-        max_explanation: maxExplanation,
-        max_score: maxScore
-      },
-      _score: score,
-    } = hit;
-    const section    = SEARCH_INTENT_SECTIONS[type];
-    const intentType = SEARCH_INTENT_NAMES[index];
-    const filterName = SEARCH_INTENT_FILTER_NAMES[index];
+            _index: index,
+            _type: type,
+            _source: {
+              content_type: contentType,
+              mdb_uid: mdbUid,
+              name,
+              explanation,
+              score: originalScore,
+              max_explanation: maxExplanation,
+              max_score: maxScore
+            },
+            _score: score,
+          }                                                       = hit;
+    const section                                                 = SEARCH_INTENT_SECTIONS[type];
+    const intentType                                              = SEARCH_INTENT_NAMES[index];
+    const filterName                                              = SEARCH_INTENT_FILTER_NAMES[index];
 
     let getFilterById = null;
     switch (index) {
@@ -310,7 +248,7 @@ class SearchResults extends Component {
           <Link
             className="search__link"
             onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-            to={sectionLink(section, [{name: filterName, value: mdbUid, getFilterById}])}
+            to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}
           >
             {t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`)} {display}
           </Link>
@@ -347,13 +285,19 @@ class SearchResults extends Component {
     const c                                                = cMap[mdbUid];
 
     if (cu) {
-      return this.renderContentUnit(cu, hit, rank);
+      return (
+        <Table.Row key={mdbUid} verticalAlign="top">
+          <Table.Cell colspan="4">
+            <SearchResultCU hit={hit} rank={rank} {...this.props} cu={cu} />
+          </Table.Cell>
+        </Table.Row>
+      );
     } else if (c) {
       return this.renderCollection(c, hit, rank);
     } else if (hitType === 'sources') {
       return this.renderSource(hit, rank);
     } else if (SEARCH_INTENT_HIT_TYPES.includes(hitType)) {
-      return this.renderIntent(hit, rank)
+      return this.renderIntent(hit, rank);
     }
 
     // maybe content_units are still loading ?
@@ -363,18 +307,18 @@ class SearchResults extends Component {
 
   render() {
     const {
-      filters,
-      wip,
-      err,
-      queryResult,
-      areSourcesLoaded,
-      pageNo,
-      pageSize,
-      language,
-      t,
-      handlePageChange,
-      location,
-    } = this.props;
+            filters,
+            wip,
+            err,
+            queryResult,
+            areSourcesLoaded,
+            pageNo,
+            pageSize,
+            language,
+            t,
+            handlePageChange,
+            location,
+          } = this.props;
 
     const { search_result: results } = queryResult;
 
@@ -396,7 +340,7 @@ class SearchResults extends Component {
 
     const { /* took, */ hits: { total, hits } } = results;
     // Elastic too slow and might fails on more than 1k results.
-    const totalForPagination = Math.min(1000, total);
+    const totalForPagination                    = Math.min(1000, total);
 
     let content;
     if (total === 0) {
@@ -412,7 +356,7 @@ class SearchResults extends Component {
             <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
             <Table sortable basic="very" className="index-list search-results">
               <Table.Body>
-                {hits.map(this.renderHit)}
+                {hits.filter(this.filterByHitType).map(this.renderHit)}
               </Table.Body>
             </Table>
           </Container>
