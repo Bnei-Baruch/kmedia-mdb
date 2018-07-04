@@ -297,16 +297,23 @@ class AVPlayer extends PureComponent {
 
   handleTimeUpdate = (timeData) => {
     const { media }          = this.props;
-    const { mode, sliceEnd } = this.state;
+    const { mode, sliceEnd, sliceStart } = this.state;
 
     const isSliceMode = mode === PLAYER_MODE.SLICE_VIEW;
 
-    const lowerTime = Math.min(sliceEnd, timeData.currentTime);
-    if (isSliceMode && lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
+    const lowerTime = Math.min(sliceEnd, timeData.currentTime);    
+
+    if (isSliceMode && (timeData.currentTime < sliceStart || timeData.currentTime  > sliceEnd)) {
+      this.setState({
+        mode: PLAYER_MODE.NORMAL,
+        sliceStart: undefined,
+        sliceEnd: undefined,
+      });
+    } else if (isSliceMode && lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
       media.pause();
       media.seekTo(sliceEnd);
     }
-    
+  
     this.saveCurrentTime();
   };
 

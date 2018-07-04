@@ -184,21 +184,6 @@ class AVPlayerMobile extends PureComponent {
   };
 
   handleSeeking = (e) => {
-    const { mode, sliceStart, sliceEnd } = this.state;
-
-    if (mode !== PLAYER_MODE.SLICE_VIEW) {
-      return;
-    }
-
-    // break slice view mode once the user is seeking out side of slice
-    const time = e.currentTarget.currentTime;
-    if (time < sliceStart || time > sliceEnd) {
-      this.setState({
-        mode: PLAYER_MODE.NORMAL,
-        sliceStart: undefined,
-        sliceEnd: undefined,
-      });
-    }
   };
 
   handlePause = () => {
@@ -221,7 +206,7 @@ class AVPlayerMobile extends PureComponent {
   };
 
   handleTimeUpdate = (e) => {
-    const { mode, sliceEnd } = this.state;
+    const { mode, sliceEnd, sliceStart } = this.state;
 
     const time = e.currentTarget.currentTime;
 
@@ -231,8 +216,17 @@ class AVPlayerMobile extends PureComponent {
       return;
     }
 
-    if (time > sliceEnd) {
+    const lowerTime = Math.min(sliceEnd, time);    
+
+    if (time < sliceStart || time > sliceEnd) {     
+      this.setState({
+        mode: PLAYER_MODE.NORMAL,
+        sliceStart: undefined,
+        sliceEnd: undefined,
+      });
+    } else if (lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
       this.media.pause();
+      this.seekTo(sliceEnd);
     }
   };
 
