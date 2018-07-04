@@ -17,7 +17,7 @@ class TopicPage extends Component {
     static propTypes = {
       sections: PropTypes.arrayOf(PropTypes.string).isRequired,
       getSectionUnits: PropTypes.func.isRequired,
-      getPathByID: PropTypes.func,
+      getPathByID: PropTypes.func.isRequired,
       match: shapes.RouterMatch.isRequired,
       fetchDashboard: PropTypes.func.isRequired,
     }
@@ -48,7 +48,7 @@ class TopicPage extends Component {
 
         // create breadCrumb sections from tagPath
         const breadCrumbSections = tagPath.map(p => ({ key: p.id, content: p.label, link: false }));
-        const topicHeader = tagPath[tagPath.length-1].label;
+        const topicHeader = tagPath[tagPath.length - 1].label;
 
         return (
           <Container>
@@ -65,7 +65,6 @@ class TopicPage extends Component {
                         section={s}
                         units={sectionUnits}
                         N={topNItems}
-                        tagId={tagId}
                         tagPath={tagPath}
                       />
                     </Grid.Column>;

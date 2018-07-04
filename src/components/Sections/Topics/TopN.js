@@ -15,7 +15,6 @@ class TopN extends React.PureComponent {
   static propTypes = {
     section: PropTypes.string.isRequired,
     N: PropTypes.number.isRequired,
-    tagId: PropTypes.string.isRequired,
     tagPath: PropTypes.arrayOf(PropTypes.object).isRequired,
     units: PropTypes.arrayOf(shapes.ContentUnit).isRequired,
     t: PropTypes.func.isRequired,
@@ -28,34 +27,6 @@ class TopN extends React.PureComponent {
   componentDidMount() {
     this.getTopNUnits();
   }
-
-  renderUnit(unit, t) {
-    const link   = canonicalLink(unit);
-    let filmDate = '';
-    if (unit.film_date) {
-      filmDate = t('values.date', { date: new Date(unit.film_date) });
-    }
-
-    return (
-      <Table.Row key={unit.id} verticalAlign="top">
-        <Table.Cell>
-          <span className="index__date">{filmDate}</span>
-          <Link className="index__title" to={link}>
-            {unit.name || NO_NAME}
-          </Link>
-        </Table.Cell>
-      </Table.Row>
-    );
-  }
-
-  compareUnits = (a, b) => {
-    let ans = -1;
-    if (a && b && a.film_date <= b.film_date) {
-      ans = 1;
-    }
-
-    return ans;
-  };
 
   getTopNUnits = () => {
     const { units, N } = this.props;
@@ -84,6 +55,34 @@ class TopN extends React.PureComponent {
 
     return url;
   };
+
+  compareUnits = (a, b) => {
+    let ans = -1;
+    if (a && b && a.film_date <= b.film_date) {
+      ans = 1;
+    }
+
+    return ans;
+  };
+
+  renderUnit = (unit, t) => {
+    const link   = canonicalLink(unit);
+    let filmDate = '';
+    if (unit.film_date) {
+      filmDate = t('values.date', { date: new Date(unit.film_date) });
+    }
+
+    return (
+      <Table.Row key={unit.id} verticalAlign="top">
+        <Table.Cell>
+          <span className="index__date">{filmDate}</span>
+          <Link className="index__title" to={link}>
+            {unit.name || NO_NAME}
+          </Link>
+        </Table.Cell>
+      </Table.Row>
+    );
+  }
 
   render() {
     const { section, t }       = this.props;

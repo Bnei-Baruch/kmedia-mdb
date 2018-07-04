@@ -7,6 +7,15 @@ import * as shapes from '../../shapes';
 import NavLink from '../../Language/MultiLanguageNavLink';
 
 class Kabbalist extends Component {
+
+  static mapLinks = {
+    ar: 'ari',
+    bs: 'baal-hasulam',
+    ml: 'michael-laitman',
+    rb: 'rabash',
+    rh: 'rashbi',
+  };
+
   static propTypes = {
     getSourceById: PropTypes.func.isRequired,
     author: shapes.Author.isRequired,
@@ -15,14 +24,6 @@ class Kabbalist extends Component {
 
   static defaultProps = {
     portrait: '',
-  };
-
-  static mapLinks = {
-    ar: 'ari',
-    bs: 'baal-hasulam',
-    ml: 'michael-laitman',
-    rb: 'rabash',
-    rh: 'rashbi',
   };
 
   renderBook = (book) => {
