@@ -7,10 +7,12 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import MomentLocaleUtils, { formatDate, parseDate } from 'react-day-picker/moment';
 import { Input } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
+import * as moment from 'moment/moment';
 
 import { today } from '../../../../helpers/date';
 import { getLanguageDirection, getLanguageLocaleWORegion } from '../../../../helpers/i18n-utils';
 import YearMonthForm from './YearMonthForm';
+import * as shapes from '../../../shapes';
 
 class FastDayPicker extends Component {
   static propTypes = {
@@ -18,6 +20,7 @@ class FastDayPicker extends Component {
     label: PropTypes.string,
     onDayChange: PropTypes.func,
     language: PropTypes.string.isRequired,
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -29,6 +32,9 @@ class FastDayPicker extends Component {
   state = {
     month: null,
   };
+
+  isMobileDevice = () =>
+    this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
   handleYearMonthChange = month =>
     this.setState({ month });
@@ -43,11 +49,39 @@ class FastDayPicker extends Component {
     }
   };
 
+  handleNativeDateInputChange = (event) => {
+    if (!event) {
+      return;
+    }
+
+    this.props.onDayChange(event.target.valueAsDate);
+  };
+
   render() {
     const { language, onDayChange, value, label } = this.props;
-    const { month }                        = this.state;
-    const selected                         = value || today().toDate();
-    const locale                           = getLanguageLocaleWORegion(language);
+    const { month }                               = this.state;
+    const selected                                = value || today().toDate();
+    const selectedToString                        = moment(selected).format('YYYY-MM-DD');
+    const locale                                  = getLanguageLocaleWORegion(language);
+    const isMobileDevice                          = this.isMobileDevice();
+
+    if (isMobileDevice) {
+      return (
+        <div>
+          <label htmlFor="dateInput">{label}</label>
+          <input
+            id="dateInput"
+            type="date"
+            value={selectedToString}
+            max={today().format('YYYY-MM-DD')}
+            step="1"
+            pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+            title={label}
+            onChange={this.handleNativeDateInputChange}
+          />
+        </div>
+      );
+    }
 
     return (
       <DayPickerInput
