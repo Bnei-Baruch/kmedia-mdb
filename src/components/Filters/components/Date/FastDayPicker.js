@@ -67,8 +67,10 @@ class FastDayPicker extends Component {
 
     if (isMobileDevice) {
       return (
-        <div>
-          <label htmlFor="dateInput">{label}</label>
+        <div className="ui labeled fluid input">
+          <div className="ui label to-from-label">
+            {label}
+          </div>
           <input
             id="dateInput"
             type="date"
