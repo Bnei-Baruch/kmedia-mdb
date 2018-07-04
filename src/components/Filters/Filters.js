@@ -137,6 +137,7 @@ class Filters extends Component {
                         onApply={x => this.handleApply(name, x)}
                         language={language}
                         t={t}
+                        deviceInfo={deviceInfo}
                       />
                     </Popup.Content>
                   </Popup>
