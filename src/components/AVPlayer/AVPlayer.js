@@ -267,13 +267,9 @@ class AVPlayer extends PureComponent {
     }
   };
 
-  isIE = () => {
-    return window.navigator.userAgent.match(/Trident\/7\./);
-  }
-
   onPause = (e) => {
     // when we're close to the end regard this as finished
-    if (!this.isIE() && Math.abs(e.currentTime - e.duration) < 0.1 && this.props.onFinish) {
+    if (Math.abs(e.currentTime - e.duration) < 0.1 && this.props.onFinish) {
       this.clearCurrentTime();
       this.props.onFinish();
     } else if (this.props.onPause) {
@@ -301,24 +297,24 @@ class AVPlayer extends PureComponent {
 
   handleTimeUpdate = (timeData) => {
     const { media }          = this.props;
-    const { mode, sliceEnd, firstSeek } = this.state;
+    const { mode, sliceEnd, sliceStart } = this.state;
 
     const isSliceMode = mode === PLAYER_MODE.SLICE_VIEW;
 
-    const lowerTime = Math.min(sliceEnd, timeData.currentTime);
-    if (isSliceMode && lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
+    const lowerTime = Math.min(sliceEnd, timeData.currentTime);    
+
+    if (isSliceMode && (timeData.currentTime < sliceStart || timeData.currentTime  > sliceEnd)) {
+      this.setState({
+        mode: PLAYER_MODE.NORMAL,
+        sliceStart: undefined,
+        sliceEnd: undefined,
+      });
+    } else if (isSliceMode && lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
       media.pause();
       media.seekTo(sliceEnd);
     }
-
-    // when we're close to the end regard this as finished
-    if (this.isIE() && !firstSeek && Math.abs(timeData.currentTime - timeData.duration) < 0.5 && this.props.onFinish) {
-      media.pause();
-      this.clearCurrentTime();
-      this.props.onFinish();
-    } else {
-      this.saveCurrentTime();
-    }
+  
+    this.saveCurrentTime();
   };
 
   handleEditBack = () => {
