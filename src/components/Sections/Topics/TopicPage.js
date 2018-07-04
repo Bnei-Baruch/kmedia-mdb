@@ -33,8 +33,8 @@ class TopicPage extends Component {
     }
 
     loadTopic = (nextProps) => {
-      const { fetchDashboard } = nextProps;
-      const tagId = nextProps.match.params.id;
+      const { fetchDashboard, match } = nextProps;
+      const tagId = match.params.id;
 
       fetchDashboard(tagId);
     }
@@ -47,14 +47,13 @@ class TopicPage extends Component {
         const tagPath = getPathByID(tagId);
 
         // create breadCrumb sections from tagPath
-        const breadCrumbSections = tagPath ? 
-                                   tagPath.map(p => ({ key: p.id, content: p.label, link: false })) :
-                                   null;
+        const breadCrumbSections = tagPath.map(p => ({ key: p.id, content: p.label, link: false }));
+        const topicHeader = tagPath[tagPath.length-1].label;
 
         return (
           <Container>
             <Breadcrumb sections={breadCrumbSections} size="small" className="section-header"/>
-            <SectionHeader section="topics" />
+            <SectionHeader section={topicHeader} />
             <Grid container doubling columns={sections.length} className="homepage__iconsrow">
               {
                 sections.map((s) => {
