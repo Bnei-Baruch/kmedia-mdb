@@ -3,36 +3,54 @@
 // Library index - Collections
 .sources {
   &__authors {
+    height: 100%;
+
+    tr,
+    tbody {
+      @include mobile { height: auto; }
+      height: 100%;
+    }
+
     .image {
       @include mobile { margin: 0 0 1em; }
       @include small-mobile { margin: 0 auto 1em; }
     }
 
-    td {
-      &:nth-child(2) {
-        position: relative;
+    .author {
+      &--image {
+        td {
+          height: 100%;
+
+          &:nth-child(2) {
+            > div {
+              height: 100%;
+              overflow: auto;
+              position: relative;
+            }
+          }
+        }
+
+        .sources__list {
+          @include mobile { position: static; }
+          position: absolute;
+        }
+
+        .list {
+          @include mobile { position: static; }
+          position: absolute;
+        }
       }
     }
   }
 
   &__list {
-    bottom: .78571429em;
+    bottom: 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    left: .78571429em;
+    left: 0;
     right: 0;
-    top: .78571429em;
-
-    &--image {
-      @include mobile { position: static; }
-      position: absolute;
-
-      .list {
-        @include mobile { position: static; }
-        position: absolute;
-      }
-    }
+    top: 0;
 
     > div:nth-child(2) {
       flex: 1 1 auto;
