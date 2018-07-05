@@ -15,6 +15,7 @@
       "design": "Дизайн",
       "design2": "Планировка",
       "project-status": "Статус проекта",
+      "twitter": "Твиттере",
       "old-site": "Старый сайт"
     },
     "footer": {
@@ -300,6 +301,13 @@
         }
       }
     }
+  },
+  "twitter": {
+    "header": {
+      "text": "Твиттере",
+      "subtext": "Все твиты от Михаэль Лайтман @Michael_Laitman"
+    },
+    "twitted": "твитов"
   },
   "pages": {
     "collection": {

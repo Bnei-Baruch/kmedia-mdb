@@ -112,7 +112,11 @@ class Filters extends Component {
                           </small>
                           <span>
                             {label}
-                            <Icon name="dropdown" flipped={isActive ? 'vertically' : ''} />
+                            {
+                              isActive ?
+                                <Icon name="dropdown" flipped="vertically" /> :
+                                <Icon name="dropdown" />
+                            }
                           </span>
                         </div>
 
