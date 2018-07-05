@@ -15,6 +15,7 @@ import { reducer as search } from './modules/search';
 import { reducer as assets } from './modules/assets';
 import { reducer as home } from './modules/home';
 import { reducer as stats } from './modules/stats';
+import { reducer as twitter } from './modules/twitter';
 
 export default combineReducers({
   router,
@@ -33,5 +34,6 @@ export default combineReducers({
   assets,
   home,
   stats,
+  twitter,
 });
 

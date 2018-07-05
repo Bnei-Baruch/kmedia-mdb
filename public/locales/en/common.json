@@ -16,6 +16,7 @@
       "design2": "Layout",
       "project-status": "Project Status",
       "help": "Help",
+      "twitter": "Twitter",
       "old-site": "Old Site"
     },
     "footer": {
@@ -302,6 +303,13 @@
         }
       }
     }
+  },
+  "twitter": {
+    "header": {
+      "text": "Twitter",
+      "subtext": "A mirror of all Tweets by Michael Laitman @laitman"
+    },
+    "twitted": "twitted"
   },
   "help": {
     "header": {
