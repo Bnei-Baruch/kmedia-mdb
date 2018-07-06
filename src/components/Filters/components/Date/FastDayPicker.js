@@ -15,7 +15,7 @@ import YearMonthForm from './YearMonthForm';
 import * as shapes from '../../../shapes';
 
 class FastDayPicker extends Component {
-  static propTypes = {
+  static propTypes    = {
     value: PropTypes.instanceOf(Date),
     label: PropTypes.string,
     onDayChange: PropTypes.func,
@@ -28,6 +28,12 @@ class FastDayPicker extends Component {
     label: '',
     onDayChange: noop,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.nativeDateInput = React.createRef();
+  }
 
   state = {
     month: null,
@@ -57,29 +63,43 @@ class FastDayPicker extends Component {
     this.props.onDayChange(event.target.valueAsDate);
   };
 
+  openNativeDatePicker = () => {
+    this.nativeDateInput.current.click();
+  };
+
   render() {
     const { language, onDayChange, value, label } = this.props;
     const { month }                               = this.state;
     const selected                                = value || today().toDate();
     const selectedToString                        = moment(selected).format('YYYY-MM-DD');
     const locale                                  = getLanguageLocaleWORegion(language);
+    const localeDateFormat                        = moment.localeData().longDateFormat('L');
+    const selectedInLocaleFormat                  = moment(selected).format(localeDateFormat);
     const isMobileDevice                          = this.isMobileDevice();
 
     if (isMobileDevice) {
       return (
-        <div className="ui labeled fluid input">
-          <div className="ui label to-from-label">
-            {label}
+        <div>
+          <div className="ui labeled input">
+            <div className="ui label label to-from-label">
+              {label}
+            </div>
+            <input
+              type="text"
+              readOnly={true}
+              value={selectedInLocaleFormat}
+              onClick={this.openNativeDatePicker}
+            />
           </div>
           <input
-            id="dateInput"
+            className="hide-native-date-input"
             type="date"
             value={selectedToString}
             max={today().format('YYYY-MM-DD')}
             step="1"
             pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
-            title={label}
             onChange={this.handleNativeDateInputChange}
+            ref={this.nativeDateInput}
           />
         </div>
       );
