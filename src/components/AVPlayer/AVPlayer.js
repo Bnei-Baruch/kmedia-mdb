@@ -65,6 +65,8 @@ class AVPlayer extends PureComponent {
     onPause: PropTypes.func,
     onPrev: PropTypes.func,
     onNext: PropTypes.func,
+
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -120,11 +122,20 @@ class AVPlayer extends PureComponent {
         sliceEnd: send
       });
     }
-
-    this.setState({
-      firstSeek:true,
-      ...this.chooseSource(this.props)
-    });
+    if (this.props.deviceInfo.browser.name !== 'Edge' && 
+        this.props.deviceInfo.browser.name !== 'IE') {
+      this.setState({
+        firstSeek:true,
+        ...this.chooseSource(this.props)
+      }); 
+    } else {
+      setTimeout(() => {
+        this.setState({
+          firstSeek:true,
+          ...this.chooseSource(this.props)
+        }); 
+      }, 1);
+    }
   }
 
   componentDidMount() {
