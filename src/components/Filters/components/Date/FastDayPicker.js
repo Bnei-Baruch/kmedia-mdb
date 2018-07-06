@@ -64,7 +64,11 @@ class FastDayPicker extends Component {
   };
 
   openNativeDatePicker = () => {
-    this.nativeDateInput.current.click();
+    if (this.props.deviceInfo.os.name === 'Android') {
+      this.nativeDateInput.current.click();
+    } else {
+      this.nativeDateInput.current.focus();
+    }
   };
 
   render() {
