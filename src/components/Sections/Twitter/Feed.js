@@ -3,6 +3,13 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Feed } from 'semantic-ui-react';
 
+const screenNames = {
+  Michael_Laitman: 'Михаэль Лайтман',
+  laitman_co_il: 'מיכאל לייטמן',
+  laitman: 'Michael Laitman',
+  laitman_es: 'Michael Laitman',
+};
+
 class TwitterFeed extends Component {
   static propTypes = {
     total: PropTypes.number,
@@ -71,18 +78,23 @@ class TwitterFeed extends Component {
   renderTweet = (tweet) => {
     const { t } = this.props;
     const {
-      username, twitter_id: tID, created_at: ts, raw
-    }     = tweet;
+            username, twitter_id: tID, created_at: ts, raw
+          }     = tweet;
     const mts   = moment(ts);
 
+    const screenName = screenNames[username];
+
     return (
-      <Feed.Event key={tID}>
+      <Feed.Event key={tID} className="tweet">
         <Feed.Content>
           <Feed.Summary>
             <a href={`https://twitter.com/${username}`} target="_blank" rel="noopener noreferrer">
-              {username}
+              {screenName}
+              &nbsp;&nbsp;
+              <span className="tweet--username">
+                @{username}
+              </span>
             </a>
-            &nbsp;&nbsp;{t('twitter.twitted')}
             <Feed.Date>
               <a
                 href={`https://twitter.com/${username}/status/${tID}`}
