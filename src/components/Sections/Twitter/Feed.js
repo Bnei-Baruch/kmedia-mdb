@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Feed } from 'semantic-ui-react';
 
+import { isEmpty } from '../../../helpers/utils';
+import * as shapes from '../../shapes';
+
 const screenNames = {
   Michael_Laitman: 'Михаэль Лайтман',
   laitman_co_il: 'מיכאל לייטמן',
@@ -12,23 +15,42 @@ const screenNames = {
 
 class TwitterFeed extends Component {
   static propTypes = {
-    total: PropTypes.number,
-    tweets: PropTypes.array,
-    t: PropTypes.func.isRequired,
+    tweets: PropTypes.arrayOf(shapes.Tweet),
   };
 
   static defaultProps = {
-    total: 0,
     tweets: [],
   };
 
+  getBestVideoVariant = (x) => {
+    const { video_info: { variants } } = x;
+    if (isEmpty(variants)) {
+      return null;
+    }
+
+    const playable = variants.filter(y => y.content_type.startsWith('video'));
+    if (isEmpty(playable)) {
+      return null;
+    }
+
+    let best = playable[0];
+    for (let i = 1; i < playable.length; i++) {
+      if (best.bitrate < playable[i].bitrate) {
+        best = playable[i];
+      }
+    }
+
+    return best;
+  };
+
   prepare = (raw) => {
-    const { full_text: fullText, entities } = raw;
+    const { full_text: fullText, entities, extended_entities: exEntities } = raw;
 
     const replacements = [
-      ...(entities.hashtags || []).map(x => ({ ...x, type: 'hashtag' })),
-      ...(entities.urls || []).map(x => ({ ...x, type: 'url' })),
-      ...(entities.user_mentions || []).map(x => ({ ...x, type: 'user_mention' })),
+      ...(entities.hashtags || []).map(x => ({ ...x, entityType: 'hashtag' })),
+      ...(entities.urls || []).map(x => ({ ...x, entityType: 'url' })),
+      ...(entities.user_mentions || []).map(x => ({ ...x, entityType: 'user_mention' })),
+      ...(exEntities.media || []).map(x => ({ ...x, entityType: 'media' })),
     ];
 
     if (replacements.length === 0) {
@@ -44,11 +66,11 @@ class TwitterFeed extends Component {
     let html   = '';
     let offset = 0;
     replacements.forEach((x) => {
-      const { indices: [s, e], type } = x;
+      const { indices: [s, e], entityType } = x;
 
       html += fullText.slice(offset, s);
 
-      switch (type) {
+      switch (entityType) {
       case 'hashtag':
         html += `<a href="https://twitter.com/hashtag/${x.text}" target="_blank" rel="noopener noreferrer">#${x.text}</a>`;
         break;
@@ -57,6 +79,25 @@ class TwitterFeed extends Component {
         break;
       case 'user_mention':
         html += `<a href="https://twitter.com/${x.screen_name}" target="_blank" title="${x.name}" rel="noopener noreferrer">@${x.screen_name}</a>`;
+        break;
+      case 'media':
+        switch (x.type) {
+        case 'photo':
+          html += `<img class="tweet--media" src="${x.media_url_https}" alt="${x.ext_alt_text}" />`;
+          break;
+        case 'video': {
+          const variant = this.getBestVideoVariant(x);
+          if (variant) {
+            html += `<video controls playsinline preload="none" poster="${x.media_url_https}" class="tweet--media" src="${variant.url}" />`;
+          } else {
+            html += fullText.slice(s, e);
+          }
+          break;
+        }
+        default:
+          html += fullText.slice(s, e);
+          break;
+        }
         break;
       default:
         html += fullText.slice(s, e);
@@ -76,11 +117,10 @@ class TwitterFeed extends Component {
   };
 
   renderTweet = (tweet) => {
-    const { t } = this.props;
     const {
             username, twitter_id: tID, created_at: ts, raw
-          }     = tweet;
-    const mts   = moment(ts);
+          }   = tweet;
+    const mts = moment(ts);
 
     const screenName = screenNames[username];
 
