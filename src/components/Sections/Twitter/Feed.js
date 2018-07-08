@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Grid, Feed, Card, Divider } from 'semantic-ui-react';
+import { Feed } from 'semantic-ui-react';
 
 class TwitterFeed extends Component {
   static propTypes = {
@@ -16,7 +16,7 @@ class TwitterFeed extends Component {
   };
 
   prepare = (raw) => {
-    const { full_text: fullText, entities, extended_entities: exEntities } = raw;
+    const { full_text: fullText, entities } = raw;
 
     const replacements = [
       ...(entities.hashtags || []).map(x => ({ ...x, type: 'hashtag' })),
@@ -71,8 +71,8 @@ class TwitterFeed extends Component {
   renderTweet = (tweet) => {
     const { t } = this.props;
     const {
-            username, twitter_id: tID, created_at: ts, raw
-          }     = tweet;
+      username, twitter_id: tID, created_at: ts, raw
+    }     = tweet;
     const mts   = moment(ts);
 
     return (
