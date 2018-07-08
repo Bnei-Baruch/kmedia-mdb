@@ -375,4 +375,8 @@
   &--username {
     color: rgba($grey, .75);
   }
+  &--media {
+    max-width: 100%;
+    height: auto;
+  }
 }
