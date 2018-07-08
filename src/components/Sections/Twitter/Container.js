@@ -4,13 +4,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
+import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../helpers/consts';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
 import { actions, selectors } from '../../../redux/modules/twitter';
 import withPagination from '../../Pagination/withPagination';
 import * as shapes from '../../shapes';
 import Page from './Page';
-import { LANG_HEBREW, LANG_RUSSIAN, LANG_UKRAINIAN } from '../../../helpers/consts';
 
 class TwitterContainer extends withPagination {
   static propTypes = {
@@ -61,10 +61,11 @@ class TwitterContainer extends withPagination {
     case LANG_UKRAINIAN:
     case LANG_RUSSIAN:
       return { username: 'Michael_Laitman' };
+    case LANG_SPANISH:
+      return { username: 'laitman_es' };
     default:
-      break;
+      return { username: 'laitman' };
     }
-    return {};
   }
 
   handlePageChanged(pageNo) {
