@@ -65,6 +65,8 @@ class AVPlayer extends PureComponent {
     onPause: PropTypes.func,
     onPrev: PropTypes.func,
     onNext: PropTypes.func,
+
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -120,9 +122,10 @@ class AVPlayer extends PureComponent {
         sliceEnd: send
       });
     }
-
+    
     this.setState({
-      firstSeek:true,
+      browserName: this.props.deviceInfo.browser.name,
+      firstSeek: true,
       ...this.chooseSource(this.props)
     });
   }
@@ -267,9 +270,12 @@ class AVPlayer extends PureComponent {
     }
   };
 
+
   onPause = (e) => {
+    const { browserName } = this.state;
     // when we're close to the end regard this as finished
-    if (Math.abs(e.currentTime - e.duration) < 0.1 && this.props.onFinish) {
+    if (!browserName === 'IE' && 
+        Math.abs(e.currentTime - e.duration) < 0.1 && this.props.onFinish) {
       this.clearCurrentTime();
       this.props.onFinish();
     } else if (this.props.onPause) {
@@ -297,7 +303,7 @@ class AVPlayer extends PureComponent {
 
   handleTimeUpdate = (timeData) => {
     const { media }          = this.props;
-    const { mode, sliceEnd } = this.state;
+    const { mode, sliceEnd, firstSeek, browserName } = this.state;
 
     const isSliceMode = mode === PLAYER_MODE.SLICE_VIEW;
 
@@ -306,8 +312,15 @@ class AVPlayer extends PureComponent {
       media.pause();
       media.seekTo(sliceEnd);
     }
-    
-    this.saveCurrentTime();
+    // when we're close to the end regard this as finished
+    if (browserName === 'IE' && 
+        !firstSeek && Math.abs(timeData.currentTime - timeData.duration) < 0.5 && this.props.onFinish) {
+      media.pause();
+      this.clearCurrentTime();
+      this.props.onFinish();
+    } else {
+      this.saveCurrentTime();
+    }
   };
 
   handleEditBack = () => {
