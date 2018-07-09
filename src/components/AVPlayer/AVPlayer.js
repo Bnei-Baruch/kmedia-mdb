@@ -122,7 +122,7 @@ class AVPlayer extends PureComponent {
         sliceEnd: send
       });
     }
-    
+
     this.setState({
       browserName: this.props.deviceInfo.browser.name,
       firstSeek: true,
@@ -226,7 +226,7 @@ class AVPlayer extends PureComponent {
     if (wasPlaying) {
       media.play();
     }
-    
+
     // restore playback from state when player instance changed (when src changes, e.g., playlist).
     this.player.instance.playbackRate = playbackToValue(this.state.playbackRate);
     this.setState({ wasCurrentTime: undefined, wasPlaying: undefined });
@@ -274,7 +274,7 @@ class AVPlayer extends PureComponent {
   onPause = (e) => {
     const { browserName } = this.state;
     // when we're close to the end regard this as finished
-    if (!browserName === 'IE' && 
+    if (!browserName === 'IE' &&
         Math.abs(e.currentTime - e.duration) < 0.1 && this.props.onFinish) {
       this.clearCurrentTime();
       this.props.onFinish();
@@ -303,17 +303,23 @@ class AVPlayer extends PureComponent {
 
   handleTimeUpdate = (timeData) => {
     const { media }          = this.props;
-    const { mode, sliceEnd, firstSeek, browserName } = this.state;
+    const { mode, sliceEnd, sliceStart, firstSeek, browserName } = this.state;
 
     const isSliceMode = mode === PLAYER_MODE.SLICE_VIEW;
 
     const lowerTime = Math.min(sliceEnd, timeData.currentTime);
-    if (isSliceMode && lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
+    if (isSliceMode && (timeData.currentTime < sliceStart || timeData.currentTime  > sliceEnd)) {
+      this.setState({
+        mode: PLAYER_MODE.NORMAL,
+        sliceStart: undefined,
+        sliceEnd: undefined,
+      });
+    } else if (isSliceMode && lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
       media.pause();
       media.seekTo(sliceEnd);
     }
     // when we're close to the end regard this as finished
-    if (browserName === 'IE' && 
+    if (browserName === 'IE' &&
         !firstSeek && Math.abs(timeData.currentTime - timeData.duration) < 0.5 && this.props.onFinish) {
       media.pause();
       this.clearCurrentTime();
@@ -479,7 +485,7 @@ class AVPlayer extends PureComponent {
 
   clearCurrentTime = () => {
     const { item } = this.props;
-    if (item && item.unit && item.unit.id) {    
+    if (item && item.unit && item.unit.id) {
         localStorage.removeItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
     }
   };
