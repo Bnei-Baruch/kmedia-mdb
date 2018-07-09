@@ -122,12 +122,22 @@ class AVPlayer extends PureComponent {
         sliceEnd: send
       });
     }
-
-    this.setState({
-      browserName: this.props.deviceInfo.browser.name,
-      firstSeek: true,
-      ...this.chooseSource(this.props)
-    });
+    if (this.props.deviceInfo.browser.name !== 'Edge' &&
+        this.props.deviceInfo.browser.name !== 'IE') {
+      this.setState({
+        browserName: this.props.deviceInfo.browser.name,
+        firstSeek:true,
+        ...this.chooseSource(this.props)
+      });
+    } else {
+      setTimeout(() => {
+        this.setState({
+          browserName: this.props.deviceInfo.browser.name,
+          firstSeek:true,
+          ...this.chooseSource(this.props)
+        });
+      }, 1);
+    }
   }
 
   componentDidMount() {
