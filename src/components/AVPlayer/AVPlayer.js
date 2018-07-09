@@ -122,12 +122,24 @@ class AVPlayer extends PureComponent {
         sliceEnd: send
       });
     }
-    
-    this.setState({
-      browserName: this.props.deviceInfo.browser.name,
-      firstSeek: true,
-      ...this.chooseSource(this.props)
-    });
+
+    const { deviceInfo: { browser: { name: browserName } } } = this.props;
+    if (browserName !== 'Edge' &&
+      browserName !== 'IE') {
+      this.setState({
+        browserName,
+        firstSeek: true,
+        ...this.chooseSource(this.props)
+      });
+    } else {
+      setTimeout(() => {
+        this.setState({
+          browserName,
+          firstSeek: true,
+          ...this.chooseSource(this.props)
+        });
+      }, 1);
+    }
   }
 
   componentDidMount() {
@@ -143,7 +155,7 @@ class AVPlayer extends PureComponent {
       this.setState({
         error: false,
         errorReason: '',
-        firstSeek:true,
+        firstSeek: true,
         ...this.chooseSource(nextProps)
       });
     }
@@ -210,7 +222,7 @@ class AVPlayer extends PureComponent {
 
   onPlayerReady = () => {
     const { wasCurrentTime, wasPlaying, sliceStart, firstSeek } = this.state;
-    const { media }                                  = this.props;
+    const { media }                                             = this.props;
 
     this.activatePersistence();
 
@@ -221,12 +233,12 @@ class AVPlayer extends PureComponent {
       if (savedTime) {
         media.seekTo(savedTime);
       }
-      this.setState({firstSeek:false});
+      this.setState({ firstSeek: false });
     }
     if (wasPlaying) {
       media.play();
     }
-    
+
     // restore playback from state when player instance changed (when src changes, e.g., playlist).
     this.player.instance.playbackRate = playbackToValue(this.state.playbackRate);
     this.setState({ wasCurrentTime: undefined, wasPlaying: undefined });
@@ -270,12 +282,11 @@ class AVPlayer extends PureComponent {
     }
   };
 
-
   onPause = (e) => {
     const { browserName } = this.state;
     // when we're close to the end regard this as finished
-    if (!browserName === 'IE' && 
-        Math.abs(e.currentTime - e.duration) < 0.1 && this.props.onFinish) {
+    if (browserName !== 'IE' &&
+      Math.abs(e.currentTime - e.duration) < 0.1 && this.props.onFinish) {
       this.clearCurrentTime();
       this.props.onFinish();
     } else if (this.props.onPause) {
@@ -302,19 +313,26 @@ class AVPlayer extends PureComponent {
   };
 
   handleTimeUpdate = (timeData) => {
-    const { media }          = this.props;
-    const { mode, sliceEnd, firstSeek, browserName } = this.state;
+    const { media }                                              = this.props;
+    const { mode, sliceEnd, sliceStart, firstSeek, browserName } = this.state;
 
     const isSliceMode = mode === PLAYER_MODE.SLICE_VIEW;
 
     const lowerTime = Math.min(sliceEnd, timeData.currentTime);
-    if (isSliceMode && lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
+    if (isSliceMode && (timeData.currentTime < sliceStart || timeData.currentTime > sliceEnd)) {
+      this.setState({
+        mode: PLAYER_MODE.NORMAL,
+        sliceStart: undefined,
+        sliceEnd: undefined,
+      });
+    } else if (isSliceMode && lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
       media.pause();
       media.seekTo(sliceEnd);
     }
+
     // when we're close to the end regard this as finished
-    if (browserName === 'IE' && 
-        !firstSeek && Math.abs(timeData.currentTime - timeData.duration) < 0.5 && this.props.onFinish) {
+    if (browserName === 'IE' &&
+      !firstSeek && Math.abs(timeData.currentTime - timeData.duration) < 0.5 && this.props.onFinish) {
       media.pause();
       this.clearCurrentTime();
       this.props.onFinish();
@@ -479,8 +497,8 @@ class AVPlayer extends PureComponent {
 
   clearCurrentTime = () => {
     const { item } = this.props;
-    if (item && item.unit && item.unit.id) {    
-        localStorage.removeItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
+    if (item && item.unit && item.unit.id) {
+      localStorage.removeItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
     }
   };
 
