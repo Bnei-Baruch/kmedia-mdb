@@ -76,14 +76,6 @@ const filtersTransformer = {
 
     return definition.valueToTagLabel(value, props, store, t);
   },
-  getTagIcon(filterName) {
-    const definition = this.definitionsByName[filterName];
-    if (!definition) {
-      return '';
-    }
-
-    return definition.tagIcon;
-  }
 };
 
 export default filtersTransformer;

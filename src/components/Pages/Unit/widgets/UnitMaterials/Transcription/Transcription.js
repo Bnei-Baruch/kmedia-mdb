@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import uniq from 'lodash/uniq';
 import { Container, Divider, Segment } from 'semantic-ui-react';
 
-import { MEDIA_TYPES, RTL_LANGUAGES } from '../../../../../../helpers/consts';
+import { RTL_LANGUAGES } from '../../../../../../helpers/consts';
+import MediaHelper from '../../../../../../helpers/media';
 import * as shapes from '../../../../../shapes';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import WipErr from '../../../../../shared/WipErr/WipErr';
@@ -66,14 +67,14 @@ class Transcription extends Component {
       return [];
     }
 
-    return unit.files.filter(x => x.type === 'text' && x.mimetype !== MEDIA_TYPES.html.mime_type);
+    return unit.files.filter(x => MediaHelper.IsText(x) && !MediaHelper.IsHtml(x));
   };
 
   setCurrentItem = (props) => {
     const textFiles = this.getTextFiles(props);
     const languages = uniq(textFiles.map(x => x.language));
-    const selected = this.selectFile(textFiles, this.state.language || props.language);
-    const language = selected ? selected.language : null;
+    const selected  = this.selectFile(textFiles, this.state.language || props.language);
+    const language  = selected ? selected.language : null;
 
     const sUpdate = { selected, languages, language };
     this.setState(sUpdate);
@@ -84,25 +85,25 @@ class Transcription extends Component {
   selectFile = (textFiles, language) => {
     let selected = textFiles.filter(x => x.language === language);
 
-    switch(selected.length){
-      case 0:
-        //no files by language - use first text file
-        selected = textFiles[0];
-        break;
-      
-      case 1:
-        //use the only file found
-        selected = selected[0];
-        break;
+    switch (selected.length) {
+    case 0:
+      // no files by language - use first text file
+      selected = textFiles[0];
+      break;
 
-      default:
-        //many files by language - get the largest - it is probably the transcription
-        selected = selected.reduce((acc, file) => acc.size < file.size ? file : acc);
-        break;
+    case 1:
+      // use the only file found
+      selected = selected[0];
+      break;
+
+    default:
+      // many files by language - get the largest - it is probably the transcription
+      selected = selected.reduce((acc, file) => (acc.size < file.size ? file : acc));
+      break;
     }
 
     return selected;
-  }
+  };
 
   handleLanguageChanged = (e, language) => {
     if (language === this.state.language) {
@@ -111,7 +112,7 @@ class Transcription extends Component {
     }
 
     const textFiles = this.getTextFiles(this.props);
-    const selected = this.selectFile(textFiles, language);
+    const selected  = this.selectFile(textFiles, language);
 
     this.props.onContentChange(selected.id);
     this.setState({ selected, language });

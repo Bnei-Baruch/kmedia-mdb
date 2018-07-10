@@ -4,6 +4,7 @@ import { translate } from 'react-i18next';
 import { Container, Grid } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
+import Helmets from '../../shared/Helmets';
 import WipErr from '../../shared/WipErr/WipErr';
 import AVBox from './widgets/AVBox/AVBox';
 import Materials from './widgets/UnitMaterials/Materials';
@@ -30,7 +31,8 @@ export class UnitPage extends Component {
 
   // eslint-disable-next-line class-methods-use-this
   renderHelmet() {
-    return null;
+    const { unit, language } = this.props;
+    return <Helmets.AVUnit unit={unit} language={language} />;
   }
 
   renderPlayer() {

@@ -42,7 +42,6 @@ class AVUnit extends Component {
 
     const videoDate = moment.utc(unit.film_date).toDate();
 
-    // Todo: secure Url ?
     const videoFiles = unit.files
       .filter(file => (file.type === 'video' && file.language === language))
       .map(file => ({

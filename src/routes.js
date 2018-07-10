@@ -6,15 +6,13 @@ import { renderRoutes } from 'react-router-config';
 import { DEFAULT_LANGUAGE } from './helpers/consts';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
-import Lessons from './components/Sections/Lessons/List';
-import LessonUnit from './components/Sections/Lessons/Unit';
-import LessonCollection from './components/Sections/Lessons/Collection';
+import Lessons from './components/Sections/Lessons/MainPage';
+import LessonUnit from './components/Sections/Lessons/Unit/Container';
+import LessonCollection from './components/Sections/Lessons/Collection/MainPage';
+import LastLessonCollection from './components/Sections/Lessons/Collection/LastDaily';
 import Programs from './components/Sections/Programs/List';
 import ProgramUnit from './components/Sections/Programs/Unit';
 import ProgramCollection from './components/Sections/Programs/Collection';
-import Lectures from './components/Sections/Lectures/MainPage';
-import LectureUnit from './components/Sections/Lectures/Unit';
-import LectureCollection from './components/Sections/Lectures/Collection';
 import Publications from './components/Sections/Publications/List';
 import PublicationUnit from './components/Sections/Publications/Unit';
 import PublicationCollection from './components/Sections/Publications/Collection';
@@ -25,12 +23,9 @@ import LibraryHomepage from './components/Sections/Library/Homepage';
 import LibraryContainer from './components/Sections/Library/LibraryContainer';
 import LibraryPerson from './components/Sections/Library/LibraryPerson';
 import SearchResults from './components/Search/SearchResultsContainer';
-import Redirect from './components/Layout/Redirect';
 import HomePage from './components/Sections/Home/Container';
-import LastLessonCollection from './components/Sections/Lessons/LastCollection';
-import Series from './components/Sections/Series/Container';
-import LessonsSeriesCollection from './components/Sections/Series/Collection';
 import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
+import Help from './components/Sections/Help/Help';
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 
@@ -53,28 +48,13 @@ const pageRoute = (path, component, { subRoutes, ssrData, prefix = '' } = {}) =>
   ssrData,
 });
 
-/**
- * Creates a redirect route config
- *
- * @param {string} from
- * @param {string} to
- * @param {string} prefix='' will be prepended to both the 'from' and the 'to' params
- */
-const redirect = (from, to, { prefix = '' }) => {
-  const fullFrom = `${prefix}/${from}`;
-  const fullTo   = `${prefix}/${to}`;
-  return ({
-    path: fullFrom,
-    component: () => <Redirect to={fullTo} />
-  });
-};
-
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
-  { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.cuListPage('lessons') } },
+  { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
+  { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
+  { path: 'lessons/:tab/c/:id', component: LessonCollection, options: { ssrData: ssrDataLoaders.lessonsCollectionPage } },
   { path: 'lessons/cu/:id', component: LessonUnit, options: { ssrData: ssrDataLoaders.cuPage } },
-  { path: 'lessons/c/:id', component: LessonCollection, options: { ssrData: ssrDataLoaders.playlistCollectionPage } },
-  { path: 'lessons/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
+  { path: 'lessons/daily/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
   { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.cuListPage('programs') } },
   { path: 'programs/cu/:id', component: ProgramUnit, options: { ssrData: ssrDataLoaders.cuPage } },
   {
@@ -86,14 +66,6 @@ const routes = [
   { path: 'events/:tab', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
   { path: 'events/cu/:id', component: EventUnit, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'events/c/:id', component: EventCollection, options: { ssrData: ssrDataLoaders.playlistCollectionPage } },
-  { path: 'lectures', component: Lectures, options: { ssrData: ssrDataLoaders.lecturesPage } },
-  { path: 'lectures/:tab', component: Lectures, options: { ssrData: ssrDataLoaders.lecturesPage } },
-  { path: 'lectures/cu/:id', component: LectureUnit, options: { ssrData: ssrDataLoaders.cuPage } },
-  {
-    path: 'lectures/c/:id',
-    component: LectureCollection,
-    options: { ssrData: ssrDataLoaders.collectionPage('lectures-collection') }
-  },
   { path: 'publications', component: Publications, options: { ssrData: ssrDataLoaders.cuListPage('publications') } },
   { path: 'publications/cu/:id', component: PublicationUnit, options: { ssrData: ssrDataLoaders.publicationCUPage } },
   {
@@ -108,25 +80,12 @@ const routes = [
   { path: 'topics', component: NotImplemented },
   { path: 'photos', component: NotImplemented },
   { path: 'search', component: SearchResults, options: { ssrData: ssrDataLoaders.searchPage } },
-  { path: 'series', component: Series, options: { ssrData: ssrDataLoaders.seriesPage } },
-  {
-    path: 'series/c/:id',
-    component: LessonsSeriesCollection,
-    options: { ssrData: ssrDataLoaders.playlistCollectionPage }
-  },
   { path: 'project-status', component: ProjectStatus },
+  { path: 'help', component: Help },
   // { path: 'design', component: Design },
   // { path: 'design2', component: Design2 },
 ];
 
-const redirects = [
-  { from: 'lessons/part/:id', to: 'lessons/cu/:id' },
-  { from: 'lessons/full/:id', to: 'lessons/c/:id' },
-  { from: 'programs/chapter/:id', to: 'programs/cu/:id' },
-  { from: 'programs/full/:id', to: 'programs/c/:id' },
-  { from: 'events/item/:id', to: 'events/cu/:id' },
-  { from: 'events/full/:id', to: 'events/c/:id' },
-];
 const createMainRoutes = (prefix) => {
   const defaultPageOptions = { prefix };
 
@@ -134,17 +93,10 @@ const createMainRoutes = (prefix) => {
   const defaultPageRoute = (path, component, options = {}) =>
     pageRoute(path, component, { ...defaultPageOptions, ...options });
 
-  // for convenience
-  const defaultRedirect = (from, to) =>
-    redirect(from, to, defaultPageOptions);
-
   return [{
     component: Layout,
     routes: [
       ...routes.map(route => defaultPageRoute(route.path, route.component, route.options)),
-
-      // Old routes - redirect for now
-      ...redirects.map(r => defaultRedirect(r.from, r.to)),
 
       {
         path: '*',

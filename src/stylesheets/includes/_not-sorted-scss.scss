@@ -23,9 +23,43 @@
 .search-omnibox {
   max-width: 600px;
   width: 100%;
-  .input {
 
+  .input {
     width: 100%;
+  }
+
+  >.results {
+    &.visible {
+      display: table !important;
+    }
+
+    // this falls sub-pixel apart from the category name table-cell,
+    // it doesn't look good. so we cancel it
+    > .category {
+      > .name {
+        border-bottom: none !important;
+      }
+
+      .result{
+        background-color: $white;
+        //border-bottom: none !important;
+        &:last-child {
+          border-bottom: 1px solid rgba(34,36,38,.1) !important;
+          margin-bottom: 1px;
+        }
+        &:hover {
+          //background-color: rgba($blue, .075) !important;
+          background-image: linear-gradient(to bottom, rgba($blue, 0.125), rgba($blue, 0)) !important;
+        }
+      }
+
+      &:last-child {
+        .result:last-child {
+          border-bottom: none !important;
+          margin-bottom: 1px;
+        }
+      }
+    }
   }
 }
 
@@ -144,4 +178,193 @@
       margin: 0 .25rem 0 0 !important;
     }
   }
+}
+
+// filters redesign
+.index-filters {
+  margin-top: .5rem !important;
+  .item {
+    &.header {
+      padding: .95714286em 1.14285714em !important;
+    }
+    padding: .35714286em 1.14285714em !important;
+    .header {
+      margin: 0;
+      .sub {
+        color: $blue;
+      }
+    }
+  }
+}
+
+.filter-popup {
+  &__header {
+    .title {
+      display: flex;
+      .header {
+        margin: 0 1rem;
+        flex-grow: 2;
+      }
+    }
+
+    .autocomplete {
+      margin-top: .75em;
+    }
+  }
+
+  &__body {
+    max-height: 350px;
+    min-width: 300px;
+    overflow-y: auto;
+
+    &.segment {
+      padding: 0;
+    }
+
+    > .menu {
+      border-radius: 0;
+
+      .item {
+        color: $blue;
+        .count {
+          color: $grey;
+        }
+      }
+    }
+
+    .highlight {
+      background-color: rgba($yellow, 0.2);
+    }
+
+    &.date-filter {
+      max-height: 450px;
+      .DayPickerInput {
+        display: block;
+      }
+      .DayPicker-Caption > div {
+        font-size: 1rem;
+      }
+    }
+
+    &.sections-filter {
+      img {
+        margin-bottom: .2em;
+        width: 50px !important;
+      }
+
+      .row .center.aligned.column {
+        display: flex !important;
+        justify-content: center;
+        align-items: stretch;
+      }
+
+      .header {
+        flex: 1 1 auto;
+        border-radius: 4px;
+        padding: 4px 4px 8px !important;
+
+        &:hover {
+          background-image: linear-gradient(to bottom, $darkWhite, rgba($darkWhite, 0));
+        }
+
+        &.active {
+          background-image: linear-gradient(to bottom, rgba($blue, 0.3), rgba($blue, 0));
+        }
+      }
+    }
+  }
+
+  &.ltr {
+    .hierarchy {
+      .item {
+        &.l1 {
+          padding-left: 1rem;
+        }
+        &.l2 {
+          padding-left: 2rem;
+        }
+        &.l3 {
+          padding-left: 3rem;
+        }
+        &.l4 {
+          padding-left: 4rem;
+        }
+        &.l5 {
+          padding-left: 5rem;
+        }
+        &.l6 {
+          padding-left: 6rem;
+        }
+      }
+    }
+  }
+
+  &.rtl {
+    .hierarchy {
+      .item {
+        &.l1 {
+          padding-right: 1rem;
+        }
+        &.l2 {
+          padding-right: 2rem;
+        }
+        &.l3 {
+          padding-right: 3rem;
+        }
+        &.l4 {
+          padding-right: 4rem;
+        }
+        &.l5 {
+          padding-right: 5rem;
+        }
+        &.l6 {
+          padding-right: 6rem;
+        }
+      }
+    }
+  }
+}
+
+.field.slice-button-mobile input {
+  font-size: 16px !important;
+}
+
+.shareCopyLinkButton {
+  width: 10em;
+  height: 37px;
+  margin: 0 0 0 10px !important;
+}
+
+.mobileShareCopyLinkButton {
+  width: 10em;
+  height: 100%;
+  margin: 0 0 0 10px !important;
+}
+
+.rtl {
+  .mobileShareCopyLinkButton, .shareCopyLinkButton {
+    margin: 0 10px 0 0 !important;
+  }
+}
+
+.mediaplayer__onscreen-share-bar-mobile {
+  display: flex;
+  padding-bottom: 10px;
+  height: 3.5em;
+}
+
+.mediaplayer__onscreen-share-bar-mobile-link {
+  width:100%;
+}
+
+.slice-button-mobile .input {
+  height: 3.5em;
+}
+
+.slice-button-mobile .input .button {
+  width: 7em;
+}
+
+.mediaplayer__onscreen-share-bar {
+  display: flex;
 }

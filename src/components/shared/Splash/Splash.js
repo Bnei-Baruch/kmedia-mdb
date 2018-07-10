@@ -7,13 +7,15 @@ export const Splash = (props) => {
   const { text, subtext, icon, color, isLoading } = props;
 
   return (
-    <Header icon className="splash" as="h2" textAlign="center">
-      <Icon name={icon} loading={isLoading} color={color} />
-      <Header.Content>
-        {text}
-        {subtext ? <Header.Subheader>{subtext}</Header.Subheader> : null}
-      </Header.Content>
-    </Header>
+    <div className="splash">
+      <Header icon as="h2" textAlign="center">
+        <Icon name={icon} loading={isLoading} color={color} />
+        <Header.Content>
+          {text}
+          {subtext ? <Header.Subheader>{subtext}</Header.Subheader> : null}
+        </Header.Content>
+      </Header>
+    </div>
   );
 };
 
@@ -31,6 +33,6 @@ Splash.defaultProps = {
   isLoading: false,
 };
 
-export const LoadingSplash = props => (<Splash isLoading icon="spinner" {...props} />);
+export const LoadingSplash = props => (<Splash isLoading icon="circle notch" color="blue" {...props} />);
 export const FrownSplash   = props => (<Splash icon="frown" color="orange" {...props} />);
 export const ErrorSplash   = props => (<Splash icon="warning sign" color="red" {...props} />);

@@ -1,41 +1,36 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
-import { Button, Divider, List, Segment } from 'semantic-ui-react';
+import { Button, Header, Grid, Image, Segment } from 'semantic-ui-react';
 
-import connectFilter from './connectFilter';
-import { options } from '../../../filters/definitions/sectionsFilter';
+import { sectionLogo } from '../../../helpers/images';
 
-class SectionsFilter extends React.Component {
-
+class SectionsFilter extends Component {
   static propTypes = {
+    value: PropTypes.string,
     onCancel: PropTypes.func,
     onApply: PropTypes.func,
-    updateValue: PropTypes.func.isRequired,
-    value: PropTypes.string,
     t: PropTypes.func.isRequired,
-    namespace: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
+    value: null,
     onCancel: noop,
     onApply: noop,
-    value: null,
   };
 
   state = {
-    selection: this.props.value
+    sValue: this.props.value
   };
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      selection: nextProps.value
-    });
+    if (this.props.value !== nextProps.value) {
+      this.setState({ sValue: nextProps.value });
+    }
   }
 
-  onSelectionChange = (event, data) => {
-    const { value } = data;
-    this.setState({ selection: value });
+  onSelectionChange = (section) => {
+    this.setState({ sValue: `filters.sections-filter.${section}` });
   };
 
   onCancel = () => {
@@ -43,69 +38,59 @@ class SectionsFilter extends React.Component {
   };
 
   apply = () => {
-    const selection = this.state.selection;
-    if (selection === null) {
-      return;
-    }
-    this.props.updateValue(selection);
-    this.props.onApply();
-  };
-
-  canApply = () => this.state.selection && this.state.selection.length > 0;
-
-  createList = (sections, selected) => {
-    if (!Array.isArray(sections)) {
-      return null;
-    }
-
-    return (
-      <div
-        style={{
-          height: '180px',
-          overflowY: 'scroll'
-        }}
-      >
-        <List divided relaxed selection>
-          {
-            sections.map((x) => {
-              const style = this.props.value === x && selected !== x ?
-                { backgroundColor: 'lightgoldenrodyellow' } :
-                {};
-
-              return (
-                <List.Item
-                  key={x}
-                  value={x}
-                  style={style}
-                  active={selected === x}
-                  onClick={this.onSelectionChange}
-                >
-                  {this.props.t(x)}
-                </List.Item>
-              );
-            })
-          }
-        </List>
-      </div>
-    );
+    this.props.onApply(this.state.sValue);
   };
 
   render() {
-    const { t } = this.props;
-
-    const sections = Object.keys(options);
+    const { t }      = this.props;
+    const { sValue } = this.state;
 
     return (
-      <Segment basic clearing attached="bottom" className="tab active">
-        { this.createList(sections, this.state.selection) }
-        <Divider />
-        <Segment vertical clearing>
-          <Button primary content={t('buttons.apply')} floated="right" disabled={!this.canApply()} onClick={this.apply} />
-          <Button content={t('buttons.cancel')} floated="right" onClick={this.onCancel} />
+      <Segment.Group>
+        <Segment secondary className="filter-popup__header">
+          <div className="title">
+            <Button
+              basic
+              compact
+              icon="remove"
+              onClick={this.onCancel}
+            />
+            <Header size="small" textAlign="center" content={t('filters.sections-filter.label')} />
+            <Button
+              primary
+              compact
+              size="small"
+              content={t('buttons.apply')}
+              disabled={!sValue}
+              onClick={this.apply}
+            />
+          </div>
         </Segment>
-      </Segment>
+        <Segment className="filter-popup__body sections-filter">
+          <Grid padded stackable columns={5}>
+            <Grid.Row>
+              {
+                ['lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
+                  (
+                    <Grid.Column key={x} textAlign="center">
+                      <Header
+                        size="small"
+                        className={(sValue && sValue.endsWith(x)) ? 'active' : ''}
+                        onClick={() => this.onSelectionChange(x)}
+                      >
+                        <Image src={sectionLogo[x]} />
+                        <br />{t(`nav.sidebar.${x}`)}
+                      </Header>
+                    </Grid.Column>
+                  )
+                )
+              }
+            </Grid.Row>
+          </Grid>
+        </Segment>
+      </Segment.Group>
     );
   }
 }
 
-export default connectFilter()(SectionsFilter);
+export default SectionsFilter;

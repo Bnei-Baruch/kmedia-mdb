@@ -21,6 +21,7 @@ class SearchResultsContainer extends Component {
     wip: shapes.WIP,
     err: shapes.Error,
     search: PropTypes.func.isRequired,
+    updateQuery: PropTypes.func.isRequired,
     click: PropTypes.func.isRequired,
     setPage: PropTypes.func.isRequired,
     pageNo: PropTypes.number.isRequired,
@@ -50,16 +51,20 @@ class SearchResultsContainer extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.updateQuery(''); // reset query for next page
+  }
+
   handlePageChange = (pageNo) => {
     const { setPage, search, query, pageSize, deb } = this.props;
     setPage(pageNo);
-    search(query, pageNo, pageSize, deb);
+    search(query, pageNo, pageSize, '' /* suggest */, deb);
   };
 
   handleSortByChanged = (e, data) => {
     const { setSortBy, search, query, pageSize, pageNo, deb } = this.props;
     setSortBy(data.value);
-    search(query, pageNo, pageSize, deb);
+    search(query, pageNo, pageSize, '' /* suggest */, deb);
   };
 
   handleFiltersChanged = () => {
@@ -68,7 +73,7 @@ class SearchResultsContainer extends Component {
 
   handleFiltersHydrated = () => {
     const { search, query, pageSize, pageNo, deb } = this.props;
-    search(query, pageNo, pageSize, deb);
+    search(query, pageNo, pageSize, '' /* suggest */, deb);
   };
 
   render() {
@@ -105,11 +110,11 @@ class SearchResultsContainer extends Component {
 
 const mapState = (state) => {
   const queryResult = selectors.getQueryResult(state.search);
-  const results = queryResult.search_result;
+  const results     = queryResult.search_result;
 
   const cMap = results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
-      if (val._type === 'collections') {
+      if (val._source.result_type === 'collections') {
         const cID = val._source.mdb_uid;
         const c   = mdbSelectors.getDenormCollection(state.mdb, cID);
         if (c) {
@@ -150,6 +155,7 @@ const mapState = (state) => {
 
 const mapDispatch = dispatch => bindActionCreators({
   search: actions.search,
+  updateQuery: actions.updateQuery,
   click: actions.click,
   setPage: actions.setPage,
   setSortBy: actions.setSortBy,
