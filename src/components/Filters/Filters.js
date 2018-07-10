@@ -122,6 +122,10 @@ class Filters extends Component {
 
                         {
                           value ?
+                            //  onClick={e => this.handleResetFilter(e, name)}>
+                            //   <Icon name="times" className="text gray"/>
+                            // </div>
+                            <div className="clear-filter">
                             <Label
                               circular
                               size="tiny"
@@ -130,6 +134,7 @@ class Filters extends Component {
                             >
                               <Icon name="times" />
                             </Label>
+                            </div>
                             :
                             null
                         }
