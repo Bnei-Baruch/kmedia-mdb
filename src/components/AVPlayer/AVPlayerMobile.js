@@ -15,10 +15,15 @@ import AVLanguageMobile from './AVLanguageMobile';
 import AVAudioVideo from './AVAudioVideo';
 import AVEditSlice from './AVEditSlice';
 import ShareFormMobile from './Share/ShareFormMobile';
+import AVPlaybackRateMobile from './AVPlaybackRateMobile';
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
 const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
+
+// Converts playback rate string to float: 1.0x => 1.0
+const playbackToValue = playback =>
+  parseFloat(playback.slice(0, -1));
 
 class AVPlayerMobile extends PureComponent {
   static propTypes = {
@@ -63,6 +68,7 @@ class AVPlayerMobile extends PureComponent {
     isSliceMode: false,
     currentTime: 0,
     firstSeek: true,
+    playbackRate: '1x',
   };
 
   componentWillMount() {
@@ -161,7 +167,7 @@ class AVPlayerMobile extends PureComponent {
   };
 
   seekIfNeeded = () => {
-    const { sliceStart, firstSeek } = this.state;
+    const { sliceStart, firstSeek, playbackRate } = this.state;
     if (this.wasCurrentTime) {
       this.media.currentTime = this.wasCurrentTime;
       this.wasCurrentTime    = undefined;
@@ -178,6 +184,7 @@ class AVPlayerMobile extends PureComponent {
       }
       this.setState({firstSeek:false});
     }
+    this.media.playbackRate = playbackToValue(playbackRate);
   };
 
   handlePlaying = () => {
@@ -296,6 +303,12 @@ class AVPlayerMobile extends PureComponent {
     }
     return null;
   };
+  
+
+  playbackRateChange = (e, rate) => {
+    this.media.playbackRate = playbackToValue(rate);
+    this.setState({ playbackRate: rate });
+  };
 
   render() {
     const
@@ -311,7 +324,7 @@ class AVPlayerMobile extends PureComponent {
         onNext,
       } = this.props;
 
-    const { error, errorReason, isSliceMode } = this.state;
+    const { error, errorReason, isSliceMode, playbackRate } = this.state;
 
     const isVideo       = item.mediaType === MT_VIDEO;
     const isAudio       = item.mediaType === MT_AUDIO;
@@ -382,6 +395,10 @@ class AVPlayerMobile extends PureComponent {
               <Icon name="forward" />
               +5s
             </button>
+            <AVPlaybackRateMobile
+              value={playbackRate}
+              onSelect={this.playbackRateChange}
+            />
             <AVAudioVideo
               isAudio={isAudio}
               isVideo={isVideo}
