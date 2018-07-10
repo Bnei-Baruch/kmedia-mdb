@@ -3,7 +3,7 @@
     .label {
       left: auto;
       right: 100%;
-      transform: translate(50%, 50%);
+      transform: translate(100%, calc(100% - 1px));
     }
   }
 }
