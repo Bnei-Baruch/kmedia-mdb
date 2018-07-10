@@ -15,7 +15,7 @@ import YearMonthForm from './YearMonthForm';
 import * as shapes from '../../../shapes';
 
 class FastDayPicker extends Component {
-  static propTypes    = {
+  static propTypes = {
     value: PropTypes.instanceOf(Date),
     label: PropTypes.string,
     onDayChange: PropTypes.func,
@@ -66,9 +66,11 @@ class FastDayPicker extends Component {
   openNativeDatePicker = () => {
     if (this.props.deviceInfo.os.name === 'Android') {
       this.nativeDateInput.current.click();
-    } else {
-      this.nativeDateInput.current.focus();
+
+      return;
     }
+
+    this.nativeDateInput.current.focus();
   };
 
   render() {
