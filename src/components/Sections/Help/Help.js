@@ -109,7 +109,7 @@ const texts = [
   },
 ];
 
-class ProjectStatus extends Component {
+class HelpPage extends Component {
   static propTypes = {
     language: PropTypes.string.isRequired
   };
@@ -174,4 +174,4 @@ const mapState = state => ({
   language: settings.getLanguage(state.settings),
 });
 
-export default connect(mapState)(ProjectStatus);
+export default connect(mapState)(HelpPage);

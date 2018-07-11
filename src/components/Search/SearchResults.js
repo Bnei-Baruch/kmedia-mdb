@@ -71,7 +71,6 @@ class SearchResults extends Component {
     const {
       _index: index,
       _source: { mdb_uid: mdbUid, result_type: resultType },
-      highlight,
       _score: score
     } = hit;
     const { title, description, content, label, content_type, date, duration } = result;

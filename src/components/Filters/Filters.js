@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
-import { Container, Header, Icon, Menu, Popup } from 'semantic-ui-react';
+import { Container, Header, Icon, Menu, Popup, Label } from 'semantic-ui-react';
 
 import { getLanguageDirection } from '../../helpers/i18n-utils';
 import { filtersTransformer } from '../../filters/index';
@@ -29,12 +29,12 @@ class Filters extends Component {
     deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
-  static defaultProps = {
-    rightItems: null,
-  };
-
   static contextTypes = {
     store: PropTypes.object.isRequired,
+  };
+
+  static defaultProps = {
+    rightItems: null,
   };
 
   state = {
@@ -81,11 +81,12 @@ class Filters extends Component {
     }
 
     return (
-      <div className="filter-panel">
+      <div className="filters">
         <FiltersHydrator namespace={namespace} onHydrated={onHydrated} />
-        <Menu secondary pointing stackable className="index-filters" size="large">
-          <Container className="padded horizontally">
-            <Menu.Item header content={t('filters.by')} />
+        {/* <Menu secondary pointing stackable className="index-filters" size="large"> */}
+        <Container className="padded">
+          <Menu className="filters__menu" stackable>
+            <Menu.Item className="filters__header" header content={t('filters.by')} />
             {
               filters.map((item) => {
                 const { component: FilterComponent, name } = item;
@@ -104,26 +105,39 @@ class Filters extends Component {
                     flowing
                     key={name}
                     trigger={
-                      <Menu.Item name={name}>
-                        <Header
-                          size="tiny"
-                          content={t(`filters.${name}.label`)}
-                          subheader={label}
-                        />
-                        <Icon size="large" name={`triangle ${isActive ? 'up' : 'down'}`} />
+                      <Menu.Item className="filter" name={name}>
+                        <div className="filter__content">
+                          <small className="blue text">
+                            {t(`filters.${name}.label`)}
+                          </small>
+                          <span>
+                            {label}
+                            {
+                              isActive ?
+                                <Icon name="dropdown" flipped="vertically" /> :
+                                <Icon name="dropdown" />
+                            }
+                          </span>
+                        </div>
+
                         {
                           value ?
-                            <Icon
-                              name="trash alternate outline"
+                            <Label
+                              circular
+                              size="tiny"
+                              color="black"
                               onClick={e => this.handleResetFilter(e, name)}
-                            /> :
+                            >
+                              <Icon name="times" />
+                            </Label>
+                            :
                             null
                         }
                       </Menu.Item>
                     }
                     on="click"
                     position={`bottom ${langDir === 'ltr' ? 'left' : 'right'}`}
-                    verticalOffset={-12}
+                    // verticalOffset={-12}
                     open={isActive}
                     onClose={this.handlePopupClose}
                     onOpen={() => this.handlePopupOpen(name)}
@@ -148,8 +162,8 @@ class Filters extends Component {
                 <Menu.Menu position="right">{rightItems}</Menu.Menu>
                 : null
             }
-          </Container>
-        </Menu>
+          </Menu>
+        </Container>
       </div>
     );
   }

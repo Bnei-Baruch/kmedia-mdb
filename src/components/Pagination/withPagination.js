@@ -39,7 +39,7 @@ class withPagination extends React.Component {
 
   askForData(props, page, params = {}) {
     const { namespace, fetchList, pageNo, pageSize } = props;
-    fetchList(namespace, page || pageNo, { ...params, ...this.extraFetchParams(), pageSize });
+    fetchList(namespace, page || pageNo, { ...params, ...this.extraFetchParams(props), pageSize });
   }
 
   // eslint-disable-next-line class-methods-use-this
