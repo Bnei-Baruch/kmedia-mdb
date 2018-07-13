@@ -26,6 +26,7 @@ import {
   CT_MEALS,
   CT_PICNIC,
   CT_PUBLICATION,
+  CT_RABASH_LESSON,
   CT_SPECIAL_LESSON,
   CT_TRAINING,
   CT_UNITY_DAY,
@@ -110,6 +111,7 @@ export const canonicalLink = (entity) => {
   case CT_LECTURE:
   case CT_VIRTUAL_LESSON:
   case CT_WOMEN_LESSON:
+  case CT_RABASH_LESSON:
   // case CT_CHILDREN_LESSON:
     return `/lessons/cu/${entity.id}`;
   case CT_VIDEO_PROGRAM_CHAPTER:
