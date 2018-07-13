@@ -55,23 +55,25 @@ class Kabbalist extends Component {
     const kabbalist = Kabbalist.mapLinks[id];
 
     return (
-      <Table.Row verticalAlign="top">
+      <Table.Row verticalAlign="top" className={classnames({'author':true, 'author--image': !!portrait })}>
         <Table.Cell collapsing width={2}>
           {portrait ? <Image src={portrait} alt={fullName} /> : null}
         </Table.Cell>
         <Table.Cell>
-          <div className={classnames({ sources__list: true, 'sources__list--image': !!portrait })}>
-            <Header size="small">
-              {kabbalist ? <NavLink to={`/persons/${kabbalist}`} title={fullName}>{displayName}</NavLink> : displayName}
-            </Header>
-            <div>
-              <List bulleted>
-                {
-                  volumes ?
-                    volumes.map(x => (this.renderBook(getSourceById(x)))) :
-                    null
-                }
-              </List>
+          <div>
+            <div className="sources__list">
+              <Header size="small">
+                {kabbalist ? <NavLink to={`/persons/${kabbalist}`} title={fullName}>{displayName}</NavLink> : displayName}
+              </Header>
+              <div>
+                <List bulleted>
+                  {
+                    volumes ?
+                      volumes.map(x => (this.renderBook(getSourceById(x)))) :
+                      null
+                  }
+                </List>
+              </div>
             </div>
           </div>
         </Table.Cell>

@@ -9,6 +9,10 @@ import {
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
+  LANG_HEBREW,
+  LANG_RUSSIAN,
+  LANG_SPANISH,
+  LANG_UKRAINIAN,
 } from './helpers/consts';
 import MediaHelper from './helpers/media';
 import { canonicalCollection, isEmpty } from './helpers/utils';
@@ -22,6 +26,7 @@ import { actions as lessonsActions } from './redux/modules/lessons';
 import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
 import { selectors as sourcesSelectors } from './redux/modules/sources';
 import { actions as assetsActions, selectors as assetsSelectors } from './redux/modules/assets';
+import { actions as twitterActions } from './redux/modules/twitter';
 import { actions as tagsActions } from './redux/modules/tags';
 import * as mdbSagas from './sagas/mdb';
 import * as filtersSagas from './sagas/filters';
@@ -94,7 +99,6 @@ export const cuListPage = (ns, collectionID = 0) => (store, match) => {
 
   // extraFetchParams
   const extraFetchParams = getExtraFetchParams(ns, collectionID);
-  console.log('SSR.cuListPage', extraFetchParams);
 
   // dispatch fetchList
   store.dispatch(listsActions.fetchList(ns, page, { ...extraFetchParams, pageSize }));
@@ -291,3 +295,41 @@ export const topicsPage = (store, match) => {
     store.sagaMiddleWare.run(tagsSagas.fetchTags, tagsActions.fetchTags).done
   ]);
 }
+
+export const tweetsListPage = (store, match) => {
+  console.log('SSR tweetsListPage');
+  // hydrate filters
+  store.dispatch(filtersActions.hydrateFilters('twitter'));
+
+  // hydrate page
+  const page = withPagination.getPageFromLocation(match.parsedURL);
+  store.dispatch(twitterActions.setPage('twitter', page));
+
+  const state = store.getState();
+
+  const pageSize = settingsSelectors.getPageSize(state.settings);
+  const language = settingsSelectors.getLanguage(state.settings);
+
+  // extraFetchParams
+  let extraFetchParams;
+  switch (language) {
+  case LANG_HEBREW:
+    extraFetchParams = { username: 'laitman_co_il' };
+    break;
+  case LANG_UKRAINIAN:
+  case LANG_RUSSIAN:
+    extraFetchParams = { username: 'Michael_Laitman' };
+    break;
+  case LANG_SPANISH:
+    extraFetchParams = { username: 'laitman_es' };
+    break;
+  default:
+    extraFetchParams = { username: 'laitman' };
+    break;
+  }
+
+  // dispatch fetchData
+  store.dispatch(twitterActions.fetchData('twitter', page, { ...extraFetchParams, pageSize }));
+
+  return Promise.resolve(null);
+};

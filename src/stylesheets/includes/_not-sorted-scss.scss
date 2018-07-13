@@ -240,7 +240,7 @@
     max-height: 350px;
     min-width: 300px;
     overflow-y: auto;
-
+    -webkit-overflow-scrolling: touch;
     &.segment {
       padding: 0;
     }
@@ -391,4 +391,16 @@
 
 .mediaplayer__onscreen-share-bar {
   display: flex;
+}
+
+
+.tweet {
+  margin-bottom: 1.5rem !important;
+  &--username {
+    color: rgba($grey, .75);
+  }
+  &--media {
+    max-width: 100%;
+    height: auto;
+  }
 }

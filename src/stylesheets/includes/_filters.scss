@@ -1,5 +1,7 @@
+@import 'rtl/filters';
+
 .filters {
-  &__menu{
+  &__menu {
     align-items: flex-start;
   }
 
@@ -16,27 +18,28 @@
   padding: .6em 1em !important;
 
   &__content {
-    width: 100%;
+    align-items: stretch;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    width: 100%;
 
     small {
       margin-bottom: .7em;
-      // padding-bottom: .4em;
-      // border-bottom: 1px solid $midWhite;
     }
 
     span {
       line-height: 1.2;
     }
   }
+
   .label {
     bottom: 100%;
+    border-radius: 0 !important;
     left: 100%;
     margin: 0 !important;
     position: absolute;
-    transform: translate(-50%, 50%);
+    text-align: center;
+    transform: translate(-100%, calc(100% - 1px));
     z-index: 100;
 
     .icon {
@@ -44,29 +47,7 @@
     }
   }
 }
-.index-filters {
 
-
-  .item {
-    // background: yellow !important;
-    div {
-
-    }
-    small {
-      // display: block;
-
-
-    }
-    span {
-      // display: flex;
-
-    }
-  }
-
-  .header {
-
-    // align-self: stretch;
-  }
-
-
+.clear-filter {
+  width: 1em;
 }
