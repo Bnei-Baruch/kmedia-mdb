@@ -6,6 +6,7 @@ import {
   CT_FRIENDS_GATHERING,
   CT_LECTURE,
   CT_MEAL,
+  CT_RABASH_LESSON,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
@@ -74,8 +75,10 @@ const getExtraFetchParams = (ns, collectionID) => {
     return { content_type: [CT_LECTURE] };
   case 'lessons-women':
     return { content_type: [CT_WOMEN_LESSON] };
-  // case 'lessons-children':
-  //   return { content_type: [CT_CHILDREN_LESSON] };
+  case 'lessons-rabash':
+    return { content_type: [CT_RABASH_LESSON] };
+    // case 'lessons-children':
+    //   return { content_type: [CT_CHILDREN_LESSON] };
   default:
     if (collectionID) {
       return { collection: collectionID };
