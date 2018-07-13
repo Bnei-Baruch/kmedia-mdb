@@ -8,6 +8,7 @@ import {
   CT_DAILY_LESSON,
   CT_LECTURE,
   CT_LESSON_PART,
+  CT_RABASH_LESSON,
   CT_SPECIAL_LESSON,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON
@@ -55,9 +56,12 @@ class Info extends Component {
       case CT_WOMEN_LESSON:
         filteredListPath += '/women';
         break;
-      // case CT_CHILDREN_LESSON:
-      //   filteredListPath += '/children';
-      //   break;
+      case CT_RABASH_LESSON:
+        filteredListPath += '/rabash';
+        break;
+        // case CT_CHILDREN_LESSON:
+        //   filteredListPath += '/children';
+        //   break;
       default:
         break;
       }
