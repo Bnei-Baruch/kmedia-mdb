@@ -216,7 +216,7 @@
     max-height: 350px;
     min-width: 300px;
     overflow-y: auto;
-
+    -webkit-overflow-scrolling: touch;
     &.segment {
       padding: 0;
     }
