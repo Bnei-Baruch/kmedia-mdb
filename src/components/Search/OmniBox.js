@@ -53,9 +53,14 @@ export class OmniBox extends Component {
     onSearch: noop,
   };
 
-  state = {
-    suggestionsHelper: new SuggestionsHelper(),
-  };
+  constructor(props) {
+    super(props);
+    this.search = null;
+
+    this.state = {
+      suggestionsHelper: new SuggestionsHelper(),
+    };
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.suggestions !== this.props.suggestions) {
@@ -115,7 +120,7 @@ export class OmniBox extends Component {
     }
 
     onSearch();
-    // so as to close the suggestions on "enter search" (KeyDown 13)
+    // So as to close the suggestions on "enter search" (KeyDown 13)
     this.setState({ suggestionsHelper: new SuggestionsHelper() });
   };
 
@@ -165,7 +170,10 @@ export class OmniBox extends Component {
     // Fix bug that did not allows to handleResultSelect when string is empty
     // we have meaning for that when filters are not empty.
     if (e.keyCode === 13 && this.props.query.trim()) {
-      this.doSearch();
+      const selectedResult = this.search.getSelectedResult();
+      if (!!selectedResult && !!selectedResult.title) {
+        this.doSearch(selectedResult.title);
+      }
     }
 
     if (e.keyCode === 27) { // Esc
@@ -270,6 +278,7 @@ export class OmniBox extends Component {
 
     return (
       <Search
+        ref={s => { this.search = s; }}
         category
         fluid
         className="search-omnibox"
