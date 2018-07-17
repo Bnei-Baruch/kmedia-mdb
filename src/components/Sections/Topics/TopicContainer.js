@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, Container, Header, Divider } from 'semantic-ui-react';
@@ -32,10 +32,10 @@ class TopicContainer extends Component {
     const { byId } = this.props;
 
     return (
-      <div>
+      <Fragment>
         {
           Array.isArray(node.children) && node.children.length > 0 ?
-            <List relaxed>
+            <List>
               {
                 node.children.map(id => (
                   <List.Item key={id}>
@@ -46,17 +46,19 @@ class TopicContainer extends Component {
             </List> :
             this.renderLeaf(node)
         }
-      </div>
+      </Fragment>
     );
   };
 
   renderSubHeader = node => (
-    <div key={node.id} className="topics__list">
-      <Header as="h4">
-        {node.label}
+    <Fragment key={node.id}>
+      <Header as="h3" className="topics__subtitle">
+        <Link to={`/topics/${node.id}`}>
+          {node.label}
+        </Link>
       </Header>
       {this.renderNode(node)}
-    </div>
+    </Fragment>
   );
 
   renderBranch = (rootId) => {
@@ -69,11 +71,18 @@ class TopicContainer extends Component {
     }
 
     return (
-      <div key={rootId}>
-        <Header as="h2"> {rootNode.label} </Header>
-        {
-          rootChildren.map(id => this.renderSubHeader(byId[id]))
-        }
+      <div key={rootId} className="topics__section">
+        <Header as="h1" className="topics__title"> 
+          <Link to={`/topics/${rootNode.id}`}>
+            {rootNode.label}
+          </Link>
+        </Header>
+        <div className="topics__list">
+          {
+            rootChildren.map(id => this.renderSubHeader(byId[id]))
+          }
+        </div>
+          <Divider />
       </div>
     );
   };
@@ -84,11 +93,11 @@ class TopicContainer extends Component {
     return (
       <div>
         <SectionHeader section="topics" />
-        <Divider hidden />
-        <Container>
+        <Divider fitted />
+        <Container className="padded">
           {roots.map(this.renderBranch)}
         </Container>
-        <Divider hidden />
+        
       </div>
     );
   }

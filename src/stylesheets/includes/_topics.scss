@@ -1,0 +1,36 @@
+.topics {
+  &__section {
+    margin-bottom: 4rem;
+
+    &:first-child {
+      margin-top: 2rem;
+    }
+  }
+
+  // &__title {
+  // }
+
+  &__list {
+    
+    column-count: 4;
+    column-gap: 2rem;
+    margin-bottom: 4rem;
+
+    .list {
+      margin: 0 !important;
+    }
+
+    .header {
+      line-height: 4rem !important;
+      margin: 0 !important;
+    }
+
+    .item {
+      line-height: 2rem !important;
+      padding: 0 !important;
+    }
+  }
+
+  // &__subtitle {
+  // }
+}

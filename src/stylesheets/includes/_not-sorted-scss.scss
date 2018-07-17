@@ -180,29 +180,7 @@
   }
 }
 
-.topics {
-  &__list{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
 
-    .list {
-      @include mobile { margin-top: -.214286em !important;}
-      align-content: flex-start;
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
-      
-      .item {
-        @include mobile { width: 50%;}
-        @include small-mobile { width: 100%; }
-        @include tablet { width: 50%; }
-        //padding: .214286em 0 !important;
-        width: 33.333333333%;
-      }
-    }
-  }
-}
 
 // filters redesign
 // .index-filters {
@@ -404,3 +382,4 @@
     height: auto;
   }
 }
+
