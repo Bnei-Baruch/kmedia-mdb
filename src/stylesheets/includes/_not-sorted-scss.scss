@@ -28,7 +28,7 @@
     width: 100%;
   }
 
-  >.results {
+  > .results {
     &.visible {
       display: table !important;
     }
@@ -40,11 +40,11 @@
         border-bottom: none !important;
       }
 
-      .result{
+      .result {
         background-color: $white;
         //border-bottom: none !important;
         &:last-child {
-          border-bottom: 1px solid rgba(34,36,38,.1) !important;
+          border-bottom: 1px solid rgba(34, 36, 38, .1) !important;
           margin-bottom: 1px;
         }
         &:hover {
@@ -181,21 +181,21 @@
 }
 
 // filters redesign
-.index-filters {
-  margin-top: .5rem !important;
-  .item {
-    &.header {
-      padding: .95714286em 1.14285714em !important;
-    }
-    padding: .35714286em 1.14285714em !important;
-    .header {
-      margin: 0;
-      .sub {
-        color: $blue;
-      }
-    }
-  }
-}
+// .index-filters {
+//   margin-top: .5rem !important;
+//   .item {
+//     &.header {
+//       padding: .95714286em 1.14285714em !important;
+//     }
+//     padding: .35714286em 1.14285714em !important;
+//     .header {
+//       margin: 0;
+//       .sub {
+//         color: $blue;
+//       }
+//     }
+//   }
+// }
 
 .filter-popup {
   &__header {
@@ -216,7 +216,7 @@
     max-height: 350px;
     min-width: 300px;
     overflow-y: auto;
-
+    -webkit-overflow-scrolling: touch;
     &.segment {
       padding: 0;
     }
@@ -354,7 +354,7 @@
 }
 
 .mediaplayer__onscreen-share-bar-mobile-link {
-  width:100%;
+  width: 100%;
 }
 
 .slice-button-mobile .input {
@@ -369,6 +369,17 @@
   display: flex;
 }
 
+.tweet {
+  margin-bottom: 1.5rem !important;
+  &--username {
+    color: rgba($grey, .75);
+  }
+  &--media {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
 // native day picker (date filter)
 .to-from-label {
   min-width: 70px;
@@ -377,6 +388,7 @@
 .hide-native-date-input {
   opacity: 0;
   position: fixed;
-  top: 0;
+  top: 40px;
+  height: 0;
   font-size: 16px;
 }
