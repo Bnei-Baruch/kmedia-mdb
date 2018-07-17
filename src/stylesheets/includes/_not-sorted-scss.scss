@@ -368,3 +368,15 @@
 .mediaplayer__onscreen-share-bar {
   display: flex;
 }
+
+// native day picker (date filter)
+.to-from-label {
+  min-width: 70px;
+}
+
+.hide-native-date-input {
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  font-size: 16px;
+}
