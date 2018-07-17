@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
+import moment from 'moment';
 import scrollIntoView from 'scroll-into-view';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import MomentLocaleUtils, { formatDate, parseDate } from 'react-day-picker/moment';
 import { Input } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
-import * as moment from 'moment/moment';
 
 import { today } from '../../../../helpers/date';
 import { getLanguageDirection, getLanguageLocaleWORegion } from '../../../../helpers/i18n-utils';
-import YearMonthForm from './YearMonthForm';
 import * as shapes from '../../../shapes';
+import YearMonthForm from './YearMonthForm';
 
 class FastDayPicker extends Component {
   static propTypes = {
@@ -66,7 +66,6 @@ class FastDayPicker extends Component {
   openNativeDatePicker = () => {
     if (this.props.deviceInfo.os.name === 'Android') {
       this.nativeDateInput.current.click();
-
       return;
     }
 
@@ -92,7 +91,7 @@ class FastDayPicker extends Component {
             </div>
             <input
               type="text"
-              readOnly={true}
+              readOnly
               value={selectedInLocaleFormat}
               onClick={this.openNativeDatePicker}
             />

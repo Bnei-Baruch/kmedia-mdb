@@ -6,8 +6,8 @@ import { Accordion, Button, Header, Menu, Segment } from 'semantic-ui-react';
 
 import 'react-day-picker/lib/style.css';
 import { today } from '../../../../helpers/date';
-import FastDayPicker from './FastDayPicker';
 import * as shapes from '../../../shapes';
+import FastDayPicker from './FastDayPicker';
 
 const TODAY        = 'TODAY';
 const YESTERDAY    = 'YESTERDAY';

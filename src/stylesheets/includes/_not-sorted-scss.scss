@@ -181,21 +181,21 @@
 }
 
 // filters redesign
-// .index-filters {
-//   margin-top: .5rem !important;
-//   .item {
-//     &.header {
-//       padding: .95714286em 1.14285714em !important;
-//     }
-//     padding: .35714286em 1.14285714em !important;
-//     .header {
-//       margin: 0;
-//       .sub {
-//         color: $blue;
-//       }
-//     }
-//   }
-// }
+.index-filters {
+  margin-top: .5rem !important;
+  .item {
+    &.header {
+      padding: .95714286em 1.14285714em !important;
+    }
+    padding: .35714286em 1.14285714em !important;
+    .header {
+      margin: 0;
+      .sub {
+        color: $blue;
+      }
+    }
+  }
+}
 
 .filter-popup {
   &__header {
@@ -216,7 +216,7 @@
     max-height: 350px;
     min-width: 300px;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+
     &.segment {
       padding: 0;
     }
@@ -369,14 +369,14 @@
   display: flex;
 }
 
+// native day picker (date filter)
+.to-from-label {
+  min-width: 70px;
+}
 
-.tweet {
-  margin-bottom: 1.5rem !important;
-  &--username {
-    color: rgba($grey, .75);
-  }
-  &--media {
-    max-width: 100%;
-    height: auto;
-  }
+.hide-native-date-input {
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  font-size: 16px;
 }
