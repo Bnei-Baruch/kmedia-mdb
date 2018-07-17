@@ -122,11 +122,10 @@ class AVPlayerMobile extends PureComponent {
       this.media.addEventListener('error', this.handleError);
       this.media.addEventListener('timeupdate', this.handleTimeUpdate);
       this.media.addEventListener('volumechange', this.handleVolumeChange);
-      this.media.addEventListener('playing', this.handlePlaying);
-      this.media.addEventListener('seeking', this.handleSeeking);
+      // this.media.addEventListener('playing', this.handlePlaying);
+      // this.media.addEventListener('seeking', this.handleSeeking);
       this.media.addEventListener('canplay', this.seekIfNeeded);
       this.restoreVolume();
-
     } else if (this.media) {
       this.media.removeEventListener('play', this.handlePlay);
       this.media.removeEventListener('pause', this.handlePause);
@@ -134,8 +133,8 @@ class AVPlayerMobile extends PureComponent {
       this.media.removeEventListener('error', this.handleError);
       this.media.removeEventListener('timeupdate', this.handleTimeUpdate);
       this.media.removeEventListener('volumechange', this.handleVolumeChange);
-      this.media.removeEventListener('playing', this.handlePlaying);
-      this.media.removeEventListener('seeking', this.handleSeeking);
+      // this.media.removeEventListener('playing', this.handlePlaying);
+      // this.media.removeEventListener('seeking', this.handleSeeking);
       this.media.removeEventListener('canplay', this.seekIfNeeded);
       this.media = ref;
     }
@@ -171,27 +170,25 @@ class AVPlayerMobile extends PureComponent {
     if (this.wasCurrentTime) {
       this.media.currentTime = this.wasCurrentTime;
       this.wasCurrentTime    = undefined;
-    } else 
-    if (firstSeek) {
+    } else if (firstSeek) {
       if (sliceStart) {
         this.media.currentTime = sliceStart;
-      }
-      else {
+      } else {
         const savedTime = this.getSavedTime();
         if (savedTime) {
           this.media.currentTime = savedTime;
         }
       }
-      this.setState({firstSeek:false});
+      this.setState({ firstSeek: false });
     }
     this.media.playbackRate = playbackToValue(playbackRate);
   };
 
-  handlePlaying = () => {
-  };
-
-  handleSeeking = (e) => {
-  };
+  // handlePlaying = () => {
+  // };
+  //
+  // handleSeeking = (e) => {
+  // };
 
   handlePause = () => {
     // stop future src changes from autoplay.
@@ -216,16 +213,15 @@ class AVPlayerMobile extends PureComponent {
     const { mode, sliceEnd, sliceStart } = this.state;
 
     const time = e.currentTarget.currentTime;
-
     this.saveCurrentTime(time);
 
     if (mode !== PLAYER_MODE.SLICE_VIEW) {
       return;
     }
 
-    const lowerTime = Math.min(sliceEnd, time);    
+    const lowerTime = Math.min(sliceEnd, time);
 
-    if (time < sliceStart || time > sliceEnd) {     
+    if (time < sliceStart || time > sliceEnd) {
       this.setState({
         mode: PLAYER_MODE.NORMAL,
         sliceStart: undefined,
@@ -274,9 +270,9 @@ class AVPlayerMobile extends PureComponent {
   };
 
   saveCurrentTime = (mediaTime) => {
-    const { currentTime, firstSeek }  = this.state;
-    const { item }         = this.props;
-    const currentMediaTime = Math.round(mediaTime);
+    const { currentTime, firstSeek } = this.state;
+    const { item }                   = this.props;
+    const currentMediaTime           = Math.round(mediaTime);
     if (!firstSeek && currentMediaTime !== currentTime) {
       this.setState({ currentTime: currentMediaTime });
       if (item && item.unit && item.unit.id) {
@@ -287,8 +283,8 @@ class AVPlayerMobile extends PureComponent {
 
   clearCurrentTime = () => {
     const { item } = this.props;
-    if (item && item.unit && item.unit.id) {    
-        localStorage.removeItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
+    if (item && item.unit && item.unit.id) {
+      localStorage.removeItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
     }
   };
 
@@ -303,7 +299,6 @@ class AVPlayerMobile extends PureComponent {
     }
     return null;
   };
-  
 
   playbackRateChange = (e, rate) => {
     this.media.playbackRate = playbackToValue(rate);
