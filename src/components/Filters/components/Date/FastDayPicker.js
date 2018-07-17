@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
+import moment from 'moment';
 import scrollIntoView from 'scroll-into-view';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import MomentLocaleUtils, { formatDate, parseDate } from 'react-day-picker/moment';
@@ -10,6 +11,7 @@ import 'react-day-picker/lib/style.css';
 
 import { today } from '../../../../helpers/date';
 import { getLanguageDirection, getLanguageLocaleWORegion } from '../../../../helpers/i18n-utils';
+import * as shapes from '../../../shapes';
 import YearMonthForm from './YearMonthForm';
 
 class FastDayPicker extends Component {
@@ -18,6 +20,7 @@ class FastDayPicker extends Component {
     label: PropTypes.string,
     onDayChange: PropTypes.func,
     language: PropTypes.string.isRequired,
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -26,9 +29,18 @@ class FastDayPicker extends Component {
     onDayChange: noop,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.nativeDateInput = React.createRef();
+  }
+
   state = {
     month: null,
   };
+
+  isMobileDevice = () =>
+    this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
   handleYearMonthChange = month =>
     this.setState({ month });
@@ -43,11 +55,60 @@ class FastDayPicker extends Component {
     }
   };
 
+  handleNativeDateInputChange = (event) => {
+    if (!event) {
+      return;
+    }
+
+    this.props.onDayChange(event.target.valueAsDate);
+  };
+
+  openNativeDatePicker = () => {
+    if (this.props.deviceInfo.os.name === 'Android') {
+      this.nativeDateInput.current.click();
+      return;
+    }
+
+    this.nativeDateInput.current.focus();
+  };
+
   render() {
     const { language, onDayChange, value, label } = this.props;
-    const { month }                        = this.state;
-    const selected                         = value || today().toDate();
-    const locale                           = getLanguageLocaleWORegion(language);
+    const { month }                               = this.state;
+    const selected                                = value || today().toDate();
+    const selectedToString                        = moment(selected).format('YYYY-MM-DD');
+    const locale                                  = getLanguageLocaleWORegion(language);
+    const localeDateFormat                        = moment.localeData().longDateFormat('L');
+    const selectedInLocaleFormat                  = moment(selected).format(localeDateFormat);
+    const isMobileDevice                          = this.isMobileDevice();
+
+    if (isMobileDevice) {
+      return (
+        <div>
+          <div className="ui labeled input">
+            <div className="ui label label to-from-label">
+              {label}
+            </div>
+            <input
+              type="text"
+              readOnly
+              value={selectedInLocaleFormat}
+              onClick={this.openNativeDatePicker}
+            />
+          </div>
+          <input
+            className="hide-native-date-input"
+            type="date"
+            value={selectedToString}
+            max={today().format('YYYY-MM-DD')}
+            step="1"
+            pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+            onChange={this.handleNativeDateInputChange}
+            ref={this.nativeDateInput}
+          />
+        </div>
+      );
+    }
 
     return (
       <DayPickerInput
