@@ -31,8 +31,6 @@ class FastDayPicker extends Component {
 
   constructor(props) {
     super(props);
-
-    this.nativeDateInput = React.createRef();
   }
 
   state = {
@@ -55,6 +53,10 @@ class FastDayPicker extends Component {
     }
   };
 
+  handleNativeDateInputRef = (ref) => {
+    this.nativeDateInput = ref;
+  };
+
   handleNativeDateInputChange = (event) => {
     if (!event) {
       return;
@@ -65,11 +67,11 @@ class FastDayPicker extends Component {
 
   openNativeDatePicker = () => {
     if (this.props.deviceInfo.os.name === 'Android') {
-      this.nativeDateInput.current.click();
+      this.nativeDateInput.click();
       return;
     }
 
-    this.nativeDateInput.current.focus();
+    this.nativeDateInput.focus();
   };
 
   render() {
@@ -104,7 +106,7 @@ class FastDayPicker extends Component {
             step="1"
             pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
             onChange={this.handleNativeDateInputChange}
-            ref={this.nativeDateInput}
+            ref={this.handleNativeDateInputRef}
           />
         </div>
       );
