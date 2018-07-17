@@ -5,10 +5,11 @@ import { List, Table } from 'semantic-ui-react';
 import {
   // CT_CHILDREN_LESSON,
   CT_LECTURE,
-  CT_RABASH_LESSON,
+  CT_LESSON_PART,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
-  NO_NAME
+  NO_NAME,
+  RABASH_PERSON_UID
 } from '../../../../../helpers/consts';
 import { sectionThumbnailFallback } from '../../../../../helpers/images';
 import { CollectionsBreakdown } from '../../../../../helpers/mdb';
@@ -105,6 +106,7 @@ class Container extends Component {
 
   extraFetchParams = () => {
     let ct;
+    let person;
     switch (this.props.tab) {
     case 'virtual':
       ct = [CT_VIRTUAL_LESSON];
@@ -116,7 +118,8 @@ class Container extends Component {
       ct = [CT_WOMEN_LESSON];
       break;
     case 'rabash':
-      ct = [CT_WOMEN_LESSON]; //TODO [CT_RABASH_LESSON];
+      ct     = [CT_LESSON_PART];
+      person = RABASH_PERSON_UID;
       break;
       // case 'children':
       //   ct = [CT_CHILDREN_LESSON];
@@ -126,7 +129,7 @@ class Container extends Component {
       break;
     }
 
-    return { content_type: ct };
+    return { content_type: ct, person };
   };
 
   render() {
