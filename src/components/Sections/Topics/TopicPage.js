@@ -6,7 +6,9 @@ import { withRouter } from 'react-router-dom';
 import { Grid, Container, Breadcrumb, Header } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../redux/modules/tags';
+import { selectors as settings } from '../../../redux/modules/settings';
 import { isEmpty } from '../../../helpers/utils';
+import { RTL_LANGUAGES } from '../../../helpers/consts';
 import * as shapes from '../../shapes';
 import SectionHeader from '../../shared/SectionHeader';
 import TopN from './TopN';
@@ -20,6 +22,7 @@ class TopicPage extends Component {
       getPathByID: PropTypes.func,
       match: shapes.RouterMatch.isRequired,
       fetchDashboard: PropTypes.func.isRequired,
+      language: PropTypes.string
     }
 
     componentDidMount() {
@@ -40,7 +43,7 @@ class TopicPage extends Component {
     }
 
     render() {
-      const { sections, getSectionUnits, getPathByID, match } = this.props;
+      const { sections, getSectionUnits, getPathByID, match, language } = this.props;
       const tagId = match.params.id;
 
       if (getPathByID && !isEmpty(sections)) {
@@ -50,15 +53,18 @@ class TopicPage extends Component {
         const breadCrumbSections = tagPath.map((p, index, arr) => 
                                                 ({ key: p.id, 
                                                    content: p.label, 
-                                                  //link: index !== arr.length - 1, 
-                                                   href: index === 0 ? `/topics` : '#' }));
+                                                   // last item is active and not a link
+                                                   active: index === arr.length - 1,
+                                                   href: index === arr.length - 1 ? null : `/topics/${p.id}` 
+                                                 }));
+        const breadCrumbIcon = (RTL_LANGUAGES.includes(language) ? 'left' : 'right') + ' angle'; 
         const topicHeader = tagPath[tagPath.length - 1].label;
         console.log('topicHeader: ', topicHeader);
 
         return (
           <Container>
-            <Breadcrumb sections={breadCrumbSections} size="small" className="section-header"/>
-            <Header as="h1" color="blue">{topicHeader}</Header>
+            <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="small" className="section-header"/>
+            <Header as="h1" >{topicHeader}</Header>
             <Grid container doubling columns={sections.length} className="homepage__iconsrow">
               {
                 sections.map((s) => {
@@ -88,7 +94,8 @@ export default withRouter(connect(
   state => ({
     sections: selectors.getSections(state.tags),
     getSectionUnits: selectors.getSectionUnits(state.tags),
-    getPathByID: selectors.getPathByID(state.tags)
+    getPathByID: selectors.getPathByID(state.tags),
+    language: settings.getLanguage(state.settings)
   }),
   dispatch => bindActionCreators({
     fetchDashboard: actions.fetchDashboard
