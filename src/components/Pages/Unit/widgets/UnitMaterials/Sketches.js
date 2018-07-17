@@ -7,12 +7,13 @@ import { Button, Container, Segment } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../../../helpers/consts';
 import { assetUrl, imaginaryUrl, Requests } from '../../../../../helpers/Api';
-import { physicalFile, strCmp, isEmpty } from '../../../../../helpers/utils';
+import { isEmpty, physicalFile, strCmp } from '../../../../../helpers/utils';
 import { actions, selectors } from '../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import * as shapes from '../../../../shapes';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import ButtonsLanguageSelector from '../../../../Language/Selector/ButtonsLanguageSelector';
+import { selectSuitableLanguage } from '../../../../../helpers/language';
 
 class Sketches extends React.Component {
   static propTypes = {
@@ -20,7 +21,8 @@ class Sketches extends React.Component {
     t: PropTypes.func.isRequired,
     zipIndexById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
     unzip: PropTypes.func.isRequired,
-    language: PropTypes.string.isRequired
+    uiLanguage: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
   };
 
   state = {
@@ -44,19 +46,17 @@ class Sketches extends React.Component {
   // load data into state
   setCurrentItem = (props) => {
     const { unit, zipIndexById, unzip } = props;
-    const language                      = this.state.language || props.language;
-    // const language                      = selectedLanguage || props.language;
 
     // get one zip file or array of image files or one image file
-    const files = this.findZipOrImageFiles(unit, language);
+    const files = this.findZipOrImageFiles(unit, props.contentLanguage, props.uiLanguage);
 
     if (files) {
       // not zip, image files only
       if (Array.isArray(files) || !files.name.endsWith('.zip')) {
-        this.setState({ imageFiles: files, language });
+        this.setState({ imageFiles: files });
       } else {
         // zip file
-        this.setState({ zipFileId: files.id, language });
+        this.setState({ zipFileId: files.id });
 
         const { data, wip, err } = zipIndexById[files.id] || {};
         if (!(wip || err) && isEmpty(data) && !Object.prototype.hasOwnProperty.call(zipIndexById, files.id)) {
@@ -64,11 +64,11 @@ class Sketches extends React.Component {
         }
       }
     } else {
-      this.setState({ zipFileId: null, language });
+      this.setState({ zipFileId: null });
     }
   };
 
-  findZipOrImageFiles = (unit, selectedLanguage) => {
+  findZipOrImageFiles = (unit, contentLanguage, uiLanguage) => {
     if (!Array.isArray(unit.files)) {
       return null;
     }
@@ -88,11 +88,11 @@ class Sketches extends React.Component {
     const languages = zipFiles
       .map(file => file.language)
       .filter((v, i, a) => a.indexOf(v) === i);
-
-    this.setState({ languages });
+    const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+    this.setState({ languages, language });
 
     // try filter by language
-    let files = zipFiles.filter(file => file.language === selectedLanguage);
+    let files = zipFiles.filter(file => file.language === language);
 
     // if no files by language - return original language files
     if (files.length === 0) {
@@ -146,6 +146,7 @@ class Sketches extends React.Component {
   };
 
   handleImageError = event =>
+    // eslint-disable-next-line no-console
     console.log('Image Gallery loading error ', event.target);
 
   renderLeftNav = (onClick, disabled) => (
@@ -248,7 +249,8 @@ class Sketches extends React.Component {
 
 const mapState = state => ({
   zipIndexById: selectors.getZipIndexById(state.assets),
-  language: settings.getLanguage(state.settings)
+  uiLanguage: settings.getLanguage(state.settings),
+  contentLanguage: settings.getContentLanguage(state.settings),
 });
 
 const mapDispatch = dispatch =>
