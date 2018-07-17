@@ -81,7 +81,7 @@ class Transcription extends Component {
     const languages   = uniq(textFiles.map(x => x.language));
     const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
     if (!newLanguage) {
-      return { selected: textFiles[0], languages, language: textFiles[0].language };
+      return false;
     }
 
     const selected = this.selectFile(textFiles, newLanguage);
@@ -95,8 +95,8 @@ class Transcription extends Component {
   selectFile = (textFiles, language) => {
     const selected = textFiles.filter(x => x.language === language);
 
-    if (selected.length === 1) {
-      // use the only file found
+    if (selected.length <= 1) {
+      // use the only file found OR no files by language - use first text file
       return selected[0];
     }
 

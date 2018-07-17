@@ -27,7 +27,7 @@ export const actions = {
 };
 
 /* Reducer */
-const initialState = {
+export const initialState = {
   language: DEFAULT_LANGUAGE,
   contentLanguage: DEFAULT_LANGUAGE,
   pageSize: 10,

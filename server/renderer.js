@@ -22,7 +22,9 @@ import createStore from '../src/redux/createStore';
 import { actions as ssr } from '../src/redux/modules/ssr';
 import App from '../src/components/App/App';
 import i18nnext from './i18nnext';
+import { initialState as settingsInitialState } from '../src/redux/modules/settings';
 
+// eslint-disable-next-line no-unused-vars
 const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all the work
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -121,10 +123,12 @@ export default function serverRender(req, res, next, htmlData, criticalCSS) {
       initialEntries: [req.originalUrl],
     });
 
+    const settings = Object.assign({}, settingsInitialState, { language, contentLanguage: cookies[COOKIE_CONTENT_LANG] });
+
     const initialState = {
       router: { location: history.location },
       device: { deviceInfo: new UAParser(req.get('user-agent')).getResult() },
-      settings: { language, contentLanguage: cookies[COOKIE_CONTENT_LANG] },
+      settings,
     };
 
     const store = createStore(initialState, history);

@@ -77,9 +77,7 @@ class LibraryContainer extends Component {
     }
 
     const firstLeafId = this.firstLeafId(sourceId);
-    if (firstLeafId !== sourceId ||
-      this.props.sourceId !== sourceId ||
-      this.state.lastLoadedId !== sourceId) {
+    if (firstLeafId !== sourceId || this.state.lastLoadedId !== sourceId) {
       if (firstLeafId !== sourceId) {
         push(`sources/${firstLeafId}`);
       } else {

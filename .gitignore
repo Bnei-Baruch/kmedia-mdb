@@ -6,6 +6,7 @@ semantic/
 
 # testing
 /coverage
+cc-test-reporter
 
 # production
 /build
