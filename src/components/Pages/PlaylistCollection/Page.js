@@ -109,7 +109,7 @@ class PlaylistCollectionPage extends Component {
                     <Grid>
                       <Grid.Row>
                         <Grid.Column mobile={16} tablet={8} computer={16}>
-                          <MediaDownloads unit={unit} language={language} t={t} />
+                          <MediaDownloads unit={unit} t={t} />
                         </Grid.Column>
                       </Grid.Row>
                     </Grid>

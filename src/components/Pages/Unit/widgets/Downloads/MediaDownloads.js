@@ -4,24 +4,13 @@ import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Grid, Header, Table } from 'semantic-ui-react';
 
-import {
-  CT_ARTICLE,
-  CT_FULL_LESSON,
-  CT_KITEI_MAKOR,
-  CT_LELO_MIKUD,
-  CT_LESSON_PART,
-  CT_PUBLICATION,
-  CT_VIDEO_PROGRAM_CHAPTER,
-  MT_AUDIO,
-  MT_IMAGE,
-  MT_TEXT,
-  MT_VIDEO,
-  VS_NAMES
-} from '../../../../../helpers/consts';
+import { CT_ARTICLE, CT_FULL_LESSON, CT_KITEI_MAKOR, CT_LELO_MIKUD, CT_LESSON_PART, CT_PUBLICATION, CT_VIDEO_PROGRAM_CHAPTER, MT_AUDIO, MT_IMAGE, MT_TEXT, MT_VIDEO, VS_NAMES } from '../../../../../helpers/consts';
 import { physicalFile } from '../../../../../helpers/utils';
 import { selectors } from '../../../../../redux/modules/publications';
 import * as shapes from '../../../../shapes';
 import DropdownLanguageSelector from '../../../../Language/Selector/DropdownLanguageSelector';
+import { selectors as settings } from '../../../../../redux/modules/settings';
+import { selectSuitableLanguage } from '../../../../../helpers/language';
 
 const MEDIA_ORDER = [
   MT_VIDEO,
@@ -35,6 +24,7 @@ class MediaDownloads extends Component {
     unit: shapes.ContentUnit,
     publisherById: PropTypes.objectOf(shapes.Publisher).isRequired,
     language: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -48,56 +38,45 @@ class MediaDownloads extends Component {
   }
 
   getInitialState = (props) => {
-    const { unit = {} } = props;
-    const groups        = this.getFilesByLanguage(unit.files);
-    const derivedGroups = this.getDerivedFilesByContentType(unit.derived_units);
+    const { unit = {}, contentLanguage, language: uiLanguage } = props;
+    const groups                                               = this.getFilesByLanguage(unit.files);
+    const derivedGroups                                        = this.getDerivedFilesByContentType(unit.derived_units);
 
-    let { language } = props;
-    if (!groups.has(language)) {
-      language = groups.keys().next().value;
-    }
+    const languages = [...groups.keys()];
+    const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
 
-    return { groups, language, derivedGroups };
+    return { groups, derivedGroups, languages, language };
   };
 
   componentWillReceiveProps(nextProps) {
-    const { unit, language } = nextProps;
-    const { props, state }   = this;
+    const { unit, contentLanguage, language: uiLanguage } = nextProps;
+    const { props, state }                                = this;
 
     // no change
-    if (unit === props.unit && language === props.language) {
+    if (unit === props.unit && uiLanguage === props.language && contentLanguage === props.contentLanguage) {
       return;
     }
 
     // only language changed
-    if (unit === props.unit && language !== props.language) {
-      if (state.groups.has(language)) {
+    if (unit === props.unit && ((uiLanguage !== props.language) || (contentLanguage !== props.contentLanguage))) {
+      const language = selectSuitableLanguage(contentLanguage, uiLanguage, this.state.languages);
+      if (language !== this.state.language) {
         this.setState({ language });
         return;
       }
     }
 
     // unit changed, maybe language as well
-    const groups = this.getFilesByLanguage(unit.files);
-    let lang;
-    if (groups.has(language)) {
-      lang = language;
-    } else if (groups.has(state.language)) {
-      lang = state.language;
-    } else {
-      lang = groups.keys().next().value;
-    }
+    const groups    = this.getFilesByLanguage(unit.files);
+    const languages = [...groups.keys()];
+    const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
 
     let { derivedGroups } = state;
     if (unit.derived_units !== props.unit.derived_units) {
       derivedGroups = this.getDerivedFilesByContentType(unit.derived_units);
     }
 
-    this.setState({
-      groups,
-      language: lang,
-      derivedGroups,
-    });
+    this.setState({ groups, derivedGroups, languages, language, });
   }
 
   getFilesByLanguage = (files = []) => {
@@ -131,9 +110,10 @@ class MediaDownloads extends Component {
 
     // fill in images fallback into every language
     if (images.length > 0) {
-      groups.forEach((byType, language) => {
+      const fallbackImage = this.fallbackImage(images);
+      groups.forEach((byType) => {
         if (!byType.has(MT_IMAGE)) {
-          byType.set(MT_IMAGE, this.fallbackImages(images, language));
+          byType.set(MT_IMAGE, fallbackImage);
         }
       });
     }
@@ -174,7 +154,13 @@ class MediaDownloads extends Component {
   };
 
   // TODO: implement once fallback language is known
-  fallbackImages = (images, language) => [images[0]];
+  fallbackImage = (images) => {
+    const imageLanguages                            = images.map(image => image.language);
+    const { contentLanguage, language: uiLanguage } = this.props;
+    const language                                  = selectSuitableLanguage(contentLanguage, uiLanguage, imageLanguages);
+
+    return [images.find(image => image.language === language)];
+  };
 
   renderRow = (file, label, t) => {
     const ext = file.name.substring(file.name.lastIndexOf('.') + 1);
@@ -251,20 +237,20 @@ class MediaDownloads extends Component {
       }, []);
     }
 
-    let derivedRows;
+    let derivedRows = [];
     if (kiteiMakorByType.size > 0) {
       derivedRows = MEDIA_ORDER.reduce((acc, val) => {
         const label = `${t('constants.content-types.KITEI_MAKOR')} - ${t(`constants.media-types.${val}`)}`;
         const files = (kiteiMakorByType.get(val) || []).map(file => this.renderRow(file, label, t));
         return acc.concat(files);
-      }, []);
+      }, derivedRows);
     }
     if (leloMikudByType.size > 0) {
-      derivedRows = (derivedRows || []).concat(MEDIA_ORDER.reduce((acc, val) => {
+      derivedRows = MEDIA_ORDER.reduce((acc, val) => {
         const label = `${t('constants.content-types.LELO_MIKUD')} - ${t(`constants.media-types.${val}`)}`;
         const files = (leloMikudByType.get(val) || []).map(file => this.renderRow(file, label, t));
         return acc.concat(files);
-      }, []));
+      }, derivedRows);
     }
     if (publicationsByType.size > 0) {
       derivedRows = MEDIA_ORDER.reduce((acc, val) => {
@@ -274,7 +260,7 @@ class MediaDownloads extends Component {
           return this.renderRow(file, `${label} - ${publisher ? publisher.name : '???'}`, t);
         });
         return acc.concat(files);
-      }, []);
+      }, derivedRows);
     }
 
     return (
@@ -320,6 +306,8 @@ class MediaDownloads extends Component {
 export default connect(state => (
   {
     publisherById: selectors.getPublisherById(state.publications),
+    language: settings.getLanguage(state.settings),
+    contentLanguage: settings.getContentLanguage(state.settings),
   })
 )(MediaDownloads);
 
