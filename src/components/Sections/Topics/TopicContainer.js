@@ -80,7 +80,6 @@ class TopicContainer extends Component {
 
   render() {
     const { roots } = this.props;
-    // console.log('TopicContainer.render: roots', roots);
 
     return (
       <div>
