@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
-import { Dropdown } from 'semantic-ui-react';
 
 const options = [
   { value: '2x', text: '2x' },
@@ -21,7 +20,7 @@ export default class AVPlaybackRateMobile extends Component {
     value: '1x',
   };
 
-  handleChange = (e) => 
+  handleChange = e =>
     this.props.onSelect(e, e.currentTarget.value);
 
   render() {
@@ -29,7 +28,7 @@ export default class AVPlaybackRateMobile extends Component {
 
     return (
       <div className="mediaplayer__playback-rate">
-          <select value={value} onChange={this.handleChange}>
+        <select value={value} onChange={this.handleChange}>
           {
             options.map(x => (
               <option key={x.value} value={x.value}>
@@ -38,7 +37,6 @@ export default class AVPlaybackRateMobile extends Component {
             ))
           }
         </select>
-
       </div>
     );
   }
