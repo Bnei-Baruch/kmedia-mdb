@@ -65,6 +65,8 @@ class AVPlayer extends PureComponent {
     onPause: PropTypes.func,
     onPrev: PropTypes.func,
     onNext: PropTypes.func,
+
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -121,10 +123,23 @@ class AVPlayer extends PureComponent {
       });
     }
 
-    this.setState({
-      firstSeek: true,
-      ...this.chooseSource(this.props)
-    });
+    const { deviceInfo: { browser: { name: browserName } } } = this.props;
+    if (browserName !== 'Edge' &&
+      browserName !== 'IE') {
+      this.setState({
+        browserName,
+        firstSeek: true,
+        ...this.chooseSource(this.props)
+      });
+    } else {
+      setTimeout(() => {
+        this.setState({
+          browserName,
+          firstSeek: true,
+          ...this.chooseSource(this.props)
+        });
+      }, 1);
+    }
   }
 
   componentDidMount() {
@@ -213,8 +228,10 @@ class AVPlayer extends PureComponent {
   };
 
   onPause = (e) => {
+    const { browserName } = this.state;
     // when we're close to the end regard this as finished
-    if (Math.abs(e.currentTime - e.duration) < 0.1 && this.props.onFinish) {
+    if (browserName !== 'IE' &&
+      Math.abs(e.currentTime - e.duration) < 0.1 && this.props.onFinish) {
       this.clearCurrentTime();
       this.props.onFinish();
     } else if (this.props.onPause) {
@@ -272,18 +289,32 @@ class AVPlayer extends PureComponent {
   };
 
   handleTimeUpdate = (timeData) => {
-    const { media }          = this.props;
-    const { mode, sliceEnd } = this.state;
+    const { media }                                              = this.props;
+    const { mode, sliceEnd, sliceStart, firstSeek, browserName } = this.state;
 
     const isSliceMode = mode === PLAYER_MODE.SLICE_VIEW;
 
     const lowerTime = Math.min(sliceEnd, timeData.currentTime);
-    if (isSliceMode && lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
+    if (isSliceMode && (timeData.currentTime < sliceStart || timeData.currentTime > sliceEnd)) {
+      this.setState({
+        mode: PLAYER_MODE.NORMAL,
+        sliceStart: undefined,
+        sliceEnd: undefined,
+      });
+    } else if (isSliceMode && lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
       media.pause();
       media.seekTo(sliceEnd);
     }
 
-    this.saveCurrentTime();
+    // when we're close to the end regard this as finished
+    if (browserName === 'IE' &&
+      !firstSeek && Math.abs(timeData.currentTime - timeData.duration) < 0.5 && this.props.onFinish) {
+      media.pause();
+      this.clearCurrentTime();
+      this.props.onFinish();
+    } else {
+      this.saveCurrentTime();
+    }
   };
 
   handleEditBack = () => {

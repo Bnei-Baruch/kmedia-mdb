@@ -73,14 +73,14 @@ export class OmniBox extends Component {
     }
   }, 100);
 
-  isEmptyQuery = () => {
-    const { query, filters } = this.props;
+  isEmptyQuery = (q) => {
+    const { query = q, filters } = this.props;
     const params             = filtersTransformer.toApiParams(filters);
     return isEmpty(query) && isEmpty(params);
   };
 
   doSearch = (q = null, locationSearch = '') => {
-    if (this.isEmptyQuery()) {
+    if (this.isEmptyQuery(q)) {
       return;
     }
 
@@ -93,17 +93,17 @@ export class OmniBox extends Component {
       // to the search page when we redirect).
 
       push({ pathname: 'search', search: locationSearch });
+
+      // Reset filters for new search (query changed)
+      if (query && getQuery(location).q !== query) {
+        resetFilter('search', 'date-filter');
+        resetFilter('search', 'topics-filter');
+        resetFilter('search', 'sources-filter');
+        resetFilter('search', 'sections-filter');
+      }
     }
 
     const query = q != null ? q : this.props.query;
-
-    // Reset filters for new search (query changed)
-    if (query && getQuery(location).q !== query) {
-      resetFilter('search', 'date-filter');
-      resetFilter('search', 'topics-filter');
-      resetFilter('search', 'sources-filter');
-      resetFilter('search', 'sections-filter');
-    }
 
     search(query, 1, pageSize, isDebMode(location));
     onSearch();
@@ -263,7 +263,7 @@ export class OmniBox extends Component {
         results={finalResults}
         value={query}
         input={this.renderInput()}
-        icon={<Icon link name="search" onClick={this.doSearch} />}
+        icon={<Icon link name="search" onClick={() => this.doSearch()} />}
         showNoResults={false}
         categoryRenderer={this.renderCategory}
         onSearchChange={this.handleSearchChange}

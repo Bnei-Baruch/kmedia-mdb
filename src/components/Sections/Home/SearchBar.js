@@ -21,7 +21,7 @@ class MyOmniBox extends OmniBox {
       <Input
         autoFocus={deviceInfo.device.type === undefined}  // desktop only
         onKeyDown={this.handleSearchKeyDown}
-        action={{ content: t('buttons.search').toLowerCase(), onClick: this.doSearch }}
+        action={{ content: t('buttons.search').toLowerCase(), onClick: () => this.doSearch() }}
         icon={null}
         placeholder={`${t('buttons.search')}...`}
         style={{ width: '100%' }}
@@ -46,20 +46,18 @@ class SearchBar extends Component {
     const { t, location } = this.props;
 
     return (
-      <div className="homepage__header">
-        <Grid centered>
-          <Grid.Row>
-            <Grid.Column computer={12} tablet={14} mobile={16}>
-              <Header as="h1" content={t('home.search')} color="blue" className="homepage__title" />
-            </Grid.Column>
-            <Grid.Column computer={12} tablet={14} mobile={16}>
-              <div className="homepage__search">
-                <MyWrappedOmniBox t={t} location={location} />
-              </div>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </div>
+      <Grid centered>
+        <Grid.Row>
+          <Grid.Column computer={12} tablet={14} mobile={16}>
+            <Header as="h1" content={t('home.search')} className="homepage__title text white" />
+          </Grid.Column>
+          <Grid.Column computer={12} tablet={14} mobile={16}>
+            <div className="homepage__search">
+              <MyWrappedOmniBox t={t} location={location} />
+            </div>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     );
   }
 }

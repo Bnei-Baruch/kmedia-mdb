@@ -31,16 +31,19 @@ app.use(helmet({
       'default-src': [
         '\'self\'',
         '*.kbb1.com',
+        'kabbalahmedia.info',
         '*.kabbalahmedia.info',
         '*.usersnap.com',
         'fullstory.com',
         '*.fullstory.com',
+        '*.twimg.com',
       ],
       'script-src': [
         '\'self\'',
         '\'unsafe-inline\'',
         '\'unsafe-eval\'',
         '*.google-analytics.com',
+        'kabbalahmedia.info',
         '*.usersnap.com',
         'fullstory.com',
         '*.fullstory.com',
@@ -60,9 +63,11 @@ app.use(helmet({
         '\'self\'',
         'data:',
         '*.kbb1.com',
+        'kabbalahmedia.info',
         '*.kabbalahmedia.info',
         '*.google-analytics.com',
         '*.usersnap.com',
+        '*.twimg.com',
       ]
     },
     browserSniff: false       // we're not targeting really old browsers

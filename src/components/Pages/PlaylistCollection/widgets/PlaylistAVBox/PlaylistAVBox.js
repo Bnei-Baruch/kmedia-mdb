@@ -112,9 +112,9 @@ class PlaylistAVBox extends Component {
   }
 
   handleSelectedChange = (selected) => {
-    this.setState({ selected });
-    playerHelper.setActivePartInQuery(this.props.history, selected);
-    this.props.onSelectedChange(this.state.playlist.items[selected].unit);
+    //this.setState({ selected });    
+    playerHelper.setActivePartInQuery(this.props.history, selected);  
+    //this.props.onSelectedChange(this.state.playlist.items[selected].unit);
   };
 
   handleLanguageChange = (e, language) => {

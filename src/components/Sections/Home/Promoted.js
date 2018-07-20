@@ -48,11 +48,11 @@ class Promoted extends Component {
               </Header> :
               null
           }
-          {
+          {/* {
             section ?
-              <Label content={section} color="orange" /> :
-              <Label content={t('home.donate')} color="orange" />
-          }
+              <Label content={section} color="black" size="tiny"/> :
+              <Label content={t('home.donate')} color="black" size="tiny"/>
+          } */}
         </Link>
       </div>
     );

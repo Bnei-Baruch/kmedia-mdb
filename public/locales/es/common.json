@@ -14,6 +14,7 @@
       "photos": "Fotos",
       "design": "Diseño",
       "project-status": "Projekto Statuso",
+      "twitter": "Twitter",
       "old-site": "Viejo Sitio"
     },
     "footer": {
@@ -173,8 +174,8 @@
   },
   "home": {
     "header": {
-      "text": "Página de inicio",
-      "subText": ""
+      "text": "Kabbalah Media",
+      "subtext": "Una enorme archivo de contenidos sobre la Sabiduría de la Cabalá: lecciones con el Rav Dr. Michael Laitman, libros de fuentes originales para descargar (incluyendo el libro del Zóhar), una serie de programas sobre educación, salud, relaciones en la pareja, seguridad y economía."
     },
     "search": "Descubre la sabiduría de la Cabalá",
     "sections": "Temas",
@@ -297,6 +298,12 @@
           "title": "Más artículos de la misma colección"
         }
       }
+    }
+  },
+  "twitter": {
+    "header": {
+      "text": "Twitter",
+      "subtext": "Un espejo de todos los tweets de Michael Laitman @laitman_es"
     }
   },
   "pages": {

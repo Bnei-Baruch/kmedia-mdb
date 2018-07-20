@@ -1,0 +1,53 @@
+@import 'rtl/filters';
+
+.filters {
+  &__menu {
+    align-items: flex-start;
+  }
+
+  &__header {
+    align-self: stretch;
+    flex: 0 1 auto !important;
+    padding: .6em 1em !important;
+    white-space: nowrap;
+  }
+}
+
+.filter {
+  flex: 0 1 auto !important;
+  padding: .6em 1em !important;
+
+  &__content {
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    small {
+      margin-bottom: .7em;
+    }
+
+    span {
+      line-height: 1.2;
+    }
+  }
+
+  .label {
+    bottom: 100%;
+    border-radius: 0 !important;
+    left: 100%;
+    margin: 0 !important;
+    position: absolute;
+    text-align: center;
+    transform: translate(-100%, calc(100% - 1px));
+    z-index: 100;
+
+    .icon {
+      margin: 0;
+    }
+  }
+}
+
+.clear-filter {
+  width: 1em;
+}

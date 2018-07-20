@@ -50,7 +50,10 @@ class Api {
     Requests.get(`content_units?${Requests.makeParams({ page_no, page_size, content_type, ...rest })}`);
 
   static unitsStats = ({ contentTypes: content_type, ...rest }) =>
-    Requests.get(`/stats/cu_class?${Requests.makeParams({ content_type, ...rest })}`);
+    Requests.get(`stats/cu_class?${Requests.makeParams({ content_type, ...rest })}`);
+
+  static tweets = ({ pageNo: page_no, pageSize: page_size, ...rest }) =>
+    Requests.get(`tweets?${Requests.makeParams({ page_no, page_size, ...rest })}`);
 
   static recentlyUpdated = () =>
     Requests.get('recently_updated');

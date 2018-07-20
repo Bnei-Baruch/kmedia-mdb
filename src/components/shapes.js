@@ -161,6 +161,13 @@ export const Banner = PropTypes.shape({
   image: PropTypes.string,
 });
 
+export const Tweet = PropTypes.shape({
+  username: PropTypes.string.isRequired,
+  twitter_id: PropTypes.string.isRequired,
+  created_at: PropTypes.string.isRequired,
+  raw: PropTypes.object.isRequired,
+});
+
 export const filterPropShape = PropTypes.shape({
   name: PropTypes.string.isRequired,
   component: PropTypes.any.isRequired
