@@ -3,25 +3,12 @@ import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 
 import { assetUrl } from './Api';
-import {
-  CT_FULL_LESSON,
-  CT_LESSON_PART,
-  EVENT_PREPARATION_TAG,
-  EVENT_TYPES,
-  LANG_ENGLISH,
-  LANG_HEBREW,
-  LANG_RUSSIAN,
-  LANG_UNKNOWN,
-  MT_AUDIO,
-  MT_VIDEO,
-  VS_DEFAULT,
-} from './consts';
+import { CT_FULL_LESSON, CT_LESSON_PART, EVENT_PREPARATION_TAG, EVENT_TYPES, LANG_ENGLISH, MT_AUDIO, MT_VIDEO, VS_DEFAULT, } from './consts';
 import { getQuery, updateQuery } from './url';
 import { canonicalLink } from './links';
 import MediaHelper from './media';
 import { isEmpty, physicalFile } from './utils';
-
-const fallbacksLanguages = [LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN];
+import { selectSuitableLanguage } from './language';
 
 function restorePreferredMediaType() {
   return localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO;
@@ -69,45 +56,36 @@ function calcAvailableLanguages(unit) {
   }, new Set()));
 }
 
-function playableItem(unit, mediaType, language) {
+function playableItem(unit, mediaType, uiLanguage, contentLanguage) {
   if (!unit) {
-    return null;
+    return {};
   }
 
   const availableLanguages = calcAvailableLanguages(unit);
-  const requestedLanguage  = language;
-  // Fallback to English, if not, then to Hebrew (most probably source) then to
-  // Russian (second most probable source), then to any other language.
-  if (!availableLanguages.includes(language)) {
-    language = fallbacksLanguages.find(f => availableLanguages.includes(f)) ||
-      (availableLanguages.length && availableLanguages[0]) ||
-      LANG_UNKNOWN;
-  }
+
+  const language = selectSuitableLanguage(contentLanguage, uiLanguage, availableLanguages);
 
   const availableMediaTypes = calcAvailableMediaTypes(unit, language);
   const requestedMediaType  = mediaType;
+  let targetMediaType       = mediaType;
   // Fallback to other media type if this one not available.
   if (!availableMediaTypes.includes(mediaType)) {
-    if (mediaType === MT_AUDIO) {
-      mediaType = MT_VIDEO;
-    } else if (mediaType === MT_VIDEO) {
-      mediaType = MT_AUDIO;
-    }
+    targetMediaType = mediaType === MT_AUDIO ? MT_VIDEO : MT_AUDIO;
   }
 
   const files     = (unit.files || []).filter(f => (
     f.language === language &&
-    (mediaType === MT_VIDEO ? MediaHelper.IsMp4(f) : MediaHelper.IsMp3(f))));
+    (targetMediaType === MT_VIDEO ? MediaHelper.IsMp4(f) : MediaHelper.IsMp3(f))));
   const byQuality = mapValues(groupBy(files, x => x.video_size || VS_DEFAULT),
     val => physicalFile(val[0], true));
 
   return {
     unit,
     language,
-    mediaType,
+    mediaType: targetMediaType,
     src: byQuality[VS_DEFAULT] || '',
     preImageUrl: assetUrl(`api/thumbnail/${unit.id}`),
-    requestedLanguage,
+    requestedLanguage: language,
     requestedMediaType,
     availableLanguages,
     availableMediaTypes,
@@ -115,9 +93,9 @@ function playableItem(unit, mediaType, language) {
   };
 }
 
-function playlist(collection, mediaType, language) {
+function playlist(collection, mediaType, contentLanguage, uiLanguage) {
   if (!collection) {
-    return null;
+    return {};
   }
 
   const units = collection.content_units || [];
@@ -149,16 +127,13 @@ function playlist(collection, mediaType, language) {
         k = 'other_parts';
       }
 
-      let v = acc[k];
-      if (!v) {
-        v = [];
-      }
-      v.push(playableItem(val, mediaType, language));
+      const v = acc[k] || [];
+      v.push(playableItem(val, mediaType, uiLanguage, contentLanguage));
       acc[k] = v;
       return acc;
     }, {});
 
-    // We better of sort things in the server...
+    // We better of sort things on the server...
 
     // Object.values(breakdown).forEach(x => x.sort((a, b) => {
     //   const fdCmp = strCmp(a.unit.film_date, b.unit.film_date);
@@ -189,13 +164,16 @@ function playlist(collection, mediaType, language) {
       return acc.concat(v);
     }, []);
   } else {
-    items = units.map(x => playableItem(x, mediaType, language));
+    items = units.map(x => playableItem(x, mediaType, uiLanguage, contentLanguage));
   }
 
   const shareUrl = canonicalLink(collection);
   items.forEach((x) => {
+    // eslint-disable-next-line no-param-reassign
     x.shareUrl = shareUrl;
-  }); // eslint-disable-line no-param-reassign
+  });
+
+  const { language } = items[0];
 
   return {
     collection,
@@ -208,7 +186,7 @@ function playlist(collection, mediaType, language) {
 
 function getMediaTypeFromQuery(location, defaultMediaType) {
   const query = getQuery(location);
-  const mt = (query.mediaType || '').toLowerCase();
+  const mt    = (query.mediaType || '').toLowerCase();
   return mt === MT_VIDEO || mt === MT_AUDIO ? mt : defaultMediaType;
 }
 
@@ -222,7 +200,7 @@ function setMediaTypeInQuery(history, mediaType = MT_VIDEO) {
 function getLanguageFromQuery(location, fallbackLanguage = LANG_ENGLISH) {
   const query    = getQuery(location);
   const language = query.language || fallbackLanguage;
-  return language.toLowerCase();
+  return language ? language.toLowerCase() : null;
 }
 
 function setLanguageInQuery(history, language) {

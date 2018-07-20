@@ -11,13 +11,15 @@ import playerHelper from '../../../../../helpers/player';
 import { selectors as device } from '../../../../../redux/modules/device';
 import * as shapes from '../../../../shapes';
 import AVMobileCheck from '../../../../AVPlayer/AVMobileCheck';
+import { selectors as settings } from '../../../../../redux/modules/settings';
 
 class AVBox extends Component {
   static propTypes = {
     unit: shapes.ContentUnit,
     history: shapes.History.isRequired,
     location: shapes.HistoryLocation.isRequired,
-    language: PropTypes.string.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
     autoPlayAllowed: PropTypes.bool.isRequired,
     t: PropTypes.func.isRequired,
   };
@@ -27,11 +29,12 @@ class AVBox extends Component {
   };
 
   componentWillMount() {
-    const { language, location, history, unit } = this.props;
-    const preferredMT                           = playerHelper.restorePreferredMediaType();
-    const mediaType                             = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const playerLanguage                        = playerHelper.getLanguageFromQuery(location, language);
-    this.setPlayableItem(unit, mediaType, playerLanguage);
+    const { uiLanguage, contentLanguage, location, history, unit }
+                         = this.props;
+    const preferredMT    = playerHelper.restorePreferredMediaType();
+    const mediaType      = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const playerLanguage = playerHelper.getLanguageFromQuery(location, contentLanguage);
+    this.setPlayableItem(unit, mediaType, playerLanguage, uiLanguage);
     playerHelper.setLanguageInQuery(history, playerLanguage);
   }
 
@@ -55,8 +58,8 @@ class AVBox extends Component {
     this.setPlayableItem(unit, newMediaType, newItemLanguage);
   }
 
-  setPlayableItem(unit, mediaType, language) {
-    const playableItem = playerHelper.playableItem(unit, mediaType, language);
+  setPlayableItem(unit, mediaType, playerLanguage, uiLanguage) {
+    const playableItem = playerHelper.playableItem(unit, mediaType, playerLanguage, uiLanguage);
     this.setState({ playableItem });
   }
 
@@ -117,6 +120,8 @@ class AVBox extends Component {
 
 const mapState = state => ({
   autoPlayAllowed: device.getAutoPlayAllowed(state.device),
+  uiLanguage: settings.getLanguage(state.settings),
+  contentLanguage: settings.getContentLanguage(state.settings),
 });
 
 export default withRouter(connect(mapState)(AVBox));

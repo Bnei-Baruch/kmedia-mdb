@@ -90,7 +90,7 @@ class LibraryContentContainer extends Component {
 
     let { languages } = this.state;
     if (!useStateLanguages && data) {
-      languages = Array.from(Object.keys(data));
+      languages = [...Object.keys(data)];
     }
     const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
 

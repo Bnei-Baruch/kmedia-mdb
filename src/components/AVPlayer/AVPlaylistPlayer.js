@@ -7,10 +7,11 @@ import { Media } from 'react-media-player';
 import { MT_AUDIO } from '../../helpers/consts';
 import { selectors as device } from '../../redux/modules/device';
 import AVMobileCheck from './AVMobileCheck';
+import * as shapes from '../shapes';
 
 class AVPlaylistPlayer extends Component {
   static propTypes = {
-    items: PropTypes.array.isRequired,
+    items: PropTypes.arrayOf(shapes.VideoItem).isRequired,
     selected: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
     autoPlayAllowed: PropTypes.bool.isRequired,

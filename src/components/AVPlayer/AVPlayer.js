@@ -41,7 +41,7 @@ const playbackToValue = playback =>
 class AVPlayer extends PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
-    media: PropTypes.object.isRequired,
+    media: shapes.Media.isRequired,
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -49,7 +49,7 @@ class AVPlayer extends PureComponent {
     onLanguageChange: PropTypes.func.isRequired,
 
     // Audio/Video switch props.
-    item: PropTypes.object.isRequired, // TODO: (yaniv) add shape fo this
+    item: shapes.VideoItem.isRequired,
     onSwitchAV: PropTypes.func.isRequired,
 
     // Slice props
@@ -122,7 +122,7 @@ class AVPlayer extends PureComponent {
     }
 
     this.setState({
-      firstSeek:true,
+      firstSeek: true,
       ...this.chooseSource(this.props)
     });
   }
@@ -140,7 +140,7 @@ class AVPlayer extends PureComponent {
       this.setState({
         error: false,
         errorReason: '',
-        firstSeek:true,
+        firstSeek: true,
         ...this.chooseSource(nextProps)
       });
     }
@@ -152,42 +152,6 @@ class AVPlayer extends PureComponent {
       this.autohideTimeoutId = null;
     }
   }
-
-  activatePersistence = () => {
-    this.setState({ persistenceFn: this.persistVolume });
-    let persistedVolume = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
-
-    if (persistedVolume == null || Number.isNaN(persistedVolume)) {
-      persistedVolume = DEFAULT_PLAYER_VOLUME;
-      localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, persistedVolume);
-    }
-    this.props.media.setVolume(persistedVolume);
-  };
-
-  persistVolume = debounce(media => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, media.volume), 200);
-
-  chooseSource = (props) => {
-    const { item, t } = props;
-    if (isEmpty(item.byQuality)) {
-      return { error: true, errorReason: t('messages.no-playable-files') };
-    }
-
-    let videoSize = playerHelper.restorePreferredVideoSize();
-    let src       = item.byQuality[videoSize];
-
-    // if we can't find the user preferred video size we fallback.
-    // first we try to go down from where he was.
-    // if we can't find anything on our way down we start go up.
-    if (!src) {
-      const vss = [VS_NHD, VS_HD, VS_FHD];
-      const idx = vss.indexOf(videoSize);
-      const o   = vss.slice(0, idx).reverse().concat(vss.slice(idx + 1));
-      videoSize = o.find(x => !!item.byQuality[x]);
-      src       = item.byQuality[videoSize];
-    }
-
-    return { src, videoSize };
-  };
 
   // Remember the current time and isPlaying while switching.
   onSwitchAV = (...params) => {
@@ -207,7 +171,7 @@ class AVPlayer extends PureComponent {
 
   onPlayerReady = () => {
     const { wasCurrentTime, wasPlaying, sliceStart, firstSeek } = this.state;
-    const { media }                                  = this.props;
+    const { media }                                             = this.props;
 
     this.activatePersistence();
 
@@ -218,34 +182,15 @@ class AVPlayer extends PureComponent {
       if (savedTime) {
         media.seekTo(savedTime);
       }
-      this.setState({firstSeek:false});
+      this.setState({ firstSeek: false });
     }
     if (wasPlaying) {
       media.play();
     }
-    
+
     // restore playback from state when player instance changed (when src changes, e.g., playlist).
     this.player.instance.playbackRate = playbackToValue(this.state.playbackRate);
     this.setState({ wasCurrentTime: undefined, wasPlaying: undefined });
-  };
-
-  playbackRateChange = (e, rate) => {
-    this.player.instance.playbackRate = playbackToValue(rate);
-    this.setState({ playbackRate: rate });
-  };
-
-  videoSizeChange = (e, vs) => {
-    playerHelper.persistPreferredVideoSize(vs);
-
-    if (vs !== this.state.videoSize) {
-      const { media: { currentTime, isPlaying } } = this.props;
-      this.setState({
-        videoSize: vs,
-        src: this.props.item.byQuality[vs],
-        wasCurrentTime: currentTime,
-        wasPlaying: isPlaying
-      });
-    }
   };
 
   onError = (e) => {
@@ -295,6 +240,37 @@ class AVPlayer extends PureComponent {
     });
   };
 
+  getSavedTime = () => {
+    const { item } = this.props;
+    // Try to get the current time from local storage if available
+    if (item && item.unit && item.unit.id) {
+      const savedTime = localStorage.getItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
+      if (savedTime) {
+        return parseInt(savedTime, 10);
+      }
+    }
+    return null;
+  };
+
+  playbackRateChange = (e, rate) => {
+    this.player.instance.playbackRate = playbackToValue(rate);
+    this.setState({ playbackRate: rate });
+  };
+
+  videoSizeChange = (e, vs) => {
+    playerHelper.persistPreferredVideoSize(vs);
+
+    if (vs !== this.state.videoSize) {
+      const { media: { currentTime, isPlaying } } = this.props;
+      this.setState({
+        videoSize: vs,
+        src: this.props.item.byQuality[vs],
+        wasCurrentTime: currentTime,
+        wasPlaying: isPlaying
+      });
+    }
+  };
+
   handleTimeUpdate = (timeData) => {
     const { media }          = this.props;
     const { mode, sliceEnd } = this.state;
@@ -306,7 +282,7 @@ class AVPlayer extends PureComponent {
       media.pause();
       media.seekTo(sliceEnd);
     }
-    
+
     this.saveCurrentTime();
   };
 
@@ -354,8 +330,7 @@ class AVPlayer extends PureComponent {
   hideControls = () => {
     if (this.wrapperMouseY < this.wrapperRect.height - this.controlsRect.height) {
       this.setState({ controlsVisible: false });
-    }
-    else {
+    } else {
       if (this.autohideTimeoutId) {
         clearTimeout(this.autohideTimeoutId);
         this.autohideTimeoutId = null;
@@ -466,21 +441,45 @@ class AVPlayer extends PureComponent {
 
   clearCurrentTime = () => {
     const { item } = this.props;
-    if (item && item.unit && item.unit.id) {    
-        localStorage.removeItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
+    if (item && item.unit && item.unit.id) {
+      localStorage.removeItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
     }
   };
 
-  getSavedTime = () => {
-    const { item } = this.props;
-    // Try to get the current time from local storage if available
-    if (item && item.unit && item.unit.id) {
-      const savedTime = localStorage.getItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
-      if (savedTime) {
-        return parseInt(savedTime, 10);
-      }
+  persistVolume = debounce(media => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, media.volume), 200);
+
+  chooseSource = (props) => {
+    const { item, t } = props;
+    if (isEmpty(item.byQuality)) {
+      return { error: true, errorReason: t('messages.no-playable-files') };
     }
-    return null;
+
+    let videoSize = playerHelper.restorePreferredVideoSize();
+    let src       = item.byQuality[videoSize];
+
+    // if we can't find the user preferred video size we fallback.
+    // first we try to go down from where he was.
+    // if we can't find anything on our way down we start go up.
+    if (!src) {
+      const vss = [VS_NHD, VS_HD, VS_FHD];
+      const idx = vss.indexOf(videoSize);
+      const o   = vss.slice(0, idx).reverse().concat(vss.slice(idx + 1));
+      videoSize = o.find(x => !!item.byQuality[x]);
+      src       = item.byQuality[videoSize];
+    }
+
+    return { src, videoSize };
+  };
+
+  activatePersistence = () => {
+    this.setState({ persistenceFn: this.persistVolume });
+    let persistedVolume = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
+
+    if (persistedVolume == null || Number.isNaN(persistedVolume)) {
+      persistedVolume = DEFAULT_PLAYER_VOLUME;
+      localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, persistedVolume);
+    }
+    this.props.media.setVolume(persistedVolume);
   };
 
   render() {

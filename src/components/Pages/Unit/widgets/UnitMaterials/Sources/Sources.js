@@ -102,7 +102,7 @@ class Sources extends Component {
     if (!idx || !idx.data) {
       return { languages: [], language: null };
     }
-    const languages = Array.from(Object.keys(idx.data));
+    const languages = [...Object.keys(idx.data)];
     const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
 
     return { languages, language };
