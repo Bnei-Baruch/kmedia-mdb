@@ -27,12 +27,14 @@ import { actions as searchActions, selectors as searchSelectors } from './redux/
 import { selectors as sourcesSelectors } from './redux/modules/sources';
 import { actions as assetsActions, selectors as assetsSelectors } from './redux/modules/assets';
 import { actions as twitterActions } from './redux/modules/twitter';
+import { actions as blogActions } from './redux/modules/blog';
 import * as mdbSagas from './sagas/mdb';
 import * as filtersSagas from './sagas/filters';
 import * as eventsSagas from './sagas/events';
 import * as lessonsSagas from './sagas/lessons';
 import * as searchSagas from './sagas/search';
 import * as assetsSagas from './sagas/assets';
+import * as blogSagas from './sagas/blog';
 import withPagination from './components/Pagination/withPagination';
 
 import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
@@ -74,8 +76,8 @@ const getExtraFetchParams = (ns, collectionID) => {
     return { content_type: [CT_LECTURE] };
   case 'lessons-women':
     return { content_type: [CT_WOMEN_LESSON] };
-  // case 'lessons-children':
-  //   return { content_type: [CT_CHILDREN_LESSON] };
+    // case 'lessons-children':
+    //   return { content_type: [CT_CHILDREN_LESSON] };
   default:
     if (collectionID) {
       return { collection: collectionID };
@@ -287,7 +289,6 @@ export const publicationCUPage = (store, match) => {
 };
 
 export const tweetsListPage = (store, match) => {
-  console.log('SSR tweetsListPage');
   // hydrate filters
   store.dispatch(filtersActions.hydrateFilters('twitter'));
 
@@ -322,4 +323,46 @@ export const tweetsListPage = (store, match) => {
   store.dispatch(twitterActions.fetchData('twitter', page, { ...extraFetchParams, pageSize }));
 
   return Promise.resolve(null);
+};
+
+export const blogListPage = (store, match) => {
+  // hydrate filters
+  store.dispatch(filtersActions.hydrateFilters('blog'));
+
+  // hydrate page
+  const page = withPagination.getPageFromLocation(match.parsedURL);
+  store.dispatch(twitterActions.setPage('blog', page));
+
+  const state = store.getState();
+
+  const pageSize = settingsSelectors.getPageSize(state.settings);
+  const language = settingsSelectors.getLanguage(state.settings);
+
+  // extraFetchParams
+  let extraFetchParams;
+  switch (language) {
+  case LANG_HEBREW:
+    extraFetchParams = { blog: 'laitman-co-il' };
+    break;
+  case LANG_UKRAINIAN:
+  case LANG_RUSSIAN:
+    extraFetchParams = { blog: 'laitman-ru' };
+    break;
+  case LANG_SPANISH:
+    extraFetchParams = { blog: 'laitman-es' };
+    break;
+  default:
+    extraFetchParams = { blog: 'laitman-com' };
+    break;
+  }
+
+  // dispatch fetchData
+  store.dispatch(blogActions.fetchList('blog', page, { ...extraFetchParams, pageSize }));
+
+  return Promise.resolve(null);
+};
+
+export const blogPostPage = (store, match) => {
+  const { blog, id } = match.params;
+  return store.sagaMiddleWare.run(blogSagas.fetchPost, blogActions.fetchPost(blog, id)).done;
 };

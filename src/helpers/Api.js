@@ -55,6 +55,12 @@ class Api {
   static tweets = ({ pageNo: page_no, pageSize: page_size, ...rest }) =>
     Requests.get(`tweets?${Requests.makeParams({ page_no, page_size, ...rest })}`);
 
+  static posts = ({ pageNo: page_no, pageSize: page_size, ...rest }) =>
+    Requests.get(`posts?${Requests.makeParams({ page_no, page_size, ...rest })}`);
+
+  static post = (blog, id) =>
+    Requests.get(`posts/${blog}/${id}`);
+
   static recentlyUpdated = () =>
     Requests.get('recently_updated');
 
