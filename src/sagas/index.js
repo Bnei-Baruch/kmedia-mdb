@@ -15,6 +15,7 @@ import { sagas as assets } from './assets';
 import { sagas as home } from './home';
 import { sagas as stats } from './stats';
 import { sagas as twitter } from './twitter';
+import { sagas as blog } from './blog';
 
 const allSagas = [
   ...device,
@@ -32,6 +33,7 @@ const allSagas = [
   ...home,
   ...stats,
   ...twitter,
+  ...blog,
 ];
 
 export function* rootSaga() {

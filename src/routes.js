@@ -27,6 +27,8 @@ import HomePage from './components/Sections/Home/Container';
 import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import Help from './components/Sections/Help/Help';
 import Twitter from './components/Sections/Twitter/Container';
+import Blog from './components/Sections/Blog/Container';
+import BlogPost from './components/Sections/Blog/Post/Container';
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 
@@ -53,7 +55,11 @@ const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
   { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
-  { path: 'lessons/:tab/c/:id', component: LessonCollection, options: { ssrData: ssrDataLoaders.lessonsCollectionPage } },
+  {
+    path: 'lessons/:tab/c/:id',
+    component: LessonCollection,
+    options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
+  },
   { path: 'lessons/cu/:id', component: LessonUnit, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons/daily/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
   { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.cuListPage('programs') } },
@@ -84,6 +90,8 @@ const routes = [
   { path: 'project-status', component: ProjectStatus },
   { path: 'help', component: Help },
   { path: 'twitter', component: Twitter, options: { ssrData: ssrDataLoaders.tweetsListPage } },
+  { path: 'blog', component: Blog, options: { ssrData: ssrDataLoaders.blogListPage } },
+  { path: 'blog/:blog/:id', component: BlogPost, options: { ssrData: ssrDataLoaders.blogPostPage } },
   // { path: 'design', component: Design },
   // { path: 'design2', component: Design2 },
 ];
