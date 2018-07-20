@@ -6,11 +6,9 @@ import { withRouter } from 'react-router-dom';
 import { Grid, Container, Breadcrumb, Header } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../redux/modules/tags';
-import { selectors as settings } from '../../../redux/modules/settings';
 import { isEmpty } from '../../../helpers/utils';
 import { RTL_LANGUAGES } from '../../../helpers/consts';
 import * as shapes from '../../shapes';
-import SectionHeader from '../../shared/SectionHeader';
 import TopN from './TopN';
 
 export const topNItems = 5;
@@ -21,8 +19,7 @@ class TopicPage extends Component {
       getSectionUnits: PropTypes.func.isRequired,
       getPathByID: PropTypes.func,
       match: shapes.RouterMatch.isRequired,
-      fetchDashboard: PropTypes.func.isRequired,
-      language: PropTypes.string
+      fetchDashboard: PropTypes.func.isRequired
     }
 
     componentDidMount() {
@@ -30,7 +27,8 @@ class TopicPage extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-      if (this.props.match.params.id !== nextProps.match.params.id) {
+      if (this.props.match.params.id !== nextProps.match.params.id ||
+          this.props.match.params.language !== nextProps.match.params.language) {
         this.loadTopic(nextProps);
       }
     }
@@ -43,8 +41,8 @@ class TopicPage extends Component {
     }
 
     render() {
-      const { sections, getSectionUnits, getPathByID, match, language } = this.props;
-      const tagId = match.params.id;
+      const { sections, getSectionUnits, getPathByID, match } = this.props;
+      const { id: tagId, language } = match.params;
 
       if (getPathByID && !isEmpty(sections)) {
         const tagPath = getPathByID(tagId);
@@ -94,8 +92,7 @@ export default withRouter(connect(
   state => ({
     sections: selectors.getSections(state.tags),
     getSectionUnits: selectors.getSectionUnits(state.tags),
-    getPathByID: selectors.getPathByID(state.tags),
-    language: settings.getLanguage(state.settings)
+    getPathByID: selectors.getPathByID(state.tags)
   }),
   dispatch => bindActionCreators({
     fetchDashboard: actions.fetchDashboard

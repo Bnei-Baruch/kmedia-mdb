@@ -116,7 +116,7 @@ const getSectionOfUnit = (unit) => {
 };
 
 const onDashboardSuccess = (state, action) => {
-  const { data }                                         = action.payload;
+  const { data } = action.payload;
   const { latest_units: latest, /* promoted_units */ } = data;
 
   if (Array.isArray(latest)) {
