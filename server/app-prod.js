@@ -37,6 +37,8 @@ app.use(helmet({
         'fullstory.com',
         '*.fullstory.com',
         '*.twimg.com',
+        '*.youtube.com',
+        '*.youtube-nocookie.com',
       ],
       'script-src': [
         '\'self\'',
@@ -65,6 +67,7 @@ app.use(helmet({
         '*.kbb1.com',
         'kabbalahmedia.info',
         '*.kabbalahmedia.info',
+        '*.laitman.ru',
         '*.google-analytics.com',
         '*.usersnap.com',
         '*.twimg.com',
