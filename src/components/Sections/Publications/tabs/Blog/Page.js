@@ -3,22 +3,23 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { Container, Divider } from 'semantic-ui-react';
 
-import * as shapes from '../../shapes';
-import Pagination from '../../Pagination/Pagination';
-import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
-import Filters from '../../Filters/Filters';
-import filterComponents from '../../Filters/components';
-import WipErr from '../../shared/WipErr/WipErr';
-import SectionHeader from '../../shared/SectionHeader';
+import * as shapes from '../../../../shapes';
+import Pagination from '../../../../Pagination/Pagination';
+import ResultsPageHeader from '../../../../Pagination/ResultsPageHeader';
+import Filters from '../../../../Filters/Filters';
+import filterComponents from '../../../../Filters/components/index';
+import Helmets from '../../../../shared/Helmets/index';
+import WipErr from '../../../../shared/WipErr/WipErr';
 import Feed from './Feed';
 
 const filters = [
   { name: 'date-filter', component: filterComponents.DateFilter },
 ];
 
-class TwitterPage extends PureComponent {
+class BlogPage extends PureComponent {
   static propTypes = {
-    items: PropTypes.arrayOf(shapes.Tweet),
+    namespace: PropTypes.string.isRequired,
+    items: PropTypes.arrayOf(shapes.BlogPost),
     wip: shapes.WIP,
     err: shapes.Error,
     pageNo: PropTypes.number.isRequired,
@@ -46,6 +47,7 @@ class TwitterPage extends PureComponent {
         pageNo,
         total,
         pageSize,
+        namespace,
         language,
         t,
         onPageChange,
@@ -59,7 +61,7 @@ class TwitterPage extends PureComponent {
           <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
           {
             items.length > 0 ?
-              <Feed tweets={items} t={t} /> :
+              <Feed items={items} language={language} /> :
               null
           }
         </Container>
@@ -78,10 +80,10 @@ class TwitterPage extends PureComponent {
 
     return (
       <div>
-        <SectionHeader section="twitter" />
+        <Helmets.NoIndex />
         <Divider fitted />
         <Filters
-          namespace="twitter"
+          namespace={namespace}
           filters={filters}
           onChange={onFiltersChanged}
           onHydrated={onFiltersHydrated}
@@ -92,4 +94,4 @@ class TwitterPage extends PureComponent {
   }
 }
 
-export default translate()(TwitterPage);
+export default translate()(BlogPage);

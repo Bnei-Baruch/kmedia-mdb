@@ -16,7 +16,6 @@
       "design2": "Layout",
       "project-status": "Project Status",
       "help": "Help",
-      "twitter": "Twitter",
       "old-site": "Old Site"
     },
     "footer": {
@@ -293,6 +292,11 @@
       "text": "Publications",
       "subtext": "Articles on current events, culture, popular science, relationships and more, presented from the unique perspective of the wisdom of Kabbalah"
     },
+    "tabs": {
+      "articles": "Articles",
+      "twitter": "Twitter",
+      "blog": "Blog"
+    },
     "list": {
       "item_from": "Item of:"
     },
@@ -302,12 +306,6 @@
           "title": "Other published articles in this collection"
         }
       }
-    }
-  },
-  "twitter": {
-    "header": {
-      "text": "Twitter",
-      "subtext": "A mirror of all Tweets by Michael Laitman @laitman"
     }
   },
   "help": {

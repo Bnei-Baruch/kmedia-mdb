@@ -4,9 +4,9 @@ import moment from 'moment';
 import { translate } from 'react-i18next';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
-import * as shapes from '../../../shapes';
-import Helmets from '../../../shared/Helmets';
-import WipErr from '../../../shared/WipErr/WipErr';
+import * as shapes from '../../../../../shapes';
+import Helmets from '../../../../../shared/Helmets/index';
+import WipErr from '../../../../../shared/WipErr/WipErr';
 
 export class BlogPostPage extends Component {
   static propTypes = {
@@ -37,7 +37,7 @@ export class BlogPostPage extends Component {
 
     const { url, title, content, created_at: ts } = post;
     const mts                                     = moment(ts);
-    const pHtml = content.replace(/href="\/blog\//gi, `href="/${language}/blog/`);
+    const pHtml = content.replace(/href="\/publications\/blog\//gi, `href="/${language}/publications/blog/`);
 
     return (
       <div className="blog-post">
