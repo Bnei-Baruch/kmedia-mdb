@@ -59,8 +59,8 @@ export function* fetchSQData() {
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.sqdata, { language });
     yield put(sources.receiveSources(data.sources));
-    yield put(tags.fetchTagsSuccess(data.tags));
-    yield put(publications.fetchPublishersSuccess({ publishers: data.publishers, total: data.publishers.length }));
+    yield put(tags.receiveTags(data.tags));
+    yield put(publications.receivePublishers(data.publishers));
     yield put(actions.fetchSQDataSuccess());
   } catch (err) {
     console.error('Error loading Semi-Quasi data', err);
