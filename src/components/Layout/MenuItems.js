@@ -16,8 +16,6 @@ const ITEMS = [
   'topics',
   'publications',
   'project-status',
-  'twitter',
-  'blog',
   // 'help',
   // 'photos',
   // 'design',

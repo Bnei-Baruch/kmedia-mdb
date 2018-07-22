@@ -13,9 +13,10 @@ import LastLessonCollection from './components/Sections/Lessons/Collection/LastD
 import Programs from './components/Sections/Programs/List';
 import ProgramUnit from './components/Sections/Programs/Unit';
 import ProgramCollection from './components/Sections/Programs/Collection';
-import Publications from './components/Sections/Publications/List';
-import PublicationUnit from './components/Sections/Publications/Unit';
-import PublicationCollection from './components/Sections/Publications/Collection';
+import Publications from './components/Sections/Publications/MainPage';
+import ArticleUnit from './components/Sections/Publications/tabs/Articles/Unit';
+import ArticleCollection from './components/Sections/Publications/tabs/Articles/Collection';
+import BlogPost from './components/Sections/Publications/tabs/Blog/Post/Container';
 import Events from './components/Sections/Events/MainPage';
 import EventUnit from './components/Sections/Events/Unit';
 import EventCollection from './components/Sections/Events/Collection';
@@ -26,9 +27,6 @@ import SearchResults from './components/Search/SearchResultsContainer';
 import HomePage from './components/Sections/Home/Container';
 import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import Help from './components/Sections/Help/Help';
-import Twitter from './components/Sections/Twitter/Container';
-import Blog from './components/Sections/Blog/Container';
-import BlogPost from './components/Sections/Blog/Post/Container';
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 
@@ -73,13 +71,15 @@ const routes = [
   { path: 'events/:tab', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
   { path: 'events/cu/:id', component: EventUnit, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'events/c/:id', component: EventCollection, options: { ssrData: ssrDataLoaders.playlistCollectionPage } },
-  { path: 'publications', component: Publications, options: { ssrData: ssrDataLoaders.cuListPage('publications') } },
-  { path: 'publications/cu/:id', component: PublicationUnit, options: { ssrData: ssrDataLoaders.publicationCUPage } },
+  { path: 'publications', component: Publications, options: { ssrData: ssrDataLoaders.publicationsPage } },
+  { path: 'publications/:tab', component: Publications, options: { ssrData: ssrDataLoaders.publicationsPage } },
+  { path: 'publications/articles/cu/:id', component: ArticleUnit, options: { ssrData: ssrDataLoaders.articleCUPage } },
   {
-    path: 'publications/c/:id',
-    component: PublicationCollection,
+    path: 'publications/articles/c/:id',
+    component: ArticleCollection,
     options: { ssrData: ssrDataLoaders.collectionPage('publications-collection') }
   },
+  { path: 'publications/blog/:blog/:id', component: BlogPost, options: { ssrData: ssrDataLoaders.blogPostPage } },
   { path: 'sources', component: LibraryHomepage },
   { path: 'sources/:id', component: LibraryContainer, options: { ssrData: ssrDataLoaders.libraryPage } },
   { path: 'persons/:id', component: LibraryPerson, options: { ssrData: ssrDataLoaders.libraryPage } },
@@ -89,9 +89,6 @@ const routes = [
   { path: 'search', component: SearchResults, options: { ssrData: ssrDataLoaders.searchPage } },
   { path: 'project-status', component: ProjectStatus },
   { path: 'help', component: Help },
-  { path: 'twitter', component: Twitter, options: { ssrData: ssrDataLoaders.tweetsListPage } },
-  { path: 'blog', component: Blog, options: { ssrData: ssrDataLoaders.blogListPage } },
-  { path: 'blog/:blog/:id', component: BlogPost, options: { ssrData: ssrDataLoaders.blogPostPage } },
   // { path: 'design', component: Design },
   // { path: 'design2', component: Design2 },
 ];

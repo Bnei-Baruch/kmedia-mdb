@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Header, Segment } from 'semantic-ui-react';
 
-import * as shapes from '../../shapes';
+import * as shapes from '../../../../shapes';
 
 class BlogFeed extends Component {
   static propTypes = {
@@ -20,7 +20,7 @@ class BlogFeed extends Component {
     const { url, title, content, created_at: ts } = item;
     const mts                                     = moment(ts);
 
-    const pHtml = content.replace(/href="\/blog\//gi, `href="/${language}/blog/`);
+    const pHtml = content.replace(/href="\/publications\/blog\//gi, `href="/${language}/publications/blog/`);
 
     return (
       <div key={url} className="post">

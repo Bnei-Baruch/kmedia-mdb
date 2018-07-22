@@ -4,9 +4,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
-import { actions, selectors } from '../../../../redux/modules/blog';
-import { selectors as settings } from '../../../../redux/modules/settings';
-import * as shapes from '../../../shapes';
+import { actions, selectors } from '../../../../../../redux/modules/publications';
+import { selectors as settings } from '../../../../../../redux/modules/settings';
+import * as shapes from '../../../../../shapes';
 import Page from './Page';
 
 export class BlogPostContainer extends Component {
@@ -70,16 +70,16 @@ export class BlogPostContainer extends Component {
 const mapState = (state, ownProps) => {
   const { blog, id } = ownProps.match.params;
   return {
-    post: selectors.getPost(state.blog, blog, id),
-    wip: selectors.getWipPost(state.blog),
-    err: selectors.getErrorPost(state.blog),
+    post: selectors.getBlogPost(state.publications, blog, id),
+    wip: selectors.getBlogWipPost(state.publications),
+    err: selectors.getBlogErrorPost(state.publications),
     language: settings.getLanguage(state.settings),
   };
 };
 
 const mapDispatch = dispatch =>
   bindActionCreators({
-    fetchPost: actions.fetchPost,
+    fetchPost: actions.fetchBlogPost,
   }, dispatch);
 
 export default withRouter(connect(mapState, mapDispatch)(BlogPostContainer));
