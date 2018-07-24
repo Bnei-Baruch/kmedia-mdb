@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom';
 
 import { actions, selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as stats } from '../../../redux/modules/stats';
 import * as shapes from '../../shapes';
 import Page from './Page';
 
@@ -25,6 +26,9 @@ class CollectionContainer extends Component {
   };
 
   componentDidMount() {
+    console.log('clearCUStats ' + this.props.namespace);
+    
+    stats.clearCUStats(this.state, this.props.namespace);
     this.askForDataIfNeeded(this.props);
   }
 
