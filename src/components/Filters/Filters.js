@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
-import { Container, Header, Icon, Menu, Popup, Label } from 'semantic-ui-react';
+import { Container, Icon, Menu, Popup, Label } from 'semantic-ui-react';
 
 import { getLanguageDirection } from '../../helpers/i18n-utils';
 import { filtersTransformer } from '../../filters/index';
