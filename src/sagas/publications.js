@@ -8,7 +8,7 @@ import { selectors as filterSelectors } from '../redux/modules/filters';
 import { updateQuery } from './helpers/url';
 
 export function* fetchTweets(action) {
-  const filters = yield select(state => filterSelectors.getFilters(state.filters, 'twitter'));
+  const filters = yield select(state => filterSelectors.getFilters(state.filters, 'publications-twitter'));
   const params  = filtersTransformer.toApiParams(filters) || {};
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
