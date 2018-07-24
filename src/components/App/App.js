@@ -11,6 +11,9 @@ import '../../stylesheets/Kmedia.css';
 class App extends Component {
   render() {
     const { i18n, store, history, initialI18nStore, initialLanguage } = this.props;
+    if (document.activeElement) {
+      document.activeElement.blur();
+    }
     return (
       <I18nextProvider i18n={i18n} initialI18nStore={initialI18nStore} initialLanguage={initialLanguage}>
         <Provider store={store}>
