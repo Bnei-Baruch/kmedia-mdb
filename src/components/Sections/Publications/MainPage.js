@@ -15,9 +15,9 @@ import Blog from './tabs/Blog/Container';
 import Twitter from './tabs/Twitter/Container';
 
 export const tabs = [
-  'articles',
   'blog',
   'twitter',
+  'articles',
 ];
 
 class MainPage extends PureComponent {
