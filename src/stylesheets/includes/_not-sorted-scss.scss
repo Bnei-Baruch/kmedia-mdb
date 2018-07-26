@@ -382,11 +382,11 @@
 }
 
 .blog-posts {
-  max-width: 800px;
+  max-width: 550px;
 }
+
 .post {
   margin-bottom: 1.5rem !important;
-
 
   /* ********** wordpress style ********** */
 
@@ -453,7 +453,8 @@
   }
 
   .entry img {
-    max-width: 445px;
+    //max-width: 445px;  // laitman.ru
+    max-width: 100%;
     border: 0 none;
   }
 
@@ -574,6 +575,49 @@
     float: left;
     margin-top: 20px;
     margin-left: 6px;
+  }
+
+  p img {
+    padding: 0;
+    max-width: 100%;
+  }
+
+  /*	Using 'class="alignright"' on an image will (who would've
+      thought?!) align the image to the right. And using 'class="centered',
+      will of course center the image. This is much better than using
+      align="center", being much more futureproof (and valid) */
+
+  img.centered {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  img.alignright {
+    padding: 4px;
+    margin: 0 0 2px 7px;
+    display: inline;
+  }
+
+  img.alignleft {
+    padding: 4px;
+    margin: 0 7px 2px 0;
+    display: inline;
+  }
+
+  .alignright {
+    float: right;
+  }
+
+  .alignleft {
+    float: left
+  }
+
+  // normalize laitman.co.il headings in entry
+  .entry {
+    h1, h2, h3, h4 {
+      font-size: 1rem;
+    }
   }
 
   /* ********** wordpress style ********** */
