@@ -4,18 +4,19 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
-import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../helpers/consts';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
-import { actions, selectors } from '../../../redux/modules/twitter';
-import withPagination from '../../Pagination/withPagination';
-import * as shapes from '../../shapes';
+import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../../../helpers/consts';
+import { selectors as settings } from '../../../../../redux/modules/settings';
+import { actions as filtersActions, selectors as filters } from '../../../../../redux/modules/filters';
+import { actions, selectors } from '../../../../../redux/modules/publications';
+import withPagination from '../../../../Pagination/withPagination';
+import * as shapes from '../../../../shapes';
 import Page from './Page';
 
-class TwitterContainer extends withPagination {
+class BlogContainer extends withPagination {
   static propTypes = {
+    namespace: PropTypes.string.isRequired,
     location: shapes.HistoryLocation.isRequired,
-    items: PropTypes.arrayOf(shapes.Tweet),
+    items: PropTypes.arrayOf(shapes.BlogPost),
     wip: shapes.WIP,
     err: shapes.Error,
     pageNo: PropTypes.number.isRequired,
@@ -46,7 +47,7 @@ class TwitterContainer extends withPagination {
     // clear all filters when location's search is cleared by Menu click
     if (nextProps.location.search !== this.props.location.search &&
       !nextProps.location.search) {
-      nextProps.resetNamespace('twitter');
+      nextProps.resetNamespace(nextProps.namespace);
       this.handleFiltersChanged();
     }
 
@@ -57,14 +58,14 @@ class TwitterContainer extends withPagination {
   extraFetchParams(props) {
     switch (props.language) {
     case LANG_HEBREW:
-      return { username: 'laitman_co_il' };
+      return { blog: 'laitman-co-il' };
     case LANG_UKRAINIAN:
     case LANG_RUSSIAN:
-      return { username: 'Michael_Laitman' };
+      return { blog: 'laitman-ru' };
     case LANG_SPANISH:
-      return { username: 'laitman_es' };
+      return { blog: 'laitman-es' };
     default:
-      return { username: 'laitman' };
+      return { blog: 'laitman-com' };
     }
   }
 
@@ -83,10 +84,11 @@ class TwitterContainer extends withPagination {
   }
 
   render() {
-    const { items, wip, err, pageNo, total, pageSize, language } = this.props;
+    const { items, wip, err, pageNo, total, pageSize, language, namespace } = this.props;
 
     return (
       <Page
+        namespace={namespace}
         items={items}
         wip={wip}
         err={err}
@@ -102,23 +104,23 @@ class TwitterContainer extends withPagination {
   }
 }
 
-export const mapState = state => ({
-  items: selectors.getTweets(state.twitter),
-  total: selectors.getTotal(state.twitter),
-  wip: selectors.getWip(state.twitter),
-  err: selectors.getError(state.twitter),
-  pageNo: selectors.getPageNo(state.twitter),
+export const mapState = (state, ownProps) => ({
+  items: selectors.getBlogPosts(state.publications),
+  total: selectors.getBlogTotal(state.publications),
+  wip: selectors.getBlogWip(state.publications),
+  err: selectors.getBlogError(state.publications),
+  pageNo: selectors.getBlogPageNo(state.publications),
   pageSize: settings.getPageSize(state.settings),
   language: settings.getLanguage(state.settings),
-  isFiltersHydrated: filters.getIsHydrated(state.filters, 'twitter'),
+  isFiltersHydrated: filters.getIsHydrated(state.filters, ownProps.namespace),
 });
 
 export const mapDispatch = dispatch => (
   bindActionCreators({
-    fetchList: actions.fetchData,
+    fetchList: actions.fetchBlogList,
     setPage: actions.setPage,
     resetNamespace: filtersActions.resetNamespace,
   }, dispatch)
 );
 
-export default withRouter(connect(mapState, mapDispatch)(TwitterContainer));
+export default withRouter(connect(mapState, mapDispatch)(BlogContainer));
