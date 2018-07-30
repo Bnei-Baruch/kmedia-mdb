@@ -9,3 +9,11 @@ Disallow: /he/sources/*
 Disallow: /ru/sources/*
 Disallow: /es/sources/*
 Disallow: /ua/sources/*
+
+# Prevent duplicate content of blogs
+Disallow: /blog/*
+Disallow: /en/blog/*
+Disallow: /he/blog/*
+Disallow: /ru/blog/*
+Disallow: /es/blog/*
+Disallow: /ua/blog/*
