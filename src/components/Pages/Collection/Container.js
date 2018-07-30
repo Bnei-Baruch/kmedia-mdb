@@ -27,7 +27,7 @@ class CollectionContainer extends Component {
   };
 
   componentDidMount() {    
-    console.log('clearCUStats ' + this.props.namespace);
+    //console.log('clearCUStats ' + this.props.namespace);
     this.props.clearCUStats(this.props.namespace);
     this.askForDataIfNeeded(this.props);
   }

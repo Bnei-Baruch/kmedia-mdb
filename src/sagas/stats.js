@@ -13,11 +13,11 @@ function* fetchCUStats(action) {
     // fetch once
     const nsState = yield select(state => selectors.getCUStats(state.stats, namespace));
     if (!isEmpty(nsState) && !isEmpty(nsState.data)) {
-      console.log('Allready in cache');
+      //console.log('Allready in cache');
       return;
     }
 
-    console.log('not in cache');
+    //console.log('not in cache');
 
     const args = { ...action.payload };
     if (namespace === 'lessons-daily') {
