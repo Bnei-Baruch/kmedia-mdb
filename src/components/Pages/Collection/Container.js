@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 
 import { actions, selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as stats } from '../../../redux/modules/stats';
+import { actions as statsActions } from '../../../redux/modules/stats';
 import * as shapes from '../../shapes';
 import Page from './Page';
 
@@ -18,6 +18,7 @@ class CollectionContainer extends Component {
     wip: shapes.WipMap.isRequired,
     errors: shapes.ErrorsMap.isRequired,
     fetchCollection: PropTypes.func.isRequired,
+    clearCUStats: PropTypes.func.isRequired,
     renderUnit: PropTypes.func.isRequired,
   };
 
@@ -25,10 +26,9 @@ class CollectionContainer extends Component {
     collection: null,
   };
 
-  componentDidMount() {
+  componentDidMount() {    
     console.log('clearCUStats ' + this.props.namespace);
-    
-    stats.clearCUStats(this.state, this.props.namespace);
+    this.props.clearCUStats(this.props.namespace);
     this.askForDataIfNeeded(this.props);
   }
 
@@ -40,7 +40,6 @@ class CollectionContainer extends Component {
     const { match, wip, fetchCollection } = props;
 
     // TODO (edo): maybe fetch with total unit count instead of loading all units ?
-
     // We fetch stuff if we don't have it already
     // and a request for it is not in progress or ended with an error.
     const { id } = match.params;
@@ -80,6 +79,7 @@ function mapState(state, ownProps) {
 function mapDispatch(dispatch) {
   return bindActionCreators({
     fetchCollection: actions.fetchCollection,
+    clearCUStats: statsActions.clearCUStats,
   }, dispatch);
 }
 

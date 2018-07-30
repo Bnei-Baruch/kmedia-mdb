@@ -22,12 +22,12 @@ export const types = {
 const fetchCUStats        = createAction(FETCH_CU_STATS, (namespace, params = {}) => ({ namespace, ...params }));
 const fetchCUStatsSuccess = createAction(FETCH_CU_STATS_SUCCESS, (namespace, data) => ({ namespace, data }));
 const fetchCUStatsFailure = createAction(FETCH_CU_STATS_FAILURE, (namespace, err) => ({ namespace, err }));
-const clarCUStats         = createAction(CLEAR_CU_STATS, (namespace, params = {}) => ({ namespace, ...params }));
+const clearCUStats         = createAction(CLEAR_CU_STATS, (namespace) => ({ namespace }));
 export const actions = {
   fetchCUStats,
   fetchCUStatsSuccess,
   fetchCUStatsFailure,
-  clarCUStats
+  clearCUStats
 };
 
 /* Reducer */
@@ -71,22 +71,13 @@ const onCUSuccess = (state, action) => ({
   }
 });
 
-const clearCUStats = (state, action) => {
-  if (!state)
-    return;
-  const cuStats = state[cuStats];
-  if (cuStats && cuStats[action.payload.namespace]) {
-    return {
-      ...state,
-      cuStats: {
-        ...state.cuStats,
-        [action.payload.namespace]: null
-      }
-    };
-  }
-
-  return state;
-};
+const onClearCUStats = (state, action) => ({    
+  ...state,
+  cuStats: {
+    ...state.cuStats,
+    [action.payload.namespace]: {}
+  }  
+});
 
 const onSSRPrepare = state =>
   mapValues(state, x => ({ ...x, errors: x.err ? x.err.toString() : x.err }));
@@ -97,7 +88,7 @@ export const reducer = handleActions({
   [FETCH_CU_STATS]: onCURequest,
   [FETCH_CU_STATS_SUCCESS]: onCUSuccess,
   [FETCH_CU_STATS_FAILURE]: onCUFailure,
-  [CLEAR_CU_STATS]: clearCUStats,
+  [CLEAR_CU_STATS]: onClearCUStats,
 }, initialState);
 
 /* Selectors */
@@ -105,6 +96,5 @@ export const reducer = handleActions({
 const getCUStats = (state, namespace) => state.cuStats[namespace] || {};
 
 export const selectors = {
-  getCUStats,  
-  clearCUStats,
+  getCUStats,
 };
