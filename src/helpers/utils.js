@@ -3,6 +3,9 @@ import 'moment-duration-format';
 
 import { CollectionsBreakdown } from './mdb';
 
+const CDN_URL    = process.env.REACT_APP_CDN_URL;
+const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
+
 export const isEmpty = (obj) => {
   // null and undefined are "empty"
   if (obj === null || obj === undefined) {
@@ -124,11 +127,13 @@ export const physicalFile = (file, ext = false) => {
   if (ext) {
     suffix = `.${filenameExtension(file.name)}`;
   }
-  return `https://cdn.kabbalahmedia.info/${file.id}${suffix}`;
+  return `${CDN_URL}${file.id}${suffix}`;
+  // return `https://cdn.kabbalahmedia.info/${file.id}${suffix}`;
 };
 
 export const publicFile = relativePath =>
-  `https://kabbalahmedia.info/${relativePath}`;
+  `${PUBLIC_BASE}${relativePath}`;
+  // `https://kabbalahmedia.info/${relativePath}`;
 
 export const canonicalCollection = (unit) => {
   if (!unit) {
