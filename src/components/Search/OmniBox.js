@@ -90,7 +90,7 @@ export class OmniBox extends Component {
   };
 
   doSearch = (q = null, suggest = '', locationSearch = '') => {
-    const query                                                       = q != null ? q : this.props.query;
+    const query = q != null ? q : this.props.query;
     const { search, location, push, pageSize, resetFilter, onSearch } = this.props;
 
     if (this.isEmptyQuery(query)) {
@@ -173,6 +173,8 @@ export class OmniBox extends Component {
       const selectedResult = this.search.getSelectedResult();
       if (!!selectedResult && !!selectedResult.title) {
         this.doSearch(selectedResult.title);
+      } else {
+        this.doSearch();
       }
     }
 
