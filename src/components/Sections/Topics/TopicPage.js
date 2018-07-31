@@ -57,7 +57,6 @@ class TopicPage extends Component {
                                                  }));
         const breadCrumbIcon = (RTL_LANGUAGES.includes(language) ? 'left' : 'right') + ' angle'; 
         const topicHeader = tagPath[tagPath.length - 1].label;
-        console.log('topicHeader: ', topicHeader);
 
         return (
           <Container>
