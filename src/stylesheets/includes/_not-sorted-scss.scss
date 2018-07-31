@@ -383,3 +383,257 @@
   }
 }
 
+.blog-posts {
+  max-width: 550px;
+}
+
+.post {
+  margin-bottom: 1.5rem !important;
+
+  /* ********** wordpress style ********** */
+
+  img.userpic, img.ngg-singlepic {
+    float: left;
+    padding: 0 5px 5px 0;
+    border: 0 none;
+  }
+
+  .a-title {
+    display: block;
+    padding: 0;
+    margin: 0 0 0.5ex 0;
+    line-height: 10px;
+    font-size: 10px;
+    font-weight: bold;
+    color: #000080;
+  }
+
+  .a-link {
+    padding: 0;
+    margin: 0 0 -1.0ex;
+    line-height: 10px;
+    font-size: 10px;
+  }
+
+  .a-link-first {
+    padding: 0;
+    margin: 0;
+    line-height: 10px;
+    font-size: 10px;
+  }
+
+  .a-link-last {
+    display: block;
+    padding: 0;
+    margin: 0 0 2.4ex 0;
+    line-height: 10px;
+    font-size: 10px;
+  }
+
+  .entry p {
+    margin: 0 0 0.6ex 0;
+  }
+
+  .entry .bb-p {
+    margin-top: 10px;
+  }
+
+  .entry ul, .entry ol {
+    margin: 0 0 15px 40px;
+  }
+
+  .entry ul {
+    list-style-type: square;
+  }
+
+  .entry li {
+    margin: 0 0 5px 0;
+  }
+
+  .entry ul li ul, .entry ul li ol, .entry ol li ul, .entry ol li ol {
+    margin: 5px 0 5px 30px;
+  }
+
+  .entry img {
+    //max-width: 445px;  // laitman.ru
+    max-width: 100%;
+    border: 0 none;
+  }
+
+  .entry img.left {
+    padding: 6px;
+    margin: 0.5em 15px 0.5em 0;
+    border: 1px solid #ccc;
+    background: #eee;
+    float: left;
+    clear: left;
+  }
+
+  .entry img.right {
+    padding: 6px;
+    margin: 0.5em 0 0.5em 15px;
+    border: 1px solid #ccc;
+    background: #eee;
+    float: right;
+    clear: right;
+  }
+
+  .entry img.center {
+    display: block;
+    padding: 8px;
+    margin: 0 auto 1.5em auto;
+    border: 1px solid #ccc;
+    background: #eee;
+    float: none;
+    clear: both;
+  }
+
+  .entry img.off {
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  .entry img.stack {
+    clear: none !important;
+  }
+
+  .entry {
+    font-size: 13px;
+    line-height: 16px;
+    text-align: justify;
+  }
+
+  .entry a {
+    text-decoration: underline;
+  }
+
+  .sub-pages ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .bborder {
+    border-bottom: 1px solid black;
+  }
+
+  .clear {
+    clear: both;
+    height: 1px;
+    font-size: 1px;
+    padding: 5px 0 0;
+  }
+
+  .ngg-imagebrowser {
+    clear: both;
+    padding-top: 10px;
+  }
+
+  .ngg-imagebrowser img {
+    margin: 0 auto;
+  }
+
+  .ngg-imagebrowser h3 {
+    display: none;
+  }
+
+  .ngg-imagebrowser .ngg-imagebrowser-desc {
+    clear: both;
+  }
+
+  .entry .ngg-gallery-thumbnail img {
+    margin: -6px 0 0 -6px;
+  }
+
+  .entry .ngg-gallery-thumbnail {
+    padding: 0;
+  }
+
+  .warning {
+    background-color: #CFEBF7;
+    border: 1px solid #CC0000;
+    margin: 5px 15px 2px;
+    padding: 0 0.6em;
+  }
+
+  table {
+    margin: 0 0 10px;
+  }
+
+  .podPressPlayerSpace {
+    position: absolute;
+  }
+
+  .entry table td {
+    clear: both;
+  }
+
+  .aligncenter,
+  div.aligncenter {
+    text-align: center;
+  }
+
+  .ngg-gallery-thumbnail-box {
+    float: left;
+    margin-top: 20px;
+    margin-left: 6px;
+  }
+
+  p img {
+    padding: 0;
+    max-width: 100%;
+  }
+
+  /*	Using 'class="alignright"' on an image will (who would've
+      thought?!) align the image to the right. And using 'class="centered',
+      will of course center the image. This is much better than using
+      align="center", being much more futureproof (and valid) */
+
+  img.centered {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  img.alignright {
+    padding: 4px;
+    margin: 0 0 2px 7px;
+    display: inline;
+  }
+
+  img.alignleft {
+    padding: 4px;
+    margin: 0 7px 2px 0;
+    display: inline;
+  }
+
+  .alignright {
+    float: right;
+  }
+
+  .alignleft {
+    float: left
+  }
+
+  // normalize laitman.co.il headings in entry
+  .entry {
+    h1, h2, h3, h4 {
+      font-size: 1rem;
+    }
+  }
+
+  /* ********** wordpress style ********** */
+}
+
+// native day picker (date filter)
+.to-from-label {
+  min-width: 70px;
+}
+
+.hide-native-date-input {
+  opacity: 0;
+  position: fixed;
+  top: 40px;
+  height: 0;
+  font-size: 16px;
+}

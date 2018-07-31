@@ -4,7 +4,9 @@ import Api from '../helpers/Api';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions, types } from '../redux/modules/publications';
 
-function* fetchPublishers(action) {
+export function* fetchTweets(action) {
+  const filters = yield select(state => filterSelectors.getFilters(state.filters, 'publications-twitter'));
+  const params  = filtersTransformer.toApiParams(filters) || {};
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.publishers, { language });
