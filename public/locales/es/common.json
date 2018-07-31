@@ -14,7 +14,6 @@
       "photos": "Fotos",
       "design": "Diseño",
       "project-status": "Projekto Statuso",
-      "twitter": "Twitter",
       "old-site": "Viejo Sitio"
     },
     "footer": {
@@ -289,6 +288,11 @@
       "text": "Publicaciones",
       "subtext": "Artículos sobre eventos actuales, cultura, ciencia popular, relaciones y más, presentados desde la perspectiva única de la sabiduría de la Cabalá"
     },
+    "tabs": {
+      "articles": "Artículos",
+      "twitter": "Twitter",
+      "blog": "Blog"
+    },
     "list": {
       "item_from": "Artículo de:"
     },
@@ -298,12 +302,6 @@
           "title": "Más artículos de la misma colección"
         }
       }
-    }
-  },
-  "twitter": {
-    "header": {
-      "text": "Twitter",
-      "subtext": "Un espejo de todos los tweets de Michael Laitman @laitman_es"
     }
   },
   "pages": {

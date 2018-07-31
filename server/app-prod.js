@@ -39,6 +39,8 @@ app.use(helmet({
         'fullstory.com',
         '*.fullstory.com',
         '*.twimg.com',
+        '*.youtube.com',
+        '*.youtube-nocookie.com',
       ],
       'script-src': [
         '\'self\'',

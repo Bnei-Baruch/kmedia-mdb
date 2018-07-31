@@ -83,6 +83,7 @@ export class OmniBox extends Component {
     }
 
     const { search, location, push, pageSize, resetFilter, onSearch } = this.props;
+    const query = q != null ? q : this.props.query;
 
     // First of all redirect to search results page if we're not there
     if (!location.pathname.endsWith('search')) {
@@ -100,8 +101,6 @@ export class OmniBox extends Component {
         resetFilter('search', 'sections-filter');
       }
     }
-
-    const query = q != null ? q : this.props.query;
 
     search(query, 1, pageSize, isDebMode(location));
     onSearch();

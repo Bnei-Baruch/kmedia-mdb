@@ -6,6 +6,7 @@ import { Accordion, Button, Header, Menu, Segment } from 'semantic-ui-react';
 
 import 'react-day-picker/lib/style.css';
 import { today } from '../../../../helpers/date';
+import * as shapes from '../../../shapes';
 import FastDayPicker from './FastDayPicker';
 
 const TODAY        = 'TODAY';
@@ -105,6 +106,7 @@ class DateFilter extends Component {
     onApply: PropTypes.func,
     t: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -199,8 +201,8 @@ class DateFilter extends Component {
     this.setState({ showCustom: !this.state.showCustom });
 
   render() {
-    const { t, language }          = this.props;
-    const { from, to, datePreset } = this.state;
+    const { t, language, deviceInfo } = this.props;
+    const { from, to, datePreset }    = this.state;
 
     return (
       <Segment.Group>
@@ -251,6 +253,7 @@ class DateFilter extends Component {
                   label={t('filters.date-filter.start')}
                   value={from}
                   language={language}
+                  deviceInfo={deviceInfo}
                   onDayChange={this.handleFromInputChange}
                 />
                 <br />
@@ -258,6 +261,7 @@ class DateFilter extends Component {
                   label={t('filters.date-filter.end')}
                   value={to}
                   language={language}
+                  deviceInfo={deviceInfo}
                   onDayChange={this.handleToInputChange}
                 />
               </Accordion.Content>

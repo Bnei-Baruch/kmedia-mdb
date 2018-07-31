@@ -8,18 +8,14 @@ import { types as ssr } from './ssr';
 
 /* Types */
 
-const FETCH_TAGS         = 'Tags/FETCH_TAGS';
-const FETCH_TAGS_SUCCESS = 'Tags/FETCH_TAGS_SUCCESS';
-const FETCH_TAGS_FAILURE = 'Tags/FETCH_TAGS_FAILURE';
+const RECEIVE_TAGS = 'Tags/RECEIVE_TAGS';
 
 const FETCH_DASHBOARD         = 'Tags/FETCH_DASHBOARD';
 const FETCH_DASHBOARD_SUCCESS = 'Tags/FETCH_DASHBOARD_SUCCESS';
 const FETCH_DASHBOARD_FAILURE = 'Tags/FETCH_DASHBOARD_FAILURE';
 
 export const types = {
-  FETCH_TAGS,
-  FETCH_TAGS_SUCCESS,
-  FETCH_TAGS_FAILURE,
+  RECEIVE_TAGS,
   FETCH_DASHBOARD,
   FETCH_DASHBOARD_SUCCESS,
   FETCH_DASHBOARD_FAILURE
@@ -27,18 +23,14 @@ export const types = {
 
 /* Actions */
 
-const fetchTags        = createAction(FETCH_TAGS);
-const fetchTagsSuccess = createAction(FETCH_TAGS_SUCCESS);
-const fetchTagsFailure = createAction(FETCH_TAGS_FAILURE);
+const receiveTags = createAction(RECEIVE_TAGS);
 
 const fetchDashboard        = createAction(FETCH_DASHBOARD);
 const fetchDashboardSuccess = createAction(FETCH_DASHBOARD_SUCCESS, (id, data) => ({ id, data }));
 const fetchDashboardFailure = createAction(FETCH_DASHBOARD_FAILURE, (id, err) => ({ id, err }));
 
 export const actions = {
-  fetchTags,
-  fetchTagsSuccess,
-  fetchTagsFailure,
+  receiveTags,
   fetchDashboard,
   fetchDashboardSuccess,
   fetchDashboardFailure
@@ -47,11 +39,8 @@ export const actions = {
 /* Reducer */
 
 const initialState = {
-  byId: {},
-  roots: [],
-  tagIdsByPattern: {},
   wip: false,
-  error: null,
+  err: null,
   getByID: identity,
   sections: [],
   units: [],
@@ -84,10 +73,9 @@ const onSSRPrepare = state => ({
   error: state.error ? state.error.toString() : state.error,
 });
 
-const onFetchTagsSuccess = (state, action) => {
+const onReceiveTags = (state, action) => {
   const byId = buildById(action.payload);
 
-  // selectors
   // we keep those in state to avoid recreating them every time a selector is called
   const getByID     = id => byId[id];
   const getPath     = source => tracePath(source, getByID);
@@ -100,10 +88,9 @@ const onFetchTagsSuccess = (state, action) => {
     getPath,
     getPathByID,
     roots: action.payload.map(x => x.id),
-    wip: false,
-    error: null
+    error: null,
   };
-};
+}
 
 const onDashboard = state => ({
   ...state,
@@ -116,9 +103,9 @@ const getSectionOfUnit = (unit) => {
 };
 
 const onDashboardSuccess = (state, action) => {
-  const { data } = action.payload;
+  const { data }                                       = action.payload;
   const { latest_units: latest, /* promoted_units */ } = data;
-
+  
   if (Array.isArray(latest)) {
     const uniqueSectionsArr = [...new Set(latest.map(u => getSectionOfUnit(u)).filter(x => !!x))].sort();
 
@@ -146,23 +133,17 @@ const onDashboardSuccess = (state, action) => {
       getSectionUnits
     };
   }
-
-  return {
-    ...state,
-    wip: false,
-    err: 'No latest units were found'
-  };
 };
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
   [settings.SET_LANGUAGE]: () => initialState,
 
-  [FETCH_TAGS_SUCCESS]: onFetchTagsSuccess,
-
   [FETCH_DASHBOARD]: onDashboard,
   [FETCH_DASHBOARD_SUCCESS]: onDashboardSuccess,
   [FETCH_DASHBOARD_FAILURE]: (state, action) => ({ ...state, error: action.payload.err }),
+
+  [RECEIVE_TAGS]: onReceiveTags
 
 }, initialState);
 
@@ -187,4 +168,3 @@ export const selectors = {
   getUnits,
   getSectionUnits
 };
-

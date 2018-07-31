@@ -5,16 +5,6 @@ import { actions, types } from '../redux/modules/tags';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions as mdb } from '../redux/modules/mdb';
 
-export function* fetchTags() {
-  try {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const { data } = yield call(Api.tags, { language });
-    yield put(actions.fetchTagsSuccess(data));
-  } catch (err) {
-    yield put(actions.fetchTagsFailure(err));
-  }
-}
-
 export function* fetchDashboard(action) {
   const id = action.payload;
 
@@ -36,15 +26,10 @@ export function* fetchDashboard(action) {
   }
 }
 
-function* watchFetchTags() {
-  yield takeLatest(types.FETCH_TAGS, fetchTags);
-}
-
 function* watchFetchDashboard() {
   yield takeLatest(types.FETCH_DASHBOARD, fetchDashboard);
 }
 
 export const sagas = [
-  watchFetchTags,
   watchFetchDashboard
 ];
