@@ -150,7 +150,7 @@ class HelpPage extends Component {
                           playsInline
                           preload="metadata"
                           type="video/mp4"
-                          src={assetUrl(`help/clip${x}.mp4`)}
+                          src={assetUrl(`help/${lang}/clip${x}.mp4`)}
                           poster={assetUrl(`help/clip${x}.jpg`)}
                           style={{ width: '100%', height: 'auto' }}
                         />
