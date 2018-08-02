@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Grid, Container, Card, Divider } from 'semantic-ui-react';
 
-import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../helpers/consts';
+import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN, LANG_GERMAN } from '../../../helpers/consts';
 import { assetUrl } from '../../../helpers/Api';
 import { selectors as settings } from '../../../redux/modules/settings';
 import SectionHeader from '../../shared/SectionHeader';
@@ -122,6 +122,7 @@ class HelpPage extends Component {
     case LANG_UKRAINIAN:
       lang = LANG_RUSSIAN;
       break;
+    case LANG_GERMAN:
     case LANG_SPANISH:
       lang = LANG_ENGLISH;
       break;
