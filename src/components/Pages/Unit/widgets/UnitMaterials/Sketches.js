@@ -197,6 +197,8 @@ class Sketches extends React.Component {
       imageObjsArr = imageObjs;
     }
 
+    const isRTL = RTL_LANGUAGES.includes(language);
+
     if (Array.isArray(imageObjsArr) && imageObjsArr.length > 0) {
       // prepare the image array for the gallery and sort it
       const items = imageObjsArr
@@ -217,32 +219,31 @@ class Sketches extends React.Component {
               </Container> :
               null
           }
-          <div style={{ direction: 'ltr' }}>
-            <ImageGallery
-              lazyLoad
-              showFullscreenButton
-              items={items}
-              thumbnailPosition="top"
-              showPlayButton={false}
-              showBullets={false}
-              showIndex={items.length > 1}
-              showThumbnails={items.length > 1}
-              onImageError={this.handleImageError}
-              renderLeftNav={this.renderLeftNav}
-              renderRightNav={this.renderRightNav}
-              renderFullscreenButton={this.renderFullscreenButton}
-            />
-          </div>
+          <ImageGallery
+            lazyLoad
+            isRTL={isRTL}
+            showFullscreenButton
+            items={items}
+            thumbnailPosition="top"
+            showPlayButton={false}
+            showBullets={false}
+            showIndex={items.length > 1}
+            showThumbnails={items.length > 1}
+            onImageError={this.handleImageError}
+            renderLeftNav={isRTL ? this.renderRightNav : this.renderLeftNav}
+            renderRightNav={isRTL ? this.renderLeftNav : this.renderRightNav}
+            renderFullscreenButton={this.renderFullscreenButton}
+          />
         </div>
       );
     }
-
-    const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
-    return (
-      <Segment basic>
-        <div style={{ direction }}>{t('messages.no-images')}</div>
-      </Segment>
-    );
+    else{
+      return (
+        <Segment basic>
+          {t('messages.no-images')}
+        </Segment>
+      );
+    }
   }
 }
 
