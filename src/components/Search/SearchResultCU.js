@@ -2,21 +2,29 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Label, Table, Image } from 'semantic-ui-react';
+import { Segment, Icon, Button, Table, Image, Label } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
+import moment from 'moment';
 
 import playerHelper from '../../helpers/player';
 import { canonicalLink, sectionLink } from '../../helpers/links';
 import { formatDuration, tracePath } from '../../helpers/utils';
+import { assetUrl, imaginaryUrl, Requests } from '../../helpers/Api';
 import { isDebMode } from '../../helpers/url';
 import { actions, selectors } from '../../redux/modules/mdb';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
 import * as shapes from '../shapes';
+import UnitLogo from '../shared/Logo/UnitLogo';
+import { sectionLogo } from '../../helpers/images';
 import Link from '../Language/MultiLanguageLink';
 import ScoreDebug from './ScoreDebug';
 import {
+  MT_TEXT,
+  MT_AUDIO,
+  MT_VIDEO,
+  CT_LESSON_PART,
   SEARCH_INTENT_FILTER_NAMES,
   SEARCH_INTENT_NAMES,
   SEARCH_INTENT_SECTIONS,
@@ -74,6 +82,76 @@ class SearchResultCU extends Component {
     click(mdb_uid, index, type, rank, searchId);
   };
 
+  renderFiles = () => {
+    const { cu, language } = this.props;
+    return cu.files.filter(f => f.language === language).map(f => this.renderFileByType(f, cu.id));
+  };
+
+  renderFileByType = (file, cuId) => {
+    switch (file.type) {
+    case MT_VIDEO:
+      return this.renderVideo(file, cuId);
+    case MT_AUDIO:
+      return this.renderAudio(file);
+    case MT_TEXT:
+      return this.renderText(file);
+    }
+  };
+
+  renderVideo = (file, unitId) => {
+
+    let src = assetUrl(`api/thumbnail/${unitId}`);
+    if (!src.startsWith('http')) {
+      src = `http://localhost${src}`;
+    }
+    src = `${imaginaryUrl('thumbnail')}?${Requests.makeParams({ url: src, width: 150 })}`;
+    return (
+      <Segment compact style={{ padding: 0 }} floated='left'>
+        <Label attached='bottom left'>{this.mlsToStrColon(file.duration)}</Label>
+        <Image src={src} />
+      </Segment>
+    );
+  };
+
+  mlsToStrColon(seconds) {
+    const duration = moment.duration({ seconds });
+    const h        = duration.hours();
+    const m        = duration.minutes();
+    const s        = duration.seconds();
+    return h ? `${h}:${m}:${s}` : `${m}:${s}`;
+  }
+
+  renderAudio = (file) => {
+    return (
+      <Button floated='left'>
+        <Icon name="file audio" />
+        {`${this.props.t(`constants.media-types.${file.type}`)}`}
+      </Button>
+    );
+  };
+
+  renderText = (file) => {
+    return (
+      <Button floated='left'>
+        <Icon name="file text" />
+        {`${this.props.t(`constants.media-types.${file.type}`)}`}
+      </Button>
+    );
+  };
+
+  iconByContentType = (type) => {
+    let icon;
+    switch (type) {
+    case CT_LESSON_PART:
+      icon = 'lessons';
+      break;
+    default:
+      icon = 'programs';
+      break;
+    }
+    return <Image src={sectionLogo[icon]} />;
+  };
+
   render() {
     const { t, location, queryResult, cu, hit, rank }                                            = this.props;
     const { search_result: { searchId } }                                                        = queryResult;
@@ -107,36 +185,34 @@ class SearchResultCU extends Component {
       filmDate = t('values.date', { date: cu.film_date });
     }
 
+
     return (<div>
         <Table>
-          <Table.Row key={mdbUid} verticalAlign="top">
-            <Table.Cell width={1}>
-              <Label size="tiny">{t(`constants.content-types.${cu.content_type}`)}</Label>
-            </Table.Cell>
-            <Table.Cell width={11}>
-              <Link
-                className="search__link"
-                onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-                to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}
-              >
-                {name}
-              </Link>
-              &nbsp;&nbsp;
-              {cu.duration ? <small>{formatDuration(cu.duration)}</small> : null}
-              {snippet || null}
-              {!isDebMode(location) ? null : <ScoreDebug name={cu.name} score={score} explanation={hit._explanation} />}
-              <strong>{filmDate}</strong>
-              <div>
-                <Image
-                  src='/images/wireframe/image-text.png'
-                  as='a'
-                  size='medium'
-                  href='http://google.com'
-                  target='_blank'
-                />
-              </div>
-            </Table.Cell>
-          </Table.Row>
+          <Table.Body>
+            <Table.Row key={mdbUid} verticalAlign="top">
+              <Table.Cell width={1}>
+                {this.iconByContentType(cu.content_type)}
+              </Table.Cell>
+              <Table.Cell width={11}>
+                <Link
+                  className="search__link"
+                  onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+                  to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}
+                >
+                  {name}
+                </Link>
+
+                {snippet || null}
+                {!isDebMode(location) ? null :
+                  <ScoreDebug name={cu.name} score={score} explanation={hit._explanation} />}
+                <strong>{filmDate}</strong>
+
+                <div>
+                  {this.renderFiles()}
+                </div>
+              </Table.Cell>
+            </Table.Row>
+          </Table.Body>
         </Table>
       </div>
 

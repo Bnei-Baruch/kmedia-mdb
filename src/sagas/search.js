@@ -66,7 +66,7 @@ export function* search(action) {
         }
       }, []);
       const language     = yield select(state => settings.getLanguage(state.settings));
-      const respCU       = yield call(Api.units, { id: cuIDsToFetch, pageSize: cuIDsToFetch.length, language });
+      const respCU       = yield call(Api.units, { id: cuIDsToFetch, pageSize: cuIDsToFetch.length, language, with_files: true });
       const respC        = yield call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, language });
       yield put(mdbActions.receiveContentUnits(respCU.data.content_units));
       yield put(mdbActions.receiveCollections(respC.data.collections));

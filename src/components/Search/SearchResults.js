@@ -18,6 +18,7 @@ import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import ScoreDebug from './ScoreDebug';
 import SearchResultCU from './SearchResultCU';
+import SearchResultIntent from './SearchResultIntent';
 import {
   SEARCH_INTENT_FILTER_NAMES,
   SEARCH_INTENT_NAMES,
@@ -189,105 +190,18 @@ class SearchResults extends Component {
     );
   };
 
-  renderIntent = (hit, rank) => {
-    const { t, location, queryResult, getTagById, getSourceById } = this.props;
-    const { search_result: { searchId } }                         = queryResult;
-    const {
-            _index: index,
-            _type: type,
-            _source: {
-              content_type: contentType,
-              mdb_uid: mdbUid,
-              name,
-              explanation,
-              score: originalScore,
-              max_explanation: maxExplanation,
-              max_score: maxScore
-            },
-            _score: score,
-          }                                                       = hit;
-    const section                                                 = SEARCH_INTENT_SECTIONS[type];
-    const intentType                                              = SEARCH_INTENT_NAMES[index];
-    const filterName                                              = SEARCH_INTENT_FILTER_NAMES[index];
-
-    let getFilterById = null;
-    switch (index) {
-    case SEARCH_INTENT_INDEX_TOPIC:
-      getFilterById = getTagById;
-      break;
-    case SEARCH_INTENT_INDEX_SOURCE:
-      getFilterById = getSourceById;
-      break;
-    default:
-      console.log('Using default filter:', index);
-      getFilterById = x => x;
-    }
-
-    const path  = tracePath(getFilterById(mdbUid), getFilterById);
-    let display = '';
-    switch (index) {
-    case SEARCH_INTENT_INDEX_TOPIC:
-      display = path[path.length - 1].label;
-      break;
-    case SEARCH_INTENT_INDEX_SOURCE:
-      display = path.map(y => y.name).join(' > ');
-      break;
-    default:
-      display = name;
-    }
-
-    return (
-      <Table.Row key={mdbUid + contentType} verticalAlign="top">
-        <Table.Cell collapsing singleLine width={1}>
-          {/*<strong>date if applicable</strong>*/}
-        </Table.Cell>
-        <Table.Cell collapsing singleLine>
-          <Label size="tiny">{t(`search.intent-types.${section}`)}</Label>
-        </Table.Cell>
-        <Table.Cell>
-          <Link
-            className="search__link"
-            onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-            to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}
-          >
-            {t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`)} {display}
-          </Link>
-        </Table.Cell>
-        {
-          !isDebMode(location) ?
-            null :
-            <Table.Cell collapsing textAlign="right">
-              <div style={{ display: 'inline-block' }}>
-                <ScoreDebug
-                  name={`${name} (${originalScore})`}
-                  score={score}
-                  explanation={explanation}
-                />
-              </div>
-              <div style={{ display: 'inline-block' }}>
-                <ScoreDebug
-                  name="Max"
-                  score={maxScore}
-                  explanation={maxExplanation}
-                />
-              </div>
-            </Table.Cell>
-        }
-      </Table.Row>
-    );
-  };
-
   renderHit = (hit, rank) => {
     // console.log('hit', hit);
     const { cMap, cuMap }                                  = this.props;
-    const { _source: { mdb_uid: mdbUid }, _type: hitType } = hit;
+    const { _source: { mdb_uid: mdbUid, content_type: contentType }, _type: hitType } = hit;
     const cu                                               = cuMap[mdbUid];
     const c                                                = cMap[mdbUid];
 
+    console.log('SearchResult.render mdbUid:', mdbUid);
     if (cu) {
       return (
-        <Table.Row key={mdbUid} verticalAlign="top">
-          <Table.Cell colspan="4">
+        <Table.Row key={`${mdbUid}_${contentType}`} verticalAlign="top">
+          <Table.Cell colSpan="4">
             <SearchResultCU hit={hit} rank={rank} {...this.props} cu={cu} />
           </Table.Cell>
         </Table.Row>
@@ -297,7 +211,13 @@ class SearchResults extends Component {
     } else if (hitType === 'sources') {
       return this.renderSource(hit, rank);
     } else if (SEARCH_INTENT_HIT_TYPES.includes(hitType)) {
-      return this.renderIntent(hit, rank);
+      return (
+        <Table.Row key={`${mdbUid}_${contentType}`} verticalAlign="top">
+          <Table.Cell colSpan="5">
+            <SearchResultIntent hit={hit} rank={rank} {...this.props} />
+          </Table.Cell>
+        </Table.Row>
+      );
     }
 
     // maybe content_units are still loading ?
