@@ -122,13 +122,22 @@ class HelpPage extends Component {
     case LANG_HEBREW:
       lang = LANG_HEBREW;
       break;
-    // case LANG_UKRAINIAN:
-    // case LANG_RUSSIAN:
-    //   lang = LANG_RUSSIAN;
-    //   break;
+      // case LANG_UKRAINIAN:
+      // case LANG_RUSSIAN:
+      //   lang = LANG_RUSSIAN;
+      //   break;
     default:
       lang = LANG_ENGLISH;
       break;
+    }
+
+    let c    = clips;
+    let txts = texts;
+    if (lang !== LANG_HEBREW) {
+      c = [...clips];
+      c.splice(4, 1); // remove 4-2 in other langs
+      txts = [...texts];
+      txts.splice(4, 1); // remove 4-2 in other langs
     }
 
     return (
@@ -138,11 +147,11 @@ class HelpPage extends Component {
         <Container>
           <Grid stackable columns={3}>
             {
-              clips.map((x, i) => (
+              c.map((x, i) => (
                 <Grid.Column key={x}>
                   <Card fluid>
                     <Card.Content>
-                      <Card.Header>{texts[i].title[lang]}</Card.Header>
+                      <Card.Header>{txts[i].title[lang]}</Card.Header>
                     </Card.Content>
                     <Card.Content>
                       <div>
@@ -158,7 +167,7 @@ class HelpPage extends Component {
                       </div>
                     </Card.Content>
                     <Card.Content>
-                      {texts[i].description[lang]}
+                      {txts[i].description[lang]}
                     </Card.Content>
                   </Card>
                 </Grid.Column>
