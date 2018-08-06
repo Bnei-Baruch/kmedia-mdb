@@ -8,7 +8,6 @@ import {
   CT_DAILY_LESSON,
   CT_LECTURE,
   CT_LESSON_PART,
-  CT_RABASH_LESSON,
   CT_SPECIAL_LESSON,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON
@@ -45,7 +44,13 @@ class Info extends Component {
     if (filteredListPath === 'lessons') {
       switch (ct) {
       case CT_LESSON_PART:
-        filteredListPath += '/daily';
+        if (filmDate && filmDate > '1980-01-01') {
+          filteredListPath += '/daily';
+        } else {
+          // dirty hack to determine if rabash lesson
+          // a better way would use MDB data (require backend api support)
+          filteredListPath += '/rabash';
+        }
         break;
       case CT_VIRTUAL_LESSON:
         filteredListPath += '/virtual';
@@ -55,9 +60,6 @@ class Info extends Component {
         break;
       case CT_WOMEN_LESSON:
         filteredListPath += '/women';
-        break;
-      case CT_RABASH_LESSON:
-        filteredListPath += '/rabash';
         break;
         // case CT_CHILDREN_LESSON:
         //   filteredListPath += '/children';
@@ -135,9 +137,9 @@ class Info extends Component {
         switch (x.content_type) {
         case CT_DAILY_LESSON:
         case CT_SPECIAL_LESSON: {
-          const ct = t(`constants.content-types.${CT_DAILY_LESSON}`);
+          const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
           const fd = t('values.date', { date: x.film_date });
-          display  = `${ct} ${fd}`;
+          display  = `${ctLabel} ${fd}`;
           break;
         }
         default:

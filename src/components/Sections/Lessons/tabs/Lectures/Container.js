@@ -19,7 +19,7 @@ import UnitList from '../../../../Pages/UnitList/Container';
 import Link from '../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
 
-const renderUnit = (unit, t, showUnitNameOnly = false) => {
+const renderUnit = (unit, t, namespace) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
   const lectures  = breakdown.getLectures();
 
@@ -37,8 +37,7 @@ const renderUnit = (unit, t, showUnitNameOnly = false) => {
   }
   const link = canonicalLink(unit);
 
-  const renderUnitNameOnly = () => {
-
+  if (namespace === 'lessons-rabash') {
     return (
       <Table.Row className="no-thumbnail" key={unit.id} verticalAlign="top">
         <Table.Cell>
@@ -55,47 +54,44 @@ const renderUnit = (unit, t, showUnitNameOnly = false) => {
         </Table.Cell>
       </Table.Row>
     );
-  };
+  }
 
   return (
-    showUnitNameOnly ?
-      renderUnitNameOnly() :
-
-      <Table.Row key={unit.id} verticalAlign="top">
-        <Table.Cell collapsing singleLine>
-          <Link to={link}>
-            <UnitLogo
-              className="index__thumbnail"
-              unitId={unit.id}
-              collectionId={lectures.length > 0 ? lectures[0].id : null}
-              fallbackImg={sectionThumbnailFallback.lectures}
-            />
-          </Link>
-        </Table.Cell>
-        <Table.Cell>
-          <span className="index__date">{filmDate}</span>
-          <Link className="index__title" to={link}>
-            {unit.name || NO_NAME}
-          </Link>
-          {
-            unit.description ?
-              <div className="index__description mobile-hidden">
-                {ellipsize(unit.description)}
-              </div>
-              : null
-          }
-          {
-            relatedItems.length > 0 ?
-              <List horizontal divided link className="index__collections" size="tiny">
-                <List.Item>
-                  <List.Header>{t('lessons.list.item_from')}</List.Header>
-                </List.Item>
-                {relatedItems}
-              </List>
-              : null
-          }
-        </Table.Cell>
-      </Table.Row>
+    <Table.Row key={unit.id} verticalAlign="top">
+      <Table.Cell collapsing singleLine>
+        <Link to={link}>
+          <UnitLogo
+            className="index__thumbnail"
+            unitId={unit.id}
+            collectionId={lectures.length > 0 ? lectures[0].id : null}
+            fallbackImg={sectionThumbnailFallback.lectures}
+          />
+        </Link>
+      </Table.Cell>
+      <Table.Cell>
+        <span className="index__date">{filmDate}</span>
+        <Link className="index__title" to={link}>
+          {unit.name || NO_NAME}
+        </Link>
+        {
+          unit.description ?
+            <div className="index__description mobile-hidden">
+              {ellipsize(unit.description)}
+            </div>
+            : null
+        }
+        {
+          relatedItems.length > 0 ?
+            <List horizontal divided link className="index__collections" size="tiny">
+              <List.Item>
+                <List.Header>{t('lessons.list.item_from')}</List.Header>
+              </List.Item>
+              {relatedItems}
+            </List>
+            : null
+        }
+      </Table.Cell>
+    </Table.Row>
   );
 };
 
