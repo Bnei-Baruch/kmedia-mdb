@@ -7,6 +7,7 @@ import Summary from './Summary/Summary';
 import SourcesContainer from './Sources/SourcesContainer';
 import Sketches from './Sketches';
 import TranscriptionContainer from './Transcription/TranscriptionContainer';
+import {CT_VIDEO_PROGRAM_CHAPTER} from '../../../../../helpers/consts';
 
 class Materials extends Component {
   static propTypes = {
@@ -25,12 +26,7 @@ class Materials extends Component {
       return null;
     }
 
-    const items = [
-      {
-        name: 'summary',
-        label: t('materials.summary.header'),
-        component: <Summary unit={this.props.unit} t={t} />,
-      },
+    const items = [     
       {
         name: 'transcription',
         label: t('materials.transcription.header'),
@@ -47,6 +43,15 @@ class Materials extends Component {
         component: <Sketches unit={this.props.unit} t={t} />,
       },
     ];
+
+    if (this.props.unit.content_type === CT_VIDEO_PROGRAM_CHAPTER)
+    {
+      items.unshift({
+        name: 'summary',
+        label: t('materials.summary.header'),
+        component: <Summary unit={this.props.unit} t={t} />,
+      });
+    }
 
     return (
       <div className="unit-materials">
