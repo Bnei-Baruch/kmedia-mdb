@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { CT_VIDEO_PROGRAM_CHAPTER } from '../../../../../helpers/consts';
 import * as shapes from '../../../../shapes';
 import TabsMenu from '../../../../shared/TabsMenu';
 import Summary from './Summary/Summary';
 import SourcesContainer from './Sources/SourcesContainer';
 import Sketches from './Sketches';
 import TranscriptionContainer from './Transcription/TranscriptionContainer';
-import {CT_VIDEO_PROGRAM_CHAPTER} from '../../../../../helpers/consts';
 
 class Materials extends Component {
   static propTypes = {
@@ -26,7 +26,7 @@ class Materials extends Component {
       return null;
     }
 
-    const items = [     
+    const items = [
       {
         name: 'transcription',
         label: t('materials.transcription.header'),
@@ -44,8 +44,7 @@ class Materials extends Component {
       },
     ];
 
-    if (this.props.unit.content_type === CT_VIDEO_PROGRAM_CHAPTER)
-    {
+    if (this.props.unit.content_type === CT_VIDEO_PROGRAM_CHAPTER) {
       items.unshift({
         name: 'summary',
         label: t('materials.summary.header'),
