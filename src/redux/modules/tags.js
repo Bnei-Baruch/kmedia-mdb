@@ -7,26 +7,18 @@ import { types as ssr } from './ssr';
 
 /* Types */
 
-const FETCH_TAGS         = 'Tags/FETCH_TAGS';
-const FETCH_TAGS_SUCCESS = 'Tags/FETCH_TAGS_SUCCESS';
-const FETCH_TAGS_FAILURE = 'Tags/FETCH_TAGS_FAILURE';
+const RECEIVE_TAGS = 'Tags/RECEIVE_TAGS';
 
 export const types = {
-  FETCH_TAGS,
-  FETCH_TAGS_SUCCESS,
-  FETCH_TAGS_FAILURE,
+  RECEIVE_TAGS,
 };
 
 /* Actions */
 
-const fetchTags        = createAction(FETCH_TAGS);
-const fetchTagsSuccess = createAction(FETCH_TAGS_SUCCESS);
-const fetchTagsFailure = createAction(FETCH_TAGS_FAILURE);
+const receiveTags = createAction(RECEIVE_TAGS);
 
 export const actions = {
-  fetchTags,
-  fetchTagsSuccess,
-  fetchTagsFailure,
+  receiveTags,
 };
 
 /* Reducer */
@@ -34,8 +26,6 @@ export const actions = {
 const initialState = {
   byId: {},
   roots: [],
-  tagIdsByPattern: {},
-  error: null,
   getByID: identity
 };
 
@@ -69,7 +59,7 @@ export const reducer = handleActions({
 
   [settings.SET_LANGUAGE]: () => initialState,
 
-  [FETCH_TAGS_SUCCESS]: (state, action) => {
+  [RECEIVE_TAGS]: (state, action) => {
     const byId = buildById(action.payload);
 
     // selectors
@@ -88,11 +78,6 @@ export const reducer = handleActions({
       error: null,
     };
   },
-
-  [FETCH_TAGS_FAILURE]: (state, action) => ({
-    ...state,
-    error: action.payload,
-  }),
 }, initialState);
 
 /* Selectors */

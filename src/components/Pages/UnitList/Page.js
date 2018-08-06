@@ -60,7 +60,7 @@ const filters = {
   'events-meals': [
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
-  publications: [
+  'publications-articles': [
     { name: 'publishers-filter', component: filterComponents.PublishersFilter },
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],

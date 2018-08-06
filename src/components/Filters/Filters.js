@@ -122,14 +122,16 @@ class Filters extends Component {
 
                         {
                           value ?
-                            <Label
-                              circular
-                              size="tiny"
-                              color="black"
-                              onClick={e => this.handleResetFilter(e, name)}
-                            >
-                              <Icon name="times" />
-                            </Label>
+                            <div className="clear-filter">
+                              <Label
+                                basic
+                                circular
+                                size="tiny"
+                                onClick={e => this.handleResetFilter(e, name)}
+                              >
+                                <Icon name="times" />
+                              </Label>
+                            </div>
                             :
                             null
                         }
@@ -151,6 +153,7 @@ class Filters extends Component {
                         onApply={x => this.handleApply(name, x)}
                         language={language}
                         t={t}
+                        deviceInfo={deviceInfo}
                       />
                     </Popup.Content>
                   </Popup>
