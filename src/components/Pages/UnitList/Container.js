@@ -67,12 +67,11 @@ export class UnitListContainer extends withPagination {
       if (!nextProps.location.search) {
         nextProps.resetNamespace(nextProps.namespace);
         this.handleFiltersChanged();
-      }
-      else
-      {
+      } else {
         const pageNo = withPagination.getPageFromLocation(nextProps.location);
-        if (pageNo !== nextProps.pageNo)  
-          this.setPage(nextProps, pageNo);     
+        if (pageNo !== nextProps.pageNo) {
+          this.setPage(nextProps, pageNo);
+        }
       }
     }
 
