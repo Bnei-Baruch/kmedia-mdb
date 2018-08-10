@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Container, Grid, Header } from 'semantic-ui-react';
-import { selectors as tags } from '../../redux/modules/tags';
 
 const Footer = (props) => {
   const { t } = props;
@@ -31,10 +29,6 @@ const Footer = (props) => {
 
 Footer.propTypes = {
   t: PropTypes.func.isRequired,
-  tagById: PropTypes.func.isRequired,
 };
 
-export default connect(
-  state => ({
-    tagById: tags.getTagById(state.tags),
-  }))(Footer);
+export default Footer;

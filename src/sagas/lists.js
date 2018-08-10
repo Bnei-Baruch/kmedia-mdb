@@ -1,5 +1,5 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
-
+import { push } from 'react-router-redux';
 import Api from '../helpers/Api';
 import { actions, types } from '../redux/modules/lists';
 import { selectors as settings } from '../redux/modules/settings';
@@ -57,6 +57,12 @@ function* fetchList(action) {
 function* updatePageInQuery(action) {
   const { pageNo } = action.payload;
   const page       = pageNo > 1 ? pageNo : null;
+
+  if (page) {
+  // adding a page to browser history
+    yield put(push(page));
+  }
+
   yield* updateQuery(query => Object.assign(query, { page }));
 }
 

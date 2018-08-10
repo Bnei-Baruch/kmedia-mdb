@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Feed } from 'semantic-ui-react';
 
-import { isEmpty } from '../../../helpers/utils';
-import * as shapes from '../../shapes';
+import { isEmpty } from '../../../../../helpers/utils';
+import * as shapes from '../../../../shapes';
 
 const screenNames = {
   Michael_Laitman: 'Михаэль Лайтман',

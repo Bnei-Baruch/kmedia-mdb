@@ -16,7 +16,9 @@
 //////////ALL YOUR CSS IS HERE ↴
 @import 'includes/not-sorted-scss';
 
-body { overflow-y: scroll; }
+body {
+  overflow-y: scroll;
+}
 
 .debug {
   background: yellow;
@@ -111,6 +113,5 @@ body { overflow-y: scroll; }
     margin-right: 4px;
   }
 }
-
 
 

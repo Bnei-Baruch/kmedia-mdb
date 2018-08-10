@@ -84,7 +84,7 @@ export const canonicalLink = (entity) => {
   case CT_VIDEO_PROGRAM:
     return `/programs/c/${entity.id}`;
   case CT_ARTICLES:
-    return `/publications/c/${entity.id}`;
+    return `/publications/articles/c/${entity.id}`;
   case CT_FRIENDS_GATHERINGS:
   case CT_MEALS:
   case CT_CONGRESS:
@@ -120,7 +120,7 @@ export const canonicalLink = (entity) => {
   case CT_MEAL:
     return `/events/cu/${entity.id}`;
   case CT_ARTICLE:
-    return `/publications/cu/${entity.id}`;
+    return `/publications/articles/cu/${entity.id}`;
   case CT_UNKNOWN:
   case CT_CLIP:
   case CT_TRAINING:
