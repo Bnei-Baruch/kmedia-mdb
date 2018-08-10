@@ -16,6 +16,7 @@ import { reducer as assets } from './modules/assets';
 import { reducer as home } from './modules/home';
 import { reducer as stats } from './modules/stats';
 import { reducer as twitter } from './modules/twitter';
+import { reducer as simpleMode } from './modules/simpelMode';
 
 export default combineReducers({
   router,
@@ -35,5 +36,6 @@ export default combineReducers({
   home,
   stats,
   twitter,
+  simpleMode,
 });
 

@@ -11,6 +11,7 @@
       "books": "ספרים",
       "topics": "נושאים",
       "publications": "פרסומים",
+      "simple-mode": "גרסה קלה",
       "photos": "תמונות",
       "design": "עיצוב",
       "project-status": "סטאטוס הפרוייקט",
@@ -307,6 +308,14 @@
       "text": "טוויטר",
       "subtext": "העתק של כל הציוצים של הרב ד\"ר מיכאל לייטמן ברשת החברתית טוויטר"
     }
+  },
+  "simple-mode": {
+    "header": {
+      "text": "הורדות - גרסה קלה",
+      "subtext": "ריכוז כל המדיה של יום ספציפי"
+    },
+    "today-button": "היום",
+    "total-media-for-date": "כל המדיה לתאריך "
   },
   "help": {
     "header": {
