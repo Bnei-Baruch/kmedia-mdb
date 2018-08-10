@@ -1,16 +1,14 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import { selectors as settings } from '../redux/modules/settings';
 import { actions, types } from '../redux/modules/simpelMode';
 
 export function* fetchAllMediaForDate(action) {
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const args     = {
+    const args = {
       startDate: action.payload.date,
       endDate: action.payload.date,
-      language,
+      language: action.payload.language,
     };
 
     const { data } = yield call(Api.simpleMode, args);
@@ -21,7 +19,7 @@ export function* fetchAllMediaForDate(action) {
 }
 
 function* watchFetchAllMedia() {
-  yield takeLatest([types.FETCH_DATA], fetchAllMediaForDate);
+  yield takeLatest([types.FETCH_ALL_MEDIA_FOR_DATE], fetchAllMediaForDate);
 }
 
 export const sagas = [
