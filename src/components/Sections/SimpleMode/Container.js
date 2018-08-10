@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import moment from 'moment';
 
 import { selectors as settings } from '../../../redux/modules/settings';
 import { actions, selectors } from '../../../redux/modules/simpelMode';
@@ -29,12 +30,19 @@ class SimpleModeContainer extends Component {
     super();
     this.handlePageChanged = this.handlePageChanged.bind(this);
     this.state             = {
-      selectedDate: new Date()
+      date: new Date(),
+      language: '',
     };
   }
 
+  componentWillMount() {
+    const { language } = this.props;
+    this.setState({ language });
+  }
+
   componentWillReceiveProps(nextProps) {
-    this.props.fetchAllMedia(this.state.selectedDate);
+    const { language } = nextProps;
+    this.setState({ language });
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -45,12 +53,19 @@ class SimpleModeContainer extends Component {
     window.scrollTo(0, 0);
   }
 
-  handleLanguageChanged = () => {
-    //todo
+  handleLanguageChanged = (e, language) => {
+    this.setState({ language });
+
+    const date = moment(this.state.date).format('YYYY-MM-DD');
+    this.props.fetchAllMedia({ date, language });
   };
 
   handleDayClick = (selectedDate) => {
-    this.setState({ selectedDate });
+    this.setState({ date: selectedDate });
+
+    const date         = moment(selectedDate).format('YYYY-MM-DD');
+    const { language } = this.state;
+    this.props.fetchAllMedia({ date, language });
   };
 
   render() {
@@ -59,7 +74,7 @@ class SimpleModeContainer extends Component {
     return (
       <Page
         items={items}
-        selectedDate={this.state.selectedDate}
+        selectedDate={this.state.date}
         wip={wip}
         err={err}
         language={language}
