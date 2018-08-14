@@ -1,7 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, Container, Header, Divider } from 'semantic-ui-react';
+import { List, Container, Header, Divider, Input } from 'semantic-ui-react';
+import { translate } from 'react-i18next';
+import debounce from 'lodash/debounce';
 
 import { TOPICS_FOR_DISPLAY } from '../../../helpers/consts';
 import { selectors } from '../../../redux/modules/tags';
@@ -12,11 +14,36 @@ class TopicContainer extends Component {
   static propTypes = {
     roots: PropTypes.arrayOf(PropTypes.string),
     byId: PropTypes.object.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     roots: []
   };
+
+  state = {
+    match: '',
+    displayRoots: []
+  }
+
+  filteredById = {}
+
+  componentDidMount(){
+    this.initRoots(this.props);
+  }
+
+  componentWillReceiveProps(nextProps){
+    if (this.props.roots !== nextProps.roots){
+      this.initRoots(nextProps);
+    }
+  }
+
+  initRoots = (props) => {
+    const { roots } = props;
+    const displayRoots = roots.filter(x => TOPICS_FOR_DISPLAY.indexOf(x) !== -1); 
+
+    this.setState({ displayRoots });
+  }
 
   /* root will be main title
   subroot will be subtitle
@@ -29,7 +56,9 @@ class TopicContainer extends Component {
   );
 
   renderNode = (node) => {
-    const { byId } = this.props;
+    if (!node){
+      return;
+    }
 
     return (
       <Fragment>
@@ -39,7 +68,7 @@ class TopicContainer extends Component {
               {
                 node.children.map(id => (
                   <List.Item key={id}>
-                    {this.renderNode(byId[id])}
+                    {this.renderNode(this.filteredById[id])}
                   </List.Item>
                 ))
               }
@@ -62,11 +91,10 @@ class TopicContainer extends Component {
   );
 
   renderBranch = (rootId) => {
-    const { byId }     = this.props;
-    const rootNode     = byId[rootId];
-    const rootChildren = rootNode.children;
+    const rootNode = this.filteredById[rootId];
+    const rootChildren = rootNode ? rootNode.children : undefined;
 
-    if (!rootChildren) {
+    if (!rootNode || !rootChildren) {
       return null;
     }
 
@@ -79,25 +107,114 @@ class TopicContainer extends Component {
         </Header>
         <div className="topics__list">
           {
-            rootChildren.map(id => this.renderSubHeader(byId[id]))
+            rootChildren.map(id => this.filteredById[id] ? this.renderSubHeader(this.filteredById[id]) : null)
           }
         </div>
-          <Divider />
+        <Divider />
       </div>
     );
   };
 
+  //filter stuff
+  handleFilterChange = debounce((e, data) => {
+    this.setState({ match: data.value });
+  }, 100);
+
+  handleFilterKeyDown = (e) => {
+    if (e.keyCode === 27) { // Esc
+      this.handleFilterClear();
+    }
+  };
+
+  handleFilterClear = () => {
+    this.setState({ match: '' });
+  };
+
+  matchString = (t) => {
+    return (
+      <Input
+        fluid
+        size="mini"
+        icon="search"
+        placeholder={t('sources-library.filter')}
+        value={this.state.match}
+        onChange={this.handleFilterChange}
+        onKeyDown={this.handleFilterKeyDown}
+      />
+    );
+  };
+
+  getRegExp = (match) => {
+    const escapedMatch = match.replace(/[/)(.+\\]/g, '\\$&');
+    const reg          = new RegExp(escapedMatch, 'i');
+
+    return reg;
+  }
+
+  filterTagsById = (byId) => {
+    const { match, displayRoots } = this.state;
+    const filteredRoots=[];
+
+    if (!match){
+      this.filteredById = byId;
+      return displayRoots;
+    }
+    
+    this.filteredById = {};
+    const parentIdsArr = [];
+    const regExp = this.getRegExp(match);
+
+    // filter objects
+    for (var key in byId) {
+      let currentObj = byId[key];
+      
+      // add object that includes the match and keep its parent_id key
+      if (currentObj.label && regExp.test(currentObj.label)){
+        this.filteredById[key] = currentObj;
+
+        if (currentObj.parent_id){
+          parentIdsArr.push(currentObj.parent_id);
+        }
+      }
+    }
+
+    // add grand parents ids till the root to parentIdsArr
+    let i=0;
+    while (i < parentIdsArr.length){
+      let parent = byId[parentIdsArr[i]];
+
+      if (!parent.parent_id && !filteredRoots.includes(parent.id)){
+        filteredRoots.push(parent.id);
+      }
+      else if (parent.parent_id && !parentIdsArr.includes(parent.parent_id)){
+        parentIdsArr.push(parent.parent_id);
+      }
+
+      i++;
+    }
+
+    // add the parents to filteredById
+    parentIdsArr.forEach((parentKey) => {
+      this.filteredById[parentKey] = byId[parentKey];
+    })
+
+    return filteredRoots;
+  }
+
   render() {
-    const { roots } = this.props;
+    const { byId, t } = this.props;
+    const { displayRoots } = this.state;
+    
+    const filteredRoots = this.filterTagsById(byId);
 
     return (
       <div>
         <SectionHeader section="topics" />
         <Divider fitted />
+        {this.matchString(t)}
         <Container className="padded">
-          {roots.map(this.renderBranch)}
+          {filteredRoots.map(r => this.renderBranch(r))}
         </Container>
-        
       </div>
     );
   }
@@ -105,7 +222,8 @@ class TopicContainer extends Component {
 
 export default connect(
   state => ({
-    roots: selectors.getRoots(state.tags).filter(x => TOPICS_FOR_DISPLAY.indexOf(x) !== -1),
+    roots: selectors.getRoots(state.tags),
     byId: selectors.getTags(state.tags),
+    // getTagById: selectors.getTagById(state.tags),
   })
-)(TopicContainer);
+)(translate()(TopicContainer));
