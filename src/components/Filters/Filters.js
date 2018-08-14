@@ -11,6 +11,7 @@ import { actions, selectors } from '../../redux/modules/filters';
 import { selectors as mdb } from '../../redux/modules/mdb';
 import { selectors as settings } from '../../redux/modules/settings';
 import { selectors as device } from '../../redux/modules/device';
+import classNames from 'classnames';
 import * as shapes from '../shapes';
 import FiltersHydrator from './FiltersHydrator';
 
@@ -98,6 +99,23 @@ class Filters extends Component {
                 const label    = value ?
                   filtersTransformer.valueToTagLabel(name, value, this.props, store, t) :
                   t('filters.all');
+                  let len = ((name==='topics-filter' || name==='sources-filter') &&value) ? label.length : 0;
+
+                  // name==='topics-filter' || 'sources-filter' ? len = 1/label.length : len = 0
+                  
+                  // console.log(name, len, value);
+                // if (label && !Array.isArray(label) && label.endsWith('</span>')) {
+                //   let s = label.substring(0, len -7);
+                //   s = s.substring(s.lastIndexOf('>')+1);
+
+                //   // let x = label.split('<span class="filter__separator"> / </span>').join('');
+                //   // x = x.split('<span class="filter__breadcrumb">').join('');
+                //   // x = x.split('</span>').join('');
+                //   // len = s.length;
+                //   // len = x.length - s.length;
+                //   len = 1/s.length;
+                //   console.log('Filters last element length:', s);
+                // }
 
                 return (
                   <Popup
@@ -105,24 +123,29 @@ class Filters extends Component {
                     flowing
                     key={name}
                     trigger={
-                      <Menu.Item className="filter" name={name}>
-                        <div className="filter__content">
-                          <small className="blue text">
+                      <Menu.Item
+                      style={{flexShrink: len}}
+                      className={classNames(`filter filter--${name}`, {'filter--is-empty':!value})}
+                      // className={classNames('mediaplayer', { 'media-edit-mode': isEditMode })}
+                      name={name}>
+                        <div className="filter__wrapper">
+                          <small className="blue text filter__title">
                             {t(`filters.${name}.label`)}
                           </small>
-                          <span>
-                            {label}
+                          <span className="filter__state">
+                            
+                            <span  className="filter__text" dangerouslySetInnerHTML={{__html: label}} />
                             {
                               isActive ?
-                                <Icon name="dropdown" flipped="vertically" /> :
-                                <Icon name="dropdown" />
+                                <Icon className="filter__fold-icon" name="dropdown" flipped="vertically" /> :
+                                <Icon className="filter__fold-icon" name="dropdown" />
                             }
                           </span>
                         </div>
 
                         {
                           value ?
-                            <div className="clear-filter">
+                            <div className="filter__clear">
                             <Label
                               basic
                               circular

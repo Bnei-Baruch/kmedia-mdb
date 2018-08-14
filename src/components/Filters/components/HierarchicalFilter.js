@@ -235,14 +235,15 @@ class HierarchicalFilter extends Component {
             <Button
               basic
               compact
-              icon="remove"
+              size="tiny"
+              content={t('buttons.cancel')}
               onClick={this.onCancel}
             />
             <Header size="small" textAlign="center" content={t(`filters.${name}.label`)} />
             <Button
               primary
               compact
-              size="small"
+              size="tiny"
               content={t('buttons.apply')}
               onClick={this.apply}
             />

@@ -1,9 +1,7 @@
 @import 'rtl/filters';
 
 .filters {
-  &__menu {
-    align-items: flex-start;
-  }
+  // &__menu {  }
 
   &__header {
     align-self: stretch;
@@ -14,27 +12,73 @@
 }
 
 .filter {
-  flex: 0 1 auto !important;
+  align-items: flex-start !important;
+  overflow: hidden;
   padding: .6em 1em !important;
+  // &--sources-filter,
+  // &--topics-filter,
+  // {
+  //   .filter__wrapper {
+  //   }
+  // }
 
-  &__content {
-    align-items: stretch;
+  &--is-empty {
+    flex: 0 0 auto !important;
+  }
+
+  &__wrapper {
     display: flex;
+    flex: 1 1 auto;
     flex-direction: column;
     width: 100%;
+  }
 
-    small {
-      margin-bottom: .7em;
+  &__title {
+    margin-bottom: .7em;
+  }
+
+  &__state {
+    display: flex;
+  }
+
+  &__text {
+    @include mobile {
+      width: auto;
     }
 
-    span {
-      line-height: 1.2;
+    display: flex;
+    overflow: hidden;
+    width: calc(100% - 1em);
+  }
+
+  &__fold-icon {
+    flex: 0 0 1em;
+    margin: 0 0 0 4px !important;
+  }
+
+  &__breadcrumb {
+    &:last-child {
+      flex: 0 1 auto;
+      min-width: 1em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 
+  &__separator {
+    flex: 0 0 auto;
+    font-weight: 900;
+    padding: 0 .2em;
+  }
+
   .label {
-    bottom: 100%;
+    @include mobile {
+      left: calc(100% + 1px);
+    }
+
     border-radius: 0 !important;
+    bottom: 100%;
     left: 100%;
     margin: 0 !important;
     position: absolute;
@@ -46,8 +90,4 @@
       margin: 0;
     }
   }
-}
-
-.clear-filter {
-  width: 1em;
 }
