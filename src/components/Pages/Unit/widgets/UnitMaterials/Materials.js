@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { CT_VIDEO_PROGRAM_CHAPTER } from '../../../../../helpers/consts';
 import * as shapes from '../../../../shapes';
 import TabsMenu from '../../../../shared/TabsMenu';
 import Summary from './Summary/Summary';
@@ -27,11 +28,6 @@ class Materials extends Component {
 
     const items = [
       {
-        name: 'summary',
-        label: t('materials.summary.header'),
-        component: <Summary unit={this.props.unit} t={t} />,
-      },
-      {
         name: 'transcription',
         label: t('materials.transcription.header'),
         component: <TranscriptionContainer unit={this.props.unit} t={t} />
@@ -47,6 +43,14 @@ class Materials extends Component {
         component: <Sketches unit={this.props.unit} t={t} />,
       },
     ];
+
+    if (this.props.unit.content_type === CT_VIDEO_PROGRAM_CHAPTER) {
+      items.unshift({
+        name: 'summary',
+        label: t('materials.summary.header'),
+        component: <Summary unit={this.props.unit} t={t} />,
+      });
+    }
 
     return (
       <div className="unit-materials">

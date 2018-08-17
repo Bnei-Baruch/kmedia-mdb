@@ -25,6 +25,13 @@ class PDFMenu extends Component {
     }
   }
 
+  onKeyDown = (e) => {
+    // Enter
+    if (e.keyCode === 13) {
+      this.handleSubmit();
+    }
+  };
+
   handleSubmit = () => {
     const value                 = this.state.inputValue;
     const { validated, parsed } = this.validateValue(value);
@@ -87,12 +94,13 @@ class PDFMenu extends Component {
       <Menu compact className="taas-pagination-menu" color="grey" size="mini">
         <Menu.Item onClick={this.firstPage}>{startsFrom} &laquo;</Menu.Item>
         <Menu.Item onClick={this.prevPage}>&lsaquo;</Menu.Item>
-        <Form onSubmit={this.handleSubmit}>
+        <Form>
           <Input
-            icon={<Icon name="search" circular />}
+            icon={<Icon name="search" circular link onClick={this.handleSubmit} />}
             value={inputValue}
             error={inputError}
             onChange={this.handleChange}
+            onKeyDown={this.onKeyDown}
           />
         </Form>
         <Menu.Item onClick={this.nextPage}>&rsaquo;</Menu.Item>
