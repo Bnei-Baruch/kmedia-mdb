@@ -37,6 +37,10 @@ import {
   CT_WOMEN_LESSON,
   CT_WOMEN_LESSONS,
   EVENT_TYPES,
+  LANG_RUSSIAN,
+  LANG_ENGLISH,
+  LANG_SPANISH,
+  LANG_HEBREW,
 } from './consts';
 
 export const sectionLink = (section, filters) => {
@@ -56,7 +60,7 @@ export const sectionLink = (section, filters) => {
   return `/${section}?${urlSearchStringify(query)}`;
 };
 
-export const canonicalLink = (entity) => {
+export const canonicalLink = (entity, lang) => {
   if (!entity) {
     return '/';
   }
@@ -64,6 +68,29 @@ export const canonicalLink = (entity) => {
   // source
   if (entity.content_type === 'SOURCE') {
     return `/sources/${entity.id}`;
+  }
+
+  if (entity.content_type === 'POST') {
+
+    const blogName;
+    switch (lang){
+      case LANG_RUSSIAN:
+        blogName = 'laitman-ru';
+        break;
+      case LANG_ENGLISH:
+        blogName = 'laitman-com';
+        break;
+      case LANG_SPANISH:
+        blogName = 'laitman-es';
+        break;
+      case LANG_HEBREW:
+        blogName = 'laitman-co-il';
+        break;
+      default:
+        blogName = 'laitman-co-il';
+    }
+
+    return `/publications/blog/${blogName}/${entity.id}`;
   }
 
   // collections

@@ -275,3 +275,4 @@ export const SEARCH_INTENT_SECTIONS = {
   [SEARCH_INTENT_HIT_TYPE_PROGRAMS]: 'programs',
 };
 
+// TBD: add posts and tweets intents
