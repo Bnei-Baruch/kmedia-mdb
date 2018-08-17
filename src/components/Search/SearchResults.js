@@ -262,6 +262,12 @@ class SearchResults extends Component {
       }
       result.content_type = 'SOURCE';
       result.label = 'filters.sections-filter.sources';
+    } else if (resultType === 'posts') {
+      if (!result.title) {
+        result.title = hit._source.title;
+      }
+      result.content_type = 'POST';
+      result.label = 'filters.sections-filter.posts';
     }
 
     return this.renderResult(hit, rank, result);
