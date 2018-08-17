@@ -133,8 +133,8 @@ class TopicContainer extends Component {
   matchString = (t) => {
     return (
       <Input
-        fluid
-        size="mini"
+        // fluid
+        size="small"
         icon="search"
         placeholder={t('sources-library.filter')}
         value={this.state.match}
@@ -203,8 +203,7 @@ class TopicContainer extends Component {
 
   render() {
     const { byId, t } = this.props;
-    const { displayRoots } = this.state;
-    
+    //run filter    
     const filteredRoots = this.filterTagsById(byId);
 
     return (
@@ -224,6 +223,5 @@ export default connect(
   state => ({
     roots: selectors.getRoots(state.tags),
     byId: selectors.getTags(state.tags),
-    // getTagById: selectors.getTagById(state.tags),
   })
 )(translate()(TopicContainer));
