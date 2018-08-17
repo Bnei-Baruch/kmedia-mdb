@@ -61,7 +61,7 @@ class TopicPage extends Component {
         return (
           <Container>
             <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="small" className="section-header"/>
-            <Header as="h1" >{topicHeader}</Header>
+            <Header as="h1" color="blue" className="section-header__title">{topicHeader}</Header>
             <Grid container doubling columns={sections.length} className="homepage__iconsrow">
               {
                 sections.map((s) => {

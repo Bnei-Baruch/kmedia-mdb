@@ -26,21 +26,19 @@ class TopicContainer extends Component {
     displayRoots: []
   }
 
-  filteredById = {}
-
-  componentDidMount(){
+  componentDidMount() {
     this.initRoots(this.props);
   }
 
-  componentWillReceiveProps(nextProps){
-    if (this.props.roots !== nextProps.roots){
+  componentWillReceiveProps(nextProps) {
+    if (this.props.roots !== nextProps.roots) {
       this.initRoots(nextProps);
     }
   }
 
   initRoots = (props) => {
     const { roots } = props;
-    const displayRoots = roots.filter(x => TOPICS_FOR_DISPLAY.indexOf(x) !== -1); 
+    const displayRoots = roots.filter(x => TOPICS_FOR_DISPLAY.indexOf(x) !== -1);
 
     this.setState({ displayRoots });
   }
@@ -56,7 +54,7 @@ class TopicContainer extends Component {
   );
 
   renderNode = (node) => {
-    if (!node){
+    if (!node) {
       return;
     }
 
@@ -100,14 +98,14 @@ class TopicContainer extends Component {
 
     return (
       <div key={rootId} className="topics__section">
-        <Header as="h1" className="topics__title"> 
+        <Header as="h1" className="topics__title">
           <Link to={`/topics/${rootNode.id}`}>
             {rootNode.label}
           </Link>
         </Header>
         <div className="topics__list">
           {
-            rootChildren.map(id => this.filteredById[id] ? this.renderSubHeader(this.filteredById[id]) : null)
+            rootChildren.map(id => (this.filteredById[id] ? this.renderSubHeader(this.filteredById[id]) : null))
           }
         </div>
         <Divider />
@@ -115,7 +113,7 @@ class TopicContainer extends Component {
     );
   };
 
-  //filter stuff
+  // filter stuff
   handleFilterChange = debounce((e, data) => {
     this.setState({ match: data.value });
   }, 100);
@@ -130,19 +128,18 @@ class TopicContainer extends Component {
     this.setState({ match: '' });
   };
 
-  matchString = (t) => {
-    return (
-      <Input
-        // fluid
-        size="small"
-        icon="search"
-        placeholder={t('sources-library.filter')}
-        value={this.state.match}
-        onChange={this.handleFilterChange}
-        onKeyDown={this.handleFilterKeyDown}
-      />
-    );
-  };
+  matchString = t => (
+    <Input
+      fluid
+      size="small"
+      icon="search"
+      className="search-omnibox"
+      placeholder={t('sources-library.filter')}
+      value={this.state.match}
+      onChange={this.handleFilterChange}
+      onKeyDown={this.handleFilterKeyDown}
+    />
+  );
 
   getRegExp = (match) => {
     const escapedMatch = match.replace(/[/)(.+\\]/g, '\\$&');
@@ -151,42 +148,43 @@ class TopicContainer extends Component {
     return reg;
   }
 
+  filteredById = {}
+
   filterTagsById = (byId) => {
     const { match, displayRoots } = this.state;
-    const filteredRoots=[];
+    const filteredRoots = [];
 
-    if (!match){
+    if (!match) {
       this.filteredById = byId;
       return displayRoots;
     }
-    
+
     this.filteredById = {};
     const parentIdsArr = [];
     const regExp = this.getRegExp(match);
 
     // filter objects
-    for (var key in byId) {
-      let currentObj = byId[key];
-      
+    for (const key in byId) {
+      const currentObj = byId[key];
+
       // add object that includes the match and keep its parent_id key
-      if (currentObj.label && regExp.test(currentObj.label)){
+      if (currentObj.label && regExp.test(currentObj.label)) {
         this.filteredById[key] = currentObj;
 
-        if (currentObj.parent_id){
+        if (currentObj.parent_id) {
           parentIdsArr.push(currentObj.parent_id);
         }
       }
     }
 
     // add grand parents ids till the root to parentIdsArr
-    let i=0;
-    while (i < parentIdsArr.length){
-      let parent = byId[parentIdsArr[i]];
+    let i = 0;
+    while (i < parentIdsArr.length) {
+      const parent = byId[parentIdsArr[i]];
 
-      if (!parent.parent_id && !filteredRoots.includes(parent.id)){
+      if (!parent.parent_id && !filteredRoots.includes(parent.id)) {
         filteredRoots.push(parent.id);
-      }
-      else if (parent.parent_id && !parentIdsArr.includes(parent.parent_id)){
+      } else if (parent.parent_id && !parentIdsArr.includes(parent.parent_id)) {
         parentIdsArr.push(parent.parent_id);
       }
 
@@ -196,14 +194,14 @@ class TopicContainer extends Component {
     // add the parents to filteredById
     parentIdsArr.forEach((parentKey) => {
       this.filteredById[parentKey] = byId[parentKey];
-    })
+    });
 
     return filteredRoots;
   }
 
   render() {
     const { byId, t } = this.props;
-    //run filter    
+    // run filter
     const filteredRoots = this.filterTagsById(byId);
 
     return (
