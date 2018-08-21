@@ -72,7 +72,7 @@ export const canonicalLink = (entity, lang) => {
 
   if (entity.content_type === 'POST') {
 
-    const blogName;
+    let blogName;
     switch (lang){
       case LANG_RUSSIAN:
         blogName = 'laitman-ru';
