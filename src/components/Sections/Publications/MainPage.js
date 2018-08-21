@@ -5,23 +5,19 @@ import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import { Menu } from 'semantic-ui-react';
 
-import { actions } from '../../../redux/modules/lessons';
+import { actions } from '../../../redux/modules/publications';
 import { actions as filterActions } from '../../../redux/modules/filters';
 import * as shapes from '../../shapes';
 import NavLink from '../../Language/MultiLanguageNavLink';
 import SectionHeader from '../../shared/SectionHeader';
-import Daily from './tabs/Daily/Container';
-import Series from './tabs/Series/Container';
-import Lectures from './tabs/Lectures/Container';
+import Articles from './tabs/Articles/List';
+import Blog from './tabs/Blog/Container';
+import Twitter from './tabs/Twitter/Container';
 
 export const tabs = [
-  'daily',
-  'virtual',
-  'lectures',
-  'women',
-  'rabash',
-  // 'children',
-  'series',
+  'blog',
+  'twitter',
+  'articles',
 ];
 
 class MainPage extends PureComponent {
@@ -40,7 +36,7 @@ class MainPage extends PureComponent {
     // clear filters if location search parameter is changed by Menu click
     if (nextProps.location.search !== this.props.location.search &&
       !nextProps.location.search) {
-      nextProps.resetNamespace(`lessons-${tab}`);
+      nextProps.resetNamespace(`publications-${tab}`);
     }
 
     if (nextTab !== tab) {
@@ -57,27 +53,23 @@ class MainPage extends PureComponent {
         key={x}
         name={x}
         as={NavLink}
-        to={`/lessons/${x}`}
+        to={`/publications/${x}`}
         active={active === x}
       >
-        {t(`lessons.tabs.${x}`)}
+        {t(`publications.tabs.${x}`)}
       </Menu.Item>
     ));
 
     let content = null;
     switch (active) {
-    case 'daily':
-      content = <Daily />;
+    case 'articles':
+      content = <Articles />;
       break;
-    case 'virtual':
-    case 'lectures':
-    case 'women':
-    case 'rabash':
-    // case 'children':
-      content = <Lectures tab={active} />;
+    case 'blog':
+      content = <Blog namespace="publications-blog" />;
       break;
-    case 'series':
-      content = <Series />;
+    case 'twitter':
+      content = <Twitter namespace="publications-twitter" />;
       break;
     default:
       content = <h1>Page not found</h1>;
@@ -86,7 +78,7 @@ class MainPage extends PureComponent {
 
     return (
       <div>
-        <SectionHeader section="lessons" submenuItems={submenuItems} />
+        <SectionHeader section="publications" submenuItems={submenuItems} />
         {content}
       </div>
     );

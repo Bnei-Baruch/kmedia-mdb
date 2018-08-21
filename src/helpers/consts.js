@@ -249,8 +249,11 @@ export const BS_TAAS_PARTS = {
   mW6eON0z: 1887,
 };
 
+// Persons
+export const RABASH_PERSON_UID = 'KxApZ4pI';
+
 export const COOKIE_UI_LANG    = 'archive_UIlang';
-export const LANG_UI_LANGUAGES = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN];
+export const LANG_UI_LANGUAGES = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_GERMAN, LANG_UKRAINIAN];
 
 // Search
 export const SEARCH_INTENT_INDEX_TOPIC       = 'intent-tag';

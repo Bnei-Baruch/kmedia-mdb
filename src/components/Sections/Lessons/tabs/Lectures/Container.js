@@ -5,9 +5,11 @@ import { List, Table } from 'semantic-ui-react';
 import {
   // CT_CHILDREN_LESSON,
   CT_LECTURE,
+  CT_LESSON_PART,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
-  NO_NAME
+  NO_NAME,
+  RABASH_PERSON_UID
 } from '../../../../../helpers/consts';
 import { sectionThumbnailFallback } from '../../../../../helpers/images';
 import { CollectionsBreakdown } from '../../../../../helpers/mdb';
@@ -17,7 +19,7 @@ import UnitList from '../../../../Pages/UnitList/Container';
 import Link from '../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
 
-const renderUnit = (unit, t) => {
+const renderUnit = (unit, t, namespace) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
   const lectures  = breakdown.getLectures();
 
@@ -34,6 +36,25 @@ const renderUnit = (unit, t) => {
     filmDate = t('values.date', { date: unit.film_date });
   }
   const link = canonicalLink(unit);
+
+  if (namespace === 'lessons-rabash') {
+    return (
+      <Table.Row className="no-thumbnail" key={unit.id} verticalAlign="top">
+        <Table.Cell>
+          <Link className="index__title" to={link}>
+            {unit.name || NO_NAME}
+          </Link>
+          {
+            unit.description ?
+              <div className="index__description mobile-hidden">
+                {ellipsize(unit.description)}
+              </div>
+              : null
+          }
+        </Table.Cell>
+      </Table.Row>
+    );
+  }
 
   return (
     <Table.Row key={unit.id} verticalAlign="top">
@@ -81,6 +102,7 @@ class Container extends Component {
 
   extraFetchParams = () => {
     let ct;
+    let person;
     switch (this.props.tab) {
     case 'virtual':
       ct = [CT_VIRTUAL_LESSON];
@@ -91,15 +113,19 @@ class Container extends Component {
     case 'women':
       ct = [CT_WOMEN_LESSON];
       break;
-    // case 'children':
-    //   ct = [CT_CHILDREN_LESSON];
-    //   break;
+    case 'rabash':
+      ct     = [CT_LESSON_PART];
+      person = RABASH_PERSON_UID;
+      break;
+      // case 'children':
+      //   ct = [CT_CHILDREN_LESSON];
+      //   break;
     default:
       ct = [CT_VIRTUAL_LESSON];
       break;
     }
 
-    return { content_type: ct };
+    return { content_type: ct, person };
   };
 
   render() {
