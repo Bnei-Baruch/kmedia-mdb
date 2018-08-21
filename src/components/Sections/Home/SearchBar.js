@@ -20,7 +20,7 @@ class MyOmniBox extends OmniBox {
     return (
       <Input
         autoFocus={deviceInfo.device.type === undefined}  // desktop only
-        onKeyDown={this.handleSearchKeyDown}
+        onKeyDown={(e) => this.handleSearchKeyDown(e)}
         action={{ content: t('buttons.search').toLowerCase(), onClick: () => this.doSearch() }}
         icon={null}
         placeholder={`${t('buttons.search')}...`}
