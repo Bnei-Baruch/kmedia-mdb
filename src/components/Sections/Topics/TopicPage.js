@@ -48,19 +48,19 @@ class TopicPage extends Component {
         const tagPath = getPathByID(tagId);
 
         // create breadCrumb sections from tagPath
-        const breadCrumbSections = tagPath.map((p, index, arr) => 
-                                                ({ key: p.id, 
-                                                   content: p.label, 
-                                                   // last item is active and not a link
-                                                   active: index === arr.length - 1,
-                                                   href: index === arr.length - 1 ? null : `/topics/${p.id}` 
-                                                 }));
-        const breadCrumbIcon = (RTL_LANGUAGES.includes(language) ? 'left' : 'right') + ' angle'; 
+        const breadCrumbSections = tagPath.map((p, index, arr) =>
+          ({ key: p.id,
+            content: p.label,
+            // last item is active and not a link
+            active: index === arr.length - 1,
+            href: index === arr.length - 1 ? null : `/topics/${p.id}`
+          }));
+        const breadCrumbIcon = `${RTL_LANGUAGES.includes(language) ? 'left' : 'right'} angle`;
         const topicHeader = tagPath[tagPath.length - 1].label;
 
         return (
           <Container>
-            <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="small" className="section-header"/>
+            <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="small" className="section-header" />
             <Header as="h1" color="blue" className="section-header__title">{topicHeader}</Header>
             <Grid container doubling columns={sections.length} className="homepage__iconsrow">
               {

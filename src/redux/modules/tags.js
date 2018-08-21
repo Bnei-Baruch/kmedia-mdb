@@ -90,7 +90,7 @@ const onReceiveTags = (state, action) => {
     roots: action.payload.map(x => x.id),
     error: null,
   };
-}
+};
 
 const onDashboard = state => ({
   ...state,
@@ -105,7 +105,7 @@ const getSectionOfUnit = (unit) => {
 const onDashboardSuccess = (state, action) => {
   const { data }                                       = action.payload;
   const { latest_units: latest, /* promoted_units */ } = data;
-  
+
   if (Array.isArray(latest)) {
     const uniqueSectionsArr = [...new Set(latest.map(u => getSectionOfUnit(u)).filter(x => !!x))].sort();
 
@@ -133,6 +133,8 @@ const onDashboardSuccess = (state, action) => {
       getSectionUnits
     };
   }
+
+  return null;
 };
 
 export const reducer = handleActions({

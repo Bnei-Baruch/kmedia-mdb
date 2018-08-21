@@ -10,10 +10,14 @@ import { selectors } from '../../../redux/modules/tags';
 import SectionHeader from '../../shared/SectionHeader';
 import Link from '../../Language/MultiLanguageLink';
 
+/* root will be main title
+  subroot will be subtitle
+  the rest will be a tree - List of Lists */
+
 class TopicContainer extends Component {
   static propTypes = {
     roots: PropTypes.arrayOf(PropTypes.string),
-    byId: PropTypes.object.isRequired,
+    byId: PropTypes.object,
     t: PropTypes.func.isRequired,
   };
 
@@ -36,6 +40,42 @@ class TopicContainer extends Component {
     }
   }
 
+  // filter stuff
+
+  getRegExp = (match) => {
+    const escapedMatch = match.replace(/[/)(.+\\]/g, '\\$&');
+    const reg          = new RegExp(escapedMatch, 'i');
+
+    return reg;
+  }
+
+  matchString = t => (
+    <Input
+      fluid
+      size="small"
+      icon="search"
+      className="search-omnibox"
+      placeholder={t('sources-library.filter')}
+      value={this.state.match}
+      onChange={this.handleFilterChange}
+      onKeyDown={this.handleFilterKeyDown}
+    />
+  );
+
+  handleFilterChange = debounce((e, data) => {
+    this.setState({ match: data.value });
+  }, 100);
+
+  handleFilterKeyDown = (e) => {
+    if (e.keyCode === 27) { // Esc
+      this.handleFilterClear();
+    }
+  };
+
+  handleFilterClear = () => {
+    this.setState({ match: '' });
+  };
+
   initRoots = (props) => {
     const { roots } = props;
     const displayRoots = roots.filter(x => TOPICS_FOR_DISPLAY.indexOf(x) !== -1);
@@ -43,9 +83,64 @@ class TopicContainer extends Component {
     this.setState({ displayRoots });
   }
 
-  /* root will be main title
-  subroot will be subtitle
-  the rest will be a tree - List of Lists */
+  filteredById = {}
+
+  filterTagsById = (byId) => {
+    const { match, displayRoots } = this.state;
+
+    if (!match) {
+      this.filteredById = byId;
+      return displayRoots;
+    }
+
+    this.filteredById = {};
+    const parentIdsArr = [];
+    const regExp = this.getRegExp(match);
+
+    // filter objects
+    Object.keys(byId).forEach((key) => {
+      const currentObj = byId[key];
+
+      // add object that includes the match and keep its parent_id key
+      if (currentObj.label && regExp.test(currentObj.label)) {
+        this.filteredById[key] = currentObj;
+
+        if (currentObj.parent_id) {
+          parentIdsArr.push(currentObj.parent_id);
+        }
+      }
+    });
+
+    // add grand parents ids till the root to parentIdsArr
+    const displayRootIndexes = []; // to keep the same order of the roots
+    let i = 0;
+    let index;
+    while (i < parentIdsArr.length) {
+      const parent = byId[parentIdsArr[i]];
+
+      // keep displayRoot index for the order of the roots
+      if (!parent.parent_id) {
+        index = displayRoots.indexOf(parent.id);
+        if (index > -1 && !displayRootIndexes.includes(index)) {
+          displayRootIndexes.push(index);
+        }
+      } else if (parent.parent_id && !parentIdsArr.includes(parent.parent_id)) {
+        parentIdsArr.push(parent.parent_id);
+      }
+
+      i++;
+    }
+
+    displayRootIndexes.sort();
+    const filteredRoots = displayRootIndexes.map(ind => displayRoots[ind]);
+
+    // add the parents to filteredById
+    parentIdsArr.forEach((parentKey) => {
+      this.filteredById[parentKey] = byId[parentKey];
+    });
+
+    return filteredRoots;
+  }
 
   renderLeaf = node => (
     <Link to={`/topics/${node.id}`}>
@@ -53,12 +148,8 @@ class TopicContainer extends Component {
     </Link>
   );
 
-  renderNode = (node) => {
-    if (!node) {
-      return;
-    }
-
-    return (
+  renderNode = node => (
+    node ?
       <Fragment>
         {
           Array.isArray(node.children) && node.children.length > 0 ?
@@ -73,9 +164,9 @@ class TopicContainer extends Component {
             </List> :
             this.renderLeaf(node)
         }
-      </Fragment>
-    );
-  };
+      </Fragment> :
+      null
+  );
 
   renderSubHeader = node => (
     <Fragment key={node.id}>
@@ -112,92 +203,6 @@ class TopicContainer extends Component {
       </div>
     );
   };
-
-  // filter stuff
-  handleFilterChange = debounce((e, data) => {
-    this.setState({ match: data.value });
-  }, 100);
-
-  handleFilterKeyDown = (e) => {
-    if (e.keyCode === 27) { // Esc
-      this.handleFilterClear();
-    }
-  };
-
-  handleFilterClear = () => {
-    this.setState({ match: '' });
-  };
-
-  matchString = t => (
-    <Input
-      fluid
-      size="small"
-      icon="search"
-      className="search-omnibox"
-      placeholder={t('sources-library.filter')}
-      value={this.state.match}
-      onChange={this.handleFilterChange}
-      onKeyDown={this.handleFilterKeyDown}
-    />
-  );
-
-  getRegExp = (match) => {
-    const escapedMatch = match.replace(/[/)(.+\\]/g, '\\$&');
-    const reg          = new RegExp(escapedMatch, 'i');
-
-    return reg;
-  }
-
-  filteredById = {}
-
-  filterTagsById = (byId) => {
-    const { match, displayRoots } = this.state;
-    const filteredRoots = [];
-
-    if (!match) {
-      this.filteredById = byId;
-      return displayRoots;
-    }
-
-    this.filteredById = {};
-    const parentIdsArr = [];
-    const regExp = this.getRegExp(match);
-
-    // filter objects
-    for (const key in byId) {
-      const currentObj = byId[key];
-
-      // add object that includes the match and keep its parent_id key
-      if (currentObj.label && regExp.test(currentObj.label)) {
-        this.filteredById[key] = currentObj;
-
-        if (currentObj.parent_id) {
-          parentIdsArr.push(currentObj.parent_id);
-        }
-      }
-    }
-
-    // add grand parents ids till the root to parentIdsArr
-    let i = 0;
-    while (i < parentIdsArr.length) {
-      const parent = byId[parentIdsArr[i]];
-
-      if (!parent.parent_id && !filteredRoots.includes(parent.id)) {
-        filteredRoots.push(parent.id);
-      } else if (parent.parent_id && !parentIdsArr.includes(parent.parent_id)) {
-        parentIdsArr.push(parent.parent_id);
-      }
-
-      i++;
-    }
-
-    // add the parents to filteredById
-    parentIdsArr.forEach((parentKey) => {
-      this.filteredById[parentKey] = byId[parentKey];
-    });
-
-    return filteredRoots;
-  }
 
   render() {
     const { byId, t } = this.props;
