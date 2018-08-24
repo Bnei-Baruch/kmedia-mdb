@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { List, Table } from 'semantic-ui-react';
 
-import { CT_ARTICLE, NO_NAME } from '../../../helpers/consts';
-import { CollectionsBreakdown } from '../../../helpers/mdb';
-import { canonicalLink } from '../../../helpers/links';
-import { ellipsize } from '../../../helpers/strings';
-import UnitList from '../../Pages/UnitList/Container';
-import Link from '../../Language/MultiLanguageLink';
-import SectionHeader from '../../shared/SectionHeader';
+import { CT_ARTICLE, NO_NAME } from '../../../../../helpers/consts';
+import { CollectionsBreakdown } from '../../../../../helpers/mdb';
+import { canonicalLink } from '../../../../../helpers/links';
+import { ellipsize } from '../../../../../helpers/strings';
+import UnitList from '../../../../Pages/UnitList/Container';
+import Link from '../../../../Language/MultiLanguageLink';
 
 export const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
@@ -53,15 +52,14 @@ export const renderUnit = (unit, t) => {
   );
 };
 
-class PublicationsList extends Component {
+class ArticlesList extends Component {
   extraFetchParams = () => ({ content_type: [CT_ARTICLE] });
 
   render() {
     return (
       <div>
-        <SectionHeader section="publications" />
         <UnitList
-          namespace="publications"
+          namespace="publications-articles"
           extraFetchParams={this.extraFetchParams}
           renderUnit={renderUnit}
         />
@@ -70,4 +68,4 @@ class PublicationsList extends Component {
   }
 }
 
-export default PublicationsList;
+export default ArticlesList;

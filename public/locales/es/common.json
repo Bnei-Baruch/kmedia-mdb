@@ -14,7 +14,7 @@
       "photos": "Fotos",
       "design": "Diseño",
       "project-status": "Projekto Statuso",
-      "twitter": "Twitter",
+      "help": "Ayuda",
       "old-site": "Viejo Sitio"
     },
     "footer": {
@@ -230,6 +230,7 @@
       "virtual": "Lecciones Virtuales",
       "lectures": "Charlas",
       "women": "Lección de Mujeres",
+      "rabash": "Lecciones de Rabash",
       "children": "Lección de Niños",
       "series": "Serie de Estudios"
     },
@@ -290,6 +291,11 @@
       "text": "Publicaciones",
       "subtext": "Artículos sobre eventos actuales, cultura, ciencia popular, relaciones y más, presentados desde la perspectiva única de la sabiduría de la Cabalá"
     },
+    "tabs": {
+      "articles": "Artículos",
+      "twitter": "Twitter",
+      "blog": "Blog"
+    },
     "list": {
       "item_from": "Artículo de:"
     },
@@ -299,12 +305,6 @@
           "title": "Más artículos de la misma colección"
         }
       }
-    }
-  },
-  "twitter": {
-    "header": {
-      "text": "Twitter",
-      "subtext": "Un espejo de todos los tweets de Michael Laitman @laitman_es"
     }
   },
   "pages": {

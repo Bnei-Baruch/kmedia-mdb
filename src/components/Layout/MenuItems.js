@@ -5,7 +5,6 @@ import { Menu, Sidebar } from 'semantic-ui-react';
 
 import NavLink from '../Language/MultiLanguageNavLink';
 import DonateNow from './DonateNow';
-import { LANG_HEBREW } from '../../helpers/consts';
 
 const ITEMS = [
   'lessons',
@@ -16,8 +15,7 @@ const ITEMS = [
   'topics',
   'publications',
   'project-status',
-  'twitter',
-  // 'help',
+  'help',
   // 'photos',
   // 'design',
   // 'design2',
@@ -42,18 +40,6 @@ const MenuItems = (props) => {
     return (
       <Menu vertical borderless fluid color="blue" size="huge">
         {items}
-        {
-          language === LANG_HEBREW ?
-            <Menu.Item
-              as={NavLink}
-              to="/help"
-              className="sidebar-item"
-              activeClassName="active"
-              content={t('nav.sidebar.help')}
-              onClick={onItemClick}
-            /> :
-            null
-        }
         <Menu.Item
           as="a"
           href="https://old.kabbalahmedia.info/"
