@@ -30,7 +30,7 @@ export const actions = {
 /* Reducer */
 
 const initialState = {
-  allMedia: {
+  allMeRdia: {
     total: 0,
     lessons: [],
     others: [],
@@ -46,7 +46,7 @@ const initialState = {
  * @returns {{wip: {}, err: {}}}
  */
 const setStatus = (state, action) => {
-  let { wip, err } = state; //todo test
+  let { wip, err } = state;
 
   switch (action.type) {
   case FETCH_ALL_MEDIA_FOR_DATE:
@@ -74,13 +74,13 @@ const setStatus = (state, action) => {
 
 const onFetchAllMediaSuccess = (state, action) => ({
   ...state,
-  allMedia: action.payload,
+  items: action.payload,
 });
 
 const onSetLanguage = state => (
   {
     ...state,
-    allMedia: initialState.allMedia, // todo
+    items: initialState.items,
   }
 );
 
@@ -102,7 +102,7 @@ export const reducer = handleActions({
 
 const getWip      = state => state.wip;
 const getErrors   = state => state.err;
-const getAllMedia = state => state.allMedia;
+const getAllMedia = state => state.items;
 
 export const selectors = {
   getWip,
