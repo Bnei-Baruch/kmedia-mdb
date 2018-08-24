@@ -8,18 +8,20 @@ import * as moment from 'moment/moment';
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 import SectionHeader from '../../shared/SectionHeader';
-import { ALL_LANGUAGES, LANGUAGE_OPTIONS, LANGUAGES } from '../../../helpers/consts';
+import { ALL_LANGUAGES } from '../../../helpers/consts';
 import DropdownLanguageSelector from '../../Language/Selector/DropdownLanguageSelector';
+import SimpleModeList from './List';
 
 class SimpleModePage extends PureComponent {
   static propTypes = {
-    items: PropTypes.arrayOf(shapes.Tweet),
-    selectedDate: PropTypes.objectOf(Date), //todo
+    items: PropTypes.objectOf(shapes.SimpleMode),
+    selectedDate: PropTypes.objectOf(Date),
     wip: shapes.WIP,
     err: shapes.Error,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
+    renderUnit: PropTypes.func.isRequired,
     onPageChange: PropTypes.func.isRequired,
     onDayClick: PropTypes.func.isRequired,
     onLanguageChange: PropTypes.func.isRequired
@@ -38,7 +40,7 @@ class SimpleModePage extends PureComponent {
 
   render() {
     const
-      { items, selectedDate, wip, err, language, t, location, onDayClick, onLanguageChange} = this.props;
+      { items, selectedDate, wip, err, language, t, renderUnit, onDayClick, onLanguageChange } = this.props;
 
     const DayPickerModifiers = {
       selected: selectedDate
@@ -47,15 +49,9 @@ class SimpleModePage extends PureComponent {
     const list = WipErr({ wip, err, t }) || (
       <div>
         {
-          <div>
-            <h4>dfsfdsfsdfsdsd</h4>
-            <h4>dfsfdsfsdfsdsd</h4>
-            <h4>dfsfdsfsdfsdsd</h4>
-            <h4>dfsfdsfsdfsdsd</h4>
-          </div>
-          /*items.length > 0 ?
-            <Feed tweets={items} t={t} /> :
-            null*/
+          items ?
+            <SimpleModeList items={items} language={language} t={t} renderUnit={renderUnit} /> :
+            null
         }
       </div>
     );
