@@ -187,7 +187,6 @@ class TopicContainer extends Component {
     const { t } = this.props;
     // run filter
     const filteredRoots = this.filterTagsById();
-    console.log('render:', this.filteredById);
 
     return (
       <div>
