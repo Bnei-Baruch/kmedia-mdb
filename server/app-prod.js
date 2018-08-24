@@ -33,6 +33,8 @@ app.use(helmet({
         '*.kbb1.com',
         'kabbalahmedia.info',
         '*.kabbalahmedia.info',
+        'archive',                      // suitcase
+        '*.archive',                    // suitcase
         '*.usersnap.com',
         'fullstory.com',
         '*.fullstory.com',
@@ -46,6 +48,7 @@ app.use(helmet({
         '\'unsafe-eval\'',
         '*.google-analytics.com',
         'kabbalahmedia.info',
+        'archive',                      // suitcase
         '*.usersnap.com',
         'fullstory.com',
         '*.fullstory.com',
@@ -59,7 +62,7 @@ app.use(helmet({
         '\'self\'',
         'data:',
         'fonts.gstatic.com',
-        'cdnjs.cloudflare.com',  // for sketches ionic icons. remove when possible
+        'cdnjs.cloudflare.com',         // for sketches ionic icons. remove when possible
       ],
       'img-src': [
         '\'self\'',
@@ -67,7 +70,13 @@ app.use(helmet({
         '*.kbb1.com',
         'kabbalahmedia.info',
         '*.kabbalahmedia.info',
-        '*.laitman.ru',
+        'archive',                      // suitcase
+        '*.archive',                    // suitcase
+        'laitman.ru',
+        'www.laitman.ru',
+        'laitman.com',
+        'laitman.es',
+        'laitman.co.il',
         '*.google-analytics.com',
         '*.usersnap.com',
         '*.twimg.com',

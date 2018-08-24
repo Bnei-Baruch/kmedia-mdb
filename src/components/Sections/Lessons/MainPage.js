@@ -19,6 +19,7 @@ export const tabs = [
   'virtual',
   'lectures',
   'women',
+  'rabash',
   // 'children',
   'series',
 ];
@@ -71,6 +72,7 @@ class MainPage extends PureComponent {
     case 'virtual':
     case 'lectures':
     case 'women':
+    case 'rabash':
     // case 'children':
       content = <Lectures tab={active} />;
       break;
