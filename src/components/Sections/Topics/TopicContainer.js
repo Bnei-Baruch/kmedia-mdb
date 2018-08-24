@@ -5,7 +5,6 @@ import { List, Container, Header, Divider, Input } from 'semantic-ui-react';
 import { translate } from 'react-i18next';
 import debounce from 'lodash/debounce';
 
-import { TOPICS_FOR_DISPLAY } from '../../../helpers/consts';
 import { selectors } from '../../../redux/modules/tags';
 import SectionHeader from '../../shared/SectionHeader';
 import Link from '../../Language/MultiLanguageLink';
@@ -27,17 +26,6 @@ class TopicContainer extends Component {
 
   state = {
     match: '',
-    displayRoots: []
-  }
-
-  componentDidMount() {
-    this.initRoots(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.roots !== nextProps.roots) {
-      this.initRoots(nextProps);
-    }
   }
 
   // filter stuff
@@ -63,21 +51,15 @@ class TopicContainer extends Component {
     this.setState({ match: '' });
   };
 
-  initRoots = (props) => {
-    const { roots } = props;
-    const displayRoots = roots.filter(x => TOPICS_FOR_DISPLAY.indexOf(x) !== -1);
-
-    this.setState({ displayRoots });
-  }
-
   filteredById = {}
 
-  filterTagsById = (byId) => {
-    const { match, displayRoots } = this.state;
+  filterTagsById = () => {
+    const { roots, byId } = this.props;
+    const { match } = this.state;
 
     if (!match) {
       this.filteredById = byId;
-      return displayRoots;
+      return roots;
     }
 
     this.filteredById = {};
@@ -108,7 +90,7 @@ class TopicContainer extends Component {
 
       // keep displayRoot index for the order of the roots
       if (!parent.parent_id) {
-        index = displayRoots.indexOf(parent.id);
+        index = roots.indexOf(parent.id);
         if (index > -1 && !displayRootIndexes.includes(index)) {
           displayRootIndexes.push(index);
         }
@@ -120,7 +102,7 @@ class TopicContainer extends Component {
     }
 
     displayRootIndexes.sort();
-    const filteredRoots = displayRootIndexes.map(ind => displayRoots[ind]);
+    const filteredRoots = displayRootIndexes.map(ind => roots[ind]);
 
     // add the parents to filteredById
     parentIdsArr.forEach((parentKey) => {
@@ -202,9 +184,10 @@ class TopicContainer extends Component {
   };
 
   render() {
-    const { byId, t } = this.props;
+    const { t } = this.props;
     // run filter
-    const filteredRoots = this.filterTagsById(byId);
+    const filteredRoots = this.filterTagsById();
+    console.log('render:', this.filteredById);
 
     return (
       <div>
@@ -230,7 +213,7 @@ class TopicContainer extends Component {
 
 export default connect(
   state => ({
-    roots: selectors.getRoots(state.tags),
+    roots: selectors.getDisplayRoots(state.tags),
     byId: selectors.getTags(state.tags),
   })
 )(translate()(TopicContainer));

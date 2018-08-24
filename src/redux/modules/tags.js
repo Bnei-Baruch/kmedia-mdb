@@ -3,6 +3,7 @@ import identity from 'lodash/identity';
 
 import { tracePath } from '../../helpers/utils';
 import { canonicalLink } from '../../helpers/links';
+import { TOPICS_FOR_DISPLAY } from '../../helpers/consts';
 import { types as settings } from './settings';
 import { types as ssr } from './ssr';
 
@@ -81,13 +82,17 @@ const onReceiveTags = (state, action) => {
   const getPath     = source => tracePath(source, getByID);
   const getPathByID = id => getPath(getByID(id));
 
+  const roots = action.payload.map(x => x.id);
+  const displayRoots = roots.filter(x => TOPICS_FOR_DISPLAY.indexOf(x) !== -1);
+
   return {
     ...state,
     byId,
     getByID,
     getPath,
     getPathByID,
-    roots: action.payload.map(x => x.id),
+    roots,
+    displayRoots,
     error: null,
   };
 };
@@ -152,6 +157,7 @@ export const reducer = handleActions({
 
 const getTags         = state => state.byId;
 const getRoots        = state => state.roots;
+const getDisplayRoots = state => state.displayRoots;
 const getTagById      = state => state.getByID;
 const getPath         = state => state.getPath;
 const getPathByID     = state => state.getPathByID;
@@ -162,6 +168,7 @@ const getSectionUnits = state => state.getSectionUnits;
 export const selectors = {
   getTags,
   getRoots,
+  getDisplayRoots,
   getTagById,
   getPath,
   getPathByID,
