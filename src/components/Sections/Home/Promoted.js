@@ -4,7 +4,7 @@ import { Header, Image } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
-import img from '../../../images/hp_featured_temp.jpg';
+import img from '../../../images/rosh_shana.jpeg';
 // import img from '../../../images/KKLO_ITALY_18_logo2.svg';
 
 // import img from '../../../images/archive_banner.jpg';
@@ -34,7 +34,11 @@ class Promoted extends Component {
 
     return (
       <div className="thumbnail">
-        <Link to="/events/c/KWdBwCaH">
+        <a
+          href="https://docs.google.com/document/d/1cdk8Bw1-L6D5lNsAknQzXgzJ-uDsywBEPTvO9Ttsmk4/edit#"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <Image fluid src={img} className="thumbnail__image" />
           {
             header ?
@@ -53,7 +57,7 @@ class Promoted extends Component {
               <Label content={section} color="black" size="tiny"/> :
               <Label content={t('home.donate')} color="black" size="tiny"/>
           } */}
-        </Link>
+        </a>
       </div>
     );
   }
