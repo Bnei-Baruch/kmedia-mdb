@@ -66,6 +66,7 @@ class TopicPage extends Component {
               {
                 sections.map((s) => {
                   const sectionUnits = getSectionUnits(s);
+
                   return isEmpty(sectionUnits) ?
                     null :
                     <Grid.Column key={s}>

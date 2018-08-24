@@ -25,11 +25,18 @@ class TopN extends React.PureComponent {
   };
 
   componentDidMount() {
-    this.getTopNUnits();
+    this.getTopNUnits(this.props);
   }
 
-  getTopNUnits = () => {
-    const { units, N } = this.props;
+  componentWillReceiveProps(nextProps) {
+    if (this.props.units !== nextProps.units ||
+        this.props.N !== nextProps.N) {
+      this.getTopNUnits(nextProps);
+    }
+  }
+
+  getTopNUnits = (props) => {
+    const { units, N } = props;
     let topNUnits;
 
     if (Array.isArray(units)) {
@@ -85,12 +92,12 @@ class TopN extends React.PureComponent {
   }
 
   render() {
-    const { section, t }       = this.props;
-    const { topNUnits: units } = this.state;
-    const url                  = this.getTopicUrl();
+    const { section, t } = this.props;
+    const { topNUnits }  = this.state;
+    const url            = this.getTopicUrl();
 
     return (
-      Array.isArray(units) && units.length > 0 ?
+      Array.isArray(topNUnits) && topNUnits.length > 0 ?
         <Table unstackable basic="very">
           <Table.Header>
             <Table.Row>
@@ -101,7 +108,7 @@ class TopN extends React.PureComponent {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {units.map(x => this.renderUnit(x, t))}
+            {topNUnits.map(x => this.renderUnit(x, t))}
           </Table.Body>
           { !url.includes('events') ? // exclude button to events - page not exists
             <Table.Footer fullWidth>

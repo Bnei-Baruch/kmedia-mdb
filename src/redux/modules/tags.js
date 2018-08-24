@@ -104,13 +104,11 @@ const getSectionOfUnit = (unit) => {
 
 const onDashboardSuccess = (state, action) => {
   const { data }                                       = action.payload;
-  const { latest_units: latest, /* promoted_units */ } = data;
+  const { latest_units: latestUnits /* promoted_units */ } = data;
 
-  if (Array.isArray(latest)) {
-    const uniqueSectionsArr = [...new Set(latest.map(u => getSectionOfUnit(u)).filter(x => !!x))].sort();
-
+  if (Array.isArray(latestUnits)) {
     // map units to sections
-    const cuBySection = latest.reduce((acc, u) => {
+    const cuBySection = latestUnits.reduce((acc, u) => {
       const section = getSectionOfUnit(u);
       if (acc[section]) {
         acc[section].push(u);
@@ -122,13 +120,14 @@ const onDashboardSuccess = (state, action) => {
     }, {});
 
     const getSectionUnits = section => cuBySection[section];
+    const uniqueSectionsArr = [...new Set(latestUnits.map(u => getSectionOfUnit(u)).filter(x => !!x))].sort();
 
     return {
       ...state,
       wip: false,
       error: null,
       sections: uniqueSectionsArr,
-      units: latest,
+      units: latestUnits,
       cuBySection,
       getSectionUnits
     };
