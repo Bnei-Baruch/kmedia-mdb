@@ -18,6 +18,7 @@ import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import ScoreDebug from './ScoreDebug';
 import SearchResultCU from './SearchResultCU';
+import SearchResultCollection from './SearchResultCollection';
 import SearchResultIntent from './SearchResultIntent';
 import {
   SEARCH_INTENT_FILTER_NAMES,
@@ -191,13 +192,11 @@ class SearchResults extends Component {
   };
 
   renderHit = (hit, rank) => {
-    // console.log('hit', hit);
-    const { cMap, cuMap }                                  = this.props;
+    const { cMap, cuMap }                                                             = this.props;
     const { _source: { mdb_uid: mdbUid, content_type: contentType }, _type: hitType } = hit;
-    const cu                                               = cuMap[mdbUid];
-    const c                                                = cMap[mdbUid];
+    const cu                                                                          = cuMap[mdbUid];
+    const c                                                                           = cMap[mdbUid];
 
-    console.log('SearchResult.render mdbUid:', mdbUid);
     if (cu) {
       return (
         <Table.Row key={`${mdbUid}_${contentType}`} verticalAlign="top">
@@ -207,7 +206,13 @@ class SearchResults extends Component {
         </Table.Row>
       );
     } else if (c) {
-      return this.renderCollection(c, hit, rank);
+      return (
+        <Table.Row key={`${mdbUid}_${contentType}`} verticalAlign="top">
+          <Table.Cell colSpan="4">
+            <SearchResultCollection hit={hit} rank={rank} c={c}  {...this.props} />
+          </Table.Cell>
+        </Table.Row>
+      );
     } else if (hitType === 'sources') {
       return this.renderSource(hit, rank);
     } else if (SEARCH_INTENT_HIT_TYPES.includes(hitType)) {

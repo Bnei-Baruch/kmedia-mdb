@@ -5,10 +5,10 @@ import { translate } from 'react-i18next';
 import { Segment, Icon, Button, Table, Image, Label } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
+import uniq from 'lodash/uniq';
 
 import playerHelper from '../../helpers/player';
-import { canonicalLink, sectionLink } from '../../helpers/links';
-import { formatDuration, tracePath } from '../../helpers/utils';
+import { canonicalLink } from '../../helpers/links';
 import { assetUrl, imaginaryUrl, Requests } from '../../helpers/Api';
 import { isDebMode } from '../../helpers/url';
 import { actions, selectors } from '../../redux/modules/mdb';
@@ -16,22 +16,10 @@ import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
 import * as shapes from '../shapes';
-import UnitLogo from '../shared/Logo/UnitLogo';
 import { sectionLogo } from '../../helpers/images';
 import Link from '../Language/MultiLanguageLink';
 import ScoreDebug from './ScoreDebug';
-import {
-  MT_TEXT,
-  MT_AUDIO,
-  MT_VIDEO,
-  CT_LESSON_PART,
-  SEARCH_INTENT_FILTER_NAMES,
-  SEARCH_INTENT_NAMES,
-  SEARCH_INTENT_SECTIONS,
-  SEARCH_INTENT_INDEX_TOPIC,
-  SEARCH_INTENT_INDEX_SOURCE,
-  SEARCH_INTENT_HIT_TYPES,
-} from '../../helpers/consts';
+import { MT_TEXT, MT_AUDIO, MT_VIDEO, CT_LESSON_PART } from '../../helpers/consts';
 
 let testCall = true;
 
@@ -84,18 +72,29 @@ class SearchResultCU extends Component {
 
   renderFiles = () => {
     const { cu, language } = this.props;
-    return cu.files.filter(f => f.language === language).map(f => this.renderFileByType(f, cu.id));
+    return uniq(cu.files, f => f.type)
+      .filter(f => f.language === language)
+      .map(f => this.renderFileByType(f, cu.id));
   };
 
   renderFileByType = (file, cuId) => {
+    let fileType;
     switch (file.type) {
     case MT_VIDEO:
-      return this.renderVideo(file, cuId);
+      fileType = 'video';
+      break;
     case MT_AUDIO:
-      return this.renderAudio(file);
+      fileType = 'audio';
+      break;
     case MT_TEXT:
-      return this.renderText(file);
+      fileType = 'text';
+      break;
     }
+
+    return (<Button floated='left' key={file.id}>
+      <Icon name={'file ' + fileType} />
+      {`${this.props.t(`constants.media-types.${file.type}`)}`}
+    </Button>);
   };
 
   renderVideo = (file, unitId) => {
@@ -106,7 +105,7 @@ class SearchResultCU extends Component {
     }
     src = `${imaginaryUrl('thumbnail')}?${Requests.makeParams({ url: src, width: 150 })}`;
     return (
-      <Segment compact style={{ padding: 0 }} floated='left'>
+      <Segment compact style={{ padding: 0 }} floated='left' key={file.id}>
         <Label attached='bottom left'>{this.mlsToStrColon(file.duration)}</Label>
         <Image src={src} />
       </Segment>
@@ -123,7 +122,7 @@ class SearchResultCU extends Component {
 
   renderAudio = (file) => {
     return (
-      <Button floated='left'>
+      <Button floated='left' key={file.id}>
         <Icon name="file audio" />
         {`${this.props.t(`constants.media-types.${file.type}`)}`}
       </Button>
@@ -132,7 +131,7 @@ class SearchResultCU extends Component {
 
   renderText = (file) => {
     return (
-      <Button floated='left'>
+      <Button floated='left' key={file.id}>
         <Icon name="file text" />
         {`${this.props.t(`constants.media-types.${file.type}`)}`}
       </Button>
@@ -185,7 +184,6 @@ class SearchResultCU extends Component {
       filmDate = t('values.date', { date: cu.film_date });
     }
 
-
     return (<div>
         <Table>
           <Table.Body>
@@ -221,14 +219,17 @@ class SearchResultCU extends Component {
 }
 
 const mapState = (state, ownProps) => {
+  const { units: wip } = selectors.getWip(state.mdb);
+  const { units: err } = selectors.getErrors(state.mdb);
+
   return {
     filters: filterSelectors.getFilters(state.filters, 'search'),
     areSourcesLoaded: sourcesSelectors.areSourcesLoaded(state.sources),
     getSourcePath: sourcesSelectors.getPathByID(state.sources),
     getSourceById: sourcesSelectors.getSourceById(state.sources),
     getTagById: tagsSelectors.getTagById(state.tags),
-    wip: selectors.getWip(state.mdb),
-    err: selectors.getErrors(state.mdb),
+    wip: wip === {},
+    err,
   };
 };
 

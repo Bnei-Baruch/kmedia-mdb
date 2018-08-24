@@ -2,38 +2,35 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import { Trans, translate } from 'react-i18next';
-import { Container, Divider, Icon, Button, Image, Segment, Pagination } from 'semantic-ui-react';
+import { translate } from 'react-i18next';
+import moment from 'moment';
+import { Divider, Button, Image, Segment, Label, Icon } from 'semantic-ui-react';
+import uniq from 'lodash/uniq';
 
-import withPagination from '../Pagination/withPagination';
+import { sectionLogo } from '../../helpers/images';
 import { selectors as settings } from '../../redux/modules/settings';
-import { actions, selectors } from '../../redux/modules/mdb';
-import { canonicalLink, sectionLink } from '../../helpers/links';
+import { selectors } from '../../redux/modules/mdb';
+import { sectionLink, canonicalLink } from '../../helpers/links';
 import { actions as listsActions, selectors as lists } from '../../redux/modules/lists';
-import { formatDuration, isEmpty, tracePath } from '../../helpers/utils';
-import { getQuery, isDebMode } from '../../helpers/url';
+import { tracePath } from '../../helpers/utils';
 import { assetUrl, imaginaryUrl, Requests } from '../../helpers/Api';
-import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
-import { filtersTransformer } from '../../filters';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
-import WipErr from '../shared/WipErr/WipErr';
-import ResultsPageHeader from '../Pagination/ResultsPageHeader';
-import ScoreDebug from './ScoreDebug';
-import SearchResultCU from './SearchResultCU';
 import {
   SEARCH_INTENT_FILTER_NAMES,
   SEARCH_INTENT_NAMES,
   SEARCH_INTENT_SECTIONS,
   SEARCH_INTENT_INDEX_TOPIC,
   SEARCH_INTENT_INDEX_SOURCE,
-  SEARCH_INTENT_HIT_TYPES,
-  CT_VIDEO_PROGRAM_CHAPTER,
+  MT_TEXT, MT_AUDIO, MT_VIDEO, CT_LESSON_PART
+
 } from '../../helpers/consts';
 
-class SearchResultIntent extends withPagination {
+let NUMBER_OF_FETCHED_UNITS = 3 * 4;
+
+class SearchResultIntent extends Component {
   static propTypes = {
     results: PropTypes.object,
     getSourcePath: PropTypes.func,
@@ -41,8 +38,6 @@ class SearchResultIntent extends withPagination {
     queryResult: PropTypes.object,
     cMap: PropTypes.objectOf(shapes.Collection),
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
-    pageNo: PropTypes.number.isRequired,
-    pageSize: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
     wip: shapes.WIP,
     err: shapes.Error,
@@ -63,32 +58,68 @@ class SearchResultIntent extends withPagination {
     intents: [],
   };
 
+  state = {
+    pageNo: 0,
+    pageSize: 3,
+  };
+
   componentDidMount() {
     this.askForData(this.props, 0);
   }
 
+  askForData = () => {
+    const { fetchIntents, hit: { _index, _source: { content_type: contentType, mdb_uid: mdbUid, } } } = this.props;
 
-    componentWillReceiveProps(nextProps) {
-      // clear all filters when location's search is cleared by Menu click
-      if (nextProps.location.search !== this.props.location.search &&
-        !nextProps.location.search) {
-        nextProps.resetNamespace(nextProps.namespace);
-
-        this.setPage(this.props, 0);
-      }
-
-      super.componentWillReceiveProps(nextProps);
+    if (!['topics-filter', 'sources-filter'].includes(SEARCH_INTENT_FILTER_NAMES[_index])) {
+      return;
     }
+
+    const namespace = `intents_${mdbUid}_${contentType}`;
+    const params    = {
+      content_type: contentType,
+      page_no: 1,
+      page_size: NUMBER_OF_FETCHED_UNITS,
+      [this.parentTypeByIndex(_index)]: mdbUid
+    };
+    fetchIntents(namespace, params);
+  };
+
+  parentTypeByIndex = (index) => {
+    switch (index) {
+    case SEARCH_INTENT_INDEX_SOURCE:
+      return 'source';
+    case SEARCH_INTENT_INDEX_TOPIC:
+      return 'tag';
+    default:
+      return 'tag';
+    }
+  };
 
   click = (mdb_uid, index, type, rank, searchId) => {
     const { click } = this.props;
     click(mdb_uid, index, type, rank, searchId);
   };
 
-  extraFetchParams = () => ({ content_type: [CT_VIDEO_PROGRAM_CHAPTER] });
+  onScrollRight = () => this.onScrollChange(this.state.pageNo + 1);
+
+  onScrollLeft = () => this.onScrollChange(this.state.pageNo - 1);
+
+  onScrollChange = (pageNo) => {
+    if (pageNo < 0 || this.state.pageSize * pageNo >= this.props.unitCounter) {
+      return;
+    }
+    this.setState({ pageNo });
+  };
+
+  mlsToStrColon(seconds) {
+    const duration = moment.duration({ seconds });
+    const h        = duration.hours();
+    const m        = duration.minutes();
+    const s        = duration.seconds();
+    return h ? `${h}:${m}:${s}` : `${m}:${s}`;
+  }
 
   renderItem = (cu) => {
-
     let src = assetUrl(`api/thumbnail/${cu.id}`);
     if (!src.startsWith('http')) {
       src = `http://localhost${src}`;
@@ -96,62 +127,133 @@ class SearchResultIntent extends withPagination {
     src = `${imaginaryUrl('thumbnail')}?${Requests.makeParams({ url: src, width: 250 })}`;
 
     const filmDate = cu.film_date ? this.props.t('values.date', { date: cu.film_date }) : '';
-
+    const link     = canonicalLink(cu);
     return (
       <Segment key={cu.id}>
-        <Image src={src} />
+        <Segment style={{ padding: 0 }}>
+          <Label attached='bottom left'>{this.mlsToStrColon(cu.duration)}</Label>
+          <Image src={src} />
+        </Segment>
         <Divider hidden />
-        <Link className="search__link" to={src}>{cu.name}</Link>
+        <Link className="search__link" to={link}>{cu.name}</Link>
 
-        <div>{filmDate}</div>
+        <div>
+          <span>{this.iconByContentType(cu.content_type)}</span>
+          <span>{filmDate}</span>
+        </div>
+        {this.renderFiles(cu,)}
+
       </Segment>
     );
   };
 
-  renderScroll = () => {
-    const pages     = new Array(this.props.numberOfPages).fill('a');
-    const pagesHtml = pages.map((p, i) => (
-      <Button style={{ padding: '10px' }} onClick={e => this.onScrollChange(i)}>o</Button>));
-    return (<div style={{ textAlign: 'center' }}>{pagesHtml}</div>);
+  renderFiles = (cu) => {
+    return uniq(cu.files, f => f.type)
+      .filter(f => f.language === this.props.language)
+      .map(f => this.renderFileByType(f, cu.id));
   };
 
-  onScrollChange = (page) => {
-    this.askForData(this.props, page);
+  renderFileByType = (file, cuId) => {
+    let fileType;
+    switch (file.type) {
+    case MT_VIDEO:
+      fileType = 'video';
+      break;
+    case MT_AUDIO:
+      fileType = 'audio';
+      break;
+    case MT_TEXT:
+      fileType = 'text';
+      break;
+    }
+
+    return (<Button floated='left' key={file.id}>
+      <Icon name={'file ' + fileType} />
+      {`${this.props.t(`constants.media-types.${file.type}`)}`}
+    </Button>);
+  };
+
+  renderScroll = () => {
+
+    const { pageNo, pageSize } = this.state;
+    const numberOfPages        = Math.round(this.props.unitCounter / pageSize);
+
+    const scrollRight = pageNo === 0 ? null : (<Button
+      icon="chevron left"
+      circular
+      basic
+      size="large"
+      onClick={this.onScrollLeft}
+      style={{ position: 'absolute', top: '100px', left: 0 }}
+    />);
+
+    const scrollLeft = (pageNo >= numberOfPages - 1 ) ? null : (<Button
+      icon="chevron right"
+      circular
+      basic
+      size="large"
+      onClick={this.onScrollRight}
+      style={{ position: 'absolute', top: '100px', right: 0 }}
+    />);
+
+    const pages     = new Array(numberOfPages).fill('a');
+    const pagesHtml = pages.map((p, i) => {
+        return <Button
+          style={{
+            padding: '10px',
+            backgroundColor: pageNo === i ? 'red' : 'green'
+          }}
+          onClick={e => this.onScrollChange(i)} key={i}>o</Button>;
+      }
+    );
+
+    return (
+      <div>
+        {scrollRight}
+        {scrollLeft}
+        <div style={{ textAlign: 'center' }}>
+          {pagesHtml}
+        </div>
+      </div>
+    );
+  };
+
+  getFilterById = index => {
+    const { getTagById, getSourceById } = this.props;
+    switch (index) {
+    case SEARCH_INTENT_INDEX_TOPIC:
+      return getTagById;
+    case SEARCH_INTENT_INDEX_SOURCE:
+      return getSourceById;
+    default:
+      console.log('Using default filter:', index);
+      return x => x;
+    }
+  };
+
+  iconByContentType = (type) => {
+    let icon;
+    switch (type) {
+    case CT_LESSON_PART:
+      icon = 'lessons';
+      break;
+    default:
+      icon = 'programs';
+      break;
+    }
+    return <Image src={sectionLogo[icon]} />;
   };
 
   render() {
-    const { t, pageNo, queryResult, getTagById, getSourceById, hit, rank, numberOfPages, items } = this.props;
-    const { search_result: { searchId } }                                                        = queryResult;
-    const {
-            _index: index,
-            _type: type,
-            _source: {
-              content_type: contentType,
-              mdb_uid: mdbUid,
-              name,
-              explanation,
-              score: originalScore,
-              max_explanation: maxExplanation,
-              max_score: maxScore
-            },
-            _score: score,
-          }                                                                                      = hit;
-    const section                                                                                = SEARCH_INTENT_SECTIONS[type];
-    const intentType                                                                             = SEARCH_INTENT_NAMES[index];
-    const filterName                                                                             = SEARCH_INTENT_FILTER_NAMES[index];
+    const { t, queryResult, hit, rank, items }                               = this.props;
+    const { _index: index, _type: type, _source: { mdb_uid: mdbUid, name } } = hit;
 
-    let getFilterById = null;
-    switch (index) {
-    case SEARCH_INTENT_INDEX_TOPIC:
-      getFilterById = getTagById;
-      break;
-    case SEARCH_INTENT_INDEX_SOURCE:
-      getFilterById = getSourceById;
-      break;
-    default:
-      console.log('Using default filter:', index);
-      getFilterById = x => x;
-    }
+    const { pageNo, pageSize }            = this.state;
+    const { search_result: { searchId } } = queryResult;
+    const section                         = SEARCH_INTENT_SECTIONS[type];
+    const intentType                      = SEARCH_INTENT_NAMES[index];
+    const filterName                      = SEARCH_INTENT_FILTER_NAMES[index];
+    const getFilterById                   = this.getFilterById(index);
 
     const path  = tracePath(getFilterById(mdbUid), getFilterById);
     let display = '';
@@ -166,45 +268,23 @@ class SearchResultIntent extends withPagination {
       display = name;
     }
 
-    const scrollRight = pageNo === 1 ? null : (<Button
-      icon="chevron left"
-      circular
-      basic
-      size="large"
-      onClick={this.scrollLeft}
-      style={{ position: 'absolute', top: '100px', left: 0 }}
-    />);
-
-    const scrollLeft = (pageNo === numberOfPages) ? null : (<Button
-      icon="chevron right"
-      circular
-      basic
-      size="large"
-      onClick={this.scrollRight}
-      style={{ position: 'absolute', top: '100px', right: 0 }}
-    />);
-
     return (
       <Segment>
         <Link
           className="search__link"
           onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-          to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}
-        >
+          to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}>
+
           {t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`)} {display}
-
-
           <span style={{ float: 'right' }}>
             {`${t('search.showAll')} ${this.props.total} ${t('search.lessons')}`}
           </span>
 
         </Link>
         <Segment.Group horizontal>
-          {items.map(this.renderItem)}
+          {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).map(this.renderItem)}
         </Segment.Group>
         {this.renderScroll()}
-        {scrollRight}
-        {scrollLeft}
       </Segment>
 
     );
@@ -212,20 +292,22 @@ class SearchResultIntent extends withPagination {
 }
 
 const mapState = (state, ownProps) => {
-  const namespace = 'programs';
-  const nsState   = lists.getNamespaceState(state.lists, namespace);
+
+  const { hit: { _source: { content_type: contentType, mdb_uid: mdbUid, } } } = ownProps;
+
+  const namespace   = `intents_${mdbUid}_${contentType}`;
+  const nsState     = lists.getNamespaceState(state.lists, namespace);
+  const unitCounter = (nsState.total > 0 && nsState.total < NUMBER_OF_FETCHED_UNITS) ? nsState.total : NUMBER_OF_FETCHED_UNITS;
+
   return {
     namespace,
+    unitCounter,
     items: (nsState.items || []).map(x => selectors.getDenormContentUnit(state.mdb, x)),
     wip: nsState.wip,
     err: nsState.err,
-    pageNo: nsState.pageNo,
     total: nsState.total,
-    pageSize: 3,
-    numberOfPages: 4,
     language: settings.getLanguage(state.settings),
 
-    filters: filterSelectors.getFilters(state.filters, 'search'),
     areSourcesLoaded: sourcesSelectors.areSourcesLoaded(state.sources),
     getSourcePath: sourcesSelectors.getPathByID(state.sources),
     getSourceById: sourcesSelectors.getSourceById(state.sources),
@@ -233,9 +315,6 @@ const mapState = (state, ownProps) => {
   };
 };
 
-const mapDispatch = dispatch => bindActionCreators({
-  fetchList: listsActions.fetchList,
-  setPage: listsActions.setPage,
-}, dispatch);
+const mapDispatch = dispatch => bindActionCreators({ fetchIntents: listsActions.fetchIntents }, dispatch);
 
 export default connect(mapState, mapDispatch)(translate()(SearchResultIntent));

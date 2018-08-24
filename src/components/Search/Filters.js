@@ -24,8 +24,8 @@ const filters = [
     component: filterComponents.SourcesFilter,
   },
   {
-    name: 'sections-filter',
-    component: filterComponents.SectionsFilter,
+    name: 'type-filter',
+    component: filterComponents.TypeFilter,
   },
 ];
 
@@ -45,8 +45,8 @@ class SearchResultsFilters extends Component {
 
   onSelectionChange = (section) => {
     const sValue = `filters.sections-filter.${section}`;
-    this.props.setFilterValue(this.props.namespace, 'sources-filter', sValue);
-    this.setState({ sValue: `filters.sections-filter.${section}` });
+    this.props.setFilterValue('search', 'sections-filter', sValue);
+    this.props.onChange();
   };
 
   renderTabs = () => {
@@ -79,8 +79,8 @@ class SearchResultsFilters extends Component {
 
     const tabs = ['lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
       <Menu.Item
+        key={x}
         name={x}
-        textAlign="center"
         onClick={() => this.onSelectionChange(x)} />
     );
 
@@ -105,14 +105,13 @@ class SearchResultsFilters extends Component {
       <div>
         {this.renderTabs()}
         {
-          this.state.isShowFilters ?
-            <Filters
-              namespace="search"
-              filters={filters}
-              onChange={onChange}
-              onHydrated={onHydrated}
-            /> : null
-        }
+          <Filters
+            style={{ 'display': this.state.isShowFilters ? 'block' : 'none' }}
+            namespace="search"
+            filters={filters}
+            onChange={onChange}
+            onHydrated={onHydrated}
+          />}
       </div>
     );
   }
@@ -122,5 +121,7 @@ export default connect(
   state => ({
     filtersValues: filterSelectors.getNSFilters(state.filters, 'search') || {},
   }),
-  disptach => bindActionCreators({ setFilterValue: actions.setFilterValue, }, disptach)
+  disptach => bindActionCreators({
+    setFilterValue: actions.setFilterValue
+  }, disptach)
 )(translate()(SearchResultsFilters));
