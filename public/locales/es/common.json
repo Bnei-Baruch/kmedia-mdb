@@ -182,8 +182,8 @@
     "updates": "Actualizaciones recientes",
     "last-lesson": "Lección diaria de Cabalá",
     "promoted": {
-      "header": "Congreso mundial en Roma, Italia.",
-      "subheader": "27-29 de julio, 2018"
+      "header": "Artículos para el mes de Elul y Rosh HaShaná",
+      "subheader": ""
     }
   },
   "events": {
@@ -229,6 +229,7 @@
       "virtual": "Lecciones Virtuales",
       "lectures": "Charlas",
       "women": "Lección de Mujeres",
+      "rabash": "Lecciones de Rabash",
       "children": "Lección de Niños",
       "series": "Serie de Estudios"
     },

@@ -6,9 +6,11 @@ import {
   CT_FRIENDS_GATHERING,
   CT_LECTURE,
   CT_MEAL,
+  CT_LESSON_PART,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
+  RABASH_PERSON_UID,
   LANG_HEBREW,
   LANG_RUSSIAN,
   LANG_SPANISH,
@@ -76,6 +78,8 @@ const getExtraFetchParams = (ns, collectionID) => {
     return { content_type: [CT_LECTURE] };
   case 'lessons-women':
     return { content_type: [CT_WOMEN_LESSON] };
+  case 'lessons-rabash':
+    return { content_type: [CT_LESSON_PART], person: RABASH_PERSON_UID };
     // case 'lessons-children':
     //   return { content_type: [CT_CHILDREN_LESSON] };
   default:
@@ -198,8 +202,9 @@ export const searchPage = store =>
       const page     = searchSelectors.getPageNo(state.search);
       const pageSize = settingsSelectors.getPageSize(state.settings);
       const deb      = searchSelectors.getDeb(state.search);
+      const suggest  = searchSelectors.getSuggest(state.search);
 
-      store.dispatch(searchActions.search(q, page, pageSize, deb));
+      store.dispatch(searchActions.search(q, page, pageSize, suggest, deb));
     });
 
 function sleep(ms) {

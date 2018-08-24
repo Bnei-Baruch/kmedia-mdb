@@ -16,6 +16,7 @@ const SET_PAGE     = 'Search/SET_PAGE';
 const SET_SORT_BY  = 'Search/SET_SORT_BY';
 const UPDATE_QUERY = 'Search/UPDATE_QUERY';
 const SET_DEB      = 'Search/SET_DEB';
+const SET_SUGGEST  = 'Search/SET_SUGGEST';
 const HYDRATE_URL  = 'Search/HYDRATE_URL';
 
 export const types = {
@@ -39,8 +40,8 @@ export const types = {
 const autocomplete        = createAction(AUTOCOMPLETE);
 const autocompleteSuccess = createAction(AUTOCOMPLETE_SUCCESS);
 const autocompleteFailure = createAction(AUTOCOMPLETE_FAILURE);
-const search              = createAction(SEARCH, (q, pageNo, pageSize, deb=false) =>
-                                                 ({q, pageNo, pageSize, deb}));
+const search              = createAction(SEARCH, (q, pageNo, pageSize, suggest='', deb=false) =>
+                                                 ({q, pageNo, pageSize, suggest, deb}));
 const searchSuccess       = createAction(SEARCH_SUCCESS);
 const searchFailure       = createAction(SEARCH_FAILURE);
 const click               = createAction(CLICK, (mdbUid, index, type, rank, searchId) =>
@@ -49,6 +50,7 @@ const setPage             = createAction(SET_PAGE);
 const setSortBy           = createAction(SET_SORT_BY);
 const updateQuery         = createAction(UPDATE_QUERY);
 const setDeb              = createAction(SET_DEB);
+const setSuggest          = createAction(SET_SUGGEST);
 const hydrateUrl          = createAction(HYDRATE_URL);
 
 export const actions = {
@@ -64,6 +66,7 @@ export const actions = {
   setSortBy,
   updateQuery,
   setDeb,
+  setSuggest,
   hydrateUrl,
 };
 
@@ -71,7 +74,7 @@ export const actions = {
 
 const initialState = {
   acQ: '',
-  suggestions: [],
+  suggestions: {},
   q: '',
   queryResult: {},
   pageNo: 1,
@@ -133,6 +136,10 @@ export const reducer = handleActions({
     ...state,
     deb: action.payload,
   }),
+  [SET_SUGGEST]: (state, action) => ({
+    ...state,
+    suggest: action.payload,
+  }),
 }, initialState);
 
 /* Selectors */
@@ -143,6 +150,7 @@ const getQueryResult = state => state.queryResult;
 const getPageNo      = state => state.pageNo;
 const getSortBy      = state => state.sortBy;
 const getDeb         = state => state.deb;
+const getSuggest     = state => state.suggest;
 const getWip         = state => state.wip;
 const getError       = state => state.error;
 
@@ -153,6 +161,7 @@ export const selectors = {
   getPageNo,
   getSortBy,
   getDeb,
+  getSuggest,
   getWip,
   getError,
 };

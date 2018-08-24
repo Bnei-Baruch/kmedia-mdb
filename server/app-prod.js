@@ -72,7 +72,11 @@ app.use(helmet({
         '*.kabbalahmedia.info',
         'archive',                      // suitcase
         '*.archive',                    // suitcase
-        '*.laitman.ru',
+        'laitman.ru',
+        'www.laitman.ru',
+        'laitman.com',
+        'laitman.es',
+        'laitman.co.il',
         '*.google-analytics.com',
         '*.usersnap.com',
         '*.twimg.com',

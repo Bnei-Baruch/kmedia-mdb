@@ -4,7 +4,7 @@ import { Button, Icon, Modal } from 'semantic-ui-react';
 
 class ScoreDebug extends Component {
   static propTypes = {
-    name: PropTypes.string.isRequired,
+    name: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
     score: PropTypes.number.isRequired,
     explanation: PropTypes.object.isRequired,
   };

@@ -32,6 +32,9 @@ const filters = {
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
+  'lessons-rabash': [
+    { name: 'sources-filter', component: filterComponents.SourcesFilter }
+  ],
   'lessons-children': [
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'date-filter', component: filterComponents.DateFilter }
@@ -115,7 +118,7 @@ class UnitListPage extends PureComponent {
             items.length > 0 ?
               <Table unstackable basic="very" className="index" sortable>
                 <Table.Body>
-                  {items.map(x => renderUnit(x, t))}
+                  {items.map(x => renderUnit(x, t, namespace))}
                 </Table.Body>
               </Table> :
               null
