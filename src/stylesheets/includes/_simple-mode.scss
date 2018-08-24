@@ -1,0 +1,42 @@
+.horizontal-list {
+  display: flex;
+  padding-bottom: 16px !important;
+  border-bottom: 1px solid #ebecf0;
+
+  .media-file-button {
+    height: 24px;
+    margin-right: 16px;
+    text-decoration: none;
+    display: flex !important;
+    padding: 0 8px !important;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ebecf0;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #00aced;;
+
+    &:hover {
+      background-color: #00aced;
+      color: #fff !important;
+    }
+
+    .icon {
+      height: 14px !important;
+    }
+
+    .media-file-link:hover {
+      font-weight: normal !important;
+      color: #fff !important;
+    }
+  }
+}
+
+.unit-header {
+  font-weight: 300 !important;
+  font-size: 18px !important;
+  margin-bottom: 12px !important;
+  text-decoration: underline !important;
+  color: #1a4179 !important;
+  margin-top: 24px !important;
+}
