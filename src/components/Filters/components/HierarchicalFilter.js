@@ -155,7 +155,7 @@ class HierarchicalFilter extends Component {
 
     if (!isEmpty(node.children)) {
       items = node.children.reduce((acc, val) =>
-        acc.concat(this.nodeToItemRec(val, level + 1, reg )), items);
+        acc.concat(this.nodeToItemRec(val, level + 1, reg)), items);
     }
 
     return items;
