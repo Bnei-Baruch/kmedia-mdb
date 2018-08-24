@@ -49,19 +49,6 @@ class TopicContainer extends Component {
     return reg;
   }
 
-  matchString = t => (
-    <Input
-      fluid
-      size="small"
-      icon="search"
-      className="search-omnibox"
-      placeholder={t('sources-library.filter')}
-      value={this.state.match}
-      onChange={this.handleFilterChange}
-      onKeyDown={this.handleFilterKeyDown}
-    />
-  );
-
   handleFilterChange = debounce((e, data) => {
     this.setState({ match: data.value });
   }, 100);
@@ -101,10 +88,11 @@ class TopicContainer extends Component {
     Object.keys(byId).forEach((key) => {
       const currentObj = byId[key];
 
-      // add object that includes the match and keep its parent_id key
+      // add object that includes the match
       if (currentObj.label && regExp.test(currentObj.label)) {
         this.filteredById[key] = currentObj;
 
+        // keep its parent_id key
         if (currentObj.parent_id) {
           parentIdsArr.push(currentObj.parent_id);
         }
@@ -142,6 +130,10 @@ class TopicContainer extends Component {
     return filteredRoots;
   }
 
+  isIncluded = id => (this.filteredById[id]);
+
+  hasChildren = node => (Array.isArray(node.children) && node.children.length > 0);
+
   renderLeaf = node => (
     <Link to={`/topics/${node.id}`}>
       {node.label}
@@ -152,14 +144,16 @@ class TopicContainer extends Component {
     node ?
       <Fragment>
         {
-          Array.isArray(node.children) && node.children.length > 0 ?
+          this.hasChildren(node) ?
             <List>
               {
-                node.children.map(id => (
-                  <List.Item key={id}>
-                    {this.renderNode(this.filteredById[id])}
-                  </List.Item>
-                ))
+                node.children
+                  .filter(this.isIncluded)
+                  .map(id => (
+                    <List.Item key={id}>
+                      {this.renderNode(this.filteredById[id])}
+                    </List.Item>
+                  ))
               }
             </List> :
             this.renderLeaf(node)
@@ -169,21 +163,22 @@ class TopicContainer extends Component {
   );
 
   renderSubHeader = node => (
-    <Fragment key={node.id}>
-      <Header as="h3" className="topics__subtitle">
-        <Link to={`/topics/${node.id}`}>
-          {node.label}
-        </Link>
-      </Header>
-      {this.renderNode(node)}
-    </Fragment>
+    this.hasChildren(node) ?
+      <Fragment key={node.id}>
+        <Header as="h3" className="topics__subtitle">
+          <Link to={`/topics/${node.id}`}>
+            {node.label}
+          </Link>
+        </Header>
+        {this.renderNode(node)}
+      </Fragment> :
+      null
   );
 
   renderBranch = (rootId) => {
     const rootNode = this.filteredById[rootId];
-    const rootChildren = rootNode ? rootNode.children : undefined;
 
-    if (!rootNode || !rootChildren) {
+    if (!rootNode.children || root.children.length === 0) {
       return null;
     }
 
@@ -196,7 +191,9 @@ class TopicContainer extends Component {
         </Header>
         <div className="topics__list">
           {
-            rootChildren.map(id => (this.filteredById[id] ? this.renderSubHeader(this.filteredById[id]) : null))
+            rootNode.children
+              .filter(this.isIncluded)
+              .map(id => this.renderSubHeader(this.filteredById[id]))
           }
         </div>
         <Divider />
@@ -213,7 +210,16 @@ class TopicContainer extends Component {
       <div>
         <SectionHeader section="topics" />
         <Divider fitted />
-        {this.matchString(t)}
+        <Input
+          fluid
+          size="small"
+          icon="search"
+          className="search-omnibox"
+          placeholder={t('sources-library.filter')}
+          value={this.state.match}
+          onChange={this.handleFilterChange}
+          onKeyDown={this.handleFilterKeyDown}
+        />
         <Container className="padded">
           {filteredRoots.map(r => this.renderBranch(r))}
         </Container>
