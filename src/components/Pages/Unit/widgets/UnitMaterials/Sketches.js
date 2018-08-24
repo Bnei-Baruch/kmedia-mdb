@@ -198,6 +198,7 @@ class Sketches extends React.Component {
     }
 
     const isRTL = RTL_LANGUAGES.includes(language);
+    console.log('isRTL:', isRTL);
 
     if (Array.isArray(imageObjsArr) && imageObjsArr.length > 0) {
       // prepare the image array for the gallery and sort it
@@ -220,7 +221,7 @@ class Sketches extends React.Component {
               null
           }
           <ImageGallery
-            lazyLoad
+            // lazyLoad
             isRTL={isRTL}
             showFullscreenButton
             items={items}
@@ -237,13 +238,13 @@ class Sketches extends React.Component {
         </div>
       );
     }
-    else{
-      return (
-        <Segment basic>
-          {t('messages.no-images')}
-        </Segment>
-      );
-    }
+
+    return (
+      <Segment basic>
+        {t('messages.no-images')}
+      </Segment>
+    );
+
   }
 }
 

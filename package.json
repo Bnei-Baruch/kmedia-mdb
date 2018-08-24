@@ -99,7 +99,7 @@
     "react-ga": "^2.4.1",
     "react-helmet": "^5.2.0",
     "react-i18next": "^7.5.0",
-    "react-image-gallery": "^0.8.7",
+    "react-image-gallery": "^0.8.10",
     "react-media-player": "github:Bnei-Baruch/react-media-player",
     "react-pdf": "^3.0.1",
     "react-redux": "^5.0.7",
