@@ -25,11 +25,9 @@ class SimpleModeList extends PureComponent {
         <Container className="padded">
           {
             items.lessons ?
-              <Table unstackable basic="very" className="index" sortable>
-                <Table.Body>
-                  {items.lessons.map(x => renderUnit(x, language, t))}
-                </Table.Body>
-              </Table> :
+              <List size="large">
+                {items.lessons.map(x => renderUnit(x, language, t))}
+              </List> :
               null
           }
 
