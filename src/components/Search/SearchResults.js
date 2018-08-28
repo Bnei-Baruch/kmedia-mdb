@@ -29,7 +29,6 @@ import {
 class SearchResults extends Component {
   static propTypes = {
     results: PropTypes.object,
-    getSourcePath: PropTypes.func,
     areSourcesLoaded: PropTypes.bool.isRequired,
     queryResult: PropTypes.object,
     cMap: PropTypes.objectOf(shapes.Collection),
@@ -52,7 +51,6 @@ class SearchResults extends Component {
     cuMap: {},
     wip: false,
     err: null,
-    getSourcePath: undefined,
   };
 
   // Helper function to get the frist prop in hightlights obj and apply htmlFunc on it.
@@ -62,151 +60,22 @@ class SearchResults extends Component {
     return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop]) }} />;
   };
 
-  click = (mdb_uid, index, type, rank, searchId) => {
+  resultClick = (mdb_uid, index, resultType, rank, searchId) => {
     const { click } = this.props;
-    click(mdb_uid, index, type, rank, searchId);
+    click(mdb_uid, index, resultType, rank, searchId);
   };
 
-  renderContentUnit = (cu, hit, rank) => {
-    const { t, location, queryResult }                                                           = this.props;
-    const { search_result: { searchId } }                                                        = queryResult;
-    const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
+  renderResult = (hit, rank, result) => {
+    const { t, location, queryResult } = this.props;
+    const { search_result: { searchId } } = queryResult;
+    const {
+      _index: index,
+      _source: { mdb_uid: mdbUid, result_type: resultType },
+      _score: score
+    } = hit;
+    const { title, description, content, label, content_type, date, duration } = result;
 
-    const name        = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || cu.name;
-    const description = this.snippetFromHighlight(highlight, ['description', 'description_analyzed'], parts => `...${parts.join('.....')}...`);
-    const transcript  = this.snippetFromHighlight(highlight, ['transcript', 'transcript_analyzed'], parts => `...${parts.join('.....')}...`);
-    const snippet     = (
-      <div className="search__snippet">
-        {
-          description ?
-            <div>
-              <strong>{t('search.result.description')}: </strong>
-              {description}
-            </div> :
-            null
-        }
-        {
-          transcript ?
-            <div>
-              <strong>{t('search.result.transcript')}: </strong>
-              {transcript}
-            </div> :
-            null
-        }
-      </div>);
-
-    let filmDate = '';
-    if (cu.film_date) {
-      filmDate = t('values.date', { date: cu.film_date });
-    }
-
-    return (
-      <Table.Row key={mdbUid} verticalAlign="top">
-        <Table.Cell collapsing singleLine width={1}>
-          <strong>{filmDate}</strong>
-        </Table.Cell>
-        <Table.Cell collapsing singleLine>
-          <Label size="tiny">{t(`constants.content-types.${cu.content_type}`)}</Label>
-        </Table.Cell>
-        <Table.Cell>
-          <Link
-            className="search__link"
-            onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-            to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}
-          >
-            {name}
-          </Link>
-          &nbsp;&nbsp;
-          {
-            cu.duration ?
-              <small>{formatDuration(cu.duration)}</small> :
-              null
-          }
-          {snippet || null}
-        </Table.Cell>
-        {
-          !isDebMode(location) ?
-            null :
-            <Table.Cell collapsing textAlign="right">
-              <ScoreDebug name={cu.name} score={score} explanation={hit._explanation} />
-            </Table.Cell>
-        }
-      </Table.Row>
-    );
-  };
-
-  renderCollection = (c, hit, rank) => {
-    const { t, location, queryResult }                                                           = this.props;
-    const { search_result: { searchId } }                                                        = queryResult;
-    const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
-
-    const name        = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || c.name;
-    const description = this.snippetFromHighlight(highlight, ['description', 'description_analyzed'], parts => `...${parts.join('.....')}...`);
-    const snippet     = (
-      <div className="search__snippet">
-        {
-          description ?
-            <div>
-              <strong>{t('search.result.description')}: </strong>
-              {description}
-            </div> :
-            null
-        }
-      </div>);
-
-    let startDate = '';
-    if (c.start_date) {
-      startDate = t('values.date', { date: c.start_date });
-    }
-
-    return (
-      <Table.Row key={mdbUid} verticalAlign="top">
-        <Table.Cell collapsing singleLine width={1}>
-          <strong>{startDate}</strong>
-        </Table.Cell>
-        <Table.Cell collapsing singleLine>
-          <Label size="tiny">{t(`constants.content-types.${c.content_type}`)}</Label>
-        </Table.Cell>
-        <Table.Cell>
-          <Link
-            className="search__link"
-            onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-            to={canonicalLink(c || { id: mdbUid, content_type: c.content_type })}
-          >
-            {name}
-          </Link>
-          &nbsp;&nbsp;
-          {snippet || null}
-        </Table.Cell>
-        {
-          !isDebMode(location) ? null :
-            <Table.Cell collapsing textAlign="right">
-              <ScoreDebug name={c.name} score={score} explanation={hit._explanation} />
-            </Table.Cell>
-        }
-      </Table.Row>
-    );
-  };
-
-  renderSource = (hit) => {
-    const { t, location, getSourcePath }                             = this.props;
-    const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
-
-    const srcPath = getSourcePath(mdbUid);
-
-    const name = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || srcPath[srcPath.length - 1].name;
-
-    const authors = this.snippetFromHighlight(highlight, ['authors', 'authors_analyzed'], parts => parts[0]);
-    if (authors) {
-      // Remove author from path in order to replace with highlight value.
-      srcPath.pop();
-    }
-
-    const path = `${srcPath.slice(0, -1).map(n => n.name).join(' > ')} >`;
-
-    const description = this.snippetFromHighlight(highlight, ['description', 'description_analyzed'], parts => `...${parts.join('.....')}...`);
-    const content     = this.snippetFromHighlight(highlight, ['content', 'content_analyzed'], parts => `...${parts.join('.....')}...`);
-    const snippet     = (
+    const snippetHtml = (
       <div className="search__snippet">
         {
           description ?
@@ -219,32 +88,45 @@ class SearchResults extends Component {
         {
           content ?
             <div>
-              <strong>{t('search.result.content')}: </strong>
+              <strong>{t('search.result.transcript')}: </strong>
               {content}
             </div> :
             null
         }
       </div>);
 
+    let dateText = '';
+    if (date) {
+      dateText = t('values.date', { date });
+    }
+
+    const durationHtml = duration ? <small>{formatDuration(duration)}</small> : null;
+
     return (
       <Table.Row key={mdbUid} verticalAlign="top">
         <Table.Cell collapsing singleLine width={1}>
-          <strong>&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+          <strong>{dateText}</strong>
         </Table.Cell>
         <Table.Cell collapsing singleLine>
-          <Label size="tiny">{t('filters.sections-filter.sources')}</Label>
+          <Label size="tiny">{t(label)}</Label>
         </Table.Cell>
         <Table.Cell>
-          <Link className="search__link" to={canonicalLink({ id: mdbUid, content_type: 'SOURCE' })}>
-            {authors}&nbsp;{path}&nbsp;{name}
+          <Link
+            className="search__link"
+            onClick={() => this.resultClick(mdbUid, index, resultType, rank, searchId)}
+            to={canonicalLink({ id: mdbUid, content_type })}
+          >
+            {title}
           </Link>
-          {snippet || null}
+          &nbsp;&nbsp;
+          {durationHtml || null}
+          {snippetHtml || null}
         </Table.Cell>
         {
           !isDebMode(location) ?
             null :
             <Table.Cell collapsing textAlign="right">
-              <ScoreDebug name={srcPath[srcPath.length - 1].name} score={score} explanation={hit._explanation} />
+              <ScoreDebug name={title} score={score} explanation={hit._explanation} />
             </Table.Cell>
         }
       </Table.Row>
@@ -281,7 +163,6 @@ class SearchResults extends Component {
       getFilterById = getSourceById;
       break;
     default:
-      console.log('Using default filter:', index);
       getFilterById = x => x;
     }
 
@@ -309,7 +190,7 @@ class SearchResults extends Component {
         <Table.Cell>
           <Link
             className="search__link"
-            onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+            onClick={() => this.resultClick(mdbUid, index, type, rank, searchId)}
             to={sectionLink(section, [{name: filterName, value: mdbUid, getFilterById}])}
           >
             {t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`)} {display}
@@ -340,25 +221,51 @@ class SearchResults extends Component {
   };
 
   renderHit = (hit, rank) => {
-    // console.log('hit', hit);
-    const { cMap, cuMap }                                  = this.props;
-    const { _source: { mdb_uid: mdbUid }, _type: hitType } = hit;
-    const cu                                               = cuMap[mdbUid];
-    const c                                                = cMap[mdbUid];
+    const {
+      _source: { mdb_uid: mdbUid,  result_type: resultType },
+      _type: hitType,
+      highlight,
+    } = hit;
 
-    if (cu) {
-      return this.renderContentUnit(cu, hit, rank);
-    } else if (c) {
-      return this.renderCollection(c, hit, rank);
-    } else if (hitType === 'sources') {
-      return this.renderSource(hit, rank);
-    } else if (SEARCH_INTENT_HIT_TYPES.includes(hitType)) {
+    if (SEARCH_INTENT_HIT_TYPES.includes(hitType)) {
       return this.renderIntent(hit, rank)
     }
 
-    // maybe content_units are still loading ?
-    // maybe stale data in elasticsearch ?
-    return null;
+    const { cMap, cuMap } = this.props;
+    const cu = cuMap[mdbUid];
+    const c = cMap[mdbUid];
+    const result = {
+      title: this.snippetFromHighlight(highlight, ['title', 'title_language'], parts => parts.join(' ')),
+      description: this.snippetFromHighlight(highlight, ['description', 'description_language'], parts => `...${parts.join('.....')}...`),
+      content: this.snippetFromHighlight(highlight, ['content', 'content_language'], parts => `...${parts.join('.....')}...`),
+      content_type: '',
+      label: '',
+      date: null,
+      duration: null,
+    };
+    if (cu) {
+      if (!result.title) {
+        result.title = cu.name;
+      }
+      result.content_type = cu.content_type;
+      result.label = `constants.content-types.${cu.content_type}`
+      result.date = cu.film_date;
+      result.duration = cu.duration;
+    } else if (c) {
+      if (!result.title) {
+        result.title = c.name;
+      }
+      result.content_type = c.content_type;
+      result.label = `constants.content-types.${c.content_type}`
+    } else if (resultType === 'sources') {
+      if (!result.title) {
+        result.title = hit._source.title;
+      }
+      result.content_type = 'SOURCE';
+      result.label = 'filters.sections-filter.sources';
+    }
+
+    return this.renderResult(hit, rank, result);
   };
 
   render() {
@@ -435,7 +342,6 @@ class SearchResults extends Component {
 export default connect(state => ({
   filters: filterSelectors.getFilters(state.filters, 'search'),
   areSourcesLoaded: sourcesSelectors.areSourcesLoaded(state.sources),
-  getSourcePath: sourcesSelectors.getPathByID(state.sources),
   getSourceById: sourcesSelectors.getSourceById(state.sources),
   getTagById: tagsSelectors.getTagById(state.tags),
 }))(translate()(SearchResults));

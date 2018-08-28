@@ -14,6 +14,7 @@
       "photos": "Fotos",
       "design": "Diseño",
       "project-status": "Projekto Statuso",
+      "help": "Ayuda",
       "old-site": "Viejo Sitio"
     },
     "footer": {
@@ -173,7 +174,7 @@
   },
   "home": {
     "header": {
-      "text": "Página de inicio",
+      "text": "Kabbalah Media",
       "subtext": "Una enorme archivo de contenidos sobre la Sabiduría de la Cabalá: lecciones con el Rav Dr. Michael Laitman, libros de fuentes originales para descargar (incluyendo el libro del Zóhar), una serie de programas sobre educación, salud, relaciones en la pareja, seguridad y economía."
     },
     "search": "Descubre la sabiduría de la Cabalá",
@@ -181,8 +182,8 @@
     "updates": "Actualizaciones recientes",
     "last-lesson": "Lección diaria de Cabalá",
     "promoted": {
-      "header": "Congreso mundial en Roma, Italia.",
-      "subheader": "27-29 de julio, 2018"
+      "header": "Artículos para el mes de Elul y Rosh HaShaná",
+      "subheader": ""
     }
   },
   "events": {
@@ -228,6 +229,7 @@
       "virtual": "Lecciones Virtuales",
       "lectures": "Charlas",
       "women": "Lección de Mujeres",
+      "rabash": "Lecciones de Rabash",
       "children": "Lección de Niños",
       "series": "Serie de Estudios"
     },
@@ -287,6 +289,11 @@
     "header": {
       "text": "Publicaciones",
       "subtext": "Artículos sobre eventos actuales, cultura, ciencia popular, relaciones y más, presentados desde la perspectiva única de la sabiduría de la Cabalá"
+    },
+    "tabs": {
+      "articles": "Artículos",
+      "twitter": "Twitter",
+      "blog": "Blog"
     },
     "list": {
       "item_from": "Artículo de:"

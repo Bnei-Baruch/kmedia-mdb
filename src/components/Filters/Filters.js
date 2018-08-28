@@ -112,20 +112,26 @@ class Filters extends Component {
                           </small>
                           <span>
                             {label}
-                            <Icon name="dropdown" flipped={isActive ? 'vertically' : ''} />
+                            {
+                              isActive ?
+                                <Icon name="dropdown" flipped="vertically" /> :
+                                <Icon name="dropdown" />
+                            }
                           </span>
                         </div>
 
                         {
                           value ?
-                            <Label
-                              circular
-                              size="tiny"
-                              color="black"
-                              onClick={e => this.handleResetFilter(e, name)}
-                            >
-                              <Icon name="times" />
-                            </Label>
+                            <div className="clear-filter">
+                              <Label
+                                basic
+                                circular
+                                size="tiny"
+                                onClick={e => this.handleResetFilter(e, name)}
+                              >
+                                <Icon name="times" />
+                              </Label>
+                            </div>
                             :
                             null
                         }
@@ -147,6 +153,7 @@ class Filters extends Component {
                         onApply={x => this.handleApply(name, x)}
                         language={language}
                         t={t}
+                        deviceInfo={deviceInfo}
                       />
                     </Popup.Content>
                   </Popup>

@@ -26,6 +26,7 @@
     "build:local": "REACT_APP_ENV=production sh -ac '. ./.env; yarn build-css && react-scripts build && yarn critical-css'",
     "build:staging": "REACT_APP_ENV=staging yarn build",
     "build:production": "REACT_APP_ENV=production yarn build",
+    "build:suitcase": "REACT_APP_ENV=suitcase yarn build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "deploy": "yarn build:production && scp -r build/* archive@app.archive.bbdomain.org:/sites/archive-frontend",

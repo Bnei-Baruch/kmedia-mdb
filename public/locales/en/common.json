@@ -176,8 +176,8 @@
   },
   "home": {
     "header": {
-      "text": "Home",
-      "subtext": "Huge content repository on the Wisdom of Kabbalah: Kabbalah lessons with PhD Rav Michael Laitman, download source books (including The Book of Zohar), a series of programs on education, health, relationships, security and economy."
+      "text": "Kabbalah Media",
+      "subtext": "The world's largest Kabbalah resource. Kabbalah lessons with Kabbalist Dr. Michael Laitman, downloadable authentic Kabbalah sources including The Zohar, and programs with Kabbalah's take on relationships, health, education, the economy and society."
     },
     "search": "Explore the wisdom of Kabbalah",
     "sections": "Archive Sections",
@@ -185,8 +185,8 @@
     "last-lesson": "The Latest Daily Lesson",
     "donate": "DONATE NOW",
     "promoted": {
-      "header": "World Convention in Rome, Italy.",
-      "subheader": "27-29 July, 2018"
+      "header": "Articles For The Month of Elul and Rosh HaShana",
+      "subheader": ""
     }
   },
   "events": {
@@ -225,13 +225,14 @@
   "lessons": {
     "header": {
       "text": "Lectures & Lessons",
-      "subtext": "Here you will find a rich variety of lessons that include: lectures, children's programs, women's programs, etc."
+      "subtext": "Lessons and lectures by Dr. Michael Laitman. Virtual lessons, lectures for women, unique recordings by Rabbi Baruch Ashlag (RABASH) and more."
     },
     "tabs": {
       "daily": "Daily Lessons",
       "virtual": "Virtual Lessons",
       "lectures": "Lectures",
       "women": "Women Lessons",
+      "rabash": "Rabash Lessons",
       "children": "Children Lessons",
       "series": "Selected Study Series"
     },
@@ -291,6 +292,11 @@
     "header": {
       "text": "Publications",
       "subtext": "Articles on current events, culture, popular science, relationships and more, presented from the unique perspective of the wisdom of Kabbalah"
+    },
+    "tabs": {
+      "articles": "Articles",
+      "twitter": "Twitter",
+      "blog": "Blog"
     },
     "list": {
       "item_from": "Item of:"

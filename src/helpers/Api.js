@@ -9,9 +9,8 @@ export const assetUrl     = path => `${ASSETS_BACKEND}${path}`;
 export const imaginaryUrl = path => `${IMAGINARY_URL}${path}`;
 
 export class Requests {
-  static get          = path => axios(backendUrl(path));
-  static getAsset     = path => axios(assetUrl(path));
-  static getImaginary = path => axios(imaginaryUrl(path));
+  static get      = path => axios(backendUrl(path));
+  static getAsset = path => axios(assetUrl(path));
 
   static makeParams = params =>
     `${Object.entries(params)
@@ -33,9 +32,6 @@ export class Requests {
 class Api {
   static collection   = ({ id, language }) => Requests.get(`collections/${id}?${Requests.makeParams({ language })}`);
   static unit         = ({ id, language }) => Requests.get(`content_units/${id}?${Requests.makeParams({ language })}`);
-  static sources      = ({ language }) => Requests.get(`sources?${Requests.makeParams({ language })}`);
-  static tags         = ({ language }) => Requests.get(`tags?${Requests.makeParams({ language })}`);
-  static publishers   = ({ language }) => Requests.get(`publishers?${Requests.makeParams({ language })}`);
   static home         = ({ language }) => Requests.get(`home?${Requests.makeParams({ language })}`);
   static latestLesson = ({ language }) => Requests.get(`latestLesson?${Requests.makeParams({ language })}`);
   static sqdata       = ({ language }) => Requests.get(`sqdata?${Requests.makeParams({ language })}`);
@@ -50,16 +46,22 @@ class Api {
     Requests.get(`content_units?${Requests.makeParams({ page_no, page_size, content_type, ...rest })}`);
 
   static unitsStats = ({ contentTypes: content_type, ...rest }) =>
-    Requests.get(`/stats/cu_class?${Requests.makeParams({ content_type, ...rest })}`);
+    Requests.get(`stats/cu_class?${Requests.makeParams({ content_type, ...rest })}`);
 
-  static recentlyUpdated = () =>
-    Requests.get('recently_updated');
+  static tweets = ({ pageNo: page_no, pageSize: page_size, ...rest }) =>
+    Requests.get(`tweets?${Requests.makeParams({ page_no, page_size, ...rest })}`);
+
+  static posts = ({ pageNo: page_no, pageSize: page_size, ...rest }) =>
+    Requests.get(`posts?${Requests.makeParams({ page_no, page_size, ...rest })}`);
+
+  static post = (blog, id) =>
+    Requests.get(`posts/${blog}/${id}`);
 
   static autocomplete = ({ q, language }) =>
     Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 
-  static search = ({ q, language, pageNo: page_no, pageSize: page_size, sortBy: sort_by, deb, searchId: search_id }) =>
-    Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb, search_id })}`);
+  static search = ({ q, language, pageNo: page_no, pageSize: page_size, sortBy: sort_by, deb, suggest, searchId: search_id }) =>
+    Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb, suggest, search_id })}`);
 
   static click = ({ mdbUid: mdb_uid, index, type, rank, searchId: search_id }) =>
     Requests.get(`click?${Requests.makeParams({ mdb_uid, index, type, rank, search_id })}`);

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Grid, Container, Card, Divider } from 'semantic-ui-react';
 
-import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../helpers/consts';
+import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_UKRAINIAN } from '../../../helpers/consts';
 import { assetUrl } from '../../../helpers/Api';
 import { selectors as settings } from '../../../redux/modules/settings';
 import SectionHeader from '../../shared/SectionHeader';
@@ -109,7 +109,7 @@ const texts = [
   },
 ];
 
-class ProjectStatus extends Component {
+class HelpPage extends Component {
   static propTypes = {
     language: PropTypes.string.isRequired
   };
@@ -119,14 +119,25 @@ class ProjectStatus extends Component {
 
     let lang = language;
     switch (lang) {
-    case LANG_UKRAINIAN:
-      lang = LANG_RUSSIAN;
+    case LANG_HEBREW:
+      lang = LANG_HEBREW;
       break;
-    case LANG_SPANISH:
+      // case LANG_UKRAINIAN:
+      // case LANG_RUSSIAN:
+      //   lang = LANG_RUSSIAN;
+      //   break;
+    default:
       lang = LANG_ENGLISH;
       break;
-    default:
-      break;
+    }
+
+    let c    = clips;
+    let txts = texts;
+    if (lang !== LANG_HEBREW) {
+      c = [...clips];
+      c.splice(4, 1); // remove 4-2 in other langs
+      txts = [...texts];
+      txts.splice(4, 1); // remove 4-2 in other langs
     }
 
     return (
@@ -136,11 +147,11 @@ class ProjectStatus extends Component {
         <Container>
           <Grid stackable columns={3}>
             {
-              clips.map((x, i) => (
+              c.map((x, i) => (
                 <Grid.Column key={x}>
                   <Card fluid>
                     <Card.Content>
-                      <Card.Header>{texts[i].title[lang]}</Card.Header>
+                      <Card.Header>{txts[i].title[lang]}</Card.Header>
                     </Card.Content>
                     <Card.Content>
                       <div>
@@ -149,14 +160,14 @@ class ProjectStatus extends Component {
                           playsInline
                           preload="metadata"
                           type="video/mp4"
-                          src={assetUrl(`help/clip${x}.mp4`)}
+                          src={assetUrl(`help/${lang}/clip${x}.mp4`)}
                           poster={assetUrl(`help/clip${x}.jpg`)}
                           style={{ width: '100%', height: 'auto' }}
                         />
                       </div>
                     </Card.Content>
                     <Card.Content>
-                      {texts[i].description[lang]}
+                      {txts[i].description[lang]}
                     </Card.Content>
                   </Card>
                 </Grid.Column>
@@ -174,4 +185,4 @@ const mapState = state => ({
   language: settings.getLanguage(state.settings),
 });
 
-export default connect(mapState)(ProjectStatus);
+export default connect(mapState)(HelpPage);

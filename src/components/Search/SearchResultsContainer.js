@@ -58,13 +58,13 @@ class SearchResultsContainer extends Component {
   handlePageChange = (pageNo) => {
     const { setPage, search, query, pageSize, deb } = this.props;
     setPage(pageNo);
-    search(query, pageNo, pageSize, deb);
+    search(query, pageNo, pageSize, '' /* suggest */, deb);
   };
 
   handleSortByChanged = (e, data) => {
     const { setSortBy, search, query, pageSize, pageNo, deb } = this.props;
     setSortBy(data.value);
-    search(query, pageNo, pageSize, deb);
+    search(query, pageNo, pageSize, '' /* suggest */, deb);
   };
 
   handleFiltersChanged = () => {
@@ -73,7 +73,7 @@ class SearchResultsContainer extends Component {
 
   handleFiltersHydrated = () => {
     const { search, query, pageSize, pageNo, deb } = this.props;
-    search(query, pageNo, pageSize, deb);
+    search(query, pageNo, pageSize, '' /* suggest */, deb);
   };
 
   render() {
@@ -114,7 +114,7 @@ const mapState = (state) => {
 
   const cMap = results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
-      if (val._type === 'collections') {
+      if (val._source.result_type === 'collections') {
         const cID = val._source.mdb_uid;
         const c   = mdbSelectors.getDenormCollection(state.mdb, cID);
         if (c) {
@@ -127,7 +127,7 @@ const mapState = (state) => {
 
   const cuMap = results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
-      if (val._type === 'content_units') {
+      if (val._source.result_type === 'units') {
         const cuID = val._source.mdb_uid;
         const cu   = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
         if (cu) {

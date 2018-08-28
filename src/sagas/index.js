@@ -8,7 +8,6 @@ import { sagas as events } from './events';
 import { sagas as lessons } from './lessons';
 import { sagas as filters } from './filters';
 import { sagas as lists } from './lists';
-import { sagas as tags } from './tags';
 import { sagas as settings } from './settings';
 import { sagas as search } from './search';
 import { sagas as assets } from './assets';
@@ -24,7 +23,6 @@ const allSagas = [
   ...lessons,
   ...filters,
   ...lists,
-  ...tags,
   ...settings,
   ...search,
   ...assets,
