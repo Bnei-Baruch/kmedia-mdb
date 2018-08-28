@@ -45,7 +45,6 @@ class Sketches extends React.Component {
   setCurrentItem = (props) => {
     const { unit, zipIndexById, unzip } = props;
     const language                      = this.state.language || props.language;
-    // const language                      = selectedLanguage || props.language;
 
     // get one zip file or array of image files or one image file
     const files = this.findZipOrImageFiles(unit, language);
@@ -198,7 +197,6 @@ class Sketches extends React.Component {
     }
 
     const isRTL = RTL_LANGUAGES.includes(language);
-    console.log('isRTL:', isRTL);
 
     if (Array.isArray(imageObjsArr) && imageObjsArr.length > 0) {
       // prepare the image array for the gallery and sort it
@@ -207,7 +205,7 @@ class Sketches extends React.Component {
         .sort((a, b) => strCmp(a.original, b.original));
 
       return (
-        <div>
+        <div style={{direction: isRTL ? 'rtl' : 'ltr'}}>
           {
             languages && languages.length > 1 ?
               <Container fluid textAlign="center">
@@ -221,7 +219,7 @@ class Sketches extends React.Component {
               null
           }
           <ImageGallery
-            // lazyLoad
+            lazyLoad
             isRTL={isRTL}
             showFullscreenButton
             items={items}
@@ -231,8 +229,8 @@ class Sketches extends React.Component {
             showIndex={items.length > 1}
             showThumbnails={items.length > 1}
             onImageError={this.handleImageError}
-            renderLeftNav={isRTL ? this.renderRightNav : this.renderLeftNav}
-            renderRightNav={isRTL ? this.renderLeftNav : this.renderRightNav}
+            renderLeftNav={this.renderLeftNav}
+            renderRightNav={this.renderRightNav}
             renderFullscreenButton={this.renderFullscreenButton}
           />
         </div>
