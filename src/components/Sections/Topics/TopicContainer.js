@@ -160,7 +160,7 @@ class TopicContainer extends Component {
   renderBranch = (rootId) => {
     const rootNode = this.filteredById[rootId];
 
-    if (!rootNode.children || root.children.length === 0) {
+    if (!rootNode.children || rootNode.children.length === 0) {
       return null;
     }
 
