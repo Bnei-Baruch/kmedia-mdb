@@ -74,9 +74,6 @@ class SimpleModeContainer extends Component {
 
   handleLanguageChanged = (e, language) => {
     this.setState({ language });
-
-    const date = moment(this.state.date).format('YYYY-MM-DD');
-    this.props.fetchAllMedia({ date, language: this.props.language });
   };
 
   handleDayClick = (selectedDate) => {
