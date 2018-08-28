@@ -68,16 +68,16 @@ class Filters extends Component {
     const langDir = getLanguageDirection(language);
 
     let popupStyle = {
-      padding: 0,
+      // padding: 0,
       direction: langDir,
     };
     if (deviceInfo.device && deviceInfo.device.type === 'mobile') {
       popupStyle = {
         ...popupStyle,
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
+        // top: 0,
+        // left: 0,
+        // bottom: 0,
+        // right: 0,
       };
     }
 
@@ -87,7 +87,9 @@ class Filters extends Component {
         {/* <Menu secondary pointing stackable className="index-filters" size="large"> */}
         <Container className="padded">
           <Menu className="filters__menu" stackable>
-            <Menu.Item className="filters__header" header content={t('filters.by')} />
+            <Menu.Item 
+              className="filters__header"
+              header content={t('filters.by')} />
             {
               filters.map((item) => {
                 const { component: FilterComponent, name } = item;
@@ -119,13 +121,14 @@ class Filters extends Component {
 
                 return (
                   <Popup
+                    className="filter-popup"
                     basic
                     flowing
                     key={name}
                     trigger={
                       <Menu.Item
                       style={{flexShrink: len}}
-                      className={classNames(`filter filter--${name}`, {'filter--is-empty':!value})}
+                      className={classNames(`filter filter--${name}`, {'filter--is-empty':!value}, {'filter--is-active':isActive})}
                       // className={classNames('mediaplayer', { 'media-edit-mode': isEditMode })}
                       name={name}>
                         <div className="filter__wrapper">
@@ -168,7 +171,7 @@ class Filters extends Component {
                     onOpen={() => this.handlePopupOpen(name)}
                     style={popupStyle}
                   >
-                    <Popup.Content className={`filter-popup ${langDir}`}>
+                    <Popup.Content className={`filter-popup__content ${langDir}`}>
                       <FilterComponent
                         namespace={namespace}
                         value={value}

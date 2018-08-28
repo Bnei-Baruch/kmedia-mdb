@@ -229,8 +229,8 @@ class HierarchicalFilter extends Component {
     const { name, t } = this.props;
 
     return (
-      <Segment.Group>
-        <Segment secondary className="filter-popup__header">
+      <Segment.Group className="filter-popup__wrapper">
+        <Segment basic secondary className="filter-popup__header">
           <div className="title">
             <Button
               basic
@@ -257,7 +257,7 @@ class HierarchicalFilter extends Component {
             onChange={this.handleTermChange}
           />
         </Segment>
-        <Segment className="filter-popup__body">
+        <Segment basic className="filter-popup__body">
           <Menu vertical fluid size="small" className="hierarchy">
             {this.getFlatList()}
           </Menu>
