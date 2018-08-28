@@ -22,7 +22,7 @@
     }
 
     a {
-      color: rgba(0,0,0,.87);
+      color: rgba(0, 0, 0, .87);
       font-weight: normal !important;
     }
 
@@ -36,9 +36,12 @@
 .unit-header {
   font-weight: 300 !important;
   font-size: 18px;
-  margin-bottom: 12px !important;
+  margin: 12px 0 !important;
   color: #1a4179 !important;
-  margin-top: 24px !important;
+
+  &.no-margin {
+    margin: 0 !important;
+  }
 }
 
 .under-line {
