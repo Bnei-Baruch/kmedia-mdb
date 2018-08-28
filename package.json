@@ -96,7 +96,7 @@
     "react-copy-to-clipboard": "^5.0.0",
     "react-day-picker": "^7.1.4",
     "react-dom": "^16.2.0",
-    "react-easy-print": "^0.6.0-beta.2",
+    "react-easy-print": "^0.6.0-beta.3",
     "react-ga": "^2.4.1",
     "react-helmet": "^5.2.0",
     "react-i18next": "^7.5.0",

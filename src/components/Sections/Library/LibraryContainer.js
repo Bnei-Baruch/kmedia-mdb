@@ -372,7 +372,7 @@ class LibraryContainer extends Component {
                         <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
                         <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                         <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                        <Button compact size="small" icon="print" onClick={this.print}/>
+                        <Button compact size="small" icon="print" onClick={this.print} />
                       </div>
                     </Grid.Column>
                   </Grid.Row>
@@ -418,7 +418,7 @@ class LibraryContainer extends Component {
                 </Grid.Row>
               </Grid>
             </Container>
-        </div>
+          </div>
         </NoPrint>
       </PrintProvider>
     );

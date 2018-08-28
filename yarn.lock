@@ -8176,9 +8176,9 @@ react-dom@^16.2.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-react-easy-print@^0.6.0-beta.2:
-  version "0.6.0-beta.2"
-  resolved "https://registry.yarnpkg.com/react-easy-print/-/react-easy-print-0.6.0-beta.2.tgz#cf9268e5cf70005898bda5b90af2be0bb22cdd16"
+react-easy-print@^0.6.0-beta.3:
+  version "0.6.0-beta.3"
+  resolved "https://registry.yarnpkg.com/react-easy-print/-/react-easy-print-0.6.0-beta.3.tgz#e7f0439cabbfd91f651c99104bdd221843685edf"
   dependencies:
     load-styles "^2.0.0"
 
