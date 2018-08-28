@@ -93,7 +93,7 @@ export const renderCollection = (collection, language, t) => {
 
   return (
     <List.Item key={`t-${collection.id}`} className="no-thumbnail">
-      <List.Header className="unit-header under-line">
+      <List.Header className="unit-header under-line no-margin">
         {`${t(CT_DAILY_LESSON_I18N_KEY)}${collection.number ? ` ${t('lessons.list.number')}${collection.number}` : ''}`}
       </List.Header>
       <List.List>
