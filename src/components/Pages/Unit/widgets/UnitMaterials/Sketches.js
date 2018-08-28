@@ -205,7 +205,7 @@ class Sketches extends React.Component {
         .sort((a, b) => strCmp(a.original, b.original));
 
       return (
-        <div style={{direction: isRTL ? 'rtl' : 'ltr'}}>
+        <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
           {
             languages && languages.length > 1 ?
               <Container fluid textAlign="center">
@@ -242,7 +242,6 @@ class Sketches extends React.Component {
         {t('messages.no-images')}
       </Segment>
     );
-
   }
 }
 
