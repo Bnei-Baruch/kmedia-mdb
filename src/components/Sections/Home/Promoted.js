@@ -4,7 +4,7 @@ import { Header, Image } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
-import img from '../../../images/rosh_shana.jpeg';
+import img from '../../../images/rosh_shana.jpg';
 // import img from '../../../images/KKLO_ITALY_18_logo2.svg';
 
 // import img from '../../../images/archive_banner.jpg';
