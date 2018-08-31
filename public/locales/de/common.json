@@ -1,0 +1,478 @@
+{
+  "nav": {
+    "top": {
+      "header": "Kabbalah Media"
+    },
+    "sidebar": {
+      "lessons": "Lektionen und Vorlesungen",
+      "programs": "Programme",
+      "sources": "Bibliothek",
+      "events": "Kongresse, Veranstaltungen",
+      "books": "Bücher",
+      "topics": "Themen",
+      "publications": "Veröffentlichungen",
+      "photos": "Fotos",
+      "design": "Design",
+      "design2": "Layout",
+      "project-status": "Projektstatus",
+      "help": "Hilfe",
+      "old-site": "Alte Seite"
+    },
+    "footer": {
+      "copyright": "Copyright © 2003-{{year}}",
+      "rights": "Bnei Baruch - Kabbala La Am Association, Alle Rechte vorbehalten"
+    }
+  },
+  "filters": {
+    "by": "Filtern nach:",
+    "all": "Alles",
+    "date-filter": {
+      "label": "Datum",
+      "selectTitle": "Wählen Sie einen Datumsbereich",
+      "presets": {
+        "TODAY": "Heute",
+        "YESTERDAY": "Gestern",
+        "LAST_7_DAYS": "Letzte 7 Tage",
+        "LAST_30_DAYS": "Letzte 30 Tage",
+        "LAST_MONTH": "Letzter Monat",
+        "THIS_MONTH": "Dieser Monat",
+        "CUSTOM_RANGE": "Beliebiger Zeitraum"
+      },
+      "start": "Start",
+      "end": "Ende"
+    },
+    "sources-filter": {
+      "label": "Primäre Quellen",
+      "all": "Alle Quellen"
+    },
+    "topics-filter": {
+      "label": "Themen",
+      "all": "Alle Themen"
+    },
+    "publishers-filter": {
+      "label": "Veröffentlichungen"
+    },
+    "programs-filter": {
+      "label": "Programme",
+      "all": "Alle Programme",
+      "recently-updated": "Kürzlich aktualisiert",
+      "last-updated": "Zuletzt aktualisiert "
+    },
+    "locations-filter": {
+      "label": "Ort",
+      "all": "Alle Orte"
+    },
+    "holidays-filter": {
+      "label": "Feiertage",
+      "all": "Alle Feiertage"
+    },
+    "years-filter": {
+      "label": "Jahr",
+      "placeholder": "Wähle das Jahr"
+    },
+    "collections-filter": {
+      "label": "Sammlungen",
+      "all": "Alle Sammlungen"
+    },
+    "sections-filter": {
+      "label": "Abschnitt",
+      "lessons": "Lektionen und Vorlesungen",
+      "programs": "Programme",
+      "events": "Kongresse, Veranstaltungen",
+      "publications": "Veröffentlichungen",
+      "sources": "Primäre Quellen"
+    }
+  },
+  "buttons": {
+    "apply": "Übernehmen",
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "audio": "Audio",
+    "video": "Video",
+    "more": "Mehr",
+    "copy-link": "Link kopieren",
+    "search": "Suche",
+    "previous": "Zurück",
+    "next": "Nächstes",
+    "copy": "Kopieren"
+  },
+  "player": {
+    "messages": {
+      "edit-help": "Bewegen Sie den Cursor, um einen Teil des Videos auszuschneiden"
+    },
+    "buttons": {
+      "edit-back": "Zurück",
+      "start-position": "Start",
+      "end-position": "Ende",
+      "click-to-set": "Bestätigen"
+    },
+    "share": {
+      "title": "Dieses Video ansehen"
+    },
+    "error": {
+      "loading": "Beim Laden der Datei ist ein Fehler aufgetreten."
+    }
+  },
+  "messages": {
+    "loading": "Laden...",
+    "loading-subtext": "Warte...",
+    "server-error": "Serverfehler",
+    "not-found": "Autsch!",
+    "not-found-subtext": "Wir können nicht finden, wonach Sie suchen",
+    "no-files": "Keine Dateien",
+    "no-playable-files": "Keine Dateien zum Abspielen",
+    "no-results": "Keine Ergebnisse",
+    "pagination-results": "Ergebnisse {{start}} - {{end}} von {{total}}",
+    "link-copied-to-clipboard": "Link kopiert!",
+    "unknown": "Unbekannt",
+    "unsupported-media-format": "Nicht unterstütztes Format.",
+    "error-loading-file": "Fehler beim Herunterladen der Datei.",
+    "fallback-language": "Medien nicht in Deutsch gefunden, Backup-Sprache ausgewählt.",
+    "fallback-to-audio": "Video nicht gefunden, Audio wird verwendet.",
+    "fallback-to-video": "Audio nicht gefunden, Video wird verwendet.",
+    "source-content-not-found": "Ursprüngliche Quelle nicht gefunden",
+    "no-images": "Zeichnungen nicht gefunden"
+  },
+  "search": {
+    "header": {
+      "text": "Suchergebnisse",
+      "subtext": ""
+    },
+    "sortby": "Sortieren nach",
+    "sorts": {
+      "relevance": "Relevanz",
+      "newertoolder": "Neuere Ergebnisse zuerst anzeigen",
+      "oldertonewer": "Ältere Ergebnisse zuerst anzeigen"
+    },
+    "suggestions": {
+      "categories": {
+        "search": "Suche",
+        "tags": "Tags",
+        "sources": "Primäre Quellen",
+        "authors": "Autoren",
+        "persons": "Personen"
+      }
+    },
+    "results": {
+      "empty-query": "Geben Sie Ihre Anfrage in das obige Feld ein, um die Suche zu starten.",
+      "no-results": "Ihre Abfrage <1><0>{{query}}</0></1> wurde nicht gefunden."
+    },
+    "result": {
+      "description": "Beschreibung",
+      "transcript": "Transkript",
+      "content": "Text"
+    },
+    "intent-types": {
+      "lessons": "Tägliche Lektionen",
+      "programs": "Programme"
+    },
+    "intent-prefix": {
+      "lessons-topic": "Lessons zum Thema:",
+      "lessons-source": "Lektionen zu primären Quellen:",
+      "programs-topic": "Programme zum Thema:",
+      "programs-source": "Programme zu primären Quellen:"
+    }
+  },
+  "home": {
+    "header": {
+      "text": "Kabbala Medien",
+      "subtext": "Die weltweit größte Internet-Informationsquelle über Kabbala und den Sinn des Lebens. Tägliche Kabbala Lektionen mit dem Kabbalisten Dr. Michael Laitman. Das Archiv der Internationalen Kabbala-Akademie mit frei verfügbaren kabbalistischen Primärquellen, Büchern, Audio- und Videolektionen zum Herunterladen. Das Buch \"Sohar\". Eine Reihe von Fernsehsendungen zu Themen der persönlichen und sozialen Beziehungen, Gesundheit, Bildung und Wirtschaft aus der Sicht der Weisheit der Kabbala."
+    },
+    "search": "Öffne die Kabbala",
+    "sections": "Sektionen archivieren",
+    "updates": "Neueste Updates",
+    "last-lesson": "Die letzte Lektion",
+    "donate": "SPENDEN",
+    "promoted": {
+      "header": "Artikel für den Monat von Elul und Rosh HaShana",
+      "subheader": ""
+    }
+  },
+  "events": {
+    "header": {
+      "text": "Kongresse, Veranstaltungen",
+      "subtext": "In unserer Zeit, kennt die Wissenschaft der Kabbala keine Grenzen. In diesem Abschnitt erhalten Sie eine Vorstellung von den Veranstaltungen, Kongressen und Veranstaltungen der Organisation \"Kabbala la-am\" in Israel und auf der ganzen Welt."
+    },
+    "tabs": {
+      "conventions": "Kongresse",
+      "holidays": "Feiertage",
+      "unity-days": "Unity Days",
+      "friends-gatherings": "Versammlungen der Freunde",
+      "meals": "Mahlzeiten"
+    },
+    "list": {
+      "item_from": "Teil von:"
+    },
+    "ALL_EVENTS": "Alle Ereignisse",
+    "no-matches": "Ereignis nicht gefunden",
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Teile des gleichen Ereignisses"
+        }
+      }
+    },
+    "collection": {
+      "playlist": {
+        "preparation": "Vorbereitung",
+        "lessons": "Lektionen",
+        "other_parts": "Sonstiges",
+        "appendices": "Anhänge"
+      }
+    }
+  },
+  "lessons": {
+    "header": {
+      "text": "Lektionen und Vorträge",
+      "subtext": "Lektionen und Vorträge von Dr. Michael Laitman: virtuelle Lektionen, Vorträge für Frauen, einzigartige Aufzeichnungen von Rav Baruch Ashlag (Rabash) und vieles mehr."
+    },
+    "tabs": {
+      "daily": "Täglicher Unterricht",
+      "virtual": "Virtuelle Lektionen",
+      "lectures": "Vorträge",
+      "women": "Lektionen für Frauen",
+      "children": "Unterricht für Kinder",
+      "series": "Ausgewählte Trainingsserien"
+    },
+    "list": {
+      "related": "Bezogen auf",
+      "number": "Nr.",
+      "item_from": "Teil von:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Aus derselben Serie"
+        }
+      }
+    },
+    "unit-lesson-part": {
+      "recommended": {
+        "same-collection": {
+          "title": "Teile der gleichen Lektion",
+          "item-title": "Teil {{name}}"
+        }
+      }
+    },
+    "last": {
+      "title": "Die tägliche Kabbala Lektion - aktualisiert",
+      "description": "Aktualisierte Verknüpfung zur letzten täglichen Lektion"
+    }
+  },
+  "programs": {
+    "header": {
+      "text": "Programme",
+      "subtext": "Hier finden Sie eine große Auswahl an Programmen, darunter: interessante Gespräche über den Sinn des Lebens, relevante Themen, Programme für die ganze Familie, usw."
+    },
+    "genres": {
+      "documentary": "Dokumentationen",
+      "late-night": "Nachtprogramme",
+      "news": "Nachrichten",
+      "talk-show": "Talkshows",
+      "educational": "Bildungsprogramme",
+      "children": "Kinderprogramme",
+      "movies": "Filme",
+      "other": "Sonstiges"
+    },
+    "list": {
+      "episode_from": "Folge von:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Teil des Programms",
+          "item-title": "Episode {{name}}"
+        }
+      }
+    }
+  },
+  "publications": {
+    "header": {
+      "text": "Veröffentlichungen",
+      "subtext": "Artikel über aktuelle Ereignisse, Kultur, Volkswissenschaften, Beziehungen und vieles mehr, präsentiert von dem einzigartigen Standpunkt der Weisheit der Kabbala"
+    },
+    "tabs": {
+      "articles": "Artikel",
+      "twitter": "Twitter",
+      "blog": "Blog"
+    },
+    "list": {
+      "item_from": "Teil von:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Die übrigen Teile des gleichen Programms"
+        }
+      }
+    }
+  },
+  "pages": {
+    "collection": {
+      "items": {
+        "programs-collection": "Folge(n)",
+        "lessons-collection": "Teil(e)",
+        "publications-collection": "Artikel",
+        "event": "Teil(e)"
+      }
+    },
+    "unit": {
+      "info": {
+        "sources": "Quellen",
+        "topics": "Themen",
+        "collections": "Bezieht sich auf"
+      },
+      "recommended": {
+        "same-collection": {
+          "title": "Aus derselben Serie",
+          "item-title": "Teil {{name}}"
+        }
+      }
+    }
+  },
+  "materials": {
+    "summary": {
+      "header": "Zusammenfassung",
+      "no-summary": "Keine Zusammenfassung"
+    },
+    "transcription": {
+      "header": "Transkript",
+      "no-transcription": "Kein Transkript"
+    },
+    "sources": {
+      "header": "Quellen",
+      "no-sources": "Keine Quellen",
+      "no-source": "Quelle auswählen",
+      "no-source-available": "Quelle nicht verfügbar"
+    },
+    "sketches": {
+      "header": "Zeichnungen"
+    }
+  },
+  "sources-library": {
+    "header": {
+      "text": "Bibliothek",
+      "subtext": "Die wichtigste Sammlung von Original-Texten für das Studium der Kabbala, geschrieben von den größten Kabbalisten."
+    },
+    "no-source": "Quelle auswählen",
+    "toc": "Inhalt",
+    "az": "А-Z",
+    "default": "Standard",
+    "filter": "Filter..."
+  },
+  "media-downloads": {
+    "title": "Herunterladen",
+    "derived-title": "Medien Bestandteile",
+    "type-labels": {
+      "video": "Hauptvideo",
+      "audio": "Grundlegendes Audio",
+      "text": "Transkript",
+      "image": "Bild"
+    },
+    "lesson": {
+      "type-labels": {
+        "video": "Videolektionen",
+        "audio": "Audiolektionen",
+        "text": "Transkript",
+        "image": "Zeichnungen"
+      }
+    },
+    "program": {
+      "type-labels": {
+        "video": "Videoprogramme",
+        "audio": "Audioprogramme",
+        "text": "Transkript",
+        "image": "Zeichnungen"
+      }
+    },
+    "publication": {
+      "type-labels": {
+        "video": "Video",
+        "audio": "Audio",
+        "text": "Artikeltext",
+        "image": "Bilder"
+      }
+    }
+  },
+  "constants": {
+    "languages": {
+      "he": "Hebräisch",
+      "en": "Englisch",
+      "ru": "Russisch",
+      "es": "Spanisch",
+      "it": "Italienisch",
+      "de": "Deutsch",
+      "nl": "Niederländisch",
+      "fr": "Französisch",
+      "pt": "Portugiesisch",
+      "tr": "Türkisch",
+      "pl": "Polnisch",
+      "ar": "Arabisch",
+      "hu": "Ungarisch",
+      "fi": "Finnisch",
+      "lt": "Litauisch",
+      "ja": "Japanisch",
+      "bg": "Bulgarisch",
+      "ka": "Georgisch",
+      "no": "Norwegisch",
+      "sv": "Schwedisch",
+      "hr": "Kroatisch",
+      "zh": "Chinesisch",
+      "fa": "Persisch",
+      "ro": "Rumänisch",
+      "hi": "Indisch",
+      "ua": "Ukrainisch",
+      "mk": "Mazedonisch",
+      "sl": "Slowenisch",
+      "lv": "Lettisch",
+      "sk": "Slowakisch",
+      "cs": "Tschechisch"
+    },
+    "content-types": {
+      "DAILY_LESSON": "Tägliche Lektion",
+      "SPECIAL_LESSON": "Besondere Lektion",
+      "FRIENDS_GATHERINGS": "Versammlungen der Freunde",
+      "CONGRESS": "Kongress",
+      "VIDEO_PROGRAM": "Videoprogramm",
+      "LECTURE_SERIES": "Vortragsreihe",
+      "CHILDREN_LESSONS": "Unterrichte für Kinder",
+      "WOMEN_LESSONS": "Unterrichte für Frauen",
+      "VIRTUAL_LESSONS": "Virtuelle Lektionen",
+      "MEALS": "Mahlzeiten",
+      "HOLIDAY": "Feiertag",
+      "PICNIC": "Picknick",
+      "UNITY_DAY": "Unity Day",
+      "CLIPS": "Clips",
+      "ARTICLES": "Artikel",
+      "LESSON_PART": "Teil Nr. der Lektion",
+      "LECTURE": "Lektion",
+      "CHILDREN_LESSON": "Unterricht für Kinder",
+      "WOMEN_LESSON": "Unterricht für Frauen",
+      "VIRTUAL_LESSON": "Virtuelle Lektion",
+      "FRIENDS_GATHERING": "Versammlung der Freunde",
+      "MEAL": "Mahlzeit",
+      "VIDEO_PROGRAM_CHAPTER": "Teil des Programmes",
+      "FULL_LESSON": "Vollständige Lektion",
+      "ARTICLE": "Artikel",
+      "UNKNOWN": "Unbekannt",
+      "EVENT_PART": "Teil der Veranstaltung",
+      "CLIP": "Clip",
+      "TRAINING": "Training",
+      "KITEI_MAKOR": "Fragmente von Primärquellen",
+      "PUBLICATION": "Veröffentlichung",
+      "LELO_MIKUD": "Bearbeitet - Ohne Fokusgruppen"
+    },
+    "media-types": {
+      "video": "Video",
+      "audio": "Audio",
+      "image": "Zeichnungen",
+      "text": "Transskript",
+      "sheet": "Seite",
+      "banner": "Banner",
+      "presentation": "Präsentation"
+    }
+  },
+  "values": {
+    "date": "{{date, l}}"
+  }
+}

@@ -1,41 +1,48 @@
 import uniqBy from 'lodash/uniqBy';
 
 export class SuggestionsHelper {
-  constructor(autocompleteResults) {
+  constructor(results) {
     this.byType = {};
-    if (Array.isArray(autocompleteResults)) {
-      autocompleteResults.forEach((results) => {
-        if (results.suggest) {
-          results.suggest['classification_name'][0].options.forEach(x => this.$$addSuggestion(x, 'name'));
-          results.suggest['classification_description'][0].options.forEach(x => this.$$addSuggestion(x, 'description'));
-        }
-      });
+    if (results && results.suggest) {
+      results.suggest['title_suggest'][0].options.forEach(x => this.$$addSuggestion(x, 'title'));
     }
   }
 
-  getSuggestions = (type, topN = 5) => {
-    const x        = this.byType[type] || {};
-    const combined = uniqBy((x.name || []).concat(x.description || []), 'id');
+  getSuggestions = (result_type, topN = 5) => {
+    const x        = this.byType[result_type] || {};
+    // TODO: Order results here by heuristics (not sure the right place to do this):
+    // 1) Most detailed element title should be selected first.
+    // 2) Prefix match should be selected first
+    // Example: for query [some], suggest should return following order:
+    // [baal sulam > shamati > some]   <== This is an interesting case as the title is "some"
+    //                                     but we also have the path. "some" is better match then "something"
+    // [something]
+    // [something else]
+    // [baal sulam > some > other]     <== This is interesing, the title is "other", but in path
+    //                                     we have "some".
+    // [else something]
+    // [some > shamati > other]
+    const combined = uniqBy(x.title, 'id');
     return combined.slice(0, topN);
   };
 
   $$addSuggestion = (option, field) => {
-    const { _index, text, _type: type, _source } = option;
-    const { mdb_uid: id }                        = _source;
+    const { _index, _source } = option;
+    const { mdb_uid: id, result_type, [field]: text} = _source;
     // TODO: Fix that to return detected language explicitly!
     const language = _index.split('_').slice(-1)[0];
-    const item = { id, type, text, language };
+    const item = { id, result_type, text, language };
 
-    let typeItems = this.byType[type];
+    let typeItems = this.byType[result_type];
     if (typeItems) {
       const fieldItems = typeItems[field];
       if (Array.isArray(fieldItems)) {
         fieldItems.push(item);
       } else {
-        this.byType[type][field] = [item];
+        this.byType[result_type][field] = [item];
       }
     } else {
-      this.byType[type] = { [field]: [item] };
+      this.byType[result_type] = { [field]: [item] };
     }
   };
 };

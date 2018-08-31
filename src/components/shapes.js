@@ -168,6 +168,15 @@ export const Tweet = PropTypes.shape({
   raw: PropTypes.object.isRequired,
 });
 
+export const BlogPost = PropTypes.shape({
+  blog: PropTypes.string.isRequired,
+  wp_id: PropTypes.number.isRequired,
+  url: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+  created_at: PropTypes.string.isRequired,
+});
+
 export const filterPropShape = PropTypes.shape({
   name: PropTypes.string.isRequired,
   component: PropTypes.any.isRequired

@@ -217,7 +217,7 @@ export const COLLECTION_PUBLICATIONS_TYPE = [CT_ARTICLES];
 export const UNIT_LESSONS_TYPE            = [CT_LESSON_PART, /* CT_CHILDREN_LESSON, */ CT_WOMEN_LESSON, CT_VIRTUAL_LESSON, CT_FULL_LESSON, CT_LECTURE];
 export const UNIT_PROGRAMS_TYPE           = [CT_VIDEO_PROGRAM_CHAPTER];
 export const UNIT_EVENTS_TYPE             = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
-export const UNIT_PUBLICATIONS_TYPE       = [CT_PUBLICATION];
+export const UNIT_PUBLICATIONS_TYPE       = [CT_ARTICLE, CT_PUBLICATION];
 
 export const NO_NAME = '☠ no name';
 
@@ -249,9 +249,12 @@ export const BS_TAAS_PARTS = {
   mW6eON0z: 1887,
 };
 
-export const LANG_UI_LANGUAGES = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN];
-export const COOKIE_UI_LANG = 'archive_UIlang';
+// Persons
+export const RABASH_PERSON_UID = 'KxApZ4pI';
+
+export const COOKIE_UI_LANG    = 'archive_UIlang';
 export const COOKIE_CONTENT_LANG = 'archive_ContentLang';
+export const LANG_UI_LANGUAGES = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_GERMAN, LANG_UKRAINIAN];
 
 // Search
 export const SEARCH_INTENT_INDEX_TOPIC       = 'intent-tag';

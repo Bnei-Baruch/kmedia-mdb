@@ -1,18 +1,18 @@
 import React, { Fragment } from 'react';
 import { Container, Grid, Header, Item } from 'semantic-ui-react';
 
-import { canonicalLink } from '../../../helpers/links';
-import { neighborIndices, strCmp } from '../../../helpers/utils';
-import Link from '../../Language/MultiLanguageLink';
-import Helmets from '../../shared/Helmets';
-import { UnitContainer, wrap as wrapContainer } from '../../Pages/Unit/Container';
-import { UnitPage, wrap as wrapPage } from '../../Pages/Unit/Page';
+import { canonicalLink } from '../../../../../helpers/links';
+import { neighborIndices, strCmp } from '../../../../../helpers/utils';
+import Link from '../../../../Language/MultiLanguageLink';
+import Helmets from '../../../../shared/Helmets/index';
+import { UnitContainer, wrap as wrapContainer } from '../../../../Pages/Unit/Container';
+import { UnitPage, wrap as wrapPage } from '../../../../Pages/Unit/Page';
 import {
   SameCollectionContainer,
   wrap as wrapSameCollectionContainer
-} from '../../Pages/Unit/widgets/Recommended/SameCollection/Container';
-import SameCollectionWidget from '../../Pages/Unit/widgets/Recommended/SameCollection/Widget';
-import TranscriptionContainer from '../../Pages/Unit/widgets/UnitMaterials/Transcription/TranscriptionContainer';
+} from '../../../../Pages/Unit/widgets/Recommended/SameCollection/Container';
+import SameCollectionWidget from '../../../../Pages/Unit/widgets/Recommended/SameCollection/Widget';
+import TranscriptionContainer from '../../../../Pages/Unit/widgets/UnitMaterials/Transcription/TranscriptionContainer';
 
 class MySameCollectionWidget extends SameCollectionWidget {
   renderContent() {

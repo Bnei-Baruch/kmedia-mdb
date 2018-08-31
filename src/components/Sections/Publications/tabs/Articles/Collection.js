@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Table } from 'semantic-ui-react';
 
-import { NO_NAME } from '../../../helpers/consts';
-import { canonicalLink } from '../../../helpers/links';
-import { ellipsize } from '../../../helpers/strings';
-import Link from '../../Language/MultiLanguageLink';
-import Collection from '../../Pages/Collection/Container';
+import { NO_NAME } from '../../../../../helpers/consts';
+import { canonicalLink } from '../../../../../helpers/links';
+import { ellipsize } from '../../../../../helpers/strings';
+import Link from '../../../../Language/MultiLanguageLink';
+import Collection from '../../../../Pages/Collection/Container';
 
 class PublicationCollection extends Component {
   renderUnit = (unit, t) => {
