@@ -40,27 +40,27 @@ class SimpleModeContainer extends Component {
     this.handlePageChanged = this.handlePageChanged.bind(this);
     this.state             = {
       date: new Date(),
-      language: '',
+      filesLanguage: '',
     };
   }
 
   componentWillMount() {
-    if (!this.state.language) {
-      const { language } = this.props;
-      this.setState({ language });
+    if (!this.state.filesLanguage) {
+      const filesLanguage = this.props.language;
+      this.setState({ filesLanguage });
     }
   }
 
   componentDidMount() {
     const date         = moment(this.state.date).format('YYYY-MM-DD');
-    const { language } = this.state;
-    this.props.fetchAllMedia({ date, language });
+    const { filesLanguage } = this.state;
+    this.props.fetchAllMedia({ date, language: filesLanguage });
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.state.language) {
-      const { language } = nextProps;
-      this.setState({ language });
+    if (!this.state.filesLanguage) {
+      const filesLanguage = nextProps.language;
+      this.setState({ filesLanguage });
     }
   }
 
@@ -72,8 +72,8 @@ class SimpleModeContainer extends Component {
     window.scrollTo(0, 0);
   }
 
-  handleLanguageChanged = (e, language) => {
-    this.setState({ language });
+  handleLanguageChanged = (e, filesLanguage) => {
+    this.setState({ filesLanguage });
   };
 
   handleDayClick = (selectedDate) => {
@@ -85,8 +85,8 @@ class SimpleModeContainer extends Component {
   };
 
   render() {
-    const { items, wip, err, t, location } = this.props;
-    const { language }                     = this.state;
+    const { items, wip, err, t, language, location } = this.props;
+    const { filesLanguage }                     = this.state;
 
     return (
       <Page
@@ -94,7 +94,8 @@ class SimpleModeContainer extends Component {
         selectedDate={this.state.date}
         wip={wip}
         err={err}
-        language={language}
+        uiLanguage={language}
+        language={filesLanguage}
         t={t}
         location={location}
         renderUnit={renderUnitOrCollection}
