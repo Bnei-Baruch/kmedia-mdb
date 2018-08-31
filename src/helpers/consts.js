@@ -282,3 +282,5 @@ export const SEARCH_INTENT_SECTIONS = {
 };
 
 export const SUGGEST_LIMIT = 10;
+
+// TBD: add posts and tweets intents
