@@ -7,7 +7,8 @@ import { withRouter } from 'react-router-dom';
 import { push as routerPush, replace as routerReplace } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Input, Ref, Message, Popup } from 'semantic-ui-react';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
@@ -19,6 +20,9 @@ import Helmets from '../../shared/Helmets';
 import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
 import LibrarySettings from './LibrarySettings';
+import ShareBar from '../../AVPlayer/Share/ShareBar';
+
+const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -56,6 +60,8 @@ class LibraryContainer extends Component {
     fontSize: 0,
     theme: 'light',
     match: '',
+    share: false,
+    isCopyPopupOpen: false
   };
 
   componentDidMount() {
@@ -194,6 +200,10 @@ class LibraryContainer extends Component {
   handleSettings                 = (setting) => {
     this.setState(setting);
   };
+  handleShare                    = () => {
+    this.setState({ share: !this.state.share });
+  }
+
   fetchIndices                   = (sourceId) => {
     if (isEmpty(sourceId) || !isEmpty(this.props.indexMap[sourceId])) {
       return;
@@ -300,6 +310,20 @@ class LibraryContainer extends Component {
     );
   };
 
+  clearTimeout = () => {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+      this.timeout = null;
+    }
+  };
+
+  handleCopied = () => {
+    this.clearTimeout();
+    this.setState({ isCopyPopupOpen: true }, () => {
+      this.timeout = setTimeout(() => this.setState({ isCopyPopupOpen: false }), POPOVER_CONFIRMATION_TIMEOUT);
+    });
+  };
+
   render() {
     const { sourceId, indexMap, getSourceById, language, t } = this.props;
 
@@ -328,9 +352,11 @@ class LibraryContainer extends Component {
       );
     }
 
-    const { isReadable, fontSize, theme, fontType, secondaryHeaderHeight, tocIsActive, match, } = this.state;
+    const { isReadable, fontSize, theme, fontType, secondaryHeaderHeight,
+      tocIsActive, match, share, isCopyPopupOpen } = this.state;
 
     const matchString = this.matchString(parentId, t);
+    const url = window.location.href;
 
     return (
       <div
@@ -363,7 +389,26 @@ class LibraryContainer extends Component {
                     <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
+                    <Button compact size="small" icon="share alternate" onClick={this.handleShare} />
+                    { share ?
+                      <div className="share-bar" >
+                        <ShareBar url={url} t={t} buttonSize="mini" messageTitle="see the article" />
+                        <Message content={url} size="mini" />
+                        <Popup
+                          open={isCopyPopupOpen}
+                          content={t('messages.link-copied-to-clipboard')}
+                          position="right"
+                          trigger={
+                            <CopyToClipboard text={url} onCopy={this.handleCopied}>
+                              <Button compact size="small" content={t('buttons.copy')} />
+                            </CopyToClipboard>
+                          }
+                        />
+                      </div> :
+                      null
+                    }
                   </div>
+
                 </Grid.Column>
               </Grid.Row>
             </Grid>
@@ -394,6 +439,25 @@ class LibraryContainer extends Component {
                   [`size${fontSize}`]: true,
                 })}
               >
+                {/* { share ?
+                  <div className="mediaplayer__onscreen-share" >
+                    <ShareBar url={url} t={t} buttonSize="medium" />
+                    <div className="mediaplayer__onscreen-share-bar" >
+                      <Message content={url} size="mini" />
+                      <Popup
+                        open={isCopyPopupOpen}
+                        content={t('messages.link-copied-to-clipboard')}
+                        position="bottom right"
+                        trigger={
+                          <CopyToClipboard text={url} onCopy={this.handleCopied}>
+                            <Button className="shareCopyLinkButton" size="mini" content={t('buttons.copy')} />
+                          </CopyToClipboard>
+                        }
+                      />
+                    </div>
+                  </div> :
+                  null
+                } */}
                 <div ref={this.handleContextRef}>
                   <div
                     className="source__content"
