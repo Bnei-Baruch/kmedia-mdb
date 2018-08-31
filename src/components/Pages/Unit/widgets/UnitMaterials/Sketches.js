@@ -45,7 +45,6 @@ class Sketches extends React.Component {
   setCurrentItem = (props) => {
     const { unit, zipIndexById, unzip } = props;
     const language                      = this.state.language || props.language;
-    // const language                      = selectedLanguage || props.language;
 
     // get one zip file or array of image files or one image file
     const files = this.findZipOrImageFiles(unit, language);
@@ -197,6 +196,8 @@ class Sketches extends React.Component {
       imageObjsArr = imageObjs;
     }
 
+    const isRTL = RTL_LANGUAGES.includes(language);
+
     if (Array.isArray(imageObjsArr) && imageObjsArr.length > 0) {
       // prepare the image array for the gallery and sort it
       const items = imageObjsArr
@@ -204,7 +205,7 @@ class Sketches extends React.Component {
         .sort((a, b) => strCmp(a.original, b.original));
 
       return (
-        <div>
+        <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
           {
             languages && languages.length > 1 ?
               <Container fluid textAlign="center">
@@ -217,30 +218,28 @@ class Sketches extends React.Component {
               </Container> :
               null
           }
-          <div style={{ direction: 'ltr' }}>
-            <ImageGallery
-              lazyLoad
-              showFullscreenButton
-              items={items}
-              thumbnailPosition="top"
-              showPlayButton={false}
-              showBullets={false}
-              showIndex={items.length > 1}
-              showThumbnails={items.length > 1}
-              onImageError={this.handleImageError}
-              renderLeftNav={this.renderLeftNav}
-              renderRightNav={this.renderRightNav}
-              renderFullscreenButton={this.renderFullscreenButton}
-            />
-          </div>
+          <ImageGallery
+            lazyLoad
+            isRTL={isRTL}
+            showFullscreenButton
+            items={items}
+            thumbnailPosition="top"
+            showPlayButton={false}
+            showBullets={false}
+            showIndex={items.length > 1}
+            showThumbnails={items.length > 1}
+            onImageError={this.handleImageError}
+            renderLeftNav={this.renderLeftNav}
+            renderRightNav={this.renderRightNav}
+            renderFullscreenButton={this.renderFullscreenButton}
+          />
         </div>
       );
     }
 
-    const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
     return (
       <Segment basic>
-        <div style={{ direction }}>{t('messages.no-images')}</div>
+        {t('messages.no-images')}
       </Segment>
     );
   }
