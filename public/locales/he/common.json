@@ -314,7 +314,9 @@
       "subtext": "ריכוז כל המדיה של יום ספציפי"
     },
     "today-button": "היום",
-    "total-media-for-date": "כל המדיה לתאריך "
+    "total-media-for-date": "כל המדיה לתאריך ",
+    "media-language": "שפת המדיה",
+    "no-files-found": "אין קבצים לשפה שבחרת"
   },
   "help": {
     "header": {
