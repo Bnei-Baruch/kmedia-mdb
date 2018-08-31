@@ -102,7 +102,7 @@ class HomePage extends Component {
               <Grid width={15} centered className="homepage__iconsrow">
                 <Grid.Row>
                   {
-                    ['lessons', 'programs', 'sources', 'events', 'publications', 'simple-mode'].map(x =>
+                    ['lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
                       (
                         <Grid.Column mobile={5} tablet={3} computer={3} key={x} textAlign="center">
                           <Topic title={t(`nav.sidebar.${x}`)} img={sectionLogo[x]} href={`/${x}`} />
