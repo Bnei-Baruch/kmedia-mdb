@@ -10,9 +10,6 @@ class LibrarySettings extends Component {
 
   static defaultProps = {};
 
-  static getItem = () => (JSON.parse(localStorage.getItem('library-settings')) || {});
-  static setItem = value => localStorage.setItem('library-settings', JSON.stringify(value));
-
   state = {
     isOpen: false,
   };
@@ -27,6 +24,9 @@ class LibrarySettings extends Component {
   componentWillUnmount() {
     window.removeEventListener('resize', this.closePopup);
   }
+
+  static getItem = () => (JSON.parse(localStorage.getItem('library-settings')) || {});
+  static setItem = value => localStorage.setItem('library-settings', JSON.stringify(value));
 
   closePopup = () => {
     this.handlePopup(false);
