@@ -9,7 +9,7 @@ import { Icon, Input, Search } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../helpers/consts';
 import { SuggestionsHelper } from '../../helpers/search';
-import { getQuery, isDebMode, stringify as urlSearchStringify } from '../../helpers/url';
+import { getQuery, isDebMode } from '../../helpers/url';
 import { isEmpty } from '../../helpers/utils';
 import { filtersTransformer } from '../../filters';
 import { actions as filtersActions, selectors as filterSelectors } from '../../redux/modules/filters';
@@ -18,14 +18,6 @@ import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
 import * as shapes from '../shapes';
-
-const CATEGORIES_ICONS = {
-  search: 'search',
-  tags: 'tags',
-  sources: 'book',
-  authors: 'student',
-  persons: 'user',
-};
 
 export class OmniBox extends Component {
   static propTypes = {
@@ -125,45 +117,12 @@ export class OmniBox extends Component {
   };
 
   handleResultSelect = (e, data) => {
-    const { key, title, category } = data.result;
+    const { title } = data.result;
     const prevQuery = this.props.query;
 
-    switch (category) {
-    case 'search':
-      this.props.updateQuery(title);
-      this.props.setSuggest(prevQuery);
-      this.doSearch(title, prevQuery);
-      break;
-
-    case 'tags': {
-      const path        = this.props.getTagPath(key).map(p => p.id);
-      const query       = filtersTransformer.toQueryParams([
-        { name: 'topics-filter', values: [path], queryKey: 'topic' }
-      ]);
-      const queryString = urlSearchStringify(query);
-      this.props.setFilterValue('search', 'topics-filter', path);
-      this.props.updateQuery('');
-      this.props.setSuggest(prevQuery);
-      this.doSearch('', prevQuery, queryString);
-      break;
-    }
-
-    case 'sources': {
-      const path        = this.props.getSourcePath(key).map(p => p.id);
-      const query       = filtersTransformer.toQueryParams([
-        { name: 'sources-filter', values: [path], queryKey: 'source' }
-      ]);
-      const queryString = urlSearchStringify(query);
-      this.props.setFilterValue('search', 'sources-filter', path);
-      this.props.updateQuery('');
-      this.props.setSuggest(prevQuery);
-      this.doSearch('', prevQuery, queryString);
-      break;
-    }
-
-    default:
-      break;  // Currently ignoring anything else.
-    }
+    this.props.updateQuery(title);
+    this.props.setSuggest(prevQuery);
+    this.doSearch(title, prevQuery);
   };
 
   handleSearchKeyDown = (e) => {
@@ -218,16 +177,6 @@ export class OmniBox extends Component {
     className: RTL_LANGUAGES.includes(language) ? 'search-result-rtl' : '',
   });
 
-  renderCategory = (category) => {
-    const { name } = category;
-    return (
-      <div>
-        <Icon name={CATEGORIES_ICONS[name]} />
-        {this.props.t(`search.suggestions.categories.${name}`)}
-      </div>
-    );
-  };
-
   renderInput() {
     return <Input onKeyDown={e => this.handleSearchKeyDown(e)} />;
   }
@@ -236,61 +185,20 @@ export class OmniBox extends Component {
     const { language, query }   = this.props;
     const { suggestionsHelper } = this.state;
 
-    // build suggestions categories
-    const categories  = ['tags', 'sources', 'authors', 'persons'];
-    const textResults = new Set();
-    const results     = categories.reduce((acc, val) => {
-      const searchResults = suggestionsHelper.getSuggestions(val, 5);
-      if (searchResults.length > 0) {
-        searchResults.map(x => x.text)
-          .filter(x => !!x)
-          .forEach(x => textResults.add(x));
-
-        acc[val] = {
-          name: val,
-          results: searchResults.map(x =>
-            this.makeResult(x.language, this.suggestionToResult(val, x))),
-        };
-      }
-
-      return acc;
-    }, {});
-
-    // blend in text results
-    const finalResults = {};
-    if (textResults.size > 0) {
-      finalResults.search = {
-        name: 'search',
-        results: Array.from(textResults).map(q =>
-          this.makeResult(language, {
-            category: 'search',
-            key: `search_${q}`,
-            title: q
-          })),
-      };
-    }
-
-    // Object property creation order is important for us here
-    // (even though not a js spec most browsers implement it)
-    categories.map(x => results[x])
-      .filter(x => !!x)
-      .forEach((x) => {
-        finalResults[x.name] = x;
-      });
+    const results = Array.from(new Set(suggestionsHelper.getSuggestions())).map(s => (
+      this.makeResult(language, {key: s, title: s})));
 
     return (
       <Search
-        ref={(s) => { this.search = s; }}
-        category
+        ref={s => { this.search = s; }}
         fluid
         className="search-omnibox"
         size="mini"
-        results={finalResults}
+        results={results}
         value={query}
         input={this.renderInput()}
         icon={<Icon link name="search" onClick={() => this.doSearch()} />}
         showNoResults={false}
-        categoryRenderer={this.renderCategory}
         onSearchChange={this.handleSearchChange}
         onResultSelect={this.handleResultSelect}
       />

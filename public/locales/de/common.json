@@ -146,15 +146,6 @@
       "newertoolder": "Neuere Ergebnisse zuerst anzeigen",
       "oldertonewer": "Ältere Ergebnisse zuerst anzeigen"
     },
-    "suggestions": {
-      "categories": {
-        "search": "Suche",
-        "tags": "Tags",
-        "sources": "Primäre Quellen",
-        "authors": "Autoren",
-        "persons": "Personen"
-      }
-    },
     "results": {
       "empty-query": "Geben Sie Ihre Anfrage in das obige Feld ein, um die Suche zu starten.",
       "no-results": "Ihre Abfrage <1><0>{{query}}</0></1> wurde nicht gefunden."

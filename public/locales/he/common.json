@@ -146,15 +146,6 @@
       "newertoolder": "חדש לישן",
       "oldertonewer": "ישן לחדש"
     },
-    "suggestions": {
-      "categories": {
-        "search": "חיפוש",
-        "tags": "נושאים",
-        "sources": "מקורות",
-        "authors": "מחברים",
-        "persons": "אנשים"
-      }
-    },
     "results": {
       "empty-query": "לא הוזן טקסט לחיפוש. השתמש בתיבת החיפוש למעלה.",
       "no-results": "לא נמצאו תוצאות עבור <1><0>{{query}}</0></1>."

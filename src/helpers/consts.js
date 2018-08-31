@@ -258,6 +258,9 @@ export const COOKIE_UI_LANG    = 'archive_UIlang';
 export const LANG_UI_LANGUAGES = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_GERMAN, LANG_UKRAINIAN];
 
 // Search
+export const ES_RESULT_TYPE_SOURCES = "sources"
+export const ES_RESULT_TYPE_TAGS = "tags"
+
 export const SEARCH_INTENT_INDEX_TOPIC       = 'intent-tag';
 export const SEARCH_INTENT_INDEX_SOURCE      = 'intent-source';
 export const SEARCH_INTENT_HIT_TYPE_PROGRAMS = 'programs';
@@ -279,5 +282,7 @@ export const SEARCH_INTENT_SECTIONS = {
   [SEARCH_INTENT_HIT_TYPE_LESSONS]: 'lessons',
   [SEARCH_INTENT_HIT_TYPE_PROGRAMS]: 'programs',
 };
+
+export const SUGGEST_LIMIT = 10;
 
 // TBD: add posts and tweets intents
