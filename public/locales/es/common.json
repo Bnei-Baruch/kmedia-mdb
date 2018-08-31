@@ -143,15 +143,6 @@
       "newertoolder": "Nuevo a viejo",
       "oldertonewer": "Viejo a nuevo"
     },
-    "suggestions": {
-      "categories": {
-        "search": "Buscar",
-        "tags": "Temas",
-        "sources": "Fuentes",
-        "authors": "Autores",
-        "persons": "Personas"
-      }
-    },
     "results": {
       "empty-query": "No se ingresó texto de búsqueda. Use el cuadro de búsqueda de arriba.",
       "no-results": "No se encontraron resultados para <1><0>{{query}}</0></1>."

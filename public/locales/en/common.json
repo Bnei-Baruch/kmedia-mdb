@@ -145,15 +145,6 @@
       "newertoolder": "newer to older",
       "oldertonewer": "older to newer"
     },
-    "suggestions": {
-      "categories": {
-        "search": "Search",
-        "tags": "Tags",
-        "sources": "Sources",
-        "authors": "Authors",
-        "persons": "Persons"
-      }
-    },
     "results": {
       "empty-query": "No search term given. Please use the box above to search.",
       "no-results": "Your search for <1><0>{{query}}</0></1> found no results."

@@ -1,50 +1,59 @@
 import uniqBy from 'lodash/uniqBy';
+import { ES_RESULT_TYPE_SOURCES, ES_RESULT_TYPE_TAGS } from './consts';
 
 export class SuggestionsHelper {
   constructor(results) {
-    this.byType = {};
-    if (results && results.suggest) {
-      results.suggest['title_suggest'][0].options.forEach(x => this.$$addSuggestion(x, 'title'));
+    this.suggestions = [];
+
+    if (results && results.suggest && 'title_suggest' in results.suggest) {
+      const query = results.suggest['title_suggest'][0].text;
+      this.suggestions = results.suggest['title_suggest'][0].options.map(option => {
+        const { text, _source: { title, result_type } } = option;
+        const textParts = text.split(' ');
+        const splitChar = result_type === ES_RESULT_TYPE_SOURCES ? '>' : (result_type === ES_RESULT_TYPE_TAGS ? '-' : null)
+        const titleParts = !!splitChar ? title.split(splitChar) : [title]
+        const reversedTitleParts = titleParts.map(p => p.trim().split(' ').length).reverse();
+
+        let suggestWords = 0;
+        let reverseIdx = 0;
+        // Assume: length > 0 at start.
+        // Total of reversedTitleParts equals to length.
+        while (suggestWords < textParts.length) {
+          suggestWords += reversedTitleParts[reverseIdx];
+          reverseIdx++;
+        }
+        reverseIdx--;
+
+        const titleWords = title.split(' ');
+        let suggestWordsWithSeparator = 0;
+        while (suggestWords > 0) {
+          if (titleWords[titleWords.length - 1 - suggestWordsWithSeparator] !== splitChar) {
+            suggestWords--;
+          }
+          suggestWordsWithSeparator++;
+        }
+
+        return {
+          part: reverseIdx,
+          suggest: titleWords.slice(titleWords.length - suggestWordsWithSeparator).join(' '),
+        };
+      }).sort((a, b) => {
+        if (a.part !== b.part) {
+          return a.part - b.part;
+        }
+        if (a.suggest.startsWith(query) && !b.suggest.startsWith(query)) {
+          return -1;
+        } else if (!a.suggest.startsWith(query) && b.suggest.startsWith(query)) {
+          return 1;
+        }
+        return a.suggest.localeCompare(b.suggest);
+      }).map(o => o.suggest);
     }
   }
 
-  getSuggestions = (result_type, topN = 5) => {
-    const x        = this.byType[result_type] || {};
-    // TODO: Order results here by heuristics (not sure the right place to do this):
-    // 1) Most detailed element title should be selected first.
-    // 2) Prefix match should be selected first
-    // Example: for query [some], suggest should return following order:
-    // [baal sulam > shamati > some]   <== This is an interesting case as the title is "some"
-    //                                     but we also have the path. "some" is better match then "something"
-    // [something]
-    // [something else]
-    // [baal sulam > some > other]     <== This is interesing, the title is "other", but in path
-    //                                     we have "some".
-    // [else something]
-    // [some > shamati > other]
-    const combined = uniqBy(x.title, 'id');
-    return combined.slice(0, topN);
-  };
-
-  $$addSuggestion = (option, field) => {
-    const { _index, _source } = option;
-    const { mdb_uid: id, result_type, [field]: text} = _source;
-    // TODO: Fix that to return detected language explicitly!
-    const language = _index.split('_').slice(-1)[0];
-    const item = { id, result_type, text, language };
-
-    let typeItems = this.byType[result_type];
-    if (typeItems) {
-      const fieldItems = typeItems[field];
-      if (Array.isArray(fieldItems)) {
-        fieldItems.push(item);
-      } else {
-        this.byType[result_type][field] = [item];
-      }
-    } else {
-      this.byType[result_type] = { [field]: [item] };
-    }
-  };
+  getSuggestions() {
+    return this.suggestions;
+  }
 };
 
 const uidBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
