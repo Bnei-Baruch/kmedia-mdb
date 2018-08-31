@@ -220,8 +220,8 @@ class Sketches extends React.Component {
           }
           <ImageGallery
             lazyLoad
-            isRTL={isRTL}
             showFullscreenButton
+            isRTL={isRTL}
             items={items}
             thumbnailPosition="top"
             showPlayButton={false}
