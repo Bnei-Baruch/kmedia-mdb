@@ -17,8 +17,16 @@ const sourcesFilter = {
 
     // Make sure we have all items.
     // Location hydration probably happens before we receive sources
-    return path.some(x => !x) ? '' : path.map(x => x.name).join(' > ');
+    const lastIndex = path.length - 1;
+    return path.some(x => !x) ? '' : path.map((x,index) => breadCrumb(x,index,lastIndex)).join('<span class="filter__separator"> / </span>');
   }
 };
 
+const breadCrumb=(x,index,lastIndex)=>{
+  if(index===lastIndex){
+    return `<span class="filter__breadcrumb" title="${x.name}">${x.name}</span>`;
+  }else{
+    return `<span class="filter__breadcrumb" title="${x.name}">&hellip;</span>`;
+  }
+}
 export default createFilterDefinition(sourcesFilter);

@@ -13,7 +13,7 @@ const collectionsFilter = {
     }
 
     const collection = mdbSelectors.getCollectionById(store.getState().mdb, value);
-    return collection ? collection.name : value;
+    return collection ? `<span class="filter__breadcrumb">${collection.name}</span>` : value;
   }
 };
 
