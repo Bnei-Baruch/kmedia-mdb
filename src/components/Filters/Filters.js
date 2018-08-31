@@ -137,7 +137,7 @@ class Filters extends Component {
                           </small>
                           <span className="filter__state">
 
-                            <span  className="filter__text" dangerouslySetInnerHTML={{__html: label}} />
+                            <span  className="filter__text" dangerouslySetInnerHTML={{ __html: label }} />
                             {
                               isActive ?
                                 <Icon className="filter__fold-icon" name="dropdown" flipped="vertically" /> :

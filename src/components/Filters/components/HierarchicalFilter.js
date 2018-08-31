@@ -21,7 +21,6 @@ class HierarchicalFilter extends Component {
     onCancel: PropTypes.func,
     onApply: PropTypes.func,
     t: PropTypes.func.isRequired,
-    renderItem: PropTypes.func,
   };
 
   static defaultProps = {
@@ -29,7 +28,6 @@ class HierarchicalFilter extends Component {
     value: [],
     onCancel: noop,
     onApply: noop,
-    renderItem: x => x.text,
   };
 
   state = {
