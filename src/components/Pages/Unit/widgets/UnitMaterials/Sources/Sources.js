@@ -28,6 +28,7 @@ class Sources extends Component {
     selected: null,
     isMakor: false,
     language: null,
+    hasContent: false,
   };
 
   componentDidMount() {
@@ -191,8 +192,11 @@ class Sources extends Component {
       } = params;
 
     if (!selected || !language) {
+      this.setState({ hasContent: false });
       return;
     }
+    
+    this.setState({ hasContent: true });
 
     const { unit, indexMap, onContentChange } = props;
 
@@ -211,7 +215,7 @@ class Sources extends Component {
 
   render() {
     const { unit, content, doc2htmlById, t, indexMap, }        = this.props;
-    const { options, selected, isMakor, languages, language, } = this.state;
+    const { options, selected, isMakor, languages, language, hasContent} = this.state;
 
     // console.log('render', { props: this.props, state: this.state });
 
@@ -237,7 +241,6 @@ class Sources extends Component {
       contentStatus    = doc2htmlById[actualFile.id] || {};
     }
     const { wip: contentWip, err: contentErr, data: contentData } = contentStatus;
-
     let contents;
     if (contentErr) {
       if (contentErr.response && contentErr.response.status === 404) {
@@ -254,11 +257,18 @@ class Sources extends Component {
     } else if (isTaas && pdfFile) {
       contents =
         <PDF pdfFile={assetUrl(`sources/${selected}/${pdfFile}`)} pageNumber={1} startsFrom={startsFrom} />;
-    } else {
+    } else if (contentData && hasContent) {
       const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
       // eslint-disable-next-line react/no-danger
       contents        =
         <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: contentData }} />;
+    }
+    else {
+        contents = (
+          <FrownSplash
+            text={t('messages.source-content-not-found')}
+          />
+        );
     }
 
     return (
@@ -278,7 +288,7 @@ class Sources extends Component {
             </Grid.Column>
             {
               languages.length > 0 ?
-                <Grid.Column width={languages.length} textAlign="right">
+                <Grid.Column width={languages.length}>
                   <ButtonsLanguageSelector
                     languages={languages}
                     defaultValue={language}
