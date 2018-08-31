@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Header, Label } from 'semantic-ui-react';
+import { Card, Header } from 'semantic-ui-react';
 
 import { sectionThumbnailFallback } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';

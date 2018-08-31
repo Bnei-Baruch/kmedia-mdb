@@ -29,10 +29,6 @@ class FastDayPicker extends Component {
     onDayChange: noop,
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   state = {
     month: null,
   };

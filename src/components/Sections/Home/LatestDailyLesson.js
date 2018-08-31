@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Header, Image, Label } from 'semantic-ui-react';
+import { Header, Image } from 'semantic-ui-react';
 
 import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
 import * as shapes from '../../shapes';
