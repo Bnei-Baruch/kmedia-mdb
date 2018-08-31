@@ -77,7 +77,7 @@ const renderUnitsList = (units, language, t) =>
         <List.Content>
           <List.Header className="unit-header"> {unit.name || NO_NAME}</List.Header>
           <List.List className="horizontal-list">
-            {files}
+            {files.length ? files : <span className="no-files">{t('simple-mode.no-files-found')}</span>}
           </List.List>
         </List.Content>
       </List.Item>

@@ -635,7 +635,6 @@
   font-size: 16px;
 }
 
-
 /* ************* Styles for simple mode ************* */
 .summary-container {
   display: flex;
@@ -655,6 +654,11 @@
   padding-bottom: 16px !important;
   border-bottom: 1px solid #ebecf0;
   text-decoration: none !important;
+
+  .no-files {
+    font-size: 14px;
+    font-weight: bold;
+  }
 
   .media-file-button {
     height: 24px;
