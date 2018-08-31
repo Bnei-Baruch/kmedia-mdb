@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Header, Image, Label } from 'semantic-ui-react';
+import { Header, Image } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
-import Link from '../../Language/MultiLanguageLink';
 import img from '../../../images/rosh_shana.jpg';
 // import img from '../../../images/KKLO_ITALY_18_logo2.svg';
 
@@ -30,7 +29,7 @@ class Promoted extends Component {
 
     const header    = t('home.promoted.header');
     const subHeader = t('home.promoted.subheader');
-    const section   = t('events.header.text');
+    // const section   = t('events.header.text');
 
     return (
       <div className="thumbnail">
