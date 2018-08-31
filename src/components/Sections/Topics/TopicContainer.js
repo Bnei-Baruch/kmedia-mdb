@@ -16,6 +16,7 @@ import Link from '../../Language/MultiLanguageLink';
 class TopicContainer extends Component {
   static propTypes = {
     roots: PropTypes.arrayOf(PropTypes.string),
+    // eslint-disable-next-line
     byId: PropTypes.object,
     t: PropTypes.func.isRequired,
   };
@@ -117,6 +118,7 @@ class TopicContainer extends Component {
   hasChildren = node => (Array.isArray(node.children) && node.children.length > 0);
 
   renderLeaf = node => (
+    // eslint-disable-next-line
     <Link to={`/topics/${node.id}`}>
       {node.label}
     </Link>
@@ -148,6 +150,7 @@ class TopicContainer extends Component {
     this.hasChildren(node) ?
       <Fragment key={node.id}>
         <Header as="h3" className="topics__subtitle">
+          {/* eslint-disable-next-line */}
           <Link to={`/topics/${node.id}`}>
             {node.label}
           </Link>
@@ -167,6 +170,7 @@ class TopicContainer extends Component {
     return (
       <div key={rootId} className="topics__section">
         <Header as="h1" className="topics__title">
+          {/* eslint-disable-next-line */}
           <Link to={`/topics/${rootNode.id}`}>
             {rootNode.label}
           </Link>
