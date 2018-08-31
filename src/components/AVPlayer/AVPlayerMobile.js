@@ -169,7 +169,7 @@ class AVPlayerMobile extends PureComponent {
     const { sliceStart, firstSeek, playbackRate } = this.state;
     if (this.wasCurrentTime) {
       this.seekTo(this.wasCurrentTime);
-      this.wasCurrentTime    = undefined;
+      this.wasCurrentTime = undefined;
     } else if (firstSeek) {
       if (sliceStart) {
         this.seekTo(sliceStart);
@@ -252,23 +252,26 @@ class AVPlayerMobile extends PureComponent {
     this.media.currentTime = t;
 
     // Bug fix for android internal browser
-    if (!this.isSeekSuccess(t)) 
-      this.seekTimeout(t, 250);    
+    if (!this.isSeekSuccess(t)) {
+      this.seekTimeout(t, 250);
+    }
   };
 
   seekTimeout = (t, timeout) => {
-    setTimeout(()=> {
-      if (this.isSeekSuccess(t))
+    setTimeout(() => {
+      if (this.isSeekSuccess(t)) {
         return;
+      }
+
       this.media.currentTime = t;
-      if (!this.isSeekSuccess(t))
-          this.seekTimeout(t, timeout);      
-    }, timeout);    
+      if (!this.isSeekSuccess(t)) {
+        this.seekTimeout(t, timeout);
+      }
+    }, timeout);
   };
 
-  isSeekSuccess = (t) => {
-    return this.media.currentTime >= t;
-  }
+  isSeekSuccess = t =>
+    this.media.currentTime >= t;
 
   toggleSliceMode = () =>
     this.setState({ isSliceMode: !this.state.isSliceMode });
