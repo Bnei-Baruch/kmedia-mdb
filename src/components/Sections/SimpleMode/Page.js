@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { Container, Divider, Grid, Card, Button } from 'semantic-ui-react';
 import DayPicker from 'react-day-picker';
+import MomentLocaleUtils from 'react-day-picker/moment';
 import * as moment from 'moment/moment';
 
 import * as shapes from '../../shapes';
@@ -18,6 +19,7 @@ class SimpleModePage extends PureComponent {
     selectedDate: PropTypes.objectOf(Date),
     wip: shapes.WIP,
     err: shapes.Error,
+    uiLanguage: PropTypes.string.isRequired,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
@@ -40,7 +42,7 @@ class SimpleModePage extends PureComponent {
 
   render() {
     const
-      { items, selectedDate, wip, err, language, t, renderUnit, onDayClick, onLanguageChange } = this.props;
+      { items, selectedDate, wip, err, language, uiLanguage, t, renderUnit, onDayClick, onLanguageChange } = this.props;
 
     const DayPickerModifiers = {
       selected: selectedDate
@@ -64,18 +66,26 @@ class SimpleModePage extends PureComponent {
           <Grid>
             <Grid.Row>
               <Grid.Column mobile={16} tablet={16} computer={12}>
-                <h4>{t('simple-mode.total-media-for-date')} {moment(selectedDate).format('DD/MM/YY')}</h4>
+                <div className="summary-container">
+                  <h4>{t('simple-mode.total-media-for-date')}</h4>
+                  <span>{moment(selectedDate).format('l')}</span>
+                  <h4>{t('simple-mode.media-language')} </h4>
+                  <div className="dropdown-container">
+                    <DropdownLanguageSelector
+                      languages={ALL_LANGUAGES}
+                      defaultValue={language}
+                      onSelect={onLanguageChange}
+                    />
+                  </div>
+                </div>
                 {list}
               </Grid.Column>
               <Grid.Column mobile={16} tablet={16} computer={4}>
-                <DropdownLanguageSelector
-                  languages={ALL_LANGUAGES}
-                  defaultValue={language}
-                  onSelect={onLanguageChange}
-                />
                 <Card>
                   <DayPicker
+                    locale={uiLanguage}
                     modifiers={DayPickerModifiers}
+                    localeUtils={MomentLocaleUtils}
                     selectedDays={selectedDate}
                     disabledDays={{ after: new Date() }}
                     onDayClick={onDayClick}
