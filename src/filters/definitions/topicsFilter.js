@@ -1,6 +1,13 @@
 import { createFilterDefinition } from './util';
 import { selectors } from '../../redux/modules/tags';
 
+const breadCrumb = (x, index, lastIndex) => {
+  if (index === lastIndex) {
+    return `<span class="filter__breadcrumb" title="${x.label}">${x.label}</span>`;
+  }
+  return `<span class="filter__breadcrumb" title="${x.label}">&hellip;</span>`;
+};
+
 const topicsFilter = {
   name: 'topics-filter',
   queryKey: 'topic',
@@ -18,14 +25,12 @@ const topicsFilter = {
     // Make sure we have all items.
     // Location hydration probably happens before we receive sources
     const lastIndex = path.length - 1;
-    return path.some(x => !x) ? '' : path.map((x,index) => breadCrumb(x,index,lastIndex)).join('<span class="filter__separator"> / </span>');
+    return path.some(x => !x) ?
+      '' :
+      path
+        .map((x, index) => breadCrumb(x, index, lastIndex))
+        .join('<span class="filter__separator"> / </span>');
   }
 };
-const breadCrumb=(x,index,lastIndex)=>{
-  if(index===lastIndex){
-    return `<span class="filter__breadcrumb" title="${x.label}">${x.label}</span>`;
-  }else{
-    return `<span class="filter__breadcrumb" title="${x.label}">&hellip;</span>`;
-  }
-}
+
 export default createFilterDefinition(topicsFilter);

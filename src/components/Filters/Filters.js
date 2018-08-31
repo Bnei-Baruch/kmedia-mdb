@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
-import { Container, Header, Icon, Menu, Popup, Label } from 'semantic-ui-react';
+import { Container, Icon, Menu, Popup, Label } from 'semantic-ui-react';
 
 import { getLanguageDirection } from '../../helpers/i18n-utils';
 import { filtersTransformer } from '../../filters/index';
@@ -11,7 +12,6 @@ import { actions, selectors } from '../../redux/modules/filters';
 import { selectors as mdb } from '../../redux/modules/mdb';
 import { selectors as settings } from '../../redux/modules/settings';
 import { selectors as device } from '../../redux/modules/device';
-import classNames from 'classnames';
 import * as shapes from '../shapes';
 import FiltersHydrator from './FiltersHydrator';
 
@@ -88,8 +88,10 @@ class Filters extends Component {
         <Container className="padded">
           <Menu className="filters__menu" stackable>
             <Menu.Item
+              header
               className="filters__header"
-              header content={t('filters.by')} />
+              content={t('filters.by')}
+            />
             {
               filters.map((item) => {
                 const { component: FilterComponent, name } = item;
@@ -101,11 +103,12 @@ class Filters extends Component {
                 const label    = value ?
                   filtersTransformer.valueToTagLabel(name, value, this.props, store, t) :
                   t('filters.all');
-                  let len = ((name==='topics-filter' || name==='sources-filter') &&value) ? label.length : 0;
 
-                  // name==='topics-filter' || 'sources-filter' ? len = 1/label.length : len = 0
+                let len = ((name === 'topics-filter' || name === 'sources-filter') && value) ? label.length : 0;
 
-                  // console.log(name, len, value);
+                // name==='topics-filter' || 'sources-filter' ? len = 1/label.length : len = 0
+
+                // console.log(name, len, value);
                 // if (label && !Array.isArray(label) && label.endsWith('</span>')) {
                 //   let s = label.substring(0, len -7);
                 //   s = s.substring(s.lastIndexOf('>')+1);
@@ -127,17 +130,19 @@ class Filters extends Component {
                     key={name}
                     trigger={
                       <Menu.Item
-                      style={{flexShrink: len}}
-                      className={classNames(`filter filter--${name}`, {'filter--is-empty':!value}, {'filter--is-active':isActive})}
-                      // className={classNames('mediaplayer', { 'media-edit-mode': isEditMode })}
-                      name={name}>
+                        style={{ flexShrink: len }}
+                        className={classNames(`filter filter--${name}`,
+                          { 'filter--is-empty': !value },
+                          { 'filter--is-active': isActive })}
+                        name={name}
+                      >
                         <div className="filter__wrapper">
                           <small className="blue text filter__title">
                             {t(`filters.${name}.label`)}
                           </small>
                           <span className="filter__state">
 
-                            <span  className="filter__text" dangerouslySetInnerHTML={{ __html: label }} />
+                            <span className="filter__text" dangerouslySetInnerHTML={{ __html: label }} />
                             {
                               isActive ?
                                 <Icon className="filter__fold-icon" name="dropdown" flipped="vertically" /> :
@@ -149,14 +154,14 @@ class Filters extends Component {
                         {
                           value ?
                             <div className="filter__clear">
-                            <Label
-                              basic
-                              circular
-                              size="tiny"
-                              onClick={e => this.handleResetFilter(e, name)}
-                            >
-                              <Icon name="times" />
-                            </Label>
+                              <Label
+                                basic
+                                circular
+                                size="tiny"
+                                onClick={e => this.handleResetFilter(e, name)}
+                              >
+                                <Icon name="times" />
+                              </Label>
                             </div>
                             :
                             null
