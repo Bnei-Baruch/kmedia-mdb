@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Icon, Menu, Popup, } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
+import { Button, Icon, Menu, Popup, } from 'semantic-ui-react';
 
 class LibrarySettings extends Component {
   static propTypes = {

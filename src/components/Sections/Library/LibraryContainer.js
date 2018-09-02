@@ -176,35 +176,43 @@ class LibraryContainer extends Component {
     return this.firstLeafId(children[0]);
   };
 
-  handleContextRef               = (ref) => {
+  handleContextRef = (ref) => {
     this.contextRef = ref;
   };
-  handleAccordionContext         = (ref) => {
+
+  handleAccordionContext = (ref) => {
     this.accordionContext = ref;
   };
+
   handleSelectedAccordionContext = (ref) => {
     this.selectedAccordionContext = ref;
   };
-  handleSecondaryHeaderRef       = (ref) => {
+
+  handleSecondaryHeaderRef = (ref) => {
     this.secondaryHeaderRef = ref;
   };
-  handleContentHeaderRef         = (ref) => {
+
+  handleContentHeaderRef = (ref) => {
     this.contentHeaderRef = ref;
   };
-  handleTocIsActive              = () => {
+
+  handleTocIsActive = () => {
     this.setState({ tocIsActive: !this.state.tocIsActive });
   };
-  handleIsReadable               = () => {
+
+  handleIsReadable = () => {
     this.setState({ isReadable: !this.state.isReadable });
   };
-  handleSettings                 = (setting) => {
+
+  handleSettings = (setting) => {
     this.setState(setting);
   };
-  handleShare                    = () => {
-    this.setState({ share: !this.state.share });
-  }
 
-  fetchIndices                   = (sourceId) => {
+  handleShare = () => {
+    this.setState({ share: !this.state.share });
+  };
+
+  fetchIndices = (sourceId) => {
     if (isEmpty(sourceId) || !isEmpty(this.props.indexMap[sourceId])) {
       return;
     }
@@ -352,11 +360,21 @@ class LibraryContainer extends Component {
       );
     }
 
-    const { isReadable, fontSize, theme, fontType, secondaryHeaderHeight,
-      tocIsActive, match, share, isCopyPopupOpen } = this.state;
+    const
+      {
+        isReadable,
+        fontSize,
+        theme,
+        fontType,
+        secondaryHeaderHeight,
+        tocIsActive,
+        match,
+        share,
+        isCopyPopupOpen,
+      } = this.state;
 
     const matchString = this.matchString(parentId, t);
-    const url = window.location.href;
+    const url         = window.location.href;
 
     return (
       <div
@@ -379,7 +397,13 @@ class LibraryContainer extends Component {
                   <div className="source__header-toolbar">
                     {matchString}
                     {this.switchSortingOrder(parentId)}
-                    <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
+                    <Button
+                      compact
+                      size="small"
+                      className="computer-hidden large-screen-hidden widescreen-hidden"
+                      icon="list layout"
+                      onClick={this.handleTocIsActive}
+                    />
                   </div>
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
@@ -390,25 +414,25 @@ class LibraryContainer extends Component {
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
                     <Button compact size="small" icon="share alternate" onClick={this.handleShare} />
-                    { share ?
-                      <div className="share-bar" >
-                        <ShareBar url={url} t={t} buttonSize="mini" messageTitle="see the article" />
-                        <Message content={url} size="mini" />
-                        <Popup
-                          open={isCopyPopupOpen}
-                          content={t('messages.link-copied-to-clipboard')}
-                          position="right"
-                          trigger={
-                            <CopyToClipboard text={url} onCopy={this.handleCopied}>
-                              <Button compact size="small" content={t('buttons.copy')} />
-                            </CopyToClipboard>
-                          }
-                        />
-                      </div> :
-                      null
+                    {
+                      share ?
+                        <div className="share-bar">
+                          <ShareBar url={url} t={t} buttonSize="mini" messageTitle="see the article" />
+                          <Message content={url} size="mini" />
+                          <Popup
+                            open={isCopyPopupOpen}
+                            content={t('messages.link-copied-to-clipboard')}
+                            position="bottom right"
+                            trigger={
+                              <CopyToClipboard text={url} onCopy={this.handleCopied}>
+                                <Button compact size="small" content={t('buttons.copy')} />
+                              </CopyToClipboard>
+                            }
+                          />
+                        </div> :
+                        null
                     }
                   </div>
-
                 </Grid.Column>
               </Grid.Row>
             </Grid>
@@ -439,25 +463,6 @@ class LibraryContainer extends Component {
                   [`size${fontSize}`]: true,
                 })}
               >
-                {/* { share ?
-                  <div className="mediaplayer__onscreen-share" >
-                    <ShareBar url={url} t={t} buttonSize="medium" />
-                    <div className="mediaplayer__onscreen-share-bar" >
-                      <Message content={url} size="mini" />
-                      <Popup
-                        open={isCopyPopupOpen}
-                        content={t('messages.link-copied-to-clipboard')}
-                        position="bottom right"
-                        trigger={
-                          <CopyToClipboard text={url} onCopy={this.handleCopied}>
-                            <Button className="shareCopyLinkButton" size="mini" content={t('buttons.copy')} />
-                          </CopyToClipboard>
-                        }
-                      />
-                    </div>
-                  </div> :
-                  null
-                } */}
                 <div ref={this.handleContextRef}>
                   <div
                     className="source__content"
