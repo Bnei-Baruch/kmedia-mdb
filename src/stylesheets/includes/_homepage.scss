@@ -14,7 +14,7 @@
     .ui.horizontal.divider {
       &::before,
       &::after {
-        background-image: linear-gradient(to right,  lighten($blue, 40%));
+        background-image: linear-gradient(to right,  lighten($blue, 40%), lighten($blue, 40%));
         background-size: 100% 1px;
       }
     }
@@ -25,10 +25,15 @@
       padding-bottom: 2rem;
       padding-top: 1rem;
     }
+    background-attachment: fixed, scroll, scroll;
     background-image:
-    radial-gradient(ellipse farthest-corner at center bottom, lighten($blue, 10%) 0%, transparent 50%),
+    linear-gradient(to bottom, $blue, transparent),
+    radial-gradient(ellipse at bottom center, lighten($blue, 15%) 0, transparent 50%),
     linear-gradient(to bottom, $blue, lighten($blue, 5%))
     ;
+    background-position: center $main-menu-height, center center, center center;
+    background-repeat: no-repeat;
+    background-size: 100% 5rem, cover, cover;
     margin-top: 0;
     padding-bottom: 4rem;
     padding-top: 2rem;

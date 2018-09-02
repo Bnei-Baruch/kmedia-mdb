@@ -41,7 +41,7 @@ export const actions = {
 
 const initialState = {
   wip: false,
-  err: null,
+  error: null,
   getByID: identity,
   sections: [],
   units: [],
@@ -93,8 +93,12 @@ const onReceiveTags = (state, action) => {
     getPathByID,
     roots,
     displayRoots,
-    error: null,
   };
+};
+
+const getSectionOfUnit = (unit) => {
+  const s = canonicalLink(unit).split('/');
+  return s.length >= 3 ? s[1] : null;
 };
 
 const onDashboard = state => ({
@@ -102,13 +106,8 @@ const onDashboard = state => ({
   wip: true
 });
 
-const getSectionOfUnit = (unit) => {
-  const s = canonicalLink(unit).split('/');
-  return s.length >= 3 ? s[1] : null;
-};
-
 const onDashboardSuccess = (state, action) => {
-  const { data }                                       = action.payload;
+  const { data }                                           = action.payload;
   const { latest_units: latestUnits /* promoted_units */ } = data;
 
   if (Array.isArray(latestUnits)) {
@@ -147,7 +146,7 @@ export const reducer = handleActions({
 
   [FETCH_DASHBOARD]: onDashboard,
   [FETCH_DASHBOARD_SUCCESS]: onDashboardSuccess,
-  [FETCH_DASHBOARD_FAILURE]: (state, action) => ({ ...state, error: action.payload.err }),
+  [FETCH_DASHBOARD_FAILURE]: (state, action) => ({ ...state, wip: false, error: action.payload.err }),
 
   [RECEIVE_TAGS]: onReceiveTags
 
@@ -164,8 +163,12 @@ const getPathByID     = state => state.getPathByID;
 const getSections     = state => state.sections;
 const getUnits        = state => state.units;
 const getSectionUnits = state => state.getSectionUnits;
+const getWip          = state => state.wip;
+const getError        = state => state.error;
 
 export const selectors = {
+  getWip,
+  getError,
   getTags,
   getRoots,
   getDisplayRoots,

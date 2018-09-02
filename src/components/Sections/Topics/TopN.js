@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, Image, Button } from 'semantic-ui-react';
-import { translate } from 'react-i18next';
 
 import { NO_NAME } from '../../../helpers/consts';
 import { sectionLogo } from '../../../helpers/images';
@@ -83,6 +82,7 @@ class TopN extends React.PureComponent {
       <Table.Row key={unit.id} verticalAlign="top">
         <Table.Cell>
           <span className="index__date">{filmDate}</span>
+          { /* eslint-disable-next-line */ }
           <Link className="index__title" to={link}>
             {unit.name || NO_NAME}
           </Link>
@@ -126,4 +126,4 @@ class TopN extends React.PureComponent {
   }
 }
 
-export default translate()(TopN);
+export default TopN;

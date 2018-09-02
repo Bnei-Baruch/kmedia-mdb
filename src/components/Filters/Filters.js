@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
@@ -67,16 +68,16 @@ class Filters extends Component {
     const langDir = getLanguageDirection(language);
 
     let popupStyle = {
-      padding: 0,
+      // padding: 0,
       direction: langDir,
     };
     if (deviceInfo.device && deviceInfo.device.type === 'mobile') {
       popupStyle = {
         ...popupStyle,
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
+        // top: 0,
+        // left: 0,
+        // bottom: 0,
+        // right: 0,
       };
     }
 
@@ -86,7 +87,11 @@ class Filters extends Component {
         {/* <Menu secondary pointing stackable className="index-filters" size="large"> */}
         <Container className="padded">
           <Menu className="filters__menu" stackable>
-            <Menu.Item className="filters__header" header content={t('filters.by')} />
+            <Menu.Item
+              header
+              className="filters__header"
+              content={t('filters.by')}
+            />
             {
               filters.map((item) => {
                 const { component: FilterComponent, name } = item;
@@ -99,30 +104,56 @@ class Filters extends Component {
                   filtersTransformer.valueToTagLabel(name, value, this.props, store, t) :
                   t('filters.all');
 
+                let len = ((name === 'topics-filter' || name === 'sources-filter') && value) ? label.length : 0;
+
+                // name==='topics-filter' || 'sources-filter' ? len = 1/label.length : len = 0
+
+                // console.log(name, len, value);
+                // if (label && !Array.isArray(label) && label.endsWith('</span>')) {
+                //   let s = label.substring(0, len -7);
+                //   s = s.substring(s.lastIndexOf('>')+1);
+
+                //   // let x = label.split('<span class="filter__separator"> / </span>').join('');
+                //   // x = x.split('<span class="filter__breadcrumb">').join('');
+                //   // x = x.split('</span>').join('');
+                //   // len = s.length;
+                //   // len = x.length - s.length;
+                //   len = 1/s.length;
+                //   console.log('Filters last element length:', s);
+                // }
+
                 return (
                   <Popup
+                    className="filter-popup"
                     basic
                     flowing
                     key={name}
                     trigger={
-                      <Menu.Item className="filter" name={name}>
-                        <div className="filter__content">
-                          <small className="blue text">
+                      <Menu.Item
+                        style={{ flexShrink: len }}
+                        className={classNames(`filter filter--${name}`,
+                          { 'filter--is-empty': !value },
+                          { 'filter--is-active': isActive })}
+                        name={name}
+                      >
+                        <div className="filter__wrapper">
+                          <small className="blue text filter__title">
                             {t(`filters.${name}.label`)}
                           </small>
-                          <span>
-                            {label}
+                          <span className="filter__state">
+
+                            <span className="filter__text" dangerouslySetInnerHTML={{ __html: label }} />
                             {
                               isActive ?
-                                <Icon name="dropdown" flipped="vertically" /> :
-                                <Icon name="dropdown" />
+                                <Icon className="filter__fold-icon" name="dropdown" flipped="vertically" /> :
+                                <Icon className="filter__fold-icon" name="dropdown" />
                             }
                           </span>
                         </div>
 
                         {
                           value ?
-                            <div className="clear-filter">
+                            <div className="filter__clear">
                               <Label
                                 basic
                                 circular
@@ -145,7 +176,7 @@ class Filters extends Component {
                     onOpen={() => this.handlePopupOpen(name)}
                     style={popupStyle}
                   >
-                    <Popup.Content className={`filter-popup ${langDir}`}>
+                    <Popup.Content className={`filter-popup__content ${langDir}`}>
                       <FilterComponent
                         namespace={namespace}
                         value={value}

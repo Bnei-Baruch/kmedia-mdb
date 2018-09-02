@@ -4,12 +4,14 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Grid, Container, Breadcrumb, Header } from 'semantic-ui-react';
+import { translate } from 'react-i18next';
 
 import { actions, selectors } from '../../../redux/modules/tags';
 import { isEmpty } from '../../../helpers/utils';
 import { RTL_LANGUAGES } from '../../../helpers/consts';
 import * as shapes from '../../shapes';
 import TopN from './TopN';
+import WipErr from '../../shared/WipErr/WipErr';
 
 export const topNItems = 5;
 
@@ -19,8 +21,16 @@ class TopicPage extends Component {
       getSectionUnits: PropTypes.func.isRequired,
       getPathByID: PropTypes.func,
       match: shapes.RouterMatch.isRequired,
-      fetchDashboard: PropTypes.func.isRequired
+      fetchDashboard: PropTypes.func.isRequired,
+      t: PropTypes.func.isRequired,
+      wip: shapes.WIP,
+      error: shapes.Error,
     }
+
+    static defaultProps = {
+      wip: false,
+      error: null
+    };
 
     componentDidMount() {
       this.loadTopic(this.props);
@@ -33,16 +43,21 @@ class TopicPage extends Component {
       }
     }
 
-    loadTopic = (nextProps) => {
-      const { fetchDashboard, match } = nextProps;
+    loadTopic = (props) => {
+      const { fetchDashboard, match } = props;
       const tagId = match.params.id;
 
       fetchDashboard(tagId);
     }
 
     render() {
-      const { sections, getSectionUnits, getPathByID, match } = this.props;
+      const { sections, getSectionUnits, getPathByID, match, t, wip, error } = this.props;
       const { id: tagId, language } = match.params;
+
+      const wipErr = WipErr({ wip, error, t });
+      if (wipErr) {
+        return wipErr;
+      }
 
       if (getPathByID && !isEmpty(sections)) {
         const tagPath = getPathByID(tagId);
@@ -75,6 +90,7 @@ class TopicPage extends Component {
                         units={sectionUnits}
                         N={topNItems}
                         tagPath={tagPath}
+                        t={t}
                       />
                     </Grid.Column>;
                 })
@@ -90,6 +106,8 @@ class TopicPage extends Component {
 
 export default withRouter(connect(
   state => ({
+    wip: selectors.getWip(state.tags),
+    error: selectors.getError(state.tags),
     sections: selectors.getSections(state.tags),
     getSectionUnits: selectors.getSectionUnits(state.tags),
     getPathByID: selectors.getPathByID(state.tags)
@@ -97,4 +115,4 @@ export default withRouter(connect(
   dispatch => bindActionCreators({
     fetchDashboard: actions.fetchDashboard
   }, dispatch)
-)(TopicPage));
+)(translate()(TopicPage)));
