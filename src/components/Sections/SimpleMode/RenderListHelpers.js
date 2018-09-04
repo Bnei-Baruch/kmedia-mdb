@@ -11,6 +11,8 @@ import {
   NO_NAME,
   VS_NAMES
 } from '../../../helpers/consts';
+import Link from '../../../components/Language/MultiLanguageLink';
+import { canonicalLink } from '../../../helpers/links';
 
 const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
 const CDN_URL                  = process.env.REACT_APP_CDN_URL;
@@ -75,7 +77,9 @@ const renderUnitsListForDesktop = (units, language, t) =>
     return (
       <List.Item key={`u-${unit.id}`} className="unit-header">
         <List.Content>
-          <List.Header className="unit-header"> {unit.name || NO_NAME}</List.Header>
+          <List.Header className="unit-header">
+            <Link to={canonicalLink(unit)}>{unit.name || NO_NAME}</Link>
+          </List.Header>
           <List.List className="horizontal-list">
             {files.length ? files : <span className="no-files">{t('simple-mode.no-files-found')}</span>}
           </List.List>
@@ -92,7 +96,9 @@ const renderUnitsListForMobile = (units, language, t) =>
     return (
       <Card key={`u-${unit.id}`}>
         <Card.Content>
-          <Card.Header className="unit-header">{unit.name || NO_NAME}</Card.Header>
+          <Card.Header className="unit-header">
+            <Link to={canonicalLink(unit)}>{unit.name || NO_NAME}</Link>
+          </Card.Header>
         </Card.Content>
         <Card.Content extra>
           <List.List className="horizontal-list">
@@ -114,7 +120,9 @@ export const renderCollection = (collection, language, t, isMobile) => {
   return (
     <List.Item key={`c-${collection.id}`} className="no-thumbnail">
       <List.Header className="unit-header under-line no-margin">
-        {`${t(CT_DAILY_LESSON_I18N_KEY)}${collection.number ? ` ${t('lessons.list.number')}${collection.number}` : ''}`}
+        <Link to={canonicalLink(collection)}>
+          {`${t(CT_DAILY_LESSON_I18N_KEY)}${collection.number ? ` ${t('lessons.list.number')}${collection.number}` : ''}`}
+        </Link>
       </List.Header>
       <List.List>
         {units}
