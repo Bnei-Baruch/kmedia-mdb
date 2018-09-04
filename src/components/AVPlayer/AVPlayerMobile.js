@@ -282,9 +282,8 @@ class AVPlayerMobile extends PureComponent {
     }, timeout);    
   };
 
-  isSeekSuccess = (t) => {
-    return this.media.currentTime >= t;
-  }
+  isSeekSuccess = t =>
+    this.media.currentTime >= t;
 
   toggleSliceMode = () =>
     this.setState({ isSliceMode: !this.state.isSliceMode });

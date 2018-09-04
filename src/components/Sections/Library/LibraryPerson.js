@@ -51,7 +51,6 @@ class LibraryPerson extends Component {
         <Grid>
           <Grid.Row>
             <Grid.Column>
-              {/* eslint-disable-next-line react/no-danger */}
               <div className="readble-width" dangerouslySetInnerHTML={{ __html: contentData }} />
             </Grid.Column>
           </Grid.Row>
