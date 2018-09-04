@@ -42,11 +42,15 @@ class Filters extends Component {
     activeFilter: null,
   };
 
-  handlePopupClose = () =>
+  handlePopupClose = () =>{
     this.setState({ activeFilter: null });
+    document.getElementsByTagName("body")[0].classList.remove('noscroll');
+  }
 
-  handlePopupOpen = activeFilter =>
+  handlePopupOpen = activeFilter =>{
     this.setState({ activeFilter });
+    document.getElementsByTagName("body")[0].classList.add('noscroll');
+  }
 
   handleApply = (name, value) => {
     this.handlePopupClose();
