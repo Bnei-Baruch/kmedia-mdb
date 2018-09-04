@@ -357,7 +357,8 @@
     "toc": "Tabla de Contenido",
     "az": "AZ",
     "default": "Por Omisión",
-    "filter": "Filtro..."
+    "filter": "Filtro...",
+    "share-title": "Read this article"
   },
   "media-downloads": {
     "title": "Descargar archivos",

@@ -366,7 +366,8 @@
     "toc": "Table of contents",
     "az": "AZ",
     "default": "Default",
-    "filter": "Filter..."
+    "filter": "Filter...",
+    "share-title": "Read this article"
   },
   "media-downloads": {
     "title": "Media Downloads",

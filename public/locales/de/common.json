@@ -358,7 +358,8 @@
     "toc": "Inhalt",
     "az": "А-Z",
     "default": "Standard",
-    "filter": "Filter..."
+    "filter": "Filter...",
+    "share-title": "Read this article"
   },
   "media-downloads": {
     "title": "Herunterladen",

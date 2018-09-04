@@ -430,7 +430,7 @@ class LibraryContainer extends Component {
                       onOpen={() => this.handlePopup(true)}
                     >
                       <Popup.Content>
-                        <ShareBar url={url} t={t} buttonSize="mini" messageTitle="see the article" />
+                        <ShareBar url={url} t={t} buttonSize="mini" messageTitle={t('sources-library.share-title')} />
                         <Message content={url} size="mini" />
                         <Popup // link was copied message popup
                           open={isCopyPopupOpen}

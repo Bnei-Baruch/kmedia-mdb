@@ -122,7 +122,7 @@
     "no-playable-files": "לא נמצאו קבצים מתאימים לתצוגה",
     "no-results": "לא נמצאו תוצאות",
     "pagination-results": "תוצאות {{start}} - {{end}} מתוך {{total}}",
-    "link-copied-to-clipboard": "הקישור הועתק ללוח בהצלחה!",
+    "link-copied-to-clipboard": "!הקישור הועתק ללוח בהצלחה",
     "unknown": "לא ידוע",
     "unsupported-media-format": "פורמט לא נתמך.",
     "error-loading-file": "טעות בהעלאת קובץ.",
@@ -364,7 +364,8 @@
     "toc": "תוכן עניינים",
     "az": "אב",
     "default": "ברירת מחדל",
-    "filter": "סנן..."
+    "filter": "סנן...",
+    "share-title": "קראו את המאמר"
   },
   "media-downloads": {
     "title": "קבצים להורדה",
