@@ -11,9 +11,9 @@ import WipErr from '../../shared/WipErr/WipErr';
 import SectionHeader from '../../shared/SectionHeader';
 import { ALL_LANGUAGES } from '../../../helpers/consts';
 import DropdownLanguageSelector from '../../Language/Selector/DropdownLanguageSelector';
-import SimpleModeList from './List';
+import SimpleModeDesktopList from './DesktopList';
 
-class SimpleModePage extends PureComponent {
+class SimpleModeDesktopPage extends PureComponent {
   static propTypes = {
     items: PropTypes.objectOf(shapes.SimpleMode),
     selectedDate: PropTypes.objectOf(Date),
@@ -30,7 +30,7 @@ class SimpleModePage extends PureComponent {
   };
 
   static defaultProps = {
-    items: [],
+    items: null,
     selectedDate: new Date(),
     wip: false,
     err: null,
@@ -52,7 +52,7 @@ class SimpleModePage extends PureComponent {
       <div>
         {
           items ?
-            <SimpleModeList items={items} language={language} t={t} renderUnit={renderUnit} /> :
+            <SimpleModeDesktopList items={items} language={language} t={t} renderUnit={renderUnit} /> :
             null
         }
       </div>
@@ -107,4 +107,4 @@ class SimpleModePage extends PureComponent {
   }
 }
 
-export default translate()(SimpleModePage);
+export default translate()(SimpleModeDesktopPage);

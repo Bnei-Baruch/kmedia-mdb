@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Container, Table, List } from 'semantic-ui-react';
+import { Container, List } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 
-class SimpleModeList extends PureComponent {
+class SimpleModeDesktopList extends PureComponent {
   static propTypes = {
     items: PropTypes.objectOf(shapes.SimpleMode),
     language: PropTypes.string.isRequired,
@@ -19,6 +19,7 @@ class SimpleModeList extends PureComponent {
 
   render() {
     const { items, language, t, renderUnit } = this.props;
+    const isMobile                           = false;
 
     const content = (
       <div>
@@ -26,7 +27,7 @@ class SimpleModeList extends PureComponent {
           {
             items.lessons ?
               <List size="large">
-                {items.lessons.map(x => renderUnit(x, language, t))}
+                {items.lessons.map(x => renderUnit(x, language, t, isMobile))}
               </List> :
               null
           }
@@ -34,7 +35,7 @@ class SimpleModeList extends PureComponent {
           {
             items.others ?
               <List size="large">
-                {renderUnit(items.others, language, t)}
+                {renderUnit(items.others, language, t, isMobile)}
               </List> :
               null
           }
@@ -50,4 +51,4 @@ class SimpleModeList extends PureComponent {
   }
 }
 
-export default translate()(SimpleModeList);
+export default translate()(SimpleModeDesktopList);
