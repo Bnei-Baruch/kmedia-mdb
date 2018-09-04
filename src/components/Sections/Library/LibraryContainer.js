@@ -60,7 +60,7 @@ class LibraryContainer extends Component {
     fontSize: 0,
     theme: 'light',
     match: '',
-    share: false,
+    isSharePopupOpen: false,
     isCopyPopupOpen: false
   };
 
@@ -208,8 +208,12 @@ class LibraryContainer extends Component {
     this.setState(setting);
   };
 
-  handleShare = () => {
-    this.setState({ share: !this.state.share });
+  // handleShare = () => {
+  //   this.setState({ share: !this.state.share });
+  // };
+
+  handlePopup = (isSharePopupOpen) => {
+    this.setState({ isSharePopupOpen });
   };
 
   fetchIndices = (sourceId) => {
@@ -369,8 +373,8 @@ class LibraryContainer extends Component {
         secondaryHeaderHeight,
         tocIsActive,
         match,
-        share,
         isCopyPopupOpen,
+        isSharePopupOpen,
       } = this.state;
 
     const matchString = this.matchString(parentId, t);
@@ -413,25 +417,33 @@ class LibraryContainer extends Component {
                     <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                    <Button compact size="small" icon="share alternate" onClick={this.handleShare} />
-                    {
-                      share ?
-                        <div className="share-bar">
-                          <ShareBar url={url} t={t} buttonSize="mini" messageTitle="see the article" />
-                          <Message content={url} size="mini" />
-                          <Popup
-                            open={isCopyPopupOpen}
-                            content={t('messages.link-copied-to-clipboard')}
-                            position="bottom right"
-                            trigger={
-                              <CopyToClipboard text={url} onCopy={this.handleCopied}>
-                                <Button compact size="small" content={t('buttons.copy')} />
-                              </CopyToClipboard>
-                            }
-                          />
-                        </div> :
-                        null
-                    }
+                    <Popup // share bar popup
+                      className="share-bar"
+                      on="click"
+                      flowing
+                      hideOnScroll
+                      content={t('messages.link-copied-to-clipboard')}
+                      position="bottom right"
+                      trigger={<Button compact size="small" icon="share alternate" />}
+                      open={isSharePopupOpen}
+                      onClose={() => this.handlePopup(false)}
+                      onOpen={() => this.handlePopup(true)}
+                    >
+                      <Popup.Content>
+                        <ShareBar url={url} t={t} buttonSize="mini" messageTitle="see the article" />
+                        <Message content={url} size="mini" />
+                        <Popup // link was copied message popup
+                          open={isCopyPopupOpen}
+                          content={t('messages.link-copied-to-clipboard')}
+                          position="bottom right"
+                          trigger={
+                            <CopyToClipboard text={url} onCopy={this.handleCopied}>
+                              <Button compact size="small" content={t('buttons.copy')} />
+                            </CopyToClipboard>
+                          }
+                        />
+                      </Popup.Content>
+                    </Popup>
                   </div>
                 </Grid.Column>
               </Grid.Row>
