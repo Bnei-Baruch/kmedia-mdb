@@ -1,5 +1,5 @@
 import React from 'react';
-import { List } from 'semantic-ui-react';
+import { Card, List } from 'semantic-ui-react';
 
 import groupBy from 'lodash/groupBy';
 import {
@@ -67,7 +67,7 @@ const renderHorizontalFilesList = (files, contentType, t) => {
   return list;
 };
 
-const renderUnitsList = (units, language, t) =>
+const renderUnitsListForDesktop = (units, language, t) =>
   units.map((unit) => {
     const filesList = unit.files.filter(file => file.language === language);
     const files     = renderHorizontalFilesList(filesList, unit.content_type, t);
@@ -84,15 +84,35 @@ const renderUnitsList = (units, language, t) =>
     );
   });
 
-export const renderCollection = (collection, language, t) => {
+const renderUnitsListForMobile = (units, language, t) =>
+  units.map((unit) => {
+    const filesList = unit.files.filter(file => file.language === language);
+    const files     = renderHorizontalFilesList(filesList, unit.content_type, t);
+
+    return (
+      <Card key={`u-${unit.id}`}>
+        <Card.Content>
+          <Card.Header className="unit-header">{unit.name || NO_NAME}</Card.Header>
+        </Card.Content>
+        <Card.Content extra>
+          <List.List className="horizontal-list">
+            {files.length ? files : <span className="no-files">{t('simple-mode.no-files-found')}</span>}
+          </List.List>
+        </Card.Content>
+      </Card>
+    );
+  });
+
+export const renderCollection = (collection, language, t, isMobile) => {
   if (!collection.content_units) {
     return;
   }
 
-  const units = renderUnitsList(collection.content_units, language, t);
+  const renderUnitsFunction = isMobile ? renderUnitsListForMobile : renderUnitsListForDesktop;
+  const units               = renderUnitsFunction(collection.content_units, language, t);
 
   return (
-    <List.Item key={`t-${collection.id}`} className="no-thumbnail">
+    <List.Item key={`c-${collection.id}`} className="no-thumbnail">
       <List.Header className="unit-header under-line no-margin">
         {`${t(CT_DAILY_LESSON_I18N_KEY)}${collection.number ? ` ${t('lessons.list.number')}${collection.number}` : ''}`}
       </List.Header>
@@ -103,12 +123,13 @@ export const renderCollection = (collection, language, t) => {
   );
 };
 
-export const groupOtherMediaByType = (collection, language, t) => {
-  const contentTypesObject = groupBy(collection, 'content_type');
-  const rows               = [];
+export const groupOtherMediaByType = (collection, language, t, isMobile) => {
+  const contentTypesObject  = groupBy(collection, 'content_type');
+  const rows                = [];
+  const renderUnitsFunction = isMobile ? renderUnitsListForMobile : renderUnitsListForDesktop;
 
   Object.keys(contentTypesObject).forEach((type) => {
-    rows.push(renderUnitsList(contentTypesObject[type], language, t));
+    rows.push(renderUnitsFunction(contentTypesObject[type], language, t));
   });
 
   return rows;
