@@ -20,9 +20,7 @@ import Helmets from '../../shared/Helmets';
 import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
 import LibrarySettings from './LibrarySettings';
-import ShareBar from '../../AVPlayer/Share/ShareBar';
-
-const POPOVER_CONFIRMATION_TIMEOUT = 2500;
+import Share from './Share';
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -60,8 +58,6 @@ class LibraryContainer extends Component {
     fontSize: 0,
     theme: 'light',
     match: '',
-    isSharePopupOpen: false,
-    isCopyPopupOpen: false
   };
 
   componentDidMount() {
@@ -208,14 +204,6 @@ class LibraryContainer extends Component {
     this.setState(setting);
   };
 
-  // handleShare = () => {
-  //   this.setState({ share: !this.state.share });
-  // };
-
-  handlePopup = (isSharePopupOpen) => {
-    this.setState({ isSharePopupOpen });
-  };
-
   fetchIndices = (sourceId) => {
     if (isEmpty(sourceId) || !isEmpty(this.props.indexMap[sourceId])) {
       return;
@@ -322,20 +310,6 @@ class LibraryContainer extends Component {
     );
   };
 
-  clearTimeout = () => {
-    if (this.timeout) {
-      clearTimeout(this.timeout);
-      this.timeout = null;
-    }
-  };
-
-  handleCopied = () => {
-    this.clearTimeout();
-    this.setState({ isCopyPopupOpen: true }, () => {
-      this.timeout = setTimeout(() => this.setState({ isCopyPopupOpen: false }), POPOVER_CONFIRMATION_TIMEOUT);
-    });
-  };
-
   render() {
     const { sourceId, indexMap, getSourceById, language, t } = this.props;
 
@@ -373,12 +347,9 @@ class LibraryContainer extends Component {
         secondaryHeaderHeight,
         tocIsActive,
         match,
-        isCopyPopupOpen,
-        isSharePopupOpen,
       } = this.state;
 
     const matchString = this.matchString(parentId, t);
-    const url         = window.location.href;
 
     return (
       <div
@@ -417,33 +388,7 @@ class LibraryContainer extends Component {
                     <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                    <Popup // share bar popup
-                      className="share-bar"
-                      on="click"
-                      flowing
-                      hideOnScroll
-                      content={t('messages.link-copied-to-clipboard')}
-                      position="bottom right"
-                      trigger={<Button compact size="small" icon="share alternate" />}
-                      open={isSharePopupOpen}
-                      onClose={() => this.handlePopup(false)}
-                      onOpen={() => this.handlePopup(true)}
-                    >
-                      <Popup.Content>
-                        <ShareBar url={url} t={t} buttonSize="mini" messageTitle={t('sources-library.share-title')} />
-                        <Message content={url} size="mini" />
-                        <Popup // link was copied message popup
-                          open={isCopyPopupOpen}
-                          content={t('messages.link-copied-to-clipboard')}
-                          position="bottom right"
-                          trigger={
-                            <CopyToClipboard text={url} onCopy={this.handleCopied}>
-                              <Button compact size="small" content={t('buttons.copy')} />
-                            </CopyToClipboard>
-                          }
-                        />
-                      </Popup.Content>
-                    </Popup>
+                    <Share t={t} />
                   </div>
                 </Grid.Column>
               </Grid.Row>
