@@ -1,7 +1,7 @@
 import React from 'react';
+import groupBy from 'lodash/groupBy';
 import { Card, List } from 'semantic-ui-react';
 
-import groupBy from 'lodash/groupBy';
 import {
   CT_ARTICLE,
   CT_DAILY_LESSON,
@@ -11,11 +11,11 @@ import {
   NO_NAME,
   VS_NAMES
 } from '../../../helpers/consts';
-import Link from '../../../components/Language/MultiLanguageLink';
 import { canonicalLink } from '../../../helpers/links';
+import { physicalFile } from '../../../helpers/utils';
+import Link from '../../../components/Language/MultiLanguageLink';
 
 const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
-const CDN_URL                  = process.env.REACT_APP_CDN_URL;
 
 const getI18nTypeOverridesKey = (contentType) => {
   switch (contentType) {
@@ -44,57 +44,56 @@ const chooseIconByFileType = (type) => {
   }
 };
 
-const renderHorizontalFilesList = (files, contentType, t) => {
-  const list = [];
-
-  files.forEach((file) => {
+const renderHorizontalFilesList = (files, contentType, t) =>
+  files.map((file) => {
     const typeOverrides = getI18nTypeOverridesKey(contentType);
-    const url           = CDN_URL + file.id;
+    const url           = physicalFile(file);
     const icon          = chooseIconByFileType(file.type);
     let label           = t(`media-downloads.${typeOverrides}type-labels.${file.type}`);
     if (file.video_size) {
       label = `${label} [${VS_NAMES[file.video_size]}]`;
     }
 
-    list.push((
-      <List.Item key={`f-${file.id}`} className="media-file-button">
+    return (
+      <List.Item key={file.id} className="media-file-button">
         <List.Content>
           <List.Icon name={icon} />
           <a href={url}>{label}</a>
         </List.Content>
       </List.Item>
-    ));
+    );
   });
 
-  return list;
-};
-
-const renderUnitsListForDesktop = (units, language, t) =>
+const renderUnitsDesktop = (units, language, t) =>
   units.map((unit) => {
     const filesList = unit.files.filter(file => file.language === language);
     const files     = renderHorizontalFilesList(filesList, unit.content_type, t);
 
     return (
-      <List.Item key={`u-${unit.id}`} className="unit-header">
+      <List.Item key={unit.id} className="unit-header">
         <List.Content>
           <List.Header className="unit-header">
             <Link to={canonicalLink(unit)}>{unit.name || NO_NAME}</Link>
           </List.Header>
           <List.List className="horizontal-list">
-            {files.length ? files : <span className="no-files">{t('simple-mode.no-files-found')}</span>}
+            {
+              files.length ?
+                files :
+                <span className="no-files">{t('simple-mode.no-files-found')}</span>
+            }
           </List.List>
         </List.Content>
       </List.Item>
     );
   });
 
-const renderUnitsListForMobile = (units, language, t) =>
+const renderUnitsMobile = (units, language, t) =>
   units.map((unit) => {
     const filesList = unit.files.filter(file => file.language === language);
     const files     = renderHorizontalFilesList(filesList, unit.content_type, t);
 
     return (
-      <Card key={`u-${unit.id}`}>
+      <Card key={unit.id}>
         <Card.Content>
           <Card.Header className="unit-header">
             <Link to={canonicalLink(unit)}>{unit.name || NO_NAME}</Link>
@@ -102,7 +101,11 @@ const renderUnitsListForMobile = (units, language, t) =>
         </Card.Content>
         <Card.Content extra>
           <List.List className="horizontal-list">
-            {files.length ? files : <span className="no-files">{t('simple-mode.no-files-found')}</span>}
+            {
+              files.length ?
+                files :
+                <span className="no-files">{t('simple-mode.no-files-found')}</span>
+            }
           </List.List>
         </Card.Content>
       </Card>
@@ -111,14 +114,14 @@ const renderUnitsListForMobile = (units, language, t) =>
 
 export const renderCollection = (collection, language, t, isMobile) => {
   if (!collection.content_units) {
-    return;
+    return null;
   }
 
-  const renderUnitsFunction = isMobile ? renderUnitsListForMobile : renderUnitsListForDesktop;
-  const units               = renderUnitsFunction(collection.content_units, language, t);
+  const renderUnits = isMobile ? renderUnitsMobile : renderUnitsDesktop;
+  const units       = renderUnits(collection.content_units, language, t);
 
   return (
-    <List.Item key={`c-${collection.id}`} className="no-thumbnail">
+    <List.Item key={collection.id} className="no-thumbnail">
       <List.Header className="unit-header under-line no-margin">
         <Link to={canonicalLink(collection)}>
           {`${t(CT_DAILY_LESSON_I18N_KEY)}${collection.number ? ` ${t('lessons.list.number')}${collection.number}` : ''}`}
@@ -132,13 +135,7 @@ export const renderCollection = (collection, language, t, isMobile) => {
 };
 
 export const groupOtherMediaByType = (collection, language, t, isMobile) => {
-  const contentTypesObject  = groupBy(collection, 'content_type');
-  const rows                = [];
-  const renderUnitsFunction = isMobile ? renderUnitsListForMobile : renderUnitsListForDesktop;
-
-  Object.keys(contentTypesObject).forEach((type) => {
-    rows.push(renderUnitsFunction(contentTypesObject[type], language, t));
-  });
-
-  return rows;
+  const renderUnits = isMobile ? renderUnitsMobile : renderUnitsDesktop;
+  const byType      = groupBy(collection, 'content_type');
+  return Object.values(byType).map(v => renderUnits(v, language, t));
 };

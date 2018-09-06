@@ -15,7 +15,7 @@ import SimpleModeMobileList from './MobileList';
 
 class SimpleModeMobilePage extends PureComponent {
   static propTypes = {
-    items: PropTypes.objectOf(shapes.SimpleMode),
+    items: shapes.SimpleMode,
     selectedDate: PropTypes.objectOf(Date),
     wip: shapes.WIP,
     err: shapes.Error,
@@ -24,7 +24,6 @@ class SimpleModeMobilePage extends PureComponent {
     t: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
     renderUnit: PropTypes.func.isRequired,
-    onPageChange: PropTypes.func.isRequired,
     onDayClick: PropTypes.func.isRequired,
     onLanguageChange: PropTypes.func.isRequired
   };
@@ -37,7 +36,7 @@ class SimpleModeMobilePage extends PureComponent {
   };
 
   componentWillReceiveProps(nextProps) {
-    console.log('next: ', nextProps);
+    console.log('SimpleModeMobilePage.componentWillReceiveProps', nextProps);
   }
 
   render() {

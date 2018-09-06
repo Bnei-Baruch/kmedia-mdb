@@ -171,7 +171,7 @@ export const Tweet = PropTypes.shape({
 export const SimpleMode = PropTypes.shape({
   lessons: PropTypes.arrayOf(LessonCollection),
   others: PropTypes.arrayOf(ContentUnit),
-  total: PropTypes.number.isRequired,
+  total: PropTypes.number,
 });
 
 export const BlogPost = PropTypes.shape({
