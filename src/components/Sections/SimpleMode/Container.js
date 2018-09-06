@@ -6,9 +6,10 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { translate } from 'react-i18next';
 
+import { selectors as device } from '../../../redux/modules/device';
+import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { actions, selectors } from '../../../redux/modules/simpelMode';
-import { selectors as device } from '../../../redux/modules/device';
 import * as shapes from '../../shapes';
 import DesktopPage from './DesktopPage';
 import MobilePage from './MobilePage';
@@ -22,7 +23,7 @@ class SimpleModeContainer extends Component {
     err: shapes.Error,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
-    fetchAllMedia: PropTypes.func.isRequired,
+    fetchForDate: PropTypes.func.isRequired,
     deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
@@ -47,7 +48,7 @@ class SimpleModeContainer extends Component {
   componentDidMount() {
     const date              = moment(this.state.date).format('YYYY-MM-DD');
     const { filesLanguage } = this.state;
-    this.props.fetchAllMedia({ date, language: filesLanguage });
+    this.props.fetchForDate({ date, language: filesLanguage });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -66,7 +67,7 @@ class SimpleModeContainer extends Component {
 
     const date         = moment(selectedDate).format('YYYY-MM-DD');
     const { language } = this.props;
-    this.props.fetchAllMedia({ date, language });
+    this.props.fetchForDate({ date, language });
   };
 
   isMobileDevice = () =>
@@ -114,17 +115,23 @@ class SimpleModeContainer extends Component {
   }
 }
 
-export const mapState = state => ({
-  items: selectors.getAllMedia(state.simpleMode),
-  wip: selectors.getWip(state.simpleMode),
-  err: selectors.getErrors(state.simpleMode),
-  language: settings.getLanguage(state.settings),
-  deviceInfo: device.getDeviceInfo(state.device),
-});
+export const mapState = (state) => {
+  const items = { ...selectors.getItems(state.simpleMode) };
+  return {
+    items: {
+      lessons: items.lessons.map(x => mdb.getDenormCollectionWUnits(state.mdb, x)),
+      others: items.others.map(x => mdb.getDenormContentUnit(state.mdb, x)),
+    },
+    wip: selectors.getWip(state.simpleMode),
+    err: selectors.getError(state.simpleMode),
+    language: settings.getLanguage(state.settings),
+    deviceInfo: device.getDeviceInfo(state.device),
+  };
+};
 
 export const mapDispatch = dispatch => (
   bindActionCreators({
-    fetchAllMedia: actions.fetchAllMediaForDate,
+    fetchForDate: actions.fetchForDate,
   }, dispatch)
 );
 

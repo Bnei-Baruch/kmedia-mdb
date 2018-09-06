@@ -90,7 +90,7 @@ const routes = [
   { path: 'search', component: SearchResults, options: { ssrData: ssrDataLoaders.searchPage } },
   { path: 'project-status', component: ProjectStatus },
   { path: 'help', component: Help },
-  { path: 'simple-mode', component: SimpleMode, options: {} },
+  { path: 'simple-mode', component: SimpleMode },
   // { path: 'design', component: Design },
   // { path: 'design2', component: Design2 },
 ];
