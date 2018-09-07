@@ -72,6 +72,8 @@ export const canonicalLink = (entity, lang) => {
 
   if (entity.content_type === 'POST') {
 
+    const [, wpID] = entity.id.split("-");
+
     let blogName;
     switch (lang){
       case LANG_RUSSIAN:
@@ -90,7 +92,7 @@ export const canonicalLink = (entity, lang) => {
         blogName = 'laitman-co-il';
     }
 
-    return `/publications/blog/${blogName}/${entity.id}`;
+    return `/publications/blog/${blogName}/${wpID}`;
   }
 
   // collections
