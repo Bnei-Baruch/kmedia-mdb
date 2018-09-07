@@ -104,7 +104,6 @@ class Library extends Component {
     } else if (!usePdfFile) {
       contents        = (<div
         style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
-        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: contentData }}
       />);
     }

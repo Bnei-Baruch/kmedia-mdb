@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Header, Image, Label } from 'semantic-ui-react';
+import { Header, Image } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
-import Link from '../../Language/MultiLanguageLink';
 import img from '../../../images/rosh_shana.jpg';
 // import img from '../../../images/KKLO_ITALY_18_logo2.svg';
 
@@ -20,17 +19,10 @@ class Promoted extends Component {
   };
 
   render() {
-    // if (!this.props.banner) {
-    //   return null;
-    // }
-
     const { t } = this.props;
-
-    // const { header, sub_header: subHeader, section, url } = banner;
 
     const header    = t('home.promoted.header');
     const subHeader = t('home.promoted.subheader');
-    const section   = t('events.header.text');
 
     return (
       <div className="thumbnail">
@@ -52,11 +44,6 @@ class Promoted extends Component {
               </Header> :
               null
           }
-          {/* {
-            section ?
-              <Label content={section} color="black" size="tiny"/> :
-              <Label content={t('home.donate')} color="black" size="tiny"/>
-          } */}
         </a>
       </div>
     );
