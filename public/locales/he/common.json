@@ -144,15 +144,6 @@
       "newertoolder": "חדש לישן",
       "oldertonewer": "ישן לחדש"
     },
-    "suggestions": {
-      "categories": {
-        "search": "חיפוש",
-        "tags": "נושאים",
-        "sources": "מקורות",
-        "authors": "מחברים",
-        "persons": "אנשים"
-      }
-    },
     "results": {
       "empty-query": "לא הוזן טקסט לחיפוש. השתמש בתיבת החיפוש למעלה.",
       "no-results": "לא נמצאו תוצאות עבור <1><0>{{query}}</0></1>."
@@ -184,8 +175,8 @@
     "last-lesson": "שיעור הקבלה היומי",
     "donate": "תרום עכשיו",
     "promoted": {
-      "header": "כנס עולמי ברומא, איטליה.",
-      "subheader": "27-29/7/2018"
+      "header": "מאמרים לחודש אלול וראש השנה",
+      "subheader": ""
     }
   },
   "events": {

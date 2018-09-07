@@ -56,7 +56,6 @@ class SearchResults extends Component {
   // Helper function to get the frist prop in hightlights obj and apply htmlFunc on it.
   snippetFromHighlight = (highlight, props, htmlFunc) => {
     const prop = props.find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
-    // eslint-disable-next-line react/no-danger
     return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop]) }} />;
   };
 

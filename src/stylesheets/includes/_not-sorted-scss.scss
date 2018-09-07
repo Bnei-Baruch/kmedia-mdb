@@ -29,8 +29,11 @@
   }
 
   > .results {
+
     &.visible {
-      display: table !important;
+      /* Limit suggest box height and allow scrolling if more then ~10. */
+      max-height: 500px;
+      overflow-y: scroll;
     }
 
     // this falls sub-pixel apart from the category name table-cell,
@@ -274,7 +277,7 @@
     }
   }
 
-  &.ltr {
+  .ltr {
     .hierarchy {
       .item {
         &.l1 {
@@ -299,7 +302,7 @@
     }
   }
 
-  &.rtl {
+  .rtl {
     .hierarchy {
       .item {
         &.l1 {
