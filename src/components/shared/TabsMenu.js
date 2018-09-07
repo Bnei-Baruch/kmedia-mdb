@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
 
 class TabsMenu extends Component {
@@ -23,14 +24,30 @@ class TabsMenu extends Component {
 
     let { active } = props;
     if (!active) {
-      const { items } = props;
-      if (items.length > 0) {
-        active = items[0].name;
-      }
+      active = this.activeFromLocation(props);
+    }
+
+    if (!active) {
+      active = this.activeFromDefault(props);
     }
 
     this.state = { active };
   }
+
+  activeFromLocation = (props) => {
+    const { location }                       = props;
+    const { state: { active: active } = {} } = location;
+    return active;
+  };
+
+  activeFromDefault = (props) => {
+    const { items } = props;
+    let active;
+    if (items.length > 0) {
+      active = items[0].name;
+    }
+    return active;
+  };
 
   componentWillReceiveProps(nextProps) {
     const { active } = nextProps;
@@ -72,4 +89,4 @@ class TabsMenu extends Component {
   }
 }
 
-export default TabsMenu;
+export default withRouter(TabsMenu);
