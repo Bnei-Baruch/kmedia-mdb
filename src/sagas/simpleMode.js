@@ -2,8 +2,9 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { actions, types } from '../redux/modules/simpelMode';
+import { actions as mdbActions } from '../redux/modules/mdb';
 
-export function* fetchAllMediaForDate(action) {
+export function* fetchForDate(action) {
   try {
     const args = {
       startDate: action.payload.date,
@@ -12,16 +13,24 @@ export function* fetchAllMediaForDate(action) {
     };
 
     const { data } = yield call(Api.simpleMode, args);
-    yield put(actions.fetchAllMediaForDateSuccess(data));
+
+    if (Array.isArray(data.lessons) && data.lessons.length > 0) {
+      yield put(mdbActions.receiveCollections(data.lessons));
+    }
+    if (Array.isArray(data.others) && data.others.length > 0) {
+      yield put(mdbActions.receiveContentUnits(data.others));
+    }
+
+    yield put(actions.fetchForDateSuccess(data));
   } catch (err) {
-    yield put(actions.fetchAllMediaForDateFailure(err));
+    yield put(actions.fetchForDateFailure(err));
   }
 }
 
-function* watchFetchAllMedia() {
-  yield takeLatest([types.FETCH_ALL_MEDIA_FOR_DATE], fetchAllMediaForDate);
+function* watchFetchForDate() {
+  yield takeLatest([types.FETCH_FOR_DATE], fetchForDate);
 }
 
 export const sagas = [
-  watchFetchAllMedia,
+  watchFetchForDate,
 ];

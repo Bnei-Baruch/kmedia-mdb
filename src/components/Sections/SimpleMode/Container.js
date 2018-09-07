@@ -1,30 +1,29 @@
 import React, { Component } from 'react';
-
-import { translate } from 'react-i18next';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { translate } from 'react-i18next';
 
-import moment from 'moment';
-
-import { groupOtherMediaByType, renderCollection } from './RenderListHelpers';
+import { selectors as device } from '../../../redux/modules/device';
+import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { actions, selectors } from '../../../redux/modules/simpelMode';
 import * as shapes from '../../shapes';
 import DesktopPage from './DesktopPage';
 import MobilePage from './MobilePage';
-import { selectors as device } from '../../../redux/modules/device';
+import { groupOtherMediaByType, renderCollection } from './RenderListHelpers';
 
 class SimpleModeContainer extends Component {
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
-    items: PropTypes.objectOf(shapes.SimpleMode),
+    items: shapes.SimpleMode,
     wip: shapes.WIP,
     err: shapes.Error,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
-    fetchAllMedia: PropTypes.func.isRequired,
+    fetchForDate: PropTypes.func.isRequired,
     deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
@@ -34,14 +33,10 @@ class SimpleModeContainer extends Component {
     err: null,
   };
 
-  constructor() {
-    super();
-    this.handlePageChanged = this.handlePageChanged.bind(this);
-    this.state             = {
-      date: new Date(),
-      filesLanguage: '',
-    };
-  }
+  state = {
+    date: new Date(),
+    filesLanguage: '',
+  };
 
   componentWillMount() {
     if (!this.state.filesLanguage) {
@@ -53,7 +48,7 @@ class SimpleModeContainer extends Component {
   componentDidMount() {
     const date              = moment(this.state.date).format('YYYY-MM-DD');
     const { filesLanguage } = this.state;
-    this.props.fetchAllMedia({ date, language: filesLanguage });
+    this.props.fetchForDate({ date, language: filesLanguage });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -61,14 +56,6 @@ class SimpleModeContainer extends Component {
       const filesLanguage = nextProps.language;
       this.setState({ filesLanguage });
     }
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  extraFetchParams(props) {
-  }
-
-  handlePageChanged(pageNo) {
-    window.scrollTo(0, 0);
   }
 
   handleLanguageChanged = (e, filesLanguage) => {
@@ -80,14 +67,16 @@ class SimpleModeContainer extends Component {
 
     const date         = moment(selectedDate).format('YYYY-MM-DD');
     const { language } = this.props;
-    this.props.fetchAllMedia({ date, language });
+    this.props.fetchForDate({ date, language });
   };
 
   isMobileDevice = () =>
     this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
-  renderUnitOrCollection = (item, language, t, isMobile) =>
-    item.content_units ? renderCollection(item, language, t, isMobile) : groupOtherMediaByType(item, language, t, isMobile);
+  renderUnitOrCollection = (item, language, t, isMobile) => (
+    item.content_units ?
+      renderCollection(item, language, t, isMobile) :
+      groupOtherMediaByType(item, language, t, isMobile));
 
   render() {
     const { items, wip, err, t, language, location } = this.props;
@@ -106,11 +95,9 @@ class SimpleModeContainer extends Component {
           t={t}
           location={location}
           renderUnit={this.renderUnitOrCollection}
-          onPageChange={this.handlePageChanged}
           onDayClick={this.handleDayClick}
           onLanguageChange={this.handleLanguageChanged}
-        />)
-        :
+        />) :
         (<DesktopPage
           items={items}
           selectedDate={this.state.date}
@@ -121,7 +108,6 @@ class SimpleModeContainer extends Component {
           t={t}
           location={location}
           renderUnit={this.renderUnitOrCollection}
-          onPageChange={this.handlePageChanged}
           onDayClick={this.handleDayClick}
           onLanguageChange={this.handleLanguageChanged}
         />)
@@ -129,17 +115,23 @@ class SimpleModeContainer extends Component {
   }
 }
 
-export const mapState = state => ({
-  items: selectors.getAllMedia(state.simpleMode),
-  wip: selectors.getWip(state.simpleMode),
-  err: selectors.getErrors(state.simpleMode),
-  language: settings.getLanguage(state.settings),
-  deviceInfo: device.getDeviceInfo(state.device),
-});
+export const mapState = (state) => {
+  const items = { ...selectors.getItems(state.simpleMode) };
+  return {
+    items: {
+      lessons: items.lessons.map(x => mdb.getDenormCollectionWUnits(state.mdb, x)),
+      others: items.others.map(x => mdb.getDenormContentUnit(state.mdb, x)),
+    },
+    wip: selectors.getWip(state.simpleMode),
+    err: selectors.getError(state.simpleMode),
+    language: settings.getLanguage(state.settings),
+    deviceInfo: device.getDeviceInfo(state.device),
+  };
+};
 
 export const mapDispatch = dispatch => (
   bindActionCreators({
-    fetchAllMedia: actions.fetchAllMediaForDate,
+    fetchForDate: actions.fetchForDate,
   }, dispatch)
 );
 

@@ -1,21 +1,21 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
-import { Container, Divider, Grid, Card, Button } from 'semantic-ui-react';
+import moment from 'moment';
 import DayPicker from 'react-day-picker';
 import MomentLocaleUtils from 'react-day-picker/moment';
-import * as moment from 'moment/moment';
+import { translate } from 'react-i18next';
+import { Container, Divider, Grid, Card, Button } from 'semantic-ui-react';
 
+import { ALL_LANGUAGES } from '../../../helpers/consts';
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 import SectionHeader from '../../shared/SectionHeader';
-import { ALL_LANGUAGES } from '../../../helpers/consts';
 import DropdownLanguageSelector from '../../Language/Selector/DropdownLanguageSelector';
 import SimpleModeDesktopList from './DesktopList';
 
 class SimpleModeDesktopPage extends PureComponent {
   static propTypes = {
-    items: PropTypes.objectOf(shapes.SimpleMode),
+    items: shapes.SimpleMode,
     selectedDate: PropTypes.objectOf(Date),
     wip: shapes.WIP,
     err: shapes.Error,
@@ -24,7 +24,6 @@ class SimpleModeDesktopPage extends PureComponent {
     t: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
     renderUnit: PropTypes.func.isRequired,
-    onPageChange: PropTypes.func.isRequired,
     onDayClick: PropTypes.func.isRequired,
     onLanguageChange: PropTypes.func.isRequired
   };
@@ -37,7 +36,7 @@ class SimpleModeDesktopPage extends PureComponent {
   };
 
   componentWillReceiveProps(nextProps) {
-    console.log('next: ', nextProps);
+    console.log('SimpleModeDesktopPage.componentWillReceiveProps', nextProps);
   }
 
   render() {

@@ -5,33 +5,32 @@ import { types as ssr } from './ssr';
 
 /* Types */
 
-const FETCH_ALL_MEDIA_FOR_DATE         = 'SimpleMode/FETCH_ALL_MEDIA_FOR_DATE';
-const FETCH_ALL_MEDIA_FOR_DATE_SUCCESS = 'SimpleMode/FETCH_ALL_MEDIA_FOR_DATE_SUCCESS';
-const FETCH_ALL_MEDIA_FOR_DATE_FAILURE = 'SimpleMode/FETCH_ALL_MEDIA_FOR_DATE_FAILURE';
+const FETCH_FOR_DATE         = 'SimpleMode/FETCH_FOR_DATE';
+const FETCH_FOR_DATE_SUCCESS = 'SimpleMode/FETCH_FOR_DATE_SUCCESS';
+const FETCH_FOR_DATE_FAILURE = 'SimpleMode/FETCH_FOR_DATE_FAILURE';
 
 export const types = {
-  FETCH_ALL_MEDIA_FOR_DATE,
-  FETCH_ALL_MEDIA_FOR_DATE_SUCCESS,
-  FETCH_ALL_MEDIA_FOR_DATE_FAILURE,
+  FETCH_FOR_DATE,
+  FETCH_FOR_DATE_SUCCESS,
+  FETCH_FOR_DATE_FAILURE,
 };
 
 /* Actions */
 
-const fetchAllMediaForDate        = createAction(FETCH_ALL_MEDIA_FOR_DATE, date => date);
-const fetchAllMediaForDateSuccess = createAction(FETCH_ALL_MEDIA_FOR_DATE_SUCCESS);
-const fetchAllMediaForDateFailure = createAction(FETCH_ALL_MEDIA_FOR_DATE_FAILURE);
+const fetchForDate        = createAction(FETCH_FOR_DATE);
+const fetchForDateSuccess = createAction(FETCH_FOR_DATE_SUCCESS);
+const fetchForDateFailure = createAction(FETCH_FOR_DATE_FAILURE);
 
 export const actions = {
-  fetchAllMediaForDate,
-  fetchAllMediaForDateSuccess,
-  fetchAllMediaForDateFailure
+  fetchForDate,
+  fetchForDateSuccess,
+  fetchForDateFailure
 };
 
 /* Reducer */
 
 const initialState = {
-  allMeRdia: {
-    total: 0,
+  items: {
     lessons: [],
     others: [],
   },
@@ -49,15 +48,15 @@ const setStatus = (state, action) => {
   let { wip, err } = state;
 
   switch (action.type) {
-  case FETCH_ALL_MEDIA_FOR_DATE:
+  case FETCH_FOR_DATE:
     wip = true;
     err = null;
     break;
-  case FETCH_ALL_MEDIA_FOR_DATE_SUCCESS:
+  case FETCH_FOR_DATE_SUCCESS:
     wip = false;
     err = null;
     break;
-  case FETCH_ALL_MEDIA_FOR_DATE_FAILURE:
+  case FETCH_FOR_DATE_FAILURE:
     wip = false;
     err = action.payload;
     break;
@@ -72,17 +71,18 @@ const setStatus = (state, action) => {
   };
 };
 
-const onFetchAllMediaSuccess = (state, action) => ({
-  ...state,
-  items: action.payload,
-});
+const onFetchForDateSuccess = (state, action) => {
+  const items   = {};
+  items.lessons = (action.payload.lessons || []).map(x => x.id);
+  items.others  = (action.payload.others || []).map(x => x.id);
 
-const onSetLanguage = state => (
-  {
+  return {
     ...state,
-    items: initialState.items,
-  }
-);
+    items,
+  };
+};
+
+const onSetLanguage = () => ({ ...initialState });
 
 const onSSRPrepare = state => ({
   ...state,
@@ -93,19 +93,19 @@ export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
   [settings.SET_LANGUAGE]: onSetLanguage,
 
-  [FETCH_ALL_MEDIA_FOR_DATE]: setStatus,
-  [FETCH_ALL_MEDIA_FOR_DATE_SUCCESS]: (state, action) => setStatus(onFetchAllMediaSuccess(state, action), action),
-  [FETCH_ALL_MEDIA_FOR_DATE_FAILURE]: setStatus,
+  [FETCH_FOR_DATE]: setStatus,
+  [FETCH_FOR_DATE_SUCCESS]: (state, action) => setStatus(onFetchForDateSuccess(state, action), action),
+  [FETCH_FOR_DATE_FAILURE]: setStatus,
 }, initialState);
 
 /* Selectors */
 
-const getWip      = state => state.wip;
-const getErrors   = state => state.err;
-const getAllMedia = state => state.items;
+const getItems = state => state.items;
+const getWip   = state => state.wip;
+const getError = state => state.err;
 
 export const selectors = {
+  getItems,
   getWip,
-  getErrors,
-  getAllMedia,
+  getError,
 };

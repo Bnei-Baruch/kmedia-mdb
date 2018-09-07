@@ -7,46 +7,38 @@ import * as shapes from '../../shapes';
 
 class SimpleModeDesktopList extends PureComponent {
   static propTypes = {
-    items: PropTypes.objectOf(shapes.SimpleMode),
+    items: shapes.SimpleMode,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     renderUnit: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    items: [],
+    items: {},
   };
 
   render() {
     const { items, language, t, renderUnit } = this.props;
     const isMobile                           = false;
 
-    const content = (
-      <div>
-        <Container className="padded">
-          {
-            items.lessons ?
-              <List size="large">
-                {items.lessons.map(x => renderUnit(x, language, t, isMobile))}
-              </List> :
-              null
-          }
-
-          {
-            items.others ?
-              <List size="large">
-                {renderUnit(items.others, language, t, isMobile)}
-              </List> :
-              null
-          }
-        </Container>
-      </div>
-    );
-
     return (
-      <div>
-        {content}
-      </div>
+      <Container className="padded">
+        {
+          items.lessons ?
+            <List size="large">
+              {items.lessons.map(x => renderUnit(x, language, t, isMobile))}
+            </List> :
+            null
+        }
+
+        {
+          items.others ?
+            <List size="large">
+              {renderUnit(items.others, language, t, isMobile)}
+            </List> :
+            null
+        }
+      </Container>
     );
   }
 }
