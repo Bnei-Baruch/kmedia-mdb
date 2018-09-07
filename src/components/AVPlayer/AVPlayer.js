@@ -385,8 +385,7 @@ class AVPlayer extends PureComponent {
   hideControls = () => {
     if (this.wrapperMouseY < this.wrapperRect.height - this.controlsRect.height) {
       this.setState({ controlsVisible: false });
-    }
-    else {
+    } else {
       if (this.autohideTimeoutId) {
         clearTimeout(this.autohideTimeoutId);
         this.autohideTimeoutId = null;

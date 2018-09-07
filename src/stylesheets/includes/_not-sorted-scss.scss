@@ -372,6 +372,22 @@
   display: flex;
 }
 
+.share-bar {
+  .social-buttons {
+    align-items: center;
+    background: rgba($black, .8);
+    border-radius: calc(36px / 2 + .5rem);
+    display: flex;
+    margin: auto 0 1rem;
+    padding: .5rem .25rem;
+
+    .SocialMediaShareButton {
+      cursor: pointer;
+      margin: 0 .25rem;
+    }
+  }
+}
+
 .tweet {
   margin-bottom: 1.5rem !important;
   &--username {
