@@ -309,6 +309,16 @@
       }
     }
   },
+  "simple-mode": {
+    "header": {
+      "text": "Downloads - Simple version",
+      "subtext": "Concentrate all media for a specific day"
+    },
+    "today-button": "Today",
+    "total-media-for-date": "All media for date ",
+    "media-language": "Media language",
+    "no-files-found": "There are no files for the language you selected"
+  },
   "help": {
     "header": {
       "text": "Help",

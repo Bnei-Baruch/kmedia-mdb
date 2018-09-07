@@ -308,6 +308,16 @@
       }
     }
   },
+  "simple-mode": {
+    "header": {
+      "text": "Завантаження - проста версія",
+      "subtext": "Концентруйте всі носії за певний день"
+    },
+    "today-button": "Сьогодні",
+    "total-media-for-date": "Всі носії для дати ",
+    "media-language": "Медіа мова",
+    "no-files-found": "Немає файлів для обраної вами мови"
+  },
   "pages": {
     "collection": {
       "items": {

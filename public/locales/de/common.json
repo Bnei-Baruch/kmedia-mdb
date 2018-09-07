@@ -307,6 +307,16 @@
       }
     }
   },
+  "simple-mode": {
+    "header": {
+      "text": "Downloads - Eenvoudige versie",
+      "subtext": "Concentreer alle media voor een specifieke dag"
+    },
+    "today-button": "vandaag",
+    "total-media-for-date": "Alle media voor datum ",
+    "media-language": "Mediataal",
+    "no-files-found": "Er zijn geen bestanden voor de taal die u hebt geselecteerd"
+  },
   "pages": {
     "collection": {
       "items": {
