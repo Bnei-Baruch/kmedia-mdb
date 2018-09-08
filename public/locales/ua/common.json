@@ -376,14 +376,18 @@
     "derived-title": "Медіа відтворення",
     "type-labels": {
       "video": "Основне відео",
+      "video-simple": "Відео",
       "audio": "Основне аудіо",
+      "audio-simple": "Аудіо",
       "text": "Стенограма",
       "image": "Зображення"
     },
     "lesson": {
       "type-labels": {
         "video": "Відео уроку",
+        "video-simple": "Відео",
         "audio": "Аудіо уроку",
+        "audio-simple": "Аудіо",
         "text": "Стенограма",
         "image": "Креслення"
       }
@@ -391,7 +395,9 @@
     "program": {
       "type-labels": {
         "video": "Відео програми",
+        "video-simple": "Відео",
         "audio": "Аудіо програми",
+        "audio-simple": "Аудіо",
         "text": "Стенограма",
         "image": "Креслення"
       }
@@ -399,7 +405,9 @@
     "publication": {
       "type-labels": {
         "video": "Відео",
+        "video-simple": "Відео",
         "audio": "Аудіо",
+        "audio-simple": "Аудіо",
         "text": "Текст статті",
         "image": "Світлини"
       }

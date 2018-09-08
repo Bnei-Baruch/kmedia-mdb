@@ -375,14 +375,18 @@
     "derived-title": "Medien Bestandteile",
     "type-labels": {
       "video": "Hauptvideo",
+      "video-simple": "Video",
       "audio": "Grundlegendes Audio",
+      "audio-simple": "Audio",
       "text": "Transkript",
       "image": "Bild"
     },
     "lesson": {
       "type-labels": {
         "video": "Videolektionen",
+        "video-simple": "Video",
         "audio": "Audiolektionen",
+        "audio-simple": "Audio",
         "text": "Transkript",
         "image": "Zeichnungen"
       }
@@ -390,7 +394,9 @@
     "program": {
       "type-labels": {
         "video": "Videoprogramme",
+        "video-simple": "Video",
         "audio": "Audioprogramme",
+        "audio-simple": "Audio",
         "text": "Transkript",
         "image": "Zeichnungen"
       }
@@ -398,7 +404,9 @@
     "publication": {
       "type-labels": {
         "video": "Video",
+        "video-simple": "Video",
         "audio": "Audio",
+        "audio-simple": "Audio",
         "text": "Artikeltext",
         "image": "Bilder"
       }

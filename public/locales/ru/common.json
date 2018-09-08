@@ -376,14 +376,18 @@
     "derived-title": "Производная медиа",
     "type-labels": {
       "video": "Основное видео",
+      "video-simple": "Видео",
       "audio": "Основное аудио",
+      "audio-simple": "Аудио",
       "text": "Стенограмма",
       "image": "Изображения"
     },
     "lesson": {
       "type-labels": {
         "video": "Видео урока",
+        "video-simple": "Видео",
         "audio": "Аудио урока",
+        "audio-simple": "Аудио",
         "text": "Стенограмма",
         "image": "Чертежи"
       }
@@ -391,7 +395,9 @@
     "program": {
       "type-labels": {
         "video": "Видео программы",
+        "video-simple": "Видео",
         "audio": "Аудио программы",
+        "audio-simple": "Аудио",
         "text": "Стенограмма",
         "image": "Чертежи"
       }
@@ -399,7 +405,9 @@
     "publication": {
       "type-labels": {
         "video": "Видео",
+        "video-simple": "Видео",
         "audio": "Аудио",
+        "audio-simple": "Аудио",
         "text": "Текст статьи",
         "image": "Снимки"
       }

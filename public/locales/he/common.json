@@ -382,14 +382,18 @@
     "derived-title": "נגזרות",
     "type-labels": {
       "video": "וידאו ראשי",
+      "video-simple": "וידאו",
       "audio": "אודיו ראשי",
+      "audio-simple": "אודיו",
       "text": "תמליל מלא",
       "image": "תמונות"
     },
     "lesson": {
       "type-labels": {
         "video": "וידאו של השיעור",
+        "video-simple": "וידאו",
         "audio": "אודיו של השיעור",
+        "audio-simple": "אודיו",
         "text": "תמליל מלא",
         "image": "שרטוטים"
       }
@@ -397,7 +401,9 @@
     "program": {
       "type-labels": {
         "video": "וידאו של התוכנית",
+        "video-simple": "וידאו",
         "audio": "אודיו של התוכנית",
+        "audio-simple": "אודיו",
         "text": "תמליל מלא",
         "image": "תמונות"
       }
@@ -405,7 +411,9 @@
     "publication": {
       "type-labels": {
         "video": "וידאו",
+        "video-simple": "וידאו",
         "audio": "אודיו",
+        "audio-simple": "אודיו",
         "text": "טקסט",
         "image": "צילומי מסך"
       }
