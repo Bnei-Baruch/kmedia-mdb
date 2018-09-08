@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Container, List } from 'semantic-ui-react';
+import { Card, Container, List } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 
@@ -32,10 +32,14 @@ class SimpleModeDesktopList extends PureComponent {
         }
 
         {
-          items.others ?
-            <List size="large">
-              {renderUnit(items.others, language, t, isMobile)}
-            </List> :
+          items.others.length ?
+            <Card fluid>
+              <Card.Content>
+                <List size="large">
+                  {renderUnit(items.others, language, t, isMobile)}
+                </List>
+              </Card.Content>
+            </Card> :
             null
         }
       </Container>

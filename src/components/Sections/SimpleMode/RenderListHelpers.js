@@ -31,25 +31,12 @@ const getI18nTypeOverridesKey = (contentType) => {
   }
 };
 
-const chooseIconByFileType = (type) => {
-  switch (type) {
-  case 'video':
-    return 'video play';
-
-  case 'audio':
-    return 'volume up';
-
-  default:
-    return 'file alternate';
-  }
-};
-
 const renderHorizontalFilesList = (files, contentType, t) =>
   files.map((file) => {
     const typeOverrides = getI18nTypeOverridesKey(contentType);
     const url           = physicalFile(file);
-    const icon          = chooseIconByFileType(file.type);
-    let label           = t(`media-downloads.${typeOverrides}type-labels.${file.type}`);
+    const fileType      = ['audio', 'video'].includes(file.type) ? `${file.type}-simple` : file.type;
+    let label           = t(`media-downloads.${typeOverrides}type-labels.${fileType}`);
     if (file.video_size) {
       label = `${label} [${VS_NAMES[file.video_size]}]`;
     }
@@ -57,8 +44,8 @@ const renderHorizontalFilesList = (files, contentType, t) =>
     return (
       <List.Item key={file.id} className="media-file-button">
         <List.Content>
-          <List.Icon name={icon} />
           <a href={url}>{label}</a>
+          <List.Icon name="angle double down" />
         </List.Content>
       </List.Item>
     );
@@ -121,16 +108,20 @@ export const renderCollection = (collection, language, t, isMobile) => {
   const units       = renderUnits(collection.content_units, language, t);
 
   return (
-    <List.Item key={collection.id} className="no-thumbnail">
-      <List.Header className="unit-header under-line no-margin">
-        <Link to={canonicalLink(collection)}>
-          {`${t(CT_DAILY_LESSON_I18N_KEY)}${collection.number ? ` ${t('lessons.list.number')}${collection.number}` : ''}`}
-        </Link>
-      </List.Header>
-      <List.List>
-        {units}
-      </List.List>
-    </List.Item>
+    <Card fluid key={collection.id}>
+      <Card.Content className={collection.number ? 'gray-header' : ''}>
+        <Card.Header className="unit-header">
+          <Link to={canonicalLink(collection)}>
+            {`${t(CT_DAILY_LESSON_I18N_KEY)}${collection.number ? ` ${t('lessons.list.number')}${collection.number}` : ''}`}
+          </Link>
+        </Card.Header>
+      </Card.Content>
+      <Card.Content extra>
+        <List fluid>
+          {units}
+        </List>
+      </Card.Content>
+    </Card>
   );
 };
 

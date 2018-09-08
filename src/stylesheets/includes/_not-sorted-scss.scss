@@ -662,28 +662,29 @@
 
   .media-file-button {
     height: 24px;
-    margin-right: 16px;
+    margin-right: 8px;
     text-decoration: none;
     display: flex !important;
     padding: 0 8px !important;
     justify-content: center;
     align-items: center;
-    border: 1px solid #ebecf0;
+    border: 1px solid #e0e0e0;
     border-radius: 4px;
+    color: #fff;
+    background-color: #ef702e;
     font-size: 12px;
 
     .icon {
       height: 14px !important;
-      color: #00aced;
+      color: #fff;
     }
 
     a {
-      color: rgba(0, 0, 0, .87);
+      color: #fff !important;
       font-weight: normal !important;
     }
 
     &:hover, &:hover .icon, &:hover a {
-      background-color: #00aced;
       color: #fff !important;
     }
   }
@@ -704,6 +705,11 @@
   text-decoration: underline;
 }
 
+.gray-header {
+  background-color: #ebecf0 !important;
+  padding: 0.2em 1em !important;
+}
+
 .rtl {
   .summary-container {
     h4, span {
@@ -716,7 +722,8 @@
     display: flex;
 
     .media-file-button {
-      margin-left: 16px;
+      margin-left: 8px;
+      margin-right: 0;
     }
   }
 }
