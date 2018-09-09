@@ -7,10 +7,8 @@ import { withRouter } from 'react-router-dom';
 import { push as routerPush, replace as routerReplace } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import PrintProvider, { Print, NoPrint } from 'react-easy-print';
-import ReactToPrint from 'react-to-print';
-import { Button, Container, Grid, Header, Input, Ref, Message, Popup } from 'semantic-ui-react';
-import CopyToClipboard from 'react-copy-to-clipboard';
+import { PrintTemplate } from 'react-print';
+import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
@@ -23,8 +21,6 @@ import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
 import LibrarySettings from './LibrarySettings';
 import Share from './Share';
-
-// TODO - fix the differences between ctrl+p and window.print()
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -147,34 +143,9 @@ class LibraryContainer extends Component {
     return getPathByID(sourceId);
   };
 
-  updateSticky = () => {
-    // take the secondary header height for sticky stuff calculations
-    if (this.secondaryHeaderRef) {
-      const { height } = this.secondaryHeaderRef.getBoundingClientRect();
-      if (this.state.secondaryHeaderHeight !== height) {
-        this.setState({ secondaryHeaderHeight: height });
-      }
-    }
-
-    // check fixed header width in pixels for text-overflow:ellipsis
-    if (this.contentHeaderRef) {
-      const { width } = this.contentHeaderRef.getBoundingClientRect();
-      if (this.state.contentHeaderWidth !== width) {
-        this.setState({ contentHeaderWidth: width });
-      }
-    }
-  };
-
-  firstLeafId = (sourceId) => {
-    const { getSourceById } = this.props;
-
-    const { children } = getSourceById(sourceId) || { children: [] };
-    if (isEmpty(children)) {
-      return sourceId;
-    }
-
-    return this.firstLeafId(children[0]);
-  };
+  handlePrintRef = (ref) => {
+    this.printContentRef = ref;
+  }
 
   handleContextRef = (ref) => {
     this.contextRef = ref;
@@ -194,6 +165,35 @@ class LibraryContainer extends Component {
 
   handleContentHeaderRef = (ref) => {
     this.contentHeaderRef = ref;
+  };
+
+  firstLeafId = (sourceId) => {
+    const { getSourceById } = this.props;
+
+    const { children } = getSourceById(sourceId) || { children: [] };
+    if (isEmpty(children)) {
+      return sourceId;
+    }
+
+    return this.firstLeafId(children[0]);
+  };
+
+  updateSticky = () => {
+    // take the secondary header height for sticky stuff calculations
+    if (this.secondaryHeaderRef) {
+      const { height } = this.secondaryHeaderRef.getBoundingClientRect();
+      if (this.state.secondaryHeaderHeight !== height) {
+        this.setState({ secondaryHeaderHeight: height });
+      }
+    }
+
+    // check fixed header width in pixels for text-overflow:ellipsis
+    if (this.contentHeaderRef) {
+      const { width } = this.contentHeaderRef.getBoundingClientRect();
+      if (this.state.contentHeaderWidth !== width) {
+        this.setState({ contentHeaderWidth: width });
+      }
+    }
   };
 
   handleTocIsActive = () => {
@@ -314,12 +314,8 @@ class LibraryContainer extends Component {
     );
   };
 
-  print = (contentToPrint) => {
-    // window.print();
-    // <ReactToPrint content={contentToPrint}
-    //   trigger={}
-    // />
-
+  print = () => {
+    window.print();
   }
 
   render() {
@@ -345,6 +341,7 @@ class LibraryContainer extends Component {
           index={index}
           languageUI={language}
           langSelectorMount={this.headerMenuRef}
+          printRefCallBack={this.handlePrintRef}
           t={t}
         />
       );
@@ -364,107 +361,94 @@ class LibraryContainer extends Component {
     const matchString = this.matchString(parentId, t);
 
     return (
-      // <PrintProvider>
-    // <NoPrint>
-      <div
-        className={classnames({
-          source: true,
-          'is-readable': isReadable,
-          'toc--is-active': tocIsActive,
-          [`is-${theme}`]: true,
-          [`is-${fontType}`]: true,
-        })}
-      >
-        <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
-          <Container>
+      <div>
+        <div
+          // id="react-no-print"
+          className={classnames({
+            source: true,
+            'is-readable': isReadable,
+            'toc--is-active': tocIsActive,
+            [`is-${theme}`]: true,
+            [`is-${fontType}`]: true,
+          })}
+        >
+          <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
+            <Container>
+              <Grid padded centered>
+                <Grid.Row verticalAlign="bottom">
+                  <Grid.Column mobile={16} tablet={16} computer={4} className="source__toc-header">
+                    <div className="source__header-title mobile-hidden">
+                      <Header size="small">{t('sources-library.toc')}</Header>
+                    </div>
+                    <div className="source__header-toolbar">
+                      {matchString}
+                      {this.switchSortingOrder(parentId)}
+                      <Button
+                        compact
+                        size="small"
+                        className="computer-hidden large-screen-hidden widescreen-hidden"
+                        icon="list layout"
+                        onClick={this.handleTocIsActive}
+                      />
+                    </div>
+                  </Grid.Column>
+                  <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
+                    <div className="source__header-title">{this.header(sourceId, fullPath)}</div>
+                    <div className="source__header-toolbar">
+                      <div id="download-button" />
+                      <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
+                      <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
+                      <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
+                      <Button compact size="small" icon="print" onClick={this.print()} />
+                      <Share t={t} />
+                    </div>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Container>
+          </div>
+          <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
             <Grid padded centered>
-              <Grid.Row verticalAlign="bottom">
-                <Grid.Column mobile={16} tablet={16} computer={4} className="source__toc-header">
-                  <div className="source__header-title mobile-hidden">
-                    <Header size="small">{t('sources-library.toc')}</Header>
-                  </div>
-                  <div className="source__header-toolbar">
-                    {matchString}
-                    {this.switchSortingOrder(parentId)}
-                    <Button
-                      compact
-                      size="small"
-                      className="computer-hidden large-screen-hidden widescreen-hidden"
-                      icon="list layout"
-                      onClick={this.handleTocIsActive}
-                    />
-                  </div>
+              <Grid.Row className="is-fitted">
+                <Grid.Column mobile={16} tablet={16} computer={4} onClick={this.handleTocIsActive}>
+                  <TOC
+                    match={matchString ? match : ''}
+                    matchApplied={this.handleFilterClear}
+                    fullPath={fullPath}
+                    rootId={parentId}
+                    contextRef={this.contextRef}
+                    getSourceById={getSourceById}
+                    apply={this.props.push}
+                    stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
+                    t={t}
+                  />
                 </Grid.Column>
-                <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
-                  <div className="source__header-title">{this.header(sourceId, fullPath)}</div>
-                  <div className="source__header-toolbar">
-                    <div id="download-button" />
-                    <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
-                    <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
-                    <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                    {/* <Button compact size="small" icon="print" onClick={this.print(content)} /> */}
-                    <ReactToPrint
-                      trigger={() => (
-                        // <a href="#">Print!</a>
-                        <Button compact size="small" icon="print" /* onClick */ />
-                      )}
-                      content={() => content}
-                      onBeforePrint={() => {
-                        console.log('before print!');
-                      }}
-                      onAfterPrint={() => {
-                        console.log('after print!');
-                      }}
-                    />
-                    <Share t={t} />
+                <Grid.Column
+                  mobile={16}
+                  tablet={16}
+                  computer={12}
+                  className={classnames({
+                    'source__content-wrapper': true,
+                    [`size${fontSize}`]: true,
+                  })}
+                >
+                  <div ref={this.handleContextRef}>
+                    <div
+                      className="source__content"
+                      style={{ minHeight: `calc(100vh - ${secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}px)` }}
+                    >
+                      {content}
+                    </div>
                   </div>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
           </Container>
         </div>
-        <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
-          <Grid padded centered>
-            <Grid.Row className="is-fitted">
-              <Grid.Column mobile={16} tablet={16} computer={4} onClick={this.handleTocIsActive}>
-                <TOC
-                  match={matchString ? match : ''}
-                  matchApplied={this.handleFilterClear}
-                  fullPath={fullPath}
-                  rootId={parentId}
-                  contextRef={this.contextRef}
-                  getSourceById={getSourceById}
-                  apply={this.props.push}
-                  stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
-                  t={t}
-                />
-              </Grid.Column>
-              <Grid.Column
-                mobile={16}
-                tablet={16}
-                computer={12}
-                className={classnames({
-                  'source__content-wrapper': true,
-                  [`size${fontSize}`]: true,
-                })}
-              >
-                <div ref={this.handleContextRef}>
-                  {/* <Print name="mySource" single> */}
-                  <div
-                    className="source__content"
-                    style={{ minHeight: `calc(100vh - ${secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}px)` }}
-                  >
-                    {content}
-                  </div>
-                  {/* </Print> */}
-                </div>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Container>
+        <PrintTemplate>
+          {content}
+        </PrintTemplate>
       </div>
-    // </NoPrint>
-      // </PrintProvider>
     );
   }
 }

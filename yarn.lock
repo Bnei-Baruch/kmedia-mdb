@@ -3724,7 +3724,7 @@ fb-watchman@^2.0.0:
   dependencies:
     bser "^2.0.0"
 
-fbjs@^0.8.16:
+fbjs@^0.8.0, fbjs@^0.8.16:
   version "0.8.17"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.17.tgz#c4d598ead6949112653d6588b01a5cdcd9f90fdd"
   dependencies:
@@ -6178,10 +6178,6 @@ load-json-file@^4.0.0:
     pify "^3.0.0"
     strip-bom "^3.0.0"
 
-load-styles@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/load-styles/-/load-styles-2.0.0.tgz#a0901c8f80ef0c869454eb580b4efc2f0be48471"
-
 loader-fs-cache@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/loader-fs-cache/-/loader-fs-cache-1.0.1.tgz#56e0bf08bd9708b26a765b68509840c8dec9fdbc"
@@ -8312,6 +8308,10 @@ react-dev-utils@^5.0.0:
     strip-ansi "3.0.1"
     text-table "0.2.0"
 
+react-dom@15.0.1:
+  version "15.0.1"
+  resolved "http://registry.npmjs.org/react-dom/-/react-dom-15.0.1.tgz#33c67f557b43ab27a6ba3ec3200321681921c48d"
+
 react-dom@^16.2.0:
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.2.0.tgz#69003178601c0ca19b709b33a83369fe6124c044"
@@ -8320,12 +8320,6 @@ react-dom@^16.2.0:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.0"
-
-react-easy-print@^0.6.0-beta.3:
-  version "0.6.0-beta.3"
-  resolved "https://registry.yarnpkg.com/react-easy-print/-/react-easy-print-0.6.0-beta.3.tgz#e7f0439cabbfd91f651c99104bdd221843685edf"
-  dependencies:
-    load-styles "^2.0.0"
 
 react-error-overlay@^3.0.0:
   version "3.0.0"
@@ -8384,6 +8378,13 @@ react-pdf@^3.0.1:
     merge-class-names "^1.1.1"
     pdfjs-dist "2.0.305"
     prop-types "^15.6.1"
+
+react-print@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/react-print/-/react-print-1.3.1.tgz#dc66e4a279e10edc0cc484169aa9e0e1fb285e12"
+  dependencies:
+    react "15.0.1"
+    react-dom "15.0.1"
 
 react-reconciler@^0.7.0:
   version "0.7.0"
@@ -8515,12 +8516,13 @@ react-test-renderer@16.2.0, react-test-renderer@^16.0.0-0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-react-to-print@^2.0.0-alpha-2:
-  version "2.0.0-alpha-2"
-  resolved "https://registry.yarnpkg.com/react-to-print/-/react-to-print-2.0.0-alpha-2.tgz#cec84bc0284d52cf62f8ef535c0a8ee714769afe"
+react@15.0.1:
+  version "15.0.1"
+  resolved "http://registry.npmjs.org/react/-/react-15.0.1.tgz#262d4f073a384c2a0421afb82d97c8f7df581c09"
   dependencies:
-    prop-types "^15.6.0"
-    react "^16.2.0"
+    fbjs "^0.8.0"
+    loose-envify "^1.1.0"
+    object-assign "^4.0.1"
 
 "react@^15.6.2 || ^16.0":
   version "16.4.0"
