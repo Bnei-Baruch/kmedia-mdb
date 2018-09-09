@@ -68,6 +68,7 @@ class AVPlayerMobile extends PureComponent {
     isSliceMode: false,
     currentTime: 0,
     firstSeek: true,
+    seeking: true,
     playbackRate: '1x',
   };
 
@@ -91,6 +92,11 @@ class AVPlayerMobile extends PureComponent {
     }
 
     this.setState({ sliceStart, sliceEnd, mode, firstSeek: true });
+  }
+
+  componentWillUnmount() {
+    if (this.seekTimeoutId)
+      clearTimeout(this.seekTimeoutId);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -168,15 +174,15 @@ class AVPlayerMobile extends PureComponent {
   seekIfNeeded = () => {
     const { sliceStart, firstSeek, playbackRate } = this.state;
     if (this.wasCurrentTime) {
-      this.seekTo(this.wasCurrentTime);
-      this.wasCurrentTime = undefined;
+      this.seekTo(this.wasCurrentTime, true);
+      this.wasCurrentTime    = undefined;
     } else if (firstSeek) {
       if (sliceStart) {
-        this.seekTo(sliceStart);
+        this.seekTo(sliceStart, true);
       } else {
         const savedTime = this.getSavedTime();
         if (savedTime) {
-          this.seekTo(savedTime);
+          this.seekTo(savedTime, true);
         }
       }
       this.setState({ firstSeek: false });
@@ -210,16 +216,16 @@ class AVPlayerMobile extends PureComponent {
   };
 
   handleTimeUpdate = (e) => {
-    const { mode, sliceEnd, sliceStart } = this.state;
+    const { mode, sliceEnd, sliceStart, seeking } = this.state;
 
     const time = e.currentTarget.currentTime;
     this.saveCurrentTime(time);
-
-    if (mode !== PLAYER_MODE.SLICE_VIEW) {
+   
+    if (mode !== PLAYER_MODE.SLICE_VIEW || seeking===true) {
       return;
     }
 
-    const lowerTime = Math.min(sliceEnd, time);
+    const lowerTime = Math.min(sliceEnd, time);  
 
     if (time < sliceStart || time > sliceEnd) {
       this.setState({
@@ -229,7 +235,7 @@ class AVPlayerMobile extends PureComponent {
       });
     } else if (lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
       this.media.pause();
-      this.seekTo(sliceEnd);
+      this.seekTo(sliceEnd, false);
     }
   };
 
@@ -248,26 +254,32 @@ class AVPlayerMobile extends PureComponent {
     }
   };
 
-  seekTo = (t) => {
+  seekTo = (t, force) => {
+    this.setState({ seeking: true });
+
     this.media.currentTime = t;
 
-    // Bug fix for android internal browser
-    if (!this.isSeekSuccess(t)) {
-      this.seekTimeout(t, 250);
-    }
+    // If seek not success, do a seek timeout (bug fix for android internal browser)
+    if (force && !this.isSeekSuccess(t)) 
+      this.seekTimeout(t, 250);    
+    else 
+      this.setState({ seeking: false });
   };
 
   seekTimeout = (t, timeout) => {
-    setTimeout(() => {
+    if (this.seekTimeoutId)
+      clearTimeout(this.seekTimeoutId);
+    this.seekTimeoutId = setTimeout(()=> {
       if (this.isSeekSuccess(t)) {
+        this.setState({ seeking: false });
         return;
       }
-
       this.media.currentTime = t;
-      if (!this.isSeekSuccess(t)) {
-        this.seekTimeout(t, timeout);
-      }
-    }, timeout);
+      if (!this.isSeekSuccess(t))
+          this.seekTimeout(t, timeout);      
+      else 
+          this.setState({ seeking: false });      
+    }, timeout);    
   };
 
   isSeekSuccess = t =>
@@ -280,14 +292,14 @@ class AVPlayerMobile extends PureComponent {
     const { currentTime, duration } = this.media;
 
     const jumpTo = Math.max(0, Math.min(currentTime - 5, duration));
-    this.seekTo(jumpTo);
+    this.seekTo(jumpTo, false);
   };
 
   handleJumpForward = () => {
     const { currentTime, duration } = this.media;
 
     const jumpTo = Math.max(0, Math.min(currentTime + 5, duration));
-    this.seekTo(jumpTo);
+    this.seekTo(jumpTo, false);
   };
 
   saveCurrentTime = (mediaTime) => {
@@ -340,7 +352,7 @@ class AVPlayerMobile extends PureComponent {
         onNext,
       } = this.props;
 
-    const { error, errorReason, isSliceMode, playbackRate } = this.state;
+    const { error, errorReason, isSliceMode, playbackRate} = this.state;
 
     const isVideo       = item.mediaType === MT_VIDEO;
     const isAudio       = item.mediaType === MT_AUDIO;
@@ -375,7 +387,7 @@ class AVPlayerMobile extends PureComponent {
     }
 
     return (
-      <div className="mediaplayer">
+      <div className="mediaplayer">        
         <div style={{ marginBottom: '0px' }}>{mediaEl}</div>
         {
           error ?
@@ -436,8 +448,8 @@ class AVPlayerMobile extends PureComponent {
           isSliceMode ?
             <ShareFormMobile media={this.media} item={item} t={t} /> :
             null
-        }
-      </div>
+        }        
+      </div>     
     );
   }
 }
