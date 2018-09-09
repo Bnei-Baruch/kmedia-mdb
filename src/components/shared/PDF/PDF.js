@@ -11,6 +11,9 @@ import { ErrorSplash, LoadingSplash, } from '../../shared/Splash/Splash';
 import PDFMenu from './PDFMenu';
 
 class PDF extends Component {
+  static isTaas = source => (BS_TAAS_PARTS[source] !== undefined);
+  static startsFrom = source => BS_TAAS_PARTS[source];
+
   static propTypes = {
     pdfFile: PropTypes.string.isRequired,
     startsFrom: PropTypes.number.isRequired,
@@ -22,10 +25,6 @@ class PDF extends Component {
   static defaultProps = {
     pageNumberHandler: noop,
   };
-
-  static isTaas = source => (BS_TAAS_PARTS[source] !== undefined);
-
-  static startsFrom = source => BS_TAAS_PARTS[source];
 
   constructor(props) {
     super(props);
