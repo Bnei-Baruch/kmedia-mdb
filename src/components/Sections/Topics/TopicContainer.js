@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, Container, Header, Divider, Input } from 'semantic-ui-react';
+import { List, Container, Header, Divider, Input, Icon} from 'semantic-ui-react';
 import { translate } from 'react-i18next';
 import debounce from 'lodash/debounce';
 
@@ -151,8 +151,9 @@ class TopicContainer extends Component {
       <Fragment key={node.id}>
         <Header as="h3" className="topics__subtitle">
           {/* eslint-disable-next-line */}
+          {node.label}
           <Link to={`/topics/${node.id}`}>
-            {node.label}
+            <Icon size='small' name="chain"/>
           </Link>
         </Header>
         {this.renderNode(node)}
@@ -171,8 +172,10 @@ class TopicContainer extends Component {
       <div key={rootId} className="topics__section">
         <Header as="h1" className="topics__title">
           {/* eslint-disable-next-line */}
-          <Link to={`/topics/${rootNode.id}`}>
             {rootNode.label}
+            
+          <Link to={`/topics/${rootNode.id}`}>
+            <Icon size='small' name="chain"/>
           </Link>
         </Header>
         <div className="topics__list">

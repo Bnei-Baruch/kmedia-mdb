@@ -7,13 +7,31 @@
     }
   }
 
-  // &__title {
-  // }
+  &__title {
+    .icon{
+      margin: 0 0 0 8px;
+    }
+    // display: flex;
+    // background:red;
+    
+  }
 
   &__list {
     
     column-count: 4;
     column-gap: 2rem;
+    @include tablet {
+      // background: pink !important;
+      column-count: 3;
+    }
+    @include mobile {
+      column-count: 2;
+      // background: green !important;
+    }
+    @include small-mobile {
+      column-count: 1;
+      // background: red !important;
+    }
     margin-bottom: 4rem;
 
     .list {
@@ -23,6 +41,9 @@
     .header {
       line-height: 4rem !important;
       margin: 0 !important;
+      .icon{
+        margin: 0 0 0 8px;
+      }
     }
 
     .item {
