@@ -1,4 +1,4 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import Api from '../helpers/Api';
 import { actions, types } from '../redux/modules/lists';
@@ -70,7 +70,7 @@ function* fetchIntents(action) {
       endpoint = Api.units;
       break;
     }
-    console.log('fetchIntents', args);
+
     const { data } = yield call(endpoint, { ...args, language, with_files: true });
 
     if (Array.isArray(data.content_units)) {
@@ -108,7 +108,7 @@ function* updatePageInQuery(action) {
   const page       = pageNo > 1 ? pageNo : null;
 
   if (page) {
-  // adding a page to browser history
+    // adding a page to browser history
     yield put(push(page));
   }
 

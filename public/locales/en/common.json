@@ -25,6 +25,7 @@
   },
   "filters": {
     "by": "Filter by:",
+    "filters": "Filters",
     "all": "All",
     "date-filter": {
       "label": "Date",
@@ -139,6 +140,9 @@
       "text": "Search Results",
       "subtext": ""
     },
+    "showAll": "Show All",
+    "lessons": "Lessons",
+    "programs": "Programs",
     "sortby": "sort by",
     "sorts": {
       "relevance": "relevance",
@@ -164,7 +168,7 @@
       "content": "Content"
     },
     "intent-types": {
-      "lessons": "Daily morning lesssons",
+      "lessons": "Daily morning lessons",
       "programs": "Programs"
     },
     "intent-prefix": {

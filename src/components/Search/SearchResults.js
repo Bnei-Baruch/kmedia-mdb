@@ -4,30 +4,21 @@ import PropTypes from 'prop-types';
 import { Trans, translate } from 'react-i18next';
 import { Container, Divider, Label, Table } from 'semantic-ui-react';
 
-import { canonicalLink, sectionLink } from '../../helpers/links';
-import { formatDuration, isEmpty, tracePath } from '../../helpers/utils';
+import {  isEmpty } from '../../helpers/utils';
 import { getQuery, isDebMode } from '../../helpers/url';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
 import { filtersTransformer } from '../../filters';
 import * as shapes from '../shapes';
-import Link from '../Language/MultiLanguageLink';
 import WipErr from '../shared/WipErr/WipErr';
 import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
-import ScoreDebug from './ScoreDebug';
 import SearchResultCU from './SearchResultCU';
 import SearchResultCollection from './SearchResultCollection';
 import SearchResultIntent from './SearchResultIntent';
-import {
-  SEARCH_INTENT_FILTER_NAMES,
-  SEARCH_INTENT_NAMES,
-  SEARCH_INTENT_SECTIONS,
-  SEARCH_INTENT_INDEX_TOPIC,
-  SEARCH_INTENT_INDEX_SOURCE,
-  SEARCH_INTENT_HIT_TYPES,
-} from '../../helpers/consts';
+import SearchResultSource from './SearchResultSource';
+import {  SEARCH_INTENT_HIT_TYPES,} from '../../helpers/consts';
 
 class SearchResults extends Component {
   static propTypes = {
@@ -75,131 +66,26 @@ class SearchResults extends Component {
     return hitType ? hit.type === hitType : true;
   };
 
-  renderCollection = (c, hit, rank) => {
-    const { t, location, queryResult }                                                           = this.props;
-    const { search_result: { searchId } }                                                        = queryResult;
-    const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
-
-    const name        = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || c.name;
-    const description = this.snippetFromHighlight(highlight, ['description', 'description_analyzed'], parts => `...${parts.join('.....')}...`);
-    const snippet     = (
-      <div className="search__snippet">
-        {
-          description ?
-            <div>
-              <strong>{t('search.result.description')}: </strong>
-              {description}
-            </div> :
-            null
-        }
-      </div>);
-
-    let startDate = '';
-    if (c.start_date) {
-      startDate = t('values.date', { date: c.start_date });
-    }
-
-    return (
-      <Table.Row key={mdbUid} verticalAlign="top">
-        <Table.Cell collapsing singleLine width={1}>
-          <strong>{startDate}</strong>
-        </Table.Cell>
-        <Table.Cell collapsing singleLine>
-          <Label size="tiny">{t(`constants.content-types.${c.content_type}`)}</Label>
-        </Table.Cell>
-        <Table.Cell>
-          <Link
-            className="search__link"
-            onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-            to={canonicalLink(c || { id: mdbUid, content_type: c.content_type })}
-          >
-            {name}
-          </Link>
-          &nbsp;&nbsp;
-          {snippet || null}
-        </Table.Cell>
-        {
-          !isDebMode(location) ? null :
-            <Table.Cell collapsing textAlign="right">
-              <ScoreDebug name={c.name} score={score} explanation={hit._explanation} />
-            </Table.Cell>
-        }
-      </Table.Row>
-    );
-  };
-
-  renderSource = (hit) => {
-    const { t, location, getSourcePath }                             = this.props;
-    const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
-
-    const srcPath = getSourcePath(mdbUid);
-
-    const name = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || srcPath[srcPath.length - 1].name;
-
-    const authors = this.snippetFromHighlight(highlight, ['authors', 'authors_analyzed'], parts => parts[0]);
-    if (authors) {
-      // Remove author from path in order to replace with highlight value.
-      srcPath.pop();
-    }
-
-    const path = `${srcPath.slice(0, -1).map(n => n.name).join(' > ')} >`;
-
-    const description = this.snippetFromHighlight(highlight, ['description', 'description_analyzed'], parts => `...${parts.join('.....')}...`);
-    const content     = this.snippetFromHighlight(highlight, ['content', 'content_analyzed'], parts => `...${parts.join('.....')}...`);
-    const snippet     = (
-      <div className="search__snippet">
-        {
-          description ?
-            <div>
-              <strong>{t('search.result.description')}: </strong>
-              {description}
-            </div> :
-            null
-        }
-        {
-          content ?
-            <div>
-              <strong>{t('search.result.content')}: </strong>
-              {content}
-            </div> :
-            null
-        }
-      </div>);
-
-    return (
-      <Table.Row key={mdbUid} verticalAlign="top">
-        <Table.Cell collapsing singleLine width={1}>
-          <strong>&nbsp;&nbsp;&nbsp;&nbsp;</strong>
-        </Table.Cell>
-        <Table.Cell collapsing singleLine>
-          <Label size="tiny">{t('filters.sections-filter.sources')}</Label>
-        </Table.Cell>
-        <Table.Cell>
-          <Link className="search__link" to={canonicalLink({ id: mdbUid, content_type: 'SOURCE' })}>
-            {authors}&nbsp;{path}&nbsp;{name}
-          </Link>
-          {snippet || null}
-        </Table.Cell>
-        {
-          !isDebMode(location) ?
-            null :
-            <Table.Cell collapsing textAlign="right">
-              <ScoreDebug name={srcPath[srcPath.length - 1].name} score={score} explanation={hit._explanation} />
-            </Table.Cell>
-        }
-      </Table.Row>
-    );
-  };
-
   renderHit = (hit, rank) => {
-    const { cMap, cuMap }                                                             = this.props;
-    const { _source: { mdb_uid: mdbUid, content_type: contentType }, _type: hitType } = hit;
-    const cu                                                                          = cuMap[mdbUid];
-    const c                                                                           = cMap[mdbUid];
+    const { cMap, cuMap }                                                           = this.props;
+    const { _source: { mdb_uid: mdbUid, result_type: resultType }, _type: hitType } = hit;
+
+    if (SEARCH_INTENT_HIT_TYPES.includes(hitType)) {
+      return (
+        <Table.Row key={`${mdbUid}_intent`} verticalAlign="top">
+          <Table.Cell colSpan="5">
+            <SearchResultIntent hit={hit} rank={rank} {...this.props} />
+          </Table.Cell>
+        </Table.Row>
+      );
+    }
+
+    const cu = cuMap[mdbUid];
+    const c  = cMap[mdbUid];
 
     if (cu) {
       return (
-        <Table.Row key={`${mdbUid}_${contentType}`} verticalAlign="top">
+        <Table.Row key={`${mdbUid}_cu`} verticalAlign="top">
           <Table.Cell colSpan="4">
             <SearchResultCU hit={hit} rank={rank} {...this.props} cu={cu} />
           </Table.Cell>
@@ -207,22 +93,18 @@ class SearchResults extends Component {
       );
     } else if (c) {
       return (
-        <Table.Row key={`${mdbUid}_${contentType}`} verticalAlign="top">
+        <Table.Row key={`${mdbUid}_collection`} verticalAlign="top">
           <Table.Cell colSpan="4">
-            <SearchResultCollection hit={hit} rank={rank} c={c}  {...this.props} />
+            <SearchResultCollection hit={hit} rank={rank} c={c} snippetFromHighlight={this.snippetFromHighlight}  {...this.props} />
           </Table.Cell>
         </Table.Row>
       );
-    } else if (hitType === 'sources') {
-      return this.renderSource(hit, rank);
-    } else if (SEARCH_INTENT_HIT_TYPES.includes(hitType)) {
-      return (
-        <Table.Row key={`${mdbUid}_${contentType}`} verticalAlign="top">
-          <Table.Cell colSpan="5">
-            <SearchResultIntent hit={hit} rank={rank} {...this.props} />
-          </Table.Cell>
-        </Table.Row>
-      );
+    } else if (resultType === 'sources') {
+      return (<Table.Row key={`${mdbUid}_sources`} verticalAlign="top">
+        <Table.Cell colSpan="5">
+          <SearchResultSource hit={hit} {...this.props} snippetFromHighlight={this.snippetFromHighlight} />
+        </Table.Cell>
+      </Table.Row>);
     }
 
     // maybe content_units are still loading ?

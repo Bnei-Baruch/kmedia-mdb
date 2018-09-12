@@ -4,8 +4,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import moment from 'moment';
-import { Divider, Button, Image, Segment, Label, Icon } from 'semantic-ui-react';
-import uniq from 'lodash/uniq';
+import { Button, Card, Image, Icon } from 'semantic-ui-react';
 
 import { sectionLogo } from '../../helpers/images';
 import { selectors as settings } from '../../redux/modules/settings';
@@ -24,7 +23,9 @@ import {
   SEARCH_INTENT_SECTIONS,
   SEARCH_INTENT_INDEX_TOPIC,
   SEARCH_INTENT_INDEX_SOURCE,
-  MT_TEXT, MT_AUDIO, MT_VIDEO, CT_LESSON_PART
+  SEARCH_INTENT_HIT_TYPE_PROGRAMS,
+  SEARCH_INTENT_HIT_TYPE_LESSONS,
+  MT_TEXT, MT_AUDIO, MT_VIDEO, MT_IMAGE, CT_LESSON_PART
 
 } from '../../helpers/consts';
 
@@ -127,50 +128,86 @@ class SearchResultIntent extends Component {
     src = `${imaginaryUrl('thumbnail')}?${Requests.makeParams({ url: src, width: 250 })}`;
 
     const filmDate = cu.film_date ? this.props.t('values.date', { date: cu.film_date }) : '';
-    const link     = canonicalLink(cu);
+
     return (
-      <Segment key={cu.id}>
-        <Segment style={{ padding: 0 }}>
-          <Label attached='bottom left'>{this.mlsToStrColon(cu.duration)}</Label>
-          <Image src={src} />
-        </Segment>
-        <Divider hidden />
-        <Link className="search__link" to={link}>{cu.name}</Link>
-
-        <div>
-          <span>{this.iconByContentType(cu.content_type)}</span>
-          <span>{filmDate}</span>
+      <Card key={cu.id} className="search__card" href={canonicalLink(cu)} link>
+        <div className="cardHeader">
+          <div className='cardHeaderLabel'>
+            {this.mlsToStrColon(cu.duration)}
+            <Icon name="play" size="small" />
+          </div>
+          <Image src={src} fluid />
         </div>
-        {this.renderFiles(cu,)}
-
-      </Segment>
+        <Card.Content>
+          <Card.Header className="search__link">
+            {cu.name}
+          </Card.Header>
+          <Card.Meta>
+            {this.iconByContentType(cu.content_type)}
+            <strong>{filmDate}</strong>
+          </Card.Meta>
+          <Card.Description>
+            {this.renderFiles(cu)}
+          </Card.Description>
+        </Card.Content>
+      </Card>
     );
   };
 
   renderFiles = (cu) => {
-    return uniq(cu.files, f => f.type)
-      .filter(f => f.language === this.props.language)
-      .map(f => this.renderFileByType(f, cu.id));
+    const { t }          = this.props;
+    const { files = [] } = cu;
+    const pathname       = canonicalLink(cu);
+    const types          = [
+      {
+        type: MT_VIDEO,
+        icon: 'video',
+        title: t('constants.media-types.video'),
+        to: { search: 'mediaType=video' }
+      },
+      {
+        type: MT_AUDIO,
+        icon: 'audio',
+        title: t('constants.media-types.audio'),
+        to: { search: 'mediaType=audio' }
+      },
+      {
+        type: MT_TEXT,
+        icon: 'text',
+        title: t('materials.transcription.header'),
+        to: { state: { active: 'transcription' } }
+      },
+      { type: MT_IMAGE, icon: 'image', title: t('materials.sketches.header'), to: { state: { active: 'sketches' } } },
+    ];
+
+    return types
+      .filter(x => files.some(f => f.type === x.type))
+      .map(x => this.renderFile(x, pathname));
   };
 
-  renderFileByType = (file, cuId) => {
-    let fileType;
-    switch (file.type) {
-    case MT_VIDEO:
-      fileType = 'video';
+  renderFile = (data, pathname) => {
+    const to = { pathname, ...data.to };
+
+    return (
+      <Link to={to} key={data.type}>
+        <Button floated='left' size="mini">
+          <Icon name={'file ' + data.icon} /> {data.title}
+        </Button>
+      </Link>
+    );
+  };
+
+  iconByContentType = (type) => {
+    let icon;
+    switch (type) {
+    case CT_LESSON_PART:
+      icon = 'lessons';
       break;
-    case MT_AUDIO:
-      fileType = 'audio';
-      break;
-    case MT_TEXT:
-      fileType = 'text';
+    default:
+      icon = 'programs';
       break;
     }
-
-    return (<Button floated='left' key={file.id}>
-      <Icon name={'file ' + fileType} />
-      {`${this.props.t(`constants.media-types.${file.type}`)}`}
-    </Button>);
+    return <Image src={sectionLogo[icon]} />;
   };
 
   renderScroll = () => {
@@ -198,12 +235,10 @@ class SearchResultIntent extends Component {
 
     const pages     = new Array(numberOfPages).fill('a');
     const pagesHtml = pages.map((p, i) => {
-        return <Button
-          style={{
-            padding: '10px',
-            backgroundColor: pageNo === i ? 'red' : 'green'
-          }}
-          onClick={e => this.onScrollChange(i)} key={i}>o</Button>;
+        return (<Button
+          onClick={e => this.onScrollChange(i)} key={i} icon className="bgTransparent">
+          <Icon name={pageNo === i ? 'circle thin' : 'circle outline'} color="blue" size="small" />
+        </Button>);
       }
     );
 
@@ -235,10 +270,10 @@ class SearchResultIntent extends Component {
     let icon;
     switch (type) {
     case CT_LESSON_PART:
-      icon = 'lessons';
+      icon = SEARCH_INTENT_HIT_TYPE_LESSONS;
       break;
     default:
-      icon = 'programs';
+      icon = SEARCH_INTENT_HIT_TYPE_PROGRAMS;
       break;
     }
     return <Image src={sectionLogo[icon]} />;
@@ -255,38 +290,41 @@ class SearchResultIntent extends Component {
     const filterName                      = SEARCH_INTENT_FILTER_NAMES[index];
     const getFilterById                   = this.getFilterById(index);
 
-    const path  = tracePath(getFilterById(mdbUid), getFilterById);
-    let display = '';
+    const path      = tracePath(getFilterById(mdbUid), getFilterById);
+    let display     = '';
+    let resultsType = '';
     switch (index) {
     case SEARCH_INTENT_INDEX_TOPIC:
-      display = path[path.length - 1].label;
+      display     = path[path.length - 1].label;
+      resultsType = SEARCH_INTENT_HIT_TYPE_PROGRAMS;
       break;
     case SEARCH_INTENT_INDEX_SOURCE:
-      display = path.map(y => y.name).join(' > ');
+      display     = path.map(y => y.name).join(' > ');
+      resultsType = SEARCH_INTENT_HIT_TYPE_LESSONS;
       break;
     default:
       display = name;
     }
 
     return (
-      <Segment>
+      <div style={{ position: 'relative' }}>
         <Link
           className="search__link"
           onClick={() => this.click(mdbUid, index, type, rank, searchId)}
           to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}>
-
-          {t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`)} {display}
+          <h3>{t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`)}</h3>
+          {display}
           <span style={{ float: 'right' }}>
-            {`${t('search.showAll')} ${this.props.total} ${t('search.lessons')}`}
+            <Icon name="list" size="small" />
+            {`${t('search.showAll')} ${this.props.total} ${t('search.' + resultsType)}`}
           </span>
 
         </Link>
-        <Segment.Group horizontal>
+        <Card.Group>
           {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).map(this.renderItem)}
-        </Segment.Group>
+        </Card.Group>
         {this.renderScroll()}
-      </Segment>
-
+      </div>
     );
   }
 }

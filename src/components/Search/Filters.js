@@ -7,8 +7,7 @@ import { selectors as filterSelectors } from '../../redux/modules/filters';
 import Filters from '../Filters/Filters';
 import filterComponents from '../Filters/components';
 import { bindActionCreators } from 'redux';
-import { actions, selectors } from '../../redux/modules/filters';
-import MenuItems from '../Layout/MenuItems';
+import { actions,  } from '../../redux/modules/filters';
 
 const filters = [
   {
@@ -44,7 +43,7 @@ class SearchResultsFilters extends Component {
   showFilters = () => this.setState({ isShowFilters: !this.state.isShowFilters });
 
   onSelectionChange = (section) => {
-    const sValue = `filters.sections-filter.${section}`;
+    const sValue = section !== 'all' ? `filters.sections-filter.${section}` : '';
     this.props.setFilterValue('search', 'sections-filter', sValue);
     this.props.onChange();
   };
@@ -52,7 +51,8 @@ class SearchResultsFilters extends Component {
   renderTabs = () => {
 
     const { t, filtersValues, sortBy, onSortByChange, onHydrated, onChange } = this.props;
-    const options                                                            = ['relevance', 'newertoolder', 'oldertonewer'].map(o => ({
+
+    const options = ['relevance', 'newertoolder', 'oldertonewer'].map(o => ({
       text: t(`search.sorts.${o}`),
       value: o,
     }));
@@ -77,7 +77,7 @@ class SearchResultsFilters extends Component {
           </span>
     );
 
-    const tabs = ['lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
+    const tabs = ['all', 'lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
       <Menu.Item
         key={x}
         name={x}
@@ -89,7 +89,7 @@ class SearchResultsFilters extends Component {
         <Menu.Item>
           <Button basic compact onClick={this.showFilters}>
             <Icon name="filter" />
-            {t('search.Filters')}
+            {t('filters.filters')}
           </Button>
         </Menu.Item>
         <Menu.Item>{filters}</Menu.Item>
@@ -105,13 +105,14 @@ class SearchResultsFilters extends Component {
       <div>
         {this.renderTabs()}
         {
-          <Filters
-            style={{ 'display': this.state.isShowFilters ? 'block' : 'none' }}
-            namespace="search"
-            filters={filters}
-            onChange={onChange}
-            onHydrated={onHydrated}
-          />}
+          <div style={{ 'display': this.state.isShowFilters ? 'block' : 'none' }}>
+            <Filters
+              namespace="search"
+              filters={filters}
+              onChange={onChange}
+              onHydrated={onHydrated} />
+          </div>
+        }
       </div>
     );
   }

@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Segment, Icon, Button, Table, Image, Label } from 'semantic-ui-react';
+import { Segment, Icon, Button,  Image,  } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import uniq from 'lodash/uniq';
 
 import playerHelper from '../../helpers/player';
 import { canonicalLink } from '../../helpers/links';
-import { assetUrl, imaginaryUrl, Requests } from '../../helpers/Api';
 import { isDebMode } from '../../helpers/url';
 import { actions, selectors } from '../../redux/modules/mdb';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
@@ -19,7 +18,7 @@ import * as shapes from '../shapes';
 import { sectionLogo } from '../../helpers/images';
 import Link from '../Language/MultiLanguageLink';
 import ScoreDebug from './ScoreDebug';
-import { MT_TEXT, MT_AUDIO, MT_VIDEO, CT_LESSON_PART } from '../../helpers/consts';
+import { MT_TEXT, MT_AUDIO, MT_VIDEO, MT_IMAGE, CT_LESSON_PART, } from '../../helpers/consts';
 
 let testCall = true;
 
@@ -65,9 +64,9 @@ class SearchResultCU extends Component {
     return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop]) }} />;
   };
 
-  click = (mdb_uid, index, type, rank, searchId) => {
+  click = (mdb_uid, index, resultType, rank, searchId) => {
     const { click } = this.props;
-    click(mdb_uid, index, type, rank, searchId);
+    click(mdb_uid, index, resultType, rank, searchId);
   };
 
   renderFiles = () => {
@@ -77,7 +76,7 @@ class SearchResultCU extends Component {
       .map(f => this.renderFileByType(f, cu.id));
   };
 
-  renderFileByType = (file, cuId) => {
+  renderFileByType = (file) => {
     let fileType;
     switch (file.type) {
     case MT_VIDEO:
@@ -91,24 +90,47 @@ class SearchResultCU extends Component {
       break;
     }
 
-    return (<Button floated='left' key={file.id}>
+    return (<Button floated='left' size="mini" key={file.id}>
       <Icon name={'file ' + fileType} />
       {`${this.props.t(`constants.media-types.${file.type}`)}`}
     </Button>);
   };
 
-  renderVideo = (file, unitId) => {
+  renderFiles = (cu = {}) => {
+    const { files = [] } = cu;
+    const pathname       = canonicalLink(cu);
+    const types          = [
+      {
+        type: MT_VIDEO,
+        icon: 'video',
+        title: this.props.t('constants.media-types.video'),
+        to: { search: 'mediaType=video' }
+      },
+      {
+        type: MT_AUDIO,
+        icon: 'audio',
+        title: this.props.t('constants.media-types.audio'),
+        to: { search: 'mediaType=audio' }
+      },
+      { type: MT_TEXT, icon: 'text', title: 'tr', to: { state: { active: 'transcription' } } },
+      { type: MT_IMAGE, icon: 'image', title: 'scetches', to: { state: { active: 'transcription' } } },
+    ];
 
-    let src = assetUrl(`api/thumbnail/${unitId}`);
-    if (!src.startsWith('http')) {
-      src = `http://localhost${src}`;
-    }
-    src = `${imaginaryUrl('thumbnail')}?${Requests.makeParams({ url: src, width: 150 })}`;
+    return types
+      .filter(x => files.some(f => f.type === x.type))
+      .map(x => this.renderFile(x, pathname));
+  };
+
+  renderFile = (data, pathname) => {
+    const to = { pathname, ...data.to };
+    console.log('SearchResultIntent.renderFile', to);
+
     return (
-      <Segment compact style={{ padding: 0 }} floated='left' key={file.id}>
-        <Label attached='bottom left'>{this.mlsToStrColon(file.duration)}</Label>
-        <Image src={src} />
-      </Segment>
+      <Link to={to} key={data.type}>
+        <Button floated='left'>
+          <Icon name={'file ' + data.icon} /> {data.title}
+        </Button>
+      </Link>
     );
   };
 
@@ -119,24 +141,6 @@ class SearchResultCU extends Component {
     const s        = duration.seconds();
     return h ? `${h}:${m}:${s}` : `${m}:${s}`;
   }
-
-  renderAudio = (file) => {
-    return (
-      <Button floated='left' key={file.id}>
-        <Icon name="file audio" />
-        {`${this.props.t(`constants.media-types.${file.type}`)}`}
-      </Button>
-    );
-  };
-
-  renderText = (file) => {
-    return (
-      <Button floated='left' key={file.id}>
-        <Icon name="file text" />
-        {`${this.props.t(`constants.media-types.${file.type}`)}`}
-      </Button>
-    );
-  };
 
   iconByContentType = (type) => {
     let icon;
@@ -152,9 +156,19 @@ class SearchResultCU extends Component {
   };
 
   render() {
-    const { t, location, queryResult, cu, hit, rank }                                            = this.props;
-    const { search_result: { searchId } }                                                        = queryResult;
-    const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
+    const { t, location, queryResult, cu, hit, rank } = this.props;
+    const { search_result: { searchId } }             = queryResult;
+    const {
+            _index: index,
+            _type: type,
+            _source:
+              {
+                mdb_uid: mdbUid,
+                result_type: resultType
+              },
+            highlight,
+            _score: score
+          }                                           = hit;
 
     const name        = this.snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || cu.name;
     const description = this.snippetFromHighlight(highlight, ['description', 'description_analyzed'], parts => `...${parts.join('.....')}...`);
@@ -184,36 +198,27 @@ class SearchResultCU extends Component {
       filmDate = t('values.date', { date: cu.film_date });
     }
 
-    return (<div>
-        <Table>
-          <Table.Body>
-            <Table.Row key={mdbUid} verticalAlign="top">
-              <Table.Cell width={1}>
-                {this.iconByContentType(cu.content_type)}
-              </Table.Cell>
-              <Table.Cell width={11}>
-                <Link
-                  className="search__link"
-                  onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-                  to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}
-                >
-                  {name}
-                </Link>
+    return (
+      <Segment key={mdbUid} className="bgHoverGrey">
+        <Link
+          className="search__link"
+          onClick={() => this.click(mdbUid, index, resultType, rank, searchId)}
+          to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}
+        >
+          {name}
 
-                {snippet || null}
-                {!isDebMode(location) ? null :
-                  <ScoreDebug name={cu.name} score={score} explanation={hit._explanation} />}
-                <strong>{filmDate}</strong>
-
-                <div>
-                  {this.renderFiles()}
-                </div>
-              </Table.Cell>
-            </Table.Row>
-          </Table.Body>
-        </Table>
-      </div>
-
+          {snippet || null}
+          {!isDebMode(location) ? null :
+            <ScoreDebug name={cu.name} score={score} explanation={hit._explanation} />}
+          <div>
+            {this.iconByContentType(cu.content_type)}
+            <strong>{filmDate}</strong>
+          </div>
+          <div>
+            {this.renderFiles()}
+          </div>
+        </Link>
+      </Segment>
     );
   };
 }
