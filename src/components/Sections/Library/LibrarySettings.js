@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Icon, Menu, Popup, } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
+import { Button, Icon, Menu, Popup, } from 'semantic-ui-react';
 
 class LibrarySettings extends Component {
   static propTypes = {
@@ -9,9 +9,6 @@ class LibrarySettings extends Component {
   };
 
   static defaultProps = {};
-
-  static getItem = () => (JSON.parse(localStorage.getItem('library-settings')) || {});
-  static setItem = value => localStorage.setItem('library-settings', JSON.stringify(value));
 
   state = {
     isOpen: false,
@@ -27,6 +24,9 @@ class LibrarySettings extends Component {
   componentWillUnmount() {
     window.removeEventListener('resize', this.closePopup);
   }
+
+  static getItem = () => (JSON.parse(localStorage.getItem('library-settings')) || {});
+  static setItem = value => localStorage.setItem('library-settings', JSON.stringify(value));
 
   closePopup = () => {
     this.handlePopup(false);

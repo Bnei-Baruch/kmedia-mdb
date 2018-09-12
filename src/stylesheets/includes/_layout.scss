@@ -2,6 +2,13 @@ $sidebar-width: 290px;
 $main-menu-height: 60px;
 $secondary-header-height: 10px;
 
+body {
+  overflow-y: scroll;
+
+  &.noscroll {
+    overflow: hidden;
+  }
+}
 
 @import 'rtl/layout';
 
@@ -219,7 +226,7 @@ $secondary-header-height: 10px;
 }
 
 .splash {
-  display:flex;
+  display: flex;
   flex-direction: column;
   justify-content: center;
 }

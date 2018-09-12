@@ -7,7 +7,8 @@ import { withRouter } from 'react-router-dom';
 import { push as routerPush, replace as routerReplace } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Input, Ref, Message, Popup } from 'semantic-ui-react';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
@@ -19,6 +20,7 @@ import Helmets from '../../shared/Helmets';
 import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
 import LibrarySettings from './LibrarySettings';
+import Share from './Share';
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -170,31 +172,39 @@ class LibraryContainer extends Component {
     return this.firstLeafId(children[0]);
   };
 
-  handleContextRef               = (ref) => {
+  handleContextRef = (ref) => {
     this.contextRef = ref;
   };
-  handleAccordionContext         = (ref) => {
+
+  handleAccordionContext = (ref) => {
     this.accordionContext = ref;
   };
+
   handleSelectedAccordionContext = (ref) => {
     this.selectedAccordionContext = ref;
   };
-  handleSecondaryHeaderRef       = (ref) => {
+
+  handleSecondaryHeaderRef = (ref) => {
     this.secondaryHeaderRef = ref;
   };
-  handleContentHeaderRef         = (ref) => {
+
+  handleContentHeaderRef = (ref) => {
     this.contentHeaderRef = ref;
   };
-  handleTocIsActive              = () => {
+
+  handleTocIsActive = () => {
     this.setState({ tocIsActive: !this.state.tocIsActive });
   };
-  handleIsReadable               = () => {
+
+  handleIsReadable = () => {
     this.setState({ isReadable: !this.state.isReadable });
   };
-  handleSettings                 = (setting) => {
+
+  handleSettings = (setting) => {
     this.setState(setting);
   };
-  fetchIndices                   = (sourceId) => {
+
+  fetchIndices = (sourceId) => {
     if (isEmpty(sourceId) || !isEmpty(this.props.indexMap[sourceId])) {
       return;
     }
@@ -328,7 +338,16 @@ class LibraryContainer extends Component {
       );
     }
 
-    const { isReadable, fontSize, theme, fontType, secondaryHeaderHeight, tocIsActive, match, } = this.state;
+    const
+      {
+        isReadable,
+        fontSize,
+        theme,
+        fontType,
+        secondaryHeaderHeight,
+        tocIsActive,
+        match,
+      } = this.state;
 
     const matchString = this.matchString(parentId, t);
 
@@ -353,7 +372,13 @@ class LibraryContainer extends Component {
                   <div className="source__header-toolbar">
                     {matchString}
                     {this.switchSortingOrder(parentId)}
-                    <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
+                    <Button
+                      compact
+                      size="small"
+                      className="computer-hidden large-screen-hidden widescreen-hidden"
+                      icon="list layout"
+                      onClick={this.handleTocIsActive}
+                    />
                   </div>
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
@@ -363,6 +388,7 @@ class LibraryContainer extends Component {
                     <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
+                    <Share t={t} />
                   </div>
                 </Grid.Column>
               </Grid.Row>
