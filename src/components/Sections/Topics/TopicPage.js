@@ -74,10 +74,10 @@ class TopicPage extends Component {
         const topicHeader = tagPath[tagPath.length - 1].label;
 
         return (
-          <Container>
+          <Container className="padded">
             <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="small" className="section-header" />
             <Header as="h1" color="blue" className="section-header__title">{topicHeader}</Header>
-            <Grid container doubling columns={sections.length} className="homepage__iconsrow">
+            <Grid doubling columns={sections.length}>
               {
                 sections.map((s) => {
                   const sectionUnits = getSectionUnits(s);

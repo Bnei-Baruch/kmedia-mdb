@@ -197,6 +197,7 @@ class TopicContainer extends Component {
       <div>
         <SectionHeader section="topics" />
         <Divider fitted />
+        <Container className="padded">
         <Input
           fluid
           size="small"
@@ -207,6 +208,7 @@ class TopicContainer extends Component {
           onChange={this.handleFilterChange}
           onKeyDown={this.handleFilterKeyDown}
         />
+        </Container>
         <Container className="padded">
           {filteredRoots.map(r => this.renderBranch(r))}
         </Container>
