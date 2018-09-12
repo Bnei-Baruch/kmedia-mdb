@@ -44,12 +44,12 @@ class Filters extends Component {
 
   handlePopupClose = () =>{
     this.setState({ activeFilter: null });
-    document.getElementsByTagName("body")[0].classList.remove('noscroll');
+    document.getElementsByTagName("body")[0].classList.remove('noscroll--smallmobile');
   }
 
   handlePopupOpen = activeFilter =>{
     this.setState({ activeFilter });
-    document.getElementsByTagName("body")[0].classList.add('noscroll');
+    document.getElementsByTagName("body")[0].classList.add('noscroll--smallmobile');
   }
 
   handleApply = (name, value) => {
