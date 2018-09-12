@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { List, Container, Header, Divider, Input, Icon} from 'semantic-ui-react';
-import { translate } from 'react-i18next';
 import debounce from 'lodash/debounce';
+import { connect } from 'react-redux';
+import { translate } from 'react-i18next';
+import { List, Container, Header, Divider, Input, Icon } from 'semantic-ui-react';
 
 import { selectors } from '../../../redux/modules/tags';
 import SectionHeader from '../../shared/SectionHeader';
@@ -27,16 +27,14 @@ class TopicContainer extends Component {
 
   state = {
     match: '',
-  }
+  };
 
   // filter stuff
 
   getRegExp = (match) => {
     const escapedMatch = match.replace(/[/)(.+\\]/g, '\\$&');
-    const reg          = new RegExp(escapedMatch, 'i');
-
-    return reg;
-  }
+    return new RegExp(escapedMatch, 'i');
+  };
 
   handleFilterChange = debounce((e, data) => {
     this.setState({ match: data.value });
@@ -52,20 +50,20 @@ class TopicContainer extends Component {
     this.setState({ match: '' });
   };
 
-  filteredById = {}
+  filteredById = {};
 
   filterTagsById = () => {
     const { roots, byId } = this.props;
-    const { match } = this.state;
+    const { match }       = this.state;
 
     if (!match) {
       this.filteredById = byId;
       return roots;
     }
 
-    this.filteredById = {};
+    this.filteredById  = {};
     const parentIdsArr = [];
-    const regExp = this.getRegExp(match);
+    const regExp       = this.getRegExp(match);
 
     // filter objects
     Object.keys(byId).forEach((key) => {
@@ -84,7 +82,7 @@ class TopicContainer extends Component {
 
     // add grand parents ids till the root to parentIdsArr
     const displayRootIndexes = []; // to keep the same order of the roots
-    let i = 0;
+    let i                    = 0;
     let index;
     while (i < parentIdsArr.length) {
       const parent = byId[parentIdsArr[i]];
@@ -111,7 +109,7 @@ class TopicContainer extends Component {
     });
 
     return filteredRoots;
-  }
+  };
 
   isIncluded = id => (this.filteredById[id]);
 
@@ -153,7 +151,7 @@ class TopicContainer extends Component {
           {/* eslint-disable-next-line */}
           {node.label}
           <Link to={`/topics/${node.id}`}>
-            <Icon size='small' name="chain"/>
+            <Icon size="small" name="chain" />
           </Link>
         </Header>
         {this.renderNode(node)}
@@ -172,10 +170,10 @@ class TopicContainer extends Component {
       <div key={rootId} className="topics__section">
         <Header as="h1" className="topics__title">
           {/* eslint-disable-next-line */}
-            {rootNode.label}
-            
+          {rootNode.label}
+
           <Link to={`/topics/${rootNode.id}`}>
-            <Icon size='small' name="chain"/>
+            <Icon size="small" name="chain" />
           </Link>
         </Header>
         <div className="topics__list">
@@ -191,7 +189,7 @@ class TopicContainer extends Component {
   };
 
   render() {
-    const { t } = this.props;
+    const { t }         = this.props;
     // run filter
     const filteredRoots = this.filterTagsById();
 
