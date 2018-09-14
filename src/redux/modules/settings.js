@@ -51,7 +51,7 @@ export const reducer = handleActions({
 /* Selectors */
 
 const getLanguage        = state => state.language;
-const getContentLanguage = state => state.contentLanguage;
+const getContentLanguage = state => state.contentLanguage || state.language;
 const getPageSize        = state => state.pageSize;
 
 export const selectors = {
