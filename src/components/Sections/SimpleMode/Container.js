@@ -59,7 +59,13 @@ class SimpleModeContainer extends Component {
   }
 
   handleLanguageChanged = (e, filesLanguage) => {
-    this.setState({ filesLanguage });
+    if (filesLanguage) {
+      this.setState({ filesLanguage });
+
+      return;
+    }
+
+    this.setState({ filesLanguage: e.currentTarget.value });
   };
 
   handleDayClick = (selectedDate) => {
@@ -79,38 +85,23 @@ class SimpleModeContainer extends Component {
       groupOtherMediaByType(item, language, t, isMobile));
 
   render() {
-    const { items, wip, err, t, language, location } = this.props;
-    const { filesLanguage }                          = this.state;
-    const isMobileDevice                             = this.isMobileDevice();
+    const { language }      = this.props;
+    const { filesLanguage } = this.state;
+    const isMobileDevice    = this.isMobileDevice();
+    const pageProps         = {
+      ...this.props,
+      selectedDate: this.state.date,
+      uiLanguage: language,
+      language: filesLanguage,
+      renderUnit: this.renderUnitOrCollection,
+      onDayClick: this.handleDayClick,
+      onLanguageChange: this.handleLanguageChanged
+    };
 
     return (
       isMobileDevice ?
-        (<MobilePage
-          items={items}
-          selectedDate={this.state.date}
-          wip={wip}
-          err={err}
-          uiLanguage={language}
-          language={filesLanguage}
-          t={t}
-          location={location}
-          renderUnit={this.renderUnitOrCollection}
-          onDayClick={this.handleDayClick}
-          onLanguageChange={this.handleLanguageChanged}
-        />) :
-        (<DesktopPage
-          items={items}
-          selectedDate={this.state.date}
-          wip={wip}
-          err={err}
-          uiLanguage={language}
-          language={filesLanguage}
-          t={t}
-          location={location}
-          renderUnit={this.renderUnitOrCollection}
-          onDayClick={this.handleDayClick}
-          onLanguageChange={this.handleLanguageChanged}
-        />)
+        (<MobilePage {...pageProps} />) :
+        (<DesktopPage {...pageProps} />)
     );
   }
 }
