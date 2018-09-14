@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Dropdown, Header, Popup, Segment } from 'semantic-ui-react';
+import { Button, Menu, Header, Popup, Segment, Icon } from 'semantic-ui-react';
 
 import UILanguage from './UILanguage';
 import ContentLanguage from './ContentLanguage';
@@ -33,7 +33,10 @@ class HandleLanguages extends Component {
         basic
         flowing
         trigger={
-          <Dropdown item labeled onClick={this.handlePopupOpen} text={'Languages'} icon="setting" options={[]} />
+          <Menu.Item onClick={this.handlePopupOpen}>
+            Languages
+            <Icon name="setting" />
+          </Menu.Item>
         }
         open={isActive}
         onOpen={this.handlePopupOpen}
