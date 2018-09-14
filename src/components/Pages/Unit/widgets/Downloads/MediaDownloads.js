@@ -153,7 +153,6 @@ class MediaDownloads extends Component {
     this.setState({ language });
   };
 
-  // TODO: implement once fallback language is known
   fallbackImage = (images) => {
     const imageLanguages                            = images.map(image => image.language);
     const { contentLanguage, language: uiLanguage } = this.props;
