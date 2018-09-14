@@ -316,7 +316,10 @@
     "today-button": "היום",
     "total-media-for-date": "כל המדיה לתאריך ",
     "media-language": "שפת המדיה",
-    "no-files-found": "אין קבצים לשפה שבחרת"
+    "no-files-found": "אין קבצים לשפה שבחרת",
+    "date": "תאריך",
+    "prev": "אחורה",
+    "next": "קדימה"
   },
   "help": {
     "header": {
