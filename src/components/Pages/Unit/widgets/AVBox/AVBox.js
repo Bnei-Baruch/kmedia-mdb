@@ -18,6 +18,7 @@ class AVBox extends Component {
     unit: shapes.ContentUnit,
     history: shapes.History.isRequired,
     location: shapes.HistoryLocation.isRequired,
+    language: PropTypes.string.isRequired,
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
     autoPlayAllowed: PropTypes.bool.isRequired,
@@ -39,27 +40,31 @@ class AVBox extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { unit, language } = nextProps;
+    const { unit, uiLanguage, contentLanguage, location } = nextProps;
+    const { uiLanguage: oldUiLanguage, contentLanguage: oldContentLanguage, location: oldLocation }
+                                                          = this.props;
+    const { language: playerLanguage }                    = this.state.playableItem;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();
-    const prevMediaType   = playerHelper.getMediaTypeFromQuery(this.props.location);
-    const newMediaType    = playerHelper.getMediaTypeFromQuery(nextProps.location, preferredMT);
-    const newItemLanguage = playerHelper.getLanguageFromQuery(nextProps.location, this.state.playableItem.language);
+    const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);
+    const newMediaType    = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
     // no change
     if (unit === this.props.unit &&
-      language === this.props.language &&
+      oldUiLanguage === uiLanguage &&
+      oldContentLanguage === contentLanguage &&
       prevMediaType === newMediaType &&
-      newItemLanguage === this.state.playableItem.language) {
+      newItemLanguage === playerLanguage) {
       return;
     }
 
     // Persist language in playableItem
-    this.setPlayableItem(unit, newMediaType, newItemLanguage);
+    this.setPlayableItem(unit, newMediaType, newItemLanguage, uiLanguage);
   }
 
   setPlayableItem(unit, mediaType, playerLanguage, uiLanguage) {
-    const playableItem = playerHelper.playableItem(unit, mediaType, playerLanguage, uiLanguage);
+    const playableItem = playerHelper.playableItem(unit, mediaType, uiLanguage, playerLanguage);
     this.setState({ playableItem });
   }
 
