@@ -4,14 +4,14 @@ import moment from 'moment';
 import DayPicker from 'react-day-picker';
 import MomentLocaleUtils from 'react-day-picker/moment';
 import { translate } from 'react-i18next';
-import { Container, Divider, Grid, Card, Button } from 'semantic-ui-react';
+import { Button, Card, Container, Divider, Grid } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES } from '../../../helpers/consts';
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 import SectionHeader from '../../shared/SectionHeader';
 import DropdownLanguageSelector from '../../Language/Selector/DropdownLanguageSelector';
-import SimpleModeDesktopList from './DesktopList';
+import SimpleModeList from './list';
 
 class SimpleModeDesktopPage extends PureComponent {
   static propTypes = {
@@ -51,7 +51,7 @@ class SimpleModeDesktopPage extends PureComponent {
       <div>
         {
           items ?
-            <SimpleModeDesktopList items={items} language={language} t={t} renderUnit={renderUnit} /> :
+            <SimpleModeList items={items} language={language} t={t} renderUnit={renderUnit} /> :
             null
         }
       </div>
