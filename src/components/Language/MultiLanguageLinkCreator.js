@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import hoistStatics from 'hoist-non-react-statics';
 import { Link, withRouter } from 'react-router-dom';
 
-import { prefixWithLanguage } from '../../helpers/url';
+import { getQuery, prefixWithLanguage, stringify } from '../../helpers/url';
 import * as shapes from '../shapes';
 
 /**
@@ -32,12 +32,14 @@ const multiLanguageLinkCreator = () => (WrappedComponent) => {
         PropTypes.object
       ]),
       location: shapes.HistoryLocation.isRequired,
-      language: PropTypes.string // language shorthand, for example: "ru"
+      language: PropTypes.string, // language shorthand, for example: "ru"
+      contentLanguage: PropTypes.string, // language shorthand, for example: "ru"
     };
 
     static defaultProps = {
       language: '',
-      to: undefined
+      to: undefined,
+      contentLanguage: undefined,
     };
 
     prefixPath = (path) => {
@@ -48,15 +50,22 @@ const multiLanguageLinkCreator = () => (WrappedComponent) => {
     render() {
       // We need to use "unused constants" in order to get proper "rest"
       // eslint-disable-next-line no-unused-vars
-      const { to, language, location, match, history, staticContext, ...rest } = this.props;
-      let navigateTo                                                                    = to;
+      const { to, language, contentLanguage, location, match, history, staticContext, ...rest } = this.props;
+      let navigateTo                                                                            = to;
       let toWithLanguage;
 
       if (typeof navigateTo === 'string') {
         toWithLanguage = this.prefixPath(navigateTo);
       } else {
         if (!navigateTo) {
-          navigateTo = location;
+          // we're changing 'search' in case contentLanguage was supplied
+          navigateTo = { ...location };
+        }
+
+        if (contentLanguage !== undefined) {
+          const q           = getQuery(navigateTo);
+          q.language        = contentLanguage;
+          navigateTo.search = `?${stringify(q)}`;
         }
 
         toWithLanguage = {
