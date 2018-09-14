@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Grid, Container, Breadcrumb, Header } from 'semantic-ui-react';
+import { Grid, Container, Breadcrumb, Header, Divider } from 'semantic-ui-react';
 import { translate } from 'react-i18next';
 
 import { actions, selectors } from '../../../redux/modules/tags';
@@ -61,9 +61,16 @@ class TopicPage extends Component {
 
       if (getPathByID && !isEmpty(sections)) {
         const tagPath = getPathByID(tagId);
+        const zzz = [
+          {id:"",label:"Topics"},
+          ...tagPath,
+        ]
 
         // create breadCrumb sections from tagPath
-        const breadCrumbSections = tagPath.map((p, index, arr) =>
+        const breadCrumbSections = [
+          { id: "", label: "Topics" },
+          ...tagPath,
+          ].map((p, index, arr) =>
           ({ key: p.id,
             content: p.label,
             // last item is active and not a link
@@ -75,8 +82,9 @@ class TopicPage extends Component {
 
         return (
           <Container className="padded">
-            <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="small" className="section-header" />
-            <Header as="h1" color="blue" className="section-header__title">{topicHeader}</Header>
+            <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="large"  />
+            <Divider hidden/>
+            {/* <Header as="h2" className="section-header__title">{topicHeader}</Header> */}
             <Grid doubling columns={sections.length}>
               {
                 sections.map((s) => {

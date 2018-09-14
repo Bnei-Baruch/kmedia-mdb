@@ -1,36 +1,33 @@
 .topics {
   &__section {
     margin-bottom: 4rem;
-
-    // &:first-child {
-    //   margin-top: 2rem;
-    // }
   }
 
   &__title {
     .icon{
       margin: 0 0 0 8px;
     }
-    // display: flex;
-    // background:red;
-    
+    margin-bottom: 1.5rem !important;
+
   }
 
   &__list {
     
     column-count: 4;
     column-gap: 2rem;
+
+    > * {
+      display: inline;
+    }
+
     @include tablet {
-      // background: pink !important;
       column-count: 3;
     }
     @include mobile {
       column-count: 2;
-      // background: green !important;
     }
     @include small-mobile {
       column-count: 1;
-      // background: red !important;
     }
     margin-bottom: 4rem;
 
@@ -39,7 +36,7 @@
     }
 
     .header {
-      line-height: 4rem !important;
+      line-height: 2rem !important;
       margin: 0 !important;
       .icon{
         margin: 0 0 0 8px;
@@ -51,7 +48,4 @@
       padding: 0 !important;
     }
   }
-
-  // &__subtitle {
-  // }
 }

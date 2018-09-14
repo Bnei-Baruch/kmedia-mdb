@@ -147,7 +147,7 @@ class TopicContainer extends Component {
   renderSubHeader = node => (
     this.hasChildren(node) ?
       <Fragment key={node.id}>
-        <Header as="h3" className="topics__subtitle">
+        <Header as="h4" className="topics__subtitle">
           {/* eslint-disable-next-line */}
           {node.label}
           <Link to={`/topics/${node.id}`}>
@@ -168,7 +168,7 @@ class TopicContainer extends Component {
 
     return (
       <div key={rootId} className="topics__section">
-        <Header as="h1" className="topics__title">
+        <Header as="h2" className="topics__title">
           {/* eslint-disable-next-line */}
           {rootNode.label}
 

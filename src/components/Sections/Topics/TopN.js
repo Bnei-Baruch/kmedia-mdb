@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table, Image, Button } from 'semantic-ui-react';
+import { Table, Image, Button, Header } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
 import { sectionLogo } from '../../../helpers/images';
@@ -102,8 +102,12 @@ class TopN extends React.PureComponent {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>
-                <Image src={sectionLogo[section]} />
-                <span>{t(`nav.sidebar.${section}`)}</span>
+                
+                
+                <Header as="h3" >
+                <Image src={sectionLogo[section]} /> {t(`nav.sidebar.${section}`)}
+                </Header>
+                
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -114,7 +118,7 @@ class TopN extends React.PureComponent {
             <Table.Footer fullWidth>
               <Table.Row>
                 <Table.HeaderCell>
-                  <Button primary size="medium" href={url}>View All</Button>
+                  <Button primary size="tiny" href={url}>View All</Button>
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Footer> :
