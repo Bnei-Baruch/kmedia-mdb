@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest, takeEvery } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { actions, types } from '../redux/modules/assets';
@@ -54,7 +54,7 @@ function* watchDoc2Html() {
 }
 
 function* watchSourceIndex() {
-  yield takeLatest([types.SOURCE_INDEX], sourceIndex);
+  yield takeEvery([types.SOURCE_INDEX], sourceIndex);
 }
 
 function* watchFetchAsset() {
