@@ -622,7 +622,7 @@
   /* ********** wordpress style ********** */
 }
 
-// native day picker (date filter)
+// native day picker (date filter && Simple mode for mobile)
 .to-from-label {
   min-width: 70px;
 }
@@ -639,6 +639,7 @@
 .summary-container {
   display: flex;
   align-items: baseline;
+  margin-bottom: 1em;
 
   h4, span {
     margin-right: 6px;
@@ -646,6 +647,52 @@
 
   .dropdown-container {
     width: 170px;
+  }
+
+  @media only screen and (max-width: $mobileBreakpoint) {
+    justify-content: space-between;
+
+    .controller {
+      display: flex;
+      flex-direction: column;
+
+      .date-container {
+        display: flex;
+
+        input {
+          background: #ebecf0;
+          color: #1a4179;
+          display: inline-block;
+          width: 75px;
+          height: 0;
+          margin: 0 .5em;
+          max-width: max-content;
+          box-sizing: content-box;
+
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+
+      .dropdown-container {
+        width: 90px;
+
+        select {
+          padding: 2px;
+          box-shadow: none;
+          background: #ebecf0;
+          color: #1a4179;
+          border: 1px solid rgba(34, 36, 38, 0.15);
+          border-radius: .28571429rem;
+          box-sizing: content-box;
+
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -677,6 +724,7 @@
     .icon {
       height: 14px !important;
       color: #fff;
+      margin: 0;
     }
 
     a {
