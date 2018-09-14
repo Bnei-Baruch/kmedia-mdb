@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Card, Container, List } from 'semantic-ui-react';
+import { Card, List } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 
-class SimpleModeDesktopList extends PureComponent {
+class SimpleModeList extends PureComponent {
   static propTypes = {
     items: shapes.SimpleMode,
     language: PropTypes.string.isRequired,
@@ -22,7 +22,7 @@ class SimpleModeDesktopList extends PureComponent {
     const isMobile                           = false;
 
     return (
-      <Container className="padded">
+      <div>
         {
           items.lessons ?
             <List size="large">
@@ -42,9 +42,9 @@ class SimpleModeDesktopList extends PureComponent {
             </Card> :
             null
         }
-      </Container>
+      </div>
     );
   }
 }
 
-export default translate()(SimpleModeDesktopList);
+export default translate()(SimpleModeList);
