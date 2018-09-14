@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Dropdown, Flag, } from 'semantic-ui-react';
 
 import { COOKIE_UI_LANG, LANG_UI_LANGUAGES, LANGUAGES } from '../../helpers/consts';
 import Link from '../Language/MultiLanguageLink';
-import { selectors as settings } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
 
 class UILanguage extends Component {
   static propTypes = {
+    contentLanguage: PropTypes.string.isRequired,
     language: PropTypes.string.isRequired,
 
     // We need dependency on location in order to change Link every time url changes
@@ -27,14 +26,14 @@ class UILanguage extends Component {
   };
 
   render() {
-    const { t, language } = this.props;
+    const { t, language, contentLanguage } = this.props;
 
     return (
       <Dropdown item text={`UI: ${t(`constants.languages.${language}`)}`}>
         <Dropdown.Menu>
           {
             LANG_UI_LANGUAGES.map(x => (
-              <Dropdown.Item key={x} as={Link} onClick={() => this.storeUILanguage(x)} language={`${x}`}>
+              <Dropdown.Item key={x} as={Link} onClick={() => this.storeUILanguage(x)} language={`${x}`} contentLanguage={contentLanguage}>
                 <Flag name={LANGUAGES[x].flag} />
                 {t(`constants.languages.${x}`)}
               </Dropdown.Item>
@@ -46,8 +45,4 @@ class UILanguage extends Component {
   }
 }
 
-export default connect(
-  state => ({
-    language: settings.getLanguage(state.settings),
-  })
-)(UILanguage);
+export default UILanguage;
