@@ -51,7 +51,7 @@ const renderHorizontalFilesList = (files, contentType, t) =>
     );
   });
 
-const renderUnitsDesktop = (units, language, t) =>
+const renderUnits = (units, language, t) =>
   units.map((unit) => {
     const filesList = unit.files.filter(file => file.language === language);
     const files     = renderHorizontalFilesList(filesList, unit.content_type, t);
@@ -74,38 +74,12 @@ const renderUnitsDesktop = (units, language, t) =>
     );
   });
 
-const renderUnitsMobile = (units, language, t) =>
-  units.map((unit) => {
-    const filesList = unit.files.filter(file => file.language === language);
-    const files     = renderHorizontalFilesList(filesList, unit.content_type, t);
-
-    return (
-      <Card key={unit.id}>
-        <Card.Content>
-          <Card.Header className="unit-header">
-            <Link to={canonicalLink(unit)}>{unit.name || NO_NAME}</Link>
-          </Card.Header>
-        </Card.Content>
-        <Card.Content extra>
-          <List.List className="horizontal-list">
-            {
-              files.length ?
-                files :
-                <span className="no-files">{t('simple-mode.no-files-found')}</span>
-            }
-          </List.List>
-        </Card.Content>
-      </Card>
-    );
-  });
-
 export const renderCollection = (collection, language, t, isMobile) => {
   if (!collection.content_units) {
     return null;
   }
 
-  const renderUnits = isMobile ? renderUnitsMobile : renderUnitsDesktop;
-  const units       = renderUnits(collection.content_units, language, t);
+  const units = renderUnits(collection.content_units, language, t);
 
   return (
     <Card fluid key={collection.id}>
@@ -117,7 +91,7 @@ export const renderCollection = (collection, language, t, isMobile) => {
         </Card.Header>
       </Card.Content>
       <Card.Content extra>
-        <List fluid>
+        <List>
           {units}
         </List>
       </Card.Content>
@@ -126,7 +100,6 @@ export const renderCollection = (collection, language, t, isMobile) => {
 };
 
 export const groupOtherMediaByType = (collection, language, t, isMobile) => {
-  const renderUnits = isMobile ? renderUnitsMobile : renderUnitsDesktop;
-  const byType      = groupBy(collection, 'content_type');
+  const byType = groupBy(collection, 'content_type');
   return Object.values(byType).map(v => renderUnits(v, language, t));
 };
