@@ -148,7 +148,6 @@ class TopicContainer extends Component {
     this.hasChildren(node) ?
       <Fragment key={node.id}>
         <Header as="h4" className="topics__subtitle">
-          {/* eslint-disable-next-line */}
           {node.label}
           <Link to={`/topics/${node.id}`}>
             <Icon size="small" name="chain" />
@@ -169,9 +168,7 @@ class TopicContainer extends Component {
     return (
       <div key={rootId} className="topics__section">
         <Header as="h2" className="topics__title">
-          {/* eslint-disable-next-line */}
           {rootNode.label}
-
           <Link to={`/topics/${rootNode.id}`}>
             <Icon size="small" name="chain" />
           </Link>
@@ -198,16 +195,16 @@ class TopicContainer extends Component {
         <SectionHeader section="topics" />
         <Divider fitted />
         <Container className="padded">
-        <Input
-          fluid
-          size="small"
-          icon="search"
-          className="search-omnibox"
-          placeholder={t('sources-library.filter')}
-          value={this.state.match}
-          onChange={this.handleFilterChange}
-          onKeyDown={this.handleFilterKeyDown}
-        />
+          <Input
+            fluid
+            size="small"
+            icon="search"
+            className="search-omnibox"
+            placeholder={t('sources-library.filter')}
+            value={this.state.match}
+            onChange={this.handleFilterChange}
+            onKeyDown={this.handleFilterKeyDown}
+          />
         </Container>
         <Container className="padded">
           {filteredRoots.map(r => this.renderBranch(r))}
