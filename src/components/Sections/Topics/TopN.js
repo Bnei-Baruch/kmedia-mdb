@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table, Image, Button, Header } from 'semantic-ui-react';
+import { Button, Header, Image, Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
 import { sectionLogo } from '../../../helpers/images';
@@ -29,7 +29,7 @@ class TopN extends React.PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.units !== nextProps.units ||
-        this.props.N !== nextProps.N) {
+      this.props.N !== nextProps.N) {
       this.getTopNUnits(nextProps);
     }
   }
@@ -56,10 +56,7 @@ class TopN extends React.PureComponent {
       { name: 'topics-filter', values: [tagPath.map(y => y.id)] }
     ]);
 
-    const search = urlSearchStringify(query);
-    const url    = `/${section}?${search}`;
-
-    return url;
+    return `/${section}?${urlSearchStringify(query)}`;
   };
 
   compareUnits = (a, b) => {
@@ -82,14 +79,14 @@ class TopN extends React.PureComponent {
       <Table.Row key={unit.id} verticalAlign="top">
         <Table.Cell>
           <span className="index__date">{filmDate}</span>
-          { /* eslint-disable-next-line */ }
+          {/* eslint-disable-next-line */}
           <Link className="index__title" to={link}>
             {unit.name || NO_NAME}
           </Link>
         </Table.Cell>
       </Table.Row>
     );
-  }
+  };
 
   render() {
     const { section, t } = this.props;
@@ -102,19 +99,16 @@ class TopN extends React.PureComponent {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>
-                
-                
-                <Header as="h3" >
-                <Image src={sectionLogo[section]} /> {t(`nav.sidebar.${section}`)}
+                <Header as="h3">
+                  <Image src={sectionLogo[section]} /> {t(`nav.sidebar.${section}`)}
                 </Header>
-                
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
             {topNUnits.map(x => this.renderUnit(x, t))}
           </Table.Body>
-          { !url.includes('events') ? // exclude button to events - page not exists
+          {!url.includes('events') ? // exclude button to events - page not exists
             <Table.Footer fullWidth>
               <Table.Row>
                 <Table.HeaderCell>
