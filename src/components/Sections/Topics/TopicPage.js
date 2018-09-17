@@ -6,8 +6,8 @@ import { withRouter } from 'react-router-dom';
 import { translate } from 'react-i18next';
 import { Grid, Container, Breadcrumb, Divider } from 'semantic-ui-react';
 
-import { isEmpty } from '../../../helpers/utils';
 import { RTL_LANGUAGES } from '../../../helpers/consts';
+import { isEmpty } from '../../../helpers/utils';
 import { actions, selectors } from '../../../redux/modules/tags';
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
@@ -64,7 +64,7 @@ class TopicPage extends Component {
 
       // create breadCrumb sections from tagPath
       const breadCrumbSections = [
-        { id: '', label: 'Topics' },
+        { id: '', label: 'Topics', href: `/${language ? `${language}/` : ''}topics` },
         ...tagPath,
       ].map((p, index, arr) =>
         ({
@@ -72,7 +72,8 @@ class TopicPage extends Component {
           content: p.label,
           // last item is active and not a link
           active: index === arr.length - 1,
-          href: index === arr.length - 1 ? null : `/topics/${p.id}`
+          href: p.href,
+          // href: index === arr.length - 1 ? null : `/topics/${p.id}`
         }));
       const breadCrumbIcon     = `${RTL_LANGUAGES.includes(language) ? 'left' : 'right'} angle`;
 
