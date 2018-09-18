@@ -701,6 +701,13 @@
   padding-bottom: 16px !important;
   border-bottom: 1px solid #ebecf0;
   text-decoration: none !important;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    background: transparent;
+  }
 
   .no-files {
     font-size: 14px;
@@ -720,6 +727,7 @@
     color: #fff;
     background-color: #ef702e;
     font-size: 12px;
+    flex-shrink: 0;
 
     .icon {
       height: 14px !important;
