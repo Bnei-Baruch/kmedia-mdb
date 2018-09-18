@@ -3,9 +3,9 @@ import { createFilterDefinition } from './util';
 export const languageFilter = createFilterDefinition({
   name: 'language-filter',
   queryKey: 'language',
-  valueToApiParam: {
-    filter_language: [value ]
-  },
+  valueToApiParam: value => ({
+    filter_language: [value]
+  }),
   valueToTagLabel: (value, props, store, t) => {
     if (!value) {
       return '';

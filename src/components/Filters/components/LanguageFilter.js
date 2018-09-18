@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import noop from 'lodash/noop';
 import { Accordion, Button, Header, Menu, Segment, Flag } from 'semantic-ui-react';
-import { COOKIE_UI_LANG, LANG_UI_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
+import { LANG_UI_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
 
 class LanguageFilter extends Component {
   static propTypes = {
@@ -30,7 +29,7 @@ class LanguageFilter extends Component {
   }
 
   onLanguageChange = (event, data) => {
-    this.setState({ sValue: `filters.language-filter.${data.name}` });
+    this.setState({ sValue: `${data.name}` });
   };
 
   onCancel = () =>
