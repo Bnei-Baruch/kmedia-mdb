@@ -86,6 +86,7 @@ class SimpleModeDesktopPage extends PureComponent {
                     modifiers={DayPickerModifiers}
                     localeUtils={MomentLocaleUtils}
                     selectedDays={selectedDate}
+                    month={selectedDate}
                     disabledDays={{ after: new Date() }}
                     onDayClick={onDayClick}
                   />
