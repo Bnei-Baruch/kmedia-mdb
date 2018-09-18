@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Menu, Header, Popup, Segment, Icon } from 'semantic-ui-react';
+import { Button, Header, Icon, Menu, Popup, Segment } from 'semantic-ui-react';
 
 import UILanguage from './UILanguage';
 import ContentLanguage from './ContentLanguage';
@@ -34,7 +34,7 @@ class HandleLanguages extends Component {
         flowing
         trigger={
           <Menu.Item onClick={this.handlePopupOpen}>
-            Languages
+            {t('languages.languages')}
             <Icon name="setting" />
           </Menu.Item>
         }
@@ -42,21 +42,21 @@ class HandleLanguages extends Component {
         onOpen={this.handlePopupOpen}
         on="click"
       >
-        <Popup.Header>
-          <div className="title">
-            <Button primary compact icon="remove" onClick={this.handlePopupClose} />
-            <Header size="small" textAlign="center" content={t(`Interface & Content Languages`)} />
-          </div>
-          <div>Some explanation about UI and Preferable Content Languages behaviour</div>
-        </Popup.Header>
-        <Popup.Content>
+        <Segment.Group>
+          <Segment secondary>
+            <div className="title">
+              <Button basic compact icon="remove" onClick={this.handlePopupClose} />
+              <Header size="small" textAlign="center" content={t('languages.title')} />
+            </div>
+            <div>{t('languages.explanation')}</div>
+          </Segment>
           <Segment>
             <UILanguage language={language} t={t} location={location} contentLanguage={contentLanguage} />
           </Segment>
           <Segment>
             <ContentLanguage language={language} t={t} contentLanguage={contentLanguage} setContentLanguage={setContentLanguage} />
           </Segment>
-        </Popup.Content>
+        </Segment.Group>
       </Popup>
     );
   }

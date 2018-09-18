@@ -562,5 +562,10 @@
   },
   "values": {
     "date": "{{date, l}}"
+  },
+  "languages": {
+    "languages": "שפות",
+    "title": "Interface & Content Languages",
+    "explanation": "Some explanation about UI and Preferable Content Languages behaviour"
   }
 }
