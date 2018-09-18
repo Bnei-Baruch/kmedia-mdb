@@ -20,7 +20,7 @@ import {
 
 export default class ShareBar extends Component {
   static propTypes = {
-    url: PropTypes.string.isRequired,
+    url: PropTypes.string,
     buttonSize: PropTypes.string,
     t: PropTypes.func.isRequired,
     messageTitle: PropTypes.string
@@ -28,7 +28,8 @@ export default class ShareBar extends Component {
 
   static defaultProps = {
     buttonSize: 'big',
-    messageTitle: ''
+    messageTitle: '',
+    url: ''
   };
 
   render() {

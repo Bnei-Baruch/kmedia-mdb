@@ -98,7 +98,7 @@ class Layout extends Component {
               }
             </Menu.Item>
             <Menu.Item className="mobile-hidden">
-              <DonateNow t={t} language={language}/>
+              <DonateNow t={t} language={language} />
             </Menu.Item>
             <Menu.Menu position="right">
               <UILanguage language={language} t={t} location={location} />
