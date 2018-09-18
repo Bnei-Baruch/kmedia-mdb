@@ -142,9 +142,6 @@ class LibraryContainer extends Component {
     return getPathByID(sourceId);
   };
 
-  handlePrintRef = (ref) => {
-    this.printContentRef = ref;
-  }
 
   handleContextRef = (ref) => {
     this.contextRef = ref;
@@ -391,12 +388,12 @@ class LibraryContainer extends Component {
                 <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
                   <div className="source__header-title">{this.header(sourceId, fullPath)}</div>
                   <div className="source__header-toolbar">
+                    <Share t={t} />
+                    <Button compact size="small" icon="print" onClick={this.print} />
                     <div id="download-button" />
                     <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                    <Button compact size="small" icon="print" onClick={this.print()} />
-                    <Share t={t} />
                   </div>
                 </Grid.Column>
               </Grid.Row>
