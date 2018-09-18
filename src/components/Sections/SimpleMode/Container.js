@@ -10,6 +10,7 @@ import { selectors as device } from '../../../redux/modules/device';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { actions, selectors } from '../../../redux/modules/simpelMode';
+import { getQuery, updateQuery } from '../../../helpers/url';
 import * as shapes from '../../shapes';
 import DesktopPage from './DesktopPage';
 import MobilePage from './MobilePage';
@@ -25,6 +26,7 @@ class SimpleModeContainer extends Component {
     t: PropTypes.func.isRequired,
     fetchForDate: PropTypes.func.isRequired,
     deviceInfo: shapes.UserAgentParserResults.isRequired,
+    history: shapes.History.isRequired,
   };
 
   static defaultProps = {
@@ -34,7 +36,6 @@ class SimpleModeContainer extends Component {
   };
 
   state = {
-    date: new Date(),
     filesLanguage: '',
   };
 
@@ -46,9 +47,12 @@ class SimpleModeContainer extends Component {
   }
 
   componentDidMount() {
-    const date              = moment(this.state.date).format('YYYY-MM-DD');
-    const { filesLanguage } = this.state;
-    this.props.fetchForDate({ date, language: filesLanguage });
+    const query = getQuery(this.props.location);
+    const date  = query.date ? moment(query.date, 'YYYY-MM-DD').toDate() : new Date();
+
+    if (!this.state.date || !moment(date).isSame(this.state.date, 'day')) {
+      this.handleDayClick(date);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -74,6 +78,9 @@ class SimpleModeContainer extends Component {
     const date         = moment(selectedDate).format('YYYY-MM-DD');
     const { language } = this.props;
     this.props.fetchForDate({ date, language });
+    updateQuery(this.props.history, query => ({
+      ...query, date
+    }));
   };
 
   isMobileDevice = () =>
