@@ -236,7 +236,7 @@
       "series": "Избранные серии обучения"
     },
     "list": {
-      "related": "Відносяться до",
+      "related": "Відносяться до:",
       "number": "№ ",
       "item_from": "Частина з:"
     },
@@ -361,6 +361,12 @@
     "default": "За замовчуванням",
     "filter": "Фiльтр...",
     "share-title": "Читайте статтю"
+  },
+  "topics": {
+    "header": {
+      "text": "Теми",
+      "subtext": "A collection of all items for a selected topic."
+    }
   },
   "media-downloads": {
     "title": "Скачати",

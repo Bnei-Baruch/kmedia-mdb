@@ -234,7 +234,7 @@
       "series": "Serie de Estudios"
     },
     "list": {
-      "related": "Relacionado con",
+      "related": "Relacionado con:",
       "number": "#",
       "item_from": "Parte de:"
     },
@@ -359,6 +359,12 @@
     "default": "Por Omisión",
     "filter": "Filtro...",
     "share-title": "Lee este artículo"
+  },
+  "topics": {
+    "header": {
+      "text": "Temas",
+      "subtext": "A collection of all items for a selected topic."
+    }
   },
   "media-downloads": {
     "title": "Descargar archivos",

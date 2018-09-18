@@ -235,7 +235,7 @@
       "series": "סדרות לימוד נבחרות"
     },
     "list": {
-      "related": "קשור ל",
+      "related": "קשור ל:",
       "number": "מס' ",
       "item_from": "חלק מתוך:"
     },
@@ -366,6 +366,12 @@
     "default": "ברירת מחדל",
     "filter": "סנן...",
     "share-title": "קרא את המאמר"
+  },
+  "topics": {
+    "header": {
+      "text": "נושאים",
+      "subtext": "אוסף תכנים בנושא נבחר"
+    }
   },
   "media-downloads": {
     "title": "קבצים להורדה",
