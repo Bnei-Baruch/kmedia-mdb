@@ -149,9 +149,9 @@ class TopicContainer extends Component {
       <Fragment key={node.id}>
         <Header as="h4" className="topics__subtitle">
           {node.label}
-          {/*<Link to={`/topics/${node.id}`}>*/}
-            {/*<Icon size="small" name="chain" />*/}
-          {/*</Link>*/}
+          <Link to={`/topics/${node.id}`}>
+            <Icon size="small" name="chain" />
+          </Link>
         </Header>
         {this.renderNode(node)}
       </Fragment> :
@@ -169,9 +169,9 @@ class TopicContainer extends Component {
       <div key={rootId} className="topics__section">
         <Header as="h2" className="topics__title">
           {rootNode.label}
-          {/*<Link to={`/topics/${rootNode.id}`}>*/}
-            {/*<Icon size="small" name="chain" />*/}
-          {/*</Link>*/}
+          <Link to={`/topics/${rootNode.id}`}>
+            <Icon size="small" name="chain" />
+          </Link>
         </Header>
         <div className="topics__list">
           {

@@ -11,6 +11,7 @@ import { isEmpty } from '../../../helpers/utils';
 import { actions, selectors } from '../../../redux/modules/tags';
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
+import Link from '../../Language/MultiLanguageLink';
 import TopN from './TopN';
 
 const topNItems = 5;
@@ -64,17 +65,23 @@ class TopicPage extends Component {
 
       // create breadCrumb sections from tagPath
       const breadCrumbSections = [
-        { id: '', label: 'Topics', href: `/${language ? `${language}/` : ''}topics` },
+        { id: '', label: t('nav.sidebar.topics') },
         ...tagPath,
-      ].map((p, index, arr) =>
-        ({
+      ].map((p, index, arr) => {
+        const section = {
           key: p.id,
           content: p.label,
-          // last item is active and not a link
-          active: index === arr.length - 1,
-          href: p.href,
-          // href: index === arr.length - 1 ? null : `/topics/${p.id}`
-        }));
+        };
+
+        if (index === arr.length - 1) {
+          section.active = true;
+        } else {
+          section.as = Link;
+          section.to = `/topics/${p.id}`;
+        }
+
+        return section;
+      });
       const breadCrumbIcon     = `${RTL_LANGUAGES.includes(language) ? 'left' : 'right'} angle`;
 
       return (
