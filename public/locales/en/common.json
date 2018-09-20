@@ -95,7 +95,8 @@
     "search": "Search",
     "previous": "Previous",
     "next": "Next",
-    "copy": "Copy"
+    "copy": "Copy",
+    "view-all": "View All"
   },
   "player": {
     "messages": {

@@ -93,7 +93,8 @@
     "search": "Buscar",
     "previous": "Anterior",
     "next": "Siguiente",
-    "copy": "Copiar"
+    "copy": "Copiar",
+    "view-all": "Ver todo"
   },
   "player": {
     "messages": {
