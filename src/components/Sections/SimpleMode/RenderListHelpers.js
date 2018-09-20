@@ -31,8 +31,17 @@ const getI18nTypeOverridesKey = (contentType) => {
   }
 };
 
+const sortMediaFiles = files =>
+  files.sort((a, b) => {
+    const order = { audio: 0, videonHD: 1, videoHD: 2, text: 3, image: 4 };
+    const typeA = a.type === 'video' ? a.type + a.video_size : a.type;
+    const typeB = b.type === 'video' ? b.type + b.video_size : b.type;
+
+    return order[typeA] - order[typeB];
+  });
+
 const renderHorizontalFilesList = (files, contentType, t) =>
-  files.map((file) => {
+  sortMediaFiles(files).map((file) => {
     const typeOverrides = getI18nTypeOverridesKey(contentType);
     const url           = physicalFile(file);
     const fileType      = ['audio', 'video'].includes(file.type) ? `${file.type}-simple` : file.type;
