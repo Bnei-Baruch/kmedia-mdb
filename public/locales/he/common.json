@@ -40,6 +40,10 @@
       "start": "התחלה",
       "end": "סיום"
     },
+    "language-filter": {
+      "label": "שפות",
+      "all": "כל השפות"
+    },
     "sources-filter": {
       "label": "מקורות",
       "all": "כל המקורות"

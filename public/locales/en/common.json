@@ -41,6 +41,10 @@
       "start": "Start",
       "end": "End"
     },
+    "language-filter": {
+      "label": "Languages",
+      "all": "All Languages"
+    },
     "sources-filter": {
       "label": "Sources",
       "all": "All Sources"

@@ -40,6 +40,10 @@
       "start": "Inicio",
       "end": "Final"
     },
+    "language-filter": {
+      "label": "Idiomas",
+      "all": "Todos Los Idiomas"
+    },
     "sources-filter": {
       "label": "Fuentes",
       "all": "Todos Los Fuentes"
