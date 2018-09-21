@@ -83,7 +83,7 @@ const renderUnits = (units, language, t) =>
     );
   });
 
-export const renderCollection = (collection, language, t, isMobile) => {
+export const renderCollection = (collection, language, t) => {
   if (!collection.content_units) {
     return null;
   }
@@ -108,7 +108,7 @@ export const renderCollection = (collection, language, t, isMobile) => {
   );
 };
 
-export const groupOtherMediaByType = (collection, language, t, isMobile) => {
+export const groupOtherMediaByType = (collection, language, t) => {
   const byType = groupBy(collection, 'content_type');
   return Object.values(byType).map(v => renderUnits(v, language, t));
 };

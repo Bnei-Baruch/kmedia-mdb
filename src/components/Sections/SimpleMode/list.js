@@ -19,14 +19,13 @@ class SimpleModeList extends PureComponent {
 
   render() {
     const { items, language, t, renderUnit } = this.props;
-    const isMobile                           = false;
 
     return (
       <div>
         {
           items.lessons ?
             <List size="large">
-              {items.lessons.map(x => renderUnit(x, language, t, isMobile))}
+              {items.lessons.map(x => renderUnit(x, language, t))}
             </List> :
             null
         }
@@ -36,7 +35,7 @@ class SimpleModeList extends PureComponent {
             <Card fluid>
               <Card.Content>
                 <List size="large">
-                  {renderUnit(items.others, language, t, isMobile)}
+                  {renderUnit(items.others, language, t)}
                 </List>
               </Card.Content>
             </Card> :

@@ -86,10 +86,10 @@ class SimpleModeContainer extends Component {
   isMobileDevice = () =>
     this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
-  renderUnitOrCollection = (item, language, t, isMobile) => (
+  renderUnitOrCollection = (item, language, t) => (
     item.content_units ?
-      renderCollection(item, language, t, isMobile) :
-      groupOtherMediaByType(item, language, t, isMobile));
+      renderCollection(item, language, t) :
+      groupOtherMediaByType(item, language, t));
 
   render() {
     const { language }      = this.props;
