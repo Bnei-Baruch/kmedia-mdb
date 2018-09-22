@@ -41,6 +41,10 @@
       "start": "Початок",
       "end": "Кінець"
     },
+    "language-filter": {
+      "label": "Мови",
+      "all": "Всі мови"
+    },
     "sources-filter": {
       "label": "Першоджерела",
       "all": "Всі першоджерела"

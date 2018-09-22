@@ -29,7 +29,7 @@ class LanguageFilter extends Component {
   }
 
   onLanguageChange = (event, data) => {
-    this.setState({ sValue: `filters.language-filter.${data.name}` });
+    this.setState({ sValue: `${data.name}` });
   };
 
   onCancel = () =>
