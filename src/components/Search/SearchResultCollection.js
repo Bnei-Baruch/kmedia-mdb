@@ -1,38 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
-import { Table, Image, Label } from 'semantic-ui-react';
+import { Table, Label } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../helpers/links';
 import { isDebMode } from '../../helpers/url';
 import * as shapes from '../shapes';
-import { sectionLogo } from '../../helpers/images';
 import Link from '../Language/MultiLanguageLink';
 import ScoreDebug from './ScoreDebug';
 import CollectionLogo from '../shared/Logo/CollectionLogo';
+import SearchResultBase from './SearchResultBase';
 
-import { CT_LESSON_PART } from '../../helpers/consts';
-
-class SearchResultCollection extends Component {
+class SearchResultCollection extends SearchResultBase {
 
   static propTypes = {
     hit: PropTypes.object,
     c: shapes.Collection,
     rank: PropTypes.number
-  };
-
-  iconByContentType = (type) => {
-    let icon;
-    switch (type) {
-    case CT_LESSON_PART:
-      icon = 'lessons';
-      break;
-    default:
-      icon = 'programs';
-      break;
-    }
-    return <Image src={sectionLogo[icon]} size='tiny' verticalAlign='middle' />;
   };
 
   renderCU = (cu) => {
@@ -44,11 +28,8 @@ class SearchResultCollection extends Component {
   };
 
   render() {
-    const { t, location, c, hit, snippetFromHighlight } = this.props;
-
+    const { t, location, c, hit } = this.props;
     const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
-
-    const name = snippetFromHighlight(highlight, ['name', 'name_analyzed'], parts => parts.join(' ')) || c.name;
 
     return (
       <Table>
@@ -61,7 +42,7 @@ class SearchResultCollection extends Component {
               <Link
                 className="search__link"
                 to={canonicalLink(c || { id: mdbUid, content_type: c.content_type })}>
-                {name}
+                {this.titleFromHighlight(highlight, c.name)}
               </Link>
               <div>
                 <Link to={canonicalLink(c || { id: mdbUid, content_type: c.content_type })}>
@@ -88,4 +69,4 @@ class SearchResultCollection extends Component {
 
 }
 
-export default translate()(SearchResultCollection);
+export default SearchResultCollection;

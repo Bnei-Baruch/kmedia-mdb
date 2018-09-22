@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Trans, translate } from 'react-i18next';
-import { Container, Divider, Label, Table } from 'semantic-ui-react';
+import { Container, Divider, Table } from 'semantic-ui-react';
 
 import {  isEmpty } from '../../helpers/utils';
-import { getQuery, isDebMode } from '../../helpers/url';
+import { getQuery } from '../../helpers/url';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
@@ -51,7 +51,7 @@ class SearchResults extends Component {
 
   // Helper function to get the frist prop in hightlights obj and apply htmlFunc on it.
   snippetFromHighlight = (highlight, props, htmlFunc) => {
-    const prop = props.find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
+    const prop = props.find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length > 0);
     // eslint-disable-next-line react/no-danger
     return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop]) }} />;
   };
@@ -72,7 +72,7 @@ class SearchResults extends Component {
 
     if (SEARCH_INTENT_HIT_TYPES.includes(hitType)) {
       return (
-        <Table.Row key={`${mdbUid}_intent`} verticalAlign="top">
+        <Table.Row key={`${mdbUid}_${hitType}_intent`} verticalAlign="top">
           <Table.Cell colSpan="5">
             <SearchResultIntent hit={hit} rank={rank} {...this.props} />
           </Table.Cell>
@@ -161,7 +161,7 @@ class SearchResults extends Component {
         <div>
           <Container>
             <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
-            <Table sortable basic="very" className="index-list search-results">
+            <Table sortable basic="very">
               <Table.Body>
                 {hits.filter(this.filterByHitType).map(this.renderHit)}
               </Table.Body>

@@ -636,10 +636,46 @@
 }
 
 /****Search Results page**/
-.search__card {
-  position: relative;
-  &:hover {
-    background: #eeeeee;
+
+.search__link {
+  color: #1a4179;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.search__block {
+  color: #828282;
+  font-weight: normal;
+  .clear {
+    clear: both;
+  }
+  .content {
+    em {
+      border-bottom: 1px solid rgba(65, 131, 196, .3);
+      background-color: rgba(242, 201, 76, .2);
+      font-weight: 900;
+    }
+  }
+  .ui.mini.image {
+    width: 25px;
+  }
+  .linkToFile {
+    padding: .5em 1em;
+    margin-top: 2px !important;
+    margin-right: 5px !important;
+
+    &:hover button {
+      background-color: $blue !important;
+    }
+  }
+
+  .search__cards {
+    padding-right: 0;
+  }
+
+  .search__card {
+    position: relative;
+    margin-top: 20px;
   }
 
   .cardHeader {
@@ -653,6 +689,7 @@
       padding: 5px 10px;
       background: rgba(51, 51, 51, .6);
       color: white;
+      font-size: 14px;
     }
   }
 }
