@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { Accordion, Button, Header, Menu, Segment, Flag } from 'semantic-ui-react';
-import { LANG_UI_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
+import { ALL_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
 
 class LanguageFilter extends Component {
   static propTypes = {
@@ -70,7 +70,7 @@ class LanguageFilter extends Component {
         <Segment className="filter-popup__body language-filter">
           <Accordion as={Menu} vertical fluid size="small">
             {
-              LANG_UI_LANGUAGES.map((x) => {
+              ALL_LANGUAGES.map((x) => {
                 return (
                   <Menu.Item
                     key={x}
