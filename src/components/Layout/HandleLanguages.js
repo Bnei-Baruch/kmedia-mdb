@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Header, Icon, Popup, Menu, Segment, PopupContent, Dropdown } from 'semantic-ui-react';
+import { Icon, Menu, Popup } from 'semantic-ui-react';
 
 import UILanguage from './UILanguage';
 import ContentLanguage from './ContentLanguage';
@@ -37,7 +37,7 @@ class HandleLanguages extends Component {
         trigger={
           <Menu.Item onClick={this.handlePopupOpen}>
             <Icon name="sliders horizontal" />
-            {t('languages.languages')}
+            {t('languages.language')}
           </Menu.Item>
         }
         open={isActive}

@@ -477,8 +477,8 @@
     "date": "{{date, l}}"
   },
   "languages": {
-    "languages": "Языки",
-    "title": "Interface & Content Languages",
-    "explanation": "Some explanation about UI and Preferable Content Languages behaviour"
+    "language": "Язык",
+    "website_language": "Язык сайта",
+    "content_language": "Предпочтительный язык контента"
   }
 }

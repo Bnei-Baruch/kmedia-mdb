@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, Flag, Menu} from 'semantic-ui-react';
+import { Dropdown, Flag, Menu } from 'semantic-ui-react';
 
 import { COOKIE_CONTENT_LANG, LANGUAGES } from '../../helpers/consts';
 import Link from '../Language/MultiLanguageLink';
@@ -24,10 +24,10 @@ class ContentLanguage extends Component {
 
     return (
       <Menu secondary>
-        <Menu.Item header>Prefered content language:</Menu.Item>
+        <Menu.Item header>{t('languages.content_language')}:</Menu.Item>
         <Menu.Menu position='right'>
           <Dropdown item scrolling text={`${t(`constants.languages.${contentLanguage}`)}`}>
-            <Dropdown.Menu >
+            <Dropdown.Menu>
               {
                 Object.values(LANGUAGES).map(({ value: x, flag, name = t(`constants.languages.${x}`) }) => (
                   <Dropdown.Item

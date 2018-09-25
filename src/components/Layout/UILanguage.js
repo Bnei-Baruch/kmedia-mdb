@@ -30,8 +30,8 @@ class UILanguage extends Component {
 
     return (
       <Menu secondary>
-        <Menu.Item header>Website language:</Menu.Item>
-        <Menu.Menu position='right'>
+        <Menu.Item header>{t('languages.website_language')}:</Menu.Item>
+        <Menu.Menu position="right">
           <Dropdown item text={`${t(`constants.languages.${language}`)}`}>
             <Dropdown.Menu>
               {
