@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
 
-import { BS_SHAMATI, RH_ARTICLES, } from '../../../helpers/consts';
+import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, RTL_LANGUAGES, } from '../../../helpers/consts';
 import { isEmpty, shallowEqual } from '../../../helpers/utils';
 
 class TOC extends Component {
@@ -18,6 +18,7 @@ class TOC extends Component {
     getSourceById: PropTypes.func.isRequired,
     apply: PropTypes.func.isRequired,
     stickyOffset: PropTypes.number,
+    language: PropTypes.string.isRequired,
 
     match: PropTypes.string.isRequired,
     matchApplied: PropTypes.func.isRequired,
@@ -82,6 +83,48 @@ class TOC extends Component {
 
   titleKey = id => `title-${id}`;
 
+  hebrew = (number) => {
+
+    let n = 1 * number;
+    switch (n) {
+    case 16:
+      return 'ט"ז';
+    case 15:
+      return 'ט"ו';
+    }
+
+    let ret = '';
+    while (n >= 400) {
+      ret += 'ת';
+      n -= 400;
+    }
+    if (n >= 300) {
+      ret += 'ש';
+      n -= 300;
+    }
+    if (n >= 200) {
+      ret += 'ר';
+      n -= 200;
+    }
+    if (n >= 100) {
+      ret += 'ק';
+      n -= 100;
+    }
+    if (n >= 10) {
+      ret += 'יכלמנסעפצ'.slice((n / 10) - 1)[0];
+      n %= 10;
+    }
+    if (n > 0) {
+      ret += 'אבגדהוזחט'.slice((n % 10) - 1)[0];
+    }
+
+    if (ret.length > 1) {
+      ret = `${ret.slice(0, 1)}"${ret.slice(1)}`;
+    }
+
+    return ret;
+  };
+
   leaf = (id, title, match) => {
     const props = {
       id: this.titleKey(id),
@@ -101,7 +144,8 @@ class TOC extends Component {
     // 2. Element that has NO children is NOT CONTAINER (though really it may be an empty container)
     // 3. If all children of the first level element are NOT CONTAINERS, than it is also NOT CONTAINER
 
-    const { getSourceById } = this.props;
+    const { getSourceById, language } = this.props;
+    const isRTL                       = RTL_LANGUAGES.includes(language);
 
     const { name: title, children } = getSourceById(sourceId);
 
@@ -114,11 +158,13 @@ class TOC extends Component {
     const hasNoGrandsons = children.reduce((acc, curr) => acc && isEmpty(getSourceById(curr).children), true);
     let panels;
     if (hasNoGrandsons) {
-      const tree = children.reduce((acc, leafId, idx) => {
+      const tree = children.reduce((acc, leafId) => {
         const { name, number, year } = getSourceById(leafId);
         let leafTitle                = name;
         if (sourceId === BS_SHAMATI) {
-          leafTitle = `${idx + 1}. ${name}`;
+          leafTitle = isRTL ? `${this.hebrew(number)}. ${name}` : `${number}. ${name}`;
+        } else if (sourceId === RH_RECORDS) {
+          leafTitle = `${number}. ${name}`;
         } else if (sourceId === RH_ARTICLES) {
           leafTitle = `${name}. ${number} (${year})`;
         }
