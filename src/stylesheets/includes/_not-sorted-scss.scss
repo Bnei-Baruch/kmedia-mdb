@@ -636,8 +636,15 @@
 }
 
 /* ************* Styles for simple mode ************* */
+.no-padding-top {
+  @media only screen and (max-width: $mobileBreakpoint) {
+    padding-top: 0;
+  }
+}
+
 .summary-container {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   margin-bottom: 1em;
 
@@ -655,6 +662,11 @@
     .controller {
       display: flex;
       flex-direction: column;
+      margin-top: 1rem;
+
+      &:first-of-type {
+        padding-right: 4px;
+      }
 
       .date-container {
         display: flex;
@@ -768,6 +780,11 @@
 
 .rtl {
   .summary-container {
+
+    .controller:first-of-type {
+      padding-left: 4px;
+    }
+
     h4, span {
       margin-right: 0;
       margin-left: 6px;

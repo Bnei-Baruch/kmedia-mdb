@@ -99,7 +99,7 @@ class SimpleModeMobilePage extends PureComponent {
         <Divider fitted />
         <Container className="padded">
           <Grid>
-            <Grid.Row>
+            <Grid.Row className="no-padding-top">
               <Grid.Column mobile={16}>
                 <div className="summary-container">
                   <div className="controller">
