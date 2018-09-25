@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, Flag, } from 'semantic-ui-react';
+import { Dropdown, Flag, Menu } from 'semantic-ui-react';
 
 import { COOKIE_UI_LANG, LANG_UI_LANGUAGES, LANGUAGES } from '../../helpers/consts';
 import Link from '../Language/MultiLanguageLink';
@@ -29,18 +29,23 @@ class UILanguage extends Component {
     const { t, language, contentLanguage } = this.props;
 
     return (
-      <Dropdown item text={`UI: ${t(`constants.languages.${language}`)}`}>
-        <Dropdown.Menu>
-          {
-            LANG_UI_LANGUAGES.map(x => (
-              <Dropdown.Item key={x} as={Link} onClick={() => this.storeUILanguage(x)} language={`${x}`} contentLanguage={contentLanguage}>
-                <Flag name={LANGUAGES[x].flag} />
-                {t(`constants.languages.${x}`)}
-              </Dropdown.Item>
-            ))
-          }
-        </Dropdown.Menu>
-      </Dropdown>
+      <Menu secondary>
+        <Menu.Item header>Website language:</Menu.Item>
+        <Menu.Menu position='right'>
+          <Dropdown item text={`${t(`constants.languages.${language}`)}`}>
+            <Dropdown.Menu>
+              {
+                LANG_UI_LANGUAGES.map(x => (
+                  <Dropdown.Item key={x} as={Link} onClick={() => this.storeUILanguage(x)} language={`${x}`} contentLanguage={contentLanguage}>
+                    <Flag name={LANGUAGES[x].flag} />
+                    {t(`constants.languages.${x}`)}
+                  </Dropdown.Item>
+                ))
+              }
+            </Dropdown.Menu>
+          </Dropdown>
+        </Menu.Menu>
+      </Menu>
     );
   }
 }

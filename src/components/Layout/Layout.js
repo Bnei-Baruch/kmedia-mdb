@@ -99,12 +99,12 @@ class Layout extends Component {
                   null
               }
             </Menu.Item>
-            <Menu.Item className="mobile-hidden">
-              <DonateNow t={t} language={language} />
-            </Menu.Item>
             <Menu.Menu position="right">
-              <TopMost t={t} />
               <HandleLanguages language={language} t={t} location={location} contentLanguage={contentLanguage} setContentLanguage={setContentLanguage} />
+              <Menu.Item className="mobile-hidden">
+                <DonateNow t={t} language={language} />
+              </Menu.Item>
+              <TopMost t={t} />
             </Menu.Menu>
           </Menu>
         </div>
