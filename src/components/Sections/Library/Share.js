@@ -62,7 +62,7 @@ class LibraryShare extends Component {
         on="click"
         flowing
         hideOnScroll
-        content={t('messages.link-copied-to-clipboard')}
+        // content={t('messages.link-copied-to-clipboard')}
         position="bottom right"
         trigger={<Button compact size="small" icon="share alternate" />}
         open={isPopupOpen}

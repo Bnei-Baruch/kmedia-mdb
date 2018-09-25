@@ -71,23 +71,16 @@ class Library extends Component {
   render() {
     const { content, language, languages, t, isTaas, langSelectorMount, fullUrlPath } = this.props;
 
+    if (isEmpty(content)) {
+      return <Segment basic>&nbsp;</Segment>;
+    }
+
     const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
 
     // PDF.js will fetch file by itself
     const usePdfFile = isTaas && this.props.pdfFile;
     const mimeType = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
     let contents;
-
-    if (usePdfFile) {
-      contents = (<PDF
-        pdfFile={assetUrl(`sources/${this.props.pdfFile}`)}
-        pageNumber={this.state.pageNumber || 1}
-        startsFrom={this.props.startsFrom}
-        pageNumberHandler={this.pageNumberHandler}
-      />);
-    } else if (isEmpty(content)) {
-      return <Segment basic>&nbsp;</Segment>;
-    }
 
     const { wip: contentWip, err: contentErr, data: contentData } = content;
 
@@ -99,13 +92,20 @@ class Library extends Component {
       }
     } else if (contentWip) {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-    } else if (!contentData && !usePdfFile) {
-      return <Segment basic>{t('sources-library.no-source')}</Segment>;
-    } else if (!usePdfFile) {
+    } else if (usePdfFile) {
+      contents = (<PDF
+        pdfFile={assetUrl(`sources/${this.props.pdfFile}`)}
+        pageNumber={this.state.pageNumber || 1}
+        startsFrom={this.props.startsFrom}
+        pageNumberHandler={this.pageNumberHandler}
+      />);
+    } else if (contentData) {
       contents        = (<div
         style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
         dangerouslySetInnerHTML={{ __html: contentData }}
       />);
+    } else {
+      return <Segment basic>{t('sources-library.no-source')}</Segment>;
     }
 
     let languageBar = null;

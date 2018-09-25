@@ -7,8 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { push as routerPush, replace as routerReplace } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Grid, Header, Input, Ref, Message, Popup } from 'semantic-ui-react';
-import CopyToClipboard from 'react-copy-to-clipboard';
+import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
@@ -143,34 +142,6 @@ class LibraryContainer extends Component {
     return getPathByID(sourceId);
   };
 
-  updateSticky = () => {
-    // take the secondary header height for sticky stuff calculations
-    if (this.secondaryHeaderRef) {
-      const { height } = this.secondaryHeaderRef.getBoundingClientRect();
-      if (this.state.secondaryHeaderHeight !== height) {
-        this.setState({ secondaryHeaderHeight: height });
-      }
-    }
-
-    // check fixed header width in pixels for text-overflow:ellipsis
-    if (this.contentHeaderRef) {
-      const { width } = this.contentHeaderRef.getBoundingClientRect();
-      if (this.state.contentHeaderWidth !== width) {
-        this.setState({ contentHeaderWidth: width });
-      }
-    }
-  };
-
-  firstLeafId = (sourceId) => {
-    const { getSourceById } = this.props;
-
-    const { children } = getSourceById(sourceId) || { children: [] };
-    if (isEmpty(children)) {
-      return sourceId;
-    }
-
-    return this.firstLeafId(children[0]);
-  };
 
   handleContextRef = (ref) => {
     this.contextRef = ref;
@@ -190,6 +161,35 @@ class LibraryContainer extends Component {
 
   handleContentHeaderRef = (ref) => {
     this.contentHeaderRef = ref;
+  };
+
+  firstLeafId = (sourceId) => {
+    const { getSourceById } = this.props;
+
+    const { children } = getSourceById(sourceId) || { children: [] };
+    if (isEmpty(children)) {
+      return sourceId;
+    }
+
+    return this.firstLeafId(children[0]);
+  };
+
+  updateSticky = () => {
+    // take the secondary header height for sticky stuff calculations
+    if (this.secondaryHeaderRef) {
+      const { height } = this.secondaryHeaderRef.getBoundingClientRect();
+      if (this.state.secondaryHeaderHeight !== height) {
+        this.setState({ secondaryHeaderHeight: height });
+      }
+    }
+
+    // check fixed header width in pixels for text-overflow:ellipsis
+    if (this.contentHeaderRef) {
+      const { width } = this.contentHeaderRef.getBoundingClientRect();
+      if (this.state.contentHeaderWidth !== width) {
+        this.setState({ contentHeaderWidth: width });
+      }
+    }
   };
 
   handleTocIsActive = () => {
@@ -310,6 +310,10 @@ class LibraryContainer extends Component {
     );
   };
 
+  print = () => {
+    window.print();
+  }
+
   render() {
     const { sourceId, indexMap, getSourceById, language, t } = this.props;
 
@@ -384,11 +388,12 @@ class LibraryContainer extends Component {
                 <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
                   <div className="source__header-title">{this.header(sourceId, fullPath)}</div>
                   <div className="source__header-toolbar">
+                    <Share t={t} />
+                    <Button compact size="small" icon="print" onClick={this.print} />
                     <div id="download-button" />
                     <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                    <Share t={t} />
                   </div>
                 </Grid.Column>
               </Grid.Row>
