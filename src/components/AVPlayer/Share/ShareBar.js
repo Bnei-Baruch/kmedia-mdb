@@ -23,17 +23,19 @@ export default class ShareBar extends Component {
     url: PropTypes.string.isRequired,
     buttonSize: PropTypes.string,
     t: PropTypes.func.isRequired,
+    messageTitle: PropTypes.string
   };
 
   static defaultProps = {
     buttonSize: 'big',
+    messageTitle: ''
   };
 
   render() {
-    const { url, buttonSize, t } = this.props;
+    const { url, buttonSize, t, messageTitle } = this.props;
     const bsPixels               = buttonSize === 'big' ? 46 : 36;
 
-    const title = t('player.share.title');
+    const title = messageTitle || t('player.share.title');
 
     return (
       <div className="social-buttons">

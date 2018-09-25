@@ -93,7 +93,8 @@
     "search": "חפש",
     "previous": "הקודם",
     "next": "הבא",
-    "copy": "העתק"
+    "copy": "העתק",
+    "view-all": "הצג הכל"
   },
   "player": {
     "messages": {
@@ -122,7 +123,7 @@
     "no-playable-files": "לא נמצאו קבצים מתאימים לתצוגה",
     "no-results": "לא נמצאו תוצאות",
     "pagination-results": "תוצאות {{start}} - {{end}} מתוך {{total}}",
-    "link-copied-to-clipboard": "הקישור הועתק ללוח בהצלחה!",
+    "link-copied-to-clipboard": "!הקישור הועתק ללוח בהצלחה",
     "unknown": "לא ידוע",
     "unsupported-media-format": "פורמט לא נתמך.",
     "error-loading-file": "טעות בהעלאת קובץ.",
@@ -235,7 +236,7 @@
       "series": "סדרות לימוד נבחרות"
     },
     "list": {
-      "related": "קשור ל",
+      "related": "קשור ל:",
       "number": "מס' ",
       "item_from": "חלק מתוך:"
     },
@@ -364,7 +365,14 @@
     "toc": "תוכן עניינים",
     "az": "אב",
     "default": "ברירת מחדל",
-    "filter": "סנן..."
+    "filter": "סנן...",
+    "share-title": "קרא את המאמר"
+  },
+  "topics": {
+    "header": {
+      "text": "נושאים",
+      "subtext": "אוסף תכנים בנושא נבחר"
+    }
   },
   "media-downloads": {
     "title": "קבצים להורדה",

@@ -93,7 +93,8 @@
     "search": "Buscar",
     "previous": "Anterior",
     "next": "Siguiente",
-    "copy": "Copiar"
+    "copy": "Copiar",
+    "view-all": "Ver todo"
   },
   "player": {
     "messages": {
@@ -234,7 +235,7 @@
       "series": "Serie de Estudios"
     },
     "list": {
-      "related": "Relacionado con",
+      "related": "Relacionado con:",
       "number": "#",
       "item_from": "Parte de:"
     },
@@ -357,7 +358,14 @@
     "toc": "Tabla de Contenido",
     "az": "AZ",
     "default": "Por Omisión",
-    "filter": "Filtro..."
+    "filter": "Filtro...",
+    "share-title": "Lee este artículo"
+  },
+  "topics": {
+    "header": {
+      "text": "Temas",
+      "subtext": "A collection of all items for a selected topic."
+    }
   },
   "media-downloads": {
     "title": "Descargar archivos",

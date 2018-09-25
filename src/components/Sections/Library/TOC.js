@@ -90,8 +90,9 @@ class TOC extends Component {
       onClick: e => this.selectSourceById(id, e),
     };
 
-    // eslint-disable-next-line react/no-danger
-    const realTitle = isEmpty(match) ? title : <span dangerouslySetInnerHTML={{ __html: title }} />;
+    const realTitle = isEmpty(match) ?
+      title :
+      <span dangerouslySetInnerHTML={{ __html: title }} />;
     return <Accordion.Title {...props}>{realTitle}</Accordion.Title>;
   };
 

@@ -138,7 +138,6 @@ class Transcription extends Component {
         <div
           className="doc2html"
           style={{ direction }}
-          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: data }}
         />
       );

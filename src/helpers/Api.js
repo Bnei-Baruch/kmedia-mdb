@@ -57,6 +57,9 @@ class Api {
   static post = (blog, id) =>
     Requests.get(`posts/${blog}/${id}`);
 
+  static tagDashboard = ({ id, language }) =>
+    Requests.get(`tags/${id}/dashboard?${Requests.makeParams({ language })}`);
+
   static autocomplete = ({ q, language }) =>
     Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 

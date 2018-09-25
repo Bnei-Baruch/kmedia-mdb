@@ -28,6 +28,7 @@ import { actions as lessonsActions } from './redux/modules/lessons';
 import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
 import { selectors as sourcesSelectors } from './redux/modules/sources';
 import { actions as assetsActions, selectors as assetsSelectors } from './redux/modules/assets';
+import { actions as tagsActions } from './redux/modules/tags';
 import { actions as publicationsActions } from './redux/modules/publications';
 import * as mdbSagas from './sagas/mdb';
 import * as filtersSagas from './sagas/filters';
@@ -35,6 +36,7 @@ import * as eventsSagas from './sagas/events';
 import * as lessonsSagas from './sagas/lessons';
 import * as searchSagas from './sagas/search';
 import * as assetsSagas from './sagas/assets';
+import * as tagsSagas from './sagas/tags';
 import * as publicationsSagas from './sagas/publications';
 import withPagination from './components/Pagination/withPagination';
 
@@ -300,6 +302,14 @@ export const tweetsListPage = (store, match) => {
 
   return Promise.resolve(null);
 };
+
+export const topicsPage = (store, match) => {
+  const tagID = match.params.id;
+  Promise.all([
+    store.sagaMiddleWare.run(tagsSagas.fetchDashboard, tagsActions.fetchDashboard(tagID)).done,
+    // store.sagaMiddleWare.run(tagsSagas.fetchTags, tagsActions.fetchTags).done
+  ]);
+}
 
 export const blogListPage = (store, match) => {
   // hydrate filters
