@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
 
-import { BS_SHAMATI, } from '../../../helpers/consts';
+import { BS_SHAMATI, RH_ARTICLES, } from '../../../helpers/consts';
 import { isEmpty, shallowEqual } from '../../../helpers/utils';
 
 class TOC extends Component {
@@ -115,11 +115,14 @@ class TOC extends Component {
     let panels;
     if (hasNoGrandsons) {
       const tree = children.reduce((acc, leafId, idx) => {
-        let { name } = getSourceById(leafId);
+        const { name, number, year } = getSourceById(leafId);
+        let leafTitle                = name;
         if (sourceId === BS_SHAMATI) {
-          name = `${idx + 1}. ${name}`;
+          leafTitle = `${idx + 1}. ${name}`;
+        } else if (sourceId === RH_ARTICLES) {
+          leafTitle = `${name}. ${number} (${year})`;
         }
-        acc.push({ leafId, leafTitle: name });
+        acc.push({ leafId, leafTitle });
         return acc;
       }, []);
 
