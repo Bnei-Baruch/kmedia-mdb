@@ -11,6 +11,7 @@
       "books": "Libros",
       "topics": "Temas",
       "publications": "Publicaciones",
+      "simple-mode": "Versión Simple",
       "photos": "Fotos",
       "design": "Diseño",
       "project-status": "Projekto Statuso",
@@ -314,7 +315,10 @@
     "today-button": "hoy",
     "total-media-for-date": "Todos los medios para la fecha ",
     "media-language": "Lenguaje de los medios",
-    "no-files-found": "No hay archivos para el idioma que seleccionaste"
+    "no-files-found": "No hay archivos para el idioma que seleccionaste",
+    "date": "Fecha",
+    "prev": "Anterior",
+    "next": "Siguiente"
   },
   "pages": {
     "collection": {

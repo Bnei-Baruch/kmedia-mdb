@@ -11,6 +11,7 @@
       "books": "Книги",
       "topics": "Темы",
       "publications": "Публикации",
+      "simple-mode": "Простая Версия",
       "photos": "Фотографии",
       "design": "Дизайн",
       "design2": "Планировка",
@@ -316,7 +317,10 @@
     "today-button": "Cегодня",
     "total-media-for-date": "Все СМИ на сегодняшний день ",
     "media-language": "Язык мультимедиа",
-    "no-files-found": "Нет файлов для выбранного вами языка."
+    "no-files-found": "Нет файлов для выбранного вами языка.",
+    "date": "Дата",
+    "prev": "Пред.",
+    "next": "Cлед."
   },
   "pages": {
     "collection": {

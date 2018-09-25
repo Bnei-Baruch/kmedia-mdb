@@ -11,6 +11,7 @@
       "books": "Books",
       "topics": "Topics",
       "publications": "Publications",
+      "simple-mode": "Simple Version",
       "photos": "Photos",
       "design": "Design",
       "design2": "Layout",
@@ -317,7 +318,10 @@
     "today-button": "Today",
     "total-media-for-date": "All media for date ",
     "media-language": "Media language",
-    "no-files-found": "There are no files for the language you selected"
+    "no-files-found": "There are no files for the language you selected",
+    "date": "Date",
+    "prev": "Prev.",
+    "next": "Next"
   },
   "help": {
     "header": {

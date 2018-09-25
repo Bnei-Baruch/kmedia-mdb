@@ -11,6 +11,7 @@
       "books": "Bücher",
       "topics": "Themen",
       "publications": "Veröffentlichungen",
+      "simple-mode": "Einfache Version",
       "photos": "Fotos",
       "design": "Design",
       "design2": "Layout",
@@ -315,7 +316,10 @@
     "today-button": "vandaag",
     "total-media-for-date": "Alle media voor datum ",
     "media-language": "Mediataal",
-    "no-files-found": "Er zijn geen bestanden voor de taal die u hebt geselecteerd"
+    "no-files-found": "Er zijn geen bestanden voor de taal die u hebt geselecteerd",
+    "date": "Datum",
+    "prev": "Bisherige",
+    "next": "Nächster"
   },
   "pages": {
     "collection": {
