@@ -400,6 +400,7 @@ class LibraryContainer extends Component {
             <Grid.Row className="is-fitted">
               <Grid.Column mobile={16} tablet={16} computer={4} onClick={this.handleTocIsActive}>
                 <TOC
+                  language={language}
                   match={matchString ? match : ''}
                   matchApplied={this.handleFilterClear}
                   fullPath={fullPath}
