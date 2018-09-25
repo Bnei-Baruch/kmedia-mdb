@@ -29,7 +29,7 @@ class Homepage extends Component {
       return isEmpty(author.children) ?
         null :
         <Kabbalist
-          key={kabbalist}
+          key={author}
           author={author}
           getSourceById={getSourceById}
           portrait={portraits[k]}
