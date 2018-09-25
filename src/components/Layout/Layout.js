@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
@@ -46,7 +47,9 @@ class Layout extends Component {
     if (this.state &&
       this.state.sidebarActive &&
       e.target !== this.sidebarElement &&
-      !this.sidebarElement.contains(e.target)) {
+      !this.sidebarElement.contains(e.target) &&
+      !this.menuButtonElement1.contains(e.target) &&
+      !this.menuButtonElement2.contains(e.target)) {
       this.closeSidebar();
     }
   };
@@ -85,7 +88,17 @@ class Layout extends Component {
         <GAPageView location={location} />
         <div className="layout__header">
           <Menu inverted borderless size="huge" color="blue">
-            <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.toggleSidebar}>
+            <Menu.Item
+              icon
+              as="a"
+              className="layout__sidebar-toggle"
+              onClick={this.toggleSidebar}
+              ref={(el) => {
+                if (!this.menuButtonElement1) {
+                  this.menuButtonElement1 = ReactDOM.findDOMNode(el);
+                }
+              }}
+            >
               <Icon name="sidebar" />
             </Menu.Item>
             <Menu.Item className="logo" header as={Link} to="/">
@@ -115,7 +128,17 @@ class Layout extends Component {
           }}
         >
           <Menu inverted borderless size="huge" color="blue">
-            <Menu.Item icon as="a" className="layout__sidebar-toggle" onClick={this.closeSidebar}>
+            <Menu.Item
+              icon
+              as="a"
+              className="layout__sidebar-toggle"
+              onClick={this.closeSidebar}
+              ref={(el) => {
+                if (!this.menuButtonElement2) {
+                  this.menuButtonElement2 = ReactDOM.findDOMNode(el);
+                }
+              }}
+            >
               <Icon name="sidebar" />
             </Menu.Item>
             <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={this.closeSidebar}>
