@@ -14,11 +14,11 @@ import Link from '../Language/MultiLanguageLink';
 import WrappedOmniBox from '../Search/OmniBox';
 import GAPageView from './GAPageView/GAPageView';
 import MenuItems from './MenuItems';
+import HandleLanguages from './HandleLanguages';
 import Footer from './Footer';
 import TopMost from './TopMost';
 import DonateNow from './DonateNow';
 import logo from '../../images/logo.svg';
-import HandleLanguages from './HandleLanguages';
 
 class Layout extends Component {
   static propTypes = {
@@ -55,8 +55,9 @@ class Layout extends Component {
   };
 
   toggleSidebar = () => this.setState({ sidebarActive: !this.state.sidebarActive });
+
   // Required for handling outside sidebar on click outside sidebar,
-  closeSidebar  = () => this.setState({ sidebarActive: false });
+  closeSidebar = () => this.setState({ sidebarActive: false });
 
   shouldShowSearch = (location) => {
     // we don't show the search on home page
@@ -113,7 +114,13 @@ class Layout extends Component {
               }
             </Menu.Item>
             <Menu.Menu position="right">
-              <HandleLanguages language={language} t={t} location={location} contentLanguage={contentLanguage} setContentLanguage={setContentLanguage} />
+              <HandleLanguages
+                language={language}
+                contentLanguage={contentLanguage}
+                setContentLanguage={setContentLanguage}
+                location={location}
+                t={t}
+              />
               <Menu.Item className="mobile-hidden">
                 <DonateNow t={t} language={language} />
               </Menu.Item>
@@ -169,5 +176,7 @@ export default connect(
     language: settings.getLanguage(state.settings),
     contentLanguage: settings.getContentLanguage(state.settings),
   }),
-  { setContentLanguage: actions.setContentLanguage }
+  {
+    setContentLanguage: actions.setContentLanguage,
+  }
 )(translate()(Layout));

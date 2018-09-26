@@ -5,15 +5,15 @@ import { connect } from 'react-redux';
 import ImageGallery from 'react-image-gallery';
 import { Button, Container, Segment } from 'semantic-ui-react';
 
-import { RTL_LANGUAGES } from '../../../../../helpers/consts';
 import { assetUrl, imaginaryUrl, Requests } from '../../../../../helpers/Api';
+import { RTL_LANGUAGES } from '../../../../../helpers/consts';
+import { selectSuitableLanguage } from '../../../../../helpers/language';
 import { isEmpty, physicalFile, strCmp } from '../../../../../helpers/utils';
 import { actions, selectors } from '../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import * as shapes from '../../../../shapes';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import ButtonsLanguageSelector from '../../../../Language/Selector/ButtonsLanguageSelector';
-import { selectSuitableLanguage } from '../../../../../helpers/language';
 
 class Sketches extends React.Component {
   static propTypes = {

@@ -4,12 +4,12 @@ import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
 
 import { assetUrl } from '../../../../../../helpers/Api';
 import { CT_KITEI_MAKOR, MT_TEXT, RTL_LANGUAGES } from '../../../../../../helpers/consts';
+import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { formatError, tracePath } from '../../../../../../helpers/utils';
 import * as shapes from '../../../../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash/Splash';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import PDF from '../../../../../shared/PDF/PDF';
-import { selectSuitableLanguage } from '../../../../../../helpers/language';
 
 class Sources extends Component {
   static propTypes = {

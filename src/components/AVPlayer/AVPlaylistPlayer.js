@@ -6,8 +6,8 @@ import { Media } from 'react-media-player';
 
 import { MT_AUDIO } from '../../helpers/consts';
 import { selectors as device } from '../../redux/modules/device';
-import AVMobileCheck from './AVMobileCheck';
 import * as shapes from '../shapes';
+import AVMobileCheck from './AVMobileCheck';
 
 class AVPlaylistPlayer extends Component {
   static propTypes = {

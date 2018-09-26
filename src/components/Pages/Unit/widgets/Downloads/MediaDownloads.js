@@ -4,13 +4,26 @@ import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Grid, Header, Table } from 'semantic-ui-react';
 
-import { CT_ARTICLE, CT_FULL_LESSON, CT_KITEI_MAKOR, CT_LELO_MIKUD, CT_LESSON_PART, CT_PUBLICATION, CT_VIDEO_PROGRAM_CHAPTER, MT_AUDIO, MT_IMAGE, MT_TEXT, MT_VIDEO, VS_NAMES } from '../../../../../helpers/consts';
+import {
+  CT_ARTICLE,
+  CT_FULL_LESSON,
+  CT_KITEI_MAKOR,
+  CT_LELO_MIKUD,
+  CT_LESSON_PART,
+  CT_PUBLICATION,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  MT_AUDIO,
+  MT_IMAGE,
+  MT_TEXT,
+  MT_VIDEO,
+  VS_NAMES
+} from '../../../../../helpers/consts';
+import { selectSuitableLanguage } from '../../../../../helpers/language';
 import { physicalFile } from '../../../../../helpers/utils';
+import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors } from '../../../../../redux/modules/publications';
 import * as shapes from '../../../../shapes';
 import DropdownLanguageSelector from '../../../../Language/Selector/DropdownLanguageSelector';
-import { selectors as settings } from '../../../../../redux/modules/settings';
-import { selectSuitableLanguage } from '../../../../../helpers/language';
 
 const MEDIA_ORDER = [
   MT_VIDEO,

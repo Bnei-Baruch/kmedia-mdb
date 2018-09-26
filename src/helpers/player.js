@@ -3,7 +3,16 @@ import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 
 import { assetUrl } from './Api';
-import { CT_FULL_LESSON, CT_LESSON_PART, EVENT_PREPARATION_TAG, EVENT_TYPES, LANG_ENGLISH, MT_AUDIO, MT_VIDEO, VS_DEFAULT, } from './consts';
+import {
+  CT_FULL_LESSON,
+  CT_LESSON_PART,
+  EVENT_PREPARATION_TAG,
+  EVENT_TYPES,
+  LANG_ENGLISH,
+  MT_AUDIO,
+  MT_VIDEO,
+  VS_DEFAULT,
+} from './consts';
 import { getQuery, updateQuery } from './url';
 import { canonicalLink } from './links';
 import MediaHelper from './media';

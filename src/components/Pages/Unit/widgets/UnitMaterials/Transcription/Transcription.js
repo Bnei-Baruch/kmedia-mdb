@@ -4,11 +4,11 @@ import uniq from 'lodash/uniq';
 import { Container, Divider, Segment } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../../../../helpers/consts';
+import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import MediaHelper from '../../../../../../helpers/media';
 import * as shapes from '../../../../../shapes';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import WipErr from '../../../../../shared/WipErr/WipErr';
-import { selectSuitableLanguage } from '../../../../../../helpers/language';
 
 class Transcription extends Component {
   static propTypes = {
@@ -110,7 +110,7 @@ class Transcription extends Component {
       return;
     }
 
-    const selected  = this.selectFile(this.state.textFiles, language);
+    const selected = this.selectFile(this.state.textFiles, language);
 
     this.props.onContentChange(selected.id);
     this.setState({ selected, language });

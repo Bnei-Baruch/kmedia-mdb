@@ -25,23 +25,23 @@ class ContentLanguage extends Component {
     return (
       <Menu secondary>
         <Menu.Item header>{t('languages.content_language')}:</Menu.Item>
-        <Menu.Menu position='right'>
+        <Menu.Menu position="right">
           <Dropdown item scrolling text={`${t(`constants.languages.${contentLanguage}`)}`}>
             <Dropdown.Menu>
               {
-                Object.values(LANGUAGES).map(({ value: x, flag, name = t(`constants.languages.${x}`) }) => (
+                Object.values(LANGUAGES).map(x => (
                   <Dropdown.Item
-                    key={x}
+                    key={x.value}
                     as={Link}
-                    active={x === contentLanguage}
+                    active={x.value === contentLanguage}
                     onClick={() => {
-                      this.storeContentLanguage(x);
+                      this.storeContentLanguage(x.value);
                     }}
                     language={language}
-                    contentLanguage={x}
+                    contentLanguage={x.value}
                   >
-                    <Flag name={flag} />
-                    {name}
+                    <Flag name={x.flag} />
+                    {t(`constants.languages.${x.value}`)}
                   </Dropdown.Item>
                 ))
               }

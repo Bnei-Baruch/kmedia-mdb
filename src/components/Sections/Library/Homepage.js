@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import { Container, Divider, Table } from 'semantic-ui-react';
-import { isEmpty } from '../../../helpers/utils';
 
+import { isEmpty } from '../../../helpers/utils';
 import { selectors as sources } from '../../../redux/modules/sources';
 import SectionHeader from '../../shared/SectionHeader';
 import Kabbalist from './Kabbalist';
@@ -20,7 +20,7 @@ class Homepage extends Component {
     getSourceById: PropTypes.func.isRequired,
   };
 
-  kabbalists = () => {
+  renderKabbalists = () => {
     const { roots, getSourceById } = this.props;
 
     return roots.map((k) => {
@@ -45,7 +45,7 @@ class Homepage extends Component {
         <Container className="padded">
           <Table basic="very" className="index-list sources__authors">
             <Table.Body>
-              {this.kabbalists()}
+              {this.renderKabbalists()}
             </Table.Body>
           </Table>
         </Container>

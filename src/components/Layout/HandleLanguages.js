@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Menu, Popup } from 'semantic-ui-react';
 
+import * as shapes from '../shapes';
 import UILanguage from './UILanguage';
 import ContentLanguage from './ContentLanguage';
-import * as shapes from '../shapes';
 
 class HandleLanguages extends Component {
   static propTypes = {
@@ -33,7 +33,7 @@ class HandleLanguages extends Component {
         flowing
         // horizontalOffset={17}
         // basic
-        position='bottom right'
+        position="bottom right"
         trigger={
           <Menu.Item onClick={this.handlePopupOpen}>
             <Icon name="sliders horizontal" />
@@ -46,8 +46,18 @@ class HandleLanguages extends Component {
         on="click"
       >
         <Popup.Content>
-          <UILanguage language={language} t={t} location={location} contentLanguage={contentLanguage} />
-          <ContentLanguage language={language} t={t} contentLanguage={contentLanguage} setContentLanguage={setContentLanguage} />
+          <UILanguage
+            language={language}
+            contentLanguage={contentLanguage}
+            location={location}
+            t={t}
+          />
+          <ContentLanguage
+            language={language}
+            contentLanguage={contentLanguage}
+            setContentLanguage={setContentLanguage}
+            t={t}
+          />
         </Popup.Content>
       </Popup>
     );

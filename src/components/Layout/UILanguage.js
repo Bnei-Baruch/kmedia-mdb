@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Dropdown, Flag, Menu } from 'semantic-ui-react';
 
 import { COOKIE_UI_LANG, LANG_UI_LANGUAGES, LANGUAGES } from '../../helpers/consts';
-import Link from '../Language/MultiLanguageLink';
 import * as shapes from '../shapes';
+import Link from '../Language/MultiLanguageLink';
 
 class UILanguage extends Component {
   static propTypes = {
@@ -36,7 +36,13 @@ class UILanguage extends Component {
             <Dropdown.Menu>
               {
                 LANG_UI_LANGUAGES.map(x => (
-                  <Dropdown.Item key={x} as={Link} onClick={() => this.storeUILanguage(x)} language={`${x}`} contentLanguage={contentLanguage}>
+                  <Dropdown.Item
+                    key={x}
+                    as={Link}
+                    language={`${x}`}
+                    contentLanguage={contentLanguage}
+                    onClick={() => this.storeUILanguage(x)}
+                  >
                     <Flag name={LANGUAGES[x].flag} />
                     {t(`constants.languages.${x}`)}
                   </Dropdown.Item>
