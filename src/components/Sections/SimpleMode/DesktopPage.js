@@ -22,7 +22,6 @@ class SimpleModeDesktopPage extends PureComponent {
     uiLanguage: PropTypes.string.isRequired,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
-    location: shapes.HistoryLocation.isRequired,
     renderUnit: PropTypes.func.isRequired,
     onDayClick: PropTypes.func.isRequired,
     onLanguageChange: PropTypes.func.isRequired
@@ -34,10 +33,6 @@ class SimpleModeDesktopPage extends PureComponent {
     wip: false,
     err: null,
   };
-
-  componentWillReceiveProps(nextProps) {
-    console.log('SimpleModeDesktopPage.componentWillReceiveProps', nextProps);
-  }
 
   render() {
     const

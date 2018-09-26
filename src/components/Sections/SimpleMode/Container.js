@@ -6,11 +6,11 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { translate } from 'react-i18next';
 
+import { getQuery, updateQuery } from '../../../helpers/url';
 import { selectors as device } from '../../../redux/modules/device';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { actions, selectors } from '../../../redux/modules/simpelMode';
-import { getQuery, updateQuery } from '../../../helpers/url';
 import * as shapes from '../../shapes';
 import DesktopPage from './DesktopPage';
 import MobilePage from './MobilePage';
@@ -65,7 +65,6 @@ class SimpleModeContainer extends Component {
   handleLanguageChanged = (e, filesLanguage) => {
     if (filesLanguage) {
       this.setState({ filesLanguage });
-
       return;
     }
 
@@ -79,7 +78,8 @@ class SimpleModeContainer extends Component {
     const { language } = this.props;
     this.props.fetchForDate({ date, language });
     updateQuery(this.props.history, query => ({
-      ...query, date
+      ...query,
+      date
     }));
   };
 
@@ -105,16 +105,13 @@ class SimpleModeContainer extends Component {
       onLanguageChange: this.handleLanguageChanged
     };
 
-    return (
-      isMobileDevice ?
-        (<MobilePage {...pageProps} />) :
-        (<DesktopPage {...pageProps} />)
-    );
+    return isMobileDevice ? <MobilePage {...pageProps} /> : <DesktopPage {...pageProps} />;
   }
 }
 
 export const mapState = (state) => {
   const items = { ...selectors.getItems(state.simpleMode) };
+
   return {
     items: {
       lessons: items.lessons.map(x => mdb.getDenormCollectionWUnits(state.mdb, x)),

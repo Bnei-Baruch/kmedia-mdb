@@ -1,14 +1,14 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { translate } from 'react-i18next';
 import { Container, Divider, Grid, Input } from 'semantic-ui-react';
-import * as moment from 'moment/moment';
 
-import * as shapes from '../../shapes';
-import WipErr from '../../shared/WipErr/WipErr';
-import SectionHeader from '../../shared/SectionHeader';
 import { ALL_LANGUAGES, LANGUAGE_OPTIONS } from '../../../helpers/consts';
 import { today } from '../../../helpers/date';
+import * as shapes from '../../shapes';
+import SectionHeader from '../../shared/SectionHeader';
+import WipErr from '../../shared/WipErr/WipErr';
 import SimpleModeList from './list';
 
 class SimpleModeMobilePage extends PureComponent {
@@ -17,10 +17,8 @@ class SimpleModeMobilePage extends PureComponent {
     selectedDate: PropTypes.objectOf(Date),
     wip: shapes.WIP,
     err: shapes.Error,
-    uiLanguage: PropTypes.string.isRequired,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
-    location: shapes.HistoryLocation.isRequired,
     renderUnit: PropTypes.func.isRequired,
     onDayClick: PropTypes.func.isRequired,
     onLanguageChange: PropTypes.func.isRequired,
@@ -34,11 +32,7 @@ class SimpleModeMobilePage extends PureComponent {
     err: null,
   };
 
-  componentWillReceiveProps(nextProps) {
-    console.log('SimpleModeMobilePage.componentWillReceiveProps', nextProps);
-  }
-
-  getOptions(props) {
+  getOptions = (props) => {
     const { languages, t } = props;
 
     return LANGUAGE_OPTIONS
