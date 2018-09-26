@@ -95,7 +95,8 @@
     "search": "Suche",
     "previous": "Zurück",
     "next": "Nächstes",
-    "copy": "Kopieren"
+    "copy": "Kopieren",
+    "view-all": "Alle ansehen"
   },
   "player": {
     "messages": {
@@ -185,8 +186,8 @@
     "last-lesson": "Die letzte Lektion",
     "donate": "SPENDEN",
     "promoted": {
-      "header": "Weltkongress in Rom, Italien.",
-      "subheader": "27-29.7.2018"
+      "header": "Artikel für den Monat von Elul und Rosh HaShana",
+      "subheader": ""
     }
   },
   "events": {
@@ -372,7 +373,8 @@
     "toc": "Inhalt",
     "az": "А-Z",
     "default": "Standard",
-    "filter": "Filter..."
+    "filter": "Filter...",
+    "share-title": "Lesen Sie diesen Artikel"
   },
   "media-downloads": {
     "title": "Herunterladen",

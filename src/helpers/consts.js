@@ -217,17 +217,19 @@ export const COLLECTION_PUBLICATIONS_TYPE = [CT_ARTICLES];
 export const UNIT_LESSONS_TYPE            = [CT_LESSON_PART, /* CT_CHILDREN_LESSON, */ CT_WOMEN_LESSON, CT_VIRTUAL_LESSON, CT_FULL_LESSON, CT_LECTURE];
 export const UNIT_PROGRAMS_TYPE           = [CT_VIDEO_PROGRAM_CHAPTER];
 export const UNIT_EVENTS_TYPE             = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
-export const UNIT_PUBLICATIONS_TYPE       = [CT_PUBLICATION];
+export const UNIT_PUBLICATIONS_TYPE       = [CT_ARTICLE, CT_PUBLICATION];
 
 export const NO_NAME = '☠ no name';
 
 // Sources
-export const BS_SHAMATI = 'qMUUn22b';
-export const BS_IGROT   = 'DVSS0xAR';
-export const BS_TAAS    = 'xtKmrbb9';
-export const RB_IGROT   = 'b8SHlrfH';
-export const MR_TORA    = 'bvA8ZB1w';
-export const RH_ZOHAR   = 'AwGBQX2L';
+export const BS_SHAMATI  = 'qMUUn22b';
+export const BS_IGROT    = 'DVSS0xAR';
+export const BS_TAAS     = 'xtKmrbb9';
+export const RB_IGROT    = 'b8SHlrfH';
+export const MR_TORA     = 'bvA8ZB1w';
+export const RH_ZOHAR    = 'AwGBQX2L';
+export const RH_ARTICLES = 'rQ6sIUZK';
+export const RH_RECORDS  = '2GAdavz0';
 
 // This is exptected to be sorted by values
 export const BS_TAAS_PARTS = {

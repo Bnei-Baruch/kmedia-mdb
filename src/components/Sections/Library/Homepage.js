@@ -18,23 +18,27 @@ class Homepage extends Component {
     getSourceById: PropTypes.func.isRequired,
   };
 
-  render() {
-    const { roots, getSourceById } = this.props;
-    const portraits                = [portraitBS, portraitRB, portraitML];
-    let portraitIndex              = 0;
+  static portraits = [portraitBS, portraitRB, portraitML];
 
-    const kabbalists = roots.map((k) => {
-      const author = getSourceById(k);
+  static kabbalists = ({ roots, getSourceById }) => {
+    let portraitIndex = 0;
+
+    return roots.map((kabbalist) => {
+      const author = getSourceById(kabbalist);
 
       return isEmpty(author.children) ?
         null :
         <Kabbalist
-          key={k}
+          key={kabbalist}
           author={author}
           getSourceById={getSourceById}
-          portrait={portraits[portraitIndex++]}
+          portrait={Homepage.portraits[portraitIndex++]}
         />;
-    });
+    }).filter(x => x); // remove nulls
+  };
+
+  render() {
+    const { roots, getSourceById } = this.props;
 
     return (
       <div>
@@ -43,7 +47,7 @@ class Homepage extends Component {
         <Container className="padded">
           <Table basic="very" className="index-list sources__authors">
             <Table.Body>
-              {kabbalists}
+              {Homepage.kabbalists({ roots, getSourceById })}
             </Table.Body>
           </Table>
         </Container>

@@ -11,14 +11,11 @@
 @import 'includes/homepage';
 @import 'includes/pagination';
 @import 'includes/filters';
+@import 'includes/topics';
 @import 'gallery/image-gallery-no-icon';
 // @import 'gallery/image-gallery';
 //////////ALL YOUR CSS IS HERE ↴
 @import 'includes/not-sorted-scss';
-
-body {
-  overflow-y: scroll;
-}
 
 .debug {
   background: yellow;

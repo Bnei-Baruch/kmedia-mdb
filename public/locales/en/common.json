@@ -96,7 +96,8 @@
     "search": "Search",
     "previous": "Previous",
     "next": "Next",
-    "copy": "Copy"
+    "copy": "Copy",
+    "view-all": "View All"
   },
   "player": {
     "messages": {
@@ -186,8 +187,8 @@
     "last-lesson": "The Latest Daily Lesson",
     "donate": "DONATE NOW",
     "promoted": {
-      "header": "World Convention in Rome, Italy.",
-      "subheader": "27-29 July, 2018"
+      "header": "Articles For The Month of Elul and Rosh HaShana",
+      "subheader": ""
     }
   },
   "events": {
@@ -238,7 +239,7 @@
       "series": "Selected Study Series"
     },
     "list": {
-      "related": "Related to",
+      "related": "Related to:",
       "number": "#",
       "item_from": "Item of:"
     },
@@ -380,7 +381,14 @@
     "toc": "Table of contents",
     "az": "AZ",
     "default": "Default",
-    "filter": "Filter..."
+    "filter": "Filter...",
+    "share-title": "Read this article"
+  },
+  "topics": {
+    "header": {
+      "text": "Topics",
+      "subtext": "A collection of all items for a selected topic."
+    }
   },
   "media-downloads": {
     "title": "Media Downloads",

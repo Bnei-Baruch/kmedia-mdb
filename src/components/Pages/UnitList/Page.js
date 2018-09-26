@@ -66,7 +66,7 @@ const filters = {
   ],
   'publications-collection': [
     { name: 'date-filter', component: filterComponents.DateFilter }
-  ],
+  ]
 };
 
 class UnitListPage extends PureComponent {

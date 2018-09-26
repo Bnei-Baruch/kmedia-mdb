@@ -95,7 +95,8 @@
     "search": "Пошук",
     "previous": "Попередній",
     "next": "Наступний",
-    "copy": "Копіювати"
+    "copy": "Копіювати",
+    "view-all": "Подивитись все"
   },
   "player": {
     "messages": {
@@ -185,8 +186,8 @@
     "last-lesson": "Останній Урок",
     "donate": "ЗРОБІТЬ ВНЕСОК",
     "promoted": {
-      "header": "Світовий конгрес у Римі, Італія.",
-      "subheader": "27-29.7.2018"
+      "header": "Статті про місяць Елул і Рош а-Шана",
+      "subheader": ""
     }
   },
   "events": {
@@ -237,7 +238,7 @@
       "series": "Избранные серии обучения"
     },
     "list": {
-      "related": "Відносяться до",
+      "related": "Відносяться до:",
       "number": "№ ",
       "item_from": "Частина з:"
     },
@@ -373,7 +374,14 @@
     "toc": "Зміст",
     "az": "А-Я",
     "default": "За замовчуванням",
-    "filter": "Фiльтр..."
+    "filter": "Фiльтр...",
+    "share-title": "Читайте статтю"
+  },
+  "topics": {
+    "header": {
+      "text": "Теми",
+      "subtext": "A collection of all items for a selected topic."
+    }
   },
   "media-downloads": {
     "title": "Скачати",
