@@ -60,7 +60,7 @@ export const sectionLink = (section, filters) => {
   return `/${section}?${urlSearchStringify(query)}`;
 };
 
-export const canonicalLink = (entity, lang) => {
+export const canonicalLink = (entity, mediaLang) => {
   if (!entity) {
     return '/';
   }
@@ -72,27 +72,27 @@ export const canonicalLink = (entity, lang) => {
 
   if (entity.content_type === 'POST') {
 
-    const [, wpID] = entity.id.split("-");
-
+    const [blogID, postID] = entity.id.split("-");
     let blogName;
-    switch (lang){
-      case LANG_RUSSIAN:
+
+    switch (parseInt(blogID)){
+      case 1:
         blogName = 'laitman-ru';
         break;
-      case LANG_ENGLISH:
+      case 2:
         blogName = 'laitman-com';
         break;
-      case LANG_SPANISH:
+      case 3:
         blogName = 'laitman-es';
         break;
-      case LANG_HEBREW:
+      case 4:
         blogName = 'laitman-co-il';
         break;
       default:
         blogName = 'laitman-co-il';
     }
 
-    return `/publications/blog/${blogName}/${wpID}`;
+    return `/publications/blog/${blogName}/${postID}`;
   }
 
   // collections
@@ -133,6 +133,8 @@ export const canonicalLink = (entity, lang) => {
     return `/events/cu/${entity.id}`;
   }
 
+  const mediaLangSuffix = mediaLang ? `?language=${mediaLang}` : ``;
+
   // unit based on type
   switch (entity.content_type) {
   case CT_LESSON_PART:
@@ -140,16 +142,16 @@ export const canonicalLink = (entity, lang) => {
   case CT_VIRTUAL_LESSON:
   case CT_WOMEN_LESSON:
   // case CT_CHILDREN_LESSON:
-    return `/lessons/cu/${entity.id}`;
+    return `/lessons/cu/${entity.id}${mediaLangSuffix}`;
   case CT_VIDEO_PROGRAM_CHAPTER:
-    return `/programs/cu/${entity.id}`;
+    return `/programs/cu/${entity.id}${mediaLangSuffix}`;
   case CT_EVENT_PART:
   case CT_FULL_LESSON:
   case CT_FRIENDS_GATHERING:
   case CT_MEAL:
-    return `/events/cu/${entity.id}`;
+    return `/events/cu/${entity.id}${mediaLangSuffix}`;
   case CT_ARTICLE:
-    return `/publications/articles/cu/${entity.id}`;
+    return `/publications/articles/cu/${entity.id}?${mediaLangSuffix}`;
   case CT_UNKNOWN:
   case CT_CLIP:
   case CT_TRAINING:
