@@ -37,10 +37,6 @@ import {
   CT_WOMEN_LESSON,
   CT_WOMEN_LESSONS,
   EVENT_TYPES,
-  LANG_RUSSIAN,
-  LANG_ENGLISH,
-  LANG_SPANISH,
-  LANG_HEBREW,
 } from './consts';
 
 export const sectionLink = (section, filters) => {
@@ -76,16 +72,16 @@ export const canonicalLink = (entity, mediaLang) => {
     let blogName;
 
     switch (parseInt(blogID)){
-      case 1:
+      case BLOG_ID_LAITMAN_RU:
         blogName = 'laitman-ru';
         break;
-      case 2:
+      case BLOG_ID_LAITMAN_COM:
         blogName = 'laitman-com';
         break;
-      case 3:
+      case BLOG_ID_LAITMAN_ES:
         blogName = 'laitman-es';
         break;
-      case 4:
+      case BLOG_ID_LAITMAN_CO_IL:
         blogName = 'laitman-co-il';
         break;
       default:

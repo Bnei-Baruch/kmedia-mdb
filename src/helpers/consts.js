@@ -259,6 +259,12 @@ export const LANG_UI_LANGUAGES = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_
 export const ES_RESULT_TYPE_SOURCES = "sources"
 export const ES_RESULT_TYPE_TAGS = "tags"
 
+// Blog
+export const BLOG_ID_LAITMAN_RU = 1
+export const BLOG_ID_LAITMAN_COM = 2
+export const BLOG_ID_LAITMAN_ES = 3
+export const BLOG_ID_LAITMAN_CO_IL = 4
+
 export const SEARCH_INTENT_INDEX_TOPIC       = 'intent-tag';
 export const SEARCH_INTENT_INDEX_SOURCE      = 'intent-source';
 export const SEARCH_INTENT_HIT_TYPE_PROGRAMS = 'programs';
