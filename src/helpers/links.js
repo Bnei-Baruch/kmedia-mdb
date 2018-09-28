@@ -37,6 +37,10 @@ import {
   CT_WOMEN_LESSON,
   CT_WOMEN_LESSONS,
   EVENT_TYPES,
+  BLOG_ID_LAITMAN_RU,
+  BLOG_ID_LAITMAN_COM,
+  BLOG_ID_LAITMAN_ES,
+  BLOG_ID_LAITMAN_CO_IL,
 } from './consts';
 
 export const sectionLink = (section, filters) => {
