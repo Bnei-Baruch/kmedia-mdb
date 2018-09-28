@@ -82,7 +82,13 @@ const onFetchForDateSuccess = (state, action) => {
   };
 };
 
-const onSetLanguage = () => ({ ...initialState });
+const onSetLanguage = state => ({
+  ...state,
+  items: {
+    lessons: [],
+    others: []
+  }
+});
 
 const onSSRPrepare = state => ({
   ...state,

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import isEmpty from 'lodash/isEmpty';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -60,6 +61,10 @@ class SimpleModeContainer extends Component {
       const filesLanguage = nextProps.language;
       this.setState({ filesLanguage });
     }
+
+    if (this.props.language !== nextProps.language) {
+      this.handleDayClick(this.state.date, nextProps);
+    }
   }
 
   handleLanguageChanged = (e, filesLanguage) => {
@@ -71,11 +76,11 @@ class SimpleModeContainer extends Component {
     this.setState({ filesLanguage: e.currentTarget.value });
   };
 
-  handleDayClick = (selectedDate) => {
+  handleDayClick = (selectedDate, nextProps = null) => {
     this.setState({ date: selectedDate });
 
     const date         = moment(selectedDate).format('YYYY-MM-DD');
-    const { language } = this.props;
+    const { language } = isEmpty(nextProps) ? this.props : nextProps;
     this.props.fetchForDate({ date, language });
     updateQuery(this.props.history, query => ({
       ...query,

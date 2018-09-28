@@ -25,7 +25,7 @@ class SimpleModeList extends PureComponent {
         {
           items.lessons ?
             <List size="large">
-              {items.lessons.map(x => renderUnit(x, language, t))}
+              {items.lessons.map(x => x && renderUnit(x, language, t))}
             </List> :
             null
         }

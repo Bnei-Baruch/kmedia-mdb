@@ -62,8 +62,12 @@ const renderHorizontalFilesList = (files, contentType, t) =>
 
 const renderUnits = (units, language, t) =>
   units.map((unit) => {
-    const filesList = unit.files.filter(file => file.language === language);
-    const files     = renderHorizontalFilesList(filesList, unit.content_type, t);
+    const filesList = unit && unit.files.filter(file => file.language === language);
+    const files     = filesList && renderHorizontalFilesList(filesList, unit.content_type, t);
+
+    if (!files) {
+      return null;
+    }
 
     return (
       <List.Item key={unit.id} className="unit-header">
