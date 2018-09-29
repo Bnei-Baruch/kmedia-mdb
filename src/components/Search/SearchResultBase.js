@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
 import moment from 'moment';
 import { Button, Image, Icon } from 'semantic-ui-react';
 
@@ -16,30 +15,55 @@ import {
   MT_AUDIO,
   MT_VIDEO,
   MT_IMAGE,
-  CT_LESSON_PART
+  CT_LESSON_PART,
+  CT_KITEI_MAKOR,
+  CT_CLIP,
+  CT_WOMEN_LESSON,
+  CT_CHILDREN_LESSON,
+  CT_LELO_MIKUD,
+  CT_FRIENDS_GATHERING,
+  CT_MEAL,
+  CT_EVENT_PART,
+  CT_TRAINING,
+  CT_ARTICLE,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  CT_FULL_LESSON,
+  CT_VIRTUAL_LESSON,
+
+  CT_DAILY_LESSON,
+  CT_SPECIAL_LESSON,
+  CT_FRIENDS_GATHERINGS,
+  CT_VIDEO_PROGRAM,
+  CT_LECTURE_SERIES,
+  CT_CHILDREN_LESSONS,
+  CT_WOMEN_LESSONS,
+  CT_VIRTUAL_LESSONS,
+  CT_MEALS,
+  CT_CONGRESS,
+  CT_HOLIDAY,
+  CT_PICNIC,
+  CT_UNITY_DAY,
+  CT_CLIPS,
+  CT_ARTICLES,
+  CT_LESSONS_SERIES,
 } from '../../helpers/consts';
 
 const PATH_SEPARATOR = ' > ';
 
 class SearchResultBase extends Component {
   static propTypes = {
-    results: PropTypes.object,
-    areSourcesLoaded: PropTypes.bool.isRequired,
     queryResult: PropTypes.object,
     language: PropTypes.string.isRequired,
-    wip: shapes.WIP,
-    err: shapes.Error,
     t: PropTypes.func.isRequired,
     filters: PropTypes.array.isRequired,
     location: shapes.HistoryLocation.isRequired,
     click: PropTypes.func.isRequired,
+    hit: PropTypes.object,
+    rank: PropTypes.number
   };
 
   static defaultProps = {
     queryResult: null,
-    wip: false,
-    err: null,
-    intents: [],
   };
 
   click = (mdb_uid, index, type, rank, searchId) => {
@@ -105,13 +129,47 @@ class SearchResultBase extends Component {
 
   iconByContentType = (type, withTitle) => {
     let icon;
+
     switch (type) {
     case CT_LESSON_PART:
+    case CT_FULL_LESSON:
+    case CT_VIRTUAL_LESSON:
+    case CT_WOMEN_LESSON:
+    case CT_CHILDREN_LESSON:
+    case CT_LELO_MIKUD:
+    case CT_DAILY_LESSON:
+    case CT_SPECIAL_LESSON:
+    case CT_LECTURE_SERIES:
+    case CT_CHILDREN_LESSONS:
+    case CT_WOMEN_LESSONS:
+    case CT_VIRTUAL_LESSONS:
+    case CT_LESSONS_SERIES:
       icon = 'lessons';
       break;
-    default:
+    case CT_FRIENDS_GATHERING:
+    case CT_MEAL:
+    case CT_EVENT_PART:
+    case CT_TRAINING:
+    case CT_UNITY_DAY:
+    case CT_FRIENDS_GATHERINGS:
+    case CT_CONGRESS:
+    case CT_MEALS:
+    case CT_HOLIDAY:
+    case CT_PICNIC:
+      icon = 'events';
+      break;
+    case CT_ARTICLE:
+    case CT_ARTICLES:
+      icon = 'publications';
+      break;
+    case CT_VIDEO_PROGRAM_CHAPTER:
+    case CT_CLIP:
+    case CT_VIDEO_PROGRAM:
+    case CT_CLIPS:
       icon = 'programs';
       break;
+    default:
+      return null;
     }
 
     if (!withTitle) {
@@ -119,8 +177,8 @@ class SearchResultBase extends Component {
     }
 
     return (<span>
-      <Image size="mini" floated="left" src={sectionLogo[icon]} />&nbsp;
-      <span>{this.props.t(`filters.sections-filter.${icon}`)}</span>
+      <Image size="mini" floated="left" src={sectionLogo[icon]} />
+      <span>{this.props.t(`constants.content-types.${type}`)}</span>
     </span>);
   };
 
@@ -132,17 +190,24 @@ class SearchResultBase extends Component {
       return null;
     }
     const titleArr = prop.split(PATH_SEPARATOR);
-    const title    = `${titleArr.splice(-1)} / ${titleArr.join(PATH_SEPARATOR)}`;
+    let title      = `${titleArr.splice(-1)}`;
+    if (titleArr.length > 0) {
+      title += ` / ${titleArr.join(PATH_SEPARATOR)}`;
+    }
     // eslint-disable-next-line react/no-danger
     return <span dangerouslySetInnerHTML={{ __html: title }} />;
   };
 
   // Helper function to get the frist prop in hightlights obj and apply htmlFunc on it.
-  snippetFromHighlight = (highlight, props, htmlFunc) => {
-    const prop   = ['content', 'content_language'].find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
+  snippetFromHighlight = (highlight, props = ['content', 'content_language']) => {
+    const prop = props.find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
+
+    if (!prop) {
+      return null;
+    }
     const __html = `...${highlight[prop].join('.....')}...`;
     // eslint-disable-next-line react/no-danger
-    return !prop ? null : <span dangerouslySetInnerHTML={{ __html }} />;
+    return <span dangerouslySetInnerHTML={{ __html }} />;
   };
 
   getFilterById = index => {
@@ -163,4 +228,4 @@ class SearchResultBase extends Component {
   }
 }
 
-export default translate()(SearchResultBase);
+export default SearchResultBase;

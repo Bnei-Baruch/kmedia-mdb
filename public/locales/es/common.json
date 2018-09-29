@@ -24,6 +24,7 @@
   },
   "filters": {
     "by": "Filtrar por:",
+    "filters": "Filtros",
     "all": "Todo",
     "date-filter": {
       "label": "Fecha",
@@ -75,6 +76,7 @@
     },
     "sections-filter": {
       "label": "Sección",
+      "all": "Todo",
       "lessons": "Lecciones y Charlas",
       "programs": "Programas",
       "events": "Congresos y Eventos",

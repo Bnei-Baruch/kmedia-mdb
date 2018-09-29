@@ -28,8 +28,6 @@ export function* search(action) {
     const suggest  = yield select(state => selectors.getSuggest(state.search))
     const deb      = yield select(state => selectors.getDeb(state.search));
 
-    console.log('deb value:', deb);
-
     // Prepare filters values.
     const filters = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
     const params  = filtersTransformer.toApiParams(filters);
@@ -46,8 +44,6 @@ export function* search(action) {
 
     const { data } = yield call(Api.search, { ...action.payload, q, sortBy, language, deb, suggest: suggest === q ? '' : suggest, searchId });
 
-    console.log(data);
-
     data.search_result.searchId = searchId;
 
     if (Array.isArray(data.search_result.hits.hits) && data.search_result.hits.hits.length > 0) {
@@ -59,7 +55,7 @@ export function* search(action) {
       // we should strive for a single call to the API and get all the data we need.
       // hmm, relay..., hmm ?
       const cIDsToFetch = data.search_result.hits.hits.reduce((acc, val) => {
-        if (val._type === 'collections') {
+        if (val._source.result_type === 'collections') {
           return acc.concat(val._source.mdb_uid);
         } else {
           return acc;

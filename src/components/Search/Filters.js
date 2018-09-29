@@ -7,7 +7,9 @@ import { selectors as filterSelectors } from '../../redux/modules/filters';
 import Filters from '../Filters/Filters';
 import filterComponents from '../Filters/components';
 import { bindActionCreators } from 'redux';
-import { actions,  } from '../../redux/modules/filters';
+import { actions, } from '../../redux/modules/filters';
+import * as shapes from '../shapes';
+import { getQuery } from '../../helpers/url';
 
 const filters = [
   {
@@ -36,9 +38,16 @@ class SearchResultsFilters extends Component {
     onHydrated: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
     filtersValues: PropTypes.objectOf(PropTypes.object).isRequired,
+    location: shapes.HistoryLocation.isRequired,
   };
 
   state = { isShowFilters: false };
+
+  componentDidMount() {
+    if (getQuery(this.props.location).section) {
+      this.setState({ isShowFilters: true });
+    }
+  }
 
   showFilters = () => this.setState({ isShowFilters: !this.state.isShowFilters });
 
@@ -48,9 +57,13 @@ class SearchResultsFilters extends Component {
     this.props.onChange();
   };
 
-  renderTabs = () => {
+  getActiveFilterTab = () => {
+    const query = getQuery(this.props.location).section;
+    return !query ? 'all' : query.split('.').slice(-1)[0] || 'all';
+  };
 
-    const { t, filtersValues, sortBy, onSortByChange, onHydrated, onChange } = this.props;
+  renderTabs = () => {
+    const { t, filtersValues, sortBy, onSortByChange } = this.props;
 
     const options = ['relevance', 'newertoolder', 'oldertonewer'].map(o => ({
       text: t(`search.sorts.${o}`),
@@ -63,7 +76,7 @@ class SearchResultsFilters extends Component {
               f.values &&
               f.values.includes('filters.sections-filter.sources'));
 
-    const filters = (
+    const filters   = (
       <span key="span" style={{ padding: '10px' }}>
             {t('search.sortby')}:
         &nbsp;&nbsp;
@@ -76,18 +89,19 @@ class SearchResultsFilters extends Component {
           onChange={onSortByChange} />
           </span>
     );
-
-    const tabs = ['all', 'lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
+    const activeTab = this.getActiveFilterTab();
+    const tabs      = ['all', 'lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
       <Menu.Item
         key={x}
-        name={x}
+        name={t(`filters.sections-filter.${x}`)}
+        active={x === activeTab}
         onClick={() => this.onSelectionChange(x)} />
     );
 
     const rightButtons = (
       <Menu.Menu position='right'>
         <Menu.Item>
-          <Button basic compact onClick={this.showFilters}>
+          <Button basic={!this.state.isShowFilters} compact onClick={this.showFilters} className="showFilters">
             <Icon name="filter" />
             {t('filters.filters')}
           </Button>
@@ -95,11 +109,11 @@ class SearchResultsFilters extends Component {
         <Menu.Item>{filters}</Menu.Item>
       </Menu.Menu>
     );
-    return (<Menu>{tabs}{rightButtons}</Menu>);
+    return (<Menu borderless className="sectionTabs">{tabs}{rightButtons}</Menu>);
   };
 
   render() {
-    const { t, filtersValues, sortBy, onSortByChange, onHydrated, onChange } = this.props;
+    const { onHydrated, onChange } = this.props;
 
     return (
       <div>

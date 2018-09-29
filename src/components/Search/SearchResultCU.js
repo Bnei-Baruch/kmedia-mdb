@@ -1,42 +1,36 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { Segment, Icon, Button, Image, } from 'semantic-ui-react';
-import { bindActionCreators } from 'redux';
+import { Segment } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../helpers/links';
-import { actions, selectors } from '../../redux/modules/mdb';
-import { selectors as filterSelectors } from '../../redux/modules/filters';
-import { selectors as sourcesSelectors } from '../../redux/modules/sources';
-import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import SearchResultBase from './SearchResultBase';
 
 class SearchResultCU extends SearchResultBase {
-  static propTypes = {
-    results: PropTypes.object,
-    getSourcePath: PropTypes.func,
-    areSourcesLoaded: PropTypes.bool.isRequired,
-    queryResult: PropTypes.object,
-    cMap: PropTypes.objectOf(shapes.Collection),
-    cuMap: PropTypes.objectOf(shapes.ContentUnit),
-    pageNo: PropTypes.number.isRequired,
-    pageSize: PropTypes.number.isRequired,
-    language: PropTypes.string.isRequired,
-    wip: shapes.WIP,
-    err: shapes.Error,
-    t: PropTypes.func.isRequired,
-    handlePageChange: PropTypes.func.isRequired,
-    filters: PropTypes.array.isRequired,
-    location: shapes.HistoryLocation.isRequired,
-    click: PropTypes.func.isRequired,
-    fetchUnit: PropTypes.func.isRequired,
-  };
 
-  static defaultProps = {
-    queryResult: null,
-    wip: false,
-    err: null,
+  renderSnippet = (highlight) => {
+    const content     = this.snippetFromHighlight(highlight);
+    const description = this.snippetFromHighlight(highlight, ['description', 'description_language']);
+
+    return (
+      <div className="search__snippet">
+        {
+          description ?
+            <div>
+              <strong>{this.props.t('search.result.description')}: </strong>
+              {description}
+            </div> :
+            null
+        }
+        {
+          content ?
+            <div>
+              <strong>{this.props.t('search.result.transcript')}: </strong>
+              {content}
+            </div> :
+            null
+        }
+      </div>);
   };
 
   render() {
@@ -50,6 +44,7 @@ class SearchResultCU extends SearchResultBase {
                 result_type: resultType
               },
             highlight,
+            _type: type
           }                                 = hit;
 
     let filmDate = '';
@@ -58,12 +53,12 @@ class SearchResultCU extends SearchResultBase {
     }
 
     return (
-      <Segment key={mdbUid} className="bgHoverGrey search__block">
+      <Segment className="bgHoverGrey search__block">
         <Link
           className="search__link content"
           onClick={() => this.click(mdbUid, index, resultType, rank, searchId)}
           to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}>
-          {this.titleFromHighlight(highlight)}
+          {this.titleFromHighlight(highlight, cu.name)}
         </Link>
         <div>
           {this.iconByContentType(cu.content_type, true)} | <strong>{filmDate}</strong>
@@ -71,7 +66,7 @@ class SearchResultCU extends SearchResultBase {
         </div>
 
         <div className="content">
-          {this.snippetFromHighlight(highlight)}
+          {this.renderSnippet(highlight)}
         </div>
         <div>
           {this.renderFiles(cu)}
@@ -82,20 +77,4 @@ class SearchResultCU extends SearchResultBase {
   };
 }
 
-const mapState = (state, ownProps) => {
-  const { units: wip } = selectors.getWip(state.mdb);
-  const { units: err } = selectors.getErrors(state.mdb);
-
-  return {
-    filters: filterSelectors.getFilters(state.filters, 'search'),
-    areSourcesLoaded: sourcesSelectors.areSourcesLoaded(state.sources),
-    wip: wip === {},
-    err,
-  };
-};
-
-const mapDispatch = dispatch => bindActionCreators({
-  fetchUnit: actions.fetchUnit,
-}, dispatch);
-
-export default connect(mapState, mapDispatch)(SearchResultCU);
+export default SearchResultCU;

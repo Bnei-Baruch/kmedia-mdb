@@ -1,55 +1,62 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { Table, Label } from 'semantic-ui-react';
+import { Table, Button } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../helpers/links';
 import { isDebMode } from '../../helpers/url';
+import { assetUrl } from '../../helpers/Api';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import ScoreDebug from './ScoreDebug';
-import CollectionLogo from '../shared/Logo/CollectionLogo';
+import FallbackImage from '../shared/FallbackImage';
 import SearchResultBase from './SearchResultBase';
 
 class SearchResultCollection extends SearchResultBase {
 
   static propTypes = {
-    hit: PropTypes.object,
+    ...SearchResultBase.props,
     c: shapes.Collection,
-    rank: PropTypes.number
   };
 
   renderCU = (cu) => {
     return (
       <Link to={canonicalLink(cu)} key={cu.id}>
-        <Label size="tiny">{cu.name}</Label>
+        <Button size="tiny" basic className="linkToCU">{cu.name}</Button>
       </Link>
     );
   };
 
   render() {
-    const { t, location, c, hit } = this.props;
-    const { _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
+    const { t, location, c, hit, rank, queryResult }                                                      = this.props;
+    const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
+    const { search_result: { searchId } }                                                                 = queryResult;
 
     return (
-      <Table>
+      <Table className="bgHoverGrey search__block">
         <Table.Body>
           <Table.Row key={mdbUid} verticalAlign="top">
             <Table.Cell collapsing singleLine width={1}>
-              <CollectionLogo collectionId={c.id} circular />
+              <FallbackImage
+                src={assetUrl(`logos/collections/${c.id}.jpg`)}
+                circular
+                size="tiny" />
             </Table.Cell>
             <Table.Cell>
               <Link
                 className="search__link"
+                onClick={() => this.click(mdbUid, index, type, rank, searchId)}
                 to={canonicalLink(c || { id: mdbUid, content_type: c.content_type })}>
                 {this.titleFromHighlight(highlight, c.name)}
               </Link>
               <div>
-                <Link to={canonicalLink(c || { id: mdbUid, content_type: c.content_type })}>
-                  {this.iconByContentType(c.content_type)}
-                  <span>{t(`constants.content-types.${c.content_type}`)}</span>
+                <Link
+                  onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+                  to={canonicalLink(c || { id: mdbUid, content_type: c.content_type })}>
+                  {this.iconByContentType(c.content_type, true)}
                 </Link>
+                &nbsp;|&nbsp;
                 <span>{c.content_units.length} {t('pages.collection.items.programs-collection')}</span>
+                <div className="clear" />
               </div>
               <div>
                 {c.content_units.slice(0, 5).map(this.renderCU)}

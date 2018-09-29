@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Trans, translate } from 'react-i18next';
-import { Container, Divider, Table } from 'semantic-ui-react';
+import { Container, Divider, Grid } from 'semantic-ui-react';
 
-import {  isEmpty } from '../../helpers/utils';
+import { isEmpty } from '../../helpers/utils';
 import { getQuery } from '../../helpers/url';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
@@ -18,7 +18,7 @@ import SearchResultCU from './SearchResultCU';
 import SearchResultCollection from './SearchResultCollection';
 import SearchResultIntent from './SearchResultIntent';
 import SearchResultSource from './SearchResultSource';
-import {  SEARCH_INTENT_HIT_TYPES,} from '../../helpers/consts';
+import { SEARCH_INTENT_HIT_TYPES, } from '../../helpers/consts';
 
 class SearchResults extends Component {
   static propTypes = {
@@ -49,62 +49,30 @@ class SearchResults extends Component {
     getSourcePath: undefined,
   };
 
-  // Helper function to get the frist prop in hightlights obj and apply htmlFunc on it.
-  snippetFromHighlight = (highlight, props, htmlFunc) => {
-    const prop = props.find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length > 0);
-    // eslint-disable-next-line react/no-danger
-    return !prop ? null : <span dangerouslySetInnerHTML={{ __html: htmlFunc(highlight[prop]) }} />;
-  };
-
-  click = (mdb_uid, index, type, rank, searchId) => {
-    const { click } = this.props;
-    click(mdb_uid, index, type, rank, searchId);
-  };
-
   filterByHitType = (hit) => {
     const { hitType } = this.props;
     return hitType ? hit.type === hitType : true;
   };
 
   renderHit = (hit, rank) => {
-    const { cMap, cuMap }                                                           = this.props;
-    const { _source: { mdb_uid: mdbUid, result_type: resultType }, _type: hitType } = hit;
+    const { cMap, cuMap }                                                        = this.props;
+    const { _source: { mdb_uid: mdbUid, result_type: resultType }, _type: type } = hit;
 
-    if (SEARCH_INTENT_HIT_TYPES.includes(hitType)) {
-      return (
-        <Table.Row key={`${mdbUid}_${hitType}_intent`} verticalAlign="top">
-          <Table.Cell colSpan="5">
-            <SearchResultIntent hit={hit} rank={rank} {...this.props} />
-          </Table.Cell>
-        </Table.Row>
-      );
+    const props = { ...this.props, hit, rank, key: `${mdbUid}_${type}` };
+
+    if (SEARCH_INTENT_HIT_TYPES.includes(type)) {
+      return <SearchResultIntent  {...props} />;
     }
 
     const cu = cuMap[mdbUid];
     const c  = cMap[mdbUid];
 
     if (cu) {
-      return (
-        <Table.Row key={`${mdbUid}_cu`} verticalAlign="top">
-          <Table.Cell colSpan="4">
-            <SearchResultCU hit={hit} rank={rank} {...this.props} cu={cu} />
-          </Table.Cell>
-        </Table.Row>
-      );
+      return <SearchResultCU   {...props} cu={cu} />;
     } else if (c) {
-      return (
-        <Table.Row key={`${mdbUid}_collection`} verticalAlign="top">
-          <Table.Cell colSpan="4">
-            <SearchResultCollection hit={hit} rank={rank} c={c} snippetFromHighlight={this.snippetFromHighlight}  {...this.props} />
-          </Table.Cell>
-        </Table.Row>
-      );
+      return <SearchResultCollection c={c}  {...props} />;
     } else if (resultType === 'sources') {
-      return (<Table.Row key={`${mdbUid}_sources`} verticalAlign="top">
-        <Table.Cell colSpan="5">
-          <SearchResultSource hit={hit} {...this.props} snippetFromHighlight={this.snippetFromHighlight} />
-        </Table.Cell>
-      </Table.Row>);
+      return <SearchResultSource   {...props} />;
     }
 
     // maybe content_units are still loading ?
@@ -158,26 +126,25 @@ class SearchResults extends Component {
       );
     } else {
       content = (
-        <div>
-          <Container>
-            <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
-            <Table sortable basic="very">
-              <Table.Body>
-                {hits.filter(this.filterByHitType).map(this.renderHit)}
-              </Table.Body>
-            </Table>
-          </Container>
-          <Divider fitted />
-          <Container className="padded pagination-wrapper" textAlign="center">
-            <Pagination
-              pageNo={pageNo}
-              pageSize={pageSize}
-              total={totalForPagination}
-              language={language}
-              onChange={handlePageChange}
-            />
-          </Container>
-        </div>);
+        <Grid>
+          <Grid.Column key="1" width={12}>
+            <div className="searchResult_content">
+              <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
+              {hits.filter(this.filterByHitType).map(this.renderHit)}
+            </div>
+            <Divider fitted />
+            <Container className="padded pagination-wrapper" textAlign="center">
+              <Pagination
+                pageNo={pageNo}
+                pageSize={pageSize}
+                total={totalForPagination}
+                language={language}
+                onChange={handlePageChange}
+              />
+            </Container>
+          </Grid.Column>
+          <Grid.Column key="2" width={4} />
+        </Grid>);
     }
     return content;
   }

@@ -68,7 +68,7 @@ export class OmniBox extends Component {
     }
 
     // Clear search query when navigating from the search page into other pages (AS-38)
-    if (this.props.query && !nextProps.location.pathname.endsWith('search') && nextProps.location.pathname !== this.props.location.pathname){
+    if (this.props.query && !nextProps.location.pathname.endsWith('search') && nextProps.location.pathname !== this.props.location.pathname) {
       this.props.updateQuery('');
       this.props.setSuggest('');
     }
@@ -90,7 +90,7 @@ export class OmniBox extends Component {
   };
 
   doSearch = (q = null, suggest = '', locationSearch = '') => {
-    const query = q != null ? q : this.props.query;
+    const query                                                       = q != null ? q : this.props.query;
     const { search, location, push, pageSize, resetFilter, onSearch } = this.props;
 
     if (this.isEmptyQuery(query)) {
@@ -126,7 +126,7 @@ export class OmniBox extends Component {
 
   handleResultSelect = (e, data) => {
     const { key, title, category } = data.result;
-    const prevQuery = this.props.query;
+    const prevQuery                = this.props.query;
 
     switch (category) {
     case 'search':
@@ -192,11 +192,16 @@ export class OmniBox extends Component {
   };
 
   suggestionToResult = (type, item) => {
+    const { getTagPath, getSourcePath } = this.props;
+    if (!getTagPath || !getSourcePath) {
+      return null;
+    }
+    
     if (type === 'tags') {
       return {
         category: type,
         key: item.id,
-        title: (this.props.getTagPath(item.id) || [])
+        title: (getTagPath(item.id) || [])
           .map(p => p.label)
           .join(' - ')
       };
@@ -204,7 +209,7 @@ export class OmniBox extends Component {
       return {
         category: type,
         key: item.id,
-        title: (this.props.getSourcePath(item.id) || [])
+        title: (getSourcePath(item.id) || [])
           .map(p => p.name)
           .join(' > ')
       };
@@ -280,7 +285,9 @@ export class OmniBox extends Component {
 
     return (
       <Search
-        ref={s => { this.search = s; }}
+        ref={s => {
+          this.search = s;
+        }}
         category
         fluid
         className="search-omnibox"

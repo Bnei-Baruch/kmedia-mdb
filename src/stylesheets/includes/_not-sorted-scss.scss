@@ -637,6 +637,10 @@
 
 /****Search Results page**/
 
+.pagination-results.h2.ui.header {
+  font: 13px/20px Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
 .search__link {
   color: #1a4179;
   font-size: 18px;
@@ -659,6 +663,7 @@
   .ui.mini.image {
     width: 25px;
   }
+
   .linkToFile {
     padding: .5em 1em;
     margin-top: 2px !important;
@@ -669,28 +674,38 @@
     }
   }
 
+  .linkToCU {
+    padding: .5em 1em;
+    margin-top: 5px !important;
+    margin-right: 5px !important;
+  }
+
   .search__cards {
     padding-right: 0;
+    position: relative;
   }
 
   .search__card {
     position: relative;
     margin-top: 20px;
+    .intentImage {
+      position: relative;
+      min-height: 160px;
+    }
+    &.card.bgHoverGrey:hover {
+      background: #eee;
+    }
   }
 
-  .cardHeader {
-    position: relative;
-
-    .cardHeaderLabel {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      z-index: 1;
-      padding: 5px 10px;
-      background: rgba(51, 51, 51, .6);
-      color: white;
-      font-size: 14px;
-    }
+  .cardHeaderLabel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    padding: 5px 10px;
+    background: rgba(51, 51, 51, .6);
+    color: white;
+    font-size: 14px;
   }
 }
 
@@ -700,4 +715,21 @@
 
 .bgTransparent, .bgTransparent:hover {
   background: transparent !important;
+}
+
+.sectionTabs.ui.menu {
+  background: $darkWhite;
+  border: 0 none;
+  .item {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+  .active {
+    border-bottom: 1px solid #1a4179;
+  }
+  .showFilters {
+    background-color: white;
+    padding-bottom: 5px !important;
+    padding-top: 0 !important;
+  }
 }

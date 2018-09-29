@@ -25,6 +25,7 @@
   },
   "filters": {
     "by": "Filtern nach:",
+    "filters": "Filter",
     "all": "Alles",
     "date-filter": {
       "label": "Datum",
@@ -80,7 +81,8 @@
       "programs": "Programme",
       "events": "Kongresse, Veranstaltungen",
       "publications": "Veröffentlichungen",
-      "sources": "Primäre Quellen"
+      "sources": "Primäre Quellen",
+      "all":"Alles"
     }
   },
   "buttons": {

@@ -25,6 +25,7 @@
   },
   "filters": {
     "by": "Фильтровать по:",
+    "filters": "Фильтры",
     "all": "Все",
     "date-filter": {
       "label": "Дата",
@@ -76,6 +77,7 @@
     },
     "sections-filter": {
       "label": "Раздел",
+      "all": "Все",
       "lessons": "Уроки и лекции",
       "programs": "Программы",
       "events": "Конгрессы, события",

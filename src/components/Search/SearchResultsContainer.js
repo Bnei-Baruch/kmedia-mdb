@@ -87,6 +87,7 @@ class SearchResultsContainer extends Component {
           onChange={this.handleFiltersChanged}
           onSortByChange={this.handleSortByChanged}
           onHydrated={this.handleFiltersHydrated}
+          location={location}
         />
         <Container className="padded">
           <SearchResults

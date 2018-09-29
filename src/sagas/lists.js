@@ -56,8 +56,8 @@ function* fetchList(action) {
 }
 
 function* fetchIntents(action) {
-  const { namespace, params }     = action.payload;
-  const { content_type, ...args } = params;
+  const { namespace, params } = action.payload;
+  const { content_type }      = params;
 
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
@@ -71,7 +71,7 @@ function* fetchIntents(action) {
       break;
     }
 
-    const { data } = yield call(endpoint, { ...args, language, with_files: true });
+    const { data } = yield call(endpoint, { ...params, language, with_files: true });
 
     if (Array.isArray(data.content_units)) {
       yield put(mdbActions.receiveContentUnits(data.content_units));

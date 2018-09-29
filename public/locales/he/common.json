@@ -24,6 +24,7 @@
   },
   "filters": {
     "by": "סנן לפי:",
+    "filters": "מסננים",
     "all": "הכל",
     "date-filter": {
       "label": "תאריך",
@@ -75,6 +76,7 @@
     },
     "sections-filter": {
       "label": "מדור",
+      "all": "הכל",
       "lessons": "שיעורים והרצאות",
       "programs": "תוכניות",
       "events": "כנסים ואירועים",
