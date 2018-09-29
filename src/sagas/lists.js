@@ -6,7 +6,7 @@ import { selectors as settings } from '../redux/modules/settings';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { filtersTransformer } from '../filters';
-import { updateQuery } from './helpers/url';
+import { pushQuery } from './helpers/url';
 import { CT_LESSON_PART, CT_VIDEO_PROGRAM_CHAPTER } from '../helpers/consts';
 
 function* fetchList(action) {
@@ -106,13 +106,10 @@ function* fetchIntents(action) {
 function* updatePageInQuery(action) {
   const { pageNo } = action.payload;
   const page       = pageNo > 1 ? pageNo : null;
-
-  if (page) {
+if (page) {
     // adding a page to browser history
     yield put(push(page));
-  }
-
-  yield* updateQuery(query => Object.assign(query, { page }));
+  }  yield* pushQuery(query => Object.assign(query, { page }));
 }
 
 function* watchFetchList() {

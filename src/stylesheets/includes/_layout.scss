@@ -2,6 +2,19 @@ $sidebar-width: 290px;
 $main-menu-height: 60px;
 $secondary-header-height: 10px;
 
+body {
+  overflow-y: scroll;
+
+  &.noscroll {
+    overflow: hidden;
+    &--smallmobile {
+      @include small-mobile {
+        overflow: hidden;
+      }
+    }
+  }
+
+}
 
 @import 'rtl/layout';
 
@@ -29,7 +42,7 @@ $secondary-header-height: 10px;
     position: fixed;
     right: 0;
     top: 0;
-    z-index: 900;
+    z-index: 2000;
   }
 
   &__search {
@@ -219,7 +232,7 @@ $secondary-header-height: 10px;
 }
 
 .splash {
-  display:flex;
+  display: flex;
   flex-direction: column;
   justify-content: center;
 }

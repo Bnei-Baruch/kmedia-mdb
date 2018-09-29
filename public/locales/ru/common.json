@@ -11,6 +11,7 @@
       "books": "Книги",
       "topics": "Темы",
       "publications": "Публикации",
+      "simple-mode": "Простая Версия",
       "photos": "Фотографии",
       "design": "Дизайн",
       "design2": "Планировка",
@@ -96,7 +97,8 @@
     "search": "Поиск",
     "previous": "Предыдущий",
     "next": "Следующий",
-    "copy": "Копировать"
+    "copy": "Копировать",
+    "view-all": "Посмотреть все"
   },
   "player": {
     "messages": {
@@ -238,7 +240,7 @@
       "series": "Избранные серии обучения"
     },
     "list": {
-      "related": "Относятся к",
+      "related": "Относятся к:",
       "number": "№ ",
       "item_from": "Часть из:"
     },
@@ -310,6 +312,19 @@
       }
     }
   },
+  "simple-mode": {
+    "header": {
+      "text": "Загрузки - Простая версия",
+      "subtext": "Сконцентрируйте все носители на определенный день"
+    },
+    "today-button": "Cегодня",
+    "total-media-for-date": "Все СМИ на сегодняшний день ",
+    "media-language": "Язык мультимедиа",
+    "no-files-found": "Нет файлов для выбранного вами языка.",
+    "date": "Дата",
+    "prev": "Пред.",
+    "next": "Cлед."
+  },
   "pages": {
     "collection": {
       "items": {
@@ -361,21 +376,32 @@
     "toc": "Содержание",
     "az": "А-Я",
     "default": "По умолчанию",
-    "filter": "Фильтр..."
+    "filter": "Фильтр...",
+    "share-title": "Читайте статью"
+  },
+  "topics": {
+    "header": {
+      "text": "Темы",
+      "subtext": "Сборник материалов по выбранной теме"
+    }
   },
   "media-downloads": {
     "title": "Скачать",
     "derived-title": "Производная медиа",
     "type-labels": {
       "video": "Основное видео",
+      "video-simple": "Видео",
       "audio": "Основное аудио",
+      "audio-simple": "Аудио",
       "text": "Стенограмма",
       "image": "Изображения"
     },
     "lesson": {
       "type-labels": {
         "video": "Видео урока",
+        "video-simple": "Видео",
         "audio": "Аудио урока",
+        "audio-simple": "Аудио",
         "text": "Стенограмма",
         "image": "Чертежи"
       }
@@ -383,7 +409,9 @@
     "program": {
       "type-labels": {
         "video": "Видео программы",
+        "video-simple": "Видео",
         "audio": "Аудио программы",
+        "audio-simple": "Аудио",
         "text": "Стенограмма",
         "image": "Чертежи"
       }
@@ -391,7 +419,9 @@
     "publication": {
       "type-labels": {
         "video": "Видео",
+        "video-simple": "Видео",
         "audio": "Аудио",
+        "audio-simple": "Аудио",
         "text": "Текст статьи",
         "image": "Снимки"
       }

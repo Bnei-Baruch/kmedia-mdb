@@ -1,4 +1,5 @@
 import uniq from 'lodash/uniq';
+import moment from 'moment';
 
 import {
   CT_ARTICLE,
@@ -6,9 +7,11 @@ import {
   CT_FRIENDS_GATHERING,
   CT_LECTURE,
   CT_MEAL,
+  CT_LESSON_PART,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
+  RABASH_PERSON_UID,
   LANG_HEBREW,
   LANG_RUSSIAN,
   LANG_SPANISH,
@@ -16,6 +19,7 @@ import {
 } from './helpers/consts';
 import MediaHelper from './helpers/media';
 import { canonicalCollection, isEmpty } from './helpers/utils';
+import { getQuery } from './helpers/url';
 import { selectors as settingsSelectors } from './redux/modules/settings';
 import { actions as mdbActions, selectors as mdbSelectors } from './redux/modules/mdb';
 import { actions as filtersActions } from './redux/modules/filters';
@@ -26,13 +30,16 @@ import { actions as lessonsActions } from './redux/modules/lessons';
 import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
 import { selectors as sourcesSelectors } from './redux/modules/sources';
 import { actions as assetsActions, selectors as assetsSelectors } from './redux/modules/assets';
+import { actions as tagsActions } from './redux/modules/tags';
 import { actions as publicationsActions } from './redux/modules/publications';
+import { actions as simpleModeActions } from './redux/modules/simpelMode';
 import * as mdbSagas from './sagas/mdb';
 import * as filtersSagas from './sagas/filters';
 import * as eventsSagas from './sagas/events';
 import * as lessonsSagas from './sagas/lessons';
 import * as searchSagas from './sagas/search';
 import * as assetsSagas from './sagas/assets';
+import * as tagsSagas from './sagas/tags';
 import * as publicationsSagas from './sagas/publications';
 import withPagination from './components/Pagination/withPagination';
 
@@ -76,6 +83,8 @@ const getExtraFetchParams = (ns, collectionID) => {
     return { content_type: [CT_LECTURE] };
   case 'lessons-women':
     return { content_type: [CT_WOMEN_LESSON] };
+  case 'lessons-rabash':
+    return { content_type: [CT_LESSON_PART], person: RABASH_PERSON_UID };
     // case 'lessons-children':
     //   return { content_type: [CT_CHILDREN_LESSON] };
   default:
@@ -173,6 +182,15 @@ export const lessonsPage = (store, match) => {
   return cuListPage(ns)(store, match);
 };
 
+export const simpleMode = (store, match) => {
+  const query        = getQuery(match.parsedURL);
+  const date         = query.date ? moment(query.date, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
+  const { language } = match.params;
+
+  store.dispatch(simpleModeActions.fetchForDate({ date, language }));
+  return Promise.resolve(null);
+};
+
 export const lessonsCollectionPage = (store, match) => {
   // hydrate tab
   const tab = match.params.tab || lessonsTabs[0];
@@ -198,8 +216,9 @@ export const searchPage = store =>
       const page     = searchSelectors.getPageNo(state.search);
       const pageSize = settingsSelectors.getPageSize(state.settings);
       const deb      = searchSelectors.getDeb(state.search);
+      const suggest  = searchSelectors.getSuggest(state.search);
 
-      store.dispatch(searchActions.search(q, page, pageSize, deb));
+      store.dispatch(searchActions.search(q, page, pageSize, suggest, deb));
     });
 
 function sleep(ms) {
@@ -295,6 +314,14 @@ export const tweetsListPage = (store, match) => {
 
   return Promise.resolve(null);
 };
+
+export const topicsPage = (store, match) => {
+  const tagID = match.params.id;
+  Promise.all([
+    store.sagaMiddleWare.run(tagsSagas.fetchDashboard, tagsActions.fetchDashboard(tagID)).done,
+    // store.sagaMiddleWare.run(tagsSagas.fetchTags, tagsActions.fetchTags).done
+  ]);
+}
 
 export const blogListPage = (store, match) => {
   // hydrate filters

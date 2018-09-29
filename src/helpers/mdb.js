@@ -1,5 +1,4 @@
 import {
-  // CT_CHILDREN_LESSONS,
   CT_CONGRESS,
   CT_DAILY_LESSON,
   CT_FRIENDS_GATHERINGS,
@@ -62,7 +61,8 @@ export class CollectionsBreakdown {
 
   getAllButPrograms = () =>
     this.collectTypes(
-      CT_DAILY_LESSON, CT_SPECIAL_LESSON,
+      CT_DAILY_LESSON,
+      CT_SPECIAL_LESSON,
       CT_FRIENDS_GATHERINGS,
       CT_LECTURE_SERIES,
       // CT_CHILDREN_LESSONS,

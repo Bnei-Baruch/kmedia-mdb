@@ -25,6 +25,13 @@ class PDFMenu extends Component {
     }
   }
 
+  onKeyDown = (e) => {
+    // Enter
+    if (e.keyCode === 13) {
+      this.handleSubmit();
+    }
+  };
+
   handleSubmit = () => {
     const value                 = this.state.inputValue;
     const { validated, parsed } = this.validateValue(value);
@@ -32,11 +39,6 @@ class PDFMenu extends Component {
       this.props.setPage(parsed);
     }
   };
-
-  onKeyDown = (e) => {
-    if (e.keyCode === 13) // Enter
-      this.handleSubmit();
-  }
 
   handleChange = (e, { value }) => {
     this.setState({ inputValue: value });
@@ -94,7 +96,7 @@ class PDFMenu extends Component {
         <Menu.Item onClick={this.prevPage}>&lsaquo;</Menu.Item>
         <Form>
           <Input
-            icon={<Icon name='search' circular link onClick={this.handleSubmit}/>}
+            icon={<Icon name="search" circular link onClick={this.handleSubmit} />}
             value={inputValue}
             error={inputError}
             onChange={this.handleChange}

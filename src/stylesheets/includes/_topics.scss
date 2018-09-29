@@ -1,0 +1,51 @@
+.topics {
+  &__section {
+    margin-bottom: 4rem;
+  }
+
+  &__title {
+    .icon{
+      margin: 0 0 0 8px;
+    }
+    margin-bottom: 1.5rem !important;
+
+  }
+
+  &__list {
+    
+    column-count: 4;
+    column-gap: 2rem;
+
+    > * {
+      display: inline;
+    }
+
+    @include tablet {
+      column-count: 3;
+    }
+    @include mobile {
+      column-count: 2;
+    }
+    @include small-mobile {
+      column-count: 1;
+    }
+    margin-bottom: 4rem;
+
+    .list {
+      margin: 0 !important;
+    }
+
+    .header {
+      line-height: 2rem !important;
+      margin: 0 !important;
+      .icon{
+        margin: 0 0 0 8px;
+      }
+    }
+
+    .item {
+      line-height: 2rem !important;
+      padding: 0 !important;
+    }
+  }
+}

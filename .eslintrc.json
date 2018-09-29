@@ -28,6 +28,7 @@
 			"error",
 			2
 		],
+		"linebreak-style": 0,
 		"no-console": "warn",
 		"comma-dangle": "off",
 		"key-spacing": "off",
@@ -37,6 +38,7 @@
     "function-paren-newline": "off",
 		"import/prefer-default-export": "off",
 		"react/jsx-filename-extension": "off",
+		"react/no-danger": "off",
 		"no-multi-spaces": "off",
 		"no-plusplus": "off",
 		"import/no-named-as-default-member": "off",

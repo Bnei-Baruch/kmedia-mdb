@@ -90,7 +90,7 @@ export class OmniBox extends Component {
   };
 
   doSearch = (q = null, suggest = '', locationSearch = '') => {
-    const query                                                       = q != null ? q : this.props.query;
+    const query = q != null ? q : this.props.query;
     const { search, location, push, pageSize, resetFilter, onSearch } = this.props;
 
     if (this.isEmptyQuery(query)) {
@@ -126,7 +126,7 @@ export class OmniBox extends Component {
 
   handleResultSelect = (e, data) => {
     const { key, title, category } = data.result;
-    const prevQuery                = this.props.query;
+    const prevQuery = this.props.query;
 
     switch (category) {
     case 'search':
@@ -192,16 +192,11 @@ export class OmniBox extends Component {
   };
 
   suggestionToResult = (type, item) => {
-    const { getTagPath, getSourcePath } = this.props;
-    if (!getTagPath || !getSourcePath) {
-      return null;
-    }
-    
     if (type === 'tags') {
       return {
         category: type,
         key: item.id,
-        title: (getTagPath(item.id) || [])
+        title: (this.props.getTagPath(item.id) || [])
           .map(p => p.label)
           .join(' - ')
       };
@@ -209,7 +204,7 @@ export class OmniBox extends Component {
       return {
         category: type,
         key: item.id,
-        title: (getSourcePath(item.id) || [])
+        title: (this.props.getSourcePath(item.id) || [])
           .map(p => p.name)
           .join(' > ')
       };
@@ -234,7 +229,7 @@ export class OmniBox extends Component {
   };
 
   renderInput() {
-    return <Input onKeyDown={(e) => this.handleSearchKeyDown(e)} />;
+    return <Input onKeyDown={e => this.handleSearchKeyDown(e)} />;
   }
 
   render() {
@@ -285,9 +280,7 @@ export class OmniBox extends Component {
 
     return (
       <Search
-        ref={s => {
-          this.search = s;
-        }}
+        ref={(s) => { this.search = s; }}
         category
         fluid
         className="search-omnibox"

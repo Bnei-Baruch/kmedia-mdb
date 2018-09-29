@@ -11,6 +11,7 @@
       "books": "ספרים",
       "topics": "נושאים",
       "publications": "פרסומים",
+      "simple-mode": "גרסה קלה",
       "photos": "תמונות",
       "design": "עיצוב",
       "project-status": "סטאטוס הפרוייקט",
@@ -95,7 +96,8 @@
     "search": "חפש",
     "previous": "הקודם",
     "next": "הבא",
-    "copy": "העתק"
+    "copy": "העתק",
+    "view-all": "הצג הכל"
   },
   "player": {
     "messages": {
@@ -124,7 +126,7 @@
     "no-playable-files": "לא נמצאו קבצים מתאימים לתצוגה",
     "no-results": "לא נמצאו תוצאות",
     "pagination-results": "תוצאות {{start}} - {{end}} מתוך {{total}}",
-    "link-copied-to-clipboard": "הקישור הועתק ללוח בהצלחה!",
+    "link-copied-to-clipboard": "!הקישור הועתק ללוח בהצלחה",
     "unknown": "לא ידוע",
     "unsupported-media-format": "פורמט לא נתמך.",
     "error-loading-file": "טעות בהעלאת קובץ.",
@@ -237,7 +239,7 @@
       "series": "סדרות לימוד נבחרות"
     },
     "list": {
-      "related": "קשור ל",
+      "related": "קשור ל:",
       "number": "מס' ",
       "item_from": "חלק מתוך:"
     },
@@ -309,6 +311,19 @@
       }
     }
   },
+  "simple-mode": {
+    "header": {
+      "text": "הורדות - גרסה קלה",
+      "subtext": "ריכוז כל המדיה של יום ספציפי"
+    },
+    "today-button": "היום",
+    "total-media-for-date": "כל המדיה לתאריך ",
+    "media-language": "שפת המדיה",
+    "no-files-found": "אין קבצים לשפה שבחרת",
+    "date": "תאריך",
+    "prev": "אחורה",
+    "next": "קדימה"
+  },
   "help": {
     "header": {
       "text": "עזרה",
@@ -366,21 +381,32 @@
     "toc": "תוכן עניינים",
     "az": "אב",
     "default": "ברירת מחדל",
-    "filter": "סנן..."
+    "filter": "סנן...",
+    "share-title": "קרא את המאמר"
+  },
+  "topics": {
+    "header": {
+      "text": "נושאים",
+      "subtext": "אוסף תכנים בנושא נבחר"
+    }
   },
   "media-downloads": {
     "title": "קבצים להורדה",
     "derived-title": "נגזרות",
     "type-labels": {
       "video": "וידאו ראשי",
+      "video-simple": "וידאו",
       "audio": "אודיו ראשי",
+      "audio-simple": "אודיו",
       "text": "תמליל מלא",
       "image": "תמונות"
     },
     "lesson": {
       "type-labels": {
         "video": "וידאו של השיעור",
+        "video-simple": "וידאו",
         "audio": "אודיו של השיעור",
+        "audio-simple": "אודיו",
         "text": "תמליל מלא",
         "image": "שרטוטים"
       }
@@ -388,7 +414,9 @@
     "program": {
       "type-labels": {
         "video": "וידאו של התוכנית",
+        "video-simple": "וידאו",
         "audio": "אודיו של התוכנית",
+        "audio-simple": "אודיו",
         "text": "תמליל מלא",
         "image": "תמונות"
       }
@@ -396,7 +424,9 @@
     "publication": {
       "type-labels": {
         "video": "וידאו",
+        "video-simple": "וידאו",
         "audio": "אודיו",
+        "audio-simple": "אודיו",
         "text": "טקסט",
         "image": "צילומי מסך"
       }

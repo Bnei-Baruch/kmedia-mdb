@@ -13,6 +13,7 @@ import { sagas as search } from './search';
 import { sagas as assets } from './assets';
 import { sagas as home } from './home';
 import { sagas as stats } from './stats';
+import { sagas as simpleMode } from './simpleMode';
 
 const allSagas = [
   ...device,
@@ -28,6 +29,7 @@ const allSagas = [
   ...assets,
   ...home,
   ...stats,
+  ...simpleMode,
 ];
 
 export function* rootSaga() {

@@ -23,10 +23,13 @@ import EventCollection from './components/Sections/Events/Collection';
 import LibraryHomepage from './components/Sections/Library/Homepage';
 import LibraryContainer from './components/Sections/Library/LibraryContainer';
 import LibraryPerson from './components/Sections/Library/LibraryPerson';
+import Topics from './components/Sections/Topics/TopicContainer';
+import Topic from './components/Sections/Topics/TopicPage';
 import SearchResults from './components/Search/SearchResultsContainer';
 import HomePage from './components/Sections/Home/Container';
 import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import Help from './components/Sections/Help/Help';
+import SimpleMode from './components/Sections/SimpleMode/Container';
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 
@@ -82,13 +85,15 @@ const routes = [
   { path: 'publications/blog/:blog/:id', component: BlogPost, options: { ssrData: ssrDataLoaders.blogPostPage } },
   { path: 'sources', component: LibraryHomepage },
   { path: 'sources/:id', component: LibraryContainer, options: { ssrData: ssrDataLoaders.libraryPage } },
+  { path: 'topics', component: Topics },
+  { path: 'topics/:id', component: Topic, options: { ssrData: ssrDataLoaders.topicsPage } },
   { path: 'persons/:id', component: LibraryPerson, options: { ssrData: ssrDataLoaders.libraryPage } },
   { path: 'books', component: NotImplemented },
-  { path: 'topics', component: NotImplemented },
   { path: 'photos', component: NotImplemented },
   { path: 'search', component: SearchResults, options: { ssrData: ssrDataLoaders.searchPage } },
   { path: 'project-status', component: ProjectStatus },
   { path: 'help', component: Help },
+  { path: 'simple-mode', component: SimpleMode, options: { ssrData: ssrDataLoaders.simpleMode } },
   // { path: 'design', component: Design },
   // { path: 'design2', component: Design2 },
 ];
