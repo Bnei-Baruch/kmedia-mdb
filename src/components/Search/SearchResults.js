@@ -72,7 +72,7 @@ class SearchResults extends Component {
       _source: { mdb_uid: mdbUid, result_type: resultType },
       _score: score
     } = hit;
-    const { title, description, content, label, content_type, date, duration } = result;
+    const { title, description, content, label, content_type, date, duration, mediaLanguage } = result;
 
     const snippetHtml = (
       <div className="search__snippet">
@@ -113,7 +113,8 @@ class SearchResults extends Component {
           <Link
             className="search__link"
             onClick={() => this.resultClick(mdbUid, index, resultType, rank, searchId)}
-            to={canonicalLink({ id: mdbUid, content_type })}
+            to={canonicalLink({ id: mdbUid, content_type }, mediaLanguage)}
+            language={content_type === 'SOURCE' ? mediaLanguage : null}
           >
             {title}
           </Link>
@@ -230,7 +231,7 @@ class SearchResults extends Component {
       return this.renderIntent(hit, rank)
     }
 
-    const { cMap, cuMap } = this.props;
+    const { cMap, cuMap, filters } = this.props;
     const cu = cuMap[mdbUid];
     const c = cMap[mdbUid];
     const result = {
@@ -241,7 +242,16 @@ class SearchResults extends Component {
       label: '',
       date: null,
       duration: null,
+      mediaLanguage: null,
     };
+
+    if (filters) {
+      const filteredLanguages = filters.find(f => f.name === "language-filter");
+      if (filteredLanguages && filteredLanguages.values.length > 0){
+        result.mediaLanguage = filteredLanguages.values[0];
+      }
+    }
+
     if (cu) {
       if (!result.title) {
         result.title = cu.name;
