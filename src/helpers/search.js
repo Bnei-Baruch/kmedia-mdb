@@ -1,4 +1,3 @@
-import uniqBy from 'lodash/uniqBy';
 import { ES_RESULT_TYPE_SOURCES, ES_RESULT_TYPE_TAGS } from './consts';
 
 export class SuggestionsHelper {

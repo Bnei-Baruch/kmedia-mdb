@@ -7,9 +7,9 @@ import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import { Icon, Input, Search } from 'semantic-ui-react';
 
-import { RTL_LANGUAGES, SUGGEST_LIMIT } from '../../helpers/consts';
+import { RTL_LANGUAGES } from '../../helpers/consts';
 import { SuggestionsHelper } from '../../helpers/search';
-import { getQuery, isDebMode, stringify as urlSearchStringify } from '../../helpers/url';
+import { getQuery, isDebMode } from '../../helpers/url';
 import { isEmpty } from '../../helpers/utils';
 import { filtersTransformer } from '../../filters';
 import { actions as filtersActions, selectors as filterSelectors } from '../../redux/modules/filters';
@@ -118,7 +118,7 @@ export class OmniBox extends Component {
   };
 
   handleResultSelect = (e, data) => {
-    const { key, title } = data.result;
+    const { title } = data.result;
     const prevQuery = this.props.query;
 
     this.props.updateQuery(title);
@@ -186,7 +186,8 @@ export class OmniBox extends Component {
     const { language, query }   = this.props;
     const { suggestionsHelper } = this.state;
 
-    const results = suggestionsHelper.getSuggestions().map(s => ({title: s}));
+    const results = Array.from(new Set(suggestionsHelper.getSuggestions())).map(s => (
+      this.makeResult(language, {key: s, title: s})));
 
     return (
       <Search
