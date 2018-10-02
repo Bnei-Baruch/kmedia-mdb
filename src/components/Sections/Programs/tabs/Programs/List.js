@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { List, Table } from 'semantic-ui-react';
 
-import { CT_VIDEO_PROGRAM_CHAPTER, NO_NAME } from '../../../../helpers/consts';
-import { sectionThumbnailFallback } from '../../../../helpers/images';
-import { CollectionsBreakdown } from '../../../../helpers/mdb';
-import { canonicalLink } from '../../../../helpers/links';
-import { ellipsize } from '../../../../helpers/strings';
-import UnitList from '../../../Pages/UnitList/Container';
-import Link from '../../../Language/MultiLanguageLink';
-import UnitLogo from '../../../shared/Logo/UnitLogo';
-import SectionHeader from '../../../shared/SectionHeader';
+import { CT_VIDEO_PROGRAM_CHAPTER, NO_NAME } from '../../../../../helpers/consts';
+import { sectionThumbnailFallback } from '../../../../../helpers/images';
+import { CollectionsBreakdown } from '../../../../../helpers/mdb';
+import { canonicalLink } from '../../../../../helpers/links';
+import { ellipsize } from '../../../../../helpers/strings';
+import UnitList from '../../../../Pages/UnitList/Container';
+import Link from '../../../../Language/MultiLanguageLink';
+import UnitLogo from '../../../../shared/Logo/UnitLogo';
+import SectionHeader from '../../../../shared/SectionHeader';
 
 export const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
@@ -69,6 +69,7 @@ export const renderUnit = (unit, t) => {
   );
 };
 
+/* eslint-disable */
 class ProgramsList extends Component {
   extraFetchParams = () => (
     { content_type: [CT_VIDEO_PROGRAM_CHAPTER] }
