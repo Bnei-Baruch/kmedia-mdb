@@ -28,6 +28,7 @@
 			"error",
 			2
 		],
+		"jsx-a11y/anchor-is-valid": "off",
 		"linebreak-style": 0,
 		"no-console": "warn",
 		"comma-dangle": "off",
@@ -39,6 +40,7 @@
 		"import/prefer-default-export": "off",
 		"react/jsx-filename-extension": "off",
 		"react/no-danger": "off",
+		"react/forbid-prop-types": "off",
 		"no-multi-spaces": "off",
 		"no-plusplus": "off",
 		"import/no-named-as-default-member": "off",
