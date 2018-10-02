@@ -143,7 +143,7 @@ class HierarchicalFilter extends Component {
         {content}
         {
           Number.isInteger(count) ?
-            <span className="count">&nbsp;({count})</span> :
+            <span className="filter__count">&nbsp;({count})</span> :
             null
         }
       </Menu.Item>

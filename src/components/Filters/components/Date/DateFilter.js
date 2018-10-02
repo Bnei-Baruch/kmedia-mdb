@@ -203,13 +203,14 @@ class DateFilter extends Component {
     const { from, to, datePreset } = this.state;
 
     return (
-      <Segment.Group>
-        <Segment secondary className="filter-popup__header">
+      <Segment.Group className="filter-popup__wrapper">
+        <Segment basic secondary className="filter-popup__header">
           <div className="title">
             <Button
               basic
               compact
-              icon="remove"
+              size="tiny"
+              content={t('buttons.cancel')}
               onClick={this.onCancel}
             />
             <Header size="small" textAlign="center" content={t('filters.date-filter.label')} />
@@ -223,7 +224,7 @@ class DateFilter extends Component {
             />
           </div>
         </Segment>
-        <Segment className="filter-popup__body date-filter">
+        <Segment basic className="filter-popup__body date-filter">
           <Accordion as={Menu} vertical fluid size="small">
             {
               datePresets.map((x) => {

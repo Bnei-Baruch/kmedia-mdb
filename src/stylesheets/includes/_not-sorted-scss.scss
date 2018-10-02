@@ -198,19 +198,7 @@
 // }
 
 .filter-popup {
-  &__header {
-    .title {
-      display: flex;
-      .header {
-        margin: 0 1rem;
-        flex-grow: 2;
-      }
-    }
 
-    .autocomplete {
-      margin-top: .75em;
-    }
-  }
 
   &__body {
     max-height: 350px;
@@ -221,16 +209,7 @@
       padding: 0;
     }
 
-    > .menu {
-      border-radius: 0;
-
-      .item {
-        color: $blue;
-        .count {
-          color: $grey;
-        }
-      }
-    }
+    
 
     .highlight {
       background-color: rgba($yellow, 0.2);
