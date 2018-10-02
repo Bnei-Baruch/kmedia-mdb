@@ -79,7 +79,7 @@ const renderUnits = (units, language, t) =>
             {
               files.length ?
                 files :
-                <span className="no-files">{t('simple-mode.no-files-found')}</span>
+                <span className="no-files">{t('simple-mode.no-files-found-for-lang')}</span>
             }
           </List.List>
         </List.Content>

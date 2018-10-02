@@ -9,6 +9,7 @@ import { today } from '../../../helpers/date';
 import * as shapes from '../../shapes';
 import SectionHeader from '../../shared/SectionHeader';
 import WipErr from '../../shared/WipErr/WipErr';
+import { Splash } from '../../shared/Splash/Splash';
 import SimpleModeList from './list';
 
 class SimpleModeMobilePage extends PureComponent {
@@ -50,7 +51,7 @@ class SimpleModeMobilePage extends PureComponent {
   };
 
   handleNativeDateInputChange = (event) => {
-    if (!event) {
+    if (!event || (event && event.target.value === '')) {
       return;
     }
 
@@ -78,9 +79,9 @@ class SimpleModeMobilePage extends PureComponent {
     const list = WipErr({ wip, err, t }) || (
       <div>
         {
-          items ?
+          (items.lessons.length || items.others.length) ?
             <SimpleModeList items={items} language={language} t={t} renderUnit={renderUnit} /> :
-            null
+            <Splash icon='warning sign' color='red' text={t('simple-mode.no-files-found-for-date')} />
         }
       </div>
     );

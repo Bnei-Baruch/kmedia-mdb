@@ -23,7 +23,7 @@ class SimpleModeList extends PureComponent {
     return (
       <div>
         {
-          items.lessons ?
+          items.lessons.length ?
             <List size="large">
               {items.lessons.map(x => x && renderUnit(x, language, t))}
             </List> :

@@ -319,7 +319,8 @@
     "today-button": "Today",
     "total-media-for-date": "All media for date ",
     "media-language": "Media language",
-    "no-files-found": "There are no files for the language you selected",
+    "no-files-found-for-lang": "There are no files for the language you selected",
+    "no-files-found-for-date": "There are no files for this date",
     "date": "Date",
     "prev": "Prev.",
     "next": "Next"

@@ -318,7 +318,8 @@
     "today-button": "Cегодня",
     "total-media-for-date": "Все материалы за этот день ",
     "media-language": "Язык мультимедиа",
-    "no-files-found": "Нет файлов для выбранного вами языка.",
+    "no-files-found-for-lang": "Нет файлов для выбранного вами языка.",
+    "no-files-found-for-date": "Нет файлов для этой даты",
     "date": "Дата",
     "prev": "Пред.",
     "next": "Cлед."

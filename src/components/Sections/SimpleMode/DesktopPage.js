@@ -10,6 +10,7 @@ import { ALL_LANGUAGES } from '../../../helpers/consts';
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 import SectionHeader from '../../shared/SectionHeader';
+import { Splash } from '../../shared/Splash/Splash';
 import DropdownLanguageSelector from '../../Language/Selector/DropdownLanguageSelector';
 import SimpleModeList from './list';
 
@@ -45,9 +46,9 @@ class SimpleModeDesktopPage extends PureComponent {
     const list = WipErr({ wip, err, t }) || (
       <div>
         {
-          items ?
+          (items.lessons.length || items.others.length) ?
             <SimpleModeList items={items} language={language} t={t} renderUnit={renderUnit} /> :
-            null
+            <Splash icon='warning sign' color='red' text={t('simple-mode.no-files-found-for-date')} />
         }
       </div>
     );
