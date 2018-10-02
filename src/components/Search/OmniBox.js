@@ -103,6 +103,7 @@ export class OmniBox extends Component {
         resetFilter('search', 'topics-filter');
         resetFilter('search', 'sources-filter');
         resetFilter('search', 'sections-filter');
+        resetFilter('search', 'language-filter');
       }
     }
 

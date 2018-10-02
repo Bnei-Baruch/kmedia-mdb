@@ -42,6 +42,10 @@
       "start": "Start",
       "end": "Ende"
     },
+    "language-filter": {
+      "label": "Sprache",
+      "all": "Jede Sprache"
+    },
     "sources-filter": {
       "label": "Primäre Quellen",
       "all": "Alle Quellen"
