@@ -310,10 +310,6 @@ class LibraryContainer extends Component {
     );
   };
 
-  print = () => {
-    window.print();
-  }
-
   render() {
     const { sourceId, indexMap, getSourceById, language, t } = this.props;
 
@@ -389,7 +385,7 @@ class LibraryContainer extends Component {
                   <div className="source__header-title">{this.header(sourceId, fullPath)}</div>
                   <div className="source__header-toolbar">
                     <Share t={t} />
-                    <Button compact size="small" icon="print" onClick={this.print} />
+                    <Button compact size="small" icon="print" onClick={window.print} />
                     <div id="download-button" />
                     <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
