@@ -49,7 +49,7 @@ class SimpleModeContainer extends Component {
 
   componentDidMount() {
     const query = getQuery(this.props.location);
-    const date  = query.date ? moment(query.date, 'YYYY-MM-DD').toDate() : new Date();
+    const date  = (query.date && moment(query.date).isValid()) ? moment(query.date, 'YYYY-MM-DD').toDate() : new Date();
 
     if (!this.state.date || !moment(date).isSame(this.state.date, 'day')) {
       this.handleDayClick(date);
@@ -63,7 +63,7 @@ class SimpleModeContainer extends Component {
     }
 
     if (this.props.language !== nextProps.language) {
-      this.handleDayClick(this.state.date, nextProps);
+      this.handleDayClick(this.state.date, {}, nextProps);
     }
   }
 
@@ -76,7 +76,11 @@ class SimpleModeContainer extends Component {
     this.setState({ filesLanguage: e.currentTarget.value });
   };
 
-  handleDayClick = (selectedDate, nextProps = null) => {
+  handleDayClick = (selectedDate, { disabled } = {}, nextProps = null) => {
+    if (disabled) {
+      return null;
+    }
+
     this.setState({ date: selectedDate });
 
     const date         = moment(selectedDate).format('YYYY-MM-DD');
