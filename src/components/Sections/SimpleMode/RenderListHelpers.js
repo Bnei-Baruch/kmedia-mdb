@@ -61,8 +61,8 @@ const renderHorizontalFilesList = (files, contentType, t) =>
   });
 
 const renderUnits = (units, language, t) =>
-  units.map((unit) => {
-    const filesList = unit && unit.files.filter(file => file.language === language);
+  units.filter((unit => unit)).map((unit) => {
+    const filesList = unit.files.filter(file => file.language === language);
     const files     = filesList && renderHorizontalFilesList(filesList, unit.content_type, t);
 
     if (!files) {
