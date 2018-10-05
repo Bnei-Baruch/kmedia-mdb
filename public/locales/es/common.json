@@ -316,7 +316,8 @@
     "today-button": "hoy",
     "total-media-for-date": "Todos los medios para la fecha ",
     "media-language": "Lenguaje de los medios",
-    "no-files-found": "No hay archivos para el idioma que seleccionaste",
+    "no-files-found-for-lang": "No hay archivos para el idioma que seleccionaste",
+    "no-files-found-for-date": "No hay archivos para esta fecha.",
     "date": "Fecha",
     "prev": "Anterior",
     "next": "Siguiente"

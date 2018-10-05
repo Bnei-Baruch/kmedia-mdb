@@ -9,6 +9,7 @@ import { today } from '../../../helpers/date';
 import * as shapes from '../../shapes';
 import SectionHeader from '../../shared/SectionHeader';
 import WipErr from '../../shared/WipErr/WipErr';
+import { FrownSplash } from '../../shared/Splash/Splash';
 import SimpleModeList from './list';
 
 class SimpleModeMobilePage extends PureComponent {
@@ -50,11 +51,9 @@ class SimpleModeMobilePage extends PureComponent {
   };
 
   handleNativeDateInputChange = (event) => {
-    if (!event) {
-      return;
+    if (event && event.target.value !== '') {
+      this.props.onDayClick(event.target.valueAsDate);
     }
-
-    this.props.onDayClick(event.target.valueAsDate);
   };
 
   openNativeDatePicker = () => {
@@ -74,18 +73,17 @@ class SimpleModeMobilePage extends PureComponent {
     const selectedToString       = moment(selected).format('YYYY-MM-DD');
     const localeDateFormat       = moment.localeData().longDateFormat('L');
     const selectedInLocaleFormat = moment(selected).format(localeDateFormat);
+    const languages              = this.getOptions({ languages: ALL_LANGUAGES, t });
 
     const list = WipErr({ wip, err, t }) || (
       <div>
         {
-          items ?
+          (items.lessons.length || items.others.length) ?
             <SimpleModeList items={items} language={language} t={t} renderUnit={renderUnit} /> :
-            null
+            <FrownSplash text={t('simple-mode.no-files-found-for-date')} />
         }
       </div>
     );
-
-    const languages = this.getOptions({ languages: ALL_LANGUAGES, t });
 
     return (
       <div>
@@ -99,7 +97,7 @@ class SimpleModeMobilePage extends PureComponent {
                   <div className="controller">
                     <h4>{t('simple-mode.date')}</h4>
                     <div className="date-container">
-                      <a onClick={() => this.changeDay(-1)}>{t('simple-mode.prev')}</a>
+                      <button onClick={() => this.changeDay(-1)}>{t('simple-mode.prev')}</button>
                       <div>
                         <div className="ui input">
                           <Input
@@ -121,7 +119,7 @@ class SimpleModeMobilePage extends PureComponent {
                           ref={this.handleNativeDateInputRef}
                         />
                       </div>
-                      <a onClick={() => this.changeDay(1)}>{t('simple-mode.next')}</a>
+                      <button onClick={() => this.changeDay(1)}>{t('simple-mode.next')}</button>
                     </div>
                   </div>
                   <div className="controller">
