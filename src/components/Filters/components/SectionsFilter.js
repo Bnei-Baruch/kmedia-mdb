@@ -46,13 +46,14 @@ class SectionsFilter extends Component {
     const { sValue } = this.state;
 
     return (
-      <Segment.Group>
-        <Segment secondary className="filter-popup__header">
+      <Segment.Group className="filter-popup__wrapper">
+        <Segment basic secondary className="filter-popup__header">
           <div className="title">
             <Button
               basic
               compact
-              icon="remove"
+              size="tiny"
+              content={t('buttons.cancel')}
               onClick={this.onCancel}
             />
             <Header size="small" textAlign="center" content={t('filters.sections-filter.label')} />
@@ -66,7 +67,7 @@ class SectionsFilter extends Component {
             />
           </div>
         </Segment>
-        <Segment className="filter-popup__body sections-filter">
+        <Segment basic className="filter-popup__body sections-filter">
           <Grid padded stackable columns={5}>
             <Grid.Row>
               {
