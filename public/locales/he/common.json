@@ -11,6 +11,7 @@
       "books": "ספרים",
       "topics": "נושאים",
       "publications": "פרסומים",
+      "simple-mode": "גרסה קלה",
       "photos": "תמונות",
       "design": "עיצוב",
       "project-status": "סטאטוס הפרוייקט",
@@ -308,6 +309,19 @@
       }
     }
   },
+  "simple-mode": {
+    "header": {
+      "text": "הורדות - גרסה קלה",
+      "subtext": "ריכוז כל המדיה של יום ספציפי"
+    },
+    "today-button": "היום",
+    "total-media-for-date": "כל המדיה לתאריך ",
+    "media-language": "שפת המדיה",
+    "no-files-found": "אין קבצים לשפה שבחרת",
+    "date": "תאריך",
+    "prev": "אחורה",
+    "next": "קדימה"
+  },
   "help": {
     "header": {
       "text": "עזרה",
@@ -379,14 +393,18 @@
     "derived-title": "נגזרות",
     "type-labels": {
       "video": "וידאו ראשי",
+      "video-simple": "וידאו",
       "audio": "אודיו ראשי",
+      "audio-simple": "אודיו",
       "text": "תמליל מלא",
       "image": "תמונות"
     },
     "lesson": {
       "type-labels": {
         "video": "וידאו של השיעור",
+        "video-simple": "וידאו",
         "audio": "אודיו של השיעור",
+        "audio-simple": "אודיו",
         "text": "תמליל מלא",
         "image": "שרטוטים"
       }
@@ -394,7 +412,9 @@
     "program": {
       "type-labels": {
         "video": "וידאו של התוכנית",
+        "video-simple": "וידאו",
         "audio": "אודיו של התוכנית",
+        "audio-simple": "אודיו",
         "text": "תמליל מלא",
         "image": "תמונות"
       }
@@ -402,7 +422,9 @@
     "publication": {
       "type-labels": {
         "video": "וידאו",
+        "video-simple": "וידאו",
         "audio": "אודיו",
+        "audio-simple": "אודיו",
         "text": "טקסט",
         "image": "צילומי מסך"
       }

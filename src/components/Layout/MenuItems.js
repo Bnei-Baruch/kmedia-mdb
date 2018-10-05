@@ -14,6 +14,7 @@ const ITEMS = [
   // 'books',
   'topics',
   'publications',
+  'simple-mode',
   'project-status',
   'help',
   // 'photos',

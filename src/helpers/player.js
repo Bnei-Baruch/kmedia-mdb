@@ -1,4 +1,4 @@
-import moment from 'moment/moment';
+import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 

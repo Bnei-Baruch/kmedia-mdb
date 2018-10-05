@@ -11,6 +11,7 @@
       "books": "Libros",
       "topics": "Temas",
       "publications": "Publicaciones",
+      "simple-mode": "Versión Simple",
       "photos": "Fotos",
       "design": "Diseño",
       "project-status": "Projekto Statuso",
@@ -307,6 +308,19 @@
       }
     }
   },
+  "simple-mode": {
+    "header": {
+      "text": "Descargas - Versión simple",
+      "subtext": "Concentrar todos los medios para un día específico"
+    },
+    "today-button": "hoy",
+    "total-media-for-date": "Todos los medios para la fecha ",
+    "media-language": "Lenguaje de los medios",
+    "no-files-found": "No hay archivos para el idioma que seleccionaste",
+    "date": "Fecha",
+    "prev": "Anterior",
+    "next": "Siguiente"
+  },
   "pages": {
     "collection": {
       "items": {
@@ -372,14 +386,18 @@
     "derived-title": "Derivados",
     "type-labels": {
       "video": "Video Principal",
+      "video-simple": "Video",
       "audio": "Audio Principal",
+      "audio-simple": "Audio",
       "text": "Transcripción Completa",
       "image": "Fotos"
     },
     "lesson": {
       "type-labels": {
         "video": "Video de la Lección",
+        "video-simple": "Video",
         "audio": "Audio de la Lección",
+        "audio-simple": "Audio",
         "text": "Transcripción Completa",
         "image": "Dibujos"
       }
@@ -387,7 +405,9 @@
     "program": {
       "type-labels": {
         "video": "Video del Programa",
+        "video-simple": "Video",
         "audio": "audio del Programa",
+        "audio-simple": "Audio",
         "text": "Transcripción Completa",
         "image": "Fotos"
       }
@@ -395,7 +415,9 @@
     "publication": {
       "type-labels": {
         "video": "Video",
+        "video-simple": "Video",
         "audio": "Audio",
+        "audio-simple": "Audio",
         "text": "Texto",
         "image": "Capturas de Pantalla"
       }

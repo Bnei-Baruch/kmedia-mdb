@@ -1,4 +1,5 @@
 import uniq from 'lodash/uniq';
+import moment from 'moment';
 
 import {
   CT_ARTICLE,
@@ -18,6 +19,7 @@ import {
 } from './helpers/consts';
 import MediaHelper from './helpers/media';
 import { canonicalCollection, isEmpty } from './helpers/utils';
+import { getQuery } from './helpers/url';
 import { selectors as settingsSelectors } from './redux/modules/settings';
 import { actions as mdbActions, selectors as mdbSelectors } from './redux/modules/mdb';
 import { actions as filtersActions } from './redux/modules/filters';
@@ -30,6 +32,7 @@ import { selectors as sourcesSelectors } from './redux/modules/sources';
 import { actions as assetsActions, selectors as assetsSelectors } from './redux/modules/assets';
 import { actions as tagsActions } from './redux/modules/tags';
 import { actions as publicationsActions } from './redux/modules/publications';
+import { actions as simpleModeActions } from './redux/modules/simpelMode';
 import * as mdbSagas from './sagas/mdb';
 import * as filtersSagas from './sagas/filters';
 import * as eventsSagas from './sagas/events';
@@ -177,6 +180,15 @@ export const lessonsPage = (store, match) => {
 
   const ns = `lessons-${tab}`;
   return cuListPage(ns)(store, match);
+};
+
+export const simpleMode = (store, match) => {
+  const query        = getQuery(match.parsedURL);
+  const date         = query.date ? moment(query.date, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
+  const { language } = match.params;
+
+  store.dispatch(simpleModeActions.fetchForDate({ date, language }));
+  return Promise.resolve(null);
 };
 
 export const lessonsCollectionPage = (store, match) => {

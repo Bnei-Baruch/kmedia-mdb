@@ -168,6 +168,11 @@ export const Tweet = PropTypes.shape({
   raw: PropTypes.object.isRequired,
 });
 
+export const SimpleMode = PropTypes.shape({
+  lessons: PropTypes.arrayOf(LessonCollection),
+  others: PropTypes.arrayOf(ContentUnit),
+});
+
 export const BlogPost = PropTypes.shape({
   blog: PropTypes.string.isRequired,
   wp_id: PropTypes.number.isRequired,
