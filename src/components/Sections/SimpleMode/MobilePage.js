@@ -51,11 +51,9 @@ class SimpleModeMobilePage extends PureComponent {
   };
 
   handleNativeDateInputChange = (event) => {
-    if (!event || (event && event.target.value === '')) {
-      return;
+    if (event && event.target.value !== '') {
+      this.props.onDayClick(event.target.valueAsDate);
     }
-
-    this.props.onDayClick(event.target.valueAsDate);
   };
 
   openNativeDatePicker = () => {
@@ -99,7 +97,7 @@ class SimpleModeMobilePage extends PureComponent {
                   <div className="controller">
                     <h4>{t('simple-mode.date')}</h4>
                     <div className="date-container">
-                      <a onClick={() => this.changeDay(-1)}>{t('simple-mode.prev')}</a>
+                      <button onClick={() => this.changeDay(-1)}>{t('simple-mode.prev')}</button>
                       <div>
                         <div className="ui input">
                           <Input
@@ -121,7 +119,7 @@ class SimpleModeMobilePage extends PureComponent {
                           ref={this.handleNativeDateInputRef}
                         />
                       </div>
-                      <a onClick={() => this.changeDay(1)}>{t('simple-mode.next')}</a>
+                      <button onClick={() => this.changeDay(1)}>{t('simple-mode.next')}</button>
                     </div>
                   </div>
                   <div className="controller">

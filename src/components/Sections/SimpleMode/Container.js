@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { translate } from 'react-i18next';
 
 import { getQuery, updateQuery } from '../../../helpers/url';
+import { isEmpty } from '../../../helpers/utils';
 import { selectors as device } from '../../../redux/modules/device';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -94,13 +95,6 @@ class SimpleModeContainer extends Component {
   isMobileDevice = () =>
     this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
-  removeEmptyItems(items) {
-    items.lessons.filter(lesson => lesson);
-    items.others.filter(other => other);
-
-    return items;
-  }
-
   renderUnitOrCollection = (item, language, t) => (
     item.content_units ?
       renderCollection(item, language, t) :
@@ -108,12 +102,10 @@ class SimpleModeContainer extends Component {
 
   render() {
     const { language }      = this.props;
-    const items             = this.removeEmptyItems(this.props.items);
     const { filesLanguage } = this.state;
     const isMobileDevice    = this.isMobileDevice();
     const pageProps         = {
       ...this.props,
-      ...{ items },
       selectedDate: this.state.date,
       uiLanguage: language,
       language: filesLanguage,
@@ -131,8 +123,8 @@ export const mapState = (state) => {
 
   return {
     items: {
-      lessons: items.lessons.map(x => mdb.getDenormCollectionWUnits(state.mdb, x)),
-      others: items.others.map(x => mdb.getDenormContentUnit(state.mdb, x)),
+      lessons: items.lessons.map(x => mdb.getDenormCollectionWUnits(state.mdb, x)).filter(x => !isEmpty(x)),
+      others: items.others.map(x => mdb.getDenormContentUnit(state.mdb, x)).filter(x => !isEmpty(x)),
     },
     wip: selectors.getWip(state.simpleMode),
     err: selectors.getError(state.simpleMode),
