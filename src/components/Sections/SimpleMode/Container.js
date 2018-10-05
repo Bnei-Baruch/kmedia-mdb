@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import isEmpty from 'lodash/isEmpty';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -76,15 +75,15 @@ class SimpleModeContainer extends Component {
     this.setState({ filesLanguage: e.currentTarget.value });
   };
 
-  handleDayClick = (selectedDate, { disabled } = {}, nextProps = null) => {
+  handleDayClick = (selectedDate, { disabled } = {}, nextProps = {}) => {
     if (disabled) {
       return null;
     }
 
     this.setState({ date: selectedDate });
 
-    const date         = moment(selectedDate).format('YYYY-MM-DD');
-    const { language } = isEmpty(nextProps) ? this.props : nextProps;
+    const date     = moment(selectedDate).format('YYYY-MM-DD');
+    const language = nextProps.language || this.props.language;
     this.props.fetchForDate({ date, language });
     updateQuery(this.props.history, query => ({
       ...query,
@@ -95,6 +94,13 @@ class SimpleModeContainer extends Component {
   isMobileDevice = () =>
     this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
+  removeEmptyItems(items) {
+    items.lessons.filter(lesson => lesson);
+    items.others.filter(other => other);
+
+    return items;
+  }
+
   renderUnitOrCollection = (item, language, t) => (
     item.content_units ?
       renderCollection(item, language, t) :
@@ -102,10 +108,12 @@ class SimpleModeContainer extends Component {
 
   render() {
     const { language }      = this.props;
+    const items             = this.removeEmptyItems(this.props.items);
     const { filesLanguage } = this.state;
     const isMobileDevice    = this.isMobileDevice();
     const pageProps         = {
       ...this.props,
+      ...{ items },
       selectedDate: this.state.date,
       uiLanguage: language,
       language: filesLanguage,
