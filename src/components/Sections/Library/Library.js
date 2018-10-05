@@ -93,17 +93,17 @@ class Library extends Component {
     } else if (contentWip) {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else if (usePdfFile) {
-      contents = (<PDF
+      contents = <PDF
         pdfFile={assetUrl(`sources/${this.props.pdfFile}`)}
         pageNumber={this.state.pageNumber || 1}
         startsFrom={this.props.startsFrom}
         pageNumberHandler={this.pageNumberHandler}
-      />);
+      />;
     } else if (contentData) {
-      contents        = (<div
+      contents        = <div
         style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
         dangerouslySetInnerHTML={{ __html: contentData }}
-      />);
+      />;
     } else {
       return <Segment basic>{t('sources-library.no-source')}</Segment>;
     }
