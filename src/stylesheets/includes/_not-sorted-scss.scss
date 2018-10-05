@@ -750,6 +750,15 @@
     font-weight: bold;
   }
 
+  .overflow-gradient {
+    width: 33px;
+    height: 23px;
+    flex-shrink: 0;
+    background-image: linear-gradient(to left, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    position: absolute;
+    right: 12px;
+  }
+
   .media-file-button {
     height: 24px;
     margin-right: 8px;
@@ -821,6 +830,12 @@
     .media-file-button {
       margin-left: 8px;
       margin-right: 0;
+    }
+
+    .overflow-gradient {
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+      left: 12px;
+      right: unset;
     }
   }
 }

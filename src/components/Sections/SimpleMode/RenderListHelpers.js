@@ -81,6 +81,7 @@ const renderUnits = (units, language, t) =>
                 files :
                 <span className="no-files">{t('simple-mode.no-files-found-for-lang')}</span>
             }
+            <div className="overflow-gradient"></div>
           </List.List>
         </List.Content>
       </List.Item>

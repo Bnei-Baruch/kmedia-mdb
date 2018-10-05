@@ -48,7 +48,7 @@ class SimpleModeDesktopPage extends PureComponent {
         {
           (items.lessons.length || items.others.length) ?
             <SimpleModeList items={items} language={language} t={t} renderUnit={renderUnit} /> :
-            <Splash icon='warning sign' color='red' text={t('simple-mode.no-files-found-for-date')} />
+            <Splash icon="warning sign" color="red" text={t('simple-mode.no-files-found-for-date')} />
         }
       </div>
     );
@@ -87,12 +87,7 @@ class SimpleModeDesktopPage extends PureComponent {
                     onDayClick={onDayClick}
                   />
                   <Divider />
-                  <Button
-                    onClick={() => {
-                      onDayClick(new Date());
-                    }}
-                    content={t('simple-mode.today-button')}
-                  />
+                  <Button onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
                 </Card>
               </Grid.Column>
             </Grid.Row>

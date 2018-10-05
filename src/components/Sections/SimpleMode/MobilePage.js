@@ -75,18 +75,17 @@ class SimpleModeMobilePage extends PureComponent {
     const selectedToString       = moment(selected).format('YYYY-MM-DD');
     const localeDateFormat       = moment.localeData().longDateFormat('L');
     const selectedInLocaleFormat = moment(selected).format(localeDateFormat);
+    const languages              = this.getOptions({ languages: ALL_LANGUAGES, t });
 
     const list = WipErr({ wip, err, t }) || (
       <div>
         {
           (items.lessons.length || items.others.length) ?
             <SimpleModeList items={items} language={language} t={t} renderUnit={renderUnit} /> :
-            <Splash icon='warning sign' color='red' text={t('simple-mode.no-files-found-for-date')} />
+            <Splash icon="warning sign" color="red" text={t('simple-mode.no-files-found-for-date')} />
         }
       </div>
     );
-
-    const languages = this.getOptions({ languages: ALL_LANGUAGES, t });
 
     return (
       <div>
