@@ -11,6 +11,7 @@
       "books": "Книжки",
       "topics": "Теми",
       "publications": "Публікації",
+      "simple-mode": "Простий Версія",
       "photos": "Фотографії",
       "design": "Дизайн",
       "design2": "Планування",
@@ -309,6 +310,19 @@
       }
     }
   },
+  "simple-mode": {
+    "header": {
+      "text": "Завантаження - проста версія",
+      "subtext": "Концентруйте всі носії за певний день"
+    },
+    "today-button": "Сьогодні",
+    "total-media-for-date": "Всі носії для дати ",
+    "media-language": "Медіа мова",
+    "no-files-found": "Немає файлів для обраної вами мови",
+    "date": "дата",
+    "prev": "Попередній",
+    "next": "далі"
+  },
   "pages": {
     "collection": {
       "items": {
@@ -374,14 +388,18 @@
     "derived-title": "Медіа відтворення",
     "type-labels": {
       "video": "Основне відео",
+      "video-simple": "Відео",
       "audio": "Основне аудіо",
+      "audio-simple": "Аудіо",
       "text": "Стенограма",
       "image": "Зображення"
     },
     "lesson": {
       "type-labels": {
         "video": "Відео уроку",
+        "video-simple": "Відео",
         "audio": "Аудіо уроку",
+        "audio-simple": "Аудіо",
         "text": "Стенограма",
         "image": "Креслення"
       }
@@ -389,7 +407,9 @@
     "program": {
       "type-labels": {
         "video": "Відео програми",
+        "video-simple": "Відео",
         "audio": "Аудіо програми",
+        "audio-simple": "Аудіо",
         "text": "Стенограма",
         "image": "Креслення"
       }
@@ -397,7 +417,9 @@
     "publication": {
       "type-labels": {
         "video": "Відео",
+        "video-simple": "Відео",
         "audio": "Аудіо",
+        "audio-simple": "Аудіо",
         "text": "Текст статті",
         "image": "Світлини"
       }
