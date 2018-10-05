@@ -73,7 +73,7 @@ const renderUnits = (units, language, t) =>
       <List.Item key={unit.id} className="unit-header">
         <List.Content>
           <List.Header className="unit-header">
-            <Link to={canonicalLink(unit)}>{unit.name || NO_NAME}</Link>
+            <Link className="unit-link" to={canonicalLink(unit)}>{unit.name || NO_NAME}</Link>
           </List.Header>
           <List.List className="horizontal-list">
             {
