@@ -64,6 +64,7 @@ const renderUnit = (unit, t) => {
   );
 };
 
+/* eslint-disable */
 class Container extends Component {
   static propTypes = {
     tab: PropTypes.string.isRequired,

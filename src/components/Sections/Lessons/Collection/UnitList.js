@@ -41,6 +41,7 @@ export const renderUnit = (unit, t) => {
   );
 };
 
+/* eslint-disable */
 class LectureCollection extends Component {
   render() {
     return <Collection namespace="lessons-collection" renderUnit={renderUnit} />;

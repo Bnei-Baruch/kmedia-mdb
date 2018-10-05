@@ -140,6 +140,7 @@ const mapState = (state, ownProps) => {
 
 const MyUnitList = wrap(UnitListContainer, mapState);
 
+/* eslint-disable */
 class LessonsList extends Component {
   render() {
     return (
