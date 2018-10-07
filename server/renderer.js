@@ -110,7 +110,7 @@ export default function serverRender(req, res, next, htmlData, criticalCSS) {
   }
 
   moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
-  const cookies = cookieParse(req.headers.cookie || { COOKIE_CONTENT_LANG: language });
+  const cookies = cookieParse(req.headers.cookie || `COOKIE_CONTENT_LANG=${language};`);
 
   const i18nServer = i18nnext.cloneInstance();
   i18nServer.changeLanguage(language, (err) => {
