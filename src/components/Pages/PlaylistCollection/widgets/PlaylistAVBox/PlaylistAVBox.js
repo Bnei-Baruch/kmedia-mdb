@@ -5,6 +5,7 @@ import { Grid } from 'semantic-ui-react';
 
 import { MT_AUDIO, MT_VIDEO } from '../../../../../helpers/consts';
 import playerHelper from '../../../../../helpers/player';
+import { equal } from '../../../../../helpers/utils';
 import * as shapes from '../../../../shapes';
 import AVPlaylistPlayer from '../../../../AVPlayer/AVPlaylistPlayer';
 
@@ -53,34 +54,17 @@ class PlaylistAVBox extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { collection, uiLanguage, contentLanguage, location } = nextProps;
+    const { collection, location } = nextProps;
 
-    const
-      {
-        collection: oldCollection,
-        uiLanguage: oldUiLanguage,
-        contentLanguage: oldContentLanguage,
-        location: oldLocation
-      }                                = this.props;
     const { selected, playlist }       = this.state;
     const { language: playerLanguage } = playlist;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();
-    const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);
     const newMediaType    = playerHelper.getMediaTypeFromQuery(location, preferredMT);
     const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
-    // no change
-    if (oldCollection === collection &&
-      oldUiLanguage === uiLanguage &&
-      oldContentLanguage === contentLanguage &&
-      prevMediaType === newMediaType &&
-      newItemLanguage === playerLanguage) {
-      return;
-    }
-
     // Recalculate playlist
-    const nPlaylist = playerHelper.playlist(collection, newMediaType, playerLanguage, newItemLanguage);
+    const nPlaylist = playerHelper.playlist(collection, newMediaType, newItemLanguage, playerLanguage);
     this.setState({ playlist: nPlaylist });
 
     // When moving from playlist to another playlist
@@ -111,10 +95,35 @@ class PlaylistAVBox extends Component {
     }
   }
 
+  shouldComponentUpdate(nextProps) {
+    const { collection, uiLanguage, contentLanguage, location } = nextProps;
+
+    const
+      {
+        collection: oldCollection,
+        uiLanguage: oldUiLanguage,
+        contentLanguage: oldContentLanguage,
+        location: oldLocation
+      }                                = this.props;
+    const { playlist }                 = this.state;
+    const { language: playerLanguage } = playlist;
+
+    const preferredMT     = playerHelper.restorePreferredMediaType();
+    const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);
+    const newMediaType    = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
+
+    return !(equal(collection, oldCollection) &&
+      oldUiLanguage === uiLanguage &&
+      oldContentLanguage === contentLanguage &&
+      prevMediaType === newMediaType &&
+      newItemLanguage === playerLanguage);
+  }
+
   handleSelectedChange = (selected) => {
-    //this.setState({ selected });    
-    playerHelper.setActivePartInQuery(this.props.history, selected);  
-    //this.props.onSelectedChange(this.state.playlist.items[selected].unit);
+    // this.setState({ selected });
+    playerHelper.setActivePartInQuery(this.props.history, selected);
+    // this.props.onSelectedChange(this.state.playlist.items[selected].unit);
   };
 
   handleLanguageChange = (e, language) => {
@@ -137,11 +146,13 @@ class PlaylistAVBox extends Component {
 
   render() {
     const { t, PlayListComponent, uiLanguage, nextLink, prevLink } = this.props;
-    const { playlist, selected }                       = this.state;
+    const { playlist, selected }                                   = this.state;
 
     if (!playlist ||
       !Array.isArray(playlist.items) ||
-      playlist.items.length === 0) {
+      playlist.items.length === 0 ||
+      playlist.language === undefined
+    ) {
       return null;
     }
 

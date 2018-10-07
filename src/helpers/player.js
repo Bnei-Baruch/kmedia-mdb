@@ -71,6 +71,9 @@ function playableItem(unit, mediaType, uiLanguage, contentLanguage) {
   }
 
   const availableLanguages = calcAvailableLanguages(unit);
+  if (availableLanguages.length === 0) {
+    return {};
+  }
 
   const language = selectSuitableLanguage(contentLanguage, uiLanguage, availableLanguages);
 
