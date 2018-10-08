@@ -3,19 +3,18 @@ import moment from 'moment';
 
 import {
   CT_ARTICLE,
-  // CT_CHILDREN_LESSON,
   CT_FRIENDS_GATHERING,
   CT_LECTURE,
-  CT_MEAL,
   CT_LESSON_PART,
+  CT_MEAL,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
-  RABASH_PERSON_UID,
   LANG_HEBREW,
   LANG_RUSSIAN,
   LANG_SPANISH,
   LANG_UKRAINIAN,
+  RABASH_PERSON_UID,
 } from './helpers/consts';
 import MediaHelper from './helpers/media';
 import { canonicalCollection, isEmpty } from './helpers/utils';
@@ -184,7 +183,7 @@ export const lessonsPage = (store, match) => {
 
 export const simpleMode = (store, match) => {
   const query        = getQuery(match.parsedURL);
-  const date         = query.date ? moment(query.date, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
+  const date         = (query.date && moment(query.date).isValid()) ? moment(query.date, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
   const { language } = match.params;
 
   store.dispatch(simpleModeActions.fetchForDate({ date, language }));
@@ -321,7 +320,7 @@ export const topicsPage = (store, match) => {
     store.sagaMiddleWare.run(tagsSagas.fetchDashboard, tagsActions.fetchDashboard(tagID)).done,
     // store.sagaMiddleWare.run(tagsSagas.fetchTags, tagsActions.fetchTags).done
   ]);
-}
+};
 
 export const blogListPage = (store, match) => {
   // hydrate filters

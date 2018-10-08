@@ -104,7 +104,7 @@ const onFetchById = (state, action) => {
   const key = getActionKey(action);
   return {
     ...state,
-    [key]: { [action.payload]: { wip: true } }
+    [key]: { [action.payload]: { wip: true }, ...(state[key]) }
   };
 };
 
@@ -113,7 +113,7 @@ const onFetchByIdSuccess = (state, action) => {
   const { id, data } = action.payload;
   return {
     ...state,
-    [key]: { [id]: { data } }
+    [key]: { ...(state[key]), [id]: { data } }
   };
 };
 
@@ -122,7 +122,7 @@ const onFetchByIdFailure = (state, action) => {
   const { id, err } = action.payload;
   return {
     ...state,
-    [key]: { [id]: { err } }
+    [key]: { [id]: { err }, ...(state[key]) }
   };
 };
 
