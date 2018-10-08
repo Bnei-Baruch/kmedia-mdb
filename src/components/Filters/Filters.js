@@ -42,14 +42,14 @@ class Filters extends Component {
     activeFilter: null,
   };
 
-  handlePopupClose = () =>{
+  handlePopupClose = () => {
     this.setState({ activeFilter: null });
-    document.getElementsByTagName("body")[0].classList.remove('noscroll--smallmobile');
+    document.getElementsByTagName('body')[0].classList.remove('noscroll--smallmobile');
   }
 
-  handlePopupOpen = activeFilter =>{
+  handlePopupOpen = (activeFilter) => {
     this.setState({ activeFilter });
-    document.getElementsByTagName("body")[0].classList.add('noscroll--smallmobile');
+    document.getElementsByTagName('body')[0].classList.add('noscroll--smallmobile');
   }
 
   handleApply = (name, value) => {
@@ -108,7 +108,7 @@ class Filters extends Component {
                   filtersTransformer.valueToTagLabel(name, value, this.props, store, t) :
                   t('filters.all');
 
-                let len = ((name === 'topics-filter' || name === 'sources-filter') && value) ? label.length : 0;
+                const len = ((name === 'topics-filter' || name === 'sources-filter') && value) ? label.length : 0;
 
                 // name==='topics-filter' || 'sources-filter' ? len = 1/label.length : len = 0
 
