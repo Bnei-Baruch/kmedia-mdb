@@ -1,118 +1,106 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ErrorSplash matches snapshot 1`] = `
-<Component
-  color="red"
-  icon="warning sign"
-  isLoading={false}
-  subtext={null}
-  text="Nasty error..."
-/>
+<div
+  className="splash"
+>
+  <h2
+    className="ui icon center aligned header"
+  >
+    <i
+      aria-hidden="true"
+      className="red warning sign icon"
+    />
+    <div
+      className="content"
+    >
+      Nasty error...
+    </div>
+  </h2>
+</div>
 `;
 
 exports[`FrownSplash matches snapshot 1`] = `
-<Component
-  color="orange"
-  icon="frown"
-  isLoading={false}
-  subtext={null}
-  text="Still loading..."
-/>
+<div
+  className="splash"
+>
+  <h2
+    className="ui icon center aligned header"
+  >
+    <i
+      aria-hidden="true"
+      className="orange frown icon"
+    />
+    <div
+      className="content"
+    >
+      Still loading...
+    </div>
+  </h2>
+</div>
 `;
 
 exports[`LoadingSplash matches snapshot 1`] = `
-<Component
-  color="black"
-  icon="spinner"
-  isLoading={true}
-  subtext={null}
-  text="Still loading..."
-/>
+<div
+  className="splash"
+>
+  <h2
+    className="ui icon center aligned header"
+  >
+    <i
+      aria-hidden="true"
+      className="blue circle notch loading icon"
+    />
+    <div
+      className="content"
+    >
+      Still loading...
+    </div>
+  </h2>
+</div>
 `;
 
 exports[`Splash Renders the same as the last time Matches snapshot 1`] = `
-<Component
-  color="red"
-  icon="warning sign"
-  isLoading={false}
-  subtext="No response from server"
-  text="Server Error"
+<div
+  className="splash"
 >
-  <Header
-    as="h2"
-    className="splash"
-    icon={true}
-    textAlign="center"
+  <h2
+    className="ui icon center aligned header"
   >
-    <h2
-      className="ui icon center aligned header splash"
+    <i
+      aria-hidden="true"
+      className="red warning sign icon"
+    />
+    <div
+      className="content"
     >
-      <Icon
-        as="i"
-        color="red"
-        loading={false}
-        name="warning sign"
+      Server Error
+      <div
+        className="sub header"
       >
-        <i
-          aria-hidden="true"
-          className="red warning sign icon"
-        />
-      </Icon>
-      <HeaderContent>
-        <div
-          className="content"
-        >
-          Server Error
-          <HeaderSubheader>
-            <div
-              className="sub header"
-            >
-              No response from server
-            </div>
-          </HeaderSubheader>
-        </div>
-      </HeaderContent>
-    </h2>
-  </Header>
-</Component>
+        No response from server
+      </div>
+    </div>
+  </h2>
+</div>
 `;
 
 exports[`Splash Renders the same as the last time Matches snapshot 2`] = `
-<Component
-  color="red"
-  icon="spinner"
-  isLoading={true}
-  subtext={null}
-  text="Server Error"
+<div
+  className="splash"
 >
-  <Header
-    as="h2"
-    className="splash"
-    icon={true}
-    textAlign="center"
+  <h2
+    className="ui icon center aligned header"
   >
-    <h2
-      className="ui icon center aligned header splash"
+    <i
+      aria-hidden="true"
+      className="red spinner loading icon"
+    />
+    <div
+      className="content"
     >
-      <Icon
-        as="i"
-        color="red"
-        loading={true}
-        name="spinner"
-      >
-        <i
-          aria-hidden="true"
-          className="red spinner loading icon"
-        />
-      </Icon>
-      <HeaderContent>
-        <div
-          className="content"
-        >
-          Server Error
-        </div>
-      </HeaderContent>
-    </h2>
-  </Header>
-</Component>
+      Server Error
+    </div>
+  </h2>
+</div>
 `;

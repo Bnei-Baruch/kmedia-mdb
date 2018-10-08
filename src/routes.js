@@ -29,6 +29,7 @@ import SearchResults from './components/Search/SearchResultsContainer';
 import HomePage from './components/Sections/Home/Container';
 import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import Help from './components/Sections/Help/Help';
+import SimpleMode from './components/Sections/SimpleMode/Container';
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 
@@ -92,6 +93,7 @@ const routes = [
   { path: 'search', component: SearchResults, options: { ssrData: ssrDataLoaders.searchPage } },
   { path: 'project-status', component: ProjectStatus },
   { path: 'help', component: Help },
+  { path: 'simple-mode', component: SimpleMode, options: { ssrData: ssrDataLoaders.simpleMode } },
   // { path: 'design', component: Design },
   // { path: 'design2', component: Design2 },
 ];

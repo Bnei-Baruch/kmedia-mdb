@@ -71,6 +71,9 @@ class Api {
 
   static getAsset = path =>
     Requests.getAsset(path);
+
+  static simpleMode = ({ language, startDate: start_date, endDate: end_date }) =>
+    Requests.get(`simple?${Requests.makeParams({ language, start_date, end_date })}`);
 }
 
 export default Api;

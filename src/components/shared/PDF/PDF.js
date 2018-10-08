@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import throttle from 'lodash/throttle';
 import noop from 'lodash/noop';
 import { translate } from 'react-i18next';
-import { Document, Page } from 'react-pdf/dist/entry.webpack';
+import { Document, Page, setOptions } from 'react-pdf';
 import { Container, } from 'semantic-ui-react';
 
 import { BS_TAAS_PARTS } from '../../../helpers/consts';
@@ -11,6 +11,10 @@ import { ErrorSplash, LoadingSplash, } from '../../shared/Splash/Splash';
 import PDFMenu from './PDFMenu';
 
 class PDF extends Component {
+  static isTaas = source => (BS_TAAS_PARTS[source] !== undefined);
+
+  static startsFrom = source => BS_TAAS_PARTS[source];
+
   static propTypes = {
     pdfFile: PropTypes.string.isRequired,
     startsFrom: PropTypes.number.isRequired,
@@ -23,12 +27,10 @@ class PDF extends Component {
     pageNumberHandler: noop,
   };
 
-  static isTaas = source => (BS_TAAS_PARTS[source] !== undefined);
-
-  static startsFrom = source => BS_TAAS_PARTS[source];
-
   constructor(props) {
     super(props);
+
+    setOptions({ workerSrc: '/pdfjs-dist/build/pdf.worker.js' });
 
     this.state = {
       pageNumber: props.pageNumber,

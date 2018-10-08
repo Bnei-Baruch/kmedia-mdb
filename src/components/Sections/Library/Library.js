@@ -79,7 +79,7 @@ class Library extends Component {
 
     // PDF.js will fetch file by itself
     const usePdfFile = isTaas && this.props.pdfFile;
-    const mimeType = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    const mimeType   = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
     let contents;
 
     const { wip: contentWip, err: contentErr, data: contentData } = content;
