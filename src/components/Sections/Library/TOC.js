@@ -91,6 +91,7 @@ class TOC extends Component {
       return 'ט"ז';
     case 15:
       return 'ט"ו';
+    default:
     }
 
     let ret = '';
