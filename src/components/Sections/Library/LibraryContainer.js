@@ -7,8 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { push as routerPush, replace as routerReplace } from 'react-router-redux';
 import classnames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Grid, Header, Input, Ref, Message, Popup } from 'semantic-ui-react';
-import CopyToClipboard from 'react-copy-to-clipboard';
+import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';

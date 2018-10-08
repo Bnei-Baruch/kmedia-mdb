@@ -70,12 +70,11 @@ class Library extends Component {
 
   render() {
     const { content, language, languages, t, isTaas, langSelectorMount, fullUrlPath } = this.props;
-
     const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
 
     // PDF.js will fetch file by itself
     const usePdfFile = isTaas && this.props.pdfFile;
-    const mimeType = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    const mimeType   = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
     let contents;
 
     if (usePdfFile) {
@@ -102,7 +101,7 @@ class Library extends Component {
     } else if (!contentData && !usePdfFile) {
       return <Segment basic>{t('sources-library.no-source')}</Segment>;
     } else if (!usePdfFile) {
-      contents        = (<div
+      contents = (<div
         style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
         dangerouslySetInnerHTML={{ __html: contentData }}
       />);

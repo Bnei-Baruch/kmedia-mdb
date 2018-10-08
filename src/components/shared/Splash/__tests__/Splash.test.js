@@ -1,22 +1,20 @@
-import { shallowToJson } from 'enzyme-to-json';
+import React from 'react';
+import renderer from 'react-test-renderer';
+import 'jest-enzyme';
 
 import { Header, Icon } from 'semantic-ui-react';
 
-import createTestContext from 'react-cosmos-test/enzyme';
-
 import SplashFixture from '../__fixtures__/Splash.fixture';
 import SplashWOSubtext from '../__fixtures__/SplashWOSubtext.fixture';
-import { shallowRender } from '../../../../setupTests';
+import { mountedRender, shallowRender } from '../../../../setupTests';
 
 import { ErrorSplash, FrownSplash, LoadingSplash, Splash } from '../Splash';
 
 [SplashFixture, SplashWOSubtext].forEach((fixture) => {
   describe('Splash', () => {
-    const { mount: mountFixture, getWrapper } = createTestContext({ fixture });
     let wrapper;
-    beforeEach(mountFixture);
     beforeEach(() => {
-      wrapper = getWrapper();
+      wrapper = mountedRender(Splash, { ...fixture.props });
     });
 
     it('renders error', () => {
@@ -38,22 +36,18 @@ import { ErrorSplash, FrownSplash, LoadingSplash, Splash } from '../Splash';
 
       it('Icon has proper params', () => {
         const icon                             = wrapper.find(Icon);
-        const { color, icon: name, isLoading } = fixture.props;
-        expect(icon).toHaveProp('color', color);
-        expect(icon).toHaveProp('name', name);
-        expect(icon).toHaveProp('loading', isLoading);
+        const { color, icon: name, isLoading: loading } = fixture.props;
+        expect(icon).toHaveProp({ color, name, loading });
       });
 
       it('always renders an Header.Content', () => {
         const header = wrapper.find(Header.Content);
         expect(header).toExist();
-        // it('Header.Content does not receive any props', () => {
-        //   expect(Object.keys(header.props())).toBeEmpty();
-        // });
       });
     });
 
     describe('subtext', () => {
+
       if (typeof fixture.props.subtext === 'undefined') {
         describe('when subtext is not supplied', () => {
           it('does not render Header.Subheader', () => {
@@ -61,9 +55,7 @@ import { ErrorSplash, FrownSplash, LoadingSplash, Splash } from '../Splash';
             expect(subheader).not.toExist();
           });
         });
-      }
-
-      if (typeof fixture.props.subtext !== 'undefined') {
+      } else {
         describe('when subtext is supplied', () => {
           it('renders Header.Subheader', () => {
             const subheader = wrapper.find(Header.Subheader);
@@ -79,58 +71,57 @@ import { ErrorSplash, FrownSplash, LoadingSplash, Splash } from '../Splash';
 
     describe('Renders the same as the last time', () => {
       it('Matches snapshot', () => {
-        expect(shallowToJson(wrapper)).toMatchSnapshot();
+        const tree = renderer.create(wrapper).toJSON();
+        expect(tree).toMatchSnapshot();
       });
     });
   });
 });
 
 describe('LoadingSplash', () => {
-  const text = 'Still loading...';
-  const icon = 'spinner';
+  const text          = 'Still loading...';
+  const loadingSplash = shallowRender(LoadingSplash, { text });
+  const tree1         = renderer.create(loadingSplash).toJSON();
 
   it('renders correctly', () => {
-    const loadingSplash = shallowRender(LoadingSplash, { text }).dive();
-    const splash        = shallowRender(Splash, { icon, text, isLoading: true });
-    expect(shallowToJson(loadingSplash)).toEqual(shallowToJson(splash));
+    const splash = shallowRender(Splash, { isLoading: true, icon: 'circle notch', color: 'blue', text });
+    const tree2  = renderer.create(splash).toJSON();
+    expect(tree1).toEqual(tree2);
   });
 
   it('matches snapshot', () => {
-    const loadingSplash = shallowRender(LoadingSplash, { text });
-    expect(shallowToJson(loadingSplash)).toMatchSnapshot();
+    expect(tree1).toMatchSnapshot();
   });
 });
 
 describe('FrownSplash', () => {
-  const text  = 'Still loading...';
-  const icon  = 'frown';
-  const color = 'orange';
+  const text        = 'Still loading...';
+  const frownSplash = shallowRender(FrownSplash, { text });
+  const tree1       = renderer.create(frownSplash).toJSON();
 
   it('renders correctly', () => {
-    const frownSplash = shallowRender(FrownSplash, { text }).dive();
-    const splash      = shallowRender(Splash, { icon, color, text });
-    expect(shallowToJson(frownSplash)).toEqual(shallowToJson(splash));
+    const splash = shallowRender(Splash, { icon: 'frown', color: 'orange', text });
+    const tree2  = renderer.create(splash).toJSON();
+    expect(tree1).toEqual(tree2);
   });
 
   it('matches snapshot', () => {
-    const frownSplash = shallowRender(FrownSplash, { text });
-    expect(shallowToJson(frownSplash)).toMatchSnapshot();
+    expect(tree1).toMatchSnapshot();
   });
 });
 
 describe('ErrorSplash', () => {
-  const text  = 'Nasty error...';
-  const icon  = 'warning sign';
-  const color = 'red';
+  const text        = 'Nasty error...';
+  const errorSplash = shallowRender(ErrorSplash, { text });
+  const tree1       = renderer.create(errorSplash).toJSON();
 
   it('renders correctly', () => {
-    const errorSplash = shallowRender(ErrorSplash, { text }).dive();
-    const splash      = shallowRender(Splash, { icon, color, text });
-    expect(shallowToJson(errorSplash)).toEqual(shallowToJson(splash));
+    const splash = shallowRender(Splash, { icon: 'warning sign', color: 'red', text });
+    const tree2  = renderer.create(splash).toJSON();
+    expect(tree1).toEqual(tree2);
   });
 
   it('matches snapshot', () => {
-    const errorSplash = shallowRender(ErrorSplash, { text });
-    expect(shallowToJson(errorSplash)).toMatchSnapshot();
+    expect(tree1).toMatchSnapshot();
   });
 });
