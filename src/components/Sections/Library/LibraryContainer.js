@@ -64,7 +64,7 @@ class LibraryContainer extends Component {
     window.addEventListener('resize', this.updateSticky);
     window.addEventListener('load', this.updateSticky);
 
-    const { sourceId, areSourcesLoaded, replace, history }                                = this.props;
+    const { sourceId, areSourcesLoaded, replace, history }                             = this.props;
     const { location: { state: { tocIsActive } = { state: { tocIsActive: false } } } } = history;
 
     if (tocIsActive) {
@@ -141,7 +141,6 @@ class LibraryContainer extends Component {
 
     return getPathByID(sourceId);
   };
-
 
   handleContextRef = (ref) => {
     this.contextRef = ref;
@@ -293,6 +292,10 @@ class LibraryContainer extends Component {
     this.setState({ match: '' });
   };
 
+  print = () => {
+    window.print();
+  };
+
   matchString = (parentId, t) => {
     if (this.props.NotToFilter.findIndex(a => a === parentId) !== -1) {
       return null;
@@ -385,7 +388,7 @@ class LibraryContainer extends Component {
                   <div className="source__header-title">{this.header(sourceId, fullPath)}</div>
                   <div className="source__header-toolbar">
                     <Share t={t} />
-                    <Button compact size="small" className="mobile-hidden" icon="print" onClick={window.print} />
+                    <Button compact size="small" className="mobile-hidden" icon="print" onClick={this.print} />
                     <div id="download-button" />
                     <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
