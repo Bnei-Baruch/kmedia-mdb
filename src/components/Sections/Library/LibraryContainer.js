@@ -65,7 +65,7 @@ class LibraryContainer extends Component {
     window.addEventListener('resize', this.updateSticky);
     window.addEventListener('load', this.updateSticky);
 
-    const { sourceId, areSourcesLoaded, push, history }                                = this.props;
+    const { sourceId, areSourcesLoaded, replace, history }                                = this.props;
     const { location: { state: { tocIsActive } = { state: { tocIsActive: false } } } } = history;
 
     if (tocIsActive) {
@@ -82,7 +82,7 @@ class LibraryContainer extends Component {
       this.props.sourceId !== sourceId ||
       this.state.lastLoadedId !== sourceId) {
       if (firstLeafId !== sourceId) {
-        push(`sources/${firstLeafId}`);
+        replace(`sources/${firstLeafId}`);
       } else {
         // eslint-disable-next-line react/no-did-mount-set-state
         this.setState({ lastLoadedId: sourceId, language: this.props.language });
@@ -400,6 +400,7 @@ class LibraryContainer extends Component {
             <Grid.Row className="is-fitted">
               <Grid.Column mobile={16} tablet={16} computer={4} onClick={this.handleTocIsActive}>
                 <TOC
+                  language={language}
                   match={matchString ? match : ''}
                   matchApplied={this.handleFilterClear}
                   fullPath={fullPath}

@@ -11,6 +11,7 @@
       "books": "ספרים",
       "topics": "נושאים",
       "publications": "פרסומים",
+      "simple-mode": "גרסה קלה",
       "photos": "תמונות",
       "design": "עיצוב",
       "project-status": "סטאטוס הפרוייקט",
@@ -39,6 +40,10 @@
       },
       "start": "התחלה",
       "end": "סיום"
+    },
+    "language-filter": {
+      "label": "שפה",
+      "all": "כל שפה"
     },
     "sources-filter": {
       "label": "מקורות",
@@ -94,7 +99,8 @@
     "search": "חפש",
     "previous": "הקודם",
     "next": "הבא",
-    "copy": "העתק"
+    "copy": "העתק",
+    "view-all": "הצג הכל"
   },
   "player": {
     "messages": {
@@ -227,7 +233,7 @@
       "series": "סדרות לימוד נבחרות"
     },
     "list": {
-      "related": "קשור ל",
+      "related": "קשור ל:",
       "number": "מס' ",
       "item_from": "חלק מתוך:"
     },
@@ -299,6 +305,20 @@
       }
     }
   },
+  "simple-mode": {
+    "header": {
+      "text": "הורדות - גרסה קלה",
+      "subtext": "ריכוז כל המדיה של יום ספציפי"
+    },
+    "today-button": "היום",
+    "total-media-for-date": "כל המדיה לתאריך ",
+    "media-language": "שפת המדיה",
+    "no-files-found-for-lang": "אין קבצים לשפה שבחרת",
+    "no-files-found-for-date": "אין קבצים לתאריך זה",
+    "date": "תאריך",
+    "prev": "אחורה",
+    "next": "קדימה"
+  },
   "help": {
     "header": {
       "text": "עזרה",
@@ -359,19 +379,29 @@
     "filter": "סנן...",
     "share-title": "קרא את המאמר"
   },
+  "topics": {
+    "header": {
+      "text": "נושאים",
+      "subtext": "אוסף תכנים בנושא נבחר"
+    }
+  },
   "media-downloads": {
     "title": "קבצים להורדה",
     "derived-title": "נגזרות",
     "type-labels": {
       "video": "וידאו ראשי",
+      "video-simple": "וידאו",
       "audio": "אודיו ראשי",
+      "audio-simple": "אודיו",
       "text": "תמליל מלא",
       "image": "תמונות"
     },
     "lesson": {
       "type-labels": {
         "video": "וידאו של השיעור",
+        "video-simple": "וידאו",
         "audio": "אודיו של השיעור",
+        "audio-simple": "אודיו",
         "text": "תמליל מלא",
         "image": "שרטוטים"
       }
@@ -379,7 +409,9 @@
     "program": {
       "type-labels": {
         "video": "וידאו של התוכנית",
+        "video-simple": "וידאו",
         "audio": "אודיו של התוכנית",
+        "audio-simple": "אודיו",
         "text": "תמליל מלא",
         "image": "תמונות"
       }
@@ -387,7 +419,9 @@
     "publication": {
       "type-labels": {
         "video": "וידאו",
+        "video-simple": "וידאו",
         "audio": "אודיו",
+        "audio-simple": "אודיו",
         "text": "טקסט",
         "image": "צילומי מסך"
       }

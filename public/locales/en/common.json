@@ -11,6 +11,7 @@
       "books": "Books",
       "topics": "Topics",
       "publications": "Publications",
+      "simple-mode": "Simple Version",
       "photos": "Photos",
       "design": "Design",
       "design2": "Layout",
@@ -40,6 +41,10 @@
       },
       "start": "Start",
       "end": "End"
+    },
+    "language-filter": {
+      "label": "Language",
+      "all": "Any Language"
     },
     "sources-filter": {
       "label": "Sources",
@@ -96,7 +101,8 @@
     "search": "Search",
     "previous": "Previous",
     "next": "Next",
-    "copy": "Copy"
+    "copy": "Copy",
+    "view-all": "View All"
   },
   "player": {
     "messages": {
@@ -229,7 +235,7 @@
       "series": "Selected Study Series"
     },
     "list": {
-      "related": "Related to",
+      "related": "Related to:",
       "number": "#",
       "item_from": "Item of:"
     },
@@ -301,6 +307,20 @@
       }
     }
   },
+  "simple-mode": {
+    "header": {
+      "text": "Downloads - Simple version",
+      "subtext": "Concentrate all media for a specific day"
+    },
+    "today-button": "Today",
+    "total-media-for-date": "All media for date ",
+    "media-language": "Media language",
+    "no-files-found-for-lang": "There are no files for the language you selected",
+    "no-files-found-for-date": "There are no files for this date",
+    "date": "Date",
+    "prev": "Prev.",
+    "next": "Next"
+  },
   "help": {
     "header": {
       "text": "Help",
@@ -361,19 +381,29 @@
     "filter": "Filter...",
     "share-title": "Read this article"
   },
+  "topics": {
+    "header": {
+      "text": "Topics",
+      "subtext": "A collection of all items for a selected topic."
+    }
+  },
   "media-downloads": {
     "title": "Media Downloads",
     "derived-title": "Derived Media",
     "type-labels": {
       "video": "Main Video",
+      "video-simple": "Video",
       "audio": "Main Audio",
+      "audio-simple": "Audio",
       "text": "Transcription Text",
       "image": "Images"
     },
     "lesson": {
       "type-labels": {
         "video": "Lesson Video",
+        "video-simple": "Video",
         "audio": "Lesson Audio",
+        "audio-simple": "Audio",
         "text": "Transcription Text",
         "image": "Sketches"
       }
@@ -381,7 +411,9 @@
     "program": {
       "type-labels": {
         "video": "Program Video",
+        "video-simple": "Video",
         "audio": "Program Audio",
+        "audio-simple": "Audio",
         "text": "Transcription Text",
         "image": "Sketches"
       }
@@ -389,7 +421,9 @@
     "publication": {
       "type-labels": {
         "video": "Video",
+        "video-simple": "Video",
         "audio": "Audio",
+        "audio-simple": "Audio",
         "text": "Article Text",
         "image": "Snapshots"
       }

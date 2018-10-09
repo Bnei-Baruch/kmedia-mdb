@@ -11,6 +11,7 @@
       "books": "Bücher",
       "topics": "Themen",
       "publications": "Veröffentlichungen",
+      "simple-mode": "Einfache Version",
       "photos": "Fotos",
       "design": "Design",
       "design2": "Layout",
@@ -40,6 +41,10 @@
       },
       "start": "Start",
       "end": "Ende"
+    },
+    "language-filter": {
+      "label": "Sprache",
+      "all": "Jede Sprache"
     },
     "sources-filter": {
       "label": "Primäre Quellen",
@@ -94,7 +99,8 @@
     "search": "Suche",
     "previous": "Zurück",
     "next": "Nächstes",
-    "copy": "Kopieren"
+    "copy": "Kopieren",
+    "view-all": "Alle ansehen"
   },
   "player": {
     "messages": {
@@ -298,6 +304,20 @@
       }
     }
   },
+  "simple-mode": {
+    "header": {
+      "text": "Downloads - Eenvoudige versie",
+      "subtext": "Concentreer alle media voor een specifieke dag"
+    },
+    "today-button": "vandaag",
+    "total-media-for-date": "Alle media voor datum ",
+    "media-language": "Mediataal",
+    "no-files-found-for-lang": "Er zijn geen bestanden voor de taal die u hebt geselecteerd",
+    "no-files-found-for-date": "Es gibt keine Dateien für dieses Datum",
+    "date": "Datum",
+    "prev": "Bisherige",
+    "next": "Nächster"
+  },
   "pages": {
     "collection": {
       "items": {
@@ -357,14 +377,18 @@
     "derived-title": "Medien Bestandteile",
     "type-labels": {
       "video": "Hauptvideo",
+      "video-simple": "Video",
       "audio": "Grundlegendes Audio",
+      "audio-simple": "Audio",
       "text": "Transkript",
       "image": "Bild"
     },
     "lesson": {
       "type-labels": {
         "video": "Videolektionen",
+        "video-simple": "Video",
         "audio": "Audiolektionen",
+        "audio-simple": "Audio",
         "text": "Transkript",
         "image": "Zeichnungen"
       }
@@ -372,7 +396,9 @@
     "program": {
       "type-labels": {
         "video": "Videoprogramme",
+        "video-simple": "Video",
         "audio": "Audioprogramme",
+        "audio-simple": "Audio",
         "text": "Transkript",
         "image": "Zeichnungen"
       }
@@ -380,7 +406,9 @@
     "publication": {
       "type-labels": {
         "video": "Video",
+        "video-simple": "Video",
         "audio": "Audio",
+        "audio-simple": "Audio",
         "text": "Artikeltext",
         "image": "Bilder"
       }

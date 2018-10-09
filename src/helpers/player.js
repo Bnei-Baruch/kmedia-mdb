@@ -1,4 +1,4 @@
-import moment from 'moment/moment';
+import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 
@@ -208,7 +208,7 @@ function playlist(collection, mediaType, language) {
 
 function getMediaTypeFromQuery(location, defaultMediaType) {
   const query = getQuery(location);
-  const mt = (query.mediaType || '').toLowerCase();
+  const mt    = (query.mediaType || '').toLowerCase();
   return mt === MT_VIDEO || mt === MT_AUDIO ? mt : defaultMediaType;
 }
 

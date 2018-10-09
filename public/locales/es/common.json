@@ -11,6 +11,7 @@
       "books": "Libros",
       "topics": "Temas",
       "publications": "Publicaciones",
+      "simple-mode": "Versión Simple",
       "photos": "Fotos",
       "design": "Diseño",
       "project-status": "Projekto Statuso",
@@ -39,6 +40,10 @@
       },
       "start": "Inicio",
       "end": "Final"
+    },
+    "language-filter": {
+      "label": "Idioma",
+      "all": "Cualquier Idioma"
     },
     "sources-filter": {
       "label": "Fuentes",
@@ -94,7 +99,8 @@
     "search": "Buscar",
     "previous": "Anterior",
     "next": "Siguiente",
-    "copy": "Copiar"
+    "copy": "Copiar",
+    "view-all": "Ver todo"
   },
   "player": {
     "messages": {
@@ -226,7 +232,7 @@
       "series": "Serie de Estudios"
     },
     "list": {
-      "related": "Relacionado con",
+      "related": "Relacionado con:",
       "number": "#",
       "item_from": "Parte de:"
     },
@@ -298,6 +304,20 @@
       }
     }
   },
+  "simple-mode": {
+    "header": {
+      "text": "Descargas - Versión simple",
+      "subtext": "Concentrar todos los medios para un día específico"
+    },
+    "today-button": "hoy",
+    "total-media-for-date": "Todos los medios para la fecha ",
+    "media-language": "Lenguaje de los medios",
+    "no-files-found-for-lang": "No hay archivos para el idioma que seleccionaste",
+    "no-files-found-for-date": "No hay archivos para esta fecha.",
+    "date": "Fecha",
+    "prev": "Anterior",
+    "next": "Siguiente"
+  },
   "pages": {
     "collection": {
       "items": {
@@ -352,19 +372,29 @@
     "filter": "Filtro...",
     "share-title": "Lee este artículo"
   },
+  "topics": {
+    "header": {
+      "text": "Temas",
+      "subtext": "A collection of all items for a selected topic."
+    }
+  },
   "media-downloads": {
     "title": "Descargar archivos",
     "derived-title": "Derivados",
     "type-labels": {
       "video": "Video Principal",
+      "video-simple": "Video",
       "audio": "Audio Principal",
+      "audio-simple": "Audio",
       "text": "Transcripción Completa",
       "image": "Fotos"
     },
     "lesson": {
       "type-labels": {
         "video": "Video de la Lección",
+        "video-simple": "Video",
         "audio": "Audio de la Lección",
+        "audio-simple": "Audio",
         "text": "Transcripción Completa",
         "image": "Dibujos"
       }
@@ -372,7 +402,9 @@
     "program": {
       "type-labels": {
         "video": "Video del Programa",
+        "video-simple": "Video",
         "audio": "audio del Programa",
+        "audio-simple": "Audio",
         "text": "Transcripción Completa",
         "image": "Fotos"
       }
@@ -380,7 +412,9 @@
     "publication": {
       "type-labels": {
         "video": "Video",
+        "video-simple": "Video",
         "audio": "Audio",
+        "audio-simple": "Audio",
         "text": "Texto",
         "image": "Capturas de Pantalla"
       }

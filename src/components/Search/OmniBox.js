@@ -60,7 +60,7 @@ export class OmniBox extends Component {
     }
 
     // Clear search query when navigating from the search page into other pages (AS-38)
-    if (this.props.query && !nextProps.location.pathname.endsWith('search') && nextProps.location.pathname !== this.props.location.pathname){
+    if (this.props.query && !nextProps.location.pathname.endsWith('search') && nextProps.location.pathname !== this.props.location.pathname) {
       this.props.updateQuery('');
       this.props.setSuggest('');
     }
@@ -103,6 +103,7 @@ export class OmniBox extends Component {
         resetFilter('search', 'topics-filter');
         resetFilter('search', 'sources-filter');
         resetFilter('search', 'sections-filter');
+        resetFilter('search', 'language-filter');
       }
     }
 
@@ -178,7 +179,7 @@ export class OmniBox extends Component {
   });
 
   renderInput() {
-    return <Input onKeyDown={(e) => this.handleSearchKeyDown(e)} />;
+    return <Input onKeyDown={e => this.handleSearchKeyDown(e)} />;
   }
 
   render() {

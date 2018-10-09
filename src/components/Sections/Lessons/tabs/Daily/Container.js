@@ -42,7 +42,7 @@ export const renderUnit = (unit, t) => {
               <List horizontal divided link className="index__collections" size="tiny">
                 <List.Item>
                   <List.Header>
-                    {t('lessons.list.related')}:
+                    {t('lessons.list.related')}
                   </List.Header>
                 </List.Item>
                 {relatedItems}
@@ -87,7 +87,7 @@ export const renderCollection = (collection, t) => {
                   <List horizontal divided link className="index__collections" size="tiny">
                     <List.Item>
                       <List.Header>
-                        {t('lessons.list.related')}:
+                        {t('lessons.list.related')}
                       </List.Header>
                     </List.Item>
                     {relatedItems}
