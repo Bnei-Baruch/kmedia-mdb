@@ -12,6 +12,7 @@ import { selectors as device } from '../../../../../redux/modules/device';
 import * as shapes from '../../../../shapes';
 import AVMobileCheck from '../../../../AVPlayer/AVMobileCheck';
 import { selectors as settings } from '../../../../../redux/modules/settings';
+import { equal, isEmpty } from '../../../../../helpers/utils';
 
 class AVBox extends Component {
   static propTypes = {
@@ -40,8 +41,20 @@ class AVBox extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { unit, uiLanguage, location } = nextProps;
+    const { language: playerLanguage }   = this.state.playableItem;
+
+    const preferredMT     = playerHelper.restorePreferredMediaType();
+    const newMediaType    = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
+
+    // Persist language in playableItem
+    this.setPlayableItem(unit, newMediaType, newItemLanguage, uiLanguage);
+  }
+
+  shouldComponentUpdate(nextProps) {
     const { unit, uiLanguage, contentLanguage, location } = nextProps;
-    const { uiLanguage: oldUiLanguage, contentLanguage: oldContentLanguage, location: oldLocation }
+    const { unit: oldUnit, uiLanguage: oldUiLanguage, contentLanguage: oldContentLanguage, location: oldLocation }
                                                           = this.props;
     const { language: playerLanguage }                    = this.state.playableItem;
 
@@ -51,16 +64,11 @@ class AVBox extends Component {
     const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
     // no change
-    if (unit === this.props.unit &&
+    return !(equal(unit, oldUnit) &&
       oldUiLanguage === uiLanguage &&
       oldContentLanguage === contentLanguage &&
       prevMediaType === newMediaType &&
-      newItemLanguage === playerLanguage) {
-      return;
-    }
-
-    // Persist language in playableItem
-    this.setPlayableItem(unit, newMediaType, newItemLanguage, uiLanguage);
+      newItemLanguage === playerLanguage);
   }
 
   setPlayableItem(unit, mediaType, playerLanguage, uiLanguage) {
@@ -89,7 +97,7 @@ class AVBox extends Component {
     const { t, autoPlayAllowed } = this.props;
     const { playableItem }       = this.state;
 
-    if (!playableItem) {
+    if (isEmpty(playableItem)) {
       return (<div>{t('messages.no-playable-files')}</div>);
     }
 
