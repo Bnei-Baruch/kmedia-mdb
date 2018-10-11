@@ -30,7 +30,7 @@ class PDF extends Component {
   constructor(props) {
     super(props);
 
-    setOptions({ workerSrc: '/pdfjs-dist/build/pdf.worker.js' });
+    setOptions({ workerSrc: '/pdf.worker.js' });
 
     this.state = {
       pageNumber: props.pageNumber,
