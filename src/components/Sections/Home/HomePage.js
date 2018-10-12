@@ -15,13 +15,18 @@ import Section from './Section';
 import LatestUpdate from './LatestUpdate';
 import LatestDailyLesson from './LatestDailyLesson';
 import Helmets from '../../shared/Helmets';
+import BlogFeed from '../Publications/tabs/Blog/Feed';
+import TwitterFeed from '../Publications/tabs/Twitter/Feed';
 
 class HomePage extends Component {
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
     latestLesson: shapes.LessonCollection,
     latestUnits: PropTypes.arrayOf(shapes.ContentUnit),
+    latestBlogPosts: PropTypes.arrayOf(shapes.BlogPost),
+    latestTweets: PropTypes.arrayOf(shapes.Tweet),
     banner: shapes.Banner,
+    language: PropTypes.string.isRequired,
     wip: shapes.WIP,
     err: shapes.Error,
     t: PropTypes.func.isRequired,
@@ -30,13 +35,15 @@ class HomePage extends Component {
   static defaultProps = {
     latestLesson: null,
     latestUnits: [],
+    latestBlogPosts: [],
+    latestTweets: [],
     banner: null,
     wip: false,
     err: null,
   };
 
   render() {
-    const { latestLesson, latestUnits, banner, wip, err, t, location } = this.props;
+    const { latestLesson, latestUnits, latestBlogPosts, latestTweets, banner, language, wip, err, t, location } = this.props;
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
@@ -128,6 +135,33 @@ class HomePage extends Component {
                   })
                 }
               </Card.Group>
+            </Section>
+          </Container>
+        </div>
+
+        <div className="homepage__section">
+          <Container className="padded horizontally">
+            <Section title={t('home.social')}>
+              <Grid width={15} centered className="homepage__iconsrow">
+                <Grid.Row>
+                  {
+                    latestBlogPosts.length ?
+                      <Grid.Column mobile={16} tablet={12} computer={12}>
+                        <h4>{t('home.blog-title')}</h4>
+                        <BlogFeed items={latestBlogPosts} language={language} />
+                      </Grid.Column> :
+                      null
+                  }
+                  {
+                    latestTweets.length ?
+                      <Grid.Column mobile={16} tablet={4} computer={4}>
+                        <h4>{t('home.twitter-title')}</h4>
+                        <TwitterFeed tweets={latestTweets} t={t} /> :
+                      </Grid.Column> :
+                      null
+                  }
+                </Grid.Row>
+              </Grid>
             </Section>
           </Container>
         </div>
