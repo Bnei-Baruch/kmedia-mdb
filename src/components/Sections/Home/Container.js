@@ -42,33 +42,23 @@ class HomePageContainer extends Component {
       this.props.fetchData();
     }
     if (!this.props.latestBlogPosts.length) {
-      this.fetchBlogPosts();
+      this.fetchSocialMedia('publications-blog', this.chooseBlogByLanguage);
     }
     if (!this.props.latestTweets.length) {
-      this.fetchTweets();
+      this.fetchSocialMedia('publications-twitter', this.chooseTwitterByLanguage);
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.language !== this.props.language) {
       this.props.fetchData();
+      this.fetchSocialMedia('publications-blog', this.chooseBlogByLanguage, nextProps);
+      this.fetchSocialMedia('publications-twitter', this.chooseTwitterByLanguage, nextProps);
     }
   }
 
-  fetchTweets() {
-    // page_no=1&page_size=10&namespace=publications-twitter&username=laitman&language=en
-    const nameSpace  = 'publications-twitter';
-    const pageNumber = 1;
-    const extraArgs  = {
-      page_size: 4,
-      ...this.chooseTwitterByLanguage(this.props.language)
-    };
-
-    this.props.fetchTweetsList(nameSpace, pageNumber, extraArgs);
-  }
-
   // eslint-disable-next-line class-methods-use-this
-  chooseTwitterByLanguage(language) {
+  chooseTwitterByLanguage = (language) => {
     switch (language) {
     case LANG_HEBREW:
       return { username: 'laitman_co_il' };
@@ -80,21 +70,10 @@ class HomePageContainer extends Component {
     default:
       return { username: 'laitman' };
     }
-  }
-
-  fetchBlogPosts() {
-    const nameSpace  = 'publications-blog';
-    const pageNumber = 1;
-    const extraArgs  = {
-      page_size: 4,
-      ...this.chooseBlogByLanguage(this.props.language)
-    };
-
-    this.props.fetchBlogList(nameSpace, pageNumber, extraArgs);
-  }
+  };
 
   // eslint-disable-next-line class-methods-use-this
-  chooseBlogByLanguage(language) {
+  chooseBlogByLanguage = (language) => {
     switch (language) {
     case LANG_HEBREW:
       return { blog: 'laitman-co-il' };
@@ -106,6 +85,18 @@ class HomePageContainer extends Component {
     default:
       return { blog: 'laitman-com' };
     }
+  };
+
+  fetchSocialMedia(nameSpace, mediaLanguage, nextProps = {}) {
+    const pageNumber = 1;
+    const language   = nextProps.language || this.props.language;
+    const extraArgs  = {
+      page_size: 4,
+      ...mediaLanguage(language)
+    };
+    (nameSpace === 'publications-blog') ?
+      this.props.fetchBlogList(nameSpace, pageNumber, extraArgs) :
+      this.props.fetchTweetsList(nameSpace, pageNumber, extraArgs);
   }
 
   render() {

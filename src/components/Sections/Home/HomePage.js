@@ -146,9 +146,9 @@ class HomePage extends Component {
                 <Grid.Row>
                   {
                     latestBlogPosts.length ?
-                      <Grid.Column mobile={16} tablet={12} computer={12}>
+                      <Grid.Column mobile={16} tablet={12} computer={12} className="home-blog-posts">
                         <h4>{t('home.blog-title')}</h4>
-                        <BlogFeed items={latestBlogPosts} language={language} />
+                        <BlogFeed items={latestBlogPosts} language={language} t={t} snippetVersion={true} />
                       </Grid.Column> :
                       null
                   }

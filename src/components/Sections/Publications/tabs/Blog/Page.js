@@ -61,7 +61,7 @@ class BlogPage extends PureComponent {
           <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
           {
             items.length > 0 ?
-              <Feed items={items} language={language} /> :
+              <Feed items={items} language={language} t={t} /> :
               null
           }
         </Container>

@@ -199,7 +199,6 @@
 
 .filter-popup {
 
-
   &__body {
     max-height: 350px;
     min-width: 300px;
@@ -208,8 +207,6 @@
     &.segment {
       padding: 0;
     }
-
-    
 
     .highlight {
       background-color: rgba($yellow, 0.2);
@@ -819,3 +816,29 @@
   }
 }
 
+/* ************* End of styles for simple mode ************* */
+
+.home-blog-posts {
+
+  .blog-posts {
+    max-width: 100%;
+  }
+
+  .entry {
+    max-height: 200px;
+    overflow: hidden;
+    position: relative;
+
+    img {
+      display: none;
+    }
+
+    .fade-text {
+      position: absolute;
+      bottom: -1px;
+      height: 100px;
+      width: 105%;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .8) 44%, rgba(255, 255, 255, 1) 100%);
+    }
+  }
+}
