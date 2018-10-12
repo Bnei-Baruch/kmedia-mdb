@@ -101,9 +101,9 @@ class SearchResultsFilters extends Component {
     const rightButtons = (
       <Menu.Menu position='right'>
         <Menu.Item>
-          <Button basic={!this.state.isShowFilters} compact onClick={this.showFilters} className="showFilters">
-            <Icon name="filter" />
-            {t('filters.filters')}
+          <Button basic active={this.state.isShowFilters} onClick={this.showFilters} className="showFilters">
+            {t('filters.filters')}&nbsp;&nbsp;
+            <Icon name="filter" fitted />
           </Button>
         </Menu.Item>
         <Menu.Item>{filters}</Menu.Item>
@@ -113,7 +113,12 @@ class SearchResultsFilters extends Component {
   };
 
   render() {
-    const { onHydrated, onChange } = this.props;
+    const { onHydrated, onChange, t } = this.props;
+
+    const hideFilters = (<Menu.Item>
+      {t('filters.hideFilters')}&nbsp;&nbsp;
+      <Button circular icon='close' basic size='small' onClick={this.showFilters} />
+    </Menu.Item>);
 
     return (
       <div>
@@ -121,9 +126,11 @@ class SearchResultsFilters extends Component {
         {
           <div style={{ 'display': this.state.isShowFilters ? 'block' : 'none' }}>
             <Filters
+              className="searchFilters"
               namespace="search"
               filters={filters}
               onChange={onChange}
+              rightItems={[hideFilters]}
               onHydrated={onHydrated} />
           </div>
         }

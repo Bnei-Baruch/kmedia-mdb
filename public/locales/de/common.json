@@ -27,6 +27,7 @@
   "filters": {
     "by": "Filtern nach:",
     "filters": "Filter",
+    "hideFilters": "Filter ausblenden",
     "all": "Alles",
     "date-filter": {
       "label": "Datum",

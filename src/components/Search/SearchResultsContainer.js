@@ -81,7 +81,6 @@ class SearchResultsContainer extends Component {
     return (
       <div>
         <SectionHeader section="search" />
-        <Divider fitted />
         <Filters
           sortBy={sortBy}
           onChange={this.handleFiltersChanged}

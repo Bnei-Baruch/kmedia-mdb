@@ -180,8 +180,6 @@
   }
 }
 
-
-
 // filters redesign
 // .index-filters {
 //   margin-top: .5rem !important;
@@ -819,7 +817,6 @@
   }
 }
 
-
 .tweet {
   margin-bottom: 1.5rem !important;
   &--username {
@@ -1115,13 +1112,24 @@
     width: 25px;
   }
 
-  .linkToFile {
+  .linkToFile.ui.basic.button {
     padding: .5em 1em;
-    margin-top: 2px !important;
+    margin-top: 5px !important;
     margin-right: 5px !important;
+    background-color: white !important;
+    border-color: $grey;
+    .icon {
+      color: $blue;
+    }
 
-    &:hover button {
+    &:hover {
+      color: white;
       background-color: $blue !important;
+      border: 0 none;
+      color: white !important;
+      .icon {
+        color: white !important;
+      }
     }
   }
 
@@ -1131,9 +1139,16 @@
     margin-right: 5px !important;
   }
 
-  .search__cards {
-    padding-right: 0;
+  .search__cards.ui.three.cards {
+    margin-left: 10px;
+    margin-right: 10px;
     position: relative;
+
+    .scrollIntents {
+      position: absolute;
+      top: 50%;
+      background-color: white !important;
+    }
   }
 
   .search__card {
@@ -1150,8 +1165,8 @@
 
   .cardHeaderLabel {
     position: absolute;
-    bottom: 0;
-    left: 0;
+    bottom: 8px;
+    right: 8px;
     z-index: 1;
     padding: 5px 10px;
     background: rgba(51, 51, 51, .6);
@@ -1168,8 +1183,13 @@
   background: transparent !important;
 }
 
+.padding0{
+  padding: 0 !important;
+}
+
 .sectionTabs.ui.menu {
   background: $darkWhite;
+  margin: 0;
   border: 0 none;
   .item {
     padding-top: 5px;
@@ -1179,8 +1199,13 @@
     border-bottom: 1px solid #1a4179;
   }
   .showFilters {
-    background-color: white;
-    padding-bottom: 5px !important;
-    padding-top: 0 !important;
+    background-color: white !important;
+  }
+}
+
+.searchFilters {
+  .ui.container.padded {
+    padding: 0;
+    margin: 0;
   }
 }

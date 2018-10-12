@@ -27,6 +27,7 @@
   "filters": {
     "by": "Фільтрувати за:",
     "filters": "Фільтри",
+    "hideFilters": "Сховати фільтри",
     "all": "Все",
     "date-filter": {
       "label": "Дата",

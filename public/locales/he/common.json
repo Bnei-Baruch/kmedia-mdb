@@ -26,6 +26,7 @@
   "filters": {
     "by": "סנן לפי:",
     "filters": "מסננים",
+    "hideFilters": "להסתיר מסננים",
     "all": "הכל",
     "date-filter": {
       "label": "תאריך",

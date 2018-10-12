@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 import { Button, Card, Image, Icon, Segment, Header, List, Container } from 'semantic-ui-react';
 
+import { selectors as device } from '../../redux/modules/device';
+import * as shapes from '../shapes';
 import { sectionLogo } from '../../helpers/images';
 import { selectors } from '../../redux/modules/mdb';
 import { sectionLink, canonicalLink } from '../../helpers/links';
@@ -27,13 +30,23 @@ let NUMBER_OF_FETCHED_UNITS = 3 * 4;
 
 class SearchResultIntent extends SearchResultBase {
 
+  static propTypes = {
+    ...SearchResultBase.propTypes,
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
+    isMobileDevice: PropTypes.func.isRequired
+  };
+
   state = {
     pageNo: 0,
     pageSize: 3,
   };
 
   componentDidMount() {
+    NUMBER_OF_FETCHED_UNITS = this.isMobileDevice() ? 1 * 4 : 3 * 4;
     this.askForData(this.props, 0);
+
+    const pageSize = this.isMobileDevice() ? 1 : 3;
+    this.setState({ pageSize });
   }
 
   askForData = () => {
@@ -81,11 +94,10 @@ class SearchResultIntent extends SearchResultBase {
     const filmDate  = cu.film_date ? this.props.t('values.date', { date: cu.film_date }) : '';
 
     return (
-      <Card key={cu.id} className="search__card bgHoverGrey">
+      <Card key={cu.id} className="search__card bgHoverGrey" raised>
         <Container className="intentImage">
           <div className='cardHeaderLabel'>
             {this.mlsToStrColon(cu.duration)}
-            <Icon name="play" size="small" />
           </div>
           <FallbackImage fluid src={src} />
         </Container>
@@ -121,8 +133,11 @@ class SearchResultIntent extends SearchResultBase {
       }
     );
 
-    return <Segment basic textAlign="center">{content}</Segment>;
+    return <Segment basic textAlign="center" className="padding0">{content}</Segment>;
   };
+
+  isMobileDevice = () =>
+    this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
   renderScrollRight = () => {
     return this.state.pageNo === 0 ? null : (<Button
@@ -131,7 +146,8 @@ class SearchResultIntent extends SearchResultBase {
       basic
       size="large"
       onClick={this.onScrollLeft}
-      style={{ position: 'absolute', top: '100px', left: 0 }}
+      className="scrollIntents"
+      style={{ left: '-15px' }}
     />);
   };
 
@@ -145,7 +161,8 @@ class SearchResultIntent extends SearchResultBase {
       basic
       size="large"
       onClick={this.onScrollRight}
-      style={{ position: 'absolute', top: '100px', right: 0 }}
+      className="scrollIntents"
+      style={{ right: '-15px' }}
     />);
   };
 
@@ -173,16 +190,16 @@ class SearchResultIntent extends SearchResultBase {
     return (
       <Segment className="search__block">
         <Header as="h2">
-          <Image size="mini" floated="left" src={sectionLogo[type]} />&nbsp;
+          <Image size="small" src={sectionLogo[type]} verticalAlign='bottom' />&nbsp;
           <span>{t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`)}</span>
         </Header>
         <List verticalAlign='middle'>
           <List.Item>
             <List.Content floated='right'>
+              <Icon name="tasks" size="small" />
               <Link
                 onClick={() => this.click(mdbUid, index, type, rank, searchId)}
                 to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}>
-                <Icon name="list" size="small" />&nbsp;&nbsp;
                 <span>{`${t('search.showAll')} ${this.props.total} ${t('search.' + resultsType)}`}</span>
               </Link>
             </List.Content>
@@ -196,7 +213,7 @@ class SearchResultIntent extends SearchResultBase {
             </Header>
           </List.Item>
         </List>
-        <Card.Group className="search__cards" centered>
+        <Card.Group className="search__cards" itemsPerRow={3} stackable>
           {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).map(this.renderItem)}
           {this.renderScrollLeft()}
           {this.renderScrollRight()}
@@ -222,6 +239,7 @@ const mapState = (state, ownProps) => {
     wip: nsState.wip,
     err: nsState.err,
     total: nsState.total,
+    deviceInfo: device.getDeviceInfo(state.device),
   };
 };
 

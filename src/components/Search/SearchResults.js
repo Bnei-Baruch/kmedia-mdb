@@ -127,7 +127,7 @@ class SearchResults extends Component {
     } else {
       content = (
         <Grid>
-          <Grid.Column key="1" width={12}>
+          <Grid.Column key="1"  computer={12} tablet={16} mobile={16}>
             <div className="searchResult_content">
               <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
               {hits.filter(this.filterByHitType).map(this.renderHit)}
@@ -143,7 +143,7 @@ class SearchResults extends Component {
               />
             </Container>
           </Grid.Column>
-          <Grid.Column key="2" width={4} />
+          <Grid.Column key="2" />
         </Grid>);
     }
     return content;
