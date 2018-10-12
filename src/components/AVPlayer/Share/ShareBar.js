@@ -20,20 +20,26 @@ import {
 
 export default class ShareBar extends Component {
   static propTypes = {
-    url: PropTypes.string.isRequired,
-    buttonSize: PropTypes.string,
     t: PropTypes.func.isRequired,
+    url: PropTypes.string,
+    buttonSize: PropTypes.string,
     messageTitle: PropTypes.string
   };
 
   static defaultProps = {
     buttonSize: 'big',
-    messageTitle: ''
+    messageTitle: '',
+    url: null
   };
 
   render() {
     const { url, buttonSize, t, messageTitle } = this.props;
-    const bsPixels               = buttonSize === 'big' ? 46 : 36;
+    if (!url) {
+      return null;
+    }
+
+    // noinspection JSValidateTypes
+    const bsPixels = buttonSize === 'big' ? 46 : 36;
 
     const title = messageTitle || t('player.share.title');
 

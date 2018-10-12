@@ -318,7 +318,8 @@
     "today-button": "Сьогодні",
     "total-media-for-date": "Всі носії для дати ",
     "media-language": "Медіа мова",
-    "no-files-found": "Немає файлів для обраної вами мови",
+    "no-files-found-for-lang": "Немає файлів для обраної вами мови",
+    "no-files-found-for-date": "Немає файлів для цієї дати",
     "date": "дата",
     "prev": "Попередній",
     "next": "далі"

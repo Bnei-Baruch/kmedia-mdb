@@ -317,7 +317,8 @@
     "today-button": "vandaag",
     "total-media-for-date": "Alle media voor datum ",
     "media-language": "Mediataal",
-    "no-files-found": "Er zijn geen bestanden voor de taal die u hebt geselecteerd",
+    "no-files-found-for-lang": "Er zijn geen bestanden voor de taal die u hebt geselecteerd",
+    "no-files-found-for-date": "Es gibt keine Dateien für dieses Datum",
     "date": "Datum",
     "prev": "Bisherige",
     "next": "Nächster"

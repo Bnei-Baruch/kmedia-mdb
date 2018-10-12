@@ -179,7 +179,11 @@ class TOC extends Component {
         key: `lib-leaf-${leafId}`
       }));
     } else {
-      panels = this.subToc(children, path.slice(1));
+      panels  = this.subToc(children, path.slice(1)).map(({ content, title: name }, index) => ({
+        title: name,
+        content,
+        key: `root-${index}-${title}`
+      }));
     }
 
     if (firstLevel) {

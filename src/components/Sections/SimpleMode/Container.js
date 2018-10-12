@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { translate } from 'react-i18next';
 
 import { getQuery, updateQuery } from '../../../helpers/url';
+import { isEmpty } from '../../../helpers/utils';
 import { selectors as device } from '../../../redux/modules/device';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -48,7 +49,7 @@ class SimpleModeContainer extends Component {
 
   componentDidMount() {
     const query = getQuery(this.props.location);
-    const date  = query.date ? moment(query.date, 'YYYY-MM-DD').toDate() : new Date();
+    const date  = (query.date && moment(query.date).isValid()) ? moment(query.date, 'YYYY-MM-DD').toDate() : new Date();
 
     if (!this.state.date || !moment(date).isSame(this.state.date, 'day')) {
       this.handleDayClick(date);
@@ -59,6 +60,10 @@ class SimpleModeContainer extends Component {
     if (!this.state.filesLanguage) {
       const filesLanguage = nextProps.language;
       this.setState({ filesLanguage });
+    }
+
+    if (this.props.language !== nextProps.language) {
+      this.handleDayClick(this.state.date, {}, nextProps);
     }
   }
 
@@ -71,11 +76,15 @@ class SimpleModeContainer extends Component {
     this.setState({ filesLanguage: e.currentTarget.value });
   };
 
-  handleDayClick = (selectedDate) => {
+  handleDayClick = (selectedDate, { disabled } = {}, nextProps = {}) => {
+    if (disabled) {
+      return null;
+    }
+
     this.setState({ date: selectedDate });
 
-    const date         = moment(selectedDate).format('YYYY-MM-DD');
-    const { language } = this.props;
+    const date     = moment(selectedDate).format('YYYY-MM-DD');
+    const language = nextProps.language || this.props.language;
     this.props.fetchForDate({ date, language });
     updateQuery(this.props.history, query => ({
       ...query,
@@ -114,8 +123,8 @@ export const mapState = (state) => {
 
   return {
     items: {
-      lessons: items.lessons.map(x => mdb.getDenormCollectionWUnits(state.mdb, x)),
-      others: items.others.map(x => mdb.getDenormContentUnit(state.mdb, x)),
+      lessons: items.lessons.map(x => mdb.getDenormCollectionWUnits(state.mdb, x)).filter(x => !isEmpty(x)),
+      others: items.others.map(x => mdb.getDenormContentUnit(state.mdb, x)).filter(x => !isEmpty(x)),
     },
     wip: selectors.getWip(state.simpleMode),
     err: selectors.getError(state.simpleMode),

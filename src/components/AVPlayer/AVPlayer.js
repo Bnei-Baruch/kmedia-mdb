@@ -122,24 +122,6 @@ class AVPlayer extends PureComponent {
         sliceEnd: send
       });
     }
-
-    const { deviceInfo: { browser: { name: browserName } } } = this.props;
-    if (browserName !== 'Edge' &&
-      browserName !== 'IE') {
-      this.setState({
-        browserName,
-        firstSeek: true,
-        ...this.chooseSource(this.props)
-      });
-    } else {
-      setTimeout(() => {
-        this.setState({
-          browserName,
-          firstSeek: true,
-          ...this.chooseSource(this.props)
-        });
-      }, 1);
-    }
   }
 
   componentDidMount() {
@@ -148,6 +130,13 @@ class AVPlayer extends PureComponent {
 
     // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ isClient: true });
+
+    const { deviceInfo: { browser: { name: browserName } } } = this.props;
+    this.setState({
+      browserName,
+      firstSeek: true,
+      ...this.chooseSource(this.props)
+    });
   }
 
   componentWillReceiveProps(nextProps) {
