@@ -1,26 +1,31 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Header, Segment } from 'semantic-ui-react';
+import { Divider, Header, Segment } from 'semantic-ui-react';
 
 import * as shapes from '../../../../shapes';
+import Link from '../../../../Language/MultiLanguageLink';
 
 class BlogFeed extends Component {
   static propTypes = {
     items: PropTypes.arrayOf(shapes.BlogPost),
+    snippetVersion: PropTypes.bool,
+    t: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
     items: [],
+    snippetVersion: false,
   };
 
   renderItem = (item) => {
-    const { language }                            = this.props;
+    const { snippetVersion, t, language }         = this.props;
     const { url, title, content, created_at: ts } = item;
     const mts                                     = moment(ts);
+    const internalUrl                             = `/${language}/publications/blog/${item.blog}/${item.wp_id}`;
 
-    const pHtml = content.replace(/href="\/publications\/blog\//gi, `href="/${language}/publications/blog/`);
+    const pHtml = `${content.replace(/href="\/publications\/blog\//gi, `href="/${language}/publications/blog/`)} <div class="fade-text"></div>`;
 
     return (
       <div key={url} className="post">
@@ -38,7 +43,13 @@ class BlogFeed extends Component {
         </Header>
         <Segment basic>
           <div className="entry" dangerouslySetInnerHTML={{ __html: pHtml }} />
+          {
+            snippetVersion ? <Link to={internalUrl}>{t('publications.read-more')}</Link> : null
+          }
         </Segment>
+        {
+          snippetVersion ? <Divider /> : null
+        }
       </div>
     );
   };
