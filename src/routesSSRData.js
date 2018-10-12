@@ -321,7 +321,7 @@ export const topicsPage = (store, match) => {
     store.sagaMiddleWare.run(tagsSagas.fetchDashboard, tagsActions.fetchDashboard(tagID)).done,
     // store.sagaMiddleWare.run(tagsSagas.fetchTags, tagsActions.fetchTags).done
   ]);
-}
+};
 
 export const blogListPage = (store, match) => {
   // hydrate filters

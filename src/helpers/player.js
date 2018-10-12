@@ -211,8 +211,8 @@ function setMediaTypeInQuery(history, mediaType = MT_VIDEO) {
 
 function getLanguageFromQuery(location, fallbackLanguage = LANG_ENGLISH) {
   const query    = getQuery(location);
-  const language = query.language || fallbackLanguage;
-  return language ? language.toLowerCase() : null;
+  const language = query.language || fallbackLanguage || LANG_ENGLISH;
+  return language.toLowerCase();
 }
 
 function setLanguageInQuery(history, language) {
