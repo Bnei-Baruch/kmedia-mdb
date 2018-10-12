@@ -184,6 +184,7 @@
     "search": "Explore the wisdom of Kabbalah",
     "sections": "Archive Sections",
     "updates": "Latest Updates",
+    "social": "Rav Laitman in Socail networks",
     "last-lesson": "The Latest Daily Lesson",
     "donate": "DONATE NOW",
     "promoted": {
@@ -309,7 +310,8 @@
           "title": "Other published articles in this collection"
         }
       }
-    }
+    },
+    "read-more": "Read more"
   },
   "simple-mode": {
     "header": {

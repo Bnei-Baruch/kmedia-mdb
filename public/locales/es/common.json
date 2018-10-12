@@ -182,6 +182,7 @@
     "search": "Descubre la sabiduría de la Cabalá",
     "sections": "Temas",
     "updates": "Actualizaciones recientes",
+    "social": "Rav Laitman en las redes sociales",
     "last-lesson": "Lección diaria de Cabalá",
     "promoted": {
       "header": "Artículos para el mes de Elul y Rosh HaShaná",
@@ -306,7 +307,8 @@
           "title": "Más artículos de la misma colección"
         }
       }
-    }
+    },
+    "read-more": "Lee mas"
   },
   "simple-mode": {
     "header": {

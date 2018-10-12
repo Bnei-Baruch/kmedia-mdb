@@ -183,6 +183,7 @@
     "search": "Öffne die Kabbala",
     "sections": "Sektionen archivieren",
     "updates": "Neueste Updates",
+    "social": "Rav Laitman in sozialen Netzwerken",
     "last-lesson": "Die letzte Lektion",
     "donate": "SPENDEN",
     "promoted": {
@@ -307,7 +308,8 @@
           "title": "Die übrigen Teile des gleichen Programms"
         }
       }
-    }
+    },
+    "read-more": "Weiterlesen"
   },
   "simple-mode": {
     "header": {
