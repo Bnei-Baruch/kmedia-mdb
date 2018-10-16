@@ -10,6 +10,7 @@ class BlogFeed extends Component {
   static propTypes = {
     items: PropTypes.arrayOf(shapes.BlogPost),
     snippetVersion: PropTypes.bool,
+    limitLength: PropTypes.number,
     t: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
   };
@@ -17,6 +18,7 @@ class BlogFeed extends Component {
   static defaultProps = {
     items: [],
     snippetVersion: false,
+    limitLength: null
   };
 
   renderItem = (item) => {
@@ -55,11 +57,12 @@ class BlogFeed extends Component {
   };
 
   render() {
-    const { items } = this.props;
+    const { items, limitLength } = this.props;
+    const length                 = limitLength || items.length;
 
     return (
       <div className="blog-posts">
-        {items.map(this.renderItem)}
+        {items.slice(0, length).map(this.renderItem)}
       </div>
     );
   }
