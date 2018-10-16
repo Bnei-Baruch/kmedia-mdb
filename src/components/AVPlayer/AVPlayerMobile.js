@@ -111,6 +111,7 @@ class AVPlayerMobile extends PureComponent {
     // prior to media element presence on the page
     this.wasCurrentTime = this.media.currentTime;
     this.props.onSwitchAV(...params);
+    this.media.autoplay = true;
   };
 
   // Remember the current time and playing state while switching.
@@ -173,6 +174,9 @@ class AVPlayerMobile extends PureComponent {
 
   seekIfNeeded = () => {
     const { sliceStart, firstSeek, playbackRate } = this.state;
+    if (firstSeek) {
+      this.media.autoplay = true;
+    }
     if (this.wasCurrentTime) {
       this.seekTo(this.wasCurrentTime, true);
       this.wasCurrentTime    = undefined;
@@ -184,10 +188,10 @@ class AVPlayerMobile extends PureComponent {
         if (savedTime) {
           this.seekTo(savedTime, true);
         }
-      }
-      this.setState({ firstSeek: false });
+      }      
     }
     this.media.playbackRate = playbackToValue(playbackRate);
+    this.setState({ firstSeek: false });    
   };
 
   // handlePlaying = () => {
@@ -368,21 +372,23 @@ class AVPlayerMobile extends PureComponent {
       mediaEl = (
         <video
           controls
+          autoPlay
           playsInline
           ref={this.handleMediaRef}
           src={item.src}
           preload="metadata"
           poster={item.preImageUrl}
-        />
+        ></video>
       );
     } else {
       mediaEl = (
         <audio
           controls
+          autoPlay
           ref={this.handleMediaRef}
           src={item.src}
           preload="metadata"
-        />
+        ></audio>
       );
     }
 
