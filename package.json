@@ -9,8 +9,6 @@
   },
   "scripts": {
     "analyze": "yarn build:production && source-map-explorer build/static/js/main.*",
-    "cosmos": "cosmos",
-    "cosmos::export": "cosmos-export",
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "node-sass-chokidar src/ -o src/ --watch --recursive",
     "critical-css": "npx postcss src/stylesheets/Kmedia.css --use autoprefixer --use cssnano --no-map -o build/critical.css",
