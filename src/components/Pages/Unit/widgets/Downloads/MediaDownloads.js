@@ -4,22 +4,9 @@ import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Grid, Header, Table } from 'semantic-ui-react';
 
-import {
-  CT_ARTICLE,
-  CT_FULL_LESSON,
-  CT_KITEI_MAKOR,
-  CT_LELO_MIKUD,
-  CT_LESSON_PART,
-  CT_PUBLICATION,
-  CT_VIDEO_PROGRAM_CHAPTER,
-  MT_AUDIO,
-  MT_IMAGE,
-  MT_TEXT,
-  MT_VIDEO,
-  VS_NAMES
-} from '../../../../../helpers/consts';
+import { CT_ARTICLE, CT_FULL_LESSON, CT_KITEI_MAKOR, CT_LELO_MIKUD, CT_LESSON_PART, CT_PUBLICATION, CT_VIDEO_PROGRAM_CHAPTER, MT_AUDIO, MT_IMAGE, MT_TEXT, MT_VIDEO, VS_NAMES } from '../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
-import { physicalFile } from '../../../../../helpers/utils';
+import { equal, physicalFile } from '../../../../../helpers/utils';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors } from '../../../../../redux/modules/publications';
 import * as shapes from '../../../../shapes';
@@ -65,13 +52,8 @@ class MediaDownloads extends Component {
     const { unit, contentLanguage, language: uiLanguage } = nextProps;
     const { props, state }                                = this;
 
-    // no change
-    if (unit === props.unit && uiLanguage === props.language && contentLanguage === props.contentLanguage) {
-      return;
-    }
-
     // only language changed
-    if (unit === props.unit && ((uiLanguage !== props.language) || (contentLanguage !== props.contentLanguage))) {
+    if (equal(unit, props.unit) && ((uiLanguage !== props.language) || (contentLanguage !== props.contentLanguage))) {
       const language = selectSuitableLanguage(contentLanguage, uiLanguage, this.state.languages);
       if (language !== this.state.language) {
         this.setState({ language });
@@ -85,11 +67,18 @@ class MediaDownloads extends Component {
     const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
 
     let { derivedGroups } = state;
-    if (unit.derived_units !== props.unit.derived_units) {
+    if (!equal(unit.derived_units, props.unit.derived_units)) {
       derivedGroups = this.getDerivedFilesByContentType(unit.derived_units);
     }
 
     this.setState({ groups, derivedGroups, languages, language, });
+  }
+
+  shouldComponentUpdate(nextProps) {
+    const { unit, contentLanguage, language: uiLanguage } = nextProps;
+    const { props }                                       = this;
+
+    return !(equal(unit, props.unit) && uiLanguage === props.language && contentLanguage === props.contentLanguage);
   }
 
   getFilesByLanguage = (files = []) => {
@@ -214,7 +203,7 @@ class MediaDownloads extends Component {
 
   render() {
     const { t, publisherById }                = this.props;
-    const { language, groups, derivedGroups } = this.state;
+    const { language, languages, groups, derivedGroups } = this.state;
     const byType                              = groups.get(language) || new Map();
     const kiteiMakor                          = derivedGroups[CT_KITEI_MAKOR];
     const kiteiMakorByType                    = (kiteiMakor && kiteiMakor.get(language)) || new Map();
@@ -284,7 +273,7 @@ class MediaDownloads extends Component {
             </Grid.Column>
             <Grid.Column>
               <DropdownLanguageSelector
-                languages={Array.from(groups.keys())}
+                languages={languages}
                 defaultValue={language}
                 onSelect={this.handleChangeLanguage}
               />
