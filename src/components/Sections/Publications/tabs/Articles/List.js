@@ -8,7 +8,7 @@ import { ellipsize } from '../../../../../helpers/strings';
 import UnitList from '../../../../Pages/UnitList/Container';
 import Link from '../../../../Language/MultiLanguageLink';
 
-export const renderUnit = (unit, t) => {
+const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
   const articles  = breakdown.getArticles();
 
@@ -61,7 +61,7 @@ class ArticlesList extends Component {
         <UnitList
           namespace="publications-articles"
           extraFetchParams={this.extraFetchParams}
-          renderUnit={this.renderUnit}
+          renderUnit={renderUnit}
         />
       </div>
     );

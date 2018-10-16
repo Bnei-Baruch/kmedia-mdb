@@ -10,7 +10,7 @@ class DropdownLanguageSelector extends BaseLanguageSelector {
     this.props.onSelect(e, data.value);
 
   render() {
-    const { defaultValue } = this.props;
+    const { defaultValue: value } = this.props;
     const options          = this.getOptions(this.props);
 
     return (
@@ -21,7 +21,7 @@ class DropdownLanguageSelector extends BaseLanguageSelector {
         selection
         scrolling
         className="dropdown-language-selector"
-        defaultValue={defaultValue}
+        value={value}
         options={options}
         onChange={this.handleSelect}
       />

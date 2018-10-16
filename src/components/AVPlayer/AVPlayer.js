@@ -542,7 +542,7 @@ class AVPlayer extends PureComponent {
     let centerMediaControl;
     if (error) {
       centerMediaControl = (
-        <div className="player-button">
+        <div className="player-button player-error-message">
           {t('player.error.loading')}
           {errorReason ? ` ${errorReason}` : ''}
           &nbsp;
