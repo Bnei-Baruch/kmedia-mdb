@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Header, Image } from 'semantic-ui-react';
 
-import img from '../../../images/rosh_shana.jpg';
+import img from '../../../images/virtual_congress.jpg';
+// import img from '../../../images/rosh_shana.jpg';
 // import img from '../../../images/KKLO_ITALY_18_logo2.svg';
 // import img from '../../../images/archive_banner.jpg';
 
@@ -25,7 +26,7 @@ class Promoted extends Component {
     return (
       <div className="thumbnail">
         <a
-          href="https://docs.google.com/document/d/1cdk8Bw1-L6D5lNsAknQzXgzJ-uDsywBEPTvO9Ttsmk4/edit#"
+          href="https://sites.google.com/view/worldvirtualcongress"
           target="_blank"
           rel="noopener noreferrer"
         >
