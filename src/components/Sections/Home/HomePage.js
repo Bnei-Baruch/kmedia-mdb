@@ -139,24 +139,36 @@ class HomePage extends Component {
           </Container>
         </div>
 
-        <div className="homepage__section">
-          <Container className="padded horizontally">
+        <div className="homepage__section home-social-section">
+          <Container className="padded horizontally ">
             <Section title={t('home.social')}>
               <Grid width={15} centered className="homepage__iconsrow">
                 <Grid.Row>
                   {
                     latestBlogPosts.length ?
-                      <Grid.Column mobile={16} tablet={12} computer={12} className="home-blog-posts">
-                        <h4>{t('home.blog-title')}</h4>
+                      <Grid.Column mobile={16} tablet={11} computer={11} className="home-blog-posts">
+                        <div className="titles">
+                          <h4>{t('home.blog-title')}</h4>
+                          <a href={`/${language}/publications/blog`}>{t('home.all-posts')}</a>
+                        </div>
                         <BlogFeed items={latestBlogPosts} language={language} t={t} snippetVersion limitLength={4} />
+                        <div className="read-more-bottom">
+                          <a href={`/${language}/publications/blog`}>{t('home.read-more-posts')}</a>
+                        </div>
                       </Grid.Column> :
                       null
                   }
                   {
                     latestTweets.length ?
-                      <Grid.Column mobile={16} tablet={4} computer={4}>
-                        <h4>{t('home.twitter-title')}</h4>
-                        <TwitterFeed tweets={latestTweets} t={t} /> :
+                      <Grid.Column mobile={16} tablet={5} computer={5} className="home-twitter">
+                        <div className="titles">
+                          <h4>{t('home.twitter-title')}</h4>
+                          <a href={`/${language}/publications/twitter`}>{t('home.all-tweets')}</a>
+                        </div>
+                        <TwitterFeed tweets={latestTweets} t={t} snippetVersion limitLength={4} />
+                        <div className="read-more-bottom">
+                          <a href={`/${language}/publications/twitter`}>{t('home.read-more-tweets')}</a>
+                        </div>
                       </Grid.Column> :
                       null
                   }
