@@ -41,6 +41,10 @@
       "start": "התחלה",
       "end": "סיום"
     },
+    "language-filter": {
+      "label": "שפה",
+      "all": "כל שפה"
+    },
     "sources-filter": {
       "label": "מקורות",
       "all": "כל המקורות"
@@ -80,7 +84,8 @@
       "programs": "תוכניות",
       "events": "כנסים ואירועים",
       "publications": "פרסומים",
-      "sources": "מקורות"
+      "sources": "מקורות",
+      "posts": "בלוג"
     }
   },
   "buttons": {
@@ -144,15 +149,6 @@
       "relevance": "רלונטיות",
       "newertoolder": "חדש לישן",
       "oldertonewer": "ישן לחדש"
-    },
-    "suggestions": {
-      "categories": {
-        "search": "חיפוש",
-        "tags": "נושאים",
-        "sources": "מקורות",
-        "authors": "מחברים",
-        "persons": "אנשים"
-      }
     },
     "results": {
       "empty-query": "לא הוזן טקסט לחיפוש. השתמש בתיבת החיפוש למעלה.",

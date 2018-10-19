@@ -22,8 +22,8 @@ exports[`FrownSplash matches snapshot 1`] = `
 
 exports[`LoadingSplash matches snapshot 1`] = `
 <Component
-  color="black"
-  icon="spinner"
+  color="blue"
+  icon="circle notch"
   isLoading={true}
   subtext={null}
   text="Still loading..."
@@ -38,42 +38,45 @@ exports[`Splash Renders the same as the last time Matches snapshot 1`] = `
   subtext="No response from server"
   text="Server Error"
 >
-  <Header
-    as="h2"
+  <div
     className="splash"
-    icon={true}
-    textAlign="center"
   >
-    <h2
-      className="ui icon center aligned header splash"
+    <Header
+      as="h2"
+      icon={true}
+      textAlign="center"
     >
-      <Icon
-        as="i"
-        color="red"
-        loading={false}
-        name="warning sign"
+      <h2
+        className="ui icon center aligned header"
       >
-        <i
-          aria-hidden="true"
-          className="red warning sign icon"
-        />
-      </Icon>
-      <HeaderContent>
-        <div
-          className="content"
+        <Icon
+          as="i"
+          color="red"
+          loading={false}
+          name="warning sign"
         >
-          Server Error
-          <HeaderSubheader>
-            <div
-              className="sub header"
-            >
-              No response from server
-            </div>
-          </HeaderSubheader>
-        </div>
-      </HeaderContent>
-    </h2>
-  </Header>
+          <i
+            aria-hidden="true"
+            className="red warning sign icon"
+          />
+        </Icon>
+        <HeaderContent>
+          <div
+            className="content"
+          >
+            Server Error
+            <HeaderSubheader>
+              <div
+                className="sub header"
+              >
+                No response from server
+              </div>
+            </HeaderSubheader>
+          </div>
+        </HeaderContent>
+      </h2>
+    </Header>
+  </div>
 </Component>
 `;
 
@@ -85,34 +88,37 @@ exports[`Splash Renders the same as the last time Matches snapshot 2`] = `
   subtext={null}
   text="Server Error"
 >
-  <Header
-    as="h2"
+  <div
     className="splash"
-    icon={true}
-    textAlign="center"
   >
-    <h2
-      className="ui icon center aligned header splash"
+    <Header
+      as="h2"
+      icon={true}
+      textAlign="center"
     >
-      <Icon
-        as="i"
-        color="red"
-        loading={true}
-        name="spinner"
+      <h2
+        className="ui icon center aligned header"
       >
-        <i
-          aria-hidden="true"
-          className="red spinner loading icon"
-        />
-      </Icon>
-      <HeaderContent>
-        <div
-          className="content"
+        <Icon
+          as="i"
+          color="red"
+          loading={true}
+          name="spinner"
         >
-          Server Error
-        </div>
-      </HeaderContent>
-    </h2>
-  </Header>
+          <i
+            aria-hidden="true"
+            className="red spinner loading icon"
+          />
+        </Icon>
+        <HeaderContent>
+          <div
+            className="content"
+          >
+            Server Error
+          </div>
+        </HeaderContent>
+      </h2>
+    </Header>
+  </div>
 </Component>
 `;

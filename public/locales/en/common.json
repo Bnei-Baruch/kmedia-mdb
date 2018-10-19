@@ -42,6 +42,10 @@
       "start": "Start",
       "end": "End"
     },
+    "language-filter": {
+      "label": "Language",
+      "all": "Any Language"
+    },
     "sources-filter": {
       "label": "Sources",
       "all": "All Sources"
@@ -82,7 +86,8 @@
       "programs": "Programs",
       "events": "Conventions & Events",
       "publications": "Publications",
-      "sources": "Sources"
+      "sources": "Sources",
+      "posts": "Blog"
     }
   },
   "buttons": {
@@ -146,15 +151,6 @@
       "relevance": "relevance",
       "newertoolder": "newer to older",
       "oldertonewer": "older to newer"
-    },
-    "suggestions": {
-      "categories": {
-        "search": "Search",
-        "tags": "Tags",
-        "sources": "Sources",
-        "authors": "Authors",
-        "persons": "Persons"
-      }
     },
     "results": {
       "empty-query": "No search term given. Please use the box above to search.",

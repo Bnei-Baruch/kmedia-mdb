@@ -41,6 +41,10 @@
       "start": "Inicio",
       "end": "Final"
     },
+    "language-filter": {
+      "label": "Idioma",
+      "all": "Cualquier Idioma"
+    },
     "sources-filter": {
       "label": "Fuentes",
       "all": "Todos Los Fuentes"
@@ -80,7 +84,8 @@
       "programs": "Programas",
       "events": "Congresos y Eventos",
       "publications": "Publicaciones",
-      "sources": "Fuentes"
+      "sources": "Fuentes",
+      "posts": "Blog"
     }
   },
   "buttons": {
@@ -144,15 +149,6 @@
       "relevance": "Relevante",
       "newertoolder": "Nuevo a viejo",
       "oldertonewer": "Viejo a nuevo"
-    },
-    "suggestions": {
-      "categories": {
-        "search": "Buscar",
-        "tags": "Temas",
-        "sources": "Fuentes",
-        "authors": "Autores",
-        "persons": "Personas"
-      }
     },
     "results": {
       "empty-query": "No se ingresó texto de búsqueda. Use el cuadro de búsqueda de arriba.",

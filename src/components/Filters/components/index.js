@@ -8,6 +8,7 @@ import TopicsFilter from './TopicsFilter';
 import PublishersFilter from './PublishersFilter';
 import YearsFilter from './YearsFilter';
 import CollectionsFilter from './CollectionsFilter';
+import LanguageFilter from './LanguageFilter';
 
 export default {
   DateFilter,
@@ -20,4 +21,5 @@ export default {
   PublishersFilter,
   YearsFilter,
   CollectionsFilter,
+  LanguageFilter,
 };

@@ -37,6 +37,10 @@ import {
   CT_WOMEN_LESSON,
   CT_WOMEN_LESSONS,
   EVENT_TYPES,
+  BLOG_ID_LAITMAN_RU,
+  BLOG_ID_LAITMAN_COM,
+  BLOG_ID_LAITMAN_ES,
+  BLOG_ID_LAITMAN_CO_IL,
 } from './consts';
 
 export const sectionLink = (section, filters) => {
@@ -56,7 +60,7 @@ export const sectionLink = (section, filters) => {
   return `/${section}?${urlSearchStringify(query)}`;
 };
 
-export const canonicalLink = (entity) => {
+export const canonicalLink = (entity, mediaLang) => {
   if (!entity) {
     return '/';
   }
@@ -64,6 +68,31 @@ export const canonicalLink = (entity) => {
   // source
   if (entity.content_type === 'SOURCE') {
     return `/sources/${entity.id}`;
+  }
+
+  if (entity.content_type === 'POST') {
+
+    const [blogID, postID] = entity.id.split("-");
+    let blogName;
+
+    switch (parseInt(blogID)){
+      case BLOG_ID_LAITMAN_RU:
+        blogName = 'laitman-ru';
+        break;
+      case BLOG_ID_LAITMAN_COM:
+        blogName = 'laitman-com';
+        break;
+      case BLOG_ID_LAITMAN_ES:
+        blogName = 'laitman-es';
+        break;
+      case BLOG_ID_LAITMAN_CO_IL:
+        blogName = 'laitman-co-il';
+        break;
+      default:
+        blogName = 'laitman-co-il';
+    }
+
+    return `/publications/blog/${blogName}/${postID}`;
   }
 
   // collections
@@ -104,6 +133,8 @@ export const canonicalLink = (entity) => {
     return `/events/cu/${entity.id}`;
   }
 
+  const mediaLangSuffix = mediaLang ? `?language=${mediaLang}` : ``;
+
   // unit based on type
   switch (entity.content_type) {
   case CT_LESSON_PART:
@@ -111,16 +142,16 @@ export const canonicalLink = (entity) => {
   case CT_VIRTUAL_LESSON:
   case CT_WOMEN_LESSON:
   // case CT_CHILDREN_LESSON:
-    return `/lessons/cu/${entity.id}`;
+    return `/lessons/cu/${entity.id}${mediaLangSuffix}`;
   case CT_VIDEO_PROGRAM_CHAPTER:
-    return `/programs/cu/${entity.id}`;
+    return `/programs/cu/${entity.id}${mediaLangSuffix}`;
   case CT_EVENT_PART:
   case CT_FULL_LESSON:
   case CT_FRIENDS_GATHERING:
   case CT_MEAL:
-    return `/events/cu/${entity.id}`;
+    return `/events/cu/${entity.id}${mediaLangSuffix}`;
   case CT_ARTICLE:
-    return `/publications/articles/cu/${entity.id}`;
+    return `/publications/articles/cu/${entity.id}?${mediaLangSuffix}`;
   case CT_UNKNOWN:
   case CT_CLIP:
   case CT_TRAINING:

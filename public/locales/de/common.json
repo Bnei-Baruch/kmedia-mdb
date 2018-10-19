@@ -42,6 +42,10 @@
       "start": "Start",
       "end": "Ende"
     },
+    "language-filter": {
+      "label": "Sprache",
+      "all": "Jede Sprache"
+    },
     "sources-filter": {
       "label": "Primäre Quellen",
       "all": "Alle Quellen"
@@ -145,15 +149,6 @@
       "relevance": "Relevanz",
       "newertoolder": "Neuere Ergebnisse zuerst anzeigen",
       "oldertonewer": "Ältere Ergebnisse zuerst anzeigen"
-    },
-    "suggestions": {
-      "categories": {
-        "search": "Suche",
-        "tags": "Tags",
-        "sources": "Primäre Quellen",
-        "authors": "Autoren",
-        "persons": "Personen"
-      }
     },
     "results": {
       "empty-query": "Geben Sie Ihre Anfrage in das obige Feld ein, um die Suche zu starten.",
