@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Feed } from 'semantic-ui-react';
+import { Divider, Feed, Image } from 'semantic-ui-react';
+import twitterAvatar from '../../../../../images/ml_twitter_avatar.jpeg';
 
 import { isEmpty } from '../../../../../helpers/utils';
 import * as shapes from '../../../../shapes';
@@ -16,10 +17,14 @@ const screenNames = {
 class TwitterFeed extends Component {
   static propTypes = {
     tweets: PropTypes.arrayOf(shapes.Tweet),
+    snippetVersion: PropTypes.bool,
+    limitLength: PropTypes.number
   };
 
   static defaultProps = {
     tweets: [],
+    snippetVersion: false,
+    limitLength: null
   };
 
   getBestVideoVariant = (x) => {
@@ -124,42 +129,52 @@ class TwitterFeed extends Component {
 
     const screenName = screenNames[username];
 
+    const { snippetVersion } = this.props;
+
     return (
-      <Feed.Event key={tID} className="tweet">
-        <Feed.Content>
-          <Feed.Summary>
-            <a href={`https://twitter.com/${username}`} target="_blank" rel="noopener noreferrer">
-              {screenName}
-              &nbsp;&nbsp;
-              <span className="tweet--username">
+      <div>
+        <Feed.Event key={tID} className="tweet">
+          <Feed.Content>
+            <Feed.Summary className="tweet-title-wrapper">
+              {snippetVersion ? <Image className="twitter-avatar" src={twitterAvatar} /> : null}
+              <a href={`https://twitter.com/${username}`} target="_blank" rel="noopener noreferrer" className="tweet-title">
+                {screenName}
+                <span className="tweet--username">
                 @{username}
               </span>
-            </a>
-            <Feed.Date>
-              <a
-                href={`https://twitter.com/${username}/status/${tID}`}
-                title={mts.format('lll')}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {mts.format('lll')}
               </a>
-            </Feed.Date>
-          </Feed.Summary>
-          <Feed.Extra text>
-            <div dangerouslySetInnerHTML={{ __html: this.prepare(raw) }} />
-          </Feed.Extra>
-        </Feed.Content>
-      </Feed.Event>
+              {
+                !snippetVersion ?
+                  <Feed.Date>
+                    <a
+                      href={`https://twitter.com/${username}/status/${tID}`}
+                      title={mts.format('lll')}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {mts.format('lll')}
+                    </a>
+                  </Feed.Date>
+                  : null
+              }
+            </Feed.Summary>
+            <Feed.Extra text>
+              <div dangerouslySetInnerHTML={{ __html: this.prepare(raw) }} />
+            </Feed.Extra>
+          </Feed.Content>
+        </Feed.Event>
+        {snippetVersion ? <Divider fitted /> : null}
+      </div>
     );
   };
 
   render() {
-    const { tweets } = this.props;
+    const { tweets, limitLength } = this.props;
+    const length                  = limitLength || tweets.length;
 
     return (
       <Feed>
-        {tweets.map(this.renderTweet)}
+        {tweets.slice(0, length).map(this.renderTweet)}
       </Feed>
     );
   }
