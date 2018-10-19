@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
+import classNames from 'classnames';
 
 import { MT_AUDIO, MT_VIDEO } from '../../../../../helpers/consts';
 import playerHelper from '../../../../../helpers/player';
@@ -135,7 +136,7 @@ class PlaylistAVBox extends Component {
   render() {
     const { t, PlayListComponent, language, nextLink, prevLink } = this.props;
     const { playlist, selected }                                 = this.state;
-
+    const isAudio = playlist.items[selected].mediaType === MT_AUDIO;
     if (!playlist ||
       !Array.isArray(playlist.items) ||
       playlist.items.length === 0) {
@@ -143,8 +144,12 @@ class PlaylistAVBox extends Component {
     }
 
     return (
-      <Grid.Row>
-        <Grid.Column mobile={16} tablet={10} computer={10}>
+      <Grid.Row
+      className={classNames('', {
+        'layout--is-audio': isAudio,
+      })}
+      >
+        <Grid.Column id="avbox__player" mobile={16} tablet={10} computer={10}>
           <AVPlaylistPlayer
             items={playlist.items}
             selected={selected}
@@ -155,7 +160,7 @@ class PlaylistAVBox extends Component {
             t={t}
           />
         </Grid.Column>
-        <Grid.Column className="avbox__playlist" mobile={16} tablet={6} computer={6}>
+        <Grid.Column id="avbox__playlist" className="avbox__playlist" mobile={16} tablet={6} computer={6}>
           <PlayListComponent
             playlist={playlist}
             selected={selected}
