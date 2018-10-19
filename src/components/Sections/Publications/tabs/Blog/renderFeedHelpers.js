@@ -14,12 +14,11 @@ export const renderBlogItemForHomepage = (item, language, t) => {
   return (
     <div key={url} className="post">
       <Header color="blue">
-        <a href={internalUrl} dangerouslySetInnerHTML={{ __html: title }} />
+        <a className="remove-indent" href={internalUrl} dangerouslySetInnerHTML={{ __html: title }} />
       </Header>
       <div>
         <div className="entry" dangerouslySetInnerHTML={{ __html: pHtml }} />
-        <p></p>
-        <Link className="read-more-link" to={internalUrl}>{t('publications.read-more')}</Link>
+        <Link className="read-more-link remove-indent" to={internalUrl}>{t('publications.read-more')}</Link>
       </div>
       <Divider />
     </div>
