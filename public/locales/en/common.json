@@ -266,7 +266,11 @@
   "programs": {
     "header": {
       "text": "Programs",
-      "subtext": "Here you will find a rich variety of programs that include: fascinating conversations about the meaning of life, current events, programs for the whole family and more."
+      "subtext": "Here you will find a rich variety of programs that include: fascinating conversations about the meaning of life, current events, programs for the whole family, clips and more."
+    },
+    "tabs": {
+      "main": "Programs",
+      "clips": "Clips"
     },
     "genres": {
       "documentary": "Documentary",
@@ -279,7 +283,8 @@
       "other": "Other"
     },
     "list": {
-      "episode_from": "Episode from:"
+      "episode_from": "Episode from:",
+      "item_of": "Item of:"
     },
     "unit": {
       "recommended": {

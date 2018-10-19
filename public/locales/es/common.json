@@ -265,6 +265,10 @@
       "text": "Programas",
       "subtext": "Aquí encontrará una gran variedad de programas que incluyen: conversaciones fascinantes sobre el significado de la vida, eventos actuales, programas para toda la familia y más."
     },
+    "tabs": {
+      "main": "Programas",
+      "clips": "Clips"
+    },
     "genres": {
       "documentary": "Documental",
       "late-night": "Tarde en la Noche",
@@ -276,7 +280,8 @@
       "other": "Otro"
     },
     "list": {
-      "episode_from": "Capítulo del programa:"
+      "episode_from": "Capítulo del programa:",
+      "item_of": "Parte de:"
     },
     "unit": {
       "recommended": {

@@ -266,6 +266,10 @@
       "text": "Programme",
       "subtext": "Hier finden Sie eine große Auswahl an Programmen, darunter: interessante Gespräche über den Sinn des Lebens, relevante Themen, Programme für die ganze Familie, usw."
     },
+    "tabs": {
+      "main": "Programs",
+      "clips": "Clips"
+    },
     "genres": {
       "documentary": "Dokumentationen",
       "late-night": "Nachtprogramme",
@@ -277,7 +281,8 @@
       "other": "Sonstiges"
     },
     "list": {
-      "episode_from": "Folge von:"
+      "episode_from": "Folge von:",
+      "item_of": "Teil von:"
     },
     "unit": {
       "recommended": {
