@@ -122,14 +122,11 @@ class TwitterFeed extends Component {
   };
 
   renderTweet = (tweet) => {
-    const {
-            username, twitter_id: tID, created_at: ts, raw
-          }   = tweet;
-    const mts = moment(ts);
-
-    const screenName = screenNames[username];
-
-    const { snippetVersion } = this.props;
+    const { username, twitter_id: tID, created_at: ts, raw } = tweet;
+    const mts                                                = moment(ts);
+    const screenName                                         = screenNames[username];
+    const { snippetVersion }                                 = this.props;
+    const url                                                = snippetVersion ? `https://twitter.com/${username}/status/${tID}` : `https://twitter.com/${username}`;
 
     return (
       <React.Fragment>
@@ -137,7 +134,7 @@ class TwitterFeed extends Component {
           <Feed.Content>
             <Feed.Summary className="tweet-title-wrapper">
               {snippetVersion ? <Image className="twitter-avatar" src={twitterAvatar} /> : null}
-              <a href={`https://twitter.com/${username}`} target="_blank" rel="noopener noreferrer" className="tweet-title">
+              <a href={url} target="_blank" rel="noopener noreferrer" className="tweet-title">
                 {screenName}
                 <span className="tweet--username">
                 @{username}
@@ -160,6 +157,7 @@ class TwitterFeed extends Component {
             </Feed.Summary>
             <Feed.Extra text>
               <div dangerouslySetInnerHTML={{ __html: this.prepare(raw) }} />
+              {snippetVersion ? <div className="tweet-friendly-date">{mts.fromNow()}</div> : null}
             </Feed.Extra>
           </Feed.Content>
         </Feed.Event>

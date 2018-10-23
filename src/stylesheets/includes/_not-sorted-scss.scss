@@ -909,6 +909,12 @@
     margin-bottom: 0 !important;
   }
 
+  .tweet-friendly-date {
+    text-align: right;
+    color: rgba(118, 118, 118, 0.75);
+    margin-top: 5px;
+  }
+
   .divider {
     margin-bottom: 25px !important;
 
@@ -924,5 +930,9 @@
       padding-right: 0 !important;
       padding-left: 4px !important;
     }
+  }
+
+  .tweet-friendly-date {
+    text-align: left;
   }
 }
