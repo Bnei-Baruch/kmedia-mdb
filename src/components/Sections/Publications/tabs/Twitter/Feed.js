@@ -132,7 +132,7 @@ class TwitterFeed extends Component {
     const { snippetVersion } = this.props;
 
     return (
-      <div>
+      <React.Fragment>
         <Feed.Event key={tID} className="tweet">
           <Feed.Content>
             <Feed.Summary className="tweet-title-wrapper">
@@ -164,7 +164,7 @@ class TwitterFeed extends Component {
           </Feed.Content>
         </Feed.Event>
         {snippetVersion ? <Divider fitted /> : null}
-      </div>
+      </React.Fragment>
     );
   };
 
