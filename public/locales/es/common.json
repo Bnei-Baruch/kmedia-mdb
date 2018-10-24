@@ -311,7 +311,7 @@
   "simple-mode": {
     "header": {
       "text": "Descargas - Versión simple",
-      "subtext": "Concentrar todos los medios para un día específico"
+      "subtext": "Todos los medios de comunicación para un día determinado"
     },
     "today-button": "hoy",
     "total-media-for-date": "Todos los medios para la fecha ",
