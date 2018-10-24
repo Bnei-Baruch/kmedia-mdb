@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { translate } from 'react-i18next';
 
 import { getQuery, updateQuery } from '../../../helpers/url';
-import { isEmpty } from '../../../helpers/utils';
+import { equal, isEmpty } from '../../../helpers/utils';
 import { selectors as device } from '../../../redux/modules/device';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -23,7 +23,8 @@ class SimpleModeContainer extends Component {
     items: shapes.SimpleMode,
     wip: shapes.WIP,
     err: shapes.Error,
-    language: PropTypes.string.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     fetchForDate: PropTypes.func.isRequired,
     deviceInfo: shapes.UserAgentParserResults.isRequired,
@@ -36,15 +37,12 @@ class SimpleModeContainer extends Component {
     err: null,
   };
 
-  state = {
-    filesLanguage: '',
-  };
-
-  componentWillMount() {
-    if (!this.state.filesLanguage) {
-      const filesLanguage = this.props.language;
-      this.setState({ filesLanguage });
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      filesLanguage: this.props.contentLanguage,
+      isMobileDevice: this.isMobileDevice(),
+    };
   }
 
   componentDidMount() {
@@ -57,34 +55,43 @@ class SimpleModeContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.state.filesLanguage) {
-      const filesLanguage = nextProps.language;
-      this.setState({ filesLanguage });
+    if (this.state.filesLanguage !== nextProps.contentLanguage) {
+      this.setState({ filesLanguage: nextProps.contentLanguage });
     }
-
-    if (this.props.language !== nextProps.language) {
+    if (this.props.uiLanguage !== nextProps.uiLanguage) {
       this.handleDayClick(this.state.date, {}, nextProps);
     }
   }
 
-  handleLanguageChanged = (e, filesLanguage) => {
-    if (filesLanguage) {
-      this.setState({ filesLanguage });
-      return;
-    }
+  shouldComponentUpdate(nextProps, nextState) {
+    const { items, uiLanguage, contentLanguage, wip, err, } = nextProps;
+    const { filesLanguage }                                 = nextState;
+    const { props, state }                                  = this;
 
-    this.setState({ filesLanguage: e.currentTarget.value });
+    return !(
+      uiLanguage === props.uiLanguage &&
+      filesLanguage === state.filesLanguage &&
+      contentLanguage === state.filesLanguage &&
+      equal(wip, props.wip) && equal(err, props.err) &&
+      equal(items, props.items)
+    );
+  }
+
+  handleLanguageChanged = (e, filesLanguage) => {
+    const language = filesLanguage || e.currentTarget.value;
+
+    this.setState({ filesLanguage: language });
   };
 
   handleDayClick = (selectedDate, { disabled } = {}, nextProps = {}) => {
     if (disabled) {
-      return null;
+      return;
     }
 
     this.setState({ date: selectedDate });
 
     const date     = moment(selectedDate).format('YYYY-MM-DD');
-    const language = nextProps.language || this.props.language;
+    const language = nextProps.uiLanguage || this.props.uiLanguage;
     this.props.fetchForDate({ date, language });
     updateQuery(this.props.history, query => ({
       ...query,
@@ -96,18 +103,15 @@ class SimpleModeContainer extends Component {
     this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
   renderUnitOrCollection = (item, language, t) => (
-    item.content_units ?
-      renderCollection(item, language, t) :
-      groupOtherMediaByType(item, language, t));
+    isEmpty(item.content_units) ?
+      groupOtherMediaByType(item, language, t) :
+      renderCollection(item, language, t));
 
   render() {
-    const { language }      = this.props;
-    const { filesLanguage } = this.state;
-    const isMobileDevice    = this.isMobileDevice();
-    const pageProps         = {
+    const { filesLanguage, isMobileDevice } = this.state;
+    const pageProps                         = {
       ...this.props,
       selectedDate: this.state.date,
-      uiLanguage: language,
       language: filesLanguage,
       renderUnit: this.renderUnitOrCollection,
       onDayClick: this.handleDayClick,
@@ -128,7 +132,8 @@ export const mapState = (state) => {
     },
     wip: selectors.getWip(state.simpleMode),
     err: selectors.getError(state.simpleMode),
-    language: settings.getLanguage(state.settings),
+    uiLanguage: settings.getLanguage(state.settings),
+    contentLanguage: settings.getContentLanguage(state.settings),
     deviceInfo: device.getDeviceInfo(state.device),
   };
 };
