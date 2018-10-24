@@ -2,15 +2,7 @@ import React from 'react';
 import groupBy from 'lodash/groupBy';
 import { Card, List } from 'semantic-ui-react';
 
-import {
-  CT_ARTICLE,
-  CT_DAILY_LESSON,
-  CT_FULL_LESSON,
-  CT_LESSON_PART,
-  CT_VIDEO_PROGRAM_CHAPTER,
-  NO_NAME,
-  VS_NAMES
-} from '../../../helpers/consts';
+import { CT_ARTICLE, CT_DAILY_LESSON, CT_FULL_LESSON, CT_LESSON_PART, CT_VIDEO_PROGRAM_CHAPTER, NO_NAME, VS_NAMES } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
 import { physicalFile } from '../../../helpers/utils';
 import Link from '../../../components/Language/MultiLanguageLink';
@@ -53,8 +45,7 @@ const renderHorizontalFilesList = (files, contentType, t) =>
     return (
       <List.Item key={file.id} className="media-file-button">
         <List.Content>
-          <a href={url}>{label}</a>
-          <List.Icon name="angle double down" />
+          <a href={url}>{label} <List.Icon name="angle double down" /></a>
         </List.Content>
       </List.Item>
     );
@@ -81,7 +72,7 @@ const renderUnits = (units, language, t) =>
                 files :
                 <span className="no-files">{t('simple-mode.no-files-found-for-lang')}</span>
             }
-            <div className="overflow-gradient"></div>
+            <div className="overflow-gradient" />
           </List.List>
         </List.Content>
       </List.Item>
