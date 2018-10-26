@@ -10,6 +10,7 @@ import { ALL_LANGUAGES } from '../../../helpers/consts';
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 import SectionHeader from '../../shared/SectionHeader';
+import { FrownSplash } from '../../shared/Splash/Splash';
 import DropdownLanguageSelector from '../../Language/Selector/DropdownLanguageSelector';
 import SimpleModeList from './list';
 
@@ -45,9 +46,9 @@ class SimpleModeDesktopPage extends PureComponent {
     const list = WipErr({ wip, err, t }) || (
       <div>
         {
-          items ?
+          (items.lessons.length || items.others.length) ?
             <SimpleModeList items={items} language={language} t={t} renderUnit={renderUnit} /> :
-            null
+            <FrownSplash text={t('simple-mode.no-files-found-for-date')} />
         }
       </div>
     );
@@ -86,12 +87,7 @@ class SimpleModeDesktopPage extends PureComponent {
                     onDayClick={onDayClick}
                   />
                   <Divider />
-                  <Button
-                    onClick={() => {
-                      onDayClick(new Date());
-                    }}
-                    content={t('simple-mode.today-button')}
-                  />
+                  <Button onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
                 </Card>
               </Grid.Column>
             </Grid.Row>

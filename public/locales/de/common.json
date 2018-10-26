@@ -42,6 +42,10 @@
       "start": "Start",
       "end": "Ende"
     },
+    "language-filter": {
+      "label": "Sprache",
+      "all": "Jede Sprache"
+    },
     "sources-filter": {
       "label": "Primäre Quellen",
       "all": "Alle Quellen"
@@ -146,15 +150,6 @@
       "newertoolder": "Neuere Ergebnisse zuerst anzeigen",
       "oldertonewer": "Ältere Ergebnisse zuerst anzeigen"
     },
-    "suggestions": {
-      "categories": {
-        "search": "Suche",
-        "tags": "Tags",
-        "sources": "Primäre Quellen",
-        "authors": "Autoren",
-        "persons": "Personen"
-      }
-    },
     "results": {
       "empty-query": "Geben Sie Ihre Anfrage in das obige Feld ein, um die Suche zu starten.",
       "no-results": "Ihre Abfrage <1><0>{{query}}</0></1> wurde nicht gefunden."
@@ -186,8 +181,8 @@
     "last-lesson": "Die letzte Lektion",
     "donate": "SPENDEN",
     "promoted": {
-      "header": "Artikel für den Monat von Elul und Rosh HaShana",
-      "subheader": ""
+      "header": "Virtueller Kongress",
+      "subheader": "19-21.10.2018"
     }
   },
   "events": {
@@ -322,7 +317,8 @@
     "today-button": "vandaag",
     "total-media-for-date": "Alle media voor datum ",
     "media-language": "Mediataal",
-    "no-files-found": "Er zijn geen bestanden voor de taal die u hebt geselecteerd",
+    "no-files-found-for-lang": "Er zijn geen bestanden voor de taal die u hebt geselecteerd",
+    "no-files-found-for-date": "Es gibt keine Dateien für dieses Datum",
     "date": "Datum",
     "prev": "Bisherige",
     "next": "Nächster"

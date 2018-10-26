@@ -34,6 +34,11 @@ export const CT_TRAINING              = 'TRAINING';
 export const CT_KITEI_MAKOR           = 'KITEI_MAKOR';
 export const CT_PUBLICATION           = 'PUBLICATION';
 export const CT_LELO_MIKUD            = 'LELO_MIKUD';
+export const CT_BLOG_POST             = "BLOG_POST"
+
+// Content types for additional Elastic results
+export const SCT_BLOG_POST = "R_BLOG_POST"
+export const SCT_TWEET     = "R_TWEET"
 
 // Source Types
 export const SRC_COLLECTION = 'COLLECTION';
@@ -217,7 +222,7 @@ export const COLLECTION_PUBLICATIONS_TYPE = [CT_ARTICLES];
 export const UNIT_LESSONS_TYPE            = [CT_LESSON_PART, /* CT_CHILDREN_LESSON, */ CT_WOMEN_LESSON, CT_VIRTUAL_LESSON, CT_FULL_LESSON, CT_LECTURE];
 export const UNIT_PROGRAMS_TYPE           = [CT_VIDEO_PROGRAM_CHAPTER];
 export const UNIT_EVENTS_TYPE             = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
-export const UNIT_PUBLICATIONS_TYPE       = [CT_ARTICLE, CT_PUBLICATION];
+export const UNIT_PUBLICATIONS_TYPE       = [CT_ARTICLE, CT_PUBLICATION, SCT_BLOG_POST, SCT_TWEET];
 
 export const NO_NAME = '☠ no name';
 
@@ -258,6 +263,15 @@ export const COOKIE_UI_LANG    = 'archive_UIlang';
 export const LANG_UI_LANGUAGES = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_GERMAN, LANG_UKRAINIAN];
 
 // Search
+export const ES_RESULT_TYPE_SOURCES = "sources"
+export const ES_RESULT_TYPE_TAGS = "tags"
+
+// Blog
+export const BLOG_ID_LAITMAN_RU = 1
+export const BLOG_ID_LAITMAN_COM = 2
+export const BLOG_ID_LAITMAN_ES = 3
+export const BLOG_ID_LAITMAN_CO_IL = 4
+
 export const SEARCH_INTENT_INDEX_TOPIC       = 'intent-tag';
 export const SEARCH_INTENT_INDEX_SOURCE      = 'intent-source';
 export const SEARCH_INTENT_HIT_TYPE_PROGRAMS = 'programs';
@@ -280,3 +294,6 @@ export const SEARCH_INTENT_SECTIONS = {
   [SEARCH_INTENT_HIT_TYPE_PROGRAMS]: 'programs',
 };
 
+export const SUGGEST_LIMIT = 10;
+
+// TBD: add posts and tweets intents

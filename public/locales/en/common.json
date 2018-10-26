@@ -42,6 +42,10 @@
       "start": "Start",
       "end": "End"
     },
+    "language-filter": {
+      "label": "Language",
+      "all": "Any Language"
+    },
     "sources-filter": {
       "label": "Sources",
       "all": "All Sources"
@@ -82,7 +86,8 @@
       "programs": "Programs",
       "events": "Conventions & Events",
       "publications": "Publications",
-      "sources": "Sources"
+      "sources": "Sources",
+      "posts": "Blog"
     }
   },
   "buttons": {
@@ -147,15 +152,6 @@
       "newertoolder": "newer to older",
       "oldertonewer": "older to newer"
     },
-    "suggestions": {
-      "categories": {
-        "search": "Search",
-        "tags": "Tags",
-        "sources": "Sources",
-        "authors": "Authors",
-        "persons": "Persons"
-      }
-    },
     "results": {
       "empty-query": "No search term given. Please use the box above to search.",
       "no-results": "Your search for <1><0>{{query}}</0></1> found no results."
@@ -187,8 +183,8 @@
     "last-lesson": "The Latest Daily Lesson",
     "donate": "DONATE NOW",
     "promoted": {
-      "header": "Articles For The Month of Elul and Rosh HaShana",
-      "subheader": ""
+      "header": "Virtual Convention",
+      "subheader": "19-21.10.2018"
     }
   },
   "events": {
@@ -324,7 +320,8 @@
     "today-button": "Today",
     "total-media-for-date": "All media for date ",
     "media-language": "Media language",
-    "no-files-found": "There are no files for the language you selected",
+    "no-files-found-for-lang": "There are no files for the language you selected",
+    "no-files-found-for-date": "There are no files for this date",
     "date": "Date",
     "prev": "Prev.",
     "next": "Next"

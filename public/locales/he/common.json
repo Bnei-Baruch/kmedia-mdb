@@ -41,6 +41,10 @@
       "start": "התחלה",
       "end": "סיום"
     },
+    "language-filter": {
+      "label": "שפה",
+      "all": "כל שפה"
+    },
     "sources-filter": {
       "label": "מקורות",
       "all": "כל המקורות"
@@ -80,7 +84,8 @@
       "programs": "תוכניות",
       "events": "כנסים ואירועים",
       "publications": "פרסומים",
-      "sources": "מקורות"
+      "sources": "מקורות",
+      "posts": "בלוג"
     }
   },
   "buttons": {
@@ -145,15 +150,6 @@
       "newertoolder": "חדש לישן",
       "oldertonewer": "ישן לחדש"
     },
-    "suggestions": {
-      "categories": {
-        "search": "חיפוש",
-        "tags": "נושאים",
-        "sources": "מקורות",
-        "authors": "מחברים",
-        "persons": "אנשים"
-      }
-    },
     "results": {
       "empty-query": "לא הוזן טקסט לחיפוש. השתמש בתיבת החיפוש למעלה.",
       "no-results": "לא נמצאו תוצאות עבור <1><0>{{query}}</0></1>."
@@ -185,8 +181,8 @@
     "last-lesson": "שיעור הקבלה היומי",
     "donate": "תרום עכשיו",
     "promoted": {
-      "header": "מאמרים לחודש אלול וראש השנה",
-      "subheader": ""
+      "header": "כנס וירטואלי",
+      "subheader": "19-21.10.2018"
     }
   },
   "events": {
@@ -322,7 +318,8 @@
     "today-button": "היום",
     "total-media-for-date": "כל המדיה לתאריך ",
     "media-language": "שפת המדיה",
-    "no-files-found": "אין קבצים לשפה שבחרת",
+    "no-files-found-for-lang": "אין קבצים לשפה שבחרת",
+    "no-files-found-for-date": "אין קבצים לתאריך זה",
     "date": "תאריך",
     "prev": "אחורה",
     "next": "קדימה"
