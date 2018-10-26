@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Dropdown, Menu, Button, Icon } from 'semantic-ui-react';
+import { Dropdown, Container, Menu, Button, Icon } from 'semantic-ui-react';
 import { translate } from 'react-i18next';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
 import Filters from '../Filters/Filters';
@@ -24,10 +24,6 @@ const filters = [
     name: 'sources-filter',
     component: filterComponents.SourcesFilter,
   },
-  {
-    name: 'type-filter',
-    component: filterComponents.TypeFilter,
-  },
 ];
 
 class SearchResultsFilters extends Component {
@@ -39,6 +35,7 @@ class SearchResultsFilters extends Component {
     onChange: PropTypes.func.isRequired,
     filtersValues: PropTypes.objectOf(PropTypes.object).isRequired,
     location: shapes.HistoryLocation.isRequired,
+    isMobileDevice: PropTypes.func.isRequired
   };
 
   state = { isShowFilters: false };
@@ -63,7 +60,7 @@ class SearchResultsFilters extends Component {
   };
 
   renderTabs = () => {
-    const { t, filtersValues, sortBy, onSortByChange } = this.props;
+    const { t, filtersValues, sortBy, onSortByChange, isMobileDevice } = this.props;
 
     const options = ['relevance', 'newertoolder', 'oldertonewer'].map(o => ({
       text: t(`search.sorts.${o}`),
@@ -76,8 +73,8 @@ class SearchResultsFilters extends Component {
               f.values &&
               f.values.includes('filters.sections-filter.sources'));
 
-    const filters   = (
-      <span key="span" style={{ padding: '10px' }}>
+    const orderFilters = isMobileDevice() ? null : (
+      <Menu.Item><span key="span" style={{ padding: '10px' }}>
             {t('search.sortby')}:
         &nbsp;&nbsp;
         <Dropdown
@@ -87,16 +84,19 @@ class SearchResultsFilters extends Component {
           options={options}
           value={sortBy}
           onChange={onSortByChange} />
-          </span>
+      </span></Menu.Item>
     );
+
     const activeTab = this.getActiveFilterTab();
-    const tabs      = ['all', 'lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
-      <Menu.Item
-        key={x}
-        name={t(`filters.sections-filter.${x}`)}
-        active={x === activeTab}
-        onClick={() => this.onSelectionChange(x)} />
-    );
+    const tabs      = <Menu.Menu className="overflowAuto">
+      {['all', 'lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
+        <Menu.Item
+          key={x}
+          name={t(`filters.sections-filter.${x}`)}
+          active={x === activeTab}
+          onClick={() => this.onSelectionChange(x)} />
+      )}
+    </Menu.Menu>;
 
     const rightButtons = (
       <Menu.Menu position='right'>
@@ -106,7 +106,7 @@ class SearchResultsFilters extends Component {
             <Icon name="filter" fitted />
           </Button>
         </Menu.Item>
-        <Menu.Item>{filters}</Menu.Item>
+        {orderFilters}
       </Menu.Menu>
     );
     return (<Menu borderless className="sectionTabs">{tabs}{rightButtons}</Menu>);
@@ -115,7 +115,7 @@ class SearchResultsFilters extends Component {
   render() {
     const { onHydrated, onChange, t } = this.props;
 
-    const hideFilters = (<Menu.Item>
+    const hideFilters = (<Menu.Item key="hideFilters">
       {t('filters.hideFilters')}&nbsp;&nbsp;
       <Button circular icon='close' basic size='small' onClick={this.showFilters} />
     </Menu.Item>);

@@ -1173,6 +1173,9 @@
     color: white;
     font-size: 14px;
   }
+  .search__snippet {
+    font-size: 14px;
+  }
 }
 
 .bgHoverGrey:hover {
@@ -1183,7 +1186,7 @@
   background: transparent !important;
 }
 
-.padding0{
+.padding0 {
   padding: 0 !important;
 }
 
@@ -1191,6 +1194,8 @@
   background: $darkWhite;
   margin: 0;
   border: 0 none;
+  border-radius: 0;
+
   .item {
     padding-top: 5px;
     padding-bottom: 5px;
@@ -1201,11 +1206,10 @@
   .showFilters {
     background-color: white !important;
   }
-}
 
-.searchFilters {
-  .ui.container.padded {
-    padding: 0;
-    margin: 0;
+  .overflowAuto {
+    overflow-x: auto;
+    min-width: 250px;
+    white-space: nowrap;
   }
 }

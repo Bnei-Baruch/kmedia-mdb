@@ -46,7 +46,7 @@ class SearchResultCollection extends SearchResultBase {
                 className="search__link"
                 onClick={() => this.click(mdbUid, index, type, rank, searchId)}
                 to={canonicalLink(c || { id: mdbUid, content_type: c.content_type })}>
-                {this.titleFromHighlight(highlight, c.name)}
+                {this. titleFromHighlight(highlight, c.name)}
               </Link>
               <div>
                 <Link

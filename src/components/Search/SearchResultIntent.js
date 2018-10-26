@@ -4,8 +4,6 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { Button, Card, Image, Icon, Segment, Header, List, Container } from 'semantic-ui-react';
 
-import { selectors as device } from '../../redux/modules/device';
-import * as shapes from '../shapes';
 import { sectionLogo } from '../../helpers/images';
 import { selectors } from '../../redux/modules/mdb';
 import { sectionLink, canonicalLink } from '../../helpers/links';
@@ -32,7 +30,6 @@ class SearchResultIntent extends SearchResultBase {
 
   static propTypes = {
     ...SearchResultBase.propTypes,
-    deviceInfo: shapes.UserAgentParserResults.isRequired,
     isMobileDevice: PropTypes.func.isRequired
   };
 
@@ -42,10 +39,10 @@ class SearchResultIntent extends SearchResultBase {
   };
 
   componentDidMount() {
-    NUMBER_OF_FETCHED_UNITS = this.isMobileDevice() ? 1 * 4 : 3 * 4;
-    this.askForData(this.props, 0);
+    const pageSize          = this.props.isMobileDevice() ? 1 : 3;
+    NUMBER_OF_FETCHED_UNITS = pageSize * 4;
 
-    const pageSize = this.isMobileDevice() ? 1 : 3;
+    this.askForData(this.props, 0);
     this.setState({ pageSize });
   }
 
@@ -110,7 +107,7 @@ class SearchResultIntent extends SearchResultBase {
             </Link>
           </Card.Header>
           <Card.Meta>
-            {this.iconByContentType(cu.content_type, true)} | <strong>{filmDate}</strong>
+            {this.iconByContentType(cu.content_type, true)}|&nbsp;<strong>{filmDate}</strong>
           </Card.Meta>
           <Card.Description>
             {this.renderFiles(cu)}
@@ -135,9 +132,6 @@ class SearchResultIntent extends SearchResultBase {
 
     return <Segment basic textAlign="center" className="padding0">{content}</Segment>;
   };
-
-  isMobileDevice = () =>
-    this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
   renderScrollRight = () => {
     return this.state.pageNo === 0 ? null : (<Button
@@ -239,7 +233,6 @@ const mapState = (state, ownProps) => {
     wip: nsState.wip,
     err: nsState.err,
     total: nsState.total,
-    deviceInfo: device.getDeviceInfo(state.device),
   };
 };
 

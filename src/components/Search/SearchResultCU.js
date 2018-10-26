@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Segment } from 'semantic-ui-react';
+import { Segment, Container, Header } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../helpers/links';
 import Link from '../Language/MultiLanguageLink';
@@ -54,24 +54,28 @@ class SearchResultCU extends SearchResultBase {
 
     return (
       <Segment className="bgHoverGrey search__block">
-        <Link
-          className="search__link content"
-          onClick={() => this.click(mdbUid, index, resultType, rank, searchId)}
-          to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}>
-          {this.titleFromHighlight(highlight, cu.name)}
-        </Link>
-        <div>
+        <Header as='h3'>
+          <Link
+            className="search__link content"
+            onClick={() => this.click(mdbUid, index, resultType, rank, searchId)}
+            to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}>
+            {this.titleFromHighlight(highlight, cu.name)}
+          </Link>
+        </Header>
+
+        <Container>
           {this.iconByContentType(cu.content_type, true)} | <strong>{filmDate}</strong>
           <div className="clear" />
-        </div>
+        </Container>
 
-        <div className="content">
+
+        <Container className="content">
           {this.renderSnippet(highlight)}
-        </div>
-        <div>
+        </Container>
+        <Container>
           {this.renderFiles(cu)}
           <div className="clear" />
-        </div>
+        </Container>
       </Segment>
     );
   };

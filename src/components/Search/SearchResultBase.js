@@ -16,7 +16,6 @@ import {
   MT_VIDEO,
   MT_IMAGE,
   CT_LESSON_PART,
-  CT_KITEI_MAKOR,
   CT_CLIP,
   CT_WOMEN_LESSON,
   CT_CHILDREN_LESSON,
@@ -74,8 +73,10 @@ class SearchResultBase extends Component {
   mlsToStrColon(seconds) {
     const duration = moment.duration({ seconds });
     const h        = duration.hours();
-    const m        = duration.minutes();
-    const s        = duration.seconds();
+    let m          = duration.minutes();
+    let s          = duration.seconds();
+    m              = m > 9 ? m : `0${m}`;
+    s              = s > 9 ? s : `0${s}`;
     return h ? `${h}:${m}:${s}` : `${m}:${s}`;
   }
 
@@ -168,16 +169,19 @@ class SearchResultBase extends Component {
     case CT_CLIPS:
       icon = 'programs';
       break;
+    case 'sources':
+      icon = 'sources';
+      break;
     default:
       return null;
     }
 
     if (!withTitle) {
-      return <Image size="mini" floated="left" src={sectionLogo[icon]} />;
+      return <Image src={sectionLogo[icon]} size="mini" verticalAlign='middle' />;
     }
 
     return (<span>
-      <Image size="mini" floated="left" src={sectionLogo[icon]} />
+      <Image src={sectionLogo[icon]} size="mini" verticalAlign='middle' />&nbsp;
       <span>{this.props.t(`constants.content-types.${type}`)}</span>
     </span>);
   };

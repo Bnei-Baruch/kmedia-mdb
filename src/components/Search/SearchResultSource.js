@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Segment, Image, } from 'semantic-ui-react';
+import { Segment, Image, Container, Header } from 'semantic-ui-react';
 import { canonicalLink } from '../../helpers/links';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { sectionLogo } from '../../helpers/images';
@@ -10,23 +10,24 @@ import SearchResultBase from './SearchResultBase';
 class SearchResultSource extends SearchResultBase {
 
   render() {
-    const { t, hit }                                                  = this.props;
-    const { _source: { mdb_uid: mdbUid, title }, highlight, _type: type } = hit;
+    const { t, hit }                                         = this.props;
+    const { _source: { mdb_uid: mdbUid, title }, highlight } = hit;
 
     const name = this.titleFromHighlight(highlight, title);
 
     return (
-      <Segment verticalalign="top" className="bgHoverGrey">
-        <Link
-          className="search__link"
-          to={canonicalLink({ id: mdbUid, content_type: 'SOURCE' })}>
-          {name}
-        </Link>
-
-        <div>
+      <Segment verticalalign="top" className="bgHoverGrey search__block">
+        <Header as='h3'>
+          <Link
+            className="search__link"
+            to={canonicalLink({ id: mdbUid, content_type: 'SOURCE' })}>
+            {name}
+          </Link>
+        </Header>
+        <Container>
           <Image size="mini" src={sectionLogo.sources} verticalAlign='middle' />&nbsp;
           <span>{t('filters.sections-filter.sources')}</span>
-        </div>
+        </Container>
       </Segment>
     );
   }
