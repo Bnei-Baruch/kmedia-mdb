@@ -49,7 +49,7 @@ class AVPlayerMobile extends PureComponent {
     onPrev: PropTypes.func,
     onNext: PropTypes.func,
 
-    // deviceInfo: shapes.UserAgentParserResults.isRequired,
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -99,7 +99,7 @@ class AVPlayerMobile extends PureComponent {
       clearTimeout(this.seekTimeoutId);
   }
 
-  componentWillReceiveProps(nextProps) {
+   componentWillReceiveProps(nextProps) {
     if (nextProps.item !== this.props.item) {
       this.setState({ error: false, errorReason: '', firstSeek: true });
     }
@@ -131,7 +131,8 @@ class AVPlayerMobile extends PureComponent {
       // this.media.addEventListener('playing', this.handlePlaying);
       // this.media.addEventListener('seeking', this.handleSeeking);
       this.media.addEventListener('canplay', this.seekIfNeeded);
-      this.restoreVolume();
+      this.seekIfNeeded();
+      this.restoreVolume();     
     } else if (this.media) {
       this.media.removeEventListener('play', this.handlePlay);
       this.media.removeEventListener('pause', this.handlePause);
@@ -147,7 +148,7 @@ class AVPlayerMobile extends PureComponent {
   };
 
   handlePlay = () => {
-    // this.seekIfNeeded();
+    //this.seekIfNeeded();
 
     // make future src changes autoplay
     this.media.autoplay = true;
@@ -222,12 +223,12 @@ class AVPlayerMobile extends PureComponent {
     this.saveCurrentTime(time);
    
     if (mode !== PLAYER_MODE.SLICE_VIEW || seeking===true) {
-      return;
+       return;
     }
 
     const lowerTime = Math.min(sliceEnd, time);  
 
-    if (time < sliceStart || time > sliceEnd) {
+    if (time < sliceStart - 0.5 || time > sliceEnd) {
       this.setState({
         mode: PLAYER_MODE.NORMAL,
         sliceStart: undefined,
@@ -254,11 +255,14 @@ class AVPlayerMobile extends PureComponent {
     }
   };
 
-  seekTo = (t, force) => {
+  seekTo = (t, force) => {        
+    this.media.currentTime = t;           
+    if (this.props.deviceInfo.browser.name !== 'Samsung Browser') {
+      this.setState({ seeking: false });  
+      return;
+    }
+
     this.setState({ seeking: true });
-
-    this.media.currentTime = t;
-
     // If seek not success, do a seek timeout (bug fix for android internal browser)
     if (force && !this.isSeekSuccess(t)) 
       this.seekTimeout(t, 250);    
@@ -266,7 +270,7 @@ class AVPlayerMobile extends PureComponent {
       this.setState({ seeking: false });
   };
 
-  seekTimeout = (t, timeout) => {
+  seekTimeout = (t, timeout) => {   
     if (this.seekTimeoutId)
       clearTimeout(this.seekTimeoutId);
     this.seekTimeoutId = setTimeout(()=> {
