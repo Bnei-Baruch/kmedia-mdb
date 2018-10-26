@@ -5,16 +5,18 @@ export class SuggestionsHelper {
     this.suggestions = [];
 
     if (results && results.suggest && 'title_suggest' in results.suggest) {
-      const query = results.suggest['title_suggest'][0].text;
-      this.suggestions = results.suggest['title_suggest'][0].options.map(option => {
+      const query      = results.suggest['title_suggest'][0].text;
+      this.suggestions = results.suggest['title_suggest'][0].options.map((option) => {
         const { text, _source: { title, result_type } } = option;
-        const textParts = text.split(' ');
-        const splitChar = result_type === ES_RESULT_TYPE_SOURCES ? '>' : (result_type === ES_RESULT_TYPE_TAGS ? '-' : null)
-        const titleParts = !!splitChar ? title.split(splitChar) : [title]
-        const reversedTitleParts = titleParts.map(p => p.trim().split(' ').length).reverse();
+        const textParts                                 = text.split(' ');
+        const splitChar                                 = result_type === ES_RESULT_TYPE_SOURCES ?
+          '>' :
+          (result_type === ES_RESULT_TYPE_TAGS ? '-' : null);
+        const titleParts                                = !!splitChar ? title.split(splitChar) : [title];
+        const reversedTitleParts                        = titleParts.map(p => p.trim().split(' ').length).reverse();
 
         let suggestWords = 0;
-        let reverseIdx = 0;
+        let reverseIdx   = 0;
         // Assume: length > 0 at start.
         // Total of reversedTitleParts equals to length.
         while (suggestWords < textParts.length) {
@@ -23,7 +25,7 @@ export class SuggestionsHelper {
         }
         reverseIdx--;
 
-        const titleWords = title.split(' ');
+        const titleWords              = title.split(' ');
         let suggestWordsWithSeparator = 0;
         while (suggestWords > 0) {
           if (titleWords[titleWords.length - 1 - suggestWordsWithSeparator] !== splitChar) {
@@ -47,15 +49,18 @@ export class SuggestionsHelper {
         }
         return a.suggest.localeCompare(b.suggest);
       }).map(o => o.suggest);
+
+      // remove duplicates (dedup)
+      this.suggestions = Array.from(new Set(this.suggestions));
     }
   }
 
   getSuggestions() {
     return this.suggestions;
   }
-};
+}
 
-const uidBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const uidBytes = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
 const GenerateUID = (n) => {
   const ret = new Array(n);
