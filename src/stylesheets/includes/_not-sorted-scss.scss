@@ -29,8 +29,11 @@
   }
 
   > .results {
+
     &.visible {
-      display: table !important;
+      /* Limit suggest box height and allow scrolling if more then ~10. */
+      max-height: 500px;
+      overflow-y: scroll;
     }
 
     // this falls sub-pixel apart from the category name table-cell,
@@ -198,19 +201,7 @@
 // }
 
 .filter-popup {
-  &__header {
-    .title {
-      display: flex;
-      .header {
-        margin: 0 1rem;
-        flex-grow: 2;
-      }
-    }
 
-    .autocomplete {
-      margin-top: .75em;
-    }
-  }
 
   &__body {
     max-height: 350px;
@@ -221,16 +212,7 @@
       padding: 0;
     }
 
-    > .menu {
-      border-radius: 0;
-
-      .item {
-        color: $blue;
-        .count {
-          color: $grey;
-        }
-      }
-    }
+    
 
     .highlight {
       background-color: rgba($yellow, 0.2);
@@ -651,6 +633,10 @@
   font-size: 16px;
 }
 
+.DayPicker-Day {
+  outline: none !important;
+}
+
 /* ************* Styles for simple mode ************* */
 .no-padding-top {
   @media only screen and (max-width: $mobileBreakpoint) {
@@ -724,6 +710,10 @@
   }
 }
 
+.unit-link {
+  color: #4183c4 !important;
+}
+
 .horizontal-list {
   display: flex;
   padding-bottom: 16px !important;
@@ -740,6 +730,15 @@
   .no-files {
     font-size: 14px;
     font-weight: bold;
+  }
+
+  .overflow-gradient {
+    width: 33px;
+    height: 23px;
+    flex-shrink: 0;
+    background-image: linear-gradient(to left, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    position: absolute;
+    right: 12px;
   }
 
   .media-file-button {
@@ -813,6 +812,12 @@
     .media-file-button {
       margin-left: 8px;
       margin-right: 0;
+    }
+
+    .overflow-gradient {
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+      left: 12px;
+      right: unset;
     }
   }
 }

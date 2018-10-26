@@ -87,11 +87,12 @@ import { ErrorSplash, FrownSplash, LoadingSplash, Splash } from '../Splash';
 
 describe('LoadingSplash', () => {
   const text = 'Still loading...';
-  const icon = 'spinner';
+  const icon = 'circle notch';
+  const color = 'blue';
 
   it('renders correctly', () => {
     const loadingSplash = shallowRender(LoadingSplash, { text }).dive();
-    const splash        = shallowRender(Splash, { icon, text, isLoading: true });
+    const splash        = shallowRender(Splash, { color, icon, text, isLoading: true });
     expect(shallowToJson(loadingSplash)).toEqual(shallowToJson(splash));
   });
 

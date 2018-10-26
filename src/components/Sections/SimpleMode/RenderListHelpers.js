@@ -61,22 +61,27 @@ const renderHorizontalFilesList = (files, contentType, t) =>
   });
 
 const renderUnits = (units, language, t) =>
-  units.map((unit) => {
+  units.filter((unit => unit)).map((unit) => {
     const filesList = unit.files.filter(file => file.language === language);
-    const files     = renderHorizontalFilesList(filesList, unit.content_type, t);
+    const files     = filesList && renderHorizontalFilesList(filesList, unit.content_type, t);
+
+    if (!files) {
+      return null;
+    }
 
     return (
       <List.Item key={unit.id} className="unit-header">
         <List.Content>
           <List.Header className="unit-header">
-            <Link to={canonicalLink(unit)}>{unit.name || NO_NAME}</Link>
+            <Link className="unit-link" to={canonicalLink(unit)}>{unit.name || NO_NAME}</Link>
           </List.Header>
           <List.List className="horizontal-list">
             {
               files.length ?
                 files :
-                <span className="no-files">{t('simple-mode.no-files-found')}</span>
+                <span className="no-files">{t('simple-mode.no-files-found-for-lang')}</span>
             }
+            <div className="overflow-gradient"></div>
           </List.List>
         </List.Content>
       </List.Item>

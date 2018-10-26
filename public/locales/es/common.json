@@ -43,6 +43,10 @@
       "start": "Inicio",
       "end": "Final"
     },
+    "language-filter": {
+      "label": "Idioma",
+      "all": "Cualquier Idioma"
+    },
     "sources-filter": {
       "label": "Fuentes",
       "all": "Todos Los Fuentes"
@@ -83,7 +87,8 @@
       "programs": "Programas",
       "events": "Congresos y Eventos",
       "publications": "Publicaciones",
-      "sources": "Fuentes"
+      "sources": "Fuentes",
+      "posts": "Blog"
     }
   },
   "buttons": {
@@ -148,15 +153,6 @@
       "newertoolder": "Nuevo a viejo",
       "oldertonewer": "Viejo a nuevo"
     },
-    "suggestions": {
-      "categories": {
-        "search": "Buscar",
-        "tags": "Temas",
-        "sources": "Fuentes",
-        "authors": "Autores",
-        "persons": "Personas"
-      }
-    },
     "results": {
       "empty-query": "No se ingresó texto de búsqueda. Use el cuadro de búsqueda de arriba.",
       "no-results": "No se encontraron resultados para <1><0>{{query}}</0></1>."
@@ -187,8 +183,8 @@
     "updates": "Actualizaciones recientes",
     "last-lesson": "Lección diaria de Cabalá",
     "promoted": {
-      "header": "Artículos para el mes de Elul y Rosh HaShaná",
-      "subheader": ""
+      "header": "Congreso virtual",
+      "subheader": "19-21.10.2018"
     }
   },
   "events": {
@@ -319,7 +315,8 @@
     "today-button": "hoy",
     "total-media-for-date": "Todos los medios para la fecha ",
     "media-language": "Lenguaje de los medios",
-    "no-files-found": "No hay archivos para el idioma que seleccionaste",
+    "no-files-found-for-lang": "No hay archivos para el idioma que seleccionaste",
+    "no-files-found-for-date": "No hay archivos para esta fecha.",
     "date": "Fecha",
     "prev": "Anterior",
     "next": "Siguiente"
