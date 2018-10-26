@@ -44,15 +44,19 @@ const filters = {
     { name: 'sources-filter', component: filterComponents.SourcesFilter },
     { name: 'date-filter', component: filterComponents.DateFilter },
   ],
-  programs: [
+  'programs-main': [
     { name: 'programs-filter', component: filterComponents.ProgramsFilter },
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'sources-filter', component: filterComponents.SourcesFilter },
-    { name: 'date-filter', component: filterComponents.DateFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter }
+  ],
+  'programs-clips': [
+    { name: 'collections-filter', component: filterComponents.CollectionsFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter }
   ],
   'programs-collection': [
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
-    { name: 'date-filter', component: filterComponents.DateFilter },
+    { name: 'date-filter', component: filterComponents.DateFilter }
   ],
   'events-friends-gatherings': [
     { name: 'date-filter', component: filterComponents.DateFilter }

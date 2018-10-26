@@ -42,14 +42,14 @@ class Filters extends Component {
     activeFilter: null,
   };
 
-  handlePopupClose = () =>{
+  handlePopupClose = () => {
     this.setState({ activeFilter: null });
-    document.getElementsByTagName("body")[0].classList.remove('noscroll--smallmobile');
+    document.getElementsByTagName('body')[0].classList.remove('noscroll--smallmobile');
   }
 
-  handlePopupOpen = activeFilter =>{
+  handlePopupOpen = (activeFilter) => {
     this.setState({ activeFilter });
-    document.getElementsByTagName("body")[0].classList.add('noscroll--smallmobile');
+    document.getElementsByTagName('body')[0].classList.add('noscroll--smallmobile');
   }
 
   handleApply = (name, value) => {
@@ -108,23 +108,7 @@ class Filters extends Component {
                   filtersTransformer.valueToTagLabel(name, value, this.props, store, t) :
                   t('filters.all');
 
-                let len = ((name === 'topics-filter' || name === 'sources-filter') && value) ? label.length : 0;
-
-                // name==='topics-filter' || 'sources-filter' ? len = 1/label.length : len = 0
-
-                // console.log(name, len, value);
-                // if (label && !Array.isArray(label) && label.endsWith('</span>')) {
-                //   let s = label.substring(0, len -7);
-                //   s = s.substring(s.lastIndexOf('>')+1);
-
-                //   // let x = label.split('<span class="filter__separator"> / </span>').join('');
-                //   // x = x.split('<span class="filter__breadcrumb">').join('');
-                //   // x = x.split('</span>').join('');
-                //   // len = s.length;
-                //   // len = x.length - s.length;
-                //   len = 1/s.length;
-                //   console.log('Filters last element length:', s);
-                // }
+                const len = ((name === 'topics-filter' || name === 'sources-filter') && value) ? label.length : 0;
 
                 return (
                   <Popup
@@ -216,8 +200,8 @@ export default connect(
     // DO NOT REMOVE, this triggers a necessary re-render for filter tags
     sqDataWipErr: mdb.getSQDataWipErr(state.mdb),
   }),
-  disptach => bindActionCreators({
+  dispatch => bindActionCreators({
     setFilterValue: actions.setFilterValue,
     resetFilter: actions.resetFilter,
-  }, disptach)
+  }, dispatch)
 )(translate()(Filters));

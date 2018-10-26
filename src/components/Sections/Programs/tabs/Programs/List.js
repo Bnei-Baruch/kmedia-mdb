@@ -9,7 +9,6 @@ import { ellipsize } from '../../../../../helpers/strings';
 import UnitList from '../../../../Pages/UnitList/Container';
 import Link from '../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
-import SectionHeader from '../../../../shared/SectionHeader';
 
 export const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
@@ -78,9 +77,8 @@ class ProgramsList extends Component {
   render() {
     return (
       <div>
-        <SectionHeader section="programs" />
         <UnitList
-          namespace="programs"
+          namespace="programs-main"
           renderUnit={renderUnit}
           extraFetchParams={this.extraFetchParams}
         />

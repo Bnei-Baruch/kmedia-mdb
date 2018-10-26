@@ -82,6 +82,7 @@ export const canonicalLink = (entity) => {
   case CT_LESSONS_SERIES:
     return `/lessons/series/c/${entity.id}`;
   case CT_VIDEO_PROGRAM:
+  case CT_CLIPS:
     return `/programs/c/${entity.id}`;
   case CT_ARTICLES:
     return `/publications/articles/c/${entity.id}`;
@@ -92,8 +93,6 @@ export const canonicalLink = (entity) => {
   case CT_PICNIC:
   case CT_UNITY_DAY:
     return `/events/c/${entity.id}`;
-  case CT_CLIPS:
-    return '/';
   default:
     break;
   }
@@ -113,6 +112,7 @@ export const canonicalLink = (entity) => {
   // case CT_CHILDREN_LESSON:
     return `/lessons/cu/${entity.id}`;
   case CT_VIDEO_PROGRAM_CHAPTER:
+  case CT_CLIP:
     return `/programs/cu/${entity.id}`;
   case CT_EVENT_PART:
   case CT_FULL_LESSON:
@@ -122,7 +122,6 @@ export const canonicalLink = (entity) => {
   case CT_ARTICLE:
     return `/publications/articles/cu/${entity.id}`;
   case CT_UNKNOWN:
-  case CT_CLIP:
   case CT_TRAINING:
   case CT_KITEI_MAKOR:
   case CT_PUBLICATION:

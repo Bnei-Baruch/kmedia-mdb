@@ -9,7 +9,6 @@ import { ellipsize } from '../../../../../helpers/strings';
 import UnitList from '../../../../Pages/UnitList/Container';
 import Link from '../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
-import SectionHeader from '../../../../shared/SectionHeader';
 
 export const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
@@ -60,7 +59,7 @@ export const renderUnit = (unit, t) => {
         }
         <List horizontal divided link className="index__collections" size="tiny">
           <List.Item>
-            <List.Header>{t('clips.list.episode_from')}</List.Header>
+            <List.Header>{t('programs.list.item_of')}</List.Header>
           </List.Item>
           {relatedItems}
         </List>
@@ -78,9 +77,8 @@ class ClipsList extends Component {
   render() {
     return (
       <div>
-        <SectionHeader section="clips" />
         <UnitList
-          namespace="clips"
+          namespace="programs-clips"
           renderUnit={renderUnit}
           extraFetchParams={this.extraFetchParams}
         />
