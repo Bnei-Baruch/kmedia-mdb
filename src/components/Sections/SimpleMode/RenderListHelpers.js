@@ -33,7 +33,7 @@ const getI18nTypeOverridesKey = (contentType) => {
 
 const sortMediaFiles = files =>
   files.sort((a, b) => {
-    const order = { audio: 0, videonHD: 1, videoHD: 2, text: 3, image: 4 };
+    const order = { audio: 0, 'lelo-mikud': 1, videonHD: 2, videoHD: 3, text: 4, image: 5 };
     const typeA = a.type === 'video' ? a.type + a.video_size : a.type;
     const typeB = b.type === 'video' ? b.type + b.video_size : b.type;
 
@@ -60,10 +60,21 @@ const renderHorizontalFilesList = (files, contentType, t) =>
     );
   });
 
+const unitLeloMikudFiles = (unit) => {
+  const keys                = [...Object.keys(unit.derived_units)].filter(key => key.includes('LELO_MIKUD'));
+  const leloMikudKey        = keys ? keys[0] : null;
+  const leloMikudCollection = leloMikudKey ? unit.derived_units[leloMikudKey] : null;
+
+  return leloMikudCollection ? leloMikudCollection.files.map((file) => {
+    return { ...file, type: 'lelo-mikud' };
+  }) : [];
+};
+
 const renderUnits = (units, language, t) =>
   units.filter((unit => unit)).map((unit) => {
-    const filesList = unit.files.filter(file => file.language === language);
-    const files     = filesList && renderHorizontalFilesList(filesList, unit.content_type, t);
+    const leloMikudFiles = unitLeloMikudFiles(unit);
+    const filesList      = [...unit.files, ...leloMikudFiles].filter(file => file.language === language);
+    const files          = filesList && renderHorizontalFilesList(filesList, unit.content_type, t);
 
     if (!files) {
       return null;
