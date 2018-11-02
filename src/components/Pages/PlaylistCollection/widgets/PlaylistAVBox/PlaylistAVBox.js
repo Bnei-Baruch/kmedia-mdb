@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
-import classNames from 'classnames';
 
 import { MT_AUDIO, MT_VIDEO } from '../../../../../helpers/consts';
 import playerHelper from '../../../../../helpers/player';
@@ -110,9 +110,7 @@ class PlaylistAVBox extends Component {
   }
 
   handleSelectedChange = (selected) => {
-    //this.setState({ selected });    
-    playerHelper.setActivePartInQuery(this.props.history, selected);  
-    //this.props.onSelectedChange(this.state.playlist.items[selected].unit);
+    playerHelper.setActivePartInQuery(this.props.history, selected);
   };
 
   handleLanguageChange = (e, language) => {
@@ -136,18 +134,20 @@ class PlaylistAVBox extends Component {
   render() {
     const { t, PlayListComponent, language, nextLink, prevLink } = this.props;
     const { playlist, selected }                                 = this.state;
-    const isAudio = playlist.items[selected].mediaType === MT_AUDIO;
+
     if (!playlist ||
       !Array.isArray(playlist.items) ||
       playlist.items.length === 0) {
       return null;
     }
 
+    const isAudio = playlist.items[selected].mediaType === MT_AUDIO;
+
     return (
       <Grid.Row
-      className={classNames('', {
-        'layout--is-audio': isAudio,
-      })}
+        className={classNames('', {
+          'layout--is-audio': isAudio,
+        })}
       >
         <Grid.Column id="avbox__player" mobile={16} tablet={10} computer={10}>
           <AVPlaylistPlayer
