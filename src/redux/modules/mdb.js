@@ -232,6 +232,25 @@ const stripOldFiles = (unit) => {
   return { ...unit, files: nFiles };
 };
 
+const normalizeSubUnit = (unit, type, parentId, state) => {
+  const typeKey       = type === 'derived_units' ? 'sduIDs' : 'dduIDs';
+  const updatedCuById = { ...state.cuById };
+  const subUnit       = Object.entries(unit).reduce((acc, val) => {
+    const [k, v]          = val;
+    const [cuID, relName] = k.split('____');
+
+    // make a copy of source unit and set this unit as relation name
+    const updatedSubUnit    = { ...v, ...state.cuById[v.id] };
+    updatedSubUnit[typeKey] = { ...updatedSubUnit[typeKey], [parentId]: relName };
+    updatedCuById[v.id]     = stripOldFiles(updatedSubUnit);
+
+    acc[k] = cuID;
+    return acc;
+  }, {});
+
+  return { subUnit, updatedCuById };
+};
+
 const onReceiveCollections = (state, action) => {
   const items = action.payload || [];
 
@@ -239,8 +258,8 @@ const onReceiveCollections = (state, action) => {
     return state;
   }
 
-  const cById  = { ...state.cById };
-  const cuById = { ...state.cuById };
+  const cById = { ...state.cById };
+  let cuById  = { ...state.cuById };
   items.forEach((x) => {
     // make a copy of incoming data since we're about to mutate it
     const y = { ...x };
@@ -255,6 +274,22 @@ const onReceiveCollections = (state, action) => {
         // make a copy of content unit and set this collection ccuName
         const updatedCU = { ...cu, ...state.cuById[cu.id] };
         updatedCU.cIDs  = { ...updatedCU.cIDs, [`${y.id}____${ccuName || ''}`]: y.id };
+
+        // normalize derived content units
+        if (cu.derived_units) {
+          const { subUnit, updatedCuById } = normalizeSubUnit(cu.derived_units, 'derived_units', y.id, state);
+          updatedCU.dduIDs                 = subUnit;
+          cuById                           = { ...cuById, ...updatedCuById };
+          delete updatedCU.derived_units;
+        }
+
+        // normalize source content units
+        if (cu.source_units) {
+          const { subUnit, updatedCuById } = normalizeSubUnit(cu.derived_units, 'source_units', y.id, state);
+          updatedCU.sduIDs                 = subUnit;
+          cuById                           = { ...cuById, ...updatedCuById };
+          delete updatedCU.source_units;
+        }
 
         // we delete it's name_in_collection
         // as it might be overridden by successive calls from different collections
@@ -284,8 +319,8 @@ const onReceiveContentUnits = (state, action) => {
     return state;
   }
 
-  const cById  = { ...state.cById };
-  const cuById = { ...state.cuById };
+  const cById = { ...state.cById };
+  let cuById  = { ...state.cuById };
   items.forEach((x) => {
     // make a copy of incoming data since we're about to mutate it
     const y = { ...x };
@@ -316,35 +351,17 @@ const onReceiveContentUnits = (state, action) => {
 
     // normalize derived content units
     if (y.derived_units) {
-      y.dduIDs = Object.entries(y.derived_units).reduce((acc, val) => {
-        const [k, v]          = val;
-        const [cuID, relName] = k.split('____');
-
-        // make a copy of derived unit and set this unit as source name
-        const updatedDU  = { ...v, ...state.cuById[v.id] };
-        updatedDU.sduIDs = { ...updatedDU.sduIDs, [y.id]: relName };
-        cuById[v.id]     = stripOldFiles(updatedDU);
-
-        acc[k] = cuID;
-        return acc;
-      }, {});
+      const { subUnit, updatedCuById } = normalizeSubUnit(y.derived_units, 'derived_units', y.id, state);
+      y.dduIDs                         = subUnit;
+      cuById                           = { ...cuById, ...updatedCuById };
       delete y.derived_units;
     }
 
     // normalize source content units
     if (y.source_units) {
-      y.sduIDs = Object.entries(y.source_units).reduce((acc, val) => {
-        const [k, v]          = val;
-        const [cuID, relName] = k.split('____');
-
-        // make a copy of source unit and set this unit as derived name
-        const updatedDU  = { ...v, ...state.cuById[v.id] };
-        updatedDU.dduIDs = { ...updatedDU.dduIDs, [y.id]: relName };
-        cuById[v.id]     = stripOldFiles(updatedDU);
-
-        acc[k] = cuID;
-        return acc;
-      }, {});
+      const { subUnit, updatedCuById } = normalizeSubUnit(y.derived_units, 'source_units', y.id, state);
+      y.sduIDs                         = subUnit;
+      cuById                           = { ...cuById, ...updatedCuById };
       delete y.source_units;
     }
 
