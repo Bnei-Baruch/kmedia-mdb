@@ -131,12 +131,15 @@ class AVPlayer extends PureComponent {
     // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ isClient: true });
 
-    const { deviceInfo: { browser: { name: browserName } } } = this.props;
+    const { deviceInfo: { browser: { name: browserName } }, media } = this.props;
     this.setState({
       browserName,
       firstSeek: true,
       ...this.chooseSource(this.props)
     });
+    
+    if (browserName === 'Edge' || browserName === 'IE') 
+      media.play();
   }
 
   componentWillReceiveProps(nextProps) {
