@@ -18,7 +18,8 @@ class PlaylistCollectionPage extends Component {
     wip: shapes.WIP,
     err: shapes.Error,
     PlaylistComponent: PropTypes.func,
-    language: PropTypes.string.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     // shouldRenderHelmet: PropTypes.bool,
     nextLink: PropTypes.string,
@@ -64,7 +65,7 @@ class PlaylistCollectionPage extends Component {
   // }
 
   render() {
-    const { language, collection, wip, err, t, PlaylistComponent, nextLink, prevLink } = this.props;
+    const { uiLanguage, contentLanguage, collection, wip, err, t, PlaylistComponent, nextLink, prevLink } = this.props;
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
@@ -85,7 +86,8 @@ class PlaylistCollectionPage extends Component {
             <Grid padded>
               <PlaylistAVBox
                 collection={collection}
-                language={language}
+                uiLanguage={uiLanguage}
+                contentLanguage={contentLanguage}
                 t={t}
                 onSelectedChange={this.handleSelectedChange}
                 PlayListComponent={PlaylistComponent}
@@ -98,7 +100,7 @@ class PlaylistCollectionPage extends Component {
         {
           unit ?
             <Container>
-              <Helmets.AVUnit unit={unit} language={language} />
+              <Helmets.AVUnit unit={unit} language={uiLanguage} />
               <Grid padded>
                 <Grid.Row>
                   <Grid.Column mobile={16} tablet={16} computer={11} className="content__main">
@@ -109,7 +111,7 @@ class PlaylistCollectionPage extends Component {
                     <Grid>
                       <Grid.Row>
                         <Grid.Column mobile={16} tablet={8} computer={16}>
-                          <MediaDownloads unit={unit} language={language} t={t} />
+                          <MediaDownloads unit={unit} t={t} />
                         </Grid.Column>
                       </Grid.Row>
                     </Grid>

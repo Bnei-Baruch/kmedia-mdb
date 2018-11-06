@@ -502,5 +502,10 @@
   },
   "values": {
     "date": "{{date, l}}"
+  },
+  "languages": {
+    "language": "Sprache",
+    "website_language": "Website Language",
+    "content_language": "Preferred content language"
   }
 }

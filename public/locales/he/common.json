@@ -597,5 +597,10 @@
   },
   "values": {
     "date": "{{date, l}}"
+  },
+  "languages": {
+    "language": "שפה",
+    "website_language": "שפת האתר",
+    "content_language": "שפת תוכן מועדפת"
   }
 }

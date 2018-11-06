@@ -14,7 +14,7 @@ export class Requests {
 
   static makeParams = params =>
     `${Object.entries(params)
-      .filter(([k, v]) => v !== undefined && v !== null)
+      .filter(([_k, v]) => v !== undefined && v !== null)
       .map((pair) => {
         const key   = pair[0];
         const value = pair[1];

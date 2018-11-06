@@ -40,9 +40,7 @@ const SectionHeader = (props) => {
             Array.isArray(submenuItems) && submenuItems.length > 0 ?
               <Grid.Row>
                 <Grid.Column>
-                  <Menu tabular className="section-header__menu" size="huge">
-                    {submenuItems}
-                  </Menu>
+                  <Menu tabular className="section-header__menu" size="huge">{submenuItems}</Menu>
                 </Grid.Column>
               </Grid.Row> :
               null

@@ -3,7 +3,7 @@ import 'moment-duration-format';
 
 import { CollectionsBreakdown } from './mdb';
 
-const CDN_URL    = process.env.REACT_APP_CDN_URL;
+const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
 
 export const isEmpty = (obj) => {
@@ -133,7 +133,6 @@ export const physicalFile = (file, ext = false) => {
 
 export const publicFile = relativePath =>
   `${PUBLIC_BASE}${relativePath}`;
-  // `https://kabbalahmedia.info/${relativePath}`;
 
 export const canonicalCollection = (unit) => {
   if (!unit) {
@@ -254,3 +253,78 @@ export const shallowCompare = (instance, nextProps, nextState) => (
   !shallowEqual(instance.props, nextProps) ||
   !shallowEqual(instance.state, nextState)
 );
+
+export function equal(a, b) {
+  const { isArray } = Array;
+  const keyList     = Object.keys;
+  const hasProp     = Object.prototype.hasOwnProperty;
+
+  if (a === b) {
+    return true;
+  }
+
+  const arrA = isArray(a);
+  const arrB = isArray(b);
+  let i;
+  let key;
+
+  if (arrA && arrB) {
+    const { length } = a;
+    if (length !== b.length) {
+      return false;
+    }
+    for (i = 0; i < length; i++) {
+      if (!equal(a[i], b[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  if (arrA !== arrB) {
+    return false;
+  }
+
+  const dateA = a instanceof Date;
+  const dateB = b instanceof Date;
+  if (dateA !== dateB) {
+    return false;
+  }
+  if (dateA && dateB) {
+    return a.getTime() === b.getTime();
+  }
+
+  const regexpA = a instanceof RegExp;
+  const regexpB = b instanceof RegExp;
+  if (regexpA !== regexpB) {
+    return false;
+  }
+  if (regexpA && regexpB) {
+    return a.toString() === b.toString();
+  }
+
+  if (a instanceof Object && b instanceof Object) {
+    const keys       = keyList(a);
+    const { length } = keys;
+
+    if (length !== keyList(b).length) {
+      return false;
+    }
+
+    for (i = 0; i < length; i++) {
+      if (!hasProp.call(b, keys[i])) {
+        return false;
+      }
+    }
+    for (i = 0; i < length; i++) {
+      key = keys[i];
+      if (!equal(a[key], b[key])) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  return false;
+}

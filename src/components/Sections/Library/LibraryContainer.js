@@ -5,10 +5,9 @@ import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import { push as routerPush, replace as routerReplace } from 'react-router-redux';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { translate } from 'react-i18next';
-import { Button, Container, Grid, Header, Input, Ref, Message, Popup } from 'semantic-ui-react';
-import CopyToClipboard from 'react-copy-to-clipboard';
+import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
@@ -27,6 +26,7 @@ class LibraryContainer extends Component {
     sourceId: PropTypes.string.isRequired,
     indexMap: PropTypes.objectOf(shapes.DataWipErr),
     language: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
     fetchIndex: PropTypes.func.isRequired,
     sourcesSortBy: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,
@@ -65,7 +65,7 @@ class LibraryContainer extends Component {
     window.addEventListener('resize', this.updateSticky);
     window.addEventListener('load', this.updateSticky);
 
-    const { sourceId, areSourcesLoaded, replace, history }                                = this.props;
+    const { sourceId, areSourcesLoaded, replace, history }                             = this.props;
     const { location: { state: { tocIsActive } = { state: { tocIsActive: false } } } } = history;
 
     if (tocIsActive) {
@@ -78,9 +78,7 @@ class LibraryContainer extends Component {
     }
 
     const firstLeafId = this.firstLeafId(sourceId);
-    if (firstLeafId !== sourceId ||
-      this.props.sourceId !== sourceId ||
-      this.state.lastLoadedId !== sourceId) {
+    if (firstLeafId !== sourceId || this.state.lastLoadedId !== sourceId) {
       if (firstLeafId !== sourceId) {
         replace(`sources/${firstLeafId}`);
       } else {
@@ -143,35 +141,6 @@ class LibraryContainer extends Component {
     return getPathByID(sourceId);
   };
 
-  updateSticky = () => {
-    // take the secondary header height for sticky stuff calculations
-    if (this.secondaryHeaderRef) {
-      const { height } = this.secondaryHeaderRef.getBoundingClientRect();
-      if (this.state.secondaryHeaderHeight !== height) {
-        this.setState({ secondaryHeaderHeight: height });
-      }
-    }
-
-    // check fixed header width in pixels for text-overflow:ellipsis
-    if (this.contentHeaderRef) {
-      const { width } = this.contentHeaderRef.getBoundingClientRect();
-      if (this.state.contentHeaderWidth !== width) {
-        this.setState({ contentHeaderWidth: width });
-      }
-    }
-  };
-
-  firstLeafId = (sourceId) => {
-    const { getSourceById } = this.props;
-
-    const { children } = getSourceById(sourceId) || { children: [] };
-    if (isEmpty(children)) {
-      return sourceId;
-    }
-
-    return this.firstLeafId(children[0]);
-  };
-
   handleContextRef = (ref) => {
     this.contextRef = ref;
   };
@@ -190,6 +159,35 @@ class LibraryContainer extends Component {
 
   handleContentHeaderRef = (ref) => {
     this.contentHeaderRef = ref;
+  };
+
+  firstLeafId = (sourceId) => {
+    const { getSourceById } = this.props;
+
+    const { children } = getSourceById(sourceId) || { children: [] };
+    if (isEmpty(children)) {
+      return sourceId;
+    }
+
+    return this.firstLeafId(children[0]);
+  };
+
+  updateSticky = () => {
+    // take the secondary header height for sticky stuff calculations
+    if (this.secondaryHeaderRef) {
+      const { height } = this.secondaryHeaderRef.getBoundingClientRect();
+      if (this.state.secondaryHeaderHeight !== height) {
+        this.setState({ secondaryHeaderHeight: height });
+      }
+    }
+
+    // check fixed header width in pixels for text-overflow:ellipsis
+    if (this.contentHeaderRef) {
+      const { width } = this.contentHeaderRef.getBoundingClientRect();
+      if (this.state.contentHeaderWidth !== width) {
+        this.setState({ contentHeaderWidth: width });
+      }
+    }
   };
 
   handleTocIsActive = () => {
@@ -293,6 +291,10 @@ class LibraryContainer extends Component {
     this.setState({ match: '' });
   };
 
+  print = () => {
+    window.print();
+  };
+
   matchString = (parentId, t) => {
     if (this.props.NotToFilter.findIndex(a => a === parentId) !== -1) {
       return null;
@@ -311,7 +313,7 @@ class LibraryContainer extends Component {
   };
 
   render() {
-    const { sourceId, indexMap, getSourceById, language, t } = this.props;
+    const { sourceId, indexMap, getSourceById, language, contentLanguage, t } = this.props;
 
     const fullPath = this.getFullPath(sourceId);
     const parentId = this.properParentId(fullPath);
@@ -331,7 +333,8 @@ class LibraryContainer extends Component {
         <LibraryContentContainer
           source={sourceId}
           index={index}
-          languageUI={language}
+          uiLanguage={language}
+          contentLanguage={contentLanguage}
           langSelectorMount={this.headerMenuRef}
           t={t}
         />
@@ -353,7 +356,7 @@ class LibraryContainer extends Component {
 
     return (
       <div
-        className={classnames({
+        className={classNames({
           source: true,
           'is-readable': isReadable,
           'toc--is-active': tocIsActive,
@@ -384,11 +387,12 @@ class LibraryContainer extends Component {
                 <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
                   <div className="source__header-title">{this.header(sourceId, fullPath)}</div>
                   <div className="source__header-toolbar">
+                    <Share t={t} />
+                    <Button compact size="small" className="mobile-hidden" icon="print" onClick={this.print} />
                     <div id="download-button" />
                     <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                    <Share t={t} />
                   </div>
                 </Grid.Column>
               </Grid.Row>
@@ -416,7 +420,7 @@ class LibraryContainer extends Component {
                 mobile={16}
                 tablet={16}
                 computer={12}
-                className={classnames({
+                className={classNames({
                   'source__content-wrapper': true,
                   [`size${fontSize}`]: true,
                 })}
@@ -443,6 +447,7 @@ export default withRouter(connect(
     sourceId: ownProps.match.params.id,
     indexMap: assets.getSourceIndexById(state.assets),
     language: settings.getLanguage(state.settings),
+    contentLanguage: settings.getContentLanguage(state.settings),
     getSourceById: sources.getSourceById(state.sources),
     getPathByID: sources.getPathByID(state.sources),
     sortBy: sources.sortBy(state.sources),

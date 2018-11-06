@@ -6,7 +6,7 @@ import { prefixWithLanguage } from '../../helpers/url';
  * This middleware uses react-router-redux's middleware and prefixes the location change depending on the language
  */
 
-export default function multiLanguageRouterMiddleware(history) {
+export default function multiLanguageRouterMidrdleware(history) {
   const routerMiddleware = createRouterMiddleware(history);
   const appliedRouterMiddleware = routerMiddleware();
 
