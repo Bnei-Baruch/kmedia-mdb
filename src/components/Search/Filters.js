@@ -24,6 +24,10 @@ const filters = [
     name: 'sources-filter',
     component: filterComponents.SourcesFilter,
   },
+  {
+    name: 'language-filter',
+    component: filterComponents.LanguageFilter,
+  },
 ];
 
 class SearchResultsFilters extends Component {

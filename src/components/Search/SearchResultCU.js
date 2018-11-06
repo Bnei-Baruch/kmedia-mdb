@@ -34,8 +34,8 @@ class SearchResultCU extends SearchResultBase {
   };
 
   render() {
-    const { t, queryResult, cu, hit, rank } = this.props;
-    const { search_result: { searchId } }   = queryResult;
+    const { t, queryResult, cu, hit, rank, filters } = this.props;
+    const { search_result: { searchId } }            = queryResult;
     const {
             _index: index,
             _source:
@@ -45,7 +45,7 @@ class SearchResultCU extends SearchResultBase {
               },
             highlight,
             _type: type
-          }                                 = hit;
+          }                                          = hit;
 
     let filmDate = '';
     if (cu.film_date) {
@@ -58,7 +58,7 @@ class SearchResultCU extends SearchResultBase {
           <Link
             className="search__link content"
             onClick={() => this.click(mdbUid, index, resultType, rank, searchId)}
-            to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type })}>
+            to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type }, this.getMediaLanguage(filters))}>
             {this.titleFromHighlight(highlight, cu.name)}
           </Link>
         </Header>

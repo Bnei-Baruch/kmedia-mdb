@@ -20,16 +20,16 @@ class SearchResultCollection extends SearchResultBase {
 
   renderCU = (cu) => {
     return (
-      <Link to={canonicalLink(cu)} key={cu.id}>
+      <Link to={canonicalLink(cu, this.getMediaLanguage(this.props.filters))} key={cu.id}>
         <Button size="tiny" basic className="linkToCU">{cu.name}</Button>
       </Link>
     );
   };
 
   render() {
-    const { t, location, c, hit, rank, queryResult }                                                      = this.props;
+    const { t, location, c, hit, rank, queryResult, filters }                                    = this.props;
     const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
-    const { search_result: { searchId } }                                                                 = queryResult;
+    const { search_result: { searchId } }                                                        = queryResult;
 
     return (
       <Table className="bgHoverGrey search__block">
@@ -45,13 +45,13 @@ class SearchResultCollection extends SearchResultBase {
               <Link
                 className="search__link"
                 onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-                to={canonicalLink(c || { id: mdbUid, content_type: c.content_type })}>
-                {this. titleFromHighlight(highlight, c.name)}
+                to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}>
+                {this.titleFromHighlight(highlight, c.name)}
               </Link>
               <div>
                 <Link
                   onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-                  to={canonicalLink(c || { id: mdbUid, content_type: c.content_type })}>
+                  to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}>
                   {this.iconByContentType(c.content_type, true)}
                 </Link>
                 &nbsp;|&nbsp;

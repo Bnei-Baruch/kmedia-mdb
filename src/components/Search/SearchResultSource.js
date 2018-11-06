@@ -10,7 +10,7 @@ import SearchResultBase from './SearchResultBase';
 class SearchResultSource extends SearchResultBase {
 
   render() {
-    const { t, hit }                                         = this.props;
+    const { t, hit, filters }                                = this.props;
     const { _source: { mdb_uid: mdbUid, title }, highlight } = hit;
 
     const name = this.titleFromHighlight(highlight, title);
@@ -20,7 +20,8 @@ class SearchResultSource extends SearchResultBase {
         <Header as='h3'>
           <Link
             className="search__link"
-            to={canonicalLink({ id: mdbUid, content_type: 'SOURCE' })}>
+            to={canonicalLink({ id: mdbUid, content_type: 'SOURCE' })}
+            language={this.getMediaLanguage(filters)}>
             {name}
           </Link>
         </Header>

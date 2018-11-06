@@ -102,7 +102,7 @@ class SearchResultIntent extends SearchResultBase {
           <Card.Header>
             <Link
               className="search__link"
-              to={canonicalLink(cu)}>
+              to={canonicalLink(cu, this.getMediaLanguage(this.props.filters))}>
               {cu.name}
             </Link>
           </Card.Header>
@@ -161,7 +161,7 @@ class SearchResultIntent extends SearchResultBase {
   };
 
   render() {
-    const { t, queryResult, hit, rank, items }                                           = this.props;
+    const { t, queryResult, hit, rank, items, unitCounter }                              = this.props;
     const { _index: index, _type: type, _source: { mdb_uid: mdbUid, title }, highlight } = hit;
 
     const { pageNo, pageSize }            = this.state;
@@ -209,10 +209,10 @@ class SearchResultIntent extends SearchResultBase {
         </List>
         <Card.Group className="search__cards" itemsPerRow={3} stackable>
           {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).map(this.renderItem)}
-          {this.renderScrollLeft()}
-          {this.renderScrollRight()}
+          {pageSize < unitCounter ? this.renderScrollLeft() : null}
+          {pageSize < unitCounter ? this.renderScrollRight() : null}
         </Card.Group>
-        {this.renderScrollPagination()}
+        {pageSize < unitCounter ? this.renderScrollPagination() : null}
       </Segment>
     );
   }

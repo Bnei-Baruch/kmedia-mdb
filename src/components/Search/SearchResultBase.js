@@ -83,7 +83,7 @@ class SearchResultBase extends Component {
   renderFiles = (cu) => {
     const { t }          = this.props;
     const { files = [] } = cu;
-    const pathname       = canonicalLink(cu);
+    const pathname       = canonicalLink(cu, this.getMediaLanguage(this.props.filters));
     const types          = [
       {
         type: MT_VIDEO,
@@ -225,6 +225,18 @@ class SearchResultBase extends Component {
       console.log('Using default filter:', index);
       return x => x;
     }
+  };
+
+  getMediaLanguage = (filters) => {
+    if (!filters) {
+      return null;
+    }
+    let mediaLanguage;
+    const filteredLanguages = filters.find(f => f.name === 'language-filter');
+    if (filteredLanguages && filteredLanguages.values.length > 0) {
+      mediaLanguage = filteredLanguages.values[0];
+    }
+    return mediaLanguage;
   };
 
   render() {

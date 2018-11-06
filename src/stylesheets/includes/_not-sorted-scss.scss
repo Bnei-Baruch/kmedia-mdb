@@ -212,7 +212,7 @@
       padding: 0;
     }
 
-    
+
 
     .highlight {
       background-color: rgba($yellow, 0.2);
@@ -1151,8 +1151,9 @@
 
     .scrollIntents {
       position: absolute;
-      top: 50%;
+      top: 150px;
       background-color: white !important;
+      z-index: 10;
     }
   }
 
@@ -1162,6 +1163,10 @@
     .intentImage {
       position: relative;
       min-height: 160px;
+      img {
+        height: 100%;
+        width: 100%;
+      }
     }
     &.card.bgHoverGrey:hover {
       background: #eee;
