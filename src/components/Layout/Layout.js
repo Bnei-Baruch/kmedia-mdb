@@ -8,14 +8,15 @@ import { renderRoutes } from 'react-router-config';
 import { Header, Icon, Menu } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
-import { selectors as settings } from '../../redux/modules/settings';
+import { actions, selectors as settings } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import WrappedOmniBox from '../Search/OmniBox';
 import GAPageView from './GAPageView/GAPageView';
 import MenuItems from './MenuItems';
+import HandleLanguages from './HandleLanguages';
 import Footer from './Footer';
-import UILanguage from './UILanguage';
+import TopMost from './TopMost';
 import DonateNow from './DonateNow';
 import logo from '../../images/logo.svg';
 
@@ -24,6 +25,8 @@ class Layout extends Component {
     location: shapes.HistoryLocation.isRequired,
     route: shapes.Route.isRequired,
     language: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
+    setContentLanguage: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -39,7 +42,6 @@ class Layout extends Component {
     document.removeEventListener('click', this.clickOutside, true);
   }
 
-  // Required for handling outside sidebar on click outside sidebar,
   // i.e, main, header of footer.
   clickOutside = (e) => {
     if (this.state &&
@@ -54,6 +56,7 @@ class Layout extends Component {
 
   toggleSidebar = () => this.setState({ sidebarActive: !this.state.sidebarActive });
 
+  // Required for handling outside sidebar on click outside sidebar,
   closeSidebar = () => this.setState({ sidebarActive: false });
 
   shouldShowSearch = (location) => {
@@ -69,8 +72,8 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location, route, language } = this.props;
-    const { sidebarActive }                = this.state;
+    const { t, location, route, language, contentLanguage, setContentLanguage } = this.props;
+    const { sidebarActive }                                                     = this.state;
 
     const showSearch = this.shouldShowSearch(location);
 
@@ -110,11 +113,18 @@ class Layout extends Component {
                   null
               }
             </Menu.Item>
-            <Menu.Item className="mobile-hidden">
-              <DonateNow t={t} language={language} />
-            </Menu.Item>
             <Menu.Menu position="right">
-              <UILanguage language={language} t={t} location={location} />
+              <HandleLanguages
+                language={language}
+                contentLanguage={contentLanguage}
+                setContentLanguage={setContentLanguage}
+                location={location}
+                t={t}
+              />
+              <Menu.Item className="mobile-hidden">
+                <DonateNow t={t} language={language} />
+              </Menu.Item>
+              <TopMost t={t} />
             </Menu.Menu>
           </Menu>
         </div>
@@ -164,5 +174,9 @@ class Layout extends Component {
 export default connect(
   state => ({
     language: settings.getLanguage(state.settings),
-  })
+    contentLanguage: settings.getContentLanguage(state.settings),
+  }),
+  {
+    setContentLanguage: actions.setContentLanguage,
+  }
 )(translate()(Layout));

@@ -188,6 +188,13 @@
     "search": "Раскрой Каббалу",
     "sections": "Разделы архива",
     "updates": "Последние обновления",
+    "social": "Рав Лайтман в социальных сетях",
+    "blog-title": "Блог Рава Лайтмана",
+    "twitter-title": "твиты",
+    "all-posts": "Все сообщения в блогах",
+    "all-tweets": "Все твиты",
+    "read-more-posts": "Читать далее",
+    "read-more-tweets": "Читайте больше твитов",
     "last-lesson": "Последний урок",
     "donate": "ВНЕСИТЕ ВКЛАД",
     "promoted": {
@@ -313,7 +320,8 @@
           "title": "Остальные части той же программы"
         }
       }
-    }
+    },
+    "read-more": "Прочитайте больше"
   },
   "simple-mode": {
     "header": {
@@ -517,5 +525,10 @@
   },
   "values": {
     "date": "{{date, l}}"
+  },
+  "languages": {
+    "language": "Язык",
+    "website_language": "Язык сайта",
+    "content_language": "Предпочтительный язык контента"
   }
 }

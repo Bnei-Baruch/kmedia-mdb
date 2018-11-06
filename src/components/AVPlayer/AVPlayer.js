@@ -41,7 +41,7 @@ const playbackToValue = playback =>
 class AVPlayer extends PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
-    media: PropTypes.object.isRequired,
+    media: shapes.Media.isRequired,
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -49,7 +49,7 @@ class AVPlayer extends PureComponent {
     onLanguageChange: PropTypes.func.isRequired,
 
     // Audio/Video switch props.
-    item: PropTypes.object.isRequired, // TODO: (yaniv) add shape fo this
+    item: shapes.VideoItem.isRequired,
     onSwitchAV: PropTypes.func.isRequired,
 
     // Slice props
@@ -193,27 +193,31 @@ class AVPlayer extends PureComponent {
     return { src, videoSize };
   };
 
-  // Remember the current time and isPlaying while switching.
+  // Remember the current time while switching.
   onSwitchAV = (...params) => {
-    const { onSwitchAV, media: { currentTime, isPlaying } } = this.props;
-    this.setState({ wasCurrentTime: currentTime, wasPlaying: isPlaying }, () => {
+    const { onSwitchAV, media: { currentTime } } = this.props;
+    this.setState({ wasCurrentTime: currentTime }, () => {
       onSwitchAV(...params);
     });
   };
 
-  // Remember the current time and isPlaying while switching.
+  // Remember the current time while switching.
   onLanguageChange = (...params) => {
-    const { onLanguageChange, media: { currentTime, isPlaying } } = this.props;
-    this.setState({ wasCurrentTime: currentTime, wasPlaying: isPlaying }, () => {
+    const { onLanguageChange, media: { currentTime } } = this.props;
+    this.setState({ wasCurrentTime: currentTime }, () => {
       onLanguageChange(...params);
     });
   };
 
   onPlayerReady = () => {
-    const { wasCurrentTime, wasPlaying, sliceStart, firstSeek } = this.state;
-    const { media }                                             = this.props;
+    const { wasCurrentTime, sliceStart, firstSeek } = this.state;
+    const { media }                                 = this.props;
 
     this.activatePersistence();
+
+    if (firstSeek) {
+      media.play();
+    }
 
     if (wasCurrentTime) {
       media.seekTo(wasCurrentTime);
@@ -222,15 +226,11 @@ class AVPlayer extends PureComponent {
       if (savedTime) {
         media.seekTo(savedTime);
       }
-      this.setState({ firstSeek: false });
-    }
-    if (wasPlaying) {
-      media.play();
     }
 
     // restore playback from state when player instance changed (when src changes, e.g., playlist).
     this.player.instance.playbackRate = playbackToValue(this.state.playbackRate);
-    this.setState({ wasCurrentTime: undefined, wasPlaying: undefined });
+    this.setState({ wasCurrentTime: undefined, firstSeek: false });
   };
 
   playbackRateChange = (e, rate) => {
@@ -242,12 +242,11 @@ class AVPlayer extends PureComponent {
     playerHelper.persistPreferredVideoSize(vs);
 
     if (vs !== this.state.videoSize) {
-      const { media: { currentTime, isPlaying } } = this.props;
+      const { media: { currentTime } } = this.props;
       this.setState({
         videoSize: vs,
         src: this.props.item.byQuality[vs],
-        wasCurrentTime: currentTime,
-        wasPlaying: isPlaying
+        wasCurrentTime: currentTime
       });
     }
   };
@@ -542,7 +541,7 @@ class AVPlayer extends PureComponent {
     let centerMediaControl;
     if (error) {
       centerMediaControl = (
-        <div className="player-button">
+        <div className="player-button player-error-message">
           {t('player.error.loading')}
           {errorReason ? ` ${errorReason}` : ''}
           &nbsp;

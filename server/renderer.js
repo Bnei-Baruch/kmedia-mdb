@@ -11,20 +11,21 @@ import qs from 'qs';
 import serialize from 'serialize-javascript';
 import UAParser from 'ua-parser-js';
 import localStorage from 'mock-local-storage';
+import { parse as cookieParse } from 'cookie';
 
 import routes from '../src/routes';
-import { LANG_UI_LANGUAGES, LANG_UKRAINIAN } from '../src/helpers/consts';
+import { COOKIE_CONTENT_LANG, LANG_UI_LANGUAGES, LANG_UKRAINIAN } from '../src/helpers/consts';
 import { getLanguageDirection, getLanguageLocaleWORegion } from '../src/helpers/i18n-utils';
 import { getLanguageFromPath } from '../src/helpers/url';
 import { isEmpty } from '../src/helpers/utils';
 import createStore from '../src/redux/createStore';
-import { actions as settings } from '../src/redux/modules/settings';
 import { actions as ssr } from '../src/redux/modules/ssr';
 import App from '../src/components/App/App';
 import i18nnext from './i18nnext';
+import { initialState as settingsInitialState } from '../src/redux/modules/settings';
 
-// eslint-disable-next-line no-unused-expressions
-localStorage; // DO NOT REMOVE - the import above does all the work
+// eslint-disable-next-line no-unused-vars
+const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all the work
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -39,6 +40,7 @@ function canonicalLink(req, lang) {
   const s = cPath.split('?');
 
   // start with path part
+  // eslint-disable-next-line prefer-destructuring
   cPath = s[0];
 
   // strip leading slash as it comes from BASE_URL
@@ -98,17 +100,18 @@ function alternateLinks(req, lang) {
 export default function serverRender(req, res, next, htmlData, criticalCSS) {
   console.log('serverRender', req.originalUrl);
 
-  const result = getLanguageFromPath(req.originalUrl, req.headers);
-  if (result.redirect) {
-    const newUrl = `${BASE_URL}${result.language}${req.originalUrl}`;
-    console.log(`serverRender: redirect (${result.language}) => ${newUrl}`);
+  const { language, redirect } = getLanguageFromPath(req.originalUrl, req.headers);
+  if (redirect) {
+    const newUrl = `${BASE_URL}${language}${req.originalUrl}`;
+    console.log(`serverRender: redirect (${language}) => ${newUrl}`);
     res.writeHead(307, { Location: newUrl });
     res.end();
     return;
   }
 
-  const { language } = result;
   moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
+  const cookies = cookieParse(req.headers.cookie || `COOKIE_CONTENT_LANG=${language};`);
+
   const i18nServer = i18nnext.cloneInstance();
   i18nServer.changeLanguage(language, (err) => {
     if (err) {
@@ -120,14 +123,15 @@ export default function serverRender(req, res, next, htmlData, criticalCSS) {
       initialEntries: [req.originalUrl],
     });
 
+    const settings = Object.assign({}, settingsInitialState, { language, contentLanguage: cookies[COOKIE_CONTENT_LANG] });
+
     const initialState = {
       router: { location: history.location },
       device: { deviceInfo: new UAParser(req.get('user-agent')).getResult() },
+      settings,
     };
 
     const store = createStore(initialState, history);
-
-    store.dispatch(settings.setLanguage(language));
 
     const context = {
       req,
