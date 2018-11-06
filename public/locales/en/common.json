@@ -318,7 +318,7 @@
   "simple-mode": {
     "header": {
       "text": "Downloads - Simple version",
-      "subtext": "Concentrate all media for a specific day"
+      "subtext": "All media for a certain day"
     },
     "today-button": "Today",
     "total-media-for-date": "All media for date ",
