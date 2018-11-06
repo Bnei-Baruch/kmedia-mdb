@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { translate } from 'react-i18next';
 import { Container, Grid, Header, Menu } from 'semantic-ui-react';
 
+import * as shapes from '../shapes';
+import { selectors as device } from '../../redux/modules/device';
 import WrappedOmniBox from '../../components/Search/OmniBox';
 import Helmets from './Helmets';
 
@@ -12,11 +16,16 @@ class SectionHeader extends Component {
     section: PropTypes.string.isRequired,
     submenuItems: PropTypes.arrayOf(PropTypes.node),
     t: PropTypes.func.isRequired,
+    location: shapes.HistoryLocation.isRequired,
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
     submenuItems: [],
   };
+
+  isMobileDevice = () =>
+    this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
   renderSearch = () => {
     const { t, location } = this.props;
@@ -60,7 +69,7 @@ class SectionHeader extends Component {
   };
 
   render() {
-    const { section, t, isMobileDevice } = this.props;
+    const { section, t } = this.props;
 
     const title   = t(`${section}.header.text`);
     const subText = t(`${section}.header.subtext`);
@@ -71,11 +80,17 @@ class SectionHeader extends Component {
         <Helmets.Basic title={title} description={subText} />
 
         <Container className="padded">
-          {isMobileDevice() ? this.renderSearch() : this.renderTitle(title, subText)}
+          {this.isMobileDevice() ? this.renderSearch() : this.renderTitle(title, subText)}
         </Container>
       </div>
     );
   };
+}
+
+const mapState = (state) => {
+  return {
+    deviceInfo: device.getDeviceInfo(state.device),
+  };
 };
 
-export default translate()(SectionHeader);
+export default connect(mapState, null)(translate()(withRouter(SectionHeader)));
