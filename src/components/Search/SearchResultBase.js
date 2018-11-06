@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Button, Image, Icon } from 'semantic-ui-react';
+import { Button, Image, Icon, Container } from 'semantic-ui-react';
 
+import { isDebMode } from '../../helpers/url';
+import ScoreDebug from './ScoreDebug';
 import { sectionLogo } from '../../helpers/images';
 import { canonicalLink } from '../../helpers/links';
 import * as shapes from '../shapes';
@@ -237,6 +239,19 @@ class SearchResultBase extends Component {
       mediaLanguage = filteredLanguages.values[0];
     }
     return mediaLanguage;
+  };
+
+  renderDebug = (name) => {
+    const { location, hit }                            = this.props;
+    const { _explanation: explanation, _score: score } = hit;
+
+    if (!isDebMode(location) || !explanation) {
+      return null;
+    }
+
+    return (<Container>
+      <ScoreDebug name={name} score={score} explanation={explanation} />
+    </Container>);
   };
 
   render() {

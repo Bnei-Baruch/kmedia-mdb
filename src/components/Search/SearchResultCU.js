@@ -76,6 +76,8 @@ class SearchResultCU extends SearchResultBase {
           {this.renderFiles(cu)}
           <div className="clear" />
         </Container>
+
+        {this.renderDebug(cu.name)}
       </Segment>
     );
   };

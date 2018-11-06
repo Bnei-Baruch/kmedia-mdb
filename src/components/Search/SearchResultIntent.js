@@ -213,6 +213,8 @@ class SearchResultIntent extends SearchResultBase {
           {pageSize < unitCounter ? this.renderScrollRight() : null}
         </Card.Group>
         {pageSize < unitCounter ? this.renderScrollPagination() : null}
+
+        {this.renderDebug(title)}
       </Segment>
     );
   }

@@ -48,6 +48,8 @@ class SearchResultPost extends SearchResultBase {
         <Container className="content">
           {this.renderSnippet(highlight)}
         </Container>
+
+        {this.renderDebug(title)}
       </Segment>
     );
   };
