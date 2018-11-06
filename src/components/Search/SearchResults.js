@@ -18,6 +18,7 @@ import SearchResultCU from './SearchResultCU';
 import SearchResultCollection from './SearchResultCollection';
 import SearchResultIntent from './SearchResultIntent';
 import SearchResultSource from './SearchResultSource';
+import SearchResultPost from './SearchResultPost';
 import { SEARCH_INTENT_HIT_TYPES, } from '../../helpers/consts';
 
 class SearchResults extends Component {
@@ -62,6 +63,10 @@ class SearchResults extends Component {
 
     if (SEARCH_INTENT_HIT_TYPES.includes(type)) {
       return <SearchResultIntent  {...props} />;
+    }
+
+    if (resultType === 'posts') {
+      return <SearchResultPost  {...props} />;
     }
 
     const cu = cuMap[mdbUid];
@@ -127,7 +132,7 @@ class SearchResults extends Component {
     } else {
       content = (
         <Grid>
-          <Grid.Column key="1"  computer={12} tablet={16} mobile={16}>
+          <Grid.Column key="1" computer={12} tablet={16} mobile={16}>
             <div className="searchResult_content">
               <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
               {hits.filter(this.filterByHitType).map(this.renderHit)}
