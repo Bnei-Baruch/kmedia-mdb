@@ -35,6 +35,11 @@ class SimpleModeDesktopPage extends PureComponent {
     err: null,
   };
 
+  changeDay(amount) {
+    const newDate = moment(this.props.selectedDate).add(amount, 'd').toDate();
+    this.props.onDayClick(newDate);
+  }
+
   render() {
     const
       { items, selectedDate, wip, err, language, uiLanguage, t, renderUnit, onDayClick, onLanguageChange } = this.props;
@@ -62,15 +67,23 @@ class SimpleModeDesktopPage extends PureComponent {
             <Grid.Row>
               <Grid.Column mobile={16} tablet={16} computer={12}>
                 <div className="summary-container">
-                  <h4>{t('simple-mode.total-media-for-date')}</h4>
-                  <span>{moment(selectedDate).format('l')}</span>
-                  <h4>{t('simple-mode.media-language')} </h4>
-                  <div className="dropdown-container">
-                    <DropdownLanguageSelector
-                      languages={ALL_LANGUAGES}
-                      defaultValue={language}
-                      onSelect={onLanguageChange}
-                    />
+                  <div className="controller">
+                    <h4>{t('simple-mode.date')}</h4>
+                    <div className="date-container">
+                      <button onClick={() => this.changeDay(-1)}>{t('simple-mode.prev')}</button>
+                      <span>{moment(selectedDate).format('l')}</span>
+                      <button onClick={() => this.changeDay(1)}>{t('simple-mode.next')}</button>
+                    </div>
+                  </div>
+                  <div className="controller">
+                    <h4>{t('simple-mode.media-language')} </h4>
+                    <div className="dropdown-container">
+                      <DropdownLanguageSelector
+                        languages={ALL_LANGUAGES}
+                        defaultValue={language}
+                        onSelect={onLanguageChange}
+                      />
+                    </div>
                   </div>
                 </div>
                 {list}

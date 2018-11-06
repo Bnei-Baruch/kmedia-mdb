@@ -61,7 +61,8 @@ const renderHorizontalFilesList = (files, contentType, t) =>
   });
 
 const renderUnits = (units, language, t) =>
-  units.filter((unit => unit)).map((unit) => {
+  units.filter((unit => unit)).map((unit, index, unitsArray) => {
+    const lastUnit  = unitsArray.length - 1;
     const filesList = unit.files.filter(file => file.language === language);
     const files     = filesList && renderHorizontalFilesList(filesList, unit.content_type, t);
 
@@ -75,7 +76,7 @@ const renderUnits = (units, language, t) =>
           <List.Header className="unit-header">
             <Link className="unit-link" to={canonicalLink(unit)}>{unit.name || NO_NAME}</Link>
           </List.Header>
-          <List.List className="horizontal-list">
+          <List.List className={`horizontal-list ${index === lastUnit ? 'remove-bottom-border' : ''}`}>
             {
               files.length ?
                 files :
