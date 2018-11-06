@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../helpers/consts';
 import { actions, selectors } from '../../../redux/modules/home';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions as publicationsActions, selectors as publications } from '../../../redux/modules/publications';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../helpers/consts';
 import * as shapes from '../../shapes';
 import HomePage from './HomePage';
 
@@ -42,18 +42,18 @@ class HomePageContainer extends Component {
       this.props.fetchData();
     }
     if (!this.props.latestBlogPosts.length) {
-      this.fetchSocialMedia('publications-blog', this.chooseBlogByLanguage);
+      this.fetchSocialMedia('blog', this.props);
     }
     if (!this.props.latestTweets.length) {
-      this.fetchSocialMedia('publications-twitter', this.chooseTwitterByLanguage);
+      this.fetchSocialMedia('twitter', this.props);
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.language !== this.props.language) {
       this.props.fetchData();
-      this.fetchSocialMedia('publications-blog', this.chooseBlogByLanguage, nextProps);
-      this.fetchSocialMedia('publications-twitter', this.chooseTwitterByLanguage, nextProps);
+      this.fetchSocialMedia('blog', nextProps);
+      this.fetchSocialMedia('twitter', nextProps);
     }
   }
 
@@ -87,20 +87,36 @@ class HomePageContainer extends Component {
     }
   };
 
-  fetchSocialMedia(nameSpace, mediaLanguage, nextProps = {}) {
-    const pageNumber = 1;
-    const language   = nextProps.language || this.props.language;
-    const extraArgs  = {
+  fetchSocialMedia(type, props = {}) {
+    let mediaLanguageFn;
+    let fetchFn;
+    if (type === 'blog') {
+      mediaLanguageFn = this.chooseBlogByLanguage;
+      fetchFn         = props.fetchBlogList;
+    } else {
+      mediaLanguageFn = this.chooseTwitterByLanguage;
+      fetchFn         = props.fetchTweetsList;
+    }
+
+    fetchFn(`publications-${type}`, 1, {
       page_size: 4,
-      ...mediaLanguage(language)
-    };
-    (nameSpace === 'publications-blog') ?
-      this.props.fetchBlogList(nameSpace, pageNumber, extraArgs) :
-      this.props.fetchTweetsList(nameSpace, pageNumber, extraArgs);
+      ...mediaLanguageFn(props.language)
+    });
   }
 
   render() {
-    const { location, latestLesson, latestUnits, latestBlogPosts, latestTweets, banner, language, wip, err, } = this.props;
+    const
+      {
+        location,
+        latestLesson,
+        latestUnits,
+        latestBlogPosts,
+        latestTweets,
+        banner,
+        language,
+        wip,
+        err,
+      } = this.props;
 
     return (
       <HomePage

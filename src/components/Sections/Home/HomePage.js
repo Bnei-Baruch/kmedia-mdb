@@ -3,18 +3,18 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { Card, Container, Grid } from 'semantic-ui-react';
 
+import { sectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
 import { strCmp } from '../../../helpers/utils';
-import { sectionLogo } from '../../../helpers/images';
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
+import Helmets from '../../shared/Helmets';
 import SearchBar from './SearchBar';
 import Promoted from './Promoted';
 import Topic from './Topic';
 import Section from './Section';
 import LatestUpdate from './LatestUpdate';
 import LatestDailyLesson from './LatestDailyLesson';
-import Helmets from '../../shared/Helmets';
 import BlogFeed from '../Publications/tabs/Blog/Feed';
 import TwitterFeed from '../Publications/tabs/Twitter/Feed';
 
@@ -43,7 +43,19 @@ class HomePage extends Component {
   };
 
   render() {
-    const { latestLesson, latestUnits, latestBlogPosts, latestTweets, banner, language, wip, err, t, location } = this.props;
+    const
+      {
+        latestLesson,
+        latestUnits,
+        latestBlogPosts,
+        latestTweets,
+        banner,
+        language,
+        wip,
+        err,
+        t,
+        location
+      } = this.props;
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
@@ -151,7 +163,7 @@ class HomePage extends Component {
                           <h4>{t('home.blog-title')}</h4>
                           <a href={`/${language}/publications/blog`}>{t('home.all-posts')}</a>
                         </div>
-                        <BlogFeed items={latestBlogPosts} language={language} t={t} snippetVersion limitLength={4} />
+                        <BlogFeed snippetVersion items={latestBlogPosts} language={language} t={t} limitLength={4} />
                         <div className="read-more-bottom">
                           <a href={`/${language}/publications/blog`}>{t('home.read-more-posts')}</a>
                         </div>
@@ -165,7 +177,7 @@ class HomePage extends Component {
                           <h4>{t('home.twitter-title')}</h4>
                           <a href={`/${language}/publications/twitter`}>{t('home.all-tweets')}</a>
                         </div>
-                        <TwitterFeed tweets={latestTweets} t={t} snippetVersion limitLength={4} />
+                        <TwitterFeed snippetVersion tweets={latestTweets} t={t} limitLength={4} />
                         <div className="read-more-bottom">
                           <a href={`/${language}/publications/twitter`}>{t('home.read-more-tweets')}</a>
                         </div>

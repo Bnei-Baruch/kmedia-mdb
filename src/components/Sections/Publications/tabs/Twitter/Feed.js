@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Divider, Feed, Image } from 'semantic-ui-react';
-import twitterAvatar from '../../../../../images/ml_twitter_avatar.jpeg';
 
 import { isEmpty } from '../../../../../helpers/utils';
 import * as shapes from '../../../../shapes';
+import twitterAvatar from '../../../../../images/ml_twitter_avatar.jpeg';
 
 const screenNames = {
   Michael_Laitman: 'Михаэль Лайтман',
@@ -122,23 +122,30 @@ class TwitterFeed extends Component {
   };
 
   renderTweet = (tweet) => {
+    const { snippetVersion }                                 = this.props;
     const { username, twitter_id: tID, created_at: ts, raw } = tweet;
     const mts                                                = moment(ts);
     const screenName                                         = screenNames[username];
-    const { snippetVersion }                                 = this.props;
-    const url                                                = snippetVersion ? `https://twitter.com/${username}/status/${tID}` : `https://twitter.com/${username}`;
+
+    const url = snippetVersion ?
+      `https://twitter.com/${username}/status/${tID}` :
+      `https://twitter.com/${username}`;
 
     return (
       <React.Fragment>
         <Feed.Event key={tID} className="tweet">
           <Feed.Content>
             <Feed.Summary className="tweet-title-wrapper">
-              {snippetVersion ? <Image className="twitter-avatar" src={twitterAvatar} /> : null}
+              {
+                snippetVersion ?
+                  <Image className="twitter-avatar" src={twitterAvatar} /> :
+                  null
+              }
               <a href={url} target="_blank" rel="noopener noreferrer" className="tweet-title">
                 {screenName}
                 <span className="tweet--username">
-                @{username}
-              </span>
+                  @{username}
+                </span>
               </a>
               {
                 !snippetVersion ?
@@ -157,11 +164,19 @@ class TwitterFeed extends Component {
             </Feed.Summary>
             <Feed.Extra text>
               <div dangerouslySetInnerHTML={{ __html: this.prepare(raw) }} />
-              {snippetVersion ? <div className="tweet-friendly-date">{mts.fromNow()}</div> : null}
+              {
+                snippetVersion ?
+                  <div className="tweet-friendly-date">{mts.fromNow()}</div> :
+                  null
+              }
             </Feed.Extra>
           </Feed.Content>
         </Feed.Event>
-        {snippetVersion ? <Divider fitted /> : null}
+        {
+          snippetVersion ?
+            <Divider fitted /> :
+            null
+        }
       </React.Fragment>
     );
   };
