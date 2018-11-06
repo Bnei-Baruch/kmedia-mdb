@@ -132,7 +132,7 @@ class TwitterFeed extends Component {
       `https://twitter.com/${username}`;
 
     return (
-      <React.Fragment>
+      <React.Fragment key={tID}>
         <Feed.Event key={tID} className="tweet">
           <Feed.Content>
             <Feed.Summary className="tweet-title-wrapper">
