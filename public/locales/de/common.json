@@ -178,6 +178,13 @@
     "search": "Öffne die Kabbala",
     "sections": "Sektionen archivieren",
     "updates": "Neueste Updates",
+    "social": "Rav Laitman in sozialen Netzwerken",
+    "blog-title": "Rav Laitmans Blog",
+    "twitter-title": "Tweets",
+    "all-posts": "Alle Blog-Posts",
+    "all-tweets": "Alle Tweets",
+    "read-more-posts": "Lesen Sie mehr Beiträge",
+    "read-more-tweets": "Lesen Sie mehr Tweets",
     "last-lesson": "Die letzte Lektion",
     "donate": "SPENDEN",
     "promoted": {
@@ -302,7 +309,8 @@
           "title": "Die übrigen Teile des gleichen Programms"
         }
       }
-    }
+    },
+    "read-more": "Weiterlesen"
   },
   "simple-mode": {
     "header": {
