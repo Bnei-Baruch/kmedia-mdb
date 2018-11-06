@@ -239,6 +239,19 @@ class SearchResultBase extends Component {
     return mediaLanguage;
   };
 
+  renderDebug = (name) => {
+    const { location, hit } = this.props;
+
+    if (isDebMode(location)) {
+      return null;
+    }
+
+    const { __explanation: explanation, _score: score } = hit;
+    return (<Container>
+      <ScoreDebug name={name} score={score} explanation={explanation} />
+    </Container>);
+  };
+
   render() {
     return null;
   }
