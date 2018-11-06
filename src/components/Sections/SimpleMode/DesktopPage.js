@@ -89,19 +89,26 @@ class SimpleModeDesktopPage extends PureComponent {
                 {list}
               </Grid.Column>
               <Grid.Column mobile={16} tablet={16} computer={4}>
-                <Card>
-                  <DayPicker
-                    locale={uiLanguage}
-                    modifiers={DayPickerModifiers}
-                    localeUtils={MomentLocaleUtils}
-                    selectedDays={selectedDate}
-                    month={selectedDate}
-                    disabledDays={{ after: new Date() }}
-                    onDayClick={onDayClick}
-                  />
-                  <Divider />
-                  <Button onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
-                </Card>
+                <div className="stick-calendar">
+                  <div className="summary-container adjust-height">
+                    <div className="controller">
+                      <h4>{t('simple-mode.choose-date')}</h4>
+                    </div>
+                  </div>
+                  <Card>
+                    <DayPicker
+                      locale={uiLanguage}
+                      modifiers={DayPickerModifiers}
+                      localeUtils={MomentLocaleUtils}
+                      selectedDays={selectedDate}
+                      month={selectedDate}
+                      disabledDays={{ after: new Date() }}
+                      onDayClick={onDayClick}
+                    />
+                    <Divider />
+                    <Button onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
+                  </Card>
+                </div>
               </Grid.Column>
             </Grid.Row>
           </Grid>

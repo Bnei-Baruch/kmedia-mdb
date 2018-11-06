@@ -641,12 +641,22 @@
   }
 }
 
+.stick-calendar {
+  position: sticky;
+  top: 65px;
+}
+
 .summary-container {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   margin-bottom: 1em;
+
+  &.adjust-height {
+    height: 2.68em;
+    align-items: center;
+  }
 
   .controller {
     display: flex;
@@ -667,9 +677,9 @@
       box-shadow: none;
       color: #1a4179;
       background: transparent;
+      text-decoration: underline;
 
       &:hover {
-        text-decoration: underline;
         cursor: pointer;
       }
     }
