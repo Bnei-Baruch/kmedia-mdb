@@ -41,6 +41,10 @@
       "start": "Inicio",
       "end": "Final"
     },
+    "language-filter": {
+      "label": "Idioma",
+      "all": "Cualquier Idioma"
+    },
     "sources-filter": {
       "label": "Fuentes",
       "all": "Todos Los Fuentes"
@@ -80,7 +84,8 @@
       "programs": "Programas",
       "events": "Congresos y Eventos",
       "publications": "Publicaciones",
-      "sources": "Fuentes"
+      "sources": "Fuentes",
+      "posts": "Blog"
     }
   },
   "buttons": {
@@ -145,15 +150,6 @@
       "newertoolder": "Nuevo a viejo",
       "oldertonewer": "Viejo a nuevo"
     },
-    "suggestions": {
-      "categories": {
-        "search": "Buscar",
-        "tags": "Temas",
-        "sources": "Fuentes",
-        "authors": "Autores",
-        "persons": "Personas"
-      }
-    },
     "results": {
       "empty-query": "No se ingresó texto de búsqueda. Use el cuadro de búsqueda de arriba.",
       "no-results": "No se encontraron resultados para <1><0>{{query}}</0></1>."
@@ -182,10 +178,17 @@
     "search": "Descubre la sabiduría de la Cabalá",
     "sections": "Temas",
     "updates": "Actualizaciones recientes",
+    "social": "Rav Laitman en las redes sociales",
+    "blog-title": "Blog de Rav Laitman",
+    "twitter-title": "Tweets",
+    "all-posts": "Todas las publicaciones del blog",
+    "all-tweets": "Todos los tweets",
+    "read-more-posts": "Leer más posts",
+    "read-more-tweets": "Leer más tweets",
     "last-lesson": "Lección diaria de Cabalá",
     "promoted": {
-      "header": "Artículos para el mes de Elul y Rosh HaShaná",
-      "subheader": ""
+      "header": "Congreso virtual",
+      "subheader": "19-21.10.2018"
     }
   },
   "events": {
@@ -306,7 +309,8 @@
           "title": "Más artículos de la misma colección"
         }
       }
-    }
+    },
+    "read-more": "Lee mas"
   },
   "simple-mode": {
     "header": {

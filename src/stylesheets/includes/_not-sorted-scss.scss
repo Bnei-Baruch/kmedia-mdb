@@ -29,8 +29,11 @@
   }
 
   > .results {
+
     &.visible {
-      display: table !important;
+      /* Limit suggest box height and allow scrolling if more then ~10. */
+      max-height: 500px;
+      overflow-y: scroll;
     }
 
     // this falls sub-pixel apart from the category name table-cell,
@@ -848,5 +851,125 @@
     border: 2px solid red;
     padding: 7px;
     border-radius: 50px;
+  }
+}
+/* ************* End of styles for simple mode ************* */
+.home-social-section {
+  .titles {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 25px;
+
+    h4 {
+      margin-bottom: 0;
+    }
+
+    a {
+      flex-grow: 0;
+    }
+  }
+
+  .read-more-bottom {
+    width: 100%;
+    text-align: center;
+    padding: 15px;
+  }
+}
+
+.home-blog-posts {
+
+  .blog-posts {
+    max-width: 100%;
+
+    .post:last-of-type, .divider:last-of-type {
+      margin-bottom: 0 !important;
+    }
+  }
+
+  .remove-indent {
+    padding-left: 0 !important;
+  }
+
+  .entry {
+    position: relative;
+
+    * {
+      display: none;
+      color: #828282;
+      font-weight: 400;
+    }
+
+    *:first-of-type {
+      display: inline;
+      width: auto;
+    }
+
+    img {
+      display: none !important;
+    }
+
+    .date {
+      font-weight: bold;
+      color: #000;
+    }
+  }
+
+  .read-more-link {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 8px;
+  }
+}
+
+.home-twitter {
+  background-color: #F4F9FB;
+
+  .twitter-avatar {
+    border-radius: 50% !important;
+    width: 45px !important;
+    height: auto !important;
+  }
+
+  .tweet-title-wrapper {
+    display: flex;
+    align-items: center;
+
+    .tweet-title {
+      display: inline-flex;
+      flex-direction: column;
+    }
+  }
+
+  .ui.feed {
+    margin-bottom: 0 !important;
+  }
+
+  .tweet-friendly-date {
+    text-align: right;
+    color: rgba(118, 118, 118, 0.75);
+    margin-top: 5px;
+  }
+
+  .divider {
+    margin-bottom: 25px !important;
+
+    &:last-of-type {
+      margin-bottom: 0 !important;
+    }
+  }
+}
+
+.rtl {
+  .home-blog-posts {
+    .remove-indent {
+      padding-right: 0 !important;
+      padding-left: 4px !important;
+    }
+  }
+
+  .tweet-friendly-date {
+    text-align: left;
   }
 }

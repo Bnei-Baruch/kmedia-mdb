@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 
@@ -121,9 +122,7 @@ class PlaylistAVBox extends Component {
   }
 
   handleSelectedChange = (selected) => {
-    // this.setState({ selected });
     playerHelper.setActivePartInQuery(this.props.history, selected);
-    // this.props.onSelectedChange(this.state.playlist.items[selected].unit);
   };
 
   handleLanguageChange = (e, language) => {
@@ -156,9 +155,15 @@ class PlaylistAVBox extends Component {
       return null;
     }
 
+    const isAudio = playlist.items[selected].mediaType === MT_AUDIO;
+
     return (
-      <Grid.Row>
-        <Grid.Column mobile={16} tablet={10} computer={10}>
+      <Grid.Row
+        className={classNames('', {
+          'layout--is-audio': isAudio,
+        })}
+      >
+        <Grid.Column id="avbox__player" mobile={16} tablet={10} computer={10}>
           <AVPlaylistPlayer
             items={playlist.items}
             selected={selected}
@@ -169,7 +174,7 @@ class PlaylistAVBox extends Component {
             t={t}
           />
         </Grid.Column>
-        <Grid.Column className="avbox__playlist" mobile={16} tablet={6} computer={6}>
+        <Grid.Column id="avbox__playlist" className="avbox__playlist" mobile={16} tablet={6} computer={6}>
           <PlayListComponent
             playlist={playlist}
             selected={selected}
