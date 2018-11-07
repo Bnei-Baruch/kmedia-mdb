@@ -95,7 +95,7 @@ const renderUnit = (unit, t, namespace) => {
   );
 };
 
-/* eslint-disable */
+/* eslint-disable-next-line react/no-multi-comp */
 class Container extends Component {
   static propTypes = {
     tab: PropTypes.string.isRequired,
