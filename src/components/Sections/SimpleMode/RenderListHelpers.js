@@ -74,7 +74,7 @@ const unitLeloMikudFiles = (unit) => {
 const renderUnits = (units, language, t) =>
   units.filter((unit => unit)).map((unit) => {
     const leloMikudFiles = unitLeloMikudFiles(unit);
-    const filesList      = [...unit.files, ...leloMikudFiles].filter(file => file.language === language);
+    const filesList      = [...(unit.files || []), ...leloMikudFiles].filter(file => file.language === language);
     const files          = filesList && renderHorizontalFilesList(filesList, unit.content_type, t);
 
     if (!files) {
