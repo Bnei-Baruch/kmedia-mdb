@@ -10,7 +10,7 @@ import Lessons from './components/Sections/Lessons/MainPage';
 import LessonUnit from './components/Sections/Lessons/Unit/Container';
 import LessonCollection from './components/Sections/Lessons/Collection/MainPage';
 import LastLessonCollection from './components/Sections/Lessons/Collection/LastDaily';
-import Programs from './components/Sections/Programs/List';
+import Programs from './components/Sections/Programs/MainPage';
 import ProgramUnit from './components/Sections/Programs/Unit';
 import ProgramCollection from './components/Sections/Programs/Collection';
 import Publications from './components/Sections/Publications/MainPage';
@@ -63,7 +63,8 @@ const routes = [
   },
   { path: 'lessons/cu/:id', component: LessonUnit, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons/daily/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
-  { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.cuListPage('programs') } },
+  { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
+  { path: 'programs/:tab', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
   { path: 'programs/cu/:id', component: ProgramUnit, options: { ssrData: ssrDataLoaders.cuPage } },
   {
     path: 'programs/c/:id',

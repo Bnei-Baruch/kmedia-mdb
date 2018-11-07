@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import { CT_VIDEO_PROGRAM } from '../../../helpers/consts';
 import { strCmp } from '../../../helpers/utils';
 import { selectors } from '../../../redux/modules/programs';
 import { selectors as mdb } from '../../../redux/modules/mdb';
@@ -82,7 +83,8 @@ class ProgramsFilter extends Component {
 
 export default connect(
   (state) => {
-    const cIDs = selectors.getPrograms(state.programs);
+    const cIDs = selectors.getProgramsByType(state.programs)[CT_VIDEO_PROGRAM];
+
     return {
       programs: (cIDs || []).map(x => mdb.getDenormCollection(state.mdb, x)),
     };
