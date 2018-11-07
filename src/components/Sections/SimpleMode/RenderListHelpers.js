@@ -2,9 +2,17 @@ import React from 'react';
 import groupBy from 'lodash/groupBy';
 import { Card, List } from 'semantic-ui-react';
 
-import { CT_ARTICLE, CT_DAILY_LESSON, CT_FULL_LESSON, CT_LESSON_PART, CT_VIDEO_PROGRAM_CHAPTER, NO_NAME, VS_NAMES } from '../../../helpers/consts';
+import {
+  CT_ARTICLE,
+  CT_DAILY_LESSON,
+  CT_FULL_LESSON,
+  CT_LESSON_PART,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  NO_NAME,
+  VS_NAMES
+} from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
-import { physicalFile } from '../../../helpers/utils';
+import { isEmpty, physicalFile } from '../../../helpers/utils';
 import Link from '../../../components/Language/MultiLanguageLink';
 
 const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
@@ -25,7 +33,7 @@ const getI18nTypeOverridesKey = (contentType) => {
 
 const sortMediaFiles = files =>
   files.sort((a, b) => {
-    const order = { audio: 0, videonHD: 1, videoHD: 2, text: 3, image: 4 };
+    const order = { audio: 0, 'lelo-mikud': 1, videonHD: 2, videoHD: 3, text: 4, image: 5 };
     const typeA = a.type === 'video' ? a.type + a.video_size : a.type;
     const typeB = b.type === 'video' ? b.type + b.video_size : b.type;
 
@@ -51,10 +59,23 @@ const renderHorizontalFilesList = (files, contentType, t) =>
     );
   });
 
+const unitLeloMikudFiles = (unit) => {
+  const keys = Object.keys(unit.derived_units).filter(key => key.includes('LELO_MIKUD'));
+  if (isEmpty(keys)) {
+    return [];
+  }
+
+  const du = unit.derived_units[keys[0]];
+  return du ?
+    du.files.map(file => ({ ...file, type: 'lelo-mikud' })) :
+    [];
+};
+
 const renderUnits = (units, language, t) =>
   units.filter((unit => unit)).map((unit) => {
-    const filesList = unit.files.filter(file => file.language === language);
-    const files     = filesList && renderHorizontalFilesList(filesList, unit.content_type, t);
+    const leloMikudFiles = unitLeloMikudFiles(unit);
+    const filesList      = [...unit.files, ...leloMikudFiles].filter(file => file.language === language);
+    const files          = filesList && renderHorizontalFilesList(filesList, unit.content_type, t);
 
     if (!files) {
       return null;
