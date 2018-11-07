@@ -63,8 +63,8 @@ const routes = [
   },
   { path: 'lessons/cu/:id', component: LessonUnit, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons/daily/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
-  { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.cuListPage('programs') } },
-  { path: 'programs/:tab', component: Programs, options: { ssrData: ssrDataLoaders.cuListPage('programs') } },
+  { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
+  { path: 'programs/:tab', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
   { path: 'programs/cu/:id', component: ProgramUnit, options: { ssrData: ssrDataLoaders.cuPage } },
   {
     path: 'programs/c/:id',

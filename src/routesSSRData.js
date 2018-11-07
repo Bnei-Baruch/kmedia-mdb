@@ -3,6 +3,7 @@ import moment from 'moment';
 
 import {
   CT_ARTICLE,
+  CT_CLIP,
   CT_FRIENDS_GATHERING,
   CT_LECTURE,
   CT_LESSON_PART,
@@ -26,6 +27,7 @@ import { actions as listsActions } from './redux/modules/lists';
 import { actions as homeActions } from './redux/modules/home';
 import { actions as eventsActions } from './redux/modules/events';
 import { actions as lessonsActions } from './redux/modules/lessons';
+import { actions as programsActions } from './redux/modules/programs';
 import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
 import { selectors as sourcesSelectors } from './redux/modules/sources';
 import { actions as assetsActions, selectors as assetsSelectors } from './redux/modules/assets';
@@ -44,6 +46,7 @@ import withPagination from './components/Pagination/withPagination';
 
 import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
 import { tabs as lessonsTabs } from './components/Sections/Lessons/MainPage';
+import { tabs as programsTabs } from './components/Sections/Programs/MainPage';
 import { tabs as pulicationsTabs } from './components/Sections/Publications/MainPage';
 import PDF from './components/shared/PDF/PDF';
 
@@ -68,8 +71,10 @@ export const cuPage = (store, match) => {
 
 const getExtraFetchParams = (ns, collectionID) => {
   switch (ns) {
-  case 'programs':
+  case 'programs-main':
     return { content_type: [CT_VIDEO_PROGRAM_CHAPTER] };
+  case 'programs-clips':
+    return { content_type: [CT_CLIP] };
   case 'publications-articles':
     return { content_type: [CT_ARTICLE] };
   case 'events-meals':
@@ -178,6 +183,17 @@ export const lessonsPage = (store, match) => {
   }
 
   const ns = `lessons-${tab}`;
+  return cuListPage(ns)(store, match);
+};
+
+export const programsPage = (store, match) => {
+  // hydrate tab
+  const tab = match.params.tab || programsTabs[0];
+  if (tab !== programsTabs[0]) {
+    store.dispatch(programsActions.setTab(tab));
+  }
+
+  const ns = `programs-${tab}`;
   return cuListPage(ns)(store, match);
 };
 

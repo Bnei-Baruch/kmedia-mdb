@@ -7,7 +7,7 @@ import { selectors as filterSelectors } from '../redux/modules/filters';
 import { selectors as listsSelectors, types as listTypes } from '../redux/modules/lists';
 import { updateQuery } from './helpers/url';
 import Api from '../helpers/Api';
-import { CT_VIDEO_PROGRAM, CT_CLIP, CT_CLIPS } from '../helpers/consts';
+import { CT_VIDEO_PROGRAM, CT_CLIPS } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
 import { filtersTransformer } from '../filters';
 

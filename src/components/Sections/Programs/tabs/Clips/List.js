@@ -12,7 +12,7 @@ import UnitLogo from '../../../../shared/Logo/UnitLogo';
 
 export const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
-  const clips  = breakdown.getClips();
+  const clips     = breakdown.getClips();
 
   const relatedItems = clips.map(x =>
     (
@@ -68,11 +68,11 @@ export const renderUnit = (unit, t) => {
   );
 };
 
-/* eslint-disable */
+/* eslint-disable-next-line react/no-multi-comp */
 class ClipsList extends Component {
-  extraFetchParams = () => (
-    { content_type: [CT_CLIP] }
-  );
+  extraFetchParams = () => ({
+    content_type: [CT_CLIP]
+  });
 
   render() {
     return (
