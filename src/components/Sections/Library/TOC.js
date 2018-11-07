@@ -84,7 +84,6 @@ class TOC extends Component {
   titleKey = id => `title-${id}`;
 
   hebrew = (number) => {
-
     let n = 1 * number;
     switch (n) {
     case 16:
@@ -92,6 +91,7 @@ class TOC extends Component {
     case 15:
       return 'ט"ו';
     default:
+      break;
     }
 
     let ret = '';

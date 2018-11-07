@@ -27,21 +27,29 @@ export default class ShareBar extends Component {
   };
 
   static defaultProps = {
+    url: '',
     buttonSize: 'big',
     messageTitle: '',
-    url: null
   };
+
+  getBsPixels = (buttonSize) => {
+    switch (buttonSize) {
+    default: return 46;
+    case 'small': return 36;
+    case 'tiny': return 26;
+    }
+  }
 
   render() {
     const { url, buttonSize, t, messageTitle } = this.props;
+    
     if (!url) {
       return null;
     }
 
     // noinspection JSValidateTypes
-    const bsPixels = buttonSize === 'big' ? 46 : 36;
-
-    const title = messageTitle || t('player.share.title');
+    const bsPixels  = this.getBsPixels(buttonSize);
+    const title     = messageTitle || t('player.share.title');
 
     return (
       <div className="social-buttons">

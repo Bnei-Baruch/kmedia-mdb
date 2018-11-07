@@ -71,25 +71,24 @@ export const canonicalLink = (entity, mediaLang) => {
   }
 
   if (entity.content_type === 'POST') {
-
-    const [blogID, postID] = entity.id.split("-");
+    const [blogID, postID] = entity.id.split('-');
     let blogName;
 
-    switch (parseInt(blogID)){
-      case BLOG_ID_LAITMAN_RU:
-        blogName = 'laitman-ru';
-        break;
-      case BLOG_ID_LAITMAN_COM:
-        blogName = 'laitman-com';
-        break;
-      case BLOG_ID_LAITMAN_ES:
-        blogName = 'laitman-es';
-        break;
-      case BLOG_ID_LAITMAN_CO_IL:
-        blogName = 'laitman-co-il';
-        break;
-      default:
-        blogName = 'laitman-co-il';
+    switch (parseInt(blogID, 10)) {
+    case BLOG_ID_LAITMAN_RU:
+      blogName = 'laitman-ru';
+      break;
+    case BLOG_ID_LAITMAN_COM:
+      blogName = 'laitman-com';
+      break;
+    case BLOG_ID_LAITMAN_ES:
+      blogName = 'laitman-es';
+      break;
+    case BLOG_ID_LAITMAN_CO_IL:
+      blogName = 'laitman-co-il';
+      break;
+    default:
+      blogName = 'laitman-co-il';
     }
 
     return `/publications/blog/${blogName}/${postID}`;
@@ -133,7 +132,7 @@ export const canonicalLink = (entity, mediaLang) => {
     return `/events/cu/${entity.id}`;
   }
 
-  const mediaLangSuffix = mediaLang ? `?language=${mediaLang}` : ``;
+  const mediaLangSuffix = mediaLang ? `?language=${mediaLang}` : '';
 
   // unit based on type
   switch (entity.content_type) {

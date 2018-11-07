@@ -13,6 +13,7 @@ import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as device } from '../../../redux/modules/device';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import Helmets from '../../shared/Helmets';
@@ -39,6 +40,7 @@ class LibraryContainer extends Component {
     push: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
     history: shapes.History.isRequired,
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -141,6 +143,38 @@ class LibraryContainer extends Component {
     return getPathByID(sourceId);
   };
 
+  isMobileDevice = () =>
+    this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
+
+  updateSticky = () => {
+    // take the secondary header height for sticky stuff calculations
+    if (this.secondaryHeaderRef) {
+      const { height } = this.secondaryHeaderRef.getBoundingClientRect();
+      if (this.state.secondaryHeaderHeight !== height) {
+        this.setState({ secondaryHeaderHeight: height });
+      }
+    }
+
+    // check fixed header width in pixels for text-overflow:ellipsis
+    if (this.contentHeaderRef) {
+      const { width } = this.contentHeaderRef.getBoundingClientRect();
+      if (this.state.contentHeaderWidth !== width) {
+        this.setState({ contentHeaderWidth: width });
+      }
+    }
+  };
+
+  firstLeafId = (sourceId) => {
+    const { getSourceById } = this.props;
+
+    const { children } = getSourceById(sourceId) || { children: [] };
+    if (isEmpty(children)) {
+      return sourceId;
+    }
+
+    return this.firstLeafId(children[0]);
+  };
+
   handleContextRef = (ref) => {
     this.contextRef = ref;
   };
@@ -159,35 +193,6 @@ class LibraryContainer extends Component {
 
   handleContentHeaderRef = (ref) => {
     this.contentHeaderRef = ref;
-  };
-
-  firstLeafId = (sourceId) => {
-    const { getSourceById } = this.props;
-
-    const { children } = getSourceById(sourceId) || { children: [] };
-    if (isEmpty(children)) {
-      return sourceId;
-    }
-
-    return this.firstLeafId(children[0]);
-  };
-
-  updateSticky = () => {
-    // take the secondary header height for sticky stuff calculations
-    if (this.secondaryHeaderRef) {
-      const { height } = this.secondaryHeaderRef.getBoundingClientRect();
-      if (this.state.secondaryHeaderHeight !== height) {
-        this.setState({ secondaryHeaderHeight: height });
-      }
-    }
-
-    // check fixed header width in pixels for text-overflow:ellipsis
-    if (this.contentHeaderRef) {
-      const { width } = this.contentHeaderRef.getBoundingClientRect();
-      if (this.state.contentHeaderWidth !== width) {
-        this.setState({ contentHeaderWidth: width });
-      }
-    }
   };
 
   handleTocIsActive = () => {
@@ -387,12 +392,12 @@ class LibraryContainer extends Component {
                 <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
                   <div className="source__header-title">{this.header(sourceId, fullPath)}</div>
                   <div className="source__header-toolbar">
-                    <Share t={t} />
                     <Button compact size="small" className="mobile-hidden" icon="print" onClick={this.print} />
                     <div id="download-button" />
                     <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
+                    <Share t={t} isMobile={this.isMobileDevice()} />
                   </div>
                 </Grid.Column>
               </Grid.Row>
@@ -454,6 +459,7 @@ export default withRouter(connect(
     areSourcesLoaded: sources.areSourcesLoaded(state.sources),
     NotToSort: sources.NotToSort,
     NotToFilter: sources.NotToFilter,
+    deviceInfo: device.getDeviceInfo(state.device),
   }),
   dispatch => bindActionCreators({
     fetchIndex: assetsActions.sourceIndex,

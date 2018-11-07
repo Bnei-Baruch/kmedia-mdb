@@ -10,7 +10,12 @@ const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 class LibraryShare extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
+    isMobile: PropTypes.bool
   };
+
+  static defaultProps = {
+    isMobile: false
+  }
 
   state = {
     isPopupOpen: false,
@@ -48,13 +53,15 @@ class LibraryShare extends Component {
   };
 
   render() {
-    const { t }                       = this.props;
+    const { t, isMobile }             = this.props;
     const { isPopupOpen, isCopyOpen } = this.state;
 
     let url;
     if (isPopupOpen) {
       url = window.location.href;  // shouldn't be called during SSR
     }
+
+    const buttonSize = isMobile ? 'tiny' : 'small';
 
     return (
       <Popup // share bar popup
@@ -69,7 +76,7 @@ class LibraryShare extends Component {
         onOpen={() => this.handlePopup(true)}
       >
         <Popup.Content>
-          <ShareBar url={url} t={t} buttonSize="mini" messageTitle={t('sources-library.share-title')} />
+          <ShareBar url={url} t={t} buttonSize={buttonSize} messageTitle={t('sources-library.share-title')} />
           <Message content={url} size="mini" />
           <Popup // link was copied message popup
             open={isCopyOpen}
