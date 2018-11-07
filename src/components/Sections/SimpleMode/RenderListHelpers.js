@@ -2,9 +2,17 @@ import React from 'react';
 import groupBy from 'lodash/groupBy';
 import { Card, List } from 'semantic-ui-react';
 
-import { CT_ARTICLE, CT_DAILY_LESSON, CT_FULL_LESSON, CT_LESSON_PART, CT_VIDEO_PROGRAM_CHAPTER, NO_NAME, VS_NAMES } from '../../../helpers/consts';
+import {
+  CT_ARTICLE,
+  CT_DAILY_LESSON,
+  CT_FULL_LESSON,
+  CT_LESSON_PART,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  NO_NAME,
+  VS_NAMES
+} from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
-import { physicalFile } from '../../../helpers/utils';
+import { isEmpty, physicalFile } from '../../../helpers/utils';
 import Link from '../../../components/Language/MultiLanguageLink';
 
 const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
@@ -52,13 +60,15 @@ const renderHorizontalFilesList = (files, contentType, t) =>
   });
 
 const unitLeloMikudFiles = (unit) => {
-  const keys                = [...Object.keys(unit.derived_units)].filter(key => key.includes('LELO_MIKUD'));
-  const leloMikudKey        = keys ? keys[0] : null;
-  const leloMikudCollection = leloMikudKey ? unit.derived_units[leloMikudKey] : null;
+  const keys = Object.keys(unit.derived_units).filter(key => key.includes('LELO_MIKUD'));
+  if (isEmpty(keys)) {
+    return [];
+  }
 
-  return leloMikudCollection ? leloMikudCollection.files.map((file) => {
-    return { ...file, type: 'lelo-mikud' };
-  }) : [];
+  const du = unit.derived_units[keys[0]];
+  return du ?
+    du.files.map(file => ({ ...file, type: 'lelo-mikud' })) :
+    [];
 };
 
 const renderUnits = (units, language, t) =>

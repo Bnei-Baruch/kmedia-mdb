@@ -232,23 +232,23 @@ const stripOldFiles = (unit) => {
   return { ...unit, files: nFiles };
 };
 
-const normalizeSubUnit = (unit, type, parentId, state) => {
+const normalizeLinkedUnits = (linkedUnits, type, parentId, state) => {
   const typeKey       = type === 'derived_units' ? 'sduIDs' : 'dduIDs';
   const updatedCuById = { ...state.cuById };
-  const subUnit       = Object.entries(unit).reduce((acc, val) => {
+  const ids           = Object.entries(linkedUnits).reduce((acc, val) => {
     const [k, v]          = val;
     const [cuID, relName] = k.split('____');
 
-    // make a copy of source unit and set this unit as relation name
-    const updatedSubUnit    = { ...v, ...state.cuById[v.id] };
-    updatedSubUnit[typeKey] = { ...updatedSubUnit[typeKey], [parentId]: relName };
-    updatedCuById[v.id]     = stripOldFiles(updatedSubUnit);
+    // make a copy of linked unit and set parent unit as relation name
+    const updatedLU     = { ...v, ...state.cuById[v.id] };
+    updatedLU[typeKey]  = { ...updatedLU[typeKey], [parentId]: relName };
+    updatedCuById[v.id] = stripOldFiles(updatedLU);
 
     acc[k] = cuID;
     return acc;
   }, {});
 
-  return { subUnit, updatedCuById };
+  return { ids, updatedCuById };
 };
 
 const onReceiveCollections = (state, action) => {
@@ -260,6 +260,7 @@ const onReceiveCollections = (state, action) => {
 
   const cById = { ...state.cById };
   let cuById  = { ...state.cuById };
+
   items.forEach((x) => {
     // make a copy of incoming data since we're about to mutate it
     const y = { ...x };
@@ -277,17 +278,17 @@ const onReceiveCollections = (state, action) => {
 
         // normalize derived content units
         if (cu.derived_units) {
-          const { subUnit, updatedCuById } = normalizeSubUnit(cu.derived_units, 'derived_units', y.id, state);
-          updatedCU.dduIDs                 = subUnit;
-          cuById                           = { ...cuById, ...updatedCuById };
+          const { ids, updatedCuById } = normalizeLinkedUnits(cu.derived_units, 'derived_units', cu.id, state);
+          updatedCU.dduIDs             = ids;
+          cuById                       = { ...cuById, ...updatedCuById };
           delete updatedCU.derived_units;
         }
 
         // normalize source content units
         if (cu.source_units) {
-          const { subUnit, updatedCuById } = normalizeSubUnit(cu.derived_units, 'source_units', y.id, state);
-          updatedCU.sduIDs                 = subUnit;
-          cuById                           = { ...cuById, ...updatedCuById };
+          const { ids, updatedCuById } = normalizeLinkedUnits(cu.source_units, 'source_units', cu.id, state);
+          updatedCU.sduIDs             = ids;
+          cuById                       = { ...cuById, ...updatedCuById };
           delete updatedCU.source_units;
         }
 
@@ -351,22 +352,23 @@ const onReceiveContentUnits = (state, action) => {
 
     // normalize derived content units
     if (y.derived_units) {
-      const { subUnit, updatedCuById } = normalizeSubUnit(y.derived_units, 'derived_units', y.id, state);
-      y.dduIDs                         = subUnit;
-      cuById                           = { ...cuById, ...updatedCuById };
+      const { ids, updatedCuById } = normalizeLinkedUnits(y.derived_units, 'derived_units', y.id, state);
+      y.dduIDs                     = ids;
+      cuById                       = { ...cuById, ...updatedCuById };
       delete y.derived_units;
     }
 
     // normalize source content units
     if (y.source_units) {
-      const { subUnit, updatedCuById } = normalizeSubUnit(y.derived_units, 'source_units', y.id, state);
-      y.sduIDs                         = subUnit;
-      cuById                           = { ...cuById, ...updatedCuById };
+      const { ids, updatedCuById } = normalizeLinkedUnits(y.source_units, 'source_units', y.id, state);
+      y.sduIDs                     = ids;
+      cuById                       = { ...cuById, ...updatedCuById };
       delete y.source_units;
     }
 
     cuById[y.id] = stripOldFiles({ ...state.cuById[y.id], ...y });
   });
+
   return {
     ...state,
     cById,
