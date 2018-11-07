@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import { push as routerPush, replace as routerReplace } from 'react-router-redux';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { translate } from 'react-i18next';
 import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
 
@@ -13,6 +13,7 @@ import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as device } from '../../../redux/modules/device';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import Helmets from '../../shared/Helmets';
@@ -26,6 +27,7 @@ class LibraryContainer extends Component {
     sourceId: PropTypes.string.isRequired,
     indexMap: PropTypes.objectOf(shapes.DataWipErr),
     language: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
     fetchIndex: PropTypes.func.isRequired,
     sourcesSortBy: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,
@@ -38,6 +40,7 @@ class LibraryContainer extends Component {
     push: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
     history: shapes.History.isRequired,
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -64,7 +67,7 @@ class LibraryContainer extends Component {
     window.addEventListener('resize', this.updateSticky);
     window.addEventListener('load', this.updateSticky);
 
-    const { sourceId, areSourcesLoaded, replace, history }                                = this.props;
+    const { sourceId, areSourcesLoaded, replace, history }                             = this.props;
     const { location: { state: { tocIsActive } = { state: { tocIsActive: false } } } } = history;
 
     if (tocIsActive) {
@@ -77,9 +80,7 @@ class LibraryContainer extends Component {
     }
 
     const firstLeafId = this.firstLeafId(sourceId);
-    if (firstLeafId !== sourceId ||
-      this.props.sourceId !== sourceId ||
-      this.state.lastLoadedId !== sourceId) {
+    if (firstLeafId !== sourceId || this.state.lastLoadedId !== sourceId) {
       if (firstLeafId !== sourceId) {
         replace(`sources/${firstLeafId}`);
       } else {
@@ -141,6 +142,9 @@ class LibraryContainer extends Component {
 
     return getPathByID(sourceId);
   };
+
+  isMobileDevice = () =>
+    this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
   updateSticky = () => {
     // take the secondary header height for sticky stuff calculations
@@ -292,6 +296,10 @@ class LibraryContainer extends Component {
     this.setState({ match: '' });
   };
 
+  print = () => {
+    window.print();
+  };
+
   matchString = (parentId, t) => {
     if (this.props.NotToFilter.findIndex(a => a === parentId) !== -1) {
       return null;
@@ -310,7 +318,7 @@ class LibraryContainer extends Component {
   };
 
   render() {
-    const { sourceId, indexMap, getSourceById, language, t } = this.props;
+    const { sourceId, indexMap, getSourceById, language, contentLanguage, t } = this.props;
 
     const fullPath = this.getFullPath(sourceId);
     const parentId = this.properParentId(fullPath);
@@ -330,7 +338,8 @@ class LibraryContainer extends Component {
         <LibraryContentContainer
           source={sourceId}
           index={index}
-          languageUI={language}
+          uiLanguage={language}
+          contentLanguage={contentLanguage}
           langSelectorMount={this.headerMenuRef}
           t={t}
         />
@@ -352,7 +361,7 @@ class LibraryContainer extends Component {
 
     return (
       <div
-        className={classnames({
+        className={classNames({
           source: true,
           'is-readable': isReadable,
           'toc--is-active': tocIsActive,
@@ -383,11 +392,12 @@ class LibraryContainer extends Component {
                 <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
                   <div className="source__header-title">{this.header(sourceId, fullPath)}</div>
                   <div className="source__header-toolbar">
+                    <Button compact size="small" className="mobile-hidden" icon="print" onClick={this.print} />
                     <div id="download-button" />
                     <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                    <Share t={t} />
+                    <Share t={t} isMobile={this.isMobileDevice()} />
                   </div>
                 </Grid.Column>
               </Grid.Row>
@@ -415,7 +425,7 @@ class LibraryContainer extends Component {
                 mobile={16}
                 tablet={16}
                 computer={12}
-                className={classnames({
+                className={classNames({
                   'source__content-wrapper': true,
                   [`size${fontSize}`]: true,
                 })}
@@ -442,12 +452,14 @@ export default withRouter(connect(
     sourceId: ownProps.match.params.id,
     indexMap: assets.getSourceIndexById(state.assets),
     language: settings.getLanguage(state.settings),
+    contentLanguage: settings.getContentLanguage(state.settings),
     getSourceById: sources.getSourceById(state.sources),
     getPathByID: sources.getPathByID(state.sources),
     sortBy: sources.sortBy(state.sources),
     areSourcesLoaded: sources.areSourcesLoaded(state.sources),
     NotToSort: sources.NotToSort,
     NotToFilter: sources.NotToFilter,
+    deviceInfo: device.getDeviceInfo(state.device),
   }),
   dispatch => bindActionCreators({
     fetchIndex: assetsActions.sourceIndex,

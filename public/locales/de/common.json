@@ -178,6 +178,13 @@
     "search": "Öffne die Kabbala",
     "sections": "Sektionen archivieren",
     "updates": "Neueste Updates",
+    "social": "Rav Laitman in sozialen Netzwerken",
+    "blog-title": "Rav Laitmans Blog",
+    "twitter-title": "Tweets",
+    "all-posts": "Alle Blog-Posts",
+    "all-tweets": "Alle Tweets",
+    "read-more-posts": "Lesen Sie mehr Beiträge",
+    "read-more-tweets": "Lesen Sie mehr Tweets",
     "last-lesson": "Die letzte Lektion",
     "donate": "SPENDEN",
     "promoted": {
@@ -307,17 +314,18 @@
           "title": "Die übrigen Teile des gleichen Programms"
         }
       }
-    }
+    },
+    "read-more": "Weiterlesen"
   },
   "simple-mode": {
     "header": {
-      "text": "Downloads - Eenvoudige versie",
-      "subtext": "Concentreer alle media voor een specifieke dag"
+      "text": "Downloads - Einfache Version",
+      "subtext": "Alle Medien für einen bestimmten Tag"
     },
-    "today-button": "vandaag",
-    "total-media-for-date": "Alle media voor datum ",
-    "media-language": "Mediataal",
-    "no-files-found-for-lang": "Er zijn geen bestanden voor de taal die u hebt geselecteerd",
+    "today-button": "Heute",
+    "total-media-for-date": "Alle Medien für das Datum ",
+    "media-language": "Mediensprache",
+    "no-files-found-for-lang": "Es gibt keine Dateien für die ausgewählte Sprache",
     "no-files-found-for-date": "Es gibt keine Dateien für dieses Datum",
     "date": "Datum",
     "prev": "Bisherige",
@@ -395,7 +403,8 @@
         "audio": "Audiolektionen",
         "audio-simple": "Audio",
         "text": "Transkript",
-        "image": "Zeichnungen"
+        "image": "Zeichnungen",
+        "lelo-mikud": "Keine Fokusgruppe"
       }
     },
     "program": {
@@ -499,5 +508,10 @@
   },
   "values": {
     "date": "{{date, l}}"
+  },
+  "languages": {
+    "language": "Sprache",
+    "website_language": "Website Language",
+    "content_language": "Preferred content language"
   }
 }

@@ -19,6 +19,7 @@ export class PlaylistCollectionContainer extends Component {
     wip: shapes.WipMap.isRequired,
     errors: shapes.ErrorsMap.isRequired,
     language: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
     PlaylistComponent: PropTypes.func,
     fetchCollection: PropTypes.func.isRequired,
     fetchUnit: PropTypes.func.isRequired,
@@ -133,7 +134,7 @@ export class PlaylistCollectionContainer extends Component {
   };
 
   render() {
-    const { match, language, collection, wip: wipMap, errors, PlaylistComponent, shouldRenderHelmet } = this.props;
+    const { match, language, contentLanguage, collection, wip: wipMap, errors, PlaylistComponent, shouldRenderHelmet } = this.props;
 
     // We're wip / err if some request is wip / err
     const { id } = match.params;
@@ -154,7 +155,8 @@ export class PlaylistCollectionContainer extends Component {
         collection={collection}
         wip={wip}
         err={err}
-        language={language}
+        uiLanguage={language}
+        contentLanguage={contentLanguage}
         PlaylistComponent={PlaylistComponent}
         shouldRenderHelmet={shouldRenderHelmet}
         nextLink={nextLink}
@@ -166,10 +168,10 @@ export class PlaylistCollectionContainer extends Component {
 
 function mapState(state, props) {
   const collection = selectors.getDenormCollectionWUnits(state.mdb, props.match.params.id);
-  const language   = settings.getLanguage(state.settings);
   return {
     collection,
-    language,
+    language: settings.getLanguage(state.settings),
+    contentLanguage: settings.getContentLanguage(state.settings),
     wip: selectors.getWip(state.mdb),
     errors: selectors.getErrors(state.mdb),
     items: selectors.getCollections(state.mdb),

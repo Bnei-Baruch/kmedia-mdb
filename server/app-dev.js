@@ -42,7 +42,7 @@ router.use('/locales', express.static(
 
 // proxy other static assets to create-react-app dev server
 router.use(['**/*.*', '/static', '/sockjs-node'], proxy({
-  target: 'http://localhost:' + CRA_CLIENT_PORT,
+  target: `http://localhost:${CRA_CLIENT_PORT}`,
   changeOrigin: true,
   ws: true
 }));

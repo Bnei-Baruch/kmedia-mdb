@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 
@@ -52,7 +52,7 @@ class Basic extends Component {
     const { title, description, keywords, /* url, */ imageUrl } = this.props;
 
     return (
-      <div>
+      <Fragment>
         {!isEmpty(title) ? this.buildTitle(title) : null}
         {!isEmpty(description) ? this.buildDescription(description) : null}
         <Helmet>
@@ -78,7 +78,7 @@ class Basic extends Component {
           {/* favicon : A small icon of dimensions 32 x 32 pixels. */}
         </Helmet>
         {!isEmpty(imageUrl) ? <Image unitOrUrl={imageUrl} /> : null}
-      </div>
+      </Fragment>
     );
   }
 }

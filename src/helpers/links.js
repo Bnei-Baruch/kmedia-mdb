@@ -74,7 +74,7 @@ export const canonicalLink = (entity, mediaLang) => {
     const [blogID, postID] = entity.id.split('-');
     let blogName;
 
-    switch (parseInt(blogID)) {
+    switch (parseInt(blogID, 10)) {
     case BLOG_ID_LAITMAN_RU:
       blogName = 'laitman-ru';
       break;

@@ -12,34 +12,32 @@ import portraitBS from '../../../images/portrait_bs.png';
 import portraitRB from '../../../images/portrait_rb.png';
 import portraitML from '../../../images/portrait_ml.png';
 
+const portraits = { bs: portraitBS, rb: portraitRB, ml: portraitML };
+
 class Homepage extends Component {
   static propTypes = {
     roots: PropTypes.arrayOf(PropTypes.string).isRequired,
     getSourceById: PropTypes.func.isRequired,
   };
 
-  static portraits = [portraitBS, portraitRB, portraitML];
+  renderKabbalists = () => {
+    const { roots, getSourceById } = this.props;
 
-  static kabbalists = ({ roots, getSourceById }) => {
-    let portraitIndex = 0;
-
-    return roots.map((kabbalist) => {
-      const author = getSourceById(kabbalist);
+    return roots.map((k) => {
+      const author = getSourceById(k);
 
       return isEmpty(author.children) ?
         null :
         <Kabbalist
-          key={kabbalist}
+          key={author}
           author={author}
           getSourceById={getSourceById}
-          portrait={Homepage.portraits[portraitIndex++]}
+          portrait={portraits[k]}
         />;
-    }).filter(x => x); // remove nulls
+    });
   };
 
   render() {
-    const { roots, getSourceById } = this.props;
-
     return (
       <div>
         <SectionHeader section="sources-library" />
@@ -47,7 +45,7 @@ class Homepage extends Component {
         <Container className="padded">
           <Table basic="very" className="index-list sources__authors">
             <Table.Body>
-              {Homepage.kabbalists({ roots, getSourceById })}
+              {this.renderKabbalists()}
             </Table.Body>
           </Table>
         </Container>

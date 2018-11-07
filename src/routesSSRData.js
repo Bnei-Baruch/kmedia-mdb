@@ -261,7 +261,7 @@ export const libraryPage = async (store, match) => {
 
       let language    = null;
       const uiLang    = settingsSelectors.getLanguage(state.settings);
-      const languages = Array.from(Object.keys(data));
+      const languages = [...Object.keys(data)];
       if (languages.length > 0) {
         language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;
       }
