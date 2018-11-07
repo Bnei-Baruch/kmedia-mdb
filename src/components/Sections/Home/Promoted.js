@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Header, Image } from 'semantic-ui-react';
 
 import img from '../../../images/virtual_congress.jpg';
+import Link from '../../Language/MultiLanguageLink';
 // import img from '../../../images/rosh_shana.jpg';
 // import img from '../../../images/KKLO_ITALY_18_logo2.svg';
 // import img from '../../../images/archive_banner.jpg';
@@ -25,11 +26,7 @@ class Promoted extends Component {
 
     return (
       <div className="thumbnail">
-        <a
-          href="https://sites.google.com/view/worldvirtualcongress"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <Link to="/events/c/s3uPMmM9">
           <Image fluid src={img} className="thumbnail__image" />
           {
             header ?
@@ -43,7 +40,7 @@ class Promoted extends Component {
               </Header> :
               null
           }
-        </a>
+        </Link>
       </div>
     );
   }
