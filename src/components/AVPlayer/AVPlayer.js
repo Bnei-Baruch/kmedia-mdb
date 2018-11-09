@@ -41,7 +41,7 @@ const playbackToValue = playback =>
 class AVPlayer extends PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
-    media: PropTypes.object.isRequired,
+    media: shapes.Media.isRequired,
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -49,7 +49,7 @@ class AVPlayer extends PureComponent {
     onLanguageChange: PropTypes.func.isRequired,
 
     // Audio/Video switch props.
-    item: PropTypes.object.isRequired, // TODO: (yaniv) add shape fo this
+    item: shapes.VideoItem.isRequired,
     onSwitchAV: PropTypes.func.isRequired,
 
     // Slice props
@@ -131,12 +131,15 @@ class AVPlayer extends PureComponent {
     // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ isClient: true });
 
-    const { deviceInfo: { browser: { name: browserName } } } = this.props;
+    const { deviceInfo: { browser: { name: browserName } }, media } = this.props;
     this.setState({
       browserName,
       firstSeek: true,
       ...this.chooseSource(this.props)
     });
+    
+    if (browserName === 'Edge' || browserName === 'IE') 
+      media.play();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -218,14 +221,14 @@ class AVPlayer extends PureComponent {
     if (firstSeek) {
       media.play();
     }
-       
+
     if (wasCurrentTime) {
       media.seekTo(wasCurrentTime);
     } else if (!sliceStart && firstSeek) {
       const savedTime = this.getSavedTime();
       if (savedTime) {
         media.seekTo(savedTime);
-      }      
+      }
     }
 
     // restore playback from state when player instance changed (when src changes, e.g., playlist).
@@ -541,7 +544,7 @@ class AVPlayer extends PureComponent {
     let centerMediaControl;
     if (error) {
       centerMediaControl = (
-        <div className="player-button">
+        <div className="player-button player-error-message">
           {t('player.error.loading')}
           {errorReason ? ` ${errorReason}` : ''}
           &nbsp;

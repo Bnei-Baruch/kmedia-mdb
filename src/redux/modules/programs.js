@@ -1,39 +1,53 @@
 import { createAction, handleActions } from 'redux-actions';
+import groupBy from 'lodash/groupBy';
+import mapValues from 'lodash/mapValues';
 
 import { types as settings } from './settings';
+import { types as ssr } from './ssr';
 
 /* Types */
+const SET_TAB = 'Programs/SET_TAB';
 const RECEIVE_COLLECTIONS = 'Programs/RECEIVE_COLLECTIONS';
 
 export const types = {
+  SET_TAB,
   RECEIVE_COLLECTIONS,
 };
 
 /* Actions */
-
+const setTab = createAction(SET_TAB);
 const receiveCollections = createAction(RECEIVE_COLLECTIONS);
 
 export const actions = {
+  setTab,
   receiveCollections,
 };
 
 /* Reducer */
 
 const initialState = {
-  programs: [],
+  programsByType: {},
+  wip: false,
+  error: null
 };
 
 const onSetLanguage = state => ({
   ...state,
-  programs: [],
+  programsByType: {},
+});
+
+const onSSRPrepare = state => ({
+  ...state,
+  err: state.err ? state.err.toString() : state.err,
 });
 
 const onReceiveCollections = (state, action) => ({
   ...state,
-  programs: action.payload.map(x => x.id),
+  programsByType: mapValues(groupBy(action.payload, x => x.content_type), x => x.map(y => y.id)),
 });
 
 export const reducer = handleActions({
+  [ssr.PREPARE]: onSSRPrepare,
   [settings.SET_LANGUAGE]: onSetLanguage,
 
   [RECEIVE_COLLECTIONS]: onReceiveCollections,
@@ -41,8 +55,8 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getPrograms = state => state.programs;
+const getProgramsByType = state => state.programsByType;
 
 export const selectors = {
-  getPrograms,
+  getProgramsByType,
 };

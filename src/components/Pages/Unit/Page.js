@@ -59,8 +59,8 @@ export class UnitPage extends Component {
   }
 
   renderDownloads() {
-    const { unit, language, t } = this.props;
-    return <MediaDownloads unit={unit} language={language} t={t} />;
+    const { unit, t } = this.props;
+    return <MediaDownloads unit={unit} t={t} />;
   }
 
   renderRecommendations() {

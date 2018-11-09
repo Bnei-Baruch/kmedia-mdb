@@ -630,6 +630,32 @@
   font-size: 16px;
 }
 
+@media print {
+  .source__toc,
+  .layout__header,
+  .layout__sidebar,
+  .layout__footer,
+  .layout__secondary-header,
+  .anchors-language-selector,
+  #us_report_button {
+    display: none;
+  }
+
+  .layout {
+    &__main {
+      padding: 0; // to remove existing padding
+    }
+
+    &__content {
+      margin: 20px 0px !important;
+    }
+  }
+
+  .ui.container {
+    padding-top: 0 !important; // remove existing padding
+  }
+}
+
 .DayPicker-Day {
   outline: none !important;
 }
@@ -858,6 +884,14 @@
   }
 }
 
+.mediaplayer__onscreen-controls {
+  .player-button.player-error-message {
+    background: white;
+    border: 2px solid red;
+    padding: 7px;
+    border-radius: 50px;
+  }
+}
 /* ************* End of styles for simple mode ************* */
 .home-social-section {
   .titles {

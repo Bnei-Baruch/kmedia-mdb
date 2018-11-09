@@ -41,6 +41,7 @@ export const renderUnit = (unit, t) => {
   );
 };
 
+/* eslint-disable-next-line react/no-multi-comp */
 class ProgramCollection extends Component {
   render() {
     return <Collection namespace="programs-collection" renderUnit={renderUnit} />;

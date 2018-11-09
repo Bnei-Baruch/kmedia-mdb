@@ -260,6 +260,7 @@ export const BS_TAAS_PARTS = {
 export const RABASH_PERSON_UID = 'KxApZ4pI';
 
 export const COOKIE_UI_LANG    = 'archive_UIlang';
+export const COOKIE_CONTENT_LANG = 'archive_ContentLang';
 export const LANG_UI_LANGUAGES = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_GERMAN, LANG_UKRAINIAN];
 
 // Search

@@ -38,19 +38,37 @@ export class CollectionsBreakdown {
     this.collectTypes(CT_VIDEO_PROGRAM);
 
   getLectures = () =>
-    this.collectTypes(CT_LECTURE_SERIES, CT_WOMEN_LESSONS, /* CT_CHILDREN_LESSONS, */ CT_VIRTUAL_LESSONS);
+    this.collectTypes(CT_LECTURE_SERIES, CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS);
 
   getArticles = () =>
     this.collectTypes(CT_ARTICLES);
 
-  getAllButDailyLessons = () =>
+  getClips = () =>
+    this.collectTypes(CT_CLIPS);
+
+  getAllButClips = () =>
     this.collectTypes(
-      CT_FRIENDS_GATHERINGS,
-      CT_VIDEO_PROGRAM,
+      CT_DAILY_LESSON,
+      CT_SPECIAL_LESSON,
       CT_LECTURE_SERIES,
-      // CT_CHILDREN_LESSONS,
       CT_WOMEN_LESSONS,
       CT_VIRTUAL_LESSONS,
+      CT_FRIENDS_GATHERINGS,
+      CT_VIDEO_PROGRAM,
+      CT_MEALS,
+      CT_CONGRESS,
+      CT_HOLIDAY,
+      CT_PICNIC,
+      CT_UNITY_DAY,
+      CT_ARTICLES);
+
+  getAllButDailyLessons = () =>
+    this.collectTypes(
+      CT_LECTURE_SERIES,
+      CT_WOMEN_LESSONS,
+      CT_VIRTUAL_LESSONS,
+      CT_FRIENDS_GATHERINGS,
+      CT_VIDEO_PROGRAM,
       CT_MEALS,
       CT_CONGRESS,
       CT_HOLIDAY,
@@ -65,7 +83,6 @@ export class CollectionsBreakdown {
       CT_SPECIAL_LESSON,
       CT_FRIENDS_GATHERINGS,
       CT_LECTURE_SERIES,
-      // CT_CHILDREN_LESSONS,
       CT_WOMEN_LESSONS,
       CT_VIRTUAL_LESSONS,
       CT_MEALS,

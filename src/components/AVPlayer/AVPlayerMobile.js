@@ -225,12 +225,12 @@ class AVPlayerMobile extends PureComponent {
 
     const time = e.currentTarget.currentTime;
     this.saveCurrentTime(time);
-   
+
     if (mode !== PLAYER_MODE.SLICE_VIEW || seeking===true) {
        return;
     }
 
-    const lowerTime = Math.min(sliceEnd, time);  
+    const lowerTime = Math.min(sliceEnd, time);
 
     if (time < sliceStart - 0.5 || time > sliceEnd) {
       this.setState({
@@ -268,9 +268,9 @@ class AVPlayerMobile extends PureComponent {
 
     this.setState({ seeking: true });
     // If seek not success, do a seek timeout (bug fix for android internal browser)
-    if (force && !this.isSeekSuccess(t)) 
-      this.seekTimeout(t, 250);    
-    else 
+    if (force && !this.isSeekSuccess(t))
+      this.seekTimeout(t, 250);
+    else
       this.setState({ seeking: false });
   };
 
@@ -284,10 +284,10 @@ class AVPlayerMobile extends PureComponent {
       }
       this.media.currentTime = t;
       if (!this.isSeekSuccess(t))
-          this.seekTimeout(t, timeout);      
-      else 
-          this.setState({ seeking: false });      
-    }, timeout);    
+          this.seekTimeout(t, timeout);
+      else
+          this.setState({ seeking: false });
+    }, timeout);
   };
 
   isSeekSuccess = t =>
@@ -397,11 +397,11 @@ class AVPlayerMobile extends PureComponent {
     }
 
     return (
-      <div className="mediaplayer">        
+      <div className="mediaplayer">
         <div style={{ marginBottom: '0px' }}>{mediaEl}</div>
         {
           error ?
-            <div className="player-button">
+            <div className="player-button player-error-message">
               {t('player.error.loading')}
               {errorReason ? ` ${errorReason}` : ''}
               &nbsp;
@@ -458,8 +458,8 @@ class AVPlayerMobile extends PureComponent {
           isSliceMode ?
             <ShareFormMobile media={this.media} item={item} t={t} /> :
             null
-        }        
-      </div>     
+        }
+      </div>
     );
   }
 }

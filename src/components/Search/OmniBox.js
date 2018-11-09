@@ -38,6 +38,8 @@ export class OmniBox extends Component {
   static defaultProps = {
     suggestions: {},
     onSearch: noop,
+    getSourcePath: noop,
+    getTagPath: noop,
   };
 
   constructor(props) {

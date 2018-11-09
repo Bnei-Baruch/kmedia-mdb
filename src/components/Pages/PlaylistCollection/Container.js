@@ -19,6 +19,7 @@ export class PlaylistCollectionContainer extends Component {
     wip: shapes.WipMap.isRequired,
     errors: shapes.ErrorsMap.isRequired,
     language: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
     PlaylistComponent: PropTypes.func,
     fetchCollection: PropTypes.func.isRequired,
     fetchUnit: PropTypes.func.isRequired,
@@ -45,41 +46,6 @@ export class PlaylistCollectionContainer extends Component {
   componentWillReceiveProps(nextProps) {
     this.askForDataIfNeeded(nextProps);
   }
-
-  askForDataIfNeeded = (props) => {
-    const { match, collection, wip, errors, fetchCollection, fetchUnit } = props;
-
-    // We fetch stuff if we don't have it already
-    // and a request for it is not in progress or ended with an error.
-    const { id } = match.params;
-
-    let fetchedSingle = false;
-    if (!Object.prototype.hasOwnProperty.call(wip.collections, id)) {
-      // never fetched as full so fetch now
-      fetchCollection(id);
-      fetchedSingle = true;
-    }
-
-    if (collection && collection.id === id && Array.isArray(collection.cuIDs)) {
-      collection.cuIDs.forEach((cuID) => {
-        const cu = collection.content_units.find(x => x.id === cuID);
-        if (!cu || !cu.files) {
-          if (!(wip.units[cuID] || errors.units[cuID])) {
-            fetchUnit(cuID);
-          }
-        }
-      });
-    } else if (!fetchedSingle && !(wip.collections[id] || errors.collections[id])) {
-      fetchCollection(id);
-    }
-
-    // next prev links only for lessons
-    if (collection &&
-      (collection.content_type === CT_DAILY_LESSON ||
-        collection.content_type === CT_SPECIAL_LESSON)) {
-      this.getNextPrevLinks(props);
-    }
-  };
 
   getNextPrevLinks = (props) => {
     const { match, wip, cWindow } = props;
@@ -132,8 +98,43 @@ export class PlaylistCollectionContainer extends Component {
     });
   };
 
+  askForDataIfNeeded = (props) => {
+    const { match, collection, wip, errors, fetchCollection, fetchUnit } = props;
+
+    // We fetch stuff if we don't have it already
+    // and a request for it is not in progress or ended with an error.
+    const { id } = match.params;
+
+    let fetchedSingle = false;
+    if (!Object.prototype.hasOwnProperty.call(wip.collections, id)) {
+      // never fetched as full so fetch now
+      fetchCollection(id);
+      fetchedSingle = true;
+    }
+
+    if (collection && collection.id === id && Array.isArray(collection.cuIDs)) {
+      collection.cuIDs.forEach((cuID) => {
+        const cu = collection.content_units.find(x => x.id === cuID);
+        if (!cu || !cu.files) {
+          if (!(wip.units[cuID] || errors.units[cuID])) {
+            fetchUnit(cuID);
+          }
+        }
+      });
+    } else if (!fetchedSingle && !(wip.collections[id] || errors.collections[id])) {
+      fetchCollection(id);
+    }
+
+    // next prev links only for lessons
+    if (collection &&
+      (collection.content_type === CT_DAILY_LESSON ||
+        collection.content_type === CT_SPECIAL_LESSON)) {
+      this.getNextPrevLinks(props);
+    }
+  };
+
   render() {
-    const { match, language, collection, wip: wipMap, errors, PlaylistComponent, shouldRenderHelmet } = this.props;
+    const { match, language, contentLanguage, collection, wip: wipMap, errors, PlaylistComponent, shouldRenderHelmet } = this.props;
 
     // We're wip / err if some request is wip / err
     const { id } = match.params;
@@ -154,7 +155,8 @@ export class PlaylistCollectionContainer extends Component {
         collection={collection}
         wip={wip}
         err={err}
-        language={language}
+        uiLanguage={language}
+        contentLanguage={contentLanguage}
         PlaylistComponent={PlaylistComponent}
         shouldRenderHelmet={shouldRenderHelmet}
         nextLink={nextLink}
@@ -166,10 +168,10 @@ export class PlaylistCollectionContainer extends Component {
 
 function mapState(state, props) {
   const collection = selectors.getDenormCollectionWUnits(state.mdb, props.match.params.id);
-  const language   = settings.getLanguage(state.settings);
   return {
     collection,
-    language,
+    language: settings.getLanguage(state.settings),
+    contentLanguage: settings.getContentLanguage(state.settings),
     wip: selectors.getWip(state.mdb),
     errors: selectors.getErrors(state.mdb),
     items: selectors.getCollections(state.mdb),

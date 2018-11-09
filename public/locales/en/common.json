@@ -269,7 +269,11 @@
   "programs": {
     "header": {
       "text": "Programs",
-      "subtext": "Here you will find a rich variety of programs that include: fascinating conversations about the meaning of life, current events, programs for the whole family and more."
+      "subtext": "Here you will find a rich variety of programs that include: fascinating conversations about the meaning of life, current events, programs for the whole family, clips and more."
+    },
+    "tabs": {
+      "main": "Programs",
+      "clips": "Clips"
     },
     "genres": {
       "documentary": "Documentary",
@@ -282,7 +286,8 @@
       "other": "Other"
     },
     "list": {
-      "episode_from": "Episode from:"
+      "episode_from": "Episode from:",
+      "item_of": "Item of:"
     },
     "unit": {
       "recommended": {
@@ -318,7 +323,7 @@
   "simple-mode": {
     "header": {
       "text": "Downloads - Simple version",
-      "subtext": "Concentrate all media for a specific day"
+      "subtext": "All media for a certain day"
     },
     "today-button": "Today",
     "total-media-for-date": "All media for date ",
@@ -413,7 +418,8 @@
         "audio": "Lesson Audio",
         "audio-simple": "Audio",
         "text": "Transcription Text",
-        "image": "Sketches"
+        "image": "Sketches",
+        "lelo-mikud": "No focus-group"
       }
     },
     "program": {
@@ -517,5 +523,10 @@
   },
   "values": {
     "date": "{{date, l}}"
+  },
+  "languages": {
+    "language": "Language",
+    "website_language": "Website Language",
+    "content_language": "Preferred content language"
   }
 }

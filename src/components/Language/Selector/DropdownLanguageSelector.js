@@ -5,13 +5,12 @@ import { Dropdown } from 'semantic-ui-react';
 import BaseLanguageSelector from './BaseLanguageSelector';
 
 class DropdownLanguageSelector extends BaseLanguageSelector {
-
   handleSelect = (e, data) =>
     this.props.onSelect(e, data.value);
 
   render() {
-    const { defaultValue } = this.props;
-    const options          = this.getOptions(this.props);
+    const { defaultValue: value } = this.props;
+    const options                 = this.getOptions(this.props);
 
     return (
       <Dropdown
@@ -21,7 +20,7 @@ class DropdownLanguageSelector extends BaseLanguageSelector {
         selection
         scrolling
         className="dropdown-language-selector"
-        defaultValue={defaultValue}
+        value={value}
         options={options}
         onChange={this.handleSelect}
       />

@@ -17,6 +17,7 @@ class TranscriptionContainer extends Component {
       err: shapes.Error,
     })).isRequired,
     language: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     doc2html: PropTypes.func.isRequired,
   };
@@ -26,13 +27,14 @@ class TranscriptionContainer extends Component {
   };
 
   render() {
-    const { unit, doc2htmlById, language, t } = this.props;
+    const { unit, doc2htmlById, language, contentLanguage, t } = this.props;
 
     return (
       <Transcription
         unit={unit}
         doc2htmlById={doc2htmlById}
-        language={language}
+        uiLanguage={language}
+        contentLanguage={contentLanguage}
         t={t}
         onContentChange={this.handleContentChange}
       />
@@ -44,6 +46,7 @@ export default connect(
   state => ({
     doc2htmlById: selectors.getDoc2htmlById(state.assets),
     language: settings.getLanguage(state.settings),
+    contentLanguage: settings.getContentLanguage(state.settings),
   }),
   dispatch => bindActionCreators({
     doc2html: actions.doc2html,

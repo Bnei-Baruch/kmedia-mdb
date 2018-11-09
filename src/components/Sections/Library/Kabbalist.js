@@ -44,8 +44,7 @@ class Kabbalist extends Component {
   };
 
   render() {
-    const { author, getSourceById, portrait }        = this.props;
-    const { id, name, full_name: fullName, children: volumes } = author;
+    const { author: { name, full_name: fullName, children: volumes, id }, getSourceById, portrait } = this.props;
 
     let displayName = fullName || name;
     if (fullName && name) {

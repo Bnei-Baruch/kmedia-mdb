@@ -17,6 +17,7 @@ class SourcesContainer extends Component {
     content: shapes.DataWipErr,
     doc2htmlById: PropTypes.objectOf(shapes.DataWipErr),
     language: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     fetchIndex: PropTypes.func.isRequired,
     fetchAsset: PropTypes.func.isRequired,
@@ -62,7 +63,7 @@ class SourcesContainer extends Component {
   };
 
   render() {
-    const { unit, indexMap, content, doc2htmlById, language, t, getSourceById } = this.props;
+    const { unit, indexMap, content, doc2htmlById, language, contentLanguage, t, getSourceById } = this.props;
 
     return (
       <Sources
@@ -70,7 +71,8 @@ class SourcesContainer extends Component {
         indexMap={indexMap}
         content={content}
         doc2htmlById={doc2htmlById}
-        defaultLanguage={language}
+        uiLanguage={language}
+        contentLanguage={contentLanguage}
         t={t}
         getSourceById={getSourceById}
         onContentChange={this.handleContentChange}
@@ -92,6 +94,7 @@ export default connect(
       content: assetsSelectors.getAsset(state.assets),
       doc2htmlById: assetsSelectors.getDoc2htmlById(state.assets),
       language: settings.getLanguage(state.settings),
+      contentLanguage: settings.getContentLanguage(state.settings),
       getSourceById: selectors.getSourceById(state.sources),
     };
   },

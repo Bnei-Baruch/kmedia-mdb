@@ -61,8 +61,8 @@ class BlogContainer extends withPagination {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  extraFetchParams(props) {
-    switch (props.language) {
+  extraFetchParams({ language }) {
+    switch (language) {
     case LANG_HEBREW:
       return { blog: 'laitman-co-il' };
     case LANG_UKRAINIAN:

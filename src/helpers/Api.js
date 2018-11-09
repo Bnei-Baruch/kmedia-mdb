@@ -14,7 +14,7 @@ export class Requests {
 
   static makeParams = params =>
     `${Object.entries(params)
-      .filter(([k, v]) => v !== undefined && v !== null)
+      .filter(([_k, v]) => v !== undefined && v !== null)
       .map((pair) => {
         const key   = pair[0];
         const value = pair[1];
@@ -29,6 +29,7 @@ export class Requests {
   static encode = encodeURIComponent;
 }
 
+/* eslint-disable camelcase */
 class Api {
   static collection   = ({ id, language }) => Requests.get(`collections/${id}?${Requests.makeParams({ language })}`);
   static unit         = ({ id, language }) => Requests.get(`content_units/${id}?${Requests.makeParams({ language })}`);

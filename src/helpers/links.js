@@ -71,25 +71,24 @@ export const canonicalLink = (entity, mediaLang) => {
   }
 
   if (entity.content_type === 'POST') {
-
-    const [blogID, postID] = entity.id.split("-");
+    const [blogID, postID] = entity.id.split('-');
     let blogName;
 
-    switch (parseInt(blogID)){
-      case BLOG_ID_LAITMAN_RU:
-        blogName = 'laitman-ru';
-        break;
-      case BLOG_ID_LAITMAN_COM:
-        blogName = 'laitman-com';
-        break;
-      case BLOG_ID_LAITMAN_ES:
-        blogName = 'laitman-es';
-        break;
-      case BLOG_ID_LAITMAN_CO_IL:
-        blogName = 'laitman-co-il';
-        break;
-      default:
-        blogName = 'laitman-co-il';
+    switch (parseInt(blogID, 10)) {
+    case BLOG_ID_LAITMAN_RU:
+      blogName = 'laitman-ru';
+      break;
+    case BLOG_ID_LAITMAN_COM:
+      blogName = 'laitman-com';
+      break;
+    case BLOG_ID_LAITMAN_ES:
+      blogName = 'laitman-es';
+      break;
+    case BLOG_ID_LAITMAN_CO_IL:
+      blogName = 'laitman-co-il';
+      break;
+    default:
+      blogName = 'laitman-co-il';
     }
 
     return `/publications/blog/${blogName}/${postID}`;
@@ -111,6 +110,7 @@ export const canonicalLink = (entity, mediaLang) => {
   case CT_LESSONS_SERIES:
     return `/lessons/series/c/${entity.id}`;
   case CT_VIDEO_PROGRAM:
+  case CT_CLIPS:
     return `/programs/c/${entity.id}`;
   case CT_ARTICLES:
     return `/publications/articles/c/${entity.id}`;
@@ -121,8 +121,6 @@ export const canonicalLink = (entity, mediaLang) => {
   case CT_PICNIC:
   case CT_UNITY_DAY:
     return `/events/c/${entity.id}`;
-  case CT_CLIPS:
-    return '/';
   default:
     break;
   }
@@ -133,7 +131,7 @@ export const canonicalLink = (entity, mediaLang) => {
     return `/events/cu/${entity.id}`;
   }
 
-  const mediaLangSuffix = mediaLang ? `?language=${mediaLang}` : ``;
+  const mediaLangSuffix = mediaLang ? `?language=${mediaLang}` : '';
 
   // unit based on type
   switch (entity.content_type) {
@@ -144,6 +142,7 @@ export const canonicalLink = (entity, mediaLang) => {
   // case CT_CHILDREN_LESSON:
     return `/lessons/cu/${entity.id}${mediaLangSuffix}`;
   case CT_VIDEO_PROGRAM_CHAPTER:
+  case CT_CLIP:
     return `/programs/cu/${entity.id}${mediaLangSuffix}`;
   case CT_EVENT_PART:
   case CT_FULL_LESSON:
@@ -153,7 +152,6 @@ export const canonicalLink = (entity, mediaLang) => {
   case CT_ARTICLE:
     return `/publications/articles/cu/${entity.id}?${mediaLangSuffix}`;
   case CT_UNKNOWN:
-  case CT_CLIP:
   case CT_TRAINING:
   case CT_KITEI_MAKOR:
   case CT_PUBLICATION:
