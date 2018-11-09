@@ -6,11 +6,13 @@ import { Button, Card, Image, Icon, Segment, Header, List, Container } from 'sem
 
 import { sectionLogo } from '../../helpers/images';
 import { selectors } from '../../redux/modules/mdb';
+import { tracePath } from '../../helpers/utils';
 import { sectionLink, canonicalLink } from '../../helpers/links';
 import { actions as listsActions, selectors as lists } from '../../redux/modules/lists';
 import { assetUrl, imaginaryUrl, Requests } from '../../helpers/Api';
 import Link from '../Language/MultiLanguageLink';
 import {
+  RTL_LANGUAGES,
   SEARCH_INTENT_FILTER_NAMES,
   SEARCH_INTENT_NAMES,
   SEARCH_INTENT_SECTIONS,
@@ -134,35 +136,37 @@ class SearchResultIntent extends SearchResultBase {
   };
 
   renderScrollRight = () => {
+    const dir = RTL_LANGUAGES.includes(this.props.language) ? 'right' : 'left';
     return this.state.pageNo === 0 ? null : (<Button
-      icon="chevron left"
+      icon={`chevron ${dir}`}
       circular
       basic
       size="large"
       onClick={this.onScrollLeft}
       className="scrollIntents"
-      style={{ left: '-15px' }}
+      style={{ [dir]: '-15px' }}
     />);
   };
 
   renderScrollLeft = () => {
     const { pageNo, pageSize } = this.state;
     const numberOfPages        = Math.round(this.props.unitCounter / pageSize);
+    const dir                  = RTL_LANGUAGES.includes(this.props.language) ? 'left' : 'right';
 
     return (pageNo >= numberOfPages - 1 ) ? null : (<Button
-      icon="chevron right"
+      icon={`chevron ${dir}`}
       circular
       basic
       size="large"
       onClick={this.onScrollRight}
       className="scrollIntents"
-      style={{ right: '-15px' }}
+      style={{ [dir]: '-15px' }}
     />);
   };
 
   render() {
-    const { t, queryResult, hit, rank, items, unitCounter }                              = this.props;
-    const { _index: index, _type: type, _source: { mdb_uid: mdbUid, title }, highlight } = hit;
+    const { t, queryResult, hit, rank, items, unitCounter }                             = this.props;
+    const { _index: index, _type: type, _source: { mdb_uid: mdbUid, name }, highlight } = hit;
 
     const { pageNo, pageSize }            = this.state;
     const { search_result: { searchId } } = queryResult;
@@ -172,13 +176,18 @@ class SearchResultIntent extends SearchResultBase {
     const getFilterById                   = this.getFilterById(index);
 
     let resultsType = '';
+    const path      = tracePath(getFilterById(mdbUid), getFilterById);
+    let display     = '';
     switch (index) {
     case SEARCH_INTENT_INDEX_TOPIC:
+      display     = path[path.length - 1].label;
       resultsType = SEARCH_INTENT_HIT_TYPE_PROGRAMS;
       break;
     case SEARCH_INTENT_INDEX_SOURCE:
+      display     = path.map(y => y.name).join(' > ');
       resultsType = SEARCH_INTENT_HIT_TYPE_LESSONS;
       break;
+      display = name;
     }
 
     return (
@@ -202,7 +211,7 @@ class SearchResultIntent extends SearchResultBase {
                 className="search__link"
                 onClick={() => this.click(mdbUid, index, type, rank, searchId)}
                 to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}>
-                {this.titleFromHighlight(highlight, title)}
+                {this.titleFromHighlight(highlight, display)}
               </Link>
             </Header>
           </List.Item>
@@ -214,7 +223,7 @@ class SearchResultIntent extends SearchResultBase {
         </Card.Group>
         {pageSize < unitCounter ? this.renderScrollPagination() : null}
 
-        {this.renderDebug(title)}
+        {this.renderDebug(display)}
       </Segment>
     );
   }
