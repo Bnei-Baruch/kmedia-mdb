@@ -96,7 +96,7 @@ class SearchResultsFilters extends Component {
       {['all', 'lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
         <Menu.Item
           key={x}
-          name={t(`filters.sections-filter.${x}`)}
+          content={t(`filters.sections-filter.${x}`)}
           active={x === activeTab}
           onClick={() => this.onSelectionChange(x)} />
       )}

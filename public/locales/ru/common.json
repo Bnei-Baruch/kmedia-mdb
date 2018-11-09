@@ -493,7 +493,7 @@
       "SPECIAL_LESSON": "Особый урок",
       "FRIENDS_GATHERINGS": "Собрания товарищей",
       "CONGRESS": "Конгресс",
-      "VIDEO_PROGRAM": "Видео программа",
+      "VIDEO_PROGRAM": "Передача",
       "LECTURE_SERIES": "Серия лекций",
       "CHILDREN_LESSONS": "Детские уроки",
       "WOMEN_LESSONS": "Женские уроки",
@@ -504,7 +504,7 @@
       "UNITY_DAY": "Вечер единства",
       "CLIPS": "Клипы",
       "ARTICLES": "Статьи",
-      "LESSON_PART": "Часть урока №",
+      "LESSON_PART": "Урок",
       "LECTURE": "Лекция",
       "CHILDREN_LESSON": "Детский урок",
       "WOMEN_LESSON": "Женский урок",
@@ -521,7 +521,7 @@
       "KITEI_MAKOR": "Отрывки первоисточников",
       "PUBLICATION": "Публикация",
       "LELO_MIKUD": "Отредактировано - без фокус-группы",
-      "BLOG_POST": "Блог"
+      "BLOG_POST": "Пост блога"
     },
     "media-types": {
       "video": "Видео",

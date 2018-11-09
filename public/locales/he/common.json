@@ -479,11 +479,11 @@
       "cs": "צ'כית"
     },
     "content-types": {
-      "DAILY_LESSON": "השיעור היומי",
+      "DAILY_LESSON": "שיעור",
       "SPECIAL_LESSON": "שיעור מיוחד",
       "FRIENDS_GATHERINGS": "ישיבות חברים",
       "CONGRESS": "כנס",
-      "VIDEO_PROGRAM": "תוכנית",
+      "VIDEO_PROGRAM": "סדרה",
       "LECTURE_SERIES": "סדרת הרצאות",
       "CHILDREN_LESSONS": "שיעורי ילדים",
       "WOMEN_LESSONS": "שיעורי נשים",
@@ -494,7 +494,7 @@
       "UNITY_DAY": "יום איחוד",
       "CLIPS": "קליפים",
       "ARTICLES": "מאמרים",
-      "LESSON_PART": "חלק שיעור",
+      "LESSON_PART": "שיעור",
       "LECTURE": "הרצאה",
       "CHILDREN_LESSON": "שיעור ילדים",
       "WOMEN_LESSON": "שיעור נשים",
@@ -511,7 +511,7 @@
       "KITEI_MAKOR": "קטעי מקור",
       "PUBLICATION": "פרסום",
       "LELO_MIKUD": "ערוך - ללא קבוצת מיקוד",
-      "BLOG_POST": "בלוג"
+      "BLOG_POST": "בלוג פוסט"
     },
     "media-types": {
       "video": "וידאו",
