@@ -47,41 +47,6 @@ export class PlaylistCollectionContainer extends Component {
     this.askForDataIfNeeded(nextProps);
   }
 
-  askForDataIfNeeded = (props) => {
-    const { match, collection, wip, errors, fetchCollection, fetchUnit } = props;
-
-    // We fetch stuff if we don't have it already
-    // and a request for it is not in progress or ended with an error.
-    const { id } = match.params;
-
-    let fetchedSingle = false;
-    if (!Object.prototype.hasOwnProperty.call(wip.collections, id)) {
-      // never fetched as full so fetch now
-      fetchCollection(id);
-      fetchedSingle = true;
-    }
-
-    if (collection && collection.id === id && Array.isArray(collection.cuIDs)) {
-      collection.cuIDs.forEach((cuID) => {
-        const cu = collection.content_units.find(x => x.id === cuID);
-        if (!cu || !cu.files) {
-          if (!(wip.units[cuID] || errors.units[cuID])) {
-            fetchUnit(cuID);
-          }
-        }
-      });
-    } else if (!fetchedSingle && !(wip.collections[id] || errors.collections[id])) {
-      fetchCollection(id);
-    }
-
-    // next prev links only for lessons
-    if (collection &&
-      (collection.content_type === CT_DAILY_LESSON ||
-        collection.content_type === CT_SPECIAL_LESSON)) {
-      this.getNextPrevLinks(props);
-    }
-  };
-
   getNextPrevLinks = (props) => {
     const { match, wip, cWindow } = props;
     const { id }                  = match.params;
@@ -131,6 +96,41 @@ export class PlaylistCollectionContainer extends Component {
       start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
       end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
     });
+  };
+
+  askForDataIfNeeded = (props) => {
+    const { match, collection, wip, errors, fetchCollection, fetchUnit } = props;
+
+    // We fetch stuff if we don't have it already
+    // and a request for it is not in progress or ended with an error.
+    const { id } = match.params;
+
+    let fetchedSingle = false;
+    if (!Object.prototype.hasOwnProperty.call(wip.collections, id)) {
+      // never fetched as full so fetch now
+      fetchCollection(id);
+      fetchedSingle = true;
+    }
+
+    if (collection && collection.id === id && Array.isArray(collection.cuIDs)) {
+      collection.cuIDs.forEach((cuID) => {
+        const cu = collection.content_units.find(x => x.id === cuID);
+        if (!cu || !cu.files) {
+          if (!(wip.units[cuID] || errors.units[cuID])) {
+            fetchUnit(cuID);
+          }
+        }
+      });
+    } else if (!fetchedSingle && !(wip.collections[id] || errors.collections[id])) {
+      fetchCollection(id);
+    }
+
+    // next prev links only for lessons
+    if (collection &&
+      (collection.content_type === CT_DAILY_LESSON ||
+        collection.content_type === CT_SPECIAL_LESSON)) {
+      this.getNextPrevLinks(props);
+    }
   };
 
   render() {

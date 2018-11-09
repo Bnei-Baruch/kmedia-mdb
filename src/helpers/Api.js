@@ -29,6 +29,7 @@ export class Requests {
   static encode = encodeURIComponent;
 }
 
+/* eslint-disable camelcase */
 class Api {
   static collection   = ({ id, language }) => Requests.get(`collections/${id}?${Requests.makeParams({ language })}`);
   static unit         = ({ id, language }) => Requests.get(`content_units/${id}?${Requests.makeParams({ language })}`);

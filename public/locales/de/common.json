@@ -268,6 +268,10 @@
       "text": "Programme",
       "subtext": "Hier finden Sie eine große Auswahl an Programmen, darunter: interessante Gespräche über den Sinn des Lebens, relevante Themen, Programme für die ganze Familie, usw."
     },
+    "tabs": {
+      "main": "Programs",
+      "clips": "Clips"
+    },
     "genres": {
       "documentary": "Dokumentationen",
       "late-night": "Nachtprogramme",
@@ -279,7 +283,8 @@
       "other": "Sonstiges"
     },
     "list": {
-      "episode_from": "Folge von:"
+      "episode_from": "Folge von:",
+      "item_of": "Teil von:"
     },
     "unit": {
       "recommended": {
@@ -314,13 +319,13 @@
   },
   "simple-mode": {
     "header": {
-      "text": "Downloads - Eenvoudige versie",
-      "subtext": "Concentreer alle media voor een specifieke dag"
+      "text": "Downloads - Einfache Version",
+      "subtext": "Alle Medien für einen bestimmten Tag"
     },
-    "today-button": "vandaag",
-    "total-media-for-date": "Alle media voor datum ",
-    "media-language": "Mediataal",
-    "no-files-found-for-lang": "Er zijn geen bestanden voor de taal die u hebt geselecteerd",
+    "today-button": "Heute",
+    "total-media-for-date": "Alle Medien für das Datum ",
+    "media-language": "Mediensprache",
+    "no-files-found-for-lang": "Es gibt keine Dateien für die ausgewählte Sprache",
     "no-files-found-for-date": "Es gibt keine Dateien für dieses Datum",
     "date": "Datum",
     "prev": "Bisherige",
@@ -398,7 +403,8 @@
         "audio": "Audiolektionen",
         "audio-simple": "Audio",
         "text": "Transkript",
-        "image": "Zeichnungen"
+        "image": "Zeichnungen",
+        "lelo-mikud": "Keine Fokusgruppe"
       }
     },
     "program": {

@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { CT_LECTURE_SERIES, CT_VIRTUAL_LESSONS } from '../../../helpers/consts';
+import { CT_LECTURE_SERIES, CT_VIRTUAL_LESSONS, CT_CLIPS } from '../../../helpers/consts';
 import { strCmp } from '../../../helpers/utils';
-import { selectors } from '../../../redux/modules/lessons';
+import { selectors as lessons } from '../../../redux/modules/lessons';
+import { selectors as programs } from '../../../redux/modules/programs';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import * as shapes from '../../shapes';
 import HierarchicalFilter from './HierarchicalFilter';
@@ -51,8 +52,25 @@ class CollectionsFilter extends React.Component {
 export default connect(
   (state, ownProps) => {
     const { namespace } = ownProps;
-    const ct            = namespace === 'lessons-virtual' ? CT_VIRTUAL_LESSONS : CT_LECTURE_SERIES;
-    const cIDs          = selectors.getLecturesByType(state.lessons)[ct];
+    let ct;
+    let cIDs;
+
+    switch (namespace) {
+    case 'lessons-virtual':
+      ct = CT_VIRTUAL_LESSONS;
+      cIDs = lessons.getLecturesByType(state.lessons)[ct];
+      break;
+    case 'lessons-lectures':
+      ct = CT_LECTURE_SERIES;
+      cIDs = lessons.getLecturesByType(state.lessons)[ct];
+      break;
+    case 'programs-clips':
+      ct = CT_CLIPS;
+      cIDs = programs.getProgramsByType(state.programs)[ct];
+      break;
+    default:
+      break;
+    }
 
     return {
       collections: (cIDs || []).map(x => mdb.getCollectionById(state.mdb, x)),
