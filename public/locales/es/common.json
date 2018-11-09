@@ -181,6 +181,13 @@
     "search": "Descubre la sabiduría de la Cabalá",
     "sections": "Temas",
     "updates": "Actualizaciones recientes",
+    "social": "Rav Laitman en las redes sociales",
+    "blog-title": "Blog de Rav Laitman",
+    "twitter-title": "Tweets",
+    "all-posts": "Todas las publicaciones del blog",
+    "all-tweets": "Todos los tweets",
+    "read-more-posts": "Leer más posts",
+    "read-more-tweets": "Leer más tweets",
     "last-lesson": "Lección diaria de Cabalá",
     "promoted": {
       "header": "Congreso virtual",
@@ -264,6 +271,10 @@
       "text": "Programas",
       "subtext": "Aquí encontrará una gran variedad de programas que incluyen: conversaciones fascinantes sobre el significado de la vida, eventos actuales, programas para toda la familia y más."
     },
+    "tabs": {
+      "main": "Programas",
+      "clips": "Clips"
+    },
     "genres": {
       "documentary": "Documental",
       "late-night": "Tarde en la Noche",
@@ -275,7 +286,8 @@
       "other": "Otro"
     },
     "list": {
-      "episode_from": "Capítulo del programa:"
+      "episode_from": "Capítulo del programa:",
+      "item_of": "Parte de:"
     },
     "unit": {
       "recommended": {
@@ -305,12 +317,13 @@
           "title": "Más artículos de la misma colección"
         }
       }
-    }
+    },
+    "read-more": "Lee mas"
   },
   "simple-mode": {
     "header": {
       "text": "Descargas - Versión simple",
-      "subtext": "Concentrar todos los medios para un día específico"
+      "subtext": "Todos los medios de comunicación para un día determinado"
     },
     "today-button": "hoy",
     "total-media-for-date": "Todos los medios para la fecha ",
@@ -399,7 +412,8 @@
         "audio": "Audio de la Lección",
         "audio-simple": "Audio",
         "text": "Transcripción Completa",
-        "image": "Dibujos"
+        "image": "Dibujos",
+        "lelo-mikud": "Sin grupo de enfoque"
       }
     },
     "program": {
@@ -504,5 +518,10 @@
   },
   "values": {
     "date": "{{date, ll}}"
+  },
+  "languages": {
+    "language": "Idioma",
+    "website_language": "Idioma del sitio",
+    "content_language": "Idioma de contenido preferido"
   }
 }

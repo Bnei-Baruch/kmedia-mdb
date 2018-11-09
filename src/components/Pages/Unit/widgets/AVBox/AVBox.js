@@ -11,6 +11,8 @@ import playerHelper from '../../../../../helpers/player';
 import { selectors as device } from '../../../../../redux/modules/device';
 import * as shapes from '../../../../shapes';
 import AVMobileCheck from '../../../../AVPlayer/AVMobileCheck';
+import { selectors as settings } from '../../../../../redux/modules/settings';
+import { equal, isEmpty } from '../../../../../helpers/utils';
 
 class AVBox extends Component {
   static propTypes = {
@@ -18,6 +20,8 @@ class AVBox extends Component {
     history: shapes.History.isRequired,
     location: shapes.HistoryLocation.isRequired,
     language: PropTypes.string.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
     autoPlayAllowed: PropTypes.bool.isRequired,
     t: PropTypes.func.isRequired,
   };
@@ -27,36 +31,48 @@ class AVBox extends Component {
   };
 
   componentWillMount() {
-    const { language, location, history, unit } = this.props;
-    const preferredMT                           = playerHelper.restorePreferredMediaType();
-    const mediaType                             = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const playerLanguage                        = playerHelper.getLanguageFromQuery(location, language);
-    this.setPlayableItem(unit, mediaType, playerLanguage);
+    const { uiLanguage, contentLanguage, location, history, unit }
+                         = this.props;
+    const preferredMT    = playerHelper.restorePreferredMediaType();
+    const mediaType      = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const playerLanguage = playerHelper.getLanguageFromQuery(location, contentLanguage);
+    this.setPlayableItem(unit, mediaType, playerLanguage, uiLanguage);
     playerHelper.setLanguageInQuery(history, playerLanguage);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { unit, language } = nextProps;
+    const { unit, uiLanguage, location } = nextProps;
+    const { language: playerLanguage }   = this.state.playableItem;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();
-    const prevMediaType   = playerHelper.getMediaTypeFromQuery(this.props.location);
-    const newMediaType    = playerHelper.getMediaTypeFromQuery(nextProps.location, preferredMT);
-    const newItemLanguage = playerHelper.getLanguageFromQuery(nextProps.location, this.state.playableItem.language);
-
-    // no change
-    if (unit === this.props.unit &&
-      language === this.props.language &&
-      prevMediaType === newMediaType &&
-      newItemLanguage === this.state.playableItem.language) {
-      return;
-    }
+    const newMediaType    = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
     // Persist language in playableItem
-    this.setPlayableItem(unit, newMediaType, newItemLanguage);
+    this.setPlayableItem(unit, newMediaType, newItemLanguage, uiLanguage);
   }
 
-  setPlayableItem(unit, mediaType, language) {
-    const playableItem = playerHelper.playableItem(unit, mediaType, language);
+  shouldComponentUpdate(nextProps) {
+    const { unit, uiLanguage, contentLanguage, location } = nextProps;
+    const { unit: oldUnit, uiLanguage: oldUiLanguage, contentLanguage: oldContentLanguage, location: oldLocation }
+                                                          = this.props;
+    const { language: playerLanguage }                    = this.state.playableItem;
+
+    const preferredMT     = playerHelper.restorePreferredMediaType();
+    const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);
+    const newMediaType    = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
+
+    // no change
+    return !(equal(unit, oldUnit) &&
+      oldUiLanguage === uiLanguage &&
+      oldContentLanguage === contentLanguage &&
+      prevMediaType === newMediaType &&
+      newItemLanguage === playerLanguage);
+  }
+
+  setPlayableItem(unit, mediaType, playerLanguage, uiLanguage) {
+    const playableItem = playerHelper.playableItem(unit, mediaType, uiLanguage, playerLanguage);
     this.setState({ playableItem });
   }
 
@@ -81,7 +97,7 @@ class AVBox extends Component {
     const { t, autoPlayAllowed } = this.props;
     const { playableItem }       = this.state;
 
-    if (!playableItem) {
+    if (isEmpty(playableItem)) {
       return (<div>{t('messages.no-playable-files')}</div>);
     }
 
@@ -117,6 +133,8 @@ class AVBox extends Component {
 
 const mapState = state => ({
   autoPlayAllowed: device.getAutoPlayAllowed(state.device),
+  uiLanguage: settings.getLanguage(state.settings),
+  contentLanguage: settings.getContentLanguage(state.settings),
 });
 
 export default withRouter(connect(mapState)(AVBox));

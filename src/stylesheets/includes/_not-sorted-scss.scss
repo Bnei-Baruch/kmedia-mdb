@@ -202,7 +202,6 @@
 
 .filter-popup {
 
-
   &__body {
     max-height: 350px;
     min-width: 300px;
@@ -211,8 +210,6 @@
     &.segment {
       padding: 0;
     }
-
-
 
     .highlight {
       background-color: rgba($yellow, 0.2);
@@ -633,6 +630,32 @@
   font-size: 16px;
 }
 
+@media print {
+  .source__toc,
+  .layout__header,
+  .layout__sidebar,
+  .layout__footer,
+  .layout__secondary-header,
+  .anchors-language-selector,
+  #us_report_button {
+    display: none;
+  }
+
+  .layout {
+    &__main {
+      padding: 0; // to remove existing padding
+    }
+
+    &__content {
+      margin: 20px 0px !important;
+    }
+  }
+
+  .ui.container {
+    padding-top: 0 !important; // remove existing padding
+  }
+}
+
 .DayPicker-Day {
   outline: none !important;
 }
@@ -822,404 +845,142 @@
   }
 }
 
-.tweet {
-  margin-bottom: 1.5rem !important;
-  &--username {
-    color: rgba($grey, .75);
-  }
-  &--media {
-    max-width: 100%;
-    height: auto;
+.mediaplayer__onscreen-controls {
+  .player-button.player-error-message {
+    background: white;
+    border: 2px solid red;
+    padding: 7px;
+    border-radius: 50px;
   }
 }
+/* ************* End of styles for simple mode ************* */
+.home-social-section {
+  .titles {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 25px;
 
-.blog-posts {
-  max-width: 550px;
-}
+    h4 {
+      margin-bottom: 0;
+    }
 
-.post {
-  margin-bottom: 1.5rem !important;
-
-  /* ********** wordpress style ********** */
-
-  img.userpic, img.ngg-singlepic {
-    float: left;
-    padding: 0 5px 5px 0;
-    border: 0 none;
+    a {
+      flex-grow: 0;
+    }
   }
 
-  .a-title {
-    display: block;
-    padding: 0;
-    margin: 0 0 0.5ex 0;
-    line-height: 10px;
-    font-size: 10px;
-    font-weight: bold;
-    color: #000080;
-  }
-
-  .a-link {
-    padding: 0;
-    margin: 0 0 -1.0ex;
-    line-height: 10px;
-    font-size: 10px;
-  }
-
-  .a-link-first {
-    padding: 0;
-    margin: 0;
-    line-height: 10px;
-    font-size: 10px;
-  }
-
-  .a-link-last {
-    display: block;
-    padding: 0;
-    margin: 0 0 2.4ex 0;
-    line-height: 10px;
-    font-size: 10px;
-  }
-
-  .entry p {
-    margin: 0 0 0.6ex 0;
-  }
-
-  .entry .bb-p {
-    margin-top: 10px;
-  }
-
-  .entry ul, .entry ol {
-    margin: 0 0 15px 40px;
-  }
-
-  .entry ul {
-    list-style-type: square;
-  }
-
-  .entry li {
-    margin: 0 0 5px 0;
-  }
-
-  .entry ul li ul, .entry ul li ol, .entry ol li ul, .entry ol li ol {
-    margin: 5px 0 5px 30px;
-  }
-
-  .entry img {
-    //max-width: 445px;  // laitman.ru
-    max-width: 100%;
-    border: 0 none;
-  }
-
-  .entry img.left {
-    padding: 6px;
-    margin: 0.5em 15px 0.5em 0;
-    border: 1px solid #ccc;
-    background: #eee;
-    float: left;
-    clear: left;
-  }
-
-  .entry img.right {
-    padding: 6px;
-    margin: 0.5em 0 0.5em 15px;
-    border: 1px solid #ccc;
-    background: #eee;
-    float: right;
-    clear: right;
-  }
-
-  .entry img.center {
-    display: block;
-    padding: 8px;
-    margin: 0 auto 1.5em auto;
-    border: 1px solid #ccc;
-    background: #eee;
-    float: none;
-    clear: both;
-  }
-
-  .entry img.off {
-    padding: 0 !important;
-    border: none !important;
-  }
-
-  .entry img.stack {
-    clear: none !important;
-  }
-
-  .entry {
-    font-size: 13px;
-    line-height: 16px;
-    text-align: justify;
-  }
-
-  .entry a {
-    text-decoration: underline;
-  }
-
-  .sub-pages ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .bborder {
-    border-bottom: 1px solid black;
-  }
-
-  .clear {
-    clear: both;
-    height: 1px;
-    font-size: 1px;
-    padding: 5px 0 0;
-  }
-
-  .ngg-imagebrowser {
-    clear: both;
-    padding-top: 10px;
-  }
-
-  .ngg-imagebrowser img {
-    margin: 0 auto;
-  }
-
-  .ngg-imagebrowser h3 {
-    display: none;
-  }
-
-  .ngg-imagebrowser .ngg-imagebrowser-desc {
-    clear: both;
-  }
-
-  .entry .ngg-gallery-thumbnail img {
-    margin: -6px 0 0 -6px;
-  }
-
-  .entry .ngg-gallery-thumbnail {
-    padding: 0;
-  }
-
-  .warning {
-    background-color: #CFEBF7;
-    border: 1px solid #CC0000;
-    margin: 5px 15px 2px;
-    padding: 0 0.6em;
-  }
-
-  table {
-    margin: 0 0 10px;
-  }
-
-  .podPressPlayerSpace {
-    position: absolute;
-  }
-
-  .entry table td {
-    clear: both;
-  }
-
-  .aligncenter,
-  div.aligncenter {
+  .read-more-bottom {
+    width: 100%;
     text-align: center;
+    padding: 15px;
   }
+}
 
-  .ngg-gallery-thumbnail-box {
-    float: left;
-    margin-top: 20px;
-    margin-left: 6px;
-  }
+.home-blog-posts {
 
-  p img {
-    padding: 0;
+  .blog-posts {
     max-width: 100%;
+
+    .post:last-of-type, .divider:last-of-type {
+      margin-bottom: 0 !important;
+    }
   }
 
-  /*	Using 'class="alignright"' on an image will (who would've
-      thought?!) align the image to the right. And using 'class="centered',
-      will of course center the image. This is much better than using
-      align="center", being much more futureproof (and valid) */
-
-  img.centered {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  .remove-indent {
+    padding-left: 0 !important;
   }
 
-  img.alignright {
-    padding: 4px;
-    margin: 0 0 2px 7px;
-    display: inline;
-  }
-
-  img.alignleft {
-    padding: 4px;
-    margin: 0 7px 2px 0;
-    display: inline;
-  }
-
-  .alignright {
-    float: right;
-  }
-
-  .alignleft {
-    float: left
-  }
-
-  // normalize laitman.co.il headings in entry
   .entry {
-    h1, h2, h3, h4 {
-      font-size: 1rem;
-    }
-  }
-
-  /* ********** wordpress style ********** */
-}
-
-// native day picker (date filter)
-.to-from-label {
-  min-width: 70px;
-}
-
-.hide-native-date-input {
-  opacity: 0;
-  position: fixed;
-  top: 40px;
-  height: 0;
-  font-size: 16px;
-}
-
-/****Search Results page**/
-
-.pagination-results.h2.ui.header {
-  font: 13px/20px Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
-
-.search__link {
-  color: #1a4179;
-  font-size: 18px;
-  line-height: 24px;
-}
-
-.search__block {
-  color: #828282;
-  font-weight: normal;
-  .clear {
-    clear: both;
-  }
-  .content {
-    em {
-      border-bottom: 1px solid rgba(65, 131, 196, .3);
-      background-color: rgba(242, 201, 76, .2);
-      font-weight: 900;
-    }
-  }
-  .ui.mini.image {
-    width: 25px;
-  }
-
-  .linkToFile.ui.basic.button {
-    padding: .5em 1em;
-    margin-top: 5px !important;
-    margin-right: 5px !important;
-    background-color: white !important;
-    border-color: $grey;
-    .icon {
-      color: $blue;
-    }
-
-    &:hover {
-      color: white;
-      background-color: $blue !important;
-      border: 0 none;
-      color: white !important;
-      .icon {
-        color: white !important;
-      }
-    }
-  }
-
-  .linkToCU {
-    padding: .5em 1em;
-    margin-top: 5px !important;
-    margin-right: 5px !important;
-  }
-
-  .search__cards.ui.three.cards {
-    margin-left: 10px;
-    margin-right: 10px;
     position: relative;
 
-    .scrollIntents {
-      position: absolute;
-      top: 150px;
-      background-color: white !important;
-      z-index: 10;
+    * {
+      display: none;
+      color: #828282;
+      font-weight: 400;
+    }
+
+    *:first-of-type {
+      display: inline;
+      width: auto;
+    }
+
+    img {
+      display: none !important;
+    }
+
+    .date {
+      font-weight: bold;
+      color: #000;
     }
   }
 
-  .search__card {
-    position: relative;
-    margin-top: 20px;
-    .intentImage {
-      position: relative;
-      min-height: 160px;
-      img {
-        height: 100%;
-        width: 100%;
-      }
+  .read-more-link {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 8px;
+  }
+}
+
+.home-twitter {
+  background-color: #F4F9FB;
+
+  .twitter-avatar {
+    border-radius: 50% !important;
+    width: 45px !important;
+    height: auto !important;
+  }
+
+  .tweet-title-wrapper {
+    display: flex;
+    align-items: center;
+
+    .tweet-title {
+      display: inline-flex;
+      flex-direction: column;
     }
-    &.card.bgHoverGrey:hover {
-      background: #eee;
+  }
+
+  .ui.feed {
+    margin-bottom: 0 !important;
+  }
+
+  .tweet-friendly-date {
+    text-align: right;
+    color: rgba(118, 118, 118, 0.75);
+    margin-top: 5px;
+  }
+
+  .divider {
+    margin-bottom: 25px !important;
+
+    &:last-of-type {
+      margin-bottom: 0 !important;
+    }
+  }
+}
+
+.rtl {
+  .home-blog-posts {
+    .remove-indent {
+      padding-right: 0 !important;
+      padding-left: 4px !important;
     }
   }
 
-  .cardHeaderLabel {
-    position: absolute;
-    bottom: 8px;
-    right: 8px;
-    z-index: 1;
-    padding: 5px 10px;
-    background: rgba(51, 51, 51, .6);
-    color: white;
-    font-size: 14px;
-  }
-  .search__snippet {
-    font-size: 14px;
+  .tweet-friendly-date {
+    text-align: left;
   }
 }
 
-.bgHoverGrey:hover {
-  background: #eee;
-}
-
-.bgTransparent, .bgTransparent:hover {
-  background: transparent !important;
-}
-
-.padding0 {
-  padding: 0 !important;
-}
-
-.sectionTabs.ui.menu {
-  background: $darkWhite;
-  margin: 0;
-  border: 0 none;
-  border-radius: 0;
-
-  .item {
-    padding-top: 5px;
-    padding-bottom: 5px;
+.handle-language-header {
+  &.title {
+    display: flex;
   }
-  .active {
-    border-bottom: 1px solid #1a4179;
-  }
-  .showFilters {
-    background-color: white !important;
-  }
-
-  .overflowAuto {
-    overflow-x: auto;
-    min-width: 250px;
-    white-space: nowrap;
+  .header {
+    margin: 0 1rem;
+    flex-grow: 2;
   }
 }
+

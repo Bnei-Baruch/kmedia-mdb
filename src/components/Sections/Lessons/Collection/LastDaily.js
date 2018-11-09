@@ -12,7 +12,7 @@ import * as shapes from '../../../shapes';
 import Helmets from '../../../shared/Helmets';
 import WipErr from '../../../shared/WipErr/WipErr';
 import { PlaylistCollectionContainer } from '../../../Pages/PlaylistCollection/Container';
-import { publicFile } from '../../../../helpers/utils';
+import { equal, publicFile } from '../../../../helpers/utils';
 
 class LastLessonCollection extends Component {
   static propTypes = {
@@ -20,16 +20,24 @@ class LastLessonCollection extends Component {
     lastLessonId: PropTypes.string,
     wip: shapes.WipMap.isRequired,
     errors: shapes.ErrorsMap.isRequired,
-    language: PropTypes.string.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
     fetchLatestLesson: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
-    fetchWindow: PropTypes.func,
-    cWindow: PropTypes.any,
+    fetchWindow: PropTypes.func.isRequired,
+    cWindow: shapes.cWindow.isRequired,
   };
 
   static defaultProps = {
     lastLessonId: '',
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      language: this.props.contentLanguage,
+    };
+  }
 
   componentDidMount() {
     if (!this.props.lastLessonId) {
@@ -38,15 +46,28 @@ class LastLessonCollection extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { language } = nextProps;
-
-    if (language !== this.props.language) {
+    if (this.state.language !== nextProps.contentLanguage) {
+      this.setState({ language: nextProps.contentLanguage });
       nextProps.fetchLatestLesson();
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    const { uiLanguage, contentLanguage, wip, err, } = nextProps;
+    const { language }                               = nextState;
+    const { props, state }                           = this;
+
+    return !(
+      uiLanguage === props.uiLanguage &&
+      language === state.filesLanguage &&
+      contentLanguage === state.filesLanguage &&
+      equal(wip, props.wip) && equal(err, props.err)
+    );
+  }
+
   render() {
-    const { wip, errors, t, lastLessonId, language } = this.props;
+    const { wip, errors, t, lastLessonId } = this.props;
+    const { language }                     = this.state;
 
     const wipErr = WipErr({ wip: wip.lastLesson, err: errors.lastLesson, t });
     if (wipErr) {
@@ -59,10 +80,10 @@ class LastLessonCollection extends Component {
 
     const props = {
       ...this.props,
+      language,
       match: {
         ...this.props.match,
         params: {
-          language,
           id: lastLessonId,
         }
       },
@@ -88,7 +109,8 @@ function mapState(state) {
     lastLessonId,
     wip: selectors.getWip(state.mdb),
     errors: selectors.getErrors(state.mdb),
-    language: settings.getLanguage(state.settings),
+    uiLanguage: settings.getLanguage(state.settings),
+    contentLanguage: settings.getContentLanguage(state.settings),
     cWindow: selectors.getWindow(state.mdb),
   };
 }

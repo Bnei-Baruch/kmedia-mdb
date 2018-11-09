@@ -43,29 +43,29 @@ class SectionHeader extends Component {
                   <span className="section-header__title">
                     {title}
                   </span>
-              {
-                subText ?
-                  <Header.Subheader className="section-header__subtitle">
-                    {subText}
-                  </Header.Subheader>
-                  : null
-              }
-            </Header.Content>
-          </Header>
-        </Grid.Column>
-      </Grid.Row>
-      {
-        Array.isArray(submenuItems) && submenuItems.length > 0 ?
-          <Grid.Row>
-            <Grid.Column>
-              <Menu tabular className="section-header__menu" size="huge">
-                {submenuItems}
-              </Menu>
+                  {
+                    subText ?
+                      <Header.Subheader className="section-header__subtitle">
+                        {subText}
+                      </Header.Subheader>
+                      : null
+                  }
+                </Header.Content>
+              </Header>
             </Grid.Column>
-          </Grid.Row> :
-          null
-      }
-    </Grid>);
+          </Grid.Row>
+          {
+            Array.isArray(submenuItems) && submenuItems.length > 0 ?
+              <Grid.Row>
+                <Grid.Column>
+                  <Menu tabular className="section-header__menu" size="huge">
+                    {submenuItems}
+                  </Menu>
+                </Grid.Column>
+              </Grid.Row> :
+              null
+          }
+        </Grid>);
   };
 
   render() {
@@ -80,12 +80,10 @@ class SectionHeader extends Component {
         <Helmets.Basic title={title} description={subText} />
 
         <Container className="padded">
-          {this.isMobileDevice() ? this.renderSearch() : this.renderTitle(title, subText)}
-        </Container>
-      </div>
-    );
-  };
-}
+          {this.isMobileDevice() ? this.renderSearch() : this.renderTitle(title, subText)}    </Container>
+    </div>
+  );
+};}
 
 const mapState = (state) => {
   return {

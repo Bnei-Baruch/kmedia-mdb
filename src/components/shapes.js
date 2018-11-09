@@ -222,3 +222,49 @@ export const UserAgentParserResults = PropTypes.shape({
     version: PropTypes.string,
   }),
 });
+
+export const Media = PropTypes.shape({
+  currentTime: PropTypes.number,
+  duration: PropTypes.number,
+  progress: PropTypes.number,
+  volume: PropTypes.number,
+
+  isFullScreen: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  isMuted: PropTypes.bool,
+  isPlaying: PropTypes.bool,
+
+  addVolume: PropTypes.func,
+  fullscreen: PropTypes.func,
+  mute: PropTypes.func,
+  muteUnmute: PropTypes.func,
+  pause: PropTypes.func,
+  play: PropTypes.func,
+  playPause: PropTypes.func,
+  seekTo: PropTypes.func,
+  setVolume: PropTypes.func,
+  skipTime: PropTypes.func,
+  stop: PropTypes.func,
+});
+
+export const VideoItem = PropTypes.shape({
+  availableLanguages: PropTypes.array,
+  availableMediaTypes: PropTypes.array,
+  byQuality: PropTypes.shape({
+    HD: PropTypes.string,
+    nHD: PropTypes.string,
+  }),
+  language: PropTypes.string,
+  mediaType: PropTypes.string,
+  preImageUrl: PropTypes.string,
+  requestedLanguage: PropTypes.string,
+  requestedMediaType: PropTypes.string,
+  shareUrl: PropTypes.string,
+  src: PropTypes.string,
+  unit: PropTypes.object,
+});
+
+export const cWindow = PropTypes.shape({
+  data: PropTypes.arrayOf(PropTypes.string),
+  id: PropTypes.string,
+});

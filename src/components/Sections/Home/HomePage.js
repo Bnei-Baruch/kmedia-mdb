@@ -3,25 +3,30 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { Card, Container, Grid } from 'semantic-ui-react';
 
+import { sectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
 import { strCmp } from '../../../helpers/utils';
-import { sectionLogo } from '../../../helpers/images';
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
+import Helmets from '../../shared/Helmets';
 import SearchBar from './SearchBar';
 import Promoted from './Promoted';
 import Topic from './Topic';
 import Section from './Section';
 import LatestUpdate from './LatestUpdate';
 import LatestDailyLesson from './LatestDailyLesson';
-import Helmets from '../../shared/Helmets';
+import BlogFeed from '../Publications/tabs/Blog/Feed';
+import TwitterFeed from '../Publications/tabs/Twitter/Feed';
 
 class HomePage extends Component {
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
     latestLesson: shapes.LessonCollection,
     latestUnits: PropTypes.arrayOf(shapes.ContentUnit),
+    latestBlogPosts: PropTypes.arrayOf(shapes.BlogPost),
+    latestTweets: PropTypes.arrayOf(shapes.Tweet),
     banner: shapes.Banner,
+    language: PropTypes.string.isRequired,
     wip: shapes.WIP,
     err: shapes.Error,
     t: PropTypes.func.isRequired,
@@ -30,13 +35,27 @@ class HomePage extends Component {
   static defaultProps = {
     latestLesson: null,
     latestUnits: [],
+    latestBlogPosts: [],
+    latestTweets: [],
     banner: null,
     wip: false,
     err: null,
   };
 
   render() {
-    const { latestLesson, latestUnits, banner, wip, err, t, location } = this.props;
+    const
+      {
+        latestLesson,
+        latestUnits,
+        latestBlogPosts,
+        latestTweets,
+        banner,
+        language,
+        wip,
+        err,
+        t,
+        location
+      } = this.props;
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
@@ -128,6 +147,45 @@ class HomePage extends Component {
                   })
                 }
               </Card.Group>
+            </Section>
+          </Container>
+        </div>
+
+        <div className="homepage__section home-social-section">
+          <Container className="padded horizontally ">
+            <Section title={t('home.social')}>
+              <Grid width={15} centered className="homepage__iconsrow">
+                <Grid.Row>
+                  {
+                    latestBlogPosts.length ?
+                      <Grid.Column mobile={16} tablet={11} computer={11} className="home-blog-posts">
+                        <div className="titles">
+                          <h4>{t('home.blog-title')}</h4>
+                          <a href={`/${language}/publications/blog`}>{t('home.all-posts')}</a>
+                        </div>
+                        <BlogFeed snippetVersion items={latestBlogPosts} language={language} t={t} limitLength={4} />
+                        <div className="read-more-bottom">
+                          <a href={`/${language}/publications/blog`}>{t('home.read-more-posts')}</a>
+                        </div>
+                      </Grid.Column> :
+                      null
+                  }
+                  {
+                    latestTweets.length ?
+                      <Grid.Column mobile={16} tablet={5} computer={5} className="home-twitter">
+                        <div className="titles">
+                          <h4>{t('home.twitter-title')}</h4>
+                          <a href={`/${language}/publications/twitter`}>{t('home.all-tweets')}</a>
+                        </div>
+                        <TwitterFeed snippetVersion tweets={latestTweets} t={t} limitLength={4} />
+                        <div className="read-more-bottom">
+                          <a href={`/${language}/publications/twitter`}>{t('home.read-more-tweets')}</a>
+                        </div>
+                      </Grid.Column> :
+                      null
+                  }
+                </Grid.Row>
+              </Grid>
             </Section>
           </Container>
         </div>

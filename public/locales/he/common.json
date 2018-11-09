@@ -181,6 +181,13 @@
     "search": "גלו את חכמת הקבלה",
     "sections": "מדורים",
     "updates": "עדכונים אחרונים",
+    "social": "הרב לייטמן ברשתות החברתיות",
+    "blog-title": "הבלוג של הרב לייטמן",
+    "twitter-title": "ציוצים",
+    "all-posts": "כל הפוסטים",
+    "all-tweets": "כל הציוצים",
+    "read-more-posts": "קרא עוד פוסטים",
+    "read-more-tweets": "קרא עוד ציוצים",
     "last-lesson": "שיעור הקבלה היומי",
     "donate": "תרום עכשיו",
     "promoted": {
@@ -265,6 +272,10 @@
       "text": "תוכניות",
       "subtext": "כאן תמצאו מגוון עשיר של תוכניות הכולל: שיחות מרתקות על משמעות החיים, אקטואליה, תוכניות לכל המשפחה ועוד."
     },
+    "tabs": {
+      "main": "תכניות",
+      "clips": "קליפים"
+    },
     "genres": {
       "documentary": "דוקומנטרי",
       "late-night": "מאוחר בלילה",
@@ -276,7 +287,8 @@
       "other": "אחר"
     },
     "list": {
-      "episode_from": "פרק מתוך התוכנית:"
+      "episode_from": "פרק מתוך התוכנית:",
+      "item_of": "חלק מתוך:"
     },
     "unit": {
       "recommended": {
@@ -306,7 +318,8 @@
           "title": "מאמרים נוספים מאותו האוסף"
         }
       }
-    }
+    },
+    "read-more": "קרא עוד"
   },
   "simple-mode": {
     "header": {
@@ -406,7 +419,8 @@
         "audio": "אודיו של השיעור",
         "audio-simple": "אודיו",
         "text": "תמליל מלא",
-        "image": "שרטוטים"
+        "image": "שרטוטים",
+        "lelo-mikud": "ללא קבוצת מיקוד"
       }
     },
     "program": {
@@ -593,5 +607,10 @@
   },
   "values": {
     "date": "{{date, ll}}"
+  },
+  "languages": {
+    "language": "שפה",
+    "website_language": "שפת האתר",
+    "content_language": "שפת תוכן מועדפת"
   }
 }

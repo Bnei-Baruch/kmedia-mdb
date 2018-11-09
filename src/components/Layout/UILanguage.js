@@ -1,15 +1,16 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, Flag, } from 'semantic-ui-react';
+import { Dropdown, Flag, Menu } from 'semantic-ui-react';
 
 import { COOKIE_UI_LANG, LANG_UI_LANGUAGES, LANGUAGES } from '../../helpers/consts';
-import Link from '../Language/MultiLanguageLink';
-import Helmets from '../shared/Helmets';
 import * as shapes from '../shapes';
+import Link from '../Language/MultiLanguageLink';
 
 class UILanguage extends Component {
   static propTypes = {
+    contentLanguage: PropTypes.string.isRequired,
     language: PropTypes.string.isRequired,
+
     // We need dependency on location in order to change Link every time url changes
     // eslint-disable-next-line react/no-unused-prop-types
     location: shapes.HistoryLocation.isRequired,
@@ -25,28 +26,32 @@ class UILanguage extends Component {
   };
 
   render() {
-    const { t, language } = this.props;
+    const { t, language, contentLanguage } = this.props;
 
     return (
-      <Fragment>
-        <Helmets.TopMost
-          titlePostfix={t('nav.top.header')}
-          mainLang={language}
-          alternateLang={LANG_UI_LANGUAGES}
-        />
-        <Dropdown item text={t(`constants.languages.${language}`)}>
-          <Dropdown.Menu>
-            {
-              LANG_UI_LANGUAGES.map(x => (
-                <Dropdown.Item key={x} as={Link} onClick={() => this.storeUILanguage(x)} language={`${x}`}>
-                  <Flag name={LANGUAGES[x].flag} />
-                  {t(`constants.languages.${x}`)}
-                </Dropdown.Item>
-              ))
-            }
-          </Dropdown.Menu>
-        </Dropdown>
-      </Fragment>
+      <Menu secondary>
+        <Menu.Item header>{t('languages.website_language')}:</Menu.Item>
+        <Menu.Menu position="right">
+          <Dropdown item text={`${t(`constants.languages.${language}`)}`}>
+            <Dropdown.Menu>
+              {
+                LANG_UI_LANGUAGES.map(x => (
+                  <Dropdown.Item
+                    key={x}
+                    as={Link}
+                    language={`${x}`}
+                    contentLanguage={contentLanguage}
+                    onClick={() => this.storeUILanguage(x)}
+                  >
+                    <Flag name={LANGUAGES[x].flag} />
+                    {t(`constants.languages.${x}`)}
+                  </Dropdown.Item>
+                ))
+              }
+            </Dropdown.Menu>
+          </Dropdown>
+        </Menu.Menu>
+      </Menu>
     );
   }
 }

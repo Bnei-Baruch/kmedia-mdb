@@ -10,7 +10,7 @@ import { updateQuery } from './helpers/url';
 import { filtersTransformer } from '../filters';
 import { actions, types, selectors } from '../redux/modules/lessons';
 import { selectors as filterSelectors } from '../redux/modules/filters';
-import { selectors as listsSelectors, types as lists } from '../redux/modules/lists';
+import { selectors as listsSelectors, types as listTypes } from '../redux/modules/lists';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 import { isEmpty } from '../helpers/utils';
@@ -85,7 +85,7 @@ function* setTab(action) {
 }
 
 function* watchFetchList() {
-  yield takeLatest(lists.FETCH_LIST, fetchLecturesList);
+  yield takeLatest(listTypes.FETCH_LIST, fetchLecturesList);
 }
 
 function* watchFetchAllSeries() {

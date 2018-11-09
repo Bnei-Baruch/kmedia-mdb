@@ -185,6 +185,13 @@
     "search": "Explore the wisdom of Kabbalah",
     "sections": "Archive Sections",
     "updates": "Latest Updates",
+    "social": "Rav Laitman in Social networks",
+    "blog-title": "Rav Laitman's Blog",
+    "twitter-title": "Tweets",
+    "all-posts": "All Blog posts",
+    "all-tweets": "All Tweets",
+    "read-more-posts": "Read more posts",
+    "read-more-tweets": "Read more Tweets",
     "last-lesson": "The Latest Daily Lesson",
     "donate": "DONATE NOW",
     "promoted": {
@@ -267,7 +274,11 @@
   "programs": {
     "header": {
       "text": "Programs",
-      "subtext": "Here you will find a rich variety of programs that include: fascinating conversations about the meaning of life, current events, programs for the whole family and more."
+      "subtext": "Here you will find a rich variety of programs that include: fascinating conversations about the meaning of life, current events, programs for the whole family, clips and more."
+    },
+    "tabs": {
+      "main": "Programs",
+      "clips": "Clips"
     },
     "genres": {
       "documentary": "Documentary",
@@ -280,7 +291,8 @@
       "other": "Other"
     },
     "list": {
-      "episode_from": "Episode from:"
+      "episode_from": "Episode from:",
+      "item_of": "Item of:"
     },
     "unit": {
       "recommended": {
@@ -310,12 +322,13 @@
           "title": "Other published articles in this collection"
         }
       }
-    }
+    },
+    "read-more": "Read more"
   },
   "simple-mode": {
     "header": {
       "text": "Downloads - Simple version",
-      "subtext": "Concentrate all media for a specific day"
+      "subtext": "All media for a certain day"
     },
     "today-button": "Today",
     "total-media-for-date": "All media for date ",
@@ -410,7 +423,8 @@
         "audio": "Lesson Audio",
         "audio-simple": "Audio",
         "text": "Transcription Text",
-        "image": "Sketches"
+        "image": "Sketches",
+        "lelo-mikud": "No focus-group"
       }
     },
     "program": {
@@ -515,5 +529,10 @@
   },
   "values": {
     "date": "{{date, ll}}"
+  },
+  "languages": {
+    "language": "Language",
+    "website_language": "Website Language",
+    "content_language": "Preferred content language"
   }
 }
