@@ -875,6 +875,16 @@
   padding: 0.2em 1em !important;
 }
 
+.type-header-top-margin {
+  margin-top: 45px;
+}
+
+.simple-mode-type-icon {
+  display: inline-block !important;
+  width: 32px;
+  margin-right: 5px;
+}
+
 .rtl {
   .summary-container {
 
@@ -911,6 +921,11 @@
       left: 12px;
       right: unset;
     }
+  }
+
+  .simple-mode-type-icon {
+    margin-left: 5px;
+    margin-right: 0;
   }
 }
 

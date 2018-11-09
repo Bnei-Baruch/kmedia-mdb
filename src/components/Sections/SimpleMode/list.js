@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
-import { Card, List } from 'semantic-ui-react';
+import { Image, List } from 'semantic-ui-react';
 
+import DailyLessonsIcon from '../../../images/icons/dailylessons.svg';
 import * as shapes from '../../shapes';
 
 class SimpleModeList extends PureComponent {
@@ -24,21 +25,23 @@ class SimpleModeList extends PureComponent {
       <div>
         {
           items.lessons.length ?
-            <List size="large">
-              {items.lessons.map(x => renderUnit(x, language, t))}
-            </List> :
+            <div>
+              <h2>
+                <Image className="simple-mode-type-icon" src={DailyLessonsIcon} />
+                {t('simple-mode.today-lessons')}
+              </h2>
+              <List size="large">
+                {items.lessons.map(x => renderUnit(x, language, t))}
+              </List>
+            </div> :
             null
         }
 
         {
           items.others.length ?
-            <Card fluid>
-              <Card.Content>
-                <List size="large">
-                  {renderUnit(items.others, language, t)}
-                </List>
-              </Card.Content>
-            </Card> :
+            <List size="large">
+              {renderUnit(items.others, language, t)}
+            </List> :
             null
         }
       </div>

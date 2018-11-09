@@ -3,6 +3,10 @@ import groupBy from 'lodash/groupBy';
 import { Card, Image, List } from 'semantic-ui-react';
 import DownloadIcon from '../../../images/icons/download.svg';
 import InfoIcon from '../../../images/icons/info.svg';
+import ProgramsIcon from '../../../images/icons/programs.svg';
+import LecturesIcon from '../../../images/icons/lectures.svg';
+import EventsIcon from '../../../images/icons/events.svg';
+import PublicationsIcon from '../../../images/icons/publications.svg';
 
 import {
   CT_ARTICLE,
@@ -11,6 +15,9 @@ import {
   CT_LESSON_PART,
   CT_VIDEO_PROGRAM_CHAPTER,
   NO_NAME,
+  UNIT_EVENTS_TYPE,
+  UNIT_PROGRAMS_TYPE,
+  UNIT_PUBLICATIONS_TYPE,
   VS_NAMES
 } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
@@ -62,7 +69,7 @@ const renderHorizontalFilesList = (files, contentType, t) =>
   });
 
 const unitLeloMikudFiles = (unit) => {
-  const keys = Object.keys(unit.derived_units).filter(key => key.includes('LELO_MIKUD'));
+  const keys = Object.keys(unit.derived_units || {}).filter(key => key.includes('LELO_MIKUD'));
   if (isEmpty(keys)) {
     return [];
   }
@@ -135,7 +142,78 @@ export const renderCollection = (collection, language, t) => {
   );
 };
 
+export const renderOtherCollection = (title, collectionArray, language, t) => {
+  const items = Object.values(collectionArray).map(u => renderUnits(u, language, t));
+  const icon  = matchIconToType(title.toLowerCase());
+
+  return (
+    <div>
+      {
+        items.length ?
+          <div className="type-header-top-margin">
+            <h2>
+              <Image className="simple-mode-type-icon" src={icon} />
+              {t(`nav.sidebar.${title.toLowerCase()}`)}
+            </h2>
+            <Card fluid>
+              <Card.Content>
+                <List size='large'>
+                  {items}
+                </List>
+              </Card.Content>
+            </Card>
+          </div> :
+          null
+      }
+    </div>
+  );
+};
+
 export const groupOtherMediaByType = (collection, language, t) => {
-  const byType = groupBy(collection, 'content_type');
-  return Object.values(byType).map(v => renderUnits(v, language, t));
+  const byType            = groupBy(collection, 'content_type');
+  const mergedCollections = mergeTypesToCollections(byType);
+  return Object.entries(mergedCollections).map(([title, collection]) => renderOtherCollection(title, collection, language, t));
+};
+
+export const mergeTypesToCollections = (byType) => {
+  const collections = {
+    LESSONS: [],
+    EVENTS: [],
+    PROGRAMS: [],
+    PUBLICATIONS: []
+  };
+
+  for (let type in byType) {
+    if (UNIT_PROGRAMS_TYPE.includes(type)) {
+      collections.PROGRAMS.push([...byType[type]]);
+      break;
+    }
+
+    if (UNIT_EVENTS_TYPE.includes(type)) {
+      collections.EVENTS.push([...byType[type]]);
+      break;
+    }
+
+    if (UNIT_PUBLICATIONS_TYPE.includes(type)) {
+      collections.PUBLICATIONS.push([...byType[type]]);
+      break;
+    }
+
+    collections.LESSONS.push([...byType[type]]);
+  }
+
+  return collections;
+};
+
+export const matchIconToType = (type) => {
+  switch (type) {
+  case 'programs':
+    return ProgramsIcon;
+  case 'events':
+    return EventsIcon;
+  case 'publications':
+    return PublicationsIcon;
+  default:
+    return LecturesIcon;
+  }
 };
