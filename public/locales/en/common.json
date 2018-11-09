@@ -88,7 +88,7 @@
       "programs": "Programs",
       "events": "Conventions & Events",
       "publications": "Publications",
-      "sources": "Sources",
+      "sources": "Kabbalah Sources",
       "posts": "Blog"
     }
   },
@@ -356,7 +356,7 @@
     },
     "unit": {
       "info": {
-        "sources": "Sources",
+        "sources": "Kabbalah Sources",
         "topics": "Topics",
         "collections": "Related to"
       },
@@ -498,14 +498,14 @@
       "UNITY_DAY": "Unity Day",
       "CLIPS": "Clips",
       "ARTICLES": "Articles",
-      "LESSON_PART": "Lesson Part",
+      "LESSON_PART": "Lesson",
       "LECTURE": "Lecture",
       "CHILDREN_LESSON": "Children Lesson",
       "WOMEN_LESSON": "Women Lesson",
       "VIRTUAL_LESSON": "Virtual Lesson",
       "FRIENDS_GATHERING": "Gathering Of Friends",
       "MEAL": "Meal",
-      "VIDEO_PROGRAM_CHAPTER": "Video Program Chapter",
+      "VIDEO_PROGRAM_CHAPTER": "Program Chapter",
       "FULL_LESSON": "Full Lesson",
       "ARTICLE": "Article",
       "UNKNOWN": "Unknown",
@@ -515,7 +515,7 @@
       "KITEI_MAKOR": "Sources Materials",
       "PUBLICATION": "Publication",
       "LELO_MIKUD": "Edited - No Focus Group",
-      "BLOG_POST": "Blog"
+      "BLOG_POST": "Blog Post"
     },
     "media-types": {
       "video": "Video",
