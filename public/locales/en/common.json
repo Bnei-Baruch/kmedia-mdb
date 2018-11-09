@@ -514,6 +514,6 @@
     }
   },
   "values": {
-    "date": "{{date, l}}"
+    "date": "{{date, ll}}"
   }
 }
