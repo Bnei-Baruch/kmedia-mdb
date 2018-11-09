@@ -67,6 +67,8 @@ class AVPlayer extends PureComponent {
     onNext: PropTypes.func,
 
     deviceInfo: shapes.UserAgentParserResults.isRequired,
+
+    onMediaEditModeChange: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -286,7 +288,7 @@ class AVPlayer extends PureComponent {
   };
 
   setSliceMode = (mode, properties = {}) => {
-    const { media } = this.props;
+    const { media, onMediaEditModeChange } = this.props;
 
     let { sliceStart, sliceEnd } = properties;
     if (typeof sliceStart === 'undefined') {
@@ -301,6 +303,8 @@ class AVPlayer extends PureComponent {
       sliceStart,
       sliceEnd
     });
+
+    onMediaEditModeChange(mode);
   };
 
   handleTimeUpdate = (timeData) => {
