@@ -483,7 +483,8 @@
       "TRAINING": "Training",
       "KITEI_MAKOR": "Fragmente von Primärquellen",
       "PUBLICATION": "Veröffentlichung",
-      "LELO_MIKUD": "Bearbeitet - Ohne Fokusgruppen"
+      "LELO_MIKUD": "Bearbeitet - Ohne Fokusgruppen",
+      "BLOG_POST": "Blog"
     },
     "media-types": {
       "video": "Video",

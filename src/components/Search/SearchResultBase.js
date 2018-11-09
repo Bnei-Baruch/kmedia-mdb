@@ -47,6 +47,7 @@ import {
   CT_CLIPS,
   CT_ARTICLES,
   CT_LESSONS_SERIES,
+  CT_BLOG_POST
 } from '../../helpers/consts';
 
 const PATH_SEPARATOR = ' > ';
@@ -163,6 +164,7 @@ class SearchResultBase extends Component {
       break;
     case CT_ARTICLE:
     case CT_ARTICLES:
+    case CT_BLOG_POST:
       icon = 'publications';
       break;
     case CT_VIDEO_PROGRAM_CHAPTER:

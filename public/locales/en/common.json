@@ -500,7 +500,8 @@
       "TRAINING": "Training",
       "KITEI_MAKOR": "Sources Materials",
       "PUBLICATION": "Publication",
-      "LELO_MIKUD": "Edited - No Focus Group"
+      "LELO_MIKUD": "Edited - No Focus Group",
+      "BLOG_POST": "Blog"
     },
     "media-types": {
       "video": "Video",

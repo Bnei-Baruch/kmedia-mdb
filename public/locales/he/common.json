@@ -496,7 +496,8 @@
       "TRAINING": "הכשרה",
       "KITEI_MAKOR": "קטעי מקור",
       "PUBLICATION": "פרסום",
-      "LELO_MIKUD": "ערוך - ללא קבוצת מיקוד"
+      "LELO_MIKUD": "ערוך - ללא קבוצת מיקוד",
+      "BLOG_POST": "בלוג"
     },
     "media-types": {
       "video": "וידאו",

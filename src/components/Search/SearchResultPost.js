@@ -2,18 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Segment, Container, Header } from 'semantic-ui-react';
 
-import { CT_ARTICLE } from '../../helpers/consts';
+import { CT_BLOG_POST } from '../../helpers/consts';
 import { canonicalLink } from '../../helpers/links';
 import Link from '../Language/MultiLanguageLink';
 import SearchResultBase from './SearchResultBase';
 
 class SearchResultPost extends SearchResultBase {
-
-  renderSnippet = (highlight) => {
-    return (<div className="search__snippet">
-      {this.snippetFromHighlight(highlight)}
-    </div>);
-  };
 
   render() {
     const { t, queryResult, hit, rank, filters } = this.props;
@@ -26,8 +20,7 @@ class SearchResultPost extends SearchResultBase {
                 result_type: resultType,
                 title
               },
-            highlight,
-            _type: type
+            highlight
           }                                      = hit;
 
     return (
@@ -43,10 +36,10 @@ class SearchResultPost extends SearchResultBase {
 
 
         <Container>
-          {this.iconByContentType(CT_ARTICLE, true)}
+          {this.iconByContentType(resultType === 'posts' ? CT_BLOG_POST : resultType, true)}
         </Container>
         <Container className="content">
-          {this.renderSnippet(highlight)}
+          {this.snippetFromHighlight(highlight)}
         </Container>
 
         {this.renderDebug(title)}

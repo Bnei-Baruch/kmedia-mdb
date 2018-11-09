@@ -29,6 +29,9 @@ class SearchResultSource extends SearchResultBase {
           <Image size="mini" src={sectionLogo.sources} verticalAlign='middle' />&nbsp;
           <span>{t('filters.sections-filter.sources')}</span>
         </Container>
+        <Container className="content">
+          {this.snippetFromHighlight(highlight)}
+        </Container>
         {this.renderDebug(title)}
       </Segment>
     );
