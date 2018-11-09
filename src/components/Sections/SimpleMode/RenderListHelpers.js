@@ -1,6 +1,8 @@
 import React from 'react';
 import groupBy from 'lodash/groupBy';
-import { Card, List } from 'semantic-ui-react';
+import { Card, Image, List } from 'semantic-ui-react';
+import DownloadIcon from '../../../images/icons/download.svg';
+import InfoIcon from '../../../images/icons/info.svg';
 
 import {
   CT_ARTICLE,
@@ -53,7 +55,7 @@ const renderHorizontalFilesList = (files, contentType, t) =>
     return (
       <List.Item key={file.id} className="media-file-button">
         <List.Content>
-          <a href={url}>{label} <List.Icon name="angle double down" /></a>
+          <a href={url}>{label} <Image className="file-list-icon" src={DownloadIcon} /></a>
         </List.Content>
       </List.Item>
     );
@@ -73,7 +75,7 @@ const unitLeloMikudFiles = (unit) => {
 
 const renderUnits = (units, language, t) =>
   units.filter((unit => unit)).map((unit, index, unitsArray) => {
-    const lastUnit  = unitsArray.length - 1;
+    const lastUnit       = unitsArray.length - 1;
     const leloMikudFiles = unitLeloMikudFiles(unit);
     const filesList      = [...(unit.files || []), ...leloMikudFiles].filter(file => file.language === language);
     const files          = filesList && renderHorizontalFilesList(filesList, unit.content_type, t);
@@ -92,7 +94,14 @@ const renderUnits = (units, language, t) =>
             {
               files.length ?
                 files :
-                <span className="no-files">{t('simple-mode.no-files-found-for-lang')}</span>
+                <List.Item key={unit.id} className="no-files">
+                  <Image src={InfoIcon} />
+                  <List.Content>
+                    <span className="bold-font">{t('simple-mode.no-files-found-for-lang')}</span>
+                    <br />
+                    {t('simple-mode.try-different-language')}
+                  </List.Content>
+                </List.Item>
             }
             <div className="overflow-gradient" />
           </List.List>
