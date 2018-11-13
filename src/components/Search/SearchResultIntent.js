@@ -92,9 +92,9 @@ class SearchResultIntent extends SearchResultBase {
     const filmDate  = cu.film_date ? this.props.t('values.date', { date: cu.film_date }) : '';
 
     return (
-      <Card key={cu.id} className="search__card bgHoverGrey" raised>
-        <Container className="intentImage">
-          <div className='cardHeaderLabel'>
+      <Card key={cu.id} className="search__card bg_hover_grey" raised>
+        <Container className="intent_image">
+          <div className='card_header_label'>
             {this.mlsToStrColon(cu.duration)}
           </div>
           <FallbackImage fluid src={src} />
@@ -125,7 +125,7 @@ class SearchResultIntent extends SearchResultBase {
     const pages   = new Array(numberOfPages).fill('a');
     const content = pages.map((p, i) => {
         return (<Button
-          onClick={e => this.onScrollChange(i)} key={i} icon className="bgTransparent">
+          onClick={e => this.onScrollChange(i)} key={i} icon className="bg_transparent">
           <Icon name={pageNo === i ? 'circle thin' : 'circle outline'} color="blue" size="small" />
         </Button>);
       }
@@ -142,7 +142,7 @@ class SearchResultIntent extends SearchResultBase {
       basic
       size="large"
       onClick={this.onScrollLeft}
-      className="scrollIntents"
+      className="scroll_intents"
       style={{ [dir]: '-15px' }}
     />);
   };
@@ -158,7 +158,7 @@ class SearchResultIntent extends SearchResultBase {
       basic
       size="large"
       onClick={this.onScrollRight}
-      className="scrollIntents"
+      className="scroll_intents"
       style={{ [dir]: '-15px' }}
     />);
   };

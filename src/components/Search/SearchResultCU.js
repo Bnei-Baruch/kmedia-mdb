@@ -52,7 +52,7 @@ class SearchResultCU extends SearchResultBase {
     }
 
     return (
-      <Segment className="bgHoverGrey search__block">
+      <Segment className="bg_hover_grey search__block">
         <Header as="h3">
           <Link
             className="search__link content"

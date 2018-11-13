@@ -24,7 +24,7 @@ class SearchResultSource extends SearchResultBase {
     const name = this.titleFromHighlight(highlight, title);
 
     return (
-      <Segment verticalalign="top" className="bgHoverGrey search__block">
+      <Segment verticalalign="top" className="bg_hover_grey search__block">
         <Header as="h3">
           <Link
             className="search__link"

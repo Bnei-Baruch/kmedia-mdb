@@ -123,7 +123,7 @@ class SearchResultBase extends Component {
 
     return (
       <Link to={to} key={data.type}>
-        <Button basic floated="left" size="mini" className="linkToFile">
+        <Button basic floated="left" size="mini" className="link_to_file">
           <Icon name={data.icon} /> {data.title}
         </Button>
       </Link>
