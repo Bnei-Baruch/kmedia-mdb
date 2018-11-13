@@ -11,7 +11,7 @@
       "books": "Bücher",
       "topics": "Themen",
       "publications": "Veröffentlichungen",
-      "simple-mode": "Einfache Version",
+      "simple-mode": "Downloads",
       "photos": "Fotos",
       "design": "Design",
       "design2": "Layout",
@@ -319,17 +319,20 @@
   },
   "simple-mode": {
     "header": {
-      "text": "Downloads - Einfache Version",
+      "text": "Downloads",
       "subtext": "Alle Medien für einen bestimmten Tag"
     },
     "today-button": "Heute",
     "total-media-for-date": "Alle Medien für das Datum ",
-    "media-language": "Mediensprache",
+    "media-language": "Mediensprache:",
     "no-files-found-for-lang": "Es gibt keine Dateien für die ausgewählte Sprache",
+    "try-different-language": "Wählen Sie eine andere Sprache.",
     "no-files-found-for-date": "Es gibt keine Dateien für dieses Datum",
-    "date": "Datum",
+    "date": "Datum:",
     "prev": "Bisherige",
-    "next": "Nächster"
+    "next": "Nächster",
+    "choose-date": "Datum wählen",
+    "today-lessons": "Tägliche Kabbalah-Stunden"
   },
   "pages": {
     "collection": {

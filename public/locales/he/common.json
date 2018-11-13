@@ -11,7 +11,7 @@
       "books": "ספרים",
       "topics": "נושאים",
       "publications": "פרסומים",
-      "simple-mode": "גרסה קלה",
+      "simple-mode": "הורדות",
       "photos": "תמונות",
       "design": "עיצוב",
       "project-status": "סטאטוס הפרוייקט",
@@ -320,17 +320,20 @@
   },
   "simple-mode": {
     "header": {
-      "text": "הורדות - גרסה קלה",
+      "text": "הורדות",
       "subtext": "ריכוז כל המדיה של יום ספציפי"
     },
     "today-button": "היום",
     "total-media-for-date": "כל המדיה לתאריך ",
-    "media-language": "שפת המדיה",
-    "no-files-found-for-lang": "אין קבצים לשפה שבחרת",
+    "media-language": "שפת המדיה:",
+    "no-files-found-for-lang": "אין קבצים לשפה שבחרת.",
+    "try-different-language": "נסה לבחור שפה אחרת.",
     "no-files-found-for-date": "אין קבצים לתאריך זה",
-    "date": "תאריך",
+    "date": "תאריך:",
     "prev": "אחורה",
-    "next": "קדימה"
+    "next": "קדימה",
+    "choose-date": "בחר תאריך",
+    "today-lessons": "שיעורי קבלה יומיים"
   },
   "help": {
     "header": {

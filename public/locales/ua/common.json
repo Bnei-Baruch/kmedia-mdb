@@ -11,7 +11,7 @@
       "books": "Книжки",
       "topics": "Теми",
       "publications": "Публікації",
-      "simple-mode": "Простий Версія",
+      "simple-mode": "Завантаження",
       "photos": "Фотографії",
       "design": "Дизайн",
       "design2": "Планування",
@@ -321,17 +321,20 @@
   },
   "simple-mode": {
     "header": {
-      "text": "Завантаження - проста версія",
+      "text": "Завантаження",
       "subtext": "Вся медіа за певний день"
     },
     "today-button": "Сьогодні",
     "total-media-for-date": "Всі носії для дати ",
-    "media-language": "Медіа мова",
+    "media-language": "Медіа мова:",
     "no-files-found-for-lang": "Немає файлів для обраної вами мови",
+    "try-different-language": "Спробуйте вибрати іншу мову.",
     "no-files-found-for-date": "Немає файлів для цієї дати",
-    "date": "дата",
+    "date": "дата:",
     "prev": "Попередній",
-    "next": "далі"
+    "next": "далі",
+    "choose-date": "Виберіть дату",
+    "today-lessons": "Щоденні уроки Каббали"
   },
   "pages": {
     "collection": {
