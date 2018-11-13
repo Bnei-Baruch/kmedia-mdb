@@ -813,6 +813,15 @@
       width: 20px;
       height: 20px;
     }
+
+    .choose-language-button {
+      background: transparent !important;
+      height: auto !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      text-decoration: underline;
+      color: #2185d0;
+    }
   }
 
   .overflow-gradient {
@@ -940,6 +949,8 @@
 }
 
 /* ************* End of styles for simple mode ************* */
+
+/* ************* Start of styles for homepage social media section ************* */
 .home-social-section {
   .titles {
     width: 100%;
@@ -1057,5 +1068,23 @@
 
   .tweet-friendly-date {
     text-align: left;
+  }
+}
+
+/* ************* End of styles for homepage social media section ************* */
+
+.dropdown-language-selector.blink {
+  box-shadow: 0 0 0 3px #7dcff5 inset;
+  animation: dropdown-blink .6s ease-in-out;
+  animation-iteration-count: 3;
+  animation-delay: .4s;
+}
+
+@keyframes dropdown-blink {
+  0% {
+    box-shadow: 0 0 0 3px #7dcff5 inset;
+  }
+  100% {
+    box-shadow: none;
   }
 }

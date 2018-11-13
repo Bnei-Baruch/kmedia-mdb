@@ -42,6 +42,7 @@ class SimpleModeContainer extends Component {
     this.state = {
       filesLanguage: this.props.contentLanguage,
       isMobileDevice: this.isMobileDevice(),
+      blinkLangSelect: false
     };
   }
 
@@ -80,7 +81,7 @@ class SimpleModeContainer extends Component {
   handleLanguageChanged = (e, filesLanguage) => {
     const language = filesLanguage || e.currentTarget.value;
 
-    this.setState({ filesLanguage: language });
+    this.setState({ filesLanguage: language, blinkLangSelect: false });
   };
 
   handleDayClick = (selectedDate, { disabled } = {}, nextProps = {}) => {
@@ -102,20 +103,27 @@ class SimpleModeContainer extends Component {
   isMobileDevice = () =>
     this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
+  helpChooseLang = () => {
+    this.setState({ blinkLangSelect: true });
+    setTimeout(() => this.setState({ blinkLangSelect: false }), 3000);
+    window.scrollTo(0, 0);
+  };
+
   renderUnitOrCollection = (item, language, t) => (
     isEmpty(item.content_units) ?
-      groupOtherMediaByType(item, language, t) :
-      renderCollection(item, language, t));
+      groupOtherMediaByType(item, language, t, this.helpChooseLang) :
+      renderCollection(item, language, t, this.helpChooseLang));
 
   render() {
-    const { filesLanguage, isMobileDevice } = this.state;
-    const pageProps                         = {
+    const { filesLanguage, isMobileDevice, blinkLangSelect } = this.state;
+    const pageProps                                          = {
       ...this.props,
       selectedDate: this.state.date,
       language: filesLanguage,
       renderUnit: this.renderUnitOrCollection,
       onDayClick: this.handleDayClick,
-      onLanguageChange: this.handleLanguageChanged
+      onLanguageChange: this.handleLanguageChanged,
+      blinkLangSelect: blinkLangSelect
     };
 
     return isMobileDevice ? <MobilePage {...pageProps} /> : <DesktopPage {...pageProps} />;

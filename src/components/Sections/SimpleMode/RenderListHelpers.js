@@ -1,6 +1,6 @@
 import React from 'react';
 import groupBy from 'lodash/groupBy';
-import { Card, Image, List } from 'semantic-ui-react';
+import { Button, Card, Image, List } from 'semantic-ui-react';
 import DownloadIcon from '../../../images/icons/download.svg';
 import InfoIcon from '../../../images/icons/info.svg';
 import ProgramsIcon from '../../../images/icons/programs.svg';
@@ -80,7 +80,7 @@ const unitLeloMikudFiles = (unit) => {
     [];
 };
 
-const renderUnits = (units, language, t) =>
+const renderUnits = (units, language, t, helpChooseLang) =>
   units.filter((unit => unit)).map((unit, index, unitsArray) => {
     const lastUnit       = unitsArray.length - 1;
     const leloMikudFiles = unitLeloMikudFiles(unit);
@@ -107,6 +107,7 @@ const renderUnits = (units, language, t) =>
                     <span className="bold-font">{t('simple-mode.no-files-found-for-lang')}</span>
                     <br />
                     {t('simple-mode.try-different-language')}
+                    <Button className="choose-language-button" onClick={helpChooseLang}>{t('simple-mode.language-click')}</Button>
                   </List.Content>
                 </List.Item>
             }
@@ -117,12 +118,12 @@ const renderUnits = (units, language, t) =>
     );
   });
 
-export const renderCollection = (collection, language, t) => {
+export const renderCollection = (collection, language, t, helpChooseLang) => {
   if (!collection.content_units) {
     return null;
   }
 
-  const units = renderUnits(collection.content_units, language, t);
+  const units = renderUnits(collection.content_units, language, t, helpChooseLang);
 
   return (
     <Card fluid key={collection.id}>
@@ -142,8 +143,8 @@ export const renderCollection = (collection, language, t) => {
   );
 };
 
-export const renderOtherCollection = (title, collectionArray, language, t) => {
-  const items = Object.values(collectionArray).map(u => renderUnits(u, language, t));
+export const renderOtherCollection = (title, collectionArray, language, t, helpChooseLang) => {
+  const items = Object.values(collectionArray).map(u => renderUnits(u, language, t, helpChooseLang));
   const icon  = matchIconToType(title.toLowerCase());
 
   return (
@@ -169,10 +170,10 @@ export const renderOtherCollection = (title, collectionArray, language, t) => {
   );
 };
 
-export const groupOtherMediaByType = (collection, language, t) => {
+export const groupOtherMediaByType = (collection, language, t, helpChooseLang) => {
   const byType            = groupBy(collection, 'content_type');
   const mergedCollections = mergeTypesToCollections(byType);
-  return Object.entries(mergedCollections).map(([title, collection]) => renderOtherCollection(title, collection, language, t));
+  return Object.entries(mergedCollections).map(([title, collection]) => renderOtherCollection(title, collection, language, t, helpChooseLang));
 };
 
 export const mergeTypesToCollections = (byType) => {

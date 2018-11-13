@@ -26,7 +26,8 @@ class SimpleModeDesktopPage extends PureComponent {
     t: PropTypes.func.isRequired,
     renderUnit: PropTypes.func.isRequired,
     onDayClick: PropTypes.func.isRequired,
-    onLanguageChange: PropTypes.func.isRequired
+    onLanguageChange: PropTypes.func.isRequired,
+    blinkLangSelect: PropTypes.bool.isRequired
   };
 
   static defaultProps = {
@@ -43,7 +44,7 @@ class SimpleModeDesktopPage extends PureComponent {
 
   render() {
     const
-      { items, selectedDate, wip, err, language, uiLanguage, t, renderUnit, onDayClick, onLanguageChange } = this.props;
+      { items, selectedDate, wip, err, language, uiLanguage, t, renderUnit, onDayClick, onLanguageChange, blinkLangSelect } = this.props;
 
     const DayPickerModifiers = {
       selected: selectedDate
@@ -83,6 +84,7 @@ class SimpleModeDesktopPage extends PureComponent {
                         languages={ALL_LANGUAGES}
                         defaultValue={language}
                         onSelect={onLanguageChange}
+                        blink={blinkLangSelect}
                       />
                     </div>
                   </div>
