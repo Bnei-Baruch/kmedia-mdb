@@ -11,6 +11,7 @@ import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 import SectionHeader from '../../shared/SectionHeader';
 import { FrownSplash } from '../../shared/Splash/Splash';
+import YearMonthForm from '../../Filters/components/Date/YearMonthForm';
 import DropdownLanguageSelector from '../../Language/Selector/DropdownLanguageSelector';
 import SimpleModeList from './list';
 
@@ -104,6 +105,14 @@ class SimpleModeDesktopPage extends PureComponent {
                       month={selectedDate}
                       disabledDays={{ after: new Date() }}
                       onDayClick={onDayClick}
+                      captionElement={({ date, localeUtils }) => (
+                        <YearMonthForm
+                          date={date}
+                          language={language}
+                          localeUtils={localeUtils}
+                          onChange={onDayClick}
+                        />
+                      )}
                     />
                     <Divider />
                     <Button onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />

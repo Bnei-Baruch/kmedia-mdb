@@ -186,17 +186,17 @@ export const mergeTypesToCollections = (byType) => {
   for (let type in byType) {
     if (UNIT_PROGRAMS_TYPE.includes(type)) {
       collections.PROGRAMS.push([...byType[type]]);
-      break;
+      continue;
     }
 
     if (UNIT_EVENTS_TYPE.includes(type)) {
       collections.EVENTS.push([...byType[type]]);
-      break;
+      continue;
     }
 
     if (UNIT_PUBLICATIONS_TYPE.includes(type)) {
       collections.PUBLICATIONS.push([...byType[type]]);
-      break;
+      continue;
     }
 
     collections.LESSONS.push([...byType[type]]);
