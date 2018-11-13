@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Table, Button } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../helpers/links';
@@ -12,24 +11,31 @@ import FallbackImage from '../shared/FallbackImage';
 import SearchResultBase from './SearchResultBase';
 
 class SearchResultCollection extends SearchResultBase {
-
   static propTypes = {
     ...SearchResultBase.props,
     c: shapes.Collection,
   };
 
-  renderCU = (cu) => {
-    return (
-      <Link to={canonicalLink(cu, this.getMediaLanguage(this.props.filters))} key={cu.id}>
-        <Button size="tiny" basic className="linkToCU">{cu.name}</Button>
-      </Link>
-    );
-  };
+  renderCU = cu => (
+    <Link key={cu.id} to={canonicalLink(cu, this.getMediaLanguage(this.props.filters))}>
+      <Button basic size="tiny" className="linkToCU" content={cu.name} />
+    </Link>
+  );
 
   render() {
-    const { t, location, c, hit, rank, queryResult, filters }                                    = this.props;
-    const { _index: index, _type: type, _source: { mdb_uid: mdbUid }, highlight, _score: score } = hit;
-    const { search_result: { searchId } }                                                        = queryResult;
+    const { t, location, c, hit, rank, queryResult, filters } = this.props;
+
+    const
+      {
+        _index: index,
+        _type: type,
+        _source: {
+          mdb_uid: mdbUid
+        },
+        highlight,
+        _score: score
+      }                                   = hit;
+    const { search_result: { searchId } } = queryResult;
 
     return (
       <Table className="bgHoverGrey search__block">
@@ -37,21 +43,24 @@ class SearchResultCollection extends SearchResultBase {
           <Table.Row key={mdbUid} verticalAlign="top">
             <Table.Cell collapsing singleLine width={1}>
               <FallbackImage
-                src={assetUrl(`logos/collections/${c.id}.jpg`)}
                 circular
-                size="tiny" />
+                size="tiny"
+                src={assetUrl(`logos/collections/${c.id}.jpg`)}
+              />
             </Table.Cell>
             <Table.Cell>
               <Link
                 className="search__link"
                 onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-                to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}>
+                to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}
+              >
                 {this.titleFromHighlight(highlight, c.name)}
               </Link>
               <div>
                 <Link
                   onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-                  to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}>
+                  to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}
+                >
                   {this.iconByContentType(c.content_type, true)}
                 </Link>
                 &nbsp;|&nbsp;
@@ -63,7 +72,8 @@ class SearchResultCollection extends SearchResultBase {
               </div>
             </Table.Cell>
             {
-              !isDebMode(location) ? null :
+              !isDebMode(location) ?
+                null :
                 <Table.Cell collapsing textAlign="right">
                   <ScoreDebug name={c.name} score={score} explanation={hit._explanation} />
                 </Table.Cell>
@@ -72,8 +82,7 @@ class SearchResultCollection extends SearchResultBase {
         </Table.Body>
       </Table>
     );
-  };
-
+  }
 }
 
 export default SearchResultCollection;

@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Button, Image, Icon, Container } from 'semantic-ui-react';
 
-import { isDebMode } from '../../helpers/url';
-import ScoreDebug from './ScoreDebug';
-import { sectionLogo } from '../../helpers/images';
-import { canonicalLink } from '../../helpers/links';
-import * as shapes from '../shapes';
-import Link from '../Language/MultiLanguageLink';
 import {
   SEARCH_INTENT_INDEX_TOPIC,
   SEARCH_INTENT_INDEX_SOURCE,
@@ -49,6 +42,12 @@ import {
   CT_LESSONS_SERIES,
   CT_BLOG_POST
 } from '../../helpers/consts';
+import { sectionLogo } from '../../helpers/images';
+import { canonicalLink } from '../../helpers/links';
+import { isDebMode } from '../../helpers/url';
+import * as shapes from '../shapes';
+import Link from '../Language/MultiLanguageLink';
+import ScoreDebug from './ScoreDebug';
 
 const PATH_SEPARATOR = ' > ';
 
@@ -124,7 +123,7 @@ class SearchResultBase extends Component {
 
     return (
       <Link to={to} key={data.type}>
-        <Button floated='left' size="mini" className="linkToFile" basic>
+        <Button basic floated="left" size="mini" className="linkToFile">
           <Icon name={data.icon} /> {data.title}
         </Button>
       </Link>
@@ -181,13 +180,15 @@ class SearchResultBase extends Component {
     }
 
     if (!withTitle) {
-      return <Image src={sectionLogo[icon]} size="mini" verticalAlign='middle' />;
+      return <Image src={sectionLogo[icon]} size="mini" verticalAlign="middle" />;
     }
 
-    return (<span>
-      <Image src={sectionLogo[icon]} size="mini" verticalAlign='middle' />&nbsp;
-      <span>{this.props.t(`constants.content-types.${type}`)}</span>
-    </span>);
+    return (
+      <span>
+        <Image src={sectionLogo[icon]} size="mini" verticalAlign="middle" />&nbsp;
+        <span>{this.props.t(`constants.content-types.${type}`)}</span>
+      </span>
+    );
   };
 
   titleFromHighlight = (highlight, defVal) => {
@@ -251,9 +252,11 @@ class SearchResultBase extends Component {
       return null;
     }
 
-    return (<Container>
-      <ScoreDebug name={name} score={score} explanation={explanation} />
-    </Container>);
+    return (
+      <Container>
+        <ScoreDebug name={name} score={score} explanation={explanation} />
+      </Container>
+    );
   };
 
   render() {

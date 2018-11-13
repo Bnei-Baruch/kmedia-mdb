@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 import { Segment, Container, Header } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../helpers/links';
@@ -7,7 +6,6 @@ import Link from '../Language/MultiLanguageLink';
 import SearchResultBase from './SearchResultBase';
 
 class SearchResultCU extends SearchResultBase {
-
   renderSnippet = (highlight) => {
     const content     = this.snippetFromHighlight(highlight);
     const description = this.snippetFromHighlight(highlight, ['description', 'description_language']);
@@ -35,17 +33,18 @@ class SearchResultCU extends SearchResultBase {
 
   render() {
     const { t, queryResult, cu, hit, rank, filters } = this.props;
-    const { search_result: { searchId } }            = queryResult;
-    const {
-            _index: index,
-            _source:
-              {
-                mdb_uid: mdbUid,
-                result_type: resultType
-              },
-            highlight,
-            _type: type
-          }                                          = hit;
+
+    const { search_result: { searchId } } = queryResult;
+
+    const
+      {
+        _index: index,
+        _source: {
+          mdb_uid: mdbUid,
+          result_type: resultType
+        },
+        highlight,
+      } = hit;
 
     let filmDate = '';
     if (cu.film_date) {
@@ -54,11 +53,12 @@ class SearchResultCU extends SearchResultBase {
 
     return (
       <Segment className="bgHoverGrey search__block">
-        <Header as='h3'>
+        <Header as="h3">
           <Link
             className="search__link content"
             onClick={() => this.click(mdbUid, index, resultType, rank, searchId)}
-            to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type }, this.getMediaLanguage(filters))}>
+            to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type }, this.getMediaLanguage(filters))}
+          >
             {this.titleFromHighlight(highlight, cu.name)}
           </Link>
         </Header>
@@ -67,7 +67,6 @@ class SearchResultCU extends SearchResultBase {
           {this.iconByContentType(cu.content_type, true)} | <strong>{filmDate}</strong>
           <div className="clear" />
         </Container>
-
 
         <Container className="content">
           {this.renderSnippet(highlight)}
@@ -80,7 +79,7 @@ class SearchResultCU extends SearchResultBase {
         {this.renderDebug(cu.name)}
       </Segment>
     );
-  };
+  }
 }
 
 export default SearchResultCU;

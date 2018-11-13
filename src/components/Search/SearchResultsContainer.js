@@ -85,7 +85,7 @@ class SearchResultsContainer extends Component {
     const { wip, err, queryResult, cMap, cuMap, pageNo, pageSize, sortBy, language, location, click } = this.props;
     return (
       <div>
-        <SectionHeader section="search" location={location} isMobileDevice={this.isMobileDevice} />
+        <SectionHeader section="search" location={location} />
         <Filters
           sortBy={sortBy}
           onChange={this.handleFiltersChanged}

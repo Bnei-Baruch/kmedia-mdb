@@ -7,7 +7,7 @@ import { selectors } from '../../../redux/modules/sources';
 import { selectors as stats } from '../../../redux/modules/stats';
 import HierarchicalFilter from './HierarchicalFilter';
 
-class TypeFilter extends Component {
+class SourcesFilter extends Component {
   static propTypes = {
     roots: PropTypes.array,
     getSourceById: PropTypes.func.isRequired,
@@ -72,4 +72,4 @@ export default connect(
       cuStats,
     };
   }
-)(TypeFilter);
+)(SourcesFilter);

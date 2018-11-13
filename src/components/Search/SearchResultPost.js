@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 import { Segment, Container, Header } from 'semantic-ui-react';
 
 import { CT_BLOG_POST } from '../../helpers/consts';
@@ -8,28 +7,30 @@ import Link from '../Language/MultiLanguageLink';
 import SearchResultBase from './SearchResultBase';
 
 class SearchResultPost extends SearchResultBase {
-
   render() {
-    const { t, queryResult, hit, rank, filters } = this.props;
-    const { search_result: { searchId } }        = queryResult;
-    const {
-            _index: index,
-            _source:
-              {
-                mdb_uid: mdbUid,
-                result_type: resultType,
-                title
-              },
-            highlight
-          }                                      = hit;
+    const { queryResult, hit, rank, filters } = this.props;
+
+    const { search_result: { searchId } } = queryResult;
+
+    const
+      {
+        _index: index,
+        _source: {
+          mdb_uid: mdbUid,
+          result_type: resultType,
+          title
+        },
+        highlight
+      } = hit;
 
     return (
       <Segment className="bgHoverGrey search__block">
-        <Header as='h3'>
+        <Header as="h3">
           <Link
             className="search__link content"
             onClick={() => this.click(mdbUid, index, resultType, rank, searchId)}
-            to={canonicalLink({ id: mdbUid, content_type: 'POST' }, this.getMediaLanguage(filters))}>
+            to={canonicalLink({ id: mdbUid, content_type: 'POST' }, this.getMediaLanguage(filters))}
+          >
             {this.titleFromHighlight(highlight, title)}
           </Link>
         </Header>
@@ -45,7 +46,7 @@ class SearchResultPost extends SearchResultBase {
         {this.renderDebug(title)}
       </Segment>
     );
-  };
+  }
 }
 
 export default SearchResultPost;

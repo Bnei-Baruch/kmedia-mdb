@@ -6,43 +6,31 @@ import { types as ssr } from './ssr';
 
 /* Types */
 
-const SET_PAGE              = 'Lists/SET_PAGE';
-const FETCH_LIST            = 'Lists/FETCH_LIST';
-const FETCH_LIST_SUCCESS    = 'Lists/FETCH_LIST_SUCCESS';
-const FETCH_LIST_FAILURE    = 'Lists/FETCH_LIST_FAILURE';
-const FETCH_INTENTS         = 'Lists/FETCH_INTENTS';
-const FETCH_INTENTS_SUCCESS = 'Lists/FETCH_INTENTS_SUCCESS';
-const FETCH_INTENTS_FAILURE = 'Lists/FETCH_INTENTS_FAILURE';
+const SET_PAGE           = 'Lists/SET_PAGE';
+const FETCH_LIST         = 'Lists/FETCH_LIST';
+const FETCH_LIST_SUCCESS = 'Lists/FETCH_LIST_SUCCESS';
+const FETCH_LIST_FAILURE = 'Lists/FETCH_LIST_FAILURE';
 
 export const types = {
   SET_PAGE,
   FETCH_LIST,
   FETCH_LIST_SUCCESS,
   FETCH_LIST_FAILURE,
-  FETCH_INTENTS,
-  FETCH_INTENTS_SUCCESS,
-  FETCH_INTENTS_FAILURE,
 };
 
 /* Actions */
 
-const setPage             = createAction(SET_PAGE, (namespace, pageNo) => ({ namespace, pageNo }));
-const fetchList           = createAction(FETCH_LIST,
+const setPage          = createAction(SET_PAGE, (namespace, pageNo) => ({ namespace, pageNo }));
+const fetchList        = createAction(FETCH_LIST,
   (namespace, pageNo, params = {}) => ({ namespace, pageNo, ...params, }));
-const fetchListSuccess    = createAction(FETCH_LIST_SUCCESS, (namespace, data) => ({ namespace, data }));
-const fetchListFailure    = createAction(FETCH_LIST_FAILURE, (namespace, err) => ({ namespace, err }));
-const fetchIntents        = createAction(FETCH_INTENTS, (namespace, params = {}) => ({ namespace, params }));
-const fetchIntentsSuccess = createAction(FETCH_INTENTS_SUCCESS, (namespace, data) => ({ namespace, data }));
-const fetchIntentsFailure = createAction(FETCH_INTENTS_FAILURE, (namespace, err) => ({ namespace, err }));
+const fetchListSuccess = createAction(FETCH_LIST_SUCCESS, (namespace, data) => ({ namespace, data }));
+const fetchListFailure = createAction(FETCH_LIST_FAILURE, (namespace, err) => ({ namespace, err }));
 
 export const actions = {
   setPage,
   fetchList,
   fetchListSuccess,
   fetchListFailure,
-  fetchIntents,
-  fetchIntentsSuccess,
-  fetchIntentsFailure,
 };
 
 /* Reducer */

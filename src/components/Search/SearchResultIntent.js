@@ -29,10 +29,10 @@ import SearchResultBase from './SearchResultBase';
 let NUMBER_OF_FETCHED_UNITS = 3 * 4;
 
 class SearchResultIntent extends SearchResultBase {
-
   static propTypes = {
     ...SearchResultBase.propTypes,
-    isMobileDevice: PropTypes.func.isRequired
+    isMobileDevice: PropTypes.func.isRequired,
+    fetchList: PropTypes.func.isRequired
   };
 
   state = {
@@ -49,7 +49,7 @@ class SearchResultIntent extends SearchResultBase {
   }
 
   askForData = () => {
-    const { fetchIntents, hit: { _index, _source: { content_type: contentType, mdb_uid: mdbUid, } } } = this.props;
+    const { fetchList, hit: { _index, _source: { content_type: contentType, mdb_uid: mdbUid, } } } = this.props;
 
     if (!['topics-filter', 'sources-filter'].includes(SEARCH_INTENT_FILTER_NAMES[_index])) {
       return;
@@ -58,11 +58,10 @@ class SearchResultIntent extends SearchResultBase {
     const namespace = `intents_${mdbUid}_${contentType}`;
     const params    = {
       content_type: contentType,
-      page_no: 1,
       page_size: NUMBER_OF_FETCHED_UNITS,
       [this.parentTypeByIndex(_index)]: mdbUid
     };
-    fetchIntents(namespace, params);
+    fetchList(namespace, 1, params);
   };
 
   parentTypeByIndex = (index) => {
@@ -247,6 +246,6 @@ const mapState = (state, ownProps) => {
   };
 };
 
-const mapDispatch = dispatch => bindActionCreators({ fetchIntents: listsActions.fetchIntents }, dispatch);
+const mapDispatch = dispatch => bindActionCreators({ fetchList: listsActions.fetchList }, dispatch);
 
 export default connect(mapState, mapDispatch)(SearchResultIntent);

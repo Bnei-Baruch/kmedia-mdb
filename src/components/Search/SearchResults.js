@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Trans, translate } from 'react-i18next';
 import { Container, Divider, Grid } from 'semantic-ui-react';
 
+import { SEARCH_INTENT_HIT_TYPES, } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { getQuery } from '../../helpers/url';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
@@ -19,7 +20,6 @@ import SearchResultCollection from './SearchResultCollection';
 import SearchResultIntent from './SearchResultIntent';
 import SearchResultSource from './SearchResultSource';
 import SearchResultPost from './SearchResultPost';
-import { SEARCH_INTENT_HIT_TYPES, } from '../../helpers/consts';
 
 class SearchResults extends Component {
   static propTypes = {
@@ -56,7 +56,8 @@ class SearchResults extends Component {
   };
 
   renderHit = (hit, rank) => {
-    const { cMap, cuMap }                                                        = this.props;
+    const { cMap, cuMap } = this.props;
+
     const { _source: { mdb_uid: mdbUid, result_type: resultType }, _type: type } = hit;
 
     const props = { ...this.props, hit, rank, key: `${mdbUid}_${type}` };
@@ -86,19 +87,20 @@ class SearchResults extends Component {
   };
 
   render() {
-    const {
-            filters,
-            wip,
-            err,
-            queryResult,
-            areSourcesLoaded,
-            pageNo,
-            pageSize,
-            language,
-            t,
-            handlePageChange,
-            location,
-          } = this.props;
+    const
+      {
+        filters,
+        wip,
+        err,
+        queryResult,
+        areSourcesLoaded,
+        pageNo,
+        pageSize,
+        language,
+        t,
+        handlePageChange,
+        location,
+      } = this.props;
 
     const { search_result: results } = queryResult;
 
@@ -149,7 +151,8 @@ class SearchResults extends Component {
             </Container>
           </Grid.Column>
           <Grid.Column key="2" />
-        </Grid>);
+        </Grid>
+      );
     }
     return content;
   }

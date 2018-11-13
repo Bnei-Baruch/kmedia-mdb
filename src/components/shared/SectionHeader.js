@@ -5,13 +5,12 @@ import { withRouter } from 'react-router';
 import { translate } from 'react-i18next';
 import { Container, Grid, Header, Menu } from 'semantic-ui-react';
 
-import * as shapes from '../shapes';
 import { selectors as device } from '../../redux/modules/device';
+import * as shapes from '../shapes';
 import WrappedOmniBox from '../../components/Search/OmniBox';
 import Helmets from './Helmets';
 
 class SectionHeader extends Component {
-
   static propTypes = {
     section: PropTypes.string.isRequired,
     submenuItems: PropTypes.arrayOf(PropTypes.node),
@@ -35,37 +34,39 @@ class SectionHeader extends Component {
   renderTitle = (title, subText) => {
     const { submenuItems } = this.props;
 
-    return (<Grid>
-      <Grid.Row>
-        <Grid.Column computer={10} tablet={12} mobile={16}>
-          <Header as="h1" color="blue">
-            <Header.Content>
-                  <span className="section-header__title">
-                    {title}
-                  </span>
-                  {
-                    subText ?
-                      <Header.Subheader className="section-header__subtitle">
-                        {subText}
-                      </Header.Subheader>
-                      : null
-                  }
-                </Header.Content>
-              </Header>
-            </Grid.Column>
-          </Grid.Row>
-          {
-            Array.isArray(submenuItems) && submenuItems.length > 0 ?
-              <Grid.Row>
-                <Grid.Column>
-                  <Menu tabular className="section-header__menu" size="huge">
-                    {submenuItems}
-                  </Menu>
-                </Grid.Column>
-              </Grid.Row> :
-              null
-          }
-        </Grid>);
+    return (
+      <Grid>
+        <Grid.Row>
+          <Grid.Column computer={10} tablet={12} mobile={16}>
+            <Header as="h1" color="blue">
+              <Header.Content>
+                <span className="section-header__title">
+                  {title}
+                </span>
+                {
+                  subText ?
+                    <Header.Subheader className="section-header__subtitle">
+                      {subText}
+                    </Header.Subheader>
+                    : null
+                }
+              </Header.Content>
+            </Header>
+          </Grid.Column>
+        </Grid.Row>
+        {
+          Array.isArray(submenuItems) && submenuItems.length > 0 ?
+            <Grid.Row>
+              <Grid.Column>
+                <Menu tabular className="section-header__menu" size="huge">
+                  {submenuItems}
+                </Menu>
+              </Grid.Column>
+            </Grid.Row> :
+            null
+        }
+      </Grid>
+    );
   };
 
   render() {
@@ -80,15 +81,19 @@ class SectionHeader extends Component {
         <Helmets.Basic title={title} description={subText} />
 
         <Container className="padded">
-          {this.isMobileDevice() ? this.renderSearch() : this.renderTitle(title, subText)}    </Container>
-    </div>
-  );
-};}
+          {
+            this.isMobileDevice() ?
+              this.renderSearch() :
+              this.renderTitle(title, subText)
+          }
+        </Container>
+      </div>
+    );
+  }
+}
 
-const mapState = (state) => {
-  return {
-    deviceInfo: device.getDeviceInfo(state.device),
-  };
-};
+const mapState = state => ({
+  deviceInfo: device.getDeviceInfo(state.device),
+});
 
 export default connect(mapState, null)(translate()(withRouter(SectionHeader)));
