@@ -21,7 +21,7 @@ class SearchResultCollection extends SearchResultBase {
   renderCU = (cu) => {
     return (
       <Link to={canonicalLink(cu, this.getMediaLanguage(this.props.filters))} key={cu.id}>
-        <Button size="tiny" basic className="linkToCU">{cu.name}</Button>
+        <Button size="tiny" basic className="link_to_cu">{cu.name}</Button>
       </Link>
     );
   };
@@ -32,7 +32,7 @@ class SearchResultCollection extends SearchResultBase {
     const { search_result: { searchId } }                                                        = queryResult;
 
     return (
-      <Table className="bgHoverGrey search__block">
+      <Table className="bg_hover_grey search__block">
         <Table.Body>
           <Table.Row key={mdbUid} verticalAlign="top">
             <Table.Cell collapsing singleLine width={1}>

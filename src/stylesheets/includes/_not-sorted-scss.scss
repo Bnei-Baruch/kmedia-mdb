@@ -1014,7 +1014,7 @@
     width: 25px;
   }
 
-  .linkToFile.ui.basic.button {
+  .link_to_file.ui.basic.button {
     padding: .5em 1em;
     margin-top: 5px !important;
     margin-right: 5px !important;
@@ -1035,7 +1035,7 @@
     }
   }
 
-  .linkToCU {
+  .link_to_cu {
     padding: .5em 1em;
     margin-top: 5px !important;
     margin-right: 5px !important;
@@ -1046,7 +1046,7 @@
     margin-right: 10px;
     position: relative;
 
-    .scrollIntents {
+    .scroll_intents {
       position: absolute;
       top: 150px;
       background-color: white !important;
@@ -1057,7 +1057,7 @@
   .search__card {
     position: relative;
     margin-top: 20px;
-    .intentImage {
+    .intent_image {
       position: relative;
       min-height: 160px;
       img {
@@ -1065,12 +1065,12 @@
         width: 100%;
       }
     }
-    &.card.bgHoverGrey:hover {
+    &.card.bg_hover_grey:hover {
       background: #eee;
     }
   }
 
-  .cardHeaderLabel {
+  .card_header_label {
     position: absolute;
     bottom: 8px;
     right: 8px;
@@ -1085,11 +1085,11 @@
   }
 }
 
-.bgHoverGrey:hover {
+.bg_hover_grey:hover {
   background: #eee;
 }
 
-.bgTransparent, .bgTransparent:hover {
+.bg_transparent, .bg_transparent:hover {
   background: transparent !important;
 }
 
@@ -1097,7 +1097,7 @@
   padding: 0 !important;
 }
 
-.sectionTabs.ui.menu {
+.section_tabs.ui.menu {
   background: $darkWhite;
   margin: 0;
   border: 0 none;
@@ -1110,11 +1110,11 @@
   .active {
     border-bottom: 1px solid #1a4179;
   }
-  .showFilters {
+  .show_filters {
     background-color: white !important;
   }
 
-  .overflowAuto {
+  .overflow_auto {
     overflow-x: auto;
     min-width: 250px;
     white-space: nowrap;

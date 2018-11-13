@@ -92,7 +92,7 @@ class SearchResultsFilters extends Component {
     );
 
     const activeTab = this.getActiveFilterTab();
-    const tabs      = <Menu.Menu className="overflowAuto">
+    const tabs      = <Menu.Menu className="overflow_auto">
       {['all', 'lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
         <Menu.Item
           key={x}
@@ -105,7 +105,7 @@ class SearchResultsFilters extends Component {
     const rightButtons = (
       <Menu.Menu position='right'>
         <Menu.Item>
-          <Button basic active={this.state.isShowFilters} onClick={this.showFilters} className="showFilters">
+          <Button basic active={this.state.isShowFilters} onClick={this.showFilters} className="show_filters">
             {t('filters.filters')}&nbsp;&nbsp;
             <Icon name="filter" fitted />
           </Button>
@@ -113,7 +113,7 @@ class SearchResultsFilters extends Component {
         {orderFilters}
       </Menu.Menu>
     );
-    return (<Menu borderless className="sectionTabs">{tabs}{rightButtons}</Menu>);
+    return (<Menu borderless className="section_tabs">{tabs}{rightButtons}</Menu>);
   };
 
   render() {
