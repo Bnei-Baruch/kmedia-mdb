@@ -80,8 +80,8 @@ export class OmniBox extends Component {
     return isEmpty(query) && isEmpty(params);
   };
 
-  doSearchFromClickEvent = (e, { content }) => {
-    this.doSearch(content);
+  doSearchFromClickEvent = () => {
+    this.doSearch();
   };
 
   doSearch = (q = null, suggest = '', locationSearch = '') => {
