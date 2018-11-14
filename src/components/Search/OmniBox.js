@@ -80,6 +80,10 @@ export class OmniBox extends Component {
     return isEmpty(query) && isEmpty(params);
   };
 
+  doSearchFromClickEvent = () => {
+    this.doSearch();
+  };
+
   doSearch = (q = null, suggest = '', locationSearch = '') => {
     const query                                                         = q != null ? q : this.props.query;
     const { search, location, push, pageSize, resetFilterNS, onSearch } = this.props;
@@ -173,7 +177,7 @@ export class OmniBox extends Component {
         results={results}
         value={query}
         input={this.renderInput()}
-        icon={<Icon link name="search" onClick={this.doSearch} />}
+        icon={<Icon link name="search" onClick={this.doSearchFromClickEvent} />}
         showNoResults={false}
         onSearchChange={this.handleSearchChange}
         onResultSelect={this.handleResultSelect}
