@@ -78,6 +78,7 @@ app.use(helmet({
         'laitman.es',
         'laitman.co.il',
         '*.google-analytics.com',
+        'stats.g.doubleclick.net',
         '*.usersnap.com',
         '*.twimg.com',
       ]
