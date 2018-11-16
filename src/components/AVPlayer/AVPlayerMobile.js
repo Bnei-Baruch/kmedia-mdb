@@ -42,6 +42,7 @@ class AVPlayerMobile extends PureComponent {
     history: shapes.History.isRequired,
 
     // Playlist props
+    autoPlay: PropTypes.bool,
     showNextPrev: PropTypes.bool,
     hasNext: PropTypes.bool,
     hasPrev: PropTypes.bool,
@@ -185,7 +186,8 @@ class AVPlayerMobile extends PureComponent {
           this.seekTo(savedTime, true);
         }
       }      
-      this.media.autoplay = true;
+      if (this.props.autoPlay)
+        this.media.autoplay = true;
       this.setState({ firstSeek: false });          
     } else if (this.wasCurrentTime) {
       this.seekTo(this.wasCurrentTime, true);
@@ -371,7 +373,7 @@ class AVPlayerMobile extends PureComponent {
     let mediaEl;
 
     if (isVideo) {
-      mediaEl = (
+      mediaEl = this.props.autoPlay ? (
         <video
           controls
           autoPlay
@@ -381,12 +383,28 @@ class AVPlayerMobile extends PureComponent {
           preload="metadata"
           poster={item.preImageUrl}
         ></video>
+      ) : (
+        <video
+          controls          
+          playsInline
+          ref={this.handleMediaRef}
+          src={item.src}
+          preload="metadata"
+          poster={item.preImageUrl}
+        ></video>
       );
     } else {
-      mediaEl = (
+      mediaEl = this.props.autoPlay ? (
         <audio
           controls
           autoPlay
+          ref={this.handleMediaRef}
+          src={item.src}
+          preload="metadata"
+        ></audio>
+      ) : (
+        <audio
+          controls          
           ref={this.handleMediaRef}
           src={item.src}
           preload="metadata"

@@ -133,15 +133,19 @@ class AVPlayer extends PureComponent {
     // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ isClient: true });
 
-    const { deviceInfo: { browser: { name: browserName } }, media } = this.props;
+    const { deviceInfo: { browser: { name: browserName } }, media, autoPlay } = this.props;
     this.setState({
       browserName,
       firstSeek: true,
       ...this.chooseSource(this.props)
     });
     
-    if (browserName === 'Edge' || browserName === 'IE') 
+    // Bug fix for IE and Edge + Auto play for IE and Edge
+    if (browserName === 'Edge' || browserName === 'IE') {
       media.play();
+      if (!autoPlay) 
+        setTimeout(media.pause , 0);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -215,12 +219,12 @@ class AVPlayer extends PureComponent {
   };
 
   onPlayerReady = () => {
-    const { wasCurrentTime, sliceStart, firstSeek } = this.state;
-    const { media }                                 = this.props;
+    const { wasCurrentTime, sliceStart, firstSeek, autoPlay } = this.state;
+    const { media }                                           = this.props;
 
     this.activatePersistence();
 
-    if (firstSeek) {
+    if (autoPlay && firstSeek) {
       media.play();
     }
 
@@ -320,9 +324,9 @@ class AVPlayer extends PureComponent {
         sliceStart: undefined,
         sliceEnd: undefined,
       });
-    } else if (isSliceMode && lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {
+    } else if (isSliceMode && lowerTime < sliceEnd && (sliceEnd - lowerTime < 0.5)) {            
       media.pause();
-      media.seekTo(sliceEnd);
+      media.seekTo(sliceEnd); 
     }
 
     // when we're close to the end regard this as finished
