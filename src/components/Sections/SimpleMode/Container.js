@@ -13,7 +13,7 @@ import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { actions, selectors } from '../../../redux/modules/simpelMode';
 import * as shapes from '../../shapes';
-import MobilePage from './MobilePage';
+import Page from './Page';
 import { groupOtherMediaByType, renderCollection } from './RenderListHelpers';
 
 class SimpleModeContainer extends Component {
@@ -126,7 +126,7 @@ class SimpleModeContainer extends Component {
       isMobile: isMobileDevice
     };
 
-    return <MobilePage {...pageProps} />;
+    return <Page {...pageProps} />;
   }
 }
 

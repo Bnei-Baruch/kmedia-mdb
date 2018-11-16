@@ -16,7 +16,7 @@ import DropdownLanguageSelector from '../../Language/Selector/DropdownLanguageSe
 import YearMonthForm from '../../Filters/components/Date/YearMonthForm';
 import SimpleModeList from './list';
 
-class SimpleModeMobilePage extends PureComponent {
+class SimpleModePage extends PureComponent {
   static propTypes = {
     items: shapes.SimpleMode,
     selectedDate: PropTypes.objectOf(Date),
@@ -215,4 +215,4 @@ class SimpleModeMobilePage extends PureComponent {
   }
 }
 
-export default translate()(SimpleModeMobilePage);
+export default translate()(SimpleModePage);
