@@ -94,6 +94,7 @@ class SimpleModePage extends PureComponent {
     const localeDateFormat       = moment.localeData().longDateFormat('L');
     const selectedInLocaleFormat = moment(selected).format(localeDateFormat);
     const languages              = this.getOptions({ languages: ALL_LANGUAGES, t });
+    const dateFormat             = uiLanguage === 'en' ? 'MMM MM, YYYY' : 'MM MMM, YYYY';
 
     const DayPickerModifiers = {
       selected: selectedDate
@@ -146,7 +147,7 @@ class SimpleModePage extends PureComponent {
                             />
                           </div>
                           :
-                          <span>{moment(selectedDate).format('l')}</span>
+                          <span>{moment(selectedDate).format(dateFormat)}</span>
                       }
                       <button onClick={() => this.changeDay(1)}>{t('simple-mode.next')}</button>
                     </div>
