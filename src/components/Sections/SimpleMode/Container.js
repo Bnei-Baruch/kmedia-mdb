@@ -13,7 +13,6 @@ import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { actions, selectors } from '../../../redux/modules/simpelMode';
 import * as shapes from '../../shapes';
-import DesktopPage from './DesktopPage';
 import MobilePage from './MobilePage';
 import { groupOtherMediaByType, renderCollection } from './RenderListHelpers';
 
@@ -105,7 +104,7 @@ class SimpleModeContainer extends Component {
 
   helpChooseLang = () => {
     this.setState({ blinkLangSelect: true });
-    setTimeout(() => this.setState({ blinkLangSelect: false }), 3000);
+    setTimeout(() => this.setState({ blinkLangSelect: false }), 7500);
     window.scrollTo(0, 0);
   };
 
@@ -123,10 +122,11 @@ class SimpleModeContainer extends Component {
       renderUnit: this.renderUnitOrCollection,
       onDayClick: this.handleDayClick,
       onLanguageChange: this.handleLanguageChanged,
-      blinkLangSelect: blinkLangSelect
+      blinkLangSelect: blinkLangSelect,
+      isMobile: isMobileDevice
     };
 
-    return isMobileDevice ? <MobilePage {...pageProps} /> : <DesktopPage {...pageProps} />;
+    return <MobilePage {...pageProps} />;
   }
 }
 
