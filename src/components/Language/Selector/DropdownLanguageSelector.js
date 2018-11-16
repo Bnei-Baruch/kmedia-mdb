@@ -1,9 +1,9 @@
 import React from 'react';
 import { translate } from 'react-i18next';
 import { Dropdown } from 'semantic-ui-react';
+import classNames from 'classnames';
 
 import BaseLanguageSelector from './BaseLanguageSelector';
-import classNames from 'classnames';
 
 class DropdownLanguageSelector extends BaseLanguageSelector {
   handleSelect = (e, data) =>
@@ -23,7 +23,6 @@ class DropdownLanguageSelector extends BaseLanguageSelector {
         value={value}
         options={options}
         onChange={this.handleSelect}
-        openOnFocus={true}
         className={classNames('dropdown-language-selector', { 'blink': !!blink })}
       />
     );
