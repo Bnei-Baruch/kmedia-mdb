@@ -1,3 +1,5 @@
+import 'react-app-polyfill/ie11'; // For IE 11 support
+
 import React, { Component } from 'react';
 import { renderRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
@@ -6,7 +8,7 @@ import { I18nextProvider } from 'react-i18next';
 
 import routes from '../../routes';
 import ScrollToTop from '../shared/ScrollToTop/ScrollToTop';
-import '../../stylesheets/Kmedia.css';
+import '../../stylesheets/Kmedia.scss';
 
 class App extends Component {
   render() {
