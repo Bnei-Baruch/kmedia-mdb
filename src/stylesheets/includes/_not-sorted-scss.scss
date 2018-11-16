@@ -689,7 +689,6 @@
     align-items: baseline;
 
     h4 {
-      //margin-right: 6px;
       margin: 0 6px 0 0;
     }
 
@@ -716,10 +715,7 @@
   }
 
   @media only screen and (max-width: $mobileBreakpoint) {
-    //justify-content: space-between;
-
     .controller {
-      //display: flex;
       flex-direction: column;
       margin-top: 1rem;
 
@@ -907,8 +903,6 @@
     }
 
     h4 {
-      //margin-right: 0;
-      //margin-left: 6px;
       margin: 0 0 0 6px;
     }
   }
