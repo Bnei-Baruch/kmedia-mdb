@@ -894,6 +894,11 @@
   margin-right: 5px;
 }
 
+.inline-button {
+  width: 80px !important;
+  margin: 5px !important;
+}
+
 .rtl {
   .summary-container {
 
@@ -1073,16 +1078,16 @@
 
 /* ************* End of styles for homepage social media section ************* */
 
-.dropdown-language-selector.blink {
-  box-shadow: 0 0 0 3px #7dcff5 inset;
-  animation: dropdown-blink .6s ease-in-out;
-  animation-iteration-count: 3;
-  animation-delay: .4s;
+.dropdown-language-selector.blink, .blink {
+  box-shadow: 0 0 0 6px #7dcff5 inset;
+  animation: dropdown-blink .8s ease-in-out;
+  animation-iteration-count: 5;
+  animation-delay: .7s;
 }
 
 @keyframes dropdown-blink {
   0% {
-    box-shadow: 0 0 0 3px #7dcff5 inset;
+    box-shadow: 0 0 0 5px #7dcff5 inset;
   }
   100% {
     box-shadow: none;

@@ -148,7 +148,7 @@ export const renderOtherCollection = (title, collectionArray, language, t, helpC
   const icon  = matchIconToType(title.toLowerCase());
 
   return (
-    <div>
+    <div key={title}>
       {
         items.length ?
           <div className="type-header-top-margin">
