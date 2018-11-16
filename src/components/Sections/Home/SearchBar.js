@@ -11,8 +11,9 @@ class MyOmniBox extends OmniBox {
     deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
-  componentWillMount() {
-    this.props.updateQuery('');  // reset the query from search page
+  constructor(props) {
+    super(props);
+    props.updateQuery('');  // reset the query from search page
   }
 
   renderInput() {

@@ -81,21 +81,9 @@ class AVPlayer extends PureComponent {
     onNext: noop,
   };
 
-  state = {
-    controlsVisible: true,
-    error: false,
-    errorReason: '',
-    playbackRate: '1x', // this is used only to rerender the component. actual value is saved on the player's instance
-    videoSize: VS_DEFAULT,
-    mode: PLAYER_MODE.NORMAL,
-    persistenceFn: noop,
-    isClient: false,
-    currentTime: 0,
-    firstSeek: true,
-  };
-
-  componentWillMount() {
-    const { history } = this.props;
+  constructor(props) {
+    super(props);
+    const { history, media } = this.props;
 
     let sstart = 0;
     let send   = Infinity;
@@ -117,12 +105,29 @@ class AVPlayer extends PureComponent {
     }
 
     if (playerMode === PLAYER_MODE.SLICE_VIEW) {
-      this.setSliceMode(playerMode, {
+      const newState = AVPlayer.getSliceModeState(media, playerMode, {
         sliceStart: sstart,
         sliceEnd: send
-      });
+      }, this.state);
+      this.state     = {
+        ...this.state,
+        ...newState,
+      };
     }
   }
+
+  state = {
+    controlsVisible: true,
+    error: false,
+    errorReason: '',
+    playbackRate: '1x', // this is used only to rerender the component. actual value is saved on the player's instance
+    videoSize: VS_DEFAULT,
+    mode: PLAYER_MODE.NORMAL,
+    persistenceFn: noop,
+    isClient: false,
+    currentTime: 0,
+    firstSeek: true,
+  };
 
   componentDidMount() {
     // By default hide controls after a while if player playing.
@@ -137,9 +142,10 @@ class AVPlayer extends PureComponent {
       firstSeek: true,
       ...this.chooseSource(this.props)
     });
-    
-    if (browserName === 'Edge' || browserName === 'IE') 
+
+    if (browserName === 'Edge' || browserName === 'IE') {
       media.play();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -285,22 +291,26 @@ class AVPlayer extends PureComponent {
     }
   };
 
-  setSliceMode = (mode, properties = {}) => {
-    const { media } = this.props;
-
+  static getSliceModeState(media, mode, properties = {}, state) {
     let { sliceStart, sliceEnd } = properties;
     if (typeof sliceStart === 'undefined') {
-      sliceStart = this.state.sliceStart || 0;
+      sliceStart = state.sliceStart || 0;
     }
     if (typeof sliceEnd === 'undefined') {
-      sliceEnd = this.state.sliceEnd || media.duration || Infinity;
+      sliceEnd = state.sliceEnd || media.duration || Infinity;
     }
 
-    this.setState({
+    return {
       mode,
       sliceStart,
       sliceEnd
-    });
+    };
+  }
+
+  setSliceMode = (mode, properties = {}) => {
+    const { media } = this.props;
+    const state     = AVPlayer.getSliceModeState(media, mode, properties, this.state);
+    this.setState(state);
   };
 
   handleTimeUpdate = (timeData) => {
@@ -565,13 +575,15 @@ class AVPlayer extends PureComponent {
       centerMediaControl = <div><AVCenteredPlay /><AVSpinner /></div>;
     }
 
+    const handleKeyDown = utils.keyboardControls.bind(null, media);
+
     return (
       <div
         ref={(c) => {
           this.mediaElement = c;
         }}
         className={classNames('mediaplayer', { 'media-edit-mode': isEditMode })}
-        onKeyDown={utils.keyboardControls.bind(null, media)}
+        onKeyDown={handleKeyDown}
         role="button"
         tabIndex="-1"
       >

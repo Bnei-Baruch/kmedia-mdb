@@ -28,14 +28,15 @@ class Transcription extends Component {
     unit: null,
   };
 
-  state = {
-    selected: null,
-    languages: [],
-    language: null,
-  };
-
-  componentWillMount() {
-    this.setCurrentItem(this.props);
+  constructor(props) {
+    super(props);
+    const state = Transcription.calcCurrentItem(this.props);
+    this.state  = {
+      selected: null,
+      languages: [],
+      language: null,
+      ...state,
+    };
   }
 
   componentDidMount() {
@@ -65,7 +66,7 @@ class Transcription extends Component {
     }
   }
 
-  getTextFiles = (props) => {
+  static getTextFiles = (props) => {
     const { unit } = props;
     if (!unit || !Array.isArray(unit.files)) {
       return [];
@@ -74,25 +75,30 @@ class Transcription extends Component {
     return unit.files.filter(x => MediaHelper.IsText(x) && !MediaHelper.IsHtml(x));
   };
 
-  setCurrentItem = (props) => {
+  static calcCurrentItem = (props) => {
     const { contentLanguage, uiLanguage } = props;
 
-    const textFiles   = this.getTextFiles(props);
+    const textFiles   = Transcription.getTextFiles(props);
     const languages   = uniq(textFiles.map(x => x.language));
     const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
     if (!newLanguage) {
       return false;
     }
 
-    const selected = this.selectFile(textFiles, newLanguage);
+    const selected = Transcription.selectFile(textFiles, newLanguage);
 
-    const sUpdate = { selected, languages, language: newLanguage, textFiles };
+    return { selected, languages, language: newLanguage, textFiles };
+  };
+
+  setCurrentItem = (props) => {
+    const sUpdate = Transcription.calcCurrentItem(props);
+
     this.setState(sUpdate);
 
     return sUpdate;
   };
 
-  selectFile = (textFiles, language) => {
+  static selectFile = (textFiles, language) => {
     const selected = textFiles.filter(x => x.language === language);
 
     if (selected.length <= 1) {
@@ -110,7 +116,7 @@ class Transcription extends Component {
       return;
     }
 
-    const selected = this.selectFile(this.state.textFiles, language);
+    const selected = Transcription.selectFile(this.state.textFiles, language);
 
     this.props.onContentChange(selected.id);
     this.setState({ selected, language });

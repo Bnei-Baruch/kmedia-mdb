@@ -30,13 +30,15 @@ class AVBox extends Component {
     unit: undefined,
   };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { uiLanguage, contentLanguage, location, history, unit }
-                         = this.props;
+                         = props;
     const preferredMT    = playerHelper.restorePreferredMediaType();
     const mediaType      = playerHelper.getMediaTypeFromQuery(location, preferredMT);
     const playerLanguage = playerHelper.getLanguageFromQuery(location, contentLanguage);
-    this.setPlayableItem(unit, mediaType, playerLanguage, uiLanguage);
+    const playableItem   = AVBox.getPlayableItem(unit, mediaType, playerLanguage, uiLanguage);
+    this.state           = { playableItem };
     playerHelper.setLanguageInQuery(history, playerLanguage);
   }
 
@@ -49,7 +51,8 @@ class AVBox extends Component {
     const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
     // Persist language in playableItem
-    this.setPlayableItem(unit, newMediaType, newItemLanguage, uiLanguage);
+    const playableItem = AVBox.getPlayableItem(unit, newMediaType, newItemLanguage, uiLanguage);
+    this.setState({ playableItem });
   }
 
   shouldComponentUpdate(nextProps) {
@@ -71,9 +74,8 @@ class AVBox extends Component {
       newItemLanguage === playerLanguage);
   }
 
-  setPlayableItem(unit, mediaType, playerLanguage, uiLanguage) {
-    const playableItem = playerHelper.playableItem(unit, mediaType, uiLanguage, playerLanguage);
-    this.setState({ playableItem });
+  static getPlayableItem(unit, mediaType, playerLanguage, uiLanguage) {
+    return playerHelper.playableItem(unit, mediaType, uiLanguage, playerLanguage);
   }
 
   handleSwitchAV = () => {

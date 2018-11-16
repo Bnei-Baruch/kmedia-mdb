@@ -15,7 +15,9 @@ class PlaylistAVBox extends Component {
     history: shapes.History.isRequired,
     location: shapes.HistoryLocation.isRequired,
     collection: shapes.GenericCollection.isRequired,
-    PlayListComponent: PropTypes.any.isRequired,
+    // There is no consensus on what the right prototype would be
+    // https://github.com/facebook/react/issues/5143
+    PlayListComponent: PropTypes.func.isRequired,
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
     onSelectedChange: PropTypes.func.isRequired,
@@ -29,12 +31,9 @@ class PlaylistAVBox extends Component {
     prevLink: null,
   };
 
-  state = {
-    selected: 0,
-  };
-
-  componentWillMount() {
-    const { collection, uiLanguage, contentLanguage, history, location, onSelectedChange } = this.props;
+  constructor(props) {
+    super(props);
+    const { collection, uiLanguage, contentLanguage, history, location, onSelectedChange } = props;
 
     const preferredMT    = playerHelper.restorePreferredMediaType();
     const mediaType      = playerHelper.getMediaTypeFromQuery(history.location, preferredMT);
@@ -49,7 +48,7 @@ class PlaylistAVBox extends Component {
       }
       onSelectedChange(playlist.items[selected].unit);
     }
-    this.setState({ playlist, selected });
+    this.state = { playlist, selected };
 
     playerHelper.setLanguageInQuery(history, playlist.language);
   }
