@@ -82,11 +82,12 @@ class SearchResultBase extends Component {
     return h ? `${h}:${m}:${s}` : `${m}:${s}`;
   }
 
-  renderFiles = (cu) => {
-    const { t }          = this.props;
-    const { files = [] } = cu;
-    const pathname       = canonicalLink(cu, this.getMediaLanguage(this.props.filters));
-    const types          = [
+  renderFiles = (cu, mdbUid, index, resultType, rank, searchId) => {
+    const { t }           = this.props;
+    const { files = [] }  = cu;
+    const pathname        = canonicalLink(cu);
+    const contentLanguage = this.getMediaLanguage(this.props.filters);
+    const types           = [
       {
         type: MT_VIDEO,
         icon: 'video play',
@@ -115,14 +116,17 @@ class SearchResultBase extends Component {
 
     return types
       .filter(x => files.some(f => f.type === x.type))
-      .map(x => this.renderFile(x, pathname));
+      .map(x => this.renderFile(x, pathname, contentLanguage, mdbUid, index, resultType, rank, searchId));
   };
 
-  renderFile = (data, pathname) => {
+  renderFile = (data, pathname, contentLanguage, mdbUid, index, resultType, rank, searchId) => {
     const to = { pathname, ...data.to };
-
     return (
-      <Link to={to} key={data.type}>
+      <Link key={data.type}
+            onClick={() => this.click(mdbUid, index, resultType, rank, searchId)}
+            contentLanguage={contentLanguage}
+            to={to}>
+
         <Button basic floated="left" size="mini" className="link_to_file">
           <Icon name={data.icon} /> {data.title}
         </Button>

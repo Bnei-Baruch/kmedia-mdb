@@ -72,7 +72,7 @@ class SearchResultCU extends SearchResultBase {
           {this.renderSnippet(highlight)}
         </Container>
         <Container>
-          {this.renderFiles(cu)}
+          {this.renderFiles(cu, mdbUid, index, resultType, rank, searchId)}
           <div className="clear" />
         </Container>
 
