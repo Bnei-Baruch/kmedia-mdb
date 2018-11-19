@@ -124,7 +124,7 @@ class TopicContainer extends Component {
 
   renderNode = node => (
     node ?
-      <Fragment>
+      <>
         {
           this.hasChildren(node) ?
             <List>
@@ -140,7 +140,7 @@ class TopicContainer extends Component {
             </List> :
             this.renderLeaf(node)
         }
-      </Fragment> :
+      </> :
       null
   );
 
