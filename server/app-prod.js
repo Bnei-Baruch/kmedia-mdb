@@ -7,11 +7,10 @@ import * as middleware from './middleware';
 import serverRender from './renderer';
 import { kmediaContainer, kmediaSearch } from './kmedia';
 
-const indexHtml   = fs.readFileSync(path.resolve(__dirname, '..', 'build', 'index.html'), 'utf8');
-const criticalCSS = fs.readFileSync(path.resolve(__dirname, '..', 'build', 'critical.css'), 'utf8');
+const indexHtml   = fs.readFileSync(path.resolve(__dirname, '..', 'build', 'critical.html'), 'utf8');
 
 function handler(req, res, next) {
-  serverRender(req, res, next, indexHtml, criticalCSS);
+  serverRender(req, res, next, indexHtml);
 }
 
 // initialize the application and create the routes

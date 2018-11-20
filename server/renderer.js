@@ -97,7 +97,7 @@ function alternateLinks(req, lang) {
     .join('');
 }
 
-export default function serverRender(req, res, next, htmlData, criticalCSS) {
+export default function serverRender(req, res, next, htmlData) {
   console.log('serverRender', req.originalUrl);
 
   const { language, redirect } = getLanguageFromPath(req.originalUrl, req.headers);
@@ -210,7 +210,7 @@ export default function serverRender(req, res, next, htmlData, criticalCSS) {
               const html = htmlData
                 .replace(/<html lang="en">/, `<html ${helmet.htmlAttributes.toString()} >`)
                 .replace(/<title>.*<\/title>/, helmet.title.toString())
-                .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, language)}${alternateLinks(req, language)}<style type="text/css">${criticalCSS}</style></head>`)
+                .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, language)}${alternateLinks(req, language)}</head>`)
                 .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
                 .replace(/semantic_v3.min.css/g, `semantic_v3${cssDirection}.min.css`)
                 .replace(/<div id="root"><\/div>/, rootDiv);
