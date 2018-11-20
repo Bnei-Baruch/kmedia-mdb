@@ -219,8 +219,8 @@ class AVPlayer extends PureComponent {
   };
 
   onPlayerReady = () => {
-    const { wasCurrentTime, sliceStart, firstSeek, autoPlay } = this.state;
-    const { media }                                           = this.props;
+    const { wasCurrentTime, sliceStart, firstSeek} = this.state;
+    const { media, autoPlay }                      = this.props;
 
     this.activatePersistence();
 
@@ -595,7 +595,6 @@ class AVPlayer extends PureComponent {
           src={src}
           poster={isVideo ? item.preImageUrl : null}
           vendor={isVideo ? 'video' : 'audio'}
-          autoPlay={autoPlay}
           onReady={this.onPlayerReady}
           preload={isClient ? 'auto' : 'none'}
           controls={false}
