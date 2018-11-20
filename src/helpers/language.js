@@ -1,4 +1,4 @@
-import { LANG_ENGLISH } from './consts';
+import { LANG_ENGLISH, DEFAULT_LANGUAGE } from './consts';
 
 /**
  * Select language to use
@@ -10,7 +10,7 @@ import { LANG_ENGLISH } from './consts';
 export const selectSuitableLanguage = (contentLanguage, uiLanguage, languages = []) => {
   if (languages.length === 0) {
     // we don't have data for new UI language. Let's stay as we are.
-    return false;
+    return DEFAULT_LANGUAGE;
   } else if (languages.includes(contentLanguage)) {
     // Use content language [preferred one]
     return contentLanguage;
