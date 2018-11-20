@@ -1116,7 +1116,6 @@
 
   .overflow_auto {
     overflow-x: auto;
-    min-width: 250px;
     white-space: nowrap;
   }
 }
@@ -1128,4 +1127,8 @@
   top: 60px;
   z-index: 1;
   padding: 0;
+}
+
+.padding0{
+  padding: 0 !important;
 }

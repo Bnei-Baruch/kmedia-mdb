@@ -14,6 +14,7 @@ class HandleLanguages extends Component {
     setContentLanguage: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
     t: PropTypes.func.isRequired,
+    isMobileDevice: PropTypes.bool
   };
 
   state = {
@@ -25,9 +26,9 @@ class HandleLanguages extends Component {
   handlePopupOpen = () => this.setState({ isActive: true });
 
   render() {
-    const { t, language, location, contentLanguage, setContentLanguage } = this.props;
-    const { isActive }                                                   = this.state;
-    const langDir                                                        = getLanguageDirection(language);
+    const { t, language, location, contentLanguage, setContentLanguage, isMobileDevice } = this.props;
+    const { isActive }                                                                   = this.state;
+    const langDir                                                                        = getLanguageDirection(language);
 
     const popupStyle = {
       direction: langDir,
@@ -40,9 +41,9 @@ class HandleLanguages extends Component {
         hideOnScroll
         position="bottom right"
         trigger={
-          <Menu.Item onClick={this.handlePopupOpen}>
-            <Icon name="sliders horizontal" />
-            {t('languages.language')}
+          <Menu.Item onClick={this.handlePopupOpen} className="padding0">
+            {isMobileDevice ? <Icon size="big" name="language" /> :
+              <Icon name="sliders horizontal">{t('languages.language')}</Icon>}
           </Menu.Item>
         }
         open={isActive}

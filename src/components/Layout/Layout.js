@@ -141,22 +141,25 @@ class Layout extends Component {
             <Menu.Item className="layout__search mobile-hidden">
               {showSearch ? <WrappedOmniBox t={t} location={location} /> : null}
             </Menu.Item>
-            <Menu.Item ref={(el) => {
-              if (!this.showSearchButtonElement) {
-                this.showSearchButtonElement = ReactDOM.findDOMNode(el);
-              }
-            }}>
-              {showSearch && this.isMobileDevice() ?
-                <Button icon="search" color="blue" onClick={this.showHeaderSearch} /> : null}
-            </Menu.Item>
-            <Menu.Menu position="right">
-              <HandleLanguages
-                language={language}
-                contentLanguage={contentLanguage}
-                setContentLanguage={setContentLanguage}
-                location={location}
-                t={t}
-              />
+            <Menu.Menu position="right" className="padding0">
+              <Menu.Item ref={(el) => {
+                if (!this.showSearchButtonElement) {
+                  this.showSearchButtonElement = ReactDOM.findDOMNode(el);
+                }
+              }}>
+                <HandleLanguages
+                  language={language}
+                  contentLanguage={contentLanguage}
+                  setContentLanguage={setContentLanguage}
+                  location={location}
+                  t={t}
+                  isMobileDevice={this.isMobileDevice()}
+                />
+                {
+                  showSearch && this.isMobileDevice() ?
+                    <Button icon="search" color="blue" onClick={this.showHeaderSearch} /> : null
+                }
+              </Menu.Item>
               <Menu.Item className="mobile-hidden">
                 <DonateNow t={t} language={language} />
               </Menu.Item>
@@ -171,7 +174,7 @@ class Layout extends Component {
             this.sidebarElement = el;
           }}
         >
-          <Menu inverted borderless size="huge" color="blue">
+          <Menu inverted size="huge" color="blue">
             <Menu.Item
               icon
               as="a"
