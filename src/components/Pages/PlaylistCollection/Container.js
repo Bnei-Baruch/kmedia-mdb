@@ -25,7 +25,7 @@ export class PlaylistCollectionContainer extends Component {
     fetchUnit: PropTypes.func.isRequired,
     shouldRenderHelmet: PropTypes.bool,
     fetchWindow: PropTypes.func.isRequired,
-    cWindow: PropTypes.any,
+    cWindow: shapes.cWindow.isRequired,
   };
 
   static defaultProps = {

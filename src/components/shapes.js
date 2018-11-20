@@ -263,3 +263,8 @@ export const VideoItem = PropTypes.shape({
   src: PropTypes.string,
   unit: PropTypes.object,
 });
+
+export const cWindow = PropTypes.shape({
+  data: PropTypes.arrayOf(PropTypes.string),
+  id: PropTypes.string,
+});

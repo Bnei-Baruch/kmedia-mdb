@@ -74,11 +74,11 @@ class MediaDownloads extends Component {
     this.setState({ groups, derivedGroups, languages, language, });
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
     const { unit, contentLanguage, language: uiLanguage } = nextProps;
-    const { props }                                       = this;
+    const { props, state }                                       = this;
 
-    return !(equal(unit, props.unit) && uiLanguage === props.language && contentLanguage === props.contentLanguage);
+    return !(state.language === nextState.language && equal(unit, props.unit) && uiLanguage === props.language && contentLanguage === props.contentLanguage);
   }
 
   getFilesByLanguage = (files = []) => {
