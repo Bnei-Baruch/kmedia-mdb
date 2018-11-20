@@ -1120,3 +1120,12 @@
     white-space: nowrap;
   }
 }
+
+.header_search {
+  left: 0;
+  position: fixed !important;
+  right: 0;
+  top: 60px;
+  z-index: 1;
+  padding: 0;
+}
