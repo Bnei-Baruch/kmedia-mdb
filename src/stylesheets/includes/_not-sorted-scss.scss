@@ -1097,6 +1097,11 @@
   padding: 0 !important;
 }
 
+.padding_r_l_0 {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
 .section_tabs.ui.menu {
   background: $darkWhite;
   margin: 0;
@@ -1124,7 +1129,7 @@
   left: 0;
   position: fixed !important;
   right: 0;
-  top: 60px;
+  top: 50px;
   z-index: 1;
   padding: 0;
 }
