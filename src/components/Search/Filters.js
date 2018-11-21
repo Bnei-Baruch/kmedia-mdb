@@ -121,7 +121,7 @@ class SearchResultsFilters extends Component {
             active={this.state.isShowFilters}
             onClick={this.showFilters}
           >
-            {t('filters.filters')}&nbsp;&nbsp;
+            {isMobileDevice() ? null : <span>{t('filters.filters')}&nbsp;&nbsp;</span>}
             <Icon name="filter" fitted />
           </Button>
         </Menu.Item>
