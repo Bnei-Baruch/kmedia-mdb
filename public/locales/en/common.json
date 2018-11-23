@@ -533,6 +533,6 @@
   "languages": {
     "language": "Language",
     "website_language": "Website Language",
-    "content_language": "Preferred content language"
+    "content_language": "Content language"
   }
 }
