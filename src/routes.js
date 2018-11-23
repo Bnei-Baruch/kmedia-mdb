@@ -1,56 +1,65 @@
 /* eslint-disable react/no-multi-comp */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { renderRoutes } from 'react-router-config';
+import Loadable from 'react-loadable';
 
 import { DEFAULT_LANGUAGE } from './helpers/consts';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
-import Lessons from './components/Sections/Lessons/MainPage';
-import LessonUnit from './components/Sections/Lessons/Unit/Container';
-import LessonCollection from './components/Sections/Lessons/Collection/MainPage';
-import LastLessonCollection from './components/Sections/Lessons/Collection/LastDaily';
-import Programs from './components/Sections/Programs/MainPage';
-import ProgramUnit from './components/Sections/Programs/Unit';
-import ProgramCollection from './components/Sections/Programs/Collection';
-import Publications from './components/Sections/Publications/MainPage';
-import ArticleUnit from './components/Sections/Publications/tabs/Articles/Unit';
-import ArticleCollection from './components/Sections/Publications/tabs/Articles/Collection';
-import BlogPost from './components/Sections/Publications/tabs/Blog/Post/Container';
-import Events from './components/Sections/Events/MainPage';
-import EventUnit from './components/Sections/Events/Unit';
-import EventCollection from './components/Sections/Events/Collection';
-import LibraryHomepage from './components/Sections/Library/Homepage';
-import LibraryContainer from './components/Sections/Library/LibraryContainer';
-import LibraryPerson from './components/Sections/Library/LibraryPerson';
-import Topics from './components/Sections/Topics/TopicContainer';
-import Topic from './components/Sections/Topics/TopicPage';
-import SearchResults from './components/Search/SearchResultsContainer';
-import HomePage from './components/Sections/Home/Container';
-import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
-import Help from './components/Sections/Help/Help';
-import SimpleMode from './components/Sections/SimpleMode/Container';
-// import Design from './components/Design/Design';
+import { ErrorSplash, FrownSplash, LoadingSplash } from './components/shared/Splash/Splash';
 import * as ssrDataLoaders from './routesSSRData';
+import * as shapes from './components/shapes';
 
-const NotImplemented = () => <h1>Not Implemented Yet</h1>;
-const NotFound       = () => <h1>Page not found</h1>;
-const Root           = ({ route }) => renderRoutes(route.routes);
+function Loading(props) {
+  const { error, timedOut, pastDelay, retry } = props;
+  if (error) {
+    return <ErrorSplash text="Error!" item={<button onClick={retry} type="button">Retry</button>} />;
+  }
+  if (timedOut) {
+    return <FrownSplash text="Taking a long time..." item={<button onClick={retry} type="button">Retry</button>} />;
+  }
+  if (pastDelay) {
+    return <LoadingSplash text={('messages.loading')} subtext={('messages.loading-subtext')} />;
+  }
+  return <></>;
+}
 
-/**
- * Creates a page route config
- *
- * @param {string} path
- * @param {React.Component|function} component
- * @param {object} subRoutes{array} prefix=''{string}
- */
-const pageRoute = (path, component, { subRoutes, ssrData, prefix = '' } = {}) => ({
-  exact: true,
-  path: `${prefix}/${path}`,
-  component,
-  routes: subRoutes,
-  ssrData,
+const l = f => ({
+  loader: f,
+  loading: Loading,
+  delay: 200,
+  timeout: 5000,
 });
+
+const HomePage             = Loadable(l(() => import('./components/Sections/Home/Container')));
+const Lessons              = Loadable(l(() => import('./components/Sections/Lessons/MainPage')));
+const LessonUnit           = Loadable(l(() => import('./components/Sections/Lessons/Unit/Container')));
+const LessonCollection     = Loadable(l(() => import('./components/Sections/Lessons/Collection/MainPage')));
+const LastLessonCollection = Loadable(l(() => import('./components/Sections/Lessons/Collection/LastDaily')));
+const Programs             = Loadable(l(() => import('./components/Sections/Programs/MainPage')));
+const ProgramUnit          = Loadable(l(() => import('./components/Sections/Programs/Unit')));
+const ProgramCollection    = Loadable(l(() => import('./components/Sections/Programs/Collection')));
+const Publications         = Loadable(l(() => import('./components/Sections/Publications/MainPage')));
+const ArticleUnit          = Loadable(l(() => import('./components/Sections/Publications/tabs/Articles/Unit')));
+const ArticleCollection    = Loadable(l(() => import('./components/Sections/Publications/tabs/Articles/Collection')));
+const BlogPost             = Loadable(l(() => import('./components/Sections/Publications/tabs/Blog/Post/Container')));
+const Events               = Loadable(l(() => import('./components/Sections/Events/MainPage')));
+const EventUnit            = Loadable(l(() => import('./components/Sections/Events/Unit')));
+const EventCollection      = Loadable(l(() => import('./components/Sections/Events/Collection')));
+const LibraryHomepage      = Loadable(l(() => import('./components/Sections/Library/Homepage')));
+const LibraryContainer     = Loadable(l(() => import('./components/Sections/Library/LibraryContainer')));
+const LibraryPerson        = Loadable(l(() => import('./components/Sections/Library/LibraryPerson')));
+const Topics               = Loadable(l(() => import('./components/Sections/Topics/TopicContainer')));
+const Topic                = Loadable(l(() => import('./components/Sections/Topics/TopicPage')));
+const SearchResults        = Loadable(l(() => import('./components/Search/SearchResultsContainer')));
+const ProjectStatus        = Loadable(l(() => import('./components/Sections/ProjectStatus/ProjectStatus')));
+const Help                 = Loadable(l(() => import('./components/Sections/Help/Help')));
+const SimpleMode           = Loadable(l(() => import('./components/Sections/SimpleMode/Container')));
+const NotImplemented       = Loadable(l(() => import('./components/NotImplemented')));
+// const Design = Loadable(l(() => import('./components/Design/Design')));
+// const Design2 = Loadable(l(() => import('./components/Design/Design2')));
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
@@ -99,17 +108,38 @@ const routes = [
   // { path: 'design2', component: Design2 },
 ];
 
-const createMainRoutes = (prefix) => {
-  const defaultPageOptions = { prefix };
+const NotFound = () => <h1>Page not found</h1>;
+const Root     = ({ route }) => renderRoutes(route.routes);
 
-  // for convenience
-  const defaultPageRoute = (path, component, options = {}) =>
-    pageRoute(path, component, { ...defaultPageOptions, ...options });
+/** Creates a page route config */
+const pageRoute = (path, component, { prefix, subRoutes, ssrData } = {}) => ({
+  exact: true,
+  path: `${prefix}/${path}`,
+  component,
+  routes: subRoutes,
+  ssrData,
+});
+
+pageRoute.propTypes    = {
+  path: PropTypes.string.isRequired,
+  component: PropTypes.func.isRequired,
+  subRoutes: PropTypes.arrayOf(PropTypes.string),
+  ssrData: PropTypes.func.isRequired,
+  prefix: PropTypes.string,
+};
+pageRoute.defaultProps = {
+  prefix: '',
+  subRoutes: null,
+};
+
+/** Creates a page route */
+const routesCreator = (prefix) => {
+  const makePageRoute = (path, component, options = {}) => pageRoute(path, component, { prefix, ...options });
 
   return [{
     component: Layout,
     routes: [
-      ...routes.map(route => defaultPageRoute(route.path, route.component, route.options)),
+      ...routes.map(({ path, component, options }) => makePageRoute(path, component, options)),
 
       {
         path: '*',
@@ -119,37 +149,61 @@ const createMainRoutes = (prefix) => {
   }];
 };
 
-/**
- * A component that sets the language it got from the route params.
- */
+routesCreator.propTypes = {
+  prefix: PropTypes.string.isRequired,
+};
+
+/** A component that sets the language it got from the route params. */
 const RoutedLanguageSetter = ({ match, route }) => (
   <LanguageSetter language={match.params.language || route.defaultLanguage}>
     {renderRoutes(route.routes)}
   </LanguageSetter>
 );
 
-/**
- * Creates routes that would detect the language from the path and updates.
- *
- * @param {string} languagePathPrefix prefix path to detect a language with.
- * @param {function} routesCreator creates the routes that will be actually rendered
- */
-const withLanguageRoutes = (languagePathPrefix, routesCreator = prefix => undefined) => ([
+const RouteItem = PropTypes.shape({
+  component: PropTypes.func.isRequired,
+  exact: PropTypes.bool,
+  path: PropTypes.string.isRequired,
+  ssrData: PropTypes.func,
+});
+
+RoutedLanguageSetter.propTypes = {
+  match: shapes.RouterMatch.isRequired,
+  route: PropTypes.shape({
+    component: PropTypes.func.isRequired,
+    path: PropTypes.string.isRequired,
+    routes: PropTypes.arrayOf(PropTypes.shape({
+      component: PropTypes.func.isRequired,
+      routes: PropTypes.arrayOf(RouteItem),
+    })),
+  }).isRequired,
+};
+
+/** Creates routes that would detect the language from the path and updates. */
+const withLanguageRoutes = (languagePathPrefix, creator) => ([
   {
     path: languagePathPrefix,
     component: RoutedLanguageSetter,
-    routes: routesCreator(languagePathPrefix)
+    routes: creator(languagePathPrefix)
   }, {
     path: '',
     defaultLanguage: DEFAULT_LANGUAGE,
     component: RoutedLanguageSetter,
-    routes: routesCreator('')
+    routes: creator('')
   }
 ]);
+
+withLanguageRoutes.propTypes    = {
+  languagePathPrefix: PropTypes.string.isRequired,
+  creator: PropTypes.func,
+};
+withLanguageRoutes.defaultProps = {
+  creator: () => undefined,
+};
 
 export default [
   {
     component: Root,
-    routes: withLanguageRoutes('/:language([a-z]{2})', createMainRoutes)
+    routes: withLanguageRoutes('/:language([a-z]{2})', routesCreator)
   }
 ];

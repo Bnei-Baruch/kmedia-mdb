@@ -1,12 +1,14 @@
 /* eslint-disable no-console */
 // ignore styles and replace images with their final path from webpack manifest
+import Loadable from 'react-loadable';
+
 const path     = require('path');
 const manifest = require('../build/asset-manifest');
 require('ignore-styles').default(undefined, (module, filename) => {
-  if (filename.endsWith('.png') ||
-    filename.endsWith('.jpg') ||
-    filename.endsWith('.jpeg') ||
-    filename.endsWith('.svg')) {
+  if (filename.endsWith('.png')
+    || filename.endsWith('.jpg')
+    || filename.endsWith('.jpeg')
+    || filename.endsWith('.svg')) {
     // eslint-disable-next-line no-param-reassign
     module.exports = `/${manifest[path.join('static', 'media', path.basename(filename))]}`;
   }
@@ -26,14 +28,16 @@ require('babel-register')({
 require('dotenv').config();
 // console.log('env', process.env);
 
-const app = process.env.NODE_ENV === 'development' ?
-  require('./app-dev') :
-  require('./app-prod');
+const app = process.env.NODE_ENV === 'development'
+  ? require('./app-dev')
+  : require('./app-prod');
 
 const PORT = process.env.SERVER_PORT || 3001;
 
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}!`);
+Loadable.preloadAll().then(() => {
+  app.listen(PORT, () => {
+    console.log(`App listening on port ${PORT}!`);
+  });
 });
 
 app.on('error', (error) => {
