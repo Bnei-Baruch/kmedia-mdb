@@ -637,7 +637,8 @@
   .layout__footer,
   .layout__secondary-header,
   .anchors-language-selector,
-  #us_report_button {
+  #us_report_button,  
+  div:empty {
     display: none;
   }
 
@@ -655,13 +656,16 @@
     padding-top: 0 !important; // remove existing padding
   }
 
-  div:empty {
-    display: none;
+  p { 
+    margin: 0px !important;
+    text-indent: 20px;
+    break-inside: avoid;
+    // border: 1px solid black;
   }
 
-  p { 
-    margin: 0px !important; 
-    text-indent: 20px;
+  ol, ul {
+    break-inside: avoid;
+    margin: 0px;
   }
 
 }
