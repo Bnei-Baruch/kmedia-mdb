@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
@@ -40,6 +40,9 @@ class SearchResultIntent extends SearchResultBase {
     pageSize: 3,
   };
 
+  // TODO: revisit the NUMBER_OF_FETCHED_UNITS implementation
+  // initialize on componentWillMount or constructor
+  // note that it is used also in redux connect (mapState)
   componentDidMount() {
     const pageSize          = this.props.isMobileDevice() ? 1 : 3;
     NUMBER_OF_FETCHED_UNITS = pageSize * 4;
@@ -87,14 +90,19 @@ class SearchResultIntent extends SearchResultBase {
   };
 
   renderItem = (cu) => {
-    const imgParams = Requests.makeParams({ url: assetUrl(`api/thumbnail/${cu.id}`), width: 250 });
+    let thumbUrl = assetUrl(`api/thumbnail/${cu.id}`);
+    if (!thumbUrl.startsWith('http')) {
+      thumbUrl = `http://localhost${thumbUrl}`;
+    }
+
+    const imgParams = Requests.makeParams({ url: thumbUrl, width: 250 });
     const src       = `${imaginaryUrl('thumbnail')}?${imgParams}`;
     const filmDate  = cu.film_date ? this.props.t('values.date', { date: cu.film_date }) : '';
 
     return (
       <Card key={cu.id} className="search__card bg_hover_grey" raised>
         <Container className="intent_image">
-          <div className='card_header_label'>
+          <div className="card_header_label">
             {this.mlsToStrColon(cu.duration)}
           </div>
           <FallbackImage fluid src={src} />
@@ -103,7 +111,8 @@ class SearchResultIntent extends SearchResultBase {
           <Card.Header>
             <Link
               className="search__link"
-              to={canonicalLink(cu, this.getMediaLanguage(this.props.filters))}>
+              to={canonicalLink(cu, this.getMediaLanguage(this.props.filters))}
+            >
               {cu.name}
             </Link>
           </Card.Header>
@@ -118,22 +127,22 @@ class SearchResultIntent extends SearchResultBase {
     );
   };
 
+  // eslint-disable-next-line react/no-multi-comp
   renderScrollPagination = () => {
     const { pageNo, pageSize } = this.state;
     const numberOfPages        = Math.round(this.props.unitCounter / pageSize);
 
     const pages   = new Array(numberOfPages).fill('a');
-    const content = pages.map((p, i) => {
-        return (<Button
-          onClick={e => this.onScrollChange(i)} key={i} icon className="bg_transparent">
-          <Icon name={pageNo === i ? 'circle thin' : 'circle outline'} color="blue" size="small" />
-        </Button>);
-      }
-    );
+    const content = pages.map((p, i) => (
+      <Button onClick={e => this.onScrollChange(i)} key={i} icon className="bg_transparent">
+        <Icon name={pageNo === i ? 'circle thin' : 'circle outline'} color="blue" size="small" />
+      </Button>
+    ));
 
     return <Segment basic textAlign="center" className="padding0">{content}</Segment>;
   };
 
+  // eslint-disable-next-line react/no-multi-comp
   renderScrollRight = () => {
     const dir = RTL_LANGUAGES.includes(this.props.language) ? 'right' : 'left';
     return this.state.pageNo === 0 ? null : (<Button
@@ -147,12 +156,13 @@ class SearchResultIntent extends SearchResultBase {
     />);
   };
 
+  // eslint-disable-next-line react/no-multi-comp
   renderScrollLeft = () => {
     const { pageNo, pageSize } = this.state;
     const numberOfPages        = Math.round(this.props.unitCounter / pageSize);
     const dir                  = RTL_LANGUAGES.includes(this.props.language) ? 'left' : 'right';
 
-    return (pageNo >= numberOfPages - 1 ) ? null : (<Button
+    return (pageNo >= numberOfPages - 1) ? null : (<Button
       icon={`chevron ${dir}`}
       circular
       basic
@@ -186,30 +196,33 @@ class SearchResultIntent extends SearchResultBase {
       display     = path.map(y => y.name).join(' > ');
       resultsType = SEARCH_INTENT_HIT_TYPE_LESSONS;
       break;
+    default:
       display = name;
     }
 
     return (
       <Segment className="search__block">
         <Header as="h2">
-          <Image size="small" src={sectionLogo[type]} verticalAlign='bottom' />&nbsp;
+          <Image size="small" src={sectionLogo[type]} verticalAlign="bottom" />&nbsp;
           <span>{t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`)}</span>
         </Header>
-        <List verticalAlign='middle'>
+        <List verticalAlign="middle">
           <List.Item>
-            <List.Content floated='right'>
+            <List.Content floated="right">
               <Icon name="tasks" size="small" />
               <Link
                 onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-                to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}>
-                <span>{`${t('search.showAll')} ${this.props.total} ${t('search.' + resultsType)}`}</span>
+                to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}
+              >
+                <span>{`${t('search.showAll')} ${this.props.total} ${t(`search.${resultsType}`)}`}</span>
               </Link>
             </List.Content>
             <Header as="h3" color="blue">
               <Link
                 className="search__link"
                 onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-                to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}>
+                to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}
+              >
                 {this.titleFromHighlight(highlight, display)}
               </Link>
             </Header>
@@ -229,7 +242,6 @@ class SearchResultIntent extends SearchResultBase {
 }
 
 const mapState = (state, ownProps) => {
-
   const { hit: { _source: { content_type: contentType, mdb_uid: mdbUid, } } } = ownProps;
 
   const namespace   = `intents_${mdbUid}_${contentType}`;
