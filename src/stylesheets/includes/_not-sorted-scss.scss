@@ -647,13 +647,23 @@
     }
 
     &__content {
-      margin: 20px 0px !important;
+      margin: 10px !important;
     }
   }
 
   .ui.container {
     padding-top: 0 !important; // remove existing padding
   }
+
+  div:empty {
+    display: none;
+  }
+
+  p { 
+    margin: 0px !important; 
+    text-indent: 20px;
+  }
+
 }
 
 .DayPicker-Day {
