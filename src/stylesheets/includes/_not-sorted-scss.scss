@@ -1097,3 +1097,156 @@
     flex-grow: 2;
   }
 }
+
+/****Search Results page**/
+
+.pagination-results.h2.ui.header {
+  font: 13px/20px Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.search__link {
+  color: #1a4179;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.search__block {
+  color: #828282;
+  font-weight: normal;
+  .clear {
+    clear: both;
+  }
+  .content {
+    em {
+      border-bottom: 1px solid rgba(65, 131, 196, .3);
+      background-color: rgba(242, 201, 76, .2);
+      font-weight: 900;
+    }
+  }
+  .ui.mini.image {
+    width: 25px;
+  }
+
+  .link_to_file.ui.basic.button {
+    padding: .5em 1em;
+    margin-top: 5px !important;
+    margin-right: 5px !important;
+    background-color: white !important;
+    border-color: $grey;
+    .icon {
+      color: $blue;
+    }
+
+    &:hover {
+      color: white;
+      background-color: $blue !important;
+      border: 0 none;
+      color: white !important;
+      .icon {
+        color: white !important;
+      }
+    }
+  }
+
+  .link_to_cu {
+    padding: .5em 1em;
+    margin-top: 5px !important;
+    margin-right: 5px !important;
+  }
+
+  .search__cards.ui.three.cards {
+    margin-left: 10px;
+    margin-right: 10px;
+    position: relative;
+
+    .scroll_intents {
+      position: absolute;
+      top: 150px;
+      background-color: white !important;
+      z-index: 10;
+    }
+  }
+
+  .search__card {
+    position: relative;
+    margin-top: 20px;
+    .intent_image {
+      position: relative;
+      min-height: 160px;
+      img {
+        height: 100%;
+        width: 100%;
+      }
+    }
+    &.card.bg_hover_grey:hover {
+      background: #eee;
+    }
+  }
+
+  .card_header_label {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    z-index: 1;
+    padding: 5px 10px;
+    background: rgba(51, 51, 51, .6);
+    color: white;
+    font-size: 14px;
+  }
+  .search__snippet {
+    font-size: 14px;
+  }
+}
+
+.bg_hover_grey:hover {
+  background: #eee;
+}
+
+.bg_transparent, .bg_transparent:hover {
+  background: transparent !important;
+}
+
+.padding0 {
+  padding: 0 !important;
+}
+
+.padding_r_l_0 {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+.section_tabs.ui.menu {
+  background: $darkWhite;
+  margin: 0;
+  border: 0 none;
+  border-radius: 0;
+
+  .item {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+  .active {
+    border-bottom: 1px solid #1a4179;
+  }
+  .show_filters {
+    background-color: white !important;
+  }
+
+  .overflow_auto {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+.header_search {
+  left: 0;
+  position: fixed !important;
+  right: 0;
+  top: 50px;
+  z-index: 1;
+  padding: 0;
+}
+
+.padding0{
+  padding: 0 !important;
+}

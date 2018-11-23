@@ -26,6 +26,8 @@
   },
   "filters": {
     "by": "Filtern nach:",
+    "filters": "Filter",
+    "hideFilters": "Filter ausblenden",
     "all": "Alles",
     "date-filter": {
       "label": "Datum",
@@ -85,7 +87,8 @@
       "programs": "Programme",
       "events": "Kongresse, Veranstaltungen",
       "publications": "Veröffentlichungen",
-      "sources": "Primäre Quellen"
+      "sources": "Primäre Quellen",
+      "all":"Alles"
     }
   },
   "buttons": {
@@ -498,7 +501,8 @@
       "TRAINING": "Training",
       "KITEI_MAKOR": "Fragmente von Primärquellen",
       "PUBLICATION": "Veröffentlichung",
-      "LELO_MIKUD": "Bearbeitet - Ohne Fokusgruppen"
+      "LELO_MIKUD": "Bearbeitet - Ohne Fokusgruppen",
+      "BLOG_POST": "Blog"
     },
     "media-types": {
       "video": "Video",
@@ -511,11 +515,11 @@
     }
   },
   "values": {
-    "date": "{{date, l}}"
+    "date": "{{date, ll}}"
   },
   "languages": {
     "language": "Sprache",
     "website_language": "Website Language",
-    "content_language": "Preferred content language"
+    "content_language": "Content language"
   }
 }

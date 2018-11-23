@@ -8,16 +8,19 @@ import { types as lists } from '../redux/modules/lists';
 
 function* fetchCUStats(action) {
   const { namespace } = action.payload;
+  if (namespace.startsWith('intents')) {
+    return;
+  }
 
   try {
     // fetch once
     const nsState = yield select(state => selectors.getCUStats(state.stats, namespace));
     if (!isEmpty(nsState) && !isEmpty(nsState.data)) {
-      //console.log('Allready in cache');
+      // console.log('Allready in cache');
       return;
     }
 
-    //console.log('not in cache');
+    // console.log('not in cache');
 
     const args = { ...action.payload };
     if (namespace === 'lessons-daily') {

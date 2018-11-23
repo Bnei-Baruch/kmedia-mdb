@@ -1,27 +1,20 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
-import Api from '../helpers/Api';
+import { call, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
+import { push } from 'react-router-redux';
+
 import { actions, types } from '../redux/modules/lists';
 import { selectors as settings } from '../redux/modules/settings';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { filtersTransformer } from '../filters';
+import Api from '../helpers/Api';
+import { CT_LESSON_PART } from '../helpers/consts';
 import { pushQuery } from './helpers/url';
 
-function* fetchList(action) {
-  const { namespace } = action.payload;
-  const filters       = yield select(state => filterSelectors.getFilters(state.filters, namespace));
-  const params        = filtersTransformer.toApiParams(filters) || {};
-  try {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const args     = {
-      ...action.payload,
-      ...params,
-      language,
-    };
-    delete args.namespace;
+function* actualFetch(namespace, endpoint, args) {
+  const language = yield select(state => settings.getLanguage(state.settings));
 
-    const endpoint = namespace === 'lessons-daily' ? Api.lessons : Api.units;
-    const { data } = yield call(endpoint, args);
+  try {
+    const { data } = yield call(endpoint, { ...args, language });
 
     if (Array.isArray(data.content_units)) {
       yield put(mdbActions.receiveContentUnits(data.content_units));
@@ -53,15 +46,37 @@ function* fetchList(action) {
   }
 }
 
+function* fetchList(action) {
+  const { namespace } = action.payload;
+
+  let endpoint;
+  const args = { ...action.payload };
+  if (namespace.startsWith('intents')) {
+    args.with_files = true;
+    endpoint        = args.content_type === CT_LESSON_PART ? Api.lessons : Api.units;
+  } else {
+    const filters      = yield select(state => filterSelectors.getFilters(state.filters, namespace));
+    const filterParams = filtersTransformer.toApiParams(filters) || {};
+    Object.assign(args, filterParams);
+    endpoint = namespace === 'lessons-daily' ? Api.lessons : Api.units;
+  }
+  delete args.namespace;
+
+  yield actualFetch(namespace, endpoint, args);
+}
+
 function* updatePageInQuery(action) {
   const { pageNo } = action.payload;
   const page       = pageNo > 1 ? pageNo : null;
-
+  if (page) {
+    // adding a page to browser history
+    yield put(push(page));
+  }
   yield* pushQuery(query => Object.assign(query, { page }));
 }
 
 function* watchFetchList() {
-  yield takeLatest(types.FETCH_LIST, fetchList);
+  yield takeEvery(types.FETCH_LIST, fetchList);
 }
 
 function* watchSetPage() {

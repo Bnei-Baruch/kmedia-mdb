@@ -25,6 +25,8 @@
   },
   "filters": {
     "by": "Filtrar por:",
+    "filters": "Filtros",
+    "hideFilters": "Ocultar filtros",
     "all": "Todo",
     "date-filter": {
       "label": "Fecha",
@@ -80,6 +82,7 @@
     },
     "sections-filter": {
       "label": "Sección",
+      "all": "Todo",
       "lessons": "Lecciones y Charlas",
       "programs": "Programas",
       "events": "Congresos y Eventos",
@@ -504,7 +507,8 @@
       "TRAINING": "Entrenamiento",
       "KITEI_MAKOR": "Extractos de Fuentes",
       "PUBLICATION": "Publicidad",
-      "LELO_MIKUD": "Editado - sin grupo de enfoque"
+      "LELO_MIKUD": "Editado - sin grupo de enfoque",
+      "BLOG_POST": "Blog"
     },
     "media-types": {
       "video": "Video",
@@ -517,11 +521,11 @@
     }
   },
   "values": {
-    "date": "{{date, l}}"
+    "date": "{{date, ll}}"
   },
   "languages": {
     "language": "Idioma",
     "website_language": "Idioma del sitio",
-    "content_language": "Idioma de contenido preferido"
+    "content_language": "Idioma de contenido"
   }
 }

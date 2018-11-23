@@ -4,6 +4,7 @@ import HolidaysFilter from './HolidaysFilter';
 import ProgramsFilter from './ProgramsFilter';
 import SectionsFilter from './SectionsFilter';
 import SourcesFilter from './SourcesFilter';
+import MediaTypeFilter from './MediaTypeFilter';
 import TopicsFilter from './TopicsFilter';
 import PublishersFilter from './PublishersFilter';
 import YearsFilter from './YearsFilter';
@@ -17,6 +18,7 @@ export default {
   ProgramsFilter,
   SectionsFilter,
   SourcesFilter,
+  MediaTypeFilter,
   TopicsFilter,
   PublishersFilter,
   YearsFilter,

@@ -26,6 +26,8 @@
   },
   "filters": {
     "by": "Filter by:",
+    "filters": "Filters",
+    "hideFilters": "Hide Filters",
     "all": "All",
     "date-filter": {
       "label": "Date",
@@ -86,7 +88,7 @@
       "programs": "Programs",
       "events": "Conventions & Events",
       "publications": "Publications",
-      "sources": "Sources",
+      "sources": "Kabbalah Sources",
       "posts": "Blog"
     }
   },
@@ -146,6 +148,9 @@
       "text": "Search Results",
       "subtext": ""
     },
+    "showAll": "Show All",
+    "lessons": "Lessons",
+    "programs": "Programs",
     "sortby": "sort by",
     "sorts": {
       "relevance": "relevance",
@@ -162,7 +167,7 @@
       "content": "Content"
     },
     "intent-types": {
-      "lessons": "Daily morning lesssons",
+      "lessons": "Daily morning lessons",
       "programs": "Programs"
     },
     "intent-prefix": {
@@ -355,7 +360,7 @@
     },
     "unit": {
       "info": {
-        "sources": "Sources",
+        "sources": "Kabbalah Sources",
         "topics": "Topics",
         "collections": "Related to"
       },
@@ -497,14 +502,14 @@
       "UNITY_DAY": "Unity Day",
       "CLIPS": "Clips",
       "ARTICLES": "Articles",
-      "LESSON_PART": "Lesson Part",
+      "LESSON_PART": "Lesson",
       "LECTURE": "Lecture",
       "CHILDREN_LESSON": "Children Lesson",
       "WOMEN_LESSON": "Women Lesson",
       "VIRTUAL_LESSON": "Virtual Lesson",
       "FRIENDS_GATHERING": "Gathering Of Friends",
       "MEAL": "Meal",
-      "VIDEO_PROGRAM_CHAPTER": "Video Program Chapter",
+      "VIDEO_PROGRAM_CHAPTER": "Program Chapter",
       "FULL_LESSON": "Full Lesson",
       "ARTICLE": "Article",
       "UNKNOWN": "Unknown",
@@ -513,7 +518,8 @@
       "TRAINING": "Training",
       "KITEI_MAKOR": "Sources Materials",
       "PUBLICATION": "Publication",
-      "LELO_MIKUD": "Edited - No Focus Group"
+      "LELO_MIKUD": "Edited - No Focus Group",
+      "BLOG_POST": "Blog Post"
     },
     "media-types": {
       "video": "Video",
@@ -526,11 +532,11 @@
     }
   },
   "values": {
-    "date": "{{date, l}}"
+    "date": "{{date, ll}}"
   },
   "languages": {
     "language": "Language",
     "website_language": "Website Language",
-    "content_language": "Preferred content language"
+    "content_language": "Content language"
   }
 }

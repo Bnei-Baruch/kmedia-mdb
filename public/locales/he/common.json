@@ -25,6 +25,8 @@
   },
   "filters": {
     "by": "סנן לפי:",
+    "filters": "מסננים",
+    "hideFilters": "להסתיר מסננים",
     "all": "הכל",
     "date-filter": {
       "label": "תאריך",
@@ -80,6 +82,7 @@
     },
     "sections-filter": {
       "label": "מדור",
+      "all": "הכל",
       "lessons": "שיעורים והרצאות",
       "programs": "תוכניות",
       "events": "כנסים ואירועים",
@@ -144,6 +147,9 @@
       "text": "תוצאות חיפוש",
       "subtext": ""
     },
+    "showAll": "הראה את כל",
+    "lessons": "השיעורים",
+    "programs": "התוכניות",
     "sortby": "מיין לפי",
     "sorts": {
       "relevance": "רלונטיות",
@@ -480,11 +486,11 @@
       "cs": "צ'כית"
     },
     "content-types": {
-      "DAILY_LESSON": "השיעור היומי",
+      "DAILY_LESSON": "שיעור",
       "SPECIAL_LESSON": "שיעור מיוחד",
       "FRIENDS_GATHERINGS": "ישיבות חברים",
       "CONGRESS": "כנס",
-      "VIDEO_PROGRAM": "תוכנית",
+      "VIDEO_PROGRAM": "סדרה",
       "LECTURE_SERIES": "סדרת הרצאות",
       "CHILDREN_LESSONS": "שיעורי ילדים",
       "WOMEN_LESSONS": "שיעורי נשים",
@@ -495,7 +501,7 @@
       "UNITY_DAY": "יום איחוד",
       "CLIPS": "קליפים",
       "ARTICLES": "מאמרים",
-      "LESSON_PART": "חלק שיעור",
+      "LESSON_PART": "שיעור",
       "LECTURE": "הרצאה",
       "CHILDREN_LESSON": "שיעור ילדים",
       "WOMEN_LESSON": "שיעור נשים",
@@ -511,7 +517,8 @@
       "TRAINING": "הכשרה",
       "KITEI_MAKOR": "קטעי מקור",
       "PUBLICATION": "פרסום",
-      "LELO_MIKUD": "ערוך - ללא קבוצת מיקוד"
+      "LELO_MIKUD": "ערוך - ללא קבוצת מיקוד",
+      "BLOG_POST": "בלוג פוסט"
     },
     "media-types": {
       "video": "וידאו",
@@ -606,11 +613,11 @@
     "unknown": "לא צוין"
   },
   "values": {
-    "date": "{{date, l}}"
+    "date": "{{date, ll}}"
   },
   "languages": {
     "language": "שפה",
     "website_language": "שפת האתר",
-    "content_language": "שפת תוכן מועדפת"
+    "content_language": "שפת תוכן"
   }
 }
