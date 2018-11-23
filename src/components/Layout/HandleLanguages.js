@@ -34,7 +34,7 @@ class HandleLanguages extends Component {
       direction: langDir,
     };
 
-    const trigger = isMobileDevice ? <Icon size="big" name="language" /> :
+    const trigger = isMobileDevice ? <Icon size="big" name="language" className="margin0" /> :
       <span><Icon name="sliders horizontal" />{t('languages.language')}</span>;
     return (
       <Popup
@@ -42,7 +42,7 @@ class HandleLanguages extends Component {
         flowing
         hideOnScroll
         position="bottom right"
-        trigger={<Menu.Item onClick={this.handlePopupOpen} className="padding_r_l_0">{trigger}</Menu.Item>}
+        trigger={<Menu.Item onClick={this.handlePopupOpen} as="a">{trigger}</Menu.Item>}
         open={isActive}
         onOpen={this.handlePopupOpen}
         onClose={this.handlePopupClose}

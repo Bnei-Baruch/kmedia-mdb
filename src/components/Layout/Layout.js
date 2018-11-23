@@ -134,19 +134,15 @@ class Layout extends Component {
             >
               <Icon name="sidebar" />
             </Menu.Item>
-            <Menu.Item className="logo" header as={Link} to="/">
+            <Menu.Item className="logo padding_r_l_0" header as={Link} to="/">
               <img src={logo} alt="logo" />
               <Header inverted as="h1" content={t('nav.top.header')} />
             </Menu.Item>
             <Menu.Item className="layout__search mobile-hidden">
               {showSearch ? <WrappedOmniBox t={t} location={location} /> : null}
             </Menu.Item>
-            <Menu.Menu position="right" className="padding0">
-              <Menu.Item ref={(el) => {
-                if (!this.showSearchButtonElement) {
-                  this.showSearchButtonElement = ReactDOM.findDOMNode(el);
-                }
-              }}>
+            <Menu.Menu position="right" className="padding0 margin0">
+              <Menu.Item className="padding0 margin0">
                 <HandleLanguages
                   language={language}
                   contentLanguage={contentLanguage}
@@ -155,12 +151,18 @@ class Layout extends Component {
                   t={t}
                   isMobileDevice={this.isMobileDevice()}
                 />
-                {
-                  showSearch && this.isMobileDevice() ?
-                    <Button icon="search" color="blue" onClick={this.showHeaderSearch} /> : null
-                }
               </Menu.Item>
-              <Menu.Item className="mobile-hidden">
+              {
+                showSearch && this.isMobileDevice() ?
+                  <Menu.Item as="a" position="right" ref={(el) => {
+                    if (!this.showSearchButtonElement) {
+                      this.showSearchButtonElement = ReactDOM.findDOMNode(el);
+                    }
+                  }}>
+                    <Icon name="search" className="margin0" onClick={this.showHeaderSearch} />
+                  </Menu.Item> : null
+              }
+              <Menu.Item position="right" className="mobile-hidden">
                 <DonateNow t={t} language={language} />
               </Menu.Item>
               <TopMost t={t} />
