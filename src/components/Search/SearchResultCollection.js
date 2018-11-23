@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Button } from 'semantic-ui-react';
+import { Table, Button, Container } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../helpers/links';
 import { isDebMode } from '../../helpers/url';
@@ -16,11 +16,19 @@ class SearchResultCollection extends SearchResultBase {
     c: shapes.Collection,
   };
 
+  state = {
+    isHideImageTD: false
+  };
+
   renderCU = cu => (
     <Link key={cu.id} to={canonicalLink(cu, this.getMediaLanguage(this.props.filters))}>
-      <Button basic size="tiny" className="link_to_cu" content={cu.name} />
+      <Button basic size="tiny" className="link_to_cu">
+        <Container textAlign="left" className="padding0">{cu.name}</Container>
+      </Button>
     </Link>
   );
+
+  hideImageTD = () => this.setState({ isHideImageTD: true });
 
   render() {
     const { t, location, c, hit, rank, queryResult, filters } = this.props;
@@ -41,13 +49,18 @@ class SearchResultCollection extends SearchResultBase {
       <Table className="bg_hover_grey search__block">
         <Table.Body>
           <Table.Row key={mdbUid} verticalAlign="top">
-            <Table.Cell collapsing singleLine width={1}>
-              <FallbackImage
-                circular
-                size="tiny"
-                src={assetUrl(`logos/collections/${c.id}.jpg`)}
-              />
-            </Table.Cell>
+            {
+              !this.state.isHideImageTD ? (
+                <Table.Cell collapsing singleLine width={1}>
+                  <FallbackImage
+                    circular
+                    fallbackImage={null}
+                    onError={this.hideImageTD()}
+                    size="tiny"
+                    src={assetUrl(`logos/collections/${c.id}.jpg`)}
+                  />
+                </Table.Cell>) : null
+            }
             <Table.Cell>
               <Link
                 className="search__link"
