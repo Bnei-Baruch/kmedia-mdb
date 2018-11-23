@@ -11,7 +11,7 @@
       "books": "Книги",
       "topics": "Темы",
       "publications": "Публикации",
-      "simple-mode": "Простая Версия",
+      "simple-mode": "Загрузки",
       "photos": "Фотографии",
       "design": "Дизайн",
       "design2": "Планировка",
@@ -336,17 +336,21 @@
   },
   "simple-mode": {
     "header": {
-      "text": "Загрузки - Легкая версия",
+      "text": "Загрузки",
       "subtext": "Вся медиа за определенный день"
     },
     "today-button": "Cегодня",
     "total-media-for-date": "Все материалы за этот день ",
-    "media-language": "Язык мультимедиа",
+    "media-language": "Язык мультимедиа:",
     "no-files-found-for-lang": "Нет файлов для выбранного вами языка.",
+    "try-different-language": "Попробуйте выбрать ",
+    "language-click": "другой язык.",
     "no-files-found-for-date": "Нет файлов для этой даты",
-    "date": "Дата",
+    "date": "Дата:",
     "prev": "Пред.",
-    "next": "Cлед."
+    "next": "Cлед.",
+    "choose-date": "Выберите дату",
+    "today-lessons": "Ежедневные уроки каббалы"
   },
   "twitter": {
     "header": {
