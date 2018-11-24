@@ -56,8 +56,7 @@ class SearchResults extends Component {
   };
 
   renderHit = (hit, rank) => {
-    const { cMap, cuMap } = this.props;
-
+    const { cMap, cuMap, postMap }                                               = this.props;
     const { _source: { mdb_uid: mdbUid, result_type: resultType }, _type: type } = hit;
 
     const props = { ...this.props, hit, rank, key: `${mdbUid}_${type}` };
@@ -66,17 +65,16 @@ class SearchResults extends Component {
       return <SearchResultIntent  {...props} />;
     }
 
-    if (resultType === 'posts') {
-      return <SearchResultPost  {...props} />;
-    }
-
     const cu = cuMap[mdbUid];
     const c  = cMap[mdbUid];
+    const p  = postMap[mdbUid];
 
     if (cu) {
       return <SearchResultCU   {...props} cu={cu} />;
     } else if (c) {
       return <SearchResultCollection c={c}  {...props} />;
+    } else if (p) {
+      return <SearchResultPost  {...props} post={p} />;
     } else if (resultType === 'sources') {
       return <SearchResultSource   {...props} />;
     }

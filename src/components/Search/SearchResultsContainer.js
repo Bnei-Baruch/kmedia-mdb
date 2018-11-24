@@ -8,6 +8,7 @@ import { selectors as device } from '../../redux/modules/device';
 import { actions, selectors } from '../../redux/modules/search';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
+import { selectors as publicationSelectors } from '../../redux/modules/publications';
 import * as shapes from '../shapes';
 import SectionHeader from '../shared/SectionHeader';
 import SearchResults from './SearchResults';
@@ -82,7 +83,7 @@ class SearchResultsContainer extends Component {
     this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
   render() {
-    const { wip, err, queryResult, cMap, cuMap, pageNo, pageSize, sortBy, language, location, click } = this.props;
+    const { wip, err, queryResult, cMap, cuMap, postMap, pageNo, pageSize, sortBy, language, location, click } = this.props;
     return (
       <div>
         <SectionHeader section="search" />
@@ -99,6 +100,7 @@ class SearchResultsContainer extends Component {
             queryResult={queryResult}
             cMap={cMap}
             cuMap={cuMap}
+            postMap={postMap}
             wip={wip}
             err={err}
             pageNo={pageNo}
@@ -115,24 +117,8 @@ class SearchResultsContainer extends Component {
   }
 }
 
-const mapState = (state) => {
-  const queryResult = selectors.getQueryResult(state.search);
-  const results     = queryResult.search_result;
-
-  const cMap = results && results.hits && Array.isArray(results.hits.hits) ?
-    results.hits.hits.reduce((acc, val) => {
-      if (val._source.result_type === 'collections') {
-        const cID = val._source.mdb_uid;
-        const c   = mdbSelectors.getDenormCollection(state.mdb, cID);
-        if (c) {
-          acc[cID] = c;
-        }
-      }
-      return acc;
-    }, {}) :
-    {};
-
-  const cuMap = results && results.hits && Array.isArray(results.hits.hits) ?
+const cuMapFromState = (state, results) => {
+  return results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
       if (val._source.result_type === 'units') {
         const cuID = val._source.mdb_uid;
@@ -144,11 +130,46 @@ const mapState = (state) => {
       return acc;
     }, {}) :
     {};
+};
+
+const cMapFromState    = (state, results) => {
+  return results && results.hits && Array.isArray(results.hits.hits) ?
+    results.hits.hits.reduce((acc, val) => {
+      if (val._source.result_type === 'collections') {
+        const cID = val._source.mdb_uid;
+        const c   = mdbSelectors.getDenormCollection(state.mdb, cID);
+        if (c) {
+          acc[cID] = c;
+        }
+      }
+      return acc;
+    }, {}) :
+    {};
+};
+const postMapFromState = (state, results) => {
+  return results && results.hits && Array.isArray(results.hits.hits) ?
+    results.hits.hits.reduce((acc, val) => {
+      if (val._source.result_type === 'posts') {
+        const ids = val._source.mdb_uid.split('-');
+        const p   = publicationSelectors.getBlogPost(state.publications, ids[0], ids[1]);
+        if (p) {
+          acc[val._source.mdb_uid] = p;
+        }
+      }
+      return acc;
+    }, {}) :
+    {};
+};
+
+const mapState = (state) => {
+  const queryResult = selectors.getQueryResult(state.search);
+  const results     = queryResult.search_result;
 
   return {
     queryResult,
-    cMap,
-    cuMap,
+    cMap: cMapFromState(state, results),
+    cuMap: cuMapFromState(state, results),
+    postMap: postMapFromState(state, results),
     query: selectors.getQuery(state.search),
     pageNo: selectors.getPageNo(state.search),
     sortBy: selectors.getSortBy(state.search),
