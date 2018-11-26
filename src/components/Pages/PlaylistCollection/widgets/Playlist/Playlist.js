@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { Header, Icon, Menu } from 'semantic-ui-react';
 
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, NO_NAME } from '../../../../../helpers/consts';
@@ -130,4 +131,4 @@ class PlaylistWidget extends Component {
   }
 }
 
-export default PlaylistWidget;
+export default withNamespaces()(PlaylistWidget);

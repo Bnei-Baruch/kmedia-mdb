@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Container, Divider, Grid, Input } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES, LANGUAGE_OPTIONS } from '../../../helpers/consts';
@@ -78,9 +78,9 @@ class SimpleModeMobilePage extends PureComponent {
     const list = WipErr({ wip, err, t }) || (
       <div>
         {
-          (items.lessons.length || items.others.length) ?
-            <SimpleModeList items={items} language={language} t={t} renderUnit={renderUnit} /> :
-            <FrownSplash text={t('simple-mode.no-files-found-for-date')} />
+          (items.lessons.length || items.others.length)
+            ? <SimpleModeList items={items} language={language} renderUnit={renderUnit} />
+            : <FrownSplash text={t('simple-mode.no-files-found-for-date')} />
         }
       </div>
     );
@@ -147,4 +147,4 @@ class SimpleModeMobilePage extends PureComponent {
   }
 }
 
-export default translate()(SimpleModeMobilePage);
+export default withNamespaces()(SimpleModeMobilePage);

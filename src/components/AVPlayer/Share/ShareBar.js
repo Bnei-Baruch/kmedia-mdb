@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 
 import {
   EmailIcon,
@@ -18,7 +19,7 @@ import {
   WhatsappShareButton,
 } from 'react-share';
 
-export default class ShareBar extends Component {
+class ShareBar extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     url: PropTypes.string,
@@ -34,22 +35,25 @@ export default class ShareBar extends Component {
 
   getBsPixels = (buttonSize) => {
     switch (buttonSize) {
-    default: return 46;
-    case 'small': return 36;
-    case 'tiny': return 26;
+    default:
+      return 46;
+    case 'small':
+      return 36;
+    case 'tiny':
+      return 26;
     }
-  }
+  };
 
   render() {
     const { url, buttonSize, t, messageTitle } = this.props;
-    
+
     if (!url) {
       return null;
     }
 
     // noinspection JSValidateTypes
-    const bsPixels  = this.getBsPixels(buttonSize);
-    const title     = messageTitle || t('player.share.title');
+    const bsPixels = this.getBsPixels(buttonSize);
+    const title    = messageTitle || t('player.share.title');
 
     return (
       <div className="social-buttons">
@@ -78,3 +82,5 @@ export default class ShareBar extends Component {
     );
   }
 }
+
+export default withNamespaces()(ShareBar);

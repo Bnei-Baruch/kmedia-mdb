@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { withNamespaces } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 
@@ -21,7 +22,6 @@ class PlaylistAVBox extends Component {
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
     onSelectedChange: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired,
     nextLink: PropTypes.string,
     prevLink: PropTypes.string,
   };
@@ -81,13 +81,13 @@ class PlaylistAVBox extends Component {
       playerHelper.setActivePartInQuery(nextProps.history, nSelected);
       nextProps.onSelectedChange(nPlaylist.items[nSelected].unit);
     } else if (
-      playlist &&
-      nPlaylist &&
-      playlist.items[selected] &&
-      nPlaylist.items[selected] &&
-      playlist.items[selected].unit &&
-      nPlaylist.items[selected].unit &&
-      playlist.items[selected].unit !== nPlaylist.items[selected].unit
+      playlist
+      && nPlaylist
+      && playlist.items[selected]
+      && nPlaylist.items[selected]
+      && playlist.items[selected].unit
+      && nPlaylist.items[selected].unit
+      && playlist.items[selected].unit !== nPlaylist.items[selected].unit
     ) {
       // case # 2
       this.setState({ selected: nSelected });
@@ -113,19 +113,21 @@ class PlaylistAVBox extends Component {
     const newMediaType    = playerHelper.getMediaTypeFromQuery(location, preferredMT);
     const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
-    return !(equal(collection, oldCollection) &&
-      oldUiLanguage === uiLanguage &&
-      oldContentLanguage === contentLanguage &&
-      prevMediaType === newMediaType &&
-      newItemLanguage === playerLanguage);
+    return !(equal(collection, oldCollection)
+      && oldUiLanguage === uiLanguage
+      && oldContentLanguage === contentLanguage
+      && prevMediaType === newMediaType
+      && newItemLanguage === playerLanguage);
   }
 
   handleSelectedChange = (selected) => {
-    playerHelper.setActivePartInQuery(this.props.history, selected);
+    const { history } = this.props;
+    playerHelper.setActivePartInQuery(history, selected);
   };
 
   handleLanguageChange = (e, language) => {
-    playerHelper.setLanguageInQuery(this.props.history, language);
+    const { history } = this.props;
+    playerHelper.setLanguageInQuery(history, language);
   };
 
   handleSwitchAV = () => {
@@ -143,13 +145,13 @@ class PlaylistAVBox extends Component {
   };
 
   render() {
-    const { t, PlayListComponent, uiLanguage, nextLink, prevLink } = this.props;
-    const { playlist, selected }                                   = this.state;
+    const { PlayListComponent, uiLanguage, nextLink, prevLink } = this.props;
+    const { playlist, selected }                                = this.state;
 
-    if (!playlist ||
-      !Array.isArray(playlist.items) ||
-      playlist.items.length === 0 ||
-      playlist.language === undefined
+    if (!playlist
+      || !Array.isArray(playlist.items)
+      || playlist.items.length === 0
+      || playlist.language === undefined
     ) {
       return null;
     }
@@ -170,7 +172,6 @@ class PlaylistAVBox extends Component {
             onSelectedChange={this.handleSelectedChange}
             onLanguageChange={this.handleLanguageChange}
             onSwitchAV={this.handleSwitchAV}
-            t={t}
           />
         </Grid.Column>
         <Grid.Column id="avbox__playlist" className="avbox__playlist" mobile={16} tablet={6} computer={6}>
@@ -179,7 +180,6 @@ class PlaylistAVBox extends Component {
             selected={selected}
             language={uiLanguage}
             onSelectedChange={this.handleSelectedChange}
-            t={t}
             nextLink={nextLink}
             prevLink={prevLink}
           />
@@ -189,4 +189,4 @@ class PlaylistAVBox extends Component {
   }
 }
 
-export default withRouter(PlaylistAVBox);
+export default withRouter(withNamespaces()(PlaylistAVBox));

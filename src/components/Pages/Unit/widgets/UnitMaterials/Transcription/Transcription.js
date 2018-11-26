@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import uniq from 'lodash/uniq';
 import { Container, Divider, Segment } from 'semantic-ui-react';
 
@@ -158,7 +159,6 @@ class Transcription extends Component {
             <ButtonsLanguageSelector
               languages={languages}
               defaultValue={language}
-              t={t}
               onSelect={this.handleLanguageChanged}
             />
           </Container>
@@ -172,4 +172,4 @@ class Transcription extends Component {
   }
 }
 
-export default Transcription;
+export default withNamespaces()(Transcription);

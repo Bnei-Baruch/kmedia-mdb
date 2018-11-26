@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { Header, Image } from 'semantic-ui-react';
 
 import img from '../../../images/virtual_congress.jpg';
@@ -46,4 +47,4 @@ class Promoted extends Component {
   }
 }
 
-export default Promoted;
+export default withNamespaces()(Promoted);

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Dropdown } from 'semantic-ui-react';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
 import Filters from '../Filters/Filters';
 import filterComponents from '../Filters/components';
@@ -80,4 +80,4 @@ class SearchResultsFilters extends Component {
 
 export default connect(state => ({
   filtersValues: filterSelectors.getNSFilters(state.filters, 'search') || {},
-}))(translate()(SearchResultsFilters));
+}))(withNamespaces()(SearchResultsFilters));

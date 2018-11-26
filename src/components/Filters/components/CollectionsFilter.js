@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 
-import { CT_LECTURE_SERIES, CT_VIRTUAL_LESSONS, CT_CLIPS } from '../../../helpers/consts';
+import { CT_CLIPS, CT_LECTURE_SERIES, CT_VIRTUAL_LESSONS } from '../../../helpers/consts';
 import { strCmp } from '../../../helpers/utils';
 import { selectors as lessons } from '../../../redux/modules/lessons';
 import { selectors as programs } from '../../../redux/modules/programs';
@@ -21,7 +22,8 @@ class CollectionsFilter extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.collections !== nextProps.collections) {
+    const { collections } = this.props;
+    if (collections !== nextProps.collections) {
       this.setState({ tree: this.getTree(nextProps) });
     }
   }
@@ -57,15 +59,15 @@ export default connect(
 
     switch (namespace) {
     case 'lessons-virtual':
-      ct = CT_VIRTUAL_LESSONS;
+      ct   = CT_VIRTUAL_LESSONS;
       cIDs = lessons.getLecturesByType(state.lessons)[ct];
       break;
     case 'lessons-lectures':
-      ct = CT_LECTURE_SERIES;
+      ct   = CT_LECTURE_SERIES;
       cIDs = lessons.getLecturesByType(state.lessons)[ct];
       break;
     case 'programs-clips':
-      ct = CT_CLIPS;
+      ct   = CT_CLIPS;
       cIDs = programs.getProgramsByType(state.programs)[ct];
       break;
     default:
@@ -76,4 +78,4 @@ export default connect(
       collections: (cIDs || []).map(x => mdb.getCollectionById(state.mdb, x)),
     };
   },
-)(CollectionsFilter);
+)(withNamespaces()(CollectionsFilter));

@@ -12,7 +12,7 @@ import SameCollectionLecture from './SameCollectionLecture';
 
 class MySameCollectionContainer extends SameCollectionContainer {
   render() {
-    const { unit, collection, wip, err, t } = this.props;
+    const { unit, collection, wip, err } = this.props;
 
     let Widget = SameCollectionLessonPart;
     if (unit.content_type !== CT_LESSON_PART) {
@@ -25,7 +25,6 @@ class MySameCollectionContainer extends SameCollectionContainer {
         wip={wip}
         err={err}
         collection={wip || err ? null : collection}
-        t={t}
       />
     );
   }
@@ -35,8 +34,8 @@ const MyWrappedSameCollectionContainer = wrapSameCollectionContainer(MySameColle
 
 class MyUnitPage extends UnitPage {
   renderRecommendations() {
-    const { unit, t } = this.props;
-    return <MyWrappedSameCollectionContainer unit={unit} t={t} />;
+    const { unit } = this.props;
+    return <MyWrappedSameCollectionContainer unit={unit} />;
   }
 }
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { Media } from 'react-media-player';
@@ -47,12 +48,13 @@ class AVPlaylistPlayer extends Component {
     }
   };
 
-  onPlay  = () => this.setState({ autoPlay: true });
+  onPlay = () => this.setState({ autoPlay: true });
+
   onPause = () => this.setState({ autoPlay: false });
 
   render() {
-    const { t, selected, items, language, onSwitchAV, onLanguageChange, autoPlayAllowed } = this.props;
-    const { autoPlay }                                                                    = this.state;
+    const { selected, items, language, onSwitchAV, onLanguageChange, autoPlayAllowed } = this.props;
+    const { autoPlay }                                                                 = this.state;
 
     const currentItem = items[selected];
 
@@ -78,7 +80,6 @@ class AVPlaylistPlayer extends Component {
               languages={currentItem.availableLanguages}
               language={language}
               onLanguageChange={onLanguageChange}
-              t={t}
               // Playlist props
               showNextPrev
               onFinish={this.onFinish}
@@ -100,4 +101,4 @@ const mapState = state => ({
   autoPlayAllowed: device.getAutoPlayAllowed(state.device),
 });
 
-export default connect(mapState)(AVPlaylistPlayer);
+export default connect(mapState)(withNamespaces()(AVPlaylistPlayer));

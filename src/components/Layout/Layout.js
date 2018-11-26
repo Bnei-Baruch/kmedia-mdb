@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
 import { Header, Icon, Menu } from 'semantic-ui-react';
 
@@ -108,9 +108,9 @@ class Layout extends Component {
             </Menu.Item>
             <Menu.Item className="layout__search mobile-hidden">
               {
-                showSearch ?
-                  <WrappedOmniBox t={t} location={location} /> :
-                  null
+                showSearch
+                  ? <WrappedOmniBox location={location} />
+                  : null
               }
             </Menu.Item>
             <Menu.Menu position="right">
@@ -119,12 +119,11 @@ class Layout extends Component {
                 contentLanguage={contentLanguage}
                 setContentLanguage={setContentLanguage}
                 location={location}
-                t={t}
               />
               <Menu.Item className="mobile-hidden">
-                <DonateNow t={t} language={language} />
+                <DonateNow language={language} />
               </Menu.Item>
-              <TopMost t={t} />
+              <TopMost />
             </Menu.Menu>
           </Menu>
         </div>
@@ -153,18 +152,18 @@ class Layout extends Component {
               <Header inverted as="h1" content={t('nav.top.header')} />
             </Menu.Item>
             <Menu.Item className="mobile-only layout__sidebar-search">
-              <WrappedOmniBox t={t} location={location} onSearch={this.closeSidebar} />
+              <WrappedOmniBox location={location} onSearch={this.closeSidebar} />
             </Menu.Item>
           </Menu>
           <div className="layout__sidebar-menu">
-            <MenuItems simple language={language} t={t} onItemClick={this.closeSidebar} />
+            <MenuItems simple language={language} onItemClick={this.closeSidebar} />
           </div>
         </div>
         <div className="layout__main">
           <div className="layout__content">
             {renderRoutes(route.routes)}
           </div>
-          <Footer t={t} />
+          <Footer />
         </div>
       </div>
     );
@@ -179,4 +178,4 @@ export default connect(
   {
     setContentLanguage: actions.setContentLanguage,
   }
-)(translate()(Layout));
+)(withNamespaces()(Layout));

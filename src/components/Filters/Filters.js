@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { translate } from 'react-i18next';
-import { Container, Icon, Menu, Popup, Label } from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
+import { Container, Icon, Label, Menu, Popup } from 'semantic-ui-react';
 
 import { getLanguageDirection } from '../../helpers/i18n-utils';
 import { filtersTransformer } from '../../filters/index';
@@ -171,7 +171,6 @@ class Filters extends Component {
                         onCancel={this.handlePopupClose}
                         onApply={x => this.handleApply(name, x)}
                         language={language}
-                        t={t}
                         deviceInfo={deviceInfo}
                       />
                     </Popup.Content>
@@ -180,8 +179,8 @@ class Filters extends Component {
               })
             }
             {
-              rightItems ?
-                <Menu.Menu position="right">{rightItems}</Menu.Menu>
+              rightItems
+                ? <Menu.Menu position="right">{rightItems}</Menu.Menu>
                 : null
             }
           </Menu>
@@ -204,4 +203,4 @@ export default connect(
     setFilterValue: actions.setFilterValue,
     resetFilter: actions.resetFilter,
   }, dispatch)
-)(translate()(Filters));
+)(withNamespaces()(Filters));

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Card, List } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
@@ -46,4 +46,4 @@ class SimpleModeList extends PureComponent {
   }
 }
 
-export default translate()(SimpleModeList);
+export default withNamespaces()(SimpleModeList);

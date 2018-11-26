@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Container, Grid } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
@@ -36,12 +36,12 @@ export class UnitPage extends Component {
   }
 
   renderPlayer() {
-    const { unit, language, t } = this.props;
+    const { unit, language } = this.props;
     return (
       <div className="avbox">
         <Container>
           <Grid centered padded>
-            <AVBox unit={unit} language={language} t={t} />
+            <AVBox unit={unit} language={language} />
           </Grid>
         </Container>
       </div>
@@ -49,23 +49,23 @@ export class UnitPage extends Component {
   }
 
   renderInfo() {
-    const { unit, t, section } = this.props;
-    return <Info unit={unit} section={section} t={t} />;
+    const { unit, section } = this.props;
+    return <Info unit={unit} section={section} />;
   }
 
   renderMaterials() {
-    const { unit, t } = this.props;
-    return <Materials unit={unit} t={t} />;
+    const { unit } = this.props;
+    return <Materials unit={unit} />;
   }
 
   renderDownloads() {
-    const { unit, t } = this.props;
-    return <MediaDownloads unit={unit} t={t} />;
+    const { unit } = this.props;
+    return <MediaDownloads unit={unit} />;
   }
 
   renderRecommendations() {
-    const { unit, t, section } = this.props;
-    return <SameCollection unit={unit} section={section} t={t} />;
+    const { unit, section } = this.props;
+    return <SameCollection unit={unit} section={section} />;
   }
 
   renderContent() {
@@ -115,6 +115,6 @@ export class UnitPage extends Component {
   }
 }
 
-export const wrap = WrappedComponent => translate()(WrappedComponent);
+export const wrap = WrappedComponent => withNamespaces()(WrappedComponent);
 
 export default wrap(UnitPage);

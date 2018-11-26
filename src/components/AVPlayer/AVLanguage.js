@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import noop from 'lodash/noop';
 import { Dropdown } from 'semantic-ui-react';
 
 import { LANG_HEBREW, LANGUAGE_OPTIONS } from '../../helpers/consts';
 import TimedPopup from '../shared/TimedPopup';
 
-export default class AVLanguage extends Component {
+class AVLanguage extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     onSelect: PropTypes.func,
@@ -59,3 +60,5 @@ export default class AVLanguage extends Component {
     );
   }
 }
+
+export default withNamespaces()(AVLanguage);

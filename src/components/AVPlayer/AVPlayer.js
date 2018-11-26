@@ -5,6 +5,7 @@ import debounce from 'lodash/debounce';
 import { withRouter } from 'react-router-dom';
 import { Player, utils, withMediaProps } from 'react-media-player';
 import enableInlineVideo from 'iphone-inline-video';
+import { withNamespaces } from 'react-i18next';
 import classNames from 'classnames';
 import { Icon } from 'semantic-ui-react';
 
@@ -35,8 +36,7 @@ const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
 const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
 
 // Converts playback rate string to float: 1.0x => 1.0
-const playbackToValue = playback =>
-  parseFloat(playback.slice(0, -1));
+const playbackToValue = playback => parseFloat(playback.slice(0, -1));
 
 class AVPlayer extends PureComponent {
   static propTypes = {
@@ -149,7 +149,8 @@ class AVPlayer extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.item !== this.props.item) {
+    const { item } = this.props;
+    if (nextProps.item !== item) {
       this.setState({
         error: false,
         errorReason: '',
@@ -167,14 +168,15 @@ class AVPlayer extends PureComponent {
   }
 
   activatePersistence = () => {
+    const { media } = this.props;
     this.setState({ persistenceFn: this.persistVolume });
     let persistedVolume = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
 
-    if (persistedVolume == null || Number.isNaN(persistedVolume)) {
-      persistedVolume = DEFAULT_PLAYER_VOLUME;
+    if (persistedVolume == null || Number.isNaN(Number.parseInt(persistedVolume, 10))) {
+      persistedVolume = DEFAULT_PLAYER_VOLUME.toString();
       localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, persistedVolume);
     }
-    this.props.media.setVolume(persistedVolume);
+    media.setVolume(persistedVolume);
   };
 
   persistVolume = debounce(media => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, media.volume), 200);
@@ -219,8 +221,8 @@ class AVPlayer extends PureComponent {
   };
 
   onPlayerReady = () => {
-    const { wasCurrentTime, sliceStart, firstSeek } = this.state;
-    const { media }                                 = this.props;
+    const { wasCurrentTime, sliceStart, firstSeek, playbackRate } = this.state;
+    const { media }                                               = this.props;
 
     this.activatePersistence();
 
@@ -238,7 +240,7 @@ class AVPlayer extends PureComponent {
     }
 
     // restore playback from state when player instance changed (when src changes, e.g., playlist).
-    this.player.instance.playbackRate = playbackToValue(this.state.playbackRate);
+    this.player.instance.playbackRate = playbackToValue(playbackRate);
     this.setState({ wasCurrentTime: undefined, firstSeek: false });
   };
 
@@ -248,13 +250,14 @@ class AVPlayer extends PureComponent {
   };
 
   videoSizeChange = (e, vs) => {
+    const { videoSize } = this.state;
     playerHelper.persistPreferredVideoSize(vs);
 
-    if (vs !== this.state.videoSize) {
-      const { media: { currentTime } } = this.props;
+    if (vs !== videoSize) {
+      const { media: { currentTime }, item: { byQuality } } = this.props;
       this.setState({
         videoSize: vs,
-        src: this.props.item.byQuality[vs],
+        src: byQuality[vs],
         wasCurrentTime: currentTime
       });
     }
@@ -274,20 +277,22 @@ class AVPlayer extends PureComponent {
   };
 
   onPlay = () => {
-    if (this.props.onPlay) {
-      this.props.onPlay();
+    const { onPlay } = this.props;
+    if (onPlay) {
+      onPlay();
     }
   };
 
   onPause = (e) => {
-    const { browserName } = this.state;
+    const { browserName }       = this.state;
+    const { onPause, onFinish } = this.props;
     // when we're close to the end regard this as finished
-    if (browserName !== 'IE' &&
-      Math.abs(e.currentTime - e.duration) < 0.1 && this.props.onFinish) {
+    if (browserName !== 'IE'
+      && Math.abs(e.currentTime - e.duration) < 0.1 && onFinish) {
       this.clearCurrentTime();
-      this.props.onFinish();
-    } else if (this.props.onPause) {
-      this.props.onPause();
+      onFinish();
+    } else if (onPause) {
+      onPause();
     }
   };
 
@@ -314,7 +319,7 @@ class AVPlayer extends PureComponent {
   };
 
   handleTimeUpdate = (timeData) => {
-    const { media }                                              = this.props;
+    const { media, onFinish }                                    = this.props;
     const { mode, sliceEnd, sliceStart, firstSeek, browserName } = this.state;
 
     const isSliceMode = mode === PLAYER_MODE.SLICE_VIEW;
@@ -332,11 +337,11 @@ class AVPlayer extends PureComponent {
     }
 
     // when we're close to the end regard this as finished
-    if (browserName === 'IE' &&
-      !firstSeek && Math.abs(timeData.currentTime - timeData.duration) < 0.5 && this.props.onFinish) {
+    if (browserName === 'IE'
+      && !firstSeek && Math.abs(timeData.currentTime - timeData.duration) < 0.5 && onFinish) {
       media.pause();
       this.clearCurrentTime();
-      this.props.onFinish();
+      onFinish();
     } else {
       this.saveCurrentTime();
     }
@@ -401,16 +406,13 @@ class AVPlayer extends PureComponent {
     }
   };
 
-  handleWrapperMouseEnter = () => {
-    this.showControls();
-  };
+  handleWrapperMouseEnter = () => this.showControls();
 
-  handleWrapperMouseLeave = () => {
-    this.hideControls();
-  };
+  handleWrapperMouseLeave = () => this.hideControls();
 
   handleWrapperMouseMove = (e) => {
-    if (!this.state.controlsVisible) {
+    const { controlsVisible } = this.state;
+    if (!controlsVisible) {
       this.showControls();
     }
     this.wrapperMouseY = e.pageY - this.wrapperRect.top;
@@ -425,9 +427,11 @@ class AVPlayer extends PureComponent {
   };
 
   handleWrapperKeyDown = (e) => {
+    const { media: { isLoading, playPause } } = this.props;
+
     if (e.keyCode === 32) {
-      if (!this.props.media.isLoading) {
-        this.props.media.playPause();
+      if (!isLoading) {
+        playPause();
       }
       e.preventDefault();
     }
@@ -452,16 +456,17 @@ class AVPlayer extends PureComponent {
   };
 
   handleOnScreenClick = () => {
-    const { media } = this.props;
+    const { media: { isLoading, playPause } } = this.props;
+    const { controlsVisible, mode }           = this.state;
 
-    if (!this.state.controlsVisible) {
+    if (!controlsVisible) {
       this.showControls();
-    } else if (!media.isLoading) {
+    } else if (!isLoading) {
       // toggle play only if we in normal mode
       // because we don't want the slice mode on screen buttons
       // to toggle play/pause
-      if (this.state.mode === PLAYER_MODE.NORMAL) {
-        media.playPause();
+      if (mode === PLAYER_MODE.NORMAL) {
+        playPause();
       }
     }
   };
@@ -490,7 +495,7 @@ class AVPlayer extends PureComponent {
       const currentMediaTime = Math.round(media.currentTime);
       if (currentMediaTime !== currentTime) {
         this.setState({ currentTime: currentMediaTime });
-        localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`, currentMediaTime);
+        localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`, currentMediaTime.toString());
       }
     }
   };
@@ -541,15 +546,15 @@ class AVPlayer extends PureComponent {
         src,
         error,
         errorReason,
-        isClient
+        isClient,
+        persistenceFn,
       } = this.state;
 
-    const { isPlaying }     = media;
-    const isVideo           = item.mediaType === MT_VIDEO;
-    const isAudio           = item.mediaType === MT_AUDIO;
-    const isEditMode        = mode === PLAYER_MODE.SLICE_EDIT;
-    const forceShowControls = item.mediaType === MT_AUDIO || !isPlaying || isEditMode;
-    const fallbackMedia     = item.mediaType !== item.requestedMediaType;
+    const { isPlaying }      = media;
+    const [isVideo, isAudio] = [item.mediaType === MT_VIDEO, item.mediaType === MT_AUDIO];
+    const isEditMode         = mode === PLAYER_MODE.SLICE_EDIT;
+    const forceShowControls  = item.mediaType === MT_AUDIO || !isPlaying || isEditMode;
+    const fallbackMedia      = item.mediaType !== item.requestedMediaType;
 
     let centerMediaControl;
     if (error) {
@@ -568,11 +573,10 @@ class AVPlayer extends PureComponent {
           item={item}
           onSliceChange={this.handleSliceChange}
           onExit={this.handleEditBack}
-          t={t}
         />
       );
     } else if (isVideo) {
-      centerMediaControl = <div><AVCenteredPlay /><AVSpinner /></div>;
+      centerMediaControl = <><AVCenteredPlay /><AVSpinner /></>;
     }
 
     const handleKeyDown = utils.keyboardControls.bind(null, media);
@@ -595,7 +599,7 @@ class AVPlayer extends PureComponent {
               enableInlineVideo(c.instance);
             }
           }}
-          onVolumeChange={this.state.persistenceFn}
+          onVolumeChange={persistenceFn}
           src={src}
           poster={isVideo ? item.preImageUrl : null}
           vendor={isVideo ? 'video' : 'audio'}
@@ -665,14 +669,12 @@ class AVPlayer extends PureComponent {
               isVideo={isVideo}
               onSwitch={this.onSwitchAV}
               fallbackMedia={fallbackMedia}
-              t={t}
             />
             <AVLanguage
               languages={languages}
               language={language}
               requestedLanguage={item.requestedLanguage}
               onSelect={this.onLanguageChange}
-              t={t}
             />
             {!isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.SLICE_EDIT)} />}
             {isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.NORMAL)} />}
@@ -694,4 +696,4 @@ class AVPlayer extends PureComponent {
   }
 }
 
-export default withMediaProps(withRouter(AVPlayer));
+export default withNamespaces()(withMediaProps(withRouter(AVPlayer)));

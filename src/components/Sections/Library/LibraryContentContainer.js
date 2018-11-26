@@ -16,7 +16,6 @@ class LibraryContentContainer extends Component {
     source: PropTypes.string,
     index: shapes.DataWipErr,
     content: shapes.DataWipErr.isRequired,
-    t: PropTypes.func.isRequired,
     fetchAsset: PropTypes.func.isRequired,
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
@@ -124,9 +123,9 @@ class LibraryContentContainer extends Component {
   };
 
   render() {
-    const { content, index, t, langSelectorMount } = this.props;
-    const { languages, language }                  = this.state;
-    const { isTaas, startsFrom, pdfFile }          = this.getTaasPdf();
+    const { content, index, langSelectorMount } = this.props;
+    const { languages, language }               = this.state;
+    const { isTaas, startsFrom, pdfFile }       = this.getTaasPdf();
 
     return (
       <Library
@@ -137,7 +136,6 @@ class LibraryContentContainer extends Component {
         content={index && index.data ? content : {}}
         language={language}
         languages={languages}
-        t={t}
         handleLanguageChanged={this.handleLanguageChanged}
         langSelectorMount={langSelectorMount}
       />

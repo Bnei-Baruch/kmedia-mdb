@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
+
 import TimedPopup from '../shared/TimedPopup';
 
 class AVAudioVideo extends Component {
@@ -11,8 +13,10 @@ class AVAudioVideo extends Component {
     fallbackMedia: PropTypes.bool.isRequired,
   };
 
-  handleSwitch = () =>
-    this.props.onSwitch();
+  handleSwitch = () => {
+    const { onSwitch } = this.props;
+    onSwitch();
+  };
 
   handleBtnRef = (ref) => {
     if (ref) {
@@ -37,9 +41,9 @@ class AVAudioVideo extends Component {
     );
 
     return (
-      <div className="mediaplayer__audiovideo">
+      <div className="mediaplayer_audiovideo">
         {popup}
-        <button ref={this.handleBtnRef}>
+        <button ref={this.handleBtnRef} type="button">
           <span className={isAudio ? 'is-active' : ''}>{t('buttons.audio')}</span>
           &nbsp;/&nbsp;
           <span className={isVideo ? 'is-active' : ''}>{t('buttons.video')}</span>
@@ -49,4 +53,4 @@ class AVAudioVideo extends Component {
   }
 }
 
-export default AVAudioVideo;
+export default withNamespaces()(AVAudioVideo);

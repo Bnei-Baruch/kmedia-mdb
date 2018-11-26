@@ -1,5 +1,5 @@
 import React from 'react';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Flag } from 'semantic-ui-react';
 
 import { LANGUAGES } from '../../../helpers/consts';
@@ -33,4 +33,4 @@ class AnchorsLanguageSelector extends BaseLanguageSelector {
   }
 }
 
-export default translate()(AnchorsLanguageSelector);
+export default withNamespaces()(AnchorsLanguageSelector);

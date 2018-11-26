@@ -434,22 +434,20 @@ class AVPlayerMobile extends PureComponent {
               isVideo={isVideo}
               onSwitch={this.onSwitchAV}
               fallbackMedia={fallbackMedia}
-              t={t}
             />
             <AVLanguageMobile
               languages={languages}
               language={language}
               requestedLanguage={item.requestedLanguage}
               onSelect={this.onLanguageChange}
-              t={t}
             />
           </div>
         </div>
 
         {
-          isSliceMode ?
-            <ShareFormMobile media={this.media} item={item} t={t} /> :
-            null
+          isSliceMode
+            ? <ShareFormMobile media={this.media} item={item} />
+            : null
         }
       </div>
     );

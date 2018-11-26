@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { Grid, Header, Input } from 'semantic-ui-react';
 
 import { selectors as device } from '../../../redux/modules/device';
@@ -32,7 +33,7 @@ class MyOmniBox extends OmniBox {
   }
 }
 
-const MyWrappedOmniBox = wrap(MyOmniBox, state => ({
+const MyWrappedOmniBox = wrap(withNamespaces()(MyOmniBox), state => ({
   ...obMS(state),
   deviceInfo: device.getDeviceInfo(state.device),
 }));
@@ -54,7 +55,7 @@ class SearchBar extends Component {
           </Grid.Column>
           <Grid.Column computer={12} tablet={14} mobile={16}>
             <div className="homepage__search">
-              <MyWrappedOmniBox t={t} location={location} />
+              <MyWrappedOmniBox location={location} />
             </div>
           </Grid.Column>
         </Grid.Row>
@@ -63,4 +64,4 @@ class SearchBar extends Component {
   }
 }
 
-export default SearchBar;
+export default withNamespaces()(SearchBar);

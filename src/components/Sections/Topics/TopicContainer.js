@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
-import { translate } from 'react-i18next';
 import { List, Container, Header, Divider, Input, Icon } from 'semantic-ui-react';
 
 import { selectors } from '../../../redux/modules/tags';
@@ -219,4 +219,4 @@ export default connect(
     roots: selectors.getDisplayRoots(state.tags),
     byId: selectors.getTags(state.tags),
   })
-)(translate()(TopicContainer));
+)(withNamespaces()(TopicContainer));

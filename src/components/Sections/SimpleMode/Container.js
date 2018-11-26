@@ -4,7 +4,7 @@ import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 
 import { getQuery, updateQuery } from '../../../helpers/url';
 import { equal, isEmpty } from '../../../helpers/utils';
@@ -144,4 +144,4 @@ export const mapDispatch = dispatch => (
   }, dispatch)
 );
 
-export default withRouter(connect(mapState, mapDispatch)(translate()(SimpleModeContainer)));
+export default withRouter(connect(mapState, mapDispatch)(withNamespaces()(SimpleModeContainer)));

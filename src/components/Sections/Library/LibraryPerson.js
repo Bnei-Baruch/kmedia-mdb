@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { Container, Grid, Segment } from 'semantic-ui-react';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 
 import { formatError } from '../../../helpers/utils';
 import { actions, selectors } from '../../../redux/modules/assets';
@@ -82,4 +82,4 @@ export default withRouter(connect(
   dispatch => bindActionCreators({
     fetchAsset: actions.fetchAsset,
   }, dispatch)
-)(translate()(LibraryPerson)));
+)(withNamespaces()(LibraryPerson)));

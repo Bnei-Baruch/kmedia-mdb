@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 
 import { CT_VIDEO_PROGRAM_CHAPTER } from '../../../../../helpers/consts';
 import * as shapes from '../../../../shapes';
@@ -30,17 +31,17 @@ class Materials extends Component {
       {
         name: 'transcription',
         label: t('materials.transcription.header'),
-        component: <TranscriptionContainer unit={this.props.unit} t={t} />
+        component: <TranscriptionContainer unit={this.props.unit} />
       },
       {
         name: 'sources',
         label: t('materials.sources.header'),
-        component: <SourcesContainer unit={this.props.unit} t={t} />
+        component: <SourcesContainer unit={this.props.unit} />
       },
       {
         name: 'sketches',
         label: t('materials.sketches.header'),
-        component: <Sketches unit={this.props.unit} t={t} />,
+        component: <Sketches unit={this.props.unit} />,
       },
     ];
 
@@ -48,7 +49,7 @@ class Materials extends Component {
       items.unshift({
         name: 'summary',
         label: t('materials.summary.header'),
-        component: <Summary unit={this.props.unit} t={t} />,
+        component: <Summary unit={this.props.unit} />,
       });
     }
 
@@ -60,4 +61,4 @@ class Materials extends Component {
   }
 }
 
-export default Materials;
+export default withNamespaces()(Materials);

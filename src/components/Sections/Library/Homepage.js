@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Container, Divider, Table } from 'semantic-ui-react';
 
 import { isEmpty } from '../../../helpers/utils';
@@ -59,4 +59,4 @@ export default connect(
     roots: sources.getRoots(state.sources),
     getSourceById: sources.getSourceById(state.sources),
   })
-)(translate()(Homepage));
+)(withNamespaces()(Homepage));

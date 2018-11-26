@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Trans, translate } from 'react-i18next';
+import { Trans, withNamespaces } from 'react-i18next';
 import { Container, Divider, Label, Table } from 'semantic-ui-react';
 
 import { canonicalLink, sectionLink } from '../../helpers/links';
@@ -182,7 +182,7 @@ class SearchResults extends Component {
     return (
       <Table.Row key={mdbUid + contentType} verticalAlign="top">
         <Table.Cell collapsing singleLine width={1}>
-          {/*<strong>date if applicable</strong>*/}
+          {/* <strong>date if applicable</strong>*/}
         </Table.Cell>
         <Table.Cell collapsing singleLine>
           <Label size="tiny">{t(`search.intent-types.${section}`)}</Label>
@@ -331,7 +331,7 @@ class SearchResults extends Component {
       content = (
         <div>
           <Container>
-            <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
+            <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
             <Table sortable basic="very" className="index-list search-results">
               <Table.Body>
                 {hits.map(this.renderHit)}
@@ -359,5 +359,4 @@ export default connect(state => ({
   areSourcesLoaded: sourcesSelectors.areSourcesLoaded(state.sources),
   getSourceById: sourcesSelectors.getSourceById(state.sources),
   getTagById: tagsSelectors.getTagById(state.tags),
-}))(translate()(SearchResults));
-
+}))(withNamespaces()(SearchResults));

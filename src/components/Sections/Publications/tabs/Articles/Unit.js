@@ -7,10 +7,7 @@ import Link from '../../../../Language/MultiLanguageLink';
 import Helmets from '../../../../shared/Helmets/index';
 import { UnitContainer, wrap as wrapContainer } from '../../../../Pages/Unit/Container';
 import { UnitPage, wrap as wrapPage } from '../../../../Pages/Unit/Page';
-import {
-  SameCollectionContainer,
-  wrap as wrapSameCollectionContainer
-} from '../../../../Pages/Unit/widgets/Recommended/SameCollection/Container';
+import { SameCollectionContainer, wrap as wrapSameCollectionContainer } from '../../../../Pages/Unit/widgets/Recommended/SameCollection/Container';
 import SameCollectionWidget from '../../../../Pages/Unit/widgets/Recommended/SameCollection/Widget';
 import TranscriptionContainer from '../../../../Pages/Unit/widgets/UnitMaterials/Transcription/TranscriptionContainer';
 
@@ -63,7 +60,8 @@ class MySameCollectionWidget extends SameCollectionWidget {
                 to={canonicalLink(collection)}
                 textAlign="right"
               >
-                {t('buttons.more')} &raquo;
+                {t('buttons.more')}
+                &raquo;
               </Container>
             </Item.Content>
           </Item>
@@ -75,7 +73,7 @@ class MySameCollectionWidget extends SameCollectionWidget {
 
 class MySameCollectionContainer extends SameCollectionContainer {
   render() {
-    const { unit, collection, wip, err, t } = this.props;
+    const { unit, collection, wip, err } = this.props;
 
     return (
       <MySameCollectionWidget
@@ -83,7 +81,6 @@ class MySameCollectionContainer extends SameCollectionContainer {
         wip={wip}
         err={err}
         collection={wip || err ? null : collection}
-        t={t}
       />
     );
   }
@@ -104,9 +101,9 @@ class MyUnitPage extends UnitPage {
                   <Header.Content>
                     {unit.name}
                     {
-                      unit.description ?
-                        <Header.Subheader>{unit.description}</Header.Subheader> :
-                        null
+                      unit.description
+                        ? <Header.Subheader>{unit.description}</Header.Subheader>
+                        : null
                     }
                   </Header.Content>
                 </Header>
@@ -136,15 +133,15 @@ class MyUnitPage extends UnitPage {
   }
 
   renderMaterials() {
-    const { unit, t } = this.props;
+    const { unit } = this.props;
     return (
-      <TranscriptionContainer unit={unit} t={t} />
+      <TranscriptionContainer unit={unit} />
     );
   }
 
   renderRecommendations() {
-    const { unit, t } = this.props;
-    return <MyWrappedSameCollectionContainer unit={unit} t={t} />;
+    const { unit } = this.props;
+    return <MyWrappedSameCollectionContainer unit={unit} />;
   }
 }
 

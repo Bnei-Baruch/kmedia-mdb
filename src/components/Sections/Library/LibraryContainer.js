@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { push as routerPush, replace as routerReplace } from 'react-router-redux';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
@@ -341,7 +341,6 @@ class LibraryContainer extends Component {
           uiLanguage={language}
           contentLanguage={contentLanguage}
           langSelectorMount={this.headerMenuRef}
-          t={t}
         />
       );
     }
@@ -397,7 +396,7 @@ class LibraryContainer extends Component {
                     <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                    <Share t={t} isMobile={this.isMobileDevice()} />
+                    <Share isMobile={this.isMobileDevice()} />
                   </div>
                 </Grid.Column>
               </Grid.Row>
@@ -418,7 +417,6 @@ class LibraryContainer extends Component {
                   getSourceById={getSourceById}
                   apply={this.props.push}
                   stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
-                  t={t}
                 />
               </Grid.Column>
               <Grid.Column
@@ -467,4 +465,4 @@ export default withRouter(connect(
     push: routerPush,
     replace: routerReplace,
   }, dispatch)
-)(translate()(withRouter(LibraryContainer))));
+)(withNamespaces()(withRouter(LibraryContainer))));

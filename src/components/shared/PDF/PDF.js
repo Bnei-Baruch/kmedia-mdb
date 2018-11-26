@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import throttle from 'lodash/throttle';
 import noop from 'lodash/noop';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Document, Page, setOptions } from 'react-pdf';
 import { Container, } from 'semantic-ui-react';
 
 import { BS_TAAS_PARTS } from '../../../helpers/consts';
-import { ErrorSplash, LoadingSplash, } from '../../shared/Splash/Splash';
+import { ErrorSplash, LoadingSplash, } from '../Splash/Splash';
 import PDFMenu from './PDFMenu';
 
 class PDF extends Component {
@@ -130,4 +130,4 @@ class PDF extends Component {
   }
 }
 
-export default translate()(PDF);
+export default withNamespaces()(PDF);

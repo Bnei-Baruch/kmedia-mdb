@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { Button, Header, Icon, Menu, Popup } from 'semantic-ui-react';
 
 import * as shapes from '../shapes';
@@ -39,12 +40,12 @@ class HandleLanguages extends Component {
         flowing
         hideOnScroll
         position="bottom right"
-        trigger={
+        trigger={(
           <Menu.Item onClick={this.handlePopupOpen}>
             <Icon name="sliders horizontal" />
             {t('languages.language')}
           </Menu.Item>
-        }
+        )}
         open={isActive}
         onOpen={this.handlePopupOpen}
         onClose={this.handlePopupClose}
@@ -61,13 +62,13 @@ class HandleLanguages extends Component {
               content={t('buttons.close')}
               onClick={this.handlePopupClose}
             />
-            {/*<Button*/}
-            {/*primary*/}
-            {/*compact*/}
-            {/*size="tiny"*/}
-            {/*content={t('buttons.apply')}*/}
-            {/*onClick={this.apply}*/}
-            {/*/>*/}
+            {/* <Button */}
+            {/* primary */}
+            {/* compact */}
+            {/* size="tiny" */}
+            {/* content={t('buttons.apply')} */}
+            {/* onClick={this.apply} */}
+            {/* /> */}
           </div>
 
         </Popup.Header>
@@ -76,13 +77,11 @@ class HandleLanguages extends Component {
             language={language}
             contentLanguage={contentLanguage}
             location={location}
-            t={t}
           />
           <ContentLanguage
             language={language}
             contentLanguage={contentLanguage}
             setContentLanguage={setContentLanguage}
-            t={t}
           />
         </Popup.Content>
       </Popup>
@@ -90,4 +89,4 @@ class HandleLanguages extends Component {
   }
 }
 
-export default HandleLanguages;
+export default withNamespaces()(HandleLanguages);

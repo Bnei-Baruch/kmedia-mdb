@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 
 import { actions, selectors } from '../../../../redux/modules/mdb';
 import { selectors as settings } from '../../../../redux/modules/settings';
@@ -124,4 +123,4 @@ function mapDispatch(dispatch) {
   }, dispatch);
 }
 
-export default withRouter(connect(mapState, mapDispatch)(translate()(LastLessonCollection)));
+export default withRouter(connect(mapState, mapDispatch)(withNamespaces()(LastLessonCollection)));

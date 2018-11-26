@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
 import { Container, Portal, Segment } from 'semantic-ui-react';
 import { assetUrl } from '../../../helpers/Api';
@@ -115,7 +116,6 @@ class Library extends Component {
           <AnchorsLanguageSelector
             languages={languages}
             defaultValue={language}
-            t={t}
             onSelect={this.props.handleLanguageChanged}
           />
         </Container>
@@ -125,12 +125,9 @@ class Library extends Component {
     return (
       <div>
         {
-          langSelectorMount && languageBar ?
-            <Portal open preprend mountNode={langSelectorMount}>
-              {languageBar}
-            </Portal>
-            :
-            languageBar
+          langSelectorMount && languageBar
+            ? <Portal open preprend mountNode={langSelectorMount}>{languageBar}</Portal>
+            : languageBar
         }
         <Download path={fullUrlPath} mimeType={mimeType} />
         {contents}
@@ -139,4 +136,4 @@ class Library extends Component {
   }
 }
 
-export default withRouter(Library);
+export default withRouter(withNamespaces()(Library));

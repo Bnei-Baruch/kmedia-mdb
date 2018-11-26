@@ -38,27 +38,28 @@ class HomePageContainer extends Component {
   };
 
   componentDidMount() {
-    if (!this.props.latestLesson) {
-      this.props.fetchData();
+    const { latestLesson, fetchData, latestBlogPosts, latestTweets } = this.props;
+    if (!latestLesson) {
+      fetchData();
     }
-    if (!this.props.latestBlogPosts.length) {
-      this.fetchSocialMedia('blog', this.props);
+    if (!latestBlogPosts.length) {
+      HomePageContainer.fetchSocialMedia('blog', this.props);
     }
-    if (!this.props.latestTweets.length) {
-      this.fetchSocialMedia('twitter', this.props);
+    if (!latestTweets.length) {
+      HomePageContainer.fetchSocialMedia('twitter', this.props);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.language !== this.props.language) {
-      this.props.fetchData();
-      this.fetchSocialMedia('blog', nextProps);
-      this.fetchSocialMedia('twitter', nextProps);
+    const { language, fetchData } = this.props;
+    if (nextProps.language !== language) {
+      fetchData();
+      HomePageContainer.fetchSocialMedia('blog', nextProps);
+      HomePageContainer.fetchSocialMedia('twitter', nextProps);
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  chooseTwitterByLanguage = (language) => {
+  static chooseTwitterByLanguage = (language) => {
     switch (language) {
     case LANG_HEBREW:
       return { username: 'laitman_co_il' };
@@ -72,8 +73,7 @@ class HomePageContainer extends Component {
     }
   };
 
-  // eslint-disable-next-line class-methods-use-this
-  chooseBlogByLanguage = (language) => {
+  static chooseBlogByLanguage = (language) => {
     switch (language) {
     case LANG_HEBREW:
       return { blog: 'laitman-co-il' };
@@ -87,14 +87,14 @@ class HomePageContainer extends Component {
     }
   };
 
-  fetchSocialMedia(type, props = {}) {
+  static fetchSocialMedia(type, props = {}) {
     let mediaLanguageFn;
     let fetchFn;
     if (type === 'blog') {
-      mediaLanguageFn = this.chooseBlogByLanguage;
+      mediaLanguageFn = HomePageContainer.chooseBlogByLanguage;
       fetchFn         = props.fetchBlogList;
     } else {
-      mediaLanguageFn = this.chooseTwitterByLanguage;
+      mediaLanguageFn = HomePageContainer.chooseTwitterByLanguage;
       fetchFn         = props.fetchTweetsList;
     }
 

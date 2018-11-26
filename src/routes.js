@@ -8,23 +8,9 @@ import Loadable from 'react-loadable';
 import { DEFAULT_LANGUAGE } from './helpers/consts';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
-import { ErrorSplash, FrownSplash, LoadingSplash } from './components/shared/Splash/Splash';
+import Loading from './components/shared/Loading';
 import * as ssrDataLoaders from './routesSSRData';
 import * as shapes from './components/shapes';
-
-function Loading(props) {
-  const { error, timedOut, pastDelay, retry } = props;
-  if (error) {
-    return <ErrorSplash text="Error!" item={<button onClick={retry} type="button">Retry</button>} />;
-  }
-  if (timedOut) {
-    return <FrownSplash text="Taking a long time..." item={<button onClick={retry} type="button">Retry</button>} />;
-  }
-  if (pastDelay) {
-    return <LoadingSplash text={('messages.loading')} subtext={('messages.loading-subtext')} />;
-  }
-  return <></>;
-}
 
 const l = f => ({
   loader: f,
