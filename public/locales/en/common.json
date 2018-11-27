@@ -11,7 +11,7 @@
       "books": "Books",
       "topics": "Topics",
       "publications": "Publications",
-      "simple-mode": "Simple Version",
+      "simple-mode": "Downloads",
       "photos": "Photos",
       "design": "Design",
       "design2": "Layout",
@@ -26,6 +26,8 @@
   },
   "filters": {
     "by": "Filter by:",
+    "filters": "Filters",
+    "hideFilters": "Hide Filters",
     "all": "All",
     "date-filter": {
       "label": "Date",
@@ -86,7 +88,7 @@
       "programs": "Programs",
       "events": "Conventions & Events",
       "publications": "Publications",
-      "sources": "Sources",
+      "sources": "Kabbalah Sources",
       "posts": "Blog"
     }
   },
@@ -146,6 +148,9 @@
       "text": "Search Results",
       "subtext": ""
     },
+    "showAll": "Show All",
+    "lessons": "Lessons",
+    "programs": "Programs",
     "sortby": "sort by",
     "sorts": {
       "relevance": "relevance",
@@ -162,7 +167,7 @@
       "content": "Content"
     },
     "intent-types": {
-      "lessons": "Daily morning lesssons",
+      "lessons": "Daily morning lessons",
       "programs": "Programs"
     },
     "intent-prefix": {
@@ -322,17 +327,21 @@
   },
   "simple-mode": {
     "header": {
-      "text": "Downloads - Simple version",
+      "text": "Downloads",
       "subtext": "All media for a certain day"
     },
     "today-button": "Today",
     "total-media-for-date": "All media for date ",
-    "media-language": "Media language",
-    "no-files-found-for-lang": "There are no files for the language you selected",
+    "media-language": "Media language:",
+    "no-files-found-for-lang": "There are no files for the language you selected.",
+    "try-different-language": "Try choosing a ",
+    "language-click": "different language.",
     "no-files-found-for-date": "There are no files for this date",
-    "date": "Date",
+    "date": "Date:",
     "prev": "Prev.",
-    "next": "Next"
+    "next": "Next",
+    "choose-date": "Choose date",
+    "today-lessons": "Daily Kabbalah lessons"
   },
   "help": {
     "header": {
@@ -351,7 +360,7 @@
     },
     "unit": {
       "info": {
-        "sources": "Sources",
+        "sources": "Kabbalah Sources",
         "topics": "Topics",
         "collections": "Related to"
       },
@@ -493,14 +502,14 @@
       "UNITY_DAY": "Unity Day",
       "CLIPS": "Clips",
       "ARTICLES": "Articles",
-      "LESSON_PART": "Lesson Part",
+      "LESSON_PART": "Lesson",
       "LECTURE": "Lecture",
       "CHILDREN_LESSON": "Children Lesson",
       "WOMEN_LESSON": "Women Lesson",
       "VIRTUAL_LESSON": "Virtual Lesson",
       "FRIENDS_GATHERING": "Gathering Of Friends",
       "MEAL": "Meal",
-      "VIDEO_PROGRAM_CHAPTER": "Video Program Chapter",
+      "VIDEO_PROGRAM_CHAPTER": "Program Chapter",
       "FULL_LESSON": "Full Lesson",
       "ARTICLE": "Article",
       "UNKNOWN": "Unknown",
@@ -509,7 +518,8 @@
       "TRAINING": "Training",
       "KITEI_MAKOR": "Sources Materials",
       "PUBLICATION": "Publication",
-      "LELO_MIKUD": "Edited - No Focus Group"
+      "LELO_MIKUD": "Edited - No Focus Group",
+      "BLOG_POST": "Blog Post"
     },
     "media-types": {
       "video": "Video",
@@ -522,11 +532,11 @@
     }
   },
   "values": {
-    "date": "{{date, l}}"
+    "date": "{{date, ll}}"
   },
   "languages": {
     "language": "Language",
     "website_language": "Website Language",
-    "content_language": "Preferred content language"
+    "content_language": "Content language"
   }
 }

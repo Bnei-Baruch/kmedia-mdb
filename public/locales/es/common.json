@@ -11,7 +11,7 @@
       "books": "Libros",
       "topics": "Temas",
       "publications": "Publicaciones",
-      "simple-mode": "Versión Simple",
+      "simple-mode": "Descargas",
       "photos": "Fotos",
       "design": "Diseño",
       "project-status": "Projekto Statuso",
@@ -25,6 +25,8 @@
   },
   "filters": {
     "by": "Filtrar por:",
+    "filters": "Filtros",
+    "hideFilters": "Ocultar filtros",
     "all": "Todo",
     "date-filter": {
       "label": "Fecha",
@@ -80,6 +82,7 @@
     },
     "sections-filter": {
       "label": "Sección",
+      "all": "Todo",
       "lessons": "Lecciones y Charlas",
       "programs": "Programas",
       "events": "Congresos y Eventos",
@@ -319,17 +322,21 @@
   },
   "simple-mode": {
     "header": {
-      "text": "Descargas - Versión simple",
+      "text": "Descargas",
       "subtext": "Todos los medios de comunicación para un día determinado"
     },
     "today-button": "hoy",
     "total-media-for-date": "Todos los medios para la fecha ",
-    "media-language": "Lenguaje de los medios",
+    "media-language": "Lenguaje de los medios:",
     "no-files-found-for-lang": "No hay archivos para el idioma que seleccionaste",
+    "try-different-language": "Intenta elegir un ",
+    "language-click": "idioma diferente.",
     "no-files-found-for-date": "No hay archivos para esta fecha.",
-    "date": "Fecha",
+    "date": "Fecha:",
     "prev": "Anterior",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "choose-date": "Elegir fecha",
+    "today-lessons": "Lecciones diarias de Cabalá"
   },
   "pages": {
     "collection": {
@@ -500,7 +507,8 @@
       "TRAINING": "Entrenamiento",
       "KITEI_MAKOR": "Extractos de Fuentes",
       "PUBLICATION": "Publicidad",
-      "LELO_MIKUD": "Editado - sin grupo de enfoque"
+      "LELO_MIKUD": "Editado - sin grupo de enfoque",
+      "BLOG_POST": "Blog"
     },
     "media-types": {
       "video": "Video",
@@ -513,11 +521,11 @@
     }
   },
   "values": {
-    "date": "{{date, l}}"
+    "date": "{{date, ll}}"
   },
   "languages": {
     "language": "Idioma",
     "website_language": "Idioma del sitio",
-    "content_language": "Idioma de contenido preferido"
+    "content_language": "Idioma de contenido"
   }
 }

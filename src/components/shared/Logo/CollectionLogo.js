@@ -14,14 +14,15 @@ class CollectionLogo extends PureComponent {
   };
 
   render() {
-    const { collectionId } = this.props;
+    const { collectionId, ...rest } = this.props;
 
     return (
       <FallbackImage
         fluid
-        className="collection-logo"
         shape="rounded"
+        className="collection-logo"
         src={assetUrl(`logos/collections/${collectionId}.jpg`)}
+        {...rest}
       />
     );
   }

@@ -22,8 +22,8 @@ export const types = {
 const fetchCUStats        = createAction(FETCH_CU_STATS, (namespace, params = {}) => ({ namespace, ...params }));
 const fetchCUStatsSuccess = createAction(FETCH_CU_STATS_SUCCESS, (namespace, data) => ({ namespace, data }));
 const fetchCUStatsFailure = createAction(FETCH_CU_STATS_FAILURE, (namespace, err) => ({ namespace, err }));
-const clearCUStats         = createAction(CLEAR_CU_STATS, (namespace) => ({ namespace }));
-export const actions = {
+const clearCUStats        = createAction(CLEAR_CU_STATS, namespace => ({ namespace }));
+export const actions      = {
   fetchCUStats,
   fetchCUStatsSuccess,
   fetchCUStatsFailure,
@@ -71,12 +71,12 @@ const onCUSuccess = (state, action) => ({
   }
 });
 
-const onClearCUStats = (state, action) => ({    
+const onClearCUStats = (state, action) => ({
   ...state,
   cuStats: {
     ...state.cuStats,
     [action.payload.namespace]: {}
-  }  
+  }
 });
 
 const onSSRPrepare = state =>

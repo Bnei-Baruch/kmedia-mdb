@@ -1,6 +1,12 @@
 import React from 'react';
 import groupBy from 'lodash/groupBy';
-import { Card, List } from 'semantic-ui-react';
+import { Button, Card, Image, List } from 'semantic-ui-react';
+import DownloadIcon from '../../../images/icons/download.svg';
+import InfoIcon from '../../../images/icons/info.svg';
+import ProgramsIcon from '../../../images/icons/programs.svg';
+import LecturesIcon from '../../../images/icons/lectures.svg';
+import EventsIcon from '../../../images/icons/events.svg';
+import PublicationsIcon from '../../../images/icons/publications.svg';
 
 import {
   CT_ARTICLE,
@@ -9,6 +15,9 @@ import {
   CT_LESSON_PART,
   CT_VIDEO_PROGRAM_CHAPTER,
   NO_NAME,
+  UNIT_EVENTS_TYPE,
+  UNIT_PROGRAMS_TYPE,
+  UNIT_PUBLICATIONS_TYPE,
   VS_NAMES
 } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
@@ -53,14 +62,14 @@ const renderHorizontalFilesList = (files, contentType, t) =>
     return (
       <List.Item key={file.id} className="media-file-button">
         <List.Content>
-          <a href={url}>{label} <List.Icon name="angle double down" /></a>
+          <a href={url}>{label} <Image className="file-list-icon" src={DownloadIcon} /></a>
         </List.Content>
       </List.Item>
     );
   });
 
 const unitLeloMikudFiles = (unit) => {
-  const keys = Object.keys(unit.derived_units).filter(key => key.includes('LELO_MIKUD'));
+  const keys = Object.keys(unit.derived_units || {}).filter(key => key.includes('LELO_MIKUD'));
   if (isEmpty(keys)) {
     return [];
   }
@@ -71,8 +80,9 @@ const unitLeloMikudFiles = (unit) => {
     [];
 };
 
-const renderUnits = (units, language, t) =>
-  units.filter((unit => unit)).map((unit) => {
+const renderUnits = (units, language, t, helpChooseLang) =>
+  units.filter((unit => unit)).map((unit, index, unitsArray) => {
+    const lastUnit       = unitsArray.length - 1;
     const leloMikudFiles = unitLeloMikudFiles(unit);
     const filesList      = [...(unit.files || []), ...leloMikudFiles].filter(file => file.language === language);
     const files          = filesList && renderHorizontalFilesList(filesList, unit.content_type, t);
@@ -87,11 +97,19 @@ const renderUnits = (units, language, t) =>
           <List.Header className="unit-header">
             <Link className="unit-link" to={canonicalLink(unit)}>{unit.name || NO_NAME}</Link>
           </List.Header>
-          <List.List className="horizontal-list">
+          <List.List className={`horizontal-list ${index === lastUnit ? 'remove-bottom-border' : ''}`}>
             {
               files.length ?
                 files :
-                <span className="no-files">{t('simple-mode.no-files-found-for-lang')}</span>
+                <List.Item key={unit.id} className="no-files">
+                  <Image src={InfoIcon} />
+                  <List.Content>
+                    <span className="bold-font">{t('simple-mode.no-files-found-for-lang')}</span>
+                    <br />
+                    {t('simple-mode.try-different-language')}
+                    <Button className="choose-language-button" onClick={helpChooseLang}>{t('simple-mode.language-click')}</Button>
+                  </List.Content>
+                </List.Item>
             }
             <div className="overflow-gradient" />
           </List.List>
@@ -100,12 +118,12 @@ const renderUnits = (units, language, t) =>
     );
   });
 
-export const renderCollection = (collection, language, t) => {
+export const renderCollection = (collection, language, t, helpChooseLang) => {
   if (!collection.content_units) {
     return null;
   }
 
-  const units = renderUnits(collection.content_units, language, t);
+  const units = renderUnits(collection.content_units, language, t, helpChooseLang);
 
   return (
     <Card fluid key={collection.id}>
@@ -125,7 +143,78 @@ export const renderCollection = (collection, language, t) => {
   );
 };
 
-export const groupOtherMediaByType = (collection, language, t) => {
-  const byType = groupBy(collection, 'content_type');
-  return Object.values(byType).map(v => renderUnits(v, language, t));
+export const renderOtherCollection = (title, collectionArray, language, t, helpChooseLang) => {
+  const items = Object.values(collectionArray).map(u => renderUnits(u, language, t, helpChooseLang));
+  const icon  = matchIconToType(title.toLowerCase());
+
+  return (
+    <div key={title}>
+      {
+        items.length ?
+          <div className="type-header-top-margin">
+            <h2>
+              <Image className="simple-mode-type-icon" src={icon} />
+              {t(`nav.sidebar.${title.toLowerCase()}`)}
+            </h2>
+            <Card fluid>
+              <Card.Content>
+                <List size='large'>
+                  {items}
+                </List>
+              </Card.Content>
+            </Card>
+          </div> :
+          null
+      }
+    </div>
+  );
+};
+
+export const groupOtherMediaByType = (collection, language, t, helpChooseLang) => {
+  const byType            = groupBy(collection, 'content_type');
+  const mergedCollections = mergeTypesToCollections(byType);
+  return Object.entries(mergedCollections).map(([title, collection]) => renderOtherCollection(title, collection, language, t, helpChooseLang));
+};
+
+export const mergeTypesToCollections = (byType) => {
+  const collections = {
+    LESSONS: [],
+    EVENTS: [],
+    PROGRAMS: [],
+    PUBLICATIONS: []
+  };
+
+  for (let type in byType) {
+    if (UNIT_PROGRAMS_TYPE.includes(type)) {
+      collections.PROGRAMS.push([...byType[type]]);
+      continue;
+    }
+
+    if (UNIT_EVENTS_TYPE.includes(type)) {
+      collections.EVENTS.push([...byType[type]]);
+      continue;
+    }
+
+    if (UNIT_PUBLICATIONS_TYPE.includes(type)) {
+      collections.PUBLICATIONS.push([...byType[type]]);
+      continue;
+    }
+
+    collections.LESSONS.push([...byType[type]]);
+  }
+
+  return collections;
+};
+
+export const matchIconToType = (type) => {
+  switch (type) {
+  case 'programs':
+    return ProgramsIcon;
+  case 'events':
+    return EventsIcon;
+  case 'publications':
+    return PublicationsIcon;
+  default:
+    return LecturesIcon;
+  }
 };

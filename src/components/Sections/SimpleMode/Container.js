@@ -13,8 +13,7 @@ import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { actions, selectors } from '../../../redux/modules/simpelMode';
 import * as shapes from '../../shapes';
-import DesktopPage from './DesktopPage';
-import MobilePage from './MobilePage';
+import Page from './Page';
 import { groupOtherMediaByType, renderCollection } from './RenderListHelpers';
 
 class SimpleModeContainer extends Component {
@@ -42,6 +41,7 @@ class SimpleModeContainer extends Component {
     this.state = {
       filesLanguage: this.props.contentLanguage,
       isMobileDevice: this.isMobileDevice(),
+      blinkLangSelect: false
     };
   }
 
@@ -80,7 +80,7 @@ class SimpleModeContainer extends Component {
   handleLanguageChanged = (e, filesLanguage) => {
     const language = filesLanguage || e.currentTarget.value;
 
-    this.setState({ filesLanguage: language });
+    this.setState({ filesLanguage: language, blinkLangSelect: false });
   };
 
   handleDayClick = (selectedDate, { disabled } = {}, nextProps = {}) => {
@@ -102,23 +102,31 @@ class SimpleModeContainer extends Component {
   isMobileDevice = () =>
     this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
+  helpChooseLang = () => {
+    this.setState({ blinkLangSelect: true });
+    setTimeout(() => this.setState({ blinkLangSelect: false }), 7500);
+    window.scrollTo(0, 0);
+  };
+
   renderUnitOrCollection = (item, language, t) => (
     isEmpty(item.content_units) ?
-      groupOtherMediaByType(item, language, t) :
-      renderCollection(item, language, t));
+      groupOtherMediaByType(item, language, t, this.helpChooseLang) :
+      renderCollection(item, language, t, this.helpChooseLang));
 
   render() {
-    const { filesLanguage, isMobileDevice } = this.state;
-    const pageProps                         = {
+    const { filesLanguage, isMobileDevice, blinkLangSelect } = this.state;
+    const pageProps                                          = {
       ...this.props,
       selectedDate: this.state.date,
       language: filesLanguage,
       renderUnit: this.renderUnitOrCollection,
       onDayClick: this.handleDayClick,
-      onLanguageChange: this.handleLanguageChanged
+      onLanguageChange: this.handleLanguageChanged,
+      blinkLangSelect: blinkLangSelect,
+      isMobile: isMobileDevice
     };
 
-    return isMobileDevice ? <MobilePage {...pageProps} /> : <DesktopPage {...pageProps} />;
+    return <Page {...pageProps} />;
   }
 }
 
