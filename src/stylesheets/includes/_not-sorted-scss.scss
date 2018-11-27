@@ -656,18 +656,17 @@
     padding-top: 0 !important; // remove existing padding
   }
 
+  div, p, ol, ul {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
   p { 
-    margin: 0px !important;
+    // margin: 1px 0 !important;
     text-indent: 20px;
-    break-inside: avoid;
-    // border: 1px solid black;
+    //border: 1px solid black;
   }
-
-  ol, ul {
-    break-inside: avoid;
-    margin: 0px;
-  }
-
+  
 }
 
 .DayPicker-Day {
