@@ -34,7 +34,7 @@ class HandleLanguages extends Component {
       direction: langDir,
     };
 
-    const trigger = isMobileDevice ? <Icon size="big" name="language" className="margin0" /> :
+    const trigger = isMobileDevice ? <Icon size="big" name="language" className="no-margin" /> :
       <span><Icon name="sliders horizontal" />{t('languages.language')}</span>;
     return (
       <Popup
