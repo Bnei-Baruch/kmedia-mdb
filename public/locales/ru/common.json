@@ -11,12 +11,12 @@
       "books": "Книги",
       "topics": "Темы",
       "publications": "Публикации",
-      "simple-mode": "Простая Версия",
+      "simple-mode": "Загрузки",
       "photos": "Фотографии",
       "design": "Дизайн",
       "design2": "Планировка",
       "project-status": "Статус проекта",
-      "help": "Помогите",
+      "help": "Поддержка",
       "old-site": "Старый сайт"
     },
     "footer": {
@@ -26,6 +26,8 @@
   },
   "filters": {
     "by": "Фильтровать по:",
+    "filters": "Фильтры",
+    "hideFilters": "Скрыть фильтры",
     "all": "Все",
     "date-filter": {
       "label": "Дата",
@@ -81,6 +83,7 @@
     },
     "sections-filter": {
       "label": "Раздел",
+      "all": "Все",
       "lessons": "Уроки и лекции",
       "programs": "Программы",
       "events": "Конгрессы, события",
@@ -145,6 +148,9 @@
       "text": "Результаты поиска",
       "subtext": ""
     },
+    "showAll": "Покажи все",
+    "lessons": "уроки",
+    "programs": "передач",
     "sortby": "Сортировать по",
     "sorts": {
       "relevance": "актуальности",
@@ -330,17 +336,21 @@
   },
   "simple-mode": {
     "header": {
-      "text": "Загрузки - Легкая версия",
+      "text": "Загрузки",
       "subtext": "Вся медиа за определенный день"
     },
     "today-button": "Cегодня",
     "total-media-for-date": "Все материалы за этот день ",
-    "media-language": "Язык мультимедиа",
+    "media-language": "Язык мультимедиа:",
     "no-files-found-for-lang": "Нет файлов для выбранного вами языка.",
+    "try-different-language": "Попробуйте выбрать ",
+    "language-click": "другой язык.",
     "no-files-found-for-date": "Нет файлов для этой даты",
-    "date": "Дата",
+    "date": "Дата:",
     "prev": "Пред.",
-    "next": "Cлед."
+    "next": "Cлед.",
+    "choose-date": "Выберите дату",
+    "today-lessons": "Ежедневные уроки каббалы"
   },
   "twitter": {
     "header": {
@@ -490,7 +500,7 @@
       "SPECIAL_LESSON": "Особый урок",
       "FRIENDS_GATHERINGS": "Собрания товарищей",
       "CONGRESS": "Конгресс",
-      "VIDEO_PROGRAM": "Видео программа",
+      "VIDEO_PROGRAM": "Передача",
       "LECTURE_SERIES": "Серия лекций",
       "CHILDREN_LESSONS": "Детские уроки",
       "WOMEN_LESSONS": "Женские уроки",
@@ -501,7 +511,7 @@
       "UNITY_DAY": "Вечер единства",
       "CLIPS": "Клипы",
       "ARTICLES": "Статьи",
-      "LESSON_PART": "Часть урока №",
+      "LESSON_PART": "Урок",
       "LECTURE": "Лекция",
       "CHILDREN_LESSON": "Детский урок",
       "WOMEN_LESSON": "Женский урок",
@@ -517,7 +527,8 @@
       "TRAINING": "Тренинг",
       "KITEI_MAKOR": "Отрывки первоисточников",
       "PUBLICATION": "Публикация",
-      "LELO_MIKUD": "Отредактировано - без фокус-группы"
+      "LELO_MIKUD": "Отредактировано - без фокус-группы",
+      "BLOG_POST": "Пост блога"
     },
     "media-types": {
       "video": "Видео",
@@ -530,11 +541,11 @@
     }
   },
   "values": {
-    "date": "{{date, l}}"
+    "date": "{{date, ll}}"
   },
   "languages": {
     "language": "Язык",
     "website_language": "Язык сайта",
-    "content_language": "Предпочтительный язык контента"
+    "content_language": "Язык контента"
   }
 }

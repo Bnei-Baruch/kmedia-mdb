@@ -42,6 +42,7 @@ export const reducer = handleActions({
 
 /* Selectors */
 
+//const getDeviceInfo      = state => ({ device: { type: 'mobile' }, browser: { name: 'asd ' } });
 const getDeviceInfo      = state => state.deviceInfo;
 const getAutoPlayAllowed = state => state.autoPlayAllowed;
 
