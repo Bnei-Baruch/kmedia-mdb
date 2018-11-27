@@ -659,8 +659,8 @@
     display: none;
   }
 
-  p { 
-    margin: 0px !important; 
+  p {
+    margin: 0px !important;
     text-indent: 20px;
   }
 
@@ -716,6 +716,11 @@
 
       &:hover {
         cursor: pointer;
+      }
+
+      &.disabled {
+        color: #b1b1b1;
+        text-decoration: none;
       }
     }
 
