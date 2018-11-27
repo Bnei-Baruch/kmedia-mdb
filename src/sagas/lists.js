@@ -10,7 +10,22 @@ import Api from '../helpers/Api';
 import { CT_LESSON_PART } from '../helpers/consts';
 import { pushQuery } from './helpers/url';
 
-function* actualFetch(namespace, endpoint, args) {
+function* fetchList(action) {
+  const { namespace } = action.payload;
+
+  let endpoint;
+  const args = { ...action.payload };
+  if (namespace.startsWith('intents')) {
+    args.with_files = true;
+    endpoint        = args.content_type === CT_LESSON_PART ? Api.lessons : Api.units;
+  } else {
+    const filters      = yield select(state => filterSelectors.getFilters(state.filters, namespace));
+    const filterParams = filtersTransformer.toApiParams(filters) || {};
+    Object.assign(args, filterParams);
+    endpoint = namespace === 'lessons-daily' ? Api.lessons : Api.units;
+  }
+  delete args.namespace;
+
   const language = yield select(state => settings.getLanguage(state.settings));
 
   try {
@@ -44,25 +59,6 @@ function* actualFetch(namespace, endpoint, args) {
   } catch (err) {
     yield put(actions.fetchListFailure(namespace, err));
   }
-}
-
-function* fetchList(action) {
-  const { namespace } = action.payload;
-
-  let endpoint;
-  const args = { ...action.payload };
-  if (namespace.startsWith('intents')) {
-    args.with_files = true;
-    endpoint        = args.content_type === CT_LESSON_PART ? Api.lessons : Api.units;
-  } else {
-    const filters      = yield select(state => filterSelectors.getFilters(state.filters, namespace));
-    const filterParams = filtersTransformer.toApiParams(filters) || {};
-    Object.assign(args, filterParams);
-    endpoint = namespace === 'lessons-daily' ? Api.lessons : Api.units;
-  }
-  delete args.namespace;
-
-  yield actualFetch(namespace, endpoint, args);
 }
 
 function* updatePageInQuery(action) {
