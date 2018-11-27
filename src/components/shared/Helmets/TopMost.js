@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 
@@ -22,14 +22,14 @@ class TopMost extends Component {
     const titleTemplate = `%s | ${titlePostfix}`;
 
     return (
-      <>
+      <Fragment>
         <Helmet defaultTitle={titlePostfix} titleTemplate={titleTemplate}>
           <meta property="og:type" content="website" />
           <meta property="og:site_name" content="Kabbalah Media" />
         </Helmet>
         <Locale {...this.props} />
         <Basic />
-      </>
+      </Fragment>
     );
   }
 }

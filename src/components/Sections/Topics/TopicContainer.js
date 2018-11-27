@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
-import { List, Container, Header, Divider, Input, Icon } from 'semantic-ui-react';
+import { Container, Divider, Header, Icon, Input, List } from 'semantic-ui-react';
 
 import { selectors } from '../../../redux/modules/tags';
 import SectionHeader from '../../shared/SectionHeader';
@@ -123,25 +123,27 @@ class TopicContainer extends Component {
   );
 
   renderNode = node => (
-    node ?
-      <>
-        {
-          this.hasChildren(node) ?
-            <List>
-              {
-                node.children
-                  .filter(this.isIncluded)
-                  .map(id => (
-                    <List.Item key={id}>
-                      {this.renderNode(this.filteredById[id])}
-                    </List.Item>
-                  ))
-              }
-            </List> :
-            this.renderLeaf(node)
-        }
-      </> :
-      null
+    node
+      ? (
+        <Fragment>
+          {
+            this.hasChildren(node)
+              ? (
+                <List>
+                  {
+                    node.children
+                      .filter(this.isIncluded)
+                      .map(id => (
+                        <List.Item key={id}>
+                          {this.renderNode(this.filteredById[id])}
+                        </List.Item>
+                      ))
+                  }
+                </List>)
+              : this.renderLeaf(node)
+          }
+        </Fragment>)
+      : null
   );
 
   renderSubHeader = node => (

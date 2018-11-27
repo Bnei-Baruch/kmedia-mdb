@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import debounce from 'lodash/debounce';
@@ -576,7 +576,7 @@ class AVPlayer extends PureComponent {
         />
       );
     } else if (isVideo) {
-      centerMediaControl = <><AVCenteredPlay /><AVSpinner /></>;
+      centerMediaControl = <Fragment><AVCenteredPlay /><AVSpinner /></Fragment>;
     }
 
     const handleKeyDown = utils.keyboardControls.bind(null, media);

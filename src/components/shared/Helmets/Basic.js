@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 
@@ -23,8 +23,7 @@ class Basic extends Component {
     keywords: null,
   };
 
-  // eslint-disable-next-line class-methods-use-this
-  buildTitle(title) {
+  static buildTitle(title) {
     return (
       <Helmet>
         <title>{title}</title>
@@ -36,8 +35,7 @@ class Basic extends Component {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  buildDescription(description) {
+  static buildDescription(description) {
     return (
       <Helmet>
         <meta name="description" content={description} />
@@ -52,9 +50,9 @@ class Basic extends Component {
     const { title, description, keywords, /* url, */ imageUrl } = this.props;
 
     return (
-      <>
-        {!isEmpty(title) ? this.buildTitle(title) : null}
-        {!isEmpty(description) ? this.buildDescription(description) : null}
+      <Fragment>
+        {!isEmpty(title) ? Basic.buildTitle(title) : null}
+        {!isEmpty(description) ? Basic.buildDescription(description) : null}
         <Helmet>
           {!isEmpty(keywords) ? <meta name="keywords" content={keywords} /> : null}
           {/* <meta name="author" content={author} /> */}
@@ -78,7 +76,7 @@ class Basic extends Component {
           {/* favicon : A small icon of dimensions 32 x 32 pixels. */}
         </Helmet>
         {!isEmpty(imageUrl) ? <Image unitOrUrl={imageUrl} /> : null}
-      </>
+      </Fragment>
     );
   }
 }

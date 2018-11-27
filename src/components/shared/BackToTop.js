@@ -1,5 +1,5 @@
 /* This component __HAVE__ to be __BEFORE__ content */
-import React, { Component, } from 'react';
+import React, { Component, Fragment, } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Visibility, } from 'semantic-ui-react';
 
@@ -47,23 +47,24 @@ class BackToTop extends Component {
       };
 
     return (
-      <>
+      <Fragment>
         <Visibility
           onUpdate={this.handleUpdate}
           offset={this.props.offset}
           fireOnMount
         />
         {
-          this.state.backToTop &&
-          <Button
-            basic
-            size="tiny"
-            icon="arrow up"
-            onClick={this.backToTop}
-            style={style}
-          />
+          this.state.backToTop
+          && (
+            <Button
+              basic
+              size="tiny"
+              icon="arrow up"
+              onClick={this.backToTop}
+              style={style}
+            />)
         }
-      </>
+      </Fragment>
     );
   }
 }
