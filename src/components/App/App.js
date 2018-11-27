@@ -1,4 +1,4 @@
-import 'react-app-polyfill/ie11'; // For IE 11 support
+// TODO: return after next version of CRA: import 'react-app-polyfill/ie11'; // For IE 11 support
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { renderRoutes } from 'react-router-config';

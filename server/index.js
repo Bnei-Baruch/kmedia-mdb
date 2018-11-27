@@ -1,5 +1,10 @@
 /* eslint-disable no-console */
 // ignore styles and replace images with their final path from webpack manifest
+require('ignore-styles');
+require('url-loader');
+require('file-loader');
+require('babel-polyfill');
+const Loadable = require('react-loadable');
 const path     = require('path');
 const manifest = require('../build/asset-manifest');
 require('ignore-styles').default(undefined, (module, filename) => {
@@ -12,15 +17,26 @@ require('ignore-styles').default(undefined, (module, filename) => {
   }
 });
 
-require('babel-register')({
+require('@babel/register')({
   presets: ['env', 'react-app'],
   plugins: [
     ['module-resolver', {
       alias: {
         'react-pdf/dist/entry.webpack': 'react-pdf'
       }
-    }]
+    }],
+    'babel-polyfill',
   ],
+});
+require('@babel/register')({
+  ignore: [/(node_modules)/],
+  presets: ['@babel/preset-env', '@babel/preset-react'],
+  plugins: [
+    '@babel/plugin-syntax-dynamic-import',
+    'dynamic-import-node',
+    'react-loadable/babel',
+    '@babel/plugin-proposal-class-properties',
+  ]
 });
 
 require('dotenv').config();
@@ -33,9 +49,15 @@ const app = process.env.NODE_ENV === 'development'
 const PORT = process.env.SERVER_PORT || 3001;
 
 Loadable.preloadAll().then(() => {
-  app.listen(PORT, () => {
-    console.log(`App listening on port ${PORT}!`);
+  app.listen(PORT, (error) => {
+    if (error) {
+      return console.log(`something bad happened: ${error} :(`);
+    }
+
+    return console.log(`App listening on port ${PORT}!`);
   });
+}).catch(() => {
+  console.log('> > > > > > Loadable.preloadAll.catch');
 });
 
 app.on('error', (error) => {

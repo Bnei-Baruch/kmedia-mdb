@@ -12,38 +12,39 @@ import Loading from './components/shared/Loading';
 import * as ssrDataLoaders from './routesSSRData';
 import * as shapes from './components/shapes';
 
-const l = f => ({
+const l = (f, name) => ({
   loader: f,
   loading: Loading,
+  modules: [name],
   delay: 200,
   timeout: 5000,
 });
 
-const HomePage             = Loadable(l(() => import('./components/Sections/Home/Container')));
-const Lessons              = Loadable(l(() => import('./components/Sections/Lessons/MainPage')));
-const LessonUnit           = Loadable(l(() => import('./components/Sections/Lessons/Unit/Container')));
-const LessonCollection     = Loadable(l(() => import('./components/Sections/Lessons/Collection/MainPage')));
-const LastLessonCollection = Loadable(l(() => import('./components/Sections/Lessons/Collection/LastDaily')));
-const Programs             = Loadable(l(() => import('./components/Sections/Programs/MainPage')));
-const ProgramUnit          = Loadable(l(() => import('./components/Sections/Programs/Unit')));
-const ProgramCollection    = Loadable(l(() => import('./components/Sections/Programs/Collection')));
-const Publications         = Loadable(l(() => import('./components/Sections/Publications/MainPage')));
-const ArticleUnit          = Loadable(l(() => import('./components/Sections/Publications/tabs/Articles/Unit')));
-const ArticleCollection    = Loadable(l(() => import('./components/Sections/Publications/tabs/Articles/Collection')));
-const BlogPost             = Loadable(l(() => import('./components/Sections/Publications/tabs/Blog/Post/Container')));
-const Events               = Loadable(l(() => import('./components/Sections/Events/MainPage')));
-const EventUnit            = Loadable(l(() => import('./components/Sections/Events/Unit')));
-const EventCollection      = Loadable(l(() => import('./components/Sections/Events/Collection')));
-const LibraryHomepage      = Loadable(l(() => import('./components/Sections/Library/Homepage')));
-const LibraryContainer     = Loadable(l(() => import('./components/Sections/Library/LibraryContainer')));
-const LibraryPerson        = Loadable(l(() => import('./components/Sections/Library/LibraryPerson')));
-const Topics               = Loadable(l(() => import('./components/Sections/Topics/TopicContainer')));
-const Topic                = Loadable(l(() => import('./components/Sections/Topics/TopicPage')));
-const SearchResults        = Loadable(l(() => import('./components/Search/SearchResultsContainer')));
-const ProjectStatus        = Loadable(l(() => import('./components/Sections/ProjectStatus/ProjectStatus')));
-const Help                 = Loadable(l(() => import('./components/Sections/Help/Help')));
-const SimpleMode           = Loadable(l(() => import('./components/Sections/SimpleMode/Container')));
-const NotImplemented       = Loadable(l(() => import('./components/NotImplemented')));
+const HomePage             = Loadable(l(() => import(/* webpackChunkName: "HomeContainer" */ './components/Sections/Home/Container'), 'HomeContainer'));
+const Lessons              = Loadable(l(() => import(/* webpackChunkName: "LessonsMainPage" */ './components/Sections/Lessons/MainPage'), 'LessonsMainPage'));
+const LessonUnit           = Loadable(l(() => import(/* webpackChunkName: "LessonsUnitContainer" */ './components/Sections/Lessons/Unit/Container'), 'LessonsUnitContainer'));
+const LessonCollection     = Loadable(l(() => import(/* webpackChunkName: "LessonsCollectionMainPage" */ './components/Sections/Lessons/Collection/MainPage'), 'LessonsCollectionMainPage'));
+const LastLessonCollection = Loadable(l(() => import(/* webpackChunkName: "LessonsCollectionLastDaily" */ './components/Sections/Lessons/Collection/LastDaily'), 'LessonsCollectionLastDaily'));
+const Programs             = Loadable(l(() => import(/* webpackChunkName: "ProgramsMainPage" */ './components/Sections/Programs/MainPage'), 'ProgramsMainPage'));
+const ProgramUnit          = Loadable(l(() => import(/* webpackChunkName: "ProgramsUnit" */ './components/Sections/Programs/Unit'), 'ProgramsUnit'));
+const ProgramCollection    = Loadable(l(() => import(/* webpackChunkName: "ProgramsCollection" */ './components/Sections/Programs/Collection'), 'ProgramsCollection'));
+const Publications         = Loadable(l(() => import(/* webpackChunkName: "PublicationsMainPage" */ './components/Sections/Publications/MainPage'), 'PublicationsMainPage'));
+const ArticleUnit          = Loadable(l(() => import(/* webpackChunkName: "PublicationstabsArticlesUnit" */ './components/Sections/Publications/tabs/Articles/Unit'), 'PublicationstabsArticlesUnit'));
+const ArticleCollection    = Loadable(l(() => import(/* webpackChunkName: "PublicationstabsArticlesCollection" */ './components/Sections/Publications/tabs/Articles/Collection'), 'PublicationstabsArticlesCollection'));
+const BlogPost             = Loadable(l(() => import(/* webpackChunkName: "PublicationstabsBlogPostContainer" */ './components/Sections/Publications/tabs/Blog/Post/Container'), 'PublicationstabsBlogPostContainer'));
+const Events               = Loadable(l(() => import(/* webpackChunkName: "EventsMainPage" */ './components/Sections/Events/MainPage'), 'EventsMainPage'));
+const EventUnit            = Loadable(l(() => import(/* webpackChunkName: "EventsUnit" */ './components/Sections/Events/Unit'), 'EventsUnit'));
+const EventCollection      = Loadable(l(() => import(/* webpackChunkName: "EventsCollection" */ './components/Sections/Events/Collection'), 'EventsCollection'));
+const LibraryHomepage      = Loadable(l(() => import(/* webpackChunkName: "LibraryHomepage" */ './components/Sections/Library/Homepage'), 'LibraryHomepage'));
+const LibraryContainer     = Loadable(l(() => import(/* webpackChunkName: "LibraryLibraryContainer" */ './components/Sections/Library/LibraryContainer'), 'LibraryLibraryContainer'));
+const LibraryPerson        = Loadable(l(() => import(/* webpackChunkName: "LibraryLibraryPerson" */ './components/Sections/Library/LibraryPerson'), 'LibraryLibraryPerson'));
+const Topics               = Loadable(l(() => import(/* webpackChunkName: "TopicsTopicContainer" */ './components/Sections/Topics/TopicContainer'), 'TopicsTopicContainer'));
+const Topic                = Loadable(l(() => import(/* webpackChunkName: "TopicsTopicPage" */ './components/Sections/Topics/TopicPage'), 'TopicsTopicPage'));
+const SearchResults        = Loadable(l(() => import(/* webpackChunkName: "archResultsContainer" */ './components/Search/SearchResultsContainer'), 'SearchSearchResultsContainer'));
+const ProjectStatus        = Loadable(l(() => import(/* webpackChunkName: "ProjectStatusProjectStatus" */ './components/Sections/ProjectStatus/ProjectStatus'), 'ProjectStatusProjectStatus'));
+const Help                 = Loadable(l(() => import(/* webpackChunkName: "HelpHelp" */ './components/Sections/Help/Help'), 'HelpHelp'));
+const SimpleMode           = Loadable(l(() => import(/* webpackChunkName: "SimpleModeContainer" */ './components/Sections/SimpleMode/Container'), 'SimpleModeContainer'));
+const NotImplemented       = Loadable(l(() => import(/* webpackChunkName: "NotImplemented" */ './components/NotImplemented'), 'NotImplemented'));
 // const Design = Loadable(l(() => import('./components/Design/Design')));
 // const Design2 = Loadable(l(() => import('./components/Design/Design2')));
 

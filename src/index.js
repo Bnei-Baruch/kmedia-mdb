@@ -10,6 +10,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactGA from 'react-ga';
 import createHistory from 'history/createBrowserHistory';
+import Loadable from 'react-loadable';
 
 import { DEFAULT_LANGUAGE, LANG_UKRAINIAN } from './helpers/consts';
 import i18n from './helpers/i18nnext';
@@ -32,10 +33,14 @@ const i18nData = window.__i18n || {};
 const language = i18nData.initialLanguage || DEFAULT_LANGUAGE;
 moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
 
-ReactDOM.hydrate(
-  <App i18n={i18n} store={store} history={history} {...i18nData} />,
-  document.getElementById('root')
-);
+window.onload = () => {
+  Loadable.preloadReady().then(() => {
+    ReactDOM.hydrate(
+      <App i18n={i18n} store={store} history={history} {...i18nData} />,
+      document.getElementById('root')
+    );
+  });
+};
 
 // We ask for semi-quasi static data here since
 // we strip it from SSR to save initial network bandwidth
