@@ -134,15 +134,15 @@ class Layout extends Component {
             >
               <Icon name="sidebar" />
             </Menu.Item>
-            <Menu.Item className="logo padding_r_l_0" header as={Link} to="/">
+            <Menu.Item className="logo" header as={Link} to="/">
               <img src={logo} alt="logo" />
               <Header inverted as="h1" content={t('nav.top.header')} />
             </Menu.Item>
             <Menu.Item className="layout__search mobile-hidden">
               {showSearch ? <WrappedOmniBox t={t} location={location} /> : null}
             </Menu.Item>
-            <Menu.Menu position="right" className="padding0 margin0">
-              <Menu.Item className="padding0 margin0">
+            <Menu.Menu position="right" className="no-padding no-margin">
+              <Menu.Item className="no-padding no-margin">
                 <HandleLanguages
                   language={language}
                   contentLanguage={contentLanguage}
@@ -159,7 +159,7 @@ class Layout extends Component {
                       this.showSearchButtonElement = ReactDOM.findDOMNode(el);
                     }
                   }}>
-                    <Icon name="search" className="margin0" onClick={this.showHeaderSearch} />
+                    <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
                   </Menu.Item> : null
               }
               <Menu.Item position="right" className="mobile-hidden">

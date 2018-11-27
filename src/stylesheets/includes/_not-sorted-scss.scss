@@ -1004,6 +1004,7 @@
     clear: both;
   }
   .content {
+    margin-top: 0.5em;
     em {
       border-bottom: 1px solid rgba(65, 131, 196, .3);
       background-color: rgba(242, 201, 76, .2);
@@ -1016,8 +1017,8 @@
 
   .link_to_file.ui.basic.button {
     padding: .5em 1em;
-    margin-top: 5px !important;
-    margin-right: 5px !important;
+    margin-top: 8px !important;
+    margin-right: 8px !important;
     background-color: white !important;
     border-color: $grey;
     .icon {
@@ -1037,8 +1038,8 @@
 
   .link_to_cu {
     padding: .5em 1em;
-    margin-top: 5px !important;
-    margin-right: 5px !important;
+    margin-top: 8px !important;
+    margin-right: 8px !important;
   }
 
   .search__cards.ui.three.cards {
@@ -1093,7 +1094,7 @@
   background: transparent !important;
 }
 
-.padding0 {
+.no-padding {
   padding: 0 !important;
 }
 
@@ -1134,6 +1135,22 @@
   padding: 0;
 }
 
-.padding0{
+.no-padding {
   padding: 0 !important;
+}
+
+.no-margin-top {
+  margin-top: 0 !important;
+}
+
+.no-border {
+  border: 0 none !important;
+}
+
+.no-shadow {
+  box-shadow: none !important;
+}
+
+.margin-top-8{
+  margin-top: 8px !important;
 }
