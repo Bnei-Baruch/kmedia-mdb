@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
 import { translate } from 'react-i18next';
 import { Container, Grid, Header, Menu } from 'semantic-ui-react';
 
