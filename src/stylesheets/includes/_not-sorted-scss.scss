@@ -659,8 +659,8 @@
     display: none;
   }
 
-  p { 
-    margin: 0px !important; 
+  p {
+    margin: 0px !important;
     text-indent: 20px;
   }
 
@@ -716,6 +716,12 @@
 
       &:hover {
         cursor: pointer;
+      }
+
+      &.disabled {
+        color: #b1b1b1;
+        text-decoration: none;
+        cursor: auto;
       }
     }
 
@@ -830,15 +836,6 @@
     }
   }
 
-  .overflow-gradient {
-    width: 33px;
-    height: 23px;
-    flex-shrink: 0;
-    background-image: linear-gradient(to left, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
-    position: absolute;
-    right: 12px;
-  }
-
   .media-file-button {
     height: 24px;
     margin-right: 8px;
@@ -933,12 +930,6 @@
     .no-files {
       padding: 10px 16px 10px 24px !important;
       border-width: 1px 4px 1px 1px;
-    }
-
-    .overflow-gradient {
-      background-image: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
-      left: 12px;
-      right: unset;
     }
   }
 
