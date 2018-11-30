@@ -94,10 +94,14 @@ class SimpleModePage extends PureComponent {
     const localeDateFormat       = moment.localeData().longDateFormat('L');
     const selectedInLocaleFormat = moment(selected).format(localeDateFormat);
     const languages              = this.getOptions({ languages: ALL_LANGUAGES, t });
-    const dateFormat             = uiLanguage === 'en' ? 'MMM MM, YYYY' : 'MM MMM, YYYY';
+    const dateFormat             = uiLanguage === 'en' ? 'MMM DD, YYYY' : 'DD MMM, YYYY';
 
     const DayPickerModifiers = {
       selected: selectedDate
+    };
+
+    const isToday = () => {
+      return moment().isSame(moment(selectedDate), 'date');
     };
 
     const list = WipErr({ wip, err, t }) || (
@@ -149,7 +153,7 @@ class SimpleModePage extends PureComponent {
                           :
                           <span>{moment(selectedDate).format(dateFormat)}</span>
                       }
-                      <button onClick={() => this.changeDay(1)}>{t('simple-mode.next')}</button>
+                      <button disabled={isToday()} className={isToday() ? 'disabled' : ''} onClick={() => this.changeDay(1)}>{t('simple-mode.next')}</button>
                     </div>
                   </div>
                   <div className="controller">

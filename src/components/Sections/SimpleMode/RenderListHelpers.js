@@ -111,7 +111,6 @@ const renderUnits = (units, language, t, helpChooseLang) =>
                   </List.Content>
                 </List.Item>
             }
-            <div className="overflow-gradient" />
           </List.List>
         </List.Content>
       </List.Item>
