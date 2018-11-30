@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Popup } from 'semantic-ui-react';
+
 import { RTL_LANGUAGES } from '../../helpers/consts';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
