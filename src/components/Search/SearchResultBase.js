@@ -195,7 +195,7 @@ class SearchResultBase extends Component {
     );
   };
 
-  titleFromHighlight = (highlight, defVal) => {
+  titleFromHighlight = (highlight = {}, defVal) => {
     let prop = ['title', 'title_language'].find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
     prop     = highlight[prop] ? highlight[prop].join(PATH_SEPARATOR) : defVal;
 
@@ -212,7 +212,7 @@ class SearchResultBase extends Component {
   };
 
   // Helper function to get the frist prop in hightlights obj and apply htmlFunc on it.
-  snippetFromHighlight = (highlight, props = ['content', 'content_language']) => {
+  snippetFromHighlight = (highlight = {}, props = ['content', 'content_language']) => {
     const prop = props.find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
 
     if (!prop) {
