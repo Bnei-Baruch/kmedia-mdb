@@ -13,6 +13,7 @@ import * as shapes from '../shapes';
 import SectionHeader from '../shared/SectionHeader';
 import SearchResults from './SearchResults';
 import Filters from './Filters';
+import { BLOGS } from '../../helpers/consts';
 
 class SearchResultsContainer extends Component {
   static propTypes = {
@@ -151,7 +152,8 @@ const postMapFromState = (state, results) => {
     results.hits.hits.reduce((acc, val) => {
       if (val._source.result_type === 'posts') {
         const ids = val._source.mdb_uid.split('-');
-        const p   = publicationSelectors.getBlogPost(state.publications, ids[0], ids[1]);
+        const blogObj = BLOGS.find(b => b.id === parseInt(ids[0]));
+        const p       = publicationSelectors.getBlogPost(state.publications, blogObj.name, ids[1]);
         if (p) {
           acc[val._source.mdb_uid] = p;
         }
