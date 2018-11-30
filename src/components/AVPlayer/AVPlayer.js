@@ -42,6 +42,7 @@ class AVPlayer extends PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
     media: shapes.Media.isRequired,
+    uiLanguage: PropTypes.string,
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -139,8 +140,8 @@ class AVPlayer extends PureComponent {
       firstSeek: true,
       ...this.chooseSource(this.props)
     });
-    
-    if (browserName === 'Edge' || browserName === 'IE') 
+
+    if (browserName === 'Edge' || browserName === 'IE')
       media.play();
   }
 
@@ -515,6 +516,7 @@ class AVPlayer extends PureComponent {
         item,
         languages,
         language,
+        uiLanguage,
         t,
         showNextPrev,
         hasNext,
@@ -662,6 +664,7 @@ class AVPlayer extends PureComponent {
             <AVLanguage
               languages={languages}
               language={language}
+              uiLanguage={uiLanguage}
               requestedLanguage={item.requestedLanguage}
               onSelect={this.onLanguageChange}
               t={t}

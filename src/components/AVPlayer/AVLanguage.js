@@ -13,6 +13,7 @@ export default class AVLanguage extends Component {
     language: PropTypes.string,
     requestedLanguage: PropTypes.string,
     languages: PropTypes.arrayOf(PropTypes.string),
+    uiLanguage: PropTypes.string,
   };
 
   static defaultProps = {
@@ -22,28 +23,35 @@ export default class AVLanguage extends Component {
     languages: [],
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
   handleChange = (e, data) =>
     this.props.onSelect(e, data.value);
 
+  setLangSelectRef = (langSelectRef) => this.setState({ langSelectRef });
+
   render() {
-    const { t, languages, language, requestedLanguage } = this.props;
+    const { t, languages, language, uiLanguage, requestedLanguage } = this.props;
+    const { langSelectRef }                                         = this.state;
+    const openPopup                                                 = language !== requestedLanguage;
 
     const options = LANGUAGE_OPTIONS
       .filter(x => languages.includes(x.value))
       .map(x => ({ value: x.value, text: x.value }));
 
-    const popup = language === requestedLanguage ? null : (
-      <TimedPopup
-        openOnInit
-        message={t('messages.fallback-language')}
-        downward={false}
-        timeout={7000}
-      />
-    );
-
     return (
-      <div className="mediaplayer__languages">
-        {popup}
+      <div ref={this.setLangSelectRef} className="mediaplayer__languages">
+        <TimedPopup
+          openOnInitopenOnInit={openPopup}
+          message={t('messages.fallback-language')}
+          downward={false}
+          timeout={7000}
+          language={uiLanguage}
+          refElement={langSelectRef}
+        />
         <Dropdown
           floating
           scrolling
