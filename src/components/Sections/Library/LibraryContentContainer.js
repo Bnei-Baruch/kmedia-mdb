@@ -11,6 +11,28 @@ import * as shapes from '../../shapes';
 import Library from './Library';
 import PDF from '../../shared/PDF/PDF';
 
+const fetchContent = (source, data, fetchAsset) => {
+  // In case of TAS we prefer PDF, otherwise HTML
+  if (data.pdf && PDF.isTaas(source)) {
+    // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
+    return;
+  }
+
+  fetchAsset(`sources/${source}/${data.html}`);
+};
+
+const getFullUrl = (pdf, data, language, source) => {
+  if (pdf) {
+    return assetUrl(`sources/${pdf}`);
+  }
+
+  if (isEmpty(data) || isEmpty(data[language])) {
+    return null;
+  }
+
+  return assetUrl(`sources/${source}/${data[language].docx}`);
+};
+
 class LibraryContentContainer extends Component {
   static propTypes = {
     source: PropTypes.string,
@@ -38,9 +60,10 @@ class LibraryContentContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let useStateLanguages = false;
-    if (nextProps.index === this.props.index) {
-      if (nextProps.uiLanguage !== this.props.uiLanguage || nextProps.contentLanguage !== this.props.contentLanguage) {
+    const { index, uiLanguage, contentLanguage } = this.props;
+    let useStateLanguages                        = false;
+    if (nextProps.index === index) {
+      if (nextProps.uiLanguage !== uiLanguage || nextProps.contentLanguage !== contentLanguage) {
         // UI or Content language was changed
         useStateLanguages = true;
       } else {
@@ -49,18 +72,6 @@ class LibraryContentContainer extends Component {
     }
     return this.setStateFromProps(nextProps, useStateLanguages);
   }
-
-  getFullUrl = (pdf, data, language) => {
-    if (pdf) {
-      return assetUrl(`sources/${pdf}`);
-    }
-
-    if (isEmpty(data) || isEmpty(data[language])) {
-      return null;
-    }
-
-    return assetUrl(`sources/${this.props.source}/${data[language].docx}`);
-  };
 
   getTaasPdf = () => {
     const { index, source, } = this.props;
@@ -100,30 +111,21 @@ class LibraryContentContainer extends Component {
     this.setState({ languages, language: newLanguage });
 
     if (!isEmpty(source)) {
-      this.fetchContent(source, data[newLanguage]);
+      const { fetchAsset } = this.props;
+      fetchContent(source, data[newLanguage], fetchAsset);
     }
 
     return true;
   };
 
   handleLanguageChanged = (e, language) => {
-    const { index: { data }, source } = this.props;
+    const { index: { data }, source, fetchAsset } = this.props;
     this.setState({ language });
-    this.fetchContent(source, data[language]);
-  };
-
-  fetchContent = (source, data) => {
-    // In case of TAS we prefer PDF, otherwise HTML
-    if (data.pdf && PDF.isTaas(source)) {
-      // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
-      return;
-    }
-
-    this.props.fetchAsset(`sources/${source}/${data.html}`);
+    fetchContent(source, data[language], fetchAsset);
   };
 
   render() {
-    const { content, index, langSelectorMount } = this.props;
+    const { content, index, langSelectorMount, source } = this.props;
     const { languages, language }               = this.state;
     const { isTaas, startsFrom, pdfFile }       = this.getTaasPdf();
 
@@ -131,7 +133,7 @@ class LibraryContentContainer extends Component {
       <Library
         isTaas={isTaas}
         pdfFile={pdfFile}
-        fullUrlPath={this.getFullUrl(pdfFile, index.data, language)}
+        fullUrlPath={getFullUrl(pdfFile, index.data, language, source)}
         startsFrom={startsFrom}
         content={index && index.data ? content : {}}
         language={language}

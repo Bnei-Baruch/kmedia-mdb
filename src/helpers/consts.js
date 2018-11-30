@@ -34,11 +34,11 @@ export const CT_TRAINING              = 'TRAINING';
 export const CT_KITEI_MAKOR           = 'KITEI_MAKOR';
 export const CT_PUBLICATION           = 'PUBLICATION';
 export const CT_LELO_MIKUD            = 'LELO_MIKUD';
-export const CT_BLOG_POST             = "BLOG_POST"
+export const CT_BLOG_POST             = 'BLOG_POST';
 
 // Content types for additional Elastic results
-export const SCT_BLOG_POST = "R_BLOG_POST"
-export const SCT_TWEET     = "R_TWEET"
+export const SCT_BLOG_POST = 'R_BLOG_POST';
+export const SCT_TWEET     = 'R_TWEET';
 
 // Source Types
 export const SRC_COLLECTION = 'COLLECTION';
@@ -259,19 +259,19 @@ export const BS_TAAS_PARTS = {
 // Persons
 export const RABASH_PERSON_UID = 'KxApZ4pI';
 
-export const COOKIE_UI_LANG    = 'archive_UIlang';
+export const COOKIE_UI_LANG      = 'archive_UIlang';
 export const COOKIE_CONTENT_LANG = 'archive_ContentLang';
-export const LANG_UI_LANGUAGES = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_GERMAN, LANG_UKRAINIAN];
+export const LANG_UI_LANGUAGES   = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_GERMAN, LANG_UKRAINIAN];
 
 // Search
-export const ES_RESULT_TYPE_SOURCES = "sources"
-export const ES_RESULT_TYPE_TAGS = "tags"
+export const ES_RESULT_TYPE_SOURCES = 'sources';
+export const ES_RESULT_TYPE_TAGS    = 'tags';
 
 // Blog
-export const BLOG_ID_LAITMAN_RU = 1
-export const BLOG_ID_LAITMAN_COM = 2
-export const BLOG_ID_LAITMAN_ES = 3
-export const BLOG_ID_LAITMAN_CO_IL = 4
+export const BLOG_ID_LAITMAN_RU    = 1;
+export const BLOG_ID_LAITMAN_COM   = 2;
+export const BLOG_ID_LAITMAN_ES    = 3;
+export const BLOG_ID_LAITMAN_CO_IL = 4;
 
 export const SEARCH_INTENT_INDEX_TOPIC       = 'intent-tag';
 export const SEARCH_INTENT_INDEX_SOURCE      = 'intent-source';

@@ -47,7 +47,8 @@
     "postcss-cli": "^6.0.1",
     "react-scripts": "2.1.1",
     "react-test-renderer": "^16.5.2",
-    "source-map-explorer": "^1.6.0"
+    "source-map-explorer": "^1.6.0",
+    "testcafe": "^0.23.2"
   },
   "dependencies": {
     "@babel/core": "^7.0.0-bridge.0",
@@ -95,7 +96,7 @@
     "react-image-gallery": "^0.8.10",
     "react-loadable": "^5.5.0",
     "react-media-player": "github:Bnei-Baruch/react-media-player",
-    "react-pdf": "^3.0.6",
+    "react-pdf": "^4.0.0",
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
     "react-router-config": "^1.0.0-beta.4",

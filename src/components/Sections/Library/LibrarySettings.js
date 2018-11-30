@@ -2,21 +2,24 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Icon, Menu, Popup, } from 'semantic-ui-react';
 
+
+const getItem = () => (JSON.parse(localStorage.getItem('library-settings')) || {});
+
+const setItem = value => localStorage.setItem('library-settings', JSON.stringify(value));
+
 class LibrarySettings extends Component {
   static propTypes = {
     handleSettings: PropTypes.func.isRequired,
     fontSize: PropTypes.number.isRequired,
   };
 
-  static defaultProps = {};
-
   state = {
     isOpen: false,
   };
 
   componentDidMount() {
-    const { handleSettings, } = this.props;
-    const savedState          = LibrarySettings.getItem();
+    const { handleSettings } = this.props;
+    const savedState         = getItem();
     handleSettings(savedState);
     window.addEventListener('resize', this.closePopup);
   }
@@ -24,9 +27,6 @@ class LibrarySettings extends Component {
   componentWillUnmount() {
     window.removeEventListener('resize', this.closePopup);
   }
-
-  static getItem = () => (JSON.parse(localStorage.getItem('library-settings')) || {});
-  static setItem = value => localStorage.setItem('library-settings', JSON.stringify(value));
 
   closePopup = () => {
     this.handlePopup(false);
@@ -37,15 +37,15 @@ class LibrarySettings extends Component {
   };
 
   handleSettings = (newSettings) => {
-    const { handleSettings, } = this.props;
-    const savedState          = LibrarySettings.getItem();
-    const settings            = { ...savedState, ...newSettings };
-    LibrarySettings.setItem(settings);
+    const { handleSettings } = this.props;
+    const savedState         = getItem();
+    const settings           = { ...savedState, ...newSettings };
+    setItem(settings);
     handleSettings(settings);
   };
 
   handleFontSize = (amount) => {
-    const { fontSize, } = this.props;
+    const { fontSize } = this.props;
 
     if ((amount > 0 && fontSize >= 8) || (amount < 0 && fontSize <= -3)) {
       return;
@@ -55,6 +55,7 @@ class LibrarySettings extends Component {
   };
 
   render() {
+    const { isOpen } = this.state;
     return (
       <Popup
         trigger={<Button compact size="small" icon="options" />}
@@ -63,7 +64,7 @@ class LibrarySettings extends Component {
         className="sources-settings"
         flowing
         hideOnScroll
-        open={this.state.isOpen}
+        open={isOpen}
         onClose={() => this.handlePopup(false)}
         onOpen={() => this.handlePopup(true)}
       >
