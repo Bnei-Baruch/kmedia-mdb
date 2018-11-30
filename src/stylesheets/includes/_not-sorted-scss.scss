@@ -50,7 +50,6 @@
           border-bottom: 1px solid rgba(34, 36, 38, .1) !important;
           margin-bottom: 1px;
         }
-
         &:hover {
           //background-color: rgba($blue, .075) !important;
           background-image: linear-gradient(to bottom, rgba($blue, 0.125), rgba($blue, 0)) !important;
@@ -135,11 +134,9 @@
     padding-top: 0;
     position: relative;
   }
-
   .mediaplayer__wrapper {
     position: relative;
   }
-
   audio {
     margin-top: 30px;
   }
@@ -211,7 +208,6 @@
     min-width: 300px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-
     &.segment {
       padding: 0;
     }
@@ -222,11 +218,9 @@
 
     &.date-filter {
       max-height: 450px;
-
       .DayPickerInput {
         display: block;
       }
-
       .DayPicker-Caption > div {
         font-size: 1rem;
       }
@@ -266,23 +260,18 @@
         &.l1 {
           padding-left: 1rem;
         }
-
         &.l2 {
           padding-left: 2rem;
         }
-
         &.l3 {
           padding-left: 3rem;
         }
-
         &.l4 {
           padding-left: 4rem;
         }
-
         &.l5 {
           padding-left: 5rem;
         }
-
         &.l6 {
           padding-left: 6rem;
         }
@@ -296,23 +285,18 @@
         &.l1 {
           padding-right: 1rem;
         }
-
         &.l2 {
           padding-right: 2rem;
         }
-
         &.l3 {
           padding-right: 3rem;
         }
-
         &.l4 {
           padding-right: 4rem;
         }
-
         &.l5 {
           padding-right: 5rem;
         }
-
         &.l6 {
           padding-right: 6rem;
         }
@@ -383,11 +367,9 @@
 
 .tweet {
   margin-bottom: 1.5rem !important;
-
   &--username {
     color: rgba($grey, .75);
   }
-
   &--media {
     max-width: 100%;
     height: auto;
@@ -1112,7 +1094,6 @@
   &.title {
     display: flex;
   }
-
   .header {
     margin: 0 1rem;
     flex-grow: 2;
@@ -1134,11 +1115,9 @@
 .search__block {
   color: #828282;
   font-weight: normal;
-
   .clear {
     clear: both;
   }
-
   .content {
     em {
       border-bottom: 1px solid rgba(65, 131, 196, .3);
@@ -1146,7 +1125,6 @@
       font-weight: 900;
     }
   }
-
   .ui.mini.image {
     width: 25px;
   }
@@ -1157,7 +1135,6 @@
     margin-right: 5px !important;
     background-color: white !important;
     border-color: $grey;
-
     .icon {
       color: $blue;
     }
@@ -1167,7 +1144,6 @@
       background-color: $blue !important;
       border: 0 none;
       color: white !important;
-
       .icon {
         color: white !important;
       }
@@ -1196,17 +1172,14 @@
   .search__card {
     position: relative;
     margin-top: 20px;
-
     .intent_image {
       position: relative;
       min-height: 160px;
-
       img {
         height: 100%;
         width: 100%;
       }
     }
-
     &.card.bg_hover_grey:hover {
       background: #eee;
     }
@@ -1222,7 +1195,6 @@
     color: white;
     font-size: 14px;
   }
-
   .search__snippet {
     font-size: 14px;
   }
@@ -1255,11 +1227,9 @@
     padding-top: 5px;
     padding-bottom: 5px;
   }
-
   .active {
     border-bottom: 1px solid #1a4179;
   }
-
   .show_filters {
     background-color: white !important;
   }
@@ -1287,5 +1257,4 @@
 .fix-popup-direction {
   direction: rtl;
 }
-
 /* ************* End of Style for Semantic Ui Popup  ************* */
