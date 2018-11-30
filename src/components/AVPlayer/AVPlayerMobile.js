@@ -443,6 +443,7 @@ class AVPlayerMobile extends PureComponent {
               onSwitch={this.onSwitchAV}
               fallbackMedia={fallbackMedia}
               t={t}
+              uiLanguage={uiLanguage}
             />
             <AVLanguageMobile
               languages={languages}

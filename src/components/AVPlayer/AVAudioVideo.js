@@ -9,7 +9,13 @@ class AVAudioVideo extends Component {
     onSwitch: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
     fallbackMedia: PropTypes.bool.isRequired,
+    uiLanguage: PropTypes.string,
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
   handleSwitch = () =>
     this.props.onSwitch();
@@ -24,21 +30,23 @@ class AVAudioVideo extends Component {
     }
   };
 
-  render() {
-    const { isAudio, isVideo, t, fallbackMedia } = this.props;
+  setAudioVideoContainerRef = (audioVideoContainerRef) => this.setState({ audioVideoContainerRef });
 
-    const popup = !fallbackMedia ? null : (
-      <TimedPopup
-        openOnInit
-        message={isAudio ? t('messages.fallback-to-audio') : t('messages.fallback-to-video')}
-        downward={false}
-        timeout={7000}
-      />
-    );
+  render() {
+    const { isAudio, isVideo, t, fallbackMedia, uiLanguage } = this.props;
+    const { audioVideoContainerRef }                         = this.state;
+    const openPopup                                          = !!fallbackMedia;
 
     return (
-      <div className="mediaplayer__audiovideo">
-        {popup}
+      <div ref={this.setAudioVideoContainerRef} className="mediaplayer__audiovideo">
+        <TimedPopup
+          openOnInit={openPopup}
+          message={isAudio ? t('messages.fallback-to-audio') : t('messages.fallback-to-video')}
+          downward={false}
+          timeout={7000}
+          language={uiLanguage}
+          refElement={audioVideoContainerRef}
+        />
         <button ref={this.handleBtnRef}>
           <span className={isAudio ? 'is-active' : ''}>{t('buttons.audio')}</span>
           &nbsp;/&nbsp;
