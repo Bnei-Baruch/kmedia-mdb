@@ -88,7 +88,7 @@
       "events": "Kongresse, Veranstaltungen",
       "publications": "Veröffentlichungen",
       "sources": "Primäre Quellen",
-      "all":"Alles"
+      "all": "Alles"
     }
   },
   "buttons": {
@@ -136,7 +136,7 @@
     "unknown": "Unbekannt",
     "unsupported-media-format": "Nicht unterstütztes Format.",
     "error-loading-file": "Fehler beim Herunterladen der Datei.",
-    "fallback-language": "Medien nicht in Deutsch gefunden, Backup-Sprache ausgewählt.",
+    "fallback-language": "Inhalt ist nicht in der angeforderten Sprache vorhanden, eine Standardsprache wurde ausgewählt.",
     "fallback-to-audio": "Video nicht gefunden, Audio wird verwendet.",
     "fallback-to-video": "Audio nicht gefunden, Video wird verwendet.",
     "source-content-not-found": "Ursprüngliche Quelle nicht gefunden",

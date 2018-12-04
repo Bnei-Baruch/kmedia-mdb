@@ -136,7 +136,7 @@
     "unknown": "לא ידוע",
     "unsupported-media-format": "פורמט לא נתמך.",
     "error-loading-file": "טעות בהעלאת קובץ.",
-    "fallback-language": "אין את השפה המבוקשת למדיה, נבחרה שפת ברירת מחדל.",
+    "fallback-language": "התוכן לא קיים בשפה המבוקשת, נבחרה שפת ברירת מחדל.",
     "fallback-to-audio": "וידיאו לא נמצא, משתמש באודיו.",
     "fallback-to-video": "אודיו לא נמצא, משתמש בוידיאו.",
     "source-content-not-found": "לא נמצא תוכן המקור",
