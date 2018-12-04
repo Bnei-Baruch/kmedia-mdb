@@ -232,7 +232,7 @@ class SearchResultIntent extends SearchResultBase {
           </Segment>
         </Segment.Group>
         <div className="clear" />
-        <Card.Group className={`${isMobileDevice() ? 'margin-top-8' : null}search__cards`} itemsPerRow={3} stackable>
+        <Card.Group className={`${isMobileDevice() ? 'margin-top-8' : null} search__cards`} itemsPerRow={3} stackable>
           {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).map(this.renderItem)}
           {pageSize < unitCounter ? this.renderScrollLeft() : null}
           {pageSize < unitCounter ? this.renderScrollRight() : null}

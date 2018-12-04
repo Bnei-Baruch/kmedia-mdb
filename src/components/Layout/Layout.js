@@ -142,7 +142,7 @@ class Layout extends Component {
               {showSearch ? <WrappedOmniBox t={t} location={location} /> : null}
             </Menu.Item>
             <Menu.Menu position="right" className="no-padding no-margin">
-              <Menu.Item className="no-padding no-margin">
+              <Menu.Item className="no-margin">
                 <HandleLanguages
                   language={language}
                   contentLanguage={contentLanguage}

@@ -42,7 +42,7 @@ class HandleLanguages extends Component {
         flowing
         hideOnScroll
         position="bottom right"
-        trigger={<Menu.Item onClick={this.handlePopupOpen} as="a">{trigger}</Menu.Item>}
+        trigger={<div onClick={this.handlePopupOpen} as="a">{trigger}</div>}
         open={isActive}
         onOpen={this.handlePopupOpen}
         onClose={this.handlePopupClose}
