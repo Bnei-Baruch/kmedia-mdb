@@ -45,7 +45,7 @@ export default class AVLanguage extends Component {
     return (
       <div ref={this.setLangSelectRef} className="mediaplayer__languages">
         <TimedPopup
-          openOnInitopenOnInit={openPopup}
+          openOnInit={openPopup}
           message={t('messages.fallback-language')}
           downward={false}
           timeout={7000}
