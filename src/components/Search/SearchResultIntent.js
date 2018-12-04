@@ -105,7 +105,9 @@ class SearchResultIntent extends SearchResultBase {
           <div className="card_header_label">
             {this.mlsToStrColon(cu.duration)}
           </div>
-          <FallbackImage fluid src={src} />
+          <div>
+            <FallbackImage fluid src={src} />
+          </div>
         </Container>
         <Card.Content>
           <Card.Header as="h3">
