@@ -16,6 +16,8 @@ class SearchResultCollection extends SearchResultBase {
     c: shapes.Collection,
   };
 
+  state = { isImgLoaded: false };
+
   renderCU = cu => (
     <Link key={cu.id} to={canonicalLink(cu, this.getMediaLanguage(this.props.filters))}>
       <Button basic size="tiny" className="link_to_cu">
@@ -23,6 +25,16 @@ class SearchResultCollection extends SearchResultBase {
       </Button>
     </Link>
   );
+
+  handleImageContextRef = (ref) => {
+    if(ref){
+      this.imgRef = ref.children[0];
+    }
+  };
+
+  imgLoadHandler        = () => {
+    this.setState({ isImgLoaded: true });
+  };
 
   render() {
     const { t, location, c, hit, rank, queryResult, filters } = this.props;
@@ -39,16 +51,23 @@ class SearchResultCollection extends SearchResultBase {
       }                                   = hit;
     const { search_result: { searchId } } = queryResult;
 
+    const { isImgLoaded } = this.state;
+
     return (
       <Segment className="bg_hover_grey search__block">
         <Container>
-          <FallbackImage
-            circular
-            floated="left"
-            fallbackImage={null}
-            size="tiny"
-            src={assetUrl(`logos/collections/${this.props.c.id}.jpg`)}
-          />
+          <span ref={this.handleImageContextRef} >
+            <FallbackImage
+              circular
+              width={isImgLoaded ? this.imgRef.offsetWidth : null}
+              height={isImgLoaded ? this.imgRef.offsetWidth : null}
+              onLoad={this.imgLoadHandler}
+              floated="left"
+              fallbackImage={null}
+              size="tiny"
+              src={assetUrl(`logos/collections/${this.props.c.id}.jpg`)}
+            />
+          </span>
           <Container>
             <Container as="h3">
               <Link
@@ -70,14 +89,16 @@ class SearchResultCollection extends SearchResultBase {
               &nbsp;|&nbsp;
               <span>{c.content_units.length} {t('pages.collection.items.programs-collection')}</span>
             </Container>
+            <div className="clear" />
           </Container>
 
-          <Container className="content">
+          <Container className="content clear margin-top-8">
             {c.content_units.slice(0, 5).map(this.renderCU)}
 
             <Link
               onClick={() => this.click(mdbUid, index, type, rank, searchId)}
               to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}
+              className="margin-right-8"
             >
               <Icon name="tasks" size="small" />
               {`${t('search.showAll')} ${c.content_units.length} ${t('pages.collection.items.programs-collection')}`}
