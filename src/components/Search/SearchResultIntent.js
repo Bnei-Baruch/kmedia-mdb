@@ -225,7 +225,8 @@ class SearchResultIntent extends SearchResultBase {
             <Icon name="tasks" size="small" />
             <Link
               onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-              to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}>
+              to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}
+            >
               <span>{`${t('search.showAll')} ${this.props.total} ${t('search.' + resultsType)}`}</span>
             </Link>
           </Segment>
