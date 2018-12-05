@@ -106,8 +106,13 @@ class Layout extends Component {
   render() {
     const { t, location, route, language, contentLanguage, setContentLanguage } = this.props;
     const { sidebarActive }                                                     = this.state;
-
+    
     const showSearch = this.shouldShowSearch(location);
+
+    let sideBarIcon = <Icon name="sidebar" />;
+    if (sidebarActive) {
+      sideBarIcon = <Icon size="large" name="x" />;  
+    }
 
     return (
       <div className="layout">
@@ -132,7 +137,8 @@ class Layout extends Component {
                 }
               }}
             >
-              <Icon name="sidebar" />
+              {/* <Icon name="sidebar" /> */}
+              {sideBarIcon}
             </Menu.Item>
             <Menu.Item className="logo" header as={Link} to="/">
               <img src={logo} alt="logo" />
@@ -186,7 +192,8 @@ class Layout extends Component {
                 }
               }}
             >
-              <Icon name="sidebar" />
+              {/* <Icon name="sidebar" /> */}
+              {sideBarIcon}
             </Menu.Item>
             <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={this.closeSidebar}>
               <img src={logo} alt="logo" />
