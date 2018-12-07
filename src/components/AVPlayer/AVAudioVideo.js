@@ -12,10 +12,7 @@ class AVAudioVideo extends Component {
     uiLanguage: PropTypes.string,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+  state = {};
 
   handleSwitch = () =>
     this.props.onSwitch();

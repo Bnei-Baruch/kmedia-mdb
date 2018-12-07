@@ -141,8 +141,9 @@ class AVPlayer extends PureComponent {
       ...this.chooseSource(this.props)
     });
 
-    if (browserName === 'Edge' || browserName === 'IE')
+    if (browserName === 'Edge' || browserName === 'IE') {
       media.play();
+    }
   }
 
   componentWillReceiveProps(nextProps) {

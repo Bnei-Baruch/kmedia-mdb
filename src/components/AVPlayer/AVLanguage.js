@@ -23,10 +23,7 @@ export default class AVLanguage extends Component {
     languages: [],
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+  state = {};
 
   handleChange = (e, data) =>
     this.props.onSelect(e, data.value);
