@@ -32,42 +32,29 @@ class LastLessonCollection extends Component {
     lastLessonId: '',
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      language: this.props.contentLanguage,
-    };
-  }
-
   componentDidMount() {
     if (!this.props.lastLessonId) {
       this.props.fetchLatestLesson();
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.state.language !== nextProps.contentLanguage) {
-      this.setState({ language: nextProps.contentLanguage });
-      nextProps.fetchLatestLesson();
+  componentDidUpdate(){
+    if (!this.props.lastLessonId) {
+      this.props.fetchLatestLesson();
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const { uiLanguage, contentLanguage, wip, err, } = nextProps;
-    const { language }                               = nextState;
-    const { props, state }                           = this;
-
-    return !(
-      uiLanguage === props.uiLanguage &&
-      language === state.filesLanguage &&
-      contentLanguage === state.filesLanguage &&
-      equal(wip, props.wip) && equal(err, props.err)
+  shouldComponentUpdate(nextProps) {
+    return (
+      nextProps.uiLanguage !== this.props.uiLanguage ||
+      nextProps.contentLanguage !== this.props.contentLanguage ||
+      !equal(nextProps.wip, this.props.wip) ||
+      !equal(nextProps.errors, this.props.errors)
     );
   }
 
   render() {
-    const { wip, errors, t, lastLessonId } = this.props;
-    const { language }                     = this.state;
+    const { wip, errors, t, lastLessonId, contentLanguage } = this.props;
 
     const wipErr = WipErr({ wip: wip.lastLesson, err: errors.lastLesson, t });
     if (wipErr) {
@@ -80,7 +67,7 @@ class LastLessonCollection extends Component {
 
     const props = {
       ...this.props,
-      language,
+      language: contentLanguage,
       match: {
         ...this.props.match,
         params: {
