@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
-import { Header, Icon, Menu, Segment, Button } from 'semantic-ui-react';
+import { Header, Icon, Menu, Segment } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
 import { actions, selectors as settings } from '../../redux/modules/settings';
@@ -46,10 +46,9 @@ class Layout extends Component {
 
   componentWillReceiveProps(nextProps) {
     const isShowHeaderSearch = (
-      this.props.location &&
+      nextProps.location &&
       this.isMobileDevice() &&
-      nextProps.location.pathname.endsWith('search') &&
-      nextProps.location.pathname !== this.props.location.pathname
+      nextProps.location.pathname.endsWith('search')
     );
     this.setState({ isShowHeaderSearch });
   }

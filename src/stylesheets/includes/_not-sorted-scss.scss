@@ -1244,7 +1244,7 @@
   left: 0;
   position: fixed !important;
   right: 0;
-  top: 50px;
+  top: 45px;
   z-index: 1;
   padding: 0;
 }
@@ -1271,4 +1271,12 @@
 
 .margin-right-8{
   margin-right: 8px !important;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  select,
+  textarea,
+  input {
+    font-size: 16px;
+  }
 }
