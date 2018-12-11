@@ -282,10 +282,11 @@ class AVPlayerMobile extends PureComponent {
         return;
       }
       this.media.currentTime = t;
-      if (!this.isSeekSuccess(t))
+      if (!this.isSeekSuccess(t)) {
         this.seekTimeout(t, timeout);
-      else
+      } else {
         this.setState({ seeking: false });
+      }
     }, timeout);
   };
 
