@@ -93,13 +93,13 @@ class AVBox extends Component {
     playerHelper.setLanguageInQuery(this.props.history, language);
   };
 
-  handleMediaEditModeChange = (mediaEditMode) => {    
-    this.setState({mediaEditMode: mediaEditMode});
+  handleMediaEditModeChange = (mediaEditMode) => {
+    this.setState({ mediaEditMode: mediaEditMode });
   };
 
   render() {
-    const { t, autoPlayAllowed }                = this.props;
-    const { playableItem, mediaEditMode }       = this.state;
+    const { t, autoPlayAllowed, uiLanguage, contentLanguage } = this.props;
+    const { playableItem, mediaEditMode }                     = this.state;
 
     if (isEmpty(playableItem)) {
       return (<div>{t('messages.no-playable-files')}</div>);
@@ -115,7 +115,7 @@ class AVBox extends Component {
               'avbox__player--is-audio': isAudio,
               'avbox__player--is-audio--edit-mode': isAudio && mediaEditMode === 2,
               'avbox__player--is-audio--normal-mode': isAudio && mediaEditMode === 0,
-              'avbox__player--is-4x3': playableItem.unit.film_date < '2014',          
+              'avbox__player--is-4x3': playableItem.unit.film_date < '2014',
               'mobile-device': !autoPlayAllowed,
             })}
           >
@@ -126,7 +126,9 @@ class AVBox extends Component {
                   preImageUrl={playableItem.preImageUrl}
                   onSwitchAV={this.handleSwitchAV}
                   languages={playableItem.availableLanguages}
-                  language={playableItem.language}
+                  selectedLanguage={playableItem.language}
+                  uiLanguage={uiLanguage}
+                  requestedLanguage={contentLanguage}
                   onLanguageChange={this.handleChangeLanguage}
                   t={t}
                   onMediaEditModeChange={this.handleMediaEditModeChange}

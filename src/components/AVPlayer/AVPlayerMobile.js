@@ -28,10 +28,11 @@ const playbackToValue = playback =>
 class AVPlayerMobile extends PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
-    language: PropTypes.string.isRequired,
+    selectedLanguage: PropTypes.string.isRequired,
     onLanguageChange: PropTypes.func.isRequired,
 
     // Audio/Video switch props.
@@ -99,7 +100,7 @@ class AVPlayerMobile extends PureComponent {
       clearTimeout(this.seekTimeoutId);
   }
 
-   componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.item !== this.props.item) {
       this.setState({ error: false, errorReason: '', firstSeek: true });
     }
@@ -132,7 +133,7 @@ class AVPlayerMobile extends PureComponent {
       // this.media.addEventListener('playing', this.handlePlaying);
       // this.media.addEventListener('seeking', this.handleSeeking);
       this.media.addEventListener('canplay', this.seekIfNeeded);
-      this.restoreVolume();     
+      this.restoreVolume();
     } else if (this.media) {
       this.media.removeEventListener('play', this.handlePlay);
       this.media.removeEventListener('pause', this.handlePause);
@@ -174,7 +175,7 @@ class AVPlayerMobile extends PureComponent {
 
   seekIfNeeded = () => {
     const { sliceStart, firstSeek, playbackRate } = this.state;
-    this.media.playbackRate = playbackToValue(playbackRate);
+    this.media.playbackRate                       = playbackToValue(playbackRate);
 
     if (firstSeek) {
       if (sliceStart) {
@@ -184,13 +185,13 @@ class AVPlayerMobile extends PureComponent {
         if (savedTime) {
           this.seekTo(savedTime, true);
         }
-      }      
+      }
       this.media.autoplay = true;
-      this.setState({ firstSeek: false });          
+      this.setState({ firstSeek: false });
     } else if (this.wasCurrentTime) {
       this.seekTo(this.wasCurrentTime, true);
-      this.wasCurrentTime    = undefined;
-    } 
+      this.wasCurrentTime = undefined;
+    }
   };
 
   // handlePlaying = () => {
@@ -221,8 +222,8 @@ class AVPlayerMobile extends PureComponent {
   handleTimeUpdate = (e) => {
     const { mode, sliceEnd, sliceStart, seeking, firstSeek } = this.state;
 
-    if (mode !== PLAYER_MODE.SLICE_VIEW || firstSeek || seeking===true) {
-       return;
+    if (mode !== PLAYER_MODE.SLICE_VIEW || firstSeek || seeking === true) {
+      return;
     }
 
     const time = e.currentTarget.currentTime;
@@ -257,10 +258,10 @@ class AVPlayerMobile extends PureComponent {
     }
   };
 
-  seekTo = (t, force) => {        
-    this.media.currentTime = t;           
+  seekTo = (t, force) => {
+    this.media.currentTime = t;
     if (this.props.deviceInfo.browser.name !== 'Samsung Browser') {
-      this.setState({ seeking: false });  
+      this.setState({ seeking: false });
       return;
     }
 
@@ -272,19 +273,19 @@ class AVPlayerMobile extends PureComponent {
       this.setState({ seeking: false });
   };
 
-  seekTimeout = (t, timeout) => {   
+  seekTimeout = (t, timeout) => {
     if (this.seekTimeoutId)
       clearTimeout(this.seekTimeoutId);
-    this.seekTimeoutId = setTimeout(()=> {
+    this.seekTimeoutId = setTimeout(() => {
       if (this.isSeekSuccess(t)) {
         this.setState({ seeking: false });
         return;
       }
       this.media.currentTime = t;
       if (!this.isSeekSuccess(t))
-          this.seekTimeout(t, timeout);
+        this.seekTimeout(t, timeout);
       else
-          this.setState({ seeking: false });
+        this.setState({ seeking: false });
     }, timeout);
   };
 
@@ -349,7 +350,9 @@ class AVPlayerMobile extends PureComponent {
       {
         item,
         languages,
-        language,
+        selectedLanguage,
+        uiLanguage,
+        requestedLanguage,
         t,
         showNextPrev,
         hasNext,
@@ -358,7 +361,7 @@ class AVPlayerMobile extends PureComponent {
         onNext,
       } = this.props;
 
-    const { error, errorReason, isSliceMode, playbackRate} = this.state;
+    const { error, errorReason, isSliceMode, playbackRate } = this.state;
 
     const isVideo       = item.mediaType === MT_VIDEO;
     const isAudio       = item.mediaType === MT_AUDIO;
@@ -441,11 +444,13 @@ class AVPlayerMobile extends PureComponent {
               onSwitch={this.onSwitchAV}
               fallbackMedia={fallbackMedia}
               t={t}
+              uiLanguage={uiLanguage}
             />
             <AVLanguageMobile
               languages={languages}
-              language={language}
-              requestedLanguage={item.requestedLanguage}
+              selectedLanguage={selectedLanguage}
+              uiLanguage={uiLanguage}
+              requestedLanguage={requestedLanguage}
               onSelect={this.onLanguageChange}
               t={t}
             />

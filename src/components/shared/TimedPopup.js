@@ -40,8 +40,8 @@ class TimedPopup extends Component {
 
   confirmTimeoutHandle = null;
 
-  componentWillMount() {
-    const { openOnInit } = this.props;
+  componentWillReceiveProps(nextProps) {
+    const { openOnInit } = nextProps;
     if (openOnInit) {
       this.open();
     }
