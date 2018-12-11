@@ -197,7 +197,7 @@ class TopicContainer extends Component {
         <Container className="padded">
           <Input
             fluid
-            size="small"
+            size="large"
             icon="search"
             className="search-omnibox"
             placeholder={t('sources-library.filter')}

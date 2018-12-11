@@ -173,7 +173,7 @@ export class OmniBox extends Component {
         }}
         fluid
         className="search-omnibox"
-        size="mini"
+        size="small"
         results={results}
         value={query}
         input={this.renderInput()}

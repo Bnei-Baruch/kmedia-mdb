@@ -44,24 +44,61 @@ class Layout extends Component {
     document.removeEventListener('click', this.clickOutside, true);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const isShowHeaderSearch = (
+      this.props.location &&
+      this.isMobileDevice() &&
+      nextProps.location.pathname.endsWith('search') &&
+      nextProps.location.pathname !== this.props.location.pathname
+    );
+    this.setState({ isShowHeaderSearch });
+  }
+
   // i.e, main, header of footer.
   clickOutside = (e) => {
-    if (this.state &&
-      this.state.sidebarActive &&
-      e.target !== this.sidebarElement &&
-      !this.sidebarElement.contains(e.target) &&
-      !this.menuButtonElement1.contains(e.target) &&
-      !this.menuButtonElement2.contains(e.target)) {
+    if (this.isCloseSideBar(e)) {
       this.closeSidebar();
     }
 
-    if (this.state &&
-      this.state.isShowHeaderSearch &&
-      e.target !== this.headerSearchElement &&
-      !this.headerSearchElement.contains(e.target) &&
-      !this.showSearchButtonElement.contains(e.target)) {
+    if (this.isCloseHeaderSearch(e)) {
       this.showHeaderSearch();
     }
+  };
+
+  isCloseHeaderSearch = (e) => {
+    if (!this.state || !this.state.sidebarActive || e.target === this.headerSearchElement) {
+      return false;
+    }
+
+    if (this.headerSearchElement && this.headerSearchElement.contains(e.target)) {
+      return false;
+    }
+
+    if (this.showSearchButtonElement && this.showSearchButtonElement.contains(e.target)) {
+      return false;
+    }
+
+    return true;
+  };
+
+  isCloseSideBar = (e) => {
+    if (!this.state || !this.state.sidebarActive || e.target === this.sidebarElement) {
+      return false;
+    }
+
+    if (this.sidebarElement && this.sidebarElement.contains(e.target)) {
+      return false;
+    }
+
+    if (this.menuButtonElement1 && this.menuButtonElement1.contains(e.target)) {
+      return false;
+    }
+
+    if (this.menuButtonElement2 && this.menuButtonElement2.contains(e.target)) {
+      return false;
+    }
+
+    return true;
   };
 
   toggleSidebar = () => this.setState({ sidebarActive: !this.state.sidebarActive });
