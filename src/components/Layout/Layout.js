@@ -137,7 +137,6 @@ class Layout extends Component {
                 }
               }}
             >
-              {/* <Icon name="sidebar" /> */}
               {sideBarIcon}
             </Menu.Item>
             <Menu.Item className="logo" header as={Link} to="/">
@@ -192,7 +191,6 @@ class Layout extends Component {
                 }
               }}
             >
-              {/* <Icon name="sidebar" /> */}
               {sideBarIcon}
             </Menu.Item>
             <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={this.closeSidebar}>
