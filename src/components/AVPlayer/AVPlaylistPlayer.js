@@ -8,17 +8,20 @@ import { MT_AUDIO } from '../../helpers/consts';
 import { selectors as device } from '../../redux/modules/device';
 import * as shapes from '../shapes';
 import AVMobileCheck from './AVMobileCheck';
+import { getQuery } from '../../helpers/url';
 
 class AVPlaylistPlayer extends Component {
   static propTypes = {
     items: PropTypes.arrayOf(shapes.VideoItem).isRequired,
     selected: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
     autoPlayAllowed: PropTypes.bool.isRequired,
     onSelectedChange: PropTypes.func.isRequired,
     onLanguageChange: PropTypes.func.isRequired,
     onSwitchAV: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    history: shapes.History.isRequired,
   };
 
   state = {
@@ -54,9 +57,17 @@ class AVPlaylistPlayer extends Component {
     this.setState({mediaEditMode: mediaEditMode});
   };
 
+  componentWillMount() {
+    const { history } = this.props;
+    const query = getQuery(history.location);
+    if (query.sstart) {
+      this.setState({ autoPlay: true });
+    }    
+  }
+
   render() {
-    const { t, selected, items, language, onSwitchAV, onLanguageChange, autoPlayAllowed } = this.props;
-    const { autoPlay, mediaEditMode }                                                     = this.state;
+    const { t, selected, items, language, onSwitchAV, onLanguageChange, autoPlayAllowed, uiLanguage } = this.props;
+    const { autoPlay, mediaEditMode }                                                                 = this.state;
 
     const currentItem = items[selected];
 
@@ -85,6 +96,7 @@ class AVPlaylistPlayer extends Component {
               onSwitchAV={onSwitchAV}
               languages={currentItem.availableLanguages}
               language={language}
+              uiLanguage={uiLanguage}
               onLanguageChange={onLanguageChange}
               t={t}
               // Playlist props

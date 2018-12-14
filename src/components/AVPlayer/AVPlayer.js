@@ -224,11 +224,9 @@ class AVPlayer extends PureComponent {
 
     this.activatePersistence();
 
-    if (autoPlay && firstSeek) {
-      media.play();
-    }
 
-    if (wasCurrentTime) {
+
+    if (wasCurrentTime && !firstSeek) {
       media.seekTo(wasCurrentTime);
     } else if (!sliceStart && firstSeek) {
       const savedTime = this.getSavedTime();
@@ -236,7 +234,9 @@ class AVPlayer extends PureComponent {
         media.seekTo(savedTime);
       }
     }
-
+    if (autoPlay && firstSeek) {
+      media.play();
+    }
     // restore playback from state when player instance changed (when src changes, e.g., playlist).
     this.player.instance.playbackRate = playbackToValue(this.state.playbackRate);
     this.setState({ wasCurrentTime: undefined, firstSeek: false });
@@ -515,7 +515,6 @@ class AVPlayer extends PureComponent {
   render() {
     const
       {
-        autoPlay,
         item,
         languages,
         language,

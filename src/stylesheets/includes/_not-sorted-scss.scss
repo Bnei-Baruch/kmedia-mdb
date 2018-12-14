@@ -853,6 +853,23 @@
     border-radius: 50px;
   }
 }
+
+.mediaplayer__mobileUnmuteButton {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+.mediaplayer__mobileUnmuteButton.rtl {
+  left: inherit;
+  right: 5px;
+}
+
+.mediaplayer__mobileLoader {
+  position: absolute;
+  top: 30%;
+  left: 40%;
+}
 /* ************* End of styles for simple mode ************* */
 .home-social-section {
   .titles {

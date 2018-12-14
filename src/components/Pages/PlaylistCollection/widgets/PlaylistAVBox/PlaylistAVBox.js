@@ -147,8 +147,8 @@ class PlaylistAVBox extends Component {
   };
 
   render() {
-    const { t, PlayListComponent, uiLanguage, nextLink, prevLink } = this.props;
-    const { playlist, selected }                                   = this.state;
+    const { t, PlayListComponent, uiLanguage, nextLink, prevLink, history } = this.props;
+    const { playlist, selected }                                            = this.state;
 
     if (!playlist ||
       !Array.isArray(playlist.items) ||
@@ -171,9 +171,11 @@ class PlaylistAVBox extends Component {
             items={playlist.items}
             selected={selected}
             language={playlist.language}
+            uiLanguage={uiLanguage}
             onSelectedChange={this.handleSelectedChange}
             onLanguageChange={this.handleLanguageChange}
             onSwitchAV={this.handleSwitchAV}
+            history={history}
             t={t}
           />
         </Grid.Column>
