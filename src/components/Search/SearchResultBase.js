@@ -69,7 +69,7 @@ class SearchResultBase extends Component {
 
   click = (mdb_uid, index, type, rank, searchId) => {
     const { click } = this.props;
-    click(mdb_uid, index, type, rank, searchId);
+    click(mdb_uid, index, type, rank, searchId, deb: isDebMode);
   };
 
   mlsToStrColon(seconds) {
