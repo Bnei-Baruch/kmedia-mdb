@@ -40,30 +40,6 @@ export class OmniBox extends Component {
     onSearch: noop,
   };
 
-  constructor(props) {
-    super(props);
-    this.search = null;
-
-    this.state = {
-      suggestionsHelper: new SuggestionsHelper(),
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { suggestions, query, updateQuery, setSuggest, location } = this.props;
-    if (nextProps.suggestions !== suggestions) {
-      this.setState({ suggestionsHelper: new SuggestionsHelper(nextProps.suggestions) });
-    }
-
-    // Clear search query when navigating from the search page into other pages (AS-38)
-    if (query
-      && !nextProps.location.pathname.endsWith('search')
-      && nextProps.location.pathname !== location.pathname) {
-      updateQuery('');
-      setSuggest('');
-    }
-  }
-
   doAutocomplete = debounce(() => {
     const { query, autocomplete } = this.props;
     if (query.trim()) {
@@ -72,6 +48,48 @@ export class OmniBox extends Component {
       this.setState({ suggestionsHelper: new SuggestionsHelper() });
     }
   }, 100);
+
+  constructor(props) {
+    super(props);
+    this.search = null;
+
+    this.state = {
+      suggestionsHelper: new SuggestionsHelper(),
+      suggestions: {},
+      query: '',
+      pathname: ''
+
+    };
+  }
+
+  static getDerivedStateFromProps(nextProps, state) {
+    const { suggestions, query, pathname } = state;
+    const { updateQuery, setSuggest }      = state;
+    let newState                           = null;
+
+    if (nextProps.suggestions !== suggestions) {
+      newState = {
+        suggestionsHelper: new SuggestionsHelper(nextProps.suggestions),
+        suggestions: nextProps.suggestions,
+      };
+    }
+
+    // Clear search query when navigating from the search page into other pages (AS-38)
+    if (query
+      && !nextProps.location.pathname.endsWith('search')
+      && nextProps.location.pathname !== pathname) {
+      newState = Object.assign({}, newState, { pathname: nextProps.location.pathname, query: nextProps.query });
+      updateQuery('');
+      setSuggest('');
+    }
+
+    return newState;
+  }
+
+  componentDidMount() {
+    const { suggestions, query, location: { pathname } } = this.props;
+    this.setState({ suggestions, query, pathname });
+  }
 
   isEmptyQuery = (query) => {
     const { filters } = this.props;

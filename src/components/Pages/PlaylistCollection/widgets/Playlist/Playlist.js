@@ -28,18 +28,18 @@ class PlaylistWidget extends Component {
 
   shouldComponentUpdate(nextProps) {
     const { playlist, selected, nextLink, prevLink, language } = this.props;
-    const should                                               = !(
-      equal(nextProps.playlist, playlist) &&
-      nextProps.selected === selected &&
-      nextProps.nextLink === nextLink &&
-      nextProps.prevLink === prevLink &&
-      nextProps.language === language
+    return !(
+      equal(nextProps.playlist, playlist)
+      && nextProps.selected === selected
+      && nextProps.nextLink === nextLink
+      && nextProps.prevLink === prevLink
+      && nextProps.language === language
     );
-    return should;
   }
 
   handleItemClick = (e, data) => {
-    this.props.onSelectedChange(parseInt(data.name, 10));
+    const { onSelectedChange } = this.props;
+    onSelectedChange(parseInt(data.name, 10));
   };
 
   renderHeader() {

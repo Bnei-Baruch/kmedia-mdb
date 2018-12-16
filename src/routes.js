@@ -3,50 +3,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { renderRoutes } from 'react-router-config';
-import Loadable from 'react-loadable';
 
 import { DEFAULT_LANGUAGE } from './helpers/consts';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
-import Loading from './components/shared/Loading';
+import Lessons from './components/Sections/Lessons/MainPage';
+import LessonUnit from './components/Sections/Lessons/Unit/Container';
+import LessonCollection from './components/Sections/Lessons/Collection/MainPage';
+import LastLessonCollection from './components/Sections/Lessons/Collection/LastDaily';
+import Programs from './components/Sections/Programs/MainPage';
+import ProgramUnit from './components/Sections/Programs/Unit';
+import ProgramCollection from './components/Sections/Programs/Collection';
+import Publications from './components/Sections/Publications/MainPage';
+import ArticleUnit from './components/Sections/Publications/tabs/Articles/Unit';
+import ArticleCollection from './components/Sections/Publications/tabs/Articles/Collection';
+import BlogPost from './components/Sections/Publications/tabs/Blog/Post/Container';
+import Events from './components/Sections/Events/MainPage';
+import EventUnit from './components/Sections/Events/Unit';
+import EventCollection from './components/Sections/Events/Collection';
+import LibraryHomepage from './components/Sections/Library/Homepage';
+import LibraryContainer from './components/Sections/Library/LibraryContainer';
+import LibraryPerson from './components/Sections/Library/LibraryPerson';
+import Topics from './components/Sections/Topics/TopicContainer';
+import Topic from './components/Sections/Topics/TopicPage';
+import SearchResults from './components/Search/SearchResultsContainer';
+import HomePage from './components/Sections/Home/Container';
+import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
+import Help from './components/Sections/Help/Help';
+import SimpleMode from './components/Sections/SimpleMode/Container';
+import NotImplemented from './components/NotImplemented';
+// import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 import * as shapes from './components/shapes';
-
-const l = (f, name) => ({
-  loader: f,
-  loading: Loading,
-  modules: [name],
-  delay: 200,
-  timeout: 5000,
-});
-
-const HomePage             = Loadable(l(() => import(/* webpackChunkName: "HomeContainer" */ './components/Sections/Home/Container'), 'HomeContainer'));
-const Lessons              = Loadable(l(() => import(/* webpackChunkName: "LessonsMainPage" */ './components/Sections/Lessons/MainPage'), 'LessonsMainPage'));
-const LessonUnit           = Loadable(l(() => import(/* webpackChunkName: "LessonsUnitContainer" */ './components/Sections/Lessons/Unit/Container'), 'LessonsUnitContainer'));
-const LessonCollection     = Loadable(l(() => import(/* webpackChunkName: "LessonsCollectionMainPage" */ './components/Sections/Lessons/Collection/MainPage'), 'LessonsCollectionMainPage'));
-const LastLessonCollection = Loadable(l(() => import(/* webpackChunkName: "LessonsCollectionLastDaily" */ './components/Sections/Lessons/Collection/LastDaily'), 'LessonsCollectionLastDaily'));
-const Programs             = Loadable(l(() => import(/* webpackChunkName: "ProgramsMainPage" */ './components/Sections/Programs/MainPage'), 'ProgramsMainPage'));
-const ProgramUnit          = Loadable(l(() => import(/* webpackChunkName: "ProgramsUnit" */ './components/Sections/Programs/Unit'), 'ProgramsUnit'));
-const ProgramCollection    = Loadable(l(() => import(/* webpackChunkName: "ProgramsCollection" */ './components/Sections/Programs/Collection'), 'ProgramsCollection'));
-const Publications         = Loadable(l(() => import(/* webpackChunkName: "PublicationsMainPage" */ './components/Sections/Publications/MainPage'), 'PublicationsMainPage'));
-const ArticleUnit          = Loadable(l(() => import(/* webpackChunkName: "PublicationstabsArticlesUnit" */ './components/Sections/Publications/tabs/Articles/Unit'), 'PublicationstabsArticlesUnit'));
-const ArticleCollection    = Loadable(l(() => import(/* webpackChunkName: "PublicationstabsArticlesCollection" */ './components/Sections/Publications/tabs/Articles/Collection'), 'PublicationstabsArticlesCollection'));
-const BlogPost             = Loadable(l(() => import(/* webpackChunkName: "PublicationstabsBlogPostContainer" */ './components/Sections/Publications/tabs/Blog/Post/Container'), 'PublicationstabsBlogPostContainer'));
-const Events               = Loadable(l(() => import(/* webpackChunkName: "EventsMainPage" */ './components/Sections/Events/MainPage'), 'EventsMainPage'));
-const EventUnit            = Loadable(l(() => import(/* webpackChunkName: "EventsUnit" */ './components/Sections/Events/Unit'), 'EventsUnit'));
-const EventCollection      = Loadable(l(() => import(/* webpackChunkName: "EventsCollection" */ './components/Sections/Events/Collection'), 'EventsCollection'));
-const LibraryHomepage      = Loadable(l(() => import(/* webpackChunkName: "LibraryHomepage" */ './components/Sections/Library/Homepage'), 'LibraryHomepage'));
-const LibraryContainer     = Loadable(l(() => import(/* webpackChunkName: "LibraryLibraryContainer" */ './components/Sections/Library/LibraryContainer'), 'LibraryLibraryContainer'));
-const LibraryPerson        = Loadable(l(() => import(/* webpackChunkName: "LibraryLibraryPerson" */ './components/Sections/Library/LibraryPerson'), 'LibraryLibraryPerson'));
-const Topics               = Loadable(l(() => import(/* webpackChunkName: "TopicsTopicContainer" */ './components/Sections/Topics/TopicContainer'), 'TopicsTopicContainer'));
-const Topic                = Loadable(l(() => import(/* webpackChunkName: "TopicsTopicPage" */ './components/Sections/Topics/TopicPage'), 'TopicsTopicPage'));
-const SearchResults        = Loadable(l(() => import(/* webpackChunkName: "archResultsContainer" */ './components/Search/SearchResultsContainer'), 'SearchSearchResultsContainer'));
-const ProjectStatus        = Loadable(l(() => import(/* webpackChunkName: "ProjectStatusProjectStatus" */ './components/Sections/ProjectStatus/ProjectStatus'), 'ProjectStatusProjectStatus'));
-const Help                 = Loadable(l(() => import(/* webpackChunkName: "HelpHelp" */ './components/Sections/Help/Help'), 'HelpHelp'));
-const SimpleMode           = Loadable(l(() => import(/* webpackChunkName: "SimpleModeContainer" */ './components/Sections/SimpleMode/Container'), 'SimpleModeContainer'));
-const NotImplemented       = Loadable(l(() => import(/* webpackChunkName: "NotImplemented" */ './components/NotImplemented'), 'NotImplemented'));
-// const Design = Loadable(l(() => import('./components/Design/Design')));
-// const Design2 = Loadable(l(() => import('./components/Design/Design2')));
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
@@ -180,12 +168,9 @@ const withLanguageRoutes = (languagePathPrefix, creator) => ([
   }
 ]);
 
-withLanguageRoutes.propTypes    = {
+withLanguageRoutes.propTypes = {
   languagePathPrefix: PropTypes.string.isRequired,
-  creator: PropTypes.func,
-};
-withLanguageRoutes.defaultProps = {
-  creator: () => undefined,
+  creator: PropTypes.func.isRequired,
 };
 
 export default [

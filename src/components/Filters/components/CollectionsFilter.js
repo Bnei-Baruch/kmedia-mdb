@@ -18,17 +18,28 @@ class CollectionsFilter extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { tree: this.getTree(this.props) };
+    this.state = {
+      tree: CollectionsFilter.getTree(this.props),
+      collections: null,
+    };
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     const { collections } = this.props;
-    if (collections !== nextProps.collections) {
-      this.setState({ tree: this.getTree(nextProps) });
+    if (collections !== prevProps.collections) {
+      this.setState({ collections });
     }
   }
 
-  getTree = (props) => {
+  static getDerivedStateFromProps(props, state) {
+    const { collections } = state;
+    if (collections !== props.collections) {
+      return { tree: CollectionsFilter.getTree(props), collections: props.collections };
+    }
+    return null;
+  }
+
+  static getTree = (props) => {
     const { collections, t } = props;
 
     collections.sort((a, b) => strCmp(a.name, b.name));

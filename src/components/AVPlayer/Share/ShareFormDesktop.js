@@ -72,7 +72,7 @@ class ShareFormDesktop extends BaseShareForm {
           <Form>
             <Form.Group widths="equal">
               <Form.Input
-                value={start ? this.mlsToStrColon(start) : ''}
+                value={start ? BaseShareForm.mlsToStrColon(start) : ''}
                 onClick={this.setStart}
                 action={{
                   content: t('player.buttons.start-position'),
@@ -87,7 +87,7 @@ class ShareFormDesktop extends BaseShareForm {
                 placeholder={t('player.buttons.click-to-set')}
               />
               <Form.Input
-                value={end ? this.mlsToStrColon(end) : ''}
+                value={end ? BaseShareForm.mlsToStrColon(end) : ''}
                 onClick={this.setEnd}
                 action={{
                   content: t('player.buttons.end-position'),

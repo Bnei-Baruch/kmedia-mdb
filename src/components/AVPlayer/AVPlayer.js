@@ -136,11 +136,12 @@ class AVPlayer extends PureComponent {
     // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ isClient: true });
 
-    const { deviceInfo: { browser: { name: browserName } }, media } = this.props;
+    const { deviceInfo: { browser: { name: browserName } }, media, item } = this.props;
     this.setState({
       browserName,
       firstSeek: true,
-      ...this.chooseSource(this.props)
+      item,
+      ...AVPlayer.chooseSource(this.props)
     });
 
     if (browserName === 'Edge' || browserName === 'IE') {
@@ -149,13 +150,14 @@ class AVPlayer extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { item } = this.props;
+    const { item } = this.state;
     if (nextProps.item !== item) {
       this.setState({
         error: false,
         errorReason: '',
         firstSeek: true,
-        ...this.chooseSource(nextProps)
+        item: nextProps.item,
+        ...AVPlayer.chooseSource(nextProps)
       });
     }
   }
@@ -169,7 +171,7 @@ class AVPlayer extends PureComponent {
 
   activatePersistence = () => {
     const { media } = this.props;
-    this.setState({ persistenceFn: this.persistVolume });
+    this.setState({ persistenceFn: AVPlayer.persistVolume });
     let persistedVolume = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
 
     if (persistedVolume == null || Number.isNaN(Number.parseInt(persistedVolume, 10))) {
@@ -181,7 +183,7 @@ class AVPlayer extends PureComponent {
 
   persistVolume = debounce(media => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, media.volume), 200);
 
-  chooseSource = (props) => {
+  static chooseSource = (props) => {
     const { item, t } = props;
     if (isEmpty(item.byQuality)) {
       return { error: true, errorReason: t('messages.no-playable-files') };
@@ -576,7 +578,11 @@ class AVPlayer extends PureComponent {
         />
       );
     } else if (isVideo) {
-      centerMediaControl = <Fragment><AVCenteredPlay /><AVSpinner /></Fragment>;
+      centerMediaControl = (
+        <Fragment>
+          <AVCenteredPlay />
+          <AVSpinner />
+        </Fragment>);
     }
 
     const handleKeyDown = utils.keyboardControls.bind(null, media);

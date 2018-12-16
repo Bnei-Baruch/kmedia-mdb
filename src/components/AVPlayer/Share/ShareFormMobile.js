@@ -65,7 +65,7 @@ class ShareFormMobile extends BaseShareForm {
           <Form size="mini">
             <Form.Group widths="equal">
               <Form.Input
-                value={start ? this.mlsToStrColon(start) : ''}
+                value={start ? BaseShareForm.mlsToStrColon(start) : ''}
                 onClick={this.setStart}
                 action={{
                   content: t('player.buttons.start-position'),
@@ -80,7 +80,7 @@ class ShareFormMobile extends BaseShareForm {
                 className="slice-button-mobile"
               />
               <Form.Input
-                value={end ? this.mlsToStrColon(end) : ''}
+                value={end ? BaseShareForm.mlsToStrColon(end) : ''}
                 onClick={this.setEnd}
                 action={{
                   content: t('player.buttons.end-position'),

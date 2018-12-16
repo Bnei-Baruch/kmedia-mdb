@@ -62,8 +62,9 @@ class Library extends Component {
   }
 
   pageNumberHandler = (pageNumber) => {
+    const { history } = this.props;
     this.setState({ pageNumber });
-    updateQuery(this.props.history, query => ({
+    updateQuery(history, query => ({
       ...query,
       page: pageNumber,
     }));
@@ -79,8 +80,10 @@ class Library extends Component {
     const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
 
     // PDF.js will fetch file by itself
-    const usePdfFile = isTaas && this.props.pdfFile;
-    const mimeType   = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    const { pdfFile, startsFrom } = this.props;
+    const usePdfFile              = isTaas && pdfFile;
+    const mimeType                = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    const { pageNumber }          = this.state;
     let contents;
 
     const { wip: contentWip, err: contentErr, data: contentData } = content;
@@ -94,29 +97,32 @@ class Library extends Component {
     } else if (contentWip) {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else if (usePdfFile) {
-      contents = (<PDF
-        pdfFile={assetUrl(`sources/${this.props.pdfFile}`)}
-        pageNumber={this.state.pageNumber || 1}
-        startsFrom={this.props.startsFrom}
-        pageNumberHandler={this.pageNumberHandler}
-      />);
+      contents = (
+        <PDF
+          pdfFile={assetUrl(`sources/${pdfFile}`)}
+          pageNumber={pageNumber || 1}
+          startsFrom={startsFrom}
+          pageNumberHandler={this.pageNumberHandler}
+        />);
     } else if (contentData) {
-      contents = (<div
-        style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
-        dangerouslySetInnerHTML={{ __html: contentData }}
-      />);
+      contents = (
+        <div
+          style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
+          dangerouslySetInnerHTML={{ __html: contentData }}
+        />);
     } else {
       return <Segment basic>{t('sources-library.no-source')}</Segment>;
     }
 
     let languageBar = null;
     if (languages.length > 0) {
-      languageBar = (
+      const { handleLanguageChanged } = this.props;
+      languageBar                     = (
         <Container fluid textAlign="right">
           <AnchorsLanguageSelector
             languages={languages}
             defaultValue={language}
-            onSelect={this.props.handleLanguageChanged}
+            onSelect={handleLanguageChanged}
           />
         </Container>
       );

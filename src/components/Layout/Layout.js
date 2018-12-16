@@ -44,12 +44,13 @@ class Layout extends Component {
 
   // i.e, main, header of footer.
   clickOutside = (e) => {
-    if (this.state &&
-      this.state.sidebarActive &&
-      e.target !== this.sidebarElement &&
-      !this.sidebarElement.contains(e.target) &&
-      !this.menuButtonElement1.contains(e.target) &&
-      !this.menuButtonElement2.contains(e.target)) {
+    const { sidebarActive } = this.state;
+    if (this.state
+      && sidebarActive
+      && e.target !== this.sidebarElement
+      && !this.sidebarElement.contains(e.target)
+      && !this.menuButtonElement1.contains(e.target)
+      && !this.menuButtonElement2.contains(e.target)) {
       this.closeSidebar();
     }
   };

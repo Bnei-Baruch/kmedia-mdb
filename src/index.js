@@ -10,12 +10,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactGA from 'react-ga';
 import createHistory from 'history/createBrowserHistory';
-import Loadable from 'react-loadable';
 
 import { DEFAULT_LANGUAGE, LANG_UKRAINIAN } from './helpers/consts';
 import i18n from './helpers/i18nnext';
 import createStore from './redux/createStore';
 import { actions as mdb } from './redux/modules/mdb';
+import ErrorBoundary from './components/ErrorBoundary';
 import { actions as ssr } from './redux/modules/ssr';
 import App from './components/App/App';
 
@@ -33,14 +33,14 @@ const i18nData = window.__i18n || {};
 const language = i18nData.initialLanguage || DEFAULT_LANGUAGE;
 moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
 
-window.onload = () => {
-  Loadable.preloadReady().then(() => {
-    ReactDOM.hydrate(
-      <App i18n={i18n} store={store} history={history} {...i18nData} />,
-      document.getElementById('root')
-    );
-  });
-};
+ReactDOM.hydrate(
+  <React.StrictMode>
+    <ErrorBoundary>
+      <App i18n={i18n} store={store} history={history} {...i18nData} />
+    </ErrorBoundary>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
 
 // We ask for semi-quasi static data here since
 // we strip it from SSR to save initial network bandwidth

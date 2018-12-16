@@ -33,22 +33,26 @@ class LastLessonCollection extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      language: this.props.contentLanguage,
+    const { contentLanguage } = this.props;
+    this.state                = {
+      language: contentLanguage,
     };
   }
 
   componentDidMount() {
-    if (!this.props.lastLessonId) {
-      this.props.fetchLatestLesson();
+    const { lastLessonId, fetchLatestLesson } = this.props;
+    if (!lastLessonId) {
+      fetchLatestLesson();
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.state.language !== nextProps.contentLanguage) {
-      this.setState({ language: nextProps.contentLanguage });
+  static getDerivedStateFromProps(nextProps, state) {
+    const { language } = state;
+    if (language !== nextProps.contentLanguage) {
       nextProps.fetchLatestLesson();
+      return { language: nextProps.contentLanguage };
     }
+    return null;
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -57,10 +61,11 @@ class LastLessonCollection extends Component {
     const { props, state }                           = this;
 
     return !(
-      uiLanguage === props.uiLanguage &&
-      language === state.filesLanguage &&
-      contentLanguage === state.filesLanguage &&
-      equal(wip, props.wip) && equal(err, props.err)
+      uiLanguage === props.uiLanguage
+      && language === state.filesLanguage
+      && contentLanguage === state.filesLanguage
+      && equal(wip, props.wip)
+      && equal(err, props.err)
     );
   }
 

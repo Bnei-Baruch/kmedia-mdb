@@ -19,7 +19,6 @@ class SourcesContainer extends Component {
     doc2htmlById: PropTypes.objectOf(shapes.DataWipErr),
     language: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
-    t: PropTypes.func.isRequired,
     fetchIndex: PropTypes.func.isRequired,
     fetchAsset: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,

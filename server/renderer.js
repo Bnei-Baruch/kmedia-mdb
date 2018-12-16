@@ -12,7 +12,6 @@ import serialize from 'serialize-javascript';
 import UAParser from 'ua-parser-js';
 import localStorage from 'mock-local-storage';
 import { parse as cookieParse } from 'cookie';
-import Loadable from 'react-loadable';
 
 import routes from '../src/routes';
 import { COOKIE_CONTENT_LANG, LANG_UI_LANGUAGES, LANG_UKRAINIAN } from '../src/helpers/consts';
@@ -26,20 +25,6 @@ import i18nnext from './i18nnext';
 import { initialState as settingsInitialState } from '../src/redux/modules/settings';
 
 const manifest = require('../build/asset-manifest');
-
-const modules       = [];
-const extractAssets = (assets, chunks) => Object.keys(assets)
-  .filter(asset => chunks.indexOf(asset.replace('.js', '')) > -1)
-  .map(k => assets[k]);
-const extraChunks   = extractAssets(manifest, modules)
-  .map(c => `<script type="text/javascript" src="/${c}"></script>`);
-
-const findOrAdd = (arr, item) => {
-  const foundIndex = arr.findIndex(x => x === item);
-  if (foundIndex === -1) {
-    arr.push(item);
-  }
-};
 
 // eslint-disable-next-line no-unused-vars
 const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all the work
@@ -143,7 +128,7 @@ export default function serverRender(req, res, next, htmlData) {
     const settings = Object.assign({}, settingsInitialState, { language, contentLanguage: cookies[COOKIE_CONTENT_LANG] });
 
     const initialState = {
-      router: { location: history.location },
+      // router: { location: history.location },
       device: { deviceInfo: new UAParser(req.get('user-agent')).getResult() },
       settings,
     };
@@ -185,7 +170,15 @@ export default function serverRender(req, res, next, htmlData) {
             hrstart = process.hrtime();
 
             // actual render
-            const markup = ReactDOMServer.renderToString(<Loadable.Capture report={m => findOrAdd(modules, m)}><App i18n={context.i18n} store={store} history={history} /></Loadable.Capture>);
+            let markup = '';
+            try {
+              markup = ReactDOMServer.renderToString(<App i18n={context.i18n} store={store} history={history} />);
+            } catch (error) {
+              console.error(`Render Error: ${error}`);
+              console.error(error.stack);
+
+              throw error;
+            }
             hrend        = process.hrtime(hrstart);
             console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
             hrstart = process.hrtime();
@@ -229,9 +222,8 @@ export default function serverRender(req, res, next, htmlData) {
                 .replace(/<title>.*<\/title>/, helmet.title.toString())
                 .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, language)}${alternateLinks(req, language)}</head>`)
                 .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
-                .replace(/semantic_v3.min.css/g, `semantic_v3${cssDirection}.min.css`)
-                .replace(/<div id="root"><\/div>/, rootDiv)
-                .replace(/<\/body>/, `${extraChunks.join('')}</body>`);
+                .replace(/semantic_v4.min.css/g, `semantic_v3${cssDirection}.min.css`)
+                .replace(/<div id="root"><\/div>/, rootDiv);
 
               if (context.code) {
                 res.status(context.code);

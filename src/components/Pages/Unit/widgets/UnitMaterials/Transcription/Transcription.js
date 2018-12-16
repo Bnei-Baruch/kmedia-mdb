@@ -51,13 +51,12 @@ class Transcription extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const toUpdate =
-            (nextProps.uiLanguage !== this.props.uiLanguage) ||
-            (nextProps.contentLanguage !== this.props.contentLanguage) ||
-            (nextProps.unit && !this.props.unit) ||
-            (nextProps.unit.id !== this.props.unit.id) ||
-            (nextProps.unit.files !== this.props.unit.files);
+  shouldComponentUpdate(nextProps, nextState) {
+    const toUpdate = (nextProps.uiLanguage !== this.props.uiLanguage)
+      || (nextProps.contentLanguage !== this.props.contentLanguage)
+      || (nextProps.unit && !this.props.unit)
+      || (nextProps.unit.id !== this.props.unit.id)
+      || (nextProps.unit.files !== this.props.unit.files);
 
     if (toUpdate) {
       const { selected, language } = this.setCurrentItem(nextProps);
@@ -65,6 +64,8 @@ class Transcription extends Component {
         this.props.onContentChange(selected.id);
       }
     }
+
+    return toUpdate;
   }
 
   static getTextFiles = (props) => {
