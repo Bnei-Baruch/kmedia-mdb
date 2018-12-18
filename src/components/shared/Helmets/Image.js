@@ -18,6 +18,10 @@ class Image extends Component {
     unitOrUrl: null,
   };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.unitOrUrl === this.props.unitOrUrl;
+  }
+
   // eslint-disable-next-line class-methods-use-this
   buildImage(url, width, height) {
     // TODO: enlarge is the most expensive op, use another one!
