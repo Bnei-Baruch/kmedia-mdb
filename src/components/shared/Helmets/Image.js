@@ -18,8 +18,8 @@ class Image extends Component {
     unitOrUrl: null,
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.unitOrUrl === this.props.unitOrUrl;
+  shouldComponentUpdate(nextProps) {
+    return nextProps.unitOrUrl !== this.props.unitOrUrl;
   }
 
   // eslint-disable-next-line class-methods-use-this
