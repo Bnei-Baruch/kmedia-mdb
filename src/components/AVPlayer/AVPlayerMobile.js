@@ -114,7 +114,7 @@ class AVPlayerMobile extends PureComponent {
     // prior to media element presence on the page
     this.wasCurrentTime = this.media.currentTime;
     this.props.onSwitchAV(...params);
-    this.media.autoplay = true;
+    //this.media.autoplay = true;
   };
 
   // Remember the current time and playing state while switching.
@@ -133,8 +133,7 @@ class AVPlayerMobile extends PureComponent {
       this.media.addEventListener('timeupdate', this.handleTimeUpdate);
       this.media.addEventListener('volumechange', this.handleVolumeChange);
       this.media.addEventListener('canplay', this.seekIfNeeded);
-      this.seekIfNeeded();
-      this.restoreVolume();
+      this.restoreVolume();     
     } else if (this.media) {
       this.media.removeEventListener('play', this.handlePlay);
       this.media.removeEventListener('pause', this.handlePause);
@@ -148,6 +147,8 @@ class AVPlayerMobile extends PureComponent {
   };
 
   handlePlay = () => {
+    this.seekIfNeeded();
+
     // make future src changes autoplay
     this.media.autoplay = true;
   };
@@ -171,13 +172,9 @@ class AVPlayerMobile extends PureComponent {
 
   seekIfNeeded = () => {
     const { sliceStart, firstSeek, playbackRate } = this.state;
+    this.media.playbackRate = playbackToValue(playbackRate);
+
     if (firstSeek) {
-      this.media.autoplay = true;
-    }
-    if (this.wasCurrentTime) {
-      this.seekTo(this.wasCurrentTime, true);
-      this.wasCurrentTime = undefined;
-    } else if (firstSeek) {
       if (sliceStart) {
         this.seekTo(sliceStart, true);
       } else {
@@ -185,10 +182,13 @@ class AVPlayerMobile extends PureComponent {
         if (savedTime) {
           this.seekTo(savedTime, true);
         }
-      }
-    }
-    this.media.playbackRate = playbackToValue(playbackRate);
-    this.setState({ firstSeek: false });
+      }      
+      this.media.autoplay = true;
+      this.setState({ firstSeek: false });          
+    } else if (this.wasCurrentTime) {
+      this.seekTo(this.wasCurrentTime, true);
+      this.wasCurrentTime    = undefined;
+    } 
   };
 
   handlePause = () => {
@@ -210,14 +210,14 @@ class AVPlayerMobile extends PureComponent {
   };
 
   handleTimeUpdate = (e) => {
-    const { mode, sliceEnd, sliceStart, seeking } = this.state;
+    const { mode, sliceEnd, sliceStart, seeking, firstSeek } = this.state;
+
+    if (mode !== PLAYER_MODE.SLICE_VIEW || firstSeek || seeking) {
+       return;
+    }
 
     const time = e.currentTarget.currentTime;
     this.saveCurrentTime(time);
-
-    if (mode !== PLAYER_MODE.SLICE_VIEW || seeking === true) {
-      return;
-    }
 
     const lowerTime = Math.min(sliceEnd, time);
 

@@ -111,12 +111,15 @@ class PlaylistAVBox extends Component {
     const preferredMT     = playerHelper.restorePreferredMediaType();
     const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);
     const newMediaType    = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const prevActivePart  = playerHelper.getActivePartFromQuery(oldLocation);
+    const newActivePart   = playerHelper.getActivePartFromQuery(location);
     const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
     return !(equal(collection, oldCollection)
       && oldUiLanguage === uiLanguage
       && oldContentLanguage === contentLanguage
       && prevMediaType === newMediaType
+      && prevActivePart === newActivePart
       && newItemLanguage === playerLanguage);
   }
 

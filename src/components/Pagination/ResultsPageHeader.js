@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { Header } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 
 const ResultsPageHeader = (props) => {
   const { pageNo, pageSize, total, t } = props;
@@ -22,7 +22,7 @@ const ResultsPageHeader = (props) => {
     );
   }
 
-  return <Header as="h2" className="pagination-results" content={content} />;
+  return <Container className="pagination-results" content={content} />;
 };
 
 ResultsPageHeader.propTypes = {

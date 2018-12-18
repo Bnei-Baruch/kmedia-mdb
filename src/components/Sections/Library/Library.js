@@ -84,20 +84,20 @@ class Library extends Component {
     const usePdfFile              = isTaas && pdfFile;
     const mimeType                = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
     const { pageNumber }          = this.state;
-    let contents;
+    let contentsToDisplay;
 
     const { wip: contentWip, err: contentErr, data: contentData } = content;
 
     if (contentErr) {
       if (contentErr.response && contentErr.response.status === 404) {
-        contents = <FrownSplash text={t('messages.source-content-not-found')} />;
+        contentsToDisplay = <FrownSplash text={t('messages.source-content-not-found')} />;
       } else {
-        contents = <ErrorSplash text={t('messages.server-error')} subtext={formatError(contentErr)} />;
+        contentsToDisplay = <ErrorSplash text={t('messages.server-error')} subtext={formatError(contentErr)} />;
       }
     } else if (contentWip) {
-      contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
+      contentsToDisplay = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else if (usePdfFile) {
-      contents = (
+      contentsToDisplay = (
         <PDF
           pdfFile={assetUrl(`sources/${pdfFile}`)}
           pageNumber={pageNumber || 1}
@@ -105,7 +105,7 @@ class Library extends Component {
           pageNumberHandler={this.pageNumberHandler}
         />);
     } else if (contentData) {
-      contents = (
+      contentsToDisplay = (
         <div
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
           dangerouslySetInnerHTML={{ __html: contentData }}
@@ -136,7 +136,7 @@ class Library extends Component {
             : languageBar
         }
         <Download path={fullUrlPath} mimeType={mimeType} />
-        {contents}
+        {contentsToDisplay}
       </div>
     );
   }

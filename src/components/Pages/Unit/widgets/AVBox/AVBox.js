@@ -96,20 +96,28 @@ class AVBox extends Component {
     playerHelper.setLanguageInQuery(history, language);
   };
 
+  handleMediaEditModeChange = (mediaEditMode) => {
+    this.setState({ mediaEditMode });
+  };
+
   render() {
-    const { t, autoPlayAllowed } = this.props;
-    const { playableItem }       = this.state;
+    const { t, autoPlayAllowed }          = this.props;
+    const { playableItem, mediaEditMode } = this.state;
 
     if (isEmpty(playableItem)) {
       return (<div>{t('messages.no-playable-files')}</div>);
     }
+
+    const isAudio = playableItem.mediaType === MT_AUDIO;
 
     return (
       <Grid.Row>
         <Grid.Column mobile={16} tablet={12} computer={10}>
           <div
             className={classNames('avbox__player', {
-              'avbox__player--is-audio': playableItem.mediaType === MT_AUDIO,
+              'avbox__player--is-audio': isAudio,
+              'avbox__player--is-audio--edit-mode': isAudio && mediaEditMode === 2,
+              'avbox__player--is-audio--normal-mode': isAudio && mediaEditMode === 0,
               'avbox__player--is-4x3': playableItem.unit.film_date < '2014',
               'mobile-device': !autoPlayAllowed,
             })}
@@ -123,6 +131,7 @@ class AVBox extends Component {
                   languages={playableItem.availableLanguages}
                   language={playableItem.language}
                   onLanguageChange={this.handleChangeLanguage}
+                  onMediaEditModeChange={this.handleMediaEditModeChange}
                 />
               </Media>
             </div>

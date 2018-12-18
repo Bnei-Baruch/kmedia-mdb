@@ -1,6 +1,7 @@
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
 import { Dropdown } from 'semantic-ui-react';
+import classNames from 'classnames';
 
 import BaseLanguageSelector from './BaseLanguageSelector';
 
@@ -9,8 +10,8 @@ class DropdownLanguageSelector extends BaseLanguageSelector {
     this.props.onSelect(e, data.value);
 
   render() {
-    const { defaultValue: value } = this.props;
-    const options                 = this.getOptions(this.props);
+    const { defaultValue: value, blink } = this.props;
+    const options                        = this.getOptions(this.props);
 
     return (
       <Dropdown
@@ -19,10 +20,10 @@ class DropdownLanguageSelector extends BaseLanguageSelector {
         labeled
         selection
         scrolling
-        className="dropdown-language-selector"
         value={value}
         options={options}
         onChange={this.handleSelect}
+        className={classNames('dropdown-language-selector', { 'blink': !!blink })}
       />
     );
   }

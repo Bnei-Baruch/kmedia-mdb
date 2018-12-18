@@ -15,6 +15,7 @@ class HandleLanguages extends Component {
     setContentLanguage: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
     t: PropTypes.func.isRequired,
+    isMobileDevice: PropTypes.bool
   };
 
   state = {
@@ -26,14 +27,21 @@ class HandleLanguages extends Component {
   handlePopupOpen = () => this.setState({ isActive: true });
 
   render() {
-    const { t, language, location, contentLanguage, setContentLanguage } = this.props;
-    const { isActive }                                                   = this.state;
-    const langDir                                                        = getLanguageDirection(language);
+    const { t, language, location, contentLanguage, setContentLanguage, isMobileDevice } = this.props;
+    const { isActive }                                                                   = this.state;
+    const langDir                                                                        = getLanguageDirection(language);
 
     const popupStyle = {
       direction: langDir,
     };
 
+    const trigger = isMobileDevice
+      ? <Icon size="big" name="language" />
+      : (
+        <span>
+          <Icon name="sliders horizontal" />
+          {t('languages.language')}
+        </span>);
     return (
       <Popup
         key="handleLangs"
@@ -41,9 +49,8 @@ class HandleLanguages extends Component {
         hideOnScroll
         position="bottom right"
         trigger={(
-          <Menu.Item onClick={this.handlePopupOpen}>
-            <Icon name="sliders horizontal" />
-            {t('languages.language')}
+          <Menu.Item onClick={this.handlePopupOpen} className="padding_r_l_0">
+            {trigger}
           </Menu.Item>
         )}
         open={isActive}
@@ -62,13 +69,6 @@ class HandleLanguages extends Component {
               content={t('buttons.close')}
               onClick={this.handlePopupClose}
             />
-            {/* <Button */}
-            {/* primary */}
-            {/* compact */}
-            {/* size="tiny" */}
-            {/* content={t('buttons.apply')} */}
-            {/* onClick={this.apply} */}
-            {/* /> */}
           </div>
 
         </Popup.Header>

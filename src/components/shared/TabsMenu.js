@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
 
-class TabsMenu extends Component {
+import * as shapes from '../shapes';
 
+class TabsMenu extends Component {
   static propTypes = {
+    location: shapes.HistoryLocation.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired,
@@ -21,15 +24,10 @@ class TabsMenu extends Component {
   constructor(props) {
     super(props);
 
-    let { active } = props;
-    if (!active) {
-      const { items } = props;
-      if (items.length > 0) {
-        active = items[0].name;
-      }
-    }
-
-    this.state = { active };
+    const active = props.active ||
+      this.activeFromLocation(props.location) ||
+      this.activeFromDefault(props.items);
+    this.state   = { active };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -39,7 +37,16 @@ class TabsMenu extends Component {
     }
   }
 
-  handleActiveChange = (e, { name }) => this.setState({ active: name });
+  activeFromLocation = (location) => {
+    const { state: { active } = {} } = location;
+    return active;
+  };
+
+  activeFromDefault = items =>
+    (items.length > 0 ? items[0].name : null);
+
+  handleActiveChange = (e, { name }) =>
+    this.setState({ active: name });
 
   render() {
     const { active } = this.state;
@@ -72,4 +79,4 @@ class TabsMenu extends Component {
   }
 }
 
-export default TabsMenu;
+export default withRouter(TabsMenu);

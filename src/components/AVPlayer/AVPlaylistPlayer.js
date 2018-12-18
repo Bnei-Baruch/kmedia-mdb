@@ -48,13 +48,16 @@ class AVPlaylistPlayer extends Component {
     }
   };
 
-  onPlay = () => this.setState({ autoPlay: true });
-
+  onPlay  = () => this.setState({ autoPlay: true });
   onPause = () => this.setState({ autoPlay: false });
+
+  handleMediaEditModeChange = (mediaEditMode) => {    
+    this.setState({mediaEditMode: mediaEditMode});
+  };
 
   render() {
     const { selected, items, language, onSwitchAV, onLanguageChange, autoPlayAllowed } = this.props;
-    const { autoPlay }                                                                 = this.state;
+    const { autoPlay, mediaEditMode }                                                     = this.state;
 
     const currentItem = items[selected];
 
@@ -63,10 +66,14 @@ class AVPlaylistPlayer extends Component {
     const hasNext = selected < items.length - 1 && items.slice(selected).some(f => !!f.src);
     const hasPrev = selected > 0 && items.slice(0, selected).some(f => !!f.src);
 
+    const isAudio = currentItem.mediaType === MT_AUDIO;
+
     return (
       <div
         className={classNames('avbox__player', {
-          'avbox__player--is-audio': currentItem.mediaType === MT_AUDIO,
+          'avbox__player--is-audio': isAudio,
+          'avbox__player--is-audio--edit-mode': isAudio && mediaEditMode === 2,
+          'avbox__player--is-audio--normal-mode': isAudio && mediaEditMode === 0,
           'avbox__player--is-4x3': currentItem.unit.film_date < '2014',
           'mobile-device': !autoPlayAllowed,
         })}
@@ -89,6 +96,7 @@ class AVPlaylistPlayer extends Component {
               onNext={this.onNext}
               onPause={this.onPause}
               onPlay={this.onPlay}
+              onMediaEditModeChange={this.handleMediaEditModeChange}
             />
           </Media>
         </div>

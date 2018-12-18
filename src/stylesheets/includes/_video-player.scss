@@ -48,7 +48,25 @@
       @include mobile {
         padding-top: 120px;
       }
-    }
+
+      &--edit-mode {
+        height:400px;
+        -webkit-transition: height 1s;
+        transition: height 1s;
+      }
+  
+      @media screen and (min-width: $tabletBreakpoint) {
+        &--edit-mode {
+          height:310px;
+        }
+      }
+  
+      &--normal-mode {
+        height:0;
+        -webkit-transition: height 1s;
+        transition: height 1s;
+      }
+    }  
   }
 
   &__media-wrapper {

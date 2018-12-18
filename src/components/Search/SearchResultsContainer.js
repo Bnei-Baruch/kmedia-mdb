@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Container, Divider } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 
+import { selectors as device } from '../../redux/modules/device';
 import { actions, selectors } from '../../redux/modules/search';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
@@ -32,6 +33,7 @@ class SearchResultsContainer extends Component {
     setSortBy: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
     location: shapes.HistoryLocation.isRequired,
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -76,17 +78,21 @@ class SearchResultsContainer extends Component {
     search(query, pageNo, pageSize, '' /* suggest */, deb);
   };
 
+  isMobileDevice = () =>
+    this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
+
   render() {
     const { wip, err, queryResult, cMap, cuMap, pageNo, pageSize, sortBy, language, location, click } = this.props;
     return (
       <div>
         <SectionHeader section="search" />
-        <Divider fitted />
         <Filters
           sortBy={sortBy}
           onChange={this.handleFiltersChanged}
           onSortByChange={this.handleSortByChanged}
           onHydrated={this.handleFiltersHydrated}
+          location={location}
+          isMobileDevice={this.isMobileDevice}
         />
         <Container className="padded">
           <SearchResults
@@ -101,6 +107,7 @@ class SearchResultsContainer extends Component {
             handlePageChange={this.handlePageChange}
             location={location}
             click={click}
+            isMobileDevice={this.isMobileDevice}
           />
         </Container>
       </div>
@@ -150,6 +157,7 @@ const mapState = (state) => {
     language: settingsSelectors.getLanguage(state.settings),
     wip: selectors.getWip(state.search),
     err: selectors.getError(state.search),
+    deviceInfo: device.getDeviceInfo(state.device),
   };
 };
 

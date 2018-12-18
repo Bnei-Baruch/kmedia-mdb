@@ -5,10 +5,11 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
-import { Header, Icon, Menu } from 'semantic-ui-react';
+import { Button, Header, Icon, Menu, Segment } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
 import { actions, selectors as settings } from '../../redux/modules/settings';
+import { selectors as device } from '../../redux/modules/device';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import WrappedOmniBox from '../Search/OmniBox';
@@ -31,7 +32,8 @@ class Layout extends Component {
   };
 
   state = {
-    sidebarActive: false
+    sidebarActive: false,
+    showHeaderSearch: false
   };
 
   componentDidMount() {
@@ -44,7 +46,7 @@ class Layout extends Component {
 
   // i.e, main, header of footer.
   clickOutside = (e) => {
-    const { sidebarActive } = this.state;
+    const { sidebarActive, isShowHeaderSearch } = this.state;
     if (this.state
       && sidebarActive
       && e.target !== this.sidebarElement
@@ -52,6 +54,14 @@ class Layout extends Component {
       && !this.menuButtonElement1.contains(e.target)
       && !this.menuButtonElement2.contains(e.target)) {
       this.closeSidebar();
+    }
+
+    if (this.state
+      && isShowHeaderSearch
+      && e.target !== this.headerSearchElement
+      && !this.headerSearchElement.contains(e.target)
+      && !this.showSearchButtonElement.contains(e.target)) {
+      this.showHeaderSearch();
     }
   };
 
@@ -70,6 +80,33 @@ class Layout extends Component {
       return !ALL_LANGUAGES.includes(parts[0]);
     }
     return true;
+  };
+
+  isMobileDevice = () => {
+    const { deviceInfo } = this.props;
+    return deviceInfo.device && deviceInfo.device.type === 'mobile';
+  };
+
+  showHeaderSearch = () => this.setState({ isShowHeaderSearch: !this.state.isShowHeaderSearch });
+
+  renderHeaderSearch = () => {
+    const { isShowHeaderSearch } = this.state;
+    if (!isShowHeaderSearch) {
+      return null;
+    }
+
+    const { t, location } = this.props;
+    return (
+      <div
+        className="header_search"
+        ref={(el) => {
+          this.headerSearchElement = el;
+        }}
+      >
+        <Segment color="blue" inverted>
+          <WrappedOmniBox t={t} location={location} />
+        </Segment>
+      </div>);
   };
 
   render() {
@@ -104,7 +141,7 @@ class Layout extends Component {
               <Icon name="sidebar" />
             </Menu.Item>
             <Menu.Item className="logo" header as={Link} to="/">
-              <img src={logo} alt="logo" />
+              <img src={logo.substring(1)} alt="logo" />
               <Header inverted as="h1" content={t('nav.top.header')} />
             </Menu.Item>
             <Menu.Item className="layout__search mobile-hidden">
@@ -114,13 +151,26 @@ class Layout extends Component {
                   : null
               }
             </Menu.Item>
-            <Menu.Menu position="right">
-              <HandleLanguages
-                language={language}
-                contentLanguage={contentLanguage}
-                setContentLanguage={setContentLanguage}
-                location={location}
-              />
+            <Menu.Menu position="right" className="padding0">
+              <Menu.Item ref={(el) => {
+                if (!this.showSearchButtonElement) {
+                  this.showSearchButtonElement = ReactDOM.findDOMNode(el);
+                }
+              }}
+              >
+                <HandleLanguages
+                  language={language}
+                  contentLanguage={contentLanguage}
+                  setContentLanguage={setContentLanguage}
+                  location={location}
+                  isMobileDevice={this.isMobileDevice()}
+                />
+                {
+                  showSearch && this.isMobileDevice()
+                    ? <Button icon="search" color="blue" onClick={this.showHeaderSearch} />
+                    : null
+                }
+              </Menu.Item>
               <Menu.Item className="mobile-hidden">
                 <DonateNow language={language} />
               </Menu.Item>
@@ -128,13 +178,14 @@ class Layout extends Component {
             </Menu.Menu>
           </Menu>
         </div>
+        {this.renderHeaderSearch()}
         <div
           className={classnames('layout__sidebar', { 'is-active': sidebarActive })}
           ref={(el) => {
             this.sidebarElement = el;
           }}
         >
-          <Menu inverted borderless size="huge" color="blue">
+          <Menu inverted size="huge" color="blue">
             <Menu.Item
               icon
               as="a"
@@ -151,9 +202,6 @@ class Layout extends Component {
             <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={this.closeSidebar}>
               <img src={logo} alt="logo" />
               <Header inverted as="h1" content={t('nav.top.header')} />
-            </Menu.Item>
-            <Menu.Item className="mobile-only layout__sidebar-search">
-              <WrappedOmniBox location={location} onSearch={this.closeSidebar} />
             </Menu.Item>
           </Menu>
           <div className="layout__sidebar-menu">
@@ -175,6 +223,7 @@ export default connect(
   state => ({
     language: settings.getLanguage(state.settings),
     contentLanguage: settings.getContentLanguage(state.settings),
+    deviceInfo: device.getDeviceInfo(state.device),
   }),
   {
     setContentLanguage: actions.setContentLanguage,
