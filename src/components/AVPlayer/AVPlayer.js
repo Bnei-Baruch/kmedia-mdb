@@ -651,7 +651,7 @@ class AVPlayer extends PureComponent {
                 />
               )
             }
-            <AVMuteUnmute />
+            <AVMuteUnmute isAudio={isAudio} />
             <AVAudioVideo
               isAudio={isAudio}
               isVideo={isVideo}
