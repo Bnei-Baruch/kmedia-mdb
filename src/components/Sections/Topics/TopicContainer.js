@@ -8,6 +8,7 @@ import { List, Container, Header, Divider, Input, Icon } from 'semantic-ui-react
 import { selectors } from '../../../redux/modules/tags';
 import SectionHeader from '../../shared/SectionHeader';
 import Link from '../../Language/MultiLanguageLink';
+import { getEscapedRegExp } from '../../../helpers/utils';
 
 /* root will be main title
   subroot will be subtitle
@@ -30,11 +31,6 @@ class TopicContainer extends Component {
   };
 
   // filter stuff
-
-  getRegExp = (match) => {
-    const escapedMatch = match.replace(/[/)(.+\\]/g, '\\$&');
-    return new RegExp(escapedMatch, 'i');
-  };
 
   handleFilterChange = debounce((e, data) => {
     this.setState({ match: data.value });
@@ -63,7 +59,7 @@ class TopicContainer extends Component {
 
     this.filteredById  = {};
     const parentIdsArr = [];
-    const regExp       = this.getRegExp(match);
+    const regExp       = getEscapedRegExp(match);
 
     // filter objects
     Object.keys(byId).forEach((key) => {
