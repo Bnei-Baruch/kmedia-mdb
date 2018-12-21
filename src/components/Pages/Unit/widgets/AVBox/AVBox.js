@@ -52,11 +52,13 @@ class AVBox extends Component {
     this.setPlayableItem(unit, newMediaType, newItemLanguage, uiLanguage);
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
     const { unit, uiLanguage, contentLanguage, location } = nextProps;
     const { unit: oldUnit, uiLanguage: oldUiLanguage, contentLanguage: oldContentLanguage, location: oldLocation }
                                                           = this.props;
     const { language: playerLanguage }                    = this.state.playableItem;
+    const { mediaEditMode }                               = nextState;
+    const { oldMediaEditMode }                            = this.state;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();
     const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);
@@ -68,7 +70,8 @@ class AVBox extends Component {
       oldUiLanguage === uiLanguage &&
       oldContentLanguage === contentLanguage &&
       prevMediaType === newMediaType &&
-      newItemLanguage === playerLanguage);
+      newItemLanguage === playerLanguage  &&
+      oldMediaEditMode === mediaEditMode);
   }
 
   setPlayableItem(unit, mediaType, playerLanguage, uiLanguage) {
