@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
 
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, RTL_LANGUAGES, } from '../../../helpers/consts';
-import { isEmpty, shallowEqual } from '../../../helpers/utils';
+import { isEmpty, shallowEqual, getEscapedRegExp } from '../../../helpers/utils';
 
 class TOC extends Component {
   static propTypes = {
@@ -179,7 +179,7 @@ class TOC extends Component {
         key: `lib-leaf-${leafId}`
       }));
     } else {
-      panels  = this.subToc(children, path.slice(1)).map(({ content, title: name }, index) => ({
+      panels = this.subToc(children, path.slice(1)).map(({ content, title: name }, index) => ({
         title: name,
         content,
         key: `root-${index}-${title}`
@@ -228,10 +228,7 @@ class TOC extends Component {
       return path;
     }
 
-    // We don't check validity of regular expression,
-    // so let's escape all special symbols
-    const escapedMatch = match.replace(/[/)(.+\\]/g, '\\$&');
-    const reg          = new RegExp(escapedMatch, 'i');
+    const reg = getEscapedRegExp(match);
     return path.reduce((acc, el) => {
       if (reg.test(el.leafTitle)) {
         const name = el.leafTitle.replace(reg, '<em class="blue text">$&</em>');

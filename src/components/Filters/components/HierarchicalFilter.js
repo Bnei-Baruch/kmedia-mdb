@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { debounce, noop, escapeRegExp } from 'lodash';
+import { debounce, noop } from 'lodash';
 import scrollIntoView from 'scroll-into-view';
 import { Button, Header, Input, Menu, Segment } from 'semantic-ui-react';
 
-import { isEmpty } from '../../../helpers/utils';
+import { isEmpty, getEscapedRegExp } from '../../../helpers/utils';
 
 class HierarchicalFilter extends Component {
   static propTypes = {
@@ -191,7 +191,7 @@ class HierarchicalFilter extends Component {
 
     // if we have a search term we use it and stop
     if (term) {
-      const reg          = this.getEscapeRegExp(term);
+      const reg          = getEscapedRegExp(term);
       const selected     = Array.isArray(sValue) && sValue.length > 0 ? sValue[sValue.length - 1] : null;
       const filteredRoot = this.filterNode(root, reg, selected);
 
@@ -219,15 +219,6 @@ class HierarchicalFilter extends Component {
     }
 
     return items;
-  };
-
-  getEscapeRegExp = (term) => {
-    const escaped = term.replace(/[/)(.+\\]/g, '\\$&');
-    try {
-      return new RegExp(escaped, 'i');
-    } catch (e) {
-      return new RegExp(escapeRegExp(escaped), 'i');
-    }
   };
 
   render() {

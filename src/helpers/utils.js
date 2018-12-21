@@ -1,5 +1,6 @@
 import moment from 'moment';
 import 'moment-duration-format';
+import escapeRegExp from 'lodash/escapeRegExp';
 
 import { CollectionsBreakdown } from './mdb';
 
@@ -328,3 +329,12 @@ export function equal(a, b) {
 
   return false;
 }
+
+export const getEscapedRegExp = (term) => {
+  const escaped = term.replace(/[/)(.+\\]/g, '\\$&');
+  try {
+    return new RegExp(escaped, 'i');
+  } catch (e) {
+    return new RegExp(escapeRegExp(escaped), 'i');
+  }
+};
