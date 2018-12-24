@@ -121,7 +121,6 @@ const freshStore = () => ({
 const setStatus = (state, action) => {
   const wip    = { ...state.wip };
   const errors = { ...state.errors };
-  console.log(action.type, action.payload);
 
   switch (action.type) {
   case FETCH_UNIT:

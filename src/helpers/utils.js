@@ -1,5 +1,6 @@
 import moment from 'moment';
 import 'moment-duration-format';
+import isEqual from 'react-fast-compare';
 
 import { CollectionsBreakdown } from './mdb';
 
@@ -46,15 +47,18 @@ export const formatError = (error) => {
     // that falls out of the range of 2xx
     const msg = error.response.data.error;
     return error.response.statusText + (msg ? `: ${msg}` : '');
-  } else if (error.request) {
+  }
+  if (error.request) {
     // The request was made but no response was received
     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
     // http.ClientRequest in node.js
     return 'No response from server';
-  } else if (error.message) {
+  }
+  if (error.message) {
     // Something happened in setting up the request that triggered an Error
     return error.message;
-  } else if (typeof error.toString === 'function') {
+  }
+  if (typeof error.toString === 'function') {
     return error.toString();
   }
   return error;
@@ -65,20 +69,19 @@ export const formatError = (error) => {
  * @param duration {numeric} number of seconds in this duration
  * @param fmt {String} default is 'hh:mm:ss'
  */
-export const formatDuration = (duration, fmt = 'hh:mm:ss') =>
-  moment.duration(duration, 'seconds').format(fmt);
+export const formatDuration = (duration, fmt = 'hh:mm:ss') => moment.duration(duration, 'seconds').format(fmt);
 
 /**
  * A generator for interspersing a delimiter between items of an iterable.
  * @param iterable
- * @param delim
+ * @param delimiter
  */
-export function* intersperse(iterable, delim) {
+export function* intersperse(iterable, delimiter) {
   let first = true;
   // eslint-disable-next-line no-restricted-syntax
   for (const item of iterable) {
     if (!first) {
-      yield delim;
+      yield delimiter;
     }
     first = false;
     yield item;
@@ -131,8 +134,7 @@ export const physicalFile = (file, ext = false) => {
   // return `https://cdn.kabbalahmedia.info/${file.id}${suffix}`;
 };
 
-export const publicFile = relativePath =>
-  `${PUBLIC_BASE}${relativePath}`;
+export const publicFile = relativePath => `${PUBLIC_BASE}${relativePath}`;
 
 export const canonicalCollection = (unit) => {
   if (!unit) {
@@ -202,44 +204,11 @@ export const neighborIndices = (idx, len, n) => {
 export const strCmp = (a, b) => {
   if (a < b) {
     return -1;
-  } else if (a > b) {
+  }
+  if (a > b) {
     return 1;
   }
   return 0;
-};
-
-/**
- * Used by shallowCompare
- * @param objA
- * @param objB
- * @returns {bool}
- */
-export const shallowEqual = (objA, objB) => {
-  if (objA === objB) {
-    return true;
-  }
-
-  if (typeof objA !== 'object' || objA === null ||
-    typeof objB !== 'object' || objB === null) {
-    return false;
-  }
-
-  const keysA = Object.keys(objA);
-  const keysB = Object.keys(objB);
-
-  if (keysA.length !== keysB.length) {
-    return false;
-  }
-
-  // Test for A's keys different from B.
-  const bHasOwnProperty = Object.hasOwnProperty.bind(objB);
-  for (let i = 0; i < keysA.length; i++) {
-    if (!bHasOwnProperty(keysA[i]) || objA[keysA[i]] !== objB[keysA[i]]) {
-      return false;
-    }
-  }
-
-  return true;
 };
 
 /**
@@ -247,84 +216,6 @@ export const shallowEqual = (objA, objB) => {
  * @param instance object to take props and state from (usually should be "this")
  * @param nextProps new props
  * @param nextState new state
- * @returns {bool}
+ * @returns {boolean}
  */
-export const shallowCompare = (instance, nextProps, nextState) => (
-  !shallowEqual(instance.props, nextProps) ||
-  !shallowEqual(instance.state, nextState)
-);
-
-export function equal(a, b) {
-  const { isArray } = Array;
-  const keyList     = Object.keys;
-  const hasProp     = Object.prototype.hasOwnProperty;
-
-  if (a === b) {
-    return true;
-  }
-
-  const arrA = isArray(a);
-  const arrB = isArray(b);
-  let i;
-  let key;
-
-  if (arrA && arrB) {
-    const { length } = a;
-    if (length !== b.length) {
-      return false;
-    }
-    for (i = 0; i < length; i++) {
-      if (!equal(a[i], b[i])) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  if (arrA !== arrB) {
-    return false;
-  }
-
-  const dateA = a instanceof Date;
-  const dateB = b instanceof Date;
-  if (dateA !== dateB) {
-    return false;
-  }
-  if (dateA && dateB) {
-    return a.getTime() === b.getTime();
-  }
-
-  const regexpA = a instanceof RegExp;
-  const regexpB = b instanceof RegExp;
-  if (regexpA !== regexpB) {
-    return false;
-  }
-  if (regexpA && regexpB) {
-    return a.toString() === b.toString();
-  }
-
-  if (a instanceof Object && b instanceof Object) {
-    const keys       = keyList(a);
-    const { length } = keys;
-
-    if (length !== keyList(b).length) {
-      return false;
-    }
-
-    for (i = 0; i < length; i++) {
-      if (!hasProp.call(b, keys[i])) {
-        return false;
-      }
-    }
-    for (i = 0; i < length; i++) {
-      key = keys[i];
-      if (!equal(a[key], b[key])) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  return false;
-}
+export const shallowCompare = (instance, nextProps, nextState) => !isEqual(instance.props, nextProps) || !isEqual(instance.state, nextState);

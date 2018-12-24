@@ -4,7 +4,6 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { matchRoutes } from 'react-router-config';
 import { createMemoryHistory } from 'history';
-import { Helmet } from 'react-helmet';
 import pick from 'lodash/pick';
 import moment from 'moment';
 import qs from 'qs';
@@ -12,6 +11,7 @@ import serialize from 'serialize-javascript';
 import UAParser from 'ua-parser-js';
 import localStorage from 'mock-local-storage';
 import { parse as cookieParse } from 'cookie';
+import { HelmetProvider } from 'react-helmet-async';
 
 import routes from '../src/routes';
 import { COOKIE_CONTENT_LANG, LANG_UI_LANGUAGES, LANG_UKRAINIAN } from '../src/helpers/consts';
@@ -25,6 +25,8 @@ import i18nnext from './i18nnext';
 import { initialState as settingsInitialState } from '../src/redux/modules/settings';
 
 const manifest = require('../build/asset-manifest');
+
+const helmetContext = {};
 
 // eslint-disable-next-line no-unused-vars
 const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all the work
@@ -190,19 +192,19 @@ export default function serverRender(req, res, next, htmlData) {
             // actual render
             let markup = '';
             try {
-              markup = ReactDOMServer.renderToString(<App i18n={context.i18n} store={store} history={history} />);
+              markup = ReactDOMServer.renderToString(<HelmetProvider context={helmetContext}><App i18n={context.i18n} store={store} history={history} /></HelmetProvider>);
             } catch (error) {
               console.error(`Render Error: ${error}`);
               console.error(error.stack);
 
               throw error;
             }
-            hrend        = process.hrtime(hrstart);
+            hrend = process.hrtime(hrstart);
             console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
             hrstart = process.hrtime();
 
-            const helmet = Helmet.renderStatic();
-            hrend        = process.hrtime(hrstart);
+            const { helmet } = helmetContext;
+            hrend            = process.hrtime(hrstart);
             console.log('serverRender:  Helmet.renderStatic %ds %dms', hrend[0], hrend[1] / 1000000);
 
             if (context.url) {

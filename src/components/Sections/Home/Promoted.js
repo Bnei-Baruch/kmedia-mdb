@@ -31,16 +31,17 @@ class Promoted extends Component {
         <Link to="/events/c/0CnTOfyc">
           <Image fluid src={img} className="thumbnail__image" />
           {
-            header ?
-              <Header as="h2" className="thumbnail__header">
-                <Header.Content>
-                  <Header.Subheader>
-                    {subHeader}
-                  </Header.Subheader>
-                  {header}
-                </Header.Content>
-              </Header> :
-              null
+            header
+              ? (
+                <Header as="h2" className="thumbnail__header">
+                  <Header.Content>
+                    <Header.Subheader>
+                      {subHeader}
+                    </Header.Subheader>
+                    {header}
+                  </Header.Content>
+                </Header>)
+              : null
           }
         </Link>
       </div>

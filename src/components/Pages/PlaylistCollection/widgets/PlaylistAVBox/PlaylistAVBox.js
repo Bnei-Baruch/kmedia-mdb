@@ -4,10 +4,10 @@ import classNames from 'classnames';
 import { withNamespaces } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
+import isEqual from 'react-fast-compare';
 
 import { MT_AUDIO, MT_VIDEO } from '../../../../../helpers/consts';
 import playerHelper from '../../../../../helpers/player';
-import { equal } from '../../../../../helpers/utils';
 import * as shapes from '../../../../shapes';
 import AVPlaylistPlayer from '../../../../AVPlayer/AVPlaylistPlayer';
 
@@ -115,12 +115,14 @@ class PlaylistAVBox extends Component {
     const newActivePart   = playerHelper.getActivePartFromQuery(location);
     const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
-    return !(equal(collection, oldCollection)
-      && oldUiLanguage === uiLanguage
+    return !(
+      oldUiLanguage === uiLanguage
       && oldContentLanguage === contentLanguage
       && prevMediaType === newMediaType
       && prevActivePart === newActivePart
-      && newItemLanguage === playerLanguage);
+      && newItemLanguage === playerLanguage
+      && isEqual(collection, oldCollection)
+    );
   }
 
   handleSelectedChange = (selected) => {

@@ -141,7 +141,7 @@ class Layout extends Component {
               <Icon name="sidebar" />
             </Menu.Item>
             <Menu.Item className="logo" header as={Link} to="/">
-              <img src={logo.substring(1)} alt="logo" />
+              <img src={logo} alt="logo" />
               <Header inverted as="h1" content={t('nav.top.header')} />
             </Menu.Item>
             <Menu.Item className="layout__search mobile-hidden">

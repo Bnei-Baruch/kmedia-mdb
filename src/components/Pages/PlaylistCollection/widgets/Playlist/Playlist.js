@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Header, Icon, Menu } from 'semantic-ui-react';
+import isEqual from 'react-fast-compare';
 
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, NO_NAME } from '../../../../../helpers/consts';
 import { fromToLocalized } from '../../../../../helpers/date';
-import { equal, formatDuration } from '../../../../../helpers/utils';
+import { formatDuration } from '../../../../../helpers/utils';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import Link from '../../../../Language/MultiLanguageLink';
 
@@ -29,11 +30,11 @@ class PlaylistWidget extends Component {
   shouldComponentUpdate(nextProps) {
     const { playlist, selected, nextLink, prevLink, language } = this.props;
     return !(
-      equal(nextProps.playlist, playlist)
-      && nextProps.selected === selected
+      nextProps.selected === selected
       && nextProps.nextLink === nextLink
       && nextProps.prevLink === prevLink
       && nextProps.language === language
+      && isEqual(nextProps.playlist, playlist)
     );
   }
 

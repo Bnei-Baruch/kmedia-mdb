@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
+import isEqual from 'react-fast-compare';
 
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, RTL_LANGUAGES, } from '../../../helpers/consts';
-import { isEmpty, shallowEqual } from '../../../helpers/utils';
+import { isEmpty } from '../../../helpers/utils';
+import { Reference } from '../../shapes';
 
 const titleKey = id => `title-${id}`;
 
@@ -106,7 +108,7 @@ class TOC extends Component {
       children: PropTypes.arrayOf(PropTypes.string),
     })).isRequired,
     rootId: PropTypes.string.isRequired,
-    contextRef: PropTypes.object,
+    contextRef: Reference,
     getSourceById: PropTypes.func.isRequired,
     apply: PropTypes.func.isRequired,
     stickyOffset: PropTypes.number,
@@ -138,7 +140,7 @@ class TOC extends Component {
       rootId !== nextProps.rootId
       || match !== nextProps.match
       || stickyOffset !== nextProps.stickyOffset
-      || !shallowEqual(fullPath, nextProps.fullPath)
+      || !isEqual(fullPath, nextProps.fullPath)
     );
   }
 

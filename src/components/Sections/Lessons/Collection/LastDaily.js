@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
+import isEqual from 'react-fast-compare';
 
 import { actions, selectors } from '../../../../redux/modules/mdb';
 import { selectors as settings } from '../../../../redux/modules/settings';
@@ -11,7 +12,7 @@ import * as shapes from '../../../shapes';
 import Helmets from '../../../shared/Helmets';
 import WipErr from '../../../shared/WipErr/WipErr';
 import { PlaylistCollectionContainer } from '../../../Pages/PlaylistCollection/Container';
-import { equal, publicFile } from '../../../../helpers/utils';
+import { publicFile } from '../../../../helpers/utils';
 
 class LastLessonCollection extends Component {
   static propTypes = {
@@ -64,8 +65,8 @@ class LastLessonCollection extends Component {
       uiLanguage === props.uiLanguage
       && language === state.filesLanguage
       && contentLanguage === state.filesLanguage
-      && equal(wip, props.wip)
-      && equal(err, props.err)
+      && isEqual(wip, props.wip)
+      && isEqual(err, props.err)
     );
   }
 

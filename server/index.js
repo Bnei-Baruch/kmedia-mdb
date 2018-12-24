@@ -12,7 +12,7 @@ require('ignore-styles').default(undefined, (module, filename) => {
     || filename.endsWith('.jpeg')
     || filename.endsWith('.svg')) {
     // eslint-disable-next-line no-param-reassign
-    module.exports = `/${manifest[path.join('static', 'media', path.basename(filename))]}`;
+    module.exports = `${manifest[path.join('static', 'media', path.basename(filename))]}`;
   }
 });
 
@@ -24,6 +24,8 @@ require('@babel/register')({
     'dynamic-import-node',
     'jaybe-react-loadable/babel',
     '@babel/plugin-proposal-class-properties',
+    '@babel/plugin-proposal-export-namespace-from',
+    '@babel/plugin-proposal-throw-expressions',
   ]
 });
 

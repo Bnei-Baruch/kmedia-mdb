@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
 import { Grid } from 'semantic-ui-react';
 import { Media } from 'react-media-player';
+import isEqual from 'react-fast-compare';
 
 import { MT_AUDIO, MT_VIDEO } from '../../../../../helpers/consts';
 import playerHelper from '../../../../../helpers/player';
@@ -13,7 +14,7 @@ import { selectors as device } from '../../../../../redux/modules/device';
 import * as shapes from '../../../../shapes';
 import AVMobileCheck from '../../../../AVPlayer/AVMobileCheck';
 import { selectors as settings } from '../../../../../redux/modules/settings';
-import { equal, isEmpty } from '../../../../../helpers/utils';
+import { isEmpty } from '../../../../../helpers/utils';
 
 class AVBox extends Component {
   static propTypes = {
@@ -67,11 +68,12 @@ class AVBox extends Component {
     const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
     // no change
-    return !(equal(unit, oldUnit)
-      && oldUiLanguage === uiLanguage
+    return !(
+      oldUiLanguage === uiLanguage
       && oldContentLanguage === contentLanguage
       && prevMediaType === newMediaType
-      && newItemLanguage === playerLanguage);
+      && newItemLanguage === playerLanguage
+      && isEqual(unit, oldUnit));
   }
 
   static getPlayableItem(unit, mediaType, playerLanguage, uiLanguage) {

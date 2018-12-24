@@ -5,9 +5,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
+import isEqual from 'react-fast-compare';
 
 import { getQuery, updateQuery } from '../../../helpers/url';
-import { equal, isEmpty } from '../../../helpers/utils';
+import { isEmpty } from '../../../helpers/utils';
 import { selectors as device } from '../../../redux/modules/device';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -69,11 +70,11 @@ class SimpleModeContainer extends Component {
     const { props, state }                                  = this;
 
     return !(
-      uiLanguage === props.uiLanguage &&
-      filesLanguage === state.filesLanguage &&
-      contentLanguage === state.filesLanguage &&
-      equal(wip, props.wip) && equal(err, props.err) &&
-      equal(items, props.items)
+      uiLanguage === props.uiLanguage
+      && filesLanguage === state.filesLanguage
+      && contentLanguage === state.filesLanguage
+      && isEqual(wip, props.wip) && isEqual(err, props.err)
+      && isEqual(items, props.items)
     );
   }
 

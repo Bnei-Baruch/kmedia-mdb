@@ -10,6 +10,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactGA from 'react-ga';
 import createHistory from 'history/createBrowserHistory';
+import { HelmetProvider } from 'react-helmet-async';
 
 import { DEFAULT_LANGUAGE, LANG_UKRAINIAN } from './helpers/consts';
 import i18n from './helpers/i18nnext';
@@ -36,7 +37,9 @@ moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
 ReactDOM.hydrate(
   <React.StrictMode>
     <ErrorBoundary>
-      <App i18n={i18n} store={store} history={history} {...i18nData} />
+      <HelmetProvider>
+        <App i18n={i18n} store={store} history={history} {...i18nData} />
+      </HelmetProvider>
     </ErrorBoundary>
   </React.StrictMode>,
   document.getElementById('root')

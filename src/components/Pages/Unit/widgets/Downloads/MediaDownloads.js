@@ -4,10 +4,11 @@ import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Grid, Header, Table } from 'semantic-ui-react';
+import isEqual from 'react-fast-compare';
 
 import { CT_ARTICLE, CT_FULL_LESSON, CT_KITEI_MAKOR, CT_LELO_MIKUD, CT_LESSON_PART, CT_PUBLICATION, CT_VIDEO_PROGRAM_CHAPTER, MT_AUDIO, MT_IMAGE, MT_TEXT, MT_VIDEO, VS_NAMES } from '../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
-import { equal, physicalFile } from '../../../../../helpers/utils';
+import { physicalFile } from '../../../../../helpers/utils';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors } from '../../../../../redux/modules/publications';
 import * as shapes from '../../../../shapes';
@@ -54,7 +55,10 @@ class MediaDownloads extends Component {
     const { props, state }                                = this;
 
     // only language changed
-    if (equal(unit, props.unit) && ((uiLanguage !== props.language) || (contentLanguage !== props.contentLanguage))) {
+    if (
+      (uiLanguage !== props.language || contentLanguage !== props.contentLanguage)
+      && isEqual(unit, props.unit)
+    ) {
       const language = selectSuitableLanguage(contentLanguage, uiLanguage, state.languages);
       if (language !== state.language) {
         this.setState({ language });
@@ -68,7 +72,7 @@ class MediaDownloads extends Component {
     const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
 
     let { derivedGroups } = state;
-    if (!equal(unit.derived_units, props.unit.derived_units)) {
+    if (!isEqual(unit.derived_units, props.unit.derived_units)) {
       derivedGroups = this.getDerivedFilesByContentType(unit.derived_units);
     }
 
@@ -79,7 +83,12 @@ class MediaDownloads extends Component {
     const { unit, contentLanguage, language: uiLanguage } = nextProps;
     const { props, state }                                = this;
 
-    return !(state.language === nextState.language && equal(unit, props.unit) && uiLanguage === props.language && contentLanguage === props.contentLanguage);
+    return !(
+      state.language === nextState.language
+      && uiLanguage === props.language
+      && contentLanguage === props.contentLanguage
+      && isEqual(unit, props.unit)
+    );
   }
 
   getFilesByLanguage = (files = []) => {
