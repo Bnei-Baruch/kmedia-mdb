@@ -210,12 +210,3 @@ export const strCmp = (a, b) => {
   }
   return 0;
 };
-
-/**
- * Shallow compare current (props, state) and next ones
- * @param instance object to take props and state from (usually should be "this")
- * @param nextProps new props
- * @param nextState new state
- * @returns {boolean}
- */
-export const shallowCompare = (instance, nextProps, nextState) => !isEqual(instance.props, nextProps) || !isEqual(instance.state, nextState);

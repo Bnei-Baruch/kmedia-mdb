@@ -6,7 +6,7 @@ import { Container, Portal, Segment } from 'semantic-ui-react';
 import { assetUrl } from '../../../helpers/Api';
 
 import { RTL_LANGUAGES, } from '../../../helpers/consts';
-import { formatError, isEmpty, shallowCompare } from '../../../helpers/utils';
+import { formatError, isEmpty } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
 import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
@@ -14,6 +14,7 @@ import PDF from '../../shared/PDF/PDF';
 import { updateQuery } from '../../../helpers/url';
 import withPagination from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
+import isEqual from 'react-fast-compare';
 
 class Library extends Component {
   static propTypes = {
@@ -58,7 +59,8 @@ class Library extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return shallowCompare(this, nextProps, nextState);
+    const { props, state } = this;
+    return !isEqual(props, nextProps) || !isEqual(state, nextState);
   }
 
   pageNumberHandler = (pageNumber) => {
