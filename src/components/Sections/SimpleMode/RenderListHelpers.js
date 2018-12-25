@@ -22,6 +22,7 @@ import {
 } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
 import { isEmpty, physicalFile } from '../../../helpers/utils';
+import { formatTime } from '../../../helpers/time';
 import Link from '../../../components/Language/MultiLanguageLink';
 
 const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
@@ -86,6 +87,7 @@ const renderUnits = (units, language, t, helpChooseLang) =>
     const leloMikudFiles = unitLeloMikudFiles(unit);
     const filesList      = [...(unit.files || []), ...leloMikudFiles].filter(file => file.language === language);
     const files          = filesList && renderHorizontalFilesList(filesList, unit.content_type, t);
+    const duration       = formatTime(unit.duration);
 
     if (!files) {
       return null;
@@ -96,6 +98,7 @@ const renderUnits = (units, language, t, helpChooseLang) =>
         <List.Content>
           <List.Header className="unit-header">
             <Link className="unit-link" to={canonicalLink(unit)}>{unit.name || NO_NAME}</Link>
+            &nbsp;<span className="duration">({duration})</span>
           </List.Header>
           <List.List className={`horizontal-list ${index === lastUnit ? 'remove-bottom-border' : ''}`}>
             {
