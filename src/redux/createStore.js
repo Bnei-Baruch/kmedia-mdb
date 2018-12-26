@@ -40,7 +40,7 @@ export default function createStore(initialState, history) {
     // middlewares.push(logger);
   }
 
-  const store = reduxCreateStore(reducer, initialState, compose(
+  const store = reduxCreateStore(reducer(history), initialState, compose(
     applyMiddleware(...middlewares),
     devToolsStoreEnhancer()
   ));

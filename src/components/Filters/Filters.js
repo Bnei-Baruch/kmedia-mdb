@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { connect, ReactReduxContext } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { Container, Icon, Label, Menu, Popup } from 'semantic-ui-react';
 
@@ -30,10 +30,6 @@ class Filters extends Component {
     deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
-  static contextTypes = {
-    store: PropTypes.object.isRequired,
-  };
-
   static defaultProps = {
     rightItems: null,
   };
@@ -53,21 +49,106 @@ class Filters extends Component {
   };
 
   handleApply = (name, value) => {
+    const { props: { setFilterValue, namespace, onChange } } = this;
     this.handlePopupClose();
-    this.props.setFilterValue(this.props.namespace, name, value);
-    this.props.onChange();
+    setFilterValue(namespace, name, value);
+    onChange();
   };
 
   handleResetFilter = (e, name) => {
+    const { props: { resetFilter, namespace, onChange } } = this;
     e.stopPropagation();
-    this.props.resetFilter(this.props.namespace, name);
-    this.props.onChange();
+    resetFilter(namespace, name);
+    onChange();
+  };
+
+  renderFilters = (store, langDir, popupStyle) => {
+    const { filters, namespace, t, filtersData, language, deviceInfo } = this.props;
+    const { activeFilter }                                             = this.state;
+
+    return filters.map((item) => {
+      const { component: FilterComponent, name } = item;
+
+      const isActive = name === activeFilter;
+      const data     = filtersData[name] || {};
+      const values   = data.values || [];
+      const value    = Array.isArray(values) && values.length > 0 ? values[0] : null;
+      const label    = value
+        ? filtersTransformer.valueToTagLabel(name, value, this.props, store, t)
+        : t('filters.all');
+
+      const len = ((name === 'topics-filter' || name === 'sources-filter') && value) ? label.length : 0;
+
+      return (
+        <Popup
+          className="filter-popup"
+          basic
+          flowing
+          key={name}
+          trigger={(
+            <Menu.Item
+              style={{ flexShrink: len }}
+              className={classNames(`filter filter--${name}`,
+                { 'filter--is-empty': !value },
+                { 'filter--is-active': isActive })}
+              name={name}
+            >
+              <div className="filter__wrapper">
+                <small className="blue text filter__title">
+                  {t(`filters.${name}.label`)}
+                </small>
+                <span className="filter__state">
+                  <span className="filter__text" dangerouslySetInnerHTML={{ __html: label }} />
+                  {
+                    isActive
+                      ? <Icon className="filter__fold-icon" name="dropdown" flipped="vertically" />
+                      : <Icon className="filter__fold-icon" name="dropdown" />
+                  }
+                </span>
+              </div>
+
+              {
+                value
+                  ? (
+                    <div className="filter__clear">
+                      <Label
+                        basic
+                        circular
+                        size="tiny"
+                        onClick={e => this.handleResetFilter(e, name)}
+                      >
+                        <Icon name="times" />
+                      </Label>
+                    </div>)
+                  : null
+              }
+            </Menu.Item>
+          )}
+          on="click"
+          position={`bottom ${langDir === 'ltr' ? 'left' : 'right'}`}
+          // verticalOffset={-12}
+          open={isActive}
+          onClose={this.handlePopupClose}
+          onOpen={() => this.handlePopupOpen(name)}
+          style={popupStyle}
+        >
+          <Popup.Content className={`filter-popup__content ${langDir}`}>
+            <FilterComponent
+              namespace={namespace}
+              value={value}
+              onCancel={this.handlePopupClose}
+              onApply={x => this.handleApply(name, x)}
+              language={language}
+              deviceInfo={deviceInfo}
+            />
+          </Popup.Content>
+        </Popup>
+      );
+    });
   };
 
   render() {
-    const { filters, namespace, onHydrated, t, filtersData, rightItems, language, deviceInfo } = this.props;
-    const { activeFilter }                                                                     = this.state;
-    const { store }                                                                            = this.context;
+    const { namespace, onHydrated, t, rightItems, language, deviceInfo } = this.props;
 
     const langDir = getLanguageDirection(language);
 
@@ -96,88 +177,9 @@ class Filters extends Component {
               className="filters__header"
               content={t('filters.by')}
             />
-            {
-              filters.map((item) => {
-                const { component: FilterComponent, name } = item;
-
-                const isActive = name === activeFilter;
-                const data     = filtersData[name] || {};
-                const values   = data.values || [];
-                const value    = Array.isArray(values) && values.length > 0 ? values[0] : null;
-                const label    = value ?
-                  filtersTransformer.valueToTagLabel(name, value, this.props, store, t) :
-                  t('filters.all');
-
-                const len = ((name === 'topics-filter' || name === 'sources-filter') && value) ? label.length : 0;
-
-                return (
-                  <Popup
-                    className="filter-popup"
-                    basic
-                    flowing
-                    key={name}
-                    trigger={
-                      <Menu.Item
-                        style={{ flexShrink: len }}
-                        className={classNames(`filter filter--${name}`,
-                          { 'filter--is-empty': !value },
-                          { 'filter--is-active': isActive })}
-                        name={name}
-                      >
-                        <div className="filter__wrapper">
-                          <small className="blue text filter__title">
-                            {t(`filters.${name}.label`)}
-                          </small>
-                          <span className="filter__state">
-
-                            <span className="filter__text" dangerouslySetInnerHTML={{ __html: label }} />
-                            {
-                              isActive ?
-                                <Icon className="filter__fold-icon" name="dropdown" flipped="vertically" /> :
-                                <Icon className="filter__fold-icon" name="dropdown" />
-                            }
-                          </span>
-                        </div>
-
-                        {
-                          value ?
-                            <div className="filter__clear">
-                              <Label
-                                basic
-                                circular
-                                size="tiny"
-                                onClick={e => this.handleResetFilter(e, name)}
-                              >
-                                <Icon name="times" />
-                              </Label>
-                            </div>
-                            :
-                            null
-                        }
-                      </Menu.Item>
-                    }
-                    on="click"
-                    position={`bottom ${langDir === 'ltr' ? 'left' : 'right'}`}
-                    // verticalOffset={-12}
-                    open={isActive}
-                    onClose={this.handlePopupClose}
-                    onOpen={() => this.handlePopupOpen(name)}
-                    style={popupStyle}
-                  >
-                    <Popup.Content className={`filter-popup__content ${langDir}`}>
-                      <FilterComponent
-                        namespace={namespace}
-                        value={value}
-                        onCancel={this.handlePopupClose}
-                        onApply={x => this.handleApply(name, x)}
-                        language={language}
-                        deviceInfo={deviceInfo}
-                      />
-                    </Popup.Content>
-                  </Popup>
-                );
-              })
-            }
+            <ReactReduxContext.Consumer>
+              {({ store }) => (this.renderFilters(store, langDir, popupStyle))}
+            </ReactReduxContext.Consumer>
             {
               rightItems
                 ? <Menu.Menu position="right">{rightItems}</Menu.Menu>

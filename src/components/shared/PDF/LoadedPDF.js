@@ -13,6 +13,7 @@ const LoadedPDF = Loadable({
   render(loaded, { pdfFile, onDocumentLoadSuccess, numPages, width, pageNumber, startsFrom, t }) {
     const { pdfjs, Document, Page }     = loaded;
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
     return (
       <Document
         file={pdfFile}

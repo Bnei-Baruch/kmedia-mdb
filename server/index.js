@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 // ignore styles and replace images with their final path from webpack manifest
 require('ignore-styles');
-require('url-loader');
+require('svg-url-loader');
 require('file-loader');
 require('babel-polyfill');
 const path     = require('path');

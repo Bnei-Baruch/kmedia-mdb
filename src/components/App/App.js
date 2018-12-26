@@ -1,9 +1,8 @@
-// TODO: return after next version of CRA: import 'react-app-polyfill/ie11'; // For IE 11 support
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { renderRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter } from 'connected-react-router';
 import { I18nextProvider } from 'react-i18next';
 
 import routes from '../../routes';

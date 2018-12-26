@@ -51,6 +51,7 @@ app.use(helmet({
         '*.usersnap.com',
         'fullstory.com',
         '*.fullstory.com',
+        'cdnjs.cloudflare.com',         // for pdf worker
       ],
       'style-src': [
         '\'self\'',

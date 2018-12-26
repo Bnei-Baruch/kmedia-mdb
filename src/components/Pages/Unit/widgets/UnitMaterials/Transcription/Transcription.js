@@ -51,17 +51,18 @@ class Transcription extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const toUpdate = (nextProps.uiLanguage !== this.props.uiLanguage)
-      || (nextProps.contentLanguage !== this.props.contentLanguage)
-      || (nextProps.unit && !this.props.unit)
-      || (nextProps.unit.id !== this.props.unit.id)
-      || (nextProps.unit.files !== this.props.unit.files);
+  shouldComponentUpdate(nextProps, _nextState) {
+    const { props } = this;
+    const toUpdate  = (nextProps.uiLanguage !== props.uiLanguage)
+      || (nextProps.contentLanguage !== props.contentLanguage)
+      || (nextProps.unit && !props.unit)
+      || (nextProps.unit.id !== props.unit.id)
+      || (nextProps.unit.files !== props.unit.files);
 
     if (toUpdate) {
       const { selected, language } = this.setCurrentItem(nextProps);
       if (selected && language) {
-        this.props.onContentChange(selected.id);
+        props.onContentChange(selected.id);
       }
     }
 
@@ -113,14 +114,15 @@ class Transcription extends Component {
   };
 
   handleLanguageChanged = (e, language) => {
-    if (language === this.state.language) {
+    const { state, props } = this;
+    if (language === state.language) {
       e.preventDefault();
       return;
     }
 
-    const selected = Transcription.selectFile(this.state.textFiles, language);
+    const selected = Transcription.selectFile(state.textFiles, language);
 
-    this.props.onContentChange(selected.id);
+    props.onContentChange(selected.id);
     this.setState({ selected, language });
   };
 

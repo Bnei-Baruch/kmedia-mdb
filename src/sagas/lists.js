@@ -1,5 +1,5 @@
 import { call, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 
 import { actions, types } from '../redux/modules/lists';
 import { selectors as settings } from '../redux/modules/settings';

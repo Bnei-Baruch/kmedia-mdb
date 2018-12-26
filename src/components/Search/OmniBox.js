@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { push as routerPush } from 'react-router-redux';
+import { push as routerPush } from 'connected-react-router';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import { Icon, Input, Search } from 'semantic-ui-react';

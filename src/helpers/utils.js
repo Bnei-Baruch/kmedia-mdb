@@ -1,6 +1,5 @@
 import moment from 'moment';
 import 'moment-duration-format';
-import isEqual from 'react-fast-compare';
 
 import { CollectionsBreakdown } from './mdb';
 

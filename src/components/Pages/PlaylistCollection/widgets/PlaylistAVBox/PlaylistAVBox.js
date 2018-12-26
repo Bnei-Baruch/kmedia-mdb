@@ -53,10 +53,10 @@ class PlaylistAVBox extends Component {
     playerHelper.setLanguageInQuery(history, playlist.language);
   }
 
-  componentWillReceiveProps(nextProps) {
+  static getDerivedStateFromProps(nextProps, state) {
     const { collection, location } = nextProps;
 
-    const { selected, playlist }       = this.state;
+    const { selected, playlist }       = state;
     const { language: playerLanguage } = playlist;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();
@@ -65,7 +65,6 @@ class PlaylistAVBox extends Component {
 
     // Recalculate playlist
     const nPlaylist = playerHelper.playlist(collection, newMediaType, newItemLanguage, playerLanguage);
-    this.setState({ playlist: nPlaylist });
 
     // When moving from playlist to another playlist
     // we're already mounted. We have to make sure to change selected as well.
@@ -77,10 +76,11 @@ class PlaylistAVBox extends Component {
     const nSelected = playerHelper.getActivePartFromQuery(location);
     if (nSelected !== selected) {
       // case # 1
-      this.setState({ selected: nSelected });
       playerHelper.setActivePartInQuery(nextProps.history, nSelected);
       nextProps.onSelectedChange(nPlaylist.items[nSelected].unit);
-    } else if (
+      return { selected: nSelected, playlist: nPlaylist };
+    }
+    if (
       playlist
       && nPlaylist
       && playlist.items[selected]
@@ -90,9 +90,9 @@ class PlaylistAVBox extends Component {
       && playlist.items[selected].unit !== nPlaylist.items[selected].unit
     ) {
       // case # 2
-      this.setState({ selected: nSelected });
       nextProps.onSelectedChange(nPlaylist.items[nSelected].unit);
     }
+    return { playlist: nPlaylist };
   }
 
   shouldComponentUpdate(nextProps) {

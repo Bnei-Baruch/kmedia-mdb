@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { push as routerPush, replace as routerReplace } from 'react-router-redux';
+import { push as routerPush, replace as routerReplace } from 'connected-react-router';
 import { withNamespaces } from 'react-i18next';
 import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
 
