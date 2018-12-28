@@ -112,7 +112,15 @@ class TopN extends React.PureComponent {
             <Table.Footer fullWidth>
               <Table.Row>
                 <Table.HeaderCell>
-                  <Button primary size="tiny" href={url}>{t('buttons.view-all')}</Button>
+                  <Button primary>
+                    {/* eslint-disable-next-line */}
+                    <Link 
+                      className="buttonLink"  // "donate-button"
+                      to={url}
+                    >
+                      {t('buttons.view-all')}
+                    </Link>
+                  </Button>
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Footer> :
