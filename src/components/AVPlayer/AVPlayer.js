@@ -153,7 +153,6 @@ class AVPlayer extends PureComponent {
       this.setState({
         error: false,
         errorReason: '',
-        firstSeek: true,
         ...this.chooseSource(nextProps)
       });
     }
