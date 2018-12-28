@@ -4,6 +4,7 @@ import { Header, Image } from 'semantic-ui-react';
 
 import Link from '../../Language/MultiLanguageLink';
 import img from '../../../images/banner_downloads.jpg';
+// import img from '../../../images/virtual_congress.jpg';
 // import img from '../../../images/rosh_shana.jpg';
 // import img from '../../../images/KKLO_ITALY_18_logo2.svg';
 // import img from '../../../images/archive_banner.jpg';

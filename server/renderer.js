@@ -97,6 +97,21 @@ function alternateLinks(req, lang) {
     .join('');
 }
 
+function ogUrl(req, lang) {
+  // strip ui language from path
+  let aPath = req.originalUrl;
+  if (lang && aPath.startsWith(`/${lang}`)) {
+    aPath = aPath.substring(3);
+  }
+
+  // strip leading slash as it comes from BASE_URL
+  if (aPath.startsWith('/')) {
+    aPath = aPath.substring(1);
+  }
+
+  return `<meta property="og:url" content="${BASE_URL}${lang}/${aPath}" />`;
+}
+
 export default function serverRender(req, res, next, htmlData, criticalCSS) {
   console.log('serverRender', req.originalUrl);
 
@@ -123,7 +138,10 @@ export default function serverRender(req, res, next, htmlData, criticalCSS) {
       initialEntries: [req.originalUrl],
     });
 
-    const settings = Object.assign({}, settingsInitialState, { language, contentLanguage: cookies[COOKIE_CONTENT_LANG] });
+    const settings = Object.assign({}, settingsInitialState, {
+      language,
+      contentLanguage: cookies[COOKIE_CONTENT_LANG]
+    });
 
     const initialState = {
       router: { location: history.location },
@@ -210,7 +228,7 @@ export default function serverRender(req, res, next, htmlData, criticalCSS) {
               const html = htmlData
                 .replace(/<html lang="en">/, `<html ${helmet.htmlAttributes.toString()} >`)
                 .replace(/<title>.*<\/title>/, helmet.title.toString())
-                .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, language)}${alternateLinks(req, language)}<style type="text/css">${criticalCSS}</style></head>`)
+                .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, language)}${alternateLinks(req, language)}${ogUrl(req, language)}<style type="text/css">${criticalCSS}</style></head>`)
                 .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
                 .replace(/semantic_v3.min.css/g, `semantic_v3${cssDirection}.min.css`)
                 .replace(/<div id="root"><\/div>/, rootDiv);
