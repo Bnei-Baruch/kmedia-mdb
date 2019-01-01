@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
-import { Button, Header, Icon, Menu, Segment } from 'semantic-ui-react';
+import { Button, Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
 import { actions, selectors as settings } from '../../redux/modules/settings';
@@ -36,6 +35,12 @@ class Layout extends Component {
     showHeaderSearch: false
   };
 
+  menuButtonElement1 = createRef();
+
+  menuButtonElement2 = createRef();
+
+  showSearchButtonElement = createRef();
+
   componentDidMount() {
     document.addEventListener('click', this.clickOutside, true);
   }
@@ -47,20 +52,18 @@ class Layout extends Component {
   // i.e, main, header of footer.
   clickOutside = (e) => {
     const { sidebarActive, isShowHeaderSearch } = this.state;
-    if (this.state
-      && sidebarActive
+    if (sidebarActive
       && e.target !== this.sidebarElement
       && !this.sidebarElement.contains(e.target)
-      && !this.menuButtonElement1.contains(e.target)
-      && !this.menuButtonElement2.contains(e.target)) {
+      && !this.menuButtonElement1.current.contains(e.target)
+      && !this.menuButtonElement2.current.contains(e.target)) {
       this.closeSidebar();
     }
 
-    if (this.state
-      && isShowHeaderSearch
+    if (isShowHeaderSearch
       && e.target !== this.headerSearchElement
       && !this.headerSearchElement.contains(e.target)
-      && !this.showSearchButtonElement.contains(e.target)) {
+      && !this.showSearchButtonElement.current.contains(e.target)) {
       this.showHeaderSearch();
     }
   };
@@ -127,19 +130,16 @@ class Layout extends Component {
         <GAPageView location={location} />
         <div className="layout__header">
           <Menu inverted borderless size="huge" color="blue">
-            <Menu.Item
-              icon
-              as="a"
-              className="layout__sidebar-toggle"
-              onClick={this.toggleSidebar}
-              ref={(el) => {
-                if (!this.menuButtonElement1) {
-                  this.menuButtonElement1 = ReactDOM.findDOMNode(el);
-                }
-              }}
-            >
-              <Icon name="sidebar" />
-            </Menu.Item>
+            <Ref innerRef={this.menuButtonElement1}>
+              <Menu.Item
+                icon
+                as="a"
+                className="layout__sidebar-toggle"
+                onClick={this.toggleSidebar}
+              >
+                <Icon name="sidebar" />
+              </Menu.Item>
+            </Ref>
             <Menu.Item className="logo" header as={Link} to="/">
               <img src={logo} alt="logo" />
               <Header inverted as="h1" content={t('nav.top.header')} />
@@ -152,25 +152,22 @@ class Layout extends Component {
               }
             </Menu.Item>
             <Menu.Menu position="right" className="padding0">
-              <Menu.Item ref={(el) => {
-                if (!this.showSearchButtonElement) {
-                  this.showSearchButtonElement = ReactDOM.findDOMNode(el);
-                }
-              }}
-              >
-                <HandleLanguages
-                  language={language}
-                  contentLanguage={contentLanguage}
-                  setContentLanguage={setContentLanguage}
-                  location={location}
-                  isMobileDevice={this.isMobileDevice()}
-                />
-                {
-                  showSearch && this.isMobileDevice()
-                    ? <Button icon="search" color="blue" onClick={this.showHeaderSearch} />
-                    : null
-                }
-              </Menu.Item>
+              <Ref innerRef={this.showSearchButtonElement}>
+                <Menu.Item>
+                  <HandleLanguages
+                    language={language}
+                    contentLanguage={contentLanguage}
+                    setContentLanguage={setContentLanguage}
+                    location={location}
+                    isMobileDevice={this.isMobileDevice()}
+                  />
+                  {
+                    showSearch && this.isMobileDevice()
+                      ? <Button icon="search" color="blue" onClick={this.showHeaderSearch} />
+                      : null
+                  }
+                </Menu.Item>
+              </Ref>
               <Menu.Item className="mobile-hidden">
                 <DonateNow language={language} />
               </Menu.Item>
@@ -186,19 +183,16 @@ class Layout extends Component {
           }}
         >
           <Menu inverted size="huge" color="blue">
-            <Menu.Item
-              icon
-              as="a"
-              className="layout__sidebar-toggle"
-              onClick={this.closeSidebar}
-              ref={(el) => {
-                if (!this.menuButtonElement2) {
-                  this.menuButtonElement2 = ReactDOM.findDOMNode(el);
-                }
-              }}
-            >
-              <Icon name="sidebar" />
-            </Menu.Item>
+            <Ref innerRef={this.menuButtonElement2}>
+              <Menu.Item
+                icon
+                as="a"
+                className="layout__sidebar-toggle"
+                onClick={this.closeSidebar}
+              >
+                <Icon name="sidebar" />
+              </Menu.Item>
+            </Ref>
             <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={this.closeSidebar}>
               <img src={logo} alt="logo" />
               <Header inverted as="h1" content={t('nav.top.header')} />

@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
 import { Container, Portal, Segment } from 'semantic-ui-react';
-import { assetUrl } from '../../../helpers/Api';
+import isEqual from 'react-fast-compare';
 
+import { assetUrl } from '../../../helpers/Api';
 import { RTL_LANGUAGES, } from '../../../helpers/consts';
 import { formatError, isEmpty } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
@@ -14,7 +15,6 @@ import PDF from '../../shared/PDF/PDF';
 import { updateQuery } from '../../../helpers/url';
 import withPagination from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
-import isEqual from 'react-fast-compare';
 
 class Library extends Component {
   static propTypes = {

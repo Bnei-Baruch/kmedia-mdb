@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import uniq from 'lodash/uniq';
 import { Container, Divider, Segment } from 'semantic-ui-react';
+import isEqual from 'react-fast-compare';
 
 import { RTL_LANGUAGES } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
@@ -14,11 +15,7 @@ import WipErr from '../../../../../shared/WipErr/WipErr';
 class Transcription extends Component {
   static propTypes = {
     unit: shapes.ContentUnit,
-    doc2htmlById: PropTypes.objectOf(PropTypes.shape({
-      data: PropTypes.string,     // actual content (HTML)
-      wip: shapes.WIP,
-      err: shapes.Error,
-    })).isRequired,
+    doc2htmlById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
@@ -57,7 +54,8 @@ class Transcription extends Component {
       || (nextProps.contentLanguage !== props.contentLanguage)
       || (nextProps.unit && !props.unit)
       || (nextProps.unit.id !== props.unit.id)
-      || (nextProps.unit.files !== props.unit.files);
+      || (nextProps.unit.files !== props.unit.files
+      || !isEqual(nextProps.doc2htmlById, props.doc2htmlById));
 
     if (toUpdate) {
       const { selected, language } = this.setCurrentItem(nextProps);
