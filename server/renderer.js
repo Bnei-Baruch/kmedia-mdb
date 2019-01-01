@@ -24,8 +24,6 @@ import App from '../src/components/App/App';
 import i18nnext from './i18nnext';
 import { initialState as settingsInitialState } from '../src/redux/modules/settings';
 
-const manifest = require('../build/asset-manifest');
-
 const helmetContext = {};
 
 // eslint-disable-next-line no-unused-vars
@@ -148,7 +146,7 @@ export default function serverRender(req, res, next, htmlData) {
     });
 
     const initialState = {
-      // router: { location: history.location },
+      router: { location: history.location },
       device: { deviceInfo: new UAParser(req.get('user-agent')).getResult() },
       settings,
     };
@@ -190,15 +188,7 @@ export default function serverRender(req, res, next, htmlData) {
             hrstart = process.hrtime();
 
             // actual render
-            let markup = '';
-            try {
-              markup = ReactDOMServer.renderToString(<HelmetProvider context={helmetContext}><App i18n={context.i18n} store={store} history={history} /></HelmetProvider>);
-            } catch (error) {
-              console.error(`Render Error: ${error}`);
-              console.error(error.stack);
-
-              throw error;
-            }
+            const markup = ReactDOMServer.renderToString(<HelmetProvider context={helmetContext}><App i18n={context.i18n} store={store} history={history} /></HelmetProvider>);
             hrend = process.hrtime(hrstart);
             console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
             hrstart = process.hrtime();
@@ -242,7 +232,7 @@ export default function serverRender(req, res, next, htmlData) {
                 .replace(/<title>.*<\/title>/, helmet.title.toString())
                 .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, language)}${alternateLinks(req, language)}${ogUrl(req, language)}</head>`)
                 .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
-                .replace(/semantic_v4.min.css/g, `semantic_v3${cssDirection}.min.css`)
+                .replace(/semantic_v4.min.css/g, `semantic_v4${cssDirection}.min.css`)
                 .replace(/<div id="root"><\/div>/, rootDiv);
 
               if (context.code) {
