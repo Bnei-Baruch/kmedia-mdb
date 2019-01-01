@@ -98,7 +98,7 @@ const renderUnits = (units, language, t, helpChooseLang) =>
         <List.Content>
           <List.Header className="unit-header">
             <Link className="unit-link" to={canonicalLink(unit)}>{unit.name || NO_NAME}</Link>
-            &nbsp;<span className="duration">({duration})</span>
+            &nbsp;&nbsp;<span className="duration">{duration}</span>
           </List.Header>
           <List.List className={`horizontal-list ${index === lastUnit ? 'remove-bottom-border' : ''}`}>
             {

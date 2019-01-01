@@ -36,14 +36,11 @@ class SimpleModeContainer extends Component {
     err: null,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      filesLanguage: this.props.contentLanguage,
-      isMobileDevice: this.isMobileDevice(),
-      blinkLangSelect: false
-    };
-  }
+  state = {
+    filesLanguage: this.props.contentLanguage,
+    isMobileDevice: false,
+    blinkLangSelect: false
+  };
 
   componentDidMount() {
     const query = getQuery(this.props.location);
