@@ -65,19 +65,22 @@ class Transcription extends Component {
     }
   }
 
-  getTextFiles = (props) => {
+  getTextFilesToShow = (props) => {
     const { unit } = props;
     if (!unit || !Array.isArray(unit.files)) {
       return [];
     }
 
-    return unit.files.filter(x => MediaHelper.IsText(x) && !MediaHelper.IsHtml(x));
+    // filter text files, but not PDF
+    const filteredFiles = unit.files.filter(x => MediaHelper.IsText(x) && !MediaHelper.IsPDF(x));
+
+    return filteredFiles;
   };
 
   setCurrentItem = (props) => {
     const { contentLanguage, uiLanguage } = props;
 
-    const textFiles   = this.getTextFiles(props);
+    const textFiles   = this.getTextFilesToShow(props);
     const languages   = uniq(textFiles.map(x => x.language));
     const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
     if (!newLanguage) {
