@@ -38,7 +38,8 @@
         "LAST_30_DAYS": "Últimos 30 Días",
         "LAST_MONTH": "Mes Pasado",
         "THIS_MONTH": "Este Mes",
-        "CUSTOM_RANGE": "Elección Flexible"
+        "CUSTOM_RANGE": "Elección Flexible",
+        "CUSTOM_DAY": "Elige una fecha"
       },
       "start": "Inicio",
       "end": "Final"

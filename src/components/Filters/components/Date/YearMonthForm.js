@@ -46,7 +46,7 @@ class YearMonthForm extends Component {
     }
 
     return (
-      <div className="DayPicker-Caption">
+      <span>
         <Dropdown
           compact
           inline
@@ -64,7 +64,7 @@ class YearMonthForm extends Component {
           value={this.state.year}
           onChange={this.handleYearChange}
         />
-      </div>
+      </span>
     );
   }
 }

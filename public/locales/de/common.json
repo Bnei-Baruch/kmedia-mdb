@@ -39,7 +39,8 @@
         "LAST_30_DAYS": "Letzte 30 Tage",
         "LAST_MONTH": "Letzter Monat",
         "THIS_MONTH": "Dieser Monat",
-        "CUSTOM_RANGE": "Beliebiger Zeitraum"
+        "CUSTOM_RANGE": "Beliebiger Zeitraum",
+        "CUSTOM_DAY": "Wählen Sie ein Datum aus"
       },
       "start": "Start",
       "end": "Ende"
