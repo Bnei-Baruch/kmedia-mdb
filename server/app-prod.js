@@ -35,8 +35,6 @@ app.use(helmet({
         'archive',                      // suitcase
         '*.archive',                    // suitcase
         '*.usersnap.com',
-        'fullstory.com',
-        '*.fullstory.com',
         '*.twimg.com',
         '*.youtube.com',
         '*.youtube-nocookie.com',
@@ -49,8 +47,6 @@ app.use(helmet({
         'kabbalahmedia.info',
         'archive',                      // suitcase
         '*.usersnap.com',
-        'fullstory.com',
-        '*.fullstory.com',
         'cdnjs.cloudflare.com',         // for pdf worker
       ],
       'style-src': [
