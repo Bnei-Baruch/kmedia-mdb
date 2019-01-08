@@ -83,9 +83,11 @@ export class UnitListContainer extends withPagination {
   }
 
   handlePageChanged(pageNo) {
-    if (typeof window !== 'undefined') {
-      window.scrollTo(0, 0);
-    }
+    // We probably don't need this because <ScrollToTop /> is in <App />
+    // In any case, we shouldn't have this null checking
+    // if (typeof window !== 'undefined') {
+    //   window.scrollTo(0, 0);
+    // }
     this.setPage(this.props, pageNo);
   }
 
