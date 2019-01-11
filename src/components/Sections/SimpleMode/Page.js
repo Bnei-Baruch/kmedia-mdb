@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import DayPicker from 'react-day-picker';
+import Navbar from 'react-day-picker/lib/src/Navbar';
 import MomentLocaleUtils from 'react-day-picker/moment';
 import { translate } from 'react-i18next';
 import { Button, Card, Container, Divider, Grid, Input } from 'semantic-ui-react';
@@ -70,6 +71,21 @@ class SimpleModePage extends PureComponent {
     }
 
     this.nativeDateInput.focus();
+  };
+
+  getNavBarElement = (props, language, onDayClick) => {
+    const { month, localeUtils } = props;
+    return (
+      <div className="DayPicker-Month">
+        <Navbar {...props} className="FastDayPicker-DayPicker-NavButton" />
+        <YearMonthForm
+          date={month}
+          language={language}
+          localeUtils={localeUtils}
+          onChange={onDayClick}
+        />
+      </div>
+    );
   };
 
   render() {
@@ -199,14 +215,8 @@ class SimpleModePage extends PureComponent {
                       month={selectedDate}
                       disabledDays={{ after: new Date() }}
                       onDayClick={onDayClick}
-                      captionElement={({ date, localeUtils }) => (
-                        <YearMonthForm
-                          date={date}
-                          language={language}
-                          localeUtils={localeUtils}
-                          onChange={onDayClick}
-                        />
-                      )}
+                      captionElement={() => null}
+                      navbarElement={(props) => this.getNavBarElement(props, language, onDayClick)}
                     />
                     <Button className="inline-button" onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
                   </Card>
