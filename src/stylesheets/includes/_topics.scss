@@ -1,51 +1,90 @@
 .topics {
   &__section {
-    margin-bottom: 4rem;
+    width: 33.33333333%;
+
+    @include mobile {
+      width: 100% !important;
+      margin-bottom: 4rem;
+    }
+    @include small-mobile {
+      width: 100% !important;
+      margin-bottom: 4rem;
+    }
   }
 
   &__title {
-    .icon{
-      margin: 0 0 0 8px;
-    }
+    margin: 0 0 10px !important;
+    padding: 20px 0 10px !important;
+    font-size: 24px !important;
+    line-height: 30px !important;
+    font-weight: bold !important;
+    color: #1a4179 !important;
     margin-bottom: 1.5rem !important;
-
+    border-bottom: 1px solid #f2f2f2 !important;
+    position: sticky;
+    top: 47px;
+    background-color: #fff;
+    z-index: 10;
   }
 
   &__list {
-    
-    column-count: 4;
-    column-gap: 2rem;
+    .topics__card {
+      display: block;
+      margin-bottom: 32px;
+      padding: 4px 8px;
+      background-color: #f3f4f5;
+      min-height: 176px;
 
-    > * {
-      display: inline;
-    }
-
-    @include tablet {
-      column-count: 3;
-    }
-    @include mobile {
-      column-count: 2;
-    }
-    @include small-mobile {
-      column-count: 1;
-    }
-    margin-bottom: 4rem;
-
-    .list {
-      margin: 0 !important;
-    }
-
-    .header {
-      line-height: 2rem !important;
-      margin: 0 !important;
-      .icon{
-        margin: 0 0 0 8px;
+      .list {
+        margin: 0 !important;
       }
-    }
 
-    .item {
-      line-height: 2rem !important;
-      padding: 0 !important;
+      .header.topics__subtitle {
+        padding: 10px 0 !important;
+        font-size: 18px !important;
+        line-height: 22px !important;
+        font-weight: 700;
+        position: sticky;
+        top: 101px;
+        z-index: 9;
+        background-color: #f3f4f5;
+
+        a {
+          color: #00aced !important;
+        }
+      }
+
+      .item {
+        line-height: 24px !important;
+        font-size: 16px !important;
+        padding: 0 !important;
+        margin-bottom: 4px !important;
+        color: #1a4179 !important;
+
+        &.hide-topic {
+          display: none !important;
+        }
+      }
+
+      .topics__button {
+        box-shadow: none !important;
+        padding: 7px 0 !important;
+        color: #828282 !important;
+        font-size: 16px;
+
+        &.hide-button {
+          visibility: hidden;
+        }
+
+        &:hover, &:focus {
+          background-color: transparent !important;
+          color: #828282 !important;
+        }
+
+        .icon {
+          color: #00aced !important;
+        }
+      }
     }
   }
 }

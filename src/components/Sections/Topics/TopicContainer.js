@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
-import { List, Container, Header, Divider, Input, Icon } from 'semantic-ui-react';
+import { Button, Container, Divider, Grid, Header, Input, List } from 'semantic-ui-react';
 
 import { selectors } from '../../../redux/modules/tags';
 import SectionHeader from '../../shared/SectionHeader';
@@ -27,6 +27,7 @@ class TopicContainer extends Component {
 
   state = {
     match: '',
+    expandedNodes: []
   };
 
   // filter stuff
@@ -34,6 +35,22 @@ class TopicContainer extends Component {
   getRegExp = (match) => {
     const escapedMatch = match.replace(/[/)(.+\\]/g, '\\$&');
     return new RegExp(escapedMatch, 'i');
+  };
+
+  setVisibleState = (byId) => {
+    const list = byId || {};
+    Object.keys(list).forEach((key) => {
+      const { id, parent_id: parentId } = list[key];
+      const { expandedNodes }           = this.state;
+      let visible                       = true;
+      if (parentId) {
+        visible = expandedNodes[parentId] || list[parentId].children.indexOf(id) < 3;
+      }
+
+      list[key] = { ...list[key], visible };
+    });
+
+    return list;
   };
 
   handleFilterChange = debounce((e, data) => {
@@ -57,7 +74,7 @@ class TopicContainer extends Component {
     const { match }       = this.state;
 
     if (!match) {
-      this.filteredById = byId;
+      this.filteredById = this.setVisibleState(byId);
       return roots;
     }
 
@@ -122,39 +139,60 @@ class TopicContainer extends Component {
     </Link>
   );
 
-  renderNode = node => (
-    node ?
-      <Fragment>
+  renderChildren = children => (
+    children
+      .filter(this.isIncluded)
+      .map(id => (
+        <List.Item key={id} className={`${children.visible ? '' : 'hide-topic'}`}>
+          {this.renderNode(this.filteredById[id])}
+        </List.Item>
+      ))
+  );
+
+  renderNode = (node) => {
+    const { t }             = this.props;
+    const { expandedNodes } = this.state;
+    const showExpandButton  = node.children && node.children.length > 3;
+    return node ?
+      <Fragment key={`f-${node.id}`}>
         {
           this.hasChildren(node) ?
-            <List>
-              {
-                node.children
-                  .filter(this.isIncluded)
-                  .map(id => (
-                    <List.Item key={id}>
-                      {this.renderNode(this.filteredById[id])}
-                    </List.Item>
-                  ))
-              }
-            </List> :
+            <div key={node.id} className="topics__card">
+              <Header as="h4" className="topics__subtitle">
+                <Link to={`/topics/${node.id}`}>
+                  {node.label}
+                </Link>
+              </Header>
+              <List>
+                {
+                  node.children
+                    .filter(this.isIncluded)
+                    .map((id) => (
+                      <List.Item key={id} className={this.filteredById[id].visible ? '' : 'hide-topic'}>
+                        {this.renderNode(this.filteredById[id])}
+                      </List.Item>
+                    ))
+                }
+              </List>
+              <Button
+                basic
+                icon={expandedNodes[node.id] ? 'minus' : 'plus'}
+                className={`topics__button ${showExpandButton ? '' : 'hide-button'}`}
+                size="mini"
+                content={t(`topics.show-${expandedNodes[node.id] ? 'less' : 'more'}`)}
+                onClick={() => this.updateParentsVisibleState(node.id)}
+              />
+            </div> :
             this.renderLeaf(node)
         }
       </Fragment> :
-      null
-  );
+      null;
+  };
 
   renderSubHeader = node => (
     this.hasChildren(node) ?
-      <Fragment key={node.id}>
-        <Header as="h4" className="topics__subtitle">
-          {node.label}
-          <Link to={`/topics/${node.id}`}>
-            <Icon size="small" name="chain" />
-          </Link>
-        </Header>
-        {this.renderNode(node)}
-      </Fragment> :
+      this.renderNode(node)
+      :
       null
   );
 
@@ -166,12 +204,9 @@ class TopicContainer extends Component {
     }
 
     return (
-      <div key={rootId} className="topics__section">
+      <Grid.Column key={rootId} className="topics__section">
         <Header as="h2" className="topics__title">
           {rootNode.label}
-          <Link to={`/topics/${rootNode.id}`}>
-            <Icon size="small" name="chain" />
-          </Link>
         </Header>
         <div className="topics__list">
           {
@@ -180,9 +215,14 @@ class TopicContainer extends Component {
               .map(id => this.renderSubHeader(this.filteredById[id]))
           }
         </div>
-        <Divider />
-      </div>
+      </Grid.Column>
     );
+  };
+
+  updateParentsVisibleState = (parentId) => {
+    const { expandedNodes } = this.state;
+    expandedNodes[parentId] = !expandedNodes[parentId];
+    this.setState({ expandedNodes });
   };
 
   render() {
@@ -207,7 +247,11 @@ class TopicContainer extends Component {
           />
         </Container>
         <Container className="padded">
-          {filteredRoots.map(r => this.renderBranch(r))}
+          <Grid columns={3}>
+            <Grid.Row>
+              {filteredRoots.map(r => this.renderBranch(r))}
+            </Grid.Row>
+          </Grid>
         </Container>
       </div>
     );
