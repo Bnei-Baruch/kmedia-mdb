@@ -11,6 +11,7 @@ import Materials from './widgets/UnitMaterials/Materials';
 import Info from './widgets/Info/Info';
 import MediaDownloads from './widgets/Downloads/MediaDownloads';
 import SameCollection from './widgets/Recommended/SameCollection/Container';
+import playerHelper from '../../../helpers/player';
 
 export class UnitPage extends Component {
   static propTypes = {
@@ -20,6 +21,7 @@ export class UnitPage extends Component {
     section: PropTypes.string,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
+    location: shapes.HistoryLocation,
   };
 
   static defaultProps = {
@@ -29,6 +31,14 @@ export class UnitPage extends Component {
     section: '',
   };
 
+  state = {
+  };
+
+  componentDidMount() {
+    const { location } = this.props;
+    this.setState( { embed: playerHelper.getEmbedFromQuery(location) } );
+  }
+
   // eslint-disable-next-line class-methods-use-this
   renderHelmet() {
     const { unit, language } = this.props;
@@ -37,7 +47,8 @@ export class UnitPage extends Component {
 
   renderPlayer() {
     const { unit, language, t } = this.props;
-    return (
+    const { embed } = this.state;
+    return !embed ? (
       <div className="avbox">
         <Container>
           <Grid centered padded>
@@ -45,6 +56,8 @@ export class UnitPage extends Component {
           </Grid>
         </Container>
       </div>
+    ) : (
+      <AVBox unit={unit} language={language} t={t} />
     );
   }
 
@@ -69,7 +82,8 @@ export class UnitPage extends Component {
   }
 
   renderContent() {
-    return (
+    const { embed } = this.state;
+    return !embed ? (
       <div className="unit-page">
         {this.renderHelmet()}
         {this.renderPlayer()}
@@ -95,6 +109,10 @@ export class UnitPage extends Component {
             </Grid.Row>
           </Grid>
         </Container>
+      </div>
+    ) : (
+      <div className="unit-page">
+        {this.renderPlayer()}    
       </div>
     );
   }

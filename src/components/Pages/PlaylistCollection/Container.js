@@ -134,7 +134,7 @@ export class PlaylistCollectionContainer extends Component {
   };
 
   render() {
-    const { match, language, contentLanguage, collection, wip: wipMap, errors, PlaylistComponent, shouldRenderHelmet } = this.props;
+    const { match, language, contentLanguage, collection, wip: wipMap, errors, PlaylistComponent, shouldRenderHelmet, location } = this.props;
 
     // We're wip / err if some request is wip / err
     const { id } = match.params;
@@ -159,6 +159,7 @@ export class PlaylistCollectionContainer extends Component {
         contentLanguage={contentLanguage}
         PlaylistComponent={PlaylistComponent}
         shouldRenderHelmet={shouldRenderHelmet}
+        location={location}
         nextLink={nextLink}
         prevLink={prevLink}
       />

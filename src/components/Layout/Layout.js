@@ -8,6 +8,7 @@ import { renderRoutes } from 'react-router-config';
 import { Header, Icon, Menu, Segment, Button } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
+import playerHelper from '../../helpers/player';
 import { actions, selectors as settings } from '../../redux/modules/settings';
 import { selectors as device } from '../../redux/modules/device';
 import * as shapes from '../shapes';
@@ -37,7 +38,9 @@ class Layout extends Component {
   };
 
   componentDidMount() {
-    document.addEventListener('click', this.clickOutside, true);
+    const {location } = this.props;
+    document.addEventListener('click', this.clickOutside, true);    
+    this.setState( { embed: playerHelper.getEmbedFromQuery(location) } );
   }
 
   componentWillUnmount() {
@@ -105,11 +108,11 @@ class Layout extends Component {
 
   render() {
     const { t, location, route, language, contentLanguage, setContentLanguage } = this.props;
-    const { sidebarActive }                                                     = this.state;
+    const { sidebarActive, embed }                                              = this.state;
 
     const showSearch = this.shouldShowSearch(location);
 
-    return (
+    return !embed ? (
       <div className="layout">
         {/* <div className="debug">
           <span className="widescreen-only">widescreen</span>
@@ -204,6 +207,10 @@ class Layout extends Component {
           <Footer t={t} />
         </div>
       </div>
+    ) : (
+        <div>
+          {renderRoutes(route.routes)}
+        </div>    
     );
   }
 }

@@ -54,6 +54,11 @@ class PlaylistAVBox extends Component {
     playerHelper.setLanguageInQuery(history, playlist.language);
   }
 
+  componentDidMount() {
+    const { location } = this.props;
+    this.setState( { embed: playerHelper.getEmbedFromQuery(location) } );
+  }
+
   componentWillReceiveProps(nextProps) {
     const { collection, location } = nextProps;
 
@@ -148,7 +153,7 @@ class PlaylistAVBox extends Component {
 
   render() {
     const { t, PlayListComponent, uiLanguage, nextLink, prevLink } = this.props;
-    const { playlist, selected }                                   = this.state;
+    const { playlist, selected, embed }                            = this.state;
 
     if (!playlist ||
       !Array.isArray(playlist.items) ||
@@ -160,7 +165,7 @@ class PlaylistAVBox extends Component {
 
     const isAudio = playlist.items[selected].mediaType === MT_AUDIO;
 
-    return (
+    return !embed? (
       <Grid.Row
         className={classNames('', {
           'layout--is-audio': isAudio,
@@ -189,6 +194,16 @@ class PlaylistAVBox extends Component {
           />
         </Grid.Column>
       </Grid.Row>
+    ) : (
+      <AVPlaylistPlayer
+            items={playlist.items}
+            selected={selected}
+            language={playlist.language}
+            onSelectedChange={this.handleSelectedChange}
+            onLanguageChange={this.handleLanguageChange}
+            onSwitchAV={this.handleSwitchAV}
+            t={t}
+          />
     );
   }
 }
