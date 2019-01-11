@@ -406,7 +406,9 @@
     "header": {
       "text": "נושאים",
       "subtext": "אוסף תכנים בנושא נבחר"
-    }
+    },
+    "show-more": "הצג עוד",
+    "show-less": "הצג פחות"
   },
   "media-downloads": {
     "title": "קבצים להורדה",
