@@ -102,9 +102,17 @@ export class OmniBox extends Component {
   };
 
   doSearch = (q = null, suggest = '', locationSearch = '') => {
-    const { isOpen, qurey: pquery }                                     = this.state;
-    const query                                                         = q != null ? q : pquery;
-    const { search, location, push, pageSize, resetFilterNS, onSearch } = this.props;
+    const { isOpen, query: squery }                                                    = this.state;
+    const { search, location, push, pageSize, resetFilterNS, onSearch, query: pquery } = this.props;
+    let query;
+
+    if (q != null) {
+      query = q;
+    } else if (!isEmpty(pquery)) {
+      query = pquery;
+    } else {
+      query = squery;
+    }
 
     if (this.isEmptyQuery(query)) {
       return;
