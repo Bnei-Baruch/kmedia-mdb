@@ -164,7 +164,7 @@ class TopicContainer extends Component {
       ))
   );
 
-  renderNode = (node) => {
+  renderNode = (node, grandchildrenClass = '') => {
     const { t }             = this.props;
     const { expandedNodes } = this.state;
     const showExpandButton  = node.children && node.children.length > 3;
@@ -172,7 +172,7 @@ class TopicContainer extends Component {
       <Fragment key={`f-${node.id}`}>
         {
           this.hasChildren(node) ?
-            <div key={node.id} className="topics__card">
+            <div key={node.id} className={`topics__card ${grandchildrenClass}`}>
               <Header as="h4" className="topics__subtitle">
                 <Link to={`/topics/${node.id}`}>
                   {node.label}
@@ -184,7 +184,7 @@ class TopicContainer extends Component {
                     .filter(this.isIncluded)
                     .map((id) => (
                       <List.Item key={id} className={this.filteredById[id].visible ? '' : 'hide-topic'}>
-                        {this.renderNode(this.filteredById[id])}
+                        {this.renderNode(this.filteredById[id], 'grandchildren')}
                       </List.Item>
                     ))
                 }

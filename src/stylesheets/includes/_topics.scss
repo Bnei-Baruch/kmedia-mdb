@@ -35,6 +35,15 @@
       background-color: #f3f4f5;
       min-height: 176px;
 
+      &.grandchildren {
+        min-height: unset;
+        margin-bottom: 0;
+
+        .hide-button {
+          display: none;
+        }
+      }
+
       .list {
         margin: 0 !important;
       }
