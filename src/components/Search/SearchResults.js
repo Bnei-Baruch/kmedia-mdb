@@ -93,8 +93,6 @@ class SearchResults extends Component {
 
   hideNote = () => this.setState({ showNote: false });
 
-  scrollTop = () => window.scrollTo(0, 0);
-
   renderTopNote = () => {
     return (
       this.state.showNote
