@@ -1248,6 +1248,15 @@
   padding: 0;
 }
 
-.padding0{
+.padding0 {
   padding: 0 !important;
+}
+
+.search-result-note {
+  padding: 10px 16px 10px 24px !important;
+  border-width: 1px 4px 1px 1px;
+  .ui.image{
+    height: 20px;
+    margin-top: 7px;
+  }
 }

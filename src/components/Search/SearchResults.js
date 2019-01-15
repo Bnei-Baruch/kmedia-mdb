@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Trans, translate } from 'react-i18next';
-import { Container, Divider, Grid } from 'semantic-ui-react';
+import { Container, Divider, Grid, Message, Image, Button } from 'semantic-ui-react';
+import InfoIcon from '../../images/icons/info.svg';
 
 import { SEARCH_INTENT_HIT_TYPES, } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
@@ -50,6 +51,10 @@ class SearchResults extends Component {
     getSourcePath: undefined,
   };
 
+  state = {
+    showNote: true
+  };
+
   filterByHitType = (hit) => {
     const { hitType } = this.props;
     return hitType ? hit.type === hitType : true;
@@ -84,6 +89,23 @@ class SearchResults extends Component {
     // maybe content_units are still loading ?
     // maybe stale data in elasticsearch ?
     return null;
+  };
+
+  hideNote = () => this.setState({ showNote: false });
+
+  scrollTop = () => window.scrollTo(0, 0);
+
+  renderTopNote = () => {
+    return (
+      this.state.showNote
+        ? <Message info className="search-result-note">
+          <Image src={InfoIcon} floated='left' />
+          <Button floated='right' icon="close" size="tiny" circular onClick={this.hideNote} />
+          <Container><strong>Tip:</strong> Search results are in <strong>English.</strong></Container>
+          <Container>If You can choose other content languages</Container>
+        </Message>
+        : null
+    );
   };
 
   render() {
@@ -135,11 +157,14 @@ class SearchResults extends Component {
       content = (
         <Grid>
           <Grid.Column key="1" computer={12} tablet={16} mobile={16}>
+            {this.renderTopNote()}
+
             <div className="searchResult_content">
               <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
               {hits.filter(this.filterByHitType).map(this.renderHit)}
             </div>
             <Divider fitted />
+
             <Container className="padded pagination-wrapper" textAlign="center">
               <Pagination
                 pageNo={pageNo}
