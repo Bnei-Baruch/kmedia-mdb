@@ -61,6 +61,7 @@ class SearchResultCU extends SearchResultBase {
           >
             {this.titleFromHighlight(highlight, cu.name)}
           </Link>
+          {this.fileDuration(cu.files)}
         </Header>
 
         <Container>
