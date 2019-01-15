@@ -69,13 +69,21 @@ class TopicContainer extends Component {
 
   filteredById = {};
 
+  sortRootsPosition = (roots) => {
+    const ORDER_BY_HEBREW = ['VUpFlBnu', '0db5BBS3', 'g3ml0jum'];
+    const extra           = roots.filter(node => !ORDER_BY_HEBREW.includes(node));
+
+    return roots.length ? [...ORDER_BY_HEBREW, ...extra] : roots;
+  };
+
   filterTagsById = () => {
     const { roots, byId } = this.props;
     const { match }       = this.state;
+    const sortedRoots     = this.sortRootsPosition(roots);
 
     if (!match) {
       this.filteredById = this.setVisibleState(byId);
-      return roots;
+      return sortedRoots;
     }
 
     this.filteredById  = {};
@@ -88,6 +96,7 @@ class TopicContainer extends Component {
 
       // add object that includes the match
       if (currentObj.label && regExp.test(currentObj.label)) {
+        currentObj.visible     = true;
         this.filteredById[key] = currentObj;
 
         // keep its parent_id key
@@ -106,7 +115,7 @@ class TopicContainer extends Component {
 
       // keep displayRoot index for the order of the roots
       if (!parent.parent_id) {
-        index = roots.indexOf(parent.id);
+        index = sortedRoots.indexOf(parent.id);
         if (index > -1 && !displayRootIndexes.includes(index)) {
           displayRootIndexes.push(index);
         }
@@ -118,7 +127,7 @@ class TopicContainer extends Component {
     }
 
     displayRootIndexes.sort();
-    const filteredRoots = displayRootIndexes.map(ind => roots[ind]);
+    const filteredRoots = displayRootIndexes.map(ind => sortedRoots[ind]);
 
     // add the parents to filteredById
     parentIdsArr.forEach((parentKey) => {
@@ -131,6 +140,12 @@ class TopicContainer extends Component {
   isIncluded = id => (this.filteredById[id]);
 
   hasChildren = node => (Array.isArray(node.children) && node.children.length > 0);
+
+  updateParentsVisibleState = (parentId) => {
+    const { expandedNodes } = this.state;
+    expandedNodes[parentId] = !expandedNodes[parentId];
+    this.setState({ expandedNodes });
+  };
 
   renderLeaf = node => (
     // eslint-disable-next-line
@@ -217,12 +232,6 @@ class TopicContainer extends Component {
         </div>
       </Grid.Column>
     );
-  };
-
-  updateParentsVisibleState = (parentId) => {
-    const { expandedNodes } = this.state;
-    expandedNodes[parentId] = !expandedNodes[parentId];
-    this.setState({ expandedNodes });
   };
 
   render() {
