@@ -4,10 +4,25 @@ import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import { Button, Container, Divider, Grid, Header, Input, List } from 'semantic-ui-react';
+import { bindActionCreators } from 'redux';
 
-import { selectors } from '../../../redux/modules/tags';
+import { actions as topicsActions, selectors as topicsSelectors } from '../../../redux/modules/tags';
+import { selectors as statsSelectors } from '../../../redux/modules/stats';
+import { isEmpty } from '../../../helpers/utils';
 import SectionHeader from '../../shared/SectionHeader';
 import Link from '../../Language/MultiLanguageLink';
+import {
+  COLLECTION_EVENTS_TYPE,
+  COLLECTION_LESSONS_TYPE,
+  COLLECTION_PROGRAMS_TYPE,
+  COLLECTION_PUBLICATIONS_TYPE,
+  CT_ARTICLE,
+  CT_PUBLICATION,
+  TOPICS_FOR_DISPLAY,
+  UNIT_EVENTS_TYPE,
+  UNIT_LESSONS_TYPE,
+  UNIT_PROGRAMS_TYPE
+} from '../../../helpers/consts';
 
 /* root will be main title
   subroot will be subtitle
@@ -19,6 +34,8 @@ class TopicContainer extends Component {
     // eslint-disable-next-line
     byId: PropTypes.object,
     t: PropTypes.func.isRequired,
+    stats: PropTypes.objectOf(PropTypes.number).isRequired,
+    fetchStats: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -30,6 +47,25 @@ class TopicContainer extends Component {
     expandedNodes: []
   };
 
+  componentWillReceiveProps(nextProps, nextContext) {
+    const { fetchStats } = nextProps;
+    const namespace      = 'topics';
+    const contentType    = [
+      ...UNIT_EVENTS_TYPE,
+      ...UNIT_EVENTS_TYPE,
+      ...UNIT_PROGRAMS_TYPE,
+      ...UNIT_LESSONS_TYPE,
+      ...COLLECTION_PUBLICATIONS_TYPE,
+      ...COLLECTION_EVENTS_TYPE,
+      ...COLLECTION_PROGRAMS_TYPE,
+      ...COLLECTION_LESSONS_TYPE,
+      CT_ARTICLE,
+      CT_PUBLICATION,
+    ];
+
+    fetchStats(namespace, contentType);
+  }
+
   // filter stuff
 
   getRegExp = (match) => {
@@ -38,13 +74,14 @@ class TopicContainer extends Component {
   };
 
   setVisibleState = (byId) => {
-    const list = byId || {};
+    const visibleItemsCount = 3;
+    const list              = byId || {};
     Object.keys(list).forEach((key) => {
       const { id, parent_id: parentId } = list[key];
       const { expandedNodes }           = this.state;
       let visible                       = true;
       if (parentId) {
-        visible = expandedNodes[parentId] || list[parentId].children.indexOf(id) < 3;
+        visible = expandedNodes[parentId] || list[parentId].children.indexOf(id) < visibleItemsCount;
       }
 
       list[key] = { ...list[key], visible };
@@ -70,10 +107,9 @@ class TopicContainer extends Component {
   filteredById = {};
 
   sortRootsPosition = (roots) => {
-    const ORDER_BY_HEBREW = ['VUpFlBnu', '0db5BBS3', 'g3ml0jum'];
-    const extra           = roots.filter(node => !ORDER_BY_HEBREW.includes(node));
+    const extra = roots.filter(node => !TOPICS_FOR_DISPLAY.includes(node));
 
-    return roots.length ? [...ORDER_BY_HEBREW, ...extra] : roots;
+    return roots.length ? [...TOPICS_FOR_DISPLAY, ...extra] : roots;
   };
 
   filterTagsById = () => {
@@ -147,12 +183,16 @@ class TopicContainer extends Component {
     this.setState({ expandedNodes });
   };
 
-  renderLeaf = node => (
+  renderLeaf = (node) => {
+    const { stats } = this.props;
+
     // eslint-disable-next-line
-    <Link to={`/topics/${node.id}`}>
-      {node.label}
-    </Link>
-  );
+    return (
+      <Link to={`/topics/${node.id}`}>
+        {node.label} {stats && stats[node.id] ? `(${stats[node.id]})` : ''}
+      </Link>
+    );
+  };
 
   renderChildren = children => (
     children
@@ -268,8 +308,17 @@ class TopicContainer extends Component {
 }
 
 export default connect(
-  state => ({
-    roots: selectors.getDisplayRoots(state.tags),
-    byId: selectors.getTags(state.tags),
-  })
+  (state) => {
+    let stats = statsSelectors.getCUStats(state.stats, 'topics') || { data: { tags: {} } };
+    stats     = isEmpty(stats) || isEmpty(stats.data) ? null : stats.data.tags;
+
+    return {
+      roots: topicsSelectors.getDisplayRoots(state.tags),
+      byId: topicsSelectors.getTags(state.tags),
+      stats
+    };
+  },
+  dispatch => bindActionCreators({
+    fetchStats: topicsActions.fetchStats
+  }, dispatch)
 )(translate()(TopicContainer));

@@ -35,28 +35,22 @@
       background-color: #f3f4f5;
       min-height: 176px;
 
-      &.grandchildren {
-        min-height: unset;
-        margin-bottom: 0;
-
-        .hide-button {
-          display: none;
-        }
-      }
-
       .list {
         margin: 0 !important;
       }
 
       .header.topics__subtitle {
-        padding: 10px 0 !important;
+        padding: 10px 8px !important;
         font-size: 18px !important;
         line-height: 22px !important;
         font-weight: 700;
+        position: -webkit-sticky;
         position: sticky;
-        top: 101px;
+        top: 105px;
         z-index: 9;
         background-color: #f3f4f5;
+        box-shadow: 0px 2px 8px -2px rgba(0,0,0,0.24);
+        margin: -4px -7.9px 8px -7.9px;
 
         a {
           color: #00aced !important;
@@ -90,8 +84,27 @@
           color: #828282 !important;
         }
 
+        &:active {
+          font-size: 14px;
+        }
+
         .icon {
           color: #00aced !important;
+        }
+      }
+
+      &.grandchildren {
+        min-height: unset;
+        margin-bottom: 0;
+
+        .header {
+          box-shadow: none !important;
+          margin-bottom: 0 !important;
+          padding-bottom: 0 !important;
+        }
+
+        .hide-button {
+          display: none;
         }
       }
     }
