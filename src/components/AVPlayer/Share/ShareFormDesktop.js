@@ -39,6 +39,11 @@ class ShareFormDesktop extends BaseShareForm {
     this.clearTimeout();
   }
 
+  getEmbed = (url) => {
+    const appendChar = url.indexOf('?') != -1 ? '&' : '?';
+    return '<iframe width="680" height="370" src="' + url + appendChar + 'embed=1" frameBorder="0" scrolling="no" allowfullscreen />';
+  }
+
   render() {
     const { t, onExit }       = this.props;
     const { start, end, url, isCopyPopupOpen } = this.state;
@@ -52,7 +57,7 @@ class ShareFormDesktop extends BaseShareForm {
           icon="chevron left"
           onClick={onExit}
         />
-        <ShareBar url={url} t={t} buttonSize="medium" />
+        <ShareBar url={url} embedContent={this.getEmbed(url)} t={t} buttonSize="medium" />
         <div className="mediaplayer__onscreen-share-form">
           <div className="mediaplayer__onscreen-share-bar">
             <Message content={url} size="mini" />
