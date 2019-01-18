@@ -93,18 +93,17 @@ class AVPlayerMobile extends PureComponent {
       mode,
       firstSeek: true,
     };
-
-  }
-
-  componentWillUnmount() {
-    if (this.seekTimeoutId) {
-      clearTimeout(this.seekTimeoutId);
-    }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.item !== this.props.item) {
       this.setState({ error: false, errorReason: '', firstSeek: true });
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.seekTimeoutId) {
+      clearTimeout(this.seekTimeoutId);
     }
   }
 
@@ -114,13 +113,25 @@ class AVPlayerMobile extends PureComponent {
     // prior to media element presence on the page
     this.wasCurrentTime = this.media.currentTime;
     this.props.onSwitchAV(...params);
-    //this.media.autoplay = true;
+    // this.media.autoplay = true;
   };
 
   // Remember the current time and playing state while switching.
   onLanguageChange = (...params) => {
     this.wasCurrentTime = this.media.currentTime;
     this.props.onLanguageChange(...params);
+  };
+
+  getSavedTime = () => {
+    const { item } = this.props;
+    // Try to get the current time from local storage if available
+    if (item && item.unit && item.unit.id) {
+      const savedTime = localStorage.getItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
+      if (savedTime) {
+        return parseInt(savedTime, 10);
+      }
+    }
+    return null;
   };
 
   handleMediaRef = (ref) => {
@@ -133,7 +144,7 @@ class AVPlayerMobile extends PureComponent {
       this.media.addEventListener('timeupdate', this.handleTimeUpdate);
       this.media.addEventListener('volumechange', this.handleVolumeChange);
       this.media.addEventListener('canplay', this.seekIfNeeded);
-      this.restoreVolume();     
+      this.restoreVolume();
     } else if (this.media) {
       this.media.removeEventListener('play', this.handlePlay);
       this.media.removeEventListener('pause', this.handlePause);
@@ -182,13 +193,13 @@ class AVPlayerMobile extends PureComponent {
         if (savedTime) {
           this.seekTo(savedTime, true);
         }
-      }      
+      }
       this.media.autoplay = true;
-      this.setState({ firstSeek: false });          
+      this.setState({ firstSeek: false });
     } else if (this.wasCurrentTime) {
       this.seekTo(this.wasCurrentTime, true);
       this.wasCurrentTime    = undefined;
-    } 
+    }
   };
 
   handlePause = () => {
@@ -213,7 +224,7 @@ class AVPlayerMobile extends PureComponent {
     const { mode, sliceEnd, sliceStart, seeking, firstSeek } = this.state;
 
     if (mode !== PLAYER_MODE.SLICE_VIEW || firstSeek || seeking) {
-       return;
+      return;
     }
 
     const time = e.currentTarget.currentTime;
@@ -321,18 +332,6 @@ class AVPlayerMobile extends PureComponent {
     }
   };
 
-  getSavedTime = () => {
-    const { item } = this.props;
-    // Try to get the current time from local storage if available
-    if (item && item.unit && item.unit.id) {
-      const savedTime = localStorage.getItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
-      if (savedTime) {
-        return parseInt(savedTime, 10);
-      }
-    }
-    return null;
-  };
-
   playbackRateChange = (e, rate) => {
     this.media.playbackRate = playbackToValue(rate);
     this.setState({ playbackRate: rate });
@@ -366,6 +365,7 @@ class AVPlayerMobile extends PureComponent {
 
     if (isVideo) {
       mediaEl = (
+        // eslint-disable-next-line jsx-a11y/media-has-caption
         <video
           controls
           autoPlay
@@ -378,6 +378,7 @@ class AVPlayerMobile extends PureComponent {
       );
     } else {
       mediaEl = (
+        // eslint-disable-next-line jsx-a11y/media-has-caption
         <audio
           controls
           autoPlay
