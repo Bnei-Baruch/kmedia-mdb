@@ -8,6 +8,7 @@ import InfoIcon from '../../images/icons/info.svg';
 import { SEARCH_INTENT_HIT_TYPES, } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { getQuery } from '../../helpers/url';
+import { selectors as settings } from '../../redux/modules/settings';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
@@ -94,13 +95,18 @@ class SearchResults extends Component {
   hideNote = () => this.setState({ showNote: false });
 
   renderTopNote = () => {
+    const { t, contentLanguage } = this.props;
+    const language               = t(`constants.languages.${contentLanguage}`);
     return (
       this.state.showNote
         ? <Message info className="search-result-note">
           <Image src={InfoIcon} floated='left' />
           <Button floated='right' icon="close" size="tiny" circular onClick={this.hideNote} />
-          <Container><strong>Tip:</strong> Search results are in <strong>English.</strong></Container>
-          <Container>If You can choose other content languages</Container>
+          <Container>
+            <strong>{t('search.topNote.tip')}: </strong>
+            {t('search.topNote.first', { language })}
+          </Container>
+          <Container>{t('search.topNote.second')}</Container>
         </Message>
         : null
     );
@@ -187,5 +193,6 @@ export default connect(state => ({
   getSourcePath: sourcesSelectors.getPathByID(state.sources),
   getSourceById: sourcesSelectors.getSourceById(state.sources),
   getTagById: tagsSelectors.getTagById(state.tags),
+  contentLanguage: settings.getContentLanguage(state.settings),
 }))(translate()(SearchResults));
 
