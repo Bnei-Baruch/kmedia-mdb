@@ -28,7 +28,7 @@ export default class ShareBar extends Component {
     url: PropTypes.string,
     embedContent: PropTypes.string,
     buttonSize: PropTypes.string,
-    messageTitle: PropTypes.string
+    messageTitle: PropTypes.string,
   };
 
   static defaultProps = {
@@ -99,7 +99,7 @@ export default class ShareBar extends Component {
           <EmailIcon size={bsPixels} round />
         </EmailShareButton>
 
-        <Popup             
+        { embedContent ? <Popup             
               open={isEmbedPopupOpen}              
               content={t('messages.link-copied-to-clipboard')}
               position="bottom right"
@@ -108,7 +108,7 @@ export default class ShareBar extends Component {
                   <Button icon="code" size="big" circular className="embed-share-button" />
                 </CopyToClipboard>
               }
-            />
+            /> : null }
       </div>
     );
   }
