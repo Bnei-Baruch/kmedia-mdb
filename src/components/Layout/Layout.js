@@ -38,13 +38,16 @@ class Layout extends Component {
   };
 
   componentDidMount() {
-    const {location } = this.props;
     document.addEventListener('click', this.clickOutside, true);    
-    this.setState( { embed: playerHelper.getEmbedFromQuery(location) } );
   }
 
   componentWillUnmount() {
     document.removeEventListener('click', this.clickOutside, true);
+  }
+
+  componentWillMount() {
+    const {location } = this.props;
+    this.setState( { embed: playerHelper.getEmbedFromQuery(location) } );
   }
 
   // i.e, main, header of footer.

@@ -66,7 +66,7 @@ class PlaylistCollectionPage extends Component {
   //   return <Helmets.Basic title={title} />;
   // }
 
-  componentDidMount() {
+  componentWillMount() {
     const {location } = this.props;
     this.setState( { embed: playerHelper.getEmbedFromQuery(location) } );
   }

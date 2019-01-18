@@ -34,7 +34,7 @@ export class UnitPage extends Component {
   state = {
   };
 
-  componentDidMount() {
+  componentWillMount() {
     const { location } = this.props;
     this.setState( { embed: playerHelper.getEmbedFromQuery(location) } );
   }

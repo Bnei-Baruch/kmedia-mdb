@@ -49,14 +49,13 @@ class PlaylistAVBox extends Component {
       }
       onSelectedChange(playlist.items[selected].unit);
     }
-    this.setState({ playlist, selected });
+    this.setState({ 
+      playlist, 
+      selected, 
+      embed: playerHelper.getEmbedFromQuery(location) 
+    });
 
     playerHelper.setLanguageInQuery(history, playlist.language);
-  }
-
-  componentDidMount() {
-    const { location } = this.props;
-    this.setState( { embed: playerHelper.getEmbedFromQuery(location) } );
   }
 
   componentWillReceiveProps(nextProps) {
@@ -164,7 +163,6 @@ class PlaylistAVBox extends Component {
     }
 
     const isAudio = playlist.items[selected].mediaType === MT_AUDIO;
-
     return !embed? (
       <Grid.Row
         className={classNames('', {
@@ -195,15 +193,23 @@ class PlaylistAVBox extends Component {
         </Grid.Column>
       </Grid.Row>
     ) : (
-      <AVPlaylistPlayer
-            items={playlist.items}
-            selected={selected}
-            language={playlist.language}
-            onSelectedChange={this.handleSelectedChange}
-            onLanguageChange={this.handleLanguageChange}
-            onSwitchAV={this.handleSwitchAV}
-            t={t}
-          />
+      <Grid.Row
+      className={classNames('', {
+        'layout--is-audio': isAudio,
+      })}
+    >
+      <Grid.Column id="avbox__player" mobile={16} tablet={10} computer={10}>
+        <AVPlaylistPlayer
+          items={playlist.items}
+          selected={selected}
+          language={playlist.language}
+          onSelectedChange={this.handleSelectedChange}
+          onLanguageChange={this.handleLanguageChange}
+          onSwitchAV={this.handleSwitchAV}
+          t={t}
+        />
+      </Grid.Column>    
+    </Grid.Row>
     );
   }
 }
