@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Container, Grid } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
@@ -88,7 +88,6 @@ class PlaylistCollectionPage extends Component {
                 collection={collection}
                 uiLanguage={uiLanguage}
                 contentLanguage={contentLanguage}
-                t={t}
                 onSelectedChange={this.handleSelectedChange}
                 PlayListComponent={PlaylistComponent}
                 nextLink={nextLink}
@@ -98,33 +97,34 @@ class PlaylistCollectionPage extends Component {
           </Container>
         </div>
         {
-          unit ?
-            <Container>
-              <Helmets.AVUnit unit={unit} language={uiLanguage} />
-              <Grid padded>
-                <Grid.Row>
-                  <Grid.Column mobile={16} tablet={16} computer={11} className="content__main">
-                    <Info unit={unit} t={t} />
-                    <Materials unit={unit} t={t} />
-                  </Grid.Column>
-                  <Grid.Column mobile={16} tablet={16} computer={5} className="content__aside">
-                    <Grid>
-                      <Grid.Row>
-                        <Grid.Column mobile={16} tablet={8} computer={16}>
-                          <MediaDownloads unit={unit} t={t} />
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-            </Container>
-            :
-            null
+          unit
+            ? (
+              <Container>
+                <Helmets.AVUnit unit={unit} language={uiLanguage} />
+                <Grid padded>
+                  <Grid.Row>
+                    <Grid.Column mobile={16} tablet={16} computer={11} className="content__main">
+                      <Info unit={unit} />
+                      <Materials unit={unit} />
+                    </Grid.Column>
+                    <Grid.Column mobile={16} tablet={16} computer={5} className="content__aside">
+                      <Grid>
+                        <Grid.Row>
+                          <Grid.Column mobile={16} tablet={8} computer={16}>
+                            <MediaDownloads unit={unit} />
+                          </Grid.Column>
+                        </Grid.Row>
+                      </Grid>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </Container>
+            )
+            : null
         }
       </div>
     );
   }
 }
 
-export default translate()(PlaylistCollectionPage);
+export default withNamespaces()(PlaylistCollectionPage);

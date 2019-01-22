@@ -19,6 +19,8 @@ class FiltersHydrator extends Component {
     isHydrated: false
   };
 
+  state = { isHydrated: null };
+
   componentDidMount() {
     // Filters hydration cycle starts here
     const { namespace, isHydrated, hydrateFilters, filtersHydrated } = this.props;
@@ -31,14 +33,14 @@ class FiltersHydrator extends Component {
     } else {
       hydrateFilters(namespace);
     }
+    this.setState({ isHydrated });
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { isHydrated, onHydrated, namespace, filtersHydrated } = nextProps;
+  static getDerivedStateFromProps(props, state) {
+    const { isHydrated, onHydrated, namespace, filtersHydrated } = props;
 
     // isHydrated changed from false to true.
-    if (!this.props.isHydrated && isHydrated) {
-
+    if (!state.isHydrated && isHydrated) {
       // End the hydration cycle.
       // Everything is updated, sagas, redux, react. Down to here.
       filtersHydrated(namespace);
@@ -46,6 +48,7 @@ class FiltersHydrator extends Component {
       // callback our event prop
       onHydrated(namespace);
     }
+    return { isHydrated: true };
   }
 
   render() {

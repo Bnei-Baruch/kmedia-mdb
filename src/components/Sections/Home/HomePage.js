@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Card, Container, Grid } from 'semantic-ui-react';
 
 import { sectionLogo } from '../../../helpers/images';
@@ -96,7 +96,7 @@ class HomePage extends Component {
 
         <div className="homepage__header homepage__section">
           <Container className="padded horizontally">
-            <SearchBar t={t} location={location} />
+            <SearchBar location={location} />
           </Container>
         </div>
 
@@ -105,10 +105,10 @@ class HomePage extends Component {
             <Grid centered>
               <Grid.Row>
                 <Grid.Column computer={6} tablet={7} mobile={16}>
-                  <LatestDailyLesson collection={latestLesson} t={t} />
+                  <LatestDailyLesson collection={latestLesson} />
                 </Grid.Column>
                 <Grid.Column computer={6} tablet={7} mobile={16}>
-                  <Promoted banner={banner} t={t} />
+                  <Promoted banner={banner} />
                 </Grid.Column>
               </Grid.Row>
             </Grid>
@@ -143,7 +143,7 @@ class HomePage extends Component {
                 {
                   sortedCUs.slice(0, 4).map((x) => {
                     const [section, unit] = x;
-                    return <LatestUpdate key={section} unit={unit} label={t(`nav.sidebar.${section}`)} t={t} />;
+                    return <LatestUpdate key={section} unit={unit} label={t(`nav.sidebar.${section}`)} />;
                   })
                 }
               </Card.Group>
@@ -157,32 +157,35 @@ class HomePage extends Component {
               <Grid width={15} centered className="homepage__iconsrow">
                 <Grid.Row>
                   {
-                    latestBlogPosts.length ?
-                      <Grid.Column mobile={16} tablet={11} computer={11} className="home-blog-posts">
-                        <div className="titles">
-                          <h4>{t('home.blog-title')}</h4>
-                          <a href={`/${language}/publications/blog`}>{t('home.all-posts')}</a>
-                        </div>
-                        <BlogFeed snippetVersion items={latestBlogPosts} language={language} t={t} limitLength={4} />
-                        <div className="read-more-bottom">
-                          <a href={`/${language}/publications/blog`}>{t('home.read-more-posts')}</a>
-                        </div>
-                      </Grid.Column> :
-                      null
+                    latestBlogPosts.length
+                      ? (
+                        <Grid.Column mobile={16} tablet={11} computer={11} className="home-blog-posts">
+                          <div className="titles">
+                            <h4>{t('home.blog-title')}</h4>
+                            <a href={`/${language}/publications/blog`}>{t('home.all-posts')}</a>
+                          </div>
+                          <BlogFeed snippetVersion items={latestBlogPosts} language={language} limitLength={4} />
+                          <div className="read-more-bottom">
+                            <a href={`/${language}/publications/blog`}>{t('home.read-more-posts')}</a>
+                          </div>
+                        </Grid.Column>)
+                      : null
                   }
                   {
-                    latestTweets.length ?
-                      <Grid.Column mobile={16} tablet={5} computer={5} className="home-twitter">
-                        <div className="titles">
-                          <h4>{t('home.twitter-title')}</h4>
-                          <a href={`/${language}/publications/twitter`}>{t('home.all-tweets')}</a>
-                        </div>
-                        <TwitterFeed snippetVersion tweets={latestTweets} t={t} limitLength={4} />
-                        <div className="read-more-bottom">
-                          <a href={`/${language}/publications/twitter`}>{t('home.read-more-tweets')}</a>
-                        </div>
-                      </Grid.Column> :
-                      null
+                    latestTweets.length
+                      ? (
+                        <Grid.Column mobile={16} tablet={5} computer={5} className="home-twitter">
+                          <div className="titles">
+                            <h4>{t('home.twitter-title')}</h4>
+                            <a href={`/${language}/publications/twitter`}>{t('home.all-tweets')}</a>
+                          </div>
+                          <TwitterFeed snippetVersion tweets={latestTweets} limitLength={4} />
+                          <div className="read-more-bottom">
+                            <a href={`/${language}/publications/twitter`}>{t('home.read-more-tweets')}</a>
+                          </div>
+                        </Grid.Column>
+                      )
+                      : null
                   }
                 </Grid.Row>
               </Grid>
@@ -194,4 +197,4 @@ class HomePage extends Component {
   }
 }
 
-export default translate()(HomePage);
+export default withNamespaces()(HomePage);

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
 const Footer = (props) => {
@@ -31,4 +32,4 @@ Footer.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default Footer;
+export default withNamespaces()(Footer);

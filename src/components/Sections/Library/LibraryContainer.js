@@ -5,8 +5,8 @@ import ReactDOM from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { push as routerPush, replace as routerReplace } from 'react-router-redux';
-import { translate } from 'react-i18next';
+import { push as routerPush, replace as routerReplace } from 'connected-react-router';
+import { withNamespaces } from 'react-i18next';
 import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
@@ -102,9 +102,9 @@ class LibraryContainer extends Component {
     }
 
     const firstLeafId = this.firstLeafId(sourceId);
-    if (firstLeafId !== sourceId ||
-      this.props.sourceId !== sourceId ||
-      this.state.lastLoadedId !== sourceId) {
+    if (firstLeafId !== sourceId
+      || this.props.sourceId !== sourceId
+      || this.state.lastLoadedId !== sourceId) {
       if (firstLeafId === sourceId) {
         this.loadNewIndices(sourceId, this.props.language);
       } else {
@@ -143,8 +143,10 @@ class LibraryContainer extends Component {
     return getPathByID(sourceId);
   };
 
-  isMobileDevice = () =>
-    this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
+  isMobileDevice = () => {
+    const { deviceInfo } = this.props;
+    return deviceInfo.device && deviceInfo.device.type === 'mobile';
+  };
 
   updateSticky = () => {
     // take the secondary header height for sticky stuff calculations
@@ -196,11 +198,13 @@ class LibraryContainer extends Component {
   };
 
   handleTocIsActive = () => {
-    this.setState({ tocIsActive: !this.state.tocIsActive });
+    const { tocIsActive } = this.state;
+    this.setState({ tocIsActive: !tocIsActive });
   };
 
   handleIsReadable = () => {
-    this.setState({ isReadable: !this.state.isReadable });
+    const { isReadable } = this.state;
+    this.setState({ isReadable: !isReadable });
   };
 
   handleSettings = (setting) => {
@@ -208,11 +212,12 @@ class LibraryContainer extends Component {
   };
 
   fetchIndices = (sourceId) => {
-    if (isEmpty(sourceId) || !isEmpty(this.props.indexMap[sourceId])) {
+    const { indexMap, fetchIndex } = this.props;
+    if (isEmpty(sourceId) || !isEmpty(indexMap[sourceId])) {
       return;
     }
 
-    this.props.fetchIndex(sourceId);
+    fetchIndex(sourceId);
   };
 
   header = (sourceId, fullPath) => {
@@ -238,7 +243,9 @@ class LibraryContainer extends Component {
         </Ref>
         <Header.Subheader>
           <small style={{ width: `${contentHeaderWidth}px` }}>
-            {displayName} / {`${parentName} ${description || ''} `}
+            {displayName}
+            /
+            {`${parentName} ${description || ''} `}
           </small>
         </Header.Subheader>
         <span style={{ width: `${contentHeaderWidth}px` }}>{sourceName}</span>
@@ -255,17 +262,20 @@ class LibraryContainer extends Component {
   };
 
   sortButton = () => {
+    const { sortBy, sourcesSortBy } = this.props;
     let sortOrder;
-    if (this.props.sortBy === 'AZ') {
+    if (sortBy === 'AZ') {
       sortOrder = 'Book';
     } else {
       sortOrder = 'AZ';
     }
-    this.props.sourcesSortBy(sortOrder);
+    sourcesSortBy(sortOrder);
   };
 
   switchSortingOrder = (parentId) => {
-    if (this.props.NotToSort.findIndex(a => a === parentId) !== -1) {
+    const { sortBy, NotToSort } = this.props;
+
+    if (NotToSort.findIndex(a => a === parentId) !== -1) {
       return null;
     }
 
@@ -274,9 +284,9 @@ class LibraryContainer extends Component {
         compact
         size="small"
         icon="sort alphabet ascending"
-        color={this.props.sortBy === 'AZ' ? 'blue' : ''}
-        active={this.props.sortBy === 'AZ'}
-        basic={this.props.sortBy !== 'AZ'}
+        color={sortBy === 'AZ' ? 'blue' : ''}
+        active={sortBy === 'AZ'}
+        basic={sortBy !== 'AZ'}
         onClick={this.sortButton}
       />
     );
@@ -301,7 +311,9 @@ class LibraryContainer extends Component {
   };
 
   matchString = (parentId, t) => {
-    if (this.props.NotToFilter.findIndex(a => a === parentId) !== -1) {
+    const { NotToFilter } = this.props;
+    const { match }       = this.state;
+    if (NotToFilter.findIndex(a => a === parentId) !== -1) {
       return null;
     }
     return (
@@ -310,7 +322,7 @@ class LibraryContainer extends Component {
         size="mini"
         icon="search"
         placeholder={t('sources-library.filter')}
-        value={this.state.match}
+        value={match}
         onChange={this.handleFilterChange}
         onKeyDown={this.handleFilterKeyDown}
       />
@@ -318,7 +330,7 @@ class LibraryContainer extends Component {
   };
 
   render() {
-    const { sourceId, indexMap, getSourceById, language, contentLanguage, t } = this.props;
+    const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push } = this.props;
 
     const fullPath = this.getFullPath(sourceId);
     const parentId = this.properParentId(fullPath);
@@ -341,7 +353,6 @@ class LibraryContainer extends Component {
           uiLanguage={language}
           contentLanguage={contentLanguage}
           langSelectorMount={this.headerMenuRef}
-          t={t}
         />
       );
     }
@@ -394,10 +405,10 @@ class LibraryContainer extends Component {
                   <div className="source__header-toolbar">
                     <Button compact size="small" className="mobile-hidden" icon="print" onClick={this.print} />
                     <div id="download-button" />
-                    <LibrarySettings fontSize={this.state.fontSize} handleSettings={this.handleSettings} />
+                    <LibrarySettings fontSize={fontSize} handleSettings={this.handleSettings} />
                     <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                     <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                    <Share t={t} isMobile={this.isMobileDevice()} />
+                    <Share isMobile={this.isMobileDevice()} />
                   </div>
                 </Grid.Column>
               </Grid.Row>
@@ -416,9 +427,8 @@ class LibraryContainer extends Component {
                   rootId={parentId}
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
-                  apply={this.props.push}
+                  apply={push}
                   stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
-                  t={t}
                 />
               </Grid.Column>
               <Grid.Column
@@ -467,4 +477,4 @@ export default withRouter(connect(
     push: routerPush,
     replace: routerReplace,
   }, dispatch)
-)(translate()(withRouter(LibraryContainer))));
+)(withNamespaces()(withRouter(LibraryContainer))));

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { Button, Header, Icon, Menu, Popup } from 'semantic-ui-react';
 
 import * as shapes from '../shapes';
@@ -34,15 +35,24 @@ class HandleLanguages extends Component {
       direction: langDir,
     };
 
-    const trigger = isMobileDevice ? <Icon size="big" name="language" /> :
-      <span><Icon name="sliders horizontal" />{t('languages.language')}</span>;
+    const trigger = isMobileDevice
+      ? <Icon size="big" name="language" />
+      : (
+        <span>
+          <Icon name="sliders horizontal" />
+          {t('languages.language')}
+        </span>);
     return (
       <Popup
         key="handleLangs"
         flowing
         hideOnScroll
         position="bottom right"
-        trigger={<Menu.Item onClick={this.handlePopupOpen} className="padding_r_l_0">{trigger}</Menu.Item>}
+        trigger={(
+          <Menu.Item onClick={this.handlePopupOpen} className="padding_r_l_0">
+            {trigger}
+          </Menu.Item>
+        )}
         open={isActive}
         onOpen={this.handlePopupOpen}
         onClose={this.handlePopupClose}
@@ -59,13 +69,6 @@ class HandleLanguages extends Component {
               content={t('buttons.close')}
               onClick={this.handlePopupClose}
             />
-            {/*<Button*/}
-            {/*primary*/}
-            {/*compact*/}
-            {/*size="tiny"*/}
-            {/*content={t('buttons.apply')}*/}
-            {/*onClick={this.apply}*/}
-            {/*/>*/}
           </div>
 
         </Popup.Header>
@@ -74,13 +77,11 @@ class HandleLanguages extends Component {
             language={language}
             contentLanguage={contentLanguage}
             location={location}
-            t={t}
           />
           <ContentLanguage
             language={language}
             contentLanguage={contentLanguage}
             setContentLanguage={setContentLanguage}
-            t={t}
           />
         </Popup.Content>
       </Popup>
@@ -88,4 +89,4 @@ class HandleLanguages extends Component {
   }
 }
 
-export default HandleLanguages;
+export default withNamespaces()(HandleLanguages);

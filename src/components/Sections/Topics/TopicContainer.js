@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
-import { translate } from 'react-i18next';
 import { Button, Container, Divider, Grid, Header, Input, List } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 
@@ -321,4 +321,4 @@ export default connect(
   dispatch => bindActionCreators({
     fetchStats: topicsActions.fetchStats
   }, dispatch)
-)(translate()(TopicContainer));
+)(withNamespaces()(TopicContainer));

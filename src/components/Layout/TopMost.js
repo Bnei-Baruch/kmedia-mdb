@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 
 import { LANG_UI_LANGUAGES } from '../../helpers/consts';
@@ -27,4 +28,4 @@ export default connect(
   state => ({
     language: settings.getLanguage(state.settings),
   })
-)(TopMost);
+)(withNamespaces()(TopMost));

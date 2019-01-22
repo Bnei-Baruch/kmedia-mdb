@@ -1,9 +1,103 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
+import isEqual from 'react-fast-compare';
 
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, RTL_LANGUAGES, } from '../../../helpers/consts';
-import { isEmpty, shallowEqual } from '../../../helpers/utils';
+import { isEmpty } from '../../../helpers/utils';
+import { Reference } from '../../shapes';
+
+const titleKey = id => `title-${id}`;
+
+const hebrew = (number) => {
+  let n = 1 * number;
+  switch (n) {
+  case 16:
+    return 'ט"ז';
+  case 15:
+    return 'ט"ו';
+  default:
+    break;
+  }
+
+  let ret = '';
+  while (n >= 400) {
+    ret += 'ת';
+    n -= 400;
+  }
+  if (n >= 300) {
+    ret += 'ש';
+    n -= 300;
+  }
+  if (n >= 200) {
+    ret += 'ר';
+    n -= 200;
+  }
+  if (n >= 100) {
+    ret += 'ק';
+    n -= 100;
+  }
+  if (n >= 10) {
+    ret += 'יכלמנסעפצ'.slice((n / 10) - 1)[0];
+    n %= 10;
+  }
+  if (n > 0) {
+    ret += 'אבגדהוזחט'.slice((n % 10) - 1)[0];
+  }
+
+  if (ret.length > 1) {
+    ret = `${ret.slice(0, 1)}"${ret.slice(1)}`;
+  }
+
+  return ret;
+};
+
+const getIndex = (node1, node2) => {
+  if (!node1 || !node2 || !node1.children) {
+    return -1;
+  }
+  return node1.children.findIndex(x => x === node2.id);
+};
+
+const scrollToActive = (activeId) => {
+  const element = document.getElementById(titleKey(activeId));
+  if (element === null) {
+    return;
+  }
+  element.scrollIntoView();
+  window.scrollTo(0, 0);
+};
+
+const handleTitleClick = (e, data) => {
+  // don't stop propagation on leaf nodes
+  const { id = '' } = data;
+
+  if (id.startsWith('title')) {
+    return;
+  }
+
+  // stop propagation so tocIsActive in LibraryContainer won't call
+  // this breaks navigation in nested TOCs (TES, Zohar, etc...)
+  e.stopPropagation();
+};
+
+const filterSources = (path, match) => {
+  if (isEmpty(match)) {
+    return path;
+  }
+
+  // We don't check validity of regular expression,
+  // so let's escape all special symbols
+  const escapedMatch = match.replace(/[/)(.+\\]/g, '\\$&');
+  const reg          = new RegExp(escapedMatch, 'i');
+  return path.reduce((acc, el) => {
+    if (reg.test(el.leafTitle)) {
+      const name = el.leafTitle.replace(reg, '<em class="blue text">$&</em>');
+      acc.push({ leafId: el.leafId, leafTitle: name });
+    }
+    return acc;
+  }, []);
+};
 
 class TOC extends Component {
   static propTypes = {
@@ -14,7 +108,7 @@ class TOC extends Component {
       children: PropTypes.arrayOf(PropTypes.string),
     })).isRequired,
     rootId: PropTypes.string.isRequired,
-    contextRef: PropTypes.object,
+    contextRef: Reference,
     getSourceById: PropTypes.func.isRequired,
     apply: PropTypes.func.isRequired,
     stickyOffset: PropTypes.number,
@@ -32,19 +126,21 @@ class TOC extends Component {
   state = {};
 
   componentWillReceiveProps(nextProps) {
-    const { fullPath } = nextProps;
-    const activeId     = fullPath[fullPath.length - 1].id;
-    if (activeId !== this.state.activeId) {
+    const { fullPath }                = nextProps;
+    const { activeId: stateActiveID } = this.state;
+    const activeId                    = fullPath[fullPath.length - 1].id;
+    if (activeId !== stateActiveID) {
       this.setState({ activeId });
     }
   }
 
   shouldComponentUpdate(nextProps) {
+    const { rootId, match, stickyOffset, fullPath } = this.props;
     return (
-      this.props.rootId !== nextProps.rootId ||
-      this.props.match !== nextProps.match ||
-      this.props.stickyOffset !== nextProps.stickyOffset ||
-      !shallowEqual(this.props.fullPath, nextProps.fullPath)
+      rootId !== nextProps.rootId
+      || match !== nextProps.match
+      || stickyOffset !== nextProps.stickyOffset
+      || !isEqual(fullPath, nextProps.fullPath)
     );
   }
 
@@ -52,91 +148,29 @@ class TOC extends Component {
     // make actual TOC content proper height
     const el = document.querySelector('.source__toc > div:nth-child(2)');
     if (el) {
-      el.style.height = `calc(100vh - ${this.props.stickyOffset}px)`;
+      const { stickyOffset } = this.props;
+      el.style.height        = `calc(100vh - ${stickyOffset}px)`;
     }
-    this.scrollToActive();
+    const { activeId } = this.state;
+    scrollToActive(activeId);
   }
-
-  getIndex = (node1, node2) => {
-    if (!node1 || !node2 || !node1.children) {
-      return -1;
-    }
-    return node1.children.findIndex(x => x === node2.id);
-  };
-
-  handleTitleClick = (e, data) => {
-    // don't stop propagation on leaf nodes
-    const { id = '' } = data;
-
-    if (id.startsWith('title')) {
-      return;
-    }
-
-    // stop propagation so tocIsActive in LibraryContainer won't call
-    // this breaks navigation in nested TOCs (TES, Zohar, etc...)
-    e.stopPropagation();
-  };
 
   subToc = (subTree, path) => (
     subTree.map(sourceId => (this.toc(sourceId, path)))
   );
 
-  titleKey = id => `title-${id}`;
-
-  hebrew = (number) => {
-    let n = 1 * number;
-    switch (n) {
-    case 16:
-      return 'ט"ז';
-    case 15:
-      return 'ט"ו';
-    default:
-      break;
-    }
-
-    let ret = '';
-    while (n >= 400) {
-      ret += 'ת';
-      n -= 400;
-    }
-    if (n >= 300) {
-      ret += 'ש';
-      n -= 300;
-    }
-    if (n >= 200) {
-      ret += 'ר';
-      n -= 200;
-    }
-    if (n >= 100) {
-      ret += 'ק';
-      n -= 100;
-    }
-    if (n >= 10) {
-      ret += 'יכלמנסעפצ'.slice((n / 10) - 1)[0];
-      n %= 10;
-    }
-    if (n > 0) {
-      ret += 'אבגדהוזחט'.slice((n % 10) - 1)[0];
-    }
-
-    if (ret.length > 1) {
-      ret = `${ret.slice(0, 1)}"${ret.slice(1)}`;
-    }
-
-    return ret;
-  };
-
   leaf = (id, title, match) => {
-    const props = {
-      id: this.titleKey(id),
-      key: this.titleKey(id),
-      active: id === this.state.activeId,
+    const { activeId } = this.state;
+    const props        = {
+      id: titleKey(id),
+      key: titleKey(id),
+      active: id === activeId,
       onClick: e => this.selectSourceById(id, e),
     };
 
-    const realTitle = isEmpty(match) ?
-      title :
-      <span dangerouslySetInnerHTML={{ __html: title }} />;
+    const realTitle = isEmpty(match)
+      ? title
+      : <span dangerouslySetInnerHTML={{ __html: title }} />;
     return <Accordion.Title {...props}>{realTitle}</Accordion.Title>;
   };
 
@@ -163,7 +197,7 @@ class TOC extends Component {
         const { name, number, year } = getSourceById(leafId);
         let leafTitle                = name;
         if (sourceId === BS_SHAMATI) {
-          leafTitle = isRTL ? `${this.hebrew(number)}. ${name}` : `${number}. ${name}`;
+          leafTitle = isRTL ? `${hebrew(number)}. ${name}` : `${number}. ${name}`;
         } else if (sourceId === RH_RECORDS) {
           leafTitle = `${number}. ${name}`;
         } else if (sourceId === RH_ARTICLES) {
@@ -174,12 +208,12 @@ class TOC extends Component {
       }, []);
 
       const { match } = this.props;
-      panels          = this.filterSources(tree, match).map(({ leafId, leafTitle, }) => ({
+      panels          = filterSources(tree, match).map(({ leafId, leafTitle, }) => ({
         title: this.leaf(leafId, leafTitle, match),
         key: `lib-leaf-${leafId}`
       }));
     } else {
-      panels  = this.subToc(children, path.slice(1)).map(({ content, title: name }, index) => ({
+      panels = this.subToc(children, path.slice(1)).map(({ content, title: name }, index) => ({
         title: name,
         content,
         key: `root-${index}-${title}`
@@ -190,7 +224,7 @@ class TOC extends Component {
       return panels;
     }
 
-    const activeIndex = this.getIndex(path[0], path[1]);
+    const activeIndex = getIndex(path[0], path[1]);
     return {
       title,
       content: {
@@ -198,7 +232,7 @@ class TOC extends Component {
           <Accordion.Accordion
             panels={panels}
             defaultActiveIndex={activeIndex}
-            onTitleClick={this.handleTitleClick}
+            onTitleClick={handleTitleClick}
           />
         ),
         key: `lib-content-${sourceId}`,
@@ -207,44 +241,17 @@ class TOC extends Component {
   };
 
   selectSourceById = (id, e) => {
+    const { apply, matchApplied } = this.props;
     e.preventDefault();
-    this.props.apply(`sources/${id}`);
-    this.props.matchApplied();
+    apply(`sources/${id}`);
+    matchApplied();
     this.setState({ activeId: id });
-  };
-
-  scrollToActive = () => {
-    const { activeId } = this.state;
-    const element      = document.getElementById(this.titleKey(activeId));
-    if (element === null) {
-      return;
-    }
-    element.scrollIntoView();
-    window.scrollTo(0, 0);
-  };
-
-  filterSources = (path, match) => {
-    if (isEmpty(match)) {
-      return path;
-    }
-
-    // We don't check validity of regular expression,
-    // so let's escape all special symbols
-    const escapedMatch = match.replace(/[/)(.+\\]/g, '\\$&');
-    const reg          = new RegExp(escapedMatch, 'i');
-    return path.reduce((acc, el) => {
-      if (reg.test(el.leafTitle)) {
-        const name = el.leafTitle.replace(reg, '<em class="blue text">$&</em>');
-        acc.push({ leafId: el.leafId, leafTitle: name });
-      }
-      return acc;
-    }, []);
   };
 
   render() {
     const { fullPath, rootId, contextRef, stickyOffset } = this.props;
 
-    const activeIndex = this.getIndex(fullPath[1], fullPath[2]);
+    const activeIndex = getIndex(fullPath[1], fullPath[2]);
     if (activeIndex === -1) {
       return null;
     }
@@ -255,7 +262,7 @@ class TOC extends Component {
     return (
       <Sticky context={contextRef} offset={stickyOffset} className="source__toc">
         <Ref innerRef={this.handleAccordionContext}>
-          <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} onTitleClick={this.handleTitleClick} />
+          <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} onTitleClick={handleTitleClick} />
         </Ref>
       </Sticky>
     );

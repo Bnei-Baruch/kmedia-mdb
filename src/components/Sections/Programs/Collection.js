@@ -30,10 +30,11 @@ export const renderUnit = (unit, t) => {
           {unit.name || NO_NAME}
         </Link>
         {
-          unit.description ?
-            <div className="index__description mobile-hidden">
-              {ellipsize(unit.description)}
-            </div>
+          unit.description
+            ? (
+              <div className="index__description mobile-hidden">
+                {ellipsize(unit.description)}
+              </div>)
             : null
         }
       </Table.Cell>

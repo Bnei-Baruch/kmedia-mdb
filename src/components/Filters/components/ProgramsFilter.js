@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 
 import { CT_VIDEO_PROGRAM } from '../../../helpers/consts';
@@ -36,7 +37,8 @@ class ProgramsFilter extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.programs !== nextProps.programs) {
+    const { programs } = this.props;
+    if (programs !== nextProps.programs) {
       this.setState({ tree: this.getTree(nextProps) });
     }
   }
@@ -89,4 +91,4 @@ export default connect(
       programs: (cIDs || []).map(x => mdb.getDenormCollection(state.mdb, x)),
     };
   },
-)(ProgramsFilter);
+)(withNamespaces()(ProgramsFilter));

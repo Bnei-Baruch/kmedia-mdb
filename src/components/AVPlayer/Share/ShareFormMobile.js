@@ -41,12 +41,12 @@ class ShareFormMobile extends BaseShareForm {
     const { start, end, url, isCopyPopupOpen } = this.state;
 
     return (
-      <div className="mediaplayer__onscreen-share">
-        <ShareBar url={url} t={t} buttonSize="medium" />
-        <div className="mediaplayer__onscreen-share-form">
-          <div className="mediaplayer__onscreen-share-bar-mobile">
+      <div className="mediaplayer_onscreen-share">
+        <ShareBar url={url} buttonSize="medium" />
+        <div className="mediaplayer_onscreen-share-form">
+          <div className="mediaplayer_onscreen-share-bar-mobile">
             <Input
-              className="mediaplayer__onscreen-share-bar-mobile-link"
+              className="mediaplayer_onscreen-share-bar-mobile-link"
               value={url}
               input={{ readOnly: true }}
               style={{ textAlign: 'left', direction: 'ltr' }}
@@ -65,7 +65,7 @@ class ShareFormMobile extends BaseShareForm {
           <Form size="mini">
             <Form.Group widths="equal">
               <Form.Input
-                value={start ? this.mlsToStrColon(start) : ''}
+                value={start ? BaseShareForm.mlsToStrColon(start) : ''}
                 onClick={this.setStart}
                 action={{
                   content: t('player.buttons.start-position'),
@@ -80,7 +80,7 @@ class ShareFormMobile extends BaseShareForm {
                 className="slice-button-mobile"
               />
               <Form.Input
-                value={end ? this.mlsToStrColon(end) : ''}
+                value={end ? BaseShareForm.mlsToStrColon(end) : ''}
                 onClick={this.setEnd}
                 action={{
                   content: t('player.buttons.end-position'),

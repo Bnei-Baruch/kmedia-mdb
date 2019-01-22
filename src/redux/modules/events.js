@@ -75,22 +75,18 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const makeYearsPredicate = values => x =>
-  isEmpty(values) ||
-  values.some(v =>
-    x.start_date.substring(0, 4) <= v && v <= x.end_date.substring(0, 4)
+const makeYearsPredicate = values => x => isEmpty(values)
+  || values.some(v => x.start_date.substring(0, 4) <= v && v <= x.end_date.substring(0, 4)
   );
 
-const makeLocationsPredicate = values => x =>
-  isEmpty(values) ||
-  values.some((v) => {
+const makeLocationsPredicate = values => x => isEmpty(values)
+  || values.some((v) => {
     const [country, city] = v;
     return country === x.country && (!city || city === x.city);
   });
 
-const makeHolidaysPredicate = values => x =>
-  isEmpty(values) ||
-  values.some(v => x.holiday_id === v[0]);
+const makeHolidaysPredicate = values => x => isEmpty(values)
+  || values.some(v => x.holiday_id === v[0]);
 
 const predicateMap = {
   'years-filter': makeYearsPredicate,

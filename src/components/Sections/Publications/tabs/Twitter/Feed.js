@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Divider, Feed, Image } from 'semantic-ui-react';
@@ -132,7 +132,7 @@ class TwitterFeed extends Component {
       `https://twitter.com/${username}`;
 
     return (
-      <React.Fragment key={tID}>
+      <Fragment key={tID}>
         <Feed.Event key={tID} className="tweet">
           <Feed.Content>
             <Feed.Summary className="tweet-title-wrapper">
@@ -177,7 +177,7 @@ class TwitterFeed extends Component {
             <Divider fitted /> :
             null
         }
-      </React.Fragment>
+      </Fragment>
     );
   };
 

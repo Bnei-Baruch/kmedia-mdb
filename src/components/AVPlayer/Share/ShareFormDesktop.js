@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Form, Message, Popup } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { withNamespaces } from 'react-i18next';
+
 import BaseShareForm from './BaseShareForm';
 import ShareBar from './ShareBar';
 
@@ -52,7 +54,7 @@ class ShareFormDesktop extends BaseShareForm {
           icon="chevron left"
           onClick={onExit}
         />
-        <ShareBar url={url} t={t} buttonSize="medium" />
+        <ShareBar url={url} buttonSize="medium" />
         <div className="mediaplayer__onscreen-share-form">
           <div className="mediaplayer__onscreen-share-bar">
             <Message content={url} size="mini" />
@@ -70,7 +72,7 @@ class ShareFormDesktop extends BaseShareForm {
           <Form>
             <Form.Group widths="equal">
               <Form.Input
-                value={start ? this.mlsToStrColon(start) : ''}
+                value={start ? BaseShareForm.mlsToStrColon(start) : ''}
                 onClick={this.setStart}
                 action={{
                   content: t('player.buttons.start-position'),
@@ -85,7 +87,7 @@ class ShareFormDesktop extends BaseShareForm {
                 placeholder={t('player.buttons.click-to-set')}
               />
               <Form.Input
-                value={end ? this.mlsToStrColon(end) : ''}
+                value={end ? BaseShareForm.mlsToStrColon(end) : ''}
                 onClick={this.setEnd}
                 action={{
                   content: t('player.buttons.end-position'),
@@ -107,4 +109,4 @@ class ShareFormDesktop extends BaseShareForm {
   }
 }
 
-export default ShareFormDesktop;
+export default withNamespaces()(ShareFormDesktop);

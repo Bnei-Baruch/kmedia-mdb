@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { withNamespaces } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
+import isEqual from 'react-fast-compare';
 
 import { MT_AUDIO, MT_VIDEO } from '../../../../../helpers/consts';
 import playerHelper from '../../../../../helpers/player';
-import { equal } from '../../../../../helpers/utils';
 import * as shapes from '../../../../shapes';
 import AVPlaylistPlayer from '../../../../AVPlayer/AVPlaylistPlayer';
 
@@ -15,11 +16,12 @@ class PlaylistAVBox extends Component {
     history: shapes.History.isRequired,
     location: shapes.HistoryLocation.isRequired,
     collection: shapes.GenericCollection.isRequired,
-    PlayListComponent: PropTypes.any.isRequired,
+    // There is no consensus on what the right prototype would be
+    // https://github.com/facebook/react/issues/5143
+    PlayListComponent: PropTypes.func.isRequired,
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
     onSelectedChange: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired,
     nextLink: PropTypes.string,
     prevLink: PropTypes.string,
   };
@@ -29,12 +31,9 @@ class PlaylistAVBox extends Component {
     prevLink: null,
   };
 
-  state = {
-    selected: 0,
-  };
-
-  componentWillMount() {
-    const { collection, uiLanguage, contentLanguage, history, location, onSelectedChange } = this.props;
+  constructor(props) {
+    super(props);
+    const { collection, uiLanguage, contentLanguage, history, location, onSelectedChange } = props;
 
     const preferredMT    = playerHelper.restorePreferredMediaType();
     const mediaType      = playerHelper.getMediaTypeFromQuery(history.location, preferredMT);
@@ -49,15 +48,15 @@ class PlaylistAVBox extends Component {
       }
       onSelectedChange(playlist.items[selected].unit);
     }
-    this.setState({ playlist, selected });
+    this.state = { playlist, selected };
 
     playerHelper.setLanguageInQuery(history, playlist.language);
   }
 
-  componentWillReceiveProps(nextProps) {
+  static getDerivedStateFromProps(nextProps, state) {
     const { collection, location } = nextProps;
 
-    const { selected, playlist }       = this.state;
+    const { selected, playlist }       = state;
     const { language: playerLanguage } = playlist;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();
@@ -66,7 +65,6 @@ class PlaylistAVBox extends Component {
 
     // Recalculate playlist
     const nPlaylist = playerHelper.playlist(collection, newMediaType, newItemLanguage, playerLanguage);
-    this.setState({ playlist: nPlaylist });
 
     // When moving from playlist to another playlist
     // we're already mounted. We have to make sure to change selected as well.
@@ -78,22 +76,23 @@ class PlaylistAVBox extends Component {
     const nSelected = playerHelper.getActivePartFromQuery(location);
     if (nSelected !== selected) {
       // case # 1
-      this.setState({ selected: nSelected });
       playerHelper.setActivePartInQuery(nextProps.history, nSelected);
       nextProps.onSelectedChange(nPlaylist.items[nSelected].unit);
-    } else if (
-      playlist &&
-      nPlaylist &&
-      playlist.items[selected] &&
-      nPlaylist.items[selected] &&
-      playlist.items[selected].unit &&
-      nPlaylist.items[selected].unit &&
-      playlist.items[selected].unit !== nPlaylist.items[selected].unit
+      return { selected: nSelected, playlist: nPlaylist };
+    }
+    if (
+      playlist
+      && nPlaylist
+      && playlist.items[selected]
+      && nPlaylist.items[selected]
+      && playlist.items[selected].unit
+      && nPlaylist.items[selected].unit
+      && playlist.items[selected].unit !== nPlaylist.items[selected].unit
     ) {
       // case # 2
-      this.setState({ selected: nSelected });
       nextProps.onSelectedChange(nPlaylist.items[nSelected].unit);
     }
+    return { playlist: nPlaylist };
   }
 
   shouldComponentUpdate(nextProps) {
@@ -112,24 +111,28 @@ class PlaylistAVBox extends Component {
     const preferredMT     = playerHelper.restorePreferredMediaType();
     const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);
     const newMediaType    = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const prevActivePart   = playerHelper.getActivePartFromQuery(oldLocation);
-    const newActivePart    = playerHelper.getActivePartFromQuery(location);
+    const prevActivePart  = playerHelper.getActivePartFromQuery(oldLocation);
+    const newActivePart   = playerHelper.getActivePartFromQuery(location);
     const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
-    return !(equal(collection, oldCollection) &&
-      oldUiLanguage === uiLanguage &&
-      oldContentLanguage === contentLanguage &&
-      prevMediaType === newMediaType &&
-      prevActivePart === newActivePart &&
-      newItemLanguage === playerLanguage);
+    return !(
+      oldUiLanguage === uiLanguage
+      && oldContentLanguage === contentLanguage
+      && prevMediaType === newMediaType
+      && prevActivePart === newActivePart
+      && newItemLanguage === playerLanguage
+      && isEqual(collection, oldCollection)
+    );
   }
 
   handleSelectedChange = (selected) => {
-    playerHelper.setActivePartInQuery(this.props.history, selected);
+    const { history } = this.props;
+    playerHelper.setActivePartInQuery(history, selected);
   };
 
   handleLanguageChange = (e, language) => {
-    playerHelper.setLanguageInQuery(this.props.history, language);
+    const { history } = this.props;
+    playerHelper.setLanguageInQuery(history, language);
   };
 
   handleSwitchAV = () => {
@@ -147,13 +150,13 @@ class PlaylistAVBox extends Component {
   };
 
   render() {
-    const { t, PlayListComponent, uiLanguage, nextLink, prevLink } = this.props;
-    const { playlist, selected }                                   = this.state;
+    const { PlayListComponent, uiLanguage, nextLink, prevLink } = this.props;
+    const { playlist, selected }                                = this.state;
 
-    if (!playlist ||
-      !Array.isArray(playlist.items) ||
-      playlist.items.length === 0 ||
-      playlist.language === undefined
+    if (!playlist
+      || !Array.isArray(playlist.items)
+      || playlist.items.length === 0
+      || playlist.language === undefined
     ) {
       return null;
     }
@@ -174,7 +177,6 @@ class PlaylistAVBox extends Component {
             onSelectedChange={this.handleSelectedChange}
             onLanguageChange={this.handleLanguageChange}
             onSwitchAV={this.handleSwitchAV}
-            t={t}
           />
         </Grid.Column>
         <Grid.Column id="avbox__playlist" className="avbox__playlist" mobile={16} tablet={6} computer={6}>
@@ -183,7 +185,6 @@ class PlaylistAVBox extends Component {
             selected={selected}
             language={uiLanguage}
             onSelectedChange={this.handleSelectedChange}
-            t={t}
             nextLink={nextLink}
             prevLink={prevLink}
           />
@@ -193,4 +194,4 @@ class PlaylistAVBox extends Component {
   }
 }
 
-export default withRouter(PlaylistAVBox);
+export default withRouter(withNamespaces()(PlaylistAVBox));

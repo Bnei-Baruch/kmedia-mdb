@@ -30,8 +30,8 @@ const createContext = () => ({
 });
 
 jest.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate HoC receive the t function as a prop
-  translate: () => (c) => {
+  // this mock makes sure any components using the withNamespaces HoC receive the t function as a prop
+  withNamespaces: () => (c) => {
     // eslint-disable-next-line no-param-reassign
     c.defaultProps = { ...c.defaultProps, t: k => k };
     return c;

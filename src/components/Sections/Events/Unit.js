@@ -67,7 +67,8 @@ class MySameCollectionWidget extends SameCollectionWidget {
                 to={canonicalLink(collection)}
                 textAlign="right"
               >
-                {t('buttons.more')} &raquo;
+                {t('buttons.more')}
+                &raquo;
               </Container>
             </Item.Content>
           </Item>
@@ -79,7 +80,7 @@ class MySameCollectionWidget extends SameCollectionWidget {
 
 class MySameCollectionContainer extends SameCollectionContainer {
   render() {
-    const { unit, collection, wip, err, t } = this.props;
+    const { unit, collection, wip, err } = this.props;
 
     return (
       <MySameCollectionWidget
@@ -87,7 +88,6 @@ class MySameCollectionContainer extends SameCollectionContainer {
         wip={wip}
         err={err}
         collection={wip || err ? null : collection}
-        t={t}
       />
     );
   }
@@ -97,13 +97,13 @@ const MyWrappedSameCollectionContainer = wrapSameCollectionContainer(MySameColle
 
 class MyUnitPage extends UnitPage {
   renderInfo() {
-    const { unit, t } = this.props;
-    return <Info unit={unit} section="" t={t} />;
+    const { unit } = this.props;
+    return <Info unit={unit} section="" />;
   }
 
   renderRecommendations() {
-    const { unit, t } = this.props;
-    return <MyWrappedSameCollectionContainer unit={unit} t={t} />;
+    const { unit } = this.props;
+    return <MyWrappedSameCollectionContainer unit={unit} />;
   }
 }
 

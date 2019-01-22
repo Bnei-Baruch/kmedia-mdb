@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 
 import { isEmpty } from '../../../helpers/utils';
@@ -26,9 +27,11 @@ class SourcesFilter extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if ((this.props.roots !== nextProps.roots &&
-      this.props.getSourceById !== nextProps.getSourceById) ||
-      this.props.cuStats !== nextProps.cuStats) {
+    const { roots, getSourceById, cuStats } = this.props;
+
+    if ((roots !== nextProps.roots
+      && getSourceById !== nextProps.getSourceById)
+      || cuStats !== nextProps.cuStats) {
       this.setState({ tree: this.getTree(nextProps) });
     }
   }
@@ -72,4 +75,4 @@ export default connect(
       cuStats,
     };
   }
-)(SourcesFilter);
+)(withNamespaces()(SourcesFilter));

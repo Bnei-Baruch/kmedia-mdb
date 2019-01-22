@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Helmet } from 'react-helmet';
+import Helmet from 'react-helmet-async';
 
 import { isEmpty, publicFile } from '../../../helpers/utils';
 import Image from './Image';
@@ -23,8 +23,7 @@ class Basic extends Component {
     keywords: null,
   };
 
-  // eslint-disable-next-line class-methods-use-this
-  buildTitle(title) {
+  static buildTitle(title) {
     return (
       <Helmet>
         <title>{title}</title>
@@ -36,8 +35,7 @@ class Basic extends Component {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  buildDescription(description) {
+  static buildDescription(description) {
     return (
       <Helmet>
         <meta name="description" content={description} />
@@ -53,8 +51,8 @@ class Basic extends Component {
 
     return (
       <Fragment>
-        {!isEmpty(title) ? this.buildTitle(title) : null}
-        {!isEmpty(description) ? this.buildDescription(description) : null}
+        {!isEmpty(title) ? Basic.buildTitle(title) : null}
+        {!isEmpty(description) ? Basic.buildDescription(description) : null}
         <Helmet>
           {!isEmpty(keywords) ? <meta name="keywords" content={keywords} /> : null}
           {/* <meta name="author" content={author} /> */}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 // NOTE: The rendering of this component should use Popup but there
 // is a bug: https://github.com/Semantic-Org/Semantic-UI-React/issues/1065
-// When solved use Popup, and update parrents to pass trigger properly.
+// When solved use Popup, and update parents to pass trigger properly.
 //
 // import { Popup } from 'semantic-ui-react';
 //
@@ -22,23 +22,26 @@ class TimedPopup extends Component {
   static propTypes = {
     message: PropTypes.string.isRequired,
     downward: PropTypes.bool,
-    trigger: PropTypes.object,
+    onTrigger: PropTypes.func,
     openOnInit: PropTypes.bool,
     timeout: PropTypes.number,
   };
 
   static defaultProps = {
     downward: false,
-    trigger: null,
+    onTrigger: null,
     openOnInit: false,
     timeout: POPOVER_CONFIRMATION_TIMEOUT,
   };
 
-  state = {
-    opened: false
-  };
-
   confirmTimeoutHandle = null;
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      opened: false,
+    };
+  }
 
   componentWillMount() {
     const { openOnInit } = this.props;
@@ -59,8 +62,9 @@ class TimedPopup extends Component {
   };
 
   onTrigger = () => {
-    if (this.props.onTrigger) {
-      this.props.onTrigger();
+    const { onTrigger } = this.props;
+    if (onTrigger) {
+      onTrigger();
     }
   };
 
@@ -80,13 +84,8 @@ class TimedPopup extends Component {
     const style = {
       position: 'absolute',
       right: 0,
+      [downward ? 'top' : 'bottom']: 0,
     };
-    if (downward) {
-      style.top = 0;
-    } else {
-      style.bottom = 0;
-    }
-
     return (
       opened ? (
         <div style={{ position: 'relative' }}>

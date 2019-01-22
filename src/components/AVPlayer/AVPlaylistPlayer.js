@@ -50,13 +50,13 @@ class AVPlaylistPlayer extends Component {
   onPlay  = () => this.setState({ autoPlay: true });
   onPause = () => this.setState({ autoPlay: false });
 
-  handleMediaEditModeChange = (mediaEditMode) => {    
-    this.setState({mediaEditMode: mediaEditMode});
+  handleMediaEditModeChange = (mediaEditMode) => {
+    this.setState({ mediaEditMode: mediaEditMode });
   };
 
   render() {
-    const { t, selected, items, language, onSwitchAV, onLanguageChange, autoPlayAllowed } = this.props;
-    const { autoPlay, mediaEditMode }                                                     = this.state;
+    const { selected, items, language, onSwitchAV, onLanguageChange, autoPlayAllowed } = this.props;
+    const { autoPlay, mediaEditMode }                                                  = this.state;
 
     const currentItem = items[selected];
 
@@ -74,7 +74,7 @@ class AVPlaylistPlayer extends Component {
           'avbox__player--is-audio--edit-mode': isAudio && mediaEditMode === 2,
           'avbox__player--is-audio--normal-mode': isAudio && mediaEditMode === 0,
           'avbox__player--is-4x3': currentItem.unit.film_date < '2014',
-          'mobile-device': !autoPlayAllowed,          
+          'mobile-device': !autoPlayAllowed,
         })}
       >
         <div className="avbox__media-wrapper">
@@ -86,7 +86,6 @@ class AVPlaylistPlayer extends Component {
               languages={currentItem.availableLanguages}
               language={language}
               onLanguageChange={onLanguageChange}
-              t={t}
               // Playlist props
               showNextPrev
               onFinish={this.onFinish}

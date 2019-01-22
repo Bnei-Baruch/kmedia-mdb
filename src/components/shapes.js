@@ -268,3 +268,8 @@ export const cWindow = PropTypes.shape({
   data: PropTypes.arrayOf(PropTypes.string),
   id: PropTypes.string,
 });
+
+export const Reference = PropTypes.oneOfType([
+  PropTypes.func,
+  PropTypes.shape({ current: PropTypes.instanceOf(PropTypes.Element) })
+]);
