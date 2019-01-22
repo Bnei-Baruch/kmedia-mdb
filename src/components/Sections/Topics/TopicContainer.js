@@ -34,12 +34,13 @@ class TopicContainer extends Component {
     // eslint-disable-next-line
     byId: PropTypes.object,
     t: PropTypes.func.isRequired,
-    stats: PropTypes.objectOf(PropTypes.number).isRequired,
+    stats: PropTypes.objectOf(PropTypes.number),
     fetchStats: PropTypes.func.isRequired
   };
 
   static defaultProps = {
-    roots: []
+    roots: [],
+    stats: []
   };
 
   state = {
@@ -47,8 +48,8 @@ class TopicContainer extends Component {
     expandedNodes: []
   };
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    const { fetchStats } = nextProps;
+  componentDidMount() {
+    const { fetchStats } = this.props;
     const namespace      = 'topics';
     const contentType    = [
       ...UNIT_EVENTS_TYPE,
