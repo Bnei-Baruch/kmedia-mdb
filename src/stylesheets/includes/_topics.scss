@@ -110,3 +110,13 @@
     }
   }
 }
+
+.search-omnibox {
+  margin: 0 auto;
+
+  input{
+    border: 1px solid #7dcff5 !important;
+    border-radius: 20px !important;
+    box-shadow: 0 0 6px 0 #7dcff5 !important;
+  }
+}
