@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import countBy from 'lodash/countBy';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import { CT_HOLIDAY } from '../../../helpers/consts';
 import { selectors } from '../../../redux/modules/events';
@@ -23,8 +24,10 @@ class HolidaysFilter extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.holidayEvents !== nextProps.holidayEvents &&
-      this.props.getTagById !== nextProps.getTagById) {
+    const { holidayEvents, getTagById } = this.props;
+
+    if (holidayEvents !== nextProps.holidayEvents
+      && getTagById !== nextProps.getTagById) {
       this.setState({ tree: this.getTree(nextProps) });
     }
   }
@@ -66,4 +69,4 @@ export default connect(
       getTagById: tags.getTagById(state.tags),
     };
   },
-)(HolidaysFilter);
+)(withNamespaces()(HolidaysFilter));
