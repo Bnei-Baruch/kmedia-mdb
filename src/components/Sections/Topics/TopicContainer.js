@@ -291,7 +291,6 @@ class TopicContainer extends Component {
             icon="search"
             className="search-omnibox"
             placeholder={t('sources-library.filter')}
-            value={this.state.match}
             onChange={this.handleFilterChange}
             onKeyDown={this.handleFilterKeyDown}
           />
