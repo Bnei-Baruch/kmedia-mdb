@@ -48,6 +48,12 @@ class TopicContainer extends Component {
     expandedNodes: []
   };
 
+  filteredById = {};
+
+  handleFilterChange = debounce((e, data) => {
+    this.setState({ match: data.value });
+  }, 100);
+
   componentDidMount() {
     const { fetchStats } = this.props;
     const namespace      = 'topics';
@@ -91,10 +97,6 @@ class TopicContainer extends Component {
     return list;
   };
 
-  handleFilterChange = debounce((e, data) => {
-    this.setState({ match: data.value });
-  }, 100);
-
   handleFilterKeyDown = (e) => {
     if (e.keyCode === 27) { // Esc
       this.handleFilterClear();
@@ -104,8 +106,6 @@ class TopicContainer extends Component {
   handleFilterClear = () => {
     this.setState({ match: '' });
   };
-
-  filteredById = {};
 
   sortRootsPosition = (roots) => {
     const extra = roots.filter(node => !TOPICS_FOR_DISPLAY.includes(node));
@@ -190,7 +190,8 @@ class TopicContainer extends Component {
     // eslint-disable-next-line
     return (
       <Link to={`/topics/${node.id}`}>
-        {node.label} {stats && stats[node.id] ? `(${stats[node.id]})` : ''}
+        {node.label}
+        {stats && stats[node.id] ? ` (${stats[node.id]})` : ''}
       </Link>
     );
   };
@@ -209,10 +210,10 @@ class TopicContainer extends Component {
     const { t }             = this.props;
     const { expandedNodes } = this.state;
     const showExpandButton  = node.children && node.children.length > 3;
-    return node ?
+    return node ? (
       <Fragment key={`f-${node.id}`}>
         {
-          this.hasChildren(node) ?
+          this.hasChildren(node) ? (
             <div key={node.id} className={`topics__card ${grandchildrenClass}`}>
               <Header as="h4" className="topics__subtitle">
                 <Link to={`/topics/${node.id}`}>
@@ -223,7 +224,7 @@ class TopicContainer extends Component {
                 {
                   node.children
                     .filter(this.isIncluded)
-                    .map((id) => (
+                    .map(id => (
                       <List.Item key={id} className={this.filteredById[id].visible ? '' : 'hide-topic'}>
                         {this.renderNode(this.filteredById[id], 'grandchildren')}
                       </List.Item>
@@ -238,18 +239,16 @@ class TopicContainer extends Component {
                 content={t(`topics.show-${expandedNodes[node.id] ? 'less' : 'more'}`)}
                 onClick={() => this.updateParentsVisibleState(node.id)}
               />
-            </div> :
-            this.renderLeaf(node)
+            </div>
+          ) : this.renderLeaf(node)
         }
-      </Fragment> :
-      null;
+      </Fragment>
+    ) : null;
   };
 
   renderSubHeader = node => (
-    this.hasChildren(node) ?
-      this.renderNode(node)
-      :
-      null
+    this.hasChildren(node) ? this.renderNode(node)
+      : null
   );
 
   renderBranch = (rootId) => {
