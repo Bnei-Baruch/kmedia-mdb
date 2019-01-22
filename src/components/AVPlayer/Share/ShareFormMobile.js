@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Button, Popup, Input } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { withNamespaces } from 'react-i18next';
 
 import BaseShareForm from './BaseShareForm';
 import ShareBar from './ShareBar';
@@ -27,8 +28,7 @@ class ShareFormMobile extends BaseShareForm {
   handleCopied = () => {
     this.clearTimeout();
     this.setState({ isCopyPopupOpen: true }, () => {
-      this.timeout = setTimeout(() =>
-        this.setState({ isCopyPopupOpen: false }), POPOVER_CONFIRMATION_TIMEOUT);
+      this.timeout = setTimeout(() => this.setState({ isCopyPopupOpen: false }), POPOVER_CONFIRMATION_TIMEOUT);
     });
   };
 
@@ -41,12 +41,12 @@ class ShareFormMobile extends BaseShareForm {
     const { start, end, url, isCopyPopupOpen } = this.state;
 
     return (
-      <div className="mediaplayer_onscreen-share">
+      <div className="mediaplayer__onscreen-share">
         <ShareBar url={url} buttonSize="medium" />
-        <div className="mediaplayer_onscreen-share-form">
-          <div className="mediaplayer_onscreen-share-bar-mobile">
+        <div className="mediaplayer__onscreen-share-form">
+          <div className="mediaplayer__onscreen-share-bar-mobile">
             <Input
-              className="mediaplayer_onscreen-share-bar-mobile-link"
+              className="mediaplayer__onscreen-share-bar-mobile-link"
               value={url}
               input={{ readOnly: true }}
               style={{ textAlign: 'left', direction: 'ltr' }}
@@ -102,4 +102,4 @@ class ShareFormMobile extends BaseShareForm {
   }
 }
 
-export default ShareFormMobile;
+export default withNamespaces()(ShareFormMobile);
