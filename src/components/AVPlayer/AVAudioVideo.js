@@ -41,9 +41,10 @@ class AVAudioVideo extends Component {
     );
 
     return (
-      <div className="mediaplayer_audiovideo">
+      <div className="mediaplayer__audiovideo">
         {popup}
         <button ref={this.handleBtnRef} type="button">
+          {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
           <span className={isAudio ? 'is-active' : ''}>{t('buttons.audio')}</span>
           &nbsp;/&nbsp;
           <span className={isVideo ? 'is-active' : ''}>{t('buttons.video')}</span>
