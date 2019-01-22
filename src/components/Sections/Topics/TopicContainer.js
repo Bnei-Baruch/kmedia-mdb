@@ -81,11 +81,11 @@ class TopicContainer extends Component {
   };
 
   setVisibleState = (byId) => {
+    const { expandedNodes } = this.state;
     const visibleItemsCount = 3;
     const list              = byId || {};
     Object.keys(list).forEach((key) => {
       const { id, parent_id: parentId } = list[key];
-      const { expandedNodes }           = this.state;
       let visible                       = true;
       if (parentId) {
         visible = expandedNodes[parentId] || list[parentId].children.indexOf(id) < visibleItemsCount;
