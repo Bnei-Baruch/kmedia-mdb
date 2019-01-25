@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import countBy from 'lodash/countBy';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import { CT_HOLIDAY } from '../../../helpers/consts';
 import { selectors } from '../../../redux/modules/events';
@@ -66,4 +67,4 @@ export default connect(
       getTagById: tags.getTagById(state.tags),
     };
   },
-)(HolidaysFilter);
+)(withNamespaces()(HolidaysFilter));
