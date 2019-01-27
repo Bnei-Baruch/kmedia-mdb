@@ -24,6 +24,8 @@ class TimedPopup extends Component {
     timeout: POPOVER_CONFIRMATION_TIMEOUT,
   };
 
+  state = {};
+
   confirmTimeoutHandle = null;
 
   componentWillReceiveProps(nextProps) {

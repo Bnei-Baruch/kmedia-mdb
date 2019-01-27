@@ -48,7 +48,7 @@ class AVLanguageMobile extends Component {
   };
 
   render() {
-    const { t, languages, uiLanguage } = this.props;
+    const { t, languages, language, uiLanguage } = this.props;
     const { langSelectRef, openPopup } = this.state;
 
     const options = LANGUAGE_OPTIONS
