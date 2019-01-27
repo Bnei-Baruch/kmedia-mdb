@@ -7,7 +7,6 @@ import { RTL_LANGUAGES } from '../../helpers/consts';
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
 class TimedPopup extends Component {
-
   static propTypes = {
     message: PropTypes.string.isRequired,
     downward: PropTypes.bool,
@@ -27,15 +26,8 @@ class TimedPopup extends Component {
 
   confirmTimeoutHandle = null;
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      opened: false,
-    };
-  }
-
-  componentWillMount() {
-    const { openOnInit } = this.props;
+  componentWillReceiveProps(nextProps) {
+    const { openOnInit } = nextProps;
     if (openOnInit) {
       this.open();
     }

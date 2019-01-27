@@ -43,10 +43,11 @@ class AVPlayer extends PureComponent {
     t: PropTypes.func.isRequired,
     media: shapes.Media.isRequired,
     uiLanguage: PropTypes.string.isRequired,
+    requestedLanguage: PropTypes.string,
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
-    language: PropTypes.string.isRequired,
+    selectedLanguage: PropTypes.string.isRequired,
     onLanguageChange: PropTypes.func.isRequired,
 
     // Audio/Video switch props.
@@ -533,8 +534,9 @@ class AVPlayer extends PureComponent {
       {
         item,
         languages,
-        language,
+        selectedLanguage,
         uiLanguage,
+        requestedLanguage,
         t,
         showNextPrev,
         hasNext,
@@ -686,9 +688,9 @@ class AVPlayer extends PureComponent {
             />
             <AVLanguage
               languages={languages}
-              language={language}
+              selectedLanguage={selectedLanguage}
               uiLanguage={uiLanguage}
-              requestedLanguage={item.requestedLanguage}
+              requestedLanguage={requestedLanguage}
               onSelect={this.onLanguageChange}
             />
             {!isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.SLICE_EDIT)} />}

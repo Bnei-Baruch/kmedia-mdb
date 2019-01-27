@@ -16,6 +16,11 @@ class AVAudioVideo extends Component {
 
   state = {};
 
+  componentWillReceiveProps() {
+    const { fallbackMedia } = this.props;
+    this.handleFallbackMedia(fallbackMedia);
+  }
+
   handleSwitch = () => this.props.onSwitch();
 
   handleBtnRef = (ref) => {
@@ -30,10 +35,22 @@ class AVAudioVideo extends Component {
 
   setAudioVideoContainerRef = audioVideoContainerRef => this.setState({ audioVideoContainerRef });
 
+  handleFallbackMedia = (fallbackMedia) => {
+    const { didShowFallbackMediaPopup } = this.state;
+    if (didShowFallbackMediaPopup) {
+      this.setState({ openPopup: false });
+      return;
+    }
+
+    this.setState({
+      didShowFallbackMediaPopup: !!fallbackMedia,
+      openPopup: !!fallbackMedia
+    });
+  };
+
   render() {
-    const { isAudio, isVideo, t, fallbackMedia, uiLanguage } = this.props;
-    const { audioVideoContainerRef }                         = this.state;
-    const openPopup                                          = !!fallbackMedia;
+    const { isAudio, isVideo, t, uiLanguage }   = this.props;
+    const { audioVideoContainerRef, openPopup } = this.state;
 
     return (
       <div ref={this.setAudioVideoContainerRef} className="mediaplayer__audiovideo">

@@ -11,7 +11,7 @@ class AVLanguage extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     onSelect: PropTypes.func,
-    language: PropTypes.string,
+    selectedLanguage: PropTypes.string,
     requestedLanguage: PropTypes.string,
     languages: PropTypes.arrayOf(PropTypes.string),
     uiLanguage: PropTypes.string,
@@ -19,22 +19,38 @@ class AVLanguage extends Component {
 
   static defaultProps = {
     onSelect: noop,
-    language: LANG_HEBREW,
+    selectedLanguage: LANG_HEBREW,
     requestedLanguage: LANG_HEBREW,
     languages: [],
   };
 
   state = {};
 
-  handleChange = (e, data) =>
-    this.props.onSelect(e, data.value);
+  componentWillReceiveProps() {
+    const { selectedLanguage, requestedLanguage } = this.props;
+    this.handlePopup(selectedLanguage, requestedLanguage);
+  }
 
-  setLangSelectRef = (langSelectRef) => this.setState({ langSelectRef });
+  handleChange = (e, data) => this.props.onSelect(e, data.value);
+
+  handlePopup = (selectedLanguage, requestedLanguage) => {
+    const { lastRequestedLanguage } = this.state;
+    if (lastRequestedLanguage === requestedLanguage) {
+      this.setState({ openPopup: false });
+      return;
+    }
+
+    this.setState({
+      lastRequestedLanguage: requestedLanguage,
+      openPopup: (selectedLanguage !== requestedLanguage)
+    });
+  };
+
+  setLangSelectRef = langSelectRef => this.setState({ langSelectRef });
 
   render() {
-    const { t, languages, language, uiLanguage, requestedLanguage } = this.props;
-    const { langSelectRef }                                         = this.state;
-    const openPopup                                                 = language !== requestedLanguage;
+    const { t, languages, selectedLanguage, uiLanguage } = this.props;
+    const { langSelectRef, openPopup }                   = this.state;
 
     const options = LANGUAGE_OPTIONS
       .filter(x => languages.includes(x.value))
@@ -57,9 +73,9 @@ class AVLanguage extends Component {
           icon={null}
           selectOnBlur={false}
           options={options}
-          value={language}
+          value={selectedLanguage}
           onChange={this.handleChange}
-          trigger={<button>{language}</button>}
+          trigger={<button>{selectedLanguage}</button>}
         />
       </div>
     );

@@ -107,7 +107,7 @@ class AVBox extends Component {
   handleMediaEditModeChange = mediaEditMode => this.setState({ mediaEditMode });
 
   render() {
-    const { t, autoPlayAllowed, uiLanguage }        = this.props;
+    const { t, autoPlayAllowed, uiLanguage, contentLanguage } = this.props;
     const { playableItem, mediaEditMode, autoPlay } = this.state;
 
     if (isEmpty(playableItem)) {
@@ -136,8 +136,9 @@ class AVBox extends Component {
                   preImageUrl={playableItem.preImageUrl}
                   onSwitchAV={this.handleSwitchAV}
                   languages={playableItem.availableLanguages}
-                  language={playableItem.language}
                   uiLanguage={uiLanguage}
+                  selectedLanguage={playableItem.language}
+                  requestedLanguage={contentLanguage}
                   onLanguageChange={this.handleChangeLanguage}
                   onMediaEditModeChange={this.handleMediaEditModeChange}
                 />

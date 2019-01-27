@@ -33,7 +33,7 @@ class AVPlayerMobile extends PureComponent {
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
-    language: PropTypes.string.isRequired,
+    selectedLanguage: PropTypes.string.isRequired,
     onLanguageChange: PropTypes.func.isRequired,
 
     // Audio/Video switch props.
@@ -378,8 +378,9 @@ class AVPlayerMobile extends PureComponent {
       {
         item,
         languages,
-        language,
+        selectedLanguage,
         uiLanguage,
+        requestedLanguage,
         t,
         showNextPrev,
         hasNext,
@@ -491,9 +492,9 @@ class AVPlayerMobile extends PureComponent {
             />
             <AVLanguageMobile
               languages={languages}
-              language={language}
+              selectedLanguage={selectedLanguage}
               uiLanguage={uiLanguage}
-              requestedLanguage={item.requestedLanguage}
+              requestedLanguage={requestedLanguage}
               onSelect={this.onLanguageChange}
             />
           </div>
