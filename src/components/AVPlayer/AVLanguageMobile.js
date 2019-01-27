@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
+import { withNamespaces } from 'react-i18next';
 
 import { LANG_HEBREW, LANGUAGE_OPTIONS } from '../../helpers/consts';
 import TimedPopup from '../shared/TimedPopup';
 
-export default class AVLanguageMobile extends Component {
+class AVLanguageMobile extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     onSelect: PropTypes.func,
@@ -21,9 +22,7 @@ export default class AVLanguageMobile extends Component {
     languages: [],
   };
 
-  handleChange = (e) => {
-    this.props.onSelect(e, e.currentTarget.value);
-  };
+  handleChange = e => this.props.onSelect(e, e.currentTarget.value);
 
   render() {
     const { t, languages, language, requestedLanguage } = this.props;
@@ -57,3 +56,5 @@ export default class AVLanguageMobile extends Component {
     );
   }
 }
+
+export default withNamespaces()(AVLanguageMobile);

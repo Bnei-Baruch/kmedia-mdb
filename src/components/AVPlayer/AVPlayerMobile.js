@@ -4,6 +4,7 @@ import noop from 'lodash/noop';
 import debounce from 'lodash/debounce';
 import { withRouter } from 'react-router-dom';
 import { Icon, Message } from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
 
 import { MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
 import { fromHumanReadableTime } from '../../helpers/time';
@@ -22,8 +23,7 @@ const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
 const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
 
 // Converts playback rate string to float: 1.0x => 1.0
-const playbackToValue = playback =>
-  parseFloat(playback.slice(0, -1));
+const playbackToValue = playback => parseFloat(playback.slice(0, -1));
 
 class AVPlayerMobile extends PureComponent {
   static propTypes = {
@@ -93,7 +93,6 @@ class AVPlayerMobile extends PureComponent {
       mode,
       firstSeek: true,
     };
-
   }
 
   componentWillUnmount() {
@@ -114,7 +113,7 @@ class AVPlayerMobile extends PureComponent {
     // prior to media element presence on the page
     this.wasCurrentTime = this.media.currentTime;
     this.props.onSwitchAV(...params);
-    //this.media.autoplay = true;
+    // this.media.autoplay = true;
   };
 
   // Remember the current time and playing state while switching.
@@ -133,7 +132,7 @@ class AVPlayerMobile extends PureComponent {
       this.media.addEventListener('timeupdate', this.handleTimeUpdate);
       this.media.addEventListener('volumechange', this.handleVolumeChange);
       this.media.addEventListener('canplay', this.seekIfNeeded);
-      this.restoreVolume();     
+      this.restoreVolume();
     } else if (this.media) {
       this.media.removeEventListener('play', this.handlePlay);
       this.media.removeEventListener('pause', this.handlePause);
@@ -172,7 +171,7 @@ class AVPlayerMobile extends PureComponent {
 
   seekIfNeeded = () => {
     const { sliceStart, firstSeek, playbackRate } = this.state;
-    this.media.playbackRate = playbackToValue(playbackRate);
+    this.media.playbackRate                       = playbackToValue(playbackRate);
 
     if (firstSeek) {
       if (sliceStart) {
@@ -182,13 +181,13 @@ class AVPlayerMobile extends PureComponent {
         if (savedTime) {
           this.seekTo(savedTime, true);
         }
-      }      
+      }
       this.media.autoplay = true;
-      this.setState({ firstSeek: false });          
+      this.setState({ firstSeek: false });
     } else if (this.wasCurrentTime) {
       this.seekTo(this.wasCurrentTime, true);
-      this.wasCurrentTime    = undefined;
-    } 
+      this.wasCurrentTime = undefined;
+    }
   };
 
   handlePause = () => {
@@ -213,7 +212,7 @@ class AVPlayerMobile extends PureComponent {
     const { mode, sliceEnd, sliceStart, seeking, firstSeek } = this.state;
 
     if (mode !== PLAYER_MODE.SLICE_VIEW || firstSeek || seeking) {
-       return;
+      return;
     }
 
     const time = e.currentTarget.currentTime;
@@ -282,11 +281,9 @@ class AVPlayerMobile extends PureComponent {
     }, timeout);
   };
 
-  isSeekSuccess = t =>
-    this.media.currentTime >= t;
+  isSeekSuccess = t => this.media.currentTime >= t;
 
-  toggleSliceMode = () =>
-    this.setState({ isSliceMode: !this.state.isSliceMode });
+  toggleSliceMode = () => this.setState({ isSliceMode: !this.state.isSliceMode });
 
   handleJumpBack = () => {
     const { currentTime, duration } = this.media;
@@ -392,14 +389,15 @@ class AVPlayerMobile extends PureComponent {
       <div className="mediaplayer">
         <div style={{ marginBottom: '0px' }}>{mediaEl}</div>
         {
-          error ?
-            <div className="player-button player-error-message">
-              {t('player.error.loading')}
-              {errorReason ? ` ${errorReason}` : ''}
-              &nbsp;
-              <Icon name="warning sign" size="large" />
-            </div> :
-            null
+          error
+            ? (
+              <div className="player-button player-error-message">
+                {t('player.error.loading')}
+                {errorReason ? ` ${errorReason}` : ''}
+                &nbsp;
+                <Icon name="warning sign" size="large" />
+              </div>
+            ) : null
         }
 
         <div className="mediaplayer__wrapper">
@@ -454,4 +452,4 @@ class AVPlayerMobile extends PureComponent {
   }
 }
 
-export default withRouter(AVPlayerMobile);
+export default withRouter(withNamespaces()(AVPlayerMobile));

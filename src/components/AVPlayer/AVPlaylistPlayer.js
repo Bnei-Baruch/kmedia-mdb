@@ -18,7 +18,6 @@ class AVPlaylistPlayer extends Component {
     onSelectedChange: PropTypes.func.isRequired,
     onLanguageChange: PropTypes.func.isRequired,
     onSwitchAV: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired,
   };
 
   state = {
@@ -47,12 +46,11 @@ class AVPlaylistPlayer extends Component {
     }
   };
 
-  onPlay  = () => this.setState({ autoPlay: true });
+  onPlay = () => this.setState({ autoPlay: true });
+
   onPause = () => this.setState({ autoPlay: false });
 
-  handleMediaEditModeChange = (mediaEditMode) => {
-    this.setState({ mediaEditMode: mediaEditMode });
-  };
+  handleMediaEditModeChange = mediaEditMode => this.setState({ mediaEditMode });
 
   render() {
     const { selected, items, language, onSwitchAV, onLanguageChange, autoPlayAllowed } = this.props;
