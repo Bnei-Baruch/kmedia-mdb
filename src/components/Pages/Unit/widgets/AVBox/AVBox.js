@@ -104,9 +104,7 @@ class AVBox extends Component {
     playerHelper.setLanguageInQuery(history, language);
   };
 
-  handleMediaEditModeChange = (mediaEditMode) => {
-    this.setState({ mediaEditMode });
-  };
+  handleMediaEditModeChange = mediaEditMode => this.setState({ mediaEditMode });
 
   render() {
     const { t, autoPlayAllowed, uiLanguage }        = this.props;

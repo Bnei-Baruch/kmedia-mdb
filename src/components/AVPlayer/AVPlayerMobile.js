@@ -29,12 +29,12 @@ const playbackToValue = playback => parseFloat(playback.slice(0, -1));
 class AVPlayerMobile extends PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
     language: PropTypes.string.isRequired,
     onLanguageChange: PropTypes.func.isRequired,
-    uiLanguage: PropTypes.string.isRequired,
 
     // Audio/Video switch props.
     item: PropTypes.object.isRequired, // TODO: (yaniv) add shape fo this
@@ -62,6 +62,7 @@ class AVPlayerMobile extends PureComponent {
     onFinish: noop,
     onPrev: noop,
     onNext: noop,
+    autoPlay: false,
   };
 
   persistVolume = debounce((value) => {
@@ -241,8 +242,6 @@ class AVPlayerMobile extends PureComponent {
   handleTimeUpdate = (e) => {
     const { mode, sliceEnd, sliceStart, seeking, firstSeek } = this.state;
 
-    this.showControls();
-
     const time = e.currentTarget.currentTime;
     this.saveCurrentTime(time);
 
@@ -380,13 +379,13 @@ class AVPlayerMobile extends PureComponent {
         item,
         languages,
         language,
+        uiLanguage,
         t,
         showNextPrev,
         hasNext,
         hasPrev,
         onPrev,
         onNext,
-        uiLanguage,
         autoPlay,
       } = this.props;
 
@@ -488,10 +487,12 @@ class AVPlayerMobile extends PureComponent {
               isVideo={isVideo}
               onSwitch={this.onSwitchAV}
               fallbackMedia={fallbackMedia}
+              uiLanguage={uiLanguage}
             />
             <AVLanguageMobile
               languages={languages}
               language={language}
+              uiLanguage={uiLanguage}
               requestedLanguage={item.requestedLanguage}
               onSelect={this.onLanguageChange}
             />

@@ -137,7 +137,7 @@
     "unknown": "desconocido",
     "unsupported-media-format": " formato no compatible.",
     "error-loading-file": "Error al cargar el archivo.",
-    "fallback-language": " Medios no encontrados para el idioma seleccionado, se eligió el idioma preseleccionado.",
+    "fallback-language": "El contenido no existe en el idioma solicitado, se ha seleccionado un idioma predeterminado.",
     "fallback-to-audio": "Video no encontrado, usa audio.",
     "fallback-to-video": "Audio no encontrado, usa video.",
     "source-content-not-found": " Contenido de fuente no fue encontrado ",

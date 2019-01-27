@@ -42,6 +42,7 @@ class AVPlayer extends PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
     media: shapes.Media.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -106,6 +107,8 @@ class AVPlayer extends PureComponent {
     return { src, videoSize };
   };
 
+  static persistVolume = debounce(media => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, media.volume), 200);
+
   state = {
     controlsVisible: true,
     error: false,
@@ -118,8 +121,6 @@ class AVPlayer extends PureComponent {
     currentTime: 0,
     firstSeek: true,
   };
-
-  persistVolume = debounce(media => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, media.volume), 200);
 
   constructor(props) {
     super(props);
@@ -533,6 +534,7 @@ class AVPlayer extends PureComponent {
         item,
         languages,
         language,
+        uiLanguage,
         t,
         showNextPrev,
         hasNext,
@@ -680,10 +682,12 @@ class AVPlayer extends PureComponent {
               isVideo={isVideo}
               onSwitch={this.onSwitchAV}
               fallbackMedia={fallbackMedia}
+              uiLanguage={uiLanguage}
             />
             <AVLanguage
               languages={languages}
               language={language}
+              uiLanguage={uiLanguage}
               requestedLanguage={item.requestedLanguage}
               onSelect={this.onLanguageChange}
             />

@@ -138,7 +138,7 @@
     "unknown": "Unknown",
     "unsupported-media-format": "Unsupported format.",
     "error-loading-file": "Error loading file.",
-    "fallback-language": "Media not found for selected language, selected fallback language.",
+    "fallback-language": "Content does not exist in the requested language, a default language has been selected.",
     "fallback-to-audio": "Video was not found, using audio.",
     "fallback-to-video": "Audio was not found, using video.",
     "source-content-not-found": "Source contents wasn't found",
