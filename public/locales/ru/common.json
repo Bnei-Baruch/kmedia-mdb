@@ -114,7 +114,8 @@
       "edit-back": "Назад",
       "start-position": "Начало",
       "end-position": "Конец",
-      "click-to-set": "Жми"
+      "click-to-set": "Жми",
+      "tap-to-unmute": "Включить звук"
     },
     "share": {
       "title": "Посмотри это видео"

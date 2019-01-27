@@ -77,7 +77,6 @@ class PlaylistCollectionPage extends Component {
     }
 
     const { selected: unit } = this.state;
-
     return (
       <div className="playlist-collection-page">
         {/* {this.renderCollectionHelmet()} */}

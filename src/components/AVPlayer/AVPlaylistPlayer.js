@@ -8,21 +8,34 @@ import { MT_AUDIO } from '../../helpers/consts';
 import { selectors as device } from '../../redux/modules/device';
 import * as shapes from '../shapes';
 import AVMobileCheck from './AVMobileCheck';
+import { getQuery } from '../../helpers/url';
 
 class AVPlaylistPlayer extends Component {
   static propTypes = {
     items: PropTypes.arrayOf(shapes.VideoItem).isRequired,
     selected: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
     autoPlayAllowed: PropTypes.bool.isRequired,
     onSelectedChange: PropTypes.func.isRequired,
     onLanguageChange: PropTypes.func.isRequired,
     onSwitchAV: PropTypes.func.isRequired,
+    history: shapes.History.isRequired,
   };
 
   state = {
     autoPlay: false
   };
+
+  componentWillMount() {
+    const { history } = this.props;
+    const query       = getQuery(history.location);
+    if (query.sstart) {
+      this.setState({ autoPlay: true });
+    }
+  }
+
+  handleMediaEditModeChange = mediaEditMode => this.setState({ mediaEditMode });
 
   onFinish = () => {
     const { selected, onSelectedChange, items } = this.props;
@@ -50,11 +63,9 @@ class AVPlaylistPlayer extends Component {
 
   onPause = () => this.setState({ autoPlay: false });
 
-  handleMediaEditModeChange = mediaEditMode => this.setState({ mediaEditMode });
-
   render() {
-    const { selected, items, language, onSwitchAV, onLanguageChange, autoPlayAllowed } = this.props;
-    const { autoPlay, mediaEditMode }                                                  = this.state;
+    const { selected, items, language, onSwitchAV, onLanguageChange, autoPlayAllowed, uiLanguage } = this.props;
+    const { autoPlay, mediaEditMode }                                                              = this.state;
 
     const currentItem = items[selected];
 
@@ -83,6 +94,7 @@ class AVPlaylistPlayer extends Component {
               onSwitchAV={onSwitchAV}
               languages={currentItem.availableLanguages}
               language={language}
+              uiLanguage={uiLanguage}
               onLanguageChange={onLanguageChange}
               // Playlist props
               showNextPrev

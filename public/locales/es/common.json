@@ -113,7 +113,8 @@
       "edit-back": "Regreso",
       "start-position": "Inicio",
       "end-position": "Final",
-      "click-to-set": "Clic para marcar"
+      "click-to-set": "Clic para marcar",
+      "tap-to-unmute": "Activar el sonido"
     },
     "share": {
       "title": "Mira el video"
