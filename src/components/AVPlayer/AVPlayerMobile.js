@@ -404,41 +404,9 @@ class AVPlayerMobile extends PureComponent {
     let mediaEl;
 
     if (isVideo) {
-      mediaEl = autoPlay ? (
-        <video
-          autoPlay
-          playsInline
-          ref={this.handleMediaRef}
-          src={item.src}
-          preload="metadata"
-          poster={item.preImageUrl}
-        />
-      ) : (
-        <video
-          playsInline
-          ref={this.handleMediaRef}
-          src={item.src}
-          preload="metadata"
-          poster={item.preImageUrl}
-        />
-      );
+      mediaEl = <video autoPlay={autoPlay} playsInline ref={this.handleMediaRef} src={item.src} preload="metadata" poster={item.preImageUrl} />;
     } else {
-      mediaEl = autoPlay ? (
-        <audio
-          controls
-          autoPlay
-          ref={this.handleMediaRef}
-          src={item.src}
-          preload="metadata"
-        />
-      ) : (
-        <audio
-          controls
-          ref={this.handleMediaRef}
-          src={item.src}
-          preload="metadata"
-        />
-      );
+      mediaEl = <audio controls autoPlay={autoPlay} ref={this.handleMediaRef} src={item.src} preload="metadata" />;
     }
 
     return (
