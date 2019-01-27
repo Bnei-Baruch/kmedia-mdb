@@ -226,6 +226,10 @@ $player-color: $black;
     top: -6px;
     width: 12px;
   }
+
+  &__audio {
+    height: 64px;
+  }
 }
 
 .seekbar {
