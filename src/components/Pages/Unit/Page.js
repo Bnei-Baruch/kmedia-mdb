@@ -31,12 +31,11 @@ export class UnitPage extends Component {
     section: '',
   };
 
-  state = {
-  };
+  state = {};
 
   componentWillMount() {
     const { location } = this.props;
-    this.setState( { embed: playerHelper.getEmbedFromQuery(location) } );
+    this.setState({ embed: playerHelper.getEmbedFromQuery(location) });
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -47,7 +46,7 @@ export class UnitPage extends Component {
 
   renderPlayer() {
     const { unit, language } = this.props;
-    const { embed } = this.state;
+    const { embed }          = this.state;
     return !embed ? (
       <div className="avbox">
         <Container>
@@ -57,7 +56,7 @@ export class UnitPage extends Component {
         </Container>
       </div>
     ) : (
-      <AVBox unit={unit} language={language} t={t} />
+      <AVBox unit={unit} language={language} />
     );
   }
 
@@ -112,7 +111,7 @@ export class UnitPage extends Component {
       </div>
     ) : (
       <div className="unit-page">
-        {this.renderPlayer()}    
+        {this.renderPlayer()}
       </div>
     );
   }

@@ -42,9 +42,6 @@ class PlaylistCollectionPage extends Component {
     selected: null,
   };
 
-  handleSelectedChange = selected =>
-    this.setState({ selected });
-
   // renderCollectionHelmet() {
   //   const { collection, t, shouldRenderHelmet } = this.props;
   //
@@ -67,9 +64,11 @@ class PlaylistCollectionPage extends Component {
   // }
 
   componentWillMount() {
-    const {location } = this.props;
-    this.setState( { embed: playerHelper.getEmbedFromQuery(location) } );
+    const { location } = this.props;
+    this.setState({ embed: playerHelper.getEmbedFromQuery(location) });
   }
+
+  handleSelectedChange = selected => this.setState({ selected });
 
   render() {
     const { uiLanguage, contentLanguage, collection, wip, err, t, PlaylistComponent, nextLink, prevLink } = this.props;
@@ -132,15 +131,15 @@ class PlaylistCollectionPage extends Component {
       </div>
     ) : (
       <PlaylistAVBox
-                collection={collection}
-                uiLanguage={uiLanguage}
-                contentLanguage={contentLanguage}
-                t={t}
-                onSelectedChange={this.handleSelectedChange}
-                PlayListComponent={PlaylistComponent}
-                nextLink={nextLink}
-                prevLink={prevLink}
-              />
+        collection={collection}
+        uiLanguage={uiLanguage}
+        contentLanguage={contentLanguage}
+        t={t}
+        onSelectedChange={this.handleSelectedChange}
+        PlayListComponent={PlaylistComponent}
+        nextLink={nextLink}
+        prevLink={prevLink}
+      />
     );
   }
 }

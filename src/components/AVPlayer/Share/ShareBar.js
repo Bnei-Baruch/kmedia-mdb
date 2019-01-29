@@ -68,7 +68,7 @@ class ShareBar extends Component {
   };
 
   render() {
-    const { url, buttonSize, messageTitle, embedContent } = this.props;
+    const { url, buttonSize, messageTitle, embedContent, t } = this.props;
     const { isEmbedPopupOpen }                               = this.state;
 
     if (!url) {
@@ -103,16 +103,20 @@ class ShareBar extends Component {
           <EmailIcon size={bsPixels} round />
         </EmailShareButton>
 
-        { embedContent ? <Popup
+        {embedContent
+          ? (
+            <Popup
               open={isEmbedPopupOpen}
               content={t('messages.link-copied-to-clipboard')}
               position="bottom right"
-              trigger={
+              trigger={(
                 <CopyToClipboard text={embedContent} onCopy={this.handleEmbedCopied}>
                   <Button icon="code" size="big" circular className="embed-share-button" />
                 </CopyToClipboard>
-              }
-            /> : null }
+              )}
+            />
+          )
+          : null}
       </div>
     );
   }
