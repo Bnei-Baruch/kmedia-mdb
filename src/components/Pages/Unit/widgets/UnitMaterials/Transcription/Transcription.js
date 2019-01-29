@@ -26,6 +26,33 @@ class Transcription extends Component {
     unit: null,
   };
 
+  static calcCurrentItem = (props) => {
+    const { contentLanguage, uiLanguage } = props;
+
+    const textFiles   = Transcription.getTextFiles(props);
+    const languages   = uniq(textFiles.map(x => x.language));
+    const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+    if (!newLanguage) {
+      return false;
+    }
+
+    const selected = Transcription.selectFile(textFiles, newLanguage);
+
+    return { selected, languages, language: newLanguage, textFiles };
+  };
+
+  static selectFile = (textFiles, language) => {
+    const selected = textFiles.filter(x => x.language === language);
+
+    if (selected.length <= 1) {
+      // use the only file found OR no files by language - use first text file
+      return selected[0];
+    }
+
+    // many files by language - get the largest - it is probably the transcription
+    return selected.reduce((acc, file) => (acc.size < file.size ? file : acc));
+  };
+
   constructor(props) {
     super(props);
     const state = Transcription.calcCurrentItem(this.props);
@@ -55,7 +82,7 @@ class Transcription extends Component {
       || (nextProps.unit && !props.unit)
       || (nextProps.unit.id !== props.unit.id)
       || (nextProps.unit.files !== props.unit.files
-      || !isEqual(nextProps.doc2htmlById, props.doc2htmlById));
+        || !isEqual(nextProps.doc2htmlById, props.doc2htmlById));
 
     if (toUpdate) {
       const { selected, language } = this.setCurrentItem(nextProps);
@@ -73,22 +100,8 @@ class Transcription extends Component {
       return [];
     }
 
-    return unit.files.filter(x => MediaHelper.IsText(x) && !MediaHelper.IsHtml(x));
-  };
-
-  static calcCurrentItem = (props) => {
-    const { contentLanguage, uiLanguage } = props;
-
-    const textFiles   = Transcription.getTextFiles(props);
-    const languages   = uniq(textFiles.map(x => x.language));
-    const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-    if (!newLanguage) {
-      return false;
-    }
-
-    const selected = Transcription.selectFile(textFiles, newLanguage);
-
-    return { selected, languages, language: newLanguage, textFiles };
+    // filter text files, but not PDF
+    return unit.files.filter(x => MediaHelper.IsText(x) && !MediaHelper.IsPDF(x));
   };
 
   setCurrentItem = (props) => {
@@ -97,18 +110,6 @@ class Transcription extends Component {
     this.setState(sUpdate);
 
     return sUpdate;
-  };
-
-  static selectFile = (textFiles, language) => {
-    const selected = textFiles.filter(x => x.language === language);
-
-    if (selected.length <= 1) {
-      // use the only file found OR no files by language - use first text file
-      return selected[0];
-    }
-
-    // many files by language - get the largest - it is probably the transcription
-    return selected.reduce((acc, file) => (acc.size < file.size ? file : acc));
   };
 
   handleLanguageChanged = (e, language) => {
