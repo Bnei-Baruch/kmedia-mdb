@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Popup } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../helpers/consts';
+import { Reference } from '../shapes';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
@@ -14,7 +15,7 @@ class TimedPopup extends Component {
     openOnInit: PropTypes.bool,
     timeout: PropTypes.number,
     language: PropTypes.string.isRequired,
-    refElement: PropTypes.object
+    refElement: Reference.isRequired,
   };
 
   static defaultProps = {
