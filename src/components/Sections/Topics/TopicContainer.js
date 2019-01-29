@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 
 import { actions as topicsActions, selectors as topicsSelectors } from '../../../redux/modules/tags';
 import { selectors as statsSelectors } from '../../../redux/modules/stats';
-import { isEmpty } from '../../../helpers/utils';
+import { getEscapedRegExp, isEmpty } from '../../../helpers/utils';
 import SectionHeader from '../../shared/SectionHeader';
 import Link from '../../Language/MultiLanguageLink';
 import {
@@ -74,9 +74,8 @@ class TopicContainer extends Component {
   }
 
   // filter stuff
-
   getRegExp = (match) => {
-    const escapedMatch = match.replace(/[/)(.+\\]/g, '\\$&');
+    const escapedMatch = getEscapedRegExp(match);
     return new RegExp(escapedMatch, 'i');
   };
 
@@ -125,7 +124,7 @@ class TopicContainer extends Component {
 
     this.filteredById  = {};
     const parentIdsArr = [];
-    const regExp       = this.getRegExp(match);
+    const regExp       = getEscapedRegExp(match);
 
     // filter objects
     Object.keys(byId).forEach((key) => {

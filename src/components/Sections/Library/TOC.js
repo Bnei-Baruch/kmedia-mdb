@@ -4,7 +4,8 @@ import { Accordion, Ref, Sticky } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, RTL_LANGUAGES, } from '../../../helpers/consts';
-import { isEmpty } from '../../../helpers/utils';
+
+import { getEscapedRegExp, isEmpty } from '../../../helpers/utils';
 import { Reference } from '../../shapes';
 
 const titleKey = id => `title-${id}`;
@@ -88,7 +89,7 @@ const filterSources = (path, match) => {
 
   // We don't check validity of regular expression,
   // so let's escape all special symbols
-  const escapedMatch = match.replace(/[/)(.+\\]/g, '\\$&');
+  const escapedMatch = getEscapedRegExp(match);
   const reg          = new RegExp(escapedMatch, 'i');
   return path.reduce((acc, el) => {
     if (reg.test(el.leafTitle)) {
