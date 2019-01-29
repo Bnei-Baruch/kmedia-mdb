@@ -749,7 +749,7 @@
     }
   }
 
-  @media only screen and (max-width: $mobileBreakpoint) {
+  @media only screen and (max-width: $tabletBreakpoint) {
     .controller {
       flex-direction: column;
       margin-top: 1rem;
