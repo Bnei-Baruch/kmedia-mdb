@@ -1,3 +1,4 @@
+@import '../includes/colors-helpers';
 // See TimedPopup.js, solves existing bug:
 // https://github.com/Semantic-Org/Semantic-UI-React/issues/1065
 .popup {
@@ -895,6 +896,11 @@
   &.no-margin {
     margin: 0 !important;
   }
+}
+
+.duration {
+  color: $midGrey;
+  font-size: 14px;
 }
 
 .under-line {
