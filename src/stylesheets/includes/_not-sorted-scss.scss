@@ -662,7 +662,8 @@
   .layout__footer,
   .layout__secondary-header,
   .anchors-language-selector,
-  #us_report_button {
+  #us_report_button,  
+  div:empty {
     display: none;
   }
 
@@ -680,15 +681,15 @@
     padding-top: 0 !important; // remove existing padding
   }
 
-  div:empty {
-    display: none;
+  div, p, ol, ul {
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   p {
     margin: 0px !important;
     text-indent: 20px;
   }
-
 }
 
 .DayPicker-Day {
