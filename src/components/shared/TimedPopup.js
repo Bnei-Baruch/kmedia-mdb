@@ -15,7 +15,7 @@ class TimedPopup extends Component {
     openOnInit: PropTypes.bool,
     timeout: PropTypes.number,
     language: PropTypes.string.isRequired,
-    refElement: Reference.isRequired,
+    refElement: Reference,
   };
 
   static defaultProps = {
@@ -23,6 +23,7 @@ class TimedPopup extends Component {
     onTrigger: null,
     openOnInit: false,
     timeout: POPOVER_CONFIRMATION_TIMEOUT,
+    refElement: null,
   };
 
   state = {};

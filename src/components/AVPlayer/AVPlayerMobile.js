@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 import { Button, Icon, Message } from 'semantic-ui-react';
 
-import { MT_AUDIO, MT_VIDEO, RTL_LANGUAGES } from '../../helpers/consts';
+import { LANG_HEBREW, MT_AUDIO, MT_VIDEO, RTL_LANGUAGES } from '../../helpers/consts';
 import { fromHumanReadableTime } from '../../helpers/time';
 import { getQuery } from '../../helpers/url';
 import * as shapes from '../shapes';
@@ -33,7 +33,7 @@ class AVPlayerMobile extends PureComponent {
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
-    selectedLanguage: PropTypes.string.isRequired,
+    selectedLanguage: PropTypes.string,
     onLanguageChange: PropTypes.func.isRequired,
 
     // Audio/Video switch props.
@@ -63,6 +63,7 @@ class AVPlayerMobile extends PureComponent {
     onPrev: noop,
     onNext: noop,
     autoPlay: false,
+    selectedLanguage: LANG_HEBREW,
   };
 
   persistVolume = debounce((value) => {

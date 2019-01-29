@@ -48,7 +48,7 @@ class AVLanguageMobile extends Component {
   };
 
   render() {
-    const { t, languages, language, uiLanguage } = this.props;
+    const { t, languages, selectedLanguage, uiLanguage } = this.props;
     const { langSelectRef, openPopup } = this.state;
 
     const options = LANGUAGE_OPTIONS
@@ -65,7 +65,7 @@ class AVLanguageMobile extends Component {
           language={uiLanguage}
           refElement={langSelectRef}
         />
-        <select value={language} onChange={this.handleChange}>
+        <select value={selectedLanguage} onChange={this.handleChange}>
           {
             options.map(x => (
               <option key={x} value={x}>
