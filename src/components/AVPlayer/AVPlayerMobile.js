@@ -18,6 +18,7 @@ import AVEditSlice from './AVEditSlice';
 import ShareFormMobile from './Share/ShareFormMobile';
 import AVPlaybackRateMobile from './AVPlaybackRateMobile';
 import AVSpinner from './AVSpinner';
+import playerHelper from '../../helpers/player';
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
@@ -103,6 +104,7 @@ class AVPlayerMobile extends PureComponent {
       firstSeek: true,
       showControls: false,
       unMuteButton: false,
+      embed: playerHelper.getEmbedFromQuery(history.location),
     };
   }
 
@@ -391,7 +393,7 @@ class AVPlayerMobile extends PureComponent {
         autoPlay,
       } = this.props;
 
-    const { error, errorReason, isSliceMode, playbackRate, unMuteButton, showControls } = this.state;
+    const { error, errorReason, isSliceMode, playbackRate, unMuteButton, showControls, embed } = this.state;
 
     const isVideo       = item.mediaType === MT_VIDEO;
     const isAudio       = item.mediaType === MT_AUDIO;
@@ -439,7 +441,7 @@ class AVPlayerMobile extends PureComponent {
               onNext={onNext}
             />
             <div className="mediaplayer__spacer" />
-            <AVEditSlice onActivateSlice={this.toggleSliceMode} />
+            {!embed ? <AVEditSlice onActivateSlice={this.toggleSliceMode} /> : null}
             <button type="button" tabIndex="-1" onClick={this.handleJumpBack}>
               -5s
               <Icon name="backward" />
