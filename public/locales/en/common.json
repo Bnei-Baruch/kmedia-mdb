@@ -408,7 +408,9 @@
     "header": {
       "text": "Topics",
       "subtext": "A collection of all items for a selected topic."
-    }
+    },
+    "show-more": "Show more",
+    "show-less": "Show less"
   },
   "media-downloads": {
     "title": "Media Downloads",

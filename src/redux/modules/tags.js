@@ -14,12 +14,18 @@ const RECEIVE_TAGS = 'Tags/RECEIVE_TAGS';
 const FETCH_DASHBOARD         = 'Tags/FETCH_DASHBOARD';
 const FETCH_DASHBOARD_SUCCESS = 'Tags/FETCH_DASHBOARD_SUCCESS';
 const FETCH_DASHBOARD_FAILURE = 'Tags/FETCH_DASHBOARD_FAILURE';
+const FETCH_STATS             = 'Tags/FETCH_STATS';
+const FETCH_STATS_SUCCESS     = 'Tags/FETCH_STATS_SUCCESS';
+const FETCH_STATS_FAILURE     = 'Tags/FETCH_STATS_FAILURE';
 
 export const types = {
   RECEIVE_TAGS,
   FETCH_DASHBOARD,
   FETCH_DASHBOARD_SUCCESS,
-  FETCH_DASHBOARD_FAILURE
+  FETCH_DASHBOARD_FAILURE,
+  FETCH_STATS,
+  FETCH_STATS_SUCCESS,
+  FETCH_STATS_FAILURE
 };
 
 /* Actions */
@@ -29,12 +35,18 @@ const receiveTags = createAction(RECEIVE_TAGS);
 const fetchDashboard        = createAction(FETCH_DASHBOARD);
 const fetchDashboardSuccess = createAction(FETCH_DASHBOARD_SUCCESS, (id, data) => ({ id, data }));
 const fetchDashboardFailure = createAction(FETCH_DASHBOARD_FAILURE, (id, err) => ({ id, err }));
+const fetchStats            = createAction(FETCH_STATS, (namespace, contentTypes) => ({ namespace, contentTypes }));
+const fetchStatsSuccess     = createAction(FETCH_STATS_SUCCESS);
+const fetchStatsFailure     = createAction(FETCH_STATS_FAILURE);
 
 export const actions = {
   receiveTags,
   fetchDashboard,
   fetchDashboardSuccess,
-  fetchDashboardFailure
+  fetchDashboardFailure,
+  fetchStats,
+  fetchStatsSuccess,
+  fetchStatsFailure
 };
 
 /* Reducer */
@@ -82,7 +94,7 @@ const onReceiveTags = (state, action) => {
   const getPath     = source => tracePath(source, getByID);
   const getPathByID = id => getPath(getByID(id));
 
-  const roots = action.payload.map(x => x.id);
+  const roots        = action.payload.map(x => x.id);
   const displayRoots = roots.filter(x => TOPICS_FOR_DISPLAY.indexOf(x) !== -1);
 
   return {
@@ -123,7 +135,7 @@ const onDashboardSuccess = (state, action) => {
       return acc;
     }, {});
 
-    const getSectionUnits = section => cuBySection[section];
+    const getSectionUnits   = section => cuBySection[section];
     const uniqueSectionsArr = [...new Set(latestUnits.map(u => getSectionOfUnit(u)).filter(x => !!x))].sort();
 
     return {

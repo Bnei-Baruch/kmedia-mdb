@@ -397,7 +397,9 @@
     "header": {
       "text": "Temas",
       "subtext": "A collection of all items for a selected topic."
-    }
+    },
+    "show-more": "Mostrar más",
+    "show-less": "Muestra menos"
   },
   "media-downloads": {
     "title": "Descargar archivos",
