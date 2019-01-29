@@ -118,6 +118,11 @@ class Layout extends Component {
 
     const showSearch = this.shouldShowSearch(location);
 
+    let sideBarIcon = <Icon name="sidebar" />;
+    if (sidebarActive) {
+      sideBarIcon = <Icon size="large" name="x" />;  
+    }
+
     return (
       <div className="layout">
         {/* <div className="debug">
@@ -137,7 +142,7 @@ class Layout extends Component {
                 className="layout__sidebar-toggle"
                 onClick={this.toggleSidebar}
               >
-                <Icon name="sidebar" />
+                {sideBarIcon}
               </Menu.Item>
             </Ref>
             <Menu.Item className="logo" header as={Link} to="/">
@@ -190,7 +195,7 @@ class Layout extends Component {
                 className="layout__sidebar-toggle"
                 onClick={this.closeSidebar}
               >
-                <Icon name="sidebar" />
+                {sideBarIcon}
               </Menu.Item>
             </Ref>
             <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={this.closeSidebar}>
