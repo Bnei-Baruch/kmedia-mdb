@@ -83,6 +83,7 @@ class SimpleModePage extends PureComponent {
           language={language}
           localeUtils={localeUtils}
           onChange={onDayClick}
+          className="float-left"
         />
       </div>
     );

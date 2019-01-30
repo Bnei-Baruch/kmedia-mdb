@@ -1252,6 +1252,14 @@
   padding: 0 !important;
 }
 
-.FastDayPicker-DayPicker-NavButton .DayPicker-NavButton {
-  top: 0;
+.FastDayPicker-DayPicker-NavButton {
+  width: 17em;
+  .DayPicker-NavButton {
+    top: 0;
+    float: right;
+  }
+}
+
+.float-left {
+  float: left
 }
