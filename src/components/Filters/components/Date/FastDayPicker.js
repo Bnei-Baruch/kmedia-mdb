@@ -89,7 +89,9 @@ class FastDayPicker extends Component {
           language={language}
           localeUtils={localeUtils}
           onChange={this.handleYearMonthChange}
+          className="float-left"
         />
+        <div className="clear"></div>
       </div>
     );
   };
