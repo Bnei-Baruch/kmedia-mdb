@@ -13,8 +13,6 @@ const TODAY        = 'TODAY';
 const YESTERDAY    = 'YESTERDAY';
 const LAST_7_DAYS  = 'LAST_7_DAYS';
 const LAST_30_DAYS = 'LAST_30_DAYS';
-const LAST_MONTH   = 'LAST_MONTH';
-const THIS_MONTH   = 'THIS_MONTH';
 const CUSTOM_RANGE = 'CUSTOM_RANGE';
 const CUSTOM_DAY   = 'CUSTOM_DAY';
 
@@ -195,7 +193,7 @@ class DateFilter extends Component {
   };
 
   toggleDay = () => {
-    this.setState({ showDay: true, showRange: false });
+    this.setState({ showDay: !this.state.showDay, showRange: false });
   };
 
   render() {
