@@ -7,6 +7,7 @@ import { renderRoutes } from 'react-router-config';
 import { Button, Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
+import playerHelper from '../../helpers/player';
 import { actions, selectors as settings } from '../../redux/modules/settings';
 import { selectors as device } from '../../redux/modules/device';
 import * as shapes from '../shapes';
@@ -42,11 +43,16 @@ class Layout extends Component {
   showSearchButtonElement = createRef();
 
   componentDidMount() {
-    document.addEventListener('click', this.clickOutside, true);
+    document.addEventListener('click', this.clickOutside, true);    
   }
 
   componentWillUnmount() {
     document.removeEventListener('click', this.clickOutside, true);
+  }
+
+  componentWillMount() {
+    const {location } = this.props;
+    this.setState( { embed: playerHelper.getEmbedFromQuery(location) } );
   }
 
   // i.e, main, header of footer.
@@ -114,11 +120,16 @@ class Layout extends Component {
 
   render() {
     const { t, location, route, language, contentLanguage, setContentLanguage } = this.props;
-    const { sidebarActive }                                                     = this.state;
+    const { sidebarActive, embed }                                              = this.state;
 
     const showSearch = this.shouldShowSearch(location);
 
-    return (
+    let sideBarIcon = <Icon name="sidebar" />;
+    if (sidebarActive) {
+      sideBarIcon = <Icon size="large" name="x" />;  
+    }
+
+    return !embed ? (
       <div className="layout">
         {/* <div className="debug">
           <span className="widescreen-only">widescreen</span>
@@ -137,7 +148,7 @@ class Layout extends Component {
                 className="layout__sidebar-toggle"
                 onClick={this.toggleSidebar}
               >
-                <Icon name="sidebar" />
+                {sideBarIcon}
               </Menu.Item>
             </Ref>
             <Menu.Item className="logo" header as={Link} to="/">
@@ -190,7 +201,7 @@ class Layout extends Component {
                 className="layout__sidebar-toggle"
                 onClick={this.closeSidebar}
               >
-                <Icon name="sidebar" />
+                {sideBarIcon}
               </Menu.Item>
             </Ref>
             <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={this.closeSidebar}>
@@ -209,6 +220,10 @@ class Layout extends Component {
           <Footer />
         </div>
       </div>
+    ) : (
+        <div>
+          {renderRoutes(route.routes)}
+        </div>    
     );
   }
 }

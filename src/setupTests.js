@@ -10,24 +10,9 @@ configure({ adapter: new Adapter() });
 
 global.requestAnimationFrame = cb => setTimeout(cb, 0);
 
-export const shallowRender = (component, props) =>
-  shallow(React.createElement(component, props));
+export const shallowRender = (component, props) => shallow(React.createElement(component, props));
 
-export const mountedRender = (component, props) =>
-  mount(React.createElement(component, props));
-
-const router = {
-  history: new Router().history,
-  route: {
-    location: {},
-    match: {}
-  },
-};
-
-const createContext = () => ({
-  context: { router },
-  childContextTypes: { router: PropTypes.shape({}) },
-});
+export const mountedRender = (component, props) => mount(React.createElement(component, props));
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the withNamespaces HoC receive the t function as a prop
@@ -39,9 +24,9 @@ jest.mock('react-i18next', () => ({
 }));
 
 export function mountWrapRouter(node) {
-  return mount(node, createContext());
+  return mount(<Router>{node}</Router>);
 }
 
 export function shallowWrapRouter(node) {
-  return shallow(node, createContext());
+  return shallow(<Router>{node}</Router>);
 }

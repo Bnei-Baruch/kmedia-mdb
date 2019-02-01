@@ -48,7 +48,12 @@ class PlaylistAVBox extends Component {
       }
       onSelectedChange(playlist.items[selected].unit);
     }
-    this.state = { playlist, selected };
+
+    this.state = {
+      playlist,
+      selected,
+      embed: playerHelper.getEmbedFromQuery(location)
+    };
 
     playerHelper.setLanguageInQuery(history, playlist.language);
   }
@@ -150,8 +155,8 @@ class PlaylistAVBox extends Component {
   };
 
   render() {
-    const { PlayListComponent, uiLanguage, nextLink, prevLink } = this.props;
-    const { playlist, selected }                                = this.state;
+    const { PlayListComponent, uiLanguage, nextLink, prevLink, history } = this.props;
+    const { playlist, selected, embed }                                  = this.state;
 
     if (!playlist
       || !Array.isArray(playlist.items)
@@ -162,8 +167,36 @@ class PlaylistAVBox extends Component {
     }
 
     const isAudio = playlist.items[selected].mediaType === MT_AUDIO;
-
-    return (
+    return !embed ? (
+      <Grid.Row
+        className={classNames('', {
+          'layout--is-audio': isAudio,
+        })}
+      >
+        <Grid.Column id="avbox__player" mobile={16} tablet={10} computer={10}>
+          <AVPlaylistPlayer
+            items={playlist.items}
+            selected={selected}
+            language={playlist.language}
+            uiLanguage={uiLanguage}
+            onSelectedChange={this.handleSelectedChange}
+            onLanguageChange={this.handleLanguageChange}
+            onSwitchAV={this.handleSwitchAV}
+            history={history}
+          />
+        </Grid.Column>
+        <Grid.Column id="avbox__playlist" className="avbox__playlist" mobile={16} tablet={6} computer={6}>
+          <PlayListComponent
+            playlist={playlist}
+            selected={selected}
+            language={uiLanguage}
+            onSelectedChange={this.handleSelectedChange}
+            nextLink={nextLink}
+            prevLink={prevLink}
+          />
+        </Grid.Column>
+      </Grid.Row>
+    ) : (
       <Grid.Row
         className={classNames('', {
           'layout--is-audio': isAudio,
@@ -177,16 +210,6 @@ class PlaylistAVBox extends Component {
             onSelectedChange={this.handleSelectedChange}
             onLanguageChange={this.handleLanguageChange}
             onSwitchAV={this.handleSwitchAV}
-          />
-        </Grid.Column>
-        <Grid.Column id="avbox__playlist" className="avbox__playlist" mobile={16} tablet={6} computer={6}>
-          <PlayListComponent
-            playlist={playlist}
-            selected={selected}
-            language={uiLanguage}
-            onSelectedChange={this.handleSelectedChange}
-            nextLink={nextLink}
-            prevLink={prevLink}
           />
         </Grid.Column>
       </Grid.Row>

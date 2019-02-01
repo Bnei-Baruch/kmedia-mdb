@@ -44,8 +44,7 @@ class PlaylistWidget extends Component {
   };
 
   renderHeader() {
-    const { playlist, t, nextLink, prevLink, language } = this.props;
-    const { collection }                                = playlist;
+    const { playlist: { collection }, t, nextLink, prevLink, language } = this.props;
 
     let content = collection.name;
     if (!content) {

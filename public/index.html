@@ -31,8 +31,13 @@
 </head>
 <body>
 <div id="root"></div>
-<script type="text/javascript">
-  (function() { var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = '//api.usersnap.com/load/2d48dac9-253b-4d56-a7bf-a58c6ece2f3c.js';
+<script type="text/javascript">  
+  (function() { 
+    var url = new URL(window.location.href);
+    var embed = url.searchParams.get("embed");
+    if (embed === '1') // don't show usersnap in embed mode
+      return;
+    var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = '//api.usersnap.com/load/2d48dac9-253b-4d56-a7bf-a58c6ece2f3c.js';
     var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); })();
 </script>
 </body>

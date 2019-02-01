@@ -269,6 +269,7 @@ export const cWindow = PropTypes.shape({
   id: PropTypes.string,
 });
 
+// https://stackoverflow.com/questions/48007326/what-is-the-correct-proptype-for-a-ref-in-react
 export const Reference = PropTypes.oneOfType([
   PropTypes.func,
   PropTypes.shape({ current: PropTypes.instanceOf(PropTypes.Element) })

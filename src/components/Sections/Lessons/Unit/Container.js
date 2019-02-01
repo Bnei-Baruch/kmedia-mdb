@@ -43,12 +43,13 @@ const MyWrappedUnitPage = wrapPage(MyUnitPage);
 
 class MyUnitContainer extends UnitContainer {
   render() {
-    const { language, unit, wip, err } = this.props;
+    const { language, unit, location, wip, err } = this.props;
     return (
       <MyWrappedUnitPage
         section="lessons"
         unit={wip || err ? null : unit}
         language={language}
+        location={location}
         wip={wip}
         err={err}
       />
