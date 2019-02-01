@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { Card, Header } from 'semantic-ui-react';
 
 import { sectionThumbnailFallback } from '../../../helpers/images';
@@ -44,4 +45,4 @@ class LatestUpdate extends Component {
   }
 }
 
-export default LatestUpdate;
+export default withNamespaces()(LatestUpdate);

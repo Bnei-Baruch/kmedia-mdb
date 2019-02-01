@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Menu } from 'semantic-ui-react';
 
 import { actions } from '../../../redux/modules/events';
@@ -31,12 +31,13 @@ class MainPage extends PureComponent {
   };
 
   componentWillReceiveProps(nextProps) {
-    const tab     = this.props.match.params.tab || tabs[0];
-    const nextTab = nextProps.match.params.tab || tabs[0];
+    const { match, location } = this.props;
+    const tab                 = match.params.tab || tabs[0];
+    const nextTab             = nextProps.match.params.tab || tabs[0];
 
     // clear filters if location search parameter is changed by Menu click
-    if (nextProps.location.search !== this.props.location.search &&
-      !nextProps.location.search) {
+    if (nextProps.location.search !== location.search
+      && !nextProps.location.search) {
       nextProps.resetNamespace(`events-${tab}`);
     }
 
@@ -93,4 +94,4 @@ const mapDispatch = dispatch => (
   }, dispatch)
 );
 
-export default connect(null, mapDispatch)(translate()(MainPage));
+export default connect(null, mapDispatch)(withNamespaces()(MainPage));

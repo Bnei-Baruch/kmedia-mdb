@@ -5,6 +5,7 @@ import { CT_LESSON_PART } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
 import { actions, selectors } from '../redux/modules/stats';
 import { types as lists } from '../redux/modules/lists';
+import { types as tags } from '../redux/modules/tags';
 
 function* fetchCUStats(action) {
   const { namespace } = action.payload;
@@ -36,7 +37,7 @@ function* fetchCUStats(action) {
 }
 
 function* watchFetchList() {
-  yield takeLatest(lists.FETCH_LIST, fetchCUStats);
+  yield takeLatest([lists.FETCH_LIST, tags.FETCH_STATS], fetchCUStats);
 }
 
 export const sagas = [

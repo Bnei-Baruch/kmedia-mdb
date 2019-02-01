@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { translate } from 'react-i18next';
-import { Grid, Container, Breadcrumb, Divider } from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
+import { Breadcrumb, Container, Divider, Grid } from 'semantic-ui-react';
 
 import { RTL_LANGUAGES } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
@@ -93,17 +93,17 @@ class TopicPage extends Component {
               sections.map((s) => {
                 const sectionUnits = getSectionUnits(s);
 
-                return isEmpty(sectionUnits) ?
-                  null :
-                  <Grid.Column key={s}>
-                    <TopN
-                      section={s}
-                      units={sectionUnits}
-                      N={topNItems}
-                      tagPath={tagPath}
-                      t={t}
-                    />
-                  </Grid.Column>;
+                return isEmpty(sectionUnits)
+                  ? null
+                  : (
+                    <Grid.Column key={s}>
+                      <TopN
+                        section={s}
+                        units={sectionUnits}
+                        N={topNItems}
+                        tagPath={tagPath}
+                      />
+                    </Grid.Column>);
               })
             }
           </Grid>
@@ -126,4 +126,4 @@ export default withRouter(connect(
   dispatch => bindActionCreators({
     fetchDashboard: actions.fetchDashboard
   }, dispatch)
-)(translate()(TopicPage)));
+)(withNamespaces()(TopicPage)));

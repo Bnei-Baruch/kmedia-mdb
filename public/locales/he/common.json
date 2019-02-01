@@ -113,7 +113,8 @@
       "edit-back": "חזור",
       "start-position": "התחלה",
       "end-position": "סיום",
-      "click-to-set": "לחץ לסימון"
+      "click-to-set": "לחץ לסימון",
+      "tap-to-unmute": "לחץ לביטול השתקה"
     },
     "share": {
       "title": "צפה בסרטון"
@@ -136,7 +137,7 @@
     "unknown": "לא ידוע",
     "unsupported-media-format": "פורמט לא נתמך.",
     "error-loading-file": "טעות בהעלאת קובץ.",
-    "fallback-language": "אין את השפה המבוקשת למדיה, נבחרה שפת ברירת מחדל.",
+    "fallback-language": "התוכן לא קיים בשפה המבוקשת, נבחרה שפת ברירת מחדל.",
     "fallback-to-audio": "וידיאו לא נמצא, משתמש באודיו.",
     "fallback-to-video": "אודיו לא נמצא, משתמש בוידיאו.",
     "source-content-not-found": "לא נמצא תוכן המקור",
@@ -199,8 +200,8 @@
     "last-lesson": "שיעור הקבלה היומי",
     "donate": "תרום עכשיו",
     "promoted": {
-      "header": "כנס וירטואלי",
-      "subheader": "15-16.12.2018"
+      "header": "להורדה קלה ומהירה של קבצים",
+      "subheader": ""
     }
   },
   "events": {
@@ -411,7 +412,9 @@
     "header": {
       "text": "נושאים",
       "subtext": "אוסף תכנים בנושא נבחר"
-    }
+    },
+    "show-more": "הצג עוד",
+    "show-less": "הצג פחות"
   },
   "media-downloads": {
     "title": "קבצים להורדה",

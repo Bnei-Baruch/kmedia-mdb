@@ -88,7 +88,7 @@
       "events": "Kongresse, Veranstaltungen",
       "publications": "Veröffentlichungen",
       "sources": "Primäre Quellen",
-      "all":"Alles"
+      "all": "Alles"
     }
   },
   "buttons": {
@@ -113,7 +113,8 @@
       "edit-back": "Zurück",
       "start-position": "Start",
       "end-position": "Ende",
-      "click-to-set": "Bestätigen"
+      "click-to-set": "Bestätigen",
+      "tap-to-unmute": "Ton einschalten"
     },
     "share": {
       "title": "Dieses Video ansehen"
@@ -136,7 +137,7 @@
     "unknown": "Unbekannt",
     "unsupported-media-format": "Nicht unterstütztes Format.",
     "error-loading-file": "Fehler beim Herunterladen der Datei.",
-    "fallback-language": "Medien nicht in Deutsch gefunden, Backup-Sprache ausgewählt.",
+    "fallback-language": "Inhalt ist nicht in der angeforderten Sprache vorhanden, eine Standardsprache wurde ausgewählt.",
     "fallback-to-audio": "Video nicht gefunden, Audio wird verwendet.",
     "fallback-to-video": "Audio nicht gefunden, Video wird verwendet.",
     "source-content-not-found": "Ursprüngliche Quelle nicht gefunden",
@@ -191,8 +192,8 @@
     "last-lesson": "Die letzte Lektion",
     "donate": "SPENDEN",
     "promoted": {
-      "header": "Virtueller Kongress",
-      "subheader": "15-16.12.2018"
+      "header": "Schneller und einfacher Download von Dateien",
+      "subheader": ""
     }
   },
   "events": {

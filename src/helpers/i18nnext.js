@@ -41,7 +41,7 @@ i18n
     },
 
     react: {
-      wait: true, // globally set to wait for loaded translations in translate hoc
+      wait: true, // globally set to wait for loaded translations in withNamespaces hoc
     },
   });
 

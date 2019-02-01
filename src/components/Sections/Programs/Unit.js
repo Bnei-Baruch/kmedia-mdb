@@ -6,7 +6,7 @@ import Page from '../../Pages/Unit/Page';
 
 class MyUnitContainer extends UnitContainer {
   render() {
-    const { language, unit, wip, err } = this.props;
+    const { language, unit, location, wip, err } = this.props;
     return (
       <div>
         <Helmets.AVUnit unit={unit} language={language} />
@@ -14,6 +14,7 @@ class MyUnitContainer extends UnitContainer {
           section="programs"
           unit={wip || err ? null : unit}
           language={language}
+          location={location}
           wip={wip}
           err={err}
         />

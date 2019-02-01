@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Trans, withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
-import { Trans, translate } from 'react-i18next';
 import { Container, Divider, Grid, Message, Image, Button } from 'semantic-ui-react';
 import InfoIcon from '../../images/icons/info.svg';
 
@@ -69,27 +69,28 @@ class SearchResults extends Component {
     const props = { ...this.props, hit, rank, key: `${mdbUid}_${type}` };
 
     if (SEARCH_INTENT_HIT_TYPES.includes(type)) {
-      return <SearchResultIntent  {...props} />;
+      return <SearchResultIntent {...props} />;
     }
 
     if (resultType === 'posts') {
-      return <SearchResultPost  {...props} />;
+      return <SearchResultPost {...props} />;
     }
 
-    const cu = cuMap[mdbUid];
-    const c  = cMap[mdbUid];
+    const cu   = cuMap[mdbUid];
+    const c    = cMap[mdbUid];
+    let result = null;
 
     if (cu) {
-      return <SearchResultCU   {...props} cu={cu} />;
+      result = <SearchResultCU {...props} cu={cu} />;
     } else if (c) {
-      return <SearchResultCollection c={c}  {...props} />;
+      result = <SearchResultCollection c={c} {...props} />;
     } else if (resultType === 'sources') {
-      return <SearchResultSource   {...props} />;
+      result = <SearchResultSource {...props} />;
     }
 
     // maybe content_units are still loading ?
     // maybe stale data in elasticsearch ?
-    return null;
+    return result;
   };
 
   hideNote = () => this.setState({ showNote: false });
@@ -154,7 +155,9 @@ class SearchResults extends Component {
     if (total === 0) {
       content = (
         <Trans i18nKey="search.results.no-results">
-          Your search for <strong style={{ fontStyle: 'italic' }}>{{ query }}</strong> found no results.
+          Your search for
+          <strong style={{ fontStyle: 'italic' }}>{{ query }}</strong>
+          found no results.
         </Trans>
       );
     } else {
@@ -194,5 +197,4 @@ export default connect(state => ({
   getSourceById: sourcesSelectors.getSourceById(state.sources),
   getTagById: tagsSelectors.getTagById(state.tags),
   contentLanguage: settings.getContentLanguage(state.settings),
-}))(translate()(SearchResults));
-
+}))(withNamespaces()(SearchResults));

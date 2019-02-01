@@ -25,9 +25,9 @@ const sourcesFilter = {
     // Make sure we have all items.
     // Location hydration probably happens before we receive sources
     const lastIndex = path.length - 1;
-    return path.some(x => !x) ?
-      '' :
-      path
+    return path.some(x => !x)
+      ? ''
+      : path
         .map((x, index) => breadCrumb(x, index, lastIndex))
         .join('<span class="filter__separator"> / </span>');
   }

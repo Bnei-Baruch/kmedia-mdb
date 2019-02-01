@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Container } from 'semantic-ui-react';
 
 const ResultsPageHeader = (props) => {
@@ -13,14 +13,13 @@ const ResultsPageHeader = (props) => {
   } else if (total <= pageSize) {
     content = t('messages.pagination-results', { start: 1, end: total, total });
   } else {
-    content =
-      t('messages.pagination-results',
-        {
-          start: ((pageNo - 1) * pageSize) + 1,
-          end: Math.min(total, pageNo * pageSize),
-          total,
-        }
-      );
+    content = t('messages.pagination-results',
+      {
+        start: ((pageNo - 1) * pageSize) + 1,
+        end: Math.min(total, pageNo * pageSize),
+        total,
+      }
+    );
   }
 
   return <Container className="pagination-results" content={content} />;
@@ -35,4 +34,4 @@ ResultsPageHeader.propTypes = {
 
 ResultsPageHeader.defaultProps = {};
 
-export default translate()(ResultsPageHeader);
+export default withNamespaces()(ResultsPageHeader);
