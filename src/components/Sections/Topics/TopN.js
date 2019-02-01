@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { Button, Table } from 'semantic-ui-react';
+import { Button, Header, Image, Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
+import { sectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
 import { stringify as urlSearchStringify } from '../../../helpers/url';
 import { filtersTransformer } from '../../../filters/index';
@@ -89,9 +90,9 @@ class TopN extends React.PureComponent {
   };
 
   render() {
-    const { t }         = this.props;
-    const { topNUnits } = this.state;
-    const url           = this.getTopicUrl();
+    const { section, t } = this.props;
+    const { topNUnits }  = this.state;
+    const url            = this.getTopicUrl();
 
     return (
       Array.isArray(topNUnits) && topNUnits.length > 0
@@ -100,15 +101,10 @@ class TopN extends React.PureComponent {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>
-                  <Button primary>
-                    {/* eslint-disable-next-line */}
-                    <Link
-                      className="buttonLink"  // "donate-button"
-                      to={url}
-                    >
-                      {t('buttons.view-all')}
-                    </Link>
-                  </Button>
+                  <Header as="h3">
+                    <Image src={sectionLogo[section]} />
+                    {t(`nav.sidebar.${section}`)}
+                  </Header>
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Header>
