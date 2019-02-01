@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Button, Popup, Input } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { withNamespaces } from 'react-i18next';
 
 import BaseShareForm from './BaseShareForm';
 import ShareBar from './ShareBar';
@@ -27,8 +28,7 @@ class ShareFormMobile extends BaseShareForm {
   handleCopied = () => {
     this.clearTimeout();
     this.setState({ isCopyPopupOpen: true }, () => {
-      this.timeout = setTimeout(() =>
-        this.setState({ isCopyPopupOpen: false }), POPOVER_CONFIRMATION_TIMEOUT);
+      this.timeout = setTimeout(() => this.setState({ isCopyPopupOpen: false }), POPOVER_CONFIRMATION_TIMEOUT);
     });
   };
 
@@ -42,7 +42,7 @@ class ShareFormMobile extends BaseShareForm {
 
     return (
       <div className="mediaplayer__onscreen-share">
-        <ShareBar url={url} t={t} buttonSize="medium" />
+        <ShareBar url={url} buttonSize="medium" />
         <div className="mediaplayer__onscreen-share-form">
           <div className="mediaplayer__onscreen-share-bar-mobile">
             <Input
@@ -65,7 +65,7 @@ class ShareFormMobile extends BaseShareForm {
           <Form size="mini">
             <Form.Group widths="equal">
               <Form.Input
-                value={start ? this.mlsToStrColon(start) : ''}
+                value={start ? BaseShareForm.mlsToStrColon(start) : ''}
                 onClick={this.setStart}
                 action={{
                   content: t('player.buttons.start-position'),
@@ -80,7 +80,7 @@ class ShareFormMobile extends BaseShareForm {
                 className="slice-button-mobile"
               />
               <Form.Input
-                value={end ? this.mlsToStrColon(end) : ''}
+                value={end ? BaseShareForm.mlsToStrColon(end) : ''}
                 onClick={this.setEnd}
                 action={{
                   content: t('player.buttons.end-position'),
@@ -102,4 +102,4 @@ class ShareFormMobile extends BaseShareForm {
   }
 }
 
-export default ShareFormMobile;
+export default withNamespaces()(ShareFormMobile);

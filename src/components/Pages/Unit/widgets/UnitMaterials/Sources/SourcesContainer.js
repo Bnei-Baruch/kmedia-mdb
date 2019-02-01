@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -18,7 +19,6 @@ class SourcesContainer extends Component {
     doc2htmlById: PropTypes.objectOf(shapes.DataWipErr),
     language: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
-    t: PropTypes.func.isRequired,
     fetchIndex: PropTypes.func.isRequired,
     fetchAsset: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,
@@ -55,15 +55,16 @@ class SourcesContainer extends Component {
   };
 
   handleContentChange = (id, name, deriveId) => {
+    const { doc2html, fetchAsset } = this.props;
     if (deriveId) {
-      this.props.doc2html(deriveId);
+      doc2html(deriveId);
     } else {
-      this.props.fetchAsset(`sources/${id}/${name}`);
+      fetchAsset(`sources/${id}/${name}`);
     }
   };
 
   render() {
-    const { unit, indexMap, content, doc2htmlById, language, contentLanguage, t, getSourceById } = this.props;
+    const { unit, indexMap, content, doc2htmlById, language, contentLanguage, getSourceById } = this.props;
 
     return (
       <Sources
@@ -73,7 +74,6 @@ class SourcesContainer extends Component {
         doc2htmlById={doc2htmlById}
         uiLanguage={language}
         contentLanguage={contentLanguage}
-        t={t}
         getSourceById={getSourceById}
         onContentChange={this.handleContentChange}
       />
@@ -103,4 +103,4 @@ export default connect(
     fetchIndex: assetsActions.sourceIndex,
     fetchAsset: assetsActions.fetchAsset,
   }, dispatch)
-)(SourcesContainer);
+)(withNamespaces()(SourcesContainer));

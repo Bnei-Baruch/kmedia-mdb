@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
-import UnitList from '../../Pages/UnitList/Container';
+import UnitList from '../UnitList/Container';
 import PageHeader from './Header';
 
 class CollectionPage extends Component {
@@ -36,7 +36,7 @@ class CollectionPage extends Component {
 
     return (
       <div className="collection-page">
-        <PageHeader collection={collection} namespace={namespace} t={t} />
+        <PageHeader collection={collection} namespace={namespace} />
         <UnitList
           namespace={namespace}
           extraFetchParams={this.extraFetchParams}
@@ -47,4 +47,4 @@ class CollectionPage extends Component {
   }
 }
 
-export default translate()(CollectionPage);
+export default withNamespaces()(CollectionPage);

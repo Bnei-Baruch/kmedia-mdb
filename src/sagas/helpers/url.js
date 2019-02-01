@@ -1,5 +1,5 @@
 import { put, select } from 'redux-saga/effects';
-import { replace, push } from 'react-router-redux';
+import { replace, push } from 'connected-react-router';
 
 import { getQuery as urlGetQuery, stringify } from '../../helpers/url';
 

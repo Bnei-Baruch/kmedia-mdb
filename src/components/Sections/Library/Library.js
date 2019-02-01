@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
 import { Container, Portal, Segment } from 'semantic-ui-react';
-import { assetUrl } from '../../../helpers/Api';
+import isEqual from 'react-fast-compare';
 
+import { assetUrl } from '../../../helpers/Api';
 import { RTL_LANGUAGES, } from '../../../helpers/consts';
-import { formatError, isEmpty, shallowCompare } from '../../../helpers/utils';
+import { formatError, isEmpty } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
 import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
@@ -47,22 +49,24 @@ class Library extends Component {
     fullUrlPath: null,
   };
 
-  state = {};
+  constructor(props) {
+    super(props);
 
-  componentWillMount() {
-    const { history: { location } } = this.props;
+    const { history: { location } } = props;
     const pageNumber                = withPagination.getPageFromLocation(location);
 
-    this.setState({ pageNumber });
+    this.state = { pageNumber };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return shallowCompare(this, nextProps, nextState);
+    const { props, state } = this;
+    return !isEqual(props, nextProps) || !isEqual(state, nextState);
   }
 
   pageNumberHandler = (pageNumber) => {
+    const { history } = this.props;
     this.setState({ pageNumber });
-    updateQuery(this.props.history, query => ({
+    updateQuery(history, query => ({
       ...query,
       page: pageNumber,
     }));
@@ -78,8 +82,10 @@ class Library extends Component {
     const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
 
     // PDF.js will fetch file by itself
-    const usePdfFile = isTaas && this.props.pdfFile;
-    const mimeType   = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    const { pdfFile, startsFrom } = this.props;
+    const usePdfFile              = isTaas && pdfFile;
+    const mimeType                = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    const { pageNumber }          = this.state;
     let contentsToDisplay;
 
     const { wip: contentWip, err: contentErr, data: contentData } = content;
@@ -93,30 +99,32 @@ class Library extends Component {
     } else if (contentWip) {
       contentsToDisplay = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else if (usePdfFile) {
-      contentsToDisplay = <PDF
-        pdfFile={assetUrl(`sources/${this.props.pdfFile}`)}
-        pageNumber={this.state.pageNumber || 1}
-        startsFrom={this.props.startsFrom}
-        pageNumberHandler={this.pageNumberHandler}
-      />;
+      contentsToDisplay = (
+        <PDF
+          pdfFile={assetUrl(`sources/${pdfFile}`)}
+          pageNumber={pageNumber || 1}
+          startsFrom={startsFrom}
+          pageNumberHandler={this.pageNumberHandler}
+        />);
     } else if (contentData) {
-      contentsToDisplay        = <div
-        style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
-        dangerouslySetInnerHTML={{ __html: contentData }}
-      />;
+      contentsToDisplay = (
+        <div
+          style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
+          dangerouslySetInnerHTML={{ __html: contentData }}
+        />);
     } else {
       return <Segment basic>{t('sources-library.no-source')}</Segment>;
     }
 
     let languageBar = null;
     if (languages.length > 0) {
-      languageBar = (
+      const { handleLanguageChanged } = this.props;
+      languageBar                     = (
         <Container fluid textAlign="right">
           <AnchorsLanguageSelector
             languages={languages}
             defaultValue={language}
-            t={t}
-            onSelect={this.props.handleLanguageChanged}
+            onSelect={handleLanguageChanged}
           />
         </Container>
       );
@@ -125,12 +133,9 @@ class Library extends Component {
     return (
       <div>
         {
-          langSelectorMount && languageBar ?
-            <Portal open preprend mountNode={langSelectorMount}>
-              {languageBar}
-            </Portal>
-            :
-            languageBar
+          langSelectorMount && languageBar
+            ? <Portal open preprend mountNode={langSelectorMount}>{languageBar}</Portal>
+            : languageBar
         }
         <Download path={fullUrlPath} mimeType={mimeType} />
         {contentsToDisplay}
@@ -139,4 +144,4 @@ class Library extends Component {
   }
 }
 
-export default withRouter(Library);
+export default withRouter(withNamespaces()(Library));

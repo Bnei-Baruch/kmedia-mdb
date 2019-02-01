@@ -8,22 +8,34 @@ import { MT_AUDIO } from '../../helpers/consts';
 import { selectors as device } from '../../redux/modules/device';
 import * as shapes from '../shapes';
 import AVMobileCheck from './AVMobileCheck';
+import { getQuery } from '../../helpers/url';
 
 class AVPlaylistPlayer extends Component {
   static propTypes = {
     items: PropTypes.arrayOf(shapes.VideoItem).isRequired,
     selected: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
     autoPlayAllowed: PropTypes.bool.isRequired,
     onSelectedChange: PropTypes.func.isRequired,
     onLanguageChange: PropTypes.func.isRequired,
     onSwitchAV: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired,
+    history: shapes.History.isRequired,
   };
 
   state = {
     autoPlay: false
   };
+
+  componentWillMount() {
+    const { history } = this.props;
+    const query       = getQuery(history.location);
+    if (query.sstart) {
+      this.setState({ autoPlay: true });
+    }
+  }
+
+  handleMediaEditModeChange = mediaEditMode => this.setState({ mediaEditMode });
 
   onFinish = () => {
     const { selected, onSelectedChange, items } = this.props;
@@ -47,16 +59,13 @@ class AVPlaylistPlayer extends Component {
     }
   };
 
-  onPlay  = () => this.setState({ autoPlay: true });
+  onPlay = () => this.setState({ autoPlay: true });
+
   onPause = () => this.setState({ autoPlay: false });
 
-  handleMediaEditModeChange = (mediaEditMode) => {    
-    this.setState({mediaEditMode: mediaEditMode});
-  };
-
   render() {
-    const { t, selected, items, language, onSwitchAV, onLanguageChange, autoPlayAllowed } = this.props;
-    const { autoPlay, mediaEditMode }                                                     = this.state;
+    const { selected, items, language, onSwitchAV, onLanguageChange, autoPlayAllowed, uiLanguage } = this.props;
+    const { autoPlay, mediaEditMode }                                                              = this.state;
 
     const currentItem = items[selected];
 
@@ -74,7 +83,7 @@ class AVPlaylistPlayer extends Component {
           'avbox__player--is-audio--edit-mode': isAudio && mediaEditMode === 2,
           'avbox__player--is-audio--normal-mode': isAudio && mediaEditMode === 0,
           'avbox__player--is-4x3': currentItem.unit.film_date < '2014',
-          'mobile-device': !autoPlayAllowed,          
+          'mobile-device': !autoPlayAllowed,
         })}
       >
         <div className="avbox__media-wrapper">
@@ -85,8 +94,8 @@ class AVPlaylistPlayer extends Component {
               onSwitchAV={onSwitchAV}
               languages={currentItem.availableLanguages}
               language={language}
+              uiLanguage={uiLanguage}
               onLanguageChange={onLanguageChange}
-              t={t}
               // Playlist props
               showNextPrev
               onFinish={this.onFinish}

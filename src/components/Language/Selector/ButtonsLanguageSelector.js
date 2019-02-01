@@ -1,5 +1,5 @@
 import React from 'react';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Button, Flag } from 'semantic-ui-react';
 
 import { LANGUAGES } from '../../../helpers/consts';
@@ -23,7 +23,7 @@ class ButtonsLanguageSelector extends BaseLanguageSelector {
               key={x.value}
               active={x.value === defaultValue}
               title={x.text}
-              onClick={e => this.handleSelect(e, x.value)}>
+              onClick={e => this.handleSelect(e, x.value)} >
               <Flag name={LANGUAGES[x.value].flag} style={{ margin: 0 }} />
             </Button>
           ))
@@ -33,4 +33,4 @@ class ButtonsLanguageSelector extends BaseLanguageSelector {
   }
 }
 
-export default translate()(ButtonsLanguageSelector);
+export default withNamespaces()(ButtonsLanguageSelector);

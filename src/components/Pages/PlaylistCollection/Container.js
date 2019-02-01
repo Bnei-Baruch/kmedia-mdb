@@ -34,71 +34,7 @@ export class PlaylistCollectionContainer extends Component {
     shouldRenderHelmet: true,
   };
 
-  state = {
-    nextLink: null,
-    prevLink: null,
-  };
-
-  componentDidMount() {
-    this.askForDataIfNeeded(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.askForDataIfNeeded(nextProps);
-  }
-
-  getNextPrevLinks = (props) => {
-    const { match, wip, cWindow } = props;
-    const { id }                  = match.params;
-
-    // empty or no window
-    if (!cWindow.data || cWindow.data.length === 0) {
-      if (!wip.cWindow[id]) {
-        // no wip, go fetch
-        this.getWindow(props);
-      }
-      return;
-    }
-
-    const { id: cWindowId, data: collections } = cWindow;
-
-    const curIndex = collections.indexOf(id);
-    if (id !== cWindowId &&
-      (curIndex <= 0 || curIndex === collections.length - 1) &&
-      !wip.cWindow[id]) {
-      // it's not our window,
-      // we're not in it (at least not in the middle, we could reuse it otherwise)
-      // and our window is not wip
-      this.getWindow(props);
-    } else {
-      // it's a good window, extract the previous and next links
-      const prevCollection = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
-      const prevLink       = prevCollection ? canonicalLink({
-        id: prevCollection,        content_type: CT_DAILY_LESSON
-      }) : null;
-
-      const nextCollection = curIndex > 0 ? collections[curIndex - 1] : null;
-      const nextLink       = nextCollection ? canonicalLink({
-        id: nextCollection,
-        content_type: CT_DAILY_LESSON
-      }) : null;
-
-      this.setState({ nextLink, prevLink });
-    }
-  };
-
-  getWindow = (props) => {
-    const { collection, fetchWindow } = props;
-
-    const filmDate = moment.utc(collection.film_date);
-    fetchWindow({
-      id: collection.id,
-      start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
-      end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
-    });
-  };
-
-  askForDataIfNeeded = (props) => {
+  static askForDataIfNeeded = (props) => {
     const { match, collection, wip, errors, fetchCollection, fetchUnit } = props;
 
     // We fetch stuff if we don't have it already
@@ -126,15 +62,89 @@ export class PlaylistCollectionContainer extends Component {
     }
 
     // next prev links only for lessons
-    if (collection &&
-      (collection.content_type === CT_DAILY_LESSON ||
-        collection.content_type === CT_SPECIAL_LESSON)) {
-      this.getNextPrevLinks(props);
+    if (collection
+      && (collection.content_type === CT_DAILY_LESSON
+        || collection.content_type === CT_SPECIAL_LESSON)) {
+      return PlaylistCollectionContainer.getNextPrevLinks(props);
     }
+
+    return null;
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      nextLink: null,
+      prevLink: null,
+    };
+  }
+
+  componentDidMount() {
+    const links = PlaylistCollectionContainer.askForDataIfNeeded(this.props);
+    this.setState(links);
+  }
+
+  static getDerivedStateFromProps(nextProps) {
+    return PlaylistCollectionContainer.askForDataIfNeeded(nextProps);
+  }
+
+  static getNextPrevLinks = (props) => {
+    const { match, wip, cWindow } = props;
+    const { id }                  = match.params;
+    let links                     = null;
+
+    // empty or no window
+    if (!cWindow.data || cWindow.data.length === 0) {
+      if (!wip.cWindow[id]) {
+        // no wip, go fetch
+        PlaylistCollectionContainer.getWindow(props);
+      }
+      return null;
+    }
+
+    const { id: cWindowId, data: collections } = cWindow;
+
+    const curIndex = collections.indexOf(id);
+    if (id !== cWindowId
+      && (curIndex <= 0 || curIndex === collections.length - 1)
+      && !wip.cWindow[id]) {
+      // it's not our window,
+      // we're not in it (at least not in the middle, we could reuse it otherwise)
+      // and our window is not wip
+      PlaylistCollectionContainer.getWindow(props);
+    } else {
+      // it's a good window, extract the previous and next links
+      const prevCollection = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
+      const prevLink       = prevCollection ? canonicalLink({
+        id: prevCollection, content_type: CT_DAILY_LESSON
+      }) : null;
+
+      const nextCollection = curIndex > 0 ? collections[curIndex - 1] : null;
+      const nextLink       = nextCollection ? canonicalLink({
+        id: nextCollection,
+        content_type: CT_DAILY_LESSON
+      }) : null;
+
+      links = { nextLink, prevLink };
+    }
+
+    return links;
+  };
+
+  static getWindow = (props) => {
+    const { collection, fetchWindow } = props;
+
+    const filmDate = moment.utc(collection.film_date);
+    fetchWindow({
+      id: collection.id,
+      start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
+      end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
+    });
   };
 
   render() {
-    const { match, language, contentLanguage, collection, wip: wipMap, errors, PlaylistComponent, shouldRenderHelmet } = this.props;
+    const { match, language, contentLanguage, collection, wip: wipMap, errors, PlaylistComponent, shouldRenderHelmet, location } = this.props;
 
     // We're wip / err if some request is wip / err
     const { id } = match.params;
@@ -159,6 +169,7 @@ export class PlaylistCollectionContainer extends Component {
         contentLanguage={contentLanguage}
         PlaylistComponent={PlaylistComponent}
         shouldRenderHelmet={shouldRenderHelmet}
+        location={location}
         nextLink={nextLink}
         prevLink={prevLink}
       />
@@ -188,4 +199,3 @@ function mapDispatch(dispatch) {
 }
 
 export default withRouter(connect(mapState, mapDispatch)(PlaylistCollectionContainer));
-

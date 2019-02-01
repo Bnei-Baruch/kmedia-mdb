@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Container, Divider } from 'semantic-ui-react';
 
 import * as shapes from '../../../../shapes';
@@ -57,11 +57,11 @@ class TwitterPage extends PureComponent {
     const content = WipErr({ wip, err, t }) || (
       <div>
         <Container className="padded">
-          <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
+          <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
           {
-            items.length > 0 ?
-              <Feed tweets={items} t={t} /> :
-              null
+            items.length > 0
+              ? <Feed tweets={items} />
+              : null
           }
         </Container>
         <Divider fitted />
@@ -92,4 +92,4 @@ class TwitterPage extends PureComponent {
   }
 }
 
-export default translate()(TwitterPage);
+export default withNamespaces()(TwitterPage);

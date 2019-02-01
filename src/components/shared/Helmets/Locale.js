@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Helmet } from 'react-helmet';
+import Helmet from 'react-helmet-async';
 
 import { getLanguageLocale } from '../../../helpers/i18n-utils';
 
@@ -23,11 +23,8 @@ class Locale extends Component {
         {
           alternateLang
             .filter(x => x !== mainLang)
-            .map(lang =>
-              <meta name="og:locale:alternate" content={getLanguageLocale(lang)} key={lang} />)
+            .map(lang => <meta name="og:locale:alternate" content={getLanguageLocale(lang)} key={lang} />)
         }
-        {/* Google use This */}
-        {/* <link rel="alternate" hreflang="es" href="http://es.example.com/" /> */}
       </Helmet>
     );
   }

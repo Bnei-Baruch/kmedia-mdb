@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Header, Icon } from 'semantic-ui-react';
 
 export const Splash = (props) => {
-  const { text, subtext, icon, color, isLoading } = props;
+  const { text, subtext, icon, color, isLoading, item } = props;
 
   return (
     <div className="splash">
@@ -13,6 +13,7 @@ export const Splash = (props) => {
         <Header.Content>
           {text}
           {subtext ? <Header.Subheader>{subtext}</Header.Subheader> : null}
+          {item ? <Header.Subheader>{item}</Header.Subheader> : null}
         </Header.Content>
       </Header>
     </div>
@@ -25,12 +26,14 @@ Splash.propTypes = {
   subtext: PropTypes.node,
   color: PropTypes.string,
   isLoading: PropTypes.bool,
+  item: PropTypes.func,
 };
 
 Splash.defaultProps = {
   subtext: null,
   color: 'black',
   isLoading: false,
+  item: null,
 };
 
 export const LoadingSplash = props => (<Splash isLoading icon="circle notch" color="blue" {...props} />);

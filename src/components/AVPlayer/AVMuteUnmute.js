@@ -12,6 +12,7 @@ class AVMuteUnmute extends Component {
       setVolume: PropTypes.func.isRequired,
     }).isRequired,
     upward: PropTypes.bool,
+    isAudio: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -96,8 +97,8 @@ class AVMuteUnmute extends Component {
   };
 
   render() {
-    const { media: { isMuted, volume } } = this.props;
-    const { volumeHover, wasMouseDown }  = this.state;
+    const { media: { isMuted, volume }, isAudio } = this.props;
+    const { volumeHover, wasMouseDown }           = this.state;
 
     const volumePopoverStyle = {
       bottom: this.props.upward ? '100%' : 'auto',
@@ -138,7 +139,7 @@ class AVMuteUnmute extends Component {
           }
         </button>
         <div
-          className="volume-popover"
+          className={isAudio ? 'volume-popover volume-popover__audio' : 'volume-popover'}
           style={volumePopoverStyle}
           onMouseEnter={this.handleMouseEnter}
           onMouseLeave={this.handleMouseLeave}

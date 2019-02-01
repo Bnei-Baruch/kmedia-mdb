@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Container, Divider, Table } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
@@ -117,15 +117,16 @@ class UnitListPage extends PureComponent {
     const content = WipErr({ wip, err, t }) || (
       <div>
         <Container className="padded">
-          <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
+          <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
           {
-            items.length > 0 ?
-              <Table unstackable basic="very" className="index" sortable>
-                <Table.Body>
-                  {items.map(x => renderUnit(x, t, namespace))}
-                </Table.Body>
-              </Table> :
-              null
+            items.length > 0
+              ? (
+                <Table unstackable basic="very" className="index" sortable>
+                  <Table.Body>
+                    {items.map(x => renderUnit(x, t, namespace))}
+                  </Table.Body>
+                </Table>)
+              : null
           }
         </Container>
         <Divider fitted />
@@ -147,14 +148,15 @@ class UnitListPage extends PureComponent {
       <div className="unit-list">
         <Divider fitted />
         {
-          nsFilters.length > 0 ?
-            <Filters
-              namespace={namespace}
-              filters={nsFilters}
-              onChange={onFiltersChanged}
-              onHydrated={onFiltersHydrated}
-            /> :
-            null
+          nsFilters.length > 0
+            ? (
+              <Filters
+                namespace={namespace}
+                filters={nsFilters}
+                onChange={onFiltersChanged}
+                onHydrated={onFiltersHydrated}
+              />)
+            : null
         }
         {content}
       </div>
@@ -162,4 +164,4 @@ class UnitListPage extends PureComponent {
   }
 }
 
-export default translate()(UnitListPage);
+export default withNamespaces()(UnitListPage);

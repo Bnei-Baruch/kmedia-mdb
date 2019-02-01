@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Header, Image } from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
 
 import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
 import * as shapes from '../../shapes';
@@ -12,7 +13,7 @@ const getRandomImage = () => {
   if (!src.startsWith('http')) {
     src = `http://localhost${src}`;
   }
-  return `${imaginaryUrl('resize')}?${Requests.makeParams({ url: src, width: 512, height:288 })}`;
+  return `${imaginaryUrl('resize')}?${Requests.makeParams({ url: src, width: 512, height: 288 })}`;
 };
 
 class LatestDailyLesson extends Component {
@@ -50,4 +51,4 @@ class LatestDailyLesson extends Component {
   }
 }
 
-export default LatestDailyLesson;
+export default withNamespaces()(LatestDailyLesson);

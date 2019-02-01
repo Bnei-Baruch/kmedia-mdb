@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { Dropdown, Flag, Menu } from 'semantic-ui-react';
 
 import { COOKIE_UI_LANG, LANG_UI_LANGUAGES, LANGUAGES } from '../../helpers/consts';
@@ -56,4 +57,4 @@ class UILanguage extends Component {
   }
 }
 
-export default UILanguage;
+export default withNamespaces()(UILanguage);

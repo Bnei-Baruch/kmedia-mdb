@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Grid, Header, Table } from 'semantic-ui-react';
+import isEqual from 'react-fast-compare';
 
 import { CT_ARTICLE, CT_FULL_LESSON, CT_KITEI_MAKOR, CT_LELO_MIKUD, CT_LESSON_PART, CT_PUBLICATION, CT_VIDEO_PROGRAM_CHAPTER, MT_AUDIO, MT_IMAGE, MT_TEXT, MT_VIDEO, VS_NAMES } from '../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
-import { equal, physicalFile } from '../../../../../helpers/utils';
+import { physicalFile } from '../../../../../helpers/utils';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors } from '../../../../../redux/modules/publications';
 import * as shapes from '../../../../shapes';
@@ -53,9 +55,12 @@ class MediaDownloads extends Component {
     const { props, state }                                = this;
 
     // only language changed
-    if (equal(unit, props.unit) && ((uiLanguage !== props.language) || (contentLanguage !== props.contentLanguage))) {
-      const language = selectSuitableLanguage(contentLanguage, uiLanguage, this.state.languages);
-      if (language !== this.state.language) {
+    if (
+      (uiLanguage !== props.language || contentLanguage !== props.contentLanguage)
+      && isEqual(unit, props.unit)
+    ) {
+      const language = selectSuitableLanguage(contentLanguage, uiLanguage, state.languages);
+      if (language !== state.language) {
         this.setState({ language });
         return;
       }
@@ -67,7 +72,7 @@ class MediaDownloads extends Component {
     const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
 
     let { derivedGroups } = state;
-    if (!equal(unit.derived_units, props.unit.derived_units)) {
+    if (!isEqual(unit.derived_units, props.unit.derived_units)) {
       derivedGroups = this.getDerivedFilesByContentType(unit.derived_units);
     }
 
@@ -76,9 +81,14 @@ class MediaDownloads extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const { unit, contentLanguage, language: uiLanguage } = nextProps;
-    const { props, state }                                       = this;
+    const { props, state }                                = this;
 
-    return !(state.language === nextState.language && equal(unit, props.unit) && uiLanguage === props.language && contentLanguage === props.contentLanguage);
+    return !(
+      state.language === nextState.language
+      && uiLanguage === props.language
+      && contentLanguage === props.contentLanguage
+      && isEqual(unit, props.unit)
+    );
   }
 
   getFilesByLanguage = (files = []) => {
@@ -138,7 +148,8 @@ class MediaDownloads extends Component {
   };
 
   getI18nTypeOverridesKey = () => {
-    switch (this.props.unit.content_type) {
+    const { unit } = this.props;
+    switch (unit.content_type) {
     case CT_LESSON_PART:
     case CT_FULL_LESSON:
       return 'lesson';
@@ -202,15 +213,15 @@ class MediaDownloads extends Component {
   };
 
   render() {
-    const { t, publisherById }                = this.props;
+    const { t, publisherById }                           = this.props;
     const { language, languages, groups, derivedGroups } = this.state;
-    const byType                              = groups.get(language) || new Map();
-    const kiteiMakor                          = derivedGroups[CT_KITEI_MAKOR];
-    const kiteiMakorByType                    = (kiteiMakor && kiteiMakor.get(language)) || new Map();
-    const leloMikud                           = derivedGroups[CT_LELO_MIKUD];
-    const leloMikudByType                     = (leloMikud && leloMikud.get(language)) || new Map();
-    const publications                        = derivedGroups[CT_PUBLICATION];
-    const publicationsByType                  = (publications && publications.get(language)) || new Map();
+    const byType                                         = groups.get(language) || new Map();
+    const kiteiMakor                                     = derivedGroups[CT_KITEI_MAKOR];
+    const kiteiMakorByType                               = (kiteiMakor && kiteiMakor.get(language)) || new Map();
+    const leloMikud                                      = derivedGroups[CT_LELO_MIKUD];
+    const leloMikudByType                                = (leloMikud && leloMikud.get(language)) || new Map();
+    const publications                                   = derivedGroups[CT_PUBLICATION];
+    const publicationsByType                             = (publications && publications.get(language)) || new Map();
 
     let typeOverrides = this.getI18nTypeOverridesKey();
     if (typeOverrides) {
@@ -310,5 +321,4 @@ export default connect(state => (
     language: settings.getLanguage(state.settings),
     contentLanguage: settings.getContentLanguage(state.settings),
   })
-)(MediaDownloads);
-
+)(withNamespaces()(MediaDownloads));

@@ -1,39 +1,49 @@
 /* eslint-disable no-console */
 // ignore styles and replace images with their final path from webpack manifest
+require('ignore-styles');
+require('svg-url-loader');
+require('file-loader');
+require('babel-polyfill');
 const path     = require('path');
 const manifest = require('../build/asset-manifest');
 require('ignore-styles').default(undefined, (module, filename) => {
-  if (filename.endsWith('.png') ||
-    filename.endsWith('.jpg') ||
-    filename.endsWith('.jpeg') ||
-    filename.endsWith('.svg')) {
+  if (filename.endsWith('.png')
+    || filename.endsWith('.jpg')
+    || filename.endsWith('.jpeg')
+    || filename.endsWith('.svg')) {
     // eslint-disable-next-line no-param-reassign
-    module.exports = `/${manifest[path.join('static', 'media', path.basename(filename))]}`;
+    module.exports = `${manifest[path.join('static', 'media', path.basename(filename))]}`;
   }
 });
 
-require('babel-register')({
-  presets: ['env', 'react-app'],
+require('@babel/register')({
+  ignore: [/(node_modules)/],
+  presets: ['@babel/preset-env', '@babel/preset-react'],
   plugins: [
-    ['module-resolver', {
-      alias: {
-        'react-pdf/dist/entry.webpack': 'react-pdf'
-      }
-    }]
-  ],
+    '@babel/plugin-syntax-dynamic-import',
+    'dynamic-import-node',
+    'jaybe-react-loadable/babel',
+    '@babel/plugin-proposal-class-properties',
+    '@babel/plugin-proposal-export-namespace-from',
+    '@babel/plugin-proposal-throw-expressions',
+  ]
 });
 
 require('dotenv').config();
 // console.log('env', process.env);
 
-const app = process.env.NODE_ENV === 'development' ?
-  require('./app-dev') :
-  require('./app-prod');
+const app = process.env.NODE_ENV === 'development'
+  ? require('./app-dev')
+  : require('./app-prod');
 
 const PORT = process.env.SERVER_PORT || 3001;
 
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}!`);
+app.listen(PORT, (error) => {
+  if (error) {
+    return console.log(`something bad happened: ${error} :(`);
+  }
+
+  return console.log(`App listening on port ${PORT}!`);
 });
 
 app.on('error', (error) => {

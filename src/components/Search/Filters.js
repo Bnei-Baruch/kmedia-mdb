@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { translate } from 'react-i18next';
-import { Dropdown, Menu, Button, Icon } from 'semantic-ui-react';
+import { Button, Dropdown, Icon, Menu } from 'semantic-ui-react';
 
 import { getQuery } from '../../helpers/url';
 import { actions, selectors } from '../../redux/modules/filters';
@@ -46,22 +46,27 @@ class SearchResultsFilters extends Component {
   state = { isShowFilters: false };
 
   componentDidMount() {
-    if (getQuery(this.props.location).section) {
+    const { location } = this.props;
+    if (getQuery(location).section) {
       this.setState({ isShowFilters: true });
     }
   }
 
-  showFilters = () =>
-    this.setState({ isShowFilters: !this.state.isShowFilters });
+  showFilters = () => {
+    const { isShowFilters } = this.state;
+    this.setState({ isShowFilters: !isShowFilters });
+  };
 
   onSelectionChange = (section) => {
-    const sValue = section !== 'all' ? `filters.sections-filter.${section}` : '';
-    this.props.setFilterValue('search', 'sections-filter', sValue);
-    this.props.onChange();
+    const { setFilterValue, onChange } = this.props;
+    const sValue                       = section !== 'all' ? `filters.sections-filter.${section}` : '';
+    setFilterValue('search', 'sections-filter', sValue);
+    onChange();
   };
 
   getActiveFilterTab = () => {
-    const query = getQuery(this.props.location).section;
+    const { location } = this.props;
+    const query        = getQuery(location).section;
     return !query ? 'all' : query.split('.').slice(-1)[0] || 'all';
   };
 
@@ -73,11 +78,11 @@ class SearchResultsFilters extends Component {
       value: o,
     }));
 
-    const sortingDisabled =
-            (filtersValues.values || []).some(f =>
-              f.name === 'sections-filter' &&
-              f.values &&
-              f.values.includes('filters.sections-filter.sources'));
+    const callback = f => f.name === 'sections-filter'
+      && f.values
+      && f.values.includes('filters.sections-filter.sources');
+
+    const sortingDisabled = (filtersValues.values || []).some(callback);
 
     const orderFilters = isMobileDevice() ? null : (
       <Menu.Item>
@@ -134,6 +139,7 @@ class SearchResultsFilters extends Component {
 
   render() {
     const { onHydrated, onChange, t } = this.props;
+    const { isShowFilters }           = this.state;
 
     const hideFilters = (
       <Menu.Item key="hideFilters">
@@ -146,7 +152,7 @@ class SearchResultsFilters extends Component {
       <div>
         {this.renderTabs()}
         {
-          <div style={{ display: this.state.isShowFilters ? 'block' : 'none' }}>
+          <div style={{ display: isShowFilters ? 'block' : 'none' }}>
             <Filters
               className="searchFilters"
               namespace="search"
@@ -166,7 +172,7 @@ export default connect(
   state => ({
     filtersValues: selectors.getNSFilters(state.filters, 'search') || {},
   }),
-  disptach => bindActionCreators({
+  dispatch => bindActionCreators({
     setFilterValue: actions.setFilterValue
-  }, disptach)
-)(translate()(SearchResultsFilters));
+  }, dispatch)
+)(withNamespaces()(SearchResultsFilters));
