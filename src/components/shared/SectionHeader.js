@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Container, Grid, Header, Menu } from 'semantic-ui-react';
 
 import Helmets from './Helmets';
@@ -72,4 +72,5 @@ class SectionHeader extends Component {
     );
   }
 }
-export default translate()(SectionHeader);
+export default withNamespaces()(SectionHeader);
+

@@ -14,15 +14,26 @@ class PDFMenu extends Component {
     numPages: null
   };
 
-  state = {
-    inputValue: this.props.pageNumber,
-    inputError: true,
-  };
+  constructor(props) {
+    super(props);
+    const { pageNumber } = props;
+    this.state           = {
+      inputValue: pageNumber,
+      inputError: true,
+    };
+  }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.pageNumber !== this.props.pageNumber) {
-      this.setState({ inputValue: nextProps.pageNumber });
+  static getDerivedStateFromProps(nextProps, state) {
+    if (nextProps.pageNumber !== state.pageNumber) {
+      return { inputValue: nextProps.pageNumber };
     }
+    return null;
+  }
+
+  componentDidMount() {
+    const { pageNumber } = this.props;
+
+    this.setState({ inputValue: pageNumber });
   }
 
   onKeyDown = (e) => {
@@ -33,10 +44,12 @@ class PDFMenu extends Component {
   };
 
   handleSubmit = () => {
-    const value                 = this.state.inputValue;
-    const { validated, parsed } = this.validateValue(value);
+    const { setPage }    = this.props;
+    const { inputValue } = this.state;
+
+    const { validated, parsed } = this.validateValue(inputValue);
     if (validated) {
-      this.props.setPage(parsed);
+      setPage(parsed);
     }
   };
 
@@ -44,21 +57,30 @@ class PDFMenu extends Component {
     this.setState({ inputValue: value });
   };
 
-  firstPage = () => this.props.setPage(this.props.startsFrom);
+  firstPage = () => {
+    const { startsFrom, setPage } = this.props;
+    setPage(startsFrom);
+  };
 
   prevPage = () => {
-    const page = this.props.pageNumber - 1;
-    const last = this.props.startsFrom;
-    this.props.setPage(page > last ? page : last);
+    const { pageNumber, startsFrom, setPage } = this.props;
+
+    const page = pageNumber - 1;
+    const last = startsFrom;
+    setPage(page > last ? page : last);
   };
 
   nextPage = () => {
-    const page = this.props.pageNumber + 1;
-    const last = this.props.numPages + this.props.startsFrom + -1;
-    this.props.setPage(page < last ? page : last);
+    const { pageNumber, numPages, startsFrom, setPage } = this.props;
+    const page                                          = pageNumber + 1;
+    const last                                          = numPages + startsFrom + -1;
+    setPage(page < last ? page : last);
   };
 
-  lastPage = () => this.props.setPage(this.props.numPages + this.props.startsFrom + -1);
+  lastPage = () => {
+    const { numPages, startsFrom, setPage } = this.props;
+    setPage(numPages + startsFrom + -1);
+  };
 
   restoreError = () => setTimeout(() => this.setState({ inputError: false }), 5000);
 
@@ -76,8 +98,9 @@ class PDFMenu extends Component {
       return bad;
     }
 
-    const realValue = parsed + -this.props.startsFrom + 1;
-    if (realValue < 1 || realValue > this.props.numPages) {
+    const { startsFrom, numPages } = this.props;
+    const realValue                = parsed + -startsFrom + 1;
+    if (realValue < 1 || realValue > numPages) {
       this.setState({ inputError: true }, this.restoreError);
       return bad;
     }
@@ -92,7 +115,10 @@ class PDFMenu extends Component {
 
     return (
       <Menu compact className="taas-pagination-menu" color="grey" size="mini">
-        <Menu.Item onClick={this.firstPage}>{startsFrom} &laquo;</Menu.Item>
+        <Menu.Item onClick={this.firstPage}>
+          {startsFrom}
+          &nbsp;&laquo;
+        </Menu.Item>
         <Menu.Item onClick={this.prevPage}>&lsaquo;</Menu.Item>
         <Form>
           <Input
@@ -104,7 +130,10 @@ class PDFMenu extends Component {
           />
         </Form>
         <Menu.Item onClick={this.nextPage}>&rsaquo;</Menu.Item>
-        <Menu.Item onClick={this.lastPage}>&raquo; {numPages + startsFrom + -1}</Menu.Item>
+        <Menu.Item onClick={this.lastPage}>
+          &raquo;&nbsp;
+          {numPages + startsFrom + -1}
+        </Menu.Item>
       </Menu>
     );
   }

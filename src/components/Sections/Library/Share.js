@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Message, Popup, } from 'semantic-ui-react';
 
@@ -15,7 +16,7 @@ class LibraryShare extends Component {
 
   static defaultProps = {
     isMobile: false
-  }
+  };
 
   state = {
     isPopupOpen: false,
@@ -76,7 +77,7 @@ class LibraryShare extends Component {
         onOpen={() => this.handlePopup(true)}
       >
         <Popup.Content>
-          <ShareBar url={url} t={t} buttonSize={buttonSize} messageTitle={t('sources-library.share-title')} />
+          <ShareBar url={url} buttonSize={buttonSize} messageTitle={t('sources-library.share-title')} />
           <Message content={url} size="mini" />
           <Popup // link was copied message popup
             open={isCopyOpen}
@@ -94,4 +95,4 @@ class LibraryShare extends Component {
   }
 }
 
-export default LibraryShare;
+export default withNamespaces()(LibraryShare);

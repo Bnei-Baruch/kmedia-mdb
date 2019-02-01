@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Menu } from 'semantic-ui-react';
 
 import { actions } from '../../../redux/modules/publications';
@@ -92,4 +92,4 @@ const mapDispatch = dispatch => (
   }, dispatch)
 );
 
-export default connect(null, mapDispatch)(translate()(MainPage));
+export default connect(null, mapDispatch)(withNamespaces()(MainPage));

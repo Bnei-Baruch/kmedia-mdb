@@ -14,17 +14,15 @@ export const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
   const clips     = breakdown.getClips();
 
-  const relatedItems = clips.map(x =>
-    (
-      <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-        {x.name || NO_NAME}
-      </List.Item>
-    )
+  const relatedItems = clips.map(x => (
+    <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
+      {x.name || NO_NAME}
+    </List.Item>)
   ).concat(breakdown.getAllButClips().map(x => (
     <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
       {x.name}
-    </List.Item>
-  )));
+    </List.Item>)
+  ));
 
   let filmDate = '';
   if (unit.film_date) {
@@ -51,10 +49,10 @@ export const renderUnit = (unit, t) => {
           {unit.name || NO_NAME}
         </Link>
         {
-          unit.description ?
+          unit.description ? (
             <div className="index__description mobile-hidden">
               {ellipsize(unit.description)}
-            </div>
+            </div>)
             : null
         }
         <List horizontal divided link className="index__collections" size="tiny">

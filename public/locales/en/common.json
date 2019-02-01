@@ -115,7 +115,8 @@
       "edit-back": "Back to play",
       "start-position": "Start",
       "end-position": "End",
-      "click-to-set": "Click to set"
+      "click-to-set": "Click to set",
+      "tap-to-unmute": "TAP TO UNMUTE"
     },
     "share": {
       "title": "watch this video"
@@ -138,7 +139,7 @@
     "unknown": "Unknown",
     "unsupported-media-format": "Unsupported format.",
     "error-loading-file": "Error loading file.",
-    "fallback-language": "Media not found for selected language, selected fallback language.",
+    "fallback-language": "Content does not exist in the requested language, a default language has been selected.",
     "fallback-to-audio": "Video was not found, using audio.",
     "fallback-to-video": "Audio was not found, using video.",
     "source-content-not-found": "Source contents wasn't found",
@@ -196,8 +197,8 @@
     "last-lesson": "The Latest Daily Lesson",
     "donate": "DONATE NOW",
     "promoted": {
-      "header": "Virtual Convention",
-      "subheader": "15-16.12.2018"
+      "header": "Quick and easy download of files",
+      "subheader": ""
     }
   },
   "events": {
@@ -408,7 +409,9 @@
     "header": {
       "text": "Topics",
       "subtext": "A collection of all items for a selected topic."
-    }
+    },
+    "show-more": "Show more",
+    "show-less": "Show less"
   },
   "media-downloads": {
     "title": "Media Downloads",

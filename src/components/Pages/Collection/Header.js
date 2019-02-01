@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
 import { assetUrl } from '../../../helpers/Api';
@@ -54,4 +55,4 @@ class CollectionPageHeader extends PureComponent {
   }
 }
 
-export default CollectionPageHeader;
+export default withNamespaces()(CollectionPageHeader);

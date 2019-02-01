@@ -1,9 +1,10 @@
 import React from 'react';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Flag } from 'semantic-ui-react';
 
 import { LANGUAGES } from '../../../helpers/consts';
 import BaseLanguageSelector from './BaseLanguageSelector';
+import Link from '../MultiLanguageLink';
 
 class AnchorsLanguageSelector extends BaseLanguageSelector {
   handleSelect = (e, lang) => {
@@ -18,14 +19,13 @@ class AnchorsLanguageSelector extends BaseLanguageSelector {
       <div className="anchors-language-selector">
         {
           options.map(x => (
-            <a
+            <Link
               key={x.value}
-              href=""
               title={x.text}
               onClick={e => this.handleSelect(e, x.value)}
             >
               <Flag name={LANGUAGES[x.value].flag} />
-            </a>
+            </Link>
           ))
         }
       </div>
@@ -33,4 +33,4 @@ class AnchorsLanguageSelector extends BaseLanguageSelector {
   }
 }
 
-export default translate()(AnchorsLanguageSelector);
+export default withNamespaces()(AnchorsLanguageSelector);

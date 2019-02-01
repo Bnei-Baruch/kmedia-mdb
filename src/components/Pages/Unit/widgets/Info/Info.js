@@ -1,17 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
-import {
-  // CT_CHILDREN_LESSON,
-  CT_DAILY_LESSON,
-  CT_LECTURE,
-  CT_LESSON_PART,
-  CT_SPECIAL_LESSON,
-  CT_VIRTUAL_LESSON,
-  CT_WOMEN_LESSON
-} from '../../../../../helpers/consts';
+import { CT_DAILY_LESSON, CT_LECTURE, CT_LESSON_PART, CT_SPECIAL_LESSON, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
 import { intersperse, tracePath } from '../../../../../helpers/utils';
 import { stringify as urlSearchStringify } from '../../../../../helpers/url';
@@ -138,8 +131,8 @@ class Info extends Component {
         case CT_DAILY_LESSON:
         case CT_SPECIAL_LESSON: {
           const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
-          const fd = t('values.date', { date: x.film_date });
-          display  = `${ctLabel} ${fd}`;
+          const fd      = t('values.date', { date: x.film_date });
+          display       = `${ctLabel} ${fd}`;
           break;
         }
         default:
@@ -161,28 +154,31 @@ class Info extends Component {
         </Header>
         <List>
           {
-            tagLinks.length === 0 ?
-              null :
-              <List.Item className="unit-info__topics">
-                <strong>{t('pages.unit.info.topics')}:</strong>
-                &nbsp;{tagLinks}
-              </List.Item>
+            tagLinks.length === 0
+              ? null
+              : (
+                <List.Item className="unit-info__topics">
+                  <strong>{t('pages.unit.info.topics')}:</strong>
+                  &nbsp;{tagLinks}
+                </List.Item>)
           }
           {
-            sourcesLinks.length === 0 ?
-              null :
-              <List.Item className="unit-info__sources">
-                <strong>{t('pages.unit.info.sources')}:</strong>
-                &nbsp;{sourcesLinks}
-              </List.Item>
+            sourcesLinks.length === 0
+              ? null
+              : (
+                <List.Item className="unit-info__sources">
+                  <strong>{t('pages.unit.info.sources')}:</strong>
+                  &nbsp;{sourcesLinks}
+                </List.Item>)
           }
           {
-            collectionsLinks.length === 0 ?
-              null :
-              <List.Item className="unit-info__collections">
-                <strong>{t('pages.unit.info.collections')}:</strong>
-                &nbsp;{collectionsLinks}
-              </List.Item>
+            collectionsLinks.length === 0
+              ? null
+              : (
+                <List.Item className="unit-info__collections">
+                  <strong>{t('pages.unit.info.collections')}:</strong>
+                  &nbsp;{collectionsLinks}
+                </List.Item>)
           }
         </List>
       </div>
@@ -195,4 +191,4 @@ export default connect(
     getSourceById: sourcesSelectors.getSourceById(state.sources),
     getTagById: tagsSelectors.getTagById(state.tags),
   })
-)(Info);
+)(withNamespaces()(Info));

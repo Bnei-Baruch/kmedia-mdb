@@ -4,10 +4,11 @@ import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
+import isEqual from 'react-fast-compare';
 
 import { getQuery, updateQuery } from '../../../helpers/url';
-import { equal, isEmpty } from '../../../helpers/utils';
+import { isEmpty } from '../../../helpers/utils';
 import { selectors as device } from '../../../redux/modules/device';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -39,27 +40,30 @@ class SimpleModeContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      filesLanguage: this.props.contentLanguage,
+      filesLanguage: props.contentLanguage,
       isMobileDevice: this.isMobileDevice(),
-      blinkLangSelect: false
+      blinkLangSelect: false,
     };
   }
 
   componentDidMount() {
-    const query = getQuery(this.props.location);
-    const date  = (query.date && moment(query.date).isValid()) ? moment(query.date, 'YYYY-MM-DD').toDate() : new Date();
+    const { state, props } = this;
+    const query            = getQuery(props.location);
+    const date             = (query.date && moment(query.date).isValid()) ? moment(query.date, 'YYYY-MM-DD').toDate() : new Date();
 
-    if (!this.state.date || !moment(date).isSame(this.state.date, 'day')) {
+    if (!state.date || !moment(date).isSame(state.date, 'day')) {
       this.handleDayClick(date);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.filesLanguage !== nextProps.contentLanguage) {
+    const { state, props } = this;
+
+    if (state.filesLanguage !== nextProps.contentLanguage) {
       this.setState({ filesLanguage: nextProps.contentLanguage });
     }
-    if (this.props.uiLanguage !== nextProps.uiLanguage) {
-      this.handleDayClick(this.state.date, {}, nextProps);
+    if (props.uiLanguage !== nextProps.uiLanguage) {
+      this.handleDayClick(state.date, {}, nextProps);
     }
   }
 
@@ -69,11 +73,11 @@ class SimpleModeContainer extends Component {
     const { props, state }                                  = this;
 
     return !(
-      uiLanguage === props.uiLanguage &&
-      filesLanguage === state.filesLanguage &&
-      contentLanguage === state.filesLanguage &&
-      equal(wip, props.wip) && equal(err, props.err) &&
-      equal(items, props.items)
+      uiLanguage === props.uiLanguage
+      && filesLanguage === state.filesLanguage
+      && contentLanguage === state.filesLanguage
+      && isEqual(wip, props.wip) && isEqual(err, props.err)
+      && isEqual(items, props.items)
     );
   }
 
@@ -84,6 +88,8 @@ class SimpleModeContainer extends Component {
   };
 
   handleDayClick = (selectedDate, { disabled } = {}, nextProps = {}) => {
+    const { props } = this;
+
     if (disabled) {
       return;
     }
@@ -91,16 +97,19 @@ class SimpleModeContainer extends Component {
     this.setState({ date: selectedDate });
 
     const date     = moment(selectedDate).format('YYYY-MM-DD');
-    const language = nextProps.uiLanguage || this.props.uiLanguage;
-    this.props.fetchForDate({ date, language });
-    updateQuery(this.props.history, query => ({
+    const language = nextProps.uiLanguage || props.uiLanguage;
+    props.fetchForDate({ date, language });
+    updateQuery(props.history, query => ({
       ...query,
       date
     }));
   };
 
-  isMobileDevice = () =>
-    this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
+  isMobileDevice = () => {
+    const { props: { deviceInfo: { device: dev } } } = this;
+
+    return dev && dev.type === 'mobile';
+  };
 
   helpChooseLang = () => {
     this.setState({ blinkLangSelect: true });
@@ -109,21 +118,21 @@ class SimpleModeContainer extends Component {
   };
 
   renderUnitOrCollection = (item, language, t) => (
-    isEmpty(item.content_units) ?
-      groupOtherMediaByType(item, language, t, this.helpChooseLang) :
-      renderCollection(item, language, t, this.helpChooseLang));
+    isEmpty(item.content_units)
+      ? groupOtherMediaByType(item, language, t, this.helpChooseLang)
+      : renderCollection(item, language, t, this.helpChooseLang));
 
   render() {
-    const { filesLanguage, isMobileDevice, blinkLangSelect } = this.state;
-    const pageProps                                          = {
+    const { filesLanguage: language, isMobileDevice: isMobile, blinkLangSelect, date: selectedDate } = this.state;
+    const pageProps                                                                                  = {
       ...this.props,
-      selectedDate: this.state.date,
-      language: filesLanguage,
+      selectedDate,
+      language,
       renderUnit: this.renderUnitOrCollection,
       onDayClick: this.handleDayClick,
       onLanguageChange: this.handleLanguageChanged,
-      blinkLangSelect: blinkLangSelect,
-      isMobile: isMobileDevice
+      blinkLangSelect,
+      isMobile,
     };
 
     return <Page {...pageProps} />;
@@ -152,4 +161,4 @@ export const mapDispatch = dispatch => (
   }, dispatch)
 );
 
-export default withRouter(connect(mapState, mapDispatch)(translate()(SimpleModeContainer)));
+export default withRouter(connect(mapState, mapDispatch)(withNamespaces()(SimpleModeContainer)));

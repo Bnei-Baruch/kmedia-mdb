@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Image, List } from 'semantic-ui-react';
 
 import DailyLessonsIcon from '../../../images/icons/dailylessons.svg';
@@ -24,29 +24,31 @@ class SimpleModeList extends PureComponent {
     return (
       <div>
         {
-          items.lessons.length ?
-            <div>
-              <h2>
-                <Image className="simple-mode-type-icon" src={DailyLessonsIcon} />
-                {t('simple-mode.today-lessons')}
-              </h2>
-              <List size="large">
-                {items.lessons.map(x => renderUnit(x, language, t))}
-              </List>
-            </div> :
-            null
+          items.lessons.length
+            ? (
+              <div>
+                <h2>
+                  <Image className="simple-mode-type-icon" src={DailyLessonsIcon} />
+                  {t('simple-mode.today-lessons')}
+                </h2>
+                <List size="large">
+                  {items.lessons.map(x => renderUnit(x, language, t))}
+                </List>
+              </div>)
+            : null
         }
 
         {
-          items.others.length ?
-            <List size="large">
-              {renderUnit(items.others, language, t)}
-            </List> :
-            null
+          items.others.length
+            ? (
+              <List size="large">
+                {renderUnit(items.others, language, t)}
+              </List>)
+            : null
         }
       </div>
     );
   }
 }
 
-export default translate()(SimpleModeList);
+export default withNamespaces()(SimpleModeList);
