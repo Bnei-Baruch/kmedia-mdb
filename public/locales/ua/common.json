@@ -88,7 +88,7 @@
       "events": "Конгреси, події",
       "publications": "Публікації",
       "sources": "Першоджерела",
-      "all":"Все",
+      "all": "Все",
       "posts": "Блог"
     }
   },
@@ -114,7 +114,8 @@
       "edit-back": "Назад",
       "start-position": "Початок",
       "end-position": "Кінець",
-      "click-to-set": "Натискай"
+      "click-to-set": "Натискай",
+      "tap-to-unmute": "Увімкніть звук"
     },
     "share": {
       "title": "Переглянь це відео"
@@ -137,7 +138,7 @@
     "unknown": "Невідома",
     "unsupported-media-format": "Непідтримуваний формат.",
     "error-loading-file": "Помилка при завантаженні файлу.",
-    "fallback-language": "Медіа українською мовою не знайдено, вибрана резервна мова.",
+    "fallback-language": "Вміст не існує в запитній мові, мова вибрана за замовчуванням.",
     "fallback-to-audio": "Відео не знайдено, використовується аудіо.",
     "fallback-to-video": "Аудіо не знайдено, використовується відео.",
     "source-content-not-found": "Першоджерело не знайдене",
@@ -398,7 +399,9 @@
     "header": {
       "text": "Теми",
       "subtext": "A collection of all items for a selected topic."
-    }
+    },
+    "show-more": "Показати більше",
+    "show-less": "Показати менше"
   },
   "media-downloads": {
     "title": "Скачати",

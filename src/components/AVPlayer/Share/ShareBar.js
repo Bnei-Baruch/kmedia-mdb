@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
+import { Button, Popup } from 'semantic-ui-react';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 import {
   EmailIcon,
@@ -19,18 +21,25 @@ import {
   WhatsappShareButton,
 } from 'react-share';
 
+const POPOVER_CONFIRMATION_TIMEOUT = 2500;
+
 class ShareBar extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     url: PropTypes.string,
+    embedContent: PropTypes.string,
     buttonSize: PropTypes.string,
-    messageTitle: PropTypes.string
+    messageTitle: PropTypes.string,
   };
 
   static defaultProps = {
     url: '',
     buttonSize: 'big',
     messageTitle: '',
+  };
+
+  state = {
+    isEmbedPopupOpen: false
   };
 
   getBsPixels = (buttonSize) => {
@@ -44,8 +53,23 @@ class ShareBar extends Component {
     }
   };
 
+  clearEmbedTimeout = () => {
+    if (this.embedTimeout) {
+      clearTimeout(this.embedTimeout);
+      this.embedTimeout = null;
+    }
+  };
+
+  handleEmbedCopied = () => {
+    this.clearEmbedTimeout();
+    this.setState({ isEmbedPopupOpen: true }, () => {
+      this.embedTimeout = setTimeout(() => this.setState({ isEmbedPopupOpen: false }), POPOVER_CONFIRMATION_TIMEOUT);
+    });
+  };
+
   render() {
-    const { url, buttonSize, t, messageTitle } = this.props;
+    const { url, buttonSize, messageTitle, embedContent, t } = this.props;
+    const { isEmbedPopupOpen }                               = this.state;
 
     if (!url) {
       return null;
@@ -78,6 +102,21 @@ class ShareBar extends Component {
         <EmailShareButton url={url} subject={title} body={url}>
           <EmailIcon size={bsPixels} round />
         </EmailShareButton>
+
+        {embedContent
+          ? (
+            <Popup
+              open={isEmbedPopupOpen}
+              content={t('messages.link-copied-to-clipboard')}
+              position="bottom right"
+              trigger={(
+                <CopyToClipboard text={embedContent} onCopy={this.handleEmbedCopied}>
+                  <Button icon="code" size="big" circular className="embed-share-button" />
+                </CopyToClipboard>
+              )}
+            />
+          )
+          : null}
       </div>
     );
   }

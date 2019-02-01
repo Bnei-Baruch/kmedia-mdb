@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { Button, Header, Image, Table } from 'semantic-ui-react';
+import { Button, Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
-import { sectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
 import { stringify as urlSearchStringify } from '../../../helpers/url';
 import { filtersTransformer } from '../../../filters/index';
@@ -29,8 +28,8 @@ class TopN extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.units !== nextProps.units ||
-      this.props.N !== nextProps.N) {
+    if (this.props.units !== nextProps.units
+      || this.props.N !== nextProps.N) {
       this.getTopNUnits(nextProps);
     }
   }
@@ -42,9 +41,9 @@ class TopN extends React.PureComponent {
     if (Array.isArray(units)) {
       units.sort(this.compareUnits);
 
-      topNUnits = units.length > N ?
-        units.slice(0, N) :
-        units;
+      topNUnits = units.length > N
+        ? units.slice(0, N)
+        : units;
     }
 
     this.setState({ topNUnits });
@@ -90,9 +89,9 @@ class TopN extends React.PureComponent {
   };
 
   render() {
-    const { section, t } = this.props;
-    const { topNUnits }  = this.state;
-    const url            = this.getTopicUrl();
+    const { t }         = this.props;
+    const { topNUnits } = this.state;
+    const url           = this.getTopicUrl();
 
     return (
       Array.isArray(topNUnits) && topNUnits.length > 0
@@ -101,9 +100,15 @@ class TopN extends React.PureComponent {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>
-                  <Header as="h3">
-                    <Image src={sectionLogo[section]} /> {t(`nav.sidebar.${section}`)}
-                  </Header>
+                  <Button primary>
+                    {/* eslint-disable-next-line */}
+                    <Link
+                      className="buttonLink"  // "donate-button"
+                      to={url}
+                    >
+                      {t('buttons.view-all')}
+                    </Link>
+                  </Button>
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Header>
@@ -118,10 +123,12 @@ class TopN extends React.PureComponent {
                       <Button primary size="tiny" href={url}>{t('buttons.view-all')}</Button>
                     </Table.HeaderCell>
                   </Table.Row>
-                </Table.Footer>)
+                </Table.Footer>
+              )
               : null
             }
-          </Table>)
+          </Table>
+        )
         : null
     );
   }

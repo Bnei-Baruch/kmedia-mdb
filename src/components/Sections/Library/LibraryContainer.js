@@ -136,11 +136,17 @@ class LibraryContainer extends Component {
     // Go to the root of this sourceId
     const { getPathByID } = this.props;
 
-    if (getPathByID === undefined) {
+    if (!getPathByID) {
       return [{ id: '0' }, { id: sourceId }];
     }
 
-    return getPathByID(sourceId);
+    const path = getPathByID(sourceId);
+
+    if (!path || path.length < 2 || !path[1]) {
+      return [{ id: '0' }, { id: sourceId }];
+    }
+
+    return path;
   };
 
   isMobileDevice = () => {
@@ -220,20 +226,31 @@ class LibraryContainer extends Component {
     fetchIndex(sourceId);
   };
 
-  header = (sourceId, fullPath) => {
+  header = (sourceId, properParentId) => {
     const { getSourceById } = this.props;
 
-    const { name: sourceName }                                   = getSourceById(sourceId);
-    const { name: parentName, description, parent_id: parentId } = getSourceById(this.properParentId(fullPath));
-    if (parentId === undefined) {
+    const source = getSourceById(sourceId);
+    const properParentSource = getSourceById(properParentId);
+
+    if (!source || !properParentSource){
       return <div />;
     }
-    const { name: kabName, full_name: kabFullName } = getSourceById(parentId);
+    
+    const { name: parentName, description, parent_id: parentId } = properParentSource;
+    const parentSource = getSourceById(parentId);
+
+    if (!parentSource) {
+      return <div />;
+    }
+
+    const { name: sourceName }                      = source;
+    const { name: kabName, full_name: kabFullName } = parentSource;
 
     let displayName = kabFullName || kabName;
     if (kabFullName && kabName) {
       displayName += ` (${kabName})`;
     }
+    
     const { contentHeaderWidth, } = this.state;
     return (
       <Header size="small">
@@ -401,7 +418,7 @@ class LibraryContainer extends Component {
                   </div>
                 </Grid.Column>
                 <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
-                  <div className="source__header-title">{this.header(sourceId, fullPath)}</div>
+                  <div className="source__header-title">{this.header(sourceId, parentId)}</div>
                   <div className="source__header-toolbar">
                     <Button compact size="small" className="mobile-hidden" icon="print" onClick={this.print} />
                     <div id="download-button" />

@@ -31,5 +31,7 @@ export default class MediaHelper {
 
   static IsMp3      = and(MediaHelper.IsAudio, makeMimeTypePredicate('audio/mp3', 'audio/mpeg'));
 
-  static IsHtml      = and(MediaHelper.IsText, makeMimeTypePredicate('text/html'));
+  static IsHtml     = and(MediaHelper.IsText, makeMimeTypePredicate('text/html'));
+  static IsWord     = and(MediaHelper.IsText, makeMimeTypePredicate('application/msword'));
+  static IsPDF      = and(MediaHelper.IsText, makeMimeTypePredicate('application/pdf'));
 }

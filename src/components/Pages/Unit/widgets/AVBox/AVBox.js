@@ -38,7 +38,10 @@ class AVBox extends Component {
     const mediaType                                                = playerHelper.getMediaTypeFromQuery(location, preferredMT);
     const playerLanguage                                           = playerHelper.getLanguageFromQuery(location, contentLanguage);
     const playableItem                                             = AVBox.getPlayableItem(unit, mediaType, playerLanguage, uiLanguage);
-    this.state                                                     = { playableItem };
+    this.state                                                     = {
+      playableItem,
+      autoPlay: true,
+    };
     playerHelper.setLanguageInQuery(history, playerLanguage);
   }
 
@@ -56,11 +59,13 @@ class AVBox extends Component {
     this.setState({ playableItem: item });
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
     const { unit, uiLanguage, contentLanguage, location }                                                          = nextProps;
     const { unit: oldUnit, uiLanguage: oldUiLanguage, contentLanguage: oldContentLanguage, location: oldLocation } = this.props;
     const { playableItem }                                                                                         = this.state;
     const { language: playerLanguage }                                                                             = playableItem;
+    const { mediaEditMode }                                                                                        = nextState;
+    const { oldMediaEditMode }                                                                                     = this.state;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();
     const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);
@@ -73,6 +78,7 @@ class AVBox extends Component {
       && oldContentLanguage === contentLanguage
       && prevMediaType === newMediaType
       && newItemLanguage === playerLanguage
+      && oldMediaEditMode === mediaEditMode
       && isEqual(unit, oldUnit));
   }
 
@@ -98,13 +104,11 @@ class AVBox extends Component {
     playerHelper.setLanguageInQuery(history, language);
   };
 
-  handleMediaEditModeChange = (mediaEditMode) => {
-    this.setState({ mediaEditMode });
-  };
+  handleMediaEditModeChange = mediaEditMode => this.setState({ mediaEditMode });
 
   render() {
-    const { t, autoPlayAllowed }          = this.props;
-    const { playableItem, mediaEditMode } = this.state;
+    const { t, autoPlayAllowed, uiLanguage, contentLanguage } = this.props;
+    const { playableItem, mediaEditMode, autoPlay } = this.state;
 
     if (isEmpty(playableItem)) {
       return (<div>{t('messages.no-playable-files')}</div>);
@@ -127,11 +131,14 @@ class AVBox extends Component {
             <div className="avbox__media-wrapper">
               <Media>
                 <AVMobileCheck
+                  autoPlay={autoPlay}
                   item={playableItem}
                   preImageUrl={playableItem.preImageUrl}
                   onSwitchAV={this.handleSwitchAV}
                   languages={playableItem.availableLanguages}
-                  language={playableItem.language}
+                  uiLanguage={uiLanguage}
+                  selectedLanguage={playableItem.language}
+                  requestedLanguage={contentLanguage}
                   onLanguageChange={this.handleChangeLanguage}
                   onMediaEditModeChange={this.handleMediaEditModeChange}
                 />

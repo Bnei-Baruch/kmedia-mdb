@@ -11,12 +11,17 @@ class AVAudioVideo extends Component {
     onSwitch: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
     fallbackMedia: PropTypes.bool.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
   };
 
-  handleSwitch = () => {
-    const { onSwitch } = this.props;
-    onSwitch();
-  };
+  state = {};
+
+  componentWillReceiveProps() {
+    const { fallbackMedia } = this.props;
+    this.handleFallbackMedia(fallbackMedia);
+  }
+
+  handleSwitch = () => this.props.onSwitch();
 
   handleBtnRef = (ref) => {
     if (ref) {
@@ -28,22 +33,36 @@ class AVAudioVideo extends Component {
     }
   };
 
-  render() {
-    const { isAudio, isVideo, t, fallbackMedia } = this.props;
+  setAudioVideoContainerRef = audioVideoContainerRef => this.setState({ audioVideoContainerRef });
 
-    const popup = !fallbackMedia ? null : (
-      <TimedPopup
-        openOnInit
-        message={isAudio ? t('messages.fallback-to-audio') : t('messages.fallback-to-video')}
-        downward={false}
-        timeout={7000}
-      />
-    );
+  handleFallbackMedia = (fallbackMedia) => {
+    const { didShowFallbackMediaPopup } = this.state;
+    if (didShowFallbackMediaPopup) {
+      this.setState({ openPopup: false });
+      return;
+    }
+
+    this.setState({
+      didShowFallbackMediaPopup: !!fallbackMedia,
+      openPopup: !!fallbackMedia
+    });
+  };
+
+  render() {
+    const { isAudio, isVideo, t, uiLanguage }   = this.props;
+    const { audioVideoContainerRef, openPopup } = this.state;
 
     return (
-      <div className="mediaplayer_audiovideo">
-        {popup}
-        <button ref={this.handleBtnRef} type="button">
+      <div ref={this.setAudioVideoContainerRef} className="mediaplayer__audiovideo">
+        <TimedPopup
+          openOnInit={openPopup}
+          message={isAudio ? t('messages.fallback-to-audio') : t('messages.fallback-to-video')}
+          downward={false}
+          timeout={7000}
+          language={uiLanguage}
+          refElement={audioVideoContainerRef}
+        />
+        <button ref={this.handleBtnRef}>
           <span className={isAudio ? 'is-active' : ''}>{t('buttons.audio')}</span>
           &nbsp;/&nbsp;
           <span className={isVideo ? 'is-active' : ''}>{t('buttons.video')}</span>

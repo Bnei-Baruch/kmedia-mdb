@@ -405,6 +405,9 @@ export const articleCUPage = (store, match) => {
       const uiLang = settingsSelectors.getLanguage(state.settings);
 
       const unit      = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
+      if (!unit) {
+        return;
+      }
       const textFiles = (unit.files || []).filter(x => MediaHelper.IsText(x) && !MediaHelper.IsHtml(x));
       const languages = uniq(textFiles.map(x => x.language));
       if (languages.length > 0) {
