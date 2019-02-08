@@ -1,4 +1,5 @@
-import { MT_AUDIO, MT_TEXT, MT_VIDEO } from './consts';
+/* eslint-disable lines-between-class-members */
+import { MT_AUDIO, MT_TEXT, MT_VIDEO, MT_IMAGE } from './consts';
 
 function makeMediaTypePredicate(...args) {
   return function predicate(file) {
@@ -21,9 +22,10 @@ function and(...args) {
 export default class MediaHelper {
   static IsVideo      = makeMediaTypePredicate(MT_VIDEO);
   static IsAudio      = makeMediaTypePredicate(MT_AUDIO);
-  static IsText       = makeMediaTypePredicate(MT_TEXT);
-  static IsImage      = makeMediaTypePredicate(MT_TEXT);
   static IsAudioVideo = makeMediaTypePredicate(MT_AUDIO, MT_VIDEO);
+
+  static IsText       = makeMediaTypePredicate(MT_TEXT);
+  static IsImage      = makeMediaTypePredicate(MT_IMAGE);
 
   static IsMp4      = and(MediaHelper.IsVideo, makeMimeTypePredicate('video/mp4'));
   static IsWmv      = and(MediaHelper.IsVideo, makeMimeTypePredicate('video/x-ms-wmv'));
