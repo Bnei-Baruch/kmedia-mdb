@@ -42,17 +42,17 @@ class Layout extends Component {
 
   showSearchButtonElement = createRef();
 
+  componentWillMount() {
+    const { location } = this.props;
+    this.setState({ embed: playerHelper.getEmbedFromQuery(location) });
+  }
+
   componentDidMount() {
-    document.addEventListener('click', this.clickOutside, true);    
+    document.addEventListener('click', this.clickOutside, true);
   }
 
   componentWillUnmount() {
     document.removeEventListener('click', this.clickOutside, true);
-  }
-
-  componentWillMount() {
-    const {location } = this.props;
-    this.setState( { embed: playerHelper.getEmbedFromQuery(location) } );
   }
 
   // i.e, main, header of footer.
@@ -115,7 +115,8 @@ class Layout extends Component {
         <Segment color="blue" inverted>
           <WrappedOmniBox t={t} location={location} />
         </Segment>
-      </div>);
+      </div>
+    );
   };
 
   render() {
@@ -126,7 +127,7 @@ class Layout extends Component {
 
     let sideBarIcon = <Icon name="sidebar" />;
     if (sidebarActive) {
-      sideBarIcon = <Icon size="large" name="x" />;  
+      sideBarIcon = <Icon size="large" name="x" />;
     }
 
     return !embed ? (
@@ -221,9 +222,9 @@ class Layout extends Component {
         </div>
       </div>
     ) : (
-        <div>
-          {renderRoutes(route.routes)}
-        </div>    
+      <div>
+        {renderRoutes(route.routes)}
+      </div>
     );
   }
 }
