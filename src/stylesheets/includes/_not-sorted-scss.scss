@@ -1305,8 +1305,8 @@
   position: fixed !important;
   right: 0;
   top: 45px;
-  z-index: 1;
-  padding: 0;
+  z-index: 2000;
+  margin: 0 !important;
 }
 
 .no-padding{

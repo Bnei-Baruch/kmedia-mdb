@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
-import { Button, Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
+import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
 import playerHelper from '../../helpers/player';
@@ -41,6 +41,8 @@ class Layout extends Component {
   menuButtonElement2 = createRef();
 
   showSearchButtonElement = createRef();
+
+  headerSearchElement = createRef();
 
   componentDidMount() {
     document.addEventListener('click', this.clickOutside, true);
@@ -80,7 +82,7 @@ class Layout extends Component {
       return false;
     }
 
-    if (this.headerSearchElement && this.headerSearchElement.contains(e.target)) {
+    if (this.headerSearchElement && this.headerSearchElement.current.contains(e.target)) {
       return false;
     }
 
@@ -143,16 +145,12 @@ class Layout extends Component {
 
     const { t, location } = this.props;
     return (
-      <div
-        className="header_search"
-        ref={(el) => {
-          this.headerSearchElement = el;
-        }}
-      >
-        <Segment color="blue" inverted>
+      <Ref innerRef={this.headerSearchElement}>
+        <Segment color="blue" inverted className="header_search">
           <WrappedOmniBox t={t} location={location} />
         </Segment>
-      </div>);
+      </Ref>
+    );
   };
 
   render() {
@@ -210,18 +208,14 @@ class Layout extends Component {
                 />
               </Menu.Item>
               {
-
                 showSearch && this.isMobileDevice()
                   ? (
                     <Ref innerRef={this.showSearchButtonElement}>
-                      <Menu.Item as="a" position="right" ref={(el) => {
-                        if (!this.showSearchButtonElement) {
-                          this.showSearchButtonElement = ReactDOM.findDOMNode(el);
-                        }
-                      }}>
+                      <Menu.Item as="a" position="right">
                         <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
                       </Menu.Item>
-                    </Ref>)
+                    </Ref>
+                  )
                   : null
               }
               <Menu.Item position="right" className="mobile-hidden">
