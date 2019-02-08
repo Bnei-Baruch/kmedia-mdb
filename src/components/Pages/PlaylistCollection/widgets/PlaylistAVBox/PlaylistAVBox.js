@@ -108,7 +108,8 @@ class PlaylistAVBox extends Component {
         collection: oldCollection,
         uiLanguage: oldUiLanguage,
         contentLanguage: oldContentLanguage,
-        location: oldLocation
+        location: oldLocation,
+        prevLink: oldPrevLink,
       }                                = this.props;
     const { playlist }                 = this.state;
     const { language: playerLanguage } = playlist;
@@ -126,8 +127,8 @@ class PlaylistAVBox extends Component {
       && prevMediaType === newMediaType
       && prevActivePart === newActivePart
       && newItemLanguage === playerLanguage
-      && isEqual(collection, oldCollection)
       && prevLink === oldPrevLink
+      && isEqual(collection, oldCollection)
     );
   }
 
