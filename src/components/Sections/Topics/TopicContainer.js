@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
-import { Button, Container, Divider, Grid, Header, Input, List } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
+import { Button, Container, Divider, Grid, Header, Input, List } from 'semantic-ui-react';
 
 import { actions as topicsActions, selectors as topicsSelectors } from '../../../redux/modules/tags';
 import { selectors as statsSelectors } from '../../../redux/modules/stats';
