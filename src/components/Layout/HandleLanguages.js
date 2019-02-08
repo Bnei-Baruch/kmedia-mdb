@@ -26,6 +26,12 @@ class HandleLanguages extends Component {
 
   handlePopupOpen = () => this.setState({ isActive: true });
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.language !== this.props.language) {
+      this.handlePopupClose();
+    }
+  }
+
   render() {
     const { t, language, location, contentLanguage, setContentLanguage, isMobileDevice } = this.props;
     const { isActive }                                                                   = this.state;
@@ -44,9 +50,9 @@ class HandleLanguages extends Component {
         </span>);
     return (
       <Popup
+        id="handleLanguagesPopup"
         key="handleLangs"
         flowing
-        hideOnScroll
         position="bottom right"
         trigger={(
           <Menu.Item onClick={this.handlePopupOpen} className="padding_r_l_0">

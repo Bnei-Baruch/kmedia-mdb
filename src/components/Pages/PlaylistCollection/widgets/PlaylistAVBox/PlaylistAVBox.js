@@ -101,14 +101,15 @@ class PlaylistAVBox extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { collection, uiLanguage, contentLanguage, location } = nextProps;
+    const { collection, uiLanguage, contentLanguage, location, prevLink } = nextProps;
 
     const
       {
         collection: oldCollection,
         uiLanguage: oldUiLanguage,
         contentLanguage: oldContentLanguage,
-        location: oldLocation
+        location: oldLocation,
+        prevLink: oldPrevLink,
       }                                = this.props;
     const { playlist }                 = this.state;
     const { language: playerLanguage } = playlist;
@@ -126,6 +127,7 @@ class PlaylistAVBox extends Component {
       && prevMediaType === newMediaType
       && prevActivePart === newActivePart
       && newItemLanguage === playerLanguage
+      && prevLink === oldPrevLink
       && isEqual(collection, oldCollection)
     );
   }

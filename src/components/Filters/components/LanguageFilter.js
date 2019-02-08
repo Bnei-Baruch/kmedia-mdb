@@ -1,8 +1,8 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import noop from 'lodash/noop';
 import { withNamespaces } from 'react-i18next';
+import noop from 'lodash/noop';
 import { Accordion, Button, Header, Menu, Segment, Flag } from 'semantic-ui-react';
 import { ALL_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
 
@@ -43,7 +43,7 @@ class LanguageFilter extends Component {
   toggleCustom = () => this.setState({ showCustom: !this.state.showCustom });
 
   render() {
-    const { t } = this.props;
+    const { t }      = this.props;
     const { sValue } = this.state;
 
     return (

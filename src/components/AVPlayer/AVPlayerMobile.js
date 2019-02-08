@@ -138,6 +138,7 @@ class AVPlayerMobile extends PureComponent {
   handleMediaRef = (ref) => {
     if (ref) {
       this.media = ref;
+      this.restoreVolume();
       if (this.props.autoPlay) {
         if (this.props.item.mediaType === MT_VIDEO) {
           this.media.muted = true;
@@ -150,8 +151,7 @@ class AVPlayerMobile extends PureComponent {
           this.showControls();
         }
       } else {
-        this.showControls();
-        this.restoreVolume();
+        this.showControls();        
       }
       this.media.addEventListener('play', this.handlePlay);
       this.media.addEventListener('pause', this.handlePause);
@@ -179,18 +179,21 @@ class AVPlayerMobile extends PureComponent {
     this.media.autoplay = true;
   };
 
-  handleVolumeChange = (e) => {
-    const { firstSeek, unMuteButton } = this.state;
+  handleVolumeChange = (e) => {    
+    const { unMuteButton } = this.state;     
+    if (this.media.muted)   
+      return;
     this.persistVolume(e.currentTarget.volume);
-    if (unMuteButton && !firstSeek) {
+    if (unMuteButton) {
       this.setState({ unMuteButton: false });
     }
   };
 
   restoreVolume = () => {
-    const value = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
+    let value = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
     if (value == null || Number.isNaN(value)) {
-      localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, DEFAULT_PLAYER_VOLUME);
+      value = DEFAULT_PLAYER_VOLUME;
+      localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, value);
     }
     this.media.volume = value;
   };
