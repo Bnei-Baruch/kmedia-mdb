@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import countBy from 'lodash/countBy';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
@@ -26,7 +27,8 @@ class LocationsFilter extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.congressEvents !== nextProps.congressEvents) {
+    const { congressEvents } = this.props;
+    if (congressEvents !== nextProps.congressEvents) {
       this.setState({ tree: this.getTree(nextProps) });
     }
   }
@@ -89,4 +91,4 @@ export default connect(
       congressEvents: (cIDs || []).map(x => mdb.getDenormCollection(state.mdb, x)),
     };
   },
-)(LocationsFilter);
+)(withNamespaces()(LocationsFilter));

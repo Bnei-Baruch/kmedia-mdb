@@ -8,11 +8,10 @@ import * as shapes from '../shapes';
 import AVPlayerMobile from './AVPlayerMobile';
 import AVPlayer from './AVPlayer';
 
-const AVMobileCheck = props => (
-  props.autoPlayAllowed ?
-    <AVPlayer {...props} /> :
-    <AVPlayerMobile {...props} />
-);
+const AVMobileCheck = (props) => {
+  const { autoPlayAllowed } = props;
+  return autoPlayAllowed ? <AVPlayer {...props} /> : <AVPlayerMobile {...props} />;
+};
 
 AVMobileCheck.propTypes = {
   deviceInfo: shapes.UserAgentParserResults.isRequired,

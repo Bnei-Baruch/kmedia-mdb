@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import hoistStatics from 'hoist-non-react-statics';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import { getQuery, prefixWithLanguage, stringify } from '../../helpers/url';
 import * as shapes from '../shapes';
@@ -26,7 +26,6 @@ import * as shapes from '../shapes';
 const multiLanguageLinkCreator = () => (WrappedComponent) => {
   class MultiLanguageLinkHOC extends Component {
     static propTypes = {
-      ...Link.propTypes,
       to: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.object

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 
 import * as shapes from '../../../../shapes';
 import { renderBlogItemForHomepage, renderBlogItemForPublications } from './renderFeedHelpers';
@@ -35,4 +36,4 @@ class BlogFeed extends Component {
   }
 }
 
-export default BlogFeed;
+export default withNamespaces()(BlogFeed);

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ImageGallery from 'react-image-gallery';
@@ -209,16 +210,17 @@ class Sketches extends React.Component {
       return (
         <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
           {
-            languages && languages.length > 1 ?
-              <Container fluid textAlign="center">
-                <ButtonsLanguageSelector
-                  languages={languages}
-                  defaultValue={language}
-                  t={t}
-                  onSelect={this.handleLanguageChanged}
-                />
-              </Container> :
-              null
+            languages && languages.length > 1
+              ? (
+                <Container fluid textAlign="center">
+                  <ButtonsLanguageSelector
+                    languages={languages}
+                    defaultValue={language}
+                    onSelect={this.handleLanguageChanged}
+                  />
+                </Container>
+              )
+              : null
           }
           <ImageGallery
             lazyLoad
@@ -253,9 +255,8 @@ const mapState = state => ({
   contentLanguage: settings.getContentLanguage(state.settings),
 });
 
-const mapDispatch = dispatch =>
-  bindActionCreators({
-    unzip: actions.unzip
-  }, dispatch);
+const mapDispatch = dispatch => bindActionCreators({
+  unzip: actions.unzip
+}, dispatch);
 
-export default connect(mapState, mapDispatch)(Sketches);
+export default connect(mapState, mapDispatch)(withNamespaces()(Sketches));

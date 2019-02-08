@@ -18,6 +18,15 @@ class BaseShareForm extends React.Component {
     onSliceChange: noop,
   };
 
+  // eslint-disable-next-line class-methods-use-this
+  static mlsToStrColon(seconds) {
+    const duration = moment.duration({ seconds });
+    const h        = duration.hours();
+    const m        = duration.minutes();
+    const s        = duration.seconds();
+    return h ? `${h}:${m}:${s}` : `${m}:${s}`;
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -38,9 +47,9 @@ class BaseShareForm extends React.Component {
     const { media, onSliceChange } = this.props;
     const duration                 = Math.max(media.duration, 0);
 
-    let start = data && data.value ?
-      this.colonStrToSecond(data.value) :
-      Math.round(media.currentTime);
+    let start = data && data.value
+      ? this.colonStrToSecond(data.value)
+      : Math.round(media.currentTime);
     start     = Math.min(start, duration);
 
     let end = this.state.end || 0;
@@ -60,9 +69,9 @@ class BaseShareForm extends React.Component {
     const { media, onSliceChange } = this.props;
     const duration                 = Math.max(media.duration, 0);
 
-    let end = data && data.value !== undefined ?
-      this.colonStrToSecond(data.value) :
-      Math.round(media.currentTime);
+    let end = data && data.value !== undefined
+      ? this.colonStrToSecond(data.value)
+      : Math.round(media.currentTime);
     end     = Math.min(end, duration);
 
     let start = this.state.start || 0;
@@ -107,15 +116,6 @@ class BaseShareForm extends React.Component {
       .map(t => (t ? parseInt(t, 10) : 0))
       .reverse()
       .reduce((result, t, i) => (result + (t * Math.pow(60, i))), 0); // eslint-disable-line no-restricted-properties
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  mlsToStrColon(seconds) {
-    const duration = moment.duration({ seconds });
-    const h        = duration.hours();
-    const m        = duration.minutes();
-    const s        = duration.seconds();
-    return h ? `${h}:${m}:${s}` : `${m}:${s}`;
   }
 
   render() {

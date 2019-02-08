@@ -1,13 +1,28 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
-import { translate } from 'react-i18next';
-import { List, Container, Header, Divider, Input, Icon } from 'semantic-ui-react';
+import { bindActionCreators } from 'redux';
+import { Button, Container, Divider, Grid, Header, Input, List } from 'semantic-ui-react';
 
-import { selectors } from '../../../redux/modules/tags';
+import { actions as topicsActions, selectors as topicsSelectors } from '../../../redux/modules/tags';
+import { selectors as statsSelectors } from '../../../redux/modules/stats';
+import { getEscapedRegExp, isEmpty } from '../../../helpers/utils';
 import SectionHeader from '../../shared/SectionHeader';
 import Link from '../../Language/MultiLanguageLink';
+import {
+  COLLECTION_EVENTS_TYPE,
+  COLLECTION_LESSONS_TYPE,
+  COLLECTION_PROGRAMS_TYPE,
+  COLLECTION_PUBLICATIONS_TYPE,
+  CT_ARTICLE,
+  CT_PUBLICATION,
+  TOPICS_FOR_DISPLAY,
+  UNIT_EVENTS_TYPE,
+  UNIT_LESSONS_TYPE,
+  UNIT_PROGRAMS_TYPE
+} from '../../../helpers/consts';
 
 /* root will be main title
   subroot will be subtitle
@@ -19,26 +34,67 @@ class TopicContainer extends Component {
     // eslint-disable-next-line
     byId: PropTypes.object,
     t: PropTypes.func.isRequired,
+    stats: PropTypes.objectOf(PropTypes.number),
+    fetchStats: PropTypes.func.isRequired
   };
 
   static defaultProps = {
-    roots: []
+    roots: [],
+    stats: []
   };
 
   state = {
     match: '',
+    expandedNodes: []
   };
 
-  // filter stuff
-
-  getRegExp = (match) => {
-    const escapedMatch = match.replace(/[/)(.+\\]/g, '\\$&');
-    return new RegExp(escapedMatch, 'i');
-  };
+  filteredById = {};
 
   handleFilterChange = debounce((e, data) => {
     this.setState({ match: data.value });
   }, 100);
+
+  componentDidMount() {
+    const { fetchStats } = this.props;
+    const namespace      = 'topics';
+    const contentType    = [
+      ...UNIT_EVENTS_TYPE,
+      ...UNIT_EVENTS_TYPE,
+      ...UNIT_PROGRAMS_TYPE,
+      ...UNIT_LESSONS_TYPE,
+      ...COLLECTION_PUBLICATIONS_TYPE,
+      ...COLLECTION_EVENTS_TYPE,
+      ...COLLECTION_PROGRAMS_TYPE,
+      ...COLLECTION_LESSONS_TYPE,
+      CT_ARTICLE,
+      CT_PUBLICATION,
+    ];
+
+    fetchStats(namespace, contentType);
+  }
+
+  // filter stuff
+  getRegExp = (match) => {
+    const escapedMatch = getEscapedRegExp(match);
+    return new RegExp(escapedMatch, 'i');
+  };
+
+  setVisibleState = (byId) => {
+    const { expandedNodes } = this.state;
+    const visibleItemsCount = 3;
+    const list              = byId || {};
+    Object.keys(list).forEach((key) => {
+      const { id, parent_id: parentId } = list[key];
+      let visible                       = true;
+      if (parentId) {
+        visible = expandedNodes[parentId] || list[parentId].children.indexOf(id) < visibleItemsCount;
+      }
+
+      list[key] = { ...list[key], visible };
+    });
+
+    return list;
+  };
 
   handleFilterKeyDown = (e) => {
     if (e.keyCode === 27) { // Esc
@@ -50,20 +106,25 @@ class TopicContainer extends Component {
     this.setState({ match: '' });
   };
 
-  filteredById = {};
+  sortRootsPosition = (roots) => {
+    const extra = roots.filter(node => !TOPICS_FOR_DISPLAY.includes(node));
+
+    return roots.length ? [...TOPICS_FOR_DISPLAY, ...extra] : roots;
+  };
 
   filterTagsById = () => {
     const { roots, byId } = this.props;
     const { match }       = this.state;
+    const sortedRoots     = this.sortRootsPosition(roots);
 
     if (!match) {
-      this.filteredById = byId;
-      return roots;
+      this.filteredById = this.setVisibleState(byId);
+      return sortedRoots;
     }
 
     this.filteredById  = {};
     const parentIdsArr = [];
-    const regExp       = this.getRegExp(match);
+    const regExp       = getEscapedRegExp(match);
 
     // filter objects
     Object.keys(byId).forEach((key) => {
@@ -71,6 +132,7 @@ class TopicContainer extends Component {
 
       // add object that includes the match
       if (currentObj.label && regExp.test(currentObj.label)) {
+        currentObj.visible     = true;
         this.filteredById[key] = currentObj;
 
         // keep its parent_id key
@@ -89,7 +151,7 @@ class TopicContainer extends Component {
 
       // keep displayRoot index for the order of the roots
       if (!parent.parent_id) {
-        index = roots.indexOf(parent.id);
+        index = sortedRoots.indexOf(parent.id);
         if (index > -1 && !displayRootIndexes.includes(index)) {
           displayRootIndexes.push(index);
         }
@@ -101,7 +163,7 @@ class TopicContainer extends Component {
     }
 
     displayRootIndexes.sort();
-    const filteredRoots = displayRootIndexes.map(ind => roots[ind]);
+    const filteredRoots = displayRootIndexes.map(ind => sortedRoots[ind]);
 
     // add the parents to filteredById
     parentIdsArr.forEach((parentKey) => {
@@ -115,47 +177,77 @@ class TopicContainer extends Component {
 
   hasChildren = node => (Array.isArray(node.children) && node.children.length > 0);
 
-  renderLeaf = node => (
+  updateParentsVisibleState = (parentId) => {
+    const { expandedNodes } = this.state;
+    expandedNodes[parentId] = !expandedNodes[parentId];
+    this.setState({ expandedNodes });
+  };
+
+  renderLeaf = (node) => {
+    const { stats } = this.props;
+
     // eslint-disable-next-line
-    <Link to={`/topics/${node.id}`}>
-      {node.label}
-    </Link>
+    return (
+      <Link to={`/topics/${node.id}`}>
+        {node.label}
+        {stats && stats[node.id] ? ` (${stats[node.id]})` : ''}
+      </Link>
+    );
+  };
+
+  renderChildren = children => (
+    children
+      .filter(this.isIncluded)
+      .map(id => (
+        <List.Item key={id} className={`${children.visible ? '' : 'hide-topic'}`}>
+          {this.renderNode(this.filteredById[id])}
+        </List.Item>
+      ))
   );
 
-  renderNode = node => (
-    node ?
-      <Fragment>
+  renderNode = (node, grandchildrenClass = '') => {
+    const { t }             = this.props;
+    const { expandedNodes } = this.state;
+    const showExpandButton  = node.children && node.children.length > 3;
+    return node ? (
+      <Fragment key={`f-${node.id}`}>
         {
-          this.hasChildren(node) ?
-            <List>
-              {
-                node.children
-                  .filter(this.isIncluded)
-                  .map(id => (
-                    <List.Item key={id}>
-                      {this.renderNode(this.filteredById[id])}
-                    </List.Item>
-                  ))
-              }
-            </List> :
-            this.renderLeaf(node)
+          this.hasChildren(node) ? (
+            <div key={node.id} className={`topics__card ${grandchildrenClass}`}>
+              <Header as="h4" className="topics__subtitle">
+                <Link to={`/topics/${node.id}`}>
+                  {node.label}
+                </Link>
+              </Header>
+              <List>
+                {
+                  node.children
+                    .filter(this.isIncluded)
+                    .map(id => (
+                      <List.Item key={id} className={this.filteredById[id].visible ? '' : 'hide-topic'}>
+                        {this.renderNode(this.filteredById[id], 'grandchildren')}
+                      </List.Item>
+                    ))
+                }
+              </List>
+              <Button
+                basic
+                icon={expandedNodes[node.id] ? 'minus' : 'plus'}
+                className={`topics__button ${showExpandButton ? '' : 'hide-button'}`}
+                size="mini"
+                content={t(`topics.show-${expandedNodes[node.id] ? 'less' : 'more'}`)}
+                onClick={() => this.updateParentsVisibleState(node.id)}
+              />
+            </div>
+          ) : this.renderLeaf(node)
         }
-      </Fragment> :
-      null
-  );
+      </Fragment>
+    ) : null;
+  };
 
   renderSubHeader = node => (
-    this.hasChildren(node) ?
-      <Fragment key={node.id}>
-        <Header as="h4" className="topics__subtitle">
-          {node.label}
-          <Link to={`/topics/${node.id}`}>
-            <Icon size="small" name="chain" />
-          </Link>
-        </Header>
-        {this.renderNode(node)}
-      </Fragment> :
-      null
+    this.hasChildren(node) ? this.renderNode(node)
+      : null
   );
 
   renderBranch = (rootId) => {
@@ -166,12 +258,9 @@ class TopicContainer extends Component {
     }
 
     return (
-      <div key={rootId} className="topics__section">
+      <Grid.Column key={rootId} className="topics__section">
         <Header as="h2" className="topics__title">
           {rootNode.label}
-          <Link to={`/topics/${rootNode.id}`}>
-            <Icon size="small" name="chain" />
-          </Link>
         </Header>
         <div className="topics__list">
           {
@@ -180,8 +269,7 @@ class TopicContainer extends Component {
               .map(id => this.renderSubHeader(this.filteredById[id]))
           }
         </div>
-        <Divider />
-      </div>
+      </Grid.Column>
     );
   };
 
@@ -201,13 +289,16 @@ class TopicContainer extends Component {
             icon="search"
             className="search-omnibox"
             placeholder={t('sources-library.filter')}
-            value={this.state.match}
             onChange={this.handleFilterChange}
             onKeyDown={this.handleFilterKeyDown}
           />
         </Container>
         <Container className="padded">
-          {filteredRoots.map(r => this.renderBranch(r))}
+          <Grid columns={3}>
+            <Grid.Row>
+              {filteredRoots.map(r => this.renderBranch(r))}
+            </Grid.Row>
+          </Grid>
         </Container>
       </div>
     );
@@ -215,8 +306,17 @@ class TopicContainer extends Component {
 }
 
 export default connect(
-  state => ({
-    roots: selectors.getDisplayRoots(state.tags),
-    byId: selectors.getTags(state.tags),
-  })
-)(translate()(TopicContainer));
+  (state) => {
+    let stats = statsSelectors.getCUStats(state.stats, 'topics') || { data: { tags: {} } };
+    stats     = isEmpty(stats) || isEmpty(stats.data) ? null : stats.data.tags;
+
+    return {
+      roots: topicsSelectors.getDisplayRoots(state.tags),
+      byId: topicsSelectors.getTags(state.tags),
+      stats
+    };
+  },
+  dispatch => bindActionCreators({
+    fetchStats: topicsActions.fetchStats
+  }, dispatch)
+)(withNamespaces()(TopicContainer));

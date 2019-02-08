@@ -4,7 +4,6 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { matchRoutes } from 'react-router-config';
 import { createMemoryHistory } from 'history';
-import { Helmet } from 'react-helmet';
 import pick from 'lodash/pick';
 import moment from 'moment';
 import qs from 'qs';
@@ -12,6 +11,7 @@ import serialize from 'serialize-javascript';
 import UAParser from 'ua-parser-js';
 import localStorage from 'mock-local-storage';
 import { parse as cookieParse } from 'cookie';
+import { HelmetProvider } from 'react-helmet-async';
 
 import routes from '../src/routes';
 import { COOKIE_CONTENT_LANG, LANG_UI_LANGUAGES, LANG_UKRAINIAN } from '../src/helpers/consts';
@@ -23,6 +23,8 @@ import { actions as ssr } from '../src/redux/modules/ssr';
 import App from '../src/components/App/App';
 import i18nnext from './i18nnext';
 import { initialState as settingsInitialState } from '../src/redux/modules/settings';
+
+const helmetContext = {};
 
 // eslint-disable-next-line no-unused-vars
 const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all the work
@@ -97,7 +99,22 @@ function alternateLinks(req, lang) {
     .join('');
 }
 
-export default function serverRender(req, res, next, htmlData, criticalCSS) {
+function ogUrl(req, lang) {
+  // strip ui language from path
+  let aPath = req.originalUrl;
+  if (lang && aPath.startsWith(`/${lang}`)) {
+    aPath = aPath.substring(3);
+  }
+
+  // strip leading slash as it comes from BASE_URL
+  if (aPath.startsWith('/')) {
+    aPath = aPath.substring(1);
+  }
+
+  return `<meta property="og:url" content="${BASE_URL}${lang}/${aPath}" />`;
+}
+
+export default function serverRender(req, res, next, htmlData) {
   console.log('serverRender', req.originalUrl);
 
   const { language, redirect } = getLanguageFromPath(req.originalUrl, req.headers);
@@ -123,7 +140,10 @@ export default function serverRender(req, res, next, htmlData, criticalCSS) {
       initialEntries: [req.originalUrl],
     });
 
-    const settings = Object.assign({}, settingsInitialState, { language, contentLanguage: cookies[COOKIE_CONTENT_LANG] });
+    const settings = Object.assign({}, settingsInitialState, {
+      language,
+      contentLanguage: cookies[COOKIE_CONTENT_LANG]
+    });
 
     const initialState = {
       router: { location: history.location },
@@ -168,13 +188,13 @@ export default function serverRender(req, res, next, htmlData, criticalCSS) {
             hrstart = process.hrtime();
 
             // actual render
-            const markup = ReactDOMServer.renderToString(<App i18n={context.i18n} store={store} history={history} />);
-            hrend        = process.hrtime(hrstart);
+            const markup = ReactDOMServer.renderToString(<HelmetProvider context={helmetContext}><App i18n={context.i18n} store={store} history={history} /></HelmetProvider>);
+            hrend = process.hrtime(hrstart);
             console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
             hrstart = process.hrtime();
 
-            const helmet = Helmet.renderStatic();
-            hrend        = process.hrtime(hrstart);
+            const { helmet } = helmetContext;
+            hrend            = process.hrtime(hrstart);
             console.log('serverRender:  Helmet.renderStatic %ds %dms', hrend[0], hrend[1] / 1000000);
 
             if (context.url) {
@@ -210,9 +230,9 @@ export default function serverRender(req, res, next, htmlData, criticalCSS) {
               const html = htmlData
                 .replace(/<html lang="en">/, `<html ${helmet.htmlAttributes.toString()} >`)
                 .replace(/<title>.*<\/title>/, helmet.title.toString())
-                .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, language)}${alternateLinks(req, language)}<style type="text/css">${criticalCSS}</style></head>`)
+                .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, language)}${alternateLinks(req, language)}${ogUrl(req, language)}</head>`)
                 .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
-                .replace(/semantic_v3.min.css/g, `semantic_v3${cssDirection}.min.css`)
+                .replace(/semantic_v4.min.css/g, `semantic_v4${cssDirection}.min.css`)
                 .replace(/<div id="root"><\/div>/, rootDiv);
 
               if (context.code) {

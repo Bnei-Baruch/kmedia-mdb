@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
 
 import { assetUrl } from '../../../../../../helpers/Api';
@@ -276,16 +277,16 @@ class Sources extends Component {
               />
             </Grid.Column>
             {
-              languages.length > 0 ?
-                <Grid.Column width={languages.length} textAlign="right">
-                  <ButtonsLanguageSelector
-                    languages={languages}
-                    defaultValue={uiLanguage}
-                    t={t}
-                    onSelect={this.handleLanguageChanged}
-                  />
-                </Grid.Column> :
-                null
+              languages.length > 0
+                ? (
+                  <Grid.Column width={languages.length} textAlign="right">
+                    <ButtonsLanguageSelector
+                      languages={languages}
+                      defaultValue={uiLanguage}
+                      onSelect={this.handleLanguageChanged}
+                    />
+                  </Grid.Column>)
+                : null
             }
           </Grid.Row>
         </Grid>
@@ -296,4 +297,4 @@ class Sources extends Component {
   }
 }
 
-export default Sources;
+export default withNamespaces()(Sources);

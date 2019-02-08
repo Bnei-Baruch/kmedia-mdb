@@ -1,6 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { renderRoutes } from 'react-router-config';
 
 import { DEFAULT_LANGUAGE } from './helpers/consts';
@@ -30,27 +31,10 @@ import HomePage from './components/Sections/Home/Container';
 import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import Help from './components/Sections/Help/Help';
 import SimpleMode from './components/Sections/SimpleMode/Container';
+import NotImplemented from './components/NotImplemented';
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
-
-const NotImplemented = () => <h1>Not Implemented Yet</h1>;
-const NotFound       = () => <h1>Page not found</h1>;
-const Root           = ({ route }) => renderRoutes(route.routes);
-
-/**
- * Creates a page route config
- *
- * @param {string} path
- * @param {React.Component|function} component
- * @param {object} subRoutes{array} prefix=''{string}
- */
-const pageRoute = (path, component, { subRoutes, ssrData, prefix = '' } = {}) => ({
-  exact: true,
-  path: `${prefix}/${path}`,
-  component,
-  routes: subRoutes,
-  ssrData,
-});
+import * as shapes from './components/shapes';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
@@ -99,17 +83,38 @@ const routes = [
   // { path: 'design2', component: Design2 },
 ];
 
-const createMainRoutes = (prefix) => {
-  const defaultPageOptions = { prefix };
+const NotFound = () => <h1>Page not found</h1>;
+const Root     = ({ route }) => renderRoutes(route.routes);
 
-  // for convenience
-  const defaultPageRoute = (path, component, options = {}) =>
-    pageRoute(path, component, { ...defaultPageOptions, ...options });
+/** Creates a page route config */
+const pageRoute = (path, component, { prefix, subRoutes, ssrData } = {}) => ({
+  exact: true,
+  path: `${prefix}/${path}`,
+  component,
+  routes: subRoutes,
+  ssrData,
+});
+
+pageRoute.propTypes    = {
+  path: PropTypes.string.isRequired,
+  component: PropTypes.func.isRequired,
+  subRoutes: PropTypes.arrayOf(PropTypes.string),
+  ssrData: PropTypes.func.isRequired,
+  prefix: PropTypes.string,
+};
+pageRoute.defaultProps = {
+  prefix: '',
+  subRoutes: null,
+};
+
+/** Creates a page route */
+const routesCreator = (prefix) => {
+  const makePageRoute = (path, component, options = {}) => pageRoute(path, component, { prefix, ...options });
 
   return [{
     component: Layout,
     routes: [
-      ...routes.map(route => defaultPageRoute(route.path, route.component, route.options)),
+      ...routes.map(({ path, component, options }) => makePageRoute(path, component, options)),
 
       {
         path: '*',
@@ -119,37 +124,58 @@ const createMainRoutes = (prefix) => {
   }];
 };
 
-/**
- * A component that sets the language it got from the route params.
- */
+routesCreator.propTypes = {
+  prefix: PropTypes.string.isRequired,
+};
+
+/** A component that sets the language it got from the route params. */
 const RoutedLanguageSetter = ({ match, route }) => (
   <LanguageSetter language={match.params.language || route.defaultLanguage}>
     {renderRoutes(route.routes)}
   </LanguageSetter>
 );
 
-/**
- * Creates routes that would detect the language from the path and updates.
- *
- * @param {string} languagePathPrefix prefix path to detect a language with.
- * @param {function} routesCreator creates the routes that will be actually rendered
- */
-const withLanguageRoutes = (languagePathPrefix, routesCreator = prefix => undefined) => ([
+const RouteItem = PropTypes.shape({
+  component: PropTypes.func.isRequired,
+  exact: PropTypes.bool,
+  path: PropTypes.string.isRequired,
+  ssrData: PropTypes.func,
+});
+
+RoutedLanguageSetter.propTypes = {
+  match: shapes.RouterMatch.isRequired,
+  route: PropTypes.shape({
+    component: PropTypes.func.isRequired,
+    path: PropTypes.string.isRequired,
+    routes: PropTypes.arrayOf(PropTypes.shape({
+      component: PropTypes.func.isRequired,
+      routes: PropTypes.arrayOf(RouteItem),
+    })),
+  }).isRequired,
+};
+
+/** Creates routes that would detect the language from the path and updates. */
+const withLanguageRoutes = (languagePathPrefix, creator) => ([
   {
     path: languagePathPrefix,
     component: RoutedLanguageSetter,
-    routes: routesCreator(languagePathPrefix)
+    routes: creator(languagePathPrefix)
   }, {
     path: '',
     defaultLanguage: DEFAULT_LANGUAGE,
     component: RoutedLanguageSetter,
-    routes: routesCreator('')
+    routes: creator('')
   }
 ]);
+
+withLanguageRoutes.propTypes = {
+  languagePathPrefix: PropTypes.string.isRequired,
+  creator: PropTypes.func.isRequired,
+};
 
 export default [
   {
     component: Root,
-    routes: withLanguageRoutes('/:language([a-z]{2})', createMainRoutes)
+    routes: withLanguageRoutes('/:language([a-z]{2})', routesCreator)
   }
 ];

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import DayPicker from 'react-day-picker';
 import MomentLocaleUtils from 'react-day-picker/moment';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Button, Card, Container, Divider, Grid, Input } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES, LANGUAGE_OPTIONS } from '../../../helpers/consts';
@@ -220,4 +220,4 @@ class SimpleModePage extends PureComponent {
   }
 }
 
-export default translate()(SimpleModePage);
+export default withNamespaces()(SimpleModePage);

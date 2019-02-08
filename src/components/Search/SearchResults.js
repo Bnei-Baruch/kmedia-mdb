@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Trans, withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
-import { Trans, translate } from 'react-i18next';
-import { Container, Divider, Grid } from 'semantic-ui-react';
+import { Container, Divider, Grid, Message, Image, Button } from 'semantic-ui-react';
+import InfoIcon from '../../images/icons/info.svg';
 
 import { SEARCH_INTENT_HIT_TYPES, } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { getQuery } from '../../helpers/url';
+import { selectors as settings } from '../../redux/modules/settings';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
@@ -50,6 +52,10 @@ class SearchResults extends Component {
     getSourcePath: undefined,
   };
 
+  state = {
+    showNote: true
+  };
+
   filterByHitType = (hit) => {
     const { hitType } = this.props;
     return hitType ? hit.type === hitType : true;
@@ -62,26 +68,47 @@ class SearchResults extends Component {
     const props = { ...this.props, hit, rank, key: `${mdbUid}_${type}` };
 
     if (SEARCH_INTENT_HIT_TYPES.includes(type)) {
-      return <SearchResultIntent  {...props} />;
+      return <SearchResultIntent {...props} />;
     }
 
+    let result = null;
     const cu = cuMap[mdbUid];
     const c  = cMap[mdbUid];
     const p  = postMap[mdbUid];
 
     if (cu) {
-      return <SearchResultCU   {...props} cu={cu} />;
+      result = <SearchResultCU {...props} cu={cu} />;
     } else if (c) {
-      return <SearchResultCollection c={c}  {...props} />;
+      result = <SearchResultCollection c={c} {...props} />;
     } else if (p) {
       return <SearchResultPost  {...props} post={p} />;
     } else if (resultType === 'sources') {
-      return <SearchResultSource   {...props} />;
+      result = <SearchResultSource {...props} />;
     }
 
     // maybe content_units are still loading ?
     // maybe stale data in elasticsearch ?
-    return null;
+    return result;
+  };
+
+  hideNote = () => this.setState({ showNote: false });
+
+  renderTopNote = () => {
+    const { t, contentLanguage } = this.props;
+    const language               = t(`constants.languages.${contentLanguage}`);
+    return (
+      this.state.showNote
+        ? <Message info className="search-result-note">
+          <Image src={InfoIcon} floated='left' />
+          <Button floated='right' icon="close" size="tiny" circular onClick={this.hideNote} />
+          <Container>
+            <strong>{t('search.topNote.tip')}: </strong>
+            {t('search.topNote.first', { language })}
+          </Container>
+          <Container>{t('search.topNote.second')}</Container>
+        </Message>
+        : null
+    );
   };
 
   render() {
@@ -126,18 +153,23 @@ class SearchResults extends Component {
     if (total === 0) {
       content = (
         <Trans i18nKey="search.results.no-results">
-          Your search for <strong style={{ fontStyle: 'italic' }}>{{ query }}</strong> found no results.
+          Your search for
+          <strong style={{ fontStyle: 'italic' }}>{{ query }}</strong>
+          found no results.
         </Trans>
       );
     } else {
       content = (
         <Grid>
           <Grid.Column key="1" computer={12} tablet={16} mobile={16}>
+            {this.renderTopNote()}
+
             <div className="searchResult_content">
               <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
               {hits.filter(this.filterByHitType).map(this.renderHit)}
             </div>
             <Divider fitted />
+
             <Container className="padded pagination-wrapper" textAlign="center">
               <Pagination
                 pageNo={pageNo}
@@ -162,5 +194,5 @@ export default connect(state => ({
   getSourcePath: sourcesSelectors.getPathByID(state.sources),
   getSourceById: sourcesSelectors.getSourceById(state.sources),
   getTagById: tagsSelectors.getTagById(state.tags),
-}))(translate()(SearchResults));
-
+  contentLanguage: settings.getContentLanguage(state.settings),
+}))(withNamespaces()(SearchResults));

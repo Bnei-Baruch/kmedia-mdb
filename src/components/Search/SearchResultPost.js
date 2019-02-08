@@ -23,9 +23,9 @@ class SearchResultPost extends SearchResultBase {
         highlight
       } = hit;
 
-    let filmDate = '';
-    if (post.film_date) {
-      filmDate = t('values.date', { date: post.film_date });
+    let createdDate = '';
+    if (post.created_at) {
+      createdDate = t('values.date', { date: post.created_at });
     }
 
     return (
@@ -43,7 +43,7 @@ class SearchResultPost extends SearchResultBase {
 
         <Container>
           {this.iconByContentType(resultType === 'posts' ? CT_BLOG_POST : resultType, true)}
-          | <strong>{filmDate}</strong>
+          | <strong>{createdDate}</strong>
         </Container>
         <Container className="content">
           {this.snippetFromHighlight(highlight)}

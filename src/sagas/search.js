@@ -64,8 +64,9 @@ export function* search(action) {
       // This second round trip to the API is awful,
       // we should strive for a single call to the API and get all the data we need.
       // hmm, relay..., hmm ?
-      const cIDsToFetch  = getIdsForFetch(data.search_result.hits.hits, 'collections');
-      const cuIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'units');
+      const cIDsToFetch    = getIdsForFetch(data.search_result.hits.hits, 'collections');
+      const cuIDsToFetch   = getIdsForFetch(data.search_result.hits.hits, 'units');
+      const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'posts');
 
       const language = yield select(state => settings.getLanguage(state.settings));
       const respCU   = yield call(Api.units, {
@@ -75,35 +76,16 @@ export function* search(action) {
         with_files: true
       });
       const respC    = yield call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, language });
-      const respPost = yield all(getBlogs(data.search_result.hits.hits));
+      const respPost = yield call(Api.posts, { id: postIDsToFetch, pageSize: postIDsToFetch.length });
 
       yield put(mdbActions.receiveContentUnits(respCU.data.content_units));
       yield put(mdbActions.receiveCollections(respC.data.collections));
-      yield all(respPost.map(r => put(postsActions.fetchBlogListSuccess(r.data))));
+      yield put(postsActions.fetchBlogListSuccess(respPost.data));
     }
     yield put(actions.searchSuccess(data));
   } catch (err) {
     yield put(actions.searchFailure(err));
   }
-}
-
-function getBlogs(hits) {
-
-  const blogsByName = BLOGS.reduce((acc, x) => {
-    acc[x.id] = { blog: x.name, id: [] };
-    return acc;
-  }, {});
-
-  const postParams = getIdsForFetch(hits, 'posts').reduce((acc, x) => {
-    const ids = x.split('-');
-    if (acc[ids[0]]) {
-      acc[ids[0]].id.push(ids[1]);
-    }
-    return acc;
-  }, blogsByName);
-  return Object.values(postParams)
-    .filter(x => x.id.length > 0)
-    .map(x => call(Api.posts, { ...x, pageSize: x.id.length }));
 }
 
 function getIdsForFetch(hits, type) {

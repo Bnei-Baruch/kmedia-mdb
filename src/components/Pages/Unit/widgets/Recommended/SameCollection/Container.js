@@ -9,7 +9,6 @@ import * as shapes from '../../../../../shapes';
 import Widget from './Widget';
 
 export class SameCollectionContainer extends Component {
-
   static propTypes = {
     unit: shapes.EventItem.isRequired,
     collectionID: PropTypes.string,
@@ -18,7 +17,6 @@ export class SameCollectionContainer extends Component {
     err: shapes.Error,
     section: PropTypes.string,
     fetchCollection: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -43,8 +41,8 @@ export class SameCollectionContainer extends Component {
 
   askForDataIfNeeded = (props) => {
     const { collectionID, wip, err, fetchCollection } = props;
-
-    if (this.state.collectionRequested) {
+    const { collectionRequested }                     = this.state;
+    if (collectionRequested) {
       return;
     }
 
@@ -55,7 +53,7 @@ export class SameCollectionContainer extends Component {
   };
 
   render() {
-    const { unit, collection, wip, err, section, t } = this.props;
+    const { unit, collection, wip, err, section } = this.props;
 
     return (
       <Widget
@@ -64,7 +62,6 @@ export class SameCollectionContainer extends Component {
         err={err}
         collection={wip || err ? null : collection}
         section={section}
-        t={t}
       />
     );
   }
@@ -81,10 +78,9 @@ const mapState = (state, ownProps) => {
   };
 };
 
-const mapDispatch = dispatch =>
-  bindActionCreators({
-    fetchCollection: actions.fetchCollection,
-  }, dispatch);
+const mapDispatch = dispatch => bindActionCreators({
+  fetchCollection: actions.fetchCollection,
+}, dispatch);
 
 export const wrap = WrappedComponent => connect(mapState, mapDispatch)(WrappedComponent);
 

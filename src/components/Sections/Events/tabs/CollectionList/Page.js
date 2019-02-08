@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Container, Divider } from 'semantic-ui-react';
 
 import * as shapes from '../../../../shapes';
@@ -50,7 +50,7 @@ class TabPage extends PureComponent {
       <Container className="padded">
         <ResultsPageHeader pageNo={1} pageSize={1000} total={items.length} />
         <Divider fitted />
-        <List items={items} t={t} />
+        <List items={items} />
       </Container>
     );
 
@@ -69,4 +69,4 @@ class TabPage extends PureComponent {
   }
 }
 
-export default translate()(TabPage);
+export default withNamespaces()(TabPage);
