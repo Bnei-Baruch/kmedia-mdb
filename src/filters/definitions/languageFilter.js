@@ -2,7 +2,7 @@ import { createFilterDefinition } from './util';
 
 export const languageFilter = createFilterDefinition({
   name: 'language-filter',
-  queryKey: 'language',
+  queryKey: 'media-language',
   valueToApiParam: value => ({
     media_language: [value]
   }),

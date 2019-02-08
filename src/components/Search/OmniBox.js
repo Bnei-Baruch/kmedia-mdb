@@ -64,7 +64,7 @@ export class OmniBox extends Component {
 
   static getDerivedStateFromProps(nextProps, state) {
     const { suggestions, query, pathname } = state;
-    const { updateQuery, setSuggest }      = state;
+    const { updateQuery, setSuggest }      = nextProps;
     let newState                           = null;
 
     if (nextProps.suggestions !== suggestions) {

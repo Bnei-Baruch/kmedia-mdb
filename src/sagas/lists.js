@@ -1,5 +1,4 @@
 import { call, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
-import { push } from 'connected-react-router';
 
 import { actions, types } from '../redux/modules/lists';
 import { selectors as settings } from '../redux/modules/settings';
@@ -63,12 +62,14 @@ function* fetchList(action) {
 
 function* updatePageInQuery(action) {
   const { pageNo } = action.payload;
-  const page       = pageNo > 1 ? pageNo : null;
-  if (page) {
-    // adding a page to browser history
-    yield put(push(page));
-  }
-  yield* pushQuery(query => Object.assign(query, { page }));
+  yield* pushQuery(query => {
+    if (pageNo > 1) {
+      return { ...query, page: pageNo };
+    } else {
+      const { page, ...result } = query;
+      return result;
+    }
+  });
 }
 
 function* watchFetchList() {
