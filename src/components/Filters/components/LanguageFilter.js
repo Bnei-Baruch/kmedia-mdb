@@ -1,6 +1,8 @@
+/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
+import { withNamespaces } from 'react-i18next';
 import { Accordion, Button, Header, Menu, Segment, Flag } from 'semantic-ui-react';
 import { ALL_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
 
@@ -32,15 +34,13 @@ class LanguageFilter extends Component {
     this.setState({ sValue: `${data.name}` });
   };
 
-  onCancel = () =>
-    this.props.onCancel();
+  onCancel = () => this.props.onCancel();
 
   apply = () => {
     this.props.onApply(this.state.sValue);
   };
 
-  toggleCustom = () =>
-    this.setState({ showCustom: !this.state.showCustom });
+  toggleCustom = () => this.setState({ showCustom: !this.state.showCustom });
 
   render() {
     const { t } = this.props;
@@ -70,25 +70,23 @@ class LanguageFilter extends Component {
         <Segment className="filter-popup__body language-filter">
           <Accordion as={Menu} vertical fluid size="small">
             {
-              ALL_LANGUAGES.map((x) => {
-                return (
-                  <Menu.Item
-                    key={x}
-                    name={x}
-                    active={sValue === x}
-                    onClick={this.onLanguageChange}
-                  >
-                    <Flag name={LANGUAGES[x].flag} />
+              ALL_LANGUAGES.map(x => (
+                <Menu.Item
+                  key={x}
+                  name={x}
+                  active={sValue === x}
+                  onClick={this.onLanguageChange}
+                >
+                  <Flag name={LANGUAGES[x].flag} />
                   {t(`constants.languages.${x}`)}
-                  </Menu.Item>
-                );
-              })
-            } 
-            </Accordion>
+                </Menu.Item>
+              ))
+            }
+          </Accordion>
         </Segment>
       </Segment.Group>
     );
   }
 }
 
-export default LanguageFilter;
+export default withNamespaces()(LanguageFilter);
