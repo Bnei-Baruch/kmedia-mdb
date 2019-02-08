@@ -76,7 +76,7 @@ class Transcription extends Component {
   }
 
   shouldComponentUpdate(nextProps, _nextState) {
-    const { props } = this;
+    const { props, state } = this;
     const toUpdate  = (nextProps.uiLanguage !== props.uiLanguage)
       || (nextProps.contentLanguage !== props.contentLanguage)
       || (nextProps.unit && !props.unit)
@@ -89,9 +89,15 @@ class Transcription extends Component {
       if (selected && language) {
         props.onContentChange(selected.id);
       }
+
+      return true;
+    } // in case state language was changed
+    if (_nextState.language !== state.language) {
+      props.onContentChange(_nextState.selected.id);
+      return true;
     }
 
-    return toUpdate;
+    return false;
   }
 
   static getTextFiles = (props) => {
@@ -104,6 +110,7 @@ class Transcription extends Component {
     return unit.files.filter(x => MediaHelper.IsText(x) && !MediaHelper.IsPDF(x));
   };
 
+
   setCurrentItem = (props) => {
     const sUpdate = Transcription.calcCurrentItem(props);
 
@@ -114,14 +121,15 @@ class Transcription extends Component {
 
   handleLanguageChanged = (e, language) => {
     const { state, props } = this;
+
     if (language === state.language) {
       e.preventDefault();
       return;
     }
 
     const selected = Transcription.selectFile(state.textFiles, language);
-
     props.onContentChange(selected.id);
+
     this.setState({ selected, language });
   };
 
