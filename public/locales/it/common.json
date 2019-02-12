@@ -1,0 +1,632 @@
+{
+  "nav": {
+    "top": {
+      "header": "Kabbalah Media"
+    },
+    "sidebar": {
+      "lessons": "Lezioni e Conferenze",
+      "programs": "Programmi",
+      "sources": "Biblioteca",
+      "events": "Convegni e Eventi",
+      "books": "Libri",
+      "topics": "Argomenti",
+      "publications": "Pubblicazioni",
+      "simple-mode": "Downloads",
+      "photos": "Fotografie",
+      "design": "Design",
+      "design2": "Impaginazione",
+      "project-status": "Stato del progetto",
+      "help": "Aiuto",
+      "old-site": "Vecchio sito"
+    },
+    "footer": {
+      "copyright": "Copyright © 2003-{{year}}",
+      "rights": "Bnei Baruch – Kabbalah L’Am Association, Tutti i diritti riservati"
+    }
+  },
+  "filters": {
+    "by": "Filtrato per:",
+     "filters": "Filters",
+    "hideFilters": "Hide Filters",
+    "all": "Tutto",
+    "date-filter": {
+      "label": "Data",
+      "selectTitle": "Selezionare un intervallo di data",
+      "presets": {
+        "TODAY": "Oggi",
+        "YESTERDAY": "Ieri",
+        "LAST_7_DAYS": "Ultimi 7 Giorni",
+        "LAST_30_DAYS": "Ultimi 30 Giorni",
+        "LAST_MONTH": "Scorso mese",
+        "THIS_MONTH": "Questo mese",
+        "CUSTOM_RANGE": "Gamma Personalizzata"
+      },
+      "start": "Inizio",
+      "end": "Fine"
+    },
+    "language-filter": {
+      "label": "Language",
+      "all": "Any Language"
+    },
+    "sources-filter": {
+      "label": "Fonti",
+      "all": "Tutte le fonti"
+    },
+    "topics-filter": {
+      "label": "Argomenti",
+      "all": "Tutti gli argomenti"
+    },
+    "publishers-filter": {
+      "label": "Editori"
+    },
+    "programs-filter": {
+      "label": "Genere/Programma",
+      "all": "Tutti i Programmi",
+      "recently-updated": "Aggiornato Recentemente",
+      "last-updated": "Ultimo aggiornamento il"
+    },
+    "locations-filter": {
+      "label": "Posizioni",
+      "all": "Tutte le posizioni"
+    },
+    "holidays-filter": {
+      "label": "Festività",
+      "all": "Tutte le Festività"
+    },
+    "years-filter": {
+      "label": "Anno",
+      "placeholder": "Selezionare un anno"
+    },
+    "collections-filter": {
+      "label": "Serie",
+      "all": "Tutte le serie"
+    },
+    "sections-filter": {
+      "label": "Sezione",
+      "all": "Tutte le sezioni",
+      "lessons": "Lezioni e Conferenze",
+      "programs": "Programmi",
+      "events": "Congressi ed Eventi",
+      "publications": "Publicazioni",
+      "sources": "Kabbalah Sources",
+      "posts": "Blog"
+    }
+  },
+  "buttons": {
+    "apply": "Applica",
+    "cancel": "Cancella",
+    "close": "Chiudi",
+    "audio": "Audio",
+    "video": "Video",
+    "more": "Altro",
+    "copy-link": "Copia Link",
+    "search": "Cerca",
+    "previous": "Precedente",
+    "next": "Successivo",
+    "copy": "Copia",
+    "view-all": "View All"
+  },
+  "player": {
+    "messages": {
+      "edit-help": "Drag the pointers to share a part of the video"
+    },
+    "buttons": {
+      "edit-back": "Back to play",
+      "start-position": "Start",
+      "end-position": "End",
+      "click-to-set": "Click to set",
+      "tap-to-unmute": "TAP TO UNMUTE"
+    },
+    "share": {
+      "title": "watch this video"
+    },
+    "error": {
+      "loading": "Error loading file."
+    }
+  },
+  "messages": {
+    "loading": "Loading",
+    "loading-subtext": "Hold on tight",
+    "server-error": "Server Error",
+    "not-found": "Oops!",
+    "not-found-subtext": "We can't seem to find what you're looking for",
+    "no-files": "No Files",
+    "no-playable-files": "No Playable Files",
+    "no-results": "No results",
+    "pagination-results": "Results {{start}} - {{end}} of {{total}}",
+    "link-copied-to-clipboard": "Link was copied!",
+    "unknown": "Unknown",
+    "unsupported-media-format": "Unsupported format.",
+    "error-loading-file": "Error loading file.",
+    "fallback-language": "Content does not exist in the requested language, a default language has been selected.",
+    "fallback-to-audio": "Video was not found, using audio.",
+    "fallback-to-video": "Audio was not found, using video.",
+    "source-content-not-found": "Source contents wasn't found",
+    "no-images": "No sketches found"
+  },
+  "search": {
+    "header": {
+      "text": "Search Results",
+      "subtext": ""
+    },
+    "topNote":{
+      "tip": "Tip",
+      "first": "Search results are in {{language}}.",
+      "second": "You can choose other content languages"
+    },
+    "showAll": "Show All",
+    "lessons": "Lessons",
+    "programs": "Programs",
+    "sortby": "sort by",
+    "sorts": {
+      "relevance": "relevance",
+      "newertoolder": "newer to older",
+      "oldertonewer": "older to newer"
+    },
+    "results": {
+      "empty-query": "No search term given. Please use the box above to search.",
+      "no-results": "Your search for <1><0>{{query}}</0></1> found no results."
+    },
+    "result": {
+      "description": "Summary",
+      "transcript": "Transcript",
+      "content": "Content"
+    },
+    "intent-types": {
+      "lessons": "Daily morning lessons",
+      "programs": "Programs"
+    },
+    "intent-prefix": {
+      "lessons-topic": "Lessons on topic:",
+      "lessons-source": "Lessons by source:",
+      "programs-topic": "Programs on topic:",
+      "programs-source": "Programs by source:"
+    }
+  },
+  "home": {
+    "header": {
+      "text": "Kabbalah Media",
+      "subtext": "The world's largest Kabbalah resource. Kabbalah lessons with Kabbalist Dr. Michael Laitman, downloadable authentic Kabbalah sources including The Zohar, and programs with Kabbalah's take on relationships, health, education, the economy and society."
+    },
+    "search": "Explore the wisdom of Kabbalah",
+    "sections": "Archive Sections",
+    "updates": "Latest Updates",
+    "social": "Rav Laitman in Social networks",
+    "blog-title": "Rav Laitman's Blog",
+    "twitter-title": "Tweets",
+    "all-posts": "All Blog posts",
+    "all-tweets": "All Tweets",
+    "read-more-posts": "Read more posts",
+    "read-more-tweets": "Read more Tweets",
+    "last-lesson": "The Latest Daily Lesson",
+    "donate": "DONATE NOW",
+    "promoted": {
+      "header": "Quick and easy download of files",
+      "subheader": ""
+    }
+  },
+  "events": {
+    "header": {
+      "text": "Convegni e Eventi",
+      "subtext": "Today, the wisdom of Kabbalah is already everywhere in the world. In this section you will be able to see events, conventions and special meetings of the \"Kabbalah L’Am\" association in Israel and abroad."
+    },
+    "tabs": {
+      "conventions": "Convegni",
+      "holidays": "Festività",
+      "unity-days": "Giorni di Unità",
+      "friends-gatherings": "Assemblea degli Amici",
+      "meals": "Pasti"
+    },
+    "list": {
+      "item_from": "Item of:"
+    },
+    "ALL_EVENTS": "All Events",
+    "no-matches": "No matching events found",
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Other parts from the same event"
+        }
+      }
+    },
+    "collection": {
+      "playlist": {
+        "preparation": "Preparation",
+        "lessons": "Lessons",
+        "other_parts": "Other Event Parts",
+        "appendices": "Appendices"
+      }
+    }
+  },
+  "lessons": {
+    "header": {
+      "text": "Lezioni e Conferenze",
+      "subtext": "Lessons and lectures by Dr. Michael Laitman. Virtual lessons, lectures for women, unique recordings by Rabbi Baruch Ashlag (RABASH) and more."
+    },
+    "tabs": {
+      "daily": "Daily Lessons",
+      "virtual": "Virtual Lessons",
+      "lectures": "Lectures",
+      "women": "Women Lessons",
+      "rabash": "Rabash Lessons",
+      "children": "Children Lessons",
+      "series": "Selected Study Series"
+    },
+    "list": {
+      "related": "Related to:",
+      "number": "#",
+      "item_from": "Item of:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Other items from the same series"
+        }
+      }
+    },
+    "unit-lesson-part": {
+      "recommended": {
+        "same-collection": {
+          "title": "Other parts from the same lesson",
+          "item-title": "Part {{name}}"
+        }
+      }
+    },
+    "last": {
+      "title": "Daily Kabbalah Lesson - updated",
+      "description": "An up to date shortcut to the latest Daily Lesson"
+    }
+  },
+  "programs": {
+    "header": {
+      "text": "Programs",
+      "subtext": "Here you will find a rich variety of programs that include: fascinating conversations about the meaning of life, current events, programs for the whole family, clips and more."
+    },
+    "tabs": {
+      "main": "Programmi",
+      "clips": "Clips"
+    },
+    "genres": {
+      "documentary": "Documentary",
+      "late-night": "Late Night",
+      "news": "News",
+      "talk-show": "Talk Show",
+      "educational": "Educational",
+      "children": "Children",
+      "movies": "Movies",
+      "other": "Other"
+    },
+    "list": {
+      "episode_from": "Episode from:",
+      "item_of": "Item of:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Other parts from the same program",
+          "item-title": "Episode {{name}}"
+        }
+      }
+    }
+  },
+  "publications": {
+    "header": {
+      "text": "Publicazioni",
+      "subtext": "Articles on current events, culture, popular science, relationships and more, presented from the unique perspective of the wisdom of Kabbalah"
+    },
+    "tabs": {
+      "articles": "Articles",
+      "twitter": "Twitter",
+      "blog": "Blog"
+    },
+    "list": {
+      "item_from": "Item of:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Other published articles in this collection"
+        }
+      }
+    },
+    "read-more": "Read more"
+  },
+  "simple-mode": {
+    "header": {
+      "text": "Downloads",
+      "subtext": "All media for a certain day"
+    },
+    "today-button": "Today",
+    "total-media-for-date": "All media for date ",
+    "media-language": "Media language:",
+    "no-files-found-for-lang": "There are no files for the language you selected.",
+    "try-different-language": "Try choosing a ",
+    "language-click": "different language.",
+    "no-files-found-for-date": "There are no files for this date",
+    "date": "Date:",
+    "prev": "Prev.",
+    "next": "Next",
+    "choose-date": "Choose date",
+    "today-lessons": "Daily Kabbalah lessons"
+  },
+  "help": {
+    "header": {
+      "text": "Help",
+      "subtext": "In this section you will find video tutorials and best practices on how to use the site"
+    }
+  },
+  "pages": {
+    "collection": {
+      "items": {
+        "programs-collection": "Episode(s)",
+        "lessons-collection": "Item(s)",
+        "publications-collection": "Articles(s)",
+        "event": "Item(s)"
+      }
+    },
+    "unit": {
+      "info": {
+        "sources": "Kabbalah Sources",
+        "topics": "Topics",
+        "collections": "Related to"
+      },
+      "recommended": {
+        "same-collection": {
+          "title": "Other item from the same collection",
+          "item-title": "Item {{name}}"
+        }
+      }
+    }
+  },
+  "materials": {
+    "summary": {
+      "header": "Summary",
+      "no-summary": "Summary is missing"
+    },
+    "transcription": {
+      "header": "Transcription",
+      "no-transcription": "Transcription is missing"
+    },
+    "sources": {
+      "header": "Sources",
+      "no-sources": "No sources",
+      "no-source": "Please select source",
+      "no-source-available": "No source is ready for display"
+    },
+    "sketches": {
+      "header": "Sketches"
+    }
+  },
+  "sources-library": {
+    "header": {
+      "text": "Library",
+      "subtext": "A collection of all the most important original texts for the study of Kabbalah, written by the greatest Kabbalists."
+    },
+    "no-source": "Please select source",
+    "toc": "Table of contents",
+    "az": "AZ",
+    "default": "Default",
+    "filter": "Filter...",
+    "share-title": "Read this article"
+  },
+  "topics": {
+    "header": {
+      "text": "Topics",
+      "subtext": "A collection of all items for a selected topic."
+    },
+    "show-more": "Show more",
+    "show-less": "Show less"
+  },
+  "media-downloads": {
+    "title": "Media Downloads",
+    "derived-title": "Derived Media",
+    "type-labels": {
+      "video": "Main Video",
+      "video-simple": "Video",
+      "audio": "Main Audio",
+      "audio-simple": "Audio",
+      "text": "Transcription Text",
+      "image": "Images"
+    },
+    "lesson": {
+      "type-labels": {
+        "video": "Lesson Video",
+        "video-simple": "Video",
+        "audio": "Lesson Audio",
+        "audio-simple": "Audio",
+        "text": "Transcription Text",
+        "image": "Sketches",
+        "lelo-mikud": "No focus-group"
+      }
+    },
+    "program": {
+      "type-labels": {
+        "video": "Program Video",
+        "video-simple": "Video",
+        "audio": "Program Audio",
+        "audio-simple": "Audio",
+        "text": "Transcription Text",
+        "image": "Sketches"
+      }
+    },
+    "publication": {
+      "type-labels": {
+        "video": "Video",
+        "video-simple": "Video",
+        "audio": "Audio",
+        "audio-simple": "Audio",
+        "text": "Article Text",
+        "image": "Snapshots"
+      }
+    }
+  },
+  "constants": {
+    "languages": {
+      "he": "Hebrew",
+      "en": "English",
+      "ru": "Russian",
+      "es": "Spanish",
+      "it": "Italian",
+      "de": "German",
+      "nl": "Dutch",
+      "fr": "French",
+      "pt": "Portuguese",
+      "tr": "Turkish",
+      "pl": "Polish",
+      "ar": "Arabic",
+      "hu": "Hungarian",
+      "fi": "Finnish",
+      "lt": "Lithuanian",
+      "ja": "Japanese",
+      "bg": "Bulgarian",
+      "ka": "Georgian",
+      "no": "Norwegian",
+      "sv": "Swedish",
+      "hr": "Croatian",
+      "zh": "Chinese",
+      "fa": "Persian",
+      "ro": "Romanian",
+      "hi": "Hindi",
+      "ua": "Ukrainian",
+      "mk": "Macedonian",
+      "sl": "Slovenian",
+      "lv": "Latvian",
+      "sk": "Slovak",
+      "cs": "Czech"
+    },
+    "content-types": {
+      "DAILY_LESSON": "Lezione del giorno",
+      "SPECIAL_LESSON": "Lezione speciale",
+      "FRIENDS_GATHERINGS": "Assemblea degli Amici",
+      "CONGRESS": "Congresso",
+      "VIDEO_PROGRAM": "Programma",
+      "LECTURE_SERIES": "Serie di conferenze",
+      "CHILDREN_LESSONS": "Lezioni per i bambini",
+      "WOMEN_LESSONS": "Lezioni per le donne",
+      "VIRTUAL_LESSONS": "Lezioni virtuali",
+      "MEALS": "Pasti",
+      "HOLIDAY": "Festività",
+      "PICNIC": "Picnic",
+      "UNITY_DAY": "Giorno dell’Unione",
+      "CLIPS": "Video brevi",
+      "ARTICLES": "Articoli",
+      "LESSON_PART": "Parte dalla lezione",
+      "LECTURE": "Conferenza",
+      "CHILDREN_LESSON": "Lezione per i bambini",
+      "WOMEN_LESSON": "Lezione per le donne",
+      "VIRTUAL_LESSON": "Lezione virtuale",
+      "FRIENDS_GATHERING": "Assemblea degli Amici",
+      "MEAL": "Pasto",
+      "VIDEO_PROGRAM_CHAPTER": "Episodio",
+      "FULL_LESSON": "Lezione completa",
+      "ARTICLE": "Articolo",
+      "UNKNOWN": "Sconosciuto",
+      "EVENT_PART": "Parte dell'evento",
+      "CLIP": "Video breve",
+      "TRAINING": "Formazione",
+      "KITEI_MAKOR": "Estratti dalle fonti",
+      "PUBLICATION": "Pubblicazione",
+      "LELO_MIKUD": "Senza Focus Group",
+      "BLOG_POST": "Post dal Blog"
+    },
+    "media-types": {
+      "video": "Video",
+      "audio": "Audio",
+      "image": "Image",
+      "text": "Text",
+      "sheet": "Sheet",
+      "banner": "Banner",
+      "presentation": "Presentazione"
+    }
+  },
+  "locations": {
+    "argentina": "argentina",
+    "buenos-aires":  "buenos-aires",
+    "austria": "austria",
+    "vienna": "vienna",
+    "brazil": "brasile",
+    "sau-paulo": "san-paolo",
+    "bulgaria": "bulgaria",
+    "borovets": "borovec",
+    "sofia": "sofia",
+    "canada": "canada",
+    "toronto": "toronto",
+    "chile": "cile",
+    "santiago": "santiago",
+    "colombia": "colombia",
+    "bogota": "Bogotá",
+    "czech-republic": "repubblica-ceca",
+    "prague": "praga",
+    "estonia": "estonia",
+    "tallinn":  "tallinn",
+    "france":  "francia",
+    "paris":  "parigi",
+    "georgia": "georgia",
+    "tbilisi":  "tbilisi",
+    "germany": "germania",
+    "berlin": "berlino",
+    "birnbach": "birnbach",
+    "bremen":   "brema",
+    "heidelberg": "heidelberg",
+    "wetzlar": "wetzlar",
+    "iceland":  "islanda",
+    "reykjavik": "reykjavik",
+    "israel": "israele",
+    "arava": "arava",
+    "galil": "galilea",
+    "kfar-tzvi-sitrin":  "kfar-tzvi-sitrin",
+    "petah-tikva": "petah-tikva",
+    "tel-aviv":"tel-aviv",
+    "italy":" italia",
+    "bologna": "bologna",
+    "rome":"roma",
+    "verona": "verona",
+    "kazakhstan": "kazakistan",
+    "almaty": "almaty",
+    "lithuania": "lituania",
+    "vilnius": "vilnius",
+    "mexico":" messico",
+    "guadalajara":"guadalajara",
+    "poland": "polonia",
+    "warsaw":"varsavia",
+    "romania":"romania",
+    "iasi":"Iași",
+    "russia": "russia",
+    "krasnoyarsk":"krasnojarsk",
+    "moscow":"mosca",
+    "novosibirsk": "novosibirsk",
+    "saint-petersburg": "san-pietroburgo",
+    "sochi": "Soči",
+    "spain": "spagna",
+    "madrid": "madrid",
+    "sweden":"svezia",
+    "stockholm": "stoccolma",
+    "switzerland": "svizzera",
+    "berne": "berna",
+    "turkey": "turchia",
+    "antalya":  "Adalia",
+    "ukraine": "ucraina",
+    "kharkiv": "Charkiv",
+    "kiev": "kiev",
+    "odessa": "odessa",
+    "united-kingdom": "regno-unito",
+    "blackpool": "blackpool",
+    "united-states": "stati-uniti",
+    "buffalo": "buffalo",
+    "los-angeles": "los-angeles",
+    "miami": "miami",
+    "new-jersey": "new-jersey",
+    "new-york":  "new-york",
+    "san-francisco": "san-francisco",
+    "st-louis": "saint-louis",
+    "unknown": "sconosciuto"
+  },
+  "values": {
+    "date": "{{date, ll}}"
+  },
+  "languages": {
+    "language": "Language",
+    "website_language": "Website Language",
+    "content_language": "Content language"
+  }
+}
