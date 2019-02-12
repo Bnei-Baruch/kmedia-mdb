@@ -272,6 +272,12 @@ export const BLOG_ID_LAITMAN_RU    = 1;
 export const BLOG_ID_LAITMAN_COM   = 2;
 export const BLOG_ID_LAITMAN_ES    = 3;
 export const BLOG_ID_LAITMAN_CO_IL = 4;
+export const BLOGS                 = [
+  { id: BLOG_ID_LAITMAN_RU, name: 'laitman-ru' },
+  { id: BLOG_ID_LAITMAN_COM, name: 'laitman-com' },
+  { id: BLOG_ID_LAITMAN_ES, name: 'laitman-es' },
+  { id: BLOG_ID_LAITMAN_CO_IL, name: 'laitman-co-il' }
+];
 
 export const SEARCH_INTENT_INDEX_TOPIC       = 'intent-tag';
 export const SEARCH_INTENT_INDEX_SOURCE      = 'intent-source';

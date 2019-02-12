@@ -42,7 +42,7 @@ class HandleLanguages extends Component {
     };
 
     const trigger = isMobileDevice
-      ? <Icon size="big" name="language" />
+      ? <Icon size="big" name="language" className="no-margin" />
       : (
         <span>
           <Icon name="sliders horizontal" />
@@ -54,11 +54,7 @@ class HandleLanguages extends Component {
         key="handleLangs"
         flowing
         position="bottom right"
-        trigger={(
-          <Menu.Item onClick={this.handlePopupOpen} className="padding_r_l_0">
-            {trigger}
-          </Menu.Item>
-        )}
+        trigger={<div onClick={this.handlePopupOpen} as="a">{trigger}</div>}
         open={isActive}
         onOpen={this.handlePopupOpen}
         onClose={this.handlePopupClose}

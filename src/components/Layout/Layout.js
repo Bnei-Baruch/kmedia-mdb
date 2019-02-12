@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
-import { Button, Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
+import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
 import playerHelper from '../../helpers/player';
@@ -42,36 +42,75 @@ class Layout extends Component {
 
   showSearchButtonElement = createRef();
 
+  headerSearchElement = createRef();
+
   componentDidMount() {
-    document.addEventListener('click', this.clickOutside, true);    
+    document.addEventListener('click', this.clickOutside, true);
   }
 
   componentWillUnmount() {
     document.removeEventListener('click', this.clickOutside, true);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const isShowHeaderSearch = (
+      nextProps.location &&
+      this.isMobileDevice() &&
+      nextProps.location.pathname.endsWith('search')
+    );
+    this.setState({ isShowHeaderSearch });
+  }
+
   componentWillMount() {
-    const {location } = this.props;
-    this.setState( { embed: playerHelper.getEmbedFromQuery(location) } );
+    const { location } = this.props;
+    this.setState({ embed: playerHelper.getEmbedFromQuery(location) });
   }
 
   // i.e, main, header of footer.
   clickOutside = (e) => {
-    const { sidebarActive, isShowHeaderSearch } = this.state;
-    if (sidebarActive
-      && e.target !== this.sidebarElement
-      && !this.sidebarElement.contains(e.target)
-      && !this.menuButtonElement1.current.contains(e.target)
-      && !this.menuButtonElement2.current.contains(e.target)) {
+    if (this.isCloseSideBar(e)) {
       this.closeSidebar();
     }
 
-    if (isShowHeaderSearch
-      && e.target !== this.headerSearchElement
-      && !this.headerSearchElement.contains(e.target)
-      && !this.showSearchButtonElement.current.contains(e.target)) {
+    if (this.isCloseHeaderSearch(e)) {
       this.showHeaderSearch();
     }
+  };
+
+  isCloseHeaderSearch = (e) => {
+    if (!this.state || !this.state.sidebarActive || e.target === this.headerSearchElement) {
+      return false;
+    }
+
+    if (this.headerSearchElement && this.headerSearchElement.current.contains(e.target)) {
+      return false;
+    }
+
+    if (this.showSearchButtonElement && this.showSearchButtonElement.current.contains(e.target)) {
+      return false;
+    }
+
+    return true;
+  };
+
+  isCloseSideBar = (e) => {
+    if (!this.state || !this.state.sidebarActive || e.target === this.sidebarElement) {
+      return false;
+    }
+
+    if (this.sidebarElement && this.sidebarElement.contains(e.target)) {
+      return false;
+    }
+
+    if (this.menuButtonElement1 && this.menuButtonElement1.current.contains(e.target)) {
+      return false;
+    }
+
+    if (this.menuButtonElement2 && this.menuButtonElement2.current.contains(e.target)) {
+      return false;
+    }
+
+    return true;
   };
 
   toggleSidebar = () => this.setState({ sidebarActive: !this.state.sidebarActive });
@@ -106,16 +145,12 @@ class Layout extends Component {
 
     const { t, location } = this.props;
     return (
-      <div
-        className="header_search"
-        ref={(el) => {
-          this.headerSearchElement = el;
-        }}
-      >
-        <Segment color="blue" inverted>
+      <Ref innerRef={this.headerSearchElement}>
+        <Segment color="blue" inverted className="header_search">
           <WrappedOmniBox t={t} location={location} />
         </Segment>
-      </div>);
+      </Ref>
+    );
   };
 
   render() {
@@ -126,7 +161,7 @@ class Layout extends Component {
 
     let sideBarIcon = <Icon name="sidebar" />;
     if (sidebarActive) {
-      sideBarIcon = <Icon size="large" name="x" />;  
+      sideBarIcon = <Icon size="large" name="x" />;
     }
 
     return !embed ? (
@@ -162,24 +197,28 @@ class Layout extends Component {
                   : null
               }
             </Menu.Item>
-            <Menu.Menu position="right" className="padding0">
-              <Ref innerRef={this.showSearchButtonElement}>
-                <Menu.Item>
-                  <HandleLanguages
-                    language={language}
-                    contentLanguage={contentLanguage}
-                    setContentLanguage={setContentLanguage}
-                    location={location}
-                    isMobileDevice={this.isMobileDevice()}
-                  />
-                  {
-                    showSearch && this.isMobileDevice()
-                      ? <Button icon="search" color="blue" onClick={this.showHeaderSearch} />
-                      : null
-                  }
-                </Menu.Item>
-              </Ref>
-              <Menu.Item className="mobile-hidden">
+            <Menu.Menu position="right" className="no-padding no-margin">
+              <Menu.Item className="no-margin">
+                <HandleLanguages
+                  language={language}
+                  contentLanguage={contentLanguage}
+                  setContentLanguage={setContentLanguage}
+                  location={location}
+                  isMobileDevice={this.isMobileDevice()}
+                />
+              </Menu.Item>
+              {
+                showSearch && this.isMobileDevice()
+                  ? (
+                    <Ref innerRef={this.showSearchButtonElement}>
+                      <Menu.Item as="a" position="right">
+                        <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
+                      </Menu.Item>
+                    </Ref>
+                  )
+                  : null
+              }
+              <Menu.Item position="right" className="mobile-hidden">
                 <DonateNow language={language} />
               </Menu.Item>
               <TopMost />
@@ -221,9 +260,9 @@ class Layout extends Component {
         </div>
       </div>
     ) : (
-        <div>
-          {renderRoutes(route.routes)}
-        </div>    
+      <div>
+        {renderRoutes(route.routes)}
+      </div>
     );
   }
 }

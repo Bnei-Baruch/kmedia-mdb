@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Button } from 'semantic-ui-react';
+import { Segment, Button, Container, Icon } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../helpers/links';
 import { isDebMode } from '../../helpers/url';
@@ -16,11 +16,25 @@ class SearchResultCollection extends SearchResultBase {
     c: shapes.Collection,
   };
 
+  state = { isImgLoaded: false };
+
   renderCU = cu => (
     <Link key={cu.id} to={canonicalLink(cu, this.getMediaLanguage(this.props.filters))}>
-      <Button basic size="tiny" className="link_to_cu" content={cu.name} />
+      <Button basic size="tiny" className="link_to_cu">
+        {cu.name}
+      </Button>
     </Link>
   );
+
+  handleImageContextRef = (ref) => {
+    if(ref){
+      this.imgRef = ref.children[0];
+    }
+  };
+
+  imgLoadHandler        = () => {
+    this.setState({ isImgLoaded: true });
+  };
 
   render() {
     const { t, location, c, hit, rank, queryResult, filters } = this.props;
@@ -37,18 +51,25 @@ class SearchResultCollection extends SearchResultBase {
       }                                   = hit;
     const { search_result: { searchId } } = queryResult;
 
+    const { isImgLoaded } = this.state;
+
     return (
-      <Table className="bg_hover_grey search__block">
-        <Table.Body>
-          <Table.Row key={mdbUid} verticalAlign="top">
-            <Table.Cell collapsing singleLine width={1}>
-              <FallbackImage
-                circular
-                size="tiny"
-                src={assetUrl(`logos/collections/${c.id}.jpg`)}
-              />
-            </Table.Cell>
-            <Table.Cell>
+      <Segment className="bg_hover_grey search__block">
+        <Container>
+          <span ref={this.handleImageContextRef} >
+            <FallbackImage
+              circular
+              width={isImgLoaded ? this.imgRef.offsetWidth : null}
+              height={isImgLoaded ? this.imgRef.offsetWidth : null}
+              onLoad={this.imgLoadHandler}
+              floated="left"
+              fallbackImage={null}
+              size="tiny"
+              src={assetUrl(`logos/collections/${this.props.c.id}.jpg`)}
+            />
+          </span>
+          <Container>
+            <Container as="h3">
               <Link
                 className="search__link"
                 onClick={() => this.click(mdbUid, index, type, rank, searchId)}
@@ -56,31 +77,42 @@ class SearchResultCollection extends SearchResultBase {
               >
                 {this.titleFromHighlight(highlight, c.name)}
               </Link>
-              <div>
-                <Link
-                  onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-                  to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}
-                >
-                  {this.iconByContentType(c.content_type, true)}
-                </Link>
-                &nbsp;|&nbsp;
-                <span>{c.content_units.length} {t('pages.collection.items.programs-collection')}</span>
-                <div className="clear" />
-              </div>
-              <div>
-                {c.content_units.slice(0, 5).map(this.renderCU)}
-              </div>
-            </Table.Cell>
-            {
-              !isDebMode(location) ?
-                null :
-                <Table.Cell collapsing textAlign="right">
-                  <ScoreDebug name={c.name} score={score} explanation={hit._explanation} />
-                </Table.Cell>
-            }
-          </Table.Row>
-        </Table.Body>
-      </Table>
+            </Container>
+
+            <Container className="content">
+              <Link
+                onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+                to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}
+              >
+                {this.iconByContentType(c.content_type, true)}
+              </Link>
+              &nbsp;|&nbsp;
+              <span>{c.content_units.length} {t('pages.collection.items.programs-collection')}</span>
+            </Container>
+            <div className="clear" />
+          </Container>
+
+          <Container className="content clear margin-top-8">
+            {c.content_units.slice(0, 5).map(this.renderCU)}
+
+            <Link
+              onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+              to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}
+              className="margin-right-8"
+            >
+              <Icon name="tasks" size="small" />
+              {`${t('search.showAll')} ${c.content_units.length} ${t('pages.collection.items.programs-collection')}`}
+            </Link>
+          </Container>
+        </Container>
+        {
+          !isDebMode(location) ?
+            null :
+            <Container collapsing>
+              <ScoreDebug name={c.name} score={score} explanation={hit._explanation} />
+            </Container>
+        }
+      </Segment>
     );
   }
 }

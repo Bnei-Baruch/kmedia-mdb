@@ -8,7 +8,7 @@ import SearchResultBase from './SearchResultBase';
 
 class SearchResultPost extends SearchResultBase {
   render() {
-    const { queryResult, hit, rank, filters } = this.props;
+    const { queryResult, hit, rank, filters, post, t } = this.props;
 
     const { search_result: { searchId } } = queryResult;
 
@@ -22,6 +22,11 @@ class SearchResultPost extends SearchResultBase {
         },
         highlight
       } = hit;
+
+    let createdDate = '';
+    if (post.created_at) {
+      createdDate = t('values.date', { date: post.created_at });
+    }
 
     return (
       <Segment className="bg_hover_grey search__block">
@@ -38,6 +43,7 @@ class SearchResultPost extends SearchResultBase {
 
         <Container>
           {this.iconByContentType(resultType === 'posts' ? CT_BLOG_POST : resultType, true)}
+          | <strong>{createdDate}</strong>
         </Container>
         <Container className="content">
           {this.snippetFromHighlight(highlight)}
