@@ -207,15 +207,15 @@
   },
   "events": {
     "header": {
-      "text": "Conventions & Events",
+      "text": "Convegni e Eventi",
       "subtext": "Today, the wisdom of Kabbalah is already everywhere in the world. In this section you will be able to see events, conventions and special meetings of the \"Kabbalah L’Am\" association in Israel and abroad."
     },
     "tabs": {
-      "conventions": "Conventions",
-      "holidays": "Holidays",
-      "unity-days": "Unity Days",
-      "friends-gatherings": "Friends Gatherings",
-      "meals": "Meals"
+      "conventions": "Convegni",
+      "holidays": "Festività",
+      "unity-days": "Giorni di Unità",
+      "friends-gatherings": "Assemblea degli Amici",
+      "meals": "Pasti"
     },
     "list": {
       "item_from": "Item of:"
@@ -240,7 +240,7 @@
   },
   "lessons": {
     "header": {
-      "text": "Lectures & Lessons",
+      "text": "Lezioni e Conferenze",
       "subtext": "Lessons and lectures by Dr. Michael Laitman. Virtual lessons, lectures for women, unique recordings by Rabbi Baruch Ashlag (RABASH) and more."
     },
     "tabs": {
@@ -283,7 +283,7 @@
       "subtext": "Here you will find a rich variety of programs that include: fascinating conversations about the meaning of life, current events, programs for the whole family, clips and more."
     },
     "tabs": {
-      "main": "Programs",
+      "main": "Programmi",
       "clips": "Clips"
     },
     "genres": {
@@ -311,7 +311,7 @@
   },
   "publications": {
     "header": {
-      "text": "Publications",
+      "text": "Publicazioni",
       "subtext": "Articles on current events, culture, popular science, relationships and more, presented from the unique perspective of the wisdom of Kabbalah"
     },
     "tabs": {
