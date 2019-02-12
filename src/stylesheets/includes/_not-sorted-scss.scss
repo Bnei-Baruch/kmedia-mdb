@@ -1361,6 +1361,22 @@
   color: whitesmoke;
 }
 
+.FastDayPicker-DayPicker-NavButton {
+  width: 17em;
+  .DayPicker-NavButton {
+    top: 0;
+    float: right;
+  }
+}
+
+.float-left {
+  float: left
+}
+
+.clear{
+  clear: both;
+}
+
 #handleLanguagesPopup {
   position: fixed !important;
   top: 57px !important;

@@ -14,18 +14,13 @@ const TODAY        = 'TODAY';
 const YESTERDAY    = 'YESTERDAY';
 const LAST_7_DAYS  = 'LAST_7_DAYS';
 const LAST_30_DAYS = 'LAST_30_DAYS';
-const LAST_MONTH   = 'LAST_MONTH';
-const THIS_MONTH   = 'THIS_MONTH';
 const CUSTOM_RANGE = 'CUSTOM_RANGE';
+const CUSTOM_DAY   = 'CUSTOM_DAY';
 
 const datePresets = [
   TODAY,
-  YESTERDAY,
   LAST_7_DAYS,
-  LAST_30_DAYS,
-  LAST_MONTH,
-  THIS_MONTH,
-  // CUSTOM_RANGE,
+  LAST_30_DAYS
 ];
 
 const presetToRange = {
@@ -33,27 +28,12 @@ const presetToRange = {
     const nToday = today().toDate();
     return ({ from: nToday, to: nToday });
   },
-  [YESTERDAY]: () => {
-    const yesterday = today().subtract(1, 'days').toDate();
-    return ({ from: yesterday, to: yesterday });
-  },
   [LAST_7_DAYS]: () => ({
     from: today().subtract(6, 'days').toDate(),
     to: today().toDate()
   }),
   [LAST_30_DAYS]: () => ({
     from: today().subtract(29, 'days').toDate(),
-    to: today().toDate()
-  }),
-  [LAST_MONTH]: () => {
-    const minusMonth = today().subtract(1, 'months');
-    return ({
-      from: moment(minusMonth).startOf('month').toDate(),
-      to: moment(minusMonth).endOf('month').toDate()
-    });
-  },
-  [THIS_MONTH]: () => ({
-    from: today().startOf('month').toDate(),
     to: today().toDate()
   })
 };
@@ -73,14 +53,10 @@ const rangeToPreset = (from, to) => {
     return LAST_7_DAYS;
   } else if (moment(mTo).subtract(29, 'days').isSame(mFrom, 'day') && mTo.isSame(mNow, 'day')) {
     return LAST_30_DAYS;
-  } else if (moment(mNow).startOf('month').isSame(mFrom, 'day') && mNow.isSame(to, 'day')) {
-    return THIS_MONTH;
   }
 
-  const minusMonth = moment(mNow).subtract(1, 'months');
-  if (moment(minusMonth).startOf('month').isSame(mFrom, 'day') &&
-    moment(minusMonth).endOf('month').isSame(to, 'day')) {
-    return LAST_MONTH;
+  if (mFrom.isSame(mTo, 'day')) {
+    return CUSTOM_DAY;
   }
 
   return CUSTOM_RANGE;
@@ -134,7 +110,7 @@ class DateFilter extends Component {
   setRange = (datePreset, from, to) => {
     // calculate range with regard to the date preset
     let range = {};
-    if (datePreset === CUSTOM_RANGE) {
+    if (datePreset === CUSTOM_RANGE || datePreset === CUSTOM_DAY) {
       range.from = from || this.state.from;
       range.to   = to || this.state.to;
     } else {
@@ -167,12 +143,23 @@ class DateFilter extends Component {
       from,
       to,
       datePreset: preset,
-      showCustom: preset === CUSTOM_RANGE,
+      showRange: preset === CUSTOM_RANGE,
+      showDay: preset === CUSTOM_DAY,
     });
   };
 
-  handleDatePresetsChange = (event, data) =>
+  handleDatePresetsChange = (event, data) => {
+    this.hidePickers();
     this.setRange(data.name);
+  };
+
+  handleDayInputChange = (value) => {
+    if (!value) {
+      return;
+    }
+
+    this.setRange(CUSTOM_DAY, value, value);
+  };
 
   handleFromInputChange = (value) => {
     if (!value) {
@@ -198,8 +185,17 @@ class DateFilter extends Component {
     }
   };
 
-  toggleCustom = () =>
-    this.setState({ showCustom: !this.state.showCustom });
+  hidePickers = () => {
+    this.setState({ showRange: false, showDay: false });
+  };
+
+  toggleRange = () => {
+    this.setState({ showRange: !this.state.showRange, showDay: false });
+  };
+
+  toggleDay = () => {
+    this.setState({ showDay: !this.state.showDay, showRange: false });
+  };
 
   render() {
     const { t, language, deviceInfo } = this.props;
@@ -246,11 +242,28 @@ class DateFilter extends Component {
             }
             <Menu.Item>
               <Accordion.Title
-                active={this.state.showCustom}
-                content={t('filters.date-filter.presets.CUSTOM_RANGE')}
-                onClick={this.toggleCustom}
+                active={this.state.showDay}
+                content={t('filters.date-filter.presets.CUSTOM_DAY')}
+                onClick={this.toggleDay}
               />
-              <Accordion.Content active={this.state.showCustom}>
+              <Accordion.Content active={this.state.showDay}>
+                <FastDayPicker
+                  label={null}
+                  value={from}
+                  language={language}
+                  deviceInfo={deviceInfo}
+                  onDayChange={this.handleDayInputChange}
+                />
+              </Accordion.Content>
+
+            </Menu.Item>
+            <Menu.Item>
+              <Accordion.Title
+                active={this.state.showRange}
+                content={t('filters.date-filter.presets.CUSTOM_RANGE')}
+                onClick={this.toggleRange}
+              />
+              <Accordion.Content active={this.state.showRange}>
                 <FastDayPicker
                   label={t('filters.date-filter.start')}
                   value={from}
