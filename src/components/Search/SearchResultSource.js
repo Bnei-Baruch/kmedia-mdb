@@ -35,7 +35,7 @@ class SearchResultSource extends SearchResultBase {
           </Link>
         </Header>
         <Container>
-          <Image size="mini" src={sectionLogo.sources} verticalAlign="middle" />&nbsp;
+          <Image size="mini" src={sectionLogo.sources} verticalAlign="middle" />&nbsp;&nbsp;
           <span>{t('filters.sections-filter.sources')}</span>
         </Container>
         <Container className="content">

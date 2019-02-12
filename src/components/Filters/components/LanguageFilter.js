@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import noop from 'lodash/noop';
-import { Accordion, Button, Header, Menu, Segment, Flag } from 'semantic-ui-react';
+import { Accordion, Button, Flag, Header, Menu, Segment } from 'semantic-ui-react';
 import { ALL_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
 
 class LanguageFilter extends Component {
@@ -43,7 +44,7 @@ class LanguageFilter extends Component {
     this.setState({ showCustom: !this.state.showCustom });
 
   render() {
-    const { t } = this.props;
+    const { t }      = this.props;
     const { sValue } = this.state;
 
     return (
@@ -79,16 +80,16 @@ class LanguageFilter extends Component {
                     onClick={this.onLanguageChange}
                   >
                     <Flag name={LANGUAGES[x].flag} />
-                  {t(`constants.languages.${x}`)}
+                    {t(`constants.languages.${x}`)}
                   </Menu.Item>
                 );
               })
-            } 
-            </Accordion>
+            }
+          </Accordion>
         </Segment>
       </Segment.Group>
     );
   }
 }
 
-export default LanguageFilter;
+export default withNamespaces()(LanguageFilter);

@@ -1169,6 +1169,7 @@
   }
 
   .content {
+    margin-top: 0.5em;
     em {
       border-bottom: 1px solid rgba(65, 131, 196, .3);
       background-color: rgba(242, 201, 76, .2);
@@ -1182,8 +1183,8 @@
 
   .link_to_file.ui.basic.button {
     padding: .5em 1em;
-    margin-top: 5px !important;
-    margin-right: 5px !important;
+    margin-top: 8px !important;
+    margin-right: 8px !important;
     background-color: white !important;
     border-color: $grey;
 
@@ -1205,8 +1206,8 @@
 
   .link_to_cu {
     padding: .5em 1em;
-    margin-top: 5px !important;
-    margin-right: 5px !important;
+    margin-top: 8px !important;
+    margin-right: 8px !important;
   }
 
   .search__cards.ui.three.cards {
@@ -1265,7 +1266,7 @@
   background: transparent !important;
 }
 
-.padding0 {
+.no-padding {
   padding: 0 !important;
 }
 
@@ -1303,13 +1304,50 @@
   left: 0;
   position: fixed !important;
   right: 0;
-  top: 50px;
-  z-index: 1;
-  padding: 0;
+  top: 45px;
+  z-index: 2000;
+  margin: 0 !important;
 }
 
-.padding0 {
+.no-padding{
   padding: 0 !important;
+}
+
+.search-result-note {
+  padding: 10px 16px 10px 24px !important;
+  border-width: 1px 4px 1px 1px;
+  .ui.image{
+    height: 20px;
+    margin-top: 7px;
+  }
+}
+
+.no-margin-top {
+  margin-top: 0 !important;
+}
+
+.no-border {
+  border: 0 none !important;
+}
+
+.no-shadow {
+  box-shadow: none !important;
+}
+
+.margin-top-8{
+  margin-top: 8px !important;
+}
+
+.margin-right-8{
+  margin-right: 8px !important;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  select,
+  textarea,
+  input {
+    font-size: 16px;
+  }
 }
 
 /* ************* Style for Semantic Ui Popup  ************* */
@@ -1337,4 +1375,9 @@
 
 .clear{
   clear: both;
+}
+
+#handleLanguagesPopup {
+  position: fixed !important;
+  top: 57px !important;
 }

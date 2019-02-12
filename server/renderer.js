@@ -206,7 +206,7 @@ export default function serverRender(req, res, next, htmlData) {
               const cssDirection = direction === 'ltr' ? '' : '.rtl';
 
               store.dispatch(ssr.prepare());
-              // console.log(util.inspect(store.getState(), { showHidden: true, depth: 2 }));
+              // console.log(require('util').inspect(store.getState(), { showHidden: true, depth: 2 }));
               const storeData = serialize(store.getState());
 
               const i18nData = serialize(

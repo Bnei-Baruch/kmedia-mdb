@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Trans, withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
-import { Container, Divider, Grid } from 'semantic-ui-react';
+import { Container, Divider, Grid, Message, Image, Button } from 'semantic-ui-react';
+import InfoIcon from '../../images/icons/info.svg';
 
 import { SEARCH_INTENT_HIT_TYPES, } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { getQuery } from '../../helpers/url';
+import { selectors as settings } from '../../redux/modules/settings';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
@@ -50,14 +52,17 @@ class SearchResults extends Component {
     getSourcePath: undefined,
   };
 
+  state = {
+    showNote: true
+  };
+
   filterByHitType = (hit) => {
     const { hitType } = this.props;
     return hitType ? hit.type === hitType : true;
   };
 
   renderHit = (hit, rank) => {
-    const { cMap, cuMap } = this.props;
-
+    const { cMap, cuMap, postMap }                                               = this.props;
     const { _source: { mdb_uid: mdbUid, result_type: resultType }, _type: type } = hit;
 
     const props = { ...this.props, hit, rank, key: `${mdbUid}_${type}` };
@@ -66,18 +71,17 @@ class SearchResults extends Component {
       return <SearchResultIntent {...props} />;
     }
 
-    if (resultType === 'posts') {
-      return <SearchResultPost {...props} />;
-    }
-
-    const cu   = cuMap[mdbUid];
-    const c    = cMap[mdbUid];
     let result = null;
+    const cu = cuMap[mdbUid];
+    const c  = cMap[mdbUid];
+    const p  = postMap[mdbUid];
 
     if (cu) {
       result = <SearchResultCU {...props} cu={cu} />;
     } else if (c) {
       result = <SearchResultCollection c={c} {...props} />;
+    } else if (p) {
+      return <SearchResultPost  {...props} post={p} />;
     } else if (resultType === 'sources') {
       result = <SearchResultSource {...props} />;
     }
@@ -85,6 +89,26 @@ class SearchResults extends Component {
     // maybe content_units are still loading ?
     // maybe stale data in elasticsearch ?
     return result;
+  };
+
+  hideNote = () => this.setState({ showNote: false });
+
+  renderTopNote = () => {
+    const { t, contentLanguage } = this.props;
+    const language               = t(`constants.languages.${contentLanguage}`);
+    return (
+      this.state.showNote
+        ? <Message info className="search-result-note">
+          <Image src={InfoIcon} floated='left' />
+          <Button floated='right' icon="close" size="tiny" circular onClick={this.hideNote} />
+          <Container>
+            <strong>{t('search.topNote.tip')}: </strong>
+            {t('search.topNote.first', { language })}
+          </Container>
+          <Container>{t('search.topNote.second')}</Container>
+        </Message>
+        : null
+    );
   };
 
   render() {
@@ -138,11 +162,14 @@ class SearchResults extends Component {
       content = (
         <Grid>
           <Grid.Column key="1" computer={12} tablet={16} mobile={16}>
+            {this.renderTopNote()}
+
             <div className="searchResult_content">
               <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
               {hits.filter(this.filterByHitType).map(this.renderHit)}
             </div>
             <Divider fitted />
+
             <Container className="padded pagination-wrapper" textAlign="center">
               <Pagination
                 pageNo={pageNo}
@@ -167,4 +194,5 @@ export default connect(state => ({
   getSourcePath: sourcesSelectors.getPathByID(state.sources),
   getSourceById: sourcesSelectors.getSourceById(state.sources),
   getTagById: tagsSelectors.getTagById(state.tags),
+  contentLanguage: settings.getContentLanguage(state.settings),
 }))(withNamespaces()(SearchResults));
