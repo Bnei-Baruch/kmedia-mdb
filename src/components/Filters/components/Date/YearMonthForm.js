@@ -45,8 +45,8 @@ class YearMonthForm extends Component {
   };
 
   render() {
-    const { state: { month, year }, props: { localeUtils, language } } = this;
-    const months                                                       = localeUtils.getMonths(language);
+    const { state: { month, year }, props: {localeUtils, language, className } }= this;
+    const months                    = localeUtils.getMonths(language);
 
     const years = [];
     for (let i = toMonth.getFullYear(); i >= fromMonth.getFullYear(); i -= 1) {
@@ -54,7 +54,7 @@ class YearMonthForm extends Component {
     }
 
     return (
-      <div className="DayPicker-Caption">
+      <span className={className}>
         <Dropdown
           compact
           inline
@@ -72,7 +72,7 @@ class YearMonthForm extends Component {
           value={year}
           onChange={this.handleYearChange}
         />
-      </div>
+      </span>
     );
   }
 }

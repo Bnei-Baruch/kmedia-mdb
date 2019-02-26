@@ -38,7 +38,8 @@
         "LAST_30_DAYS": "30 ימים אחרונים",
         "LAST_MONTH": "חודש שעבר",
         "THIS_MONTH": "חודש נוכחי",
-        "CUSTOM_RANGE": "בחירה גמישה"
+        "CUSTOM_RANGE": "בחירה גמישה",
+        "CUSTOM_DAY": "בחירה תאריך"
       },
       "start": "התחלה",
       "end": "סיום"

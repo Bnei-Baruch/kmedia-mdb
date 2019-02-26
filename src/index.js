@@ -6,6 +6,7 @@ import 'moment/locale/he';
 import 'moment/locale/ru';
 import 'moment/locale/es';
 import 'moment/locale/uk';
+import 'moment/locale/it';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactGA from 'react-ga';

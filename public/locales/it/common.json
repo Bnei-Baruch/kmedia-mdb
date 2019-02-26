@@ -4,107 +4,106 @@
       "header": "Kabbalah Media"
     },
     "sidebar": {
-      "lessons": "Lessons & Lectures",
-      "programs": "Programs",
-      "sources": "Library",
-      "events": "Conventions & Events",
-      "books": "Books",
-      "topics": "Topics",
-      "publications": "Publications",
+      "lessons": "Lezioni e Conferenze",
+      "programs": "Programmi",
+      "sources": "Biblioteca",
+      "events": "Convegni e Eventi",
+      "books": "Libri",
+      "topics": "Argomenti",
+      "publications": "Pubblicazioni",
       "simple-mode": "Downloads",
-      "photos": "Photos",
+      "photos": "Fotografie",
       "design": "Design",
-      "design2": "Layout",
-      "project-status": "Project Status",
-      "help": "Help",
-      "old-site": "Old Site"
+      "design2": "Impaginazione",
+      "project-status": "Stato del progetto",
+      "help": "Aiuto",
+      "old-site": "Vecchio sito"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
-      "rights": "Bnei Baruch – Kabbalah L’Am Association, All rights reserved"
+      "rights": "Bnei Baruch – Kabbalah L’Am Association, Tutti i diritti riservati"
     }
   },
   "filters": {
-    "by": "Filter by:",
-    "filters": "Filters",
+    "by": "Filtrato per:",
+     "filters": "Filters",
     "hideFilters": "Hide Filters",
-    "all": "All",
+    "all": "Tutto",
     "date-filter": {
-      "label": "Date",
-      "selectTitle": "Select a date range",
+      "label": "Data",
+      "selectTitle": "Selezionare un intervallo di data",
       "presets": {
-        "TODAY": "Today",
-        "YESTERDAY": "Yesterday",
-        "LAST_7_DAYS": "Last 7 Days",
-        "LAST_30_DAYS": "Last 30 Days",
-        "LAST_MONTH": "Last Month",
-        "THIS_MONTH": "This Month",
-        "CUSTOM_RANGE": "Custom Range",
-        "CUSTOM_DAY": "Pick a Date"
+        "TODAY": "Oggi",
+        "YESTERDAY": "Ieri",
+        "LAST_7_DAYS": "Ultimi 7 Giorni",
+        "LAST_30_DAYS": "Ultimi 30 Giorni",
+        "LAST_MONTH": "Scorso mese",
+        "THIS_MONTH": "Questo mese",
+        "CUSTOM_RANGE": "Gamma Personalizzata"
       },
-      "start": "Start",
-      "end": "End"
+      "start": "Inizio",
+      "end": "Fine"
     },
     "language-filter": {
       "label": "Language",
       "all": "Any Language"
     },
     "sources-filter": {
-      "label": "Sources",
-      "all": "All Sources"
+      "label": "Fonti",
+      "all": "Tutte le fonti"
     },
     "topics-filter": {
-      "label": "Topics",
-      "all": "All Topics"
+      "label": "Argomenti",
+      "all": "Tutti gli argomenti"
     },
     "publishers-filter": {
-      "label": "Publishers"
+      "label": "Editori"
     },
     "programs-filter": {
-      "label": "Genre/Program",
-      "all": "All Programs",
-      "recently-updated": "Recently Updated",
-      "last-updated": "Last updated on"
+      "label": "Genere/Programma",
+      "all": "Tutti i Programmi",
+      "recently-updated": "Aggiornato Recentemente",
+      "last-updated": "Ultimo aggiornamento il"
     },
     "locations-filter": {
-      "label": "Locations",
-      "all": "All Locations"
+      "label": "Posizioni",
+      "all": "Tutte le posizioni"
     },
     "holidays-filter": {
-      "label": "Holidays",
-      "all": "All Holidays"
+      "label": "Festività",
+      "all": "Tutte le Festività"
     },
     "years-filter": {
-      "label": "Year",
-      "placeholder": "Select a year"
+      "label": "Anno",
+      "placeholder": "Selezionare un anno"
     },
     "collections-filter": {
-      "label": "Collections",
-      "all": "All Collections"
+      "label": "Serie",
+      "all": "Tutte le serie"
     },
     "sections-filter": {
-      "label": "Section",
-      "all": "All",
-      "lessons": "Lessons & Lectures",
-      "programs": "Programs",
-      "events": "Conventions & Events",
-      "publications": "Publications",
+      "label": "Sezione",
+      "all": "Tutte le sezioni",
+      "lessons": "Lezioni e Conferenze",
+      "programs": "Programmi",
+      "events": "Congressi ed Eventi",
+      "publications": "Publicazioni",
       "sources": "Kabbalah Sources",
       "posts": "Blog"
     }
   },
   "buttons": {
-    "apply": "Apply",
-    "cancel": "Cancel",
-    "close": "Close",
+    "apply": "Applica",
+    "cancel": "Cancella",
+    "close": "Chiudi",
     "audio": "Audio",
     "video": "Video",
-    "more": "More",
-    "copy-link": "Copy Link",
-    "search": "Search",
-    "previous": "Previous",
-    "next": "Next",
-    "copy": "Copy",
+    "more": "Altro",
+    "copy-link": "Copia Link",
+    "search": "Cerca",
+    "previous": "Precedente",
+    "next": "Successivo",
+    "copy": "Copia",
     "view-all": "View All"
   },
   "player": {
@@ -208,15 +207,15 @@
   },
   "events": {
     "header": {
-      "text": "Conventions & Events",
+      "text": "Convegni e Eventi",
       "subtext": "Today, the wisdom of Kabbalah is already everywhere in the world. In this section you will be able to see events, conventions and special meetings of the \"Kabbalah L’Am\" association in Israel and abroad."
     },
     "tabs": {
-      "conventions": "Conventions",
-      "holidays": "Holidays",
-      "unity-days": "Unity Days",
-      "friends-gatherings": "Friends Gatherings",
-      "meals": "Meals"
+      "conventions": "Convegni",
+      "holidays": "Festività",
+      "unity-days": "Giorni di Unità",
+      "friends-gatherings": "Assemblea degli Amici",
+      "meals": "Pasti"
     },
     "list": {
       "item_from": "Item of:"
@@ -241,7 +240,7 @@
   },
   "lessons": {
     "header": {
-      "text": "Lectures & Lessons",
+      "text": "Lezioni e Conferenze",
       "subtext": "Lessons and lectures by Dr. Michael Laitman. Virtual lessons, lectures for women, unique recordings by Rabbi Baruch Ashlag (RABASH) and more."
     },
     "tabs": {
@@ -284,7 +283,7 @@
       "subtext": "Here you will find a rich variety of programs that include: fascinating conversations about the meaning of life, current events, programs for the whole family, clips and more."
     },
     "tabs": {
-      "main": "Programs",
+      "main": "Programmi",
       "clips": "Clips"
     },
     "genres": {
@@ -312,7 +311,7 @@
   },
   "publications": {
     "header": {
-      "text": "Publications",
+      "text": "Publicazioni",
       "subtext": "Articles on current events, culture, popular science, relationships and more, presented from the unique perspective of the wisdom of Kabbalah"
     },
     "tabs": {
@@ -496,39 +495,39 @@
       "cs": "Czech"
     },
     "content-types": {
-      "DAILY_LESSON": "Daily Lesson",
-      "SPECIAL_LESSON": "Special Lesson",
-      "FRIENDS_GATHERINGS": "Friends Gatherings",
-      "CONGRESS": "Convention",
-      "VIDEO_PROGRAM": "Program",
-      "LECTURE_SERIES": "Lecture Series",
-      "CHILDREN_LESSONS": "Children Lessons",
-      "WOMEN_LESSONS": "Women Lessons",
-      "VIRTUAL_LESSONS": "Virtual Lessons",
-      "MEALS": "Meals",
-      "HOLIDAY": "Holiday",
+      "DAILY_LESSON": "Lezione del giorno",
+      "SPECIAL_LESSON": "Lezione speciale",
+      "FRIENDS_GATHERINGS": "Assemblea degli Amici",
+      "CONGRESS": "Congresso",
+      "VIDEO_PROGRAM": "Programma",
+      "LECTURE_SERIES": "Serie di conferenze",
+      "CHILDREN_LESSONS": "Lezioni per i bambini",
+      "WOMEN_LESSONS": "Lezioni per le donne",
+      "VIRTUAL_LESSONS": "Lezioni virtuali",
+      "MEALS": "Pasti",
+      "HOLIDAY": "Festività",
       "PICNIC": "Picnic",
-      "UNITY_DAY": "Unity Day",
-      "CLIPS": "Clips",
-      "ARTICLES": "Articles",
-      "LESSON_PART": "Lesson",
-      "LECTURE": "Lecture",
-      "CHILDREN_LESSON": "Children Lesson",
-      "WOMEN_LESSON": "Women Lesson",
-      "VIRTUAL_LESSON": "Virtual Lesson",
-      "FRIENDS_GATHERING": "Gathering Of Friends",
-      "MEAL": "Meal",
-      "VIDEO_PROGRAM_CHAPTER": "Program Chapter",
-      "FULL_LESSON": "Full Lesson",
-      "ARTICLE": "Article",
-      "UNKNOWN": "Unknown",
-      "EVENT_PART": "Event Part",
-      "CLIP": "Clip",
-      "TRAINING": "Training",
-      "KITEI_MAKOR": "Sources Materials",
-      "PUBLICATION": "Publication",
-      "LELO_MIKUD": "Edited - No Focus Group",
-      "BLOG_POST": "Blog Post"
+      "UNITY_DAY": "Giorno dell’Unione",
+      "CLIPS": "Video brevi",
+      "ARTICLES": "Articoli",
+      "LESSON_PART": "Parte dalla lezione",
+      "LECTURE": "Conferenza",
+      "CHILDREN_LESSON": "Lezione per i bambini",
+      "WOMEN_LESSON": "Lezione per le donne",
+      "VIRTUAL_LESSON": "Lezione virtuale",
+      "FRIENDS_GATHERING": "Assemblea degli Amici",
+      "MEAL": "Pasto",
+      "VIDEO_PROGRAM_CHAPTER": "Episodio",
+      "FULL_LESSON": "Lezione completa",
+      "ARTICLE": "Articolo",
+      "UNKNOWN": "Sconosciuto",
+      "EVENT_PART": "Parte dell'evento",
+      "CLIP": "Video breve",
+      "TRAINING": "Formazione",
+      "KITEI_MAKOR": "Estratti dalle fonti",
+      "PUBLICATION": "Pubblicazione",
+      "LELO_MIKUD": "Senza Focus Group",
+      "BLOG_POST": "Post dal Blog"
     },
     "media-types": {
       "video": "Video",
@@ -537,8 +536,90 @@
       "text": "Text",
       "sheet": "Sheet",
       "banner": "Banner",
-      "presentation": "Presentation"
+      "presentation": "Presentazione"
     }
+  },
+  "locations": {
+    "argentina": "argentina",
+    "buenos-aires":  "buenos-aires",
+    "austria": "austria",
+    "vienna": "vienna",
+    "brazil": "brasile",
+    "sau-paulo": "san-paolo",
+    "bulgaria": "bulgaria",
+    "borovets": "borovec",
+    "sofia": "sofia",
+    "canada": "canada",
+    "toronto": "toronto",
+    "chile": "cile",
+    "santiago": "santiago",
+    "colombia": "colombia",
+    "bogota": "Bogotá",
+    "czech-republic": "repubblica-ceca",
+    "prague": "praga",
+    "estonia": "estonia",
+    "tallinn":  "tallinn",
+    "france":  "francia",
+    "paris":  "parigi",
+    "georgia": "georgia",
+    "tbilisi":  "tbilisi",
+    "germany": "germania",
+    "berlin": "berlino",
+    "birnbach": "birnbach",
+    "bremen":   "brema",
+    "heidelberg": "heidelberg",
+    "wetzlar": "wetzlar",
+    "iceland":  "islanda",
+    "reykjavik": "reykjavik",
+    "israel": "israele",
+    "arava": "arava",
+    "galil": "galilea",
+    "kfar-tzvi-sitrin":  "kfar-tzvi-sitrin",
+    "petah-tikva": "petah-tikva",
+    "tel-aviv":"tel-aviv",
+    "italy":" italia",
+    "bologna": "bologna",
+    "rome":"roma",
+    "verona": "verona",
+    "kazakhstan": "kazakistan",
+    "almaty": "almaty",
+    "lithuania": "lituania",
+    "vilnius": "vilnius",
+    "mexico":" messico",
+    "guadalajara":"guadalajara",
+    "poland": "polonia",
+    "warsaw":"varsavia",
+    "romania":"romania",
+    "iasi":"Iași",
+    "russia": "russia",
+    "krasnoyarsk":"krasnojarsk",
+    "moscow":"mosca",
+    "novosibirsk": "novosibirsk",
+    "saint-petersburg": "san-pietroburgo",
+    "sochi": "Soči",
+    "spain": "spagna",
+    "madrid": "madrid",
+    "sweden":"svezia",
+    "stockholm": "stoccolma",
+    "switzerland": "svizzera",
+    "berne": "berna",
+    "turkey": "turchia",
+    "antalya":  "Adalia",
+    "ukraine": "ucraina",
+    "kharkiv": "Charkiv",
+    "kiev": "kiev",
+    "odessa": "odessa",
+    "united-kingdom": "regno-unito",
+    "blackpool": "blackpool",
+    "united-states": "stati-uniti",
+    "buffalo": "buffalo",
+    "los-angeles": "los-angeles",
+    "miami": "miami",
+    "new-jersey": "new-jersey",
+    "new-york":  "new-york",
+    "san-francisco": "san-francisco",
+    "st-louis": "saint-louis",
+    "unknown": "sconosciuto"
   },
   "values": {
     "date": "{{date, ll}}"
