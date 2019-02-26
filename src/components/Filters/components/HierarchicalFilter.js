@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { debounce, noop } from 'lodash';
+import debounce from 'lodash/debounce';
+import noop from 'lodash/noop';
 import scrollIntoView from 'scroll-into-view';
 import { Button, Header, Input, Menu, Segment } from 'semantic-ui-react';
 
@@ -80,7 +81,8 @@ class HierarchicalFilter extends Component {
   };
 
   handleClick = (e, data) => {
-    const depth = data['data-level'] - 2;
+    const depth       = data['data-level'] - 2;
+    const isCallApply = data['is-last-leaf'] === 'true';
 
     // clear selection if root was clicked
     if (depth < 0) {
@@ -103,7 +105,11 @@ class HierarchicalFilter extends Component {
     newSelection.splice(depth, oldSelection.length - depth);
     newSelection.push(data.name);
 
-    this.setState({ sValue: newSelection });
+    if (isCallApply) {
+      this.props.onApply(newSelection);
+    } else {
+      this.setState({ sValue: newSelection });
+    }
   };
 
   handleTermChange = debounce((e, data) => {
@@ -134,6 +140,7 @@ class HierarchicalFilter extends Component {
         ref={ref}
         active={active}
         data-level={level}
+        is-last-leaf={(node.children.length === 0).toString()}
         className={`l${level}`}
         onClick={this.handleClick}
       >
