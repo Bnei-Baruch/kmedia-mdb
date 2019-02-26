@@ -1177,6 +1177,10 @@
     }
   }
 
+  .header .label{
+    margin-top: 9px !important;
+  }
+
   .ui.mini.image {
     width: 25px;
   }
@@ -1314,11 +1318,15 @@
 }
 
 .search-result-note {
-  padding: 10px 16px 10px 24px !important;
+  padding: 10px 16px 10px 16px !important;
   border-width: 1px 4px 1px 1px;
   .ui.image{
     height: 20px;
-    margin-top: 7px;
+    margin-top: 10px;
+  }
+  .button{
+    margin-top: 3px;
+    margin-left: 0px !important;
   }
 }
 
