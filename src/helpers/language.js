@@ -11,13 +11,19 @@ export const selectSuitableLanguage = (contentLanguage, uiLanguage, languages = 
   if (languages.length === 0) {
     // we don't have data for new UI language. Let's stay as we are.
     return DEFAULT_LANGUAGE;
-  } else if (languages.includes(contentLanguage)) {
+  }
+
+  if (languages.includes(contentLanguage)) {
     // Use content language [preferred one]
     return contentLanguage;
-  } else if (languages.includes(uiLanguage)) {
+  }
+
+  if (languages.includes(uiLanguage)) {
     // Or UI language
     return uiLanguage;
-  } else if (languages.includes(LANG_ENGLISH)) {
+  }
+
+  if (languages.includes(LANG_ENGLISH)) {
     // Or English
     return LANG_ENGLISH;
   }
@@ -25,4 +31,3 @@ export const selectSuitableLanguage = (contentLanguage, uiLanguage, languages = 
   // eslint-disable-next-line prefer-destructuring
   return languages[0];
 };
-
