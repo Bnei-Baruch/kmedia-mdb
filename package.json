@@ -102,7 +102,7 @@
     "react-ga": "^2.5.6",
     "react-helmet-async": "^0.2.0",
     "react-i18next": "^8.3.8",
-    "react-image-gallery": "^0.8.10",
+    "react-image-gallery": "^0.8.14",
     "react-media-player": "github:Bnei-Baruch/react-media-player",
     "react-pdf": "^4.0.0",
     "react-redux": "^6.0.0",

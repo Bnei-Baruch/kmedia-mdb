@@ -10949,15 +10949,15 @@ react-i18next@^8.3.8:
     hoist-non-react-statics "3.0.1"
     html-parse-stringify2 "2.0.1"
 
-react-image-gallery@^0.8.10:
-  version "0.8.12"
-  resolved "https://registry.yarnpkg.com/react-image-gallery/-/react-image-gallery-0.8.12.tgz#d27f498e28fef03aa80841f18d6ba03379a02517"
-  integrity sha512-jkrsEhRZ3JPxFhLznrwPyAVy/n6HiM204tKBJ1W5z1a8QnWLVVi+j/UXsMETvks4rnSIkAQbW3WPHbrS19nNMQ==
+react-image-gallery@^0.8.14:
+  version "0.8.14"
+  resolved "https://registry.yarnpkg.com/react-image-gallery/-/react-image-gallery-0.8.14.tgz#d5e87fadc67174199bb4c542ff5a6dae14fcdc09"
+  integrity sha512-sQllvTwKzEaoo8ii9NSjWtxHE2kic6gArXYH7YGwpY4WIM6IBLF9clVH4XC+Wh/bp7I4lCGYYH7xkcRALQy+RQ==
   dependencies:
     lodash.debounce "^4.0.8"
     lodash.throttle "^4.1.1"
     prop-types "^15.5.8"
-    react-swipeable "^4.2.2"
+    react-swipeable "^4.3.2"
     resize-observer-polyfill "^1.5.0"
 
 react-is@^16.3.2, react-is@^16.5.2, react-is@^16.6.1, react-is@^16.6.3, react-is@^16.7.0:
@@ -11101,10 +11101,10 @@ react-share@^2.0.0:
     jsonp "^0.2.1"
     prop-types "^15.5.8"
 
-react-swipeable@^4.2.2:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/react-swipeable/-/react-swipeable-4.3.1.tgz#9b78da9d3a7a29dabda347ee1cd10452cb171806"
-  integrity sha512-l37UjE4iydKaCKmL1npVxGqwGZhXol5JSZhNRHssHoPhdfz8KOZedmkopsCal5H4H1VVrhPKv61gXGfgaWfN8Q==
+react-swipeable@^4.3.2:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/react-swipeable/-/react-swipeable-4.3.2.tgz#8bacfd17f74bd24bdd770fc522739dbdc9a9d493"
+  integrity sha512-DPZ5FbefHk2XtbLIMqa7LKwqDPHRezPrcBVg4M2beeRohlmEK2hGsYj81lReEnX6AChOJZtYBvBSxGIIwpG38A==
   dependencies:
     detect-passive-events "^1.0.4"
     prop-types "^15.5.8"
