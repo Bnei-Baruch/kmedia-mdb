@@ -1,4 +1,4 @@
-import { call, put, select, takeEvery, takeLatest, all } from 'redux-saga/effects';
+import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { getQuery, updateQuery as urlUpdateQuery } from './helpers/url';
@@ -9,7 +9,8 @@ import { actions as mdbActions } from '../redux/modules/mdb';
 import { actions as postsActions } from '../redux/modules/publications';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 import { filtersTransformer } from '../filters';
-import { BLOGS } from '../helpers/consts';
+
+// import { BLOGS } from '../helpers/consts';
 
 function* autocomplete(action) {
   try {

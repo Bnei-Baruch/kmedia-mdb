@@ -22,6 +22,7 @@ class AVLanguage extends Component {
     selectedLanguage: LANG_HEBREW,
     requestedLanguage: LANG_HEBREW,
     languages: [],
+    uiLanguage: LANG_HEBREW,
   };
 
   state = {};

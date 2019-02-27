@@ -108,7 +108,7 @@ class AVBox extends Component {
 
   render() {
     const { t, autoPlayAllowed, uiLanguage, contentLanguage } = this.props;
-    const { playableItem, mediaEditMode, autoPlay } = this.state;
+    const { playableItem, mediaEditMode, autoPlay }           = this.state;
 
     if (isEmpty(playableItem)) {
       return (<div>{t('messages.no-playable-files')}</div>);

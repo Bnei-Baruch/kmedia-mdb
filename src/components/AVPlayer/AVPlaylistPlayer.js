@@ -93,8 +93,9 @@ class AVPlaylistPlayer extends Component {
               item={currentItem}
               onSwitchAV={onSwitchAV}
               languages={currentItem.availableLanguages}
-              language={language}
               uiLanguage={uiLanguage}
+              selectedLanguage={currentItem.language}
+              requestedLanguage={language}
               onLanguageChange={onLanguageChange}
               // Playlist props
               showNextPrev
