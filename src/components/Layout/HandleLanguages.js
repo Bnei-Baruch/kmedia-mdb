@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { Button, Header, Icon, Menu, Popup } from 'semantic-ui-react';
+import { Button, Header, Icon, Popup } from 'semantic-ui-react';
 
 import * as shapes from '../shapes';
 import UILanguage from './UILanguage';

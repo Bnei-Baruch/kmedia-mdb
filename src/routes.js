@@ -28,7 +28,7 @@ import Topics from './components/Sections/Topics/TopicContainer';
 import Topic from './components/Sections/Topics/TopicPage';
 import SearchResults from './components/Search/SearchResultsContainer';
 import HomePage from './components/Sections/Home/Container';
-import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
+// import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import Help from './components/Sections/Help/Help';
 import SimpleMode from './components/Sections/SimpleMode/Container';
 import NotImplemented from './components/NotImplemented';
@@ -76,7 +76,7 @@ const routes = [
   { path: 'books', component: NotImplemented },
   { path: 'photos', component: NotImplemented },
   { path: 'search', component: SearchResults, options: { ssrData: ssrDataLoaders.searchPage } },
-  { path: 'project-status', component: ProjectStatus },
+  // { path: 'project-status', component: ProjectStatus },
   { path: 'help', component: Help },
   { path: 'simple-mode', component: SimpleMode, options: { ssrData: ssrDataLoaders.simpleMode } },
   // { path: 'design', component: Design },
