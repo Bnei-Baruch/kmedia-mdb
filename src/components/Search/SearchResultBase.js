@@ -254,7 +254,7 @@ class SearchResultBase extends Component {
     const { location, hit }                            = this.props;
     const { _explanation: explanation, _score: score } = hit;
 
-    if (!isDebMode(location) || !explanation) {
+    if (!isDebMode(location)) {
       return null;
     }
 
