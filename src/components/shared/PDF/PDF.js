@@ -46,9 +46,8 @@ class PDF extends Component {
   static getDerivedStateFromProps(nextProps, state) {
     const { pdfFile } = state;
     if (pdfFile !== nextProps.pdfFile) {
-      const pageNumber = nextProps.pageNumber + nextProps.startsFrom + -1;
       return {
-        pageNumber,
+        pageNumber: nextProps.pageNumber,
         numPages: null,
       };
     }
