@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
+import isEqual from 'react-fast-compare';
 
 import { actions, selectors } from '../../../../redux/modules/mdb';
 import { selectors as settings } from '../../../../redux/modules/settings';
@@ -12,7 +12,7 @@ import * as shapes from '../../../shapes';
 import Helmets from '../../../shared/Helmets';
 import WipErr from '../../../shared/WipErr/WipErr';
 import { PlaylistCollectionContainer } from '../../../Pages/PlaylistCollection/Container';
-import { equal, publicFile } from '../../../../helpers/utils';
+import { publicFile } from '../../../../helpers/utils';
 
 class LastLessonCollection extends Component {
   static propTypes = {
@@ -32,24 +32,41 @@ class LastLessonCollection extends Component {
     lastLessonId: '',
   };
 
+  constructor(props) {
+    super(props);
+    const { contentLanguage } = this.props;
+    this.state                = {
+      language: contentLanguage,
+    };
+  }
+
   componentDidMount() {
-    if (!this.props.lastLessonId) {
-      this.props.fetchLatestLesson();
+    const { lastLessonId, fetchLatestLesson } = this.props;
+    if (!lastLessonId) {
+      fetchLatestLesson();
     }
   }
 
-  componentDidUpdate(){
-    if (!this.props.lastLessonId) {
-      this.props.fetchLatestLesson();
+  static getDerivedStateFromProps(nextProps, state) {
+    const { language } = state;
+    if (language !== nextProps.contentLanguage) {
+      nextProps.fetchLatestLesson();
+      return { language: nextProps.contentLanguage };
     }
+    return null;
   }
 
-  shouldComponentUpdate(nextProps) {
-    return (
-      nextProps.uiLanguage !== this.props.uiLanguage ||
-      nextProps.contentLanguage !== this.props.contentLanguage ||
-      !equal(nextProps.wip, this.props.wip) ||
-      !equal(nextProps.errors, this.props.errors)
+  shouldComponentUpdate(nextProps, nextState) {
+    const { uiLanguage, contentLanguage, wip, errors, } = nextProps;
+    const { language }                               = nextState;
+    const { props, state }                           = this;
+
+    return !(
+      uiLanguage === props.uiLanguage
+      && language === state.filesLanguage
+      && contentLanguage === state.filesLanguage
+      && isEqual(wip, props.wip)
+      && isEqual(errors, props.errors)
     );
   }
 
@@ -111,4 +128,4 @@ function mapDispatch(dispatch) {
   }, dispatch);
 }
 
-export default withRouter(connect(mapState, mapDispatch)(translate()(LastLessonCollection)));
+export default withRouter(connect(mapState, mapDispatch)(withNamespaces()(LastLessonCollection)));
