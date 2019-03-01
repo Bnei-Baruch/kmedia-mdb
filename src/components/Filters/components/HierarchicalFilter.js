@@ -6,7 +6,7 @@ import noop from 'lodash/noop';
 import scrollIntoView from 'scroll-into-view';
 import { Button, Header, Input, Menu, Segment } from 'semantic-ui-react';
 
-import { isEmpty, getEscapedRegExp } from '../../../helpers/utils';
+import { getEscapedRegExp, isEmpty } from '../../../helpers/utils';
 
 class HierarchicalFilter extends Component {
   static propTypes = {
@@ -140,7 +140,7 @@ class HierarchicalFilter extends Component {
         ref={ref}
         active={active}
         data-level={level}
-        is-last-leaf={(node.children.length === 0).toString()}
+        is-last-leaf={(!node.children || node.children.length === 0).toString()}
         className={`l${level}`}
         onClick={this.handleClick}
       >
