@@ -19,13 +19,14 @@ class PDFMenu extends Component {
     const { pageNumber } = props;
     this.state           = {
       inputValue: pageNumber,
+      propsPageNumber: pageNumber,
       inputError: true,
     };
   }
 
   static getDerivedStateFromProps(nextProps, state) {
-    if (nextProps.pageNumber !== state.pageNumber) {
-      return { inputValue: nextProps.pageNumber };
+    if (nextProps.pageNumber !== state.propsPageNumber) {
+      return { inputValue: nextProps.pageNumber, propsPageNumber: nextProps.pageNumber };
     }
     return null;
   }
