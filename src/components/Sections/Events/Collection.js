@@ -9,14 +9,17 @@ import PlaylistWidget from '../../Pages/PlaylistCollection/widgets/Playlist/Play
 import logo from '../../../images/event_logo.png';
 
 class MyPlaylistWidget extends PlaylistWidget {
+  state = {
+    selectedRef: null,
+  };
+
   handleSelectedRef = x => this.setState({ selectedRef: x });
 
   componentDidUpdate(prevProps, prevState) {
     // We want selected item to visible to the user.
     // So we scrollIntoView if it's not.
-    if (this.state.selectedRef &&
-      (!prevState || this.state.selectedRef !== prevState.selectedRef)) {
-
+    if (this.state.selectedRef
+      && (!prevState || this.state.selectedRef !== prevState.selectedRef)) {
       const { top: pTop, bottom: pBottom } = this.playlistView.getBoundingClientRect();
       const { top, bottom }                = this.state.selectedRef.getBoundingClientRect();
 
@@ -27,13 +30,14 @@ class MyPlaylistWidget extends PlaylistWidget {
   }
 
   renderHeader() {
-    const { name, start_date, end_date } = this.props.playlist.collection;
+    const { name, start_date: startDate, end_date: endDate } = this.props.playlist.collection;
 
     return (
       <Header inverted as="h2">
-        <Image circular src={logo} floated="left" />{name}
+        <Image circular src={logo} floated="left" />
+        {name}
         <Header.Subheader>
-          {fromToLocalized(start_date, end_date)}
+          {fromToLocalized(startDate, endDate)}
         </Header.Subheader>
       </Header>
     );
@@ -60,9 +64,9 @@ class MyPlaylistWidget extends PlaylistWidget {
                 onClick={this.handleItemClick}
               >
                 {
-                  section === 'preparation' || section === 'appendices' ?
-                    <strong>{t('values.date', { date: unit.film_date })} &nbsp;</strong> :
-                    null
+                  section === 'preparation' || section === 'appendices'
+                    ? <strong>{t('values.date', { date: unit.film_date })} &nbsp;</strong>
+                    : null
                 }
                 {unit.name || NO_NAME} - {formatDuration(unit.duration)}
               </Menu.Item>

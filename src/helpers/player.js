@@ -235,6 +235,12 @@ function setActivePartInQuery(history, ap) {
   }));
 }
 
+function getEmbedFromQuery(location) {
+  const query    = getQuery(location);
+  const embed = query.embed === '1';
+  return embed;
+}
+
 export default {
   playableItem,
   playlist,
@@ -248,4 +254,5 @@ export default {
   persistPreferredMediaType,
   restorePreferredVideoSize,
   persistPreferredVideoSize,
+  getEmbedFromQuery,
 };

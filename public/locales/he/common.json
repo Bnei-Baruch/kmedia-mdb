@@ -38,7 +38,8 @@
         "LAST_30_DAYS": "30 ימים אחרונים",
         "LAST_MONTH": "חודש שעבר",
         "THIS_MONTH": "חודש נוכחי",
-        "CUSTOM_RANGE": "בחירה גמישה"
+        "CUSTOM_RANGE": "בחירה גמישה",
+        "CUSTOM_DAY": "בחירה תאריך"
       },
       "start": "התחלה",
       "end": "סיום"
@@ -113,7 +114,8 @@
       "edit-back": "חזור",
       "start-position": "התחלה",
       "end-position": "סיום",
-      "click-to-set": "לחץ לסימון"
+      "click-to-set": "לחץ לסימון",
+      "tap-to-unmute": "לחץ לביטול השתקה"
     },
     "share": {
       "title": "צפה בסרטון"
@@ -136,7 +138,7 @@
     "unknown": "לא ידוע",
     "unsupported-media-format": "פורמט לא נתמך.",
     "error-loading-file": "טעות בהעלאת קובץ.",
-    "fallback-language": "אין את השפה המבוקשת למדיה, נבחרה שפת ברירת מחדל.",
+    "fallback-language": "התוכן לא קיים בשפה המבוקשת, נבחרה שפת ברירת מחדל.",
     "fallback-to-audio": "וידיאו לא נמצא, משתמש באודיו.",
     "fallback-to-video": "אודיו לא נמצא, משתמש בוידיאו.",
     "source-content-not-found": "לא נמצא תוכן המקור",
@@ -146,6 +148,11 @@
     "header": {
       "text": "תוצאות חיפוש",
       "subtext": ""
+    },
+    "topNote":{
+      "tip": "עצה",
+      "first": "תוצאות החיפוש הן בשפה {{language}}.",
+      "second": "אתה יכול לבחור שפות תוכן אחרות"
     },
     "showAll": "הראה את כל",
     "lessons": "השיעורים",
@@ -194,8 +201,8 @@
     "last-lesson": "שיעור הקבלה היומי",
     "donate": "תרום עכשיו",
     "promoted": {
-      "header": "להורדה קלה ומהירה של קבצים",
-      "subheader": ""
+      "header": "חיבור לחיים טובים",
+      "subheader": "כנס \"קבלה לעם\" העולמי 2019"
     }
   },
   "events": {
@@ -406,7 +413,9 @@
     "header": {
       "text": "נושאים",
       "subtext": "אוסף תכנים בנושא נבחר"
-    }
+    },
+    "show-more": "הצג עוד",
+    "show-less": "הצג פחות"
   },
   "media-downloads": {
     "title": "קבצים להורדה",

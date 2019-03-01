@@ -38,7 +38,8 @@
         "LAST_30_DAYS": "Últimos 30 Días",
         "LAST_MONTH": "Mes Pasado",
         "THIS_MONTH": "Este Mes",
-        "CUSTOM_RANGE": "Elección Flexible"
+        "CUSTOM_RANGE": "Elección Flexible",
+        "CUSTOM_DAY": "Elige una fecha"
       },
       "start": "Inicio",
       "end": "Final"
@@ -113,7 +114,8 @@
       "edit-back": "Regreso",
       "start-position": "Inicio",
       "end-position": "Final",
-      "click-to-set": "Clic para marcar"
+      "click-to-set": "Clic para marcar",
+      "tap-to-unmute": "Activar el sonido"
     },
     "share": {
       "title": "Mira el video"
@@ -136,7 +138,7 @@
     "unknown": "desconocido",
     "unsupported-media-format": " formato no compatible.",
     "error-loading-file": "Error al cargar el archivo.",
-    "fallback-language": " Medios no encontrados para el idioma seleccionado, se eligió el idioma preseleccionado.",
+    "fallback-language": "El contenido no existe en el idioma solicitado, se ha seleccionado un idioma predeterminado.",
     "fallback-to-audio": "Video no encontrado, usa audio.",
     "fallback-to-video": "Audio no encontrado, usa video.",
     "source-content-not-found": " Contenido de fuente no fue encontrado ",
@@ -190,8 +192,8 @@
     "read-more-tweets": "Leer más tweets",
     "last-lesson": "Lección diaria de Cabalá",
     "promoted": {
-      "header": "Descarga rápida y fácil de archivos",
-      "subheader": ""
+      "header": "Conectándonos a la vida buena",
+      "subheader": "Convencion Mundial de Cabala 2019"
     }
   },
   "events": {
@@ -396,7 +398,9 @@
     "header": {
       "text": "Temas",
       "subtext": "A collection of all items for a selected topic."
-    }
+    },
+    "show-more": "Mostrar más",
+    "show-less": "Muestra menos"
   },
   "media-downloads": {
     "title": "Descargar archivos",

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../../../helpers/consts';
@@ -53,4 +54,4 @@ class EventsList extends PureComponent {
   }
 }
 
-export default EventsList;
+export default withNamespaces()(EventsList);

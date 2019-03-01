@@ -5,8 +5,9 @@ import noop from 'lodash/noop';
 import moment from 'moment';
 import scrollIntoView from 'scroll-into-view';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
+import Navbar from 'react-day-picker/lib/src/Navbar';
 import MomentLocaleUtils, { formatDate, parseDate } from 'react-day-picker/moment';
-import { Input } from 'semantic-ui-react';
+import { Input, Segment } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
 
 import { today } from '../../../../helpers/date';
@@ -70,8 +71,33 @@ class FastDayPicker extends Component {
     this.nativeDateInput.focus();
   };
 
+  getOverlayComponent = (props) => {
+    return (
+      <Segment>
+        {props.children}
+      </Segment>
+    );
+  };
+
+  getNavBarElement = (props, language) => {
+    const { month, localeUtils } = props;
+    return (
+      <div>
+        <Navbar {...props} className="FastDayPicker-DayPicker-NavButton" />
+        <YearMonthForm
+          date={month}
+          language={language}
+          localeUtils={localeUtils}
+          onChange={this.handleYearMonthChange}
+          className="float-left"
+        />
+        <div className="clear"></div>
+      </div>
+    );
+  };
+
   render() {
-    const { language, onDayChange, value, label } = this.props;
+    const { language, value, label, onDayChange } = this.props;
     const { month }                               = this.state;
     const selected                                = value || today().toDate();
     const selectedToString                        = moment(selected).format('YYYY-MM-DD');
@@ -109,37 +135,37 @@ class FastDayPicker extends Component {
     }
 
     return (
-      <DayPickerInput
-        component={Input}
-        value={selected}
-        onDayChange={onDayChange}
-        inputProps={{
-          label,
-          fluid: true,
-          size: 'small',
-        }}
-        format="l"
-        formatDate={formatDate}
-        parseDate={parseDate}
-        placeholder={`${formatDate(new Date(), 'l', locale)}`}
-        dayPickerProps={{
-          month,
-          toMonth: today().toDate(),
-          disabledDays: { after: today().toDate() },
-          locale,
-          localeUtils: MomentLocaleUtils,
-          dir: getLanguageDirection(language),
-          ref: this.handleDayPickerRef,
-          captionElement: ({ date, localeUtils }) => (
-            <YearMonthForm
-              date={date}
-              language={language}
-              localeUtils={localeUtils}
-              onChange={this.handleYearMonthChange}
-            />
-          )
-        }}
-      />
+      <div>
+        <DayPickerInput
+          overlayComponent={this.getOverlayComponent}
+          component={Input}
+          value={selected}
+          onDayChange={onDayChange}
+          hideOnDayClick={false}
+          inputProps={{
+            label,
+            fluid: true,
+            size: 'small',
+            icon: 'calendar alternate outline'
+          }}
+          format="l"
+          formatDate={formatDate}
+          parseDate={parseDate}
+          placeholder={`${formatDate(new Date(), 'l', locale)}`}
+          showOverlay={true}
+          dayPickerProps={{
+            month,
+            toMonth: today().toDate(),
+            disabledDays: { after: today().toDate() },
+            locale,
+            localeUtils: MomentLocaleUtils,
+            dir: getLanguageDirection(language),
+            ref: this.handleDayPickerRef,
+            captionElement: () => null,
+            navbarElement: (props) => this.getNavBarElement(props, language)
+          }}
+        />
+      </div>
     );
   }
 }

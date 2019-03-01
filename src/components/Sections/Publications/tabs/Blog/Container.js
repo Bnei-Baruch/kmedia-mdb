@@ -76,7 +76,9 @@ class BlogContainer extends withPagination {
   }
 
   handlePageChanged(pageNo) {
-    window.scrollTo(0, 0);
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0);
+    }
     this.setPage(this.props, pageNo);
   }
 

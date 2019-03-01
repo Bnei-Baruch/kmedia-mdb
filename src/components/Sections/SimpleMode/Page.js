@@ -2,8 +2,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import DayPicker from 'react-day-picker';
+import Navbar from 'react-day-picker/lib/src/Navbar';
 import MomentLocaleUtils from 'react-day-picker/moment';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Button, Card, Container, Divider, Grid, Input } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES, LANGUAGE_OPTIONS } from '../../../helpers/consts';
@@ -70,6 +71,22 @@ class SimpleModePage extends PureComponent {
     }
 
     this.nativeDateInput.focus();
+  };
+
+  getNavBarElement = (props, language, onDayClick) => {
+    const { month, localeUtils } = props;
+    return (
+      <div className="DayPicker-Month">
+        <Navbar {...props} className="FastDayPicker-DayPicker-NavButton" />
+        <YearMonthForm
+          date={month}
+          language={language}
+          localeUtils={localeUtils}
+          onChange={onDayClick}
+          className="float-left"
+        />
+      </div>
+    );
   };
 
   render() {
@@ -199,14 +216,8 @@ class SimpleModePage extends PureComponent {
                       month={selectedDate}
                       disabledDays={{ after: new Date() }}
                       onDayClick={onDayClick}
-                      captionElement={({ date, localeUtils }) => (
-                        <YearMonthForm
-                          date={date}
-                          language={language}
-                          localeUtils={localeUtils}
-                          onChange={onDayClick}
-                        />
-                      )}
+                      captionElement={() => null}
+                      navbarElement={(props) => this.getNavBarElement(props, language, onDayClick)}
                     />
                     <Button className="inline-button" onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
                   </Card>
@@ -220,4 +231,4 @@ class SimpleModePage extends PureComponent {
   }
 }
 
-export default translate()(SimpleModePage);
+export default withNamespaces()(SimpleModePage);

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { push as routerPush } from 'react-router-redux';
+import { push as routerPush } from 'connected-react-router';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import { Icon, Input, Search } from 'semantic-ui-react';
@@ -23,7 +24,6 @@ export class OmniBox extends Component {
     autocomplete: PropTypes.func.isRequired,
     search: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired,
     suggestions: PropTypes.object,
     query: PropTypes.string.isRequired,
     updateQuery: PropTypes.func.isRequired,
@@ -38,9 +38,16 @@ export class OmniBox extends Component {
   static defaultProps = {
     suggestions: {},
     onSearch: noop,
-    getSourcePath: noop,
-    getTagPath: noop,
   };
+
+  doAutocomplete = debounce(() => {
+    const { query, autocomplete } = this.props;
+    if (query.trim()) {
+      autocomplete(query);
+    } else {
+      this.setState({ suggestionsHelper: new SuggestionsHelper() });
+    }
+  }, 100);
 
   constructor(props) {
     super(props);
@@ -48,31 +55,41 @@ export class OmniBox extends Component {
 
     this.state = {
       suggestionsHelper: new SuggestionsHelper(),
+      suggestions: {},
+      query: '',
+      pathname: ''
+
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.suggestions !== this.props.suggestions) {
-      this.setState({ suggestionsHelper: new SuggestionsHelper(nextProps.suggestions) });
+  static getDerivedStateFromProps(nextProps, state) {
+    const { suggestions, query, pathname } = state;
+    const { updateQuery, setSuggest }      = nextProps;
+    let newState                           = null;
+
+    if (nextProps.suggestions !== suggestions) {
+      newState = {
+        suggestionsHelper: new SuggestionsHelper(nextProps.suggestions),
+        suggestions: nextProps.suggestions,
+      };
     }
 
     // Clear search query when navigating from the search page into other pages (AS-38)
-    if (this.props.query &&
-      !nextProps.location.pathname.endsWith('search') &&
-      nextProps.location.pathname !== this.props.location.pathname) {
-      this.props.updateQuery('');
-      this.props.setSuggest('');
+    if (query
+      && !nextProps.location.pathname.endsWith('search')
+      && nextProps.location.pathname !== pathname) {
+      newState = Object.assign({}, newState, { pathname: nextProps.location.pathname, query: nextProps.query });
+      updateQuery('');
+      setSuggest('');
     }
+
+    return newState;
   }
 
-  doAutocomplete = debounce(() => {
-    const { query } = this.props;
-    if (query.trim()) {
-      this.props.autocomplete(query);
-    } else {
-      this.setState({ suggestionsHelper: new SuggestionsHelper() });
-    }
-  }, 100);
+  componentDidMount() {
+    const { suggestions, query, location: { pathname } } = this.props;
+    this.setState({ suggestions, query, pathname });
+  }
 
   isEmptyQuery = (query) => {
     const { filters } = this.props;
@@ -85,8 +102,17 @@ export class OmniBox extends Component {
   };
 
   doSearch = (q = null, suggest = '', locationSearch = '') => {
-    const query                                                         = q != null ? q : this.props.query;
-    const { search, location, push, pageSize, resetFilterNS, onSearch } = this.props;
+    const { isOpen, query: squery }                                                    = this.state;
+    const { search, location, push, pageSize, resetFilterNS, onSearch, query: pquery } = this.props;
+    let query;
+
+    if (q != null) {
+      query = q;
+    } else if (!isEmpty(pquery)) {
+      query = pquery;
+    } else {
+      query = squery;
+    }
 
     if (this.isEmptyQuery(query)) {
       return;
@@ -107,7 +133,7 @@ export class OmniBox extends Component {
     }
 
     search(query, 1, pageSize, suggest, isDebMode(location));
-    if (this.state.isOpen) {
+    if (isOpen) {
       this.setState({ isOpen: false });
     }
 
@@ -117,19 +143,24 @@ export class OmniBox extends Component {
   };
 
   handleResultSelect = (e, data) => {
-    const { title } = data.result;
-    const prevQuery = this.props.query;
+    const { updateQuery, setSuggest, query } = this.props;
 
-    this.props.updateQuery(title);
-    this.props.setSuggest(prevQuery);
+    const { title } = data.result;
+    const prevQuery = query;
+
+    updateQuery(title);
+    setSuggest(prevQuery);
     this.doSearch(title, prevQuery);
   };
 
   handleSearchKeyDown = (e) => {
+    const { updateQuery, query } = this.props;
+    const { getSelectedResult }  = this.search;
+
     // Fix bug that did not allows to handleResultSelect when string is empty
     // we have meaning for that when filters are not empty.
-    if (e.keyCode === 13 && this.props.query.trim()) {
-      const selectedResult = this.search.getSelectedResult();
+    if (e.keyCode === 13 && query.trim()) {
+      const selectedResult = getSelectedResult();
       if (!!selectedResult && !!selectedResult.title) {
         this.doSearch(selectedResult.title);
       } else {
@@ -138,13 +169,14 @@ export class OmniBox extends Component {
     }
 
     if (e.keyCode === 27) { // Esc
-      this.props.updateQuery('');
+      updateQuery('');
     }
   };
 
   handleSearchChange = (e, data) => {
-    this.props.updateQuery(data.value);
-    this.props.setSuggest(this.props.query);
+    const { updateQuery, setSuggest, query } = this.props;
+    updateQuery(data.value);
+    setSuggest(query);
     if (data.value.trim()) {
       this.doAutocomplete();
     }
@@ -173,7 +205,7 @@ export class OmniBox extends Component {
         }}
         fluid
         className="search-omnibox"
-        size="mini"
+        size="small"
         results={results}
         value={query}
         input={this.renderInput()}
@@ -203,7 +235,6 @@ export const mapDispatch = dispatch => bindActionCreators({
   push: routerPush,
 }, dispatch);
 
-export const wrap = (WrappedComponent, ms = mapState, md = mapDispatch) =>
-  connect(ms, md)(WrappedComponent);
+export const wrap = (WrappedComponent, ms = mapState, md = mapDispatch) => connect(ms, md)(WrappedComponent);
 
-export default wrap(OmniBox);
+export default wrap(withNamespaces()(OmniBox));

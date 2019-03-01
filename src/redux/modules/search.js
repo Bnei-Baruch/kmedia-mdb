@@ -44,8 +44,8 @@ const search              = createAction(SEARCH, (q, pageNo, pageSize, suggest='
                                                  ({q, pageNo, pageSize, suggest, deb}));
 const searchSuccess       = createAction(SEARCH_SUCCESS);
 const searchFailure       = createAction(SEARCH_FAILURE);
-const click               = createAction(CLICK, (mdbUid, index, type, rank, searchId) =>
-                                                ({mdbUid, index, type, rank, searchId}));
+const click               = createAction(CLICK, (mdbUid, index, type, rank, searchId, deb=false) =>
+                                                ({mdbUid, index, type, rank, searchId, deb}));
 const setPage             = createAction(SET_PAGE);
 const setSortBy           = createAction(SET_SORT_BY);
 const updateQuery         = createAction(UPDATE_QUERY);

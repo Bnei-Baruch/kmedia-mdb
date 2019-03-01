@@ -27,6 +27,7 @@ yarn-error.log*
 src/**/*.css
 babel-src/
 cc-test-reporter
+logs/
 
 # do not ignore main theme
 !src/**/semantic.min.css

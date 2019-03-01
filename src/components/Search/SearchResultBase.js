@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Button, Image, Icon, Container } from 'semantic-ui-react';
+import { Button, Image, Icon, Container, Label } from 'semantic-ui-react';
 
 import {
   SEARCH_INTENT_INDEX_TOPIC,
@@ -48,6 +48,7 @@ import { isDebMode } from '../../helpers/url';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import ScoreDebug from './ScoreDebug';
+import { formatDuration } from '../../helpers/utils';
 
 const PATH_SEPARATOR = ' > ';
 
@@ -68,8 +69,9 @@ class SearchResultBase extends Component {
   };
 
   click = (mdb_uid, index, type, rank, searchId) => {
-    const { click } = this.props;
-    click(mdb_uid, index, type, rank, searchId);
+    const { click, location } = this.props;
+    const deb = isDebMode(location);
+    click(mdb_uid, index, type, rank, searchId, deb);
   };
 
   mlsToStrColon(seconds) {
@@ -195,7 +197,7 @@ class SearchResultBase extends Component {
     );
   };
 
-  titleFromHighlight = (highlight, defVal) => {
+  titleFromHighlight = (highlight = {}, defVal) => {
     let prop = ['title', 'title_language'].find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
     prop     = highlight[prop] ? highlight[prop].join(PATH_SEPARATOR) : defVal;
 
@@ -212,7 +214,7 @@ class SearchResultBase extends Component {
   };
 
   // Helper function to get the frist prop in hightlights obj and apply htmlFunc on it.
-  snippetFromHighlight = (highlight, props = ['content', 'content_language']) => {
+  snippetFromHighlight = (highlight = {}, props = ['content', 'content_language']) => {
     const prop = props.find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
 
     if (!prop) {
@@ -260,6 +262,15 @@ class SearchResultBase extends Component {
       <Container>
         <ScoreDebug name={name} score={score} explanation={explanation} />
       </Container>
+    );
+  };
+
+  fileDuration = (files) => {
+    const fileWithDuration = files.find(f => f.type === 'video' || f.type === 'audio');
+    return (
+      fileWithDuration
+        ? <Label as='span' size="small">{formatDuration(fileWithDuration.duration)}</Label>
+        : null
     );
   };
 

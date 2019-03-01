@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import debounce from 'lodash/debounce';
 import { withRouter } from 'react-router-dom';
-import { Icon, Message } from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
+import { Button, Icon, Message } from 'semantic-ui-react';
 
-import { MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
+import { LANG_HEBREW, MT_AUDIO, MT_VIDEO, RTL_LANGUAGES } from '../../helpers/consts';
 import { fromHumanReadableTime } from '../../helpers/time';
 import { getQuery } from '../../helpers/url';
 import * as shapes from '../shapes';
@@ -16,22 +17,24 @@ import AVAudioVideo from './AVAudioVideo';
 import AVEditSlice from './AVEditSlice';
 import ShareFormMobile from './Share/ShareFormMobile';
 import AVPlaybackRateMobile from './AVPlaybackRateMobile';
+import AVSpinner from './AVSpinner';
+import playerHelper from '../../helpers/player';
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
 const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
 
 // Converts playback rate string to float: 1.0x => 1.0
-const playbackToValue = playback =>
-  parseFloat(playback.slice(0, -1));
+const playbackToValue = playback => parseFloat(playback.slice(0, -1));
 
 class AVPlayerMobile extends PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
-    language: PropTypes.string.isRequired,
+    selectedLanguage: PropTypes.string,
     onLanguageChange: PropTypes.func.isRequired,
 
     // Audio/Video switch props.
@@ -42,6 +45,7 @@ class AVPlayerMobile extends PureComponent {
     history: shapes.History.isRequired,
 
     // Playlist props
+    autoPlay: PropTypes.bool,
     showNextPrev: PropTypes.bool,
     hasNext: PropTypes.bool,
     hasPrev: PropTypes.bool,
@@ -59,21 +63,17 @@ class AVPlayerMobile extends PureComponent {
     onFinish: noop,
     onPrev: noop,
     onNext: noop,
+    autoPlay: false,
+    selectedLanguage: LANG_HEBREW,
   };
 
-  state = {
-    error: false,
-    errorReason: '',
-    mode: PLAYER_MODE.NORMAL,
-    isSliceMode: false,
-    currentTime: 0,
-    firstSeek: true,
-    seeking: true,
-    playbackRate: '1x',
-  };
+  persistVolume = debounce((value) => {
+    localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, value);
+  }, 200);
 
-  componentWillMount() {
-    const { history } = this.props;
+  constructor(props) {
+    super(props);
+    const { history } = props;
 
     let sliceStart = 0;
     let sliceEnd   = Infinity;
@@ -91,17 +91,32 @@ class AVPlayerMobile extends PureComponent {
       sliceEnd = fromHumanReadableTime(query.send).asSeconds();
     }
 
-    this.setState({ sliceStart, sliceEnd, mode, firstSeek: true });
+    this.state = {
+      error: false,
+      errorReason: '',
+      isSliceMode: false,
+      currentTime: 0,
+      seeking: true,
+      playbackRate: '1x',
+      sliceStart,
+      sliceEnd,
+      mode,
+      firstSeek: true,
+      showControls: false,
+      unMuteButton: false,
+      embed: playerHelper.getEmbedFromQuery(history.location),
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.item !== this.props.item) {
+      this.setState({ error: false, errorReason: '', firstSeek: true });
+    }
   }
 
   componentWillUnmount() {
-    if (this.seekTimeoutId)
+    if (this.seekTimeoutId) {
       clearTimeout(this.seekTimeoutId);
-  }
-
-   componentWillReceiveProps(nextProps) {
-    if (nextProps.item !== this.props.item) {
-      this.setState({ error: false, errorReason: '', firstSeek: true });
     }
   }
 
@@ -111,7 +126,7 @@ class AVPlayerMobile extends PureComponent {
     // prior to media element presence on the page
     this.wasCurrentTime = this.media.currentTime;
     this.props.onSwitchAV(...params);
-    //this.media.autoplay = true;
+    // this.media.autoplay = true;
   };
 
   // Remember the current time and playing state while switching.
@@ -123,16 +138,28 @@ class AVPlayerMobile extends PureComponent {
   handleMediaRef = (ref) => {
     if (ref) {
       this.media = ref;
+      this.restoreVolume();
+      if (this.props.autoPlay) {
+        if (this.props.item.mediaType === MT_VIDEO) {
+          this.media.muted = true;
+        }
+        this.media.autoPlay = true;
+        this.setState({ unMuteButton: true });
+        if (this.props.deviceInfo.os.name === 'iOS') {
+          setTimeout(this.showControls, 5000);
+        } else {
+          this.showControls();
+        }
+      } else {
+        this.showControls();        
+      }
       this.media.addEventListener('play', this.handlePlay);
       this.media.addEventListener('pause', this.handlePause);
       this.media.addEventListener('ended', this.handleEnded);
       this.media.addEventListener('error', this.handleError);
       this.media.addEventListener('timeupdate', this.handleTimeUpdate);
       this.media.addEventListener('volumechange', this.handleVolumeChange);
-      // this.media.addEventListener('playing', this.handlePlaying);
-      // this.media.addEventListener('seeking', this.handleSeeking);
       this.media.addEventListener('canplay', this.seekIfNeeded);
-      this.restoreVolume();     
     } else if (this.media) {
       this.media.removeEventListener('play', this.handlePlay);
       this.media.removeEventListener('pause', this.handlePause);
@@ -140,8 +167,6 @@ class AVPlayerMobile extends PureComponent {
       this.media.removeEventListener('error', this.handleError);
       this.media.removeEventListener('timeupdate', this.handleTimeUpdate);
       this.media.removeEventListener('volumechange', this.handleVolumeChange);
-      // this.media.removeEventListener('playing', this.handlePlaying);
-      // this.media.removeEventListener('seeking', this.handleSeeking);
       this.media.removeEventListener('canplay', this.seekIfNeeded);
       this.media = ref;
     }
@@ -154,13 +179,15 @@ class AVPlayerMobile extends PureComponent {
     this.media.autoplay = true;
   };
 
-  handleVolumeChange = (e) => {
+  handleVolumeChange = (e) => {    
+    const { unMuteButton } = this.state;     
+    if (this.media.muted)   
+      return;
     this.persistVolume(e.currentTarget.volume);
+    if (unMuteButton) {
+      this.setState({ unMuteButton: false });
+    }
   };
-
-  persistVolume = debounce((value) => {
-    localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, value);
-  }, 200);
 
   restoreVolume = () => {
     let value = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
@@ -168,13 +195,12 @@ class AVPlayerMobile extends PureComponent {
       value = DEFAULT_PLAYER_VOLUME;
       localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, value);
     }
-
     this.media.volume = value;
   };
 
   seekIfNeeded = () => {
     const { sliceStart, firstSeek, playbackRate } = this.state;
-    this.media.playbackRate = playbackToValue(playbackRate);
+    this.media.playbackRate                       = playbackToValue(playbackRate);
 
     if (firstSeek) {
       if (sliceStart) {
@@ -184,20 +210,13 @@ class AVPlayerMobile extends PureComponent {
         if (savedTime) {
           this.seekTo(savedTime, true);
         }
-      }      
-      this.media.autoplay = true;
-      this.setState({ firstSeek: false });          
+      }
+      this.setState({ firstSeek: false });
     } else if (this.wasCurrentTime) {
       this.seekTo(this.wasCurrentTime, true);
-      this.wasCurrentTime    = undefined;
-    } 
+      this.wasCurrentTime = undefined;
+    }
   };
-
-  // handlePlaying = () => {
-  // };
-  //
-  // handleSeeking = (e) => {
-  // };
 
   handlePause = () => {
     // stop future src changes from autoplay.
@@ -207,26 +226,34 @@ class AVPlayerMobile extends PureComponent {
     if (Math.abs(this.media.currentTime - this.media.duration) > 0.1) {
       this.media.autoplay = false;
       this.saveCurrentTime(this.media.currentTime);
-      // updateQuery(this.props.history, q => ({ ...q, currentTime: this.media.currentTime }));
     }
   };
 
   handleEnded = () => {
-    if (this.props.onFinish) {
+    const { onFinish } = this.props;
+    if (onFinish) {
       this.clearCurrentTime();
-      this.props.onFinish();
+      onFinish();
+    }
+  };
+
+  showControls = () => {
+    const { showControls } = this.state;
+    if (!showControls) {
+      this.media.controls = true;
+      this.setState({ showControls: true });
     }
   };
 
   handleTimeUpdate = (e) => {
     const { mode, sliceEnd, sliceStart, seeking, firstSeek } = this.state;
 
-    if (mode !== PLAYER_MODE.SLICE_VIEW || firstSeek || seeking===true) {
-       return;
-    }
-
     const time = e.currentTarget.currentTime;
     this.saveCurrentTime(time);
+
+    if (mode !== PLAYER_MODE.SLICE_VIEW || firstSeek || seeking === true) {
+      return;
+    }
 
     const lowerTime = Math.min(sliceEnd, time);
 
@@ -257,42 +284,43 @@ class AVPlayerMobile extends PureComponent {
     }
   };
 
-  seekTo = (t, force) => {        
-    this.media.currentTime = t;           
+  seekTo = (t, force) => {
+    this.media.currentTime = t;
     if (this.props.deviceInfo.browser.name !== 'Samsung Browser') {
-      this.setState({ seeking: false });  
+      this.setState({ seeking: false });
       return;
     }
 
     this.setState({ seeking: true });
     // If seek not success, do a seek timeout (bug fix for android internal browser)
-    if (force && !this.isSeekSuccess(t))
+    if (force && !this.isSeekSuccess(t)) {
       this.seekTimeout(t, 250);
-    else
+    } else {
       this.setState({ seeking: false });
+    }
   };
 
-  seekTimeout = (t, timeout) => {   
-    if (this.seekTimeoutId)
+  seekTimeout = (t, timeout) => {
+    if (this.seekTimeoutId) {
       clearTimeout(this.seekTimeoutId);
-    this.seekTimeoutId = setTimeout(()=> {
+    }
+    this.seekTimeoutId = setTimeout(() => {
       if (this.isSeekSuccess(t)) {
         this.setState({ seeking: false });
         return;
       }
       this.media.currentTime = t;
-      if (!this.isSeekSuccess(t))
-          this.seekTimeout(t, timeout);
-      else
-          this.setState({ seeking: false });
+      if (!this.isSeekSuccess(t)) {
+        this.seekTimeout(t, timeout);
+      } else {
+        this.setState({ seeking: false });
+      }
     }, timeout);
   };
 
-  isSeekSuccess = t =>
-    this.media.currentTime >= t;
+  isSeekSuccess = t => this.media.currentTime >= t;
 
-  toggleSliceMode = () =>
-    this.setState({ isSliceMode: !this.state.isSliceMode });
+  toggleSliceMode = () => this.setState({ isSliceMode: !this.state.isSliceMode });
 
   handleJumpBack = () => {
     const { currentTime, duration } = this.media;
@@ -344,25 +372,36 @@ class AVPlayerMobile extends PureComponent {
     this.setState({ playbackRate: rate });
   };
 
+  unMute = () => {
+    if (this.media && this.media.muted) {
+      this.media.muted = false;
+      this.setState({ unMuteButton: false });
+    }
+  };
+
   render() {
     const
       {
         item,
         languages,
-        language,
+        selectedLanguage,
+        uiLanguage,
+        requestedLanguage,
         t,
         showNextPrev,
         hasNext,
         hasPrev,
         onPrev,
         onNext,
+        autoPlay,
       } = this.props;
 
-    const { error, errorReason, isSliceMode, playbackRate} = this.state;
+    const { error, errorReason, isSliceMode, playbackRate, unMuteButton, showControls, embed } = this.state;
 
     const isVideo       = item.mediaType === MT_VIDEO;
     const isAudio       = item.mediaType === MT_AUDIO;
     const fallbackMedia = item.mediaType !== item.requestedMediaType;
+    const isRtl         = RTL_LANGUAGES.includes(uiLanguage);
 
     if (!item.src) {
       return <Message warning>{t('messages.no-playable-files')}</Message>;
@@ -371,41 +410,24 @@ class AVPlayerMobile extends PureComponent {
     let mediaEl;
 
     if (isVideo) {
-      mediaEl = (
-        <video
-          controls
-          autoPlay
-          playsInline
-          ref={this.handleMediaRef}
-          src={item.src}
-          preload="metadata"
-          poster={item.preImageUrl}
-        ></video>
-      );
+      mediaEl = <video autoPlay={autoPlay} playsInline ref={this.handleMediaRef} src={item.src} preload="metadata" poster={item.preImageUrl} />;
     } else {
-      mediaEl = (
-        <audio
-          controls
-          autoPlay
-          ref={this.handleMediaRef}
-          src={item.src}
-          preload="metadata"
-        ></audio>
-      );
+      mediaEl = <audio controls autoPlay={autoPlay} ref={this.handleMediaRef} src={item.src} preload="metadata" />;
     }
 
     return (
       <div className="mediaplayer">
         <div style={{ marginBottom: '0px' }}>{mediaEl}</div>
         {
-          error ?
-            <div className="player-button player-error-message">
-              {t('player.error.loading')}
-              {errorReason ? ` ${errorReason}` : ''}
-              &nbsp;
-              <Icon name="warning sign" size="large" />
-            </div> :
-            null
+          error
+            ? (
+              <div className="player-button player-error-message">
+                {t('player.error.loading')}
+                {errorReason ? ` ${errorReason}` : ''}
+                &nbsp;
+                <Icon name="warning sign" size="large" />
+              </div>
+            ) : null
         }
 
         <div className="mediaplayer__wrapper">
@@ -413,7 +435,7 @@ class AVPlayerMobile extends PureComponent {
             <AVPlayPause
               withoutPlay
               media={{
-                isLoading: false,
+                showControls: false,
               }}
               showNextPrev={showNextPrev}
               hasNext={hasNext}
@@ -422,7 +444,7 @@ class AVPlayerMobile extends PureComponent {
               onNext={onNext}
             />
             <div className="mediaplayer__spacer" />
-            <AVEditSlice onActivateSlice={this.toggleSliceMode} />
+            {!embed ? <AVEditSlice onActivateSlice={this.toggleSliceMode} /> : null}
             <button type="button" tabIndex="-1" onClick={this.handleJumpBack}>
               -5s
               <Icon name="backward" />
@@ -440,26 +462,42 @@ class AVPlayerMobile extends PureComponent {
               isVideo={isVideo}
               onSwitch={this.onSwitchAV}
               fallbackMedia={fallbackMedia}
-              t={t}
+              uiLanguage={uiLanguage}
             />
             <AVLanguageMobile
               languages={languages}
-              language={language}
-              requestedLanguage={item.requestedLanguage}
+              selectedLanguage={selectedLanguage}
+              uiLanguage={uiLanguage}
+              requestedLanguage={requestedLanguage}
               onSelect={this.onLanguageChange}
-              t={t}
             />
           </div>
         </div>
-
         {
-          isSliceMode ?
-            <ShareFormMobile media={this.media} item={item} t={t} /> :
-            null
+          isSliceMode
+            ? <ShareFormMobile media={this.media} item={item} />
+            : null
+        }
+        {
+          isVideo && unMuteButton
+            ? (
+              <Button
+                icon="volume off"
+                className={isRtl ? 'mediaplayer__mobileUnmuteButton rtl' : 'mediaplayer__mobileUnmuteButton'}
+                content={t('player.buttons.tap-to-unmute')}
+                onClick={this.unMute}
+              />
+            )
+            : null
+        }
+        {
+          !showControls
+            ? <div className="mediaplayer__mobileLoader"><AVSpinner /></div>
+            : null
         }
       </div>
     );
   }
 }
 
-export default withRouter(AVPlayerMobile);
+export default withRouter(withNamespaces()(AVPlayerMobile));

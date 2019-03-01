@@ -10,8 +10,8 @@ import { rootSaga } from '../sagas';
 
 const isBrowser             = (typeof window !== 'undefined' && window.document);
 const isProduction          = process.env.NODE_ENV === 'production';
-const devToolsArePresent    = typeof window === 'object' && typeof window.devToolsExtension !== 'undefined';
-const devToolsStoreEnhancer = () => (isBrowser && devToolsArePresent ? window.devToolsExtension() : f => f);
+const devToolsArePresent    = typeof window === 'object' && typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined';
+const devToolsStoreEnhancer = () => (isBrowser && devToolsArePresent ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f);
 
 export default function createStore(initialState, history) {
   const middlewares = [
@@ -40,7 +40,7 @@ export default function createStore(initialState, history) {
     // middlewares.push(logger);
   }
 
-  const store = reduxCreateStore(reducer, initialState, compose(
+  const store = reduxCreateStore(reducer(history), initialState, compose(
     applyMiddleware(...middlewares),
     devToolsStoreEnhancer()
   ));

@@ -90,8 +90,10 @@ class FallbackImage extends Component {
       return this.state.imageSource;
     }
 
-    const { fallbackImage, onLoad, onError, ...rest } = this.props;
-    return <Image {...rest} src={this.state.imageSource} />;
+    const { fallbackImage, onLoad, onError, width = 'auto', height = 'auto', ...rest } = this.props;
+    return <Image {...rest}
+                  src={this.state.imageSource}
+                  style={{ 'width': `${width}px`, 'height': `${height}px` }} />;
   }
 }
 

@@ -118,9 +118,9 @@ class Pagination extends PureComponent {
         {this.renderPage(titles(isRTL ? 'next' : 'prev'), current - 1, 'prev', prevDisabled, false, ['prev-page'])}
 
         {
-          visibleRange.map(x =>
+          visibleRange.map(x => (
             this.renderPage(x, x, x, false, x === current,
-              x === current ? [] : [`distance-${Math.abs(x - current)}`]))
+              x === current ? [] : [`distance-${Math.abs(x - current)}`])))
         }
 
         {this.renderPage(titles(isRTL ? 'prev' : 'next'), current + 1, 'next', nextDisabled, false, ['next-page'])}

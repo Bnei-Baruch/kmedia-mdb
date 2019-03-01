@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 
 import { TOPICS_FOR_DISPLAY } from '../../../helpers/consts';
@@ -27,9 +28,11 @@ class TagsFilter extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if ((this.props.roots !== nextProps.roots &&
-      this.props.getTagById !== nextProps.getTagById) ||
-      this.props.cuStats !== nextProps.cuStats) {
+    const { roots, getTagById, cuStats } = this.props;
+
+    if ((roots !== nextProps.roots
+      && getTagById !== nextProps.getTagById)
+      || cuStats !== nextProps.cuStats) {
       this.setState({ tree: this.getTree(nextProps) });
     }
   }
@@ -40,11 +43,11 @@ class TagsFilter extends Component {
       {
         value: 'root',
         text: t('filters.topics-filter.all'),
-        children: roots ?
-          roots
+        children: roots
+          ? roots
             .filter(x => TOPICS_FOR_DISPLAY.indexOf(x) !== -1)
-            .map(x => this.buildNode(x, getTagById, cuStats)) :
-          null,
+            .map(x => this.buildNode(x, getTagById, cuStats))
+          : null,
       }
     ];
   };
@@ -76,4 +79,4 @@ export default connect(
       cuStats,
     };
   }
-)(TagsFilter);
+)(withNamespaces()(TagsFilter));

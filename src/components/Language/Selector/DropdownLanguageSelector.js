@@ -1,5 +1,5 @@
 import React from 'react';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Dropdown } from 'semantic-ui-react';
 import classNames from 'classnames';
 
@@ -29,4 +29,4 @@ class DropdownLanguageSelector extends BaseLanguageSelector {
   }
 }
 
-export default translate()(DropdownLanguageSelector);
+export default withNamespaces()(DropdownLanguageSelector);

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { Container, Grid, Segment } from 'semantic-ui-react';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 
 import { formatError } from '../../../helpers/utils';
 import { actions, selectors } from '../../../redux/modules/assets';
@@ -36,40 +36,39 @@ class LibraryPerson extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { fetchAsset, sourceId, language } = this.props;
-    if (nextProps.sourceId !== sourceId ||
-      nextProps.language !== language) {
+    if (nextProps.sourceId !== sourceId
+      || nextProps.language !== language) {
       fetchAsset(`persons/${nextProps.sourceId}-${nextProps.language}.html`);
     }
   }
 
   render() {
-    const { content, t }                                          = this.props;
-    const { wip: contentWip, err: contentErr, data: contentData } = content;
+    const { content: { wip, err, data }, t } = this.props;
 
-    let result = (
+    if (err) {
+      if (err.response && err.response.status === 404) {
+        return <FrownSplash text={t('messages.source-content-not-found')} />;
+      }
+      return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
+    }
+    if (wip) {
+      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
+    }
+    if (!data) {
+      return <Segment basic>{t('sources-library.no-source')}</Segment>;
+    }
+
+    return (
       <Container className="padded">
         <Grid>
           <Grid.Row>
             <Grid.Column>
-              <div className="readble-width" dangerouslySetInnerHTML={{ __html: contentData }} />
+              <div className="readble-width" dangerouslySetInnerHTML={{ __html: data }} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
       </Container>
     );
-    if (contentErr) {
-      if (contentErr.response && contentErr.response.status === 404) {
-        result = <FrownSplash text={t('messages.source-content-not-found')} />;
-      } else {
-        result = <ErrorSplash text={t('messages.server-error')} subtext={formatError(contentErr)} />;
-      }
-    } else if (contentWip) {
-      result = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-    } else if (!contentData) {
-      result = <Segment basic>{t('sources-library.no-source')}</Segment>;
-    }
-
-    return result;
   }
 }
 
@@ -82,4 +81,4 @@ export default withRouter(connect(
   dispatch => bindActionCreators({
     fetchAsset: actions.fetchAsset,
   }, dispatch)
-)(translate()(LibraryPerson)));
+)(withNamespaces()(LibraryPerson)));

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
 import { Grid } from 'semantic-ui-react';
 import { Media } from 'react-media-player';
+import isEqual from 'react-fast-compare';
 
 import { MT_AUDIO, MT_VIDEO } from '../../../../../helpers/consts';
 import playerHelper from '../../../../../helpers/player';
@@ -12,14 +14,13 @@ import { selectors as device } from '../../../../../redux/modules/device';
 import * as shapes from '../../../../shapes';
 import AVMobileCheck from '../../../../AVPlayer/AVMobileCheck';
 import { selectors as settings } from '../../../../../redux/modules/settings';
-import { equal, isEmpty } from '../../../../../helpers/utils';
+import { isEmpty } from '../../../../../helpers/utils';
 
 class AVBox extends Component {
   static propTypes = {
     unit: shapes.ContentUnit,
     history: shapes.History.isRequired,
     location: shapes.HistoryLocation.isRequired,
-    language: PropTypes.string.isRequired,
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
     autoPlayAllowed: PropTypes.bool.isRequired,
@@ -30,33 +31,41 @@ class AVBox extends Component {
     unit: undefined,
   };
 
-  componentWillMount() {
-    const { uiLanguage, contentLanguage, location, history, unit }
-                         = this.props;
-    const preferredMT    = playerHelper.restorePreferredMediaType();
-    const mediaType      = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const playerLanguage = playerHelper.getLanguageFromQuery(location, contentLanguage);
-    this.setPlayableItem(unit, mediaType, playerLanguage, uiLanguage);
+  constructor(props) {
+    super(props);
+    const { uiLanguage, contentLanguage, location, history, unit } = props;
+    const preferredMT                                              = playerHelper.restorePreferredMediaType();
+    const mediaType                                                = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const playerLanguage                                           = playerHelper.getLanguageFromQuery(location, contentLanguage);
+    const playableItem                                             = AVBox.getPlayableItem(unit, mediaType, playerLanguage, uiLanguage);
+    this.state                                                     = {
+      playableItem,
+      autoPlay: true,
+    };
     playerHelper.setLanguageInQuery(history, playerLanguage);
   }
 
   componentWillReceiveProps(nextProps) {
     const { unit, uiLanguage, location } = nextProps;
-    const { language: playerLanguage }   = this.state.playableItem;
+    const { playableItem }               = this.state;
+    const { language: playerLanguage }   = playableItem;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();
     const newMediaType    = playerHelper.getMediaTypeFromQuery(location, preferredMT);
     const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
     // Persist language in playableItem
-    this.setPlayableItem(unit, newMediaType, newItemLanguage, uiLanguage);
+    const item = AVBox.getPlayableItem(unit, newMediaType, newItemLanguage, uiLanguage);
+    this.setState({ playableItem: item });
   }
 
-  shouldComponentUpdate(nextProps) {
-    const { unit, uiLanguage, contentLanguage, location } = nextProps;
-    const { unit: oldUnit, uiLanguage: oldUiLanguage, contentLanguage: oldContentLanguage, location: oldLocation }
-                                                          = this.props;
-    const { language: playerLanguage }                    = this.state.playableItem;
+  shouldComponentUpdate(nextProps, nextState) {
+    const { unit, uiLanguage, contentLanguage, location }                                                          = nextProps;
+    const { unit: oldUnit, uiLanguage: oldUiLanguage, contentLanguage: oldContentLanguage, location: oldLocation } = this.props;
+    const { playableItem }                                                                                         = this.state;
+    const { language: playerLanguage }                                                                             = playableItem;
+    const { mediaEditMode }                                                                                        = nextState;
+    const { oldMediaEditMode }                                                                                     = this.state;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();
     const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);
@@ -64,16 +73,17 @@ class AVBox extends Component {
     const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
     // no change
-    return !(equal(unit, oldUnit) &&
-      oldUiLanguage === uiLanguage &&
-      oldContentLanguage === contentLanguage &&
-      prevMediaType === newMediaType &&
-      newItemLanguage === playerLanguage);
+    return !(
+      oldUiLanguage === uiLanguage
+      && oldContentLanguage === contentLanguage
+      && prevMediaType === newMediaType
+      && newItemLanguage === playerLanguage
+      && oldMediaEditMode === mediaEditMode
+      && isEqual(unit, oldUnit));
   }
 
-  setPlayableItem(unit, mediaType, playerLanguage, uiLanguage) {
-    const playableItem = playerHelper.playableItem(unit, mediaType, uiLanguage, playerLanguage);
-    this.setState({ playableItem });
+  static getPlayableItem(unit, mediaType, playerLanguage, uiLanguage) {
+    return playerHelper.playableItem(unit, mediaType, uiLanguage, playerLanguage);
   }
 
   handleSwitchAV = () => {
@@ -90,16 +100,15 @@ class AVBox extends Component {
   };
 
   handleChangeLanguage = (e, language) => {
-    playerHelper.setLanguageInQuery(this.props.history, language);
+    const { history } = this.props;
+    playerHelper.setLanguageInQuery(history, language);
   };
 
-  handleMediaEditModeChange = (mediaEditMode) => {    
-    this.setState({mediaEditMode: mediaEditMode});
-  };
+  handleMediaEditModeChange = mediaEditMode => this.setState({ mediaEditMode });
 
   render() {
-    const { t, autoPlayAllowed }                = this.props;
-    const { playableItem, mediaEditMode }       = this.state;
+    const { t, autoPlayAllowed, uiLanguage, contentLanguage } = this.props;
+    const { playableItem, mediaEditMode, autoPlay }           = this.state;
 
     if (isEmpty(playableItem)) {
       return (<div>{t('messages.no-playable-files')}</div>);
@@ -115,20 +124,22 @@ class AVBox extends Component {
               'avbox__player--is-audio': isAudio,
               'avbox__player--is-audio--edit-mode': isAudio && mediaEditMode === 2,
               'avbox__player--is-audio--normal-mode': isAudio && mediaEditMode === 0,
-              'avbox__player--is-4x3': playableItem.unit.film_date < '2014',          
+              'avbox__player--is-4x3': playableItem.unit.film_date < '2014',
               'mobile-device': !autoPlayAllowed,
             })}
           >
             <div className="avbox__media-wrapper">
               <Media>
                 <AVMobileCheck
+                  autoPlay={autoPlay}
                   item={playableItem}
                   preImageUrl={playableItem.preImageUrl}
                   onSwitchAV={this.handleSwitchAV}
                   languages={playableItem.availableLanguages}
-                  language={playableItem.language}
+                  uiLanguage={uiLanguage}
+                  selectedLanguage={playableItem.language}
+                  requestedLanguage={contentLanguage}
                   onLanguageChange={this.handleChangeLanguage}
-                  t={t}
                   onMediaEditModeChange={this.handleMediaEditModeChange}
                 />
               </Media>
@@ -146,4 +157,4 @@ const mapState = state => ({
   contentLanguage: settings.getContentLanguage(state.settings),
 });
 
-export default withRouter(connect(mapState)(AVBox));
+export default withRouter(connect(mapState)(withNamespaces()(AVBox)));

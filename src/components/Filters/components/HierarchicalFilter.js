@@ -6,7 +6,7 @@ import noop from 'lodash/noop';
 import scrollIntoView from 'scroll-into-view';
 import { Button, Header, Input, Menu, Segment } from 'semantic-ui-react';
 
-import { isEmpty } from '../../../helpers/utils';
+import { isEmpty, getEscapedRegExp } from '../../../helpers/utils';
 
 class HierarchicalFilter extends Component {
   static propTypes = {
@@ -81,7 +81,8 @@ class HierarchicalFilter extends Component {
   };
 
   handleClick = (e, data) => {
-    const depth = data['data-level'] - 2;
+    const depth       = data['data-level'] - 2;
+    const isCallApply = data['is-last-leaf'] === 'true';
 
     // clear selection if root was clicked
     if (depth < 0) {
@@ -104,7 +105,11 @@ class HierarchicalFilter extends Component {
     newSelection.splice(depth, oldSelection.length - depth);
     newSelection.push(data.name);
 
-    this.setState({ sValue: newSelection });
+    if (isCallApply) {
+      this.props.onApply(newSelection);
+    } else {
+      this.setState({ sValue: newSelection });
+    }
   };
 
   handleTermChange = debounce((e, data) => {
@@ -135,6 +140,7 @@ class HierarchicalFilter extends Component {
         ref={ref}
         active={active}
         data-level={level}
+        is-last-leaf={(node.children.length === 0).toString()}
         className={`l${level}`}
         onClick={this.handleClick}
       >
@@ -192,8 +198,7 @@ class HierarchicalFilter extends Component {
 
     // if we have a search term we use it and stop
     if (term) {
-      const escapedMatch = term.replace(/[/)(.+\\]/g, '\\$&');
-      const reg          = new RegExp(escapedMatch, 'i');
+      const reg          = getEscapedRegExp(term);
       const selected     = Array.isArray(sValue) && sValue.length > 0 ? sValue[sValue.length - 1] : null;
       const filteredRoot = this.filterNode(root, reg, selected);
 

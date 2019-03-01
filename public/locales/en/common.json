@@ -39,7 +39,8 @@
         "LAST_30_DAYS": "Last 30 Days",
         "LAST_MONTH": "Last Month",
         "THIS_MONTH": "This Month",
-        "CUSTOM_RANGE": "Custom Range"
+        "CUSTOM_RANGE": "Custom Range",
+        "CUSTOM_DAY": "Pick a Date"
       },
       "start": "Start",
       "end": "End"
@@ -114,7 +115,8 @@
       "edit-back": "Back to play",
       "start-position": "Start",
       "end-position": "End",
-      "click-to-set": "Click to set"
+      "click-to-set": "Click to set",
+      "tap-to-unmute": "TAP TO UNMUTE"
     },
     "share": {
       "title": "watch this video"
@@ -137,7 +139,7 @@
     "unknown": "Unknown",
     "unsupported-media-format": "Unsupported format.",
     "error-loading-file": "Error loading file.",
-    "fallback-language": "Media not found for selected language, selected fallback language.",
+    "fallback-language": "Content does not exist in the requested language, a default language has been selected.",
     "fallback-to-audio": "Video was not found, using audio.",
     "fallback-to-video": "Audio was not found, using video.",
     "source-content-not-found": "Source contents wasn't found",
@@ -147,6 +149,11 @@
     "header": {
       "text": "Search Results",
       "subtext": ""
+    },
+    "topNote":{
+      "tip": "Tip",
+      "first": "Search results are in {{language}}.",
+      "second": "You can choose other content languages"
     },
     "showAll": "Show All",
     "lessons": "Lessons",
@@ -195,8 +202,8 @@
     "last-lesson": "The Latest Daily Lesson",
     "donate": "DONATE NOW",
     "promoted": {
-      "header": "Quick and easy download of files",
-      "subheader": ""
+      "header": "Connecting The Good Life",
+      "subheader": "World Kabbalah Convention 2019"
     }
   },
   "events": {
@@ -407,7 +414,9 @@
     "header": {
       "text": "Topics",
       "subtext": "A collection of all items for a selected topic."
-    }
+    },
+    "show-more": "Show more",
+    "show-less": "Show less"
   },
   "media-downloads": {
     "title": "Media Downloads",

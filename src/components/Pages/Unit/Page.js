@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Container, Grid } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
@@ -11,6 +11,7 @@ import Materials from './widgets/UnitMaterials/Materials';
 import Info from './widgets/Info/Info';
 import MediaDownloads from './widgets/Downloads/MediaDownloads';
 import SameCollection from './widgets/Recommended/SameCollection/Container';
+import playerHelper from '../../../helpers/player';
 
 export class UnitPage extends Component {
   static propTypes = {
@@ -20,6 +21,7 @@ export class UnitPage extends Component {
     section: PropTypes.string,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
+    location: shapes.HistoryLocation,
   };
 
   static defaultProps = {
@@ -29,6 +31,13 @@ export class UnitPage extends Component {
     section: '',
   };
 
+  state = {};
+
+  componentWillMount() {
+    const { location } = this.props;
+    this.setState({ embed: playerHelper.getEmbedFromQuery(location) });
+  }
+
   // eslint-disable-next-line class-methods-use-this
   renderHelmet() {
     const { unit, language } = this.props;
@@ -36,40 +45,44 @@ export class UnitPage extends Component {
   }
 
   renderPlayer() {
-    const { unit, language, t } = this.props;
-    return (
+    const { unit, language } = this.props;
+    const { embed }          = this.state;
+    return !embed ? (
       <div className="avbox">
         <Container>
           <Grid centered padded>
-            <AVBox unit={unit} language={language} t={t} />
+            <AVBox unit={unit} language={language} />
           </Grid>
         </Container>
       </div>
+    ) : (
+      <AVBox unit={unit} language={language} />
     );
   }
 
   renderInfo() {
-    const { unit, t, section } = this.props;
-    return <Info unit={unit} section={section} t={t} />;
+    const { unit, section } = this.props;
+    return <Info unit={unit} section={section} />;
   }
 
   renderMaterials() {
-    const { unit, t } = this.props;
-    return <Materials unit={unit} t={t} />;
+    const { unit } = this.props;
+    return <Materials unit={unit} />;
   }
 
   renderDownloads() {
-    const { unit, t } = this.props;
-    return <MediaDownloads unit={unit} t={t} />;
+    const { unit } = this.props;
+    return <MediaDownloads unit={unit} />;
   }
 
   renderRecommendations() {
-    const { unit, t, section } = this.props;
-    return <SameCollection unit={unit} section={section} t={t} />;
+    const { unit, section } = this.props;
+    return <SameCollection unit={unit} section={section} />;
   }
 
   renderContent() {
-    return (
+    const { embed } = this.state;
+    return !embed ? (
       <div className="unit-page">
         {this.renderHelmet()}
         {this.renderPlayer()}
@@ -96,6 +109,10 @@ export class UnitPage extends Component {
           </Grid>
         </Container>
       </div>
+    ) : (
+      <div className="unit-page">
+        {this.renderPlayer()}
+      </div>
     );
   }
 
@@ -115,6 +132,6 @@ export class UnitPage extends Component {
   }
 }
 
-export const wrap = WrappedComponent => translate()(WrappedComponent);
+export const wrap = WrappedComponent => withNamespaces()(WrappedComponent);
 
 export default wrap(UnitPage);

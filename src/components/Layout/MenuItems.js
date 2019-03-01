@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import identity from 'lodash/identity';
 import { Menu, Sidebar } from 'semantic-ui-react';
 
@@ -15,7 +16,7 @@ const ITEMS = [
   'topics',
   'publications',
   'simple-mode',
-  'project-status',
+  // 'project-status',
   'help',
   // 'photos',
   // 'design',
@@ -48,7 +49,7 @@ const MenuItems = (props) => {
           content={t('nav.sidebar.old-site')}
         />
         <Menu.Item className="mobile-only">
-          <DonateNow t={t} language={language} />
+          <DonateNow language={language} />
         </Menu.Item>
       </Menu>
     );
@@ -75,4 +76,4 @@ MenuItems.defaultProps = {
   onItemClick: identity
 };
 
-export default MenuItems;
+export default withNamespaces()(MenuItems);

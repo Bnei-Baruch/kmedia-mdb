@@ -14,30 +14,38 @@ class YearMonthForm extends Component {
     language: PropTypes.string.isRequired,
   };
 
-  state = {
-    month: this.props.date.getMonth(),
-    year: this.props.date.getFullYear(),
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      month: props.date.getMonth(),
+      year: props.date.getFullYear(),
+      date: props.date,
+    };
+  }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.date !== nextProps.date) {
-      this.setState({
+  static getDerivedStateFromProps(nextProps, state) {
+    if (state.date !== nextProps.date) {
+      return {
         month: nextProps.date.getMonth(),
         year: nextProps.date.getFullYear(),
-      });
+        date: nextProps.date,
+      };
     }
+    return null;
   }
 
   handleMonthChange = (e, data) => {
-    this.props.onChange(new Date(this.state.year, data.value));
+    const { props, state } = this;
+    props.onChange(new Date(state.year, data.value));
   };
 
   handleYearChange = (e, data) => {
-    this.props.onChange(new Date(data.value, this.state.month));
+    const { props, state } = this;
+    props.onChange(new Date(data.value, state.month));
   };
 
   render() {
-    const { localeUtils, language } = this.props;
+    const { state: { month, year }, props: {localeUtils, language, className } }= this;
     const months                    = localeUtils.getMonths(language);
 
     const years = [];
@@ -46,13 +54,13 @@ class YearMonthForm extends Component {
     }
 
     return (
-      <div className="DayPicker-Caption">
+      <span className={className}>
         <Dropdown
           compact
           inline
           scrolling
-          options={months.map((month, i) => ({ text: month, value: i }))}
-          value={this.state.month}
+          options={months.map((mon, i) => ({ text: mon, value: i }))}
+          value={month}
           onChange={this.handleMonthChange}
         />
         &nbsp;&nbsp;
@@ -60,11 +68,11 @@ class YearMonthForm extends Component {
           compact
           inline
           scrolling
-          options={years.map(year => ({ text: year, value: year }))}
-          value={this.state.year}
+          options={years.map(yea => ({ text: yea, value: yea }))}
+          value={year}
           onChange={this.handleYearChange}
         />
-      </div>
+      </span>
     );
   }
 }

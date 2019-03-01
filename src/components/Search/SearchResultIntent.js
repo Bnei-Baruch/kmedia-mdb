@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import { Button, Card, Image, Icon, Segment, Header, List, Container } from 'semantic-ui-react';
+import { Button, Card, Image, Icon, Segment, Header, Container } from 'semantic-ui-react';
 
 import { sectionLogo } from '../../helpers/images';
 import { selectors } from '../../redux/modules/mdb';
@@ -105,10 +105,12 @@ class SearchResultIntent extends SearchResultBase {
           <div className="card_header_label">
             {this.mlsToStrColon(cu.duration)}
           </div>
-          <FallbackImage fluid src={src} />
+          <div>
+            <FallbackImage fluid src={src} />
+          </div>
         </Container>
         <Card.Content>
-          <Card.Header>
+          <Card.Header as="h3">
             <Link
               className="search__link"
               to={canonicalLink(cu, this.getMediaLanguage(this.props.filters))}
@@ -121,6 +123,7 @@ class SearchResultIntent extends SearchResultBase {
           </Card.Meta>
           <Card.Description>
             {this.renderFiles(cu)}
+            <div className="clear" />
           </Card.Description>
         </Card.Content>
       </Card>
@@ -139,7 +142,7 @@ class SearchResultIntent extends SearchResultBase {
       </Button>
     ));
 
-    return <Segment basic textAlign="center" className="padding0">{content}</Segment>;
+    return <Segment basic textAlign="center" className="no-padding">{content}</Segment>;
   };
 
   // eslint-disable-next-line react/no-multi-comp
@@ -174,7 +177,7 @@ class SearchResultIntent extends SearchResultBase {
   };
 
   render() {
-    const { t, queryResult, hit, rank, items, unitCounter }                             = this.props;
+    const { t, queryResult, hit, rank, items, unitCounter, isMobileDevice }             = this.props;
     const { _index: index, _type: type, _source: { mdb_uid: mdbUid, name }, highlight } = hit;
 
     const { pageNo, pageSize }            = this.state;
@@ -206,17 +209,8 @@ class SearchResultIntent extends SearchResultBase {
           <Image size="small" src={sectionLogo[type]} verticalAlign="bottom" />&nbsp;
           <span>{t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`)}</span>
         </Header>
-        <List verticalAlign="middle">
-          <List.Item>
-            <List.Content floated="right">
-              <Icon name="tasks" size="small" />
-              <Link
-                onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-                to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}
-              >
-                <span>{`${t('search.showAll')} ${this.props.total} ${t(`search.${resultsType}`)}`}</span>
-              </Link>
-            </List.Content>
+        <Segment.Group horizontal={!isMobileDevice()} className="no-padding no-margin-top no-border no-shadow">
+          <Segment className="no-padding  no-border">
             <Header as="h3" color="blue">
               <Link
                 className="search__link"
@@ -226,9 +220,19 @@ class SearchResultIntent extends SearchResultBase {
                 {this.titleFromHighlight(highlight, display)}
               </Link>
             </Header>
-          </List.Item>
-        </List>
-        <Card.Group className="search__cards" itemsPerRow={3} stackable>
+          </Segment>
+        <Segment textAlign={isMobileDevice() ? 'left' : 'right'} className="no-padding  no-border">
+            <Icon name="tasks" size="small" />
+            <Link
+              onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+              to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}
+            >
+              <span>{`${t('search.showAll')} ${this.props.total} ${t('search.' + resultsType)}`}</span>
+            </Link>
+          </Segment>
+        </Segment.Group>
+        <div className="clear" />
+        <Card.Group className={`${isMobileDevice() ? 'margin-top-8' : null} search__cards`} itemsPerRow={3} stackable>
           {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).map(this.renderItem)}
           {pageSize < unitCounter ? this.renderScrollLeft() : null}
           {pageSize < unitCounter ? this.renderScrollRight() : null}
