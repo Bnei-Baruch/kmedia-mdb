@@ -76,7 +76,7 @@ const unitLeloMikudFiles = (unit) => {
   }
 
   const du = unit.derived_units[keys[0]];
-  return du ?
+  return du && du.files ?
     du.files.map(file => ({ ...file, type: 'lelo-mikud' })) :
     [];
 };
