@@ -20,6 +20,7 @@ import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import SearchResultCU from './SearchResultCU';
 import SearchResultCollection from './SearchResultCollection';
 import SearchResultIntent from './SearchResultIntent';
+import SearchResultTwitter from './SearchResultTwitter';
 import SearchResultSource from './SearchResultSource';
 import SearchResultPost from './SearchResultPost';
 
@@ -68,7 +69,8 @@ class SearchResults extends Component {
     const props = { ...this.props, hit, rank, key: `${mdbUid}_${type}` };
 
     if (SEARCH_INTENT_HIT_TYPES.includes(type)) {
-      return <SearchResultIntent {...props} />;
+      return <SearchResultTwitter {...props} />;
+      //return <SearchResultIntent {...props} />;
     }
 
     let result = null;
@@ -84,6 +86,8 @@ class SearchResults extends Component {
       return <SearchResultPost  {...props} post={p} />;
     } else if (resultType === 'sources') {
       result = <SearchResultSource {...props} />;
+    } else if (resultType === 'tweets') {
+        result = <SearchResultTwitter {...props} />;
     }
 
     // maybe content_units are still loading ?
