@@ -14,8 +14,8 @@ class AVCenteredPlay extends Component {
   };
 
   shouldComponentUpdate({ media }) {
-    return this.props.media.isPlaying !== media.isPlaying ||
-      this.props.media.isLoading !== media.isLoading;
+    return this.props.media.isPlaying !== media.isPlaying
+      || this.props.media.isLoading !== media.isLoading;
   }
 
   handlePlayPause = () => {
@@ -26,7 +26,7 @@ class AVCenteredPlay extends Component {
 
   render() {
     const { media } = this.props;
-    let isHidden = false;
+    let isHidden    = false;
 
     if (media.isPlaying || media.isLoading) {
       isHidden = true;

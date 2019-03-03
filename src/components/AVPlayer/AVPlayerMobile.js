@@ -151,7 +151,7 @@ class AVPlayerMobile extends PureComponent {
           this.showControls();
         }
       } else {
-        this.showControls();        
+        this.showControls();
       }
       this.media.addEventListener('play', this.handlePlay);
       this.media.addEventListener('pause', this.handlePause);
@@ -179,10 +179,11 @@ class AVPlayerMobile extends PureComponent {
     this.media.autoplay = true;
   };
 
-  handleVolumeChange = (e) => {    
-    const { unMuteButton } = this.state;     
-    if (this.media.muted)   
+  handleVolumeChange = (e) => {
+    const { unMuteButton } = this.state;
+    if (this.media.muted) {
       return;
+    }
     this.persistVolume(e.currentTarget.volume);
     if (unMuteButton) {
       this.setState({ unMuteButton: false });
