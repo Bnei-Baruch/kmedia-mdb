@@ -47,6 +47,7 @@ class PDF extends Component {
     const { pdfFile } = state;
     if (pdfFile !== nextProps.pdfFile) {
       return {
+        pdfFile: nextProps.pdfFile,
         pageNumber: nextProps.pageNumber,
         numPages: null,
       };
