@@ -19,8 +19,7 @@ class LanguageSelector extends PureComponent {
     languages: [],
   };
 
-  // eslint-disable-next-line class-methods-use-this
-  getOptions(props) {
+  static getOptions(props) {
     const { languages, t } = props;
 
     return LANGUAGE_OPTIONS

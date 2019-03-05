@@ -10,7 +10,7 @@ class DropdownLanguageSelector extends BaseLanguageSelector {
 
   render() {
     const { defaultValue: value, blink } = this.props;
-    const options                        = this.getOptions(this.props);
+    const options                        = BaseLanguageSelector.getOptions(this.props);
 
     return (
       <Dropdown
