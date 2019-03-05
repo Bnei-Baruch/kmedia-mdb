@@ -69,8 +69,8 @@ class AVPlayer extends PureComponent {
     onNext: PropTypes.func,
 
     deviceInfo: shapes.UserAgentParserResults.isRequired,
-
     onMediaEditModeChange: PropTypes.func.isRequired,
+    onDropdownOpenedChange: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -544,6 +544,7 @@ class AVPlayer extends PureComponent {
         onPrev,
         onNext,
         media,
+        onDropdownOpenedChange
       } = this.props;
 
     const
@@ -667,6 +668,7 @@ class AVPlayer extends PureComponent {
             <AVPlaybackRate
               value={playbackRate}
               onSelect={this.playbackRateChange}
+              onDropdownOpenedChange={onDropdownOpenedChange}
             />
 
             {
@@ -692,6 +694,7 @@ class AVPlayer extends PureComponent {
               uiLanguage={uiLanguage}
               requestedLanguage={requestedLanguage}
               onSelect={this.onLanguageChange}
+              onDropdownOpenedChange={onDropdownOpenedChange}
             />
             {!isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.SLICE_EDIT)} />}
             {isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.NORMAL)} />}

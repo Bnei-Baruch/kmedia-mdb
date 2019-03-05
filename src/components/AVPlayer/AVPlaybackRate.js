@@ -14,6 +14,7 @@ export default class AVPlaybackRate extends Component {
   static propTypes = {
     onSelect: PropTypes.func,
     value: PropTypes.string,
+    onDropdownOpenedChange: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -22,7 +23,10 @@ export default class AVPlaybackRate extends Component {
   };
 
   handleChange = (e, data) =>
-    this.props.onSelect(e, data.value);
+    this.props.onSelect(e, data.value);    
+
+  handleOnOpen = () => this.props.onDropdownOpenedChange(true);
+  handleOnClose = () => this.props.onDropdownOpenedChange(false);
 
   render() {
     const { value } = this.props;
@@ -39,6 +43,8 @@ export default class AVPlaybackRate extends Component {
           value={value}
           onChange={this.handleChange}
           trigger={<button>{value}</button>}
+          onOpen={this.handleOnOpen}
+          onClose={this.handleOnClose}
         />
       </div>
     );
