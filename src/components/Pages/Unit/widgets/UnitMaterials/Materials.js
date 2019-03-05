@@ -31,25 +31,25 @@ class Materials extends Component {
       {
         name: 'transcription',
         label: t('materials.transcription.header'),
-        component: <TranscriptionContainer unit={this.props.unit} />
+        component: <TranscriptionContainer unit={unit} />
       },
       {
         name: 'sources',
         label: t('materials.sources.header'),
-        component: <SourcesContainer unit={this.props.unit} />
+        component: <SourcesContainer unit={unit} />
       },
       {
         name: 'sketches',
         label: t('materials.sketches.header'),
-        component: <Sketches unit={this.props.unit} />,
+        component: <Sketches unit={unit} />,
       },
     ];
 
-    if (this.props.unit.content_type === CT_VIDEO_PROGRAM_CHAPTER) {
+    if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER) {
       items.unshift({
         name: 'summary',
         label: t('materials.summary.header'),
-        component: <Summary unit={this.props.unit} />,
+        component: <Summary unit={unit} />,
       });
     }
 

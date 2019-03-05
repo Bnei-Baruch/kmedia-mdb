@@ -26,7 +26,7 @@ class Transcription extends Component {
     unit: null,
   };
 
-  static calcCurrentItem = (props) => {
+  static calcCurrentState = (props) => {
     const { contentLanguage, uiLanguage } = props;
 
     const textFiles   = Transcription.getTextFiles(props);
@@ -36,69 +36,22 @@ class Transcription extends Component {
       return false;
     }
 
-    const selected = Transcription.selectFile(textFiles, newLanguage);
+    const selectedFile = Transcription.selectFile(textFiles, newLanguage);
 
-    return { selected, languages, language: newLanguage, textFiles };
+    return { selectedFile, languages, language: newLanguage, textFiles };
   };
 
   static selectFile = (textFiles, language) => {
-    const selected = textFiles.filter(x => x.language === language);
+    const selectedFiles = textFiles.filter(x => x.language === language);
 
-    if (selected.length <= 1) {
+    if (selectedFiles.length <= 1) {
       // use the only file found OR no files by language - use first text file
-      return selected[0];
+      return selectedFiles[0];
     }
 
     // many files by language - get the largest - it is probably the transcription
-    return selected.reduce((acc, file) => (acc.size < file.size ? file : acc));
+    return selectedFiles.reduce((acc, file) => (acc.size < file.size ? file : acc));
   };
-
-  constructor(props) {
-    super(props);
-    const state = Transcription.calcCurrentItem(this.props);
-    this.state  = {
-      selected: null,
-      languages: [],
-      language: null,
-      ...state,
-    };
-  }
-
-  componentDidMount() {
-    const { selected, language } = this.state;
-    if (selected && language) {
-      const { doc2htmlById, onContentChange } = this.props;
-      const { data }                          = doc2htmlById[selected.id] || {};
-      if (!data) {
-        onContentChange(selected.id);
-      }
-    }
-  }
-
-  shouldComponentUpdate(nextProps, _nextState) {
-    const { props, state } = this;
-    const toUpdate  = (nextProps.uiLanguage !== props.uiLanguage)
-      || (nextProps.contentLanguage !== props.contentLanguage)
-      || (nextProps.unit && !props.unit)
-      || (nextProps.unit.id !== props.unit.id)
-      || (nextProps.unit.files !== props.unit.files
-        || !isEqual(nextProps.doc2htmlById, props.doc2htmlById));
-
-    if (toUpdate) {
-      const { selected, language } = this.setCurrentItem(nextProps);
-      if (selected && language) {
-        props.onContentChange(selected.id);
-      }
-
-      return true;
-    } // in case state language was changed
-    if (_nextState.language !== state.language) {
-      props.onContentChange(_nextState.selected.id);
-      return true;
-    }
-
-    return false;
-  }
 
   static getTextFiles = (props) => {
     const { unit } = props;
@@ -110,38 +63,57 @@ class Transcription extends Component {
     return unit.files.filter(x => MediaHelper.IsText(x) && !MediaHelper.IsPDF(x));
   };
 
+  constructor(props) {
+    super(props);
+    this.state = Transcription.calcCurrentState(this.props);
+  }
 
-  setCurrentItem = (props) => {
-    const sUpdate = Transcription.calcCurrentItem(props);
+  componentDidMount() {
+    const { selectedFile, language } = this.state;
 
-    this.setState(sUpdate);
+    if (selectedFile && language) {
+      const { doc2htmlById, onContentChange } = this.props;
+      const { data }                          = doc2htmlById[selectedFile.id] || {};
+      if (!data) {
+        onContentChange(selectedFile.id);
+      }
+    }
+  }
 
-    return sUpdate;
-  };
+  shouldComponentUpdate(nextProps, nextState) {
+    const { props, state } = this;
+    const toUpdate  = (nextProps.uiLanguage !== props.uiLanguage)
+      || (nextProps.contentLanguage !== props.contentLanguage)
+      || (nextProps.unit && !props.unit)
+      || (nextProps.unit.id !== props.unit.id)
+      || (nextProps.unit.files !== props.unit.files
+        || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
+      || nextState.language !== state.language);
 
-  handleLanguageChanged = (e, language) => {
-    const { state, props } = this;
+    return toUpdate;
+  }
 
-    if (language === state.language) {
+  handleLanguageChanged = (e, newLanguage) => {
+    const { language, textFiles } = this.state;
+
+    if (newLanguage === language) {
       e.preventDefault();
       return;
     }
 
-    const selected = Transcription.selectFile(state.textFiles, language);
-    props.onContentChange(selected.id);
-
-    this.setState({ selected, language });
+    const selectedFile = Transcription.selectFile(textFiles, newLanguage);
+    this.setState({ selectedFile, language: newLanguage });
   };
 
   render() {
     const { doc2htmlById, t }               = this.props;
-    const { selected, languages, language } = this.state;
+    const { selectedFile, languages, language } = this.state;
 
-    if (!selected) {
+    if (!selectedFile) {
       return <Segment basic>{t('materials.transcription.no-transcription')}</Segment>;
     }
 
-    const { data, wip, err } = doc2htmlById[selected.id] || {};
+    const { data, wip, err } = doc2htmlById[selectedFile.id] || {};
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
