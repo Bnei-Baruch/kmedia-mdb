@@ -192,7 +192,7 @@ class AVPlayerMobile extends PureComponent {
 
   restoreVolume = () => {
     let value = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
-    if (value == null || Number.isNaN(value)) {
+    if (value == null || Number.isNaN(value) || value === '0') {
       value = DEFAULT_PLAYER_VOLUME;
       localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, value);
     }
@@ -321,7 +321,7 @@ class AVPlayerMobile extends PureComponent {
 
   isSeekSuccess = t => this.media.currentTime >= t;
 
-  toggleSliceMode = () => this.setState({ isSliceMode: !this.state.isSliceMode });
+  toggleSliceMode = () => this.setState(prevState => ({ isSliceMode: !prevState.isSliceMode }));
 
   handleJumpBack = () => {
     const { currentTime, duration } = this.media;
