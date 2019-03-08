@@ -16,15 +16,13 @@ const screenNames = {
 
 class TwitterFeed extends Component {
   static propTypes = {
-    tweets: PropTypes.arrayOf(shapes.Tweet),
+    twitter: shapes.Tweet,
     snippetVersion: PropTypes.bool,
-    limitLength: PropTypes.number
   };
 
   static defaultProps = {
-    tweets: [],
-    snippetVersion: false,
-    limitLength: null
+    twitter: null,
+    snippetVersion: false
   };
 
   getBestVideoVariant = (x) => {
@@ -121,9 +119,12 @@ class TwitterFeed extends Component {
     return html;
   };
 
-  renderTweet = (tweet) => {
-    const { snippetVersion }                                 = this.props;
-    const { username, twitter_id: tID, created_at: ts, raw } = tweet;
+  render() {
+    const { snippetVersion, twitter } = this.props;
+    if (!twitter) {
+      return null;
+    }
+    const { username, twitter_id: tID, created_at: ts, raw } = twitter;
     const mts                                                = moment(ts);
     const screenName                                         = screenNames[username];
 
@@ -180,17 +181,6 @@ class TwitterFeed extends Component {
       </Fragment>
     );
   };
-
-  render() {
-    const { tweets, limitLength } = this.props;
-    const length                  = limitLength || tweets.length;
-
-    return (
-      <Feed>
-        {tweets.slice(0, length).map(this.renderTweet)}
-      </Feed>
-    );
-  }
 }
 
 export default TwitterFeed;

@@ -68,6 +68,7 @@ export function* search(action) {
       const cIDsToFetch    = getIdsForFetch(data.search_result.hits.hits, 'collections');
       const cuIDsToFetch   = getIdsForFetch(data.search_result.hits.hits, 'units');
       const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'posts');
+      const twitterIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'tweets');
 
       const language = yield select(state => settings.getLanguage(state.settings));
       const respCU   = yield call(Api.units, {
@@ -78,10 +79,12 @@ export function* search(action) {
       });
       const respC    = yield call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, language });
       const respPost = yield call(Api.posts, { id: postIDsToFetch, pageSize: postIDsToFetch.length });
+      const respTwitter = yield call(Api.tweets, { id: twitterIDsToFetch, pageSize: twitterIDsToFetch.length });
 
       yield put(mdbActions.receiveContentUnits(respCU.data.content_units));
       yield put(mdbActions.receiveCollections(respC.data.collections));
       yield put(postsActions.fetchBlogListSuccess(respPost.data));
+      yield put(postsActions.fetchTweetsSuccess(respTwitter.data));
     }
     yield put(actions.searchSuccess(data));
   } catch (err) {

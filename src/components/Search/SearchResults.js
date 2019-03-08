@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Trans, withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
-import { Container, Divider, Grid, Message, Image, Button } from 'semantic-ui-react';
+import { Container, Divider, Grid, Message, Image, Button, Segment } from 'semantic-ui-react';
 import InfoIcon from '../../images/icons/info.svg';
 
 import { SEARCH_INTENT_HIT_TYPES, } from '../../helpers/consts';
@@ -20,7 +20,7 @@ import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import SearchResultCU from './SearchResultCU';
 import SearchResultCollection from './SearchResultCollection';
 import SearchResultIntent from './SearchResultIntent';
-import SearchResultTwitter from './SearchResultTwitter';
+import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
 import SearchResultSource from './SearchResultSource';
 import SearchResultPost from './SearchResultPost';
 
@@ -32,6 +32,7 @@ class SearchResults extends Component {
     queryResult: PropTypes.object,
     cMap: PropTypes.objectOf(shapes.Collection),
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
+    twitterMap: PropTypes.objectOf(shapes.Tweet),
     pageNo: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
@@ -48,6 +49,7 @@ class SearchResults extends Component {
     queryResult: null,
     cMap: {},
     cuMap: {},
+    twitterMap: {},
     wip: false,
     err: null,
     getSourcePath: undefined,
@@ -63,20 +65,20 @@ class SearchResults extends Component {
   };
 
   renderHit = (hit, rank) => {
-    const { cMap, cuMap, postMap }                                               = this.props;
+    const { cMap, cuMap, postMap, twitterMap }                                   = this.props;
     const { _source: { mdb_uid: mdbUid, result_type: resultType }, _type: type } = hit;
 
     const props = { ...this.props, hit, rank, key: `${mdbUid}_${type}` };
 
     if (SEARCH_INTENT_HIT_TYPES.includes(type)) {
-      return <SearchResultTwitter {...props} />;
-      //return <SearchResultIntent {...props} />;
+      return <SearchResultIntent {...props} />;
     }
 
     let result = null;
-    const cu = cuMap[mdbUid];
-    const c  = cMap[mdbUid];
-    const p  = postMap[mdbUid];
+    const cu   = cuMap[mdbUid];
+    const c    = cMap[mdbUid];
+    const p    = postMap[mdbUid];
+    const t    = twitterMap[mdbUid];
 
     if (cu) {
       result = <SearchResultCU {...props} cu={cu} />;
@@ -87,7 +89,8 @@ class SearchResults extends Component {
     } else if (resultType === 'sources') {
       result = <SearchResultSource {...props} />;
     } else if (resultType === 'tweets') {
-        result = <SearchResultTwitter {...props} />;
+      result =
+        <Segment verticalalign="top" className="bg_hover_grey search__block"><TwitterFeed twitter={t} /></Segment>;
     }
 
     // maybe content_units are still loading ?

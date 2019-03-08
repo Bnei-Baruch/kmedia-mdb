@@ -84,7 +84,7 @@ class SearchResultsContainer extends Component {
     this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
   render() {
-    const { wip, err, queryResult, cMap, cuMap, postMap, pageNo, pageSize, sortBy, language, location, click } = this.props;
+    const { wip, err, queryResult, cMap, cuMap, postMap, twitterMap, pageNo, pageSize, sortBy, language, location, click } = this.props;
     return (
       <div>
         <SectionHeader section="search" />
@@ -102,6 +102,7 @@ class SearchResultsContainer extends Component {
             cMap={cMap}
             cuMap={cuMap}
             postMap={postMap}
+            twitterMap={twitterMap}
             wip={wip}
             err={err}
             pageNo={pageNo}
@@ -133,7 +134,7 @@ const cuMapFromState = (state, results) => {
     {};
 };
 
-const cMapFromState    = (state, results) => {
+const cMapFromState = (state, results) => {
   return results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
       if (val._source.result_type === 'collections') {
@@ -147,15 +148,31 @@ const cMapFromState    = (state, results) => {
     }, {}) :
     {};
 };
+
 const postMapFromState = (state, results) => {
   return results && results.hits && Array.isArray(results.hits.hits) ?
     results.hits.hits.reduce((acc, val) => {
       if (val._source.result_type === 'posts') {
-        const ids = val._source.mdb_uid.split('-');
+        const ids     = val._source.mdb_uid.split('-');
         const blogObj = BLOGS.find(b => b.id === parseInt(ids[0]));
         const p       = publicationSelectors.getBlogPost(state.publications, blogObj.name, ids[1]);
         if (p) {
           acc[val._source.mdb_uid] = p;
+        }
+      }
+      return acc;
+    }, {}) :
+    {};
+};
+
+const twitterMapFromState = (state, results) => {
+  return results && results.hits && Array.isArray(results.hits.hits) ?
+    results.hits.hits.reduce((acc, val) => {
+      if (val._source.result_type === 'tweets') {
+        const tID = val._source.mdb_uid;
+        const t   = publicationSelectors.getTwitter(state.publications, tID);
+        if (t) {
+          acc[tID] = t;
         }
       }
       return acc;
@@ -172,6 +189,7 @@ const mapState = (state) => {
     cMap: cMapFromState(state, results),
     cuMap: cuMapFromState(state, results),
     postMap: postMapFromState(state, results),
+    twitterMap: twitterMapFromState(state, results),
     query: selectors.getQuery(state.search),
     pageNo: selectors.getPageNo(state.search),
     sortBy: selectors.getSortBy(state.search),

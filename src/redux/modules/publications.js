@@ -80,6 +80,7 @@ const initialState = {
     byID: {},
   },
   twitter: {
+    byID: {},
     tweets: [],
     pageNo: 1,
     total: 0,
@@ -129,14 +130,23 @@ const onFetchTweets = state => ({
   }
 });
 
-const onFetchTweetsSuccess = (state, action) => ({
-  ...state,
-  twitter: {
-    ...state.twitter,
-    ...action.payload,
-    wip: false,
-  }
-});
+const onFetchTweetsSuccess = (state, action) => {
+
+  const { tweets = [] }     = action.payload;
+  const { twitter: { byID } } = state;
+
+  tweets.forEach((x) => byID[x.twitter_id] = x);
+
+  return {
+    ...state,
+    twitter: {
+      ...state.twitter,
+      ...action.payload,
+      byID,
+      wip: false,
+    }
+  };
+};
 
 const onFetchTweetsFailure = (state, action) => ({
   ...state,
@@ -275,6 +285,7 @@ export const reducer = handleActions({
 
 const getPublisherById = state => state.publishers.byID;
 
+const getTwitter      = (state, id) => state.twitter.byID[id];
 const getTweets       = state => state.twitter.tweets;
 const getTweetsTotal  = state => state.twitter.total;
 const getTweetsPageNo = state => state.twitter.pageNo;
@@ -293,6 +304,7 @@ const getBlogErrorPost = state => state.blog.errPost;
 export const selectors = {
   getPublisherById,
 
+  getTwitter,
   getTweets,
   getTweetsTotal,
   getTweetsPageNo,
