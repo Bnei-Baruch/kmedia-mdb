@@ -239,11 +239,8 @@ class AVPlayerMobile extends PureComponent {
   };
 
   showControls = () => {
-    const { showControls } = this.state;
-    if (!showControls) {
       this.media.controls = true;
       this.setState({ showControls: true });
-    }
   };
 
   handleTimeUpdate = (e) => {
