@@ -32,48 +32,43 @@ class LastLessonCollection extends Component {
     lastLessonId: '',
   };
 
-  constructor(props) {
-    super(props);
-    const { contentLanguage } = this.props;
-    this.state                = {
-      language: contentLanguage,
-    };
-  }
-
   componentDidMount() {
     const { lastLessonId, fetchLatestLesson } = this.props;
+
     if (!lastLessonId) {
       fetchLatestLesson();
     }
   }
 
-  static getDerivedStateFromProps(nextProps, state) {
-    const { language } = state;
-    if (language !== nextProps.contentLanguage) {
-      nextProps.fetchLatestLesson();
-      return { language: nextProps.contentLanguage };
-    }
-    return null;
+  shouldComponentUpdate(nextProps) {
+    const { uiLanguage, contentLanguage, wip, errors, lastLessonId } = nextProps;
+    const { props }                           = this;
+
+    return (
+      (lastLessonId && (lastLessonId !== props.lastLessonId))
+      || uiLanguage !== props.uiLanguage
+      || contentLanguage !== props.contentLanguage
+      || !isEqual(wip, props.wip)
+      || !isEqual(errors, props.errors)
+    );
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const { uiLanguage, contentLanguage, wip, errors, } = nextProps;
-    const { language }                               = nextState;
-    const { props, state }                           = this;
+  componentDidUpdate(prevProps) {
+    const { lastLessonId, uiLanguage, contentLanguage, fetchLatestLesson } = this.props;
 
-    return !(
-      uiLanguage === props.uiLanguage
-      && language === state.filesLanguage
-      && contentLanguage === state.filesLanguage
-      && isEqual(wip, props.wip)
-      && isEqual(errors, props.errors)
-    );
+    if (!lastLessonId
+      && (uiLanguage !== prevProps.uiLanguage
+      || contentLanguage !== prevProps.contentLanguage)
+    ) {
+      fetchLatestLesson();
+    }
   }
 
   render() {
     const { wip, errors, t, lastLessonId, contentLanguage } = this.props;
 
     const wipErr = WipErr({ wip: wip.lastLesson, err: errors.lastLesson, t });
+
     if (wipErr) {
       return wipErr;
     }
