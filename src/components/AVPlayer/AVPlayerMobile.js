@@ -146,6 +146,9 @@ class AVPlayerMobile extends PureComponent {
         }
         this.media.autoPlay = true;
         this.setState({ unMuteButton: true });
+        if (this.props.deviceInfo.os.name !== 'iOS') {
+          this.showControls();
+        }
       } else {
         this.showControls();
       }
