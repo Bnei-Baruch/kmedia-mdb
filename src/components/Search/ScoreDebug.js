@@ -6,7 +6,11 @@ class ScoreDebug extends Component {
   static propTypes = {
     name: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
     score: PropTypes.number.isRequired,
-    explanation: PropTypes.object.isRequired,
+    explanation: PropTypes.object,
+  };
+
+  static defaultProps = {
+    explanation: null,
   };
 
   state = {
@@ -20,6 +24,9 @@ class ScoreDebug extends Component {
   };
 
   reduceExplanation = (exp, open, key) => {
+    if (!exp) {
+        return (<div>Error, expected explanations, got null.</div>);
+    }
     if (!open || !(key in open)) {
       open[key] = {
         open: true,
@@ -61,8 +68,13 @@ class ScoreDebug extends Component {
     const { open, treeOpen }           = this.state;
 
     return (
-      <div>
+      <div className="score_debug">
         <Button color="red" icon="flask" content={score} onClick={() => this.setState({ open: true })} />
+        {explanation ? null : (
+            <span data-tooltip="Explanations are null.">
+                <Icon name='warning sign' color='yellow' size='big' />
+            </span>
+        )}
         <Modal dimmer="inverted" open={open} onClose={() => this.setState({ open: false })}>
           <Modal.Content style={{ textAlign: 'left' }}>
             <h2>{name}</h2>

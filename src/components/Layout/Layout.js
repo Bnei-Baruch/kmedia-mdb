@@ -82,11 +82,11 @@ class Layout extends Component {
       return false;
     }
 
-    if (this.headerSearchElement && this.headerSearchElement.current.contains(e.target)) {
+    if (this.headerSearchElement.current && this.headerSearchElement.current.contains(e.target)) {
       return false;
     }
 
-    if (this.showSearchButtonElement && this.showSearchButtonElement.current.contains(e.target)) {
+    if (this.showSearchButtonElement.current && this.showSearchButtonElement.current.contains(e.target)) {
       return false;
     }
 
@@ -102,11 +102,11 @@ class Layout extends Component {
       return false;
     }
 
-    if (this.menuButtonElement1 && this.menuButtonElement1.current.contains(e.target)) {
+    if (this.menuButtonElement1.current && this.menuButtonElement1.current.contains(e.target)) {
       return false;
     }
 
-    if (this.menuButtonElement2 && this.menuButtonElement2.current.contains(e.target)) {
+    if (this.menuButtonElement2.current && this.menuButtonElement2.current.contains(e.target)) {
       return false;
     }
 
