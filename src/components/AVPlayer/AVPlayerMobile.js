@@ -124,6 +124,7 @@ class AVPlayerMobile extends PureComponent {
     // We only keep the current time.
     // Playing state is irrelevant on mobile due to user gesture finish
     // prior to media element presence on the page
+    this.setState({ showControls: false });
     this.wasCurrentTime = this.media.currentTime;
     this.props.onSwitchAV(...params);
     // this.media.autoplay = true;
@@ -145,11 +146,6 @@ class AVPlayerMobile extends PureComponent {
         }
         this.media.autoPlay = true;
         this.setState({ unMuteButton: true });
-        if (this.props.deviceInfo.os.name === 'iOS') {
-          setTimeout(this.showControls, 5000);
-        } else {
-          this.showControls();
-        }
       } else {
         this.showControls();
       }
@@ -239,12 +235,18 @@ class AVPlayerMobile extends PureComponent {
   };
 
   showControls = () => {
+    const { showControls } = this.state;
+    if (!showControls) {
       this.media.controls = true;
       this.setState({ showControls: true });
+    }
   };
 
   handleTimeUpdate = (e) => {
-    const { mode, sliceEnd, sliceStart, seeking, firstSeek } = this.state;
+    const { mode, sliceEnd, sliceStart, seeking, firstSeek, showControls } = this.state;
+
+    if (!showControls)
+      this.showControls();
 
     const time = e.currentTarget.currentTime;
     this.saveCurrentTime(time);
