@@ -5,7 +5,7 @@ import uniq from 'lodash/uniq';
 import { Container, Divider, Segment } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
-import { RTL_LANGUAGES } from '../../../../../../helpers/consts';
+import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, RTL_LANGUAGES } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import MediaHelper from '../../../../../../helpers/media';
 import * as shapes from '../../../../../shapes';
@@ -19,11 +19,13 @@ class Transcription extends Component {
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
+    type: PropTypes.string,
     onContentChange: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     unit: null,
+    type: null,
   };
 
   static calcCurrentItem = (props) => {
@@ -95,14 +97,30 @@ class Transcription extends Component {
   }
 
   static getTextFiles = (props) => {
-    const { unit } = props;
+    const { unit, type } = props;
     if (!unit || !Array.isArray(unit.files)) {
       return [];
     }
 
-    // filter text files, but not PDF
-    return unit.files.filter(x => MediaHelper.IsText(x) && !MediaHelper.IsPDF(x));
+    if (!type) {
+      // filter text files, but not PDF
+      return unit.files.filter(x => MediaHelper.IsText(x) && !MediaHelper.IsPDF(x));
+    }
+
+    return Transcription.getUnitDerivedArticle(props);
   };
+
+  static getUnitDerivedArticle(props) {
+    const { unit, type } = props;
+    // suitable for having either derived articles or research materials only
+    const ct             = type === 'articles' ? CT_ARTICLE : CT_RESEARCH_MATERIAL;
+
+    return Object.values(unit.derived_units || {})
+      .filter(x => x.content_type === ct
+        && (x.files || []).some(f => f.type === MT_TEXT))
+      .map(x => x.files)
+      .reduce((acc, files) => [...acc, ...files], []);
+  }
 
   setCurrentItem = (props) => {
     const sUpdate = Transcription.calcCurrentItem(props);
@@ -126,11 +144,12 @@ class Transcription extends Component {
   };
 
   render() {
-    const { doc2htmlById, t }               = this.props;
+    const { doc2htmlById, t, type }         = this.props;
     const { selected, languages, language } = this.state;
 
     if (!selected) {
-      return <Segment basic>{t('materials.transcription.no-transcription')}</Segment>;
+      const text = type || 'transcription';
+      return <Segment basic>{t(`materials.${text}.no-content`)}</Segment>;
     }
 
     const { data, wip, err } = doc2htmlById[selected.id] || {};

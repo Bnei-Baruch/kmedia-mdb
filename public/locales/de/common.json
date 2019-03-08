@@ -370,7 +370,7 @@
     },
     "transcription": {
       "header": "Transkript",
-      "no-transcription": "Kein Transkript"
+      "no-content": "Kein Transkript"
     },
     "sources": {
       "header": "Quellen",
@@ -380,6 +380,14 @@
     },
     "sketches": {
       "header": "Zeichnungen"
+    },
+    "articles": {
+      "header": "Artikel",
+      "no-content": "Keine Artikel"
+    },
+    "research": {
+      "header": "Forschungsmaterialien",
+      "no-content": "Kein Forschungsmaterial"
     }
   },
   "sources-library": {

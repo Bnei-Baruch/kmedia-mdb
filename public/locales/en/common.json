@@ -150,7 +150,7 @@
       "text": "Search Results",
       "subtext": ""
     },
-    "topNote":{
+    "topNote": {
       "tip": "Tip",
       "first": "Search results are in {{language}}.",
       "second": "You can choose other content languages"
@@ -386,7 +386,7 @@
     },
     "transcription": {
       "header": "Transcription",
-      "no-transcription": "Transcription is missing"
+      "no-content": "Transcription is missing"
     },
     "sources": {
       "header": "Sources",
@@ -396,6 +396,14 @@
     },
     "sketches": {
       "header": "Sketches"
+    },
+    "articles": {
+      "header": "Articles",
+      "no-content": "No articles"
+    },
+    "research": {
+      "header": "Research materials",
+      "no-content": "No research materials"
     }
   },
   "sources-library": {

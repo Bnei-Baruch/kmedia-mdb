@@ -35,6 +35,7 @@ export const CT_KITEI_MAKOR           = 'KITEI_MAKOR';
 export const CT_PUBLICATION           = 'PUBLICATION';
 export const CT_LELO_MIKUD            = 'LELO_MIKUD';
 export const CT_BLOG_POST             = 'BLOG_POST';
+export const CT_RESEARCH_MATERIAL     = 'RESEARCH_MATERIAL';
 
 // Content types for additional Elastic results
 export const SCT_BLOG_POST = 'R_BLOG_POST';

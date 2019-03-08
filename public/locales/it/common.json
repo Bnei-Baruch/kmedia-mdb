@@ -26,7 +26,7 @@
   },
   "filters": {
     "by": "Filtrato per:",
-     "filters": "Filters",
+    "filters": "Filters",
     "hideFilters": "Hide Filters",
     "all": "Tutto",
     "date-filter": {
@@ -149,7 +149,7 @@
       "text": "Search Results",
       "subtext": ""
     },
-    "topNote":{
+    "topNote": {
       "tip": "Tip",
       "first": "Search results are in {{language}}.",
       "second": "You can choose other content languages"
@@ -385,7 +385,7 @@
     },
     "transcription": {
       "header": "Transcription",
-      "no-transcription": "Transcription is missing"
+      "no-content": "Transcription is missing"
     },
     "sources": {
       "header": "Sources",
@@ -395,6 +395,14 @@
     },
     "sketches": {
       "header": "Sketches"
+    },
+    "articles": {
+      "header": "articoli",
+      "no-content": "Nessun articolo"
+    },
+    "research": {
+      "header": "Materiali di ricerca",
+      "no-content": "Nessun materiale di ricerca"
     }
   },
   "sources-library": {
@@ -541,7 +549,7 @@
   },
   "locations": {
     "argentina": "argentina",
-    "buenos-aires":  "buenos-aires",
+    "buenos-aires": "buenos-aires",
     "austria": "austria",
     "vienna": "vienna",
     "brazil": "brasile",
@@ -558,53 +566,53 @@
     "czech-republic": "repubblica-ceca",
     "prague": "praga",
     "estonia": "estonia",
-    "tallinn":  "tallinn",
-    "france":  "francia",
-    "paris":  "parigi",
+    "tallinn": "tallinn",
+    "france": "francia",
+    "paris": "parigi",
     "georgia": "georgia",
-    "tbilisi":  "tbilisi",
+    "tbilisi": "tbilisi",
     "germany": "germania",
     "berlin": "berlino",
     "birnbach": "birnbach",
-    "bremen":   "brema",
+    "bremen": "brema",
     "heidelberg": "heidelberg",
     "wetzlar": "wetzlar",
-    "iceland":  "islanda",
+    "iceland": "islanda",
     "reykjavik": "reykjavik",
     "israel": "israele",
     "arava": "arava",
     "galil": "galilea",
-    "kfar-tzvi-sitrin":  "kfar-tzvi-sitrin",
+    "kfar-tzvi-sitrin": "kfar-tzvi-sitrin",
     "petah-tikva": "petah-tikva",
-    "tel-aviv":"tel-aviv",
-    "italy":" italia",
+    "tel-aviv": "tel-aviv",
+    "italy": " italia",
     "bologna": "bologna",
-    "rome":"roma",
+    "rome": "roma",
     "verona": "verona",
     "kazakhstan": "kazakistan",
     "almaty": "almaty",
     "lithuania": "lituania",
     "vilnius": "vilnius",
-    "mexico":" messico",
-    "guadalajara":"guadalajara",
+    "mexico": " messico",
+    "guadalajara": "guadalajara",
     "poland": "polonia",
-    "warsaw":"varsavia",
-    "romania":"romania",
-    "iasi":"Iași",
+    "warsaw": "varsavia",
+    "romania": "romania",
+    "iasi": "Iași",
     "russia": "russia",
-    "krasnoyarsk":"krasnojarsk",
-    "moscow":"mosca",
+    "krasnoyarsk": "krasnojarsk",
+    "moscow": "mosca",
     "novosibirsk": "novosibirsk",
     "saint-petersburg": "san-pietroburgo",
     "sochi": "Soči",
     "spain": "spagna",
     "madrid": "madrid",
-    "sweden":"svezia",
+    "sweden": "svezia",
     "stockholm": "stoccolma",
     "switzerland": "svizzera",
     "berne": "berna",
     "turkey": "turchia",
-    "antalya":  "Adalia",
+    "antalya": "Adalia",
     "ukraine": "ucraina",
     "kharkiv": "Charkiv",
     "kiev": "kiev",
@@ -616,7 +624,7 @@
     "los-angeles": "los-angeles",
     "miami": "miami",
     "new-jersey": "new-jersey",
-    "new-york":  "new-york",
+    "new-york": "new-york",
     "san-francisco": "san-francisco",
     "st-louis": "saint-louis",
     "unknown": "sconosciuto"

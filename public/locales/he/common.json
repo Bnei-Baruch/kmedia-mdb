@@ -149,7 +149,7 @@
       "text": "תוצאות חיפוש",
       "subtext": ""
     },
-    "topNote":{
+    "topNote": {
       "tip": "עצה",
       "first": "תוצאות החיפוש הן בשפה {{language}}.",
       "second": "אתה יכול לבחור שפות תוכן אחרות"
@@ -385,7 +385,7 @@
     },
     "transcription": {
       "header": "תמליל",
-      "no-transcription": "חסר תמליל"
+      "no-content": "חסר תמליל"
     },
     "sources": {
       "header": "מקורות",
@@ -395,6 +395,14 @@
     },
     "sketches": {
       "header": "שרטוטים"
+    },
+    "articles": {
+      "header": "מאמרים",
+      "no-content": "אין מאמרים"
+    },
+    "research": {
+      "header": "חומרי מחקר",
+      "no-content": "אין חומרי מחקר"
     }
   },
   "sources-library": {
