@@ -25,9 +25,7 @@ class Materials extends Component {
     const types    = {};
 
     Object.values(unit.derived_units || {})
-      .forEach((x) => {
-        types[x.content_type] = (x.files || []).some(f => f.type === MT_TEXT);
-      });
+      .forEach(x => types[x.content_type] = (x.files || []).some(f => f.type === MT_TEXT));
 
     return types;
   }
