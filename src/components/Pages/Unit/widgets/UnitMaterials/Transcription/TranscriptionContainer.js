@@ -19,6 +19,11 @@ class TranscriptionContainer extends Component {
     language: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
     doc2html: PropTypes.func.isRequired,
+    type: PropTypes.string,
+  };
+
+  static defaultProps = {
+    type: null,
   };
 
   handleContentChange = (id) => {
@@ -27,7 +32,7 @@ class TranscriptionContainer extends Component {
   };
 
   render() {
-    const { unit, doc2htmlById, language, contentLanguage } = this.props;
+    const { unit, doc2htmlById, language, contentLanguage, type } = this.props;
 
     return (
       <Transcription
@@ -35,6 +40,7 @@ class TranscriptionContainer extends Component {
         doc2htmlById={doc2htmlById}
         uiLanguage={language}
         contentLanguage={contentLanguage}
+        type={type}
         onContentChange={this.handleContentChange}
       />
     );
