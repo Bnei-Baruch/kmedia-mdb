@@ -78,7 +78,7 @@ class Layout extends Component {
   };
 
   isCloseHeaderSearch = (e) => {
-    if (!this.state || !this.state.sidebarActive || e.target === this.headerSearchElement) {
+    if (!this.state || !this.state.isShowHeaderSearch || e.target === this.headerSearchElement) {
       return false;
     }
 

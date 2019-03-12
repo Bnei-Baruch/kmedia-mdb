@@ -43,6 +43,7 @@
 		"no-multi-spaces": "off",
 		"no-plusplus": "off",
 		"import/no-named-as-default-member": "off",
+		"react/destructuring-assignment": "off",
 		"no-unused-vars": [
 			1,
 			{

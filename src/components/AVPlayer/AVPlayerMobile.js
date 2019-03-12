@@ -124,6 +124,7 @@ class AVPlayerMobile extends PureComponent {
     // We only keep the current time.
     // Playing state is irrelevant on mobile due to user gesture finish
     // prior to media element presence on the page
+    this.setState({ showControls: false });
     this.wasCurrentTime = this.media.currentTime;
     this.props.onSwitchAV(...params);
     // this.media.autoplay = true;
@@ -145,13 +146,11 @@ class AVPlayerMobile extends PureComponent {
         }
         this.media.autoPlay = true;
         this.setState({ unMuteButton: true });
-        if (this.props.deviceInfo.os.name === 'iOS') {
-          setTimeout(this.showControls, 5000);
-        } else {
+        if (this.props.deviceInfo.os.name !== 'iOS') {
           this.showControls();
         }
       } else {
-        this.showControls();        
+        this.showControls();
       }
       this.media.addEventListener('play', this.handlePlay);
       this.media.addEventListener('pause', this.handlePause);
@@ -179,10 +178,11 @@ class AVPlayerMobile extends PureComponent {
     this.media.autoplay = true;
   };
 
-  handleVolumeChange = (e) => {    
-    const { unMuteButton } = this.state;     
-    if (this.media.muted)   
+  handleVolumeChange = (e) => {
+    const { unMuteButton } = this.state;
+    if (this.media.muted) {
       return;
+    }
     this.persistVolume(e.currentTarget.volume);
     if (unMuteButton) {
       this.setState({ unMuteButton: false });
@@ -191,7 +191,7 @@ class AVPlayerMobile extends PureComponent {
 
   restoreVolume = () => {
     let value = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
-    if (value == null || Number.isNaN(value)) {
+    if (value == null || Number.isNaN(value) || value === '0') {
       value = DEFAULT_PLAYER_VOLUME;
       localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, value);
     }
@@ -246,7 +246,10 @@ class AVPlayerMobile extends PureComponent {
   };
 
   handleTimeUpdate = (e) => {
-    const { mode, sliceEnd, sliceStart, seeking, firstSeek } = this.state;
+    const { mode, sliceEnd, sliceStart, seeking, firstSeek, showControls } = this.state;
+
+    if (!showControls)
+      this.showControls();
 
     const time = e.currentTarget.currentTime;
     this.saveCurrentTime(time);
@@ -320,7 +323,7 @@ class AVPlayerMobile extends PureComponent {
 
   isSeekSuccess = t => this.media.currentTime >= t;
 
-  toggleSliceMode = () => this.setState({ isSliceMode: !this.state.isSliceMode });
+  toggleSliceMode = () => this.setState(prevState => ({ isSliceMode: !prevState.isSliceMode }));
 
   handleJumpBack = () => {
     const { currentTime, duration } = this.media;

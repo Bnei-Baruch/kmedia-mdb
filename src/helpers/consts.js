@@ -85,6 +85,7 @@ export const LANG_SLOVENIAN  = 'sl';
 export const LANG_LATVIAN    = 'lv';
 export const LANG_SLOVAK     = 'sk';
 export const LANG_CZECH      = 'cs';
+export const LANG_AMHARIC      = 'am';
 export const LANG_UNKNOWN    = 'xx';
 
 export const LANGUAGES = {
@@ -120,6 +121,7 @@ export const LANGUAGES = {
   [LANG_LATVIAN]: { value: LANG_LATVIAN, flag: 'lv', locale: 'lv_LV' },
   [LANG_SLOVAK]: { value: LANG_SLOVAK, flag: 'sk', locale: 'sk_SK' },
   [LANG_CZECH]: { value: LANG_CZECH, flag: 'cz', locale: 'cs_CZ' },
+  [LANG_AMHARIC]: { value: LANG_AMHARIC, flag: 'et', locale: 'am_ET' },
 };
 
 export const FLAG_TO_LANGUAGE = Object.values(LANGUAGES).reduce((acc, language) => {
@@ -159,6 +161,7 @@ export const ALL_LANGUAGES = [
   LANG_LATVIAN,
   LANG_SLOVAK,
   LANG_CZECH,
+  LANG_AMHARIC,
 ];
 
 export const DEFAULT_LANGUAGE = LANG_ENGLISH;
