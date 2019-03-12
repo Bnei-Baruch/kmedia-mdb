@@ -4,7 +4,6 @@ import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import 'jest-enzyme';
 import { BrowserRouter as Router } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 configure({ adapter: new Adapter() });
 

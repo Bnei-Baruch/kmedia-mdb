@@ -4,11 +4,9 @@ import { parse as cookieParse } from 'cookie';
 
 import { COOKIE_UI_LANG, DEFAULT_LANGUAGE, LANG_UI_LANGUAGES, LANGUAGES } from './consts';
 
-export const parse = str =>
-  qs.parse(str);
+export const parse = str => qs.parse(str);
 
-export const stringify = obj =>
-  qs.stringify(obj, { arrayFormat: 'repeat', skipNulls: true });
+export const stringify = obj => qs.stringify(obj, { arrayFormat: 'repeat', skipNulls: true });
 
 /**
  * Test if a url is an absolute url
@@ -108,5 +106,4 @@ export const updateQuery = (history, updater) => {
   history.replace({ search: stringify(updater(query)) });
 };
 
-export const isDebMode = location =>
-  getQuery(location).deb || false;
+export const isDebMode = location => getQuery(location).deb || false;

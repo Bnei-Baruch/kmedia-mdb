@@ -35,12 +35,13 @@ class BackToTop extends Component {
   };
 
   render() {
-    const style = this.props.isRTL ?
-      {
+    const style = this.props.isRTL
+      ? {
         position: 'fixed',
         left: 50,
         bottom: 70
-      } : {
+      }
+      : {
         position: 'fixed',
         right: 50,
         bottom: 70
@@ -62,7 +63,8 @@ class BackToTop extends Component {
               icon="arrow up"
               onClick={this.backToTop}
               style={style}
-            />)
+            />
+          )
         }
       </Fragment>
     );

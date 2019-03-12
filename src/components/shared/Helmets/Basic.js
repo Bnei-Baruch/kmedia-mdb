@@ -12,7 +12,6 @@ class Basic extends Component {
     imageUrl: PropTypes.string,
     url: PropTypes.string,
     keywords: PropTypes.string,
-
   };
 
   static defaultProps = {

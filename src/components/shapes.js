@@ -274,3 +274,8 @@ export const Reference = PropTypes.oneOfType([
   PropTypes.func,
   PropTypes.shape({ current: PropTypes.instanceOf(PropTypes.Element) })
 ]);
+
+export const Children = PropTypes.oneOfType([
+  PropTypes.arrayOf(PropTypes.node),
+  PropTypes.node
+]);

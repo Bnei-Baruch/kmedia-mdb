@@ -50,7 +50,7 @@ import { tabs as programsTabs } from './components/Sections/Programs/MainPage';
 import { tabs as pulicationsTabs } from './components/Sections/Publications/MainPage';
 import PDF from './components/shared/PDF/PDF';
 
-export const home = (store, match) => {
+export const home = (store) => {
   store.dispatch(homeActions.fetchData());
   return Promise.resolve(null);
 };
@@ -140,7 +140,7 @@ export const playlistCollectionPage = (store, match) => {
     });
 };
 
-export const latestLesson = store =>
+export const latestLesson = store => (
   store.sagaMiddleWare.run(mdbSagas.fetchLatestLesson).done
     .then(() => {
       // TODO: replace this with a single call to backend with all IDs
@@ -151,7 +151,8 @@ export const latestLesson = store =>
       c.cuIDs.forEach((cuID) => {
         store.dispatch(mdbActions.fetchUnit(cuID));
       });
-    });
+    })
+);
 
 export const eventsPage = (store, match) => {
   // hydrate tab
@@ -220,7 +221,7 @@ export const lessonsCollectionPage = (store, match) => {
   return collectionPage('lessons-collection')(store, match);
 };
 
-export const searchPage = store =>
+export const searchPage = store => (
   Promise.all([
     store.sagaMiddleWare.run(searchSagas.hydrateUrl).done,
     store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done
@@ -234,7 +235,8 @@ export const searchPage = store =>
       const suggest  = searchSelectors.getSuggest(state.search);
 
       store.dispatch(searchActions.search(q, page, pageSize, suggest, deb));
-    });
+    })
+);
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -332,7 +334,7 @@ export const tweetsListPage = (store, match) => {
 
 export const topicsPage = (store, match) => {
   const tagID = match.params.id;
-  Promise.all([
+  return Promise.all([
     store.sagaMiddleWare.run(tagsSagas.fetchDashboard, tagsActions.fetchDashboard(tagID)).done,
     // store.sagaMiddleWare.run(tagsSagas.fetchTags, tagsActions.fetchTags).done
   ]);
@@ -404,7 +406,7 @@ export const articleCUPage = (store, match) => {
       let language = null;
       const uiLang = settingsSelectors.getLanguage(state.settings);
 
-      const unit      = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
+      const unit = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
       if (!unit) {
         return;
       }

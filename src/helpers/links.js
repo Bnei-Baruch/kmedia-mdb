@@ -161,4 +161,3 @@ export const canonicalLink = (entity, mediaLang) => {
     return '/';
   }
 };
-

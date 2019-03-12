@@ -32,7 +32,8 @@ const LoadedPDF = Loadable({
                 renderAnnotations={false}
                 renderTextLayer={false}
                 renderMode="canvas"
-              />)
+              />
+            )
             : null
         }
       </Document>

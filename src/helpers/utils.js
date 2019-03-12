@@ -219,4 +219,3 @@ export const getEscapedRegExp = (term) => {
     return new RegExp(escapeRegExp(escaped), 'i');
   }
 };
-

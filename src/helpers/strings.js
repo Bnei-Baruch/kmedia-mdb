@@ -15,7 +15,7 @@ export function ellipsize(str, len = 200) {
     return '';
   }
 
-  return (str.length > len) ?
-    `${str.substr(0, str.lastIndexOf(' ', len))}...` :
-    str;
+  return (str.length > len)
+    ? `${str.substr(0, str.lastIndexOf(' ', len))}...`
+    : str;
 }

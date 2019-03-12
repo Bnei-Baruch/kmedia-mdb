@@ -17,6 +17,8 @@ array-bracket-spacing,
 
 import { asEffect, is } from 'redux-saga/utils';
 
+const util = require('util');
+
 export const EFFECT_STATUS_PENDING   = 'PENDING';
 export const EFFECT_STATUS_RESOLVED  = 'RESOLVED';
 export const EFFECT_STATUS_REJECTED  = 'REJECTED';
@@ -30,24 +32,27 @@ const CANCEL_STYLE      = 'color: #ccc';
 
 const IS_BROWSER = (typeof window !== 'undefined' && window.document);
 
-export default function createSagaMonitor({
-                                            debug = false,
-                                            exportToWindow = true,
-                                          } = {}) {
+export default function createSagaMonitor(
+  {
+    debug = false,
+    exportToWindow = true,
+  } = {}) {
   const VERBOSE = debug;
 
   const time = () => {
-    if (typeof performance !== 'undefined' && performance.now)
+    if (typeof performance !== 'undefined' && performance.now) {
       return performance.now();
-    else
+    } else {
       return Date.now();
+    }
   };
 
   const effectsById = {};
 
   function effectTriggered(desc) {
-    if (VERBOSE)
+    if (VERBOSE) {
       console.log('Saga monitor: effectTriggered:', desc);
+    }
 
     effectsById[desc.effectId] = Object.assign({},
       desc,
@@ -59,22 +64,25 @@ export default function createSagaMonitor({
   }
 
   function effectResolved(effectId, result) {
-    if (VERBOSE)
+    if (VERBOSE) {
       console.log('Saga monitor: effectResolved:', effectId, result);
+    }
 
     resolveEffect(effectId, result);
   }
 
   function effectRejected(effectId, error) {
-    if (VERBOSE)
+    if (VERBOSE) {
       console.log('Saga monitor: effectRejected:', effectId, error);
+    }
 
     rejectEffect(effectId, error);
   }
 
   function effectCancelled(effectId) {
-    if (VERBOSE)
+    if (VERBOSE) {
       console.log('Saga monitor: effectCancelled:', effectId);
+    }
 
     cancelEffect(effectId);
   }
@@ -92,11 +100,12 @@ export default function createSagaMonitor({
 
     if (is.task(result)) {
       result.done.then(
-        taskResult => {
-          if (result.isCancelled())
+        (taskResult) => {
+          if (result.isCancelled()) {
             cancelEffect(effectId);
-          else
+          } else {
             resolveEffect(effectId, taskResult);
+          }
         },
         taskError => rejectEffect(effectId, taskError)
       );
@@ -104,8 +113,9 @@ export default function createSagaMonitor({
       computeEffectDur(effect);
       effect.status = EFFECT_STATUS_RESOLVED;
       effect.result = result;
-      if (effect && asEffect.race(effect.effect))
+      if (effect && asEffect.race(effect.effect)) {
         setRaceWinner(effectId, result);
+      }
     }
   }
 
@@ -114,8 +124,9 @@ export default function createSagaMonitor({
     computeEffectDur(effect);
     effect.status = EFFECT_STATUS_REJECTED;
     effect.error  = error;
-    if (effect && asEffect.race(effect.effect))
+    if (effect && asEffect.race(effect.effect)) {
       setRaceWinner(effectId, error);
+    }
   }
 
   function cancelEffect(effectId) {
@@ -129,8 +140,9 @@ export default function createSagaMonitor({
     const children    = getChildEffects(raceEffectId);
     for (let i = 0; i < children.length; i++) {
       const childEffect = effectsById[children[i]];
-      if (childEffect.label === winnerLabel)
+      if (childEffect.label === winnerLabel) {
         childEffect.winner = true;
+      }
     }
   }
 
@@ -149,9 +161,9 @@ export default function createSagaMonitor({
   const GROUP_ARROW = '▼';
 
   function consoleGroup(...args) {
-    if (console.group)
+    if (console.group) {
       console.group(...args);
-    else {
+    } else {
       console.log('');
       console.log(groupPrefix + GROUP_ARROW, ...args);
       groupPrefix += GROUP_SHIFT;
@@ -159,10 +171,11 @@ export default function createSagaMonitor({
   }
 
   function consoleGroupEnd() {
-    if (console.groupEnd)
+    if (console.groupEnd) {
       console.groupEnd();
-    else
+    } else {
       groupPrefix = groupPrefix.substr(0, groupPrefix.length - GROUP_SHIFT.length);
+    }
   }
 
   function logEffectTree(effectId) {
@@ -173,14 +186,15 @@ export default function createSagaMonitor({
     }
     const childEffects = getChildEffects(effectId);
 
-    if (!childEffects.length)
+    if (!childEffects.length) {
       logSimpleEffect(effect);
-    else {
+    } else {
       if (effect) {
         const { formatter } = getEffectLog(effect);
         consoleGroup(...formatter.getLog());
-      } else
+      } else {
         consoleGroup('root');
+      }
 
       childEffects.forEach(logEffectTree);
 
@@ -201,64 +215,42 @@ export default function createSagaMonitor({
       log = getLogPrefix('take', effect);
       log.formatter.addValue(data);
       logResult(effect, log.formatter);
-    }
-
-    else if (data = asEffect.put(effect.effect)) {
+    } else if (data = asEffect.put(effect.effect)) {
       log = getLogPrefix('put', effect);
       logResult(Object.assign({}, effect, { result: data }), log.formatter);
-    }
-
-    else if (data = asEffect.call(effect.effect)) {
+    } else if (data = asEffect.call(effect.effect)) {
       log = getLogPrefix('call', effect);
       log.formatter.addCall(data.fn.name, data.args);
       logResult(effect, log.formatter);
-    }
-
-    else if (data = asEffect.cps(effect.effect)) {
+    } else if (data = asEffect.cps(effect.effect)) {
       log = getLogPrefix('cps', effect);
       log.formatter.addCall(data.fn.name, data.args);
       logResult(effect, log.formatter);
-    }
-
-    else if (data = asEffect.fork(effect.effect)) {
+    } else if (data = asEffect.fork(effect.effect)) {
       log = getLogPrefix('', effect);
       log.formatter.addCall(data.fn.name, data.args);
       logResult(effect, log.formatter);
-    }
-
-    else if (data = asEffect.join(effect.effect)) {
+    } else if (data = asEffect.join(effect.effect)) {
       log = getLogPrefix('join', effect);
       logResult(effect, log.formatter);
-    }
-
-    else if (data = asEffect.race(effect.effect)) {
+    } else if (data = asEffect.race(effect.effect)) {
       log = getLogPrefix('race', effect);
       logResult(effect, log.formatter, true);
-    }
-
-    else if (data = asEffect.cancel(effect.effect)) {
+    } else if (data = asEffect.cancel(effect.effect)) {
       log = getLogPrefix('cancel', effect);
       log.formatter.appendData(data.name);
-    }
-
-    else if (data = asEffect.select(effect.effect)) {
+    } else if (data = asEffect.select(effect.effect)) {
       log = getLogPrefix('select', effect);
       log.formatter.addCall(data.selector.name, data.args);
       logResult(effect, log.formatter);
-    }
-
-    else if (is.array(effect.effect)) {
+    } else if (is.array(effect.effect)) {
       log = getLogPrefix('parallel', effect);
       logResult(effect, log.formatter, true);
-    }
-
-    else if (is.iterator(effect.effect)) {
+    } else if (is.iterator(effect.effect)) {
       log = getLogPrefix('', effect);
       log.formatter.addValue(effect.effect.name);
       logResult(effect, log.formatter, true);
-    }
-
-    else {
+    } else {
       log = getLogPrefix('unkown', effect);
       logResult(effect, log.formatter);
     }
@@ -267,7 +259,6 @@ export default function createSagaMonitor({
   }
 
   function getLogPrefix(type, effect) {
-
     const isCancel = effect.status === EFFECT_STATUS_CANCELLED;
     const isError  = effect.status === EFFECT_STATUS_REJECTED;
 
@@ -276,22 +267,29 @@ export default function createSagaMonitor({
       ? (isError ? '✘' : '✓')
       : '';
 
-    const style = (s) => (
-      isCancel ? CANCEL_STYLE
-        : isError ? ERROR_STYLE
-        : s
+    const style = s => (
+      isCancel
+        ? CANCEL_STYLE
+        : (
+          isError
+            ? ERROR_STYLE
+            : s
+        )
     );
 
     const formatter = logFormatter();
 
-    if (winnerInd)
+    if (winnerInd) {
       formatter.add(`%c ${winnerInd}`, style(LABEL_STYLE));
+    }
 
-    if (effect && effect.label)
+    if (effect && effect.label) {
       formatter.add(`%c ${effect.label}: `, style(LABEL_STYLE));
+    }
 
-    if (type)
+    if (type) {
       formatter.add(`%c ${type} `, style(EFFECT_TYPE_STYLE));
+    }
 
     formatter.add('%c', style(DEFAULT_STYLE));
 
@@ -303,43 +301,44 @@ export default function createSagaMonitor({
 
   function argToString(arg) {
     return (
-      typeof arg === 'function' ? `${arg.name}`
-        : typeof arg === 'string' ? `'${arg}'`
-        : arg
+      typeof arg === 'function'
+        ? `${arg.name}`
+        : (
+          typeof arg === 'string'
+            ? `'${arg}'`
+            : arg
+        )
     );
   }
 
   function logResult({ status, result, error, duration }, formatter, ignoreResult) {
-
     if (status === EFFECT_STATUS_RESOLVED && !ignoreResult) {
       if (is.array(result)) {
         formatter.addValue(' → ');
         formatter.addValue(result);
-      } else
+      } else {
         formatter.appendData('→', result);
-    }
-
-    else if (status === EFFECT_STATUS_REJECTED) {
+      }
+    } else if (status === EFFECT_STATUS_REJECTED) {
       formatter.appendData('→ ⚠', error);
+    } else if (status === EFFECT_STATUS_PENDING) {
+      formatter.appendData('⌛');
+    } else if (status === EFFECT_STATUS_CANCELLED) {
+      formatter.appendData('→ Cancelled!');
     }
 
-    else if (status === EFFECT_STATUS_PENDING)
-      formatter.appendData('⌛');
-
-    else if (status === EFFECT_STATUS_CANCELLED)
-      formatter.appendData('→ Cancelled!');
-
-    if (status !== EFFECT_STATUS_PENDING)
+    if (status !== EFFECT_STATUS_PENDING) {
       formatter.appendData(`(${duration.toFixed(2)}ms)`);
+    }
   }
 
   function isPrimitive(val) {
-    return typeof val === 'string' ||
-      typeof val === 'number' ||
-      typeof val === 'boolean' ||
-      typeof val === 'symbol' ||
-      val === null ||
-      val === undefined;
+    return typeof val === 'string'
+      || typeof val === 'number'
+      || typeof val === 'boolean'
+      || typeof val === 'symbol'
+      || val === null
+      || val === undefined;
   }
 
   function logFormatter() {
@@ -350,8 +349,8 @@ export default function createSagaMonitor({
       // Remove the `%c` CSS styling that is not supported by the Node console.
       if (!IS_BROWSER && typeof msg === 'string') {
         const prevMsg = msg;
-        msg           = msg.replace(/^%c\s*/, '');
-        if (msg !== prevMsg) {
+        const newMsg  = msg.replace(/^%c\s*/, '');
+        if (newMsg !== prevMsg) {
           // Remove the first argument which is the CSS style string.
           args.shift();
         }
@@ -364,21 +363,20 @@ export default function createSagaMonitor({
     }
 
     function addValue(value) {
-      if (isPrimitive(value))
+      if (isPrimitive(value)) {
         add(value);
-      else {
+      } else if (IS_BROWSER) {
         // The browser console supports `%O`, the Node console does not.
-        if (IS_BROWSER)
-          add('%O', value);
-        else
-          add('%s', require('util').inspect(value));
+        add('%O', value);
+      } else {
+        add('%s', util.inspect(value));
       }
     }
 
     function addCall(name, args) {
-      if (!args.length)
+      if (!args.length) {
         add(`${name}()`);
-      else {
+      } else {
         add(name);
         add('(');
         args.forEach((arg, i) => {
@@ -418,9 +416,7 @@ export default function createSagaMonitor({
    *
    * @return {Object<string,SagaMonitorEffectDescriptor>} The effects hashed by identifier.
    */
-  const getEffectsById = () => {
-    return effectsById;
-  };
+  const getEffectsById = () => effectsById;
 
   /**
    * Returns effects that currently block the saga promise from resolving.
@@ -431,8 +427,8 @@ export default function createSagaMonitor({
     // Skip FORK and TAKE because they are auto-interrupted by the END action.
     const blockingEffects = Object.keys(effectsById)
       .filter(effectId => (
-        effectsById[effectId].status === EFFECT_STATUS_PENDING &&
-        !asEffect.fork(effectsById[effectId].effect) && !asEffect.take(effectsById[effectId].effect)
+        effectsById[effectId].status === EFFECT_STATUS_PENDING
+        && !asEffect.fork(effectsById[effectId].effect) && !asEffect.take(effectsById[effectId].effect)
       ))
       .map(effectId => effectsById[effectId]);
 
