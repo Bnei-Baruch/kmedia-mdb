@@ -441,7 +441,9 @@
         "audio": "Аудіо програми",
         "audio-simple": "Аудіо",
         "text": "Стенограма",
-        "image": "Креслення"
+        "image": "Креслення",
+        "text-article": "Стаття за програмою",
+        "text-research-material": "Матеріали досліджень"
       }
     },
     "publication": {

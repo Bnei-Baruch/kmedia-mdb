@@ -431,7 +431,9 @@
         "audio": "Audioprogramme",
         "audio-simple": "Audio",
         "text": "Transkript",
-        "image": "Zeichnungen"
+        "image": "Zeichnungen",
+        "text-article": "Artikel basierend auf dem Programm",
+        "text-research-material": "Forschungsmaterialien"
       }
     },
     "publication": {

@@ -407,7 +407,7 @@
       "header": "Чертежи"
     },
     "articles": {
-      "header": "статьи",
+      "header": "Cтатьи",
       "no-content": "Нет статей"
     },
     "research": {
@@ -464,7 +464,9 @@
         "audio": "Аудио программы",
         "audio-simple": "Аудио",
         "text": "Стенограмма",
-        "image": "Чертежи"
+        "image": "Чертежи",
+        "text-article": "Статья по программе",
+        "text-research-material": "Материалы исследований"
       }
     },
     "publication": {

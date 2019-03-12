@@ -454,7 +454,9 @@
         "audio": "Program Audio",
         "audio-simple": "Audio",
         "text": "Transcription Text",
-        "image": "Sketches"
+        "image": "Sketches",
+        "text-article": "Articolo basato sul programma",
+        "text-research-material": "Materiali di Ricerca"
       }
     },
     "publication": {
