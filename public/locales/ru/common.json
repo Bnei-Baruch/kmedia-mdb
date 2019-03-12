@@ -150,7 +150,7 @@
       "text": "Результаты поиска",
       "subtext": ""
     },
-    "topNote":{
+    "topNote": {
       "tip": "Совет",
       "first": "Найденный контент - на языке {{language}}.",
       "second": "Вы можете выбрать другой язык контента"
@@ -395,7 +395,7 @@
     },
     "transcription": {
       "header": "Стенограмма",
-      "no-transcription": "Нет стенограммы"
+      "no-content": "Нет стенограммы"
     },
     "sources": {
       "header": "Источники",
@@ -405,6 +405,14 @@
     },
     "sketches": {
       "header": "Чертежи"
+    },
+    "articles": {
+      "header": "статьи",
+      "no-content": "Нет статей"
+    },
+    "research": {
+      "header": "Исследовательские материалы",
+      "no-content": "Нет исследовательских материалов"
     }
   },
   "sources-library": {
