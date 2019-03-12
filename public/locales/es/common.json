@@ -439,7 +439,9 @@
         "audio": "audio del Programa",
         "audio-simple": "Audio",
         "text": "Transcripción Completa",
-        "image": "Fotos"
+        "image": "Fotos",
+        "text-article": "Artículo basado en programa",
+        "text-research-material": "Materiales de Investigacion"
       }
     },
     "publication": {
