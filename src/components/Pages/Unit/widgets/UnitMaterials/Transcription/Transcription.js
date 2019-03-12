@@ -5,7 +5,7 @@ import uniq from 'lodash/uniq';
 import { Container, Divider, Segment } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
-import { RTL_LANGUAGES } from '../../../../../../helpers/consts';
+import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, RTL_LANGUAGES } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import MediaHelper from '../../../../../../helpers/media';
 import * as shapes from '../../../../../shapes';
@@ -19,26 +19,13 @@ class Transcription extends Component {
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
+    type: PropTypes.string,
     onContentChange: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     unit: null,
-  };
-
-  static calcCurrentState = (props) => {
-    const { contentLanguage, uiLanguage } = props;
-
-    const textFiles   = Transcription.getTextFiles(props);
-    const languages   = uniq(textFiles.map(x => x.language));
-    const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-    if (!newLanguage) {
-      return false;
-    }
-
-    const selectedFile = Transcription.selectFile(textFiles, newLanguage);
-
-    return { selectedFile, languages, language: newLanguage, textFiles };
+    type: null,
   };
 
   static selectFile = (textFiles, language) => {
@@ -53,31 +40,42 @@ class Transcription extends Component {
     return selectedFiles.reduce((acc, file) => (acc.size < file.size ? file : acc));
   };
 
-  static getTextFiles = (props) => {
-    const { unit } = props;
+  static getTextFiles = (unit, type) => {
+    // const { unit, type } = props;
     if (!unit || !Array.isArray(unit.files)) {
       return [];
     }
 
-    // filter text files, but not PDF
-    return unit.files.filter(x => MediaHelper.IsText(x) && !MediaHelper.IsPDF(x));
+    if (!type) {
+      // filter text files, but not PDF
+      return unit.files.filter(x => MediaHelper.IsText(x) && !MediaHelper.IsPDF(x));
+    }
+
+    return Transcription.getUnitDerivedArticle(unit, type);
   };
+
+  static getUnitDerivedArticle(unit, type) {
+    // suitable for having either derived articles or research materials only
+    const ct             = type === 'articles' ? CT_ARTICLE : CT_RESEARCH_MATERIAL;
+
+    return Object.values(unit.derived_units || {})
+      .filter(x => x.content_type === ct
+        && (x.files || []).some(f => f.type === MT_TEXT))
+      .map(x => x.files)
+      .reduce((acc, files) => [...acc, ...files], []);
+  }
+
 
   constructor(props) {
     super(props);
-    this.state = Transcription.calcCurrentState(this.props);
+    this.state = this.calcCurrentState();
   }
 
-  componentDidMount() {
-    const { selectedFile, language } = this.state;
 
-    if (selectedFile && language) {
-      const { doc2htmlById, onContentChange } = this.props;
-      const { data }                          = doc2htmlById[selectedFile.id] || {};
-      if (!data) {
-        onContentChange(selectedFile.id);
-      }
-    }
+  componentDidMount() {
+    const { selectedFile } = this.state;
+
+    this.loadFile(selectedFile);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -93,6 +91,42 @@ class Transcription extends Component {
     return toUpdate;
   }
 
+  componentDidUpdate(prevState) {
+    const { selectedFile } = this.state;
+
+    if (selectedFile !== prevState.selectedFile) {
+      this.loadFile(selectedFile);
+    }
+  }
+
+  loadFile = (selectedFile) => {
+    if (selectedFile && selectedFile.id) {
+      const { doc2htmlById, onContentChange } = this.props;
+      const { data } = doc2htmlById[selectedFile.id] || {};
+
+      if (!data) {
+        // load from redux
+        onContentChange(selectedFile.id);
+      }
+    }
+  }
+
+  calcCurrentState = () => {
+    const { contentLanguage, uiLanguage, unit, type } = this.props;
+
+    const textFiles   = Transcription.getTextFiles(unit, type);
+    const languages   = uniq(textFiles.map(x => x.language));
+    const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+    if (!newLanguage) {
+      return false;
+    }
+
+    const selectedFile = Transcription.selectFile(textFiles, newLanguage);
+
+    return { selectedFile, languages, language: newLanguage, textFiles };
+  };
+
+
   handleLanguageChanged = (e, newLanguage) => {
     const { language, textFiles } = this.state;
 
@@ -102,15 +136,17 @@ class Transcription extends Component {
     }
 
     const selectedFile = Transcription.selectFile(textFiles, newLanguage);
+
     this.setState({ selectedFile, language: newLanguage });
   };
 
   render() {
-    const { doc2htmlById, t }               = this.props;
+    const { doc2htmlById, t, type }         = this.props;
     const { selectedFile, languages, language } = this.state;
 
     if (!selectedFile) {
-      return <Segment basic>{t('materials.transcription.no-transcription')}</Segment>;
+      const text = type || 'transcription';
+      return <Segment basic>{t(`materials.${text}.no-content`)}</Segment>;
     }
 
     const { data, wip, err } = doc2htmlById[selectedFile.id] || {};
