@@ -20,9 +20,9 @@ class TopicPage extends Component {
   static propTypes = {
     sections: PropTypes.arrayOf(PropTypes.string).isRequired,
     getSectionUnits: PropTypes.func.isRequired,
-    getPathByID: PropTypes.func,
+    getPathByID: PropTypes.func.isRequired,
     match: shapes.RouterMatch.isRequired,
-    fetchDashboard: PropTypes.func.isRequired,
+    fetchDashboard: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
     t: PropTypes.func.isRequired,
     wip: shapes.WIP,
     error: shapes.Error,
@@ -38,8 +38,8 @@ class TopicPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.match.params.id !== nextProps.match.params.id ||
-      this.props.match.params.language !== nextProps.match.params.language) {
+    if (this.props.match.params.id !== nextProps.match.params.id // eslint-disable-line react/prop-types
+      || this.props.match.params.language !== nextProps.match.params.language) { // eslint-disable-line react/prop-types
       this.loadTopic(nextProps);
     }
   }
@@ -103,7 +103,8 @@ class TopicPage extends Component {
                         N={topNItems}
                         tagPath={tagPath}
                       />
-                    </Grid.Column>);
+                    </Grid.Column>
+                  );
               })
             }
           </Grid>
@@ -111,7 +112,14 @@ class TopicPage extends Component {
       );
     }
 
-    return <div>Topic {tagId} Not Found</div>;
+    return (
+      <div>
+        Topic
+        {tagId}
+        {' '}
+        Not Found
+      </div>
+    );
   }
 }
 

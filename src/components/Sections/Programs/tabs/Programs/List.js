@@ -17,12 +17,12 @@ export const renderUnit = (unit, t) => {
   const relatedItems = programs.map(x => (
     <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
       {x.name || NO_NAME}
-    </List.Item>)
-  ).concat(breakdown.getAllButPrograms().map(x => (
+    </List.Item>
+  )).concat(breakdown.getAllButPrograms().map(x => (
     <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
       {x.name}
-    </List.Item>)
-  ));
+    </List.Item>
+  )));
 
   let filmDate = '';
   if (unit.film_date) {
@@ -53,7 +53,8 @@ export const renderUnit = (unit, t) => {
             ? (
               <div className="index__description mobile-hidden">
                 {ellipsize(unit.description)}
-              </div>)
+              </div>
+            )
             : null
         }
         <List horizontal divided link className="index__collections" size="tiny">

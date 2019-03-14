@@ -24,7 +24,7 @@ export class OmniBox extends Component {
     autocomplete: PropTypes.func.isRequired,
     search: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired,
-    suggestions: PropTypes.object,
+    suggestions: PropTypes.shape({}),
     query: PropTypes.string.isRequired,
     updateQuery: PropTypes.func.isRequired,
     setSuggest: PropTypes.func.isRequired,

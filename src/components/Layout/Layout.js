@@ -33,7 +33,7 @@ class Layout extends Component {
 
   state = {
     sidebarActive: false,
-    showHeaderSearch: false
+    isShowHeaderSearch: false
   };
 
   menuButtonElement1 = createRef();
@@ -44,26 +44,26 @@ class Layout extends Component {
 
   headerSearchElement = createRef();
 
+  componentWillMount() {
+    const { location } = this.props;
+    this.setState({ embed: playerHelper.getEmbedFromQuery(location) });
+  }
+
   componentDidMount() {
     document.addEventListener('click', this.clickOutside, true);
   }
 
-  componentWillUnmount() {
-    document.removeEventListener('click', this.clickOutside, true);
-  }
-
   componentWillReceiveProps(nextProps) {
     const isShowHeaderSearch = (
-      nextProps.location &&
-      this.isMobileDevice() &&
-      nextProps.location.pathname.endsWith('search')
+      nextProps.location
+      && this.isMobileDevice()
+      && nextProps.location.pathname.endsWith('search') // eslint-disable-line react/prop-types
     );
     this.setState({ isShowHeaderSearch });
   }
 
-  componentWillMount() {
-    const { location } = this.props;
-    this.setState({ embed: playerHelper.getEmbedFromQuery(location) });
+  componentWillUnmount() {
+    document.removeEventListener('click', this.clickOutside, true);
   }
 
   // i.e, main, header of footer.
@@ -86,11 +86,8 @@ class Layout extends Component {
       return false;
     }
 
-    if (this.showSearchButtonElement.current && this.showSearchButtonElement.current.contains(e.target)) {
-      return false;
-    }
-
-    return true;
+    const hasTarget = this.showSearchButtonElement.current && this.showSearchButtonElement.current.contains(e.target);
+    return !hasTarget;
   };
 
   isCloseSideBar = (e) => {
@@ -106,14 +103,14 @@ class Layout extends Component {
       return false;
     }
 
-    if (this.menuButtonElement2.current && this.menuButtonElement2.current.contains(e.target)) {
-      return false;
-    }
-
-    return true;
+    const hasTarget = this.menuButtonElement2.current && this.menuButtonElement2.current.contains(e.target);
+    return !hasTarget;
   };
 
-  toggleSidebar = () => this.setState({ sidebarActive: !this.state.sidebarActive });
+  toggleSidebar = () => {
+    const { sidebarActive } = this.state;
+    this.setState({ sidebarActive: !sidebarActive });
+  };
 
   // Required for handling outside sidebar on click outside sidebar,
   closeSidebar = () => this.setState({ sidebarActive: false });
@@ -131,11 +128,14 @@ class Layout extends Component {
   };
 
   isMobileDevice = () => {
-    const { deviceInfo } = this.props;
+    const { deviceInfo } = this.props; // eslint-disable-line react/prop-types
     return deviceInfo.device && deviceInfo.device.type === 'mobile';
   };
 
-  showHeaderSearch = () => this.setState({ isShowHeaderSearch: !this.state.isShowHeaderSearch });
+  showHeaderSearch = () => {
+    const { isShowHeaderSearch } = this.state;
+    this.setState({ isShowHeaderSearch: !isShowHeaderSearch });
+  };
 
   renderHeaderSearch = () => {
     const { isShowHeaderSearch } = this.state;

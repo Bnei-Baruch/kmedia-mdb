@@ -11,7 +11,7 @@ import HierarchicalFilter from './HierarchicalFilter';
 
 class TagsFilter extends Component {
   static propTypes = {
-    roots: PropTypes.array,
+    roots: PropTypes.arrayOf(PropTypes.shape({})),
     getTagById: PropTypes.func.isRequired,
     cuStats: PropTypes.objectOf(PropTypes.number),
     t: PropTypes.func.isRequired,

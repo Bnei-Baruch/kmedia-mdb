@@ -46,7 +46,8 @@ const rangeToPreset = (from, to) => {
   if (mFrom.isSame(mTo, 'day')) {
     if (mTo.isSame(mNow, 'day')) {
       return TODAY;
-    } else if (mTo.isSame(moment(mNow).subtract(1, 'days'), 'day')) {
+    }
+    if (mTo.isSame(moment(mNow).subtract(1, 'days'), 'day')) {
       return YESTERDAY;
     }
   } else if (moment(mTo).subtract(6, 'days').isSame(mFrom, 'day')) {
@@ -66,10 +67,10 @@ const isValidDateRange = (from, to) => {
   const mFrom = moment(from);
   const mTo   = moment(to);
 
-  return mFrom.isValid() &&
-    mTo.isValid() &&
-    mFrom.isSameOrBefore(mTo, 'day') &&
-    mTo.isSameOrBefore(today(), 'day');
+  return mFrom.isValid()
+    && mTo.isValid()
+    && mFrom.isSameOrBefore(mTo, 'day')
+    && mTo.isSameOrBefore(today(), 'day');
 };
 
 class DateFilter extends Component {
@@ -104,8 +105,7 @@ class DateFilter extends Component {
     this.setState(this.convertToStateObject(nextProps));
   }
 
-  onCancel = () =>
-    this.props.onCancel();
+  onCancel = () => this.props.onCancel();
 
   setRange = (datePreset, from, to) => {
     // calculate range with regard to the date preset
@@ -123,8 +123,7 @@ class DateFilter extends Component {
     });
   };
 
-  canApply = () =>
-    isValidDateRange(this.state.from, this.state.to);
+  canApply = () => isValidDateRange(this.state.from, this.state.to);
 
   apply = () => {
     const { from, to, datePreset } = this.state;
@@ -190,11 +189,13 @@ class DateFilter extends Component {
   };
 
   toggleRange = () => {
-    this.setState({ showRange: !this.state.showRange, showDay: false });
+    const { showRange } = this.state;
+    this.setState({ showRange: !showRange, showDay: false });
   };
 
   toggleDay = () => {
-    this.setState({ showDay: !this.state.showDay, showRange: false });
+    const { showDay } = this.state;
+    this.setState({ showDay: !showDay, showRange: false });
   };
 
   render() {

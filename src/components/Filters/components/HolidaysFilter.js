@@ -24,8 +24,8 @@ class HolidaysFilter extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.holidayEvents !== nextProps.holidayEvents &&
-      this.props.getTagById !== nextProps.getTagById) {
+    if (this.props.holidayEvents !== nextProps.holidayEvents
+      && this.props.getTagById !== nextProps.getTagById) {
       this.setState({ tree: this.getTree(nextProps) });
     }
   }

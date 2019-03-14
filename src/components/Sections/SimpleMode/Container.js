@@ -120,7 +120,8 @@ class SimpleModeContainer extends Component {
   renderUnitOrCollection = (item, language, t) => (
     isEmpty(item.content_units)
       ? groupOtherMediaByType(item, language, t, this.helpChooseLang)
-      : renderCollection(item, language, t, this.helpChooseLang));
+      : renderCollection(item, language, t, this.helpChooseLang)
+  );
 
   render() {
     const { filesLanguage: language, isMobileDevice: isMobile, blinkLangSelect, date: selectedDate } = this.state;

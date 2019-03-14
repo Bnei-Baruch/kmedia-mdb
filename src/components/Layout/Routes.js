@@ -1,20 +1,21 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import Redirect from 'react-router/Redirect';
 
 import * as shapes from '../shapes';
-import Lessons from '../Sections/Lessons/List';
-import LessonUnit from '../Sections/Lessons/Unit';
-import LessonCollection from '../Sections/Lessons/Collection';
-import LastLessonCollection from '../Sections/Lessons/LastCollection';
-import Programs from '../Sections/Programs/List';
+import Lessons from '../Sections/Lessons/MainPage';
+import LessonUnit from '../Sections/Lessons/Unit/Container';
+import LessonCollection from '../Sections/Lessons/Collection/MainPage';
+import LastLessonCollection from '../Sections/Lessons/Collection/LastDaily';
+import Programs from '../Sections/Programs/MainPage';
 import ProgramChapter from '../Sections/Programs/Unit';
 import ProgramCollection from '../Sections/Programs/Collection';
 import Lectures from '../Sections/Lectures/List';
 import LectureUnit from '../Sections/Lectures/Unit';
-import LectureCollection from '../Sections/Lectures/Collection';
-import Publications from '../Sections/Publications/List';
-import PublicationUnit from '../Sections/Publications/Unit';
-import PublicationCollection from '../Sections/Publications/Collection';
+import LectureCollection from '../Sections/Lessons/Collection/UnitList';
+import Publications from '../Sections/Publications/tabs/Articles/List';
+import PublicationUnit from '../Sections/Publications/tabs/Articles/Unit';
+import PublicationCollection from '../Sections/Publications/tabs/Articles/Collection';
 import Events from '../Sections/Events/MainPage';
 import EventUnit from '../Sections/Events/Unit';
 import EventCollection from '../Sections/Events/Collection';
@@ -25,9 +26,6 @@ import HomePage from '../Sections/Home/Container';
 import Design from '../Design/Design';
 import TopicsContainer from '../Sections/Topics/TopicContainer';
 
-import Redirect from './Redirect';
-
-const NotImplemented = () => <h1>Not Implemented Yet</h1>;
 const NotFound       = () => <h1>Page not found</h1>;
 
 const Routes = ({ match }) => {
@@ -58,9 +56,7 @@ const Routes = ({ match }) => {
       <Route exact path={`${urlPrefix}/publications/c/:id`} component={PublicationCollection} />
       <Route exact path={`${urlPrefix}/sources`} component={LibraryHomepage} />
       <Route exact path={`${urlPrefix}/sources/:id`} component={LibraryContainer} />
-      {/* <Route exact path={`${urlPrefix}/books`} component={NotImplemented} /> */}
       <Route exact path={`${urlPrefix}/topics`} component={TopicsContainer} />
-      {/* <Route exact path={`${urlPrefix}/photos`} component={NotImplemented} /> */}
       <Route exact path={`${urlPrefix}/search`} component={SearchResults} />
       <Route exact path={`${urlPrefix}/design`} component={Design} />
       <Route exact path={`${urlPrefix}/design2`} component={Lessons} />
@@ -75,7 +71,7 @@ const Routes = ({ match }) => {
       {/* Old versions "saved on screen" in Android still point to /index.html */}
       <Redirect from={`${urlPrefix}/index.html`} to={`${urlPrefix}/`} />
 
-      <Route path='*' component={NotFound} />
+      <Route path="*" component={NotFound} />
     </Switch>
   );
 };

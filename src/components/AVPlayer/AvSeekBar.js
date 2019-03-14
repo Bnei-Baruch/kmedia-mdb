@@ -7,6 +7,7 @@ import { PLAYER_MODE } from './constants';
 import { playerModeProp } from './propTypes';
 
 class AvSeekBar extends Component {
+  /* eslint-disable react/forbid-prop-types */
   static propTypes = {
     media: PropTypes.object.isRequired, // TODO: (yaniv) use right propType
     buffers: PropTypes.array,
@@ -26,6 +27,12 @@ class AvSeekBar extends Component {
     playPoint: this.props.media.currentTime
   };
 
+  element = null;
+
+  wasMouseDown = false;
+
+  isPlayingOnMouseDown = false;
+
   componentDidMount() {
     document.addEventListener('mousemove', this.handleMove, { passive: false });
     document.addEventListener('touchmove', this.handleMove, { passive: false });
@@ -34,8 +41,8 @@ class AvSeekBar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.media.currentTime !== nextProps.media.currentTime) {
-      this.setState({ playPoint: nextProps.media.currentTime });
+    if (this.props.media.currentTime !== nextProps.media.currentTime) { // eslint-disable-line react/prop-types
+      this.setState({ playPoint: nextProps.media.currentTime }); // eslint-disable-line react/prop-types
     }
   }
 
@@ -100,10 +107,6 @@ class AvSeekBar extends Component {
 
     return sliceEnd / duration;
   };
-
-  element              = null;
-  wasMouseDown         = false;
-  isPlayingOnMouseDown = false;
 
   toPercentage = (l) => {
     const ret = 100 * l;

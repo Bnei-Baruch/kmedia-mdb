@@ -72,7 +72,7 @@ class MediaDownloads extends Component {
     const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
 
     let { derivedGroups } = state;
-    if (!isEqual(unit.derived_units, props.unit.derived_units)) {
+    if (!isEqual(unit.derived_units, props.unit.derived_units)) { // eslint-disable-line react/prop-types
       derivedGroups = this.getDerivedFilesByContentType(unit.derived_units);
     }
 

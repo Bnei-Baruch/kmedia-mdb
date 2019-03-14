@@ -6,21 +6,20 @@ import MenuItems from '../Layout/MenuItems';
 import Routes from '../Layout/Routes';
 
 class Design2 extends Component {
-
-  toggleSidebar = (e, data) => {
+  toggleSidebar = () => {
     document.querySelector('.layout__sidebar').classList.toggle('is-active');
   };
 
   render() {
     return (
-      <div className='layout'>
-        <div className='layout__header'>
-          <Menu inverted size='huge' borderless color='blue'>
-            <Menu.Item className='layout__sidebar-toggle' as="a" icon onClick={this.toggleSidebar}>
+      <div className="layout">
+        <div className="layout__header">
+          <Menu inverted size="huge" borderless color="blue">
+            <Menu.Item className="layout__sidebar-toggle" as="a" icon onClick={this.toggleSidebar}>
               <Icon name="sidebar" />
             </Menu.Item>
             <Menu.Item as={Link} to="/" header>
-              <Header inverted as='h2'>
+              <Header inverted as="h2">
                 Kabbalah Media
                 <small>&nbsp;- Daily Lessons</small>
               </Header>
@@ -37,28 +36,28 @@ class Design2 extends Component {
             </Menu.Menu>
           </Menu>
         </div>
-        <div className='layout__sidebar'>
-          <Menu inverted size='huge' borderless color='blue'>
-            <Menu.Item className='layout__sidebar-toggle' as="a" icon onClick={this.toggleSidebar}>
+        <div className="layout__sidebar">
+          <Menu inverted size="huge" borderless color="blue">
+            <Menu.Item className="layout__sidebar-toggle" as="a" icon onClick={this.toggleSidebar}>
               <Icon name="sidebar" />
             </Menu.Item>
             <Menu.Item as={Link} to="/" header>
-              <Header inverted as='h2'>
+              <Header inverted as="h2">
                 Kabbalah Media
               </Header>
             </Menu.Item>
           </Menu>
-          <div className='layout__sidebar-menu'>
+          <div className="layout__sidebar-menu">
             <MenuItems simple />
           </div>
         </div>
-        <div className='layout__content'>
+        <div className="layout__content">
           <Grid padded>
             <Grid.Row>
               <Routes />
             </Grid.Row>
           </Grid>
-          <div className='layout__footer'></div>
+          <div className="layout__footer" />
         </div>
       </div>
     );

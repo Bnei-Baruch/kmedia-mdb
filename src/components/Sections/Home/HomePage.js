@@ -90,6 +90,12 @@ class HomePage extends Component {
     // we only have 4 slots and > 4 sections ...
     const sortedCUs = Object.entries(cuBySection).sort((a, b) => strCmp(b[1].film_date, a[1].film_date));
 
+    const map = x => (
+      <Grid.Column mobile={5} tablet={3} computer={3} key={x} textAlign="center">
+        <Topic title={t(`nav.sidebar.${x}`)} img={sectionLogo[x]} href={`/${x}`} />
+      </Grid.Column>
+    );
+
     return (
       <div className="homepage">
         <Helmets.Basic title={t('home.header.text')} description={t('home.header.subtext')} />
@@ -121,13 +127,7 @@ class HomePage extends Component {
               <Grid width={15} centered className="homepage__iconsrow">
                 <Grid.Row>
                   {
-                    ['lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
-                      (
-                        <Grid.Column mobile={5} tablet={3} computer={3} key={x} textAlign="center">
-                          <Topic title={t(`nav.sidebar.${x}`)} img={sectionLogo[x]} href={`/${x}`} />
-                        </Grid.Column>
-                      )
-                    )
+                    ['lessons', 'programs', 'sources', 'events', 'publications'].map(map)
                   }
                   <Grid.Column mobile={5} tablet={3} computer={3} only="mobile" />
                 </Grid.Row>
@@ -168,7 +168,8 @@ class HomePage extends Component {
                           <div className="read-more-bottom">
                             <a href={`/${language}/publications/blog`}>{t('home.read-more-posts')}</a>
                           </div>
-                        </Grid.Column>)
+                        </Grid.Column>
+                      )
                       : null
                   }
                   {

@@ -15,7 +15,7 @@ import WipErr from '../../../../shared/WipErr/WipErr';
 
 class SeriesContainer extends Component {
   static propTypes = {
-    bySource: PropTypes.array,
+    bySource: PropTypes.array, // eslint-disable-line react/forbid-prop-types
     wip: shapes.WIP,
     err: shapes.Error,
     language: PropTypes.string.isRequired,
@@ -47,25 +47,25 @@ class SeriesContainer extends Component {
     }
   }
 
-  renderTree = (nodes, level) =>
-    (nodes || []).map((x) => {
-      const { name, items } = x;
+  renderTree = (nodes, level) => (
+    nodes || []).map((x) => {
+    const { name, items } = x;
 
-      if (isEmpty(items)) {
-        return (
-          <List.Item key={name} as={NavLink} to={canonicalLink(x)} content={name} />
-        );
-      }
-
+    if (isEmpty(items)) {
       return (
-        <List.Item key={name}>
-          <Header as={`h${level + 2}`} content={name} />
-          <List.List>
-            {this.renderTree(items, level + 1)}
-          </List.List>
-        </List.Item>
+        <List.Item key={name} as={NavLink} to={canonicalLink(x)} content={name} />
       );
-    });
+    }
+
+    return (
+      <List.Item key={name}>
+        <Header as={`h${level + 2}`} content={name} />
+        <List.List>
+          {this.renderTree(items, level + 1)}
+        </List.List>
+      </List.Item>
+    );
+  });
 
   render() {
     const { bySource, wip, err, t } = this.props;

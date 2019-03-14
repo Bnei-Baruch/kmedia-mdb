@@ -41,7 +41,8 @@ class CollectionPageHeader extends PureComponent {
                       {collection.name}
                     </span>
                     <Header.Subheader className="section-header__subtitle">
-                      {itemCount}&nbsp;{t(`pages.collection.items.${namespace}`)}
+                      {itemCount}
+                      {t(`pages.collection.items.${namespace}`)}
                     </Header.Subheader>
                   </Header.Content>
                 </Header>

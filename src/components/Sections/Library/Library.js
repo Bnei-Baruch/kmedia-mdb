@@ -105,13 +105,15 @@ class Library extends Component {
           pageNumber={pageNumber || 1}
           startsFrom={startsFrom}
           pageNumberHandler={this.pageNumberHandler}
-        />);
+        />
+      );
     } else if (contentData) {
       contentsToDisplay = (
         <div
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
           dangerouslySetInnerHTML={{ __html: contentData }}
-        />);
+        />
+      );
     } else {
       return <Segment basic>{t('sources-library.no-source')}</Segment>;
     }

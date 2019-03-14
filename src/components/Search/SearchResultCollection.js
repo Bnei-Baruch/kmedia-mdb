@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Button, Container, Icon } from 'semantic-ui-react';
+import { Button, Container, Icon, Segment } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../helpers/links';
 import { isDebMode } from '../../helpers/url';
@@ -27,12 +27,12 @@ class SearchResultCollection extends SearchResultBase {
   );
 
   handleImageContextRef = (ref) => {
-    if(ref){
+    if (ref) {
       this.imgRef = ref.children[0];
     }
   };
 
-  imgLoadHandler        = () => {
+  imgLoadHandler = () => {
     this.setState({ isImgLoaded: true });
   };
 
@@ -56,7 +56,7 @@ class SearchResultCollection extends SearchResultBase {
     return (
       <Segment className="bg_hover_grey search__block">
         <Container>
-          <span ref={this.handleImageContextRef} >
+          <span ref={this.handleImageContextRef}>
             <FallbackImage
               circular
               width={isImgLoaded ? this.imgRef.offsetWidth : null}
@@ -87,7 +87,11 @@ class SearchResultCollection extends SearchResultBase {
                 {this.iconByContentType(c.content_type, true)}
               </Link>
               &nbsp;|&nbsp;
-              <span>{c.content_units.length} {t('pages.collection.items.programs-collection')}</span>
+              <span>
+                {c.content_units.length}
+                {' '}
+                {t('pages.collection.items.programs-collection')}
+              </span>
             </Container>
             <div className="clear" />
           </Container>
@@ -106,11 +110,13 @@ class SearchResultCollection extends SearchResultBase {
           </Container>
         </Container>
         {
-          !isDebMode(location) ?
-            null :
-            <Container collapsing>
-              <ScoreDebug name={c.name} score={score} explanation={hit._explanation} />
-            </Container>
+          !isDebMode(location)
+            ? null
+            : (
+              <Container collapsing>
+                <ScoreDebug name={c.name} score={score} explanation={hit._explanation} />
+              </Container>
+            )
         }
       </Segment>
     );

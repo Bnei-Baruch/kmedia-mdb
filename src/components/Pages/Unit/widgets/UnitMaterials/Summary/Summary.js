@@ -6,7 +6,6 @@ import { Segment } from 'semantic-ui-react';
 import * as shapes from '../../../../../shapes';
 
 class Summary extends Component {
-
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     t: PropTypes.func.isRequired,

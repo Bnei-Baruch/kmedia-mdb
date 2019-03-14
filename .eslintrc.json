@@ -50,17 +50,12 @@
     "import/no-named-as-default-member": "off",
     "react/destructuring-assignment":    "off",
     "prefer-destructuring":              "off",
+    "react/no-multi-comp":               "off",
     "no-unused-vars":                    [
       "error",
       {
         "varsIgnorePattern": "^_",
         "argsIgnorePattern": "^_"
-      }
-    ],
-    "react/no-multi-comp":               [
-      1,
-      {
-        "ignoreStateless": false
       }
     ]
   },

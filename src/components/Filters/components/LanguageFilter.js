@@ -33,15 +33,16 @@ class LanguageFilter extends Component {
     this.setState({ sValue: `${data.name}` });
   };
 
-  onCancel = () =>
-    this.props.onCancel();
+  onCancel = () => this.props.onCancel();
 
   apply = () => {
     this.props.onApply(this.state.sValue);
   };
 
-  toggleCustom = () =>
-    this.setState({ showCustom: !this.state.showCustom });
+  toggleCustom = () => {
+    const { showCustom } = this.state;
+    this.setState({ showCustom: !showCustom });
+  };
 
   render() {
     const { t }      = this.props;
@@ -71,8 +72,8 @@ class LanguageFilter extends Component {
         <Segment className="filter-popup__body language-filter">
           <Accordion as={Menu} vertical fluid size="small">
             {
-              ALL_LANGUAGES.map((x) => {
-                return (
+              ALL_LANGUAGES.map(x => (
+                (
                   <Menu.Item
                     key={x}
                     name={x}
@@ -82,8 +83,8 @@ class LanguageFilter extends Component {
                     <Flag name={LANGUAGES[x].flag} />
                     {t(`constants.languages.${x}`)}
                   </Menu.Item>
-                );
-              })
+                )
+              ))
             }
           </Accordion>
         </Segment>

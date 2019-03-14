@@ -1,23 +1,41 @@
 import PropTypes from 'prop-types';
 
 export const RouterMatch = PropTypes.shape({
+  isExact: PropTypes.bool,
+  params: PropTypes.object.isRequired,
   path: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
-  params: PropTypes.object,
-  isExact: PropTypes.bool,
-});
-
-export const History = PropTypes.shape({
-  push: PropTypes.func.isRequired,
-  replace: PropTypes.func.isRequired
 });
 
 export const HistoryLocation = PropTypes.shape({
-  pathname: PropTypes.string,
-  search: PropTypes.string,
-  hash: PropTypes.string,
-  key: PropTypes.string,
-  state: PropTypes.object,
+  hash: PropTypes.string.isRequired,
+  key: PropTypes.string, // only in createBrowserHistory and createMemoryHistory
+  pathname: PropTypes.string.isRequired,
+  search: PropTypes.string.isRequired,
+  state: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.bool,
+    PropTypes.number,
+    PropTypes.object,
+    PropTypes.string,
+  ]), // only in createBrowserHistory and createMemoryHistory,
+});
+
+export const History = PropTypes.shape({
+  action: PropTypes.oneOf(['PUSH', 'REPLACE', 'POP']).isRequired,
+  block: PropTypes.func.isRequired,
+  canGo: PropTypes.func, // only in createMemoryHistory
+  createHref: PropTypes.func.isRequired,
+  entries: PropTypes.arrayOf(HistoryLocation), // only in createMemoryHistory
+  go: PropTypes.func.isRequired,
+  goBack: PropTypes.func.isRequired,
+  goForward: PropTypes.func.isRequired,
+  index: PropTypes.number, // only in createMemoryHistory
+  length: PropTypes.number,
+  listen: PropTypes.func.isRequired,
+  location: HistoryLocation.isRequired,
+  push: PropTypes.func.isRequired,
+  replace: PropTypes.func.isRequired,
 });
 
 export const Route = PropTypes.shape({
@@ -27,6 +45,7 @@ export const Route = PropTypes.shape({
   sensitive: PropTypes.bool,
   component: PropTypes.func,
 });
+Route.routes       = PropTypes.arrayOf(PropTypes.shape(Route));
 
 export const MDBFile = PropTypes.shape({
   id: PropTypes.string.isRequired,

@@ -36,6 +36,7 @@ class ShareBar extends Component {
     url: '',
     buttonSize: 'big',
     messageTitle: '',
+    embedContent: null,
   };
 
   state = {

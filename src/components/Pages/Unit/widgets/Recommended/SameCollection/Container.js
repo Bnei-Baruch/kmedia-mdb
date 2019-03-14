@@ -11,12 +11,12 @@ import Widget from './Widget';
 export class SameCollectionContainer extends Component {
   static propTypes = {
     unit: shapes.EventItem.isRequired,
-    collectionID: PropTypes.string,
+    collectionID: PropTypes.string, // eslint-disable-line react/no-unused-prop-types
     collection: shapes.GenericCollection,
     wip: shapes.WIP,
     err: shapes.Error,
     section: PropTypes.string,
-    fetchCollection: PropTypes.func.isRequired,
+    fetchCollection: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
   };
 
   static defaultProps = {

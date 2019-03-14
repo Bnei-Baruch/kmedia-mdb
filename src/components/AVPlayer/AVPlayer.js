@@ -83,6 +83,7 @@ class AVPlayer extends PureComponent {
     onPause: noop,
     onPrev: noop,
     onNext: noop,
+    requestedLanguage: 'en',
   };
 
   static chooseSource = (props) => {
@@ -183,7 +184,7 @@ class AVPlayer extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { item } = this.state;
+    const { item } = this.state; // eslint-disable-line react/prop-types
     if (nextProps.item !== item) {
       this.setState({
         error: false,

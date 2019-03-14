@@ -29,6 +29,7 @@ export class UnitPage extends Component {
     wip: false,
     err: null,
     section: '',
+    location: {}
   };
 
   state = {};
