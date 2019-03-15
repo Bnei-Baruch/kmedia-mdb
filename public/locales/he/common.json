@@ -454,7 +454,9 @@
         "audio": "אודיו של התוכנית",
         "audio-simple": "אודיו",
         "text": "תמליל מלא",
-        "image": "תמונות"
+        "image": "תמונות",
+        "text-article": "מאמר על בסיס התוכנית",
+        "text-research-material": "חומרי מחקר"
       }
     },
     "publication": {

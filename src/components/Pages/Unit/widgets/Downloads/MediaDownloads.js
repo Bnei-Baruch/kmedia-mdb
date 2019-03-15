@@ -6,7 +6,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Grid, Header, Table } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
-import { CT_ARTICLE, CT_FULL_LESSON, CT_KITEI_MAKOR, CT_LELO_MIKUD, CT_LESSON_PART, CT_PUBLICATION, CT_VIDEO_PROGRAM_CHAPTER, MT_AUDIO, MT_IMAGE, MT_TEXT, MT_VIDEO, VS_NAMES } from '../../../../../helpers/consts';
+import { CT_ARTICLE, CT_FULL_LESSON, CT_KITEI_MAKOR, CT_LELO_MIKUD, CT_LESSON_PART, CT_PUBLICATION, CT_RESEARCH_MATERIAL, CT_VIDEO_PROGRAM_CHAPTER, MT_AUDIO, MT_IMAGE, MT_TEXT, MT_VIDEO, VS_NAMES } from '../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
 import { physicalFile } from '../../../../../helpers/utils';
 import { selectors as settings } from '../../../../../redux/modules/settings';
@@ -222,6 +222,10 @@ class MediaDownloads extends Component {
     const leloMikudByType                                = (leloMikud && leloMikud.get(language)) || new Map();
     const publications                                   = derivedGroups[CT_PUBLICATION];
     const publicationsByType                             = (publications && publications.get(language)) || new Map();
+    const articles                                       = derivedGroups[CT_ARTICLE];
+    const articlesByType                                 = (articles && articles.get(language)) || new Map();
+    const researchMaterials                              = derivedGroups[CT_RESEARCH_MATERIAL];
+    const researchMaterialsByType                        = (researchMaterials && researchMaterials.get(language)) || new Map();
 
     let typeOverrides = this.getI18nTypeOverridesKey();
     if (typeOverrides) {
@@ -271,6 +275,20 @@ class MediaDownloads extends Component {
           const publisher = publisherById[file.cu.publishers[0]];
           return this.renderRow(file, `${label} - ${publisher ? publisher.name : '???'}`, t);
         });
+        return acc.concat(files);
+      }, derivedRows);
+    }
+    if (articlesByType.size > 0) {
+      derivedRows = MEDIA_ORDER.reduce((acc, val) => {
+        const label = t(`media-downloads.${typeOverrides}type-labels.${val}-article`);
+        const files = (articlesByType.get(val) || []).map(file => this.renderRow(file, label, t));
+        return acc.concat(files);
+      }, derivedRows);
+    }
+    if (researchMaterialsByType.size > 0) {
+      derivedRows = MEDIA_ORDER.reduce((acc, val) => {
+        const label = t(`media-downloads.${typeOverrides}type-labels.${val}-research-material`);
+        const files = (researchMaterialsByType.get(val) || []).map(file => this.renderRow(file, label, t));
         return acc.concat(files);
       }, derivedRows);
     }
