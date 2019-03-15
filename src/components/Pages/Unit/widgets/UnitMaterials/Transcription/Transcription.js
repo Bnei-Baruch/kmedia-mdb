@@ -65,10 +65,25 @@ class Transcription extends Component {
       .reduce((acc, files) => [...acc, ...files], []);
   }
 
-  constructor(props) {
-    super(props);
-    this.state = this.calcCurrentState();
+  static getDerivedStateFromProps(props, state) {
+    const { contentLanguage, uiLanguage, unit, type } = props;
+
+    const textFiles   = Transcription.getTextFiles(unit, type);
+    const languages   = uniq(textFiles.map(x => x.language));
+    let newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+    if (!newLanguage) {
+      return false;
+    }
+    if (state.language && state.language !== newLanguage) {
+      newLanguage = state.language;
+    }
+
+    const selectedFile = Transcription.selectFile(textFiles, newLanguage);
+
+    return { selectedFile, languages, language: newLanguage, textFiles };
   }
+
+  state = {};
 
   componentDidMount() {
     const { selectedFile } = this.state;
@@ -78,27 +93,20 @@ class Transcription extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const { props, state } = this;
-    const toUpdate         = (nextProps.uiLanguage !== props.uiLanguage)
+    return (nextProps.uiLanguage !== props.uiLanguage)
       || (nextProps.contentLanguage !== props.contentLanguage)
       || (nextProps.unit && !props.unit)
       || (nextProps.unit.id !== props.unit.id) // eslint-disable-line react/prop-types
       || (nextProps.unit.files !== props.unit.files // eslint-disable-line react/prop-types
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
         || nextState.language !== state.language);
-
-    return toUpdate;
   }
 
   componentDidUpdate(prevState) {
-    const { selectedFile } = this.state; // eslint-disable-line react/prop-types
+    const { selectedFile, language } = this.state; // eslint-disable-line react/prop-types
 
-    if (selectedFile !== prevState.selectedFile) {
+    if (selectedFile !== prevState.selectedFile || language !== prevState.language) {
       this.loadFile(selectedFile);
-    }
-
-    const { selected, language } = this.setCurrentItem(this.props);
-    if (selected && language) {
-      this.props.onContentChange(selected.id);
     }
   }
 
@@ -112,21 +120,6 @@ class Transcription extends Component {
         onContentChange(selectedFile.id);
       }
     }
-  };
-
-  calcCurrentState = () => {
-    const { contentLanguage, uiLanguage, unit, type } = this.props;
-
-    const textFiles   = Transcription.getTextFiles(unit, type);
-    const languages   = uniq(textFiles.map(x => x.language));
-    const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-    if (!newLanguage) {
-      return false;
-    }
-
-    const selectedFile = Transcription.selectFile(textFiles, newLanguage);
-
-    return { selectedFile, languages, language: newLanguage, textFiles };
   };
 
   handleLanguageChanged = (e, newLanguage) => {
