@@ -87,7 +87,8 @@ class SearchResultsFilters extends Component {
     const orderFilters = isMobileDevice() ? null : (
       <Menu.Item>
         <span key="span" style={{ padding: '10px' }}>
-          {t('search.sortby')}:
+          {t('search.sortby')}
+          :
           &nbsp;&nbsp;
           <Dropdown
             inline
@@ -126,7 +127,12 @@ class SearchResultsFilters extends Component {
             active={this.state.isShowFilters}
             onClick={this.showFilters}
           >
-            {isMobileDevice() ? null : <span>{t('filters.filters')}&nbsp;&nbsp;</span>}
+            {isMobileDevice() ? null : (
+              <span>
+                {t('filters.filters')}
+                &nbsp;&nbsp;
+              </span>
+            )}
             <Icon name="filter" fitted />
           </Button>
         </Menu.Item>
@@ -134,7 +140,12 @@ class SearchResultsFilters extends Component {
       </Menu.Menu>
     );
 
-    return <Menu borderless className="section_tabs">{tabs}{rightButtons}</Menu>;
+    return (
+      <Menu borderless className="section_tabs">
+        {tabs}
+        {rightButtons}
+      </Menu>
+    );
   };
 
   render() {
@@ -143,7 +154,8 @@ class SearchResultsFilters extends Component {
 
     const hideFilters = (
       <Menu.Item key="hideFilters">
-        {t('filters.hideFilters')}&nbsp;&nbsp;
+        {t('filters.hideFilters')}
+        &nbsp;&nbsp;
         <Button circular basic icon="close" size="small" onClick={this.showFilters} />
       </Menu.Item>
     );

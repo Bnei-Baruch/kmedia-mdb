@@ -48,7 +48,8 @@ const multiLanguageLinkCreator = () => (WrappedComponent) => {
 
     render() {
       // We need to use "unused constants" in order to get proper "rest"
-      // eslint-disable-next-line no-unused-vars
+      /* eslint-disable react/prop-types */
+      /* eslint-disable no-unused-vars */
       const { to, language, contentLanguage, location, match, history, staticContext, ...rest } = this.props;
       let navigateTo                                                                            = to;
       let toWithLanguage;

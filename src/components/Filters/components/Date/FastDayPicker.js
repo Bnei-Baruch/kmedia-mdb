@@ -34,11 +34,11 @@ class FastDayPicker extends Component {
     month: null,
   };
 
-  isMobileDevice = () =>
-    this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
+  isMobileDevice = () => this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
-  handleYearMonthChange = month =>
+  handleYearMonthChange = (month) => {
     this.setState({ month });
+  };
 
   handleDayPickerRef = (ref) => {
     if (ref) {
@@ -71,13 +71,13 @@ class FastDayPicker extends Component {
     this.nativeDateInput.focus();
   };
 
-  getOverlayComponent = (props) => {
-    return (
+  getOverlayComponent = props => (
+    (
       <Segment>
         {props.children}
       </Segment>
-    );
-  };
+    )
+  );
 
   getNavBarElement = (props, language) => {
     const { month, localeUtils } = props;
@@ -91,7 +91,7 @@ class FastDayPicker extends Component {
           onChange={this.handleYearMonthChange}
           className="float-left"
         />
-        <div className="clear"></div>
+        <div className="clear" />
       </div>
     );
   };
@@ -152,7 +152,7 @@ class FastDayPicker extends Component {
           formatDate={formatDate}
           parseDate={parseDate}
           placeholder={`${formatDate(new Date(), 'l', locale)}`}
-          showOverlay={true}
+          showOverlay
           dayPickerProps={{
             month,
             toMonth: today().toDate(),
@@ -162,7 +162,7 @@ class FastDayPicker extends Component {
             dir: getLanguageDirection(language),
             ref: this.handleDayPickerRef,
             captionElement: () => null,
-            navbarElement: (props) => this.getNavBarElement(props, language)
+            navbarElement: props => this.getNavBarElement(props, language)
           }}
         />
       </div>

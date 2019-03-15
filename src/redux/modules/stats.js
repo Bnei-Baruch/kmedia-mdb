@@ -79,8 +79,7 @@ const onClearCUStats = (state, action) => ({
   }
 });
 
-const onSSRPrepare = state =>
-  mapValues(state, x => ({ ...x, errors: x.err ? x.err.toString() : x.err }));
+const onSSRPrepare = state => mapValues(state, x => ({ ...x, errors: x.err ? x.err.toString() : x.err }));
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,

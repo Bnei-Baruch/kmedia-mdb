@@ -1,14 +1,10 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import {
-  CT_LECTURE_SERIES,
-  CT_LESSONS_SERIES,
-  CT_VIRTUAL_LESSONS,
-} from '../helpers/consts';
+import { CT_LECTURE_SERIES, CT_LESSONS_SERIES, CT_VIRTUAL_LESSONS, } from '../helpers/consts';
 import { updateQuery } from './helpers/url';
 import { filtersTransformer } from '../filters';
-import { actions, types, selectors } from '../redux/modules/lessons';
+import { actions, selectors, types } from '../redux/modules/lessons';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 import { selectors as listsSelectors, types as listTypes } from '../redux/modules/lists';
 import { actions as mdbActions } from '../redux/modules/mdb';
@@ -16,8 +12,8 @@ import { selectors as settings } from '../redux/modules/settings';
 import { isEmpty } from '../helpers/utils';
 
 function* fetchLecturesList(action) {
-  if (action.payload.namespace !== 'lessons-virtual' &&
-    action.payload.namespace !== 'lessons-lectures') {
+  if (action.payload.namespace !== 'lessons-virtual'
+    && action.payload.namespace !== 'lessons-lectures') {
     return;
   }
   try {

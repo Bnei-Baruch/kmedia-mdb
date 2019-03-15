@@ -10,7 +10,7 @@ import HierarchicalFilter from './HierarchicalFilter';
 
 class SourcesFilter extends Component {
   static propTypes = {
-    roots: PropTypes.array,
+    roots: PropTypes.arrayOf(PropTypes.shape({})),
     getSourceById: PropTypes.func.isRequired,
     cuStats: PropTypes.objectOf(PropTypes.number),
     t: PropTypes.func.isRequired,

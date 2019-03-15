@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Divider, Grid } from 'semantic-ui-react';
+import * as shapes from '../../shapes';
 
 class Section extends Component {
-
   static propTypes = {
     title: PropTypes.string.isRequired,
+    children: shapes.Children.isRequired,
   };
 
   render() {

@@ -158,27 +158,42 @@ class Info extends Component {
               ? null
               : (
                 <List.Item className="unit-info__topics">
-                  <strong>{t('pages.unit.info.topics')}:</strong>
-                  &nbsp;{tagLinks}
-                </List.Item>)
+                  <strong>
+                    {t('pages.unit.info.topics')}
+                    :
+                  </strong>
+                  &nbsp;
+                  {tagLinks}
+                </List.Item>
+              )
           }
           {
             sourcesLinks.length === 0
               ? null
               : (
                 <List.Item className="unit-info__sources">
-                  <strong>{t('pages.unit.info.sources')}:</strong>
-                  &nbsp;{sourcesLinks}
-                </List.Item>)
+                  <strong>
+                    {t('pages.unit.info.sources')}
+                    :
+                  </strong>
+                  &nbsp;
+                  {sourcesLinks}
+                </List.Item>
+              )
           }
           {
             collectionsLinks.length === 0
               ? null
               : (
                 <List.Item className="unit-info__collections">
-                  <strong>{t('pages.unit.info.collections')}:</strong>
-                  &nbsp;{collectionsLinks}
-                </List.Item>)
+                  <strong>
+                    {t('pages.unit.info.collections')}
+                    :
+                  </strong>
+                  &nbsp;
+                  {collectionsLinks}
+                </List.Item>
+              )
           }
         </List>
       </div>

@@ -22,6 +22,15 @@ function* autocomplete(action) {
   }
 }
 
+function getIdsForFetch(hits, type) {
+  return hits.reduce((acc, val) => {
+    if (val._source.result_type === type) {
+      return acc.concat(val._source.mdb_uid);
+    }
+    return acc;
+  }, []);
+}
+
 export function* search(action) {
   try {
     yield* urlUpdateQuery(query => Object.assign(query, { q: action.payload.q }));
@@ -69,14 +78,14 @@ export function* search(action) {
       const cuIDsToFetch   = getIdsForFetch(data.search_result.hits.hits, 'units');
       const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'posts');
 
-      const language = yield select(state => settings.getLanguage(state.settings));
+      const lang = yield select(state => settings.getLanguage(state.settings));
       const respCU   = yield call(Api.units, {
         id: cuIDsToFetch,
         pageSize: cuIDsToFetch.length,
-        language,
+        lang,
         with_files: true
       });
-      const respC    = yield call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, language });
+      const respC    = yield call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, lang });
       const respPost = yield call(Api.posts, { id: postIDsToFetch, pageSize: postIDsToFetch.length });
 
       yield put(mdbActions.receiveContentUnits(respCU.data.content_units));
@@ -87,16 +96,6 @@ export function* search(action) {
   } catch (err) {
     yield put(actions.searchFailure(err));
   }
-}
-
-function getIdsForFetch(hits, type) {
-  return hits.reduce((acc, val) => {
-    if (val._source.result_type === type) {
-      return acc.concat(val._source.mdb_uid);
-    } else {
-      return acc;
-    }
-  }, []);
 }
 
 function* click(action) {

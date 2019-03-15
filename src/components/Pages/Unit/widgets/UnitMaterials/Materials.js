@@ -23,9 +23,12 @@ class Materials extends Component {
   derivedTextUnits() {
     const { unit } = this.props;
     const types    = {};
+    const callback = (x) => {
+      types[x.content_type] = (x.files || []).some(f => f.type === MT_TEXT);
+    };
 
     Object.values(unit.derived_units || {})
-      .forEach(x => types[x.content_type] = (x.files || []).some(f => f.type === MT_TEXT));
+      .forEach(callback);
 
     return types;
   }

@@ -23,8 +23,8 @@ class HomePageContainer extends Component {
     err: shapes.Error,
     language: PropTypes.string.isRequired,
     fetchData: PropTypes.func.isRequired,
-    fetchBlogList: PropTypes.func.isRequired,
-    fetchTweetsList: PropTypes.func.isRequired,
+    fetchBlogList: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+    fetchTweetsList: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
   };
 
   static defaultProps = {
@@ -36,28 +36,6 @@ class HomePageContainer extends Component {
     wip: false,
     err: null,
   };
-
-  componentDidMount() {
-    const { latestLesson, fetchData, latestBlogPosts, latestTweets } = this.props;
-    if (!latestLesson) {
-      fetchData();
-    }
-    if (!latestBlogPosts.length) {
-      HomePageContainer.fetchSocialMedia('blog', this.props);
-    }
-    if (!latestTweets.length) {
-      HomePageContainer.fetchSocialMedia('twitter', this.props);
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { language, fetchData } = this.props;
-    if (nextProps.language !== language) {
-      fetchData();
-      HomePageContainer.fetchSocialMedia('blog', nextProps);
-      HomePageContainer.fetchSocialMedia('twitter', nextProps);
-    }
-  }
 
   static chooseTwitterByLanguage = (language) => {
     switch (language) {
@@ -104,6 +82,28 @@ class HomePageContainer extends Component {
     });
   }
 
+  componentDidMount() {
+    const { latestLesson, fetchData, latestBlogPosts, latestTweets } = this.props;
+    if (!latestLesson) {
+      fetchData();
+    }
+    if (!latestBlogPosts.length) {
+      HomePageContainer.fetchSocialMedia('blog', this.props);
+    }
+    if (!latestTweets.length) {
+      HomePageContainer.fetchSocialMedia('twitter', this.props);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { language, fetchData } = this.props;
+    if (nextProps.language !== language) {
+      fetchData();
+      HomePageContainer.fetchSocialMedia('blog', nextProps);
+      HomePageContainer.fetchSocialMedia('twitter', nextProps);
+    }
+  }
+
   render() {
     const
       {
@@ -139,9 +139,9 @@ const mapState = (state) => {
   const latestLesson   = latestLessonID ? mdb.getCollectionById(state.mdb, latestLessonID) : null;
 
   const latestUnitIDs = selectors.getLatestUnits(state.home);
-  const latestUnits   = Array.isArray(latestUnitIDs) ?
-    latestUnitIDs.map(x => mdb.getDenormContentUnit(state.mdb, x)) :
-    [];
+  const latestUnits   = Array.isArray(latestUnitIDs)
+    ? latestUnitIDs.map(x => mdb.getDenormContentUnit(state.mdb, x))
+    : [];
   return {
     latestLesson,
     latestUnits,

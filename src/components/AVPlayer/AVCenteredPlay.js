@@ -14,8 +14,8 @@ class AVCenteredPlay extends Component {
   };
 
   shouldComponentUpdate({ media }) {
-    return this.props.media.isPlaying !== media.isPlaying
-      || this.props.media.isLoading !== media.isLoading;
+    return this.props.media.isPlaying !== media.isPlaying // eslint-disable-line react/prop-types
+      || this.props.media.isLoading !== media.isLoading; // eslint-disable-line react/prop-types
   }
 
   handlePlayPause = () => {

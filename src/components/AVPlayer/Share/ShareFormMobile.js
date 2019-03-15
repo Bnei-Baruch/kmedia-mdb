@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button, Popup, Input } from 'semantic-ui-react';
+import { Button, Form, Input, Popup } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { withNamespaces } from 'react-i18next';
 
@@ -56,9 +56,11 @@ class ShareFormMobile extends BaseShareForm {
               content={t('messages.link-copied-to-clipboard')}
               position="bottom right"
               trigger={
-                <CopyToClipboard text={url} onCopy={this.handleCopied}>
-                  <Button className="mobileShareCopyLinkButton" content={t('buttons.copy')} />
-                </CopyToClipboard>
+                (
+                  <CopyToClipboard text={url} onCopy={this.handleCopied}>
+                    <Button className="mobileShareCopyLinkButton" content={t('buttons.copy')} />
+                  </CopyToClipboard>
+                )
               }
             />
           </div>

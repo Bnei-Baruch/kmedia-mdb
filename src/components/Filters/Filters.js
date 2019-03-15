@@ -119,7 +119,8 @@ class Filters extends Component {
                       >
                         <Icon name="times" />
                       </Label>
-                    </div>)
+                    </div>
+                  )
                   : null
               }
             </Menu.Item>

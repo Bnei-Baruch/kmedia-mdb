@@ -19,19 +19,27 @@ function and(...args) {
 }
 
 export default class MediaHelper {
-  static IsVideo      = makeMediaTypePredicate(MT_VIDEO);
-  static IsAudio      = makeMediaTypePredicate(MT_AUDIO);
-  static IsText       = makeMediaTypePredicate(MT_TEXT);
-  static IsImage      = makeMediaTypePredicate(MT_TEXT);
+  static IsVideo = makeMediaTypePredicate(MT_VIDEO);
+
+  static IsAudio = makeMediaTypePredicate(MT_AUDIO);
+
+  static IsText = makeMediaTypePredicate(MT_TEXT);
+
+  static IsImage = makeMediaTypePredicate(MT_TEXT);
+
   static IsAudioVideo = makeMediaTypePredicate(MT_AUDIO, MT_VIDEO);
 
-  static IsMp4      = and(MediaHelper.IsVideo, makeMimeTypePredicate('video/mp4'));
-  static IsWmv      = and(MediaHelper.IsVideo, makeMimeTypePredicate('video/x-ms-wmv'));
-  static IsFlv      = and(MediaHelper.IsVideo, makeMimeTypePredicate('video/x-flv'));
+  static IsMp4 = and(MediaHelper.IsVideo, makeMimeTypePredicate('video/mp4'));
 
-  static IsMp3      = and(MediaHelper.IsAudio, makeMimeTypePredicate('audio/mp3', 'audio/mpeg'));
+  static IsWmv = and(MediaHelper.IsVideo, makeMimeTypePredicate('video/x-ms-wmv'));
 
-  static IsHtml     = and(MediaHelper.IsText, makeMimeTypePredicate('text/html'));
-  static IsWord     = and(MediaHelper.IsText, makeMimeTypePredicate('application/msword'));
-  static IsPDF      = and(MediaHelper.IsText, makeMimeTypePredicate('application/pdf'));
+  static IsFlv = and(MediaHelper.IsVideo, makeMimeTypePredicate('video/x-flv'));
+
+  static IsMp3 = and(MediaHelper.IsAudio, makeMimeTypePredicate('audio/mp3', 'audio/mpeg'));
+
+  static IsHtml = and(MediaHelper.IsText, makeMimeTypePredicate('text/html'));
+
+  static IsWord = and(MediaHelper.IsText, makeMimeTypePredicate('application/msword'));
+
+  static IsPDF = and(MediaHelper.IsText, makeMimeTypePredicate('application/pdf'));
 }

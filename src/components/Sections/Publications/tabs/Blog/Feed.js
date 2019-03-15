@@ -27,9 +27,9 @@ class BlogFeed extends Component {
     return (
       <div className="blog-posts">
         {
-          snippetVersion ?
-            items.slice(0, length).map(item => renderBlogItemForHomepage(item, language, t)) :
-            items.map(item => renderBlogItemForPublications(item, language))
+          snippetVersion
+            ? items.slice(0, length).map(item => renderBlogItemForHomepage(item, language, t))
+            : items.map(item => renderBlogItemForPublications(item, language))
         }
       </div>
     );

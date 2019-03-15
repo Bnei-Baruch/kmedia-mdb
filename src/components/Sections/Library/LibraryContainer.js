@@ -104,7 +104,7 @@ class LibraryContainer extends Component {
     const firstLeafId = this.firstLeafId(sourceId);
     if (firstLeafId !== sourceId
       || this.props.sourceId !== sourceId
-      || this.state.lastLoadedId !== sourceId) {
+      || this.state.lastLoadedId !== sourceId) { // eslint-disable-line react/prop-types
       if (firstLeafId === sourceId) {
         this.loadNewIndices(sourceId, this.props.language);
       } else {
@@ -116,7 +116,7 @@ class LibraryContainer extends Component {
     if (!isEmpty(this.accordionContext) && !isEmpty(this.selectedAccordionContext)) {
       // eslint-disable-next-line react/no-find-dom-node
       const elScrollTop = ReactDOM.findDOMNode(this.selectedAccordionContext).offsetTop;
-      const p           = this.accordionContext.parentElement;
+      const p           = this.accordionContext.parentElement; // eslint-disable-line react/prop-types
       if (p.scrollTop !== elScrollTop) {
         p.scrollTop = elScrollTop;
       }
@@ -229,15 +229,15 @@ class LibraryContainer extends Component {
   header = (sourceId, properParentId) => {
     const { getSourceById } = this.props;
 
-    const source = getSourceById(sourceId);
+    const source             = getSourceById(sourceId);
     const properParentSource = getSourceById(properParentId);
 
-    if (!source || !properParentSource){
+    if (!source || !properParentSource) {
       return <div />;
     }
-    
+
     const { name: parentName, description, parent_id: parentId } = properParentSource;
-    const parentSource = getSourceById(parentId);
+    const parentSource                                           = getSourceById(parentId);
 
     if (!parentSource) {
       return <div />;
@@ -250,7 +250,7 @@ class LibraryContainer extends Component {
     if (kabFullName && kabName) {
       displayName += ` (${kabName})`;
     }
-    
+
     const { contentHeaderWidth, } = this.state;
     return (
       <Header size="small">

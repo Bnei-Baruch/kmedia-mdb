@@ -48,4 +48,3 @@ export function today() {
     .seconds(0)
     .milliseconds(0);
 }
-

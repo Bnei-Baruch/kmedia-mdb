@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Segment, Image, Container, Header } from 'semantic-ui-react';
+import { Container, Header, Image, Segment } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../helpers/links';
 import { sectionLogo } from '../../helpers/images';
@@ -35,7 +35,8 @@ class SearchResultSource extends SearchResultBase {
           </Link>
         </Header>
         <Container>
-          <Image size="mini" src={sectionLogo.sources} verticalAlign="middle" />&nbsp;&nbsp;
+          <Image size="mini" src={sectionLogo.sources} verticalAlign="middle" />
+          &nbsp;&nbsp;
           <span>{t('filters.sections-filter.sources')}</span>
         </Container>
         <Container className="content">

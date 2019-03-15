@@ -10,7 +10,6 @@ import * as shapes from '../../../../shapes';
 import Link from '../../../../Language/MultiLanguageLink';
 
 class EventsList extends PureComponent {
-
   static propTypes = {
     items: PropTypes.arrayOf(shapes.EventCollection),
     t: PropTypes.func.isRequired,

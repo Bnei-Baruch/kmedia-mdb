@@ -82,8 +82,8 @@ class Transcription extends Component {
     const toUpdate  = (nextProps.uiLanguage !== props.uiLanguage)
       || (nextProps.contentLanguage !== props.contentLanguage)
       || (nextProps.unit && !props.unit)
-      || (nextProps.unit.id !== props.unit.id)
-      || (nextProps.unit.files !== props.unit.files
+      || (nextProps.unit.id !== props.unit.id) // eslint-disable-line react/prop-types
+      || (nextProps.unit.files !== props.unit.files // eslint-disable-line react/prop-types
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById));
 
     if (toUpdate) {

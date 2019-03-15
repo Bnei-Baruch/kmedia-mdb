@@ -7,12 +7,12 @@ import * as shapes from '../shapes';
 class withPagination extends React.Component {
   static propTypes = {
     namespace: PropTypes.string.isRequired,
-    pageNo: PropTypes.number.isRequired,
+    pageNo: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
     pageSize: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
-    location: shapes.HistoryLocation.isRequired,
-    fetchList: PropTypes.func.isRequired,
-    setPage: PropTypes.func.isRequired,
+    location: shapes.HistoryLocation.isRequired, // eslint-disable-line react/no-unused-prop-types
+    fetchList: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+    setPage: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
   };
 
   static getPageFromLocation(location) {
@@ -22,8 +22,8 @@ class withPagination extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.language !== this.props.language ||
-      nextProps.namespace !== this.props.namespace) {
+    if (nextProps.language !== this.props.language
+      || nextProps.namespace !== this.props.namespace) {
       this.askForData(nextProps);
     }
 

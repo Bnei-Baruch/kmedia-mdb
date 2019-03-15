@@ -1,22 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Image } from 'semantic-ui-react';
+import noop from 'lodash/noop';
 
 import imagePlaceholder from '../../images/image.png';
 
 // An adaptation of https://github.com/socialtables/react-image-fallback
 // for react semantic-ui
 class FallbackImage extends Component {
-
   static propTypes = {
     src: PropTypes.string,
     fallbackImage: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.element, PropTypes.array])),
     onLoad: PropTypes.func,
-    onError: PropTypes.func
+    onError: PropTypes.func,
+    width: PropTypes.string,
+    height: PropTypes.string,
   };
 
   static defaultProps = {
+    src: '',
     fallbackImage: [imagePlaceholder],
+    onLoad: noop,
+    onError: noop,
+    width: 'auto',
+    height: 'auto',
   };
 
   constructor(props) {
@@ -90,10 +97,15 @@ class FallbackImage extends Component {
       return this.state.imageSource;
     }
 
-    const { fallbackImage, onLoad, onError, width = 'auto', height = 'auto', ...rest } = this.props;
-    return <Image {...rest}
-                  src={this.state.imageSource}
-                  style={{ 'width': `${width}px`, 'height': `${height}px` }} />;
+    /* eslint no-unused-vars: "off" */
+    const { fallbackImage, onLoad, onError, width, height, ...rest } = this.props;
+    return (
+      <Image
+        {...rest}
+        src={this.state.imageSource}
+        style={{ width: `${width}px`, height: `${height}px` }}
+      />
+    );
   }
 }
 
