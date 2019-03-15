@@ -56,7 +56,7 @@ class Transcription extends Component {
 
   static getUnitDerivedArticle(unit, type) {
     // suitable for having either derived articles or research materials only
-    const ct             = type === 'articles' ? CT_ARTICLE : CT_RESEARCH_MATERIAL;
+    const ct = type === 'articles' ? CT_ARTICLE : CT_RESEARCH_MATERIAL;
 
     return Object.values(unit.derived_units || {})
       .filter(x => x.content_type === ct
@@ -65,12 +65,10 @@ class Transcription extends Component {
       .reduce((acc, files) => [...acc, ...files], []);
   }
 
-
   constructor(props) {
     super(props);
     this.state = this.calcCurrentState();
   }
-
 
   componentDidMount() {
     const { selectedFile } = this.state;
@@ -80,36 +78,41 @@ class Transcription extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const { props, state } = this;
-    const toUpdate  = (nextProps.uiLanguage !== props.uiLanguage)
+    const toUpdate         = (nextProps.uiLanguage !== props.uiLanguage)
       || (nextProps.contentLanguage !== props.contentLanguage)
       || (nextProps.unit && !props.unit)
-      || (nextProps.unit.id !== props.unit.id)
-      || (nextProps.unit.files !== props.unit.files
+      || (nextProps.unit.id !== props.unit.id) // eslint-disable-line react/prop-types
+      || (nextProps.unit.files !== props.unit.files // eslint-disable-line react/prop-types
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
-      || nextState.language !== state.language);
+        || nextState.language !== state.language);
 
     return toUpdate;
   }
 
   componentDidUpdate(prevState) {
-    const { selectedFile } = this.state;
+    const { selectedFile } = this.state; // eslint-disable-line react/prop-types
 
     if (selectedFile !== prevState.selectedFile) {
       this.loadFile(selectedFile);
+    }
+
+    const { selected, language } = this.setCurrentItem(this.props);
+    if (selected && language) {
+      this.props.onContentChange(selected.id);
     }
   }
 
   loadFile = (selectedFile) => {
     if (selectedFile && selectedFile.id) {
       const { doc2htmlById, onContentChange } = this.props;
-      const { data } = doc2htmlById[selectedFile.id] || {};
+      const { data }                          = doc2htmlById[selectedFile.id] || {};
 
       if (!data) {
         // load from redux
         onContentChange(selectedFile.id);
       }
     }
-  }
+  };
 
   calcCurrentState = () => {
     const { contentLanguage, uiLanguage, unit, type } = this.props;
@@ -126,7 +129,6 @@ class Transcription extends Component {
     return { selectedFile, languages, language: newLanguage, textFiles };
   };
 
-
   handleLanguageChanged = (e, newLanguage) => {
     const { language, textFiles } = this.state;
 
@@ -141,7 +143,7 @@ class Transcription extends Component {
   };
 
   render() {
-    const { doc2htmlById, t, type }         = this.props;
+    const { doc2htmlById, t, type }             = this.props;
     const { selectedFile, languages, language } = this.state;
 
     if (!selectedFile) {

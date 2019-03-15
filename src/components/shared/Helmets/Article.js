@@ -24,15 +24,15 @@ class Article extends Component {
       <Helmet>
         <meta property="og:type" content="article" />
         {
-          !isEmpty(section) ?
-            <meta property="article:section" content={section} /> :
-            null
+          !isEmpty(section)
+            ? <meta property="article:section" content={section} />
+            : null
         }
 
         {
-          !isEmpty(publishedTime) ?
-            <meta name="article:published_time" content={publishedTime} /> :
-            null
+          !isEmpty(publishedTime)
+            ? <meta name="article:published_time" content={publishedTime} />
+            : null
         }
 
         {tags.map(tag => <meta name="article:tag" key={tag} content={tag} />)}

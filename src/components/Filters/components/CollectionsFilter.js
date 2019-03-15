@@ -27,7 +27,7 @@ class CollectionsFilter extends React.Component {
   componentDidUpdate(prevProps) {
     const { collections } = this.props;
     if (collections !== prevProps.collections) {
-      this.setState({ collections });
+      this.setState({ collections });// eslint-disable-line react/no-did-update-set-state
     }
   }
 

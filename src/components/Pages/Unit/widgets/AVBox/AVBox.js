@@ -47,7 +47,7 @@ class AVBox extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { unit, uiLanguage, location } = nextProps;
-    const { playableItem }               = this.state;
+    const { playableItem }               = this.state; // eslint-disable-line react/prop-types
     const { language: playerLanguage }   = playableItem;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();
@@ -62,10 +62,9 @@ class AVBox extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const { unit, uiLanguage, contentLanguage, location }                                                          = nextProps;
     const { unit: oldUnit, uiLanguage: oldUiLanguage, contentLanguage: oldContentLanguage, location: oldLocation } = this.props;
-    const { playableItem }                                                                                         = this.state;
+    const { playableItem, oldMediaEditMode }                                                                       = this.state; // eslint-disable-line react/prop-types
     const { language: playerLanguage }                                                                             = playableItem;
     const { mediaEditMode }                                                                                        = nextState;
-    const { oldMediaEditMode }                                                                                     = this.state;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();
     const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);

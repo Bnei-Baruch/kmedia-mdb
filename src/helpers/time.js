@@ -49,4 +49,3 @@ export const fromHumanReadableTime = (str) => {
     seconds: s,
   });
 };
-

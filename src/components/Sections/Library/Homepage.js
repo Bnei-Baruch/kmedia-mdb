@@ -26,7 +26,8 @@ const renderKabbalists = ({ roots, getSourceById }) => (
             author={author}
             getSourceById={getSourceById}
             portrait={portraits[k]}
-          />);
+          />
+        );
     }
   )
 );

@@ -66,9 +66,9 @@ const onFailure = (state, action) => ({
 
 const onSuccess = (state, action) => {
   const { namespace, data } = action.payload;
-  const itemNormalizer      = namespace === 'lessons-daily' ?
-    x => [x.id, x.content_type] :
-    x => x.id;
+  const itemNormalizer      = namespace === 'lessons-daily'
+    ? x => [x.id, x.content_type]
+    : x => x.id;
 
   return {
     ...state,
@@ -92,8 +92,7 @@ const onSetLanguage = state => (
   }, {})
 );
 
-const onSSRPrepare = state =>
-  mapValues(state, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
+const onSSRPrepare = state => mapValues(state, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,

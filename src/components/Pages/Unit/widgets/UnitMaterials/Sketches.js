@@ -22,9 +22,9 @@ class Sketches extends React.Component {
     unit: shapes.ContentUnit.isRequired,
     t: PropTypes.func.isRequired,
     zipIndexById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
-    unzip: PropTypes.func.isRequired,
-    uiLanguage: PropTypes.string.isRequired,
-    contentLanguage: PropTypes.string.isRequired,
+    unzip: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+    uiLanguage: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
+    contentLanguage: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
   };
 
   state = {
@@ -114,17 +114,12 @@ class Sketches extends React.Component {
       return zipFiles[0];
     }
 
-    let { language } = this.state;
-
-    if (!language) {
-      // many files - get all existing unique languages
-      const languages = zipFiles
-        .map(file => file.language)
-        .filter((v, i, a) => a.indexOf(v) === i);
-
-      language = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-      this.setState({ languages, language });
-    }
+    // many files - get all existing unique languages
+    const languages = zipFiles
+      .map(file => file.language)
+      .filter((v, i, a) => a.indexOf(v) === i);
+    const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+    this.setState({ languages, language });
 
     // try filter by language
     let files = zipFiles.filter(file => file.language === language);

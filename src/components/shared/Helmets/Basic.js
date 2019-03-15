@@ -10,9 +10,8 @@ class Basic extends Component {
     title: PropTypes.string,
     description: PropTypes.string,
     imageUrl: PropTypes.string,
-    url: PropTypes.string,
+    url: PropTypes.string, // eslint-disable-line react/no-unused-prop-types
     keywords: PropTypes.string,
-
   };
 
   static defaultProps = {

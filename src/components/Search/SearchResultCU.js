@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Container, Header } from 'semantic-ui-react';
+import { Container, Header, Segment } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../helpers/links';
 import Link from '../Language/MultiLanguageLink';
@@ -13,22 +13,35 @@ class SearchResultCU extends SearchResultBase {
     return (
       <div className="search__snippet">
         {
-          description ?
-            <div>
-              <strong>{this.props.t('search.result.description')}: </strong>
-              {description}
-            </div> :
-            null
+          description
+            ? (
+              <div>
+                <strong>
+                  {this.props.t('search.result.description')}
+                  :
+                  {' '}
+                </strong>
+                {description}
+              </div>
+            )
+            : null
         }
         {
-          content ?
-            <div>
-              <strong>{this.props.t('search.result.transcript')}: </strong>
-              {content}
-            </div> :
-            null
+          content
+            ? (
+              <div>
+                <strong>
+                  {this.props.t('search.result.transcript')}
+                  :
+                  {' '}
+                </strong>
+                {content}
+              </div>
+            )
+            : null
         }
-      </div>);
+      </div>
+    );
   };
 
   render() {
@@ -65,7 +78,10 @@ class SearchResultCU extends SearchResultBase {
         </Header>
 
         <Container>
-          {this.iconByContentType(cu.content_type, true)} | <strong>{filmDate}</strong>
+          {this.iconByContentType(cu.content_type, true)}
+          {' '}
+          |
+          <strong>{filmDate}</strong>
           <div className="clear" />
         </Container>
 

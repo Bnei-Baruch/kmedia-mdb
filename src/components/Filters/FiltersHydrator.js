@@ -10,7 +10,7 @@ class FiltersHydrator extends Component {
     hydrateFilters: PropTypes.func.isRequired,
     filtersHydrated: PropTypes.func.isRequired,
     namespace: PropTypes.string.isRequired,
-    onHydrated: PropTypes.func,
+    onHydrated: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
     isHydrated: PropTypes.bool
   };
 

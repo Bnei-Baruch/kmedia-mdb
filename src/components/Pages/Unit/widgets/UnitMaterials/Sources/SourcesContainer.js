@@ -19,7 +19,7 @@ class SourcesContainer extends Component {
     doc2htmlById: PropTypes.objectOf(shapes.DataWipErr),
     language: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
-    fetchIndex: PropTypes.func.isRequired,
+    fetchIndex: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
     fetchAsset: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,
     doc2html: PropTypes.func.isRequired,
@@ -40,7 +40,7 @@ class SourcesContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.unit.sources !== this.props.unit.sources) {
+    if (nextProps.unit.sources !== this.props.unit.sources) { // eslint-disable-line react/prop-types
       this.fetchIndices(nextProps);
     }
   }

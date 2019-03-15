@@ -62,7 +62,10 @@ class SameCollection extends Component {
                 <Item.Content verticalAlign="top">
                   <Header as="h5">
                     <small className="text grey uppercase recommended-same-collection__item-title">
-                      {t(`${section || 'pages'}.unit.recommended.same-collection.item-title`, { name: collection.ccuNames[part.id] })} - {t('values.date', { date: part.film_date })}
+                      {t(`${section || 'pages'}.unit.recommended.same-collection.item-title`, { name: collection.ccuNames[part.id] })}
+                      {' '}
+                      -
+                      {t('values.date', { date: part.film_date })}
                     </small>
                     <br />
                     <span className="recommended-same-collection__item-name">
@@ -84,7 +87,9 @@ class SameCollection extends Component {
                 to={canonicalLink(collection)}
                 textAlign="right"
               >
-                {t('buttons.more')} &raquo;
+                {t('buttons.more')}
+                {' '}
+                &raquo;
               </Container>
             </Item.Content>
           </Item>

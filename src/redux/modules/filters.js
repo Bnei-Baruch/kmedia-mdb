@@ -74,9 +74,9 @@ const setFilterState = (state, namespace, name, newFilterStateReducer) => {
 const $$setFilterValue = (state, action) => {
   const { namespace, name, value } = action.payload;
   return setFilterState(state, namespace, name, () => {
-    const arrayObjectOrString = Array.isArray(value) ||
-      typeof value === 'object' ||
-      typeof value === 'string';
+    const arrayObjectOrString = Array.isArray(value)
+      || typeof value === 'object'
+      || typeof value === 'string';
     return {
       values: arrayObjectOrString && isEmpty(value) ? [] : [value],
     };
@@ -169,8 +169,7 @@ const getFilters = (state, namespace) => {
   }));
 };
 
-const getIsHydrated = (state, namespace) =>
-  !!state.isHydrated && !!state.isHydrated[namespace];
+const getIsHydrated = (state, namespace) => !!state.isHydrated && !!state.isHydrated[namespace];
 
 export const selectors = {
   getNSFilters,

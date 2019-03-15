@@ -7,7 +7,7 @@ class AVDuration extends Component {
   static propTypes = {
     name: PropTypes.string,
     value: PropTypes.number,
-    media: PropTypes.object.isRequired,
+    media: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   };
 
   static defaultProps = {

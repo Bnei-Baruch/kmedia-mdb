@@ -34,7 +34,8 @@ export const renderUnit = (unit, t) => {
             ? (
               <div className="index__description mobile-hidden">
                 {ellipsize(unit.description)}
-              </div>)
+              </div>
+            )
             : null
         }
       </Table.Cell>

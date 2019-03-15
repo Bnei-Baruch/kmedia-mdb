@@ -4,20 +4,24 @@ import { Header, Image } from 'semantic-ui-react';
 import Link from '../../Language/MultiLanguageLink';
 
 class Topic extends Component {
-
   static propTypes = {
     title: PropTypes.string.isRequired,
     img: PropTypes.string.isRequired,
     href: PropTypes.string
   };
 
+  static defaultProps = {
+    href: '',
+  };
+
   render() {
     const { title, img, href } = this.props;
 
     return (
-      <Header size="tiny" as={Link} to={href} >
+      <Header size="tiny" as={Link} to={href}>
         <Image src={img} />
-        <br />{title}
+        <br />
+        {title}
       </Header>
     );
   }

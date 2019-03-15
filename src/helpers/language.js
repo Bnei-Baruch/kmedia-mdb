@@ -1,4 +1,4 @@
-import { LANG_ENGLISH, DEFAULT_LANGUAGE } from './consts';
+import { DEFAULT_LANGUAGE, LANG_ENGLISH } from './consts';
 
 /**
  * Select language to use
@@ -27,6 +27,7 @@ export const selectSuitableLanguage = (contentLanguage, uiLanguage, languages = 
     // Or English
     return LANG_ENGLISH;
   }
+
   // Or first available language
   // eslint-disable-next-line prefer-destructuring
   return languages[0];

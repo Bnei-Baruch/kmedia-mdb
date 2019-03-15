@@ -17,7 +17,9 @@ const Footer = (props) => {
                 {t('nav.top.header')}
                 <br />
                 <small className="text grey">
-                  {t('nav.footer.copyright', { year })} {t('nav.footer.rights')}
+                  {t('nav.footer.copyright', { year })}
+                  {' '}
+                  {t('nav.footer.rights')}
                 </small>
               </Header>
             </Grid.Column>

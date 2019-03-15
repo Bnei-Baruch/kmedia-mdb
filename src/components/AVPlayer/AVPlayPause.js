@@ -29,10 +29,10 @@ class AVPlayPause extends Component {
 
   shouldComponentUpdate(prevProps) {
     const { media, hasNext, hasPrev, showNextPrev } = prevProps;
-    return this.props.media.isPlaying !== media.isPlaying ||
-      this.props.hasNext !== hasNext ||
-      this.props.hasPrev !== hasPrev ||
-      this.props.showNextPrev !== showNextPrev;
+    return this.props.media.isPlaying !== media.isPlaying // eslint-disable-line react/prop-types
+      || this.props.hasNext !== hasNext
+      || this.props.hasPrev !== hasPrev
+      || this.props.showNextPrev !== showNextPrev;
   }
 
   handlePlayPause = () => {
@@ -69,9 +69,9 @@ class AVPlayPause extends Component {
           ) : null
         }
         {
-          withoutPlay ?
-            null :
-            (
+          withoutPlay
+            ? null
+            : (
               <button
                 ref={this.handleMainBtnRef}
                 type="button"

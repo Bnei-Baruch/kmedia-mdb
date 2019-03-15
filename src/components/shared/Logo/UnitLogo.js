@@ -11,7 +11,7 @@ class UnitLogo extends PureComponent {
     collectionId: PropTypes.string,
     width: PropTypes.number,
     className: PropTypes.string,
-    fallbackImg: PropTypes.any,
+    fallbackImg: PropTypes.any,  // eslint-disable-line react/forbid-prop-types
   };
 
   static defaultProps = {

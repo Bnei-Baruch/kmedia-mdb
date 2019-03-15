@@ -41,7 +41,8 @@ class Promoted extends Component {
                     </Header.Subheader>
                     {header}
                   </Header.Content>
-                </Header>)
+                </Header>
+              )
               : null
           }
         </Link>

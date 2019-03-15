@@ -10,14 +10,13 @@ import * as shapes from '../../../../../shapes';
 import Page from './Page';
 
 export class BlogPostContainer extends Component {
-
   static propTypes = {
-    match: shapes.RouterMatch.isRequired,
+    match: shapes.RouterMatch.isRequired, // eslint-disable-line
     post: shapes.BlogPost,
     wip: shapes.WIP,
     err: shapes.Error,
     language: PropTypes.string.isRequired,
-    fetchPost: PropTypes.func.isRequired,
+    fetchPost: PropTypes.func.isRequired, // eslint-disable-line
   };
 
   static defaultProps = {
@@ -45,9 +44,9 @@ export class BlogPostContainer extends Component {
 
     const { blog, id } = match.params;
     if (
-      post &&
-      post.blog === blog &&
-      `${post.wp_id}` === id) {
+      post
+      && post.blog === blog
+      && `${post.wp_id}` === id) {
       return;
     }
 
@@ -77,9 +76,8 @@ const mapState = (state, ownProps) => {
   };
 };
 
-const mapDispatch = dispatch =>
-  bindActionCreators({
-    fetchPost: actions.fetchBlogPost,
-  }, dispatch);
+const mapDispatch = dispatch => bindActionCreators({
+  fetchPost: actions.fetchBlogPost,
+}, dispatch);
 
 export default withRouter(connect(mapState, mapDispatch)(BlogPostContainer));

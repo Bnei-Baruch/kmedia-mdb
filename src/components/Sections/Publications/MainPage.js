@@ -30,12 +30,12 @@ class MainPage extends PureComponent {
   };
 
   componentWillReceiveProps(nextProps) {
-    const tab     = this.props.match.params.tab || tabs[0];
-    const nextTab = nextProps.match.params.tab || tabs[0];
+    const tab     = this.props.match.params.tab || tabs[0]; // eslint-disable-line react/prop-types
+    const nextTab = nextProps.match.params.tab || tabs[0];  // eslint-disable-line react/prop-types
 
     // clear filters if location search parameter is changed by Menu click
-    if (nextProps.location.search !== this.props.location.search &&
-      !nextProps.location.search) {
+    if (nextProps.location.search !== this.props.location.search// eslint-disable-line react/prop-types
+      && !nextProps.location.search) { // eslint-disable-line react/prop-types
       nextProps.resetNamespace(`publications-${tab}`);
     }
 

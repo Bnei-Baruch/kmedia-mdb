@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Trans, withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
-import { Container, Divider, Grid, Message, Image, Button } from 'semantic-ui-react';
+import { Button, Container, Divider, Grid, Image, Message } from 'semantic-ui-react';
 import InfoIcon from '../../images/icons/info.svg';
 
 import { SEARCH_INTENT_HIT_TYPES, } from '../../helpers/consts';
@@ -25,10 +25,16 @@ import SearchResultPost from './SearchResultPost';
 
 class SearchResults extends Component {
   static propTypes = {
-    results: PropTypes.object,
     getSourcePath: PropTypes.func,
     areSourcesLoaded: PropTypes.bool.isRequired,
-    queryResult: PropTypes.object,
+    queryResult: PropTypes.shape({
+      intents: PropTypes.arrayOf(PropTypes.shape({
+        language: PropTypes.string,
+        type: PropTypes.string,
+        value: PropTypes.shape({}),
+      })),
+      search_result: PropTypes.shape({})
+    }),
     cMap: PropTypes.objectOf(shapes.Collection),
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
     pageNo: PropTypes.number.isRequired,
@@ -38,9 +44,25 @@ class SearchResults extends Component {
     err: shapes.Error,
     t: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
-    filters: PropTypes.array.isRequired,
+    filters: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+      values: PropTypes.arrayOf(PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf(PropTypes.string)
+      ]))
+    })).isRequired,
     location: shapes.HistoryLocation.isRequired,
     click: PropTypes.func.isRequired,
+    postMap: PropTypes.objectOf(PropTypes.shape({
+      blog: PropTypes.string,
+      content: PropTypes.string,
+      created_at: PropTypes.string,
+      title: PropTypes.string,
+      url: PropTypes.string,
+      wp_id: PropTypes.number,
+    })).isRequired,
+    hitType: PropTypes.shape({}),
+    contentLanguage: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -50,6 +72,7 @@ class SearchResults extends Component {
     wip: false,
     err: null,
     getSourcePath: undefined,
+    hitType: undefined,
   };
 
   state = {
@@ -72,16 +95,16 @@ class SearchResults extends Component {
     }
 
     let result = null;
-    const cu = cuMap[mdbUid];
-    const c  = cMap[mdbUid];
-    const p  = postMap[mdbUid];
+    const cu   = cuMap[mdbUid];
+    const c    = cMap[mdbUid];
+    const p    = postMap[mdbUid];
 
     if (cu) {
       result = <SearchResultCU {...props} cu={cu} />;
     } else if (c) {
       result = <SearchResultCollection c={c} {...props} />;
     } else if (p) {
-      return <SearchResultPost  {...props} post={p} />;
+      return <SearchResultPost {...props} post={p} />;
     } else if (resultType === 'sources') {
       result = <SearchResultSource {...props} />;
     }
@@ -98,15 +121,21 @@ class SearchResults extends Component {
     const language               = t(`constants.languages.${contentLanguage}`);
     return (
       this.state.showNote
-        ? <Message info className="search-result-note">
-          <Image src={InfoIcon} floated='left' />
-          <Button floated='right' icon="close" size="tiny" circular onClick={this.hideNote} />
-          <Container>
-            <strong>{t('search.topNote.tip')}: </strong>
-            {t('search.topNote.first', { language })}
-          </Container>
-          <Container>{t('search.topNote.second')}</Container>
-        </Message>
+        ? (
+          <Message info className="search-result-note">
+            <Image src={InfoIcon} floated="left" />
+            <Button floated="right" icon="close" size="tiny" circular onClick={this.hideNote} />
+            <Container>
+              <strong>
+                {t('search.topNote.tip')}
+                :
+                {' '}
+              </strong>
+              {t('search.topNote.first', { language })}
+            </Container>
+            <Container>{t('search.topNote.second')}</Container>
+          </Message>
+        )
         : null
     );
   };

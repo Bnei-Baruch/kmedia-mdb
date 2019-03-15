@@ -40,7 +40,10 @@ class LanguageFilter extends Component {
     this.props.onApply(this.state.sValue);
   };
 
-  toggleCustom = () => this.setState({ showCustom: !this.state.showCustom });
+  toggleCustom = () => {
+    const { showCustom } = this.state;
+    this.setState({ showCustom: !showCustom });
+  };
 
   render() {
     const { t }      = this.props;
@@ -71,15 +74,17 @@ class LanguageFilter extends Component {
           <Accordion as={Menu} vertical fluid size="small">
             {
               ALL_LANGUAGES.map(x => (
-                <Menu.Item
-                  key={x}
-                  name={x}
-                  active={sValue === x}
-                  onClick={this.onLanguageChange}
-                >
-                  <Flag name={LANGUAGES[x].flag} />
-                  {t(`constants.languages.${x}`)}
-                </Menu.Item>
+                (
+                  <Menu.Item
+                    key={x}
+                    name={x}
+                    active={sValue === x}
+                    onClick={this.onLanguageChange}
+                  >
+                    <Flag name={LANGUAGES[x].flag} />
+                    {t(`constants.languages.${x}`)}
+                  </Menu.Item>
+                )
               ))
             }
           </Accordion>

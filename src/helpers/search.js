@@ -5,15 +5,21 @@ export class SuggestionsHelper {
     this.suggestions = [];
 
     if (results && results.suggest && 'title_suggest' in results.suggest) {
-      const query      = results.suggest['title_suggest'][0].text;
-      this.suggestions = results.suggest['title_suggest'][0].options.map((option) => {
-        const { text, _source: { title, result_type } } = option;
-        const textParts                                 = text.split(' ');
-        const splitChar                                 = result_type === ES_RESULT_TYPE_SOURCES ?
-          '>' :
-          (result_type === ES_RESULT_TYPE_TAGS ? '-' : null);
-        const titleParts                                = !!splitChar ? title.split(splitChar) : [title];
-        const reversedTitleParts                        = titleParts.map(p => p.trim().split(' ').length).reverse();
+      const query      = results.suggest.title_suggest[0].text;
+      this.suggestions = results.suggest.title_suggest[0].options.map((option) => {
+        const { text, _source: { title, result_type: resultType } } = option;
+        const textParts                                             = text.split(' ');
+        let splitChar                                               = null;
+        if (resultType === ES_RESULT_TYPE_SOURCES) {
+          splitChar = '>';
+        } else if (resultType === ES_RESULT_TYPE_TAGS) {
+          splitChar = '-';
+        }
+        // These !! are redundant, see https://eslint.org/docs/rules/no-extra-boolean-cast,
+        // but we don't have tests, so...
+        /* eslint no-extra-boolean-cast: "off" */
+        const titleParts         = !!splitChar ? title.split(splitChar) : [title];
+        const reversedTitleParts = titleParts.map(p => p.trim().split(' ').length).reverse();
 
         let suggestWords = 0;
         let reverseIdx   = 0;
@@ -44,7 +50,8 @@ export class SuggestionsHelper {
         }
         if (a.suggest.startsWith(query) && !b.suggest.startsWith(query)) {
           return -1;
-        } else if (!a.suggest.startsWith(query) && b.suggest.startsWith(query)) {
+        }
+        if (!a.suggest.startsWith(query) && b.suggest.startsWith(query)) {
           return 1;
         }
         return a.suggest.localeCompare(b.suggest);
@@ -64,11 +71,11 @@ const uidBytes = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 const GenerateUID = (n) => {
   const ret = new Array(n);
-  while (n--) {
-    ret[n] = uidBytes.charAt(Math.floor(Math.random() * uidBytes.length));
+  let times = n;
+  while (times--) {
+    ret[times] = uidBytes.charAt(Math.floor(Math.random() * uidBytes.length));
   }
   return ret.join('');
 };
 
 export const GenerateSearchId = () => GenerateUID(16);
-

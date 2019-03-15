@@ -1,5 +1,5 @@
 /* eslint-disable lines-between-class-members */
-import { MT_AUDIO, MT_TEXT, MT_VIDEO, MT_IMAGE } from './consts';
+import { MT_AUDIO, MT_TEXT, MT_VIDEO } from './consts';
 
 function makeMediaTypePredicate(...args) {
   return function predicate(file) {
@@ -20,20 +20,27 @@ function and(...args) {
 }
 
 export default class MediaHelper {
-  static IsVideo      = makeMediaTypePredicate(MT_VIDEO);
-  static IsAudio      = makeMediaTypePredicate(MT_AUDIO);
+  static IsVideo = makeMediaTypePredicate(MT_VIDEO);
+
+  static IsAudio = makeMediaTypePredicate(MT_AUDIO);
+
+  static IsText = makeMediaTypePredicate(MT_TEXT);
+
+  static IsImage = makeMediaTypePredicate(MT_TEXT);
+
   static IsAudioVideo = makeMediaTypePredicate(MT_AUDIO, MT_VIDEO);
 
-  static IsText       = makeMediaTypePredicate(MT_TEXT);
-  static IsImage      = makeMediaTypePredicate(MT_IMAGE);
+  static IsMp4 = and(MediaHelper.IsVideo, makeMimeTypePredicate('video/mp4'));
 
-  static IsMp4      = and(MediaHelper.IsVideo, makeMimeTypePredicate('video/mp4'));
-  static IsWmv      = and(MediaHelper.IsVideo, makeMimeTypePredicate('video/x-ms-wmv'));
-  static IsFlv      = and(MediaHelper.IsVideo, makeMimeTypePredicate('video/x-flv'));
+  static IsWmv = and(MediaHelper.IsVideo, makeMimeTypePredicate('video/x-ms-wmv'));
 
-  static IsMp3      = and(MediaHelper.IsAudio, makeMimeTypePredicate('audio/mp3', 'audio/mpeg'));
+  static IsFlv = and(MediaHelper.IsVideo, makeMimeTypePredicate('video/x-flv'));
 
-  static IsHtml     = and(MediaHelper.IsText, makeMimeTypePredicate('text/html'));
-  static IsWord     = and(MediaHelper.IsText, makeMimeTypePredicate('application/msword'));
-  static IsPDF      = and(MediaHelper.IsText, makeMimeTypePredicate('application/pdf'));
+  static IsMp3 = and(MediaHelper.IsAudio, makeMimeTypePredicate('audio/mp3', 'audio/mpeg'));
+
+  static IsHtml = and(MediaHelper.IsText, makeMimeTypePredicate('text/html'));
+
+  static IsWord = and(MediaHelper.IsText, makeMimeTypePredicate('application/msword'));
+
+  static IsPDF = and(MediaHelper.IsText, makeMimeTypePredicate('application/pdf'));
 }

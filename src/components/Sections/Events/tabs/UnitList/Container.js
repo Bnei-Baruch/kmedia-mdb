@@ -15,13 +15,12 @@ const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
   const events    = breakdown.getEvents();
 
-  const relatedItems = events.map(x =>
-    (
-      <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-        {x.name || NO_NAME}
-      </List.Item>
-    )
+  const map          = x => (
+    <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
+      {x.name || NO_NAME}
+    </List.Item>
   );
+  const relatedItems = events.map(map);
 
   let filmDate = '';
   if (unit.film_date) {
@@ -43,21 +42,25 @@ const renderUnit = (unit, t) => {
           {unit.name || NO_NAME}
         </Link>
         {
-          unit.description ?
-            <div className="index__description mobile-hidden">
-              {ellipsize(unit.description)}
-            </div>
+          unit.description
+            ? (
+              <div className="index__description mobile-hidden">
+                {ellipsize(unit.description)}
+              </div>
+            )
             : null
         }
         {
-          relatedItems.length > 0 ?
-            <List horizontal divided link className="index-list__item-subtitle" size="tiny">
-              <List.Item>
-                <List.Header>{t('events.list.item_from')}</List.Header>
-              </List.Item>
-              {relatedItems}
-            </List> :
-            null
+          relatedItems.length > 0
+            ? (
+              <List horizontal divided link className="index-list__item-subtitle" size="tiny">
+                <List.Item>
+                  <List.Header>{t('events.list.item_from')}</List.Header>
+                </List.Item>
+                {relatedItems}
+              </List>
+            )
+            : null
         }
       </Table.Cell>
     </Table.Row>

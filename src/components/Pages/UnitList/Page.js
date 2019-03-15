@@ -125,7 +125,8 @@ class UnitListPage extends PureComponent {
                   <Table.Body>
                     {items.map(x => renderUnit(x, t, namespace))}
                   </Table.Body>
-                </Table>)
+                </Table>
+              )
               : null
           }
         </Container>
@@ -155,7 +156,8 @@ class UnitListPage extends PureComponent {
                 filters={nsFilters}
                 onChange={onFiltersChanged}
                 onHydrated={onFiltersHydrated}
-              />)
+              />
+            )
             : null
         }
         {content}

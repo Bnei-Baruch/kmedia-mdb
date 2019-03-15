@@ -7,10 +7,8 @@ import * as definitions from './definitions';
 
 const compactMap = (values, transform) => compact(values.map(transform));
 
-const filterValuesToQueryValues = (definition, values = []) =>
-  compactMap(castArray(values), arg => definition.valueToQuery(arg));
-const queryValuesToFilterValues = (definition, values = []) =>
-  compactMap(castArray(values), arg => definition.queryToValue(arg));
+const filterValuesToQueryValues = (definition, values = []) => compactMap(castArray(values), arg => definition.valueToQuery(arg));
+const queryValuesToFilterValues = (definition, values = []) => compactMap(castArray(values), arg => definition.queryToValue(arg));
 
 function filterValuesToApiParams(definition, values = []) {
   const transformedValues = castArray(values).map(definition.valueToApiParam);
@@ -31,13 +29,11 @@ const filtersTransformer = {
   definitionsByName: keyBy(definitions, 'name'),
   queryKeyToName: reduce(definitions, (acc, definition) => Object.assign(acc, { [definition.queryKey]: definition.name }), {}),
   toQueryParams(filters /* arrayOf({ name: string, values: array }) */) {
-    const queryParams = filters.reduce((acc, filter) => {
-      const definition = this.definitionsByName[filter.name];
+    return filters.reduce((acc, filter) => {
+      const definition  = this.definitionsByName[filter.name];
       const paramValues = filterValuesToQueryValues(definition, filter.values);
       return Object.assign(acc, { [definition.queryKey]: paramValues });
     }, {});
-
-    return queryParams;
   },
   fromQueryParams(queryParams) {
     return Object.keys(queryParams).reduce((acc, key) => {
@@ -59,7 +55,7 @@ const filtersTransformer = {
   toApiParams(filters /* arrayOf({ name: string, values: array}) */) {
     return filters.reduce((acc, filter) => {
       const definition = this.definitionsByName[filter.name];
-      const apiParams = filterValuesToApiParams(definition, filter.values);
+      const apiParams  = filterValuesToApiParams(definition, filter.values);
 
       if (!isEmpty(apiParams)) {
         return Object.assign(acc, apiParams);

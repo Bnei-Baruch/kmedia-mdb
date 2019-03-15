@@ -124,12 +124,14 @@ class TOC extends Component {
     stickyOffset: 144, // 60 + 70 + 14 (top navbar + library secondary header + 1em)
   };
 
-  state = {};
+  state = {
+    activeId: null,
+  };
 
   componentWillReceiveProps(nextProps) {
     const { fullPath }                = nextProps;
-    const { activeId: stateActiveID } = this.state;
-    const activeId                    = fullPath[fullPath.length - 1].id;
+    const { activeId: stateActiveID } = this.state; // eslint-disable-line react/prop-types
+    const activeId                    = fullPath[fullPath.length - 1].id; // eslint-disable-line react/prop-types
     if (activeId !== stateActiveID) {
       this.setState({ activeId });
     }
@@ -150,9 +152,9 @@ class TOC extends Component {
     const el = document.querySelector('.source__toc > div:nth-child(2)');
     if (el) {
       const { stickyOffset } = this.props;
-      el.style.height        = `calc(100vh - ${stickyOffset}px)`;
+      el.style.height        = `calc(100vh - ${stickyOffset}px)`; // eslint-disable-line react/prop-types
     }
-    const { activeId } = this.state;
+    const { activeId } = this.state; // eslint-disable-line react/prop-types
     scrollToActive(activeId);
   }
 

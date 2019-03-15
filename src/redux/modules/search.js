@@ -40,12 +40,10 @@ export const types = {
 const autocomplete        = createAction(AUTOCOMPLETE);
 const autocompleteSuccess = createAction(AUTOCOMPLETE_SUCCESS);
 const autocompleteFailure = createAction(AUTOCOMPLETE_FAILURE);
-const search              = createAction(SEARCH, (q, pageNo, pageSize, suggest='', deb=false) =>
-                                                 ({q, pageNo, pageSize, suggest, deb}));
+const search              = createAction(SEARCH, (q, pageNo, pageSize, suggest = '', deb = false) => ({ q, pageNo, pageSize, suggest, deb }));
 const searchSuccess       = createAction(SEARCH_SUCCESS);
 const searchFailure       = createAction(SEARCH_FAILURE);
-const click               = createAction(CLICK, (mdbUid, index, type, rank, searchId, deb=false) =>
-                                                ({mdbUid, index, type, rank, searchId, deb}));
+const click               = createAction(CLICK, (mdbUid, index, type, rank, searchId, deb = false) => ({ mdbUid, index, type, rank, searchId, deb }));
 const setPage             = createAction(SET_PAGE);
 const setSortBy           = createAction(SET_SORT_BY);
 const updateQuery         = createAction(UPDATE_QUERY);
@@ -100,7 +98,7 @@ export const reducer = handleActions({
     ...state,
     suggestions: action.payload,
   }),
-  [AUTOCOMPLETE_FAILURE]: (state, action) => ({
+  [AUTOCOMPLETE_FAILURE]: state => ({
     ...state,
     suggestions: null,
   }),
@@ -165,4 +163,3 @@ export const selectors = {
   getWip,
   getError,
 };
-
