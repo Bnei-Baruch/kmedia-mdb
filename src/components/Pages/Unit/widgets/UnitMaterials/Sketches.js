@@ -52,10 +52,10 @@ class Sketches extends React.Component {
     const { unit, zipIndexById, contentLanguage, uiLanguage } = this.props;
 
     return prevProps.contentLanguage !== contentLanguage
-           || prevProps.uiLanguage !== uiLanguage
-           || !isEqual(prevProps.zipIndexById, zipIndexById)
-           || !isEqual(prevProps.unit, unit);
-  }
+      || prevProps.uiLanguage !== uiLanguage
+      || !isEqual(prevProps.zipIndexById, zipIndexById)
+      || !isEqual(prevProps.unit, unit);
+  };
 
   isStateChanged = (prevState) => {
     // eslint-disable-next-line react/prop-types
@@ -64,7 +64,7 @@ class Sketches extends React.Component {
     return prevState.zipFileId !== zipFileId
       || prevState.language !== language
       || prevState.imageFiles !== imageFiles;
-  }
+  };
 
   // load data into state
   setCurrentItem = () => {
@@ -89,12 +89,12 @@ class Sketches extends React.Component {
 
   unzipFiles = (file) => {
     const { zipIndexById, unzip } = this.props;
-    const { data, wip, err } = zipIndexById[file.id] || {};
+    const { data, wip, err }      = zipIndexById[file.id] || {};
 
     if (!(wip || err) && isEmpty(data) && !Object.prototype.hasOwnProperty.call(zipIndexById, file.id)) {
       unzip(file.id);
     }
-  }
+  };
 
   findZipOrImageFile = () => {
     const { unit, contentLanguage, uiLanguage } = this.props;
