@@ -1,7 +1,11 @@
 /* eslint-disable consistent-return,no-console */
 
 export function logErrors(err, req, res, next) {
-  console.error(err.stack);
+  try {
+    throw new Error(err);
+  } catch (e) {
+    console.error(e.stack || e);
+  }
   console.info(`error handling ${req.originalUrl}`);
   next(err);
 }

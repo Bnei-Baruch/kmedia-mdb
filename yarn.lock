@@ -3862,10 +3862,10 @@ connected-domain@^1.0.0:
   resolved "https://registry.yarnpkg.com/connected-domain/-/connected-domain-1.0.0.tgz#bfe77238c74be453a79f0cb6058deeb4f2358e93"
   integrity sha1-v+dyOMdL5FOnnwy2BY3utPI1jpM=
 
-connected-react-router@^6.0.0:
-  version "6.3.2"
-  resolved "https://registry.yarnpkg.com/connected-react-router/-/connected-react-router-6.3.2.tgz#8c90b77f1d7b783608cd50e4f69bf60e47265425"
-  integrity sha512-YxrAfMExl/OBsi+ojA4ywZeC7cmQ52MnZ4bhzqLhhjuOiXcQogC4kW0kodouXAXrXDovb2l3yEhDfpH99/wYcw==
+connected-react-router@6.3.1:
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/connected-react-router/-/connected-react-router-6.3.1.tgz#b68e505cca553ce9b6a179d4166cf43b948c85bf"
+  integrity sha512-nhuQiLOAQlCgkCypGSUhycgaqqTh2IUwVFvzw2y13v8JqB92yTk3yeAKG6X1b0IcD7S4gQizYbjgejf7DJjbyw==
   dependencies:
     immutable "^3.8.1"
     seamless-immutable "^7.1.3"
