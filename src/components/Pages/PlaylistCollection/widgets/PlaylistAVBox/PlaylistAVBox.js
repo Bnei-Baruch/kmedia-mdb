@@ -78,7 +78,10 @@ class PlaylistAVBox extends Component {
     //   2. Active part hasn't change in query but playlist has changed
     //      and it's no longer the same unit
 
-    const nSelected = playerHelper.getActivePartFromQuery(location);
+    let nSelected = playerHelper.getActivePartFromQuery(location);
+    if (nSelected >= nPlaylist.items.length) {
+      nSelected = 0;
+    }
     if (nSelected !== selected) {
       // case # 1
       playerHelper.setActivePartInQuery(nextProps.history, nSelected);
