@@ -58,10 +58,7 @@ function calcAvailableLanguages(unit) {
   }
 
   return Array.from(unit.files.reduce((acc, val) => {
-    if (isPlayable(val)) {
-      acc.add(val.language);
-    }
-    return acc;
+    return acc.add(val.language);
   }, new Set()));
 }
 
@@ -236,7 +233,7 @@ function setActivePartInQuery(history, ap) {
 }
 
 function getEmbedFromQuery(location) {
-  const query    = getQuery(location);
+  const query = getQuery(location);
   const embed = query.embed === '1';
   return embed;
 }
