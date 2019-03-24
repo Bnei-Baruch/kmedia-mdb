@@ -77,7 +77,7 @@ class Sketches extends React.Component {
         });
       }
     } else if (this.isStateChanged(prevState)) {
-      const { zipFiles, language } = this.state;
+      const { zipFiles, language } = this.state; // eslint-disable-line react/prop-types
 
       if (prevState.language !== language) {
         if (zipFiles && Array.isArray(zipFiles)) {
