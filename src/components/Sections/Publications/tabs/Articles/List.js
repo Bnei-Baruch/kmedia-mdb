@@ -12,13 +12,11 @@ const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
   const articles  = breakdown.getArticles();
 
-  const relatedItems = articles.map(x =>
-    (
-      <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-        {x.name || NO_NAME}
-      </List.Item>
-    )
-  );
+  const relatedItems = articles.map(x => (
+    <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
+      {x.name || NO_NAME}
+    </List.Item>
+  ));
 
   let filmDate = '';
   if (unit.film_date) {
@@ -35,10 +33,12 @@ const renderUnit = (unit, t) => {
           {unit.name || NO_NAME}
         </Link>
         {
-          unit.description ?
-            <div className="index__description mobile-hidden">
-              {ellipsize(unit.description)}
-            </div>
+          unit.description
+            ? (
+              <div className="index__description mobile-hidden">
+                {ellipsize(unit.description)}
+              </div>
+            )
             : null
         }
         <List horizontal divided link className="index__collections" size="tiny">

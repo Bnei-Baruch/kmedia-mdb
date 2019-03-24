@@ -34,7 +34,8 @@ class SimpleModeList extends PureComponent {
                 <List size="large">
                   {items.lessons.map(x => renderUnit(x, language, t))}
                 </List>
-              </div>)
+              </div>
+            )
             : null
         }
 
@@ -43,7 +44,8 @@ class SimpleModeList extends PureComponent {
             ? (
               <List size="large">
                 {renderUnit(items.others, language, t)}
-              </List>)
+              </List>
+            )
             : null
         }
       </div>

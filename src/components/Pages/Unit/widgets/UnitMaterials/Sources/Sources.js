@@ -21,8 +21,8 @@ class Sources extends Component {
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
-    onContentChange: PropTypes.func.isRequired,
-    getSourceById: PropTypes.func.isRequired,
+    onContentChange: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+    getSourceById: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
   };
 
   state = {
@@ -39,12 +39,12 @@ class Sources extends Component {
 
   componentWillReceiveProps(nextProps) {
     // unit has changed - replace all state
-    if (nextProps.unit.id !== this.props.unit.id) {
+    if (nextProps.unit.id !== this.props.unit.id) { // eslint-disable-line react/prop-types
       this.myReplaceState(nextProps);
       return;
     }
 
-    const { selected } = this.state;
+    const { selected } = this.state; // eslint-disable-line react/prop-types
 
     // if no previous selection - replace all state
     if (!selected) {
@@ -52,7 +52,7 @@ class Sources extends Component {
       return;
     }
 
-    if (!this.state.isMakor) {
+    if (!this.state.isMakor) { // eslint-disable-line react/prop-types
       const idx  = this.props.indexMap[selected];
       const nIdx = nextProps.indexMap[selected];
 
@@ -73,11 +73,13 @@ class Sources extends Component {
     }
   }
 
-  getKiteiMakorUnits = unit =>
+  getKiteiMakorUnits = unit => (
     Object.values(unit.derived_units || {})
-      .filter(x =>
-        x.content_type === CT_KITEI_MAKOR &&
-        (x.files || []).some(f => f.type === MT_TEXT));
+      .filter(x => (
+        x.content_type === CT_KITEI_MAKOR
+        && (x.files || []).some(f => f.type === MT_TEXT))
+      )
+  );
 
   getSourceOptions = (props) => {
     const { unit, indexMap, getSourceById, t } = props;
@@ -154,12 +156,12 @@ class Sources extends Component {
       return;
     }
     const { indexMap, contentLanguage, unit } = this.props;
-    const { language: uiLanguage }            = this.state;
-    const isMakor                             = this.checkIsMakor(this.state.options, selected);
+    const { language: uiLanguage, options }   = this.state;
+    const isMakor                             = this.checkIsMakor(options, selected);
 
-    const { languages, language } = isMakor ?
-      this.getMakorLanguages(this.getKiteiMakorFiles(unit), uiLanguage, contentLanguage) :
-      this.getSourceLanguages(indexMap[selected], uiLanguage, contentLanguage);
+    const { languages, language } = isMakor
+      ? this.getMakorLanguages(this.getKiteiMakorFiles(unit), uiLanguage, contentLanguage)
+      : this.getSourceLanguages(indexMap[selected], uiLanguage, contentLanguage);
 
     this.setState({ selected, languages, language, isMakor });
     this.changeContent({ selected, language, isMakor });
@@ -174,9 +176,9 @@ class Sources extends Component {
     const { contentLanguage }      = nextProps;
     const { language: uiLanguage } = this.state;
 
-    const { languages, language } = isMakor ?
-      this.getMakorLanguages(ktFiles, uiLanguage, contentLanguage) :
-      this.getSourceLanguages(nextProps.indexMap[selected], uiLanguage, contentLanguage);
+    const { languages, language } = isMakor
+      ? this.getMakorLanguages(ktFiles, uiLanguage, contentLanguage)
+      : this.getSourceLanguages(nextProps.indexMap[selected], uiLanguage, contentLanguage);
 
     this.setState({ options, languages, language, selected, isMakor, });
     this.changeContent({ selected, language, props: nextProps, isMakor, });
@@ -253,8 +255,7 @@ class Sources extends Component {
     } else if (contentWip) {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else if (isTaas && pdfFile) {
-      contents =
-        <PDF pdfFile={assetUrl(`sources/${selected}/${pdfFile}`)} pageNumber={1} startsFrom={startsFrom} />;
+      contents = <PDF pdfFile={assetUrl(`sources/${selected}/${pdfFile}`)} pageNumber={1} startsFrom={startsFrom} />;
     } else {
       const direction = RTL_LANGUAGES.includes(uiLanguage) ? 'rtl' : 'ltr';
       // eslint-disable-next-line react/no-danger
@@ -285,7 +286,8 @@ class Sources extends Component {
                       defaultValue={uiLanguage}
                       onSelect={this.handleLanguageChanged}
                     />
-                  </Grid.Column>)
+                  </Grid.Column>
+                )
                 : null
             }
           </Grid.Row>

@@ -12,7 +12,7 @@ import Link from '../../../../Language/MultiLanguageLink';
 
 class PlaylistWidget extends Component {
   static propTypes = {
-    playlist: PropTypes.object.isRequired,
+    playlist: PropTypes.shape({}).isRequired,
     selected: PropTypes.number,
     onSelectedChange: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,

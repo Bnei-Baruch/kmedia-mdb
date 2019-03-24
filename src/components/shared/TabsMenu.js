@@ -24,9 +24,9 @@ class TabsMenu extends Component {
   constructor(props) {
     super(props);
 
-    const active = props.active ||
-      this.activeFromLocation(props.location) ||
-      this.activeFromDefault(props.items);
+    const active = props.active
+      || this.activeFromLocation(props.location)
+      || this.activeFromDefault(props.items);
     this.state   = { active };
   }
 
@@ -42,11 +42,9 @@ class TabsMenu extends Component {
     return active;
   };
 
-  activeFromDefault = items =>
-    (items.length > 0 ? items[0].name : null);
+  activeFromDefault = items => (items.length > 0 ? items[0].name : null);
 
-  handleActiveChange = (e, { name }) =>
-    this.setState({ active: name });
+  handleActiveChange = (e, { name }) => this.setState({ active: name });
 
   render() {
     const { active } = this.state;

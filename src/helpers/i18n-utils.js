@@ -1,8 +1,8 @@
-import { RTL_LANGUAGES, LANGUAGES } from '../helpers/consts';
+import { RTL_LANGUAGES, LANGUAGES } from './consts';
 
 export const getCurrentDirection = () => {
   if (typeof window === 'undefined') {
-    return;
+    return false;
   }
 
   return document.getElementById('root').style.getPropertyValue('direction');

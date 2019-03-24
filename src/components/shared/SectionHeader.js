@@ -29,10 +29,12 @@ class SectionHeader extends Component {
                   {title}
                 </span>
                 {
-                  subText ?
-                    <Header.Subheader className="section-header__subtitle">
-                      {subText}
-                    </Header.Subheader>
+                  subText
+                    ? (
+                      <Header.Subheader className="section-header__subtitle">
+                        {subText}
+                      </Header.Subheader>
+                    )
                     : null
                 }
               </Header.Content>
@@ -40,15 +42,17 @@ class SectionHeader extends Component {
           </Grid.Column>
         </Grid.Row>
         {
-          Array.isArray(submenuItems) && submenuItems.length > 0 ?
-            <Grid.Row>
-              <Grid.Column>
-                <Menu tabular className="section-header__menu" size="huge">
-                  {submenuItems}
-                </Menu>
-              </Grid.Column>
-            </Grid.Row> :
-            null
+          Array.isArray(submenuItems) && submenuItems.length > 0
+            ? (
+              <Grid.Row>
+                <Grid.Column>
+                  <Menu tabular className="section-header__menu" size="huge">
+                    {submenuItems}
+                  </Menu>
+                </Grid.Column>
+              </Grid.Row>
+            )
+            : null
         }
       </Grid>
     );
@@ -72,5 +76,5 @@ class SectionHeader extends Component {
     );
   }
 }
-export default withNamespaces()(SectionHeader);
 
+export default withNamespaces()(SectionHeader);

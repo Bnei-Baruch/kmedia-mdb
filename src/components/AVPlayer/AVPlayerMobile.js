@@ -36,8 +36,10 @@ class AVPlayerMobile extends PureComponent {
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
     selectedLanguage: PropTypes.string,
     onLanguageChange: PropTypes.func.isRequired,
+    requestedLanguage: PropTypes.string.isRequired,
 
     // Audio/Video switch props.
+    // eslint-disable-next-line react/forbid-prop-types
     item: PropTypes.object.isRequired, // TODO: (yaniv) add shape fo this
     onSwitchAV: PropTypes.func.isRequired,
 
@@ -248,8 +250,9 @@ class AVPlayerMobile extends PureComponent {
   handleTimeUpdate = (e) => {
     const { mode, sliceEnd, sliceStart, seeking, firstSeek, showControls } = this.state;
 
-    if (!showControls)
+    if (!showControls) {
       this.showControls();
+    }
 
     const time = e.currentTarget.currentTime;
     this.saveCurrentTime(time);

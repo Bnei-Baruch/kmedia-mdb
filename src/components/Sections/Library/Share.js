@@ -84,9 +84,11 @@ class LibraryShare extends Component {
             content={t('messages.link-copied-to-clipboard')}
             position="bottom right"
             trigger={
-              <CopyToClipboard text={url} onCopy={this.handleCopied}>
-                <Button compact size="small" content={t('buttons.copy')} />
-              </CopyToClipboard>
+              (
+                <CopyToClipboard text={url} onCopy={this.handleCopied}>
+                  <Button compact size="small" content={t('buttons.copy')} />
+                </CopyToClipboard>
+              )
             }
           />
         </Popup.Content>

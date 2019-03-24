@@ -10,15 +10,14 @@ import * as shapes from '../../shapes';
 import Page from './Page';
 
 export class UnitContainer extends Component {
-
   static propTypes = {
-    match: shapes.RouterMatch.isRequired,
+    match: shapes.RouterMatch.isRequired, // eslint-disable-line react/no-unused-prop-types
     unit: shapes.ContentUnit,
     wip: shapes.WIP,
     err: shapes.Error,
     section: PropTypes.string,
     language: PropTypes.string.isRequired,
-    fetchUnit: PropTypes.func.isRequired,
+    fetchUnit: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
   };
 
   static defaultProps = {
@@ -47,9 +46,9 @@ export class UnitContainer extends Component {
 
     const { id } = match.params;
     if (
-      unit &&
-      unit.id === id &&
-      Array.isArray(unit.files)) {
+      unit
+      && unit.id === id
+      && Array.isArray(unit.files)) {
       return;
     }
 
@@ -80,10 +79,9 @@ const mapState = (state, ownProps) => {
   };
 };
 
-const mapDispatch = dispatch =>
-  bindActionCreators({
-    fetchUnit: actions.fetchUnit,
-  }, dispatch);
+const mapDispatch = dispatch => bindActionCreators({
+  fetchUnit: actions.fetchUnit,
+}, dispatch);
 
 export const wrap = WrappedComponent => withRouter(connect(mapState, mapDispatch)(WrappedComponent));
 

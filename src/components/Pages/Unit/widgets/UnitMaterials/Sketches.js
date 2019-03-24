@@ -21,9 +21,9 @@ class Sketches extends React.Component {
     unit: shapes.ContentUnit.isRequired,
     t: PropTypes.func.isRequired,
     zipIndexById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
-    unzip: PropTypes.func.isRequired,
-    uiLanguage: PropTypes.string.isRequired,
-    contentLanguage: PropTypes.string.isRequired,
+    unzip: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+    uiLanguage: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
+    contentLanguage: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
   };
 
   state = {
@@ -38,8 +38,8 @@ class Sketches extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.zipIndexById !== this.props.zipIndexById ||
-      nextProps.unit !== this.props.unit) {
+    if (nextProps.zipIndexById !== this.props.zipIndexById
+      || nextProps.unit !== this.props.unit) {
       this.setCurrentItem(nextProps);
     }
   }
@@ -141,14 +141,11 @@ class Sketches extends React.Component {
   };
 
   handleLanguageChanged = (e, language) => {
-    this.setState({ language }, () =>
-      this.setCurrentItem(this.props)
-    );
+    this.setState({ language }, () => this.setCurrentItem(this.props));
   };
 
-  handleImageError = event =>
-    // eslint-disable-next-line no-console
-    console.log('Image Gallery loading error ', event.target);
+  // eslint-disable-next-line no-console
+  handleImageError = event => console.log('Image Gallery loading error ', event.target);
 
   renderLeftNav = (onClick, disabled) => (
     <Button
@@ -158,7 +155,8 @@ class Sketches extends React.Component {
       icon="chevron left"
       disabled={disabled}
       onClick={onClick}
-    />);
+    />
+  );
 
   renderRightNav = (onClick, disabled) => (
     <Button
@@ -168,7 +166,8 @@ class Sketches extends React.Component {
       icon="chevron right"
       disabled={disabled}
       onClick={onClick}
-    />);
+    />
+  );
 
   renderFullscreenButton = (onClick, isFullscreen) => (
     <Button
@@ -177,7 +176,8 @@ class Sketches extends React.Component {
       className="image-gallery-fullscreen-button"
       icon={isFullscreen ? 'compress' : 'expand'}
       onClick={onClick}
-    />);
+    />
+  );
 
   render() {
     const { t, zipIndexById }                            = this.props;

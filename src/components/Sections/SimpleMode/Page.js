@@ -49,11 +49,6 @@ class SimpleModePage extends PureComponent {
       .map(x => ({ ...x, text: t(`constants.languages.${x.value}`) }));
   };
 
-  changeDay(amount) {
-    const newDate = moment(this.props.selectedDate).add(amount, 'd').toDate();
-    this.props.onDayClick(newDate);
-  }
-
   handleNativeDateInputRef = (ref) => {
     this.nativeDateInput = ref;
   };
@@ -89,6 +84,11 @@ class SimpleModePage extends PureComponent {
     );
   };
 
+  changeDay(amount) {
+    const newDate = moment(this.props.selectedDate).add(amount, 'd').toDate();
+    this.props.onDayClick(newDate);
+  }
+
   render() {
     const
       {
@@ -117,16 +117,14 @@ class SimpleModePage extends PureComponent {
       selected: selectedDate
     };
 
-    const isToday = () => {
-      return moment().isSame(moment(selectedDate), 'date');
-    };
+    const isToday = () => moment().isSame(moment(selectedDate), 'date');
 
     const list = WipErr({ wip, err, t }) || (
       <div>
         {
-          (items.lessons.length || items.others.length) ?
-            <SimpleModeList items={items} language={language} t={t} renderUnit={renderUnit} /> :
-            <FrownSplash text={t('simple-mode.no-files-found-for-date')} />
+          (items.lessons.length || items.others.length)
+            ? <SimpleModeList items={items} language={language} t={t} renderUnit={renderUnit} />
+            : <FrownSplash text={t('simple-mode.no-files-found-for-date')} />
         }
       </div>
     );
@@ -143,64 +141,71 @@ class SimpleModePage extends PureComponent {
                   <div className="controller">
                     <h4>{t('simple-mode.date')}</h4>
                     <div className="date-container">
-                      <button onClick={() => this.changeDay(-1)}>{t('simple-mode.prev')}</button>
+                      <button type="button" onClick={() => this.changeDay(-1)}>{t('simple-mode.prev')}</button>
                       {
-                        isMobile ?
-                          <div>
-                            <div className="ui input">
-                              <Input
-                                icon="dropdown"
-                                type="text"
-                                readOnly
-                                value={selectedInLocaleFormat}
-                                onClick={this.openNativeDatePicker}
+                        isMobile
+                          ? (
+                            <div>
+                              <div className="ui input">
+                                <Input
+                                  icon="dropdown"
+                                  type="text"
+                                  readOnly
+                                  value={selectedInLocaleFormat}
+                                  onClick={this.openNativeDatePicker}
+                                />
+                              </div>
+                              <input
+                                className="hide-native-date-input"
+                                type="date"
+                                value={selectedToString}
+                                max={today().format('YYYY-MM-DD')}
+                                step="1"
+                                pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+                                onChange={this.handleNativeDateInputChange}
+                                ref={this.handleNativeDateInputRef}
                               />
                             </div>
-                            <input
-                              className="hide-native-date-input"
-                              type="date"
-                              value={selectedToString}
-                              max={today().format('YYYY-MM-DD')}
-                              step="1"
-                              pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
-                              onChange={this.handleNativeDateInputChange}
-                              ref={this.handleNativeDateInputRef}
-                            />
-                          </div>
-                          :
-                          <span>{moment(selectedDate).format(dateFormat)}</span>
+                          )
+                          : <span>{moment(selectedDate).format(dateFormat)}</span>
                       }
-                      <button disabled={isToday()} className={isToday() ? 'disabled' : ''} onClick={() => this.changeDay(1)}>{t('simple-mode.next')}</button>
+                      <button type="button" disabled={isToday()} className={isToday() ? 'disabled' : ''} onClick={() => this.changeDay(1)}>{t('simple-mode.next')}</button>
                     </div>
                   </div>
                   <div className="controller">
-                    <h4>{t('simple-mode.media-language')} </h4>
+                    <h4>
+                      {t('simple-mode.media-language')}
+                      {' '}
+                    </h4>
                     <div className="dropdown-container">
                       {
-                        isMobile ?
-                          <select className={blinkLangSelect ? 'blink' : ''} value={language} onChange={onLanguageChange}>
-                            {
-                              languages.map(x => (
-                                <option key={`opt-${x.flag}`} value={x.value}>
-                                  {x.text}
-                                </option>
-                              ))
-                            }
-                          </select>
-                          :
-                          <DropdownLanguageSelector
-                            languages={ALL_LANGUAGES}
-                            defaultValue={language}
-                            onSelect={onLanguageChange}
-                            blink={blinkLangSelect}
-                          />
+                        isMobile
+                          ? (
+                            <select className={blinkLangSelect ? 'blink' : ''} value={language} onChange={onLanguageChange}>
+                              {
+                                languages.map(x => (
+                                  <option key={`opt-${x.flag}`} value={x.value}>
+                                    {x.text}
+                                  </option>
+                                ))
+                              }
+                            </select>
+                          )
+                          : (
+                            <DropdownLanguageSelector
+                              languages={ALL_LANGUAGES}
+                              defaultValue={language}
+                              onSelect={onLanguageChange}
+                              blink={blinkLangSelect}
+                            />
+                          )
                       }
                     </div>
                   </div>
                 </div>
                 {list}
               </Grid.Column>
-              <Grid.Column only='tablet computer' tablet={16} computer={4}>
+              <Grid.Column only="tablet computer" tablet={16} computer={4}>
                 <div className="stick-calendar">
                   <div className="summary-container adjust-height">
                     <div className="controller">
@@ -217,7 +222,7 @@ class SimpleModePage extends PureComponent {
                       disabledDays={{ after: new Date() }}
                       onDayClick={onDayClick}
                       captionElement={() => null}
-                      navbarElement={(props) => this.getNavBarElement(props, language, onDayClick)}
+                      navbarElement={props => this.getNavBarElement(props, language, onDayClick)}
                     />
                     <Button className="inline-button" onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
                   </Card>

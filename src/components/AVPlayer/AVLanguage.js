@@ -51,6 +51,7 @@ class AVLanguage extends Component {
   setLangSelectRef = langSelectRef => this.setState({ langSelectRef });
 
   handleOnOpen = () => this.props.onDropdownOpenedChange(true);
+
   handleOnClose = () => this.props.onDropdownOpenedChange(false);
 
   render() {
@@ -80,7 +81,7 @@ class AVLanguage extends Component {
           options={options}
           value={selectedLanguage}
           onChange={this.handleChange}
-          trigger={<button>{selectedLanguage}</button>}
+          trigger={<button type="button">{selectedLanguage}</button>}
           onOpen={this.handleOnOpen}
           onClose={this.handleOnClose}
         />

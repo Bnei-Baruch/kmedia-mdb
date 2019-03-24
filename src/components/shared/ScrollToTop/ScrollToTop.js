@@ -6,6 +6,7 @@ import * as shapes from '../../shapes';
 class ScrollToTop extends Component {
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
+    children: shapes.Children.isRequired
   };
 
   // componentDidUpdate has a rather strict purpose

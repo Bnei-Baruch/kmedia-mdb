@@ -22,10 +22,10 @@ export default class AVPlaybackRate extends Component {
     value: '1x',
   };
 
-  handleChange = (e, data) =>
-    this.props.onSelect(e, data.value);    
+  handleChange = (e, data) => this.props.onSelect(e, data.value);
 
   handleOnOpen = () => this.props.onDropdownOpenedChange(true);
+
   handleOnClose = () => this.props.onDropdownOpenedChange(false);
 
   render() {
@@ -42,7 +42,7 @@ export default class AVPlaybackRate extends Component {
           options={options}
           value={value}
           onChange={this.handleChange}
-          trigger={<button>{value}</button>}
+          trigger={<button type="button">{value}</button>}
           onOpen={this.handleOnOpen}
           onClose={this.handleOnClose}
         />

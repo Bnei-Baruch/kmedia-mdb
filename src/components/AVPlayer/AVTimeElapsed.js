@@ -8,7 +8,10 @@ const AVTimeElapsed = (props) => {
 
   return (
     <div className="mediaplayer__timecode">
-      <AVDuration value={start} /> / <AVDuration value={end} />
+      <AVDuration value={start} />
+      {' '}
+      /
+      <AVDuration value={end} />
     </div>
   );
 };

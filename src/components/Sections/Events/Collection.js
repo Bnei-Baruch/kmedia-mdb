@@ -65,10 +65,19 @@ class MyPlaylistWidget extends PlaylistWidget {
               >
                 {
                   section === 'preparation' || section === 'appendices'
-                    ? <strong>{t('values.date', { date: unit.film_date })} &nbsp;</strong>
+                    ? (
+                      <strong>
+                        {t('values.date', { date: unit.film_date })}
+                        {' '}
+&nbsp;
+                      </strong>
+                    )
                     : null
                 }
-                {unit.name || NO_NAME} - {formatDuration(unit.duration)}
+                {unit.name || NO_NAME}
+                {' '}
+-
+                {formatDuration(unit.duration)}
               </Menu.Item>
             );
 

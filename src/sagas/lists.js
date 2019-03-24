@@ -1,4 +1,4 @@
-import { call, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
+import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import { actions, types } from '../redux/modules/lists';
 import { selectors as settings } from '../redux/modules/settings';
@@ -62,13 +62,12 @@ function* fetchList(action) {
 
 function* updatePageInQuery(action) {
   const { pageNo } = action.payload;
-  yield* pushQuery(query => {
+  yield* pushQuery((query) => {
     if (pageNo > 1) {
       return { ...query, page: pageNo };
-    } else {
-      const { page, ...result } = query;
-      return result;
     }
+    const { _page, ...result } = query;
+    return result;
   });
 }
 

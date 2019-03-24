@@ -83,8 +83,8 @@ function playableItem(unit, mediaType, uiLanguage, contentLanguage) {
   }
 
   const files     = (unit.files || []).filter(f => (
-    f.language === language &&
-    (targetMediaType === MT_VIDEO ? MediaHelper.IsMp4(f) : MediaHelper.IsMp3(f))));
+    f.language === language
+    && (targetMediaType === MT_VIDEO ? MediaHelper.IsMp4(f) : MediaHelper.IsMp3(f))));
   const byQuality = mapValues(groupBy(files, x => x.video_size || VS_DEFAULT),
     val => physicalFile(val[0], true));
 
@@ -233,9 +233,8 @@ function setActivePartInQuery(history, ap) {
 }
 
 function getEmbedFromQuery(location) {
-  const query = getQuery(location);
-  const embed = query.embed === '1';
-  return embed;
+  const query    = getQuery(location);
+  return query.embed === '1';
 }
 
 export default {

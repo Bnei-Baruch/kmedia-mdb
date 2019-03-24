@@ -19,8 +19,7 @@ export default class AVVideoSize extends Component {
     onSelect: noop,
   };
 
-  handleChange = (e, data) =>
-    this.props.onSelect(e, data.value);
+  handleChange = (e, data) => this.props.onSelect(e, data.value);
 
   render() {
     const { value, qualities } = this.props;
@@ -44,7 +43,7 @@ export default class AVVideoSize extends Component {
           options={options}
           value={value}
           onChange={this.handleChange}
-          trigger={<button>{VS_NAMES[value]}</button>}
+          trigger={<button type="button">{VS_NAMES[value]}</button>}
         />
       </div>
     );

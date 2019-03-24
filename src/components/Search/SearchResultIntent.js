@@ -2,25 +2,24 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import { Button, Card, Image, Icon, Segment, Header, Container } from 'semantic-ui-react';
+import { Button, Card, Container, Header, Icon, Image, Segment } from 'semantic-ui-react';
 
 import { sectionLogo } from '../../helpers/images';
 import { selectors } from '../../redux/modules/mdb';
 import { tracePath } from '../../helpers/utils';
-import { sectionLink, canonicalLink } from '../../helpers/links';
+import { canonicalLink, sectionLink } from '../../helpers/links';
 import { actions as listsActions, selectors as lists } from '../../redux/modules/lists';
 import { assetUrl, imaginaryUrl, Requests } from '../../helpers/Api';
 import Link from '../Language/MultiLanguageLink';
 import {
   RTL_LANGUAGES,
   SEARCH_INTENT_FILTER_NAMES,
+  SEARCH_INTENT_HIT_TYPE_LESSONS,
+  SEARCH_INTENT_HIT_TYPE_PROGRAMS,
+  SEARCH_INTENT_INDEX_SOURCE,
+  SEARCH_INTENT_INDEX_TOPIC,
   SEARCH_INTENT_NAMES,
   SEARCH_INTENT_SECTIONS,
-  SEARCH_INTENT_INDEX_TOPIC,
-  SEARCH_INTENT_INDEX_SOURCE,
-  SEARCH_INTENT_HIT_TYPE_PROGRAMS,
-  SEARCH_INTENT_HIT_TYPE_LESSONS,
-
 } from '../../helpers/consts';
 
 import FallbackImage from '../shared/FallbackImage';
@@ -103,7 +102,7 @@ class SearchResultIntent extends SearchResultBase {
       <Card key={cu.id} className="search__card bg_hover_grey" raised>
         <Container className="intent_image">
           <div className="card_header_label">
-            {this.mlsToStrColon(cu.duration)}
+            {SearchResultBase.mlsToStrColon(cu.duration)}
           </div>
           <div>
             <FallbackImage fluid src={src} />
@@ -119,7 +118,9 @@ class SearchResultIntent extends SearchResultBase {
             </Link>
           </Card.Header>
           <Card.Meta>
-            {this.iconByContentType(cu.content_type, true)}|&nbsp;<strong>{filmDate}</strong>
+            {this.iconByContentType(cu.content_type, true)}
+            |&nbsp;
+            <strong>{filmDate}</strong>
           </Card.Meta>
           <Card.Description>
             {this.renderFiles(cu)}
@@ -137,7 +138,8 @@ class SearchResultIntent extends SearchResultBase {
 
     const pages   = new Array(numberOfPages).fill('a');
     const content = pages.map((p, i) => (
-      <Button onClick={e => this.onScrollChange(i)} key={i} icon className="bg_transparent">
+      // eslint-disable-next-line react/no-array-index-key
+      <Button onClick={() => this.onScrollChange(i)} key={i} icon className="bg_transparent">
         <Icon name={pageNo === i ? 'circle thin' : 'circle outline'} color="blue" size="small" />
       </Button>
     ));
@@ -148,15 +150,17 @@ class SearchResultIntent extends SearchResultBase {
   // eslint-disable-next-line react/no-multi-comp
   renderScrollRight = () => {
     const dir = RTL_LANGUAGES.includes(this.props.language) ? 'right' : 'left';
-    return this.state.pageNo === 0 ? null : (<Button
-      icon={`chevron ${dir}`}
-      circular
-      basic
-      size="large"
-      onClick={this.onScrollLeft}
-      className="scroll_intents"
-      style={{ [dir]: '-15px' }}
-    />);
+    return this.state.pageNo === 0 ? null : (
+      <Button
+        icon={`chevron ${dir}`}
+        circular
+        basic
+        size="large"
+        onClick={this.onScrollLeft}
+        className="scroll_intents"
+        style={{ [dir]: '-15px' }}
+      />
+    );
   };
 
   // eslint-disable-next-line react/no-multi-comp
@@ -165,15 +169,17 @@ class SearchResultIntent extends SearchResultBase {
     const numberOfPages        = Math.round(this.props.unitCounter / pageSize);
     const dir                  = RTL_LANGUAGES.includes(this.props.language) ? 'left' : 'right';
 
-    return (pageNo >= numberOfPages - 1) ? null : (<Button
-      icon={`chevron ${dir}`}
-      circular
-      basic
-      size="large"
-      onClick={this.onScrollRight}
-      className="scroll_intents"
-      style={{ [dir]: '-15px' }}
-    />);
+    return (pageNo >= numberOfPages - 1) ? null : (
+      <Button
+        icon={`chevron ${dir}`}
+        circular
+        basic
+        size="large"
+        onClick={this.onScrollRight}
+        className="scroll_intents"
+        style={{ [dir]: '-15px' }}
+      />
+    );
   };
 
   render() {
@@ -206,7 +212,8 @@ class SearchResultIntent extends SearchResultBase {
     return (
       <Segment className="search__block">
         <Header as="h2">
-          <Image size="small" src={sectionLogo[type]} verticalAlign="bottom" />&nbsp;
+          <Image size="small" src={sectionLogo[type]} verticalAlign="bottom" />
+          &nbsp;
           <span>{t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`)}</span>
         </Header>
         <Segment.Group horizontal={!isMobileDevice()} className="no-padding no-margin-top no-border no-shadow">
@@ -221,13 +228,13 @@ class SearchResultIntent extends SearchResultBase {
               </Link>
             </Header>
           </Segment>
-        <Segment textAlign={isMobileDevice() ? 'left' : 'right'} className="no-padding  no-border">
+          <Segment textAlign={isMobileDevice() ? 'left' : 'right'} className="no-padding  no-border">
             <Icon name="tasks" size="small" />
             <Link
               onClick={() => this.click(mdbUid, index, type, rank, searchId)}
               to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}
             >
-              <span>{`${t('search.showAll')} ${this.props.total} ${t('search.' + resultsType)}`}</span>
+              <span>{`${t('search.showAll')} ${this.props.total} ${t(`search.${resultsType}`)}`}</span>
             </Link>
           </Segment>
         </Segment.Group>

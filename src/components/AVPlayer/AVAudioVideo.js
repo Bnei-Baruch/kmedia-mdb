@@ -62,7 +62,7 @@ class AVAudioVideo extends Component {
           language={uiLanguage}
           refElement={audioVideoContainerRef}
         />
-        <button ref={this.handleBtnRef}>
+        <button ref={this.handleBtnRef} type="button">
           <span className={isAudio ? 'is-active' : ''}>{t('buttons.audio')}</span>
           &nbsp;/&nbsp;
           <span className={isVideo ? 'is-active' : ''}>{t('buttons.video')}</span>

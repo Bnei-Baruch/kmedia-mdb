@@ -25,7 +25,10 @@ class ContentLanguage extends Component {
 
     return (
       <Menu secondary>
-        <Menu.Item header>{t('languages.content_language')}:</Menu.Item>
+        <Menu.Item header>
+          {t('languages.content_language')}
+          :
+        </Menu.Item>
         <Menu.Menu position="right">
           <Dropdown item scrolling text={`${t(`constants.languages.${contentLanguage}`)}`}>
             <Dropdown.Menu>

@@ -35,6 +35,10 @@ class HierarchicalFilter extends Component {
     term: '',
   };
 
+  handleTermChange = debounce((e, data) => {
+    this.setState({ term: data.value });
+  }, 200);
+
   componentDidMount() {
     if (this.activeRef) {
       // eslint-disable-next-line react/no-find-dom-node
@@ -112,10 +116,6 @@ class HierarchicalFilter extends Component {
     }
   };
 
-  handleTermChange = debounce((e, data) => {
-    this.setState({ term: data.value });
-  }, 200);
-
   nodeToItem = (node, level, reg) => {
     const { text, value, count } = node;
     const { sValue }             = this.state;
@@ -146,9 +146,15 @@ class HierarchicalFilter extends Component {
       >
         {content}
         {
-          Number.isInteger(count) ?
-            <span className="filter__count">&nbsp;({count})</span> :
-            null
+          Number.isInteger(count)
+            ? (
+              <span className="filter__count">
+                &nbsp;(
+                {count}
+                )
+              </span>
+            )
+            : null
         }
       </Menu.Item>
     );
@@ -158,8 +164,7 @@ class HierarchicalFilter extends Component {
     let items = [this.nodeToItem(node, level, reg)];
 
     if (!isEmpty(node.children)) {
-      items = node.children.reduce((acc, val) =>
-        acc.concat(this.nodeToItemRec(val, level + 1, reg)), items);
+      items = node.children.reduce((acc, val) => acc.concat(this.nodeToItemRec(val, level + 1, reg)), items);
     }
 
     return items;

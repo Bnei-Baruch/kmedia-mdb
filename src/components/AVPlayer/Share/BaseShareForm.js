@@ -6,12 +6,14 @@ import noop from 'lodash/noop';
 import { toHumanReadableTime } from '../../../helpers/time';
 import { getQuery, stringify } from '../../../helpers/url';
 
+/* eslint-disable react/no-unused-state */
 class BaseShareForm extends React.Component {
+  /* eslint-disable react/forbid-prop-types */
   static propTypes = {
     media: PropTypes.object.isRequired,
     item: PropTypes.object.isRequired,
     onSliceChange: PropTypes.func,
-    t: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
   };
 
   static defaultProps = {
@@ -32,14 +34,14 @@ class BaseShareForm extends React.Component {
     this.state = {
       start: undefined,
       end: undefined,
-      url: this.getUrl(props),
+      url: BaseShareForm.getUrl(props),
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.item !== this.props.item) {
-      const { start, end } = this.state;
-      this.setState({ ...this.state, url: this.getUrl(nextProps, start, end) });
+      const { start, end } = this.state; // eslint-disable-line react/prop-types
+      this.setState({ url: BaseShareForm.getUrl(nextProps, start, end) });
     }
   }
 
@@ -61,7 +63,7 @@ class BaseShareForm extends React.Component {
       end = null;
     }
 
-    this.setState({ ...state, url: this.getUrl(this.props, start, end) });
+    this.setState({ ...state, url: BaseShareForm.getUrl(this.props, start, end) });
     onSliceChange(start, end);
   }
 
@@ -74,17 +76,17 @@ class BaseShareForm extends React.Component {
       : Math.round(media.currentTime);
     end     = Math.min(end, duration);
 
-    let start = this.state.start || 0;
+    let start = this.state.start || 0; // eslint-disable-line react/no-access-state-in-setstate
     if (end) {
       start = this.state.start < end ? start : 0;
     }
 
-    this.setState({ end, start, url: this.getUrl(this.props, start, end) });
+    this.setState({ end, start, url: BaseShareForm.getUrl(this.props, start, end) });
     onSliceChange(start, end);
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getUrl(props, start, end) {
+  static getUrl(props, start, end) {
     const { protocol, hostname, port, pathname } = window.location;
 
     const { item } = props;

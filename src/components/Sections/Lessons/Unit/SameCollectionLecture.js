@@ -65,7 +65,9 @@ class MySameCollectionWidget extends SameCollectionWidget {
                 to={canonicalLink(collection)}
                 textAlign="right"
               >
-                {t('buttons.more')} &raquo;
+                {t('buttons.more')}
+                {' '}
+                &raquo;
               </Container>
             </Item.Content>
           </Item>

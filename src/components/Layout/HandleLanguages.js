@@ -18,19 +18,23 @@ class HandleLanguages extends Component {
     isMobileDevice: PropTypes.bool
   };
 
+  static defaultProps = {
+    isMobileDevice: false,
+  };
+
   state = {
     isActive: false,
   };
-
-  handlePopupClose = () => this.setState({ isActive: false });
-
-  handlePopupOpen = () => this.setState({ isActive: true });
 
   componentDidUpdate(prevProps) {
     if (prevProps.language !== this.props.language) {
       this.handlePopupClose();
     }
   }
+
+  handlePopupOpen = () => this.setState({ isActive: true });
+
+  handlePopupClose = () => this.setState({ isActive: false });
 
   render() {
     const { t, language, location, contentLanguage, setContentLanguage, isMobileDevice } = this.props;
@@ -47,14 +51,16 @@ class HandleLanguages extends Component {
         <span>
           <Icon name="sliders horizontal" />
           {t('languages.language')}
-        </span>);
+        </span>
+      );
     return (
       <Popup
         id="handleLanguagesPopup"
         key="handleLangs"
         flowing
         position="bottom right"
-        trigger={<div onClick={this.handlePopupOpen} as="a">{trigger}</div>}
+        // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
+        trigger={<div onClick={this.handlePopupOpen}>{trigger}</div>}
         open={isActive}
         onOpen={this.handlePopupOpen}
         onClose={this.handlePopupClose}

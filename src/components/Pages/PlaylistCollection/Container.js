@@ -21,11 +21,12 @@ export class PlaylistCollectionContainer extends Component {
     language: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
     PlaylistComponent: PropTypes.func,
-    fetchCollection: PropTypes.func.isRequired,
-    fetchUnit: PropTypes.func.isRequired,
+    fetchCollection: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+    fetchUnit: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
     shouldRenderHelmet: PropTypes.bool,
-    fetchWindow: PropTypes.func.isRequired,
-    cWindow: shapes.cWindow.isRequired,
+    fetchWindow: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+    cWindow: shapes.cWindow.isRequired, // eslint-disable-line react/no-unused-prop-types
+    location: shapes.HistoryLocation.isRequired,
   };
 
   static defaultProps = {
