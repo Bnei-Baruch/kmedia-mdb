@@ -27,15 +27,32 @@ class Sketches extends React.Component {
     contentLanguage: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
   };
 
-  state = {
-    zipFileId: null,
-    imageFiles: null,
-    languages: null,
-    language: null,
-  };
+  constructor(props) {
+    super(props);
+    const { unit, contentLanguage, uiLanguage } = props;
 
-  componentDidMount() {
-    this.setCurrentItem();
+    const zipFiles = this.getUnitFiles(unit);
+    this.state     = {
+      zipFiles,
+      zipFileId: null,
+      imageFiles: null,
+      languages: null,
+      language: null,
+    };
+
+    // many files - get all existing unique languages
+    if (zipFiles && Array.isArray(zipFiles)) {
+      const { languages, language } = this.getLanguage(zipFiles, contentLanguage, uiLanguage);
+      const files                   = this.filterFiles(zipFiles, language, unit.original_language);
+      const itemState               = this.setCurrentItem(files);
+
+      this.state = {
+        ...this.state,
+        languages,
+        language,
+        ...itemState,
+      };
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -43,8 +60,36 @@ class Sketches extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.isPropsChanged(prevProps) || this.isStateChanged(prevState)) {
-      this.setCurrentItem();
+    const { unit, contentLanguage, uiLanguage } = this.props;
+
+    if (this.isPropsChanged(prevProps)) {
+      // full reset
+      const zipFiles = this.getUnitFiles(unit);
+      if (zipFiles && Array.isArray(zipFiles)) {
+        const { languages, language } = this.getLanguage(zipFiles, contentLanguage, uiLanguage);
+        const files                   = this.filterFiles(zipFiles, language, unit.original_language);
+        const itemState               = this.setCurrentItem(files);
+
+        this.setState({
+          languages,
+          language,
+          ...itemState,
+        });
+      }
+    } else if (this.isStateChanged(prevState)) {
+      const { zipFiles, language } = this.state;
+
+      if (prevState.language !== language) {
+        if (zipFiles && Array.isArray(zipFiles)) {
+          const files     = this.filterFiles(zipFiles, language, unit.original_language);
+          const itemState = this.setCurrentItem(files);
+
+          this.setState({
+            language,
+            ...itemState,
+          });
+        }
+      }
     }
   }
 
@@ -67,24 +112,24 @@ class Sketches extends React.Component {
   };
 
   // load data into state
-  setCurrentItem = () => {
-    // get one zip file or array of image files or one image file
-    const file = this.findZipOrImageFile();
-
+  // get one zip file or array of image files or one image file
+  setCurrentItem = (file) => {
+    let state = {};
     if (file) {
       // not zip, image files only
       if (Array.isArray(file) || !file.name.endsWith('.zip')) {
-        this.setState({ imageFiles: file });
+        state = { imageFiles: file };
       } else {
         // zip file
-        this.setState({ zipFileId: file.id });
+        state = { zipFileId: file.id };
 
         // call redux
         this.unzipFiles(file);
       }
     } else {
-      this.setState({ zipFileId: null });
+      state = { zipFileId: null };
     }
+    return state;
   };
 
   unzipFiles = (file) => {
@@ -96,9 +141,7 @@ class Sketches extends React.Component {
     }
   };
 
-  findZipOrImageFile = () => {
-    const { unit, contentLanguage, uiLanguage } = this.props;
-
+  getUnitFiles = (unit) => {
     if (!Array.isArray(unit.files)) {
       return null;
     }
@@ -114,19 +157,24 @@ class Sketches extends React.Component {
       return zipFiles[0];
     }
 
-    // many files - get all existing unique languages
+    return zipFiles;
+  };
+
+  getLanguage = (zipFiles, contentLanguage, uiLanguage) => {
     const languages = zipFiles
       .map(file => file.language)
       .filter((v, i, a) => a.indexOf(v) === i);
     const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-    this.setState({ languages, language });
+    return { languages, language };
+  };
 
+  filterFiles = (zipFiles, language, originalLanguage) => {
     // try filter by language
     let files = zipFiles.filter(file => file.language === language);
 
     // if no files by language - return original language files
     if (files.length === 0) {
-      files = zipFiles.filter(file => file.language === unit.original_language);
+      files = zipFiles.filter(file => file.language === originalLanguage);
     }
 
     // if there are many zip files - use the first one
