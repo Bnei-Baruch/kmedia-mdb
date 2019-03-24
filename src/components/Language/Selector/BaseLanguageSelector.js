@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-prop-types */
 import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
@@ -19,8 +20,8 @@ class LanguageSelector extends PureComponent {
     languages: [],
   };
 
-  // eslint-disable-next-line class-methods-use-this
-  getOptions(props) {
+  static getOptions(props) {
+    // eslint-disable-next-line class-methods-use-this
     const { languages, t } = props;
 
     return LANGUAGE_OPTIONS

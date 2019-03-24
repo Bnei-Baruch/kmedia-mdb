@@ -1,8 +1,9 @@
+/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import noop from 'lodash/noop';
-import { Accordion, Button, Flag, Header, Menu, Segment } from 'semantic-ui-react';
+import { Accordion, Button, Header, Menu, Segment, Flag } from 'semantic-ui-react';
 import { ALL_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
 
 class LanguageFilter extends Component {

@@ -51,6 +51,7 @@
     "react/destructuring-assignment":    "off",
     "prefer-destructuring":              "off",
     "react/no-multi-comp":               "off",
+    "react/no-did-update-set-state":    "off",
     "no-unused-vars":                    [
       "error",
       {

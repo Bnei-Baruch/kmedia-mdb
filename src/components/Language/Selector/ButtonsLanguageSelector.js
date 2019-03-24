@@ -10,7 +10,7 @@ class ButtonsLanguageSelector extends BaseLanguageSelector {
 
   render() {
     const { defaultValue } = this.props;
-    const options          = this.getOptions(this.props);
+    const options          = BaseLanguageSelector.getOptions(this.props);
 
     return (
       <Button.Group basic className="buttons-language-selector" size="small">

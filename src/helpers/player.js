@@ -3,16 +3,7 @@ import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 
 import { assetUrl } from './Api';
-import {
-  CT_FULL_LESSON,
-  CT_LESSON_PART,
-  EVENT_PREPARATION_TAG,
-  EVENT_TYPES,
-  LANG_ENGLISH,
-  MT_AUDIO,
-  MT_VIDEO,
-  VS_DEFAULT,
-} from './consts';
+import { CT_FULL_LESSON, CT_LESSON_PART, EVENT_PREPARATION_TAG, EVENT_TYPES, LANG_ENGLISH, MT_AUDIO, MT_VIDEO, VS_DEFAULT, } from './consts';
 import { getQuery, updateQuery } from './url';
 import { canonicalLink } from './links';
 import MediaHelper from './media';
@@ -57,9 +48,9 @@ function calcAvailableLanguages(unit) {
     return [];
   }
 
-  return Array.from(unit.files.reduce((acc, val) => {
-    return acc.add(val.language);
-  }, new Set()));
+  return Array.from(
+    unit.files.reduce((acc, val) => acc.add(val.language),
+      new Set()));
 }
 
 function playableItem(unit, mediaType, uiLanguage, contentLanguage) {
@@ -233,7 +224,7 @@ function setActivePartInQuery(history, ap) {
 }
 
 function getEmbedFromQuery(location) {
-  const query    = getQuery(location);
+  const query = getQuery(location);
   return query.embed === '1';
 }
 
