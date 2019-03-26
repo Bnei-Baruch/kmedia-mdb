@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import noop from 'lodash/noop';
@@ -19,7 +19,7 @@ class FiltersHydrator extends Component {
     isHydrated: false
   };
 
-  state = { isHydrated: null };
+  state = { isHydrated: false };
 
   componentDidMount() {
     // Filters hydration cycle starts here
@@ -33,26 +33,23 @@ class FiltersHydrator extends Component {
     } else {
       hydrateFilters(namespace);
     }
-    this.setState({ isHydrated });
   }
 
   static getDerivedStateFromProps(props, state) {
-    const { isHydrated, onHydrated, namespace, filtersHydrated } = props;
+    const { isHydrated, onHydrated, namespace } = props;
 
     // isHydrated changed from false to true.
     if (!state.isHydrated && isHydrated) {
       // End the hydration cycle.
       // Everything is updated, sagas, redux, react. Down to here.
-      filtersHydrated(namespace);
-
       // callback our event prop
       onHydrated(namespace);
     }
-    return { isHydrated: true };
+    return { isHydrated };
   }
 
   render() {
-    return <div />;
+    return <Fragment />;
   }
 }
 
