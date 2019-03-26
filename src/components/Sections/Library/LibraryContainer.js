@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import ReactDOM from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -111,16 +110,6 @@ class LibraryContainer extends Component {
         replace(`sources/${firstLeafId}`);
       }
     }
-
-    // @TODO - David, can be state that change scroll to many times.
-    if (!isEmpty(this.accordionContext) && !isEmpty(this.selectedAccordionContext)) {
-      // eslint-disable-next-line react/no-find-dom-node
-      const elScrollTop = ReactDOM.findDOMNode(this.selectedAccordionContext).offsetTop;
-      const p           = this.accordionContext.parentElement; // eslint-disable-line react/prop-types
-      if (p.scrollTop !== elScrollTop) {
-        p.scrollTop = elScrollTop;
-      }
-    }
   }
 
   componentDidUpdate() {
@@ -185,14 +174,6 @@ class LibraryContainer extends Component {
 
   handleContextRef = (ref) => {
     this.contextRef = ref;
-  };
-
-  handleAccordionContext = (ref) => {
-    this.accordionContext = ref;
-  };
-
-  handleSelectedAccordionContext = (ref) => {
-    this.selectedAccordionContext = ref;
   };
 
   handleSecondaryHeaderRef = (ref) => {
@@ -445,7 +426,7 @@ class LibraryContainer extends Component {
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
                   apply={push}
-                  stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
+                  stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60) + (this.isMobileDevice() ? 60 : 0)}
                 />
               </Grid.Column>
               <Grid.Column
@@ -457,14 +438,14 @@ class LibraryContainer extends Component {
                   [`size${fontSize}`]: true,
                 })}
               >
-                <div ref={this.handleContextRef}>
+                <Ref innerRef={this.handleContextRef}>
                   <div
                     className="source__content"
                     style={{ minHeight: `calc(100vh - ${secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}px)` }}
                   >
                     {content}
                   </div>
-                </div>
+                </Ref>
               </Grid.Column>
             </Grid.Row>
           </Grid>
