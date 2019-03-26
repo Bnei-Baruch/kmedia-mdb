@@ -284,7 +284,7 @@ class Sketches extends React.Component {
         .sort((a, b) => strCmp(a.original, b.original));
 
       return (
-        <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+        <div>
           {
             languages && languages.length > 1
               ? (
