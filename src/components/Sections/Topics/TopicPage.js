@@ -102,6 +102,7 @@ class TopicPage extends Component {
                         units={sectionUnits}
                         N={topNItems}
                         tagPath={tagPath}
+                        language={language}
                       />
                     </Grid.Column>
                   );
