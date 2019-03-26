@@ -134,7 +134,6 @@
     "@babel/types" "^7.3.0"
     esutils "^2.0.0"
 
-<<<<<< AR-515_language-switch-fix
 "@babel/helper-call-delegate@^7.1.0", "@babel/helper-call-delegate@^7.4.0":
   version "7.4.0"
   resolved "https://registry.yarnpkg.com/@babel/helper-call-delegate/-/helper-call-delegate-7.4.0.tgz#f308eabe0d44f451217853aedf4dea5f6fe3294f"
