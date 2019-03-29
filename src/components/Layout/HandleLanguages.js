@@ -59,7 +59,6 @@ class HandleLanguages extends Component {
         key="handleLangs"
         flowing
         position="bottom right"
-        // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
         trigger={<div onClick={this.handlePopupOpen}>{trigger}</div>}
         open={isActive}
         onOpen={this.handlePopupOpen}

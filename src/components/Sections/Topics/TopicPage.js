@@ -22,7 +22,7 @@ class TopicPage extends Component {
     getSectionUnits: PropTypes.func.isRequired,
     getPathByID: PropTypes.func.isRequired,
     match: shapes.RouterMatch.isRequired,
-    fetchDashboard: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+    fetchDashboard: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
     wip: shapes.WIP,
     error: shapes.Error,
@@ -38,8 +38,8 @@ class TopicPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.match.params.id !== nextProps.match.params.id // eslint-disable-line react/prop-types
-      || this.props.match.params.language !== nextProps.match.params.language) { // eslint-disable-line react/prop-types
+    if (this.props.match.params.id !== nextProps.match.params.id
+      || this.props.match.params.language !== nextProps.match.params.language) {
       this.loadTopic(nextProps);
     }
   }

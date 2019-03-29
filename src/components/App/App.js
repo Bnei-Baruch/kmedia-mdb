@@ -11,7 +11,6 @@ import '../../stylesheets/Kmedia.scss';
 import * as shapes from '../shapes';
 
 class App extends Component {
-  /* eslint-disable react/forbid-prop-types */
   static propTypes = {
     i18n: PropTypes.object.isRequired,
     store: PropTypes.object.isRequired,

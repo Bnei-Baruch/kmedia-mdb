@@ -60,7 +60,6 @@ class BlogContainer extends withPagination {
     super.componentWillReceiveProps(nextProps);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   extraFetchParams({ language }) {
     switch (language) {
     case LANG_HEBREW:

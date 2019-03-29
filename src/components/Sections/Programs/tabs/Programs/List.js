@@ -68,7 +68,6 @@ export const renderUnit = (unit, t) => {
   );
 };
 
-/* eslint-disable-next-line react/no-multi-comp */
 class ProgramsList extends Component {
   extraFetchParams = () => ({
     content_type: [CT_VIDEO_PROGRAM_CHAPTER]

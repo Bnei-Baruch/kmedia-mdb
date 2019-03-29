@@ -6,21 +6,18 @@ import noop from 'lodash/noop';
 import { toHumanReadableTime } from '../../../helpers/time';
 import { getQuery, stringify } from '../../../helpers/url';
 
-/* eslint-disable react/no-unused-state */
 class BaseShareForm extends React.Component {
-  /* eslint-disable react/forbid-prop-types */
   static propTypes = {
     media: PropTypes.object.isRequired,
     item: PropTypes.object.isRequired,
     onSliceChange: PropTypes.func,
-    t: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     onSliceChange: noop,
   };
 
-  // eslint-disable-next-line class-methods-use-this
   static mlsToStrColon(seconds) {
     const duration = moment.duration({ seconds });
     const h        = duration.hours();
@@ -40,7 +37,7 @@ class BaseShareForm extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.item !== this.props.item) {
-      const { start, end } = this.state; // eslint-disable-line react/prop-types
+      const { start, end } = this.state;
       this.setState({ url: BaseShareForm.getUrl(nextProps, start, end) });
     }
   }
@@ -76,7 +73,7 @@ class BaseShareForm extends React.Component {
       : Math.round(media.currentTime);
     end     = Math.min(end, duration);
 
-    let start = this.state.start || 0; // eslint-disable-line react/no-access-state-in-setstate
+    let start = this.state.start || 0;
     if (end) {
       start = this.state.start < end ? start : 0;
     }
@@ -85,7 +82,6 @@ class BaseShareForm extends React.Component {
     onSliceChange(start, end);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   static getUrl(props, start, end) {
     const { protocol, hostname, port, pathname } = window.location;
 
@@ -111,13 +107,12 @@ class BaseShareForm extends React.Component {
     return `${shareUrl}?${stringify(q)}`;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   colonStrToSecond(str) {
     const s = str.replace(/[^\d:]+/g, '');
     return s.split(':')
       .map(t => (t ? parseInt(t, 10) : 0))
       .reverse()
-      .reduce((result, t, i) => (result + (t * Math.pow(60, i))), 0); // eslint-disable-line no-restricted-properties
+      .reduce((result, t, i) => (result + (t * Math.pow(60, i))), 0);
   }
 
   render() {

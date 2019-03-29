@@ -163,7 +163,6 @@ class AVPlayer extends PureComponent {
     // By default hide controls after a while if player playing.
     this.hideControlsTimeout();
 
-    // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ isClient: true });
 
     const { deviceInfo: { browser: { name: browserName } }, media, item, autoPlay } = this.props;
@@ -184,7 +183,7 @@ class AVPlayer extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { item } = this.state; // eslint-disable-line react/prop-types
+    const { item } = this.state;
     if (nextProps.item !== item) {
       this.setState({
         error: false,

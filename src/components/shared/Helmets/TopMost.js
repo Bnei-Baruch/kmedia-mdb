@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import Helmet from 'react-helmet-async';
+import { Helmet } from 'react-helmet-async';
 
 import Basic from './Basic';
 import Locale from './Locale';

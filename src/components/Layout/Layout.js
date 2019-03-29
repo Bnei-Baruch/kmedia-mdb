@@ -57,7 +57,7 @@ class Layout extends Component {
     const isShowHeaderSearch = (
       nextProps.location
       && this.isMobileDevice()
-      && nextProps.location.pathname.endsWith('search') // eslint-disable-line react/prop-types
+      && nextProps.location.pathname.endsWith('search')
     );
     this.setState({ isShowHeaderSearch });
   }
@@ -128,7 +128,7 @@ class Layout extends Component {
   };
 
   isMobileDevice = () => {
-    const { deviceInfo } = this.props; // eslint-disable-line react/prop-types
+    const { deviceInfo } = this.props;
     return deviceInfo.device && deviceInfo.device.type === 'mobile';
   };
 

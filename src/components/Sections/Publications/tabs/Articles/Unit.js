@@ -118,7 +118,6 @@ class MyUnitPage extends UnitPage {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   renderInfo() {
     return null;
   }

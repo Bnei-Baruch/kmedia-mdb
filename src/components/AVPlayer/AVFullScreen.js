@@ -5,7 +5,7 @@ import { Icon } from 'semantic-ui-react';
 
 class AVFullscreen extends Component {
   static propTypes = {
-    element: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+    element: PropTypes.object,
   };
 
   static defaultProps = {
