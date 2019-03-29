@@ -40,8 +40,7 @@ class Sketches extends React.Component {
       language: null,
     };
 
-    // many files - get all existing unique languages
-    if (zipFiles && Array.isArray(zipFiles)) {
+    if (zipFiles) {
       const { languages, language } = this.getLanguage(zipFiles, contentLanguage, uiLanguage);
       const files                   = this.filterFiles(zipFiles, language, unit.original_language);
       const itemState               = this.setCurrentItem(files);
@@ -65,7 +64,7 @@ class Sketches extends React.Component {
     if (this.isPropsChanged(prevProps)) {
       // full reset
       const zipFiles = this.getUnitFiles(unit);
-      if (zipFiles && Array.isArray(zipFiles)) {
+      if (zipFiles) {
         const { languages, language } = this.getLanguage(zipFiles, contentLanguage, uiLanguage);
         const files                   = this.filterFiles(zipFiles, language, unit.original_language);
         const itemState               = this.setCurrentItem(files);
@@ -150,11 +149,6 @@ class Sketches extends React.Component {
     const zipFiles = unit.files.filter(this.filterZipOrImageFiles);
     if (zipFiles.length === 0) {
       return null;
-    }
-
-    // at least one file
-    if (zipFiles.length === 1) {
-      return zipFiles[0];
     }
 
     return zipFiles;
