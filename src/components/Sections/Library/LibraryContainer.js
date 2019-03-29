@@ -328,7 +328,7 @@ class LibraryContainer extends Component {
   };
 
   render() {
-    const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push } = this.props;
+    const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push, history } = this.props;
 
     const fullPath = this.getFullPath(sourceId);
     const parentId = this.properParentId(fullPath);
@@ -351,6 +351,7 @@ class LibraryContainer extends Component {
           uiLanguage={language}
           contentLanguage={contentLanguage}
           langSelectorMount={this.headerMenuRef}
+          history={history}
         />
       );
     }
