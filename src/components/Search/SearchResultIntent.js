@@ -131,14 +131,12 @@ class SearchResultIntent extends SearchResultBase {
     );
   };
 
-  // eslint-disable-next-line react/no-multi-comp
   renderScrollPagination = () => {
     const { pageNo, pageSize } = this.state;
     const numberOfPages        = Math.round(this.props.unitCounter / pageSize);
 
     const pages   = new Array(numberOfPages).fill('a');
     const content = pages.map((p, i) => (
-      // eslint-disable-next-line react/no-array-index-key
       <Button onClick={() => this.onScrollChange(i)} key={i} icon className="bg_transparent">
         <Icon name={pageNo === i ? 'circle thin' : 'circle outline'} color="blue" size="small" />
       </Button>
@@ -147,7 +145,6 @@ class SearchResultIntent extends SearchResultBase {
     return <Segment basic textAlign="center" className="no-padding">{content}</Segment>;
   };
 
-  // eslint-disable-next-line react/no-multi-comp
   renderScrollRight = () => {
     const dir = RTL_LANGUAGES.includes(this.props.language) ? 'right' : 'left';
     return this.state.pageNo === 0 ? null : (
@@ -163,7 +160,6 @@ class SearchResultIntent extends SearchResultBase {
     );
   };
 
-  // eslint-disable-next-line react/no-multi-comp
   renderScrollLeft = () => {
     const { pageNo, pageSize } = this.state;
     const numberOfPages        = Math.round(this.props.unitCounter / pageSize);

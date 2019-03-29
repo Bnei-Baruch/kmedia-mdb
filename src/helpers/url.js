@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import qs from 'qs';
 import { parse as cookieParse } from 'cookie';
 
@@ -58,7 +57,6 @@ export const getLanguageFromPath = (path, headers) => {
     if (headerLanguages.length > 0) {
       console.log(`header-languages: ${headerLanguages}\n`);
       // THAT'S NOT STRUCTURE, THAT'S ARRAY OF LANGUAGES
-      // eslint-disable-next-line prefer-destructuring
       language = headerLanguages[0];
       return { language, redirect: language !== DEFAULT_LANGUAGE };
     }

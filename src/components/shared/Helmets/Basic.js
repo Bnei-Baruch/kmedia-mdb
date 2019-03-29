@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import Helmet from 'react-helmet-async';
+import { Helmet } from 'react-helmet-async';
 
 import { isEmpty, publicFile } from '../../../helpers/utils';
 import Image from './Image';
@@ -10,7 +10,7 @@ class Basic extends Component {
     title: PropTypes.string,
     description: PropTypes.string,
     imageUrl: PropTypes.string,
-    url: PropTypes.string, // eslint-disable-line react/no-unused-prop-types
+    url: PropTypes.string,
     keywords: PropTypes.string,
   };
 

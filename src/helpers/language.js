@@ -29,6 +29,5 @@ export const selectSuitableLanguage = (contentLanguage, uiLanguage, languages = 
   }
 
   // Or first available language
-  // eslint-disable-next-line prefer-destructuring
   return languages[0];
 };

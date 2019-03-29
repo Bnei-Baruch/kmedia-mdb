@@ -31,7 +31,6 @@ import {
 class TopicContainer extends Component {
   static propTypes = {
     roots: PropTypes.arrayOf(PropTypes.string),
-    // eslint-disable-next-line
     byId: PropTypes.object,
     t: PropTypes.func.isRequired,
     stats: PropTypes.objectOf(PropTypes.number),
@@ -186,7 +185,6 @@ class TopicContainer extends Component {
   renderLeaf = (node) => {
     const { stats } = this.props;
 
-    // eslint-disable-next-line
     return (
       <Link to={`/topics/${node.id}`}>
         {node.label}

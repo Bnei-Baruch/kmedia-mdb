@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Helmet from 'react-helmet-async';
+import { Helmet } from 'react-helmet-async';
 
 import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
 import { isEmpty } from '../../../helpers/utils';
@@ -18,7 +18,6 @@ class Image extends Component {
     unitOrUrl: null,
   };
 
-  // eslint-disable-next-line class-methods-use-this
   buildImage(url, width, height) {
     // TODO: enlarge is the most expensive op, use another one!
     const imageUrl = `${imaginaryUrl('enlarge')}?${Requests.makeParams({ url, width, height, nocrop: true })}`;

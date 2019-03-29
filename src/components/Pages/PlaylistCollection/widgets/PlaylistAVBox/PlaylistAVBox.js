@@ -114,7 +114,7 @@ class PlaylistAVBox extends Component {
         location: oldLocation,
         prevLink: oldPrevLink,
       }                                = this.props;
-    const { playlist }                 = this.state; // eslint-disable-line react/prop-types
+    const { playlist }                 = this.state;
     const { language: playerLanguage } = playlist;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();

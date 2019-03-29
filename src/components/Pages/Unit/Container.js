@@ -11,13 +11,13 @@ import Page from './Page';
 
 export class UnitContainer extends Component {
   static propTypes = {
-    match: shapes.RouterMatch.isRequired, // eslint-disable-line react/no-unused-prop-types
+    match: shapes.RouterMatch.isRequired,
     unit: shapes.ContentUnit,
     wip: shapes.WIP,
     err: shapes.Error,
     section: PropTypes.string,
     language: PropTypes.string.isRequired,
-    fetchUnit: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+    fetchUnit: PropTypes.func.isRequired,
   };
 
   static defaultProps = {

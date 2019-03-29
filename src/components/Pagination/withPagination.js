@@ -7,12 +7,12 @@ import * as shapes from '../shapes';
 class withPagination extends React.Component {
   static propTypes = {
     namespace: PropTypes.string.isRequired,
-    pageNo: PropTypes.number.isRequired, // eslint-disable-line react/no-unused-prop-types
+    pageNo: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
-    location: shapes.HistoryLocation.isRequired, // eslint-disable-line react/no-unused-prop-types
-    fetchList: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
-    setPage: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+    location: shapes.HistoryLocation.isRequired,
+    fetchList: PropTypes.func.isRequired,
+    setPage: PropTypes.func.isRequired,
   };
 
   static getPageFromLocation(location) {
@@ -42,7 +42,6 @@ class withPagination extends React.Component {
     fetchList(namespace, page || pageNo, { ...params, ...this.extraFetchParams(props), pageSize });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   extraFetchParams() {
     // this is overridden in subclasses. Try not to modify...
     return {};

@@ -13,7 +13,6 @@ class UILanguage extends Component {
     language: PropTypes.string.isRequired,
 
     // We need dependency on location in order to change Link every time url changes
-    // eslint-disable-next-line react/no-unused-prop-types
     location: shapes.HistoryLocation.isRequired,
     t: PropTypes.func.isRequired,
   };

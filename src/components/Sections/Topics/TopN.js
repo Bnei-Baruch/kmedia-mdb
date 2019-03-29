@@ -81,7 +81,6 @@ class TopN extends React.PureComponent {
       <Table.Row key={unit.id} verticalAlign="top">
         <Table.Cell>
           <span className="index__date">{filmDate}</span>
-          {/* eslint-disable-next-line */}
           <Link className="index__title" to={link}>
             {unit.name || NO_NAME}
           </Link>

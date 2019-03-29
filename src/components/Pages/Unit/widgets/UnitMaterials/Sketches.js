@@ -22,9 +22,9 @@ class Sketches extends React.Component {
     unit: shapes.ContentUnit.isRequired,
     t: PropTypes.func.isRequired,
     zipIndexById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
-    unzip: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
-    uiLanguage: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
-    contentLanguage: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
+    unzip: PropTypes.func.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
   };
 
   constructor(props) {
@@ -77,7 +77,7 @@ class Sketches extends React.Component {
         });
       }
     } else if (this.isStateChanged(prevState)) {
-      const { zipFiles, language } = this.state; // eslint-disable-line react/prop-types
+      const { zipFiles, language } = this.state;
 
       if (prevState.language !== language) {
         if (zipFiles && Array.isArray(zipFiles)) {
@@ -103,7 +103,6 @@ class Sketches extends React.Component {
   };
 
   isStateChanged = (prevState) => {
-    // eslint-disable-next-line react/prop-types
     const { zipFileId, language, imageFiles } = this.state;
 
     return prevState.zipFileId !== zipFileId

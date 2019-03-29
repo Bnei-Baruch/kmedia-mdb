@@ -96,14 +96,14 @@ class Transcription extends Component {
     return (nextProps.uiLanguage !== props.uiLanguage)
       || (nextProps.contentLanguage !== props.contentLanguage)
       || (nextProps.unit && !props.unit)
-      || (nextProps.unit.id !== props.unit.id) // eslint-disable-line react/prop-types
-      || (nextProps.unit.files !== props.unit.files // eslint-disable-line react/prop-types
+      || (nextProps.unit.id !== props.unit.id)
+      || (nextProps.unit.files !== props.unit.files
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
         || nextState.language !== state.language);
   }
 
   componentDidUpdate(prevState) {
-    const { selectedFile, language } = this.state; // eslint-disable-line react/prop-types
+    const { selectedFile, language } = this.state;
 
     if (selectedFile !== prevState.selectedFile || language !== prevState.language) {
       this.loadFile(selectedFile);

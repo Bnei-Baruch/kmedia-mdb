@@ -41,7 +41,6 @@ class HierarchicalFilter extends Component {
 
   componentDidMount() {
     if (this.activeRef) {
-      // eslint-disable-next-line react/no-find-dom-node
       scrollIntoView(ReactDOM.findDOMNode(this.activeRef), {
         time: 150, // half a second
         validTarget: (target, parentsScrolled) => (parentsScrolled < 1),
