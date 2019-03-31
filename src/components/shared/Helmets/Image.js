@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Helmet } from 'react-helmet-async';
+import Helmet from 'react-helmet-async';
 
 import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
 import { isEmpty } from '../../../helpers/utils';

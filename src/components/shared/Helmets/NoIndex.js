@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Helmet } from 'react-helmet-async';
+import Helmet from 'react-helmet-async';
 
 class NoIndex extends Component {
   render() {
