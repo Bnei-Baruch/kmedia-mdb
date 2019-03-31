@@ -1,4 +1,3 @@
-/* eslint-disable lines-between-class-members */
 import { MT_AUDIO, MT_TEXT, MT_VIDEO } from './consts';
 
 function makeMediaTypePredicate(...args) {

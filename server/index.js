@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 // ignore styles and replace images with their final path from webpack manifest
 require('ignore-styles');
 require('svg-url-loader');
@@ -11,7 +10,6 @@ require('ignore-styles').default(undefined, (module, filename) => {
     || filename.endsWith('.jpg')
     || filename.endsWith('.jpeg')
     || filename.endsWith('.svg')) {
-    // eslint-disable-next-line no-param-reassign
     module.exports = `${manifest[path.join('static', 'media', path.basename(filename))]}`;
   }
 });

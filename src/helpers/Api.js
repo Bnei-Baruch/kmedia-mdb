@@ -31,7 +31,6 @@ export class Requests {
   static encode = encodeURIComponent;
 }
 
-/* eslint-disable camelcase */
 class Api {
   static collection = ({ id, language }) => Requests.get(`collections/${id}?${Requests.makeParams({ language })}`);
 

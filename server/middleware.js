@@ -1,5 +1,3 @@
-/* eslint-disable consistent-return,no-console */
-
 export function logErrors(err, req, res, next) {
   try {
     throw new Error(err);
@@ -15,4 +13,5 @@ export function errorHandler(err, req, res, next) {
     return next(err);
   }
   res.status(500).send('Internal Server Error');
+  return null;
 }

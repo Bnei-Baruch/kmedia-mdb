@@ -22,9 +22,9 @@ class Sketches extends React.Component {
     unit: shapes.ContentUnit.isRequired,
     t: PropTypes.func.isRequired,
     zipIndexById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
-    unzip: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
-    uiLanguage: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
-    contentLanguage: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
+    unzip: PropTypes.func.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
   };
 
   constructor(props) {
@@ -40,8 +40,7 @@ class Sketches extends React.Component {
       language: null,
     };
 
-    // many files - get all existing unique languages
-    if (zipFiles && Array.isArray(zipFiles)) {
+    if (zipFiles) {
       const { languages, language } = this.getLanguage(zipFiles, contentLanguage, uiLanguage);
       const files                   = this.filterFiles(zipFiles, language, unit.original_language);
       const itemState               = this.setCurrentItem(files);
@@ -65,7 +64,7 @@ class Sketches extends React.Component {
     if (this.isPropsChanged(prevProps)) {
       // full reset
       const zipFiles = this.getUnitFiles(unit);
-      if (zipFiles && Array.isArray(zipFiles)) {
+      if (zipFiles) {
         const { languages, language } = this.getLanguage(zipFiles, contentLanguage, uiLanguage);
         const files                   = this.filterFiles(zipFiles, language, unit.original_language);
         const itemState               = this.setCurrentItem(files);
@@ -77,7 +76,7 @@ class Sketches extends React.Component {
         });
       }
     } else if (this.isStateChanged(prevState)) {
-      const { zipFiles, language } = this.state; // eslint-disable-line react/prop-types
+      const { zipFiles, language } = this.state;
 
       if (prevState.language !== language) {
         if (zipFiles && Array.isArray(zipFiles)) {
@@ -103,7 +102,6 @@ class Sketches extends React.Component {
   };
 
   isStateChanged = (prevState) => {
-    // eslint-disable-next-line react/prop-types
     const { zipFileId, language, imageFiles } = this.state;
 
     return prevState.zipFileId !== zipFileId
@@ -150,11 +148,6 @@ class Sketches extends React.Component {
     const zipFiles = unit.files.filter(this.filterZipOrImageFiles);
     if (zipFiles.length === 0) {
       return null;
-    }
-
-    // at least one file
-    if (zipFiles.length === 1) {
-      return zipFiles[0];
     }
 
     return zipFiles;

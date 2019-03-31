@@ -11,12 +11,12 @@ import Page from './Page';
 
 export class BlogPostContainer extends Component {
   static propTypes = {
-    match: shapes.RouterMatch.isRequired, // eslint-disable-line
+    match: shapes.RouterMatch.isRequired,
     post: shapes.BlogPost,
     wip: shapes.WIP,
     err: shapes.Error,
     language: PropTypes.string.isRequired,
-    fetchPost: PropTypes.func.isRequired, // eslint-disable-line
+    fetchPost: PropTypes.func.isRequired,
   };
 
   static defaultProps = {

@@ -11,7 +11,7 @@ class FlatListFilter extends Component {
       text: PropTypes.string.isRequired,
       value: PropTypes.any.isRequired,
     })),
-    value: PropTypes.any, // eslint-disable-line react/forbid-prop-types
+    value: PropTypes.any,
     onCancel: PropTypes.func,
     onApply: PropTypes.func,
     t: PropTypes.func.isRequired,

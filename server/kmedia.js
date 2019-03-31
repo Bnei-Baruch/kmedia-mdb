@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import { Requests } from '../src/helpers/Api';
 import { canonicalLink } from '../src/helpers/links';
 

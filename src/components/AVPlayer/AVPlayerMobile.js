@@ -39,7 +39,6 @@ class AVPlayerMobile extends PureComponent {
     requestedLanguage: PropTypes.string.isRequired,
 
     // Audio/Video switch props.
-    // eslint-disable-next-line react/forbid-prop-types
     item: PropTypes.object.isRequired, // TODO: (yaniv) add shape fo this
     onSwitchAV: PropTypes.func.isRequired,
 

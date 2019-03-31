@@ -15,7 +15,7 @@ import WipErr from '../../../../shared/WipErr/WipErr';
 
 class SeriesContainer extends Component {
   static propTypes = {
-    bySource: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+    bySource: PropTypes.array,
     wip: shapes.WIP,
     err: shapes.Error,
     language: PropTypes.string.isRequired,

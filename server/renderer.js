@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { URL } from 'url';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
@@ -26,7 +25,6 @@ import { initialState as settingsInitialState } from '../src/redux/modules/setti
 
 const helmetContext = {};
 
-// eslint-disable-next-line no-unused-vars
 const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all the work
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -42,7 +40,6 @@ function canonicalLink(req, lang) {
   const s = cPath.split('?');
 
   // start with path part
-  // eslint-disable-next-line prefer-destructuring
   cPath = s[0];
 
   // strip leading slash as it comes from BASE_URL
@@ -189,7 +186,7 @@ export default function serverRender(req, res, next, htmlData) {
 
             // actual render
             const markup = ReactDOMServer.renderToString(<HelmetProvider context={helmetContext}><App i18n={context.i18n} store={store} history={history} /></HelmetProvider>);
-            hrend = process.hrtime(hrstart);
+            hrend        = process.hrtime(hrstart);
             console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
             hrstart = process.hrtime();
 

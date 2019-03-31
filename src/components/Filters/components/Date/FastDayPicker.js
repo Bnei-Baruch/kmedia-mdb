@@ -42,7 +42,6 @@ class FastDayPicker extends Component {
 
   handleDayPickerRef = (ref) => {
     if (ref) {
-      // eslint-disable-next-line react/no-find-dom-node
       scrollIntoView(ReactDOM.findDOMNode(ref), {
         time: 150, // half a second
         validTarget: target => target !== window,
