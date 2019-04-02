@@ -425,7 +425,7 @@ class LibraryContainer extends Component {
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
                   apply={push}
-                  stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60) + (this.isMobileDevice() ? 60 : 0)}
+                  stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
                 />
               </Grid.Column>
               <Grid.Column
