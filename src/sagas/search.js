@@ -78,14 +78,14 @@ export function* search(action) {
       const cuIDsToFetch   = getIdsForFetch(data.search_result.hits.hits, 'units');
       const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'posts');
 
-      const lang = yield select(state => settings.getLanguage(state.settings));
+      const lang     = yield select(state => settings.getLanguage(state.settings));
       const respCU   = yield call(Api.units, {
         id: cuIDsToFetch,
         pageSize: cuIDsToFetch.length,
-        lang,
+        language: lang,
         with_files: true
       });
-      const respC    = yield call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, lang });
+      const respC    = yield call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, language: lang });
       const respPost = yield call(Api.posts, { id: postIDsToFetch, pageSize: postIDsToFetch.length });
 
       yield put(mdbActions.receiveContentUnits(respCU.data.content_units));
