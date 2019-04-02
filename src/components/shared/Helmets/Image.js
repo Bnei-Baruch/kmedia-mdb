@@ -18,7 +18,6 @@ class Image extends Component {
     unitOrUrl: null,
   };
 
-  // eslint-disable-next-line class-methods-use-this
   buildImage(url, width, height) {
     // TODO: enlarge is the most expensive op, use another one!
     const imageUrl = `${imaginaryUrl('enlarge')}?${Requests.makeParams({ url, width, height, nocrop: true })}`;

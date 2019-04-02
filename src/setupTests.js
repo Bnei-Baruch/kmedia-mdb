@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
@@ -16,7 +15,6 @@ export const mountedRender = (component, props) => mount(React.createElement(com
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the withNamespaces HoC receive the t function as a prop
   withNamespaces: () => (c) => {
-    // eslint-disable-next-line no-param-reassign
     c.defaultProps = { ...c.defaultProps, t: k => k };
     return c;
   },

@@ -74,7 +74,7 @@ class SearchResultBase extends Component {
     getTagById: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,
     hit: PropTypes.shape({}).isRequired,
-    rank: PropTypes.number, // eslint-disable-line react/no-unused-prop-types
+    rank: PropTypes.number,
   };
 
   static defaultProps = {
@@ -228,7 +228,6 @@ class SearchResultBase extends Component {
     if (titleArr.length > 0) {
       title += ` / ${titleArr.join(PATH_SEPARATOR)}`;
     }
-    // eslint-disable-next-line react/no-danger
     return <span dangerouslySetInnerHTML={{ __html: title }} />;
   };
 
@@ -240,7 +239,6 @@ class SearchResultBase extends Component {
       return null;
     }
     const __html = `...${highlight[prop].join('.....')}...`;
-    // eslint-disable-next-line react/no-danger
     return <span dangerouslySetInnerHTML={{ __html }} />;
   };
 

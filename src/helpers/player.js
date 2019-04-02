@@ -169,7 +169,6 @@ function playlist(collection, mediaType, contentLanguage, uiLanguage) {
 
   const shareUrl = canonicalLink(collection);
   items.forEach((x) => {
-    // eslint-disable-next-line no-param-reassign
     x.shareUrl = shareUrl;
   });
 

@@ -17,7 +17,7 @@ class CollectionContainer extends Component {
     collection: shapes.GenericCollection,
     wip: shapes.WipMap.isRequired,
     errors: shapes.ErrorsMap.isRequired,
-    fetchCollection: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+    fetchCollection: PropTypes.func.isRequired,
     clearCUStats: PropTypes.func.isRequired,
     renderUnit: PropTypes.func.isRequired,
   };

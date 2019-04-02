@@ -70,7 +70,6 @@ class LibraryContainer extends Component {
     const { location: { state: { tocIsActive } = { state: { tocIsActive: false } } } } = history;
 
     if (tocIsActive) {
-      // eslint-disable-next-line react/no-did-mount-set-state
       this.setState({ tocIsActive });
     }
 
@@ -83,7 +82,6 @@ class LibraryContainer extends Component {
       if (firstLeafId !== sourceId) {
         replace(`sources/${firstLeafId}`);
       } else {
-        // eslint-disable-next-line react/no-did-mount-set-state
         this.setState({ lastLoadedId: sourceId, language: this.props.language });
         this.fetchIndices(sourceId);
       }
@@ -103,7 +101,7 @@ class LibraryContainer extends Component {
     const firstLeafId = this.firstLeafId(sourceId);
     if (firstLeafId !== sourceId
       || this.props.sourceId !== sourceId
-      || this.state.lastLoadedId !== sourceId) { // eslint-disable-line react/prop-types
+      || this.state.lastLoadedId !== sourceId) {
       if (firstLeafId === sourceId) {
         this.loadNewIndices(sourceId, this.props.language);
       } else {
@@ -328,7 +326,7 @@ class LibraryContainer extends Component {
   };
 
   render() {
-    const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push } = this.props;
+    const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push, history } = this.props;
 
     const fullPath = this.getFullPath(sourceId);
     const parentId = this.properParentId(fullPath);
@@ -351,6 +349,7 @@ class LibraryContainer extends Component {
           uiLanguage={language}
           contentLanguage={contentLanguage}
           langSelectorMount={this.headerMenuRef}
+          history={history}
         />
       );
     }

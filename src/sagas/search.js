@@ -102,7 +102,7 @@ function* click(action) {
   try {
     yield call(Api.click, action.payload);
   } catch (err) {
-    console.error('search click logging error:', err); // eslint-disable-line no-console
+    console.error('search click logging error:', err);
   }
 }
 

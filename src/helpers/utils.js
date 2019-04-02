@@ -78,7 +78,6 @@ export const formatDuration = (duration, fmt = 'hh:mm:ss') => moment.duration(du
  */
 export function* intersperse(iterable, delimiter) {
   let first = true;
-  // eslint-disable-next-line no-restricted-syntax
   for (const item of iterable) {
     if (!first) {
       yield delimiter;

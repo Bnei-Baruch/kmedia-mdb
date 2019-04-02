@@ -68,7 +68,6 @@ export const renderUnit = (unit, t) => {
   );
 };
 
-/* eslint-disable-next-line react/no-multi-comp */
 class ClipsList extends Component {
   extraFetchParams = () => ({
     content_type: [CT_CLIP]
