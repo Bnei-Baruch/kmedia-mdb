@@ -7,13 +7,19 @@
 
     tr,
     tbody {
-      @include mobile { height: auto; }
+      @include mobile {
+        height: auto;
+      }
       height: 100%;
     }
 
     .image {
-      @include mobile { margin: 0 0 1em; }
-      @include small-mobile { margin: 0 auto 1em; }
+      @include mobile {
+        margin: 0 0 1em;
+      }
+      @include small-mobile {
+        margin: 0 auto 1em;
+      }
     }
 
     .author {
@@ -31,12 +37,16 @@
         }
 
         .sources__list {
-          @include mobile { position: static; }
+          @include mobile {
+            position: static;
+          }
           position: absolute;
         }
 
         .list {
-          @include mobile { position: static; }
+          @include mobile {
+            position: static;
+          }
           position: absolute;
         }
       }
@@ -59,7 +69,9 @@
     }
 
     .list {
-      @include mobile { margin-top: -.214286em !important;}
+      @include mobile {
+        margin-top: -.214286em !important;
+      }
       align-content: flex-start;
       bottom: 0;
       display: flex;
@@ -70,9 +82,15 @@
       top: 0;
 
       .item {
-        @include mobile { width: 50%;}
-        @include small-mobile { width: 100%; }
-        @include tablet { width: 50%; }
+        @include mobile {
+          width: 50%;
+        }
+        @include small-mobile {
+          width: 100%;
+        }
+        @include tablet {
+          width: 50%;
+        }
         padding: .214286em 0 !important;
         width: 33.333333333%;
       }
@@ -82,7 +100,6 @@
 
 // Library item - Unit
 .source {
-
 
   &.is-readable {
     -webkit-overflow-scrolling: touch;
@@ -112,6 +129,10 @@
       > div:nth-child(2) {
         @include tablet-mobile {
           transform: none;
+        }
+
+        @include mobile {
+          padding-top: calc(1em + 60px);
         }
       }
     }
@@ -240,25 +261,50 @@
     }
   }
 
-
   &__content {
     margin: 0 auto;
     max-width: $max-readble-width;
     padding-bottom: 1rem;
     padding-top: 1rem;
-    .is-serif & { font-family: Georgia, “Times New Roman”, Times, serif;}
-    .size8 & {font-size: (24 / 16) + em;}
-    .size7 & {font-size: (23 / 16) + em;}
-    .size6 & {font-size: (22 / 16) + em;}
-    .size5 & {font-size: (21 / 16) + em;}
-    .size4 & {font-size: (20 / 16) + em;}
-    .size3 & {font-size: (19 / 16) + em;}
-    .size2 & {font-size: (18 / 16) + em;}
-    .size1 & {font-size: (17 / 16) + em;}
-    .size0 & {font-size: (16 / 16) + em;}
-    .size-1 & {font-size: (15 / 16) + em;}
-    .size-2 & {font-size: (14 / 16) + em;}
-    .size-3 & {font-size: (13 / 16) + em;}
+    .is-serif & {
+      font-family: Georgia, “Times New Roman”, Times, serif;
+    }
+    .size8 & {
+      font-size: (24 / 16) + em;
+    }
+    .size7 & {
+      font-size: (23 / 16) + em;
+    }
+    .size6 & {
+      font-size: (22 / 16) + em;
+    }
+    .size5 & {
+      font-size: (21 / 16) + em;
+    }
+    .size4 & {
+      font-size: (20 / 16) + em;
+    }
+    .size3 & {
+      font-size: (19 / 16) + em;
+    }
+    .size2 & {
+      font-size: (18 / 16) + em;
+    }
+    .size1 & {
+      font-size: (17 / 16) + em;
+    }
+    .size0 & {
+      font-size: (16 / 16) + em;
+    }
+    .size-1 & {
+      font-size: (15 / 16) + em;
+    }
+    .size-2 & {
+      font-size: (14 / 16) + em;
+    }
+    .size-3 & {
+      font-size: (13 / 16) + em;
+    }
 
     * {
       line-height: 1.65;
@@ -271,8 +317,9 @@
     h5 {
       line-height: 1.28571429em;
 
-      .is-serif & { font-family: $serif-family;}
-
+      .is-serif & {
+        font-family: $serif-family;
+      }
 
     }
 
@@ -287,11 +334,21 @@
       }
     }
 
-    h1 {font-size: 2em;}
-    h2 {font-size: 1.71428571em;}
-    h3 {font-size: 1.28571429em;}
-    h4 {font-size: 1.07142857em;}
-    h5 {font-size: 1em;}
+    h1 {
+      font-size: 2em;
+    }
+    h2 {
+      font-size: 1.71428571em;
+    }
+    h3 {
+      font-size: 1.28571429em;
+    }
+    h4 {
+      font-size: 1.07142857em;
+    }
+    h5 {
+      font-size: 1em;
+    }
 
   }
 }
