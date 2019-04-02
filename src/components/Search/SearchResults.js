@@ -191,7 +191,7 @@ class SearchResults extends Component {
       content = (
         <Grid>
           <Grid.Column key="1" computer={12} tablet={16} mobile={16}>
-            {this.renderTopNote()}
+            {{ /*this.renderTopNote()*/ }}
 
             <div className="searchResult_content">
               <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
