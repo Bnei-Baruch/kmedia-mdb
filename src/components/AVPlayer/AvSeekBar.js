@@ -4,7 +4,7 @@ import isNumber from 'lodash/isNumber';
 import { withMediaProps } from 'react-media-player';
 
 import { PLAYER_MODE } from './constants';
-import { playerModeProp } from './propTypes';
+import { playerModeProp } from '../shapes';
 
 class AvSeekBar extends Component {
   static propTypes = {

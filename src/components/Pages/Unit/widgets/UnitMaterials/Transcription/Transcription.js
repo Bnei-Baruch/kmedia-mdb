@@ -5,7 +5,8 @@ import uniq from 'lodash/uniq';
 import { Container, Divider, Segment } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
-import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, RTL_LANGUAGES } from '../../../../../../helpers/consts';
+import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT } from '../../../../../../helpers/consts';
+import { isLanguageRtl } from '../../../../../../helpers/i18n-utils';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import MediaHelper from '../../../../../../helpers/media';
 import * as shapes from '../../../../../shapes';
@@ -68,8 +69,8 @@ class Transcription extends Component {
   static getDerivedStateFromProps(props, state) {
     const { contentLanguage, uiLanguage, unit, type } = props;
 
-    const textFiles   = Transcription.getTextFiles(unit, type);
-    const languages   = uniq(textFiles.map(x => x.language));
+    const textFiles = Transcription.getTextFiles(unit, type);
+    const languages = uniq(textFiles.map(x => x.language));
     let newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
     if (!newLanguage) {
       return false;
@@ -152,7 +153,7 @@ class Transcription extends Component {
     }
 
     if (data) {
-      const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
+      const direction = isLanguageRtl(language);
 
       const content = (
         <div
