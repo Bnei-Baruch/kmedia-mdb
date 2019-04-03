@@ -5,9 +5,7 @@ import * as shapes from '../../shapes';
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../Splash/Splash';
 
-const WipErr = (props) => {
-  const { wip, err, t } = props;
-
+const WipErr = ({ wip, err, t }) => {
   if (err) {
     if (err.response && err.response.status === 404) {
       return <FrownSplash text={t('messages.not-found')} subtext={t('messages.not-found-subtext')} />;

@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
-const Footer = (props) => {
-  const { t } = props;
-  const year  = new Date().getFullYear();
+const Footer = ({ t }) => {
+  const year = new Date().getFullYear();
 
   return (
     <div className="layout__footer">

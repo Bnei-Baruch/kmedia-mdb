@@ -8,8 +8,8 @@ import ImageGallery from 'react-image-gallery';
 import { Button, Container, Segment } from 'semantic-ui-react';
 
 import { assetUrl, imaginaryUrl, Requests } from '../../../../../helpers/Api';
-import { RTL_LANGUAGES } from '../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
+import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
 import { isEmpty, physicalFile, strCmp } from '../../../../../helpers/utils';
 import { actions, selectors } from '../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../redux/modules/settings';
@@ -268,8 +268,6 @@ class Sketches extends React.Component {
       imageObjsArr = imageObjs;
     }
 
-    const isRTL = RTL_LANGUAGES.includes(language);
-
     if (Array.isArray(imageObjsArr) && imageObjsArr.length > 0) {
       // prepare the image array for the gallery and sort it
       const items = imageObjsArr
@@ -294,7 +292,7 @@ class Sketches extends React.Component {
           <ImageGallery
             lazyLoad
             showFullscreenButton
-            isRTL={isRTL}
+            isRTL={isLanguageRtl(language)}
             items={items}
             thumbnailPosition="top"
             showPlayButton={false}

@@ -4,8 +4,9 @@ import { withNamespaces } from 'react-i18next';
 import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
 
 import { assetUrl } from '../../../../../../helpers/Api';
-import { CT_KITEI_MAKOR, MT_TEXT, RTL_LANGUAGES } from '../../../../../../helpers/consts';
+import { CT_KITEI_MAKOR, MT_TEXT } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
+import { isLanguageRtl } from '../../../../../../helpers/i18n-utils';
 import { formatError, tracePath } from '../../../../../../helpers/utils';
 import * as shapes from '../../../../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash/Splash';
@@ -256,7 +257,7 @@ class Sources extends Component {
     } else if (isTaas && pdfFile) {
       contents = <PDF pdfFile={assetUrl(`sources/${selected}/${pdfFile}`)} pageNumber={1} startsFrom={startsFrom} />;
     } else {
-      const direction = RTL_LANGUAGES.includes(uiLanguage) ? 'rtl' : 'ltr';
+      const direction = isLanguageRtl(uiLanguage);
       contents        = <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: contentData }} />;
     }
 

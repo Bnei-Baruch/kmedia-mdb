@@ -7,12 +7,12 @@ import { Button, Card, Container, Header, Icon, Image, Segment } from 'semantic-
 import { sectionLogo } from '../../helpers/images';
 import { selectors } from '../../redux/modules/mdb';
 import { tracePath } from '../../helpers/utils';
+import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { canonicalLink, sectionLink } from '../../helpers/links';
 import { actions as listsActions, selectors as lists } from '../../redux/modules/lists';
 import { assetUrl, imaginaryUrl, Requests } from '../../helpers/Api';
 import Link from '../Language/MultiLanguageLink';
 import {
-  RTL_LANGUAGES,
   SEARCH_INTENT_FILTER_NAMES,
   SEARCH_INTENT_HIT_TYPE_LESSONS,
   SEARCH_INTENT_HIT_TYPE_PROGRAMS,
@@ -146,7 +146,7 @@ class SearchResultIntent extends SearchResultBase {
   };
 
   renderScrollRight = () => {
-    const dir = RTL_LANGUAGES.includes(this.props.language) ? 'right' : 'left';
+    const dir = isLanguageRtl(this.props.language) ? 'right' : 'left';
     return this.state.pageNo === 0 ? null : (
       <Button
         icon={`chevron ${dir}`}
@@ -163,7 +163,7 @@ class SearchResultIntent extends SearchResultBase {
   renderScrollLeft = () => {
     const { pageNo, pageSize } = this.state;
     const numberOfPages        = Math.round(this.props.unitCounter / pageSize);
-    const dir                  = RTL_LANGUAGES.includes(this.props.language) ? 'left' : 'right';
+    const dir                  = isLanguageRtl(this.props.language) ? 'left' : 'right';
 
     return (pageNo >= numberOfPages - 1) ? null : (
       <Button
