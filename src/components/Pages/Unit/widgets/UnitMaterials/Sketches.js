@@ -249,7 +249,7 @@ class Sketches extends React.Component {
   );
 
   render() {
-    const { t, zipIndexById }                            = this.props;
+    const { t, zipIndexById, uiLanguage }                = this.props;
     const { zipFileId, languages, language, imageFiles } = this.state;
     const { wip, err, data }                             = zipIndexById[zipFileId] || {};
 
@@ -292,7 +292,7 @@ class Sketches extends React.Component {
           <ImageGallery
             lazyLoad
             showFullscreenButton
-            isRTL={isLanguageRtl(language)}
+            isRTL={isLanguageRtl(uiLanguage)}
             items={items}
             thumbnailPosition="top"
             showPlayButton={false}
