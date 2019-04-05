@@ -25,7 +25,10 @@ export class Requests {
         }
 
         return `${key}=${Requests.encode(value)}`;
-      }).join('&')}`
+      })
+      //can happen if parameter value is empty array 
+      .filter(p => p !== '')
+      .join('&')}`
   );
 
   static encode = encodeURIComponent;

@@ -127,7 +127,6 @@ class Filters extends Component {
           )}
           on="click"
           position={`bottom ${langDir === 'ltr' ? 'left' : 'right'}`}
-          // verticalOffset={-12}
           open={isActive}
           onClose={this.handlePopupClose}
           onOpen={() => this.handlePopupOpen(name)}

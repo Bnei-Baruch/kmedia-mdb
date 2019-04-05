@@ -6,8 +6,9 @@ import { withRouter } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 import { Button, Icon, Message } from 'semantic-ui-react';
 
-import { LANG_HEBREW, MT_AUDIO, MT_VIDEO, RTL_LANGUAGES } from '../../helpers/consts';
+import { LANG_HEBREW, MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
 import { fromHumanReadableTime } from '../../helpers/time';
+import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { getQuery } from '../../helpers/url';
 import * as shapes from '../shapes';
 import { PLAYER_MODE } from './constants';
@@ -406,7 +407,7 @@ class AVPlayerMobile extends PureComponent {
     const isVideo       = item.mediaType === MT_VIDEO;
     const isAudio       = item.mediaType === MT_AUDIO;
     const fallbackMedia = item.mediaType !== item.requestedMediaType;
-    const isRtl         = RTL_LANGUAGES.includes(uiLanguage);
+    const isRtl         = isLanguageRtl(uiLanguage);
 
     if (!item.src) {
       return <Message warning>{t('messages.no-playable-files')}</Message>;

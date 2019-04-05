@@ -6,12 +6,12 @@ import { Container, Portal, Segment } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
 import { assetUrl } from '../../../helpers/Api';
-import { RTL_LANGUAGES, } from '../../../helpers/consts';
 import { formatError, isEmpty } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
 import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
 import PDF from '../../shared/PDF/PDF';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { updateQuery } from '../../../helpers/url';
 import withPagination from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
@@ -79,7 +79,7 @@ class Library extends Component {
       return <Segment basic>&nbsp;</Segment>;
     }
 
-    const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
+    const direction = getLanguageDirection(language);
 
     // PDF.js will fetch file by itself
     const { pdfFile, startsFrom } = this.props;

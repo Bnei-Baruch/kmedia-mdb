@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 import { Breadcrumb, Container, Divider, Grid } from 'semantic-ui-react';
-
-import { RTL_LANGUAGES } from '../../../helpers/consts';
+import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { isEmpty } from '../../../helpers/utils';
 import { actions, selectors } from '../../../redux/modules/tags';
 import * as shapes from '../../shapes';
@@ -82,7 +81,7 @@ class TopicPage extends Component {
 
         return section;
       });
-      const breadCrumbIcon     = `${RTL_LANGUAGES.includes(language) ? 'left' : 'right'} angle`;
+      const breadCrumbIcon     = `${isLanguageRtl ? 'left' : 'right'} angle`;
 
       return (
         <Container className="padded">
