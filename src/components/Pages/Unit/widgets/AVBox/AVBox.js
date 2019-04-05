@@ -41,6 +41,7 @@ class AVBox extends Component {
     this.state                                                     = {
       playableItem,
       autoPlay: true,
+      newItemLanguage: null
     };
     playerHelper.setLanguageInQuery(history, playerLanguage);
   }
@@ -56,7 +57,7 @@ class AVBox extends Component {
 
     // Persist language in playableItem
     const item = AVBox.getPlayableItem(unit, newMediaType, newItemLanguage, uiLanguage);
-    this.setState({ playableItem: item });
+    this.setState({ playableItem: item, newItemLanguage });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -108,8 +109,8 @@ class AVBox extends Component {
   handleDropdownOpenedChange = isDropdownOpened => this.setState({ isDropdownOpened });
 
   render() {
-    const { t, autoPlayAllowed, uiLanguage, contentLanguage }         = this.props;
-    const { playableItem, mediaEditMode, autoPlay, isDropdownOpened } = this.state;
+    const { t, autoPlayAllowed, uiLanguage }                                           = this.props;
+    const { playableItem, mediaEditMode, autoPlay, isDropdownOpened, newItemLanguage } = this.state;
 
     if (isEmpty(playableItem)) {
       return (<div>{t('messages.no-playable-files')}</div>);
@@ -141,7 +142,7 @@ class AVBox extends Component {
                   languages={playableItem.availableLanguages}
                   uiLanguage={uiLanguage}
                   selectedLanguage={playableItem.language}
-                  requestedLanguage={contentLanguage}
+                  requestedLanguage={newItemLanguage}
                   onLanguageChange={this.handleChangeLanguage}
                   onMediaEditModeChange={this.handleMediaEditModeChange}
                   onDropdownOpenedChange={this.handleDropdownOpenedChange}
