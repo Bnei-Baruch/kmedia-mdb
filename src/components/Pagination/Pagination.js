@@ -27,7 +27,8 @@ import noop from 'lodash/noop';
 import { Icon, Menu } from 'semantic-ui-react';
 import classNames from 'classnames';
 
-import { DEFAULT_LANGUAGE, RTL_LANGUAGES } from '../../helpers/consts';
+import { DEFAULT_LANGUAGE } from '../../helpers/consts';
+import { isLanguageRtl } from '../../helpers/i18n-utils';
 
 class Pagination extends PureComponent {
   static TITLES = {
@@ -106,7 +107,7 @@ class Pagination extends PureComponent {
       return null;
     }
 
-    const isRTL = RTL_LANGUAGES.includes(language);
+    const isRTL = isLanguageRtl(language);
 
     const titles       = this.getTitle;
     const prevDisabled = current === 1;

@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { PLAYER_MODE } from './AVPlayer/constants';
 
 export const RouterMatch = PropTypes.shape({
   isExact: PropTypes.bool,
@@ -298,3 +299,5 @@ export const Children = PropTypes.oneOfType([
   PropTypes.arrayOf(PropTypes.node),
   PropTypes.node
 ]);
+
+export const playerModeProp = PropTypes.oneOf(Object.values(PLAYER_MODE));
