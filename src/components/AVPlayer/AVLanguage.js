@@ -36,6 +36,9 @@ class AVLanguage extends Component {
   handleChange = (e, data) => this.props.onSelect(e, data.value);
 
   handlePopup = (selectedLanguage, requestedLanguage) => {
+    if (requestedLanguage === null) {
+      return;
+    }
     const { lastRequestedLanguage } = this.state;
     if (lastRequestedLanguage === requestedLanguage) {
       this.setState({ openPopup: false });
