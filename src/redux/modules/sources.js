@@ -115,9 +115,7 @@ const onSSRPrepare = () => ({ ...initialState });
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
 
-  [settings.SET_LANGUAGE]: () => ({
-    ...initialState,
-  }),
+  [settings.SET_LANGUAGE]: onSSRPrepare,
 
   [RECEIVE_SOURCES]: (state, action) => {
     const [byId, byIdAZ] = prepareById(action.payload);
@@ -125,7 +123,7 @@ export const reducer = handleActions({
     // we keep selectors in state to avoid recreating them every time a selector is called
     const sortedByBook = getIdFuncs(byId);
     const sortedByAZ   = getIdFuncs(byIdAZ);
-
+    console.log('################### LOADED@@@');
     return {
       ...state,
       byId,
