@@ -27,7 +27,7 @@ export class UnitContainer extends Component {
     section: '',
   };
 
-  staic askForDataIfNeeded = (props, forceUpdate) => {
+  static askForDataIfNeeded = (props, forceUpdate) => {
     const { match, unit, wip, err, fetchUnit } = props;
 
     // We fetch stuff if we don't have it already
