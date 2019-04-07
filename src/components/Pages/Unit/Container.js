@@ -28,14 +28,14 @@ export class UnitContainer extends Component {
   };
 
   componentDidMount() {
-    this.askForDataIfNeeded(this.props);
+    this.askForDataIfNeeded(this.props, false);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.askForDataIfNeeded(nextProps);
+    this.askForDataIfNeeded(nextProps, true);
   }
 
-  askForDataIfNeeded = (props) => {
+  askForDataIfNeeded = (props, componentIsMounted) => {
     const { match, unit, wip, err, fetchUnit } = props;
 
     // We fetch stuff if we don't have it already
@@ -46,7 +46,8 @@ export class UnitContainer extends Component {
 
     const { id } = match.params;
     if (
-      unit
+      componentIsMounted
+      && unit
       && unit.id === id
       && Array.isArray(unit.files)) {
       return;
