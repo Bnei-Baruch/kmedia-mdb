@@ -263,7 +263,7 @@ export const libraryPage = async (store, match) => {
     timeout -= 10;
     await sleep(10);
   }
-  console.log('loaded: ', timeout);
+
   const sourcesState = store.getState().sources;
   let sourceID       = match.params.id;
   if (sourcesSelectors.areSourcesLoaded(sourcesState)) {
@@ -273,10 +273,8 @@ export const libraryPage = async (store, match) => {
 
   return store.sagaMiddleWare.run(assetsSagas.sourceIndex, assetsActions.sourceIndex(sourceID)).done
     .then(() => {
-      const state = store.getState();
-      console.log('state', assetsSelectors.getSourceIndexById(state.assets));
+      const state    = store.getState();
       const { data } = assetsSelectors.getSourceIndexById(state.assets)[sourceID];
-      console.log('data', data);
       if (!data) {
         return;
       }

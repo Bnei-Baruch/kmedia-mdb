@@ -123,7 +123,7 @@ export const reducer = handleActions({
     // we keep selectors in state to avoid recreating them every time a selector is called
     const sortedByBook = getIdFuncs(byId);
     const sortedByAZ   = getIdFuncs(byIdAZ);
-    console.log('################### LOADED@@@');
+
     return {
       ...state,
       byId,
