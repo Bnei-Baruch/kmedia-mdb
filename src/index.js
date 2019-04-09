@@ -47,6 +47,4 @@ ReactDOM.hydrate(
 
 // We ask for semi-quasi static data here since
 // we strip it from SSR to save initial network bandwidth
-// excluding Library where we need tree of kabbalists for
-// calculation of real Article to show
 store.dispatch(mdb.fetchSQData());

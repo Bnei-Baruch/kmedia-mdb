@@ -252,8 +252,6 @@ function firstLeafId(sourceId, getSourceById) {
 }
 
 export const libraryPage = async (store, match) => {
-  store.dispatch(mdbActions.fetchSQData());
-
   // This is a rather ugly, timeout, sleep, loop.
   // We wait for sources to be loaded so we could
   // determine the firstLeafID for redirection.
