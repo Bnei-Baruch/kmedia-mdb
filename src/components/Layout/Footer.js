@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { Container, Grid, Header } from 'semantic-ui-react';
+import { Container, Grid, Header, Button } from 'semantic-ui-react';
 
 const Footer = ({ t }) => {
   const year = new Date().getFullYear();
@@ -21,6 +21,7 @@ const Footer = ({ t }) => {
                   {t('nav.footer.rights')}
                 </small>
               </Header>
+              <Button icon="rss square" floated="left" color="orange" />
             </Grid.Column>
           </Grid.Row>
         </Grid>
