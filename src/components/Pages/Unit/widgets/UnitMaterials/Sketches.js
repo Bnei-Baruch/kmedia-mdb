@@ -27,7 +27,7 @@ class Sketches extends React.Component {
     contentLanguage: PropTypes.string.isRequired,
   };
 
-  static getUnitFiles = (unit) => {
+  static getUnitSketchFiles = (unit) => {
     if (!Array.isArray(unit.files)) {
       return null;
     }
@@ -139,7 +139,7 @@ class Sketches extends React.Component {
 
   processUnit = () => {
     const { unit, contentLanguage, uiLanguage } = this.props;
-    const zipFiles = Sketches.getUnitFiles(unit);
+    const zipFiles = Sketches.getUnitSketchFiles(unit);
 
     if (zipFiles) {
       this.setStateByZipFiles(zipFiles, contentLanguage, uiLanguage, unit);
@@ -152,7 +152,6 @@ class Sketches extends React.Component {
 
     this.setState({ zipFiles, languages, language, ...itemState });
   }
-
 
   getItemState = (zipFiles, language, unit) => {
     const files = Sketches.filterZipFiles(zipFiles, language, unit.original_language);
