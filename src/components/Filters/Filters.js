@@ -131,6 +131,7 @@ class Filters extends Component {
           onClose={this.handlePopupClose}
           onOpen={() => this.handlePopupOpen(name)}
           style={popupStyle}
+          closeOnDocumentClick={false}        
         >
           <Popup.Content className={`filter-popup__content ${langDir}`}>
             <FilterComponent

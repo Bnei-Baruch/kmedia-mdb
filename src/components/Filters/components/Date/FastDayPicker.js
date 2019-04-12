@@ -7,7 +7,7 @@ import scrollIntoView from 'scroll-into-view';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import Navbar from 'react-day-picker/lib/src/Navbar';
 import MomentLocaleUtils, { formatDate, parseDate } from 'react-day-picker/moment';
-import { Input, Segment, Modal } from 'semantic-ui-react';
+import { Input, Segment, Popup } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
 
 import { today } from '../../../../helpers/date';
@@ -34,7 +34,7 @@ class FastDayPicker extends Component {
 
   state = {
     month: null,
-    open: false,
+    isOpen: false
   };
 
   inputElement = null;
@@ -100,9 +100,23 @@ class FastDayPicker extends Component {
     );
   };
 
+  openPopup = () => {
+    this.setState({isOpen: true});
+  }
+
+  closePopup = () => {
+    this.setState({isOpen: false});
+  }
+
+  onPopupDayChange = (date) => {
+    const { onDayChange } = this.props;    
+    onDayChange(date);
+    this.closePopup();
+  }
+
   render() {
     const { language, value, label, onDayChange } = this.props;
-    const { month, open, topPos, leftPos } = this.state;
+    const { month, isOpen } = this.state;
     const selected = value || today().toDate();
     const selectedToString = moment(selected).format('YYYY-MM-DD');
     const locale = getLanguageLocaleWORegion(language);
@@ -169,64 +183,41 @@ class FastDayPicker extends Component {
             navbarElement: props => this.getNavBarElement(props, language)
           }}
         /> */}
-        <Input
-          fluid
-          label
-          size="small"
-          icon="calendar alternate outline"
-          placeholder={`${formatDate(new Date(), 'l', locale)}`}
-          value={selectedToString}
-          format="l"
-          onClick={() => {
-            const domNode = ReactDOM.findDOMNode(this.inputElement);
-            let rect = domNode.getBoundingClientRect();
-            let topPos = rect.top - 305;
-            if (topPos < 0)
-              topPos = 0;
-            this.setState({ open: true, topPos: topPos, leftPos: rect.left });
-          }
-          }
-          ref={(el) => {
-            this.inputElement = el;
-          }}
-        />
-        <Modal dimmer={false}
-          open={open} onClose={() => this.setState({ open: false })}
-
-          closeOnDimmerClick={false}
-          closeOnDocumentClick={false}
-          closeOnPortalMouseLeave={false}
-          closeOnTriggerBlur={false}
-          closeOnTriggerMouseLeave={false}
-
-          style={{
-            width: '300px',
-            top: topPos,
-            left: leftPos,
-          }}>
-          <Modal.Content >
+        <Popup          
+          basic
+          flowing
+          on='focus'
+          open={isOpen}
+          onOpen={this.openPopup}
+          onClose={this.closePopup}
+          trigger={
+            <Input
+              fluid
+              label
+              size="small"
+              icon="calendar alternate outline"
+              placeholder={`${formatDate(new Date(), 'l', locale)}`}
+              value={selectedToString}
+              format="l"              
+          /> }         
+        >
+          <Popup.Content>
             <DayPicker
-              locale={locale}
-              localeUtils={MomentLocaleUtils}
-              disabledDays={{ after: new Date() }}
-              captionElement={() => null}
-              navbarElement={props => this.getNavBarElement(props, language)}
-              month={month}
-              toMonth={today().toDate()}
-              dir={getLanguageDirection(language)}
-              ref={this.handleDayPickerRef}
-              onDayChange={onDayChange}
-              hideOnDayClick={false}
-
-              closeOnDimmerClick={false}
-              closeOnDocumentClick={false}
-              closeOnPortalMouseLeave={false}
-              closeOnTriggerBlur={false}
-              closeOnTriggerMouseLeave={false}
-
-            />
-          </Modal.Content>
-        </Modal>
+                locale={locale}
+                localeUtils={MomentLocaleUtils}
+                disabledDays={{ after: new Date() }}
+                captionElement={() => null}
+                navbarElement={props => this.getNavBarElement(props, language)}
+                month={month}
+                toMonth={today().toDate()}
+                dir={getLanguageDirection(language)}
+                ref={this.handleDayPickerRef}
+                onDayChange={this.onPopupDayChange}
+                onDayClick={this.onPopupDayChange}              
+              />
+          </Popup.Content>
+        </Popup>
+        
 
       </div>
     );
