@@ -101,15 +101,15 @@ class FastDayPicker extends Component {
   };
 
   openPopup = () => {
-    this.setState({isOpen: true});
+    this.setState({ isOpen: true });
   }
 
   closePopup = () => {
-    this.setState({isOpen: false});
+    this.setState({ isOpen: false });
   }
 
   onPopupDayChange = (date) => {
-    const { onDayChange } = this.props;    
+    const { onDayChange } = this.props;
     onDayChange(date);
     this.closePopup();
   }
@@ -183,7 +183,7 @@ class FastDayPicker extends Component {
             navbarElement: props => this.getNavBarElement(props, language)
           }}
         /> */}
-        <Popup          
+        <Popup
           basic
           flowing
           on='focus'
@@ -198,26 +198,26 @@ class FastDayPicker extends Component {
               icon="calendar alternate outline"
               placeholder={`${formatDate(new Date(), 'l', locale)}`}
               value={selectedToString}
-              format="l"              
-          /> }         
+              format="l"
+            />}
         >
           <Popup.Content>
             <DayPicker
-                locale={locale}
-                localeUtils={MomentLocaleUtils}
-                disabledDays={{ after: new Date() }}
-                captionElement={() => null}
-                navbarElement={props => this.getNavBarElement(props, language)}
-                month={month}
-                toMonth={today().toDate()}
-                dir={getLanguageDirection(language)}
-                ref={this.handleDayPickerRef}
-                onDayChange={this.onPopupDayChange}
-                onDayClick={this.onPopupDayChange}              
-              />
+              locale={locale}
+              localeUtils={MomentLocaleUtils}
+              disabledDays={{ after: new Date() }}
+              captionElement={() => null}
+              navbarElement={props => this.getNavBarElement(props, language)}
+              month={month}
+              toMonth={today().toDate()}
+              dir={getLanguageDirection(language)}
+              ref={this.handleDayPickerRef}
+              onDayChange={this.onPopupDayChange}
+              onDayClick={this.onPopupDayChange}
+            />
           </Popup.Content>
         </Popup>
-        
+
 
       </div>
     );
