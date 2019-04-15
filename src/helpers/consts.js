@@ -166,12 +166,6 @@ export const ALL_LANGUAGES = [
 
 export const DEFAULT_LANGUAGE = LANG_ENGLISH;
 
-export const RTL_LANGUAGES = [
-  LANG_HEBREW,
-  LANG_ARABIC,
-  LANG_PERSIAN,
-];
-
 export const LANGUAGE_OPTIONS = ALL_LANGUAGES.map(x => LANGUAGES[x]);
 
 export const MT_VIDEO        = 'video';

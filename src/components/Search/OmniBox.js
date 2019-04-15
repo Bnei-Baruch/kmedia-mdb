@@ -8,9 +8,9 @@ import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import { Icon, Input, Search } from 'semantic-ui-react';
 
-import { RTL_LANGUAGES } from '../../helpers/consts';
 import { SuggestionsHelper } from '../../helpers/search';
 import { getQuery, isDebMode } from '../../helpers/url';
+import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { isEmpty } from '../../helpers/utils';
 import { filtersTransformer } from '../../filters';
 import { actions as filtersActions, selectors as filterSelectors } from '../../redux/modules/filters';
@@ -184,7 +184,7 @@ export class OmniBox extends Component {
 
   makeResult = (language, result) => ({
     ...result,
-    className: RTL_LANGUAGES.includes(language) ? 'search-result-rtl' : '',
+    className: isLanguageRtl(language) ? 'search-result-rtl' : '',
   });
 
   renderInput() {

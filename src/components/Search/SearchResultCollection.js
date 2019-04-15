@@ -59,8 +59,8 @@ class SearchResultCollection extends SearchResultBase {
           <span ref={this.handleImageContextRef}>
             <FallbackImage
               circular
-              width={isImgLoaded ? this.imgRef.offsetWidth : null}
-              height={isImgLoaded ? this.imgRef.offsetWidth : null}
+              width={isImgLoaded ? this.imgRef.offsetWidth.toString() : null}
+              height={isImgLoaded ? this.imgRef.offsetWidth.toString() : null}
               onLoad={this.imgLoadHandler}
               floated="left"
               fallbackImage={null}

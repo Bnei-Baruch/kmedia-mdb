@@ -1,20 +1,3 @@
-/*
-eslint-disable
-semi,
-no-else-return,
-no-console,
-no-use-before-define,
-brace-style,
-keyword-spacing,
-no-nested-ternary,
-no-multi-spaces,
-id-length,
-object-curly-spacing,
-one-var,
-one-var-declaration-per-line,
-array-bracket-spacing,
-*/
-
 import { asEffect, is } from 'redux-saga/utils';
 
 const util = require('util');

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import noop from 'lodash/noop';
-import { Accordion, Button, Flag, Header, Menu, Segment } from 'semantic-ui-react';
+import { Accordion, Button, Header, Menu, Segment, Flag } from 'semantic-ui-react';
 import { ALL_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
 
 class LanguageFilter extends Component {
@@ -30,14 +30,10 @@ class LanguageFilter extends Component {
   }
 
   onLanguageChange = (event, data) => {
-    this.setState({ sValue: `${data.name}` });
+    this.props.onApply(data.name);
   };
 
   onCancel = () => this.props.onCancel();
-
-  apply = () => {
-    this.props.onApply(this.state.sValue);
-  };
 
   toggleCustom = () => {
     const { showCustom } = this.state;
@@ -59,14 +55,6 @@ class LanguageFilter extends Component {
               onClick={this.onCancel}
             />
             <Header size="small" textAlign="center" content={t('filters.language-filter.label')} />
-            <Button
-              primary
-              compact
-              size="small"
-              content={t('buttons.apply')}
-              disabled={!sValue}
-              onClick={this.apply}
-            />
           </div>
         </Segment>
         <Segment className="filter-popup__body language-filter">

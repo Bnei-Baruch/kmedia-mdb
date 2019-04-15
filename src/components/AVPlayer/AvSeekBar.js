@@ -4,10 +4,9 @@ import isNumber from 'lodash/isNumber';
 import { withMediaProps } from 'react-media-player';
 
 import { PLAYER_MODE } from './constants';
-import { playerModeProp } from './propTypes';
+import { playerModeProp } from '../shapes';
 
 class AvSeekBar extends Component {
-  /* eslint-disable react/forbid-prop-types */
   static propTypes = {
     media: PropTypes.object.isRequired, // TODO: (yaniv) use right propType
     buffers: PropTypes.array,
@@ -41,8 +40,8 @@ class AvSeekBar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.media.currentTime !== nextProps.media.currentTime) { // eslint-disable-line react/prop-types
-      this.setState({ playPoint: nextProps.media.currentTime }); // eslint-disable-line react/prop-types
+    if (this.props.media.currentTime !== nextProps.media.currentTime) {
+      this.setState({ playPoint: nextProps.media.currentTime });
     }
   }
 

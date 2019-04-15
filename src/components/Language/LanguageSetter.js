@@ -14,7 +14,6 @@ const LanguageSetter = withRouter(connect(
   }),
   { setLanguage: settingActions.setLanguage }
 )(class extends React.Component {
-  /* eslint-disable react/no-unused-prop-types */
   static propTypes = {
     currentLanguage: PropTypes.string.isRequired,
     language: PropTypes.string,

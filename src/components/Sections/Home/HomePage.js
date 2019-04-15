@@ -42,11 +42,62 @@ class HomePage extends Component {
     err: null,
   };
 
+  state = {
+    latestUnitsFirstSection: null,
+    latestUnitsLastSection: null
+  };
+
+  static getDerivedStateFromProps(props) {
+    const { latestUnits } = props;
+    const secondTypes     = ['WOMEN_LESSON', 'VIRTUAL_LESSON', 'MEAL', 'CLIP'];
+    const first           = [];
+    const last            = [];
+
+    // map units to sections or content type
+    function mapCU(list, bySection = true) {
+      const a = list.reduce((acc, val) => {
+        const s = canonicalLink(val).split('/');
+
+        if (bySection && s.length < 3) {
+          return acc;
+        }
+
+        const section = bySection ? s[1] : `${s[1]}_${val.content_type}`;
+        const v       = acc[section];
+        if (v) {
+          if (v.film_date < val.film_date) {
+            acc[section] = val;
+          }
+        } else {
+          acc[section] = val;
+        }
+
+        return acc;
+      }, {});
+
+      return Object.entries(a);
+    }
+
+    latestUnits.forEach((x) => {
+      if (secondTypes.includes(x.content_type)) {
+        last.push(x);
+      } else {
+        first.push(x);
+      }
+    });
+
+    // sort sections based on their units
+    // we only have 4 slots and > 4 sections ...
+    const latestUnitsFirstSection = mapCU(first).sort((a, b) => strCmp(b[1].film_date, a[1].film_date));
+    const latestUnitsLastSection  = mapCU(last, false).sort((a, b) => strCmp(b[1].film_date, a[1].film_date));
+
+    return { latestUnitsFirstSection, latestUnitsLastSection };
+  }
+
   render() {
     const
       {
         latestLesson,
-        latestUnits,
         latestBlogPosts,
         latestTweets,
         banner,
@@ -55,7 +106,8 @@ class HomePage extends Component {
         err,
         t,
         location
-      } = this.props;
+      }                                                       = this.props;
+    const { latestUnitsFirstSection, latestUnitsLastSection } = this.state;
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
@@ -65,30 +117,6 @@ class HomePage extends Component {
     if (!latestLesson) {
       return null;
     }
-
-    // map units to sections
-    const cuBySection = latestUnits.reduce((acc, val) => {
-      const s = canonicalLink(val).split('/');
-      if (s.length < 3) {
-        return acc;
-      }
-
-      const section = s[1];
-      const v       = acc[section];
-      if (v) {
-        if (v.film_date < val.film_date) {
-          acc[section] = val;
-        }
-      } else {
-        acc[section] = val;
-      }
-
-      return acc;
-    }, {});
-
-    // sort sections based on their units
-    // we only have 4 slots and > 4 sections ...
-    const sortedCUs = Object.entries(cuBySection).sort((a, b) => strCmp(b[1].film_date, a[1].film_date));
 
     const map = x => (
       <Grid.Column mobile={5} tablet={3} computer={3} key={x} textAlign="center">
@@ -141,9 +169,18 @@ class HomePage extends Component {
             <Section title={t('home.updates')}>
               <Card.Group itemsPerRow={4} doubling>
                 {
-                  sortedCUs.slice(0, 4).map((x) => {
+                  latestUnitsFirstSection.slice(0, 4).map((x) => {
                     const [section, unit] = x;
                     return <LatestUpdate key={section} unit={unit} label={t(`nav.sidebar.${section}`)} />;
+                  })
+                }
+              </Card.Group>
+              <Card.Group itemsPerRow={4} doubling>
+                {
+                  latestUnitsLastSection.slice(0, 4).map((x) => {
+                    const [key, unit] = x;
+                    const section     = key.split('_')[0];
+                    return <LatestUpdate key={key} unit={unit} label={t(`nav.sidebar.${section}`)} />;
                   })
                 }
               </Card.Group>

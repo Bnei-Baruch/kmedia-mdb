@@ -1,7 +1,9 @@
-/* eslint-disable consistent-return,no-console */
-
 export function logErrors(err, req, res, next) {
-  console.error(err.stack);
+  try {
+    throw new Error(err);
+  } catch (e) {
+    console.error(e.stack || e);
+  }
   console.info(`error handling ${req.originalUrl}`);
   next(err);
 }
@@ -11,4 +13,5 @@ export function errorHandler(err, req, res, next) {
     return next(err);
   }
   res.status(500).send('Internal Server Error');
+  return null;
 }

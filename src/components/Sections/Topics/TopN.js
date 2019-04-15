@@ -18,6 +18,7 @@ class TopN extends React.PureComponent {
     tagPath: PropTypes.arrayOf(PropTypes.object).isRequired,
     units: PropTypes.arrayOf(shapes.ContentUnit).isRequired,
     t: PropTypes.func.isRequired,
+    language: PropTypes.string.isRequired,
   };
 
   state = {
@@ -51,13 +52,13 @@ class TopN extends React.PureComponent {
   };
 
   getTopicUrl = () => {
-    const { section, tagPath } = this.props;
+    const { section, tagPath, language } = this.props;
 
     const query = filtersTransformer.toQueryParams([
       { name: 'topics-filter', values: [tagPath.map(y => y.id)] }
     ]);
 
-    return `/${section}?${urlSearchStringify(query)}`;
+    return `/${language}/${section}?${urlSearchStringify(query)}`;
   };
 
   compareUnits = (a, b) => {
@@ -80,7 +81,6 @@ class TopN extends React.PureComponent {
       <Table.Row key={unit.id} verticalAlign="top">
         <Table.Cell>
           <span className="index__date">{filmDate}</span>
-          {/* eslint-disable-next-line */}
           <Link className="index__title" to={link}>
             {unit.name || NO_NAME}
           </Link>

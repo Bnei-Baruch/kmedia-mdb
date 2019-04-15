@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import ReactDOM from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -71,7 +70,6 @@ class LibraryContainer extends Component {
     const { location: { state: { tocIsActive } = { state: { tocIsActive: false } } } } = history;
 
     if (tocIsActive) {
-      // eslint-disable-next-line react/no-did-mount-set-state
       this.setState({ tocIsActive });
     }
 
@@ -84,7 +82,6 @@ class LibraryContainer extends Component {
       if (firstLeafId !== sourceId) {
         replace(`sources/${firstLeafId}`);
       } else {
-        // eslint-disable-next-line react/no-did-mount-set-state
         this.setState({ lastLoadedId: sourceId, language: this.props.language });
         this.fetchIndices(sourceId);
       }
@@ -104,21 +101,11 @@ class LibraryContainer extends Component {
     const firstLeafId = this.firstLeafId(sourceId);
     if (firstLeafId !== sourceId
       || this.props.sourceId !== sourceId
-      || this.state.lastLoadedId !== sourceId) { // eslint-disable-line react/prop-types
+      || this.state.lastLoadedId !== sourceId) {
       if (firstLeafId === sourceId) {
         this.loadNewIndices(sourceId, this.props.language);
       } else {
         replace(`sources/${firstLeafId}`);
-      }
-    }
-
-    // @TODO - David, can be state that change scroll to many times.
-    if (!isEmpty(this.accordionContext) && !isEmpty(this.selectedAccordionContext)) {
-      // eslint-disable-next-line react/no-find-dom-node
-      const elScrollTop = ReactDOM.findDOMNode(this.selectedAccordionContext).offsetTop;
-      const p           = this.accordionContext.parentElement; // eslint-disable-line react/prop-types
-      if (p.scrollTop !== elScrollTop) {
-        p.scrollTop = elScrollTop;
       }
     }
   }
@@ -185,14 +172,6 @@ class LibraryContainer extends Component {
 
   handleContextRef = (ref) => {
     this.contextRef = ref;
-  };
-
-  handleAccordionContext = (ref) => {
-    this.accordionContext = ref;
-  };
-
-  handleSelectedAccordionContext = (ref) => {
-    this.selectedAccordionContext = ref;
   };
 
   handleSecondaryHeaderRef = (ref) => {
@@ -315,12 +294,8 @@ class LibraryContainer extends Component {
 
   handleFilterKeyDown = (e) => {
     if (e.keyCode === 27) { // Esc
-      this.handleFilterClear();
+      this.setState({ match: '' });
     }
-  };
-
-  handleFilterClear = () => {
-    this.setState({ match: '' });
   };
 
   print = () => {
@@ -347,7 +322,7 @@ class LibraryContainer extends Component {
   };
 
   render() {
-    const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push } = this.props;
+    const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push, history } = this.props;
 
     const fullPath = this.getFullPath(sourceId);
     const parentId = this.properParentId(fullPath);
@@ -370,6 +345,7 @@ class LibraryContainer extends Component {
           uiLanguage={language}
           contentLanguage={contentLanguage}
           langSelectorMount={this.headerMenuRef}
+          history={history}
         />
       );
     }
@@ -439,7 +415,6 @@ class LibraryContainer extends Component {
                 <TOC
                   language={language}
                   match={matchString ? match : ''}
-                  matchApplied={this.handleFilterClear}
                   fullPath={fullPath}
                   rootId={parentId}
                   contextRef={this.contextRef}
@@ -457,14 +432,14 @@ class LibraryContainer extends Component {
                   [`size${fontSize}`]: true,
                 })}
               >
-                <div ref={this.handleContextRef}>
+                <Ref innerRef={this.handleContextRef}>
                   <div
                     className="source__content"
                     style={{ minHeight: `calc(100vh - ${secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}px)` }}
                   >
                     {content}
                   </div>
-                </div>
+                </Ref>
               </Grid.Column>
             </Grid.Row>
           </Grid>

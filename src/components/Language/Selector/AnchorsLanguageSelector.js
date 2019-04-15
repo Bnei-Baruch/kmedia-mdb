@@ -13,13 +13,12 @@ class AnchorsLanguageSelector extends BaseLanguageSelector {
   };
 
   render() {
-    const options = this.getOptions(this.props);
+    const options = BaseLanguageSelector.getOptions(this.props);
 
     return (
       <div className="anchors-language-selector">
         {
           options.map(x => (
-            // eslint-disable-next-line jsx-a11y/anchor-is-valid
             <Link
               key={x.value}
               title={x.text}

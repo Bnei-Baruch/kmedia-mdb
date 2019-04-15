@@ -254,12 +254,12 @@ function firstLeafId(sourceId, getSourceById) {
 export const libraryPage = async (store, match) => {
   // This is a rather ugly, timeout, sleep, loop.
   // We wait for sources to be loaded so we could
-  // determine the firstLeadfID for redirection.
+  // determine the firstLeafID for redirection.
   // Fix for AR-356
   let timeout = 5000;
   while (timeout && !sourcesSelectors.areSourcesLoaded(store.getState().sources)) {
     timeout -= 10;
-    await sleep(10); // eslint-disable-line no-await-in-loop
+    await sleep(10);
   }
 
   const sourcesState = store.getState().sources;
@@ -278,7 +278,9 @@ export const libraryPage = async (store, match) => {
       }
 
       let language    = null;
-      const uiLang    = settingsSelectors.getLanguage(state.settings);
+      const location  = (state && state.router.location) || {};
+      const query     = getQuery(location);
+      const uiLang    = query.language || settingsSelectors.getLanguage(state.settings);
       const languages = [...Object.keys(data)];
       if (languages.length > 0) {
         language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;

@@ -32,12 +32,12 @@ class MainPage extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     const { match, location } = this.props;
-    const tab                 = match.params.tab || tabs[0]; // eslint-disable-line react/prop-types
-    const nextTab             = nextProps.match.params.tab || tabs[0]; // eslint-disable-line react/prop-types
+    const tab                 = match.params.tab || tabs[0];
+    const nextTab             = nextProps.match.params.tab || tabs[0];
 
     // clear filters if location search parameter is changed by Menu click
-    if (nextProps.location.search !== location.search // eslint-disable-line react/prop-types
-      && !nextProps.location.search) { // eslint-disable-line react/prop-types
+    if (nextProps.location.search !== location.search
+      && !nextProps.location.search) {
       nextProps.resetNamespace(`events-${tab}`);
     }
 

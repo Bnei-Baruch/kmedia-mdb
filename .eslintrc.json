@@ -1,6 +1,6 @@
 {
   "extends":  [
-    "airbnb",
+    "react-app",
     "plugin:jest/recommended",
     "jest-enzyme"
   ],
@@ -25,39 +25,15 @@
     }
   },
   "rules":    {
-    "indent":                            [
+    "indent":            [
       "error",
       2
     ],
-    "linebreak-style":                   [
+    "linebreak-style":   [
       "error",
       "unix"
     ],
-    "no-console":                        "off",
-    "comma-dangle":                      "off",
-    "key-spacing":                       "off",
-    "max-len":                           "off",
-    "react/prefer-stateless-function":   "off",
-    "object-curly-newline":              "off",
-    "function-paren-newline":            "off",
-    "import/prefer-default-export":      "off",
-    "react/jsx-filename-extension":      "off",
-    "react/no-danger":                   "off",
-    "no-multi-spaces":                   "off",
-    "no-plusplus":                       "off",
-    "no-underscore-dangle":              "off",
-    "jsx-a11y/media-has-caption":        "off",
-    "import/no-named-as-default-member": "off",
-    "react/destructuring-assignment":    "off",
-    "prefer-destructuring":              "off",
-    "react/no-multi-comp":               "off",
-    "no-unused-vars":                    [
-      "error",
-      {
-        "varsIgnorePattern": "^_",
-        "argsIgnorePattern": "^_"
-      }
-    ]
+    "consistent-return": "error"
   },
   "globals":  {
     "socket": true,

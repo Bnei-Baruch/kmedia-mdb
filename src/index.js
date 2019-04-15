@@ -10,7 +10,7 @@ import 'moment/locale/it';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactGA from 'react-ga';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 import { HelmetProvider } from 'react-helmet-async';
 
 import { DEFAULT_LANGUAGE, LANG_UKRAINIAN } from './helpers/consts';
@@ -23,12 +23,11 @@ import App from './components/App/App';
 
 ReactGA.initialize('UA-108372395-1', { gaOptions: { transport: 'beacon' } });
 
-const history = createHistory();
+const history = createBrowserHistory();
 const store   = createStore(window.__data, history);
 store.dispatch(ssr.hydrate());
 // console.log('window.__data', window.__data);
 
-// eslint-disable-next-line no-underscore-dangle
 const i18nData = window.__i18n || {};
 
 // Initialize moment global locale to default language

@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Container } from 'semantic-ui-react';
 
-const ResultsPageHeader = (props) => {
-  const { pageNo, pageSize, total, t } = props;
-
+const ResultsPageHeader = ({ pageNo, pageSize, total, t }) => {
   let content;
 
   if (total === 0) {

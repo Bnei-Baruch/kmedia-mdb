@@ -39,7 +39,6 @@ export class UnitPage extends Component {
     this.setState({ embed: playerHelper.getEmbedFromQuery(location) });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   renderHelmet() {
     const { unit, language } = this.props;
     return <Helmets.AVUnit unit={unit} language={language} />;

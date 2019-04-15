@@ -36,8 +36,8 @@ class BlogContainer extends withPagination {
     isFiltersHydrated: false,
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.handlePageChanged     = this.handlePageChanged.bind(this);
     this.handleFiltersChanged  = this.handleFiltersChanged.bind(this);
     this.handleFiltersHydrated = this.handleFiltersHydrated.bind(this);
@@ -60,7 +60,6 @@ class BlogContainer extends withPagination {
     super.componentWillReceiveProps(nextProps);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   extraFetchParams({ language }) {
     switch (language) {
     case LANG_HEBREW:

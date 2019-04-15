@@ -11,7 +11,7 @@ class AVSpinner extends Component {
   };
 
   shouldComponentUpdate(nextProps) {
-    return this.props.media.isLoading !== nextProps.media.isLoading; // eslint-disable-line react/prop-types
+    return this.props.media.isLoading !== nextProps.media.isLoading;
   }
 
   render() {

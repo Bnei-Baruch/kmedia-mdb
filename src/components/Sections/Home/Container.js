@@ -23,8 +23,8 @@ class HomePageContainer extends Component {
     err: shapes.Error,
     language: PropTypes.string.isRequired,
     fetchData: PropTypes.func.isRequired,
-    fetchBlogList: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
-    fetchTweetsList: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+    fetchBlogList: PropTypes.func.isRequired,
+    fetchTweetsList: PropTypes.func.isRequired,
   };
 
   static defaultProps = {

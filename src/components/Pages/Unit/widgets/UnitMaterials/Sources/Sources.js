@@ -4,8 +4,9 @@ import { withNamespaces } from 'react-i18next';
 import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
 
 import { assetUrl } from '../../../../../../helpers/Api';
-import { CT_KITEI_MAKOR, MT_TEXT, RTL_LANGUAGES } from '../../../../../../helpers/consts';
+import { CT_KITEI_MAKOR, MT_TEXT } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
+import { isLanguageRtl } from '../../../../../../helpers/i18n-utils';
 import { formatError, tracePath } from '../../../../../../helpers/utils';
 import * as shapes from '../../../../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash/Splash';
@@ -21,8 +22,8 @@ class Sources extends Component {
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
-    onContentChange: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
-    getSourceById: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+    onContentChange: PropTypes.func.isRequired,
+    getSourceById: PropTypes.func.isRequired,
   };
 
   state = {
@@ -39,12 +40,11 @@ class Sources extends Component {
 
   componentWillReceiveProps(nextProps) {
     // unit has changed - replace all state
-    if (nextProps.unit.id !== this.props.unit.id) { // eslint-disable-line react/prop-types
-      this.myReplaceState(nextProps);
+    if (nextProps.unit.id !== this.props.unit.id) {
       return;
     }
 
-    const { selected } = this.state; // eslint-disable-line react/prop-types
+    const { selected } = this.state;
 
     // if no previous selection - replace all state
     if (!selected) {
@@ -52,7 +52,7 @@ class Sources extends Component {
       return;
     }
 
-    if (!this.state.isMakor) { // eslint-disable-line react/prop-types
+    if (!this.state.isMakor) {
       const idx  = this.props.indexMap[selected];
       const nIdx = nextProps.indexMap[selected];
 
@@ -257,8 +257,7 @@ class Sources extends Component {
     } else if (isTaas && pdfFile) {
       contents = <PDF pdfFile={assetUrl(`sources/${selected}/${pdfFile}`)} pageNumber={1} startsFrom={startsFrom} />;
     } else {
-      const direction = RTL_LANGUAGES.includes(uiLanguage) ? 'rtl' : 'ltr';
-      // eslint-disable-next-line react/no-danger
+      const direction = isLanguageRtl(uiLanguage);
       contents        = <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: contentData }} />;
     }
 

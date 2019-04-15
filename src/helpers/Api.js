@@ -25,13 +25,15 @@ export class Requests {
         }
 
         return `${key}=${Requests.encode(value)}`;
-      }).join('&')}`
+      })
+      //can happen if parameter value is empty array 
+      .filter(p => p !== '')
+      .join('&')}`
   );
 
   static encode = encodeURIComponent;
 }
 
-/* eslint-disable camelcase */
 class Api {
   static collection = ({ id, language }) => Requests.get(`collections/${id}?${Requests.makeParams({ language })}`);
 

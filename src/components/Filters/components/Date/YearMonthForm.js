@@ -8,9 +8,9 @@ const toMonth   = new Date(new Date().getFullYear(), 11);
 
 class YearMonthForm extends Component {
   static propTypes = {
-    date: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
-    localeUtils: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
-    onChange: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+    date: PropTypes.any.isRequired,
+    localeUtils: PropTypes.any.isRequired,
+    onChange: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
     className: PropTypes.string.isRequired,
   };

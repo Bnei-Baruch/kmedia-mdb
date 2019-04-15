@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Icon, Modal } from 'semantic-ui-react';
@@ -36,7 +35,6 @@ class ScoreDebug extends Component {
     }
     return (
       <div key={key}>
-        {/* eslint-disable-next-line */}
         {!exp.details
           ? <span style={{ paddingLeft: '17px' }} />
           : (!open[key].open

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { assetUrl } from '../../../helpers/Api';
 import { isEmpty } from '../../../helpers/utils';
 import { selectSuitableLanguage } from '../../../helpers/language';
+import { getQuery, updateQuery } from '../../../helpers/url';
 import { actions, selectors } from '../../../redux/modules/assets';
 import * as shapes from '../../shapes';
 import Library from './Library';
@@ -42,6 +43,7 @@ class LibraryContentContainer extends Component {
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
     langSelectorMount: PropTypes.instanceOf(PropTypes.element),
+    history: shapes.History.isRequired,
   };
 
   static defaultProps = {
@@ -92,7 +94,7 @@ class LibraryContentContainer extends Component {
   };
 
   setStateFromProps = (nextProps, useStateLanguages = false) => {
-    const { index: { data } = { index: { data: null } }, source, uiLanguage, contentLanguage } = nextProps;
+    const { index: { data } = { index: { data: null } }, source, uiLanguage, contentLanguage, history } = nextProps;
 
     if (!data) {
       return { languages: [], language: null };
@@ -102,7 +104,10 @@ class LibraryContentContainer extends Component {
     if (!useStateLanguages && data) {
       languages = [...Object.keys(data)];
     }
-    const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+    const query            = getQuery(history.location);
+    const queryLanguage    = languages.includes(query.language) ? query.language : undefined;
+    const priorityLanguage = queryLanguage || contentLanguage;
+    const newLanguage      = selectSuitableLanguage(priorityLanguage, uiLanguage, languages);
 
     if (!newLanguage) {
       return false;
@@ -119,15 +124,19 @@ class LibraryContentContainer extends Component {
   };
 
   handleLanguageChanged = (e, language) => {
-    const { index: { data }, source, fetchAsset } = this.props;
+    const { index: { data }, source, fetchAsset, history } = this.props;
+    updateQuery(history, query => ({
+      ...query,
+      language,
+    }));
     this.setState({ language });
     fetchContent(source, data[language], fetchAsset);
   };
 
   render() {
     const { content, index, langSelectorMount, source } = this.props;
-    const { languages, language }               = this.state;
-    const { isTaas, startsFrom, pdfFile }       = this.getTaasPdf();
+    const { languages, language }                       = this.state;
+    const { isTaas, startsFrom, pdfFile }               = this.getTaasPdf();
 
     return (
       <Library

@@ -11,13 +11,13 @@ import Page from './Page';
 
 export class UnitContainer extends Component {
   static propTypes = {
-    match: shapes.RouterMatch.isRequired, // eslint-disable-line react/no-unused-prop-types
+    match: shapes.RouterMatch.isRequired,
     unit: shapes.ContentUnit,
     wip: shapes.WIP,
     err: shapes.Error,
     section: PropTypes.string,
     language: PropTypes.string.isRequired,
-    fetchUnit: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+    fetchUnit: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -27,15 +27,7 @@ export class UnitContainer extends Component {
     section: '',
   };
 
-  componentDidMount() {
-    this.askForDataIfNeeded(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.askForDataIfNeeded(nextProps);
-  }
-
-  askForDataIfNeeded = (props) => {
+  static askForDataIfNeeded = (props, forceUpdate) => {
     const { match, unit, wip, err, fetchUnit } = props;
 
     // We fetch stuff if we don't have it already
@@ -46,7 +38,8 @@ export class UnitContainer extends Component {
 
     const { id } = match.params;
     if (
-      unit
+      !forceUpdate
+      && unit
       && unit.id === id
       && Array.isArray(unit.files)) {
       return;
@@ -54,6 +47,14 @@ export class UnitContainer extends Component {
 
     fetchUnit(id);
   };
+
+  componentDidMount() {
+    UnitContainer.askForDataIfNeeded(this.props, true);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    UnitContainer.askForDataIfNeeded(nextProps, false);
+  }
 
   render() {
     const { language, unit, wip, err, section } = this.props;

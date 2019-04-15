@@ -43,7 +43,6 @@ export const renderUnit = (unit, t) => {
   );
 };
 
-/* eslint-disable-next-line react/no-multi-comp */
 class LectureCollection extends Component {
   render() {
     return <Collection namespace="lessons-collection" renderUnit={renderUnit} />;
