@@ -1,6 +1,19 @@
-import { createAction, handleActions } from 'redux-actions';
+import { createAction } from 'redux-actions';
+import produce from 'immer';
 
 import { DEFAULT_LANGUAGE } from '../../helpers/consts';
+
+/* Helpers */
+
+export const handleActions = (actionsMap, defaultState) =>
+  (
+    state = defaultState,
+    { type, payload }
+  ) =>
+    produce(state, draft => {
+      const action = actionsMap[type];
+      action && action(draft, payload, type);
+    });
 
 /* Types */
 
@@ -34,18 +47,15 @@ export const initialState = {
 };
 
 export const reducer = handleActions({
-  [SET_LANGUAGE]: (state, action) => ({
-    ...state,
-    language: action.payload,
-  }),
-  [SET_CONTENT_LANGUAGE]: (state, action) => ({
-    ...state,
-    contentLanguage: action.payload,
-  }),
-  [SET_PAGE_SIZE]: (state, action) => ({
-    ...state,
-    pageSize: action.payload,
-  }),
+  [SET_LANGUAGE]: (draft, payload) => {
+    draft.language = payload;
+  },
+  [SET_CONTENT_LANGUAGE]: (draft, payload) => {
+    draft.contentLanguage = payload;
+  },
+  [SET_PAGE_SIZE]: (draft, payload) => {
+    draft.pageSize = payload;
+  },
 }, initialState);
 
 /* Selectors */

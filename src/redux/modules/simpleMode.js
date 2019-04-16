@@ -1,6 +1,6 @@
-import { createAction, handleActions } from 'redux-actions';
+import { createAction } from 'redux-actions';
 
-import { types as settings } from './settings';
+import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
 
 /* Types */
@@ -40,67 +40,52 @@ const initialState = {
 
 /**
  * Set the wip and err part of the state
- * @param state
- * @param action
- * @returns {{wip: {}, err: {}}}
  */
-const setStatus = (state, action) => {
-  let { wip, err } = state;
-
-  switch (action.type) {
+const setStatus = (draft, payload, type) => {
+  switch (type) {
   case FETCH_FOR_DATE:
-    wip = true;
-    err = null;
+    draft.wip = true;
+    draft.err = null;
     break;
   case FETCH_FOR_DATE_SUCCESS:
-    wip = false;
-    err = null;
+    draft.wip = false;
+    draft.err = null;
     break;
   case FETCH_FOR_DATE_FAILURE:
-    wip = false;
-    err = action.payload;
+    draft.wip = false;
+    draft.err = payload;
     break;
   default:
     break;
   }
-
-  return {
-    ...state,
-    wip,
-    err,
-  };
 };
 
-const onFetchForDateSuccess = (state, action) => {
-  const items   = {};
-  items.lessons = (action.payload.lessons || []).map(x => x.id);
-  items.others  = (action.payload.others || []).map(x => x.id);
-
-  return {
-    ...state,
-    items,
-  };
+const onFetchForDateSuccess = (draft, payload) => {
+  draft.items         = {};
+  draft.items.lessons = (payload.lessons || []).map(x => x.id);
+  draft.items.others  = (payload.others || []).map(x => x.id);
 };
 
-const onSetLanguage = state => ({
-  ...state,
-  items: {
-    lessons: [],
-    others: []
+const onSetLanguage = draft => {
+  draft.items.lessons = [];
+  draft.items.others  = [];
+};
+
+const onSSRPrepare = draft => {
+  if (draft.err) {
+    draft.err = draft.err.toString();
   }
-});
-
-const onSSRPrepare = state => ({
-  ...state,
-  err: state.err ? state.err.toString() : state.err,
-});
+};
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
   [settings.SET_LANGUAGE]: onSetLanguage,
 
   [FETCH_FOR_DATE]: setStatus,
-  [FETCH_FOR_DATE_SUCCESS]: (state, action) => setStatus(onFetchForDateSuccess(state, action), action),
+  [FETCH_FOR_DATE_SUCCESS]: (draft, payload, type) => {
+    onFetchForDateSuccess(draft, payload);
+    setStatus(draft, payload, type);
+  },
   [FETCH_FOR_DATE_FAILURE]: setStatus,
 }, initialState);
 

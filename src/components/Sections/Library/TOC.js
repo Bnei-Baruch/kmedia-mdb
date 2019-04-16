@@ -158,7 +158,10 @@ class TOC extends Component {
     // make actual TOC content proper height
     const el = document.querySelector('.source__toc > div:nth-child(2)');
     if (el) {
-      const { stickyOffset } = this.props;
+      let { stickyOffset } = this.props;
+      if (isNaN(stickyOffset)) {
+        stickyOffset = 0;
+      }
       el.style.height        = `calc(100vh - ${stickyOffset}px)`;
     }
     const { activeId } = this.state;

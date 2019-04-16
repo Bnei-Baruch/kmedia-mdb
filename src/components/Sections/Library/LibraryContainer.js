@@ -360,11 +360,13 @@ class LibraryContainer extends Component {
         fontSize,
         theme,
         fontType,
-        secondaryHeaderHeight,
         tocIsActive,
         match,
-      } = this.state;
-
+      }                           = this.state;
+    let { secondaryHeaderHeight } = this.state;
+    if (isNaN(secondaryHeaderHeight)) {
+      secondaryHeaderHeight = 0;
+    }
     const matchString = this.matchString(parentId, t);
 
     return (
