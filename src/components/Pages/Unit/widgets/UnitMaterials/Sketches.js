@@ -8,8 +8,8 @@ import ImageGallery from 'react-image-gallery';
 import { Button, Container, Segment } from 'semantic-ui-react';
 
 import { assetUrl, imaginaryUrl, Requests } from '../../../../../helpers/Api';
-import { RTL_LANGUAGES } from '../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
+import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
 import { isEmpty, physicalFile, strCmp } from '../../../../../helpers/utils';
 import { actions, selectors } from '../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../redux/modules/settings';
@@ -27,78 +27,66 @@ class Sketches extends React.Component {
     contentLanguage: PropTypes.string.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    const { unit, contentLanguage, uiLanguage } = props;
-
-    const zipFiles = this.getUnitFiles(unit);
-    this.state     = {
-      zipFiles,
-      zipFileId: null,
-      imageFiles: null,
-      languages: null,
-      language: null,
-    };
-
-    if (zipFiles) {
-      const { languages, language } = this.getLanguage(zipFiles, contentLanguage, uiLanguage);
-      const files                   = this.filterFiles(zipFiles, language, unit.original_language);
-      const itemState               = this.setCurrentItem(files);
-
-      this.state = {
-        ...this.state,
-        languages,
-        language,
-        ...itemState,
-      };
+  static getUnitSketchFiles = (unit) => {
+    if (!Array.isArray(unit.files)) {
+      return null;
     }
-  }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.isPropsChanged(nextProps) || this.isStateChanged(nextState);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { unit, contentLanguage, uiLanguage } = this.props;
-
-    if (this.isPropsChanged(prevProps)) {
-      // full reset
-      const zipFiles = this.getUnitFiles(unit);
-      if (zipFiles) {
-        const { languages, language } = this.getLanguage(zipFiles, contentLanguage, uiLanguage);
-        const files                   = this.filterFiles(zipFiles, language, unit.original_language);
-        const itemState               = this.setCurrentItem(files);
-
-        this.setState({
-          languages,
-          language,
-          ...itemState,
-        });
-      }
-    } else if (this.isStateChanged(prevState)) {
-      const { zipFiles, language } = this.state;
-
-      if (prevState.language !== language) {
-        if (zipFiles && Array.isArray(zipFiles)) {
-          const files     = this.filterFiles(zipFiles, language, unit.original_language);
-          const itemState = this.setCurrentItem(files);
-
-          this.setState({
-            language,
-            ...itemState,
-          });
-        }
-      }
+    // get the zip files
+    const zipFiles = unit.files.filter(Sketches.isZipOrImageFileType);
+    if (zipFiles.length === 0) {
+      return null;
     }
-  }
 
+    return zipFiles;
+  };
+
+  static getFilesLanguages = (zipFiles, contentLanguage, uiLanguage) => {
+    const languages = zipFiles
+      .map(file => file.language)
+      .filter((v, i, a) => a.indexOf(v) === i);
+
+    const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+    return { languages, language };
+  };
+
+  static filterZipFiles = (zipFiles, language, originalLanguage) => {
+    // try filter by language
+    let files = zipFiles.filter(file => file.language === language);
+
+    // if no files by language - return original language files
+    if (files.length === 0) {
+      files = zipFiles.filter(file => file.language === originalLanguage);
+    }
+
+    // if there are many zip files - use the first one
+    if (files.length > 0) {
+      const zipFileArr = files.filter(file => Sketches.isZipFile(file));
+      files            = zipFileArr.length > 0 ? zipFileArr[0] : files;
+    }
+
+    return files;
+  };
+
+  static isZipFile = (file) => file.name.endsWith('.zip');
+
+  static isZipOrImageFileType = file => file.type === 'image';
+
+  state = {
+    zipFiles: null,
+    zipFileId: null,
+    imageFiles: null,
+    languages: null,
+    language: null,
+  };
+  
   isPropsChanged = (prevProps) => {
     const { unit, zipIndexById, contentLanguage, uiLanguage } = this.props;
 
     return prevProps.contentLanguage !== contentLanguage
       || prevProps.uiLanguage !== uiLanguage
+      || prevProps.unit.id !== unit.id
       || !isEqual(prevProps.zipIndexById, zipIndexById)
-      || !isEqual(prevProps.unit, unit);
   };
 
   isStateChanged = (prevState) => {
@@ -109,13 +97,69 @@ class Sketches extends React.Component {
       || prevState.imageFiles !== imageFiles;
   };
 
-  // load data into state
+  shouldComponentUpdate(nextProps, nextState) {
+    const propsChanged = this.isPropsChanged(nextProps);
+    const stateChanged = this.isStateChanged(nextState);
+
+    return propsChanged || stateChanged; 
+  }
+
+  componentDidMount(){
+    this.processUnit();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { unit, contentLanguage, uiLanguage } = this.props;
+
+    if (prevProps.unit.id !== unit.id || !prevState.zipFiles){
+      // full reset
+      this.processUnit();
+    }
+    else if (prevProps.contentLanguage !== contentLanguage 
+          || prevProps.uiLanguage !== uiLanguage){
+      this.setStateByZipFiles(prevState.zipFiles, contentLanguage, uiLanguage, unit);
+    }
+    else if (prevState.language !== this.state.language) {
+      const { zipFiles, language } = this.state;
+
+      if (zipFiles && Array.isArray(zipFiles)) {
+        const itemState = this.getItemState(zipFiles, language, unit);
+
+        this.setState({
+          ...itemState,
+        });
+      }
+    }
+  }
+
+  processUnit = () => {
+    const { unit, contentLanguage, uiLanguage } = this.props;
+    const zipFiles = Sketches.getUnitSketchFiles(unit);
+
+    if (zipFiles) {
+      this.setStateByZipFiles(zipFiles, contentLanguage, uiLanguage, unit);
+    }
+  }
+
+  setStateByZipFiles = (zipFiles, contentLanguage, uiLanguage, unit) => {
+    const { languages, language } = Sketches.getFilesLanguages(zipFiles, contentLanguage, uiLanguage);
+    const itemState = this.getItemState(zipFiles, language, unit);
+
+    this.setState({ zipFiles, languages, language, ...itemState });
+  }
+
+  getItemState = (zipFiles, language, unit) => {
+    const files = Sketches.filterZipFiles(zipFiles, language, unit.original_language);
+    const itemState = this.getStateByFile(files);
+    return itemState;
+  }
+
   // get one zip file or array of image files or one image file
-  setCurrentItem = (file) => {
+  getStateByFile = (file) => {
     let state = {};
     if (file) {
       // not zip, image files only
-      if (Array.isArray(file) || !file.name.endsWith('.zip')) {
+      if (Array.isArray(file) || !Sketches.isZipFile(file)) {
         state = { imageFiles: file };
       } else {
         // zip file
@@ -138,48 +182,6 @@ class Sketches extends React.Component {
       unzip(file.id);
     }
   };
-
-  getUnitFiles = (unit) => {
-    if (!Array.isArray(unit.files)) {
-      return null;
-    }
-
-    // get the zip files
-    const zipFiles = unit.files.filter(this.filterZipOrImageFiles);
-    if (zipFiles.length === 0) {
-      return null;
-    }
-
-    return zipFiles;
-  };
-
-  getLanguage = (zipFiles, contentLanguage, uiLanguage) => {
-    const languages = zipFiles
-      .map(file => file.language)
-      .filter((v, i, a) => a.indexOf(v) === i);
-    const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-    return { languages, language };
-  };
-
-  filterFiles = (zipFiles, language, originalLanguage) => {
-    // try filter by language
-    let files = zipFiles.filter(file => file.language === language);
-
-    // if no files by language - return original language files
-    if (files.length === 0) {
-      files = zipFiles.filter(file => file.language === originalLanguage);
-    }
-
-    // if there are many zip files - use the first one
-    if (files.length > 0) {
-      const zipFileArr = files.filter(file => file.name.endsWith('.zip'));
-      files            = zipFileArr.length > 0 ? zipFileArr[0] : files;
-    }
-
-    return files;
-  };
-
-  filterZipOrImageFiles = file => file.type === 'image';
 
   handleLanguageChanged = (e, language) => {
     this.setState({ language });
@@ -249,7 +251,7 @@ class Sketches extends React.Component {
   );
 
   render() {
-    const { t, zipIndexById }                            = this.props;
+    const { t, zipIndexById, uiLanguage }                = this.props;
     const { zipFileId, languages, language, imageFiles } = this.state;
     const { wip, err, data }                             = zipIndexById[zipFileId] || {};
 
@@ -267,8 +269,6 @@ class Sketches extends React.Component {
     } else {
       imageObjsArr = imageObjs;
     }
-
-    const isRTL = RTL_LANGUAGES.includes(language);
 
     if (Array.isArray(imageObjsArr) && imageObjsArr.length > 0) {
       // prepare the image array for the gallery and sort it
@@ -294,7 +294,7 @@ class Sketches extends React.Component {
           <ImageGallery
             lazyLoad
             showFullscreenButton
-            isRTL={isRTL}
+            isRTL={isLanguageRtl(uiLanguage)}
             items={items}
             thumbnailPosition="top"
             showPlayButton={false}

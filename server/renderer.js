@@ -19,9 +19,9 @@ import { getLanguageFromPath } from '../src/helpers/url';
 import { isEmpty } from '../src/helpers/utils';
 import createStore from '../src/redux/createStore';
 import { actions as ssr } from '../src/redux/modules/ssr';
+import { actions as settings } from '../src/redux/modules/settings';
 import App from '../src/components/App/App';
 import i18nnext from './i18nnext';
-import { initialState as settingsInitialState } from '../src/redux/modules/settings';
 
 const helmetContext = {};
 
@@ -124,7 +124,6 @@ export default function serverRender(req, res, next, htmlData) {
   }
 
   moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
-  const cookies = cookieParse(req.headers.cookie || `COOKIE_CONTENT_LANG=${language};`);
 
   const i18nServer = i18nnext.cloneInstance();
   i18nServer.changeLanguage(language, (err) => {
@@ -137,15 +136,9 @@ export default function serverRender(req, res, next, htmlData) {
       initialEntries: [req.originalUrl],
     });
 
-    const settings = Object.assign({}, settingsInitialState, {
-      language,
-      contentLanguage: cookies[COOKIE_CONTENT_LANG]
-    });
-
     const initialState = {
       router: { location: history.location },
       device: { deviceInfo: new UAParser(req.get('user-agent')).getResult() },
-      settings,
     };
 
     const store = createStore(initialState, history);

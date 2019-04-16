@@ -23,9 +23,7 @@ const ITEMS = [
   // 'design2',
 ];
 
-const MenuItems = (props) => {
-  const { simple, visible, t, onItemClick, language } = props;
-
+const MenuItems = ({ simple, visible, t, onItemClick, language }) => {
   const items = ITEMS.map(x => (
     <Menu.Item
       key={x}

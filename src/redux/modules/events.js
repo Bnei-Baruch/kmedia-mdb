@@ -1,9 +1,9 @@
-import { createAction, handleActions } from 'redux-actions';
+import { createAction } from 'redux-actions';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 
 import { isEmpty } from '../../helpers/utils';
-import { types as settings } from './settings';
+import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
 import { selectors as mdb } from './mdb';
 
@@ -47,30 +47,34 @@ const initialState = {
   eventsByType: {},
 };
 
-const onSuccess = (state, action) => ({
-  ...state,
-  wip: false,
-  err: null,
-  eventsByType: mapValues(groupBy(action.payload.collections, x => x.content_type), x => x.map(y => y.id))
-});
+const onSuccess = (draft, payload) => {
+  draft.wip          = false;
+  draft.err          = null;
+  draft.eventsByType = mapValues(groupBy(payload.collections, x => x.content_type), x => x.map(y => y.id));
+};
 
-const onSetLanguage = state => ({
-  ...state,
-  eventsByType: {},
-});
+const onSetLanguage = draft => {
+  draft.eventsByType = {};
+};
 
-const onSSRPrepare = state => ({
-  ...state,
-  err: state.err ? state.err.toString() : state.err,
-});
+const onSSRPrepare = draft => {
+  if (draft.err) {
+    draft.err = draft.err.toString();
+  }
+};
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
   [settings.SET_LANGUAGE]: onSetLanguage,
 
-  [FETCH_ALL_EVENTS]: state => ({ ...state, wip: true }),
-  [FETCH_ALL_EVENTS_SUCCESS]: (state, action) => onSuccess(state, action),
-  [FETCH_ALL_EVENTS_FAILURE]: (state, action) => ({ ...state, wip: false, err: action.payload }),
+  [FETCH_ALL_EVENTS]: draft => {
+    draft.wip = true;
+  },
+  [FETCH_ALL_EVENTS_SUCCESS]: onSuccess,
+  [FETCH_ALL_EVENTS_FAILURE]: (draft, payload) => {
+    draft.wip = false;
+    draft.err = payload;
+  },
 }, initialState);
 
 /* Selectors */

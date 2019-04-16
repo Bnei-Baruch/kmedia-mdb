@@ -33,7 +33,7 @@ import { selectors as sourcesSelectors } from './redux/modules/sources';
 import { actions as assetsActions, selectors as assetsSelectors } from './redux/modules/assets';
 import { actions as tagsActions } from './redux/modules/tags';
 import { actions as publicationsActions } from './redux/modules/publications';
-import { actions as simpleModeActions } from './redux/modules/simpelMode';
+import { actions as simpleModeActions } from './redux/modules/simpleMode';
 import * as mdbSagas from './sagas/mdb';
 import * as filtersSagas from './sagas/filters';
 import * as eventsSagas from './sagas/events';

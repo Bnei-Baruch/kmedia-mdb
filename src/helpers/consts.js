@@ -166,12 +166,6 @@ export const ALL_LANGUAGES = [
 
 export const DEFAULT_LANGUAGE = LANG_ENGLISH;
 
-export const RTL_LANGUAGES = [
-  LANG_HEBREW,
-  LANG_ARABIC,
-  LANG_PERSIAN,
-];
-
 export const LANGUAGE_OPTIONS = ALL_LANGUAGES.map(x => LANGUAGES[x]);
 
 export const MT_VIDEO        = 'video';
@@ -234,6 +228,7 @@ export const NO_NAME = '☠ no name';
 export const BS_SHAMATI  = 'qMUUn22b';
 export const BS_IGROT    = 'DVSS0xAR';
 export const BS_TAAS     = 'xtKmrbb9';
+export const BS_ETZ_HAIM = 'SqBA6XOl';
 export const RB_IGROT    = 'b8SHlrfH';
 export const MR_TORA     = 'bvA8ZB1w';
 export const RH_ZOHAR    = 'AwGBQX2L';
@@ -265,7 +260,7 @@ export const RABASH_PERSON_UID = 'KxApZ4pI';
 
 export const COOKIE_UI_LANG      = 'archive_UIlang';
 export const COOKIE_CONTENT_LANG = 'archive_ContentLang';
-export const LANG_UI_LANGUAGES   = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_GERMAN, LANG_UKRAINIAN, LANG_ITALIAN];
+export const LANG_UI_LANGUAGES   = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_GERMAN, LANG_UKRAINIAN, LANG_ITALIAN, LANG_TURKISH];
 
 // Search
 export const ES_RESULT_TYPE_SOURCES = 'sources';

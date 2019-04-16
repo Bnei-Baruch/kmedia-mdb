@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
+import noop from 'lodash/noop';
 
-import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, RTL_LANGUAGES, } from '../../../helpers/consts';
+import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../helpers/consts';
 
 import { getEscapedRegExp, isEmpty } from '../../../helpers/utils';
+import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { Reference } from '../../shapes';
 
 const titleKey = id => `title-${id}`;
@@ -14,9 +16,9 @@ const hebrew = (number) => {
   let n = 1 * number;
   switch (n) {
   case 16:
-    return 'ט"ז';
+    return 'טז';
   case 15:
-    return 'ט"ו';
+    return 'טו';
   default:
     break;
   }
@@ -38,16 +40,22 @@ const hebrew = (number) => {
     ret += 'ק';
     n -= 100;
   }
-  if (n >= 10) {
-    ret += 'יכלמנסעפצ'.slice((n / 10) - 1)[0];
-    n %= 10;
-  }
-  if (n > 0) {
-    ret += 'אבגדהוזחט'.slice((n % 10) - 1)[0];
-  }
-
-  if (ret.length > 1) {
-    ret = `${ret.slice(0, 1)}"${ret.slice(1)}`;
+  switch (n) {
+  case 16:
+    ret += 'טז';
+    break;
+  case 15:
+    ret += 'טו';
+    break;
+  default:
+    if (n >= 10) {
+      ret += 'יכלמנסעפצ'.slice((n / 10) - 1)[0];
+      n %= 10;
+    }
+    if (n > 0) {
+      ret += 'אבגדהוזחט'.slice((n % 10) - 1)[0];
+    }
+    break;
   }
 
   return ret;
@@ -116,25 +124,27 @@ class TOC extends Component {
     language: PropTypes.string.isRequired,
 
     match: PropTypes.string.isRequired,
-    matchApplied: PropTypes.func.isRequired,
+    matchApplied: PropTypes.func,
   };
 
   static defaultProps = {
     contextRef: null,
     stickyOffset: 144, // 60 + 70 + 14 (top navbar + library secondary header + 1em)
+    matchApplied: noop,
   };
 
   state = {
     activeId: null,
   };
 
-  componentWillReceiveProps(nextProps) {
+  static getDerivedStateFromProps(nextProps, state) {
     const { fullPath }                = nextProps;
-    const { activeId: stateActiveID } = this.state;
+    const { activeId: stateActiveID } = state;
     const activeId                    = fullPath[fullPath.length - 1].id;
     if (activeId !== stateActiveID) {
-      this.setState({ activeId });
+      return { activeId };
     }
+    return null;
   }
 
   shouldComponentUpdate(nextProps) {
@@ -151,7 +161,10 @@ class TOC extends Component {
     // make actual TOC content proper height
     const el = document.querySelector('.source__toc > div:nth-child(2)');
     if (el) {
-      const { stickyOffset } = this.props;
+      let { stickyOffset } = this.props;
+      if (isNaN(stickyOffset)) {
+        stickyOffset = 0;
+      }
       el.style.height        = `calc(100vh - ${stickyOffset}px)`;
     }
     const { activeId } = this.state;
@@ -183,7 +196,7 @@ class TOC extends Component {
     // 3. If all children of the first level element are NOT CONTAINERS, than it is also NOT CONTAINER
 
     const { getSourceById, language } = this.props;
-    const isRTL                       = RTL_LANGUAGES.includes(language);
+    const isRTL                       = isLanguageRtl(language);
 
     const { name: title, children } = getSourceById(sourceId);
 

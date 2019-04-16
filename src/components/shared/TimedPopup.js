@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Popup } from 'semantic-ui-react';
-
-import { RTL_LANGUAGES } from '../../helpers/consts';
+import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { Reference } from '../shapes';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
@@ -77,7 +76,7 @@ class TimedPopup extends Component {
     } else {
       style.bottom = 0;
     }
-    const rtlLang = RTL_LANGUAGES.includes(language);
+    const rtlLang = isLanguageRtl(language);
 
     return (
       <Popup

@@ -294,12 +294,8 @@ class LibraryContainer extends Component {
 
   handleFilterKeyDown = (e) => {
     if (e.keyCode === 27) { // Esc
-      this.handleFilterClear();
+      this.setState({ match: '' });
     }
-  };
-
-  handleFilterClear = () => {
-    this.setState({ match: '' });
   };
 
   print = () => {
@@ -360,11 +356,13 @@ class LibraryContainer extends Component {
         fontSize,
         theme,
         fontType,
-        secondaryHeaderHeight,
         tocIsActive,
         match,
-      } = this.state;
-
+      }                           = this.state;
+    let { secondaryHeaderHeight } = this.state;
+    if (isNaN(secondaryHeaderHeight)) {
+      secondaryHeaderHeight = 0;
+    }
     const matchString = this.matchString(parentId, t);
 
     return (
@@ -419,13 +417,12 @@ class LibraryContainer extends Component {
                 <TOC
                   language={language}
                   match={matchString ? match : ''}
-                  matchApplied={this.handleFilterClear}
                   fullPath={fullPath}
                   rootId={parentId}
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
                   apply={push}
-                  stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60) + (this.isMobileDevice() ? 60 : 0)}
+                  stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
                 />
               </Grid.Column>
               <Grid.Column
