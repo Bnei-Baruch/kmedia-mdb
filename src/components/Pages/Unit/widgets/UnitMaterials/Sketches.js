@@ -91,7 +91,6 @@ class Sketches extends React.Component {
 
   isStateChanged = (prevState) => {
     const { zipFileId, language, imageFiles } = this.state;
-    console.log('state language:', language, prevState.language);
 
     return prevState.zipFileId !== zipFileId
       || prevState.language !== language
@@ -101,8 +100,6 @@ class Sketches extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     const propsChanged = this.isPropsChanged(nextProps);
     const stateChanged = this.isStateChanged(nextState);
-
-    console.log('propsChanged:', propsChanged, ' stateChanged:', stateChanged);
 
     return propsChanged || stateChanged; 
   }
@@ -124,8 +121,6 @@ class Sketches extends React.Component {
     }
     else if (prevState.language !== this.state.language) {
       const { zipFiles, language } = this.state;
-
-      console.log('componentDidUpdate prevState.language:', prevState.language, language);
 
       if (zipFiles && Array.isArray(zipFiles)) {
         const itemState = this.getItemState(zipFiles, language, unit);
