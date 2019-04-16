@@ -112,7 +112,7 @@
     "react-image-gallery": "^0.8.14",
     "react-media-player": "github:Bnei-Baruch/react-media-player",
     "react-pdf": "^4.0.0",
-    "react-redux": "^6.0.0",
+    "react-redux": "^7.0.2",
     "react-router": "5.0.0",
     "react-router-config": "5.0.0",
     "react-router-dom": "5.0.0",
