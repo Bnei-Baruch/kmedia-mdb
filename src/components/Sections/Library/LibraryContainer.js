@@ -294,12 +294,8 @@ class LibraryContainer extends Component {
 
   handleFilterKeyDown = (e) => {
     if (e.keyCode === 27) { // Esc
-      this.handleFilterClear();
+      this.setState({ match: '' });
     }
-  };
-
-  handleFilterClear = () => {
-    this.setState({ match: '' });
   };
 
   print = () => {
@@ -421,7 +417,6 @@ class LibraryContainer extends Component {
                 <TOC
                   language={language}
                   match={matchString ? match : ''}
-                  matchApplied={this.handleFilterClear}
                   fullPath={fullPath}
                   rootId={parentId}
                   contextRef={this.contextRef}

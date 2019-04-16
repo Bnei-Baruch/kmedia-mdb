@@ -1,13 +1,17 @@
 import { createAction } from 'redux-actions';
 
+import groupBy from 'lodash/groupBy';
+import mapValues from 'lodash/mapValues';
 import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
+
 
 /* Types */
 
 const SET_TAB            = 'Publications/SET_TAB';
 const SET_PAGE           = 'Publications/SET_PAGE';
 const RECEIVE_PUBLISHERS = 'Publications/RECEIVE_PUBLISHERS';
+const FETCH_COLLECTIONS  = 'Publications/FETCH_COLLECTIONS';
 
 const FETCH_TWEETS         = 'Publications/FETCH_TWEETS';
 const FETCH_TWEETS_SUCCESS = 'Publications/FETCH_TWEETS_SUCCESS';
@@ -24,6 +28,7 @@ export const types = {
   SET_TAB,
   SET_PAGE,
   RECEIVE_PUBLISHERS,
+  FETCH_COLLECTIONS,
 
   FETCH_TWEETS,
   FETCH_TWEETS_SUCCESS,
@@ -42,6 +47,7 @@ export const types = {
 const setTab            = createAction(SET_TAB);
 const setPage           = createAction(SET_PAGE, (namespace, pageNo) => ({ namespace, pageNo }));
 const receivePublishers = createAction(RECEIVE_PUBLISHERS);
+const fetchCollections  = createAction(FETCH_COLLECTIONS);
 
 const fetchTweets        = createAction(FETCH_TWEETS,
   (namespace, pageNo, params = {}) => ({ namespace, pageNo, ...params, }));
@@ -60,6 +66,7 @@ export const actions = {
   setTab,
   setPage,
   receivePublishers,
+  fetchCollections,
 
   fetchTweets,
   fetchTweetsSuccess,
@@ -79,6 +86,7 @@ const initialState = {
   publishers: {
     byID: {},
   },
+  collections: {},
   twitter: {
     tweets: [],
     pageNo: 1,
@@ -108,6 +116,10 @@ const onReceivePublishers = (draft, payload) => {
     acc[val.id] = val;
     return acc;
   }, {});
+};
+
+const onFetchCollections = (draft, payload) => {
+  draft.collections = mapValues(groupBy(payload, x => x.content_type), x => x.map(y => y.id));
 };
 
 const onFetchTweets = draft => {
@@ -170,6 +182,7 @@ const onFetchBlogPostFailure = (draft, payload) => {
 
 const onSetLanguage = draft => {
   draft.publishers.byID = {};
+  draft.collections = {};
 
   let pageNo           = draft.twitter.pageNo;
   let total            = draft.twitter.total;
@@ -202,6 +215,7 @@ export const reducer = handleActions({
 
   [SET_PAGE]: onSetPage,
   [RECEIVE_PUBLISHERS]: onReceivePublishers,
+  [FETCH_COLLECTIONS]: onFetchCollections,
 
   [FETCH_TWEETS]: onFetchTweets,
   [FETCH_TWEETS_SUCCESS]: onFetchTweetsSuccess,
@@ -218,6 +232,7 @@ export const reducer = handleActions({
 /* Selectors */
 
 const getPublisherById = state => state.publishers.byID;
+const getCollections = state => state.collections;
 
 const getTweets       = state => state.twitter.tweets;
 const getTweetsTotal  = state => state.twitter.total;
@@ -236,6 +251,7 @@ const getBlogErrorPost = state => state.blog.errPost;
 
 export const selectors = {
   getPublisherById,
+  getCollections,
 
   getTweets,
   getTweetsTotal,

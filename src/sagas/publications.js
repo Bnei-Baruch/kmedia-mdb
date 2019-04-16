@@ -1,11 +1,15 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
+import { CT_ARTICLES } from '../helpers/consts';
 import { selectors as settings } from '../redux/modules/settings';
-import { actions, types } from '../redux/modules/publications';
+import { selectors, actions, types } from '../redux/modules/publications';
+import { types as listTypes } from '../redux/modules/lists';
 import { filtersTransformer } from '../filters';
 import { selectors as filterSelectors } from '../redux/modules/filters';
+import { actions as mdbActions } from '../redux/modules/mdb';
 import { updateQuery } from './helpers/url';
+import { isEmpty } from '../helpers/utils';
 
 export function* fetchTweets(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, 'publications-twitter'));
@@ -53,6 +57,36 @@ export function* fetchBlogPost(action) {
   }
 }
 
+function* fetchArticlesList(action) {
+  if (action.payload.namespace !== 'publications-articles') {
+    return;
+  }
+
+  try {
+    // fetch once
+    const collections = yield select(state => selectors.getCollections(state.publications));
+    if (!isEmpty(collections)) {
+      return;
+    }
+
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const { data } = yield call(Api.collections, {
+      language,
+      content_type: CT_ARTICLES,
+      pageNo: 1,
+      pageSize: 1000,
+      with_units: false,
+    });
+
+    if (Array.isArray(data.collections)) {
+      yield put(mdbActions.receiveCollections(data.collections));
+      yield put(actions.fetchCollections(data.collections));
+    }
+  } catch (err) {
+    console.log('fetch lectures error', err);
+  }
+}
+
 function* setTab(action) {
   // we have to replace url completely...
 
@@ -80,6 +114,10 @@ function* updatePageInQuery(action) {
   yield* updateQuery(query => Object.assign(query, { page }));
 }
 
+function* watchFetchArticleList() {
+  yield takeLatest(listTypes.FETCH_LIST, fetchArticlesList);
+}
+
 function* watchFetchTweets() {
   yield takeLatest([types.FETCH_TWEETS], fetchTweets);
 }
@@ -101,6 +139,7 @@ function* watchSetPage() {
 }
 
 export const sagas = [
+  watchFetchArticleList,
   watchFetchTweets,
   watchFetchBlogList,
   watchFetchBlogPost,

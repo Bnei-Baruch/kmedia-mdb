@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
+import noop from 'lodash/noop';
 
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../helpers/consts';
 
@@ -123,25 +124,27 @@ class TOC extends Component {
     language: PropTypes.string.isRequired,
 
     match: PropTypes.string.isRequired,
-    matchApplied: PropTypes.func.isRequired,
+    matchApplied: PropTypes.func,
   };
 
   static defaultProps = {
     contextRef: null,
     stickyOffset: 144, // 60 + 70 + 14 (top navbar + library secondary header + 1em)
+    matchApplied: noop,
   };
 
   state = {
     activeId: null,
   };
 
-  componentWillReceiveProps(nextProps) {
+  static getDerivedStateFromProps(nextProps, state) {
     const { fullPath }                = nextProps;
-    const { activeId: stateActiveID } = this.state;
+    const { activeId: stateActiveID } = state;
     const activeId                    = fullPath[fullPath.length - 1].id;
     if (activeId !== stateActiveID) {
-      this.setState({ activeId });
+      return { activeId };
     }
+    return null;
   }
 
   shouldComponentUpdate(nextProps) {
