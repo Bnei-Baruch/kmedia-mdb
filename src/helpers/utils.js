@@ -3,6 +3,7 @@ import 'moment-duration-format';
 import escapeRegExp from 'lodash/escapeRegExp';
 
 import { CollectionsBreakdown } from './mdb';
+import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH } from './consts';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
@@ -216,5 +217,18 @@ export const getEscapedRegExp = (term) => {
     return new RegExp(escaped, 'i');
   } catch (e) {
     return new RegExp(escapeRegExp(escaped), 'i');
+  }
+};
+
+export const getRSSLinkByLang = (language) => {
+  switch (language) {
+  case LANG_HEBREW:
+    return 'https://feeds.feedburner.com/KabbalahVideoHeb';
+  case LANG_RUSSIAN:
+    return 'https://feeds.feedburner.com/KabbalahVideoRus';
+  case LANG_SPANISH:
+    return 'https://feeds.feedburner.com/kabbalah-archive/spa';
+  default:
+    return 'https://feeds.feedburner.com/KabbalahVideoEng';
   }
 };
