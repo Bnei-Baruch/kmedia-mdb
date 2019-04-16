@@ -228,6 +228,7 @@ export const NO_NAME = '☠ no name';
 export const BS_SHAMATI  = 'qMUUn22b';
 export const BS_IGROT    = 'DVSS0xAR';
 export const BS_TAAS     = 'xtKmrbb9';
+export const BS_ETZ_HAIM = 'SqBA6XOl';
 export const RB_IGROT    = 'b8SHlrfH';
 export const MR_TORA     = 'bvA8ZB1w';
 export const RH_ZOHAR    = 'AwGBQX2L';
