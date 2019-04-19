@@ -6,7 +6,8 @@ import { Header, Image } from 'semantic-ui-react';
 import Link from '../../Language/MultiLanguageLink';
 // import img from '../../../images/hp_featured_temp.jpg';
 // import img from '../../../images/banner_downloads.jpg';
-import img from '../../../images/virtual_congress.jpg';
+// import img from '../../../images/virtual_congress.jpg';
+import img from '../../../images/pesach.jpg';
 // import img from '../../../images/rosh_shana.jpg';
 // import img from '../../../images/KKLO_ITALY_18_logo2.svg';
 // import img from '../../../images/archive_banner.jpg';
@@ -29,7 +30,7 @@ class Promoted extends Component {
 
     return (
       <div className="thumbnail">
-        <Link to="/events/c/XYlnKdlP">
+        <Link to="/events/c/oUOfBqA7">
           <Image fluid src={img} className="thumbnail__image" />
           {
             header
