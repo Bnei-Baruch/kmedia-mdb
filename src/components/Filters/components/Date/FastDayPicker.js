@@ -19,7 +19,7 @@ import DayPicker from 'react-day-picker';
 class FastDayPicker extends Component {
   static propTypes = {
     value: PropTypes.instanceOf(Date),
-    label: PropTypes.string,    
+    label: PropTypes.string,
     onDayChange: PropTypes.func,
     language: PropTypes.string.isRequired,
     deviceInfo: shapes.UserAgentParserResults.isRequired,
@@ -42,7 +42,7 @@ class FastDayPicker extends Component {
   componentWillReceiveProps(nextProps) {
     const { value } = this.state;
     if (nextProps.value !== value) {
-      this.setState({ stringValue: this.formatDateValue(nextProps.value) });    
+      this.setState({ stringValue: this.formatDateValue(nextProps.value) });
     }
   }
 
@@ -108,9 +108,9 @@ class FastDayPicker extends Component {
   };
 
   openPopup = () => this.setState({ isOpen: true });
-  
+
   closePopup = () => this.setState({ isOpen: false });
-  
+
   formatDateValue = (date) => {
     const { language } = this.props;
     const locale = getLanguageLocaleWORegion(language);
@@ -119,7 +119,7 @@ class FastDayPicker extends Component {
 
   onPopupDayChange = (date) => {
     const { onDayChange } = this.props;
-    this.setState({ stringValue: this.formatDateValue(date) });    
+    this.setState({ stringValue: this.formatDateValue(date) });
     onDayChange(date);
     this.closePopup();
   }
@@ -127,7 +127,7 @@ class FastDayPicker extends Component {
   handleDateInputChange = (event, data) => {
     if (!event) {
       return;
-    }    
+    }
     if (data.value && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(data.value)) {
       const { onDayChange } = this.props;
       const date = moment(data.value, "DD/MM/YYYY").toDate();
@@ -135,12 +135,12 @@ class FastDayPicker extends Component {
         onDayChange(date);
     }
     else {
-      this.setState({ stringValue: data.value });        
+      this.setState({ stringValue: data.value });
     }
   };
 
   handleKeyDown = () => {
-    this.setState({ isOpen : false });
+    this.setState({ isOpen: false });
   }
 
   render() {
@@ -153,7 +153,7 @@ class FastDayPicker extends Component {
       const selected = value || today().toDate();
       const selectedToString = moment(selected).format('YYYY-MM-DD');
       const localeDateFormat = moment.localeData().longDateFormat('L');
-      const selectedInLocaleFormat = moment(selected).format(localeDateFormat); 
+      const selectedInLocaleFormat = moment(selected).format(localeDateFormat);
       return (
         <div>
           <div className="ui labeled input">
@@ -182,45 +182,45 @@ class FastDayPicker extends Component {
     }
 
     return (
-        <Popup
-          basic
-          flowing
-          on='focus'
-          open={isOpen}
-          onOpen={this.openPopup}
-          onClose={this.closePopup}
-          trigger={
-            <Input
-              fluid
-              label
-              size="small"
-              icon="calendar alternate outline"
-              placeholder={`${formatDate(new Date(), 'l', locale)}`}
-              value={stringValue}
-              onChange={this.handleDateInputChange}
-              onKeyDown={this.handleKeyDown}            
-              format="l"
-              overlayComponent={this.getOverlayComponent}
-              showOverlay
-              label={label ? <Label className="ui label label to-from-label">{label}</Label> : null}        
-            />}
-        >
-          <Popup.Content>
-            <DayPicker
-              locale={locale}
-              localeUtils={MomentLocaleUtils}
-              disabledDays={{ after: new Date() }}
-              captionElement={() => null}
-              navbarElement={props => this.getNavBarElement(props, language)}
-              month={month}
-              toMonth={today().toDate()}
-              dir={getLanguageDirection(language)}
-              ref={this.handleDayPickerRef}
-              onDayChange={this.onPopupDayChange}
-              onDayClick={this.onPopupDayChange}
-            />
-          </Popup.Content>
-        </Popup>
+      <Popup
+        basic
+        flowing
+        on='focus'
+        open={isOpen}
+        onOpen={this.openPopup}
+        onClose={this.closePopup}
+        trigger={
+          <Input
+            fluid
+            label
+            size="small"
+            icon="calendar alternate outline"
+            placeholder={`${formatDate(new Date(), 'l', locale)}`}
+            value={stringValue}
+            onChange={this.handleDateInputChange}
+            onKeyDown={this.handleKeyDown}
+            format="l"
+            overlayComponent={this.getOverlayComponent}
+            showOverlay
+            label={label ? <Label className="ui label label to-from-label">{label}</Label> : null}
+          />}
+      >
+        <Popup.Content>
+          <DayPicker
+            locale={locale}
+            localeUtils={MomentLocaleUtils}
+            disabledDays={{ after: new Date() }}
+            captionElement={() => null}
+            navbarElement={props => this.getNavBarElement(props, language)}
+            month={month}
+            toMonth={today().toDate()}
+            dir={getLanguageDirection(language)}
+            ref={this.handleDayPickerRef}
+            onDayChange={this.onPopupDayChange}
+            onDayClick={this.onPopupDayChange}
+          />
+        </Popup.Content>
+      </Popup>
     );
   }
 }
