@@ -60,10 +60,11 @@ const setStatus = (draft, payload, type) => {
   }
 };
 
-const onFetchForDateSuccess = (draft, payload) => {
+const onFetchForDateSuccess = (draft, payload, type) => {
   draft.items         = {};
   draft.items.lessons = (payload.lessons || []).map(x => x.id);
   draft.items.others  = (payload.others || []).map(x => x.id);
+  setStatus(draft, payload, type);
 };
 
 const onSetLanguage = draft => {
@@ -82,10 +83,7 @@ export const reducer = handleActions({
   [settings.SET_LANGUAGE]: onSetLanguage,
 
   [FETCH_FOR_DATE]: setStatus,
-  [FETCH_FOR_DATE_SUCCESS]: (draft, payload, type) => {
-    onFetchForDateSuccess(draft, payload);
-    setStatus(draft, payload, type);
-  },
+  [FETCH_FOR_DATE_SUCCESS]: onFetchForDateSuccess,
   [FETCH_FOR_DATE_FAILURE]: setStatus,
 }, initialState);
 

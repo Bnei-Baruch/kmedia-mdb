@@ -5,7 +5,6 @@ import mapValues from 'lodash/mapValues';
 import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
 
-
 /* Types */
 
 const SET_TAB            = 'Publications/SET_TAB';
@@ -182,7 +181,7 @@ const onFetchBlogPostFailure = (draft, payload) => {
 
 const onSetLanguage = draft => {
   draft.publishers.byID = {};
-  draft.collections = {};
+  draft.collections     = {};
 
   let pageNo           = draft.twitter.pageNo;
   let total            = draft.twitter.total;
@@ -232,7 +231,7 @@ export const reducer = handleActions({
 /* Selectors */
 
 const getPublisherById = state => state.publishers.byID;
-const getCollections = state => state.collections;
+const getCollections   = state => state.collections;
 
 const getTweets       = state => state.twitter.tweets;
 const getTweetsTotal  = state => state.twitter.total;

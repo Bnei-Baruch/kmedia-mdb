@@ -52,6 +52,12 @@ const onData = (draft, payload) => {
   draft.banner       = payload.banner;
 };
 
+const onDataFailure = (draft, payload) => {
+  draft.wip  = false;
+  draft.data = null;
+  draft.err  = payload;
+};
+
 const onSSRPrepare = draft => {
   if (draft.err) {
     draft.err = draft.err.toString();
@@ -67,11 +73,7 @@ export const reducer = handleActions({
     draft.wip = true;
   },
   [FETCH_DATA_SUCCESS]: onData,
-  [FETCH_DATA_FAILURE]: (draft, payload) => {
-    draft.wip  = false;
-    draft.data = null;
-    draft.err  = payload;
-  },
+  [FETCH_DATA_FAILURE]: onDataFailure,
 }, initialState);
 
 /* Selectors */

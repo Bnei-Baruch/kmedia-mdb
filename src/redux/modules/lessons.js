@@ -84,8 +84,9 @@ const onReceiveLectures = (draft, payload) => {
   draft.lecturesByType = mapValues(groupBy(payload, x => x.content_type), x => x.map(y => y.id));
 };
 
-const onFetchAllSeriesSuccess = (draft, payload) => {
+const onFetchAllSeriesSuccess = (draft, payload, type) => {
   draft.seriesIDs = payload.collections.map(x => x.id);
+  setStatus(draft, payload, type);
 };
 
 const onSetLanguage = draft => {
@@ -108,10 +109,7 @@ export const reducer = handleActions({
 
   [RECEIVE_LECTURES]: onReceiveLectures,
   [FETCH_ALL_SERIES]: setStatus,
-  [FETCH_ALL_SERIES_SUCCESS]: (draft, payload, type) => {
-    onFetchAllSeriesSuccess(draft, payload);
-    setStatus(draft, payload, type);
-  },
+  [FETCH_ALL_SERIES_SUCCESS]: onFetchAllSeriesSuccess,
   [FETCH_ALL_SERIES_FAILURE]: setStatus,
 }, initialState);
 

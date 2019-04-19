@@ -33,6 +33,8 @@ const initialState = {
 
 const onSetLanguage = draft => {
   draft.programsByType = {};
+  draft.wip            = false;
+  draft.error          = null;
 };
 
 const onSSRPrepare = draft => {
