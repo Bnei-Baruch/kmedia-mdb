@@ -162,16 +162,18 @@ const onSetLanguage = draft => {
   draft.err             = null;
 };
 
+const onFetchDashboardFailure = (draft, payload) => {
+  draft.wip   = false;
+  draft.error = payload.err;
+};
+
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
   [settings.SET_LANGUAGE]: onSetLanguage,
 
   [FETCH_DASHBOARD]: onDashboard,
   [FETCH_DASHBOARD_SUCCESS]: onDashboardSuccess,
-  [FETCH_DASHBOARD_FAILURE]: (draft, payload) => {
-    draft.wip   = false;
-    draft.error = payload.err;
-  },
+  [FETCH_DASHBOARD_FAILURE]: onFetchDashboardFailure,
 
   [RECEIVE_TAGS]: onReceiveTags
 

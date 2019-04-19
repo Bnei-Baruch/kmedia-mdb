@@ -110,6 +110,7 @@ const onFetchById = (draft, payload, type) => {
 const onFetchByIdSuccess = (draft, payload, type) => {
   const key           = getActionKey(type);
   const { id, data }  = payload;
+  draft[key][id]      = draft[key][id] || {};
   draft[key][id].data = data;
   draft[key][id].wip  = false;
 };
@@ -117,8 +118,24 @@ const onFetchByIdSuccess = (draft, payload, type) => {
 const onFetchByIdFailure = (draft, payload, type) => {
   const key          = getActionKey(type);
   const { id, err }  = payload;
+  draft[key][id]      = draft[key][id] || {};
   draft[key][id].err = err;
   draft[key][id].wip = false;
+};
+
+const onFetchAsset = draft => {
+  draft.asset.wip = true;
+};
+
+const onFetchAssetSuccess = (draft, payload) => {
+  draft.asset.data = payload;
+  draft.asset.wip  = false;
+  draft.asset.err  = null;
+};
+
+const onFetchAssetFailure = (draft, payload) => {
+  draft.asset.wip = false;
+  draft.asset.err = payload;
 };
 
 export const reducer = handleActions({
@@ -136,20 +153,11 @@ export const reducer = handleActions({
   [SOURCE_INDEX_SUCCESS]: onFetchByIdSuccess,
   [SOURCE_INDEX_FAILURE]: onFetchByIdFailure,
 
-  [FETCH_ASSET]: draft => {
-    draft.asset.wip = true;
-  },
+  [FETCH_ASSET]: onFetchAsset,
 
-  [FETCH_ASSET_SUCCESS]: (draft, payload) => {
-    draft.asset.data = payload;
-    draft.asset.wip  = false;
-    draft.asset.err  = null;
-  },
+  [FETCH_ASSET_SUCCESS]: onFetchAssetSuccess,
 
-  [FETCH_ASSET_FAILURE]: (draft, payload) => {
-    draft.asset.wip = false;
-    draft.asset.err = payload;
-  },
+  [FETCH_ASSET_FAILURE]: onFetchAssetFailure,
 }, initialState);
 
 /* Selectors */

@@ -61,11 +61,10 @@ const onCUFailure = (state, action) => ({
 
 const onCUSuccess = (draft, payload) => {
   if (draft.cuStats[payload.namespace] === undefined) {
-    draft.cuStats[payload.namespace]      = {};
-    draft.cuStats[payload.namespace].wip  = false;
-    draft.cuStats[payload.namespace].wip  = false;
-    draft.cuStats[payload.namespace].data = payload.data;
+    draft.cuStats[payload.namespace] = {};
   }
+  draft.cuStats[payload.namespace].wip  = false;
+  draft.cuStats[payload.namespace].data = payload.data;
 };
 
 const onClearCUStats = (draft, payload) => {

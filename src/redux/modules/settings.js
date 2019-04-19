@@ -46,16 +46,22 @@ export const initialState = {
   pageSize: 10,
 };
 
+const onSetLanguage = (draft, payload) => {
+  draft.language = payload;
+};
+
+const onSetContentLanguage = (draft, payload) => {
+  draft.contentLanguage = payload;
+};
+
+const onSetPageSize = (draft, payload) => {
+  draft.pageSize = payload;
+};
+
 export const reducer = handleActions({
-  [SET_LANGUAGE]: (draft, payload) => {
-    draft.language = payload;
-  },
-  [SET_CONTENT_LANGUAGE]: (draft, payload) => {
-    draft.contentLanguage = payload;
-  },
-  [SET_PAGE_SIZE]: (draft, payload) => {
-    draft.pageSize = payload;
-  },
+  [SET_LANGUAGE]: onSetLanguage,
+  [SET_CONTENT_LANGUAGE]: onSetContentLanguage,
+  [SET_PAGE_SIZE]: onSetPageSize,
 }, initialState);
 
 /* Selectors */

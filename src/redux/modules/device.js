@@ -29,14 +29,18 @@ const initialState = {
   autoPlayAllowed: false,
 };
 
-export const reducer = handleActions({
-  [SET_DEVICE_INFO]: (draft, payload) => {
-    draft.deviceInfo = payload;
-  },
+const onSetDeviceInfo = (draft, payload) => {
+  draft.deviceInfo = payload;
+};
 
-  [SET_AUTO_PLAY_ALLOWED]: (draft, payload) => {
-    draft.autoPlayAllowed = payload;
-  },
+const onSetAutoPlayAllowed = (draft, payload) => {
+  draft.autoPlayAllowed = payload;
+};
+
+export const reducer = handleActions({
+  [SET_DEVICE_INFO]: onSetDeviceInfo,
+
+  [SET_AUTO_PLAY_ALLOWED]: onSetAutoPlayAllowed,
 
 }, initialState);
 

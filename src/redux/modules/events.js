@@ -57,6 +57,11 @@ const onSetLanguage = draft => {
   draft.eventsByType = {};
 };
 
+const onFailure = (draft, payload) => {
+  draft.wip = false;
+  draft.err = payload;
+};
+
 const onSSRPrepare = draft => {
   if (draft.err) {
     draft.err = draft.err.toString();
@@ -71,10 +76,7 @@ export const reducer = handleActions({
     draft.wip = true;
   },
   [FETCH_ALL_EVENTS_SUCCESS]: onSuccess,
-  [FETCH_ALL_EVENTS_FAILURE]: (draft, payload) => {
-    draft.wip = false;
-    draft.err = payload;
-  },
+  [FETCH_ALL_EVENTS_FAILURE]: onFailure,
 }, initialState);
 
 /* Selectors */

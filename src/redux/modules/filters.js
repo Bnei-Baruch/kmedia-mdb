@@ -56,6 +56,9 @@ const setFilterState = (draft, namespace, name, newFilterStateReducer) => {
     ? newFilterStateReducer(oldNamespace[name])
     : newFilterStateReducer;
 
+  if (draft[namespace] === undefined) {
+    draft[namespace] = {};
+  }
   if (oldNamespace[name] !== newFilterState) {
     draft[namespace][name] = { ...oldNamespace[name], ...newFilterState };
   }
@@ -86,6 +89,9 @@ const $$resetNamespace = (draft, { namespace }) => {
 
 const $$setHydratedFilterValues = (draft, { namespace, filters }) => {
   const oldNamespace = draft[namespace] || {};
+  if (draft.isHydrated === undefined) {
+    draft.isHydrated = {};
+  }
 
   draft[namespace]            = {
     // ...oldNamespace,  If we're hydrating then we need a fresh state
