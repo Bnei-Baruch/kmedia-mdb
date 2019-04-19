@@ -46,6 +46,14 @@ class FastDayPicker extends Component {
     }
   }
 
+  // static getDerivedStateFromProps(props, state) {
+  //   const { value } = state;
+  //   if (props.value !== value) {
+  //     return { stringValue: this.formatDateValue(props.value) };
+  //   }
+  //   return null;
+  // }
+
   isMobileDevice = () => this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
   handleYearMonthChange = (month) => {
