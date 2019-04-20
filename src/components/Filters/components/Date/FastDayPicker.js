@@ -127,6 +127,8 @@ class FastDayPicker extends Component {
 
   onPopupDayChange = (date) => {
     const { onDayChange } = this.props;
+    if (date > Date.now())
+      return;
     this.setState({ stringValue: this.formatDateValue(date) });
     onDayChange(date);
     this.closePopup();
@@ -136,11 +138,11 @@ class FastDayPicker extends Component {
     if (!event) {
       return;
     }
-    if (data.value && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(data.value)) {
-      const { onDayChange } = this.props;
-      const date = moment(data.value, "DD/MM/YYYY").toDate();
-      if (date)
-        onDayChange(date);
+    const { onDayChange } = this.props;
+    const localeDateFormat = moment.localeData().longDateFormat('L').replace('DD','D').replace('MM','M');
+    const day = moment(data.value, localeDateFormat, true);
+    if (day.isValid()) {
+      onDayChange(day.toDate());
     }
     else {
       this.setState({ stringValue: data.value });
@@ -213,7 +215,7 @@ class FastDayPicker extends Component {
             label={label ? <Label className="ui label label to-from-label">{label}</Label> : null}
           />}
       >
-        <Popup.Content>
+        <Popup.Content  dir={getLanguageDirection(language)}>
           <DayPicker
             locale={locale}
             localeUtils={MomentLocaleUtils}
@@ -222,7 +224,7 @@ class FastDayPicker extends Component {
             navbarElement={props => this.getNavBarElement(props, language)}
             month={month}
             toMonth={today().toDate()}
-            dir={getLanguageDirection(language)}
+           
             ref={this.handleDayPickerRef}
             onDayChange={this.onPopupDayChange}
             onDayClick={this.onPopupDayChange}
