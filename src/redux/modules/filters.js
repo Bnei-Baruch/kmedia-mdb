@@ -65,7 +65,6 @@ const setFilterState = (draft, namespace, name, newFilterStateReducer) => {
 };
 
 const $$setFilterValue = (draft, { namespace, name, value }) => {
-  console.log(1);
   setFilterState(draft, namespace, name, () => {
     const arrayObjectOrString = Array.isArray(value)
       || typeof value === 'object'
