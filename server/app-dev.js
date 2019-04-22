@@ -39,6 +39,11 @@ router.use('/locales', express.static(
   path.resolve(__dirname, '..', 'public', 'locales'),
 ));
 
+// serve assets
+router.use('/assets', express.static(
+  path.resolve(__dirname, '..', 'public', 'assets'),
+));
+
 // proxy other static assets to create-react-app dev server
 router.use(['**/*.*', '/static', '/sockjs-node'], proxy({
   target: `http://localhost:${CRA_CLIENT_PORT}`,
