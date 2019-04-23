@@ -40,13 +40,6 @@ class FastDayPicker extends Component {
 
   inputElement = null;
 
-  // componentWillReceiveProps(nextProps) {
-  //   const { value } = this.state;
-  //   if (nextProps.value !== value) {
-  //     this.setState({ stringValue: FastDayPicker.formatDateValue(nextProps.value, nextProps.language) });
-  //   }
-  // }
-
   static getDerivedStateFromProps(props, state) {
     const { value } = state;
     if (props.value !== value) {
