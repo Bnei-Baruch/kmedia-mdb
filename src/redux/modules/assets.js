@@ -154,9 +154,7 @@ export const reducer = handleActions({
   [SOURCE_INDEX_FAILURE]: onFetchByIdFailure,
 
   [FETCH_ASSET]: onFetchAsset,
-
   [FETCH_ASSET_SUCCESS]: onFetchAssetSuccess,
-
   [FETCH_ASSET_FAILURE]: onFetchAssetFailure,
 }, initialState);
 
