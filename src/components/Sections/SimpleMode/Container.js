@@ -12,7 +12,7 @@ import { isEmpty } from '../../../helpers/utils';
 import { selectors as device } from '../../../redux/modules/device';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { actions, selectors } from '../../../redux/modules/simpelMode';
+import { actions, selectors } from '../../../redux/modules/simpleMode';
 import * as shapes from '../../shapes';
 import Page from './Page';
 import { groupOtherMediaByType, renderCollection } from './RenderListHelpers';

@@ -1,10 +1,10 @@
-import { createAction, handleActions } from 'redux-actions';
+import { createAction } from 'redux-actions';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 
 import { isEmpty, strCmp } from '../../helpers/utils';
 import { selectors as mdb } from './mdb';
-import { types as settings } from './settings';
+import { handleActions, types as settings } from './settings';
 import { selectors as sources } from './sources';
 import { types as ssr } from './ssr';
 
@@ -61,62 +61,47 @@ const initialState = {
 
 /**
  * Set the wip and errors part of the state
- * @param state
- * @param action
- * @returns {{wip: {}, errors: {}}}
  */
-const setStatus = (state, action) => {
-  const wip    = { ...state.wip };
-  const errors = { ...state.errors };
-
-  switch (action.type) {
+const setStatus = (draft, payload, type) => {
+  switch (type) {
   case FETCH_ALL_SERIES:
-    wip.series = true;
+    draft.wip.series = true;
     break;
   case FETCH_ALL_SERIES_SUCCESS:
-    wip.series    = false;
-    errors.series = null;
+    draft.wip.series    = false;
+    draft.errors.series = null;
     break;
   case FETCH_ALL_SERIES_FAILURE:
-    wip.series    = false;
-    errors.series = action.payload;
+    draft.wip.series    = false;
+    draft.errors.series = payload;
     break;
   default:
     break;
   }
-
-  return {
-    ...state,
-    wip,
-    errors,
-  };
 };
 
-const onReceiveLectures = (state, action) => ({
-  ...state,
-  lecturesByType: mapValues(groupBy(action.payload, x => x.content_type), x => x.map(y => y.id)),
-});
+const onReceiveLectures = (draft, payload) => {
+  draft.lecturesByType = mapValues(groupBy(payload, x => x.content_type), x => x.map(y => y.id));
+};
 
-const onFetchAllSeriesSuccess = (state, action) => ({
-  ...state,
-  seriesIDs: action.payload.collections.map(x => x.id),
-});
+const onFetchAllSeriesSuccess = (draft, payload, type) => {
+  draft.seriesIDs = payload.collections.map(x => x.id);
+  setStatus(draft, payload, type);
+};
 
-const onSetLanguage = state => (
-  {
-    ...state,
-    lecturesByType: {},
-    seriesIDs: [],
+const onSetLanguage = draft => {
+  draft.lecturesByType = {};
+  draft.seriesIDs      = [];
+};
+
+const onSSRPrepare = draft => {
+  if (draft.errors.lectures) {
+    draft.errors.lectures = draft.errors.lectures.toString();
   }
-);
-
-const onSSRPrepare = state => ({
-  ...state,
-  errors: {
-    lectures: state.errors.lectures ? state.errors.lectures.toString() : state.errors.lectures,
-    series: state.errors.series ? state.errors.series.toString() : state.errors.series,
+  if (draft.errors.series) {
+    draft.errors.series = draft.errors.series.toString();
   }
-});
+};
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
@@ -124,7 +109,7 @@ export const reducer = handleActions({
 
   [RECEIVE_LECTURES]: onReceiveLectures,
   [FETCH_ALL_SERIES]: setStatus,
-  [FETCH_ALL_SERIES_SUCCESS]: (state, action) => setStatus(onFetchAllSeriesSuccess(state, action), action),
+  [FETCH_ALL_SERIES_SUCCESS]: onFetchAllSeriesSuccess,
   [FETCH_ALL_SERIES_FAILURE]: setStatus,
 }, initialState);
 

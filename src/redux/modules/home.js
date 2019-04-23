@@ -1,6 +1,6 @@
-import { createAction, handleActions } from 'redux-actions';
+import { createAction } from 'redux-actions';
 
-import { types as settings } from './settings';
+import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
 
 /* Types */
@@ -36,32 +36,44 @@ const initialState = {
   err: null,
 };
 
-const onSetLanguage = () => ({
-  ...initialState,
-});
+const onSetLanguage = (draft) => {
+  draft.latestLesson = null;
+  draft.latestUnits  = null;
+  draft.banner       = null;
+  draft.wip          = false;
+  draft.err          = null;
+};
 
-const onData = (state, action) => ({
-  ...state,
-  wip: false,
-  err: null,
-  latestLesson: action.payload.latest_daily_lesson.id,
-  latestUnits: action.payload.latest_units.map(x => x.id),
-  banner: action.payload.banner,
-});
+const onData = (draft, payload) => {
+  draft.wip          = false;
+  draft.err          = null;
+  draft.latestLesson = payload.latest_daily_lesson.id;
+  draft.latestUnits  = payload.latest_units.map(x => x.id);
+  draft.banner       = payload.banner;
+};
 
-const onSSRPrepare = state => ({
-  ...state,
-  err: state.err ? state.err.toString() : state.err,
-});
+const onDataFailure = (draft, payload) => {
+  draft.wip  = false;
+  draft.data = null;
+  draft.err  = payload;
+};
+
+const onSSRPrepare = draft => {
+  if (draft.err) {
+    draft.err = draft.err.toString();
+  }
+};
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
 
   [settings.SET_LANGUAGE]: onSetLanguage,
 
-  [FETCH_DATA]: state => ({ ...state, wip: true }),
+  [FETCH_DATA]: draft => {
+    draft.wip = true;
+  },
   [FETCH_DATA_SUCCESS]: onData,
-  [FETCH_DATA_FAILURE]: (state, action) => ({ ...state, wip: false, data: null, err: action.payload }),
+  [FETCH_DATA_FAILURE]: onDataFailure,
 }, initialState);
 
 /* Selectors */

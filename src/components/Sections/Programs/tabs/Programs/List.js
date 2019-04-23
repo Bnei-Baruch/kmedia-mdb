@@ -9,8 +9,13 @@ import { ellipsize } from '../../../../../helpers/strings';
 import UnitList from '../../../../Pages/UnitList/Container';
 import Link from '../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
+import { FrownSplash } from '../../../../shared/Splash/Splash';
 
 export const renderUnit = (unit, t) => {
+  if (unit === undefined) {
+    return <FrownSplash text={t('messages.source-content-not-found')} />;
+  }
+
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
   const programs  = breakdown.getPrograms();
 
