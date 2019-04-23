@@ -115,9 +115,7 @@ const onSSRPrepare = () => ({ ...initialState });
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
 
-  [settings.SET_LANGUAGE]: () => ({
-    ...initialState,
-  }),
+  [settings.SET_LANGUAGE]: onSSRPrepare,
 
   [RECEIVE_SOURCES]: (state, action) => {
     const [byId, byIdAZ] = prepareById(action.payload);

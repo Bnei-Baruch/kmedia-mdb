@@ -1,6 +1,7 @@
-import { createAction, handleActions } from 'redux-actions';
+import { createAction } from 'redux-actions';
 import isFunction from 'lodash/isFunction';
 
+import { handleActions } from './settings';
 import { isEmpty } from '../../helpers/utils';
 
 /* Types */
@@ -46,8 +47,8 @@ export const actions = {
 
 const initialState = {};
 
-const setFilterState = (state, namespace, name, newFilterStateReducer) => {
-  const oldNamespace = state[namespace] || { [name]: {} };
+const setFilterState = (draft, namespace, name, newFilterStateReducer) => {
+  const oldNamespace = draft[namespace] || { [name]: {} };
   if (!oldNamespace[name]) {
     oldNamespace[name] = {};
   }
@@ -55,25 +56,16 @@ const setFilterState = (state, namespace, name, newFilterStateReducer) => {
     ? newFilterStateReducer(oldNamespace[name])
     : newFilterStateReducer;
 
-  if (oldNamespace[name] === newFilterState) {
-    return state;
+  if (draft[namespace] === undefined) {
+    draft[namespace] = {};
   }
-
-  return {
-    ...state,
-    [namespace]: {
-      ...oldNamespace,
-      [name]: {
-        ...oldNamespace[name],
-        ...newFilterState
-      }
-    }
-  };
+  if (oldNamespace[name] !== newFilterState) {
+    draft[namespace][name] = { ...oldNamespace[name], ...newFilterState };
+  }
 };
 
-const $$setFilterValue = (state, action) => {
-  const { namespace, name, value } = action.payload;
-  return setFilterState(state, namespace, name, () => {
+const $$setFilterValue = (draft, { namespace, name, value }) => {
+  setFilterState(draft, namespace, name, () => {
     const arrayObjectOrString = Array.isArray(value)
       || typeof value === 'object'
       || typeof value === 'string';
@@ -83,64 +75,51 @@ const $$setFilterValue = (state, action) => {
   });
 };
 
-const $$resetFilter = (state, action) => {
-  const { namespace, name } = action.payload;
-  return setFilterState(state, namespace, name, () => ({ values: [] }));
+const $$resetFilter = (draft, { namespace, name }) => {
+  setFilterState(draft, namespace, name, () => ({ values: [] }));
 };
 
-const $$resetNamespace = (state, action) => {
-  const { namespace } = action.payload;
-
+const $$resetNamespace = (draft, { namespace }) => {
   // remove the namespace from state if it exists there
-  if (state && state[namespace]) {
-    return {
-      ...state,
-      [namespace]: {},
-    };
+  if (draft[namespace]) {
+    draft[namespace] = {};
   }
-
-  return state;
 };
 
-const $$setHydratedFilterValues = (state, action) => {
-  const { namespace, filters } = action.payload;
-  const oldNamespace           = state[namespace] || {};
+const $$setHydratedFilterValues = (draft, { namespace, filters }) => {
+  const oldNamespace = draft[namespace] || {};
+  if (draft.isHydrated === undefined) {
+    draft.isHydrated = {};
+  }
 
-  return {
-    ...state,
-    isHydrated: {
-      ...state.isHydrated,
-      [action.payload.namespace]: true
-    },
-    [namespace]: {
-      // ...oldNamespace,  If we're hydrating then we need a fresh state
-      ...Object.keys(filters).reduce((acc, name) => {
-        const value = filters[name];
-        acc[name]   = {
-          ...oldNamespace[name],
-          values: Array.isArray(value) ? value : [value]
-        };
-        return acc;
-      }, {})
-    }
+  draft[namespace]            = {
+    // ...oldNamespace,  If we're hydrating then we need a fresh state
+    ...Object.keys(filters).reduce((acc, name) => {
+      const value = filters[name];
+      acc[name]   = {
+        ...oldNamespace[name],
+        values: Array.isArray(value) ? value : [value]
+      };
+      return acc;
+    }, {})
   };
+  draft.isHydrated[namespace] = true;
 };
 
-const $$hydrateFilters = (state, action) => ({
-  ...state,
-  isHydrated: {
-    ...state.isHydrated,
-    [action.payload.namespace]: false
+const $$hydrateFilters = (draft, { namespace }) => {
+  if (draft.isHydrated === undefined) {
+    draft.isHydrated = {};
   }
-});
+  if (draft.isHydrated[namespace] === undefined) {
+    draft.isHydrated[namespace] = {};
+  }
 
-const $$filtersHydrated = (state, action) => ({
-  ...state,
-  isHydrated: {
-    ...state.isHydrated,
-    [action.payload.namespace]: false
-  }
-});
+  draft.isHydrated[namespace] = false;
+};
+
+const $$filtersHydrated = (draft, { namespace }) => {
+  draft.isHydrated[namespace] = false;
+};
 
 export const reducer = handleActions({
   [SET_FILTER_VALUE]: $$setFilterValue,

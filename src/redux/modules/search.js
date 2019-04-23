@@ -1,5 +1,6 @@
-import { createAction, handleActions } from 'redux-actions';
+import { createAction } from 'redux-actions';
 
+import { handleActions } from './settings';
 import { types as ssr } from './ssr';
 
 /* Types */
@@ -82,62 +83,52 @@ const initialState = {
   error: null,
 };
 
-const onSSRPrepare = state => ({
-  ...state,
-  error: state.error ? state.error.toString() : state.error,
-});
+const onSSRPrepare = draft => {
+  if (draft.error) {
+    draft.error = draft.error.toString();
+  }
+};
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
 
-  [AUTOCOMPLETE]: (state, action) => ({
-    ...state,
-    acQ: action.payload,
-  }),
-  [AUTOCOMPLETE_SUCCESS]: (state, action) => ({
-    ...state,
-    suggestions: action.payload,
-  }),
-  [AUTOCOMPLETE_FAILURE]: state => ({
-    ...state,
-    suggestions: null,
-  }),
-  [SEARCH]: (state, action) => ({
-    ...state,
-    ...action.payload,
-    wip: true,
-  }),
-  [SEARCH_SUCCESS]: (state, action) => ({
-    ...state,
-    wip: false,
-    error: null,
-    queryResult: action.payload,
-  }),
-  [SEARCH_FAILURE]: (state, action) => ({
-    ...state,
-    wip: false,
-    error: action.payload,
-  }),
-  [SET_PAGE]: (state, action) => ({
-    ...state,
-    pageNo: action.payload
-  }),
-  [SET_SORT_BY]: (state, action) => ({
-    ...state,
-    sortBy: action.payload
-  }),
-  [UPDATE_QUERY]: (state, action) => ({
-    ...state,
-    q: action.payload,
-  }),
-  [SET_DEB]: (state, action) => ({
-    ...state,
-    deb: action.payload,
-  }),
-  [SET_SUGGEST]: (state, action) => ({
-    ...state,
-    suggest: action.payload,
-  }),
+  [AUTOCOMPLETE]: (draft, payload) => {
+    draft.acQ = payload;
+  },
+  [AUTOCOMPLETE_SUCCESS]: (draft, payload) => {
+    draft.suggestions = payload;
+  },
+  [AUTOCOMPLETE_FAILURE]: draft => {
+    draft.suggestions = null;
+  },
+  [SEARCH]: (draft, payload) => {
+    draft     = { ...payload };
+    draft.wip = true;
+  },
+  [SEARCH_SUCCESS]: (draft, payload) => {
+    draft.wip         = false;
+    draft.error       = null;
+    draft.queryResult = payload;
+  },
+  [SEARCH_FAILURE]: (draft, payload) => {
+    draft.wip   = false;
+    draft.error = payload;
+  },
+  [SET_PAGE]: (draft, payload) => {
+    draft.pageNo = payload;
+  },
+  [SET_SORT_BY]: (draft, payload) => {
+    draft.sortBy = payload;
+  },
+  [UPDATE_QUERY]: (draft, payload) => {
+    draft.q = payload;
+  },
+  [SET_DEB]: (draft, payload) => {
+    draft.deb = payload;
+  },
+  [SET_SUGGEST]: (draft, payload) => {
+    draft.suggest = payload;
+  },
 }, initialState);
 
 /* Selectors */
