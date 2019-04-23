@@ -34,25 +34,26 @@ class FastDayPicker extends Component {
 
   state = {
     month: null,
-    isOpen: false
+    isOpen: false,
+    value: null,
   };
 
   inputElement = null;
 
-  componentWillReceiveProps(nextProps) {
-    const { value } = this.state;
-    if (nextProps.value !== value) {
-      this.setState({ stringValue: FastDayPicker.formatDateValue(nextProps.value, nextProps.language) });
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   const { value } = this.state;
+  //   if (nextProps.value !== value) {
+  //     this.setState({ stringValue: FastDayPicker.formatDateValue(nextProps.value, nextProps.language) });
+  //   }
+  // }
 
-  /*static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(props, state) {
     const { value } = state;
-    if (props.value && props.value !== value) {
+    if (props.value !== value) {
       return { value, stringValue: FastDayPicker.formatDateValue(props.value, props.language) };
     }
     return null;
-  }*/
+  }
 
   static formatDateValue (date, language) {
     const locale = getLanguageLocaleWORegion(language);
