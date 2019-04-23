@@ -29,9 +29,11 @@ class AVPlaylistPlayer extends Component {
 
   componentWillMount() {
     const { history } = this.props;
-    const query       = getQuery(history.location);
-    if (query.sstart) {
-      this.setState({ autoPlay: true });
+    if (history){
+      const query       = getQuery(history.location);
+      if (query.sstart) {
+        this.setState({ autoPlay: true });
+      }
     }
   }
 
