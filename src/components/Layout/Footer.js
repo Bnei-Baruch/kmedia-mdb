@@ -24,10 +24,14 @@ const Footer = ({ t, language }) => {
                   {t('nav.footer.rights')}
                 </small>
               </Header>
+
               <Button
-                icon="rss square"
-                floated="right"
+                icon="rss"
                 color="orange"
+                basic
+                inverted
+                bordered={false}
+                floated="right"
                 href={getRSSLinkByLang(language)} />
             </Grid.Column>
           </Grid.Row>
