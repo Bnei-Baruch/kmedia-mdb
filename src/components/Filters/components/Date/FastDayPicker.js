@@ -42,17 +42,22 @@ class FastDayPicker extends Component {
   componentWillReceiveProps(nextProps) {
     const { value } = this.state;
     if (nextProps.value !== value) {
-      this.setState({ stringValue: this.formatDateValue(nextProps.value) });
+      this.setState({ stringValue: FastDayPicker.formatDateValue(nextProps.value, nextProps.language) });
     }
   }
 
-  // static getDerivedStateFromProps(props, state) {
-  //   const { value } = state;
-  //   if (props.value !== value) {
-  //     return { stringValue: this.formatDateValue(props.value) };
-  //   }
-  //   return null;
-  // }
+  /*static getDerivedStateFromProps(props, state) {
+    const { value } = state;
+    if (props.value && props.value !== value) {
+      return { value, stringValue: FastDayPicker.formatDateValue(props.value, props.language) };
+    }
+    return null;
+  }*/
+
+  static formatDateValue (date, language) {
+    const locale = getLanguageLocaleWORegion(language);
+    return date ? formatDate(date, 'l', locale) : '';
+  }
 
   isMobileDevice = () => this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
 
@@ -119,17 +124,11 @@ class FastDayPicker extends Component {
 
   closePopup = () => this.setState({ isOpen: false });
 
-  formatDateValue = (date) => {
-    const { language } = this.props;
-    const locale = getLanguageLocaleWORegion(language);
-    return date ? formatDate(date, 'l', locale) : '';
-  }
-
   onPopupDayChange = (date) => {
-    const { onDayChange } = this.props;
+    const { onDayChange, language } = this.props;
     if (date > Date.now())
       return;
-    this.setState({ stringValue: this.formatDateValue(date) });
+    this.setState({ stringValue: FastDayPicker.formatDateValue(date, language) });
     onDayChange(date);
     this.closePopup();
   }
