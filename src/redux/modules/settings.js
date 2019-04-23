@@ -57,5 +57,5 @@ const getPageSize        = state => state.pageSize;
 export const selectors = {
   getLanguage,
   getContentLanguage,
-  getPageSize
+  getPageSize,
 };

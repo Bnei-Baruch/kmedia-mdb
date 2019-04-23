@@ -15,6 +15,9 @@ const SOURCE_INDEX_FAILURE = 'Assets/SOURCE_INDEX_FAILURE';
 const FETCH_ASSET          = 'Assets/FETCH_ASSET';
 const FETCH_ASSET_SUCCESS  = 'Assets/FETCH_ASSET_SUCCESS';
 const FETCH_ASSET_FAILURE  = 'Assets/FETCH_ASSET_FAILURE';
+const FETCH_PERSON         = 'Assets/FETCH_PERSON';
+const FETCH_PERSON_SUCCESS = 'Assets/FETCH_PERSON_SUCCESS';
+const FETCH_PERSON_FAILURE = 'Assets/FETCH_PERSON_FAILURE';
 
 export const types = {
   UNZIP,
@@ -29,6 +32,7 @@ export const types = {
   FETCH_ASSET,
   FETCH_ASSET_SUCCESS,
   FETCH_ASSET_FAILURE,
+  FETCH_PERSON,
 };
 
 /* Actions */
@@ -45,6 +49,9 @@ const sourceIndexFailure = createAction(SOURCE_INDEX_FAILURE, (id, err) => ({ id
 const fetchAsset         = createAction(FETCH_ASSET);
 const fetchAssetSuccess  = createAction(FETCH_ASSET_SUCCESS);
 const fetchAssetFailure  = createAction(FETCH_ASSET_FAILURE);
+const fetchPerson        = createAction(FETCH_PERSON);
+const fetchPersonSuccess = createAction(FETCH_PERSON_SUCCESS);
+const fetchPersonFailure = createAction(FETCH_PERSON_FAILURE);
 
 export const actions = {
   unzip,
@@ -59,6 +66,9 @@ export const actions = {
   fetchAsset,
   fetchAssetSuccess,
   fetchAssetFailure,
+  fetchPerson,
+  fetchWPSuccess: fetchPersonSuccess,
+  fetchWPFailure: fetchPersonFailure,
 };
 
 /* Reducer */
@@ -72,6 +82,11 @@ const initialState = {
     wip: false,
     err: null,
   },
+  person: {
+    data: null,
+    wip: false,
+    err: null,
+  },
 };
 
 const onSSRPrepare = state => ({
@@ -79,6 +94,7 @@ const onSSRPrepare = state => ({
   doc2htmlById: mapValues(state.doc2htmlById, x => ({ ...x, err: x.err ? x.err.toString() : x.err })),
   sourceIndexById: mapValues(state.sourceIndexById, x => ({ ...x, err: x.err ? x.err.toString() : x.err })),
   asset: ({ ...state.asset, err: state.asset.err ? state.asset.err.toString() : state.asset.err }),
+  person: ({ ...state.person, err: state.person.err ? state.person.err.toString() : state.person.err }),
 });
 
 const getActionKey = (action) => {
@@ -155,6 +171,21 @@ export const reducer = handleActions({
     ...state,
     asset: { wip: false, err: action.payload }
   }),
+
+  [FETCH_PERSON]: state => ({
+    ...state,
+    person: { wip: true }
+  }),
+
+  [FETCH_PERSON_SUCCESS]: (state, action) => ({
+    ...state,
+    person: { data: action.payload, wip: false, err: null }
+  }),
+
+  [FETCH_PERSON_FAILURE]: (state, action) => ({
+    ...state,
+    person: { wip: false, err: action.payload }
+  }),
 }, initialState);
 
 /* Selectors */
@@ -163,10 +194,12 @@ const getZipIndexById    = state => state.zipIndexById;
 const getDoc2htmlById    = state => state.doc2htmlById;
 const getSourceIndexById = state => state.sourceIndexById;
 const getAsset           = state => state.asset;
+const getWP              = state => state.person;
 
 export const selectors = {
   getZipIndexById,
   getDoc2htmlById,
   getSourceIndexById,
   getAsset,
+  getWP,
 };

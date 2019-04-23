@@ -39,9 +39,19 @@ export function* sourceIndex(action) {
 export function* fetchAsset(action) {
   try {
     const { data } = yield call(Api.getAsset, action.payload);
+    console.log(data);
     yield put(actions.fetchAssetSuccess(data));
   } catch (err) {
     yield put(actions.fetchAssetFailure(err));
+  }
+}
+
+export function* fetchWP(action) {
+  try {
+    const { data } = yield call(Api.getWP, action.payload);
+    yield put(actions.fetchWPSuccess(data));
+  } catch (err) {
+    yield put(actions.fetchWPFailure(err));
   }
 }
 
@@ -61,9 +71,14 @@ function* watchFetchAsset() {
   yield takeLatest([types.FETCH_ASSET], fetchAsset);
 }
 
+function* watchFetchPerson() {
+  yield takeLatest([types.FETCH_PERSON], fetchWP);
+}
+
 export const sagas = [
   watchUnzip,
   watchDoc2Html,
   watchSourceIndex,
   watchFetchAsset,
+  watchFetchPerson,
 ];

@@ -17,7 +17,7 @@ class LibraryPerson extends Component {
     sourceId: PropTypes.string.isRequired,
     language: PropTypes.string.isRequired,
     content: shapes.DataWipErr,
-    fetchAsset: PropTypes.func.isRequired,
+    fetchPerson: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -30,20 +30,20 @@ class LibraryPerson extends Component {
   };
 
   componentDidMount() {
-    const { fetchAsset, sourceId, language } = this.props;
-    fetchAsset(`persons/${sourceId}-${language}.html`);
+    const { fetchPerson, sourceId, language } = this.props;
+    fetchPerson(`persons/${sourceId}-${language}.html`);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { fetchAsset, sourceId, language } = this.props;
+    const { fetchPerson, sourceId, language } = this.props;
     if (nextProps.sourceId !== sourceId
       || nextProps.language !== language) {
-      fetchAsset(`persons/${nextProps.sourceId}-${nextProps.language}.html`);
+      fetchPerson(`persons/${nextProps.sourceId}-${nextProps.language}.html`);
     }
   }
 
   render() {
-    const { content: { wip, err, data }, t } = this.props;
+    const { person: { wip, err, data }, t } = this.props;
 
     if (err) {
       if (err.response && err.response.status === 404) {
@@ -54,7 +54,15 @@ class LibraryPerson extends Component {
     if (wip) {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
-    if (!data) {
+    let content;
+    if (data) {
+      try {
+        content = data[0].content.rendered;
+      } catch (e) {
+        content = null;
+      }
+    }
+    if (!content) {
       return <Segment basic>{t('sources-library.no-source')}</Segment>;
     }
 
@@ -63,7 +71,7 @@ class LibraryPerson extends Component {
         <Grid>
           <Grid.Row>
             <Grid.Column>
-              <div className="readble-width" dangerouslySetInnerHTML={{ __html: data }} />
+              <div className="readble-width" dangerouslySetInnerHTML={{ __html: content }} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -75,10 +83,10 @@ class LibraryPerson extends Component {
 export default withRouter(connect(
   (state, ownProps) => ({
     sourceId: ownProps.match.params.id,
-    content: selectors.getAsset(state.assets),
     language: settings.getLanguage(state.settings),
+    person: selectors.getWP(state.assets),
   }),
   dispatch => bindActionCreators({
-    fetchAsset: actions.fetchAsset,
+    fetchPerson: actions.fetchPerson,
   }, dispatch)
 )(withNamespaces()(LibraryPerson)));

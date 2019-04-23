@@ -2,16 +2,20 @@ import axios from 'axios';
 
 const API_BACKEND    = process.env.REACT_APP_API_BACKEND;
 const ASSETS_BACKEND = process.env.REACT_APP_ASSETS_BACKEND;
+const WP_BACKEND     = process.env.REACT_APP_WP_BACKEND;
 const IMAGINARY_URL  = process.env.REACT_APP_IMAGINARY_URL;
 
 export const backendUrl   = path => `${API_BACKEND}${path}`;
 export const assetUrl     = path => `${ASSETS_BACKEND}${path}`;
+export const wpUrl        = path => `${WP_BACKEND}wp-json/wp/v2/pages/?slug=${path}`;
 export const imaginaryUrl = path => `${IMAGINARY_URL}${path}`;
 
 export class Requests {
   static get = path => axios(backendUrl(path));
 
   static getAsset = path => axios(assetUrl(path));
+
+  static getWP = path => axios(wpUrl(path));
 
   static makeParams = params => (
     `${Object.entries(params)
@@ -84,6 +88,8 @@ class Api {
   );
 
   static getAsset = path => Requests.getAsset(path);
+
+  static getWP = path => Requests.getWP(path);
 
   static simpleMode = ({ language, startDate: start_date, endDate: end_date }) => (
     Requests.get(`simple?${Requests.makeParams({ language, start_date, end_date })}`)
