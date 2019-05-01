@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 
-import { CT_ARTICLE, CT_RESEARCH_MATERIAL, CT_VIDEO_PROGRAM_CHAPTER, MT_TEXT } from '../../../../../helpers/consts';
+import { CT_ARTICLE, CT_RESEARCH_MATERIAL, CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, MT_TEXT } from '../../../../../helpers/consts';
 import * as shapes from '../../../../shapes';
 import TabsMenu from '../../../../shared/TabsMenu';
 import Summary from './Summary/Summary';
@@ -59,7 +59,8 @@ class Materials extends Component {
       },
     ];
 
-    if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER) {
+    if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER || 
+        unit.content_type === CT_VIRTUAL_LESSON) {
       items.unshift({
         name: 'summary',
         label: t('materials.summary.header'),
