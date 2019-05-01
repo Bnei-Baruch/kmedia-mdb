@@ -26,8 +26,7 @@ class FastDayPicker extends Component {
   };
 
   static defaultProps = {
-    value: null,
-    stringValue: null,
+    value: null,    
     label: '',
     onDayChange: noop,
   };
@@ -36,6 +35,7 @@ class FastDayPicker extends Component {
     month: null,
     isOpen: false,
     value: null,
+    stringValue: null,
   };
 
   inputElement = null;
@@ -43,7 +43,7 @@ class FastDayPicker extends Component {
   static getDerivedStateFromProps(props, state) {
     const { value } = state;
     if (props.value !== value) {
-      return { value, stringValue: FastDayPicker.formatDateValue(props.value, props.language) };
+      return { value: props.value, stringValue: FastDayPicker.formatDateValue(props.value, props.language) };
     }
     return null;
   }
@@ -119,31 +119,27 @@ class FastDayPicker extends Component {
   closePopup = () => this.setState({ isOpen: false });
 
   onPopupDayChange = (date) => {
-    const { onDayChange, language } = this.props;
-    if (date > Date.now())
+    if (date > today().add(1, 'days').toDate())
       return;
+    const { onDayChange, language } = this.props;
     this.setState({ stringValue: FastDayPicker.formatDateValue(date, language) });
     onDayChange(date);
     this.closePopup();
   }
 
   handleDateInputChange = (event, data) => {
-    if (!event) {
-      return;
-    }
     const { onDayChange } = this.props;
     const localeDateFormat = moment.localeData().longDateFormat('L').replace('DD','D').replace('MM','M');
     const day = moment(data.value, localeDateFormat, true);
     if (day.isValid()) {
       onDayChange(day.toDate());
-    }
-    else {
+    } else {
       this.setState({ stringValue: data.value });
     }
   };
 
   handleKeyDown = () => {
-    this.setState({ isOpen: false });
+    this.closePopup();
   }
 
   render() {
