@@ -26,7 +26,7 @@ class FastDayPicker extends Component {
   };
 
   static defaultProps = {
-    value: null,    
+    value: null,
     label: '',
     onDayChange: noop,
   };
@@ -48,7 +48,7 @@ class FastDayPicker extends Component {
     return null;
   }
 
-  static formatDateValue (date, language) {
+  static formatDateValue(date, language) {
     const locale = getLanguageLocaleWORegion(language);
     return date ? formatDate(date, 'l', locale) : '';
   }
@@ -129,7 +129,7 @@ class FastDayPicker extends Component {
 
   handleDateInputChange = (event, data) => {
     const { onDayChange } = this.props;
-    const localeDateFormat = moment.localeData().longDateFormat('L').replace('DD','D').replace('MM','M');
+    const localeDateFormat = moment.localeData().longDateFormat('L').replace('DD', 'D').replace('MM', 'M');
     const day = moment(data.value, localeDateFormat, true);
     if (day.isValid()) {
       onDayChange(day.toDate());
@@ -204,7 +204,7 @@ class FastDayPicker extends Component {
             label={label ? <Label className="ui label label to-from-label">{label}</Label> : null}
           />}
       >
-        <Popup.Content  dir={getLanguageDirection(language)}>
+        <Popup.Content dir={getLanguageDirection(language)}>
           <DayPicker
             locale={locale}
             localeUtils={MomentLocaleUtils}
@@ -213,7 +213,7 @@ class FastDayPicker extends Component {
             navbarElement={props => this.getNavBarElement(props, language)}
             month={month}
             toMonth={today().toDate()}
-           
+
             ref={this.handleDayPickerRef}
             onDayChange={this.onPopupDayChange}
             onDayClick={this.onPopupDayChange}
