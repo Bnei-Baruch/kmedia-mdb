@@ -38,7 +38,8 @@ class FastDayPicker extends Component {
     stringValue: null,
   };
 
-  inputElement = null;
+  localeDateFormat = moment.localeData().longDateFormat('L');
+  localeDateFormatShort = this.localeDateFormat.replace('DD', 'D').replace('MM', 'M');
 
   static getDerivedStateFromProps(props, state) {
     const { value } = state;
@@ -128,9 +129,8 @@ class FastDayPicker extends Component {
   }
 
   handleDateInputChange = (event, data) => {
-    const { onDayChange } = this.props;
-    const localeDateFormat = moment.localeData().longDateFormat('L').replace('DD', 'D').replace('MM', 'M');
-    const day = moment(data.value, localeDateFormat, true);
+    const { onDayChange } = this.props;    
+    const day = moment(data.value, this.localeDateFormatShort, true);
     if (day.isValid()) {
       onDayChange(day.toDate());
     } else {
@@ -151,8 +151,7 @@ class FastDayPicker extends Component {
     if (isMobileDevice) {
       const selected = value || today().toDate();
       const selectedToString = moment(selected).format('YYYY-MM-DD');
-      const localeDateFormat = moment.localeData().longDateFormat('L');
-      const selectedInLocaleFormat = moment(selected).format(localeDateFormat);
+      const selectedInLocaleFormat = moment(selected).format(this.localeDateFormat);
       return (
         <div>
           <div className="ui labeled input">
