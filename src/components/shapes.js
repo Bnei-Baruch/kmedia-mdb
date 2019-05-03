@@ -50,7 +50,7 @@ export const Route = PropTypes.shape({
   exact: PropTypes.bool,
   strict: PropTypes.bool,
   sensitive: PropTypes.bool,
-  component: PropTypes.func,
+  component: PropTypes.elementType,
 });
 Route.routes       = PropTypes.arrayOf(PropTypes.shape(Route));
 

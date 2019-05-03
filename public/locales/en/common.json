@@ -445,7 +445,8 @@
         "audio-simple": "Audio",
         "text": "Transcription Text",
         "image": "Sketches",
-        "lelo-mikud": "No focus-group"
+        "lelo-mikud": "No focus-group",
+        "text-research-material": "Research Materials"
       }
     },
     "program": {
