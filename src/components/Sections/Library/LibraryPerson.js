@@ -9,41 +9,35 @@ import { withNamespaces } from 'react-i18next';
 import { formatError } from '../../../helpers/utils';
 import { actions, selectors } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
-import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
+import { LANG_ENGLISH } from '../../../helpers/consts';
 
 class LibraryPerson extends Component {
   static propTypes = {
     sourceId: PropTypes.string.isRequired,
     language: PropTypes.string.isRequired,
-    content: shapes.DataWipErr,
     fetchPerson: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
 
-  static defaultProps = {
-    content: {
-      data: null,
-      wip: false,
-      err: null,
-    },
-  };
+  static getPerson({ fetchPerson, sourceId, language }) {
+    fetchPerson(`persons-${sourceId}-${language}-html`);
+  }
 
   componentDidMount() {
-    const { fetchPerson, sourceId, language } = this.props;
-    fetchPerson(`persons/${sourceId}-${language}.html`);
+    LibraryPerson.getPerson(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { fetchPerson, sourceId, language } = this.props;
+    const { sourceId, language } = this.props;
     if (nextProps.sourceId !== sourceId
       || nextProps.language !== language) {
-      fetchPerson(`persons/${nextProps.sourceId}-${nextProps.language}.html`);
+      LibraryPerson.getPerson(nextProps);
     }
   }
 
   render() {
-    const { person: { wip, err, data }, t } = this.props;
+    const { person: { wip, err, data: content }, language, t } = this.props;
 
     if (err) {
       if (err.response && err.response.status === 404) {
@@ -54,15 +48,13 @@ class LibraryPerson extends Component {
     if (wip) {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
-    let content;
-    if (data) {
-      try {
-        content = data[0].content.rendered;
-      } catch (e) {
-        content = null;
-      }
-    }
     if (!content) {
+      if (language !== LANG_ENGLISH) {
+        LibraryPerson.getPerson({
+          ...this.props,
+          language: LANG_ENGLISH,
+        });
+      }
       return <Segment basic>{t('sources-library.no-source')}</Segment>;
     }
 
@@ -84,7 +76,7 @@ export default withRouter(connect(
   (state, ownProps) => ({
     sourceId: ownProps.match.params.id,
     language: settings.getLanguage(state.settings),
-    person: selectors.getWP(state.assets),
+    person: selectors.getPerson(state.assets),
   }),
   dispatch => bindActionCreators({
     fetchPerson: actions.fetchPerson,

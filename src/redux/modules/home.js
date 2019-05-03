@@ -4,26 +4,38 @@ import { types as settings } from './settings';
 import { types as ssr } from './ssr';
 
 /* Types */
-const FETCH_DATA         = 'Home/FETCH_DATA';
-const FETCH_DATA_SUCCESS = 'Home/FETCH_DATA_SUCCESS';
-const FETCH_DATA_FAILURE = 'Home/FETCH_DATA_FAILURE';
+const FETCH_DATA           = 'Home/FETCH_DATA';
+const FETCH_DATA_SUCCESS   = 'Home/FETCH_DATA_SUCCESS';
+const FETCH_DATA_FAILURE   = 'Home/FETCH_DATA_FAILURE';
+const FETCH_BANNER         = 'Assets/FETCH_BANNER';
+const FETCH_BANNER_SUCCESS = 'Assets/FETCH_BANNER_SUCCESS';
+const FETCH_BANNER_FAILURE = 'Assets/FETCH_BANNER_FAILURE';
 
 export const types = {
   FETCH_DATA,
   FETCH_DATA_SUCCESS,
   FETCH_DATA_FAILURE,
+  FETCH_BANNER,
+  FETCH_BANNER_SUCCESS,
+  FETCH_BANNER_FAILURE,
 };
 
 /* Actions */
 
-const fetchData        = createAction(FETCH_DATA);
-const fetchDataSuccess = createAction(FETCH_DATA_SUCCESS);
-const fetchDataFailure = createAction(FETCH_DATA_FAILURE);
+const fetchData          = createAction(FETCH_DATA);
+const fetchDataSuccess   = createAction(FETCH_DATA_SUCCESS);
+const fetchDataFailure   = createAction(FETCH_DATA_FAILURE);
+const fetchBanner        = createAction(FETCH_BANNER);
+const fetchBannerSuccess = createAction(FETCH_BANNER_SUCCESS);
+const fetchBannerFailure = createAction(FETCH_BANNER_FAILURE);
 
 export const actions = {
   fetchData,
   fetchDataSuccess,
   fetchDataFailure,
+  fetchBanner,
+  fetchBannerSuccess,
+  fetchBannerFailure,
 };
 
 /* Reducer */
@@ -31,7 +43,11 @@ export const actions = {
 const initialState = {
   latestLesson: null,
   latestUnits: null,
-  banner: null,
+  banner: {
+    data: {},
+    wip: false,
+    err: null,
+  },
   wip: false,
   err: null,
 };
@@ -46,7 +62,6 @@ const onData = (state, action) => ({
   err: null,
   latestLesson: action.payload.latest_daily_lesson.id,
   latestUnits: action.payload.latest_units.map(x => x.id),
-  banner: action.payload.banner,
 });
 
 const onSSRPrepare = state => ({
@@ -62,6 +77,21 @@ export const reducer = handleActions({
   [FETCH_DATA]: state => ({ ...state, wip: true }),
   [FETCH_DATA_SUCCESS]: onData,
   [FETCH_DATA_FAILURE]: (state, action) => ({ ...state, wip: false, data: null, err: action.payload }),
+
+  [FETCH_BANNER]: state => ({
+    ...state,
+    banner: { wip: true, data: {} }
+  }),
+
+  [FETCH_BANNER_SUCCESS]: (state, action) => ({
+    ...state,
+    banner: { data: action.payload.content, wip: false, err: null }
+  }),
+
+  [FETCH_BANNER_FAILURE]: (state, action) => ({
+    ...state,
+    banner: { wip: false, err: action.payload }
+  }),
 }, initialState);
 
 /* Selectors */

@@ -7,7 +7,7 @@ const IMAGINARY_URL  = process.env.REACT_APP_IMAGINARY_URL;
 
 export const backendUrl   = path => `${API_BACKEND}${path}`;
 export const assetUrl     = path => `${ASSETS_BACKEND}${path}`;
-export const wpUrl        = path => `${WP_BACKEND}wp-json/wp/v2/pages/?slug=${path}`;
+export const wpUrl        = path => `${WP_BACKEND}wp-json/get-post-plugin/v1/get-post/${path}`;
 export const imaginaryUrl = path => `${IMAGINARY_URL}${path}`;
 
 export class Requests {

@@ -49,9 +49,9 @@ export function* fetchAsset(action) {
 export function* fetchWP(action) {
   try {
     const { data } = yield call(Api.getWP, action.payload);
-    yield put(actions.fetchWPSuccess(data));
+    yield put(actions.fetchPersonSuccess(data));
   } catch (err) {
-    yield put(actions.fetchWPFailure(err));
+    yield put(actions.fetchPersonFailure(err));
   }
 }
 

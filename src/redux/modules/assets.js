@@ -67,8 +67,8 @@ export const actions = {
   fetchAssetSuccess,
   fetchAssetFailure,
   fetchPerson,
-  fetchWPSuccess: fetchPersonSuccess,
-  fetchWPFailure: fetchPersonFailure,
+  fetchPersonSuccess,
+  fetchPersonFailure,
 };
 
 /* Reducer */
@@ -179,7 +179,7 @@ export const reducer = handleActions({
 
   [FETCH_PERSON_SUCCESS]: (state, action) => ({
     ...state,
-    person: { data: action.payload, wip: false, err: null }
+    person: { data: action.payload.content, wip: false, err: null }
   }),
 
   [FETCH_PERSON_FAILURE]: (state, action) => ({
@@ -194,12 +194,12 @@ const getZipIndexById    = state => state.zipIndexById;
 const getDoc2htmlById    = state => state.doc2htmlById;
 const getSourceIndexById = state => state.sourceIndexById;
 const getAsset           = state => state.asset;
-const getWP              = state => state.person;
+const getPerson          = state => state.person;
 
 export const selectors = {
   getZipIndexById,
   getDoc2htmlById,
   getSourceIndexById,
   getAsset,
-  getWP,
+  getPerson,
 };

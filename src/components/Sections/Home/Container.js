@@ -18,13 +18,14 @@ class HomePageContainer extends Component {
     latestUnits: PropTypes.arrayOf(shapes.ContentUnit),
     latestBlogPosts: PropTypes.arrayOf(shapes.BlogPost),
     latestTweets: PropTypes.arrayOf(shapes.Tweet),
-    banner: shapes.Banner,
+    banner: shapes.Banner.isRequired,
     wip: shapes.WIP,
     err: shapes.Error,
     language: PropTypes.string.isRequired,
     fetchData: PropTypes.func.isRequired,
     fetchBlogList: PropTypes.func.isRequired,
     fetchTweetsList: PropTypes.func.isRequired,
+    fetchBanner: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -32,7 +33,6 @@ class HomePageContainer extends Component {
     latestUnits: [],
     latestBlogPosts: [],
     latestTweets: [],
-    banner: null,
     wip: false,
     err: null,
   };
@@ -82,6 +82,10 @@ class HomePageContainer extends Component {
     });
   }
 
+  static getBanner({ fetchBanner, language }) {
+    fetchBanner(`banner-${language}?meta=header,sub-header,link`);
+  }
+
   componentDidMount() {
     const { latestLesson, fetchData, latestBlogPosts, latestTweets } = this.props;
     if (!latestLesson) {
@@ -93,6 +97,7 @@ class HomePageContainer extends Component {
     if (!latestTweets.length) {
       HomePageContainer.fetchSocialMedia('twitter', this.props);
     }
+    HomePageContainer.getBanner(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -101,6 +106,7 @@ class HomePageContainer extends Component {
       fetchData();
       HomePageContainer.fetchSocialMedia('blog', nextProps);
       HomePageContainer.fetchSocialMedia('twitter', nextProps);
+      HomePageContainer.getBanner(nextProps);
     }
   }
 
@@ -158,6 +164,7 @@ const mapDispatch = dispatch => bindActionCreators({
   fetchData: actions.fetchData,
   fetchBlogList: publicationsActions.fetchBlogList,
   fetchTweetsList: publicationsActions.fetchTweets,
+  fetchBanner: actions.fetchBanner,
 }, dispatch);
 
 export default connect(mapState, mapDispatch)(HomePageContainer);
