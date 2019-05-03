@@ -1397,3 +1397,8 @@
 .ui.flowing.popup {
   z-index: 10000;
 }
+
+.ui.accordion.menu .item .title>.dropdown.icon {
+  -webkit-transform: rotate(0);
+  transform: rotate(0);
+}
