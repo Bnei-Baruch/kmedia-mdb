@@ -7,9 +7,9 @@ import { types as ssr } from './ssr';
 const FETCH_DATA           = 'Home/FETCH_DATA';
 const FETCH_DATA_SUCCESS   = 'Home/FETCH_DATA_SUCCESS';
 const FETCH_DATA_FAILURE   = 'Home/FETCH_DATA_FAILURE';
-const FETCH_BANNER         = 'Assets/FETCH_BANNER';
-const FETCH_BANNER_SUCCESS = 'Assets/FETCH_BANNER_SUCCESS';
-const FETCH_BANNER_FAILURE = 'Assets/FETCH_BANNER_FAILURE';
+const FETCH_BANNER         = 'Home/FETCH_BANNER';
+const FETCH_BANNER_SUCCESS = 'Home/FETCH_BANNER_SUCCESS';
+const FETCH_BANNER_FAILURE = 'Home/FETCH_BANNER_FAILURE';
 
 export const types = {
   FETCH_DATA,
@@ -55,7 +55,11 @@ const initialState = {
 const onSetLanguage = (draft) => {
   draft.latestLesson = null;
   draft.latestUnits  = null;
-  draft.banner       = null;
+  draft.banner       = {
+    data: {},
+    wip: false,
+    err: null,
+  };
   draft.wip          = false;
   draft.err          = null;
 };
@@ -69,7 +73,6 @@ const onDataSuccess = (draft, payload) => {
   draft.err          = null;
   draft.latestLesson = payload.latest_daily_lesson.id;
   draft.latestUnits  = payload.latest_units.map(x => x.id);
-  draft.banner       = payload.banner;
 };
 
 const onDataFailure = (draft, payload) => {
@@ -80,18 +83,22 @@ const onDataFailure = (draft, payload) => {
 
 const onFetchBanner = draft => {
   draft.banner.wip  = true;
-  draft.banner.data = {};
+  draft.banner.data = {
+    data: {},
+    wip: false,
+    err: null,
+  };
 };
 
 const onFetchBannerSuccess = (draft, payload) => {
   draft.banner.wip  = false;
   draft.banner.err  = null;
-  draft.banner.data = payload.content;
+  draft.banner.data = payload;
 };
 
 const onFetchBannerFailure = (draft, payload) => {
   draft.banner.wip  = false;
-  draft.banner.data = null;
+  draft.banner.data = {};
   draft.banner.err  = payload;
 };
 
@@ -111,7 +118,7 @@ export const reducer = handleActions({
   [FETCH_DATA_FAILURE]: onDataFailure,
 
   [FETCH_BANNER]: onFetchBanner,
-  [FETCH_BANNER_SUCCESS]: onFetchBannerSuccess(),
+  [FETCH_BANNER_SUCCESS]: onFetchBannerSuccess,
   [FETCH_BANNER_FAILURE]: onFetchBannerFailure,
 }, initialState);
 

@@ -10,6 +10,7 @@ import { actions as publicationsActions, selectors as publications } from '../..
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
 import HomePage from './HomePage';
+import { withNamespaces } from 'react-i18next';
 
 class HomePageContainer extends Component {
   static propTypes = {
@@ -122,6 +123,7 @@ class HomePageContainer extends Component {
         language,
         wip,
         err,
+        t,
       } = this.props;
 
     return (
@@ -135,6 +137,7 @@ class HomePageContainer extends Component {
         language={language}
         wip={wip}
         err={err}
+        t={t}
       />
     );
   }
@@ -167,4 +170,4 @@ const mapDispatch = dispatch => bindActionCreators({
   fetchBanner: actions.fetchBanner,
 }, dispatch);
 
-export default connect(mapState, mapDispatch)(HomePageContainer);
+export default connect(mapState, mapDispatch)(withNamespaces()(HomePageContainer));

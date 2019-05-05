@@ -46,7 +46,7 @@ export function* fetchAsset(action) {
   }
 }
 
-export function* fetchWP(action) {
+export function* fetchPerson(action) {
   try {
     const { data } = yield call(Api.getWP, action.payload);
     yield put(actions.fetchPersonSuccess(data));
@@ -72,7 +72,7 @@ function* watchFetchAsset() {
 }
 
 function* watchFetchPerson() {
-  yield takeLatest([types.FETCH_PERSON], fetchWP);
+  yield takeLatest([types.FETCH_PERSON], fetchPerson);
 }
 
 export const sagas = [
