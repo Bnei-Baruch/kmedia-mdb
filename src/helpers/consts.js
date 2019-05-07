@@ -214,11 +214,11 @@ export const EVENT_TYPES = [
 
 // Required for Sections filter.
 export const COLLECTION_LESSONS_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, /* CT_CHILDREN_LESSONS, */ CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS, CT_LECTURE_SERIES];
-export const COLLECTION_PROGRAMS_TYPE     = [CT_VIDEO_PROGRAM];
+export const COLLECTION_PROGRAMS_TYPE     = [CT_VIDEO_PROGRAM, CT_CLIPS];
 export const COLLECTION_EVENTS_TYPE       = [CT_FRIENDS_GATHERINGS, CT_MEALS, ...EVENT_TYPES];
 export const COLLECTION_PUBLICATIONS_TYPE = [CT_ARTICLES];
 export const UNIT_LESSONS_TYPE            = [CT_LESSON_PART, /* CT_CHILDREN_LESSON, */ CT_WOMEN_LESSON, CT_VIRTUAL_LESSON, CT_FULL_LESSON, CT_LECTURE];
-export const UNIT_PROGRAMS_TYPE           = [CT_VIDEO_PROGRAM_CHAPTER];
+export const UNIT_PROGRAMS_TYPE           = [CT_VIDEO_PROGRAM_CHAPTER, CT_CLIP];
 export const UNIT_EVENTS_TYPE             = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
 export const UNIT_PUBLICATIONS_TYPE       = [CT_ARTICLE, CT_PUBLICATION, SCT_BLOG_POST, SCT_TWEET];
 
@@ -263,8 +263,100 @@ export const COOKIE_CONTENT_LANG = 'archive_ContentLang';
 export const LANG_UI_LANGUAGES   = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_GERMAN, LANG_UKRAINIAN, LANG_ITALIAN, LANG_TURKISH];
 
 // Search
-export const ES_RESULT_TYPE_SOURCES = 'sources';
-export const ES_RESULT_TYPE_TAGS    = 'tags';
+
+export const SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE = "landing-page";
+
+export const SEARCH_GRAMMAR_LANDING_PAGE_LESSONS = "lessons";
+export const SEARCH_GRAMMAR_LANDING_PAGE_VIRTUAL_LESSONS = "virtual_lessons";
+export const SEARCH_GRAMMAR_LANDING_PAGE_LECTURES = "lectures";
+export const SEARCH_GRAMMAR_LANDING_PAGE_WOMEN_LESSONS = "women_lessons";
+export const SEARCH_GRAMMAR_LANDING_PAGE_RABASH_LESSONS = "rabash_lessons";
+export const SEARCH_GRAMMAR_LANDING_PAGE_LESSON_SERIES = "lesson_series";
+export const SEARCH_GRAMMAR_LANDING_PAGE_PRORGRAMS = "programs";
+export const SEARCH_GRAMMAR_LANDING_PAGE_CLIPS = "clips";
+export const SEARCH_GRAMMAR_LANDING_PAGE_LIBRARY = "library";
+export const SEARCH_GRAMMAR_LANDING_PAGE_CONVENTIONS = "conventions";
+export const SEARCH_GRAMMAR_LANDING_PAGE_HOLIDAYS = "holidays";
+export const SEARCH_GRAMMAR_LANDING_PAGE_UNITY_DAYS = "unity_days";
+export const SEARCH_GRAMMAR_LANDING_PAGE_FRIENDS_GATHERINGS = "friends_gratherings";
+export const SEARCH_GRAMMAR_LANDING_PAGE_MEALS = "meals";
+export const SEARCH_GRAMMAR_LANDING_PAGE_TOPICS = "topics";
+export const SEARCH_GRAMMAR_LANDING_PAGE_BLOG = "blog";
+export const SEARCH_GRAMMAR_LANDING_PAGE_TWITTER = "twitter";
+export const SEARCH_GRAMMAR_LANDING_PAGE_ARTICLES = "articles";
+export const SEARCH_GRAMMAR_LANDING_PAGE_DOWNLOADS = "downloads";
+export const SEARCH_GRAMMAR_LANDING_PAGE_HELP = "help";
+
+export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK = {
+    [SEARCH_GRAMMAR_LANDING_PAGE_LESSONS]: "lessons/daily",
+    [SEARCH_GRAMMAR_LANDING_PAGE_VIRTUAL_LESSONS]: "lessons/virtual",
+    [SEARCH_GRAMMAR_LANDING_PAGE_LECTURES]: "lessons/lectures",
+    [SEARCH_GRAMMAR_LANDING_PAGE_WOMEN_LESSONS]: "lessons/women",
+    [SEARCH_GRAMMAR_LANDING_PAGE_RABASH_LESSONS]: "lessons/rabash",
+    [SEARCH_GRAMMAR_LANDING_PAGE_LESSON_SERIES]: "lessons/series",
+    [SEARCH_GRAMMAR_LANDING_PAGE_PRORGRAMS]: "programs/main",
+    [SEARCH_GRAMMAR_LANDING_PAGE_CLIPS]: "programs/clips",
+    [SEARCH_GRAMMAR_LANDING_PAGE_LIBRARY]: "sources",
+    [SEARCH_GRAMMAR_LANDING_PAGE_CONVENTIONS]: "events/conventions",
+    [SEARCH_GRAMMAR_LANDING_PAGE_HOLIDAYS]: "events/holidays",
+    [SEARCH_GRAMMAR_LANDING_PAGE_UNITY_DAYS]: "events/unity-days",
+    [SEARCH_GRAMMAR_LANDING_PAGE_FRIENDS_GATHERINGS]: "events/friends-gatherings",
+    [SEARCH_GRAMMAR_LANDING_PAGE_MEALS]: "events/meals",
+    [SEARCH_GRAMMAR_LANDING_PAGE_TOPICS]: "topics",
+    [SEARCH_GRAMMAR_LANDING_PAGE_BLOG]: "publications/blog",
+    [SEARCH_GRAMMAR_LANDING_PAGE_TWITTER]: "publications/twitter",
+    [SEARCH_GRAMMAR_LANDING_PAGE_ARTICLES]: "publications/articles",
+    [SEARCH_GRAMMAR_LANDING_PAGE_DOWNLOADS]: "simple-mode",
+    [SEARCH_GRAMMAR_LANDING_PAGE_HELP]: "help",
+};
+
+export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT = {
+    [SEARCH_GRAMMAR_LANDING_PAGE_LESSONS]: "lessons.tabs.daily",
+    [SEARCH_GRAMMAR_LANDING_PAGE_VIRTUAL_LESSONS]: "lessons.tabs.virtual",
+    [SEARCH_GRAMMAR_LANDING_PAGE_LECTURES]: "lessons.tabs.lectures",
+    [SEARCH_GRAMMAR_LANDING_PAGE_WOMEN_LESSONS]: "lessons.tabs.women",
+    [SEARCH_GRAMMAR_LANDING_PAGE_RABASH_LESSONS]: "lessons.tabs.rabash",
+    [SEARCH_GRAMMAR_LANDING_PAGE_LESSON_SERIES]: "lessons.tabs.series",
+    [SEARCH_GRAMMAR_LANDING_PAGE_PRORGRAMS]: "programs.tabs.main",
+    [SEARCH_GRAMMAR_LANDING_PAGE_CLIPS]: "programs.tabs.clips",
+    [SEARCH_GRAMMAR_LANDING_PAGE_LIBRARY]: "sources-library.header.text",
+    [SEARCH_GRAMMAR_LANDING_PAGE_CONVENTIONS]: "events.tabs.conventions",
+    [SEARCH_GRAMMAR_LANDING_PAGE_HOLIDAYS]: "events.tabs.holidays",
+    [SEARCH_GRAMMAR_LANDING_PAGE_UNITY_DAYS]: "events.tabs.unity-days",
+    [SEARCH_GRAMMAR_LANDING_PAGE_FRIENDS_GATHERINGS]: "events.tabs.friends-gatherings",
+    [SEARCH_GRAMMAR_LANDING_PAGE_MEALS]: "events.tabs.meals",
+    [SEARCH_GRAMMAR_LANDING_PAGE_TOPICS]: "topics.header.text",
+    [SEARCH_GRAMMAR_LANDING_PAGE_BLOG]: "publications.tabs.blog",
+    [SEARCH_GRAMMAR_LANDING_PAGE_TWITTER]: "publications.tabs.twitter",
+    [SEARCH_GRAMMAR_LANDING_PAGE_ARTICLES]: "publications.tabs.articles",
+    [SEARCH_GRAMMAR_LANDING_PAGE_DOWNLOADS]: "simple-mode.header.text",
+    [SEARCH_GRAMMAR_LANDING_PAGE_HELP]: "help.header.text",
+};
+
+export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT = {
+    [SEARCH_GRAMMAR_LANDING_PAGE_LESSONS]: "lessons.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_VIRTUAL_LESSONS]: "lessons.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_LECTURES]: "lessons.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_WOMEN_LESSONS]: "lessons.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_RABASH_LESSONS]: "lessons.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_LESSON_SERIES]: "lessons.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_PRORGRAMS]: "programs.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_CLIPS]: "",  // Subtext is appropriate only for programs.
+    [SEARCH_GRAMMAR_LANDING_PAGE_LIBRARY]: "sources-library.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_CONVENTIONS]: "events.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_HOLIDAYS]: "events.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_UNITY_DAYS]: "events.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_FRIENDS_GATHERINGS]: "events.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_MEALS]: "events.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_TOPICS]: "topics.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_BLOG]: "publications.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_TWITTER]: "publications.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_ARTICLES]: "publications.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_DOWNLOADS]: "simple-mode.header.subtext",
+    [SEARCH_GRAMMAR_LANDING_PAGE_HELP]: "help.header.subtext",
+};
+
+export const SEARCH_GRAMMAR_HIT_TYPES = [SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE]
 
 // Blog
 export const BLOG_ID_LAITMAN_RU    = 1;
@@ -277,6 +369,13 @@ export const BLOGS                 = [
   { id: BLOG_ID_LAITMAN_ES, name: 'laitman-es' },
   { id: BLOG_ID_LAITMAN_CO_IL, name: 'laitman-co-il' }
 ];
+
+export const SUGGEST_LIMIT = 10;
+
+// Search Intent constants (to be deprecated).
+
+export const ES_RESULT_TYPE_SOURCES = 'sources';
+export const ES_RESULT_TYPE_TAGS    = 'tags';
 
 export const SEARCH_INTENT_INDEX_TOPIC       = 'intent-tag';
 export const SEARCH_INTENT_INDEX_SOURCE      = 'intent-source';
@@ -299,7 +398,3 @@ export const SEARCH_INTENT_SECTIONS = {
   [SEARCH_INTENT_HIT_TYPE_LESSONS]: 'lessons',
   [SEARCH_INTENT_HIT_TYPE_PROGRAMS]: 'programs',
 };
-
-export const SUGGEST_LIMIT = 10;
-
-// TBD: add posts and tweets intents

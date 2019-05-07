@@ -41,9 +41,14 @@ import {
   BLOG_ID_LAITMAN_COM,
   BLOG_ID_LAITMAN_ES,
   BLOG_ID_LAITMAN_CO_IL,
+  SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK,
 } from './consts';
 
-export const sectionLink = (section, filters) => {
+export const landingPageSectionLink = (landingPage) => {
+    return SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK[landingPage];
+}
+
+export const intentSectionLink = (section, filters) => {
   const filterValues = filters.map(({ name, value, getFilterById }) => {
     if (['topics-filter', 'sources-filter'].includes(name)) {
       const tagOrSource = getFilterById(value);
