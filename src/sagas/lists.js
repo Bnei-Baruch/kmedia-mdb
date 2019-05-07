@@ -7,7 +7,7 @@ import { actions as mdbActions } from '../redux/modules/mdb';
 import { filtersTransformer } from '../filters';
 import Api from '../helpers/Api';
 import { CT_LESSON_PART } from '../helpers/consts';
-import { pushQuery } from './helpers/url';
+import { getQuery, pushQuery } from './helpers/url';
 
 function* fetchList(action) {
   const { namespace } = action.payload;
@@ -61,7 +61,13 @@ function* fetchList(action) {
 }
 
 function* updatePageInQuery(action) {
-  const { pageNo } = action.payload;
+  const { pageNo }   = action.payload;
+  let currentQuery = yield* getQuery();
+  const page = currentQuery.page || 1;
+  if (pageNo === +page) {
+    return;
+  }
+
   yield* pushQuery((query) => {
     if (pageNo > 1) {
       return { ...query, page: pageNo };
