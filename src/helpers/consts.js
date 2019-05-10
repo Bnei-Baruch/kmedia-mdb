@@ -266,94 +266,95 @@ export const LANG_UI_LANGUAGES   = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LAN
 
 export const SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE = "landing-page";
 
-export const SEARCH_GRAMMAR_LANDING_PAGE_LESSONS = "lessons";
-export const SEARCH_GRAMMAR_LANDING_PAGE_VIRTUAL_LESSONS = "virtual_lessons";
-export const SEARCH_GRAMMAR_LANDING_PAGE_LECTURES = "lectures";
-export const SEARCH_GRAMMAR_LANDING_PAGE_WOMEN_LESSONS = "women_lessons";
-export const SEARCH_GRAMMAR_LANDING_PAGE_RABASH_LESSONS = "rabash_lessons";
-export const SEARCH_GRAMMAR_LANDING_PAGE_LESSON_SERIES = "lesson_series";
-export const SEARCH_GRAMMAR_LANDING_PAGE_PRORGRAMS = "programs";
-export const SEARCH_GRAMMAR_LANDING_PAGE_CLIPS = "clips";
-export const SEARCH_GRAMMAR_LANDING_PAGE_LIBRARY = "library";
-export const SEARCH_GRAMMAR_LANDING_PAGE_CONVENTIONS = "conventions";
-export const SEARCH_GRAMMAR_LANDING_PAGE_HOLIDAYS = "holidays";
-export const SEARCH_GRAMMAR_LANDING_PAGE_UNITY_DAYS = "unity_days";
-export const SEARCH_GRAMMAR_LANDING_PAGE_FRIENDS_GATHERINGS = "friends_gratherings";
-export const SEARCH_GRAMMAR_LANDING_PAGE_MEALS = "meals";
-export const SEARCH_GRAMMAR_LANDING_PAGE_TOPICS = "topics";
-export const SEARCH_GRAMMAR_LANDING_PAGE_BLOG = "blog";
-export const SEARCH_GRAMMAR_LANDING_PAGE_TWITTER = "twitter";
-export const SEARCH_GRAMMAR_LANDING_PAGE_ARTICLES = "articles";
-export const SEARCH_GRAMMAR_LANDING_PAGE_DOWNLOADS = "downloads";
-export const SEARCH_GRAMMAR_LANDING_PAGE_HELP = "help";
+// Search Grammar Landing Pages (SGL) constants.
+const SGLP_LESSONS = "lessons";
+const SGLP_VIRTUAL_LESSONS = "virtual_lessons";
+const SGLP_LECTURES = "lectures";
+const SGLP_WOMEN_LESSONS = "women_lessons";
+const SGLP_RABASH_LESSONS = "rabash_lessons";
+const SGLP_LESSON_SERIES = "lesson_series";
+const SGLP_PRORGRAMS = "programs";
+const SGLP_CLIPS = "clips";
+const SGLP_LIBRARY = "library";
+const SGLP_CONVENTIONS = "conventions";
+const SGLP_HOLIDAYS = "holidays";
+const SGLP_UNITY_DAYS = "unity_days";
+const SGLP_FRIENDS_GATHERINGS = "friends_gratherings";
+const SGLP_MEALS = "meals";
+const SGLP_TOPICS = "topics";
+const SGLP_BLOG = "blog";
+const SGLP_TWITTER = "twitter";
+const SGLP_ARTICLES = "articles";
+const SGLP_DOWNLOADS = "downloads";
+const SGLP_HELP = "help";
 
 export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK = {
-    [SEARCH_GRAMMAR_LANDING_PAGE_LESSONS]: "lessons/daily",
-    [SEARCH_GRAMMAR_LANDING_PAGE_VIRTUAL_LESSONS]: "lessons/virtual",
-    [SEARCH_GRAMMAR_LANDING_PAGE_LECTURES]: "lessons/lectures",
-    [SEARCH_GRAMMAR_LANDING_PAGE_WOMEN_LESSONS]: "lessons/women",
-    [SEARCH_GRAMMAR_LANDING_PAGE_RABASH_LESSONS]: "lessons/rabash",
-    [SEARCH_GRAMMAR_LANDING_PAGE_LESSON_SERIES]: "lessons/series",
-    [SEARCH_GRAMMAR_LANDING_PAGE_PRORGRAMS]: "programs/main",
-    [SEARCH_GRAMMAR_LANDING_PAGE_CLIPS]: "programs/clips",
-    [SEARCH_GRAMMAR_LANDING_PAGE_LIBRARY]: "sources",
-    [SEARCH_GRAMMAR_LANDING_PAGE_CONVENTIONS]: "events/conventions",
-    [SEARCH_GRAMMAR_LANDING_PAGE_HOLIDAYS]: "events/holidays",
-    [SEARCH_GRAMMAR_LANDING_PAGE_UNITY_DAYS]: "events/unity-days",
-    [SEARCH_GRAMMAR_LANDING_PAGE_FRIENDS_GATHERINGS]: "events/friends-gatherings",
-    [SEARCH_GRAMMAR_LANDING_PAGE_MEALS]: "events/meals",
-    [SEARCH_GRAMMAR_LANDING_PAGE_TOPICS]: "topics",
-    [SEARCH_GRAMMAR_LANDING_PAGE_BLOG]: "publications/blog",
-    [SEARCH_GRAMMAR_LANDING_PAGE_TWITTER]: "publications/twitter",
-    [SEARCH_GRAMMAR_LANDING_PAGE_ARTICLES]: "publications/articles",
-    [SEARCH_GRAMMAR_LANDING_PAGE_DOWNLOADS]: "simple-mode",
-    [SEARCH_GRAMMAR_LANDING_PAGE_HELP]: "help",
+    [SGLP_LESSONS]: "lessons/daily",
+    [SGLP_VIRTUAL_LESSONS]: "lessons/virtual",
+    [SGLP_LECTURES]: "lessons/lectures",
+    [SGLP_WOMEN_LESSONS]: "lessons/women",
+    [SGLP_RABASH_LESSONS]: "lessons/rabash",
+    [SGLP_LESSON_SERIES]: "lessons/series",
+    [SGLP_PRORGRAMS]: "programs/main",
+    [SGLP_CLIPS]: "programs/clips",
+    [SGLP_LIBRARY]: "sources",
+    [SGLP_CONVENTIONS]: "events/conventions",
+    [SGLP_HOLIDAYS]: "events/holidays",
+    [SGLP_UNITY_DAYS]: "events/unity-days",
+    [SGLP_FRIENDS_GATHERINGS]: "events/friends-gatherings",
+    [SGLP_MEALS]: "events/meals",
+    [SGLP_TOPICS]: "topics",
+    [SGLP_BLOG]: "publications/blog",
+    [SGLP_TWITTER]: "publications/twitter",
+    [SGLP_ARTICLES]: "publications/articles",
+    [SGLP_DOWNLOADS]: "simple-mode",
+    [SGLP_HELP]: "help",
 };
 
 export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT = {
-    [SEARCH_GRAMMAR_LANDING_PAGE_LESSONS]: "lessons.tabs.daily",
-    [SEARCH_GRAMMAR_LANDING_PAGE_VIRTUAL_LESSONS]: "lessons.tabs.virtual",
-    [SEARCH_GRAMMAR_LANDING_PAGE_LECTURES]: "lessons.tabs.lectures",
-    [SEARCH_GRAMMAR_LANDING_PAGE_WOMEN_LESSONS]: "lessons.tabs.women",
-    [SEARCH_GRAMMAR_LANDING_PAGE_RABASH_LESSONS]: "lessons.tabs.rabash",
-    [SEARCH_GRAMMAR_LANDING_PAGE_LESSON_SERIES]: "lessons.tabs.series",
-    [SEARCH_GRAMMAR_LANDING_PAGE_PRORGRAMS]: "programs.tabs.main",
-    [SEARCH_GRAMMAR_LANDING_PAGE_CLIPS]: "programs.tabs.clips",
-    [SEARCH_GRAMMAR_LANDING_PAGE_LIBRARY]: "sources-library.header.text",
-    [SEARCH_GRAMMAR_LANDING_PAGE_CONVENTIONS]: "events.tabs.conventions",
-    [SEARCH_GRAMMAR_LANDING_PAGE_HOLIDAYS]: "events.tabs.holidays",
-    [SEARCH_GRAMMAR_LANDING_PAGE_UNITY_DAYS]: "events.tabs.unity-days",
-    [SEARCH_GRAMMAR_LANDING_PAGE_FRIENDS_GATHERINGS]: "events.tabs.friends-gatherings",
-    [SEARCH_GRAMMAR_LANDING_PAGE_MEALS]: "events.tabs.meals",
-    [SEARCH_GRAMMAR_LANDING_PAGE_TOPICS]: "topics.header.text",
-    [SEARCH_GRAMMAR_LANDING_PAGE_BLOG]: "publications.tabs.blog",
-    [SEARCH_GRAMMAR_LANDING_PAGE_TWITTER]: "publications.tabs.twitter",
-    [SEARCH_GRAMMAR_LANDING_PAGE_ARTICLES]: "publications.tabs.articles",
-    [SEARCH_GRAMMAR_LANDING_PAGE_DOWNLOADS]: "simple-mode.header.text",
-    [SEARCH_GRAMMAR_LANDING_PAGE_HELP]: "help.header.text",
+    [SGLP_LESSONS]: "lessons.tabs.daily",
+    [SGLP_VIRTUAL_LESSONS]: "lessons.tabs.virtual",
+    [SGLP_LECTURES]: "lessons.tabs.lectures",
+    [SGLP_WOMEN_LESSONS]: "lessons.tabs.women",
+    [SGLP_RABASH_LESSONS]: "lessons.tabs.rabash",
+    [SGLP_LESSON_SERIES]: "lessons.tabs.series",
+    [SGLP_PRORGRAMS]: "programs.tabs.main",
+    [SGLP_CLIPS]: "programs.tabs.clips",
+    [SGLP_LIBRARY]: "sources-library.header.text",
+    [SGLP_CONVENTIONS]: "events.tabs.conventions",
+    [SGLP_HOLIDAYS]: "events.tabs.holidays",
+    [SGLP_UNITY_DAYS]: "events.tabs.unity-days",
+    [SGLP_FRIENDS_GATHERINGS]: "events.tabs.friends-gatherings",
+    [SGLP_MEALS]: "events.tabs.meals",
+    [SGLP_TOPICS]: "topics.header.text",
+    [SGLP_BLOG]: "publications.tabs.blog",
+    [SGLP_TWITTER]: "publications.tabs.twitter",
+    [SGLP_ARTICLES]: "publications.tabs.articles",
+    [SGLP_DOWNLOADS]: "simple-mode.header.text",
+    [SGLP_HELP]: "help.header.text",
 };
 
 export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT = {
-    [SEARCH_GRAMMAR_LANDING_PAGE_LESSONS]: "lessons.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_VIRTUAL_LESSONS]: "lessons.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_LECTURES]: "lessons.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_WOMEN_LESSONS]: "lessons.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_RABASH_LESSONS]: "lessons.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_LESSON_SERIES]: "lessons.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_PRORGRAMS]: "programs.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_CLIPS]: "",  // Subtext is appropriate only for programs.
-    [SEARCH_GRAMMAR_LANDING_PAGE_LIBRARY]: "sources-library.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_CONVENTIONS]: "events.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_HOLIDAYS]: "events.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_UNITY_DAYS]: "events.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_FRIENDS_GATHERINGS]: "events.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_MEALS]: "events.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_TOPICS]: "topics.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_BLOG]: "publications.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_TWITTER]: "publications.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_ARTICLES]: "publications.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_DOWNLOADS]: "simple-mode.header.subtext",
-    [SEARCH_GRAMMAR_LANDING_PAGE_HELP]: "help.header.subtext",
+    [SGLP_LESSONS]: "lessons.header.subtext",
+    [SGLP_VIRTUAL_LESSONS]: "lessons.header.subtext",
+    [SGLP_LECTURES]: "lessons.header.subtext",
+    [SGLP_WOMEN_LESSONS]: "lessons.header.subtext",
+    [SGLP_RABASH_LESSONS]: "lessons.header.subtext",
+    [SGLP_LESSON_SERIES]: "lessons.header.subtext",
+    [SGLP_PRORGRAMS]: "programs.header.subtext",
+    [SGLP_CLIPS]: "",  // Subtext is appropriate only for programs.
+    [SGLP_LIBRARY]: "sources-library.header.subtext",
+    [SGLP_CONVENTIONS]: "events.header.subtext",
+    [SGLP_HOLIDAYS]: "events.header.subtext",
+    [SGLP_UNITY_DAYS]: "events.header.subtext",
+    [SGLP_FRIENDS_GATHERINGS]: "events.header.subtext",
+    [SGLP_MEALS]: "events.header.subtext",
+    [SGLP_TOPICS]: "topics.header.subtext",
+    [SGLP_BLOG]: "publications.header.subtext",
+    [SGLP_TWITTER]: "publications.header.subtext",
+    [SGLP_ARTICLES]: "publications.header.subtext",
+    [SGLP_DOWNLOADS]: "simple-mode.header.subtext",
+    [SGLP_HELP]: "help.header.subtext",
 };
 
 export const SEARCH_GRAMMAR_HIT_TYPES = [SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE]
@@ -374,6 +375,7 @@ export const SUGGEST_LIMIT = 10;
 
 // Search Intent constants (to be deprecated).
 
+// Elastic Search (ES).
 export const ES_RESULT_TYPE_SOURCES = 'sources';
 export const ES_RESULT_TYPE_TAGS    = 'tags';
 
