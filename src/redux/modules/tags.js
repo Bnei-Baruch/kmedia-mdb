@@ -84,6 +84,7 @@ const buildById = (items) => {
 const onSSRPrepare = draft => {
   draft.wip             = false;
   draft.getByID         = identity;
+  draft.getPathByID     = () => [];
   draft.sections        = [];
   draft.units           = [];
   draft.cuBySection     = {};
