@@ -190,7 +190,6 @@ class FastDayPicker extends Component {
         trigger={
           <Input
             fluid
-            label
             size="small"
             icon="calendar alternate outline"
             placeholder={`${formatDate(new Date(), 'l', locale)}`}
