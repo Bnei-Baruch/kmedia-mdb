@@ -1,10 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Header, Image } from 'semantic-ui-react';
 
 import Link from '../../Language/MultiLanguageLink';
-import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
-import { formatError } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 
 const renderHeader = (header, subHeader) => {
@@ -24,17 +21,12 @@ const renderHeader = (header, subHeader) => {
 };
 
 function Promoted(props) {
-  const { banner: { wip, err, data }, t } = props;
+  const { banner: { wip, err, data } } = props;
 
-  if (err) {
-    if (err.response && err.response.status === 404) {
-      return <FrownSplash text={t('messages.source-content-not-found')} />;
-    }
-    return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
+  if (err || wip) {
+    return <div className="thumbnail" />;
   }
-  if (wip) {
-    return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-  }
+
   const { content } = data;
   if (!content) {
     return <div className="thumbnail">>&nbsp;</div>;
@@ -56,7 +48,6 @@ function Promoted(props) {
 
 Promoted.propTypes = {
   banner: shapes.Banner.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
 export default Promoted;

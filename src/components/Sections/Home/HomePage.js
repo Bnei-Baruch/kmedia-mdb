@@ -159,7 +159,7 @@ class HomePage extends Component {
                   <LatestDailyLesson collection={latestLesson} />
                 </Grid.Column>
                 <Grid.Column computer={6} tablet={7} mobile={16}>
-                  <Promoted banner={banner} t={t} />
+                  <Promoted banner={banner} />
                 </Grid.Column>
               </Grid.Row>
             </Grid>
