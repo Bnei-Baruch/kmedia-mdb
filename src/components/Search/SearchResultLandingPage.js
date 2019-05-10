@@ -36,7 +36,7 @@ class SearchResultLandingPage extends SearchResultBase {
                 {t(linkTitle)}
               </Link>
             </Header>
-            {!subText ? null : <Container className="content">
+            {!!subText && <Container className="content">
               {t(subText)}
             </Container>}
           </Segment>
