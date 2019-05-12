@@ -8,8 +8,8 @@ import { landingPageSectionLink } from '../../helpers/links';
 import SearchResultBase from './SearchResultBase';
 
 import {
-    SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT,
-    SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT,
+  SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT,
+  SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT,
 } from '../../helpers/consts'
 
 class SearchResultLandingPage extends SearchResultBase {
