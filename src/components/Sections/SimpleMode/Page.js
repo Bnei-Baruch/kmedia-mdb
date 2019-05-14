@@ -222,7 +222,7 @@ class SimpleModePage extends PureComponent {
                       disabledDays={{ after: new Date() }}
                       onDayClick={onDayClick}
                       captionElement={() => null}
-                      navbarElement={props => this.getNavBarElement(props, language, onDayClick)}
+                      navbarElement={props => this.getNavBarElement(props, uiLanguage, onDayClick)}
                     />
                     <Button className="inline-button" onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
                   </Card>
