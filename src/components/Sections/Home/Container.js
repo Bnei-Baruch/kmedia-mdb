@@ -12,6 +12,55 @@ import * as shapes from '../../shapes';
 import HomePage from './HomePage';
 import { withNamespaces } from 'react-i18next';
 
+const chooseTwitterByLanguage = (language) => {
+  switch (language) {
+  case LANG_HEBREW:
+    return { username: 'laitman_co_il' };
+  case LANG_UKRAINIAN:
+  case LANG_RUSSIAN:
+    return { username: 'Michael_Laitman' };
+  case LANG_SPANISH:
+    return { username: 'laitman_es' };
+  default:
+    return { username: 'laitman' };
+  }
+};
+
+const chooseBlogByLanguage = (language) => {
+  switch (language) {
+  case LANG_HEBREW:
+    return { blog: 'laitman-co-il' };
+  case LANG_UKRAINIAN:
+  case LANG_RUSSIAN:
+    return { blog: 'laitman-ru' };
+  case LANG_SPANISH:
+    return { blog: 'laitman-es' };
+  default:
+    return { blog: 'laitman-com' };
+  }
+};
+
+const fetchSocialMedia = (type, { fetchBlogList, fetchTweetsList, language }) => {
+  let mediaLanguageFn;
+  let fetchFn;
+  if (type === 'blog') {
+    mediaLanguageFn = chooseBlogByLanguage;
+    fetchFn         = fetchBlogList;
+  } else {
+    mediaLanguageFn = chooseTwitterByLanguage;
+    fetchFn         = fetchTweetsList;
+  }
+
+  fetchFn(`publications-${type}`, 1, {
+    page_size: 4,
+    ...mediaLanguageFn(language)
+  });
+};
+
+const getBanner = ({ fetchBanner, language }) => {
+  fetchBanner(`banner-${language}?meta=header,sub-header,link`);
+};
+
 class HomePageContainer extends Component {
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
@@ -38,76 +87,27 @@ class HomePageContainer extends Component {
     err: null,
   };
 
-  static chooseTwitterByLanguage = (language) => {
-    switch (language) {
-    case LANG_HEBREW:
-      return { username: 'laitman_co_il' };
-    case LANG_UKRAINIAN:
-    case LANG_RUSSIAN:
-      return { username: 'Michael_Laitman' };
-    case LANG_SPANISH:
-      return { username: 'laitman_es' };
-    default:
-      return { username: 'laitman' };
-    }
-  };
-
-  static chooseBlogByLanguage = (language) => {
-    switch (language) {
-    case LANG_HEBREW:
-      return { blog: 'laitman-co-il' };
-    case LANG_UKRAINIAN:
-    case LANG_RUSSIAN:
-      return { blog: 'laitman-ru' };
-    case LANG_SPANISH:
-      return { blog: 'laitman-es' };
-    default:
-      return { blog: 'laitman-com' };
-    }
-  };
-
-  static fetchSocialMedia(type, props = {}) {
-    let mediaLanguageFn;
-    let fetchFn;
-    if (type === 'blog') {
-      mediaLanguageFn = HomePageContainer.chooseBlogByLanguage;
-      fetchFn         = props.fetchBlogList;
-    } else {
-      mediaLanguageFn = HomePageContainer.chooseTwitterByLanguage;
-      fetchFn         = props.fetchTweetsList;
-    }
-
-    fetchFn(`publications-${type}`, 1, {
-      page_size: 4,
-      ...mediaLanguageFn(props.language)
-    });
-  }
-
-  static getBanner({ fetchBanner, language }) {
-    fetchBanner(`banner-${language}?meta=header,sub-header,link`);
-  }
-
   componentDidMount() {
     const { latestLesson, fetchData, latestBlogPosts, latestTweets } = this.props;
     if (!latestLesson) {
       fetchData();
     }
     if (!latestBlogPosts.length) {
-      HomePageContainer.fetchSocialMedia('blog', this.props);
+      fetchSocialMedia('blog', this.props);
     }
     if (!latestTweets.length) {
-      HomePageContainer.fetchSocialMedia('twitter', this.props);
+      fetchSocialMedia('twitter', this.props);
     }
-    HomePageContainer.getBanner(this.props);
+    getBanner(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
     const { language, fetchData } = this.props;
     if (nextProps.language !== language) {
       fetchData();
-      HomePageContainer.fetchSocialMedia('blog', nextProps);
-      HomePageContainer.fetchSocialMedia('twitter', nextProps);
-      HomePageContainer.getBanner(nextProps);
+      fetchSocialMedia('blog', nextProps);
+      fetchSocialMedia('twitter', nextProps);
+      getBanner(nextProps);
     }
   }
 
