@@ -10,7 +10,6 @@ import { formatError } from '../../../helpers/utils';
 import { actions, selectors } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
-import { LANG_ENGLISH } from '../../../helpers/consts';
 
 class LibraryPerson extends Component {
   static propTypes = {
@@ -37,7 +36,7 @@ class LibraryPerson extends Component {
   }
 
   render() {
-    const { person: { wip, err, data: content }, language, t } = this.props;
+    const { person: { wip, err, data: content }, t } = this.props;
 
     if (err) {
       if (err.response && err.response.status === 404) {
@@ -49,13 +48,7 @@ class LibraryPerson extends Component {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     }
     if (!content) {
-      if (language !== LANG_ENGLISH) {
-        LibraryPerson.getPerson({
-          ...this.props,
-          language: LANG_ENGLISH,
-        });
-      }
-      return <Segment basic>{t('sources-library.no-source')}</Segment>;
+      return <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
     }
 
     return (
