@@ -19,7 +19,7 @@ import HandleLanguages from './HandleLanguages';
 import Footer from './Footer';
 import TopMost from './TopMost';
 import DonateNow from './DonateNow';
-import logo from '../../images/logo.svg';
+import { ReactComponent as Logo } from '../../images/logo.svg';
 
 let isMobileDevice = false;
 
@@ -185,7 +185,7 @@ class Layout extends Component {
               </Menu.Item>
             </Ref>
             <Menu.Item className="logo" header as={Link} to="/">
-              <img src={logo} alt="logo" />
+              <Logo className='mobile-hidden' />
               <Header inverted as="h1" content={t('nav.top.header')} />
             </Menu.Item>
             <Menu.Item className="layout__search mobile-hidden">
@@ -242,7 +242,7 @@ class Layout extends Component {
               </Menu.Item>
             </Ref>
             <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={this.closeSidebar}>
-              <img src={logo} alt="logo" />
+              <Logo />
               <Header inverted as="h1" content={t('nav.top.header')} />
             </Menu.Item>
           </Menu>
