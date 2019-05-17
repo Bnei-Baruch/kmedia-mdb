@@ -166,12 +166,11 @@ const onFetchBlogPost = draft => {
 };
 
 const onFetchBlogPostSuccess = (draft, payload) => {
-  const { blog: { byID } }  = draft;
   const { blog, wp_id: id } = payload;
 
-  byID[`${blog}${id}`] = { ...payload };
-  blog.wipPost         = false;
-  blog.errPost         = null;
+  draft.blog.byID[`${blog}${id}`] = payload;
+  draft.blog.wipPost              = false;
+  draft.blog.errPost              = null;
 };
 
 const onFetchBlogPostFailure = (draft, payload) => {

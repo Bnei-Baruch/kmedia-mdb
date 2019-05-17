@@ -94,12 +94,12 @@
     }
   },
   "buttons": {
-    "apply": "Uygula", 
-    "cancel": "İptal Et", 
+    "apply": "Uygula",
+    "cancel": "İptal Et",
     "close": "Kapat",
     "audio": "Ses",
     "video": "Görüntü",
-    "more": "Daha", 
+    "more": "Daha",
     "copy-link": "Linki Kopyala",
     "search": "Ara",
     "previous": "Önceki",
@@ -174,7 +174,7 @@
       "content": "İçerik"
     },
     "intent-types": {
-      "lessons": "Günlük sabah dersleri", 
+      "lessons": "Günlük sabah dersleri",
       "programs": "Programlar"
     },
     "intent-prefix": {
@@ -194,7 +194,7 @@
     "updates": "En Son Güncellemeler",
     "social": "Sosyal Yayınlar Ağında Rav Laitman",
     "blog-title": "Rav Laitman'ın Bloku",
-    "twitter-title": "Tvitler", 
+    "twitter-title": "Tvitler",
     "all-posts": "Tüm Blog yazıları",
     "all-tweets": "Tüm Tivitler",
     "read-more-posts": "Daha çok Blok yazısı okuyun",
@@ -202,8 +202,8 @@
     "last-lesson": "En Son Günlük Ders",
     "donate": "ŞİMDİ BAĞIŞ YAPIN",
     "promoted": {
-      "header": "Fısıh 2019",
-      "subheader": ""
+      "header": "Latin Amerika Sözleşmesi",
+      "subheader": "17-19/5/2019"
     }
   },
   "events": {
@@ -381,7 +381,7 @@
   },
   "materials": {
     "summary": {
-      "header": "Özet", 
+      "header": "Özet",
       "no-summary": "Özet eksik"
     },
     "transcription": {
@@ -412,10 +412,10 @@
       "subtext": "Kabala öğrenmek için, büyük Kabalistler tarafından yazılmış olan en önemli orijinal metinlerin bir derlemesi."
     },
     "no-source": "Lütfen kaynağı seçin",
-    "toc": "İçindekiler", 
+    "toc": "İçindekiler",
     "az": "AZ",
-    "default": "Varsayılan", 
-    "filter": "Filtre...", 
+    "default": "Varsayılan",
+    "filter": "Filtre...",
     "share-title": "Bu makaleyi okuyun"
   },
   "topics": {
@@ -423,7 +423,7 @@
       "text": "Konu",
       "subtext": "Seçilmiş bir konunun tüm parçalarının derlemesi "
     },
-    "show-more": "Daha fazlasını göster", 
+    "show-more": "Daha fazlasını göster",
     "show-less": "Daha azını göster"
   },
   "media-downloads": {
@@ -445,7 +445,8 @@
         "audio-simple": "Ses kaydı",
         "text": "Yazıya dökülmüş metin",
         "image": "Skeçler",
-        "lelo-mikud": "Odak-grubu yok"
+        "lelo-mikud": "Odak-grubu yok",
+        "text-research-material": "Araştırma Materyalleri"
       }
     },
     "program": {
@@ -546,8 +547,8 @@
       "audio": "Ses",
       "image": "İmaj",
       "text": "Metin",
-      "sheet": "Sayfa", 
-      "banner": "Afiş", 
+      "sheet": "Sayfa",
+      "banner": "Afiş",
       "presentation": "Sunum"
     }
   },
