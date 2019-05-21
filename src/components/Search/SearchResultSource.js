@@ -31,7 +31,7 @@ class SearchResultSource extends SearchResultBase {
         <Header as="h3">
           <Link
             className="search__link"
-            onClick={() => this.click(mdbUid, index, resultType, rank, searchId)}
+            onClick={() => this.logClick(mdbUid, index, resultType, rank, searchId)}
             to={canonicalLink({ id: mdbUid, content_type: 'SOURCE' })}
             language={this.getMediaLanguage(filters)}
           >

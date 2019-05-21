@@ -69,7 +69,7 @@ class SearchResultCU extends SearchResultBase {
         <Header as="h3">
           <Link
             className="search__link content"
-            onClick={() => this.click(mdbUid, index, resultType, rank, searchId)}
+            onClick={() => this.logClick(mdbUid, index, resultType, rank, searchId)}
             to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type }, this.getMediaLanguage(filters))}
           >
             {this.titleFromHighlight(highlight, cu.name)}

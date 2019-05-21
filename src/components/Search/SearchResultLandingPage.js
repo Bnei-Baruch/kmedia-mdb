@@ -38,7 +38,7 @@ class SearchResultLandingPage extends SearchResultBase {
             <Header as="h3" color="blue">
               <Link
                 className="search__link"
-                onClick={() => this.click(landingPage, index, resultType, rank, searchId)}
+                onClick={() => this.logClick(landingPage, index, resultType, rank, searchId)}
                 to={landingPageSectionLink(landingPage)}
               >
                 {t(linkTitle)}
