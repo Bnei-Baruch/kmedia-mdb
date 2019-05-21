@@ -33,7 +33,7 @@ class SearchResultPost extends SearchResultBase {
         <Header as="h3">
           <Link
             className="search__link content"
-            onClick={() => this.click(mdbUid, index, resultType, rank, searchId)}
+            onClick={() => this.logClick(mdbUid, index, resultType, rank, searchId)}
             to={canonicalLink({ id: mdbUid, content_type: 'POST' }, this.getMediaLanguage(filters))}
           >
             {this.titleFromHighlight(highlight, title)}
