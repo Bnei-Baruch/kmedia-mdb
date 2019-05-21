@@ -20,6 +20,10 @@ const renderHeader = (header, subHeader) => {
   );
 };
 
+const ExtLink = ({ to, children }) => (
+  <a href={to} target="_blank" rel="noopener noreferrer">{children}</a>
+);
+
 function Promoted(props) {
   const { banner: { wip, err, data } } = props;
 
@@ -29,19 +33,20 @@ function Promoted(props) {
 
   const { content } = data;
   if (!content) {
-    return <div className="thumbnail">>&nbsp;</div>;
+    return <div className="thumbnail">&nbsp;</div>;
   }
 
   const { header, 'sub-header': subHeader, link } = data.meta;
   const imgData                                   = content.match(/img src="(.+?)"/);
   let img                                         = imgData ? imgData[1] : null;
+  let Lnk                                         = link.match(/:\/\//) === null ? Link : ExtLink;
 
   return (
     <div className="thumbnail">
-      <Link to={link}>
+      <Lnk to={link}>
         <Image fluid src={img} className="thumbnail__image" />
         {renderHeader(header, subHeader)}
-      </Link>
+      </Lnk>
     </div>
   );
 }

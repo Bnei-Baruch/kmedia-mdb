@@ -58,7 +58,7 @@ const fetchSocialMedia = (type, { fetchBlogList, fetchTweetsList, language }) =>
 };
 
 const getBanner = ({ fetchBanner, language }) => {
-  fetchBanner(`banner-${language}?meta=header,sub-header,link`);
+  fetchBanner(language);
 };
 
 class HomePageContainer extends Component {

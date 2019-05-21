@@ -1,4 +1,4 @@
-import { call, put, takeLatest, takeEvery } from 'redux-saga/effects';
+import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { actions, types } from '../redux/modules/assets';
@@ -39,7 +39,6 @@ export function* sourceIndex(action) {
 export function* fetchAsset(action) {
   try {
     const { data } = yield call(Api.getAsset, action.payload);
-    console.log(data);
     yield put(actions.fetchAssetSuccess(data));
   } catch (err) {
     yield put(actions.fetchAssetFailure(err));
@@ -48,7 +47,8 @@ export function* fetchAsset(action) {
 
 export function* fetchPerson(action) {
   try {
-    const { data } = yield call(Api.getWP, action.payload);
+    const name     = `persons-${action.payload.sourceId}-${action.payload.language}-html`;
+    const { data } = yield call(Api.getCMS, name);
     yield put(actions.fetchPersonSuccess(data));
   } catch (err) {
     yield put(actions.fetchPersonFailure(err));

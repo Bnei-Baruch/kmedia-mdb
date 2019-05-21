@@ -5,6 +5,9 @@ import { Button, Grid, Header, Image, Segment } from 'semantic-ui-react';
 
 import { sectionLogo } from '../../../helpers/images';
 
+/*
+ * It was used once in SearchResults, but not anymore...
+ */
 class SectionsFilter extends Component {
   static propTypes = {
     value: PropTypes.string,

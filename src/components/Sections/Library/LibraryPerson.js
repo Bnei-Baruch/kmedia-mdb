@@ -11,16 +11,13 @@ import { actions, selectors } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
 
-const getPerson = ({ fetchPerson, sourceId, language }) => {
-  fetchPerson(`persons-${sourceId}-${language}-html`);
-};
-
 const LibraryPerson = (props) => {
+  const { sourceId, fetchPerson, language } = props;
   useEffect(
     () => {
-      getPerson({ sourceId: props.sourceId, language: props.language, fetchPerson: props.fetchPerson });
+      fetchPerson({ sourceId, language });
     },
-    [props.sourceId, props.language, props.fetchPerson]
+    [sourceId, fetchPerson, language]
   );
 
   const { person: { wip, err, data: content }, t } = props;
