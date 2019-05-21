@@ -21,6 +21,8 @@ import TopMost from './TopMost';
 import DonateNow from './DonateNow';
 import logo from '../../images/logo.svg';
 
+let isMobileDevice = false;
+
 class Layout extends Component {
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
@@ -31,10 +33,16 @@ class Layout extends Component {
     t: PropTypes.func.isRequired,
   };
 
-  state = {
-    sidebarActive: false,
-    isShowHeaderSearch: false
-  };
+  constructor(props) {
+    super(props);
+    const { deviceInfo, location } = props;
+    isMobileDevice                 = deviceInfo.device && deviceInfo.device.type === 'mobile';
+    this.state                     = {
+      sidebarActive: false,
+      isShowHeaderSearch: false,
+      embed: playerHelper.getEmbedFromQuery(location),
+    };
+  }
 
   menuButtonElement1 = createRef();
 
@@ -44,22 +52,17 @@ class Layout extends Component {
 
   headerSearchElement = createRef();
 
-  componentWillMount() {
-    const { location } = this.props;
-    this.setState({ embed: playerHelper.getEmbedFromQuery(location) });
-  }
-
   componentDidMount() {
     document.addEventListener('click', this.clickOutside, true);
   }
 
-  componentWillReceiveProps(nextProps) {
+  static getDerivedStateFromProps(nextProps, state) {
     const isShowHeaderSearch = (
       nextProps.location
-      && this.isMobileDevice()
+      && isMobileDevice
       && nextProps.location.pathname.endsWith('search')
     );
-    this.setState({ isShowHeaderSearch });
+    return { isShowHeaderSearch };
   }
 
   componentWillUnmount() {
@@ -125,11 +128,6 @@ class Layout extends Component {
       return !ALL_LANGUAGES.includes(parts[0]);
     }
     return true;
-  };
-
-  isMobileDevice = () => {
-    const { deviceInfo } = this.props;
-    return deviceInfo.device && deviceInfo.device.type === 'mobile';
   };
 
   showHeaderSearch = () => {
@@ -204,11 +202,11 @@ class Layout extends Component {
                   contentLanguage={contentLanguage}
                   setContentLanguage={setContentLanguage}
                   location={location}
-                  isMobileDevice={this.isMobileDevice()}
+                  isMobileDevice={isMobileDevice}
                 />
               </Menu.Item>
               {
-                showSearch && this.isMobileDevice()
+                showSearch && isMobileDevice
                   ? (
                     <Ref innerRef={this.showSearchButtonElement}>
                       <Menu.Item as="a" position="right">

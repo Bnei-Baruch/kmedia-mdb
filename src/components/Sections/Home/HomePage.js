@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
 import { Card, Container, Grid } from 'semantic-ui-react';
 
 import { sectionLogo } from '../../../helpers/images';
@@ -19,29 +18,6 @@ import BlogFeed from '../Publications/tabs/Blog/Feed';
 import TwitterFeed from '../Publications/tabs/Twitter/Feed';
 
 class HomePage extends Component {
-  static propTypes = {
-    location: shapes.HistoryLocation.isRequired,
-    latestLesson: shapes.LessonCollection,
-    latestUnits: PropTypes.arrayOf(shapes.ContentUnit),
-    latestBlogPosts: PropTypes.arrayOf(shapes.BlogPost),
-    latestTweets: PropTypes.arrayOf(shapes.Tweet),
-    banner: shapes.Banner,
-    language: PropTypes.string.isRequired,
-    wip: shapes.WIP,
-    err: shapes.Error,
-    t: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    latestLesson: null,
-    latestUnits: [],
-    latestBlogPosts: [],
-    latestTweets: [],
-    banner: null,
-    wip: false,
-    err: null,
-  };
-
   state = {
     latestUnitsFirstSection: null,
     latestUnitsLastSection: null
@@ -78,6 +54,8 @@ class HomePage extends Component {
       return Object.entries(a);
     }
 
+    const sortFunc = (a, b) => strCmp(b[1].film_date, a[1].film_date);
+
     latestUnits.forEach((x) => {
       if (secondTypes.includes(x.content_type)) {
         last.push(x);
@@ -88,11 +66,56 @@ class HomePage extends Component {
 
     // sort sections based on their units
     // we only have 4 slots and > 4 sections ...
-    const latestUnitsFirstSection = mapCU(first).sort((a, b) => strCmp(b[1].film_date, a[1].film_date));
-    const latestUnitsLastSection  = mapCU(last, false).sort((a, b) => strCmp(b[1].film_date, a[1].film_date));
+    const latestUnitsFirstSection = mapCU(first).sort(sortFunc);
+    const latestUnitsLastSection  = mapCU(last, false).sort(sortFunc);
 
     return { latestUnitsFirstSection, latestUnitsLastSection };
   }
+
+  static renderBlogPosts = (latestBlogPosts, language, t) => {
+    return latestBlogPosts.length
+      ? (
+        <Grid.Column mobile={16} tablet={11} computer={11} className="home-blog-posts">
+          <div className="titles">
+            <h4>{t('home.blog-title')}</h4>
+            <a href={`/${language}/publications/blog`}>{t('home.all-posts')}</a>
+          </div>
+          <BlogFeed snippetVersion items={latestBlogPosts} language={language} limitLength={4} />
+          <div className="read-more-bottom">
+            <a href={`/${language}/publications/blog`}>{t('home.read-more-posts')}</a>
+          </div>
+        </Grid.Column>
+      )
+      : null;
+  };
+
+  static renderTweets = (latestTweets, language, t) => {
+    return latestTweets.length
+      ? (
+        <Grid.Column mobile={16} tablet={5} computer={5} className="home-twitter">
+          <div className="titles">
+            <h4>{t('home.twitter-title')}</h4>
+            <a href={`/${language}/publications/twitter`}>{t('home.all-tweets')}</a>
+          </div>
+          <TwitterFeed snippetVersion tweets={latestTweets} limitLength={4} />
+          <div className="read-more-bottom">
+            <a href={`/${language}/publications/twitter`}>{t('home.read-more-tweets')}</a>
+          </div>
+        </Grid.Column>
+      )
+      :
+      null;
+  };
+
+  static renderActiveSections = (t) => {
+    const map = x => (
+      <Grid.Column mobile={5} tablet={3} computer={3} key={x} textAlign="center">
+        <Topic title={t(`nav.sidebar.${x}`)} img={sectionLogo[x]} href={`/${x}`} />
+      </Grid.Column>
+    );
+
+    return ['lessons', 'programs', 'sources', 'events', 'publications'].map(map);
+  };
 
   render() {
     const
@@ -117,12 +140,6 @@ class HomePage extends Component {
     if (!latestLesson) {
       return null;
     }
-
-    const map = x => (
-      <Grid.Column mobile={5} tablet={3} computer={3} key={x} textAlign="center">
-        <Topic title={t(`nav.sidebar.${x}`)} img={sectionLogo[x]} href={`/${x}`} />
-      </Grid.Column>
-    );
 
     return (
       <div className="homepage">
@@ -154,9 +171,7 @@ class HomePage extends Component {
             <Section title={t('home.sections')}>
               <Grid width={15} centered className="homepage__iconsrow">
                 <Grid.Row>
-                  {
-                    ['lessons', 'programs', 'sources', 'events', 'publications'].map(map)
-                  }
+                  {HomePage.renderActiveSections(t)}
                   <Grid.Column mobile={5} tablet={3} computer={3} only="mobile" />
                 </Grid.Row>
               </Grid>
@@ -193,38 +208,8 @@ class HomePage extends Component {
             <Section title={t('home.social')}>
               <Grid width={15} centered className="homepage__iconsrow">
                 <Grid.Row>
-                  {
-                    latestBlogPosts.length
-                      ? (
-                        <Grid.Column mobile={16} tablet={11} computer={11} className="home-blog-posts">
-                          <div className="titles">
-                            <h4>{t('home.blog-title')}</h4>
-                            <a href={`/${language}/publications/blog`}>{t('home.all-posts')}</a>
-                          </div>
-                          <BlogFeed snippetVersion items={latestBlogPosts} language={language} limitLength={4} />
-                          <div className="read-more-bottom">
-                            <a href={`/${language}/publications/blog`}>{t('home.read-more-posts')}</a>
-                          </div>
-                        </Grid.Column>
-                      )
-                      : null
-                  }
-                  {
-                    latestTweets.length
-                      ? (
-                        <Grid.Column mobile={16} tablet={5} computer={5} className="home-twitter">
-                          <div className="titles">
-                            <h4>{t('home.twitter-title')}</h4>
-                            <a href={`/${language}/publications/twitter`}>{t('home.all-tweets')}</a>
-                          </div>
-                          <TwitterFeed snippetVersion tweets={latestTweets} limitLength={4} />
-                          <div className="read-more-bottom">
-                            <a href={`/${language}/publications/twitter`}>{t('home.read-more-tweets')}</a>
-                          </div>
-                        </Grid.Column>
-                      )
-                      : null
-                  }
+                  {HomePage.renderBlogPosts(latestBlogPosts, language, t)}
+                  {HomePage.renderTweets(latestTweets, language, t)}
                 </Grid.Row>
               </Grid>
             </Section>
@@ -235,4 +220,26 @@ class HomePage extends Component {
   }
 }
 
-export default withNamespaces()(HomePage);
+HomePage.propTypes = {
+  location: shapes.HistoryLocation.isRequired,
+  latestLesson: shapes.LessonCollection,
+  latestUnits: PropTypes.arrayOf(shapes.ContentUnit),
+  latestBlogPosts: PropTypes.arrayOf(shapes.BlogPost),
+  latestTweets: PropTypes.arrayOf(shapes.Tweet),
+  banner: shapes.Banner,
+  language: PropTypes.string.isRequired,
+  wip: shapes.WIP,
+  err: shapes.Error,
+  t: PropTypes.func.isRequired,
+};
+
+HomePage.defaultProps = {
+  latestLesson: null,
+  latestUnits: [],
+  latestBlogPosts: [],
+  latestTweets: [],
+  wip: false,
+  err: null,
+};
+
+export default HomePage;

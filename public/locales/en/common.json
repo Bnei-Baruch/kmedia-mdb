@@ -202,8 +202,8 @@
     "last-lesson": "The Latest Daily Lesson",
     "donate": "DONATE NOW",
     "promoted": {
-      "header": "Pesach (Passover) 2019",
-      "subheader": ""
+      "header": "Latin America Convention",
+      "subheader": "17-19 May 2019"
     }
   },
   "events": {
@@ -445,7 +445,8 @@
         "audio-simple": "Audio",
         "text": "Transcription Text",
         "image": "Sketches",
-        "lelo-mikud": "No focus-group"
+        "lelo-mikud": "No focus-group",
+        "text-research-material": "Research Materials"
       }
     },
     "program": {

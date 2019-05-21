@@ -64,16 +64,16 @@ class Filters extends Component {
 
   renderFilters = (store, langDir, popupStyle) => {
     const { filters, namespace, t, filtersData, language, deviceInfo } = this.props;
-    const { activeFilter }                                             = this.state;
+    const { activeFilter } = this.state;
 
     return filters.map((item) => {
       const { component: FilterComponent, name } = item;
 
       const isActive = name === activeFilter;
-      const data     = filtersData[name] || {};
-      const values   = data.values || [];
-      const value    = Array.isArray(values) && values.length > 0 ? values[0] : null;
-      const label    = value
+      const data = filtersData[name] || {};
+      const values = data.values || [];
+      const value = Array.isArray(values) && values.length > 0 ? values[0] : null;
+      const label = value
         ? filtersTransformer.valueToTagLabel(name, value, this.props, store, t)
         : t('filters.all');
 
@@ -131,6 +131,7 @@ class Filters extends Component {
           onClose={this.handlePopupClose}
           onOpen={() => this.handlePopupOpen(name)}
           style={popupStyle}
+          closeOnDocumentClick={false}
         >
           <Popup.Content className={`filter-popup__content ${langDir}`}>
             <FilterComponent

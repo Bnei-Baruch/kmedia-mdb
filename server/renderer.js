@@ -9,8 +9,8 @@ import qs from 'qs';
 import serialize from 'serialize-javascript';
 import UAParser from 'ua-parser-js';
 import localStorage from 'mock-local-storage';
-import { parse as cookieParse } from 'cookie';
 import { HelmetProvider } from 'react-helmet-async';
+import { parse as cookieParse } from 'cookie';
 
 import routes from '../src/routes';
 import { COOKIE_CONTENT_LANG, LANG_UI_LANGUAGES, LANG_UKRAINIAN } from '../src/helpers/consts';
@@ -19,7 +19,7 @@ import { getLanguageFromPath } from '../src/helpers/url';
 import { isEmpty } from '../src/helpers/utils';
 import createStore from '../src/redux/createStore';
 import { actions as ssr } from '../src/redux/modules/ssr';
-import { actions as settings } from '../src/redux/modules/settings';
+import { actions as settings, initialState as settingsInitialState } from '../src/redux/modules/settings';
 import App from '../src/components/App/App';
 import i18nnext from './i18nnext';
 
@@ -139,9 +139,14 @@ export default function serverRender(req, res, next, htmlData) {
     const initialState = {
       router: { location: history.location },
       device: { deviceInfo: new UAParser(req.get('user-agent')).getResult() },
+      settings: Object.assign({}, settingsInitialState, {
+        language,
+        contentLanguage: cookies[COOKIE_CONTENT_LANG]
+      }),
     };
 
     const store = createStore(initialState, history);
+    store.dispatch(settings.setLanguage(language));
 
     const context = {
       req,

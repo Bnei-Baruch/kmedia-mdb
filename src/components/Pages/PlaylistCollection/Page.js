@@ -39,13 +39,13 @@ class PlaylistCollectionPage extends Component {
     location: {},
   };
 
-  state = {
-    selected: null,
-  };
-
-  componentWillMount() {
+  constructor(props){
+    super(props);
     const { location } = this.props;
-    this.setState({ embed: playerHelper.getEmbedFromQuery(location) });
+    this.state = {
+      selected: null,
+      embed: playerHelper.getEmbedFromQuery(location)
+    }
   }
 
   handleSelectedChange = selected => this.setState({ selected });

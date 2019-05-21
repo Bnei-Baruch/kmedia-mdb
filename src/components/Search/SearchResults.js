@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Button, Container, Divider, Grid, Image, Message } from 'semantic-ui-react';
 import InfoIcon from '../../images/icons/info.svg';
 
-import { SEARCH_INTENT_HIT_TYPES, } from '../../helpers/consts';
+import { SEARCH_INTENT_HIT_TYPES, SEARCH_GRAMMAR_HIT_TYPES } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { getQuery } from '../../helpers/url';
 import { selectors as settings } from '../../redux/modules/settings';
@@ -20,6 +20,7 @@ import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import SearchResultCU from './SearchResultCU';
 import SearchResultCollection from './SearchResultCollection';
 import SearchResultIntent from './SearchResultIntent';
+import SearchResultLandingPage from './SearchResultLandingPage';
 import SearchResultSource from './SearchResultSource';
 import SearchResultPost from './SearchResultPost';
 
@@ -86,10 +87,15 @@ class SearchResults extends Component {
 
   renderHit = (hit, rank) => {
     const { cMap, cuMap, postMap }                                               = this.props;
-    const { _source: { mdb_uid: mdbUid, result_type: resultType }, _type: type } = hit;
+    const { _source: { mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage }, _type: type } = hit;
 
-    const props = { ...this.props, hit, rank, key: `${mdbUid}_${type}` };
+    const props = { ...this.props, hit, rank, key: `${mdbUid || landingPage}_${type}` };
 
+    if (SEARCH_GRAMMAR_HIT_TYPES.includes(type)) {
+      return <SearchResultLandingPage {...props} />;
+    }
+
+    // To be deprecated soon.
     if (SEARCH_INTENT_HIT_TYPES.includes(type)) {
       return <SearchResultIntent {...props} />;
     }

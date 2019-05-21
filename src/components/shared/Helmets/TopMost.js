@@ -1,37 +1,34 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet-async';
 
 import Basic from './Basic';
 import Locale from './Locale';
 
-class TopMost extends Component {
-  static propTypes = {
-    titlePostfix: PropTypes.string.isRequired,
-    mainLang: PropTypes.string.isRequired,
-    alternateLang: PropTypes.arrayOf(PropTypes.string),
-  };
+const TopMost = (props) => {
+  const { titlePostfix } = props;
+  const titleTemplate    = `%s | ${titlePostfix}`;
 
-  static defaultProps = {
-    alternateLang: [],
-  };
+  return (
+    <Fragment>
+      <Helmet defaultTitle={titlePostfix} titleTemplate={titleTemplate}>
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Kabbalah Media" />
+      </Helmet>
+      <Locale {...props} />
+      <Basic />
+    </Fragment>
+  );
+};
 
-  render() {
-    const { titlePostfix } = this.props;
+TopMost.propTypes = {
+  titlePostfix: PropTypes.string.isRequired,
+  mainLang: PropTypes.string.isRequired,
+  alternateLang: PropTypes.arrayOf(PropTypes.string),
+};
 
-    const titleTemplate = `%s | ${titlePostfix}`;
-
-    return (
-      <Fragment>
-        <Helmet defaultTitle={titlePostfix} titleTemplate={titleTemplate}>
-          <meta property="og:type" content="website" />
-          <meta property="og:site_name" content="Kabbalah Media" />
-        </Helmet>
-        <Locale {...this.props} />
-        <Basic />
-      </Fragment>
-    );
-  }
-}
+TopMost.defaultProps = {
+  alternateLang: [],
+};
 
 export default TopMost;

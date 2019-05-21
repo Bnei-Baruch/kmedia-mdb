@@ -211,8 +211,8 @@
     "last-lesson": "Последний урок",
     "donate": "ВНЕСИТЕ ВКЛАД",
     "promoted": {
-      "header": "Песах 2019",
-      "subheader": ""
+      "header": "Конгресс в Латинской Америке",
+      "subheader": "17-19.5.2019"
     }
   },
   "events": {
@@ -454,7 +454,8 @@
         "audio-simple": "Аудио",
         "text": "Стенограмма",
         "image": "Чертежи",
-        "lelo-mikud": "без фокус-группы"
+        "lelo-mikud": "без фокус-группы",
+        "text-research-material": "Материалы исследований"
       }
     },
     "program": {

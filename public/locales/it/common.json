@@ -201,8 +201,8 @@
     "last-lesson": "The Latest Daily Lesson",
     "donate": "DONATE NOW",
     "promoted": {
-      "header": "Pesach (Pasqua ebraica) 2019",
-      "subheader": ""
+      "header": "Convenzione dell'America latina",
+      "subheader": "17-19/5/2019"
     }
   },
   "events": {
@@ -444,7 +444,8 @@
         "audio-simple": "Audio",
         "text": "Transcription Text",
         "image": "Sketches",
-        "lelo-mikud": "No focus-group"
+        "lelo-mikud": "No focus-group",
+        "text-research-material": "Materiali di Ricerca"
       }
     },
     "program": {
