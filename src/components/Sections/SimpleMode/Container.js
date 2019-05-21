@@ -12,7 +12,7 @@ import { isEmpty } from '../../../helpers/utils';
 import { selectors as device } from '../../../redux/modules/device';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { actions, selectors } from '../../../redux/modules/simpelMode';
+import { actions, selectors } from '../../../redux/modules/simpleMode';
 import * as shapes from '../../shapes';
 import Page from './Page';
 import { groupOtherMediaByType, renderCollection } from './RenderListHelpers';
@@ -114,7 +114,7 @@ class SimpleModeContainer extends Component {
   helpChooseLang = () => {
     this.setState({ blinkLangSelect: true });
     setTimeout(() => this.setState({ blinkLangSelect: false }), 7500);
-    window.scrollTo(0, 0);
+    this.scrollToTop();
   };
 
   renderUnitOrCollection = (item, language, t) => (
@@ -122,6 +122,13 @@ class SimpleModeContainer extends Component {
       ? groupOtherMediaByType(item, language, t, this.helpChooseLang)
       : renderCollection(item, language, t, this.helpChooseLang)
   );
+
+  scrollToTop = () => {
+    const { deviceInfo: { browser: { name: browserName } } } = this.props;
+    (browserName.toLowerCase() === 'chrome' || browserName.toLowerCase() === 'firefox')
+      ? window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+      : window.scrollTo(0, 0);
+  };
 
   render() {
     const { filesLanguage: language, isMobileDevice: isMobile, blinkLangSelect, date: selectedDate } = this.state;

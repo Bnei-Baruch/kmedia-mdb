@@ -212,9 +212,11 @@ class PlaylistAVBox extends Component {
             items={playlist.items}
             selected={selected}
             language={playlist.language}
+            uiLanguage={uiLanguage}
             onSelectedChange={this.handleSelectedChange}
             onLanguageChange={this.handleLanguageChange}
             onSwitchAV={this.handleSwitchAV}
+            history={history}
           />
         </Grid.Column>
       </Grid.Row>

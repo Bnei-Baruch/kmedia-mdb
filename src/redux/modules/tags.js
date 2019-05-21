@@ -1,10 +1,10 @@
-import { createAction, handleActions } from 'redux-actions';
+import { createAction } from 'redux-actions';
 import identity from 'lodash/identity';
 
 import { tracePath } from '../../helpers/utils';
 import { canonicalLink } from '../../helpers/links';
 import { TOPICS_FOR_DISPLAY } from '../../helpers/consts';
-import { types as settings } from './settings';
+import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
 
 /* Types */
@@ -81,31 +81,37 @@ const buildById = (items) => {
   return byId;
 };
 
-const onSSRPrepare = state => ({
-  ...initialState,
-  error: state.error ? state.error.toString() : state.error,
-});
+const onSSRPrepare = draft => {
+  draft.wip             = false;
+  draft.getByID         = identity;
+  draft.getPathByID     = () => [];
+  draft.sections        = [];
+  draft.units           = [];
+  draft.cuBySection     = {};
+  draft.getSectionUnits = identity;
 
-const onReceiveTags = (state, action) => {
-  const byId = buildById(action.payload);
+  if (draft.error) {
+    draft.error = draft.error.toString();
+  }
+};
+
+const onReceiveTags = (draft, payload) => {
+  const byId = buildById(payload);
 
   // we keep those in state to avoid recreating them every time a selector is called
   const getByID     = id => byId[id];
   const getPath     = source => tracePath(source, getByID);
   const getPathByID = id => getPath(getByID(id));
 
-  const roots        = action.payload.map(x => x.id);
+  const roots        = payload.map(x => x.id);
   const displayRoots = roots.filter(x => TOPICS_FOR_DISPLAY.indexOf(x) !== -1);
 
-  return {
-    ...state,
-    byId,
-    getByID,
-    getPath,
-    getPathByID,
-    roots,
-    displayRoots,
-  };
+  draft.byId         = byId;
+  draft.getByID      = getByID;
+  draft.getPath      = getPath;
+  draft.getPathByID  = getPathByID;
+  draft.roots        = roots;
+  draft.displayRoots = displayRoots;
 };
 
 const getSectionOfUnit = (unit) => {
@@ -113,52 +119,62 @@ const getSectionOfUnit = (unit) => {
   return s.length >= 3 ? s[1] : null;
 };
 
-const onDashboard = state => ({
-  ...state,
-  wip: true
-});
+const onDashboard = draft => {
+  draft.wip = true;
+};
 
-const onDashboardSuccess = (state, action) => {
-  const { data }                                           = action.payload;
+const onDashboardSuccess = (draft, { data }) => {
   const { latest_units: latestUnits /* promoted_units */ } = data;
 
-  if (Array.isArray(latestUnits)) {
-    // map units to sections
-    const cuBySection = latestUnits.reduce((acc, u) => {
-      const section = getSectionOfUnit(u);
-      if (acc[section]) {
-        acc[section].push(u);
-      } else {
-        acc[section] = [u];
-      }
-
-      return acc;
-    }, {});
-
-    const getSectionUnits   = section => cuBySection[section];
-    const uniqueSectionsArr = [...new Set(latestUnits.map(u => getSectionOfUnit(u)).filter(x => !!x))].sort();
-
-    return {
-      ...state,
-      wip: false,
-      error: null,
-      sections: uniqueSectionsArr,
-      units: latestUnits,
-      cuBySection,
-      getSectionUnits
-    };
+  if (!Array.isArray(latestUnits)) {
+    return;
   }
 
-  return null;
+  // map units to sections
+  const cuBySection = latestUnits.reduce((acc, u) => {
+    const section = getSectionOfUnit(u);
+    if (acc[section]) {
+      acc[section].push(u);
+    } else {
+      acc[section] = [u];
+    }
+
+    return acc;
+  }, {});
+
+  const getSectionUnits   = section => cuBySection[section];
+  const uniqueSectionsArr = [...new Set(latestUnits.map(u => getSectionOfUnit(u)).filter(x => !!x))].sort();
+
+  draft.wip             = false;
+  draft.error           = null;
+  draft.sections        = uniqueSectionsArr;
+  draft.units           = latestUnits;
+  draft.cuBySection     = cuBySection;
+  draft.getSectionUnits = getSectionUnits;
+};
+
+const onSetLanguage = draft => {
+  draft.wip             = false;
+  draft.getByID         = identity;
+  draft.sections        = [];
+  draft.units           = [];
+  draft.cuBySection     = {};
+  draft.getSectionUnits = identity;
+  draft.err             = null;
+};
+
+const onFetchDashboardFailure = (draft, payload) => {
+  draft.wip   = false;
+  draft.error = payload.err;
 };
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
-  [settings.SET_LANGUAGE]: () => initialState,
+  [settings.SET_LANGUAGE]: onSetLanguage,
 
   [FETCH_DASHBOARD]: onDashboard,
   [FETCH_DASHBOARD_SUCCESS]: onDashboardSuccess,
-  [FETCH_DASHBOARD_FAILURE]: (state, action) => ({ ...state, wip: false, error: action.payload.err }),
+  [FETCH_DASHBOARD_FAILURE]: onFetchDashboardFailure,
 
   [RECEIVE_TAGS]: onReceiveTags
 

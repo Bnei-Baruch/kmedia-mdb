@@ -8,7 +8,7 @@ import { sectionLogo } from '../../helpers/images';
 import { selectors } from '../../redux/modules/mdb';
 import { tracePath } from '../../helpers/utils';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
-import { canonicalLink, sectionLink } from '../../helpers/links';
+import { canonicalLink, intentSectionLink } from '../../helpers/links';
 import { actions as listsActions, selectors as lists } from '../../redux/modules/lists';
 import { assetUrl, imaginaryUrl, Requests } from '../../helpers/Api';
 import Link from '../Language/MultiLanguageLink';
@@ -218,7 +218,7 @@ class SearchResultIntent extends SearchResultBase {
               <Link
                 className="search__link"
                 onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-                to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}
+                to={intentSectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}
               >
                 {this.titleFromHighlight(highlight, display)}
               </Link>
@@ -228,7 +228,7 @@ class SearchResultIntent extends SearchResultBase {
             <Icon name="tasks" size="small" />
             <Link
               onClick={() => this.click(mdbUid, index, type, rank, searchId)}
-              to={sectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}
+              to={intentSectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}
             >
               <span>{`${t('search.showAll')} ${this.props.total} ${t(`search.${resultsType}`)}`}</span>
             </Link>

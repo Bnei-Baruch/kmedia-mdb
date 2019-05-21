@@ -1,6 +1,8 @@
-import { createAction, handleActions } from 'redux-actions';
+import { createAction } from 'redux-actions';
 
-import { types as settings } from './settings';
+import groupBy from 'lodash/groupBy';
+import mapValues from 'lodash/mapValues';
+import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
 
 /* Types */
@@ -8,6 +10,7 @@ import { types as ssr } from './ssr';
 const SET_TAB            = 'Publications/SET_TAB';
 const SET_PAGE           = 'Publications/SET_PAGE';
 const RECEIVE_PUBLISHERS = 'Publications/RECEIVE_PUBLISHERS';
+const FETCH_COLLECTIONS  = 'Publications/FETCH_COLLECTIONS';
 
 const FETCH_TWEETS         = 'Publications/FETCH_TWEETS';
 const FETCH_TWEETS_SUCCESS = 'Publications/FETCH_TWEETS_SUCCESS';
@@ -24,6 +27,7 @@ export const types = {
   SET_TAB,
   SET_PAGE,
   RECEIVE_PUBLISHERS,
+  FETCH_COLLECTIONS,
 
   FETCH_TWEETS,
   FETCH_TWEETS_SUCCESS,
@@ -42,6 +46,7 @@ export const types = {
 const setTab            = createAction(SET_TAB);
 const setPage           = createAction(SET_PAGE, (namespace, pageNo) => ({ namespace, pageNo }));
 const receivePublishers = createAction(RECEIVE_PUBLISHERS);
+const fetchCollections  = createAction(FETCH_COLLECTIONS);
 
 const fetchTweets        = createAction(FETCH_TWEETS,
   (namespace, pageNo, params = {}) => ({ namespace, pageNo, ...params, }));
@@ -60,6 +65,7 @@ export const actions = {
   setTab,
   setPage,
   receivePublishers,
+  fetchCollections,
 
   fetchTweets,
   fetchTweetsSuccess,
@@ -79,6 +85,7 @@ const initialState = {
   publishers: {
     byID: {},
   },
+  collections: {},
   twitter: {
     tweets: [],
     pageNo: 1,
@@ -98,159 +105,107 @@ const initialState = {
   },
 };
 
-const onSetPage = (state, action) => {
-  const { namespace, pageNo } = action.payload;
-  const ns                    = namespace.split('-')[1];
-  return {
-    ...state,
-    [ns]: {
-      ...state[ns],
-      pageNo,
-    }
-  };
+const onSetPage = (draft, { namespace, pageNo }) => {
+  const ns         = namespace.split('-')[1];
+  draft[ns].pageNo = pageNo;
 };
 
-const onReceivePublishers = (state, action) => ({
-  ...state,
-  publishers: {
-    ...state.publishers,
-    byID: action.payload.reduce((acc, val) => {
-      acc[val.id] = val;
-      return acc;
-    }, {}),
-  },
-});
+const onReceivePublishers = (draft, payload) => {
+  draft.publishers.byID = payload.reduce((acc, val) => {
+    acc[val.id] = val;
+    return acc;
+  }, {});
+};
 
-const onFetchTweets = state => ({
-  ...state,
-  twitter: {
-    ...state.twitter,
-    wip: true,
-  }
-});
+const onFetchCollections = (draft, payload) => {
+  draft.collections = mapValues(groupBy(payload, x => x.content_type), x => x.map(y => y.id));
+};
 
-const onFetchTweetsSuccess = (state, action) => ({
-  ...state,
-  twitter: {
-    ...state.twitter,
-    ...action.payload,
-    wip: false,
-  }
-});
+const onFetchTweets = draft => {
+  draft.twitter.wip = true;
+};
 
-const onFetchTweetsFailure = (state, action) => ({
-  ...state,
-  twitter: {
-    ...state.twitter,
-    wip: false,
-    err: action.payload
-  }
-});
+const onFetchTweetsSuccess = (draft, payload) => {
+  draft.twitter.total  = payload.total;
+  draft.twitter.tweets = payload.tweets;
+  draft.twitter.wip    = false;
+};
 
-const onFetchBlogList = state => ({
-  ...state,
-  blog: {
-    ...state.blog,
-    wip: true,
-  }
-});
+const onFetchTweetsFailure = (draft, payload) => {
+  draft.twitter.wip = false;
+  draft.twitter.err = payload;
+};
 
-const onFetchBlogListSuccess = (state, action) => {
-  const { total, posts }   = action.payload;
-  const { blog: { byID } } = state;
+const onFetchBlogList = draft => {
+  draft.blog.wip = true;
+};
 
-  const ids = [];
+const onFetchBlogListSuccess = (draft, { total, posts }) => {
+  const { blog } = draft;
+  const byID     = blog.byID;
+  let blogPosts  = blog.posts;
+
+  blogPosts.length = 0;
   posts.forEach((x) => {
     const k = `${x.blog}${x.wp_id}`;
     byID[k] = x;
-    ids.push(k);
+    blogPosts.push(k);
   });
-
-  return {
-    ...state,
-    blog: {
-      ...state.blog,
-      byID,
-      total,
-      posts: ids,
-      wip: false,
-      err: null,
-    }
-  };
+  blog.total = total;
+  blog.wip   = false;
+  blog.err   = null;
 };
 
-const onFetchBlogListFailure = (state, action) => ({
-  ...state,
-  blog: {
-    ...state.blog,
-    wip: false,
-    err: action.payload
-  }
-});
-
-const onFetchBlogPost = state => ({
-  ...state,
-  blog: {
-    ...state.blog,
-    wipPost: true,
-  }
-});
-
-const onFetchBlogPostSuccess = (state, action) => {
-  const { blog, wp_id: id } = action.payload;
-  const { blog: { byID } }  = state;
-
-  byID[`${blog}${id}`] = action.payload;
-
-  return {
-    ...state,
-    blog: {
-      ...state.blog,
-      byID,
-      wipPost: false,
-      errPost: null,
-    }
-  };
+const onFetchBlogListFailure = (draft, payload) => {
+  draft.blog.wip = false;
+  draft.blog.err = payload;
 };
 
-const onFetchBlogPostFailure = (state, action) => ({
-  ...state,
-  blog: {
-    ...state.blog,
-    wipPost: false,
-    errPost: action.payload
-  }
-});
+const onFetchBlogPost = draft => {
+  draft.blog.wipPost = true;
+};
 
-const onSetLanguage = state => ({
-  ...state,
-  publishers: {
-    byID: {},
-  },
-  twitter: {
-    ...initialState.twitter,
-    pageNo: state.twitter.pageNo,
-    total: state.twitter.total,
-  },
-  blog: {
-    ...initialState.blog,
-    pageNo: state.blog.pageNo,
-    total: state.blog.total,
-  }
-});
+const onFetchBlogPostSuccess = (draft, payload) => {
+  const { blog, wp_id: id } = payload;
 
-const onSSRPrepare = state => ({
-  ...state,
-  twitter: {
-    ...state.twitter,
-    err: state.twitter.err ? state.twitter.err.toString() : state.twitter.err,
-  },
-  blog: {
-    ...state.blog,
-    err: state.blog.err ? state.blog.err.toString() : state.blog.err,
-    errPost: state.blog.errPost ? state.blog.errPost.toString() : state.blog.errPost,
+  draft.blog.byID[`${blog}${id}`] = payload;
+  draft.blog.wipPost              = false;
+  draft.blog.errPost              = null;
+};
+
+const onFetchBlogPostFailure = (draft, payload) => {
+  draft.blog.wipPost = false;
+  draft.blog.errPost = payload;
+};
+
+const onSetLanguage = draft => {
+  draft.publishers.byID = {};
+  draft.collections     = {};
+
+  let pageNo           = draft.twitter.pageNo;
+  let total            = draft.twitter.total;
+  draft.twitter        = { ...initialState.twitter };
+  draft.twitter.pageNo = pageNo;
+  draft.twitter.total  = total;
+
+  pageNo            = draft.blog.pageNo;
+  total             = draft.blog.total;
+  draft.blog        = { ...initialState.blog };
+  draft.blog.pageNo = pageNo;
+  draft.blog.total  = total;
+};
+
+const onSSRPrepare = draft => {
+  if (draft.twitter.err) {
+    draft.twitter.err = draft.twitter.err.toString();
   }
-});
+  if (draft.blog.err) {
+    draft.blog.err = draft.blog.err.toString();
+  }
+  if (draft.blog.errPost) {
+    draft.blog.errPost = draft.blog.errPost.toString();
+  }
+};
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
@@ -258,6 +213,7 @@ export const reducer = handleActions({
 
   [SET_PAGE]: onSetPage,
   [RECEIVE_PUBLISHERS]: onReceivePublishers,
+  [FETCH_COLLECTIONS]: onFetchCollections,
 
   [FETCH_TWEETS]: onFetchTweets,
   [FETCH_TWEETS_SUCCESS]: onFetchTweetsSuccess,
@@ -274,6 +230,7 @@ export const reducer = handleActions({
 /* Selectors */
 
 const getPublisherById = state => state.publishers.byID;
+const getCollections   = state => state.collections;
 
 const getTweets       = state => state.twitter.tweets;
 const getTweetsTotal  = state => state.twitter.total;
@@ -292,6 +249,7 @@ const getBlogErrorPost = state => state.blog.errPost;
 
 export const selectors = {
   getPublisherById,
+  getCollections,
 
   getTweets,
   getTweetsTotal,

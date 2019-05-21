@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 
-import { CT_CLIPS, CT_LECTURE_SERIES, CT_VIRTUAL_LESSONS } from '../../../helpers/consts';
+import { CT_CLIPS, CT_LECTURE_SERIES, CT_VIRTUAL_LESSONS, CT_ARTICLES } from '../../../helpers/consts';
 import { strCmp } from '../../../helpers/utils';
 import { selectors as lessons } from '../../../redux/modules/lessons';
 import { selectors as programs } from '../../../redux/modules/programs';
+import { selectors as publications } from '../../../redux/modules/publications';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import * as shapes from '../../shapes';
 import HierarchicalFilter from './HierarchicalFilter';
@@ -80,6 +81,10 @@ export default connect(
     case 'programs-clips':
       ct   = CT_CLIPS;
       cIDs = programs.getProgramsByType(state.programs)[ct];
+      break;
+    case 'publications-articles':
+      ct = CT_ARTICLES;
+      cIDs = publications.getCollections(state.publications)[ct];
       break;
     default:
       break;

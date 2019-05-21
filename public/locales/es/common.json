@@ -192,8 +192,8 @@
     "read-more-tweets": "Leer más tweets",
     "last-lesson": "Lección diaria de Cabalá",
     "promoted": {
-      "header": "Congreso virtual",
-      "subheader": "22-23.03.2019"
+      "header": "Congreso Latino Americano",
+      "subheader": "17-19/5/2019"
     }
   },
   "events": {
@@ -429,7 +429,8 @@
         "audio-simple": "Audio",
         "text": "Transcripción Completa",
         "image": "Dibujos",
-        "lelo-mikud": "Sin grupo de enfoque"
+        "lelo-mikud": "Sin grupo de enfoque",
+        "text-research-material": "Materiales de Investigacion"
       }
     },
     "program": {

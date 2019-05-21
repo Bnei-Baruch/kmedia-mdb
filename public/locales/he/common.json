@@ -201,8 +201,8 @@
     "last-lesson": "שיעור הקבלה היומי",
     "donate": "תרום עכשיו",
     "promoted": {
-      "header": "כנס וירטואלי",
-      "subheader": "22-23.03.2019"
+      "header": "כנס באמריקה הלטינית",
+      "subheader": "17-19.5.2019"
     }
   },
   "events": {
@@ -444,7 +444,8 @@
         "audio-simple": "אודיו",
         "text": "תמליל מלא",
         "image": "שרטוטים",
-        "lelo-mikud": "ללא קבוצת מיקוד"
+        "lelo-mikud": "ללא קבוצת מיקוד",
+        "text-research-material": "חומרי מחקר"
       }
     },
     "program": {
