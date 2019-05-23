@@ -263,7 +263,7 @@ const mapState = (state, ownProps) => {
   return {
     namespace,
     unitCounter,
-    items: (nsState.items || []).map(x => selectors.getDenormContentUnit(state.mdb, x)),
+    items: (nsState.items || []).map(x => selectors.getDenormContentUnit(state.mdb, x)).filter(item => item),
     wip: nsState.wip,
     err: nsState.err,
     total: nsState.total,
