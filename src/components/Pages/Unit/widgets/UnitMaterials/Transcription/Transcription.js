@@ -75,7 +75,10 @@ class Transcription extends Component {
     if (!newLanguage) {
       return false;
     }
-    if (state.language && state.language !== newLanguage) {
+    if (textFiles.length === 0) {
+      newLanguage = undefined;
+    }
+    if (newLanguage !== undefined && state.language && state.language !== newLanguage) {
       newLanguage = state.language;
     }
 
@@ -103,7 +106,7 @@ class Transcription extends Component {
         || nextState.language !== state.language);
   }
 
-  componentDidUpdate(prevState) {
+  componentDidUpdate(prevProp, prevState) {
     const { selectedFile, language } = this.state;
 
     if (selectedFile !== prevState.selectedFile || language !== prevState.language) {

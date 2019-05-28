@@ -125,11 +125,13 @@ export const renderCollection = (collection, t) => {
   return rows.concat(units);
 };
 
-export const renderUnitOrCollection = (item, t) => (
-  item.content_type === CT_LESSON_PART
+export const renderUnitOrCollection = (item, t) => {
+  if (!item)
+    return null;
+  return item.content_type === CT_LESSON_PART
     ? renderUnit(item, t)
     : renderCollection(item, t)
-);
+};
 
 const mapState = (state, ownProps) => {
   const nsState = lists.getNamespaceState(state.lists, ownProps.namespace);

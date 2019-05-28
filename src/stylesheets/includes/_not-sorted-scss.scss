@@ -1051,7 +1051,7 @@
       width: auto;
     }
 
-    img {
+    img, style, .bwg_container  {
       display: none !important;
     }
 
@@ -1401,4 +1401,18 @@
 .ui.accordion.menu .item .title>.dropdown.icon {
   -webkit-transform: rotate(0);
   transform: rotate(0);
+}
+
+.ui.top.left.popup {
+  &.filter-popup {
+    top: 0 !important;
+    overflow: auto !important;
+  }
+}
+
+.ui.top.right.popup {
+  &.filter-popup {
+    top: 0 !important;
+    overflow: auto !important;
+  }
 }
