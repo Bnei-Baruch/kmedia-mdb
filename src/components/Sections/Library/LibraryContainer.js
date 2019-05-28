@@ -59,6 +59,7 @@ class LibraryContainer extends Component {
     fontSize: 0,
     theme: 'light',
     match: '',
+    contentScrollTop: 0
   };
 
   componentDidMount() {
@@ -112,9 +113,14 @@ class LibraryContainer extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     this.updateSticky();
-    const { isReadable } = this.state;
-    if (isReadable && prevState.isReadable !== isReadable && this.articleRef) {
-      this.articleRef.scrollTop = 0;
+    const { isReadable, contentScrollTop } = this.state;
+
+    if (prevState.isReadable !== isReadable && this.articleRef) {
+      if (isReadable) {
+        this.articleRef.scrollTop = contentScrollTop;
+      } else {
+        document.scrollingElement.scrollTop = contentScrollTop;
+      }
     }
   }
 
@@ -196,8 +202,13 @@ class LibraryContainer extends Component {
   };
 
   handleIsReadable = () => {
-    const { isReadable } = this.state;
-    this.setState({ isReadable: !isReadable });
+    const { isReadable }   = this.state;
+    const contentScrollTop = this.getScrollTop();
+    this.setState({ isReadable: !isReadable, contentScrollTop });
+  };
+
+  getScrollTop = () => {
+    return this.state.isReadable ? this.articleRef.scrollTop : document.scrollingElement.scrollTop;
   };
 
   handleSettings = (setting) => {
