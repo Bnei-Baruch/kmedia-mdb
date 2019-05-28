@@ -19,8 +19,15 @@ class SearchResultLandingPage extends SearchResultBase {
   };
 
   render() {
-    const { hit, isMobileDevice, t } = this.props;
-    const { _source: { landing_page: landingPage }} = hit;
+    const { hit, isMobileDevice, queryResult, rank, t } = this.props;
+    const { search_result: { searchId } } = queryResult;
+    const {
+      _index: index,
+      _type: resultType,
+      _source: {
+        landing_page: landingPage,
+      }
+    } = hit;
     const linkTitle = SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT[landingPage] || 'home.sections';
     const subText = SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT[landingPage]
 
@@ -31,6 +38,7 @@ class SearchResultLandingPage extends SearchResultBase {
             <Header as="h3" color="blue">
               <Link
                 className="search__link"
+                onClick={() => this.logClick(landingPage, index, resultType, rank, searchId)}
                 to={landingPageSectionLink(landingPage)}
               >
                 {t(linkTitle)}

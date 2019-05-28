@@ -1402,3 +1402,17 @@
   -webkit-transform: rotate(0);
   transform: rotate(0);
 }
+
+.ui.top.left.popup {
+  &.filter-popup {
+    top: 0 !important;
+    overflow: auto !important;
+  }
+}
+
+.ui.top.right.popup {
+  &.filter-popup {
+    top: 0 !important;
+    overflow: auto !important;
+  }
+}

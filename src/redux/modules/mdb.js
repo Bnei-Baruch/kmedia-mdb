@@ -386,6 +386,7 @@ const onFetchWindow = (state, action) => {
 
 const onSSRPrepare = state => ({
   ...state,
+  wip: freshStore().wip,
   errors: {
     units: mapValues(state.errors.units, x => (x ? x.toString() : x)),
     collections: mapValues(state.errors.collections, x => (x ? x.toString() : x)),

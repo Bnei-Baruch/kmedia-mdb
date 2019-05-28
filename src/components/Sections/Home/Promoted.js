@@ -30,7 +30,7 @@ class Promoted extends Component {
 
     return (
       <div className="thumbnail">
-        <Link to="/events/c/iCiUABK4">
+        <Link to="/events/c/0B1AWfqg">
           <Image fluid src={img} className="thumbnail__image" />
           {
             header
