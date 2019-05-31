@@ -56,11 +56,12 @@ const MenuItems = ({ simple, visible, t, onItemClick, language }) => {
         >
           <Button
             icon="rss"
+            size="mini"
             color="orange"
-            inverted
             bordered={false}
             fitted={false}
             href={getRSSLinkByLang(language)} />
+          <span className="margin-right-8 margin-left-8">RSS</span>
         </Menu.Item>
       </Menu>
     );

@@ -27,6 +27,7 @@ const Footer = ({ t, language }) => {
 
               <Button
                 icon="rss"
+                size="tiny"
                 color="orange"
                 basic
                 inverted
