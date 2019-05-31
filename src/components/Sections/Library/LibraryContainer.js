@@ -110,12 +110,8 @@ class LibraryContainer extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate() {
     this.updateSticky();
-    const { isReadable } = this.state;
-    if (isReadable && prevState.isReadable !== isReadable && this.articleRef) {
-      this.articleRef.scrollTop = 0;
-    }
   }
 
   componentWillUnmount() {
@@ -176,10 +172,6 @@ class LibraryContainer extends Component {
 
   handleContextRef = (ref) => {
     this.contextRef = ref;
-  };
-
-  handleContentArticleRef = (ref) => {
-    this.articleRef = ref;
   };
 
   handleSecondaryHeaderRef = (ref) => {
@@ -375,7 +367,6 @@ class LibraryContainer extends Component {
 
     return (
       <div
-        ref={this.handleContentArticleRef}
         className={classNames({
           source: true,
           'is-readable': isReadable,
