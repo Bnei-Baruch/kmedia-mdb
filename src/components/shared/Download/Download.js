@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { Button, } from 'semantic-ui-react';
+import * as shapes from "../../shapes";
 
 // The component renders itself in DOM:
 //    <div id="download-button" />
@@ -15,6 +16,7 @@ class Download extends Component {
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node
     ]),
+    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -55,15 +57,21 @@ class Download extends Component {
     window.URL.revokeObjectURL(blobURL);
   };
 
-  static downloadAsset = (path, mimeType) => axios({
-    url: path,
-    headers: {
-      Accept: mimeType
-    },
-    responseType: 'blob'
-  }).then((response) => {
-    Download.fileDownload(response.data, path, mimeType);
-  });
+  downloadAsset = (path, mimeType) => {
+    if (this.props.deviceInfo.os.name !== 'iOS') {
+      axios({
+        url: path,
+        headers: {
+          Accept: mimeType
+        },
+        responseType: 'blob'
+      }).then((response) => {
+        Download.fileDownload(response.data, path, mimeType);
+      });
+    } else {
+      window.open(path, '_blank');
+    }
+  };
 
   render() {
     const { children, path, mimeType, } = this.props;
@@ -81,7 +89,7 @@ class Download extends Component {
     }
 
     return ReactDOM.createPortal(
-      <Button compact size="small" icon="download" onClick={() => Download.downloadAsset(path, mimeType)}>{children}</Button>,
+      <Button compact size="small" icon="download"  onClick={() => this.downloadAsset(path, mimeType)} >{children}</Button>,
       mountPoint,
     );
   }
