@@ -59,7 +59,7 @@ class LibraryContainer extends Component {
     fontSize: 0,
     theme: 'light',
     match: '',
-    contentScrollTop: 0
+    scrollTopPosition: 0
   };
 
   componentDidMount() {
@@ -113,13 +113,13 @@ class LibraryContainer extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     this.updateSticky();
-    const { isReadable, contentScrollTop } = this.state;
-
+    const { isReadable, scrollTopPosition } = this.state;
+    //on change full screen and normal view scroll to position
     if (prevState.isReadable !== isReadable && this.articleRef) {
       if (isReadable) {
-        this.articleRef.scrollTop = contentScrollTop;
+        this.articleRef.scrollTop = scrollTopPosition;
       } else {
-        document.scrollingElement.scrollTop = contentScrollTop;
+        document.scrollingElement.scrollTop = scrollTopPosition;
       }
     }
   }
@@ -203,10 +203,14 @@ class LibraryContainer extends Component {
 
   handleIsReadable = () => {
     const { isReadable }   = this.state;
-    const contentScrollTop = this.getScrollTop();
-    this.setState({ isReadable: !isReadable, contentScrollTop });
+    const scrollTopPosition = this.getScrollTop();
+    this.setState({ isReadable: !isReadable, scrollTopPosition });
   };
 
+  /**
+   * Get position of scroll
+   * @returns {number|*}
+   */
   getScrollTop = () => {
     return this.state.isReadable ? this.articleRef.scrollTop : document.scrollingElement.scrollTop;
   };
