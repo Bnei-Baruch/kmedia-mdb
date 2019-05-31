@@ -1354,6 +1354,10 @@
   margin-right: 8px !important;
 }
 
+.margin-left-8{
+  margin-left: 8px !important;
+}
+
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   select,
   textarea,
@@ -1396,4 +1400,23 @@
 
 .ui.flowing.popup {
   z-index: 10000;
+}
+
+.ui.accordion.menu .item .title>.dropdown.icon {
+  -webkit-transform: rotate(0);
+  transform: rotate(0);
+}
+
+.ui.top.left.popup {
+  &.filter-popup {
+    top: 0 !important;
+    overflow: auto !important;
+  }
+}
+
+.ui.top.right.popup {
+  &.filter-popup {
+    top: 0 !important;
+    overflow: auto !important;
+  }
 }
