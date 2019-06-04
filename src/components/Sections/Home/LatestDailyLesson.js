@@ -13,7 +13,14 @@ const getRandomImage = () => {
   if (!src.startsWith('http')) {
     src = `http://localhost${src}`;
   }
-  return `${imaginaryUrl('resize')}?${Requests.makeParams({ url: src, width: 512, height: 288 })}`;
+  const params = Requests.makeParams({
+    url: src,
+    width: 512,
+    height: 288,
+    nocrop: false,
+    stripmeta: true,
+  });
+  return `${imaginaryUrl('resize')}?${params}`;
 };
 
 class LatestDailyLesson extends Component {

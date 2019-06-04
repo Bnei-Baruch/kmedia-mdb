@@ -1051,7 +1051,7 @@
       width: auto;
     }
 
-    img {
+    img, style, .bwg_container  {
       display: none !important;
     }
 
@@ -1403,6 +1403,16 @@
   transform: rotate(0);
 }
 
-.header.item.logo svg {
-  width: 40px;
+.ui.top.left.popup {
+  &.filter-popup {
+    top: 0 !important;
+    overflow: auto !important;
+  }
+}
+
+.ui.top.right.popup {
+  &.filter-popup {
+    top: 0 !important;
+    overflow: auto !important;
+  }
 }
