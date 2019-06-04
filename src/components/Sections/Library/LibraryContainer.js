@@ -338,7 +338,7 @@ class LibraryContainer extends Component {
         content = <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
       }
     } else {
-      let downloadAllowed = deviceInfo.os.name !== 'iOS';
+      const downloadAllowed = deviceInfo.os.name !== 'iOS';
       content = (
         <LibraryContentContainer
           source={sourceId}
