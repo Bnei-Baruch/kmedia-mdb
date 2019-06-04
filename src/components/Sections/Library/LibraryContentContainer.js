@@ -44,7 +44,7 @@ class LibraryContentContainer extends Component {
     contentLanguage: PropTypes.string.isRequired,
     langSelectorMount: PropTypes.instanceOf(PropTypes.element),
     history: shapes.History.isRequired,
-    deviceInfo: shapes.UserAgentParserResults.isRequired,
+    downloadAllowed: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -135,9 +135,9 @@ class LibraryContentContainer extends Component {
   };
 
   render() {
-    const { content, index, langSelectorMount, source, deviceInfo } = this.props;
-    const { languages, language }                                   = this.state;
-    const { isTaas, startsFrom, pdfFile }                           = this.getTaasPdf();
+    const { content, index, langSelectorMount, source, downloadAllowed } = this.props;
+    const { languages, language }                                        = this.state;
+    const { isTaas, startsFrom, pdfFile }                                = this.getTaasPdf();
 
     return (
       <Library
@@ -150,7 +150,7 @@ class LibraryContentContainer extends Component {
         languages={languages}
         handleLanguageChanged={this.handleLanguageChanged}
         langSelectorMount={langSelectorMount}
-        deviceInfo={deviceInfo}
+        downloadAllowed={downloadAllowed}
       />
     );
   }

@@ -16,7 +16,7 @@ class Download extends Component {
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node
     ]),
-    deviceInfo: shapes.UserAgentParserResults.isRequired,
+    downloadAllowed: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -58,7 +58,7 @@ class Download extends Component {
   };
 
   downloadAsset = (path, mimeType) => {
-    if (this.props.deviceInfo.os.name !== 'iOS') {
+    if (this.props.downloadAllowed) {
       axios({
         url: path,
         headers: {

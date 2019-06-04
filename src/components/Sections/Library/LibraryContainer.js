@@ -338,6 +338,7 @@ class LibraryContainer extends Component {
         content = <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
       }
     } else {
+      let downloadAllowed = deviceInfo.os.name !== 'iOS';
       content = (
         <LibraryContentContainer
           source={sourceId}
@@ -346,7 +347,7 @@ class LibraryContainer extends Component {
           contentLanguage={contentLanguage}
           langSelectorMount={this.headerMenuRef}
           history={history}
-          deviceInfo={deviceInfo}
+          downloadAllowed={downloadAllowed}
         />
       );
     }

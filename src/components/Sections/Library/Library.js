@@ -33,7 +33,7 @@ class Library extends Component {
     handleLanguageChanged: PropTypes.func.isRequired,
     history: shapes.History.isRequired,
     fullUrlPath: PropTypes.string,
-    deviceInfo: shapes.UserAgentParserResults.isRequired,
+    downloadAllowed: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -83,10 +83,10 @@ class Library extends Component {
     const direction = getLanguageDirection(language);
 
     // PDF.js will fetch file by itself
-    const { pdfFile, startsFrom, deviceInfo } = this.props;
-    const usePdfFile                          = isTaas && pdfFile;
-    const mimeType                            = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-    const { pageNumber }                      = this.state;
+    const { pdfFile, startsFrom, downloadAllowed } = this.props;
+    const usePdfFile                               = isTaas && pdfFile;
+    const mimeType                                 = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    const { pageNumber }                           = this.state;
     let contentsToDisplay;
 
     const { wip: contentWip, err: contentErr, data: contentData } = content;
@@ -140,7 +140,7 @@ class Library extends Component {
             ? <Portal open preprend mountNode={langSelectorMount}>{languageBar}</Portal>
             : languageBar
         }
-        <Download path={fullUrlPath} mimeType={mimeType} deviceInfo={deviceInfo}  />
+        <Download path={fullUrlPath} mimeType={mimeType} downloadAllowed={downloadAllowed}  />
         {contentsToDisplay}
       </div>
     );
