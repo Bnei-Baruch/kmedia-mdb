@@ -29,7 +29,8 @@ class UnitLogo extends PureComponent {
     if (!src.startsWith('http')) {
       src = `http://localhost${src}`;
     }
-    src = `${imaginaryUrl('thumbnail')}?${Requests.makeParams({ url: src, width })}`;
+    const params = Requests.makeParams({ url: src, width, stripmeta: true, });
+    src = `${imaginaryUrl('thumbnail')}?${params}`;
 
     const fallback = fallbackImg || imagePlaceholder;
 
