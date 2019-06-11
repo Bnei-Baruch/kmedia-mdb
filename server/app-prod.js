@@ -7,7 +7,7 @@ import * as middleware from './middleware';
 import serverRender from './renderer';
 import { kmediaContainer, kmediaSearch } from './kmedia';
 
-const indexHtml   = fs.readFileSync(path.resolve(__dirname, '..', 'build', 'critical.html'), 'utf8');
+const indexHtml = fs.readFileSync(path.resolve(__dirname, '..', 'build', 'critical.html'), 'utf8');
 
 function handler(req, res, next) {
   serverRender(req, res, next, indexHtml);
@@ -24,6 +24,7 @@ app.use(middleware.errorHandler);
 
 // security headers
 app.use(helmet({
+  frameguard: false,          // we want to allow embed in iframes
   dnsPrefetchControl: false,  // we use dns prefetch in index.html to speed things up.
   contentSecurityPolicy: {
     directives: {

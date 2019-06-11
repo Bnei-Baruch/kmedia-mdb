@@ -322,7 +322,7 @@ class LibraryContainer extends Component {
   };
 
   render() {
-    const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push, history } = this.props;
+    const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push, history, deviceInfo } = this.props;
 
     const fullPath = this.getFullPath(sourceId);
     const parentId = this.properParentId(fullPath);
@@ -338,6 +338,7 @@ class LibraryContainer extends Component {
         content = <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
       }
     } else {
+      const downloadAllowed = deviceInfo.os.name !== 'iOS';
       content = (
         <LibraryContentContainer
           source={sourceId}
@@ -346,6 +347,7 @@ class LibraryContainer extends Component {
           contentLanguage={contentLanguage}
           langSelectorMount={this.headerMenuRef}
           history={history}
+          downloadAllowed={downloadAllowed}
         />
       );
     }

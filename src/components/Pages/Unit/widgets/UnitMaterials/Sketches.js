@@ -207,7 +207,8 @@ class Sketches extends React.Component {
     if (!thumbSrc.startsWith('http')) {
       thumbSrc = `http://localhost${src}`;
     }
-    thumbSrc = `${imaginaryUrl('thumbnail')}?${Requests.makeParams({ url: thumbSrc, width: 100 })}`;
+    const thumbParams = Requests.makeParams({ url: thumbSrc, width: 100, stripmeta: true });
+    thumbSrc = `${imaginaryUrl('thumbnail')}?${thumbParams}`;
 
     return {
       original: src,

@@ -98,7 +98,7 @@ class SearchResultIntent extends SearchResultBase {
       thumbUrl = `http://localhost${thumbUrl}`;
     }
 
-    const imgParams = Requests.makeParams({ url: thumbUrl, width: 250 });
+    const imgParams = Requests.makeParams({ url: thumbUrl, width: 250, stripmeta: true });
     const src       = `${imaginaryUrl('thumbnail')}?${imgParams}`;
     const filmDate  = cu.film_date ? t('values.date', { date: cu.film_date }) : '';
 
