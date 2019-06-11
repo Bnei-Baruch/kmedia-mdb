@@ -4,6 +4,7 @@ import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Container, Grid, Header, Button } from 'semantic-ui-react';
 import { getRSSLinkByLang } from '../../helpers/utils';
+import * as shapes from '../shapes';
 import { selectors as settings } from '../../redux/modules/settings';
 import { selectors as device } from '../../redux/modules/device';
 
@@ -46,6 +47,8 @@ const Footer = ({ t, language, deviceInfo }) => {
 
 Footer.propTypes = {
   t: PropTypes.func.isRequired,
+  deviceInfo: shapes.UserAgentParserResults.isRequired,
+  language: PropTypes.string.isRequired
 };
 
 export default connect(state => ({
