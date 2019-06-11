@@ -1403,6 +1403,18 @@
   transform: rotate(0);
 }
 
-.header.item.logo svg {
-  width: 40px;
+/* fix for svg in logo */
+.logo svg {
+  display: none !important;
+}
+@media only screen and (min-width: $largeMonitorBreakpoint) {
+  .logo svg {
+    display: inline-block !important;
+  }
+}
+.ui.menu .item>svg:not(.ui) {
+  display: inline-block;
+  vertical-align: middle;
+  margin: -.3em 0;
+  width: 2.5em;
 }

@@ -107,7 +107,7 @@ const onReceiveTags = (draft, payload) => {
   }
 
   function getPathByID(id) {
-    return getPath(draft.getByID(id));
+    return getPath(getByID(id));
   }
 
   const roots        = payload.map(x => x.id);
@@ -117,7 +117,7 @@ const onReceiveTags = (draft, payload) => {
   // we keep those in state to avoid recreating them every time a selector is called
   draft.getByID      = getByID;
   draft.getPath      = getPath;
-  draft.getPathByID  = getPathByID
+  draft.getPathByID  = getPathByID;
   draft.roots        = roots;
   draft.displayRoots = displayRoots;
 };

@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { Button, Card, Container, Header, Icon, Image, Segment } from 'semantic-ui-react';
 
-import { sectionLogo } from '../../helpers/images';
+import { SectionLogo } from '../../helpers/images';
 import { selectors } from '../../redux/modules/mdb';
 import { tracePath } from '../../helpers/utils';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
@@ -208,7 +208,9 @@ class SearchResultIntent extends SearchResultBase {
     return (
       <Segment className="search__block">
         <Header as="h2">
-          <Image size="small" src={sectionLogo[type]} verticalAlign="bottom" />
+          <Image size="small" verticalAlign="bottom">
+            <SectionLogo name={type} height='50' width='50' />
+          </Image>
           &nbsp;
           <span>{t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`)}</span>
         </Header>

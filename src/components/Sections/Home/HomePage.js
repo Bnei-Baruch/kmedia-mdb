@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Container, Grid } from 'semantic-ui-react';
-
-import { sectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
 import { strCmp } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
@@ -110,7 +108,7 @@ class HomePage extends Component {
   static renderActiveSections = (t) => {
     const map = x => (
       <Grid.Column mobile={5} tablet={3} computer={3} key={x} textAlign="center">
-        <Topic title={t(`nav.sidebar.${x}`)} img={sectionLogo[x]} href={`/${x}`} />
+        <Topic title={t(`nav.sidebar.${x}`)} src={x} href={`/${x}`} />
       </Grid.Column>
     );
 

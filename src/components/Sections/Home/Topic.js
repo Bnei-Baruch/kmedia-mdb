@@ -1,23 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Header, Image } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 import Link from '../../Language/MultiLanguageLink';
+import { SectionLogo } from '../../../helpers/images';
 
-const Topic = (props) => {
-  const { title, img, href } = props;
-
-  return (
-    <Header size="tiny" as={Link} to={href}>
-      <Image src={img} />
-      <br />
-      {title}
-    </Header>
-  );
-};
+const Topic = ({ title, src, href }) => (
+  <Header size="tiny" as={Link} to={href}>
+    <SectionLogo name={src} />
+    <br />
+    {title}
+  </Header>
+);
 
 Topic.propTypes = {
   title: PropTypes.string.isRequired,
-  img: PropTypes.string.isRequired,
+  src: PropTypes.string.isRequired,
   href: PropTypes.string
 };
 
