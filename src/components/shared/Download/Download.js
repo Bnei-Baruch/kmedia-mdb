@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import { Button, } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 
 const fileDownload = (data, path, mimeType) => {
   const [filename] = path.split('/').slice(-1);
