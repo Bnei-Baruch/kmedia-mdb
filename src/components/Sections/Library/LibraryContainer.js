@@ -180,21 +180,13 @@ class LibraryContainer extends Component {
     return this.firstLeafId(children[0]);
   };
 
-  handleContextRef = (ref) => {
-    this.contextRef = ref;
-  };
+  handleContextRef = (ref) => this.contextRef = ref;
 
-  handleContentArticleRef = (ref) => {
-    this.articleRef = ref;
-  };
+  handleContentArticleRef = (ref) => this.articleRef = ref;
 
-  handleSecondaryHeaderRef = (ref) => {
-    this.secondaryHeaderRef = ref;
-  };
+  handleSecondaryHeaderRef = (ref) => this.secondaryHeaderRef = ref;
 
-  handleContentHeaderRef = (ref) => {
-    this.contentHeaderRef = ref;
-  };
+  handleContentHeaderRef = (ref) => this.contentHeaderRef = ref;
 
   handleTocIsActive = () => {
     const { tocIsActive } = this.state;
@@ -202,7 +194,7 @@ class LibraryContainer extends Component {
   };
 
   handleIsReadable = () => {
-    const { isReadable }   = this.state;
+    const { isReadable }    = this.state;
     const scrollTopPosition = this.getScrollTop();
     this.setState({ isReadable: !isReadable, scrollTopPosition });
   };
@@ -211,13 +203,9 @@ class LibraryContainer extends Component {
    * Get position of scroll
    * @returns {number|*}
    */
-  getScrollTop = () => {
-    return this.state.isReadable ? this.articleRef.scrollTop : document.scrollingElement.scrollTop;
-  };
+  getScrollTop = () => this.state.isReadable ? this.articleRef.scrollTop : document.scrollingElement.scrollTop;
 
-  handleSettings = (setting) => {
-    this.setState(setting);
-  };
+  handleSettings = (setting) => this.setState(setting);
 
   fetchIndices = (sourceId) => {
     const { indexMap, fetchIndex } = this.props;
@@ -311,9 +299,7 @@ class LibraryContainer extends Component {
     );
   };
 
-  handleFilterChange = (e, data) => {
-    this.setState({ match: data.value });
-  };
+  handleFilterChange = (e, data) => this.setState({ match: data.value });
 
   handleFilterKeyDown = (e) => {
     if (e.keyCode === 27) { // Esc
