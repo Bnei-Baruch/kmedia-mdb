@@ -348,7 +348,7 @@ class LibraryContainer extends Component {
       }
     } else {
       const downloadAllowed = deviceInfo.os.name !== 'iOS';
-      content               = (
+      content = (
         <LibraryContentContainer
           source={sourceId}
           index={index}
@@ -378,6 +378,7 @@ class LibraryContainer extends Component {
 
     return (
       <div
+        ref={this.handleContentArticleRef}
         className={classNames({
           source: true,
           'is-readable': isReadable,
