@@ -5,9 +5,11 @@ import { connect } from 'react-redux';
 import { Container, Grid, Header, Button } from 'semantic-ui-react';
 import { getRSSLinkByLang } from '../../helpers/utils';
 import { selectors as settings } from '../../redux/modules/settings';
+import { selectors as device } from '../../redux/modules/device';
 
-const Footer = ({ t, language }) => {
-  const year = new Date().getFullYear();
+const Footer = ({ t, language, deviceInfo }) => {
+  const year     = new Date().getFullYear();
+  const isMobile = deviceInfo.device && deviceInfo.device.type === 'mobile';
 
   return (
     <div className="layout__footer">
@@ -32,7 +34,7 @@ const Footer = ({ t, language }) => {
                 basic
                 inverted
                 bordered={false}
-                floated="right"
+                floated={isMobile ? 'left' : 'right'}
                 href={getRSSLinkByLang(language)} />
             </Grid.Column>
           </Grid.Row>
@@ -47,6 +49,7 @@ Footer.propTypes = {
 };
 
 export default connect(state => ({
-  language: settings.getLanguage(state.settings)
+  language: settings.getLanguage(state.settings),
+  deviceInfo: device.getDeviceInfo(state.device),
 }))(withNamespaces()(Footer));
 
