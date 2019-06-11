@@ -59,6 +59,7 @@ class LibraryContainer extends Component {
     fontSize: 0,
     theme: 'light',
     match: '',
+    scrollTopPosition: 0
   };
 
   componentDidMount() {
@@ -110,8 +111,17 @@ class LibraryContainer extends Component {
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     this.updateSticky();
+    const { isReadable, scrollTopPosition } = this.state;
+    //on change full screen and normal view scroll to position
+    if (prevState.isReadable !== isReadable && this.articleRef) {
+      if (isReadable) {
+        this.articleRef.scrollTop = scrollTopPosition;
+      } else {
+        document.scrollingElement.scrollTop = scrollTopPosition;
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -170,17 +180,13 @@ class LibraryContainer extends Component {
     return this.firstLeafId(children[0]);
   };
 
-  handleContextRef = (ref) => {
-    this.contextRef = ref;
-  };
+  handleContextRef = (ref) => this.contextRef = ref;
 
-  handleSecondaryHeaderRef = (ref) => {
-    this.secondaryHeaderRef = ref;
-  };
+  handleContentArticleRef = (ref) => this.articleRef = ref;
 
-  handleContentHeaderRef = (ref) => {
-    this.contentHeaderRef = ref;
-  };
+  handleSecondaryHeaderRef = (ref) => this.secondaryHeaderRef = ref;
+
+  handleContentHeaderRef = (ref) => this.contentHeaderRef = ref;
 
   handleTocIsActive = () => {
     const { tocIsActive } = this.state;
@@ -188,13 +194,18 @@ class LibraryContainer extends Component {
   };
 
   handleIsReadable = () => {
-    const { isReadable } = this.state;
-    this.setState({ isReadable: !isReadable });
+    const { isReadable }    = this.state;
+    const scrollTopPosition = this.getScrollTop();
+    this.setState({ isReadable: !isReadable, scrollTopPosition });
   };
 
-  handleSettings = (setting) => {
-    this.setState(setting);
-  };
+  /**
+   * Get position of scroll
+   * @returns {number|*}
+   */
+  getScrollTop = () => this.state.isReadable ? this.articleRef.scrollTop : document.scrollingElement.scrollTop;
+
+  handleSettings = (setting) => this.setState(setting);
 
   fetchIndices = (sourceId) => {
     const { indexMap, fetchIndex } = this.props;
@@ -288,9 +299,7 @@ class LibraryContainer extends Component {
     );
   };
 
-  handleFilterChange = (e, data) => {
-    this.setState({ match: data.value });
-  };
+  handleFilterChange = (e, data) => this.setState({ match: data.value });
 
   handleFilterKeyDown = (e) => {
     if (e.keyCode === 27) { // Esc
@@ -369,6 +378,7 @@ class LibraryContainer extends Component {
 
     return (
       <div
+        ref={this.handleContentArticleRef}
         className={classNames({
           source: true,
           'is-readable': isReadable,
