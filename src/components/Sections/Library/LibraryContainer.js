@@ -111,7 +111,7 @@ class LibraryContainer extends Component {
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     this.updateSticky();
     const { isReadable, scrollTopPosition } = this.state;
     //on change full screen and normal view scroll to position
@@ -348,7 +348,7 @@ class LibraryContainer extends Component {
       }
     } else {
       const downloadAllowed = deviceInfo.os.name !== 'iOS';
-      content = (
+      content               = (
         <LibraryContentContainer
           source={sourceId}
           index={index}
