@@ -1051,7 +1051,7 @@
       width: auto;
     }
 
-    img {
+    img, style, .bwg_container  {
       display: none !important;
     }
 
@@ -1354,6 +1354,10 @@
   margin-right: 8px !important;
 }
 
+.margin-left-8{
+  margin-left: 8px !important;
+}
+
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   select,
   textarea,
@@ -1407,14 +1411,29 @@
 .logo svg {
   display: none !important;
 }
+
 @media only screen and (min-width: $largeMonitorBreakpoint) {
   .logo svg {
     display: inline-block !important;
   }
 }
+
 .ui.menu .item>svg:not(.ui) {
   display: inline-block;
   vertical-align: middle;
   margin: -.3em 0;
   width: 2.5em;
+
+.ui.top.left.popup {
+  &.filter-popup {
+    top: 0 !important;
+    overflow: auto !important;
+  }
+}
+
+.ui.top.right.popup {
+  &.filter-popup {
+    top: 0 !important;
+    overflow: auto !important;
+  }
 }

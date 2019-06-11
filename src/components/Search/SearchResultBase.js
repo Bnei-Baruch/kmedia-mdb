@@ -92,7 +92,7 @@ class SearchResultBase extends Component {
     return h ? `${h}:${m}:${s}` : `${m}:${s}`;
   }
 
-  click = (mdbUid, index, type, rank, searchId) => {
+  logClick = (mdbUid, index, type, rank, searchId) => {
     const { click, location } = this.props;
     const deb                 = isDebMode(location);
     click(mdbUid, index, type, rank, searchId, deb);
@@ -140,7 +140,7 @@ class SearchResultBase extends Component {
     return (
       <Link
         key={data.type}
-        onClick={() => this.click(mdbUid, index, resultType, rank, searchId)}
+        onClick={() => this.logClick(mdbUid, index, resultType, rank, searchId)}
         contentLanguage={contentLanguage}
         to={to}
       >

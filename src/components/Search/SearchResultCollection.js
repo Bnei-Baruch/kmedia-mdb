@@ -18,13 +18,22 @@ class SearchResultCollection extends SearchResultBase {
 
   state = { isImgLoaded: false };
 
-  renderCU = cu => (
-    <Link key={cu.id} to={canonicalLink(cu, this.getMediaLanguage(this.props.filters))}>
-      <Button basic size="tiny" className="link_to_cu">
-        {cu.name}
-      </Button>
-    </Link>
-  );
+  renderCU = cu => {
+    const { queryResult, hit, rank }             = this.props;
+    const { _index: index, _type: type, _source: { mdb_uid: mdbUid } } = hit;
+    const { search_result: { searchId } } = queryResult;
+      
+    return (
+      <Link
+        key={cu.id}
+        onClick={() => this.logClick(mdbUid, index, type, rank, searchId)}
+        to={canonicalLink(cu, this.getMediaLanguage(this.props.filters))}>
+        <Button basic size="tiny" className="link_to_cu">
+          {cu.name}
+        </Button>
+      </Link>
+    );
+  }
 
   handleImageContextRef = (ref) => {
     if (ref) {
@@ -72,7 +81,7 @@ class SearchResultCollection extends SearchResultBase {
             <Container as="h3">
               <Link
                 className="search__link"
-                onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+                onClick={() => this.logClick(mdbUid, index, type, rank, searchId)}
                 to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}
               >
                 {this.titleFromHighlight(highlight, c.name)}
@@ -81,7 +90,7 @@ class SearchResultCollection extends SearchResultBase {
 
             <Container className="content">
               <Link
-                onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+                onClick={() => this.logClick(mdbUid, index, type, rank, searchId)}
                 to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}
               >
                 {this.iconByContentType(c.content_type, true)}
@@ -100,7 +109,7 @@ class SearchResultCollection extends SearchResultBase {
             {c.content_units.slice(0, 5).map(this.renderCU)}
 
             <Link
-              onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+              onClick={() => this.logClick(mdbUid, index, type, rank, searchId)}
               to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}
               className="margin-right-8"
             >

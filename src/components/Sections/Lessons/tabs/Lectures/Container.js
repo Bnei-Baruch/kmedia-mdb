@@ -12,6 +12,8 @@ import Link from '../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
 
 const renderUnit = (unit, t, namespace) => {
+  if (!unit)
+    return null;
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
   const lectures  = breakdown.getLectures();
   const map = x => (

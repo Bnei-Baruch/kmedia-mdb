@@ -89,14 +89,18 @@ class SearchResultIntent extends SearchResultBase {
   };
 
   renderItem = (cu) => {
+    const { t, queryResult, hit, rank }             = this.props;
+    const { _index: index, _type: type, _source: { mdb_uid: mdbUid } } = hit;
+    const { search_result: { searchId } } = queryResult;
+
     let thumbUrl = assetUrl(`api/thumbnail/${cu.id}`);
     if (!thumbUrl.startsWith('http')) {
       thumbUrl = `http://localhost${thumbUrl}`;
     }
 
-    const imgParams = Requests.makeParams({ url: thumbUrl, width: 250 });
+    const imgParams = Requests.makeParams({ url: thumbUrl, width: 250, stripmeta: true });
     const src       = `${imaginaryUrl('thumbnail')}?${imgParams}`;
-    const filmDate  = cu.film_date ? this.props.t('values.date', { date: cu.film_date }) : '';
+    const filmDate  = cu.film_date ? t('values.date', { date: cu.film_date }) : '';
 
     return (
       <Card key={cu.id} className="search__card bg_hover_grey" raised>
@@ -112,6 +116,7 @@ class SearchResultIntent extends SearchResultBase {
           <Card.Header as="h3">
             <Link
               className="search__link"
+              onClick={() => this.logClick(mdbUid, index, type, rank, searchId)}
               to={canonicalLink(cu, this.getMediaLanguage(this.props.filters))}
             >
               {cu.name}
@@ -123,7 +128,7 @@ class SearchResultIntent extends SearchResultBase {
             <strong>{filmDate}</strong>
           </Card.Meta>
           <Card.Description>
-            {this.renderFiles(cu)}
+            {this.renderFiles(cu, mdbUid, index, type, rank, searchId)}
             <div className="clear" />
           </Card.Description>
         </Card.Content>
@@ -219,7 +224,7 @@ class SearchResultIntent extends SearchResultBase {
             <Header as="h3" color="blue">
               <Link
                 className="search__link"
-                onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+                onClick={() => this.logClick(mdbUid, index, type, rank, searchId)}
                 to={intentSectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}
               >
                 {this.titleFromHighlight(highlight, display)}
@@ -229,7 +234,7 @@ class SearchResultIntent extends SearchResultBase {
           <Segment textAlign={isMobileDevice() ? 'left' : 'right'} className="no-padding  no-border">
             <Icon name="tasks" size="small" />
             <Link
-              onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+              onClick={() => this.logClick(mdbUid, index, type, rank, searchId)}
               to={intentSectionLink(section, [{ name: filterName, value: mdbUid, getFilterById }])}
             >
               <span>{`${t('search.showAll')} ${this.props.total} ${t(`search.${resultsType}`)}`}</span>
@@ -260,7 +265,7 @@ const mapState = (state, ownProps) => {
   return {
     namespace,
     unitCounter,
-    items: (nsState.items || []).map(x => selectors.getDenormContentUnit(state.mdb, x)),
+    items: (nsState.items || []).map(x => selectors.getDenormContentUnit(state.mdb, x)).filter(item => item),
     wip: nsState.wip,
     err: nsState.err,
     total: nsState.total,
