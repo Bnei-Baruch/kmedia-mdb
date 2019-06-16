@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { Button, Header, Image, Table } from 'semantic-ui-react';
+import { Button, Header, Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
-import { sectionLogo } from '../../../helpers/images';
+import { SectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
 import { stringify as urlSearchStringify } from '../../../helpers/url';
 import { filtersTransformer } from '../../../filters/index';
@@ -22,7 +22,7 @@ class TopN extends React.PureComponent {
   };
 
   state = {
-    topNUnits: []
+    topNUnits: [],
   };
 
   componentDidMount() {
@@ -61,14 +61,7 @@ class TopN extends React.PureComponent {
     return `/${language}/${section}?${urlSearchStringify(query)}`;
   };
 
-  compareUnits = (a, b) => {
-    let ans = -1;
-    if (a && b && a.film_date <= b.film_date) {
-      ans = 1;
-    }
-
-    return ans;
-  };
+  compareUnits = (a, b) => (a && b && a.film_date <= b.film_date) ? 1 : -1;
 
   renderUnit = (unit, t) => {
     const link   = canonicalLink(unit);
@@ -102,7 +95,7 @@ class TopN extends React.PureComponent {
               <Table.Row>
                 <Table.HeaderCell>
                   <Header as="h3">
-                    <Image src={sectionLogo[section]} />
+                    <SectionLogo name={section} />
                     {t(`nav.sidebar.${section}`)}
                   </Header>
                 </Table.HeaderCell>

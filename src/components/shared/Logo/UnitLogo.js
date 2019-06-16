@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
 import FallbackImage from '../FallbackImage';
-import imagePlaceholder from '../../../images/image.png';
 
 class UnitLogo extends PureComponent {
   static propTypes = {
@@ -19,7 +18,7 @@ class UnitLogo extends PureComponent {
     collectionId: null,
     width: 120,
     className: '',
-    fallbackImg: imagePlaceholder,
+    fallbackImg: 'default',
   };
 
   render() {
@@ -30,14 +29,15 @@ class UnitLogo extends PureComponent {
       src = `http://localhost${src}`;
     }
     const params = Requests.makeParams({ url: src, width, stripmeta: true, });
-    src = `${imaginaryUrl('thumbnail')}?${params}`;
+    src          = `${imaginaryUrl('thumbnail')}?${params}`;
 
-    const fallback = fallbackImg || imagePlaceholder;
+    const fallback = fallbackImg || 'default';
 
     return (
       <FallbackImage
         {...rest}
         src={src}
+        width={width}
         className={`unit-logo ${className}`}
         fallbackImage={[
           collectionId ? assetUrl(`logos/collections/${collectionId}.png`) : null,

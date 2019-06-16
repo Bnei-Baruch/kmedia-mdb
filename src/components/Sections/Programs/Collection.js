@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
-import { sectionThumbnailFallback } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
 import { ellipsize } from '../../../helpers/strings';
 import Link from '../../Language/MultiLanguageLink';
@@ -21,7 +20,7 @@ export const renderUnit = (unit, t) => {
     <Table.Row key={unit.id} verticalAlign="top">
       <Table.Cell collapsing singleLine>
         <Link to={link}>
-          <UnitLogo className="index__thumbnail" unitId={unit.id} fallbackImg={sectionThumbnailFallback.programs} />
+          <UnitLogo className="index__thumbnail" unitId={unit.id} fallbackImg='programs' />
         </Link>
       </Table.Cell>
       <Table.Cell>
