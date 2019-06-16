@@ -399,7 +399,7 @@ class AVPlayer extends PureComponent {
   };
 
   hideControls = () => {
-    if (this.wrapperMouseY < this.wrapperRect.height - this.controlsRect.height) {
+    if (!this.mouseEnter || this.wrapperMouseY < this.wrapperRect.height - this.controlsRect.height) {
       this.setState({ controlsVisible: false });
     } else {
       if (this.autohideTimeoutId) {
@@ -416,9 +416,15 @@ class AVPlayer extends PureComponent {
     }
   };
 
-  handleWrapperMouseEnter = () => this.showControls();
+  handleWrapperMouseEnter = () => {
+    this.mouseEnter = true;
+    this.showControls();
+  };
 
-  handleWrapperMouseLeave = () => this.hideControls();
+  handleWrapperMouseLeave = () => {
+    this.mouseEnter = false;
+    this.hideControls();
+  };
 
   handleWrapperMouseMove = (e) => {
     const { controlsVisible } = this.state;
