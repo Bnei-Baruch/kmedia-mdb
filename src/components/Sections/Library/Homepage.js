@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Container, Divider, Table } from 'semantic-ui-react';
 
 import { isEmpty } from '../../../helpers/utils';
@@ -32,8 +32,9 @@ const renderKabbalists = ({ roots, getSourceById }) => (
   )
 );
 
-const Homepage = (props) => {
-  const { roots, getSourceById } = props;
+const Homepage = () => {
+  const roots         = useSelector(state => sources.getRoots(state.sources));
+  const getSourceById = useSelector(state => sources.getSourceById(state.sources));
 
   return (
     <div>
@@ -55,9 +56,4 @@ Homepage.propTypes = {
   getSourceById: PropTypes.func.isRequired,
 };
 
-export default connect(
-  state => ({
-    roots: sources.getRoots(state.sources),
-    getSourceById: sources.getSourceById(state.sources),
-  })
-)(Homepage);
+export default Homepage;

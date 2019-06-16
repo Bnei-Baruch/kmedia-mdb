@@ -30,8 +30,8 @@ const sectionLogo = {
 };
 
 export const SectionLogo = ({ name, ...props }) => {
-  const SLogo = sectionLogo[name];
-  return <SLogo {...props} />;
+  const Logo = sectionLogo[name];
+  return <Logo {...props} />;
 };
 
 const sectionThumbnailFallback = {
@@ -45,6 +45,6 @@ const sectionThumbnailFallback = {
 };
 
 export const SectionThumbnailFallback = ({ name, ...props }) => {
-  const STFallback = sectionThumbnailFallback[name];
-  return <STFallback {...props} />;
+  const Fallback = sectionThumbnailFallback[name];
+  return <Fallback {...props} />;
 };
