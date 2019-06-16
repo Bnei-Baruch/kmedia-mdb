@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_FRIENDS_GATHERING, CT_MEAL, NO_NAME } from '../../../../../helpers/consts';
-import { sectionThumbnailFallback } from '../../../../../helpers/images';
 import { canonicalLink } from '../../../../../helpers/links';
 import { CollectionsBreakdown } from '../../../../../helpers/mdb';
 import { ellipsize } from '../../../../../helpers/strings';
@@ -33,7 +32,7 @@ const renderUnit = (unit, t) => {
     <Table.Row key={unit.id} verticalAlign="top">
       <Table.Cell collapsing width={1}>
         <Link to={link}>
-          <UnitLogo className="index__thumbnail" unitId={unit.id} fallbackImg={sectionThumbnailFallback.events} />
+          <UnitLogo className="index__thumbnail" unitId={unit.id} fallbackImg='events' />
         </Link>
       </Table.Cell>
       <Table.Cell>

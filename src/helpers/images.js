@@ -9,12 +9,14 @@ import PublicationsIcon from '../images/icons/Publications';
 import DownloadIcon from '../images/icons/Download';
 import InfoIcon from '../images/icons/Info';
 
-import DailyLessonsFallbackIcon from '../images/fallbacks/dailylessons-fallback.svg';
-import ProgramsFallbackIcon from '../images/fallbacks/programs-fallback.svg';
-import LecturesFallbackIcon from '../images/fallbacks/lectures-fallback.svg';
-import SourcesFallbackIcon from '../images/fallbacks/sources-fallback.svg';
-import EventsFallbackIcon from '../images/fallbacks/events-fallback.svg';
-import PublicationsFallbackIcon from '../images/fallbacks/publications-fallback.svg';
+import DailyLessonsFallbackIcon from '../images/fallbacks/DailylessonsFallback';
+import ProgramsFallbackIcon from '../images/fallbacks/ProgramsFallback';
+import LecturesFallbackIcon from '../images/fallbacks/LecturesFallback';
+import SourcesFallbackIcon from '../images/fallbacks/SourcesFallback';
+import EventsFallbackIcon from '../images/fallbacks/EventsFallback';
+import PublicationsFallbackIcon from '../images/fallbacks/PublicationsFallback';
+
+import ImagePlaceholder from '../images/Image';
 
 const sectionLogo = {
   lessons: DailyLessonsIcon,
@@ -28,15 +30,21 @@ const sectionLogo = {
 };
 
 export const SectionLogo = ({ name, ...props }) => {
-  const Logo = sectionLogo[name];
-  return <Logo {...props} />;
+  const SLogo = sectionLogo[name];
+  return <SLogo {...props} />;
 };
 
-export const sectionThumbnailFallback = {
+const sectionThumbnailFallback = {
   lessons: DailyLessonsFallbackIcon,
   programs: ProgramsFallbackIcon,
   lectures: LecturesFallbackIcon,
   sources: SourcesFallbackIcon,
   events: EventsFallbackIcon,
   publications: PublicationsFallbackIcon,
+  default: ImagePlaceholder,
+};
+
+export const SectionThumbnailFallback = ({ name, ...props }) => {
+  const STFallback = sectionThumbnailFallback[name];
+  return <STFallback {...props} />;
 };

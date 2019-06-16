@@ -3,15 +3,11 @@ import { Container, Header, Item } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../../helpers/links';
 import { formatDuration, neighborIndices } from '../../../helpers/utils';
-import { sectionThumbnailFallback } from '../../../helpers/images';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
 import { UnitContainer, wrap as wrapContainer } from '../../Pages/Unit/Container';
 import { UnitPage, wrap as wrapPage } from '../../Pages/Unit/Page';
-import {
-  SameCollectionContainer,
-  wrap as wrapSameCollectionContainer
-} from '../../Pages/Unit/widgets/Recommended/SameCollection/Container';
+import { SameCollectionContainer, wrap as wrapSameCollectionContainer } from '../../Pages/Unit/widgets/Recommended/SameCollection/Container';
 import Info from '../../Pages/Unit/widgets/Info/Info';
 import SameCollectionWidget from '../../Pages/Unit/widgets/Recommended/SameCollection/Widget';
 
@@ -40,7 +36,7 @@ class MySameCollectionWidget extends SameCollectionWidget {
                 className="recommended-same-collection__item"
               >
                 <Item.Image size="small">
-                  <UnitLogo unitId={part.id} collectionId={collection.id} fallbackImg={sectionThumbnailFallback.events} width={150} />
+                  <UnitLogo unitId={part.id} collectionId={collection.id} fallbackImg='events' width={150} />
                 </Item.Image>
                 <Item.Content verticalAlign="top">
                   <Header as="h5">

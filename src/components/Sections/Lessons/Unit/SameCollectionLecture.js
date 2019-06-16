@@ -1,7 +1,6 @@
 import React from 'react';
 import { Container, Header, Item } from 'semantic-ui-react';
 
-import { sectionThumbnailFallback } from '../../../../helpers/images';
 import { canonicalLink } from '../../../../helpers/links';
 import { formatDuration, neighborIndices } from '../../../../helpers/utils';
 import Link from '../../../Language/MultiLanguageLink';
@@ -37,7 +36,7 @@ class MySameCollectionWidget extends SameCollectionWidget {
                     unitId={part.id}
                     collectionId={collection.id}
                     width={150}
-                    fallbackImg={sectionThumbnailFallback.lectures}
+                    fallbackImg='lectures'
                   />
                 </Item.Image>
                 <Item.Content verticalAlign="top">
