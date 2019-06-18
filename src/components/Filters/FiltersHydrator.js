@@ -48,6 +48,11 @@ class FiltersHydrator extends Component {
     return { isHydrated };
   }
 
+  componentWillUnmount() {
+    const { filtersHydrated, namespace } = this.props;
+    filtersHydrated(namespace);
+  }
+
   render() {
     return <Fragment />;
   }
