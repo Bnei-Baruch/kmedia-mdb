@@ -283,7 +283,7 @@ class SearchResultBase extends Component {
   };
 
   fileDuration = (files) => {
-    const fileWithDuration = files.find(f => f.type === 'video' || f.type === 'audio');
+    const fileWithDuration = files ? files.find(f => f.type === 'video' || f.type === 'audio') : null;
     return (
       fileWithDuration
         ? <Label as="span" size="small">{formatDuration(fileWithDuration.duration)}</Label>
