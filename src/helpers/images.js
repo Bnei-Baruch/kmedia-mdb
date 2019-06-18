@@ -31,7 +31,7 @@ const sectionLogo = {
 
 export const SectionLogo = ({ name, ...props }) => {
   const Logo = sectionLogo[name];
-  return <Logo {...props} />;
+  return <Logo {...props} width="50" height="50"/>;
 };
 
 const sectionThumbnailFallback = {

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Container, Divider, Table } from 'semantic-ui-react';
 
@@ -49,11 +48,6 @@ const Homepage = () => {
       </Container>
     </div>
   );
-};
-
-Homepage.propTypes = {
-  roots: PropTypes.arrayOf(PropTypes.string).isRequired,
-  getSourceById: PropTypes.func.isRequired,
 };
 
 export default Homepage;

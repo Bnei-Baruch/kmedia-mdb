@@ -185,7 +185,7 @@ class Layout extends Component {
               </Menu.Item>
             </Ref>
             <Menu.Item className="logo" header as={Link} to="/">
-              <Logo />
+              <Logo width="40" height="40"/>
               <Header inverted as="h1" content={t('nav.top.header')} />
             </Menu.Item>
             <Menu.Item className="layout__search mobile-hidden">

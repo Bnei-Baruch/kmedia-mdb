@@ -89,13 +89,13 @@ class FallbackImage extends Component {
     const { fallbackImage, onLoad, onError, width = 'auto', height = 'auto', ...rest } = this.props;
 
     if (!this.state.imageSource.match(/^http/)) {
-      return <SectionThumbnailFallback name={this.state.imageSource} width={width} height={height}/>;
+      return <div className="ui image unit-logo"><SectionThumbnailFallback name={this.state.imageSource} width={width} height={height} /></div>;
     }
 
     return <Image
       {...rest}
       src={this.state.imageSource}
-      style={{ 'width': `${width}px`, 'height': `${height}px` }} />;
+    />;
   }
 }
 
