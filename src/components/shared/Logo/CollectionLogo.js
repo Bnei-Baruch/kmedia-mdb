@@ -11,7 +11,7 @@ const CollectionLogo = (props) => {
     <FallbackImage
       fluid
       shape="rounded"
-      className="collection-logo"
+      className="collection-logo ui fluid image"
       src={assetUrl(`logos/collections/${collectionId}.jpg`)}
       {...rest}
     />

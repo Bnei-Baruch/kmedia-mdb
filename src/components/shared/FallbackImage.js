@@ -86,13 +86,22 @@ class FallbackImage extends Component {
   };
 
   render() {
-    const { fallbackImage, onLoad, onError, width = 'auto', height = 'auto', ...rest } = this.props;
+    const { fallbackImage, className, onLoad, onError, width = 'auto', height = 'auto', ...rest } = this.props;
+
+    if (this.state.imageSource === null) {
+      /* There is no fallbacks and src was not found */
+      return null;
+    }
 
     if (!this.state.imageSource.match(/^http/)) {
-      return <div className="ui image unit-logo"><SectionThumbnailFallback name={this.state.imageSource} width={width} height={height} /></div>;
+      return (
+        <div className={className}>
+          <SectionThumbnailFallback name={this.state.imageSource} width={width} height={height} />
+        </div>);
     }
 
     return <Image
+      className={className}
       {...rest}
       src={this.state.imageSource}
     />;
