@@ -157,15 +157,15 @@ class MediaDownloads extends Component {
   getI18nTypeOverridesKey = () => {
     const { unit } = this.props;
     switch (unit.content_type) {
-      case CT_LESSON_PART:
-      case CT_FULL_LESSON:
-        return 'lesson';
-      case CT_VIDEO_PROGRAM_CHAPTER:
-        return 'program';
-      case CT_ARTICLE:
-        return 'publication';
-      default:
-        return '';
+    case CT_LESSON_PART:
+    case CT_FULL_LESSON:
+      return 'lesson';
+    case CT_VIDEO_PROGRAM_CHAPTER:
+      return 'program';
+    case CT_ARTICLE:
+      return 'publication';
+    default:
+      return '';
     }
   };
 
