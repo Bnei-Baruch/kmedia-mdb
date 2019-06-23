@@ -11323,11 +11323,6 @@ react-scripts@2.1.8:
   optionalDependencies:
     fsevents "1.2.4"
 
-react-scroll-into-view@^1.2.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/react-scroll-into-view/-/react-scroll-into-view-1.5.0.tgz#c77937f6f9eae8b307d55d7bab98afecf2206246"
-  integrity sha512-q911hjgM9gndHyCFzf1zrZkXu8POmz/N5EP5yGhCIyVYkJJDfsX7e3UmkM4SGIJw9UMWnk+5Q43YpSItUaC7Ag==
-
 react-share@^2.0.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/react-share/-/react-share-2.4.0.tgz#e033316760cfe3265bf0cb031373a7564dbf92f5"
