@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Grid, Container, Card, Divider } from 'semantic-ui-react';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Card, Container, Divider, Grid } from 'semantic-ui-react';
 
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN } from '../../../helpers/consts';
 import { assetUrl } from '../../../helpers/Api';
@@ -109,80 +108,70 @@ const texts = [
   },
 ];
 
-class HelpPage extends Component {
-  static propTypes = {
-    language: PropTypes.string.isRequired
-  };
+const HelpPage = () => {
+  const language = useSelector(state => settings.getLanguage(state.settings));
 
-  render() {
-    const { language } = this.props;
-
-    let lang = language;
-    switch (lang) {
-    case LANG_HEBREW:
-      lang = LANG_HEBREW;
-      break;
-      // case LANG_UKRAINIAN:
-      // case LANG_RUSSIAN:
-      //   lang = LANG_RUSSIAN;
-      //   break;
-    default:
-      lang = LANG_ENGLISH;
-      break;
-    }
-
-    let c    = clips;
-    let txts = texts;
-    if (lang !== LANG_HEBREW) {
-      c = [...clips];
-      c.splice(4, 1); // remove 4-2 in other langs
-      txts = [...texts];
-      txts.splice(4, 1); // remove 4-2 in other langs
-    }
-
-    return (
-      <div>
-        <SectionHeader section="help" />
-        <Divider hidden />
-        <Container>
-          <Grid stackable columns={3}>
-            {
-              c.map((x, i) => (
-                <Grid.Column key={x}>
-                  <Card fluid>
-                    <Card.Content>
-                      <Card.Header>{txts[i].title[lang]}</Card.Header>
-                    </Card.Content>
-                    <Card.Content>
-                      <div>
-                        <video
-                          controls
-                          playsInline
-                          preload="metadata"
-                          type="video/mp4"
-                          src={assetUrl(`help/${lang}/clip${x}.mp4`)}
-                          poster={assetUrl(`help/clip${x}.jpg`)}
-                          style={{ width: '100%', height: 'auto' }}
-                        />
-                      </div>
-                    </Card.Content>
-                    <Card.Content>
-                      {txts[i].description[lang]}
-                    </Card.Content>
-                  </Card>
-                </Grid.Column>
-              ))
-            }
-          </Grid>
-        </Container>
-        <Divider hidden />
-      </div>
-    );
+  let lang = language;
+  switch (lang) {
+  case LANG_HEBREW:
+    lang = LANG_HEBREW;
+    break;
+    // case LANG_UKRAINIAN:
+    // case LANG_RUSSIAN:
+    //   lang = LANG_RUSSIAN;
+    //   break;
+  default:
+    lang = LANG_ENGLISH;
+    break;
   }
-}
 
-const mapState = state => ({
-  language: settings.getLanguage(state.settings),
-});
+  let c    = clips;
+  let txts = texts;
+  if (lang !== LANG_HEBREW) {
+    c = [...clips];
+    c.splice(4, 1); // remove 4-2 in other langs
+    txts = [...texts];
+    txts.splice(4, 1); // remove 4-2 in other langs
+  }
 
-export default connect(mapState)(HelpPage);
+  return (
+    <div>
+      <SectionHeader section="help" />
+      <Divider hidden />
+      <Container>
+        <Grid stackable columns={3}>
+          {
+            c.map((x, i) => (
+              <Grid.Column key={x}>
+                <Card fluid>
+                  <Card.Content>
+                    <Card.Header>{txts[i].title[lang]}</Card.Header>
+                  </Card.Content>
+                  <Card.Content>
+                    <div>
+                      <video
+                        controls
+                        playsInline
+                        preload="metadata"
+                        type="video/mp4"
+                        src={assetUrl(`help/${lang}/clip${x}.mp4`)}
+                        poster={assetUrl(`help/clip${x}.jpg`)}
+                        style={{ width: '100%', height: 'auto' }}
+                      />
+                    </div>
+                  </Card.Content>
+                  <Card.Content>
+                    {txts[i].description[lang]}
+                  </Card.Content>
+                </Card>
+              </Grid.Column>
+            ))
+          }
+        </Grid>
+      </Container>
+      <Divider hidden />
+    </div>
+  );
+};
+
+export default HelpPage;

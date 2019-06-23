@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
 import { Container, Grid, Segment } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
 
@@ -10,17 +9,21 @@ import { formatError } from '../../../helpers/utils';
 import { actions, selectors } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
+import * as shapes from '../../shapes';
 
 const LibraryPerson = (props) => {
-  const { sourceId, fetchPerson, language } = props;
+  const { match: { params: { id: sourceId } }, t } = props;
+
+  const language                    = useSelector(state => settings.getLanguage(state.settings));
+  const { wip, err, data: content } = useSelector(state => selectors.getPerson(state.assets));
+  const dispatch                    = useDispatch();
+
   useEffect(
     () => {
-      fetchPerson({ sourceId, language });
+      dispatch(actions.fetchPerson({ sourceId, language }));
     },
-    [sourceId, fetchPerson, language]
+    [sourceId, language, dispatch]
   );
-
-  const { person: { wip, err, data: content }, t } = props;
 
   if (err) {
     if (err.response && err.response.status === 404) {
@@ -49,19 +52,8 @@ const LibraryPerson = (props) => {
 };
 
 LibraryPerson.propTypes = {
-  sourceId: PropTypes.string.isRequired,
-  language: PropTypes.string.isRequired,
-  fetchPerson: PropTypes.func.isRequired,
+  match: shapes.RouterMatch.isRequired,
   t: PropTypes.func.isRequired,
 };
 
-export default withRouter(connect(
-  (state, ownProps) => ({
-    sourceId: ownProps.match.params.id,
-    language: settings.getLanguage(state.settings),
-    person: selectors.getPerson(state.assets),
-  }),
-  dispatch => bindActionCreators({
-    fetchPerson: actions.fetchPerson,
-  }, dispatch)
-)(withNamespaces()(LibraryPerson)));
+export default withRouter(withNamespaces()(LibraryPerson));

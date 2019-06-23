@@ -46,7 +46,7 @@ class Sketches extends React.Component {
       .map(file => file.language)
       .filter((v, i, a) => a.indexOf(v) === i);
 
-    const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+    const language = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
     return { languages, language };
   };
 
@@ -79,14 +79,14 @@ class Sketches extends React.Component {
     languages: null,
     language: null,
   };
-  
+
   isPropsChanged = (prevProps) => {
     const { unit, zipIndexById, contentLanguage, uiLanguage } = this.props;
 
     return prevProps.contentLanguage !== contentLanguage
       || prevProps.uiLanguage !== uiLanguage
       || prevProps.unit.id !== unit.id
-      || !isEqual(prevProps.zipIndexById, zipIndexById)
+      || !isEqual(prevProps.zipIndexById, zipIndexById);
   };
 
   isStateChanged = (prevState) => {
@@ -101,25 +101,23 @@ class Sketches extends React.Component {
     const propsChanged = this.isPropsChanged(nextProps);
     const stateChanged = this.isStateChanged(nextState);
 
-    return propsChanged || stateChanged; 
+    return propsChanged || stateChanged;
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.processUnit();
   }
 
   componentDidUpdate(prevProps, prevState) {
     const { unit, contentLanguage, uiLanguage } = this.props;
 
-    if (prevProps.unit.id !== unit.id || !prevState.zipFiles){
+    if (prevProps.unit.id !== unit.id || !prevState.zipFiles) {
       // full reset
       this.processUnit();
-    }
-    else if (prevProps.contentLanguage !== contentLanguage 
-          || prevProps.uiLanguage !== uiLanguage){
+    } else if (prevProps.contentLanguage !== contentLanguage
+      || prevProps.uiLanguage !== uiLanguage) {
       this.setStateByZipFiles(prevState.zipFiles, contentLanguage, uiLanguage, unit);
-    }
-    else if (prevState.language !== this.state.language) {
+    } else if (prevState.language !== this.state.language) {
       const { zipFiles, language } = this.state;
 
       if (zipFiles && Array.isArray(zipFiles)) {
@@ -134,25 +132,24 @@ class Sketches extends React.Component {
 
   processUnit = () => {
     const { unit, contentLanguage, uiLanguage } = this.props;
-    const zipFiles = Sketches.getUnitSketchFiles(unit);
+    const zipFiles                              = Sketches.getUnitSketchFiles(unit);
 
     if (zipFiles) {
       this.setStateByZipFiles(zipFiles, contentLanguage, uiLanguage, unit);
     }
-  }
+  };
 
   setStateByZipFiles = (zipFiles, contentLanguage, uiLanguage, unit) => {
     const { languages, language } = Sketches.getFilesLanguages(zipFiles, contentLanguage, uiLanguage);
-    const itemState = this.getItemState(zipFiles, language, unit);
+    const itemState               = this.getItemState(zipFiles, language, unit);
 
     this.setState({ zipFiles, languages, language, ...itemState });
-  }
+  };
 
   getItemState = (zipFiles, language, unit) => {
-    const files = Sketches.filterZipFiles(zipFiles, language, unit.original_language);
-    const itemState = this.getStateByFile(files);
-    return itemState;
-  }
+    const files     = Sketches.filterZipFiles(zipFiles, language, unit.original_language);
+    return this.getStateByFile(files);
+  };
 
   // get one zip file or array of image files or one image file
   getStateByFile = (file) => {
@@ -209,7 +206,7 @@ class Sketches extends React.Component {
       thumbSrc = `http://localhost${src}`;
     }
     const thumbParams = Requests.makeParams({ url: thumbSrc, width: 100, stripmeta: true });
-    thumbSrc = `${imaginaryUrl('thumbnail')}?${thumbParams}`;
+    thumbSrc          = `${imaginaryUrl('thumbnail')}?${thumbParams}`;
 
     return {
       original: src,
