@@ -7,12 +7,18 @@ import { selectors as settings } from '../../../../../../redux/modules/settings'
 import * as shapes from '../../../../../shapes';
 import Transcription from './Transcription';
 
+const useTranscriptionContainer = () => {
+  const doc2htmlById    = useSelector(state => selectors.getDoc2htmlById(state.assets));
+  const language        = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
+  const dispatch        = useDispatch();
+
+  return { doc2htmlById, language, contentLanguage, dispatch };
+};
+
 const TranscriptionContainer = (props) => {
-  const { unit, type = null } = props;
-  const doc2htmlById          = useSelector(state => selectors.getDoc2htmlById(state.assets));
-  const language              = useSelector(state => settings.getLanguage(state.settings));
-  const contentLanguage       = useSelector(state => settings.getContentLanguage(state.settings));
-  const dispatch              = useDispatch();
+  const { unit, type = null }                               = props;
+  const [doc2htmlById, language, contentLanguage, dispatch] = useTranscriptionContainer();
 
   const handleContentChange = (id) => {
     dispatch(actions.doc2html(id));

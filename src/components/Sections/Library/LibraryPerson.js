@@ -11,12 +11,17 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
 import * as shapes from '../../shapes';
 
-const LibraryPerson = (props) => {
-  const { match: { params: { id: sourceId } }, t } = props;
-
+const useLibraryPerson = () => {
   const language                    = useSelector(state => settings.getLanguage(state.settings));
   const { wip, err, data: content } = useSelector(state => selectors.getPerson(state.assets));
   const dispatch                    = useDispatch();
+
+  return { language, wip, err, content, dispatch };
+};
+
+const LibraryPerson = (props) => {
+  const { match: { params: { id: sourceId } }, t } = props;
+  const [language, wip, err, content, dispatch]    = useLibraryPerson();
 
   useEffect(
     () => {
