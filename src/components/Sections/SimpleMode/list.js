@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Image, List } from 'semantic-ui-react';
 
-import { SectionLogo } from '../../../helpers/images';
+import DailyLessonsIcon from '../../../images/icons/dailylessons.svg';
 import * as shapes from '../../shapes';
 
 class SimpleModeList extends PureComponent {
@@ -28,9 +28,7 @@ class SimpleModeList extends PureComponent {
             ? (
               <div>
                 <h2>
-                  <Image className="simple-mode-type-icon">
-                    <SectionLogo name='lessons' />
-                  </Image>
+                  <Image className="simple-mode-type-icon" src={DailyLessonsIcon} />
                   {t('simple-mode.today-lessons')}
                 </h2>
                 <List size="large">

@@ -1,4 +1,4 @@
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest, takeEvery } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { actions, types } from '../redux/modules/assets';
@@ -45,16 +45,6 @@ export function* fetchAsset(action) {
   }
 }
 
-export function* fetchPerson(action) {
-  try {
-    const name     = `persons-${action.payload.sourceId}-${action.payload.language}-html`;
-    const { data } = yield call(Api.getCMS, name);
-    yield put(actions.fetchPersonSuccess(data));
-  } catch (err) {
-    yield put(actions.fetchPersonFailure(err));
-  }
-}
-
 function* watchUnzip() {
   yield takeLatest(types.UNZIP, unzip);
 }
@@ -71,14 +61,9 @@ function* watchFetchAsset() {
   yield takeLatest([types.FETCH_ASSET], fetchAsset);
 }
 
-function* watchFetchPerson() {
-  yield takeLatest([types.FETCH_PERSON], fetchPerson);
-}
-
 export const sagas = [
   watchUnzip,
   watchDoc2Html,
   watchSourceIndex,
   watchFetchAsset,
-  watchFetchPerson,
 ];

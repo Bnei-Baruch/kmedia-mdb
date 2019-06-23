@@ -1,42 +1,44 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet-async';
 
 import { isEmpty } from '../../../helpers/utils';
 
-const Article = (props) => {
-  const { publishedTime, tags, section } = props;
+class Article extends Component {
+  static propTypes = {
+    publishedTime: PropTypes.string,
+    tags: PropTypes.arrayOf(PropTypes.string),
+    section: PropTypes.string, // A high-level section name. E.g. Technology
+  };
 
-  return (
-    <Helmet>
-      <meta property="og:type" content="article" />
-      {
-        !isEmpty(section)
-          ? <meta property="article:section" content={section} />
-          : null
-      }
+  static defaultProps = {
+    publishedTime: null,
+    tags: [],
+    section: '', // TODO: Kabbalah ? Spirituality
+  };
 
-      {
-        !isEmpty(publishedTime)
-          ? <meta name="article:published_time" content={publishedTime} />
-          : null
-      }
+  render() {
+    const { publishedTime, tags, section } = this.props;
 
-      {tags.map(tag => <meta name="article:tag" key={tag} content={tag} />)}
-    </Helmet>
-  );
-};
+    return (
+      <Helmet>
+        <meta property="og:type" content="article" />
+        {
+          !isEmpty(section)
+            ? <meta property="article:section" content={section} />
+            : null
+        }
 
-Article.propTypes = {
-  publishedTime: PropTypes.string,
-  tags: PropTypes.arrayOf(PropTypes.string),
-  section: PropTypes.string, // A high-level section name. E.g. Technology
-};
+        {
+          !isEmpty(publishedTime)
+            ? <meta name="article:published_time" content={publishedTime} />
+            : null
+        }
 
-Article.defaultProps = {
-  publishedTime: null,
-  tags: [],
-  section: '', // TODO: Kabbalah ? Spirituality
-};
+        {tags.map(tag => <meta name="article:tag" key={tag} content={tag} />)}
+      </Helmet>
+    );
+  }
+}
 
 export default Article;

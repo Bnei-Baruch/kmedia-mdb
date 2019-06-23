@@ -10,56 +10,6 @@ import { actions as publicationsActions, selectors as publications } from '../..
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
 import HomePage from './HomePage';
-import { withNamespaces } from 'react-i18next';
-
-const chooseTwitterByLanguage = (language) => {
-  switch (language) {
-  case LANG_HEBREW:
-    return { username: 'laitman_co_il' };
-  case LANG_UKRAINIAN:
-  case LANG_RUSSIAN:
-    return { username: 'Michael_Laitman' };
-  case LANG_SPANISH:
-    return { username: 'laitman_es' };
-  default:
-    return { username: 'laitman' };
-  }
-};
-
-const chooseBlogByLanguage = (language) => {
-  switch (language) {
-  case LANG_HEBREW:
-    return { blog: 'laitman-co-il' };
-  case LANG_UKRAINIAN:
-  case LANG_RUSSIAN:
-    return { blog: 'laitman-ru' };
-  case LANG_SPANISH:
-    return { blog: 'laitman-es' };
-  default:
-    return { blog: 'laitman-com' };
-  }
-};
-
-const fetchSocialMedia = (type, { fetchBlogList, fetchTweetsList, language }) => {
-  let mediaLanguageFn;
-  let fetchFn;
-  if (type === 'blog') {
-    mediaLanguageFn = chooseBlogByLanguage;
-    fetchFn         = fetchBlogList;
-  } else {
-    mediaLanguageFn = chooseTwitterByLanguage;
-    fetchFn         = fetchTweetsList;
-  }
-
-  fetchFn(`publications-${type}`, 1, {
-    page_size: 4,
-    ...mediaLanguageFn(language)
-  });
-};
-
-const getBanner = ({ fetchBanner, language }) => {
-  fetchBanner(language);
-};
 
 class HomePageContainer extends Component {
   static propTypes = {
@@ -68,14 +18,13 @@ class HomePageContainer extends Component {
     latestUnits: PropTypes.arrayOf(shapes.ContentUnit),
     latestBlogPosts: PropTypes.arrayOf(shapes.BlogPost),
     latestTweets: PropTypes.arrayOf(shapes.Tweet),
-    banner: shapes.Banner.isRequired,
+    banner: shapes.Banner,
     wip: shapes.WIP,
     err: shapes.Error,
     language: PropTypes.string.isRequired,
     fetchData: PropTypes.func.isRequired,
     fetchBlogList: PropTypes.func.isRequired,
     fetchTweetsList: PropTypes.func.isRequired,
-    fetchBanner: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -83,9 +32,55 @@ class HomePageContainer extends Component {
     latestUnits: [],
     latestBlogPosts: [],
     latestTweets: [],
+    banner: null,
     wip: false,
     err: null,
   };
+
+  static chooseTwitterByLanguage = (language) => {
+    switch (language) {
+    case LANG_HEBREW:
+      return { username: 'laitman_co_il' };
+    case LANG_UKRAINIAN:
+    case LANG_RUSSIAN:
+      return { username: 'Michael_Laitman' };
+    case LANG_SPANISH:
+      return { username: 'laitman_es' };
+    default:
+      return { username: 'laitman' };
+    }
+  };
+
+  static chooseBlogByLanguage = (language) => {
+    switch (language) {
+    case LANG_HEBREW:
+      return { blog: 'laitman-co-il' };
+    case LANG_UKRAINIAN:
+    case LANG_RUSSIAN:
+      return { blog: 'laitman-ru' };
+    case LANG_SPANISH:
+      return { blog: 'laitman-es' };
+    default:
+      return { blog: 'laitman-com' };
+    }
+  };
+
+  static fetchSocialMedia(type, props = {}) {
+    let mediaLanguageFn;
+    let fetchFn;
+    if (type === 'blog') {
+      mediaLanguageFn = HomePageContainer.chooseBlogByLanguage;
+      fetchFn         = props.fetchBlogList;
+    } else {
+      mediaLanguageFn = HomePageContainer.chooseTwitterByLanguage;
+      fetchFn         = props.fetchTweetsList;
+    }
+
+    fetchFn(`publications-${type}`, 1, {
+      page_size: 4,
+      ...mediaLanguageFn(props.language)
+    });
+  }
 
   componentDidMount() {
     const { latestLesson, fetchData, latestBlogPosts, latestTweets } = this.props;
@@ -93,21 +88,19 @@ class HomePageContainer extends Component {
       fetchData();
     }
     if (!latestBlogPosts.length) {
-      fetchSocialMedia('blog', this.props);
+      HomePageContainer.fetchSocialMedia('blog', this.props);
     }
     if (!latestTweets.length) {
-      fetchSocialMedia('twitter', this.props);
+      HomePageContainer.fetchSocialMedia('twitter', this.props);
     }
-    getBanner(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
     const { language, fetchData } = this.props;
     if (nextProps.language !== language) {
       fetchData();
-      fetchSocialMedia('blog', nextProps);
-      fetchSocialMedia('twitter', nextProps);
-      getBanner(nextProps);
+      HomePageContainer.fetchSocialMedia('blog', nextProps);
+      HomePageContainer.fetchSocialMedia('twitter', nextProps);
     }
   }
 
@@ -123,7 +116,6 @@ class HomePageContainer extends Component {
         language,
         wip,
         err,
-        t,
       } = this.props;
 
     return (
@@ -137,7 +129,6 @@ class HomePageContainer extends Component {
         language={language}
         wip={wip}
         err={err}
-        t={t}
       />
     );
   }
@@ -167,7 +158,6 @@ const mapDispatch = dispatch => bindActionCreators({
   fetchData: actions.fetchData,
   fetchBlogList: publicationsActions.fetchBlogList,
   fetchTweetsList: publicationsActions.fetchTweets,
-  fetchBanner: actions.fetchBanner,
 }, dispatch);
 
-export default connect(mapState, mapDispatch)(withNamespaces()(HomePageContainer));
+export default connect(mapState, mapDispatch)(HomePageContainer);

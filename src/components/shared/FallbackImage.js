@@ -1,22 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Image } from 'semantic-ui-react';
+import noop from 'lodash/noop';
 
-import { SectionThumbnailFallback } from '../../helpers/images';
+import imagePlaceholder from '../../images/image.png';
 
 // An adaptation of https://github.com/socialtables/react-image-fallback
 // for react semantic-ui
 class FallbackImage extends Component {
-
   static propTypes = {
     src: PropTypes.string,
     fallbackImage: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.element, PropTypes.array])),
     onLoad: PropTypes.func,
-    onError: PropTypes.func
+    onError: PropTypes.func,
+    width: PropTypes.string,
+    height: PropTypes.string,
   };
 
   static defaultProps = {
-    fallbackImage: ['default'],
+    src: '',
+    fallbackImage: [imagePlaceholder],
+    onLoad: noop,
+    onError: noop,
+    width: 'auto',
+    height: 'auto',
   };
 
   constructor(props) {
@@ -86,25 +93,19 @@ class FallbackImage extends Component {
   };
 
   render() {
-    const { fallbackImage, className, onLoad, onError, width = 'auto', height = 'auto', ...rest } = this.props;
-
-    if (this.state.imageSource === null) {
-      /* There is no fallbacks and src was not found */
-      return null;
+    if (typeof this.state.imageSource !== 'string') {
+      return this.state.imageSource;
     }
 
-    if (!this.state.imageSource.match(/^http/)) {
-      return (
-        <div className={className}>
-          <SectionThumbnailFallback name={this.state.imageSource} width={width} height={height} />
-        </div>);
-    }
-
-    return <Image
-      className={className}
-      {...rest}
-      src={this.state.imageSource}
-    />;
+    /* eslint no-unused-vars: "off" */
+    const { fallbackImage, onLoad, onError, width, height, ...rest } = this.props;
+    return (
+      <Image
+        {...rest}
+        src={this.state.imageSource}
+        style={{ width: `${width}px`, height: `${height}px` }}
+      />
+    );
   }
 }
 

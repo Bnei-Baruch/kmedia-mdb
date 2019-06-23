@@ -19,43 +19,7 @@ import HandleLanguages from './HandleLanguages';
 import Footer from './Footer';
 import TopMost from './TopMost';
 import DonateNow from './DonateNow';
-import Logo from '../../images/icons/Logo';
-
-let isMobileDevice = false;
-
-const renderHeaderSearch = ({ isShowHeaderSearch }, { t, location }, headerSearchElement) => {
-  if (!isShowHeaderSearch) {
-    return null;
-  }
-
-  return (
-    <Ref innerRef={headerSearchElement}>
-      <Segment color="blue" inverted className="header_search">
-        <WrappedOmniBox t={t} location={location} />
-      </Segment>
-    </Ref>
-  );
-};
-
-const shouldShowSearch = (location) => {
-  // we don't show the search on home page
-  const parts = location.pathname.split('/').filter(x => (x !== ''));
-  if (parts.length === 0) {
-    return false;
-  }
-  if (parts.length === 1) {
-    return !ALL_LANGUAGES.includes(parts[0]);
-  }
-  return true;
-};
-
-const menuButtonElement1 = createRef();
-
-const menuButtonElement2 = createRef();
-
-const showSearchButtonElement = createRef();
-
-const headerSearchElement = createRef();
+import logo from '../../images/logo.svg';
 
 class Layout extends Component {
   static propTypes = {
@@ -67,28 +31,35 @@ class Layout extends Component {
     t: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    const { deviceInfo, location } = props;
-    isMobileDevice                 = deviceInfo.device && deviceInfo.device.type === 'mobile';
-    this.state                     = {
-      sidebarActive: false,
-      isShowHeaderSearch: false,
-      embed: playerHelper.getEmbedFromQuery(location),
-    };
+  state = {
+    sidebarActive: false,
+    isShowHeaderSearch: false
+  };
+
+  menuButtonElement1 = createRef();
+
+  menuButtonElement2 = createRef();
+
+  showSearchButtonElement = createRef();
+
+  headerSearchElement = createRef();
+
+  componentWillMount() {
+    const { location } = this.props;
+    this.setState({ embed: playerHelper.getEmbedFromQuery(location) });
   }
 
   componentDidMount() {
     document.addEventListener('click', this.clickOutside, true);
   }
 
-  static getDerivedStateFromProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     const isShowHeaderSearch = (
       nextProps.location
-      && isMobileDevice
+      && this.isMobileDevice()
       && nextProps.location.pathname.endsWith('search')
     );
-    return { isShowHeaderSearch };
+    this.setState({ isShowHeaderSearch });
   }
 
   componentWillUnmount() {
@@ -107,15 +78,15 @@ class Layout extends Component {
   };
 
   isCloseHeaderSearch = (e) => {
-    if (!this.state || !this.state.isShowHeaderSearch || e.target === headerSearchElement) {
+    if (!this.state || !this.state.isShowHeaderSearch || e.target === this.headerSearchElement) {
       return false;
     }
 
-    if (headerSearchElement.current && headerSearchElement.current.contains(e.target)) {
+    if (this.headerSearchElement.current && this.headerSearchElement.current.contains(e.target)) {
       return false;
     }
 
-    const hasTarget = showSearchButtonElement.current && showSearchButtonElement.current.contains(e.target);
+    const hasTarget = this.showSearchButtonElement.current && this.showSearchButtonElement.current.contains(e.target);
     return !hasTarget;
   };
 
@@ -128,11 +99,11 @@ class Layout extends Component {
       return false;
     }
 
-    if (menuButtonElement1.current && menuButtonElement1.current.contains(e.target)) {
+    if (this.menuButtonElement1.current && this.menuButtonElement1.current.contains(e.target)) {
       return false;
     }
 
-    const hasTarget = menuButtonElement2.current && menuButtonElement2.current.contains(e.target);
+    const hasTarget = this.menuButtonElement2.current && this.menuButtonElement2.current.contains(e.target);
     return !hasTarget;
   };
 
@@ -144,30 +115,56 @@ class Layout extends Component {
   // Required for handling outside sidebar on click outside sidebar,
   closeSidebar = () => this.setState({ sidebarActive: false });
 
+  shouldShowSearch = (location) => {
+    // we don't show the search on home page
+    const parts = location.pathname.split('/').filter(x => (x !== ''));
+    if (parts.length === 0) {
+      return false;
+    }
+    if (parts.length === 1) {
+      return !ALL_LANGUAGES.includes(parts[0]);
+    }
+    return true;
+  };
+
+  isMobileDevice = () => {
+    const { deviceInfo } = this.props;
+    return deviceInfo.device && deviceInfo.device.type === 'mobile';
+  };
+
   showHeaderSearch = () => {
     const { isShowHeaderSearch } = this.state;
     this.setState({ isShowHeaderSearch: !isShowHeaderSearch });
+  };
+
+  renderHeaderSearch = () => {
+    const { isShowHeaderSearch } = this.state;
+    if (!isShowHeaderSearch) {
+      return null;
+    }
+
+    const { t, location } = this.props;
+    return (
+      <Ref innerRef={this.headerSearchElement}>
+        <Segment color="blue" inverted className="header_search">
+          <WrappedOmniBox t={t} location={location} />
+        </Segment>
+      </Ref>
+    );
   };
 
   render() {
     const { t, location, route, language, contentLanguage, setContentLanguage } = this.props;
     const { sidebarActive, embed }                                              = this.state;
 
-    const showSearch = shouldShowSearch(location);
+    const showSearch = this.shouldShowSearch(location);
 
     let sideBarIcon = <Icon name="sidebar" />;
     if (sidebarActive) {
       sideBarIcon = <Icon size="large" name="x" />;
     }
 
-    if (embed) {
-      return (
-        <div>
-          {renderRoutes(route.routes)}
-        </div>
-      );
-    }
-    return (
+    return !embed ? (
       <div className="layout">
         {/* <div className="debug">
           <span className="widescreen-only">widescreen</span>
@@ -179,7 +176,7 @@ class Layout extends Component {
         <GAPageView location={location} />
         <div className="layout__header">
           <Menu inverted borderless size="huge" color="blue">
-            <Ref innerRef={menuButtonElement1}>
+            <Ref innerRef={this.menuButtonElement1}>
               <Menu.Item
                 icon
                 as="a"
@@ -190,7 +187,7 @@ class Layout extends Component {
               </Menu.Item>
             </Ref>
             <Menu.Item className="logo" header as={Link} to="/">
-              <Logo width="40" height="40" />
+              <img src={logo} alt="logo" />
               <Header inverted as="h1" content={t('nav.top.header')} />
             </Menu.Item>
             <Menu.Item className="layout__search mobile-hidden">
@@ -207,13 +204,13 @@ class Layout extends Component {
                   contentLanguage={contentLanguage}
                   setContentLanguage={setContentLanguage}
                   location={location}
-                  isMobileDevice={isMobileDevice}
+                  isMobileDevice={this.isMobileDevice()}
                 />
               </Menu.Item>
               {
-                showSearch && isMobileDevice
+                showSearch && this.isMobileDevice()
                   ? (
-                    <Ref innerRef={showSearchButtonElement}>
+                    <Ref innerRef={this.showSearchButtonElement}>
                       <Menu.Item as="a" position="right">
                         <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
                       </Menu.Item>
@@ -228,7 +225,7 @@ class Layout extends Component {
             </Menu.Menu>
           </Menu>
         </div>
-        {renderHeaderSearch(this.state, this.props, headerSearchElement)}
+        {this.renderHeaderSearch()}
         <div
           className={classnames('layout__sidebar', { 'is-active': sidebarActive })}
           ref={(el) => {
@@ -236,7 +233,7 @@ class Layout extends Component {
           }}
         >
           <Menu inverted size="huge" color="blue">
-            <Ref innerRef={menuButtonElement2}>
+            <Ref innerRef={this.menuButtonElement2}>
               <Menu.Item
                 icon
                 as="a"
@@ -247,7 +244,7 @@ class Layout extends Component {
               </Menu.Item>
             </Ref>
             <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={this.closeSidebar}>
-              <Logo />
+              <img src={logo} alt="logo" />
               <Header inverted as="h1" content={t('nav.top.header')} />
             </Menu.Item>
           </Menu>
@@ -261,6 +258,10 @@ class Layout extends Component {
           </div>
           <Footer />
         </div>
+      </div>
+    ) : (
+      <div>
+        {renderRoutes(route.routes)}
       </div>
     );
   }

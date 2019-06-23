@@ -2,9 +2,9 @@ import 'jest-enzyme';
 
 import { Header } from 'semantic-ui-react';
 
-import SplashFixture from './__fixtures__/Splash.fixture';
-import SplashWOSubtext from './__fixtures__/SplashWOSubtext.fixture';
-import { mountedRender } from '../../../setupTests';
+import SplashFixture from '../__fixtures__/Splash.fixture';
+import SplashWOSubtext from '../__fixtures__/SplashWOSubtext.fixture';
+import { mountedRender } from '../../../../setupTests';
 
 [SplashFixture, SplashWOSubtext].forEach((fixture) => {
   describe('Splash', () => {

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Icon, Menu, Popup, } from 'semantic-ui-react';
 
+
 const getItem = () => (JSON.parse(localStorage.getItem('library-settings')) || {});
 
 const setItem = value => localStorage.setItem('library-settings', JSON.stringify(value));

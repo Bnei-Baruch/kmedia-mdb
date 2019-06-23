@@ -340,7 +340,7 @@
 
 .embed-share-button {
   width: 46px;
-  height: 46px;
+  height:46px;
 }
 
 .rtl {
@@ -687,7 +687,7 @@
   }
 
   p {
-    margin: 0 !important;
+    margin: 0px !important;
     text-indent: 20px;
   }
 }
@@ -1051,7 +1051,7 @@
       width: auto;
     }
 
-    img, style, .bwg_container {
+    img, style, .bwg_container  {
       display: none !important;
     }
 
@@ -1170,7 +1170,6 @@
 
   .content {
     margin-top: 0.5em;
-
     em {
       border-bottom: 1px solid rgba(65, 131, 196, .3);
       background-color: rgba(242, 201, 76, .2);
@@ -1178,7 +1177,7 @@
     }
   }
 
-  .header .label {
+  .header .label{
     margin-top: 9px !important;
   }
 
@@ -1198,6 +1197,7 @@
     }
 
     &:hover {
+      color: white;
       background-color: $blue !important;
       border: 0 none;
       color: white !important;
@@ -1317,22 +1317,20 @@
   margin: 0 !important;
 }
 
-.no-padding {
+.no-padding{
   padding: 0 !important;
 }
 
 .search-result-note {
   padding: 10px 16px 10px 16px !important;
   border-width: 1px 4px 1px 1px;
-
-  .ui.image {
+  .ui.image{
     height: 20px;
     margin-top: 10px;
   }
-
-  .button {
+  .button{
     margin-top: 3px;
-    margin-left: 0 !important;
+    margin-left: 0px !important;
   }
 }
 
@@ -1348,19 +1346,19 @@
   box-shadow: none !important;
 }
 
-.margin-top-8 {
+.margin-top-8{
   margin-top: 8px !important;
 }
 
-.margin-right-8 {
+.margin-right-8{
   margin-right: 8px !important;
 }
 
-.margin-left-8 {
+.margin-left-8{
   margin-left: 8px !important;
 }
 
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
+@media screen and (-webkit-min-device-pixel-ratio:0) {
   select,
   textarea,
   input {
@@ -1372,7 +1370,6 @@
 .change-popup-direction .content {
   direction: rtl;
 }
-
 /* ************* End of Style for Semantic Ui Popup  ************* */
 
 .buttonLink {
@@ -1382,7 +1379,6 @@
 
 .FastDayPicker-DayPicker-NavButton {
   width: 17em;
-
   .DayPicker-NavButton {
     top: 0;
     float: right;
@@ -1393,7 +1389,7 @@
   float: left
 }
 
-.clear {
+.clear{
   clear: both;
 }
 
@@ -1406,27 +1402,9 @@
   z-index: 10000;
 }
 
-.ui.accordion.menu .item .title > .dropdown.icon {
+.ui.accordion.menu .item .title>.dropdown.icon {
   -webkit-transform: rotate(0);
   transform: rotate(0);
-}
-
-/* fix for svg in logo */
-.logo svg {
-  display: none !important;
-}
-
-@media only screen and (min-width: $largeMonitorBreakpoint) {
-  .logo svg {
-    display: inline-block !important;
-  }
-}
-
-.ui.menu .item > svg:not(.ui) {
-  display: inline-block;
-  vertical-align: middle;
-  margin: -.3em 0;
-  width: 2.5em;
 }
 
 .ui.top.left.popup {

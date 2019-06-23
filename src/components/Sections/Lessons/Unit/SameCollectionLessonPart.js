@@ -3,6 +3,7 @@ import { Container, Header, Item } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../../../helpers/links';
 import { formatDuration, neighborIndices } from '../../../../helpers/utils';
+import { sectionThumbnailFallback } from '../../../../helpers/images';
 import Link from '../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../shared/Logo/UnitLogo';
 import { wrap as wrapContainer } from '../../../Pages/Unit/Container';
@@ -37,7 +38,7 @@ class SameCollectionLessonPart extends SameCollectionWidget {
                     unitId={part.id}
                     collectionId={collection.id}
                     width={150}
-                    fallbackImg='lessons'
+                    fallbackImg={sectionThumbnailFallback.lessons}
                   />
                 </Item.Image>
                 <Item.Content verticalAlign="top">

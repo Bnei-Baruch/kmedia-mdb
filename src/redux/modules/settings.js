@@ -12,6 +12,7 @@ export const handleActions = (actionsMap, defaultState) =>
   ) =>
     produce(state, draft => {
       const action = actionsMap[type];
+      // console.log('>>> action ', action, 'type', type, 'payload', payload);
       action && action(draft, payload, type);
     });
 
@@ -73,5 +74,5 @@ const getPageSize        = state => state.pageSize;
 export const selectors = {
   getLanguage,
   getContentLanguage,
-  getPageSize,
+  getPageSize
 };

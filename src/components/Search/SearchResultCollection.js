@@ -19,10 +19,10 @@ class SearchResultCollection extends SearchResultBase {
   state = { isImgLoaded: false };
 
   renderCU = cu => {
-    const { queryResult, hit, rank }                                   = this.props;
+    const { queryResult, hit, rank }             = this.props;
     const { _index: index, _type: type, _source: { mdb_uid: mdbUid } } = hit;
-    const { search_result: { searchId } }                              = queryResult;
-
+    const { search_result: { searchId } } = queryResult;
+      
     return (
       <Link
         key={cu.id}
@@ -33,7 +33,7 @@ class SearchResultCollection extends SearchResultBase {
         </Button>
       </Link>
     );
-  };
+  }
 
   handleImageContextRef = (ref) => {
     if (ref) {

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_VIDEO_PROGRAM_CHAPTER, NO_NAME } from '../../../../../helpers/consts';
+import { sectionThumbnailFallback } from '../../../../../helpers/images';
 import { CollectionsBreakdown } from '../../../../../helpers/mdb';
 import { canonicalLink } from '../../../../../helpers/links';
 import { ellipsize } from '../../../../../helpers/strings';
@@ -43,7 +44,7 @@ export const renderUnit = (unit, t) => {
             className="index__thumbnail"
             unitId={unit.id}
             collectionId={programs.length > 0 ? programs[0].id : null}
-            fallbackImg='programs'
+            fallbackImg={sectionThumbnailFallback.programs}
           />
         </Link>
       </Table.Cell>

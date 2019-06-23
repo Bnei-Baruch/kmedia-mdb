@@ -13,8 +13,7 @@
   "plugins":  [
     "react",
     "jest",
-    "import",
-    "react-hooks"
+    "import"
   ],
   "settings": {
     "parser":         "babel-eslint",
@@ -26,17 +25,15 @@
     }
   },
   "rules":    {
-    "react-hooks/rules-of-hooks":  "error",
-    "react-hooks/exhaustive-deps": "warn",
-    "indent":                      [
+    "indent":            [
       "error",
       2
     ],
-    "linebreak-style":             [
+    "linebreak-style":   [
       "error",
       "unix"
     ],
-    "consistent-return":           "error"
+    "consistent-return": "error"
   },
   "globals":  {
     "socket": true,
