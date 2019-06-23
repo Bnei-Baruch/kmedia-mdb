@@ -1,55 +1,56 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { withNamespaces } from 'react-i18next';
 import { Header, Image } from 'semantic-ui-react';
 
 import Link from '../../Language/MultiLanguageLink';
-import img from '../../../images/hp_featured_temp.jpg';
-// import img from '../../../images/banner_downloads.jpg';
-// import img from '../../../images/virtual_congress.jpg';
-// import img from '../../../images/pesach.jpg';
-// import img from '../../../images/rosh_shana.jpg';
-// import img from '../../../images/KKLO_ITALY_18_logo2.svg';
-// import img from '../../../images/archive_banner.jpg';
 
-class Promoted extends Component {
-  static propTypes = {
-    // banner: shapes.Banner,
-    t: PropTypes.func.isRequired,
-  };
-
-  // static defaultProps = {
-  //   banner: null,
-  // };
-
-  render() {
-    const { t } = this.props;
-
-    const header    = t('home.promoted.header');
-    const subHeader = t('home.promoted.subheader');
-
-    return (
-      <div className="thumbnail">
-        <Link to="/events/c/0B1AWfqg">
-          <Image fluid src={img} className="thumbnail__image" />
-          {
-            header
-              ? (
-                <Header as="h2" className="thumbnail__header">
-                  <Header.Content>
-                    <Header.Subheader>
-                      {subHeader}
-                    </Header.Subheader>
-                    {header}
-                  </Header.Content>
-                </Header>
-              )
-              : null
-          }
-        </Link>
-      </div>
-    );
+const renderHeader = (header, subHeader) => {
+  if (!header) {
+    return null;
   }
+  return (
+    <Header as="h2" className="thumbnail__header">
+      <Header.Content>
+        <Header.Subheader>
+          {subHeader}
+        </Header.Subheader>
+        {header}
+      </Header.Content>
+    </Header>
+  );
+};
+
+const ExtLink = ({ to, children }) => (
+  <a href={to} target="_blank" rel="noopener noreferrer">{children}</a>
+);
+
+const Promoted = (props) => {
+  const { banner: { wip, err, data } } = props;
+
+  if (err || wip) {
+    return <div className="thumbnail" />;
+  }
+
+  const { content } = data;
+  if (!content) {
+    return <div className="thumbnail">&nbsp;</div>;
+  }
+
+  const { header, 'sub-header': subHeader, link } = data.meta;
+  const imgData                                   = content.match(/img src="(.+?)"/);
+  let img                                         = imgData ? imgData[1] : null;
+  let Lnk                                         = link.match(/:\/\//) === null ? Link : ExtLink;
+
+  return (
+    <div className="thumbnail">
+      <Lnk to={link}>
+        <Image fluid src={img} className="thumbnail__image" />
+        {renderHeader(header, subHeader)}
+      </Lnk>
+    </div>
+  );
 }
+
+Promoted.propTypes = {};
 
 export default withNamespaces()(Promoted);

@@ -1,7 +1,12 @@
+import React from 'react';
+
 import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import React from 'react';
+import 'react-testing-library/cleanup-after-each';
 import 'jest-enzyme';
+
+// import 'jest-axe/extend-expect'; // Testing the a11y
+import 'jest-dom/extend-expect'; // adds custom jest matchers from jest-dom
 import { BrowserRouter as Router } from 'react-router-dom';
 
 configure({ adapter: new Adapter() });
@@ -19,6 +24,16 @@ jest.mock('react-i18next', () => ({
     return c;
   },
 }));
+
+window.matchMedia = jest.fn().mockImplementation(query => {
+  return {
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+  };
+});
 
 export function mountWrapRouter(node) {
   return mount(<Router>{node}</Router>);

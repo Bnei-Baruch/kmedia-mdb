@@ -34,7 +34,6 @@ const Footer = ({ t, language, deviceInfo }) => {
                 color="orange"
                 basic
                 inverted
-                bordered={false}
                 floated={isMobile ? 'left' : 'right'}
                 href={getRSSLinkByLang(language)} />
             </Grid.Column>

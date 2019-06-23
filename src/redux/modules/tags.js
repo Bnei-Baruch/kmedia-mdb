@@ -98,15 +98,23 @@ const onSSRPrepare = draft => {
 const onReceiveTags = (draft, payload) => {
   const byId = buildById(payload);
 
-  // we keep those in state to avoid recreating them every time a selector is called
-  const getByID     = id => byId[id];
-  const getPath     = source => tracePath(source, getByID);
-  const getPathByID = id => getPath(getByID(id));
+  function getByID(id) {
+    return byId[id];
+  }
+
+  function getPath(source) {
+    return tracePath(source, getByID);
+  }
+
+  function getPathByID(id) {
+    return getPath(getByID(id));
+  }
 
   const roots        = payload.map(x => x.id);
   const displayRoots = roots.filter(x => TOPICS_FOR_DISPLAY.indexOf(x) !== -1);
 
   draft.byId         = byId;
+  // we keep those in state to avoid recreating them every time a selector is called
   draft.getByID      = getByID;
   draft.getPath      = getPath;
   draft.getPathByID  = getPathByID;

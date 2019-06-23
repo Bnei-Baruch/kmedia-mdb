@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
-import { Button, Grid, Header, Image, Segment } from 'semantic-ui-react';
+import { Button, Grid, Header, Segment } from 'semantic-ui-react';
 
-import { sectionLogo } from '../../../helpers/images';
+import { SectionLogo } from '../../../helpers/images';
 
+/*
+ * It was used once in SearchResults, but not anymore...
+ */
 class SectionsFilter extends Component {
   static propTypes = {
     value: PropTypes.string,
@@ -48,7 +51,7 @@ class SectionsFilter extends Component {
         className={(sValue && sValue.endsWith(x)) ? 'active' : ''}
         onClick={() => this.onSelectionChange(x)}
       >
-        <Image src={sectionLogo[x]} />
+        <SectionLogo name={x} />
         <br />
         {t(`nav.sidebar.${x}`)}
       </Header>
