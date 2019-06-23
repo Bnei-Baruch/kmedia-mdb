@@ -1,48 +1,51 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
 import FallbackImage from '../FallbackImage';
+import imagePlaceholder from '../../../images/image.png';
 
-const UnitLogo = (props) => {
-  const { unitId, collectionId, width, className, fallbackImg, ...rest } = props;
+class UnitLogo extends PureComponent {
+  static propTypes = {
+    unitId: PropTypes.string,
+    collectionId: PropTypes.string,
+    width: PropTypes.number,
+    className: PropTypes.string,
+    fallbackImg: PropTypes.any,
+  };
 
-  let src = assetUrl(`api/thumbnail/${unitId}`);
-  if (!src.startsWith('http')) {
-    src = `http://localhost${src}`;
+  static defaultProps = {
+    unitId: null,
+    collectionId: null,
+    width: 120,
+    className: '',
+    fallbackImg: imagePlaceholder,
+  };
+
+  render() {
+    const { unitId, collectionId, width, className, fallbackImg, ...rest } = this.props;
+
+    let src = assetUrl(`api/thumbnail/${unitId}`);
+    if (!src.startsWith('http')) {
+      src = `http://localhost${src}`;
+    }
+    const params = Requests.makeParams({ url: src, width, stripmeta: true, });
+    src = `${imaginaryUrl('thumbnail')}?${params}`;
+
+    const fallback = fallbackImg || imagePlaceholder;
+
+    return (
+      <FallbackImage
+        {...rest}
+        src={src}
+        className={`unit-logo ${className}`}
+        fallbackImage={[
+          collectionId ? assetUrl(`logos/collections/${collectionId}.png`) : null,
+          fallback
+        ]}
+      />
+    );
   }
-  const params = Requests.makeParams({ url: src, width, stripmeta: true, });
-  src          = `${imaginaryUrl('thumbnail')}?${params}`;
-
-  const fallback = fallbackImg || 'default';
-
-  return (
-    <FallbackImage
-      {...rest}
-      src={src}
-      className={`unit-logo ${className} ui image`}
-      fallbackImage={[
-        collectionId ? assetUrl(`logos/collections/${collectionId}.png`) : null,
-        fallback
-      ]}
-    />
-  );
-};
-
-UnitLogo.propTypes = {
-  unitId: PropTypes.string,
-  collectionId: PropTypes.string,
-  width: PropTypes.number,
-  className: PropTypes.string,
-  fallbackImg: PropTypes.any,
-};
-
-UnitLogo.defaultProps = {
-  unitId: null,
-  collectionId: null,
-  width: 120,
-  className: '',
-  fallbackImg: 'default',
-};
+}
 
 export default UnitLogo;

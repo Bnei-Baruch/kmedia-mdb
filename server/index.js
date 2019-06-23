@@ -1,5 +1,6 @@
 // ignore styles and replace images with their final path from webpack manifest
 require('ignore-styles');
+require('svg-url-loader');
 require('file-loader');
 require('babel-polyfill');
 const path     = require('path');
@@ -7,7 +8,8 @@ const manifest = require('../build/asset-manifest');
 require('ignore-styles').default(undefined, (module, filename) => {
   if (filename.endsWith('.png')
     || filename.endsWith('.jpg')
-    || filename.endsWith('.jpeg')) {
+    || filename.endsWith('.jpeg')
+    || filename.endsWith('.svg')) {
     module.exports = `${manifest[path.join('static', 'media', path.basename(filename))]}`;
   }
 });
@@ -22,7 +24,7 @@ require('@babel/register')({
     '@babel/plugin-proposal-class-properties',
     '@babel/plugin-proposal-export-namespace-from',
     '@babel/plugin-proposal-throw-expressions',
-  ],
+  ]
 });
 
 require('dotenv').config();

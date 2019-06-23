@@ -41,7 +41,7 @@ import {
   SEARCH_INTENT_INDEX_SOURCE,
   SEARCH_INTENT_INDEX_TOPIC
 } from '../../helpers/consts';
-import { SectionLogo } from '../../helpers/images';
+import { sectionLogo } from '../../helpers/images';
 import { canonicalLink } from '../../helpers/links';
 import { isDebMode } from '../../helpers/url';
 import * as shapes from '../shapes';
@@ -204,18 +204,12 @@ class SearchResultBase extends Component {
     }
 
     if (!withTitle) {
-      return (
-        <Image size="mini" verticalAlign="middle">
-          <SectionLogo name={icon} width='25' height='25' />
-        </Image>
-      );
+      return <Image src={sectionLogo[icon]} size="mini" verticalAlign="middle" />;
     }
 
     return (
       <span>
-        <Image size="mini" verticalAlign="middle">
-          <SectionLogo name={icon} width='25' height='25' />
-        </Image>
+        <Image src={sectionLogo[icon]} size="mini" verticalAlign="middle" />
         &nbsp;
         <span>{this.props.t(`constants.content-types.${type}`)}</span>
       </span>

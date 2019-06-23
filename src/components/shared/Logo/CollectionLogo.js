@@ -1,29 +1,31 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import { assetUrl } from '../../../helpers/Api';
 import FallbackImage from '../FallbackImage';
 
-const CollectionLogo = (props) => {
-  const { collectionId, ...rest } = props;
+class CollectionLogo extends PureComponent {
+  static propTypes = {
+    collectionId: PropTypes.string,
+  };
 
-  return (
-    <FallbackImage
-      fluid
-      shape="rounded"
-      className="collection-logo ui fluid image"
-      src={assetUrl(`logos/collections/${collectionId}.jpg`)}
-      {...rest}
-    />
-  );
-};
+  static defaultProps = {
+    collectionId: null,
+  };
 
-CollectionLogo.propTypes = {
-  collectionId: PropTypes.string,
-};
+  render() {
+    const { collectionId, ...rest } = this.props;
 
-CollectionLogo.defaultProps = {
-  collectionId: null,
-};
+    return (
+      <FallbackImage
+        fluid
+        shape="rounded"
+        className="collection-logo"
+        src={assetUrl(`logos/collections/${collectionId}.jpg`)}
+        {...rest}
+      />
+    );
+  }
+}
 
 export default CollectionLogo;

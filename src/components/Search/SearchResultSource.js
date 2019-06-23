@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Container, Header, Image, Segment } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../helpers/links';
-import { SectionLogo } from '../../helpers/images';
+import { sectionLogo } from '../../helpers/images';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import Link from '../Language/MultiLanguageLink';
 import SearchResultBase from './SearchResultBase';
@@ -39,10 +39,7 @@ class SearchResultSource extends SearchResultBase {
           </Link>
         </Header>
         <Container>
-          <Image size="mini" verticalAlign="middle">
-            <SectionLogo name='sources' height='50' width='50' />
-          </Image>
-
+          <Image size="mini" src={sectionLogo.sources} verticalAlign="middle" />
           &nbsp;&nbsp;
           <span>{t('filters.sections-filter.sources')}</span>
         </Container>

@@ -1,12 +1,6 @@
 import PropTypes from 'prop-types';
 import { PLAYER_MODE } from './AVPlayer/constants';
 
-export const WIP    = PropTypes.bool;
-export const WipMap = PropTypes.objectOf(PropTypes.oneOfType([WIP, PropTypes.objectOf(WIP)]));
-
-export const Error     = PropTypes.oneOfType([PropTypes.object, PropTypes.string]);
-export const ErrorsMap = PropTypes.objectOf(PropTypes.oneOfType([Error, PropTypes.objectOf(Error)]));
-
 export const RouterMatch = PropTypes.shape({
   isExact: PropTypes.bool,
   params: PropTypes.object.isRequired,
@@ -180,14 +174,11 @@ export const Publisher = PropTypes.shape({
 });
 
 export const Banner = PropTypes.shape({
-  wip: WIP,
-  err: Error,
-  data: PropTypes.shape({
-    content: PropTypes.string,
-    header: PropTypes.string,
-    'sub-header': PropTypes.string,
-    link: PropTypes.string,
-  }),
+  section: PropTypes.string.isRequired,
+  header: PropTypes.string.isRequired,
+  sub_header: PropTypes.string,
+  url: PropTypes.string.isRequired,
+  image: PropTypes.string,
 });
 
 export const Tweet = PropTypes.shape({
@@ -215,6 +206,12 @@ export const filterPropShape = PropTypes.shape({
   name: PropTypes.string.isRequired,
   component: PropTypes.any.isRequired
 });
+
+export const WIP    = PropTypes.bool;
+export const WipMap = PropTypes.objectOf(PropTypes.oneOfType([WIP, PropTypes.objectOf(WIP)]));
+
+export const Error     = PropTypes.oneOfType([PropTypes.object, PropTypes.string]);
+export const ErrorsMap = PropTypes.objectOf(PropTypes.oneOfType([Error, PropTypes.objectOf(Error)]));
 
 export const DataWipErr = PropTypes.shape({
   data: PropTypes.any,

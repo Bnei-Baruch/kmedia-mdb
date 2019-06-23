@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Trans, withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Button, Container, Divider, Grid, Image, Message } from 'semantic-ui-react';
+import InfoIcon from '../../images/icons/info.svg';
 
-import { SEARCH_GRAMMAR_HIT_TYPES, SEARCH_INTENT_HIT_TYPES } from '../../helpers/consts';
+import { SEARCH_INTENT_HIT_TYPES, SEARCH_GRAMMAR_HIT_TYPES } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { getQuery } from '../../helpers/url';
 import { selectors as settings } from '../../redux/modules/settings';
@@ -22,7 +23,6 @@ import SearchResultIntent from './SearchResultIntent';
 import SearchResultLandingPage from './SearchResultLandingPage';
 import SearchResultSource from './SearchResultSource';
 import SearchResultPost from './SearchResultPost';
-import { SectionLogo } from '../../helpers/images';
 
 class SearchResults extends Component {
   static propTypes = {
@@ -86,7 +86,7 @@ class SearchResults extends Component {
   };
 
   renderHit = (hit, rank) => {
-    const { cMap, cuMap, postMap }                                                                          = this.props;
+    const { cMap, cuMap, postMap }                                               = this.props;
     const { _source: { mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage }, _type: type } = hit;
 
     const props = { ...this.props, hit, rank, key: `${mdbUid || landingPage}_${type}` };
@@ -129,9 +129,7 @@ class SearchResults extends Component {
       this.state.showNote
         ? (
           <Message info className="search-result-note">
-            <Image floated="left">
-              <SectionLogo name='info' />
-            </Image>
+            <Image src={InfoIcon} floated="left" />
             <Button floated="right" icon="close" size="tiny" circular onClick={this.hideNote} />
             <Container>
               <strong>

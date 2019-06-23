@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Card, Header } from 'semantic-ui-react';
 
+import { sectionThumbnailFallback } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
@@ -28,7 +29,7 @@ class LatestUpdate extends Component {
 
     return (
       <Card as={Link} to={link} raised>
-        <UnitLogo width={512} unitId={unit.id} fallbackImg={canonicalSection} />
+        <UnitLogo width={512} unitId={unit.id} fallbackImg={sectionThumbnailFallback[canonicalSection]} />
         <Card.Content>
           {/* <Card.Meta content={t('values.date', { date: unit.film_date })}/> */}
           <Header size="tiny">
