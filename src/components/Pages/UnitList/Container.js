@@ -71,7 +71,12 @@ export class UnitListContainer extends withPagination {
         const pageNo = withPagination.getPageFromLocation(nextProps.location);
         if (pageNo !== nextProps.pageNo) {
           this.setPage(nextProps, pageNo);
+
+          return;
         }
+
+        this.props.hydrateFilters(this.props.namespace);
+        this.handleFiltersChanged(pageNo);
       }
     }
 
@@ -91,8 +96,8 @@ export class UnitListContainer extends withPagination {
     this.setPage(this.props, pageNo);
   }
 
-  handleFiltersChanged() {
-    this.handlePageChanged(1);
+  handleFiltersChanged(pageNo) {
+    this.handlePageChanged(pageNo || 1);
   }
 
   handleFiltersHydrated() {
@@ -144,6 +149,7 @@ export const mapDispatch = dispatch => (
     fetchList: listsActions.fetchList,
     setPage: listsActions.setPage,
     resetNamespace: filtersActions.resetNamespace,
+    hydrateFilters: filtersActions.hydrateFilters,
   }, dispatch)
 );
 
