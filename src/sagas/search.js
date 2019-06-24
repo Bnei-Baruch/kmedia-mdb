@@ -77,22 +77,35 @@ export function* search(action) {
       const cIDsToFetch    = getIdsForFetch(data.search_result.hits.hits, 'collections');
       const cuIDsToFetch   = getIdsForFetch(data.search_result.hits.hits, 'units');
       const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'posts');
+      if (cuIDsToFetch.length === 0 && cIDsToFetch.length === 0 && postIDsToFetch === 0) {
+        yield put(actions.searchSuccess(data));
+      }
 
-      const lang                      = yield select(state => settings.getLanguage(state.settings));
-      const [respCU, respC, respPost] = yield all([
-        call(Api.units, {
-          id: cuIDsToFetch,
-          pageSize: cuIDsToFetch.length,
-          language: lang,
-          with_files: true
-        }),
-        call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, language: lang }),
-        call(Api.posts, { id: postIDsToFetch, pageSize: postIDsToFetch.length, language: lang })
-      ]);
+      const lang     = yield select(state => settings.getLanguage(state.settings));
+      const requests = [];
+      if (cuIDsToFetch.length > 0) {
+        requests.push(call(Api.units, { id: cuIDsToFetch, pageSize: cuIDsToFetch.length, language: lang, with_files: true }));
+      }
+      if (cIDsToFetch.length > 0) {
+        requests.push(call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, language: lang }));
+      }
+      if (postIDsToFetch.length > 0) {
+        requests.push(call(Api.posts, { id: postIDsToFetch, pageSize: postIDsToFetch.length, language: lang }));
+      }
 
-      yield put(mdbActions.receiveContentUnits(respCU.data.content_units));
-      yield put(mdbActions.receiveCollections(respC.data.collections));
-      yield put(postsActions.fetchBlogListSuccess(respPost.data));
+      const responses = yield all(requests);
+      if (cuIDsToFetch.length > 0) {
+        const respCU = responses.shift();
+        yield put(mdbActions.receiveContentUnits(respCU.data.content_units));
+      }
+      if (cIDsToFetch.length > 0) {
+        const respC = responses.shift();
+        yield put(mdbActions.receiveCollections(respC.data.collections));
+      }
+      if (postIDsToFetch.length > 0) {
+        const respPost = responses.shift();
+        yield put(postsActions.fetchBlogListSuccess(respPost.data));
+      }
     }
     yield put(actions.searchSuccess(data));
   } catch (err) {
