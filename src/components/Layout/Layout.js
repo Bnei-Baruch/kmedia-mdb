@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
-import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
+import { Header, Icon, Menu, Segment } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
 import playerHelper from '../../helpers/player';
@@ -29,11 +29,9 @@ const renderHeaderSearch = ({ isShowHeaderSearch }, { t, location }, headerSearc
   }
 
   return (
-    <Ref innerRef={headerSearchElement}>
-      <Segment color="blue" inverted className="header_search">
-        <WrappedOmniBox t={t} location={location} />
-      </Segment>
-    </Ref>
+    <Segment color="blue" inverted className="header_search" ref={headerSearchElement}>
+      <WrappedOmniBox t={t} location={location} />
+    </Segment>
   );
 };
 
@@ -179,16 +177,15 @@ class Layout extends Component {
         <GAPageView location={location} />
         <div className="layout__header">
           <Menu inverted borderless size="huge" color="blue">
-            <Ref innerRef={menuButtonElement1}>
-              <Menu.Item
-                icon
-                as="a"
-                className="layout__sidebar-toggle"
-                onClick={this.toggleSidebar}
-              >
-                {sideBarIcon}
-              </Menu.Item>
-            </Ref>
+            <Menu.Item
+              ref={menuButtonElement1}
+              icon
+              as="a"
+              className="layout__sidebar-toggle"
+              onClick={this.toggleSidebar}
+            >
+              {sideBarIcon}
+            </Menu.Item>
             <Menu.Item className="logo" header as={Link} to="/">
               <Logo width="40" height="40" />
               <Header inverted as="h1" content={t('nav.top.header')} />
@@ -213,11 +210,9 @@ class Layout extends Component {
               {
                 showSearch && isMobileDevice
                   ? (
-                    <Ref innerRef={showSearchButtonElement}>
-                      <Menu.Item as="a" position="right">
-                        <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
-                      </Menu.Item>
-                    </Ref>
+                    <Menu.Item as="a" position="right" ref={showSearchButtonElement}>
+                      <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
+                    </Menu.Item>
                   )
                   : null
               }
@@ -236,16 +231,15 @@ class Layout extends Component {
           }}
         >
           <Menu inverted size="huge" color="blue">
-            <Ref innerRef={menuButtonElement2}>
-              <Menu.Item
-                icon
-                as="a"
-                className="layout__sidebar-toggle"
-                onClick={this.closeSidebar}
-              >
-                {sideBarIcon}
-              </Menu.Item>
-            </Ref>
+            <Menu.Item
+              ref={menuButtonElement2}
+              icon
+              as="a"
+              className="layout__sidebar-toggle"
+              onClick={this.closeSidebar}
+            >
+              {sideBarIcon}
+            </Menu.Item>
             <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={this.closeSidebar}>
               <Logo />
               <Header inverted as="h1" content={t('nav.top.header')} />
