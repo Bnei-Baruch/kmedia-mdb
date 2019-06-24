@@ -185,6 +185,7 @@ class Sketches extends React.Component {
 
   handleLanguageChanged = (e, language) => {
     this.setState({ language });
+    this._imageGallery.slideToIndex(0);
   };
 
   handleImageError = event => console.log('Image Gallery loading error ', event.target);
@@ -293,6 +294,7 @@ class Sketches extends React.Component {
               : null
           }
           <ImageGallery
+            ref={i => this._imageGallery = i}
             lazyLoad
             showFullscreenButton
             isRTL={isLanguageRtl(uiLanguage)}
