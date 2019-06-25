@@ -4,6 +4,8 @@ import { withNamespaces } from 'react-i18next';
 import { Dropdown, Flag, Menu } from 'semantic-ui-react';
 
 import { COOKIE_UI_LANG, LANG_UI_LANGUAGES, LANGUAGES } from '../../helpers/consts';
+import * as dates from '../../helpers/date';
+import { getToWithLanguage } from '../../helpers/url';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 
@@ -15,18 +17,29 @@ class UILanguage extends Component {
     // We need dependency on location in order to change Link every time url changes
     location: shapes.HistoryLocation.isRequired,
     t: PropTypes.func.isRequired,
+    isMobile: PropTypes.bool.isRequired,
+    push: PropTypes.func.isRequired,
   };
 
   storeUILanguage = (language) => {
     if (language === '' || language === undefined) {
       return;
     }
-    const expires   = new Date(Date.now() + (365 * 24 * 60 * 60 * 1000)).toUTCString();
-    document.cookie = `${COOKIE_UI_LANG}=${language}; path=/; expires=${expires}`;
+    
+    document.cookie = `${COOKIE_UI_LANG}=${language}; path=/; expires=${dates.expires}`;
   };
 
+  onMobileChange = (e) => {
+    const selectedLang = e.currentTarget.value;
+    this.storeUILanguage(selectedLang);
+
+    const { contentLanguage, location, push } = this.props;
+    const link = getToWithLanguage(null, location, selectedLang, contentLanguage);
+    push(link);
+  }
+
   render() {
-    const { t, language, contentLanguage } = this.props;
+    const { language, contentLanguage, isMobile, t } = this.props;
 
     return (
       <Menu secondary>
@@ -35,24 +48,39 @@ class UILanguage extends Component {
           :
         </Menu.Item>
         <Menu.Menu position="right">
-          <Dropdown item text={`${t(`constants.languages.${language}`)}`}>
-            <Dropdown.Menu>
-              {
-                LANG_UI_LANGUAGES.map(x => (
-                  <Dropdown.Item
-                    key={x}
-                    as={Link}
-                    language={`${x}`}
-                    contentLanguage={contentLanguage}
-                    onClick={() => this.storeUILanguage(x)}
-                  >
-                    <Flag name={LANGUAGES[x].flag} />
-                    {t(`constants.languages.${x}`)}
-                  </Dropdown.Item>
-                ))
-              }
-            </Dropdown.Menu>
-          </Dropdown>
+          {isMobile
+            ? (
+              <select className="dropdown-container" value={language} onChange={this.onMobileChange} >
+                {
+                  LANG_UI_LANGUAGES.map(x => (
+                    <option key={`opt-${x}`} value={x}>
+                      {t(`constants.languages.${x}`)}
+                    </option>
+                  ))
+                }
+              </select>
+            )
+            : 
+            <Dropdown item text={`${t(`constants.languages.${language}`)}`}>
+              <Dropdown.Menu>
+                {
+                  LANG_UI_LANGUAGES.map(x => (
+                    <Dropdown.Item
+                      key={x}
+                      as={Link}
+                      language={`${x}`}
+                      active={x === language}
+                      contentLanguage={contentLanguage}
+                      onClick={() => this.storeUILanguage(x)}
+                    >
+                      <Flag name={LANGUAGES[x].flag} />
+                      {t(`constants.languages.${x}`)}
+                    </Dropdown.Item>
+                  ))
+                }
+              </Dropdown.Menu>
+            </Dropdown>
+          }
         </Menu.Menu>
       </Menu>
     );

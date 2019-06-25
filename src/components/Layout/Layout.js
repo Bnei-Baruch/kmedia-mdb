@@ -1,6 +1,7 @@
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
@@ -29,6 +30,7 @@ class Layout extends Component {
     contentLanguage: PropTypes.string.isRequired,
     setContentLanguage: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired,
   };
 
   state = {
@@ -154,8 +156,8 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location, route, language, contentLanguage, setContentLanguage } = this.props;
-    const { sidebarActive, embed }                                              = this.state;
+    const { t, location, route, language, contentLanguage, setContentLanguage, push } = this.props;
+    const { sidebarActive, embed }                                                    = this.state;
 
     const showSearch = this.shouldShowSearch(location);
 
@@ -204,7 +206,8 @@ class Layout extends Component {
                   contentLanguage={contentLanguage}
                   setContentLanguage={setContentLanguage}
                   location={location}
-                  isMobileDevice={this.isMobileDevice()}
+                  isMobile={this.isMobileDevice()}
+                  push={push}
                 />
               </Menu.Item>
               {
@@ -275,5 +278,6 @@ export default connect(
   }),
   {
     setContentLanguage: actions.setContentLanguage,
+    push
   }
 )(withNamespaces()(Layout));
