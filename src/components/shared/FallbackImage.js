@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Image } from 'semantic-ui-react';
 
-import { SectionThumbnailFallback } from '../../helpers/images';
+import { knownFallbackImages, SectionThumbnailFallback } from '../../helpers/images';
 
 // An adaptation of https://github.com/socialtables/react-image-fallback
 // for react semantic-ui
@@ -93,7 +93,7 @@ class FallbackImage extends Component {
       return null;
     }
 
-    if (!this.state.imageSource.match(/^http/)) {
+    if (knownFallbackImages.includes(this.state.imageSource)) {
       return (
         <div className={className}>
           <SectionThumbnailFallback name={this.state.imageSource} width={width} height={height} />
