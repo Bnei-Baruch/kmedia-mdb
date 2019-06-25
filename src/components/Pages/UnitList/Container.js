@@ -80,8 +80,11 @@ export class UnitListContainer extends withPagination {
 
   extraFetchParams() {
     const t = typeof this.props.extraFetchParams;
-    console.log('this.props.extraFetchParams:', t);
-    return this.props.extraFetchParams && t === 'function' ? this.props.extraFetchParams(this.props) : {};
+    if (this.props.extraFetchParams) {
+      if (t === 'function') return this.props.extraFetchParams(this.props);
+      if (t === 'object') return this.props.extraFetchParams;
+    }
+    return {};
   }
 
   handlePageChanged(pageNo) {
