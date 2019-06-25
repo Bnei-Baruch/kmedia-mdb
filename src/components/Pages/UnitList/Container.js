@@ -36,11 +36,11 @@ export class UnitListContainer extends withPagination {
     wip: false,
     err: null,
     isFiltersHydrated: false,
-    extraFetchParams: null,
+    extraFetchParams: () => {},
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.handlePageChanged     = this.handlePageChanged.bind(this);
     this.handleFiltersChanged  = this.handleFiltersChanged.bind(this);
     this.handleFiltersHydrated = this.handleFiltersHydrated.bind(this);
