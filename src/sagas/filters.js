@@ -1,6 +1,6 @@
 import { put, select, takeEvery } from 'redux-saga/effects';
 
-import { getQuery, updateQuery } from './helpers/url';
+import { getQuery, pushQuery } from './helpers/url';
 import { actions as filterActions, selectors as filterSelectors, types as filterTypes } from '../redux/modules/filters';
 import { filtersTransformer } from '../filters';
 
@@ -19,10 +19,10 @@ import { filtersTransformer } from '../filters';
  * NOTE: if you add new actions you'll need to watch for those too.
  */
 
-function* updateFilterValuesInQuery(action) {
+function* pushFilterValuesInQuery(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, action.payload.namespace));
 
-  yield* updateQuery(query => Object.assign(query, filtersTransformer.toQueryParams(filters)));
+  yield* pushQuery(query => Object.assign(query, filtersTransformer.toQueryParams(filters)));
 }
 
 export function* hydrateFilters(action) {
@@ -38,7 +38,7 @@ const valueChangingActions = [
 ];
 
 function* watchFilterValueChange() {
-  yield takeEvery(valueChangingActions, updateFilterValuesInQuery);
+  yield takeEvery(valueChangingActions, pushFilterValuesInQuery);
 }
 
 function* watchHydrateFilters() {
