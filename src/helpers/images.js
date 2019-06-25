@@ -31,7 +31,7 @@ const sectionLogo = {
 
 export const SectionLogo = ({ name, ...props }) => {
   const Logo = sectionLogo[name];
-  return <Logo {...props} width="50" height="50"/>;
+  return <Logo {...props} width="50" height="50" />;
 };
 
 const sectionThumbnailFallback = {
@@ -43,6 +43,8 @@ const sectionThumbnailFallback = {
   publications: PublicationsFallbackIcon,
   default: ImagePlaceholder,
 };
+
+export const knownFallbackImages = ['lessons', 'programs', 'lectures', 'sources', 'events', 'publications', 'default'];
 
 export const SectionThumbnailFallback = ({ name, ...props }) => {
   const Fallback = sectionThumbnailFallback[name];
