@@ -1,20 +1,7 @@
-// import 'core-js/shim';
-// import 'regenerator-runtime/runtime';
-// import 'babel-polyfill';
-// core-js v2
-
-// Stage 3
-import "core-js/fn/string/trim-left";
-import "core-js/fn/string/trim-right";
-import "core-js/fn/string/match-all";
-import "core-js/fn/array/flat-map";
-import "core-js/fn/array/flatten"; // RENAMED
-import "core-js/fn/global";
-
-// Stage 1
-import "core-js/fn/symbol/observable";
-import "core-js/fn/promise/try";
-import "core-js/fn/observable";
+// full ES2015+ environment (no < Stage 4 proposals)
+import "core-js/stable";
+import "core-js/proposals/url";
+import "regenerator-runtime/runtime";
 
 import moment from 'moment';
 import 'moment/locale/he';
