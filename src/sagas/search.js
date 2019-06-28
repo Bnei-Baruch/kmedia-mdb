@@ -68,17 +68,14 @@ export function* search(action) {
 
     if (Array.isArray(data.search_result.hits.hits) && data.search_result.hits.hits.length > 0) {
       // TODO edo: optimize data fetching
-      // Here comes another call for all content_units we got
-      // in order to fetch their possible additional collections.
-      // We need this to show 'related to' second line in list.
-      // This second round trip to the API is awful,
-      // we should strive for a single call to the API and get all the data we need.
+      // Server should return associated items (collections, units, posts...) together with search results
       // hmm, relay..., hmm ?
       const cIDsToFetch    = getIdsForFetch(data.search_result.hits.hits, 'collections');
       const cuIDsToFetch   = getIdsForFetch(data.search_result.hits.hits, 'units');
       const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'posts');
       if (cuIDsToFetch.length === 0 && cIDsToFetch.length === 0 && postIDsToFetch === 0) {
         yield put(actions.searchSuccess(data));
+        return;
       }
 
       const lang     = yield select(state => settings.getLanguage(state.settings));
