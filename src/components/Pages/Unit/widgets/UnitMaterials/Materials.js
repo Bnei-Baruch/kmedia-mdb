@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 
@@ -10,86 +10,76 @@ import SourcesContainer from './Sources/SourcesContainer';
 import Sketches from './Sketches';
 import TranscriptionContainer from './Transcription/TranscriptionContainer';
 
-class Materials extends Component {
-  static propTypes = {
-    unit: shapes.ContentUnit,
-    t: PropTypes.func.isRequired,
+const derivedTextUnits = (unit) => {
+  const types    = {};
+  const callback = (x) => {
+    types[x.content_type] = (x.files || []).some(f => f.type === MT_TEXT);
   };
 
-  static defaultProps = {
-    unit: undefined,
-  };
+  Object.values(unit.derived_units || {})
+    .forEach(callback);
 
-  derivedTextUnits() {
-    const { unit } = this.props;
-    const types    = {};
-    const callback = (x) => {
-      types[x.content_type] = (x.files || []).some(f => f.type === MT_TEXT);
-    };
+  return types;
+};
 
-    Object.values(unit.derived_units || {})
-      .forEach(callback);
-
-    return types;
+const Materials = ({ unit = undefined, t }) => {
+  if (!unit) {
+    return null;
   }
 
-  render() {
-    const { unit, t } = this.props;
+  const derivedTexts = derivedTextUnits(unit);
+  const items        = [
+    {
+      name: 'transcription',
+      label: t('materials.transcription.header'),
+      component: <TranscriptionContainer unit={unit} key="transcription" />
+    },
+    {
+      name: 'sources',
+      label: t('materials.sources.header'),
+      component: <SourcesContainer unit={unit} />
+    },
+    {
+      name: 'sketches',
+      label: t('materials.sketches.header'),
+      component: <Sketches unit={unit} />,
+    },
+  ];
 
-    if (!unit) {
-      return null;
-    }
-
-    const derivedTexts = this.derivedTextUnits();
-    const items        = [
-      {
-        name: 'transcription',
-        label: t('materials.transcription.header'),
-        component: <TranscriptionContainer unit={unit} key="transcription" />
-      },
-      {
-        name: 'sources',
-        label: t('materials.sources.header'),
-        component: <SourcesContainer unit={unit} />
-      },
-      {
-        name: 'sketches',
-        label: t('materials.sketches.header'),
-        component: <Sketches unit={unit} />,
-      },
-    ];
-
-    if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER || 
-        unit.content_type === CT_VIRTUAL_LESSON) {
-      items.unshift({
-        name: 'summary',
-        label: t('materials.summary.header'),
-        component: <Summary unit={unit} />,
-      });
-    }
-
-    if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER && derivedTexts[CT_ARTICLE]) {
-      items.push({
-        name: 'articles',
-        label: t('materials.articles.header'),
-        component: <TranscriptionContainer unit={unit} key="articles" type="articles" />
-      });
-    }
-
-    if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER && derivedTexts[CT_RESEARCH_MATERIAL]) {
-      items.push({
-        name: 'research',
-        label: t('materials.research.header'),
-        component: <TranscriptionContainer unit={unit} key="research" type="research" />
-      });
-    }
-
-    return (
-      <div className="unit-materials">
-        <TabsMenu items={items} />
-      </div>
-    );
+  if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER || unit.content_type === CT_VIRTUAL_LESSON) {
+    items.unshift({
+      name: 'summary',
+      label: t('materials.summary.header'),
+      component: <Summary unit={unit} />,
+    });
   }
-}
+
+  if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER && derivedTexts[CT_ARTICLE]) {
+    items.push({
+      name: 'articles',
+      label: t('materials.articles.header'),
+      component: <TranscriptionContainer unit={unit} key="articles" type="articles" />
+    });
+  }
+
+  if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER && derivedTexts[CT_RESEARCH_MATERIAL]) {
+    items.push({
+      name: 'research',
+      label: t('materials.research.header'),
+      component: <TranscriptionContainer unit={unit} key="research" type="research" />
+    });
+  }
+
+  return (
+    <div className="unit-materials">
+      <TabsMenu items={items} />
+    </div>
+  );
+};
+
+Materials.propTypes = {
+  unit: shapes.ContentUnit,
+  t: PropTypes.func.isRequired,
+};
 
 export default withNamespaces()(Materials);

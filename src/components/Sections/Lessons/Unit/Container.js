@@ -3,10 +3,7 @@ import React from 'react';
 import { CT_LESSON_PART } from '../../../../helpers/consts';
 import { UnitContainer, wrap as wrapContainer } from '../../../Pages/Unit/Container';
 import { UnitPage, wrap as wrapPage } from '../../../Pages/Unit/Page';
-import {
-  SameCollectionContainer,
-  wrap as wrapSameCollectionContainer
-} from '../../../Pages/Unit/widgets/Recommended/SameCollection/Container';
+import { SameCollectionContainer, wrap as wrapSameCollectionContainer } from '../../../Pages/Unit/widgets/Recommended/SameCollection/Container';
 import SameCollectionLessonPart from './SameCollectionLessonPart';
 import SameCollectionLecture from './SameCollectionLecture';
 

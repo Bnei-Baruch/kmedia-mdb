@@ -17,10 +17,26 @@ export function* fetchData() {
   }
 }
 
+export function* fetchBanner(action) {
+  try {
+    const name     = `banner-${action.payload}?meta=header,sub-header,link`;
+    const { data } = yield call(Api.getCMS, name);
+    yield put(actions.fetchBannerSuccess(data));
+  } catch (err) {
+    yield put(actions.fetchBannerFailure(err));
+  }
+}
+
 function* watchFetchData() {
   yield takeLatest([types.FETCH_DATA], fetchData);
 }
 
+function* watchFetchBanner() {
+  yield takeLatest([types.FETCH_BANNER], fetchBanner);
+}
+
 export const sagas = [
   watchFetchData,
+  watchFetchBanner,
 ];
+

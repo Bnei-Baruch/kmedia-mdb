@@ -124,7 +124,6 @@ export default function serverRender(req, res, next, htmlData) {
   }
 
   moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
-  const cookies = cookieParse(req.headers.cookie || `COOKIE_CONTENT_LANG=${language};`);
 
   const i18nServer = i18nnext.cloneInstance();
   i18nServer.changeLanguage(language, (err) => {
@@ -137,12 +136,14 @@ export default function serverRender(req, res, next, htmlData) {
       initialEntries: [req.originalUrl],
     });
 
+    const cookies = cookieParse(req.headers.cookie || '');
+
     const initialState = {
       router: { location: history.location },
       device: { deviceInfo: new UAParser(req.get('user-agent')).getResult() },
       settings: Object.assign({}, settingsInitialState, {
         language,
-        contentLanguage: cookies[COOKIE_CONTENT_LANG]
+        contentLanguage: cookies[COOKIE_CONTENT_LANG],
       }),
     };
 
@@ -224,7 +225,7 @@ export default function serverRender(req, res, next, htmlData) {
 </script>`;
 
               const html = htmlData
-                .replace(/<html lang="en">/, `<html ${helmet.htmlAttributes.toString()} >`)
+                .replace(/<html lang="en">/, `<html lang="en" ${helmet.htmlAttributes.toString()} >`)
                 .replace(/<title>.*<\/title>/, helmet.title.toString())
                 .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, language)}${alternateLinks(req, language)}${ogUrl(req, language)}</head>`)
                 .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)

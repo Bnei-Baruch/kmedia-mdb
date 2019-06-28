@@ -36,11 +36,11 @@ export class UnitListContainer extends withPagination {
     wip: false,
     err: null,
     isFiltersHydrated: false,
-    extraFetchParams: null,
+    extraFetchParams: () => {},
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.handlePageChanged     = this.handlePageChanged.bind(this);
     this.handleFiltersChanged  = this.handleFiltersChanged.bind(this);
     this.handleFiltersHydrated = this.handleFiltersHydrated.bind(this);
@@ -84,7 +84,12 @@ export class UnitListContainer extends withPagination {
   }
 
   extraFetchParams() {
-    return this.props.extraFetchParams ? this.props.extraFetchParams(this.props) : {};
+    const t = typeof this.props.extraFetchParams;
+    if (this.props.extraFetchParams) {
+      if (t === 'function') return this.props.extraFetchParams(this.props);
+      if (t === 'object') return this.props.extraFetchParams;
+    }
+    return {};
   }
 
   handlePageChanged(pageNo) {

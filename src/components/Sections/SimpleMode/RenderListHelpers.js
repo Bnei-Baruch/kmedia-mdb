@@ -1,18 +1,13 @@
 import React from 'react';
 import groupBy from 'lodash/groupBy';
 import { Button, Card, Image, List } from 'semantic-ui-react';
-import DownloadIcon from '../../../images/icons/download.svg';
-import InfoIcon from '../../../images/icons/info.svg';
-import ProgramsIcon from '../../../images/icons/programs.svg';
-import LecturesIcon from '../../../images/icons/lectures.svg';
-import EventsIcon from '../../../images/icons/events.svg';
-import PublicationsIcon from '../../../images/icons/publications.svg';
 
 import { CT_ARTICLE, CT_DAILY_LESSON, CT_FULL_LESSON, CT_LESSON_PART, CT_VIDEO_PROGRAM_CHAPTER, NO_NAME, UNIT_EVENTS_TYPE, UNIT_PROGRAMS_TYPE, UNIT_PUBLICATIONS_TYPE, VS_NAMES } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
 import { isEmpty, physicalFile } from '../../../helpers/utils';
 import { formatTime } from '../../../helpers/time';
 import Link from '../../Language/MultiLanguageLink';
+import { SectionLogo } from '../../../helpers/images';
 
 const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
 
@@ -55,7 +50,9 @@ const renderHorizontalFilesList = (files, contentType, t) => (
         <List.Content>
           <a href={url}>
             {label}
-            <Image className="file-list-icon" src={DownloadIcon} />
+            <Image className="file-list-icon">
+              <SectionLogo name='downloads' />
+            </Image>
           </a>
         </List.Content>
       </List.Item>
@@ -101,7 +98,9 @@ const renderUnits = (units, language, t, helpChooseLang) => (
                 ? files
                 : (
                   <List.Item key={unit.id} className="no-files">
-                    <Image src={InfoIcon} />
+                    <Image>
+                      <SectionLogo name='info' />
+                    </Image>
                     <List.Content>
                       <span className="bold-font">{t('simple-mode.no-files-found-for-lang')}</span>
                       <br />
@@ -146,13 +145,11 @@ export const renderCollection = (collection, language, t, helpChooseLang) => {
 export const matchIconToType = (type) => {
   switch (type) {
   case 'programs':
-    return ProgramsIcon;
   case 'events':
-    return EventsIcon;
   case 'publications':
-    return PublicationsIcon;
+    return type;
   default:
-    return LecturesIcon;
+    return 'lectures';
   }
 };
 
@@ -167,7 +164,9 @@ export const renderOtherCollection = (title, collectionArray, language, t, helpC
           ? (
             <div className="type-header-top-margin">
               <h2>
-                <Image className="simple-mode-type-icon" src={icon} />
+                <Image className="simple-mode-type-icon">
+                  <SectionLogo name={icon} />
+                </Image>
                 {t(`nav.sidebar.${title.toLowerCase()}`)}
               </h2>
               <Card fluid>

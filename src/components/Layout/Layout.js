@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
-import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
+import { Header, Icon, Menu, Segment } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
 import playerHelper from '../../helpers/player';
@@ -19,7 +19,41 @@ import HandleLanguages from './HandleLanguages';
 import Footer from './Footer';
 import TopMost from './TopMost';
 import DonateNow from './DonateNow';
-import logo from '../../images/logo.svg';
+import Logo from '../../images/icons/Logo';
+
+let isMobileDevice = false;
+
+const renderHeaderSearch = ({ isShowHeaderSearch }, { t, location }, headerSearchElement) => {
+  if (!isShowHeaderSearch) {
+    return null;
+  }
+
+  return (
+    <Segment color="blue" inverted className="header_search" ref={headerSearchElement}>
+      <WrappedOmniBox t={t} location={location} />
+    </Segment>
+  );
+};
+
+const shouldShowSearch = (location) => {
+  // we don't show the search on home page
+  const parts = location.pathname.split('/').filter(x => (x !== ''));
+  if (parts.length === 0) {
+    return false;
+  }
+  if (parts.length === 1) {
+    return !ALL_LANGUAGES.includes(parts[0]);
+  }
+  return true;
+};
+
+const menuButtonElement1 = createRef();
+
+const menuButtonElement2 = createRef();
+
+const showSearchButtonElement = createRef();
+
+const headerSearchElement = createRef();
 
 class Layout extends Component {
   static propTypes = {
@@ -31,35 +65,28 @@ class Layout extends Component {
     t: PropTypes.func.isRequired,
   };
 
-  state = {
-    sidebarActive: false,
-    isShowHeaderSearch: false
-  };
-
-  menuButtonElement1 = createRef();
-
-  menuButtonElement2 = createRef();
-
-  showSearchButtonElement = createRef();
-
-  headerSearchElement = createRef();
-
-  componentWillMount() {
-    const { location } = this.props;
-    this.setState({ embed: playerHelper.getEmbedFromQuery(location) });
+  constructor(props) {
+    super(props);
+    const { deviceInfo, location } = props;
+    isMobileDevice                 = deviceInfo.device && deviceInfo.device.type === 'mobile';
+    this.state                     = {
+      sidebarActive: false,
+      isShowHeaderSearch: false,
+      embed: playerHelper.getEmbedFromQuery(location),
+    };
   }
 
   componentDidMount() {
     document.addEventListener('click', this.clickOutside, true);
   }
 
-  componentWillReceiveProps(nextProps) {
+  static getDerivedStateFromProps(nextProps) {
     const isShowHeaderSearch = (
       nextProps.location
-      && this.isMobileDevice()
+      && isMobileDevice
       && nextProps.location.pathname.endsWith('search')
     );
-    this.setState({ isShowHeaderSearch });
+    return { isShowHeaderSearch };
   }
 
   componentWillUnmount() {
@@ -78,15 +105,15 @@ class Layout extends Component {
   };
 
   isCloseHeaderSearch = (e) => {
-    if (!this.state || !this.state.isShowHeaderSearch || e.target === this.headerSearchElement) {
+    if (!this.state || !this.state.isShowHeaderSearch || e.target === headerSearchElement) {
       return false;
     }
 
-    if (this.headerSearchElement.current && this.headerSearchElement.current.contains(e.target)) {
+    if (headerSearchElement.current && headerSearchElement.current.contains(e.target)) {
       return false;
     }
 
-    const hasTarget = this.showSearchButtonElement.current && this.showSearchButtonElement.current.contains(e.target);
+    const hasTarget = showSearchButtonElement.current && showSearchButtonElement.current.contains(e.target);
     return !hasTarget;
   };
 
@@ -99,11 +126,11 @@ class Layout extends Component {
       return false;
     }
 
-    if (this.menuButtonElement1.current && this.menuButtonElement1.current.contains(e.target)) {
+    if (menuButtonElement1.current && menuButtonElement1.current.contains(e.target)) {
       return false;
     }
 
-    const hasTarget = this.menuButtonElement2.current && this.menuButtonElement2.current.contains(e.target);
+    const hasTarget = menuButtonElement2.current && menuButtonElement2.current.contains(e.target);
     return !hasTarget;
   };
 
@@ -115,56 +142,30 @@ class Layout extends Component {
   // Required for handling outside sidebar on click outside sidebar,
   closeSidebar = () => this.setState({ sidebarActive: false });
 
-  shouldShowSearch = (location) => {
-    // we don't show the search on home page
-    const parts = location.pathname.split('/').filter(x => (x !== ''));
-    if (parts.length === 0) {
-      return false;
-    }
-    if (parts.length === 1) {
-      return !ALL_LANGUAGES.includes(parts[0]);
-    }
-    return true;
-  };
-
-  isMobileDevice = () => {
-    const { deviceInfo } = this.props;
-    return deviceInfo.device && deviceInfo.device.type === 'mobile';
-  };
-
   showHeaderSearch = () => {
     const { isShowHeaderSearch } = this.state;
     this.setState({ isShowHeaderSearch: !isShowHeaderSearch });
-  };
-
-  renderHeaderSearch = () => {
-    const { isShowHeaderSearch } = this.state;
-    if (!isShowHeaderSearch) {
-      return null;
-    }
-
-    const { t, location } = this.props;
-    return (
-      <Ref innerRef={this.headerSearchElement}>
-        <Segment color="blue" inverted className="header_search">
-          <WrappedOmniBox t={t} location={location} />
-        </Segment>
-      </Ref>
-    );
   };
 
   render() {
     const { t, location, route, language, contentLanguage, setContentLanguage } = this.props;
     const { sidebarActive, embed }                                              = this.state;
 
-    const showSearch = this.shouldShowSearch(location);
+    const showSearch = shouldShowSearch(location);
 
     let sideBarIcon = <Icon name="sidebar" />;
     if (sidebarActive) {
       sideBarIcon = <Icon size="large" name="x" />;
     }
 
-    return !embed ? (
+    if (embed) {
+      return (
+        <div>
+          {renderRoutes(route.routes)}
+        </div>
+      );
+    }
+    return (
       <div className="layout">
         {/* <div className="debug">
           <span className="widescreen-only">widescreen</span>
@@ -176,18 +177,17 @@ class Layout extends Component {
         <GAPageView location={location} />
         <div className="layout__header">
           <Menu inverted borderless size="huge" color="blue">
-            <Ref innerRef={this.menuButtonElement1}>
-              <Menu.Item
-                icon
-                as="a"
-                className="layout__sidebar-toggle"
-                onClick={this.toggleSidebar}
-              >
-                {sideBarIcon}
-              </Menu.Item>
-            </Ref>
+            <Menu.Item
+              ref={menuButtonElement1}
+              icon
+              as="a"
+              className="layout__sidebar-toggle"
+              onClick={this.toggleSidebar}
+            >
+              {sideBarIcon}
+            </Menu.Item>
             <Menu.Item className="logo" header as={Link} to="/">
-              <img src={logo} alt="logo" />
+              <Logo width="40" height="40" />
               <Header inverted as="h1" content={t('nav.top.header')} />
             </Menu.Item>
             <Menu.Item className="layout__search mobile-hidden">
@@ -204,17 +204,15 @@ class Layout extends Component {
                   contentLanguage={contentLanguage}
                   setContentLanguage={setContentLanguage}
                   location={location}
-                  isMobileDevice={this.isMobileDevice()}
+                  isMobileDevice={isMobileDevice}
                 />
               </Menu.Item>
               {
-                showSearch && this.isMobileDevice()
+                showSearch && isMobileDevice
                   ? (
-                    <Ref innerRef={this.showSearchButtonElement}>
-                      <Menu.Item as="a" position="right">
-                        <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
-                      </Menu.Item>
-                    </Ref>
+                    <Menu.Item as="a" position="right" ref={showSearchButtonElement}>
+                      <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
+                    </Menu.Item>
                   )
                   : null
               }
@@ -225,7 +223,7 @@ class Layout extends Component {
             </Menu.Menu>
           </Menu>
         </div>
-        {this.renderHeaderSearch()}
+        {renderHeaderSearch(this.state, this.props, headerSearchElement)}
         <div
           className={classnames('layout__sidebar', { 'is-active': sidebarActive })}
           ref={(el) => {
@@ -233,18 +231,17 @@ class Layout extends Component {
           }}
         >
           <Menu inverted size="huge" color="blue">
-            <Ref innerRef={this.menuButtonElement2}>
-              <Menu.Item
-                icon
-                as="a"
-                className="layout__sidebar-toggle"
-                onClick={this.closeSidebar}
-              >
-                {sideBarIcon}
-              </Menu.Item>
-            </Ref>
+            <Menu.Item
+              ref={menuButtonElement2}
+              icon
+              as="a"
+              className="layout__sidebar-toggle"
+              onClick={this.closeSidebar}
+            >
+              {sideBarIcon}
+            </Menu.Item>
             <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={this.closeSidebar}>
-              <img src={logo} alt="logo" />
+              <Logo />
               <Header inverted as="h1" content={t('nav.top.header')} />
             </Menu.Item>
           </Menu>
@@ -258,10 +255,6 @@ class Layout extends Component {
           </div>
           <Footer />
         </div>
-      </div>
-    ) : (
-      <div>
-        {renderRoutes(route.routes)}
       </div>
     );
   }
