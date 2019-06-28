@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
-import { Header, Icon, Menu, Segment } from 'semantic-ui-react';
+import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
 import playerHelper from '../../helpers/player';
@@ -23,17 +23,13 @@ import Logo from '../../images/icons/Logo';
 
 let isMobileDevice = false;
 
-const renderHeaderSearch = ({ isShowHeaderSearch }, { t, location }, headerSearchElement) => {
-  if (!isShowHeaderSearch) {
-    return null;
-  }
-
-  return (
-    <Segment color="blue" inverted className="header_search" ref={headerSearchElement}>
+const RenderHeaderSearch = React.forwardRef(({ t, location }, headerSearchElement) => (
+  <div ref={headerSearchElement}>
+    <Segment color="blue" inverted className="header_search">
       <WrappedOmniBox t={t} location={location} />
     </Segment>
-  );
-};
+  </div>
+));
 
 const shouldShowSearch = (location) => {
   // we don't show the search on home page
@@ -73,6 +69,7 @@ class Layout extends Component {
       sidebarActive: false,
       isShowHeaderSearch: false,
       embed: playerHelper.getEmbedFromQuery(location),
+      pathname: props.location ? props.location.pathname : null,
     };
   }
 
@@ -80,13 +77,17 @@ class Layout extends Component {
     document.addEventListener('click', this.clickOutside, true);
   }
 
-  static getDerivedStateFromProps(nextProps) {
+  static getDerivedStateFromProps(nextProps, state) {
+    if (nextProps.location && nextProps.location.pathname === state.pathname) {
+      return null;
+    }
+
     const isShowHeaderSearch = (
       nextProps.location
       && isMobileDevice
       && nextProps.location.pathname.endsWith('search')
     );
-    return { isShowHeaderSearch };
+    return { isShowHeaderSearch, pathname: nextProps.pathname };
   }
 
   componentWillUnmount() {
@@ -210,9 +211,11 @@ class Layout extends Component {
               {
                 showSearch && isMobileDevice
                   ? (
-                    <Menu.Item as="a" position="right" ref={showSearchButtonElement}>
-                      <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
-                    </Menu.Item>
+                    <Ref innerRef={showSearchButtonElement}>
+                      <Menu.Item as="a" position="right">
+                        <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
+                      </Menu.Item>
+                    </Ref>
                   )
                   : null
               }
@@ -223,7 +226,7 @@ class Layout extends Component {
             </Menu.Menu>
           </Menu>
         </div>
-        {renderHeaderSearch(this.state, this.props, headerSearchElement)}
+        {this.state.isShowHeaderSearch && <RenderHeaderSearch t={this.props.t} location={this.props.location} ref={headerSearchElement} />}
         <div
           className={classnames('layout__sidebar', { 'is-active': sidebarActive })}
           ref={(el) => {
