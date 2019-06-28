@@ -213,7 +213,7 @@ class MediaDownloads extends Component {
           <Popup
             open={!!isCopyPopupOpen[url]}
             content={t('messages.link-copied-to-clipboard')}
-            position="bottom"
+            position="bottom center"
             trigger={(
               <CopyToClipboard text={url} onCopy={() => this.handleCopied(url)}>
                 <Button
