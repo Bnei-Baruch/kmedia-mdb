@@ -7,7 +7,7 @@ import 'jest-enzyme';
 
 // Testing library
 import '@testing-library/react/cleanup-after-each';
-import 'jest-dom/extend-expect'; // adds custom jest matchers from jest-dom
+import '@testing-library/jest-dom/extend-expect'; // adds custom jest matchers from jest-dom
 // import 'jest-axe/extend-expect'; // Testing the a11y
 
 import { BrowserRouter as Router } from 'react-router-dom';
