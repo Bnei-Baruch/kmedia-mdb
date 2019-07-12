@@ -71,7 +71,7 @@ class Layout extends Component {
       sidebarActive: false,
       isShowHeaderSearch: false,
       embed: playerHelper.getEmbedFromQuery(location),
-      pathname: props.location ? props.location.pathname : null,
+      pathname: location ? location.pathname : null,
     };
   }
 
