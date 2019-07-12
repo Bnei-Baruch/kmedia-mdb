@@ -1,12 +1,15 @@
 import React from 'react';
 
+// Enzyme
 import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import 'react-testing-library/cleanup-after-each';
 import 'jest-enzyme';
 
+// Testing library
+import '@testing-library/react/cleanup-after-each';
+import '@testing-library/jest-dom/extend-expect'; // adds custom jest matchers from jest-dom
 // import 'jest-axe/extend-expect'; // Testing the a11y
-import 'jest-dom/extend-expect'; // adds custom jest matchers from jest-dom
+
 import { BrowserRouter as Router } from 'react-router-dom';
 
 configure({ adapter: new Adapter() });
