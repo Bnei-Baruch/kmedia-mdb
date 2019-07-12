@@ -123,7 +123,7 @@ export const getToWithLanguage = (navigateTo, location, language, contentLanguag
   }
 
   return {
-      ...navigateTo,
-      pathname: prefixWithLanguage(navigateTo.pathname, location, language)
+    ...navigateTo,
+    pathname: prefixWithLanguage(navigateTo.pathname, location, language)
   };
 }
