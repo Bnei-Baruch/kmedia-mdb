@@ -30,7 +30,7 @@
     "all": "הכל",
     "date-filter": {
       "label": "תאריך",
-      "selectTitle": "בחר טווח תאריכים",
+      "selectTitle": "בחרו טווח תאריכים",
       "presets": {
         "TODAY": "היום",
         "YESTERDAY": "אתמול",
@@ -38,8 +38,8 @@
         "LAST_30_DAYS": "30 ימים אחרונים",
         "LAST_MONTH": "חודש שעבר",
         "THIS_MONTH": "חודש נוכחי",
-        "CUSTOM_RANGE": "בחירה גמישה",
-        "CUSTOM_DAY": "בחירה תאריך"
+        "CUSTOM_RANGE": "בחרו טווח תאריכים",
+        "CUSTOM_DAY": "בחרו תאריך"
       },
       "start": "התחלה",
       "end": "סיום"
