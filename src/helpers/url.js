@@ -107,28 +107,23 @@ export const updateQuery = (history, updater) => {
 export const isDebMode = location => getQuery(location).deb || false;
 
 export const getToWithLanguage = (navigateTo, location, language, contentLanguage) => {
-  let toWithLanguage;
-
   if (typeof navigateTo === 'string') {
-    toWithLanguage = prefixWithLanguage(navigateTo, location, language); 
+    return prefixWithLanguage(navigateTo, location, language); 
   }
-  else {
-    if (!navigateTo) {
-      navigateTo = { ...location };
-    }
+  
+  if (!navigateTo) {
+    navigateTo = { ...location };
+  }
 
-    // we're changing 'search' in case contentLanguage was supplied
-    if (contentLanguage) {
-      const q = getQuery(navigateTo);
-      q.language = contentLanguage;
-      navigateTo.search = `?${stringify(q)}`;
-    }
+  // we're changing 'search' in case contentLanguage was supplied
+  if (contentLanguage) {
+    const q = getQuery(navigateTo);
+    q.language = contentLanguage;
+    navigateTo.search = `?${stringify(q)}`;
+  }
 
-    toWithLanguage = {
+  return {
       ...navigateTo,
       pathname: prefixWithLanguage(navigateTo.pathname, location, language)
-    };
-  }
-
-  return toWithLanguage;
+  };
 }
