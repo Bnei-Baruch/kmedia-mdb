@@ -178,15 +178,16 @@ class Layout extends Component {
         <GAPageView location={location} />
         <div className="layout__header">
           <Menu inverted borderless size="huge" color="blue">
-            <Menu.Item
-              ref={menuButtonElement1}
-              icon
-              as="a"
-              className="layout__sidebar-toggle"
-              onClick={this.toggleSidebar}
-            >
-              {sideBarIcon}
-            </Menu.Item>
+            <Ref innerRef={this.menuButtonElement1}>
+              <Menu.Item
+                icon
+                as="a"
+                className="layout__sidebar-toggle"
+                onClick={this.toggleSidebar}
+              >
+                {sideBarIcon}
+              </Menu.Item>
+            </Ref>
             <Menu.Item className="logo" header as={Link} to="/">
               <Logo width="40" height="40" />
               <Header inverted as="h1" content={t('nav.top.header')} />
@@ -234,15 +235,16 @@ class Layout extends Component {
           }}
         >
           <Menu inverted size="huge" color="blue">
-            <Menu.Item
-              ref={menuButtonElement2}
-              icon
-              as="a"
-              className="layout__sidebar-toggle"
-              onClick={this.closeSidebar}
-            >
-              {sideBarIcon}
-            </Menu.Item>
+            <Ref innerRef={this.menuButtonElement2}>
+              <Menu.Item
+                icon
+                as="a"
+                className="layout__sidebar-toggle"
+                onClick={this.closeSidebar}
+              >
+                {sideBarIcon}
+              </Menu.Item>
+            </Ref>
             <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={this.closeSidebar}>
               <Logo />
               <Header inverted as="h1" content={t('nav.top.header')} />
