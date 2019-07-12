@@ -235,15 +235,16 @@ class Layout extends Component {
           }}
         >
           <Menu inverted size="huge" color="blue">
-            <Menu.Item
-              icon
-              as="a"
-              className="layout__sidebar-toggle"
-              onClick={this.closeSidebar}
-              ref={menuButtonElement2}
-            >
-              {sideBarIcon}
-            </Menu.Item>
+            <div ref={menuButtonElement2}>
+              <Menu.Item
+                icon
+                as="a"
+                className="layout__sidebar-toggle"
+                onClick={this.closeSidebar}
+              >
+                {sideBarIcon}
+              </Menu.Item>
+            </div>
             <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={this.closeSidebar}>
               <Logo />
               <Header inverted as="h1" content={t('nav.top.header')} />
