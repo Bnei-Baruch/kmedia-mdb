@@ -24,6 +24,7 @@
 .search-omnibox {
   max-width: 600px;
   width: 100%;
+  overflow:hidden;
 
   .input {
     width: 100%;
@@ -1440,5 +1441,55 @@
   &.filter-popup {
     top: 0 !important;
     overflow: auto !important;
+  }
+}
+
+.action:hover {
+  background: inherit !important;
+}
+
+.searchButton {
+  border-radius: 0 .28571429rem .28571429rem 0 !important;
+  margin-right: 45px !important;
+}
+
+.dateButton {
+  border-radius: .28571429rem !important;
+}
+
+@media only screen and (max-width: $tabletBreakpoint) {
+  .search-omnibox {
+    .searchButton {
+      margin-right: 5px !important;
+      padding-left: 15px !important;
+      padding-right: 0px !important;
+    }
+  }
+  .dateButton {
+    padding-left: 15px !important;
+    padding-right: 0px !important;
+  }
+}
+
+.rtl {
+  .search-omnibox {
+    .searchButton {
+      border-radius: .28571429rem 0 0 .28571429rem !important;
+      margin-right: 0 !important;
+      margin-left: 45px !important;
+      padding-right: 15px !important;
+    }
+  }
+  @media only screen and (max-width: $tabletBreakpoint) {
+    .search-omnibox {
+      .searchButton {
+        margin-right: 0px !important;
+        margin-left: 5px !important;
+      }
+    }
+    .dateButton {
+      padding-left: 5px !important;
+      padding-right: 15px !important;
+    }
   }
 }
