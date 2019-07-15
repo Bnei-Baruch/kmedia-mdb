@@ -15,6 +15,7 @@ import { sagas as assets } from './assets';
 import { sagas as home } from './home';
 import { sagas as stats } from './stats';
 import { sagas as simpleMode } from './simpleMode';
+import { sagas as user } from './user';
 
 const allSagas = [
   ...device,
@@ -32,6 +33,7 @@ const allSagas = [
   ...home,
   ...stats,
   ...simpleMode,
+  ...user,
 ];
 
 export function* rootSaga() {

@@ -4,7 +4,9 @@ import { renderRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { I18nextProvider } from 'react-i18next';
+import { OidcProvider } from 'redux-oidc';
 
+import userManager from '../../helpers/usermanager';
 import routes from '../../routes';
 import ScrollToTop from '../shared/ScrollToTop/ScrollToTop';
 import '../../stylesheets/Kmedia.scss';
@@ -15,11 +17,13 @@ const App = (props) => {
   return (
     <I18nextProvider i18n={i18n} initialI18nStore={initialI18nStore} initialLanguage={initialLanguage}>
       <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <ScrollToTop>
-            {renderRoutes(routes)}
-          </ScrollToTop>
-        </ConnectedRouter>
+        <OidcProvider store={store} userManager={userManager}>
+          <ConnectedRouter history={history}>
+            <ScrollToTop>
+              {renderRoutes(routes)}
+            </ScrollToTop>
+          </ConnectedRouter>
+        </OidcProvider>
       </Provider>
     </I18nextProvider>
   );

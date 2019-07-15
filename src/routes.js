@@ -26,6 +26,7 @@ import Topics from './components/Sections/Topics/TopicContainer';
 import Topic from './components/Sections/Topics/TopicPage';
 import SearchResults from './components/Search/SearchResultsContainer';
 import HomePage from './components/Sections/Home/Container';
+import LoginCallback from './components/Auth/LoginCallback';
 // import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import Help from './components/Sections/Help/Help';
 import SimpleMode from './components/Sections/SimpleMode/Container';
@@ -36,6 +37,7 @@ import * as shapes from './components/shapes';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
+  { path: 'callback', component: LoginCallback },
   { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   {

@@ -1,7 +1,10 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
+import { reducer as oidc } from 'redux-oidc';
+
 import { reducer as device } from './modules/device';
 import { reducer as settings } from './modules/settings';
+import { reducer as user } from './modules/user';
 import { reducer as events } from './modules/events';
 import { reducer as lessons } from './modules/lessons';
 import { reducer as programs } from './modules/programs';
@@ -19,8 +22,10 @@ import { reducer as simpleMode } from './modules/simpleMode';
 
 export default history => combineReducers({
   router: connectRouter(history),
+  oidc,
   device,
   settings,
+  user,
   programs,
   events,
   lessons,

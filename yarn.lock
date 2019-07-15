@@ -6985,7 +6985,7 @@ immer@^3.1.3:
   resolved "https://registry.yarnpkg.com/immer/-/immer-3.1.3.tgz#59bc742b2aab6e2c676445edb653e588a23c70fc"
   integrity sha512-HG5SXTXTTVy9lGNwS075cNhQoV375jHsIJO3UtMjuUWJOuwlMr0u42FlsKTJcppt5AzsFAsmj9r4kHvsSHh3hQ==
 
-immutable@^3.8.1:
+immutable@>=3.6.0, immutable@^3.8.1:
   version "3.8.2"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
   integrity sha1-wkOZUUVbs5kT2vKBN28VMOEErfM=
@@ -8337,6 +8337,11 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
+jsrsasign@^8.0.12:
+  version "8.0.12"
+  resolved "https://registry.yarnpkg.com/jsrsasign/-/jsrsasign-8.0.12.tgz#22abb9656d34a30b9530436720835e89c2e5c316"
+  integrity sha1-Iqu5ZW00owuVMENnIINeicLlwxY=
+
 jsx-ast-utils@^2.0.1, jsx-ast-utils@^2.1.0, jsx-ast-utils@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/jsx-ast-utils/-/jsx-ast-utils-2.2.1.tgz#4d4973ebf8b9d2837ee91a8208cc66f3a2776cfb"
@@ -9686,6 +9691,13 @@ obuf@^1.0.0, obuf@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
+
+oidc-client@^1.8.2:
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/oidc-client/-/oidc-client-1.8.2.tgz#5a73c33858fe0e25489fdc6de31c8ce3075f6e0b"
+  integrity sha512-WwoSY8S6QyNN3qpne88YurjNqjTf6z1Xr0y+OrFVvdnVPYcefkTtXlZ5iOwR2JrmP4vBuq2j8eTjUJyDZFrFNQ==
+  dependencies:
+    uuid "^3.3.2"
 
 on-finished@~2.3.0:
   version "2.3.0"
@@ -11745,6 +11757,13 @@ redux-logger@^3.0.6:
   integrity sha1-91VZZvMJjzyIYExEnPC69XeCdL8=
   dependencies:
     deep-diff "^0.3.5"
+
+redux-oidc@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/redux-oidc/-/redux-oidc-3.1.3.tgz#101f890e38beeb02e5d1c43b181ef3256bb66414"
+  integrity sha512-1ZpZdTXCL/hEOviz2VFamoMLe8Gk1K0z8bcaxdKkhKIAL7DTTPigd86V1qDBJmtC23ZDKa0jBTGebbitBSiQhA==
+  optionalDependencies:
+    immutable ">=3.6.0"
 
 redux-saga@^0.16.0:
   version "0.16.2"

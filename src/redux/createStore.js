@@ -1,7 +1,9 @@
 import { applyMiddleware, compose, createStore as reduxCreateStore } from 'redux';
 import createSagaMiddleware, { END } from 'redux-saga';
+import { loadUser } from 'redux-oidc';
 // import { createLogger } from 'redux-logger';
 
+import userManager from '../helpers/usermanager';
 import sagaMonitor from '../sagas/helpers/sagaMonitor';
 import createMultiLanguageRouterMiddleware from './middleware/multiLanguageRouterMiddleware';
 // import createDeferredSagasMiddleware from './middleware/defferedSagasMiddleware';
@@ -44,6 +46,12 @@ export default function createStore(initialState, history) {
     applyMiddleware(...middlewares),
     devToolsStoreEnhancer()
   ));
+
+  // we have silent_renew configured so we use this instead of the oidc-middleware.
+  // TODO(yanive): implement server side as redux-iodc doesn't support server side code.
+  if (isBrowser) {
+    loadUser(store, userManager);
+  }
 
   // used server side
   store.rootSagaPromise = sagaMiddleWare.run(rootSaga).done;

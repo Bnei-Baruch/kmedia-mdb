@@ -28,7 +28,7 @@ ReactGA.initialize('UA-108372395-1', { gaOptions: { transport: 'beacon' } });
 const history = createBrowserHistory();
 const store   = createStore(window.__data, history);
 store.dispatch(ssr.hydrate());
-// console.log('window.__data', window.__data);
+console.log('window.__data', window.__data);
 
 const i18nData = window.__i18n || {};
 

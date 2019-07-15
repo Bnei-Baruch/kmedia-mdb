@@ -10,12 +10,20 @@ export const assetUrl     = path => `${ASSETS_BACKEND}${path}`;
 export const cmsUrl       = path => `${CMS_BACKEND}wp-json/get-post-plugin/v1/get-post/${path}`;
 export const imaginaryUrl = path => `${IMAGINARY_URL}${path}`;
 
+export function setApiAccessToken(value) {
+  axios.defaults.headers.common.Authorization = value;
+}
+
+export function removeApiAcessToken() {
+  delete axios.defaults.headers.common.Authorization;
+}
+
 export class Requests {
-  static get = path => axios(backendUrl(path));
+  static get = path => axios.get(backendUrl(path));
 
-  static getAsset = path => axios(assetUrl(path));
+  static getAsset = path => axios.get(assetUrl(path));
 
-  static getCMS = path => axios(cmsUrl(path));
+  static getCMS = path => axios.get(cmsUrl(path));
 
   static makeParams = params => (
     `${Object.entries(params)
@@ -30,7 +38,7 @@ export class Requests {
 
         return `${key}=${Requests.encode(value)}`;
       })
-      //can happen if parameter value is empty array 
+      // can happen if parameter value is empty array
       .filter(p => p !== '')
       .join('&')}`
   );
