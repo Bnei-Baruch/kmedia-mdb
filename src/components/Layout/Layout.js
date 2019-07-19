@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
+import { push } from 'connected-react-router';
 import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
@@ -59,6 +60,7 @@ class Layout extends Component {
     contentLanguage: PropTypes.string.isRequired,
     setContentLanguage: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -69,7 +71,7 @@ class Layout extends Component {
       sidebarActive: false,
       isShowHeaderSearch: false,
       embed: playerHelper.getEmbedFromQuery(location),
-      pathname: props.location ? props.location.pathname : null,
+      pathname: location ? location.pathname : null,
     };
   }
 
@@ -149,8 +151,8 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location, route, language, contentLanguage, setContentLanguage } = this.props;
-    const { sidebarActive, embed }                                              = this.state;
+    const { t, location, route, language, contentLanguage, setContentLanguage, push } = this.props;
+    const { sidebarActive, embed }                                                    = this.state;
 
     const showSearch = shouldShowSearch(location);
 
@@ -206,7 +208,8 @@ class Layout extends Component {
                   contentLanguage={contentLanguage}
                   setContentLanguage={setContentLanguage}
                   location={location}
-                  isMobileDevice={isMobileDevice}
+                  isMobile={isMobileDevice}
+                  push={push}
                 />
               </Menu.Item>
               {
@@ -273,5 +276,6 @@ export default connect(
   }),
   {
     setContentLanguage: actions.setContentLanguage,
+    push
   }
 )(withNamespaces()(Layout));

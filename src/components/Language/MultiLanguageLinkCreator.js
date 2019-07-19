@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import hoistStatics from 'hoist-non-react-statics';
 import { withRouter } from 'react-router-dom';
 
-import { getQuery, prefixWithLanguage, stringify } from '../../helpers/url';
+import { getToWithLanguage } from '../../helpers/url';
 import * as shapes from '../shapes';
 
 /**
@@ -41,39 +41,14 @@ const multiLanguageLinkCreator = () => (WrappedComponent) => {
       contentLanguage: undefined,
     };
 
-    prefixPath = (path) => {
-      const { location, language } = this.props;
-      return prefixWithLanguage(path, location, language);
-    };
-
     render() {
       // We need to use "unused constants" in order to get proper "rest"
       const { to, language, contentLanguage, location, match, history, staticContext, ...rest } = this.props;
-      let navigateTo                                                                            = to;
-      let toWithLanguage;
-
-      if (typeof navigateTo === 'string') {
-        toWithLanguage = this.prefixPath(navigateTo);
-      } else {
-        if (!navigateTo) {
-          // we're changing 'search' in case contentLanguage was supplied
-          navigateTo = { ...location };
-        }
-
-        if (contentLanguage !== undefined) {
-          const q           = getQuery(navigateTo);
-          q.language        = contentLanguage;
-          navigateTo.search = `?${stringify(q)}`;
-        }
-
-        toWithLanguage = {
-          ...navigateTo,
-          pathname: this.prefixPath(navigateTo.pathname)
-        };
-      }
+      const toWithLanguage = getToWithLanguage(to, location, language, contentLanguage);
 
       return <WrappedComponent to={toWithLanguage} {...rest} />;
     }
+    
   }
 
   return withRouter(hoistStatics(MultiLanguageLinkHOC, WrappedComponent));
