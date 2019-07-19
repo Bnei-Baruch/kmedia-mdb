@@ -100,7 +100,7 @@ class HierarchicalFilter extends Component {
       if (isCallApply) {
         this.props.onApply(sValue);
       } else {
-        this.setState({ sValue: sValue });
+        this.setState({ sValue });
       }
       return;
     }
