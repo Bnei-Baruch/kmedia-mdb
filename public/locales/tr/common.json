@@ -318,7 +318,8 @@
     "tabs": {
       "articles": "Makaleler",
       "twitter": "Twitter",
-      "blog": "Blok"
+      "blog": "Blok",
+      "audio-blog": "Audio Blog"
     },
     "list": {
       "item_from":  "Maddesi:"
