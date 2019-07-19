@@ -327,7 +327,8 @@
     "tabs": {
       "articles": "Статьи",
       "twitter": "Твиттер",
-      "blog": "Блог"
+      "blog": "Блог",
+      "audio-blog": "Аудио Блог"
     },
     "list": {
       "episode_from": "Часть из:"
