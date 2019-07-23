@@ -9,17 +9,26 @@ import routes from '../../routes';
 import ScrollToTop from '../shared/ScrollToTop/ScrollToTop';
 import '../../stylesheets/Kmedia.scss';
 import * as shapes from '../shapes';
+import { DeviceInfoContext } from '../../helpers/app-contexts'
+import UAParser from "ua-parser-js";
 
 const App = (props) => {
   const { i18n, store, history, initialI18nStore, initialLanguage } = props;
+  const deviceInfo = new UAParser().getResult();
+  const deviceInfoContext =  {
+    deviceInfo: deviceInfo,
+    isMobileDevice: deviceInfo.device && deviceInfo.device.type === 'mobile'
+  };
   return (
     <I18nextProvider i18n={i18n} initialI18nStore={initialI18nStore} initialLanguage={initialLanguage}>
       <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <ScrollToTop>
-            {renderRoutes(routes)}
-          </ScrollToTop>
-        </ConnectedRouter>
+        <DeviceInfoContext.Provider value={deviceInfoContext}>
+          <ConnectedRouter history={history}>
+            <ScrollToTop>
+              {renderRoutes(routes)}
+            </ScrollToTop>
+          </ConnectedRouter>
+        </DeviceInfoContext.Provider>
       </Provider>
     </I18nextProvider>
   );
