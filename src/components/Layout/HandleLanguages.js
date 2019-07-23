@@ -15,11 +15,12 @@ class HandleLanguages extends Component {
     setContentLanguage: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
     t: PropTypes.func.isRequired,
-    isMobileDevice: PropTypes.bool
+    isMobile: PropTypes.bool,
+    push: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    isMobileDevice: false,
+    isMobile: false,
   };
 
   state = {
@@ -37,15 +38,15 @@ class HandleLanguages extends Component {
   handlePopupClose = () => this.setState({ isActive: false });
 
   render() {
-    const { t, language, location, contentLanguage, setContentLanguage, isMobileDevice } = this.props;
-    const { isActive }                                                                   = this.state;
-    const langDir                                                                        = getLanguageDirection(language);
+    const { t, language, location, contentLanguage, setContentLanguage, isMobile, push } = this.props;
+    const { isActive } = this.state;
+    const langDir      = getLanguageDirection(language);
 
     const popupStyle = {
       direction: langDir,
     };
 
-    const trigger = isMobileDevice
+    const trigger = isMobile
       ? <Icon size="big" name="language" className="no-margin" />
       : (
         <span>
@@ -53,6 +54,7 @@ class HandleLanguages extends Component {
           {t('languages.language')}
         </span>
       );
+
     return (
       <Popup
         id="handleLanguagesPopup"
@@ -77,18 +79,22 @@ class HandleLanguages extends Component {
               onClick={this.handlePopupClose}
             />
           </div>
-
         </Popup.Header>
         <Popup.Content>
           <UILanguage
             language={language}
             contentLanguage={contentLanguage}
             location={location}
+            isMobile={isMobile}
+            push={push}
           />
           <ContentLanguage
             language={language}
             contentLanguage={contentLanguage}
+            location={location}
             setContentLanguage={setContentLanguage}
+            isMobile={isMobile}
+            push={push}
           />
         </Popup.Content>
       </Popup>

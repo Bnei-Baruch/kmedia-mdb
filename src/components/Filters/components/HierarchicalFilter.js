@@ -96,7 +96,12 @@ class HierarchicalFilter extends Component {
     // in term mode we trace path
     if (this.state.term) {
       const path = this.tracepath(this.props.tree[0], data.name);
-      this.setState({ sValue: path.slice(1) });
+      const sValue = path.slice(1);
+      if (isCallApply) {
+        this.props.onApply(sValue);
+      } else {
+        this.setState({ sValue });
+      }
       return;
     }
 
