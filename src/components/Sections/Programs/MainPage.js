@@ -27,19 +27,22 @@ class MainPage extends PureComponent {
     resetNamespace: PropTypes.func.isRequired
   };
 
-  componentWillReceiveProps(nextProps) {
-    const { match, location } = this.props;
-    const tab                 = match.params.tab || tabs[0];
-    const nextTab             = nextProps.match.params.tab || tabs[0];
+  componentDidMount(prevProps){
+    const { match, location, resetNamespace, setTab } = this.props;
+    
+    const nextTab = match.params.tab || tabs[0];
+    const tab = (prevProps && prevProps.match.params.tab) || tabs[0]; 
+    const prevSearch = prevProps && prevProps.location.search;
 
     // clear filters if location search parameter is changed by Menu click
-    if (nextProps.location.search !== location.search
-      && !nextProps.location.search) {
-      nextProps.resetNamespace(`programs-${tab}`);
+    if (!prevSearch
+      || (location.search !== prevSearch
+      && !location.search)) {
+      resetNamespace(`programs-${tab}`);
     }
 
     if (nextTab !== tab) {
-      nextProps.setTab(nextTab);
+      setTab(nextTab);
     }
   }
 
@@ -59,25 +62,23 @@ class MainPage extends PureComponent {
       </Menu.Item>
     ));
 
-    let content = null;
-    switch (active) {
-    case 'main':
-      content = <ProgramList />;
-      break;
-    case 'clips':
-      content = <ClipList />;
-      break;
-    default:
-      content = <h1>Page not found</h1>;
-      break;
-    }
-
     return (
       <div>
         <SectionHeader section="programs" submenuItems={submenuItems} />
-        {content}
+        {content(active)}
       </div>
     );
+  }
+}
+
+const content = (active) => {
+  switch (active) {
+  case 'main':
+    return <ProgramList />;
+  case 'clips':
+    return <ClipList />;
+  default:
+    return <h1>Page not found</h1>;
   }
 }
 
