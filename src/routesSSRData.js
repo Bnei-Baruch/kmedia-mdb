@@ -133,10 +133,13 @@ export const playlistCollectionPage = (store, match) => {
     .then(() => {
       // TODO: replace this with a single call to backend with all IDs
       // I don't think we need all files of every unit. Just for active one.
+
       const c = mdbSelectors.getCollectionById(store.getState().mdb, cID);
-      c.cuIDs.forEach((cuID) => {
-        store.dispatch(mdbActions.fetchUnit(cuID));
-      });
+      if (typeof c !== "undefined") {
+        c.cuIDs.forEach((cuID) => {
+          store.dispatch(mdbActions.fetchUnit(cuID));
+        });
+      };
     });
 };
 

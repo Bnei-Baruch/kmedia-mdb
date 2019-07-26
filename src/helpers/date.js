@@ -48,3 +48,7 @@ export function today() {
     .seconds(0)
     .milliseconds(0);
 }
+
+export function yearFromNow() {
+  return new Date(Date.now() + (365 * 24 * 60 * 60 * 1000)).toUTCString();
+}
