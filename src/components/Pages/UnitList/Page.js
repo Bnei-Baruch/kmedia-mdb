@@ -71,6 +71,10 @@ const filters = {
   ],
   'publications-collection': [
     { name: 'date-filter', component: filterComponents.DateFilter }
+  ],
+  'publications-audio-blog':[
+    { name: 'date-filter', component: filterComponents.DateFilter },
+    { name: 'language-filter', component: filterComponents.LanguageFilter }
   ]
 };
 
