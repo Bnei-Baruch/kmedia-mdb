@@ -1,44 +1,34 @@
+import React from 'react';
+import { cleanup, render } from '@testing-library/react';
 import 'jest-enzyme';
 
-import { Header } from 'semantic-ui-react';
+import { Splash } from './Splash';
 
-import SplashFixture from './__fixtures__/Splash.fixture';
-import SplashWOSubtext from './__fixtures__/SplashWOSubtext.fixture';
-import { mountedRender } from '../../../setupTests';
+afterEach(cleanup);
 
-[SplashFixture, SplashWOSubtext].forEach((fixture) => {
-  describe('Splash', () => {
-    let wrapper;
-    beforeEach(() => {
-      wrapper = mountedRender(fixture.component, { ...fixture.props });
-    });
+it('renders like ErrorSplash', () => {
+  const text = 'Server Error', subtext = 'No response from server';
 
-    it('renders error', () => {
-      const { text, subtext } = fixture.props;
-      const message           = `${text}${subtext || ''}`;
-      expect(wrapper).toHaveText(message);
-    });
+  const { getByText } = render(<Splash
+    icon='warning sign'
+    color='red'
+    text={text}
+    subtext={subtext}
+    isLoading={false}
+  />);
+  expect(getByText(text)).toHaveClass('content');
+  expect(getByText(subtext)).toHaveClass('sub header');
+});
 
-    describe('subtext', () => {
-      if (typeof fixture.props.subtext === 'undefined') {
-        describe('when subtext is not supplied', () => {
-          it('does not render Header.Subheader', () => {
-            const subheader = wrapper.find(Header.Subheader);
-            expect(subheader).not.toExist();
-          });
-        });
-      } else {
-        describe('when subtext is supplied', () => {
-          it('renders Header.Subheader', () => {
-            const subheader = wrapper.find(Header.Subheader);
-            expect(subheader).toExist();
-          });
-          it('renders Header.Subheader with this subtext', () => {
-            const subheader = wrapper.find(Header.Subheader);
-            expect(subheader).toHaveText(fixture.props.subtext);
-          });
-        });
-      }
-    });
-  });
+it('does not render Header.Subheader when subtext is not supplied', () => {
+  const text = 'Server Error';
+
+  const { getByText, queryByTestId } = render(<Splash
+    icon='spinner'
+    color='red'
+    text={text}
+    isLoading={true}
+  />);
+  expect(getByText(text)).toHaveClass('content');
+  expect(queryByTestId('header.subHeader')).toBeNull();
 });
