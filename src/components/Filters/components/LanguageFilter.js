@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import noop from 'lodash/noop';
 import { Accordion, Button, Header, Menu, Segment, Flag } from 'semantic-ui-react';
-import { ALL_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
+import { ALL_LANGUAGES, LANGUAGES, AUDIO_BLOG_LANGUAGES } from '../../../helpers/consts';
 
 class LanguageFilter extends Component {
   static propTypes = {
+    namespace: PropTypes.string,
     value: PropTypes.string,
     onCancel: PropTypes.func,
     onApply: PropTypes.func,
@@ -20,14 +21,8 @@ class LanguageFilter extends Component {
   };
 
   state = {
-    sValue: this.props.value
+    showCustom: false
   };
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.value !== nextProps.value) {
-      this.setState({ sValue: nextProps.value });
-    }
-  }
 
   onLanguageChange = (event, data) => {
     this.props.onApply(data.name);
@@ -41,8 +36,10 @@ class LanguageFilter extends Component {
   };
 
   render() {
-    const { t }      = this.props;
-    const { sValue } = this.state;
+    const { t, value, namespace }      = this.props;
+    const displayedLanguages = namespace === 'publications-audio-blog'
+      ? AUDIO_BLOG_LANGUAGES
+      : ALL_LANGUAGES;
 
     return (
       <Segment.Group>
@@ -60,12 +57,12 @@ class LanguageFilter extends Component {
         <Segment className="filter-popup__body language-filter">
           <Accordion as={Menu} vertical fluid size="small">
             {
-              ALL_LANGUAGES.map(x => (
+              displayedLanguages.map(x => (
                 (
                   <Menu.Item
                     key={x}
                     name={x}
-                    active={sValue === x}
+                    active={value === x}
                     onClick={this.onLanguageChange}
                   >
                     <Flag name={LANGUAGES[x].flag} />
