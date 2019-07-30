@@ -167,8 +167,7 @@ class ButtonDayPicker extends Component {
 
       const dateButton = (
         <button className="ui button dateButton" onClick={this.openNativeDatePicker}>
-          <i aria-hidden="true"
-             className={isMobileDevice ? 'calendar alternate outline large icon':'calendar alternate outline icon'}/>
+          <i aria-hidden="true" className={isMobileDevice ? 'calendar alternate outline large icon':'calendar alternate outline icon'}/>
           <input
             className="hide-native-date-input"
             type="date"
