@@ -5,7 +5,7 @@ export class SuggestionsHelper {
     this.suggestions = [];
 
     if (results && results.suggest && 'title_suggest' in results.suggest) {
-      const query      = results.suggest.title_suggest[0].text;
+      const query      = results.suggest.title_suggest[0].text.toLowerCase();
       this.suggestions = results.suggest.title_suggest[0].options.map((option) => {
         const { text, _source: { title, result_type: resultType } } = option;
         const textParts                                             = text.split(' ');
