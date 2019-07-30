@@ -85,7 +85,8 @@ class ButtonDayPicker extends Component {
   };
 
   openNativeDatePicker = () => {
-    if (this.props.deviceInfo.os.name==='Android') {
+    const {deviceInfo} = this.context;
+    if (deviceInfo.os.name==='Android') {
       this.nativeDateInput.click();
       return;
     }
@@ -166,7 +167,8 @@ class ButtonDayPicker extends Component {
 
       const dateButton = (
         <button className="ui button dateButton" onClick={this.openNativeDatePicker}>
-          <i aria-hidden="true" className={isMobileDevice ? 'calendar alternate outline large icon':'calendar alternate outline icon'}/>
+          <i aria-hidden="true"
+             className={isMobileDevice ? 'calendar alternate outline large icon':'calendar alternate outline icon'}/>
           <input
             className="hide-native-date-input"
             type="date"
