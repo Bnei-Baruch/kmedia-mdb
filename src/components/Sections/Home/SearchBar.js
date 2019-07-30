@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {withNamespaces} from 'react-i18next';
 import {Button, Grid, Header, Input, Icon} from 'semantic-ui-react';
@@ -8,10 +8,11 @@ import * as shapes from '../../shapes';
 import {mapState as obMS, OmniBox, wrap} from '../../Search/OmniBox';
 import ButtonDayPicker from "../../Filters/components/Date/ButtonDayPicker";
 import moment from 'moment';
+import {DeviceInfoContext} from "../../../helpers/app-contexts";
 
 class MyOmniBox extends OmniBox {
-  static propTypes = {
-    deviceInfo: shapes.UserAgentParserResults.isRequired,
+  static contextType = DeviceInfoContext;
+  static propTypes   = {
     language: PropTypes.string.isRequired,
   };
 
@@ -24,11 +25,9 @@ class MyOmniBox extends OmniBox {
     window.location.href = '/' + this.props.language + '/simple-mode?date=' + moment(value).format('YYYY-MM-DD');
   };
 
-  isMobileDevice = () => this.props.deviceInfo.device && this.props.deviceInfo.device.type==='mobile';
-
   renderInput() {
-    const {t, deviceInfo, language} = this.props;
-    const isMobileDevice            = this.isMobileDevice();
+    const {t, language}                = this.props;
+    const {deviceInfo, isMobileDevice} = this.context;
 
     return (
       <div>
@@ -58,8 +57,7 @@ class MyOmniBox extends OmniBox {
 }
 
 const MyWrappedOmniBox = wrap(withNamespaces()(MyOmniBox), state => ({
-  ...obMS(state),
-  deviceInfo: device.getDeviceInfo(state.device),
+  ...obMS(state)
 }));
 
 class SearchBar extends Component {
