@@ -31,16 +31,16 @@ class MyOmniBox extends OmniBox {
     const isMobileDevice            = this.isMobileDevice();
 
     return (
-      <Fragment>
+      <div>
         <Input
-          autoFocus={deviceInfo.device.type === undefined}  // desktop only
+          autoFocus={deviceInfo.device.type===undefined}  // desktop only
           onKeyDown={this.handleSearchKeyDown}
           className={'right action'}
           icon={null}
           placeholder={`${t('buttons.search')}...`}
-          style={{ width: '100%' }}
-          type="search">
-          <input />
+          style={{width: '100%'}}
+          type="text">
+          <input/>
           <Button type='submit' className="searchButton" onClick={this.doSearchFromClickEvent}>
             <Icon name='search' size={isMobileDevice ? 'large':null}/>
             {!isMobileDevice ? t('buttons.search').toUpperCase():null}
@@ -52,7 +52,7 @@ class MyOmniBox extends OmniBox {
             onDayChange={this.handleFromInputChange}
           />
         </Input>
-      </Fragment>
+      </div>
     );
   }
 }
