@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Trans, withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
-import { Button, Container, Divider, Grid, Image, Message } from 'semantic-ui-react';
+import { Button, Container, Divider, Grid, Image, Message, Segment } from 'semantic-ui-react';
 
 import { SEARCH_GRAMMAR_HIT_TYPES, SEARCH_INTENT_HIT_TYPES } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';

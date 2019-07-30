@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Segment, Image, Container, Header } from 'semantic-ui-react';
 
+import { LANG_HEBREW, LANG_UKRAINIAN, LANG_RUSSIAN, LANG_SPANISH } from '../../helpers/consts';
 import { canonicalLink } from '../../helpers/links';
 import { sectionLogo } from '../../helpers/images';
 import Link from '../Language/MultiLanguageLink';
@@ -9,7 +10,7 @@ import SearchResultBase from './SearchResultBase';
 
 class SearchResultTwitter extends SearchResultBase {
 
-  getTwitterLink = (language) => {
+  getTwitterLink = (language, tID) => {
 
     let username;
     switch (language) {
@@ -27,22 +28,8 @@ class SearchResultTwitter extends SearchResultBase {
   };
 
   render() {
-    const { t, hit, filters } = this.props;
 
-    const
-      {
-        _source: {
-          mdb_uid: mdbUid,
-          title
-        },
-        highlight
-      } = hit;
-
-    const name = this.titleFromHighlight(highlight, title);
-
-    return (
-
-    const { t, queryResult, twitt, hit, rank, filters } = this.props;
+    const { queryResult, twitt, hit, rank, filters } = this.props;
 
     const { search_result: { searchId } } = queryResult;
 
@@ -56,10 +43,6 @@ class SearchResultTwitter extends SearchResultBase {
         highlight,
       } = hit;
 
-    let filmDate = '';
-    if (twitt.film_date) {
-      filmDate = t('values.date', { date: cu.film_date });
-    }
 
     return (
       <Segment className="bg_hover_grey search__block">
@@ -69,7 +52,7 @@ class SearchResultTwitter extends SearchResultBase {
             onClick={() => this.click(mdbUid, index, resultType, rank, searchId)}
             to={this.getTwitterLink(this.getMediaLanguage(filters), mdbUid)}
           >
-            {this.titleFromHighlight(highlight, cu.name)}
+            {this.titleFromHighlight(highlight, twitt.name)}
           </Link>
         </Header>
 
@@ -77,7 +60,7 @@ class SearchResultTwitter extends SearchResultBase {
           {this.renderSnippet(highlight)}
         </Container>
 
-        {this.renderDebug(cu.name)}
+        {this.renderDebug(twitt.name)}
       </Segment>
     );
   }

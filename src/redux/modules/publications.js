@@ -122,6 +122,11 @@ const onFetchCollections = (draft, payload) => {
   draft.collections = mapValues(groupBy(payload, x => x.content_type), x => x.map(y => y.id));
 };
 
+
+const onFetchTweets = draft => {
+  draft.tweets.wip = true;
+};
+
 const onFetchTweetsSuccess = (draft, action) => {
 
   const { tweets = [] }     = action.payload;
