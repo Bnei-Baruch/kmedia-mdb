@@ -11,7 +11,6 @@ import 'react-day-picker/lib/style.css';
 
 import {today} from '../../../../helpers/date';
 import {getLanguageDirection, getLanguageLocaleWORegion} from '../../../../helpers/i18n-utils';
-import * as shapes from '../../../shapes';
 import YearMonthForm from './YearMonthForm';
 
 import DayPicker from 'react-day-picker';
@@ -26,7 +25,6 @@ class ButtonDayPicker extends Component {
     label: PropTypes.string,
     onDayChange: PropTypes.func,
     language: PropTypes.string.isRequired,
-    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -43,12 +41,12 @@ class ButtonDayPicker extends Component {
     stringValue: null,
   };
 
-  localeDateFormat = moment.localeData().longDateFormat('L');
+  localeDateFormat      = moment.localeData().longDateFormat('L');
   localeDateFormatShort = this.localeDateFormat.replace('DD', 'D').replace('MM', 'M');
 
   static getDerivedStateFromProps(props, state) {
     const {value} = state;
-    if (props.value !== value) {
+    if (props.value!==value) {
       return {value: props.value, stringValue: ButtonDayPicker.formatDateValue(props.value, props.language)};
     }
     return null;
@@ -56,7 +54,7 @@ class ButtonDayPicker extends Component {
 
   static formatDateValue(date, language) {
     const locale = getLanguageLocaleWORegion(language);
-    return date ? formatDate(date, 'l', locale) : '';
+    return date ? formatDate(date, 'l', locale):'';
   }
 
   handleYearMonthChange = (month) => {
@@ -67,7 +65,7 @@ class ButtonDayPicker extends Component {
     if (ref) {
       scrollIntoView(ReactDOM.findDOMNode(ref), {
         time: 150, // half a second
-        validTarget: target => target !== window,
+        validTarget: target => target!==window,
       });
     }
   };
@@ -77,16 +75,17 @@ class ButtonDayPicker extends Component {
   };
 
   handleNativeDateInputChange = (event) => {
-    const date = event.target.valueAsDate;
-    const {deviceInfo, onDayChange} = this.props;
+    const date          = event.target.valueAsDate;
+    const {onDayChange} = this.props;
+    const {deviceInfo}  = this.context;
     this.setState({selectedDate: date});
-    if (deviceInfo.os.name !== 'iOS') {
+    if (deviceInfo.os.name!=='iOS') {
       onDayChange(date);
     }
   };
 
   openNativeDatePicker = () => {
-    if (this.props.deviceInfo.os.name === 'Android') {
+    if (this.props.deviceInfo.os.name==='Android') {
       this.nativeDateInput.click();
       return;
     }
@@ -95,8 +94,8 @@ class ButtonDayPicker extends Component {
 
   applySelectedDate = () => {
     const {onDayChange, value} = this.props;
-    const {selectedDate} = this.state;
-    const selected = selectedDate || value || today().toDate();
+    const {selectedDate}       = this.state;
+    const selected             = selectedDate || value || today().toDate();
     onDayChange(selected);
   };
 
@@ -125,10 +124,10 @@ class ButtonDayPicker extends Component {
     );
   };
 
-  openPopup = () => this.setState({isPopupOpen: true});
+  openPopup  = () => this.setState({isPopupOpen: true});
   closePopup = () => this.setState({isPopupOpen: false});
 
-  openNativePopup = () => this.setState({isNativePopupOpen: true});
+  openNativePopup  = () => this.setState({isNativePopupOpen: true});
   closeNativePopup = () => this.setState({isNativePopupOpen: false});
 
   onPopupDayChange = (date) => {
@@ -142,7 +141,7 @@ class ButtonDayPicker extends Component {
 
   handleDateInputChange = (event, data) => {
     const {onDayChange} = this.props;
-    const day = moment(data.value, this.localeDateFormatShort, true);
+    const day           = moment(data.value, this.localeDateFormatShort, true);
     if (day.isValid()) {
       onDayChange(day.toDate());
     } else {
@@ -162,12 +161,12 @@ class ButtonDayPicker extends Component {
     const locale = getLanguageLocaleWORegion(language);
 
     if (isMobileDevice) {
-      const selected = selectedDate || value;
-      const selectedToString = selected ? moment(selected).format('YYYY-MM-DD') : null;
+      const selected         = selectedDate || value;
+      const selectedToString = selected ? moment(selected).format('YYYY-MM-DD'):null;
 
       const dateButton = (
         <button className="ui button dateButton" onClick={this.openNativeDatePicker}>
-          <i aria-hidden="true" className={isMobileDevice ? 'calendar alternate outline large icon' : 'calendar alternate outline icon'}/>
+          <i aria-hidden="true" className={isMobileDevice ? 'calendar alternate outline large icon':'calendar alternate outline icon'}/>
           <input
             className="hide-native-date-input"
             type="date"
@@ -180,7 +179,7 @@ class ButtonDayPicker extends Component {
           />
         </button>
       );
-      if (deviceInfo.os.name !== 'iOS')
+      if (deviceInfo.os.name!=='iOS')
         return dateButton;
 
       const selectedInLocaleFormat = moment(selected).format(this.localeDateFormat);
