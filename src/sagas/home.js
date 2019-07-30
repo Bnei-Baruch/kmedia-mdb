@@ -5,7 +5,7 @@ import { selectors as settings } from '../redux/modules/settings';
 import { actions, types } from '../redux/modules/home';
 import { actions as mdb } from '../redux/modules/mdb';
 
-export function* fetchData(action) {
+export function* fetchData() {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.home, { language });
@@ -17,10 +17,26 @@ export function* fetchData(action) {
   }
 }
 
+export function* fetchBanner(action) {
+  try {
+    const name     = `banner-${action.payload}?meta=header,sub-header,link`;
+    const { data } = yield call(Api.getCMS, name);
+    yield put(actions.fetchBannerSuccess(data));
+  } catch (err) {
+    yield put(actions.fetchBannerFailure(err));
+  }
+}
+
 function* watchFetchData() {
   yield takeLatest([types.FETCH_DATA], fetchData);
 }
 
+function* watchFetchBanner() {
+  yield takeLatest([types.FETCH_BANNER], fetchBanner);
+}
+
 export const sagas = [
   watchFetchData,
+  watchFetchBanner,
 ];
+

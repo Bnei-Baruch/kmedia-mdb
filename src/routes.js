@@ -1,5 +1,3 @@
-/* eslint-disable react/no-multi-comp */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { renderRoutes } from 'react-router-config';
@@ -136,7 +134,7 @@ const RoutedLanguageSetter = ({ match, route }) => (
 );
 
 const RouteItem = PropTypes.shape({
-  component: PropTypes.func.isRequired,
+  component: PropTypes.elementType.isRequired,
   exact: PropTypes.bool,
   path: PropTypes.string.isRequired,
   ssrData: PropTypes.func,
@@ -145,10 +143,10 @@ const RouteItem = PropTypes.shape({
 RoutedLanguageSetter.propTypes = {
   match: shapes.RouterMatch.isRequired,
   route: PropTypes.shape({
-    component: PropTypes.func.isRequired,
+    component: PropTypes.elementType.isRequired,
     path: PropTypes.string.isRequired,
     routes: PropTypes.arrayOf(PropTypes.shape({
-      component: PropTypes.func.isRequired,
+      component: PropTypes.object.isRequired,
       routes: PropTypes.arrayOf(RouteItem),
     })),
   }).isRequired,

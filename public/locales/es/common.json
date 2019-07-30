@@ -192,8 +192,8 @@
     "read-more-tweets": "Leer más tweets",
     "last-lesson": "Lección diaria de Cabalá",
     "promoted": {
-      "header": "Conectándonos a la vida buena",
-      "subheader": "Convencion Mundial de Cabala 2019"
+      "header": "Congreso en Nueva Jersey",
+      "subheader": "23-26/5/2019"
     }
   },
   "events": {
@@ -370,7 +370,7 @@
     },
     "transcription": {
       "header": "Transcripción",
-      "no-transcription": "Falta transcripción"
+      "no-content": "Falta transcripción"
     },
     "sources": {
       "header": "Fuentes",
@@ -380,6 +380,14 @@
     },
     "sketches": {
       "header": "Dibujos"
+    },
+    "articles": {
+      "header": "Artículos",
+      "no-content": "No articulos"
+    },
+    "research": {
+      "header": "Materiales de investigacion",
+      "no-content": "No hay materiales de investigación."
     }
   },
   "sources-library": {
@@ -421,7 +429,8 @@
         "audio-simple": "Audio",
         "text": "Transcripción Completa",
         "image": "Dibujos",
-        "lelo-mikud": "Sin grupo de enfoque"
+        "lelo-mikud": "Sin grupo de enfoque",
+        "text-research-material": "Materiales de Investigacion"
       }
     },
     "program": {
@@ -431,7 +440,9 @@
         "audio": "audio del Programa",
         "audio-simple": "Audio",
         "text": "Transcripción Completa",
-        "image": "Fotos"
+        "image": "Fotos",
+        "text-article": "Artículo basado en programa",
+        "text-research-material": "Materiales de Investigacion"
       }
     },
     "publication": {
@@ -477,7 +488,8 @@
       "sl": "Esloveno",
       "lv": "Letón",
       "sk": "eslovaco",
-      "cs": "Checo"
+      "cs": "Checo",
+      "am": "Amárico"
     },
     "content-types": {
       "DAILY_LESSON": "Lección Diaria",

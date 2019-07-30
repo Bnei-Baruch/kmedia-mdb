@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { Button, Header, Image, Table } from 'semantic-ui-react';
+import { Button, Header, Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
-import { sectionLogo } from '../../../helpers/images';
+import { SectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
 import { stringify as urlSearchStringify } from '../../../helpers/url';
 import { filtersTransformer } from '../../../filters/index';
@@ -18,10 +18,11 @@ class TopN extends React.PureComponent {
     tagPath: PropTypes.arrayOf(PropTypes.object).isRequired,
     units: PropTypes.arrayOf(shapes.ContentUnit).isRequired,
     t: PropTypes.func.isRequired,
+    language: PropTypes.string.isRequired,
   };
 
   state = {
-    topNUnits: []
+    topNUnits: [],
   };
 
   componentDidMount() {
@@ -51,23 +52,16 @@ class TopN extends React.PureComponent {
   };
 
   getTopicUrl = () => {
-    const { section, tagPath } = this.props;
+    const { section, tagPath, language } = this.props;
 
     const query = filtersTransformer.toQueryParams([
       { name: 'topics-filter', values: [tagPath.map(y => y.id)] }
     ]);
 
-    return `/${section}?${urlSearchStringify(query)}`;
+    return `/${language}/${section}?${urlSearchStringify(query)}`;
   };
 
-  compareUnits = (a, b) => {
-    let ans = -1;
-    if (a && b && a.film_date <= b.film_date) {
-      ans = 1;
-    }
-
-    return ans;
-  };
+  compareUnits = (a, b) => (a && b && a.film_date <= b.film_date) ? 1 : -1;
 
   renderUnit = (unit, t) => {
     const link   = canonicalLink(unit);
@@ -80,7 +74,6 @@ class TopN extends React.PureComponent {
       <Table.Row key={unit.id} verticalAlign="top">
         <Table.Cell>
           <span className="index__date">{filmDate}</span>
-          {/* eslint-disable-next-line */}
           <Link className="index__title" to={link}>
             {unit.name || NO_NAME}
           </Link>
@@ -102,7 +95,7 @@ class TopN extends React.PureComponent {
               <Table.Row>
                 <Table.HeaderCell>
                   <Header as="h3">
-                    <Image src={sectionLogo[section]} />
+                    <SectionLogo name={section} />
                     {t(`nav.sidebar.${section}`)}
                   </Header>
                 </Table.HeaderCell>

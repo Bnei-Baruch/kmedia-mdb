@@ -35,6 +35,7 @@ export const CT_KITEI_MAKOR           = 'KITEI_MAKOR';
 export const CT_PUBLICATION           = 'PUBLICATION';
 export const CT_LELO_MIKUD            = 'LELO_MIKUD';
 export const CT_BLOG_POST             = 'BLOG_POST';
+export const CT_RESEARCH_MATERIAL     = 'RESEARCH_MATERIAL';
 
 // Content types for additional Elastic results
 export const SCT_BLOG_POST = 'R_BLOG_POST';
@@ -84,6 +85,7 @@ export const LANG_SLOVENIAN  = 'sl';
 export const LANG_LATVIAN    = 'lv';
 export const LANG_SLOVAK     = 'sk';
 export const LANG_CZECH      = 'cs';
+export const LANG_AMHARIC      = 'am';
 export const LANG_UNKNOWN    = 'xx';
 
 export const LANGUAGES = {
@@ -119,6 +121,7 @@ export const LANGUAGES = {
   [LANG_LATVIAN]: { value: LANG_LATVIAN, flag: 'lv', locale: 'lv_LV' },
   [LANG_SLOVAK]: { value: LANG_SLOVAK, flag: 'sk', locale: 'sk_SK' },
   [LANG_CZECH]: { value: LANG_CZECH, flag: 'cz', locale: 'cs_CZ' },
+  [LANG_AMHARIC]: { value: LANG_AMHARIC, flag: 'et', locale: 'am_ET' },
 };
 
 export const FLAG_TO_LANGUAGE = Object.values(LANGUAGES).reduce((acc, language) => {
@@ -158,15 +161,10 @@ export const ALL_LANGUAGES = [
   LANG_LATVIAN,
   LANG_SLOVAK,
   LANG_CZECH,
+  LANG_AMHARIC,
 ];
 
 export const DEFAULT_LANGUAGE = LANG_ENGLISH;
-
-export const RTL_LANGUAGES = [
-  LANG_HEBREW,
-  LANG_ARABIC,
-  LANG_PERSIAN,
-];
 
 export const LANGUAGE_OPTIONS = ALL_LANGUAGES.map(x => LANGUAGES[x]);
 
@@ -216,13 +214,13 @@ export const EVENT_TYPES = [
 
 // Required for Sections filter.
 export const COLLECTION_LESSONS_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, /* CT_CHILDREN_LESSONS, */ CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS, CT_LECTURE_SERIES];
-export const COLLECTION_PROGRAMS_TYPE     = [CT_VIDEO_PROGRAM];
+export const COLLECTION_PROGRAMS_TYPE     = [CT_VIDEO_PROGRAM, CT_CLIPS];
 export const COLLECTION_EVENTS_TYPE       = [CT_FRIENDS_GATHERINGS, CT_MEALS, ...EVENT_TYPES];
 export const COLLECTION_PUBLICATIONS_TYPE = [CT_ARTICLES];
 export const UNIT_LESSONS_TYPE            = [CT_LESSON_PART, /* CT_CHILDREN_LESSON, */ CT_WOMEN_LESSON, CT_VIRTUAL_LESSON, CT_FULL_LESSON, CT_LECTURE];
-export const UNIT_PROGRAMS_TYPE           = [CT_VIDEO_PROGRAM_CHAPTER];
+export const UNIT_PROGRAMS_TYPE           = [CT_VIDEO_PROGRAM_CHAPTER, CT_CLIP];
 export const UNIT_EVENTS_TYPE             = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
-export const UNIT_PUBLICATIONS_TYPE       = [CT_ARTICLE, CT_PUBLICATION, SCT_BLOG_POST, SCT_TWEET];
+export const UNIT_PUBLICATIONS_TYPE       = [CT_ARTICLE, CT_PUBLICATION, CT_BLOG_POST, SCT_BLOG_POST, SCT_TWEET];
 
 export const NO_NAME = '☠ no name';
 
@@ -230,6 +228,7 @@ export const NO_NAME = '☠ no name';
 export const BS_SHAMATI  = 'qMUUn22b';
 export const BS_IGROT    = 'DVSS0xAR';
 export const BS_TAAS     = 'xtKmrbb9';
+export const BS_ETZ_HAIM = 'SqBA6XOl';
 export const RB_IGROT    = 'b8SHlrfH';
 export const MR_TORA     = 'bvA8ZB1w';
 export const RH_ZOHAR    = 'AwGBQX2L';
@@ -261,11 +260,104 @@ export const RABASH_PERSON_UID = 'KxApZ4pI';
 
 export const COOKIE_UI_LANG      = 'archive_UIlang';
 export const COOKIE_CONTENT_LANG = 'archive_ContentLang';
-export const LANG_UI_LANGUAGES   = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_GERMAN, LANG_UKRAINIAN, LANG_ITALIAN];
+export const LANG_UI_LANGUAGES   = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_GERMAN, LANG_UKRAINIAN, LANG_ITALIAN, LANG_TURKISH];
 
 // Search
-export const ES_RESULT_TYPE_SOURCES = 'sources';
-export const ES_RESULT_TYPE_TAGS    = 'tags';
+
+export const SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE = "landing-page";
+
+// Search Grammar Landing Pages (SGL) constants.
+const SGLP_LESSONS = "lessons";
+const SGLP_VIRTUAL_LESSONS = "virtual_lessons";
+const SGLP_LECTURES = "lectures";
+const SGLP_WOMEN_LESSONS = "women_lessons";
+const SGLP_RABASH_LESSONS = "rabash_lessons";
+const SGLP_LESSON_SERIES = "lesson_series";
+const SGLP_PRORGRAMS = "programs";
+const SGLP_CLIPS = "clips";
+const SGLP_LIBRARY = "library";
+const SGLP_CONVENTIONS = "conventions";
+const SGLP_HOLIDAYS = "holidays";
+const SGLP_UNITY_DAYS = "unity_days";
+const SGLP_FRIENDS_GATHERINGS = "friends_gatherings";
+const SGLP_MEALS = "meals";
+const SGLP_TOPICS = "topics";
+const SGLP_BLOG = "blog";
+const SGLP_TWITTER = "twitter";
+const SGLP_ARTICLES = "articles";
+const SGLP_DOWNLOADS = "downloads";
+const SGLP_HELP = "help";
+
+export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK = {
+  [SGLP_LESSONS]: "lessons/daily",
+  [SGLP_VIRTUAL_LESSONS]: "lessons/virtual",
+  [SGLP_LECTURES]: "lessons/lectures",
+  [SGLP_WOMEN_LESSONS]: "lessons/women",
+  [SGLP_RABASH_LESSONS]: "lessons/rabash",
+  [SGLP_LESSON_SERIES]: "lessons/series",
+  [SGLP_PRORGRAMS]: "programs/main",
+  [SGLP_CLIPS]: "programs/clips",
+  [SGLP_LIBRARY]: "sources",
+  [SGLP_CONVENTIONS]: "events/conventions",
+  [SGLP_HOLIDAYS]: "events/holidays",
+  [SGLP_UNITY_DAYS]: "events/unity-days",
+  [SGLP_FRIENDS_GATHERINGS]: "events/friends-gatherings",
+  [SGLP_MEALS]: "events/meals",
+  [SGLP_TOPICS]: "topics",
+  [SGLP_BLOG]: "publications/blog",
+  [SGLP_TWITTER]: "publications/twitter",
+  [SGLP_ARTICLES]: "publications/articles",
+  [SGLP_DOWNLOADS]: "simple-mode",
+  [SGLP_HELP]: "help",
+};
+
+export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT = {
+  [SGLP_LESSONS]: "lessons.tabs.daily",
+  [SGLP_VIRTUAL_LESSONS]: "lessons.tabs.virtual",
+  [SGLP_LECTURES]: "lessons.tabs.lectures",
+  [SGLP_WOMEN_LESSONS]: "lessons.tabs.women",
+  [SGLP_RABASH_LESSONS]: "lessons.tabs.rabash",
+  [SGLP_LESSON_SERIES]: "lessons.tabs.series",
+  [SGLP_PRORGRAMS]: "programs.tabs.main",
+  [SGLP_CLIPS]: "programs.tabs.clips",
+  [SGLP_LIBRARY]: "sources-library.header.text",
+  [SGLP_CONVENTIONS]: "events.tabs.conventions",
+  [SGLP_HOLIDAYS]: "events.tabs.holidays",
+  [SGLP_UNITY_DAYS]: "events.tabs.unity-days",
+  [SGLP_FRIENDS_GATHERINGS]: "events.tabs.friends-gatherings",
+  [SGLP_MEALS]: "events.tabs.meals",
+  [SGLP_TOPICS]: "topics.header.text",
+  [SGLP_BLOG]: "publications.tabs.blog",
+  [SGLP_TWITTER]: "publications.tabs.twitter",
+  [SGLP_ARTICLES]: "publications.tabs.articles",
+  [SGLP_DOWNLOADS]: "simple-mode.header.text",
+  [SGLP_HELP]: "help.header.text",
+};
+
+export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT = {
+  [SGLP_LESSONS]: "lessons.header.subtext",
+  [SGLP_VIRTUAL_LESSONS]: "lessons.header.subtext",
+  [SGLP_LECTURES]: "lessons.header.subtext",
+  [SGLP_WOMEN_LESSONS]: "lessons.header.subtext",
+  [SGLP_RABASH_LESSONS]: "lessons.header.subtext",
+  [SGLP_LESSON_SERIES]: "lessons.header.subtext",
+  [SGLP_PRORGRAMS]: "programs.header.subtext",
+  [SGLP_CLIPS]: "",  // Subtext is appropriate only for programs.
+  [SGLP_LIBRARY]: "sources-library.header.subtext",
+  [SGLP_CONVENTIONS]: "events.header.subtext",
+  [SGLP_HOLIDAYS]: "events.header.subtext",
+  [SGLP_UNITY_DAYS]: "events.header.subtext",
+  [SGLP_FRIENDS_GATHERINGS]: "events.header.subtext",
+  [SGLP_MEALS]: "events.header.subtext",
+  [SGLP_TOPICS]: "topics.header.subtext",
+  [SGLP_BLOG]: "publications.header.subtext",
+  [SGLP_TWITTER]: "publications.header.subtext",
+  [SGLP_ARTICLES]: "publications.header.subtext",
+  [SGLP_DOWNLOADS]: "simple-mode.header.subtext",
+  [SGLP_HELP]: "help.header.subtext",
+};
+
+export const SEARCH_GRAMMAR_HIT_TYPES = [SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE]
 
 // Blog
 export const BLOG_ID_LAITMAN_RU    = 1;
@@ -278,6 +370,14 @@ export const BLOGS                 = [
   { id: BLOG_ID_LAITMAN_ES, name: 'laitman-es' },
   { id: BLOG_ID_LAITMAN_CO_IL, name: 'laitman-co-il' }
 ];
+
+export const SUGGEST_LIMIT = 10;
+
+// Search Intent constants (to be deprecated).
+
+// Elastic Search (ES).
+export const ES_RESULT_TYPE_SOURCES = 'sources';
+export const ES_RESULT_TYPE_TAGS    = 'tags';
 
 export const SEARCH_INTENT_INDEX_TOPIC       = 'intent-tag';
 export const SEARCH_INTENT_INDEX_SOURCE      = 'intent-source';
@@ -300,7 +400,3 @@ export const SEARCH_INTENT_SECTIONS = {
   [SEARCH_INTENT_HIT_TYPE_LESSONS]: 'lessons',
   [SEARCH_INTENT_HIT_TYPE_PROGRAMS]: 'programs',
 };
-
-export const SUGGEST_LIMIT = 10;
-
-// TBD: add posts and tweets intents

@@ -128,9 +128,9 @@ class TwitterFeed extends Component {
     const mts                                                = moment(ts);
     const screenName                                         = screenNames[username];
 
-    const url = snippetVersion ?
-      `https://twitter.com/${username}/status/${tID}` :
-      `https://twitter.com/${username}`;
+    const url = snippetVersion
+      ? `https://twitter.com/${username}/status/${tID}`
+      : `https://twitter.com/${username}`;
 
     return (
       <Fragment key={tID}>
@@ -138,45 +138,48 @@ class TwitterFeed extends Component {
           <Feed.Content>
             <Feed.Summary className="tweet-title-wrapper">
               {
-                snippetVersion ?
-                  <Image className="twitter-avatar" src={twitterAvatar} /> :
-                  null
+                snippetVersion
+                  ? <Image className="twitter-avatar" src={twitterAvatar} />
+                  : null
               }
               <a href={url} target="_blank" rel="noopener noreferrer" className="tweet-title">
                 {screenName}
                 <span className="tweet--username">
-                  @{username}
+                  @
+                  {username}
                 </span>
               </a>
               {
-                !snippetVersion ?
-                  <Feed.Date>
-                    <a
-                      href={`https://twitter.com/${username}/status/${tID}`}
-                      title={mts.format('lll')}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {mts.format('lll')}
-                    </a>
-                  </Feed.Date>
+                !snippetVersion
+                  ? (
+                    <Feed.Date>
+                      <a
+                        href={`https://twitter.com/${username}/status/${tID}`}
+                        title={mts.format('lll')}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {mts.format('lll')}
+                      </a>
+                    </Feed.Date>
+                  )
                   : null
               }
             </Feed.Summary>
             <Feed.Extra text>
               <div dangerouslySetInnerHTML={{ __html: this.prepare(raw) }} />
               {
-                snippetVersion ?
-                  <div className="tweet-friendly-date">{mts.fromNow()}</div> :
-                  null
+                snippetVersion
+                  ? <div className="tweet-friendly-date">{mts.fromNow()}</div>
+                  : null
               }
             </Feed.Extra>
           </Feed.Content>
         </Feed.Event>
         {
-          snippetVersion ?
-            <Divider fitted /> :
-            null
+          snippetVersion
+            ? <Divider fitted />
+            : null
         }
       </Fragment>
     );

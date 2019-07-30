@@ -2,16 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { List, Table } from 'semantic-ui-react';
 
-import {
-  // CT_CHILDREN_LESSON,
-  CT_LECTURE,
-  CT_LESSON_PART,
-  CT_VIRTUAL_LESSON,
-  CT_WOMEN_LESSON,
-  NO_NAME,
-  RABASH_PERSON_UID
-} from '../../../../../helpers/consts';
-import { sectionThumbnailFallback } from '../../../../../helpers/images';
+import { CT_LECTURE, CT_LESSON_PART, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, NO_NAME, RABASH_PERSON_UID } from '../../../../../helpers/consts';
 import { CollectionsBreakdown } from '../../../../../helpers/mdb';
 import { canonicalLink } from '../../../../../helpers/links';
 import { ellipsize } from '../../../../../helpers/strings';
@@ -20,16 +11,18 @@ import Link from '../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
 
 const renderUnit = (unit, t, namespace) => {
+  if (!unit) {
+    return null;
+  }
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
   const lectures  = breakdown.getLectures();
-
-  const relatedItems = lectures.map(x =>
-    (
-      <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-        {x.name || NO_NAME}
-      </List.Item>
-    )
+  const map       = x => (
+    <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
+      {x.name || NO_NAME}
+    </List.Item>
   );
+
+  const relatedItems = lectures.map(map);
 
   let filmDate = '';
   if (unit.film_date) {
@@ -45,10 +38,12 @@ const renderUnit = (unit, t, namespace) => {
             {unit.name || NO_NAME}
           </Link>
           {
-            unit.description ?
-              <div className="index__description mobile-hidden">
-                {ellipsize(unit.description)}
-              </div>
+            unit.description
+              ? (
+                <div className="index__description mobile-hidden">
+                  {ellipsize(unit.description)}
+                </div>
+              )
               : null
           }
         </Table.Cell>
@@ -64,7 +59,7 @@ const renderUnit = (unit, t, namespace) => {
             className="index__thumbnail"
             unitId={unit.id}
             collectionId={lectures.length > 0 ? lectures[0].id : null}
-            fallbackImg={sectionThumbnailFallback.lectures}
+            fallbackImg='lectures'
           />
         </Link>
       </Table.Cell>
@@ -74,20 +69,24 @@ const renderUnit = (unit, t, namespace) => {
           {unit.name || NO_NAME}
         </Link>
         {
-          unit.description ?
-            <div className="index__description mobile-hidden">
-              {ellipsize(unit.description)}
-            </div>
+          unit.description
+            ? (
+              <div className="index__description mobile-hidden">
+                {ellipsize(unit.description)}
+              </div>
+            )
             : null
         }
         {
-          relatedItems.length > 0 ?
-            <List horizontal divided link className="index__collections" size="tiny">
-              <List.Item>
-                <List.Header>{t('lessons.list.item_from')}</List.Header>
-              </List.Item>
-              {relatedItems}
-            </List>
+          relatedItems.length > 0
+            ? (
+              <List horizontal divided link className="index__collections" size="tiny">
+                <List.Item>
+                  <List.Header>{t('lessons.list.item_from')}</List.Header>
+                </List.Item>
+                {relatedItems}
+              </List>
+            )
             : null
         }
       </Table.Cell>
@@ -95,7 +94,6 @@ const renderUnit = (unit, t, namespace) => {
   );
 };
 
-/* eslint-disable-next-line react/no-multi-comp */
 class Container extends Component {
   static propTypes = {
     tab: PropTypes.string.isRequired,

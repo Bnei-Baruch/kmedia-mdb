@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { Button, Grid, Header, Table } from 'semantic-ui-react';
+import { Button, Grid, Header, Table, Popup } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
-import { CT_ARTICLE, CT_FULL_LESSON, CT_KITEI_MAKOR, CT_LELO_MIKUD, CT_LESSON_PART, CT_PUBLICATION, CT_VIDEO_PROGRAM_CHAPTER, MT_AUDIO, MT_IMAGE, MT_TEXT, MT_VIDEO, VS_NAMES } from '../../../../../helpers/consts';
+import { CT_ARTICLE, CT_FULL_LESSON, CT_KITEI_MAKOR, CT_LELO_MIKUD, CT_LESSON_PART, CT_PUBLICATION, CT_RESEARCH_MATERIAL, CT_VIDEO_PROGRAM_CHAPTER, MT_AUDIO, MT_IMAGE, MT_TEXT, MT_VIDEO, VS_NAMES } from '../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
 import { physicalFile } from '../../../../../helpers/utils';
 import { selectors as settings } from '../../../../../redux/modules/settings';
@@ -21,6 +21,8 @@ const MEDIA_ORDER = [
   MT_IMAGE,
 ];
 
+const POPOVER_CONFIRMATION_TIMEOUT = 2500;
+
 class MediaDownloads extends Component {
   static propTypes = {
     unit: shapes.ContentUnit,
@@ -33,6 +35,8 @@ class MediaDownloads extends Component {
   static defaultProps = {
     unit: undefined,
   };
+
+  timeout = {};
 
   constructor(props) {
     super(props);
@@ -47,7 +51,9 @@ class MediaDownloads extends Component {
     const languages = [...groups.keys()];
     const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
 
-    return { groups, derivedGroups, languages, language };
+    const isCopyPopupOpen = {};
+
+    return { groups, derivedGroups, languages, language, isCopyPopupOpen };
   };
 
   componentWillReceiveProps(nextProps) {
@@ -88,6 +94,7 @@ class MediaDownloads extends Component {
       && uiLanguage === props.language
       && contentLanguage === props.contentLanguage
       && isEqual(unit, props.unit)
+      && isEqual(state.isCopyPopupOpen, nextState.isCopyPopupOpen)
     );
   }
 
@@ -173,8 +180,14 @@ class MediaDownloads extends Component {
 
     return [images.find(image => image.language === language)];
   };
+  handleCopied = (url) => {
+    this.setState({ isCopyPopupOpen: {...this.state.isCopyPopupOpen, [url]: true} }, () => {
+      setTimeout(() => this.setState({ isCopyPopupOpen: {...this.state.isCopyPopupOpen, [url]: false} } ), POPOVER_CONFIRMATION_TIMEOUT);
+    });
+  };
 
   renderRow = (file, label, t) => {
+    const { isCopyPopupOpen } = this.state;
     const ext = file.name.substring(file.name.lastIndexOf('.') + 1);
     const url = physicalFile(file);
 
@@ -197,16 +210,23 @@ class MediaDownloads extends Component {
           />
         </Table.Cell>
         <Table.Cell collapsing>
-          <CopyToClipboard text={url}>
-            <Button
-              compact
-              fluid
-              className="media-downloads__file-copy-link-btn"
-              size="mini"
-              color="orange"
-              content={t('buttons.copy-link')}
-            />
-          </CopyToClipboard>
+          <Popup
+            open={!!isCopyPopupOpen[url]}
+            content={t('messages.link-copied-to-clipboard')}
+            position="bottom center"
+            trigger={(
+              <CopyToClipboard text={url} onCopy={() => this.handleCopied(url)}>
+                <Button
+                  compact
+                  fluid
+                  className="media-downloads__file-copy-link-btn"
+                  size="mini"
+                  color="orange"
+                  content={t('buttons.copy-link')}
+                />
+              </CopyToClipboard>
+            )}
+          />
         </Table.Cell>
       </Table.Row>
     );
@@ -222,6 +242,10 @@ class MediaDownloads extends Component {
     const leloMikudByType                                = (leloMikud && leloMikud.get(language)) || new Map();
     const publications                                   = derivedGroups[CT_PUBLICATION];
     const publicationsByType                             = (publications && publications.get(language)) || new Map();
+    const articles                                       = derivedGroups[CT_ARTICLE];
+    const articlesByType                                 = (articles && articles.get(language)) || new Map();
+    const researchMaterials                              = derivedGroups[CT_RESEARCH_MATERIAL];
+    const researchMaterialsByType                        = (researchMaterials && researchMaterials.get(language)) || new Map();
 
     let typeOverrides = this.getI18nTypeOverridesKey();
     if (typeOverrides) {
@@ -271,6 +295,20 @@ class MediaDownloads extends Component {
           const publisher = publisherById[file.cu.publishers[0]];
           return this.renderRow(file, `${label} - ${publisher ? publisher.name : '???'}`, t);
         });
+        return acc.concat(files);
+      }, derivedRows);
+    }
+    if (articlesByType.size > 0) {
+      derivedRows = MEDIA_ORDER.reduce((acc, val) => {
+        const label = t(`media-downloads.${typeOverrides}type-labels.${val}-article`);
+        const files = (articlesByType.get(val) || []).map(file => this.renderRow(file, label, t));
+        return acc.concat(files);
+      }, derivedRows);
+    }
+    if (researchMaterialsByType.size > 0) {
+      derivedRows = MEDIA_ORDER.reduce((acc, val) => {
+        const label = t(`media-downloads.${typeOverrides}type-labels.${val}-research-material`);
+        const files = (researchMaterialsByType.get(val) || []).map(file => this.renderRow(file, label, t));
         return acc.concat(files);
       }, derivedRows);
     }

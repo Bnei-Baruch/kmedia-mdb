@@ -18,7 +18,14 @@ import { BLOGS } from '../../helpers/consts';
 class SearchResultsContainer extends Component {
   static propTypes = {
     query: PropTypes.string.isRequired,
-    queryResult: PropTypes.object,
+    queryResult: PropTypes.shape({
+      intents: PropTypes.arrayOf(PropTypes.shape({
+        language: PropTypes.string,
+        type: PropTypes.string,
+        value: PropTypes.shape({}),
+      })),
+      search_result: PropTypes.shape({})
+    }),
     cMap: PropTypes.objectOf(shapes.Collection).isRequired,
     cuMap: PropTypes.objectOf(shapes.ContentUnit).isRequired,
     wip: shapes.WIP,
@@ -36,6 +43,14 @@ class SearchResultsContainer extends Component {
     language: PropTypes.string.isRequired,
     location: shapes.HistoryLocation.isRequired,
     deviceInfo: shapes.UserAgentParserResults.isRequired,
+    postMap: PropTypes.objectOf(PropTypes.shape({
+      blog: PropTypes.string,
+      content: PropTypes.string,
+      created_at: PropTypes.string,
+      title: PropTypes.string,
+      url: PropTypes.string,
+      wp_id: PropTypes.number,
+    })).isRequired,
   };
 
   static defaultProps = {
@@ -80,8 +95,9 @@ class SearchResultsContainer extends Component {
     search(query, pageNo, pageSize, '' /* suggest */, deb);
   };
 
-  isMobileDevice = () =>
-    this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
+  isMobileDevice = () => (
+    this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile'
+  );
 
   render() {
     const { wip, err, queryResult, cMap, cuMap, postMap, twitterMap, pageNo, pageSize, sortBy, language, location, click } = this.props;
@@ -119,9 +135,9 @@ class SearchResultsContainer extends Component {
   }
 }
 
-const cuMapFromState = (state, results) => {
-  return results && results.hits && Array.isArray(results.hits.hits) ?
-    results.hits.hits.reduce((acc, val) => {
+const cuMapFromState = (state, results) => (
+  results && results.hits && Array.isArray(results.hits.hits)
+    ? results.hits.hits.reduce((acc, val) => {
       if (val._source.result_type === 'units') {
         const cuID = val._source.mdb_uid;
         const cu   = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
@@ -130,13 +146,13 @@ const cuMapFromState = (state, results) => {
         }
       }
       return acc;
-    }, {}) :
-    {};
-};
+    }, {})
+    : {}
+);
 
-const cMapFromState = (state, results) => {
-  return results && results.hits && Array.isArray(results.hits.hits) ?
-    results.hits.hits.reduce((acc, val) => {
+const cMapFromState = (state, results) => (
+  results && results.hits && Array.isArray(results.hits.hits)
+    ? results.hits.hits.reduce((acc, val) => {
       if (val._source.result_type === 'collections') {
         const cID = val._source.mdb_uid;
         const c   = mdbSelectors.getDenormCollection(state.mdb, cID);
@@ -145,25 +161,25 @@ const cMapFromState = (state, results) => {
         }
       }
       return acc;
-    }, {}) :
-    {};
-};
+    }, {})
+    : {}
+);
 
-const postMapFromState = (state, results) => {
-  return results && results.hits && Array.isArray(results.hits.hits) ?
-    results.hits.hits.reduce((acc, val) => {
+const postMapFromState = (state, results) => (
+  results && results.hits && Array.isArray(results.hits.hits)
+    ? results.hits.hits.reduce((acc, val) => {
       if (val._source.result_type === 'posts') {
         const ids     = val._source.mdb_uid.split('-');
-        const blogObj = BLOGS.find(b => b.id === parseInt(ids[0]));
+        const blogObj = BLOGS.find(b => b.id === parseInt(ids[0], 10));
         const p       = publicationSelectors.getBlogPost(state.publications, blogObj.name, ids[1]);
         if (p) {
           acc[val._source.mdb_uid] = p;
         }
       }
       return acc;
-    }, {}) :
-    {};
-};
+    }, {})
+    : {}
+);
 
 const twitterMapFromState = (state, results) => {
   return results && results.hits && Array.isArray(results.hits.hits) ?

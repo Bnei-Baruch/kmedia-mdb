@@ -193,8 +193,8 @@
     "last-lesson": "Die letzte Lektion",
     "donate": "SPENDEN",
     "promoted": {
-      "header": "Das gute Leben verbinden",
-      "subheader": "Weltkabbalah Konvention 2019"
+      "header": "Convention in New-Jersey",
+      "subheader": "23-26/5/2019"
     }
   },
   "events": {
@@ -370,7 +370,7 @@
     },
     "transcription": {
       "header": "Transkript",
-      "no-transcription": "Kein Transkript"
+      "no-content": "Kein Transkript"
     },
     "sources": {
       "header": "Quellen",
@@ -380,6 +380,14 @@
     },
     "sketches": {
       "header": "Zeichnungen"
+    },
+    "articles": {
+      "header": "Artikel",
+      "no-content": "Keine Artikel"
+    },
+    "research": {
+      "header": "Forschungsmaterialien",
+      "no-content": "Kein Forschungsmaterial"
     }
   },
   "sources-library": {
@@ -413,7 +421,8 @@
         "audio-simple": "Audio",
         "text": "Transkript",
         "image": "Zeichnungen",
-        "lelo-mikud": "Keine Fokusgruppe"
+        "lelo-mikud": "Keine Fokusgruppe",
+        "text-research-material": "Forschungsmaterialien"
       }
     },
     "program": {
@@ -423,7 +432,9 @@
         "audio": "Audioprogramme",
         "audio-simple": "Audio",
         "text": "Transkript",
-        "image": "Zeichnungen"
+        "image": "Zeichnungen",
+        "text-article": "Artikel basierend auf dem Programm",
+        "text-research-material": "Forschungsmaterialien"
       }
     },
     "publication": {
@@ -469,7 +480,8 @@
       "sl": "Slowenisch",
       "lv": "Lettisch",
       "sk": "Slowakisch",
-      "cs": "Tschechisch"
+      "cs": "Tschechisch",
+      "am": "Amharisch"
     },
     "content-types": {
       "DAILY_LESSON": "Tägliche Lektion",

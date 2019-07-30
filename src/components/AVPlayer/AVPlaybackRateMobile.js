@@ -20,8 +20,7 @@ export default class AVPlaybackRateMobile extends Component {
     value: '1x',
   };
 
-  handleChange = e =>
-    this.props.onSelect(e, e.currentTarget.value);
+  handleChange = e => this.props.onSelect(e, e.currentTarget.value);
 
   render() {
     const { value } = this.props;

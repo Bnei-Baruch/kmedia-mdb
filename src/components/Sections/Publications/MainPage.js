@@ -34,8 +34,8 @@ class MainPage extends PureComponent {
     const nextTab = nextProps.match.params.tab || tabs[0];
 
     // clear filters if location search parameter is changed by Menu click
-    if (nextProps.location.search !== this.props.location.search &&
-      !nextProps.location.search) {
+    if (nextProps.location.search !== this.props.location.search
+      && !nextProps.location.search) {
       nextProps.resetNamespace(`publications-${tab}`);
     }
 

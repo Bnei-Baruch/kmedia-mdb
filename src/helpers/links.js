@@ -3,8 +3,13 @@ import { filtersTransformer } from '../filters/index';
 import { stringify as urlSearchStringify } from './url';
 
 import {
+  BLOG_ID_LAITMAN_CO_IL,
+  BLOG_ID_LAITMAN_COM,
+  BLOG_ID_LAITMAN_ES,
+  BLOG_ID_LAITMAN_RU,
   CT_ARTICLE,
   CT_ARTICLES,
+  CT_BLOG_POST,
   // CT_CHILDREN_LESSON,
   // CT_CHILDREN_LESSONS,
   CT_CLIP,
@@ -37,13 +42,14 @@ import {
   CT_WOMEN_LESSON,
   CT_WOMEN_LESSONS,
   EVENT_TYPES,
-  BLOG_ID_LAITMAN_RU,
-  BLOG_ID_LAITMAN_COM,
-  BLOG_ID_LAITMAN_ES,
-  BLOG_ID_LAITMAN_CO_IL,
+  SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK,
 } from './consts';
 
-export const sectionLink = (section, filters) => {
+export const landingPageSectionLink = (landingPage) => {
+  return SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK[landingPage];
+};
+
+export const intentSectionLink = (section, filters) => {
   const filterValues = filters.map(({ name, value, getFilterById }) => {
     if (['topics-filter', 'sources-filter'].includes(name)) {
       const tagOrSource = getFilterById(value);
@@ -56,7 +62,7 @@ export const sectionLink = (section, filters) => {
 
     return { name, values: [value] };
   });
-  const query = filtersTransformer.toQueryParams(filterValues.filter(f => !!f));
+  const query        = filtersTransformer.toQueryParams(filterValues.filter(f => !!f));
   return `/${section}?${urlSearchStringify(query)}`;
 };
 
@@ -105,8 +111,8 @@ export const canonicalLink = (entity, mediaLang) => {
     return `/lessons/lectures/c/${entity.id}`;
   case CT_WOMEN_LESSONS:
     return `/lessons/women/c/${entity.id}`;
-  // case CT_CHILDREN_LESSONS:
-  //   return `/lessons/children/c/${entity.id}`;
+    // case CT_CHILDREN_LESSONS:
+    //   return `/lessons/children/c/${entity.id}`;
   case CT_LESSONS_SERIES:
     return `/lessons/series/c/${entity.id}`;
   case CT_VIDEO_PROGRAM:
@@ -139,7 +145,8 @@ export const canonicalLink = (entity, mediaLang) => {
   case CT_LECTURE:
   case CT_VIRTUAL_LESSON:
   case CT_WOMEN_LESSON:
-  // case CT_CHILDREN_LESSON:
+  case CT_BLOG_POST:
+    // case CT_CHILDREN_LESSON:
     return `/lessons/cu/${entity.id}${mediaLangSuffix}`;
   case CT_VIDEO_PROGRAM_CHAPTER:
   case CT_CLIP:
@@ -161,4 +168,3 @@ export const canonicalLink = (entity, mediaLang) => {
     return '/';
   }
 };
-

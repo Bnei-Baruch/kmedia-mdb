@@ -1,48 +1,47 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Button, Image, Icon, Container, Label } from 'semantic-ui-react';
+import { Button, Container, Icon, Image, Label } from 'semantic-ui-react';
 
 import {
-  SEARCH_INTENT_INDEX_TOPIC,
-  SEARCH_INTENT_INDEX_SOURCE,
-  MT_TEXT,
-  MT_AUDIO,
-  MT_VIDEO,
-  MT_IMAGE,
-  CT_LESSON_PART,
-  CT_CLIP,
-  CT_WOMEN_LESSON,
-  CT_CHILDREN_LESSON,
-  CT_LELO_MIKUD,
-  CT_FRIENDS_GATHERING,
-  CT_MEAL,
-  CT_EVENT_PART,
-  CT_TRAINING,
   CT_ARTICLE,
-  CT_VIDEO_PROGRAM_CHAPTER,
-  CT_FULL_LESSON,
-  CT_VIRTUAL_LESSON,
-
-  CT_DAILY_LESSON,
-  CT_SPECIAL_LESSON,
-  CT_FRIENDS_GATHERINGS,
-  CT_VIDEO_PROGRAM,
-  CT_LECTURE_SERIES,
-  CT_CHILDREN_LESSONS,
-  CT_WOMEN_LESSONS,
-  CT_VIRTUAL_LESSONS,
-  CT_MEALS,
-  CT_CONGRESS,
-  CT_HOLIDAY,
-  CT_PICNIC,
-  CT_UNITY_DAY,
-  CT_CLIPS,
   CT_ARTICLES,
+  CT_BLOG_POST,
+  CT_CHILDREN_LESSON,
+  CT_CHILDREN_LESSONS,
+  CT_CLIP,
+  CT_CLIPS,
+  CT_CONGRESS,
+  CT_DAILY_LESSON,
+  CT_EVENT_PART,
+  CT_FRIENDS_GATHERING,
+  CT_FRIENDS_GATHERINGS,
+  CT_FULL_LESSON,
+  CT_HOLIDAY,
+  CT_LECTURE_SERIES,
+  CT_LELO_MIKUD,
+  CT_LESSON_PART,
   CT_LESSONS_SERIES,
-  CT_BLOG_POST
+  CT_MEAL,
+  CT_MEALS,
+  CT_PICNIC,
+  CT_SPECIAL_LESSON,
+  CT_TRAINING,
+  CT_UNITY_DAY,
+  CT_VIDEO_PROGRAM,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  CT_VIRTUAL_LESSON,
+  CT_VIRTUAL_LESSONS,
+  CT_WOMEN_LESSON,
+  CT_WOMEN_LESSONS,
+  MT_AUDIO,
+  MT_IMAGE,
+  MT_TEXT,
+  MT_VIDEO,
+  SEARCH_INTENT_INDEX_SOURCE,
+  SEARCH_INTENT_INDEX_TOPIC
 } from '../../helpers/consts';
-import { sectionLogo } from '../../helpers/images';
+import { SectionLogo } from '../../helpers/images';
 import { canonicalLink } from '../../helpers/links';
 import { isDebMode } from '../../helpers/url';
 import * as shapes from '../shapes';
@@ -54,27 +53,36 @@ const PATH_SEPARATOR = ' > ';
 
 class SearchResultBase extends Component {
   static propTypes = {
-    queryResult: PropTypes.object,
-    language: PropTypes.string.isRequired,
+    queryResult: PropTypes.shape({
+      intents: PropTypes.arrayOf(PropTypes.shape({
+        language: PropTypes.string,
+        type: PropTypes.string,
+        value: PropTypes.shape({}),
+      })),
+      search_result: PropTypes.shape({})
+    }),
     t: PropTypes.func.isRequired,
-    filters: PropTypes.array.isRequired,
+    filters: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+      values: PropTypes.arrayOf(PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf(PropTypes.string)
+      ]))
+    })).isRequired,
     location: shapes.HistoryLocation.isRequired,
     click: PropTypes.func.isRequired,
-    hit: PropTypes.object,
-    rank: PropTypes.number
+    getTagById: PropTypes.func.isRequired,
+    getSourceById: PropTypes.func.isRequired,
+    hit: PropTypes.shape({}).isRequired,
+    rank: PropTypes.number,
   };
 
   static defaultProps = {
     queryResult: null,
+    rank: 0,
   };
 
-  click = (mdb_uid, index, type, rank, searchId) => {
-    const { click, location } = this.props;
-    const deb = isDebMode(location);
-    click(mdb_uid, index, type, rank, searchId, deb);
-  };
-
-  mlsToStrColon(seconds) {
+  static mlsToStrColon(seconds) {
     const duration = moment.duration({ seconds });
     const h        = duration.hours();
     let m          = duration.minutes();
@@ -83,6 +91,12 @@ class SearchResultBase extends Component {
     s              = s > 9 ? s : `0${s}`;
     return h ? `${h}:${m}:${s}` : `${m}:${s}`;
   }
+
+  logClick = (mdbUid, index, type, rank, searchId) => {
+    const { click, location } = this.props;
+    const deb                 = isDebMode(location);
+    click(mdbUid, index, type, rank, searchId, deb);
+  };
 
   renderFiles = (cu, mdbUid, index, resultType, rank, searchId) => {
     const { t }           = this.props;
@@ -124,13 +138,17 @@ class SearchResultBase extends Component {
   renderFile = (data, pathname, contentLanguage, mdbUid, index, resultType, rank, searchId) => {
     const to = { pathname, ...data.to };
     return (
-      <Link key={data.type}
-            onClick={() => this.click(mdbUid, index, resultType, rank, searchId)}
-            contentLanguage={contentLanguage}
-            to={to}>
+      <Link
+        key={data.type}
+        onClick={() => this.logClick(mdbUid, index, resultType, rank, searchId)}
+        contentLanguage={contentLanguage}
+        to={to}
+      >
 
         <Button basic floated="left" size="mini" className="link_to_file">
-          <Icon name={data.icon} /> {data.title}
+          <Icon name={data.icon} />
+          {' '}
+          {data.title}
         </Button>
       </Link>
     );
@@ -186,12 +204,19 @@ class SearchResultBase extends Component {
     }
 
     if (!withTitle) {
-      return <Image src={sectionLogo[icon]} size="mini" verticalAlign="middle" />;
+      return (
+        <Image size="mini" verticalAlign="middle">
+          <SectionLogo name={icon} width='25' height='25' />
+        </Image>
+      );
     }
 
     return (
       <span>
-        <Image src={sectionLogo[icon]} size="mini" verticalAlign="middle" />&nbsp;
+        <Image size="mini" verticalAlign="middle">
+          <SectionLogo name={icon} width='25' height='25' />
+        </Image>
+        &nbsp;
         <span>{this.props.t(`constants.content-types.${type}`)}</span>
       </span>
     );
@@ -209,7 +234,6 @@ class SearchResultBase extends Component {
     if (titleArr.length > 0) {
       title += ` / ${titleArr.join(PATH_SEPARATOR)}`;
     }
-    // eslint-disable-next-line react/no-danger
     return <span dangerouslySetInnerHTML={{ __html: title }} />;
   };
 
@@ -221,11 +245,10 @@ class SearchResultBase extends Component {
       return null;
     }
     const __html = `...${highlight[prop].join('.....')}...`;
-    // eslint-disable-next-line react/no-danger
     return <span dangerouslySetInnerHTML={{ __html }} />;
   };
 
-  getFilterById = index => {
+  getFilterById = (index) => {
     const { getTagById, getSourceById } = this.props;
     switch (index) {
     case SEARCH_INTENT_INDEX_TOPIC:
@@ -266,11 +289,12 @@ class SearchResultBase extends Component {
   };
 
   fileDuration = (files) => {
-    const fileWithDuration = files.find(f => f.type === 'video' || f.type === 'audio');
+    const fileWithDuration = files ? files.find(f => f.type === 'video' || f.type === 'audio') : null;
+    if (!fileWithDuration) {
+      return null;
+    }
     return (
-      fileWithDuration
-        ? <Label as='span' size="small">{formatDuration(fileWithDuration.duration)}</Label>
-        : null
+      <Label as="span" size="small">{formatDuration(fileWithDuration.duration)}</Label>
     );
   };
 

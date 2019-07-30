@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../../helpers/consts';
-import { sectionThumbnailFallback } from '../../../../helpers/images';
 import { canonicalLink } from '../../../../helpers/links';
 import { ellipsize } from '../../../../helpers/strings';
 import Link from '../../../Language/MultiLanguageLink';
@@ -21,7 +20,7 @@ export const renderUnit = (unit, t) => {
     <Table.Row key={unit.id} verticalAlign="top">
       <Table.Cell collapsing singleLine>
         <Link to={link}>
-          <UnitLogo className="index__thumbnail" unitId={unit.id} fallbackImg={sectionThumbnailFallback.lectures} />
+          <UnitLogo className="index__thumbnail" unitId={unit.id} fallbackImg='lectures' />
         </Link>
       </Table.Cell>
       <Table.Cell>
@@ -30,10 +29,12 @@ export const renderUnit = (unit, t) => {
           {unit.name || NO_NAME}
         </Link>
         {
-          unit.description ?
-            <div className="index__description mobile-hidden">
-              {ellipsize(unit.description)}
-            </div>
+          unit.description
+            ? (
+              <div className="index__description mobile-hidden">
+                {ellipsize(unit.description)}
+              </div>
+            )
             : null
         }
       </Table.Cell>
@@ -41,7 +42,6 @@ export const renderUnit = (unit, t) => {
   );
 };
 
-/* eslint-disable-next-line react/no-multi-comp */
 class LectureCollection extends Component {
   render() {
     return <Collection namespace="lessons-collection" renderUnit={renderUnit} />;

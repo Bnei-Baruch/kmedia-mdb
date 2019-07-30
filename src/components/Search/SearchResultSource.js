@@ -1,21 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Segment, Image, Container, Header } from 'semantic-ui-react';
+import { Container, Header, Image, Segment } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../helpers/links';
-import { sectionLogo } from '../../helpers/images';
+import { SectionLogo } from '../../helpers/images';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import Link from '../Language/MultiLanguageLink';
 import SearchResultBase from './SearchResultBase';
 
 class SearchResultSource extends SearchResultBase {
   render() {
-    const { t, hit, filters } = this.props;
+    const { t, queryResult, hit, filters, rank } = this.props;
+    const { search_result: { searchId } } = queryResult;
 
     const
       {
+        _index: index,
         _source: {
           mdb_uid: mdbUid,
+          result_type: resultType,
           title
         },
         highlight
@@ -28,6 +31,7 @@ class SearchResultSource extends SearchResultBase {
         <Header as="h3">
           <Link
             className="search__link"
+            onClick={() => this.logClick(mdbUid, index, resultType, rank, searchId)}
             to={canonicalLink({ id: mdbUid, content_type: 'SOURCE' })}
             language={this.getMediaLanguage(filters)}
           >
@@ -35,7 +39,11 @@ class SearchResultSource extends SearchResultBase {
           </Link>
         </Header>
         <Container>
-          <Image size="mini" src={sectionLogo.sources} verticalAlign="middle" />&nbsp;&nbsp;
+          <Image size="mini" verticalAlign="middle">
+            <SectionLogo name='sources' height='50' width='50' />
+          </Image>
+
+          &nbsp;&nbsp;
           <span>{t('filters.sections-filter.sources')}</span>
         </Container>
         <Container className="content">

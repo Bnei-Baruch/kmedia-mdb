@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 import { Breadcrumb, Container, Divider, Grid } from 'semantic-ui-react';
-
-import { RTL_LANGUAGES } from '../../../helpers/consts';
+import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { isEmpty } from '../../../helpers/utils';
 import { actions, selectors } from '../../../redux/modules/tags';
 import * as shapes from '../../shapes';
@@ -20,7 +19,7 @@ class TopicPage extends Component {
   static propTypes = {
     sections: PropTypes.arrayOf(PropTypes.string).isRequired,
     getSectionUnits: PropTypes.func.isRequired,
-    getPathByID: PropTypes.func,
+    getPathByID: PropTypes.func.isRequired,
     match: shapes.RouterMatch.isRequired,
     fetchDashboard: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
@@ -38,8 +37,8 @@ class TopicPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.match.params.id !== nextProps.match.params.id ||
-      this.props.match.params.language !== nextProps.match.params.language) {
+    if (this.props.match.params.id !== nextProps.match.params.id
+      || this.props.match.params.language !== nextProps.match.params.language) {
       this.loadTopic(nextProps);
     }
   }
@@ -82,7 +81,7 @@ class TopicPage extends Component {
 
         return section;
       });
-      const breadCrumbIcon     = `${RTL_LANGUAGES.includes(language) ? 'left' : 'right'} angle`;
+      const breadCrumbIcon     = `${isLanguageRtl ? 'left' : 'right'} angle`;
 
       return (
         <Container className="padded">
@@ -102,8 +101,10 @@ class TopicPage extends Component {
                         units={sectionUnits}
                         N={topNItems}
                         tagPath={tagPath}
+                        language={language}
                       />
-                    </Grid.Column>);
+                    </Grid.Column>
+                  );
               })
             }
           </Grid>
@@ -111,7 +112,14 @@ class TopicPage extends Component {
       );
     }
 
-    return <div>Topic {tagId} Not Found</div>;
+    return (
+      <div>
+        Topic
+        {tagId}
+        {' '}
+        Not Found
+      </div>
+    );
   }
 }
 

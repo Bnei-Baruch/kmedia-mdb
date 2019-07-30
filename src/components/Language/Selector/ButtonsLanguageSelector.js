@@ -6,13 +6,11 @@ import { LANGUAGES } from '../../../helpers/consts';
 import BaseLanguageSelector from './BaseLanguageSelector';
 
 class ButtonsLanguageSelector extends BaseLanguageSelector {
-
-  handleSelect = (e, lang) =>
-    this.props.onSelect(e, lang);
+  handleSelect = (e, lang) => this.props.onSelect(e, lang);
 
   render() {
     const { defaultValue } = this.props;
-    const options          = this.getOptions(this.props);
+    const options          = BaseLanguageSelector.getOptions(this.props);
 
     return (
       <Button.Group basic className="buttons-language-selector" size="small">
@@ -23,7 +21,8 @@ class ButtonsLanguageSelector extends BaseLanguageSelector {
               key={x.value}
               active={x.value === defaultValue}
               title={x.text}
-              onClick={e => this.handleSelect(e, x.value)} >
+              onClick={e => this.handleSelect(e, x.value)}
+            >
               <Flag name={LANGUAGES[x.value].flag} style={{ margin: 0 }} />
             </Button>
           ))

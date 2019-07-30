@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Button, Container, Icon } from 'semantic-ui-react';
+import { Button, Container, Icon, Segment } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../helpers/links';
 import { isDebMode } from '../../helpers/url';
@@ -18,21 +18,30 @@ class SearchResultCollection extends SearchResultBase {
 
   state = { isImgLoaded: false };
 
-  renderCU = cu => (
-    <Link key={cu.id} to={canonicalLink(cu, this.getMediaLanguage(this.props.filters))}>
-      <Button basic size="tiny" className="link_to_cu">
-        {cu.name}
-      </Button>
-    </Link>
-  );
+  renderCU = cu => {
+    const { queryResult, hit, rank }                                   = this.props;
+    const { _index: index, _type: type, _source: { mdb_uid: mdbUid } } = hit;
+    const { search_result: { searchId } }                              = queryResult;
+
+    return (
+      <Link
+        key={cu.id}
+        onClick={() => this.logClick(mdbUid, index, type, rank, searchId)}
+        to={canonicalLink(cu, this.getMediaLanguage(this.props.filters))}>
+        <Button basic size="tiny" className="link_to_cu">
+          {cu.name}
+        </Button>
+      </Link>
+    );
+  };
 
   handleImageContextRef = (ref) => {
-    if(ref){
+    if (ref) {
       this.imgRef = ref.children[0];
     }
   };
 
-  imgLoadHandler        = () => {
+  imgLoadHandler = () => {
     this.setState({ isImgLoaded: true });
   };
 
@@ -56,11 +65,11 @@ class SearchResultCollection extends SearchResultBase {
     return (
       <Segment className="bg_hover_grey search__block">
         <Container>
-          <span ref={this.handleImageContextRef} >
+          <span ref={this.handleImageContextRef}>
             <FallbackImage
               circular
-              width={isImgLoaded ? this.imgRef.offsetWidth : null}
-              height={isImgLoaded ? this.imgRef.offsetWidth : null}
+              width={isImgLoaded ? this.imgRef.offsetWidth.toString() : null}
+              height={isImgLoaded ? this.imgRef.offsetWidth.toString() : null}
               onLoad={this.imgLoadHandler}
               floated="left"
               fallbackImage={null}
@@ -72,7 +81,7 @@ class SearchResultCollection extends SearchResultBase {
             <Container as="h3">
               <Link
                 className="search__link"
-                onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+                onClick={() => this.logClick(mdbUid, index, type, rank, searchId)}
                 to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}
               >
                 {this.titleFromHighlight(highlight, c.name)}
@@ -81,13 +90,17 @@ class SearchResultCollection extends SearchResultBase {
 
             <Container className="content">
               <Link
-                onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+                onClick={() => this.logClick(mdbUid, index, type, rank, searchId)}
                 to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}
               >
                 {this.iconByContentType(c.content_type, true)}
               </Link>
               &nbsp;|&nbsp;
-              <span>{c.content_units.length} {t('pages.collection.items.programs-collection')}</span>
+              <span>
+                {c.content_units.length}
+                {' '}
+                {t('pages.collection.items.programs-collection')}
+              </span>
             </Container>
             <div className="clear" />
           </Container>
@@ -96,7 +109,7 @@ class SearchResultCollection extends SearchResultBase {
             {c.content_units.slice(0, 5).map(this.renderCU)}
 
             <Link
-              onClick={() => this.click(mdbUid, index, type, rank, searchId)}
+              onClick={() => this.logClick(mdbUid, index, type, rank, searchId)}
               to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}
               className="margin-right-8"
             >
@@ -106,11 +119,13 @@ class SearchResultCollection extends SearchResultBase {
           </Container>
         </Container>
         {
-          !isDebMode(location) ?
-            null :
-            <Container collapsing>
-              <ScoreDebug name={c.name} score={score} explanation={hit._explanation} />
-            </Container>
+          !isDebMode(location)
+            ? null
+            : (
+              <Container collapsing>
+                <ScoreDebug name={c.name} score={score} explanation={hit._explanation} />
+              </Container>
+            )
         }
       </Segment>
     );

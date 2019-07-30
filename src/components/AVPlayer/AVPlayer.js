@@ -69,8 +69,8 @@ class AVPlayer extends PureComponent {
     onNext: PropTypes.func,
 
     deviceInfo: shapes.UserAgentParserResults.isRequired,
-
     onMediaEditModeChange: PropTypes.func.isRequired,
+    onDropdownOpenedChange: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -83,6 +83,7 @@ class AVPlayer extends PureComponent {
     onPause: noop,
     onPrev: noop,
     onNext: noop,
+    requestedLanguage: 'en',
   };
 
   static chooseSource = (props) => {
@@ -162,7 +163,6 @@ class AVPlayer extends PureComponent {
     // By default hide controls after a while if player playing.
     this.hideControlsTimeout();
 
-    // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ isClient: true });
 
     const { deviceInfo: { browser: { name: browserName } }, media, item, autoPlay } = this.props;
@@ -399,7 +399,7 @@ class AVPlayer extends PureComponent {
   };
 
   hideControls = () => {
-    if (this.wrapperMouseY < this.wrapperRect.height - this.controlsRect.height) {
+    if (!this.mouseEnter || this.wrapperMouseY < this.wrapperRect.height - this.controlsRect.height) {
       this.setState({ controlsVisible: false });
     } else {
       if (this.autohideTimeoutId) {
@@ -416,9 +416,15 @@ class AVPlayer extends PureComponent {
     }
   };
 
-  handleWrapperMouseEnter = () => this.showControls();
+  handleWrapperMouseEnter = () => {
+    this.mouseEnter = true;
+    this.showControls();
+  };
 
-  handleWrapperMouseLeave = () => this.hideControls();
+  handleWrapperMouseLeave = () => {
+    this.mouseEnter = false;
+    this.hideControls();
+  };
 
   handleWrapperMouseMove = (e) => {
     const { controlsVisible } = this.state;
@@ -544,6 +550,7 @@ class AVPlayer extends PureComponent {
         onPrev,
         onNext,
         media,
+        onDropdownOpenedChange
       } = this.props;
 
     const
@@ -667,6 +674,7 @@ class AVPlayer extends PureComponent {
             <AVPlaybackRate
               value={playbackRate}
               onSelect={this.playbackRateChange}
+              onDropdownOpenedChange={onDropdownOpenedChange}
             />
 
             {
@@ -692,6 +700,7 @@ class AVPlayer extends PureComponent {
               uiLanguage={uiLanguage}
               requestedLanguage={requestedLanguage}
               onSelect={this.onLanguageChange}
+              onDropdownOpenedChange={onDropdownOpenedChange}
             />
             {!isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.SLICE_EDIT)} />}
             {isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.NORMAL)} />}

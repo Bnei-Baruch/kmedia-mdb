@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Header, Icon } from 'semantic-ui-react';
@@ -12,7 +11,7 @@ export const Splash = (props) => {
         <Icon name={icon} loading={isLoading} color={color} />
         <Header.Content>
           {text}
-          {subtext ? <Header.Subheader>{subtext}</Header.Subheader> : null}
+          {subtext ? <Header.Subheader data-testid='header.subHeader'>{subtext}</Header.Subheader> : null}
           {item ? <Header.Subheader>{item}</Header.Subheader> : null}
         </Header.Content>
       </Header>

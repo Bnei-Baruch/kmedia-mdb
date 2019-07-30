@@ -113,6 +113,10 @@
         @include tablet-mobile {
           transform: none;
         }
+
+        @include mobile {
+          padding-top: calc(1em + 60px);
+        }
       }
     }
   }

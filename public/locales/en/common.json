@@ -150,7 +150,7 @@
       "text": "Search Results",
       "subtext": ""
     },
-    "topNote":{
+    "topNote": {
       "tip": "Tip",
       "first": "Search results are in {{language}}.",
       "second": "You can choose other content languages"
@@ -202,8 +202,8 @@
     "last-lesson": "The Latest Daily Lesson",
     "donate": "DONATE NOW",
     "promoted": {
-      "header": "Connecting The Good Life",
-      "subheader": "World Kabbalah Convention 2019"
+      "header": "Convention in New-Jersey",
+      "subheader": "23-26 May 2019"
     }
   },
   "events": {
@@ -386,7 +386,7 @@
     },
     "transcription": {
       "header": "Transcription",
-      "no-transcription": "Transcription is missing"
+      "no-content": "Transcription is missing"
     },
     "sources": {
       "header": "Sources",
@@ -396,6 +396,14 @@
     },
     "sketches": {
       "header": "Sketches"
+    },
+    "articles": {
+      "header": "Articles",
+      "no-content": "No articles"
+    },
+    "research": {
+      "header": "Research materials",
+      "no-content": "No research materials"
     }
   },
   "sources-library": {
@@ -437,7 +445,8 @@
         "audio-simple": "Audio",
         "text": "Transcription Text",
         "image": "Sketches",
-        "lelo-mikud": "No focus-group"
+        "lelo-mikud": "No focus-group",
+        "text-research-material": "Research Materials"
       }
     },
     "program": {
@@ -447,7 +456,9 @@
         "audio": "Program Audio",
         "audio-simple": "Audio",
         "text": "Transcription Text",
-        "image": "Sketches"
+        "image": "Sketches",
+        "text-article": "Article based on program",
+        "text-research-material": "Research Materials"
       }
     },
     "publication": {
@@ -493,7 +504,8 @@
       "sl": "Slovenian",
       "lv": "Latvian",
       "sk": "Slovak",
-      "cs": "Czech"
+      "cs": "Czech",
+      "am": "Amharic"
     },
     "content-types": {
       "DAILY_LESSON": "Daily Lesson",

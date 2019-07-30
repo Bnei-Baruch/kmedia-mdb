@@ -4,8 +4,9 @@ import { withNamespaces } from 'react-i18next';
 import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
 
 import { assetUrl } from '../../../../../../helpers/Api';
-import { CT_KITEI_MAKOR, MT_TEXT, RTL_LANGUAGES } from '../../../../../../helpers/consts';
+import { CT_KITEI_MAKOR, MT_TEXT } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
+import { isLanguageRtl } from '../../../../../../helpers/i18n-utils';
 import { formatError, tracePath } from '../../../../../../helpers/utils';
 import * as shapes from '../../../../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash/Splash';
@@ -40,7 +41,6 @@ class Sources extends Component {
   componentWillReceiveProps(nextProps) {
     // unit has changed - replace all state
     if (nextProps.unit.id !== this.props.unit.id) {
-      this.myReplaceState(nextProps);
       return;
     }
 
@@ -73,11 +73,13 @@ class Sources extends Component {
     }
   }
 
-  getKiteiMakorUnits = unit =>
+  getKiteiMakorUnits = unit => (
     Object.values(unit.derived_units || {})
-      .filter(x =>
-        x.content_type === CT_KITEI_MAKOR &&
-        (x.files || []).some(f => f.type === MT_TEXT));
+      .filter(x => (
+        x.content_type === CT_KITEI_MAKOR
+        && (x.files || []).some(f => f.type === MT_TEXT))
+      )
+  );
 
   getSourceOptions = (props) => {
     const { unit, indexMap, getSourceById, t } = props;
@@ -154,12 +156,12 @@ class Sources extends Component {
       return;
     }
     const { indexMap, contentLanguage, unit } = this.props;
-    const { language: uiLanguage }            = this.state;
-    const isMakor                             = this.checkIsMakor(this.state.options, selected);
+    const { language: uiLanguage, options }   = this.state;
+    const isMakor                             = this.checkIsMakor(options, selected);
 
-    const { languages, language } = isMakor ?
-      this.getMakorLanguages(this.getKiteiMakorFiles(unit), uiLanguage, contentLanguage) :
-      this.getSourceLanguages(indexMap[selected], uiLanguage, contentLanguage);
+    const { languages, language } = isMakor
+      ? this.getMakorLanguages(this.getKiteiMakorFiles(unit), uiLanguage, contentLanguage)
+      : this.getSourceLanguages(indexMap[selected], uiLanguage, contentLanguage);
 
     this.setState({ selected, languages, language, isMakor });
     this.changeContent({ selected, language, isMakor });
@@ -174,9 +176,9 @@ class Sources extends Component {
     const { contentLanguage }      = nextProps;
     const { language: uiLanguage } = this.state;
 
-    const { languages, language } = isMakor ?
-      this.getMakorLanguages(ktFiles, uiLanguage, contentLanguage) :
-      this.getSourceLanguages(nextProps.indexMap[selected], uiLanguage, contentLanguage);
+    const { languages, language } = isMakor
+      ? this.getMakorLanguages(ktFiles, uiLanguage, contentLanguage)
+      : this.getSourceLanguages(nextProps.indexMap[selected], uiLanguage, contentLanguage);
 
     this.setState({ options, languages, language, selected, isMakor, });
     this.changeContent({ selected, language, props: nextProps, isMakor, });
@@ -253,11 +255,9 @@ class Sources extends Component {
     } else if (contentWip) {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else if (isTaas && pdfFile) {
-      contents =
-        <PDF pdfFile={assetUrl(`sources/${selected}/${pdfFile}`)} pageNumber={1} startsFrom={startsFrom} />;
+      contents = <PDF pdfFile={assetUrl(`sources/${selected}/${pdfFile}`)} pageNumber={1} startsFrom={startsFrom} />;
     } else {
-      const direction = RTL_LANGUAGES.includes(uiLanguage) ? 'rtl' : 'ltr';
-      // eslint-disable-next-line react/no-danger
+      const direction = isLanguageRtl(uiLanguage);
       contents        = <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: contentData }} />;
     }
 
@@ -285,7 +285,8 @@ class Sources extends Component {
                       defaultValue={uiLanguage}
                       onSelect={this.handleLanguageChanged}
                     />
-                  </Grid.Column>)
+                  </Grid.Column>
+                )
                 : null
             }
           </Grid.Row>

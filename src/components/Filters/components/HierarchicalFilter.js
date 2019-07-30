@@ -6,7 +6,7 @@ import noop from 'lodash/noop';
 import scrollIntoView from 'scroll-into-view';
 import { Button, Header, Input, Menu, Segment } from 'semantic-ui-react';
 
-import { isEmpty, getEscapedRegExp } from '../../../helpers/utils';
+import { getEscapedRegExp, isEmpty } from '../../../helpers/utils';
 
 class HierarchicalFilter extends Component {
   static propTypes = {
@@ -35,9 +35,12 @@ class HierarchicalFilter extends Component {
     term: '',
   };
 
+  handleTermChange = debounce((e, data) => {
+    this.setState({ term: data.value });
+  }, 200);
+
   componentDidMount() {
     if (this.activeRef) {
-      // eslint-disable-next-line react/no-find-dom-node
       scrollIntoView(ReactDOM.findDOMNode(this.activeRef), {
         time: 150, // half a second
         validTarget: (target, parentsScrolled) => (parentsScrolled < 1),
@@ -93,7 +96,12 @@ class HierarchicalFilter extends Component {
     // in term mode we trace path
     if (this.state.term) {
       const path = this.tracepath(this.props.tree[0], data.name);
-      this.setState({ sValue: path.slice(1) });
+      const sValue = path.slice(1);
+      if (isCallApply) {
+        this.props.onApply(sValue);
+      } else {
+        this.setState({ sValue });
+      }
       return;
     }
 
@@ -111,10 +119,6 @@ class HierarchicalFilter extends Component {
       this.setState({ sValue: newSelection });
     }
   };
-
-  handleTermChange = debounce((e, data) => {
-    this.setState({ term: data.value });
-  }, 200);
 
   nodeToItem = (node, level, reg) => {
     const { text, value, count } = node;
@@ -140,15 +144,21 @@ class HierarchicalFilter extends Component {
         ref={ref}
         active={active}
         data-level={level}
-        is-last-leaf={(node.children.length === 0).toString()}
+        is-last-leaf={(!node.children || node.children.length === 0).toString()}
         className={`l${level}`}
         onClick={this.handleClick}
       >
         {content}
         {
-          Number.isInteger(count) ?
-            <span className="filter__count">&nbsp;({count})</span> :
-            null
+          Number.isInteger(count)
+            ? (
+              <span className="filter__count">
+                &nbsp;(
+                {count}
+                )
+              </span>
+            )
+            : null
         }
       </Menu.Item>
     );
@@ -158,8 +168,7 @@ class HierarchicalFilter extends Component {
     let items = [this.nodeToItem(node, level, reg)];
 
     if (!isEmpty(node.children)) {
-      items = node.children.reduce((acc, val) =>
-        acc.concat(this.nodeToItemRec(val, level + 1, reg)), items);
+      items = node.children.reduce((acc, val) => acc.concat(this.nodeToItemRec(val, level + 1, reg)), items);
     }
 
     return items;

@@ -6,7 +6,7 @@ class ScoreDebug extends Component {
   static propTypes = {
     name: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
     score: PropTypes.number.isRequired,
-    explanation: PropTypes.object,
+    explanation: PropTypes.shape({}),
   };
 
   static defaultProps = {
@@ -25,7 +25,7 @@ class ScoreDebug extends Component {
 
   reduceExplanation = (exp, open, key) => {
     if (!exp) {
-        return (<div>Error, expected explanations, got null.</div>);
+      return (<div>Error, expected explanations, got null.</div>);
     }
     if (!open || !(key in open)) {
       open[key] = {
@@ -35,29 +35,43 @@ class ScoreDebug extends Component {
     }
     return (
       <div key={key}>
-        {!exp.details ? <span style={{ paddingLeft: '17px' }} /> :
-          (!open[key].open ?
-            <Icon
-              name="plus"
-              onClick={() => {
-                open[key].open = true;
-                this.updateOpen();
-              }}
-            /> :
-            <Icon
-              name="minus"
-              onClick={() => {
-                open[key].open = false;
-                this.updateOpen();
-              }}
-            />)}
-        <span>{exp.value} = {exp.description}</span>
+        {!exp.details
+          ? <span style={{ paddingLeft: '17px' }} />
+          : (!open[key].open
+            ? (
+              <Icon
+                name="plus"
+                onClick={() => {
+                  open[key].open = true;
+                  this.updateOpen();
+                }}
+              />
+            )
+            : (
+              <Icon
+                name="minus"
+                onClick={() => {
+                  open[key].open = false;
+                  this.updateOpen();
+                }}
+              />
+            ))
+        }
+        <span>
+          {exp.value}
+          {' '}
+=
+          {' '}
+          {exp.description}
+        </span>
         {
-          !exp.details || !open[key].open ?
-            null :
-            <div style={{ paddingLeft: '25px' }}>
-              {exp.details.map((d, i) => this.reduceExplanation(d, open[key].details, i))}
-            </div>
+          !exp.details || !open[key].open
+            ? null
+            : (
+              <div style={{ paddingLeft: '25px' }}>
+                {exp.details.map((d, i) => this.reduceExplanation(d, open[key].details, i))}
+              </div>
+            )
         }
       </div>
     );
@@ -71,9 +85,7 @@ class ScoreDebug extends Component {
       <div className="score_debug">
         <Button color="red" icon="flask" content={score} onClick={() => this.setState({ open: true })} />
         {explanation ? null : (
-            <span data-tooltip="Explanations are null.">
-                <Icon name='warning sign' color='yellow' size='big' />
-            </span>
+          <span data-tooltip="Explanations are null."><Icon name="warning sign" color="yellow" size="big" /></span>
         )}
         <Modal dimmer="inverted" open={open} onClose={() => this.setState({ open: false })}>
           <Modal.Content style={{ textAlign: 'left' }}>

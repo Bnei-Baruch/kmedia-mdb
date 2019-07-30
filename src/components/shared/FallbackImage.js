@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Image } from 'semantic-ui-react';
 
-import imagePlaceholder from '../../images/image.png';
+import { knownFallbackImages, SectionThumbnailFallback } from '../../helpers/images';
 
 // An adaptation of https://github.com/socialtables/react-image-fallback
 // for react semantic-ui
@@ -16,7 +16,7 @@ class FallbackImage extends Component {
   };
 
   static defaultProps = {
-    fallbackImage: [imagePlaceholder],
+    fallbackImage: ['default'],
   };
 
   constructor(props) {
@@ -86,14 +86,25 @@ class FallbackImage extends Component {
   };
 
   render() {
-    if (typeof this.state.imageSource !== 'string') {
-      return this.state.imageSource;
+    const { fallbackImage, className, onLoad, onError, width = 'auto', height = 'auto', ...rest } = this.props;
+
+    if (this.state.imageSource === null) {
+      /* There is no fallbacks and src was not found */
+      return null;
     }
 
-    const { fallbackImage, onLoad, onError, width = 'auto', height = 'auto', ...rest } = this.props;
-    return <Image {...rest}
-                  src={this.state.imageSource}
-                  style={{ 'width': `${width}px`, 'height': `${height}px` }} />;
+    if (knownFallbackImages.includes(this.state.imageSource)) {
+      return (
+        <div className={className}>
+          <SectionThumbnailFallback name={this.state.imageSource} width={width} height={height} />
+        </div>);
+    }
+
+    return <Image
+      className={className}
+      {...rest}
+      src={this.state.imageSource}
+    />;
   }
 }
 

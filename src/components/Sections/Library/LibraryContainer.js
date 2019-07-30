@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import ReactDOM from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -60,6 +59,7 @@ class LibraryContainer extends Component {
     fontSize: 0,
     theme: 'light',
     match: '',
+    scrollTopPosition: 0
   };
 
   componentDidMount() {
@@ -71,7 +71,6 @@ class LibraryContainer extends Component {
     const { location: { state: { tocIsActive } = { state: { tocIsActive: false } } } } = history;
 
     if (tocIsActive) {
-      // eslint-disable-next-line react/no-did-mount-set-state
       this.setState({ tocIsActive });
     }
 
@@ -84,7 +83,6 @@ class LibraryContainer extends Component {
       if (firstLeafId !== sourceId) {
         replace(`sources/${firstLeafId}`);
       } else {
-        // eslint-disable-next-line react/no-did-mount-set-state
         this.setState({ lastLoadedId: sourceId, language: this.props.language });
         this.fetchIndices(sourceId);
       }
@@ -111,20 +109,19 @@ class LibraryContainer extends Component {
         replace(`sources/${firstLeafId}`);
       }
     }
-
-    // @TODO - David, can be state that change scroll to many times.
-    if (!isEmpty(this.accordionContext) && !isEmpty(this.selectedAccordionContext)) {
-      // eslint-disable-next-line react/no-find-dom-node
-      const elScrollTop = ReactDOM.findDOMNode(this.selectedAccordionContext).offsetTop;
-      const p           = this.accordionContext.parentElement;
-      if (p.scrollTop !== elScrollTop) {
-        p.scrollTop = elScrollTop;
-      }
-    }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     this.updateSticky();
+    const { isReadable, scrollTopPosition } = this.state;
+    //on change full screen and normal view scroll to position
+    if (prevState.isReadable !== isReadable && this.articleRef) {
+      if (isReadable) {
+        this.articleRef.scrollTop = scrollTopPosition;
+      } else {
+        document.scrollingElement.scrollTop = scrollTopPosition;
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -183,25 +180,13 @@ class LibraryContainer extends Component {
     return this.firstLeafId(children[0]);
   };
 
-  handleContextRef = (ref) => {
-    this.contextRef = ref;
-  };
+  handleContextRef = (ref) => this.contextRef = ref;
 
-  handleAccordionContext = (ref) => {
-    this.accordionContext = ref;
-  };
+  handleContentArticleRef = (ref) => this.articleRef = ref;
 
-  handleSelectedAccordionContext = (ref) => {
-    this.selectedAccordionContext = ref;
-  };
+  handleSecondaryHeaderRef = (ref) => this.secondaryHeaderRef = ref;
 
-  handleSecondaryHeaderRef = (ref) => {
-    this.secondaryHeaderRef = ref;
-  };
-
-  handleContentHeaderRef = (ref) => {
-    this.contentHeaderRef = ref;
-  };
+  handleContentHeaderRef = (ref) => this.contentHeaderRef = ref;
 
   handleTocIsActive = () => {
     const { tocIsActive } = this.state;
@@ -209,13 +194,18 @@ class LibraryContainer extends Component {
   };
 
   handleIsReadable = () => {
-    const { isReadable } = this.state;
-    this.setState({ isReadable: !isReadable });
+    const { isReadable }    = this.state;
+    const scrollTopPosition = this.getScrollTop();
+    this.setState({ isReadable: !isReadable, scrollTopPosition });
   };
 
-  handleSettings = (setting) => {
-    this.setState(setting);
-  };
+  /**
+   * Get position of scroll
+   * @returns {number|*}
+   */
+  getScrollTop = () => this.state.isReadable ? this.articleRef.scrollTop : document.scrollingElement.scrollTop;
+
+  handleSettings = (setting) => this.setState(setting);
 
   fetchIndices = (sourceId) => {
     const { indexMap, fetchIndex } = this.props;
@@ -229,15 +219,15 @@ class LibraryContainer extends Component {
   header = (sourceId, properParentId) => {
     const { getSourceById } = this.props;
 
-    const source = getSourceById(sourceId);
+    const source             = getSourceById(sourceId);
     const properParentSource = getSourceById(properParentId);
 
-    if (!source || !properParentSource){
+    if (!source || !properParentSource) {
       return <div />;
     }
-    
+
     const { name: parentName, description, parent_id: parentId } = properParentSource;
-    const parentSource = getSourceById(parentId);
+    const parentSource                                           = getSourceById(parentId);
 
     if (!parentSource) {
       return <div />;
@@ -250,7 +240,7 @@ class LibraryContainer extends Component {
     if (kabFullName && kabName) {
       displayName += ` (${kabName})`;
     }
-    
+
     const { contentHeaderWidth, } = this.state;
     return (
       <Header size="small">
@@ -309,18 +299,12 @@ class LibraryContainer extends Component {
     );
   };
 
-  handleFilterChange = (e, data) => {
-    this.setState({ match: data.value });
-  };
+  handleFilterChange = (e, data) => this.setState({ match: data.value });
 
   handleFilterKeyDown = (e) => {
     if (e.keyCode === 27) { // Esc
-      this.handleFilterClear();
+      this.setState({ match: '' });
     }
-  };
-
-  handleFilterClear = () => {
-    this.setState({ match: '' });
   };
 
   print = () => {
@@ -347,7 +331,7 @@ class LibraryContainer extends Component {
   };
 
   render() {
-    const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push } = this.props;
+    const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push, history, deviceInfo } = this.props;
 
     const fullPath = this.getFullPath(sourceId);
     const parentId = this.properParentId(fullPath);
@@ -363,6 +347,7 @@ class LibraryContainer extends Component {
         content = <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
       }
     } else {
+      const downloadAllowed = deviceInfo.os.name !== 'iOS';
       content = (
         <LibraryContentContainer
           source={sourceId}
@@ -370,6 +355,8 @@ class LibraryContainer extends Component {
           uiLanguage={language}
           contentLanguage={contentLanguage}
           langSelectorMount={this.headerMenuRef}
+          history={history}
+          downloadAllowed={downloadAllowed}
         />
       );
     }
@@ -380,15 +367,18 @@ class LibraryContainer extends Component {
         fontSize,
         theme,
         fontType,
-        secondaryHeaderHeight,
         tocIsActive,
         match,
-      } = this.state;
-
+      }                           = this.state;
+    let { secondaryHeaderHeight } = this.state;
+    if (isNaN(secondaryHeaderHeight)) {
+      secondaryHeaderHeight = 0;
+    }
     const matchString = this.matchString(parentId, t);
 
     return (
       <div
+        ref={this.handleContentArticleRef}
         className={classNames({
           source: true,
           'is-readable': isReadable,
@@ -439,7 +429,6 @@ class LibraryContainer extends Component {
                 <TOC
                   language={language}
                   match={matchString ? match : ''}
-                  matchApplied={this.handleFilterClear}
                   fullPath={fullPath}
                   rootId={parentId}
                   contextRef={this.contextRef}
@@ -457,14 +446,14 @@ class LibraryContainer extends Component {
                   [`size${fontSize}`]: true,
                 })}
               >
-                <div ref={this.handleContextRef}>
+                <Ref innerRef={this.handleContextRef}>
                   <div
                     className="source__content"
                     style={{ minHeight: `calc(100vh - ${secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}px)` }}
                   >
                     {content}
                   </div>
-                </div>
+                </Ref>
               </Grid.Column>
             </Grid.Row>
           </Grid>

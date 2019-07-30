@@ -6,12 +6,12 @@ import { Container, Portal, Segment } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
 import { assetUrl } from '../../../helpers/Api';
-import { RTL_LANGUAGES, } from '../../../helpers/consts';
 import { formatError, isEmpty } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
 import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
 import PDF from '../../shared/PDF/PDF';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { updateQuery } from '../../../helpers/url';
 import withPagination from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
@@ -33,6 +33,7 @@ class Library extends Component {
     handleLanguageChanged: PropTypes.func.isRequired,
     history: shapes.History.isRequired,
     fullUrlPath: PropTypes.string,
+    downloadAllowed: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -79,13 +80,13 @@ class Library extends Component {
       return <Segment basic>&nbsp;</Segment>;
     }
 
-    const direction = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
+    const direction = getLanguageDirection(language);
 
     // PDF.js will fetch file by itself
-    const { pdfFile, startsFrom } = this.props;
-    const usePdfFile              = isTaas && pdfFile;
-    const mimeType                = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-    const { pageNumber }          = this.state;
+    const { pdfFile, startsFrom, downloadAllowed } = this.props;
+    const usePdfFile                               = isTaas && pdfFile;
+    const mimeType                                 = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    const { pageNumber }                           = this.state;
     let contentsToDisplay;
 
     const { wip: contentWip, err: contentErr, data: contentData } = content;
@@ -105,13 +106,15 @@ class Library extends Component {
           pageNumber={pageNumber || 1}
           startsFrom={startsFrom}
           pageNumberHandler={this.pageNumberHandler}
-        />);
+        />
+      );
     } else if (contentData) {
       contentsToDisplay = (
         <div
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
           dangerouslySetInnerHTML={{ __html: contentData }}
-        />);
+        />
+      );
     } else {
       return <Segment basic>{t('sources-library.no-source')}</Segment>;
     }
@@ -137,7 +140,7 @@ class Library extends Component {
             ? <Portal open preprend mountNode={langSelectorMount}>{languageBar}</Portal>
             : languageBar
         }
-        <Download path={fullUrlPath} mimeType={mimeType} />
+        <Download path={fullUrlPath} mimeType={mimeType} downloadAllowed={downloadAllowed}  />
         {contentsToDisplay}
       </div>
     );

@@ -10,7 +10,6 @@ import * as shapes from '../../shapes';
 import Page from './Page';
 
 export class UnitContainer extends Component {
-
   static propTypes = {
     match: shapes.RouterMatch.isRequired,
     unit: shapes.ContentUnit,
@@ -28,15 +27,7 @@ export class UnitContainer extends Component {
     section: '',
   };
 
-  componentDidMount() {
-    this.askForDataIfNeeded(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.askForDataIfNeeded(nextProps);
-  }
-
-  askForDataIfNeeded = (props) => {
+  static askForDataIfNeeded = (props, forceUpdate) => {
     const { match, unit, wip, err, fetchUnit } = props;
 
     // We fetch stuff if we don't have it already
@@ -47,14 +38,23 @@ export class UnitContainer extends Component {
 
     const { id } = match.params;
     if (
-      unit &&
-      unit.id === id &&
-      Array.isArray(unit.files)) {
+      !forceUpdate
+      && unit
+      && unit.id === id
+      && Array.isArray(unit.files)) {
       return;
     }
 
     fetchUnit(id);
   };
+
+  componentDidMount() {
+    UnitContainer.askForDataIfNeeded(this.props, true);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    UnitContainer.askForDataIfNeeded(nextProps, false);
+  }
 
   render() {
     const { language, unit, wip, err, section } = this.props;
@@ -80,10 +80,9 @@ const mapState = (state, ownProps) => {
   };
 };
 
-const mapDispatch = dispatch =>
-  bindActionCreators({
-    fetchUnit: actions.fetchUnit,
-  }, dispatch);
+const mapDispatch = dispatch => bindActionCreators({
+  fetchUnit: actions.fetchUnit,
+}, dispatch);
 
 export const wrap = WrappedComponent => withRouter(connect(mapState, mapDispatch)(WrappedComponent));
 

@@ -35,6 +35,9 @@ class AVLanguageMobile extends Component {
   handleChange = e => this.props.onSelect(e, e.currentTarget.value);
 
   handlePopup = (selectedLanguage, requestedLanguage) => {
+    if (requestedLanguage === null) {
+      return;
+    }
     const { lastRequestedLanguage } = this.state;
     if (lastRequestedLanguage === requestedLanguage) {
       this.setState({ openPopup: false });
@@ -49,7 +52,7 @@ class AVLanguageMobile extends Component {
 
   render() {
     const { t, languages, selectedLanguage, uiLanguage } = this.props;
-    const { langSelectRef, openPopup } = this.state;
+    const { langSelectRef, openPopup }                   = this.state;
 
     const options = LANGUAGE_OPTIONS
       .filter(x => languages.includes(x.value))

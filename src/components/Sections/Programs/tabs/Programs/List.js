@@ -2,27 +2,31 @@ import React, { Component } from 'react';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_VIDEO_PROGRAM_CHAPTER, NO_NAME } from '../../../../../helpers/consts';
-import { sectionThumbnailFallback } from '../../../../../helpers/images';
 import { CollectionsBreakdown } from '../../../../../helpers/mdb';
 import { canonicalLink } from '../../../../../helpers/links';
 import { ellipsize } from '../../../../../helpers/strings';
 import UnitList from '../../../../Pages/UnitList/Container';
 import Link from '../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
+import { FrownSplash } from '../../../../shared/Splash/Splash';
 
 export const renderUnit = (unit, t) => {
+  if (unit === undefined) {
+    return <FrownSplash text={t('messages.source-content-not-found')} />;
+  }
+
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
   const programs  = breakdown.getPrograms();
 
   const relatedItems = programs.map(x => (
     <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
       {x.name || NO_NAME}
-    </List.Item>)
-  ).concat(breakdown.getAllButPrograms().map(x => (
+    </List.Item>
+  )).concat(breakdown.getAllButPrograms().map(x => (
     <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
       {x.name}
-    </List.Item>)
-  ));
+    </List.Item>
+  )));
 
   let filmDate = '';
   if (unit.film_date) {
@@ -39,7 +43,7 @@ export const renderUnit = (unit, t) => {
             className="index__thumbnail"
             unitId={unit.id}
             collectionId={programs.length > 0 ? programs[0].id : null}
-            fallbackImg={sectionThumbnailFallback.programs}
+            fallbackImg='programs'
           />
         </Link>
       </Table.Cell>
@@ -53,7 +57,8 @@ export const renderUnit = (unit, t) => {
             ? (
               <div className="index__description mobile-hidden">
                 {ellipsize(unit.description)}
-              </div>)
+              </div>
+            )
             : null
         }
         <List horizontal divided link className="index__collections" size="tiny">
@@ -67,7 +72,6 @@ export const renderUnit = (unit, t) => {
   );
 };
 
-/* eslint-disable-next-line react/no-multi-comp */
 class ProgramsList extends Component {
   extraFetchParams = () => ({
     content_type: [CT_VIDEO_PROGRAM_CHAPTER]

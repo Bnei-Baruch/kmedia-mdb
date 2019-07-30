@@ -1,84 +1,58 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
 import { Container, Grid, Segment } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
 
 import { formatError } from '../../../helpers/utils';
 import { actions, selectors } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
-import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
+import * as shapes from '../../shapes';
 
-class LibraryPerson extends Component {
-  static propTypes = {
-    sourceId: PropTypes.string.isRequired,
-    language: PropTypes.string.isRequired,
-    content: shapes.DataWipErr,
-    fetchAsset: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired,
-  };
+const LibraryPerson = (props) => {
+  const { match: { params: { id: sourceId } }, t } = props;
+  const language                    = useSelector(state => settings.getLanguage(state.settings));
+  const { wip, err, data: content } = useSelector(state => selectors.getPerson(state.assets));
+  const dispatch                    = useDispatch();
 
-  static defaultProps = {
-    content: {
-      data: null,
-      wip: false,
-      err: null,
+  useEffect(
+    () => {
+      dispatch(actions.fetchPerson({ sourceId, language }));
     },
-  };
+    [sourceId, language, dispatch]
+  );
 
-  componentDidMount() {
-    const { fetchAsset, sourceId, language } = this.props;
-    fetchAsset(`persons/${sourceId}-${language}.html`);
+  if (err) {
+    if (err.response && err.response.status === 404) {
+      return <FrownSplash text={t('messages.source-content-not-found')} />;
+    }
+    return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
+  }
+  if (wip) {
+    return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
+  }
+  if (!content) {
+    return <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { fetchAsset, sourceId, language } = this.props;
-    if (nextProps.sourceId !== sourceId
-      || nextProps.language !== language) {
-      fetchAsset(`persons/${nextProps.sourceId}-${nextProps.language}.html`);
-    }
-  }
+  return (
+    <Container className="padded">
+      <Grid>
+        <Grid.Row>
+          <Grid.Column>
+            <div className="readble-width" dangerouslySetInnerHTML={{ __html: content }} />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </Container>
+  );
+};
 
-  render() {
-    const { content: { wip, err, data }, t } = this.props;
+LibraryPerson.propTypes = {
+  match: shapes.RouterMatch.isRequired,
+  t: PropTypes.func.isRequired,
+};
 
-    if (err) {
-      if (err.response && err.response.status === 404) {
-        return <FrownSplash text={t('messages.source-content-not-found')} />;
-      }
-      return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
-    }
-    if (wip) {
-      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-    }
-    if (!data) {
-      return <Segment basic>{t('sources-library.no-source')}</Segment>;
-    }
-
-    return (
-      <Container className="padded">
-        <Grid>
-          <Grid.Row>
-            <Grid.Column>
-              <div className="readble-width" dangerouslySetInnerHTML={{ __html: data }} />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Container>
-    );
-  }
-}
-
-export default withRouter(connect(
-  (state, ownProps) => ({
-    sourceId: ownProps.match.params.id,
-    content: selectors.getAsset(state.assets),
-    language: settings.getLanguage(state.settings),
-  }),
-  dispatch => bindActionCreators({
-    fetchAsset: actions.fetchAsset,
-  }, dispatch)
-)(withNamespaces()(LibraryPerson)));
+export default withRouter(withNamespaces()(LibraryPerson));

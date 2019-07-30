@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Container, Header } from 'semantic-ui-react';
+import { Container, Header, Segment } from 'semantic-ui-react';
 
 import { CT_BLOG_POST } from '../../helpers/consts';
 import { canonicalLink } from '../../helpers/links';
@@ -33,7 +33,7 @@ class SearchResultPost extends SearchResultBase {
         <Header as="h3">
           <Link
             className="search__link content"
-            onClick={() => this.click(mdbUid, index, resultType, rank, searchId)}
+            onClick={() => this.logClick(mdbUid, index, resultType, rank, searchId)}
             to={canonicalLink({ id: mdbUid, content_type: 'POST' }, this.getMediaLanguage(filters))}
           >
             {this.titleFromHighlight(highlight, title)}
@@ -43,7 +43,9 @@ class SearchResultPost extends SearchResultBase {
 
         <Container>
           {this.iconByContentType(resultType === 'posts' ? CT_BLOG_POST : resultType, true)}
-          | <strong>{createdDate}</strong>
+          |
+          {' '}
+          <strong>{createdDate}</strong>
         </Container>
         <Container className="content">
           {this.snippetFromHighlight(highlight)}

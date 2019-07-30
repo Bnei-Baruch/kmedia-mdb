@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { URL } from 'url';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
@@ -10,8 +9,8 @@ import qs from 'qs';
 import serialize from 'serialize-javascript';
 import UAParser from 'ua-parser-js';
 import localStorage from 'mock-local-storage';
-import { parse as cookieParse } from 'cookie';
 import { HelmetProvider } from 'react-helmet-async';
+import { parse as cookieParse } from 'cookie';
 
 import routes from '../src/routes';
 import { COOKIE_CONTENT_LANG, LANG_UI_LANGUAGES, LANG_UKRAINIAN } from '../src/helpers/consts';
@@ -20,13 +19,12 @@ import { getLanguageFromPath } from '../src/helpers/url';
 import { isEmpty } from '../src/helpers/utils';
 import createStore from '../src/redux/createStore';
 import { actions as ssr } from '../src/redux/modules/ssr';
+import { actions as settings, initialState as settingsInitialState } from '../src/redux/modules/settings';
 import App from '../src/components/App/App';
 import i18nnext from './i18nnext';
-import { initialState as settingsInitialState } from '../src/redux/modules/settings';
 
 const helmetContext = {};
 
-// eslint-disable-next-line no-unused-vars
 const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all the work
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -42,7 +40,6 @@ function canonicalLink(req, lang) {
   const s = cPath.split('?');
 
   // start with path part
-  // eslint-disable-next-line prefer-destructuring
   cPath = s[0];
 
   // strip leading slash as it comes from BASE_URL
@@ -127,7 +124,6 @@ export default function serverRender(req, res, next, htmlData) {
   }
 
   moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
-  const cookies = cookieParse(req.headers.cookie || `COOKIE_CONTENT_LANG=${language};`);
 
   const i18nServer = i18nnext.cloneInstance();
   i18nServer.changeLanguage(language, (err) => {
@@ -140,18 +136,19 @@ export default function serverRender(req, res, next, htmlData) {
       initialEntries: [req.originalUrl],
     });
 
-    const settings = Object.assign({}, settingsInitialState, {
-      language,
-      contentLanguage: cookies[COOKIE_CONTENT_LANG]
-    });
+    const cookies = cookieParse(req.headers.cookie || '');
 
     const initialState = {
       router: { location: history.location },
       device: { deviceInfo: new UAParser(req.get('user-agent')).getResult() },
-      settings,
+      settings: Object.assign({}, settingsInitialState, {
+        language,
+        contentLanguage: cookies[COOKIE_CONTENT_LANG],
+      }),
     };
 
     const store = createStore(initialState, history);
+    store.dispatch(settings.setLanguage(language));
 
     const context = {
       req,
@@ -189,7 +186,7 @@ export default function serverRender(req, res, next, htmlData) {
 
             // actual render
             const markup = ReactDOMServer.renderToString(<HelmetProvider context={helmetContext}><App i18n={context.i18n} store={store} history={history} /></HelmetProvider>);
-            hrend = process.hrtime(hrstart);
+            hrend        = process.hrtime(hrstart);
             console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
             hrstart = process.hrtime();
 
@@ -228,7 +225,7 @@ export default function serverRender(req, res, next, htmlData) {
 </script>`;
 
               const html = htmlData
-                .replace(/<html lang="en">/, `<html ${helmet.htmlAttributes.toString()} >`)
+                .replace(/<html lang="en">/, `<html lang="en" ${helmet.htmlAttributes.toString()} >`)
                 .replace(/<title>.*<\/title>/, helmet.title.toString())
                 .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, language)}${alternateLinks(req, language)}${ogUrl(req, language)}</head>`)
                 .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)

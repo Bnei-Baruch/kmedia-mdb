@@ -1,14 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Helmet from 'react-helmet-async';
 
-class NoIndex extends Component {
-  render() {
-    return (
-      <Helmet>
-        <meta property="robots" content="noindex" />
-      </Helmet>
-    );
-  }
-}
+const NoIndex = () => {
+  return (
+    <Helmet>
+      <meta property="robots" content="noindex" />
+    </Helmet>
+  );
+};
 
 export default NoIndex;

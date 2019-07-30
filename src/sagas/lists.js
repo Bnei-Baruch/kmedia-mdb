@@ -1,4 +1,4 @@
-import { call, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
+import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import { actions, types } from '../redux/modules/lists';
 import { selectors as settings } from '../redux/modules/settings';
@@ -7,7 +7,7 @@ import { actions as mdbActions } from '../redux/modules/mdb';
 import { filtersTransformer } from '../filters';
 import Api from '../helpers/Api';
 import { CT_LESSON_PART } from '../helpers/consts';
-import { pushQuery } from './helpers/url';
+import { getQuery, pushQuery } from './helpers/url';
 
 function* fetchList(action) {
   const { namespace } = action.payload;
@@ -61,14 +61,19 @@ function* fetchList(action) {
 }
 
 function* updatePageInQuery(action) {
-  const { pageNo } = action.payload;
-  yield* pushQuery(query => {
+  const { pageNo }   = action.payload;
+  let currentQuery = yield* getQuery();
+  const page = currentQuery.page || 1;
+  if (pageNo === +page) {
+    return;
+  }
+
+  yield* pushQuery((query) => {
     if (pageNo > 1) {
       return { ...query, page: pageNo };
-    } else {
-      const { page, ...result } = query;
-      return result;
     }
+    const { _page, ...result } = query;
+    return result;
   });
 }
 

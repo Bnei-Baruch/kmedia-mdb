@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import { actions, types } from '../redux/modules/simpelMode';
+import { actions, types } from '../redux/modules/simpleMode';
 import { actions as mdbActions } from '../redux/modules/mdb';
 
 export function* fetchForDate(action) {

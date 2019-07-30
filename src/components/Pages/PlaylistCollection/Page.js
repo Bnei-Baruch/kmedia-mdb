@@ -36,36 +36,16 @@ class PlaylistCollectionPage extends Component {
     // shouldRenderHelmet: true,
     nextLink: null,
     prevLink: null,
+    location: {},
   };
 
-  state = {
-    selected: null,
-  };
-
-  // renderCollectionHelmet() {
-  //   const { collection, t, shouldRenderHelmet } = this.props;
-  //
-  //   if (!shouldRenderHelmet) {
-  //     return null;
-  //   }
-  //
-  //   let title = collection.name;
-  //   // if the collection doesn't have a name, use a default.
-  //   if (title === undefined) {
-  //     title = t(`constants.content-types.${collection.content_type}`);
-  //   }
-  //
-  //   if (collection.film_date) {
-  //     const filmDate = t('values.date', { date: new Date(collection.film_date) });
-  //     title          = `${title} - ${filmDate}`;
-  //   }
-  //
-  //   return <Helmets.Basic title={title} />;
-  // }
-
-  componentWillMount() {
+  constructor(props){
+    super(props);
     const { location } = this.props;
-    this.setState({ embed: playerHelper.getEmbedFromQuery(location) });
+    this.state = {
+      selected: null,
+      embed: playerHelper.getEmbedFromQuery(location)
+    }
   }
 
   handleSelectedChange = selected => this.setState({ selected });

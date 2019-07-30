@@ -1,7 +1,7 @@
-import { createAction, handleActions } from 'redux-actions';
+import { createAction } from 'redux-actions';
 import mapValues from 'lodash/mapValues';
 
-import { types as settings } from './settings';
+import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
 
 /* Types */
@@ -39,61 +39,52 @@ const initialState = {};
 
 const defaultNSvalue = { pageNo: 1, total: 0 };
 
-const onSetPage = (state, action) => ({
-  ...state,
-  [action.payload.namespace]: ({
-    ...(state[action.payload.namespace] || defaultNSvalue),
-    pageNo: action.payload.pageNo,
-  })
-});
-
-const onRequest = (state, action) => ({
-  ...state,
-  [action.payload.namespace]: ({
-    ...(state[action.payload.namespace] || defaultNSvalue),
-    wip: true,
-  })
-});
-
-const onFailure = (state, action) => ({
-  ...state,
-  [action.payload.namespace]: ({
-    ...(state[action.payload.namespace] || defaultNSvalue),
-    wip: false,
-    err: action.payload.err,
-  })
-});
-
-const onSuccess = (state, action) => {
-  const { namespace, data } = action.payload;
-  const itemNormalizer      = namespace === 'lessons-daily' ?
-    x => [x.id, x.content_type] :
-    x => x.id;
-
-  return {
-    ...state,
-    [namespace]: {
-      ...(state[namespace] || defaultNSvalue),
-      wip: false,
-      err: null,
-      total: data.total,
-      items: (data.collections || data.content_units || []).map(itemNormalizer),
-    }
-  };
+const onSetPage = (draft, { namespace, pageNo }) => {
+  if (draft[namespace] === undefined) {
+    draft[namespace] = { ...defaultNSvalue };
+  }
+  draft[namespace].pageNo = pageNo;
 };
 
-const onSetLanguage = state => (
-  Object.keys(state).reduce((acc, val) => {
+const onRequest = (draft, { namespace }) => {
+  if (draft[namespace] === undefined) {
+    draft[namespace] = { ...defaultNSvalue };
+  }
+  draft[namespace].wip = true;
+};
+
+const onFailure = (draft, { namespace, err }) => {
+  if (draft[namespace] === undefined) {
+    draft[namespace] = { ...defaultNSvalue };
+  }
+  draft[namespace].wip = false;
+  draft[namespace].err = err;
+};
+
+const onSuccess = (draft, { namespace, data }) => {
+  const itemNormalizer = namespace === 'lessons-daily'
+    ? x => [x.id, x.content_type]
+    : x => x.id;
+  if (draft[namespace] === undefined) {
+    draft[namespace] = { ...defaultNSvalue };
+  }
+  draft[namespace].wip   = false;
+  draft[namespace].err   = null;
+  draft[namespace].total = data.total;
+  draft[namespace].items = (data.collections || data.content_units || []).map(itemNormalizer);
+};
+
+const onSetLanguage = draft => (
+  Object.keys(draft).reduce((acc, val) => {
     acc[val] = {
-      pageNo: state[val].pageNo,
-      total: state[val].total
+      pageNo: draft[val].pageNo,
+      total: draft[val].total
     };
     return acc;
   }, {})
 );
 
-const onSSRPrepare = state =>
-  mapValues(state, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
+const onSSRPrepare = state => mapValues(state, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,

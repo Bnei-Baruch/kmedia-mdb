@@ -33,7 +33,7 @@ import { selectors as sourcesSelectors } from './redux/modules/sources';
 import { actions as assetsActions, selectors as assetsSelectors } from './redux/modules/assets';
 import { actions as tagsActions } from './redux/modules/tags';
 import { actions as publicationsActions } from './redux/modules/publications';
-import { actions as simpleModeActions } from './redux/modules/simpelMode';
+import { actions as simpleModeActions } from './redux/modules/simpleMode';
 import * as mdbSagas from './sagas/mdb';
 import * as filtersSagas from './sagas/filters';
 import * as eventsSagas from './sagas/events';
@@ -50,7 +50,7 @@ import { tabs as programsTabs } from './components/Sections/Programs/MainPage';
 import { tabs as pulicationsTabs } from './components/Sections/Publications/MainPage';
 import PDF from './components/shared/PDF/PDF';
 
-export const home = (store, match) => {
+export const home = (store) => {
   store.dispatch(homeActions.fetchData());
   return Promise.resolve(null);
 };
@@ -133,14 +133,17 @@ export const playlistCollectionPage = (store, match) => {
     .then(() => {
       // TODO: replace this with a single call to backend with all IDs
       // I don't think we need all files of every unit. Just for active one.
+
       const c = mdbSelectors.getCollectionById(store.getState().mdb, cID);
-      c.cuIDs.forEach((cuID) => {
-        store.dispatch(mdbActions.fetchUnit(cuID));
-      });
+      if (typeof c !== "undefined") {
+        c.cuIDs.forEach((cuID) => {
+          store.dispatch(mdbActions.fetchUnit(cuID));
+        });
+      };
     });
 };
 
-export const latestLesson = store =>
+export const latestLesson = store => (
   store.sagaMiddleWare.run(mdbSagas.fetchLatestLesson).done
     .then(() => {
       // TODO: replace this with a single call to backend with all IDs
@@ -151,7 +154,8 @@ export const latestLesson = store =>
       c.cuIDs.forEach((cuID) => {
         store.dispatch(mdbActions.fetchUnit(cuID));
       });
-    });
+    })
+);
 
 export const eventsPage = (store, match) => {
   // hydrate tab
@@ -220,7 +224,7 @@ export const lessonsCollectionPage = (store, match) => {
   return collectionPage('lessons-collection')(store, match);
 };
 
-export const searchPage = store =>
+export const searchPage = store => (
   Promise.all([
     store.sagaMiddleWare.run(searchSagas.hydrateUrl).done,
     store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done
@@ -234,7 +238,8 @@ export const searchPage = store =>
       const suggest  = searchSelectors.getSuggest(state.search);
 
       store.dispatch(searchActions.search(q, page, pageSize, suggest, deb));
-    });
+    })
+);
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -252,12 +257,12 @@ function firstLeafId(sourceId, getSourceById) {
 export const libraryPage = async (store, match) => {
   // This is a rather ugly, timeout, sleep, loop.
   // We wait for sources to be loaded so we could
-  // determine the firstLeadfID for redirection.
+  // determine the firstLeafID for redirection.
   // Fix for AR-356
   let timeout = 5000;
   while (timeout && !sourcesSelectors.areSourcesLoaded(store.getState().sources)) {
     timeout -= 10;
-    await sleep(10); // eslint-disable-line no-await-in-loop
+    await sleep(10);
   }
 
   const sourcesState = store.getState().sources;
@@ -276,7 +281,9 @@ export const libraryPage = async (store, match) => {
       }
 
       let language    = null;
-      const uiLang    = settingsSelectors.getLanguage(state.settings);
+      const location  = (state && state.router.location) || {};
+      const query     = getQuery(location);
+      const uiLang    = query.language || settingsSelectors.getLanguage(state.settings);
       const languages = [...Object.keys(data)];
       if (languages.length > 0) {
         language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;
@@ -332,7 +339,7 @@ export const tweetsListPage = (store, match) => {
 
 export const topicsPage = (store, match) => {
   const tagID = match.params.id;
-  Promise.all([
+  return Promise.all([
     store.sagaMiddleWare.run(tagsSagas.fetchDashboard, tagsActions.fetchDashboard(tagID)).done,
     // store.sagaMiddleWare.run(tagsSagas.fetchTags, tagsActions.fetchTags).done
   ]);
@@ -404,7 +411,7 @@ export const articleCUPage = (store, match) => {
       let language = null;
       const uiLang = settingsSelectors.getLanguage(state.settings);
 
-      const unit      = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
+      const unit = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
       if (!unit) {
         return;
       }

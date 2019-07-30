@@ -5,7 +5,6 @@ import { Container, Header, Item } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../../../../../helpers/links';
 import { formatDuration, neighborIndices } from '../../../../../../helpers/utils';
-import { sectionThumbnailFallback } from '../../../../../../helpers/images';
 import * as shapes from '../../../../../shapes';
 import Link from '../../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../../shared/Logo/UnitLogo';
@@ -56,13 +55,16 @@ class SameCollection extends Component {
                     unitId={part.id}
                     collectionId={collection.id}
                     width={150}
-                    fallbackImg={sectionThumbnailFallback.programs}
+                    fallbackImg='programs'
                   />
                 </Item.Image>
                 <Item.Content verticalAlign="top">
                   <Header as="h5">
                     <small className="text grey uppercase recommended-same-collection__item-title">
-                      {t(`${section || 'pages'}.unit.recommended.same-collection.item-title`, { name: collection.ccuNames[part.id] })} - {t('values.date', { date: part.film_date })}
+                      {t(`${section || 'pages'}.unit.recommended.same-collection.item-title`, { name: collection.ccuNames[part.id] })}
+                      {' '}
+                      -
+                      {t('values.date', { date: part.film_date })}
                     </small>
                     <br />
                     <span className="recommended-same-collection__item-name">
@@ -84,7 +86,9 @@ class SameCollection extends Component {
                 to={canonicalLink(collection)}
                 textAlign="right"
               >
-                {t('buttons.more')} &raquo;
+                {t('buttons.more')}
+                {' '}
+                &raquo;
               </Container>
             </Item.Content>
           </Item>

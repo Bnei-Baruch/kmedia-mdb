@@ -1,53 +1,38 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { actions, selectors } from '../../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
 import * as shapes from '../../../../../shapes';
 import Transcription from './Transcription';
 
-class TranscriptionContainer extends Component {
-  static propTypes = {
-    unit: shapes.ContentUnit.isRequired,
-    doc2htmlById: PropTypes.objectOf(PropTypes.shape({
-      data: PropTypes.string,     // actual content (HTML)
-      wip: shapes.WIP,
-      err: shapes.Error,
-    })).isRequired,
-    language: PropTypes.string.isRequired,
-    contentLanguage: PropTypes.string.isRequired,
-    doc2html: PropTypes.func.isRequired,
+const TranscriptionContainer = (props) => {
+  const { unit, type = null } = props;
+  const doc2htmlById          = useSelector(state => selectors.getDoc2htmlById(state.assets));
+  const language              = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguage       = useSelector(state => settings.getContentLanguage(state.settings));
+  const dispatch              = useDispatch();
+
+  const handleContentChange = (id) => {
+    dispatch(actions.doc2html(id));
   };
 
-  handleContentChange = (id) => {
-    const { doc2html } = this.props;
-    doc2html(id);
-  };
+  return (
+    <Transcription
+      unit={unit}
+      doc2htmlById={doc2htmlById}
+      uiLanguage={language}
+      contentLanguage={contentLanguage}
+      type={type}
+      onContentChange={handleContentChange}
+    />
+  );
+};
 
-  render() {
-    const { unit, doc2htmlById, language, contentLanguage } = this.props;
+TranscriptionContainer.propTypes = {
+  unit: shapes.ContentUnit.isRequired,
+  type: PropTypes.string,
+};
 
-    return (
-      <Transcription
-        unit={unit}
-        doc2htmlById={doc2htmlById}
-        uiLanguage={language}
-        contentLanguage={contentLanguage}
-        onContentChange={this.handleContentChange}
-      />
-    );
-  }
-}
-
-export default connect(
-  state => ({
-    doc2htmlById: selectors.getDoc2htmlById(state.assets),
-    language: settings.getLanguage(state.settings),
-    contentLanguage: settings.getContentLanguage(state.settings),
-  }),
-  dispatch => bindActionCreators({
-    doc2html: actions.doc2html,
-  }, dispatch)
-)(TranscriptionContainer);
+export default TranscriptionContainer;

@@ -5,7 +5,6 @@ import noop from 'lodash/noop';
 import { LANG_HEBREW, LANGUAGE_OPTIONS } from '../../../helpers/consts';
 
 class LanguageSelector extends PureComponent {
-
   static propTypes = {
     onSelect: PropTypes.func,
     defaultValue: PropTypes.string,
@@ -19,13 +18,13 @@ class LanguageSelector extends PureComponent {
     languages: [],
   };
 
-  getOptions(props) {
+  static getOptions(props) {
     const { languages, t } = props;
 
     return LANGUAGE_OPTIONS
       .filter(x => languages.includes(x.value))
       .map(x => ({ ...x, text: t(`constants.languages.${x.value}`) }));
-  };
+  }
 
   render() {
     return null;

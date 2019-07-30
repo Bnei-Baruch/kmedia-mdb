@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actions as settingActions, selectors as settingSelectors } from '../../redux/modules/settings';
 import { DEFAULT_LANGUAGE, LANGUAGES } from '../../helpers/consts';
+import * as shapes from '../shapes';
 
 // NOTE: yaniv -> edo: should we block rendering until language changed?
 
@@ -13,12 +14,12 @@ const LanguageSetter = withRouter(connect(
   }),
   { setLanguage: settingActions.setLanguage }
 )(class extends React.Component {
-
   static propTypes = {
     currentLanguage: PropTypes.string.isRequired,
     language: PropTypes.string,
     setLanguage: PropTypes.func.isRequired,
-    location: PropTypes.object.isRequired
+    location: shapes.HistoryLocation.isRequired,
+    children: shapes.Children.isRequired,
   };
 
   static defaultProps = {

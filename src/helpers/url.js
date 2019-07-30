@@ -1,14 +1,11 @@
-/* eslint-disable no-console */
 import qs from 'qs';
 import { parse as cookieParse } from 'cookie';
 
 import { COOKIE_UI_LANG, DEFAULT_LANGUAGE, LANG_UI_LANGUAGES, LANGUAGES } from './consts';
 
-export const parse = str =>
-  qs.parse(str);
+export const parse = str => qs.parse(str);
 
-export const stringify = obj =>
-  qs.stringify(obj, { arrayFormat: 'repeat', skipNulls: true });
+export const stringify = obj => qs.stringify(obj, { arrayFormat: 'repeat', skipNulls: true });
 
 /**
  * Test if a url is an absolute url
@@ -60,7 +57,6 @@ export const getLanguageFromPath = (path, headers) => {
     if (headerLanguages.length > 0) {
       console.log(`header-languages: ${headerLanguages}\n`);
       // THAT'S NOT STRUCTURE, THAT'S ARRAY OF LANGUAGES
-      // eslint-disable-next-line prefer-destructuring
       language = headerLanguages[0];
       return { language, redirect: language !== DEFAULT_LANGUAGE };
     }
@@ -108,5 +104,26 @@ export const updateQuery = (history, updater) => {
   history.replace({ search: stringify(updater(query)) });
 };
 
-export const isDebMode = location =>
-  getQuery(location).deb || false;
+export const isDebMode = location => getQuery(location).deb || false;
+
+export const getToWithLanguage = (navigateTo, location, language, contentLanguage) => {
+  if (typeof navigateTo === 'string') {
+    return prefixWithLanguage(navigateTo, location, language); 
+  }
+  
+  if (!navigateTo) {
+    navigateTo = { ...location };
+  }
+
+  // we're changing 'search' in case contentLanguage was supplied
+  if (contentLanguage) {
+    const q = getQuery(navigateTo);
+    q.language = contentLanguage;
+    navigateTo.search = `?${stringify(q)}`;
+  }
+
+  return {
+    ...navigateTo,
+    pathname: prefixWithLanguage(navigateTo.pathname, location, language)
+  };
+}

@@ -1,6 +1,19 @@
-import { createAction, handleActions } from 'redux-actions';
+import { createAction } from 'redux-actions';
+import produce from 'immer';
 
 import { DEFAULT_LANGUAGE } from '../../helpers/consts';
+
+/* Helpers */
+
+export const handleActions = (actionsMap, defaultState) =>
+  (
+    state = defaultState,
+    { type, payload }
+  ) =>
+    produce(state, draft => {
+      const action = actionsMap[type];
+      action && action(draft, payload, type);
+    });
 
 /* Types */
 
@@ -33,19 +46,22 @@ export const initialState = {
   pageSize: 10,
 };
 
+const onSetLanguage = (draft, payload) => {
+  draft.language = payload;
+};
+
+const onSetContentLanguage = (draft, payload) => {
+  draft.contentLanguage = payload;
+};
+
+const onSetPageSize = (draft, payload) => {
+  draft.pageSize = payload;
+};
+
 export const reducer = handleActions({
-  [SET_LANGUAGE]: (state, action) => ({
-    ...state,
-    language: action.payload,
-  }),
-  [SET_CONTENT_LANGUAGE]: (state, action) => ({
-    ...state,
-    contentLanguage: action.payload,
-  }),
-  [SET_PAGE_SIZE]: (state, action) => ({
-    ...state,
-    pageSize: action.payload,
-  }),
+  [SET_LANGUAGE]: onSetLanguage,
+  [SET_CONTENT_LANGUAGE]: onSetContentLanguage,
+  [SET_PAGE_SIZE]: onSetPageSize,
 }, initialState);
 
 /* Selectors */
@@ -57,5 +73,5 @@ const getPageSize        = state => state.pageSize;
 export const selectors = {
   getLanguage,
   getContentLanguage,
-  getPageSize
+  getPageSize,
 };

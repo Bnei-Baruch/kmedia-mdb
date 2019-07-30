@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { mountWrapRouter } from '../../../setupTests';
-
 import Library from './Library';
 
 const commonProps = {
@@ -25,6 +24,7 @@ describe('Library', () => {
       ...commonProps,
       isTaas: true,
       pdfFile: 'o5lXptLo/heb_tes_kerech-2_helek-5.pdf',
+      downloadAllowed: true,
     };
     const library = mountWrapRouter(<Library {...props} />);
     expect(library).toContainExactlyOneMatchingElement('#pdfWrapper');
@@ -34,6 +34,7 @@ describe('Library', () => {
     const props   = {
       ...commonProps,
       content: {},
+      downloadAllowed: true,
     };
     const library = mountWrapRouter(<Library {...props} />);
     expect(library.exists()).toBe(true);
@@ -50,6 +51,7 @@ describe('Library', () => {
           }
         }
       },
+      downloadAllowed: true,
     };
     const library = mountWrapRouter(<Library {...props} />);
     expect(library).toContainExactlyOneMatchingElement('[text="messages.source-content-not-found"] [icon="frown"]');
@@ -69,6 +71,7 @@ describe('Library', () => {
           }
         }
       },
+      downloadAllowed: true,
     };
     const library = mountWrapRouter(<Library {...props} />);
     expect(library.exists()).toBe(true);
@@ -81,6 +84,7 @@ describe('Library', () => {
       content: {
         wip: true,
       },
+      downloadAllowed: true,
     };
     const library = mountWrapRouter(<Library {...props} />);
     expect(library.exists()).toBe(true);
@@ -95,6 +99,7 @@ describe('Library', () => {
       },
       isTaas: false,
       pdfFile: undefined,
+      downloadAllowed: true,
     };
     const library = mountWrapRouter(<Library {...props} />);
     expect(library.exists()).toBe(true);
@@ -109,6 +114,7 @@ describe('Library', () => {
       },
       isTaas: false,
       pdfFile: undefined,
+      downloadAllowed: true,
     };
     const library = mountWrapRouter(<Library {...props} />);
     expect(library.exists()).toBe(true);

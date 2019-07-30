@@ -1,23 +1,48 @@
 import PropTypes from 'prop-types';
+import { PLAYER_MODE } from './AVPlayer/constants';
+
+export const WIP    = PropTypes.bool;
+export const WipMap = PropTypes.objectOf(PropTypes.oneOfType([WIP, PropTypes.objectOf(WIP)]));
+
+export const Error     = PropTypes.oneOfType([PropTypes.object, PropTypes.string]);
+export const ErrorsMap = PropTypes.objectOf(PropTypes.oneOfType([Error, PropTypes.objectOf(Error)]));
 
 export const RouterMatch = PropTypes.shape({
+  isExact: PropTypes.bool,
+  params: PropTypes.object.isRequired,
   path: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
-  params: PropTypes.object,
-  isExact: PropTypes.bool,
-});
-
-export const History = PropTypes.shape({
-  push: PropTypes.func.isRequired,
-  replace: PropTypes.func.isRequired
 });
 
 export const HistoryLocation = PropTypes.shape({
-  pathname: PropTypes.string,
-  search: PropTypes.string,
-  hash: PropTypes.string,
-  key: PropTypes.string,
-  state: PropTypes.object,
+  hash: PropTypes.string.isRequired,
+  key: PropTypes.string, // only in createBrowserHistory and createMemoryHistory
+  pathname: PropTypes.string.isRequired,
+  search: PropTypes.string.isRequired,
+  state: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.bool,
+    PropTypes.number,
+    PropTypes.object,
+    PropTypes.string,
+  ]), // only in createBrowserHistory and createMemoryHistory,
+});
+
+export const History = PropTypes.shape({
+  action: PropTypes.oneOf(['PUSH', 'REPLACE', 'POP']).isRequired,
+  block: PropTypes.func.isRequired,
+  canGo: PropTypes.func, // only in createMemoryHistory
+  createHref: PropTypes.func.isRequired,
+  entries: PropTypes.arrayOf(HistoryLocation), // only in createMemoryHistory
+  go: PropTypes.func.isRequired,
+  goBack: PropTypes.func.isRequired,
+  goForward: PropTypes.func.isRequired,
+  index: PropTypes.number, // only in createMemoryHistory
+  length: PropTypes.number,
+  listen: PropTypes.func.isRequired,
+  location: HistoryLocation.isRequired,
+  push: PropTypes.func.isRequired,
+  replace: PropTypes.func.isRequired,
 });
 
 export const Route = PropTypes.shape({
@@ -25,8 +50,9 @@ export const Route = PropTypes.shape({
   exact: PropTypes.bool,
   strict: PropTypes.bool,
   sensitive: PropTypes.bool,
-  component: PropTypes.func,
+  component: PropTypes.elementType,
 });
+Route.routes       = PropTypes.arrayOf(PropTypes.shape(Route));
 
 export const MDBFile = PropTypes.shape({
   id: PropTypes.string.isRequired,
@@ -154,11 +180,14 @@ export const Publisher = PropTypes.shape({
 });
 
 export const Banner = PropTypes.shape({
-  section: PropTypes.string.isRequired,
-  header: PropTypes.string.isRequired,
-  sub_header: PropTypes.string,
-  url: PropTypes.string.isRequired,
-  image: PropTypes.string,
+  wip: WIP,
+  err: Error,
+  data: PropTypes.shape({
+    content: PropTypes.string,
+    header: PropTypes.string,
+    'sub-header': PropTypes.string,
+    link: PropTypes.string,
+  }),
 });
 
 export const Tweet = PropTypes.shape({
@@ -186,12 +215,6 @@ export const filterPropShape = PropTypes.shape({
   name: PropTypes.string.isRequired,
   component: PropTypes.any.isRequired
 });
-
-export const WIP    = PropTypes.bool;
-export const WipMap = PropTypes.objectOf(PropTypes.oneOfType([WIP, PropTypes.objectOf(WIP)]));
-
-export const Error     = PropTypes.oneOfType([PropTypes.object, PropTypes.string]);
-export const ErrorsMap = PropTypes.objectOf(PropTypes.oneOfType([Error, PropTypes.objectOf(Error)]));
 
 export const DataWipErr = PropTypes.shape({
   data: PropTypes.any,
@@ -274,3 +297,10 @@ export const Reference = PropTypes.oneOfType([
   PropTypes.func,
   PropTypes.shape({ current: PropTypes.instanceOf(PropTypes.Element) })
 ]);
+
+export const Children = PropTypes.oneOfType([
+  PropTypes.arrayOf(PropTypes.node),
+  PropTypes.node
+]);
+
+export const playerModeProp = PropTypes.oneOf(Object.values(PLAYER_MODE));

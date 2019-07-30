@@ -4,7 +4,7 @@ import isNumber from 'lodash/isNumber';
 import { withMediaProps } from 'react-media-player';
 
 import { PLAYER_MODE } from './constants';
-import { playerModeProp } from './propTypes';
+import { playerModeProp } from '../shapes';
 
 class AvSeekBar extends Component {
   static propTypes = {
@@ -25,6 +25,12 @@ class AvSeekBar extends Component {
     seekbarHadInteraction: false,
     playPoint: this.props.media.currentTime
   };
+
+  element = null;
+
+  wasMouseDown = false;
+
+  isPlayingOnMouseDown = false;
 
   componentDidMount() {
     document.addEventListener('mousemove', this.handleMove, { passive: false });
@@ -100,10 +106,6 @@ class AvSeekBar extends Component {
 
     return sliceEnd / duration;
   };
-
-  element              = null;
-  wasMouseDown         = false;
-  isPlayingOnMouseDown = false;
 
   toPercentage = (l) => {
     const ret = 100 * l;

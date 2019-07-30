@@ -1,10 +1,16 @@
-/* eslint-disable import/no-extraneous-dependencies */
+import React from 'react';
+
+// Enzyme
 import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import React from 'react';
 import 'jest-enzyme';
+
+// Testing library
+import '@testing-library/react/cleanup-after-each';
+import '@testing-library/jest-dom/extend-expect'; // adds custom jest matchers from jest-dom
+// import 'jest-axe/extend-expect'; // Testing the a11y
+
 import { BrowserRouter as Router } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 configure({ adapter: new Adapter() });
 
@@ -17,11 +23,20 @@ export const mountedRender = (component, props) => mount(React.createElement(com
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the withNamespaces HoC receive the t function as a prop
   withNamespaces: () => (c) => {
-    // eslint-disable-next-line no-param-reassign
     c.defaultProps = { ...c.defaultProps, t: k => k };
     return c;
   },
 }));
+
+window.matchMedia = jest.fn().mockImplementation(query => {
+  return {
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+  };
+});
 
 export function mountWrapRouter(node) {
   return mount(<Router>{node}</Router>);

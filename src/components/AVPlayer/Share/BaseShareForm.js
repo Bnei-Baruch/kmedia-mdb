@@ -18,7 +18,6 @@ class BaseShareForm extends React.Component {
     onSliceChange: noop,
   };
 
-  // eslint-disable-next-line class-methods-use-this
   static mlsToStrColon(seconds) {
     const duration = moment.duration({ seconds });
     const h        = duration.hours();
@@ -32,14 +31,14 @@ class BaseShareForm extends React.Component {
     this.state = {
       start: undefined,
       end: undefined,
-      url: this.getUrl(props),
+      url: BaseShareForm.getUrl(props),
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.item !== this.props.item) {
       const { start, end } = this.state;
-      this.setState({ ...this.state, url: this.getUrl(nextProps, start, end) });
+      this.setState({ url: BaseShareForm.getUrl(nextProps, start, end) });
     }
   }
 
@@ -61,7 +60,7 @@ class BaseShareForm extends React.Component {
       end = null;
     }
 
-    this.setState({ ...state, url: this.getUrl(this.props, start, end) });
+    this.setState({ ...state, url: BaseShareForm.getUrl(this.props, start, end) });
     onSliceChange(start, end);
   }
 
@@ -79,12 +78,11 @@ class BaseShareForm extends React.Component {
       start = this.state.start < end ? start : 0;
     }
 
-    this.setState({ end, start, url: this.getUrl(this.props, start, end) });
+    this.setState({ end, start, url: BaseShareForm.getUrl(this.props, start, end) });
     onSliceChange(start, end);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getUrl(props, start, end) {
+  static getUrl(props, start, end) {
     const { protocol, hostname, port, pathname } = window.location;
 
     const { item } = props;
@@ -109,13 +107,12 @@ class BaseShareForm extends React.Component {
     return `${shareUrl}?${stringify(q)}`;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   colonStrToSecond(str) {
     const s = str.replace(/[^\d:]+/g, '');
     return s.split(':')
       .map(t => (t ? parseInt(t, 10) : 0))
       .reverse()
-      .reduce((result, t, i) => (result + (t * Math.pow(60, i))), 0); // eslint-disable-line no-restricted-properties
+      .reduce((result, t, i) => (result + (t * Math.pow(60, i))), 0);
   }
 
   render() {

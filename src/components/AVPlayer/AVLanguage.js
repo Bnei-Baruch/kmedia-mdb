@@ -11,6 +11,7 @@ class AVLanguage extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     onSelect: PropTypes.func,
+    onDropdownOpenedChange: PropTypes.func.isRequired,
     selectedLanguage: PropTypes.string,
     requestedLanguage: PropTypes.string,
     languages: PropTypes.arrayOf(PropTypes.string),
@@ -35,6 +36,9 @@ class AVLanguage extends Component {
   handleChange = (e, data) => this.props.onSelect(e, data.value);
 
   handlePopup = (selectedLanguage, requestedLanguage) => {
+    if (requestedLanguage === null) {
+      return;
+    }
     const { lastRequestedLanguage } = this.state;
     if (lastRequestedLanguage === requestedLanguage) {
       this.setState({ openPopup: false });
@@ -48,6 +52,10 @@ class AVLanguage extends Component {
   };
 
   setLangSelectRef = langSelectRef => this.setState({ langSelectRef });
+
+  handleOnOpen = () => this.props.onDropdownOpenedChange(true);
+
+  handleOnClose = () => this.props.onDropdownOpenedChange(false);
 
   render() {
     const { t, languages, selectedLanguage, uiLanguage } = this.props;
@@ -76,7 +84,9 @@ class AVLanguage extends Component {
           options={options}
           value={selectedLanguage}
           onChange={this.handleChange}
-          trigger={<button>{selectedLanguage}</button>}
+          trigger={<button type="button">{selectedLanguage}</button>}
+          onOpen={this.handleOnOpen}
+          onClose={this.handleOnClose}
         />
       </div>
     );

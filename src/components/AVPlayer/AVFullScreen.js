@@ -28,8 +28,7 @@ class AVFullscreen extends Component {
     this.setState({ fullScreen: this.isFullScreenElement() });
   };
 
-  isFullScreenElement = () =>
-    fscreen.fullscreenElement !== null;
+  isFullScreenElement = () => fscreen.fullscreenElement !== null;
 
   handleFullscreen = () => {
     if (this.isFullScreenElement()) {

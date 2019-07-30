@@ -7,9 +7,7 @@ import { LANG_UI_LANGUAGES } from '../../helpers/consts';
 import { selectors as settings } from '../../redux/modules/settings';
 import Helmets from '../shared/Helmets';
 
-const TopMost = (props) => {
-  const { t, language } = props;
-
+const TopMost = ({ t, language }) => {
   return (
     <Helmets.TopMost
       titlePostfix={t('nav.top.header')}

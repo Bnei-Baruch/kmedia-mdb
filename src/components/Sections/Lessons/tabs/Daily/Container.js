@@ -14,17 +14,20 @@ const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
 export const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
 
-  const relatedItems = breakdown.getDailyLessons().map(x =>
-    (
-      <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-        {t(CT_DAILY_LESSON_I18N_KEY)} {t('values.date', { date: x.film_date })}
-      </List.Item>
-    )
-  ).concat(breakdown.getAllButDailyLessons().map(x => (
+  const map1 = x => (
+    <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
+      {t(CT_DAILY_LESSON_I18N_KEY)}
+      {' '}
+      {t('values.date', { date: x.film_date })}
+    </List.Item>
+  );
+  const map2 = x => (
     <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
       {x.name || NO_NAME}
     </List.Item>
-  )));
+  );
+
+  const relatedItems = breakdown.getDailyLessons().map(map1).concat(breakdown.getAllButDailyLessons().map(map2));
 
   return (
     <Table.Row verticalAlign="top" key={unit.id} className="no-thumbnail">
@@ -36,9 +39,9 @@ export const renderUnit = (unit, t) => {
           {unit.name || NO_NAME}
         </Link>
         {
-          relatedItems.length === 0 ?
-            null :
-            (
+          relatedItems.length === 0
+            ? null
+            : (
               <List horizontal divided link className="index__collections" size="tiny">
                 <List.Item>
                   <List.Header>
@@ -60,19 +63,22 @@ export const renderCollection = (collection, t) => {
     units = collection.content_units.map((unit) => {
       const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
 
+      const map1 = x => (
+        <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
+          {t(CT_DAILY_LESSON_I18N_KEY)}
+          {' '}
+          {t('values.date', { date: x.film_date })}
+        </List.Item>
+      );
+      const map2 = x => (
+        <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
+          {x.name || NO_NAME}
+        </List.Item>
+      );
+
       const relatedItems = breakdown.getDailyLessons()
         .filter(x => x.id !== collection.id)
-        .map(x =>
-          (
-            <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-              {t(CT_DAILY_LESSON_I18N_KEY)} {t('values.date', { date: x.film_date })}
-            </List.Item>
-          )
-        ).concat(breakdown.getAllButDailyLessons().map(x => (
-          <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-            {x.name || NO_NAME}
-          </List.Item>
-        )));
+        .map(map1).concat(breakdown.getAllButDailyLessons().map(map2));
 
       return (
         <Table.Row key={`u-${unit.id}`} verticalAlign="top" className="no-thumbnail">
@@ -81,9 +87,9 @@ export const renderCollection = (collection, t) => {
               {unit.name || NO_NAME}
             </Link>
             {
-              relatedItems.length === 0 ?
-                null :
-                (
+              relatedItems.length === 0
+                ? null
+                : (
                   <List horizontal divided link className="index__collections" size="tiny">
                     <List.Item>
                       <List.Header>
@@ -119,11 +125,13 @@ export const renderCollection = (collection, t) => {
   return rows.concat(units);
 };
 
-export const renderUnitOrCollection = (item, t) => (
-  item.content_type === CT_LESSON_PART ?
-    renderUnit(item, t) :
-    renderCollection(item, t)
-);
+export const renderUnitOrCollection = (item, t) => {
+  if (!item)
+    return null;
+  return item.content_type === CT_LESSON_PART
+    ? renderUnit(item, t)
+    : renderCollection(item, t)
+};
 
 const mapState = (state, ownProps) => {
   const nsState = lists.getNamespaceState(state.lists, ownProps.namespace);
@@ -131,16 +139,15 @@ const mapState = (state, ownProps) => {
   return {
     ...baseMapState(state, ownProps),
     items: (nsState.items || []).map(x => (
-      x[1] === CT_LESSON_PART ?
-        mdb.getDenormContentUnit(state.mdb, x[0]) :
-        mdb.getDenormCollectionWUnits(state.mdb, x[0]))
+      x[1] === CT_LESSON_PART
+        ? mdb.getDenormContentUnit(state.mdb, x[0])
+        : mdb.getDenormCollectionWUnits(state.mdb, x[0]))
     ),
   };
 };
 
 const MyUnitList = wrap(UnitListContainer, mapState);
 
-/* eslint-disable-next-line react/no-multi-comp */
 class LessonsList extends Component {
   render() {
     return (

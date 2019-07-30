@@ -60,7 +60,6 @@ class TwitterContainer extends withPagination {
     super.componentWillReceiveProps(nextProps);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   extraFetchParams(props) {
     switch (props.language) {
     case LANG_HEBREW:

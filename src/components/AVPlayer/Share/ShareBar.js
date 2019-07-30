@@ -9,8 +9,6 @@ import {
   EmailShareButton,
   FacebookIcon,
   FacebookShareButton,
-  GooglePlusIcon,
-  GooglePlusShareButton,
   MailruIcon,
   MailruShareButton,
   TelegramIcon,
@@ -36,6 +34,7 @@ class ShareBar extends Component {
     url: '',
     buttonSize: 'big',
     messageTitle: '',
+    embedContent: null,
   };
 
   state = {
@@ -87,9 +86,6 @@ class ShareBar extends Component {
         <TwitterShareButton url={url} title={title}>
           <TwitterIcon size={bsPixels} round />
         </TwitterShareButton>
-        <GooglePlusShareButton url={url}>
-          <GooglePlusIcon size={bsPixels} round />
-        </GooglePlusShareButton>
         <WhatsappShareButton url={url} title={title} separator=": ">
           <WhatsappIcon size={bsPixels} round />
         </WhatsappShareButton>

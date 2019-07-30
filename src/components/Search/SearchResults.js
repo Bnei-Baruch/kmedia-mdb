@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Trans, withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
-import { Container, Divider, Grid, Message, Image, Button, Segment } from 'semantic-ui-react';
-import InfoIcon from '../../images/icons/info.svg';
+import { Button, Container, Divider, Grid, Image, Message } from 'semantic-ui-react';
 
-import { SEARCH_INTENT_HIT_TYPES, } from '../../helpers/consts';
+import { SEARCH_GRAMMAR_HIT_TYPES, SEARCH_INTENT_HIT_TYPES } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { getQuery } from '../../helpers/url';
 import { selectors as settings } from '../../redux/modules/settings';
@@ -20,16 +19,24 @@ import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import SearchResultCU from './SearchResultCU';
 import SearchResultCollection from './SearchResultCollection';
 import SearchResultIntent from './SearchResultIntent';
+import SearchResultLandingPage from './SearchResultLandingPage';
 import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
 import SearchResultSource from './SearchResultSource';
 import SearchResultPost from './SearchResultPost';
+import { SectionLogo } from '../../helpers/images';
 
 class SearchResults extends Component {
   static propTypes = {
-    results: PropTypes.object,
     getSourcePath: PropTypes.func,
     areSourcesLoaded: PropTypes.bool.isRequired,
-    queryResult: PropTypes.object,
+    queryResult: PropTypes.shape({
+      intents: PropTypes.arrayOf(PropTypes.shape({
+        language: PropTypes.string,
+        type: PropTypes.string,
+        value: PropTypes.shape({}),
+      })),
+      search_result: PropTypes.shape({})
+    }),
     cMap: PropTypes.objectOf(shapes.Collection),
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
     twitterMap: PropTypes.objectOf(shapes.Tweet),
@@ -40,9 +47,25 @@ class SearchResults extends Component {
     err: shapes.Error,
     t: PropTypes.func.isRequired,
     handlePageChange: PropTypes.func.isRequired,
-    filters: PropTypes.array.isRequired,
+    filters: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+      values: PropTypes.arrayOf(PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf(PropTypes.string)
+      ]))
+    })).isRequired,
     location: shapes.HistoryLocation.isRequired,
     click: PropTypes.func.isRequired,
+    postMap: PropTypes.objectOf(PropTypes.shape({
+      blog: PropTypes.string,
+      content: PropTypes.string,
+      created_at: PropTypes.string,
+      title: PropTypes.string,
+      url: PropTypes.string,
+      wp_id: PropTypes.number,
+    })).isRequired,
+    hitType: PropTypes.shape({}),
+    contentLanguage: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -53,6 +76,7 @@ class SearchResults extends Component {
     wip: false,
     err: null,
     getSourcePath: undefined,
+    hitType: undefined,
   };
 
   state = {
@@ -65,11 +89,16 @@ class SearchResults extends Component {
   };
 
   renderHit = (hit, rank) => {
-    const { cMap, cuMap, postMap, twitterMap }                                   = this.props;
-    const { _source: { mdb_uid: mdbUid, result_type: resultType }, _type: type } = hit;
+    const { cMap, cuMap, postMap, twitterMap }                                               = this.props;
+    const { _source: { mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage }, _type: type } = hit;
 
-    const props = { ...this.props, hit, rank, key: `${mdbUid}_${type}` };
+    const props = { ...this.props, hit, rank, key: `${mdbUid || landingPage}_${type}` };
 
+    if (SEARCH_GRAMMAR_HIT_TYPES.includes(type)) {
+      return <SearchResultLandingPage {...props} />;
+    }
+
+    // To be deprecated soon.
     if (SEARCH_INTENT_HIT_TYPES.includes(type)) {
       return <SearchResultIntent {...props} />;
     }
@@ -85,7 +114,7 @@ class SearchResults extends Component {
     } else if (c) {
       result = <SearchResultCollection c={c} {...props} />;
     } else if (p) {
-      return <SearchResultPost  {...props} post={p} />;
+      return <SearchResultPost {...props} post={p} />;
     } else if (resultType === 'sources') {
       result = <SearchResultSource {...props} />;
     } else if (resultType === 'tweets') {
@@ -105,15 +134,23 @@ class SearchResults extends Component {
     const language               = t(`constants.languages.${contentLanguage}`);
     return (
       this.state.showNote
-        ? <Message info className="search-result-note">
-          <Image src={InfoIcon} floated='left' />
-          <Button floated='right' icon="close" size="tiny" circular onClick={this.hideNote} />
-          <Container>
-            <strong>{t('search.topNote.tip')}: </strong>
-            {t('search.topNote.first', { language })}
-          </Container>
-          <Container>{t('search.topNote.second')}</Container>
-        </Message>
+        ? (
+          <Message info className="search-result-note">
+            <Image floated="left">
+              <SectionLogo name='info' />
+            </Image>
+            <Button floated="right" icon="close" size="tiny" circular onClick={this.hideNote} />
+            <Container>
+              <strong>
+                {t('search.topNote.tip')}
+                :
+                {' '}
+              </strong>
+              {t('search.topNote.first', { language })}
+            </Container>
+            <Container>{t('search.topNote.second')}</Container>
+          </Message>
+        )
         : null
     );
   };
@@ -169,7 +206,7 @@ class SearchResults extends Component {
       content = (
         <Grid>
           <Grid.Column key="1" computer={12} tablet={16} mobile={16}>
-            {this.renderTopNote()}
+            {/* Requested by Mizrahi this.renderTopNote() */}
 
             <div className="searchResult_content">
               <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />

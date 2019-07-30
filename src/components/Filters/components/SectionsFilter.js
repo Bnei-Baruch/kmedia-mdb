@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
-import { Button, Header, Grid, Image, Segment } from 'semantic-ui-react';
+import { Button, Grid, Header, Segment } from 'semantic-ui-react';
 
-import { sectionLogo } from '../../../helpers/images';
+import { SectionLogo } from '../../../helpers/images';
 
+/*
+ * It was used once in SearchResults, but not anymore...
+ */
 class SectionsFilter extends Component {
   static propTypes = {
     value: PropTypes.string,
@@ -41,6 +44,20 @@ class SectionsFilter extends Component {
     this.props.onApply(this.state.sValue);
   };
 
+  gridColumn = (x, sValue, t) => (
+    <Grid.Column key={x} textAlign="center">
+      <Header
+        size="small"
+        className={(sValue && sValue.endsWith(x)) ? 'active' : ''}
+        onClick={() => this.onSelectionChange(x)}
+      >
+        <SectionLogo name={x} />
+        <br />
+        {t(`nav.sidebar.${x}`)}
+      </Header>
+    </Grid.Column>
+  );
+
   render() {
     const { t }      = this.props;
     const { sValue } = this.state;
@@ -71,20 +88,7 @@ class SectionsFilter extends Component {
           <Grid padded stackable columns={5}>
             <Grid.Row>
               {
-                ['lessons', 'programs', 'sources', 'events', 'publications'].map(x =>
-                  (
-                    <Grid.Column key={x} textAlign="center">
-                      <Header
-                        size="small"
-                        className={(sValue && sValue.endsWith(x)) ? 'active' : ''}
-                        onClick={() => this.onSelectionChange(x)}
-                      >
-                        <Image src={sectionLogo[x]} />
-                        <br />{t(`nav.sidebar.${x}`)}
-                      </Header>
-                    </Grid.Column>
-                  )
-                )
+                ['lessons', 'programs', 'sources', 'events', 'publications'].map(x => this.gridColumn(x, sValue, t))
               }
             </Grid.Row>
           </Grid>

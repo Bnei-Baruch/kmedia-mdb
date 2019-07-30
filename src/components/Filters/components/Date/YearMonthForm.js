@@ -12,6 +12,7 @@ class YearMonthForm extends Component {
     localeUtils: PropTypes.any.isRequired,
     onChange: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
+    className: PropTypes.string.isRequired,
   };
 
   constructor(props) {
@@ -45,8 +46,8 @@ class YearMonthForm extends Component {
   };
 
   render() {
-    const { state: { month, year }, props: {localeUtils, language, className } }= this;
-    const months                    = localeUtils.getMonths(language);
+    const { state: { month, year }, props: { localeUtils, language, className } } = this;
+    const months                                                                  = localeUtils.getMonths(language);
 
     const years = [];
     for (let i = toMonth.getFullYear(); i >= fromMonth.getFullYear(); i -= 1) {

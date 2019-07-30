@@ -1,4 +1,6 @@
 import {
+  CT_ARTICLES,
+  CT_CLIPS,
   CT_CONGRESS,
   CT_DAILY_LESSON,
   CT_FRIENDS_GATHERINGS,
@@ -8,8 +10,6 @@ import {
   CT_PICNIC,
   CT_SPECIAL_LESSON,
   CT_UNITY_DAY,
-  CT_CLIPS,
-  CT_ARTICLES,
   CT_VIDEO_PROGRAM,
   CT_VIRTUAL_LESSONS,
   CT_WOMEN_LESSONS,
@@ -28,25 +28,19 @@ export class CollectionsBreakdown {
     }, {});
   }
 
-  getDailyLessons = () =>
-    this.collectTypes(CT_DAILY_LESSON, CT_SPECIAL_LESSON);
+  getDailyLessons = () => this.collectTypes(CT_DAILY_LESSON, CT_SPECIAL_LESSON);
 
-  getEvents = () =>
-    this.collectTypes(CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY);
+  getEvents = () => this.collectTypes(CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY);
 
-  getPrograms = () =>
-    this.collectTypes(CT_VIDEO_PROGRAM);
+  getPrograms = () => this.collectTypes(CT_VIDEO_PROGRAM);
 
-  getLectures = () =>
-    this.collectTypes(CT_LECTURE_SERIES, CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS);
+  getLectures = () => this.collectTypes(CT_LECTURE_SERIES, CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS);
 
-  getArticles = () =>
-    this.collectTypes(CT_ARTICLES);
+  getArticles = () => this.collectTypes(CT_ARTICLES);
 
-  getClips = () =>
-    this.collectTypes(CT_CLIPS);
+  getClips = () => this.collectTypes(CT_CLIPS);
 
-  getAllButClips = () =>
+  getAllButClips = () => (
     this.collectTypes(
       CT_DAILY_LESSON,
       CT_SPECIAL_LESSON,
@@ -60,9 +54,10 @@ export class CollectionsBreakdown {
       CT_HOLIDAY,
       CT_PICNIC,
       CT_UNITY_DAY,
-      CT_ARTICLES);
+      CT_ARTICLES)
+  );
 
-  getAllButDailyLessons = () =>
+  getAllButDailyLessons = () => (
     this.collectTypes(
       CT_LECTURE_SERIES,
       CT_WOMEN_LESSONS,
@@ -75,9 +70,10 @@ export class CollectionsBreakdown {
       CT_PICNIC,
       CT_UNITY_DAY,
       CT_CLIPS,
-      CT_ARTICLES);
+      CT_ARTICLES)
+  );
 
-  getAllButPrograms = () =>
+  getAllButPrograms = () => (
     this.collectTypes(
       CT_DAILY_LESSON,
       CT_SPECIAL_LESSON,
@@ -91,9 +87,12 @@ export class CollectionsBreakdown {
       CT_PICNIC,
       CT_UNITY_DAY,
       CT_CLIPS,
-      CT_ARTICLES);
+      CT_ARTICLES)
+  );
 
-  collectTypes = (...types) =>
-    types.reduce((acc, val) =>
-      acc.concat(this.byType[val] || []), []);
+  collectTypes = (...types) => (
+    types.reduce((acc, val) => (
+      acc.concat(this.byType[val] || [])
+    ), [])
+  );
 }

@@ -1,8 +1,8 @@
-import { RTL_LANGUAGES, LANGUAGES } from '../helpers/consts';
+import { LANGUAGES } from './consts';
 
 export const getCurrentDirection = () => {
   if (typeof window === 'undefined') {
-    return;
+    return false;
   }
 
   return document.getElementById('root').style.getPropertyValue('direction');
@@ -48,7 +48,17 @@ export const changeDirection = (direction) => {
   }
 };
 
-export const getLanguageDirection = language => (RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr');
+const rtlLngs = ['ar', 'shu', 'sqr', 'ssh', 'xaa', 'yhd', 'yud', 'aao', 'abh', 'abv', 'acm', 'acq', 'acw', 'acx', 'acy', 'adf', 'ads', 'aeb', 'aec', 'afb', 'ajp', 'apc', 'apd', 'arb', 'arq', 'ars', 'ary', 'arz', 'auz', 'avl', 'ayh', 'ayl', 'ayn', 'ayp', 'bbz', 'pga', 'he', 'iw', 'ps', 'pbt', 'pbu', 'pst', 'prp', 'prd', 'ur', 'ydd', 'yds', 'yih', 'ji', 'yi', 'hbo', 'men', 'xmn', 'fa', 'jpr', 'peo', 'pes', 'prs', 'dv', 'sam'];
+
+export const getLanguageDirection = language => {
+  if (!language) {
+    return 'rtl';
+  }
+
+  return rtlLngs.indexOf(language) >= 0 ? 'rtl' : 'ltr';
+};
+
+export const isLanguageRtl = language => rtlLngs.indexOf(language) >= 0;
 
 export const getLanguageLocale = language => LANGUAGES[language].locale;
 

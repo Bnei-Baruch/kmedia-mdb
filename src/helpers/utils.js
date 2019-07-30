@@ -3,6 +3,7 @@ import 'moment-duration-format';
 import escapeRegExp from 'lodash/escapeRegExp';
 
 import { CollectionsBreakdown } from './mdb';
+import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH } from './consts';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
@@ -78,7 +79,6 @@ export const formatDuration = (duration, fmt = 'hh:mm:ss') => moment.duration(du
  */
 export function* intersperse(iterable, delimiter) {
   let first = true;
-  // eslint-disable-next-line no-restricted-syntax
   for (const item of iterable) {
     if (!first) {
       yield delimiter;
@@ -220,3 +220,15 @@ export const getEscapedRegExp = (term) => {
   }
 };
 
+export const getRSSLinkByLang = (language) => {
+  switch (language) {
+  case LANG_HEBREW:
+    return 'https://feeds.feedburner.com/KabbalahVideoHeb';
+  case LANG_RUSSIAN:
+    return 'https://feeds.feedburner.com/KabbalahVideoRus';
+  case LANG_SPANISH:
+    return 'https://feeds.feedburner.com/kabbalah-archive/spa';
+  default:
+    return 'https://feeds.feedburner.com/KabbalahVideoEng';
+  }
+};

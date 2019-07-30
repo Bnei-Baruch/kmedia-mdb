@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import isEqual from 'react-fast-compare';
 import ImageGallery from 'react-image-gallery';
 import { Button, Container, Segment } from 'semantic-ui-react';
 
 import { assetUrl, imaginaryUrl, Requests } from '../../../../../helpers/Api';
-import { RTL_LANGUAGES } from '../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
+import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
 import { isEmpty, physicalFile, strCmp } from '../../../../../helpers/utils';
 import { actions, selectors } from '../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../redux/modules/settings';
@@ -26,90 +27,165 @@ class Sketches extends React.Component {
     contentLanguage: PropTypes.string.isRequired,
   };
 
-  state = {
-    zipFileId: null,
-    imageFiles: null,
-    languages: null,
-    language: null,
-  };
-
-  componentDidMount() {
-    this.setCurrentItem(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.zipIndexById !== this.props.zipIndexById ||
-      nextProps.unit !== this.props.unit) {
-      this.setCurrentItem(nextProps);
-    }
-  }
-
-  // load data into state
-  setCurrentItem = (props) => {
-    const { unit, zipIndexById, unzip } = props;
-
-    // get one zip file or array of image files or one image file
-    const files = this.findZipOrImageFiles(unit, props.contentLanguage, props.uiLanguage);
-
-    if (files) {
-      // not zip, image files only
-      if (Array.isArray(files) || !files.name.endsWith('.zip')) {
-        this.setState({ imageFiles: files });
-      } else {
-        // zip file
-        this.setState({ zipFileId: files.id });
-
-        const { data, wip, err } = zipIndexById[files.id] || {};
-        if (!(wip || err) && isEmpty(data) && !Object.prototype.hasOwnProperty.call(zipIndexById, files.id)) {
-          unzip(files.id);
-        }
-      }
-    } else {
-      this.setState({ zipFileId: null });
-    }
-  };
-
-  findZipOrImageFiles = (unit, contentLanguage, uiLanguage) => {
+  static getUnitSketchFiles = (unit) => {
     if (!Array.isArray(unit.files)) {
       return null;
     }
 
     // get the zip files
-    const zipFiles = unit.files.filter(this.filterZipOrImageFiles);
+    const zipFiles = unit.files.filter(Sketches.isZipOrImageFileType);
     if (zipFiles.length === 0) {
       return null;
     }
 
-    // at least one file
-    if (zipFiles.length === 1) {
-      return zipFiles[0];
-    }
+    return zipFiles;
+  };
 
-    // many files - get all existing unique languages
+  static getFilesLanguages = (zipFiles, contentLanguage, uiLanguage) => {
     const languages = zipFiles
       .map(file => file.language)
       .filter((v, i, a) => a.indexOf(v) === i);
-    const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-    this.setState({ languages, language });
 
+    const language = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+    return { languages, language };
+  };
+
+  static filterZipFiles = (zipFiles, language, originalLanguage) => {
     // try filter by language
     let files = zipFiles.filter(file => file.language === language);
 
     // if no files by language - return original language files
     if (files.length === 0) {
-      files = zipFiles.filter(file => file.language === unit.original_language);
+      files = zipFiles.filter(file => file.language === originalLanguage);
     }
 
     // if there are many zip files - use the first one
     if (files.length > 0) {
-      const zipFileArr = files.filter(file => file.name.endsWith('.zip'));
+      const zipFileArr = files.filter(file => Sketches.isZipFile(file));
       files            = zipFileArr.length > 0 ? zipFileArr[0] : files;
     }
 
     return files;
   };
 
-  filterZipOrImageFiles = file => file.type === 'image';
+  static isZipFile = (file) => file.name.endsWith('.zip');
+
+  static isZipOrImageFileType = file => file.type === 'image';
+
+  state = {
+    zipFiles: null,
+    zipFileId: null,
+    imageFiles: null,
+    languages: null,
+    language: null,
+  };
+
+  isPropsChanged = (prevProps) => {
+    const { unit, zipIndexById, contentLanguage, uiLanguage } = this.props;
+
+    return prevProps.contentLanguage !== contentLanguage
+      || prevProps.uiLanguage !== uiLanguage
+      || prevProps.unit.id !== unit.id
+      || !isEqual(prevProps.zipIndexById, zipIndexById);
+  };
+
+  isStateChanged = (prevState) => {
+    const { zipFileId, language, imageFiles } = this.state;
+
+    return prevState.zipFileId !== zipFileId
+      || prevState.language !== language
+      || prevState.imageFiles !== imageFiles;
+  };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const propsChanged = this.isPropsChanged(nextProps);
+    const stateChanged = this.isStateChanged(nextState);
+
+    return propsChanged || stateChanged;
+  }
+
+  componentDidMount() {
+    this.processUnit();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { unit, contentLanguage, uiLanguage } = this.props;
+
+    if (prevProps.unit.id !== unit.id || !prevState.zipFiles) {
+      // full reset
+      this.processUnit();
+    } else if (prevProps.contentLanguage !== contentLanguage
+      || prevProps.uiLanguage !== uiLanguage) {
+      this.setStateByZipFiles(prevState.zipFiles, contentLanguage, uiLanguage, unit);
+    } else if (prevState.language !== this.state.language) {
+      const { zipFiles, language } = this.state;
+
+      if (zipFiles && Array.isArray(zipFiles)) {
+        const itemState = this.getItemState(zipFiles, language, unit);
+
+        this.setState({
+          ...itemState,
+        });
+      }
+    }
+  }
+
+  processUnit = () => {
+    const { unit, contentLanguage, uiLanguage } = this.props;
+    const zipFiles                              = Sketches.getUnitSketchFiles(unit);
+
+    if (zipFiles) {
+      this.setStateByZipFiles(zipFiles, contentLanguage, uiLanguage, unit);
+    }
+  };
+
+  setStateByZipFiles = (zipFiles, contentLanguage, uiLanguage, unit) => {
+    const { languages, language } = Sketches.getFilesLanguages(zipFiles, contentLanguage, uiLanguage);
+    const itemState               = this.getItemState(zipFiles, language, unit);
+
+    this.setState({ zipFiles, languages, language, ...itemState });
+  };
+
+  getItemState = (zipFiles, language, unit) => {
+    const files     = Sketches.filterZipFiles(zipFiles, language, unit.original_language);
+    return this.getStateByFile(files);
+  };
+
+  // get one zip file or array of image files or one image file
+  getStateByFile = (file) => {
+    let state = {};
+    if (file) {
+      // not zip, image files only
+      if (Array.isArray(file) || !Sketches.isZipFile(file)) {
+        state = { imageFiles: file };
+      } else {
+        // zip file
+        state = { zipFileId: file.id };
+
+        // call redux
+        this.unzipFiles(file);
+      }
+    } else {
+      state = { zipFileId: null };
+    }
+    return state;
+  };
+
+  unzipFiles = (file) => {
+    const { zipIndexById, unzip } = this.props;
+    const { data, wip, err }      = zipIndexById[file.id] || {};
+
+    if (!(wip || err) && isEmpty(data) && !Object.prototype.hasOwnProperty.call(zipIndexById, file.id)) {
+      unzip(file.id);
+    }
+  };
+
+  handleLanguageChanged = (e, language) => {
+    this.setState({ language });
+    this._imageGallery.slideToIndex(0);
+  };
+
+  handleImageError = event => console.log('Image Gallery loading error ', event.target);
 
   // converts images from server format (path, size) to ImageGallery format
   imageGalleryItem = (item) => {
@@ -129,7 +205,8 @@ class Sketches extends React.Component {
     if (!thumbSrc.startsWith('http')) {
       thumbSrc = `http://localhost${src}`;
     }
-    thumbSrc = `${imaginaryUrl('thumbnail')}?${Requests.makeParams({ url: thumbSrc, width: 100 })}`;
+    const thumbParams = Requests.makeParams({ url: thumbSrc, width: 100, stripmeta: true });
+    thumbSrc          = `${imaginaryUrl('thumbnail')}?${thumbParams}`;
 
     return {
       original: src,
@@ -140,16 +217,6 @@ class Sketches extends React.Component {
     };
   };
 
-  handleLanguageChanged = (e, language) => {
-    this.setState({ language }, () =>
-      this.setCurrentItem(this.props)
-    );
-  };
-
-  handleImageError = event =>
-    // eslint-disable-next-line no-console
-    console.log('Image Gallery loading error ', event.target);
-
   renderLeftNav = (onClick, disabled) => (
     <Button
       color="black"
@@ -158,7 +225,8 @@ class Sketches extends React.Component {
       icon="chevron left"
       disabled={disabled}
       onClick={onClick}
-    />);
+    />
+  );
 
   renderRightNav = (onClick, disabled) => (
     <Button
@@ -168,7 +236,8 @@ class Sketches extends React.Component {
       icon="chevron right"
       disabled={disabled}
       onClick={onClick}
-    />);
+    />
+  );
 
   renderFullscreenButton = (onClick, isFullscreen) => (
     <Button
@@ -177,10 +246,11 @@ class Sketches extends React.Component {
       className="image-gallery-fullscreen-button"
       icon={isFullscreen ? 'compress' : 'expand'}
       onClick={onClick}
-    />);
+    />
+  );
 
   render() {
-    const { t, zipIndexById }                            = this.props;
+    const { t, zipIndexById, uiLanguage }                = this.props;
     const { zipFileId, languages, language, imageFiles } = this.state;
     const { wip, err, data }                             = zipIndexById[zipFileId] || {};
 
@@ -199,8 +269,6 @@ class Sketches extends React.Component {
       imageObjsArr = imageObjs;
     }
 
-    const isRTL = RTL_LANGUAGES.includes(language);
-
     if (Array.isArray(imageObjsArr) && imageObjsArr.length > 0) {
       // prepare the image array for the gallery and sort it
       const items = imageObjsArr
@@ -208,7 +276,7 @@ class Sketches extends React.Component {
         .sort((a, b) => strCmp(a.original, b.original));
 
       return (
-        <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+        <div>
           {
             languages && languages.length > 1
               ? (
@@ -223,9 +291,10 @@ class Sketches extends React.Component {
               : null
           }
           <ImageGallery
+            ref={i => this._imageGallery = i}
             lazyLoad
             showFullscreenButton
-            isRTL={isRTL}
+            isRTL={isLanguageRtl(uiLanguage)}
             items={items}
             thumbnailPosition="top"
             showPlayButton={false}

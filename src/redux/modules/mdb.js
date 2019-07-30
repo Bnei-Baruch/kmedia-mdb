@@ -386,6 +386,7 @@ const onFetchWindow = (state, action) => {
 
 const onSSRPrepare = state => ({
   ...state,
+  wip: freshStore().wip,
   errors: {
     units: mapValues(state.errors.units, x => (x ? x.toString() : x)),
     collections: mapValues(state.errors.collections, x => (x ? x.toString() : x)),
@@ -398,12 +399,14 @@ export const reducer = handleActions({
   [settings.SET_LANGUAGE]: () => freshStore(),
 
   [FETCH_UNIT]: setStatus,
-  [FETCH_UNIT_SUCCESS]: (state, action) =>
-    setStatus(onReceiveContentUnits(state, { payload: [action.payload.data] }), action),
+  [FETCH_UNIT_SUCCESS]: (state, action) => (
+    setStatus(onReceiveContentUnits(state, { payload: [action.payload.data] }), action)
+  ),
   [FETCH_UNIT_FAILURE]: setStatus,
   [FETCH_COLLECTION]: setStatus,
-  [FETCH_COLLECTION_SUCCESS]: (state, action) =>
-    setStatus(onReceiveCollections(state, { payload: [action.payload.data] }), action),
+  [FETCH_COLLECTION_SUCCESS]: (state, action) => (
+    setStatus(onReceiveCollections(state, { payload: [action.payload.data] }), action)
+  ),
   [FETCH_COLLECTION_FAILURE]: setStatus,
   [FETCH_LATEST_LESSON]: setStatus,
   [FETCH_LATEST_LESSON_SUCCESS]: (state, action) => ({
@@ -412,8 +415,9 @@ export const reducer = handleActions({
   }),
   [FETCH_LATEST_LESSON_FAILURE]: setStatus,
   [FETCH_WINDOW]: setStatus,
-  [FETCH_WINDOW_SUCCESS]: (state, action) =>
-    setStatus(onFetchWindow(onReceiveCollections(state, action.payload.data), action), action),
+  [FETCH_WINDOW_SUCCESS]: (state, action) => (
+    setStatus(onFetchWindow(onReceiveCollections(state, action.payload.data), action), action)
+  ),
   [FETCH_WINDOW_FAILURE]: setStatus,
   [FETCH_SQDATA]: setStatus,
   [FETCH_SQDATA_SUCCESS]: setStatus,

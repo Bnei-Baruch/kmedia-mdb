@@ -1,7 +1,7 @@
-import { createAction, handleActions } from 'redux-actions';
-import mapValues from 'lodash/mapValues';
+import { createAction } from 'redux-actions';
 
 import { types as ssr } from './ssr';
+import { handleActions } from './settings';
 
 /* Types */
 
@@ -59,28 +59,25 @@ const onCUFailure = (state, action) => ({
   }
 });
 
-const onCUSuccess = (state, action) => ({
-  ...state,
-  cuStats: {
-    ...state.cuStats,
-    [action.payload.namespace]: {
-      ...(state.cuStats[action.payload.namespace] || {}),
-      wip: false,
-      data: action.payload.data,
+const onCUSuccess = (draft, payload) => {
+  if (draft.cuStats[payload.namespace] === undefined) {
+    draft.cuStats[payload.namespace] = {};
+  }
+  draft.cuStats[payload.namespace].wip  = false;
+  draft.cuStats[payload.namespace].data = payload.data;
+};
+
+const onClearCUStats = (draft, payload) => {
+  draft.cuStats[payload.namespace] = {};
+};
+
+const onSSRPrepare = draft => {
+  Object.keys(draft.cuStats).forEach(namespace => {
+    if (draft.cuStats[namespace].err) {
+      draft.cuStats[namespace].err = draft.cuStats[namespace].err.toString;
     }
-  }
-});
-
-const onClearCUStats = (state, action) => ({
-  ...state,
-  cuStats: {
-    ...state.cuStats,
-    [action.payload.namespace]: {}
-  }
-});
-
-const onSSRPrepare = state =>
-  mapValues(state, x => ({ ...x, errors: x.err ? x.err.toString() : x.err }));
+  });
+};
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,

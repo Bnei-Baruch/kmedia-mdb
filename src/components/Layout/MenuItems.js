@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import identity from 'lodash/identity';
-import { Menu, Sidebar } from 'semantic-ui-react';
+import { Menu, Sidebar, Button } from 'semantic-ui-react';
 
+import { getRSSLinkByLang } from '../../helpers/utils';
 import NavLink from '../Language/MultiLanguageNavLink';
 import DonateNow from './DonateNow';
 
@@ -23,9 +24,7 @@ const ITEMS = [
   // 'design2',
 ];
 
-const MenuItems = (props) => {
-  const { simple, visible, t, onItemClick, language } = props;
-
+const MenuItems = ({ simple, visible, t, onItemClick, language }) => {
   const items = ITEMS.map(x => (
     <Menu.Item
       key={x}
@@ -50,6 +49,17 @@ const MenuItems = (props) => {
         />
         <Menu.Item className="mobile-only">
           <DonateNow language={language} />
+        </Menu.Item>
+        <Menu.Item
+          key="rss"
+          className="sidebar-item"
+        >
+          <Button
+            icon="rss"
+            size="mini"
+            color="orange"
+            href={getRSSLinkByLang(language)} />
+          <span className="margin-right-8 margin-left-8">RSS</span>
         </Menu.Item>
       </Menu>
     );

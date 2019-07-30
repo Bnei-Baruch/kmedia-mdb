@@ -15,16 +15,17 @@ class HandleLanguages extends Component {
     setContentLanguage: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
     t: PropTypes.func.isRequired,
-    isMobileDevice: PropTypes.bool
+    isMobile: PropTypes.bool,
+    push: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    isMobile: false,
   };
 
   state = {
     isActive: false,
   };
-
-  handlePopupClose = () => this.setState({ isActive: false });
-
-  handlePopupOpen = () => this.setState({ isActive: true });
 
   componentDidUpdate(prevProps) {
     if (prevProps.language !== this.props.language) {
@@ -32,29 +33,35 @@ class HandleLanguages extends Component {
     }
   }
 
+  handlePopupOpen = () => this.setState({ isActive: true });
+
+  handlePopupClose = () => this.setState({ isActive: false });
+
   render() {
-    const { t, language, location, contentLanguage, setContentLanguage, isMobileDevice } = this.props;
-    const { isActive }                                                                   = this.state;
-    const langDir                                                                        = getLanguageDirection(language);
+    const { t, language, location, contentLanguage, setContentLanguage, isMobile, push } = this.props;
+    const { isActive } = this.state;
+    const langDir      = getLanguageDirection(language);
 
     const popupStyle = {
       direction: langDir,
     };
 
-    const trigger = isMobileDevice
+    const trigger = isMobile
       ? <Icon size="big" name="language" className="no-margin" />
       : (
         <span>
           <Icon name="sliders horizontal" />
           {t('languages.language')}
-        </span>);
+        </span>
+      );
+
     return (
       <Popup
         id="handleLanguagesPopup"
         key="handleLangs"
         flowing
         position="bottom right"
-        trigger={<div onClick={this.handlePopupOpen} as="a">{trigger}</div>}
+        trigger={<div onClick={this.handlePopupOpen}>{trigger}</div>}
         open={isActive}
         onOpen={this.handlePopupOpen}
         onClose={this.handlePopupClose}
@@ -72,18 +79,22 @@ class HandleLanguages extends Component {
               onClick={this.handlePopupClose}
             />
           </div>
-
         </Popup.Header>
         <Popup.Content>
           <UILanguage
             language={language}
             contentLanguage={contentLanguage}
             location={location}
+            isMobile={isMobile}
+            push={push}
           />
           <ContentLanguage
             language={language}
             contentLanguage={contentLanguage}
+            location={location}
             setContentLanguage={setContentLanguage}
+            isMobile={isMobile}
+            push={push}
           />
         </Popup.Content>
       </Popup>

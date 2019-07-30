@@ -6,12 +6,11 @@ import classNames from 'classnames';
 import BaseLanguageSelector from './BaseLanguageSelector';
 
 class DropdownLanguageSelector extends BaseLanguageSelector {
-  handleSelect = (e, data) =>
-    this.props.onSelect(e, data.value);
+  handleSelect = (e, data) => this.props.onSelect(e, data.value);
 
   render() {
     const { defaultValue: value, blink } = this.props;
-    const options                        = this.getOptions(this.props);
+    const options                        = BaseLanguageSelector.getOptions(this.props);
 
     return (
       <Dropdown
@@ -23,7 +22,7 @@ class DropdownLanguageSelector extends BaseLanguageSelector {
         value={value}
         options={options}
         onChange={this.handleSelect}
-        className={classNames('dropdown-language-selector', { 'blink': !!blink })}
+        className={classNames('dropdown-language-selector', { blink: !!blink })}
       />
     );
   }

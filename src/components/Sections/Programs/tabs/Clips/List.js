@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_CLIP, NO_NAME } from '../../../../../helpers/consts';
-import { sectionThumbnailFallback } from '../../../../../helpers/images';
 import { CollectionsBreakdown } from '../../../../../helpers/mdb';
 import { canonicalLink } from '../../../../../helpers/links';
 import { ellipsize } from '../../../../../helpers/strings';
@@ -17,12 +16,12 @@ export const renderUnit = (unit, t) => {
   const relatedItems = clips.map(x => (
     <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
       {x.name || NO_NAME}
-    </List.Item>)
-  ).concat(breakdown.getAllButClips().map(x => (
+    </List.Item>
+  )).concat(breakdown.getAllButClips().map(x => (
     <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
       {x.name}
-    </List.Item>)
-  ));
+    </List.Item>
+  )));
 
   let filmDate = '';
   if (unit.film_date) {
@@ -39,7 +38,7 @@ export const renderUnit = (unit, t) => {
             className="index__thumbnail"
             unitId={unit.id}
             collectionId={clips.length > 0 ? clips[0].id : null}
-            fallbackImg={sectionThumbnailFallback.clips}
+            fallbackImg='clips'
           />
         </Link>
       </Table.Cell>
@@ -49,10 +48,12 @@ export const renderUnit = (unit, t) => {
           {unit.name || NO_NAME}
         </Link>
         {
-          unit.description ? (
-            <div className="index__description mobile-hidden">
-              {ellipsize(unit.description)}
-            </div>)
+          unit.description
+            ? (
+              <div className="index__description mobile-hidden">
+                {ellipsize(unit.description)}
+              </div>
+            )
             : null
         }
         <List horizontal divided link className="index__collections" size="tiny">
@@ -66,7 +67,6 @@ export const renderUnit = (unit, t) => {
   );
 };
 
-/* eslint-disable-next-line react/no-multi-comp */
 class ClipsList extends Component {
   extraFetchParams = () => ({
     content_type: [CT_CLIP]

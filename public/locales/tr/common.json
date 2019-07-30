@@ -1,0 +1,563 @@
+{
+  "nav": {
+    "top": {
+      "header": "Kabala Medya"
+    },
+    "sidebar": {
+      "lessons": "Dersler ve Konuşmalar",
+      "programs": "Programlar",
+      "sources": "Kütüphane",
+      "events": "Kongreler ve Etkinlikler",
+      "books": "Kitaplar",
+      "topics": "Konular",
+      "publications": "Yayınlar",
+      "simple-mode": "İndirilenler",
+      "photos": "Fotoğraflar",
+      "design": "Tasarım",
+      "design2": "Düzen",
+      "project-status": "Proje Durumu",
+      "help": "Yardım",
+      "old-site": "Eski Site"
+    },
+    "footer": {
+      "copyright": "Telif Hakkı © 2003-{{year}}",
+      "rights": "Bnei Baruch – Kabbalah L’Am Association, Tüm Hakları Saklıdır"
+    }
+  },
+  "filters": {
+    "by": "Filtre",
+    "filters": "Filtreler",
+    "hideFilters": "Filtreleri Gizle",
+    "all": "Hepsi",
+    "date-filter": {
+      "label": "Tarih",
+      "selectTitle": "Bir tarih aralığı seçin",
+      "presets": {
+        "TODAY": "Bugün",
+        "YESTERDAY": "Dün",
+        "LAST_7_DAYS": "Son 7 Gün",
+        "LAST_30_DAYS": "Son 30 Gün",
+        "LAST_MONTH": "Geçen Ay",
+        "THIS_MONTH": "Bu Ay",
+        "CUSTOM_RANGE": "Özel Aralık",
+        "CUSTOM_DAY": "Bir Tarih Seçin"
+      },
+      "start": "Başlangıç",
+      "end": "Bitiş"
+    },
+    "language-filter": {
+      "label": "Dili",
+      "all": "Herhangi Bir Dilde"
+    },
+    "sources-filter": {
+      "label": "Kaynaklar",
+      "all": "Tüm Kaynaklar"
+    },
+    "topics-filter": {
+      "label": "Konular",
+      "all": "Tüm Konularda"
+    },
+    "publishers-filter": {
+      "label": "Yayınlar"
+    },
+    "programs-filter": {
+      "label": "Tür/Program",
+      "all": "Tüm Programlar",
+      "recently-updated": "Yeni Güncellenen",
+      "last-updated": "En Son Güncellenen"
+    },
+    "locations-filter": {
+      "label": "Yerler",
+      "all": "Tüm Yerler"
+    },
+    "holidays-filter": {
+      "label": "Bayramlar",
+      "all": "Tüm Bayramlar"
+    },
+    "years-filter": {
+      "label": "Yıl",
+      "placeholder": "Bir Yıl Seçin"
+    },
+    "collections-filter": {
+      "label": "Derlemeler",
+      "all": "Tüm Derlemeler"
+    },
+    "sections-filter": {
+      "label": "Bölüm",
+      "all": "Hepsi",
+      "lessons": "Dersler ve Konuşmalar",
+      "programs": "Programlar",
+      "events": "Kongreler ve Etkinlikler",
+      "publications": "Yayınlar",
+      "sources": "Kabala Kaynakları",
+      "posts": "Blok"
+    }
+  },
+  "buttons": {
+    "apply": "Uygula",
+    "cancel": "İptal Et",
+    "close": "Kapat",
+    "audio": "Ses",
+    "video": "Görüntü",
+    "more": "Daha",
+    "copy-link": "Linki Kopyala",
+    "search": "Ara",
+    "previous": "Önceki",
+    "next": "Sonraki",
+    "copy": "Kopyala",
+    "view-all":  "Hepsini Görüntüle"
+  },
+  "player": {
+    "messages": {
+      "edit-help": "Videonun bir bölümünü paylaşmak için işaretçileri sürükleyin"
+    },
+    "buttons": {
+      "edit-back": "Tekrar oynat",
+      "start-position": "Başlat",
+      "end-position": "Bitir",
+      "click-to-set": "Düzenlemek için tıkla",
+      "tap-to-unmute": "Sesize almak için tıkla"
+    },
+    "share": {
+      "title": "bu videoyu seyret"
+    },
+    "error": {
+      "loading": "Dosya yükleme hatası."
+    }
+  },
+  "messages": {
+    "loading": "Yükleme",
+    "loading-subtext": "Sıkı durun",
+    "server-error":  "Server Hatası",
+    "not-found": "Pardon!",
+    "not-found-subtext": "Aradığınız şeyi bulamıyoruz",
+    "no-files": "Dosya Yok",
+    "no-playable-files": "Oynatılabilen dosya yok",
+    "no-results": "Sonuç yok",
+    "pagination-results": "Sonuçlar {{start}} - {{end}} da {{total}}",
+    "link-copied-to-clipboard": "Bağlantı kopyalandı!",
+    "unknown": "Bilinmeyen",
+    "unsupported-media-format": "Desteklenmeyen format.",
+    "error-loading-file": "Dosya yükleme hatası.",
+    "fallback-language": "Bu içerik seçilen dilde yok, varsayılan dil seçildi.",
+    "fallback-to-audio": "Görüntü kayıt bulunamadı, sesli kayıt kullanılıyor.",
+    "fallback-to-video": "Sesli kayıt bulunamadı, görüntülü  kayıt kullanılıyor. ",
+    "source-content-not-found": "Kaynak içerik bulunamadı",
+    "no-images": "Skeç bulunmuyor"
+  },
+  "search": {
+    "header": {
+      "text": "Arama Sonuçları",
+      "subtext": ""
+    },
+    "topNote": {
+      "tip": "İpucu",
+      "first": "Arama sonuçlarının dili: {{language}}.",
+      "second": "Bu içerik için başka bir dil seçebilirsiniz"
+    },
+    "showAll": "Hepsini Göster",
+    "lessons": "Dersler",
+    "programs": "Programlar",
+    "sortby": "Göre Sırala",
+    "sorts": {
+      "relevance": "uygunluğana",
+      "newertoolder": "yeniden eskiye",
+      "oldertonewer": "eskiden yeniye"
+    },
+    "results": {
+      "empty-query": "Hiç bir sıralama koşulu verilmedi. Sıralamak için lütfen yukarıdaki kutudan seçin.",
+      "no-results": "<1><0>{{query}}</0></1> aramanız hiç bir sonuç vermedi."
+    },
+    "result": {
+      "description": "Özet",
+      "transcript": "Yazıya dökülmüş",
+      "content": "İçerik"
+    },
+    "intent-types": {
+      "lessons": "Günlük sabah dersleri",
+      "programs": "Programlar"
+    },
+    "intent-prefix": {
+      "lessons-topic": "Konuya göre dersler",
+      "lessons-source": "Kaynağa göre dersler",
+      "programs-topic": "Konuya göre programlar",
+      "programs-source": "Kaynağa göre programlar"
+    }
+  },
+  "home": {
+    "header": {
+      "text": "Kabala Medya",
+      "subtext": "Dünyanın en geniş Kabala kaynağı. Kabalist Dr. Michael Laitman ile Kabala dersleri, indirilebilen Zohar dahil otantik Kabala kaynakları, Kabalayı ilişkiler sağlık, eğitim ekonomi, toplum konusunda ele alan programlar."
+    },
+    "search": "Kabala İlmini Keşfedin",
+    "sections": "Arşiv Bölümü",
+    "updates": "En Son Güncellemeler",
+    "social": "Sosyal Yayınlar Ağında Rav Laitman",
+    "blog-title": "Rav Laitman'ın Bloku",
+    "twitter-title": "Tvitler",
+    "all-posts": "Tüm Blog yazıları",
+    "all-tweets": "Tüm Tivitler",
+    "read-more-posts": "Daha çok Blok yazısı okuyun",
+    "read-more-tweets": "Daha çok Tivit okuyun",
+    "last-lesson": "En Son Günlük Ders",
+    "donate": "ŞİMDİ BAĞIŞ YAPIN",
+    "promoted": {
+      "header": "New Jersey'de Kongre",
+      "subheader": "23-26/5/2019"
+    }
+  },
+  "events": {
+    "header": {
+      "text": "Kongreler ve Etkinlikler",
+      "subtext": "Günümüzde Kabala ilmi dünyanın her yerine yayılmıştır. Bu bölümde, İsrail’de ve tüm dünyadaki \"Kabbalah L’Am\" a ilişkin etkinlikleri, kongreleri ve özel toplantıları görebilirsiniz."
+    },
+    "tabs": {
+      "conventions": "Kongreler",
+      "holidays": "Bayramlar",
+      "unity-days": "Birlik Günleri",
+      "friends-gatherings": "Dostlar Toplantıları",
+      "meals": "Yemekler"
+    },
+    "list": {
+      "item_from": "Konusunda:"
+    },
+    "ALL_EVENTS": "Tüm Etkinlikler",
+    "no-matches": "Eşleşen bir etkinlik bulunamadı",
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Aynı etkinliğin diğer bölümleri"
+        }
+      }
+    },
+    "collection": {
+      "playlist": {
+        "preparation": "Hazırlık",
+        "lessons": "Dersler",
+        "other_parts": "Diğer Etkinlik Bölümleri",
+        "appendices": "Ekler"
+      }
+    }
+  },
+  "lessons": {
+    "header": {
+      "text": "Dersler ve Konuşmalar",
+      "subtext": "Dr. Laitman’ın dersleri ve konuşmaları. Sanal dersler, kadınlar için dersler, Rabbi Baruh Aşlag’a (RABAŞ) ait özel kayıtlar ve dahası."
+    },
+    "tabs": {
+      "daily": "Günlük Dersler",
+      "virtual": "Sanal Dersler",
+      "lectures": "Konuşmalar",
+      "women": "Kadın Dersleri",
+      "rabash": "Rabaş Dersleri",
+      "children": "Çocuk Dersleri",
+      "series": "Seçilmiş Ders Serileri"
+    },
+    "list": {
+      "related": "İlgili:",
+      "number": "#",
+      "item_from": "Konusu:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Aynı seri ile ilgili diğerleri"
+        }
+      }
+    },
+    "unit-lesson-part": {
+      "recommended": {
+        "same-collection": {
+          "title": "Aynı dersin diğer bölümleri",
+          "item-title": "Bölüm {{name}}"
+        }
+      }
+    },
+    "last": {
+      "title": "Günlük Kabala Dersi - güncel",
+      "description": "En son Günlük dersin güncel kısa yolu"
+    }
+  },
+  "programs": {
+    "header": {
+      "text": "Programlar",
+      "subtext": "Burada zengin çeşitlilikte programlar bulacaksınız: Hayatın anlamına, güncel olaylara dair ilginç sohbetler, tüm aileyi ilgilendiren programlar, klipler ve dahası."
+    },
+    "tabs": {
+      "main": "Programlar",
+      "clips": "Klipler"
+    },
+    "genres": {
+      "documentary": "Belgeseller",
+      "late-night": "Geç Gece",
+      "news": "Haberler",
+      "talk-show": "Sohbet Programı",
+      "educational": "Eğitsel",
+      "children": "Çocuk",
+      "movies": "Filmler",
+      "other": "Diğerleri"
+    },
+    "list": {
+      "episode_from": "Bölümünden",
+      "item_of": "Maddesi:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Aynı programın diğer bölümleri",
+          "item-title":  "{{name}} Bölümü"
+        }
+      }
+    }
+  },
+  "publications": {
+    "header": {
+      "text": "Yayınlar",
+      "subtext": "Kabalanın benzersiz bakış açısından güncel olaylar, popüler bilim, ilişkiler ve daha pek çok konudaki makaleler."
+    },
+    "tabs": {
+      "articles": "Makaleler",
+      "twitter": "Twitter",
+      "blog": "Blok"
+    },
+    "list": {
+      "item_from":  "Maddesi:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Bu derleme içinde yayınlanmış diğer makaleler"
+        }
+      }
+    },
+    "read-more": "Daha çok okuyun"
+  },
+  "simple-mode": {
+    "header": {
+      "text": "İndirilenler",
+      "subtext": "Belli bir güne ait tüm medya"
+    },
+    "today-button": "Bugün",
+    "total-media-for-date": "Bu tarihe ait tüm  medya",
+    "media-language": "Medya dili:",
+    "no-files-found-for-lang": "Seçtiğiniz dilde hiçbir dosya yok.",
+    "try-different-language": "Başka bir dilde",
+    "language-click": "seçim yapmayı deneyin.",
+    "no-files-found-for-date": "Bu tarihe ait hiçbir dosya yok.",
+    "date": "Gün",
+    "prev": "Önceki",
+    "next": "Sonraki",
+    "choose-date": "Tarih seçin",
+    "today-lessons": "Günlük Kabala dersleri"
+  },
+  "help": {
+    "header": {
+      "text": "Yardım",
+      "subtext": "Bu bölümde bu siteyi en iyi nasıl kullanacağınız dair görüntülü açıklamalar bulacaksınız."
+    }
+  },
+  "pages": {
+    "collection": {
+      "items": {
+        "programs-collection": "Bölüm(ler)",
+        "lessons-collection": "Madde(ler)",
+        "publications-collection": "Makale(ler)",
+        "event": "Item(s)"
+      }
+    },
+    "unit": {
+      "info": {
+        "sources": "Kabala Kaynakları",
+        "topics": "Konular",
+        "collections": "İlişkili olan"
+      },
+      "recommended": {
+        "same-collection": {
+          "title": "Aynı derlemeden diğerleri",
+          "item-title": "Madde {{name}}"
+        }
+      }
+    }
+  },
+  "materials": {
+    "summary": {
+      "header": "Özet",
+      "no-summary": "Özet eksik"
+    },
+    "transcription": {
+      "header": "Yazıya dökülmüş",
+      "no-content": "Yazılaya dökülen yok"
+    },
+    "sources": {
+      "header": "Kaynaklar",
+      "no-sources": "Kaynak yok",
+      "no-source": "Lütfen kaynak seçin",
+      "no-source-available": "Gösterilecek hazır bir kaynak yok"
+    },
+    "sketches": {
+      "header": "Skeçler"
+    },
+    "articles": {
+      "header": "Makaleler",
+      "no-content": "Makale yok"
+    },
+    "research": {
+      "header": "Araştırma materyalleri",
+      "no-content": "Araştırma materyali yok"
+    }
+  },
+  "sources-library": {
+    "header": {
+      "text": "Kütüphane",
+      "subtext": "Kabala öğrenmek için, büyük Kabalistler tarafından yazılmış olan en önemli orijinal metinlerin bir derlemesi."
+    },
+    "no-source": "Lütfen kaynağı seçin",
+    "toc": "İçindekiler",
+    "az": "AZ",
+    "default": "Varsayılan",
+    "filter": "Filtre...",
+    "share-title": "Bu makaleyi okuyun"
+  },
+  "topics": {
+    "header": {
+      "text": "Konu",
+      "subtext": "Seçilmiş bir konunun tüm parçalarının derlemesi "
+    },
+    "show-more": "Daha fazlasını göster",
+    "show-less": "Daha azını göster"
+  },
+  "media-downloads": {
+    "title": "Medya yüklemeleri",
+    "derived-title": "Türetilmiş Medya",
+    "type-labels": {
+      "video": "Ana görüntü kayıt",
+      "video-simple": "Görüntü kayıt",
+      "audio": "Ana ses kaydı",
+      "audio-simple": "Ses kaydı",
+      "text": "Yazıya dökülmüş metin",
+      "image": "İmajlar"
+    },
+    "lesson": {
+      "type-labels": {
+        "video": "Görüntülü ders kaydı",
+        "video-simple": "Görüntülü kayıt",
+        "audio": "Sesli ders kaydı",
+        "audio-simple": "Ses kaydı",
+        "text": "Yazıya dökülmüş metin",
+        "image": "Skeçler",
+        "lelo-mikud": "Odak-grubu yok",
+        "text-research-material": "Araştırma Materyalleri"
+      }
+    },
+    "program": {
+      "type-labels": {
+        "video": "Görüntülü Program kaydı",
+        "video-simple": "Görüntülü",
+        "audio": "Sesli program kaydı",
+        "audio-simple": "Sesli",
+        "text": "Yazıya dökülmüş metin",
+        "image": "Skeçler",
+        "text-article": "Program bazında makaleler",
+        "text-research-material": "Araştırma Materyalleri"
+      }
+    },
+    "publication": {
+      "type-labels": {
+        "video": "Görüntü",
+        "video-simple": "Görüntü",
+        "audio": "Sesli",
+        "audio-simple": "Sesli",
+        "text": "Makale Metni",
+        "image": "Şipşaklar"
+      }
+    }
+  },
+  "constants": {
+    "languages": {
+      "he": "Hebrew",
+      "en": "English",
+      "ru": "Russian",
+      "es": "Spanish",
+      "it": "Italian",
+      "de": "German",
+      "nl": "Dutch",
+      "fr": "French",
+      "pt": "Portuguese",
+      "tr": "Türkçe",
+      "pl": "Polish",
+      "ar": "Arabic",
+      "hu": "Hungarian",
+      "fi": "Finnish",
+      "lt": "Lithuanian",
+      "ja": "Japanese",
+      "bg": "Bulgarian",
+      "ka": "Georgian",
+      "no": "Norwegian",
+      "sv": "Swedish",
+      "hr": "Croatian",
+      "zh": "Chinese",
+      "fa": "Persian",
+      "ro": "Romanian",
+      "hi": "Hindi",
+      "ua": "Ukrainian",
+      "mk": "Macedonian",
+      "sl": "Slovenian",
+      "lv": "Latvian",
+      "sk": "Slovak",
+      "cs": "Czech",
+      "am": "Amharic"
+    },
+    "content-types": {
+      "DAILY_LESSON": "Günlük Dersler",
+      "SPECIAL_LESSON": "Özel Dersler",
+      "FRIENDS_GATHERINGS": "Dostlar Toplantıları",
+      "CONGRESS": "Sohbetler",
+      "VIDEO_PROGRAM": "Programlar",
+      "LECTURE_SERIES": "Konuşma Serileri",
+      "CHILDREN_LESSONS": "Çocuk dersleri",
+      "WOMEN_LESSONS": "Kadın Dersleri",
+      "VIRTUAL_LESSONS": "Sanal Dersler",
+      "MEALS": "Yemekler",
+      "HOLIDAY": "Bayram",
+      "PICNIC": "Piknik",
+      "UNITY_DAY": "Birlik Günü",
+      "CLIPS": "Klipler",
+      "ARTICLES": "Makaleler",
+      "LESSON_PART": "Ders",
+      "LECTURE": "Konuşma",
+      "CHILDREN_LESSON": "Çocuk Dersi",
+      "WOMEN_LESSON": "Kadın Dersi",
+      "VIRTUAL_LESSON": "Sanal Ders",
+      "FRIENDS_GATHERING": "Dostlar Toplantısı",
+      "MEAL": "Yemek",
+      "VIDEO_PROGRAM_CHAPTER": "Program Bölümü",
+      "FULL_LESSON": "Tam Ders",
+      "ARTICLE": "Makale",
+      "UNKNOWN": "Bilinmeyen",
+      "EVENT_PART": "Etkinlik Bölümü",
+      "CLIP": "Klip",
+      "TRAINING": "Eğitim",
+      "KITEI_MAKOR": "Kaynak Materyaller",
+      "PUBLICATION": "Yayınlar",
+      "LELO_MIKUD": "Düzenlenmiş - Odak Grubu Yok",
+      "BLOG_POST": "Blok Yazısı"
+    },
+    "media-types": {
+      "video": "Görüntü",
+      "audio": "Ses",
+      "image": "İmaj",
+      "text": "Metin",
+      "sheet": "Sayfa",
+      "banner": "Afiş",
+      "presentation": "Sunum"
+    }
+  },
+  "values": {
+    "date": "{{date, ll}}"
+  },
+  "languages": {
+    "language": "Dil",
+    "website_language": "Web Sitesi Dili",
+    "content_language": "İçerik Dili"
+  }
+}

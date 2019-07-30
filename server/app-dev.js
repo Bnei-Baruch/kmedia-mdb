@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import http from 'http';
 import path from 'path';
 import express from 'express';
@@ -38,6 +37,11 @@ router.use('^/$', handler);
 // serve locales
 router.use('/locales', express.static(
   path.resolve(__dirname, '..', 'public', 'locales'),
+));
+
+// serve assets
+router.use('/assets', express.static(
+  path.resolve(__dirname, '..', 'public', 'assets'),
 ));
 
 // proxy other static assets to create-react-app dev server

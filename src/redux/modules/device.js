@@ -1,4 +1,6 @@
-import { createAction, handleActions } from 'redux-actions';
+import { createAction } from 'redux-actions';
+
+import { handleActions } from './settings';
 
 /* Types */
 
@@ -27,22 +29,23 @@ const initialState = {
   autoPlayAllowed: false,
 };
 
-export const reducer = handleActions({
-  [SET_DEVICE_INFO]: (state, action) => ({
-    ...state,
-    deviceInfo: action.payload,
-  }),
+const onSetDeviceInfo = (draft, payload) => {
+  draft.deviceInfo = payload;
+};
 
-  [SET_AUTO_PLAY_ALLOWED]: (state, action) => ({
-    ...state,
-    autoPlayAllowed: action.payload,
-  }),
+const onSetAutoPlayAllowed = (draft, payload) => {
+  draft.autoPlayAllowed = payload;
+};
+
+export const reducer = handleActions({
+  [SET_DEVICE_INFO]: onSetDeviceInfo,
+
+  [SET_AUTO_PLAY_ALLOWED]: onSetAutoPlayAllowed,
 
 }, initialState);
 
 /* Selectors */
 
-//const getDeviceInfo      = state => ({ device: { type: 'mobile' }, browser: { name: 'asd ' } });
 const getDeviceInfo      = state => state.deviceInfo;
 const getAutoPlayAllowed = state => state.autoPlayAllowed;
 
