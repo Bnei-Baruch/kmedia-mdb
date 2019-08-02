@@ -148,15 +148,10 @@ const mapState = (state, ownProps) => {
 
 const MyUnitList = wrap(UnitListContainer, mapState);
 
-class LessonsList extends Component {
-  render() {
-    return (
-      <MyUnitList
-        namespace="lessons-daily"
-        renderUnit={renderUnitOrCollection}
-      />
-    );
-  }
-}
+const LessonsList = () => 
+  <MyUnitList
+    namespace="lessons-daily"
+    renderUnit={renderUnitOrCollection}
+  />
 
 export default LessonsList;

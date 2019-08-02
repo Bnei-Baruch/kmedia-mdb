@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_ARTICLE, NO_NAME } from '../../../../../helpers/consts';
@@ -52,20 +52,18 @@ const renderUnit = (unit, t) => {
   );
 };
 
-class ArticlesList extends Component {
-  extraFetchParams = () => ({ content_type: [CT_ARTICLE] });
+const ArticlesList = () => {
+  const extraFetchParams = () => ({ content_type: [CT_ARTICLE] });
 
-  render() {
-    return (
-      <div>
-        <UnitList
-          namespace="publications-articles"
-          extraFetchParams={this.extraFetchParams}
-          renderUnit={renderUnit}
-        />
-      </div>
-    );
-  }
+  return (
+    <div>
+      <UnitList
+        namespace="publications-articles"
+        extraFetchParams={extraFetchParams}
+        renderUnit={renderUnit}
+      />
+    </div>
+  );
 }
 
 export default ArticlesList;

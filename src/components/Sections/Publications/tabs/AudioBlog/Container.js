@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { Table } from 'semantic-ui-react';
 
 import { CT_BLOG_POST, NO_NAME } from '../../../../../helpers/consts';
@@ -38,21 +38,18 @@ const renderUnit = (unit, t) => {
 };
 
 
-class AudioBlogList extends PureComponent {
+const AudioBlogList = () => {
+  const extraFetchParams = () => ({ content_type: [CT_BLOG_POST] });
   
-  extraFetchParams = () => ({ content_type: [CT_BLOG_POST] });
-
-  render() {
-    return (
-      <div>
-        <UnitList
-          namespace="publications-audio-blog"
-          extraFetchParams={this.extraFetchParams}
-          renderUnit={renderUnit}
-        />
-      </div>
-    );
-  }
+  return (
+    <div>
+      <UnitList
+        namespace="publications-audio-blog"
+        extraFetchParams={extraFetchParams}
+        renderUnit={renderUnit}
+      />
+    </div>
+  );
 }
 
 export default AudioBlogList;
