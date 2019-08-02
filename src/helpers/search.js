@@ -48,10 +48,10 @@ export class SuggestionsHelper {
         if (a.part !== b.part) {
           return a.part - b.part;
         }
-        if (a.suggest.startsWith(query) && !b.suggest.startsWith(query)) {
+        if (a.suggest.toLowerCase().startsWith(query) && !b.suggest.toLowerCase().startsWith(query)) {
           return -1;
         }
-        if (!a.suggest.startsWith(query) && b.suggest.startsWith(query)) {
+        if (!a.suggest.toLowerCase().startsWith(query) && b.suggest.toLowerCase().startsWith(query)) {
           return 1;
         }
         return a.suggest.localeCompare(b.suggest);
