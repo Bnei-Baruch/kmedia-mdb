@@ -169,7 +169,7 @@ class Filters extends Component {
 
     return (
       <div className="filters">
-        <FiltersHydrator namespace={namespace} onHydrated={onHydrated} />
+          <FiltersHydrator namespace={namespace} onHydrated={onHydrated} />
         {/* <Menu secondary pointing stackable className="index-filters" size="large"> */}
         <Container className="padded">
           <Menu className="filters__menu" stackable>

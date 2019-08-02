@@ -20,7 +20,7 @@ import SearchResultCU from './SearchResultCU';
 import SearchResultCollection from './SearchResultCollection';
 import SearchResultIntent from './SearchResultIntent';
 import SearchResultLandingPage from './SearchResultLandingPage';
-import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
+import SearchResultTwitters from './SearchResultTwitters';
 import SearchResultSource from './SearchResultSource';
 import SearchResultPost from './SearchResultPost';
 import { SectionLogo } from '../../helpers/images';
@@ -89,7 +89,7 @@ class SearchResults extends Component {
   };
 
   renderHit = (hit, rank) => {
-    const { cMap, cuMap, postMap, twitterMap }                                               = this.props;
+    const { cMap, cuMap, postMap }                                                                          = this.props;
     const { _source: { mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage }, _type: type } = hit;
 
     const props = { ...this.props, hit, rank, key: `${mdbUid || landingPage}_${type}` };
@@ -103,11 +103,14 @@ class SearchResults extends Component {
       return <SearchResultIntent {...props} />;
     }
 
+    if (false && type === 'tweets_many') {
+      return <SearchResultTwitters hit={hit} />;
+    }
+
     let result = null;
     const cu   = cuMap[mdbUid];
     const c    = cMap[mdbUid];
     const p    = postMap[mdbUid];
-    const t    = twitterMap[mdbUid];
 
     if (cu) {
       result = <SearchResultCU {...props} cu={cu} />;
@@ -117,9 +120,6 @@ class SearchResults extends Component {
       return <SearchResultPost {...props} post={p} />;
     } else if (resultType === 'sources') {
       result = <SearchResultSource {...props} />;
-    } else if (resultType === 'tweets') {
-      result =
-        <Segment verticalalign="top" className="bg_hover_grey search__block"><TwitterFeed twitter={t} /></Segment>;
     }
 
     // maybe content_units are still loading ?

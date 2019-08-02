@@ -73,9 +73,12 @@ export function* search(action) {
       const cIDsToFetch    = getIdsForFetch(data.search_result.hits.hits, 'collections');
       const cuIDsToFetch   = getIdsForFetch(data.search_result.hits.hits, 'units');
       const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'posts');
-      const twitterIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'tweets');
+      const twitterIDsToFetch = data.search_result.hits.hits
+        .filter(h=>h._type === 'tweets_many')
+        .flatMap(h=>h._source)
+        .map(s=>s._source.mdb_uid);
 
-      if (cuIDsToFetch.length === 0 && cIDsToFetch.length === 0 && postIDsToFetch === 0 && twitterIDsToFetch === 0) {
+      if (cuIDsToFetch.length === 0 && cIDsToFetch.length === 0 && postIDsToFetch.length === 0 && twitterIDsToFetch.length === 0) {
         yield put(actions.searchSuccess(data));
         return;
       }
@@ -112,8 +115,10 @@ export function* search(action) {
       }
 
       if(twitterIDsToFetch.length > 0) {
-        const respTwitter = responses.shift();
-        yield put(postsActions.fetchTweetsSuccess(respTwitter.data));
+        //const respTwitter = responses.shift();
+        //yield put(postsActions.fetchTweetsSuccess(respTwitter.data));
+        /*const tweets = data.search_result.hits.hits.find(h=>h._type === 'tweets_many')._source;
+        yield put(postsActions.fetchTweetsSuccess(tweets));*/
       }
     }
     yield put(actions.searchSuccess(data));

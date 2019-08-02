@@ -122,27 +122,23 @@ const onFetchCollections = (draft, payload) => {
   draft.collections = mapValues(groupBy(payload, x => x.content_type), x => x.map(y => y.id));
 };
 
-
 const onFetchTweets = draft => {
-  draft.tweets.wip = true;
+  draft.twitter.wip = true;
 };
 
-const onFetchTweetsSuccess = (draft, action) => {
+const onFetchTweetsSuccess = (draft, { tweets = [], total }) => {
 
-  const { tweets = [] }     = action.payload;
-  const { twitter: { byID } } = draft;
 
-  tweets.forEach((x) => byID[x.twitter_id] = x);
+  draft.twitter.wip = false;
+  /*
 
-  return {
-    ...draft,
-    twitter: {
-      ...draft.twitter,
-      ...action.payload,
-      byID,
-      wip: false,
-    }
-  };
+  twitter.tweets.length = 0;
+  tweets.forEach((x) => {
+    twitter.byID[x._id] = x;
+    twitter.tweets.push(x);
+  });
+  twitter.wip   = false;
+  twitter.total = total;*/
 };
 
 const onFetchTweetsFailure = (draft, payload) => {

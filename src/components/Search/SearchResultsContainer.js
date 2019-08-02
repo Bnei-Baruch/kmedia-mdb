@@ -181,21 +181,6 @@ const postMapFromState = (state, results) => (
     : {}
 );
 
-const twitterMapFromState = (state, results) => {
-  return results && results.hits && Array.isArray(results.hits.hits) ?
-    results.hits.hits.reduce((acc, val) => {
-      if (val._source.result_type === 'tweets') {
-        const tID = val._source.mdb_uid;
-        const t   = publicationSelectors.getTwitter(state.publications, tID);
-        if (t) {
-          acc[tID] = t;
-        }
-      }
-      return acc;
-    }, {}) :
-    {};
-};
-
 const mapState = (state) => {
   const queryResult = selectors.getQueryResult(state.search);
   const results     = queryResult.search_result;
@@ -205,7 +190,6 @@ const mapState = (state) => {
     cMap: cMapFromState(state, results),
     cuMap: cuMapFromState(state, results),
     postMap: postMapFromState(state, results),
-    twitterMap: twitterMapFromState(state, results),
     query: selectors.getQuery(state.search),
     pageNo: selectors.getPageNo(state.search),
     sortBy: selectors.getSortBy(state.search),
