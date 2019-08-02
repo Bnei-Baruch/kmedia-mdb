@@ -27,17 +27,26 @@ class MainPage extends PureComponent {
     resetNamespace: PropTypes.func.isRequired
   };
 
-  componentDidMount(prevProps){
+  static content = (active) => {
+    switch (active) {
+    case 'main':
+      return <ProgramList />;
+    case 'clips':
+      return <ClipList />;
+    default:
+      return <h1>Page not found</h1>;
+    }
+  };
+
+  componentDidUpdate(prevProps){
     const { match, location, resetNamespace, setTab } = this.props;
     
+    const tab = prevProps.match.params.tab || tabs[0]; 
     const nextTab = match.params.tab || tabs[0];
-    const tab = (prevProps && prevProps.match.params.tab) || tabs[0]; 
-    const prevSearch = prevProps && prevProps.location.search;
 
     // clear filters if location search parameter is changed by Menu click
-    if (!prevSearch
-      || (location.search !== prevSearch
-      && !location.search)) {
+    if (location.search !== prevProps.location.search
+      && !location.search) {
       resetNamespace(`programs-${tab}`);
     }
 
@@ -65,20 +74,9 @@ class MainPage extends PureComponent {
     return (
       <div>
         <SectionHeader section="programs" submenuItems={submenuItems} />
-        {content(active)}
+        {MainPage.content(active)}
       </div>
     );
-  }
-}
-
-const content = (active) => {
-  switch (active) {
-  case 'main':
-    return <ProgramList />;
-  case 'clips':
-    return <ClipList />;
-  default:
-    return <h1>Page not found</h1>;
   }
 }
 

@@ -31,6 +31,21 @@ class MainPage extends PureComponent {
     resetNamespace: PropTypes.func.isRequired
   };
 
+  static content = (active) => {
+    switch (active) {
+    case 'articles':
+      return <Articles />;
+    case 'blog':
+      return <Blog namespace="publications-blog" />;
+    case 'twitter':
+      return <Twitter namespace="publications-twitter" />;
+    case 'audio-blog':
+      return <AudioBlog />;
+    default:
+      return <h1>Page not found</h1>;
+    }
+  }
+
   componentDidUpdate(prevProps){
     const { match, location, resetNamespace, setTab } = this.props;
 
@@ -40,7 +55,7 @@ class MainPage extends PureComponent {
     // clear filters if location search parameter is changed by Menu click
     if (location.search !== prevProps.location.search
         && !location.search) {
-        resetNamespace(`publications-${tab}`);
+      resetNamespace(`publications-${tab}`);
     }
 
     if (nextTab !== tab) {
@@ -67,24 +82,9 @@ class MainPage extends PureComponent {
     return (
       <div>
         <SectionHeader section="publications" submenuItems={submenuItems} />
-        {content(active)}
+        {MainPage.content(active)}
       </div>
     );
-  }
-}
-
-const content = (active) => {
-  switch (active) {
-  case 'articles':
-    return <Articles />;
-  case 'blog':
-    return <Blog namespace="publications-blog" />;
-  case 'twitter':
-    return <Twitter namespace="publications-twitter" />;
-  case 'audio-blog':
-    return <AudioBlog />;
-  default:
-    return <h1>Page not found</h1>;
   }
 }
 
