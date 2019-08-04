@@ -18,11 +18,13 @@ class TwitterFeed extends Component {
   static propTypes = {
     twitter: shapes.Tweet,
     snippetVersion: PropTypes.bool,
+    withDivider: PropTypes.bool,
   };
 
   static defaultProps = {
     twitter: null,
-    snippetVersion: false
+    snippetVersion: false,
+    withDivider: true,
   };
 
   getBestVideoVariant = (x) => {
@@ -46,7 +48,7 @@ class TwitterFeed extends Component {
     return best;
   };
 
-  prepare = (raw) => {
+  prepare = (raw, highlight) => {
     const { full_text: fullText, entities, extended_entities: exEntities } = raw;
 
     const replacements = [
@@ -57,7 +59,7 @@ class TwitterFeed extends Component {
     ];
 
     if (replacements.length === 0) {
-      return fullText;
+      return highlight ? highlight: fullText;
     }
 
     replacements.sort((a, b) => {
@@ -120,7 +122,7 @@ class TwitterFeed extends Component {
   };
 
   render() {
-    const { snippetVersion, twitter } = this.props;
+    const { snippetVersion, withDivider, twitter, highlight } = this.props;
     if (!twitter) {
       return null;
     }
@@ -167,7 +169,7 @@ class TwitterFeed extends Component {
               }
             </Feed.Summary>
             <Feed.Extra text>
-              <div dangerouslySetInnerHTML={{ __html: this.prepare(raw) }} />
+              <div dangerouslySetInnerHTML={{ __html: this.prepare(raw, highlight) }} />
               {
                 snippetVersion
                   ? <div className="tweet-friendly-date">{mts.fromNow()}</div>
@@ -177,7 +179,7 @@ class TwitterFeed extends Component {
           </Feed.Content>
         </Feed.Event>
         {
-          snippetVersion
+          snippetVersion && withDivider
             ? <Divider fitted />
             : null
         }

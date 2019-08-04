@@ -103,8 +103,8 @@ class SearchResults extends Component {
       return <SearchResultIntent {...props} />;
     }
 
-    if (false && type === 'tweets_many') {
-      return <SearchResultTwitters hit={hit} />;
+    if (type === 'tweets_many') {
+      return <SearchResultTwitters  {...props} />;
     }
 
     let result = null;

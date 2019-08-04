@@ -70,13 +70,13 @@ export function* search(action) {
       // TODO edo: optimize data fetching
       // Server should return associated items (collections, units, posts...) together with search results
       // hmm, relay..., hmm ?
-      const cIDsToFetch    = getIdsForFetch(data.search_result.hits.hits, 'collections');
-      const cuIDsToFetch   = getIdsForFetch(data.search_result.hits.hits, 'units');
-      const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'posts');
+      const cIDsToFetch       = getIdsForFetch(data.search_result.hits.hits, 'collections');
+      const cuIDsToFetch      = getIdsForFetch(data.search_result.hits.hits, 'units');
+      const postIDsToFetch    = getIdsForFetch(data.search_result.hits.hits, 'posts');
       const twitterIDsToFetch = data.search_result.hits.hits
-        .filter(h=>h._type === 'tweets_many')
-        .flatMap(h=>h._source)
-        .map(s=>s._source.mdb_uid);
+        .filter(h => h._type === 'tweets_many')
+        .flatMap(h => h._source)
+        .map(s => s._source.mdb_uid);
 
       if (cuIDsToFetch.length === 0 && cIDsToFetch.length === 0 && postIDsToFetch.length === 0 && twitterIDsToFetch.length === 0) {
         yield put(actions.searchSuccess(data));
@@ -86,7 +86,12 @@ export function* search(action) {
       const lang     = yield select(state => settings.getLanguage(state.settings));
       const requests = [];
       if (cuIDsToFetch.length > 0) {
-        requests.push(call(Api.units, { id: cuIDsToFetch, pageSize: cuIDsToFetch.length, language: lang, with_files: true }));
+        requests.push(call(Api.units, {
+          id: cuIDsToFetch,
+          pageSize: cuIDsToFetch.length,
+          language: lang,
+          with_files: true
+        }));
       }
       if (cIDsToFetch.length > 0) {
         requests.push(call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, language: lang }));
@@ -95,10 +100,9 @@ export function* search(action) {
         requests.push(call(Api.posts, { id: postIDsToFetch, pageSize: postIDsToFetch.length, language: lang }));
       }
 
-      if(twitterIDsToFetch.length > 0) {
-        requests.push( call(Api.tweets, { id: twitterIDsToFetch, pageSize: twitterIDsToFetch.length, language: lang  }));
+      if (twitterIDsToFetch.length > 0) {
+        requests.push(call(Api.tweets, { id: twitterIDsToFetch, pageSize: twitterIDsToFetch.length, language: lang }));
       }
-
 
       const responses = yield all(requests);
       if (cuIDsToFetch.length > 0) {
@@ -114,11 +118,9 @@ export function* search(action) {
         yield put(postsActions.fetchBlogListSuccess(respPost.data));
       }
 
-      if(twitterIDsToFetch.length > 0) {
-        //const respTwitter = responses.shift();
-        //yield put(postsActions.fetchTweetsSuccess(respTwitter.data));
-        /*const tweets = data.search_result.hits.hits.find(h=>h._type === 'tweets_many')._source;
-        yield put(postsActions.fetchTweetsSuccess(tweets));*/
+      if (twitterIDsToFetch.length > 0) {
+        const respTwitter = responses.shift();
+        yield put(postsActions.fetchTweetsSuccess(respTwitter.data));
       }
     }
     yield put(actions.searchSuccess(data));

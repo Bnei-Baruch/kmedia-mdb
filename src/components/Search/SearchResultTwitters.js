@@ -2,9 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import { Button, Card, Container, Header, Icon, Image, Segment } from 'semantic-ui-react';
+import { Button, Card, Header, Icon, Segment, Feed } from 'semantic-ui-react';
 
-import { SectionLogo } from '../../helpers/images';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { selectors as publicationSelectors } from '../../redux/modules/publications';
 import { actions as listsActions, selectors as lists } from '../../redux/modules/lists';
@@ -41,7 +40,7 @@ class SearchResultTwitters extends SearchResultBase {
   askForData = () => {
     const { fetchList, hit: { _index, _source: { mdb_uid: mdbUid, } } } = this.props;
 
-    const namespace = `tweets_${mdbUid}`;
+    const namespace = `tweets`;
     const params    = {
       content_type: 'tweet',
       page_size: NUMBER_OF_FETCHED_UNITS,
@@ -72,10 +71,15 @@ class SearchResultTwitters extends SearchResultBase {
     this.setState({ pageNo });
   };
 
-  renderItem = ({ tweet, highlight }) => {
-
+  renderItem = ({ twitter, highlight }) => {
     return (
-      <TwitterFeed tweet={tweet} highlight={highlight} />
+      <Card key={twitter.twitter_id} className="search__card bg_hover_grey home-twitter" raised>
+        <Card.Content>
+          <Feed className="min-height-200">
+            <TwitterFeed snippetVersion withDivider={false} twitter={twitter} highlight={highlight} />
+          </Feed>
+        </Card.Content>
+      </Card>
     );
   };
 
@@ -127,20 +131,17 @@ class SearchResultTwitters extends SearchResultBase {
   };
 
   render() {
-    const { t, hit: { _type: type }, items, unitCounter, isMobileDevice } = this.props;
-    const { pageNo, pageSize }                                            = this.state;
+    const { t, items, unitCounter, isMobileDevice, language } = this.props;
+    const { pageNo, pageSize }                                = this.state;
 
     return (
-      <Segment className="search__block">
-        <Header as="h2">
-          <Image size="small" verticalAlign="bottom">
-            <SectionLogo name={type} height='50' width='50' />
-          </Image>
-        </Header>
+      <Segment className="search__block no-border">
         <Segment.Group horizontal={!isMobileDevice()} className="no-padding no-margin-top no-border no-shadow">
+          <Segment className="no-padding  no-border">
+            <Header as="h3" color="blue">{t('home.twitter-title')}</Header>
+          </Segment>
           <Segment textAlign={isMobileDevice() ? 'left' : 'right'} className="no-padding  no-border">
-            <Icon name="tasks" size="small" />
-            <span>{`${t('search.showAll')} ${this.props.total}`}</span>
+            <a href={`/${language}/publications/twitter`}>{t('home.all-tweets')}</a>
           </Segment>
         </Segment.Group>
         <div className="clear" />
@@ -155,13 +156,11 @@ class SearchResultTwitters extends SearchResultBase {
   }
 }
 
-const twitterMapFromState = (state, hit) => {
-  return hit._source.map((acc, val) => {
-    const { highlight: { content, title }, _source: { mdb_uid } } = val;
-    const tweet                                                   = publicationSelectors.getTwitter(state.publications, mdb_uid);
-
-    return { tweet, highlight: { content, title } };
-  }, {});
+const twitterMapFromState = (state, tweets) => {
+  return tweets.map(({ highlight: { content }, _source: { mdb_uid } }) => {
+    const twitter = publicationSelectors.getTwitter(state.publications, mdb_uid);
+    return { twitter, highlight: content };
+  });
 };
 
 const mapState = (state, ownProps) => {

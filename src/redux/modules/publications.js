@@ -127,18 +127,15 @@ const onFetchTweets = draft => {
 };
 
 const onFetchTweetsSuccess = (draft, { tweets = [], total }) => {
-
-
-  draft.twitter.wip = false;
-  /*
+  let { twitter } = draft;
 
   twitter.tweets.length = 0;
   tweets.forEach((x) => {
-    twitter.byID[x._id] = x;
+    twitter.byID[x.twitter_id] = x;
     twitter.tweets.push(x);
   });
   twitter.wip   = false;
-  twitter.total = total;*/
+  twitter.total = total;
 };
 
 const onFetchTweetsFailure = (draft, payload) => {
