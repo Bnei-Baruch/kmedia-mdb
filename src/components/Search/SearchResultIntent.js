@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { Button, Card, Container, Header, Icon, Image, Segment } from 'semantic-ui-react';
+import { Swipeable } from 'react-swipeable';
 
 import { SectionLogo } from '../../helpers/images';
 import { selectors } from '../../redux/modules/mdb';
@@ -89,9 +90,9 @@ class SearchResultIntent extends SearchResultBase {
   };
 
   renderItem = (cu) => {
-    const { t, queryResult, hit, rank }             = this.props;
+    const { t, queryResult, hit, rank }                                = this.props;
     const { _index: index, _type: type, _source: { mdb_uid: mdbUid } } = hit;
-    const { search_result: { searchId } } = queryResult;
+    const { search_result: { searchId } }                              = queryResult;
 
     let thumbUrl = assetUrl(`api/thumbnail/${cu.id}`);
     if (!thumbUrl.startsWith('http')) {
@@ -242,11 +243,13 @@ class SearchResultIntent extends SearchResultBase {
           </Segment>
         </Segment.Group>
         <div className="clear" />
-        <Card.Group className={`${isMobileDevice() ? 'margin-top-8' : null} search__cards`} itemsPerRow={3} stackable>
-          {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).map(this.renderItem)}
-          {pageSize < unitCounter ? this.renderScrollLeft() : null}
-          {pageSize < unitCounter ? this.renderScrollRight() : null}
-        </Card.Group>
+        <Swipeable onSwipedLeft={this.onScrollLeft} onSwipedRight={this.onScrollRight}>
+          <Card.Group className={`${isMobileDevice() ? 'margin-top-8' : null} search__cards`} itemsPerRow={3} stackable>
+            {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).map(this.renderItem)}
+            {pageSize < unitCounter ? this.renderScrollLeft() : null}
+            {pageSize < unitCounter ? this.renderScrollRight() : null}
+          </Card.Group>
+        </Swipeable>
         {pageSize < unitCounter ? this.renderScrollPagination() : null}
 
         {this.renderDebug(display)}
