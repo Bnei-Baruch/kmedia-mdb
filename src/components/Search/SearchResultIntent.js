@@ -185,7 +185,7 @@ class SearchResultIntent extends SearchResultBase {
   };
 
   render() {
-    const { t, queryResult, hit, rank, items, unitCounter, isMobileDevice }             = this.props;
+    const { t, queryResult, hit, rank, items, unitCounter, isMobileDevice, language }   = this.props;
     const { _index: index, _type: type, _source: { mdb_uid: mdbUid, name }, highlight } = hit;
 
     const { pageNo, pageSize }            = this.state;
@@ -243,7 +243,9 @@ class SearchResultIntent extends SearchResultBase {
           </Segment>
         </Segment.Group>
         <div className="clear" />
-        <Swipeable onSwipedLeft={this.onScrollLeft} onSwipedRight={this.onScrollRight}>
+        <Swipeable
+          onSwipedLeft={isLanguageRtl(language) ? this.onScrollRight : this.onScrollLeft}
+          onSwipedRight={isLanguageRtl(language) ? this.onScrollLeft : this.onScrollRight}>
           <Card.Group className={`${isMobileDevice() ? 'margin-top-8' : null} search__cards`} itemsPerRow={3} stackable>
             {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).map(this.renderItem)}
             {pageSize < unitCounter ? this.renderScrollLeft() : null}
