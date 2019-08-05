@@ -19,6 +19,7 @@ class TwitterFeed extends Component {
     twitter: shapes.Tweet,
     snippetVersion: PropTypes.bool,
     withDivider: PropTypes.bool,
+    highlight: PropTypes.object
   };
 
   static defaultProps = {
@@ -57,9 +58,9 @@ class TwitterFeed extends Component {
       ...(entities.user_mentions || []).map(x => ({ ...x, entityType: 'user_mention' })),
       ...(exEntities.media || []).map(x => ({ ...x, entityType: 'media' })),
     ];
-
+    //TODO:For now use highlight of search result just if no media and ets in the tweeter because of complicate parsing with <em />
     if (replacements.length === 0) {
-      return highlight ? highlight: fullText;
+      return highlight ? highlight : fullText;
     }
 
     replacements.sort((a, b) => {
