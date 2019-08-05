@@ -19,8 +19,9 @@ export function* fetchData() {
 
 export function* fetchBanner(action) {
   try {
-    const name     = `banner-${action.payload}?meta=header,sub-header,link`;
-    const { data } = yield call(Api.getCMS, name);
+    const { data } = yield call(Api.getCMS, 'banner', {
+      language: action.payload,
+    });
     yield put(actions.fetchBannerSuccess(data));
   } catch (err) {
     yield put(actions.fetchBannerFailure(err));

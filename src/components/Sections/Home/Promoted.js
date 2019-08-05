@@ -1,5 +1,4 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
 import { Header, Image } from 'semantic-ui-react';
 
 import Link from '../../Language/MultiLanguageLink';
@@ -33,24 +32,24 @@ const Promoted = (props) => {
 
   const { content } = data;
   if (!content) {
-    return <div className="thumbnail">&nbsp;</div>;
+    return <div className="thumbnail" data-testid="empty-content">&nbsp;</div>;
   }
 
-  const { header, 'sub-header': subHeader, link } = data.meta;
+  const { header, 'sub-header': subHeader, link } = Object.assign({}, ...data.meta);
   const imgData                                   = content.match(/img src="(.+?)"/);
   let img                                         = imgData ? imgData[1] : null;
-  let Lnk                                         = link.match(/:\/\//) === null ? Link : ExtLink;
+  let Lnk                                         = link[0].match(/:\/\//) === null ? Link : ExtLink;
 
   return (
     <div className="thumbnail">
-      <Lnk to={link}>
+      <Lnk to={link[0]}>
         <Image fluid src={img} className="thumbnail__image" />
-        {renderHeader(header, subHeader)}
+        {renderHeader(header[0], subHeader[0])}
       </Lnk>
     </div>
   );
-}
+};
 
 Promoted.propTypes = {};
 
-export default withNamespaces()(Promoted);
+export default Promoted;
