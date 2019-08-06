@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_DAILY_LESSON, CT_LESSON_PART, NO_NAME } from '../../../../../helpers/consts';
@@ -126,11 +126,12 @@ export const renderCollection = (collection, t) => {
 };
 
 export const renderUnitOrCollection = (item, t) => {
-  if (!item)
+  if (!item) {
     return null;
+  }
   return item.content_type === CT_LESSON_PART
     ? renderUnit(item, t)
-    : renderCollection(item, t)
+    : renderCollection(item, t);
 };
 
 const mapState = (state, ownProps) => {
@@ -148,10 +149,10 @@ const mapState = (state, ownProps) => {
 
 const MyUnitList = wrap(UnitListContainer, mapState);
 
-const LessonsList = () => 
+const LessonsList = () =>
   <MyUnitList
     namespace="lessons-daily"
     renderUnit={renderUnitOrCollection}
-  />
+  />;
 
 export default LessonsList;
