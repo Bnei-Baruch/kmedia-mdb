@@ -317,7 +317,8 @@
     "tabs": {
       "articles": "Articles",
       "twitter": "Twitter",
-      "blog": "Blog"
+      "blog": "Blog",
+      "audio-blog": "Audio Blog"
     },
     "list": {
       "item_from": "Item of:"

@@ -1,23 +1,21 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 
 import * as shapes from '../../../shapes';
 import Playlist from '../../../Pages/PlaylistCollection/Container';
 import UnitList from './UnitList';
 
-class MainPage extends PureComponent {
-  static propTypes = {
-    match: shapes.RouterMatch.isRequired,
-  };
+const MainPage = (props) => {
+  const { match: { params: { tab } } } = props;
 
-  render() {
-    const { match: { params: { tab } } } = this.props;
-
-    if (tab === 'daily' || tab === 'series') {
-      return <Playlist />;
-    }
-
-    return <UnitList />;
+  if (tab === 'daily' || tab === 'series') {
+    return <Playlist />;
   }
+
+  return <UnitList />;
 }
+
+MainPage.propTypes = {
+  match: shapes.RouterMatch.isRequired,
+};
 
 export default MainPage;
