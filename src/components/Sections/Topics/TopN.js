@@ -25,31 +25,35 @@ class TopN extends React.PureComponent {
     topNUnits: [],
   };
 
-  componentDidMount() {
-    this.getTopNUnits(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.units !== nextProps.units
-      || this.props.N !== nextProps.N) {
-      this.getTopNUnits(nextProps);
-    }
-  }
-
-  getTopNUnits = (props) => {
+  static getTopNUnits = (props) => {
     const { units, N } = props;
     let topNUnits;
 
     if (Array.isArray(units)) {
-      units.sort(this.compareUnits);
+      units.sort(TopN.compareUnits);
 
       topNUnits = units.length > N
         ? units.slice(0, N)
         : units;
     }
 
-    this.setState({ topNUnits });
+    return topNUnits;
   };
+
+  static compareUnits = (a, b) => (a && b && a.film_date <= b.film_date) ? 1 : -1;
+
+  componentDidMount() {
+    const topNUnits = TopN.getTopNUnits(this.props);
+    this.setState({ topNUnits });
+  }
+
+  componentDidUpdate(prevProps){
+    if (prevProps.units !== this.props.units
+      || prevProps.N !== this.props.N){
+      const topNUnits = TopN.getTopNUnits(this.props);
+      this.setState({ topNUnits });
+    }
+  }
 
   getTopicUrl = () => {
     const { section, tagPath, language } = this.props;
@@ -58,18 +62,19 @@ class TopN extends React.PureComponent {
       { name: 'topics-filter', values: [tagPath.map(y => y.id)] }
     ]);
 
-    return `/${language}/${section}?${urlSearchStringify(query)}`;
-  };
+    const realSection = section === 'publications' 
+      ? 'publications/articles' 
+      : section;
 
-  compareUnits = (a, b) => (a && b && a.film_date <= b.film_date) ? 1 : -1;
+    return `/${language}/${realSection}?${urlSearchStringify(query)}`;
+  };
 
   renderUnit = (unit, t) => {
     const link   = canonicalLink(unit);
-    let filmDate = '';
-    if (unit.film_date) {
-      filmDate = t('values.date', { date: new Date(unit.film_date) });
-    }
-
+    const filmDate = unit.film_date 
+      ? t('values.date', { date: new Date(unit.film_date) }) 
+      : '';
+   
     return (
       <Table.Row key={unit.id} verticalAlign="top">
         <Table.Cell>
