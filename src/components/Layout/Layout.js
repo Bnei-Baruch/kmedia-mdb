@@ -84,11 +84,13 @@ class Layout extends Component {
       return null;
     }
 
-    const isShowHeaderSearch = (
+    const isShowHeaderSearch = state.isShowHeaderSearch || 
+    (
       nextProps.location
       && isMobileDevice
       && nextProps.location.pathname.endsWith('search')
     );
+
     return { isShowHeaderSearch, pathname: nextProps.pathname };
   }
 
@@ -152,7 +154,7 @@ class Layout extends Component {
 
   render() {
     const { t, location, route, language, contentLanguage, setContentLanguage, push } = this.props;
-    const { sidebarActive, embed }                                                    = this.state;
+    const { sidebarActive, embed, isShowHeaderSearch }                                = this.state;
 
     const showSearch = shouldShowSearch(location);
 
@@ -168,6 +170,7 @@ class Layout extends Component {
         </div>
       );
     }
+    
     return (
       <div className="layout">
         {/* <div className="debug">
@@ -230,7 +233,7 @@ class Layout extends Component {
             </Menu.Menu>
           </Menu>
         </div>
-        {this.state.isShowHeaderSearch && <RenderHeaderSearch t={this.props.t} location={this.props.location} ref={headerSearchElement} />}
+        {isShowHeaderSearch && <RenderHeaderSearch t={this.props.t} location={this.props.location} ref={headerSearchElement} />}
         <div
           className={classnames('layout__sidebar', { 'is-active': sidebarActive })}
           ref={(el) => {
