@@ -233,7 +233,7 @@ class Layout extends Component {
             </Menu.Menu>
           </Menu>
         </div>
-        {isShowHeaderSearch && <RenderHeaderSearch t={this.props.t} location={this.props.location} ref={headerSearchElement} />}
+        {isShowHeaderSearch && <RenderHeaderSearch t={t} location={location} ref={headerSearchElement} />}
         <div
           className={classnames('layout__sidebar', { 'is-active': sidebarActive })}
           ref={(el) => {
