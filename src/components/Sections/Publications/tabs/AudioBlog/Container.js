@@ -1,23 +1,14 @@
 import React from 'react';
-import { List, Table } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 
-import { CT_ARTICLE, NO_NAME } from '../../../../../helpers/consts';
-import { CollectionsBreakdown } from '../../../../../helpers/mdb';
+import { CT_BLOG_POST, NO_NAME } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
 import { ellipsize } from '../../../../../helpers/strings';
 import UnitList from '../../../../Pages/UnitList/Container';
 import Link from '../../../../Language/MultiLanguageLink';
 
+
 const renderUnit = (unit, t) => {
-  const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
-  const articles  = breakdown.getArticles();
-
-  const relatedItems = articles.map(x => (
-    <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-      {x.name || NO_NAME}
-    </List.Item>
-  ));
-
   let filmDate = '';
   if (unit.film_date) {
     filmDate = t('values.date', { date: unit.film_date });
@@ -41,24 +32,19 @@ const renderUnit = (unit, t) => {
             )
             : null
         }
-        <List horizontal divided link className="index__collections" size="tiny">
-          <List.Item>
-            <List.Header>{t('publications.list.item_from')}</List.Header>
-          </List.Item>
-          {relatedItems}
-        </List>
       </Table.Cell>
     </Table.Row>
   );
 };
 
-const ArticlesList = () => {
-  const extraFetchParams = () => ({ content_type: [CT_ARTICLE] });
 
+const AudioBlogList = () => {
+  const extraFetchParams = () => ({ content_type: [CT_BLOG_POST] });
+  
   return (
     <div>
       <UnitList
-        namespace="publications-articles"
+        namespace="publications-audio-blog"
         extraFetchParams={extraFetchParams}
         renderUnit={renderUnit}
       />
@@ -66,4 +52,4 @@ const ArticlesList = () => {
   );
 }
 
-export default ArticlesList;
+export default AudioBlogList;

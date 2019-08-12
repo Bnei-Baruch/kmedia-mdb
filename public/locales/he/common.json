@@ -317,7 +317,8 @@
     "tabs": {
       "articles": "מאמרים",
       "twitter": "טוויטר",
-      "blog": "בלוג"
+      "blog": "בלוג",
+      "audio-blog": "אודיו בלוג"
     },
     "list": {
       "item_from": "מאמר מתוך:"
