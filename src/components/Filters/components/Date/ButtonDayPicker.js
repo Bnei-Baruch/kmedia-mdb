@@ -1,29 +1,30 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import moment from 'moment';
 import scrollIntoView from 'scroll-into-view';
 import Navbar from 'react-day-picker/lib/src/Navbar';
-import MomentLocaleUtils, { formatDate } from 'react-day-picker/moment';
-import {Input, Segment, Popup, Modal, Button, Icon, Label} from 'semantic-ui-react';
+import MomentLocaleUtils, {formatDate} from 'react-day-picker/moment';
+import {Input, Segment, Popup, Modal, Button, Icon} from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
 
-import { today } from '../../../../helpers/date';
-import { getLanguageDirection, getLanguageLocaleWORegion } from '../../../../helpers/i18n-utils';
-import * as shapes from '../../../shapes';
+import {today} from '../../../../helpers/date';
+import {getLanguageDirection, getLanguageLocaleWORegion} from '../../../../helpers/i18n-utils';
 import YearMonthForm from './YearMonthForm';
 
 import DayPicker from 'react-day-picker';
 import {withNamespaces} from "react-i18next";
+import {DeviceInfoContext} from '../../../../helpers/app-contexts';
 
 class ButtonDayPicker extends Component {
+  static contextType = DeviceInfoContext;
+
   static propTypes = {
     value: PropTypes.instanceOf(Date),
     label: PropTypes.string,
     onDayChange: PropTypes.func,
     language: PropTypes.string.isRequired,
-    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -40,33 +41,31 @@ class ButtonDayPicker extends Component {
     stringValue: null,
   };
 
-  localeDateFormat = moment.localeData().longDateFormat('L');
+  localeDateFormat      = moment.localeData().longDateFormat('L');
   localeDateFormatShort = this.localeDateFormat.replace('DD', 'D').replace('MM', 'M');
 
   static getDerivedStateFromProps(props, state) {
-    const { value } = state;
-    if (props.value !== value) {
-      return { value: props.value, stringValue: ButtonDayPicker.formatDateValue(props.value, props.language) };
+    const {value} = state;
+    if (props.value!==value) {
+      return {value: props.value, stringValue: ButtonDayPicker.formatDateValue(props.value, props.language)};
     }
     return null;
   }
 
   static formatDateValue(date, language) {
     const locale = getLanguageLocaleWORegion(language);
-    return date ? formatDate(date, 'l', locale) : '';
+    return date ? formatDate(date, 'l', locale):'';
   }
 
-  isMobileDevice = () => this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
-
   handleYearMonthChange = (month) => {
-    this.setState({ month });
+    this.setState({month});
   };
 
   handleDayPickerRef = (ref) => {
     if (ref) {
       scrollIntoView(ReactDOM.findDOMNode(ref), {
         time: 150, // half a second
-        validTarget: target => target !== window,
+        validTarget: target => target!==window,
       });
     }
   };
@@ -76,16 +75,18 @@ class ButtonDayPicker extends Component {
   };
 
   handleNativeDateInputChange = (event) => {
-    const date = event.target.valueAsDate;
-    const { deviceInfo, onDayChange } = this.props;
+    const date          = event.target.valueAsDate;
+    const {onDayChange} = this.props;
+    const {deviceInfo}  = this.context;
     this.setState({selectedDate: date});
-    if (deviceInfo.os.name !== 'iOS') {
+    if (deviceInfo.os.name!=='iOS') {
       onDayChange(date);
     }
   };
 
   openNativeDatePicker = () => {
-    if (this.props.deviceInfo.os.name === 'Android') {
+    const {deviceInfo} = this.context;
+    if (deviceInfo.os.name==='Android') {
       this.nativeDateInput.click();
       return;
     }
@@ -93,9 +94,9 @@ class ButtonDayPicker extends Component {
   };
 
   applySelectedDate = () => {
-    const { onDayChange, value } = this.props;
-    const { selectedDate } = this.state;
-    const selected = selectedDate || value || today().toDate();
+    const {onDayChange, value} = this.props;
+    const {selectedDate}       = this.state;
+    const selected             = selectedDate || value || today().toDate();
     onDayChange(selected);
   };
 
@@ -108,10 +109,10 @@ class ButtonDayPicker extends Component {
   );
 
   getNavBarElement = (props, language) => {
-    const { month, localeUtils } = props;
+    const {month, localeUtils} = props;
     return (
       <div>
-        <Navbar {...props} className="ButtonDayPicker-DayPicker-NavButton" />
+        <Navbar {...props} className="ButtonDayPicker-DayPicker-NavButton"/>
         <YearMonthForm
           date={month}
           language={language}
@@ -119,33 +120,33 @@ class ButtonDayPicker extends Component {
           onChange={this.handleYearMonthChange}
           className="float-left"
         />
-        <div className="clear" />
+        <div className="clear"/>
       </div>
     );
   };
 
-  openPopup = () => this.setState({ isPopupOpen: true });
-  closePopup = () => this.setState({ isPopupOpen: false });
+  openPopup  = () => this.setState({isPopupOpen: true});
+  closePopup = () => this.setState({isPopupOpen: false});
 
-  openNativePopup = () => this.setState({ isNativePopupOpen: true });
-  closeNativePopup = () => this.setState({ isNativePopupOpen: false });
+  openNativePopup  = () => this.setState({isNativePopupOpen: true});
+  closeNativePopup = () => this.setState({isNativePopupOpen: false});
 
   onPopupDayChange = (date) => {
     if (date > today().add(1, 'days').toDate())
       return;
-    const { onDayChange, language } = this.props;
-    this.setState({ stringValue: ButtonDayPicker.formatDateValue(date, language) });
+    const {onDayChange, language} = this.props;
+    this.setState({stringValue: ButtonDayPicker.formatDateValue(date, language)});
     onDayChange(date);
     this.closePopup();
   };
 
   handleDateInputChange = (event, data) => {
-    const { onDayChange } = this.props;    
-    const day = moment(data.value, this.localeDateFormatShort, true);
+    const {onDayChange} = this.props;
+    const day           = moment(data.value, this.localeDateFormatShort, true);
     if (day.isValid()) {
       onDayChange(day.toDate());
     } else {
-      this.setState({ stringValue: data.value });
+      this.setState({stringValue: data.value});
     }
   };
 
@@ -154,18 +155,19 @@ class ButtonDayPicker extends Component {
   };
 
   render() {
-    const { language, t, value, label, deviceInfo }               = this.props;
-    const { month, isPopupOpen, isNativePopupOpen, selectedDate } = this.state;
+    const {language, t, value, label}                           = this.props;
+    const {month, isPopupOpen, isNativePopupOpen, selectedDate} = this.state;
+    const {deviceInfo, isMobileDevice}                          = this.context;
+
     const locale = getLanguageLocaleWORegion(language);
-    const isMobileDevice = this.isMobileDevice();
 
     if (isMobileDevice) {
-      const selected = selectedDate || value;
-      const selectedToString =  selected ? moment(selected).format('YYYY-MM-DD') : null;
+      const selected         = selectedDate || value;
+      const selectedToString = selected ? moment(selected).format('YYYY-MM-DD'):null;
 
       const dateButton = (
         <button className="ui button dateButton" onClick={this.openNativeDatePicker}>
-          <i aria-hidden="true" className={isMobileDevice ? 'calendar alternate outline large icon' : 'calendar alternate outline icon'}/>
+          <i aria-hidden="true" className={isMobileDevice ? 'calendar alternate outline large icon':'calendar alternate outline icon'}/>
           <input
             className="hide-native-date-input"
             type="date"
@@ -178,7 +180,7 @@ class ButtonDayPicker extends Component {
           />
         </button>
       );
-      if (deviceInfo.os.name !== 'iOS')
+      if (deviceInfo.os.name!=='iOS')
         return dateButton;
 
       const selectedInLocaleFormat = moment(selected).format(this.localeDateFormat);
@@ -225,7 +227,7 @@ class ButtonDayPicker extends Component {
         onClose={this.closePopup}
         trigger={
           <Button className="dateButton" onClick={this.doSearchFromClickEvent}>
-            <Icon name='calendar alternate outline' />
+            <Icon name='calendar alternate outline'/>
             {label}
           </Button>
         }
@@ -234,7 +236,7 @@ class ButtonDayPicker extends Component {
           <DayPicker
             locale={locale}
             localeUtils={MomentLocaleUtils}
-            disabledDays={{ after: new Date() }}
+            disabledDays={{after: new Date()}}
             captionElement={() => null}
             navbarElement={props => this.getNavBarElement(props, language)}
             month={month}
