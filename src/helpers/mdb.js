@@ -13,6 +13,7 @@ import {
   CT_VIDEO_PROGRAM,
   CT_VIRTUAL_LESSONS,
   CT_WOMEN_LESSONS,
+  CT_BLOG_POST,
 } from './consts';
 
 export class CollectionsBreakdown {
@@ -39,6 +40,8 @@ export class CollectionsBreakdown {
   getArticles = () => this.collectTypes(CT_ARTICLES);
 
   getClips = () => this.collectTypes(CT_CLIPS);
+
+  getAudioBlogs = () => this.collectTypes(CT_BLOG_POST);
 
   getAllButClips = () => (
     this.collectTypes(

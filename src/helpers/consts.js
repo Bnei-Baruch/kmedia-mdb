@@ -164,6 +164,11 @@ export const ALL_LANGUAGES = [
   LANG_AMHARIC,
 ];
 
+export const AUDIO_BLOG_LANGUAGES = [
+  LANG_RUSSIAN,
+  LANG_ENGLISH
+];
+
 export const DEFAULT_LANGUAGE = LANG_ENGLISH;
 
 export const LANGUAGE_OPTIONS = ALL_LANGUAGES.map(x => LANGUAGES[x]);

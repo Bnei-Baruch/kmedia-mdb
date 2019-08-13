@@ -310,7 +310,8 @@
     "tabs": {
       "articles": "Статті",
       "twitter": "Твиттер",
-      "blog": "Блог"
+      "blog": "Блог",
+      "audio-blog": "Аудіо Блог"
     },
     "list": {
       "episode_from": "Частина з:"
