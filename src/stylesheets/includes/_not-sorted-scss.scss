@@ -979,13 +979,25 @@
   }
 }
 
-.mediaplayer__mobileUnmuteButton {
+.mediaplayer__unmuteButton {
   position: absolute;
   top: 5px;
   left: 5px;
 }
 
-.mediaplayer__mobileUnmuteButton.rtl {
+.mediaplayer__unmuteButton.rtl {
+  left: inherit;
+  right: 5px;
+}
+
+.mediaplayer__embedUnmuteButton {
+  z-index: 10000;
+  position: absolute;
+  top: 20px;
+  left: 5px;
+}
+
+.mediaplayer__embedUnmuteButton.rtl {
   left: inherit;
   right: 5px;
 }
