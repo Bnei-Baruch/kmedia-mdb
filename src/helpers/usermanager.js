@@ -7,10 +7,8 @@ const AUTH_URL = process.env.REACT_APP_AUTH_URL;
 oidclog.logger = console;
 oidclog.level  = 4;
 
-// TODO(yanive): revise this to work server side as well.
-
 const userManagerConfig = {
-  client_id: 'mdb-admin-ui',
+  client_id: 'kmedia-mdb',
   redirect_uri: `${BASE_URL}callback`,
   response_type: 'token id_token',
   scope: 'openid profile',

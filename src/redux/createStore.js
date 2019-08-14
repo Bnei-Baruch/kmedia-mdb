@@ -48,7 +48,6 @@ export default function createStore(initialState, history) {
   ));
 
   // we have silent_renew configured so we use this instead of the oidc-middleware.
-  // TODO: implement server side as redux-iodc doesn't support server side code.
   if (isBrowser) {
     loadUser(store, userManager);
   }

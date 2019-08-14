@@ -5,19 +5,23 @@ import userManager from '../helpers/usermanager';
 import { types } from '../redux/modules/user';
 
 export function* login(action) {
-
   const location = JSON.stringify(yield select(getLocation));
-  try {
-    yield userManager.signinSilent({ state: location });
-  } catch (err) {
-    yield userManager.signinRedirect({ state: location });
-  }
+  yield userManager.signinRedirect({ state: location });
+}
+
+export function* logout(action) {
+  userManager.signoutRedirect();
 }
 
 function* watchLogin() {
   yield takeLatest(types.LOGIN, login);
 }
 
+function* watchLogout() {
+  yield takeLatest(types.LOGOUT, logout);
+}
+
 export const sagas = [
-  watchLogin
+  watchLogin,
+  watchLogout,
 ];

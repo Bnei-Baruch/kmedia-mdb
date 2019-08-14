@@ -8,17 +8,21 @@ import { setApiAccessToken, removeApiAcessToken } from '../../helpers/Api';
 /* Types */
 
 const LOGIN         = 'User/LOGIN';
+const LOGOUT         = 'User/LOGOUT';
 
 export const types = {
   LOGIN,
+  LOGOUT,
 };
 
 /* Actions */
 
 const login = createAction(LOGIN);
+const logout = createAction(LOGOUT);
 
 export const actions = {
   login,
+  logout,
 };
 
 /* Reducer */
@@ -29,10 +33,6 @@ const initialState = {
 
 const onUser = (state, action) => {
   const user = action.payload;
-
-  if (user.fake) {
-    return { user };
-  }
 
   // Keycloak special handling
   // We decode the access token for the user's roles
