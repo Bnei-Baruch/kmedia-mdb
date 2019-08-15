@@ -71,6 +71,7 @@ const MainPage = ({ location, match, t }) => {
     if (!location.search) {
       resetNamespace(`lessons-${tab}`);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search, resetNamespace]);
 
   useEffect(() => {
