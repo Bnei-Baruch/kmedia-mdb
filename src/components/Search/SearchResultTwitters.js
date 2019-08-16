@@ -34,31 +34,19 @@ class SearchResultTwitters extends SearchResultBase {
     const pageSize          = this.props.isMobileDevice() ? 1 : 3;
     NUMBER_OF_FETCHED_UNITS = pageSize * 4;
 
-    this.askForData(this.props, 0);
+    this.askForData(1);
     this.setState({ pageSize });
   }
 
-  askForData = () => {
-    const { fetchList, hit: { _index, _source: { mdb_uid: mdbUid, } } } = this.props;
+  askForData = (page) => {
+    const { fetchList } = this.props;
 
-    const namespace = `tweets`;
+    const namespace = 'tweets';
     const params    = {
       content_type: 'tweet',
-      page_size: NUMBER_OF_FETCHED_UNITS,
-      [this.parentTypeByIndex(_index)]: mdbUid
+      page_size: NUMBER_OF_FETCHED_UNITS
     };
-    fetchList(namespace, 1, params);
-  };
-
-  parentTypeByIndex = (index) => {
-    switch (index) {
-    case SEARCH_INTENT_INDEX_SOURCE:
-      return 'source';
-    case SEARCH_INTENT_INDEX_TOPIC:
-      return 'tag';
-    default:
-      return 'tag';
-    }
+    fetchList(namespace, page, params);
   };
 
   onScrollRight = () => this.onScrollChange(this.state.pageNo + 1);

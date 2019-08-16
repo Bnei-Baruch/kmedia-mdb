@@ -58,7 +58,7 @@ class TwitterFeed extends Component {
       ...(entities.user_mentions || []).map(x => ({ ...x, entityType: 'user_mention' })),
       ...(exEntities.media || []).map(x => ({ ...x, entityType: 'media' })),
     ];
-    //TODO:For now use highlight of search result just if no media and ets in the tweeter because of complicate parsing with <em />
+    //TODO:For now use highlight of search result just if no media and etc in the tweeter because of complicate parsing with <em />
     if (replacements.length === 0) {
       return highlight ? highlight : fullText;
     }
