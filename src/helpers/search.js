@@ -4,8 +4,8 @@ export class SuggestionsHelper {
   constructor(results) {
     this.suggestions = [];
 
-    if (results && results.suggest && 'title_suggest' in results.suggest) {
-      const query      = results.suggest.title_suggest[0].text;
+    if (results && results.suggest && results.suggest['title_suggest']) {
+      const query      = results.suggest.title_suggest[0].text.toLowerCase();
       this.suggestions = results.suggest.title_suggest[0].options.map((option) => {
         const { text, _source: { title, result_type: resultType } } = option;
         const textParts                                             = text.split(' ');
@@ -40,18 +40,22 @@ export class SuggestionsHelper {
           suggestWordsWithSeparator++;
         }
 
+        const suggest = titleWords.slice(titleWords.length - suggestWordsWithSeparator).join(' ')
+        const suggestLC = suggest.toLowerCase()
+
         return {
           part: reverseIdx,
-          suggest: titleWords.slice(titleWords.length - suggestWordsWithSeparator).join(' '),
+          suggest: suggest,
+          suggestLC: suggestLC,
         };
       }).sort((a, b) => {
         if (a.part !== b.part) {
           return a.part - b.part;
         }
-        if (a.suggest.startsWith(query) && !b.suggest.startsWith(query)) {
+        if (a.suggestLC.startsWith(query) && !b.suggestLC.startsWith(query)) {
           return -1;
         }
-        if (!a.suggest.startsWith(query) && b.suggest.startsWith(query)) {
+        if (!a.suggestLC.startsWith(query) && b.suggestLC.startsWith(query)) {
           return 1;
         }
         return a.suggest.localeCompare(b.suggest);
