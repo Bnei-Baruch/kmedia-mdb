@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { Button, Card, Header, Icon, Segment, Feed } from 'semantic-ui-react';
+import { Swipeable } from 'react-swipeable';
 
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { selectors as publicationSelectors } from '../../redux/modules/publications';
@@ -69,6 +70,14 @@ class SearchResultTwitters extends SearchResultBase {
       return;
     }
     this.setState({ pageNo });
+  };
+
+  getSwipeProps = () => {
+    const isRTL = isLanguageRtl(this.props.language);
+    return {
+      onSwipedLeft: isRTL ? this.onScrollRight : this.onScrollLeft,
+      onSwipedRight: isRTL ? this.onScrollLeft : this.onScrollRight
+    };
   };
 
   renderItem = ({ twitter, highlight }) => {
@@ -145,11 +154,13 @@ class SearchResultTwitters extends SearchResultBase {
           </Segment>
         </Segment.Group>
         <div className="clear" />
-        <Card.Group className={`${isMobileDevice() ? 'margin-top-8' : null} search__cards`} itemsPerRow={3} stackable>
-          {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).map(this.renderItem)}
-          {pageSize < unitCounter ? this.renderScrollLeft() : null}
-          {pageSize < unitCounter ? this.renderScrollRight() : null}
-        </Card.Group>
+        <Swipeable {...this.getSwipeProps()} >
+          <Card.Group className={`${isMobileDevice() ? 'margin-top-8' : null} search__cards`} itemsPerRow={3} stackable>
+            {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).map(this.renderItem)}
+            {pageSize < unitCounter ? this.renderScrollLeft() : null}
+            {pageSize < unitCounter ? this.renderScrollRight() : null}
+          </Card.Group>
+        </Swipeable>
         {pageSize < unitCounter ? this.renderScrollPagination() : null}
       </Segment>
     );
