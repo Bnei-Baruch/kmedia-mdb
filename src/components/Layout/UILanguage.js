@@ -11,7 +11,7 @@ import Link from '../Language/MultiLanguageLink';
 
 
 const storeUILanguage = (language) => {
-  if (language === '' || language === undefined) {
+  if (!language) {
     return;
   }
   
