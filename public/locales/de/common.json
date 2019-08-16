@@ -308,7 +308,8 @@
     "tabs": {
       "articles": "Artikel",
       "twitter": "Twitter",
-      "blog": "Blog"
+      "blog": "Blog",
+      "audio-blog": "Audio Blog"
     },
     "list": {
       "item_from": "Teil von:"

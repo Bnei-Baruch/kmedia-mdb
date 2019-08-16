@@ -13,11 +13,13 @@ import SectionHeader from '../../shared/SectionHeader';
 import Articles from './tabs/Articles/List';
 import Blog from './tabs/Blog/Container';
 import Twitter from './tabs/Twitter/Container';
+import AudioBlog from './tabs/AudioBlog/Container';
 
 export const tabs = [
   'blog',
   'twitter',
   'articles',
+  'audio-blog'
 ];
 
 class MainPage extends PureComponent {
@@ -29,18 +31,35 @@ class MainPage extends PureComponent {
     resetNamespace: PropTypes.func.isRequired
   };
 
-  componentWillReceiveProps(nextProps) {
-    const tab     = this.props.match.params.tab || tabs[0];
-    const nextTab = nextProps.match.params.tab || tabs[0];
+  static content = (active) => {
+    switch (active) {
+    case 'articles':
+      return <Articles />;
+    case 'blog':
+      return <Blog namespace="publications-blog" />;
+    case 'twitter':
+      return <Twitter namespace="publications-twitter" />;
+    case 'audio-blog':
+      return <AudioBlog />;
+    default:
+      return <h1>Page not found</h1>;
+    }
+  }
+
+  componentDidUpdate(prevProps){
+    const { match, location, resetNamespace, setTab } = this.props;
+
+    const tab     = prevProps.match.params.tab || tabs[0];
+    const nextTab = match.params.tab || tabs[0];
 
     // clear filters if location search parameter is changed by Menu click
-    if (nextProps.location.search !== this.props.location.search
-      && !nextProps.location.search) {
-      nextProps.resetNamespace(`publications-${tab}`);
+    if (location.search !== prevProps.location.search
+        && !location.search) {
+      resetNamespace(`publications-${tab}`);
     }
 
     if (nextTab !== tab) {
-      nextProps.setTab(nextTab);
+      setTab(nextTab);
     }
   }
 
@@ -60,26 +79,10 @@ class MainPage extends PureComponent {
       </Menu.Item>
     ));
 
-    let content = null;
-    switch (active) {
-    case 'articles':
-      content = <Articles />;
-      break;
-    case 'blog':
-      content = <Blog namespace="publications-blog" />;
-      break;
-    case 'twitter':
-      content = <Twitter namespace="publications-twitter" />;
-      break;
-    default:
-      content = <h1>Page not found</h1>;
-      break;
-    }
-
     return (
       <div>
         <SectionHeader section="publications" submenuItems={submenuItems} />
-        {content}
+        {MainPage.content(active)}
       </div>
     );
   }

@@ -101,13 +101,13 @@ class HomePageContainer extends Component {
     getBanner(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     const { language, fetchData } = this.props;
-    if (nextProps.language !== language) {
+    if (prevProps.language !== language) {
       fetchData();
-      fetchSocialMedia('blog', nextProps);
-      fetchSocialMedia('twitter', nextProps);
-      getBanner(nextProps);
+      fetchSocialMedia('blog', this.props);
+      fetchSocialMedia('twitter', this.props);
+      getBanner(this.props);
     }
   }
 
