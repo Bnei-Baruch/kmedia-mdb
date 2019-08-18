@@ -100,7 +100,7 @@ class SearchResultsContainer extends Component {
   );
 
   render() {
-    const { wip, err, queryResult, cMap, cuMap, postMap, pageNo, pageSize, sortBy, language, location, click } = this.props;
+    const { wip, err, queryResult, cMap, cuMap, postMap, twitterMap, pageNo, pageSize, sortBy, language, location, click } = this.props;
     return (
       <div>
         <SectionHeader section="search" />
@@ -118,6 +118,7 @@ class SearchResultsContainer extends Component {
             cMap={cMap}
             cuMap={cuMap}
             postMap={postMap}
+            twitterMap={twitterMap}
             wip={wip}
             err={err}
             pageNo={pageNo}

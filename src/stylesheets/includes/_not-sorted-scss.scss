@@ -24,7 +24,7 @@
 .search-omnibox {
   max-width: 600px;
   width: 100%;
-  
+
   .input {
     width: 100%;
   }
@@ -1491,4 +1491,8 @@
       padding-right: 15px !important;
     }
   }
+}
+
+.min-height-200{
+  min-height: 200px;
 }

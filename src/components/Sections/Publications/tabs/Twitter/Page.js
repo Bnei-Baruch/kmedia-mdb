@@ -9,7 +9,8 @@ import ResultsPageHeader from '../../../../Pagination/ResultsPageHeader';
 import Filters from '../../../../Filters/Filters';
 import filterComponents from '../../../../Filters/components/index';
 import WipErr from '../../../../shared/WipErr/WipErr';
-import Feed from './Feed';
+import TwitterFeed from './Feed';
+import { Feed } from 'semantic-ui-react';
 
 const filters = [
   { name: 'date-filter', component: filterComponents.DateFilter },
@@ -37,6 +38,19 @@ class TwitterPage extends PureComponent {
     err: null,
   };
 
+  renderTwitters = (tweets) => {
+    const { limitLength } = this.props;
+    const length          = limitLength || tweets.length;
+
+    return (
+      <Feed>
+        {
+          tweets.slice(0, length).map(item => <TwitterFeed twitter={item} />)
+        }
+      </Feed>
+    );
+  };
+
   render() {
     const
       {
@@ -60,7 +74,7 @@ class TwitterPage extends PureComponent {
           <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
           {
             items.length > 0
-              ? <Feed tweets={items} />
+              ? this.renderTwitters(items)
               : null
           }
         </Container>

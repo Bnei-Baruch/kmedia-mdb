@@ -25,8 +25,8 @@ import {
 
 import FallbackImage from '../shared/FallbackImage';
 import SearchResultBase from './SearchResultBase';
-
-let NUMBER_OF_FETCHED_UNITS = 3 * 4;
+//fetch 3 items for 4 screens
+let numberOfFetchedUnits = 3 * 4;
 
 class SearchResultIntent extends SearchResultBase {
   static propTypes = {
@@ -40,12 +40,12 @@ class SearchResultIntent extends SearchResultBase {
     pageSize: 3,
   };
 
-  // TODO: revisit the NUMBER_OF_FETCHED_UNITS implementation
+  // TODO: revisit the numberOfFetchedUnits implementation
   // initialize on componentWillMount or constructor
   // note that it is used also in redux connect (mapState)
   componentDidMount() {
-    const pageSize          = this.props.isMobileDevice() ? 1 : 3;
-    NUMBER_OF_FETCHED_UNITS = pageSize * 4;
+    const pageSize       = this.props.isMobileDevice() ? 1 : 3;
+    numberOfFetchedUnits = pageSize * 4;
 
     this.askForData(this.props, 0);
     this.setState({ pageSize });
@@ -61,22 +61,13 @@ class SearchResultIntent extends SearchResultBase {
     const namespace = `intents_${mdbUid}_${contentType}`;
     const params    = {
       content_type: contentType,
-      page_size: NUMBER_OF_FETCHED_UNITS,
+      page_size: numberOfFetchedUnits,
       [this.parentTypeByIndex(_index)]: mdbUid
     };
     fetchList(namespace, 1, params);
   };
 
-  parentTypeByIndex = (index) => {
-    switch (index) {
-    case SEARCH_INTENT_INDEX_SOURCE:
-      return 'source';
-    case SEARCH_INTENT_INDEX_TOPIC:
-      return 'tag';
-    default:
-      return 'tag';
-    }
-  };
+  parentTypeByIndex = index => (index === SEARCH_INTENT_INDEX_SOURCE) ? 'source' : 'tag';
 
   onScrollRight = () => this.onScrollChange(this.state.pageNo + 1);
 
@@ -271,7 +262,7 @@ const mapState = (state, ownProps) => {
 
   const namespace   = `intents_${mdbUid}_${contentType}`;
   const nsState     = lists.getNamespaceState(state.lists, namespace);
-  const unitCounter = (nsState.total > 0 && nsState.total < NUMBER_OF_FETCHED_UNITS) ? nsState.total : NUMBER_OF_FETCHED_UNITS;
+  const unitCounter = (nsState.total > 0 && nsState.total < numberOfFetchedUnits) ? nsState.total : numberOfFetchedUnits;
 
   return {
     namespace,
