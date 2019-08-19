@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../helpers/consts';
 import { actions, selectors } from '../../../redux/modules/home';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as mdb, actions as mdbActions } from '../../../redux/modules/mdb';
 import { actions as publicationsActions, selectors as publications } from '../../../redux/modules/publications';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
@@ -61,6 +61,8 @@ const getBanner = ({ fetchBanner, language }) => {
   fetchBanner(language);
 };
 
+let timerHandle = null;
+
 class HomePageContainer extends Component {
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
@@ -76,6 +78,7 @@ class HomePageContainer extends Component {
     fetchBlogList: PropTypes.func.isRequired,
     fetchTweetsList: PropTypes.func.isRequired,
     fetchBanner: PropTypes.func.isRequired,
+    fetchLatestLesson: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -88,26 +91,25 @@ class HomePageContainer extends Component {
   };
 
   componentDidMount() {
-    const { latestLesson, fetchData, latestBlogPosts, latestTweets } = this.props;
-    if (!latestLesson) {
-      fetchData();
-    }
-    if (!latestBlogPosts.length) {
-      fetchSocialMedia('blog', this.props);
-    }
-    if (!latestTweets.length) {
-      fetchSocialMedia('twitter', this.props);
-    }
+    const { fetchData, fetchLatestLesson } = this.props;
+    fetchData();
+    fetchSocialMedia('blog', this.props);
+    fetchSocialMedia('twitter', this.props);
     getBanner(this.props);
+    timerHandle = setInterval(() => fetchLatestLesson(), 10 * 60 * 1000); // every 10 min
   }
 
   componentDidUpdate(prevProps) {
-    const { language, fetchData } = this.props;
+    const { language, fetchLatestLesson } = this.props;
     if (prevProps.language !== language) {
-      fetchData();
       fetchSocialMedia('blog', this.props);
       fetchSocialMedia('twitter', this.props);
       getBanner(this.props);
+
+      if (timerHandle) {
+        clearInterval(timerHandle);
+      }
+      timerHandle = setInterval(() => fetchLatestLesson(), 10 * 60 * 1000); // every 10 min
     }
   }
 
@@ -168,6 +170,7 @@ const mapDispatch = dispatch => bindActionCreators({
   fetchBlogList: publicationsActions.fetchBlogList,
   fetchTweetsList: publicationsActions.fetchTweets,
   fetchBanner: actions.fetchBanner,
+  fetchLatestLesson: mdbActions.fetchLatestLesson,
 }, dispatch);
 
 export default connect(mapState, mapDispatch)(withNamespaces()(HomePageContainer));

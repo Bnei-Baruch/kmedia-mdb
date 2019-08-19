@@ -33,16 +33,14 @@ class LastLessonCollection extends Component {
   };
 
   componentDidMount() {
-    const { lastLessonId, fetchLatestLesson } = this.props;
+    const { fetchLatestLesson } = this.props;
 
-    if (!lastLessonId) {
-      fetchLatestLesson();
-    }
+    fetchLatestLesson();
   }
 
   shouldComponentUpdate(nextProps) {
     const { uiLanguage, contentLanguage, wip, errors, lastLessonId } = nextProps;
-    const { props }                           = this;
+    const { props }                                                  = this;
 
     return (
       (lastLessonId && (lastLessonId !== props.lastLessonId))
@@ -58,7 +56,7 @@ class LastLessonCollection extends Component {
 
     if (!lastLessonId
       && (uiLanguage !== prevProps.uiLanguage
-      || contentLanguage !== prevProps.contentLanguage)
+        || contentLanguage !== prevProps.contentLanguage)
     ) {
       fetchLatestLesson();
     }
