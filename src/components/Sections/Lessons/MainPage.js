@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
@@ -48,11 +48,6 @@ const content = (active) => {
 };
 
 const MainPage = ({ location, match, t }) => {
-  const dispatch = useDispatch();
-
-  const setTab         = useCallback(tab => dispatch(lessonsActions.setTab(tab)), [dispatch]);
-  const resetNamespace = useCallback(tab => dispatch(filterActions.resetNamespace(tab)), [dispatch]);
-
   const tab = match.params.tab || tabs[0];
 
   const submenuItems = tabs.map(x => (
@@ -67,16 +62,21 @@ const MainPage = ({ location, match, t }) => {
     </Menu.Item>
   ));
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (!location.search) {
+      const resetNamespace = tab => dispatch(filterActions.resetNamespace(tab));
       resetNamespace(`lessons-${tab}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.search, resetNamespace]);
+  }, [location.search]);
 
   useEffect(() => {
+    const setTab = tab => dispatch(lessonsActions.setTab(tab));
     setTab(tab);
-  }, [setTab, tab]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab]);
 
   return (
     <div>
