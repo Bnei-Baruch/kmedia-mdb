@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Button, Header, Table } from 'semantic-ui-react';
@@ -11,121 +11,111 @@ import { filtersTransformer } from '../../../filters/index';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 
-class TopN extends React.PureComponent {
-  static propTypes = {
-    section: PropTypes.string.isRequired,
-    N: PropTypes.number.isRequired,
-    tagPath: PropTypes.arrayOf(PropTypes.object).isRequired,
-    units: PropTypes.arrayOf(shapes.ContentUnit).isRequired,
-    t: PropTypes.func.isRequired,
-    language: PropTypes.string.isRequired,
-  };
 
-  state = {
-    topNUnits: [],
-  };
+const TopN = ({ units, N, section, tagPath, language, t }) => {
+  
+  const [topNUnits, setTopNUnits] = useState([]);
 
-  static getTopNUnits = (props) => {
-    const { units, N } = props;
-    let topNUnits;
+  useEffect(() => {
+    const topNUnits = getTopNUnits(units, N);
+    setTopNUnits(topNUnits);
+  }, [units, N]);
 
-    if (Array.isArray(units)) {
-      units.sort(TopN.compareUnits);
+  const url = getTopicUrl(section, tagPath, language);
 
-      topNUnits = units.length > N
-        ? units.slice(0, N)
-        : units;
-    }
+  return (Array.isArray(topNUnits) && topNUnits.length > 0
+    ? renderTable(topNUnits, section, url, t)
+    : null);
+}
 
-    return topNUnits;
-  };
+const getTopNUnits = (units, N) => {
+  let topNUnits;
 
-  static compareUnits = (a, b) => (a && b && a.film_date <= b.film_date) ? 1 : -1;
+  if (Array.isArray(units)) {
+    units.sort(compareUnits);
 
-  componentDidMount() {
-    const topNUnits = TopN.getTopNUnits(this.props);
-    this.setState({ topNUnits });
+    topNUnits = units.length > N
+      ? units.slice(0, N)
+      : units;
   }
 
-  componentDidUpdate(prevProps){
-    if (prevProps.units !== this.props.units
-      || prevProps.N !== this.props.N){
-      const topNUnits = TopN.getTopNUnits(this.props);
-      this.setState({ topNUnits });
-    }
-  }
+  return topNUnits;
+};
 
-  getTopicUrl = () => {
-    const { section, tagPath, language } = this.props;
+const compareUnits = (a, b) => (a && b && a.film_date <= b.film_date) ? 1 : -1;
 
-    const query = filtersTransformer.toQueryParams([
-      { name: 'topics-filter', values: [tagPath.map(y => y.id)] }
-    ]);
+const getTopicUrl = ({ section, tagPath, language }) => {
+  const query = tagPath 
+    ? filtersTransformer
+      .toQueryParams([{ name: 'topics-filter', values: [tagPath.map(y => y.id)] }])
+    : '';
 
-    const realSection = section === 'publications' 
-      ? 'publications/articles' 
-      : section;
+  const realSection = section === 'publications' 
+    ? 'publications/articles' 
+    : section;
 
-    return `/${language}/${realSection}?${urlSearchStringify(query)}`;
-  };
+  return `/${language}/${realSection}?${urlSearchStringify(query)}`;
+};
 
-  renderUnit = (unit, t) => {
-    const link   = canonicalLink(unit);
-    const filmDate = unit.film_date 
-      ? t('values.date', { date: new Date(unit.film_date) }) 
-      : '';
-   
-    return (
-      <Table.Row key={unit.id} verticalAlign="top">
-        <Table.Cell>
-          <span className="index__date">{filmDate}</span>
-          <Link className="index__title" to={link}>
-            {unit.name || NO_NAME}
-          </Link>
-        </Table.Cell>
-      </Table.Row>
-    );
-  };
+const renderTable = (topNUnits, section, url, t) => {
+  console.log('render table:', section, topNUnits, ' url: ', url);
 
-  render() {
-    const { section, t } = this.props;
-    const { topNUnits }  = this.state;
-    const url            = this.getTopicUrl();
-
-    return (
-      Array.isArray(topNUnits) && topNUnits.length > 0
+  return(
+    <Table unstackable basic="very">
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>
+            <Header as="h3">
+              <SectionLogo name={section} />
+              {t(`nav.sidebar.${section}`)}
+            </Header>
+          </Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {topNUnits.map(x => renderUnit(x, t))}
+      </Table.Body>
+      {!url.includes('events')  // exclude button to events - page not exists
         ? (
-          <Table unstackable basic="very">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>
-                  <Header as="h3">
-                    <SectionLogo name={section} />
-                    {t(`nav.sidebar.${section}`)}
-                  </Header>
-                </Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {topNUnits.map(x => this.renderUnit(x, t))}
-            </Table.Body>
-            {!url.includes('events')  // exclude button to events - page not exists
-              ? (
-                <Table.Footer fullWidth>
-                  <Table.Row>
-                    <Table.HeaderCell>
-                      <Button primary size="tiny" href={url}>{t('buttons.view-all')}</Button>
-                    </Table.HeaderCell>
-                  </Table.Row>
-                </Table.Footer>
-              )
-              : null
-            }
-          </Table>
+          <Table.Footer fullWidth>
+            <Table.Row>
+              <Table.HeaderCell>
+                <Button primary size="tiny" href={url}>{t('buttons.view-all')}</Button>
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Footer>
         )
         : null
-    );
-  }
-}
+      }
+    </Table>
+  )};
+
+
+const renderUnit = (unit, t) => {
+  const link   = canonicalLink(unit);
+  const filmDate = unit.film_date 
+    ? t('values.date', { date: new Date(unit.film_date) }) 
+    : '';
+ 
+  return (
+    <Table.Row key={unit.id} verticalAlign="top">
+      <Table.Cell>
+        <span className="index__date">{filmDate}</span>
+        <Link className="index__title" to={link}>
+          {unit.name || NO_NAME}
+        </Link>
+      </Table.Cell>
+    </Table.Row>
+  );
+};
+
+TopN.propTypes = {
+  section: PropTypes.string.isRequired,
+  N: PropTypes.number.isRequired,
+  tagPath: PropTypes.arrayOf(PropTypes.object).isRequired,
+  units: PropTypes.arrayOf(shapes.ContentUnit).isRequired,
+  t: PropTypes.func.isRequired,
+  language: PropTypes.string.isRequired,
+};
 
 export default withNamespaces()(TopN);
