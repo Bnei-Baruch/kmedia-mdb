@@ -13,6 +13,8 @@ class AVMuteUnmute extends Component {
     }).isRequired,
     upward: PropTypes.bool,
     isAudio: PropTypes.bool.isRequired,
+    onMuteUnmute: PropTypes.func.isRequired,
+    onVolumeChange: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -50,10 +52,12 @@ class AVMuteUnmute extends Component {
     const offset          = Math.min(Math.max(0, clientY - top), bottom - top);
     const newVolume       = 1 - (offset / (bottom - top));
     media.setVolume(newVolume);
+    this.props.onVolumeChange();
   };
 
   handleMuteUnmute = () => {
     this.props.media.muteUnmute();
+    this.props.onMuteUnmute();
   };
 
   handleMouseEnter = () => {

@@ -20,6 +20,7 @@ import ShareFormMobile from './Share/ShareFormMobile';
 import AVPlaybackRateMobile from './AVPlaybackRateMobile';
 import AVSpinner from './AVSpinner';
 import playerHelper from '../../helpers/player';
+import {PlayerStartEnum} from "./playerStartEnum";
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
@@ -93,9 +94,9 @@ class AVPlayerMobile extends PureComponent {
       sliceEnd = fromHumanReadableTime(query.send).asSeconds();
     }
 
-    const start = query.autoPlay !== undefined ? query.autoPlay === '1' : undefined;
+    const start = PlayerStartEnum.GetFromQuery(query);
 
-    const autoPlay = start !== undefined ? start : props.autoPlay;
+    const autoPlay = start === PlayerStartEnum.UseParentLogic ? props.autoPlay : start === PlayerStartEnum.Start;
 
     this.state = {
       error: false,
@@ -111,6 +112,7 @@ class AVPlayerMobile extends PureComponent {
       showControls: false,
       unMuteButton: false,
       autoPlay,
+      start,
       embed: playerHelper.getEmbedFromQuery(history.location),
     };
   }
@@ -206,13 +208,13 @@ class AVPlayerMobile extends PureComponent {
   };
 
   seekIfNeeded = () => {
-    const { sliceStart, firstSeek, playbackRate } = this.state;
+    const { sliceStart, firstSeek, playbackRate, start } = this.state;
     this.media.playbackRate                       = playbackToValue(playbackRate);
 
     if (firstSeek) {
       if (sliceStart) {
         this.seekTo(sliceStart, true);
-      } else {
+      } else if (start === PlayerStartEnum.UseParentLogic) {
         const savedTime = this.getSavedTime();
         if (savedTime) {
           this.seekTo(savedTime, true);

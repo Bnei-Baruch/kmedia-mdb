@@ -31,6 +31,7 @@ import AVJumpBack from './AVJumpBack';
 import AVSpinner from './AVSpinner';
 import ShareFormDesktop from './Share/ShareFormDesktop';
 import {isLanguageRtl} from "../../helpers/i18n-utils";
+import {PlayerStartEnum} from "./playerStartEnum";
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
@@ -162,7 +163,7 @@ class AVPlayer extends PureComponent {
   componentDidMount() {
     const { history } = this.props;
     const query    = getQuery(history.location);
-    const start = query.autoPlay !== undefined ? query.autoPlay === '1' : undefined;
+    const start = PlayerStartEnum.GetFromQuery(query);
     // By default hide controls after a while if player playing.
     this.hideControlsTimeout();
 
@@ -179,7 +180,7 @@ class AVPlayer extends PureComponent {
     // Bug fix for IE and Edge + Auto play for IE and Edge
     if (browserName === 'Edge' || browserName === 'IE') {
       media.play();
-      if (!autoPlay || start===false) {
+      if (!autoPlay || start===PlayerStartEnum.Stop) {
         setTimeout(media.pause, 0);
       }
     }
@@ -225,19 +226,21 @@ class AVPlayer extends PureComponent {
     const { wasCurrentTime, sliceStart, firstSeek, playbackRate,  start } = this.state;
     const { media, autoPlay }                                     = this.props;
 
-    if (!start)
+    if (start===PlayerStartEnum.UseParentLogic)
       this.activatePersistence();
 
     if (wasCurrentTime && !firstSeek) {
       media.seekTo(wasCurrentTime);
-    } else if (!sliceStart && !start && firstSeek) {
+    } else if (!sliceStart && start===PlayerStartEnum.UseParentLogic && firstSeek) {
       const savedTime = this.getSavedTime();
       if (savedTime) {
         media.seekTo(savedTime);
       }
     }
-    if ((autoPlay && firstSeek && start !== false) || start) {
-      if (start && this.props.item.mediaType === MT_VIDEO) {
+    // Start the player if auto play needed
+    if (firstSeek && ((autoPlay && start !== PlayerStartEnum.Stop) || start===PlayerStartEnum.Start)) {
+      // Mute the video if auto play video
+      if (start===PlayerStartEnum.Start && this.props.item.mediaType === MT_VIDEO) {
         media.mute(true);
         this.setState({ unMuteButton: true });
       }
@@ -284,9 +287,13 @@ class AVPlayer extends PureComponent {
   handleUnMute = () => {
     const { media } = this.props;
     if (media) {
-      media.muteUnmute();
-      this.setState({ unMuteButton: false });
+      media.mute(false);
+      this.removeUnMuteButton();
     }
+  };
+
+  removeUnMuteButton = () => {
+    this.setState({ unMuteButton: false });
   };
 
   static getSliceModeState(media, mode, properties = {}, state) {
@@ -718,7 +725,7 @@ class AVPlayer extends PureComponent {
                 />
               )
             }
-            <AVMuteUnmute isAudio={isAudio} />
+            <AVMuteUnmute isAudio={isAudio} onMuteUnmute={this.removeUnMuteButton} onVolumeChange={this.removeUnMuteButton} />
             <AVAudioVideo
               isAudio={isAudio}
               isVideo={isVideo}
