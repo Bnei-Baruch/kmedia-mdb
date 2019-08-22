@@ -18,7 +18,7 @@ const SvgDailylessons = props => (
         />
         <g stroke="#2185d0" strokeWidth={2}>
             <path
-                d="M40 40h4v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z"
+                d="M40 40h4v2a1 1 0 01-1 1h-2a1 1 0 01-1-1z"
                 fill="#fff"
                 strokeLinecap="square"
             />
