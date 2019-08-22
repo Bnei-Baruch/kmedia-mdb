@@ -21,7 +21,7 @@ const SvgDailylessonsFallback = props => (
         />
         <g stroke="#5b5b5b">
             <path
-                d="M272 164h8v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2z"
+                d="M272 164h8v4a2 2 0 01-2 2h-4a2 2 0 01-2-2z"
                 fill="#767676"
                 strokeLinecap="square"
                 strokeWidth={4}
