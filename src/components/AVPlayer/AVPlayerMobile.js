@@ -420,16 +420,17 @@ class AVPlayerMobile extends PureComponent {
         onNext,
       } = this.props;
 
-    const {
-            error,
-            errorReason,
-            isSliceMode,
-            playbackRate,
-            unMuteButton,
-            showControls,
-            embed,
-            autoPlay,
-          } = this.state;
+    const
+      {
+        error,
+        errorReason,
+        isSliceMode,
+        playbackRate,
+        unMuteButton,
+        showControls,
+        embed,
+        autoPlay,
+      } = this.state;
 
     const isVideo       = item.mediaType === MT_VIDEO;
     const isAudio       = item.mediaType === MT_AUDIO;
