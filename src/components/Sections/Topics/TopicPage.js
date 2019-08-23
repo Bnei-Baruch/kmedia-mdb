@@ -6,7 +6,10 @@ import { withNamespaces } from 'react-i18next';
 import { Breadcrumb, Container, Divider, Grid } from 'semantic-ui-react';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { isEmpty } from '../../../helpers/utils';
+import { stringify as urlSearchStringify } from '../../../helpers/url';
+import { filtersTransformer } from '../../../filters/index';
 import { actions, selectors } from '../../../redux/modules/tags';
+import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 import Link from '../../Language/MultiLanguageLink';
@@ -14,23 +17,51 @@ import TopN from './TopN';
 
 const TOP_N_ITEMS = 5;
 
+const getTopicUrl = (section, tagPath, language) => {
+  const query = tagPath 
+    ? filtersTransformer
+      .toQueryParams([{ name: 'topics-filter', values: [tagPath.map(y => y.id)] }])
+    : '';
+
+  const realSection = section === 'publications' 
+    ? 'publications/articles' 
+    : section;
+
+  return `/${language}/${realSection}?${urlSearchStringify(query)}`;
+};
+
+const getBreadCrumbSection = (p, index, arr) => {
+  const section = {
+    key: p.id,
+    content: p.label,
+  };
+
+  if (index === arr.length - 1) {
+    section.active = true;
+  } else {
+    section.as = Link;
+    section.to = `/topics/${p.id}`;
+  }
+
+  return section;
+};
+
 const TopicPage = ({ match, t }) => {
 
-  const { id: tagId, language } = match.params;
+  const tagId = match.params.id;
 
   const wip = useSelector(state => selectors.getWip(state.tags));
   const error = useSelector(state => selectors.getError(state.tags));
   const sections = useSelector(state => selectors.getSections(state.tags));
   const getSectionUnits = useSelector(state => selectors.getSectionUnits(state.tags));
   const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
+  const language = useSelector(state => settings.getLanguage(state.settings));
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchDashboard = tagId => dispatch(actions.fetchDashboard(tagId));
-
-    fetchDashboard(tagId);
-  }, [tagId, dispatch]);
+    dispatch(actions.fetchDashboard(tagId));
+  }, [tagId, language, dispatch]);
 
   const wipErr = WipErr({ wip, error, t });
   if (wipErr) {
@@ -44,22 +75,9 @@ const TopicPage = ({ match, t }) => {
     const breadCrumbSections = [
       { id: '', label: t('nav.sidebar.topics') },
       ...tagPath,
-    ].map((p, index, arr) => {
-      const section = {
-        key: p.id,
-        content: p.label,
-      };
+    ].map(getBreadCrumbSection);
 
-      if (index === arr.length - 1) {
-        section.active = true;
-      } else {
-        section.as = Link;
-        section.to = `/topics/${p.id}`;
-      }
-
-      return section;
-    });
-    const breadCrumbIcon     = `${isLanguageRtl ? 'left' : 'right'} angle`;
+    const breadCrumbIcon = `${isLanguageRtl(language) ? 'left' : 'right'} angle`;
 
     return (
       <Container className="padded">
@@ -67,8 +85,9 @@ const TopicPage = ({ match, t }) => {
         <Divider hidden />
         <Grid doubling columns={sections.length}>
           {
-            sections.map((s) => {
+            sections.map(s => {
               const sectionUnits = getSectionUnits(s);
+              const topicUrl = getTopicUrl(s, tagPath, language);
 
               return isEmpty(sectionUnits)
                 ? null
@@ -78,8 +97,7 @@ const TopicPage = ({ match, t }) => {
                       section={s}
                       units={sectionUnits}
                       N={TOP_N_ITEMS}
-                      tagPath={tagPath}
-                      language={language}
+                      topicUrl={topicUrl}
                     />
                   </Grid.Column>
                 );

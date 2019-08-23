@@ -6,32 +6,37 @@ import { Button, Header, Table } from 'semantic-ui-react';
 import { NO_NAME } from '../../../helpers/consts';
 import { SectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
-import { stringify as urlSearchStringify } from '../../../helpers/url';
-import { filtersTransformer } from '../../../filters/index';
+import { isNotEmptyArray } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 
-
-const TopN = ({ units, N, section, tagPath, language, t }) => {
-  
+const TopN = ({ units, N, section, topicUrl, t }) => {
   const [topNUnits, setTopNUnits] = useState([]);
+  const [buttonVisible, setButtonVisible] = useState(true);
 
   useEffect(() => {
     const topNUnits = getTopNUnits(units, N);
     setTopNUnits(topNUnits);
-  }, [units, N]);
 
-  const url = getTopicUrl(section, tagPath, language);
+    const buttonViewAllVisible = isButtonViewAllVisible(units.length, N, topicUrl);
+    setButtonVisible(buttonViewAllVisible);
+  }, [units, N, topicUrl]);
 
-  return (Array.isArray(topNUnits) && topNUnits.length > 0
-    ? renderTable(topNUnits, section, url, t)
+  return (isNotEmptyArray(topNUnits)
+    ? renderTable(topNUnits, section, buttonVisible ? topicUrl : null, t)
     : null);
 }
 
-const getTopNUnits = (units, N) => {
-  let topNUnits;
+const isButtonViewAllVisible = (totalUnits, N, url) => (
+  // don't show button to events - page not exists
+  // show only for more than N units
+  totalUnits > N && !url.includes('events') 
+);
 
-  if (Array.isArray(units)) {
+const getTopNUnits = (units, N) => {
+  let topNUnits = [];
+
+  if (isNotEmptyArray(units)) {
     units.sort(compareUnits);
 
     topNUnits = units.length > N
@@ -44,22 +49,7 @@ const getTopNUnits = (units, N) => {
 
 const compareUnits = (a, b) => (a && b && a.film_date <= b.film_date) ? 1 : -1;
 
-const getTopicUrl = ({ section, tagPath, language }) => {
-  const query = tagPath 
-    ? filtersTransformer
-      .toQueryParams([{ name: 'topics-filter', values: [tagPath.map(y => y.id)] }])
-    : '';
-
-  const realSection = section === 'publications' 
-    ? 'publications/articles' 
-    : section;
-
-  return `/${language}/${realSection}?${urlSearchStringify(query)}`;
-};
-
 const renderTable = (topNUnits, section, url, t) => {
-  console.log('render table:', section, topNUnits, ' url: ', url);
-
   return(
     <Table unstackable basic="very">
       <Table.Header>
@@ -75,17 +65,18 @@ const renderTable = (topNUnits, section, url, t) => {
       <Table.Body>
         {topNUnits.map(x => renderUnit(x, t))}
       </Table.Body>
-      {!url.includes('events')  // exclude button to events - page not exists
-        ? (
-          <Table.Footer fullWidth>
-            <Table.Row>
-              <Table.HeaderCell>
-                <Button primary size="tiny" href={url}>{t('buttons.view-all')}</Button>
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Footer>
-        )
-        : null
+      {
+        url 
+          ? (
+            <Table.Footer fullWidth>
+              <Table.Row>
+                <Table.HeaderCell>
+                  <Button primary size="tiny" href={url}>{t('buttons.view-all')}</Button>
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Footer>
+          )
+          : null
       }
     </Table>
   )};
@@ -111,11 +102,12 @@ const renderUnit = (unit, t) => {
 
 TopN.propTypes = {
   section: PropTypes.string.isRequired,
-  N: PropTypes.number.isRequired,
-  tagPath: PropTypes.arrayOf(PropTypes.object).isRequired,
   units: PropTypes.arrayOf(shapes.ContentUnit).isRequired,
+  N: PropTypes.number.isRequired,
+  topicUrl: PropTypes.string,
   t: PropTypes.func.isRequired,
-  language: PropTypes.string.isRequired,
 };
 
 export default withNamespaces()(TopN);
+
+
