@@ -423,15 +423,15 @@ class AVPlayerMobile extends PureComponent {
       } = this.props;
 
     const {
-            error,
-            errorReason,
-            isSliceMode,
-            playbackRate,
-            unMuteButton,
-            showControls,
-            embed,
-            autoPlay,
-          } = this.state;
+      error,
+      errorReason,
+      isSliceMode,
+      playbackRate,
+      unMuteButton,
+      showControls,
+      embed,
+      autoPlay,
+    } = this.state;
 
     const isVideo       = item.mediaType===MT_VIDEO;
     const isAudio       = item.mediaType===MT_AUDIO;
@@ -446,7 +446,7 @@ class AVPlayerMobile extends PureComponent {
 
     if (isVideo) {
       mediaEl = <video autoPlay={autoPlay} playsInline ref={this.handleMediaRef} src={item.src} preload="metadata"
-                       poster={item.preImageUrl}/>;
+        poster={item.preImageUrl}/>;
     } else {
       mediaEl = <audio controls autoPlay={autoPlay} ref={this.handleMediaRef} src={item.src} preload="metadata"/>;
     }
