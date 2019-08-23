@@ -1,7 +1,7 @@
 // ignore styles and replace images with their final path from webpack manifest
 require('ignore-styles');
 require('file-loader');
-require('babel-polyfill');
+require('@babel/polyfill');
 const path     = require('path');
 const manifest = require('../build/asset-manifest');
 require('ignore-styles').default(undefined, (module, filename) => {

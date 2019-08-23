@@ -24,7 +24,7 @@
 .search-omnibox {
   max-width: 600px;
   width: 100%;
-  
+
   .input {
     width: 100%;
   }
@@ -1409,11 +1409,6 @@
   clear: both;
 }
 
-#handleLanguagesPopup {
-  position: fixed !important;
-  top: 57px !important;
-}
-
 .ui.flowing.popup {
   z-index: 10000;
 }
@@ -1503,4 +1498,8 @@
       padding-right: 15px !important;
     }
   }
+}
+
+.min-height-200{
+  min-height: 200px;
 }
