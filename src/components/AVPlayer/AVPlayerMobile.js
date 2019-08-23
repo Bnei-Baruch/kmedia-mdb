@@ -511,7 +511,7 @@ class AVPlayerMobile extends PureComponent {
         </div>
         {
           isSliceMode
-            ? <ShareFormMobile media={this.media} item={item}/>
+            ? <ShareFormMobile media={this.media} item={item} uiLanguage={uiLanguage} />
             :null
         }
         {

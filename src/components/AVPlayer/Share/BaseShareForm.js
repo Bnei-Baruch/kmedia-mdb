@@ -10,6 +10,7 @@ class BaseShareForm extends React.Component {
   static propTypes = {
     media: PropTypes.object.isRequired,
     item: PropTypes.object.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
     onSliceChange: PropTypes.func,
     t: PropTypes.func.isRequired,
   };
@@ -84,9 +85,8 @@ class BaseShareForm extends React.Component {
 
   static getUrl(props, start, end) {
     const { protocol, hostname, port, pathname } = window.location;
-
-    const { item } = props;
-    const shareUrl = `${protocol}//${hostname}${port ? `:${port}` : ''}${item.shareUrl || pathname}`;
+    const { item, uiLanguage } = props;
+    const shareUrl = `${protocol}//${hostname}${port ? `:${port}` : ''}/${uiLanguage}${item.shareUrl || pathname}`;
 
     const q = getQuery(window.location);
 

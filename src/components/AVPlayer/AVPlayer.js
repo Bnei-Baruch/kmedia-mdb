@@ -621,6 +621,7 @@ class AVPlayer extends PureComponent {
         <ShareFormDesktop
           media={media}
           item={item}
+          uiLanguage={uiLanguage}
           onSliceChange={this.handleSliceChange}
           onExit={this.handleEditBack}
         />
