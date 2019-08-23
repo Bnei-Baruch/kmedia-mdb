@@ -348,7 +348,7 @@ class LibraryContainer extends Component {
       }
     } else {
       const downloadAllowed = deviceInfo.os.name !== 'iOS';
-      content = (
+      content               = (
         <LibraryContentContainer
           source={sourceId}
           index={index}
@@ -425,7 +425,12 @@ class LibraryContainer extends Component {
         <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
           <Grid padded centered>
             <Grid.Row className="is-fitted">
-              <Grid.Column mobile={16} tablet={16} computer={4} onClick={this.handleTocIsActive}>
+              <Grid.Column
+                mobile={16}
+                tablet={16}
+                computer={4}
+                onClick={this.handleTocIsActive}
+                className={!tocIsActive && 'widescreen-only large-screen-only computer-only'}>
                 <TOC
                   language={language}
                   match={matchString ? match : ''}

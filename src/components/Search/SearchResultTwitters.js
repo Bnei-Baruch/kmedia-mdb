@@ -9,7 +9,6 @@ import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { selectors as publicationSelectors } from '../../redux/modules/publications';
 import { actions as listsActions, selectors as lists } from '../../redux/modules/lists';
 import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
-import { SEARCH_INTENT_INDEX_SOURCE, SEARCH_INTENT_INDEX_TOPIC } from '../../helpers/consts';
 
 import SearchResultBase from './SearchResultBase';
 
