@@ -67,6 +67,7 @@ const filters = {
   'publications-articles': [
     { name: 'collections-filter', component: filterComponents.CollectionsFilter },
     { name: 'publishers-filter', component: filterComponents.PublishersFilter },
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
   'publications-collection': [
