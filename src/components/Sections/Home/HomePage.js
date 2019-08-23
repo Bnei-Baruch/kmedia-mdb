@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Container, Grid } from 'semantic-ui-react';
+import { Card, Container, Grid, Feed } from 'semantic-ui-react';
 import { canonicalLink } from '../../../helpers/links';
 import { strCmp } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
@@ -95,7 +95,11 @@ class HomePage extends Component {
             <h4>{t('home.twitter-title')}</h4>
             <a href={`/${language}/publications/twitter`}>{t('home.all-tweets')}</a>
           </div>
-          <TwitterFeed snippetVersion tweets={latestTweets} limitLength={4} />
+          <Feed>
+            {
+              latestTweets.slice(0, 4).map(item => <TwitterFeed twitter={item} key={item.twitter_id} />)
+            }
+          </Feed>
           <div className="read-more-bottom">
             <a href={`/${language}/publications/twitter`}>{t('home.read-more-tweets')}</a>
           </div>

@@ -9,11 +9,10 @@ import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { selectors as publicationSelectors } from '../../redux/modules/publications';
 import { actions as listsActions, selectors as lists } from '../../redux/modules/lists';
 import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
-import { SEARCH_INTENT_INDEX_SOURCE, SEARCH_INTENT_INDEX_TOPIC } from '../../helpers/consts';
 
 import SearchResultBase from './SearchResultBase';
-
-let NUMBER_OF_FETCHED_UNITS = 3 * 4;
+//fetch 3 items for 4 screens
+let numberOfFetchedUnits = 3 * 4;
 
 class SearchResultTwitters extends SearchResultBase {
   static propTypes = {
@@ -27,12 +26,12 @@ class SearchResultTwitters extends SearchResultBase {
     pageSize: 3,
   };
 
-  // TODO: revisit the NUMBER_OF_FETCHED_UNITS implementation
+  // TODO: revisit the numberOfFetchedUnits implementation
   // initialize on componentWillMount or constructor
   // note that it is used also in redux connect (mapState)
   componentDidMount() {
-    const pageSize          = this.props.isMobileDevice() ? 1 : 3;
-    NUMBER_OF_FETCHED_UNITS = pageSize * 4;
+    const pageSize       = this.props.isMobileDevice() ? 1 : 3;
+    numberOfFetchedUnits = pageSize * 4;
 
     this.askForData(1);
     this.setState({ pageSize });
@@ -44,7 +43,7 @@ class SearchResultTwitters extends SearchResultBase {
     const namespace = 'tweets';
     const params    = {
       content_type: 'tweet',
-      page_size: NUMBER_OF_FETCHED_UNITS
+      page_size: numberOfFetchedUnits
     };
     fetchList(namespace, page, params);
   };
@@ -73,7 +72,7 @@ class SearchResultTwitters extends SearchResultBase {
       <Card key={twitter.twitter_id} className="search__card bg_hover_grey home-twitter" raised>
         <Card.Content>
           <Feed className="min-height-200">
-            <TwitterFeed snippetVersion withDivider={false} twitter={twitter} highlight={highlight} />
+            <TwitterFeed snippetVersion withDivider={false} twitter={twitter} highlight={highlight && highlight[0]} />
           </Feed>
         </Card.Content>
       </Card>
@@ -165,9 +164,9 @@ const twitterMapFromState = (state, tweets) => {
 const mapState = (state, ownProps) => {
   const { hit: { _source } } = ownProps;
 
-  const namespace   = `twitters`;
+  const namespace   = 'twitters';
   const nsState     = lists.getNamespaceState(state.lists, namespace);
-  const unitCounter = (nsState.total > 0 && nsState.total < NUMBER_OF_FETCHED_UNITS) ? nsState.total : NUMBER_OF_FETCHED_UNITS;
+  const unitCounter = (nsState.total > 0 && nsState.total < numberOfFetchedUnits) ? nsState.total : numberOfFetchedUnits;
 
   return {
     namespace,
