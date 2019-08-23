@@ -7,7 +7,7 @@ import {Player, utils, withMediaProps} from 'react-media-player';
 import enableInlineVideo from 'iphone-inline-video';
 import {withNamespaces} from 'react-i18next';
 import classNames from 'classnames';
-import { Button, Icon } from 'semantic-ui-react';
+import {Button, Icon} from 'semantic-ui-react';
 
 import {MT_AUDIO, MT_VIDEO, VS_DEFAULT, VS_FHD, VS_HD, VS_NHD} from '../../helpers/consts';
 import playerHelper from '../../helpers/player';
@@ -30,8 +30,8 @@ import AVEditSlice from './AVEditSlice';
 import AVJumpBack from './AVJumpBack';
 import AVSpinner from './AVSpinner';
 import ShareFormDesktop from './Share/ShareFormDesktop';
-import { isLanguageRtl } from '../../helpers/i18n-utils';
-import { PlayerStartEnum } from './playerStartEnum';
+import {isLanguageRtl} from "../../helpers/i18n-utils";
+import {PlayerStartEnum} from "./playerStartEnum";
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
@@ -161,9 +161,9 @@ class AVPlayer extends PureComponent {
   }
 
   componentDidMount() {
-    const { history } = this.props;
-    const query       = getQuery(history.location);
-    const start       = PlayerStartEnum.GetFromQuery(query);
+    const {history} = this.props;
+    const query     = getQuery(history.location);
+    const start     = PlayerStartEnum.GetFromQuery(query);
     // By default hide controls after a while if player playing.
     this.hideControlsTimeout();
 
@@ -180,7 +180,7 @@ class AVPlayer extends PureComponent {
     // Bug fix for IE and Edge + Auto play for IE and Edge
     if (browserName==='Edge' || browserName==='IE') {
       media.play();
-      if (!autoPlay || start === PlayerStartEnum.Stop) {
+      if (!autoPlay || start===PlayerStartEnum.Stop) {
         setTimeout(media.pause, 0);
       }
     }
@@ -223,25 +223,24 @@ class AVPlayer extends PureComponent {
   };
 
   onPlayerReady = () => {
-    const { wasCurrentTime, sliceStart, firstSeek, playbackRate, start } = this.state;
-    const { media, autoPlay }                                            = this.props;
+    const {wasCurrentTime, sliceStart, firstSeek, playbackRate, start} = this.state;
+    const {media, autoPlay}                                            = this.props;
 
-    if (start === PlayerStartEnum.UseParentLogic) {
+    if (start===PlayerStartEnum.UseParentLogic)
       this.activatePersistence();
-    }
 
     if (wasCurrentTime && !firstSeek) {
       media.seekTo(wasCurrentTime);
-    } else if (!sliceStart && start === PlayerStartEnum.UseParentLogic && firstSeek) {
+    } else if (!sliceStart && start===PlayerStartEnum.UseParentLogic && firstSeek) {
       const savedTime = this.getSavedTime();
       if (savedTime) {
         media.seekTo(savedTime);
       }
     }
     // Start the player if auto play needed
-    if (firstSeek && ((autoPlay && start !== PlayerStartEnum.Stop) || start === PlayerStartEnum.Start)) {
+    if (firstSeek && ((autoPlay && start!==PlayerStartEnum.Stop) || start===PlayerStartEnum.Start)) {
       // Mute the video if auto play video
-      if (start === PlayerStartEnum.Start && this.props.item.mediaType === MT_VIDEO) {
+      if (start===PlayerStartEnum.Start && this.props.item.mediaType===MT_VIDEO) {
         media.mute(true);
         this.setState({unMuteButton: true});
       }
@@ -560,7 +559,7 @@ class AVPlayer extends PureComponent {
   renderUnmuteButton(isRtl, t) {
     return <Button
       icon="volume off"
-      className={isRtl ? 'mediaplayer__embedUnmuteButton rtl' : 'mediaplayer__embedUnmuteButton'}
+      className={isRtl ? 'mediaplayer__embedUnmuteButton rtl':'mediaplayer__embedUnmuteButton'}
       content={t('player.buttons.tap-to-unmute')}
       onClick={this.handleUnMute}
     />;
@@ -600,11 +599,11 @@ class AVPlayer extends PureComponent {
         unMuteButton,
       } = this.state;
 
-    const { isPlaying }      = media;
-    const [isVideo, isAudio] = [item.mediaType === MT_VIDEO, item.mediaType === MT_AUDIO];
-    const isEditMode         = mode === PLAYER_MODE.SLICE_EDIT;
-    const forceShowControls  = item.mediaType === MT_AUDIO || !isPlaying || isEditMode;
-    const fallbackMedia      = item.mediaType !== item.requestedMediaType;
+    const {isPlaying}        = media;
+    const [isVideo, isAudio] = [item.mediaType===MT_VIDEO, item.mediaType===MT_AUDIO];
+    const isEditMode         = mode===PLAYER_MODE.SLICE_EDIT;
+    const forceShowControls  = item.mediaType===MT_AUDIO || !isPlaying || isEditMode;
+    const fallbackMedia      = item.mediaType!==item.requestedMediaType;
     const isRtl              = isLanguageRtl(uiLanguage);
 
     let centerMediaControl;

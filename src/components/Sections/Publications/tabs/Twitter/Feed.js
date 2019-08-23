@@ -16,16 +16,15 @@ const screenNames = {
 
 class TwitterFeed extends Component {
   static propTypes = {
-    twitter: shapes.Tweet,
+    tweets: PropTypes.arrayOf(shapes.Tweet),
     snippetVersion: PropTypes.bool,
-    withDivider: PropTypes.bool,
-    highlight: PropTypes.object
+    limitLength: PropTypes.number
   };
 
   static defaultProps = {
-    twitter: null,
+    tweets: [],
     snippetVersion: false,
-    withDivider: true,
+    limitLength: null
   };
 
   getBestVideoVariant = (x) => {
@@ -49,7 +48,7 @@ class TwitterFeed extends Component {
     return best;
   };
 
-  prepare = (raw, highlight) => {
+  prepare = (raw) => {
     const { full_text: fullText, entities, extended_entities: exEntities } = raw;
 
     const replacements = [
@@ -58,9 +57,9 @@ class TwitterFeed extends Component {
       ...(entities.user_mentions || []).map(x => ({ ...x, entityType: 'user_mention' })),
       ...(exEntities.media || []).map(x => ({ ...x, entityType: 'media' })),
     ];
-    //TODO:For now use highlight of search result just if no media and etc in the tweeter because of complicate parsing with <em />
+
     if (replacements.length === 0) {
-      return highlight ? highlight : fullText;
+      return fullText;
     }
 
     replacements.sort((a, b) => {
@@ -122,12 +121,9 @@ class TwitterFeed extends Component {
     return html;
   };
 
-  render() {
-    const { snippetVersion, withDivider, twitter, highlight } = this.props;
-    if (!twitter) {
-      return null;
-    }
-    const { username, twitter_id: tID, created_at: ts, raw } = twitter;
+  renderTweet = (tweet) => {
+    const { snippetVersion }                                 = this.props;
+    const { username, twitter_id: tID, created_at: ts, raw } = tweet;
     const mts                                                = moment(ts);
     const screenName                                         = screenNames[username];
 
@@ -170,7 +166,7 @@ class TwitterFeed extends Component {
               }
             </Feed.Summary>
             <Feed.Extra text>
-              <div dangerouslySetInnerHTML={{ __html: this.prepare(raw, highlight) }} />
+              <div dangerouslySetInnerHTML={{ __html: this.prepare(raw) }} />
               {
                 snippetVersion
                   ? <div className="tweet-friendly-date">{mts.fromNow()}</div>
@@ -180,13 +176,24 @@ class TwitterFeed extends Component {
           </Feed.Content>
         </Feed.Event>
         {
-          snippetVersion && withDivider
+          snippetVersion
             ? <Divider fitted />
             : null
         }
       </Fragment>
     );
   };
+
+  render() {
+    const { tweets, limitLength } = this.props;
+    const length                  = limitLength || tweets.length;
+
+    return (
+      <Feed>
+        {tweets.slice(0, length).map(this.renderTweet)}
+      </Feed>
+    );
+  }
 }
 
 export default TwitterFeed;

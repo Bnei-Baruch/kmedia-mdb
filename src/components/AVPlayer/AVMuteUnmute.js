@@ -47,7 +47,7 @@ class AVMuteUnmute extends Component {
   }
 
   setVolume = (clientY) => {
-    const { media }       = this.props;
+    const { media } = this.props;
     const { top, bottom } = this.element.getBoundingClientRect();
     const offset          = Math.min(Math.max(0, clientY - top), bottom - top);
     const newVolume       = 1 - (offset / (bottom - top));
@@ -149,9 +149,7 @@ class AVMuteUnmute extends Component {
           onMouseLeave={this.handleMouseLeave}
         >
           <div
-            ref={(c) => {
-              this.element = c;
-            }}
+            ref={(c) => { this.element = c; }}
             className="volume-popover__wrapper"
             role="button"
             tabIndex="0"

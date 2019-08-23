@@ -20,7 +20,7 @@ import ShareFormMobile from './Share/ShareFormMobile';
 import AVPlaybackRateMobile from './AVPlaybackRateMobile';
 import AVSpinner from './AVSpinner';
 import playerHelper from '../../helpers/player';
-import { PlayerStartEnum } from './playerStartEnum';
+import {PlayerStartEnum} from "./playerStartEnum";
 import classNames from "classnames";
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
@@ -209,8 +209,8 @@ class AVPlayerMobile extends PureComponent {
   };
 
   seekIfNeeded = () => {
-    const { sliceStart, firstSeek, playbackRate, start } = this.state;
-    this.media.playbackRate                              = playbackToValue(playbackRate);
+    const {sliceStart, firstSeek, playbackRate, start} = this.state;
+    this.media.playbackRate                            = playbackToValue(playbackRate);
 
     if (firstSeek) {
       if (sliceStart) {
@@ -422,17 +422,16 @@ class AVPlayerMobile extends PureComponent {
         onNext,
       } = this.props;
 
-    const
-      {
-        error,
-        errorReason,
-        isSliceMode,
-        playbackRate,
-        unMuteButton,
-        showControls,
-        embed,
-        autoPlay,
-      } = this.state;
+    const {
+      error,
+      errorReason,
+      isSliceMode,
+      playbackRate,
+      unMuteButton,
+      showControls,
+      embed,
+      autoPlay,
+    } = this.state;
 
     const isVideo       = item.mediaType===MT_VIDEO;
     const isAudio       = item.mediaType===MT_AUDIO;

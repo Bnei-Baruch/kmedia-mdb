@@ -7,12 +7,12 @@ const SvgPublicationsFallback = props => (
         <path d="M0 0h480v270H0z" fill="#767676" />
         <g stroke="#5b5b5b" strokeLinecap="square">
             <path
-                d="M202 106h28v60h-22a6 6 0 01-6-6z"
+                d="M202 106h28v60h-22a6 6 0 0 1-6-6z"
                 fill="#767676"
                 strokeWidth={4}
             />
             <path
-                d="M214 100h64v60a6 6 0 01-6 6h-65 1a6 6 0 006-6z"
+                d="M214 100h64v60a6 6 0 0 1-6 6h-65 1a6 6 0 0 0 6-6z"
                 fill="#767676"
                 strokeWidth={4}
             />

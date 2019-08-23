@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { Menu } from 'semantic-ui-react';
 
-import { actions as lessonsActions } from '../../../redux/modules/lessons';
+import { actions as lessonsActions} from '../../../redux/modules/lessons';
 import { actions as filterActions } from '../../../redux/modules/filters';
 import * as shapes from '../../shapes';
 import NavLink from '../../Language/MultiLanguageNavLink';
@@ -45,15 +45,15 @@ const content = (active) => {
     break;
   }
   return content;
-};
+}
 
 const MainPage = ({ location, match, t }) => {
   const dispatch = useDispatch();
 
-  const setTab         = useCallback(tab => dispatch(lessonsActions.setTab(tab)), [dispatch]);
+  const setTab = useCallback(tab => dispatch(lessonsActions.setTab(tab)), [dispatch]);
   const resetNamespace = useCallback(tab => dispatch(filterActions.resetNamespace(tab)), [dispatch]);
 
-  const tab = match.params.tab || tabs[0];
+  const tab       = match.params.tab || tabs[0];
 
   const submenuItems = tabs.map(x => (
     <Menu.Item
@@ -68,15 +68,9 @@ const MainPage = ({ location, match, t }) => {
   ));
 
   useEffect(() => {
-    if (!location.search) {
-      resetNamespace(`lessons-${tab}`);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.search, resetNamespace]);
-
-  useEffect(() => {
+    resetNamespace(`lessons-${tab}`);
     setTab(tab);
-  }, [setTab, tab]);
+  }, [location.search, resetNamespace, setTab, tab]);
 
   return (
     <div>
@@ -84,7 +78,7 @@ const MainPage = ({ location, match, t }) => {
       {content(tab)}
     </div>
   );
-};
+}
 
 MainPage.propTypes = {
   location: shapes.HistoryLocation.isRequired,

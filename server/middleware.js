@@ -1,6 +1,9 @@
 export function logErrors(err, req, res, next) {
-  const e = Error(err);
-  console.error(e.stack || e);
+  try {
+    throw new Error(err);
+  } catch (e) {
+    console.error(e.stack || e);
+  }
   console.info(`error handling ${req.originalUrl}`);
   next(err);
 }

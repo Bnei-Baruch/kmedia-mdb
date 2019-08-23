@@ -87,7 +87,6 @@ const initialState = {
   },
   collections: {},
   twitter: {
-    byID: {},
     tweets: [],
     pageNo: 1,
     total: 0,
@@ -126,16 +125,10 @@ const onFetchTweets = draft => {
   draft.twitter.wip = true;
 };
 
-const onFetchTweetsSuccess = (draft, { tweets = [], total }) => {
-  let { twitter } = draft;
-
-  twitter.tweets.length = 0;
-  tweets.forEach((x) => {
-    twitter.byID[x.twitter_id] = x;
-    twitter.tweets.push(x);
-  });
-  twitter.wip   = false;
-  twitter.total = total;
+const onFetchTweetsSuccess = (draft, payload) => {
+  draft.twitter.total  = payload.total;
+  draft.twitter.tweets = payload.tweets;
+  draft.twitter.wip    = false;
 };
 
 const onFetchTweetsFailure = (draft, payload) => {
@@ -239,7 +232,6 @@ export const reducer = handleActions({
 const getPublisherById = state => state.publishers.byID;
 const getCollections   = state => state.collections;
 
-const getTwitter      = (state, id) => state.twitter.byID[id];
 const getTweets       = state => state.twitter.tweets;
 const getTweetsTotal  = state => state.twitter.total;
 const getTweetsPageNo = state => state.twitter.pageNo;
@@ -259,7 +251,6 @@ export const selectors = {
   getPublisherById,
   getCollections,
 
-  getTwitter,
   getTweets,
   getTweetsTotal,
   getTweetsPageNo,

@@ -20,7 +20,6 @@ import SearchResultCU from './SearchResultCU';
 import SearchResultCollection from './SearchResultCollection';
 import SearchResultIntent from './SearchResultIntent';
 import SearchResultLandingPage from './SearchResultLandingPage';
-import SearchResultTwitters from './SearchResultTwitters';
 import SearchResultSource from './SearchResultSource';
 import SearchResultPost from './SearchResultPost';
 import { SectionLogo } from '../../helpers/images';
@@ -39,7 +38,6 @@ class SearchResults extends Component {
     }),
     cMap: PropTypes.objectOf(shapes.Collection),
     cuMap: PropTypes.objectOf(shapes.ContentUnit),
-    twitterMap: PropTypes.objectOf(shapes.Tweet),
     pageNo: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
@@ -72,7 +70,6 @@ class SearchResults extends Component {
     queryResult: null,
     cMap: {},
     cuMap: {},
-    twitterMap: {},
     wip: false,
     err: null,
     getSourcePath: undefined,
@@ -101,10 +98,6 @@ class SearchResults extends Component {
     // To be deprecated soon.
     if (SEARCH_INTENT_HIT_TYPES.includes(type)) {
       return <SearchResultIntent {...props} />;
-    }
-
-    if (type === 'tweets_many') {
-      return <SearchResultTwitters  {...props} />;
     }
 
     let result = null;

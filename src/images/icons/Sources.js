@@ -10,7 +10,7 @@ const SvgSources = props => (
                 fillRule="evenodd"
             />
             <path d="M7 14h36v25H7z" />
-            <path d="M7 8h13a5 5 0 015 5v25.5a4.5 4.5 0 00-4.5-4.5H7zM43 8H30a5 5 0 00-5 5v25.5a4.5 4.5 0 014.5-4.5H43z" />
+            <path d="M7 8h13a5 5 0 0 1 5 5v25.5a4.5 4.5 0 0 0-4.5-4.5H7zM43 8H30a5 5 0 0 0-5 5v25.5a4.5 4.5 0 0 1 4.5-4.5H43z" />
         </g>
     </svg>
 );
