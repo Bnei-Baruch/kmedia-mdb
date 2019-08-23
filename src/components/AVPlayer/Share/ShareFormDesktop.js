@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Form, Message, Popup } from 'semantic-ui-react';
+import {Button, Form, Message, Popup} from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { withNamespaces } from 'react-i18next';
+import {withNamespaces} from 'react-i18next';
 
 import BaseShareForm from './BaseShareForm';
 import ShareBar from './ShareBar';
@@ -32,8 +32,8 @@ class ShareFormDesktop extends BaseShareForm {
 
   handleCopied = () => {
     this.clearTimeout();
-    this.setState({ isCopyPopupOpen: true }, () => {
-      this.timeout = setTimeout(() => this.setState({ isCopyPopupOpen: false }), POPOVER_CONFIRMATION_TIMEOUT);
+    this.setState({isCopyPopupOpen: true}, () => {
+      this.timeout = setTimeout(() => this.setState({isCopyPopupOpen: false}), POPOVER_CONFIRMATION_TIMEOUT);
     });
   };
 
@@ -42,13 +42,13 @@ class ShareFormDesktop extends BaseShareForm {
   }
 
   getEmbed = (url) => {
-    const appendChar = url.indexOf('?') !== -1 ? '&' : '?';
+    const appendChar = url.indexOf('?')!== -1 ? '&':'?';
     return `<iframe width="680" height="420" src="${url}${appendChar}embed=1&autoPlay=1" frameBorder="0" scrolling="no" allowfullscreen />`;
   };
 
   render() {
-    const { t, onExit }                        = this.props;
-    const { start, end, url, isCopyPopupOpen } = this.state;
+    const {t, onExit}                                   = this.props;
+    const {start, end, url, uiLangUrl, isCopyPopupOpen} = this.state;
 
     return (
       <div className="mediaplayer__onscreen-share">
@@ -59,17 +59,17 @@ class ShareFormDesktop extends BaseShareForm {
           icon="chevron left"
           onClick={onExit}
         />
-        <ShareBar url={url} embedContent={this.getEmbed(url)} t={t} buttonSize="medium" />
+        <ShareBar url={url} embedContent={this.getEmbed(uiLangUrl)} t={t} buttonSize="medium"/>
         <div className="mediaplayer__onscreen-share-form">
           <div className="mediaplayer__onscreen-share-bar">
-            <Message content={url} size="mini" />
+            <Message content={url} size="mini"/>
             <Popup
               open={isCopyPopupOpen}
               content={t('messages.link-copied-to-clipboard')}
               position="bottom right"
               trigger={(
                 <CopyToClipboard text={url} onCopy={this.handleCopied}>
-                  <Button className="shareCopyLinkButton" size="mini" content={t('buttons.copy')} />
+                  <Button className="shareCopyLinkButton" size="mini" content={t('buttons.copy')}/>
                 </CopyToClipboard>
               )}
             />
@@ -77,7 +77,7 @@ class ShareFormDesktop extends BaseShareForm {
           <Form>
             <Form.Group widths="equal">
               <Form.Input
-                value={start ? BaseShareForm.mlsToStrColon(start) : ''}
+                value={start ? BaseShareForm.mlsToStrColon(start):''}
                 onClick={this.setStart}
                 action={{
                   content: t('player.buttons.start-position'),
@@ -87,12 +87,12 @@ class ShareFormDesktop extends BaseShareForm {
                   size: 'mini',
                   compact: true,
                 }}
-                input={{ readOnly: true }}
+                input={{readOnly: true}}
                 actionPosition="left"
                 placeholder={t('player.buttons.click-to-set')}
               />
               <Form.Input
-                value={end ? BaseShareForm.mlsToStrColon(end) : ''}
+                value={end ? BaseShareForm.mlsToStrColon(end):''}
                 onClick={this.setEnd}
                 action={{
                   content: t('player.buttons.end-position'),
@@ -102,7 +102,7 @@ class ShareFormDesktop extends BaseShareForm {
                   size: 'mini',
                   compact: true,
                 }}
-                input={{ readOnly: true }}
+                input={{readOnly: true}}
                 actionPosition="left"
                 placeholder={t('player.buttons.click-to-set')}
               />
