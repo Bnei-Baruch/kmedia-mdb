@@ -20,6 +20,7 @@ import ShareFormMobile from './Share/ShareFormMobile';
 import AVPlaybackRateMobile from './AVPlaybackRateMobile';
 import AVSpinner from './AVSpinner';
 import playerHelper from '../../helpers/player';
+import { PlayerStartEnum } from './playerStartEnum';
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
@@ -93,6 +94,10 @@ class AVPlayerMobile extends PureComponent {
       sliceEnd = fromHumanReadableTime(query.send).asSeconds();
     }
 
+    const start = PlayerStartEnum.GetFromQuery(query);
+
+    const autoPlay = start === PlayerStartEnum.UseParentLogic ? props.autoPlay : start === PlayerStartEnum.Start;
+
     this.state = {
       error: false,
       errorReason: '',
@@ -106,6 +111,8 @@ class AVPlayerMobile extends PureComponent {
       firstSeek: true,
       showControls: false,
       unMuteButton: false,
+      autoPlay,
+      start,
       embed: playerHelper.getEmbedFromQuery(history.location),
     };
   }
@@ -142,7 +149,7 @@ class AVPlayerMobile extends PureComponent {
     if (ref) {
       this.media = ref;
       this.restoreVolume();
-      if (this.props.autoPlay) {
+      if (this.state.autoPlay) {
         if (this.props.item.mediaType === MT_VIDEO) {
           this.media.muted = true;
         }
@@ -201,13 +208,13 @@ class AVPlayerMobile extends PureComponent {
   };
 
   seekIfNeeded = () => {
-    const { sliceStart, firstSeek, playbackRate } = this.state;
-    this.media.playbackRate                       = playbackToValue(playbackRate);
+    const { sliceStart, firstSeek, playbackRate, start } = this.state;
+    this.media.playbackRate                              = playbackToValue(playbackRate);
 
     if (firstSeek) {
       if (sliceStart) {
         this.seekTo(sliceStart, true);
-      } else {
+      } else if (start === PlayerStartEnum.UseParentLogic) {
         const savedTime = this.getSavedTime();
         if (savedTime) {
           this.seekTo(savedTime, true);
@@ -385,6 +392,18 @@ class AVPlayerMobile extends PureComponent {
     }
   };
 
+  getUnmuteButton(isRtl, embed, t) {
+    const className = isRtl ?
+      (embed ? 'mediaplayer__embedUnmuteButton rtl' : 'mediaplayer__unmuteButton rtl') :
+      (embed ? 'mediaplayer__embedUnmuteButton' : 'mediaplayer__unmuteButton');
+    return <Button
+      icon="volume off"
+      className={className}
+      content={t('player.buttons.tap-to-unmute')}
+      onClick={this.unMute}
+    />;
+  }
+
   render() {
     const
       {
@@ -399,10 +418,19 @@ class AVPlayerMobile extends PureComponent {
         hasPrev,
         onPrev,
         onNext,
-        autoPlay,
       } = this.props;
 
-    const { error, errorReason, isSliceMode, playbackRate, unMuteButton, showControls, embed } = this.state;
+    const
+      {
+        error,
+        errorReason,
+        isSliceMode,
+        playbackRate,
+        unMuteButton,
+        showControls,
+        embed,
+        autoPlay,
+      } = this.state;
 
     const isVideo       = item.mediaType === MT_VIDEO;
     const isAudio       = item.mediaType === MT_AUDIO;
@@ -486,14 +514,7 @@ class AVPlayerMobile extends PureComponent {
         }
         {
           isVideo && unMuteButton
-            ? (
-              <Button
-                icon="volume off"
-                className={isRtl ? 'mediaplayer__mobileUnmuteButton rtl' : 'mediaplayer__mobileUnmuteButton'}
-                content={t('player.buttons.tap-to-unmute')}
-                onClick={this.unMute}
-              />
-            )
+            ? this.getUnmuteButton(isRtl, embed, t)
             : null
         }
         {

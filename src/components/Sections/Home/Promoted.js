@@ -30,21 +30,19 @@ const Promoted = (props) => {
     return <div className="thumbnail" />;
   }
 
-  const { content } = data;
-  if (!content) {
-    return <div className="thumbnail" data-testid="empty-content">&nbsp;</div>;
+  const { meta } = data;
+  if (!meta) {
+    return <div className="thumbnail">&nbsp;</div>;
   }
 
-  const { header, 'sub-header': subHeader, link } = Object.assign({}, ...data.meta);
-  const imgData                                   = content.match(/img src="(.+?)"/);
-  let img                                         = imgData ? imgData[1] : null;
-  let Lnk                                         = link[0].match(/:\/\//) === null ? Link : ExtLink;
+  const { header, 'sub-header': subHeader, link, image } = data.meta;
+  let Lnk                                                = link.match(/:\/\//) === null ? Link : ExtLink;
 
   return (
     <div className="thumbnail">
-      <Lnk to={link[0]}>
-        <Image fluid src={img} className="thumbnail__image" />
-        {renderHeader(header[0], subHeader[0])}
+      <Lnk to={link}>
+        <Image fluid src={image} className="thumbnail__image" />
+        {renderHeader(header, subHeader)}
       </Lnk>
     </div>
   );

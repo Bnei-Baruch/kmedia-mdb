@@ -47,8 +47,9 @@ export function* fetchAsset(action) {
 
 export function* fetchPerson(action) {
   try {
-    const { data } = yield call(Api.getCMS, `person/${action.payload.sourceId}`, {
+    const { data } = yield call(Api.getCMS, 'person', {
       language: action.payload.language,
+      id: action.payload.sourceId,
     });
     yield put(actions.fetchPersonSuccess(data));
   } catch (err) {
