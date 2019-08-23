@@ -541,7 +541,8 @@
       "KITEI_MAKOR": "Sources Materials",
       "PUBLICATION": "Publication",
       "LELO_MIKUD": "Edited - No Focus Group",
-      "BLOG_POST": "Blog Post"
+      "BLOG_POST": "Blog Post",
+      "LESSONS_SERIES": "Selected Study Series"
     },
     "media-types": {
       "video": "Video",
