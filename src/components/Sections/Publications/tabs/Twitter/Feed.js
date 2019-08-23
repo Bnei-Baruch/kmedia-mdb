@@ -19,7 +19,7 @@ class TwitterFeed extends Component {
     twitter: shapes.Tweet,
     snippetVersion: PropTypes.bool,
     withDivider: PropTypes.bool,
-    highlight: PropTypes.object
+    highlight: PropTypes.string
   };
 
   static defaultProps = {
@@ -136,7 +136,7 @@ class TwitterFeed extends Component {
       : `https://twitter.com/${username}`;
 
     return (
-      <Fragment key={tID}>
+      <Fragment>
         <Feed.Event key={tID} className="tweet">
           <Feed.Content>
             <Feed.Summary className="tweet-title-wrapper">
