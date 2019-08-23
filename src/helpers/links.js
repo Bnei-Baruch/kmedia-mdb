@@ -46,8 +46,15 @@ import {
   UNIT_PUBLICATIONS_TYPE,
 } from './consts';
 
-export const landingPageSectionLink = (landingPage) => {
-  return SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK[landingPage];
+export const landingPageSectionLink = (landingPage, filterValues) => {
+  const linkParts = [SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK[landingPage]];
+  const params = filterValues &&
+        filterValues.filter((filterValue) => filterValue.name !== 'text')
+          .map((filterValue) => `${filterValue.name}=${filterValue.value}`).join('&');
+  if (params) {
+    linkParts.push(params);
+  }
+  return linkParts.join('?');
 };
 
 export const intentSectionLink = (section, filters) => {
