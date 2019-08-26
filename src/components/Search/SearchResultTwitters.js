@@ -6,20 +6,17 @@ import { Button, Card, Header, Icon, Segment, Feed } from 'semantic-ui-react';
 import { Swipeable } from 'react-swipeable';
 
 import { isLanguageRtl } from '../../helpers/i18n-utils';
-import { selectors as publicationSelectors } from '../../redux/modules/publications';
-import { actions as listsActions, selectors as lists } from '../../redux/modules/lists';
+import { actions, selectors } from '../../redux/modules/publications';
 import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
 import { SEARCH_INTENT_INDEX_SOURCE, SEARCH_INTENT_INDEX_TOPIC } from '../../helpers/consts';
 
 import SearchResultBase from './SearchResultBase';
-//fetch 3 items for 4 screens
-let numberOfFetchedUnits = 3 * 4;
 
 class SearchResultTwitters extends SearchResultBase {
   static propTypes = {
     ...SearchResultBase.propTypes,
     isMobileDevice: PropTypes.func.isRequired,
-    fetchList: PropTypes.func.isRequired
+    fetchTweets: PropTypes.func.isRequired
   };
 
   state = {
@@ -27,26 +24,19 @@ class SearchResultTwitters extends SearchResultBase {
     pageSize: 3,
   };
 
-  // TODO: revisit the numberOfFetchedUnits implementation
-  // initialize on componentWillMount or constructor
-  // note that it is used also in redux connect (mapState)
   componentDidMount() {
-    const pageSize       = this.props.isMobileDevice() ? 1 : 3;
-    numberOfFetchedUnits = pageSize * 4;
+    const pageSize = this.props.isMobileDevice() ? 1 : 3;
 
-    this.askForData(1);
+    this.askForData(0, pageSize);
     this.setState({ pageSize });
   }
 
-  askForData = (page) => {
-    const { fetchList } = this.props;
+  askForData = (page, page_size = this.state.pageSize) => {
+    const { fetchTweets, tweetIds } = this.props;
+    const { pageNo }                = this.state;
 
-    const namespace = 'tweets';
-    const params    = {
-      content_type: 'tweet',
-      page_size: numberOfFetchedUnits
-    };
-    fetchList(namespace, page, params);
+    const id = tweetIds.slice(pageNo * page_size, (pageNo + 1) * page_size);
+    fetchTweets('tweets_many', page, { id });
   };
 
   onScrollRight = () => this.onScrollChange(this.state.pageNo + 1);
@@ -54,10 +44,11 @@ class SearchResultTwitters extends SearchResultBase {
   onScrollLeft = () => this.onScrollChange(this.state.pageNo - 1);
 
   onScrollChange = (pageNo) => {
-    if (pageNo < 0 || this.state.pageSize * pageNo >= this.props.unitCounter) {
+    if (pageNo < 0 || this.state.pageSize * pageNo >= this.props.tweetIds.length) {
       return;
     }
     this.setState({ pageNo });
+    this.askForData(pageNo);
   };
 
   getSwipeProps = () => {
@@ -82,7 +73,7 @@ class SearchResultTwitters extends SearchResultBase {
 
   renderScrollPagination = () => {
     const { pageNo, pageSize } = this.state;
-    const numberOfPages        = Math.round(this.props.unitCounter / pageSize);
+    const numberOfPages        = Math.round(this.props.tweetIds.length / pageSize);
 
     const pages   = new Array(numberOfPages).fill('a');
     const content = pages.map((p, i) => (
@@ -111,7 +102,7 @@ class SearchResultTwitters extends SearchResultBase {
 
   renderScrollLeft = () => {
     const { pageNo, pageSize } = this.state;
-    const numberOfPages        = Math.round(this.props.unitCounter / pageSize);
+    const numberOfPages        = Math.round(this.props.tweetIds.length / pageSize);
     const dir                  = isLanguageRtl(this.props.language) ? 'left' : 'right';
 
     return (pageNo >= numberOfPages - 1) ? null : (
@@ -128,8 +119,8 @@ class SearchResultTwitters extends SearchResultBase {
   };
 
   render() {
-    const { t, items, unitCounter, isMobileDevice, language } = this.props;
-    const { pageNo, pageSize }                                = this.state;
+    const { t, items, tweetIds, isMobileDevice, language } = this.props;
+    const { pageNo, pageSize }                             = this.state;
 
     return (
       <Segment className="search__block no-border">
@@ -145,11 +136,11 @@ class SearchResultTwitters extends SearchResultBase {
         <Swipeable {...this.getSwipeProps()} >
           <Card.Group className={`${isMobileDevice() ? 'margin-top-8' : null} search__cards`} itemsPerRow={3} stackable>
             {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).map(this.renderItem)}
-            {pageSize < unitCounter ? this.renderScrollLeft() : null}
-            {pageSize < unitCounter ? this.renderScrollRight() : null}
+            {pageSize < tweetIds.length ? this.renderScrollLeft() : null}
+            {pageSize < tweetIds.length ? this.renderScrollRight() : null}
           </Card.Group>
         </Swipeable>
-        {pageSize < unitCounter ? this.renderScrollPagination() : null}
+        {pageSize < tweetIds.length ? this.renderScrollPagination() : null}
       </Segment>
     );
   }
@@ -157,7 +148,7 @@ class SearchResultTwitters extends SearchResultBase {
 
 const twitterMapFromState = (state, tweets) => {
   return tweets.map(({ highlight: { content }, _source: { mdb_uid } }) => {
-    const twitter = publicationSelectors.getTwitter(state.publications, mdb_uid);
+    const twitter = selectors.getTwitter(state.publications, mdb_uid);
     return { twitter, highlight: content };
   });
 };
@@ -165,20 +156,14 @@ const twitterMapFromState = (state, tweets) => {
 const mapState = (state, ownProps) => {
   const { hit: { _source } } = ownProps;
 
-  const namespace   = 'twitters';
-  const nsState     = lists.getNamespaceState(state.lists, namespace);
-  const unitCounter = (nsState.total > 0 && nsState.total < numberOfFetchedUnits) ? nsState.total : numberOfFetchedUnits;
-
   return {
-    namespace,
-    unitCounter,
+    tweetIds: _source.map(x => x._source.mdb_uid) || [],
     items: twitterMapFromState(state, _source),
-    wip: nsState.wip,
-    err: nsState.err,
-    total: nsState.total,
+    wip: selectors.getBlogWip(state.publications),
+    err: selectors.getBlogError(state.publications)
   };
 };
 
-const mapDispatch = dispatch => bindActionCreators({ fetchList: listsActions.fetchList }, dispatch);
+const mapDispatch = dispatch => bindActionCreators({ fetchTweets: actions.fetchTweets }, dispatch);
 
 export default connect(mapState, mapDispatch)(SearchResultTwitters);
