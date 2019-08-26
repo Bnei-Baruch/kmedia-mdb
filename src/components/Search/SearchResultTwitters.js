@@ -26,7 +26,7 @@ class SearchResultTwitters extends SearchResultBase {
   componentDidMount() {
     const pageSize = this.props.isMobileDevice() ? 1 : 3;
 
-    this.askForData(1, pageSize);
+    this.askForData(0, pageSize);
     this.setState({ pageSize });
   }
 
@@ -34,8 +34,8 @@ class SearchResultTwitters extends SearchResultBase {
     const { fetchTweets, tweetIds } = this.props;
     const { pageNo }                = this.state;
 
-    const ids = tweetIds.slice(pageNo * page_size, (pageNo + 1) * page_size);
-    fetchTweets('tweets_many', page, { ids });
+    const id = tweetIds.slice(pageNo * page_size, (pageNo + 1) * page_size);
+    fetchTweets('tweets_many', page, { id });
   };
 
   onScrollRight = () => this.onScrollChange(this.state.pageNo + 1);
