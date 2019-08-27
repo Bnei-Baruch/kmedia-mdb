@@ -47,8 +47,8 @@ class ShareFormDesktop extends BaseShareForm {
   };
 
   render() {
-    const { t, onExit }                        = this.props;
-    const { start, end, url, isCopyPopupOpen } = this.state;
+    const { t, onExit }                                 = this.props;
+    const { start, end, url, baseUrl, isCopyPopupOpen } = this.state;
 
     return (
       <div className="mediaplayer__onscreen-share">
@@ -59,17 +59,17 @@ class ShareFormDesktop extends BaseShareForm {
           icon="chevron left"
           onClick={onExit}
         />
-        <ShareBar url={url} embedContent={this.getEmbed(url)} t={t} buttonSize="medium" />
+        <ShareBar url={url} embedContent={this.getEmbed(baseUrl)} t={t} buttonSize="medium"/>
         <div className="mediaplayer__onscreen-share-form">
           <div className="mediaplayer__onscreen-share-bar">
-            <Message content={url} size="mini" />
+            <Message content={url} size="mini"/>
             <Popup
               open={isCopyPopupOpen}
               content={t('messages.link-copied-to-clipboard')}
               position="bottom right"
               trigger={(
                 <CopyToClipboard text={url} onCopy={this.handleCopied}>
-                  <Button className="shareCopyLinkButton" size="mini" content={t('buttons.copy')} />
+                  <Button className="shareCopyLinkButton" size="mini" content={t('buttons.copy')}/>
                 </CopyToClipboard>
               )}
             />

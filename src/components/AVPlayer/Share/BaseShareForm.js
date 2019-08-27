@@ -10,6 +10,7 @@ class BaseShareForm extends React.Component {
   static propTypes = {
     media: PropTypes.object.isRequired,
     item: PropTypes.object.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
     onSliceChange: PropTypes.func,
     t: PropTypes.func.isRequired,
   };
@@ -32,13 +33,17 @@ class BaseShareForm extends React.Component {
       start: undefined,
       end: undefined,
       url: BaseShareForm.getUrl(props),
+      baseUrl: BaseShareForm.getUrl(props, undefined, undefined, true),
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.item !== this.props.item) {
       const { start, end } = this.state;
-      this.setState({ url: BaseShareForm.getUrl(nextProps, start, end) });
+      this.setState({
+        url: BaseShareForm.getUrl(nextProps, start, end),
+        baseUrl: BaseShareForm.getUrl(nextProps, undefined, undefined, true),
+      });
     }
   }
 
@@ -47,8 +52,8 @@ class BaseShareForm extends React.Component {
     const duration                 = Math.max(media.duration, 0);
 
     let start = data && data.value
-      ? this.colonStrToSecond(data.value)
-      : Math.round(media.currentTime);
+            ? this.colonStrToSecond(data.value)
+            : Math.round(media.currentTime);
     start     = Math.min(start, duration);
 
     let end = this.state.end || 0;
@@ -69,8 +74,8 @@ class BaseShareForm extends React.Component {
     const duration                 = Math.max(media.duration, 0);
 
     let end = data && data.value !== undefined
-      ? this.colonStrToSecond(data.value)
-      : Math.round(media.currentTime);
+            ? this.colonStrToSecond(data.value)
+            : Math.round(media.currentTime);
     end     = Math.min(end, duration);
 
     let start = this.state.start || 0;
@@ -82,11 +87,11 @@ class BaseShareForm extends React.Component {
     onSliceChange(start, end);
   }
 
-  static getUrl(props, start, end) {
+  static getUrl(props, start, end, addUiLang) {
     const { protocol, hostname, port, pathname } = window.location;
-
-    const { item } = props;
-    const shareUrl = `${protocol}//${hostname}${port ? `:${port}` : ''}${item.shareUrl || pathname}`;
+    const { item, uiLanguage }                   = props;
+    const uiLang                                 = addUiLang ? `/${uiLanguage}` : '';
+    const shareUrl                               = `${protocol}//${hostname}${port ? `:${port}` : ''}${uiLang}${item.shareUrl || pathname}`;
 
     const q = getQuery(window.location);
 
@@ -110,9 +115,9 @@ class BaseShareForm extends React.Component {
   colonStrToSecond(str) {
     const s = str.replace(/[^\d:]+/g, '');
     return s.split(':')
-      .map(t => (t ? parseInt(t, 10) : 0))
-      .reverse()
-      .reduce((result, t, i) => (result + (t * Math.pow(60, i))), 0);
+            .map(t => (t ? parseInt(t, 10) : 0))
+            .reverse()
+            .reduce((result, t, i) => (result + (t * Math.pow(60, i))), 0);
   }
 
   render() {
