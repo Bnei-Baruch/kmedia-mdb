@@ -9,7 +9,8 @@ import ResultsPageHeader from '../../../../Pagination/ResultsPageHeader';
 import Filters from '../../../../Filters/Filters';
 import filterComponents from '../../../../Filters/components/index';
 import WipErr from '../../../../shared/WipErr/WipErr';
-import Feed from './Feed';
+import TwitterFeed from './Feed';
+import { Feed } from 'semantic-ui-react';
 
 const filters = [
   { name: 'date-filter', component: filterComponents.DateFilter },
