@@ -133,7 +133,7 @@ class SearchResultTwitters extends SearchResultBase {
         <div className="clear" />
         <Swipeable {...this.getSwipeProps()} >
           <Card.Group className={`${isMobileDevice() ? 'margin-top-8' : null} search__cards`} itemsPerRow={3} stackable>
-            {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).map(this.renderItem)}
+            {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).filter(x => x && x.twitter).map(this.renderItem)}
             {pageSize < tweetIds.length ? this.renderScrollLeft() : null}
             {pageSize < tweetIds.length ? this.renderScrollRight() : null}
           </Card.Group>
