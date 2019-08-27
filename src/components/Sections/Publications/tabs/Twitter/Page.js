@@ -37,6 +37,19 @@ class TwitterPage extends PureComponent {
     err: null,
   };
 
+  renderTwitters = (tweets) => {
+    const { limitLength } = this.props;
+    const length          = limitLength || tweets.length;
+
+    return (
+      <Feed>
+        {
+          tweets.slice(0, length).map(item => <TwitterFeed twitter={item}  key={item.twitter_id} />)
+        }
+      </Feed>
+    );
+  };
+
   render() {
     const
       {

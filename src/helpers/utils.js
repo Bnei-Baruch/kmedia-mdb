@@ -15,7 +15,7 @@ export const isEmpty = (obj) => {
   }
 
   // Assume if it has a length property with a non-zero value
-  // that that property is correct.
+  // that property is correct.
   if (obj.length > 0) {
     return false;
   }
@@ -32,6 +32,8 @@ export const isEmpty = (obj) => {
 
   return Object.getOwnPropertyNames(obj).length <= 0;
 };
+
+export const isNotEmptyArray = arr => (Array.isArray(arr) && arr.length > 0); 
 
 /**
  * Format the given error into a user friendly string

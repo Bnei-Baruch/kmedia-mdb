@@ -18,7 +18,8 @@ class TwitterFeed extends Component {
   static propTypes = {
     tweets: PropTypes.arrayOf(shapes.Tweet),
     snippetVersion: PropTypes.bool,
-    limitLength: PropTypes.number
+    withDivider: PropTypes.bool,
+    highlight: PropTypes.string
   };
 
   static defaultProps = {
@@ -132,7 +133,7 @@ class TwitterFeed extends Component {
       : `https://twitter.com/${username}`;
 
     return (
-      <Fragment key={tID}>
+      <Fragment>
         <Feed.Event key={tID} className="tweet">
           <Feed.Content>
             <Feed.Summary className="tweet-title-wrapper">
