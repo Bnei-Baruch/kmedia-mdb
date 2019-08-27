@@ -182,65 +182,69 @@ class Layout extends Component {
           <span className="mobile-only">mobile</span>
         </div> */}
         <GAPageView location={location} />
-        <div className="z-index-2">
-
-          <Headroom>
-            <div className="layout__header">
-              <Menu inverted borderless size="huge" color="blue">
-                <div ref={menuButtonElement1}>
-                  <Menu.Item
-                    icon
-                    as="a"
-                    className="layout__sidebar-toggle"
-                    onClick={this.toggleSidebar}
-                  >
-                    {sideBarIcon}
-                  </Menu.Item>
-                </div>
-                <Menu.Item className="logo" header as={Link} to="/">
-                  <Logo width="40" height="40" />
-                  <Header inverted as="h1" content={t('nav.top.header')} />
+        <Headroom
+          onPin={() => console.log('pinned')}
+          onUnpin={() => console.log('unpinned')}
+          style={{
+            background: 'rgb(57, 111, 176)',
+            boxShadow: '1px 1px 1px rgba(0,0,0,0.25)',
+          }}
+        >
+          <div className="">
+            <Menu inverted borderless size="huge" color="blue">
+              <div ref={menuButtonElement1}>
+                <Menu.Item
+                  icon
+                  as="a"
+                  className="layout__sidebar-toggle"
+                  onClick={this.toggleSidebar}
+                >
+                  {sideBarIcon}
                 </Menu.Item>
-                <Menu.Item className="layout__search mobile-hidden">
-                  {
-                    showSearch
-                      ? <WrappedOmniBox location={location} />
-                      : null
-                  }
+              </div>
+              <Menu.Item className="logo" header as={Link} to="/">
+                <Logo width="40" height="40" />
+                <Header inverted as="h1" content={t('nav.top.header')} />
+              </Menu.Item>
+              <Menu.Item className="layout__search mobile-hidden">
+                {
+                  showSearch
+                    ? <WrappedOmniBox location={location} />
+                    : null
+                }
+              </Menu.Item>
+              <Menu.Menu position="right" className="no-padding no-margin">
+                <Menu.Item className="no-margin">
+                  <HandleLanguages
+                    language={language}
+                    contentLanguage={contentLanguage}
+                    setContentLanguage={setContentLanguage}
+                    location={location}
+                    isMobile={isMobileDevice}
+                    push={push}
+                  />
                 </Menu.Item>
-                <Menu.Menu position="right" className="no-padding no-margin">
-                  <Menu.Item className="no-margin">
-                    <HandleLanguages
-                      language={language}
-                      contentLanguage={contentLanguage}
-                      setContentLanguage={setContentLanguage}
-                      location={location}
-                      isMobile={isMobileDevice}
-                      push={push}
-                    />
-                  </Menu.Item>
-                  {
-                    showSearch && isMobileDevice
-                      ? (
-                        <Ref innerRef={showSearchButtonElement}>
-                          <Menu.Item as="a" position="right">
-                            <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
-                          </Menu.Item>
-                        </Ref>
-                      )
-                      : null
-                  }
-                  <Menu.Item position="right" className="mobile-hidden">
-                    <DonateNow language={language} />
-                  </Menu.Item>
-                  <TopMost />
-                </Menu.Menu>
-              </Menu>
-            </div>
+                {
+                  showSearch && isMobileDevice
+                    ? (
+                      <Ref innerRef={showSearchButtonElement}>
+                        <Menu.Item as="a" position="right">
+                          <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
+                        </Menu.Item>
+                      </Ref>
+                    )
+                    : null
+                }
+                <Menu.Item position="right" className="mobile-hidden">
+                  <DonateNow language={language} />
+                </Menu.Item>
+                <TopMost />
+              </Menu.Menu>
+            </Menu>
+          </div>
 
-            {isShowHeaderSearch && <RenderHeaderSearch t={t} location={location} ref={headerSearchElement} />}
-          </Headroom>
-        </div>
+        </Headroom>
+        {isShowHeaderSearch && <RenderHeaderSearch t={t} location={location} ref={headerSearchElement} />}
         <div
           className={classnames('layout__sidebar', { 'is-active': sidebarActive })}
           ref={(el) => {

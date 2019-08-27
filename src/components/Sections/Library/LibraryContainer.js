@@ -153,6 +153,13 @@ class LibraryContainer extends Component {
   };
 
   updateSticky = () => {
+    // take the secondary header height for sticky stuff calculations
+    if (this.secondaryHeaderRef) {
+      const { height } = this.secondaryHeaderRef.getBoundingClientRect();
+      if (this.state.secondaryHeaderHeight !== height) {
+        this.setState({ secondaryHeaderHeight: height });
+      }
+    }
 
     // check fixed header width in pixels for text-overflow:ellipsis
     if (this.contentHeaderRef) {
@@ -177,6 +184,8 @@ class LibraryContainer extends Component {
   handleContextRef = (ref) => this.contextRef = ref;
 
   handleContentArticleRef = (ref) => this.articleRef = ref;
+
+  handleSecondaryHeaderRef = (ref) => this.secondaryHeaderRef = ref;
 
   handleContentHeaderRef = (ref) => this.contentHeaderRef = ref;
 
@@ -361,7 +370,11 @@ class LibraryContainer extends Component {
         fontType,
         tocIsActive,
         match,
-      }               = this.state;
+      }                           = this.state;
+    let { secondaryHeaderHeight } = this.state;
+    if (isNaN(secondaryHeaderHeight)) {
+      secondaryHeaderHeight = 0;
+    }
     const matchString = this.matchString(parentId, t);
 
     return (
@@ -375,7 +388,14 @@ class LibraryContainer extends Component {
           [`is-${fontType}`]: true,
         })}
       >
-        <Headroom>
+        <Headroom
+          onPin={() => console.log('pinned')}
+          onUnpin={() => console.log('unpinned')}
+          style={{
+            background: 'rgb(57, 111, 176)',
+            boxShadow: '1px 1px 1px rgba(0,0,0,0.25)',
+          }}
+        >
           <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
             <Container>
               <Grid padded centered>
@@ -412,7 +432,7 @@ class LibraryContainer extends Component {
             </Container>
           </div>
         </Headroom>
-        <Container>
+        <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
           <Grid padded centered>
             <Grid.Row className="is-fitted">
               <Grid.Column
@@ -420,7 +440,7 @@ class LibraryContainer extends Component {
                 tablet={16}
                 computer={4}
                 onClick={this.handleTocIsActive}
-                className={!tocIsActive ? 'widescreen-only large-screen-only computer-only' : ''}>
+                className={!tocIsActive && 'widescreen-only large-screen-only computer-only'}>
                 <TOC
                   language={language}
                   match={matchString ? match : ''}
@@ -429,6 +449,7 @@ class LibraryContainer extends Component {
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
                   apply={push}
+                  stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
                 />
               </Grid.Column>
               <Grid.Column
@@ -443,7 +464,7 @@ class LibraryContainer extends Component {
                 <Ref innerRef={this.handleContextRef}>
                   <div
                     className="source__content"
-                    style={{ minHeight: `calc(100vh - 14px)` }}
+                    style={{ minHeight: `calc(100vh - ${secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}px)` }}
                   >
                     {content}
                   </div>
