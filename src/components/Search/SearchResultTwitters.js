@@ -30,12 +30,11 @@ class SearchResultTwitters extends SearchResultBase {
     this.setState({ pageSize });
   }
 
-  askForData = (page, page_size = this.state.pageSize) => {
+  askForData = (pageNo = this.state.pageNo, page_size = this.state.pageSize) => {
     const { fetchTweets, tweetIds } = this.props;
-    const { pageNo }                = this.state;
 
     const id = tweetIds.slice(pageNo * page_size, (pageNo + 1) * page_size);
-    fetchTweets('tweets_many', page, { id });
+    fetchTweets('tweets_many', pageNo, { id });
   };
 
   onScrollRight = () => this.onScrollChange(this.state.pageNo + 1);
