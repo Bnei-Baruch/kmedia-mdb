@@ -10,6 +10,7 @@ class BaseShareForm extends React.Component {
   static propTypes = {
     media: PropTypes.object.isRequired,
     item: PropTypes.object.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
     onSliceChange: PropTypes.func,
     t: PropTypes.func.isRequired,
   };
@@ -32,13 +33,17 @@ class BaseShareForm extends React.Component {
       start: undefined,
       end: undefined,
       url: BaseShareForm.getUrl(props),
+      baseUrl: BaseShareForm.getUrl(props, undefined, undefined, true),
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.item !== this.props.item) {
       const { start, end } = this.state;
-      this.setState({ url: BaseShareForm.getUrl(nextProps, start, end) });
+      this.setState({
+        url: BaseShareForm.getUrl(nextProps, start, end),
+        baseUrl: BaseShareForm.getUrl(nextProps, undefined, undefined, true),
+      });
     }
   }
 
@@ -82,11 +87,11 @@ class BaseShareForm extends React.Component {
     onSliceChange(start, end);
   }
 
-  static getUrl(props, start, end) {
+  static getUrl(props, start, end, addUiLang) {
     const { protocol, hostname, port, pathname } = window.location;
-
-    const { item } = props;
-    const shareUrl = `${protocol}//${hostname}${port ? `:${port}` : ''}${item.shareUrl || pathname}`;
+    const { item, uiLanguage }                   = props;
+    const uiLang                                 = addUiLang ? `/${uiLanguage}` : '';
+    const shareUrl                               = `${protocol}//${hostname}${port ? `:${port}` : ''}${uiLang}${item.shareUrl || pathname}`;
 
     const q = getQuery(window.location);
 

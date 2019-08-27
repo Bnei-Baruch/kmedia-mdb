@@ -20,7 +20,8 @@ import ShareFormMobile from './Share/ShareFormMobile';
 import AVPlaybackRateMobile from './AVPlaybackRateMobile';
 import AVSpinner from './AVSpinner';
 import playerHelper from '../../helpers/player';
-import { PlayerStartEnum } from './playerStartEnum';
+import { PlayerStartEnum } from "./playerStartEnum";
+import classNames from "classnames";
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
@@ -392,13 +393,14 @@ class AVPlayerMobile extends PureComponent {
     }
   };
 
-  getUnmuteButton(isRtl, embed, t) {
-    const className = isRtl ?
-      (embed ? 'mediaplayer__embedUnmuteButton rtl' : 'mediaplayer__unmuteButton rtl') :
-      (embed ? 'mediaplayer__embedUnmuteButton' : 'mediaplayer__unmuteButton');
+  renderUnmuteButton(isRtl, embed, t) {
     return <Button
       icon="volume off"
-      className={className}
+      className={classNames('', {
+        'mediaplayer__embedUnmuteButton': embed,
+        'mediaplayer__unmuteButton': !embed,
+        'rtl': isRtl
+      })}
       content={t('player.buttons.tap-to-unmute')}
       onClick={this.unMute}
     />;
@@ -420,17 +422,16 @@ class AVPlayerMobile extends PureComponent {
         onNext,
       } = this.props;
 
-    const
-      {
-        error,
-        errorReason,
-        isSliceMode,
-        playbackRate,
-        unMuteButton,
-        showControls,
-        embed,
-        autoPlay,
-      } = this.state;
+    const {
+      error,
+      errorReason,
+      isSliceMode,
+      playbackRate,
+      unMuteButton,
+      showControls,
+      embed,
+      autoPlay,
+    } = this.state;
 
     const isVideo       = item.mediaType === MT_VIDEO;
     const isAudio       = item.mediaType === MT_AUDIO;
@@ -444,9 +445,10 @@ class AVPlayerMobile extends PureComponent {
     let mediaEl;
 
     if (isVideo) {
-      mediaEl = <video autoPlay={autoPlay} playsInline ref={this.handleMediaRef} src={item.src} preload="metadata" poster={item.preImageUrl} />;
+      mediaEl = <video autoPlay={autoPlay} playsInline ref={this.handleMediaRef} src={item.src} preload="metadata"
+        poster={item.preImageUrl}/>;
     } else {
-      mediaEl = <audio controls autoPlay={autoPlay} ref={this.handleMediaRef} src={item.src} preload="metadata" />;
+      mediaEl = <audio controls autoPlay={autoPlay} ref={this.handleMediaRef} src={item.src} preload="metadata"/>;
     }
 
     return (
@@ -458,8 +460,8 @@ class AVPlayerMobile extends PureComponent {
               <div className="player-button player-error-message">
                 {t('player.error.loading')}
                 {errorReason ? ` ${errorReason}` : ''}
-                &nbsp;
-                <Icon name="warning sign" size="large" />
+                                  &nbsp;
+                <Icon name="warning sign" size="large"/>
               </div>
             ) : null
         }
@@ -477,15 +479,15 @@ class AVPlayerMobile extends PureComponent {
               onPrev={onPrev}
               onNext={onNext}
             />
-            <div className="mediaplayer__spacer" />
-            {!embed ? <AVEditSlice onActivateSlice={this.toggleSliceMode} /> : null}
+            <div className="mediaplayer__spacer"/>
+            {!embed ? <AVEditSlice onActivateSlice={this.toggleSliceMode}/> : null}
             <button type="button" tabIndex="-1" onClick={this.handleJumpBack}>
-              -5s
-              <Icon name="backward" />
+                    -5s
+              <Icon name="backward"/>
             </button>
             <button type="button" tabIndex="-1" onClick={this.handleJumpForward}>
-              <Icon name="forward" />
-              +5s
+              <Icon name="forward"/>
+                    +5s
             </button>
             <AVPlaybackRateMobile
               value={playbackRate}
@@ -509,17 +511,15 @@ class AVPlayerMobile extends PureComponent {
         </div>
         {
           isSliceMode
-            ? <ShareFormMobile media={this.media} item={item} />
+            ? <ShareFormMobile media={this.media} item={item} uiLanguage={uiLanguage}/>
             : null
         }
         {
-          isVideo && unMuteButton
-            ? this.getUnmuteButton(isRtl, embed, t)
-            : null
+          isVideo && unMuteButton && this.renderUnmuteButton(isRtl, embed, t)
         }
         {
           !showControls
-            ? <div className="mediaplayer__mobileLoader"><AVSpinner /></div>
+            ? <div className="mediaplayer__mobileLoader"><AVSpinner/></div>
             : null
         }
       </div>
