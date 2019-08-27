@@ -137,7 +137,8 @@
     "serialize-javascript": "^1.4.0",
     "ua-parser-js": "^0.7.17",
     "warning": "^4.0.2",
-    "worker-loader": "^2.0.0"
+    "worker-loader": "^2.0.0",
+    "react-headroom": "^2.2.8"
   },
   "moduleRoots": [
     "src",
