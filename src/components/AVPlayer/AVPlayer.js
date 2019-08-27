@@ -558,46 +558,46 @@ class AVPlayer extends PureComponent {
 
   renderUnmuteButton(isRtl, t) {
     return <Button
-            icon="volume off"
-            className={isRtl ? 'mediaplayer__embedUnmuteButton rtl' : 'mediaplayer__embedUnmuteButton'}
-            content={t('player.buttons.tap-to-unmute')}
-            onClick={this.handleUnMute}
+      icon="volume off"
+      className={isRtl ? 'mediaplayer__embedUnmuteButton rtl' : 'mediaplayer__embedUnmuteButton'}
+      content={t('player.buttons.tap-to-unmute')}
+      onClick={this.handleUnMute}
     />;
   }
 
   render() {
     const
-            {
-              item,
-              languages,
-              selectedLanguage,
-              uiLanguage,
-              requestedLanguage,
-              t,
-              showNextPrev,
-              hasNext,
-              hasPrev,
-              onPrev,
-              onNext,
-              media,
-              onDropdownOpenedChange
-            } = this.props;
+      {
+        item,
+        languages,
+        selectedLanguage,
+        uiLanguage,
+        requestedLanguage,
+        t,
+        showNextPrev,
+        hasNext,
+        hasPrev,
+        onPrev,
+        onNext,
+        media,
+        onDropdownOpenedChange
+      } = this.props;
 
     const
-            {
-              controlsVisible,
-              sliceStart,
-              sliceEnd,
-              mode,
-              playbackRate,
-              videoSize,
-              src,
-              error,
-              errorReason,
-              isClient,
-              persistenceFn,
-              unMuteButton,
-            } = this.state;
+      {
+        controlsVisible,
+        sliceStart,
+        sliceEnd,
+        mode,
+        playbackRate,
+        videoSize,
+        src,
+        error,
+        errorReason,
+        isClient,
+        persistenceFn,
+        unMuteButton,
+      } = this.state;
 
     const { isPlaying }      = media;
     const [isVideo, isAudio] = [item.mediaType === MT_VIDEO, item.mediaType === MT_AUDIO];
@@ -609,152 +609,152 @@ class AVPlayer extends PureComponent {
     let centerMediaControl;
     if (error) {
       centerMediaControl = (
-              <div className="player-button player-error-message">
-                {t('player.error.loading')}
-                {errorReason ? ` ${errorReason}` : ''}
+        <div className="player-button player-error-message">
+          {t('player.error.loading')}
+          {errorReason ? ` ${errorReason}` : ''}
                 &nbsp;
-                <Icon name="warning sign" size="large"/>
-              </div>
+          <Icon name="warning sign" size="large"/>
+        </div>
       );
     } else if (isEditMode) {
       centerMediaControl = (
-              <ShareFormDesktop
-                      media={media}
-                      item={item}
-                      uiLanguage={uiLanguage}
-                      onSliceChange={this.handleSliceChange}
-                      onExit={this.handleEditBack}
-              />
+        <ShareFormDesktop
+          media={media}
+          item={item}
+          uiLanguage={uiLanguage}
+          onSliceChange={this.handleSliceChange}
+          onExit={this.handleEditBack}
+        />
       );
     } else if (isVideo) {
       centerMediaControl = (
-              <Fragment>
-                <AVCenteredPlay/>
-                <AVSpinner/>
-              </Fragment>
+        <Fragment>
+          <AVCenteredPlay/>
+          <AVSpinner/>
+        </Fragment>
       );
     }
 
     const handleKeyDown = utils.keyboardControls.bind(null, media);
 
     return (
-            <div
-                    ref={(c) => {
-                      this.mediaElement = c;
-                    }}
-                    className={classNames('mediaplayer', { 'media-edit-mode': isEditMode })}
-                    onKeyDown={handleKeyDown}
-                    role="button"
-                    tabIndex="-1"
-            >
-              {
-                isVideo && unMuteButton && this.renderUnmuteButton(isRtl, t)
-              }
-              <Player
-                      playsInline
-                      ref={(c) => {
-                        this.player = c;
-                        if (c && c.instance) {
-                          enableInlineVideo(c.instance);
-                        }
-                      }}
-                      onVolumeChange={persistenceFn}
-                      src={src}
-                      poster={isVideo ? item.preImageUrl : null}
-                      vendor={isVideo ? 'video' : 'audio'}
-                      onReady={this.onPlayerReady}
-                      preload={isClient ? 'auto' : 'none'}
-                      controls={false}
-                      onError={this.onError}
-                      onPause={this.onPause}
-                      onPlay={this.onPlay}
-                      onTimeUpdate={this.handleTimeUpdate}
-                      defaultCurrentTime={sliceStart || -1}  // -1 so RMP won't seek to 0 (browser won't fire seeked so we'll hang)
-              />
-              <div
-                      ref={this.handleWrapperRef}
-                      className="mediaplayer__wrapper"
-                      onMouseEnter={this.handleWrapperMouseEnter}
-                      onMouseLeave={this.handleWrapperMouseLeave}
-                      onMouseMove={this.handleWrapperMouseMove}
-              >
-                <div
-                        ref={this.handlePlayerControlsRef}
-                        className={classNames('mediaplayer__controls', {
-                          'mediaplayer__controls--is-fade': !controlsVisible && !forceShowControls
-                        })}
-                        onMouseEnter={this.handleControlsMouseEnter}
-                        onMouseLeave={this.handleControlsMouseLeave}
-                >
-                  <AVPlayPause
-                          showNextPrev={showNextPrev && !isEditMode}
-                          hasNext={hasNext}
-                          hasPrev={hasPrev}
-                          onPrev={onPrev}
-                          onNext={onNext}
-                  />
-                  <AVTimeElapsed
-                          start={media.currentTime}
-                          end={media.duration}
-                  />
-                  <AVJumpBack jumpSpan={-5}/>
-                  <AVJumpBack jumpSpan={5}/>
-                  <div className="mediaplayer__spacer"/>
-                  <AvSeekBar
-                          buffers={this.buffers()}
-                          playerMode={mode}
-                          sliceStart={sliceStart}
-                          sliceEnd={sliceEnd}
-                  />
+      <div
+        ref={(c) => {
+          this.mediaElement = c;
+        }}
+        className={classNames('mediaplayer', { 'media-edit-mode': isEditMode })}
+        onKeyDown={handleKeyDown}
+        role="button"
+        tabIndex="-1"
+      >
+        {
+          isVideo && unMuteButton && this.renderUnmuteButton(isRtl, t)
+        }
+        <Player
+          playsInline
+          ref={(c) => {
+            this.player = c;
+            if (c && c.instance) {
+              enableInlineVideo(c.instance);
+            }
+          }}
+          onVolumeChange={persistenceFn}
+          src={src}
+          poster={isVideo ? item.preImageUrl : null}
+          vendor={isVideo ? 'video' : 'audio'}
+          onReady={this.onPlayerReady}
+          preload={isClient ? 'auto' : 'none'}
+          controls={false}
+          onError={this.onError}
+          onPause={this.onPause}
+          onPlay={this.onPlay}
+          onTimeUpdate={this.handleTimeUpdate}
+          defaultCurrentTime={sliceStart || -1}  // -1 so RMP won't seek to 0 (browser won't fire seeked so we'll hang)
+        />
+        <div
+          ref={this.handleWrapperRef}
+          className="mediaplayer__wrapper"
+          onMouseEnter={this.handleWrapperMouseEnter}
+          onMouseLeave={this.handleWrapperMouseLeave}
+          onMouseMove={this.handleWrapperMouseMove}
+        >
+          <div
+            ref={this.handlePlayerControlsRef}
+            className={classNames('mediaplayer__controls', {
+              'mediaplayer__controls--is-fade': !controlsVisible && !forceShowControls
+            })}
+            onMouseEnter={this.handleControlsMouseEnter}
+            onMouseLeave={this.handleControlsMouseLeave}
+          >
+            <AVPlayPause
+              showNextPrev={showNextPrev && !isEditMode}
+              hasNext={hasNext}
+              hasPrev={hasPrev}
+              onPrev={onPrev}
+              onNext={onNext}
+            />
+            <AVTimeElapsed
+              start={media.currentTime}
+              end={media.duration}
+            />
+            <AVJumpBack jumpSpan={-5}/>
+            <AVJumpBack jumpSpan={5}/>
+            <div className="mediaplayer__spacer"/>
+            <AvSeekBar
+              buffers={this.buffers()}
+              playerMode={mode}
+              sliceStart={sliceStart}
+              sliceEnd={sliceEnd}
+            />
 
-                  <AVPlaybackRate
-                          value={playbackRate}
-                          onSelect={this.playbackRateChange}
-                          onDropdownOpenedChange={onDropdownOpenedChange}
-                  />
+            <AVPlaybackRate
+              value={playbackRate}
+              onSelect={this.playbackRateChange}
+              onDropdownOpenedChange={onDropdownOpenedChange}
+            />
 
-                  {
-                    isVideo && (
-                            <AVVideoSize
-                                    value={videoSize}
-                                    qualities={Object.keys(item.byQuality)}
-                                    onSelect={this.videoSizeChange}
-                            />
-                    )
-                  }
-                  <AVMuteUnmute isAudio={isAudio} onMuteUnmute={this.removeUnMuteButton}
-                                onVolumeChange={this.removeUnMuteButton}/>
-                  <AVAudioVideo
-                          isAudio={isAudio}
-                          isVideo={isVideo}
-                          onSwitch={this.onSwitchAV}
-                          fallbackMedia={fallbackMedia}
-                          uiLanguage={uiLanguage}
-                  />
-                  <AVLanguage
-                          languages={languages}
-                          selectedLanguage={selectedLanguage}
-                          uiLanguage={uiLanguage}
-                          requestedLanguage={requestedLanguage}
-                          onSelect={this.onLanguageChange}
-                          onDropdownOpenedChange={onDropdownOpenedChange}
-                  />
-                  {!isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.SLICE_EDIT)}/>}
-                  {isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.NORMAL)}/>}
-                  {!isAudio && <AVFullScreen element={this.mediaElement}/>}
-                </div>
-                <div
-                        ref={this.handleOnScreenRef}
-                        className="mediaplayer__onscreen-controls"
-                        role="button"
-                        tabIndex="0"
-                        onClick={this.handleOnScreenClick}
-                        onKeyPress={this.handleOnScreenKeyDown}
-                >
-                  {centerMediaControl}
-                </div>
-              </div>
-            </div>
+            {
+              isVideo && (
+                <AVVideoSize
+                  value={videoSize}
+                  qualities={Object.keys(item.byQuality)}
+                  onSelect={this.videoSizeChange}
+                />
+              )
+            }
+            <AVMuteUnmute isAudio={isAudio} onMuteUnmute={this.removeUnMuteButton}
+              onVolumeChange={this.removeUnMuteButton}/>
+            <AVAudioVideo
+              isAudio={isAudio}
+              isVideo={isVideo}
+              onSwitch={this.onSwitchAV}
+              fallbackMedia={fallbackMedia}
+              uiLanguage={uiLanguage}
+            />
+            <AVLanguage
+              languages={languages}
+              selectedLanguage={selectedLanguage}
+              uiLanguage={uiLanguage}
+              requestedLanguage={requestedLanguage}
+              onSelect={this.onLanguageChange}
+              onDropdownOpenedChange={onDropdownOpenedChange}
+            />
+            {!isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.SLICE_EDIT)}/>}
+            {isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.NORMAL)}/>}
+            {!isAudio && <AVFullScreen element={this.mediaElement}/>}
+          </div>
+          <div
+            ref={this.handleOnScreenRef}
+            className="mediaplayer__onscreen-controls"
+            role="button"
+            tabIndex="0"
+            onClick={this.handleOnScreenClick}
+            onKeyPress={this.handleOnScreenKeyDown}
+          >
+            {centerMediaControl}
+          </div>
+        </div>
+      </div>
     );
   }
 }
