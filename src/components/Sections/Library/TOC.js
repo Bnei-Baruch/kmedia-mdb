@@ -120,7 +120,6 @@ class TOC extends Component {
     contextRef: Reference,
     getSourceById: PropTypes.func.isRequired,
     apply: PropTypes.func.isRequired,
-    stickyOffset: PropTypes.number,
     language: PropTypes.string.isRequired,
 
     match: PropTypes.string.isRequired,
@@ -129,7 +128,6 @@ class TOC extends Component {
 
   static defaultProps = {
     contextRef: null,
-    stickyOffset: 144, // 60 + 70 + 14 (top navbar + library secondary header + 1em)
     matchApplied: noop,
   };
 
@@ -148,11 +146,10 @@ class TOC extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { rootId, match, stickyOffset, fullPath } = this.props;
+    const { rootId, match, fullPath } = this.props;
     return (
       rootId !== nextProps.rootId
       || match !== nextProps.match
-      || stickyOffset !== nextProps.stickyOffset
       || !isEqual(fullPath, nextProps.fullPath)
     );
   }
@@ -265,7 +262,7 @@ class TOC extends Component {
   };
 
   render() {
-    const { fullPath, rootId, contextRef, stickyOffset } = this.props;
+    const { fullPath, rootId, contextRef} = this.props;
 
     const activeIndex = getIndex(fullPath[1], fullPath[2]);
     if (activeIndex === -1) {
@@ -276,7 +273,7 @@ class TOC extends Component {
     const toc  = this.toc(rootId, path, true);
 
     return (
-      <Sticky context={contextRef} offset={stickyOffset} className="source__toc">
+      <Sticky context={contextRef} className="source__toc">
         <Ref innerRef={this.handleAccordionContext}>
           <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} onTitleClick={handleTitleClick} />
         </Ref>
