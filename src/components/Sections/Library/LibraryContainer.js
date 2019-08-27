@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { push as routerPush, replace as routerReplace } from 'connected-react-router';
 import { withNamespaces } from 'react-i18next';
 import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
+import Headroom from 'react-headroom';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
@@ -387,41 +388,50 @@ class LibraryContainer extends Component {
           [`is-${fontType}`]: true,
         })}
       >
-        <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
-          <Container>
-            <Grid padded centered>
-              <Grid.Row verticalAlign="bottom">
-                <Grid.Column mobile={16} tablet={16} computer={4} className="source__toc-header">
-                  <div className="source__header-title mobile-hidden">
-                    <Header size="small">{t('sources-library.toc')}</Header>
-                  </div>
-                  <div className="source__header-toolbar">
-                    {matchString}
-                    {this.switchSortingOrder(parentId)}
-                    <Button
-                      compact
-                      size="small"
-                      className="computer-hidden large-screen-hidden widescreen-hidden"
-                      icon="list layout"
-                      onClick={this.handleTocIsActive}
-                    />
-                  </div>
-                </Grid.Column>
-                <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
-                  <div className="source__header-title">{this.header(sourceId, parentId)}</div>
-                  <div className="source__header-toolbar">
-                    <Button compact size="small" className="mobile-hidden" icon="print" onClick={this.print} />
-                    <div id="download-button" />
-                    <LibrarySettings fontSize={fontSize} handleSettings={this.handleSettings} />
-                    <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
-                    <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                    <Share isMobile={this.isMobileDevice()} />
-                  </div>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          </Container>
-        </div>
+        <Headroom
+          onPin={() => console.log('pinned')}
+          onUnpin={() => console.log('unpinned')}
+          style={{
+            background: 'rgb(57, 111, 176)',
+            boxShadow: '1px 1px 1px rgba(0,0,0,0.25)',
+          }}
+        >
+          <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
+            <Container>
+              <Grid padded centered>
+                <Grid.Row verticalAlign="bottom">
+                  <Grid.Column mobile={16} tablet={16} computer={4} className="source__toc-header">
+                    <div className="source__header-title mobile-hidden">
+                      <Header size="small">{t('sources-library.toc')}</Header>
+                    </div>
+                    <div className="source__header-toolbar">
+                      {matchString}
+                      {this.switchSortingOrder(parentId)}
+                      <Button
+                        compact
+                        size="small"
+                        className="computer-hidden large-screen-hidden widescreen-hidden"
+                        icon="list layout"
+                        onClick={this.handleTocIsActive}
+                      />
+                    </div>
+                  </Grid.Column>
+                  <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
+                    <div className="source__header-title">{this.header(sourceId, parentId)}</div>
+                    <div className="source__header-toolbar">
+                      <Button compact size="small" className="mobile-hidden" icon="print" onClick={this.print} />
+                      <div id="download-button" />
+                      <LibrarySettings fontSize={fontSize} handleSettings={this.handleSettings} />
+                      <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
+                      <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
+                      <Share isMobile={this.isMobileDevice()} />
+                    </div>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Container>
+          </div>
+        </Headroom>
         <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
           <Grid padded centered>
             <Grid.Row className="is-fitted">
