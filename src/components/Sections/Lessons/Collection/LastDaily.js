@@ -99,11 +99,9 @@ class LastLessonCollection extends Component {
 }
 
 function mapState(state) {
-  const lastLessonId = selectors.getLastLessonId(state.mdb);
-  const collection   = selectors.getDenormCollectionWUnits(state.mdb, lastLessonId);
   return {
-    collection,
-    lastLessonId,
+    collection: selectors.getDenormCollectionWUnits(state.mdb, selectors.getLastLessonId(state.mdb)),
+    lastLessonId: selectors.getLastLessonId(state.mdb),
     wip: selectors.getWip(state.mdb),
     errors: selectors.getErrors(state.mdb),
     uiLanguage: settings.getLanguage(state.settings),
