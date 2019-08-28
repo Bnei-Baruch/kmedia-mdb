@@ -33,7 +33,6 @@ class BaseShareForm extends React.Component {
       start: undefined,
       end: undefined,
       url: BaseShareForm.getUrl(props),
-      baseUrl: BaseShareForm.getUrl(props, undefined, undefined, true),
     };
   }
 
@@ -42,7 +41,6 @@ class BaseShareForm extends React.Component {
       const { start, end } = this.state;
       this.setState({
         url: BaseShareForm.getUrl(nextProps, start, end),
-        baseUrl: BaseShareForm.getUrl(nextProps, undefined, undefined, true),
       });
     }
   }
