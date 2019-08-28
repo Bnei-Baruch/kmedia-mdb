@@ -368,6 +368,7 @@ class LibraryContainer extends Component {
       <div
         ref={this.handleContentArticleRef}
         className={classNames({
+          'headroom-z-index-801': true,
           source: true,
           'is-readable': isReadable,
           'toc--is-active': tocIsActive,

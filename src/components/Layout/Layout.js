@@ -182,7 +182,7 @@ class Layout extends Component {
           <span className="mobile-only">mobile</span>
         </div> */}
         <GAPageView location={location} />
-        <div className="z-index-2">
+        <div className="headroom-z-index-801">
 
           <Headroom>
             <div className="layout__header">
