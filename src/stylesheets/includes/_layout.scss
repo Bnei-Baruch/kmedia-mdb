@@ -100,17 +100,6 @@ body {
     min-height: 100%;
   }
 
-  &__content {
-    .headroom--pinned {
-      @include tablet-mobile {
-        width: 100%;
-        margin-left: 0;
-      }
-      transform: translateY($main-menu-height) !important;
-      margin-left: $sidebar-width;
-    }
-  }
-
   &__footer {
     background: $black;
   }
@@ -121,7 +110,6 @@ body {
     left: 0;
     min-height: $secondary-header-height;
     right: 0;
-    z-index: 801;
 
     .row {
       padding-bottom: .5rem !important;
