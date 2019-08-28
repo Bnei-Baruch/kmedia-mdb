@@ -1499,6 +1499,37 @@
   min-height: 200px;
 }
 
-.headroom-z-index-2 .headroom {
-  z-index: 2 !important;
+.headroom-z-index-801 .headroom {
+  z-index: 801 !important;
+}
+
+.layout__content {
+  .headroom--pinned {
+    transform: translateY($main-menu-height) !important;
+  }
+}
+
+.ltr {
+  .layout__content {
+    .headroom--pinned {
+      @include tablet-mobile {
+        margin-left: 0;
+        width: 100%;
+      }
+      margin-left: $sidebar-width;
+    }
+  }
+}
+
+.rtl {
+  .layout__content {
+    .headroom--pinned {
+      @include tablet-mobile {
+        margin-right: 0;
+        width: 100%;
+      }
+      margin-right: $sidebar-width;
+      margin-left: 0;
+    }
+  }
 }
