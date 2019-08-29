@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../helpers/consts';
 import { actions, selectors } from '../../../redux/modules/home';
-import { selectors as mdb, actions as mdbActions } from '../../../redux/modules/mdb';
+import { actions as mdbActions, selectors as mdb } from '../../../redux/modules/mdb';
 import { actions as publicationsActions, selectors as publications } from '../../../redux/modules/publications';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
@@ -40,15 +40,12 @@ const chooseBlogByLanguage = (language) => {
   }
 };
 
-const fetchSocialMedia = (type, { fetchBlogList, fetchTweetsList, language }) => {
+const fetchSocialMedia = (type, fetchFn, language) => {
   let mediaLanguageFn;
-  let fetchFn;
   if (type === 'blog') {
     mediaLanguageFn = chooseBlogByLanguage;
-    fetchFn         = fetchBlogList;
   } else {
     mediaLanguageFn = chooseTwitterByLanguage;
-    fetchFn         = fetchTweetsList;
   }
 
   fetchFn(`publications-${type}`, 1, {
@@ -57,11 +54,15 @@ const fetchSocialMedia = (type, { fetchBlogList, fetchTweetsList, language }) =>
   });
 };
 
-const getBanner = ({ fetchBanner, language }) => {
-  fetchBanner(language);
-};
-
 let timerHandle = null;
+
+const handleRefresh = (fetchData, fetchLatestLesson, fetchBlogList, language, fetchTweetsList, fetchBanner) => {
+  fetchData();
+  fetchSocialMedia('blog', fetchBlogList, language);
+  fetchSocialMedia('twitter', fetchTweetsList, language);
+  fetchBanner(language);
+  fetchLatestLesson();
+};
 
 class HomePageContainer extends Component {
   static propTypes = {
@@ -91,25 +92,20 @@ class HomePageContainer extends Component {
   };
 
   componentDidMount() {
-    const { fetchData, fetchLatestLesson } = this.props;
-    fetchData();
-    fetchSocialMedia('blog', this.props);
-    fetchSocialMedia('twitter', this.props);
-    getBanner(this.props);
-    timerHandle = setInterval(() => fetchLatestLesson(), 10 * 60 * 1000); // every 10 min
+    const { fetchData, fetchLatestLesson, fetchBlogList, language, fetchTweetsList, fetchBanner } = this.props;
+    handleRefresh(fetchData, fetchLatestLesson, fetchBlogList, language, fetchTweetsList, fetchBanner);
+    timerHandle = setInterval(() => handleRefresh(fetchData, fetchLatestLesson, fetchBlogList, language, fetchTweetsList, fetchBanner), 10 * 60 * 1000); // every 10 min
+
   }
 
   componentDidUpdate(prevProps) {
-    const { language, fetchLatestLesson } = this.props;
+    const { fetchData, fetchLatestLesson, fetchBlogList, language, fetchTweetsList, fetchBanner } = this.props;
     if (prevProps.language !== language) {
-      fetchSocialMedia('blog', this.props);
-      fetchSocialMedia('twitter', this.props);
-      getBanner(this.props);
-
       if (timerHandle) {
         clearInterval(timerHandle);
       }
-      timerHandle = setInterval(() => fetchLatestLesson(), 10 * 60 * 1000); // every 10 min
+      handleRefresh(fetchData, fetchLatestLesson, fetchBlogList, language, fetchTweetsList, fetchBanner);
+      timerHandle = setInterval(() => handleRefresh(fetchData, fetchLatestLesson, fetchBlogList, language, fetchTweetsList, fetchBanner), 10 * 60 * 1000); // every 10 min
     }
   }
 
@@ -146,16 +142,13 @@ class HomePageContainer extends Component {
 }
 
 const mapState = (state) => {
-  const latestLessonID = selectors.getLatestLesson(state.home);
-  const latestLesson   = latestLessonID ? mdb.getCollectionById(state.mdb, latestLessonID) : null;
-
-  const latestUnitIDs = selectors.getLatestUnits(state.home);
-  const latestUnits   = Array.isArray(latestUnitIDs)
-    ? latestUnitIDs.map(x => mdb.getDenormContentUnit(state.mdb, x))
-    : [];
   return {
-    latestLesson,
-    latestUnits,
+    latestLessonID: selectors.getLatestLesson(state.home),
+    latestLesson: selectors.getLatestLesson(state.home) ? mdb.getCollectionById(state.mdb, selectors.getLatestLesson(state.home)) : null,
+    latestUnitIDs: selectors.getLatestUnits(state.home),
+    latestUnits: Array.isArray(selectors.getLatestUnits(state.home))
+      ? selectors.getLatestUnits(state.home).map(x => mdb.getDenormContentUnit(state.mdb, x))
+      : [],
     banner: selectors.getBanner(state.home),
     wip: selectors.getWip(state.home),
     err: selectors.getError(state.home),
