@@ -33,16 +33,14 @@ class LastLessonCollection extends Component {
   };
 
   componentDidMount() {
-    const { lastLessonId, fetchLatestLesson } = this.props;
+    const { fetchLatestLesson } = this.props;
 
-    if (!lastLessonId) {
-      fetchLatestLesson();
-    }
+    fetchLatestLesson();
   }
 
   shouldComponentUpdate(nextProps) {
     const { uiLanguage, contentLanguage, wip, errors, lastLessonId } = nextProps;
-    const { props }                           = this;
+    const { props }                                                  = this;
 
     return (
       (lastLessonId && (lastLessonId !== props.lastLessonId))
@@ -58,7 +56,7 @@ class LastLessonCollection extends Component {
 
     if (!lastLessonId
       && (uiLanguage !== prevProps.uiLanguage
-      || contentLanguage !== prevProps.contentLanguage)
+        || contentLanguage !== prevProps.contentLanguage)
     ) {
       fetchLatestLesson();
     }
@@ -101,11 +99,9 @@ class LastLessonCollection extends Component {
 }
 
 function mapState(state) {
-  const lastLessonId = selectors.getLastLessonId(state.mdb);
-  const collection   = selectors.getDenormCollectionWUnits(state.mdb, lastLessonId);
   return {
-    collection,
-    lastLessonId,
+    collection: selectors.getDenormCollectionWUnits(state.mdb, selectors.getLastLessonId(state.mdb)),
+    lastLessonId: selectors.getLastLessonId(state.mdb),
     wip: selectors.getWip(state.mdb),
     errors: selectors.getErrors(state.mdb),
     uiLanguage: settings.getLanguage(state.settings),

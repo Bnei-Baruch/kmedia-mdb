@@ -158,7 +158,7 @@ class HomePage extends Component {
             <Grid centered>
               <Grid.Row>
                 <Grid.Column computer={6} tablet={7} mobile={16}>
-                  <LatestDailyLesson collection={latestLesson} />
+                  <LatestDailyLesson film_date={latestLesson.film_date} />
                 </Grid.Column>
                 <Grid.Column computer={6} tablet={7} mobile={16}>
                   <Promoted banner={banner} />

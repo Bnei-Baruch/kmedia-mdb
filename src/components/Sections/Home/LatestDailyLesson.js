@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Header, Image } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
 
 import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
-import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 
 const getRandomImage = () => {
@@ -23,39 +22,29 @@ const getRandomImage = () => {
   return `${imaginaryUrl('resize')}?${params}`;
 };
 
-class LatestDailyLesson extends Component {
-  static propTypes = {
-    collection: shapes.LessonCollection.isRequired,
-    t: PropTypes.func.isRequired,
-  };
+const LatestDailyLesson = ({ t, film_date }) => {
+  const [imageSrc] = useState(getRandomImage());
 
-  state = {
-    imageSrc: getRandomImage(),
-  };
+  return (
+    <div className="thumbnail">
+      <Link to="/lessons/daily/latest">
+        <Image fluid src={imageSrc} className="thumbnail__image" width={512} />
+        <Header as="h2" className="thumbnail__header">
+          <Header.Content>
+            <Header.Subheader>
+              {t('values.date', { date: film_date })}
+            </Header.Subheader>
+            {t('home.last-lesson')}
+          </Header.Content>
+        </Header>
+      </Link>
+    </div>
+  );
+};
 
-  render() {
-    const { t, collection } = this.props;
-    const { imageSrc }      = this.state;
-
-    return (
-      <div className="thumbnail">
-        <Link to="/lessons/daily/latest">
-          <Image fluid src={imageSrc} className="thumbnail__image" width={512} />
-          <Header as="h2" className="thumbnail__header">
-            <Header.Content>
-              <Header.Subheader>
-                {t('values.date', { date: collection.film_date })}
-              </Header.Subheader>
-              {t('home.last-lesson')}
-            </Header.Content>
-          </Header>
-          {/* <Label color="black" size="tiny">
-            {t('nav.sidebar.lessons')}
-          </Label> */}
-        </Link>
-      </div>
-    );
-  }
-}
+LatestDailyLesson.propTypes = {
+  film_date: PropTypes.string.isRequired,
+  t: PropTypes.func.isRequired,
+};
 
 export default withNamespaces()(LatestDailyLesson);

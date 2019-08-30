@@ -28,6 +28,7 @@ src/**/*.css
 babel-src/
 cc-test-reporter
 logs/
+public/assets/cms
 
 # do not ignore main theme
 !src/**/semantic.min.css

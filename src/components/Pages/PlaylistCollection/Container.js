@@ -179,9 +179,8 @@ export class PlaylistCollectionContainer extends Component {
 }
 
 function mapState(state, props) {
-  const collection = selectors.getDenormCollectionWUnits(state.mdb, props.match.params.id);
   return {
-    collection,
+    collection: selectors.getDenormCollectionWUnits(state.mdb, props.match.params.id),
     language: settings.getLanguage(state.settings),
     contentLanguage: settings.getContentLanguage(state.settings),
     wip: selectors.getWip(state.mdb),
