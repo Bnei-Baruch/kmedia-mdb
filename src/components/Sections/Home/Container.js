@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../helpers/consts';
 import { actions, selectors } from '../../../redux/modules/home';
-import { actions as mdbActions, selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions as publicationsActions, selectors as publications } from '../../../redux/modules/publications';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
@@ -40,12 +40,15 @@ const chooseBlogByLanguage = (language) => {
   }
 };
 
-const fetchSocialMedia = (type, fetchFn, language) => {
+const fetchSocialMedia = (type, { fetchBlogList, fetchTweetsList, language }) => {
   let mediaLanguageFn;
+  let fetchFn;
   if (type === 'blog') {
     mediaLanguageFn = chooseBlogByLanguage;
+    fetchFn         = fetchBlogList;
   } else {
     mediaLanguageFn = chooseTwitterByLanguage;
+    fetchFn         = fetchTweetsList;
   }
 
   fetchFn(`publications-${type}`, 1, {
@@ -54,14 +57,8 @@ const fetchSocialMedia = (type, fetchFn, language) => {
   });
 };
 
-let timerHandle = null;
-
-const handleRefresh = (fetchData, fetchLatestLesson, fetchBlogList, language, fetchTweetsList, fetchBanner) => {
-  fetchData();
-  fetchSocialMedia('blog', fetchBlogList, language);
-  fetchSocialMedia('twitter', fetchTweetsList, language);
+const getBanner = ({ fetchBanner, language }) => {
   fetchBanner(language);
-  fetchLatestLesson();
 };
 
 class HomePageContainer extends Component {
@@ -79,7 +76,6 @@ class HomePageContainer extends Component {
     fetchBlogList: PropTypes.func.isRequired,
     fetchTweetsList: PropTypes.func.isRequired,
     fetchBanner: PropTypes.func.isRequired,
-    fetchLatestLesson: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -92,20 +88,26 @@ class HomePageContainer extends Component {
   };
 
   componentDidMount() {
-    const { fetchData, fetchLatestLesson, fetchBlogList, language, fetchTweetsList, fetchBanner } = this.props;
-    handleRefresh(fetchData, fetchLatestLesson, fetchBlogList, language, fetchTweetsList, fetchBanner);
-    timerHandle = setInterval(() => handleRefresh(fetchData, fetchLatestLesson, fetchBlogList, language, fetchTweetsList, fetchBanner), 10 * 60 * 1000); // every 10 min
-
+    const { latestLesson, fetchData, latestBlogPosts, latestTweets } = this.props;
+    if (!latestLesson) {
+      fetchData();
+    }
+    if (!latestBlogPosts.length) {
+      fetchSocialMedia('blog', this.props);
+    }
+    if (!latestTweets.length) {
+      fetchSocialMedia('twitter', this.props);
+    }
+    getBanner(this.props);
   }
 
   componentDidUpdate(prevProps) {
-    const { fetchData, fetchLatestLesson, fetchBlogList, language, fetchTweetsList, fetchBanner } = this.props;
+    const { language, fetchData } = this.props;
     if (prevProps.language !== language) {
-      if (timerHandle) {
-        clearInterval(timerHandle);
-      }
-      handleRefresh(fetchData, fetchLatestLesson, fetchBlogList, language, fetchTweetsList, fetchBanner);
-      timerHandle = setInterval(() => handleRefresh(fetchData, fetchLatestLesson, fetchBlogList, language, fetchTweetsList, fetchBanner), 10 * 60 * 1000); // every 10 min
+      fetchData();
+      fetchSocialMedia('blog', this.props);
+      fetchSocialMedia('twitter', this.props);
+      getBanner(this.props);
     }
   }
 
@@ -142,13 +144,16 @@ class HomePageContainer extends Component {
 }
 
 const mapState = (state) => {
+  const latestLessonID = selectors.getLatestLesson(state.home);
+  const latestLesson   = latestLessonID ? mdb.getCollectionById(state.mdb, latestLessonID) : null;
+
+  const latestUnitIDs = selectors.getLatestUnits(state.home);
+  const latestUnits   = Array.isArray(latestUnitIDs)
+    ? latestUnitIDs.map(x => mdb.getDenormContentUnit(state.mdb, x))
+    : [];
   return {
-    latestLessonID: selectors.getLatestLesson(state.home),
-    latestLesson: selectors.getLatestLesson(state.home) ? mdb.getCollectionById(state.mdb, selectors.getLatestLesson(state.home)) : null,
-    latestUnitIDs: selectors.getLatestUnits(state.home),
-    latestUnits: Array.isArray(selectors.getLatestUnits(state.home))
-      ? selectors.getLatestUnits(state.home).map(x => mdb.getDenormContentUnit(state.mdb, x))
-      : [],
+    latestLesson,
+    latestUnits,
     banner: selectors.getBanner(state.home),
     wip: selectors.getWip(state.home),
     err: selectors.getError(state.home),
@@ -163,7 +168,6 @@ const mapDispatch = dispatch => bindActionCreators({
   fetchBlogList: publicationsActions.fetchBlogList,
   fetchTweetsList: publicationsActions.fetchTweets,
   fetchBanner: actions.fetchBanner,
-  fetchLatestLesson: mdbActions.fetchLatestLesson,
 }, dispatch);
 
 export default connect(mapState, mapDispatch)(withNamespaces()(HomePageContainer));
