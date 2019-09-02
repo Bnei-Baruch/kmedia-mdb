@@ -33,9 +33,7 @@ class LastLessonCollection extends Component {
   };
 
   componentDidMount() {
-    const { fetchLatestLesson } = this.props;
-
-    fetchLatestLesson();
+    this.props.fetchLatestLesson();
   }
 
   shouldComponentUpdate(nextProps) {

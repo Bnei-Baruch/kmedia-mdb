@@ -25,12 +25,12 @@ const TopN = ({ units, N, section, topicUrl, t }) => {
   return (isNotEmptyArray(topNUnits)
     ? renderTable(topNUnits, section, buttonVisible ? topicUrl : null, t)
     : null);
-}
+};
 
 const isButtonViewAllVisible = (totalUnits, N, url) => (
   // don't show button to events - page not exists
   // show only for more than N units
-  totalUnits > N && !url.includes('events') 
+  totalUnits > N && !url.includes('events')
 );
 
 const getTopNUnits = (units, N) => {
@@ -66,7 +66,7 @@ const renderTable = (topNUnits, section, url, t) => {
         {topNUnits.map(x => renderUnit(x, t))}
       </Table.Body>
       {
-        url 
+        url
           ? (
             <Table.Footer fullWidth>
               <Table.Row>
@@ -84,10 +84,10 @@ const renderTable = (topNUnits, section, url, t) => {
 
 const renderUnit = (unit, t) => {
   const link   = canonicalLink(unit);
-  const filmDate = unit.film_date 
-    ? t('values.date', { date: new Date(unit.film_date) }) 
+  const filmDate = unit.film_date
+    ? t('values.date', { date: new Date(unit.film_date) })
     : '';
- 
+
   return (
     <Table.Row key={unit.id} verticalAlign="top">
       <Table.Cell>
