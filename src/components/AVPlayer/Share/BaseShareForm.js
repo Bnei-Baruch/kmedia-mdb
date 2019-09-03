@@ -52,8 +52,8 @@ class BaseShareForm extends React.Component {
     const duration                 = Math.max(media.duration, 0);
 
     let start = data && data.value
-            ? this.colonStrToSecond(data.value)
-            : Math.round(media.currentTime);
+      ? this.colonStrToSecond(data.value)
+      : Math.round(media.currentTime);
     start     = Math.min(start, duration);
 
     let end = this.state.end || 0;
@@ -78,8 +78,8 @@ class BaseShareForm extends React.Component {
     const duration                 = Math.max(media.duration, 0);
 
     let end = data && data.value !== undefined
-            ? this.colonStrToSecond(data.value)
-            : Math.round(media.currentTime);
+      ? this.colonStrToSecond(data.value)
+      : Math.round(media.currentTime);
     end     = Math.min(end, duration);
 
     let start = this.state.start || 0;
@@ -124,9 +124,9 @@ class BaseShareForm extends React.Component {
   colonStrToSecond(str) {
     const s = str.replace(/[^\d:]+/g, '');
     return s.split(':')
-            .map(t => (t ? parseInt(t, 10) : 0))
-            .reverse()
-            .reduce((result, t, i) => (result + (t * Math.pow(60, i))), 0);
+      .map(t => (t ? parseInt(t, 10) : 0))
+      .reverse()
+      .reduce((result, t, i) => (result + (t * Math.pow(60, i))), 0);
   }
 
   render() {
