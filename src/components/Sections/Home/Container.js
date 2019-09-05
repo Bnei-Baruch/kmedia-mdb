@@ -13,7 +13,7 @@ import * as shapes from '../../shapes';
 import HomePage from './HomePage';
 import { useInterval } from '../../../helpers/timer';
 
-const FETCH_TIMEOUT = 1 * 60 * 1000; //60 * 60 * 1000;  // TODO: every 10 min
+const FETCH_TIMEOUT = 10 * 60 * 1000;// every 10 min
 
 const chooseTwitterByLanguage = (language) => {
   switch (language) {
