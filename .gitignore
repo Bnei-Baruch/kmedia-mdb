@@ -29,7 +29,6 @@ babel-src/
 cc-test-reporter
 logs/
 public/assets/cms
-mdb.dump.*.sql
 
 # do not ignore main theme
 !src/**/semantic.min.css
