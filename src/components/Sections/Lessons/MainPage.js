@@ -69,14 +69,12 @@ const MainPage = ({ location, match, t }) => {
       const resetNamespace = tab => dispatch(filterActions.resetNamespace(tab));
       resetNamespace(`lessons-${tab}`);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.search]);
+  }, [location.search]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const setTab = tab => dispatch(lessonsActions.setTab(tab));
     setTab(tab);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab]);
+  }, [tab]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>

@@ -8,7 +8,7 @@ import { prefixWithLanguage } from '../../helpers/url';
 
 export default function multiLanguageRouterMidrdleware(history) {
   const routerMiddleware = createRouterMiddleware(history);
-  const appliedRouterMiddleware = routerMiddleware();
+  const appliedRouterMiddleware = routerMiddleware(history);
 
   return () => next => (action) => {
     if (action.type !== CALL_HISTORY_METHOD) {

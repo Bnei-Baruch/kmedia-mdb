@@ -139,7 +139,6 @@ export default function serverRender(req, res, next, htmlData) {
     const cookies = cookieParse(req.headers.cookie || '');
 
     const initialState = {
-      router: { location: history.location },
       device: { deviceInfo: new UAParser(req.get('user-agent')).getResult() },
       settings: Object.assign({}, settingsInitialState, {
         language,

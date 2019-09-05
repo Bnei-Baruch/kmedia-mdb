@@ -2,6 +2,7 @@ import { createAction } from 'redux-actions';
 
 import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
+import isEqual from 'react-fast-compare';
 
 /* Types */
 const FETCH_DATA           = 'Home/FETCH_DATA';
@@ -64,15 +65,22 @@ const onSetLanguage = (draft) => {
   draft.err          = null;
 };
 
-const onData = draft => {
-  draft.wip = true;
+const onData = (draft, payload) => {
+  if (payload) {
+    draft.wip = true;
+  }
 };
 
 const onDataSuccess = (draft, payload) => {
-  draft.wip          = false;
-  draft.err          = null;
-  draft.latestLesson = payload.latest_daily_lesson.id;
-  draft.latestUnits  = payload.latest_units.map(x => x.id);
+  const id          = payload.latest_daily_lesson.id;
+  const latestUnits = payload.latest_units.map(x => x.id);
+
+  if (draft.latestLesson !== id || !isEqual(draft.latestLesson, latestUnits)) {
+    draft.wip          = false;
+    draft.err          = null;
+    draft.latestLesson = id;
+    draft.latestUnits  = latestUnits;
+  }
 };
 
 const onDataFailure = (draft, payload) => {
