@@ -18,13 +18,13 @@ import TopN from './TopN';
 const TOP_N_ITEMS = 5;
 
 const getTopicUrl = (section, tagPath, language) => {
-  const query = tagPath 
+  const query = tagPath
     ? filtersTransformer
       .toQueryParams([{ name: 'topics-filter', values: [tagPath.map(y => y.id)] }])
     : '';
 
-  const realSection = section === 'publications' 
-    ? 'publications/articles' 
+  const realSection = section === 'publications'
+    ? 'publications/articles'
     : section;
 
   return `/${language}/${realSection}?${urlSearchStringify(query)}`;
