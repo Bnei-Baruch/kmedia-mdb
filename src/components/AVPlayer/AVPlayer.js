@@ -111,7 +111,7 @@ class AVPlayer extends PureComponent {
     return { src, videoSize };
   };
 
-  static persistVolume = debounce(media => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, media.volume), 200);
+  static persistVolume = debounce(volume => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, volume), 200);
 
   state = {
     controlsVisible: true,
@@ -294,6 +294,16 @@ class AVPlayer extends PureComponent {
     this.setState({ unMuteButton: false });
   };
 
+  onVolumeChange = (volume) => {
+    const { persistenceFn } = this.state;
+    persistenceFn && persistenceFn(volume);
+    this.removeUnMuteButton();
+  };
+
+  onMuteUnmute = () => {
+    this.removeUnMuteButton();
+  };
+
   static getSliceModeState(media, mode, properties = {}, state) {
     let { sliceStart, sliceEnd } = properties;
     if (typeof sliceStart === 'undefined') {
@@ -333,7 +343,6 @@ class AVPlayer extends PureComponent {
     const { media } = this.props;
     this.setState({ persistenceFn: AVPlayer.persistVolume });
     let persistedVolume = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
-
     if (persistedVolume == null || Number.isNaN(Number.parseInt(persistedVolume, 10))) {
       persistedVolume = DEFAULT_PLAYER_VOLUME.toString();
       localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, persistedVolume);
@@ -595,7 +604,6 @@ class AVPlayer extends PureComponent {
         error,
         errorReason,
         isClient,
-        persistenceFn,
         unMuteButton,
       } = this.state;
 
@@ -658,7 +666,6 @@ class AVPlayer extends PureComponent {
               enableInlineVideo(c.instance);
             }
           }}
-          onVolumeChange={persistenceFn}
           src={src}
           poster={isVideo ? item.preImageUrl : null}
           vendor={isVideo ? 'video' : 'audio'}
@@ -722,8 +729,8 @@ class AVPlayer extends PureComponent {
                 />
               )
             }
-            <AVMuteUnmute isAudio={isAudio} onMuteUnmute={this.removeUnMuteButton}
-              onVolumeChange={this.removeUnMuteButton}/>
+            <AVMuteUnmute isAudio={isAudio} onMuteUnmute={this.onMuteUnmute}
+              onVolumeChange={this.onVolumeChange}/>
             <AVAudioVideo
               isAudio={isAudio}
               isVideo={isVideo}
