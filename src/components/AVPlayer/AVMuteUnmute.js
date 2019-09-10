@@ -52,7 +52,7 @@ class AVMuteUnmute extends Component {
     const offset          = Math.min(Math.max(0, clientY - top), bottom - top);
     const newVolume       = 1 - (offset / (bottom - top));
     media.setVolume(newVolume);
-    this.props.onVolumeChange();
+    this.props.onVolumeChange(newVolume);
   };
 
   handleMuteUnmute = () => {
