@@ -34,7 +34,7 @@ class SearchResultTwitters extends SearchResultBase {
     const { fetchTweets, tweetIds } = this.props;
 
     const id = tweetIds.slice(pageNo * page_size, (pageNo + 1) * page_size);
-    fetchTweets('tweets_many', pageNo, { id });
+    fetchTweets('tweets_many', 1, { id });
   };
 
   onScrollRight = () => this.onScrollChange(this.state.pageNo + 1);
