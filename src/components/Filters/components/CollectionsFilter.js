@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 
-import { CT_CLIPS, CT_LECTURE_SERIES, CT_VIRTUAL_LESSONS, CT_ARTICLES } from '../../../helpers/consts';
+import { CT_CLIPS, CT_LECTURE_SERIES, CT_VIRTUAL_LESSONS, CT_ARTICLES, CT_VIDEO_PROGRAM } from '../../../helpers/consts';
 import { strCmp } from '../../../helpers/utils';
 import { selectors as lessons } from '../../../redux/modules/lessons';
 import { selectors as programs } from '../../../redux/modules/programs';
@@ -77,6 +77,10 @@ export default connect(
     case 'lessons-lectures':
       ct   = CT_LECTURE_SERIES;
       cIDs = lessons.getLecturesByType(state.lessons)[ct];
+      break;
+    case 'programs-main':
+      ct   = CT_VIDEO_PROGRAM;
+      cIDs = programs.getProgramsByType(state.programs)[ct];
       break;
     case 'programs-clips':
       ct   = CT_CLIPS;
