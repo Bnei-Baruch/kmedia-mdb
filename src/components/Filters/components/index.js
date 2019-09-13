@@ -1,7 +1,6 @@
 import DateFilter from './Date/DateFilter';
 import LocationsFilter from './LocationsFilter';
 import HolidaysFilter from './HolidaysFilter';
-import ProgramsFilter from './ProgramsFilter';
 import SectionsFilter from './SectionsFilter';
 import SourcesFilter from './SourcesFilter';
 import MediaTypeFilter from './MediaTypeFilter';
@@ -15,7 +14,6 @@ export default {
   DateFilter,
   LocationsFilter,
   HolidaysFilter,
-  ProgramsFilter,
   SectionsFilter,
   SourcesFilter,
   MediaTypeFilter,
