@@ -33,7 +33,7 @@ export const isEmpty = (obj) => {
   return Object.getOwnPropertyNames(obj).length <= 0;
 };
 
-export const isNotEmptyArray = arr => (Array.isArray(arr) && arr.length > 0); 
+export const isNotEmptyArray = arr => (Array.isArray(arr) && arr.length > 0);
 
 /**
  * Format the given error into a user friendly string
@@ -81,7 +81,7 @@ export const formatDuration = (duration, fmt = 'hh:mm:ss') => moment.duration(du
  */
 export function* intersperse(iterable, delimiter) {
   let first = true;
-  for (const item of iterable) {
+  for (const item of iterable) { // eslint-disable-line no-unused-vars
     if (!first) {
       yield delimiter;
     }
