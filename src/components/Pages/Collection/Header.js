@@ -33,7 +33,7 @@ const CollectionPageHeader = ({ collection = null, namespace, t }) => {
                     {collection.name}
                   </span>
                   <Header.Subheader className="section-header__subtitle">
-                    {itemCount}
+                    {itemCount}&nbsp;
                     {t(`pages.collection.items.${namespace}`)}
                   </Header.Subheader>
                 </Header.Content>
