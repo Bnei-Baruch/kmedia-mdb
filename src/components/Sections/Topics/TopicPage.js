@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
-import { Breadcrumb, Container, Divider, Grid } from 'semantic-ui-react';
+import { Breadcrumb, Container, Divider, Grid, Header } from 'semantic-ui-react';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { isEmpty } from '../../../helpers/utils';
 import { stringify as urlSearchStringify } from '../../../helpers/url';
@@ -50,12 +50,14 @@ const TopicPage = ({ match, t }) => {
 
   const tagId = match.params.id;
 
-  const wip = useSelector(state => selectors.getWip(state.tags));
-  const error = useSelector(state => selectors.getError(state.tags));
-  const sections = useSelector(state => selectors.getSections(state.tags));
+  const wip             = useSelector(state => selectors.getWip(state.tags));
+  const error           = useSelector(state => selectors.getError(state.tags));
+  const sections        = useSelector(state => selectors.getSections(state.tags));
   const getSectionUnits = useSelector(state => selectors.getSectionUnits(state.tags));
-  const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
-  const language = useSelector(state => settings.getLanguage(state.settings));
+  const getCounts       = useSelector(state => selectors.getCounts(state.tags));
+  const getPathByID     = useSelector(state => selectors.getPathByID(state.tags));
+  const getTags         = useSelector(state => selectors.getTags(state.tags));
+  const language        = useSelector(state => settings.getLanguage(state.settings));
 
   const dispatch = useDispatch();
 
@@ -87,7 +89,8 @@ const TopicPage = ({ match, t }) => {
           {
             sections.map(s => {
               const sectionUnits = getSectionUnits(s);
-              const topicUrl = getTopicUrl(s, tagPath, language);
+              const topicUrl     = getTopicUrl(s, tagPath, language);
+              const sectionCount = getCounts(s);
 
               return isEmpty(sectionUnits)
                 ? null
@@ -98,6 +101,7 @@ const TopicPage = ({ match, t }) => {
                       units={sectionUnits}
                       N={TOP_N_ITEMS}
                       topicUrl={topicUrl}
+                      sectionCount={sectionCount}
                     />
                   </Grid.Column>
                 );
@@ -108,15 +112,20 @@ const TopicPage = ({ match, t }) => {
     );
   }
 
+  const tag = getTags ? getTags[tagId] : null;
+
   return (
-    <div>
-        Topic
-      {tagId}
-      {' '}
-        Not Found
-    </div>
+    <Container className="padded">
+      <Header as="h3">
+        {t(`nav.sidebar.topic`)}
+        {' "'}
+        {tag ? tag.label : tagId}
+        {'" '}
+        {t(`nav.sidebar.not-found`)}
+      </Header>
+    </Container>
   );
-}
+};
 
 TopicPage.propTypes = {
   match: shapes.RouterMatch.isRequired,

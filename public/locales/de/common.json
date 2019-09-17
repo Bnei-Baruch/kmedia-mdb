@@ -10,6 +10,8 @@
       "events": "Kongresse, Veranstaltungen",
       "books": "Bücher",
       "topics": "Themen",
+      "topic": "Thema",
+      "not-found": "nicht gefunden",
       "publications": "Veröffentlichungen",
       "simple-mode": "Downloads",
       "photos": "Fotos",

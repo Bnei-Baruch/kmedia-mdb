@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
+import produce from 'immer';
 import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -81,15 +82,16 @@ class TopicContainer extends Component {
   setVisibleState = (byId) => {
     const { expandedNodes } = this.state;
     const visibleItemsCount = 3;
-    const list              = byId || {};
-    Object.keys(list).forEach((key) => {
-      const { id, parent_id: parentId } = list[key];
-      let visible                       = true;
-      if (parentId) {
-        visible = expandedNodes[parentId] || list[parentId].children.indexOf(id) < visibleItemsCount;
-      }
+    const list              = produce(byId || {}, draft => {
+      Object.keys(draft).forEach((key) => {
+        const { id, parent_id: parentId } = draft[key];
+        let visible                       = true;
+        if (parentId) {
+          visible = expandedNodes[parentId] || draft[parentId].children.indexOf(id) < visibleItemsCount;
+        }
 
-      list[key] = { ...list[key], visible };
+        draft[key].visible = visible;
+      });
     });
 
     return list;
