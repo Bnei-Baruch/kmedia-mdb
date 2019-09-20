@@ -1,78 +1,43 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { withNamespaces } from 'react-i18next';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { isEmpty } from '../../../helpers/utils';
 import { selectors } from '../../../redux/modules/sources';
 import { selectors as stats } from '../../../redux/modules/stats';
 import HierarchicalFilter from './HierarchicalFilter';
 
-class SourcesFilter extends Component {
-  static propTypes = {
-    roots: PropTypes.arrayOf(PropTypes.shape({})),
-    getSourceById: PropTypes.func.isRequired,
-    cuStats: PropTypes.objectOf(PropTypes.number),
-    t: PropTypes.func.isRequired,
+const getTree = (roots, getSourceById, cuStats, t) => {
+  const root = {
+    value: 'root',
+    text: t('filters.sources-filter.all'),
+    children: roots ? roots.map(x => buildNode(x, getSourceById, cuStats)) : null,
   };
 
-  static defaultProps = {
-    roots: [],
-    cuStats: null,
+  return [root];
+};
+
+const buildNode = (id, getSourceById, cuStats) => {
+  const { name, children } = getSourceById(id);
+  return {
+    value: id,
+    text: name,
+    count: cuStats ? cuStats[id] : null,
+    children: children ? children.map(x => buildNode(x, getSourceById, cuStats)) : null,
   };
+};
 
-  constructor(props) {
-    super(props);
-    this.state = { tree: this.getTree(this.props) };
-  }
+const SourcesFilter = (props) => {
+  const { t, namespace, ...rest } = props;
 
-  componentWillReceiveProps(nextProps) {
-    const { roots, getSourceById, cuStats } = this.props;
+  const roots = useSelector(state => selectors.getRoots(state.sources));
+  const getSourceById = useSelector(state => selectors.getSourceById(state.sources));
 
-    if ((roots !== nextProps.roots
-      && getSourceById !== nextProps.getSourceById)
-      || cuStats !== nextProps.cuStats) {
-      this.setState({ tree: this.getTree(nextProps) });
-    }
-  }
+  let cuStats = useSelector(state => stats.getCUStats(state.stats, namespace)) || { data: { sources: {} } };
+  cuStats     = isEmpty(cuStats) || isEmpty(cuStats.data) ? null : cuStats.data.sources;
 
-  getTree = (props) => {
-    const { roots, getSourceById, cuStats, t } = props;
-
-    const root = {
-      value: 'root',
-      text: t('filters.sources-filter.all'),
-      children: roots ? roots.map(x => this.buildNode(x, getSourceById, cuStats)) : null,
-    };
-
-    return [root];
-  };
-
-  buildNode = (id, getSourceById, cuStats) => {
-    const { name, children } = getSourceById(id);
-    return {
-      value: id,
-      text: name,
-      count: cuStats ? cuStats[id] : null,
-      children: children ? children.map(x => this.buildNode(x, getSourceById, cuStats)) : null,
-    };
-  };
-
-  render() {
-    const { tree } = this.state;
-    return <HierarchicalFilter name="sources-filter" tree={tree} {...this.props} />;
-  }
+  const tree  = getTree(roots, getSourceById, cuStats, t);
+  return <HierarchicalFilter name="sources-filter" tree={tree} t={t} {...rest} />;
 }
 
-export default connect(
-  (state, ownProps) => {
-    let cuStats = stats.getCUStats(state.stats, ownProps.namespace) || { data: { sources: {} } };
-    cuStats     = isEmpty(cuStats) || isEmpty(cuStats.data) ? null : cuStats.data.sources;
-
-    return {
-      roots: selectors.getRoots(state.sources),
-      getSourceById: selectors.getSourceById(state.sources),
-      cuStats,
-    };
-  }
-)(withNamespaces()(SourcesFilter));
+export default withNamespaces()(SourcesFilter);
