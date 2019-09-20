@@ -41,6 +41,13 @@ class SimpleModePage extends PureComponent {
     err: null,
   };
 
+  state = {
+  };
+
+  componentDidMount() {
+    this.setState({ isClient: true });
+  }
+
   getOptions = (props) => {
     const { languages, t } = props;
 
@@ -106,6 +113,8 @@ class SimpleModePage extends PureComponent {
         onDayClick
       } = this.props;
 
+    const { isClient } = this.state;
+
     const selected               = selectedDate || today().toDate();
     const selectedToString       = moment(selected).format('YYYY-MM-DD');
     const localeDateFormat       = moment.localeData().longDateFormat('L');
@@ -129,10 +138,28 @@ class SimpleModePage extends PureComponent {
       </div>
     );
 
+    const renderDatePicker = () => {
+      return isClient && <Card>
+        <DayPicker
+          locale={uiLanguage}
+          modifiers={DayPickerModifiers}
+          localeUtils={MomentLocaleUtils}
+          selectedDays={selectedDate}
+          month={selectedDate}
+          disabledDays={{ after: new Date() }}
+          onDayClick={onDayClick}
+          captionElement={() => null}
+          navbarElement={props => this.getNavBarElement(props, uiLanguage, onDayClick)}
+        />
+        <Button className="inline-button" onClick={() => onDayClick(new Date())}
+          content={t('simple-mode.today-button')}/>
+      </Card>;
+    };
+
     return (
       <div>
-        <SectionHeader section="simple-mode" />
-        <Divider fitted />
+        <SectionHeader section="simple-mode"/>
+        <Divider fitted/>
         <Container className="padded">
           <Grid>
             <Grid.Row className="no-padding-top">
@@ -169,7 +196,8 @@ class SimpleModePage extends PureComponent {
                           )
                           : <span>{moment(selectedDate).format(dateFormat)}</span>
                       }
-                      <button type="button" disabled={isToday()} className={isToday() ? 'disabled' : ''} onClick={() => this.changeDay(1)}>{t('simple-mode.next')}</button>
+                      <button type="button" disabled={isToday()} className={isToday() ? 'disabled' : ''}
+                        onClick={() => this.changeDay(1)}>{t('simple-mode.next')}</button>
                     </div>
                   </div>
                   <div className="controller">
@@ -181,7 +209,8 @@ class SimpleModePage extends PureComponent {
                       {
                         isMobile
                           ? (
-                            <select className={blinkLangSelect ? 'blink' : ''} value={language} onChange={onLanguageChange}>
+                            <select className={blinkLangSelect ? 'blink' : ''} value={language}
+                              onChange={onLanguageChange}>
                               {
                                 languages.map(x => (
                                   <option key={`opt-${x.flag}`} value={x.value}>
@@ -212,20 +241,7 @@ class SimpleModePage extends PureComponent {
                       <h4>{t('simple-mode.choose-date')}</h4>
                     </div>
                   </div>
-                  <Card>
-                    <DayPicker
-                      locale={uiLanguage}
-                      modifiers={DayPickerModifiers}
-                      localeUtils={MomentLocaleUtils}
-                      selectedDays={selectedDate}
-                      month={selectedDate}
-                      disabledDays={{ after: new Date() }}
-                      onDayClick={onDayClick}
-                      captionElement={() => null}
-                      navbarElement={props => this.getNavBarElement(props, uiLanguage, onDayClick)}
-                    />
-                    <Button className="inline-button" onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
-                  </Card>
+                  {renderDatePicker()}
                 </div>
               </Grid.Column>
             </Grid.Row>
