@@ -634,6 +634,12 @@
     "new-york": "new-york",
     "san-francisco": "san-francisco",
     "st-louis": "saint-louis",
+    "india": "India",
+    "moldova,-republic-of": "Repubblica di Moldavia",
+    "kfar-sitrin": "Kfar Sitrin",
+    "kfar-hayarok": "Kfar Yarok",
+    "ahziv": "Ahziv",
+    "mount-meron": "Monte Meron",
     "unknown": "sconosciuto"
   },
   "values": {
