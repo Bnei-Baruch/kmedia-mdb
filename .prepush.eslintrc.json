@@ -1,0 +1,46 @@
+{
+  "extends":  [
+    "react-app",
+    "plugin:jest/recommended",
+    "jest-enzyme"
+  ],
+  "parser":   "babel-eslint",
+  "env":      {
+    "browser": true,
+    "es6":     true,
+    "jest":    true
+  },
+  "plugins":  [
+    "react",
+    "jest",
+    "import",
+    "react-hooks"
+  ],
+  "settings": {
+    "parser":         "babel-eslint",
+    "import/parser":  "babel-eslint",
+    "import/resolve": {},
+    "ecmaFeatures":   {
+      "classes": true,
+      "jsx":     true
+    }
+  },
+  "rules":    {
+    "react-hooks/rules-of-hooks":  "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "indent":                      [
+      "error",
+      2
+    ],
+    "linebreak-style":             [
+      "error",
+      "unix"
+    ],
+    "consistent-return":           "error"
+  },
+  "globals":  {
+    "socket": true,
+    "enzyme": true
+  }
+}
+
