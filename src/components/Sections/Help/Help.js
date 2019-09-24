@@ -117,9 +117,9 @@ const HelpPage = () => {
     lang = LANG_HEBREW;
     break;
     // case LANG_UKRAINIAN:
-    // case LANG_RUSSIAN:
-    //   lang = LANG_RUSSIAN;
-    //   break;
+  case LANG_RUSSIAN:
+    lang = LANG_RUSSIAN;
+    break;
   default:
     lang = LANG_ENGLISH;
     break;
