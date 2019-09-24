@@ -69,7 +69,7 @@ function* updatePageInQuery(action) {
   }
 
   yield* pushQuery((query) => {
-    if (pageNo > 1) {
+    if (pageNo > 0) {
       return { ...query, page: pageNo };
     }
     const { _page, ...result } = query;
