@@ -10,6 +10,8 @@
       "events": "Kongreler ve Etkinlikler",
       "books": "Kitaplar",
       "topics": "Konular",
+      "topic": "Konu",
+      "not-found": "bulunamadı",
       "publications": "Yayınlar",
       "simple-mode": "İndirilenler",
       "photos": "Fotoğraflar",

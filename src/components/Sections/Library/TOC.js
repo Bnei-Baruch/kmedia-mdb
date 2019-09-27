@@ -261,6 +261,10 @@ class TOC extends Component {
     this.setState({ activeId: id });
   };
 
+  handleAccordionContext = (ref) => {
+    this.accordionContext = ref;
+  };
+
   render() {
     const { fullPath, rootId, contextRef} = this.props;
 
@@ -283,3 +287,7 @@ class TOC extends Component {
 }
 
 export default TOC;
+// four wide computer sixteen wide mobile sixteen wide tablet column
+// four wide computer sixteen wide mobile sixteen wide tablet column widescreen-only large-screen-only computer-only
+// twelve wide computer sixteen wide mobile sixteen wide tablet column source__content-wrapper size0
+// twelve wide computer sixteen wide mobile sixteen wide tablet column source__content-wrapper size0
