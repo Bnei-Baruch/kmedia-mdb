@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
+import produce from 'immer';
 import { Button, Header, Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
@@ -10,17 +11,17 @@ import { isNotEmptyArray } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 
-const TopN = ({ units, N, section, topicUrl, t }) => {
-  const [topNUnits, setTopNUnits] = useState([]);
+const TopN = ({ units, N, sectionCount, section, topicUrl, t }) => {
+  const [topNUnits, setTopNUnits]         = useState([]);
   const [buttonVisible, setButtonVisible] = useState(true);
 
   useEffect(() => {
     const topNUnits = getTopNUnits(units, N);
     setTopNUnits(topNUnits);
 
-    const buttonViewAllVisible = isButtonViewAllVisible(units.length, N, topicUrl);
+    const buttonViewAllVisible = isButtonViewAllVisible(sectionCount, N, topicUrl);
     setButtonVisible(buttonViewAllVisible);
-  }, [units, N, topicUrl]);
+  }, [units, sectionCount, N, topicUrl]);
 
   return (isNotEmptyArray(topNUnits)
     ? renderTable(topNUnits, section, buttonVisible ? topicUrl : null, t)
@@ -34,23 +35,21 @@ const isButtonViewAllVisible = (totalUnits, N, url) => (
 );
 
 const getTopNUnits = (units, N) => {
-  let topNUnits = [];
+  let topNUnits = produce(units, draft => {
+    if (isNotEmptyArray(draft)) {
+      draft.sort(compareUnits);
+    }
+  });
 
-  if (isNotEmptyArray(units)) {
-    units.sort(compareUnits);
-
-    topNUnits = units.length > N
-      ? units.slice(0, N)
-      : units;
-  }
-
-  return topNUnits;
+  return topNUnits.length > N
+    ? topNUnits.slice(0, N)
+    : topNUnits;
 };
 
 const compareUnits = (a, b) => (a && b && a.film_date <= b.film_date) ? 1 : -1;
 
 const renderTable = (topNUnits, section, url, t) => {
-  return(
+  return (
     <Table unstackable basic="very">
       <Table.Header>
         <Table.Row>
@@ -79,11 +78,11 @@ const renderTable = (topNUnits, section, url, t) => {
           : null
       }
     </Table>
-  )};
-
+  );
+};
 
 const renderUnit = (unit, t) => {
-  const link   = canonicalLink(unit);
+  const link     = canonicalLink(unit);
   const filmDate = unit.film_date
     ? t('values.date', { date: new Date(unit.film_date) })
     : '';
@@ -104,6 +103,7 @@ TopN.propTypes = {
   section: PropTypes.string.isRequired,
   units: PropTypes.arrayOf(shapes.ContentUnit).isRequired,
   N: PropTypes.number.isRequired,
+  sectionCount: PropTypes.number.isRequired,
   topicUrl: PropTypes.string,
   t: PropTypes.func.isRequired,
 };

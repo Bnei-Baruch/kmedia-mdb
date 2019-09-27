@@ -421,7 +421,7 @@ class LibraryContainer extends Component {
                 tablet={16}
                 computer={4}
                 onClick={this.handleTocIsActive}
-                className={!tocIsActive ? 'widescreen-only large-screen-only computer-only' : ''}>
+                className={!tocIsActive ? 'large-screen-only computer-only' : ''}>
                 <TOC
                   language={language}
                   match={matchString ? match : ''}

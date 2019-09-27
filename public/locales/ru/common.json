@@ -10,6 +10,8 @@
       "events": "Конгрессы, события",
       "books": "Книги",
       "topics": "Темы",
+      "topic": "Тема",
+      "not-found": "не найдена",
       "publications": "Публикации",
       "simple-mode": "Загрузки",
       "photos": "Фотографии",

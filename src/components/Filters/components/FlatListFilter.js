@@ -30,9 +30,9 @@ class FlatListFilter extends Component {
     sValue: this.props.value
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.value !== nextProps.value) {
-      this.setState({ sValue: nextProps.value });
+  componentDidUpdate(prevProps) {
+    if (this.props.value !== prevProps.value) {
+      this.setState({ sValue: this.props.value });
     }
   }
 
