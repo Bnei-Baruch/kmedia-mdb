@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { useParams, withRouter } from 'react-router-dom';
 import { Container, Grid, Segment } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
 
 import { actions, selectors } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
-import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 
 const LibraryPerson = (props) => {
-  const { match: { params: { id: sourceId } }, t } = props;
+  const { t }                       = props;
+  const { id: sourceId }            = useParams();
   const language                    = useSelector(state => settings.getLanguage(state.settings));
   const { wip, err, data: content } = useSelector(state => selectors.getPerson(state.assets));
   const dispatch                    = useDispatch();
@@ -46,7 +46,6 @@ const LibraryPerson = (props) => {
 };
 
 LibraryPerson.propTypes = {
-  match: shapes.RouterMatch.isRequired,
   t: PropTypes.func.isRequired,
 };
 

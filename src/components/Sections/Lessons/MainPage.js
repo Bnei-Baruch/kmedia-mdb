@@ -6,12 +6,12 @@ import { Menu } from 'semantic-ui-react';
 
 import { actions as lessonsActions } from '../../../redux/modules/lessons';
 import { actions as filterActions } from '../../../redux/modules/filters';
-import * as shapes from '../../shapes';
 import NavLink from '../../Language/MultiLanguageNavLink';
 import SectionHeader from '../../shared/SectionHeader';
 import Daily from './tabs/Daily/Container';
 import Series from './tabs/Series/Container';
 import Lectures from './tabs/Lectures/Container';
+import { useLocation, useParams } from 'react-router';
 
 // needed in routesSSRData
 export const tabs = [
@@ -47,8 +47,11 @@ const content = (active) => {
   return content;
 };
 
-const MainPage = ({ location, match, t }) => {
-  const tab = match.params.tab || tabs[0];
+const MainPage = ({ t }) => {
+  const params   = useParams();
+  const location = useLocation();
+
+  const tab = params.tab || tabs[0];
 
   const submenuItems = tabs.map(x => (
     <Menu.Item
@@ -85,8 +88,6 @@ const MainPage = ({ location, match, t }) => {
 };
 
 MainPage.propTypes = {
-  location: shapes.HistoryLocation.isRequired,
-  match: shapes.RouterMatch.isRequired,
   t: PropTypes.func.isRequired,
 };
 
