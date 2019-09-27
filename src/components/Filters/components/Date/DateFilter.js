@@ -96,13 +96,32 @@ class DateFilter extends Component {
     }
   };
 
+  static convertToStateObject = (props) => {
+    const { value } = props;
+    if (!value) {
+      return {};
+    }
+
+    const { from, to, datePreset } = value;
+    const preset                   = datePreset || rangeToPreset(from, to);
+    return ({
+      from,
+      to,
+      datePreset: preset,
+      showRange: preset === CUSTOM_RANGE,
+      showDay: preset === CUSTOM_DAY,
+    });
+  };
+
   constructor(props, context) {
     super(props, context);
-    this.state = this.convertToStateObject(this.props);
+    this.state = DateFilter.convertToStateObject(props);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState(this.convertToStateObject(nextProps));
+  componentDidUpdate(prevProps) {
+    if (this.props.value && this.props.value !== prevProps.value){
+      this.setState(DateFilter.convertToStateObject(this.props));
+    }
   }
 
   onCancel = () => this.props.onCancel();
@@ -128,23 +147,6 @@ class DateFilter extends Component {
   apply = () => {
     const { from, to, datePreset } = this.state;
     this.props.onApply({ from, to, datePreset });
-  };
-
-  convertToStateObject = (props) => {
-    const { value } = props;
-    if (!value) {
-      return {};
-    }
-
-    const { from, to, datePreset } = value;
-    const preset                   = datePreset || rangeToPreset(from, to);
-    return ({
-      from,
-      to,
-      datePreset: preset,
-      showRange: preset === CUSTOM_RANGE,
-      showDay: preset === CUSTOM_DAY,
-    });
   };
 
   handleDatePresetsChange = (event, data) => {

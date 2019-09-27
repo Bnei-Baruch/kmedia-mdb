@@ -4,27 +4,25 @@ import range from 'lodash/range';
 
 import FlatListFilter from './FlatListFilter';
 
-class YearsFilter extends React.Component {
-  static propTypes = {
-    fromYear: PropTypes.number,
-    toYear: PropTypes.number,
-  };
+const YearsFilter = (props) => {
+  const { fromYear, toYear, ...rest } = props;
 
-  static defaultProps = {
-    fromYear: 1995,
-    toYear: (new Date()).getFullYear(),
-  };
+  const options = range(toYear, fromYear, -1).map(x => ({
+    value: x,
+    text: `${x}`
+  }));
 
-  render() {
-    const { fromYear, toYear, ...rest } = this.props;
-
-    const options = range(toYear, fromYear, -1).map(x => ({
-      value: x,
-      text: `${x}`
-    }));
-
-    return <FlatListFilter name="years-filter" options={options} {...rest} />;
-  }
+  return <FlatListFilter name="years-filter" options={options} {...rest} />;
 }
+
+YearsFilter.propTypes = {
+  fromYear: PropTypes.number,
+  toYear: PropTypes.number,
+};
+
+YearsFilter.defaultProps = {
+  fromYear: 1995,
+  toYear: (new Date()).getFullYear(),
+};
 
 export default YearsFilter;
