@@ -10,6 +10,8 @@
       "events": "Conventions & Events",
       "books": "Books",
       "topics": "Topics",
+      "topic": "Topic",
+      "not-found": "Not Found",
       "publications": "Publications",
       "simple-mode": "Downloads",
       "photos": "Photos",
