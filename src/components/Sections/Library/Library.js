@@ -15,21 +15,63 @@ import { updateQuery } from '../../../helpers/url';
 import withPagination from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
 
+const defaultContent = {
+  data: null,
+  wip: false,
+  err: null,
+};
+
+const getContentToDisplay = (language, pageNumber, pageNumberHandler, usePdfFile, pdfFile, startsFrom, content, t) => {
+  const { wip: contentWip, err: contentErr, data: contentData } = content;
+
+  if (contentErr) {
+    if (contentErr.response && contentErr.response.status === 404) {
+      return <FrownSplash text={t('messages.source-content-not-found')} />;
+    } else {
+      return <ErrorSplash text={t('messages.server-error')} subtext={formatError(contentErr)} />;
+    }
+  } else if (contentWip) {
+    return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
+  } else if (usePdfFile) {
+    return (
+      <PDF
+        pdfFile={assetUrl(`sources/${pdfFile}`)}
+        pageNumber={pageNumber || 1}
+        startsFrom={startsFrom}
+        pageNumberHandler={pageNumberHandler}
+      />
+    );
+  } else if (contentData) {
+    const direction = getLanguageDirection(language);
+
+    return (
+      <div
+        style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
+        dangerouslySetInnerHTML={{ __html: contentData }}
+      />
+    );
+  } else {
+    return null;
+  }
+};
+
 const Library = (props) => {
   const location                    = useLocation();
   const history                     = useHistory();
   const [pageNumber, setPageNumber] = useState(withPagination.getPageFromLocation(location));
 
-  const {
-          content     = {
-            data: null,
-            wip: false,
-            err: null,
-          }, language = null, languages = [], isTaas, langSelectorMount = null, fullUrlPath = null,
-          t,
-        } = props;
+  const
+    {
+      content           = defaultContent,
+      language          = null,
+      languages         = [],
+      isTaas,
+      langSelectorMount = null,
+      fullUrlPath       = null,
+      t,
+    } = props;
 
-  const pageNumberHandler = (pageNumber) => {
+  const pageNumberHandler = pageNumber => {
     setPageNumber(pageNumber);
     updateQuery(history, query => ({
       ...query,
@@ -41,41 +83,13 @@ const Library = (props) => {
     return <Segment basic>&nbsp;</Segment>;
   }
 
-  const direction = getLanguageDirection(language);
-
   // PDF.js will fetch file by itself
   const { pdfFile = null, startsFrom = 1, downloadAllowed } = props;
   const usePdfFile                                          = isTaas && pdfFile;
   const mimeType                                            = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-  let contentsToDisplay;
 
-  const { wip: contentWip, err: contentErr, data: contentData } = content;
-
-  if (contentErr) {
-    if (contentErr.response && contentErr.response.status === 404) {
-      contentsToDisplay = <FrownSplash text={t('messages.source-content-not-found')} />;
-    } else {
-      contentsToDisplay = <ErrorSplash text={t('messages.server-error')} subtext={formatError(contentErr)} />;
-    }
-  } else if (contentWip) {
-    contentsToDisplay = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-  } else if (usePdfFile) {
-    contentsToDisplay = (
-      <PDF
-        pdfFile={assetUrl(`sources/${pdfFile}`)}
-        pageNumber={pageNumber || 1}
-        startsFrom={startsFrom}
-        pageNumberHandler={pageNumberHandler}
-      />
-    );
-  } else if (contentData) {
-    contentsToDisplay = (
-      <div
-        style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
-        dangerouslySetInnerHTML={{ __html: contentData }}
-      />
-    );
-  } else {
+  const contentsToDisplay = getContentToDisplay(language, pageNumber, pageNumberHandler, pdfFile, usePdfFile, startsFrom, content, t);
+  if (contentsToDisplay === null) {
     return <Segment basic>{t('sources-library.no-source')}</Segment>;
   }
 
