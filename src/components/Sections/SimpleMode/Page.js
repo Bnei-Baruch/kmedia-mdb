@@ -129,6 +129,7 @@ const SimpleModePage = (props) => {
   const [isClient, setIsClient]   = useState(false);
   const [data, setData]           = useState({
     selected: ToDay,
+    selectedDate,
     selectedToString: moment(ToDay).format('YYYY-MM-DD'),
     selectedInLocaleFormat: moment(ToDay).format(LocaleDateFormat),
     dateFormat: 'MMM DD, YYYY',
@@ -152,6 +153,7 @@ const SimpleModePage = (props) => {
       const selected = selectedDate || today().toDate();
       setData({
         selected,
+        selectedDate,
         selectedToString: moment(selected).format('YYYY-MM-DD'),
         selectedInLocaleFormat: moment(selected).format(LocaleDateFormat),
         dateFormat: uiLanguage === 'en' ? 'MMM DD, YYYY' : 'DD MMM, YYYY',
