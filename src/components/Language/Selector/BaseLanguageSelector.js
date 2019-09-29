@@ -18,14 +18,6 @@ class LanguageSelector extends PureComponent {
     languages: [],
   };
 
-  static getOptions(props) {
-    const { languages, t } = props;
-
-    return LANGUAGE_OPTIONS
-      .filter(x => languages.includes(x.value))
-      .map(x => ({ ...x, text: t(`constants.languages.${x.value}`) }));
-  }
-
   render() {
     return null;
   }
