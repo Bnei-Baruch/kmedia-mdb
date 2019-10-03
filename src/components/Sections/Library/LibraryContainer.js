@@ -21,7 +21,6 @@ import LibraryContentContainer from './LibraryContentContainer';
 import TOC from './TOC';
 import LibrarySettings from './LibrarySettings';
 import Share from './Share';
-import { getQuery } from '../../../helpers/url';
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -131,9 +130,9 @@ class LibraryContainer extends Component {
     window.removeEventListener('load', this.updateSticky);
   }
 
-  getFullPath = (sourceId, parentId) => {
+  getFullPath = (sourceId) => {
     // Go to the root of this sourceId
-    const { getPathByID, getSourceById } = this.props;
+    const { getPathByID } = this.props;
 
     if (!getPathByID) {
       return [{ id: '0' }, { id: sourceId }];
@@ -143,14 +142,6 @@ class LibraryContainer extends Component {
 
     if (!path || path.length < 2 || !path[1]) {
       return [{ id: '0' }, { id: sourceId }];
-    }
-
-    if (parentId) {
-      // replace COLLECTION if parent id supplied
-      const node = getSourceById(parentId);
-      if (node) {
-        path[1] = node;
-      }
     }
 
     return path;
@@ -332,11 +323,9 @@ class LibraryContainer extends Component {
   };
 
   render() {
-    const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push, history, deviceInfo, location } = this.props;
+    const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push, history, deviceInfo } = this.props;
 
-    const q = getQuery(location);
-
-    const fullPath = this.getFullPath(sourceId, q.parent);
+    const fullPath = this.getFullPath(sourceId);
     const parentId = this.properParentId(fullPath);
 
     const index = isEmpty(sourceId) ? {} : indexMap[sourceId];
@@ -441,7 +430,6 @@ class LibraryContainer extends Component {
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
                   apply={push}
-                  parentId={q.parent}
                 />
               </Grid.Column>
               <Grid.Column

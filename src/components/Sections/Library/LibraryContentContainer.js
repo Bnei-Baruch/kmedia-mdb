@@ -19,7 +19,13 @@ const fetchContent = (source, data, fetchAsset) => {
     return;
   }
 
-  fetchAsset(`sources/${source}/${data.html}`);
+  let id = source;
+  if (/^gr-/.test(id)) { // Rabash Group Articles
+    const result = /^gr-(.+)/.exec(id);
+    id           = result[1];
+  }
+
+  fetchAsset(`sources/${id}/${data.html}`);
 };
 
 const getFullUrl = (pdf, data, language, source) => {

@@ -130,7 +130,7 @@ const setRabash = (sources, language) => {
   const rbLetters  = rb.children.find(el => el.id === 'b8SHlrfH').children;
   const children   = groupRabash.map(gr => {
     const item = rbArticles.find(el => el.id === gr) || rbLetters.find(el => el.id === gr);
-    const el   = Object.assign({}, item, { parent_id: 'grRABASH' });
+    const el   = Object.assign({}, item, { parent_id: 'grRABASH', id: `gr-${item.id}` });
     return el;
   });
   rb.children.push({
