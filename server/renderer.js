@@ -73,8 +73,8 @@ function canonicalLink(req, lang) {
   }
 
   if (/\/gr-/.test(cPath)) { // Rabash Group Articles
-    const result = /(.+)\/gr-(.+)$/.exec(cpath);
-    cPath           = `${result[0]}/${result[1]}`;
+    const result = /(.+)\/gr-(.+)$/.exec(cPath);
+    cPath           = `${result[1]}/${result[2]}`;
   }
 
   return `<link rel="canonical" href="${BASE_URL}${cPath}" />`;
