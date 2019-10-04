@@ -46,7 +46,7 @@ class AVBox extends Component {
     playerHelper.setLanguageInQuery(history, playerLanguage);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { unit, uiLanguage, location } = nextProps;
     const { playableItem }               = this.state;
     const { language: playerLanguage }   = playableItem;

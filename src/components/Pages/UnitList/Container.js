@@ -61,7 +61,7 @@ export class UnitListContainer extends withPagination {
   //   }
   // }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     // clear all filters when location's search is cleared by Menu click
     if (nextProps.location.search !== this.props.location.search) {
       if (!nextProps.location.search) {
@@ -80,7 +80,7 @@ export class UnitListContainer extends withPagination {
       }
     }
 
-    super.componentWillReceiveProps(nextProps);
+    super.UNSAFE_componentWillReceiveProps(nextProps);
   }
 
   extraFetchParams() {

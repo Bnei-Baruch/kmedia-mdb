@@ -29,7 +29,7 @@ class TimedPopup extends Component {
 
   confirmTimeoutHandle = null;
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { openOnInit } = nextProps;
     if (openOnInit) {
       this.open();

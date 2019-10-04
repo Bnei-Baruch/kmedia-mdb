@@ -29,7 +29,7 @@ export class BlogPostContainer extends Component {
     this.askForDataIfNeeded(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.askForDataIfNeeded(nextProps);
   }
 

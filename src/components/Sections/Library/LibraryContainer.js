@@ -90,7 +90,7 @@ class LibraryContainer extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { sourceId, areSourcesLoaded, language, replace } = nextProps;
     if (!areSourcesLoaded) {
       return;

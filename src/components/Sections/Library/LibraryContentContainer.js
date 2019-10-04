@@ -74,7 +74,7 @@ class LibraryContentContainer extends Component {
     this.setStateFromProps(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { index, uiLanguage, contentLanguage } = this.props;
     let useStateLanguages                        = false;
     if (nextProps.index === index) {
