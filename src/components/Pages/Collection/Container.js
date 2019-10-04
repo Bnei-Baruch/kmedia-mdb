@@ -31,7 +31,7 @@ class CollectionContainer extends Component {
     this.askForDataIfNeeded(this.props);
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     this.askForDataIfNeeded(nextProps);
   }
 

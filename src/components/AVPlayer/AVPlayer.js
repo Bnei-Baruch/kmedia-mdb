@@ -186,7 +186,7 @@ class AVPlayer extends PureComponent {
     }
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     const { item } = this.state;
     if (nextProps.item !== item) {
       this.setState({

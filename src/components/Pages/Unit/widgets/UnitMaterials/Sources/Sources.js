@@ -38,7 +38,7 @@ class Sources extends Component {
     this.myReplaceState(this.props);
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     // unit has changed - replace all state
     if (nextProps.unit.id !== this.props.unit.id) {
       return;

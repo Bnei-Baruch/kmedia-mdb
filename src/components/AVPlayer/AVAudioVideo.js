@@ -16,7 +16,7 @@ class AVAudioVideo extends Component {
 
   state = {};
 
-  UNSAFE_componentWillReceiveProps() {
+  componentWillReceiveProps() {
     const { fallbackMedia } = this.props;
     this.handleFallbackMedia(fallbackMedia);
   }

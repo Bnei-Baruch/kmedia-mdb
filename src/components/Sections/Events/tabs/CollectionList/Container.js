@@ -43,7 +43,7 @@ class TabContainer extends Component {
     }
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     const { language } = nextProps;
 
     if (language !== this.props.language) {

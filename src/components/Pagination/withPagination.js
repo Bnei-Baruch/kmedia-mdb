@@ -21,7 +21,7 @@ class withPagination extends React.Component {
     return Number.isNaN(p) || p <= 0 ? 1 : p;
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.language !== this.props.language
       || nextProps.namespace !== this.props.namespace) {
       this.askForData(nextProps);
