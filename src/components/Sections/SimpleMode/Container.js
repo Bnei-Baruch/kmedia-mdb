@@ -56,7 +56,7 @@ class SimpleModeContainer extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { state, props } = this;
 
     if (state.filesLanguage !== nextProps.contentLanguage) {

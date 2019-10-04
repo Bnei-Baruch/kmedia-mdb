@@ -26,7 +26,7 @@ class SourcesFilter extends Component {
     this.state = { tree: this.getTree(this.props) };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { roots, getSourceById, cuStats } = this.props;
 
     if ((roots !== nextProps.roots

@@ -27,7 +27,7 @@ class AVPlaylistPlayer extends Component {
     autoPlay: false
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { history } = this.props;
     if (history){
       const query       = getQuery(history.location);

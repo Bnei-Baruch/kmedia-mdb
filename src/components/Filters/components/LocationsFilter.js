@@ -26,7 +26,7 @@ class LocationsFilter extends Component {
     this.state = { tree: this.getTree(this.props) };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { congressEvents } = this.props;
     if (congressEvents !== nextProps.congressEvents) {
       this.setState({ tree: this.getTree(nextProps) });
