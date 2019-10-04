@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { withRouter } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Container, Portal, Segment } from 'semantic-ui-react';
-import isEqual from 'react-fast-compare';
 
 import { assetUrl } from '../../../helpers/Api';
 import { formatError, isEmpty } from '../../../helpers/utils';
@@ -16,135 +15,127 @@ import { updateQuery } from '../../../helpers/url';
 import withPagination from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
 
-class Library extends Component {
-  static propTypes = {
-    content: PropTypes.shape({
-      data: PropTypes.string, // actual content (HTML)
-      wip: shapes.WIP,
-      err: shapes.Error,
-    }),
-    isTaas: PropTypes.bool.isRequired,
-    pdfFile: PropTypes.string,
-    startsFrom: PropTypes.number,
-    language: PropTypes.string,
-    languages: PropTypes.arrayOf(PropTypes.string),
-    langSelectorMount: PropTypes.instanceOf(PropTypes.element),
-    t: PropTypes.func.isRequired,
-    handleLanguageChanged: PropTypes.func.isRequired,
-    history: shapes.History.isRequired,
-    fullUrlPath: PropTypes.string,
-    downloadAllowed: PropTypes.bool.isRequired,
-  };
+const defaultContent = {
+  data: null,
+  wip: false,
+  err: null,
+};
 
-  static defaultProps = {
-    language: null,
-    languages: [],
-    langSelectorMount: null,
-    content: {
-      data: null,
-      wip: false,
-      err: null,
-    },
-    pdfFile: null,
-    startsFrom: 1,
-    fullUrlPath: null,
-  };
+const getContentToDisplay = (language, pageNumber, pageNumberHandler, usePdfFile, pdfFile, startsFrom, content, t) => {
+  const { wip: contentWip, err: contentErr, data: contentData } = content;
 
-  constructor(props) {
-    super(props);
+  if (contentErr) {
+    if (contentErr.response && contentErr.response.status === 404) {
+      return <FrownSplash text={t('messages.source-content-not-found')} />;
+    } else {
+      return <ErrorSplash text={t('messages.server-error')} subtext={formatError(contentErr)} />;
+    }
+  } else if (contentWip) {
+    return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
+  } else if (usePdfFile) {
+    return (
+      <PDF
+        pdfFile={assetUrl(`sources/${pdfFile}`)}
+        pageNumber={pageNumber || 1}
+        startsFrom={startsFrom}
+        pageNumberHandler={pageNumberHandler}
+      />
+    );
+  } else if (contentData) {
+    const direction = getLanguageDirection(language);
 
-    const { history: { location } } = props;
-    const pageNumber                = withPagination.getPageFromLocation(location);
-
-    this.state = { pageNumber };
+    return (
+      <div
+        style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
+        dangerouslySetInnerHTML={{ __html: contentData }}
+      />
+    );
+  } else {
+    return null;
   }
+};
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const { props, state } = this;
-    return !isEqual(props, nextProps) || !isEqual(state, nextState);
-  }
+const Library = (props) => {
+  const location                    = useLocation();
+  const history                     = useHistory();
+  const [pageNumber, setPageNumber] = useState(withPagination.getPageFromLocation(location));
 
-  pageNumberHandler = (pageNumber) => {
-    const { history } = this.props;
-    this.setState({ pageNumber });
+  const
+    {
+      content           = defaultContent,
+      language          = null,
+      languages         = [],
+      isTaas,
+      langSelectorMount = null,
+      fullUrlPath       = null,
+      t,
+    } = props;
+
+  const pageNumberHandler = pageNumber => {
+    setPageNumber(pageNumber);
     updateQuery(history, query => ({
       ...query,
       page: pageNumber,
     }));
   };
 
-  render() {
-    const { content, language, languages, t, isTaas, langSelectorMount, fullUrlPath } = this.props;
+  if (isEmpty(content)) {
+    return <Segment basic>&nbsp;</Segment>;
+  }
 
-    if (isEmpty(content)) {
-      return <Segment basic>&nbsp;</Segment>;
-    }
+  // PDF.js will fetch file by itself
+  const { pdfFile = null, startsFrom = 1, downloadAllowed } = props;
+  const usePdfFile                                          = isTaas && pdfFile;
+  const mimeType                                            = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
-    const direction = getLanguageDirection(language);
+  const contentsToDisplay = getContentToDisplay(language, pageNumber, pageNumberHandler, pdfFile, usePdfFile, startsFrom, content, t);
+  if (contentsToDisplay === null) {
+    return <Segment basic>{t('sources-library.no-source')}</Segment>;
+  }
 
-    // PDF.js will fetch file by itself
-    const { pdfFile, startsFrom, downloadAllowed } = this.props;
-    const usePdfFile                               = isTaas && pdfFile;
-    const mimeType                                 = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-    const { pageNumber }                           = this.state;
-    let contentsToDisplay;
-
-    const { wip: contentWip, err: contentErr, data: contentData } = content;
-
-    if (contentErr) {
-      if (contentErr.response && contentErr.response.status === 404) {
-        contentsToDisplay = <FrownSplash text={t('messages.source-content-not-found')} />;
-      } else {
-        contentsToDisplay = <ErrorSplash text={t('messages.server-error')} subtext={formatError(contentErr)} />;
-      }
-    } else if (contentWip) {
-      contentsToDisplay = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-    } else if (usePdfFile) {
-      contentsToDisplay = (
-        <PDF
-          pdfFile={assetUrl(`sources/${pdfFile}`)}
-          pageNumber={pageNumber || 1}
-          startsFrom={startsFrom}
-          pageNumberHandler={this.pageNumberHandler}
+  let languageBar = null;
+  if (languages.length > 0) {
+    const { handleLanguageChanged } = props;
+    languageBar                     = (
+      <Container fluid textAlign="right">
+        <AnchorsLanguageSelector
+          languages={languages}
+          defaultValue={language}
+          onSelect={handleLanguageChanged}
         />
-      );
-    } else if (contentData) {
-      contentsToDisplay = (
-        <div
-          style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
-          dangerouslySetInnerHTML={{ __html: contentData }}
-        />
-      );
-    } else {
-      return <Segment basic>{t('sources-library.no-source')}</Segment>;
-    }
-
-    let languageBar = null;
-    if (languages.length > 0) {
-      const { handleLanguageChanged } = this.props;
-      languageBar                     = (
-        <Container fluid textAlign="right">
-          <AnchorsLanguageSelector
-            languages={languages}
-            defaultValue={language}
-            onSelect={handleLanguageChanged}
-          />
-        </Container>
-      );
-    }
-
-    return (
-      <div>
-        {
-          langSelectorMount && languageBar
-            ? <Portal open preprend mountNode={langSelectorMount}>{languageBar}</Portal>
-            : languageBar
-        }
-        <Download path={fullUrlPath} mimeType={mimeType} downloadAllowed={downloadAllowed}  />
-        {contentsToDisplay}
-      </div>
+      </Container>
     );
   }
-}
 
-export default withRouter(withNamespaces()(Library));
+  return (
+    <div>
+      {
+        langSelectorMount && languageBar
+          ? <Portal open preprend mountNode={langSelectorMount}>{languageBar}</Portal>
+          : languageBar
+      }
+      <Download path={fullUrlPath} mimeType={mimeType} downloadAllowed={downloadAllowed} />
+      {contentsToDisplay}
+    </div>
+  );
+};
+
+Library.propTypes = {
+  content: PropTypes.shape({
+    data: PropTypes.string, // actual content (HTML)
+    wip: shapes.WIP,
+    err: shapes.Error,
+  }),
+  isTaas: PropTypes.bool.isRequired,
+  pdfFile: PropTypes.string,
+  startsFrom: PropTypes.number,
+  language: PropTypes.string,
+  languages: PropTypes.arrayOf(PropTypes.string),
+  langSelectorMount: PropTypes.instanceOf(PropTypes.element),
+  handleLanguageChanged: PropTypes.func.isRequired,
+  fullUrlPath: PropTypes.string,
+  downloadAllowed: PropTypes.bool.isRequired,
+  t: PropTypes.func.isRequired,
+};
+
+export default withNamespaces()(Library);

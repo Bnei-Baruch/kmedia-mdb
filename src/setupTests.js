@@ -6,7 +6,6 @@ import Adapter from 'enzyme-adapter-react-16';
 import 'jest-enzyme';
 
 // Testing library
-import '@testing-library/react/cleanup-after-each';
 import '@testing-library/jest-dom/extend-expect'; // adds custom jest matchers from jest-dom
 // import 'jest-axe/extend-expect'; // Testing the a11y
 

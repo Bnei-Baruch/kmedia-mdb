@@ -1,4 +1,4 @@
-import { DEFAULT_LANGUAGE, LANG_ENGLISH } from './consts';
+import { DEFAULT_LANGUAGE, LANG_ENGLISH, LANGUAGE_OPTIONS } from './consts';
 
 /**
  * Select language to use
@@ -31,3 +31,9 @@ export const selectSuitableLanguage = (contentLanguage, uiLanguage, languages = 
   // Or first available language
   return languages[0];
 };
+
+export const getOptions = ({ languages, t }) =>
+  LANGUAGE_OPTIONS
+    .filter(x => languages.includes(x.value))
+    .map(x => ({ ...x, text: t(`constants.languages.${x.value}`) }));
+

@@ -172,13 +172,13 @@ class TOC extends Component {
     subTree.map(sourceId => (this.toc(sourceId, path)))
   );
 
-  leaf = (id, title, parentId, match) => {
+  leaf = (id, title, match) => {
     const { activeId } = this.state;
     const props        = {
       id: titleKey(id),
       key: titleKey(id),
       active: id === activeId,
-      onClick: e => this.selectSourceById(id, parentId, e),
+      onClick: e => this.selectSourceById(id, e),
     };
 
     const realTitle = isEmpty(match)
@@ -187,7 +187,7 @@ class TOC extends Component {
     return <Accordion.Title {...props}>{realTitle}</Accordion.Title>;
   };
 
-  toc = (sourceId, path, parentId, firstLevel = false) => {
+  toc = (sourceId, path, firstLevel = false) => {
     // 1. Element that has children is CONTAINER
     // 2. Element that has NO children is NOT CONTAINER (though really it may be an empty container)
     // 3. If all children of the first level element are NOT CONTAINERS, than it is also NOT CONTAINER
@@ -198,7 +198,7 @@ class TOC extends Component {
     const { name: title, children } = getSourceById(sourceId);
 
     if (isEmpty(children)) { // Leaf
-      const item   = this.leaf(sourceId, title, parentId);
+      const item   = this.leaf(sourceId, title);
       const result = { as: 'span', title: item, key: `lib-leaf-${sourceId}` };
       return [result];
     }
@@ -222,7 +222,7 @@ class TOC extends Component {
 
       const { match } = this.props;
       panels          = filterSources(tree, match).map(({ leafId, leafTitle, }) => ({
-        title: this.leaf(leafId, leafTitle, parentId, match),
+        title: this.leaf(leafId, leafTitle, match),
         key: `lib-leaf-${leafId}`
       }));
     } else {
@@ -253,10 +253,10 @@ class TOC extends Component {
     };
   };
 
-  selectSourceById = (id, parentId, e) => {
+  selectSourceById = (id, e) => {
     const { apply, matchApplied } = this.props;
     e.preventDefault();
-    apply(`sources/${id}?parent=${parentId}`);
+    apply(`sources/${id}`);
     matchApplied();
     this.setState({ activeId: id });
   };
@@ -266,7 +266,7 @@ class TOC extends Component {
   };
 
   render() {
-    const { fullPath, rootId, contextRef, parentId} = this.props;
+    const { fullPath, rootId, contextRef} = this.props;
 
     const activeIndex = getIndex(fullPath[1], fullPath[2]);
     if (activeIndex === -1) {
@@ -274,7 +274,7 @@ class TOC extends Component {
     }
 
     const path = fullPath.slice(1); // Remove first element (i.e. kabbalist)
-    const toc  = this.toc(rootId, path, parentId, true);
+    const toc  = this.toc(rootId, path, true);
 
     return (
       <Sticky context={contextRef} className="source__toc">

@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import hoistStatics from 'hoist-non-react-statics';
-import { withRouter } from 'react-router-dom';
 
 import { getToWithLanguage } from '../../helpers/url';
-import * as shapes from '../shapes';
+import { useLocation } from 'react-router';
 
 /**
  * multiLanguageLinkCreator - an higher order component to create a link that allows navigating
@@ -24,34 +23,25 @@ import * as shapes from '../shapes';
  */
 
 const multiLanguageLinkCreator = () => (WrappedComponent) => {
-  class MultiLanguageLinkHOC extends Component {
-    static propTypes = {
-      to: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.object
-      ]),
-      location: shapes.HistoryLocation.isRequired,
-      language: PropTypes.string, // language shorthand, for example: "ru"
-      contentLanguage: PropTypes.string, // language shorthand, for example: "ru"
-    };
+  const MultiLanguageLinkHOC = ({ to = undefined, language = '', contentLanguage = undefined, staticContext, ...rest }) => {
 
-    static defaultProps = {
-      language: '',
-      to: undefined,
-      contentLanguage: undefined,
-    };
+    // We need to use "unused constants" in order to get proper "rest"
+    const location       = useLocation();
+    const toWithLanguage = getToWithLanguage(to, location, language, contentLanguage);
 
-    render() {
-      // We need to use "unused constants" in order to get proper "rest"
-      const { to, language, contentLanguage, location, match, history, staticContext, ...rest } = this.props;
-      const toWithLanguage = getToWithLanguage(to, location, language, contentLanguage);
+    return <WrappedComponent to={toWithLanguage} {...rest} />;
+  };
 
-      return <WrappedComponent to={toWithLanguage} {...rest} />;
-    }
-    
-  }
+  MultiLanguageLinkHOC.propTypes = {
+    to: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object
+    ]),
+    language: PropTypes.string, // language shorthand, for example: "ru"
+    contentLanguage: PropTypes.string, // language shorthand, for example: "ru"
+  };
 
-  return withRouter(hoistStatics(MultiLanguageLinkHOC, WrappedComponent));
+  return hoistStatics(MultiLanguageLinkHOC, WrappedComponent);
 };
 
 export default multiLanguageLinkCreator;

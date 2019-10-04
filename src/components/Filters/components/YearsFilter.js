@@ -4,8 +4,10 @@ import range from 'lodash/range';
 
 import FlatListFilter from './FlatListFilter';
 
+const defToYear = (new Date()).getFullYear();
+
 const YearsFilter = (props) => {
-  const { fromYear, toYear, ...rest } = props;
+  const { fromYear = 1995, toYear = defToYear, ...rest } = props;
 
   const options = range(toYear, fromYear, -1).map(x => ({
     value: x,
@@ -13,16 +15,11 @@ const YearsFilter = (props) => {
   }));
 
   return <FlatListFilter name="years-filter" options={options} {...rest} />;
-}
+};
 
 YearsFilter.propTypes = {
   fromYear: PropTypes.number,
   toYear: PropTypes.number,
-};
-
-YearsFilter.defaultProps = {
-  fromYear: 1995,
-  toYear: (new Date()).getFullYear(),
 };
 
 export default YearsFilter;
