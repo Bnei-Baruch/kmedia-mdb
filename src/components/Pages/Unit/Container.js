@@ -52,7 +52,7 @@ export class UnitContainer extends Component {
     UnitContainer.askForDataIfNeeded(this.props, true);
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     UnitContainer.askForDataIfNeeded(nextProps, false);
   }
 

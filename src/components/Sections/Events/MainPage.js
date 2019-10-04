@@ -30,7 +30,7 @@ class MainPage extends PureComponent {
     resetNamespace: PropTypes.func.isRequired
   };
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     const { match, location } = this.props;
     const tab                 = match.params.tab || tabs[0];
     const nextTab             = nextProps.match.params.tab || tabs[0];

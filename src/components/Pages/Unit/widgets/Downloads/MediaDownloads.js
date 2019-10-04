@@ -56,7 +56,7 @@ class MediaDownloads extends Component {
     return { groups, derivedGroups, languages, language, isCopyPopupOpen };
   };
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     const { unit, contentLanguage, language: uiLanguage } = nextProps;
     const { props, state }                                = this;
 

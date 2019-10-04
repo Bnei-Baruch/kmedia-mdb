@@ -30,7 +30,7 @@ class TabsMenu extends Component {
     this.state   = { active };
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     const { active } = nextProps;
     if (active !== this.props.active) {
       this.setState({ active });

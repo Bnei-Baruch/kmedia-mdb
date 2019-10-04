@@ -37,7 +37,7 @@ class BaseShareForm extends React.Component {
     };
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.item !== this.props.item) {
       const { start, end } = this.state;
       this.setState({
