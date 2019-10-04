@@ -127,12 +127,17 @@
 
     .source__toc {
       > div:nth-child(2) {
+        top: calc(1em + 60px) !important;
+
         @include tablet-mobile {
           transform: none;
+          top: calc(1em + 60px) !important;
+          padding-top: calc(3em + 60px);
         }
 
         @include mobile {
-          padding-top: calc(1em + 60px);
+          top: calc(1em + 60px) !important;
+          padding-top: calc(3em + 60px);
         }
       }
     }
