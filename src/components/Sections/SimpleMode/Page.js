@@ -7,7 +7,7 @@ import MomentLocaleUtils from 'react-day-picker/moment';
 import { withNamespaces } from 'react-i18next';
 import { Button, Card, Container, Divider, Grid, Input } from 'semantic-ui-react';
 
-import { ALL_LANGUAGES, LANGUAGE_OPTIONS } from '../../../helpers/consts';
+import { ALL_LANGUAGES } from '../../../helpers/consts';
 import { today } from '../../../helpers/date';
 import * as shapes from '../../shapes';
 import SectionHeader from '../../shared/SectionHeader';
@@ -16,16 +16,11 @@ import { FrownSplash } from '../../shared/Splash/Splash';
 import DropdownLanguageSelector from '../../Language/Selector/DropdownLanguageSelector';
 import YearMonthForm from '../../Filters/components/Date/YearMonthForm';
 import SimpleModeList from './list';
+import { getOptions } from '../../../helpers/language';
 
 const changeDay = (amount, selectedDate, onDayClick) => {
   const newDate = moment(selectedDate).add(amount, 'd').toDate();
   onDayClick(newDate);
-};
-
-const getOptions = ({ languages, t }) => {
-  return LANGUAGE_OPTIONS
-    .filter(x => languages.includes(x.value))
-    .map(x => ({ ...x, text: t(`constants.languages.${x.value}`) }));
 };
 
 const getNavBarElement = (props, language, onDayClick) => {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { Button, Grid, Header, Segment } from 'semantic-ui-react';
@@ -8,48 +8,21 @@ import { SectionLogo } from '../../../helpers/images';
 /*
  * It was used once in SearchResults, but not anymore...
  */
-class SectionsFilter extends Component {
-  static propTypes = {
-    value: PropTypes.string,
-    onCancel: PropTypes.func,
-    onApply: PropTypes.func,
-    t: PropTypes.func.isRequired,
-  };
+const SectionsFilter = (value = null, onCancel = noop, onApply = noop, t) => {
+  const [sValue, setSValue] = useState(value);
 
-  static defaultProps = {
-    value: null,
-    onCancel: noop,
-    onApply: noop,
-  };
+  useEffect(() => setSValue(value), [value]);
 
-  state = {
-    sValue: this.props.value
-  };
+  const onSelectionChange = (section) => setSValue(`filters.sections-filter.${section}`);
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.value !== nextProps.value) {
-      this.setState({ sValue: nextProps.value });
-    }
-  }
+  const apply = () => onApply(sValue);
 
-  onSelectionChange = (section) => {
-    this.setState({ sValue: `filters.sections-filter.${section}` });
-  };
-
-  onCancel = () => {
-    this.props.onCancel();
-  };
-
-  apply = () => {
-    this.props.onApply(this.state.sValue);
-  };
-
-  gridColumn = (x, sValue, t) => (
+  const gridColumn = (x, sValue, t) => (
     <Grid.Column key={x} textAlign="center">
       <Header
         size="small"
         className={(sValue && sValue.endsWith(x)) ? 'active' : ''}
-        onClick={() => this.onSelectionChange(x)}
+        onClick={() => onSelectionChange(x)}
       >
         <SectionLogo name={x} />
         <br />
@@ -58,44 +31,46 @@ class SectionsFilter extends Component {
     </Grid.Column>
   );
 
-  render() {
-    const { t }      = this.props;
-    const { sValue } = this.state;
+  return (
+    <Segment.Group className="filter-popup__wrapper">
+      <Segment basic secondary className="filter-popup__header">
+        <div className="title">
+          <Button
+            basic
+            compact
+            size="tiny"
+            content={t('buttons.cancel')}
+            onClick={onCancel}
+          />
+          <Header size="small" textAlign="center" content={t('filters.sections-filter.label')} />
+          <Button
+            primary
+            compact
+            size="small"
+            content={t('buttons.apply')}
+            disabled={!sValue}
+            onClick={apply}
+          />
+        </div>
+      </Segment>
+      <Segment basic className="filter-popup__body sections-filter">
+        <Grid padded stackable columns={5}>
+          <Grid.Row>
+            {
+              ['lessons', 'programs', 'sources', 'events', 'publications'].map(x => gridColumn(x, sValue, t))
+            }
+          </Grid.Row>
+        </Grid>
+      </Segment>
+    </Segment.Group>
+  );
+};
 
-    return (
-      <Segment.Group className="filter-popup__wrapper">
-        <Segment basic secondary className="filter-popup__header">
-          <div className="title">
-            <Button
-              basic
-              compact
-              size="tiny"
-              content={t('buttons.cancel')}
-              onClick={this.onCancel}
-            />
-            <Header size="small" textAlign="center" content={t('filters.sections-filter.label')} />
-            <Button
-              primary
-              compact
-              size="small"
-              content={t('buttons.apply')}
-              disabled={!sValue}
-              onClick={this.apply}
-            />
-          </div>
-        </Segment>
-        <Segment basic className="filter-popup__body sections-filter">
-          <Grid padded stackable columns={5}>
-            <Grid.Row>
-              {
-                ['lessons', 'programs', 'sources', 'events', 'publications'].map(x => this.gridColumn(x, sValue, t))
-              }
-            </Grid.Row>
-          </Grid>
-        </Segment>
-      </Segment.Group>
-    );
-  }
-}
+SectionsFilter.propTypes = {
+  value: PropTypes.string,
+  onCancel: PropTypes.func,
+  onApply: PropTypes.func,
+  t: PropTypes.func.isRequired,
+};
 
 export default SectionsFilter;
