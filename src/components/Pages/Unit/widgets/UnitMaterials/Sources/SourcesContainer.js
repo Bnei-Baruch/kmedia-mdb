@@ -39,7 +39,7 @@ class SourcesContainer extends Component {
     this.fetchIndices(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.unit.sources !== this.props.unit.sources) {
       this.fetchIndices(nextProps);
     }

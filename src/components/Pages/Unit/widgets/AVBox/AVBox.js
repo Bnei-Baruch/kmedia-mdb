@@ -46,7 +46,7 @@ class AVBox extends Component {
     playerHelper.setLanguageInQuery(history, playerLanguage);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { unit, uiLanguage, location } = nextProps;
     const { playableItem }               = this.state;
     const { language: playerLanguage }   = playableItem;
@@ -63,9 +63,9 @@ class AVBox extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const { unit, uiLanguage, contentLanguage, location }                                                          = nextProps;
     const { unit: oldUnit, uiLanguage: oldUiLanguage, contentLanguage: oldContentLanguage, location: oldLocation } = this.props;
-    const { playableItem, oldMediaEditMode, oldIsDropdownOpened }                                                  = this.state;
+    const { playableItem, oldMediaEditMode }                                                                       = this.state;
     const { language: playerLanguage }                                                                             = playableItem;
-    const { mediaEditMode, isDropdownOpened }                                                                      = nextState;
+    const { mediaEditMode }                                                                                        = nextState;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();
     const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);
@@ -79,7 +79,6 @@ class AVBox extends Component {
       && prevMediaType === newMediaType
       && newItemLanguage === playerLanguage
       && oldMediaEditMode === mediaEditMode
-      && oldIsDropdownOpened === isDropdownOpened
       && isEqual(unit, oldUnit));
   }
 
