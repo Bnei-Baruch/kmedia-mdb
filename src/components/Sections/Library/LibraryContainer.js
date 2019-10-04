@@ -71,8 +71,8 @@ class LibraryContainer extends Component {
     const { sourceId, areSourcesLoaded, replace, history }                             = this.props;
     const { location: { state: { tocIsActive } = { state: { tocIsActive: false } } } } = history;
 
-    if (tocIsActive) {
-      this.setState({ tocIsActive });
+    if (tocIsActive || sourceId === 'grRABASH') {
+      this.setState({ tocIsActive: true });
     }
 
     if (!areSourcesLoaded) {
