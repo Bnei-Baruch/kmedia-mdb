@@ -143,6 +143,7 @@
     "serialize-javascript": "^2.1.0",
     "ua-parser-js": "^0.7.17",
     "warning": "^4.0.2",
+    "windows-build-tools": "^5.2.2",
     "worker-loader": "^2.0.0"
   },
   "moduleRoots": [
