@@ -434,7 +434,8 @@
     "az": "А-Я",
     "default": "По умолчанию",
     "filter": "Фильтр...",
-    "share-title": "Читайте статью"
+    "share-title": "Читайте статью",
+    "group-articles": "Статьи о группе"
   },
   "topics": {
     "header": {

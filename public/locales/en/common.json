@@ -419,7 +419,8 @@
     "az": "AZ",
     "default": "Default",
     "filter": "Filter...",
-    "share-title": "Read this article"
+    "share-title": "Read this article",
+    "group-articles": "Group Articles"
   },
   "topics": {
     "header": {
