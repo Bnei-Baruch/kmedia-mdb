@@ -281,6 +281,7 @@ const SGLP_LESSON_SERIES = "lesson_series";
 const SGLP_PRORGRAMS = "programs";
 const SGLP_CLIPS = "clips";
 const SGLP_LIBRARY = "library";
+const SGLP_GROUP_ARTICLES = "group_articles";
 const SGLP_CONVENTIONS = "conventions";
 const SGLP_HOLIDAYS = "holidays";
 const SGLP_UNITY_DAYS = "unity_days";
@@ -303,6 +304,7 @@ export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK = {
   [SGLP_PRORGRAMS]: "programs/main",
   [SGLP_CLIPS]: "programs/clips",
   [SGLP_LIBRARY]: "sources",
+  [SGLP_GROUP_ARTICLES]: "sources/grRABASH",
   [SGLP_CONVENTIONS]: "events/conventions",
   [SGLP_HOLIDAYS]: "events/holidays",
   [SGLP_UNITY_DAYS]: "events/unity-days",
@@ -326,6 +328,7 @@ export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT = {
   [SGLP_PRORGRAMS]: "programs.tabs.main",
   [SGLP_CLIPS]: "programs.tabs.clips",
   [SGLP_LIBRARY]: "sources-library.header.text",
+  [SGLP_GROUP_ARTICLES]: "sources-library.group-articles",
   [SGLP_CONVENTIONS]: "events.tabs.conventions",
   [SGLP_HOLIDAYS]: "events.tabs.holidays",
   [SGLP_UNITY_DAYS]: "events.tabs.unity-days",
@@ -349,6 +352,7 @@ export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT = {
   [SGLP_PRORGRAMS]: "programs.header.subtext",
   [SGLP_CLIPS]: "",  // Subtext is appropriate only for programs.
   [SGLP_LIBRARY]: "sources-library.header.subtext",
+  [SGLP_GROUP_ARTICLES]: "sources-library.header.subtext",
   [SGLP_CONVENTIONS]: "events.header.subtext",
   [SGLP_HOLIDAYS]: "events.header.subtext",
   [SGLP_UNITY_DAYS]: "events.header.subtext",
