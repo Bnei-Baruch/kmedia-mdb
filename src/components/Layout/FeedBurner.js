@@ -19,9 +19,9 @@ class FeedBurner extends Component {
     const { language } = this.props;
     const uri          = getRSSFeedByLang(language);
     window.open(
-            `https://feedburner.google.com/fb/a/mailverify?uri=${uri}&email=${email}`,
-            'popupwindow',
-            'scrollbars=yes,width=550,height=520');
+      `https://feedburner.google.com/fb/a/mailverify?uri=${uri}&email=${email}`,
+      'popupwindow',
+      'scrollbars=yes,width=550,height=520');
     this.setState({ email: '' });
   };
 
@@ -31,23 +31,23 @@ class FeedBurner extends Component {
     const { t } = this.props;
     const { email }    = this.state;
     return (
-            <Form>
-              <Form.Input
-                      action={{
-                        title: t('nav.sidebar.subscribe'),
-                        onClick: this.subscribe,
-                        icon: 'mail',
-                        compact: true,
-                        disabled: !email
-                      }}
-                      onChange={this.handleChange}
-                      name='email'
-                      className={'right action'}
-                      actionPosition="right"
-                      placeholder={t('nav.sidebar.subscribe')}
-                      value={email}
-              />
-            </Form>
+      <Form>
+        <Form.Input
+          action={{
+            title: t('nav.sidebar.subscribe'),
+            onClick: this.subscribe,
+            icon: 'mail',
+            compact: true,
+            disabled: !email
+          }}
+          onChange={this.handleChange}
+          name='email'
+          className={'right action'}
+          actionPosition="right"
+          placeholder={t('nav.sidebar.subscribe')}
+          value={email}
+        />
+      </Form>
     );
   }
 }

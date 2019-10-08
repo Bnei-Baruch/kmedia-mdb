@@ -64,8 +64,8 @@ const MenuItems = ({ simple, visible, t, onItemClick, language }) => {
         </Menu.Item>
 
         <Menu.Item
-                key="feedBurner"
-                className="sidebar-item"
+          key="feedBurner"
+          className="sidebar-item"
         >
           <FeedBurner language={language} />
         </Menu.Item>

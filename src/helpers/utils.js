@@ -224,14 +224,14 @@ export const getEscapedRegExp = (term) => {
 
 export const getRSSFeedByLang = (language) => {
   switch (language) {
-    case LANG_HEBREW:
-      return 'KabbalahVideoHeb';
-    case LANG_RUSSIAN:
-      return 'KabbalahVideoRus';
-    case LANG_SPANISH:
-      return 'kabbalah-archive/spa';
-    default:
-      return 'KabbalahVideoEng';
+  case LANG_HEBREW:
+    return 'KabbalahVideoHeb';
+  case LANG_RUSSIAN:
+    return 'KabbalahVideoRus';
+  case LANG_SPANISH:
+    return 'kabbalah-archive/spa';
+  default:
+    return 'KabbalahVideoEng';
   }
 };
 
