@@ -19,7 +19,8 @@
       "design2": "Планування",
       "project-status": "Статус проекту",
       "help": "Допомогти",
-      "old-site": "Старий сайт"
+      "old-site": "Старий сайт",
+      "subscribe": "Підписатися на оновлення"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
