@@ -18,7 +18,8 @@
       "design": "Diseño",
       "project-status": "Projekto Statuso",
       "help": "Ayuda",
-      "old-site": "Viejo Sitio"
+      "old-site": "Viejo Sitio",
+      "subscribe": "Suscríbase para actualizaciones"
     },
     "footer": {
       "copyright": "Derecho de autor 2003-{{year}}",
