@@ -222,15 +222,19 @@ export const getEscapedRegExp = (term) => {
   }
 };
 
-export const getRSSLinkByLang = (language) => {
+export const getRSSFeedByLang = (language) => {
   switch (language) {
   case LANG_HEBREW:
-    return 'https://feeds.feedburner.com/KabbalahVideoHeb';
+    return 'KabbalahVideoHeb';
   case LANG_RUSSIAN:
-    return 'https://feeds.feedburner.com/KabbalahVideoRus';
+    return 'KabbalahVideoRus';
   case LANG_SPANISH:
-    return 'https://feeds.feedburner.com/kabbalah-archive/spa';
+    return 'kabbalah-archive/spa';
   default:
-    return 'https://feeds.feedburner.com/KabbalahVideoEng';
+    return 'KabbalahVideoEng';
   }
+};
+
+export const getRSSLinkByLang = (language) => {
+  return 'https://feeds.feedburner.com/' + getRSSFeedByLang(language);
 };

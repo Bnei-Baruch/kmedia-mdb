@@ -45,6 +45,7 @@ app.use(helmet({
         '\'unsafe-inline\'',
         '\'unsafe-eval\'',
         '*.google-analytics.com',
+        '*.googletagmanager.com',
         'kabbalahmedia.info',
         'archive',                      // suitcase
         '*.usersnap.com',

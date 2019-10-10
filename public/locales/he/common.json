@@ -18,7 +18,8 @@
       "design": "עיצוב",
       "project-status": "סטאטוס הפרוייקט",
       "help": "עזרה",
-      "old-site": "לאתר הישן"
+      "old-site": "לאתר הישן",
+      "subscribe": "הרשם לעדכונים"
     },
     "footer": {
       "copyright": "© כל הזכויות שמורות 2003-{{year}}",
@@ -418,7 +419,8 @@
     "az": "אב",
     "default": "ברירת מחדל",
     "filter": "סנן...",
-    "share-title": "קרא את המאמר"
+    "share-title": "קרא את המאמר",
+    "group-articles": "מאמרי החברה"
   },
   "topics": {
     "header": {

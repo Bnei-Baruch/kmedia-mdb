@@ -19,7 +19,8 @@
       "design2": "Layout",
       "project-status": "Project Status",
       "help": "Help",
-      "old-site": "Old Site"
+      "old-site": "Old Site",
+      "subscribe": "Subscribe For Updates"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
@@ -419,7 +420,8 @@
     "az": "AZ",
     "default": "Default",
     "filter": "Filter...",
-    "share-title": "Read this article"
+    "share-title": "Read this article",
+    "group-articles": "Group Articles"
   },
   "topics": {
     "header": {

@@ -118,6 +118,9 @@ const groupRabash      = [
   'tuNiurqI', 'mVQJIMlj', 'VLuOsaN3', '0G3JOBRv', 'UAiHPiou', 'y5BKi0y2',
   'r0GUBxQQ', 'jmrf8Gud', 'HotkF4i5', 'aeUpX57j', 'oR4gtgR7', 'WhVeEvxC',
 ];
+
+// Plesae note that hose translations werer added to common.json files.
+// Consider using common.json instead of this const.
 const groupRabashTitle = {
   'en': 'Group Articles',
   'he': 'מאמרי החברה',

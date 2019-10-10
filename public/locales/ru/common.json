@@ -19,7 +19,8 @@
       "design2": "Планировка",
       "project-status": "Статус проекта",
       "help": "Поддержка",
-      "old-site": "Старый сайт"
+      "old-site": "Старый сайт",
+      "subscribe": "Подписаться на обновления"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
@@ -434,7 +435,8 @@
     "az": "А-Я",
     "default": "По умолчанию",
     "filter": "Фильтр...",
-    "share-title": "Читайте статью"
+    "share-title": "Читайте статью",
+    "group-articles": "Статьи о группе"
   },
   "topics": {
     "header": {
