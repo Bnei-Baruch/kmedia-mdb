@@ -63,9 +63,9 @@ class AVBox extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const { unit, uiLanguage, contentLanguage, location }                                                          = nextProps;
     const { unit: oldUnit, uiLanguage: oldUiLanguage, contentLanguage: oldContentLanguage, location: oldLocation } = this.props;
-    const { playableItem, oldMediaEditMode }                                                                       = this.state;
+    const { playableItem, oldMediaEditMode, oldIsDropdownOpened }                                                  = this.state;
     const { language: playerLanguage }                                                                             = playableItem;
-    const { mediaEditMode }                                                                                        = nextState;
+    const { mediaEditMode, isDropdownOpened }                                                                      = nextState;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();
     const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);
@@ -79,6 +79,7 @@ class AVBox extends Component {
       && prevMediaType === newMediaType
       && newItemLanguage === playerLanguage
       && oldMediaEditMode === mediaEditMode
+      && oldIsDropdownOpened === isDropdownOpened
       && isEqual(unit, oldUnit));
   }
 
