@@ -4,12 +4,13 @@ import moment from 'moment';
 import noop from 'lodash/noop';
 
 import { toHumanReadableTime } from '../../../helpers/time';
-import { getQuery, stringify } from '../../../helpers/url';
+import { getQuery, stringify, splitPathByLanguage } from '../../../helpers/url';
 
 class BaseShareForm extends React.Component {
   static propTypes = {
     media: PropTypes.object.isRequired,
     item: PropTypes.object.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
     onSliceChange: PropTypes.func,
     t: PropTypes.func.isRequired,
   };
@@ -32,13 +33,17 @@ class BaseShareForm extends React.Component {
       start: undefined,
       end: undefined,
       url: BaseShareForm.getUrl(props),
+      uiLangUrl: BaseShareForm.getUrl(props, undefined, undefined, true),
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.item !== this.props.item) {
       const { start, end } = this.state;
-      this.setState({ url: BaseShareForm.getUrl(nextProps, start, end) });
+      this.setState({
+        url: BaseShareForm.getUrl(nextProps, start, end),
+        uiLangUrl: BaseShareForm.getUrl(nextProps, start, end, true),
+      });
     }
   }
 
@@ -60,7 +65,11 @@ class BaseShareForm extends React.Component {
       end = null;
     }
 
-    this.setState({ ...state, url: BaseShareForm.getUrl(this.props, start, end) });
+    this.setState({
+      ...state,
+      url: BaseShareForm.getUrl(this.props, start, end),
+      uiLangUrl: BaseShareForm.getUrl(this.props, start, end, true),
+    });
     onSliceChange(start, end);
   }
 
@@ -78,18 +87,23 @@ class BaseShareForm extends React.Component {
       start = this.state.start < end ? start : 0;
     }
 
-    this.setState({ end, start, url: BaseShareForm.getUrl(this.props, start, end) });
+    this.setState({
+      end, start,
+      url: BaseShareForm.getUrl(this.props, start, end),
+      uiLangUrl: BaseShareForm.getUrl(this.props, start, end, true),
+    });
     onSliceChange(start, end);
   }
 
-  static getUrl(props, start, end) {
+  static getUrl(props, start, end, addUiLang) {
     const { protocol, hostname, port, pathname } = window.location;
+    const { item, uiLanguage }                   = props;
+    const path                                   = item.shareUrl || pathname;
+    const { path: pathSuffix }                   = splitPathByLanguage(path);
+    const uiLang                                 = addUiLang ? `/${uiLanguage}` : '';
+    const shareUrl                               = `${protocol}//${hostname}${port ? `:${port}` : ''}${uiLang}${pathSuffix}`;
 
-    const { item } = props;
-    const shareUrl = `${protocol}//${hostname}${port ? `:${port}` : ''}${item.shareUrl || pathname}`;
-
-    const q = getQuery(window.location);
-
+    const q  = getQuery(window.location);
     // Set start end points
     q.sstart = toHumanReadableTime(start);
     if (end) {

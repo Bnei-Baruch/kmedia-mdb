@@ -51,7 +51,7 @@ import { tabs as pulicationsTabs } from './components/Sections/Publications/Main
 import PDF from './components/shared/PDF/PDF';
 
 export const home = (store) => {
-  store.dispatch(homeActions.fetchData());
+  store.dispatch(homeActions.fetchData(true));
   return Promise.resolve(null);
 };
 

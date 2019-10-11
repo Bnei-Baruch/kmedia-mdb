@@ -26,13 +26,16 @@ function* doc2Html(action) {
 }
 
 export function* sourceIndex(action) {
-  const id = action.payload;
-
   try {
+    let id = action.payload;
+    if (/^gr-/.test(id)) { // Rabash Group Articles
+      const result = /^gr-(.+)/.exec(id);
+      id           = result[1];
+    }
     const { data } = yield call(Api.getAsset, `sources/${id}/index.json`);
-    yield put(actions.sourceIndexSuccess(id, data));
+    yield put(actions.sourceIndexSuccess(action.payload, data));
   } catch (err) {
-    yield put(actions.sourceIndexFailure(id, err));
+    yield put(actions.sourceIndexFailure(action.payload, err));
   }
 }
 

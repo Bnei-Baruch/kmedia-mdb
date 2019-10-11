@@ -10,6 +10,8 @@
       "events": "Конгреси, події",
       "books": "Книжки",
       "topics": "Теми",
+      "topic": "Тема",
+      "not-found": "Не знайдена",
       "publications": "Публікації",
       "simple-mode": "Завантаження",
       "photos": "Фотографії",
@@ -17,7 +19,8 @@
       "design2": "Планування",
       "project-status": "Статус проекту",
       "help": "Допомогти",
-      "old-site": "Старий сайт"
+      "old-site": "Старий сайт",
+      "subscribe": "Підписатися на оновлення"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
@@ -618,6 +621,12 @@
     "new-york": "Нью-Йорк",
     "san-francisco": "Сан-Франциско",
     "st-louis": "Сент-Луїс",
+    "india": "Індія",
+    "moldova,-republic-of": "Республіка Молдова",
+    "kfar-sitrin": "Кфар-сітрін",
+    "kfar-hayarok": "Кфар-ярок",
+    "mount-meron": "гора Мерон",
+    "ahziv": "Ахзiв",
     "unknown": "невідоме"
   },
   "values": {

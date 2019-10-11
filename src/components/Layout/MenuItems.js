@@ -7,6 +7,7 @@ import { Menu, Sidebar, Button } from 'semantic-ui-react';
 import { getRSSLinkByLang } from '../../helpers/utils';
 import NavLink from '../Language/MultiLanguageNavLink';
 import DonateNow from './DonateNow';
+import FeedBurner from "./FeedBurner";
 
 const ITEMS = [
   'lessons',
@@ -60,6 +61,13 @@ const MenuItems = ({ simple, visible, t, onItemClick, language }) => {
             color="orange"
             href={getRSSLinkByLang(language)} />
           <span className="margin-right-8 margin-left-8">RSS</span>
+        </Menu.Item>
+
+        <Menu.Item
+          key="feedBurner"
+          className="sidebar-item"
+        >
+          <FeedBurner language={language} />
         </Menu.Item>
       </Menu>
     );

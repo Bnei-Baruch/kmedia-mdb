@@ -1,4 +1,4 @@
-$sidebar-width: 290px;
+$sidebar-width: 300px;
 $main-menu-height: 60px;
 $secondary-header-height: 10px;
 
@@ -39,7 +39,6 @@ body {
 
   &__header {
     left: 0;
-    position: fixed;
     right: 0;
     top: 0;
     z-index: 2000;
@@ -98,16 +97,7 @@ body {
   }
 
   &__main {
-    display: flex;
-    flex-direction: column;
     min-height: 100%;
-    padding-top: $main-menu-height;
-  }
-
-  &__content {
-    flex-grow: 1;
-    //display: flex;
-    //justify-content: center;
   }
 
   &__footer {
@@ -119,16 +109,14 @@ body {
     border-bottom: 1px solid $border-color;
     left: 0;
     min-height: $secondary-header-height;
-    position: fixed;
     right: 0;
-    z-index: 801;
 
     .row {
       padding-bottom: .5rem !important;
       padding-top: .5rem !important;
     }
 
-    +.ui.container {
+    + .ui.container {
       background-clip: content-box;
       padding-top: $secondary-header-height;
     }
@@ -159,6 +147,7 @@ body {
     }
   }
 }
+
 @media only screen and (min-width: $largeMonitorBreakpoint) {
   .layout {
     &__sidebar-toggle {
@@ -217,7 +206,7 @@ body {
   }
 }
 
-.ui.grid>.row.is-fitted {
+.ui.grid > .row.is-fitted {
   padding-bottom: 0;
   padding-top: 0;
 }

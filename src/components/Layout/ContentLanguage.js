@@ -11,7 +11,7 @@ import Link from '../Language/MultiLanguageLink';
 
 
 const storeContentLanguage = (language, setContentLanguage) => {
-  if (language === '' || language === undefined) {
+  if (!language){
     return;
   }
 

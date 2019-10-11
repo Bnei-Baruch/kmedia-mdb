@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { push as routerPush, replace as routerReplace } from 'connected-react-router';
 import { withNamespaces } from 'react-i18next';
 import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
+import Headroom from 'react-headroom';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
@@ -70,8 +71,8 @@ class LibraryContainer extends Component {
     const { sourceId, areSourcesLoaded, replace, history }                             = this.props;
     const { location: { state: { tocIsActive } = { state: { tocIsActive: false } } } } = history;
 
-    if (tocIsActive) {
-      this.setState({ tocIsActive });
+    if (tocIsActive || sourceId === 'grRABASH') {
+      this.setState({ tocIsActive: true });
     }
 
     if (!areSourcesLoaded) {
@@ -152,13 +153,6 @@ class LibraryContainer extends Component {
   };
 
   updateSticky = () => {
-    // take the secondary header height for sticky stuff calculations
-    if (this.secondaryHeaderRef) {
-      const { height } = this.secondaryHeaderRef.getBoundingClientRect();
-      if (this.state.secondaryHeaderHeight !== height) {
-        this.setState({ secondaryHeaderHeight: height });
-      }
-    }
 
     // check fixed header width in pixels for text-overflow:ellipsis
     if (this.contentHeaderRef) {
@@ -183,8 +177,6 @@ class LibraryContainer extends Component {
   handleContextRef = (ref) => this.contextRef = ref;
 
   handleContentArticleRef = (ref) => this.articleRef = ref;
-
-  handleSecondaryHeaderRef = (ref) => this.secondaryHeaderRef = ref;
 
   handleContentHeaderRef = (ref) => this.contentHeaderRef = ref;
 
@@ -348,7 +340,7 @@ class LibraryContainer extends Component {
       }
     } else {
       const downloadAllowed = deviceInfo.os.name !== 'iOS';
-      content = (
+      content               = (
         <LibraryContentContainer
           source={sourceId}
           index={index}
@@ -369,17 +361,14 @@ class LibraryContainer extends Component {
         fontType,
         tocIsActive,
         match,
-      }                           = this.state;
-    let { secondaryHeaderHeight } = this.state;
-    if (isNaN(secondaryHeaderHeight)) {
-      secondaryHeaderHeight = 0;
-    }
+      }               = this.state;
     const matchString = this.matchString(parentId, t);
 
     return (
       <div
         ref={this.handleContentArticleRef}
         className={classNames({
+          'headroom-z-index-801': true,
           source: true,
           'is-readable': isReadable,
           'toc--is-active': tocIsActive,
@@ -387,45 +376,52 @@ class LibraryContainer extends Component {
           [`is-${fontType}`]: true,
         })}
       >
-        <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
-          <Container>
-            <Grid padded centered>
-              <Grid.Row verticalAlign="bottom">
-                <Grid.Column mobile={16} tablet={16} computer={4} className="source__toc-header">
-                  <div className="source__header-title mobile-hidden">
-                    <Header size="small">{t('sources-library.toc')}</Header>
-                  </div>
-                  <div className="source__header-toolbar">
-                    {matchString}
-                    {this.switchSortingOrder(parentId)}
-                    <Button
-                      compact
-                      size="small"
-                      className="computer-hidden large-screen-hidden widescreen-hidden"
-                      icon="list layout"
-                      onClick={this.handleTocIsActive}
-                    />
-                  </div>
-                </Grid.Column>
-                <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
-                  <div className="source__header-title">{this.header(sourceId, parentId)}</div>
-                  <div className="source__header-toolbar">
-                    <Button compact size="small" className="mobile-hidden" icon="print" onClick={this.print} />
-                    <div id="download-button" />
-                    <LibrarySettings fontSize={fontSize} handleSettings={this.handleSettings} />
-                    <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
-                    <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                    <Share isMobile={this.isMobileDevice()} />
-                  </div>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          </Container>
-        </div>
-        <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
+        <Headroom>
+          <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
+            <Container>
+              <Grid padded centered>
+                <Grid.Row verticalAlign="bottom">
+                  <Grid.Column mobile={16} tablet={16} computer={4} className="source__toc-header">
+                    <div className="source__header-title mobile-hidden">
+                      <Header size="small">{t('sources-library.toc')}</Header>
+                    </div>
+                    <div className="source__header-toolbar">
+                      {matchString}
+                      {this.switchSortingOrder(parentId)}
+                      <Button
+                        compact
+                        size="small"
+                        className="computer-hidden large-screen-hidden widescreen-hidden"
+                        icon="list layout"
+                        onClick={this.handleTocIsActive}
+                      />
+                    </div>
+                  </Grid.Column>
+                  <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
+                    <div className="source__header-title">{this.header(sourceId, parentId)}</div>
+                    <div className="source__header-toolbar">
+                      <Button compact size="small" className="mobile-hidden" icon="print" onClick={this.print} />
+                      <div id="download-button" />
+                      <LibrarySettings fontSize={fontSize} handleSettings={this.handleSettings} />
+                      <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
+                      <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
+                      <Share isMobile={this.isMobileDevice()} />
+                    </div>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Container>
+          </div>
+        </Headroom>
+        <Container>
           <Grid padded centered>
             <Grid.Row className="is-fitted">
-              <Grid.Column mobile={16} tablet={16} computer={4} onClick={this.handleTocIsActive}>
+              <Grid.Column
+                mobile={16}
+                tablet={16}
+                computer={4}
+                onClick={this.handleTocIsActive}
+                className={!tocIsActive ? 'large-screen-only computer-only' : ''}>
                 <TOC
                   language={language}
                   match={matchString ? match : ''}
@@ -434,7 +430,6 @@ class LibraryContainer extends Component {
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
                   apply={push}
-                  stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
                 />
               </Grid.Column>
               <Grid.Column
@@ -449,7 +444,7 @@ class LibraryContainer extends Component {
                 <Ref innerRef={this.handleContextRef}>
                   <div
                     className="source__content"
-                    style={{ minHeight: `calc(100vh - ${secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}px)` }}
+                    style={{ minHeight: `calc(100vh - 14px)` }}
                   >
                     {content}
                   </div>

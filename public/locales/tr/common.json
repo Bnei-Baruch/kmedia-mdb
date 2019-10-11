@@ -10,6 +10,8 @@
       "events": "Kongreler ve Etkinlikler",
       "books": "Kitaplar",
       "topics": "Konular",
+      "topic": "Konu",
+      "not-found": "bulunamadı",
       "publications": "Yayınlar",
       "simple-mode": "İndirilenler",
       "photos": "Fotoğraflar",
@@ -17,7 +19,8 @@
       "design2": "Düzen",
       "project-status": "Proje Durumu",
       "help": "Yardım",
-      "old-site": "Eski Site"
+      "old-site": "Eski Site",
+      "subscribe": "Güncellemeler İçin Abone Ol"
     },
     "footer": {
       "copyright": "Telif Hakkı © 2003-{{year}}",

@@ -7,11 +7,13 @@ import {
   BLOG_ID_LAITMAN_COM,
   BLOG_ID_LAITMAN_ES,
   BLOG_ID_LAITMAN_RU,
+  COLLECTION_EVENTS_TYPE,
+  COLLECTION_LESSONS_TYPE,
+  COLLECTION_PROGRAMS_TYPE,
+  COLLECTION_PUBLICATIONS_TYPE,
   CT_ARTICLE,
   CT_ARTICLES,
   CT_BLOG_POST,
-  // CT_CHILDREN_LESSON,
-  // CT_CHILDREN_LESSONS,
   CT_CLIP,
   CT_CLIPS,
   CT_CONGRESS,
@@ -43,6 +45,10 @@ import {
   CT_WOMEN_LESSONS,
   EVENT_TYPES,
   SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK,
+  UNIT_EVENTS_TYPE,
+  UNIT_LESSONS_TYPE,
+  UNIT_PROGRAMS_TYPE,
+  UNIT_PUBLICATIONS_TYPE,
 } from './consts';
 
 export const landingPageSectionLink = (landingPage) => {
@@ -66,6 +72,9 @@ export const intentSectionLink = (section, filters) => {
   return `/${section}?${urlSearchStringify(query)}`;
 };
 
+/* WARNING!!!
+   This function MUST be synchronized with the next one: canonicalContentType
+ */
 export const canonicalLink = (entity, mediaLang) => {
   if (!entity) {
     return '/';
@@ -166,5 +175,25 @@ export const canonicalLink = (entity, mediaLang) => {
     return '/';
   default:
     return '/';
+  }
+};
+
+/* WARNING!!!
+   This function MUST be synchronized with the previous one: canonicalLink
+ */
+export const canonicalContentType = (entity) => {
+  switch (entity) {
+  case 'sources':
+    return ['SOURCE'];
+  case 'lessons':
+    return [...COLLECTION_LESSONS_TYPE, ...UNIT_LESSONS_TYPE];
+  case 'programs':
+    return [...COLLECTION_PROGRAMS_TYPE, ...UNIT_PROGRAMS_TYPE];
+  case 'publications':
+    return ['POST', CT_ARTICLES, ...COLLECTION_PUBLICATIONS_TYPE, ...UNIT_PUBLICATIONS_TYPE];
+  case 'events':
+    return [...COLLECTION_EVENTS_TYPE, ...UNIT_EVENTS_TYPE];
+  default:
+    return [];
   }
 };

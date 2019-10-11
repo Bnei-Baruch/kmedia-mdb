@@ -15,7 +15,7 @@ export const isEmpty = (obj) => {
   }
 
   // Assume if it has a length property with a non-zero value
-  // that that property is correct.
+  // that property is correct.
   if (obj.length > 0) {
     return false;
   }
@@ -32,6 +32,8 @@ export const isEmpty = (obj) => {
 
   return Object.getOwnPropertyNames(obj).length <= 0;
 };
+
+export const isNotEmptyArray = arr => (Array.isArray(arr) && arr.length > 0);
 
 /**
  * Format the given error into a user friendly string
@@ -79,7 +81,7 @@ export const formatDuration = (duration, fmt = 'hh:mm:ss') => moment.duration(du
  */
 export function* intersperse(iterable, delimiter) {
   let first = true;
-  for (const item of iterable) {
+  for (const item of iterable) { // eslint-disable-line no-unused-vars
     if (!first) {
       yield delimiter;
     }
@@ -220,15 +222,19 @@ export const getEscapedRegExp = (term) => {
   }
 };
 
-export const getRSSLinkByLang = (language) => {
+export const getRSSFeedByLang = (language) => {
   switch (language) {
   case LANG_HEBREW:
-    return 'https://feeds.feedburner.com/KabbalahVideoHeb';
+    return 'KabbalahVideoHeb';
   case LANG_RUSSIAN:
-    return 'https://feeds.feedburner.com/KabbalahVideoRus';
+    return 'KabbalahVideoRus';
   case LANG_SPANISH:
-    return 'https://feeds.feedburner.com/kabbalah-archive/spa';
+    return 'kabbalah-archive/spa';
   default:
-    return 'https://feeds.feedburner.com/KabbalahVideoEng';
+    return 'KabbalahVideoEng';
   }
+};
+
+export const getRSSLinkByLang = (language) => {
+  return 'https://feeds.feedburner.com/' + getRSSFeedByLang(language);
 };

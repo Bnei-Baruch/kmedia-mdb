@@ -10,13 +10,16 @@
       "events": "כנסים ואירועים",
       "books": "ספרים",
       "topics": "נושאים",
+      "topic": "נושא",
+      "not-found": "לא נמצא",
       "publications": "פרסומים",
       "simple-mode": "הורדות",
       "photos": "תמונות",
       "design": "עיצוב",
       "project-status": "סטאטוס הפרוייקט",
       "help": "עזרה",
-      "old-site": "לאתר הישן"
+      "old-site": "לאתר הישן",
+      "subscribe": "הרשם לעדכונים"
     },
     "footer": {
       "copyright": "© כל הזכויות שמורות 2003-{{year}}",
@@ -416,7 +419,8 @@
     "az": "אב",
     "default": "ברירת מחדל",
     "filter": "סנן...",
-    "share-title": "קרא את המאמר"
+    "share-title": "קרא את המאמר",
+    "group-articles": "מאמרי החברה"
   },
   "topics": {
     "header": {
@@ -632,6 +636,12 @@
     "new-york": "ניו יורק",
     "san-francisco": "סן פרנסיסקו",
     "st-louis": "סנט לואיס",
+    "india": "הודו",
+    "moldova,-republic-of": "רפובליקת מולדובה",
+    "kfar-sitrin": "כפר סיטרין",
+    "kfar-hayarok": "כפר הירוק",
+    "mount-meron": "הר מרון",
+    "ahziv": "אכזיב",
     "unknown": "לא צוין"
   },
   "values": {

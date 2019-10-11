@@ -45,7 +45,7 @@ class TwitterPage extends PureComponent {
     return (
       <Feed>
         {
-          tweets.slice(0, length).map(item => <TwitterFeed twitter={item} />)
+          tweets.slice(0, length).map(item => <TwitterFeed twitter={item}  key={item.twitter_id} />)
         }
       </Feed>
     );

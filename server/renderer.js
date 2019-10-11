@@ -72,6 +72,11 @@ function canonicalLink(req, lang) {
     }
   }
 
+  if (/\/gr-/.test(cPath)) { // Rabash Group Articles
+    const result = /(.+)\/gr-(.+)$/.exec(cPath);
+    cPath           = `${result[1]}/${result[2]}`;
+  }
+
   return `<link rel="canonical" href="${BASE_URL}${cPath}" />`;
 }
 
@@ -139,8 +144,6 @@ export default function serverRender(req, res, next, htmlData) {
     const cookies = cookieParse(req.headers.cookie || '');
 
     const initialState = {
-      // the next line is handled automatically by connected-react-router since 6.3.2
-      // router: { location: history.location },
       device: { deviceInfo: new UAParser(req.get('user-agent')).getResult() },
       settings: Object.assign({}, settingsInitialState, {
         language,

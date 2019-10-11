@@ -109,25 +109,24 @@ const texts = [
 ];
 
 const HelpPage = () => {
-  const language = useSelector(state => settings.getLanguage(state.settings));
+  let language = useSelector(state => settings.getLanguage(state.settings));
 
-  let lang = language;
-  switch (lang) {
+  switch (language) {
   case LANG_HEBREW:
-    lang = LANG_HEBREW;
+    language = LANG_HEBREW;
     break;
     // case LANG_UKRAINIAN:
-    // case LANG_RUSSIAN:
-    //   lang = LANG_RUSSIAN;
-    //   break;
+  case LANG_RUSSIAN:
+    language = LANG_RUSSIAN;
+    break;
   default:
-    lang = LANG_ENGLISH;
+    language = LANG_ENGLISH;
     break;
   }
 
   let c    = clips;
   let txts = texts;
-  if (lang !== LANG_HEBREW) {
+  if (language !== LANG_HEBREW) {
     c = [...clips];
     c.splice(4, 1); // remove 4-2 in other langs
     txts = [...texts];
@@ -145,7 +144,7 @@ const HelpPage = () => {
               <Grid.Column key={x}>
                 <Card fluid>
                   <Card.Content>
-                    <Card.Header>{txts[i].title[lang]}</Card.Header>
+                    <Card.Header>{txts[i].title[language]}</Card.Header>
                   </Card.Content>
                   <Card.Content>
                     <div>
@@ -154,14 +153,14 @@ const HelpPage = () => {
                         playsInline
                         preload="metadata"
                         type="video/mp4"
-                        src={assetUrl(`help/${lang}/clip${x}.mp4`)}
-                        poster={assetUrl(`help/clip${x}.jpg`)}
+                        src={assetUrl(`help/${language}/clip${x}.mp4`)}
+                        poster={assetUrl(`help/${language}/clip${x}.jpg`)}
                         style={{ width: '100%', height: 'auto' }}
                       />
                     </div>
                   </Card.Content>
                   <Card.Content>
-                    {txts[i].description[lang]}
+                    {txts[i].description[language]}
                   </Card.Content>
                 </Card>
               </Grid.Column>

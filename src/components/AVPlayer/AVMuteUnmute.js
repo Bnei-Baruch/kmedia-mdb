@@ -52,7 +52,7 @@ class AVMuteUnmute extends Component {
     const offset          = Math.min(Math.max(0, clientY - top), bottom - top);
     const newVolume       = 1 - (offset / (bottom - top));
     media.setVolume(newVolume);
-    this.props.onVolumeChange();
+    this.props.onVolumeChange(newVolume);
   };
 
   handleMuteUnmute = () => {
@@ -128,17 +128,17 @@ class AVMuteUnmute extends Component {
         >
           {
             isMuted && (
-              <Icon key="mute" name="volume off" />
+              <Icon key="mute" name="volume off"/>
             )
           }
           {
             volume > 0 && volume < 0.5 && (
-              <Icon key="volume-down" name="volume down" />
+              <Icon key="volume-down" name="volume down"/>
             )
           }
           {
             volume >= 0.5 && (
-              <Icon key="volume-up" name="volume up" />
+              <Icon key="volume-up" name="volume up"/>
             )
           }
         </button>
@@ -159,9 +159,9 @@ class AVMuteUnmute extends Component {
             onTouchStart={this.handleStart}
           >
             <div className="volume-popover__bar is-full" style={styleFull}>
-              <div className="volume-popover__knob" />
+              <div className="volume-popover__knob"/>
             </div>
-            <div className="volume-popover__bar is-empty" style={styleEmpty} />
+            <div className="volume-popover__bar is-empty" style={styleEmpty}/>
           </div>
         </div>
       </div>
