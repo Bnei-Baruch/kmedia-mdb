@@ -7,7 +7,7 @@ const IMAGINARY_URL  = process.env.REACT_APP_IMAGINARY_URL;
 
 export const backendUrl   = path => `${API_BACKEND}${path}`;
 export const assetUrl     = path => `${ASSETS_BACKEND}${path}`;
-export const cmsUrl       = path => `${CMS_BACKEND}/${path}`;
+export const cmsUrl       = item => `${CMS_BACKEND}wp-json/get-post-plugin/v1/get-${item}`;
 export const imaginaryUrl = path => `${IMAGINARY_URL}${path}`;
 
 export class Requests {
@@ -16,8 +16,18 @@ export class Requests {
   static getAsset = path => axios(assetUrl(path));
 
   static getCMS = (item, options) => {
-    const params = Object.entries(options).map(([key, value]) => `${key}=${value}`).join('&');
-    return axios(`${CMS_BACKEND}${item}?${params}`);
+    let url;
+    switch (item) {
+    case 'banner':
+      url = `${cmsUrl('banner')}/${options.language}`;
+      break;
+    case 'person':
+      url = `${cmsUrl('person')}/${options.id}-${options.language}`;
+      break;
+    default:
+      return null;
+    }
+    return axios(url);
   };
 
   static makeParams = params => (
