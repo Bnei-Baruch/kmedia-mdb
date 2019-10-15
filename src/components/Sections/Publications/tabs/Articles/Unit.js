@@ -111,9 +111,9 @@ class MyUnitPage extends UnitPage {
                     }
                   </Header.Content>
                 </Header>
-                <h4 color="grey" className="display-inline">
+                <Header as="h4" color="grey" className="display-inline">
                   {t('values.date', { date: unit.film_date })}
-                </h4>
+                </Header>
                 <span className="share-publication">
                   <Share position={position} />
                 </span>

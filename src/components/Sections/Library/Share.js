@@ -82,7 +82,7 @@ class LibraryShare extends Component {
           <Popup // link was copied message popup
             open={isCopyOpen}
             content={t('messages.link-copied-to-clipboard')}
-            position="bottom"
+            position={`bottom ${position}`}
             trigger={
               (
                 <CopyToClipboard text={url} onCopy={this.handleCopied}>
