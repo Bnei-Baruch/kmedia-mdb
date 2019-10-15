@@ -40,49 +40,34 @@ class MediaDownloads extends Component {
 
   constructor(props) {
     super(props);
-    this.state = this.getInitialState(props);
+    this.state = {} 
   }
 
-  getInitialState = (props) => {
+  static getDerivedStateFromProps(props, state){
     const { unit = {}, contentLanguage, language: uiLanguage } = props;
-    const groups                                               = this.getFilesByLanguage(unit.files);
-    const derivedGroups                                        = this.getDerivedFilesByContentType(unit.derived_units);
+    const { unit: stateUnit, isCopyPopupOpen = {} } = state;
 
-    const languages = [...groups.keys()];
-    const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-
-    const isCopyPopupOpen = {};
-
-    return { groups, derivedGroups, languages, language, isCopyPopupOpen };
-  };
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const { unit, contentLanguage, language: uiLanguage } = nextProps;
-    const { props, state }                                = this;
-
-    // only language changed
-    if (
-      (uiLanguage !== props.language || contentLanguage !== props.contentLanguage)
-      && isEqual(unit, props.unit)
-    ) {
-      const language = selectSuitableLanguage(contentLanguage, uiLanguage, state.languages);
-      if (language !== state.language) {
-        this.setState({ language });
-        return;
+    if (stateUnit && isEqual(stateUnit, unit)) {
+      // only language changed
+      if (state.uiLanguage !== uiLanguage
+          || state.contentLanguage !== contentLanguage) {
+        const language = selectSuitableLanguage(contentLanguage, uiLanguage, state.languages);
+        if (state.language !== language) {
+          return { ...state, language }
+        }
       }
+
+      return null;
+
+    } else {
+      // no unit or a different unit - create new state
+      const groups    = MediaDownloads.getFilesByLanguage(unit.files);
+      const languages = [...groups.keys()];
+      const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+      const derivedGroups = MediaDownloads.getDerivedFilesByContentType(unit.derived_units);
+
+      return { groups, derivedGroups, isCopyPopupOpen, languages, language, uiLanguage, contentLanguage, unit };
     }
-
-    // unit changed, maybe language as well
-    const groups    = this.getFilesByLanguage(unit.files);
-    const languages = [...groups.keys()];
-    const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-
-    let { derivedGroups } = state;
-    if (!isEqual(unit.derived_units, props.unit.derived_units)) {
-      derivedGroups = this.getDerivedFilesByContentType(unit.derived_units);
-    }
-
-    this.setState({ groups, derivedGroups, languages, language, });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -98,7 +83,7 @@ class MediaDownloads extends Component {
     );
   }
 
-  getFilesByLanguage = (files = []) => {
+  static getFilesByLanguage = (files = []) => {
     const groups = new Map();
 
     // keep track of image files. These are a special case.
@@ -140,7 +125,7 @@ class MediaDownloads extends Component {
     return groups;
   };
 
-  getDerivedFilesByContentType = (units) => {
+  static getDerivedFilesByContentType = (units) => {
     const allByCT = Object.values(units || {})
       .reduce((acc, val) => {
         acc[val.content_type] = (acc[val.content_type] || []).concat((val.files || []).map(x => ({ ...x, cu: val })));
@@ -149,13 +134,12 @@ class MediaDownloads extends Component {
 
     return Object.entries(allByCT).reduce((acc, val) => {
       const [ct, files] = val;
-      acc[ct]           = this.getFilesByLanguage(files);
+      acc[ct]           = MediaDownloads.getFilesByLanguage(files);
       return acc;
     }, {});
   };
 
-  getI18nTypeOverridesKey = () => {
-    const { unit } = this.props;
+  static getI18nTypeOverridesKey = (unit) => {
     switch (unit.content_type) {
     case CT_LESSON_PART:
     case CT_FULL_LESSON:
@@ -180,6 +164,7 @@ class MediaDownloads extends Component {
 
     return [images.find(image => image.language === language)];
   };
+
   handleCopied = (url) => {
     this.setState({ isCopyPopupOpen: {...this.state.isCopyPopupOpen, [url]: true} }, () => {
       setTimeout(() => this.setState({ isCopyPopupOpen: {...this.state.isCopyPopupOpen, [url]: false} } ), POPOVER_CONFIRMATION_TIMEOUT);
@@ -233,8 +218,9 @@ class MediaDownloads extends Component {
   };
 
   render() {
-    const { t, publisherById }                           = this.props;
+    const { t, publisherById, unit }                     = this.props;
     const { language, languages, groups, derivedGroups } = this.state;
+
     const byType                                         = groups.get(language) || new Map();
     const kiteiMakor                                     = derivedGroups[CT_KITEI_MAKOR];
     const kiteiMakorByType                               = (kiteiMakor && kiteiMakor.get(language)) || new Map();
@@ -247,7 +233,7 @@ class MediaDownloads extends Component {
     const researchMaterials                              = derivedGroups[CT_RESEARCH_MATERIAL];
     const researchMaterialsByType                        = (researchMaterials && researchMaterials.get(language)) || new Map();
 
-    let typeOverrides = this.getI18nTypeOverridesKey();
+    let typeOverrides = MediaDownloads.getI18nTypeOverridesKey(unit);
     if (typeOverrides) {
       typeOverrides += '.';
     }
