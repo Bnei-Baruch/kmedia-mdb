@@ -62,7 +62,7 @@ const LocationsFilter = (props) => {
   const congressEvents = useSelector(state => (cIDs || []).map(x => mdb.getDenormCollection(state.mdb, x)));
 
   const { t } = props;
-  const tree = useMemo(() => getTree(congressEvents, t), [congressEvents]); 
+  const tree = useMemo(() => getTree(congressEvents, t), [congressEvents,t]); 
 
   return <HierarchicalFilter name="locations-filter" tree={tree} {...props} />;
 }

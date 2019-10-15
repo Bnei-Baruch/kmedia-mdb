@@ -37,7 +37,7 @@ const HolidaysFilter = (props) => {
   const getTagById = useSelector(state => tags.getTagById(state.tags));
 
   const { t } = props;
-  const tree = useMemo(() => getTree(holidayEvents, getTagById, t), [holidayEvents, getTagById]); 
+  const tree = useMemo(() => getTree(holidayEvents, getTagById, t), [holidayEvents, getTagById, t]); 
 
   return <HierarchicalFilter name="holidays-filter" tree={tree} {...props} />;
 }
