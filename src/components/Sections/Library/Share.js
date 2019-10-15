@@ -13,7 +13,8 @@ class LibraryShare extends Component {
   static contextType = DeviceInfoContext;
 
   static propTypes = {
-    t: PropTypes.func.isRequired
+    t: PropTypes.func.isRequired,
+    position: PropTypes.string.isRequired,
   };
 
   state = {
@@ -52,7 +53,7 @@ class LibraryShare extends Component {
   };
 
   render() {
-    const { t }                       = this.props;
+    const { t, position }            = this.props;
     const { isPopupOpen, isCopyOpen } = this.state;
     const { isMobileDevice }          = this.context;
 
@@ -69,7 +70,7 @@ class LibraryShare extends Component {
         on="click"
         flowing
         hideOnScroll
-        position="bottom right"
+        position={`bottom ${position}`}
         trigger={<Button compact size="small" icon="share alternate"/>}
         open={isPopupOpen}
         onClose={() => this.handlePopup(false)}
@@ -81,7 +82,7 @@ class LibraryShare extends Component {
           <Popup // link was copied message popup
             open={isCopyOpen}
             content={t('messages.link-copied-to-clipboard')}
-            position="bottom right"
+            position="bottom"
             trigger={
               (
                 <CopyToClipboard text={url} onCopy={this.handleCopied}>
