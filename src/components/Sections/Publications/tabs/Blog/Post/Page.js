@@ -7,6 +7,7 @@ import { Container, Grid, Header } from 'semantic-ui-react';
 import * as shapes from '../../../../../shapes';
 import Helmets from '../../../../../shared/Helmets/index';
 import WipErr from '../../../../../shared/WipErr/WipErr';
+import Share from "../../../../Library/Share";
 
 export class BlogPostPage extends Component {
   static propTypes = {
@@ -52,7 +53,7 @@ export class BlogPostPage extends Component {
                       <div dangerouslySetInnerHTML={{ __html: title }} />
                     </Header.Content>
                   </Header>
-                  <Header as="h4" color="grey">
+                  <Header as="h4" color="grey" className="display-inline">
                     <a
                       href={url}
                       target="_blank"
@@ -61,6 +62,9 @@ export class BlogPostPage extends Component {
                       {mts.format('lll')}
                     </a>
                   </Header>
+                  <span className="share-publication">
+                    <Share />
+                  </span>
                 </Grid.Column>
               </Grid.Row>
             </Grid>

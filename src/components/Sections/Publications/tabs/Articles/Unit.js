@@ -10,6 +10,7 @@ import { UnitPage, wrap as wrapPage } from '../../../../Pages/Unit/Page';
 import { SameCollectionContainer, wrap as wrapSameCollectionContainer } from '../../../../Pages/Unit/widgets/Recommended/SameCollection/Container';
 import SameCollectionWidget from '../../../../Pages/Unit/widgets/Recommended/SameCollection/Widget';
 import TranscriptionContainer from '../../../../Pages/Unit/widgets/UnitMaterials/Transcription/TranscriptionContainer';
+import Share from "../../../Library/Share";
 
 class MySameCollectionWidget extends SameCollectionWidget {
   renderContent() {
@@ -107,9 +108,12 @@ class MyUnitPage extends UnitPage {
                     }
                   </Header.Content>
                 </Header>
-                <Header as="h4" color="grey">
+                <h4 color="grey" className="display-inline">
                   {t('values.date', { date: unit.film_date })}
-                </Header>
+                </h4>
+                <span className="share-publication">
+                  <Share />
+                </span>
               </Grid.Column>
             </Grid.Row>
           </Grid>

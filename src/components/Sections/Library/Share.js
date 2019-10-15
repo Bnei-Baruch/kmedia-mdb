@@ -5,17 +5,15 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Message, Popup, } from 'semantic-ui-react';
 
 import ShareBar from '../../AVPlayer/Share/ShareBar';
+import { DeviceInfoContext } from "../../../helpers/app-contexts";
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
 class LibraryShare extends Component {
-  static propTypes = {
-    t: PropTypes.func.isRequired,
-    isMobile: PropTypes.bool
-  };
+  static contextType = DeviceInfoContext;
 
-  static defaultProps = {
-    isMobile: false
+  static propTypes = {
+    t: PropTypes.func.isRequired
   };
 
   state = {
@@ -54,15 +52,16 @@ class LibraryShare extends Component {
   };
 
   render() {
-    const { t, isMobile }             = this.props;
+    const { t }                       = this.props;
     const { isPopupOpen, isCopyOpen } = this.state;
+    const { isMobileDevice }          = this.context;
 
     let url;
     if (isPopupOpen) {
       url = window.location.href;  // shouldn't be called during SSR
     }
 
-    const buttonSize = isMobile ? 'tiny' : 'small';
+    const buttonSize = isMobileDevice ? 'tiny' : 'small';
 
     return (
       <Popup // share bar popup
@@ -71,14 +70,14 @@ class LibraryShare extends Component {
         flowing
         hideOnScroll
         position="bottom right"
-        trigger={<Button compact size="small" icon="share alternate" />}
+        trigger={<Button compact size="small" icon="share alternate"/>}
         open={isPopupOpen}
         onClose={() => this.handlePopup(false)}
         onOpen={() => this.handlePopup(true)}
       >
         <Popup.Content>
-          <ShareBar url={url} buttonSize={buttonSize} messageTitle={t('sources-library.share-title')} />
-          <Message content={url} size="mini" />
+          <ShareBar url={url} buttonSize={buttonSize} messageTitle={t('sources-library.share-title')}/>
+          <Message content={url} size="mini"/>
           <Popup // link was copied message popup
             open={isCopyOpen}
             content={t('messages.link-copied-to-clipboard')}

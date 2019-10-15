@@ -405,7 +405,7 @@ class LibraryContainer extends Component {
                       <LibrarySettings fontSize={fontSize} handleSettings={this.handleSettings} />
                       <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                       <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                      <Share isMobile={this.isMobileDevice()} />
+                      <Share />
                     </div>
                   </Grid.Column>
                 </Grid.Row>
