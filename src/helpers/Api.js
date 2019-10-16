@@ -22,7 +22,7 @@ export class Requests {
       url = `${cmsUrl('banner')}/${options.language}`;
       break;
     case 'person':
-      url = `${cmsUrl('person')}/${options.id}-${options.language}`;
+      url = `${cmsUrl('person')}/${options.id}?language=${options.language}`;
       break;
     default:
       return null;
