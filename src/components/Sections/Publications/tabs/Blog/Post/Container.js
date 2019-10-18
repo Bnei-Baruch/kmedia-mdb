@@ -25,13 +25,13 @@ const BlogPostContainer = ({ match }) => {
   );
 
   if (wip || err) {
-    return;
+    return null;
   }
   
   if (post
     && post.blog === blog
     && `${post.wp_id}` === id) {
-    return;
+    return null;
   }
 
   return (
