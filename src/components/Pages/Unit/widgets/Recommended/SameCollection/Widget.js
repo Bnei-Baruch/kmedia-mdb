@@ -18,7 +18,6 @@ class SameCollection extends Component {
     err: shapes.Error,
     section: PropTypes.string,
     t: PropTypes.func.isRequired,
-    language: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
