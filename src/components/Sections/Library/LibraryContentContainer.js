@@ -117,10 +117,8 @@ class LibraryContentContainer extends Component {
     if (!useStateLanguages && data) {
       languages = [...Object.keys(data)];
     }
-    const query            = getQuery(history.location);
-    const queryLanguage    = languages.includes(query.language) ? query.language : undefined;
-    const priorityLanguage = queryLanguage || contentLanguage;
-    const newLanguage      = selectSuitableLanguage(priorityLanguage, uiLanguage, languages);
+    
+    const newLanguage      = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
 
     if (!newLanguage) {
       return false;
