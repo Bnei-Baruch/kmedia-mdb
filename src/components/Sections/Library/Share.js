@@ -58,34 +58,34 @@ const LibraryShare = (props) => {
     const buttonSize = isMobileDevice ? 'tiny' : 'small';
 
     return (
-            <Popup // share bar popup
-                    className="share-bar"
-                    on="click"
-                    flowing
-                    hideOnScroll
-                    position={`bottom ${position}`}
-                    trigger={<Button compact size="small" icon="share alternate"/>}
-                    open={isPopupOpen}
-                    onClose={() => setIsPopupOpen(false)}
-                    onOpen={() => setIsPopupOpen(true)}
-            >
-              <Popup.Content>
-                <ShareBar url={url} buttonSize={buttonSize} messageTitle={t('sources-library.share-title')}/>
-                <Message content={url} size="mini"/>
-                <Popup // link was copied message popup
-                        open={isCopyOpen}
-                        content={t('messages.link-copied-to-clipboard')}
-                        position={`bottom ${position}`}
-                        trigger={
-                          (
-                                  <CopyToClipboard text={url} onCopy={handleCopied}>
-                                    <Button compact size="small" content={t('buttons.copy')}/>
-                                  </CopyToClipboard>
-                          )
-                        }
-                />
-              </Popup.Content>
-            </Popup>
+      <Popup // share bar popup
+        className="share-bar"
+        on="click"
+        flowing
+        hideOnScroll
+        position={`bottom ${position}`}
+        trigger={<Button compact size="small" icon="share alternate"/>}
+        open={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        onOpen={() => setIsPopupOpen(true)}
+      >
+        <Popup.Content>
+          <ShareBar url={url} buttonSize={buttonSize} messageTitle={t('sources-library.share-title')}/>
+          <Message content={url} size="mini"/>
+          <Popup // link was copied message popup
+            open={isCopyOpen}
+            content={t('messages.link-copied-to-clipboard')}
+            position={`bottom ${position}`}
+            trigger={
+              (
+                <CopyToClipboard text={url} onCopy={handleCopied}>
+                  <Button compact size="small" content={t('buttons.copy')}/>
+                </CopyToClipboard>
+              )
+            }
+          />
+        </Popup.Content>
+      </Popup>
     );
   };
 
