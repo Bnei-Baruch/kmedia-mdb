@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { assetUrl } from '../../../helpers/Api';
+import { cmsUrl } from '../../../helpers/Api';
 import { isEmpty } from '../../../helpers/utils';
 import { selectSuitableLanguage } from '../../../helpers/language';
 import { getQuery, updateQuery } from '../../../helpers/url';
@@ -12,7 +12,7 @@ import * as shapes from '../../shapes';
 import Library from './Library';
 import PDF from '../../shared/PDF/PDF';
 
-const fetchContent = (source, data, fetchAsset) => {
+const fetchContent = (source, data, language, fetchSource) => {
   // In case of TAS we prefer PDF, otherwise HTML
   if (data.pdf && PDF.isTaas(source)) {
     // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
@@ -24,26 +24,26 @@ const fetchContent = (source, data, fetchAsset) => {
     const result = /^gr-(.+)/.exec(id);
     id           = result[1];
   }
-
-  fetchAsset(`sources/${id}/${data.html}`);
+  fetchSource({ sourceID: id, name: data.html, language });
 };
 
 const getFullUrl = (pdf, data, language, source) => {
-  if (pdf) {
-    return assetUrl(`sources/${pdf}`);
-  }
-
-  if (isEmpty(data) || isEmpty(data[language])) {
-    return null;
-  }
-
   let id = source;
   if (/^gr-/.test(id)) { // Rabash Group Articles
     const result = /^gr-(.+)/.exec(id);
     id           = result[1];
   }
 
-  return assetUrl(`sources/${id}/${data[language].docx}`);
+  if (pdf) {
+    pdf = pdf.replace(`${id}/`, '');
+    return `${cmsUrl('sources')}/${pdf}?uid=${id}&language=${language}`;
+  }
+
+  if (isEmpty(data) || isEmpty(data[language])) {
+    return null;
+  }
+
+  return `${cmsUrl('sources')}/${data[language].html}?uid=${id}&language=${language}`;
 };
 
 class LibraryContentContainer extends Component {
@@ -51,7 +51,7 @@ class LibraryContentContainer extends Component {
     source: PropTypes.string,
     index: shapes.DataWipErr,
     content: shapes.DataWipErr.isRequired,
-    fetchAsset: PropTypes.func.isRequired,
+    fetchSource: PropTypes.func.isRequired,
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
     langSelectorMount: PropTypes.instanceOf(PropTypes.element),
@@ -129,21 +129,21 @@ class LibraryContentContainer extends Component {
     this.setState({ languages, language: newLanguage });
 
     if (!isEmpty(source)) {
-      const { fetchAsset } = this.props;
-      fetchContent(source, data[newLanguage], fetchAsset);
+      const { fetchSource } = this.props;
+      fetchContent(source, data[newLanguage], newLanguage, fetchSource);
     }
 
     return true;
   };
 
   handleLanguageChanged = (e, language) => {
-    const { index: { data }, source, fetchAsset, history } = this.props;
+    const { index: { data }, source, fetchSource, history } = this.props;
     updateQuery(history, query => ({
       ...query,
       language,
     }));
     this.setState({ language });
-    fetchContent(source, data[language], fetchAsset);
+    fetchContent(source, data[language], language, fetchSource);
   };
 
   render() {
@@ -156,6 +156,7 @@ class LibraryContentContainer extends Component {
         isTaas={isTaas}
         pdfFile={pdfFile}
         fullUrlPath={getFullUrl(pdfFile, index.data, language, source)}
+        sourceId={source}
         startsFrom={startsFrom}
         content={index && index.data ? content : {}}
         language={language}
@@ -170,9 +171,9 @@ class LibraryContentContainer extends Component {
 
 export default connect(
   state => ({
-    content: selectors.getAsset(state.assets),
+    content: selectors.getSource(state.assets),
   }),
   dispatch => bindActionCreators({
-    fetchAsset: actions.fetchAsset,
+    fetchSource: actions.fetchSource,
   }, dispatch)
 )(LibraryContentContainer);

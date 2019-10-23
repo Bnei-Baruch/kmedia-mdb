@@ -20,7 +20,7 @@ class SourcesContainer extends Component {
     language: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
     fetchIndex: PropTypes.func.isRequired,
-    fetchAsset: PropTypes.func.isRequired,
+    fetchSource: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,
     doc2html: PropTypes.func.isRequired,
   };
@@ -55,11 +55,11 @@ class SourcesContainer extends Component {
   };
 
   handleContentChange = (id, name, deriveId) => {
-    const { doc2html, fetchAsset } = this.props;
+    const { doc2html, language, fetchSource } = this.props;
     if (deriveId) {
       doc2html(deriveId);
     } else {
-      fetchAsset(`sources/${id}/${name}`);
+      fetchSource({ sourceID: id, name, language });
     }
   };
 
@@ -91,7 +91,7 @@ export default connect(
 
     return {
       indexMap,
-      content: assetsSelectors.getAsset(state.assets),
+      content: assetsSelectors.getSource(state.assets),
       doc2htmlById: assetsSelectors.getDoc2htmlById(state.assets),
       language: settings.getLanguage(state.settings),
       contentLanguage: settings.getContentLanguage(state.settings),
@@ -101,6 +101,6 @@ export default connect(
   dispatch => bindActionCreators({
     doc2html: assetsActions.doc2html,
     fetchIndex: assetsActions.sourceIndex,
-    fetchAsset: assetsActions.fetchAsset,
+    fetchSource: assetsActions.fetchSource,
   }, dispatch)
 )(withNamespaces()(SourcesContainer));
