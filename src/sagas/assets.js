@@ -32,27 +32,10 @@ export function* sourceIndex(action) {
       const result = /^gr-(.+)/.exec(id);
       id           = result[1];
     }
-    const { data } = yield call(Api.getCMS, 'sourceIndex', {
-      id: id,
-      name: 'index.json',
-      language: 'en'
-    });
+    const { data } = yield call(Api.getAsset, `sources/${id}/index.json`);
     yield put(actions.sourceIndexSuccess(action.payload, data));
   } catch (err) {
     yield put(actions.sourceIndexFailure(action.payload, err));
-  }
-}
-
-export function* fetchSource(action) {
-  try {
-    const { data } = yield call(Api.getCMS, 'source', {
-      id: action.payload.sourceID,
-      name: action.payload.name,
-      language: action.payload.language,
-    });
-    yield put(actions.fetchSourceSuccess(data));
-  } catch (err) {
-    yield put(actions.fetchSourceFailure(err));
   }
 }
 
@@ -89,10 +72,6 @@ function* watchSourceIndex() {
   yield takeEvery([types.SOURCE_INDEX], sourceIndex);
 }
 
-function* watchSource() {
-  yield takeEvery([types.FETCH_SOURCE], fetchSource);
-}
-
 function* watchFetchAsset() {
   yield takeLatest([types.FETCH_ASSET], fetchAsset);
 }
@@ -105,7 +84,6 @@ export const sagas = [
   watchUnzip,
   watchDoc2Html,
   watchSourceIndex,
-  watchSource,
   watchFetchAsset,
   watchFetchPerson,
 ];

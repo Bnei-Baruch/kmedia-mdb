@@ -19,14 +19,10 @@ export class Requests {
     let url;
     switch (item) {
     case 'banner':
-      url = `${cmsUrl('banners')}/${options.language}`;
+      url = `${cmsUrl('banner')}/${options.language}`;
       break;
     case 'person':
-      url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
-      break;
-    case 'sourceIndex':
-    case 'source':
-      url = `${cmsUrl('sources')}/${options.name}?uid=${options.id}&language=${options.language}`;
+      url = `${cmsUrl('person')}/${options.id}?language=${options.language}`;
       break;
     default:
       return null;

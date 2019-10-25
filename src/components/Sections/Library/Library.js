@@ -4,7 +4,7 @@ import { withNamespaces } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Container, Portal, Segment } from 'semantic-ui-react';
 
-import { cmsUrl } from '../../../helpers/Api';
+import { assetUrl } from '../../../helpers/Api';
 import { formatError, isEmpty } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
@@ -21,7 +21,7 @@ const defaultContent = {
   err: null,
 };
 
-const getContentToDisplay = (language, sourceId, pageNumber, pageNumberHandler, usePdfFile, pdfFile, startsFrom, content, t) => {
+const getContentToDisplay = (language, pageNumber, pageNumberHandler, usePdfFile, pdfFile, startsFrom, content, t) => {
   const { wip: contentWip, err: contentErr, data: contentData } = content;
 
   if (contentErr) {
@@ -33,10 +33,9 @@ const getContentToDisplay = (language, sourceId, pageNumber, pageNumberHandler, 
   } else if (contentWip) {
     return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
   } else if (usePdfFile) {
-    const pdf = pdfFile.replace(`${sourceId}/`, '');
     return (
       <PDF
-        pdfFile={`${cmsUrl('sources')}/${pdf}?uid=${sourceId}&language=${language}`}
+        pdfFile={assetUrl(`sources/${pdfFile}`)}
         pageNumber={pageNumber || 1}
         startsFrom={startsFrom}
         pageNumberHandler={pageNumberHandler}
@@ -63,7 +62,6 @@ const Library = (props) => {
 
   const
     {
-      sourceId,
       content           = defaultContent,
       language          = null,
       languages         = [],
@@ -90,7 +88,7 @@ const Library = (props) => {
   const usePdfFile                                          = isTaas && pdfFile;
   const mimeType                                            = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
-  const contentsToDisplay = getContentToDisplay(language, sourceId, pageNumber, pageNumberHandler, pdfFile, usePdfFile, startsFrom, content, t);
+  const contentsToDisplay = getContentToDisplay(language, pageNumber, pageNumberHandler, pdfFile, usePdfFile, startsFrom, content, t);
   if (contentsToDisplay === null) {
     return <Segment basic>{t('sources-library.no-source')}</Segment>;
   }
@@ -129,7 +127,6 @@ Library.propTypes = {
     err: shapes.Error,
   }),
   isTaas: PropTypes.bool.isRequired,
-  sourceId: PropTypes.string.isRequired,
   pdfFile: PropTypes.string,
   startsFrom: PropTypes.number,
   language: PropTypes.string,

@@ -295,7 +295,7 @@ export const libraryPage = async (store, match) => {
         }
 
         const name = data[language].html;
-        store.dispatch(assetsActions.fetchSource({sourceID, name, language}));
+        store.dispatch(assetsActions.fetchAsset(`sources/${sourceID}/${name}`));
       }
     });
 };

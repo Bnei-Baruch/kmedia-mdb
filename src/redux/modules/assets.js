@@ -13,9 +13,6 @@ const DOC2HTML_FAILURE     = 'Assets/DOC2HTML_FAILURE';
 const SOURCE_INDEX         = 'Assets/SOURCE_INDEX';
 const SOURCE_INDEX_SUCCESS = 'Assets/SOURCE_INDEX_SUCCESS';
 const SOURCE_INDEX_FAILURE = 'Assets/SOURCE_INDEX_FAILURE';
-const FETCH_SOURCE         = 'Assets/FETCH_SOURCE';
-const FETCH_SOURCE_SUCCESS = 'Assets/FETCH_SOURCE_SUCCESS';
-const FETCH_SOURCE_FAILURE = 'Assets/FETCH_SOURCE_FAILURE';
 const FETCH_ASSET          = 'Assets/FETCH_ASSET';
 const FETCH_ASSET_SUCCESS  = 'Assets/FETCH_ASSET_SUCCESS';
 const FETCH_ASSET_FAILURE  = 'Assets/FETCH_ASSET_FAILURE';
@@ -33,9 +30,6 @@ export const types = {
   SOURCE_INDEX,
   SOURCE_INDEX_SUCCESS,
   SOURCE_INDEX_FAILURE,
-  FETCH_SOURCE,
-  FETCH_SOURCE_SUCCESS,
-  FETCH_SOURCE_FAILURE,
   FETCH_ASSET,
   FETCH_ASSET_SUCCESS,
   FETCH_ASSET_FAILURE,
@@ -53,9 +47,6 @@ const doc2htmlFailure    = createAction(DOC2HTML_FAILURE, (id, err) => ({ id, er
 const sourceIndex        = createAction(SOURCE_INDEX);
 const sourceIndexSuccess = createAction(SOURCE_INDEX_SUCCESS, (id, data) => ({ id, data }));
 const sourceIndexFailure = createAction(SOURCE_INDEX_FAILURE, (id, err) => ({ id, err }));
-const fetchSource        = createAction(FETCH_SOURCE);
-const fetchSourceSuccess = createAction(FETCH_SOURCE_SUCCESS, data => data);
-const fetchSourceFailure = createAction(FETCH_SOURCE_FAILURE, (id, err) => ({ id, err }));
 const fetchAsset         = createAction(FETCH_ASSET);
 const fetchAssetSuccess  = createAction(FETCH_ASSET_SUCCESS);
 const fetchAssetFailure  = createAction(FETCH_ASSET_FAILURE);
@@ -73,9 +64,6 @@ export const actions = {
   sourceIndex,
   sourceIndexSuccess,
   sourceIndexFailure,
-  fetchSource,
-  fetchSourceSuccess,
-  fetchSourceFailure,
   fetchAsset,
   fetchAssetSuccess,
   fetchAssetFailure,
@@ -100,11 +88,6 @@ const initialState = {
     wip: false,
     err: null,
   },
-  source: {
-    data: null,
-    wip: false,
-    err: null,
-  },
 };
 
 const onSSRPrepare = draft => {
@@ -113,7 +96,6 @@ const onSSRPrepare = draft => {
   draft.sourceIndexById = mapValues(draft.sourceIndexById, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
   draft.asset.err       = draft.asset.err ? draft.asset.err.toString() : draft.asset.err;
   draft.person.err      = draft.person.err ? draft.person.err.toString() : draft.person.err;
-  draft.source.err      = draft.source.err ? draft.source.err.toString() : draft.source.err;
 };
 
 const getActionKey = (type) => {
@@ -172,21 +154,6 @@ const onFetchAssetFailure = (draft, payload) => {
   draft.asset.err = payload;
 };
 
-const onFetchSource = draft => {
-  draft.source.wip = true;
-};
-
-const onFetchSourceSuccess = (draft, payload) => {
-  draft.source.data = payload;
-  draft.source.wip  = false;
-  draft.source.err  = null;
-};
-
-const onFetchSourceFailure = (draft, payload) => {
-  draft.source.wip = false;
-  draft.source.err = payload;
-};
-
 const onFetchPerson = draft => {
   draft.person.wip = true;
 };
@@ -217,10 +184,6 @@ export const reducer = handleActions({
   [SOURCE_INDEX_SUCCESS]: onFetchByIdSuccess,
   [SOURCE_INDEX_FAILURE]: onFetchByIdFailure,
 
-  [FETCH_SOURCE]: onFetchSource,
-  [FETCH_SOURCE_SUCCESS]: onFetchSourceSuccess,
-  [FETCH_SOURCE_FAILURE]: onFetchSourceFailure,
-
   [FETCH_ASSET]: onFetchAsset,
   [FETCH_ASSET_SUCCESS]: onFetchAssetSuccess,
   [FETCH_ASSET_FAILURE]: onFetchAssetFailure,
@@ -237,7 +200,6 @@ const getDoc2htmlById    = state => state.doc2htmlById;
 const getSourceIndexById = state => state.sourceIndexById;
 const getAsset           = state => state.asset;
 const getPerson          = state => state.person;
-const getSource          = state => state.source;
 
 export const selectors = {
   getZipIndexById,
@@ -245,5 +207,4 @@ export const selectors = {
   getSourceIndexById,
   getAsset,
   getPerson,
-  getSource,
 };

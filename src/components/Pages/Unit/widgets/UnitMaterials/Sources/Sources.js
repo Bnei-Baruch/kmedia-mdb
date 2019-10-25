@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
 
+import { assetUrl } from '../../../../../../helpers/Api';
 import { CT_KITEI_MAKOR, MT_TEXT } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { isLanguageRtl } from '../../../../../../helpers/i18n-utils';
@@ -254,7 +255,7 @@ class Sources extends Component {
     } else if (contentWip) {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else if (isTaas && pdfFile) {
-      contents = <PDF pdfFile={pdfFile} pageNumber={1} startsFrom={startsFrom} />;
+      contents = <PDF pdfFile={assetUrl(`sources/${selected}/${pdfFile}`)} pageNumber={1} startsFrom={startsFrom} />;
     } else {
       const direction = isLanguageRtl(uiLanguage);
       contents        = <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: contentData }} />;
