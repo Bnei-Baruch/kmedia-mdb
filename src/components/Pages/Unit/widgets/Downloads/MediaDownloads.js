@@ -61,10 +61,10 @@ class MediaDownloads extends Component {
 
     } else {
       // no unit or a different unit - create new state
-      const groups    = MediaDownloads.getFilesByLanguage(unit.files);
+      const groups    = MediaDownloads.getFilesByLanguage(unit.files, contentLanguage, uiLanguage);
       const languages = [...groups.keys()];
       const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-      const derivedGroups = MediaDownloads.getDerivedFilesByContentType(unit.derived_units);
+      const derivedGroups = MediaDownloads.getDerivedFilesByContentType(unit.derived_units, contentLanguage, uiLanguage);
 
       return { groups, derivedGroups, isCopyPopupOpen, languages, language, uiLanguage, contentLanguage, unit };
     }
@@ -83,7 +83,7 @@ class MediaDownloads extends Component {
     );
   }
 
-  static getFilesByLanguage = (files = []) => {
+  static getFilesByLanguage = (files = [], contentLanguage, uiLanguage) => {
     const groups = new Map();
 
     // keep track of image files. These are a special case.
@@ -114,7 +114,7 @@ class MediaDownloads extends Component {
 
     // fill in images fallback into every language
     if (images.length > 0) {
-      const fallbackImage = this.fallbackImage(images);
+      const fallbackImage = MediaDownloads.fallbackImage(images, contentLanguage, uiLanguage);
       groups.forEach((byType) => {
         if (!byType.has(MT_IMAGE)) {
           byType.set(MT_IMAGE, fallbackImage);
@@ -125,7 +125,14 @@ class MediaDownloads extends Component {
     return groups;
   };
 
-  static getDerivedFilesByContentType = (units) => {
+  static fallbackImage = (images, contentLanguage, uiLanguage) => {
+    const imageLanguages = images.map(image => image.language);
+    const language       = selectSuitableLanguage(contentLanguage, uiLanguage, imageLanguages);
+
+    return [images.find(image => image.language === language)];
+  };
+
+  static getDerivedFilesByContentType = (units, contentLanguage, uiLanguage) => {
     const allByCT = Object.values(units || {})
       .reduce((acc, val) => {
         acc[val.content_type] = (acc[val.content_type] || []).concat((val.files || []).map(x => ({ ...x, cu: val })));
@@ -134,7 +141,7 @@ class MediaDownloads extends Component {
 
     return Object.entries(allByCT).reduce((acc, val) => {
       const [ct, files] = val;
-      acc[ct]           = MediaDownloads.getFilesByLanguage(files);
+      acc[ct]           = MediaDownloads.getFilesByLanguage(files, contentLanguage, uiLanguage);
       return acc;
     }, {});
   };
@@ -155,14 +162,6 @@ class MediaDownloads extends Component {
 
   handleChangeLanguage = (e, language) => {
     this.setState({ language });
-  };
-
-  fallbackImage = (images) => {
-    const imageLanguages                            = images.map(image => image.language);
-    const { contentLanguage, language: uiLanguage } = this.props;
-    const language                                  = selectSuitableLanguage(contentLanguage, uiLanguage, imageLanguages);
-
-    return [images.find(image => image.language === language)];
   };
 
   handleCopied = (url) => {
