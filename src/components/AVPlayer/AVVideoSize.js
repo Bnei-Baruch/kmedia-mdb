@@ -6,8 +6,7 @@ import { VS_DEFAULT, VS_FHD, VS_HD, VS_NAMES, VS_NHD } from '../../helpers/const
 
 const sortedVS = [VS_FHD, VS_HD, VS_NHD];
 
-const AVVideoSize = (value = VS_DEFAULT, qualities = [], onSelect = noop) => {
-
+const AVVideoSize = ({value = VS_DEFAULT, qualities = [], onSelect = noop}) => {
   const handleChange = (e, data) => onSelect(e, data.value);
 
   if (qualities.length < 2 && qualities[0] === VS_DEFAULT) {

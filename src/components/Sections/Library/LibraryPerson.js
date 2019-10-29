@@ -17,7 +17,6 @@ const convertImages = (content) => {
   while ((arr = regex.exec(content))) {
     let img = arr[1];
     if (!img.startsWith('http') && !img.startsWith('/static/')) {
-      console.log(cmsUrl(img));
       const params = Requests.makeParams({
         url: cmsUrl(img),
         width: 160,

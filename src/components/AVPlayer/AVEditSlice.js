@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'semantic-ui-react';
 
-const AVEditSlice = (onActivateSlice) => (
+const AVEditSlice = ({onActivateSlice}) => (
   <button
     type="button"
     tabIndex="-1"

@@ -11,16 +11,6 @@ const AVAudioVideo = ({ isAudio, isVideo, fallbackMedia, uiLanguage, onSwitch, t
 
   const handleSwitch = useCallback(() => onSwitch(), [onSwitch]);
 
-  const handleBtnRef = (ref) => {
-    if (ref) {
-      this.mainBtn = ref;
-      this.mainBtn.addEventListener('click', handleSwitch);
-    } else if (this.mainBtn) {
-      this.mainBtn.removeEventListener('click', handleSwitch);
-      this.mainBtn = ref;
-    }
-  };
-
   const handleFallbackMedia = useCallback(fallbackMedia => {
     if (didShowFallbackMediaPopup) {
       setOpenPopup(false);
@@ -45,7 +35,7 @@ const AVAudioVideo = ({ isAudio, isVideo, fallbackMedia, uiLanguage, onSwitch, t
         language={uiLanguage}
         refElement={audioVideoContainerRef}
       />
-      <button ref={handleBtnRef} type="button">
+      <button type="button" onClick={handleSwitch}>
         <span className={isAudio ? 'is-active' : ''}>{t('buttons.audio')}</span>
         &nbsp;/&nbsp;
         <span className={isVideo ? 'is-active' : ''}>{t('buttons.video')}</span>
