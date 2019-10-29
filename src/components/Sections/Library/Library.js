@@ -1,38 +1,56 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Container, Portal, Segment } from 'semantic-ui-react';
 
+import { selectors } from '../../../redux/modules/assets';
 import { assetUrl } from '../../../helpers/Api';
-import { formatError, isEmpty } from '../../../helpers/utils';
-import * as shapes from '../../shapes';
-import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
+import { isEmpty } from '../../../helpers/utils';
 import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
 import PDF from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { updateQuery } from '../../../helpers/url';
 import withPagination from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
+import WipErr from '../../shared/WipErr/WipErr';
 
-const defaultContent = {
-  data: null,
-  wip: false,
-  err: null,
+
+export const checkRabashGroupArticles = (source) => {
+  let id = source;
+  if (/^gr-/.test(id)) { // Rabash Group Articles
+    const result = /^gr-(.+)/.exec(id);
+    id = result[1];
+  }
+
+  return id;
+}
+
+const getFullUrl = (pdfFile, data, language, source) => {
+  if (pdfFile) {
+    return assetUrl(`sources/${pdfFile}`);
+  }
+
+  if (isEmpty(data) || isEmpty(data[language])) {
+    return null;
+  }
+
+  const id = checkRabashGroupArticles(source);
+
+  return assetUrl(`sources/${id}/${data[language].docx}`);
 };
 
-const getContentToDisplay = (language, pageNumber, pageNumberHandler, usePdfFile, pdfFile, startsFrom, content, t) => {
-  const { wip: contentWip, err: contentErr, data: contentData } = content;
 
-  if (contentErr) {
-    if (contentErr.response && contentErr.response.status === 404) {
-      return <FrownSplash text={t('messages.source-content-not-found')} />;
-    } else {
-      return <ErrorSplash text={t('messages.server-error')} subtext={formatError(contentErr)} />;
-    }
-  } else if (contentWip) {
-    return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-  } else if (usePdfFile) {
+const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, pdfFile, startsFrom, t) => {
+  const { wip, err, data: contentData } = content;
+
+  const wipErr = WipErr({ wip, err, t });
+  if (wipErr) {
+    return wipErr;
+  }
+  
+  if (pdfFile) {
     return (
       <PDF
         pdfFile={assetUrl(`sources/${pdfFile}`)}
@@ -62,14 +80,32 @@ const Library = (props) => {
 
   const
     {
-      content           = defaultContent,
+      data,
+      source,
       language          = null,
       languages         = [],
-      isTaas,
       langSelectorMount = null,
-      fullUrlPath       = null,
+      downloadAllowed,
       t,
     } = props;
+
+  const content = useSelector(state => selectors.getAsset(state.assets)); 
+
+  if (!data) {
+    return <Segment basic>&nbsp;</Segment>;
+  }
+
+  const startsFrom = PDF.startsFrom(source) || 1;
+  const isTaas     = PDF.isTaas(source);
+  
+  let pdfFile;
+  if (data && isTaas){
+    const langData = data[language];
+
+    if (langData && langData.pdf) {
+      pdfFile = `${source}/${langData.pdf}`;
+    }
+  }
 
   const pageNumberHandler = pageNumber => {
     setPageNumber(pageNumber);
@@ -79,16 +115,7 @@ const Library = (props) => {
     }));
   };
 
-  if (isEmpty(content)) {
-    return <Segment basic>&nbsp;</Segment>;
-  }
-
-  // PDF.js will fetch file by itself
-  const { pdfFile = null, startsFrom = 1, downloadAllowed } = props;
-  const usePdfFile                                          = isTaas && pdfFile;
-  const mimeType                                            = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-
-  const contentsToDisplay = getContentToDisplay(language, pageNumber, pageNumberHandler, pdfFile, usePdfFile, startsFrom, content, t);
+  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, startsFrom, t);
   if (contentsToDisplay === null) {
     return <Segment basic>{t('sources-library.no-source')}</Segment>;
   }
@@ -107,6 +134,13 @@ const Library = (props) => {
     );
   }
 
+  const fullUrlPath = getFullUrl(pdfFile, data, language, source);
+  
+  // PDF.js will fetch file by itself
+  const mimeType = pdfFile 
+    ? 'application/pdf' 
+    : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
   return (
     <div>
       {
@@ -121,19 +155,12 @@ const Library = (props) => {
 };
 
 Library.propTypes = {
-  content: PropTypes.shape({
-    data: PropTypes.string, // actual content (HTML)
-    wip: shapes.WIP,
-    err: shapes.Error,
-  }),
-  isTaas: PropTypes.bool.isRequired,
-  pdfFile: PropTypes.string,
-  startsFrom: PropTypes.number,
+  source: PropTypes.string,
+  data: PropTypes.any,
   language: PropTypes.string,
   languages: PropTypes.arrayOf(PropTypes.string),
   langSelectorMount: PropTypes.instanceOf(PropTypes.element),
   handleLanguageChanged: PropTypes.func.isRequired,
-  fullUrlPath: PropTypes.string,
   downloadAllowed: PropTypes.bool.isRequired,
   t: PropTypes.func.isRequired,
 };

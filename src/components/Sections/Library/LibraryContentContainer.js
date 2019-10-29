@@ -1,44 +1,14 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { assetUrl } from '../../../helpers/Api';
 import { isEmpty } from '../../../helpers/utils';
 import { selectSuitableLanguage } from '../../../helpers/language';
 import { updateQuery } from '../../../helpers/url';
-import { actions, selectors } from '../../../redux/modules/assets';
+import { actions } from '../../../redux/modules/assets';
 import * as shapes from '../../shapes';
-import Library from './Library';
+import Library, { checkRabashGroupArticles } from './Library';
 import PDF from '../../shared/PDF/PDF';
-
-const getFullUrl = (pdf, data, language, source) => {
-  if (pdf) {
-    return assetUrl(`sources/${pdf}`);
-  }
-
-  if (isEmpty(data) || isEmpty(data[language])) {
-    return null;
-  }
-
-  let id = source;
-  if (/^gr-/.test(id)) { // Rabash Group Articles
-    const result = /^gr-(.+)/.exec(id);
-    id           = result[1];
-  }
-
-  return assetUrl(`sources/${id}/${data[language].docx}`);
-};
-
-
-const getTaasPdf = (langData, source) => {
-  let pdfFile;
-
-  if (langData && langData.pdf) {
-    pdfFile = `${source}/${langData.pdf}`;
-  }
-
-  return pdfFile;
-};
 
 const LibraryContentContainer = (props) => {
   const { index: { data } = { index: { data: null } }, 
@@ -54,7 +24,7 @@ const LibraryContentContainer = (props) => {
 
   useEffect(() => {
     if (data){
-      const languages =[...Object.keys(data)];
+      const languages = Object.keys(data);
       setLanguages(languages);
     }
   }, [data]);
@@ -69,31 +39,19 @@ const LibraryContentContainer = (props) => {
   
   const dispatch = useDispatch();
 
-  const fetchContent = useCallback(() => {
-    if (data && language){
+  useEffect(() => {
+    if (data && language && !isEmpty(source)){
       const lData = data[language];
 
       // In case of TAS we prefer PDF, otherwise HTML
-      if (lData && lData.pdf && PDF.isTaas(source)) {
       // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
-        return;
-      }
+      if (lData && (!lData.pdf || !PDF.isTaas(source))) {
+        const id = checkRabashGroupArticles(source);
   
-      let id = source;
-      if (/^gr-/.test(id)) { // Rabash Group Articles
-        const result = /^gr-(.+)/.exec(id);
-        id           = result[1];
+        dispatch(actions.fetchAsset(`sources/${id}/${lData.html}`));
       }
-  
-      dispatch(actions.fetchAsset(`sources/${id}/${lData.html}`));
     }
   }, [data, language, source, dispatch]);
-
-  useEffect(() => {
-    if (!isEmpty(source)) {
-      fetchContent();
-    }
-  }, [source, fetchContent]);
 
   // this handler passed to child component to handle language change from there
   const handleLanguageChanged = (e, language) => {
@@ -105,24 +63,10 @@ const LibraryContentContainer = (props) => {
     setLanguage(language);
   };
 
-  const content = useSelector(state => selectors.getAsset(state.assets));
-
-  const startsFrom = PDF.startsFrom(source);
-  const isTaas     = PDF.isTaas(source);
-  
-  let pdfFile;
-  if (data && isTaas){
-    const langData = data[language];
-    pdfFile = getTaasPdf(langData, source);
-  }
-
   return (
     <Library
-      isTaas={isTaas}
-      pdfFile={pdfFile}
-      fullUrlPath={getFullUrl(pdfFile, data, language, source)}
-      startsFrom={startsFrom}
-      content={data ? content : {}}
+      source={source}
+      data={data}
       language={language}
       languages={languages}
       handleLanguageChanged={handleLanguageChanged}
