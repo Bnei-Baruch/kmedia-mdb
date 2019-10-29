@@ -13,7 +13,6 @@ import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as device } from '../../../redux/modules/device';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import Helmets from '../../shared/Helmets';
@@ -22,8 +21,11 @@ import TOC from './TOC';
 import LibrarySettings from './LibrarySettings';
 import Share from './Share';
 import { isLanguageRtl } from "../../../helpers/i18n-utils";
+import { DeviceInfoContext } from "../../../helpers/app-contexts";
 
 class LibraryContainer extends Component {
+  static contextType = DeviceInfoContext;
+
   static propTypes = {
     sourceId: PropTypes.string.isRequired,
     indexMap: PropTypes.objectOf(shapes.DataWipErr),
@@ -41,7 +43,6 @@ class LibraryContainer extends Component {
     push: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
     history: shapes.History.isRequired,
-    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -146,11 +147,6 @@ class LibraryContainer extends Component {
     }
 
     return path;
-  };
-
-  isMobileDevice = () => {
-    const { deviceInfo } = this.props;
-    return deviceInfo.device && deviceInfo.device.type === 'mobile';
   };
 
   updateSticky = () => {
@@ -324,7 +320,8 @@ class LibraryContainer extends Component {
   };
 
   render() {
-    const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push, history, deviceInfo } = this.props;
+    const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push, history } = this.props;
+    const { deviceInfo }                                                                     = this.context;
 
     const fullPath = this.getFullPath(sourceId);
     const parentId = this.properParentId(fullPath);
@@ -474,7 +471,6 @@ export default withRouter(connect(
     areSourcesLoaded: sources.areSourcesLoaded(state.sources),
     NotToSort: sources.NotToSort,
     NotToFilter: sources.NotToFilter,
-    deviceInfo: device.getDeviceInfo(state.device),
   }),
   dispatch => bindActionCreators({
     fetchIndex: assetsActions.sourceIndex,

@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { withMediaProps } from 'react-media-player';
 
 import { selectors as device } from '../../redux/modules/device';
-import * as shapes from '../shapes';
 import AVPlayerMobile from './AVPlayerMobile';
 import AVPlayer from './AVPlayer';
 
@@ -14,12 +13,10 @@ const AVMobileCheck = (props) => {
 };
 
 AVMobileCheck.propTypes = {
-  deviceInfo: shapes.UserAgentParserResults.isRequired,
   autoPlayAllowed: PropTypes.bool.isRequired,
 };
 
 const mapState = state => ({
-  deviceInfo: device.getDeviceInfo(state.device),
   autoPlayAllowed: device.getAutoPlayAllowed(state.device),
 });
 

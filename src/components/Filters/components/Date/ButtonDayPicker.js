@@ -163,7 +163,7 @@ class ButtonDayPicker extends Component {
 
     if (isMobileDevice) {
       const selected         = selectedDate || value;
-      const selectedToString = selected ? moment(selected).format('YYYY-MM-DD'):null;
+      const selectedToString = selected ? moment(selected).format('YYYY-MM-DD'): '';
 
       const dateButton = (
         <button className="ui button dateButton" onClick={this.openNativeDatePicker}>

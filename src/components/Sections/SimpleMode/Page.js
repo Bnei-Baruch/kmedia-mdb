@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { createRef, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import DayPicker from 'react-day-picker';
@@ -17,6 +17,7 @@ import DropdownLanguageSelector from '../../Language/Selector/DropdownLanguageSe
 import YearMonthForm from '../../Filters/components/Date/YearMonthForm';
 import SimpleModeList from './list';
 import { getOptions } from '../../../helpers/language';
+import { DeviceInfoContext } from "../../../helpers/app-contexts";
 
 const changeDay = (amount, selectedDate, onDayClick) => {
   const newDate = moment(selectedDate).add(amount, 'd').toDate();
@@ -39,8 +40,8 @@ const getNavBarElement = (props, language, onDayClick) => {
   );
 };
 
-const datePickerButton = ({ isMobile, deviceInfo }, nativeDateInput, handleNativeDateInputChange, data) => {
-  return isMobile
+const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, isMobileDevice, deviceInfo) => {
+  return isMobileDevice
     ? (
       <div>
         <div className="ui input">
@@ -49,7 +50,7 @@ const datePickerButton = ({ isMobile, deviceInfo }, nativeDateInput, handleNativ
             type="text"
             readOnly
             value={data.selectedInLocaleFormat}
-            onClick={() => openNativeDatePicker(deviceInfo, nativeDateInput)}
+            onClick={() => openNativeDatePicker(nativeDateInput, deviceInfo)}
           />
         </div>
         <input
@@ -67,8 +68,8 @@ const datePickerButton = ({ isMobile, deviceInfo }, nativeDateInput, handleNativ
     : <span>{moment(data.selectedDate).format(data.dateFormat)}</span>;
 };
 
-const dropDownContainer = ({ isMobile, language, blinkLangSelect, onLanguageChange }, languages) => {
-  return isMobile
+const dropDownContainer = ({ language, blinkLangSelect, onLanguageChange }, languages, isMobileDevice) => {
+  return isMobileDevice
     ? (
       <select className={blinkLangSelect ? 'blink' : ''} value={language} onChange={onLanguageChange}>
         {
@@ -90,7 +91,7 @@ const dropDownContainer = ({ isMobile, language, blinkLangSelect, onLanguageChan
     );
 };
 
-const openNativeDatePicker = (deviceInfo, nativeDateInput) => {
+const openNativeDatePicker = (nativeDateInput, deviceInfo) => {
   if (deviceInfo.os.name === 'Android') {
     nativeDateInput.current.click();
   } else {
@@ -137,8 +138,9 @@ const SimpleModePage = (props) => {
       selected: selectedDate,
     },
   });
-  const [languages, setLanguages] = useState([]);
-  const nativeDateInput           = createRef();
+  const [languages, setLanguages]      = useState([]);
+  const nativeDateInput                = createRef();
+  const { isMobileDevice, deviceInfo } = useContext(DeviceInfoContext);
 
   useEffect(() => {
     setIsClient(typeof window !== 'undefined');
@@ -200,7 +202,7 @@ const SimpleModePage = (props) => {
                   <h4>{t('simple-mode.date')}</h4>
                   <div className="date-container">
                     <button type="button" onClick={() => changeDay(-1, selectedDate, onDayClick)}>{t('simple-mode.prev')}</button>
-                    {datePickerButton(props, nativeDateInput, handleNativeDateInputChange, data)}
+                    {datePickerButton(nativeDateInput, handleNativeDateInputChange, data, isMobileDevice, deviceInfo)}
                     <button
                       type="button"
                       disabled={isToday(selectedDate)}
@@ -214,7 +216,7 @@ const SimpleModePage = (props) => {
                     {' '}
                   </h4>
                   <div className="dropdown-container">
-                    {dropDownContainer(props, languages)}
+                    {dropDownContainer(props, languages, isMobileDevice)}
                   </div>
                 </div>
               </div>
@@ -248,9 +250,7 @@ SimpleModePage.propTypes = {
   renderUnit: PropTypes.func.isRequired,
   onDayClick: PropTypes.func.isRequired,
   onLanguageChange: PropTypes.func.isRequired,
-  deviceInfo: shapes.UserAgentParserResults.isRequired,
   blinkLangSelect: PropTypes.bool.isRequired,
-  isMobile: PropTypes.bool.isRequired,
 };
 
 export default withNamespaces()(SimpleModePage);

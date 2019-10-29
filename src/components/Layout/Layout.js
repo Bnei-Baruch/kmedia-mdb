@@ -11,7 +11,6 @@ import Headroom from 'react-headroom';
 import { ALL_LANGUAGES } from '../../helpers/consts';
 import playerHelper from '../../helpers/player';
 import { actions, selectors as settings } from '../../redux/modules/settings';
-import { selectors as device } from '../../redux/modules/device';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import WrappedOmniBox from '../Search/OmniBox';
@@ -22,6 +21,7 @@ import Footer from './Footer';
 import TopMost from './TopMost';
 import DonateNow from './DonateNow';
 import Logo from '../../images/icons/Logo';
+import { DeviceInfoContext } from "../../helpers/app-contexts";
 
 let isMobileDevice = false;
 
@@ -54,6 +54,8 @@ const showSearchButtonElement = createRef();
 const headerSearchElement = createRef();
 
 class Layout extends Component {
+  static contextType = DeviceInfoContext;
+
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
     route: shapes.Route.isRequired,
@@ -66,9 +68,8 @@ class Layout extends Component {
 
   constructor(props) {
     super(props);
-    const { deviceInfo, location } = props;
-    isMobileDevice                 = deviceInfo.device && deviceInfo.device.type === 'mobile';
-    this.state                     = {
+    const { location } = props;
+    this.state         = {
       sidebarActive: false,
       isShowHeaderSearch: false,
       embed: playerHelper.getEmbedFromQuery(location),
@@ -156,6 +157,8 @@ class Layout extends Component {
   render() {
     const { t, location, route, language, contentLanguage, setContentLanguage, push } = this.props;
     const { sidebarActive, embed, isShowHeaderSearch }                                = this.state;
+    isMobileDevice                                                                    = this.context.isMobileDevice;
+
 
     const showSearch = shouldShowSearch(location);
 
@@ -282,7 +285,6 @@ export default connect(
   state => ({
     language: settings.getLanguage(state.settings),
     contentLanguage: settings.getContentLanguage(state.settings),
-    deviceInfo: device.getDeviceInfo(state.device),
   }),
   {
     setContentLanguage: actions.setContentLanguage,

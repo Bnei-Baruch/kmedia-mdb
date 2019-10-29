@@ -9,15 +9,17 @@ import isEqual from 'react-fast-compare';
 
 import { getQuery, updateQuery } from '../../../helpers/url';
 import { isEmpty } from '../../../helpers/utils';
-import { selectors as device } from '../../../redux/modules/device';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { actions, selectors } from '../../../redux/modules/simpleMode';
 import * as shapes from '../../shapes';
 import Page from './Page';
 import { groupOtherMediaByType, renderCollection } from './RenderListHelpers';
+import { DeviceInfoContext } from "../../../helpers/app-contexts";
 
 class SimpleModeContainer extends Component {
+  static contextType = DeviceInfoContext;
+
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
     items: shapes.SimpleMode,
@@ -27,7 +29,6 @@ class SimpleModeContainer extends Component {
     contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     fetchForDate: PropTypes.func.isRequired,
-    deviceInfo: shapes.UserAgentParserResults.isRequired,
     history: shapes.History.isRequired,
   };
 
@@ -41,7 +42,6 @@ class SimpleModeContainer extends Component {
     super(props);
     this.state = {
       filesLanguage: props.contentLanguage,
-      isMobileDevice: this.isMobileDevice(),
       blinkLangSelect: false,
     };
   }
@@ -105,12 +105,6 @@ class SimpleModeContainer extends Component {
     }));
   };
 
-  isMobileDevice = () => {
-    const { props: { deviceInfo: { device: dev } } } = this;
-
-    return dev && dev.type === 'mobile';
-  };
-
   helpChooseLang = () => {
     this.setState({ blinkLangSelect: true });
     setTimeout(() => this.setState({ blinkLangSelect: false }), 7500);
@@ -124,25 +118,23 @@ class SimpleModeContainer extends Component {
   );
 
   scrollToTop = () => {
-    const { deviceInfo: { browser: { name: browserName } } } = this.props;
+    const { deviceInfo: { browser: { name: browserName } } } = this.context;
     (browserName.toLowerCase() === 'chrome' || browserName.toLowerCase() === 'firefox')
       ? window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
       : window.scrollTo(0, 0);
   };
 
   render() {
-    const { filesLanguage: language, isMobileDevice: isMobile, blinkLangSelect, date: selectedDate } = this.state;
-    const pageProps                                                                                  = {
+    const { filesLanguage: language, blinkLangSelect, date: selectedDate } = this.state;
+    const pageProps = {
       ...this.props,
       selectedDate,
       language,
       renderUnit: this.renderUnitOrCollection,
       onDayClick: this.handleDayClick,
       onLanguageChange: this.handleLanguageChanged,
-      blinkLangSelect,
-      isMobile,
+      blinkLangSelect
     };
-
     return <Page {...pageProps} />;
   }
 }
@@ -159,7 +151,6 @@ export const mapState = (state) => {
     err: selectors.getError(state.simpleMode),
     uiLanguage: settings.getLanguage(state.settings),
     contentLanguage: settings.getContentLanguage(state.settings),
-    deviceInfo: device.getDeviceInfo(state.device),
   };
 };
 

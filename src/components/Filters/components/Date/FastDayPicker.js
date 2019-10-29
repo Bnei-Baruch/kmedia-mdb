@@ -11,18 +11,19 @@ import 'react-day-picker/lib/style.css';
 
 import { today } from '../../../../helpers/date';
 import { getLanguageDirection, getLanguageLocaleWORegion } from '../../../../helpers/i18n-utils';
-import * as shapes from '../../../shapes';
 import YearMonthForm from './YearMonthForm';
 
 import DayPicker from 'react-day-picker';
+import { DeviceInfoContext } from "../../../../helpers/app-contexts";
 
 class FastDayPicker extends Component {
+  static contextType = DeviceInfoContext;
+
   static propTypes = {
     value: PropTypes.instanceOf(Date),
     label: PropTypes.string,
     onDayChange: PropTypes.func,
     language: PropTypes.string.isRequired,
-    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -54,8 +55,6 @@ class FastDayPicker extends Component {
     return date ? formatDate(date, 'l', locale) : '';
   }
 
-  isMobileDevice = () => this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
-
   handleYearMonthChange = (month) => {
     this.setState({ month });
   };
@@ -82,7 +81,7 @@ class FastDayPicker extends Component {
   };
 
   openNativeDatePicker = () => {
-    if (this.props.deviceInfo.os.name === 'Android') {
+    if (this.context.deviceInfo.os.name === 'Android') {
       this.nativeDateInput.click();
       return;
     }
@@ -146,7 +145,7 @@ class FastDayPicker extends Component {
     const { language, value, label } = this.props;
     const { month, isOpen, stringValue } = this.state;
     const locale = getLanguageLocaleWORegion(language);
-    const isMobileDevice = this.isMobileDevice();
+    const {isMobileDevice} = this.context;
 
     if (isMobileDevice) {
       const selected = value || today().toDate();
