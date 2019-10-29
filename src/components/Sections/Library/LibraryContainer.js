@@ -69,7 +69,7 @@ class LibraryContainer extends Component {
     window.addEventListener('resize', this.updateSticky);
     window.addEventListener('load', this.updateSticky);
 
-    const { sourceId, areSourcesLoaded, replace, history }                             = this.props;
+    const { sourceId, areSourcesLoaded, history }                                      = this.props;
     const { location: { state: { tocIsActive } = { state: { tocIsActive: false } } } } = history;
 
     if (tocIsActive || sourceId === 'grRABASH') {
@@ -80,37 +80,16 @@ class LibraryContainer extends Component {
       return;
     }
 
-    const firstLeafId = this.firstLeafId(sourceId);
-    if (firstLeafId !== sourceId || this.state.lastLoadedId !== sourceId) {
-      if (firstLeafId !== sourceId) {
-        replace(`sources/${firstLeafId}`);
-      } else {
-        this.setState({ lastLoadedId: sourceId, language: this.props.language });
-        this.fetchIndices(sourceId);
-      }
-    }
+    this.replaceOrFetch(sourceId);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    const { sourceId, areSourcesLoaded, language, replace } = nextProps;
+    const { sourceId, areSourcesLoaded } = nextProps;
     if (!areSourcesLoaded) {
       return;
     }
-    if (this.state.language && language !== this.state.language) {
-      this.loadNewIndices(sourceId, this.props.language);
-      return;
-    }
 
-    const firstLeafId = this.firstLeafId(sourceId);
-    if (firstLeafId !== sourceId
-      || this.props.sourceId !== sourceId
-      || this.state.lastLoadedId !== sourceId) {
-      if (firstLeafId === sourceId) {
-        this.loadNewIndices(sourceId, this.props.language);
-      } else {
-        replace(`sources/${firstLeafId}`);
-      }
-    }
+    this.replaceOrFetch(sourceId);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -131,30 +110,34 @@ class LibraryContainer extends Component {
     window.removeEventListener('load', this.updateSticky);
   }
 
-  getFullPath = (sourceId) => {
-    // Go to the root of this sourceId
-    const { getPathByID } = this.props;
+  replaceOrFetch(nextSourceId){
+    const { sourceId, replace, language } = this.props;
 
-    if (!getPathByID) {
-      return [{ id: '0' }, { id: sourceId }];
+    const firstLeafId = this.firstLeafId(nextSourceId);
+    if (firstLeafId !== nextSourceId) {
+      replace(`sources/${firstLeafId}`);
+    } else if (sourceId !== nextSourceId
+        || this.state.lastLoadedId !== nextSourceId
+        || this.state.language !== language) {
+      this.loadNewIndices(nextSourceId, language);
     }
+  }
 
-    const path = getPathByID(sourceId);
-
-    if (!path || path.length < 2 || !path[1]) {
-      return [{ id: '0' }, { id: sourceId }];
-    }
-
-    return path;
+  loadNewIndices = (sourceId, language) => {
+    this.setState({ lastLoadedId: sourceId, language });
+    this.fetchIndices(sourceId);
   };
 
-  isMobileDevice = () => {
-    const { deviceInfo } = this.props;
-    return deviceInfo.device && deviceInfo.device.type === 'mobile';
+  fetchIndices = (sourceId) => {
+    const { indexMap, fetchIndex } = this.props;
+    if (isEmpty(sourceId) || !isEmpty(indexMap[sourceId])) {
+      return;
+    }
+
+    fetchIndex(sourceId);
   };
 
   updateSticky = () => {
-
     // check fixed header width in pixels for text-overflow:ellipsis
     if (this.contentHeaderRef) {
       const { width } = this.contentHeaderRef.getBoundingClientRect();
@@ -199,15 +182,6 @@ class LibraryContainer extends Component {
   getScrollTop = () => this.state.isReadable ? this.articleRef.scrollTop : document.scrollingElement.scrollTop;
 
   handleSettings = (setting) => this.setState(setting);
-
-  fetchIndices = (sourceId) => {
-    const { indexMap, fetchIndex } = this.props;
-    if (isEmpty(sourceId) || !isEmpty(indexMap[sourceId])) {
-      return;
-    }
-
-    fetchIndex(sourceId);
-  };
 
   header = (sourceId, properParentId) => {
     const { getSourceById } = this.props;
@@ -255,11 +229,6 @@ class LibraryContainer extends Component {
   };
 
   properParentId = path => (path[1].id);
-
-  loadNewIndices = (sourceId, language) => {
-    this.setState({ lastLoadedId: sourceId, language });
-    this.fetchIndices(sourceId);
-  };
 
   sortButton = () => {
     const { sortBy, sourcesSortBy } = this.props;
@@ -322,6 +291,24 @@ class LibraryContainer extends Component {
       />
     );
   };
+
+  getFullPath = (sourceId) => {
+    // Go to the root of this sourceId
+    const { getPathByID } = this.props;
+
+    if (!getPathByID) {
+      return [{ id: '0' }, { id: sourceId }];
+    }
+
+    const path = getPathByID(sourceId);
+
+    if (!path || path.length < 2 || !path[1]) {
+      return [{ id: '0' }, { id: sourceId }];
+    }
+
+    return path;
+  };
+
 
   render() {
     const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push, history, deviceInfo } = this.props;
