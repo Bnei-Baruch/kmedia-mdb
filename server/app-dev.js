@@ -41,7 +41,7 @@ router.use('/locales', express.static(
 
 // serve assets
 router.use('/assets', express.static(
-  path.resolve(__dirname, '..', 'public', 'assets'),
+  path.join(__dirname, '..', 'public', 'assets'),
 ));
 
 // proxy other static assets to create-react-app dev server

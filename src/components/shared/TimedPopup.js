@@ -83,7 +83,6 @@ class TimedPopup extends Component {
         open={opened}
         content={message}
         position={`${downward ? 'bottom' : 'top'} right`}
-        keepInViewPort
         className={rtlLang ? 'change-popup-direction' : ''}
         context={refElement}
       />
