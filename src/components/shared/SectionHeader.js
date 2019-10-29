@@ -5,7 +5,7 @@ import { Container, Grid, Header, Menu } from 'semantic-ui-react';
 
 import Helmets from './Helmets';
 
-const renderTitle = (title, subText, submenuItems) => {
+const renderTitle = (title, subText, submenuItems = []) => {
   return (
     <Grid>
       <Grid.Row>
@@ -65,10 +65,6 @@ SectionHeader.propTypes = {
   section: PropTypes.string.isRequired,
   submenuItems: PropTypes.arrayOf(PropTypes.node),
   t: PropTypes.func.isRequired,
-};
-
-SectionHeader.defaultProps = {
-  submenuItems: [],
 };
 
 export default withNamespaces()(SectionHeader);

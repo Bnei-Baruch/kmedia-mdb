@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_BACKEND    = process.env.REACT_APP_API_BACKEND;
 const ASSETS_BACKEND = process.env.REACT_APP_ASSETS_BACKEND;
-const CMS_BACKEND    = process.env.REACT_APP_CMS_BACKEND;
+const CMS_BACKEND    = process.env.REACT_APP_CMS_BACKEND
 const IMAGINARY_URL  = process.env.REACT_APP_IMAGINARY_URL;
 
 export const backendUrl   = path => `${API_BACKEND}${path}`;
