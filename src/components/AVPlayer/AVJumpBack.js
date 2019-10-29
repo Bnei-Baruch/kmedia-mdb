@@ -1,39 +1,44 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withMediaProps } from 'react-media-player';
 import { Icon } from 'semantic-ui-react';
 
-const AVJumpBack = ({ jumpSpan = 5, media: { duration, currentTime, seekTo } }) => {
-  const onJumpBack = () => {
-    let jumpTo = currentTime + jumpSpan;
-
-    // Make sure we don't exceed the duration boundaries
-    jumpTo = Math.max(0, Math.min(jumpTo, duration));
-
-    seekTo(jumpTo);
+class AVJumpBack extends Component {
+  static propTypes = {
+    media: PropTypes.shape({
+      currentTime: PropTypes.number.isRequired,
+      duration: PropTypes.number.isRequired,
+      seekTo: PropTypes.func.isRequired,
+    }).isRequired,
+    jumpSpan: PropTypes.number,
   };
 
-  const isBack = () => jumpSpan < 0;
+  static defaultProps = {
+    jumpSpan: 5,
+  };
 
-  const backwardText = jumpSpan < 0 ? `${jumpSpan}s` : '';
-  const farwardText  = jumpSpan > 0 ? `+${jumpSpan}s` : '';
+  onJumpBack = () => {
+    let jumpTo = this.props.media.currentTime + this.props.jumpSpan;
 
-  return (
-    <button type="button" tabIndex="-1" onClick={onJumpBack}>
-      {backwardText}
-      <Icon name={isBack() ? 'backward' : 'forward'} />
-      {farwardText}
-    </button>
-  );
-};
+    // Make sure we don't exceed the duration boundaries
+    jumpTo = Math.max(0, Math.min(jumpTo, this.props.media.duration));
 
-AVJumpBack.propTypes = {
-  media: PropTypes.shape({
-    currentTime: PropTypes.number.isRequired,
-    duration: PropTypes.number.isRequired,
-    seekTo: PropTypes.func.isRequired,
-  }).isRequired,
-  jumpSpan: PropTypes.number,
-};
+    this.props.media.seekTo(jumpTo);
+  };
+
+  isBack = () => this.props.jumpSpan < 0;
+
+  render() {
+    const backwardText = this.props.jumpSpan < 0 ? `${this.props.jumpSpan}s` : '';
+    const farwardText  = this.props.jumpSpan > 0 ? `+${this.props.jumpSpan}s` : '';
+    return (
+      <button type="button" tabIndex="-1" onClick={this.onJumpBack}>
+        {backwardText}
+        <Icon name={this.isBack() ? 'backward' : 'forward'} />
+        {farwardText}
+      </button>
+    );
+  }
+}
 
 export default withMediaProps(AVJumpBack);

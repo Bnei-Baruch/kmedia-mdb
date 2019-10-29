@@ -1,20 +1,30 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withMediaProps } from 'react-media-player';
 import { formatTime } from '../../helpers/time';
 
-const AVDuration = ({ name = undefined, value = undefined, media }) => {
-  const time = typeof value !== 'undefined' ? value : media[name];
+class AVDuration extends Component {
+  static propTypes = {
+    name: PropTypes.string,
+    value: PropTypes.number,
+    media: PropTypes.object.isRequired,
+  };
 
-  return (
-    <time>{formatTime(time)}</time>
-  );
-};
+  static defaultProps = {
+    name: undefined,
+    value: undefined,
+  };
 
-AVDuration.propTypes = {
-  name: PropTypes.string,
-  value: PropTypes.number,
-  media: PropTypes.object.isRequired,
-};
+  render() {
+    const { name, value, media } = this.props;
+    const time                   = typeof value !== 'undefined' ? value : media[name];
+
+    return (
+      <time>
+        {formatTime(time)}
+      </time>
+    );
+  }
+}
 
 export default withMediaProps(AVDuration);
