@@ -19,20 +19,20 @@ const BlogPostContainer = ({ match }) => {
 
   useEffect(
     () => {
+      if (wip || err) {
+        return;
+      }
+      
+      if (post
+        && post.blog === blog
+        && `${post.wp_id}` === id) {
+        return;
+      }
+
       dispatch(actions.fetchBlogPost(id, blog));
     },
-    [id, blog, dispatch]
+    [id, blog, dispatch, wip, err, post]
   );
-
-  if (wip || err) {
-    return null;
-  }
-  
-  if (post
-    && post.blog === blog
-    && `${post.wp_id}` === id) {
-    return null;
-  }
 
   return (
     <Page
