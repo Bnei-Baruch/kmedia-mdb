@@ -50,8 +50,10 @@ export function* fetchAsset(action) {
 
 export function* fetchPerson(action) {
   try {
-    const name     = `${action.payload.sourceId}-${action.payload.language}`;
-    const { data } = yield call(Api.getCMS, 'person', name);
+    const { data } = yield call(Api.getCMS, 'person', {
+      language: action.payload.language,
+      id: action.payload.sourceId,
+    });
     yield put(actions.fetchPersonSuccess(data));
   } catch (err) {
     yield put(actions.fetchPersonFailure(err));

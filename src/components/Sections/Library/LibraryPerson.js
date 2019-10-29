@@ -8,6 +8,29 @@ import { withNamespaces } from 'react-i18next';
 import { actions, selectors } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
 import WipErr from '../../shared/WipErr/WipErr';
+import { cmsUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
+
+// Convert WP images to full URL+imaginary
+const convertImages = (content) => {
+  const regex   = /<img[^>]*src="([^"]*)"/g;
+  let arr;
+  while ((arr = regex.exec(content))) {
+    let img = arr[1];
+    if (!img.startsWith('http') && !img.startsWith('/static/')) {
+      const params = Requests.makeParams({
+        url: cmsUrl(img),
+        width: 160,
+        height: 200,
+        nocrop: false,
+        stripmeta: true,
+      });
+      const src    = `${imaginaryUrl('resize')}?${params}`;
+      content = content.replace(img, src);
+    }
+  }
+
+  return content;
+};
 
 const LibraryPerson = (props) => {
   const { t }                       = props;
@@ -37,7 +60,7 @@ const LibraryPerson = (props) => {
       <Grid>
         <Grid.Row>
           <Grid.Column>
-            <div className="readble-width" dangerouslySetInnerHTML={{ __html: content }} />
+            <div className="readble-width" dangerouslySetInnerHTML={{ __html: convertImages(content) }} />
           </Grid.Column>
         </Grid.Row>
       </Grid>

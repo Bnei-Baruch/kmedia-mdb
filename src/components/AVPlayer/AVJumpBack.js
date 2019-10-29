@@ -1,44 +1,39 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withMediaProps } from 'react-media-player';
 import { Icon } from 'semantic-ui-react';
 
-class AVJumpBack extends Component {
-  static propTypes = {
-    media: PropTypes.shape({
-      currentTime: PropTypes.number.isRequired,
-      duration: PropTypes.number.isRequired,
-      seekTo: PropTypes.func.isRequired,
-    }).isRequired,
-    jumpSpan: PropTypes.number,
-  };
-
-  static defaultProps = {
-    jumpSpan: 5,
-  };
-
-  onJumpBack = () => {
-    let jumpTo = this.props.media.currentTime + this.props.jumpSpan;
+const AVJumpBack = ({ jumpSpan = 5, media: { duration, currentTime, seekTo } }) => {
+  const onJumpBack = () => {
+    let jumpTo = currentTime + jumpSpan;
 
     // Make sure we don't exceed the duration boundaries
-    jumpTo = Math.max(0, Math.min(jumpTo, this.props.media.duration));
+    jumpTo = Math.max(0, Math.min(jumpTo, duration));
 
-    this.props.media.seekTo(jumpTo);
+    seekTo(jumpTo);
   };
 
-  isBack = () => this.props.jumpSpan < 0;
+  const isBack = () => jumpSpan < 0;
 
-  render() {
-    const backwardText = this.props.jumpSpan < 0 ? `${this.props.jumpSpan}s` : '';
-    const farwardText  = this.props.jumpSpan > 0 ? `+${this.props.jumpSpan}s` : '';
-    return (
-      <button type="button" tabIndex="-1" onClick={this.onJumpBack}>
-        {backwardText}
-        <Icon name={this.isBack() ? 'backward' : 'forward'} />
-        {farwardText}
-      </button>
-    );
-  }
-}
+  const backwardText = jumpSpan < 0 ? `${jumpSpan}s` : '';
+  const farwardText  = jumpSpan > 0 ? `+${jumpSpan}s` : '';
+
+  return (
+    <button type="button" tabIndex="-1" onClick={onJumpBack}>
+      {backwardText}
+      <Icon name={isBack() ? 'backward' : 'forward'} />
+      {farwardText}
+    </button>
+  );
+};
+
+AVJumpBack.propTypes = {
+  media: PropTypes.shape({
+    currentTime: PropTypes.number.isRequired,
+    duration: PropTypes.number.isRequired,
+    seekTo: PropTypes.func.isRequired,
+  }).isRequired,
+  jumpSpan: PropTypes.number,
+};
 
 export default withMediaProps(AVJumpBack);

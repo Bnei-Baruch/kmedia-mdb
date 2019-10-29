@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 
@@ -9,34 +9,28 @@ const options = [
   { value: '1x', text: '1x' },
   { value: '0.75x', text: '0.75x' }];
 
-export default class AVPlaybackRateMobile extends Component {
-  static propTypes = {
-    onSelect: PropTypes.func,
-    value: PropTypes.string,
-  };
+const AVPlaybackRateMobile = ({ onSelect = noop, value = '1x' }) => {
 
-  static defaultProps = {
-    onSelect: noop,
-    value: '1x',
-  };
+  const handleChange = e => onSelect(e, e.currentTarget.value);
 
-  handleChange = e => this.props.onSelect(e, e.currentTarget.value);
+  return (
+    <div className="mediaplayer__playback-rate">
+      <select value={value} onChange={handleChange}>
+        {
+          options.map(x => (
+            <option key={x.value} value={x.value}>
+              {x.text}
+            </option>
+          ))
+        }
+      </select>
+    </div>
+  );
+};
 
-  render() {
-    const { value } = this.props;
+AVPlaybackRateMobile.propTypes = {
+  onSelect: PropTypes.func,
+  value: PropTypes.string,
+};
 
-    return (
-      <div className="mediaplayer__playback-rate">
-        <select value={value} onChange={this.handleChange}>
-          {
-            options.map(x => (
-              <option key={x.value} value={x.value}>
-                {x.text}
-              </option>
-            ))
-          }
-        </select>
-      </div>
-    );
-  }
-}
+export default AVPlaybackRateMobile;
