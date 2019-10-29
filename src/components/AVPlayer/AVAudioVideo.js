@@ -1,66 +1,75 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 
 import TimedPopup from '../shared/TimedPopup';
 
-const AVAudioVideo = ({ isAudio, isVideo, fallbackMedia, uiLanguage, onSwitch, t }) => {
-  const [audioVideoContainerRef, setAudioVideoContainerRef]       = useState();
-  const [didShowFallbackMediaPopup, setDidShowFallbackMediaPopup] = useState();
-  const [openPopup, setOpenPopup]                                 = useState();
+class AVAudioVideo extends Component {
+  static propTypes = {
+    isAudio: PropTypes.bool.isRequired,
+    isVideo: PropTypes.bool.isRequired,
+    onSwitch: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
+    fallbackMedia: PropTypes.bool.isRequired,
+    uiLanguage: PropTypes.string.isRequired,
+  };
 
-  const handleSwitch = useCallback(() => onSwitch(), [onSwitch]);
+  state = {};
 
-  const handleBtnRef = (ref) => {
+  componentWillReceiveProps() {
+    const { fallbackMedia } = this.props;
+    this.handleFallbackMedia(fallbackMedia);
+  }
+
+  handleSwitch = () => this.props.onSwitch();
+
+  handleBtnRef = (ref) => {
     if (ref) {
       this.mainBtn = ref;
-      this.mainBtn.addEventListener('click', handleSwitch);
+      this.mainBtn.addEventListener('click', this.handleSwitch);
     } else if (this.mainBtn) {
-      this.mainBtn.removeEventListener('click', handleSwitch);
+      this.mainBtn.removeEventListener('click', this.handleSwitch);
       this.mainBtn = ref;
     }
   };
 
-  const handleFallbackMedia = useCallback(fallbackMedia => {
+  setAudioVideoContainerRef = audioVideoContainerRef => this.setState({ audioVideoContainerRef });
+
+  handleFallbackMedia = (fallbackMedia) => {
+    const { didShowFallbackMediaPopup } = this.state;
     if (didShowFallbackMediaPopup) {
-      setOpenPopup(false);
+      this.setState({ openPopup: false });
       return;
     }
 
-    setOpenPopup(!!fallbackMedia);
-    setDidShowFallbackMediaPopup(!!fallbackMedia);
-  }, [didShowFallbackMediaPopup]);
+    this.setState({
+      didShowFallbackMediaPopup: !!fallbackMedia,
+      openPopup: !!fallbackMedia
+    });
+  };
 
-  useEffect(() => {
-    handleFallbackMedia(fallbackMedia);
-  }, [fallbackMedia, handleFallbackMedia]);
+  render() {
+    const { isAudio, isVideo, t, uiLanguage }   = this.props;
+    const { audioVideoContainerRef, openPopup } = this.state;
 
-  return (
-    <div ref={setAudioVideoContainerRef} className="mediaplayer__audiovideo">
-      <TimedPopup
-        openOnInit={openPopup}
-        message={isAudio ? t('messages.fallback-to-audio') : t('messages.fallback-to-video')}
-        downward={false}
-        timeout={7000}
-        language={uiLanguage}
-        refElement={audioVideoContainerRef}
-      />
-      <button ref={handleBtnRef} type="button">
-        <span className={isAudio ? 'is-active' : ''}>{t('buttons.audio')}</span>
-        &nbsp;/&nbsp;
-        <span className={isVideo ? 'is-active' : ''}>{t('buttons.video')}</span>
-      </button>
-    </div>
-  );
-};
-
-AVAudioVideo.propTypes = {
-  isAudio: PropTypes.bool.isRequired,
-  isVideo: PropTypes.bool.isRequired,
-  onSwitch: PropTypes.func.isRequired,
-  t: PropTypes.func.isRequired,
-  fallbackMedia: PropTypes.bool.isRequired,
-  uiLanguage: PropTypes.string.isRequired,
-};
+    return (
+      <div ref={this.setAudioVideoContainerRef} className="mediaplayer__audiovideo">
+        <TimedPopup
+          openOnInit={openPopup}
+          message={isAudio ? t('messages.fallback-to-audio') : t('messages.fallback-to-video')}
+          downward={false}
+          timeout={7000}
+          language={uiLanguage}
+          refElement={audioVideoContainerRef}
+        />
+        <button ref={this.handleBtnRef} type="button">
+          <span className={isAudio ? 'is-active' : ''}>{t('buttons.audio')}</span>
+          &nbsp;/&nbsp;
+          <span className={isVideo ? 'is-active' : ''}>{t('buttons.video')}</span>
+        </button>
+      </div>
+    );
+  }
+}
 
 export default withNamespaces()(AVAudioVideo);

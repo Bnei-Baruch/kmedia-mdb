@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { Dropdown } from 'semantic-ui-react';
@@ -10,37 +10,43 @@ const options = [
   { value: '1x', text: '1x' },
   { value: '0.75x', text: '0.75x' }];
 
-const AVPlaybackRate = ({ onSelect = noop, value = '1x', onDropdownOpenedChange }) => {
+export default class AVPlaybackRate extends Component {
+  static propTypes = {
+    onSelect: PropTypes.func,
+    value: PropTypes.string,
+    onDropdownOpenedChange: PropTypes.func.isRequired,
+  };
 
-  const handleChange = (e, data) => onSelect(e, data.value);
+  static defaultProps = {
+    onSelect: noop,
+    value: '1x',
+  };
 
-  const handleOnOpen = () => onDropdownOpenedChange(true);
+  handleChange = (e, data) => this.props.onSelect(e, data.value);
 
-  const handleOnClose = () => onDropdownOpenedChange(false);
+  handleOnOpen = () => this.props.onDropdownOpenedChange(true);
 
-  return (
-    <div className="mediaplayer__playback-rate">
-      <Dropdown
-        floating
-        scrolling
-        upward
-        icon={null}
-        selectOnBlur={false}
-        options={options}
-        value={value}
-        onChange={handleChange}
-        trigger={<button type="button">{value}</button>}
-        onOpen={handleOnOpen}
-        onClose={handleOnClose}
-      />
-    </div>
-  );
-};
+  handleOnClose = () => this.props.onDropdownOpenedChange(false);
 
-AVPlaybackRate.propTypes = {
-  onSelect: PropTypes.func,
-  value: PropTypes.string,
-  onDropdownOpenedChange: PropTypes.func.isRequired,
-};
+  render() {
+    const { value } = this.props;
 
-export default AVPlaybackRate;
+    return (
+      <div className="mediaplayer__playback-rate">
+        <Dropdown
+          floating
+          scrolling
+          upward
+          icon={null}
+          selectOnBlur={false}
+          options={options}
+          value={value}
+          onChange={this.handleChange}
+          trigger={<button type="button">{value}</button>}
+          onOpen={this.handleOnOpen}
+          onClose={this.handleOnClose}
+        />
+      </div>
+    );
+  }
+}
