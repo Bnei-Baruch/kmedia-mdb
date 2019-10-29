@@ -2,12 +2,12 @@ import axios from 'axios';
 
 const API_BACKEND    = process.env.REACT_APP_API_BACKEND;
 const ASSETS_BACKEND = process.env.REACT_APP_ASSETS_BACKEND;
-const CMS_BACKEND    = process.env.REACT_APP_CMS_BACKEND;
+const CMS_BACKEND    = process.env.REACT_APP_CMS_BACKEND || `${API_BACKEND}cms/`;
 const IMAGINARY_URL  = process.env.REACT_APP_IMAGINARY_URL;
 
 export const backendUrl   = path => `${API_BACKEND}${path}`;
 export const assetUrl     = path => `${ASSETS_BACKEND}${path}`;
-export const cmsUrl       = (kind, path) => `${CMS_BACKEND}wp-json/get-post-plugin/v1/get-${kind}/${path}`;
+export const cmsUrl       = path => `${CMS_BACKEND}${path}`;
 export const imaginaryUrl = path => `${IMAGINARY_URL}${path}`;
 
 export class Requests {
@@ -15,11 +15,24 @@ export class Requests {
 
   static getAsset = path => axios(assetUrl(path));
 
-  static getCMS = (kind, path) => axios(cmsUrl(kind, path));
+  static getCMS = (item, options) => {
+    let url;
+    switch (item) {
+    case 'banner':
+      url = `${cmsUrl('banners')}/${options.language}`;
+      break;
+    case 'person':
+      url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
+      break;
+    default:
+      return null;
+    }
+    return axios(url);
+  };
 
   static makeParams = params => (
     `${Object.entries(params)
-      .filter(([_k, v]) => v !== undefined && v !== null)
+      .filter(([_, v]) => v !== undefined && v !== null)
       .map((pair) => {
         const key   = pair[0];
         const value = pair[1];
@@ -89,7 +102,7 @@ class Api {
 
   static getAsset = path => Requests.getAsset(path);
 
-  static getCMS = (kind, path) => Requests.getCMS(kind, path);
+  static getCMS = (item, options) => Requests.getCMS(item, options);
 
   static simpleMode = ({ language, startDate: start_date, endDate: end_date }) => (
     Requests.get(`simple?${Requests.makeParams({ language, start_date, end_date })}`)

@@ -11,23 +11,27 @@ import Link from '../../../../Language/MultiLanguageLink';
 
 const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
 
+const breakdownFunc = unit => new CollectionsBreakdown(Object.values(unit.collections || {}));
+
+const map1Func = t => x => (
+  <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
+    {t(CT_DAILY_LESSON_I18N_KEY)}
+    {' '}
+    {t('values.date', { date: x.film_date })}
+  </List.Item>
+);
+const map2Func = x => (
+  <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
+    {x.name || NO_NAME}
+  </List.Item>
+);
+
 export const renderUnit = (unit, t) => {
-  const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
+  const breakdown = breakdownFunc(unit);
 
-  const map1 = x => (
-    <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-      {t(CT_DAILY_LESSON_I18N_KEY)}
-      {' '}
-      {t('values.date', { date: x.film_date })}
-    </List.Item>
-  );
-  const map2 = x => (
-    <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-      {x.name || NO_NAME}
-    </List.Item>
-  );
+  const map1 = map1Func(t);
 
-  const relatedItems = breakdown.getDailyLessons().map(map1).concat(breakdown.getAllButDailyLessons().map(map2));
+  const relatedItems = breakdown.getDailyLessons().map(map1).concat(breakdown.getAllButDailyLessons().map(map2Func));
 
   return (
     <Table.Row verticalAlign="top" key={unit.id} className="no-thumbnail">
@@ -61,24 +65,13 @@ export const renderCollection = (collection, t) => {
   let units = [];
   if (collection.content_units) {
     units = collection.content_units.map((unit) => {
-      const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
+      const breakdown = breakdownFunc(unit);
 
-      const map1 = x => (
-        <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-          {t(CT_DAILY_LESSON_I18N_KEY)}
-          {' '}
-          {t('values.date', { date: x.film_date })}
-        </List.Item>
-      );
-      const map2 = x => (
-        <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-          {x.name || NO_NAME}
-        </List.Item>
-      );
+      const map1 = map1Func(t);
 
       const relatedItems = breakdown.getDailyLessons()
         .filter(x => x.id !== collection.id)
-        .map(map1).concat(breakdown.getAllButDailyLessons().map(map2));
+        .map(map1).concat(breakdown.getAllButDailyLessons().map(map2Func));
 
       return (
         <Table.Row key={`u-${unit.id}`} verticalAlign="top" className="no-thumbnail">

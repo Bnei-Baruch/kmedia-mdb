@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { Dropdown } from 'semantic-ui-react';
@@ -10,43 +10,37 @@ const options = [
   { value: '1x', text: '1x' },
   { value: '0.75x', text: '0.75x' }];
 
-export default class AVPlaybackRate extends Component {
-  static propTypes = {
-    onSelect: PropTypes.func,
-    value: PropTypes.string,
-    onDropdownOpenedChange: PropTypes.func.isRequired,
-  };
+const AVPlaybackRate = ({ onSelect = noop, value = '1x', onDropdownOpenedChange }) => {
 
-  static defaultProps = {
-    onSelect: noop,
-    value: '1x',
-  };
+  const handleChange = (e, data) => onSelect(e, data.value);
 
-  handleChange = (e, data) => this.props.onSelect(e, data.value);
+  const handleOnOpen = () => onDropdownOpenedChange(true);
 
-  handleOnOpen = () => this.props.onDropdownOpenedChange(true);
+  const handleOnClose = () => onDropdownOpenedChange(false);
 
-  handleOnClose = () => this.props.onDropdownOpenedChange(false);
+  return (
+    <div className="mediaplayer__playback-rate">
+      <Dropdown
+        floating
+        scrolling
+        upward
+        icon={null}
+        selectOnBlur={false}
+        options={options}
+        value={value}
+        onChange={handleChange}
+        trigger={<button type="button">{value}</button>}
+        onOpen={handleOnOpen}
+        onClose={handleOnClose}
+      />
+    </div>
+  );
+};
 
-  render() {
-    const { value } = this.props;
+AVPlaybackRate.propTypes = {
+  onSelect: PropTypes.func,
+  value: PropTypes.string,
+  onDropdownOpenedChange: PropTypes.func.isRequired,
+};
 
-    return (
-      <div className="mediaplayer__playback-rate">
-        <Dropdown
-          floating
-          scrolling
-          upward
-          icon={null}
-          selectOnBlur={false}
-          options={options}
-          value={value}
-          onChange={this.handleChange}
-          trigger={<button type="button">{value}</button>}
-          onOpen={this.handleOnOpen}
-          onClose={this.handleOnClose}
-        />
-      </div>
-    );
-  }
-}
+export default AVPlaybackRate;
