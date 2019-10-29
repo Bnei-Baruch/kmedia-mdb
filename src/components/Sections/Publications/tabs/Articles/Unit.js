@@ -10,8 +10,6 @@ import { UnitPage, wrap as wrapPage } from '../../../../Pages/Unit/Page';
 import { SameCollectionContainer, wrap as wrapSameCollectionContainer } from '../../../../Pages/Unit/widgets/Recommended/SameCollection/Container';
 import SameCollectionWidget from '../../../../Pages/Unit/widgets/Recommended/SameCollection/Widget';
 import TranscriptionContainer from '../../../../Pages/Unit/widgets/UnitMaterials/Transcription/TranscriptionContainer';
-import Share from "../../../Library/Share";
-import { isLanguageRtl } from "../../../../../helpers/i18n-utils";
 
 class MySameCollectionWidget extends SameCollectionWidget {
   renderContent() {
@@ -92,9 +90,7 @@ const MyWrappedSameCollectionContainer = wrapSameCollectionContainer(MySameColle
 
 class MyUnitPage extends UnitPage {
   renderPlayer() {
-    const { unit, t, language } = this.props;
-    const isRtl = isLanguageRtl(language);
-    const position = isRtl ? 'right' : 'left';
+    const { unit, t } = this.props;
     return (
       <div className="section-header">
         <Container className="padded">
@@ -111,12 +107,9 @@ class MyUnitPage extends UnitPage {
                     }
                   </Header.Content>
                 </Header>
-                <Header as="h4" color="grey" className="display-inline">
+                <Header as="h4" color="grey">
                   {t('values.date', { date: unit.film_date })}
                 </Header>
-                <span className="share-publication">
-                  <Share position={position} />
-                </span>
               </Grid.Column>
             </Grid.Row>
           </Grid>

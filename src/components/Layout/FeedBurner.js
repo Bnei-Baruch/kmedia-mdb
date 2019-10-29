@@ -43,6 +43,7 @@ class FeedBurner extends Component {
           onChange={this.handleChange}
           name='email'
           className={'right action'}
+          actionPosition="right"
           placeholder={t('nav.sidebar.subscribe')}
           value={email}
         />

@@ -68,13 +68,9 @@ class SameCollection extends Component {
                       {part.name}
                     </span>
                   </Header>
-                  {
-                    part.duration && (
-                      <Item.Meta>
-                        <small>{formatDuration(part.duration)}</small>
-                      </Item.Meta>
-                    )
-                  }
+                  <Item.Meta>
+                    <small>{formatDuration(part.duration)}</small>
+                  </Item.Meta>
                 </Item.Content>
               </Item>
             ))
