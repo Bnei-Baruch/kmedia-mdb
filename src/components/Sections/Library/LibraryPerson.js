@@ -9,23 +9,29 @@ import { actions, selectors } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
 import WipErr from '../../shared/WipErr/WipErr';
 import { cmsUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
+import { publicFile } from '../../../helpers/utils';
 
 // Convert WP images to full URL+imaginary
 const convertImages = (content) => {
-  const regex   = /<img[^>]*src="([^"]*)"/g;
+  const regex = /<img[^>]*src="([^"]*)"/g;
   let arr;
   while ((arr = regex.exec(content))) {
     let img = arr[1];
     if (!img.startsWith('http') && !img.startsWith('/static/')) {
+      let imageFile = cmsUrl(img);
+      if (!/^http/.exec(imageFile)) {
+        imageFile = publicFile(imageFile);
+      }
+
       const params = Requests.makeParams({
-        url: cmsUrl(img),
+        url: imageFile,
         width: 160,
         height: 200,
         nocrop: false,
         stripmeta: true,
       });
       const src    = `${imaginaryUrl('resize')}?${params}`;
-      content = content.replace(img, src);
+      content      = content.replace(img, src);
     }
   }
 
