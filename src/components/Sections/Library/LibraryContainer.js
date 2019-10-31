@@ -109,15 +109,15 @@ class LibraryContainer extends Component {
     window.removeEventListener('load', this.updateSticky);
   }
 
-  replaceOrFetch(nextSourceId){
+  replaceOrFetch(nextSourceId) {
     const { sourceId, replace, language } = this.props;
 
     const firstLeafId = this.firstLeafId(nextSourceId);
     if (firstLeafId !== nextSourceId) {
       replace(`sources/${firstLeafId}`);
     } else if (sourceId !== nextSourceId
-        || this.state.lastLoadedId !== nextSourceId
-        || this.state.language !== language) {
+      || this.state.lastLoadedId !== nextSourceId
+      || this.state.language !== language) {
       this.loadNewIndices(nextSourceId, language);
     }
   }
@@ -134,6 +134,11 @@ class LibraryContainer extends Component {
     }
 
     fetchIndex(sourceId);
+  };
+
+  isMobileDevice = () => {
+    const { deviceInfo } = this.props;
+    return deviceInfo.device && deviceInfo.device.type === 'mobile';
   };
 
   updateSticky = () => {
@@ -307,7 +312,6 @@ class LibraryContainer extends Component {
 
     return path;
   };
-
 
   render() {
     const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push, history, deviceInfo } = this.props;
