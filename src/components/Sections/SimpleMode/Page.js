@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import DayPicker from 'react-day-picker';
@@ -138,7 +138,7 @@ const SimpleModePage = (props) => {
     },
   });
   const [languages, setLanguages] = useState([]);
-  const nativeDateInput           = createRef();
+  const nativeDateInput           = useRef(null);
 
   useEffect(() => {
     setIsClient(typeof window !== 'undefined');

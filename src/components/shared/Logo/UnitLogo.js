@@ -5,7 +5,7 @@ import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
 import FallbackImage from '../FallbackImage';
 
 const UnitLogo = (props) => {
-  const { unitId, collectionId, width, className, fallbackImg, ...rest } = props;
+  const { unitId = null, collectionId = null, width = 120, className = '', fallbackImg = 'default', ...rest } = props;
 
   let src = assetUrl(`api/thumbnail/${unitId}`);
   if (!src.startsWith('http')) {
@@ -35,14 +35,6 @@ UnitLogo.propTypes = {
   width: PropTypes.number,
   className: PropTypes.string,
   fallbackImg: PropTypes.any,
-};
-
-UnitLogo.defaultProps = {
-  unitId: null,
-  collectionId: null,
-  width: 120,
-  className: '',
-  fallbackImg: 'default',
 };
 
 export default UnitLogo;

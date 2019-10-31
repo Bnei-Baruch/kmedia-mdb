@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_CLIP, NO_NAME } from '../../../../../helpers/consts';
@@ -67,22 +67,20 @@ export const renderUnit = (unit, t) => {
   );
 };
 
-class ClipsList extends Component {
-  extraFetchParams = () => ({
-    content_type: [CT_CLIP]
-  });
+const extraFetchParams = () => ({
+  content_type: [CT_CLIP]
+});
 
-  render() {
-    return (
-      <div>
-        <UnitList
-          namespace="programs-clips"
-          renderUnit={renderUnit}
-          extraFetchParams={this.extraFetchParams}
-        />
-      </div>
-    );
-  }
-}
+const ClipsList = () => {
+  return (
+    <div>
+      <UnitList
+        namespace="programs-clips"
+        renderUnit={renderUnit}
+        extraFetchParams={extraFetchParams}
+      />
+    </div>
+  );
+};
 
 export default ClipsList;

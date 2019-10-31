@@ -21,7 +21,7 @@ const buildImage = (url, width, height) => {
   // ];
 };
 
-const Image = ({ unitOrUrl }) => {
+const Image = ({ unitOrUrl = null }) => {
   if (isEmpty(unitOrUrl)) {
     return null;
   }
@@ -49,10 +49,6 @@ Image.propTypes = {
     shapes.ContentUnit,
     PropTypes.string,
   ])
-};
-
-Image.defaultProps = {
-  unitOrUrl: null,
 };
 
 export default Image;
