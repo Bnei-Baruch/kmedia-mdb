@@ -19,7 +19,7 @@ const PublishersFilter = props => {
 };
 
 PublishersFilter.propTypes = {
-  publisherById: PropTypes.objectOf(PropTypes.object).isRequired,
+  publisherById: PropTypes.objectOf(PropTypes.object),
 };
 
 export default PublishersFilter;
