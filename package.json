@@ -88,7 +88,7 @@
     "babel-preset-react-app": "^9.0.0",
     "child_process": "^1.0.2",
     "classnames": "^2.2.5",
-    "connected-react-router": "6.5.2",
+    "connected-react-router": "6.3.1",
     "cookie": "^0.4.0",
     "core-js": "^3.1.4",
     "cross-env": "^6.0.3",

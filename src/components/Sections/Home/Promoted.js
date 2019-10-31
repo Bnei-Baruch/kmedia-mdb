@@ -2,6 +2,8 @@ import React from 'react';
 import { Header, Image } from 'semantic-ui-react';
 
 import Link from '../../Language/MultiLanguageLink';
+import { cmsUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
+import { publicFile } from '../../../helpers/utils';
 
 const renderHeader = (header, subHeader) => {
   if (!header) {
@@ -36,16 +38,31 @@ const Promoted = (props) => {
   }
 
   const { header, 'sub-header': subHeader, link, image } = data.meta;
-  let Lnk                                                = link.match(/:\/\//) === null ? Link : ExtLink;
+
+  const Lnk     = link.match(/:\/\//) === null ? Link : ExtLink;
+  let imageFile = cmsUrl(image);
+  if (!/^http/.exec(imageFile)) {
+    imageFile = publicFile(imageFile);
+  }
+  const params = Requests.makeParams({
+    url: imageFile,
+    width: 512,
+    height: 288,
+    nocrop: false,
+    stripmeta: true,
+  });
+  const src    = `${imaginaryUrl('resize')}?${params}`;
 
   return (
     <div className="thumbnail">
       <Lnk to={link}>
-        <Image fluid src={image} className="thumbnail__image" />
+        <Image fluid src={src} className="thumbnail__image" />
         {renderHeader(header, subHeader)}
       </Lnk>
     </div>
   );
 };
+
+Promoted.propTypes = {};
 
 export default Promoted;

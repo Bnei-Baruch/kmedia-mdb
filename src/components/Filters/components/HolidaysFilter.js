@@ -1,70 +1,49 @@
-import React, { Component } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import countBy from 'lodash/countBy';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 
 import { CT_HOLIDAY } from '../../../helpers/consts';
 import { selectors } from '../../../redux/modules/events';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as tags } from '../../../redux/modules/tags';
-import * as shapes from '../../shapes';
 import HierarchicalFilter from './HierarchicalFilter';
 
-class HolidaysFilter extends Component {
-  static propTypes = {
-    holidayEvents: PropTypes.arrayOf(shapes.EventCollection).isRequired,
-    getTagById: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired,
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = { tree: this.getTree(this.props) };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.holidayEvents !== nextProps.holidayEvents
-      && this.props.getTagById !== nextProps.getTagById) {
-      this.setState({ tree: this.getTree(nextProps) });
+const getTree = (holidayEvents, getTagById, t) => {
+  const counts = countBy(holidayEvents, x => x.holiday_id);
+  return [
+    {
+      value: 'root',
+      text: t('filters.holidays-filter.all'),
+      count: holidayEvents.length,
+      children: Object.entries(counts).map(([tagID, count]) => buildNode(tagID, count, getTagById))
     }
-  }
+  ];
+};
 
-  getTree = (props) => {
-    const { holidayEvents, getTagById, t } = props;
-
-    const counts = countBy(holidayEvents, x => x.holiday_id);
-    return [
-      {
-        value: 'root',
-        text: t('filters.holidays-filter.all'),
-        count: holidayEvents.length,
-        children: Object.entries(counts).map(([tagID, count]) => this.buildNode(tagID, count, getTagById))
-      }
-    ];
+const buildNode = (id, count, getTagById) => {
+  const { label } = getTagById(id);
+  return {
+    value: id,
+    text: label,
+    count,
   };
+};
 
-  buildNode = (id, count, getTagById) => {
-    const { label } = getTagById(id);
-    return {
-      value: id,
-      text: label,
-      count,
-    };
-  };
+const HolidaysFilter = (props) => {
+  const cIDs = useSelector(state => selectors.getEventsByType(state.events)[CT_HOLIDAY]);
+  const holidayEvents = useSelector(state => (cIDs || []).map(x => mdb.getCollectionById(state.mdb, x)));
+  const getTagById = useSelector(state => tags.getTagById(state.tags));
 
-  render() {
-    const { tree } = this.state;
-    return <HierarchicalFilter name="holidays-filter" tree={tree} {...this.props} />;
-  }
+  const { t } = props;
+  const tree = useMemo(() => getTree(holidayEvents, getTagById, t), [holidayEvents, getTagById, t]); 
+
+  return <HierarchicalFilter name="holidays-filter" tree={tree} {...props} />;
 }
 
-export default connect(
-  (state) => {
-    const cIDs = selectors.getEventsByType(state.events)[CT_HOLIDAY];
-    return {
-      holidayEvents: (cIDs || []).map(x => mdb.getCollectionById(state.mdb, x)),
-      getTagById: tags.getTagById(state.tags),
-    };
-  },
-)(withNamespaces()(HolidaysFilter));
+HolidaysFilter.propTypes = {
+  t: PropTypes.func.isRequired,
+};
+
+export default withNamespaces()(HolidaysFilter);

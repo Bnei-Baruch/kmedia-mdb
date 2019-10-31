@@ -186,7 +186,7 @@ class AVPlayer extends PureComponent {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { item } = this.state;
     if (nextProps.item !== item) {
       this.setState({
@@ -670,7 +670,7 @@ class AVPlayer extends PureComponent {
           poster={isVideo ? item.preImageUrl : null}
           vendor={isVideo ? 'video' : 'audio'}
           onReady={this.onPlayerReady}
-          preload={isClient ? 'auto' : 'none'}
+          preload={isClient ? 'metadata' : 'none'}
           controls={false}
           onError={this.onError}
           onPause={this.onPause}
