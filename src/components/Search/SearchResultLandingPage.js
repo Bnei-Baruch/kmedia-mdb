@@ -11,16 +11,18 @@ import {
   SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT,
   SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT,
 } from '../../helpers/consts'
+import { DeviceInfoContext } from "../../helpers/app-contexts";
 
 class SearchResultLandingPage extends SearchResultBase {
+  static contextType = DeviceInfoContext;
   static propTypes = {
     ...SearchResultBase.propTypes,
-    isMobileDevice: PropTypes.func.isRequired,
   };
 
   render() {
-    const { hit, isMobileDevice, queryResult, rank, t } = this.props;
+    const { hit, queryResult, rank, t }   = this.props;
     const { search_result: { searchId } } = queryResult;
+    const { isMobileDevice }              = this.context;
     const {
       _index: index,
       _type: resultType,
@@ -33,7 +35,7 @@ class SearchResultLandingPage extends SearchResultBase {
 
     return (
       <Segment className="search__block">
-        <Segment.Group horizontal={!isMobileDevice()} className="no-padding no-margin-top no-border no-shadow">
+        <Segment.Group horizontal={!isMobileDevice} className="no-padding no-margin-top no-border no-shadow">
           <Segment className="no-padding  no-border">
             <Header as="h3" color="blue">
               <Link
