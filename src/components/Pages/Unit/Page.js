@@ -34,7 +34,7 @@ export class UnitPage extends Component {
 
   state = {};
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { location } = this.props;
     this.setState({ embed: playerHelper.getEmbedFromQuery(location) });
   }
@@ -76,8 +76,8 @@ export class UnitPage extends Component {
   }
 
   renderRecommendations() {
-    const { unit, section, language } = this.props;
-    return <SameCollection unit={unit} section={section} language={language} />;
+    const { unit, section } = this.props;
+    return <SameCollection unit={unit} section={section} />;
   }
 
   renderContent() {

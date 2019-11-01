@@ -61,7 +61,7 @@ class SearchResultsContainer extends Component {
     this.props.hydrateUrl();
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.language !== this.props.language) {
       const { search, query, pageSize, pageNo, deb } = this.props;
       search(query, pageNo, pageSize, deb);

@@ -7,7 +7,6 @@ import { ellipsize } from '../../../../../helpers/strings';
 import UnitList from '../../../../Pages/UnitList/Container';
 import Link from '../../../../Language/MultiLanguageLink';
 
-
 const renderUnit = (unit, t) => {
   let filmDate = '';
   if (unit.film_date) {
@@ -37,10 +36,9 @@ const renderUnit = (unit, t) => {
   );
 };
 
-
 const AudioBlogList = () => {
   const extraFetchParams = () => ({ content_type: [CT_BLOG_POST] });
-  
+
   return (
     <div>
       <UnitList
@@ -50,6 +48,6 @@ const AudioBlogList = () => {
       />
     </div>
   );
-}
+};
 
 export default AudioBlogList;

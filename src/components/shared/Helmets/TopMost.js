@@ -24,11 +24,6 @@ const TopMost = (props) => {
 TopMost.propTypes = {
   titlePostfix: PropTypes.string.isRequired,
   mainLang: PropTypes.string.isRequired,
-  alternateLang: PropTypes.arrayOf(PropTypes.string),
-};
-
-TopMost.defaultProps = {
-  alternateLang: [],
 };
 
 export default TopMost;

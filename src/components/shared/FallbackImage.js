@@ -31,7 +31,7 @@ class FallbackImage extends Component {
     this.setDisplayImage(this.props.src, this.props.fallbackImage);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.src !== this.props.src) {
       this.setDisplayImage(nextProps.src, nextProps.fallbackImage);
     }

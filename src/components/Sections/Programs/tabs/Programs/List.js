@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { List, Table } from 'semantic-ui-react';
 
 import { CT_VIDEO_PROGRAM_CHAPTER, NO_NAME } from '../../../../../helpers/consts';
@@ -72,22 +72,20 @@ export const renderUnit = (unit, t) => {
   );
 };
 
-class ProgramsList extends Component {
-  extraFetchParams = () => ({
-    content_type: [CT_VIDEO_PROGRAM_CHAPTER]
-  });
+const extraFetchParams = () => ({
+  content_type: [CT_VIDEO_PROGRAM_CHAPTER]
+});
 
-  render() {
-    return (
-      <div>
-        <UnitList
-          namespace="programs-main"
-          renderUnit={renderUnit}
-          extraFetchParams={this.extraFetchParams}
-        />
-      </div>
-    );
-  }
-}
+const ProgramsList = () => {
+  return (
+    <div>
+      <UnitList
+        namespace="programs-main"
+        renderUnit={renderUnit}
+        extraFetchParams={extraFetchParams}
+      />
+    </div>
+  );
+};
 
 export default ProgramsList;

@@ -46,14 +46,20 @@ class HandleLanguages extends Component {
       direction: langDir,
     };
 
-    const trigger = isMobileDevice
-      ? <Icon size="big" name="language" className="no-margin" />
-      : (
-        <span>
-          <Icon name="sliders horizontal" />
-          {t('languages.language')}
-        </span>
-      );
+    const Trigger = React.forwardRef((props, ref) => (
+      <div onClick={this.handlePopupOpen} ref={ref}>
+        {
+          isMobileDevice
+            ? <Icon size="big" name="language" className="no-margin" />
+            : (
+              <>
+                <Icon name="sliders horizontal" />
+                {t('languages.language')}
+              </>
+            )
+        }
+      </div>
+    ));
 
     return (
       <Popup
@@ -61,7 +67,9 @@ class HandleLanguages extends Component {
         key="handleLangs"
         flowing
         position="bottom right"
-        trigger={<div onClick={this.handlePopupOpen}>{trigger}</div>}
+        trigger={
+          <Trigger />
+        }
         open={isActive}
         onOpen={this.handlePopupOpen}
         onClose={this.handlePopupClose}

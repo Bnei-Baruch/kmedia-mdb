@@ -1,4 +1,4 @@
-import React, { createRef, useContext, useEffect, useState } from 'react';
+import React, { useRef, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import DayPicker from 'react-day-picker';
@@ -138,10 +138,9 @@ const SimpleModePage = (props) => {
       selected: selectedDate,
     },
   });
-  const [languages, setLanguages]      = useState([]);
-  const nativeDateInput                = createRef();
+  const [languages, setLanguages] = useState([]);
+  const nativeDateInput           = useRef(null);
   const { isMobileDevice, deviceInfo } = useContext(DeviceInfoContext);
-
   useEffect(() => {
     setIsClient(typeof window !== 'undefined');
   }, []);

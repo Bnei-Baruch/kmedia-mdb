@@ -29,7 +29,7 @@ const buildDescription = (description) => {
 };
 
 const Basic = (props) => {
-  const { title, description, keywords, /* url, */ imageUrl } = props;
+  const { title = null, description = null, keywords = null, /* url = null, */ imageUrl = publicFile('seo/default2.png')} = props;
 
   return (
     <Fragment>
@@ -68,14 +68,6 @@ Basic.propTypes = {
   imageUrl: PropTypes.string,
   url: PropTypes.string,
   keywords: PropTypes.string,
-};
-
-Basic.defaultProps = {
-  title: null,
-  description: null,
-  imageUrl: publicFile('seo/default2.png'),
-  url: null,
-  keywords: null,
 };
 
 export default Basic;

@@ -28,7 +28,7 @@ class AVLanguage extends Component {
 
   state = {};
 
-  componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps() {
     const { selectedLanguage, requestedLanguage } = this.props;
     this.handlePopup(selectedLanguage, requestedLanguage);
   }

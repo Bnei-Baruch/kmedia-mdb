@@ -29,7 +29,7 @@ class TimedPopup extends Component {
 
   confirmTimeoutHandle = null;
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { openOnInit } = nextProps;
     if (openOnInit) {
       this.open();
@@ -83,7 +83,6 @@ class TimedPopup extends Component {
         open={opened}
         content={message}
         position={`${downward ? 'bottom' : 'top'} right`}
-        keepInViewPort
         className={rtlLang ? 'change-popup-direction' : ''}
         context={refElement}
       />
