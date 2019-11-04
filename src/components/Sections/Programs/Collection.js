@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
@@ -42,10 +42,8 @@ export const renderUnit = (unit, t) => {
   );
 };
 
-class ProgramCollection extends Component {
-  render() {
-    return <Collection namespace="programs-collection" renderUnit={renderUnit} />;
-  }
-}
+const ProgramCollection = () => {
+  return <Collection namespace="programs-collection" renderUnit={renderUnit} />;
+};
 
 export default ProgramCollection;

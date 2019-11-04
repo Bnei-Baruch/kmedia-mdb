@@ -9,7 +9,7 @@ import Basic from './Basic';
 import Image from './Image';
 import Video from './Video';
 
-const AVUnit = ({ unit, language }) => {
+const AVUnit = ({ unit = undefined, language = undefined }) => {
   if (!unit || !unit.files) {
     return null;
   }
@@ -56,11 +56,6 @@ const AVUnit = ({ unit, language }) => {
 AVUnit.propTypes = {
   unit: shapes.ContentUnit,
   language: PropTypes.string
-};
-
-AVUnit.defaultProps = {
-  unit: undefined,
-  language: undefined,
 };
 
 export default AVUnit;
