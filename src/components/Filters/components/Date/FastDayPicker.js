@@ -5,7 +5,7 @@ import moment from 'moment';
 import scrollIntoView from 'scroll-into-view';
 import Navbar from 'react-day-picker/lib/src/Navbar';
 import MomentLocaleUtils, { formatDate } from 'react-day-picker/moment';
-import { Input, Segment, Popup, Label } from 'semantic-ui-react';
+import { Input, Popup, Label } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
 
 import { today } from '../../../../helpers/date';
