@@ -28,28 +28,25 @@ class AVLanguage extends Component {
 
   state = {};
 
-  UNSAFE_componentWillReceiveProps() {
-    const { selectedLanguage, requestedLanguage } = this.props;
-    this.handlePopup(selectedLanguage, requestedLanguage);
+  static getDerivedStateFromProps(props, state){
+    const { requestedLanguage, selectedLanguage } = props;
+    
+    if (requestedLanguage) {
+      const { lastRequestedLanguage } = state;
+      const openPopup = (lastRequestedLanguage === requestedLanguage) 
+        ? false
+        : (selectedLanguage !== requestedLanguage);
+
+      return {
+        lastRequestedLanguage: requestedLanguage,
+        openPopup
+      };
+    }
+
+    return null;
   }
 
   handleChange = (e, data) => this.props.onSelect(e, data.value);
-
-  handlePopup = (selectedLanguage, requestedLanguage) => {
-    if (requestedLanguage === null) {
-      return;
-    }
-    const { lastRequestedLanguage } = this.state;
-    if (lastRequestedLanguage === requestedLanguage) {
-      this.setState({ openPopup: false });
-      return;
-    }
-
-    this.setState({
-      lastRequestedLanguage: requestedLanguage,
-      openPopup: (selectedLanguage !== requestedLanguage)
-    });
-  };
 
   setLangSelectRef = langSelectRef => this.setState({ langSelectRef });
 
