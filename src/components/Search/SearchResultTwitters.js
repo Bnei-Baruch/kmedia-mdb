@@ -145,7 +145,10 @@ class SearchResultTwitters extends SearchResultBase {
 }
 
 const twitterMapFromState = (state, tweets) => {
-  return tweets.map(({ highlight: { content }, _source: { mdb_uid } }) => {
+  return tweets.map(tweet => {
+    const content = tweet && tweet.highlight && tweet.highlight.content;
+    const mdb_uid = tweet && tweet._source && tweet._source.mdb_uid;
+    //const { highlight: { content }, _source: { mdb_uid } } = tweet;
     const twitter = selectors.getTwitter(state.publications, mdb_uid);
     return { twitter, highlight: content };
   });
