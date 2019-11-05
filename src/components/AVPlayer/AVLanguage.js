@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import noop from 'lodash/noop';
@@ -7,7 +7,7 @@ import { Dropdown } from 'semantic-ui-react';
 import { LANG_HEBREW, LANGUAGE_OPTIONS } from '../../helpers/consts';
 import TimedPopup from '../shared/TimedPopup';
 
-class AVLanguage extends Component {
+class AVLanguage extends PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
     onSelect: PropTypes.func,
