@@ -49,6 +49,6 @@ export function today() {
     .milliseconds(0);
 }
 
-export function yearFromNow() {
-  return new Date(Date.now() + (365 * 24 * 60 * 60 * 1000)).toUTCString();
+export function setCookie(name, value) {
+  document.cookie = `${name}=${value}; path=/; Max-Age=${365 * 24 * 60 * 60}; Secure; SameSite=Lax`;
 }
