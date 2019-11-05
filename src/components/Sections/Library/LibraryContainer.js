@@ -82,16 +82,14 @@ class LibraryContainer extends Component {
     this.replaceOrFetch(sourceId);
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const { sourceId, areSourcesLoaded } = nextProps;
+  componentDidUpdate(prevProps, prevState) {
+    const { sourceId, areSourcesLoaded } = this.props;
     if (!areSourcesLoaded) {
       return;
     }
 
     this.replaceOrFetch(sourceId);
-  }
 
-  componentDidUpdate(prevProps, prevState) {
     this.updateSticky();
     const { isReadable, scrollTopPosition } = this.state;
     //on change full screen and normal view scroll to position
