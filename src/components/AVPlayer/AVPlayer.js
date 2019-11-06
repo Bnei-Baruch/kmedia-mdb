@@ -186,7 +186,7 @@ class AVPlayer extends PureComponent {
     }
   }
 
-  componentDidUpdate(prevProps){
+  componentDidUpdate(){
     const { item } = this.props;
     if (this.state.item !== item) {
       this.setState({

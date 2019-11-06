@@ -23,18 +23,19 @@ class AVPlaylistPlayer extends Component {
     history: shapes.History.isRequired,
   };
 
-  state = {
-    autoPlay: false
-  };
+  constructor(props){
+    super(props);
+    const { history } = props;
+    let autoPlay = false;
 
-  UNSAFE_componentWillMount() {
-    const { history } = this.props;
-    if (history){
-      const query       = getQuery(history.location);
+    if (history) {
+      const query = getQuery(history.location);
       if (query.sstart) {
-        this.setState({ autoPlay: true });
+        autoPlay = true;
       }
     }
+
+    this.state = { autoPlay };
   }
 
   handleMediaEditModeChange = mediaEditMode => this.setState({ mediaEditMode });
