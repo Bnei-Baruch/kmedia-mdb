@@ -21,6 +21,7 @@ import LibraryContentContainer from './LibraryContentContainer';
 import TOC, { getIndex } from './TOC';
 import LibrarySettings from './LibrarySettings';
 import Share from './Share';
+import { isLanguageRtl } from "../../../helpers/i18n-utils";
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -363,6 +364,9 @@ class LibraryContainer extends Component {
     const parentId = this.properParentId(fullPath);
     const matchString = this.matchString(parentId, t);
 
+    const isRtl = isLanguageRtl(language);
+    const position = isRtl ? 'left' : 'right';
+
     return (
       <div
         ref={this.handleContentArticleRef}
@@ -404,7 +408,7 @@ class LibraryContainer extends Component {
                       <LibrarySettings fontSize={fontSize} handleSettings={this.handleSettings} />
                       <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                       <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                      <Share isMobile={this.isMobileDevice()} />
+                      <Share position={position} />
                     </div>
                   </Grid.Column>
                 </Grid.Row>
