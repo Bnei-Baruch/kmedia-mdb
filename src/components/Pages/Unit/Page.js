@@ -76,8 +76,8 @@ export class UnitPage extends Component {
   }
 
   renderRecommendations() {
-    const { unit, section } = this.props;
-    return <SameCollection unit={unit} section={section} />;
+    const { unit, section, language } = this.props;
+    return <SameCollection unit={unit} section={section} language={language} />;
   }
 
   renderContent() {
