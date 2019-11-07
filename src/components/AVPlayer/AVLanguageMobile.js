@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { withNamespaces } from 'react-i18next';
@@ -6,7 +6,7 @@ import { withNamespaces } from 'react-i18next';
 import { LANG_HEBREW, LANGUAGE_OPTIONS } from '../../helpers/consts';
 import TimedPopup from '../shared/TimedPopup';
 
-class AVLanguageMobile extends Component {
+class AVLanguageMobile extends PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
     onSelect: PropTypes.func,
@@ -25,30 +25,27 @@ class AVLanguageMobile extends Component {
 
   state = {};
 
-  UNSAFE_componentWillReceiveProps() {
-    const { selectedLanguage, requestedLanguage } = this.props;
-    this.handlePopup(selectedLanguage, requestedLanguage);
+  static getDerivedStateFromProps(props, state){
+    const { requestedLanguage, selectedLanguage } = props;
+    
+    if (requestedLanguage) {
+      const { lastRequestedLanguage } = state;
+      const openPopup = (lastRequestedLanguage === requestedLanguage) 
+        ? false
+        : (selectedLanguage !== requestedLanguage);
+
+      return {
+        lastRequestedLanguage: requestedLanguage,
+        openPopup
+      };
+    }
+
+    return null;
   }
 
   setLangSelectRef = langSelectRef => this.setState({ langSelectRef });
 
   handleChange = e => this.props.onSelect(e, e.currentTarget.value);
-
-  handlePopup = (selectedLanguage, requestedLanguage) => {
-    if (requestedLanguage === null) {
-      return;
-    }
-    const { lastRequestedLanguage } = this.state;
-    if (lastRequestedLanguage === requestedLanguage) {
-      this.setState({ openPopup: false });
-      return;
-    }
-
-    this.setState({
-      lastRequestedLanguage: requestedLanguage,
-      openPopup: (selectedLanguage !== requestedLanguage)
-    });
-  };
 
   render() {
     const { t, languages, selectedLanguage, uiLanguage } = this.props;
