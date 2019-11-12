@@ -64,8 +64,8 @@ const MobileLanguage = ({ language, contentLanguage, location, push, t }) => (
 );
 
 const UILanguage = ({ language, contentLanguage, location, push, t }) => {
-const { isMobileDevice } = useContext(DeviceInfoContext);
-	return (
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  return (
 	  <Menu secondary>
 	    <Menu.Item header>
 	      {t('languages.website_language')}
@@ -86,7 +86,7 @@ const { isMobileDevice } = useContext(DeviceInfoContext);
 	      }
 	    </Menu.Menu>
 	  </Menu>
-	);
+  );
 };
 
 UILanguage.propTypes = {
