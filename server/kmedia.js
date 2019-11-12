@@ -29,6 +29,7 @@ export async function kmediaContainer(req, res, next) {
   case 'homepage':
   case 'google_ads':
   case 'lesson_downloader':
+  case 'index.php':
     kmRedirect(req, res, '/');
     break;
   default:
