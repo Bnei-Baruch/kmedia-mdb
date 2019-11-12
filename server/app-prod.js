@@ -19,6 +19,7 @@ const app = express();
 const router = express.Router();
 
 // middleware
+// app.use(middleware.logAll);
 app.use(middleware.logErrors);
 app.use(middleware.errorHandler);
 
@@ -102,6 +103,7 @@ router.use(express.static(
 ));
 
 router.use('/:lang(en|he|ru|es|de|tr|ua)?/ui/:cnID', kmediaContainer);
+router.use('/:cnID(index.php)$', kmediaContainer);
 router.use('/:lang(en|he|ru|es|de|tr|ua)?/ui/?', kmediaSearch);
 
 // anything else should act as our index page
