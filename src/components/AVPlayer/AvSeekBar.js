@@ -39,9 +39,9 @@ class AvSeekBar extends Component {
     document.addEventListener('touchend', this.handleEnd, { passive: false });
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.props.media.currentTime !== nextProps.media.currentTime) {
-      this.setState({ playPoint: nextProps.media.currentTime });
+  componentDidUpdate(prevProps) {
+    if (this.props.media.currentTime !== prevProps.media.currentTime) {
+      this.setState({ playPoint: this.props.media.currentTime });
     }
   }
 

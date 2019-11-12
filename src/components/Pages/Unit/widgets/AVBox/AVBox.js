@@ -31,33 +31,29 @@ class AVBox extends Component {
     unit: undefined,
   };
 
-  constructor(props) {
-    super(props);
+  state = {}
+
+  static getDerivedStateFromProps(props, state){
     const { uiLanguage, contentLanguage, location, history, unit } = props;
-    const preferredMT                                              = playerHelper.restorePreferredMediaType();
-    const mediaType                                                = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const playerLanguage                                           = playerHelper.getLanguageFromQuery(location, contentLanguage);
-    const playableItem                                             = AVBox.getPlayableItem(unit, mediaType, playerLanguage, uiLanguage);
-    this.state                                                     = {
-      playableItem,
-      autoPlay: true,
-      newItemLanguage: null
-    };
-    playerHelper.setLanguageInQuery(history, playerLanguage);
-  }
+    let { playableItem = {}, autoPlay = true }                     = state;
+    let { language: playerLanguage = contentLanguage, unit: oldUnit } = playableItem;
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const { unit, uiLanguage, location } = nextProps;
-    const { playableItem }               = this.state;
-    const { language: playerLanguage }   = playableItem;
+    const preferredMT      = playerHelper.restorePreferredMediaType();
+    const mediaType        = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const newItemLanguage  = playerHelper.getLanguageFromQuery(location, playerLanguage);
+    const newPlayableItem  = playerHelper.playableItem(unit, mediaType, uiLanguage, newItemLanguage);
 
-    const preferredMT     = playerHelper.restorePreferredMediaType();
-    const newMediaType    = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
+    if (newItemLanguage !== playerLanguage || !isEqual(unit, oldUnit)) {
+      playerHelper.setLanguageInQuery(history, newItemLanguage);
 
-    // Persist language in playableItem
-    const item = AVBox.getPlayableItem(unit, newMediaType, newItemLanguage, uiLanguage);
-    this.setState({ playableItem: item, newItemLanguage });
+      return {
+        playableItem: newPlayableItem,
+        autoPlay,
+        newItemLanguage
+      }
+    }
+
+    return null;
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -81,10 +77,6 @@ class AVBox extends Component {
       && oldMediaEditMode === mediaEditMode
       && oldIsDropdownOpened === isDropdownOpened
       && isEqual(unit, oldUnit));
-  }
-
-  static getPlayableItem(unit, mediaType, playerLanguage, uiLanguage) {
-    return playerHelper.playableItem(unit, mediaType, uiLanguage, playerLanguage);
   }
 
   handleSwitchAV = () => {
