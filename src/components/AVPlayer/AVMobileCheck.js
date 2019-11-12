@@ -1,6 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { withMediaProps } from 'react-media-player';
 
 import { selectors as device } from '../../redux/modules/device';
@@ -8,18 +7,14 @@ import AVPlayerMobile from './AVPlayerMobile';
 import AVPlayer from './AVPlayer';
 
 const AVMobileCheck = (props) => {
-  const { autoPlayAllowed } = props;
-  return autoPlayAllowed ? <AVPlayer {...props} /> : <AVPlayerMobile {...props} />;
-};
+  const deviceInfo = useSelector(state => device.getDeviceInfo(state.device));
+  const autoPlayAllowed = useSelector(state => device.getAutoPlayAllowed(state.device));
 
-AVMobileCheck.propTypes = {
-  autoPlayAllowed: PropTypes.bool.isRequired,
+  return autoPlayAllowed 
+    ? <AVPlayer {...props} /> 
+    : <AVPlayerMobile {...props} />;
 };
-
-const mapState = state => ({
-  autoPlayAllowed: device.getAutoPlayAllowed(state.device),
-});
 
 // withMediaProps is here to make the changes in the media context
 // to propagate correctly through this component
-export default withMediaProps(connect(mapState)(AVMobileCheck));
+export default withMediaProps(AVMobileCheck);

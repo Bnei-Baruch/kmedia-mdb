@@ -119,8 +119,8 @@ class AVPlayerMobile extends PureComponent {
     };
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.item !== this.props.item) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.item !== this.props.item) {
       this.setState({ error: false, errorReason: '', firstSeek: true });
     }
   }

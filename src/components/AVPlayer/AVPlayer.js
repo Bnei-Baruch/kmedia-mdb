@@ -189,15 +189,15 @@ class AVPlayer extends PureComponent {
     }
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const { item } = this.state;
-    if (nextProps.item !== item) {
+  componentDidUpdate(){
+    const { item } = this.props;
+    if (this.state.item !== item) {
       this.setState({
         error: false,
         errorReason: '',
         firstSeek: true,
-        item: nextProps.item,
-        ...AVPlayer.chooseSource(nextProps),
+        item: item,
+        ...AVPlayer.chooseSource(this.props),
       });
     }
   }

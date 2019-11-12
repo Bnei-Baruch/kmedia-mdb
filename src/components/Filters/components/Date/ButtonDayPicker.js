@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import moment from 'moment';
@@ -33,6 +32,11 @@ class ButtonDayPicker extends Component {
     onDayChange: noop,
   };
 
+  constructor(props){
+    super(props);
+    this.myRef = React.createRef();
+  }
+
   state = {
     month: null,
     isPopupOpen: false,
@@ -61,9 +65,9 @@ class ButtonDayPicker extends Component {
     this.setState({month});
   };
 
-  handleDayPickerRef = (ref) => {
-    if (ref) {
-      scrollIntoView(ReactDOM.findDOMNode(ref), {
+  handleDayPickerRef = () => {
+    if (this.myRef) {
+      scrollIntoView(this.myRef, {
         time: 150, // half a second
         validTarget: target => target!==window,
       });

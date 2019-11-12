@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withMediaProps } from 'react-media-player';
 import { Icon } from 'semantic-ui-react';
 
-const AVMuteUnmute = ({ upward = true, media, media: { isMuted, volume }, isAudio }, onVolumeChange, onMuteUnmute) => {
+const AVMuteUnmute = ({ upward = true, media, media: { isMuted, volume }, isAudio, onVolumeChange, onMuteUnmute }) => {
   const [element, setElement]           = useState(null);
   const [volumeHover, setVolumeHover]   = useState(false);
   const [wasMouseDown, setWasMouseDown] = useState(false);
