@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Container, Header, Segment } from 'semantic-ui-react';
 
 import Link from '../Language/MultiLanguageLink';
@@ -31,7 +30,7 @@ class SearchResultLandingPage extends SearchResultBase {
       }
     } = hit;
     const linkTitle = SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT[landingPage] || 'home.sections';
-    const subText = SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT[landingPage]
+    const subText = SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT[landingPage];
 
     return (
       <Segment className="search__block">
