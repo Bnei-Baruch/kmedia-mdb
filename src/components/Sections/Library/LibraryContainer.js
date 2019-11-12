@@ -18,9 +18,10 @@ import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import Helmets from '../../shared/Helmets';
 import LibraryContentContainer from './LibraryContentContainer';
-import TOC from './TOC';
+import TOC, { getIndex } from './TOC';
 import LibrarySettings from './LibrarySettings';
 import Share from './Share';
+import { isLanguageRtl } from "../../../helpers/i18n-utils";
 
 class LibraryContainer extends Component {
   static propTypes = {
@@ -82,24 +83,32 @@ class LibraryContainer extends Component {
     this.replaceOrFetch(sourceId);
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const { sourceId, areSourcesLoaded } = nextProps;
+  componentDidUpdate(prevProps, prevState) {
+    const { sourceId, areSourcesLoaded } = this.props;
     if (!areSourcesLoaded) {
       return;
     }
 
     this.replaceOrFetch(sourceId);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
     this.updateSticky();
-    const { isReadable, scrollTopPosition } = this.state;
+    
+    const { isReadable, scrollTopPosition, tocIsActive } = this.state;
     //on change full screen and normal view scroll to position
     if (prevState.isReadable !== isReadable && this.articleRef) {
       if (isReadable) {
         this.articleRef.scrollTop = scrollTopPosition;
       } else {
         document.scrollingElement.scrollTop = scrollTopPosition;
+      }
+    }
+
+    // hide toc if only one item
+    if (tocIsActive){
+      const fullPath = this.getFullPath(sourceId);
+      const activeIndex = getIndex(fullPath[1], fullPath[2]);
+
+      if (activeIndex === -1){
+        this.setState({ tocIsActive: false });
       }
     }
   }
@@ -118,14 +127,10 @@ class LibraryContainer extends Component {
     } else if (sourceId !== nextSourceId
       || this.state.lastLoadedId !== nextSourceId
       || this.state.language !== language) {
-      this.loadNewIndices(nextSourceId, language);
+      this.setState({ lastLoadedId: nextSourceId, language });
+      this.fetchIndices(nextSourceId);
     }
   }
-
-  loadNewIndices = (sourceId, language) => {
-    this.setState({ lastLoadedId: sourceId, language });
-    this.fetchIndices(sourceId);
-  };
 
   fetchIndices = (sourceId) => {
     const { indexMap, fetchIndex } = this.props;
@@ -134,21 +139,6 @@ class LibraryContainer extends Component {
     }
 
     fetchIndex(sourceId);
-  };
-
-  isMobileDevice = () => {
-    const { deviceInfo } = this.props;
-    return deviceInfo.device && deviceInfo.device.type === 'mobile';
-  };
-
-  updateSticky = () => {
-    // check fixed header width in pixels for text-overflow:ellipsis
-    if (this.contentHeaderRef) {
-      const { width } = this.contentHeaderRef.getBoundingClientRect();
-      if (this.state.contentHeaderWidth !== width) {
-        this.setState({ contentHeaderWidth: width });
-      }
-    }
   };
 
   firstLeafId = (sourceId) => {
@@ -160,6 +150,16 @@ class LibraryContainer extends Component {
     }
 
     return this.firstLeafId(children[0]);
+  };
+
+  updateSticky = () => {
+    // check fixed header width in pixels for text-overflow:ellipsis
+    if (this.contentHeaderRef) {
+      const { width } = this.contentHeaderRef.getBoundingClientRect();
+      if (this.state.contentHeaderWidth !== width) {
+        this.setState({ contentHeaderWidth: width });
+      }
+    }
   };
 
   handleContextRef = (ref) => this.contextRef = ref;
@@ -183,7 +183,9 @@ class LibraryContainer extends Component {
    * Get position of scroll
    * @returns {number|*}
    */
-  getScrollTop = () => this.state.isReadable ? this.articleRef.scrollTop : document.scrollingElement.scrollTop;
+  getScrollTop = () => this.state.isReadable 
+    ? this.articleRef.scrollTop 
+    : document.scrollingElement.scrollTop;
 
   handleSettings = (setting) => this.setState(setting);
 
@@ -236,12 +238,10 @@ class LibraryContainer extends Component {
 
   sortButton = () => {
     const { sortBy, sourcesSortBy } = this.props;
-    let sortOrder;
-    if (sortBy === 'AZ') {
-      sortOrder = 'Book';
-    } else {
-      sortOrder = 'AZ';
-    }
+    const sortOrder = sortBy === 'AZ'
+      ? 'Book'
+      : 'AZ';
+
     sourcesSortBy(sortOrder);
   };
 
@@ -252,14 +252,16 @@ class LibraryContainer extends Component {
       return null;
     }
 
+    const sortByAZ = sortBy === 'AZ';
+
     return (
       <Button
         compact
         size="small"
         icon="sort alphabet ascending"
-        color={sortBy === 'AZ' ? 'blue' : ''}
-        active={sortBy === 'AZ'}
-        basic={sortBy !== 'AZ'}
+        color={sortByAZ ? 'blue' : ''}
+        active={sortByAZ}
+        basic={!sortByAZ}
         onClick={this.sortButton}
       />
     );
@@ -313,25 +315,24 @@ class LibraryContainer extends Component {
     return path;
   };
 
-  render() {
-    const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push, history, deviceInfo } = this.props;
+  static getErrContent = (err, t) => {
+    return (err.response && err.response.status === 404) 
+      ? <FrownSplash text={t('messages.source-content-not-found')} />
+      : <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
+  };
 
-    const fullPath = this.getFullPath(sourceId);
-    const parentId = this.properParentId(fullPath);
-
+  getContent = () => {
+    const { sourceId, indexMap, language, contentLanguage, t, history, deviceInfo } = this.props;
     const index = isEmpty(sourceId) ? {} : indexMap[sourceId];
-
-    let content;
     const { err } = index || {};
+    
+    let content;
+    
     if (err) {
-      if (err.response && err.response.status === 404) {
-        content = <FrownSplash text={t('messages.source-content-not-found')} />;
-      } else {
-        content = <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
-      }
+      content = LibraryContainer.getErrContent(err, t);  
     } else {
       const downloadAllowed = deviceInfo.os.name !== 'iOS';
-      content               = (
+      content = (
         <LibraryContentContainer
           source={sourceId}
           index={index}
@@ -344,16 +345,27 @@ class LibraryContainer extends Component {
       );
     }
 
-    const
-      {
-        isReadable,
-        fontSize,
-        theme,
-        fontType,
-        tocIsActive,
-        match,
-      }               = this.state;
+    return content;
+  }
+
+  isMobileDevice = () => {
+    const { deviceInfo } = this.props;
+    return deviceInfo.device && deviceInfo.device.type === 'mobile';
+  };
+
+  render() {
+    const { sourceId, getSourceById, language, t, push } = this.props;
+    
+    const content = this.getContent();
+
+    const { isReadable, fontSize, theme, fontType, tocIsActive, match } = this.state;
+
+    const fullPath = this.getFullPath(sourceId);
+    const parentId = this.properParentId(fullPath);
     const matchString = this.matchString(parentId, t);
+
+    const isRtl = isLanguageRtl(language);
+    const position = isRtl ? 'left' : 'right';
 
     return (
       <div
@@ -396,7 +408,7 @@ class LibraryContainer extends Component {
                       <LibrarySettings fontSize={fontSize} handleSettings={this.handleSettings} />
                       <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
                       <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                      <Share isMobile={this.isMobileDevice()} />
+                      <Share position={position} />
                     </div>
                   </Grid.Column>
                 </Grid.Row>
