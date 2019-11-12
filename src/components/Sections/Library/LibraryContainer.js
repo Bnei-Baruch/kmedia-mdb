@@ -332,7 +332,7 @@ class LibraryContainer extends Component {
     if (err) {
       content = LibraryContainer.getErrContent(err, t);  
     } else {
-      const downloadAllowed = deviceInfo.os.name !== 'iOS';
+      const downloadAllowed = this.context.deviceInfo.os.name !== 'iOS';
       content = (
         <LibraryContentContainer
           source={sourceId}
@@ -347,11 +347,6 @@ class LibraryContainer extends Component {
     }
 
     return content;
-  }
-
-  isMobileDevice = () => {
-    const { deviceInfo } = this.props;
-    return deviceInfo.device && deviceInfo.device.type === 'mobile';
   };
 
   render() {

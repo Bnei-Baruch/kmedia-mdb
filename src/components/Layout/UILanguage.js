@@ -63,7 +63,7 @@ const MobileLanguage = ({ language, contentLanguage, location, push, t }) => (
   </select>
 );
 
-const UILanguage = ({ language, contentLanguage, isMobile, location, push, t }) => {
+const UILanguage = ({ language, contentLanguage, location, push, t }) => {
 const { isMobileDevice } = useContext(DeviceInfoContext);
 	return (
 	  <Menu secondary>

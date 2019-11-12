@@ -5,18 +5,18 @@ import classNames from 'classnames';
 import { Media } from 'react-media-player';
 
 import { MT_AUDIO } from '../../helpers/consts';
-import { selectors as device } from '../../redux/modules/device';
 import * as shapes from '../shapes';
 import AVMobileCheck from './AVMobileCheck';
 import { getQuery } from '../../helpers/url';
+import { DeviceInfoContext } from "../../helpers/app-contexts";
 
 class AVPlaylistPlayer extends Component {
+  static contextType = DeviceInfoContext;
   static propTypes = {
     items: PropTypes.arrayOf(shapes.VideoItem).isRequired,
     selected: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
     uiLanguage: PropTypes.string.isRequired,
-    autoPlayAllowed: PropTypes.bool.isRequired,
     onSelectedChange: PropTypes.func.isRequired,
     onLanguageChange: PropTypes.func.isRequired,
     onSwitchAV: PropTypes.func.isRequired,
@@ -69,8 +69,9 @@ class AVPlaylistPlayer extends Component {
   onPause = () => this.setState({ autoPlay: false });
 
   render() {
-    const { selected, items, language, onSwitchAV, onLanguageChange, autoPlayAllowed, uiLanguage } = this.props;
-    const { autoPlay, mediaEditMode, isDropdownOpened }                                            = this.state;
+    const { selected, items, language, onSwitchAV, onLanguageChange, uiLanguage } = this.props;
+    const { autoPlay, mediaEditMode, isDropdownOpened }                           = this.state;
+    const { autoPlayAllowed }                                                     = this.context;
 
     const currentItem = items[selected];
 
@@ -115,6 +116,7 @@ class AVPlaylistPlayer extends Component {
               onPlay={this.onPlay}
               onMediaEditModeChange={this.handleMediaEditModeChange}
               onDropdownOpenedChange={this.handleDropdownOpenedChange}
+              autoPlayAllowed={autoPlayAllowed}
             />
           </Media>
         </div>
@@ -123,8 +125,7 @@ class AVPlaylistPlayer extends Component {
   }
 }
 
-const mapState = state => ({
-  autoPlayAllowed: device.getAutoPlayAllowed(state.device),
+const mapState = () => ({
 });
 
 export default connect(mapState)(AVPlaylistPlayer);

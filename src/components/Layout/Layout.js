@@ -218,7 +218,6 @@ class Layout extends Component {
                       contentLanguage={contentLanguage}
                       setContentLanguage={setContentLanguage}
                       location={location}
-                      isMobile={isMobileDevice}
                       push={push}
                     />
                   </Menu.Item>
