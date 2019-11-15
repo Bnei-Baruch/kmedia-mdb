@@ -1,17 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Container, Grid, Header, Button } from 'semantic-ui-react';
 import { getRSSLinkByLang } from '../../helpers/utils';
-import * as shapes from '../shapes';
 import { selectors as settings } from '../../redux/modules/settings';
-import { selectors as device } from '../../redux/modules/device';
+import { DeviceInfoContext } from "../../helpers/app-contexts";
 
-const Footer = ({ t, language, deviceInfo }) => {
-  const year     = new Date().getFullYear();
-  const isMobile = deviceInfo.device && deviceInfo.device.type === 'mobile';
-
+const Footer = ({ t, language }) => {
+  const year = new Date().getFullYear();
+  const { isMobileDevice } = useContext(DeviceInfoContext);
   return (
     <div className="layout__footer">
       <Container>
@@ -34,7 +32,7 @@ const Footer = ({ t, language, deviceInfo }) => {
                 color="orange"
                 basic
                 inverted
-                floated={isMobile ? 'left' : 'right'}
+                floated={isMobileDevice ? 'left' : 'right'}
                 href={getRSSLinkByLang(language)} />
             </Grid.Column>
           </Grid.Row>
@@ -46,12 +44,10 @@ const Footer = ({ t, language, deviceInfo }) => {
 
 Footer.propTypes = {
   t: PropTypes.func.isRequired,
-  deviceInfo: shapes.UserAgentParserResults.isRequired,
   language: PropTypes.string.isRequired
 };
 
 export default connect(state => ({
   language: settings.getLanguage(state.settings),
-  deviceInfo: device.getDeviceInfo(state.device),
 }))(withNamespaces()(Footer));
 

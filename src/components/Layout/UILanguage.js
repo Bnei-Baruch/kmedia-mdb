@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Dropdown, Flag, Menu } from 'semantic-ui-react';
@@ -8,6 +8,7 @@ import { setCookie } from '../../helpers/date';
 import { getToWithLanguage } from '../../helpers/url';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
+import { DeviceInfoContext } from "../../helpers/app-contexts";
 
 const storeUILanguage = (language) => {
   if (!language) {
@@ -62,28 +63,31 @@ const MobileLanguage = ({ language, contentLanguage, location, push, t }) => (
   </select>
 );
 
-const UILanguage = ({ language, contentLanguage, isMobile, location, push, t }) => (
-  <Menu secondary>
-    <Menu.Item header>
-      {t('languages.website_language')}
-      :
-    </Menu.Item>
-    <Menu.Menu position="right">
-      {
-        isMobile
-          ?
-          <MobileLanguage
-            language={language}
-            onMobileChange={onMobileChange}
-            contentLanguage={contentLanguage}
-            location={location}
-            push={push}
-            t={t} />
-          : <DesktopLanguage t={t} language={language} contentLanguage={contentLanguage} />
-      }
-    </Menu.Menu>
-  </Menu>
-);
+const UILanguage = ({ language, contentLanguage, location, push, t }) => {
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  return (
+	  <Menu secondary>
+	    <Menu.Item header>
+	      {t('languages.website_language')}
+	      :
+	    </Menu.Item>
+	    <Menu.Menu position="right">
+	      {
+	        isMobileDevice
+	          ?
+	          <MobileLanguage
+	            language={language}
+	            onMobileChange={onMobileChange}
+	            contentLanguage={contentLanguage}
+	            location={location}
+	            push={push}
+	            t={t} />
+	          : <DesktopLanguage t={t} language={language} contentLanguage={contentLanguage} />
+	      }
+	    </Menu.Menu>
+	  </Menu>
+  );
+};
 
 UILanguage.propTypes = {
   contentLanguage: PropTypes.string.isRequired,
@@ -92,7 +96,6 @@ UILanguage.propTypes = {
   // We need dependency on location in order to change Link every time url changes
   location: shapes.HistoryLocation.isRequired,
   t: PropTypes.func.isRequired,
-  isMobile: PropTypes.bool.isRequired,
   push: PropTypes.func.isRequired,
 };
 
