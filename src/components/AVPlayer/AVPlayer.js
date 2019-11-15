@@ -32,6 +32,7 @@ import AVSpinner from './AVSpinner';
 import ShareFormDesktop from './Share/ShareFormDesktop';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { PlayerStartEnum } from './playerStartEnum';
+import { DeviceInfoContext } from "../../helpers/app-contexts";
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
@@ -41,6 +42,8 @@ const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
 const playbackToValue = playback => parseFloat(playback.slice(0, -1));
 
 class AVPlayer extends PureComponent {
+  static contextType = DeviceInfoContext;
+
   static propTypes = {
     t: PropTypes.func.isRequired,
     media: shapes.Media.isRequired,
@@ -70,7 +73,6 @@ class AVPlayer extends PureComponent {
     onPrev: PropTypes.func,
     onNext: PropTypes.func,
 
-    deviceInfo: shapes.UserAgentParserResults.isRequired,
     onMediaEditModeChange: PropTypes.func.isRequired,
     onDropdownOpenedChange: PropTypes.func.isRequired,
   };
@@ -167,7 +169,8 @@ class AVPlayer extends PureComponent {
     // By default hide controls after a while if player playing.
     this.hideControlsTimeout();
 
-    const { deviceInfo: { browser: { name: browserName } }, media, item, autoPlay } = this.props;
+    const { media, item, autoPlay } = this.props;
+    const { deviceInfo: { browser: { name: browserName } } } = this.context;
     this.setState({
       isClient: true,
       start,

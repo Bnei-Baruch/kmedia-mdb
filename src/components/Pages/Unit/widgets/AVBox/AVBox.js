@@ -10,20 +10,20 @@ import isEqual from 'react-fast-compare';
 
 import { MT_AUDIO, MT_VIDEO } from '../../../../../helpers/consts';
 import playerHelper from '../../../../../helpers/player';
-import { selectors as device } from '../../../../../redux/modules/device';
 import * as shapes from '../../../../shapes';
 import AVMobileCheck from '../../../../AVPlayer/AVMobileCheck';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { isEmpty } from '../../../../../helpers/utils';
+import { DeviceInfoContext } from "../../../../../helpers/app-contexts";
 
 class AVBox extends Component {
+  static contextType = DeviceInfoContext;
   static propTypes = {
     unit: shapes.ContentUnit,
     history: shapes.History.isRequired,
     location: shapes.HistoryLocation.isRequired,
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
-    autoPlayAllowed: PropTypes.bool.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -115,8 +115,9 @@ class AVBox extends Component {
   handleDropdownOpenedChange = isDropdownOpened => this.setState({ isDropdownOpened });
 
   render() {
-    const { t, autoPlayAllowed, uiLanguage }                                           = this.props;
+    const { t, uiLanguage }                                                            = this.props;
     const { playableItem, mediaEditMode, autoPlay, isDropdownOpened, newItemLanguage } = this.state;
+    const { autoPlayAllowed }                                                          = this.context;
 
     if (isEmpty(playableItem)) {
       return (<div>{t('messages.no-playable-files')}</div>);
@@ -152,6 +153,7 @@ class AVBox extends Component {
                   onLanguageChange={this.handleChangeLanguage}
                   onMediaEditModeChange={this.handleMediaEditModeChange}
                   onDropdownOpenedChange={this.handleDropdownOpenedChange}
+                  autoPlayAllowed={autoPlayAllowed}
                 />
               </Media>
             </div>
@@ -163,7 +165,6 @@ class AVBox extends Component {
 }
 
 const mapState = state => ({
-  autoPlayAllowed: device.getAutoPlayAllowed(state.device),
   uiLanguage: settings.getLanguage(state.settings),
   contentLanguage: settings.getContentLanguage(state.settings),
 });

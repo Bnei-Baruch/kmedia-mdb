@@ -11,11 +11,13 @@ import { filtersTransformer } from '../../filters/index';
 import { actions, selectors } from '../../redux/modules/filters';
 import { selectors as mdb } from '../../redux/modules/mdb';
 import { selectors as settings } from '../../redux/modules/settings';
-import { selectors as device } from '../../redux/modules/device';
 import * as shapes from '../shapes';
 import FiltersHydrator from './FiltersHydrator';
+import { DeviceInfoContext } from "../../helpers/app-contexts";
 
 class Filters extends Component {
+  static contextType = DeviceInfoContext;
+
   static propTypes = {
     namespace: PropTypes.string.isRequired,
     filters: PropTypes.arrayOf(shapes.filterPropShape).isRequired,
@@ -27,7 +29,6 @@ class Filters extends Component {
     filtersData: PropTypes.objectOf(PropTypes.object).isRequired,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
-    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -63,8 +64,8 @@ class Filters extends Component {
   };
 
   renderFilters = (store, langDir, popupStyle) => {
-    const { filters, namespace, t, filtersData, language, deviceInfo } = this.props;
-    const { activeFilter }                                             = this.state;
+    const { filters, namespace, t, filtersData, language } = this.props;
+    const { activeFilter }                                 = this.state;
 
     return filters.map((item) => {
       const { component: FilterComponent, name } = item;
@@ -140,7 +141,6 @@ class Filters extends Component {
               onCancel={this.handlePopupClose}
               onApply={x => this.handleApply(name, x)}
               language={language}
-              deviceInfo={deviceInfo}
             />
           </Popup.Content>
         </Popup>
@@ -149,7 +149,8 @@ class Filters extends Component {
   };
 
   render() {
-    const { namespace, onHydrated, t, rightItems, language, deviceInfo } = this.props;
+    const { namespace, onHydrated, t, rightItems, language } = this.props;
+    const { isMobileDevice }                                 = this.context;
 
     const langDir = getLanguageDirection(language);
 
@@ -157,7 +158,7 @@ class Filters extends Component {
       // padding: 0,
       direction: langDir,
     };
-    if (deviceInfo.device && deviceInfo.device.type === 'mobile') {
+    if (isMobileDevice) {
       popupStyle = {
         ...popupStyle,
         // top: 0,
@@ -197,7 +198,6 @@ export default connect(
   (state, ownProps) => ({
     filtersData: selectors.getNSFilters(state.filters, ownProps.namespace),
     language: settings.getLanguage(state.settings),
-    deviceInfo: device.getDeviceInfo(state.device),
 
     // DO NOT REMOVE, this triggers a necessary re-render for filter tags
     sqDataWipErr: mdb.getSQDataWipErr(state.mdb),

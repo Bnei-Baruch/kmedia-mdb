@@ -10,11 +10,12 @@ import { actions, selectors } from '../../redux/modules/publications';
 import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
 
 import SearchResultBase from './SearchResultBase';
+import { DeviceInfoContext } from "../../helpers/app-contexts";
 
 class SearchResultTwitters extends SearchResultBase {
+  static contextType = DeviceInfoContext;
   static propTypes = {
     ...SearchResultBase.propTypes,
-    isMobileDevice: PropTypes.func.isRequired,
     fetchTweets: PropTypes.func.isRequired
   };
 
@@ -24,7 +25,7 @@ class SearchResultTwitters extends SearchResultBase {
   };
 
   componentDidMount() {
-    const pageSize = this.props.isMobileDevice() ? 1 : 3;
+    const pageSize = this.context.isMobileDevice ? 1 : 3;
 
     this.askForData(0, pageSize);
     this.setState({ pageSize });
@@ -117,22 +118,23 @@ class SearchResultTwitters extends SearchResultBase {
   };
 
   render() {
-    const { t, items, tweetIds, isMobileDevice, language } = this.props;
-    const { pageNo, pageSize }                             = this.state;
+    const { t, items, tweetIds, language } = this.props;
+    const { pageNo, pageSize }             = this.state;
+    const { isMobileDevice }               = this.context;
 
     return (
       <Segment className="search__block no-border">
-        <Segment.Group horizontal={!isMobileDevice()} className="no-padding no-margin-top no-border no-shadow">
+        <Segment.Group horizontal={!isMobileDevice} className="no-padding no-margin-top no-border no-shadow">
           <Segment className="no-padding  no-border">
             <Header as="h3" color="blue">{t('home.twitter-title')}</Header>
           </Segment>
-          <Segment textAlign={isMobileDevice() ? 'left' : 'right'} className="no-padding  no-border">
+          <Segment textAlign={isMobileDevice ? 'left' : 'right'} className="no-padding  no-border">
             <a href={`/${language}/publications/twitter`}>{t('home.all-tweets')}</a>
           </Segment>
         </Segment.Group>
         <div className="clear" />
         <Swipeable {...this.getSwipeProps()} >
-          <Card.Group className={`${isMobileDevice() ? 'margin-top-8' : null} search__cards`} itemsPerRow={3} stackable>
+          <Card.Group className={`${isMobileDevice ? 'margin-top-8' : null} search__cards`} itemsPerRow={3} stackable>
             {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).filter(x => x && x.twitter).map(this.renderItem)}
             {pageSize < tweetIds.length ? this.renderScrollLeft() : null}
             {pageSize < tweetIds.length ? this.renderScrollRight() : null}

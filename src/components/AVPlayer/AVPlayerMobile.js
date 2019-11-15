@@ -22,6 +22,8 @@ import AVSpinner from './AVSpinner';
 import playerHelper from '../../helpers/player';
 import { PlayerStartEnum } from "./playerStartEnum";
 import classNames from "classnames";
+import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { withMediaProps } from 'react-media-player';
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
@@ -31,6 +33,8 @@ const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
 const playbackToValue = playback => parseFloat(playback.slice(0, -1));
 
 class AVPlayerMobile extends PureComponent {
+  static contextType = DeviceInfoContext;
+
   static propTypes = {
     t: PropTypes.func.isRequired,
     uiLanguage: PropTypes.string.isRequired,
@@ -56,8 +60,6 @@ class AVPlayerMobile extends PureComponent {
     onFinish: PropTypes.func,
     onPrev: PropTypes.func,
     onNext: PropTypes.func,
-
-    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -156,7 +158,7 @@ class AVPlayerMobile extends PureComponent {
         }
         this.media.autoPlay = true;
         this.setState({ unMuteButton: true });
-        if (this.props.deviceInfo.os.name !== 'iOS') {
+        if (this.context.deviceInfo.os.name !== 'iOS') {
           this.showControls();
         }
       } else {
@@ -300,7 +302,7 @@ class AVPlayerMobile extends PureComponent {
 
   seekTo = (t, force) => {
     this.media.currentTime = t;
-    if (this.props.deviceInfo.browser.name !== 'Samsung Browser') {
+    if (this.context.deviceInfo.browser.name !== 'Samsung Browser') {
       this.setState({ seeking: false });
       return;
     }
@@ -527,4 +529,4 @@ class AVPlayerMobile extends PureComponent {
   }
 }
 
-export default withRouter(withNamespaces()(AVPlayerMobile));
+export default withRouter(withNamespaces()(withMediaProps(AVPlayerMobile)));

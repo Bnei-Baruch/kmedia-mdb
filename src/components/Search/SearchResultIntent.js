@@ -25,13 +25,14 @@ import {
 
 import FallbackImage from '../shared/FallbackImage';
 import SearchResultBase from './SearchResultBase';
+import { DeviceInfoContext } from "../../helpers/app-contexts";
 //fetch 3 items for 4 screens
 let numberOfFetchedUnits = 3 * 4;
 
 class SearchResultIntent extends SearchResultBase {
+  static contextType = DeviceInfoContext;
   static propTypes = {
     ...SearchResultBase.propTypes,
-    isMobileDevice: PropTypes.func.isRequired,
     fetchList: PropTypes.func.isRequired
   };
 
@@ -44,7 +45,7 @@ class SearchResultIntent extends SearchResultBase {
   // initialize on componentWillMount or constructor
   // note that it is used also in redux connect (mapState)
   componentDidMount() {
-    const pageSize       = this.props.isMobileDevice() ? 1 : 3;
+    const pageSize       = this.context.isMobileDevice ? 1 : 3;
     numberOfFetchedUnits = pageSize * 4;
 
     this.askForData(this.props, 0);
@@ -184,8 +185,9 @@ class SearchResultIntent extends SearchResultBase {
   };
 
   render() {
-    const { t, queryResult, hit, rank, items, unitCounter, isMobileDevice }             = this.props;
+    const { t, queryResult, hit, rank, items, unitCounter }                             = this.props;
     const { _index: index, _type: type, _source: { mdb_uid: mdbUid, name }, highlight } = hit;
+    const { isMobileDevice }                                                            = this.context;
 
     const { pageNo, pageSize }            = this.state;
     const { search_result: { searchId } } = queryResult;
@@ -219,7 +221,7 @@ class SearchResultIntent extends SearchResultBase {
           &nbsp;
           <span>{t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`)}</span>
         </Header>
-        <Segment.Group horizontal={!isMobileDevice()} className="no-padding no-margin-top no-border no-shadow">
+        <Segment.Group horizontal={!isMobileDevice} className="no-padding no-margin-top no-border no-shadow">
           <Segment className="no-padding  no-border">
             <Header as="h3" color="blue">
               <Link
@@ -231,7 +233,7 @@ class SearchResultIntent extends SearchResultBase {
               </Link>
             </Header>
           </Segment>
-          <Segment textAlign={isMobileDevice() ? 'left' : 'right'} className="no-padding  no-border">
+          <Segment textAlign={isMobileDevice ? 'left' : 'right'} className="no-padding  no-border">
             <Icon name="tasks" size="small" />
             <Link
               onClick={() => this.logClick(mdbUid, index, type, rank, searchId)}
@@ -243,7 +245,7 @@ class SearchResultIntent extends SearchResultBase {
         </Segment.Group>
         <div className="clear" />
         <Swipeable {...this.getSwipeProps()} >
-          <Card.Group className={`${isMobileDevice() ? 'margin-top-8' : null} search__cards`} itemsPerRow={3} stackable>
+          <Card.Group className={`${isMobileDevice ? 'margin-top-8' : null} search__cards`} itemsPerRow={3} stackable>
             {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).map(this.renderItem)}
             {pageSize < unitCounter ? this.renderScrollLeft() : null}
             {pageSize < unitCounter ? this.renderScrollRight() : null}
