@@ -23,6 +23,7 @@ import playerHelper from '../../helpers/player';
 import { PlayerStartEnum } from "./playerStartEnum";
 import classNames from "classnames";
 import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { withMediaProps } from 'react-media-player';
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
@@ -528,4 +529,4 @@ class AVPlayerMobile extends PureComponent {
   }
 }
 
-export default withRouter(withNamespaces()(AVPlayerMobile));
+export default withRouter(withNamespaces()(withMediaProps(AVPlayerMobile)));

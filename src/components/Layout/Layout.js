@@ -159,7 +159,6 @@ class Layout extends Component {
     const { sidebarActive, embed, isShowHeaderSearch }                                = this.state;
     isMobileDevice                                                                    = this.context.isMobileDevice;
 
-
     const showSearch = shouldShowSearch(location);
 
     let sideBarIcon = <Icon name="sidebar" />;
