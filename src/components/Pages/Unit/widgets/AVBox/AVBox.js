@@ -31,29 +31,28 @@ class AVBox extends Component {
     unit: undefined,
   };
 
-  state = {}
+  static getMediaType = (location) => {
+    const preferredMT = playerHelper.restorePreferredMediaType();
+    const mediaType   = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    
+    return mediaType;
+  }
 
-  static getDerivedStateFromProps(props, state){
+  constructor(props) {
+    super(props);
     const { uiLanguage, contentLanguage, location, history, unit } = props;
-    let { playableItem = {}, autoPlay = true }                     = state;
-    let { language: playerLanguage = contentLanguage, unit: oldUnit } = playableItem;
 
-    const preferredMT      = playerHelper.restorePreferredMediaType();
-    const mediaType        = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const newItemLanguage  = playerHelper.getLanguageFromQuery(location, playerLanguage);
-    const newPlayableItem  = playerHelper.playableItem(unit, mediaType, uiLanguage, newItemLanguage);
+    const mediaType      = AVBox.getMediaType(location);
+    const playerLanguage = playerHelper.getLanguageFromQuery(location, contentLanguage);
+    const playableItem   = playerHelper.playableItem(unit, mediaType, uiLanguage, playerLanguage);
+    
+    this.state = {
+      playableItem,
+      autoPlay: true,
+      newItemLanguage: null
+    };
 
-    if (newItemLanguage !== playerLanguage || !isEqual(unit, oldUnit)) {
-      playerHelper.setLanguageInQuery(history, newItemLanguage);
-
-      return {
-        playableItem: newPlayableItem,
-        autoPlay,
-        newItemLanguage
-      }
-    }
-
-    return null;
+    playerHelper.setLanguageInQuery(history, playerLanguage);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -77,6 +76,20 @@ class AVBox extends Component {
       && oldMediaEditMode === mediaEditMode
       && oldIsDropdownOpened === isDropdownOpened
       && isEqual(unit, oldUnit));
+  }
+
+  componentDidUpdate(prevProps){
+    const { unit, uiLanguage, location } = this.props;
+    const { playableItem }               = this.state;
+    const { language: playerLanguage }   = playableItem;
+
+    const mediaType       = AVBox.getMediaType(location);
+    const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
+    const newPlayableItem = playerHelper.playableItem(unit, mediaType, uiLanguage, newItemLanguage);
+   
+    if (!isEqual(playableItem, newPlayableItem)) {
+      this.setState({ playableItem: newPlayableItem, newItemLanguage });
+    }
   }
 
   handleSwitchAV = () => {
