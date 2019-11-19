@@ -32,11 +32,10 @@ export class UnitPage extends Component {
     location: {}
   };
 
-  state = {};
-
-  UNSAFE_componentWillMount() {
-    const { location } = this.props;
-    this.setState({ embed: playerHelper.getEmbedFromQuery(location) });
+  constructor(props){
+    super(props);
+    const { location } = props;
+    this.state = { embed: playerHelper.getEmbedFromQuery(location) };
   }
 
   renderHelmet() {
