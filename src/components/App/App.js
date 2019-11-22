@@ -13,8 +13,7 @@ import { DeviceInfoContext } from '../../helpers/app-contexts'
 import UAParser from "ua-parser-js";
 
 const App = (props) => {
-  const { i18n, store, history, initialI18nStore, initialLanguage } = props;
-  const deviceInfo = new UAParser().getResult();
+  const { i18n, store, history, initialI18nStore, initialLanguage, deviceInfo } = props;
   const deviceInfoContext =  {
     deviceInfo: deviceInfo,
     isMobileDevice: deviceInfo.device && deviceInfo.device.type === 'mobile',
@@ -41,6 +40,7 @@ App.propTypes = {
   history: shapes.History.isRequired,
   initialI18nStore: PropTypes.object,
   initialLanguage: PropTypes.string,
+  deviceInfo: PropTypes.object.isRequired,
 };
 
 App.defaultProps = {
