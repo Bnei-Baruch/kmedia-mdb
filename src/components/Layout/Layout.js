@@ -23,8 +23,6 @@ import DonateNow from './DonateNow';
 import Logo from '../../images/icons/Logo';
 import { DeviceInfoContext } from "../../helpers/app-contexts";
 
-let isMobileDevice = false;
-
 const RenderHeaderSearch = React.forwardRef(({ t, location }, headerSearchElement) => (
   <div ref={headerSearchElement}>
     <Segment color="blue" inverted className="header_search">
@@ -89,7 +87,7 @@ class Layout extends Component {
     const isShowHeaderSearch = state.isShowHeaderSearch ||
       (
         nextProps.location
-        && isMobileDevice
+        && state.isMobileDevice
         && nextProps.location.pathname.endsWith('search')
       );
 
@@ -157,7 +155,11 @@ class Layout extends Component {
   render() {
     const { t, location, route, language, contentLanguage, setContentLanguage, push } = this.props;
     const { sidebarActive, embed, isShowHeaderSearch }                                = this.state;
-    isMobileDevice                                                                    = this.context.isMobileDevice;
+    const { isMobileDevice }                                                          = this.context;
+
+    if (this.state.isMobileDevice !== isMobileDevice) {
+      this.setState({ isMobileDevice });
+    }
 
     const showSearch = shouldShowSearch(location);
 

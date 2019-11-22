@@ -1,17 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext } from 'react';
 
 import AVPlayerMobile from './AVPlayerMobile';
 import AVPlayer from './AVPlayer';
+import { DeviceInfoContext } from "../../helpers/app-contexts";
 
 const AVMobileCheck = (props) => {
-  return props.autoPlayAllowed
+  const { autoPlayAllowed } = useContext(DeviceInfoContext);
+  return autoPlayAllowed
     ? <AVPlayer {...props} />
     : <AVPlayerMobile {...props} />;
-};
-
-AVMobileCheck.propTypes = {
-  autoPlayAllowed: PropTypes.bool.isRequired,
 };
 
 // withMediaProps is here to make the changes in the media context

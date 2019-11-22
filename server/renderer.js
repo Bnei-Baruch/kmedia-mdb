@@ -143,8 +143,9 @@ export default function serverRender(req, res, next, htmlData) {
 
     const cookies = cookieParse(req.headers.cookie || '');
 
+    const deviceInfo = new UAParser(req.get('user-agent')).getResult();
+
     const initialState = {
-      device: { deviceInfo: new UAParser(req.get('user-agent')).getResult() },
       settings: Object.assign({}, settingsInitialState, {
         language,
         contentLanguage: cookies[COOKIE_CONTENT_LANG],
@@ -189,7 +190,7 @@ export default function serverRender(req, res, next, htmlData) {
             hrstart = process.hrtime();
 
             // actual render
-            const markup = ReactDOMServer.renderToString(<HelmetProvider context={helmetContext}><App i18n={context.i18n} store={store} history={history} /></HelmetProvider>);
+            const markup = ReactDOMServer.renderToString(<HelmetProvider context={helmetContext}><App i18n={context.i18n} store={store} history={history} deviceInfo={deviceInfo} /></HelmetProvider>);
             hrend        = process.hrtime(hrstart);
             console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
             hrstart = process.hrtime();
