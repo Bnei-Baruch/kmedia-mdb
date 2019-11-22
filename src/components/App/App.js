@@ -10,7 +10,6 @@ import ScrollToTop from '../shared/ScrollToTop/ScrollToTop';
 import '../../stylesheets/Kmedia.scss';
 import * as shapes from '../shapes';
 import { DeviceInfoContext } from '../../helpers/app-contexts'
-import UAParser from "ua-parser-js";
 
 const App = (props) => {
   const { i18n, store, history, initialI18nStore, initialLanguage, deviceInfo } = props;
