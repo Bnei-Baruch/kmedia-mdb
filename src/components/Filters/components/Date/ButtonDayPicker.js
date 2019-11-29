@@ -49,10 +49,10 @@ class ButtonDayPicker extends Component {
   localeDateFormatShort = this.localeDateFormat.replace('DD', 'D').replace('MM', 'M');
 
   static getDerivedStateFromProps(props, state) {
-    const { value } = state;
+    const { value, language } = state;
 
     if (props.value !== value ||
-        props.language !== state.language) {
+        props.language !== language) {
       return {
         value: props.value,
         stringValue: ButtonDayPicker.formatDateValue(props.value, props.language),
