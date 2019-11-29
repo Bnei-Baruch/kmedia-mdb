@@ -49,15 +49,22 @@ class ButtonDayPicker extends Component {
   localeDateFormatShort = this.localeDateFormat.replace('DD', 'D').replace('MM', 'M');
 
   static getDerivedStateFromProps(props, state) {
-    const { value } = state;
-    if (props.value !== value) {
-      return { value: props.value, stringValue: ButtonDayPicker.formatDateValue(props.value, props.language) };
+    const { value, language } = state;
+
+    if (props.value !== value ||
+        props.language !== language) {
+      return {
+        value: props.value,
+        stringValue: ButtonDayPicker.formatDateValue(props.value, props.language),
+        language: props.language,
+        langDir: getLanguageDirection(props.language),
+        locale: getLanguageLocaleWORegion(props.language),
+      };
     }
     return null;
   }
 
-  static formatDateValue(date, language) {
-    const locale = getLanguageLocaleWORegion(language);
+  static formatDateValue(date, locale) {
     return date ? formatDate(date, 'l', locale) : '';
   }
 
@@ -139,8 +146,9 @@ class ButtonDayPicker extends Component {
     if (date > today().add(1, 'days').toDate()) {
       return;
     }
-    const { onDayChange, language } = this.props;
-    this.setState({ stringValue: ButtonDayPicker.formatDateValue(date, language) });
+    const { onDayChange } = this.props;
+    const { locale } = this.state;
+    this.setState({ stringValue: ButtonDayPicker.formatDateValue(date, locale) });
     onDayChange(date);
     this.closePopup();
   };
@@ -160,11 +168,9 @@ class ButtonDayPicker extends Component {
   };
 
   render() {
-    const { language, t, value, label }                           = this.props;
-    const { month, isPopupOpen, isNativePopupOpen, selectedDate } = this.state;
-    const { deviceInfo, isMobileDevice }                          = this.context;
-
-    const locale = getLanguageLocaleWORegion(language);
+    const { language, t, value, label }                                            = this.props;
+    const { month, isPopupOpen, isNativePopupOpen, selectedDate, langDir, locale } = this.state;
+    const { deviceInfo, isMobileDevice }                                           = this.context;
 
     if (isMobileDevice) {
       const selected         = selectedDate || value;
@@ -198,7 +204,7 @@ class ButtonDayPicker extends Component {
             dateButton
           }
         >
-          <Modal.Content dir={getLanguageDirection(language)}>
+          <Modal.Content dir={langDir}>
             <Input
               fluid
               size="small"
@@ -237,7 +243,7 @@ class ButtonDayPicker extends Component {
           </Button>
         }
       >
-        <Popup.Content dir={getLanguageDirection(language)}>
+        <Popup.Content dir={langDir}>
           <DayPicker
             locale={locale}
             localeUtils={MomentLocaleUtils}
