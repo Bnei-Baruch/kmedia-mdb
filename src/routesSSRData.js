@@ -69,36 +69,30 @@ export const cuPage = (store, match) => {
     });
 };
 
-const getExtraFetchParams = (ns, collectionID) => {
-  switch (ns) {
-  case 'programs-main':
-    return { content_type: [CT_VIDEO_PROGRAM_CHAPTER] };
-  case 'programs-clips':
-    return { content_type: [CT_CLIP] };
-  case 'publications-articles':
-    return { content_type: [CT_ARTICLE] };
-  case 'events-meals':
-    return { content_type: [CT_MEAL] };
-  case 'events-friends-gatherings':
-    return { content_type: [CT_FRIENDS_GATHERING] };
-  case 'lessons-virtual':
-    return { content_type: [CT_VIRTUAL_LESSON] };
-  case 'lessons-lectures':
-    return { content_type: [CT_LECTURE] };
-  case 'lessons-women':
-    return { content_type: [CT_WOMEN_LESSON] };
-  case 'lessons-rabash':
-    return { content_type: [CT_LESSON_PART], person: RABASH_PERSON_UID };
-    // case 'lessons-children':
-    //   return { content_type: [CT_CHILDREN_LESSON] };
-  default:
+const getExtraFetchParams            = (ns, collectionID) => {
+  let value = getExtraFetchParams.extraFetchParams.get(ns);
+  if (value === undefined) {
     if (collectionID) {
-      return { collection: collectionID };
+      value = { collection: collectionID };
+    } else {
+      value = {};
     }
   }
 
-  return {};
+  return value;
 };
+getExtraFetchParams.extraFetchParams = new Map([
+  ['programs-main', { content_type: [CT_VIDEO_PROGRAM_CHAPTER] }],
+  ['programs-clips', { content_type: [CT_CLIP] }],
+  ['publications-articles', { content_type: [CT_ARTICLE] }],
+  ['events-meals', { content_type: [CT_MEAL] }],
+  ['events-friends-gatherings', { content_type: [CT_FRIENDS_GATHERING] }],
+  ['lessons-virtual', { content_type: [CT_VIRTUAL_LESSON] }],
+  ['lessons-lectures', { content_type: [CT_LECTURE] }],
+  ['lessons-women', { content_type: [CT_WOMEN_LESSON] }],
+  ['lessons-rabash', { content_type: [CT_LESSON_PART], person: RABASH_PERSON_UID }],
+  // ['lessons-children': { content_type: [CT_CHILDREN_LESSON] }],
+]);
 
 export const cuListPage = (ns, collectionID = 0) => (store, match) => {
   // hydrate filters
@@ -135,11 +129,11 @@ export const playlistCollectionPage = (store, match) => {
       // I don't think we need all files of every unit. Just for active one.
 
       const c = mdbSelectors.getCollectionById(store.getState().mdb, cID);
-      if (typeof c !== "undefined") {
+      if (typeof c !== 'undefined') {
         c.cuIDs.forEach((cuID) => {
           store.dispatch(mdbActions.fetchUnit(cuID));
         });
-      };
+      }
     });
 };
 
@@ -300,6 +294,13 @@ export const libraryPage = async (store, match) => {
     });
 };
 
+const tweetUserName = new Map([
+  [LANG_HEBREW, 'laitman_co_il'],
+  [LANG_UKRAINIAN, 'Michael_Laitman'],
+  [LANG_RUSSIAN, 'Michael_Laitman'],
+  [LANG_SPANISH, 'laitman'],
+]);
+
 export const tweetsListPage = (store, match) => {
   // hydrate filters
   store.dispatch(filtersActions.hydrateFilters('publications-twitter'));
@@ -314,22 +315,7 @@ export const tweetsListPage = (store, match) => {
   const language = settingsSelectors.getLanguage(state.settings);
 
   // extraFetchParams
-  let extraFetchParams;
-  switch (language) {
-  case LANG_HEBREW:
-    extraFetchParams = { username: 'laitman_co_il' };
-    break;
-  case LANG_UKRAINIAN:
-  case LANG_RUSSIAN:
-    extraFetchParams = { username: 'Michael_Laitman' };
-    break;
-  case LANG_SPANISH:
-    extraFetchParams = { username: 'laitman_es' };
-    break;
-  default:
-    extraFetchParams = { username: 'laitman' };
-    break;
-  }
+  let extraFetchParams = { username: tweetUserName.get(language) || 'laitman' };
 
   // dispatch fetchData
   store.dispatch(publicationsActions.fetchTweets('publications-twitter', page, { ...extraFetchParams, pageSize }));
@@ -345,6 +331,13 @@ export const topicsPage = (store, match) => {
   ]);
 };
 
+const blogName = new Map([
+  [LANG_HEBREW, 'laitman-co-il'],
+  [LANG_UKRAINIAN, 'laitman-ru'],
+  [LANG_RUSSIAN, 'laitman-ru'],
+  [LANG_SPANISH, 'laitman-es'],
+]);
+
 export const blogListPage = (store, match) => {
   // hydrate filters
   store.dispatch(filtersActions.hydrateFilters('publications-blog'));
@@ -358,23 +351,7 @@ export const blogListPage = (store, match) => {
   const pageSize = settingsSelectors.getPageSize(state.settings);
   const language = settingsSelectors.getLanguage(state.settings);
 
-  // extraFetchParams
-  let extraFetchParams;
-  switch (language) {
-  case LANG_HEBREW:
-    extraFetchParams = { blog: 'laitman-co-il' };
-    break;
-  case LANG_UKRAINIAN:
-  case LANG_RUSSIAN:
-    extraFetchParams = { blog: 'laitman-ru' };
-    break;
-  case LANG_SPANISH:
-    extraFetchParams = { blog: 'laitman-es' };
-    break;
-  default:
-    extraFetchParams = { blog: 'laitman-com' };
-    break;
-  }
+  const extraFetchParams = {blog: blogName.get(language) || 'laitman-com'};
 
   // dispatch fetchData
   store.dispatch(publicationsActions.fetchBlogList('publications-blog', page, { ...extraFetchParams, pageSize }));

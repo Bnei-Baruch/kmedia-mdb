@@ -154,54 +154,41 @@ class SearchResultBase extends Component {
     );
   };
 
+  static iconByCT   = new Map([
+    [CT_LESSON_PART, 'lessons'],
+    [CT_FULL_LESSON, 'lessons'],
+    [CT_VIRTUAL_LESSON, 'lessons'],
+    [CT_WOMEN_LESSON, 'lessons'],
+    [CT_CHILDREN_LESSON, 'lessons'],
+    [CT_LELO_MIKUD, 'lessons'],
+    [CT_DAILY_LESSON, 'lessons'],
+    [CT_SPECIAL_LESSON, 'lessons'],
+    [CT_LECTURE_SERIES, 'lessons'],
+    [CT_CHILDREN_LESSONS, 'lessons'],
+    [CT_WOMEN_LESSONS, 'lessons'],
+    [CT_VIRTUAL_LESSONS, 'lessons'],
+    [CT_LESSONS_SERIES, 'lessons'],
+    [CT_FRIENDS_GATHERING, 'events'],
+    [CT_MEAL, 'events'],
+    [CT_EVENT_PART, 'events'],
+    [CT_TRAINING, 'events'],
+    [CT_UNITY_DAY, 'events'],
+    [CT_FRIENDS_GATHERINGS, 'events'],
+    [CT_CONGRESS, 'events'],
+    [CT_MEALS, 'events'],
+    [CT_HOLIDAY, 'events'],
+    [CT_PICNIC, 'events'],
+    [CT_ARTICLE, 'publications'],
+    [CT_ARTICLES, 'publications'],
+    [CT_BLOG_POST, 'publications'],
+    [CT_VIDEO_PROGRAM_CHAPTER, 'programs'],
+    [CT_CLIP, 'programs'],
+    [CT_VIDEO_PROGRAM, 'programs'],
+    [CT_CLIPS, 'programs'],
+    ['sources', 'sources'],
+  ]);
   iconByContentType = (type, withTitle) => {
-    let icon;
-
-    switch (type) {
-    case CT_LESSON_PART:
-    case CT_FULL_LESSON:
-    case CT_VIRTUAL_LESSON:
-    case CT_WOMEN_LESSON:
-    case CT_CHILDREN_LESSON:
-    case CT_LELO_MIKUD:
-    case CT_DAILY_LESSON:
-    case CT_SPECIAL_LESSON:
-    case CT_LECTURE_SERIES:
-    case CT_CHILDREN_LESSONS:
-    case CT_WOMEN_LESSONS:
-    case CT_VIRTUAL_LESSONS:
-    case CT_LESSONS_SERIES:
-      icon = 'lessons';
-      break;
-    case CT_FRIENDS_GATHERING:
-    case CT_MEAL:
-    case CT_EVENT_PART:
-    case CT_TRAINING:
-    case CT_UNITY_DAY:
-    case CT_FRIENDS_GATHERINGS:
-    case CT_CONGRESS:
-    case CT_MEALS:
-    case CT_HOLIDAY:
-    case CT_PICNIC:
-      icon = 'events';
-      break;
-    case CT_ARTICLE:
-    case CT_ARTICLES:
-    case CT_BLOG_POST:
-      icon = 'publications';
-      break;
-    case CT_VIDEO_PROGRAM_CHAPTER:
-    case CT_CLIP:
-    case CT_VIDEO_PROGRAM:
-    case CT_CLIPS:
-      icon = 'programs';
-      break;
-    case 'sources':
-      icon = 'sources';
-      break;
-    default:
-      return null;
-    }
+    const icon = SearchResultBase.iconByCT.get(type);
 
     if (!withTitle) {
       return (
