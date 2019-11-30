@@ -6,11 +6,11 @@ import { withNamespaces } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
 import { push } from 'connected-react-router';
 import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
+import Headroom from 'react-headroom';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
 import playerHelper from '../../helpers/player';
 import { actions, selectors as settings } from '../../redux/modules/settings';
-import { selectors as device } from '../../redux/modules/device';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import WrappedOmniBox from '../Search/OmniBox';
@@ -21,8 +21,7 @@ import Footer from './Footer';
 import TopMost from './TopMost';
 import DonateNow from './DonateNow';
 import Logo from '../../images/icons/Logo';
-
-let isMobileDevice = false;
+import { DeviceInfoContext } from "../../helpers/app-contexts";
 
 const RenderHeaderSearch = React.forwardRef(({ t, location }, headerSearchElement) => (
   <div ref={headerSearchElement}>
@@ -53,6 +52,8 @@ const showSearchButtonElement = createRef();
 const headerSearchElement = createRef();
 
 class Layout extends Component {
+  static contextType = DeviceInfoContext;
+
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
     route: shapes.Route.isRequired,
@@ -65,9 +66,8 @@ class Layout extends Component {
 
   constructor(props) {
     super(props);
-    const { deviceInfo, location } = props;
-    isMobileDevice                 = deviceInfo.device && deviceInfo.device.type === 'mobile';
-    this.state                     = {
+    const { location } = props;
+    this.state         = {
       sidebarActive: false,
       isShowHeaderSearch: false,
       embed: playerHelper.getEmbedFromQuery(location),
@@ -84,12 +84,12 @@ class Layout extends Component {
       return null;
     }
 
-    const isShowHeaderSearch = state.isShowHeaderSearch || 
-    (
-      nextProps.location
-      && isMobileDevice
-      && nextProps.location.pathname.endsWith('search')
-    );
+    const isShowHeaderSearch = state.isShowHeaderSearch ||
+      (
+        nextProps.location
+        && state.isMobileDevice
+        && nextProps.location.pathname.endsWith('search')
+      );
 
     return { isShowHeaderSearch, pathname: nextProps.pathname };
   }
@@ -155,6 +155,11 @@ class Layout extends Component {
   render() {
     const { t, location, route, language, contentLanguage, setContentLanguage, push } = this.props;
     const { sidebarActive, embed, isShowHeaderSearch }                                = this.state;
+    const { isMobileDevice }                                                          = this.context;
+
+    if (this.state.isMobileDevice !== isMobileDevice) {
+      this.setState({ isMobileDevice });
+    }
 
     const showSearch = shouldShowSearch(location);
 
@@ -170,7 +175,7 @@ class Layout extends Component {
         </div>
       );
     }
-    
+
     return (
       <div className="layout">
         {/* <div className="debug">
@@ -181,59 +186,64 @@ class Layout extends Component {
           <span className="mobile-only">mobile</span>
         </div> */}
         <GAPageView location={location} />
-        <div className="layout__header">
-          <Menu inverted borderless size="huge" color="blue">
-            <div ref={menuButtonElement1}>
-              <Menu.Item
-                icon
-                as="a"
-                className="layout__sidebar-toggle"
-                onClick={this.toggleSidebar}
-              >
-                {sideBarIcon}
-              </Menu.Item>
+        <div className="headroom-z-index-801">
+
+          <Headroom>
+            <div className="layout__header">
+              <Menu inverted borderless size="huge" color="blue">
+                <div ref={menuButtonElement1}>
+                  <Menu.Item
+                    icon
+                    as="a"
+                    className="layout__sidebar-toggle"
+                    onClick={this.toggleSidebar}
+                  >
+                    {sideBarIcon}
+                  </Menu.Item>
+                </div>
+                <Menu.Item className="logo" header as={Link} to="/">
+                  <Logo width="40" height="40" />
+                  <Header inverted as="h1" content={t('nav.top.header')} />
+                </Menu.Item>
+                <Menu.Item className="layout__search mobile-hidden">
+                  {
+                    showSearch
+                      ? <WrappedOmniBox location={location} />
+                      : null
+                  }
+                </Menu.Item>
+                <Menu.Menu position="right" className="no-padding no-margin">
+                  <Menu.Item className="no-margin">
+                    <HandleLanguages
+                      language={language}
+                      contentLanguage={contentLanguage}
+                      setContentLanguage={setContentLanguage}
+                      location={location}
+                      push={push}
+                    />
+                  </Menu.Item>
+                  {
+                    showSearch && isMobileDevice
+                      ? (
+                        <Ref innerRef={showSearchButtonElement}>
+                          <Menu.Item as="a" position="right">
+                            <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
+                          </Menu.Item>
+                        </Ref>
+                      )
+                      : null
+                  }
+                  <Menu.Item position="right" className="mobile-hidden">
+                    <DonateNow language={language} />
+                  </Menu.Item>
+                  <TopMost />
+                </Menu.Menu>
+              </Menu>
             </div>
-            <Menu.Item className="logo" header as={Link} to="/">
-              <Logo width="40" height="40" />
-              <Header inverted as="h1" content={t('nav.top.header')} />
-            </Menu.Item>
-            <Menu.Item className="layout__search mobile-hidden">
-              {
-                showSearch
-                  ? <WrappedOmniBox location={location} />
-                  : null
-              }
-            </Menu.Item>
-            <Menu.Menu position="right" className="no-padding no-margin">
-              <Menu.Item className="no-margin">
-                <HandleLanguages
-                  language={language}
-                  contentLanguage={contentLanguage}
-                  setContentLanguage={setContentLanguage}
-                  location={location}
-                  isMobile={isMobileDevice}
-                  push={push}
-                />
-              </Menu.Item>
-              {
-                showSearch && isMobileDevice
-                  ? (
-                    <Ref innerRef={showSearchButtonElement}>
-                      <Menu.Item as="a" position="right">
-                        <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
-                      </Menu.Item>
-                    </Ref>
-                  )
-                  : null
-              }
-              <Menu.Item position="right" className="mobile-hidden">
-                <DonateNow language={language} />
-              </Menu.Item>
-              <TopMost />
-            </Menu.Menu>
-          </Menu>
+
+            {isShowHeaderSearch && <RenderHeaderSearch t={t} location={location} ref={headerSearchElement} />}
+          </Headroom>
         </div>
-        {isShowHeaderSearch && <RenderHeaderSearch t={t} location={location} ref={headerSearchElement} />}
         <div
           className={classnames('layout__sidebar', { 'is-active': sidebarActive })}
           ref={(el) => {
@@ -275,7 +285,6 @@ export default connect(
   state => ({
     language: settings.getLanguage(state.settings),
     contentLanguage: settings.getContentLanguage(state.settings),
-    deviceInfo: device.getDeviceInfo(state.device),
   }),
   {
     setContentLanguage: actions.setContentLanguage,

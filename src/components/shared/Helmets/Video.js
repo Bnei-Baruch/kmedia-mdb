@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Helmet from 'react-helmet-async';
+import { Helmet } from 'react-helmet-async';
 import { isEmpty } from '../../../helpers/utils';
 
-const Video = ({ url, releaseDate, duration, mimetype, width, height, /* tags, */ }) => {
+const Video = ({ url, releaseDate = undefined, duration = undefined, mimetype = undefined, width = undefined, height = undefined, /* tags, */ }) => {
   // tv_show - to be used in the main page of tv show.
   // episode - to be used for a specific episode
   // video:series - a url to the tv show
@@ -37,14 +37,6 @@ Video.propTypes = {
   mimetype: PropTypes.string,
   width: PropTypes.number,
   height: PropTypes.number,
-};
-
-Video.defaultProps = {
-  releaseDate: undefined,
-  duration: undefined,
-  mimetype: undefined,
-  width: undefined,
-  height: undefined,
 };
 
 export default Video;

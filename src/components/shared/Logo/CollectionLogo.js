@@ -5,7 +5,7 @@ import { assetUrl } from '../../../helpers/Api';
 import FallbackImage from '../FallbackImage';
 
 const CollectionLogo = (props) => {
-  const { collectionId, ...rest } = props;
+  const { collectionId = null, ...rest } = props;
 
   return (
     <FallbackImage
@@ -20,10 +20,6 @@ const CollectionLogo = (props) => {
 
 CollectionLogo.propTypes = {
   collectionId: PropTypes.string,
-};
-
-CollectionLogo.defaultProps = {
-  collectionId: null,
 };
 
 export default CollectionLogo;

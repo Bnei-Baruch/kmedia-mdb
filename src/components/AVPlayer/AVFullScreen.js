@@ -1,57 +1,44 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import fscreen from 'fscreen';
 import { Icon } from 'semantic-ui-react';
 
-class AVFullscreen extends Component {
-  static propTypes = {
-    element: PropTypes.object,
+const AVFullscreen = ({ element = null }) => {
+  const [fullScreen, setFullScreen] = useState(false);
+
+  useEffect(() => {
+    fscreen.addEventListener('fullscreenchange', fullScreenChange);
+    return () => fscreen.removeEventListener('fullscreenchange', fullScreenChange);
+  });
+
+  const fullScreenChange = () => {
+    setFullScreen(isFullScreenElement());
   };
 
-  static defaultProps = {
-    element: null,
-  };
+  const isFullScreenElement = () => fscreen.fullscreenElement !== null;
 
-  state = {
-    fullScreen: false,
-  };
-
-  componentDidMount() {
-    fscreen.addEventListener('fullscreenchange', this.fullScreenChange);
-  }
-
-  componentWillUnmount() {
-    fscreen.removeEventListener('fullscreenchange', this.fullScreenChange);
-  }
-
-  fullScreenChange = () => {
-    this.setState({ fullScreen: this.isFullScreenElement() });
-  };
-
-  isFullScreenElement = () => fscreen.fullscreenElement !== null;
-
-  handleFullscreen = () => {
-    if (this.isFullScreenElement()) {
+  const handleFullscreen = () => {
+    if (isFullScreenElement()) {
       fscreen.exitFullscreen();
     } else {
-      fscreen.requestFullscreen(this.props.element);
+      fscreen.requestFullscreen(element);
     }
   };
 
-  render() {
-    const { element }    = this.props;
-    const { fullScreen } = this.state;
-    return (
-      <button
-        type="button"
-        className="player-button player-control-fullscreen"
-        disabled={!element || !fscreen.fullscreenEnabled}
-        onClick={this.handleFullscreen}
-      >
-        <Icon name={fullScreen ? 'compress' : 'expand'} />
-      </button>
-    );
-  }
-}
+  return (
+    <button
+      type="button"
+      className="player-button player-control-fullscreen"
+      disabled={!element || !fscreen.fullscreenEnabled}
+      onClick={handleFullscreen}
+    >
+      <Icon name={fullScreen ? 'compress' : 'expand'} />
+    </button>
+  );
+};
+
+AVFullscreen.propTypes = {
+  element: PropTypes.object,
+};
 
 export default AVFullscreen;

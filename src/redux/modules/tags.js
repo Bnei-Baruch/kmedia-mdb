@@ -2,7 +2,7 @@ import { createAction } from 'redux-actions';
 import identity from 'lodash/identity';
 
 import { tracePath } from '../../helpers/utils';
-import { canonicalLink } from '../../helpers/links';
+import { canonicalContentType, canonicalLink } from '../../helpers/links';
 import { TOPICS_FOR_DISPLAY } from '../../helpers/consts';
 import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
@@ -55,6 +55,7 @@ const initialState = {
   wip: false,
   error: null,
   getByID: identity,
+  counts: [],
   sections: [],
   units: [],
   cuBySection: {},
@@ -85,6 +86,7 @@ const onSSRPrepare = draft => {
   draft.wip             = false;
   draft.getByID         = identity;
   draft.getPathByID     = () => [];
+  draft.counts          = [];
   draft.sections        = [];
   draft.units           = [];
   draft.cuBySection     = {};
@@ -132,7 +134,7 @@ const onDashboard = draft => {
 };
 
 const onDashboardSuccess = (draft, { data }) => {
-  const { latest_units: latestUnits /* promoted_units */ } = data;
+  const { latest_units: latestUnits, counts /* promoted_units */ } = data;
 
   if (!Array.isArray(latestUnits)) {
     return;
@@ -153,8 +155,15 @@ const onDashboardSuccess = (draft, { data }) => {
   const getSectionUnits   = section => cuBySection[section];
   const uniqueSectionsArr = [...new Set(latestUnits.map(u => getSectionOfUnit(u)).filter(x => !!x))].sort();
 
+  const getCounts = section => {
+    const contentTypes = canonicalContentType(section);
+    return contentTypes.map(c => counts[c] || 0).reduce((acc, c) => acc + c) || 0;
+  };
+
   draft.wip             = false;
   draft.error           = null;
+  draft.counts          = counts;
+  draft.getCounts       = getCounts;
   draft.sections        = uniqueSectionsArr;
   draft.units           = latestUnits;
   draft.cuBySection     = cuBySection;
@@ -164,6 +173,7 @@ const onDashboardSuccess = (draft, { data }) => {
 const onSetLanguage = draft => {
   draft.wip             = false;
   draft.getByID         = identity;
+  draft.counts          = [];
   draft.sections        = [];
   draft.units           = [];
   draft.cuBySection     = {};
@@ -192,6 +202,7 @@ export const reducer = handleActions({
 
 const getTags         = state => state.byId;
 const getRoots        = state => state.roots;
+const getCounts       = state => state.getCounts;
 const getDisplayRoots = state => state.displayRoots;
 const getTagById      = state => state.getByID;
 const getPath         = state => state.getPath;
@@ -207,6 +218,7 @@ export const selectors = {
   getError,
   getTags,
   getRoots,
+  getCounts,
   getDisplayRoots,
   getTagById,
   getPath,

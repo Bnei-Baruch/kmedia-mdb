@@ -45,7 +45,7 @@ const filters = {
     { name: 'date-filter', component: filterComponents.DateFilter },
   ],
   'programs-main': [
-    { name: 'programs-filter', component: filterComponents.ProgramsFilter },
+    { name: 'collections-filter', component: filterComponents.CollectionsFilter },
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'sources-filter', component: filterComponents.SourcesFilter },
     { name: 'date-filter', component: filterComponents.DateFilter }
@@ -67,6 +67,7 @@ const filters = {
   'publications-articles': [
     { name: 'collections-filter', component: filterComponents.CollectionsFilter },
     { name: 'publishers-filter', component: filterComponents.PublishersFilter },
+    { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'date-filter', component: filterComponents.DateFilter }
   ],
   'publications-collection': [

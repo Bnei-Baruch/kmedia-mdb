@@ -61,9 +61,6 @@ class SameCollection extends Component {
                 <Item.Content verticalAlign="top">
                   <Header as="h5">
                     <small className="text grey uppercase recommended-same-collection__item-title">
-                      {t(`${section || 'pages'}.unit.recommended.same-collection.item-title`, { name: collection.ccuNames[part.id] })}
-                      {' '}
-                      -
                       {t('values.date', { date: part.film_date })}
                     </small>
                     <br />
@@ -71,9 +68,13 @@ class SameCollection extends Component {
                       {part.name}
                     </span>
                   </Header>
-                  <Item.Meta>
-                    <small>{formatDuration(part.duration)}</small>
-                  </Item.Meta>
+                  {
+                    part.duration && (
+                      <Item.Meta>
+                        <small>{formatDuration(part.duration)}</small>
+                      </Item.Meta>
+                    )
+                  }
                 </Item.Content>
               </Item>
             ))

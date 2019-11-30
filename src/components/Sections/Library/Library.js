@@ -1,150 +1,168 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { withRouter } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Container, Portal, Segment } from 'semantic-ui-react';
-import isEqual from 'react-fast-compare';
 
+import { selectors } from '../../../redux/modules/assets';
 import { assetUrl } from '../../../helpers/Api';
-import { formatError, isEmpty } from '../../../helpers/utils';
-import * as shapes from '../../shapes';
-import { ErrorSplash, FrownSplash, LoadingSplash } from '../../shared/Splash/Splash';
+import { isEmpty } from '../../../helpers/utils';
 import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
 import PDF from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { updateQuery } from '../../../helpers/url';
 import withPagination from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
+import WipErr from '../../shared/WipErr/WipErr';
 
-class Library extends Component {
-  static propTypes = {
-    content: PropTypes.shape({
-      data: PropTypes.string, // actual content (HTML)
-      wip: shapes.WIP,
-      err: shapes.Error,
-    }),
-    isTaas: PropTypes.bool.isRequired,
-    pdfFile: PropTypes.string,
-    startsFrom: PropTypes.number,
-    language: PropTypes.string,
-    languages: PropTypes.arrayOf(PropTypes.string),
-    langSelectorMount: PropTypes.instanceOf(PropTypes.element),
-    t: PropTypes.func.isRequired,
-    handleLanguageChanged: PropTypes.func.isRequired,
-    history: shapes.History.isRequired,
-    fullUrlPath: PropTypes.string,
-    downloadAllowed: PropTypes.bool.isRequired,
-  };
 
-  static defaultProps = {
-    language: null,
-    languages: [],
-    langSelectorMount: null,
-    content: {
-      data: null,
-      wip: false,
-      err: null,
-    },
-    pdfFile: null,
-    startsFrom: 1,
-    fullUrlPath: null,
-  };
-
-  constructor(props) {
-    super(props);
-
-    const { history: { location } } = props;
-    const pageNumber                = withPagination.getPageFromLocation(location);
-
-    this.state = { pageNumber };
+export const checkRabashGroupArticles = (source) => {
+  let id = source;
+  if (/^gr-/.test(id)) { // Rabash Group Articles
+    const result = /^gr-(.+)/.exec(id);
+    id = result[1];
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const { props, state } = this;
-    return !isEqual(props, nextProps) || !isEqual(state, nextState);
+  return id;
+}
+
+const getFullUrl = (pdfFile, data, language, source) => {
+  if (pdfFile) {
+    return assetUrl(`sources/${pdfFile}`);
   }
 
-  pageNumberHandler = (pageNumber) => {
-    const { history } = this.props;
-    this.setState({ pageNumber });
+  if (isEmpty(data) || isEmpty(data[language])) {
+    return null;
+  }
+
+  const id = checkRabashGroupArticles(source);
+
+  return assetUrl(`sources/${id}/${data[language].docx}`);
+};
+
+
+const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, pdfFile, startsFrom, t) => {
+  const { wip, err, data: contentData } = content;
+
+  const wipErr = WipErr({ wip, err, t });
+  if (wipErr) {
+    return wipErr;
+  }
+  
+  if (pdfFile) {
+    return (
+      <PDF
+        pdfFile={assetUrl(`sources/${pdfFile}`)}
+        pageNumber={pageNumber || 1}
+        startsFrom={startsFrom}
+        pageNumberHandler={pageNumberHandler}
+      />
+    );
+  } else if (contentData) {
+    const direction = getLanguageDirection(language);
+
+    return (
+      <div
+        style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
+        dangerouslySetInnerHTML={{ __html: contentData }}
+      />
+    );
+  } else {
+    return null;
+  }
+};
+
+const Library = (props) => {
+  const location                    = useLocation();
+  const history                     = useHistory();
+  const [pageNumber, setPageNumber] = useState(withPagination.getPageFromLocation(location));
+
+  const
+    {
+      data,
+      source,
+      language          = null,
+      languages         = [],
+      langSelectorMount = null,
+      downloadAllowed,
+      t,
+    } = props;
+
+  const content = useSelector(state => selectors.getAsset(state.assets)); 
+
+  if (!data) {
+    return <Segment basic>&nbsp;</Segment>;
+  }
+
+  const startsFrom = PDF.startsFrom(source) || 1;
+  const isTaas     = PDF.isTaas(source);
+  
+  let pdfFile;
+  if (data && isTaas){
+    const langData = data[language];
+
+    if (langData && langData.pdf) {
+      pdfFile = `${source}/${langData.pdf}`;
+    }
+  }
+
+  const pageNumberHandler = pageNumber => {
+    setPageNumber(pageNumber);
     updateQuery(history, query => ({
       ...query,
       page: pageNumber,
     }));
   };
 
-  render() {
-    const { content, language, languages, t, isTaas, langSelectorMount, fullUrlPath } = this.props;
+  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, startsFrom, t);
+  if (contentsToDisplay === null) {
+    return <Segment basic>{t('sources-library.no-source')}</Segment>;
+  }
 
-    if (isEmpty(content)) {
-      return <Segment basic>&nbsp;</Segment>;
-    }
-
-    const direction = getLanguageDirection(language);
-
-    // PDF.js will fetch file by itself
-    const { pdfFile, startsFrom, downloadAllowed } = this.props;
-    const usePdfFile                               = isTaas && pdfFile;
-    const mimeType                                 = usePdfFile ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-    const { pageNumber }                           = this.state;
-    let contentsToDisplay;
-
-    const { wip: contentWip, err: contentErr, data: contentData } = content;
-
-    if (contentErr) {
-      if (contentErr.response && contentErr.response.status === 404) {
-        contentsToDisplay = <FrownSplash text={t('messages.source-content-not-found')} />;
-      } else {
-        contentsToDisplay = <ErrorSplash text={t('messages.server-error')} subtext={formatError(contentErr)} />;
-      }
-    } else if (contentWip) {
-      contentsToDisplay = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-    } else if (usePdfFile) {
-      contentsToDisplay = (
-        <PDF
-          pdfFile={assetUrl(`sources/${pdfFile}`)}
-          pageNumber={pageNumber || 1}
-          startsFrom={startsFrom}
-          pageNumberHandler={this.pageNumberHandler}
+  let languageBar = null;
+  if (languages.length > 0) {
+    const { handleLanguageChanged } = props;
+    languageBar                     = (
+      <Container fluid textAlign="right">
+        <AnchorsLanguageSelector
+          languages={languages}
+          defaultValue={language}
+          onSelect={handleLanguageChanged}
         />
-      );
-    } else if (contentData) {
-      contentsToDisplay = (
-        <div
-          style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
-          dangerouslySetInnerHTML={{ __html: contentData }}
-        />
-      );
-    } else {
-      return <Segment basic>{t('sources-library.no-source')}</Segment>;
-    }
-
-    let languageBar = null;
-    if (languages.length > 0) {
-      const { handleLanguageChanged } = this.props;
-      languageBar                     = (
-        <Container fluid textAlign="right">
-          <AnchorsLanguageSelector
-            languages={languages}
-            defaultValue={language}
-            onSelect={handleLanguageChanged}
-          />
-        </Container>
-      );
-    }
-
-    return (
-      <div>
-        {
-          langSelectorMount && languageBar
-            ? <Portal open preprend mountNode={langSelectorMount}>{languageBar}</Portal>
-            : languageBar
-        }
-        <Download path={fullUrlPath} mimeType={mimeType} downloadAllowed={downloadAllowed}  />
-        {contentsToDisplay}
-      </div>
+      </Container>
     );
   }
-}
 
-export default withRouter(withNamespaces()(Library));
+  const fullUrlPath = getFullUrl(pdfFile, data, language, source);
+  
+  // PDF.js will fetch file by itself
+  const mimeType = pdfFile 
+    ? 'application/pdf' 
+    : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+  return (
+    <div>
+      {
+        langSelectorMount && languageBar
+          ? <Portal open preprend mountNode={langSelectorMount}>{languageBar}</Portal>
+          : languageBar
+      }
+      <Download path={fullUrlPath} mimeType={mimeType} downloadAllowed={downloadAllowed} />
+      {contentsToDisplay}
+    </div>
+  );
+};
+
+Library.propTypes = {
+  source: PropTypes.string,
+  data: PropTypes.any,
+  language: PropTypes.string,
+  languages: PropTypes.arrayOf(PropTypes.string),
+  langSelectorMount: PropTypes.instanceOf(PropTypes.element),
+  handleLanguageChanged: PropTypes.func.isRequired,
+  downloadAllowed: PropTypes.bool.isRequired,
+  t: PropTypes.func.isRequired,
+};
+
+export default withNamespaces()(Library);

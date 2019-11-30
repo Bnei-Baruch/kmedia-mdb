@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
@@ -6,12 +6,12 @@ import { Menu } from 'semantic-ui-react';
 
 import { actions as lessonsActions } from '../../../redux/modules/lessons';
 import { actions as filterActions } from '../../../redux/modules/filters';
-import * as shapes from '../../shapes';
 import NavLink from '../../Language/MultiLanguageNavLink';
 import SectionHeader from '../../shared/SectionHeader';
 import Daily from './tabs/Daily/Container';
 import Series from './tabs/Series/Container';
 import Lectures from './tabs/Lectures/Container';
+import { useLocation, useParams } from 'react-router';
 
 // needed in routesSSRData
 export const tabs = [
@@ -47,13 +47,11 @@ const content = (active) => {
   return content;
 };
 
-const MainPage = ({ location, match, t }) => {
-  const dispatch = useDispatch();
+const MainPage = ({ t }) => {
+  const params   = useParams();
+  const location = useLocation();
 
-  const setTab         = useCallback(tab => dispatch(lessonsActions.setTab(tab)), [dispatch]);
-  const resetNamespace = useCallback(tab => dispatch(filterActions.resetNamespace(tab)), [dispatch]);
-
-  const tab = match.params.tab || tabs[0];
+  const tab = params.tab || tabs[0];
 
   const submenuItems = tabs.map(x => (
     <Menu.Item
@@ -67,16 +65,19 @@ const MainPage = ({ location, match, t }) => {
     </Menu.Item>
   ));
 
-  useEffect(() => {
-    if (!location.search) {
-      resetNamespace(`lessons-${tab}`);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.search, resetNamespace]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!location.search) {
+      const resetNamespace = tab => dispatch(filterActions.resetNamespace(tab));
+      resetNamespace(`lessons-${tab}`);
+    }
+  }, [location.search]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    const setTab = tab => dispatch(lessonsActions.setTab(tab));
     setTab(tab);
-  }, [setTab, tab]);
+  }, [tab]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
@@ -87,8 +88,6 @@ const MainPage = ({ location, match, t }) => {
 };
 
 MainPage.propTypes = {
-  location: shapes.HistoryLocation.isRequired,
-  match: shapes.RouterMatch.isRequired,
   t: PropTypes.func.isRequired,
 };
 

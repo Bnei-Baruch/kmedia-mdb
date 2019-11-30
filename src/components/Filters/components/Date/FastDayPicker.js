@@ -1,28 +1,28 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import moment from 'moment';
 import scrollIntoView from 'scroll-into-view';
 import Navbar from 'react-day-picker/lib/src/Navbar';
 import MomentLocaleUtils, { formatDate } from 'react-day-picker/moment';
-import { Input, Segment, Popup, Label } from 'semantic-ui-react';
+import { Input, Popup, Label } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
 
 import { today } from '../../../../helpers/date';
 import { getLanguageDirection, getLanguageLocaleWORegion } from '../../../../helpers/i18n-utils';
-import * as shapes from '../../../shapes';
 import YearMonthForm from './YearMonthForm';
 
 import DayPicker from 'react-day-picker';
+import { DeviceInfoContext } from "../../../../helpers/app-contexts";
 
 class FastDayPicker extends Component {
+  static contextType = DeviceInfoContext;
+
   static propTypes = {
     value: PropTypes.instanceOf(Date),
     label: PropTypes.string,
     onDayChange: PropTypes.func,
     language: PropTypes.string.isRequired,
-    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -31,11 +31,16 @@ class FastDayPicker extends Component {
     onDayChange: noop,
   };
 
+  constructor(props){
+    super(props);
+    this.myRef = React.createRef();
+  }
+
   state = {
     month: null,
     isOpen: false,
     value: null,
-    stringValue: null,
+    stringValue: "",
   };
 
   localeDateFormat = moment.localeData().longDateFormat('L');
@@ -54,15 +59,13 @@ class FastDayPicker extends Component {
     return date ? formatDate(date, 'l', locale) : '';
   }
 
-  isMobileDevice = () => this.props.deviceInfo.device && this.props.deviceInfo.device.type === 'mobile';
-
   handleYearMonthChange = (month) => {
     this.setState({ month });
   };
 
-  handleDayPickerRef = (ref) => {
-    if (ref) {
-      scrollIntoView(ReactDOM.findDOMNode(ref), {
+  handleDayPickerRef = () => {
+    if (this.myRef) {
+      scrollIntoView(this.myRef, {
         time: 150, // half a second
         validTarget: target => target !== window,
       });
@@ -82,7 +85,7 @@ class FastDayPicker extends Component {
   };
 
   openNativeDatePicker = () => {
-    if (this.props.deviceInfo.os.name === 'Android') {
+    if (this.context.deviceInfo.os.name === 'Android') {
       this.nativeDateInput.click();
       return;
     }
@@ -90,13 +93,12 @@ class FastDayPicker extends Component {
     this.nativeDateInput.focus();
   };
 
-  getOverlayComponent = props => (
-    (
-      <Segment>
-        {props.children}
-      </Segment>
-    )
-  );
+  // getOverlayComponent = props => (
+  //   ( <Segment>
+  //       {props.children}
+  //     </Segment>
+  //   )
+  // );
 
   getNavBarElement = (props, language) => {
     const { month, localeUtils } = props;
@@ -146,7 +148,7 @@ class FastDayPicker extends Component {
     const { language, value, label } = this.props;
     const { month, isOpen, stringValue } = this.state;
     const locale = getLanguageLocaleWORegion(language);
-    const isMobileDevice = this.isMobileDevice();
+    const {isMobileDevice} = this.context;
 
     if (isMobileDevice) {
       const selected = value || today().toDate();
@@ -197,8 +199,8 @@ class FastDayPicker extends Component {
             onChange={this.handleDateInputChange}
             onKeyDown={this.handleKeyDown}
             format="l"
-            overlayComponent={this.getOverlayComponent}
-            showOverlay
+            // overlaycomponent={this.getOverlayComponent}
+            // showoverlay="true"
             label={label ? <Label className="ui label label to-from-label">{label}</Label> : null}
           />}
       >
@@ -211,7 +213,6 @@ class FastDayPicker extends Component {
             navbarElement={props => this.getNavBarElement(props, language)}
             month={month}
             toMonth={today().toDate()}
-
             ref={this.handleDayPickerRef}
             onDayChange={this.onPopupDayChange}
             onDayClick={this.onPopupDayChange}

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
@@ -41,16 +40,16 @@ class HierarchicalFilter extends Component {
 
   componentDidMount() {
     if (this.activeRef) {
-      scrollIntoView(ReactDOM.findDOMNode(this.activeRef), {
+      scrollIntoView(this.activeRef, {
         time: 150, // half a second
         validTarget: (target, parentsScrolled) => (parentsScrolled < 1),
       });
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.value !== nextProps.value) {
-      this.setState({ sValue: nextProps.value });
+  componentDidUpdate(prevProps) {
+    if (this.props.value !== prevProps.value) {
+      this.setState({ sValue: this.props.value });
     }
   }
 

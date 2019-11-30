@@ -54,7 +54,7 @@ const downloadAsset = (path, mimeType, downloadAllowed) => {
 };
 
 const Download = (props) => {
-  const { children, path, mimeType, downloadAllowed} = props;
+  const { children = null, path = null, mimeType, downloadAllowed} = props;
   if (path === null) {
     return null;
   }
@@ -82,11 +82,6 @@ Download.propTypes = {
     PropTypes.node
   ]),
   downloadAllowed: PropTypes.bool.isRequired,
-};
-
-Download.defaultProps = {
-  path: null,
-  children: null,
 };
 
 export default Download;

@@ -12,3 +12,8 @@ export function errorHandler(err, req, res, next) {
   res.status(500).send('Internal Server Error');
   return null;
 }
+
+export function logAll(req, res, next) {
+  console.info('>>> %s %s %s', req.method, req.url, req.path);
+  next();
+}

@@ -7,7 +7,6 @@ import { Accordion, Button, Header, Menu, Segment } from 'semantic-ui-react';
 
 import 'react-day-picker/lib/style.css';
 import { today } from '../../../../helpers/date';
-import * as shapes from '../../../shapes';
 import FastDayPicker from './FastDayPicker';
 
 const TODAY        = 'TODAY';
@@ -84,7 +83,6 @@ class DateFilter extends Component {
     onApply: PropTypes.func,
     t: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
-    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -96,13 +94,32 @@ class DateFilter extends Component {
     }
   };
 
+  static convertToStateObject = (props) => {
+    const { value } = props;
+    if (!value) {
+      return {};
+    }
+
+    const { from, to, datePreset } = value;
+    const preset                   = datePreset || rangeToPreset(from, to);
+    return ({
+      from,
+      to,
+      datePreset: preset,
+      showRange: preset === CUSTOM_RANGE,
+      showDay: preset === CUSTOM_DAY,
+    });
+  };
+
   constructor(props, context) {
     super(props, context);
-    this.state = this.convertToStateObject(this.props);
+    this.state = DateFilter.convertToStateObject(props);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState(this.convertToStateObject(nextProps));
+  componentDidUpdate(prevProps) {
+    if (this.props.value && this.props.value !== prevProps.value){
+      this.setState(DateFilter.convertToStateObject(this.props));
+    }
   }
 
   onCancel = () => this.props.onCancel();
@@ -128,23 +145,6 @@ class DateFilter extends Component {
   apply = () => {
     const { from, to, datePreset } = this.state;
     this.props.onApply({ from, to, datePreset });
-  };
-
-  convertToStateObject = (props) => {
-    const { value } = props;
-    if (!value) {
-      return {};
-    }
-
-    const { from, to, datePreset } = value;
-    const preset                   = datePreset || rangeToPreset(from, to);
-    return ({
-      from,
-      to,
-      datePreset: preset,
-      showRange: preset === CUSTOM_RANGE,
-      showDay: preset === CUSTOM_DAY,
-    });
   };
 
   handleDatePresetsChange = (event, data) => {
@@ -199,7 +199,7 @@ class DateFilter extends Component {
   };
 
   render() {
-    const { t, language, deviceInfo } = this.props;
+    const { t, language }             = this.props;
     const { from, to, datePreset }    = this.state;
 
     return (
@@ -252,7 +252,6 @@ class DateFilter extends Component {
                   label={null}
                   value={from}
                   language={language}
-                  deviceInfo={deviceInfo}
                   onDayChange={this.handleDayInputChange}
                 />
               </Accordion.Content>
@@ -269,7 +268,6 @@ class DateFilter extends Component {
                   label={t('filters.date-filter.start')}
                   value={from}
                   language={language}
-                  deviceInfo={deviceInfo}
                   onDayChange={this.handleFromInputChange}
                 />
                 <br />
@@ -277,7 +275,6 @@ class DateFilter extends Component {
                   label={t('filters.date-filter.end')}
                   value={to}
                   language={language}
-                  deviceInfo={deviceInfo}
                   onDayChange={this.handleToInputChange}
                 />
               </Accordion.Content>

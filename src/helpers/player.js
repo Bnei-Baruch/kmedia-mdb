@@ -10,27 +10,17 @@ import MediaHelper from './media';
 import { isEmpty, physicalFile } from './utils';
 import { selectSuitableLanguage } from './language';
 
-function restorePreferredMediaType() {
-  return localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO;
-}
+const restorePreferredMediaType = () => localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO;
 
-function persistPreferredMediaType(value) {
-  localStorage.setItem('@@kmedia_player_media_type', value);
-}
+const persistPreferredMediaType = (value) => localStorage.setItem('@@kmedia_player_media_type', value);
 
-function restorePreferredVideoSize() {
-  return localStorage.getItem('@@kmedia_player_video_size') || VS_DEFAULT;
-}
+const restorePreferredVideoSize = () => localStorage.getItem('@@kmedia_player_video_size') || VS_DEFAULT;
 
-function persistPreferredVideoSize(value) {
-  localStorage.setItem('@@kmedia_player_video_size', value);
-}
+const persistPreferredVideoSize = (value) => localStorage.setItem('@@kmedia_player_video_size', value);
 
-function isPlayable(file) {
-  return MediaHelper.IsMp4(file) || MediaHelper.IsMp3(file);
-}
+const isPlayable = (file) => MediaHelper.IsMp4(file) || MediaHelper.IsMp3(file);
 
-function calcAvailableMediaTypes(unit, language) {
+const calcAvailableMediaTypes = (unit, language) => {
   if (!unit || !Array.isArray(unit.files)) {
     return [];
   }
@@ -41,9 +31,9 @@ function calcAvailableMediaTypes(unit, language) {
     }
     return acc;
   }, new Set()));
-}
+};
 
-function calcAvailableLanguages(unit) {
+const calcAvailableLanguages = (unit) => {
   if (!unit || !Array.isArray(unit.files)) {
     return [];
   }
@@ -51,9 +41,9 @@ function calcAvailableLanguages(unit) {
   return Array.from(
     unit.files.reduce((acc, val) => acc.add(val.language),
       new Set()));
-}
+};
 
-function playableItem(unit, mediaType, uiLanguage, contentLanguage) {
+const playableItem = (unit, mediaType, uiLanguage, contentLanguage) => {
   if (!unit) {
     return {};
   }
@@ -91,9 +81,9 @@ function playableItem(unit, mediaType, uiLanguage, contentLanguage) {
     availableMediaTypes,
     byQuality,
   };
-}
+};
 
-function playlist(collection, mediaType, contentLanguage, uiLanguage) {
+const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
   if (!collection) {
     return {};
   }
@@ -181,51 +171,49 @@ function playlist(collection, mediaType, contentLanguage, uiLanguage) {
     items,
     groups,
   };
-}
+};
 
-function getMediaTypeFromQuery(location, defaultMediaType) {
+const getMediaTypeFromQuery = (location, defaultMediaType) => {
   const query = getQuery(location);
   const mt    = (query.mediaType || '').toLowerCase();
   return mt === MT_VIDEO || mt === MT_AUDIO ? mt : defaultMediaType;
-}
+};
 
-function setMediaTypeInQuery(history, mediaType = MT_VIDEO) {
+const setMediaTypeInQuery = (history, mediaType = MT_VIDEO) => {
   updateQuery(history, query => ({
     ...query,
     mediaType
   }));
-}
+};
 
-function getLanguageFromQuery(location, fallbackLanguage = LANG_ENGLISH) {
+const getLanguageFromQuery = (location, fallbackLanguage = LANG_ENGLISH) => {
   const query    = getQuery(location);
   const language = query.language || fallbackLanguage || LANG_ENGLISH;
   return language.toLowerCase();
-}
+};
 
-function setLanguageInQuery(history, language) {
+const setLanguageInQuery = (history, language) =>
   updateQuery(history, query => ({
     ...query,
     language
   }));
-}
 
-function getActivePartFromQuery(location) {
+const getActivePartFromQuery = (location) => {
   const q = getQuery(location);
   const p = q.ap ? parseInt(q.ap, 10) : 0;
   return Number.isNaN(p) || p < 0 ? 0 : p;
-}
+};
 
-function setActivePartInQuery(history, ap) {
+const setActivePartInQuery = (history, ap) =>
   updateQuery(history, query => ({
     ...query,
     ap
   }));
-}
 
-function getEmbedFromQuery(location) {
+const getEmbedFromQuery = (location) => {
   const query = getQuery(location);
   return query.embed === '1';
-}
+};
 
 export default {
   playableItem,

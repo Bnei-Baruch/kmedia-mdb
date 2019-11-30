@@ -7,21 +7,25 @@ import { withRouter } from 'react-router-dom';
 import { push as routerPush, replace as routerReplace } from 'connected-react-router';
 import { withNamespaces } from 'react-i18next';
 import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
+import Headroom from 'react-headroom';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as device } from '../../../redux/modules/device';
 import * as shapes from '../../shapes';
 import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
 import Helmets from '../../shared/Helmets';
 import LibraryContentContainer from './LibraryContentContainer';
-import TOC from './TOC';
+import TOC, { getIndex } from './TOC';
 import LibrarySettings from './LibrarySettings';
 import Share from './Share';
+import { isLanguageRtl } from "../../../helpers/i18n-utils";
+import { DeviceInfoContext } from "../../../helpers/app-contexts";
 
 class LibraryContainer extends Component {
+  static contextType = DeviceInfoContext;
+
   static propTypes = {
     sourceId: PropTypes.string.isRequired,
     indexMap: PropTypes.objectOf(shapes.DataWipErr),
@@ -39,7 +43,6 @@ class LibraryContainer extends Component {
     push: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
     history: shapes.History.isRequired,
-    deviceInfo: shapes.UserAgentParserResults.isRequired,
   };
 
   static defaultProps = {
@@ -67,59 +70,46 @@ class LibraryContainer extends Component {
     window.addEventListener('resize', this.updateSticky);
     window.addEventListener('load', this.updateSticky);
 
-    const { sourceId, areSourcesLoaded, replace, history }                             = this.props;
+    const { sourceId, areSourcesLoaded, history }                                      = this.props;
     const { location: { state: { tocIsActive } = { state: { tocIsActive: false } } } } = history;
 
-    if (tocIsActive) {
-      this.setState({ tocIsActive });
+    if (tocIsActive || sourceId === 'grRABASH') {
+      this.setState({ tocIsActive: true });
     }
 
     if (!areSourcesLoaded) {
       return;
     }
 
-    const firstLeafId = this.firstLeafId(sourceId);
-    if (firstLeafId !== sourceId || this.state.lastLoadedId !== sourceId) {
-      if (firstLeafId !== sourceId) {
-        replace(`sources/${firstLeafId}`);
-      } else {
-        this.setState({ lastLoadedId: sourceId, language: this.props.language });
-        this.fetchIndices(sourceId);
-      }
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { sourceId, areSourcesLoaded, language, replace } = nextProps;
-    if (!areSourcesLoaded) {
-      return;
-    }
-    if (this.state.language && language !== this.state.language) {
-      this.loadNewIndices(sourceId, this.props.language);
-      return;
-    }
-
-    const firstLeafId = this.firstLeafId(sourceId);
-    if (firstLeafId !== sourceId
-      || this.props.sourceId !== sourceId
-      || this.state.lastLoadedId !== sourceId) {
-      if (firstLeafId === sourceId) {
-        this.loadNewIndices(sourceId, this.props.language);
-      } else {
-        replace(`sources/${firstLeafId}`);
-      }
-    }
+    this.replaceOrFetch(sourceId);
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { sourceId, areSourcesLoaded } = this.props;
+    if (!areSourcesLoaded) {
+      return;
+    }
+
+    this.replaceOrFetch(sourceId);
     this.updateSticky();
-    const { isReadable, scrollTopPosition } = this.state;
+    
+    const { isReadable, scrollTopPosition, tocIsActive } = this.state;
     //on change full screen and normal view scroll to position
     if (prevState.isReadable !== isReadable && this.articleRef) {
       if (isReadable) {
         this.articleRef.scrollTop = scrollTopPosition;
       } else {
         document.scrollingElement.scrollTop = scrollTopPosition;
+      }
+    }
+
+    // hide toc if only one item
+    if (tocIsActive){
+      const fullPath = this.getFullPath(sourceId);
+      const activeIndex = getIndex(fullPath[1], fullPath[2]);
+
+      if (activeIndex === -1){
+        this.setState({ tocIsActive: false });
       }
     }
   }
@@ -129,44 +119,27 @@ class LibraryContainer extends Component {
     window.removeEventListener('load', this.updateSticky);
   }
 
-  getFullPath = (sourceId) => {
-    // Go to the root of this sourceId
-    const { getPathByID } = this.props;
+  replaceOrFetch(nextSourceId) {
+    const { sourceId, replace, language } = this.props;
 
-    if (!getPathByID) {
-      return [{ id: '0' }, { id: sourceId }];
+    const firstLeafId = this.firstLeafId(nextSourceId);
+    if (firstLeafId !== nextSourceId) {
+      replace(`sources/${firstLeafId}`);
+    } else if (sourceId !== nextSourceId
+      || this.state.lastLoadedId !== nextSourceId
+      || this.state.language !== language) {
+      this.setState({ lastLoadedId: nextSourceId, language });
+      this.fetchIndices(nextSourceId);
+    }
+  }
+
+  fetchIndices = (sourceId) => {
+    const { indexMap, fetchIndex } = this.props;
+    if (isEmpty(sourceId) || !isEmpty(indexMap[sourceId])) {
+      return;
     }
 
-    const path = getPathByID(sourceId);
-
-    if (!path || path.length < 2 || !path[1]) {
-      return [{ id: '0' }, { id: sourceId }];
-    }
-
-    return path;
-  };
-
-  isMobileDevice = () => {
-    const { deviceInfo } = this.props;
-    return deviceInfo.device && deviceInfo.device.type === 'mobile';
-  };
-
-  updateSticky = () => {
-    // take the secondary header height for sticky stuff calculations
-    if (this.secondaryHeaderRef) {
-      const { height } = this.secondaryHeaderRef.getBoundingClientRect();
-      if (this.state.secondaryHeaderHeight !== height) {
-        this.setState({ secondaryHeaderHeight: height });
-      }
-    }
-
-    // check fixed header width in pixels for text-overflow:ellipsis
-    if (this.contentHeaderRef) {
-      const { width } = this.contentHeaderRef.getBoundingClientRect();
-      if (this.state.contentHeaderWidth !== width) {
-        this.setState({ contentHeaderWidth: width });
-      }
-    }
+    fetchIndex(sourceId);
   };
 
   firstLeafId = (sourceId) => {
@@ -180,11 +153,19 @@ class LibraryContainer extends Component {
     return this.firstLeafId(children[0]);
   };
 
+  updateSticky = () => {
+    // check fixed header width in pixels for text-overflow:ellipsis
+    if (this.contentHeaderRef) {
+      const { width } = this.contentHeaderRef.getBoundingClientRect();
+      if (this.state.contentHeaderWidth !== width) {
+        this.setState({ contentHeaderWidth: width });
+      }
+    }
+  };
+
   handleContextRef = (ref) => this.contextRef = ref;
 
   handleContentArticleRef = (ref) => this.articleRef = ref;
-
-  handleSecondaryHeaderRef = (ref) => this.secondaryHeaderRef = ref;
 
   handleContentHeaderRef = (ref) => this.contentHeaderRef = ref;
 
@@ -203,18 +184,11 @@ class LibraryContainer extends Component {
    * Get position of scroll
    * @returns {number|*}
    */
-  getScrollTop = () => this.state.isReadable ? this.articleRef.scrollTop : document.scrollingElement.scrollTop;
+  getScrollTop = () => this.state.isReadable 
+    ? this.articleRef.scrollTop 
+    : document.scrollingElement.scrollTop;
 
   handleSettings = (setting) => this.setState(setting);
-
-  fetchIndices = (sourceId) => {
-    const { indexMap, fetchIndex } = this.props;
-    if (isEmpty(sourceId) || !isEmpty(indexMap[sourceId])) {
-      return;
-    }
-
-    fetchIndex(sourceId);
-  };
 
   header = (sourceId, properParentId) => {
     const { getSourceById } = this.props;
@@ -263,19 +237,12 @@ class LibraryContainer extends Component {
 
   properParentId = path => (path[1].id);
 
-  loadNewIndices = (sourceId, language) => {
-    this.setState({ lastLoadedId: sourceId, language });
-    this.fetchIndices(sourceId);
-  };
-
   sortButton = () => {
     const { sortBy, sourcesSortBy } = this.props;
-    let sortOrder;
-    if (sortBy === 'AZ') {
-      sortOrder = 'Book';
-    } else {
-      sortOrder = 'AZ';
-    }
+    const sortOrder = sortBy === 'AZ'
+      ? 'Book'
+      : 'AZ';
+
     sourcesSortBy(sortOrder);
   };
 
@@ -286,14 +253,16 @@ class LibraryContainer extends Component {
       return null;
     }
 
+    const sortByAZ = sortBy === 'AZ';
+
     return (
       <Button
         compact
         size="small"
         icon="sort alphabet ascending"
-        color={sortBy === 'AZ' ? 'blue' : ''}
-        active={sortBy === 'AZ'}
-        basic={sortBy !== 'AZ'}
+        color={sortByAZ ? 'blue' : ''}
+        active={sortByAZ}
+        basic={!sortByAZ}
         onClick={this.sortButton}
       />
     );
@@ -330,24 +299,40 @@ class LibraryContainer extends Component {
     );
   };
 
-  render() {
-    const { sourceId, indexMap, getSourceById, language, contentLanguage, t, push, history, deviceInfo } = this.props;
+  getFullPath = (sourceId) => {
+    // Go to the root of this sourceId
+    const { getPathByID } = this.props;
 
-    const fullPath = this.getFullPath(sourceId);
-    const parentId = this.properParentId(fullPath);
+    if (!getPathByID) {
+      return [{ id: '0' }, { id: sourceId }];
+    }
 
+    const path = getPathByID(sourceId);
+
+    if (!path || path.length < 2 || !path[1]) {
+      return [{ id: '0' }, { id: sourceId }];
+    }
+
+    return path;
+  };
+
+  static getErrContent = (err, t) => {
+    return (err.response && err.response.status === 404) 
+      ? <FrownSplash text={t('messages.source-content-not-found')} />
+      : <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
+  };
+
+  getContent = () => {
+    const { sourceId, indexMap, language, contentLanguage, t, history } = this.props;
     const index = isEmpty(sourceId) ? {} : indexMap[sourceId];
-
-    let content;
     const { err } = index || {};
+    
+    let content;
+    
     if (err) {
-      if (err.response && err.response.status === 404) {
-        content = <FrownSplash text={t('messages.source-content-not-found')} />;
-      } else {
-        content = <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
-      }
+      content = LibraryContainer.getErrContent(err, t);  
     } else {
-      const downloadAllowed = deviceInfo.os.name !== 'iOS';
+      const downloadAllowed = this.context.deviceInfo.os.name !== 'iOS';
       content = (
         <LibraryContentContainer
           source={sourceId}
@@ -361,25 +346,28 @@ class LibraryContainer extends Component {
       );
     }
 
-    const
-      {
-        isReadable,
-        fontSize,
-        theme,
-        fontType,
-        tocIsActive,
-        match,
-      }                           = this.state;
-    let { secondaryHeaderHeight } = this.state;
-    if (isNaN(secondaryHeaderHeight)) {
-      secondaryHeaderHeight = 0;
-    }
+    return content;
+  };
+
+  render() {
+    const { sourceId, getSourceById, language, t, push } = this.props;
+    
+    const content = this.getContent();
+
+    const { isReadable, fontSize, theme, fontType, tocIsActive, match } = this.state;
+
+    const fullPath = this.getFullPath(sourceId);
+    const parentId = this.properParentId(fullPath);
     const matchString = this.matchString(parentId, t);
+
+    const isRtl = isLanguageRtl(language);
+    const position = isRtl ? 'left' : 'right';
 
     return (
       <div
         ref={this.handleContentArticleRef}
         className={classNames({
+          'headroom-z-index-801': true,
           source: true,
           'is-readable': isReadable,
           'toc--is-active': tocIsActive,
@@ -387,45 +375,52 @@ class LibraryContainer extends Component {
           [`is-${fontType}`]: true,
         })}
       >
-        <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
-          <Container>
-            <Grid padded centered>
-              <Grid.Row verticalAlign="bottom">
-                <Grid.Column mobile={16} tablet={16} computer={4} className="source__toc-header">
-                  <div className="source__header-title mobile-hidden">
-                    <Header size="small">{t('sources-library.toc')}</Header>
-                  </div>
-                  <div className="source__header-toolbar">
-                    {matchString}
-                    {this.switchSortingOrder(parentId)}
-                    <Button
-                      compact
-                      size="small"
-                      className="computer-hidden large-screen-hidden widescreen-hidden"
-                      icon="list layout"
-                      onClick={this.handleTocIsActive}
-                    />
-                  </div>
-                </Grid.Column>
-                <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
-                  <div className="source__header-title">{this.header(sourceId, parentId)}</div>
-                  <div className="source__header-toolbar">
-                    <Button compact size="small" className="mobile-hidden" icon="print" onClick={this.print} />
-                    <div id="download-button" />
-                    <LibrarySettings fontSize={fontSize} handleSettings={this.handleSettings} />
-                    <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
-                    <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                    <Share isMobile={this.isMobileDevice()} />
-                  </div>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          </Container>
-        </div>
-        <Container style={{ paddingTop: `${secondaryHeaderHeight}px` }}>
+        <Headroom>
+          <div className="layout__secondary-header" ref={this.handleSecondaryHeaderRef}>
+            <Container>
+              <Grid padded centered>
+                <Grid.Row verticalAlign="bottom">
+                  <Grid.Column mobile={16} tablet={16} computer={4} className="source__toc-header">
+                    <div className="source__header-title mobile-hidden">
+                      <Header size="small">{t('sources-library.toc')}</Header>
+                    </div>
+                    <div className="source__header-toolbar">
+                      {matchString}
+                      {this.switchSortingOrder(parentId)}
+                      <Button
+                        compact
+                        size="small"
+                        className="computer-hidden large-screen-hidden widescreen-hidden"
+                        icon="list layout"
+                        onClick={this.handleTocIsActive}
+                      />
+                    </div>
+                  </Grid.Column>
+                  <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
+                    <div className="source__header-title">{this.header(sourceId, parentId)}</div>
+                    <div className="source__header-toolbar">
+                      <Button compact size="small" className="mobile-hidden" icon="print" onClick={this.print} />
+                      <div id="download-button" />
+                      <LibrarySettings fontSize={fontSize} handleSettings={this.handleSettings} />
+                      <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
+                      <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
+                      <Share position={position} />
+                    </div>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Container>
+          </div>
+        </Headroom>
+        <Container>
           <Grid padded centered>
             <Grid.Row className="is-fitted">
-              <Grid.Column mobile={16} tablet={16} computer={4} onClick={this.handleTocIsActive}>
+              <Grid.Column
+                mobile={16}
+                tablet={16}
+                computer={4}
+                onClick={this.handleTocIsActive}
+                className={!tocIsActive ? 'large-screen-only computer-only' : ''}>
                 <TOC
                   language={language}
                   match={matchString ? match : ''}
@@ -434,7 +429,6 @@ class LibraryContainer extends Component {
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
                   apply={push}
-                  stickyOffset={secondaryHeaderHeight + (isReadable ? 0 : 60)}
                 />
               </Grid.Column>
               <Grid.Column
@@ -449,7 +443,7 @@ class LibraryContainer extends Component {
                 <Ref innerRef={this.handleContextRef}>
                   <div
                     className="source__content"
-                    style={{ minHeight: `calc(100vh - ${secondaryHeaderHeight + (isReadable ? 0 : 60) + 14}px)` }}
+                    style={{ minHeight: `calc(100vh - 14px)` }}
                   >
                     {content}
                   </div>
@@ -475,7 +469,6 @@ export default withRouter(connect(
     areSourcesLoaded: sources.areSourcesLoaded(state.sources),
     NotToSort: sources.NotToSort,
     NotToFilter: sources.NotToFilter,
-    deviceInfo: device.getDeviceInfo(state.device),
   }),
   dispatch => bindActionCreators({
     fetchIndex: assetsActions.sourceIndex,

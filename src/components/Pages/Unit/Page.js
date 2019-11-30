@@ -32,11 +32,10 @@ export class UnitPage extends Component {
     location: {}
   };
 
-  state = {};
-
-  componentWillMount() {
-    const { location } = this.props;
-    this.setState({ embed: playerHelper.getEmbedFromQuery(location) });
+  constructor(props){
+    super(props);
+    const { location } = props;
+    this.state = { embed: playerHelper.getEmbedFromQuery(location) };
   }
 
   renderHelmet() {
@@ -76,8 +75,8 @@ export class UnitPage extends Component {
   }
 
   renderRecommendations() {
-    const { unit, section } = this.props;
-    return <SameCollection unit={unit} section={section} />;
+    const { unit, section, language } = this.props;
+    return <SameCollection unit={unit} section={section} language={language} />;
   }
 
   renderContent() {

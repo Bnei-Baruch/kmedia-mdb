@@ -32,6 +32,7 @@ import AVSpinner from './AVSpinner';
 import ShareFormDesktop from './Share/ShareFormDesktop';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { PlayerStartEnum } from './playerStartEnum';
+import { DeviceInfoContext } from "../../helpers/app-contexts";
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
@@ -41,6 +42,8 @@ const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
 const playbackToValue = playback => parseFloat(playback.slice(0, -1));
 
 class AVPlayer extends PureComponent {
+  static contextType = DeviceInfoContext;
+
   static propTypes = {
     t: PropTypes.func.isRequired,
     media: shapes.Media.isRequired,
@@ -70,7 +73,6 @@ class AVPlayer extends PureComponent {
     onPrev: PropTypes.func,
     onNext: PropTypes.func,
 
-    deviceInfo: shapes.UserAgentParserResults.isRequired,
     onMediaEditModeChange: PropTypes.func.isRequired,
     onDropdownOpenedChange: PropTypes.func.isRequired,
   };
@@ -111,7 +113,7 @@ class AVPlayer extends PureComponent {
     return { src, videoSize };
   };
 
-  static persistVolume = debounce(media => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, media.volume), 200);
+  static persistVolume = debounce(volume => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, volume), 200);
 
   state = {
     controlsVisible: true,
@@ -167,7 +169,8 @@ class AVPlayer extends PureComponent {
     // By default hide controls after a while if player playing.
     this.hideControlsTimeout();
 
-    const { deviceInfo: { browser: { name: browserName } }, media, item, autoPlay } = this.props;
+    const { media, item, autoPlay } = this.props;
+    const { deviceInfo: { browser: { name: browserName } } } = this.context;
     this.setState({
       isClient: true,
       start,
@@ -186,15 +189,15 @@ class AVPlayer extends PureComponent {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { item } = this.state;
-    if (nextProps.item !== item) {
+  componentDidUpdate(){
+    const { item } = this.props;
+    if (this.state.item !== item) {
       this.setState({
         error: false,
         errorReason: '',
         firstSeek: true,
-        item: nextProps.item,
-        ...AVPlayer.chooseSource(nextProps),
+        item: item,
+        ...AVPlayer.chooseSource(this.props),
       });
     }
   }
@@ -226,9 +229,8 @@ class AVPlayer extends PureComponent {
     const { wasCurrentTime, sliceStart, firstSeek, playbackRate, start } = this.state;
     const { media, autoPlay }                                            = this.props;
 
-    if (start === PlayerStartEnum.UseParentLogic) {
+    if (start === PlayerStartEnum.UseParentLogic)
       this.activatePersistence();
-    }
 
     if (wasCurrentTime && !firstSeek) {
       media.seekTo(wasCurrentTime);
@@ -277,7 +279,7 @@ class AVPlayer extends PureComponent {
     const { onPause, onFinish } = this.props;
     // when we're close to the end regard this as finished
     if (browserName !== 'IE'
-      && Math.abs(e.currentTime - e.duration) < 0.1 && onFinish) {
+            && Math.abs(e.currentTime - e.duration) < 0.1 && onFinish) {
       this.clearCurrentTime();
       onFinish();
     } else if (onPause) {
@@ -287,14 +289,22 @@ class AVPlayer extends PureComponent {
 
   handleUnMute = () => {
     const { media } = this.props;
-    if (media) {
-      media.mute(false);
-      this.removeUnMuteButton();
-    }
+    media.mute(false);
+    this.removeUnMuteButton();
   };
 
   removeUnMuteButton = () => {
     this.setState({ unMuteButton: false });
+  };
+
+  onVolumeChange = (volume) => {
+    const { persistenceFn } = this.state;
+    persistenceFn && persistenceFn(volume);
+    this.removeUnMuteButton();
+  };
+
+  onMuteUnmute = () => {
+    this.removeUnMuteButton();
   };
 
   static getSliceModeState(media, mode, properties = {}, state) {
@@ -336,7 +346,6 @@ class AVPlayer extends PureComponent {
     const { media } = this.props;
     this.setState({ persistenceFn: AVPlayer.persistVolume });
     let persistedVolume = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
-
     if (persistedVolume == null || Number.isNaN(Number.parseInt(persistedVolume, 10))) {
       persistedVolume = DEFAULT_PLAYER_VOLUME.toString();
       localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, persistedVolume);
@@ -372,7 +381,7 @@ class AVPlayer extends PureComponent {
 
     // when we're close to the end regard this as finished
     if (browserName === 'IE'
-      && !firstSeek && Math.abs(timeData.currentTime - timeData.duration) < 0.5 && onFinish) {
+            && !firstSeek && Math.abs(timeData.currentTime - timeData.duration) < 0.5 && onFinish) {
       media.pause();
       this.clearCurrentTime();
       onFinish();
@@ -559,7 +568,7 @@ class AVPlayer extends PureComponent {
     return null;
   };
 
-  getUnmuteButton(isRtl, t) {
+  renderUnmuteButton(isRtl, t) {
     return <Button
       icon="volume off"
       className={isRtl ? 'mediaplayer__embedUnmuteButton rtl' : 'mediaplayer__embedUnmuteButton'}
@@ -598,7 +607,6 @@ class AVPlayer extends PureComponent {
         error,
         errorReason,
         isClient,
-        persistenceFn,
         unMuteButton,
       } = this.state;
 
@@ -615,8 +623,8 @@ class AVPlayer extends PureComponent {
         <div className="player-button player-error-message">
           {t('player.error.loading')}
           {errorReason ? ` ${errorReason}` : ''}
-          &nbsp;
-          <Icon name="warning sign" size="large" />
+                &nbsp;
+          <Icon name="warning sign" size="large"/>
         </div>
       );
     } else if (isEditMode) {
@@ -624,6 +632,7 @@ class AVPlayer extends PureComponent {
         <ShareFormDesktop
           media={media}
           item={item}
+          uiLanguage={uiLanguage}
           onSliceChange={this.handleSliceChange}
           onExit={this.handleEditBack}
         />
@@ -631,8 +640,8 @@ class AVPlayer extends PureComponent {
     } else if (isVideo) {
       centerMediaControl = (
         <Fragment>
-          <AVCenteredPlay />
-          <AVSpinner />
+          <AVCenteredPlay/>
+          <AVSpinner/>
         </Fragment>
       );
     }
@@ -650,9 +659,7 @@ class AVPlayer extends PureComponent {
         tabIndex="-1"
       >
         {
-          isVideo && unMuteButton
-            ? this.getUnmuteButton(isRtl, t)
-            : null
+          isVideo && unMuteButton && this.renderUnmuteButton(isRtl, t)
         }
         <Player
           playsInline
@@ -662,12 +669,11 @@ class AVPlayer extends PureComponent {
               enableInlineVideo(c.instance);
             }
           }}
-          onVolumeChange={persistenceFn}
           src={src}
           poster={isVideo ? item.preImageUrl : null}
           vendor={isVideo ? 'video' : 'audio'}
           onReady={this.onPlayerReady}
-          preload={isClient ? 'auto' : 'none'}
+          preload={isClient ? 'metadata' : 'none'}
           controls={false}
           onError={this.onError}
           onPause={this.onPause}
@@ -701,9 +707,9 @@ class AVPlayer extends PureComponent {
               start={media.currentTime}
               end={media.duration}
             />
-            <AVJumpBack jumpSpan={-5} />
-            <AVJumpBack jumpSpan={5} />
-            <div className="mediaplayer__spacer" />
+            <AVJumpBack jumpSpan={-5}/>
+            <AVJumpBack jumpSpan={5}/>
+            <div className="mediaplayer__spacer"/>
             <AvSeekBar
               buffers={this.buffers()}
               playerMode={mode}
@@ -726,7 +732,8 @@ class AVPlayer extends PureComponent {
                 />
               )
             }
-            <AVMuteUnmute isAudio={isAudio} onMuteUnmute={this.removeUnMuteButton} onVolumeChange={this.removeUnMuteButton} />
+            <AVMuteUnmute isAudio={isAudio} onMuteUnmute={this.onMuteUnmute}
+              onVolumeChange={this.onVolumeChange}/>
             <AVAudioVideo
               isAudio={isAudio}
               isVideo={isVideo}
@@ -742,9 +749,9 @@ class AVPlayer extends PureComponent {
               onSelect={this.onLanguageChange}
               onDropdownOpenedChange={onDropdownOpenedChange}
             />
-            {!isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.SLICE_EDIT)} />}
-            {isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.NORMAL)} />}
-            {!isAudio && <AVFullScreen element={this.mediaElement} />}
+            {!isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.SLICE_EDIT)}/>}
+            {isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.NORMAL)}/>}
+            {!isAudio && <AVFullScreen element={this.mediaElement}/>}
           </div>
           <div
             ref={this.handleOnScreenRef}

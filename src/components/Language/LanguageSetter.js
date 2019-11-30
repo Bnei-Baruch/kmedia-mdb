@@ -1,62 +1,45 @@
-import React from 'react';
+import { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { actions as settingActions, selectors as settingSelectors } from '../../redux/modules/settings';
+import { useDispatch, useSelector } from 'react-redux';
+import { actions, selectors } from '../../redux/modules/settings';
 import { DEFAULT_LANGUAGE, LANGUAGES } from '../../helpers/consts';
 import * as shapes from '../shapes';
 
 // NOTE: yaniv -> edo: should we block rendering until language changed?
 
-const LanguageSetter = withRouter(connect(
-  state => ({
-    currentLanguage: settingSelectors.getLanguage(state.settings),
-  }),
-  { setLanguage: settingActions.setLanguage }
-)(class extends React.Component {
-  static propTypes = {
-    currentLanguage: PropTypes.string.isRequired,
-    language: PropTypes.string,
-    setLanguage: PropTypes.func.isRequired,
-    location: shapes.HistoryLocation.isRequired,
-    children: shapes.Children.isRequired,
-  };
-
-  static defaultProps = {
-    language: DEFAULT_LANGUAGE
-  };
-
-  componentDidMount() {
-    this.catchLanguageChange(this.props);
+const catchLanguageChange = ({ language: newLanguage, currentLanguage, setLanguage }) => {
+  // catch language change only on client
+  if (typeof window === 'undefined') {
+    return;
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.catchLanguageChange(nextProps);
+  if (currentLanguage === newLanguage) {
+    return;
   }
 
-  catchLanguageChange = (props) => {
-    // catch language change only on client
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    const { language: newLanguage, currentLanguage } = props;
-
-    if (currentLanguage === newLanguage) {
-      return;
-    }
-
-    let actualLanguage = DEFAULT_LANGUAGE;
-    if (LANGUAGES[newLanguage]) {
-      actualLanguage = newLanguage;
-    }
-
-    props.setLanguage(actualLanguage);
-  };
-
-  render() {
-    return this.props.children;
+  let actualLanguage = DEFAULT_LANGUAGE;
+  if (LANGUAGES[newLanguage]) {
+    actualLanguage = newLanguage;
   }
-}));
+
+  setLanguage(actualLanguage);
+};
+
+const LanguageSetter = ({ language = DEFAULT_LANGUAGE, children }) => {
+  const currentLanguage = useSelector(state => selectors.getLanguage(state.settings));
+  const dispatch        = useDispatch();
+  const setLanguage     = useCallback(language => dispatch(actions.setLanguage(language)), [dispatch]);
+
+  useEffect(() => {
+    catchLanguageChange({ language, currentLanguage, setLanguage });
+  }, [language, currentLanguage, setLanguage]);
+
+  return children;
+};
+
+LanguageSetter.propTypes = {
+  language: PropTypes.string,
+  children: shapes.Children.isRequired,
+};
 
 export default LanguageSetter;

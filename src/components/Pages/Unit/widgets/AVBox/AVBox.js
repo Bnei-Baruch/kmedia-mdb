@@ -10,20 +10,20 @@ import isEqual from 'react-fast-compare';
 
 import { MT_AUDIO, MT_VIDEO } from '../../../../../helpers/consts';
 import playerHelper from '../../../../../helpers/player';
-import { selectors as device } from '../../../../../redux/modules/device';
 import * as shapes from '../../../../shapes';
 import AVMobileCheck from '../../../../AVPlayer/AVMobileCheck';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { isEmpty } from '../../../../../helpers/utils';
+import { DeviceInfoContext } from "../../../../../helpers/app-contexts";
 
 class AVBox extends Component {
+  static contextType = DeviceInfoContext;
   static propTypes = {
     unit: shapes.ContentUnit,
     history: shapes.History.isRequired,
     location: shapes.HistoryLocation.isRequired,
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
-    autoPlayAllowed: PropTypes.bool.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -31,41 +31,36 @@ class AVBox extends Component {
     unit: undefined,
   };
 
+  static getMediaType = (location) => {
+    const preferredMT = playerHelper.restorePreferredMediaType();
+    const mediaType   = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    
+    return mediaType;
+  }
+
   constructor(props) {
     super(props);
     const { uiLanguage, contentLanguage, location, history, unit } = props;
-    const preferredMT                                              = playerHelper.restorePreferredMediaType();
-    const mediaType                                                = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const playerLanguage                                           = playerHelper.getLanguageFromQuery(location, contentLanguage);
-    const playableItem                                             = AVBox.getPlayableItem(unit, mediaType, playerLanguage, uiLanguage);
-    this.state                                                     = {
+
+    const mediaType      = AVBox.getMediaType(location);
+    const playerLanguage = playerHelper.getLanguageFromQuery(location, contentLanguage);
+    const playableItem   = playerHelper.playableItem(unit, mediaType, uiLanguage, playerLanguage);
+    
+    this.state = {
       playableItem,
       autoPlay: true,
       newItemLanguage: null
     };
+
     playerHelper.setLanguageInQuery(history, playerLanguage);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { unit, uiLanguage, location } = nextProps;
-    const { playableItem }               = this.state;
-    const { language: playerLanguage }   = playableItem;
-
-    const preferredMT     = playerHelper.restorePreferredMediaType();
-    const newMediaType    = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
-
-    // Persist language in playableItem
-    const item = AVBox.getPlayableItem(unit, newMediaType, newItemLanguage, uiLanguage);
-    this.setState({ playableItem: item, newItemLanguage });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     const { unit, uiLanguage, contentLanguage, location }                                                          = nextProps;
     const { unit: oldUnit, uiLanguage: oldUiLanguage, contentLanguage: oldContentLanguage, location: oldLocation } = this.props;
-    const { playableItem, oldMediaEditMode }                                                                       = this.state;
+    const { playableItem, oldMediaEditMode, oldIsDropdownOpened }                                                  = this.state;
     const { language: playerLanguage }                                                                             = playableItem;
-    const { mediaEditMode }                                                                                        = nextState;
+    const { mediaEditMode, isDropdownOpened }                                                                      = nextState;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();
     const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);
@@ -79,11 +74,22 @@ class AVBox extends Component {
       && prevMediaType === newMediaType
       && newItemLanguage === playerLanguage
       && oldMediaEditMode === mediaEditMode
+      && oldIsDropdownOpened === isDropdownOpened
       && isEqual(unit, oldUnit));
   }
 
-  static getPlayableItem(unit, mediaType, playerLanguage, uiLanguage) {
-    return playerHelper.playableItem(unit, mediaType, uiLanguage, playerLanguage);
+  componentDidUpdate(prevProps){
+    const { unit, uiLanguage, location } = this.props;
+    const { playableItem }               = this.state;
+    const { language: playerLanguage }   = playableItem;
+
+    const mediaType       = AVBox.getMediaType(location);
+    const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
+    const newPlayableItem = playerHelper.playableItem(unit, mediaType, uiLanguage, newItemLanguage);
+   
+    if (!isEqual(playableItem, newPlayableItem)) {
+      this.setState({ playableItem: newPlayableItem, newItemLanguage });
+    }
   }
 
   handleSwitchAV = () => {
@@ -109,8 +115,9 @@ class AVBox extends Component {
   handleDropdownOpenedChange = isDropdownOpened => this.setState({ isDropdownOpened });
 
   render() {
-    const { t, autoPlayAllowed, uiLanguage }                                           = this.props;
+    const { t, uiLanguage }                                                            = this.props;
     const { playableItem, mediaEditMode, autoPlay, isDropdownOpened, newItemLanguage } = this.state;
+    const { autoPlayAllowed }                                                          = this.context;
 
     if (isEmpty(playableItem)) {
       return (<div>{t('messages.no-playable-files')}</div>);
@@ -146,6 +153,7 @@ class AVBox extends Component {
                   onLanguageChange={this.handleChangeLanguage}
                   onMediaEditModeChange={this.handleMediaEditModeChange}
                   onDropdownOpenedChange={this.handleDropdownOpenedChange}
+                  autoPlayAllowed={autoPlayAllowed}
                 />
               </Media>
             </div>
@@ -157,7 +165,6 @@ class AVBox extends Component {
 }
 
 const mapState = state => ({
-  autoPlayAllowed: device.getAutoPlayAllowed(state.device),
   uiLanguage: settings.getLanguage(state.settings),
   contentLanguage: settings.getContentLanguage(state.settings),
 });

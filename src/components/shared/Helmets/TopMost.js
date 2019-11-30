@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import Helmet from 'react-helmet-async';
+import { Helmet } from 'react-helmet-async';
 
 import Basic from './Basic';
 import Locale from './Locale';
@@ -24,11 +24,6 @@ const TopMost = (props) => {
 TopMost.propTypes = {
   titlePostfix: PropTypes.string.isRequired,
   mainLang: PropTypes.string.isRequired,
-  alternateLang: PropTypes.arrayOf(PropTypes.string),
-};
-
-TopMost.defaultProps = {
-  alternateLang: [],
 };
 
 export default TopMost;

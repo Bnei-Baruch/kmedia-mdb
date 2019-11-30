@@ -16,7 +16,7 @@ export const isAbsoluteUrl = url => /^(?:[a-z]+:)?\/\//i.test(url);
 
 const ensureStartsWithSlash = str => str && (str[0] === '/' ? str : `/${str}`);
 
-const splitPathByLanguage = (path) => {
+export const splitPathByLanguage = (path) => {
   const pathWithSlash = ensureStartsWithSlash(path);
   const parts         = pathWithSlash.split('/');
 
@@ -108,9 +108,9 @@ export const isDebMode = location => getQuery(location).deb || false;
 
 export const getToWithLanguage = (navigateTo, location, language, contentLanguage) => {
   if (typeof navigateTo === 'string') {
-    return prefixWithLanguage(navigateTo, location, language); 
+    return prefixWithLanguage(navigateTo, location, language);
   }
-  
+
   if (!navigateTo) {
     navigateTo = { ...location };
   }
@@ -126,4 +126,4 @@ export const getToWithLanguage = (navigateTo, location, language, contentLanguag
     ...navigateTo,
     pathname: prefixWithLanguage(navigateTo.pathname, location, language)
   };
-}
+};

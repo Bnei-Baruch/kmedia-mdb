@@ -10,6 +10,7 @@ import { actions, selectors } from '../../redux/modules/filters';
 import * as shapes from '../shapes';
 import Filters from '../Filters/Filters';
 import filterComponents from '../Filters/components';
+import { DeviceInfoContext } from "../../helpers/app-contexts";
 
 const filters = [
   {
@@ -31,6 +32,7 @@ const filters = [
 ];
 
 class SearchResultsFilters extends Component {
+  static contextType = DeviceInfoContext;
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
     sortBy: PropTypes.string.isRequired,
@@ -39,7 +41,6 @@ class SearchResultsFilters extends Component {
     onChange: PropTypes.func.isRequired,
     filtersValues: PropTypes.objectOf(PropTypes.object).isRequired,
     setFilterValue: PropTypes.func.isRequired,
-    isMobileDevice: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -71,7 +72,8 @@ class SearchResultsFilters extends Component {
   };
 
   renderTabs = () => {
-    const { t, filtersValues, sortBy, onSortByChange, isMobileDevice } = this.props;
+    const { t, filtersValues, sortBy, onSortByChange } = this.props;
+    const { isMobileDevice }                           = this.context;
 
     const options = ['relevance', 'newertoolder', 'oldertonewer'].map(o => ({
       text: t(`search.sorts.${o}`),
@@ -84,7 +86,7 @@ class SearchResultsFilters extends Component {
 
     const sortingDisabled = (filtersValues.values || []).some(callback);
 
-    const orderFilters = isMobileDevice() ? null : (
+    const orderFilters = isMobileDevice ? null : (
       <Menu.Item>
         <span key="span" style={{ padding: '10px' }}>
           {t('search.sortby')}
@@ -127,7 +129,7 @@ class SearchResultsFilters extends Component {
             active={this.state.isShowFilters}
             onClick={this.showFilters}
           >
-            {isMobileDevice() ? null : (
+            {isMobileDevice ? null : (
               <span>
                 {t('filters.filters')}
                 &nbsp;&nbsp;
