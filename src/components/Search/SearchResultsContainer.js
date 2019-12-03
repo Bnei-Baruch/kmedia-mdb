@@ -8,11 +8,11 @@ import { actions, selectors } from '../../redux/modules/search';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
 import { selectors as publicationSelectors } from '../../redux/modules/publications';
+import { BLOGS } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import SectionHeader from '../shared/SectionHeader';
 import SearchResults from './SearchResults';
 import Filters from './Filters';
-import { BLOGS } from '../../helpers/consts';
 
 class SearchResultsContainer extends Component {
   static propTypes = {
@@ -61,10 +61,11 @@ class SearchResultsContainer extends Component {
     this.props.hydrateUrl();
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.language !== this.props.language) {
-      const { search, query, pageSize, pageNo, deb } = this.props;
-      search(query, pageNo, pageSize, deb);
+  componentDidUpdate(prevProps) {
+    const { pageNo, language } = this.props;
+
+    if (prevProps.language !== language) {
+      this.callSearch(pageNo);
     }
   }
 
@@ -72,16 +73,21 @@ class SearchResultsContainer extends Component {
     this.props.updateQuery(''); // reset query for next page
   }
 
-  handlePageChange = (pageNo) => {
-    const { setPage, search, query, pageSize, deb } = this.props;
-    setPage(pageNo);
+  callSearch = (pageNo = 1) => {
+    const { search, query, pageSize, deb } = this.props;
     search(query, pageNo, pageSize, '' /* suggest */, deb);
+  }
+
+  handlePageChange = (pageNo) => {
+    const { setPage } = this.props;
+    setPage(pageNo);
+    this.callSearch(pageNo);
   };
 
   handleSortByChanged = (e, data) => {
-    const { setSortBy, search, query, pageSize, pageNo, deb } = this.props;
+    const { setSortBy, pageNo } = this.props;
     setSortBy(data.value);
-    search(query, pageNo, pageSize, '' /* suggest */, deb);
+    this.callSearch(pageNo);
   };
 
   handleFiltersChanged = () => {
@@ -89,12 +95,13 @@ class SearchResultsContainer extends Component {
   };
 
   handleFiltersHydrated = () => {
-    const { search, query, pageSize, pageNo, deb } = this.props;
-    search(query, pageNo, pageSize, '' /* suggest */, deb);
+    const { pageNo } = this.props;
+    this.callSearch(pageNo);
   };
 
   render() {
     const { wip, err, queryResult, cMap, cuMap, postMap, twitterMap, pageNo, pageSize, sortBy, language, location, click } = this.props;
+    
     return (
       <div>
         <SectionHeader section="search" />
