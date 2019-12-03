@@ -23,15 +23,20 @@ import {
   CT_FRIENDS_GATHERINGS,
   CT_FULL_LESSON,
   CT_HOLIDAY,
+  CT_KITEI_MAKOR,
   CT_LECTURE,
   CT_LECTURE_SERIES,
+  CT_LELO_MIKUD,
   CT_LESSON_PART,
   CT_LESSONS_SERIES,
   CT_MEAL,
   CT_MEALS,
   CT_PICNIC,
+  CT_PUBLICATION,
   CT_SPECIAL_LESSON,
+  CT_TRAINING,
   CT_UNITY_DAY,
+  CT_UNKNOWN,
   CT_VIDEO_PROGRAM,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
@@ -130,9 +135,34 @@ export const canonicalLink = (entity, mediaLang) => {
   }
 
   // collections
-  const collectionPrefix = collectionPrefixes.get(entity.content_type);
-  if (collectionPrefix) {
-    return `${collectionPrefix}${entity.id}`;
+  switch (entity.content_type) {
+  case CT_DAILY_LESSON:
+  case CT_SPECIAL_LESSON:
+    return `/lessons/daily/c/${entity.id}`;
+  case CT_VIRTUAL_LESSONS:
+    return `/lessons/virtual/c/${entity.id}`;
+  case CT_LECTURE_SERIES:
+    return `/lessons/lectures/c/${entity.id}`;
+  case CT_WOMEN_LESSONS:
+    return `/lessons/women/c/${entity.id}`;
+    // case CT_CHILDREN_LESSONS:
+    //   return `/lessons/children/c/${entity.id}`;
+  case CT_LESSONS_SERIES:
+    return `/lessons/series/c/${entity.id}`;
+  case CT_VIDEO_PROGRAM:
+  case CT_CLIPS:
+    return `/programs/c/${entity.id}`;
+  case CT_ARTICLES:
+    return `/publications/articles/c/${entity.id}`;
+  case CT_FRIENDS_GATHERINGS:
+  case CT_MEALS:
+  case CT_CONGRESS:
+  case CT_HOLIDAY:
+  case CT_PICNIC:
+  case CT_UNITY_DAY:
+    return `/events/c/${entity.id}`;
+  default:
+    break;
   }
 
   // units whose canonical collection is an event goes as an event item
@@ -142,6 +172,7 @@ export const canonicalLink = (entity, mediaLang) => {
   }
 
   const mediaLangSuffix = mediaLang ? `?language=${mediaLang}` : '';
+
   // unit based on type
   const prefix          = mediaPrefix.get(entity.content_type);
   if (prefix) {

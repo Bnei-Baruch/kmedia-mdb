@@ -544,7 +544,8 @@
       "KITEI_MAKOR": "Kaynak Materyaller",
       "PUBLICATION": "Yayınlar",
       "LELO_MIKUD": "Düzenlenmiş - Odak Grubu Yok",
-      "BLOG_POST": "Blok Yazısı"
+      "BLOG_POST": "Blok Yazısı",
+      "LESSONS_SERIES": "Seçilmiş Ders Serileri"
     },
     "media-types": {
       "video": "Görüntü",

@@ -41,6 +41,7 @@ class Sources extends Component {
   UNSAFE_componentWillReceiveProps(nextProps) {
     // unit has changed - replace all state
     if (nextProps.unit.id !== this.props.unit.id) {
+      this.myReplaceState(nextProps);
       return;
     }
 
