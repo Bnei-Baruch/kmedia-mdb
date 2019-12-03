@@ -23,20 +23,15 @@ import {
   CT_FRIENDS_GATHERINGS,
   CT_FULL_LESSON,
   CT_HOLIDAY,
-  // CT_KITEI_MAKOR,
   CT_LECTURE,
   CT_LECTURE_SERIES,
-  // CT_LELO_MIKUD,
   CT_LESSON_PART,
   CT_LESSONS_SERIES,
   CT_MEAL,
   CT_MEALS,
   CT_PICNIC,
-  // CT_PUBLICATION,
   CT_SPECIAL_LESSON,
-  // CT_TRAINING,
   CT_UNITY_DAY,
-  // CT_UNKNOWN,
   CT_VIDEO_PROGRAM,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
@@ -76,7 +71,6 @@ const blogNames = new Map([
   [BLOG_ID_LAITMAN_RU, 'laitman-ru'],
   [BLOG_ID_LAITMAN_COM, 'laitman-com'],
   [BLOG_ID_LAITMAN_ES, 'laitman-es'],
-  [BLOG_ID_LAITMAN_RU, 'laitman-ru'],
   [BLOG_ID_LAITMAN_CO_IL, 'laitman-co-il'],
 ]);
 
@@ -130,7 +124,7 @@ export const canonicalLink = (entity, mediaLang) => {
 
   if (entity.content_type === 'POST') {
     const [blogID, postID] = entity.id.split('-');
-    let blogName           = blogNames.get(parseInt(blogID, 10)) || 'laitman-co-il';
+    const blogName         = blogNames.get(parseInt(blogID, 10)) || 'laitman-co-il';
 
     return `/publications/blog/${blogName}/${postID}`;
   }
@@ -151,7 +145,7 @@ export const canonicalLink = (entity, mediaLang) => {
   // unit based on type
   const prefix          = mediaPrefix.get(entity.content_type);
   if (prefix) {
-    return `${prefix}/${entity.id}?${mediaLangSuffix}`;
+    return `${prefix}${entity.id}${mediaLangSuffix}`;
   } else {
     return '/';
   }
