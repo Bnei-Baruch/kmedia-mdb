@@ -72,6 +72,48 @@ export const intentSectionLink = (section, filters) => {
   return `/${section}?${urlSearchStringify(query)}`;
 };
 
+const blogNames = new Map([
+  [BLOG_ID_LAITMAN_RU, 'laitman-ru'],
+  [BLOG_ID_LAITMAN_COM, 'laitman-com'],
+  [BLOG_ID_LAITMAN_ES, 'laitman-es'],
+  [BLOG_ID_LAITMAN_CO_IL, 'laitman-co-il'],
+]);
+
+const collectionPrefixes = new Map([
+  [CT_DAILY_LESSON, '/lessons/daily/c/'],
+  [CT_SPECIAL_LESSON, '/lessons/daily/c/'],
+  [CT_VIRTUAL_LESSONS, '/lessons/virtual/c/'],
+  [CT_LECTURE_SERIES, '/lessons/lectures/c/'],
+  [CT_WOMEN_LESSONS, '/lessons/women/c/'],
+  // [CT_CHILDREN_LESSONS, '/lessons/children/c/'],
+  [CT_LESSONS_SERIES, '/lessons/series/c/'],
+  [CT_VIDEO_PROGRAM, '/programs/c/'],
+  [CT_CLIPS, '/programs/c/'],
+  [CT_ARTICLES, '/publications/articles/c/'],
+  [CT_FRIENDS_GATHERINGS, '/events/c/'],
+  [CT_MEALS, '/events/c/'],
+  [CT_CONGRESS, '/events/c/'],
+  [CT_HOLIDAY, '/events/c/'],
+  [CT_PICNIC, '/events/c/'],
+  [CT_UNITY_DAY, '/events/c/'],
+]);
+
+const mediaPrefix = new Map([
+  [CT_LESSON_PART, '/lessons/cu/'],
+  [CT_LECTURE, '/lessons/cu/'],
+  [CT_VIRTUAL_LESSON, '/lessons/cu/'],
+  [CT_WOMEN_LESSON, '/lessons/cu/'],
+  [CT_BLOG_POST, '/lessons/cu/'],
+  // [CT_CHILDREN_LESSON, '/lessons/cu/'],
+  [CT_VIDEO_PROGRAM_CHAPTER, '/programs/cu/'],
+  [CT_CLIP, '/programs/cu/'],
+  [CT_EVENT_PART, '/events/cu/'],
+  [CT_FULL_LESSON, '/events/cu/'],
+  [CT_FRIENDS_GATHERING, '/events/cu/'],
+  [CT_MEAL, '/events/cu/'],
+  [CT_ARTICLE, '/publications/articles/cu/'],
+]);
+
 /* WARNING!!!
    This function MUST be synchronized with the next one: canonicalContentType
  */
@@ -87,24 +129,7 @@ export const canonicalLink = (entity, mediaLang) => {
 
   if (entity.content_type === 'POST') {
     const [blogID, postID] = entity.id.split('-');
-    let blogName;
-
-    switch (parseInt(blogID, 10)) {
-    case BLOG_ID_LAITMAN_RU:
-      blogName = 'laitman-ru';
-      break;
-    case BLOG_ID_LAITMAN_COM:
-      blogName = 'laitman-com';
-      break;
-    case BLOG_ID_LAITMAN_ES:
-      blogName = 'laitman-es';
-      break;
-    case BLOG_ID_LAITMAN_CO_IL:
-      blogName = 'laitman-co-il';
-      break;
-    default:
-      blogName = 'laitman-co-il';
-    }
+    const blogName         = blogNames.get(parseInt(blogID, 10)) || 'laitman-co-il';
 
     return `/publications/blog/${blogName}/${postID}`;
   }
@@ -149,31 +174,10 @@ export const canonicalLink = (entity, mediaLang) => {
   const mediaLangSuffix = mediaLang ? `?language=${mediaLang}` : '';
 
   // unit based on type
-  switch (entity.content_type) {
-  case CT_LESSON_PART:
-  case CT_LECTURE:
-  case CT_VIRTUAL_LESSON:
-  case CT_WOMEN_LESSON:
-  case CT_BLOG_POST:
-    // case CT_CHILDREN_LESSON:
-    return `/lessons/cu/${entity.id}${mediaLangSuffix}`;
-  case CT_VIDEO_PROGRAM_CHAPTER:
-  case CT_CLIP:
-    return `/programs/cu/${entity.id}${mediaLangSuffix}`;
-  case CT_EVENT_PART:
-  case CT_FULL_LESSON:
-  case CT_FRIENDS_GATHERING:
-  case CT_MEAL:
-    return `/events/cu/${entity.id}${mediaLangSuffix}`;
-  case CT_ARTICLE:
-    return `/publications/articles/cu/${entity.id}?${mediaLangSuffix}`;
-  case CT_UNKNOWN:
-  case CT_TRAINING:
-  case CT_KITEI_MAKOR:
-  case CT_PUBLICATION:
-  case CT_LELO_MIKUD:
-    return '/';
-  default:
+  const prefix          = mediaPrefix.get(entity.content_type);
+  if (prefix) {
+    return `${prefix}${entity.id}${mediaLangSuffix}`;
+  } else {
     return '/';
   }
 };
