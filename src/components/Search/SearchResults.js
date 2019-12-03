@@ -23,6 +23,7 @@ import SearchResultLandingPage from './SearchResultLandingPage';
 import SearchResultTwitters from './SearchResultTwitters';
 import SearchResultSource from './SearchResultSource';
 import SearchResultPost from './SearchResultPost';
+import DidYouMean from './DidYouMean';
 import { SectionLogo } from '../../helpers/images';
 
 class SearchResults extends Component {
@@ -171,14 +172,14 @@ class SearchResults extends Component {
         location,
       } = this.props;
 
-    const { search_result: results } = queryResult;
+    const { search_result: results, suggest } = queryResult;
 
     const wipErr = WipErr({ wip: wip || !areSourcesLoaded, err, t });
     if (wipErr) {
       return wipErr;
     }
 
-    // Query from URL (not changed until pressed Enter.
+    // Query from URL (not changed until pressed Enter)
     const query = getQuery(location).q;
 
     if (query === '' && !Object.values(filtersTransformer.toApiParams(filters)).length) {
@@ -207,6 +208,10 @@ class SearchResults extends Component {
         <Grid>
           <Grid.Column key="1" computer={12} tablet={16} mobile={16}>
             {/* Requested by Mizrahi this.renderTopNote() */}
+            { suggest 
+              ? <DidYouMean suggestion={suggest} /> 
+              : null 
+            }
 
             <div className="searchResult_content">
               <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
