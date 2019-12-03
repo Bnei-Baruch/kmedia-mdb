@@ -158,6 +158,7 @@
       "first": "Search results are in {{language}}.",
       "second": "You can choose other content languages"
     },
+    "didYouMean": "Did you mean:",
     "showAll": "Show All",
     "lessons": "Lessons",
     "programs": "Programs",
