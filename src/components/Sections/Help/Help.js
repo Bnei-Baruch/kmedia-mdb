@@ -48,9 +48,9 @@ const texts = [
   },
   {
     title: {
-      [LANG_HEBREW]: 'תוכניות',
-      [LANG_ENGLISH]: 'Programs',
-      [LANG_RUSSIAN]: 'Программы',
+      [LANG_HEBREW]: 'תוכניות וקליפים',
+      [LANG_ENGLISH]: 'Programs & Clips',
+      [LANG_RUSSIAN]: 'Программы и Клипы',
     },
     description: {
       [LANG_HEBREW]: 'איזה תוכניות יש, איך הן מחולקות ואיך להתמצא במדור.',
