@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 
-import { CT_ARTICLES, CT_CLIPS, CT_LECTURE_SERIES, CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS } from '../../../helpers/consts';
+import { CT_CLIPS, CT_LECTURE_SERIES, CT_VIRTUAL_LESSONS, CT_ARTICLES, CT_VIDEO_PROGRAM } from '../../../helpers/consts';
 import { strCmp } from '../../../helpers/utils';
 import { selectors as lessons } from '../../../redux/modules/lessons';
 import { selectors as programs } from '../../../redux/modules/programs';
@@ -63,19 +63,36 @@ class CollectionsFilter extends React.Component {
   }
 }
 
-const nsMap = new Map([
-  ['lessons-virtual', [CT_VIRTUAL_LESSONS, lessons.getLecturesByType, 'lessons']],
-  ['lessons-lectures', [CT_LECTURE_SERIES, lessons.getLecturesByType, 'lessons']],
-  ['programs-main', [CT_VIDEO_PROGRAM, programs.getProgramsByType, 'programs']],
-  ['programs-clips', [CT_CLIPS, programs.getProgramsByType, 'programs']],
-  ['publications-articles', [CT_ARTICLES, publications.getCollections, 'publications']],
-]);
 export default connect(
   (state, ownProps) => {
-    const { namespace }        = ownProps;
-    const [ct, cIDsFunc, kind] = nsMap.get(namespace);
+    const { namespace } = ownProps;
+    let ct;
+    let cIDs;
 
-    const cIDs = ct ? cIDsFunc(state[kind])[ct] : null;
+    switch (namespace) {
+    case 'lessons-virtual':
+      ct   = CT_VIRTUAL_LESSONS;
+      cIDs = lessons.getLecturesByType(state.lessons)[ct];
+      break;
+    case 'lessons-lectures':
+      ct   = CT_LECTURE_SERIES;
+      cIDs = lessons.getLecturesByType(state.lessons)[ct];
+      break;
+    case 'programs-main':
+      ct   = CT_VIDEO_PROGRAM;
+      cIDs = programs.getProgramsByType(state.programs)[ct];
+      break;
+    case 'programs-clips':
+      ct   = CT_CLIPS;
+      cIDs = programs.getProgramsByType(state.programs)[ct];
+      break;
+    case 'publications-articles':
+      ct = CT_ARTICLES;
+      cIDs = publications.getCollections(state.publications)[ct];
+      break;
+    default:
+      break;
+    }
 
     return {
       collections: (cIDs || []).map(x => mdb.getCollectionById(state.mdb, x)),

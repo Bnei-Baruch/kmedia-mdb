@@ -99,17 +99,32 @@ class Container extends Component {
     tab: PropTypes.string.isRequired,
   };
 
-  static extraParams = new Map([
-    ['virtual', [CT_VIRTUAL_LESSON, undefined]],
-    ['lectures', [CT_LECTURE, undefined]],
-    ['women', [CT_WOMEN_LESSON, undefined]],
-    ['rabash', [CT_LESSON_PART, RABASH_PERSON_UID]],
-    // ['children', [CT_CHILDREN_LESSON, undefined]],
-  ]);
-  extraFetchParams   = () => {
-    let [ct, person] = Container.extraParams.get(this.props.tab);
-    ct               = ct || CT_VIRTUAL_LESSON;
-    return person ? { content_type: ct, person } : { content_type: ct };
+  extraFetchParams = () => {
+    let ct;
+    let person;
+    switch (this.props.tab) {
+    case 'virtual':
+      ct = [CT_VIRTUAL_LESSON];
+      break;
+    case 'lectures':
+      ct = [CT_LECTURE];
+      break;
+    case 'women':
+      ct = [CT_WOMEN_LESSON];
+      break;
+    case 'rabash':
+      ct     = [CT_LESSON_PART];
+      person = RABASH_PERSON_UID;
+      break;
+      // case 'children':
+      //   ct = [CT_CHILDREN_LESSON];
+      //   break;
+    default:
+      ct = [CT_VIRTUAL_LESSON];
+      break;
+    }
+
+    return { content_type: ct, person };
   };
 
   render() {
