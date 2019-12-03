@@ -520,7 +520,8 @@
       "KITEI_MAKOR": "Fragmente von Primärquellen",
       "PUBLICATION": "Veröffentlichung",
       "LELO_MIKUD": "Bearbeitet - Ohne Fokusgruppen",
-      "BLOG_POST": "Blog"
+      "BLOG_POST": "Blog",
+      "LESSONS_SERIES": "Ausgewählte Trainingsserien"
     },
     "media-types": {
       "video": "Video",
