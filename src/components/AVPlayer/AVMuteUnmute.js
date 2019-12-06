@@ -27,7 +27,7 @@ const AVMuteUnmute = ({ upward = true, media, media: { isMuted, volume }, isAudi
     const offset          = Math.min(Math.max(0, clientY - top), bottom - top);
     const newVolume       = 1 - (offset / (bottom - top));
     media.setVolume(newVolume);
-    onVolumeChange();
+    onVolumeChange(newVolume);
   };
 
   const handleMuteUnmute = () => {
