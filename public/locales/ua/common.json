@@ -5,7 +5,7 @@
     },
     "sidebar": {
       "lessons": "Уроки та Лекції",
-      "programs": "Програми",
+      "programs": "Програми та Кліпи",
       "sources": "Бібліотека",
       "events": "Конгреси, події",
       "books": "Книжки",
@@ -88,7 +88,7 @@
     "sections-filter": {
       "label": "Розділ",
       "lessons": "Уроки та Лекції",
-      "programs": "Програми",
+      "programs": "Програми та Кліпи",
       "events": "Конгреси, події",
       "publications": "Публікації",
       "sources": "Першоджерела",

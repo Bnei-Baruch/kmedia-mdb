@@ -5,7 +5,7 @@
     },
     "sidebar": {
       "lessons": "Dersler ve Konuşmalar",
-      "programs": "Programlar",
+      "programs": "Programlar ve Klipler",
       "sources": "Kütüphane",
       "events": "Kongreler ve Etkinlikler",
       "books": "Kitaplar",
@@ -89,7 +89,7 @@
       "label": "Bölüm",
       "all": "Hepsi",
       "lessons": "Dersler ve Konuşmalar",
-      "programs": "Programlar",
+      "programs": "Programlar ve Klipler",
       "events": "Kongreler ve Etkinlikler",
       "publications": "Yayınlar",
       "sources": "Kabala Kaynakları",

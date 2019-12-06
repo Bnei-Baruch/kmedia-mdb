@@ -5,7 +5,7 @@
     },
     "sidebar": {
       "lessons": "Lecciones y Charlas",
-      "programs": "Programas",
+      "programs": "Programas y Clips",
       "sources": "Biblioteca",
       "events": "Congresos y Eventos",
       "books": "Libros",
@@ -88,7 +88,7 @@
       "label": "Sección",
       "all": "Todo",
       "lessons": "Lecciones y Charlas",
-      "programs": "Programas",
+      "programs": "Programas y Clips",
       "events": "Congresos y Eventos",
       "publications": "Publicaciones",
       "sources": "Fuentes",
