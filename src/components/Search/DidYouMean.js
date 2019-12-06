@@ -14,10 +14,10 @@ const DidYouMean = ({suggestion, t}) => {
   const to = `${origin}${pathname}?q=${suggestion}`;  
 
   return (
-    <Container>
+    <Container className="search__didyoumean">
       {didYouMeanStr}
       <a href={to} className="search__link">{suggestion}</a>
-      <Divider fitted />
+      <Divider hidden />
     </Container>
   );
 };
