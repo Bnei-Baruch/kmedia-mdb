@@ -23,20 +23,15 @@ import {
   CT_FRIENDS_GATHERINGS,
   CT_FULL_LESSON,
   CT_HOLIDAY,
-  CT_KITEI_MAKOR,
   CT_LECTURE,
   CT_LECTURE_SERIES,
-  CT_LELO_MIKUD,
   CT_LESSON_PART,
   CT_LESSONS_SERIES,
   CT_MEAL,
   CT_MEALS,
   CT_PICNIC,
-  CT_PUBLICATION,
   CT_SPECIAL_LESSON,
-  CT_TRAINING,
   CT_UNITY_DAY,
-  CT_UNKNOWN,
   CT_VIDEO_PROGRAM,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
@@ -77,25 +72,6 @@ const blogNames = new Map([
   [BLOG_ID_LAITMAN_COM, 'laitman-com'],
   [BLOG_ID_LAITMAN_ES, 'laitman-es'],
   [BLOG_ID_LAITMAN_CO_IL, 'laitman-co-il'],
-]);
-
-const collectionPrefixes = new Map([
-  [CT_DAILY_LESSON, '/lessons/daily/c/'],
-  [CT_SPECIAL_LESSON, '/lessons/daily/c/'],
-  [CT_VIRTUAL_LESSONS, '/lessons/virtual/c/'],
-  [CT_LECTURE_SERIES, '/lessons/lectures/c/'],
-  [CT_WOMEN_LESSONS, '/lessons/women/c/'],
-  // [CT_CHILDREN_LESSONS, '/lessons/children/c/'],
-  [CT_LESSONS_SERIES, '/lessons/series/c/'],
-  [CT_VIDEO_PROGRAM, '/programs/c/'],
-  [CT_CLIPS, '/programs/c/'],
-  [CT_ARTICLES, '/publications/articles/c/'],
-  [CT_FRIENDS_GATHERINGS, '/events/c/'],
-  [CT_MEALS, '/events/c/'],
-  [CT_CONGRESS, '/events/c/'],
-  [CT_HOLIDAY, '/events/c/'],
-  [CT_PICNIC, '/events/c/'],
-  [CT_UNITY_DAY, '/events/c/'],
 ]);
 
 const mediaPrefix = new Map([
@@ -174,7 +150,7 @@ export const canonicalLink = (entity, mediaLang) => {
   const mediaLangSuffix = mediaLang ? `?language=${mediaLang}` : '';
 
   // unit based on type
-  const prefix          = mediaPrefix.get(entity.content_type);
+  const prefix = mediaPrefix.get(entity.content_type);
   if (prefix) {
     return `${prefix}${entity.id}${mediaLangSuffix}`;
   } else {

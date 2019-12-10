@@ -20,8 +20,8 @@ import LibraryContentContainer from './LibraryContentContainer';
 import TOC, { getIndex } from './TOC';
 import LibrarySettings from './LibrarySettings';
 import Share from './Share';
-import { isLanguageRtl } from "../../../helpers/i18n-utils";
-import { DeviceInfoContext } from "../../../helpers/app-contexts";
+import { isLanguageRtl } from '../../../helpers/i18n-utils';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 class LibraryContainer extends Component {
   static contextType = DeviceInfoContext;
@@ -104,11 +104,11 @@ class LibraryContainer extends Component {
     }
 
     // hide toc if only one item
-    if (tocIsActive){
-      const fullPath = this.getFullPath(sourceId);
+    if (tocIsActive) {
+      const fullPath    = this.getFullPath(sourceId);
       const activeIndex = getIndex(fullPath[1], fullPath[2]);
 
-      if (activeIndex === -1){
+      if (activeIndex === -1) {
         this.setState({ tocIsActive: false });
       }
     }
@@ -239,7 +239,7 @@ class LibraryContainer extends Component {
 
   sortButton = () => {
     const { sortBy, sourcesSortBy } = this.props;
-    const sortOrder = sortBy === 'AZ'
+    const sortOrder                 = sortBy === 'AZ'
       ? 'Book'
       : 'AZ';
 
@@ -324,8 +324,8 @@ class LibraryContainer extends Component {
 
   getContent = () => {
     const { sourceId, indexMap, language, contentLanguage, t, history } = this.props;
-    const index = isEmpty(sourceId) ? {} : indexMap[sourceId];
-    const { err } = index || {};
+    const index                                                         = isEmpty(sourceId) ? {} : indexMap[sourceId];
+    const { err }                                                       = index || {};
 
     let content;
 
@@ -333,7 +333,7 @@ class LibraryContainer extends Component {
       content = LibraryContainer.getErrContent(err, t);
     } else {
       const downloadAllowed = this.context.deviceInfo.os.name !== 'iOS';
-      content = (
+      content               = (
         <LibraryContentContainer
           source={sourceId}
           index={index}
@@ -356,11 +356,11 @@ class LibraryContainer extends Component {
 
     const { isReadable, fontSize, theme, fontType, tocIsActive, match } = this.state;
 
-    const fullPath = this.getFullPath(sourceId);
-    const parentId = this.properParentId(fullPath);
+    const fullPath    = this.getFullPath(sourceId);
+    const parentId    = this.properParentId(fullPath);
     const matchString = this.matchString(parentId, t);
 
-    const isRtl = isLanguageRtl(language);
+    const isRtl    = isLanguageRtl(language);
     const position = isRtl ? 'left' : 'right';
 
     return (
@@ -420,6 +420,7 @@ class LibraryContainer extends Component {
                 tablet={16}
                 computer={4}
                 onClick={this.handleTocIsActive}
+              >
                 <TOC
                   language={language}
                   match={matchString ? match : ''}
