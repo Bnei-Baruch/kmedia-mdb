@@ -92,7 +92,7 @@ class LibraryContainer extends Component {
 
     this.replaceOrFetch(sourceId);
     this.updateSticky();
-    
+
     const { isReadable, scrollTopPosition, tocIsActive } = this.state;
     //on change full screen and normal view scroll to position
     if (prevState.isReadable !== isReadable && this.articleRef) {
@@ -184,8 +184,8 @@ class LibraryContainer extends Component {
    * Get position of scroll
    * @returns {number|*}
    */
-  getScrollTop = () => this.state.isReadable 
-    ? this.articleRef.scrollTop 
+  getScrollTop = () => this.state.isReadable
+    ? this.articleRef.scrollTop
     : document.scrollingElement.scrollTop;
 
   handleSettings = (setting) => this.setState(setting);
@@ -317,7 +317,7 @@ class LibraryContainer extends Component {
   };
 
   static getErrContent = (err, t) => {
-    return (err.response && err.response.status === 404) 
+    return (err.response && err.response.status === 404)
       ? <FrownSplash text={t('messages.source-content-not-found')} />
       : <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
   };
@@ -326,11 +326,11 @@ class LibraryContainer extends Component {
     const { sourceId, indexMap, language, contentLanguage, t, history } = this.props;
     const index = isEmpty(sourceId) ? {} : indexMap[sourceId];
     const { err } = index || {};
-    
+
     let content;
-    
+
     if (err) {
-      content = LibraryContainer.getErrContent(err, t);  
+      content = LibraryContainer.getErrContent(err, t);
     } else {
       const downloadAllowed = this.context.deviceInfo.os.name !== 'iOS';
       content = (
@@ -351,7 +351,7 @@ class LibraryContainer extends Component {
 
   render() {
     const { sourceId, getSourceById, language, t, push } = this.props;
-    
+
     const content = this.getContent();
 
     const { isReadable, fontSize, theme, fontType, tocIsActive, match } = this.state;
@@ -420,7 +420,6 @@ class LibraryContainer extends Component {
                 tablet={16}
                 computer={4}
                 onClick={this.handleTocIsActive}
-                className={!tocIsActive ? 'large-screen-only computer-only' : ''}>
                 <TOC
                   language={language}
                   match={matchString ? match : ''}
