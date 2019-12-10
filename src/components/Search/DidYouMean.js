@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { Container, Divider } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 
 const DidYouMean = ({suggestion, t}) => {
   if (!suggestion){
@@ -17,7 +17,6 @@ const DidYouMean = ({suggestion, t}) => {
     <Container className="search__didyoumean">
       {didYouMeanStr}
       <a href={to} className="search__link">{suggestion}</a>
-      <Divider hidden />
     </Container>
   );
 };
