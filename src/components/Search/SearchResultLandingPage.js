@@ -27,8 +27,10 @@ class SearchResultLandingPage extends SearchResultBase {
       _type: resultType,
       _source: {
         landing_page: landingPage,
+        filter_values: filterValues,
       }
     } = hit;
+    const valuesTitleSuffix = (filterValues && filterValues.filter((filterValue) => filterValue.name !== 'text').map((filterValue) => filterValue.origin || filterValue.value).join(' ')) || ''; 
     const linkTitle = SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT[landingPage] || 'home.sections';
     const subText = SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT[landingPage];
 
@@ -40,9 +42,9 @@ class SearchResultLandingPage extends SearchResultBase {
               <Link
                 className="search__link"
                 onClick={() => this.logClick(landingPage, index, resultType, rank, searchId)}
-                to={landingPageSectionLink(landingPage)}
+                to={landingPageSectionLink(landingPage, filterValues)}
               >
-                {t(linkTitle)}
+                {t(linkTitle)} {valuesTitleSuffix}
               </Link>
             </Header>
             {!!subText && <Container className="content">
