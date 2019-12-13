@@ -153,6 +153,12 @@
       "text": "Результати пошуку",
       "subtext": ""
     },
+    "topNote": {
+      "tip": "Tip",
+      "first": "Search results are in {{language}}.",
+      "second": "You can choose other content languages"
+    },
+    "didYouMean": "Ти мав на увазі: ",
     "sortby": "Сортувати за",
     "sorts": {
       "relevance": "актуальністю",

@@ -158,6 +158,7 @@
       "first": "Arama sonuçlarının dili: {{language}}.",
       "second": "Bu içerik için başka bir dil seçebilirsiniz"
     },
+    "didYouMean": "Demek istediğin: ",
     "showAll": "Hepsini Göster",
     "lessons": "Dersler",
     "programs": "Programlar",

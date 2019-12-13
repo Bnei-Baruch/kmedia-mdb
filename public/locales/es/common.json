@@ -152,6 +152,12 @@
       "text": "Resultados de búsqueda",
       "subtext": ""
     },
+    "topNote": {
+      "tip": "Tip",
+      "first": "Search results are in {{language}}.",
+      "second": "You can choose other content languages"
+    },
+    "didYouMean": "Querías decir: ",
     "sortby": "ordenar por",
     "sorts": {
       "relevance": "Relevante",
