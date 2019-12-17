@@ -266,7 +266,5 @@ const removeFunctions = (fromObj) => {
 
 export const areEqual = (prevProps, nextProps) => {
   const [prev, next] = [prevProps, nextProps].map(removeFunctions);
-  console.log('prevProps:', prev);
-  console.log('nextProps', next);
   return isEqual(prev, next);
 }
