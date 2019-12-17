@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, memo } from 'react';
 
 import AVPlayerMobile from './AVPlayerMobile';
 import AVPlayer from './AVPlayer';
 import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { areEqual } from '../../helpers/utils';
 
 const AVMobileCheck = (props) => {
   const { autoPlayAllowed } = useContext(DeviceInfoContext);
@@ -11,6 +12,4 @@ const AVMobileCheck = (props) => {
     : <AVPlayerMobile {...props} />;
 };
 
-// withMediaProps is here to make the changes in the media context
-// to propagate correctly through this component
-export default AVMobileCheck;
+export default memo(AVMobileCheck, areEqual);
