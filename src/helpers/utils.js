@@ -1,6 +1,8 @@
 import moment from 'moment';
 import 'moment-duration-format';
 import escapeRegExp from 'lodash/escapeRegExp';
+import _ from 'lodash';
+import isEqual from 'react-fast-compare';
 
 import { CollectionsBreakdown } from './mdb';
 import { LANG_GERMAN, LANG_HEBREW, LANG_ITALIAN, LANG_RUSSIAN, LANG_SPANISH, LANG_TURKISH } from './consts';
@@ -252,3 +254,19 @@ export const getPodcastLinkByLang = language => {
   const hash = podcastLinks.get(language) || 'kabbalah-media-mp3-kab-eng/id1109845884?l=iw';
   return 'https://podcasts.apple.com/il/podcast/' + hash;
 };
+
+// Compare properties without functions
+const removeFunctions = (fromObj) => {
+  const obj = {}
+  // @description it only removes functions that are not inside nested object properties.
+  // you can improve with recursion to remove all functions inside an object. 
+  Object.keys(fromObj).forEach(key => !_.isFunction(fromObj[key]) && (obj[key] = fromObj[key]))
+  return obj
+}
+
+export const areEqual = (prevProps, nextProps) => {
+  const [prev, next] = [prevProps, nextProps].map(removeFunctions);
+  console.log('prevProps:', prev);
+  console.log('nextProps', next);
+  return isEqual(prev, next);
+}
