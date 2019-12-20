@@ -46,8 +46,15 @@ import {
   UNIT_PUBLICATIONS_TYPE,
 } from './consts';
 
-export const landingPageSectionLink = (landingPage) => {
-  return SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK[landingPage];
+export const landingPageSectionLink = (landingPage, filterValues) => {
+  const linkParts = [SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK[landingPage]];
+  const params = filterValues &&
+        filterValues.filter((filterValue) => filterValue.name !== 'text')
+          .map((filterValue) => `${filterValue.name}=${filterValue.value}`).join('&');
+  if (params) {
+    linkParts.push(params);
+  }
+  return linkParts.join('?');
 };
 
 export const intentSectionLink = (section, filters) => {
@@ -72,25 +79,6 @@ const blogNames = new Map([
   [BLOG_ID_LAITMAN_COM, 'laitman-com'],
   [BLOG_ID_LAITMAN_ES, 'laitman-es'],
   [BLOG_ID_LAITMAN_CO_IL, 'laitman-co-il'],
-]);
-
-const collectionPrefixes = new Map([
-  [CT_DAILY_LESSON, '/lessons/daily/c/'],
-  [CT_SPECIAL_LESSON, '/lessons/daily/c/'],
-  [CT_VIRTUAL_LESSONS, '/lessons/virtual/c/'],
-  [CT_LECTURE_SERIES, '/lessons/lectures/c/'],
-  [CT_WOMEN_LESSONS, '/lessons/women/c/'],
-  // [CT_CHILDREN_LESSONS, '/lessons/children/c/'],
-  [CT_LESSONS_SERIES, '/lessons/series/c/'],
-  [CT_VIDEO_PROGRAM, '/programs/c/'],
-  [CT_CLIPS, '/programs/c/'],
-  [CT_ARTICLES, '/publications/articles/c/'],
-  [CT_FRIENDS_GATHERINGS, '/events/c/'],
-  [CT_MEALS, '/events/c/'],
-  [CT_CONGRESS, '/events/c/'],
-  [CT_HOLIDAY, '/events/c/'],
-  [CT_PICNIC, '/events/c/'],
-  [CT_UNITY_DAY, '/events/c/'],
 ]);
 
 const mediaPrefix = new Map([
@@ -169,7 +157,7 @@ export const canonicalLink = (entity, mediaLang) => {
   const mediaLangSuffix = mediaLang ? `?language=${mediaLang}` : '';
 
   // unit based on type
-  const prefix          = mediaPrefix.get(entity.content_type);
+  const prefix = mediaPrefix.get(entity.content_type);
   if (prefix) {
     return `${prefix}${entity.id}${mediaLangSuffix}`;
   } else {

@@ -1,4 +1,4 @@
-import { ES_RESULT_TYPE_SOURCES, ES_RESULT_TYPE_TAGS } from './consts';
+import { ES_RESULT_TYPE_SOURCES, ES_RESULT_TYPE_TAGS, SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE } from './consts';
 
 export class SuggestionsHelper {
   constructor(results) {
@@ -44,6 +44,7 @@ export class SuggestionsHelper {
         const suggestLC = suggest.toLowerCase()
 
         return {
+          resultType,
           part: reverseIdx,
           suggest: suggest,
           suggestLC: suggestLC,
@@ -56,6 +57,14 @@ export class SuggestionsHelper {
           return -1;
         }
         if (!a.suggestLC.startsWith(query) && b.suggestLC.startsWith(query)) {
+          return 1;
+        }
+        if (a.resultType === SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE &&
+          b.resultType !== SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE) {
+          return -1;
+        }
+        if (a.resultType !== SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE &&
+          b.resultType === SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE) {
           return 1;
         }
         return a.suggest.localeCompare(b.suggest);
