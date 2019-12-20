@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Button, Container, Icon, Image, Label } from 'semantic-ui-react';
+import { physicalFile } from '../../helpers/utils';
 
 import {
   CT_ARTICLE,
@@ -18,10 +19,11 @@ import {
   CT_FRIENDS_GATHERINGS,
   CT_FULL_LESSON,
   CT_HOLIDAY,
+  CT_KITEI_MAKOR,
   CT_LECTURE_SERIES,
   CT_LELO_MIKUD,
-  CT_LESSON_PART,
   CT_LESSONS_SERIES,
+  CT_LESSON_PART,
   CT_MEAL,
   CT_MEALS,
   CT_PICNIC,
@@ -75,6 +77,7 @@ class SearchResultBase extends Component {
     getSourceById: PropTypes.func.isRequired,
     hit: PropTypes.shape({}).isRequired,
     rank: PropTypes.number,
+    contentLanguage: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -92,17 +95,26 @@ class SearchResultBase extends Component {
     return h ? `${h}:${m}:${s}` : `${m}:${s}`;
   }
 
+  // Extract from derived units all kitei makor text and audio files.
+  static getKiteiMakor = (units, contentLanguage) => {
+    return Object.values(units || {})
+      .filter(unit => unit.content_type === CT_KITEI_MAKOR)
+      .map(unit => unit.files.filter(file => file.language === contentLanguage && [MT_AUDIO, MT_TEXT].includes(file.type)))
+      .flat(1);
+  };
+    
   logClick = (mdbUid, index, type, rank, searchId) => {
     const { click, location } = this.props;
     const deb                 = isDebMode(location);
     click(mdbUid, index, type, rank, searchId, deb);
   };
 
+  // Renders both direct and direct content unit files.
   renderFiles = (cu, mdbUid, index, resultType, rank, searchId) => {
-    const { t }           = this.props;
+    const { t, filters, contentLanguage } = this.props;
     const { files = [] }  = cu;
     const pathname        = canonicalLink(cu);
-    const contentLanguage = this.getMediaLanguage(this.props.filters);
+    const mediaContentLanguage = this.getMediaLanguage(filters) || contentLanguage;
     const types           = [
       {
         type: MT_VIDEO,
@@ -130,9 +142,32 @@ class SearchResultBase extends Component {
       },
     ];
 
+    const kiteiMakorFiles = SearchResultBase.getKiteiMakor(cu.derived_units, mediaContentLanguage);
+
     return types
       .filter(x => files.some(f => f.type === x.type))
-      .map(x => this.renderFile(x, pathname, contentLanguage, mdbUid, index, resultType, rank, searchId));
+      .map(x => this.renderFile(x, pathname, contentLanguage, mdbUid, index, resultType, rank, searchId))
+      .concat(kiteiMakorFiles.map(f => this.renderKiteiMakor(f, mdbUid, index, resultType, rank, searchId)));
+  };
+
+  renderKiteiMakor = (file, mdbUid, index, resultType, rank, searchId) => {
+    const { t } = this.props;
+    const url = physicalFile(file);
+    const icon = file.type === MT_TEXT ? 'file text' : 'volume up'; 
+    return (
+      <Button
+        key={`${file.type}-${mdbUid}`}
+        as="a"
+        href={url}
+        target="_blank"
+        onClick={() => this.logClick(mdbUid, index, resultType, rank, searchId)}
+        basic
+        floated="left" size="mini" className="link_to_file">
+        <Icon name={icon} />
+        {' '}
+        {t('constants.content-types.KITEI_MAKOR')}
+      </Button>
+    );
   };
 
   renderFile = (data, pathname, contentLanguage, mdbUid, index, resultType, rank, searchId) => {
