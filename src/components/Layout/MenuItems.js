@@ -4,10 +4,10 @@ import { withNamespaces } from 'react-i18next';
 import identity from 'lodash/identity';
 import { Menu, Sidebar, Button } from 'semantic-ui-react';
 
-import { getRSSLinkByLang } from '../../helpers/utils';
+import { getRSSLinkByLang, getPodcastLinkByLang } from '../../helpers/utils';
 import NavLink from '../Language/MultiLanguageNavLink';
 import DonateNow from './DonateNow';
-import FeedBurner from "./FeedBurner";
+import FeedBurner from './FeedBurner';
 
 const ITEMS = [
   'lessons',
@@ -61,6 +61,11 @@ const MenuItems = ({ simple, visible, t, onItemClick, language }) => {
             color="orange"
             href={getRSSLinkByLang(language)} />
           <span className="margin-right-8 margin-left-8">RSS</span>
+          <Button
+            icon="apple"
+            size="mini"
+            href={getPodcastLinkByLang(language)} />
+          <span className="margin-right-8 margin-left-8">{t('nav.sidebar.podcast')}</span>
         </Menu.Item>
 
         <Menu.Item

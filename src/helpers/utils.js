@@ -3,7 +3,15 @@ import 'moment-duration-format';
 import escapeRegExp from 'lodash/escapeRegExp';
 
 import { CollectionsBreakdown } from './mdb';
-import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH } from './consts';
+import {
+  LANG_ENGLISH,
+  LANG_GERMAN,
+  LANG_HEBREW,
+  LANG_ITALIAN,
+  LANG_RUSSIAN,
+  LANG_SPANISH,
+  LANG_TURKISH
+} from './consts';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
@@ -237,4 +245,26 @@ export const getRSSFeedByLang = (language) => {
 
 export const getRSSLinkByLang = (language) => {
   return 'https://feeds.feedburner.com/' + getRSSFeedByLang(language);
+};
+
+export const getPodcastLinkByLang = (language) => {
+  let hash;
+  switch (language) {
+  case LANG_HEBREW:
+    hash = 'קבלה-מדיה-mp3-kab-heb/id1109848638?l=iw';
+  case LANG_RUSSIAN:
+    hash = 'каббала-медиа-mp3-kab-rus/id1109845737?l=iw';
+  case LANG_TURKISH:
+    hash = 'kabala-günlük-dersler-mp3-kab-trk/id1106592672?l=iw';
+  case LANG_ITALIAN:
+    hash = 'kabbalah-media-mp3-kab-ita/id1109848953?l=iw';
+  case LANG_GERMAN:
+    hash = 'kabbalah-media-mp3-kab-ger/id1109848570?l=iw';
+  case LANG_SPANISH:
+    hash = 'kcabalá-media-mp3-kab-spa/id1109848764?l=iw';
+  case LANG_ENGLISH:
+  default:
+    hash = 'kabbalah-media-mp3-kab-eng/id1109845884?l=iw';
+  }
+  return 'https://podcasts.apple.com/il/podcast/' + hash;
 };
