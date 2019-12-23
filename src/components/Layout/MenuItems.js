@@ -64,6 +64,7 @@ const MenuItems = ({ simple, visible, t, onItemClick, language }) => {
           <Button
             icon="apple"
             size="mini"
+            className="margin-left-8"
             href={getPodcastLinkByLang(language)} />
           <span className="margin-right-8 margin-left-8">{t('nav.sidebar.podcast')}</span>
         </Menu.Item>
