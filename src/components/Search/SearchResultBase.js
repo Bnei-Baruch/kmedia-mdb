@@ -100,7 +100,10 @@ class SearchResultBase extends Component {
     return Object.values(units || {})
       .filter(unit => unit.content_type === CT_KITEI_MAKOR)
       .map(unit => unit.files.filter(file => file.language === contentLanguage && [MT_AUDIO, MT_TEXT].includes(file.type)))
-      .flat(1);
+      .reduce((acc, files) => {
+        files.forEach((file) => acc.push(file));
+        return acc;
+      }, []);
   };
     
   logClick = (mdbUid, index, type, rank, searchId) => {
