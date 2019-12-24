@@ -1,4 +1,4 @@
-import React, { Fragment, PureComponent } from 'react';
+import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import debounce from 'lodash/debounce';
@@ -13,7 +13,7 @@ import { MT_AUDIO, MT_VIDEO, VS_DEFAULT, VS_FHD, VS_HD, VS_NHD } from '../../hel
 import playerHelper from '../../helpers/player';
 import { fromHumanReadableTime } from '../../helpers/time';
 import { getQuery } from '../../helpers/url';
-import { isEmpty } from '../../helpers/utils';
+import { isEmpty, areEqual } from '../../helpers/utils';
 import * as shapes from '../shapes';
 import { PLAYER_MODE } from './constants';
 import AVPlayPause from './AVPlayPause';
@@ -41,7 +41,7 @@ const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = playback => parseFloat(playback.slice(0, -1));
 
-class AVPlayer extends PureComponent {
+class AVPlayer extends Component {
   static contextType = DeviceInfoContext;
 
   static propTypes = {
@@ -187,6 +187,11 @@ class AVPlayer extends PureComponent {
         setTimeout(media.pause, 0);
       }
     }
+  }
+
+  shouldComponentUpdate(prevProps, prevState){
+    return !areEqual(this.props, prevProps) 
+    || !areEqual(this.state, prevState);
   }
 
   componentDidUpdate(){
@@ -697,6 +702,7 @@ class AVPlayer extends PureComponent {
             onMouseLeave={this.handleControlsMouseLeave}
           >
             <AVPlayPause
+              media={media}
               showNextPrev={showNextPrev && !isEditMode}
               hasNext={hasNext}
               hasPrev={hasPrev}

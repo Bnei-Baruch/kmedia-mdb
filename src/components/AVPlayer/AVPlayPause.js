@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withMediaProps } from 'react-media-player';
 import { Icon } from 'semantic-ui-react';
+import * as shapes from '../shapes';
 
 class AVPlayPause extends Component {
   static propTypes = {
-    media: PropTypes.shape({
-      isPlaying: PropTypes.bool,
-      isLoading: PropTypes.bool,
-      playPause: PropTypes.func,
-    }).isRequired,
+    media: shapes.Media.isRequired,
     showNextPrev: PropTypes.bool,
     hasNext: PropTypes.bool,
     hasPrev: PropTypes.bool,
@@ -97,4 +93,4 @@ class AVPlayPause extends Component {
   }
 }
 
-export default withMediaProps(AVPlayPause);
+export default AVPlayPause;
