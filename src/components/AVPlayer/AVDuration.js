@@ -17,4 +17,4 @@ AVDuration.propTypes = {
   media: PropTypes.object.isRequired,
 };
 
-export default withMediaProps(AVDuration);
+export default React.memo(withMediaProps(AVDuration));
