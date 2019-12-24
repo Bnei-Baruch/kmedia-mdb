@@ -172,8 +172,6 @@ class SearchResults extends Component {
         location,
       } = this.props;
 
-    const { search_result: results, suggest } = queryResult;
-
     const wipErr = WipErr({ wip: wip || !areSourcesLoaded, err, t });
     if (wipErr) {
       return wipErr;
@@ -185,6 +183,8 @@ class SearchResults extends Component {
     if (query === '' && !Object.values(filtersTransformer.toApiParams(filters)).length) {
       return <div>{t('search.results.empty-query')}</div>;
     }
+
+    const { search_result: results, typo_suggest } = queryResult;
 
     if (isEmpty(results)) {
       return null;
@@ -208,8 +208,8 @@ class SearchResults extends Component {
         <Grid>
           <Grid.Column key="1" computer={12} tablet={16} mobile={16}>
             {/* Requested by Mizrahi this.renderTopNote() */}
-            { suggest 
-              ? <DidYouMean suggestion={suggest} /> 
+            { typo_suggest 
+              ? <DidYouMean typo_suggest={typo_suggest} /> 
               : null 
             }
 
