@@ -4,8 +4,13 @@ import { Container, Header, Segment } from 'semantic-ui-react';
 import { canonicalLink } from '../../helpers/links';
 import Link from '../Language/MultiLanguageLink';
 import SearchResultBase from './SearchResultBase';
+import * as shapes from '../shapes';
 
 class SearchResultCU extends SearchResultBase {
+  static propTypes = {
+    cu: shapes.ContentUnit,
+  };
+
   renderSnippet = (highlight) => {
     const content     = this.snippetFromHighlight(highlight);
     const description = this.snippetFromHighlight(highlight, ['description', 'description_language']);

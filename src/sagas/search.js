@@ -86,7 +86,8 @@ export function* search(action) {
           id: cuIDsToFetch,
           pageSize: cuIDsToFetch.length,
           language: lang,
-          with_files: true
+          with_files: true,
+          with_derivations: true,
         }));
       }
       if (cIDsToFetch.length > 0) {
