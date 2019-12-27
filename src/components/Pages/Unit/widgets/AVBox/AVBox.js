@@ -56,54 +56,71 @@ class AVBox extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { unit, uiLanguage, contentLanguage, location }                                                          = nextProps;
-    const { unit: oldUnit, uiLanguage: oldUiLanguage, contentLanguage: oldContentLanguage, location: oldLocation } = this.props;
-    const { playableItem, oldMediaEditMode, oldIsDropdownOpened }                                                  = this.state;
-    const { language: playerLanguage }                                                                             = playableItem;
-    const { mediaEditMode, isDropdownOpened }                                                                      = nextState;
+    const { unit, uiLanguage, contentLanguage, location }           = nextProps;
+    const { unit: oldUnit, uiLanguage: oldUiLanguage, contentLanguage: oldContentLanguage, 
+      location: oldLocation }                                       = this.props;
+    const { playableItem, oldMediaEditMode, oldIsDropdownOpened }   = this.state;
+    const { language: playerLanguage }                              = playableItem;
+    const { mediaEditMode, isDropdownOpened }                       = nextState;
 
     const preferredMT     = playerHelper.restorePreferredMediaType();
     const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);
     const newMediaType    = playerHelper.getMediaTypeFromQuery(location, preferredMT);
     const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
-    // no change
-    return !(
+    const equal = 
       oldUiLanguage === uiLanguage
       && oldContentLanguage === contentLanguage
       && prevMediaType === newMediaType
       && newItemLanguage === playerLanguage
       && oldMediaEditMode === mediaEditMode
       && oldIsDropdownOpened === isDropdownOpened
-      && isEqual(unit, oldUnit));
+      && unit && oldUnit && unit.id === oldUnit.id;
+
+    return !equal;
   }
 
-  componentDidUpdate(prevProps){
+  componentDidUpdate(){
+    this.setPlayableItemState();
+  }
+
+  handleSwitchAV = () => {
+    const { playableItem } = this.state;
+
+    if (playableItem.mediaType === MT_VIDEO 
+      && playableItem.availableMediaTypes.includes(MT_AUDIO)) {
+      this.setMediaType(MT_AUDIO);
+    } else if (playableItem.mediaType === MT_AUDIO 
+      && playableItem.availableMediaTypes.includes(MT_VIDEO)) {
+      this.setMediaType(MT_VIDEO);
+    }
+  };
+
+  setMediaType(mediaType){
+    const { history } = this.props;
+
+    playerHelper.setMediaTypeInQuery(history, mediaType);
+    playerHelper.persistPreferredMediaType(mediaType);
+
+    this.setPlayableItemState(mediaType);
+  }
+
+  setPlayableItemState(mediaType) {
     const { unit, uiLanguage, location } = this.props;
     const { playableItem }               = this.state;
     const { language: playerLanguage }   = playableItem;
 
-    const mediaType       = AVBox.getMediaType(location);
+    if (!mediaType){
+      mediaType = AVBox.getMediaType(location);
+    }
+
     const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
     const newPlayableItem = playerHelper.playableItem(unit, mediaType, uiLanguage, newItemLanguage);
-   
+    
     if (!isEqual(playableItem, newPlayableItem)) {
       this.setState({ playableItem: newPlayableItem, newItemLanguage });
     }
   }
-
-  handleSwitchAV = () => {
-    const { history }      = this.props;
-    const { playableItem } = this.state;
-
-    if (playableItem.mediaType === MT_VIDEO && playableItem.availableMediaTypes.includes(MT_AUDIO)) {
-      playerHelper.setMediaTypeInQuery(history, MT_AUDIO);
-      playerHelper.persistPreferredMediaType(MT_AUDIO);
-    } else if (playableItem.mediaType === MT_AUDIO && playableItem.availableMediaTypes.includes(MT_VIDEO)) {
-      playerHelper.setMediaTypeInQuery(history, MT_VIDEO);
-      playerHelper.persistPreferredMediaType(MT_VIDEO);
-    }
-  };
 
   handleChangeLanguage = (e, language) => {
     const { history } = this.props;
