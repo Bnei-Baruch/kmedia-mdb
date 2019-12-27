@@ -521,7 +521,9 @@ class AVPlayerMobile extends PureComponent {
         }
         {
           !showControls
-            ? <div className="mediaplayer__mobileLoader"><AVSpinner/></div>
+            ? <div className="mediaplayer__mobileLoader">
+              <AVSpinner isLoading={this.media.isLoading}/>
+            </div>
             : null
         }
       </div>
