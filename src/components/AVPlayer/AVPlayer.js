@@ -8,12 +8,13 @@ import enableInlineVideo from 'iphone-inline-video';
 import { withNamespaces } from 'react-i18next';
 import classNames from 'classnames';
 import { Button, Icon } from 'semantic-ui-react';
+import isEqual from 'react-fast-compare';
 
 import { MT_AUDIO, MT_VIDEO, VS_DEFAULT, VS_FHD, VS_HD, VS_NHD } from '../../helpers/consts';
 import playerHelper from '../../helpers/player';
 import { fromHumanReadableTime } from '../../helpers/time';
 import { getQuery } from '../../helpers/url';
-import { isEmpty, areEqual } from '../../helpers/utils';
+import { isEmpty } from '../../helpers/utils';
 import * as shapes from '../shapes';
 import { PLAYER_MODE } from './constants';
 import AVPlayPause from './AVPlayPause';
@@ -189,14 +190,9 @@ class AVPlayer extends Component {
     }
   }
 
-  shouldComponentUpdate(prevProps, prevState){
-    return !areEqual(this.props, prevProps) 
-    || !areEqual(this.state, prevState);
-  }
-
   componentDidUpdate(){
     const { item } = this.props;
-    if (this.state.item !== item) {
+    if (!isEqual(this.state.item, item)) {
       this.setState({
         error: false,
         errorReason: '',
@@ -645,8 +641,8 @@ class AVPlayer extends Component {
     } else if (isVideo) {
       centerMediaControl = (
         <Fragment>
-          <AVCenteredPlay/>
-          <AVSpinner/>
+          <AVCenteredPlay media={media}/>
+          <AVSpinner isLoading={media.isLoading}/>
         </Fragment>
       );
     }
@@ -713,6 +709,7 @@ class AVPlayer extends Component {
               start={media.currentTime}
               end={media.duration}
             />
+            {/* media current time is changed while playing */}
             <AVJumpBack jumpSpan={-5}/>
             <AVJumpBack jumpSpan={5}/>
             <div className="mediaplayer__spacer"/>
