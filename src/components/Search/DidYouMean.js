@@ -7,11 +7,8 @@ const DidYouMean = ({typo_suggest, t}) => {
   if (!typo_suggest){
     return null;
   }
-
+  const to = `?q=${typo_suggest}`;
   const didYouMeanStr = t('search.didYouMean');
-  const { origin, pathname } = window.location;
-
-  const to = `${origin}${pathname}?q=${typo_suggest}`;  
 
   return (
     <Container className="search__didyoumean">
