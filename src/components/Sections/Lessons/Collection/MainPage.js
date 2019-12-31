@@ -12,7 +12,7 @@ const MainPage = (props) => {
   }
 
   return <UnitList />;
-}
+};
 
 MainPage.propTypes = {
   match: shapes.RouterMatch.isRequired,

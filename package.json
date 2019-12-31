@@ -37,7 +37,7 @@
     }
   },
   "devDependencies": {
-    "@svgr/cli": "^4.3.3",
+    "@svgr/cli": "^5.0.1",
     "@testing-library/react": "^9.3.0",
     "compression": "^1.7.3",
     "enzyme": "^3.9.0",
@@ -84,7 +84,7 @@
     "babel-eslint": "^10.0.3",
     "babel-plugin-dynamic-import-node": "^2.2.0",
     "babel-plugin-lodash": "^3.2.11",
-    "babel-plugin-module-resolver": "^3.1.0",
+    "babel-plugin-module-resolver": "^4.0.0",
     "babel-preset-react-app": "^9.0.0",
     "child_process": "^1.0.2",
     "classnames": "^2.2.5",
@@ -125,7 +125,7 @@
     "react-headroom": "^3.0.0",
     "react-helmet-async": "1.0.4",
     "react-i18next": "^8.3.8",
-    "react-image-gallery": "^0.9.0",
+    "react-image-gallery": "^1.0.3",
     "react-media-player": "github:Bnei-Baruch/react-media-player",
     "react-pdf": "^4.0.0",
     "react-redux": "^7.0.2",
