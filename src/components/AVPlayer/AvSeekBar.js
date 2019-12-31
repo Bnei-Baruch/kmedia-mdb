@@ -4,11 +4,11 @@ import isNumber from 'lodash/isNumber';
 import { withMediaProps } from 'react-media-player';
 
 import { PLAYER_MODE } from './constants';
-import { playerModeProp } from '../shapes';
+import { playerModeProp, Media } from '../shapes';
 
 class AvSeekBar extends Component {
   static propTypes = {
-    media: PropTypes.object.isRequired, // TODO: (yaniv) use right propType
+    media: Media.isRequired,
     buffers: PropTypes.array,
     playerMode: playerModeProp.isRequired,
     sliceStart: PropTypes.number,
@@ -27,9 +27,7 @@ class AvSeekBar extends Component {
   };
 
   element = null;
-
   wasMouseDown = false;
-
   isPlayingOnMouseDown = false;
 
   componentDidMount() {
