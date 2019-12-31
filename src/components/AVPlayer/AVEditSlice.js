@@ -17,4 +17,4 @@ AVEditSlice.propTypes = {
   onActivateSlice: PropTypes.func.isRequired,
 };
 
-export default AVEditSlice;
+export default React.memo(AVEditSlice);

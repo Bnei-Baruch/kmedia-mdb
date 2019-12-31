@@ -151,4 +151,12 @@ AVMuteUnmute.propTypes = {
   onVolumeChange: PropTypes.func.isRequired,
 };
 
-export default withMediaProps(AVMuteUnmute);
+const arePropsEqual = (props, nextProps) => {
+  const { media, isAudio } = props;
+  
+  return media.isMuted === nextProps.media.isMuted
+  && media.volume === nextProps.media.volume
+  && isAudio === nextProps.isAudio;
+}
+
+export default React.memo(AVMuteUnmute, arePropsEqual);
