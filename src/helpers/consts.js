@@ -36,6 +36,7 @@ export const CT_PUBLICATION           = 'PUBLICATION';
 export const CT_LELO_MIKUD            = 'LELO_MIKUD';
 export const CT_BLOG_POST             = 'BLOG_POST';
 export const CT_RESEARCH_MATERIAL     = 'RESEARCH_MATERIAL';
+export const CT_KTAIM_NIVCHARIM       = 'KTAIM_NIVCHARIM';
 
 // Content types for additional Elastic results
 export const SCT_BLOG_POST = 'R_BLOG_POST';
