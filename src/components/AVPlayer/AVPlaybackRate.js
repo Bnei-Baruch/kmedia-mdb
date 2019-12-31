@@ -43,4 +43,4 @@ AVPlaybackRate.propTypes = {
   onDropdownOpenedChange: PropTypes.func.isRequired,
 };
 
-export default AVPlaybackRate;
+export default React.memo(AVPlaybackRate);

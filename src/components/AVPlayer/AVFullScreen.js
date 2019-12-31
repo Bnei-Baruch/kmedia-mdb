@@ -41,4 +41,4 @@ AVFullscreen.propTypes = {
   element: PropTypes.object,
 };
 
-export default AVFullscreen;
+export default React.memo(AVFullscreen);

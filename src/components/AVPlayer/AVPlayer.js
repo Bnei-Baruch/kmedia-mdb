@@ -719,13 +719,11 @@ class AVPlayer extends Component {
               sliceStart={sliceStart}
               sliceEnd={sliceEnd}
             />
-
             <AVPlaybackRate
               value={playbackRate}
               onSelect={this.playbackRateChange}
               onDropdownOpenedChange={onDropdownOpenedChange}
             />
-
             {
               isVideo && (
                 <AVVideoSize
@@ -735,8 +733,12 @@ class AVPlayer extends Component {
                 />
               )
             }
-            <AVMuteUnmute isAudio={isAudio} onMuteUnmute={this.onMuteUnmute}
-              onVolumeChange={this.onVolumeChange}/>
+            <AVMuteUnmute 
+              media={media}
+              isAudio={isAudio} 
+              onMuteUnmute={this.onMuteUnmute}
+              onVolumeChange={this.onVolumeChange}
+            />
             <AVAudioVideo
               isAudio={isAudio}
               isVideo={isVideo}
