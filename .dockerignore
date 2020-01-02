@@ -1,0 +1,38 @@
+# Common
+README.md
+CHANGELOG.md
+LICENSE
+*.log
+
+# git
+.git
+.gitattributes
+.gitignore
+
+# JetBrains
+.idea
+projectFilesBackup
+
+# Docker
+docker-compose.yml
+Dockerfile
+
+# Others
+.codeclimate.json
+.editorconfig
+.eslintignore
+.prepush.eslintrc.json
+.sass-lint.yml
+cc-test-reporter
+.circleci
+circle.yml
+semantic.json
+.env
+
+# App
+assets
+help
+misc
+node_modules
+semantic
+testcafe
