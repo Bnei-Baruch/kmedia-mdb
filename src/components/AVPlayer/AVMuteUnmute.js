@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withMediaProps } from 'react-media-player';
 import { Icon } from 'semantic-ui-react';
 
 const AVMuteUnmute = ({ upward = true, media, media: { isMuted, volume }, isAudio, onVolumeChange, onMuteUnmute }) => {
