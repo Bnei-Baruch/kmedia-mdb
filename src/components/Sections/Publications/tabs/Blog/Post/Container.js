@@ -11,7 +11,7 @@ const BlogPostContainer = ({ match }) => {
   const wip = useSelector(state => selectors.getBlogWipPost(state.publications));
   const err = useSelector(state => selectors.getBlogErrorPost(state.publications));
   const language = useSelector(state => settings.getLanguage(state.settings));
- 
+
   const { blog, id } = match.params;
   const post = useSelector(state => selectors.getBlogPost(state.publications, blog, id));
 
@@ -22,14 +22,14 @@ const BlogPostContainer = ({ match }) => {
       if (wip || err) {
         return;
       }
-      
+
       if (post
         && post.blog === blog
         && `${post.wp_id}` === id) {
         return;
       }
 
-      dispatch(actions.fetchBlogPost(id, blog));
+      dispatch(actions.fetchBlogPost(blog, id));
     },
     [id, blog, dispatch, wip, err, post]
   );
