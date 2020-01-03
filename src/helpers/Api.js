@@ -86,7 +86,7 @@ class Api {
     Requests.get(`posts?${Requests.makeParams({ page_no, page_size, ...rest })}`)
   );
 
-  static post = (blog, id) => Requests.get(`posts/${id}/${blog}`);
+  static post = (blog, id) => Requests.get(`posts/${blog}/${id}`);
 
   static tagDashboard = ({ id, language }) => Requests.get(`tags/${id}/dashboard?${Requests.makeParams({ language })}`);
 
