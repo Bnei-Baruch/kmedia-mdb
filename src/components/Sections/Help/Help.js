@@ -31,7 +31,7 @@ const texts = [
     description: {
       [LANG_HEBREW]: 'איך מוצאים את השיעור האחרון, מה כולל הדף של השיעור ואיך משתמשים בו.',
       [LANG_ENGLISH]: 'How to find the last lesson, what includes the page of the lesson and how to use it.',
-      [LANG_RUSSIAN]: 'Как найти последний урок, что есть на страницы урока и как ей пользоваться',
+      [LANG_RUSSIAN]: 'Как найти последний урок, что есть на странице урока и как ей пользоваться',
     },
   },
   {
