@@ -94,7 +94,7 @@
     "cross-env": "^6.0.3",
     "dotenv": "^8.0.0",
     "eslint-config-react-app": "^5.0.2",
-    "eslint-plugin-jsdoc": "^18.1.0",
+    "eslint-plugin-jsdoc": "^20.0.0",
     "express": "^4.16.3",
     "file-loader": "^5.0.2",
     "fscreen": "^1.0.2",
