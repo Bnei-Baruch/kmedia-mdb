@@ -53,4 +53,13 @@ AVAudioVideo.propTypes = {
   uiLanguage: PropTypes.string.isRequired,
 };
 
-export default withNamespaces()(AVAudioVideo);
+const areEqual = (prevProps, nextProps) => {
+  const equal = prevProps.isAudio === nextProps.isAudio
+    && prevProps.isVideo === nextProps.isVideo
+    && prevProps.fallbackMedia === nextProps.fallbackMedia
+    && prevProps.uiLanguage === nextProps.uiLanguage;
+
+  return equal;
+}
+
+export default withNamespaces()(React.memo(AVAudioVideo, areEqual));
