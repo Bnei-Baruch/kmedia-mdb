@@ -33,4 +33,7 @@ AVPlaybackRateMobile.propTypes = {
   value: PropTypes.string,
 };
 
-export default AVPlaybackRateMobile;
+const arePropsEqual = (prevProps, nextProps) => 
+  prevProps.value === nextProps.value;
+
+export default React.memo(AVPlaybackRateMobile, arePropsEqual);
