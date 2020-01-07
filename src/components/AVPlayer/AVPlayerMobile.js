@@ -38,6 +38,7 @@ class AVPlayerMobile extends PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
     uiLanguage: PropTypes.string.isRequired,
+    media: shapes.Media.isRequired,
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -46,7 +47,7 @@ class AVPlayerMobile extends PureComponent {
     requestedLanguage: PropTypes.string.isRequired,
 
     // Audio/Video switch props.
-    item: PropTypes.object.isRequired, // TODO: (yaniv) add shape fo this
+    item: shapes.VideoItem.isRequired,
     onSwitchAV: PropTypes.func.isRequired,
 
     // Slice props
@@ -522,7 +523,7 @@ class AVPlayerMobile extends PureComponent {
         {
           !showControls
             ? <div className="mediaplayer__mobileLoader">
-              <AVSpinner isLoading={this.media.isLoading}/>
+              <AVSpinner isLoading={this.media ? this.media.isLoading : false}/>
             </div>
             : null
         }
