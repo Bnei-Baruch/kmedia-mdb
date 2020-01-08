@@ -3,12 +3,12 @@ import 'moment-duration-format';
 import escapeRegExp from 'lodash/escapeRegExp';
 
 import { CollectionsBreakdown } from './mdb';
-import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH } from './consts';
+import { LANG_GERMAN, LANG_HEBREW, LANG_ITALIAN, LANG_RUSSIAN, LANG_SPANISH, LANG_TURKISH } from './consts';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
 
-export const isEmpty = (obj) => {
+export const isEmpty = obj => {
   // null and undefined are "empty"
   if (obj === null || obj === undefined) {
     return true;
@@ -44,7 +44,7 @@ export const isNotEmptyArray = arr => (Array.isArray(arr) && arr.length > 0);
  * @param error
  * @returns {String}
  */
-export const formatError = (error) => {
+export const formatError = error => {
   if (error.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
@@ -138,7 +138,7 @@ export const physicalFile = (file, ext = false) => {
 
 export const publicFile = relativePath => `${PUBLIC_BASE}${relativePath}`;
 
-export const canonicalCollection = (unit) => {
+export const canonicalCollection = unit => {
   if (!unit) {
     return null;
   }
@@ -213,7 +213,7 @@ export const strCmp = (a, b) => {
   return 0;
 };
 
-export const getEscapedRegExp = (term) => {
+export const getEscapedRegExp = term => {
   const escaped = term.replace(/[/)(.+\\]/g, '\\$&');
   try {
     return new RegExp(escaped, 'i');
@@ -222,7 +222,7 @@ export const getEscapedRegExp = (term) => {
   }
 };
 
-export const getRSSFeedByLang = (language) => {
+export const getRSSFeedByLang = language => {
   switch (language) {
   case LANG_HEBREW:
     return 'KabbalahVideoHeb';
@@ -235,6 +235,20 @@ export const getRSSFeedByLang = (language) => {
   }
 };
 
-export const getRSSLinkByLang = (language) => {
+export const getRSSLinkByLang = language => {
   return 'https://feeds.feedburner.com/' + getRSSFeedByLang(language);
+};
+
+const podcastLinks = new Map([
+  [LANG_HEBREW, 'קבלה-מדיה-mp3-kab-heb/id1109848638?l=iw'],
+  [LANG_RUSSIAN, 'каббала-медиа-mp3-kab-rus/id1109845737?l=iw'],
+  [LANG_TURKISH, 'kabala-günlük-dersler-mp3-kab-trk/id1106592672?l=iw'],
+  [LANG_ITALIAN, 'kabbalah-media-mp3-kab-ita/id1109848953?l=iw'],
+  [LANG_GERMAN, 'kabbalah-media-mp3-kab-ger/id1109848570?l=iw'],
+  [LANG_SPANISH, 'kcabalá-media-mp3-kab-spa/id1109848764?l=iw'],
+]);
+
+export const getPodcastLinkByLang = language => {
+  const hash = podcastLinks.get(language) || 'kabbalah-media-mp3-kab-eng/id1109845884?l=iw';
+  return 'https://podcasts.apple.com/il/podcast/' + hash;
 };
