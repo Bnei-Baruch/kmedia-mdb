@@ -15,7 +15,7 @@ const holidaysFilter = {
 
     // we may have tag or v (TagById is identity function on initial state)
     const tag = tags.getTagById(getState().tags)(v);
-    if (tag && tag.label) {
+    if (tag?.label) {
       return tag.label;
     }
 

@@ -281,7 +281,7 @@ export const libraryPage = async (store, match) => {
       }
 
       let language    = null;
-      const location  = (state && state.router.location) || {};
+      const location  = state?.router.location ?? {};
       const query     = getQuery(location);
       const uiLang    = query.language || settingsSelectors.getLanguage(state.settings);
       const languages = [...Object.keys(data)];

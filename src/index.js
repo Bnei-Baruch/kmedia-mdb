@@ -36,7 +36,7 @@ store.dispatch(ssr.hydrate());
 const i18nData = window.__i18n || {};
 
 // Initialize moment global locale to default language
-const language = i18nData.initialLanguage || DEFAULT_LANGUAGE;
+const language = i18nData.initialLanguage ?? DEFAULT_LANGUAGE;
 moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
 
 const deviceInfo = new UAParser().getResult();

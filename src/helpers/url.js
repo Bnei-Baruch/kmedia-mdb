@@ -81,7 +81,7 @@ export const prefixWithLanguage = (path, location, toLanguage) => {
 };
 
 export const getQuery = (location) => {
-  if (location && location.search) {
+  if (location?.search) {
     const q = parse(location.search.slice(1));
     if ('deb' in q) {
       q.deb = q.deb !== 'false';

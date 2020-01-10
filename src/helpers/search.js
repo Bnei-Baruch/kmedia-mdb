@@ -4,7 +4,7 @@ export class SuggestionsHelper {
   constructor(results) {
     this.suggestions = [];
 
-    if (results && results.suggest && results.suggest['title_suggest']) {
+    if (results?.suggest && results.suggest['title_suggest']) {
       const query      = results.suggest.title_suggest[0].text.toLowerCase();
       this.suggestions = results.suggest.title_suggest[0].options.map((option) => {
         const { text, _source: { title, result_type: resultType } } = option;
