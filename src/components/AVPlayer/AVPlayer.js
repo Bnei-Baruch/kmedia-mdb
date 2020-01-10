@@ -750,6 +750,7 @@ class AVPlayer extends Component {
               onSwitch={this.onSwitchAV}
               fallbackMedia={fallbackMedia}
               uiLanguage={uiLanguage}
+              t={t}
             />
             <AVLanguage
               languages={languages}
