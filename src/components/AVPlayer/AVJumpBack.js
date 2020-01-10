@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withMediaProps } from 'react-media-player';
 import { Icon } from 'semantic-ui-react';
 
-const AVJumpBack = ({ jumpSpan = 5, media: { duration, currentTime, seekTo } }) => {
+const AVJumpBack = ({ jumpSpan = 5, getMedia }) => {
   const onJumpBack = () => {
+    const { duration, currentTime, seekTo } = getMedia();
     let jumpTo = currentTime + jumpSpan;
 
     // Make sure we don't exceed the duration boundaries
@@ -13,27 +13,23 @@ const AVJumpBack = ({ jumpSpan = 5, media: { duration, currentTime, seekTo } }) 
     seekTo(jumpTo);
   };
 
-  const isBack = () => jumpSpan < 0;
+  const isBack = jumpSpan < 0;
 
-  const backwardText = jumpSpan < 0 ? `${jumpSpan}s` : '';
-  const farwardText  = jumpSpan > 0 ? `+${jumpSpan}s` : '';
+  const backwardText = isBack ? `${jumpSpan}s` : '';
+  const forwardText  = !isBack ? `+${jumpSpan}s` : '';
 
   return (
     <button type="button" tabIndex="-1" onClick={onJumpBack}>
       {backwardText}
-      <Icon name={isBack() ? 'backward' : 'forward'} />
-      {farwardText}
+      <Icon name={isBack ? 'backward' : 'forward'} />
+      {forwardText}
     </button>
   );
 };
 
 AVJumpBack.propTypes = {
-  media: PropTypes.shape({
-    currentTime: PropTypes.number.isRequired,
-    duration: PropTypes.number.isRequired,
-    seekTo: PropTypes.func.isRequired,
-  }).isRequired,
+  getMedia: PropTypes.func,
   jumpSpan: PropTypes.number,
 };
 
-export default withMediaProps(AVJumpBack);
+export default React.memo(AVJumpBack);
