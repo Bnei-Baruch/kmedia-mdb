@@ -163,6 +163,9 @@ class AVPlayer extends Component {
     }
   }
 
+  // the player has to re-render during play because of the media changes, 
+  // so no need to shouldComponentUpdate here
+
   componentDidMount() {
     const { history } = this.props;
     const query       = getQuery(history.location);
@@ -569,6 +572,8 @@ class AVPlayer extends Component {
     return null;
   };
 
+  getMedia = () => this.props.media;
+
   renderUnmuteButton(isRtl, t) {
     return <Button
       icon="volume off"
@@ -710,8 +715,8 @@ class AVPlayer extends Component {
               end={media.duration}
             />
             {/* media current time is changed while playing */}
-            <AVJumpBack jumpSpan={-5}/>
-            <AVJumpBack jumpSpan={5}/>
+            <AVJumpBack jumpSpan={-5} getMedia={this.getMedia} />
+            <AVJumpBack jumpSpan={5} getMedia={this.getMedia} />
             <div className="mediaplayer__spacer"/>
             <AvSeekBar
               buffers={this.buffers()}
