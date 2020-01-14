@@ -349,6 +349,31 @@ class LibraryContainer extends Component {
     return content;
   };
 
+  nextPrevButtons = () => {
+    const { sourceId } = this.props;
+    const fullPath    = this.getFullPath(sourceId);
+    const activeIndex = getIndex(fullPath[1], fullPath[2]);
+    if (activeIndex === -1)
+      return null;
+    const children = fullPath[1].children;
+    return (
+      <div>
+        {this.nextPrevLink(children, activeIndex - 1)}
+        {this.nextPrevLink(children, activeIndex + 1)}
+      </div>
+    );
+  };
+
+  nextPrevLink(children, index) {
+    const { getSourceById } = this.props;
+    if (index < 0 || index > children.length -1)
+      return null;
+    const source = getSourceById(children[index]);
+    return (
+      <div>{source.name}</div>
+    );
+  }
+
   render() {
     const { sourceId, getSourceById, language, t, push } = this.props;
 
@@ -446,6 +471,7 @@ class LibraryContainer extends Component {
                     style={{ minHeight: `calc(100vh - 14px)` }}
                   >
                     {content}
+                    {this.nextPrevButtons()}
                   </div>
                 </Ref>
               </Grid.Column>
