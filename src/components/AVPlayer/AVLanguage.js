@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
 import noop from 'lodash/noop';
 import { Dropdown } from 'semantic-ui-react';
 
@@ -79,4 +78,4 @@ const areEqual = (prevProps, nextProps) =>
 && prevProps.requestedLanguage === nextProps.requestedLanguage
 && prevProps.uiLanguage === nextProps.uiLanguage
 
-export default React.memo((withNamespaces()(AVLanguage)), areEqual);
+export default React.memo(AVLanguage, areEqual);

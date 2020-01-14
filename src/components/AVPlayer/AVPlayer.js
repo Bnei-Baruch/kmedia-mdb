@@ -759,6 +759,7 @@ class AVPlayer extends Component {
               requestedLanguage={requestedLanguage}
               onSelect={this.onLanguageChange}
               onDropdownOpenedChange={onDropdownOpenedChange}
+              t={t}
             />
             {!isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.SLICE_EDIT)}/>}
             {isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.NORMAL)}/>}
