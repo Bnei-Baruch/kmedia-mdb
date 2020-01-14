@@ -1,10 +1,11 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import debounce from 'lodash/debounce';
 import { withRouter } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 import { Button, Icon, Message } from 'semantic-ui-react';
+import { isEqual } from 'react-fast-compare';
 
 import { LANG_HEBREW, MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
 import { fromHumanReadableTime } from '../../helpers/time';
@@ -23,7 +24,6 @@ import playerHelper from '../../helpers/player';
 import { PlayerStartEnum } from "./playerStartEnum";
 import classNames from "classnames";
 import { DeviceInfoContext } from "../../helpers/app-contexts";
-import { withMediaProps } from 'react-media-player';
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
@@ -32,13 +32,12 @@ const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = playback => parseFloat(playback.slice(0, -1));
 
-class AVPlayerMobile extends PureComponent {
+class AVPlayerMobile extends Component {
   static contextType = DeviceInfoContext;
 
   static propTypes = {
     t: PropTypes.func.isRequired,
     uiLanguage: PropTypes.string.isRequired,
-    media: shapes.Media.isRequired,
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -121,12 +120,6 @@ class AVPlayerMobile extends PureComponent {
     };
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.item !== this.props.item) {
-      this.setState({ error: false, errorReason: '', firstSeek: true });
-    }
-  }
-
   componentWillUnmount() {
     if (this.seekTimeoutId) {
       clearTimeout(this.seekTimeoutId);
@@ -140,7 +133,6 @@ class AVPlayerMobile extends PureComponent {
     this.setState({ showControls: false });
     this.wasCurrentTime = this.media.currentTime;
     this.props.onSwitchAV(...params);
-    // this.media.autoplay = true;
   };
 
   // Remember the current time and playing state while switching.
@@ -411,7 +403,7 @@ class AVPlayerMobile extends PureComponent {
 
   render() {
     const
-      {
+      { 
         item,
         languages,
         selectedLanguage,
@@ -502,6 +494,7 @@ class AVPlayerMobile extends PureComponent {
               onSwitch={this.onSwitchAV}
               fallbackMedia={fallbackMedia}
               uiLanguage={uiLanguage}
+              t={t}
             />
             <AVLanguageMobile
               languages={languages}
@@ -509,6 +502,7 @@ class AVPlayerMobile extends PureComponent {
               uiLanguage={uiLanguage}
               requestedLanguage={requestedLanguage}
               onSelect={this.onLanguageChange}
+              t={t}
             />
           </div>
         </div>
@@ -532,4 +526,4 @@ class AVPlayerMobile extends PureComponent {
   }
 }
 
-export default withRouter(withNamespaces()(withMediaProps(AVPlayerMobile)));
+export default withRouter(withNamespaces()(AVPlayerMobile));

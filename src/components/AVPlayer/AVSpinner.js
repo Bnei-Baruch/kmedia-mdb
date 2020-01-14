@@ -14,7 +14,7 @@ const AVSpinner = ({ isLoading }) => {
 }
 
 AVSpinner.propTypes = {
-  isLoading: PropTypes.bool.isRequired
+  isLoading: PropTypes.bool
 }
 
 export default React.memo(AVSpinner);
