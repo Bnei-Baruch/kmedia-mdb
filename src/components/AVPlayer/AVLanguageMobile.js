@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
-import { withNamespaces } from 'react-i18next';
 
 import { LANG_HEBREW, LANGUAGE_OPTIONS } from '../../helpers/consts';
 import TimedPopup from '../shared/TimedPopup';
@@ -71,4 +70,4 @@ const areEqual = (prevProps, nextProps) =>
 && prevProps.requestedLanguage === nextProps.requestedLanguage
 && prevProps.uiLanguage === nextProps.uiLanguage
 
-export default React.memo(withNamespaces()(AVLanguageMobile), areEqual);
+export default React.memo(AVLanguageMobile, areEqual);
