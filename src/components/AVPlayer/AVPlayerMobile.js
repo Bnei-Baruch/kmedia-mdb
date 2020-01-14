@@ -5,7 +5,6 @@ import debounce from 'lodash/debounce';
 import { withRouter } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 import { Button, Icon, Message } from 'semantic-ui-react';
-import { isEqual } from 'react-fast-compare';
 
 import { LANG_HEBREW, MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
 import { fromHumanReadableTime } from '../../helpers/time';
