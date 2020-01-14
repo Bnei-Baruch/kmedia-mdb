@@ -26,4 +26,5 @@ AVTimeElapsed.defaultProps = {
   end: undefined
 };
 
+// React.memo cannot help here because start is always changed during playback
 export default AVTimeElapsed;
