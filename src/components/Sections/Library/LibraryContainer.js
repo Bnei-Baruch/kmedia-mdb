@@ -20,7 +20,7 @@ import LibraryContentContainer from './LibraryContentContainer';
 import TOC, { getIndex } from './TOC';
 import LibrarySettings from './LibrarySettings';
 import Share from './Share';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
+import { getLanguageDirection, isLanguageRtl } from '../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 class LibraryContainer extends Component {
@@ -85,7 +85,7 @@ class LibraryContainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { sourceId, areSourcesLoaded } = this.props;
+    const { sourceId, areSourcesLoaded, getPathByID } = this.props;
     if (!areSourcesLoaded) {
       return;
     }
@@ -105,7 +105,7 @@ class LibraryContainer extends Component {
 
     // hide toc if only one item
     if (tocIsActive) {
-      const fullPath    = this.getFullPath(sourceId);
+      const fullPath    = LibraryContainer.getFullPath(sourceId, getPathByID);
       const activeIndex = getIndex(fullPath[1], fullPath[2]);
 
       if (activeIndex === -1) {
@@ -299,10 +299,8 @@ class LibraryContainer extends Component {
     );
   };
 
-  getFullPath = (sourceId) => {
+  static getFullPath = (sourceId, getPathByID) => {
     // Go to the root of this sourceId
-    const { getPathByID } = this.props;
-
     if (!getPathByID) {
       return [{ id: '0' }, { id: sourceId }];
     }
@@ -349,39 +347,60 @@ class LibraryContainer extends Component {
     return content;
   };
 
-  nextPrevButtons = () => {
-    const { sourceId } = this.props;
-    const fullPath    = this.getFullPath(sourceId);
+  static nextPrevButtons = props => {
+    const { sourceId, getPathByID } = props;
+
+    const fullPath    = LibraryContainer.getFullPath(sourceId, getPathByID);
     const activeIndex = getIndex(fullPath[1], fullPath[2]);
-    if (activeIndex === -1)
+    if (activeIndex === -1) {
       return null;
+    }
     const children = fullPath[1].children;
     return (
       <div>
-        {this.nextPrevLink(children, activeIndex - 1)}
-        {this.nextPrevLink(children, activeIndex + 1)}
+        {LibraryContainer.nextPrevLink(children, activeIndex - 1, false, props)}
+        {LibraryContainer.nextPrevLink(children, activeIndex + 1, true, props)}
       </div>
     );
   };
 
-  nextPrevLink(children, index) {
-    const { getSourceById } = this.props;
-    if (index < 0 || index > children.length -1)
+  static getNextPrevDetails(isNext, language, t) {
+    const langDir = getLanguageDirection(language);
+
+    const title         = isNext ? t('buttons.next') : t('buttons.previous');
+    const labelPosition = isNext ? 'right' : 'left';
+    const icon          = isNext ? (langDir === 'ltr' ? 'forward' : 'backward') : (langDir === 'ltr' ? 'backward' : 'forward');
+
+    return { title, labelPosition, icon };
+  }
+
+  static nextPrevLink(children, index, isNext, { push, t, language, getSourceById }) {
+    if (index < 0 || index > children.length - 1) {
       return null;
-    const source = getSourceById(children[index]);
+    }
+    const { title, labelPosition, icon } = LibraryContainer.getNextPrevDetails(isNext, language, t);
+    const sourceId                       = children[index];
+    const source                         = getSourceById(sourceId);
     return (
-      <div>{source.name}</div>
+      <Button
+        onClick={() => push(`sources/${sourceId}`)}
+        className="library__nextPrevButton"
+        size="mini"
+        icon={icon}
+        labelPosition={labelPosition}
+        content={title}
+        title={source.name} />
     );
   }
 
   render() {
-    const { sourceId, getSourceById, language, t, push } = this.props;
+    const { sourceId, getSourceById, getPathByID, language, t, push } = this.props;
 
     const content = this.getContent();
 
     const { isReadable, fontSize, theme, fontType, tocIsActive, match } = this.state;
 
-    const fullPath    = this.getFullPath(sourceId);
+    const fullPath    = LibraryContainer.getFullPath(sourceId, getPathByID);
     const parentId    = this.properParentId(fullPath);
     const matchString = this.matchString(parentId, t);
 
@@ -471,7 +490,7 @@ class LibraryContainer extends Component {
                     style={{ minHeight: `calc(100vh - 14px)` }}
                   >
                     {content}
-                    {this.nextPrevButtons()}
+                    {LibraryContainer.nextPrevButtons(this.props)}
                   </div>
                 </Ref>
               </Grid.Column>
