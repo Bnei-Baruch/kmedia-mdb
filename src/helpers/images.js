@@ -8,6 +8,8 @@ import EventsIcon from '../images/icons/Events';
 import PublicationsIcon from '../images/icons/Publications';
 import DownloadIcon from '../images/icons/Download';
 import InfoIcon from '../images/icons/Info';
+import SimpleModeIcon from '../images/icons/SimpleMode';
+
 
 import DailyLessonsFallbackIcon from '../images/fallbacks/DailylessonsFallback';
 import ProgramsFallbackIcon from '../images/fallbacks/ProgramsFallback';
@@ -19,14 +21,15 @@ import PublicationsFallbackIcon from '../images/fallbacks/PublicationsFallback';
 import ImagePlaceholder from '../images/Image';
 
 const sectionLogo = {
-  lessons: DailyLessonsIcon,
-  programs: ProgramsIcon,
-  lectures: LecturesIcon,
-  sources: SourcesIcon,
-  events: EventsIcon,
-  publications: PublicationsIcon,
-  downloads: DownloadIcon,
-  info: InfoIcon,
+  'lessons': DailyLessonsIcon,
+  'programs': ProgramsIcon,
+  'lectures': LecturesIcon,
+  'sources': SourcesIcon,
+  'events': EventsIcon,
+  'publications': PublicationsIcon,
+  'downloads': DownloadIcon,
+  'info': InfoIcon,
+  'simple-mode': SimpleModeIcon,
 };
 
 export const SectionLogo = ({ name, ...props }) => {
