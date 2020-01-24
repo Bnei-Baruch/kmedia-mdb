@@ -9,6 +9,8 @@ import Summary from './Summary/Summary';
 import SourcesContainer from './Sources/SourcesContainer';
 import Sketches from './Sketches';
 import TranscriptionContainer from './Transcription/TranscriptionContainer';
+import { isEmpty } from '../../../../../helpers/utils';
+import DerivedUnits, { derivedUnitsContentTypes } from './DerivedUnits';
 
 const derivedTextUnits = (unit) => {
   const types    = {};
@@ -67,6 +69,14 @@ const Materials = ({ unit = undefined, t }) => {
       name: 'research',
       label: t('materials.research.header'),
       component: <TranscriptionContainer unit={unit} key="research" type="research" />
+    });
+  }
+
+  if (!isEmpty(unit.derived_units) && derivedUnitsContentTypes.includes(unit.content_type)){
+    items.push({
+      name: 'derived',
+      label: t('materials.derived-units.header'),
+      component: <DerivedUnits objUnits={unit.derived_units} key="derived" type="derived" />
     });
   }
 
