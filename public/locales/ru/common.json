@@ -425,6 +425,9 @@
     "research": {
       "header": "Исследовательские материалы",
       "no-content": "Нет исследовательских материалов"
+    },
+    "derived-units": {
+      "header": "Избранные отрывки"
     }
   },
   "sources-library": {

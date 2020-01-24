@@ -399,6 +399,9 @@
     "research": {
       "header": "Materiales de investigacion",
       "no-content": "No hay materiales de investigación."
+    },
+    "derived-units": {
+      "header": "Selected Highlights"
     }
   },
   "sources-library": {
