@@ -21,7 +21,7 @@ const CollectionPage = (props) => {
       <PageHeader collection={collection} namespace={namespace} />
       <UnitList
         namespace={namespace}
-        extraFetchParams={{ collection: collection.id }}
+        extraFetchParams={(collection) => collection.id}
         renderUnit={renderUnit}
       />
     </div>

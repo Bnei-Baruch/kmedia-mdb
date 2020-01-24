@@ -11,7 +11,7 @@ import UnitLogo from '../../../../shared/Logo/UnitLogo';
 import { FrownSplash } from '../../../../shared/Splash/Splash';
 
 export const renderUnit = (unit, t) => {
-  if (unit === undefined) {
+  if (!unit) {
     return <FrownSplash text={t('messages.source-content-not-found')} />;
   }
 
