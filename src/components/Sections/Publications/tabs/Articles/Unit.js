@@ -5,7 +5,7 @@ import { canonicalLink } from '../../../../../helpers/links';
 import { neighborIndices, strCmp } from '../../../../../helpers/utils';
 import Link from '../../../../Language/MultiLanguageLink';
 import Helmets from '../../../../shared/Helmets/index';
-import { UnitContainer, wrap as wrapContainer } from '../../../../Pages/Unit/Container';
+import { wrap as wrapContainer } from '../../../../Pages/Unit/Container';
 import { UnitPage, wrap as wrapPage } from '../../../../Pages/Unit/Page';
 import { SameCollectionContainer, wrap as wrapSameCollectionContainer } from '../../../../Pages/Unit/widgets/Recommended/SameCollection/Container';
 import SameCollectionWidget from '../../../../Pages/Unit/widgets/Recommended/SameCollection/Widget';
@@ -153,19 +153,14 @@ class MyUnitPage extends UnitPage {
 
 const MyWrappedUnitPage = wrapPage(MyUnitPage);
 
-class MyUnitContainer extends UnitContainer {
-  render() {
-    const { language, unit, wip, err } = this.props;
-    return (
-      <MyWrappedUnitPage
-        section="publications"
-        unit={wip || err ? null : unit}
-        language={language}
-        wip={wip}
-        err={err}
-      />
-    );
-  }
-}
+const MyUnitContainer = ({ language, unit, wip, err }) => (
+  <MyWrappedUnitPage
+    section="publications"
+    unit={wip || err ? null : unit}
+    language={language}
+    wip={wip}
+    err={err}
+  />
+);
 
 export default wrapContainer(MyUnitContainer);
