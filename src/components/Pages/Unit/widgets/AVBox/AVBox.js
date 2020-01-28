@@ -49,7 +49,7 @@ class AVBox extends Component {
     this.state = {
       playableItem,
       autoPlay: true,
-      newItemLanguage: null
+      newItemLanguage: playerLanguage
     };
 
     playerHelper.setLanguageInQuery(history, playerLanguage);
