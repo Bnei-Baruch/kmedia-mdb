@@ -14,18 +14,22 @@ const commonRenderUnitForClips = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
   const clips     = breakdown.getClips();
 
-  const relatedItems = clips.map(x => (
-    <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-      {x.name || NO_NAME}
-    </List.Item>
-  )).concat(breakdown.getAllButClips().map(x => (
-    <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-      {x.name}
-    </List.Item>
-  )));
+  const relatedItems = clips
+    .map(x => (
+      <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
+        {x.name || NO_NAME}
+      </List.Item>
+    ))
+    .concat(breakdown.getAllButClips().map(x => (
+      <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
+        {x.name}
+      </List.Item>
+    )));
+
+  const link = canonicalLink(unit);
 
   return {
-    link: canonicalLink(unit),
+    link: link,
     filmDate: unit.film_date ? t('values.date', { date: unit.film_date }) : '',
     clips,
     relatedItems
@@ -68,15 +72,12 @@ const renderUnit = (unit, t) => {
   );
 };
 
-const DerivedUnits = ({ selectedUnits, t }) => {
-  return (
-    <Table unstackable basic="very" className="index" sortable>
-      <Table.Body>
-        {selectedUnits.map(u => renderUnit(u, t))}
-      </Table.Body>
-    </Table>
-  );
-};
+const DerivedUnits = ({ selectedUnits, t }) => 
+  <Table unstackable basic="very" className="index" sortable>
+    <Table.Body>
+      {selectedUnits.map(u => renderUnit(u, t))}
+    </Table.Body>
+  </Table>;
 
 DerivedUnits.propTypes = {
   selectedUnits: PropTypes.arrayOf(shapes.ContentUnit).isRequired,
