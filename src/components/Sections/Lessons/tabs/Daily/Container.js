@@ -26,12 +26,14 @@ const map2Func = x => (
   </List.Item>
 );
 
-export const renderUnit = (unit, t) => {
+const renderUnit = (unit, t) => {
   const breakdown = breakdownFunc(unit);
 
   const map1 = map1Func(t);
 
-  const relatedItems = breakdown.getDailyLessons().map(map1).concat(breakdown.getAllButDailyLessons().map(map2Func));
+  const relatedItems = breakdown.getDailyLessons()
+    .map(map1)
+    .concat(breakdown.getAllButDailyLessons().map(map2Func));
 
   return (
     <Table.Row verticalAlign="top" key={unit.id} className="no-thumbnail">

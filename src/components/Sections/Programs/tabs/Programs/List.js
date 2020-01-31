@@ -10,7 +10,7 @@ import Link from '../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
 import { FrownSplash } from '../../../../shared/Splash/Splash';
 
-export const renderUnit = (unit, t) => {
+const renderUnit = (unit, t) => {
   if (!unit) {
     return <FrownSplash text={t('messages.source-content-not-found')} />;
   }

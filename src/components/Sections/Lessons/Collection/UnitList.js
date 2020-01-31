@@ -8,7 +8,7 @@ import Link from '../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../shared/Logo/UnitLogo';
 import Collection from '../../../Pages/Collection/Container';
 
-export const renderUnit = (unit, t) => {
+const renderUnit = (unit, t) => {
   let filmDate = '';
   if (unit.film_date) {
     filmDate = t('values.date', { date: unit.film_date });

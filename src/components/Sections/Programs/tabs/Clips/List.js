@@ -9,7 +9,7 @@ import UnitList from '../../../../Pages/UnitList/Container';
 import Link from '../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
 
-export const renderUnit = (unit, t) => {
+const renderUnit = (unit, t) => {
   const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
   const clips     = breakdown.getClips();
 
