@@ -39,7 +39,7 @@ const calcAvailableLanguages = (unit) => {
   }
 
   return Array.from(
-    unit.files.reduce((acc, val) => acc.add(val.language),
+    unit.files.filter(f => f.type === MT_VIDEO || f.type === MT_AUDIO).reduce((acc, val) => acc.add(val.language),
       new Set()));
 };
 
