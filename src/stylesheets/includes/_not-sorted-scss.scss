@@ -1543,6 +1543,18 @@
   display:inline;
 }
 
+.library__nextPrevButtons {
+  height:20px;
+}
+
 .library__nextPrevButton {
   min-width: 140px;
+}
+
+.align-right {
+  float: right;
+}
+
+.align-left {
+  float: left
 }

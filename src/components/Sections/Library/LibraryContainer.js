@@ -357,7 +357,7 @@ class LibraryContainer extends Component {
     }
     const children = fullPath[1].children;
     return (
-      <div>
+      <div className="library__nextPrevButtons">
         {LibraryContainer.nextPrevLink(children, activeIndex - 1, false, props)}
         {LibraryContainer.nextPrevLink(children, activeIndex + 1, true, props)}
       </div>
@@ -370,21 +370,22 @@ class LibraryContainer extends Component {
     const title         = isNext ? t('buttons.next') : t('buttons.previous');
     const labelPosition = isNext ? 'right' : 'left';
     const icon          = isNext ? (langDir === 'ltr' ? 'forward' : 'backward') : (langDir === 'ltr' ? 'backward' : 'forward');
+    const buttonAlign   = isNext ? (langDir === 'ltr' ? 'right' : 'left') : (langDir === 'ltr' ? 'left' : 'right');
 
-    return { title, labelPosition, icon };
+    return { title, labelPosition, buttonAlign, icon };
   }
 
   static nextPrevLink(children, index, isNext, { push, t, language, getSourceById }) {
     if (index < 0 || index > children.length - 1) {
       return null;
     }
-    const { title, labelPosition, icon } = LibraryContainer.getNextPrevDetails(isNext, language, t);
-    const sourceId                       = children[index];
-    const source                         = getSourceById(sourceId);
+    const { title, labelPosition, buttonAlign, icon } = LibraryContainer.getNextPrevDetails(isNext, language, t);
+    const sourceId                                    = children[index];
+    const source                                      = getSourceById(sourceId);
     return (
       <Button
-        onClick={() => push(`sources/${sourceId}`)}
-        className="library__nextPrevButton"
+        onClick={e => { push(`sources/${sourceId}`); e.target.blur(); }}
+        className={`library__nextPrevButton align-${buttonAlign}`}
         size="mini"
         icon={icon}
         labelPosition={labelPosition}
