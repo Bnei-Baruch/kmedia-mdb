@@ -34,8 +34,10 @@ export const getFilmDate = (unit, t) =>
 export const renderFilmDate = filmDate =>
   <span className="index__date">{filmDate}</span>
 
-export const renderUnitFilmDate = (unit, t) => 
-  renderFilmDate(getFilmDate(unit, t));
+export const renderUnitFilmDate = (unit, t) => {
+  const filmDate = getFilmDate(unit, t)
+  return filmDate ? renderFilmDate(filmDate) : null;
+};
 
 export const renderUnitNameAsListItem = unit => 
   <List.Item key={unit.id} as={Link} to={canonicalLink(unit)}>
