@@ -14,8 +14,11 @@ import LatestUpdate from './LatestUpdate';
 import LatestDailyLesson from './LatestDailyLesson';
 import BlogFeed from '../Publications/tabs/Blog/Feed';
 import TwitterFeed from '../Publications/tabs/Twitter/Feed';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 class HomePage extends Component {
+  static contextType = DeviceInfoContext;
+
   state = {
     latestUnitsFirstSection: null,
     latestUnitsLastSection: null
@@ -109,14 +112,20 @@ class HomePage extends Component {
       null;
   };
 
-  static renderActiveSections = (t) => {
-    const map = x => (
-      <Grid.Column mobile={5} tablet={3} computer={3} key={x} textAlign="center">
-        <Topic title={t(`nav.sidebar.${x}`)} src={x} href={`/${x}`} />
-      </Grid.Column>
-    );
+  static renderActiveSections = (t, isMobileDevice) => {
+    const map = isMobileDevice ?
+      x => (
+        <Grid.Column width={5} key={x} textAlign="center">
+          <Topic title={t(`nav.sidebar.${x}`)} src={x} href={`/${x}`} />
+        </Grid.Column>
+      ) :
+      x => (
+        <Grid.Column key={x} textAlign="center">
+          <Topic title={t(`nav.sidebar.${x}`)} src={x} href={`/${x}`} />
+        </Grid.Column>
+      );
 
-    return ['lessons', 'programs', 'sources', 'events', 'publications'].map(map);
+    return ['lessons', 'programs', 'sources', 'events', 'publications', 'simple-mode'].map(map);
   };
 
   render() {
@@ -133,6 +142,7 @@ class HomePage extends Component {
         location
       }                                                       = this.props;
     const { latestUnitsFirstSection, latestUnitsLastSection } = this.state;
+    const { isMobileDevice }                                  = this.context;
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
@@ -171,10 +181,9 @@ class HomePage extends Component {
         <div className="homepage__website-sections homepage__section">
           <Container className="padded horizontally">
             <Section title={t('home.sections')}>
-              <Grid width={15} centered className="homepage__iconsrow">
+              <Grid columns="equal" centered className="homepage__iconsrow">
                 <Grid.Row>
-                  {HomePage.renderActiveSections(t)}
-                  <Grid.Column mobile={5} tablet={3} computer={3} only="mobile" />
+                  {HomePage.renderActiveSections(t, isMobileDevice)}
                 </Grid.Row>
               </Grid>
             </Section>
