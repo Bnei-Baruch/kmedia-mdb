@@ -266,7 +266,7 @@ export default function createSagaMonitor(
       formatter.add(`%c ${winnerInd}`, style(LABEL_STYLE));
     }
 
-    if (effect && effect.label) {
+    if (effect?.label) {
       formatter.add(`%c ${effect.label}: `, style(LABEL_STYLE));
     }
 
