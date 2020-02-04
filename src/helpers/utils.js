@@ -99,7 +99,7 @@ export function* intersperse(iterable, delimiter) {
 export const tracePath = (node, getById) => {
   let x      = node;
   const path = [node];
-  while (x && x.parent_id) {
+  while (x?.parent_id) {
     x = getById(x.parent_id);
     if (x) {
       path.unshift(x);

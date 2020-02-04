@@ -40,7 +40,7 @@ class MediaDownloads extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {} 
+    this.state = {}
   }
 
   static getDerivedStateFromProps(props, state){
@@ -222,15 +222,15 @@ class MediaDownloads extends Component {
 
     const byType                                         = groups.get(language) || new Map();
     const kiteiMakor                                     = derivedGroups[CT_KITEI_MAKOR];
-    const kiteiMakorByType                               = (kiteiMakor && kiteiMakor.get(language)) || new Map();
+    const kiteiMakorByType                               = (kiteiMakor && kiteiMakor.get(language)) ?? new Map();
     const leloMikud                                      = derivedGroups[CT_LELO_MIKUD];
-    const leloMikudByType                                = (leloMikud && leloMikud.get(language)) || new Map();
+    const leloMikudByType                                = (leloMikud && leloMikud.get(language)) ?? new Map();
     const publications                                   = derivedGroups[CT_PUBLICATION];
-    const publicationsByType                             = (publications && publications.get(language)) || new Map();
+    const publicationsByType                             = (publications && publications.get(language)) ?? new Map();
     const articles                                       = derivedGroups[CT_ARTICLE];
-    const articlesByType                                 = (articles && articles.get(language)) || new Map();
+    const articlesByType                                 = (articles && articles.get(language)) ?? new Map();
     const researchMaterials                              = derivedGroups[CT_RESEARCH_MATERIAL];
-    const researchMaterialsByType                        = (researchMaterials && researchMaterials.get(language)) || new Map();
+    const researchMaterialsByType                        = (researchMaterials && researchMaterials.get(language)) ?? new Map();
 
     let typeOverrides = MediaDownloads.getI18nTypeOverridesKey(unit);
     if (typeOverrides) {
