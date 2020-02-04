@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Table } from 'semantic-ui-react';
 
 import * as renderUnitHelper from '../../../../helpers/renderUnitHelper';
@@ -16,10 +16,7 @@ const renderUnit = (unit, t) =>
     </Table.Cell>
   </Table.Row>
 
-class LectureCollection extends Component {
-  render() {
-    return <Collection namespace="lessons-collection" renderUnit={renderUnit} />;
-  }
-}
+const LectureCollection = () => 
+  <Collection namespace="lessons-collection" renderUnit={renderUnit} />;
 
 export default LectureCollection;
