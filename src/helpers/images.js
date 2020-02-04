@@ -21,14 +21,14 @@ import PublicationsFallbackIcon from '../images/fallbacks/PublicationsFallback';
 import ImagePlaceholder from '../images/Image';
 
 const sectionLogo = {
-  'lessons': DailyLessonsIcon,
-  'programs': ProgramsIcon,
-  'lectures': LecturesIcon,
-  'sources': SourcesIcon,
-  'events': EventsIcon,
-  'publications': PublicationsIcon,
-  'downloads': DownloadIcon,
-  'info': InfoIcon,
+  lessons: DailyLessonsIcon,
+  programs: ProgramsIcon,
+  lectures: LecturesIcon,
+  sources: SourcesIcon,
+  events: EventsIcon,
+  publications: PublicationsIcon,
+  downloads: DownloadIcon,
+  info: InfoIcon,
   'simple-mode': SimpleModeIcon,
 };
 
