@@ -1,8 +1,8 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
-import { withNamespaces } from 'react-i18next';
-import { Container, Divider } from 'semantic-ui-react';
+import {withNamespaces} from 'react-i18next';
+import {Container, Divider} from 'semantic-ui-react';
 
 import * as shapes from '../../../../shapes';
 import ResultsPageHeader from '../../../../Pagination/ResultsPageHeader';
@@ -13,18 +13,21 @@ import List from './List';
 
 const filters = {
   conventions: [
-    { name: 'locations-filter', component: filterComponents.LocationsFilter },
-    { name: 'years-filter', component: filterComponents.YearsFilter },
+    {name: 'locations-filter', component: filterComponents.LocationsFilter},
+    {name: 'years-filter', component: filterComponents.YearsFilter},
+    {name: 'language-filter', component: filterComponents.LanguageFilter},
   ],
   holidays: [
-    { name: 'holidays-filter', component: filterComponents.HolidaysFilter },
-    { name: 'years-filter', component: filterComponents.YearsFilter }
+    {name: 'holidays-filter', component: filterComponents.HolidaysFilter},
+    {name: 'years-filter', component: filterComponents.YearsFilter},
+    {name: 'language-filter', component: filterComponents.LanguageFilter},
   ],
   picnics: [
-    { name: 'years-filter', component: filterComponents.YearsFilter }
+    {name: 'years-filter', component: filterComponents.YearsFilter}
   ],
   'unity-days': [
-    { name: 'years-filter', component: filterComponents.YearsFilter }
+    {name: 'years-filter', component: filterComponents.YearsFilter},
+    {name: 'language-filter', component: filterComponents.LanguageFilter},
   ],
 };
 
@@ -44,19 +47,19 @@ class TabPage extends PureComponent {
   };
 
   render() {
-    const { tabName, items, wip, err, t } = this.props;
+    const {tabName, items, wip, err, t} = this.props;
 
-    const content = WipErr({ wip, err, t }) || (
+    const content = WipErr({wip, err, t}) || (
       <Container className="padded">
-        <ResultsPageHeader pageNo={1} pageSize={1000} total={items.length} />
-        <Divider fitted />
-        <List items={items} />
+        <ResultsPageHeader pageNo={1} pageSize={1000} total={items.length}/>
+        <Divider fitted/>
+        <List items={items}/>
       </Container>
     );
 
     return (
       <div>
-        <Divider fitted />
+        <Divider fitted/>
         <Filters
           namespace={`events-${tabName}`}
           filters={filters[tabName]}
