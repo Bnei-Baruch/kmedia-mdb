@@ -22,7 +22,7 @@ const AVLanguage = ({
     if (!requestedLanguage) {
       return;
     }
-    
+
     if (lastRequestedLanguage === requestedLanguage) {
       setOpenPopup(false);
       return;
@@ -73,9 +73,9 @@ AVLanguage.propTypes = {
   uiLanguage: PropTypes.string,
 };
 
-const areEqual = (prevProps, nextProps) => 
+const areEqual = (prevProps, nextProps) =>
   prevProps.selectedLanguage === nextProps.selectedLanguage
-&& prevProps.requestedLanguage === nextProps.requestedLanguage
-&& prevProps.uiLanguage === nextProps.uiLanguage
+  && prevProps.requestedLanguage === nextProps.requestedLanguage
+  && prevProps.uiLanguage === nextProps.uiLanguage;
 
 export default React.memo(AVLanguage, areEqual);

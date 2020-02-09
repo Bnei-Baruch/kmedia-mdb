@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import AVDuration from './AVDuration';
+import { formatTime } from '../../helpers/time';
+
+const AVDuration = React.memo(({ duration }) => <time>{formatTime(duration)}</time>);
 
 const AVTimeElapsed = (props) => {
   const { start, end } = props;

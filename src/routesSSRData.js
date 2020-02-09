@@ -135,11 +135,12 @@ export const playlistCollectionPage = (store, match) => {
       // I don't think we need all files of every unit. Just for active one.
 
       const c = mdbSelectors.getCollectionById(store.getState().mdb, cID);
-      if (typeof c !== "undefined") {
+      if (typeof c !== 'undefined') {
         c.cuIDs.forEach((cuID) => {
           store.dispatch(mdbActions.fetchUnit(cuID));
         });
-      };
+      }
+      ;
     });
 };
 
@@ -160,10 +161,11 @@ export const latestLesson = store => (
 export const eventsPage = (store, match) => {
   // hydrate tab
   const tab = match.params.tab || eventsTabs[0];
+  const ns  = `events-${tab}`;
+
   if (tab !== eventsTabs[0]) {
-    store.dispatch(eventsActions.setTab(tab));
+    store.dispatch(eventsActions.setTab(ns));
   }
-  const ns = `events-${tab}`;
 
   // UnitList
   if (tab === 'friends-gatherings' || tab === 'meals') {
@@ -178,26 +180,28 @@ export const eventsPage = (store, match) => {
 export const lessonsPage = (store, match) => {
   // hydrate tab
   const tab = match.params.tab || lessonsTabs[0];
+  const ns = `lessons-${tab}`;
+
   if (tab !== lessonsTabs[0]) {
-    store.dispatch(lessonsActions.setTab(tab));
+    store.dispatch(lessonsActions.setTab(ns));
   }
 
   if (tab === 'series') {
     return store.sagaMiddleWare.run(lessonsSagas.fetchAllSeries, lessonsActions.fetchAllSeries).done;
   }
 
-  const ns = `lessons-${tab}`;
   return cuListPage(ns)(store, match);
 };
 
 export const programsPage = (store, match) => {
   // hydrate tab
   const tab = match.params.tab || programsTabs[0];
+  const ns = `programs-${tab}`;
+
   if (tab !== programsTabs[0]) {
-    store.dispatch(programsActions.setTab(tab));
+    store.dispatch(programsActions.setTab(ns));
   }
 
-  const ns = `programs-${tab}`;
   return cuListPage(ns)(store, match);
 };
 
@@ -214,7 +218,8 @@ export const lessonsCollectionPage = (store, match) => {
   // hydrate tab
   const tab = match.params.tab || lessonsTabs[0];
   if (tab !== lessonsTabs[0]) {
-    store.dispatch(lessonsActions.setTab(tab));
+    const namespace = `lessons-${tab}`;
+    store.dispatch(lessonsActions.setTab(namespace));
   }
 
   if (tab === 'daily' || tab === 'series') {
@@ -385,10 +390,11 @@ export const blogListPage = (store, match) => {
 export const publicationsPage = (store, match) => {
   // hydrate tab
   const tab = match.params.tab || pulicationsTabs[0];
-  if (tab !== pulicationsTabs[0]) {
-    store.dispatch(publicationsActions.setTab(tab));
-  }
   const ns = `publications-${tab}`;
+
+  if (tab !== pulicationsTabs[0]) {
+    store.dispatch(publicationsActions.setTab(ns));
+  }
 
   switch (tab) {
   case 'articles':

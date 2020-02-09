@@ -29,22 +29,22 @@ class TimedPopup extends Component {
 
   confirmTimeoutHandle = null;
 
-  shouldComponentUpdate(nextProps, nextState){
+  shouldComponentUpdate(nextProps, nextState) {
     const { message, downward, openOnInit, timeout, language, refElement } = this.props;
-    const { opened } = this.state;
+    const { opened }                                                       = this.state;
 
     const toUpdate = openOnInit !== nextProps.openOnInit
-    || message !== nextProps.message
-    || downward !== nextProps.downward
-    || language !== nextProps.language
-    || timeout !== nextProps.timeout
-    || refElement !== nextProps.refElement
-    || opened !== nextState.opened;
+      || message !== nextProps.message
+      || downward !== nextProps.downward
+      || language !== nextProps.language
+      || timeout !== nextProps.timeout
+      || refElement !== nextProps.refElement
+      || opened !== nextState.opened;
 
     return toUpdate;
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     const { openOnInit } = this.props;
 
     if (openOnInit) {

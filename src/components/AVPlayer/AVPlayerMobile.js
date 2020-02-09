@@ -20,9 +20,9 @@ import ShareFormMobile from './Share/ShareFormMobile';
 import AVPlaybackRateMobile from './AVPlaybackRateMobile';
 import AVSpinner from './AVSpinner';
 import playerHelper from '../../helpers/player';
-import { PlayerStartEnum } from "./playerStartEnum";
-import classNames from "classnames";
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { PlayerStartEnum } from './playerStartEnum';
+import classNames from 'classnames';
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
@@ -117,6 +117,12 @@ class AVPlayerMobile extends Component {
       start,
       embed: playerHelper.getEmbedFromQuery(history.location),
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.item !== this.props.item) {
+      this.setState({ error: false, errorReason: '', firstSeek: true });
+    }
   }
 
   componentWillUnmount() {
@@ -402,7 +408,7 @@ class AVPlayerMobile extends Component {
 
   render() {
     const
-      { 
+      {
         item,
         languages,
         selectedLanguage,
@@ -416,16 +422,17 @@ class AVPlayerMobile extends Component {
         onNext,
       } = this.props;
 
-    const {
-      error,
-      errorReason,
-      isSliceMode,
-      playbackRate,
-      unMuteButton,
-      showControls,
-      embed,
-      autoPlay,
-    } = this.state;
+    const
+      {
+        error,
+        errorReason,
+        isSliceMode,
+        playbackRate,
+        unMuteButton,
+        showControls,
+        embed,
+        autoPlay,
+      } = this.state;
 
     const isVideo       = item.mediaType === MT_VIDEO;
     const isAudio       = item.mediaType === MT_AUDIO;
@@ -439,10 +446,15 @@ class AVPlayerMobile extends Component {
     let mediaEl;
 
     if (isVideo) {
-      mediaEl = <video autoPlay={autoPlay} playsInline ref={this.handleMediaRef} src={item.src} preload="metadata"
-        poster={item.preImageUrl}/>;
+      mediaEl = <video
+        autoPlay={autoPlay}
+        playsInline
+        ref={this.handleMediaRef}
+        src={item.src}
+        preload="metadata"
+        poster={item.preImageUrl} />;
     } else {
-      mediaEl = <audio controls autoPlay={autoPlay} ref={this.handleMediaRef} src={item.src} preload="metadata"/>;
+      mediaEl = <audio controls autoPlay={autoPlay} ref={this.handleMediaRef} src={item.src} preload="metadata" />;
     }
 
     return (
@@ -454,8 +466,8 @@ class AVPlayerMobile extends Component {
               <div className="player-button player-error-message">
                 {t('player.error.loading')}
                 {errorReason ? ` ${errorReason}` : ''}
-                                  &nbsp;
-                <Icon name="warning sign" size="large"/>
+                &nbsp;
+                <Icon name="warning sign" size="large" />
               </div>
             ) : null
         }
@@ -473,15 +485,15 @@ class AVPlayerMobile extends Component {
               onPrev={onPrev}
               onNext={onNext}
             />
-            <div className="mediaplayer__spacer"/>
-            {!embed ? <AVEditSlice onActivateSlice={this.toggleSliceMode}/> : null}
+            <div className="mediaplayer__spacer" />
+            {!embed ? <AVEditSlice onActivateSlice={this.toggleSliceMode} /> : null}
             <button type="button" tabIndex="-1" onClick={this.handleJumpBack}>
-                    -5s
-              <Icon name="backward"/>
+              -5s
+              <Icon name="backward" />
             </button>
             <button type="button" tabIndex="-1" onClick={this.handleJumpForward}>
-              <Icon name="forward"/>
-                    +5s
+              <Icon name="forward" />
+              +5s
             </button>
             <AVPlaybackRateMobile
               value={playbackRate}
@@ -507,7 +519,7 @@ class AVPlayerMobile extends Component {
         </div>
         {
           isSliceMode
-            ? <ShareFormMobile media={this.media} item={item} uiLanguage={uiLanguage}/>
+            ? <ShareFormMobile media={this.media} item={item} uiLanguage={uiLanguage} />
             : null
         }
         {
@@ -516,7 +528,7 @@ class AVPlayerMobile extends Component {
         {
           !showControls
             ? <div className="mediaplayer__mobileLoader">
-              <AVSpinner isLoading={this.media ? this.media.isLoading : false}/>
+              <AVSpinner isLoading={this.media ? this.media.isLoading : false} />
             </div>
             : null
         }

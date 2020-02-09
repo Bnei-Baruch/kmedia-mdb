@@ -1,6 +1,4 @@
 import React from 'react';
-
-import { actions } from '../../../redux/modules/publications';
 import MainTabPage from '../../shared/MainTabPage';
 import Articles from './tabs/Articles/List';
 import Blog from './tabs/Blog/Container';
@@ -27,13 +25,12 @@ const content = (active) => {
   default:
     return <h1>Page not found</h1>;
   }
-}
+};
 
 const MainPage = () => (
-  <MainTabPage 
-    tabs={tabs} 
-    content={content} 
-    setTab={actions.setTab} 
+  <MainTabPage
+    tabs={tabs}
+    content={content}
     section="publications" />
 );
 

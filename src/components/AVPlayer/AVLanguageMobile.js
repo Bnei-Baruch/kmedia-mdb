@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 
@@ -13,7 +13,7 @@ const AVLanguageMobile = ({
   const [openPopup, setOpenPopup]                         = useState(false);
   const [langSelectRef, setLangSelectRef]                 = useState();
 
-  const handleChange  = (e) => onSelect(e, e.currentTarget.value);
+  const handleChange = (e) => onSelect(e, e.currentTarget.value);
 
   useEffect(() => {
     if (!requestedLanguage) {
@@ -65,9 +65,9 @@ AVLanguageMobile.propTypes = {
   uiLanguage: PropTypes.string,
 };
 
-const areEqual = (prevProps, nextProps) => 
+const areEqual = (prevProps, nextProps) =>
   prevProps.selectedLanguage === nextProps.selectedLanguage
-&& prevProps.requestedLanguage === nextProps.requestedLanguage
-&& prevProps.uiLanguage === nextProps.uiLanguage
+  && prevProps.requestedLanguage === nextProps.requestedLanguage
+  && prevProps.uiLanguage === nextProps.uiLanguage;
 
 export default React.memo(AVLanguageMobile, areEqual);

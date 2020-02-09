@@ -5,7 +5,7 @@ import { Icon } from 'semantic-ui-react';
 const AVJumpBack = ({ jumpSpan = 5, getMedia }) => {
   const onJumpBack = () => {
     const { duration, currentTime, seekTo } = getMedia();
-    let jumpTo = currentTime + jumpSpan;
+    let jumpTo                              = currentTime + jumpSpan;
 
     // Make sure we don't exceed the duration boundaries
     jumpTo = Math.max(0, Math.min(jumpTo, duration));

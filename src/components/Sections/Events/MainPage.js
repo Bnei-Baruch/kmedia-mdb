@@ -1,6 +1,4 @@
 import React from 'react';
-
-import { actions } from '../../../redux/modules/events';
 import CollectionList from './tabs/CollectionList/Container';
 import UnitList from './tabs/UnitList/Container';
 import MainTabPage from '../../shared/MainTabPage';
@@ -25,13 +23,12 @@ const content = (active) => {
   default:
     return <h1>Page not found</h1>;
   }
-}
+};
 
 const MainPage = () => (
-  <MainTabPage 
-    tabs={tabs} 
-    content={content} 
-    setTab={actions.setTab} 
+  <MainTabPage
+    tabs={tabs}
+    content={content}
     section="events" />
 );
 

@@ -1,6 +1,4 @@
 import React from 'react';
-
-import { actions } from '../../../redux/modules/programs';
 import MainTabPage from '../../shared/MainTabPage';
 import ProgramList from './tabs/Programs/List';
 import ClipList from './tabs/Clips/List';
@@ -22,11 +20,10 @@ const content = (active) => {
 };
 
 const MainPage = () => {
-  return <MainTabPage 
-    tabs={tabs} 
-    content={content} 
-    setTab={actions.setTab} 
-    section="programs" />
-}
+  return <MainTabPage
+    tabs={tabs}
+    content={content}
+    section="programs" />;
+};
 
 export default MainPage;
