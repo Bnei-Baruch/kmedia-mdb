@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, useParams } from 'react-router';
 import { withNamespaces } from 'react-i18next';
@@ -7,6 +7,7 @@ import { Menu } from 'semantic-ui-react';
 import NavLink from '../Language/MultiLanguageNavLink';
 import SectionHeader from './SectionHeader';
 import { actions as filterActions } from '../../redux/modules/filters';
+import { useDispatch } from 'react-redux';
 
 const MainTabPage = ({ tabs, content, setTab, section, t }) => {
   const params   = useParams();
@@ -26,11 +27,15 @@ const MainTabPage = ({ tabs, content, setTab, section, t }) => {
     </Menu.Item>
   ));
 
-  if (!location.search) {
-    filterActions.resetNamespace(`${section}-${tab}`);
-  }
+  const dispatch = useDispatch();
 
-  setTab(tab);
+  useEffect(() => {
+    if (!location.search) {
+      dispatch(filterActions.resetNamespace(`${section}-${tab}`));
+    }
+
+    dispatch(setTab(tab));
+  },[dispatch, location.search, section, setTab, tab]);
 
   return (
     <div>
