@@ -14,9 +14,7 @@ const TranscriptionContainer = (props) => {
   const contentLanguage       = useSelector(state => settings.getContentLanguage(state.settings));
   const dispatch              = useDispatch();
 
-  const handleContentChange = (id) => {
-    dispatch(actions.doc2html(id));
-  };
+  const handleContentChange = id => dispatch(actions.doc2html(id));
 
   return (
     <Transcription
