@@ -118,8 +118,7 @@ function ogUrl(req, lang) {
 
 export default function serverRender(req, res, next, htmlData) {
   console.log('serverRender', req.originalUrl);
-
-  const { language, redirect } = getLanguageFromPath(req.originalUrl, req.headers);
+  const { language, redirect } = getLanguageFromPath(req.originalUrl, req.headers, req.get('user-agent'));
   if (redirect) {
     const newUrl = `${BASE_URL}${language}${req.originalUrl}`;
     console.log(`serverRender: redirect (${language}) => ${newUrl}`);

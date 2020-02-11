@@ -32,8 +32,13 @@ export const splitPathByLanguage = (path) => {
   };
 };
 
-export const getLanguageFromPath = (path, headers) => {
+export const isSocialUserAgent = userAgent => /facebook|facebot/i.test(userAgent);
+
+export const getLanguageFromPath = (path, headers, userAgent) => {
   let { language } = splitPathByLanguage(path);
+    if (!language && isSocialUserAgent(userAgent)) {
+    language = parse(path).shareLang;
+  }
   if (language && LANG_UI_LANGUAGES.includes(language)) {
     // UI lang is set as first part of the url path. i,e, /:lang/...
     return { language, redirect: false };
