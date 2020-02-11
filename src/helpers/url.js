@@ -36,7 +36,7 @@ export const isSocialUserAgent = userAgent => /facebook|facebot/i.test(userAgent
 
 export const getLanguageFromPath = (path, headers, userAgent) => {
   let { language } = splitPathByLanguage(path);
-    if (!language && isSocialUserAgent(userAgent)) {
+  if (!language && isSocialUserAgent(userAgent)) {
     language = parse(path).shareLang;
   }
   if (language && LANG_UI_LANGUAGES.includes(language)) {
