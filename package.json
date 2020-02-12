@@ -118,6 +118,7 @@
     "react": "^16.10.2",
     "react-app-polyfill": "^1.0.4",
     "react-copy-to-clipboard": "^5.0.0",
+    "react-countdown": "^2.2.1",
     "react-day-picker": "^7.1.4",
     "react-dom": "^16.10.2",
     "react-fast-compare": "^3.0.1",
