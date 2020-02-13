@@ -61,7 +61,7 @@ class ExcerptContainer extends Component {
     const { excerpt } = this.state;
 
     return (
-      <div style={{padding: '20px'}}>
+      <div style={{'padding': '20px', 'text-align': 'justify'}}>
         <br/>
         <Header as="h1" textAlign="center" color="green" size="huge">
           <Countdown date={Date.now() + 5 * 60 * 1000} renderer={renderer}/>
