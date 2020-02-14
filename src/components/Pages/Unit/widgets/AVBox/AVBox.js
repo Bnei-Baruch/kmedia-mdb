@@ -119,7 +119,7 @@ class AVBox extends Component {
 
     const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
     const newPlayableItem = playerHelper.playableItem(unit, mediaType, uiLanguage, newItemLanguage);
-
+    
     if (!isEqual(playableItem, newPlayableItem)) {
       this.setState({ playableItem: newPlayableItem, newItemLanguage });
     }

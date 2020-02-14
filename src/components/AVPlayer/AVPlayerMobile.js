@@ -119,10 +119,10 @@ class AVPlayerMobile extends Component {
     };
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.item !== this.props.item) {
-      this.setState({ error: false, errorReason: '', firstSeek: true });
-    }
+  componentDidUpdate(prevProps) {	
+    if (prevProps.item !== this.props.item) {	
+      this.setState({ error: false, errorReason: '', firstSeek: true });	
+    }	
   }
 
   componentWillUnmount() {
@@ -408,7 +408,7 @@ class AVPlayerMobile extends Component {
 
   render() {
     const
-      {
+      { 
         item,
         languages,
         selectedLanguage,
