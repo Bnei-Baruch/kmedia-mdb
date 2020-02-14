@@ -119,6 +119,12 @@ class AVPlayerMobile extends Component {
     };
   }
 
+  componentDidUpdate(prevProps) {	
+    if (prevProps.item !== this.props.item) {	
+      this.setState({ error: false, errorReason: '', firstSeek: true });	
+    }	
+  }
+
   componentWillUnmount() {
     if (this.seekTimeoutId) {
       clearTimeout(this.seekTimeoutId);
