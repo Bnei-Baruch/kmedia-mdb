@@ -4,7 +4,7 @@ import isNumber from 'lodash/isNumber';
 import { withMediaProps } from 'react-media-player';
 
 import { PLAYER_MODE } from './constants';
-import { playerModeProp, Media } from '../shapes';
+import { Media, playerModeProp } from '../shapes';
 
 class AvSeekBar extends Component {
   static propTypes = {
@@ -26,8 +26,8 @@ class AvSeekBar extends Component {
     playPoint: this.props.media.currentTime
   };
 
-  element = null;
-  wasMouseDown = false;
+  element              = null;
+  wasMouseDown         = false;
   isPlayingOnMouseDown = false;
 
   componentDidMount() {

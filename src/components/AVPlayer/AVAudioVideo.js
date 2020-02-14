@@ -57,6 +57,6 @@ const areEqual = (prevProps, nextProps) => {
     && prevProps.uiLanguage === nextProps.uiLanguage;
 
   return equal;
-}
+};
 
 export default React.memo(AVAudioVideo, areEqual);

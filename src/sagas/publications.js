@@ -3,12 +3,12 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import Api from '../helpers/Api';
 import { CT_ARTICLES } from '../helpers/consts';
 import { selectors as settings } from '../redux/modules/settings';
-import { selectors, actions, types } from '../redux/modules/publications';
+import { actions, selectors, types } from '../redux/modules/publications';
 import { types as listTypes } from '../redux/modules/lists';
 import { filtersTransformer } from '../filters';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 import { actions as mdbActions } from '../redux/modules/mdb';
-import { updateQuery } from './helpers/url';
+import { setTab, updateQuery } from './helpers/url';
 import { isEmpty } from '../helpers/utils';
 
 export function* fetchTweets(action) {
@@ -85,27 +85,6 @@ function* fetchArticlesList(action) {
   } catch (err) {
     console.log('fetch lectures error', err);
   }
-}
-
-function* setTab(action) {
-  // we have to replace url completely...
-
-  const tab       = action.payload;
-  const namespace = `publications-${tab}`;
-  const filters   = yield select(state => filterSelectors.getFilters(state.filters, namespace));
-  // const lists     = yield select(state => listsSelectors.getNamespaceState(state.lists, namespace));
-  const q         = {
-    // page: lists.pageNo,
-    ...filtersTransformer.toQueryParams(filters),
-  };
-
-  yield* updateQuery((query) => {
-    const x = Object.assign(query, q);
-    if (x.page === 1) {
-      delete x.page;
-    }
-    return x;
-  });
 }
 
 function* updatePageInQuery(action) {

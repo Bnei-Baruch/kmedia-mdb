@@ -152,10 +152,10 @@ AVMuteUnmute.propTypes = {
 
 const arePropsEqual = (props, nextProps) => {
   const { media, isAudio } = props;
-  
+
   return media.isMuted === nextProps.media.isMuted
-  && media.volume === nextProps.media.volume
-  && isAudio === nextProps.isAudio;
-}
+    && media.volume === nextProps.media.volume
+    && isAudio === nextProps.isAudio;
+};
 
 export default React.memo(AVMuteUnmute, arePropsEqual);

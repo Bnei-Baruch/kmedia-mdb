@@ -11,10 +11,10 @@ const AVSpinner = ({ isLoading }) => {
       size="huge"
     />
     : null;
-}
+};
 
 AVSpinner.propTypes = {
   isLoading: PropTypes.bool
-}
+};
 
 export default React.memo(AVSpinner);

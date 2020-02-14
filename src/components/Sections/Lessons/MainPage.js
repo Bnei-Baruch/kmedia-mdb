@@ -1,6 +1,4 @@
 import React from 'react';
-
-import { actions } from '../../../redux/modules/lessons';
 import MainTabPage from '../../shared/MainTabPage';
 import Daily from './tabs/Daily/Container';
 import Series from './tabs/Series/Container';
@@ -41,10 +39,9 @@ const content = (active) => {
 };
 
 const MainPage = () => (
-  <MainTabPage 
-    tabs={tabs} 
-    content={content} 
-    setTab={actions.setTab} 
+  <MainTabPage
+    tabs={tabs}
+    content={content}
     section="lessons" />
 );
 

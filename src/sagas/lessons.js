@@ -2,14 +2,12 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { CT_LECTURE_SERIES, CT_LESSONS_SERIES, CT_VIRTUAL_LESSONS, } from '../helpers/consts';
-import { updateQuery } from './helpers/url';
-import { filtersTransformer } from '../filters';
 import { actions, selectors, types } from '../redux/modules/lessons';
-import { selectors as filterSelectors } from '../redux/modules/filters';
-import { selectors as listsSelectors, types as listTypes } from '../redux/modules/lists';
+import { types as listTypes } from '../redux/modules/lists';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 import { isEmpty } from '../helpers/utils';
+import { setTab } from './helpers/url';
 
 function* fetchLecturesList(action) {
   if (action.payload.namespace !== 'lessons-virtual'
@@ -57,27 +55,6 @@ export function* fetchAllSeries(action) {
   } catch (err) {
     yield put(actions.fetchAllSeriesFailure(err));
   }
-}
-
-function* setTab(action) {
-  // we have to replace url completely...
-
-  const tab       = action.payload;
-  const namespace = `lessons-${tab}`;
-  const filters   = yield select(state => filterSelectors.getFilters(state.filters, namespace));
-  const lists     = yield select(state => listsSelectors.getNamespaceState(state.lists, namespace));
-  const q         = {
-    page: lists.pageNo,
-    ...filtersTransformer.toQueryParams(filters),
-  };
-
-  yield* updateQuery((query) => {
-    const x = Object.assign(query, q);
-    if (x.page === 1) {
-      delete x.page;
-    }
-    return x;
-  });
 }
 
 function* watchFetchList() {

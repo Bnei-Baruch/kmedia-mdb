@@ -1,17 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { useLocation, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { Menu } from 'semantic-ui-react';
 
 import NavLink from '../Language/MultiLanguageNavLink';
 import SectionHeader from './SectionHeader';
-import { actions as filterActions } from '../../redux/modules/filters';
-import { useDispatch } from 'react-redux';
 
-const MainTabPage = ({ tabs, content, setTab, section, t }) => {
-  const params   = useParams();
-  const location = useLocation();
+const MainTabPage = ({ tabs, content, section, t }) => {
+  const params = useParams();
 
   const tab = params.tab || tabs[0];
 
@@ -27,16 +24,6 @@ const MainTabPage = ({ tabs, content, setTab, section, t }) => {
     </Menu.Item>
   ));
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!location.search) {
-      dispatch(filterActions.resetNamespace(`${section}-${tab}`));
-    }
-
-    dispatch(setTab(tab));
-  },[dispatch, location.search, section, setTab, tab]);
-
   return (
     <div>
       <SectionHeader section={section} submenuItems={submenuItems} />
@@ -48,7 +35,6 @@ const MainTabPage = ({ tabs, content, setTab, section, t }) => {
 MainTabPage.propTypes = {
   tabs: PropTypes.arrayOf(PropTypes.string).isRequired,
   content: PropTypes.func.isRequired,
-  setTab: PropTypes.func.isRequired,
   section: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,
 };
