@@ -20,7 +20,7 @@ const renderer = ({ hours, minutes, seconds, completed }) => {
   } else {
     // Render a countdown
     return <span style={{ direction: 'ltr', 'font-size': '3em' }}>{zeroPad(minutes)}:{zeroPad(seconds)}</span>
-      ;
+    ;
   }
 };
 
@@ -35,7 +35,6 @@ class ExcerptContainer extends Component {
   state = {
     excerpt: '',
   };
-
 
   chooseExcerpt() {
     const { language } = this.props;
