@@ -1,82 +1,73 @@
-import React, { PureComponent } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
-import { withNamespaces } from 'react-i18next';
 
 import { LANG_HEBREW, LANGUAGE_OPTIONS } from '../../helpers/consts';
 import TimedPopup from '../shared/TimedPopup';
 
-class AVLanguageMobile extends PureComponent {
-  static propTypes = {
-    t: PropTypes.func.isRequired,
-    onSelect: PropTypes.func,
-    selectedLanguage: PropTypes.string,
-    requestedLanguage: PropTypes.string,
-    languages: PropTypes.arrayOf(PropTypes.string),
-    uiLanguage: PropTypes.string.isRequired,
-  };
+const AVLanguageMobile = ({
+  languages = [], selectedLanguage = LANG_HEBREW, requestedLanguage = LANG_HEBREW, uiLanguage = LANG_HEBREW,
+  onSelect = noop, t
+}) => {
+  const [lastRequestedLanguage, setLastRequestedLanguage] = useState();
+  const [openPopup, setOpenPopup]                         = useState(false);
+  const [langSelectRef, setLangSelectRef]                 = useState();
 
-  static defaultProps = {
-    onSelect: noop,
-    selectedLanguage: LANG_HEBREW,
-    requestedLanguage: LANG_HEBREW,
-    languages: [],
-  };
+  const handleChange = (e) => onSelect(e, e.currentTarget.value);
 
-  state = {};
-
-  static getDerivedStateFromProps(props, state){
-    const { requestedLanguage, selectedLanguage } = props;
-    
-    if (requestedLanguage) {
-      const { lastRequestedLanguage } = state;
-      const openPopup = (lastRequestedLanguage === requestedLanguage) 
-        ? false
-        : (selectedLanguage !== requestedLanguage);
-
-      return {
-        lastRequestedLanguage: requestedLanguage,
-        openPopup
-      };
+  useEffect(() => {
+    if (!requestedLanguage) {
+      return;
     }
 
-    return null;
-  }
+    if (lastRequestedLanguage === requestedLanguage) {
+      setOpenPopup(false);
+      return;
+    }
 
-  setLangSelectRef = langSelectRef => this.setState({ langSelectRef });
+    setOpenPopup(selectedLanguage !== requestedLanguage);
+    setLastRequestedLanguage(requestedLanguage);
+  }, [selectedLanguage, requestedLanguage, lastRequestedLanguage]);
 
-  handleChange = e => this.props.onSelect(e, e.currentTarget.value);
+  const options = LANGUAGE_OPTIONS
+    .filter(x => languages.includes(x.value))
+    .map(x => x.value);
 
-  render() {
-    const { t, languages, selectedLanguage, uiLanguage } = this.props;
-    const { langSelectRef, openPopup }                   = this.state;
+  return (
+    <div ref={setLangSelectRef} className="mediaplayer__languages">
+      <TimedPopup
+        openOnInit={openPopup}
+        message={t('messages.fallback-language')}
+        downward={false}
+        timeout={7000}
+        language={uiLanguage}
+        refElement={langSelectRef}
+      />
+      <select value={selectedLanguage} onChange={handleChange}>
+        {
+          options.map(x => (
+            <option key={x} value={x}>
+              {x}
+            </option>
+          ))
+        }
+      </select>
+    </div>
+  );
+};
 
-    const options = LANGUAGE_OPTIONS
-      .filter(x => languages.includes(x.value))
-      .map(x => x.value);
+AVLanguageMobile.propTypes = {
+  t: PropTypes.func.isRequired,
+  onSelect: PropTypes.func,
+  selectedLanguage: PropTypes.string,
+  requestedLanguage: PropTypes.string,
+  languages: PropTypes.arrayOf(PropTypes.string),
+  uiLanguage: PropTypes.string,
+};
 
-    return (
-      <div ref={this.setLangSelectRef} className="mediaplayer__languages">
-        <TimedPopup
-          openOnInit={openPopup}
-          message={t('messages.fallback-language')}
-          downward={false}
-          timeout={7000}
-          language={uiLanguage}
-          refElement={langSelectRef}
-        />
-        <select value={selectedLanguage} onChange={this.handleChange}>
-          {
-            options.map(x => (
-              <option key={x} value={x}>
-                {x}
-              </option>
-            ))
-          }
-        </select>
-      </div>
-    );
-  }
-}
+const areEqual = (prevProps, nextProps) =>
+  prevProps.selectedLanguage === nextProps.selectedLanguage
+  && prevProps.requestedLanguage === nextProps.requestedLanguage
+  && prevProps.uiLanguage === nextProps.uiLanguage;
 
-export default withNamespaces()(AVLanguageMobile);
+export default React.memo(AVLanguageMobile, areEqual);

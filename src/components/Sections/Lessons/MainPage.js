@@ -1,17 +1,8 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
-import { Menu } from 'semantic-ui-react';
-
-import { actions as lessonsActions } from '../../../redux/modules/lessons';
-import { actions as filterActions } from '../../../redux/modules/filters';
-import NavLink from '../../Language/MultiLanguageNavLink';
-import SectionHeader from '../../shared/SectionHeader';
+import React from 'react';
+import MainTabPage from '../../shared/MainTabPage';
 import Daily from './tabs/Daily/Container';
 import Series from './tabs/Series/Container';
 import Lectures from './tabs/Lectures/Container';
-import { useLocation, useParams } from 'react-router';
 
 // needed in routesSSRData
 export const tabs = [
@@ -47,48 +38,11 @@ const content = (active) => {
   return content;
 };
 
-const MainPage = ({ t }) => {
-  const params   = useParams();
-  const location = useLocation();
+const MainPage = () => (
+  <MainTabPage
+    tabs={tabs}
+    content={content}
+    section="lessons" />
+);
 
-  const tab = params.tab || tabs[0];
-
-  const submenuItems = tabs.map(x => (
-    <Menu.Item
-      key={x}
-      name={x}
-      as={NavLink}
-      to={`/lessons/${x}`}
-      active={tab === x}
-    >
-      {t(`lessons.tabs.${x}`)}
-    </Menu.Item>
-  ));
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!location.search) {
-      const resetNamespace = tab => dispatch(filterActions.resetNamespace(tab));
-      resetNamespace(`lessons-${tab}`);
-    }
-  }, [location.search]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    const setTab = tab => dispatch(lessonsActions.setTab(tab));
-    setTab(tab);
-  }, [tab]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  return (
-    <div>
-      <SectionHeader section="lessons" submenuItems={submenuItems} />
-      {content(tab)}
-    </div>
-  );
-};
-
-MainPage.propTypes = {
-  t: PropTypes.func.isRequired,
-};
-
-export default withNamespaces()(MainPage);
+export default MainPage;

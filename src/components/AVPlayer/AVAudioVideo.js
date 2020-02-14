@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
 
 import TimedPopup from '../shared/TimedPopup';
 
@@ -8,8 +7,6 @@ const AVAudioVideo = ({ isAudio, isVideo, fallbackMedia, uiLanguage, onSwitch, t
   const [audioVideoContainerRef, setAudioVideoContainerRef]       = useState();
   const [didShowFallbackMediaPopup, setDidShowFallbackMediaPopup] = useState();
   const [openPopup, setOpenPopup]                                 = useState();
-
-  const handleSwitch = useCallback(() => onSwitch(), [onSwitch]);
 
   const handleFallbackMedia = useCallback(fallbackMedia => {
     if (didShowFallbackMediaPopup) {
@@ -35,7 +32,7 @@ const AVAudioVideo = ({ isAudio, isVideo, fallbackMedia, uiLanguage, onSwitch, t
         language={uiLanguage}
         refElement={audioVideoContainerRef}
       />
-      <button type="button" onClick={handleSwitch}>
+      <button type="button" onClick={onSwitch}>
         <span className={isAudio ? 'is-active' : ''}>{t('buttons.audio')}</span>
         &nbsp;/&nbsp;
         <span className={isVideo ? 'is-active' : ''}>{t('buttons.video')}</span>
@@ -53,4 +50,13 @@ AVAudioVideo.propTypes = {
   uiLanguage: PropTypes.string.isRequired,
 };
 
-export default withNamespaces()(AVAudioVideo);
+const areEqual = (prevProps, nextProps) => {
+  const equal = prevProps.isAudio === nextProps.isAudio
+    && prevProps.isVideo === nextProps.isVideo
+    && prevProps.fallbackMedia === nextProps.fallbackMedia
+    && prevProps.uiLanguage === nextProps.uiLanguage;
+
+  return equal;
+};
+
+export default React.memo(AVAudioVideo, areEqual);

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withMediaProps } from 'react-media-player';
 import { Icon } from 'semantic-ui-react';
 
 const AVMuteUnmute = ({ upward = true, media, media: { isMuted, volume }, isAudio, onVolumeChange, onMuteUnmute }) => {
@@ -151,4 +150,12 @@ AVMuteUnmute.propTypes = {
   onVolumeChange: PropTypes.func.isRequired,
 };
 
-export default withMediaProps(AVMuteUnmute);
+const arePropsEqual = (props, nextProps) => {
+  const { media, isAudio } = props;
+
+  return media.isMuted === nextProps.media.isMuted
+    && media.volume === nextProps.media.volume
+    && isAudio === nextProps.isAudio;
+};
+
+export default React.memo(AVMuteUnmute, arePropsEqual);

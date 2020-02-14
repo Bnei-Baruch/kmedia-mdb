@@ -51,7 +51,6 @@ const SectionHeader = ({ section, t, submenuItems }) => {
 
   return (
     <div className="section-header">
-      {/* TODO: dont use image fixed url */}
       <Helmets.Basic title={title} description={subText} />
 
       <Container className="padded">

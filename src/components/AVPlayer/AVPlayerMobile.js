@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import debounce from 'lodash/debounce';
@@ -20,10 +20,9 @@ import ShareFormMobile from './Share/ShareFormMobile';
 import AVPlaybackRateMobile from './AVPlaybackRateMobile';
 import AVSpinner from './AVSpinner';
 import playerHelper from '../../helpers/player';
-import { PlayerStartEnum } from "./playerStartEnum";
-import classNames from "classnames";
-import { DeviceInfoContext } from "../../helpers/app-contexts";
-import { withMediaProps } from 'react-media-player';
+import { PlayerStartEnum } from './playerStartEnum';
+import classNames from 'classnames';
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
@@ -32,7 +31,7 @@ const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = playback => parseFloat(playback.slice(0, -1));
 
-class AVPlayerMobile extends PureComponent {
+class AVPlayerMobile extends Component {
   static contextType = DeviceInfoContext;
 
   static propTypes = {
@@ -46,7 +45,7 @@ class AVPlayerMobile extends PureComponent {
     requestedLanguage: PropTypes.string.isRequired,
 
     // Audio/Video switch props.
-    item: PropTypes.object.isRequired, // TODO: (yaniv) add shape fo this
+    item: shapes.VideoItem.isRequired,
     onSwitchAV: PropTypes.func.isRequired,
 
     // Slice props
@@ -139,7 +138,6 @@ class AVPlayerMobile extends PureComponent {
     this.setState({ showControls: false });
     this.wasCurrentTime = this.media.currentTime;
     this.props.onSwitchAV(...params);
-    // this.media.autoplay = true;
   };
 
   // Remember the current time and playing state while switching.
@@ -424,16 +422,17 @@ class AVPlayerMobile extends PureComponent {
         onNext,
       } = this.props;
 
-    const {
-      error,
-      errorReason,
-      isSliceMode,
-      playbackRate,
-      unMuteButton,
-      showControls,
-      embed,
-      autoPlay,
-    } = this.state;
+    const
+      {
+        error,
+        errorReason,
+        isSliceMode,
+        playbackRate,
+        unMuteButton,
+        showControls,
+        embed,
+        autoPlay,
+      } = this.state;
 
     const isVideo       = item.mediaType === MT_VIDEO;
     const isAudio       = item.mediaType === MT_AUDIO;
@@ -447,10 +446,15 @@ class AVPlayerMobile extends PureComponent {
     let mediaEl;
 
     if (isVideo) {
-      mediaEl = <video autoPlay={autoPlay} playsInline ref={this.handleMediaRef} src={item.src} preload="metadata"
-        poster={item.preImageUrl}/>;
+      mediaEl = <video
+        autoPlay={autoPlay}
+        playsInline
+        ref={this.handleMediaRef}
+        src={item.src}
+        preload="metadata"
+        poster={item.preImageUrl} />;
     } else {
-      mediaEl = <audio controls autoPlay={autoPlay} ref={this.handleMediaRef} src={item.src} preload="metadata"/>;
+      mediaEl = <audio controls autoPlay={autoPlay} ref={this.handleMediaRef} src={item.src} preload="metadata" />;
     }
 
     return (
@@ -462,8 +466,8 @@ class AVPlayerMobile extends PureComponent {
               <div className="player-button player-error-message">
                 {t('player.error.loading')}
                 {errorReason ? ` ${errorReason}` : ''}
-                                  &nbsp;
-                <Icon name="warning sign" size="large"/>
+                &nbsp;
+                <Icon name="warning sign" size="large" />
               </div>
             ) : null
         }
@@ -481,15 +485,15 @@ class AVPlayerMobile extends PureComponent {
               onPrev={onPrev}
               onNext={onNext}
             />
-            <div className="mediaplayer__spacer"/>
-            {!embed ? <AVEditSlice onActivateSlice={this.toggleSliceMode}/> : null}
+            <div className="mediaplayer__spacer" />
+            {!embed ? <AVEditSlice onActivateSlice={this.toggleSliceMode} /> : null}
             <button type="button" tabIndex="-1" onClick={this.handleJumpBack}>
-                    -5s
-              <Icon name="backward"/>
+              -5s
+              <Icon name="backward" />
             </button>
             <button type="button" tabIndex="-1" onClick={this.handleJumpForward}>
-              <Icon name="forward"/>
-                    +5s
+              <Icon name="forward" />
+              +5s
             </button>
             <AVPlaybackRateMobile
               value={playbackRate}
@@ -501,6 +505,7 @@ class AVPlayerMobile extends PureComponent {
               onSwitch={this.onSwitchAV}
               fallbackMedia={fallbackMedia}
               uiLanguage={uiLanguage}
+              t={t}
             />
             <AVLanguageMobile
               languages={languages}
@@ -508,12 +513,13 @@ class AVPlayerMobile extends PureComponent {
               uiLanguage={uiLanguage}
               requestedLanguage={requestedLanguage}
               onSelect={this.onLanguageChange}
+              t={t}
             />
           </div>
         </div>
         {
           isSliceMode
-            ? <ShareFormMobile media={this.media} item={item} uiLanguage={uiLanguage}/>
+            ? <ShareFormMobile media={this.media} item={item} uiLanguage={uiLanguage} />
             : null
         }
         {
@@ -521,7 +527,9 @@ class AVPlayerMobile extends PureComponent {
         }
         {
           !showControls
-            ? <div className="mediaplayer__mobileLoader"><AVSpinner/></div>
+            ? <div className="mediaplayer__mobileLoader">
+              <AVSpinner isLoading={this.media ? this.media.isLoading : false} />
+            </div>
             : null
         }
       </div>
@@ -529,4 +537,4 @@ class AVPlayerMobile extends PureComponent {
   }
 }
 
-export default withRouter(withNamespaces()(withMediaProps(AVPlayerMobile)));
+export default withRouter(withNamespaces()(AVPlayerMobile));

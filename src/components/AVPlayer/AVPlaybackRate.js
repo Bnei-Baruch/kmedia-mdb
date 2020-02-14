@@ -43,4 +43,6 @@ AVPlaybackRate.propTypes = {
   onDropdownOpenedChange: PropTypes.func.isRequired,
 };
 
-export default AVPlaybackRate;
+const arePropsEqual = (prevProps, nextProps) => prevProps.value === nextProps.value;
+
+export default React.memo(AVPlaybackRate, arePropsEqual);

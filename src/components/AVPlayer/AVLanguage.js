@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
 import noop from 'lodash/noop';
 import { Dropdown } from 'semantic-ui-react';
 
@@ -20,9 +19,10 @@ const AVLanguage = ({
   const handleOnClose = () => onDropdownOpenedChange(false);
 
   useEffect(() => {
-    if (requestedLanguage === null) {
+    if (!requestedLanguage) {
       return;
     }
+
     if (lastRequestedLanguage === requestedLanguage) {
       setOpenPopup(false);
       return;
@@ -73,4 +73,9 @@ AVLanguage.propTypes = {
   uiLanguage: PropTypes.string,
 };
 
-export default withNamespaces()(AVLanguage);
+const areEqual = (prevProps, nextProps) =>
+  prevProps.selectedLanguage === nextProps.selectedLanguage
+  && prevProps.requestedLanguage === nextProps.requestedLanguage
+  && prevProps.uiLanguage === nextProps.uiLanguage;
+
+export default React.memo(AVLanguage, areEqual);

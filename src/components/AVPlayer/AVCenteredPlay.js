@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withMediaProps } from 'react-media-player';
 import { Icon } from 'semantic-ui-react';
 import classNames from 'classnames';
 
@@ -26,11 +25,7 @@ class AVCenteredPlay extends Component {
 
   render() {
     const { media } = this.props;
-    let isHidden    = false;
-
-    if (media.isPlaying || media.isLoading) {
-      isHidden = true;
-    }
+    const isHidden  = media.isPlaying || media.isLoading;
 
     return (
       <button
@@ -45,4 +40,4 @@ class AVCenteredPlay extends Component {
   }
 }
 
-export default withMediaProps(AVCenteredPlay);
+export default AVCenteredPlay;

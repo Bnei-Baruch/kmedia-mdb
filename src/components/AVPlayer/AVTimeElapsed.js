@@ -1,17 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import AVDuration from './AVDuration';
+import { formatTime } from '../../helpers/time';
+
+const AVDuration = React.memo(({ duration }) => <time>{formatTime(duration)}</time>);
 
 const AVTimeElapsed = (props) => {
   const { start, end } = props;
 
   return (
     <div className="mediaplayer__timecode">
-      <AVDuration value={start} />
+      <AVDuration duration={start} />
       {' '}
       /
-      <AVDuration value={end} />
+      <AVDuration duration={end} />
     </div>
   );
 };
@@ -26,4 +28,5 @@ AVTimeElapsed.defaultProps = {
   end: undefined
 };
 
+// React.memo cannot help here because start is always changed during playback
 export default AVTimeElapsed;
