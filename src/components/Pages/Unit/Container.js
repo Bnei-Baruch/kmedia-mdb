@@ -52,8 +52,8 @@ export class UnitContainer extends Component {
     UnitContainer.askForDataIfNeeded(this.props, true);
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    UnitContainer.askForDataIfNeeded(nextProps, false);
+  componentDidUpdate() {
+    UnitContainer.askForDataIfNeeded(this.props, false);
   }
 
   render() {
