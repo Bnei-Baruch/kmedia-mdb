@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { CT_LESSON_PART } from '../../../../helpers/consts';
-import { wrap as wrapContainer } from '../../../Pages/Unit/Container';
+import { UnitContainer, wrap as wrapContainer } from '../../../Pages/Unit/Container';
 import { UnitPage, wrap as wrapPage } from '../../../Pages/Unit/Page';
 import { SameCollectionContainer, wrap as wrapSameCollectionContainer } from '../../../Pages/Unit/widgets/Recommended/SameCollection/Container';
 import SameCollectionLessonPart from './SameCollectionLessonPart';
@@ -38,15 +38,20 @@ class MyUnitPage extends UnitPage {
 
 const MyWrappedUnitPage = wrapPage(MyUnitPage);
 
-const MyUnitContainer = ({ language, unit, location, wip, err }) => (
-  <MyWrappedUnitPage
-    section="lessons"
-    unit={wip || err ? null : unit}
-    language={language}
-    location={location}
-    wip={wip}
-    err={err}
-  />
-);
+class MyUnitContainer extends UnitContainer {
+  render() {
+    const { language, unit, location, wip, err } = this.props;
+    return (
+      <MyWrappedUnitPage
+        section="lessons"
+        unit={wip || err ? null : unit}
+        language={language}
+        location={location}
+        wip={wip}
+        err={err}
+      />
+    );
+  }
+}
 
 export default wrapContainer(MyUnitContainer);
