@@ -29,6 +29,7 @@ import HomePage from './components/Sections/Home/Container';
 // import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import Help from './components/Sections/Help/Help';
 import SimpleMode from './components/Sections/SimpleMode/Container';
+import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
 import NotImplemented from './components/NotImplemented';
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
@@ -77,6 +78,7 @@ const routes = [
   // { path: 'project-status', component: ProjectStatus },
   { path: 'help', component: Help },
   { path: 'simple-mode', component: SimpleMode, options: { ssrData: ssrDataLoaders.simpleMode } },
+  { path: 'excerpt', component: ExcerptContainer },
   // { path: 'design', component: Design },
   // { path: 'design2', component: Design2 },
 ];

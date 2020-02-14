@@ -22,6 +22,7 @@ const AVLanguage = ({
     if (!requestedLanguage) {
       return;
     }
+
     if (lastRequestedLanguage === requestedLanguage) {
       setOpenPopup(false);
       return;
