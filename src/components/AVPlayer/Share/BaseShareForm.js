@@ -42,6 +42,9 @@ class BaseShareForm extends React.Component {
     // Remove the currentTime param from the share url
     q.currentTime = null;
 
+    if (!addUiLang)
+      q.shareLang = uiLanguage;
+
     return `${shareUrl}?${stringify(q)}`;
   }
 
@@ -75,7 +78,7 @@ class BaseShareForm extends React.Component {
     if (prevProps.item !== this.props.item) {
       const { start, end } = prevState;
       this.setState({
-        start, 
+        start,
         end,
         url: BaseShareForm.getUrl(this.props, start, end),
         uiLangUrl: BaseShareForm.getUrl(this.props, start, end, true),
