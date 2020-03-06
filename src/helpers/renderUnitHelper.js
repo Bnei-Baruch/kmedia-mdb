@@ -44,8 +44,8 @@ export const renderUnitNameAsListItem = unit =>
     {unit.name || NO_NAME}
   </List.Item>
 
-export const renderUnitNameLink = unit =>
-  <Link className="index__title" to={canonicalLink(unit)}>
+export const renderUnitNameLink = (unit, className="index__title") =>
+  <Link className={className} to={canonicalLink(unit)}>
     {unit.name || NO_NAME}
   </Link>
 
@@ -73,5 +73,16 @@ export const renderUnitDescription = unit =>
     )
     : null
 
-
-
+export const renderRelatedItems = (relatedItems, header, className="index__collections") =>
+  relatedItems.length === 0
+    ? null
+    : (
+      <List horizontal divided link className={className} size="tiny">
+        <List.Item>
+          <List.Header>
+            {header}
+          </List.Header>
+        </List.Item>
+        {relatedItems}
+      </List>
+    )

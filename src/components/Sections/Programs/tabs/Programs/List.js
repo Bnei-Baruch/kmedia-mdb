@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Table } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 
 import { CT_VIDEO_PROGRAM_CHAPTER } from '../../../../../helpers/consts';
 import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
@@ -28,13 +28,7 @@ const renderUnit = (unit, t) => {
         { renderUnitHelper.renderUnitFilmDate(unit, t) }
         { renderUnitHelper.renderUnitNameLink(unit) }
         { renderUnitHelper.renderUnitDescription(unit) }
-        
-        <List horizontal divided link className="index__collections" size="tiny">
-          <List.Item>
-            <List.Header>{t('programs.list.episode_from')}</List.Header>
-          </List.Item>
-          {relatedItems}
-        </List>
+        { renderUnitHelper.renderRelatedItems(relatedItems, t('programs.list.episode_from')) }
       </Table.Cell>
     </Table.Row>
   );

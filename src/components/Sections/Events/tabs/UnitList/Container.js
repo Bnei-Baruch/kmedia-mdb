@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { List, Table } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 
 import { CT_FRIENDS_GATHERING, CT_MEAL } from '../../../../../helpers/consts';
-import { ellipsize } from '../../../../../helpers/strings';
 import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import UnitList from '../../../../Pages/UnitList/Container';
 
@@ -21,27 +20,8 @@ const renderUnit = (unit, t) => {
       <Table.Cell>
         { renderUnitHelper.renderFilmDate(unit, t) }
         { renderUnitHelper.renderUnitNameLink(unit) }
-        {
-          unit.description
-            ? (
-              <div className="index__description mobile-hidden">
-                {ellipsize(unit.description)}
-              </div>
-            )
-            : null
-        }
-        {
-          relatedItems.length > 0
-            ? (
-              <List horizontal divided link className="index-list__item-subtitle" size="tiny">
-                <List.Item>
-                  <List.Header>{t('events.list.item_from')}</List.Header>
-                </List.Item>
-                {relatedItems}
-              </List>
-            )
-            : null
-        }
+        { renderUnitHelper.renderUnitDescription(unit) }
+        { renderUnitHelper.renderRelatedItems(relatedItems, t('events.list.item_from'), "index-list__item-subtitle")}
       </Table.Cell>
     </Table.Row>
   );

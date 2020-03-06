@@ -4,12 +4,10 @@ import { withNamespaces } from 'react-i18next';
 import produce from 'immer';
 import { Button, Header, Table } from 'semantic-ui-react';
 
-import { NO_NAME } from '../../../helpers/consts';
 import { SectionLogo } from '../../../helpers/images';
-import { canonicalLink } from '../../../helpers/links';
 import { isNotEmptyArray } from '../../../helpers/utils';
+import * as renderUnitHelper from '../../../helpers/renderUnitHelper';
 import * as shapes from '../../shapes';
-import Link from '../../Language/MultiLanguageLink';
 
 const TopN = ({ units, N, sectionCount, section, topicUrl, t }) => {
   const [topNUnits, setTopNUnits]         = useState([]);
@@ -81,23 +79,15 @@ const renderTable = (topNUnits, section, url, t) => {
   );
 };
 
-const renderUnit = (unit, t) => {
-  const link     = canonicalLink(unit);
-  const filmDate = unit.film_date
-    ? t('values.date', { date: new Date(unit.film_date) })
-    : '';
-
-  return (
+const renderUnit = (unit, t) => 
+  (
     <Table.Row key={unit.id} verticalAlign="top">
       <Table.Cell>
-        <span className="index__date">{filmDate}</span>
-        <Link className="index__title" to={link}>
-          {unit.name || NO_NAME}
-        </Link>
+        { renderUnitHelper.renderUnitFilmDate(unit, t)}
+        { renderUnitHelper.renderUnitNameLink(unit)}
       </Table.Cell>
     </Table.Row>
   );
-};
 
 TopN.propTypes = {
   section: PropTypes.string.isRequired,
