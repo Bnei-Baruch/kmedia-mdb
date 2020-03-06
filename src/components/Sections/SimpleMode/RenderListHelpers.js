@@ -82,7 +82,7 @@ const unitKiteiMakorFiles = (unit) => {
 
   const du = unit.derived_units[keys[0]];
   return (du && du.files)
-    ? du.files.filter(f => f.mimetype.includes(MT_AUDIO)).map(file => ({...file, type: 'KITEI_MAKOR'}))
+    ? du.files.filter(f => f.mimetype && f.mimetype.includes(MT_AUDIO)).map(file => ({...file, type: 'KITEI_MAKOR'}))
     : [];
 };
 
