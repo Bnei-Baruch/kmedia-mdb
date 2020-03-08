@@ -4,7 +4,7 @@ LABEL maintainer="edoshor@gmail.com"
 
 WORKDIR /app
 
-ENV DEPLOY_ENV=production \
+ENV REACT_APP_ENV=production \
     REACT_APP_API_BACKEND=/backend/ \
     REACT_APP_ASSETS_BACKEND=/assets/ \
     REACT_APP_IMAGINARY_URL=/imaginary/ \
@@ -15,7 +15,9 @@ ENV DEPLOY_ENV=production \
 COPY . .
 
 RUN yarn install --frozen-lockfile && \
-    yarn build:$DEPLOY_ENV && \
+    yarn build:svgs && \ 
+    yarn build:scripts && \ 
+    yarn build:css && \
     rm -rf node_modules && \
     yarn install --production --frozen-lockfile
 
