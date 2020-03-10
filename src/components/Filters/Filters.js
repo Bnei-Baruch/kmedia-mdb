@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect, ReactReduxContext } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { Container, Icon, Label, Menu, Popup } from 'semantic-ui-react';
+import isEqual from 'react-fast-compare';
 
 import { getLanguageDirection } from '../../helpers/i18n-utils';
 import { filtersTransformer } from '../../filters/index';
@@ -29,6 +30,7 @@ class Filters extends Component {
     filtersData: PropTypes.objectOf(PropTypes.object).isRequired,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
+    sqDataWipErr: PropTypes.bool
   };
 
   static defaultProps = {
@@ -38,6 +40,19 @@ class Filters extends Component {
   state = {
     activeFilter: null,
   };
+
+  shouldComponentUpdate(nextProps, nextState){
+    const { namespace, language, filters, rightItems, filtersData, sqDataWipErr } = this.props;
+    const { activeFilter } = this.state;
+
+    return (activeFilter !== nextState.activeFilter
+      || namespace !== nextProps.namespace
+      || language !== nextProps.language
+      || sqDataWipErr !== nextProps.sqDataWipErr
+      || !isEqual(filters, nextProps.filters)
+      || !isEqual(rightItems, nextProps.rightItems)
+      || !isEqual(filtersData, nextProps.filtersData));
+  }
 
   handlePopupClose = () => {
     this.setState({ activeFilter: null });
@@ -151,6 +166,8 @@ class Filters extends Component {
   render() {
     const { namespace, onHydrated, t, rightItems, language } = this.props;
     const { isMobileDevice }                                 = this.context;
+
+    console.log('render filters:', this.props, this.state);
 
     const langDir = getLanguageDirection(language);
 
