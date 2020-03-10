@@ -10,7 +10,7 @@ const renderUnit = (unit, t) =>
       { renderUnitHelper.renderUnitLogo(unit, 'lectures')}
     </Table.Cell>
     <Table.Cell>
-      { renderUnitHelper.renderFilmDate(unit, t) }
+      { renderUnitHelper.renderUnitFilmDate(unit, t) }
       { renderUnitHelper.renderUnitNameLink(unit) }
       { renderUnitHelper.renderUnitDescription(unit) }
     </Table.Cell>

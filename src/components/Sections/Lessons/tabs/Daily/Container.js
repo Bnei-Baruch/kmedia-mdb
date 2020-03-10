@@ -31,7 +31,7 @@ const renderUnit = (unit, t) => {
   return (
     <Table.Row verticalAlign="top" key={unit.id} className="no-thumbnail">
       <Table.Cell collapsing singleLine>
-        { renderUnitHelper.renderFilmDate(unit, t) }
+        { renderUnitHelper.renderUnitFilmDate(unit, t) }
       </Table.Cell>
       <Table.Cell>
         { renderUnitHelper.renderUnitNameLink(unit) }
