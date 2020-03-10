@@ -2,7 +2,20 @@ import React from 'react';
 import groupBy from 'lodash/groupBy';
 import { Button, Card, Image, List } from 'semantic-ui-react';
 
-import { CT_ARTICLE, CT_DAILY_LESSON, CT_FULL_LESSON, CT_LESSON_PART, CT_VIDEO_PROGRAM_CHAPTER, CT_LELO_MIKUD, CT_KITEI_MAKOR, NO_NAME, UNIT_EVENTS_TYPE, UNIT_PROGRAMS_TYPE, UNIT_PUBLICATIONS_TYPE, VS_NAMES, MT_AUDIO } from '../../../helpers/consts';
+import {
+  CT_ARTICLE,
+  CT_DAILY_LESSON,
+  CT_FULL_LESSON,
+  CT_KITEI_MAKOR,
+  CT_LESSON_PART,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  MT_AUDIO,
+  NO_NAME,
+  UNIT_EVENTS_TYPE,
+  UNIT_PROGRAMS_TYPE,
+  UNIT_PUBLICATIONS_TYPE,
+  VS_NAMES
+} from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
 import { isEmpty, physicalFile } from '../../../helpers/utils';
 import { formatTime } from '../../../helpers/time';
@@ -27,7 +40,7 @@ const getI18nTypeOverridesKey = (contentType) => {
 
 const sortMediaFiles = files => (
   files.sort((a, b) => {
-    const order = {audio: 0, 'lelo-mikud': 1, 'KITEI_MAKOR': 2, videonHD: 3, videoHD: 4, text: 5, image: 6};
+    const order = { audio: 0, 'lelo-mikud': 1, 'KITEI_MAKOR': 2, videonHD: 3, videoHD: 4, text: 5, image: 6 };
     const typeA = a.type === 'video' ? a.type + a.video_size : a.type;
     const typeB = b.type === 'video' ? b.type + b.video_size : b.type;
 
@@ -40,8 +53,8 @@ const labelTextByFile = (file, contentType, t) => {
     return t(`constants.content-types.${CT_KITEI_MAKOR}`);
   }
   const typeOverrides = getI18nTypeOverridesKey(contentType);
-  const fileType = ['audio', 'video'].includes(file.type) ? `${file.type}-simple` : file.type;
-  const label = t(`media-downloads.${typeOverrides}type-labels.${fileType}`);
+  const fileType      = ['audio', 'video'].includes(file.type) ? `${file.type}-simple` : file.type;
+  const label         = t(`media-downloads.${typeOverrides}type-labels.${fileType}`);
   if (file.video_size) {
     return `${label} [${VS_NAMES[file.video_size]}]`;
   }
@@ -50,7 +63,7 @@ const labelTextByFile = (file, contentType, t) => {
 
 const renderHorizontalFilesList = (files, contentType, t) => (
   sortMediaFiles(files).map((file) => {
-    const url = physicalFile(file);
+    const url   = physicalFile(file);
     const label = labelTextByFile(file, contentType, t);
     return (
       <List.Item key={file.id} className="media-file-button">
@@ -68,42 +81,28 @@ const renderHorizontalFilesList = (files, contentType, t) => (
 );
 
 const filesForRenderByUnit = (unit) => {
-  const leloMikudFiles = unitLeloMikudFiles(unit);
-  const kiteiMakorFiles = unitKiteiMakorFiles(unit);
-  console.log('filesForRenderByUnit kiteiMakorFiles', kiteiMakorFiles)
-  return [...(unit.files || []), ...leloMikudFiles, ...kiteiMakorFiles];
-};
-
-const unitKiteiMakorFiles = (unit) => {
   const keys = Object.keys(unit.derived_units || {}).filter(key => key.includes(CT_KITEI_MAKOR));
   if (isEmpty(keys)) {
     return [];
   }
 
   const du = unit.derived_units[keys[0]];
-  return (du && du.files)
-    ? du.files.filter(f => f.mimetype.includes(MT_AUDIO)).map(file => ({...file, type: 'KITEI_MAKOR'}))
-    : [];
-};
 
-const unitLeloMikudFiles = (unit) => {
-  const keys = Object.keys(unit.derived_units || {}).filter(key => key.includes(CT_LELO_MIKUD));
-  if (isEmpty(keys)) {
-    return [];
+  let leloMikudFiles  = [];
+  let kiteiMakorFiles = [];
+  if (du?.files) {
+    kiteiMakorFiles = du.files.filter(f => f?.mimetype?.includes(MT_AUDIO)).map(file => ({ ...file, type: 'KITEI_MAKOR' }));
+    leloMikudFiles  = du.files.map(file => ({ ...file, type: 'lelo-mikud' }));
   }
-
-  const du = unit.derived_units[keys[0]];
-  return (du && du.files)
-    ? du.files.map(file => ({ ...file, type: 'lelo-mikud' }))
-    : [];
+  return [...(unit.files || []), ...leloMikudFiles, ...kiteiMakorFiles];
 };
 
 const renderUnits = (units, language, t, helpChooseLang) => (
   units.filter((unit => unit)).map((unit, index, unitsArray) => {
-    const lastUnit = unitsArray.length - 1;
+    const lastUnit  = unitsArray.length - 1;
     const filesList = filesForRenderByUnit(unit).filter(file => file.language === language);
-    const files = filesList && renderHorizontalFilesList(filesList, unit.content_type, t);
-    const duration = formatTime(unit.duration);
+    const files     = filesList && renderHorizontalFilesList(filesList, unit.content_type, t);
+    const duration  = formatTime(unit.duration);
 
     if (!files) {
       return null;

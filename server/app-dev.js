@@ -2,7 +2,7 @@ import http from 'http';
 import path from 'path';
 import express from 'express';
 import compression from 'compression';
-import proxy from 'http-proxy-middleware';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import { resourceMonitorMiddleware } from 'express-watcher';
 
 import * as middleware from './middleware';
@@ -45,7 +45,7 @@ router.use('/assets', express.static(
 ));
 
 // proxy other static assets to create-react-app dev server
-router.use(['**/*.*', '/static', '/sockjs-node'], proxy({
+router.use(['**/*.*', '/static', '/sockjs-node'], createProxyMiddleware({
   target: `http://localhost:${CRA_CLIENT_PORT}`,
   changeOrigin: true,
   ws: true
