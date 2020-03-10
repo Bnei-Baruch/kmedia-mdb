@@ -27,6 +27,7 @@ const renderUnit = (unit, t) => {
   );
 };
 
+// Cannot change this to function because extraFetchParams does not work
 class Container extends PureComponent {
   static propTypes = {
     tab: PropTypes.string.isRequired,
