@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Header, Image, Menu, Ref } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
@@ -47,7 +47,6 @@ class MyPlaylistWidget extends PlaylistWidget {
     const { t, selected } = this.props;
 
     return (
-
       <Menu.Item key={section}>
         <Menu.Header>
           {t(`events.collection.playlist.${section}`)}
@@ -68,23 +67,20 @@ class MyPlaylistWidget extends PlaylistWidget {
                     ? (
                       <strong>
                         {t('values.date', { date: unit.film_date })}
-                        {' '}
-&nbsp;
+                        {' '}&nbsp;
                       </strong>
                     )
                     : null
                 }
                 {unit.name || NO_NAME}
-                {' '}
--
+                {' '}-
                 {formatDuration(unit.duration)}
               </Menu.Item>
             );
 
-            if ((offset + index) === selected) {
-              return <Ref innerRef={this.handleSelectedRef} key={unit.id}>{mItem}</Ref>;
-            }
-            return mItem;
+            return (offset + index) === selected 
+              ? <Ref innerRef={this.handleSelectedRef} key={unit.id}>{mItem}</Ref> 
+              : mItem;
           })
         }
       </Menu.Item>
@@ -120,10 +116,8 @@ class MyPlaylistWidget extends PlaylistWidget {
   }
 }
 
-class EventCollection extends Component {
-  render() {
-    return <PlaylistCollection PlaylistComponent={MyPlaylistWidget} />;
-  }
-}
+const EventCollection = () => (
+  <PlaylistCollection PlaylistComponent={MyPlaylistWidget} />
+);
 
 export default EventCollection;
