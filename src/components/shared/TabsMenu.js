@@ -5,7 +5,7 @@ import { Menu } from 'semantic-ui-react';
 
 import * as shapes from '../shapes';
 
-const activeFromLocation = location => location.state ? location.state.active : {};
+const activeFromLocation = location => location.state ? location.state.active : '';
 
 const activeFromDefault = items => (items.length > 0 ? items[0].name : null);
 
