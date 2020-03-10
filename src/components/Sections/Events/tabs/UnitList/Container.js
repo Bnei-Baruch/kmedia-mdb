@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'semantic-ui-react';
 
@@ -18,16 +18,16 @@ const renderUnit = (unit, t) => {
         { renderUnitHelper.renderUnitLogo(unit, 'events')}
       </Table.Cell>
       <Table.Cell>
-        { renderUnitHelper.renderFilmDate(unit, t) }
-        { renderUnitHelper.renderUnitNameLink(unit) }
-        { renderUnitHelper.renderUnitDescription(unit) }
+        { renderUnitHelper.renderUnitFilmDate(unit, t)}
+        { renderUnitHelper.renderUnitNameLink(unit)}
+        { renderUnitHelper.renderUnitDescription(unit)}
         { renderUnitHelper.renderRelatedItems(relatedItems, t('events.list.item_from'), "index-list__item-subtitle")}
       </Table.Cell>
     </Table.Row>
   );
 };
 
-class Container extends Component {
+class Container extends PureComponent {
   static propTypes = {
     tab: PropTypes.string.isRequired,
   };
