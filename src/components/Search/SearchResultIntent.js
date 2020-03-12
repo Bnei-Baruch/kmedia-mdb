@@ -11,7 +11,7 @@ import { tracePath } from '../../helpers/utils';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { canonicalLink, intentSectionLink } from '../../helpers/links';
 import { actions as listsActions, selectors as lists } from '../../redux/modules/lists';
-import { assetUrl, imaginaryUrl, Requests } from '../../helpers/Api';
+import { assetUrl, Requests } from '../../helpers/Api';
 import Link from '../Language/MultiLanguageLink';
 import {
   SEARCH_INTENT_FILTER_NAMES,
@@ -86,13 +86,12 @@ class SearchResultIntent extends SearchResultBase {
     const { _index: index, _type: type, _source: { mdb_uid: mdbUid } } = hit;
     const { search_result: { searchId } }                              = queryResult;
 
-    let thumbUrl = assetUrl(`api/thumbnail/${cu.id}`);
-    if (!thumbUrl.startsWith('http')) {
-      thumbUrl = `http://localhost${thumbUrl}`;
-    }
+    const src = Requests.imaginary('thumbnail', {
+      url: assetUrl(`api/thumbnail/${cu.id}`),
+      width: 250,
+      stripmeta: true
+    });
 
-    const imgParams = Requests.makeParams({ url: thumbUrl, width: 250, stripmeta: true });
-    const src       = `${imaginaryUrl('thumbnail')}?${imgParams}`;
     const filmDate  = cu.film_date ? t('values.date', { date: cu.film_date }) : '';
 
     return (

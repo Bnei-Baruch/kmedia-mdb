@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-const API_BACKEND    = process.env.REACT_APP_API_BACKEND;
-const ASSETS_BACKEND = process.env.REACT_APP_ASSETS_BACKEND;
-const CMS_BACKEND    = process.env.REACT_APP_CMS_BACKEND || `${API_BACKEND}cms/`;
-const IMAGINARY_URL  = process.env.REACT_APP_IMAGINARY_URL;
+const API_BACKEND             = process.env.REACT_APP_API_BACKEND;
+const ASSETS_BACKEND          = process.env.REACT_APP_ASSETS_BACKEND;
+const CMS_BACKEND             = process.env.REACT_APP_CMS_BACKEND || `${API_BACKEND}cms/`;
+const IMAGINARY_URL           = process.env.REACT_APP_IMAGINARY_URL;
+const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST || 'localhost';
 
 export const backendUrl   = path => `${API_BACKEND}${path}`;
 export const assetUrl     = path => `${ASSETS_BACKEND}${path}`;
@@ -47,6 +48,13 @@ export class Requests {
       .filter(p => p !== '')
       .join('&')}`
   );
+
+  static imaginary = (action, params) => {
+    if (!params.url.startsWith('http')) {
+      params.url = `http://${IMAGINARY_INTERNAL_HOST}${params.url}`;
+    }
+    return `${imaginaryUrl('thumbnail')}?${Requests.makeParams(params)}`;
+  };
 
   static encode = encodeURIComponent;
 }
