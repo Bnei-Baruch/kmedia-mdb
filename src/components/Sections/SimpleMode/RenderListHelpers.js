@@ -7,6 +7,7 @@ import {
   CT_DAILY_LESSON,
   CT_FULL_LESSON,
   CT_KITEI_MAKOR,
+  CT_LELO_MIKUD,
   CT_LESSON_PART,
   CT_VIDEO_PROGRAM_CHAPTER,
   MT_AUDIO,
@@ -81,20 +82,22 @@ const renderHorizontalFilesList = (files, contentType, t) => (
 );
 
 const filesForRenderByUnit = (unit) => {
-  const keys = Object.keys(unit.derived_units || {}).filter(key => key.includes(CT_KITEI_MAKOR));
+  const leloMikudFiles  = unitDerivedFiles(unit, 'lelo-mikud', key => key.includes(CT_LELO_MIKUD), () => true);
+  const kiteiMakorFiles = unitDerivedFiles(unit, 'KITEI_MAKOR', key => key.includes(CT_KITEI_MAKOR), f => f?.mimetype?.includes(MT_AUDIO));
+
+  return [...(unit.files || []), ...leloMikudFiles, ...kiteiMakorFiles];
+};
+
+const unitDerivedFiles = (unit, type, keyFilter, mimeFilter) => {
+  const keys = Object.keys(unit.derived_units || {}).filter(keyFilter);
   if (isEmpty(keys)) {
     return [];
   }
 
   const du = unit.derived_units[keys[0]];
-
-  let leloMikudFiles  = [];
-  let kiteiMakorFiles = [];
-  if (du?.files) {
-    kiteiMakorFiles = du.files.filter(f => f?.mimetype?.includes(MT_AUDIO)).map(file => ({ ...file, type: 'KITEI_MAKOR' }));
-    leloMikudFiles  = du.files.map(file => ({ ...file, type: 'lelo-mikud' }));
-  }
-  return [...(unit.files || []), ...leloMikudFiles, ...kiteiMakorFiles];
+  return du?.files
+    ? du.files.filter(mimeFilter).map(file => ({ ...file, type }))
+    : [];
 };
 
 const renderUnits = (units, language, t, helpChooseLang) => (
