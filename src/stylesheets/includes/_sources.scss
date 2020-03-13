@@ -226,7 +226,7 @@
       padding-bottom: .5rem !important;
       padding-top: .5rem !important;
       position: fixed !important;
-      top: calc(60px - 1rem);
+      top: calc(#{$main-menu-height} - 1rem); // 1rem = padding-bottom + padding-top
       transform: translate(100%, 0);
       transition: transform .3s;
       z-index: 10;
