@@ -410,6 +410,9 @@
     "research": {
       "header": "Araştırma materyalleri",
       "no-content": "Araştırma materyali yok"
+    },
+    "derived-units": {
+      "header": "Selected Highlights"
     }
   },
   "sources-library": {

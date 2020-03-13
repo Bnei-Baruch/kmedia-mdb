@@ -410,6 +410,9 @@
     "research": {
       "header": "Research materials",
       "no-content": "No research materials"
+    },
+    "derived-units": {
+      "header": "Selected Highlights"
     }
   },
   "sources-library": {

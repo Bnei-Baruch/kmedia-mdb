@@ -1,51 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { List, Table } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 
-import { CT_LECTURE, CT_LESSON_PART, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, NO_NAME, RABASH_PERSON_UID } from '../../../../../helpers/consts';
-import { CollectionsBreakdown } from '../../../../../helpers/mdb';
-import { canonicalLink } from '../../../../../helpers/links';
-import { ellipsize } from '../../../../../helpers/strings';
+import { CT_LECTURE, CT_LESSON_PART, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, RABASH_PERSON_UID } from '../../../../../helpers/consts';
+import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import UnitList from '../../../../Pages/UnitList/Container';
-import Link from '../../../../Language/MultiLanguageLink';
-import UnitLogo from '../../../../shared/Logo/UnitLogo';
 
 const renderUnit = (unit, t, namespace) => {
   if (!unit) {
     return null;
   }
-  const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
+
+  const breakdown = renderUnitHelper.getUnitCollectionsBreakdown(unit);
   const lectures  = breakdown.getLectures();
-  const map       = x => (
-    <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-      {x.name || NO_NAME}
-    </List.Item>
-  );
-
-  const relatedItems = lectures.map(map);
-
-  let filmDate = '';
-  if (unit.film_date) {
-    filmDate = t('values.date', { date: unit.film_date });
-  }
-  const link = canonicalLink(unit);
+  const relatedItems = lectures.map(renderUnitHelper.renderUnitNameAsListItem);
 
   if (namespace === 'lessons-rabash') {
     return (
       <Table.Row className="no-thumbnail" key={unit.id} verticalAlign="top">
         <Table.Cell>
-          <Link className="index__title" to={link}>
-            {unit.name || NO_NAME}
-          </Link>
-          {
-            unit.description
-              ? (
-                <div className="index__description mobile-hidden">
-                  {ellipsize(unit.description)}
-                </div>
-              )
-              : null
-          }
+          { renderUnitHelper.renderUnitNameLink(unit)}
+          { renderUnitHelper.renderUnitDescription(unit) }
         </Table.Cell>
       </Table.Row>
     );
@@ -54,41 +29,13 @@ const renderUnit = (unit, t, namespace) => {
   return (
     <Table.Row key={unit.id} verticalAlign="top">
       <Table.Cell collapsing singleLine>
-        <Link to={link}>
-          <UnitLogo
-            className="index__thumbnail"
-            unitId={unit.id}
-            collectionId={lectures.length > 0 ? lectures[0].id : null}
-            fallbackImg='lectures'
-          />
-        </Link>
+        { renderUnitHelper.renderUnitCollectionLogo(unit, 'lectures', lectures.length > 0 ? lectures[0].id : null)}
       </Table.Cell>
       <Table.Cell>
-        <span className="index__date">{filmDate}</span>
-        <Link className="index__title" to={link}>
-          {unit.name || NO_NAME}
-        </Link>
-        {
-          unit.description
-            ? (
-              <div className="index__description mobile-hidden">
-                {ellipsize(unit.description)}
-              </div>
-            )
-            : null
-        }
-        {
-          relatedItems.length > 0
-            ? (
-              <List horizontal divided link className="index__collections" size="tiny">
-                <List.Item>
-                  <List.Header>{t('lessons.list.item_from')}</List.Header>
-                </List.Item>
-                {relatedItems}
-              </List>
-            )
-            : null
-        }
+        { renderUnitHelper.renderUnitFilmDate(unit, t)}
+        { renderUnitHelper.renderUnitNameLink(unit)}
+        { renderUnitHelper.renderUnitDescription(unit)}
+        { renderUnitHelper.renderRelatedItems(relatedItems, t('lessons.list.item_from')) }
       </Table.Cell>
     </Table.Row>
   );

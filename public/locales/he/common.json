@@ -409,6 +409,9 @@
     "research": {
       "header": "חומרי מחקר",
       "no-content": "אין חומרי מחקר"
+    },
+    "derived-units": {
+      "header": "קטעים נבחרים"
     }
   },
   "sources-library": {

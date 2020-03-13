@@ -401,6 +401,9 @@
     "research": {
       "header": "Матеріали досліджень",
       "no-content": "Немає дослідницьких матеріалів"
+    },
+    "derived-units": {
+      "header": "Selected Highlights"
     }
   },
   "sources-library": {

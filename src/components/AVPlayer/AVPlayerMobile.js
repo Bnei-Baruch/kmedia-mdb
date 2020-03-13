@@ -23,6 +23,7 @@ import playerHelper from '../../helpers/player';
 import { PlayerStartEnum } from './playerStartEnum';
 import classNames from 'classnames';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
+import { areEqual } from '../../helpers/utils';
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
@@ -117,6 +118,24 @@ class AVPlayerMobile extends Component {
       start,
       embed: playerHelper.getEmbedFromQuery(history.location),
     };
+  }
+
+  shouldComponentUpdate(nextProps, nextState){
+    const diffInProps = !areEqual(this.props, nextProps);
+    const updateState = this.updateState(nextState);
+
+    return diffInProps || updateState;
+  }
+
+  updateState = (nextState) => {
+    const { playbackRate, showControls, unMuteButton, error, isSliceMode, mode } = this.state;
+
+    return (playbackRate !== nextState.playbackRate 
+      || showControls !== nextState.showControls
+      || unMuteButton !== nextState.unMuteButton
+      || error !== nextState.error
+      || isSliceMode !== nextState.isSliceMode
+      || mode !== nextState.mode);
   }
 
   componentDidUpdate(prevProps) {	

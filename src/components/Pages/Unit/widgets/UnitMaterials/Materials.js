@@ -2,13 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 
-import { CT_ARTICLE, CT_RESEARCH_MATERIAL, CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, MT_TEXT } from '../../../../../helpers/consts';
+import { CT_ARTICLE, CT_RESEARCH_MATERIAL, CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, DERIVED_UNITS_CONTENT_TYPE, MT_TEXT } from '../../../../../helpers/consts';
 import * as shapes from '../../../../shapes';
 import TabsMenu from '../../../../shared/TabsMenu';
 import Summary from './Summary/Summary';
 import SourcesContainer from './Sources/SourcesContainer';
 import Sketches from './Sketches';
 import TranscriptionContainer from './Transcription/TranscriptionContainer';
+import { isEmpty } from '../../../../../helpers/utils';
+import DerivedUnits from './DerivedUnits';
 
 const derivedTextUnits = (unit) => {
   const types    = {};
@@ -68,6 +70,17 @@ const Materials = ({ unit = undefined, t }) => {
       label: t('materials.research.header'),
       component: <TranscriptionContainer unit={unit} key="research" type="research" />
     });
+  }
+
+  if (!isEmpty(unit.derived_units)) {
+    const selectedUnits = Object.values(unit.derived_units).filter(u => DERIVED_UNITS_CONTENT_TYPE.includes(u.content_type));
+    if (selectedUnits.length > 0) {
+      items.push({
+        name: 'derived',
+        label: t('materials.derived-units.header'),
+        component: <DerivedUnits selectedUnits={selectedUnits} key="derived" type="derived" t={t}/>
+      });
+    }
   }
 
   return (
