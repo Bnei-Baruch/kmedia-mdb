@@ -167,8 +167,6 @@ class Filters extends Component {
     const { namespace, onHydrated, t, rightItems, language } = this.props;
     const { isMobileDevice }                                 = this.context;
 
-    console.log('render filters:', this.props, this.state);
-
     const langDir = getLanguageDirection(language);
 
     let popupStyle = {
