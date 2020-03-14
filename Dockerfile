@@ -37,4 +37,5 @@ ENV NODE_ENV=production \
     REACT_APP_PUBLIC_BASE=https://kabbalahmedia.info/
 
 EXPOSE 3001
-CMD [ "node", "/app/server/index.js" ]
+ENTRYPOINT ["/app/misc/docker-entrypoint.sh"]
+
