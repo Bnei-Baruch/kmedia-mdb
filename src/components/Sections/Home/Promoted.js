@@ -2,7 +2,7 @@ import React from 'react';
 import { Header, Image } from 'semantic-ui-react';
 
 import Link from '../../Language/MultiLanguageLink';
-import { cmsUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
+import { cmsUrl, Requests } from '../../../helpers/Api';
 import { publicFile } from '../../../helpers/utils';
 
 const renderHeader = (header, subHeader) => {
@@ -44,14 +44,13 @@ const Promoted = (props) => {
   if (!/^http/.exec(imageFile)) {
     imageFile = publicFile(imageFile);
   }
-  const params = Requests.makeParams({
+  const src = Requests.imaginary('resize', {
     url: imageFile,
     width: 512,
     height: 288,
     nocrop: false,
     stripmeta: true,
   });
-  const src    = `${imaginaryUrl('resize')}?${params}`;
 
   return (
     <div className="thumbnail">

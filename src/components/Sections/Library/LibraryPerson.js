@@ -8,7 +8,7 @@ import { withNamespaces } from 'react-i18next';
 import { actions, selectors } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
 import WipErr from '../../shared/WipErr/WipErr';
-import { cmsUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
+import { cmsUrl, Requests } from '../../../helpers/Api';
 import { publicFile } from '../../../helpers/utils';
 
 // Convert WP images to full URL+imaginary
@@ -23,15 +23,15 @@ const convertImages = (content) => {
         imageFile = publicFile(imageFile);
       }
 
-      const params = Requests.makeParams({
+      const src = Requests.imaginary('resize', {
         url: imageFile,
         width: 160,
         height: 200,
         nocrop: false,
         stripmeta: true,
       });
-      const src    = `${imaginaryUrl('resize')}?${params}`;
-      content      = content.replace(img, src);
+
+      content = content.replace(img, src);
     }
   }
 

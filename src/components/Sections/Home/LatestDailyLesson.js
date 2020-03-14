@@ -3,24 +3,20 @@ import PropTypes from 'prop-types';
 import { Header, Image } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
 
-import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
+import { assetUrl, Requests } from '../../../helpers/Api';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 
 const getRandomImage = () => {
   const rand = Math.floor(Math.random() * Math.floor(9)) + 1;
-  let src    = assetUrl(`lessons/latest_lesson_${rand}.jpg`);
-  if (!src.startsWith('http')) {
-    src = `http://localhost${src}`;
-  }
-  const params = Requests.makeParams({
-    url: src,
+
+  return Requests.imaginary('resize', {
+    url: assetUrl(`lessons/latest_lesson_${rand}.jpg`),
     width: 512,
     height: 288,
     nocrop: false,
     stripmeta: true,
   });
-  return `${imaginaryUrl('resize')}?${params}`;
 };
 
 class LatestDailyLesson extends Component {

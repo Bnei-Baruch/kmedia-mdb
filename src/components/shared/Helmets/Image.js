@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 
-import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
+import { assetUrl, Requests } from '../../../helpers/Api';
 import { isEmpty } from '../../../helpers/utils';
 import * as shapes from '../../shapes';
 
 const buildImage = (url, width, height) => {
   // TODO: enlarge is the most expensive op, use another one!
-  const imageUrl = `${imaginaryUrl('enlarge')}?${Requests.makeParams({ url, width, height, nocrop: true })}`;
+  const imageUrl = Requests.imaginary('enlarge',{ url, width, height, nocrop: true });
 
   // TODO: BUG !!!, when a new image overrides the old one,
   // it breaks the helmet structure (separate the image properties

@@ -1,18 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { assetUrl, imaginaryUrl, Requests } from '../../../helpers/Api';
+import { assetUrl, Requests } from '../../../helpers/Api';
 import FallbackImage from '../FallbackImage';
 
 const UnitLogo = (props) => {
   const { unitId = null, collectionId = null, width = 120, className = '', fallbackImg = 'default', ...rest } = props;
 
-  let src = assetUrl(`api/thumbnail/${unitId}`);
-  if (!src.startsWith('http')) {
-    src = `http://localhost${src}`;
-  }
-  const params = Requests.makeParams({ url: src, width, stripmeta: true, });
-  src          = `${imaginaryUrl('thumbnail')}?${params}`;
+  const src = Requests.imaginary('thumbnail', {
+    url: assetUrl(`api/thumbnail/${unitId}`),
+    width,
+    stripmeta: true,
+  });
 
   const fallback = fallbackImg || 'default';
 

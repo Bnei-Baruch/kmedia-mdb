@@ -7,7 +7,7 @@ import isEqual from 'react-fast-compare';
 import ImageGallery from 'react-image-gallery';
 import { Button, Container, Segment } from 'semantic-ui-react';
 
-import { assetUrl, imaginaryUrl, Requests } from '../../../../../helpers/Api';
+import { assetUrl, Requests } from '../../../../../helpers/Api';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
 import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
 import { isEmpty, physicalFile, strCmp } from '../../../../../helpers/utils';
@@ -201,12 +201,7 @@ class Sketches extends React.Component {
       alt = item.name;
     }
 
-    let thumbSrc = src;
-    if (!thumbSrc.startsWith('http')) {
-      thumbSrc = `http://localhost${src}`;
-    }
-    const thumbParams = Requests.makeParams({ url: thumbSrc, width: 100, stripmeta: true });
-    thumbSrc          = `${imaginaryUrl('thumbnail')}?${thumbParams}`;
+    const thumbSrc = Requests.imaginary('thumbnail', { url: src, width: 100, stripmeta: true });
 
     return {
       original: src,

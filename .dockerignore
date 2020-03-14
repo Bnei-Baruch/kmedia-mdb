@@ -32,7 +32,6 @@ semantic.json
 # App
 assets
 help
-misc
 node_modules
 semantic
 testcafe
