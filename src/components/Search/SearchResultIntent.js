@@ -12,6 +12,7 @@ import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { canonicalLink, intentSectionLink } from '../../helpers/links';
 import { actions as listsActions, selectors as lists } from '../../redux/modules/lists';
 import { assetUrl, Requests } from '../../helpers/Api';
+import * as renderUnitHelper from '../../helpers/renderUnitHelper';
 import Link from '../Language/MultiLanguageLink';
 import {
   SEARCH_INTENT_FILTER_NAMES,
@@ -92,7 +93,7 @@ class SearchResultIntent extends SearchResultBase {
       stripmeta: true
     });
 
-    const filmDate  = cu.film_date ? t('values.date', { date: cu.film_date }) : '';
+    const filmDate  = renderUnitHelper.getFilmDate(cu, t);
 
     return (
       <Card key={cu.id} className="search__card bg_hover_grey" raised>

@@ -1,9 +1,10 @@
 import React from 'react';
-import { Table } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
+import { List, Table } from 'semantic-ui-react';
 
-import { CT_CLIP } from '../../../../../helpers/consts';
 import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
-import UnitList from '../../../../Pages/UnitList/Container';
+import * as shapes from '../../../../shapes';
+
 
 const renderUnit = (unit, t) => {
   const {
@@ -20,23 +21,27 @@ const renderUnit = (unit, t) => {
         { renderUnitHelper.renderUnitFilmDate(unit, t) }
         { renderUnitHelper.renderUnitNameLink(unit) }
         { renderUnitHelper.renderUnitDescription(unit) }
-        { renderUnitHelper.renderRelatedItems(relatedItems, t('programs.list.item_of'))}
+        {
+          relatedItems &&
+          <List horizontal divided link className="index__collections" size="tiny">
+            {relatedItems}
+          </List>
+        }
       </Table.Cell>
     </Table.Row>
   );
 };
 
-const extraFetchParams = () => ({
-  content_type: [CT_CLIP]
-});
+const DerivedUnits = ({ selectedUnits, t }) => 
+  <Table unstackable basic="very" className="index" sortable>
+    <Table.Body>
+      {selectedUnits.map(u => renderUnit(u, t))}
+    </Table.Body>
+  </Table>;
 
-const ClipsList = () => 
-  <div>
-    <UnitList
-      namespace="programs-clips"
-      renderUnit={renderUnit}
-      extraFetchParams={extraFetchParams}
-    />
-  </div>
+DerivedUnits.propTypes = {
+  selectedUnits: PropTypes.arrayOf(shapes.ContentUnit).isRequired,
+  t: PropTypes.func.isRequired,
+};
 
-export default ClipsList;
+export default DerivedUnits;

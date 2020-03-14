@@ -1,40 +1,22 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
 
-import { CT_BLOG_POST, NO_NAME } from '../../../../../helpers/consts';
-import { canonicalLink } from '../../../../../helpers/links';
-import { ellipsize } from '../../../../../helpers/strings';
+import { CT_BLOG_POST } from '../../../../../helpers/consts';
+import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import UnitList from '../../../../Pages/UnitList/Container';
-import Link from '../../../../Language/MultiLanguageLink';
 
-const renderUnit = (unit, t) => {
-  let filmDate = '';
-  if (unit.film_date) {
-    filmDate = t('values.date', { date: unit.film_date });
-  }
-
-  return (
+const renderUnit = (unit, t) => 
+  (
     <Table.Row key={unit.id} verticalAlign="top" className="no-thumbnail">
       <Table.Cell collapsing singleLine>
-        <span className="index__date">{filmDate}</span>
+        { renderUnitHelper.renderUnitFilmDate(unit, t)}
       </Table.Cell>
       <Table.Cell>
-        <Link className="index__title" to={canonicalLink(unit)}>
-          {unit.name || NO_NAME}
-        </Link>
-        {
-          unit.description
-            ? (
-              <div className="index__description mobile-hidden">
-                {ellipsize(unit.description)}
-              </div>
-            )
-            : null
-        }
+        { renderUnitHelper.renderUnitNameLink(unit)}
+        { renderUnitHelper.renderUnitDescription(unit)}
       </Table.Cell>
     </Table.Row>
   );
-};
 
 const AudioBlogList = () => {
   const extraFetchParams = () => ({ content_type: [CT_BLOG_POST] });

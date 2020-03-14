@@ -106,7 +106,7 @@ class PlaylistWidget extends Component {
       <div className="avbox__playlist-view">
         <Menu vertical fluid size="small">
           {
-            playlist.items.map((playableItem, index) => (
+            playlist.items.filter(item => item.unit).map((playableItem, index) => (
               <Menu.Item
                 key={playableItem.unit.id}
                 name={`${index}`}

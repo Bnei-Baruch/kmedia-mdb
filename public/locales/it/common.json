@@ -409,6 +409,9 @@
     "research": {
       "header": "Materiali di ricerca",
       "no-content": "Nessun materiale di ricerca"
+    },
+    "derived-units": {
+      "header": "Selected Highlights"
     }
   },
   "sources-library": {

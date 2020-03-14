@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Header, Segment } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../helpers/links';
+import * as renderUnitHelper from '../../helpers/renderUnitHelper';
 import Link from '../Language/MultiLanguageLink';
 import SearchResultBase from './SearchResultBase';
 import * as shapes from '../shapes';
@@ -64,10 +65,7 @@ class SearchResultCU extends SearchResultBase {
         highlight,
       } = hit;
 
-    let filmDate = '';
-    if (cu.film_date) {
-      filmDate = t('values.date', { date: cu.film_date });
-    }
+    const filmDate = renderUnitHelper.getFilmDate(cu, t);
 
     return (
       <Segment className="bg_hover_grey search__block">

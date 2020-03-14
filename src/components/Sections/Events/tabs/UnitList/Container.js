@@ -1,72 +1,34 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { List, Table } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 
-import { CT_FRIENDS_GATHERING, CT_MEAL, NO_NAME } from '../../../../../helpers/consts';
-import { canonicalLink } from '../../../../../helpers/links';
-import { CollectionsBreakdown } from '../../../../../helpers/mdb';
-import { ellipsize } from '../../../../../helpers/strings';
+import { CT_FRIENDS_GATHERING, CT_MEAL } from '../../../../../helpers/consts';
+import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import UnitList from '../../../../Pages/UnitList/Container';
-import Link from '../../../../Language/MultiLanguageLink';
-import UnitLogo from '../../../../shared/Logo/UnitLogo';
 
 const renderUnit = (unit, t) => {
-  const breakdown = new CollectionsBreakdown(Object.values(unit.collections || {}));
+  const breakdown = renderUnitHelper.getUnitCollectionsBreakdown(unit); 
   const events    = breakdown.getEvents();
 
-  const map          = x => (
-    <List.Item key={x.id} as={Link} to={canonicalLink(x)}>
-      {x.name || NO_NAME}
-    </List.Item>
-  );
-  const relatedItems = events.map(map);
-
-  let filmDate = '';
-  if (unit.film_date) {
-    filmDate = t('values.date', { date: unit.film_date });
-  }
-
-  const link = canonicalLink(unit);
+  const relatedItems = events.map(renderUnitHelper.renderUnitNameAsListItem);
 
   return (
     <Table.Row key={unit.id} verticalAlign="top">
       <Table.Cell collapsing width={1}>
-        <Link to={link}>
-          <UnitLogo className="index__thumbnail" unitId={unit.id} fallbackImg='events' />
-        </Link>
+        { renderUnitHelper.renderUnitLogo(unit, 'events')}
       </Table.Cell>
       <Table.Cell>
-        <span className="index__date">{filmDate}</span>
-        <Link className="index__title" to={link}>
-          {unit.name || NO_NAME}
-        </Link>
-        {
-          unit.description
-            ? (
-              <div className="index__description mobile-hidden">
-                {ellipsize(unit.description)}
-              </div>
-            )
-            : null
-        }
-        {
-          relatedItems.length > 0
-            ? (
-              <List horizontal divided link className="index-list__item-subtitle" size="tiny">
-                <List.Item>
-                  <List.Header>{t('events.list.item_from')}</List.Header>
-                </List.Item>
-                {relatedItems}
-              </List>
-            )
-            : null
-        }
+        { renderUnitHelper.renderUnitFilmDate(unit, t)}
+        { renderUnitHelper.renderUnitNameLink(unit)}
+        { renderUnitHelper.renderUnitDescription(unit)}
+        { renderUnitHelper.renderRelatedItems(relatedItems, t('events.list.item_from'), "index-list__item-subtitle")}
       </Table.Cell>
     </Table.Row>
   );
 };
 
-class Container extends Component {
+// Cannot change this to function because extraFetchParams does not work
+class Container extends PureComponent {
   static propTypes = {
     tab: PropTypes.string.isRequired,
   };

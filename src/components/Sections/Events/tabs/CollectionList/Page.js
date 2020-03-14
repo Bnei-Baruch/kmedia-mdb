@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import { withNamespaces } from 'react-i18next';
@@ -28,45 +28,35 @@ const filters = {
   ],
 };
 
-class TabPage extends PureComponent {
-  static propTypes = {
-    tabName: PropTypes.string.isRequired,
-    items: PropTypes.arrayOf(shapes.EventCollection),
-    wip: shapes.WIP,
-    err: shapes.Error,
-    t: PropTypes.func.isRequired,
-  };
+const TabPage = ({tabName, items = [], wip = false, err = null, t}) => {
+  const content = WipErr({ wip, err, t }) || (
+    <Container className="padded">
+      <ResultsPageHeader pageNo={1} pageSize={1000} total={items.length} />
+      <Divider fitted />
+      <List items={items} />
+    </Container>
+  );
 
-  static defaultProps = {
-    items: [],
-    wip: false,
-    err: null,
-  };
-
-  render() {
-    const { tabName, items, wip, err, t } = this.props;
-
-    const content = WipErr({ wip, err, t }) || (
-      <Container className="padded">
-        <ResultsPageHeader pageNo={1} pageSize={1000} total={items.length} />
-        <Divider fitted />
-        <List items={items} />
-      </Container>
-    );
-
-    return (
-      <div>
-        <Divider fitted />
-        <Filters
-          namespace={`events-${tabName}`}
-          filters={filters[tabName]}
-          onChange={noop}
-          onHydrated={noop}
-        />
-        {content}
-      </div>
-    );
-  }
+  return (
+    <div>
+      <Divider fitted />
+      <Filters
+        namespace={`events-${tabName}`}
+        filters={filters[tabName]}
+        onChange={noop}
+        onHydrated={noop}
+      />
+      {content}
+    </div>
+  );
 }
+
+TabPage.propTypes = {
+  tabName: PropTypes.string.isRequired,
+  items: PropTypes.arrayOf(shapes.EventCollection),
+  wip: shapes.WIP,
+  err: shapes.Error,
+  t: PropTypes.func.isRequired,
+};
 
 export default withNamespaces()(TabPage);
