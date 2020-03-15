@@ -81,16 +81,15 @@ class SearchResultCU extends SearchResultBase {
         </Header>
 
         <Container>
-          {this.iconByContentType(cu.content_type, true)}
+          {this.iconByContentType(cu.content_type, true, t)}
           {' '}
           |
           <strong>{filmDate}</strong>
           <div className="clear" />
         </Container>
 
-        <Container className="content">
-          {this.renderSnippet(highlight)}
-        </Container>
+        <Container className="content">{this.renderSnippet(highlight)}</Container>
+
         <Container>
           {this.renderFiles(cu, mdbUid, index, resultType, rank, searchId)}
           <div className="clear" />

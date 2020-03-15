@@ -26,13 +26,13 @@ import {
 
 import FallbackImage from '../shared/FallbackImage';
 import SearchResultBase from './SearchResultBase';
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 //fetch 3 items for 4 screens
 let numberOfFetchedUnits = 3 * 4;
 
 class SearchResultIntent extends SearchResultBase {
   static contextType = DeviceInfoContext;
-  static propTypes = {
+  static propTypes   = {
     ...SearchResultBase.propTypes,
     fetchList: PropTypes.func.isRequired
   };
@@ -93,7 +93,7 @@ class SearchResultIntent extends SearchResultBase {
       stripmeta: true
     });
 
-    const filmDate  = renderUnitHelper.getFilmDate(cu, t);
+    const filmDate = renderUnitHelper.getFilmDate(cu, t);
 
     return (
       <Card key={cu.id} className="search__card bg_hover_grey" raised>
@@ -116,7 +116,7 @@ class SearchResultIntent extends SearchResultBase {
             </Link>
           </Card.Header>
           <Card.Meta>
-            {this.iconByContentType(cu.content_type, true)}
+            {this.iconByContentType(cu.content_type, true, t)}
             |&nbsp;
             <strong>{filmDate}</strong>
           </Card.Meta>

@@ -23,10 +23,7 @@ class SearchResultPost extends SearchResultBase {
         highlight
       } = hit;
 
-    let createdDate = '';
-    if (post.created_at) {
-      createdDate = t('values.date', { date: post.created_at });
-    }
+    const createdDate = post.created_at ? t('values.date', { date: post.created_at }) : '';
 
     return (
       <Segment className="bg_hover_grey search__block">
@@ -40,16 +37,13 @@ class SearchResultPost extends SearchResultBase {
           </Link>
         </Header>
 
-
         <Container>
-          {this.iconByContentType(resultType === 'posts' ? CT_BLOG_POST : resultType, true)}
+          {this.iconByContentType(resultType === 'posts' ? CT_BLOG_POST : resultType, true, t)}
           |
           {' '}
           <strong>{createdDate}</strong>
         </Container>
-        <Container className="content">
-          {this.snippetFromHighlight(highlight)}
-        </Container>
+        <Container className="content">{this.snippetFromHighlight(highlight)}</Container>
 
         {this.renderDebug(title)}
       </Segment>

@@ -93,7 +93,7 @@ class SearchResultCollection extends SearchResultBase {
                 onClick={() => this.logClick(mdbUid, index, type, rank, searchId)}
                 to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}
               >
-                {this.iconByContentType(c.content_type, true)}
+                {this.iconByContentType(c.content_type, true, t)}
               </Link>
               &nbsp;|&nbsp;
               <span>
