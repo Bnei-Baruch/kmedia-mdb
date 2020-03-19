@@ -6,37 +6,32 @@ import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import UnitList from '../../../../Pages/UnitList/Container';
 
 const renderUnit = (unit, t) => {
-  const {
-    clips,
-    relatedItems
-  } = renderUnitHelper.commonRenderUnitForClips(unit, t);
+  const { clips, relatedItems }
+          = renderUnitHelper.commonRenderUnitForClips(unit, t);
 
   return (
     <Table.Row key={unit.id} verticalAlign="top">
       <Table.Cell collapsing singleLine>
-        { renderUnitHelper.renderUnitCollectionLogo(unit, 'clips', clips.length > 0 ? clips[0].id : null)}
+        {renderUnitHelper.renderUnitCollectionLogo(unit, 'clips', clips.length > 0 ? clips[0].id : null)}
       </Table.Cell>
       <Table.Cell>
-        { renderUnitHelper.renderUnitFilmDate(unit, t) }
-        { renderUnitHelper.renderUnitNameLink(unit) }
-        { renderUnitHelper.renderUnitDescription(unit) }
-        { renderUnitHelper.renderRelatedItems(relatedItems, t('programs.list.item_of'))}
+        {renderUnitHelper.renderUnitFilmDate(unit, t)}
+        {renderUnitHelper.renderUnitNameLink(unit)}
+        {renderUnitHelper.renderUnitDescription(unit)}
+        {renderUnitHelper.renderRelatedItems(relatedItems, t('programs.list.item_of'))}
       </Table.Cell>
     </Table.Row>
   );
 };
 
-const extraFetchParams = () => ({
-  content_type: [CT_CLIP]
-});
-
-const ClipsList = () => 
+const ClipsList = () =>
   <div>
     <UnitList
+      key="programs-clips"
       namespace="programs-clips"
       renderUnit={renderUnit}
-      extraFetchParams={extraFetchParams}
+      extraFetchParams={{ content_type: CT_CLIP }}
     />
-  </div>
+  </div>;
 
 export default ClipsList;

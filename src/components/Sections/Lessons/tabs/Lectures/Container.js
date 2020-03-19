@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'semantic-ui-react';
 
@@ -11,16 +11,16 @@ const renderUnit = (unit, t, namespace) => {
     return null;
   }
 
-  const breakdown = renderUnitHelper.getUnitCollectionsBreakdown(unit);
-  const lectures  = breakdown.getLectures();
+  const breakdown    = renderUnitHelper.getUnitCollectionsBreakdown(unit);
+  const lectures     = breakdown.getLectures();
   const relatedItems = lectures.map(renderUnitHelper.renderUnitNameAsListItem);
 
   if (namespace === 'lessons-rabash') {
     return (
       <Table.Row className="no-thumbnail" key={unit.id} verticalAlign="top">
         <Table.Cell>
-          { renderUnitHelper.renderUnitNameLink(unit)}
-          { renderUnitHelper.renderUnitDescription(unit) }
+          {renderUnitHelper.renderUnitNameLink(unit)}
+          {renderUnitHelper.renderUnitDescription(unit)}
         </Table.Cell>
       </Table.Row>
     );
@@ -29,60 +29,41 @@ const renderUnit = (unit, t, namespace) => {
   return (
     <Table.Row key={unit.id} verticalAlign="top">
       <Table.Cell collapsing singleLine>
-        { renderUnitHelper.renderUnitCollectionLogo(unit, 'lectures', lectures.length > 0 ? lectures[0].id : null)}
+        {renderUnitHelper.renderUnitCollectionLogo(unit, 'lectures', lectures.length > 0 ? lectures[0].id : null)}
       </Table.Cell>
       <Table.Cell>
-        { renderUnitHelper.renderUnitFilmDate(unit, t)}
-        { renderUnitHelper.renderUnitNameLink(unit)}
-        { renderUnitHelper.renderUnitDescription(unit)}
-        { renderUnitHelper.renderRelatedItems(relatedItems, t('lessons.list.item_from')) }
+        {renderUnitHelper.renderUnitFilmDate(unit, t)}
+        {renderUnitHelper.renderUnitNameLink(unit)}
+        {renderUnitHelper.renderUnitDescription(unit)}
+        {renderUnitHelper.renderRelatedItems(relatedItems, t('lessons.list.item_from'))}
       </Table.Cell>
     </Table.Row>
   );
 };
 
-class Container extends Component {
-  static propTypes = {
-    tab: PropTypes.string.isRequired,
-  };
+const mapTabToCt = new Map([
+  ['virtual', { content_type: CT_VIRTUAL_LESSON, }],
+  ['lectures', { content_type: CT_LECTURE, }],
+  ['women', { content_type: CT_WOMEN_LESSON, }],
+  ['rabash', { content_type: CT_LESSON_PART, person: RABASH_PERSON_UID, }],
+  // ['children', [CT_CHILDREN_LESSON, null]],
+]);
 
-  extraFetchParams = () => {
-    let ct;
-    let person;
-    switch (this.props.tab) {
-    case 'virtual':
-      ct = [CT_VIRTUAL_LESSON];
-      break;
-    case 'lectures':
-      ct = [CT_LECTURE];
-      break;
-    case 'women':
-      ct = [CT_WOMEN_LESSON];
-      break;
-    case 'rabash':
-      ct     = [CT_LESSON_PART];
-      person = RABASH_PERSON_UID;
-      break;
-      // case 'children':
-      //   ct = [CT_CHILDREN_LESSON];
-      //   break;
-    default:
-      ct = [CT_VIRTUAL_LESSON];
-      break;
-    }
+const Container = (props) => {
+  const { tab }          = props;
+  const extraFetchParams = mapTabToCt.get(tab) || { content_type: CT_VIRTUAL_LESSON, };
+  return (
+    <UnitList
+      key={tab}
+      namespace={`lessons-${tab}`}
+      extraFetchParams={extraFetchParams}
+      renderUnit={renderUnit}
+    />
+  );
+};
 
-    return { content_type: ct, person };
-  };
-
-  render() {
-    return (
-      <UnitList
-        namespace={`lessons-${this.props.tab}`}
-        extraFetchParams={this.extraFetchParams}
-        renderUnit={renderUnit}
-      />
-    );
-  }
-}
+Container.propTypes = {
+  tab: PropTypes.string.isRequired,
+};
 
 export default Container;

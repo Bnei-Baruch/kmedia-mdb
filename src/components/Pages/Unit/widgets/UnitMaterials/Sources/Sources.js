@@ -6,12 +6,117 @@ import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
 import { assetUrl } from '../../../../../../helpers/Api';
 import { CT_KITEI_MAKOR, MT_TEXT } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
-import {getLanguageDirection} from '../../../../../../helpers/i18n-utils';
+import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { formatError, tracePath } from '../../../../../../helpers/utils';
 import * as shapes from '../../../../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash/Splash';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import PDF from '../../../../../shared/PDF/PDF';
+
+const getSourceLanguages = (idx, uiLanguage, contentLanguage) => {
+  if (!idx || !idx.data) {
+    return { languages: [], language: null };
+  }
+  const languages = [...Object.keys(idx.data)];
+  const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+
+  return { languages, language };
+};
+
+const changeContent = ({ selected, language, unit, indexMap, onContentChange, isMakor }) => {
+  if (!selected || !language) {
+    return;
+  }
+
+  if (isMakor) {
+    const derived = getKiteiMakorFiles(unit, selected).find(x => x.language === language);
+    onContentChange(null, null, derived.id);
+  } else if (indexMap[selected] && indexMap[selected].data) {
+    const data = indexMap[selected].data[language];
+    if (data.pdf && PDF.isTaas(selected)) {
+      // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
+      return;
+    }
+    onContentChange(selected, data.html);
+  }
+};
+
+const getMakorLanguages = (files, uiLanguage, contentLanguage) => {
+  if (!files) {
+    return { languages: [], language: null };
+  }
+
+  const languages = files.map(f => f.language);
+  let language    = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+  if (languages.length > 0) {
+    language = languages.indexOf(language) === -1 ? languages[0] : language;
+  }
+
+  return { languages, language };
+};
+
+const getKiteiMakorUnits = unit => (
+  Object.values(unit.derived_units || {})
+    .filter(x => (
+      x.content_type === CT_KITEI_MAKOR
+      && (x.files || []).some(f => f.type === MT_TEXT))
+    )
+);
+
+const checkIsMakor = (options, selected) => {
+  const val = options.find(o => o.value === selected);
+  return val && val.type === CT_KITEI_MAKOR;
+};
+
+const getSourceOptions = (props) => {
+  const { unit, indexMap, getSourceById, t } = props;
+
+  const sourceOptions = (unit.sources || []).map(getSourceById).filter(x => !!x).map(x => ({
+    value: x.id,
+    text: tracePath(x, getSourceById).map(y => y.name).join(' > '),
+    disabled: indexMap[x.id] && !indexMap[x.id].data && !indexMap[x.id].wip,
+  }));
+
+  const derivedOptions = getKiteiMakorUnits(unit)
+    .map(x => ({
+      value: x.id,
+      text: t(`constants.content-types.${x.content_type}`),
+      type: x.content_type,
+      disabled: false,
+    })) || [];
+
+  return [...sourceOptions, ...derivedOptions];
+};
+
+const getKiteiMakorFiles = (unit, ktCUID) => {
+  const ktCUs = getKiteiMakorUnits(unit);
+
+  let cu;
+  if (ktCUID) {
+    cu = ktCUs.find(x => x.id === ktCUID);
+  } else {
+    cu = ktCUs.length > 0 ? ktCUs[0] : null;
+  }
+
+  return cu ? cu.files.filter(f => f.type === MT_TEXT) : null;
+};
+
+const myReplaceState = (nextProps, uiLanguage) => {
+  const options                  = getSourceOptions(nextProps);
+  const available                = options.filter(x => !x.disabled);
+  const selected                 = (available.length > 0) ? available[0].value : null;
+  const isMakor                  = checkIsMakor(options, selected);
+  const ktFiles                  = getKiteiMakorFiles(nextProps.unit);
+
+  const { unit, indexMap, contentLanguage, onContentChange } = nextProps;
+
+  const { languages, language } = isMakor
+    ? getMakorLanguages(ktFiles, uiLanguage, contentLanguage)
+    : getSourceLanguages(indexMap[selected], uiLanguage, contentLanguage);
+
+  changeContent({ selected, language, unit, indexMap, onContentChange, isMakor });
+  return { options, languages, language, selected, isMakor };
+};
 
 class Sources extends Component {
   static propTypes = {
@@ -32,24 +137,22 @@ class Sources extends Component {
     selected: null,
     isMakor: false,
     language: null,
+    unitId: null,
   };
 
   componentDidMount() {
-    this.myReplaceState(this.props);
+    const { language } = this.state;
+
+    this.setState(myReplaceState(this.props, language));
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
+    const { selected, isMakor, language: uiLanguage } = this.state;
+
     // unit has changed - replace all state
-    if (nextProps.unit.id !== this.props.unit.id) {
-      this.myReplaceState(nextProps);
-      return;
-    }
-
-    const { selected } = this.state;
-
-    // if no previous selection - replace all state
-    if (!selected) {
-      this.myReplaceState(nextProps);
+    // or no previous selection - replace all state
+    if (nextProps.unit.id !== this.props.unit.id || !selected) {
+      this.setState(myReplaceState(nextProps, uiLanguage));
       return;
     }
 
@@ -63,89 +166,23 @@ class Sources extends Component {
 
       // if prev idx for current selection is missing and now we have it - use it
       if (nIdx && nIdx.data && !(idx && idx.data)) {
-        const options                 = this.getSourceOptions(nextProps);
-        const { languages, language } = this.getSourceLanguages(nIdx, nextProps.uiLanguage, nextProps.contentLanguage);
+        const options                 = getSourceOptions(nextProps);
+        const { languages, language } = getSourceLanguages(nIdx, nextProps.uiLanguage, nextProps.contentLanguage);
         this.setState({ options, languages, language });
-        this.changeContent({ selected, language, props: nextProps });
+        const { unit, indexMap, onContentChange } = nextProps;
+        changeContent({ selected, language: language || this.state.language, unit, indexMap, onContentChange, isMakor });
       } else {
         // we keep previous selection. Source options must be updated anyway
-        this.setState({ options: this.getSourceOptions(nextProps) });
+        this.setState({ options: getSourceOptions(nextProps) });
       }
     }
   }
 
-  getKiteiMakorUnits = unit => (
-    Object.values(unit.derived_units || {})
-      .filter(x => (
-        x.content_type === CT_KITEI_MAKOR
-        && (x.files || []).some(f => f.type === MT_TEXT))
-      )
-  );
-
-  getSourceOptions = (props) => {
-    const { unit, indexMap, getSourceById, t } = props;
-
-    const sourceOptions = (unit.sources || []).map(getSourceById).filter(x => !!x).map(x => ({
-      value: x.id,
-      text: tracePath(x, getSourceById).map(y => y.name).join(' > '),
-      disabled: indexMap[x.id] && !indexMap[x.id].data && !indexMap[x.id].wip,
-    }));
-
-    const derivedOptions = this.getKiteiMakorUnits(unit)
-      .map(x => ({
-        value: x.id,
-        text: t(`constants.content-types.${x.content_type}`),
-        type: x.content_type,
-        disabled: false,
-      })) || [];
-
-    return [...sourceOptions, ...derivedOptions];
-  };
-
-  getSourceLanguages = (idx, uiLanguage, contentLanguage) => {
-    if (!idx || !idx.data) {
-      return { languages: [], language: null };
-    }
-    const languages = [...Object.keys(idx.data)];
-    const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-
-    return { languages, language };
-  };
-
-  getMakorLanguages = (files, uiLanguage, contentLanguage) => {
-    if (!files) {
-      return { languages: [], language: null };
-    }
-
-    const languages = files.map(f => f.language);
-    let language    = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-    if (languages.length > 0) {
-      language = languages.indexOf(language) === -1 ? languages[0] : language;
-    }
-
-    return { languages, language };
-  };
-
-  getKiteiMakorFiles = (unit, ktCUID) => {
-    const ktCUs = this.getKiteiMakorUnits(unit);
-
-    let cu;
-    if (ktCUID) {
-      cu = ktCUs.find(x => x.id === ktCUID);
-    } else {
-      cu = ktCUs.length > 0 ? ktCUs[0] : null;
-    }
-
-    return cu ? cu.files.filter(f => f.type === MT_TEXT) : null;
-  };
-
-  checkIsMakor = (options, selected) => {
-    const val = options.find(o => o.value === selected);
-    return val && val.type === CT_KITEI_MAKOR;
-  };
-
   handleLanguageChanged = (e, language) => {
-    this.changeContent({ language });
+    const { selected, isMakor }               = this.state;
+    const { unit, indexMap, onContentChange } = this.props;
+
+    changeContent({ selected, language, unit, indexMap, onContentChange, isMakor });
     this.setState({ language });
   };
 
@@ -156,68 +193,22 @@ class Sources extends Component {
       e.preventDefault();
       return;
     }
-    const { indexMap, contentLanguage, unit } = this.props;
-    const { language: uiLanguage, options }   = this.state;
-    const isMakor                             = this.checkIsMakor(options, selected);
+    const { indexMap, contentLanguage, unit, onContentChange } = this.props;
+    const { language: uiLanguage, options }                    = this.state;
+    const isMakor                                              = checkIsMakor(options, selected);
 
     const { languages, language } = isMakor
-      ? this.getMakorLanguages(this.getKiteiMakorFiles(unit), uiLanguage, contentLanguage)
-      : this.getSourceLanguages(indexMap[selected], uiLanguage, contentLanguage);
+      ? getMakorLanguages(getKiteiMakorFiles(unit), uiLanguage, contentLanguage)
+      : getSourceLanguages(indexMap[selected], uiLanguage, contentLanguage);
 
     this.setState({ selected, languages, language, isMakor });
-    this.changeContent({ selected, language, isMakor });
-  };
 
-  myReplaceState = (nextProps) => {
-    const options                  = this.getSourceOptions(nextProps);
-    const available                = options.filter(x => !x.disabled);
-    const selected                 = (available.length > 0) ? available[0].value : null;
-    const isMakor                  = this.checkIsMakor(options, selected);
-    const ktFiles                  = this.getKiteiMakorFiles(nextProps.unit);
-    const { contentLanguage }      = nextProps;
-    const { language: uiLanguage } = this.state;
-
-    const { languages, language } = isMakor
-      ? this.getMakorLanguages(ktFiles, uiLanguage, contentLanguage)
-      : this.getSourceLanguages(nextProps.indexMap[selected], uiLanguage, contentLanguage);
-
-    this.setState({ options, languages, language, selected, isMakor, });
-    this.changeContent({ selected, language, props: nextProps, isMakor, });
-  };
-
-  changeContent = (params) => {
-    const
-      {
-        selected = this.state.selected,
-        language = this.state.language,
-        props    = this.props,
-        isMakor  = this.state.isMakor
-      } = params;
-
-    if (!selected || !language) {
-      return;
-    }
-
-    const { unit, indexMap, onContentChange } = props;
-
-    if (isMakor) {
-      const derived = this.getKiteiMakorFiles(unit, selected).find(x => x.language === language);
-      onContentChange(null, null, derived.id);
-    } else if (indexMap[selected] && indexMap[selected].data) {
-      const data = indexMap[selected].data[language];
-      if (data.pdf && PDF.isTaas(selected)) {
-        // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
-        return;
-      }
-      onContentChange(selected, data.html);
-    }
+    changeContent({ selected, language, unit, indexMap, onContentChange, isMakor });
   };
 
   render() {
     const { unit, content, doc2htmlById, t, indexMap, }                    = this.props;
     const { options, selected, isMakor, languages, language: uiLanguage, } = this.state;
-
-    // console.log('render', { props: this.props, state: this.state });
 
     if (options.length === 0) {
       return <Segment basic>{t('materials.sources.no-sources')}</Segment>;
@@ -237,11 +228,11 @@ class Sources extends Component {
 
     let contentStatus = content;
     if (isMakor) {
-      const actualFile = this.getKiteiMakorFiles(unit, selected).find(x => x.language === uiLanguage);
+      const actualFile = getKiteiMakorFiles(unit, selected).find(x => x.language === uiLanguage);
       contentStatus    = doc2htmlById[actualFile.id] || {};
     }
-    const { wip: contentWip, err: contentErr, data: contentData } = contentStatus;
 
+    const { wip: contentWip, err: contentErr, data: contentData } = contentStatus;
     let contents;
     if (contentErr) {
       if (contentErr.response && contentErr.response.status === 404) {

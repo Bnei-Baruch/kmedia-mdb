@@ -6,36 +6,33 @@ import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import UnitList from '../../../../Pages/UnitList/Container';
 
 const renderUnit = (unit, t) => {
-  const breakdown = renderUnitHelper.getUnitCollectionsBreakdown(unit);
-  const articles  = breakdown.getArticles();
+  const breakdown    = renderUnitHelper.getUnitCollectionsBreakdown(unit);
+  const articles     = breakdown.getArticles();
   const relatedItems = articles.map(renderUnitHelper.renderUnitNameAsListItem);
 
   return (
     <Table.Row key={unit.id} verticalAlign="top" className="no-thumbnail">
       <Table.Cell collapsing singleLine>
-        { renderUnitHelper.renderUnitFilmDate(unit, t)}
+        {renderUnitHelper.renderUnitFilmDate(unit, t)}
       </Table.Cell>
       <Table.Cell>
-        { renderUnitHelper.renderUnitNameLink(unit)}
-        { renderUnitHelper.renderUnitDescription(unit)}
-        { renderUnitHelper.renderRelatedItems(relatedItems, t('publications.list.item_from')) }
+        {renderUnitHelper.renderUnitNameLink(unit)}
+        {renderUnitHelper.renderUnitDescription(unit)}
+        {renderUnitHelper.renderRelatedItems(relatedItems, t('publications.list.item_from'))}
       </Table.Cell>
     </Table.Row>
   );
 };
 
-const ArticlesList = () => {
-  const extraFetchParams = () => ({ content_type: [CT_ARTICLE] });
-
-  return (
-    <div>
-      <UnitList
-        namespace="publications-articles"
-        extraFetchParams={extraFetchParams}
-        renderUnit={renderUnit}
-      />
-    </div>
-  );
-};
+const ArticlesList = () =>
+  <div>
+    <UnitList
+      key="publications-articles"
+      namespace="publications-articles"
+      extraFetchParams={{ content_type: CT_ARTICLE }}
+      renderUnit={renderUnit}
+    />
+  </div>
+;
 
 export default ArticlesList;

@@ -11,7 +11,7 @@ const MainPage = (props) => {
     return <Playlist />;
   }
 
-  return <UnitList />;
+  return <UnitList key={tab} />;
 };
 
 MainPage.propTypes = {

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'semantic-ui-react';
 
@@ -7,7 +7,7 @@ import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import UnitList from '../../../../Pages/UnitList/Container';
 
 const renderUnit = (unit, t) => {
-  const breakdown = renderUnitHelper.getUnitCollectionsBreakdown(unit); 
+  const breakdown = renderUnitHelper.getUnitCollectionsBreakdown(unit);
   const events    = breakdown.getEvents();
 
   const relatedItems = events.map(renderUnitHelper.renderUnitNameAsListItem);
@@ -15,37 +15,33 @@ const renderUnit = (unit, t) => {
   return (
     <Table.Row key={unit.id} verticalAlign="top">
       <Table.Cell collapsing width={1}>
-        { renderUnitHelper.renderUnitLogo(unit, 'events')}
+        {renderUnitHelper.renderUnitLogo(unit, 'events')}
       </Table.Cell>
       <Table.Cell>
-        { renderUnitHelper.renderUnitFilmDate(unit, t)}
-        { renderUnitHelper.renderUnitNameLink(unit)}
-        { renderUnitHelper.renderUnitDescription(unit)}
-        { renderUnitHelper.renderRelatedItems(relatedItems, t('events.list.item_from'), "index-list__item-subtitle")}
+        {renderUnitHelper.renderUnitFilmDate(unit, t)}
+        {renderUnitHelper.renderUnitNameLink(unit)}
+        {renderUnitHelper.renderUnitDescription(unit)}
+        {renderUnitHelper.renderRelatedItems(relatedItems, t('events.list.item_from'), 'index-list__item-subtitle')}
       </Table.Cell>
     </Table.Row>
   );
 };
 
-// Cannot change this to function because extraFetchParams does not work
-class Container extends PureComponent {
-  static propTypes = {
-    tab: PropTypes.string.isRequired,
-  };
+const Container = ({ tab }) => {
+  return (
+    <UnitList
+      key={tab}
+      namespace={`events-${tab}`}
+      extraFetchParams={{
+        content_type: tab === 'meals' ? CT_MEAL : CT_FRIENDS_GATHERING
+      }}
+      renderUnit={renderUnit}
+    />
+  );
+};
 
-  extraFetchParams = () => ({
-    content_type: [this.props.tab === 'meals' ? CT_MEAL : CT_FRIENDS_GATHERING]
-  });
-
-  render() {
-    return (
-      <UnitList
-        namespace={`events-${this.props.tab}`}
-        extraFetchParams={this.extraFetchParams}
-        renderUnit={renderUnit}
-      />
-    );
-  }
-}
+Container.propTypes = {
+  tab: PropTypes.string.isRequired,
+};
 
 export default Container;
