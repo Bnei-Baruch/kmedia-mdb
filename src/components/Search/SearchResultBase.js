@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { Button, Container, Icon, Image, Label } from 'semantic-ui-react';
-import { physicalFile } from '../../helpers/utils';
+import { formatDuration, physicalFile } from '../../helpers/utils';
 
 import {
   CT_ARTICLE,
@@ -22,8 +21,8 @@ import {
   CT_KITEI_MAKOR,
   CT_LECTURE_SERIES,
   CT_LELO_MIKUD,
-  CT_LESSONS_SERIES,
   CT_LESSON_PART,
+  CT_LESSONS_SERIES,
   CT_MEAL,
   CT_MEALS,
   CT_PICNIC,
@@ -49,9 +48,42 @@ import { isDebMode } from '../../helpers/url';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import ScoreDebug from './ScoreDebug';
-import { formatDuration } from '../../helpers/utils';
 
 const PATH_SEPARATOR = ' > ';
+
+const iconByContentTypeMap = new Map([
+  [CT_LESSON_PART, 'lessons'],
+  [CT_FULL_LESSON, 'lessons'],
+  [CT_VIRTUAL_LESSON, 'lessons'],
+  [CT_WOMEN_LESSON, 'lessons'],
+  [CT_CHILDREN_LESSON, 'lessons'],
+  [CT_LELO_MIKUD, 'lessons'],
+  [CT_DAILY_LESSON, 'lessons'],
+  [CT_SPECIAL_LESSON, 'lessons'],
+  [CT_LECTURE_SERIES, 'lessons'],
+  [CT_CHILDREN_LESSONS, 'lessons'],
+  [CT_WOMEN_LESSONS, 'lessons'],
+  [CT_VIRTUAL_LESSONS, 'lessons'],
+  [CT_LESSONS_SERIES, 'lessons'],
+  [CT_FRIENDS_GATHERING, 'events'],
+  [CT_MEAL, 'events'],
+  [CT_EVENT_PART, 'events'],
+  [CT_TRAINING, 'events'],
+  [CT_UNITY_DAY, 'events'],
+  [CT_FRIENDS_GATHERINGS, 'events'],
+  [CT_CONGRESS, 'events'],
+  [CT_MEALS, 'events'],
+  [CT_HOLIDAY, 'events'],
+  [CT_PICNIC, 'events'],
+  [CT_ARTICLE, 'publications'],
+  [CT_ARTICLES, 'publications'],
+  [CT_BLOG_POST, 'publications'],
+  [CT_VIDEO_PROGRAM_CHAPTER, 'programs'],
+  [CT_CLIP, 'programs'],
+  [CT_VIDEO_PROGRAM, 'programs'],
+  [CT_CLIPS, 'programs'],
+  ['sources', 'sources'],
+]);
 
 class SearchResultBase extends Component {
   static propTypes = {
@@ -86,10 +118,10 @@ class SearchResultBase extends Component {
   };
 
   static mlsToStrColon(seconds) {
-    const duration = moment.duration({ seconds });
-    const h        = duration.hours();
-    let m          = duration.minutes();
-    let s          = duration.seconds();
+    const duration = new Date(seconds * 1000); // ms
+    const h        = duration.getUTCHours();
+    let m          = duration.getUTCMinutes();
+    let s          = duration.getUTCSeconds();
     m              = m > 9 ? m : `0${m}`;
     s              = s > 9 ? s : `0${s}`;
     return h ? `${h}:${m}:${s}` : `${m}:${s}`;
@@ -105,7 +137,7 @@ class SearchResultBase extends Component {
         return acc;
       }, []);
   };
-    
+
   logClick = (mdbUid, index, type, rank, searchId) => {
     const { click, location } = this.props;
     const deb                 = isDebMode(location);
@@ -115,10 +147,10 @@ class SearchResultBase extends Component {
   // Renders both direct and direct content unit files.
   renderFiles = (cu, mdbUid, index, resultType, rank, searchId) => {
     const { t, filters, contentLanguage } = this.props;
-    const { files = [] }  = cu;
-    const pathname        = canonicalLink(cu);
-    const mediaContentLanguage = this.getMediaLanguage(filters) || contentLanguage;
-    const types           = [
+    const { files = [] }                  = cu;
+    const pathname                        = canonicalLink(cu);
+    const mediaContentLanguage            = this.getMediaLanguage(filters) || contentLanguage;
+    const fileTypes                       = [
       {
         type: MT_VIDEO,
         icon: 'video play',
@@ -147,7 +179,7 @@ class SearchResultBase extends Component {
 
     const kiteiMakorFiles = SearchResultBase.getKiteiMakor(cu.derived_units, mediaContentLanguage);
 
-    return types
+    return fileTypes
       .filter(x => files.some(f => f.type === x.type))
       .map(x => this.renderFile(x, pathname, contentLanguage, mdbUid, index, resultType, rank, searchId))
       .concat(kiteiMakorFiles.map(f => this.renderKiteiMakor(f, mdbUid, index, resultType, rank, searchId)));
@@ -155,8 +187,8 @@ class SearchResultBase extends Component {
 
   renderKiteiMakor = (file, mdbUid, index, resultType, rank, searchId) => {
     const { t } = this.props;
-    const url = physicalFile(file);
-    const icon = file.type === MT_TEXT ? 'file text' : 'volume up'; 
+    const url   = physicalFile(file);
+    const icon  = file.type === MT_TEXT ? 'file text' : 'volume up';
     return (
       <Button
         key={`${file.type}-${mdbUid}`}
@@ -192,54 +224,8 @@ class SearchResultBase extends Component {
     );
   };
 
-  iconByContentType = (type, withTitle) => {
-    let icon;
-
-    switch (type) {
-    case CT_LESSON_PART:
-    case CT_FULL_LESSON:
-    case CT_VIRTUAL_LESSON:
-    case CT_WOMEN_LESSON:
-    case CT_CHILDREN_LESSON:
-    case CT_LELO_MIKUD:
-    case CT_DAILY_LESSON:
-    case CT_SPECIAL_LESSON:
-    case CT_LECTURE_SERIES:
-    case CT_CHILDREN_LESSONS:
-    case CT_WOMEN_LESSONS:
-    case CT_VIRTUAL_LESSONS:
-    case CT_LESSONS_SERIES:
-      icon = 'lessons';
-      break;
-    case CT_FRIENDS_GATHERING:
-    case CT_MEAL:
-    case CT_EVENT_PART:
-    case CT_TRAINING:
-    case CT_UNITY_DAY:
-    case CT_FRIENDS_GATHERINGS:
-    case CT_CONGRESS:
-    case CT_MEALS:
-    case CT_HOLIDAY:
-    case CT_PICNIC:
-      icon = 'events';
-      break;
-    case CT_ARTICLE:
-    case CT_ARTICLES:
-    case CT_BLOG_POST:
-      icon = 'publications';
-      break;
-    case CT_VIDEO_PROGRAM_CHAPTER:
-    case CT_CLIP:
-    case CT_VIDEO_PROGRAM:
-    case CT_CLIPS:
-      icon = 'programs';
-      break;
-    case 'sources':
-      icon = 'sources';
-      break;
-    default:
-      return null;
-    }
+  iconByContentType = (type, withTitle, t) => {
+    const icon = iconByContentTypeMap.get(type) || null;
 
     if (!withTitle) {
       return (
@@ -255,7 +241,7 @@ class SearchResultBase extends Component {
           <SectionLogo name={icon} width='25' height='25' />
         </Image>
         &nbsp;
-        <span>{this.props.t(`constants.content-types.${type}`)}</span>
+        <span>{t(`constants.content-types.${type}`)}</span>
       </span>
     );
   };

@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import noop from 'lodash/noop';
 
 import { toHumanReadableTime } from '../../../helpers/time';
-import { getQuery, stringify, splitPathByLanguage } from '../../../helpers/url';
+import { getQuery, splitPathByLanguage, stringify } from '../../../helpers/url';
 
 class BaseShareForm extends React.Component {
   static propTypes = {
@@ -42,8 +41,9 @@ class BaseShareForm extends React.Component {
     // Remove the currentTime param from the share url
     q.currentTime = null;
 
-    if (!addUiLang)
+    if (!addUiLang) {
       q.shareLang = uiLanguage;
+    }
 
     return `${shareUrl}?${stringify(q)}`;
   }
@@ -57,10 +57,10 @@ class BaseShareForm extends React.Component {
   }
 
   static mlsToStrColon(seconds) {
-    const duration = moment.duration({ seconds });
-    const h        = duration.hours();
-    const m        = duration.minutes();
-    const s        = duration.seconds();
+    const duration = new Date(seconds * 1000); // ms
+    const h        = duration.getUTCHours();
+    const m        = duration.getUTCMinutes();
+    const s        = duration.getUTCSeconds();
     return h ? `${h}:${m}:${s}` : `${m}:${s}`;
   }
 

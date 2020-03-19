@@ -8,12 +8,12 @@ import * as shapes from '../../../../../shapes';
 import Page from './Page';
 
 const BlogPostContainer = ({ match }) => {
-  const wip = useSelector(state => selectors.getBlogWipPost(state.publications));
-  const err = useSelector(state => selectors.getBlogErrorPost(state.publications));
+  const wip      = useSelector(state => selectors.getBlogWipPost(state.publications));
+  const err      = useSelector(state => selectors.getBlogErrorPost(state.publications));
   const language = useSelector(state => settings.getLanguage(state.settings));
 
   const { blog, id } = match.params;
-  const post = useSelector(state => selectors.getBlogPost(state.publications, blog, id));
+  const post         = useSelector(state => selectors.getBlogPost(state.publications, blog, id));
 
   const dispatch = useDispatch();
 
@@ -42,7 +42,7 @@ const BlogPostContainer = ({ match }) => {
       err={err}
     />
   );
-}
+};
 
 BlogPostContainer.propTypes = {
   match: shapes.RouterMatch.isRequired,

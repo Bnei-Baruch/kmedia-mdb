@@ -26,7 +26,7 @@ export class UnitListContainer extends withPagination {
     isFiltersHydrated: PropTypes.bool,
     fetchList: PropTypes.func.isRequired,
     setPage: PropTypes.func.isRequired,
-    extraFetchParams: PropTypes.func,
+    extraFetchParams: PropTypes.object,
     renderUnit: PropTypes.func.isRequired,
     resetNamespace: PropTypes.func.isRequired
   };
@@ -36,7 +36,7 @@ export class UnitListContainer extends withPagination {
     wip: false,
     err: null,
     isFiltersHydrated: false,
-    extraFetchParams: () => {},
+    extraFetchParams: {},
   };
 
   constructor(props) {
@@ -84,12 +84,7 @@ export class UnitListContainer extends withPagination {
   }
 
   extraFetchParams() {
-    const t = typeof this.props.extraFetchParams;
-    if (this.props.extraFetchParams) {
-      if (t === 'function') return this.props.extraFetchParams(this.props);
-      if (t === 'object') return this.props.extraFetchParams;
-    }
-    return {};
+    return this.props.extraFetchParams;
   }
 
   handlePageChanged(pageNo) {

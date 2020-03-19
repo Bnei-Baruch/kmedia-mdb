@@ -22,29 +22,26 @@ const renderUnit = (unit, t) => {
   return (
     <Table.Row key={unit.id} verticalAlign="top">
       <Table.Cell collapsing singleLine>
-        { renderUnitHelper.renderUnitCollectionLogo(unit, 'programs', programs.length > 0 ? programs[0].id : null)}
+        {renderUnitHelper.renderUnitCollectionLogo(unit, 'programs', programs.length > 0 ? programs[0].id : null)}
       </Table.Cell>
       <Table.Cell>
-        { renderUnitHelper.renderUnitFilmDate(unit, t) }
-        { renderUnitHelper.renderUnitNameLink(unit) }
-        { renderUnitHelper.renderUnitDescription(unit) }
-        { renderUnitHelper.renderRelatedItems(relatedItems, t('programs.list.episode_from')) }
+        {renderUnitHelper.renderUnitFilmDate(unit, t)}
+        {renderUnitHelper.renderUnitNameLink(unit)}
+        {renderUnitHelper.renderUnitDescription(unit)}
+        {renderUnitHelper.renderRelatedItems(relatedItems, t('programs.list.episode_from'))}
       </Table.Cell>
     </Table.Row>
   );
 };
 
-const extraFetchParams = () => ({
-  content_type: [CT_VIDEO_PROGRAM_CHAPTER]
-});
-
-const ProgramsList = () => 
+const ProgramsList = () =>
   <div>
     <UnitList
+      key="programs-main"
       namespace="programs-main"
       renderUnit={renderUnit}
-      extraFetchParams={extraFetchParams}
+      extraFetchParams={{ content_type: CT_VIDEO_PROGRAM_CHAPTER }}
     />
-  </div>
+  </div>;
 
 export default ProgramsList;
