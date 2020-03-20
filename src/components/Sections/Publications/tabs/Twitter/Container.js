@@ -8,7 +8,7 @@ import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../.
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { actions as filtersActions, selectors as filters } from '../../../../../redux/modules/filters';
 import { actions, selectors } from '../../../../../redux/modules/publications';
-import withPagination from '../../../../Pagination/withPagination';
+import withPagination, { getPageFromLocation } from '../../../../Pagination/withPagination';
 import * as shapes from '../../../../shapes';
 import Page from './Page';
 
@@ -36,8 +36,8 @@ class TwitterContainer extends withPagination {
     isFiltersHydrated: false,
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.handlePageChanged     = this.handlePageChanged.bind(this);
     this.handleFiltersChanged  = this.handleFiltersChanged.bind(this);
     this.handleFiltersHydrated = this.handleFiltersHydrated.bind(this);
@@ -50,7 +50,7 @@ class TwitterContainer extends withPagination {
         nextProps.resetNamespace(nextProps.namespace);
         this.handleFiltersChanged();
       } else {
-        const pageNo = withPagination.getPageFromLocation(nextProps.location);
+        const pageNo = getPageFromLocation(nextProps.location);
         if (pageNo !== nextProps.pageNo) {
           this.setPage(nextProps, pageNo);
         }
@@ -85,13 +85,13 @@ class TwitterContainer extends withPagination {
     this.handlePageChanged(1);
   }
 
-  handleFiltersHydrated() {
-    const p = withPagination.getPageFromLocation(this.props.location);
+  handleFiltersHydrated(location) {
+    const p = getPageFromLocation(location);
     this.handlePageChanged(p);
   }
 
   render() {
-    const { items, wip, err, pageNo, total, pageSize, language, namespace } = this.props;
+    const { items, wip, err, pageNo, total, pageSize, language, namespace, location } = this.props;
 
     return (
       <Page
@@ -105,7 +105,7 @@ class TwitterContainer extends withPagination {
         language={language}
         onPageChange={this.handlePageChanged}
         onFiltersChanged={this.handleFiltersChanged}
-        onFiltersHydrated={this.handleFiltersHydrated}
+        onFiltersHydrated={() => this.handleFiltersHydrated(location)}
       />
     );
   }

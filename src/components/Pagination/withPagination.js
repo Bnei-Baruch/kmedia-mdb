@@ -4,6 +4,12 @@ import PropTypes from 'prop-types';
 import { getQuery } from '../../helpers/url';
 import * as shapes from '../shapes';
 
+export const getPageFromLocation = (location) => {
+  const q = getQuery(location);
+  const p = q.page ? Number.parseInt(q.page, 10) : 1;
+  return Number.isNaN(p) || p <= 0 ? 1 : p;
+};
+
 class withPagination extends React.Component {
   static propTypes = {
     namespace: PropTypes.string.isRequired,
@@ -14,12 +20,6 @@ class withPagination extends React.Component {
     fetchList: PropTypes.func.isRequired,
     setPage: PropTypes.func.isRequired,
   };
-
-  static getPageFromLocation(location) {
-    const q = getQuery(location);
-    const p = q.page ? Number.parseInt(q.page, 10) : 1;
-    return Number.isNaN(p) || p <= 0 ? 1 : p;
-  }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.language !== this.props.language
@@ -37,9 +37,9 @@ class withPagination extends React.Component {
     this.askForData(props, pageNo);
   }
 
-  askForData(props, page, params = {}) {
+  askForData(props, page) {
     const { namespace, fetchList, pageNo, pageSize } = props;
-    fetchList(namespace, page || pageNo, { ...params, ...this.extraFetchParams(props), pageSize });
+    fetchList(namespace, page || pageNo, { ...this.extraFetchParams(props), pageSize });
   }
 
   extraFetchParams() {
