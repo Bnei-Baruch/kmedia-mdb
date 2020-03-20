@@ -86,7 +86,7 @@ class BaseShareForm extends React.Component {
     }
   }
 
-  setStart(e, data) {
+  setStart = (e, data) => {
     const { media, onSliceChange } = this.props;
     const duration                 = Math.max(media.duration, 0);
 
@@ -110,9 +110,9 @@ class BaseShareForm extends React.Component {
       uiLangUrl: BaseShareForm.getUrl(this.props, start, end, true),
     });
     onSliceChange(start, end);
-  }
+  };
 
-  setEnd(e, data) {
+  setEnd = (e, data) => {
     const { media, onSliceChange } = this.props;
     const duration                 = Math.max(media.duration, 0);
 
@@ -132,7 +132,7 @@ class BaseShareForm extends React.Component {
       uiLangUrl: BaseShareForm.getUrl(this.props, start, end, true),
     });
     onSliceChange(start, end);
-  }
+  };
 
   render() {
     return null;

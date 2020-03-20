@@ -8,7 +8,7 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
 import { actions as listsActions, selectors as lists } from '../../../redux/modules/lists';
 import { selectors as mdb } from '../../../redux/modules/mdb';
-import withPagination from '../../Pagination/withPagination';
+import withPagination, { getPageFromLocation } from '../../Pagination/withPagination';
 import * as shapes from '../../shapes';
 import Page from './Page';
 
@@ -68,7 +68,7 @@ export class UnitListContainer extends withPagination {
         nextProps.resetNamespace(nextProps.namespace);
         this.handleFiltersChanged();
       } else {
-        const pageNo = withPagination.getPageFromLocation(nextProps.location);
+        const pageNo = getPageFromLocation(nextProps.location);
         if (pageNo !== nextProps.pageNo) {
           this.setPage(nextProps, pageNo);
 
@@ -100,13 +100,13 @@ export class UnitListContainer extends withPagination {
     this.handlePageChanged(pageNo || 1);
   }
 
-  handleFiltersHydrated() {
-    const p = withPagination.getPageFromLocation(this.props.location);
+  handleFiltersHydrated(location) {
+    const p = getPageFromLocation(location);
     this.handlePageChanged(p);
   }
 
   render() {
-    const { namespace, items, wip, err, pageNo, total, pageSize, language, renderUnit } = this.props;
+    const { namespace, items, wip, err, pageNo, total, pageSize, language, renderUnit, location } = this.props;
 
     return (
       <Page
@@ -121,7 +121,7 @@ export class UnitListContainer extends withPagination {
         renderUnit={renderUnit}
         onPageChange={this.handlePageChanged}
         onFiltersChanged={this.handleFiltersChanged}
-        onFiltersHydrated={this.handleFiltersHydrated}
+        onFiltersHydrated={() => this.handleFiltersHydrated(location)}
       />
     );
   }

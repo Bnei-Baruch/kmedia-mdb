@@ -26,8 +26,8 @@ const SourcesContainer = ({ unit }) => {
   const reducer         = useCallback((acc, val) => {
     acc[val] = indexById[val];
     return acc;
-  });
-  const indexMap        = useCallback(sources => (sources || []).reduce(reducer, {}), [indexById]);
+  }, [indexById]);
+  const indexMap        = useCallback(sources => (sources || []).reduce(reducer, {}), [reducer]);
   const content         = useSelector(state => assetsSelectors.getAsset(state.assets));
   const doc2htmlById    = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
   const language        = useSelector(state => settings.getLanguage(state.settings));
