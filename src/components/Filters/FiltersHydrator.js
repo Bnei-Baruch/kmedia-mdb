@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectors, actions } from '../../redux/modules/filters';
@@ -24,7 +24,7 @@ const FiltersHydrator = ({ namespace, onHydrated }) => {
     }
   }, [dispatch, hydrated, isHydrated, namespace, onHydrated]);
   
-  return <Fragment />;
+  return null;
 }
 
 FiltersHydrator.propTypes = {
