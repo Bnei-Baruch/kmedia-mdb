@@ -12,7 +12,7 @@ import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSele
 import PDF from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { updateQuery } from '../../../helpers/url';
-import withPagination from '../../Pagination/withPagination';
+import {getPageFromLocation} from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
 
@@ -49,7 +49,7 @@ const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, p
   if (wipErr) {
     return wipErr;
   }
-  
+
   if (pdfFile) {
     return (
       <PDF
@@ -76,7 +76,7 @@ const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, p
 const Library = (props) => {
   const location                    = useLocation();
   const history                     = useHistory();
-  const [pageNumber, setPageNumber] = useState(withPagination.getPageFromLocation(location));
+  const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
 
   const
     {
@@ -89,7 +89,7 @@ const Library = (props) => {
       t,
     } = props;
 
-  const content = useSelector(state => selectors.getAsset(state.assets)); 
+  const content = useSelector(state => selectors.getAsset(state.assets));
 
   if (!data) {
     return <Segment basic>&nbsp;</Segment>;
@@ -97,7 +97,7 @@ const Library = (props) => {
 
   const startsFrom = PDF.startsFrom(source) || 1;
   const isTaas     = PDF.isTaas(source);
-  
+
   let pdfFile;
   if (data && isTaas){
     const langData = data[language];
@@ -135,10 +135,10 @@ const Library = (props) => {
   }
 
   const fullUrlPath = getFullUrl(pdfFile, data, language, source);
-  
+
   // PDF.js will fetch file by itself
-  const mimeType = pdfFile 
-    ? 'application/pdf' 
+  const mimeType = pdfFile
+    ? 'application/pdf'
     : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
   return (

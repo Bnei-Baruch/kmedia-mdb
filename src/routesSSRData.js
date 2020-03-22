@@ -42,13 +42,13 @@ import * as searchSagas from './sagas/search';
 import * as assetsSagas from './sagas/assets';
 import * as tagsSagas from './sagas/tags';
 import * as publicationsSagas from './sagas/publications';
-import withPagination from './components/Pagination/withPagination';
+import { getPageFromLocation } from './components/Pagination/withPagination';
+import PDF from './components/shared/PDF/PDF';
 
 import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
 import { tabs as lessonsTabs } from './components/Sections/Lessons/MainPage';
 import { tabs as programsTabs } from './components/Sections/Programs/MainPage';
 import { tabs as pulicationsTabs } from './components/Sections/Publications/MainPage';
-import PDF from './components/shared/PDF/PDF';
 
 export const home = (store) => {
   store.dispatch(homeActions.fetchData(true));
@@ -105,7 +105,7 @@ export const cuListPage = (ns, collectionID = 0) => (store, match) => {
   store.dispatch(filtersActions.hydrateFilters(ns));
 
   // hydrate page
-  const page = withPagination.getPageFromLocation(match.parsedURL);
+  const page = getPageFromLocation(match.parsedURL);
   store.dispatch(listsActions.setPage(ns, page));
 
   const pageSize = settingsSelectors.getPageSize(store.getState().settings);
@@ -180,7 +180,7 @@ export const eventsPage = (store, match) => {
 export const lessonsPage = (store, match) => {
   // hydrate tab
   const tab = match.params.tab || lessonsTabs[0];
-  const ns = `lessons-${tab}`;
+  const ns  = `lessons-${tab}`;
 
   if (tab !== lessonsTabs[0]) {
     store.dispatch(lessonsActions.setTab(ns));
@@ -196,7 +196,7 @@ export const lessonsPage = (store, match) => {
 export const programsPage = (store, match) => {
   // hydrate tab
   const tab = match.params.tab || programsTabs[0];
-  const ns = `programs-${tab}`;
+  const ns  = `programs-${tab}`;
 
   if (tab !== programsTabs[0]) {
     store.dispatch(programsActions.setTab(ns));
@@ -310,7 +310,7 @@ export const tweetsListPage = (store, match) => {
   store.dispatch(filtersActions.hydrateFilters('publications-twitter'));
 
   // hydrate page
-  const page = withPagination.getPageFromLocation(match.parsedURL);
+  const page = getPageFromLocation(match.parsedURL);
   store.dispatch(publicationsActions.setPage('publications-twitter', page));
 
   const state = store.getState();
@@ -355,7 +355,7 @@ export const blogListPage = (store, match) => {
   store.dispatch(filtersActions.hydrateFilters('publications-blog'));
 
   // hydrate page
-  const page = withPagination.getPageFromLocation(match.parsedURL);
+  const page = getPageFromLocation(match.parsedURL);
   store.dispatch(publicationsActions.setPage('publications-blog', page));
 
   const state = store.getState();
@@ -390,7 +390,7 @@ export const blogListPage = (store, match) => {
 export const publicationsPage = (store, match) => {
   // hydrate tab
   const tab = match.params.tab || pulicationsTabs[0];
-  const ns = `publications-${tab}`;
+  const ns  = `publications-${tab}`;
 
   if (tab !== pulicationsTabs[0]) {
     store.dispatch(publicationsActions.setTab(ns));
