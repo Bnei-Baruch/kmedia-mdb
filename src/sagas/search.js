@@ -137,11 +137,13 @@ function* updateSortByInQuery(action) {
 
 export function* hydrateUrl() {
   const query = yield* getQuery();
-  const {q, page = '1', deb = false, suggest = '', section = 'all'} = query;
+  const {q, page = '1', deb = false, suggest = '', section} = query;
 
   yield put(actions.setDeb(deb));
   yield put(actions.setSuggest(suggest));
-  yield put(filterActions.setFilterValue('search', 'sections-filter', section));
+  if (section) {
+    yield put(filterActions.setFilterValue('search', 'sections-filter', section));
+  }
 
   if (q) {
     yield put(actions.updateQuery(q));
