@@ -84,10 +84,12 @@ class Layout extends Component {
       return null;
     }
 
+    const isMobileDevice = this.context;
+
     const isShowHeaderSearch = state.isShowHeaderSearch ||
       (
         nextProps.location
-        && state.isMobileDevice
+        && isMobileDevice
         && nextProps.location.pathname.endsWith('search')
       );
 
@@ -157,10 +159,6 @@ class Layout extends Component {
     const { sidebarActive, embed, isShowHeaderSearch }                                = this.state;
     const { isMobileDevice }                                                          = this.context;
 
-    if (this.state.isMobileDevice !== isMobileDevice) {
-      this.setState({ isMobileDevice });
-    }
-
     const showSearch = shouldShowSearch(location);
 
     let sideBarIcon = <Icon name="sidebar" />;
@@ -187,7 +185,6 @@ class Layout extends Component {
         </div> */}
         <GAPageView location={location} />
         <div className="headroom-z-index-801">
-
           <Headroom>
             <div className="layout__header">
               <Menu inverted borderless size="huge" color="blue">
@@ -240,7 +237,6 @@ class Layout extends Component {
                 </Menu.Menu>
               </Menu>
             </div>
-
             {isShowHeaderSearch && <RenderHeaderSearch t={t} location={location} ref={headerSearchElement} />}
           </Headroom>
         </div>
