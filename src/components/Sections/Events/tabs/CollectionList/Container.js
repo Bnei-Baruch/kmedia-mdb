@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -26,24 +26,11 @@ const TabContainer = ({ tabName }) => {
 
   const dispatch = useDispatch();
 
-  // We only fetch one time on first mount, if not wip or error.
-  // Next time we fetch is on language change.
-  const [firstRun, setFirstRun] = useState(() => {
+  useEffect(() => {
     if (items.length === 0 && !wip && !err) {
       dispatch(actions.fetchAllEvents());
     }
-
-    return true;
-  });
-
-  useEffect(() => {
-    if (firstRun){
-      setFirstRun(false);
-    }
-    else{
-      dispatch(actions.fetchAllEvents());
-    }
-  }, [language, dispatch, firstRun]);
+  }, [language, dispatch, items.length, wip, err]);
 
   return <Page tabName={tabName} items={items} wip={wip} err={err} />;
 };
