@@ -1,66 +1,35 @@
-import React, { Component, Fragment } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import noop from 'lodash/noop';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectors, actions } from '../../redux/modules/filters';
 
-import { actions, selectors } from '../../redux/modules/filters';
+const FiltersHydrator = ({ namespace, onHydrated }) => {
+    
+  const isHydrated  = useSelector(state => selectors.getIsHydrated(state.filters, namespace));
+  const [hydrated, setHydrated] = useState(false);
 
-class FiltersHydrator extends Component {
-  static propTypes = {
-    hydrateFilters: PropTypes.func.isRequired,
-    filtersHydrated: PropTypes.func.isRequired,
-    namespace: PropTypes.string.isRequired,
-    onHydrated: PropTypes.func,
-    isHydrated: PropTypes.bool
-  };
+  const dispatch = useDispatch();
 
-  static defaultProps = {
-    onHydrated: noop,
-    isHydrated: false
-  };
+  useEffect(() => {
+    if (isHydrated){
+      dispatch(actions.filtersHydrated(namespace));
 
-  state = { isHydrated: false };
+      if (onHydrated) {
+        onHydrated(namespace);
+      }
 
-  componentDidMount() {
-    // Filters hydration cycle starts here
-    const { namespace, isHydrated, hydrateFilters, filtersHydrated } = this.props;
-
-    // Filters were hydrated on SSR ?
-    if (isHydrated) {
-      // Short the circuit here.
-      // We'll continue next time we mount.
-      filtersHydrated(namespace);
-    } else {
-      hydrateFilters(namespace);
+    } else if (!hydrated) {
+      dispatch(actions.hydrateFilters(namespace));
+      setHydrated(true);
     }
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    const { isHydrated, onHydrated, namespace } = props;
-
-    // isHydrated changed from false to true.
-    if (!state.isHydrated && isHydrated) {
-      // End the hydration cycle.
-      // Everything is updated, sagas, redux, react. Down to here.
-      // callback our event prop
-      onHydrated(namespace);
-    }
-    return { isHydrated };
-  }
-
-  componentWillUnmount() {
-    const { filtersHydrated, namespace } = this.props;
-    filtersHydrated(namespace);
-  }
-
-  render() {
-    return <Fragment />;
-  }
+  }, [dispatch, hydrated, isHydrated, namespace, onHydrated]);
+  
+  return null;
 }
 
-export default connect(
-  (state, ownProps) => ({
-    isHydrated: selectors.getIsHydrated(state.filters, ownProps.namespace)
-  }),
-  actions
-)(FiltersHydrator);
+FiltersHydrator.propTypes = {
+  namespace: PropTypes.string.isRequired,
+  onHydrated: PropTypes.func,
+};
+
+export default FiltersHydrator;

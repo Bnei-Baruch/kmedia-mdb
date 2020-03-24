@@ -22,12 +22,15 @@ const SourcesContainer = ({ unit }) => {
   const sourceIndex     = useCallback(k => dispatch(assetsActions.sourceIndex(k)), [dispatch]);
   const fetchAsset      = useCallback((name) => dispatch(assetsActions.fetchAsset(name)), [dispatch]);
   const doc2html        = useCallback(deriveId => dispatch(assetsActions.doc2html(deriveId)), [dispatch]);
+  
   const indexById       = useSelector(state => assetsSelectors.getSourceIndexById(state.assets));
   const reducer         = useCallback((acc, val) => {
     acc[val] = indexById[val];
     return acc;
   }, [indexById]);
+
   const indexMap        = useCallback(sources => (sources || []).reduce(reducer, {}), [reducer]);
+  
   const content         = useSelector(state => assetsSelectors.getAsset(state.assets));
   const doc2htmlById    = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
   const language        = useSelector(state => settings.getLanguage(state.settings));
