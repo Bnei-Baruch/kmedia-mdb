@@ -220,9 +220,7 @@ export default function serverRender(req, res, next, htmlData) {
                 }
               );
 
-              const rootDiv = `<div id="root" class="${direction}" style="direction: ${direction}">
-  ${markup}
-</div>
+              const rootDiv = `<div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
 <script>
   window.__data = ${storeData};
   window.__i18n = ${i18nData};
