@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Header, Image } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
@@ -19,39 +19,32 @@ const getRandomImage = () => {
   });
 };
 
-class LatestDailyLesson extends Component {
-  static propTypes = {
-    collection: shapes.LessonCollection.isRequired,
-    t: PropTypes.func.isRequired,
-  };
+const LatestDailyLesson = ({ collection, t }) => {
+  const imageSrc = getRandomImage();
 
-  state = {
-    imageSrc: getRandomImage(),
-  };
-
-  render() {
-    const { t, collection } = this.props;
-    const { imageSrc }      = this.state;
-
-    return (
-      <div className="thumbnail">
-        <Link to="/lessons/daily/latest">
-          <Image fluid src={imageSrc} className="thumbnail__image" width={512} />
-          <Header as="h2" className="thumbnail__header">
-            <Header.Content>
-              <Header.Subheader>
-                {t('values.date', { date: collection.film_date })}
-              </Header.Subheader>
-              {t('home.last-lesson')}
-            </Header.Content>
-          </Header>
-          {/* <Label color="black" size="tiny">
+  return (
+    <div className="thumbnail">
+      <Link to="/lessons/daily/latest">
+        <Image fluid src={imageSrc} className="thumbnail__image" width={512} />
+        <Header as="h2" className="thumbnail__header">
+          <Header.Content>
+            <Header.Subheader>
+              {t('values.date', { date: collection.film_date })}
+            </Header.Subheader>
+            {t('home.last-lesson')}
+          </Header.Content>
+        </Header>
+        {/* <Label color="black" size="tiny">
             {t('nav.sidebar.lessons')}
           </Label> */}
-        </Link>
-      </div>
-    );
-  }
+      </Link>
+    </div>
+  );
 }
+
+LatestDailyLesson.propTypes = {
+  collection: shapes.LessonCollection.isRequired,
+  t: PropTypes.func.isRequired,
+};
 
 export default withNamespaces()(LatestDailyLesson);
