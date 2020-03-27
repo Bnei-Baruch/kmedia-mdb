@@ -1,21 +1,21 @@
-import {all, call, put, select, takeEvery, takeLatest} from 'redux-saga/effects';
+import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import {getQuery, updateQuery as urlUpdateQuery} from './helpers/url';
-import {GenerateSearchId} from '../helpers/search';
-import {actions, selectors, types} from '../redux/modules/search';
-import {selectors as settings} from '../redux/modules/settings';
-import {actions as mdbActions} from '../redux/modules/mdb';
-import {actions as postsActions} from '../redux/modules/publications';
-import {selectors as filterSelectors, actions as filterActions} from '../redux/modules/filters';
-import {filtersTransformer} from '../filters';
+import { getQuery, updateQuery as urlUpdateQuery } from './helpers/url';
+import { GenerateSearchId } from '../helpers/search';
+import { actions, selectors, types } from '../redux/modules/search';
+import { selectors as settings } from '../redux/modules/settings';
+import { actions as mdbActions } from '../redux/modules/mdb';
+import { actions as postsActions } from '../redux/modules/publications';
+import { selectors as filterSelectors, actions as filterActions } from '../redux/modules/filters';
+import { filtersTransformer } from '../filters';
 
 // import { BLOGS } from '../helpers/consts';
 
 function* autocomplete(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const {data} = yield call(Api.autocomplete, {q: action.payload, language});
+    const { data } = yield call(Api.autocomplete, { q: action.payload, language });
     yield put(actions.autocompleteSuccess(data));
   } catch (err) {
     yield put(actions.autocompleteFailure(err));
@@ -33,18 +33,18 @@ function getIdsForFetch(hits, type) {
 
 export function* search(action) {
   try {
-    yield* urlUpdateQuery(query => Object.assign(query, {q: action.payload.q}));
+    yield* urlUpdateQuery(query => Object.assign(query, { q: action.payload.q }));
 
     const language = yield select(state => settings.getLanguage(state.settings));
-    const sortBy = yield select(state => selectors.getSortBy(state.search));
-    const suggest = yield select(state => selectors.getSuggest(state.search));
-    const deb = yield select(state => selectors.getDeb(state.search));
+    const sortBy   = yield select(state => selectors.getSortBy(state.search));
+    const suggest  = yield select(state => selectors.getSuggest(state.search));
+    const deb      = yield select(state => selectors.getDeb(state.search));
 
     // Prepare filters values.
-    const filters = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
-    const params = filtersTransformer.toApiParams(filters);
+    const filters         = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
+    const params          = filtersTransformer.toApiParams(filters);
     const filterKeyValues = Object.entries(params).map(([v, k]) => `${v}:${k}`).join(' ');
-    const filterParams = filterKeyValues ? ` ${filterKeyValues}` : '';
+    const filterParams    = filterKeyValues ? ` ${filterKeyValues}` : '';
 
     const q = action.payload.q.trim() ? `${action.payload.q.trim()}${filterParams}` : filterParams;
     if (!q) {
@@ -54,7 +54,7 @@ export function* search(action) {
     }
     const searchId = GenerateSearchId();
 
-    const {data} = yield call(Api.search, {
+    const { data } = yield call(Api.search, {
       ...action.payload,
       q,
       sortBy,
@@ -70,8 +70,8 @@ export function* search(action) {
       // TODO edo: optimize data fetching
       // Server should return associated items (collections, units, posts...) together with search results
       // hmm, relay..., hmm ?
-      const cIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'collections');
-      const cuIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'units');
+      const cIDsToFetch    = getIdsForFetch(data.search_result.hits.hits, 'collections');
+      const cuIDsToFetch   = getIdsForFetch(data.search_result.hits.hits, 'units');
       const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'posts');
 
       if (cuIDsToFetch.length === 0 && cIDsToFetch.length === 0 && postIDsToFetch.length === 0) {
@@ -79,7 +79,7 @@ export function* search(action) {
         return;
       }
 
-      const lang = yield select(state => settings.getLanguage(state.settings));
+      const lang     = yield select(state => settings.getLanguage(state.settings));
       const requests = [];
       if (cuIDsToFetch.length > 0) {
         requests.push(call(Api.units, {
@@ -91,10 +91,10 @@ export function* search(action) {
         }));
       }
       if (cIDsToFetch.length > 0) {
-        requests.push(call(Api.collections, {id: cIDsToFetch, pageSize: cIDsToFetch.length, language: lang}));
+        requests.push(call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, language: lang }));
       }
       if (postIDsToFetch.length > 0) {
-        requests.push(call(Api.posts, {id: postIDsToFetch, pageSize: postIDsToFetch.length, language: lang}));
+        requests.push(call(Api.posts, { id: postIDsToFetch, pageSize: postIDsToFetch.length, language: lang }));
       }
 
       const responses = yield all(requests);
@@ -127,17 +127,17 @@ function* click(action) {
 
 function* updatePageInQuery(action) {
   const page = action.payload > 1 ? action.payload : null;
-  yield* urlUpdateQuery(query => Object.assign(query, {page}));
+  yield* urlUpdateQuery(query => Object.assign(query, { page }));
 }
 
 function* updateSortByInQuery(action) {
   const sortBy = action.payload;
-  yield* urlUpdateQuery(query => Object.assign(query, {sort_by: sortBy}));
+  yield* urlUpdateQuery(query => Object.assign(query, { sort_by: sortBy }));
 }
 
 export function* hydrateUrl() {
-  const query = yield* getQuery();
-  const {q, page = '1', deb = false, suggest = '', section} = query;
+  const query                                                 = yield* getQuery();
+  const { q, page = '1', deb = false, suggest = '', section } = query;
 
   yield put(actions.setDeb(deb));
   yield put(actions.setSuggest(suggest));
