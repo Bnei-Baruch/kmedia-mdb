@@ -7,7 +7,7 @@ import { actions, selectors, types } from '../redux/modules/search';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { actions as postsActions } from '../redux/modules/publications';
-import { selectors as filterSelectors } from '../redux/modules/filters';
+import { selectors as filterSelectors, actions as filterActions } from '../redux/modules/filters';
 import { filtersTransformer } from '../filters';
 
 // import { BLOGS } from '../helpers/consts';
@@ -70,9 +70,9 @@ export function* search(action) {
       // TODO edo: optimize data fetching
       // Server should return associated items (collections, units, posts...) together with search results
       // hmm, relay..., hmm ?
-      const cIDsToFetch       = getIdsForFetch(data.search_result.hits.hits, 'collections');
-      const cuIDsToFetch      = getIdsForFetch(data.search_result.hits.hits, 'units');
-      const postIDsToFetch    = getIdsForFetch(data.search_result.hits.hits, 'posts');
+      const cIDsToFetch    = getIdsForFetch(data.search_result.hits.hits, 'collections');
+      const cuIDsToFetch   = getIdsForFetch(data.search_result.hits.hits, 'units');
+      const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'posts');
 
       if (cuIDsToFetch.length === 0 && cIDsToFetch.length === 0 && postIDsToFetch.length === 0) {
         yield put(actions.searchSuccess(data));
@@ -136,11 +136,14 @@ function* updateSortByInQuery(action) {
 }
 
 export function* hydrateUrl() {
-  const query                                        = yield* getQuery();
-  const { q, page = '1', deb = false, suggest = '' } = query;
+  const query                                                 = yield* getQuery();
+  const { q, page = '1', deb = false, suggest = '', section } = query;
 
   yield put(actions.setDeb(deb));
   yield put(actions.setSuggest(suggest));
+  if (section) {
+    yield put(filterActions.setFilterValue('search', 'sections-filter', section));
+  }
 
   if (q) {
     yield put(actions.updateQuery(q));
