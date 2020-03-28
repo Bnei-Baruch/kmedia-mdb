@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Header, Image } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
@@ -20,7 +20,12 @@ const getRandomImage = () => {
 };
 
 const LatestDailyLesson = ({ collection, t }) => {
-  const imageSrc = getRandomImage();
+  const [imageSrc, setImageSrc] = useState(null);
+
+  if (!imageSrc){
+    const src = getRandomImage();
+    setImageSrc(src);
+  }
 
   return (
     <div className="thumbnail">
