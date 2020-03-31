@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { push as routerPush, replace as routerReplace } from 'connected-react-router';
 import { withNamespaces } from 'react-i18next';
-import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Input, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
@@ -204,7 +204,7 @@ class LibraryContainer extends Component {
     const parentSource                                           = getSourceById(parentId);
 
     if (!parentSource) {
-      return <div />;
+      return <Segment basic>&nbsp;</Segment>;
     }
 
     const { name: sourceName }                      = source;
