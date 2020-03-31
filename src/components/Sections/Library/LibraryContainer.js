@@ -65,6 +65,29 @@ class LibraryContainer extends Component {
     scrollTopPosition: 0
   };
 
+  shouldComponentUpdate(nextProps, nextState){
+    const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded } = this.props;
+    const { lastLoadedId, isReadable, fontSize, theme, tocIsActive, match, scrollTopPosition } = this.state;
+
+    const equalProps = sourceId === nextProps.sourceId
+      && language === nextProps.language
+      && contentLanguage === nextProps.contentLanguage
+      && sortBy === nextProps.sortBy
+      && areSourcesLoaded === nextProps.areSourcesLoaded;
+
+    const equalIndexMap = indexMap && nextProps.indexMap && indexMap[sourceId] === nextProps.indexMap[sourceId];
+
+    const equalState = lastLoadedId === nextState.lastLoadedId
+      && isReadable === nextState.isReadable
+      && tocIsActive === nextState.tocIsActive
+      && fontSize === nextState.fontSize
+      && theme === nextState.theme
+      && match === nextState.match
+      && scrollTopPosition === nextState.scrollTopPosition; 
+
+    return !equalProps || !equalIndexMap || !equalState;
+  }
+
   componentDidMount() {
     this.updateSticky();
     window.addEventListener('resize', this.updateSticky);
@@ -215,7 +238,8 @@ class LibraryContainer extends Component {
       displayName += ` (${kabName})`;
     }
 
-    const { contentHeaderWidth, } = this.state;
+    const { contentHeaderWidth } = this.state;
+
     return (
       <Header size="small">
         <Helmets.Basic title={`${sourceName} - ${parentName} - ${kabName}`} description={description} />
