@@ -10,7 +10,6 @@ import DownloadIcon from '../images/icons/Download';
 import InfoIcon from '../images/icons/Info';
 import SimpleModeIcon from '../images/icons/SimpleMode';
 
-
 import DailyLessonsFallbackIcon from '../images/fallbacks/DailylessonsFallback';
 import ProgramsFallbackIcon from '../images/fallbacks/ProgramsFallback';
 import LecturesFallbackIcon from '../images/fallbacks/LecturesFallback';
@@ -34,6 +33,9 @@ const sectionLogo = {
 
 export const SectionLogo = ({ name, ...props }) => {
   const Logo = sectionLogo[name];
+  if (!Logo) {
+    return null;
+  }
   return <Logo {...props} width="50" height="50" />;
 };
 
@@ -51,5 +53,5 @@ export const knownFallbackImages = ['lessons', 'programs', 'lectures', 'sources'
 
 export const SectionThumbnailFallback = ({ name, ...props }) => {
   const Fallback = sectionThumbnailFallback[name];
-  return <Fallback {...props} width="100%" height="100%"/>;
+  return <Fallback {...props} width="100%" height="100%" />;
 };
