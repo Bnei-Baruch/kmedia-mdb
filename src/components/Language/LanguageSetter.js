@@ -7,16 +7,7 @@ import * as shapes from '../shapes';
 
 // NOTE: yaniv -> edo: should we block rendering until language changed?
 
-const catchLanguageChange = ({ language: newLanguage, currentLanguage, setLanguage }) => {
-  // catch language change only on client
-  if (typeof window === 'undefined') {
-    return;
-  }
-
-  if (currentLanguage === newLanguage) {
-    return;
-  }
-
+const catchLanguageChange = ({ language: newLanguage, setLanguage }) => {
   let actualLanguage = DEFAULT_LANGUAGE;
   if (LANGUAGES[newLanguage]) {
     actualLanguage = newLanguage;
@@ -31,7 +22,14 @@ const LanguageSetter = ({ language = DEFAULT_LANGUAGE, children }) => {
   const setLanguage     = useCallback(language => dispatch(actions.setLanguage(language)), [dispatch]);
 
   useEffect(() => {
-    catchLanguageChange({ language, currentLanguage, setLanguage });
+    // catch language change only on client
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    if (language !== currentLanguage) {
+      catchLanguageChange({ language, setLanguage });
+    }
   }, [language, currentLanguage, setLanguage]);
 
   return children;

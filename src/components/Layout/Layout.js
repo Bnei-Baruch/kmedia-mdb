@@ -67,31 +67,40 @@ class Layout extends Component {
   constructor(props) {
     super(props);
     const { location } = props;
+
     this.state         = {
       sidebarActive: false,
       isShowHeaderSearch: false,
       embed: playerHelper.getEmbedFromQuery(location),
-      pathname: location ? location.pathname : null,
     };
   }
 
   componentDidMount() {
     document.addEventListener('click', this.clickOutside, true);
+    const { location } = this.props;
+    const { isMobileDevice } = this.context;
+
+    const isShowHeaderSearch = 
+      isMobileDevice
+      && location.pathname.endsWith('search');
+
+    // false is set in the constructor so no need to update
+    if (isShowHeaderSearch) {
+      this.setState({ isShowHeaderSearch });
+    }
   }
 
-  static getDerivedStateFromProps(nextProps, state) {
-    if (nextProps.location && nextProps.location.pathname === state.pathname) {
-      return null;
-    }
+  shouldComponentUpdate(nextProps, nextState) {
+    const { location, language, contentLanguage } = this.props;
+    const { sidebarActive, isShowHeaderSearch }   = this.state;
 
-    const isShowHeaderSearch = state.isShowHeaderSearch ||
-      (
-        nextProps.location
-        && state.isMobileDevice
-        && nextProps.location.pathname.endsWith('search')
-      );
+    const shouldUpdate = (language !== nextProps.language
+      || contentLanguage !== nextProps.contentLanguage
+      || location.pathname !== nextProps.location.pathname
+      || sidebarActive !== nextState.sidebarActive
+      || isShowHeaderSearch !== nextState.isShowHeaderSearch);
 
-    return { isShowHeaderSearch, pathname: nextProps.pathname };
+    return shouldUpdate;
   }
 
   componentWillUnmount() {
@@ -157,17 +166,12 @@ class Layout extends Component {
     const { sidebarActive, embed, isShowHeaderSearch }                                = this.state;
     const { isMobileDevice }                                                          = this.context;
 
-    if (this.state.isMobileDevice !== isMobileDevice) {
-      this.setState({ isMobileDevice });
-    }
-
     const showSearch = shouldShowSearch(location);
 
-    let sideBarIcon = <Icon name="sidebar" />;
-    if (sidebarActive) {
-      sideBarIcon = <Icon size="large" name="x" />;
-    }
-
+    const sideBarIcon = sidebarActive 
+      ? <Icon size="large" name="x" /> 
+      : <Icon name="sidebar" />;
+    
     if (embed) {
       return (
         <div>
@@ -187,7 +191,6 @@ class Layout extends Component {
         </div> */}
         <GAPageView location={location} />
         <div className="headroom-z-index-801">
-
           <Headroom>
             <div className="layout__header">
               <Menu inverted borderless size="huge" color="blue">
@@ -240,7 +243,6 @@ class Layout extends Component {
                 </Menu.Menu>
               </Menu>
             </div>
-
             {isShowHeaderSearch && <RenderHeaderSearch t={t} location={location} ref={headerSearchElement} />}
           </Headroom>
         </div>

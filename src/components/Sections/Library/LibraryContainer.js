@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { push as routerPush, replace as routerReplace } from 'connected-react-router';
 import { withNamespaces } from 'react-i18next';
-import { Button, Container, Grid, Header, Input, Ref } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Input, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
 import { formatError, isEmpty } from '../../../helpers/utils';
@@ -64,6 +64,29 @@ class LibraryContainer extends Component {
     match: '',
     scrollTopPosition: 0
   };
+
+  shouldComponentUpdate(nextProps, nextState){
+    const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded } = this.props;
+    const { lastLoadedId, isReadable, fontSize, theme, tocIsActive, match, scrollTopPosition } = this.state;
+
+    const equalProps = sourceId === nextProps.sourceId
+      && language === nextProps.language
+      && contentLanguage === nextProps.contentLanguage
+      && sortBy === nextProps.sortBy
+      && areSourcesLoaded === nextProps.areSourcesLoaded;
+
+    const equalIndexMap = indexMap && nextProps.indexMap && indexMap[sourceId] === nextProps.indexMap[sourceId];
+
+    const equalState = lastLoadedId === nextState.lastLoadedId
+      && isReadable === nextState.isReadable
+      && tocIsActive === nextState.tocIsActive
+      && fontSize === nextState.fontSize
+      && theme === nextState.theme
+      && match === nextState.match
+      && scrollTopPosition === nextState.scrollTopPosition; 
+
+    return !equalProps || !equalIndexMap || !equalState;
+  }
 
   componentDidMount() {
     this.updateSticky();
@@ -204,7 +227,7 @@ class LibraryContainer extends Component {
     const parentSource                                           = getSourceById(parentId);
 
     if (!parentSource) {
-      return <div />;
+      return <Segment basic>&nbsp;</Segment>;
     }
 
     const { name: sourceName }                      = source;
@@ -215,7 +238,8 @@ class LibraryContainer extends Component {
       displayName += ` (${kabName})`;
     }
 
-    const { contentHeaderWidth, } = this.state;
+    const { contentHeaderWidth } = this.state;
+
     return (
       <Header size="small">
         <Helmets.Basic title={`${sourceName} - ${parentName} - ${kabName}`} description={description} />
