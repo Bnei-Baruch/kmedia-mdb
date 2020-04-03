@@ -29,7 +29,9 @@ const renderCollection = (collection) => {
 
 const EventsList = ({ items = [], t }) => {
   if (!Array.isArray(items) || items.length === 0) {
-    return <div>{t('events.no-matches')}</div>;
+    return null; 
+    /* no results message already returned by ResultsPageHeader, 
+      so no need to return this <div>{t('events.no-matches')}</div>; */
   }
 
   return (
