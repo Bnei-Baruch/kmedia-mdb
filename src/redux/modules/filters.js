@@ -87,7 +87,7 @@ const $$resetNamespace = (draft, { namespace }) => {
 };
 
 const $$setHydratedFilterValues = (draft, { namespace, filters }) => {
-  const oldNamespace = draft[namespace] && {};
+  const oldNamespace = draft[namespace] || {};
   if (draft.isHydrated === undefined) {
     draft.isHydrated = {};
   }
