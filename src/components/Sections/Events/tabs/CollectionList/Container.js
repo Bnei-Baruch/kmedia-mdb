@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -15,7 +15,7 @@ const TAB_NAME_CT_MAP = {
   'unity-days': CT_UNITY_DAY,
 };
 
-const TabContainer = ({ tabName }) => {
+const CollectionListContainer = ({ tabName }) => {
   const filters = useSelector(state => filterSelectors.getFilters(state.filters, `events-${tabName}`));
   const ids = useSelector(state => selectors.getFilteredData(state.events, TAB_NAME_CT_MAP[tabName], filters, state.mdb));
 
@@ -24,19 +24,22 @@ const TabContainer = ({ tabName }) => {
   const wip = useSelector(state => selectors.getWip(state.events));
   const err = useSelector(state => selectors.getError(state.events));
 
+  const [dataLoaded, setDataLoaded] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (items.length === 0 && !wip && !err) {
+    if (!dataLoaded && !wip && !err) {
       dispatch(actions.fetchAllEvents());
+      setDataLoaded(true);
     }
-  }, [language, dispatch, items.length, wip, err]);
+    
+  }, [language, dispatch, items, wip, err, dataLoaded]);
 
   return <Page tabName={tabName} items={items} wip={wip} err={err} />;
 };
 
-TabContainer.propTypes = {
+CollectionListContainer.propTypes = {
   tabName: PropTypes.string.isRequired,
 };
 
-export default TabContainer;
+export default CollectionListContainer;
