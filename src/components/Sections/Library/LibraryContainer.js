@@ -67,7 +67,7 @@ class LibraryContainer extends Component {
 
   shouldComponentUpdate(nextProps, nextState){
     const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded } = this.props;
-    const { lastLoadedId, isReadable, fontSize, theme, tocIsActive, match, scrollTopPosition } = this.state;
+    const { lastLoadedId, isReadable, fontSize, fontType, theme, tocIsActive, match, scrollTopPosition } = this.state;
 
     const equalProps = sourceId === nextProps.sourceId
       && language === nextProps.language
@@ -81,6 +81,7 @@ class LibraryContainer extends Component {
       && isReadable === nextState.isReadable
       && tocIsActive === nextState.tocIsActive
       && fontSize === nextState.fontSize
+      && fontType === nextState.fontType
       && theme === nextState.theme
       && match === nextState.match
       && scrollTopPosition === nextState.scrollTopPosition; 
