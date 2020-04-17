@@ -10,9 +10,7 @@ export class SuggestionsHelper {
         const { text, _source: { title, result_type: resultType } } = option;
         const textParts                                             = text.split(' ');
         let splitChar                                               = null;
-        if (resultType === ES_RESULT_TYPE_SOURCES) {
-          splitChar = '>';
-        } else if (resultType === ES_RESULT_TYPE_TAGS) {
+        if (resultType === ES_RESULT_TYPE_TAGS) {
           splitChar = '-';
         }
         // These !! are redundant, see https://eslint.org/docs/rules/no-extra-boolean-cast,
