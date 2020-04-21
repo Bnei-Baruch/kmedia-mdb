@@ -138,6 +138,7 @@
         @include mobile {
           top: calc(1em + 60px) !important;
           padding-top: calc(3em + 60px);
+          padding-bottom: calc(3em + 70px);
         }
       }
     }
