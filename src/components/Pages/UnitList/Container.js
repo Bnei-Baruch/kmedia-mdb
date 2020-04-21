@@ -69,14 +69,10 @@ export class UnitListContainer extends withPagination {
         this.handleFiltersChanged();
       } else {
         const pageNo = getPageFromLocation(nextProps.location);
+
         if (pageNo !== nextProps.pageNo) {
           this.setPage(nextProps, pageNo);
-
-          return;
-        }
-
-        this.props.hydrateFilters(this.props.namespace);
-        this.handleFiltersChanged(pageNo);
+        } 
       }
     }
 
