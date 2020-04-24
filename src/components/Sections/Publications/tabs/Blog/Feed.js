@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import * as shapes from '../../../../shapes';
 import { renderBlogItemForHomepage, renderBlogItemForPublications } from './renderFeedHelpers';
 
-const BlogFeed = ({ items = [], snippetVersion = false, limitLength = null, t, language }) => {
+const BlogFeed = ({ items = [], snippetVersion = false, limitLength = null, language }) => {
+  const { t }  = useTranslation('common', { useSuspense: false });
   const length = limitLength || items.length;
 
   return (
@@ -23,8 +24,7 @@ BlogFeed.propTypes = {
   items: PropTypes.arrayOf(shapes.BlogPost),
   snippetVersion: PropTypes.bool,
   limitLength: PropTypes.number,
-  t: PropTypes.func.isRequired,
   language: PropTypes.string.isRequired,
 };
 
-export default withNamespaces()(BlogFeed);
+export default BlogFeed;

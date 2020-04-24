@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Breadcrumb, Container, Divider, Grid, Header } from 'semantic-ui-react';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { isEmpty } from '../../../helpers/utils';
@@ -46,10 +46,8 @@ const getBreadCrumbSection = (p, index, arr) => {
   return section;
 };
 
-const TopicPage = ({ match, t }) => {
-
-  const tagId = match.params.id;
-
+const TopicPage = ({ match }) => {
+  const { t }           = useTranslation('common', { useSuspense: false });
   const wip             = useSelector(state => selectors.getWip(state.tags));
   const error           = useSelector(state => selectors.getError(state.tags));
   const sections        = useSelector(state => selectors.getSections(state.tags));
@@ -60,6 +58,8 @@ const TopicPage = ({ match, t }) => {
   const language        = useSelector(state => settings.getLanguage(state.settings));
 
   const dispatch = useDispatch();
+
+  const tagId = match.params.id;
 
   useEffect(() => {
     dispatch(actions.fetchDashboard(tagId));
@@ -132,4 +132,4 @@ TopicPage.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withRouter(withNamespaces()(TopicPage));
+export default withRouter(TopicPage);

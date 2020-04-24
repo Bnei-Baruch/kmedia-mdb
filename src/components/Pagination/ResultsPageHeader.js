@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Container } from 'semantic-ui-react';
 
-const ResultsPageHeader = ({ pageNo, pageSize, total, t }) => {
+const ResultsPageHeader = ({ pageNo, pageSize, total }) => {
+  const { t } = useTranslation('common', { useSuspense: false });
+
   let content;
 
   if (total === 0) {
@@ -27,9 +29,6 @@ ResultsPageHeader.propTypes = {
   pageNo: PropTypes.number.isRequired,
   pageSize: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
-ResultsPageHeader.defaultProps = {};
-
-export default withNamespaces()(ResultsPageHeader);
+export default ResultsPageHeader;

@@ -1,6 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { CT_ARTICLE, CT_RESEARCH_MATERIAL, CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, DERIVED_UNITS_CONTENT_TYPE, MT_TEXT } from '../../../../../helpers/consts';
 import * as shapes from '../../../../shapes';
@@ -24,7 +23,9 @@ const derivedTextUnits = (unit) => {
   return types;
 };
 
-const Materials = ({ unit = undefined, t }) => {
+const Materials = ({ unit = undefined }) => {
+  const { t } = useTranslation('common', { useSuspense: false });
+
   if (!unit) {
     return null;
   }
@@ -78,7 +79,7 @@ const Materials = ({ unit = undefined, t }) => {
       items.push({
         name: 'derived',
         label: t('materials.derived-units.header'),
-        component: <DerivedUnits selectedUnits={selectedUnits} key="derived" type="derived" t={t}/>
+        component: <DerivedUnits selectedUnits={selectedUnits} key="derived" type="derived" t={t} />
       });
     }
   }
@@ -92,7 +93,6 @@ const Materials = ({ unit = undefined, t }) => {
 
 Materials.propTypes = {
   unit: shapes.ContentUnit,
-  t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(Materials);
+export default Materials;

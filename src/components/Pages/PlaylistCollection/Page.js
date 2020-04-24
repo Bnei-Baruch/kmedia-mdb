@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container, Grid } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
@@ -13,7 +13,7 @@ import PlaylistAVBox from './widgets/PlaylistAVBox/PlaylistAVBox';
 import Playlist from './widgets/Playlist/Playlist';
 import playerHelper from '../../../helpers/player';
 
-class PlaylistCollectionPage extends Component {
+class PlaylistCollectionPageOriginal extends Component {
   static propTypes = {
     collection: shapes.GenericCollection,
     wip: shapes.WIP,
@@ -39,13 +39,13 @@ class PlaylistCollectionPage extends Component {
     location: {},
   };
 
-  constructor(props){
+  constructor(props) {
     super(props);
     const { location } = this.props;
-    this.state = {
+    this.state         = {
       selected: null,
       embed: playerHelper.getEmbedFromQuery(location)
-    }
+    };
   }
 
   handleSelectedChange = selected => this.setState({ selected });
@@ -124,4 +124,12 @@ class PlaylistCollectionPage extends Component {
   }
 }
 
-export default withNamespaces()(PlaylistCollectionPage);
+const Extended = withTranslation()(PlaylistCollectionPageOriginal);
+
+class PlaylistCollectionPage extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default PlaylistCollectionPage;

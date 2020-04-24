@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
 import { Button } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 
 import { LANG_ENGLISH, LANG_RUSSIAN, LANG_UKRAINIAN } from '../../helpers/consts';
 
-const DonateNow = ({ t, language }) => {
-
-  let lang = language;
+const DonateNow = ({ language }) => {
+  const { t } = useTranslation('common', { useSuspense: false });
+  let lang    = language;
   switch (lang) {
   case LANG_UKRAINIAN:
     lang = LANG_RUSSIAN;
@@ -36,7 +36,6 @@ const DonateNow = ({ t, language }) => {
 
 DonateNow.propTypes = {
   language: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(DonateNow);
+export default DonateNow;

@@ -1,11 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Segment } from 'semantic-ui-react';
 
 import * as shapes from '../../../../../shapes';
 
-const Summary = ({ unit, t }) => {
+const Summary = ({ unit }) => {
+  const { t } = useTranslation('common', { useSuspense: false });
+
   if (unit.description) {
     return (
       <Segment basic>
@@ -19,7 +20,6 @@ const Summary = ({ unit, t }) => {
 
 Summary.propTypes = {
   unit: shapes.ContentUnit.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(Summary);
+export default Summary;

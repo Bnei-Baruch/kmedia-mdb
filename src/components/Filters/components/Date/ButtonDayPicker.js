@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import moment from 'moment';
 import scrollIntoView from 'scroll-into-view';
-import Navbar from 'react-day-picker/lib/src/Navbar';
+import Navbar from 'react-day-picker/lib/react-day-picker.min';
 import MomentLocaleUtils, { formatDate } from 'react-day-picker/moment';
 import { Button, Icon, Input, Modal, Popup, Segment } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
@@ -13,10 +13,10 @@ import { getLanguageDirection, getLanguageLocaleWORegion } from '../../../../hel
 import YearMonthForm from './YearMonthForm';
 
 import DayPicker from 'react-day-picker';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 
-class ButtonDayPicker extends Component {
+class ButtonDayPickerOriginal extends Component {
   static contextType = DeviceInfoContext;
 
   static propTypes = {
@@ -52,10 +52,10 @@ class ButtonDayPicker extends Component {
     const { value, language } = state;
 
     if (props.value !== value ||
-        props.language !== language) {
+      props.language !== language) {
       return {
         value: props.value,
-        stringValue: ButtonDayPicker.formatDateValue(props.value, props.language),
+        stringValue: ButtonDayPickerOriginal.formatDateValue(props.value, props.language),
         language: props.language,
         langDir: getLanguageDirection(props.language),
         locale: getLanguageLocaleWORegion(props.language),
@@ -147,8 +147,8 @@ class ButtonDayPicker extends Component {
       return;
     }
     const { onDayChange } = this.props;
-    const { locale } = this.state;
-    this.setState({ stringValue: ButtonDayPicker.formatDateValue(date, locale) });
+    const { locale }      = this.state;
+    this.setState({ stringValue: ButtonDayPickerOriginal.formatDateValue(date, locale) });
     onDayChange(date);
     this.closePopup();
   };
@@ -262,4 +262,12 @@ class ButtonDayPicker extends Component {
   }
 }
 
-export default withNamespaces()(ButtonDayPicker);
+const Extended = withTranslation()(ButtonDayPickerOriginal);
+
+class ButtonDayPicker extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default ButtonDayPicker;

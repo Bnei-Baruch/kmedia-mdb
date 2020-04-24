@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import uniq from 'lodash/uniq';
 import { Container, Divider, Segment } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
 import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT } from '../../../../../../helpers/consts';
-import {getLanguageDirection} from '../../../../../../helpers/i18n-utils';
+import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import MediaHelper from '../../../../../../helpers/media';
 import * as shapes from '../../../../../shapes';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 
-class Transcription extends Component {
+class TranscriptionOriginal extends Component {
   static propTypes = {
     unit: shapes.ContentUnit,
     doc2htmlById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
@@ -52,7 +52,7 @@ class Transcription extends Component {
       return unit.files.filter(x => MediaHelper.IsText(x) && !MediaHelper.IsPDF(x));
     }
 
-    return Transcription.getUnitDerivedArticle(unit, type);
+    return TranscriptionOriginal.getUnitDerivedArticle(unit, type);
   };
 
   static getUnitDerivedArticle(unit, type) {
@@ -69,7 +69,7 @@ class Transcription extends Component {
   static getDerivedStateFromProps(props, state) {
     const { contentLanguage, uiLanguage, unit, type } = props;
 
-    const textFiles = Transcription.getTextFiles(unit, type);
+    const textFiles = TranscriptionOriginal.getTextFiles(unit, type);
     const languages = uniq(textFiles.map(x => x.language));
     let newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
     if (!newLanguage) {
@@ -82,7 +82,7 @@ class Transcription extends Component {
       newLanguage = state.language;
     }
 
-    const selectedFile = Transcription.selectFile(textFiles, newLanguage);
+    const selectedFile = TranscriptionOriginal.selectFile(textFiles, newLanguage);
 
     return { selectedFile, languages, language: newLanguage, textFiles };
   }
@@ -134,7 +134,7 @@ class Transcription extends Component {
       return;
     }
 
-    const selectedFile = Transcription.selectFile(textFiles, newLanguage);
+    const selectedFile = TranscriptionOriginal.selectFile(textFiles, newLanguage);
 
     this.setState({ selectedFile, language: newLanguage });
   };
@@ -189,4 +189,12 @@ class Transcription extends Component {
   }
 }
 
-export default withNamespaces()(Transcription);
+const Extended = withTranslation()(TranscriptionOriginal);
+
+class Transcription extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default Transcription;

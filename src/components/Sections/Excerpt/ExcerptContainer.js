@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import Countdown, { zeroPad } from 'react-countdown';
 import { Container, Header } from 'semantic-ui-react';
 
@@ -16,16 +16,14 @@ const Completionist = () => <span>You are good to go!</span>;
 const renderer = ({ hours, minutes, seconds, completed }) => {
   if (completed) {
     // Render a completed state
-    return <Completionist/>;
+    return <Completionist />;
   } else {
     // Render a countdown
-    return <span style={{ direction: 'ltr', 'font-size': '3em' }}>{zeroPad(minutes)}:{zeroPad(seconds)}</span>
-    ;
+    return <span style={{ direction: 'ltr', 'font-size': '3em' }}>{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
   }
 };
 
-class ExcerptContainer extends Component {
-
+class ExcerptContainerOriginal extends Component {
   static propTypes = {
     language: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
@@ -38,7 +36,7 @@ class ExcerptContainer extends Component {
 
   chooseExcerpt() {
     const { language } = this.props;
-    let items = excerpts[language];
+    let items          = excerpts[language];
     if (!items) {
       items = excerpts[DEFAULT_LANGUAGE];
     }
@@ -60,18 +58,26 @@ class ExcerptContainer extends Component {
     const { excerpt } = this.state;
 
     return (
-      <div style={{'padding': '20px', 'text-align': 'justify'}}>
-        <br/>
+      <div style={{ 'padding': '20px', 'text-align': 'justify' }}>
+        <br />
         <Header as="h1" textAlign="center" color="green" size="huge">
-          <Countdown date={Date.now() + 5 * 60 * 1000} renderer={renderer}/>
+          <Countdown date={Date.now() + 5 * 60 * 1000} renderer={renderer} />
         </Header>
         <Container text>
           {excerpt}
         </Container>
-        <br/>
-        <br/>
+        <br />
+        <br />
       </div>
     );
+  }
+}
+
+const Extended = withTranslation()(ExcerptContainerOriginal);
+
+class ExcerptContainer extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
   }
 }
 
@@ -80,4 +86,4 @@ export default connect(
     language: settings.getLanguage(state.settings),
     contentLanguage: settings.getContentLanguage(state.settings),
   })
-)(withNamespaces()(ExcerptContainer));
+)(ExcerptContainer);

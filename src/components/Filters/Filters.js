@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
 import { connect, ReactReduxContext } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container, Icon, Label, Menu, Popup } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
@@ -14,9 +14,9 @@ import { selectors as mdb } from '../../redux/modules/mdb';
 import { selectors as settings } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
 import FiltersHydrator from './FiltersHydrator';
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
-class Filters extends Component {
+class FiltersOriginal extends Component {
   static contextType = DeviceInfoContext;
 
   static propTypes = {
@@ -41,9 +41,9 @@ class Filters extends Component {
     activeFilter: null,
   };
 
-  shouldComponentUpdate(nextProps, nextState){
+  shouldComponentUpdate(nextProps, nextState) {
     const { namespace, language, filters, rightItems, filtersData, sqDataWipErr } = this.props;
-    const { activeFilter } = this.state;
+    const { activeFilter }                                                        = this.state;
 
     return (activeFilter !== nextState.activeFilter
       || namespace !== nextProps.namespace
@@ -209,6 +209,14 @@ class Filters extends Component {
   }
 }
 
+const Extended = withTranslation()(FiltersOriginal);
+
+class Filters extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
 export default connect(
   (state, ownProps) => ({
     filtersData: selectors.getNSFilters(state.filters, ownProps.namespace),
@@ -221,4 +229,4 @@ export default connect(
     setFilterValue: actions.setFilterValue,
     resetFilter: actions.resetFilter,
   }, dispatch)
-)(withNamespaces()(Filters));
+)(Filters);

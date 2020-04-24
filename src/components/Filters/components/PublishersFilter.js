@@ -7,8 +7,7 @@ import FlatListFilter from './FlatListFilter';
 
 const PublishersFilter = props => {
   const publisherById = useSelector(state => selectors.getPublisherById(state.publications));
-
-  const options = Object.values(publisherById).map(x => ({
+  const options       = Object.values(publisherById).map(x => ({
     text: x.name,
     value: x.id,
   }));

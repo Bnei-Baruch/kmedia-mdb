@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import isEqual from 'react-fast-compare';
 
 import { actions, selectors } from '../../../../redux/modules/mdb';
@@ -14,7 +14,7 @@ import WipErr from '../../../shared/WipErr/WipErr';
 import { PlaylistCollectionContainer } from '../../../Pages/PlaylistCollection/Container';
 import { publicFile } from '../../../../helpers/utils';
 
-class LastLessonCollection extends Component {
+class LastLessonCollectionOriginal extends Component {
   static propTypes = {
     match: shapes.RouterMatch.isRequired,
     lastLessonId: PropTypes.string,
@@ -117,4 +117,12 @@ function mapDispatch(dispatch) {
   }, dispatch);
 }
 
-export default withRouter(connect(mapState, mapDispatch)(withNamespaces()(LastLessonCollection)));
+const Extended = withTranslation()(LastLessonCollectionOriginal);
+
+class LastLessonCollection extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default withRouter(connect(mapState, mapDispatch)(LastLessonCollection));
