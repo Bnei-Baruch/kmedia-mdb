@@ -15,19 +15,16 @@ const filters = {
   conventions: [
     {name: 'locations-filter', component: filterComponents.LocationsFilter},
     {name: 'years-filter', component: filterComponents.YearsFilter},
-    {name: 'language-filter', component: filterComponents.LanguageFilter},
   ],
   holidays: [
     {name: 'holidays-filter', component: filterComponents.HolidaysFilter},
     {name: 'years-filter', component: filterComponents.YearsFilter},
-    {name: 'language-filter', component: filterComponents.LanguageFilter},
   ],
   picnics: [
     {name: 'years-filter', component: filterComponents.YearsFilter}
   ],
   'unity-days': [
     {name: 'years-filter', component: filterComponents.YearsFilter},
-    {name: 'language-filter', component: filterComponents.LanguageFilter},
   ],
 };
 
