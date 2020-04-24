@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import isEqual from 'react-fast-compare';
@@ -17,7 +17,7 @@ import * as shapes from '../../../../shapes';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import ButtonsLanguageSelector from '../../../../Language/Selector/ButtonsLanguageSelector';
 
-class Sketches extends React.Component {
+class SketchesOriginal extends React.Component {
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     t: PropTypes.func.isRequired,
@@ -33,7 +33,7 @@ class Sketches extends React.Component {
     }
 
     // get the zip files
-    const zipFiles = unit.files.filter(Sketches.isZipOrImageFileType);
+    const zipFiles = unit.files.filter(SketchesOriginal.isZipOrImageFileType);
     if (zipFiles.length === 0) {
       return null;
     }
@@ -61,7 +61,7 @@ class Sketches extends React.Component {
 
     // if there are many zip files - use the first one
     if (files.length > 0) {
-      const zipFileArr = files.filter(file => Sketches.isZipFile(file));
+      const zipFileArr = files.filter(file => SketchesOriginal.isZipFile(file));
       files            = zipFileArr.length > 0 ? zipFileArr[0] : files;
     }
 
@@ -132,7 +132,7 @@ class Sketches extends React.Component {
 
   processUnit = () => {
     const { unit, contentLanguage, uiLanguage } = this.props;
-    const zipFiles                              = Sketches.getUnitSketchFiles(unit);
+    const zipFiles                              = SketchesOriginal.getUnitSketchFiles(unit);
 
     if (zipFiles) {
       this.setStateByZipFiles(zipFiles, contentLanguage, uiLanguage, unit);
@@ -140,14 +140,14 @@ class Sketches extends React.Component {
   };
 
   setStateByZipFiles = (zipFiles, contentLanguage, uiLanguage, unit) => {
-    const { languages, language } = Sketches.getFilesLanguages(zipFiles, contentLanguage, uiLanguage);
+    const { languages, language } = SketchesOriginal.getFilesLanguages(zipFiles, contentLanguage, uiLanguage);
     const itemState               = this.getItemState(zipFiles, language, unit);
 
     this.setState({ zipFiles, languages, language, ...itemState });
   };
 
   getItemState = (zipFiles, language, unit) => {
-    const files     = Sketches.filterZipFiles(zipFiles, language, unit.original_language);
+    const files = SketchesOriginal.filterZipFiles(zipFiles, language, unit.original_language);
     return this.getStateByFile(files);
   };
 
@@ -156,7 +156,7 @@ class Sketches extends React.Component {
     let state = {};
     if (file) {
       // not zip, image files only
-      if (Array.isArray(file) || !Sketches.isZipFile(file)) {
+      if (Array.isArray(file) || !SketchesOriginal.isZipFile(file)) {
         state = { imageFiles: file };
       } else {
         // zip file
@@ -323,4 +323,12 @@ const mapDispatch = dispatch => bindActionCreators({
   unzip: actions.unzip
 }, dispatch);
 
-export default connect(mapState, mapDispatch)(withNamespaces()(Sketches));
+const Extended = withTranslation()(SketchesOriginal);
+
+class Sketches extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default connect(mapState, mapDispatch)(Sketches);

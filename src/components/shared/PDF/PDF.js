@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import throttle from 'lodash/throttle';
 import noop from 'lodash/noop';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container, } from 'semantic-ui-react';
 
 import { BS_TAAS_PARTS } from '../../../helpers/consts';
 import PDFMenu from './PDFMenu';
 import LoadedPDF from './LoadedPDF';
 
-class PDF extends Component {
-  static isTaas = source => (BS_TAAS_PARTS[source] !== undefined);
+export const isTaas     = source => (BS_TAAS_PARTS[source] !== undefined);
+export const startsFrom = source => BS_TAAS_PARTS[source];
 
-  static startsFrom = source => BS_TAAS_PARTS[source];
+class PDFOriginal extends Component {
 
   static propTypes = {
     pdfFile: PropTypes.string.isRequired,
@@ -88,7 +88,7 @@ class PDF extends Component {
 
   render() {
     const { numPages, pageNumber } = this.state;
-    const { startsFrom, }          = this.props;
+    const { startsFrom, t }        = this.props;
 
     return (
       <div id="pdfWrapper" style={{ marginTop: '10px' }}>
@@ -101,7 +101,7 @@ class PDF extends Component {
           />
         </Container>
         <div style={{ direction: 'ltr' }}>
-          <LoadedPDF {...this.props} {...this.state} onDocumentLoadSuccess={this.onDocumentLoadSuccess} />
+          <LoadedPDF {...this.props} {...this.state} onDocumentLoadSuccess={this.onDocumentLoadSuccess} t={t} />
         </div>
         <Container fluid textAlign="center">
           <PDFMenu
@@ -116,4 +116,12 @@ class PDF extends Component {
   }
 }
 
-export default withNamespaces()(PDF);
+const Extended = withTranslation()(PDFOriginal);
+
+class PDF extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default PDF;

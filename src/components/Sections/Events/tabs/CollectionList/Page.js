@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Container, Divider } from 'semantic-ui-react';
 
 import * as shapes from '../../../../shapes';
@@ -28,7 +28,8 @@ const filters = {
   ],
 };
 
-const TabPage = ({tabName, items = [], wip = false, err = null, t}) => {
+const TabPage = ({ tabName, items = [], wip = false, err = null }) => {
+  const { t }   = useTranslation('common', { useSuspense: false });
   const content = WipErr({ wip, err, t }) || (
     <Container className="padded">
       <ResultsPageHeader pageNo={1} pageSize={1000} total={items.length} />
@@ -49,14 +50,13 @@ const TabPage = ({tabName, items = [], wip = false, err = null, t}) => {
       {content}
     </div>
   );
-}
+};
 
 TabPage.propTypes = {
   tabName: PropTypes.string.isRequired,
   items: PropTypes.arrayOf(shapes.EventCollection),
   wip: shapes.WIP,
   err: shapes.Error,
-  t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(TabPage);
+export default TabPage;

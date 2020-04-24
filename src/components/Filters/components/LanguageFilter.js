@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import noop from 'lodash/noop';
 import { Accordion, Button, Flag, Header, Menu, Segment } from 'semantic-ui-react';
 import { ALL_LANGUAGES, AUDIO_BLOG_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
 
-const LanguageFilter = ({ t, value = null, namespace, onCancel = noop, onApply = noop }) => {
+const LanguageFilter = ({ value = null, namespace, onCancel = noop, onApply = noop }) => {
+  const { t } = useTranslation('common', { useSuspense: false });
   const onLanguageChange = (event, data) => onApply(data.name);
 
   const displayedLanguages = namespace === 'publications-audio-blog'
@@ -53,7 +54,6 @@ LanguageFilter.propTypes = {
   value: PropTypes.string,
   onCancel: PropTypes.func,
   onApply: PropTypes.func,
-  t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(LanguageFilter);
+export default LanguageFilter;

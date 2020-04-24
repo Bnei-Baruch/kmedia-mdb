@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Header, Icon, Menu } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
@@ -10,7 +10,7 @@ import { formatDuration } from '../../../../../helpers/utils';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import Link from '../../../../Language/MultiLanguageLink';
 
-class PlaylistWidget extends Component {
+class PlaylistWidgetOriginal extends Component {
   static propTypes = {
     playlist: PropTypes.shape({}).isRequired,
     selected: PropTypes.number,
@@ -131,4 +131,12 @@ class PlaylistWidget extends Component {
   }
 }
 
-export default withNamespaces()(PlaylistWidget);
+const Extended = withTranslation()(PlaylistWidgetOriginal);
+
+class PlaylistWidget extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default PlaylistWidget;

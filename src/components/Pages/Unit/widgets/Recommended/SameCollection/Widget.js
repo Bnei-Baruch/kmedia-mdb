@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container, Header, Item } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../../../../../helpers/links';
@@ -10,7 +10,7 @@ import Link from '../../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../../shared/Logo/UnitLogo';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 
-class SameCollection extends Component {
+class SameCollectionOriginal extends Component {
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     collection: shapes.GenericCollection,
@@ -114,4 +114,12 @@ class SameCollection extends Component {
   }
 }
 
-export default withNamespaces()(SameCollection);
+const Extended = withTranslation()(SameCollectionOriginal);
+
+class SameCollection extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default SameCollection;

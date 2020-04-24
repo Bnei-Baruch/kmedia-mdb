@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
 import { assetUrl } from '../../../helpers/Api';
@@ -8,7 +8,9 @@ import * as shapes from '../../shapes';
 import CollectionLogo from '../../shared/Logo/CollectionLogo';
 import Helmets from '../../shared/Helmets';
 
-const CollectionPageHeader = ({ collection = null, namespace, t }) => {
+const CollectionPageHeader = ({ collection = null, namespace }) => {
+  const { t } = useTranslation('common', { useSuspense: false });
+
   if (collection === null) {
     return <div className="collection-header" />;
   }
@@ -48,9 +50,8 @@ const CollectionPageHeader = ({ collection = null, namespace, t }) => {
 };
 
 CollectionPageHeader.propTypes = {
-  collection: shapes.GenericCollection,
   namespace: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
+  collection: shapes.GenericCollection,
 };
 
-export default withNamespaces()(CollectionPageHeader);
+export default CollectionPageHeader;

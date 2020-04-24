@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, withRouter } from 'react-router-dom';
 import { Container, Grid, Segment } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { actions, selectors } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -38,8 +37,8 @@ const convertImages = (content) => {
   return content;
 };
 
-const LibraryPerson = (props) => {
-  const { t }                       = props;
+const LibraryPerson = () => {
+  const { t }                       = useTranslation('common', { useSuspense: false });
   const { id: sourceId }            = useParams();
   const language                    = useSelector(state => settings.getLanguage(state.settings));
   const { wip, err, data: content } = useSelector(state => selectors.getPerson(state.assets));
@@ -74,8 +73,4 @@ const LibraryPerson = (props) => {
   );
 };
 
-LibraryPerson.propTypes = {
-  t: PropTypes.func.isRequired,
-};
-
-export default withRouter(withNamespaces()(LibraryPerson));
+export default withRouter(LibraryPerson);

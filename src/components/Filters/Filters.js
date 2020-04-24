@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
 import { connect, ReactReduxContext } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container, Icon, Label, Menu, Popup } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
@@ -17,7 +17,7 @@ import FiltersHydrator from './FiltersHydrator';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { POPULAR_LANGUAGES } from '../../helpers/consts';
 
-class Filters extends Component {
+class FiltersOriginal extends Component {
   static contextType = DeviceInfoContext;
 
   static propTypes = {
@@ -208,6 +208,14 @@ class Filters extends Component {
         </Container>
       </div>
     );
+  }
+}
+
+const Extended = withTranslation()(FiltersOriginal);
+
+class Filters extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
   }
 }
 

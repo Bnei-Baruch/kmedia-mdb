@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import countBy from 'lodash/countBy';
 import { useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { CT_HOLIDAY } from '../../../helpers/consts';
 import { selectors } from '../../../redux/modules/events';
@@ -32,18 +31,13 @@ const buildNode = (id, count, getTagById) => {
 };
 
 const HolidaysFilter = (props) => {
-  const cIDs = useSelector(state => selectors.getEventsByType(state.events)[CT_HOLIDAY]);
+  const cIDs          = useSelector(state => selectors.getEventsByType(state.events)[CT_HOLIDAY]);
+  const getTagById    = useSelector(state => tags.getTagById(state.tags));
   const holidayEvents = useSelector(state => (cIDs || []).map(x => mdb.getCollectionById(state.mdb, x)));
-  const getTagById = useSelector(state => tags.getTagById(state.tags));
+  const { t }         = useTranslation('common', { useSuspense: false });
+  const tree          = useMemo(() => getTree(holidayEvents, getTagById, t), [holidayEvents, getTagById, t]);
 
-  const { t } = props;
-  const tree = useMemo(() => getTree(holidayEvents, getTagById, t), [holidayEvents, getTagById, t]); 
-
-  return <HierarchicalFilter name="holidays-filter" tree={tree} {...props} />;
-}
-
-HolidaysFilter.propTypes = {
-  t: PropTypes.func.isRequired,
+  return <HierarchicalFilter name="holidays-filter" tree={tree} {...props} t={t} />;
 };
 
-export default withNamespaces()(HolidaysFilter);
+export default HolidaysFilter;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Popup } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
@@ -21,7 +21,7 @@ import {
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
-class ShareBar extends Component {
+class ShareBarOriginal extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     url: PropTypes.string,
@@ -118,4 +118,12 @@ class ShareBar extends Component {
   }
 }
 
-export default withNamespaces()(ShareBar);
+const Extended = withTranslation()(ShareBarOriginal);
+
+class ShareBar extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default ShareBar;

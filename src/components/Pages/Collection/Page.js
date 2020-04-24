@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 import UnitList from '../UnitList/Container';
 import PageHeader from './Header';
 
-const CollectionPage = (props) => {
-  const { collection, wip, err, namespace, t, renderUnit } = props;
+const CollectionPage = ({ collection = null, wip = false, err = null, namespace, renderUnit }) => {
+  const { t } = useTranslation('common', { useSuspense: false });
 
   // Most chances we already have the collection either SSR or some nav link.
   // Only in case we don't, we'll show wipErr.
@@ -34,14 +34,7 @@ CollectionPage.propTypes = {
   collection: shapes.GenericCollection,
   wip: shapes.WIP,
   err: shapes.Error,
-  t: PropTypes.func.isRequired,
   renderUnit: PropTypes.func.isRequired,
 };
 
-CollectionPage.defaultProps = {
-  collection: null,
-  wip: false,
-  err: null,
-};
-
-export default withNamespaces()(CollectionPage);
+export default CollectionPage;

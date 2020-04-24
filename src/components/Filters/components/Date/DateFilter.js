@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import moment from 'moment';
 import noop from 'lodash/noop';
 import { Accordion, Button, Header, Menu, Segment } from 'semantic-ui-react';
@@ -72,7 +72,7 @@ const isValidDateRange = (from, to) => {
     && mTo.isSameOrBefore(today(), 'day');
 };
 
-class DateFilter extends Component {
+class DateFilterOriginal extends Component {
   static propTypes = {
     value: PropTypes.shape({
       from: PropTypes.objectOf(Date),
@@ -113,12 +113,12 @@ class DateFilter extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = DateFilter.convertToStateObject(props);
+    this.state = DateFilterOriginal.convertToStateObject(props);
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.value && this.props.value !== prevProps.value){
-      this.setState(DateFilter.convertToStateObject(this.props));
+    if (this.props.value && this.props.value !== prevProps.value) {
+      this.setState(DateFilterOriginal.convertToStateObject(this.props));
     }
   }
 
@@ -199,8 +199,8 @@ class DateFilter extends Component {
   };
 
   render() {
-    const { t, language }             = this.props;
-    const { from, to, datePreset }    = this.state;
+    const { t, language }          = this.props;
+    const { from, to, datePreset } = this.state;
 
     return (
       <Segment.Group className="filter-popup__wrapper">
@@ -286,4 +286,12 @@ class DateFilter extends Component {
   }
 }
 
-export default withNamespaces()(DateFilter);
+const Extended = withTranslation()(DateFilterOriginal);
+
+class DateFilter extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default DateFilter;

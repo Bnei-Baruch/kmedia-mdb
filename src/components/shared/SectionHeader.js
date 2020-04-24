@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
 import { Container, Grid, Header, Menu } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 
 import Helmets from './Helmets';
 
@@ -45,7 +45,8 @@ const renderTitle = (title, subText, submenuItems = []) => {
   );
 };
 
-const SectionHeader = ({ section, t, submenuItems }) => {
+const SectionHeader = ({ section, submenuItems }) => {
+  const { t }   = useTranslation('common', { useSuspense: false });
   const title   = t(`${section}.header.text`);
   const subText = t(`${section}.header.subtext`);
 
@@ -63,7 +64,6 @@ const SectionHeader = ({ section, t, submenuItems }) => {
 SectionHeader.propTypes = {
   section: PropTypes.string.isRequired,
   submenuItems: PropTypes.arrayOf(PropTypes.node),
-  t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(SectionHeader);
+export default SectionHeader;

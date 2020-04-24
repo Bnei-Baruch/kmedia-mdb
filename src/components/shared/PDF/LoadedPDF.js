@@ -1,8 +1,8 @@
 // Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
 // https://github.com/wojtekmaj/react-pdf/issues/280
 import React from 'react';
-import Loadable from 'jaybe-react-loadable';
-import { withNamespaces } from 'react-i18next';
+import Loadable from 'react-loadable';
+
 import { ErrorSplash, LoadingSplash, } from '../Splash/Splash';
 import Loading from '../Loading';
 
@@ -41,4 +41,4 @@ const LoadedPDF = Loadable({
   }
 });
 
-export default withNamespaces()(LoadedPDF);
+export default LoadedPDF;

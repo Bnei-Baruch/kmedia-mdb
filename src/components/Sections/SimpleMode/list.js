@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Image, List } from 'semantic-ui-react';
 
 import { SectionLogo } from '../../../helpers/images';
 import * as shapes from '../../shapes';
 
-const SimpleModeList = ({ items = {}, language, t, renderUnit }) => {
+const SimpleModeList = ({ items = {}, language, renderUnit }) => {
+  const { t } = useTranslation('common', { useSuspense: false });
+
   return (
     <div>
       {
@@ -43,8 +45,7 @@ const SimpleModeList = ({ items = {}, language, t, renderUnit }) => {
 SimpleModeList.propTypes = {
   items: shapes.SimpleMode,
   language: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
   renderUnit: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(SimpleModeList);
+export default SimpleModeList;

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Header, Image } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { assetUrl, Requests } from '../../../helpers/Api';
 import * as shapes from '../../shapes';
@@ -19,13 +18,10 @@ const getRandomImage = () => {
   });
 };
 
-const LatestDailyLesson = ({ collection, t }) => {
-  const [imageSrc, setImageSrc] = useState(null);
-
-  if (!imageSrc){
-    const src = getRandomImage();
-    setImageSrc(src);
-  }
+const LatestDailyLesson = ({ collection }) => {
+  const { t }         = useTranslation('common', { useSuspense: false });
+  // eslint-disable-next-line no-unused-vars
+  const [imageSrc, _] = useState(getRandomImage());
 
   return (
     <div className="thumbnail">
@@ -39,17 +35,13 @@ const LatestDailyLesson = ({ collection, t }) => {
             {t('home.last-lesson')}
           </Header.Content>
         </Header>
-        {/* <Label color="black" size="tiny">
-            {t('nav.sidebar.lessons')}
-          </Label> */}
       </Link>
     </div>
   );
-}
+};
 
 LatestDailyLesson.propTypes = {
   collection: shapes.LessonCollection.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(LatestDailyLesson);
+export default LatestDailyLesson;

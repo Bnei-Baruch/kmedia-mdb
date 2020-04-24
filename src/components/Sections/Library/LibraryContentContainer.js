@@ -8,22 +8,25 @@ import { updateQuery } from '../../../helpers/url';
 import { actions } from '../../../redux/modules/assets';
 import * as shapes from '../../shapes';
 import Library, { checkRabashGroupArticles } from './Library';
-import PDF from '../../shared/PDF/PDF';
+import { isTaas } from '../../shared/PDF/PDF';
 
 const LibraryContentContainer = (props) => {
-  const { index: { data } = { index: { data: null } }, 
-    source = null, 
-    uiLanguage, 
-    contentLanguage, 
-    history,
-    langSelectorMount = null, 
-    downloadAllowed } = props;
+  const
+    {
+      index: { data }   = { index: { data: null } },
+      source            = null,
+      uiLanguage,
+      contentLanguage,
+      history,
+      langSelectorMount = null,
+      downloadAllowed
+    } = props;
 
-  const [language, setLanguage] = useState(null);
+  const [language, setLanguage]   = useState(null);
   const [languages, setLanguages] = useState([]);
 
   useEffect(() => {
-    if (data){
+    if (data) {
       const languages = Object.keys(data);
       setLanguages(languages);
     }
@@ -31,23 +34,22 @@ const LibraryContentContainer = (props) => {
 
   useEffect(() => {
     const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-    if (newLanguage){
+    if (newLanguage) {
       setLanguage(newLanguage);
     }
   }, [contentLanguage, uiLanguage, languages]);
 
-  
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (data && language && !isEmpty(source)){
+    if (data && language && !isEmpty(source)) {
       const lData = data[language];
 
       // In case of TAS we prefer PDF, otherwise HTML
       // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
-      if (lData && (!lData.pdf || !PDF.isTaas(source))) {
+      if (lData && (!lData.pdf || !isTaas(source))) {
         const id = checkRabashGroupArticles(source);
-  
+
         dispatch(actions.fetchAsset(`sources/${id}/${lData.html}`));
       }
     }
@@ -74,7 +76,7 @@ const LibraryContentContainer = (props) => {
       downloadAllowed={downloadAllowed}
     />
   );
-}
+};
 
 LibraryContentContainer.propTypes = {
   source: PropTypes.string,

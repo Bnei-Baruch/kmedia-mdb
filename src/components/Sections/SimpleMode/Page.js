@@ -1,10 +1,10 @@
-import React, { useRef, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import DayPicker from 'react-day-picker';
-import Navbar from 'react-day-picker/lib/src/Navbar';
+import Navbar from 'react-day-picker/lib/react-day-picker.min';
 import MomentLocaleUtils from 'react-day-picker/moment';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Button, Card, Container, Divider, Grid, Input } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES } from '../../../helpers/consts';
@@ -17,7 +17,7 @@ import DropdownLanguageSelector from '../../Language/Selector/DropdownLanguageSe
 import YearMonthForm from '../../Filters/components/Date/YearMonthForm';
 import SimpleModeList from './list';
 import { getOptions } from '../../../helpers/language';
-import { DeviceInfoContext } from "../../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const changeDay = (amount, selectedDate, onDayClick) => {
   const newDate = moment(selectedDate).add(amount, 'd').toDate();
@@ -119,16 +119,12 @@ const LocaleDateFormat = moment.localeData().longDateFormat('L');
 const ToDay            = today().toDate();
 
 const SimpleModePage = (props) => {
-  const
-    {
-      selectedDate = new Date(),
-      t,
-      uiLanguage,
-      onDayClick,
-    } = props;
+  const { t } = useTranslation('common', { useSuspense: false });
 
-  const [isClient, setIsClient]   = useState(false);
-  const [data, setData]           = useState({
+  const { selectedDate = new Date(), uiLanguage, onDayClick } = props;
+
+  const [isClient, setIsClient]        = useState(false);
+  const [data, setData]                = useState({
     selected: ToDay,
     selectedDate,
     selectedToString: moment(ToDay).format('YYYY-MM-DD'),
@@ -138,8 +134,8 @@ const SimpleModePage = (props) => {
       selected: selectedDate,
     },
   });
-  const [languages, setLanguages] = useState([]);
-  const nativeDateInput           = useRef(null);
+  const [languages, setLanguages]      = useState([]);
+  const nativeDateInput                = useRef(null);
   const { isMobileDevice, deviceInfo } = useContext(DeviceInfoContext);
   useEffect(() => {
     setIsClient(typeof window !== 'undefined');
@@ -184,7 +180,7 @@ const SimpleModePage = (props) => {
         captionElement={() => null}
         navbarElement={props => getNavBarElement(props, uiLanguage, onDayClick)}
       />
-      <Button className="inline-button" onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
+      <Button onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
     </Card>;
   };
 
@@ -245,11 +241,10 @@ SimpleModePage.propTypes = {
   err: shapes.Error,
   uiLanguage: PropTypes.string.isRequired,
   language: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
   renderUnit: PropTypes.func.isRequired,
   onDayClick: PropTypes.func.isRequired,
   onLanguageChange: PropTypes.func.isRequired,
   blinkLangSelect: PropTypes.bool.isRequired,
 };
 
-export default withNamespaces()(SimpleModePage);
+export default SimpleModePage;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
@@ -16,7 +16,7 @@ import { selectors as settings } from '../../../../../redux/modules/settings';
 import { isEmpty } from '../../../../../helpers/utils';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 
-class AVBox extends Component {
+class AVBoxOriginal extends Component {
   static contextType = DeviceInfoContext;
   static propTypes   = {
     unit: shapes.ContentUnit,
@@ -33,16 +33,14 @@ class AVBox extends Component {
 
   static getMediaType = (location) => {
     const preferredMT = playerHelper.restorePreferredMediaType();
-    const mediaType   = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-
-    return mediaType;
+    return playerHelper.getMediaTypeFromQuery(location, preferredMT);
   };
 
   constructor(props) {
     super(props);
     const { uiLanguage, contentLanguage, location, history, unit } = props;
 
-    const mediaType      = AVBox.getMediaType(location);
+    const mediaType      = AVBoxOriginal.getMediaType(location);
     const playerLanguage = playerHelper.getLanguageFromQuery(location, contentLanguage);
     const playableItem   = playerHelper.playableItem(unit, mediaType, uiLanguage, playerLanguage);
 
@@ -114,12 +112,12 @@ class AVBox extends Component {
     const { language: playerLanguage }   = playableItem;
 
     if (!mediaType) {
-      mediaType = AVBox.getMediaType(location);
+      mediaType = AVBoxOriginal.getMediaType(location);
     }
 
     const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
     const newPlayableItem = playerHelper.playableItem(unit, mediaType, uiLanguage, newItemLanguage);
-    
+
     if (!isEqual(playableItem, newPlayableItem)) {
       this.setState({ playableItem: newPlayableItem, newItemLanguage });
     }
@@ -184,9 +182,17 @@ class AVBox extends Component {
   }
 }
 
+const Extended = withTranslation()(AVBoxOriginal);
+
+class AVBox extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
 const mapState = state => ({
   uiLanguage: settings.getLanguage(state.settings),
   contentLanguage: settings.getContentLanguage(state.settings),
 });
 
-export default withRouter(connect(mapState)(withNamespaces()(AVBox)));
+export default withRouter(connect(mapState)(AVBox));

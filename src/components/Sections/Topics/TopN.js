@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import produce from 'immer';
 import { Button, Header, Table } from 'semantic-ui-react';
 
@@ -9,7 +9,8 @@ import { isNotEmptyArray } from '../../../helpers/utils';
 import * as renderUnitHelper from '../../../helpers/renderUnitHelper';
 import * as shapes from '../../shapes';
 
-const TopN = ({ units, N, sectionCount, section, topicUrl, t }) => {
+const TopN = ({ units, N, sectionCount, section, topicUrl }) => {
+  const { t } = useTranslation('common', { useSuspense: false });
   const [topNUnits, setTopNUnits]         = useState([]);
   const [buttonVisible, setButtonVisible] = useState(true);
 
@@ -79,7 +80,7 @@ const renderTable = (topNUnits, section, url, t) => {
   );
 };
 
-const renderUnit = (unit, t) => 
+const renderUnit = (unit, t) =>
   (
     <Table.Row key={unit.id} verticalAlign="top">
       <Table.Cell>
@@ -95,9 +96,8 @@ TopN.propTypes = {
   N: PropTypes.number.isRequired,
   sectionCount: PropTypes.number.isRequired,
   topicUrl: PropTypes.string,
-  t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(TopN);
+export default TopN;
 
 

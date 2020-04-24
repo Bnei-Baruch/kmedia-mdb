@@ -4,7 +4,7 @@ import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import isEqual from 'react-fast-compare';
 
 import { getQuery, updateQuery } from '../../../helpers/url';
@@ -15,9 +15,9 @@ import { actions, selectors } from '../../../redux/modules/simpleMode';
 import * as shapes from '../../shapes';
 import Page from './Page';
 import { groupOtherMediaByType, renderCollection } from './RenderListHelpers';
-import { DeviceInfoContext } from "../../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
-class SimpleModeContainer extends Component {
+class SimpleModeContainerOriginal extends Component {
   static contextType = DeviceInfoContext;
 
   static propTypes = {
@@ -126,7 +126,7 @@ class SimpleModeContainer extends Component {
 
   render() {
     const { filesLanguage: language, blinkLangSelect, date: selectedDate } = this.state;
-    const pageProps = {
+    const pageProps                                                        = {
       ...this.props,
       selectedDate,
       language,
@@ -160,4 +160,12 @@ export const mapDispatch = dispatch => (
   }, dispatch)
 );
 
-export default withRouter(connect(mapState, mapDispatch)(withNamespaces()(SimpleModeContainer)));
+const Extended = withTranslation()(SimpleModeContainerOriginal);
+
+class SimpleModeContainer extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default withRouter(connect(mapState, mapDispatch)(SimpleModeContainer));

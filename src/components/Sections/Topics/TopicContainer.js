@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import produce from 'immer';
 import debounce from 'lodash/debounce';
 import { connect } from 'react-redux';
@@ -29,7 +29,7 @@ import {
   subroot will be subtitle
   the rest will be a tree - List of Lists */
 
-class TopicContainer extends Component {
+class TopicContainerOriginal extends Component {
   static propTypes = {
     roots: PropTypes.arrayOf(PropTypes.string),
     byId: PropTypes.object,
@@ -305,6 +305,14 @@ class TopicContainer extends Component {
   }
 }
 
+const Extended = withTranslation()(TopicContainerOriginal);
+
+class TopicContainer extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
 export default connect(
   (state) => {
     let stats = statsSelectors.getCUStats(state.stats, 'topics') || { data: { tags: {} } };
@@ -319,4 +327,4 @@ export default connect(
   dispatch => bindActionCreators({
     fetchStats: topicsActions.fetchStats
   }, dispatch)
-)(withNamespaces()(TopicContainer));
+)(TopicContainer);

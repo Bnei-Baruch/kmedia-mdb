@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Container, Divider, Table } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
@@ -94,19 +94,18 @@ const UnitListPage = (props) => {
     {
       namespace,
       items = [],
-      wip = false,
-      err = null,
+      wip   = false,
+      err   = null,
       pageNo,
       total,
       pageSize,
       language,
-      t,
       onPageChange,
       onFiltersChanged,
       onFiltersHydrated,
       renderUnit
-    } = props;
-
+    }           = props;
+  const { t }   = useTranslation('common', { useSuspense: false });
   const content = WipErr({ wip, err, t }) || (
     <div>
       <Container className="padded">
@@ -156,7 +155,7 @@ const UnitListPage = (props) => {
       {content}
     </div>
   );
-}
+};
 
 UnitListPage.propTypes = {
   namespace: PropTypes.string.isRequired,
@@ -167,11 +166,10 @@ UnitListPage.propTypes = {
   total: PropTypes.number.isRequired,
   pageSize: PropTypes.number.isRequired,
   language: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
   onPageChange: PropTypes.func.isRequired,
   onFiltersChanged: PropTypes.func.isRequired,
   onFiltersHydrated: PropTypes.func.isRequired,
   renderUnit: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(UnitListPage);
+export default UnitListPage;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { TOPICS_FOR_DISPLAY } from '../../../helpers/consts';
@@ -32,17 +32,15 @@ const buildNode = (id, getTagById, cuStats) => {
 };
 
 const TagsFilter = (props) => {
+  const { t }      = useTranslation('common', { useSuspense: false });
   const roots      = useSelector(state => selectors.getRoots(state.tags));
   const getTagById = useSelector(state => selectors.getTagById(state.tags));
-
-  let cuStats = useSelector(state => stats.getCUStats(state.stats, props.namespace)) || { data: { tags: {} } };
-  cuStats     = isEmpty(cuStats) || isEmpty(cuStats.data) ? null : cuStats.data.tags;
-
-  const { t } = props;
+  let cuStats      = useSelector(state => stats.getCUStats(state.stats, props.namespace)) || { data: { tags: {} } };
+  cuStats          = isEmpty(cuStats) || isEmpty(cuStats.data) ? null : cuStats.data.tags;
 
   const tree = getTree(roots, getTagById, cuStats, t);
 
-  return <HierarchicalFilter name="topics-filter" tree={tree} {...props} />;
+  return <HierarchicalFilter name="topics-filter" tree={tree} {...props} t={t} />;
 };
 
-export default withNamespaces()(TagsFilter);
+export default TagsFilter;

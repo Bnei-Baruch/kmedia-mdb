@@ -1,7 +1,7 @@
 // full ES2015+ environment (no < Stage 4 proposals)
-import "core-js/stable";
-import "core-js/proposals/url";
-import "regenerator-runtime/runtime";
+import 'core-js/stable';
+import 'core-js/proposals/url';
+import 'regenerator-runtime/runtime';
 
 import moment from 'moment';
 import 'moment/locale/he';
@@ -16,9 +16,10 @@ import ReactDOM from 'react-dom';
 import ReactGA from 'react-ga';
 import { createBrowserHistory } from 'history';
 import { HelmetProvider } from 'react-helmet-async';
+import i18n from 'i18next';
 
 import { DEFAULT_LANGUAGE, LANG_UKRAINIAN } from './helpers/consts';
-import i18n from './helpers/i18nnext';
+import initI18n from './helpers/i18nnext';
 import createStore from './redux/createStore';
 import { actions as mdb } from './redux/modules/mdb';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -38,6 +39,9 @@ const i18nData = window.__i18n || {};
 // Initialize moment global locale to default language
 const language = i18nData.initialLanguage ?? DEFAULT_LANGUAGE;
 moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
+i18n.init({
+  lng: language,
+});
 
 const deviceInfo = new UAParser().getResult();
 
@@ -45,7 +49,7 @@ ReactDOM.hydrate(
   <React.StrictMode>
     <ErrorBoundary>
       <HelmetProvider>
-        <App i18n={i18n} store={store} history={history} deviceInfo={deviceInfo} {...i18nData} />
+        <App i18n={initI18n} store={store} history={history} deviceInfo={deviceInfo} {...i18nData} />
       </HelmetProvider>
     </ErrorBoundary>
   </React.StrictMode>,

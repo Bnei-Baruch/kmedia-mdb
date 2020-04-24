@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
 import * as shapes from '../../../../../shapes';
@@ -10,7 +10,8 @@ import WipErr from '../../../../../shared/WipErr/WipErr';
 import Share from '../../../../Library/Share';
 import { isLanguageRtl } from '../../../../../../helpers/i18n-utils';
 
-export const BlogPostPage = ({ post = null, wip = false, err = null, t, language }) => {
+export const BlogPostPage = ({ post = null, wip = false, err = null, language }) => {
+  const { t }  = useTranslation('common', { useSuspense: false });
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) {
     return wipErr;
@@ -75,7 +76,6 @@ BlogPostPage.propTypes = {
   wip: shapes.WIP,
   err: shapes.Error,
   language: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(BlogPostPage);
+export default BlogPostPage;

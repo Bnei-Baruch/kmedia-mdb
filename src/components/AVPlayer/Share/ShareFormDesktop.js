@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Form, Message, Popup } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import BaseShareForm from './BaseShareForm';
 import ShareBar from './ShareBar';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
-class ShareFormDesktop extends BaseShareForm {
+class ShareFormDesktopOriginal extends BaseShareForm {
   static propTypes = {
     onExit: PropTypes.func.isRequired,
   };
@@ -59,17 +59,17 @@ class ShareFormDesktop extends BaseShareForm {
           icon="chevron left"
           onClick={onExit}
         />
-        <ShareBar url={url} embedContent={ShareFormDesktop.getEmbed(uiLangUrl)} t={t} buttonSize="medium"/>
+        <ShareBar url={url} embedContent={ShareFormDesktopOriginal.getEmbed(uiLangUrl)} t={t} buttonSize="medium" />
         <div className="mediaplayer__onscreen-share-form">
           <div className="mediaplayer__onscreen-share-bar">
-            <Message content={url} size="mini"/>
+            <Message content={url} size="mini" />
             <Popup
               open={isCopyPopupOpen}
               content={t('messages.link-copied-to-clipboard')}
               position="bottom right"
               trigger={(
                 <CopyToClipboard text={url} onCopy={this.handleCopied}>
-                  <Button className="shareCopyLinkButton" size="mini" content={t('buttons.copy')}/>
+                  <Button className="shareCopyLinkButton" size="mini" content={t('buttons.copy')} />
                 </CopyToClipboard>
               )}
             />
@@ -114,4 +114,12 @@ class ShareFormDesktop extends BaseShareForm {
   }
 }
 
-export default withNamespaces()(ShareFormDesktop);
+const Extended = withTranslation()(ShareFormDesktopOriginal);
+
+class ShareFormDesktop extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default ShareFormDesktop;

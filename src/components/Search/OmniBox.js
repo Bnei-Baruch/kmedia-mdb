@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push as routerPush } from 'connected-react-router';
@@ -18,7 +18,7 @@ import { actions, selectors } from '../../redux/modules/search';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
 
-export class OmniBox extends Component {
+export class OmniBoxOriginal extends Component {
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
     autocomplete: PropTypes.func.isRequired,
@@ -237,4 +237,12 @@ export const mapDispatch = dispatch => bindActionCreators({
 
 export const wrap = (WrappedComponent, ms = mapState, md = mapDispatch) => connect(ms, md)(WrappedComponent);
 
-export default wrap(withNamespaces()(OmniBox));
+const Extended = withTranslation()(OmniBoxOriginal);
+
+export class OmniBox extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default wrap(OmniBox);

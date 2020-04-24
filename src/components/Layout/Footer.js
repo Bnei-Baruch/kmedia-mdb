@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Container, Grid, Header, Button } from 'semantic-ui-react';
+import { Button, Container, Grid, Header } from 'semantic-ui-react';
 import { getRSSLinkByLang } from '../../helpers/utils';
 import { selectors as settings } from '../../redux/modules/settings';
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
-const Footer = ({ t }) => {
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const year = new Date().getFullYear();
+const Footer = () => {
+  const { t }              = useTranslation('common', { useSuspense: false });
+  const language           = useSelector(state => settings.getLanguage(state.settings));
+  const year               = new Date().getFullYear();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   return (
@@ -44,9 +44,5 @@ const Footer = ({ t }) => {
   );
 };
 
-Footer.propTypes = {
-  t: PropTypes.func.isRequired,
-};
-
-export default withNamespaces()(Footer);
+export default Footer;
 

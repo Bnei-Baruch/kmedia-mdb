@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
 
 import { assetUrl } from '../../../../../../helpers/Api';
@@ -11,7 +11,7 @@ import { formatError, tracePath } from '../../../../../../helpers/utils';
 import * as shapes from '../../../../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash/Splash';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
-import PDF from '../../../../../shared/PDF/PDF';
+import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
 
 const getSourceLanguages = (idx, uiLanguage, contentLanguage) => {
   if (!idx || !idx.data) {
@@ -33,7 +33,7 @@ const changeContent = ({ selected, language, unit, indexMap, onContentChange, is
     onContentChange(null, null, derived.id);
   } else if (indexMap[selected] && indexMap[selected].data) {
     const data = indexMap[selected].data[language];
-    if (data.pdf && PDF.isTaas(selected)) {
+    if (data.pdf && isTaas(selected)) {
       // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
       return;
     }
@@ -102,11 +102,11 @@ const getKiteiMakorFiles = (unit, ktCUID) => {
 };
 
 const myReplaceState = (nextProps, uiLanguage) => {
-  const options                  = getSourceOptions(nextProps);
-  const available                = options.filter(x => !x.disabled);
-  const selected                 = (available.length > 0) ? available[0].value : null;
-  const isMakor                  = checkIsMakor(options, selected);
-  const ktFiles                  = getKiteiMakorFiles(nextProps.unit);
+  const options   = getSourceOptions(nextProps);
+  const available = options.filter(x => !x.disabled);
+  const selected  = (available.length > 0) ? available[0].value : null;
+  const isMakor   = checkIsMakor(options, selected);
+  const ktFiles   = getKiteiMakorFiles(nextProps.unit);
 
   const { unit, indexMap, contentLanguage, onContentChange } = nextProps;
 
@@ -118,7 +118,7 @@ const myReplaceState = (nextProps, uiLanguage) => {
   return { options, languages, language, selected, isMakor };
 };
 
-class Sources extends Component {
+class SourcesOriginal extends Component {
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     indexMap: PropTypes.objectOf(shapes.DataWipErr).isRequired,
@@ -218,8 +218,8 @@ class Sources extends Component {
       return <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
     }
 
-    const isTaas     = PDF.isTaas(selected);
-    const startsFrom = PDF.startsFrom(selected);
+    const taas     = isTaas(selected);
+    const starts = startsFrom(selected);
     let pdfFile;
 
     if (isTaas && indexMap[selected] && indexMap[selected].data) {
@@ -246,8 +246,8 @@ class Sources extends Component {
       }
     } else if (contentWip) {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-    } else if (isTaas && pdfFile) {
-      contents = <PDF pdfFile={assetUrl(`sources/${selected}/${pdfFile}`)} pageNumber={1} startsFrom={startsFrom} />;
+    } else if (taas && pdfFile) {
+      contents = <PDF pdfFile={assetUrl(`sources/${selected}/${pdfFile}`)} pageNumber={1} startsFrom={starts} />;
     } else {
       const direction = getLanguageDirection(uiLanguage);
       contents        = <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: contentData }} />;
@@ -290,4 +290,12 @@ class Sources extends Component {
   }
 }
 
-export default withNamespaces()(Sources);
+const Extended = withTranslation()(SourcesOriginal);
+
+class Sources extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default Sources;

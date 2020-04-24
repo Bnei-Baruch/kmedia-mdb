@@ -2,7 +2,7 @@ import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
 import { push } from 'connected-react-router';
 import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
@@ -21,7 +21,7 @@ import Footer from './Footer';
 import TopMost from './TopMost';
 import DonateNow from './DonateNow';
 import Logo from '../../images/icons/Logo';
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 const RenderHeaderSearch = React.forwardRef(({ t, location }, headerSearchElement) => (
   <div ref={headerSearchElement}>
@@ -51,7 +51,7 @@ const showSearchButtonElement = createRef();
 
 const headerSearchElement = createRef();
 
-class Layout extends Component {
+class LayoutOriginal extends Component {
   static contextType = DeviceInfoContext;
 
   static propTypes = {
@@ -162,9 +162,17 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location, route, language, contentLanguage, setContentLanguage, push } = this.props;
-    const { sidebarActive, embed, isShowHeaderSearch }                                = this.state;
-    const { isMobileDevice }                                                          = this.context;
+    const
+      {
+        t, tReady, location, route, language, contentLanguage,
+        setContentLanguage, push
+      }                                                = this.props;
+    const { sidebarActive, embed, isShowHeaderSearch } = this.state;
+    const { isMobileDevice }                           = this.context;
+
+    if (!tReady) {
+      return null;
+    }
 
     const showSearch = shouldShowSearch(location);
 
@@ -283,6 +291,14 @@ class Layout extends Component {
   }
 }
 
+const Extended = withTranslation()(LayoutOriginal);
+
+class Layout extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
 export default connect(
   state => ({
     language: settings.getLanguage(state.settings),
@@ -292,4 +308,4 @@ export default connect(
     setContentLanguage: actions.setContentLanguage,
     push
   }
-)(withNamespaces()(Layout));
+)(Layout);

@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Button, Form, Input, Popup } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import BaseShareForm from './BaseShareForm';
 import ShareBar from './ShareBar';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
-class ShareFormMobile extends BaseShareForm {
+class ShareFormMobileOriginal extends BaseShareForm {
   constructor(props) {
     super(props);
     this.setStart              = this.setStart.bind(this);
@@ -42,7 +42,7 @@ class ShareFormMobile extends BaseShareForm {
 
     return (
       <div className="mediaplayer__onscreen-share">
-        <ShareBar url={url} buttonSize="medium"/>
+        <ShareBar url={url} buttonSize="medium" />
         <div className="mediaplayer__onscreen-share-form">
           <div className="mediaplayer__onscreen-share-bar-mobile">
             <Input
@@ -58,7 +58,7 @@ class ShareFormMobile extends BaseShareForm {
               trigger={
                 (
                   <CopyToClipboard text={url} onCopy={this.handleCopied}>
-                    <Button className="mobileShareCopyLinkButton" content={t('buttons.copy')}/>
+                    <Button className="mobileShareCopyLinkButton" content={t('buttons.copy')} />
                   </CopyToClipboard>
                 )
               }
@@ -104,4 +104,12 @@ class ShareFormMobile extends BaseShareForm {
   }
 }
 
-export default withNamespaces()(ShareFormMobile);
+const Extended = withTranslation()(ShareFormMobileOriginal);
+
+class ShareFormMobile extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default ShareFormMobile;

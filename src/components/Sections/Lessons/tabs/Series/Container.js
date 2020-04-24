@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Container, Divider, Header, List } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../../../../helpers/links';
@@ -31,7 +30,8 @@ const renderTree = (nodes, level) => (
   );
 });
 
-const SeriesContainer = ({ fetchAll, t }) => {
+const SeriesContainer = () => {
+  const { t }    = useTranslation('common', { useSuspense: false });
   const bySource = useSelector(state => selectors.getSeriesBySource(state.lessons, state.mdb, state.sources)) || [];
   const language = useSelector(state => settings.getLanguage(state.settings));
   const wip      = useSelector(state => selectors.getWip(state.lessons).series);
@@ -60,8 +60,4 @@ const SeriesContainer = ({ fetchAll, t }) => {
   );
 };
 
-SeriesContainer.propTypes = {
-  t: PropTypes.func.isRequired,
-};
-
-export default withNamespaces()(SeriesContainer);
+export default SeriesContainer;

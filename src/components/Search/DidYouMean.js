@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Container } from 'semantic-ui-react';
 
-const DidYouMean = ({typo_suggest, t}) => {
-  if (!typo_suggest){
+const DidYouMean = ({ typo_suggest }) => {
+  const { t } = useTranslation('common', { useSuspense: false });
+
+  if (!typo_suggest) {
     return null;
   }
-  const to = `?q=${typo_suggest}`;
+
+  const to            = `?q=${typo_suggest}`;
   const didYouMeanStr = t('search.didYouMean');
 
   return (
@@ -20,7 +23,6 @@ const DidYouMean = ({typo_suggest, t}) => {
 
 DidYouMean.propTypes = {
   typo_suggest: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(DidYouMean);
+export default DidYouMean;

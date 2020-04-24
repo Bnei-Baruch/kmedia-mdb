@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import identity from 'lodash/identity';
-import { Menu, Sidebar, Button } from 'semantic-ui-react';
+import { Button, Menu, Sidebar } from 'semantic-ui-react';
 
-import { getRSSLinkByLang, getPodcastLinkByLang } from '../../helpers/utils';
+import { getPodcastLinkByLang, getRSSLinkByLang } from '../../helpers/utils';
 import NavLink from '../Language/MultiLanguageNavLink';
 import DonateNow from './DonateNow';
 import FeedBurner from './FeedBurner';
@@ -25,7 +25,8 @@ const ITEMS = [
   // 'design2',
 ];
 
-const MenuItems = ({ simple, visible, t, onItemClick, language }) => {
+const MenuItems = ({ simple = false, visible = false, onItemClick = identity, language }) => {
+  const { t } = useTranslation('common', { useSuspense: false });
   const items = ITEMS.map(x => (
     <Menu.Item
       key={x}
@@ -89,15 +90,8 @@ const MenuItems = ({ simple, visible, t, onItemClick, language }) => {
 MenuItems.propTypes = {
   simple: PropTypes.bool,
   visible: PropTypes.bool,
-  t: PropTypes.func.isRequired,
   onItemClick: PropTypes.func,
   language: PropTypes.string.isRequired,
 };
 
-MenuItems.defaultProps = {
-  simple: false,
-  visible: false,
-  onItemClick: identity
-};
-
-export default withNamespaces()(MenuItems);
+export default MenuItems;
