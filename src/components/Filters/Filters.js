@@ -43,12 +43,13 @@ class Filters extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { namespace, language, filters, rightItems, filtersData, sqDataWipErr } = this.props;
+    const { namespace, language, contentLanguage, filters, rightItems, filtersData, sqDataWipErr } = this.props;
     const { activeFilter }                                                        = this.state;
 
     return (activeFilter !== nextState.activeFilter
       || namespace !== nextProps.namespace
       || language !== nextProps.language
+      || contentLanguage !== nextProps.contentLanguage
       || sqDataWipErr !== nextProps.sqDataWipErr
       || !isEqual(filters, nextProps.filters)
       || !isEqual(rightItems, nextProps.rightItems)
@@ -80,10 +81,10 @@ class Filters extends Component {
   };
 
   renderFilters = (store, langDir, popupStyle) => {
-    const { filters, namespace, t, filtersData, language } = this.props;
-    const { activeFilter }                                 = this.state;
+    const { filters, namespace, t, filtersData, language, contentLanguage } = this.props;
+    const { activeFilter }                                                  = this.state;
 
-    return filters.filter(x => filterMediaLanguageFilter(x, language)).map((item) => {
+    return filters.filter(x => filterMediaLanguageFilter(x, contentLanguage)).map((item) => {
       const { component: FilterComponent, name } = item;
 
       const isActive = name === activeFilter;
@@ -214,6 +215,7 @@ export default connect(
   (state, ownProps) => ({
     filtersData: selectors.getNSFilters(state.filters, ownProps.namespace),
     language: settings.getLanguage(state.settings),
+    contentLanguage: settings.getContentLanguage(state.settings),
 
     // DO NOT REMOVE, this triggers a necessary re-render for filter tags
     sqDataWipErr: mdb.getSQDataWipErr(state.mdb),
