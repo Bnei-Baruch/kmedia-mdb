@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container, Grid } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
@@ -13,7 +13,7 @@ import MediaDownloads from './widgets/Downloads/MediaDownloads';
 import SameCollection from './widgets/Recommended/SameCollection/Container';
 import playerHelper from '../../../helpers/player';
 
-export class UnitPage extends Component {
+export class UnitPageOriginal extends Component {
   static propTypes = {
     unit: shapes.ContentUnit,
     wip: shapes.WIP,
@@ -32,10 +32,10 @@ export class UnitPage extends Component {
     location: {}
   };
 
-  constructor(props){
+  constructor(props) {
     super(props);
     const { location } = props;
-    this.state = { embed: playerHelper.getEmbedFromQuery(location) };
+    this.state         = { embed: playerHelper.getEmbedFromQuery(location) };
   }
 
   renderHelmet() {
@@ -131,6 +131,17 @@ export class UnitPage extends Component {
   }
 }
 
-export const wrap = WrappedComponent => withNamespaces()(WrappedComponent);
+export const wrap = WrappedComponent => props => {
+  const Extended = withTranslation()(WrappedComponent);
+  return <Extended useSuspense={false} {...props} />;
+};
 
-export default wrap(UnitPage);
+const Extended = withTranslation()(UnitPageOriginal);
+
+export class UnitPage extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default UnitPage;

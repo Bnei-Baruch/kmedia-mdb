@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Header, Icon, Popup } from 'semantic-ui-react';
 
 import * as shapes from '../shapes';
 import UILanguage from './UILanguage';
 import ContentLanguage from './ContentLanguage';
 import { getLanguageDirection } from '../../helpers/i18n-utils';
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
-class HandleLanguages extends Component {
+class HandleLanguagesOriginal extends Component {
   static contextType = DeviceInfoContext;
 
   static propTypes = {
@@ -37,10 +37,10 @@ class HandleLanguages extends Component {
 
   render() {
     const { t, language, location, contentLanguage, setContentLanguage, push } = this.props;
-    const { isActive } = this.state;
-    const { isMobileDevice } = this.context;
+    const { isActive }                                                         = this.state;
+    const { isMobileDevice }                                                   = this.context;
 
-    const langDir      = getLanguageDirection(language);
+    const langDir = getLanguageDirection(language);
 
     const popupStyle = {
       direction: langDir,
@@ -108,4 +108,12 @@ class HandleLanguages extends Component {
   }
 }
 
-export default withNamespaces()(HandleLanguages);
+const Extended = withTranslation()(HandleLanguagesOriginal);
+
+class HandleLanguages extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default HandleLanguages;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import moment from 'moment';
 import scrollIntoView from 'scroll-into-view';
-import Navbar from 'react-day-picker/lib/src/Navbar';
+import Navbar from 'react-day-picker/lib/react-day-picker.min';
 import MomentLocaleUtils, { formatDate } from 'react-day-picker/moment';
 import { Input, Popup, Label } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
@@ -131,7 +131,7 @@ class FastDayPicker extends Component {
   }
 
   handleDateInputChange = (event, data) => {
-    const { onDayChange } = this.props;    
+    const { onDayChange } = this.props;
     const day = moment(data.value, this.localeDateFormatShort, true);
     if (day.isValid()) {
       onDayChange(day.toDate());

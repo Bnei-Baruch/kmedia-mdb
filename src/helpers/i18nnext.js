@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import backend from 'i18next-xhr-backend';
+import { initReactI18next } from 'react-i18next';
 import moment from 'moment';
 import 'moment/locale/he';
 import 'moment/locale/ru';
@@ -15,6 +16,8 @@ const LOCALES_BACKEND = process.env.REACT_APP_LOCALES_BACKEND;
 
 export const options = {
   load: 'languageOnly',
+
+  lng: DEFAULT_LANGUAGE,
   fallbackLng: DEFAULT_LANGUAGE,
 
   // have a common namespace used around the full app
@@ -22,6 +25,10 @@ export const options = {
   defaultNS: 'common',
 
   debug: false,
+
+  react: {
+    useSuspense: false,
+  },
 
   interpolation: {
     escapeValue: false, // not needed for react!!
@@ -35,6 +42,7 @@ export const options = {
 // instance for client side
 i18n
   .use(backend)
+  .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     ...options,
     backend: {
@@ -43,7 +51,7 @@ i18n
     },
 
     react: {
-      wait: true, // globally set to wait for loaded translations in withNamespaces hoc
+      wait: true, // globally set to wait for loaded translations in withTranslation hoc
     },
   });
 

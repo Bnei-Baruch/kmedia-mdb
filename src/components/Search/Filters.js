@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Button, Dropdown, Icon, Menu } from 'semantic-ui-react';
@@ -10,7 +10,7 @@ import { actions, selectors } from '../../redux/modules/filters';
 import * as shapes from '../shapes';
 import Filters from '../Filters/Filters';
 import filterComponents from '../Filters/components';
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 const filters = [
   {
@@ -31,9 +31,9 @@ const filters = [
   },
 ];
 
-class SearchResultsFilters extends Component {
+class SearchResultsFiltersOriginal extends Component {
   static contextType = DeviceInfoContext;
-  static propTypes = {
+  static propTypes   = {
     location: shapes.HistoryLocation.isRequired,
     sortBy: PropTypes.string.isRequired,
     onSortByChange: PropTypes.func.isRequired,
@@ -182,6 +182,14 @@ class SearchResultsFilters extends Component {
   }
 }
 
+const Extended = withTranslation()(SearchResultsFiltersOriginal);
+
+class SearchResultsFilters extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
 export default connect(
   state => ({
     filtersValues: selectors.getNSFilters(state.filters, 'search') || {},
@@ -189,4 +197,4 @@ export default connect(
   dispatch => bindActionCreators({
     setFilterValue: actions.setFilterValue
   }, dispatch)
-)(withNamespaces()(SearchResultsFilters));
+)(SearchResultsFilters);

@@ -5,7 +5,7 @@ import debounce from 'lodash/debounce';
 import { withRouter } from 'react-router-dom';
 import { Player, utils, withMediaProps } from 'react-media-player';
 import enableInlineVideo from 'iphone-inline-video';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { Button, Icon } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
@@ -42,7 +42,7 @@ const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = playback => parseFloat(playback.slice(0, -1));
 
-class AVPlayer extends Component {
+class AVPlayerOriginal extends Component {
   static contextType = DeviceInfoContext;
 
   static propTypes = {
@@ -152,7 +152,7 @@ class AVPlayer extends Component {
     }
 
     if (playerMode === PLAYER_MODE.SLICE_VIEW) {
-      const newState = AVPlayer.getSliceModeState(media, playerMode, {
+      const newState = AVPlayerOriginal.getSliceModeState(media, playerMode, {
         sliceStart: sstart,
         sliceEnd: send
       }, this.state);
@@ -181,7 +181,7 @@ class AVPlayer extends Component {
       browserName,
       firstSeek: true,
       item,
-      ...AVPlayer.chooseSource(this.props)
+      ...AVPlayerOriginal.chooseSource(this.props)
     });
 
     // Bug fix for IE and Edge + Auto play for IE and Edge
@@ -201,7 +201,7 @@ class AVPlayer extends Component {
         errorReason: '',
         firstSeek: true,
         item: item,
-        ...AVPlayer.chooseSource(this.props),
+        ...AVPlayerOriginal.chooseSource(this.props),
       });
     }
   }
@@ -349,7 +349,7 @@ class AVPlayer extends Component {
 
   activatePersistence = () => {
     const { media } = this.props;
-    this.setState({ persistenceFn: AVPlayer.persistVolume });
+    this.setState({ persistenceFn: AVPlayerOriginal.persistVolume });
     let persistedVolume = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
     if (persistedVolume == null || Number.isNaN(Number.parseInt(persistedVolume, 10))) {
       persistedVolume = DEFAULT_PLAYER_VOLUME.toString();
@@ -360,7 +360,7 @@ class AVPlayer extends Component {
 
   setSliceMode = (mode, properties = {}) => {
     const { media, onMediaEditModeChange } = this.props;
-    const state                            = AVPlayer.getSliceModeState(media, mode, properties, this.state);
+    const state                            = AVPlayerOriginal.getSliceModeState(media, mode, properties, this.state);
     this.setState(state);
 
     onMediaEditModeChange(mode);
@@ -593,6 +593,7 @@ class AVPlayer extends Component {
         uiLanguage,
         requestedLanguage,
         t,
+        tReady,
         showNextPrev,
         hasNext,
         hasPrev,
@@ -623,6 +624,10 @@ class AVPlayer extends Component {
     const forceShowControls  = item.mediaType === MT_AUDIO || !isPlaying || isEditMode;
     const fallbackMedia      = item.mediaType !== item.requestedMediaType;
     const isRtl              = isLanguageRtl(uiLanguage);
+
+    if (tReady === false) {
+      return null;
+    }
 
     let centerMediaControl;
     if (error) {
@@ -782,4 +787,12 @@ class AVPlayer extends Component {
   }
 }
 
-export default withNamespaces()(withMediaProps(withRouter(AVPlayer)));
+const Extended = withTranslation()(AVPlayerOriginal);
+
+class AVPlayer extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default withMediaProps(withRouter(AVPlayer));

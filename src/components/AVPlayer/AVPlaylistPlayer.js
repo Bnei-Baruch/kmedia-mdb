@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { Media } from 'react-media-player';
 
@@ -8,11 +7,11 @@ import { MT_AUDIO } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import AVMobileCheck from './AVMobileCheck';
 import { getQuery } from '../../helpers/url';
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 class AVPlaylistPlayer extends Component {
   static contextType = DeviceInfoContext;
-  static propTypes = {
+  static propTypes   = {
     items: PropTypes.arrayOf(shapes.VideoItem).isRequired,
     selected: PropTypes.number.isRequired,
     language: PropTypes.string.isRequired,
@@ -23,10 +22,10 @@ class AVPlaylistPlayer extends Component {
     history: shapes.History.isRequired,
   };
 
-  constructor(props){
+  constructor(props) {
     super(props);
     const { history } = props;
-    let autoPlay = false;
+    let autoPlay      = false;
 
     if (history) {
       const query = getQuery(history.location);
@@ -125,7 +124,4 @@ class AVPlaylistPlayer extends Component {
   }
 }
 
-const mapState = () => ({
-});
-
-export default connect(mapState)(AVPlaylistPlayer);
+export default AVPlaylistPlayer;

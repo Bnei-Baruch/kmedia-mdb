@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
@@ -11,7 +11,7 @@ import playerHelper from '../../../../../helpers/player';
 import * as shapes from '../../../../shapes';
 import AVPlaylistPlayer from '../../../../AVPlayer/AVPlaylistPlayer';
 
-class PlaylistAVBox extends Component {
+class PlaylistAVBoxtOriginal extends Component {
   static propTypes = {
     history: shapes.History.isRequired,
     location: shapes.HistoryLocation.isRequired,
@@ -224,4 +224,12 @@ class PlaylistAVBox extends Component {
   }
 }
 
-export default withRouter(withNamespaces()(PlaylistAVBox));
+const Extended = withTranslation()(PlaylistAVBoxtOriginal);
+
+class PlaylistAVBox extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default withRouter(PlaylistAVBox);

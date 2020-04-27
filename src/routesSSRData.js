@@ -43,7 +43,7 @@ import * as assetsSagas from './sagas/assets';
 import * as tagsSagas from './sagas/tags';
 import * as publicationsSagas from './sagas/publications';
 import { getPageFromLocation } from './components/Pagination/withPagination';
-import PDF from './components/shared/PDF/PDF';
+import { isTaas } from './components/shared/PDF/PDF';
 
 import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
 import { tabs as lessonsTabs } from './components/Sections/Lessons/MainPage';
@@ -295,7 +295,7 @@ export const libraryPage = async (store, match) => {
       }
 
       if (data[language]) {
-        if (data[language].pdf && PDF.isTaas(sourceID)) {
+        if (data[language].pdf && isTaas(sourceID)) {
           return; // no need to fetch pdf. we don't do that on SSR
         }
 

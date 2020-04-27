@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
 import { Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../../../helpers/consts';
@@ -8,7 +7,6 @@ import { canonicalLink } from '../../../../../helpers/links';
 import { fromToLocalized } from '../../../../../helpers/date';
 import * as shapes from '../../../../shapes';
 import Link from '../../../../Language/MultiLanguageLink';
-
 
 const renderCollection = (collection) => {
   const localDate = fromToLocalized(collection.start_date, collection.end_date);
@@ -27,10 +25,10 @@ const renderCollection = (collection) => {
   );
 };
 
-const EventsList = ({ items = [], t }) => {
+const EventsList = ({ items = [] }) => {
   if (!Array.isArray(items) || items.length === 0) {
-    return null; 
-    /* no results message already returned by ResultsPageHeader, 
+    return null;
+    /* no results message already returned by ResultsPageHeader,
       so no need to return this <div>{t('events.no-matches')}</div>; */
   }
 
@@ -41,11 +39,10 @@ const EventsList = ({ items = [], t }) => {
       </Table.Body>
     </Table>
   );
-}
+};
 
 EventsList.propTypes = {
   items: PropTypes.arrayOf(shapes.EventCollection),
-  t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(EventsList);
+export default EventsList;

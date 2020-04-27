@@ -17,9 +17,9 @@ const catchLanguageChange = ({ language: newLanguage, setLanguage }) => {
 };
 
 const LanguageSetter = ({ language = DEFAULT_LANGUAGE, children }) => {
-  const currentLanguage = useSelector(state => selectors.getLanguage(state.settings));
   const dispatch        = useDispatch();
   const setLanguage     = useCallback(language => dispatch(actions.setLanguage(language)), [dispatch]);
+  const currentLanguage = useSelector(state => selectors.getLanguage(state.settings));
 
   useEffect(() => {
     // catch language change only on client

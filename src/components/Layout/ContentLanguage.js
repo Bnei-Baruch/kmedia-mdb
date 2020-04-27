@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Dropdown, Flag, Menu } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES, COOKIE_CONTENT_LANG, LANGUAGES } from '../../helpers/consts';
@@ -65,7 +65,8 @@ const MobileLanguage = ({ language, contentLanguage, location, push, t, setConte
   </select>
 );
 
-const ContentLanguage = ({ language, contentLanguage, setContentLanguage, location, push, t }) => {
+const ContentLanguage = ({ language, contentLanguage, setContentLanguage, location, push, }) => {
+  const { t } = useTranslation('common', { useSuspense: false });
   const { isMobileDevice } = useContext(DeviceInfoContext);
   return (
 	  <Menu secondary>
@@ -104,11 +105,7 @@ ContentLanguage.propTypes = {
   setContentLanguage: PropTypes.func.isRequired,
   // We need dependency on location in order to change Link every time url changes
   location: shapes.HistoryLocation.isRequired,
-  t: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(ContentLanguage);
-
-
-
+export default ContentLanguage;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Flag } from 'semantic-ui-react';
 import noop from 'lodash/noop';
 
@@ -7,7 +7,8 @@ import { LANGUAGES } from '../../../helpers/consts';
 import Link from '../MultiLanguageLink';
 import { getOptions } from '../../../helpers/language';
 
-const AnchorsLanguageSelector = ({ languages = [], onSelect = noop, t }) => {
+const AnchorsLanguageSelector = ({ languages = [], onSelect = noop }) => {
+  const { t }        = useTranslation('common', { useSuspense: false });
   const handleSelect = (e, lang) => {
     e.preventDefault();
     onSelect(e, lang);
@@ -32,4 +33,4 @@ const AnchorsLanguageSelector = ({ languages = [], onSelect = noop, t }) => {
   );
 };
 
-export default withNamespaces()(AnchorsLanguageSelector);
+export default AnchorsLanguageSelector;

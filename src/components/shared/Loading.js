@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { ErrorSplash, FrownSplash, LoadingSplash } from './Splash/Splash';
 
-const Loading = (props) => {
-  const { error = false, timedOut = false, pastDelay = false, retry = null, t } = props;
+const Loading = ({ error = false, timedOut = false, pastDelay = false, retry = null }) => {
+  const { t } = useTranslation('common', { useSuspense: false });
+
   if (error) {
     return <ErrorSplash text={t('messages.error')} item={<button onClick={retry} type="button">{t('messages.retry')}</button>} />;
   }
@@ -19,11 +20,10 @@ const Loading = (props) => {
 };
 
 Loading.propTypes = {
-  t: PropTypes.func.isRequired,
   error: PropTypes.bool,
   timedOut: PropTypes.bool,
   pastDelay: PropTypes.bool,
   retry: PropTypes.func,
 };
 
-export default withNamespaces()(Loading);
+export default Loading;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import debounce from 'lodash/debounce';
 import { withRouter } from 'react-router-dom';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Icon, Message } from 'semantic-ui-react';
 
 import { LANG_HEBREW, MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
@@ -32,7 +32,7 @@ const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = playback => parseFloat(playback.slice(0, -1));
 
-class AVPlayerMobile extends Component {
+class AVPlayerMobileOriginal extends Component {
   static contextType = DeviceInfoContext;
 
   static propTypes = {
@@ -120,7 +120,7 @@ class AVPlayerMobile extends Component {
     };
   }
 
-  shouldComponentUpdate(nextProps, nextState){
+  shouldComponentUpdate(nextProps, nextState) {
     const diffInProps = !areEqual(this.props, nextProps);
     const updateState = this.updateState(nextState);
 
@@ -130,18 +130,18 @@ class AVPlayerMobile extends Component {
   updateState = (nextState) => {
     const { playbackRate, showControls, unMuteButton, error, isSliceMode, mode } = this.state;
 
-    return (playbackRate !== nextState.playbackRate 
+    return (playbackRate !== nextState.playbackRate
       || showControls !== nextState.showControls
       || unMuteButton !== nextState.unMuteButton
       || error !== nextState.error
       || isSliceMode !== nextState.isSliceMode
       || mode !== nextState.mode);
-  }
+  };
 
-  componentDidUpdate(prevProps) {	
-    if (prevProps.item !== this.props.item) {	
-      this.setState({ error: false, errorReason: '', firstSeek: true });	
-    }	
+  componentDidUpdate(prevProps) {
+    if (prevProps.item !== this.props.item) {
+      this.setState({ error: false, errorReason: '', firstSeek: true });
+    }
   }
 
   componentWillUnmount() {
@@ -427,7 +427,7 @@ class AVPlayerMobile extends Component {
 
   render() {
     const
-      { 
+      {
         item,
         languages,
         selectedLanguage,
@@ -556,4 +556,12 @@ class AVPlayerMobile extends Component {
   }
 }
 
-export default withRouter(withNamespaces()(AVPlayerMobile));
+const Extended = withTranslation()(AVPlayerMobileOriginal);
+
+class AVPlayerMobile extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
+export default withRouter(AVPlayerMobile);

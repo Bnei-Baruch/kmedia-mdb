@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Trans, withNamespaces } from 'react-i18next';
+import { Trans, withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Button, Container, Divider, Grid, Image, Message } from 'semantic-ui-react';
 
@@ -26,7 +26,7 @@ import SearchResultPost from './SearchResultPost';
 import DidYouMean from './DidYouMean';
 import { SectionLogo } from '../../helpers/images';
 
-class SearchResults extends Component {
+class SearchResultsOriginal extends Component {
   static propTypes = {
     getSourcePath: PropTypes.func,
     areSourcesLoaded: PropTypes.bool.isRequired,
@@ -208,9 +208,9 @@ class SearchResults extends Component {
         <Grid>
           <Grid.Column key="1" computer={12} tablet={16} mobile={16}>
             {/* Requested by Mizrahi this.renderTopNote() */}
-            { typo_suggest 
-              ? <DidYouMean typo_suggest={typo_suggest} /> 
-              : null 
+            {typo_suggest
+              ? <DidYouMean typo_suggest={typo_suggest} />
+              : null
             }
 
             <div className="searchResult_content">
@@ -237,6 +237,14 @@ class SearchResults extends Component {
   }
 }
 
+const Extended = withTranslation()(SearchResultsOriginal);
+
+class SearchResults extends Component {
+  render() {
+    return <Extended useSuspense={false} {...this.props} />;
+  }
+}
+
 export default connect(state => ({
   filters: filterSelectors.getFilters(state.filters, 'search'),
   areSourcesLoaded: sourcesSelectors.areSourcesLoaded(state.sources),
@@ -244,4 +252,4 @@ export default connect(state => ({
   getSourceById: sourcesSelectors.getSourceById(state.sources),
   getTagById: tagsSelectors.getTagById(state.tags),
   contentLanguage: settings.getContentLanguage(state.settings),
-}))(withNamespaces()(SearchResults));
+}))(SearchResults);
