@@ -5,7 +5,6 @@ import isEqual from 'react-fast-compare';
 import noop from 'lodash/noop';
 
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../helpers/consts';
-
 import { getEscapedRegExp, isEmpty } from '../../../helpers/utils';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { Reference } from '../../shapes';
@@ -121,7 +120,7 @@ class TOC extends Component {
     getSourceById: PropTypes.func.isRequired,
     apply: PropTypes.func.isRequired,
     language: PropTypes.string.isRequired,
-
+    active: PropTypes.bool,
     match: PropTypes.string.isRequired,
     matchApplied: PropTypes.func,
   };
@@ -129,6 +128,7 @@ class TOC extends Component {
   static defaultProps = {
     contextRef: null,
     matchApplied: noop,
+    active: true
   };
 
   state = {
@@ -283,7 +283,7 @@ class TOC extends Component {
   };
 
   render() {
-    const { fullPath, rootId, contextRef} = this.props;
+    const { fullPath, rootId, contextRef, active } = this.props;
 
     const activeIndex = getIndex(fullPath[1], fullPath[2]);
 
@@ -295,7 +295,7 @@ class TOC extends Component {
     const toc  = this.toc(rootId, path, true);
 
     return (
-      <Sticky context={contextRef} className="source__toc">
+      <Sticky context={contextRef} className="source__toc" active={active}>
         <Ref innerRef={this.handleAccordionContext}>
           <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} onTitleClick={handleTitleClick} />
         </Ref>

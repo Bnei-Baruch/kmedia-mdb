@@ -499,6 +499,7 @@ class LibraryContainer extends Component {
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
                   apply={push}
+                  active={tocIsActive}
                 />
               </Grid.Column>
               <Grid.Column
