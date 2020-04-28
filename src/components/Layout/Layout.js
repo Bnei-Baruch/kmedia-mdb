@@ -80,7 +80,7 @@ class Layout extends Component {
     const { location } = this.props;
     const { isMobileDevice } = this.context;
 
-    const isShowHeaderSearch = 
+    const isShowHeaderSearch =
       isMobileDevice
       && location.pathname.endsWith('search');
 
@@ -168,10 +168,10 @@ class Layout extends Component {
 
     const showSearch = shouldShowSearch(location);
 
-    const sideBarIcon = sidebarActive 
-      ? <Icon size="large" name="x" /> 
+    const sideBarIcon = sidebarActive
+      ? <Icon size="large" name="x" />
       : <Icon name="sidebar" />;
-    
+
     if (embed) {
       return (
         <div>
@@ -208,7 +208,7 @@ class Layout extends Component {
                   <Logo width="40" height="40" />
                   <Header inverted as="h1" content={t('nav.top.header')} />
                 </Menu.Item>
-                <Menu.Item className="layout__search mobile-hidden">
+                <Menu.Item className={isMobileDevice ? 'layout__search mobile-hidden' : 'layout__search layout__search_max_width'}>
                   {
                     showSearch
                       ? <WrappedOmniBox location={location} />

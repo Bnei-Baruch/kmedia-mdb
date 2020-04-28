@@ -50,6 +50,12 @@ body {
     line-height: 1.4285em !important;
   }
 
+  &__search_max_width {
+    @include small-mobile {
+      max-width: 150px;
+    }
+  }
+
   &__sidebar {
     @include small-mobile {
       width: 100%;
