@@ -14,7 +14,8 @@ import { selectors as mdb } from '../../redux/modules/mdb';
 import { selectors as settings } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
 import FiltersHydrator from './FiltersHydrator';
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../helpers/app-contexts';
+import { POPULAR_LANGUAGES } from '../../helpers/consts';
 
 class Filters extends Component {
   static contextType = DeviceInfoContext;
@@ -41,13 +42,14 @@ class Filters extends Component {
     activeFilter: null,
   };
 
-  shouldComponentUpdate(nextProps, nextState){
-    const { namespace, language, filters, rightItems, filtersData, sqDataWipErr } = this.props;
-    const { activeFilter } = this.state;
+  shouldComponentUpdate(nextProps, nextState) {
+    const { namespace, language, contentLanguage, filters, rightItems, filtersData, sqDataWipErr } = this.props;
+    const { activeFilter }                                                        = this.state;
 
     return (activeFilter !== nextState.activeFilter
       || namespace !== nextProps.namespace
       || language !== nextProps.language
+      || contentLanguage !== nextProps.contentLanguage
       || sqDataWipErr !== nextProps.sqDataWipErr
       || !isEqual(filters, nextProps.filters)
       || !isEqual(rightItems, nextProps.rightItems)
@@ -79,10 +81,10 @@ class Filters extends Component {
   };
 
   renderFilters = (store, langDir, popupStyle) => {
-    const { filters, namespace, t, filtersData, language } = this.props;
-    const { activeFilter }                                 = this.state;
+    const { filters, namespace, t, filtersData, language, contentLanguage } = this.props;
+    const { activeFilter }                                                  = this.state;
 
-    return filters.map((item) => {
+    return filters.filter(x => filterMediaLanguageFilter(x, contentLanguage)).map((item) => {
       const { component: FilterComponent, name } = item;
 
       const isActive = name === activeFilter;
@@ -213,6 +215,7 @@ export default connect(
   (state, ownProps) => ({
     filtersData: selectors.getNSFilters(state.filters, ownProps.namespace),
     language: settings.getLanguage(state.settings),
+    contentLanguage: settings.getContentLanguage(state.settings),
 
     // DO NOT REMOVE, this triggers a necessary re-render for filter tags
     sqDataWipErr: mdb.getSQDataWipErr(state.mdb),
@@ -222,3 +225,10 @@ export default connect(
     resetFilter: actions.resetFilter,
   }, dispatch)
 )(withNamespaces()(Filters));
+
+function filterMediaLanguageFilter(filter, language) {
+  if (filter.name === 'language-filter' && POPULAR_LANGUAGES.includes(language)) {
+    return false;
+  }
+  return true;
+}
