@@ -432,6 +432,7 @@ class LibraryContainer extends Component {
 
     const isRtl    = isLanguageRtl(language);
     const position = isRtl ? 'left' : 'right';
+    const active = !this.context.isMobileDevice || tocIsActive;
 
     return (
       <div
@@ -499,6 +500,7 @@ class LibraryContainer extends Component {
                   contextRef={this.contextRef}
                   getSourceById={getSourceById}
                   apply={push}
+                  active={active}
                 />
               </Grid.Column>
               <Grid.Column
