@@ -17,6 +17,11 @@ import FiltersHydrator from './FiltersHydrator';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { POPULAR_LANGUAGES } from '../../helpers/consts';
 
+
+function filterMediaLanguageFilter(filter, language) {
+  return !(filter.name === 'language-filter' && POPULAR_LANGUAGES.includes(language));
+}
+
 class FiltersOriginal extends Component {
   static contextType = DeviceInfoContext;
 
@@ -232,11 +237,4 @@ export default connect(
     setFilterValue: actions.setFilterValue,
     resetFilter: actions.resetFilter,
   }, dispatch)
-)(withNamespaces()(Filters));
-
-function filterMediaLanguageFilter(filter, language) {
-  if (filter.name === 'language-filter' && POPULAR_LANGUAGES.includes(language)) {
-    return false;
-  }
-  return true;
-}
+)(withTranslation()(Filters));

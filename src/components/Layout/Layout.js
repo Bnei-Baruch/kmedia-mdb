@@ -94,13 +94,11 @@ class LayoutOriginal extends Component {
     const { location, language, contentLanguage } = this.props;
     const { sidebarActive, isShowHeaderSearch }   = this.state;
 
-    const shouldUpdate = (language !== nextProps.language
+    return (language !== nextProps.language
       || contentLanguage !== nextProps.contentLanguage
       || location.pathname !== nextProps.location.pathname
       || sidebarActive !== nextState.sidebarActive
       || isShowHeaderSearch !== nextState.isShowHeaderSearch);
-
-    return shouldUpdate;
   }
 
   componentWillUnmount() {
