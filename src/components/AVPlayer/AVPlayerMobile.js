@@ -120,7 +120,7 @@ class AVPlayerMobile extends Component {
     };
   }
 
-  shouldComponentUpdate(nextProps, nextState){
+  shouldComponentUpdate(nextProps, nextState) {
     const diffInProps = !areEqual(this.props, nextProps);
     const updateState = this.updateState(nextState);
 
@@ -130,18 +130,18 @@ class AVPlayerMobile extends Component {
   updateState = (nextState) => {
     const { playbackRate, showControls, unMuteButton, error, isSliceMode, mode } = this.state;
 
-    return (playbackRate !== nextState.playbackRate 
+    return (playbackRate !== nextState.playbackRate
       || showControls !== nextState.showControls
       || unMuteButton !== nextState.unMuteButton
       || error !== nextState.error
       || isSliceMode !== nextState.isSliceMode
       || mode !== nextState.mode);
-  }
+  };
 
-  componentDidUpdate(prevProps) {	
-    if (prevProps.item !== this.props.item) {	
-      this.setState({ error: false, errorReason: '', firstSeek: true });	
-    }	
+  componentDidUpdate(prevProps) {
+    if (prevProps.item !== this.props.item) {
+      this.setState({ error: false, errorReason: '', firstSeek: true });
+    }
   }
 
   componentWillUnmount() {
@@ -427,7 +427,7 @@ class AVPlayerMobile extends Component {
 
   render() {
     const
-      { 
+      {
         item,
         languages,
         selectedLanguage,

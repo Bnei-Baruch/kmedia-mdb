@@ -32,15 +32,15 @@ const buildNode = (id, count, getTagById) => {
 };
 
 const HolidaysFilter = (props) => {
-  const cIDs = useSelector(state => selectors.getEventsByType(state.events)[CT_HOLIDAY]);
+  const cIDs          = useSelector(state => selectors.getEventsByType(state.events)[CT_HOLIDAY]);
+  const getTagById    = useSelector(state => tags.getTagById(state.tags));
   const holidayEvents = useSelector(state => (cIDs || []).map(x => mdb.getCollectionById(state.mdb, x)));
-  const getTagById = useSelector(state => tags.getTagById(state.tags));
 
   const { t } = props;
-  const tree = useMemo(() => getTree(holidayEvents, getTagById, t), [holidayEvents, getTagById, t]); 
+  const tree  = useMemo(() => getTree(holidayEvents, getTagById, t), [holidayEvents, getTagById, t]);
 
-  return <HierarchicalFilter name="holidays-filter" tree={tree} {...props} />;
-}
+  return <HierarchicalFilter name="holidays-filter" tree={tree} {...props} t={t} />;
+};
 
 HolidaysFilter.propTypes = {
   t: PropTypes.func.isRequired,

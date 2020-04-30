@@ -8,7 +8,7 @@ import { setCookie } from '../../helpers/date';
 import { getToWithLanguage } from '../../helpers/url';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 const storeUILanguage = (language) => {
   if (!language) {
@@ -66,26 +66,26 @@ const MobileLanguage = ({ language, contentLanguage, location, push, t }) => (
 const UILanguage = ({ language, contentLanguage, location, push, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   return (
-	  <Menu secondary>
-	    <Menu.Item header>
-	      {t('languages.website_language')}
-	      :
-	    </Menu.Item>
-	    <Menu.Menu position="right">
-	      {
-	        isMobileDevice
-	          ?
-	          <MobileLanguage
-	            language={language}
-	            onMobileChange={onMobileChange}
-	            contentLanguage={contentLanguage}
-	            location={location}
-	            push={push}
-	            t={t} />
-	          : <DesktopLanguage t={t} language={language} contentLanguage={contentLanguage} />
-	      }
-	    </Menu.Menu>
-	  </Menu>
+    <Menu secondary>
+      <Menu.Item header>
+        {t('languages.website_language')}
+        :
+      </Menu.Item>
+      <Menu.Menu position="right">
+        {
+          isMobileDevice
+            ?
+            <MobileLanguage
+              language={language}
+              onMobileChange={onMobileChange}
+              contentLanguage={contentLanguage}
+              location={location}
+              push={push}
+              t={t} />
+            : <DesktopLanguage t={t} language={language} contentLanguage={contentLanguage} />
+        }
+      </Menu.Menu>
+    </Menu>
   );
 };
 

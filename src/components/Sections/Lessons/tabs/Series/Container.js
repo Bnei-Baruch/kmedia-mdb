@@ -31,7 +31,7 @@ const renderTree = (nodes, level) => (
   );
 });
 
-const SeriesContainer = ({ fetchAll, t }) => {
+const SeriesContainer = ({ t }) => {
   const bySource = useSelector(state => selectors.getSeriesBySource(state.lessons, state.mdb, state.sources)) || [];
   const language = useSelector(state => settings.getLanguage(state.settings));
   const wip      = useSelector(state => selectors.getWip(state.lessons).series);

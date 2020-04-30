@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import identity from 'lodash/identity';
-import { Menu, Sidebar, Button } from 'semantic-ui-react';
+import { Button, Menu, Sidebar } from 'semantic-ui-react';
 
-import { getRSSLinkByLang, getPodcastLinkByLang } from '../../helpers/utils';
+import { getPodcastLinkByLang, getRSSLinkByLang } from '../../helpers/utils';
 import NavLink from '../Language/MultiLanguageNavLink';
 import DonateNow from './DonateNow';
 import FeedBurner from './FeedBurner';
@@ -25,7 +25,7 @@ const ITEMS = [
   // 'design2',
 ];
 
-const MenuItems = ({ simple, visible, t, onItemClick, language }) => {
+const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity, language }) => {
   const items = ITEMS.map(x => (
     <Menu.Item
       key={x}

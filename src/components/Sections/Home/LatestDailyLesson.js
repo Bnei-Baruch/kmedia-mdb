@@ -20,12 +20,8 @@ const getRandomImage = () => {
 };
 
 const LatestDailyLesson = ({ collection, t }) => {
-  const [imageSrc, setImageSrc] = useState(null);
-
-  if (!imageSrc){
-    const src = getRandomImage();
-    setImageSrc(src);
-  }
+  // eslint-disable-next-line no-unused-vars
+  const [imageSrc, _] = useState(getRandomImage());
 
   return (
     <div className="thumbnail">
@@ -39,13 +35,10 @@ const LatestDailyLesson = ({ collection, t }) => {
             {t('home.last-lesson')}
           </Header.Content>
         </Header>
-        {/* <Label color="black" size="tiny">
-            {t('nav.sidebar.lessons')}
-          </Label> */}
       </Link>
     </div>
   );
-}
+};
 
 LatestDailyLesson.propTypes = {
   collection: shapes.LessonCollection.isRequired,

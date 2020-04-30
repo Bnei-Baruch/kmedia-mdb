@@ -33,9 +33,7 @@ class AVBox extends Component {
 
   static getMediaType = (location) => {
     const preferredMT = playerHelper.restorePreferredMediaType();
-    const mediaType   = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-
-    return mediaType;
+    return playerHelper.getMediaTypeFromQuery(location, preferredMT);
   };
 
   constructor(props) {
@@ -119,7 +117,7 @@ class AVBox extends Component {
 
     const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
     const newPlayableItem = playerHelper.playableItem(unit, mediaType, uiLanguage, newItemLanguage);
-    
+
     if (!isEqual(playableItem, newPlayableItem)) {
       this.setState({ playableItem: newPlayableItem, newItemLanguage });
     }

@@ -10,7 +10,7 @@ import { actions, selectors } from '../../redux/modules/filters';
 import * as shapes from '../shapes';
 import Filters from '../Filters/Filters';
 import filterComponents from '../Filters/components';
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 const filters = [
   {
@@ -33,7 +33,7 @@ const filters = [
 
 class SearchResultsFilters extends Component {
   static contextType = DeviceInfoContext;
-  static propTypes = {
+  static propTypes   = {
     location: shapes.HistoryLocation.isRequired,
     sortBy: PropTypes.string.isRequired,
     onSortByChange: PropTypes.func.isRequired,

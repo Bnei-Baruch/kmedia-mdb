@@ -32,10 +32,10 @@ export class UnitPage extends Component {
     location: {}
   };
 
-  constructor(props){
+  constructor(props) {
     super(props);
     const { location } = props;
-    this.state = { embed: playerHelper.getEmbedFromQuery(location) };
+    this.state         = { embed: playerHelper.getEmbedFromQuery(location) };
   }
 
   renderHelmet() {

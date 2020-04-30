@@ -94,8 +94,8 @@ const UnitListPage = (props) => {
     {
       namespace,
       items = [],
-      wip = false,
-      err = null,
+      wip   = false,
+      err   = null,
       pageNo,
       total,
       pageSize,
@@ -156,7 +156,7 @@ const UnitListPage = (props) => {
       {content}
     </div>
   );
-}
+};
 
 UnitListPage.propTypes = {
   namespace: PropTypes.string.isRequired,

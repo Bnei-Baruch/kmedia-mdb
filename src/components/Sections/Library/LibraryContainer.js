@@ -65,8 +65,8 @@ class LibraryContainer extends Component {
     scrollTopPosition: 0
   };
 
-  shouldComponentUpdate(nextProps, nextState){
-    const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded } = this.props;
+  shouldComponentUpdate(nextProps, nextState) {
+    const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded }                    = this.props;
     const { lastLoadedId, isReadable, fontSize, fontType, theme, tocIsActive, match, scrollTopPosition } = this.state;
 
     const equalProps = sourceId === nextProps.sourceId
@@ -84,7 +84,7 @@ class LibraryContainer extends Component {
       && fontType === nextState.fontType
       && theme === nextState.theme
       && match === nextState.match
-      && scrollTopPosition === nextState.scrollTopPosition; 
+      && scrollTopPosition === nextState.scrollTopPosition;
 
     return !equalProps || !equalIndexMap || !equalState;
   }
@@ -409,7 +409,10 @@ class LibraryContainer extends Component {
     const source                                      = getSourceById(sourceId);
     return (
       <Button
-        onClick={e => { push(`sources/${sourceId}`); e.target.blur(); }}
+        onClick={e => {
+          push(`sources/${sourceId}`);
+          e.target.blur();
+        }}
         className={`library__nextPrevButton align-${buttonAlign}`}
         size="mini"
         icon={icon}
