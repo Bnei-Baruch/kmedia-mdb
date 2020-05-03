@@ -21,7 +21,7 @@ import Footer from './Footer';
 import TopMost from './TopMost';
 import DonateNow from './DonateNow';
 import Logo from '../../images/icons/Logo';
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 const RenderHeaderSearch = React.forwardRef(({ t, location }, headerSearchElement) => (
   <div ref={headerSearchElement}>
@@ -68,7 +68,7 @@ class Layout extends Component {
     super(props);
     const { location } = props;
 
-    this.state         = {
+    this.state = {
       sidebarActive: false,
       isShowHeaderSearch: false,
       embed: playerHelper.getEmbedFromQuery(location),
@@ -77,12 +77,12 @@ class Layout extends Component {
 
   componentDidMount() {
     document.addEventListener('click', this.clickOutside, true);
-    const { location } = this.props;
+    const { location }       = this.props;
     const { isMobileDevice } = this.context;
 
-    const isShowHeaderSearch = 
-      isMobileDevice
-      && location.pathname.endsWith('search');
+    const isShowHeaderSearch =
+            isMobileDevice
+            && location.pathname.endsWith('search');
 
     // false is set in the constructor so no need to update
     if (isShowHeaderSearch) {
@@ -94,13 +94,11 @@ class Layout extends Component {
     const { location, language, contentLanguage } = this.props;
     const { sidebarActive, isShowHeaderSearch }   = this.state;
 
-    const shouldUpdate = (language !== nextProps.language
+    return (language !== nextProps.language
       || contentLanguage !== nextProps.contentLanguage
       || location.pathname !== nextProps.location.pathname
       || sidebarActive !== nextState.sidebarActive
       || isShowHeaderSearch !== nextState.isShowHeaderSearch);
-
-    return shouldUpdate;
   }
 
   componentWillUnmount() {
@@ -168,10 +166,10 @@ class Layout extends Component {
 
     const showSearch = shouldShowSearch(location);
 
-    const sideBarIcon = sidebarActive 
-      ? <Icon size="large" name="x" /> 
+    const sideBarIcon = sidebarActive
+      ? <Icon size="large" name="x" />
       : <Icon name="sidebar" />;
-    
+
     if (embed) {
       return (
         <div>
@@ -208,7 +206,7 @@ class Layout extends Component {
                   <Logo width="40" height="40" />
                   <Header inverted as="h1" content={t('nav.top.header')} />
                 </Menu.Item>
-                <Menu.Item className="layout__search mobile-hidden">
+                <Menu.Item className={isMobileDevice ? 'layout__search mobile-hidden' : 'layout__search layout__search_max_width'}>
                   {
                     showSearch
                       ? <WrappedOmniBox location={location} />
@@ -223,6 +221,7 @@ class Layout extends Component {
                       setContentLanguage={setContentLanguage}
                       location={location}
                       push={push}
+                      t={t}
                     />
                   </Menu.Item>
                   {

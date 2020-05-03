@@ -9,7 +9,6 @@ import { fromToLocalized } from '../../../../../helpers/date';
 import * as shapes from '../../../../shapes';
 import Link from '../../../../Language/MultiLanguageLink';
 
-
 const renderCollection = (collection) => {
   const localDate = fromToLocalized(collection.start_date, collection.end_date);
 
@@ -27,11 +26,9 @@ const renderCollection = (collection) => {
   );
 };
 
-const EventsList = ({ items = [], t }) => {
+const EventsList = ({ items = [] }) => {
   if (!Array.isArray(items) || items.length === 0) {
-    return null; 
-    /* no results message already returned by ResultsPageHeader, 
-      so no need to return this <div>{t('events.no-matches')}</div>; */
+    return null;
   }
 
   return (
@@ -41,7 +38,7 @@ const EventsList = ({ items = [], t }) => {
       </Table.Body>
     </Table>
   );
-}
+};
 
 EventsList.propTypes = {
   items: PropTypes.arrayOf(shapes.EventCollection),

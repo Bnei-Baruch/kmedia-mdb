@@ -7,8 +7,7 @@ import WipErr from '../../shared/WipErr/WipErr';
 import UnitList from '../UnitList/Container';
 import PageHeader from './Header';
 
-const CollectionPage = (props) => {
-  const { collection, wip, err, namespace, t, renderUnit } = props;
+const CollectionPage = ({ collection= null, wip = false, err = null, namespace, t, renderUnit }) => {
 
   // Most chances we already have the collection either SSR or some nav link.
   // Only in case we don't, we'll show wipErr.
@@ -36,12 +35,6 @@ CollectionPage.propTypes = {
   err: shapes.Error,
   t: PropTypes.func.isRequired,
   renderUnit: PropTypes.func.isRequired,
-};
-
-CollectionPage.defaultProps = {
-  collection: null,
-  wip: false,
-  err: null,
 };
 
 export default withNamespaces()(CollectionPage);

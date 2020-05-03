@@ -13,22 +13,22 @@ import List from './List';
 
 const filters = {
   conventions: [
-    { name: 'locations-filter', component: filterComponents.LocationsFilter },
-    { name: 'years-filter', component: filterComponents.YearsFilter },
+    {name: 'locations-filter', component: filterComponents.LocationsFilter},
+    {name: 'years-filter', component: filterComponents.YearsFilter},
   ],
   holidays: [
-    { name: 'holidays-filter', component: filterComponents.HolidaysFilter },
-    { name: 'years-filter', component: filterComponents.YearsFilter }
+    {name: 'holidays-filter', component: filterComponents.HolidaysFilter},
+    {name: 'years-filter', component: filterComponents.YearsFilter},
   ],
   picnics: [
-    { name: 'years-filter', component: filterComponents.YearsFilter }
+    {name: 'years-filter', component: filterComponents.YearsFilter}
   ],
   'unity-days': [
-    { name: 'years-filter', component: filterComponents.YearsFilter }
+    {name: 'years-filter', component: filterComponents.YearsFilter},
   ],
 };
 
-const TabPage = ({tabName, items = [], wip = false, err = null, t}) => {
+const TabPage = ({ tabName, items = [], wip = false, err = null, t }) => {
   const content = WipErr({ wip, err, t }) || (
     <Container className="padded">
       <ResultsPageHeader pageNo={1} pageSize={1000} total={items.length} />
@@ -49,7 +49,7 @@ const TabPage = ({tabName, items = [], wip = false, err = null, t}) => {
       {content}
     </div>
   );
-}
+};
 
 TabPage.propTypes = {
   tabName: PropTypes.string.isRequired,

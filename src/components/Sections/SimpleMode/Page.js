@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import DayPicker from 'react-day-picker';
@@ -17,7 +17,7 @@ import DropdownLanguageSelector from '../../Language/Selector/DropdownLanguageSe
 import YearMonthForm from '../../Filters/components/Date/YearMonthForm';
 import SimpleModeList from './list';
 import { getOptions } from '../../../helpers/language';
-import { DeviceInfoContext } from "../../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const changeDay = (amount, selectedDate, onDayClick) => {
   const newDate = moment(selectedDate).add(amount, 'd').toDate();
@@ -127,8 +127,8 @@ const SimpleModePage = (props) => {
       onDayClick,
     } = props;
 
-  const [isClient, setIsClient]   = useState(false);
-  const [data, setData]           = useState({
+  const [isClient, setIsClient]        = useState(false);
+  const [data, setData]                = useState({
     selected: ToDay,
     selectedDate,
     selectedToString: moment(ToDay).format('YYYY-MM-DD'),
@@ -138,8 +138,8 @@ const SimpleModePage = (props) => {
       selected: selectedDate,
     },
   });
-  const [languages, setLanguages] = useState([]);
-  const nativeDateInput           = useRef(null);
+  const [languages, setLanguages]      = useState([]);
+  const nativeDateInput                = useRef(null);
   const { isMobileDevice, deviceInfo } = useContext(DeviceInfoContext);
   useEffect(() => {
     setIsClient(typeof window !== 'undefined');

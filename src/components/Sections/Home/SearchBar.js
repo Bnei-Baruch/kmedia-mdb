@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {withNamespaces} from 'react-i18next';
-import {Button, Grid, Header, Input, Icon} from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
+import { Button, Grid, Header, Icon, Input } from 'semantic-ui-react';
 import * as shapes from '../../shapes';
-import {mapState as obMS, OmniBox, wrap} from '../../Search/OmniBox';
-import ButtonDayPicker from "../../Filters/components/Date/ButtonDayPicker";
+import { mapState as obMS, OmniBox, wrap } from '../../Search/OmniBox';
+import ButtonDayPicker from '../../Filters/components/Date/ButtonDayPicker';
 import moment from 'moment';
-import {DeviceInfoContext} from "../../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 class MyOmniBox extends OmniBox {
   static contextType = DeviceInfoContext;
@@ -24,23 +24,23 @@ class MyOmniBox extends OmniBox {
   };
 
   renderInput() {
-    const {t, language}                = this.props;
-    const {deviceInfo, isMobileDevice} = this.context;
+    const { t, language }                = this.props;
+    const { deviceInfo, isMobileDevice } = this.context;
 
     return (
       <div>
         <Input
-          autoFocus={deviceInfo.device.type===undefined}  // desktop only
+          autoFocus={deviceInfo.device.type === undefined}  // desktop only
           onKeyDown={this.handleSearchKeyDown}
           className={'right action'}
           icon={null}
           placeholder={`${t('buttons.search')}...`}
-          style={{width: '100%'}}
+          style={{ width: '100%' }}
           type="text">
-          <input/>
+          <input />
           <Button type='submit' className="searchButton" onClick={this.doSearchFromClickEvent}>
-            <Icon name='search' size={isMobileDevice ? 'large':null}/>
-            {!isMobileDevice ? t('buttons.search').toUpperCase():null}
+            <Icon name='search' size={isMobileDevice ? 'large' : null} />
+            {!isMobileDevice ? t('buttons.search').toUpperCase() : null}
           </Button>
           <ButtonDayPicker
             label={t('filters.date-filter.presets.CUSTOM_DAY')}
@@ -64,17 +64,17 @@ class SearchBar extends Component {
   };
 
   render() {
-    const {t, location} = this.props;
+    const { t, location } = this.props;
 
     return (
       <Grid centered>
         <Grid.Row>
           <Grid.Column computer={12} tablet={14} mobile={16}>
-            <Header as="h1" content={t('home.search')} className="homepage__title text white"/>
+            <Header as="h1" content={t('home.search')} className="homepage__title text white" />
           </Grid.Column>
           <Grid.Column computer={12} tablet={14} mobile={16}>
             <div className="homepage__search">
-              <MyWrappedOmniBox location={location}/>
+              <MyWrappedOmniBox location={location} />
             </div>
           </Grid.Column>
         </Grid.Row>

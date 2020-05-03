@@ -117,7 +117,7 @@ class DateFilter extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.value && this.props.value !== prevProps.value){
+    if (this.props.value && this.props.value !== prevProps.value) {
       this.setState(DateFilter.convertToStateObject(this.props));
     }
   }
@@ -199,8 +199,8 @@ class DateFilter extends Component {
   };
 
   render() {
-    const { t, language }             = this.props;
-    const { from, to, datePreset }    = this.state;
+    const { t, language }          = this.props;
+    const { from, to, datePreset } = this.state;
 
     return (
       <Segment.Group className="filter-popup__wrapper">

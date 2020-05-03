@@ -6,7 +6,7 @@ import { Container, Divider, Segment } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
 import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT } from '../../../../../../helpers/consts';
-import {getLanguageDirection} from '../../../../../../helpers/i18n-utils';
+import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import MediaHelper from '../../../../../../helpers/media';
 import * as shapes from '../../../../../shapes';

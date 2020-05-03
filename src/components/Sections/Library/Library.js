@@ -9,23 +9,21 @@ import { selectors } from '../../../redux/modules/assets';
 import { assetUrl } from '../../../helpers/Api';
 import { isEmpty } from '../../../helpers/utils';
 import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
-import PDF from '../../shared/PDF/PDF';
+import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { updateQuery } from '../../../helpers/url';
-import {getPageFromLocation} from '../../Pagination/withPagination';
+import { getPageFromLocation } from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
 
-
 export const checkRabashGroupArticles = (source) => {
-  let id = source;
-  if (/^gr-/.test(id)) { // Rabash Group Articles
-    const result = /^gr-(.+)/.exec(id);
-    id = result[1];
+  if (/^gr-/.test(source)) { // Rabash Group Articles
+    const result = /^gr-(.+)/.exec(source);
+    return result[1];
+  } else {
+    return source;
   }
-
-  return id;
-}
+};
 
 const getFullUrl = (pdfFile, data, language, source) => {
   if (pdfFile) {
@@ -40,7 +38,6 @@ const getFullUrl = (pdfFile, data, language, source) => {
 
   return assetUrl(`sources/${id}/${data[language].docx}`);
 };
-
 
 const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, pdfFile, startsFrom, t) => {
   const { wip, err, data: contentData } = content;
@@ -73,21 +70,19 @@ const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, p
   }
 };
 
-const Library = (props) => {
+const Library = ({
+  data,
+  source,
+  language = null,
+  languages = [],
+  langSelectorMount = null,
+  downloadAllowed,
+  handleLanguageChanged,
+  t,
+}) => {
   const location                    = useLocation();
   const history                     = useHistory();
   const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
-
-  const
-    {
-      data,
-      source,
-      language          = null,
-      languages         = [],
-      langSelectorMount = null,
-      downloadAllowed,
-      t,
-    } = props;
 
   const content = useSelector(state => selectors.getAsset(state.assets));
 
@@ -95,11 +90,11 @@ const Library = (props) => {
     return <Segment basic>&nbsp;</Segment>;
   }
 
-  const startsFrom = PDF.startsFrom(source) || 1;
-  const isTaas     = PDF.isTaas(source);
+  const starts = startsFrom(source) || 1;
+  const taas   = isTaas(source);
 
   let pdfFile;
-  if (data && isTaas){
+  if (data && taas) {
     const langData = data[language];
 
     if (langData && langData.pdf) {
@@ -115,15 +110,14 @@ const Library = (props) => {
     }));
   };
 
-  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, startsFrom, t);
+  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, starts, t);
   if (contentsToDisplay === null) {
     return <Segment basic>{t('sources-library.no-source')}</Segment>;
   }
 
   let languageBar = null;
   if (languages.length > 0) {
-    const { handleLanguageChanged } = props;
-    languageBar                     = (
+    languageBar = (
       <Container fluid textAlign="right">
         <AnchorsLanguageSelector
           languages={languages}

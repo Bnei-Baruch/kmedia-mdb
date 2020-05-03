@@ -42,7 +42,7 @@ class ShareFormMobile extends BaseShareForm {
 
     return (
       <div className="mediaplayer__onscreen-share">
-        <ShareBar url={url} buttonSize="medium"/>
+        <ShareBar url={url} buttonSize="medium" />
         <div className="mediaplayer__onscreen-share-form">
           <div className="mediaplayer__onscreen-share-bar-mobile">
             <Input
@@ -58,7 +58,7 @@ class ShareFormMobile extends BaseShareForm {
               trigger={
                 (
                   <CopyToClipboard text={url} onCopy={this.handleCopied}>
-                    <Button className="mobileShareCopyLinkButton" content={t('buttons.copy')}/>
+                    <Button className="mobileShareCopyLinkButton" content={t('buttons.copy')} />
                   </CopyToClipboard>
                 )
               }

@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 
 import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../helpers/consts';
@@ -57,19 +56,28 @@ const fetchSocialMedia = (type, fetchFn, language) => {
   });
 };
 
-const HomePageContainer = (props) => {
-  const
-    {
-      location,
-      fetchData, latestLesson = null, latestUnits = [],
-      fetchBlogList, latestBlogPosts              = [],
-      fetchTweetsList, latestTweets               = [],
-      banner, fetchBanner,
-      language,
-      wip                                         = false,
-      err                                         = null,
-      t,
-    } = props;
+const HomePageContainer = ({ location, t }) => {
+  const dispatch  = useDispatch();
+  const fetchData = useCallback(flag => dispatch(actions.fetchData(flag)), [dispatch]);
+
+  const latestLessonID = useSelector(state => selectors.getLatestLesson(state.home));
+  const latestLesson   = useSelector(state => latestLessonID ? mdb.getCollectionById(state.mdb, latestLessonID) : null);
+
+  const latestUnitIDs = useSelector(state => selectors.getLatestUnits(state.home));
+  const latestUnits   = useSelector(state => Array.isArray(latestUnitIDs) ? latestUnitIDs.map(x => mdb.getDenormContentUnit(state.mdb, x)) : [], [latestUnitIDs]);
+
+  const fetchBlogList   = useCallback((type, id, options) => dispatch(publicationsActions.fetchBlogList(type, id, options)), [dispatch]);
+  const latestBlogPosts = useSelector(state => publications.getBlogPosts(state.publications));
+
+  const fetchTweetsList = useCallback((type, id, options) => dispatch(publicationsActions.fetchTweets(type, id, options)), [dispatch]);
+  const latestTweets    = useSelector(state => publications.getTweets(state.publications));
+
+  const banner      = useSelector(state => selectors.getBanner(state.home));
+  const fetchBanner = useCallback(language => dispatch(actions.fetchBanner(language)), [dispatch]);
+
+  const language = useSelector(state => settings.getLanguage(state.settings));
+  const wip      = useSelector(state => selectors.getWip(state.home));
+  const err      = useSelector(state => selectors.getError(state.home));
 
   useEffect(() => {
     fetchData(true);
@@ -96,44 +104,9 @@ const HomePageContainer = (props) => {
   );
 };
 
-const mapState = (state) => {
-  return {
-    latestLessonID: selectors.getLatestLesson(state.home),
-    latestLesson: selectors.getLatestLesson(state.home) ? mdb.getCollectionById(state.mdb, selectors.getLatestLesson(state.home)) : null,
-    latestUnitIDs: selectors.getLatestUnits(state.home),
-    latestUnits: Array.isArray(selectors.getLatestUnits(state.home))
-      ? selectors.getLatestUnits(state.home).map(x => mdb.getDenormContentUnit(state.mdb, x))
-      : [],
-    banner: selectors.getBanner(state.home),
-    wip: selectors.getWip(state.home),
-    err: selectors.getError(state.home),
-    latestBlogPosts: publications.getBlogPosts(state.publications),
-    latestTweets: publications.getTweets(state.publications),
-    language: settings.getLanguage(state.settings)
-  };
-};
-
-const mapDispatch = dispatch => bindActionCreators({
-  fetchData: actions.fetchData,
-  fetchBlogList: publicationsActions.fetchBlogList,
-  fetchTweetsList: publicationsActions.fetchTweets,
-  fetchBanner: actions.fetchBanner,
-}, dispatch);
-
 HomePageContainer.propTypes = {
   location: shapes.HistoryLocation.isRequired,
-  latestLesson: shapes.LessonCollection,
-  latestUnits: PropTypes.arrayOf(shapes.ContentUnit),
-  latestBlogPosts: PropTypes.arrayOf(shapes.BlogPost),
-  latestTweets: PropTypes.arrayOf(shapes.Tweet),
-  banner: shapes.Banner.isRequired,
-  wip: shapes.WIP,
-  err: shapes.Error,
-  language: PropTypes.string.isRequired,
-  fetchData: PropTypes.func.isRequired,
-  fetchBlogList: PropTypes.func.isRequired,
-  fetchTweetsList: PropTypes.func.isRequired,
-  fetchBanner: PropTypes.func.isRequired,
+  f: PropTypes.func.isRequired,
 };
 
-export default connect(mapState, mapDispatch)(withNamespaces()(HomePageContainer));
+export default withNamespaces()(HomePageContainer);

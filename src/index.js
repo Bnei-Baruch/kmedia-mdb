@@ -1,7 +1,7 @@
 // full ES2015+ environment (no < Stage 4 proposals)
-import "core-js/stable";
-import "core-js/proposals/url";
-import "regenerator-runtime/runtime";
+import 'core-js/stable';
+import 'core-js/proposals/url';
+import 'regenerator-runtime/runtime';
 
 import moment from 'moment';
 import 'moment/locale/he';

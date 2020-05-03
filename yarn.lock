@@ -12050,13 +12050,6 @@ react-copy-to-clipboard@^5.0.0:
     copy-to-clipboard "^3"
     prop-types "^15.5.8"
 
-react-countdown@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/react-countdown/-/react-countdown-2.2.1.tgz#28d56fc1874b5b0d5238b7efe3ae914ed8033783"
-  integrity sha512-e8dUUhlysDqgci32VOOe0uDfeDMaiyyFNrWHdmMky5fithYDt4iOJa22EF96VbkU64R4D+Bww4AbLpqA/J4dww==
-  dependencies:
-    prop-types "^15.7.2"
-
 react-day-picker@^7.1.4:
   version "7.4.0"
   resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-7.4.0.tgz#1b3dfe76a81864518d241214ba658da25903b7df"

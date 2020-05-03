@@ -15,29 +15,34 @@ const filters = {
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'sources-filter', component: filterComponents.SourcesFilter },
     { name: 'date-filter', component: filterComponents.DateFilter },
+    { name: 'language-filter', component: filterComponents.LanguageFilter },
   ],
   'lessons-virtual': [
     { name: 'collections-filter', component: filterComponents.CollectionsFilter },
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'sources-filter', component: filterComponents.SourcesFilter },
-    { name: 'date-filter', component: filterComponents.DateFilter }
+    { name: 'date-filter', component: filterComponents.DateFilter },
+    { name: 'language-filter', component: filterComponents.LanguageFilter },
   ],
   'lessons-lectures': [
     { name: 'collections-filter', component: filterComponents.CollectionsFilter },
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'sources-filter', component: filterComponents.SourcesFilter },
-    { name: 'date-filter', component: filterComponents.DateFilter }
+    { name: 'date-filter', component: filterComponents.DateFilter },
+    { name: 'language-filter', component: filterComponents.LanguageFilter },
   ],
   'lessons-women': [
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
-    { name: 'date-filter', component: filterComponents.DateFilter }
+    { name: 'date-filter', component: filterComponents.DateFilter },
+    { name: 'language-filter', component: filterComponents.LanguageFilter },
   ],
   'lessons-rabash': [
-    { name: 'sources-filter', component: filterComponents.SourcesFilter }
+    { name: 'sources-filter', component: filterComponents.SourcesFilter },
+    { name: 'language-filter', component: filterComponents.LanguageFilter },
   ],
   'lessons-children': [
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
-    { name: 'date-filter', component: filterComponents.DateFilter }
+    { name: 'date-filter', component: filterComponents.DateFilter },
   ],
   'lessons-collection': [
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
@@ -48,34 +53,39 @@ const filters = {
     { name: 'collections-filter', component: filterComponents.CollectionsFilter },
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
     { name: 'sources-filter', component: filterComponents.SourcesFilter },
-    { name: 'date-filter', component: filterComponents.DateFilter }
+    { name: 'date-filter', component: filterComponents.DateFilter },
+    { name: 'language-filter', component: filterComponents.LanguageFilter },
   ],
   'programs-clips': [
     { name: 'collections-filter', component: filterComponents.CollectionsFilter },
-    { name: 'date-filter', component: filterComponents.DateFilter }
+    { name: 'date-filter', component: filterComponents.DateFilter },
+    { name: 'language-filter', component: filterComponents.LanguageFilter },
   ],
   'programs-collection': [
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
-    { name: 'date-filter', component: filterComponents.DateFilter }
+    { name: 'date-filter', component: filterComponents.DateFilter },
   ],
   'events-friends-gatherings': [
-    { name: 'date-filter', component: filterComponents.DateFilter }
+    { name: 'date-filter', component: filterComponents.DateFilter },
+    { name: 'language-filter', component: filterComponents.LanguageFilter },
   ],
   'events-meals': [
-    { name: 'date-filter', component: filterComponents.DateFilter }
+    { name: 'date-filter', component: filterComponents.DateFilter },
+    { name: 'language-filter', component: filterComponents.LanguageFilter },
   ],
   'publications-articles': [
     { name: 'collections-filter', component: filterComponents.CollectionsFilter },
     { name: 'publishers-filter', component: filterComponents.PublishersFilter },
     { name: 'topics-filter', component: filterComponents.TopicsFilter },
-    { name: 'date-filter', component: filterComponents.DateFilter }
+    { name: 'date-filter', component: filterComponents.DateFilter },
+    { name: 'language-filter', component: filterComponents.LanguageFilter },
   ],
   'publications-collection': [
-    { name: 'date-filter', component: filterComponents.DateFilter }
-  ],
-  'publications-audio-blog':[
     { name: 'date-filter', component: filterComponents.DateFilter },
-    { name: 'language-filter', component: filterComponents.LanguageFilter }
+  ],
+  'publications-audio-blog': [
+    { name: 'date-filter', component: filterComponents.DateFilter },
+    { name: 'language-filter', component: filterComponents.LanguageFilter },
   ]
 };
 
@@ -84,8 +94,8 @@ const UnitListPage = (props) => {
     {
       namespace,
       items = [],
-      wip = false,
-      err = null,
+      wip   = false,
+      err   = null,
       pageNo,
       total,
       pageSize,
@@ -146,7 +156,7 @@ const UnitListPage = (props) => {
       {content}
     </div>
   );
-}
+};
 
 UnitListPage.propTypes = {
   namespace: PropTypes.string.isRequired,
