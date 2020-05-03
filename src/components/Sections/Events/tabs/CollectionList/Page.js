@@ -28,7 +28,7 @@ const filters = {
   ],
 };
 
-const TabPage = ({tabName, items = [], wip = false, err = null, t}) => {
+const TabPage = ({ tabName, items = [], wip = false, err = null, t }) => {
   const content = WipErr({ wip, err, t }) || (
     <Container className="padded">
       <ResultsPageHeader pageNo={1} pageSize={1000} total={items.length} />
@@ -49,7 +49,7 @@ const TabPage = ({tabName, items = [], wip = false, err = null, t}) => {
       {content}
     </div>
   );
-}
+};
 
 TabPage.propTypes = {
   tabName: PropTypes.string.isRequired,

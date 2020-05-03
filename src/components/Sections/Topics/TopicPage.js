@@ -47,9 +47,6 @@ const getBreadCrumbSection = (p, index, arr) => {
 };
 
 const TopicPage = ({ match, t }) => {
-
-  const tagId = match.params.id;
-
   const wip             = useSelector(state => selectors.getWip(state.tags));
   const error           = useSelector(state => selectors.getError(state.tags));
   const sections        = useSelector(state => selectors.getSections(state.tags));
@@ -60,6 +57,8 @@ const TopicPage = ({ match, t }) => {
   const language        = useSelector(state => settings.getLanguage(state.settings));
 
   const dispatch = useDispatch();
+
+  const tagId = match.params.id;
 
   useEffect(() => {
     dispatch(actions.fetchDashboard(tagId));

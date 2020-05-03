@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Container } from 'semantic-ui-react';
 
-const DidYouMean = ({typo_suggest, t}) => {
-  if (!typo_suggest){
+const DidYouMean = ({ typo_suggest, t }) => {
+  if (!typo_suggest) {
     return null;
   }
-  const to = `?q=${typo_suggest}`;
+  const to            = `?q=${typo_suggest}`;
   const didYouMeanStr = t('search.didYouMean');
 
   return (

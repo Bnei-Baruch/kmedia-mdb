@@ -3,10 +3,24 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { Button, Grid, Header, Table, Popup } from 'semantic-ui-react';
+import { Button, Grid, Header, Popup, Table } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
-import { CT_ARTICLE, CT_FULL_LESSON, CT_KITEI_MAKOR, CT_LELO_MIKUD, CT_LESSON_PART, CT_PUBLICATION, CT_RESEARCH_MATERIAL, CT_VIDEO_PROGRAM_CHAPTER, MT_AUDIO, MT_IMAGE, MT_TEXT, MT_VIDEO, VS_NAMES } from '../../../../../helpers/consts';
+import {
+  CT_ARTICLE,
+  CT_FULL_LESSON,
+  CT_KITEI_MAKOR,
+  CT_LELO_MIKUD,
+  CT_LESSON_PART,
+  CT_PUBLICATION,
+  CT_RESEARCH_MATERIAL,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  MT_AUDIO,
+  MT_IMAGE,
+  MT_TEXT,
+  MT_VIDEO,
+  VS_NAMES
+} from '../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
 import { physicalFile } from '../../../../../helpers/utils';
 import { selectors as settings } from '../../../../../redux/modules/settings';
@@ -40,20 +54,20 @@ class MediaDownloads extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {};
   }
 
-  static getDerivedStateFromProps(props, state){
+  static getDerivedStateFromProps(props, state) {
     const { unit = {}, contentLanguage, language: uiLanguage } = props;
-    const { unit: stateUnit, isCopyPopupOpen = {} } = state;
+    const { unit: stateUnit, isCopyPopupOpen = {} }            = state;
 
     if (stateUnit && isEqual(stateUnit, unit)) {
       // only language changed
       if (state.uiLanguage !== uiLanguage
-          || state.contentLanguage !== contentLanguage) {
+        || state.contentLanguage !== contentLanguage) {
         const language = selectSuitableLanguage(contentLanguage, uiLanguage, state.languages);
         if (state.language !== language) {
-          return { ...state, language }
+          return { ...state, language };
         }
       }
 
@@ -61,9 +75,9 @@ class MediaDownloads extends Component {
 
     } else {
       // no unit or a different unit - create new state
-      const groups    = MediaDownloads.getFilesByLanguage(unit.files, contentLanguage, uiLanguage);
-      const languages = [...groups.keys()];
-      const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+      const groups        = MediaDownloads.getFilesByLanguage(unit.files, contentLanguage, uiLanguage);
+      const languages     = [...groups.keys()];
+      const language      = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
       const derivedGroups = MediaDownloads.getDerivedFilesByContentType(unit.derived_units, contentLanguage, uiLanguage);
 
       return { groups, derivedGroups, isCopyPopupOpen, languages, language, uiLanguage, contentLanguage, unit };
@@ -165,15 +179,15 @@ class MediaDownloads extends Component {
   };
 
   handleCopied = (url) => {
-    this.setState({ isCopyPopupOpen: {...this.state.isCopyPopupOpen, [url]: true} }, () => {
-      setTimeout(() => this.setState({ isCopyPopupOpen: {...this.state.isCopyPopupOpen, [url]: false} } ), POPOVER_CONFIRMATION_TIMEOUT);
+    this.setState({ isCopyPopupOpen: { ...this.state.isCopyPopupOpen, [url]: true } }, () => {
+      setTimeout(() => this.setState({ isCopyPopupOpen: { ...this.state.isCopyPopupOpen, [url]: false } }), POPOVER_CONFIRMATION_TIMEOUT);
     });
   };
 
   renderRow = (file, label, t) => {
     const { isCopyPopupOpen } = this.state;
-    const ext = file.name.substring(file.name.lastIndexOf('.') + 1);
-    const url = physicalFile(file);
+    const ext                 = file.name.substring(file.name.lastIndexOf('.') + 1);
+    const url                 = physicalFile(file);
 
     return (
       <Table.Row key={file.id} className="media-downloads__file" verticalAlign="top">
@@ -220,17 +234,17 @@ class MediaDownloads extends Component {
     const { t, publisherById, unit }                     = this.props;
     const { language, languages, groups, derivedGroups } = this.state;
 
-    const byType                                         = groups.get(language) || new Map();
-    const kiteiMakor                                     = derivedGroups[CT_KITEI_MAKOR];
-    const kiteiMakorByType                               = (kiteiMakor && kiteiMakor.get(language)) ?? new Map();
-    const leloMikud                                      = derivedGroups[CT_LELO_MIKUD];
-    const leloMikudByType                                = (leloMikud && leloMikud.get(language)) ?? new Map();
-    const publications                                   = derivedGroups[CT_PUBLICATION];
-    const publicationsByType                             = (publications && publications.get(language)) ?? new Map();
-    const articles                                       = derivedGroups[CT_ARTICLE];
-    const articlesByType                                 = (articles && articles.get(language)) ?? new Map();
-    const researchMaterials                              = derivedGroups[CT_RESEARCH_MATERIAL];
-    const researchMaterialsByType                        = (researchMaterials && researchMaterials.get(language)) ?? new Map();
+    const byType                  = groups.get(language) || new Map();
+    const kiteiMakor              = derivedGroups[CT_KITEI_MAKOR];
+    const kiteiMakorByType        = (kiteiMakor && kiteiMakor.get(language)) ?? new Map();
+    const leloMikud               = derivedGroups[CT_LELO_MIKUD];
+    const leloMikudByType         = (leloMikud && leloMikud.get(language)) ?? new Map();
+    const publications            = derivedGroups[CT_PUBLICATION];
+    const publicationsByType      = (publications && publications.get(language)) ?? new Map();
+    const articles                = derivedGroups[CT_ARTICLE];
+    const articlesByType          = (articles && articles.get(language)) ?? new Map();
+    const researchMaterials       = derivedGroups[CT_RESEARCH_MATERIAL];
+    const researchMaterialsByType = (researchMaterials && researchMaterials.get(language)) ?? new Map();
 
     let typeOverrides = MediaDownloads.getI18nTypeOverridesKey(unit);
     if (typeOverrides) {
@@ -320,19 +334,6 @@ class MediaDownloads extends Component {
             {derivedRows || null}
           </Table.Body>
         </Table>
-        {/* moved "derived media to the main downloads table" */}
-        {/* {
-          derivedRows ?
-            <div className="media-downloads__derivations">
-              <Header size="tiny" content={t('media-downloads.derived-title')} />
-              <Table unstackable basic="very" compact="very">
-                <Table.Body>
-                  {derivedRows}
-                </Table.Body>
-              </Table>
-            </div>
-            : null
-        } */}
       </div>
     );
   }

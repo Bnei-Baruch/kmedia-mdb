@@ -52,7 +52,7 @@ class ButtonDayPicker extends Component {
     const { value, language } = state;
 
     if (props.value !== value ||
-        props.language !== language) {
+      props.language !== language) {
       return {
         value: props.value,
         stringValue: ButtonDayPicker.formatDateValue(props.value, props.language),
@@ -147,7 +147,7 @@ class ButtonDayPicker extends Component {
       return;
     }
     const { onDayChange } = this.props;
-    const { locale } = this.state;
+    const { locale }      = this.state;
     this.setState({ stringValue: ButtonDayPicker.formatDateValue(date, locale) });
     onDayChange(date);
     this.closePopup();

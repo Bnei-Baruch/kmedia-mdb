@@ -15,7 +15,7 @@ import { actions, selectors } from '../../../redux/modules/simpleMode';
 import * as shapes from '../../shapes';
 import Page from './Page';
 import { groupOtherMediaByType, renderCollection } from './RenderListHelpers';
-import { DeviceInfoContext } from "../../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 class SimpleModeContainer extends Component {
   static contextType = DeviceInfoContext;
@@ -126,6 +126,7 @@ class SimpleModeContainer extends Component {
 
   render() {
     const { filesLanguage: language, blinkLangSelect, date: selectedDate } = this.state;
+
     const pageProps = {
       ...this.props,
       selectedDate,

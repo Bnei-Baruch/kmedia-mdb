@@ -208,9 +208,9 @@ class SearchResults extends Component {
         <Grid>
           <Grid.Column key="1" computer={12} tablet={16} mobile={16}>
             {/* Requested by Mizrahi this.renderTopNote() */}
-            { typo_suggest 
-              ? <DidYouMean typo_suggest={typo_suggest} /> 
-              : null 
+            {typo_suggest
+              ? <DidYouMean typo_suggest={typo_suggest} />
+              : null
             }
 
             <div className="searchResult_content">

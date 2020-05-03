@@ -1,4 +1,4 @@
-import { ES_RESULT_TYPE_SOURCES, ES_RESULT_TYPE_TAGS, SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE } from './consts';
+import { ES_RESULT_TYPE_TAGS, SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE } from './consts';
 
 export class SuggestionsHelper {
   constructor(results) {
@@ -38,8 +38,8 @@ export class SuggestionsHelper {
           suggestWordsWithSeparator++;
         }
 
-        const suggest = titleWords.slice(titleWords.length - suggestWordsWithSeparator).join(' ')
-        const suggestLC = suggest.toLowerCase()
+        const suggest   = titleWords.slice(titleWords.length - suggestWordsWithSeparator).join(' ');
+        const suggestLC = suggest.toLowerCase();
 
         return {
           resultType,

@@ -9,11 +9,10 @@ import { BS_TAAS_PARTS } from '../../../helpers/consts';
 import PDFMenu from './PDFMenu';
 import LoadedPDF from './LoadedPDF';
 
+export const isTaas = source => (BS_TAAS_PARTS[source] !== undefined);
+export const startsFrom = source => BS_TAAS_PARTS[source];
+
 class PDF extends Component {
-  static isTaas = source => (BS_TAAS_PARTS[source] !== undefined);
-
-  static startsFrom = source => BS_TAAS_PARTS[source];
-
   static propTypes = {
     pdfFile: PropTypes.string.isRequired,
     startsFrom: PropTypes.number.isRequired,
