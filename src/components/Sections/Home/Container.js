@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 
@@ -105,6 +106,7 @@ const HomePageContainer = ({ location, t }) => {
 
 HomePageContainer.propTypes = {
   location: shapes.HistoryLocation.isRequired,
+  t: PropTypes.func.isRequired
 };
 
 export default withNamespaces()(HomePageContainer);
