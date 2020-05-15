@@ -136,6 +136,8 @@ class Sketches extends React.Component {
 
     if (zipFiles) {
       this.setStateByZipFiles(zipFiles, contentLanguage, uiLanguage, unit);
+    } else{
+      this.setState({ zipFileId: null, imageFiles: null });
     }
   };
 
@@ -258,51 +260,53 @@ class Sketches extends React.Component {
 
     // if imageObjs is not an array - create it
     let imageObjsArr = [];
-    if (imageObjs && !Array.isArray(imageObjs)) {
-      imageObjsArr.push(imageObjs);
-    } else {
-      imageObjsArr = imageObjs;
-    }
+    if (imageObjs) {
+      if(Array.isArray(imageObjs)) {
+        imageObjsArr = imageObjs;
+      } else {
+        imageObjsArr.push(imageObjs);
+      }
 
-    if (Array.isArray(imageObjsArr) && imageObjsArr.length > 0) {
-      // prepare the image array for the gallery and sort it
-      const items = imageObjsArr
-        .map(this.imageGalleryItem)
-        .sort((a, b) => strCmp(a.original, b.original));
-
-      return (
-        <div>
-          {
-            languages && languages.length > 1
-              ? (
-                <Container fluid textAlign="center">
-                  <ButtonsLanguageSelector
-                    languages={languages}
-                    defaultValue={language}
-                    onSelect={this.handleLanguageChanged}
-                  />
-                </Container>
-              )
-              : null
-          }
-          <ImageGallery
-            ref={i => this._imageGallery = i}
-            lazyLoad
-            showFullscreenButton
-            isRTL={isLanguageRtl(uiLanguage)}
-            items={items}
-            thumbnailPosition="top"
-            showPlayButton={false}
-            showBullets={false}
-            showIndex={items.length > 1}
-            showThumbnails={items.length > 1}
-            onImageError={this.handleImageError}
-            renderLeftNav={this.renderLeftNav}
-            renderRightNav={this.renderRightNav}
-            renderFullscreenButton={this.renderFullscreenButton}
-          />
-        </div>
-      );
+      if (imageObjsArr.length > 0) {
+        // prepare the image array for the gallery and sort it
+        const items = imageObjsArr
+          .map(this.imageGalleryItem)
+          .sort((a, b) => strCmp(a.original, b.original));
+  
+        return (
+          <div>
+            {
+              languages && languages.length > 1
+                ? (
+                  <Container fluid textAlign="center">
+                    <ButtonsLanguageSelector
+                      languages={languages}
+                      defaultValue={language}
+                      onSelect={this.handleLanguageChanged}
+                    />
+                  </Container>
+                )
+                : null
+            }
+            <ImageGallery
+              ref={i => this._imageGallery = i}
+              lazyLoad
+              showFullscreenButton
+              isRTL={isLanguageRtl(uiLanguage)}
+              items={items}
+              thumbnailPosition="top"
+              showPlayButton={false}
+              showBullets={false}
+              showIndex={items.length > 1}
+              showThumbnails={items.length > 1}
+              onImageError={this.handleImageError}
+              renderLeftNav={this.renderLeftNav}
+              renderRightNav={this.renderRightNav}
+              renderFullscreenButton={this.renderFullscreenButton}
+            />
+          </div>
+        );
+      }
     }
 
     return (
