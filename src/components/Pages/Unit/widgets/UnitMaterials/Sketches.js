@@ -149,7 +149,7 @@ class Sketches extends React.Component {
   };
 
   getItemState = (zipFiles, language, unit) => {
-    const files     = Sketches.filterZipFiles(zipFiles, language, unit.original_language);
+    const files = Sketches.filterZipFiles(zipFiles, language, unit.original_language);
     return this.getStateByFile(files);
   };
 
@@ -177,7 +177,7 @@ class Sketches extends React.Component {
     const { zipIndexById, unzip } = this.props;
     const { data, wip, err }      = zipIndexById[file.id] || {};
 
-    if (!(wip || err) && isEmpty(data) && !Object.prototype.hasOwnProperty.call(zipIndexById, file.id)) {
+    if (!wip && !err && isEmpty(data) && !Object.prototype.hasOwnProperty.call(zipIndexById, file.id)) {
       unzip(file.id);
     }
   };
@@ -188,6 +188,9 @@ class Sketches extends React.Component {
   };
 
   handleImageError = event => console.log('Image Gallery loading error ', event.target);
+
+  removeErroneousImages = (item) =>
+    !item.path?.toUpperCase().includes('MACOSX');
 
   // converts images from server format (path, size) to ImageGallery format
   imageGalleryItem = (item) => {
@@ -270,6 +273,7 @@ class Sketches extends React.Component {
       if (imageObjsArr.length > 0) {
         // prepare the image array for the gallery and sort it
         const items = imageObjsArr
+          .filter(this.removeErroneousImages)
           .map(this.imageGalleryItem)
           .sort((a, b) => strCmp(a.original, b.original));
   
