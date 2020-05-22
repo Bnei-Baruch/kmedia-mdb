@@ -38,7 +38,7 @@ const initialState = {
     getByID: identity
   },
   loaded: false,
-  sortBy: 'AZ',
+  sortBy: 'Book',
 };
 
 const NotToSort   = [BS_SHAMATI, BS_IGROT, BS_TAAS, RB_IGROT, MR_TORA, RH_ZOHAR, BS_ETZ_HAIM, 'grRABASH'];
