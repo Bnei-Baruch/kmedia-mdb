@@ -167,6 +167,7 @@ export const reducer = handleActions({
       sortedByAZ,
       loaded: true,
       roots: sources.map(x => x.id),
+      sortBy: 'Book'
     };
   },
 
