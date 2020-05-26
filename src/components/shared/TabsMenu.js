@@ -9,10 +9,10 @@ const activeFromLocation = location => location.state ? location.state.active : 
 
 const activeFromDefault = items => (items.length > 0 ? items[0].name : null);
 
-const TabsMenu = ({location, items = [], active = ''}) => {
+const TabsMenu = ({ location, items = [], active = '' }) => {
   const computedActive = active
-      || activeFromLocation(location)
-      || activeFromDefault(items);
+    || activeFromLocation(location)
+    || activeFromDefault(items);
 
   const [internalActive, setInternalActive] = useState(computedActive);
 
@@ -31,7 +31,7 @@ const TabsMenu = ({location, items = [], active = ''}) => {
                 key={name}
                 name={name}
                 className={`tab-${name}`}
-                active={active === name}
+                active={internalActive === name}
                 onClick={handleActiveChange}
               >
                 {label}

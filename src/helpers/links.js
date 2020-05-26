@@ -47,6 +47,7 @@ import {
   UNIT_PUBLICATIONS_TYPE,
 } from './consts';
 
+const MAX_URL_LENGTH                = 100;
 export const landingPageSectionLink = (landingPage, filterValues) => {
   const linkParts = [SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK[landingPage]];
   const params = filterValues &&
@@ -160,9 +161,9 @@ export const canonicalLink = (entity, mediaLang) => {
 
   // unit based on type
   const prefix = mediaPrefix.get(entity.content_type);
-  
-  return prefix 
-    ? `${prefix}${entity.id}${mediaLangSuffix}` 
+
+  return prefix
+    ? `${prefix}${entity.id}${mediaLangSuffix}`
     : '/';
 };
 
@@ -184,4 +185,14 @@ export const canonicalContentType = (entity) => {
   default:
     return [];
   }
+};
+
+export const insertScrollToSearchParam = (link, search) => {
+  if (!search)
+    return link;
+  if (search.length > MAX_URL_LENGTH)
+    search = search.slice(0, MAX_URL_LENGTH);
+
+  const separator = link.indexOf('?') === -1 ? '?' : '&';
+  return `${link}${separator}searchScroll=${search}`;
 };

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { useHistory, useLocation, withRouter } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Container, Portal, Segment } from 'semantic-ui-react';
 
 import { selectors } from '../../../redux/modules/assets';
@@ -11,7 +11,7 @@ import { isEmpty } from '../../../helpers/utils';
 import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import { getQuery, updateQuery } from '../../../helpers/url';
+import { updateQuery } from '../../../helpers/url';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
@@ -39,16 +39,6 @@ const getFullUrl = (pdfFile, data, language, source) => {
   return assetUrl(`sources/${id}/${data[language].docx}`);
 };
 
-const prepareSearchInContent = (content, search) => {
-  const data = content.data.split('<p>').map(p => {
-    if (p.indexOf(search) === -1) {
-      return p;
-    }
-    return `<span id="__scrollSearchToHere__" style="background: red">${p.slice(-3)}</p></span>`;
-  }).join('<p>');
-  return { ...content, data };
-};
-
 const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, pdfFile, startsFrom, t) => {
   const { wip, err, data: contentData } = content;
 
@@ -71,7 +61,7 @@ const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, p
     return (
       <div
         style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
-        dangerouslySetInnerHTML={{ __html: prepareSearchInContent(content, search) }}
+        dangerouslySetInnerHTML={{ __html: contentData }}
       />
     );
   } else {
@@ -119,7 +109,7 @@ const Library = ({
     }));
   };
 
-  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, starts, t, getQuery(location).searchString);
+  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, starts, t);
   if (contentsToDisplay === null) {
     return <Segment basic>{t('sources-library.no-source')}</Segment>;
   }
@@ -165,8 +155,7 @@ Library.propTypes = {
   langSelectorMount: PropTypes.instanceOf(PropTypes.element),
   handleLanguageChanged: PropTypes.func.isRequired,
   downloadAllowed: PropTypes.bool.isRequired,
-  searchString: PropTypes.string,
   t: PropTypes.func.isRequired,
 };
 
-export default withRouter(withNamespaces()(Library));
+export default withNamespaces()(Library);

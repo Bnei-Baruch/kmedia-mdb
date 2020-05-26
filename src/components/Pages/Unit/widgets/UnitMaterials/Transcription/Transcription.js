@@ -12,6 +12,18 @@ import MediaHelper from '../../../../../../helpers/media';
 import * as shapes from '../../../../../shapes';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import WipErr from '../../../../../shared/WipErr/WipErr';
+import { withRouter } from 'react-router-dom';
+import { getQuery } from '../../../../../../helpers/url';
+
+const SCROLL_SEARCH_ID = '__scrollSearchToHere__';
+const scrollToSearch   = () => {
+  // const { getWIP } = this.props;
+  const element = document.getElementById(SCROLL_SEARCH_ID);
+  if (element === null) {
+    return;
+  }
+  setTimeout(() => element.scrollIntoView(), 0);
+};
 
 class Transcription extends Component {
   static propTypes = {
@@ -22,6 +34,7 @@ class Transcription extends Component {
     t: PropTypes.func.isRequired,
     type: PropTypes.string,
     onContentChange: PropTypes.func.isRequired,
+    location: shapes.HistoryLocation.isRequired,
   };
 
   static defaultProps = {
@@ -93,6 +106,11 @@ class Transcription extends Component {
     const { selectedFile } = this.state;
 
     this.loadFile(selectedFile);
+
+
+    if (selectedFile && this.props.doc2htmlById[selectedFile.id] && this.props.doc2htmlById[selectedFile.id].wip === false) {
+      scrollToSearch();
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -103,6 +121,7 @@ class Transcription extends Component {
       || (nextProps.unit.id !== props.unit.id)
       || (nextProps.unit.files !== props.unit.files
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
+        || state.selectedFile && (props.doc2htmlById[state.selectedFile.id].wip !== nextProps.doc2htmlById[state.selectedFile.id].wip)
         || nextState.language !== state.language);
   }
 
@@ -111,6 +130,10 @@ class Transcription extends Component {
 
     if (selectedFile !== prevState.selectedFile || language !== prevState.language) {
       this.loadFile(selectedFile);
+    }
+
+    if (selectedFile && this.props.doc2htmlById[selectedFile.id] && this.props.doc2htmlById[selectedFile.id].wip === false) {
+      scrollToSearch();
     }
   }
 
@@ -139,9 +162,21 @@ class Transcription extends Component {
     this.setState({ selectedFile, language: newLanguage });
   };
 
+  prepareScrollToSearch = (data, search) => {
+    const result = data.split('<p').map(p => {
+      const clearTags = p.replace(/<.+?>/gi, '');
+      if (clearTags.indexOf(search) === -1) {
+        return p;
+      }
+      return ` class="scroll-to-search"  id="${SCROLL_SEARCH_ID}" ${p}`;
+    }).join('<p');
+    return result;
+  };
+
   render() {
-    const { doc2htmlById, t, type }             = this.props;
+    const { doc2htmlById, t, type, location }   = this.props;
     const { selectedFile, languages, language } = this.state;
+    const { searchScroll }                      = getQuery(location);
 
     if (!selectedFile) {
       const text = type || 'transcription';
@@ -162,7 +197,7 @@ class Transcription extends Component {
         <div
           className="doc2html"
           style={{ direction }}
-          dangerouslySetInnerHTML={{ __html: data }}
+          dangerouslySetInnerHTML={{ __html: this.prepareScrollToSearch(data, searchScroll) }}
         />
       );
 
@@ -189,4 +224,4 @@ class Transcription extends Component {
   }
 }
 
-export default withNamespaces()(Transcription);
+export default withRouter(withNamespaces()(Transcription));

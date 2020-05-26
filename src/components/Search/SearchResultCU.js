@@ -1,7 +1,7 @@
 import React from 'react';
-import { Container, Header, Segment } from 'semantic-ui-react';
+import {Container, Header, Segment} from 'semantic-ui-react';
 
-import { canonicalLink } from '../../helpers/links';
+import {canonicalLink, insertScrollToSearchParam} from '../../helpers/links';
 import * as renderUnitHelper from '../../helpers/renderUnitHelper';
 import Link from '../Language/MultiLanguageLink';
 import SearchResultBase from './SearchResultBase';
@@ -12,8 +12,34 @@ class SearchResultCU extends SearchResultBase {
     cu: shapes.ContentUnit,
   };
 
+  highlightWrapToLink = (__html, pathname, activeTab) => {
+    let param = __html.replace(/<.+?>/gi, '');
+    return (<Link
+      to={{
+        pathname,
+        state: {active: activeTab},
+        search: `searchScroll=${param}`
+      }}>
+      <span dangerouslySetInnerHTML={{__html: `...${__html}...`}}/>
+    </Link>);
+  };
+
+  snippetFromHighlightWithLink = (highlight = {}, props, activeTab) => {
+    const prop = props.find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
+
+    if (!prop) {
+      return null;
+    }
+
+    const {cu, filters} = this.props;
+    const baseLink = canonicalLink(cu, this.getMediaLanguage(filters));
+
+    const __html = highlight[prop].map(h => this.highlightWrapToLink(h, baseLink, activeTab));
+    return <span>{__html}</span>;
+  };
+
   renderSnippet = (highlight) => {
-    const content     = this.snippetFromHighlight(highlight);
+    const content = this.snippetFromHighlightWithLink(highlight, ['content', 'content_language'], 'transcription');
     const description = this.snippetFromHighlight(highlight, ['description', 'description_language']);
 
     return (
@@ -51,9 +77,9 @@ class SearchResultCU extends SearchResultBase {
   };
 
   render() {
-    const { t, queryResult, cu, hit, rank, filters } = this.props;
+    const {t, queryResult, cu, hit, rank, filters} = this.props;
 
-    const { search_result: { searchId } } = queryResult;
+    const {search_result: {searchId}} = queryResult;
 
     const
       {
@@ -73,7 +99,7 @@ class SearchResultCU extends SearchResultBase {
           <Link
             className="search__link content"
             onClick={() => this.logClick(mdbUid, index, resultType, rank, searchId)}
-            to={canonicalLink(cu || { id: mdbUid, content_type: cu.content_type }, this.getMediaLanguage(filters))}
+            to={canonicalLink(cu || {id: mdbUid, content_type: cu.content_type}, this.getMediaLanguage(filters))}
           >
             {this.titleFromHighlight(highlight, cu.name)}
           </Link>
@@ -85,14 +111,14 @@ class SearchResultCU extends SearchResultBase {
           {' '}
           |
           <strong>{filmDate}</strong>
-          <div className="clear" />
+          <div className="clear"/>
         </Container>
 
         <Container className="content">{this.renderSnippet(highlight)}</Container>
 
         <Container>
           {this.renderFiles(cu, mdbUid, index, resultType, rank, searchId)}
-          <div className="clear" />
+          <div className="clear"/>
         </Container>
 
         {this.renderDebug(cu.name)}
