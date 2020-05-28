@@ -1,28 +1,37 @@
 import React from 'react';
 import {Container, Header, Segment} from 'semantic-ui-react';
 
-import {canonicalLink, insertScrollToSearchParam} from '../../helpers/links';
+import {canonicalLink} from '../../helpers/links';
 import * as renderUnitHelper from '../../helpers/renderUnitHelper';
 import Link from '../Language/MultiLanguageLink';
 import SearchResultBase from './SearchResultBase';
 import * as shapes from '../shapes';
+
+
+const MAX_URL_LENGTH = 100;
+const SEPARATOR = '__{}$';
 
 class SearchResultCU extends SearchResultBase {
   static propTypes = {
     cu: shapes.ContentUnit,
   };
 
-  highlightWrapToLink = (__html, pathname, activeTab) => {
-    let param = __html.replace(/<.+?>/gi, '');
-    return (<Link
-      to={{
-        pathname,
-        state: {active: activeTab},
-        search: `searchScroll=${param}`
-      }}>
-      <span dangerouslySetInnerHTML={{__html: `...${__html}...`}}/>
-    </Link>);
-  };
+  clearStringForLink = (str) => {
+    if (str.search(/\r\n|\r|\n/)) {
+      //select longest string separated with linebreaks
+      str = str.replace(/\r\n|\r|\n/gi, SEPARATOR).split(SEPARATOR).reduce((acc, x) => acc.length > x.length ? acc : x, '');
+    }
+    return str.replace(/<.+?>/gi, '');
+
+  }
+  highlightWrapToLink = (__html, pathname, activeTab) => (<Link
+    to={{
+      pathname,
+      state: {active: activeTab},
+      search: `searchScroll=${this.clearStringForLink(__html)}`
+    }}>
+    <span dangerouslySetInnerHTML={{__html: `...${__html}...`}}/>
+  </Link>);
 
   snippetFromHighlightWithLink = (highlight = {}, props, activeTab) => {
     const prop = props.find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
