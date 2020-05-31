@@ -8,7 +8,7 @@ import SearchResultBase from './SearchResultBase';
 import * as shapes from '../shapes';
 
 
-const MAX_URL_LENGTH = 100;
+const MAX_URL_LENGTH = 50;
 const SEPARATOR = '__{}$';
 
 class SearchResultCU extends SearchResultBase {
@@ -21,10 +21,11 @@ class SearchResultCU extends SearchResultBase {
       //select longest string separated with linebreaks
       str = str.replace(/\r\n|\r|\n/gi, SEPARATOR).split(SEPARATOR).reduce((acc, x) => acc.length > x.length ? acc : x, '');
     }
-    return str.replace(/<.+?>/gi, '');
-
+    return str.replace(/<.+?>/gi, '').slice(0, MAX_URL_LENGTH);
   }
+
   highlightWrapToLink = (__html, pathname, activeTab) => (<Link
+    className={'hover-under-line'}
     to={{
       pathname,
       state: {active: activeTab},
