@@ -6,6 +6,7 @@ import * as renderUnitHelper from '../../helpers/renderUnitHelper';
 import Link from '../Language/MultiLanguageLink';
 import SearchResultBase from './SearchResultBase';
 import * as shapes from '../shapes';
+import {stringify as urlSearchStringify} from "../../helpers/url";
 
 
 const MAX_URL_LENGTH = 50;
@@ -28,8 +29,7 @@ class SearchResultCU extends SearchResultBase {
     className={'hover-under-line'}
     to={{
       pathname,
-      state: {active: activeTab},
-      search: `searchScroll=${this.clearStringForLink(__html)}`
+      search: urlSearchStringify({searchScroll: this.clearStringForLink(__html), activeTab: activeTab})
     }}>
     <span dangerouslySetInnerHTML={{__html: `...${__html}...`}}/>
   </Link>);
