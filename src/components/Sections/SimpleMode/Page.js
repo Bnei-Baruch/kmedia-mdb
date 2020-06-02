@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import DayPicker from 'react-day-picker';
-import Navbar from 'react-day-picker/lib/src/Navbar';
+import Navbar from 'react-day-picker/build/Navbar';
 import MomentLocaleUtils from 'react-day-picker/moment';
 import { withNamespaces } from 'react-i18next';
 import { Button, Card, Container, Divider, Grid, Input } from 'semantic-ui-react';
