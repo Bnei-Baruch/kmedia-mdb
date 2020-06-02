@@ -285,7 +285,7 @@ class LibraryContainer extends Component {
         compact
         size="small"
         icon="sort alphabet ascending"
-        color={sortByAZ ? 'blue' : ''}
+        color={sortByAZ ? 'blue' : 'grey'}
         active={sortByAZ}
         basic={!sortByAZ}
         onClick={this.sortButton}
