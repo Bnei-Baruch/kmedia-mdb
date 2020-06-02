@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import noop from 'lodash/noop';
 import moment from 'moment';
 import scrollIntoView from 'scroll-into-view';
-import Navbar from 'react-day-picker/lib/src/Navbar';
+import Navbar from 'react-day-picker/build/Navbar';
 import MomentLocaleUtils, { formatDate } from 'react-day-picker/moment';
 import { Button, Icon, Input, Modal, Popup, Segment } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
