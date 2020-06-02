@@ -136,6 +136,8 @@ class Sketches extends React.Component {
 
     if (zipFiles) {
       this.setStateByZipFiles(zipFiles, contentLanguage, uiLanguage, unit);
+    } else{
+      this.setState({ zipFileId: null, imageFiles: null });
     }
   };
 
@@ -147,7 +149,7 @@ class Sketches extends React.Component {
   };
 
   getItemState = (zipFiles, language, unit) => {
-    const files     = Sketches.filterZipFiles(zipFiles, language, unit.original_language);
+    const files = Sketches.filterZipFiles(zipFiles, language, unit.original_language);
     return this.getStateByFile(files);
   };
 
@@ -175,7 +177,7 @@ class Sketches extends React.Component {
     const { zipIndexById, unzip } = this.props;
     const { data, wip, err }      = zipIndexById[file.id] || {};
 
-    if (!(wip || err) && isEmpty(data) && !Object.prototype.hasOwnProperty.call(zipIndexById, file.id)) {
+    if (!wip && !err && isEmpty(data) && !Object.prototype.hasOwnProperty.call(zipIndexById, file.id)) {
       unzip(file.id);
     }
   };
@@ -186,6 +188,9 @@ class Sketches extends React.Component {
   };
 
   handleImageError = event => console.log('Image Gallery loading error ', event.target);
+
+  removeErroneousImages = (item) =>
+    !item.path?.toUpperCase().includes('MACOSX');
 
   // converts images from server format (path, size) to ImageGallery format
   imageGalleryItem = (item) => {
@@ -258,51 +263,54 @@ class Sketches extends React.Component {
 
     // if imageObjs is not an array - create it
     let imageObjsArr = [];
-    if (imageObjs && !Array.isArray(imageObjs)) {
-      imageObjsArr.push(imageObjs);
-    } else {
-      imageObjsArr = imageObjs;
-    }
+    if (imageObjs) {
+      if(Array.isArray(imageObjs)) {
+        imageObjsArr = imageObjs;
+      } else {
+        imageObjsArr.push(imageObjs);
+      }
 
-    if (Array.isArray(imageObjsArr) && imageObjsArr.length > 0) {
-      // prepare the image array for the gallery and sort it
-      const items = imageObjsArr
-        .map(this.imageGalleryItem)
-        .sort((a, b) => strCmp(a.original, b.original));
-
-      return (
-        <div>
-          {
-            languages && languages.length > 1
-              ? (
-                <Container fluid textAlign="center">
-                  <ButtonsLanguageSelector
-                    languages={languages}
-                    defaultValue={language}
-                    onSelect={this.handleLanguageChanged}
-                  />
-                </Container>
-              )
-              : null
-          }
-          <ImageGallery
-            ref={i => this._imageGallery = i}
-            lazyLoad
-            showFullscreenButton
-            isRTL={isLanguageRtl(uiLanguage)}
-            items={items}
-            thumbnailPosition="top"
-            showPlayButton={false}
-            showBullets={false}
-            showIndex={items.length > 1}
-            showThumbnails={items.length > 1}
-            onImageError={this.handleImageError}
-            renderLeftNav={this.renderLeftNav}
-            renderRightNav={this.renderRightNav}
-            renderFullscreenButton={this.renderFullscreenButton}
-          />
-        </div>
-      );
+      if (imageObjsArr.length > 0) {
+        // prepare the image array for the gallery and sort it
+        const items = imageObjsArr
+          .filter(this.removeErroneousImages)
+          .map(this.imageGalleryItem)
+          .sort((a, b) => strCmp(a.original, b.original));
+  
+        return (
+          <div>
+            {
+              languages && languages.length > 1
+                ? (
+                  <Container fluid textAlign="center">
+                    <ButtonsLanguageSelector
+                      languages={languages}
+                      defaultValue={language}
+                      onSelect={this.handleLanguageChanged}
+                    />
+                  </Container>
+                )
+                : null
+            }
+            <ImageGallery
+              ref={i => this._imageGallery = i}
+              lazyLoad
+              showFullscreenButton
+              isRTL={isLanguageRtl(uiLanguage)}
+              items={items}
+              thumbnailPosition="top"
+              showPlayButton={false}
+              showBullets={false}
+              showIndex={items.length > 1}
+              showThumbnails={items.length > 1}
+              onImageError={this.handleImageError}
+              renderLeftNav={this.renderLeftNav}
+              renderRightNav={this.renderRightNav}
+              renderFullscreenButton={this.renderFullscreenButton}
+            />
+          </div>
+        );
+      }
     }
 
     return (
