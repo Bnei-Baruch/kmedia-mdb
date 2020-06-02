@@ -1,11 +1,11 @@
 import qs from 'qs';
-import { parse as cookieParse } from 'cookie';
+import {parse as cookieParse} from 'cookie';
 
-import { COOKIE_UI_LANG, DEFAULT_LANGUAGE, LANG_UI_LANGUAGES, LANGUAGES } from './consts';
+import {COOKIE_UI_LANG, DEFAULT_LANGUAGE, LANG_UI_LANGUAGES, LANGUAGES} from './consts';
 
 export const parse = str => qs.parse(str);
 
-export const stringify = obj => qs.stringify(obj, { arrayFormat: 'repeat', skipNulls: true });
+export const stringify = obj => qs.stringify(obj, {arrayFormat: 'repeat', skipNulls: true});
 
 /**
  * Test if a url is an absolute url
@@ -18,7 +18,7 @@ const ensureStartsWithSlash = str => str && (str[0] === '/' ? str : `/${str}`);
 
 export const splitPathByLanguage = (path) => {
   const pathWithSlash = ensureStartsWithSlash(path);
-  const parts         = pathWithSlash.split('/');
+  const parts = pathWithSlash.split('/');
 
   if (LANGUAGES[parts[1]]) {
     return {
@@ -35,22 +35,22 @@ export const splitPathByLanguage = (path) => {
 export const isSocialUserAgent = userAgent => /facebook|facebot/i.test(userAgent);
 
 export const getLanguageFromPath = (path, headers, userAgent) => {
-  let { language } = splitPathByLanguage(path);
+  let {language} = splitPathByLanguage(path);
   if (!language && isSocialUserAgent(userAgent)) {
     language = parse(path).shareLang;
   }
   if (language && LANG_UI_LANGUAGES.includes(language)) {
     // UI lang is set as first part of the url path. i,e, /:lang/...
-    return { language, redirect: false };
+    return {language, redirect: false};
   }
 
   // UI lang is set in cookie - redirect 302 to /:lang/...
   const cookies = cookieParse(headers.cookie || '');
-  language      = cookies[COOKIE_UI_LANG];
+  language = cookies[COOKIE_UI_LANG];
   // Only existing languages...
   if (language !== undefined && LANG_UI_LANGUAGES.includes(language)) {
     console.log(`language: ${language}, redirect: ${language !== DEFAULT_LANGUAGE}`);
-    return { language, redirect: true };
+    return {language, redirect: true};
   }
 
   // Educated guess: HTTP header
@@ -63,12 +63,12 @@ export const getLanguageFromPath = (path, headers, userAgent) => {
       console.log(`header-languages: ${headerLanguages}\n`);
       // THAT'S NOT STRUCTURE, THAT'S ARRAY OF LANGUAGES
       language = headerLanguages[0];
-      return { language, redirect: language !== DEFAULT_LANGUAGE };
+      return {language, redirect: language !== DEFAULT_LANGUAGE};
     }
   }
 
   // English
-  return { language: DEFAULT_LANGUAGE, redirect: false };
+  return {language: DEFAULT_LANGUAGE, redirect: false};
 };
 
 export const prefixWithLanguage = (path, location, toLanguage) => {
@@ -77,8 +77,8 @@ export const prefixWithLanguage = (path, location, toLanguage) => {
     return path;
   }
 
-  const { language: languagePrefix, path: pathSuffix } = splitPathByLanguage(path);
-  const { language: currentPathLangPrefix }            = splitPathByLanguage(location.pathname);
+  const {language: languagePrefix, path: pathSuffix} = splitPathByLanguage(path);
+  const {language: currentPathLangPrefix} = splitPathByLanguage(location.pathname);
 
   // priority: language from args > language from link path > language from current path
   const language = toLanguage || languagePrefix || currentPathLangPrefix || '';
@@ -106,7 +106,7 @@ export const updateQuery = (history, updater) => {
   if (!query.deb) {
     delete query.deb;
   }
-  history.replace({ search: stringify(updater(query)) });
+  history.replace({search: stringify(updater(query)), state: history.location?.state ?? ''});
 };
 
 export const isDebMode = location => getQuery(location).deb || false;
@@ -117,7 +117,7 @@ export const getToWithLanguage = (navigateTo, location, language, contentLanguag
   }
 
   if (!navigateTo) {
-    navigateTo = { ...location };
+    navigateTo = {...location};
   }
 
   // we're changing 'search' in case contentLanguage was supplied

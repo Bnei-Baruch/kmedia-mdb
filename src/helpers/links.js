@@ -160,9 +160,9 @@ export const canonicalLink = (entity, mediaLang) => {
 
   // unit based on type
   const prefix = mediaPrefix.get(entity.content_type);
-  
-  return prefix 
-    ? `${prefix}${entity.id}${mediaLangSuffix}` 
+
+  return prefix
+    ? `${prefix}${entity.id}${mediaLangSuffix}`
     : '/';
 };
 

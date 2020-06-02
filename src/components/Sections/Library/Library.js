@@ -58,7 +58,6 @@ const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, p
     );
   } else if (contentData) {
     const direction = getLanguageDirection(language);
-
     return (
       <div
         style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
