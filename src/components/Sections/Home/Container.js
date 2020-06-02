@@ -106,7 +106,7 @@ const HomePageContainer = ({ location, t }) => {
 
 HomePageContainer.propTypes = {
   location: shapes.HistoryLocation.isRequired,
-  f: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 };
 
 export default withNamespaces()(HomePageContainer);

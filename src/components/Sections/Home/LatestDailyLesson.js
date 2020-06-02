@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Header, Image } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
@@ -20,8 +20,9 @@ const getRandomImage = () => {
 };
 
 const LatestDailyLesson = ({ collection, t }) => {
-  // eslint-disable-next-line no-unused-vars
-  const [imageSrc, _] = useState(getRandomImage());
+  const [imageSrc, setImage] = useState();
+
+  useEffect(() => setImage(getRandomImage()), []);
 
   return (
     <div className="thumbnail">
