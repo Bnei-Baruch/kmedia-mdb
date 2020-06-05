@@ -11,6 +11,7 @@ import 'moment/locale/uk';
 import 'moment/locale/it';
 import 'moment/locale/de';
 import 'moment/locale/tr';
+import 'moment/locale/cs';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactGA from 'react-ga';
