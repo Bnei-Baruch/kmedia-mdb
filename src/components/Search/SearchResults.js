@@ -28,7 +28,6 @@ import DidYouMean from './DidYouMean';
 const SearchResults = (props) => {
   /* Requested by Mizrahi
     const [showNote, setShowNote] = useState(true);
-    const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
    */
   const filters          = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
   const areSourcesLoaded = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
@@ -46,7 +45,6 @@ const SearchResults = (props) => {
       wip,
       err,
       hitType,
-      // Requested by Mizrahi contentLanguage,
       pageNo,
       pageSize,
       language,
