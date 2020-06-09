@@ -8,6 +8,7 @@ const LANG_MAP = {
   he: 'he',
   ru: 'ru',
   es: 'es',
+  cs: 'cs',
   de: 'en',
   tr: 'en',
   ua: 'ua',

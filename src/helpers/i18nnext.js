@@ -8,6 +8,7 @@ import 'moment/locale/uk';
 import 'moment/locale/it';
 import 'moment/locale/de';
 import 'moment/locale/tr';
+import 'moment/locale/cs';
 
 import { DEFAULT_LANGUAGE } from './consts';
 

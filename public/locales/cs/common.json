@@ -1,0 +1,485 @@
+{
+  "nav": {
+    "top": {
+      "header": "Kabala Media"
+    },
+    "sidebar": {
+      "lessons": "Lekce a Přednášky",
+      "programs": "Programy",
+      "sources": "Knihovna",
+      "events": "Setkání a Události",
+      "books": "Knihy",
+      "topics": "Témata",
+      "publications": "Publikace",
+      "photos": "Fotky",
+      "design": "Design",
+      "design2": "Nákresy",
+      "project-status": "Stav projektu",
+      "help": "Pomoc",
+      "old-site": "Stará stránka"
+    },
+    "footer": {
+      "copyright": "Copyright © 2003-{{year}}",
+      "rights": "Bnei Baruch – Kabbalah L’Am Association, All rights reserved"
+    }
+  },
+  "filters": {
+    "by": "Filtrovat dle:",
+    "all": "Vše",
+    "date-filter": {
+      "label": "Datum",
+      "selectTitle": "Výběr časového rozpětí",
+      "presets": {
+        "TODAY": "Dnes",
+        "YESTERDAY": "Včera",
+        "LAST_7_DAYS": "Posledních 7 dní",
+        "LAST_30_DAYS": "Posledních 30 dní",
+        "LAST_MONTH": "Poslední měsíc",
+        "THIS_MONTH": "Tento měsíc",
+        "CUSTOM_RANGE": "Vlastní rozsah"
+      },
+      "start": "Začátek",
+      "end": "Konec"
+    },
+    "sources-filter": {
+      "label": "Zdroje",
+      "all": "Všechny zdroje"
+    },
+    "topics-filter": {
+      "label": "Témata",
+      "all": "Všechna témata"
+    },
+    "publishers-filter": {
+      "label": "Vydavatelé"
+    },
+    "programs-filter": {
+      "label": "Žánr/Program",
+      "all": "Všechny programy",
+      "recently-updated": "Nedávno aktualizované",
+      "last-updated": "Poslední aktualizace dne"
+    },
+    "locations-filter": {
+      "label": "Umístění",
+      "all": "Všechny umístění"
+    },
+    "holidays-filter": {
+      "label": "Svátky",
+      "all": "Všechny svátky"
+    },
+    "years-filter": {
+      "label": "Rok",
+      "placeholder": "Vybrat rok"
+    },
+    "collections-filter": {
+      "label": "Sbírky",
+      "all": "Všechny sbírky"
+    },
+    "sections-filter": {
+      "label": "Rubrika",
+      "all": "Vše",
+      "lessons": "Lekce a Přednášky",
+      "programs": "Programy",
+      "events": "Setkání a Události",
+      "publications": "Publikace",
+      "sources": "Zdroje"
+    }
+  },
+  "buttons": {
+    "apply": "Použít",
+    "cancel": "Zrušit",
+    "close": "Zavřít",
+    "audio": "Audio",
+    "video": "Video",
+    "more": "Více",
+    "copy-link": "Kopírovat odkaz",
+    "search": "Hledat",
+    "previous": "Předchozí",
+    "next": "Další",
+    "copy": "Kopírovat"
+  },
+  "player": {
+    "messages": {
+      "edit-help": "Přetáhněte ukazatele, chcete-li sdílet část videa"
+    },
+    "buttons": {
+      "edit-back": "Zpět na přehrávání",
+      "start-position": "Začátek",
+      "end-position": "Konec",
+      "click-to-set": "Kliknout pro nastavení"
+    },
+    "share": {
+      "title": "spustit toto video"
+    },
+    "error": {
+      "loading": "Chyba nahrávání souboru"
+    }
+  },
+  "messages": {
+    "loading": "Nahrávání",
+    "loading-subtext": "Přidržet pevně",
+    "server-error": "Server Error",
+    "not-found": "Oops!",
+    "not-found-subtext": "Nemůžeme najít to, co hledáte",
+    "no-files": "Žádné soubory",
+    "no-playable-files": "Žádné soubory k přehrání",
+    "no-results": "Žádné výsledky",
+    "pagination-results": "Výsledky {{start}} - {{end}}  {{total}}",
+    "link-copied-to-clipboard": "Odkaz byl zkopírován",
+    "unknown": "Neznámé",
+    "unsupported-media-format": "Nepodporovaný formát",
+    "error-loading-file": "Chyba nahrávání souboru",
+    "fallback-language": "Médium nebylo nalezeno pro vybraný jazyk, vybraný jazyk pro zálohování.",
+    "fallback-to-audio": "Video nebylo nalezeno, pouze audio",
+    "fallback-to-video": "Audio nebylo nalezeno, pouze video",
+    "source-content-not-found": "Obsah zdroje nebyl nalezen",
+    "no-images": "Nebyly nalezeny žádné náčrtky"
+  },
+  "search": {
+    "header": {
+      "text": "Výsledky hledání",
+      "subtext": ""
+    },
+    "sortby": "sort by",
+    "sorts": {
+      "relevance": "relevantnost",
+      "newertoolder": "od novějších ke starším",
+      "oldertonewer": "od starších k novějším"
+    },
+    "suggestions": {
+      "categories": {
+        "search": "Hledat",
+        "tags": "Štítky",
+        "sources": "Zdroje",
+        "authors": "Autoři",
+        "persons": "Osoby"
+      }
+    },
+    "results": {
+      "empty-query": "Není zadán žádný vyhledávací dotaz. Pro vyhledávání použijte prosím výše uvedené pole.",
+      "no-results": "Vyše hledání <1><0>{{query}}</0></1> nic nenašlo"
+    },
+    "result": {
+      "description": "Shrnutí",
+      "transcript": "Přepis",
+      "content": "Obsah"
+    },
+    "intent-types": {
+      "lessons": "Denní ranní lekce",
+      "programs": "Programy"
+    },
+    "intent-prefix": {
+      "lessons-topic": "Lekce a témata:",
+      "lessons-source": "Lekce dle zdroje:",
+      "programs-topic": "Programy na téma:",
+      "programs-source": "Programy dle zdroje:"
+    }
+  },
+  "home": {
+    "header": {
+      "text": "Kabala Media",
+      "subtext": "Největší zdroj Kabaly na světě. Lekce Kabaly s kabalistou Dr. Michaelem Laitmanem, stahovatelnými autentickými zdroji Kabaly, včetně knihy Zohar, a programy s Kabalou o vztazích, zdraví, vzdělání, ekonomice a společnosti."
+    },
+    "search": "Objevte moudrost Kabaly",
+    "sections": "Oddíly archivu",
+    "updates": "Poslední aktualizace",
+    "last-lesson": "Poslední denní lekce",
+    "donate": "Přispět nyní",
+    "promoted": {
+      "header": "Světové setkání v Římě v Itálii",
+      "subheader": "27-29 Července, 2018"
+    }
+  },
+  "events": {
+    "header": {
+      "text": "Setkání a Události",
+      "subtext": "Dnes je moudrost kabaly již všude ve světě. V této sekci budete moci vidět události, kongresy a zvláštní setkání sdružení "Kabbalah L'Am" v Izraeli a v zahraničí."
+    },
+    "tabs": {
+      "conventions": "Congresy",
+      "holidays": "Svátky",
+      "unity-days": "Dny Jednoty",
+      "friends-gatherings": "Setkání přátel",
+      "meals": "Jídla"
+    },
+    "list": {
+      "item_from": "Položka:"
+    },
+    "ALL_EVENTS": "Všechny události",
+    "no-matches": "Nebyly nalezeny žádné odpovídající události",
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Ostatní části ze stejné události"
+        }
+      }
+    },
+    "collection": {
+      "playlist": {
+        "preparation": "Příprava",
+        "lessons": "Lekce",
+        "other_parts": "Ostatní součásti události",
+        "appendices": "Dodatky"
+      }
+    }
+  },
+  "lessons": {
+    "header": {
+      "text": "Lekce a přednášky",
+      "subtext": "Lekce a přednášky Dr. Michaela Laitmana. Virtuální lekce, přednášky pro ženy, jedinečné nahrávky Rabiho Barucha Ashlaga (RABASH) a další."
+    },
+    "tabs": {
+      "daily": "Denní lekce",
+      "virtual": "Virtuální lekce",
+      "lectures": "Přednášky",
+      "women": "Ženské lekce",
+      "children": "Dětské lekce",
+      "series": "Vybrané studijní série"
+    },
+    "list": {
+      "related": "Související s",
+      "number": "#",
+      "item_from": "Položka:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Ostatní položky ze stejné série"
+        }
+      }
+    },
+    "unit-lesson-part": {
+      "recommended": {
+        "same-collection": {
+          "title": "Ostatní části ze stejné lekce",
+          "item-title": "Část {{name}}"
+        }
+      }
+    },
+    "last": {
+      "title": "Denní Kabalistické lekce - aktualizované",
+      "description": "Aktuální zkratky k poslední Denní lekci"
+    }
+  },
+  "programs": {
+    "header": {
+      "text": "Programy",
+      "subtext": "Zde najdete bohaté množství programů, které zahrnují: fascinující rozhovory o významu života, aktuální události, programy pro celou rodinu a další."
+    },
+    "genres": {
+      "documentary": "Documentární",
+      "late-night": "Pozdní noc",
+      "news": "Novinky",
+      "talk-show": "Talk Show",
+      "educational": "Vzdělávací",
+      "children": "Dětské",
+      "movies": "Filmy",
+      "other": "Ostatní"
+    },
+    "list": {
+      "episode_from": "Epizody od:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Ostatní součásti ze stejného programu",
+          "item-title": "Epizoda {{name}}"
+        }
+      }
+    }
+  },
+  "publications": {
+    "header": {
+      "text": "Publikace",
+      "subtext": "Články o aktuálních událostech, kultuře, populární vědě, vztazích a dalších, představené z jedinečné perspektivy moudrosti Kabaly"
+    },
+    "tabs": {
+      "articles": "Články",
+      "twitter": "Twitter",
+      "blog": "Blog"
+    },
+    "list": {
+      "item_from": "Položka:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "Další publikované články v této sbírce"
+        }
+      }
+    }
+  },
+  "help": {
+    "header": {
+      "text": "Pomoc",
+      "subtext": "V této části najdete video návody a osvědčené postupy, jak používat stránky"
+    }
+  },
+  "pages": {
+    "collection": {
+      "items": {
+        "programs-collection": "Epizoda(dy)",
+        "lessons-collection": "Položka(ky)",
+        "publications-collection": "Článek(ky)",
+        "event": "Položka(ky)"
+      }
+    },
+    "unit": {
+      "info": {
+        "sources": "Zdroje",
+        "topics": "Témata",
+        "collections": "Související s"
+      },
+      "recommended": {
+        "same-collection": {
+          "title": "Další položka ze stejné sbírky",
+          "item-title": "Položka {{name}}"
+        }
+      }
+    }
+  },
+  "materials": {
+    "summary": {
+      "header": "Shrnutí",
+      "no-summary": "Shrnutí chybí"
+    },
+    "transcription": {
+      "header": "Přepis",
+      "no-transcription": "Přepis chybí"
+    },
+    "sources": {
+      "header": "Zdroje",
+      "no-sources": "Žádné zdroje",
+      "no-source": "Prosím vyberte zdroj",
+      "no-source-available": "Nejsou připraveny žádné zdroje k zobrazení"
+    },
+    "sketches": {
+      "header": "Nákresy"
+    }
+  },
+  "sources-library": {
+    "header": {
+      "text": "Knihovna",
+      "subtext": "Sbírka všech nejdůležitějších originálních textů pro studium Kabaly, napsané největšími kabalisty."
+    },
+    "no-source": "Prosím vyberte zdroj",
+    "toc": "Obsah",
+    "az": "AZ",
+    "default": "Výchozí",
+    "filter": "Filtr..."
+  },
+  "media-downloads": {
+    "title": "Stahování médií",
+    "derived-title": "Odvozená média",
+    "type-labels": {
+      "video": "Hlavní Video",
+      "audio": "Hlavní Audio",
+      "text": "Přepis Textů",
+      "image": "Obrázky"
+    },
+    "lesson": {
+      "type-labels": {
+        "video": "Video lekce",
+        "audio": "Audio lekce",
+        "text": "Přepis Textů",
+        "image": "Náčrty"
+      }
+    },
+    "program": {
+      "type-labels": {
+        "video": "Programy Video",
+        "audio": "Programy Audio",
+        "text": "Přepis Textů",
+        "image": "Náčrty"
+      }
+    },
+    "publication": {
+      "type-labels": {
+        "video": "Video",
+        "audio": "Audio",
+        "text": "Texty článků",
+        "image": "Momentky"
+      }
+    }
+  },
+  "constants": {
+    "languages": {
+      "he": "Hebrew",
+      "en": "English",
+      "ru": "Russian",
+      "es": "Spanish",
+      "it": "Italian",
+      "de": "German",
+      "nl": "Dutch",
+      "fr": "French",
+      "pt": "Portuguese",
+      "tr": "Turkish",
+      "pl": "Polish",
+      "ar": "Arabic",
+      "hu": "Hungarian",
+      "fi": "Finnish",
+      "lt": "Lithuanian",
+      "ja": "Japanese",
+      "bg": "Bulgarian",
+      "ka": "Georgian",
+      "no": "Norwegian",
+      "sv": "Swedish",
+      "hr": "Croatian",
+      "zh": "Chinese",
+      "fa": "Persian",
+      "ro": "Romanian",
+      "hi": "Hindi",
+      "ua": "Ukrainian",
+      "mk": "Macedonian",
+      "sl": "Slovenian",
+      "lv": "Latvian",
+      "sk": "Slovak",
+      "cs": "Czech"
+    },
+    "content-types": {
+      "DAILY_LESSON": "Denní lekce",
+      "SPECIAL_LESSON": "Speciální lekce",
+      "FRIENDS_GATHERINGS": "Setkání přátel",
+      "CONGRESS": "Setkání",
+      "VIDEO_PROGRAM": "Programy",
+      "LECTURE_SERIES": "Série přednášek",
+      "CHILDREN_LESSONS": "Dětské lekce",
+      "WOMEN_LESSONS": "Ženské lekce",
+      "VIRTUAL_LESSONS": "Virtuální lekce",
+      "MEALS": "Jídla",
+      "HOLIDAY": "Svátky",
+      "PICNIC": "Piknik",
+      "UNITY_DAY": "Den Jednoty",
+      "CLIPS": "Klipy",
+      "ARTICLES": "Články",
+      "LESSON_PART": "Část lekce",
+      "LECTURE": "Přednášky",
+      "CHILDREN_LESSON": "Children Lesson",
+      "WOMEN_LESSON": "Ženské lekce",
+      "VIRTUAL_LESSON": "Virtuální lekce",
+      "FRIENDS_GATHERING": "Setkání přátel",
+      "MEAL": "Jídlo",
+      "VIDEO_PROGRAM_CHAPTER": "Kapitola video programů",
+      "FULL_LESSON": "Celá lekce",
+      "ARTICLE": "Článek",
+      "UNKNOWN": "Neznámé",
+      "EVENT_PART": "Část Události",
+      "CLIP": "Klip",
+      "TRAINING": "Výcvik",
+      "KITEI_MAKOR": "Zdrojové materiály",
+      "PUBLICATION": "Publikace",
+      "LELO_MIKUD": "Upraveno - Ne Focus Group"
+    },
+    "media-types": {
+      "video": "Video",
+      "audio": "Audio",
+      "image": "Obrazek",
+      "text": "Text",
+      "sheet": "Tabulka",
+      "banner": "Baner",
+      "presentation": "Prezentace"
+    }
+  },
+  "values": {
+    "date": "{{date, l}}"
+  }
+}
