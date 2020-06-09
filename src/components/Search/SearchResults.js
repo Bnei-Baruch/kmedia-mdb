@@ -7,8 +7,10 @@ import { Container, Divider, Grid } from 'semantic-ui-react';
 import { SEARCH_GRAMMAR_HIT_TYPES, SEARCH_INTENT_HIT_TYPES } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { getQuery } from '../../helpers/url';
+import { selectors as settings } from '../../redux/modules/settings';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
+import { selectors as tagsSelectors } from '../../redux/modules/tags';
 import { filtersTransformer } from '../../filters';
 import * as shapes from '../shapes';
 import WipErr from '../shared/WipErr/WipErr';
@@ -30,6 +32,10 @@ const SearchResults = (props) => {
    */
   const filters          = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
   const areSourcesLoaded = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
+  const getTagById       = useSelector(state => tagsSelectors.getTagById(state.tags));
+  const getSourcePath    = useSelector(state => sourcesSelectors.getSourceById(state.sources));
+  const getSourceById    = useSelector(state => sourcesSelectors.getSourceById(state.sources));
+  const contentLanguage  = useSelector(state => settings.getContentLanguage(state.settings));
 
   const
     {
@@ -54,7 +60,10 @@ const SearchResults = (props) => {
   const renderHit = (hit, rank) => {
     const { _source: { mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage }, _type: type } = hit;
 
-    const newProps = { ...props, hit, rank, key: `${mdbUid || landingPage}_${type}` };
+    const newProps = {
+      ...props, filters, getTagById, getSourceById, contentLanguage, getSourcePath,
+      hit, rank, key: `${mdbUid || landingPage}_${type}`
+    };
 
     if (SEARCH_GRAMMAR_HIT_TYPES.includes(type)) {
       return <SearchResultLandingPage {...newProps} />;
