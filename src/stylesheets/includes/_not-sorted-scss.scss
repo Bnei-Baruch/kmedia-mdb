@@ -913,6 +913,10 @@
   text-decoration: underline;
 }
 
+.hover-under-line:hover {
+  text-decoration: underline;
+}
+
 .gray-header {
   background-color: #ebecf0 !important;
   padding: 0.2em 1em !important;
@@ -1557,4 +1561,20 @@
 
 .align-left {
   float: left
+}
+
+.scroll-to-search {
+  box-shadow: 0 0 0 6px #7dcff5;
+  animation: blink-on-scroll .8s ease-in-out;
+  animation-iteration-count: 5;
+  animation-delay: .7s;
+}
+
+@keyframes blink-on-scroll {
+  0% {
+    box-shadow: 0 0 0 5px #7dcff5;
+  }
+  100% {
+    box-shadow: none;
+  }
 }
