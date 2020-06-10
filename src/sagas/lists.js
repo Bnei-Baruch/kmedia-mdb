@@ -6,7 +6,7 @@ import { selectors as filterSelectors } from '../redux/modules/filters';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { filtersTransformer } from '../filters';
 import Api from '../helpers/Api';
-import { CT_LESSON_PART } from '../helpers/consts';
+import { CT_VIDEO_PROGRAM_CHAPTER } from '../helpers/consts';
 import { getQuery, pushQuery } from './helpers/url';
 
 function* fetchList(action) {
@@ -16,7 +16,13 @@ function* fetchList(action) {
   const args = { ...action.payload };
   if (namespace.startsWith('intents')) {
     args.with_files = true;
-    endpoint        = args.content_type === CT_LESSON_PART ? Api.lessons : Api.units;
+    if (args.content_type === 'lessons') {
+      endpoint = Api.lessons;
+      args.content_type && delete args.content_type;
+    } else {
+      endpoint          = Api.units;
+      args.content_type = CT_VIDEO_PROGRAM_CHAPTER;
+    }
   } else {
     const filters      = yield select(state => filterSelectors.getFilters(state.filters, namespace));
     const filterParams = filtersTransformer.toApiParams(filters) || {};
