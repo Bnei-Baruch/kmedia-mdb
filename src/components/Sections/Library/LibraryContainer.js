@@ -22,6 +22,9 @@ import LibrarySettings from './LibrarySettings';
 import Share from './Share';
 import { getLanguageDirection, isLanguageRtl } from '../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { getQuery } from '../../../helpers/url';
+
+const SCROLL_SEARCH_ID = '__scrollSearchToHere__';
 
 class LibraryContainer extends Component {
   static contextType = DeviceInfoContext;
@@ -66,14 +69,15 @@ class LibraryContainer extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded }                    = this.props;
+    const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded, assetWIP }          = this.props;
     const { lastLoadedId, isReadable, fontSize, fontType, theme, tocIsActive, match, scrollTopPosition } = this.state;
 
     const equalProps = sourceId === nextProps.sourceId
       && language === nextProps.language
       && contentLanguage === nextProps.contentLanguage
       && sortBy === nextProps.sortBy
-      && areSourcesLoaded === nextProps.areSourcesLoaded;
+      && areSourcesLoaded === nextProps.areSourcesLoaded
+      && (!assetWIP && nextProps.assetWIP);
 
     const equalIndexMap = indexMap && nextProps.indexMap && indexMap[sourceId] === nextProps.indexMap[sourceId];
 
@@ -109,7 +113,7 @@ class LibraryContainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { sourceId, areSourcesLoaded, getPathByID } = this.props;
+    const { sourceId, areSourcesLoaded, getPathByID, location } = this.props;
     if (!areSourcesLoaded) {
       return;
     }
@@ -117,13 +121,27 @@ class LibraryContainer extends Component {
     this.replaceOrFetch(sourceId);
     this.updateSticky();
 
-    const { isReadable, scrollTopPosition, tocIsActive } = this.state;
+    let { isReadable, scrollTopPosition, tocIsActive } = this.state;
+
+    const { searchScroll } = getQuery(location);
+    const scrollingElement = isReadable ? this.articleRef : document.scrollingElement;
+
+    if (scrollingElement?.scrollTop === 0 && searchScroll) {
+      setTimeout(() => {
+        const element = document.getElementById(SCROLL_SEARCH_ID);
+        if (element) {
+          console.log('scroll to selected', scrollingElement, element);
+          scrollingElement.scrollTop = element.offsetTop;
+        }
+      }, 0);
+    }
+
     //on change full screen and normal view scroll to position
     if (prevState.isReadable !== isReadable && this.articleRef) {
       if (isReadable) {
-        this.articleRef.scrollTop = scrollTopPosition;
+        scrollingElement.scrollTop = scrollTopPosition;
       } else {
-        document.scrollingElement.scrollTop = scrollTopPosition;
+        scrollingElement.scrollTop = scrollTopPosition;
       }
     }
 
@@ -208,9 +226,14 @@ class LibraryContainer extends Component {
    * Get position of scroll
    * @returns {number|*}
    */
-  getScrollTop = () => this.state.isReadable
-    ? this.articleRef.scrollTop
-    : document.scrollingElement.scrollTop;
+  getScrollTop = () => {
+    const element = document.getElementById(SCROLL_SEARCH_ID);
+
+    console.log('getScrollTop', element, this.articleRef, document.scrollingElement);
+    return this.state.isReadable
+      ? this.articleRef.scrollTop
+      : document.scrollingElement.scrollTop;
+  };
 
   handleSettings = (setting) => this.setState(setting);
 
@@ -537,6 +560,7 @@ export default withRouter(connect(
   (state, ownProps) => ({
     sourceId: ownProps.match.params.id,
     indexMap: assets.getSourceIndexById(state.assets),
+    assetWIP: assets.getAsset(state.assets)?.wip,
     language: settings.getLanguage(state.settings),
     contentLanguage: settings.getContentLanguage(state.settings),
     getSourceById: sources.getSourceById(state.sources),
