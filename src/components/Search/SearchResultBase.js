@@ -45,12 +45,15 @@ import {
 } from '../../helpers/consts';
 import { SectionLogo } from '../../helpers/images';
 import { canonicalLink } from '../../helpers/links';
-import { isDebMode } from '../../helpers/url';
+import { isDebMode, stringify } from '../../helpers/url';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import ScoreDebug from './ScoreDebug';
 
 const PATH_SEPARATOR = ' > ';
+
+const MAX_URL_LENGTH     = 50;
+const NEW_LINE_SEPARATOR = '__P__';
 
 const iconByContentTypeMap = new Map([
   [CT_LESSON_PART, 'lessons'],
@@ -272,6 +275,48 @@ class SearchResultBase extends Component {
     }
     const __html = `...${highlight[prop].join('.....')}...`;
     return <span dangerouslySetInnerHTML={{ __html }} />;
+  };
+
+  clearStringForLink = (str) => {
+    if (str.search(/\r\n|\r|\n/)) {
+      //select longest string separated with linebreaks
+      str = str.replace(/\r\n|\r|\n/gi, NEW_LINE_SEPARATOR).split(NEW_LINE_SEPARATOR).reduce((acc, x) => acc.length > x.length ? acc : x, '');
+    }
+    return str.replace(/<.+?>/gi, '').slice(0, MAX_URL_LENGTH);
+  };
+
+  highlightWrapToLink = (__html, index, activeTab, pathname, logLinkParams) => {
+    let searchParams = { searchScroll: this.clearStringForLink(__html) };
+    if (activeTab) {
+      searchParams.activeTab = activeTab;
+    }
+    return (<Link
+      key={`highlightLink_${index}`}
+      onClick={() => this.logClick(...logLinkParams)}
+      className={'hover-under-line'}
+      to={{ pathname, search: stringify(searchParams) }}>
+      <span dangerouslySetInnerHTML={{ __html: `...${__html}...` }} />
+    </Link>);
+  };
+
+  snippetFromHighlightWithLink = (highlight = {}, props = ['content', 'content_language'], activeTab) => {
+    const prop = props.find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
+
+    if (!prop) {
+      return null;
+    }
+
+    const { cu, filters }                        = this.props;
+    const { canonicalLinkParams, logLinkParams } = this.buildLinkParams();
+    const baseLink                               = canonicalLink(...canonicalLinkParams);
+
+    const __html = highlight[prop].map((h, i) => this.highlightWrapToLink(h, i, activeTab, baseLink, logLinkParams));
+    return <span>{__html}</span>;
+  };
+
+  buildLinkParams = () => {
+    console.error('must be override in child class');
+    return { canonicalLinkParams: [], logLinkParams: [] };
   };
 
   getFilterById = (index) => {
