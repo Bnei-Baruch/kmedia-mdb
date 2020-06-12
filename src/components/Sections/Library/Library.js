@@ -76,7 +76,7 @@ const prepareScrollToSearch = (data, search) => {
     if (i === 0 || clearTags.indexOf(search) === -1) {
       return p;
     }
-    return ` class="scroll-to-search"  id="${SCROLL_SEARCH_ID}" ${p}`;
+    return ` class="scroll-to-search"  id="${SCROLL_SEARCH_ID}" ${p.replace(search, `<em>${search}</em>`)}`;
   }).join('<p');
   return result;
 };
