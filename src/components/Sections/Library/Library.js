@@ -11,11 +11,12 @@ import { isEmpty } from '../../../helpers/utils';
 import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import { updateQuery } from '../../../helpers/url';
+import { getQuery, updateQuery } from '../../../helpers/url';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
 
+const SCROLL_SEARCH_ID                = '__scrollSearchToHere__';
 export const checkRabashGroupArticles = (source) => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
     const result = /^gr-(.+)/.exec(source);
@@ -39,7 +40,7 @@ const getFullUrl = (pdfFile, data, language, source) => {
   return assetUrl(`sources/${id}/${data[language].docx}`);
 };
 
-const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, pdfFile, startsFrom, t) => {
+const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, pdfFile, startsFrom, t, search) => {
   const { wip, err, data: contentData } = content;
 
   const wipErr = WipErr({ wip, err, t });
@@ -61,12 +62,23 @@ const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, p
     return (
       <div
         style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
-        dangerouslySetInnerHTML={{ __html: contentData }}
+        dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(contentData, search) }}
       />
     );
   } else {
     return null;
   }
+};
+
+const prepareScrollToSearch = (data, search) => {
+  const result = data.split('<p').map((p, i) => {
+    const clearTags = p.replace(/<.+?>/gi, '');
+    if (i === 0 || clearTags.indexOf(search) === -1) {
+      return p;
+    }
+    return ` class="scroll-to-search"  id="${SCROLL_SEARCH_ID}" ${p}`;
+  }).join('<p');
+  return result;
 };
 
 const Library = ({
@@ -82,6 +94,7 @@ const Library = ({
   const location                    = useLocation();
   const history                     = useHistory();
   const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
+  const { searchScroll }            = getQuery(location);
 
   const content = useSelector(state => selectors.getAsset(state.assets));
 
@@ -109,7 +122,7 @@ const Library = ({
     }));
   };
 
-  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, starts, t);
+  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, starts, t, searchScroll);
   if (contentsToDisplay === null) {
     return <Segment basic>{t('sources-library.no-source')}</Segment>;
   }
