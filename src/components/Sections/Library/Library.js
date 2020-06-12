@@ -12,11 +12,11 @@ import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSele
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { getQuery, updateQuery } from '../../../helpers/url';
+import { prepareScrollToSearch } from '../../../helpers/utils';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
 
-const SCROLL_SEARCH_ID                = '__scrollSearchToHere__';
 export const checkRabashGroupArticles = (source) => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
     const result = /^gr-(.+)/.exec(source);
@@ -68,17 +68,6 @@ const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, p
   } else {
     return null;
   }
-};
-
-const prepareScrollToSearch = (data, search) => {
-  const result = data.split('<p').map((p, i) => {
-    const clearTags = p.replace(/<.+?>/gi, '');
-    if (i === 0 || clearTags.indexOf(search) === -1) {
-      return p;
-    }
-    return ` class="scroll-to-search"  id="${SCROLL_SEARCH_ID}" ${p.replace(search, `<em>${search}</em>`)}`;
-  }).join('<p');
-  return result;
 };
 
 const Library = ({

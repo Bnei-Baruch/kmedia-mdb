@@ -419,3 +419,6 @@ export const SEARCH_INTENT_SECTIONS = {
   [SEARCH_INTENT_HIT_TYPE_LESSONS]: 'lessons',
   [SEARCH_INTENT_HIT_TYPE_PROGRAMS]: 'programs',
 };
+
+
+export const SCROLL_SEARCH_ID = '__scrollSearchToHere__';

@@ -23,8 +23,7 @@ import Share from './Share';
 import { getLanguageDirection, isLanguageRtl } from '../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getQuery } from '../../../helpers/url';
-
-const SCROLL_SEARCH_ID = '__scrollSearchToHere__';
+import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
 
 class LibraryContainer extends Component {
   static contextType = DeviceInfoContext;
@@ -113,7 +112,7 @@ class LibraryContainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { sourceId, areSourcesLoaded, getPathByID, location } = this.props;
+    const { sourceId, areSourcesLoaded, getPathByID, location, assetWIP } = this.props;
     if (!areSourcesLoaded) {
       return;
     }
@@ -126,14 +125,9 @@ class LibraryContainer extends Component {
     const { searchScroll } = getQuery(location);
     const scrollingElement = isReadable ? this.articleRef : document.scrollingElement;
 
-    if (scrollingElement?.scrollTop === 0 && searchScroll) {
-      setTimeout(() => {
-        const element = document.getElementById(SCROLL_SEARCH_ID);
-        if (element) {
-          console.log('scroll to selected', scrollingElement, element);
-          scrollingElement.scrollTop = element.offsetTop;
-        }
-      }, 0);
+    if (searchScroll && !assetWIP) {
+      const element = document.getElementById(SCROLL_SEARCH_ID);
+      element && (scrollingElement.scrollTop = element.offsetTop);
     }
 
     //on change full screen and normal view scroll to position
@@ -458,7 +452,7 @@ class LibraryContainer extends Component {
 
     const isRtl    = isLanguageRtl(language);
     const position = isRtl ? 'left' : 'right';
-    const active = !this.context.isMobileDevice || tocIsActive;
+    const active   = !this.context.isMobileDevice || tocIsActive;
 
     return (
       <div

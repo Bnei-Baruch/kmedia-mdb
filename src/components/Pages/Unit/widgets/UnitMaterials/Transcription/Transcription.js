@@ -13,9 +13,10 @@ import * as shapes from '../../../../../shapes';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 import { withRouter } from 'react-router-dom';
+import { prepareScrollToSearch } from '../../../../../../helpers/utils';
+import { SCROLL_SEARCH_ID } from '../../../../../../helpers/consts';
 import { getQuery } from '../../../../../../helpers/url';
 
-const SCROLL_SEARCH_ID = '__scrollSearchToHere__';
 const scrollToSearch   = () => {
   const element = document.getElementById(SCROLL_SEARCH_ID);
   if (element === null) {
@@ -163,17 +164,6 @@ class Transcription extends Component {
     this.setState({ selectedFile, language: newLanguage });
   };
 
-  prepareScrollToSearch = (data, search) => {
-    const result = data.split('<p').map((p, i) => {
-      const clearTags = p.replace(/<.+?>/gi, '');
-      if (i === 0 || clearTags.indexOf(search) === -1) {
-        return p;
-      }
-      return ` class="scroll-to-search"  id="${SCROLL_SEARCH_ID}" ${p.replace(search, `<em>${search}</em>`)}`;
-    }).join('<p');
-    return result;
-  };
-
   render() {
     const { doc2htmlById, t, type, location }   = this.props;
     const { selectedFile, languages, language } = this.state;
@@ -198,7 +188,7 @@ class Transcription extends Component {
         <div
           className="doc2html"
           style={{ direction }}
-          dangerouslySetInnerHTML={{ __html: this.prepareScrollToSearch(data, searchScroll) }}
+          dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(data, searchScroll) }}
         />
       );
 

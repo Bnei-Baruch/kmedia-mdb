@@ -5,7 +5,7 @@ import _ from 'lodash';
 import isEqual from 'react-fast-compare';
 
 import { CollectionsBreakdown } from './mdb';
-import { LANG_GERMAN, LANG_HEBREW, LANG_ITALIAN, LANG_RUSSIAN, LANG_SPANISH, LANG_TURKISH } from './consts';
+import { LANG_GERMAN, LANG_HEBREW, LANG_ITALIAN, LANG_RUSSIAN, LANG_SPANISH, LANG_TURKISH, SCROLL_SEARCH_ID } from './consts';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
@@ -259,7 +259,7 @@ export const getPodcastLinkByLang = language => {
 const removeFunctions = (fromObj) => {
   const obj = {}
   // @description it only removes functions that are not inside nested object properties.
-  // you can improve with recursion to remove all functions inside an object. 
+  // you can improve with recursion to remove all functions inside an object.
   Object.keys(fromObj).forEach(key => !_.isFunction(fromObj[key]) && (obj[key] = fromObj[key]))
   return obj
 }
@@ -268,3 +268,14 @@ export const areEqual = (prevProps, nextProps) => {
   const [prev, next] = [prevProps, nextProps].map(removeFunctions);
   return isEqual(prev, next);
 }
+
+export const prepareScrollToSearch = (data, search) => {
+  const result = data.split('<p').map((p, i) => {
+    const clearTags = p.replace(/<.+?>/gi, '');
+    if (i === 0 || clearTags.indexOf(search) === -1) {
+      return p;
+    }
+    return ` class="scroll-to-search"  id="${SCROLL_SEARCH_ID}" ${p.replace(search, `<em class="highlight">${search}</em>`)}`;
+  }).join('<p');
+  return result;
+};
