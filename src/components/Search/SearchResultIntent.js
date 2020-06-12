@@ -54,7 +54,7 @@ class SearchResultIntent extends SearchResultBase {
   }
 
   askForData = () => {
-    const { fetchList, hit: { _index, _source: { content_type: contentType, mdb_uid: mdbUid, } } } = this.props;
+    const { fetchList, hit: { _index, _type: contentType, _source: { mdb_uid: mdbUid, } } } = this.props;
 
     if (!['topics-filter', 'sources-filter'].includes(SEARCH_INTENT_FILTER_NAMES[_index])) {
       return;
@@ -260,7 +260,7 @@ class SearchResultIntent extends SearchResultBase {
 }
 
 const mapState = (state, ownProps) => {
-  const { hit: { _source: { content_type: contentType, mdb_uid: mdbUid, } } } = ownProps;
+  const { hit: { _type: contentType, _source: { mdb_uid: mdbUid, } } } = ownProps;
 
   const namespace   = `intents_${mdbUid}_${contentType}`;
   const nsState     = lists.getNamespaceState(state.lists, namespace);
