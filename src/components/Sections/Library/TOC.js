@@ -151,6 +151,7 @@ class TOC extends Component {
       rootId !== nextProps.rootId
       || match !== nextProps.match
       || !isEqual(fullPath, nextProps.fullPath)
+      || (!this.props.contextRef && nextProps.contextRef)
     );
   }
 
@@ -195,8 +196,8 @@ class TOC extends Component {
     let leafTitle;
     switch(sourceId){
     case BS_SHAMATI:
-      leafTitle = isRTL 
-        ? `${hebrew(number)}. ${name}` 
+      leafTitle = isRTL
+        ? `${hebrew(number)}. ${name}`
         : `${number}. ${name}`;
       break;
     case RH_RECORDS:
@@ -231,7 +232,7 @@ class TOC extends Component {
     let panels;
     if (hasNoGrandsons) {
       const tree = children.reduce((acc, leafId) => {
-        const leafTitle = this.getLeafTitle(leafId, sourceId);  
+        const leafTitle = this.getLeafTitle(leafId, sourceId);
 
         acc.push({ leafId, leafTitle });
         return acc;
