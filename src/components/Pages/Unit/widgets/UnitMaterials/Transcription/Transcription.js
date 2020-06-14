@@ -17,7 +17,7 @@ import { prepareScrollToSearch } from '../../../../../../helpers/utils';
 import { SCROLL_SEARCH_ID } from '../../../../../../helpers/consts';
 import { getQuery } from '../../../../../../helpers/url';
 
-const scrollToSearch   = () => {
+const scrollToSearch = () => {
   const element = document.getElementById(SCROLL_SEARCH_ID);
   if (element === null) {
     return;
