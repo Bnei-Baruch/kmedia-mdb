@@ -165,7 +165,6 @@ export const ALL_LANGUAGES = [
   LANG_AMHARIC,
 ];
 
-
 export const POPULAR_LANGUAGES = [
   LANG_HEBREW,
   LANG_ENGLISH,
@@ -419,6 +418,5 @@ export const SEARCH_INTENT_SECTIONS = {
   [SEARCH_INTENT_HIT_TYPE_LESSONS]: 'lessons',
   [SEARCH_INTENT_HIT_TYPE_PROGRAMS]: 'programs',
 };
-
 
 export const SCROLL_SEARCH_ID = '__scrollSearchToHere__';
