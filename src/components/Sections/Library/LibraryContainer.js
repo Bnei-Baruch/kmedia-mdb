@@ -98,15 +98,15 @@ class LibraryContainer extends Component {
     window.addEventListener('resize', this.updateSticky);
     window.addEventListener('load', this.updateSticky);
 
-    const { sourceId, areSourcesLoaded, history }                                      = this.props;
+    const { sourceId, areSourcesLoaded, history } = this.props;
+    if (!areSourcesLoaded) {
+      return;
+    }
+
     const { location: { state: { tocIsActive } = { state: { tocIsActive: false } } } } = history;
 
     if (tocIsActive || sourceId === 'grRABASH') {
       this.setState({ tocIsActive: true });
-    }
-
-    if (!areSourcesLoaded) {
-      return;
     }
 
     this.replaceOrFetch(sourceId);
@@ -458,7 +458,7 @@ class LibraryContainer extends Component {
 
     const isRtl    = isLanguageRtl(language);
     const position = isRtl ? 'left' : 'right';
-    const active = !this.context.isMobileDevice || tocIsActive;
+    const active   = !this.context.isMobileDevice || tocIsActive;
 
     return (
       <div

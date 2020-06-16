@@ -35,8 +35,8 @@ export const History = PropTypes.shape({
   createHref: PropTypes.func.isRequired,
   entries: PropTypes.arrayOf(HistoryLocation), // only in createMemoryHistory
   go: PropTypes.func.isRequired,
-  goBack: PropTypes.func.isRequired,
-  goForward: PropTypes.func.isRequired,
+  back: PropTypes.func.isRequired,
+  forward: PropTypes.func.isRequired,
   index: PropTypes.number, // only in createMemoryHistory
   length: PropTypes.number,
   listen: PropTypes.func.isRequired,

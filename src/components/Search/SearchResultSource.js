@@ -11,7 +11,7 @@ import SearchResultBase from './SearchResultBase';
 class SearchResultSource extends SearchResultBase {
 
   buildLinkParams = () => {
-    const { t, queryResult: { search_result: { searchId } }, cu, hit, rank, filters } = this.props;
+    const { queryResult: { search_result: { searchId } }, hit, rank } = this.props;
     const
       {
         _index: index,
@@ -19,7 +19,7 @@ class SearchResultSource extends SearchResultBase {
           mdb_uid: mdbUid,
           result_type: resultType
         },
-      }                                                                               = hit;
+      }                                                               = hit;
 
     return {
       canonicalLinkParams: [{ id: mdbUid, content_type: 'SOURCE' }],
@@ -28,15 +28,11 @@ class SearchResultSource extends SearchResultBase {
   };
 
   render() {
-    const { t, queryResult, hit, filters, rank } = this.props;
-    const { search_result: { searchId } }        = queryResult;
+    const { t, hit, filters } = this.props;
 
     const
       {
-        _index: index,
         _source: {
-          mdb_uid: mdbUid,
-          result_type: resultType,
           title
         },
         highlight

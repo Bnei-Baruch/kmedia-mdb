@@ -19,11 +19,11 @@ import {
   CT_FULL_LESSON,
   CT_HOLIDAY,
   CT_KITEI_MAKOR,
+  CT_LECTURE,
   CT_LECTURE_SERIES,
   CT_LELO_MIKUD,
   CT_LESSON_PART,
   CT_LESSONS_SERIES,
-  CT_LECTURE,
   CT_MEAL,
   CT_MEALS,
   CT_PICNIC,
@@ -306,7 +306,6 @@ class SearchResultBase extends Component {
       return null;
     }
 
-    const { cu, filters }                        = this.props;
     const { canonicalLinkParams, logLinkParams } = this.buildLinkParams();
     const baseLink                               = canonicalLink(...canonicalLinkParams);
 
