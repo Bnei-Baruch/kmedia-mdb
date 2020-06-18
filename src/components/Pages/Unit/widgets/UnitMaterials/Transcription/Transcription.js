@@ -164,9 +164,9 @@ class Transcription extends Component {
   };
 
   prepareScrollToSearch = (data, search) => {
-    const result = data.split('<p').map((p, i) => {
+    const result = data.split('<p').map(p => {
       const clearTags = p.replace(/<.+?>/gi, '');
-      if (i === 0 || clearTags.indexOf(search) === -1) {
+      if (clearTags.indexOf(search) === -1) {
         return p;
       }
       return ` class="scroll-to-search"  id="${SCROLL_SEARCH_ID}" ${p}`;
