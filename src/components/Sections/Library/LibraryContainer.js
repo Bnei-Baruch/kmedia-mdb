@@ -220,14 +220,9 @@ class LibraryContainer extends Component {
    * Get position of scroll
    * @returns {number|*}
    */
-  getScrollTop = () => {
-    const element = document.getElementById(SCROLL_SEARCH_ID);
-
-    console.log('getScrollTop', element, this.articleRef, document.scrollingElement);
-    return this.state.isReadable
-      ? this.articleRef.scrollTop
-      : document.scrollingElement.scrollTop;
-  };
+  getScrollTop = () => this.state.isReadable
+    ? this.articleRef.scrollTop
+    : document.scrollingElement.scrollTop;
 
   handleSettings = (setting) => this.setState(setting);
 
@@ -556,7 +551,7 @@ export default withRouter(connect(
     indexMap: assets.getSourceIndexById(state.assets),
     assetWIP: assets.getAsset(state.assets)?.wip,
     language: settings.getLanguage(state.settings),
-    contentLanguage: settings.getContentLanguage(state.settings),
+    contentLanguage: settings.getContentLanguage(state.settings, ownProps.history.location),
     getSourceById: sources.getSourceById(state.sources),
     getPathByID: sources.getPathByID(state.sources),
     sortBy: sources.sortBy(state.sources),
