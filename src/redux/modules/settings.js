@@ -66,9 +66,8 @@ export const reducer = handleActions({
 }, initialState);
 
 /* Selectors */
-
 const getLanguage        = state => state.language;
-const getContentLanguage = state => getQuery(window.location)?.language || state.contentLanguage || state.language;
+const getContentLanguage = (state, location) => getQuery(location)?.language || state.contentLanguage || state.language;
 const getPageSize        = state => state.pageSize;
 
 export const selectors = {
