@@ -165,7 +165,7 @@ const SearchResults = (props) => {
 
         <div className="searchResult_content">
           <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
-          {hits.filter(filterByHitType).map(h => renderHit(h, searchLanguage))}
+          {hits.filter(filterByHitType).map((h, rank) => renderHit(h, rank, searchLanguage))}
         </div>
         <Divider fitted />
 
