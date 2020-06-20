@@ -16,31 +16,19 @@ class SearchResultSource extends SearchResultBase {
       {
         _index: index,
         _source: {
-          mdb_uid: mdbUid,
+          mdb_uid: id,
           result_type: resultType
         },
-      }                                                                                  = hit;
+      }                                                                  = hit;
 
     return {
-      canonicalLinkParams: [{ id: mdbUid, content_type: 'SOURCE' }],
-      logLinkParams: [mdbUid, index, resultType, rank, searchId]
+      canonicalLinkParams: [{ id, content_type: 'SOURCE' }],
+      logLinkParams: [id, index, resultType, rank, searchId]
     };
   };
 
   render() {
-    const { t, queryResult, hit, filters, searchLanguage } = this.props;
-    const { search_result: { searchId } }        = queryResult;
-
-    const
-      {
-        _index: index,
-        _source: {
-          mdb_uid: mdbUid,
-          result_type: resultType,
-          title
-        },
-        highlight
-      } = hit;
+    const { t, hit: { _source: { title }, highlight }, searchLanguage: language } = this.props;
 
     const name                                   = this.titleFromHighlight(highlight, title);
     const { canonicalLinkParams, logLinkParams } = this.buildLinkParams();
@@ -51,8 +39,10 @@ class SearchResultSource extends SearchResultBase {
           <Link
             className="search__link"
             onClick={() => this.logClick(...logLinkParams)}
-            to={canonicalLink(...canonicalLinkParams, searchLanguage)}
-            language={this.getMediaLanguage(filters)}
+            to={{
+              pathname: canonicalLink(canonicalLinkParams),
+              search: { language }
+            }}
           >
             {name}
           </Link>
