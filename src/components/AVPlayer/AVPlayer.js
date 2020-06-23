@@ -219,9 +219,6 @@ class AVPlayer extends Component {
     const { media, item } = this.props;
     try {
       switch (event.data.command) {
-      case undefined:
-        // Ignore commands that weren't sent to us
-        return;
       case 'play':
         media.play();
         break;
