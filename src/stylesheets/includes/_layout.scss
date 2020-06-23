@@ -217,12 +217,26 @@ body {
   padding-top: 0;
 }
 
-.ui.menu .donate-button {
-  &.ui.button,
-  &.ui.button:hover,
-  &.ui.button:focus {
-    background: $white !important;
+.ui.menu {
+  .donate-button {
+    &.ui.button,
+    &.ui.button:hover,
+    &.ui.button:focus {
+      background: $white !important;
+      font-size: .92857143rem !important;
+    }
+  }
+
+  .vh-button {
     font-size: .92857143rem !important;
+    margin: 0 0.5em !important;
+    &.ui.button,
+    &.ui.button:focus {
+      background: rgb(244, 119, 33) !important;
+    }
+    &.ui.button:hover{
+      background: rgb(255, 102, 27) !important;
+    }
   }
 }
 

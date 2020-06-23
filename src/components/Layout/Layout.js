@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
 import { push } from 'connected-react-router';
-import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
+import { Header, Icon, Menu, Ref, Segment, Button } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
@@ -237,6 +237,18 @@ class Layout extends Component {
                   }
                   <Menu.Item position="right" className="mobile-hidden">
                     <DonateNow language={language} />
+                    <Button
+                      compact
+                      basic
+                      inverted
+                      size="small"
+                      icon="globe"
+                      content={t('home.virtual-home')}
+                      className="vh-button"
+                      as="a"
+                      href={`https://virtualhome.kli.one/`}
+                      target="_blank"
+                    />
                   </Menu.Item>
                   <TopMost />
                 </Menu.Menu>
