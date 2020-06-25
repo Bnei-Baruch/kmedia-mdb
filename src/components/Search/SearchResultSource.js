@@ -13,15 +13,7 @@ class SearchResultSource extends SearchResultBase {
 
   buildLinkParams = () => {
     const { t, queryResult: { search_result: { searchId } }, hit, rank, searchLanguage: language } = this.props;
-
-    const
-      {
-        _index: index,
-        _source: {
-          mdb_uid: id,
-          result_type: resultType
-        },
-      } = hit;
+    const { _index: index, _source: { mdb_uid: id, result_type: resultType }, }                    = hit;
 
     return {
       canonicalLinkParams: [{ id, content_type: 'SOURCE' }],
@@ -33,7 +25,7 @@ class SearchResultSource extends SearchResultBase {
   render() {
     const { t, hit: { _source: { title }, highlight } } = this.props;
 
-    const name                                   = this.titleFromHighlight(highlight, title);
+    const name                                                        = this.titleFromHighlight(highlight, title);
     const { canonicalLinkParams, logLinkParams, canonicalLinkSearch } = this.buildLinkParams();
 
     return (
