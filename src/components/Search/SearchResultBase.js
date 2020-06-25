@@ -285,38 +285,35 @@ class SearchResultBase extends Component {
     return str.replace(/<.+?>/gi, '').slice(0, MAX_URL_LENGTH);
   };
 
-  highlightWrapToLink = (__html, index, activeTab, pathname, logLinkParams) => {
-    let searchParams = { searchScroll: this.clearStringForLink(__html) };
-    if (activeTab) {
-      searchParams.activeTab = activeTab;
-    }
+  highlightWrapToLink = (__html, index, pathname, search, logLinkParams) => {
+    search.searchScroll = this.clearStringForLink(__html);
     return (<Link
       key={`highlightLink_${index}`}
       onClick={() => this.logClick(...logLinkParams)}
       className={'hover-under-line'}
-      to={{ pathname, search: stringify(searchParams) }}>
+      to={{ pathname, search: stringify(search) }}>
       <span dangerouslySetInnerHTML={{ __html: `...${__html}...` }} />
     </Link>);
   };
 
-  snippetFromHighlightWithLink = (highlight = {}, props = ['content', 'content_language'], activeTab) => {
+  snippetFromHighlightWithLink = (highlight = {}, props = ['content', 'content_language']) => {
     const prop = props.find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
 
     if (!prop) {
       return null;
     }
 
-    const { cu, filters }                        = this.props;
-    const { canonicalLinkParams, logLinkParams } = this.buildLinkParams();
-    const baseLink                               = canonicalLink(...canonicalLinkParams);
+    const { cu, filters }                                                     = this.props;
+    const { canonicalLinkParams, logLinkParams, canonicalLinkSearch: search } = this.buildLinkParams();
+    const baseLink                                                            = canonicalLink(...canonicalLinkParams);
 
-    const __html = highlight[prop].map((h, i) => this.highlightWrapToLink(h, i, activeTab, baseLink, logLinkParams));
+    const __html = highlight[prop].map((h, i) => this.highlightWrapToLink(h, i, baseLink, search, logLinkParams));
     return <span>{__html}</span>;
   };
 
   buildLinkParams = () => {
     console.error('must be override in child class');
-    return { canonicalLinkParams: [], logLinkParams: [] };
+    return { canonicalLinkParams: [], logLinkParams: [], canonicalLinkSearch: {} };
   };
 
   getFilterById = (index) => {

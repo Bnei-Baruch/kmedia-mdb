@@ -1,12 +1,11 @@
 import React from 'react';
-import {Container, Header, Segment} from 'semantic-ui-react';
+import { Container, Header, Segment } from 'semantic-ui-react';
 
-import {canonicalLink} from '../../helpers/links';
+import { canonicalLink } from '../../helpers/links';
 import * as renderUnitHelper from '../../helpers/renderUnitHelper';
 import Link from '../Language/MultiLanguageLink';
 import SearchResultBase from './SearchResultBase';
 import * as shapes from '../shapes';
-
 
 class SearchResultCU extends SearchResultBase {
   static propTypes = {
@@ -14,7 +13,7 @@ class SearchResultCU extends SearchResultBase {
   };
 
   renderSnippet = (highlight) => {
-    const content = this.snippetFromHighlightWithLink(highlight, ['content', 'content_language'], 'transcription');
+    const content     = this.snippetFromHighlightWithLink(highlight);
     const description = this.snippetFromHighlight(highlight, ['description', 'description_language']);
 
     return (
@@ -52,7 +51,7 @@ class SearchResultCU extends SearchResultBase {
   };
 
   buildLinkParams = () => {
-    const {t, queryResult: {search_result: {searchId}}, cu, hit, rank, filters} = this.props;
+    const { t, queryResult: { search_result: { searchId } }, cu, hit, rank, filters } = this.props;
 
     const
       {
@@ -64,13 +63,14 @@ class SearchResultCU extends SearchResultBase {
       } = hit;
 
     return {
-      canonicalLinkParams: [cu || {id: mdbUid, content_type: cu.content_type}, this.getMediaLanguage(filters)],
+      canonicalLinkParams: [cu || { id: mdbUid, content_type: cu.content_type }, this.getMediaLanguage(filters)],
+      canonicalLinkSearch: { activeTab: 'transcription' },
       logLinkParams: [mdbUid, index, resultType, rank, searchId]
     };
   };
 
   render() {
-    const {t, queryResult: {search_result: {searchId}}, cu, hit, rank, filters} = this.props;
+    const { t, queryResult: { search_result: { searchId } }, cu, hit, rank, filters } = this.props;
 
     const
       {
@@ -80,8 +80,8 @@ class SearchResultCU extends SearchResultBase {
           result_type: resultType
         },
         highlight,
-      } = hit;
-    const {canonicalLinkParams, logLinkParams} = this.buildLinkParams();
+      }                                          = hit;
+    const { canonicalLinkParams, logLinkParams } = this.buildLinkParams();
 
     const filmDate = renderUnitHelper.getFilmDate(cu, t);
 
@@ -103,14 +103,14 @@ class SearchResultCU extends SearchResultBase {
           {' '}
           |
           <strong>{filmDate}</strong>
-          <div className="clear"/>
+          <div className="clear" />
         </Container>
 
         <Container className="content">{this.renderSnippet(highlight)}</Container>
 
         <Container>
           {this.renderFiles(cu, mdbUid, index, resultType, rank, searchId)}
-          <div className="clear"/>
+          <div className="clear" />
         </Container>
 
         {this.renderDebug(cu.name)}

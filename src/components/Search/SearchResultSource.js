@@ -7,11 +7,13 @@ import { SectionLogo } from '../../helpers/images';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import Link from '../Language/MultiLanguageLink';
 import SearchResultBase from './SearchResultBase';
+import { stringify as urlSearchStringify } from '../../helpers/url';
 
 class SearchResultSource extends SearchResultBase {
 
   buildLinkParams = () => {
-    const { t, queryResult: { search_result: { searchId } }, hit, rank } = this.props;
+    const { t, queryResult: { search_result: { searchId } }, hit, rank, searchLanguage: language } = this.props;
+
     const
       {
         _index: index,
@@ -19,19 +21,20 @@ class SearchResultSource extends SearchResultBase {
           mdb_uid: id,
           result_type: resultType
         },
-      }                                                                  = hit;
+      } = hit;
 
     return {
       canonicalLinkParams: [{ id, content_type: 'SOURCE' }],
+      canonicalLinkSearch: { language },
       logLinkParams: [id, index, resultType, rank, searchId]
     };
   };
 
   render() {
-    const { t, hit: { _source: { title }, highlight }, searchLanguage: language } = this.props;
+    const { t, hit: { _source: { title }, highlight } } = this.props;
 
     const name                                   = this.titleFromHighlight(highlight, title);
-    const { canonicalLinkParams, logLinkParams } = this.buildLinkParams();
+    const { canonicalLinkParams, logLinkParams, canonicalLinkSearch } = this.buildLinkParams();
 
     return (
       <Segment verticalalign="top" className="bg_hover_grey search__block">
@@ -41,7 +44,7 @@ class SearchResultSource extends SearchResultBase {
             onClick={() => this.logClick(...logLinkParams)}
             to={{
               pathname: canonicalLink(canonicalLinkParams),
-              search: { language }
+              search: urlSearchStringify(canonicalLinkSearch)
             }}
           >
             {name}
