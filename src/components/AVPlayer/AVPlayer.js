@@ -219,62 +219,62 @@ class AVPlayer extends Component {
     const { media, item } = this.props;
     try {
       switch (event.data.command) {
-        case 'play':
-          media.play();
-          break;
-        case 'stop':
-          media.stop();
-          break;
-        case 'pause':
-          media.pause();
-          break;
-        case 'exitFullscreen':
-          media.exitFullscreen();
-          break;
-        case 'mute':
-          media.mute(true);
-          break;
-        case 'muteUnmute':
-          media.muteUnmute();
-          break;
-        case 'setVolume':
-          if (event.data.volume === undefined) {
-            window.parent && window.parent.postMessage('playerCallback', '*');
-            return;
-          }
-          media.setVolume(event.data.volume);
-          break;
-        case 'getVolume':
-          this.sendCallbackMessage(event.data, { status: 'ok', result: media.volume });
+      case 'play':
+        media.play();
+        break;
+      case 'stop':
+        media.stop();
+        break;
+      case 'pause':
+        media.pause();
+        break;
+      case 'exitFullscreen':
+        media.exitFullscreen();
+        break;
+      case 'mute':
+        media.mute(true);
+        break;
+      case 'muteUnmute':
+        media.muteUnmute();
+        break;
+      case 'setVolume':
+        if (event.data.volume === undefined) {
+          window.parent && window.parent.postMessage('playerCallback', '*');
           return;
-        case "getCurrentTime":
-          this.sendCallbackMessage(event.data, { status: 'ok', result: media.currentTime });
+        }
+        media.setVolume(event.data.volume);
+        break;
+      case 'getVolume':
+        this.sendCallbackMessage(event.data, { status: 'ok', result: media.volume });
+        return;
+      case "getCurrentTime":
+        this.sendCallbackMessage(event.data, { status: 'ok', result: media.currentTime });
+        return;
+      case "setCurrentTime":
+        if (event.data.currentTime === undefined) {
+          this.sendCallbackMessage(event.data, {status: 'error', error: 'currentTime parameter is missing'});
           return;
-        case "setCurrentTime":
-          if (event.data.currentTime === undefined) {
-            this.sendCallbackMessage(event.data, {status: 'error', error: 'currentTime parameter is missing'});
-            return;
-          }
-          media.seekTo(event.data.currentTime);
-          break;
-        case 'getInfo':
-          this.sendCallbackMessage(event.data, { status: 'ok', result: item });
-          return;
-        case 'isFullScreen':
-          this.sendCallbackMessage(event.data, { status: 'ok', result: media.isFullScreen });
-          return;
-        case 'isLoading':
-          this.sendCallbackMessage(event.data, { status: 'ok', result: media.isLoading });
-          return;
-        case 'isMuted':
-          this.sendCallbackMessage(event.data, { status: 'ok', result: media.isMuted });
-          return;
-        case 'isPlaying':
-          this.sendCallbackMessage(event.data, { status: 'ok', result: media.isPlaying });
-          return;
-        default:
-          this.sendCallbackMessage(event.data, { status: 'error', error: 'command not found!' });
-          return;
+        }
+        media.seekTo(event.data.currentTime);
+        break;
+      case 'getInfo':
+        this.sendCallbackMessage(event.data, { status: 'ok', result: item });
+        return;
+      case 'isFullScreen':
+        this.sendCallbackMessage(event.data, { status: 'ok', result: media.isFullScreen });
+        return;
+      case 'isLoading':
+        this.sendCallbackMessage(event.data, { status: 'ok', result: media.isLoading });
+        return;
+      case 'isMuted':
+        this.sendCallbackMessage(event.data, { status: 'ok', result: media.isMuted });
+        return;
+      case 'isPlaying':
+        this.sendCallbackMessage(event.data, { status: 'ok', result: media.isPlaying });
+        return;
+      default:
+        this.sendCallbackMessage(event.data, { status: 'error', error: 'command not found!' });
+        return;
       }
       this.sendCallbackMessage(event.data, { status: 'ok' });
     } catch (e) {
