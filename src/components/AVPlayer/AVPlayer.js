@@ -212,7 +212,7 @@ class AVPlayer extends Component {
       clearTimeout(this.autohideTimeoutId);
       this.autohideTimeoutId = null;
     }
-    window.removeEventListener('test');
+    window.removeEventListener('message');
   }
 
   receiveMessage(event) {
