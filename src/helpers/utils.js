@@ -256,13 +256,13 @@ export const getPodcastLinkByLang = language => {
 };
 
 // Compare properties without functions
-// only removes functions that are not inside nested object properties.
-// you can improve with recursion to remove all functions inside an object. 
-const removeFunctions = fromObj =>
-  fromObj ? Object.keys(fromObj)
-    .filter(key => !!key && !_.isFunction(fromObj[key]))
-    .reduce((obj, key) => obj[key] = fromObj[key], {})
-    : {};
+const removeFunctions = (fromObj) => {
+  const obj = {}
+  // @description it only removes functions that are not inside nested object properties.
+  // you can improve with recursion to remove all functions inside an object.
+  Object.keys(fromObj).forEach(key => !_.isFunction(fromObj[key]) && (obj[key] = fromObj[key]))
+  return obj
+}
 
 export const areEqual = (prevProps, nextProps) => {
   const [prev, next] = [prevProps, nextProps].map(removeFunctions);
