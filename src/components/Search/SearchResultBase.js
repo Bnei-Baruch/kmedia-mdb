@@ -52,7 +52,7 @@ import ScoreDebug from './ScoreDebug';
 
 const PATH_SEPARATOR = ' > ';
 
-const MAX_URL_LENGTH     = 50;
+const MAX_URL_LENGTH     = 120;
 const NEW_LINE_SEPARATOR = '__P__';
 
 const iconByContentTypeMap = new Map([
@@ -304,7 +304,6 @@ class SearchResultBase extends Component {
       return null;
     }
 
-    const { cu, filters }                                                     = this.props;
     const { canonicalLinkParams, logLinkParams, canonicalLinkSearch: search } = this.buildLinkParams();
     const baseLink                                                            = canonicalLink(...canonicalLinkParams);
 

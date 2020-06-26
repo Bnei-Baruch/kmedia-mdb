@@ -269,7 +269,7 @@ export const areEqual = (prevProps, nextProps) => {
 
 export const prepareScrollToSearch = (data, search) => {
   return data.split('<p').map((p, i) => {
-    const clearTags = p.replace(/<.+?>/gi, '');
+    const clearTags = p.replace(/<sup>.*?<\/sup>/ig, '').replace(/<.+?>/gi, '');
     if (i === 0 || clearTags.indexOf(search) === -1) {
       return p;
     }

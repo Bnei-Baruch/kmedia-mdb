@@ -35,7 +35,7 @@ class SearchResultSource extends SearchResultBase {
             className="search__link"
             onClick={() => this.logClick(...logLinkParams)}
             to={{
-              pathname: canonicalLink(canonicalLinkParams),
+              pathname: canonicalLink(...canonicalLinkParams),
               search: urlSearchStringify(canonicalLinkSearch)
             }}
           >
