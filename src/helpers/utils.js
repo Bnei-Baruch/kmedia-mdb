@@ -268,12 +268,42 @@ export const areEqual = (prevProps, nextProps) => {
 }
 
 export const prepareScrollToSearch = (data, search) => {
-  const result = data.split('<p').map((p, i) => {
+  return data.split('<p').map((p, i) => {
     const clearTags = p.replace(/<.+?>/gi, '');
     if (i === 0 || clearTags.indexOf(search) === -1) {
       return p;
     }
-    return ` class="scroll-to-search"  id="${SCROLL_SEARCH_ID}" ${p.replace(search, `<em class="highlight">${search}</em>`)}`;
+
+    return ` class="scroll-to-search"  id="${SCROLL_SEARCH_ID}" ${selectWholeWorlds(p, search)}`;
   }).join('<p');
-  return result;
+};
+
+export const selectWholeWorlds = (paragraph, subStr) => {
+  const start = paragraph.indexOf(subStr);
+  if (start === -1) {
+    return paragraph;
+  }
+  const end            = start + subStr.length;
+  let prevPosition     = 0, before = '', after = '', selected = '';
+  const paragraphAsArr = paragraph.split(' ');
+
+  for (let i = 0; i < paragraphAsArr.length; i++) {
+    const s        = paragraphAsArr[i];
+    const position = i === 0 ? s.length : prevPosition + s.length + 1;
+
+    if (prevPosition > end) {
+      after += s + ' ';
+      continue;
+    }
+
+    prevPosition = position;
+
+    if (position < start) {
+      before += s + ' ';
+      continue;
+    }
+
+    selected += s + ' ';
+  }
+  return `${before.trim()} <em class="highlight">${selected.trim()}</em> ${after.trim()}`;
 };
