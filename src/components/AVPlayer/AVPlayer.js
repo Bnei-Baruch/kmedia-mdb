@@ -212,7 +212,7 @@ class AVPlayer extends Component {
       clearTimeout(this.autohideTimeoutId);
       this.autohideTimeoutId = null;
     }
-    window.removeEventListener('message');
+    window.removeEventListener('message', this.receiveMessage, false);
   }
 
   receiveMessage(event) {
@@ -239,7 +239,7 @@ class AVPlayer extends Component {
         break;
       case 'setVolume':
         if (event.data.volume === undefined) {
-          window.parent && window.parent.postMessage('playerCallback', '*');
+          this.sendCallbackMessage(event.data, {status: 'error', error: 'volume parameter is missing'});
           return;
         }
         media.setVolume(event.data.volume);
@@ -278,14 +278,12 @@ class AVPlayer extends Component {
       }
       this.sendCallbackMessage(event.data, { status: 'ok' });
     } catch (e) {
-      console.error(e);
+      console.error('Error while receive external message in AVPlayer: ' + e);
       this.sendCallbackMessage(event.data, { status: 'error', error: e });
     }
   }
 
-  sendCallbackMessage(params, result) {
-    window.parent && window.parent.postMessage({params, result}, '*');
-  }
+  sendCallbackMessage = (params, result) => window.parent?.postMessage({params, result}, '*');
 
   // Remember the current time while switching.
   onSwitchAV = (...params) => {
