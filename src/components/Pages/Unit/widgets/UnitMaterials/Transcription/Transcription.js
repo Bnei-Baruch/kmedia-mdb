@@ -215,4 +215,4 @@ class Transcription extends Component {
   }
 }
 
-export default withRouter(withNamespaces()(Transcription));
+export default withNamespaces()(Transcription);

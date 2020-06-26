@@ -55,9 +55,12 @@ const SearchResults = (props) => {
 
   const filterByHitType = hit => hitType ? hit.type === hitType : true;
 
-  const renderHit = (hit, rank, searchLanguage) => {
-    const { _source: { mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage }, _type: type } = hit;
+  const searchLanguageByIndex = (index, def) => index.split('_')[2] ?? def;
 
+  const renderHit = (hit, rank, searchLanguage) => {
+    const { _source: { mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage }, _type: type, _index } = hit;
+
+    searchLanguage = searchLanguageByIndex(_index, searchLanguage);
     const newProps = {
       ...props, filters, getTagById, getSourceById, contentLanguage, getSourcePath, searchLanguage,
       hit, rank, key: `${mdbUid || landingPage}_${type}`

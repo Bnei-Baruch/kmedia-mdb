@@ -115,6 +115,7 @@ class SearchResultBase extends Component {
     hit: PropTypes.shape({}).isRequired,
     rank: PropTypes.number,
     contentLanguage: PropTypes.string.isRequired,
+    searchLanguage: PropTypes.string,
   };
 
   static defaultProps = {
