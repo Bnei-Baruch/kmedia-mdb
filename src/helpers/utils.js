@@ -263,7 +263,7 @@ const removeFunctions = (fromObj) => {
   Object.keys(fromObj).forEach(key => !_.isFunction(fromObj[key]) && (obj[key] = fromObj[key]))
   return obj
 }
-э
+
 export const areEqual = (prevProps, nextProps) => {
   const [prev, next] = [prevProps, nextProps].map(removeFunctions);
   return isEqual(prev, next);
