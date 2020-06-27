@@ -6,12 +6,13 @@ import { actions, selectors } from '../../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
 import * as shapes from '../../../../../shapes';
 import Transcription from './Transcription';
+import { withRouter } from 'react-router-dom';
 
 const TranscriptionContainer = (props) => {
-  const { unit, type = null } = props;
+  const { unit, type = null, location } = props;
   const doc2htmlById          = useSelector(state => selectors.getDoc2htmlById(state.assets));
   const language              = useSelector(state => settings.getLanguage(state.settings));
-  const contentLanguage       = useSelector(state => settings.getContentLanguage(state.settings));
+  const contentLanguage       = useSelector(state => settings.getContentLanguage(state.settings, location));
   const dispatch              = useDispatch();
 
   const handleContentChange = id => dispatch(actions.doc2html(id));
@@ -24,6 +25,7 @@ const TranscriptionContainer = (props) => {
       contentLanguage={contentLanguage}
       type={type}
       onContentChange={handleContentChange}
+      location={location}
     />
   );
 };
@@ -31,6 +33,7 @@ const TranscriptionContainer = (props) => {
 TranscriptionContainer.propTypes = {
   unit: shapes.ContentUnit.isRequired,
   type: PropTypes.string,
+  location: shapes.HistoryLocation.isRequired,
 };
 
-export default TranscriptionContainer;
+export default withRouter(TranscriptionContainer);

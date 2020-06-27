@@ -5,7 +5,7 @@ import _ from 'lodash';
 import isEqual from 'react-fast-compare';
 
 import { CollectionsBreakdown } from './mdb';
-import { LANG_GERMAN, LANG_HEBREW, LANG_ITALIAN, LANG_RUSSIAN, LANG_SPANISH, LANG_TURKISH } from './consts';
+import { LANG_GERMAN, LANG_HEBREW, LANG_ITALIAN, LANG_RUSSIAN, LANG_SPANISH, LANG_TURKISH, SCROLL_SEARCH_ID } from './consts';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
@@ -268,3 +268,44 @@ export const areEqual = (prevProps, nextProps) => {
   const [prev, next] = [prevProps, nextProps].map(removeFunctions);
   return isEqual(prev, next);
 }
+
+export const prepareScrollToSearch = (data, search) => {
+  return data.split('<p').map((p, i) => {
+    const clearTags = p.replace(/<sup>.*?<\/sup>/ig, '').replace(/<.+?>/gi, '');
+    if (i === 0 || clearTags.indexOf(search) === -1) {
+      return p;
+    }
+
+    return ` class="scroll-to-search"  id="${SCROLL_SEARCH_ID}" ${selectWholeWorlds(p, search)}`;
+  }).join('<p');
+};
+
+export const selectWholeWorlds = (paragraph, subStr) => {
+  const start = paragraph.indexOf(subStr);
+  if (start === -1) {
+    return paragraph;
+  }
+  const end            = start + subStr.length;
+  let prevPosition     = 0, before = '', after = '', selected = '';
+  const paragraphAsArr = paragraph.split(' ');
+
+  for (let i = 0; i < paragraphAsArr.length; i++) {
+    const s        = paragraphAsArr[i];
+    const position = i === 0 ? s.length : prevPosition + s.length + 1;
+
+    if (prevPosition > end) {
+      after += s + ' ';
+      continue;
+    }
+
+    prevPosition = position;
+
+    if (position < start) {
+      before += s + ' ';
+      continue;
+    }
+
+    selected += s + ' ';
+  }
+  return `${before.trim()} <em class="highlight">${selected.trim()}</em> ${after.trim()}`;
+};

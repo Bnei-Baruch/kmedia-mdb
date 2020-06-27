@@ -1568,6 +1568,11 @@
   animation: blink-on-scroll .8s ease-in-out;
   animation-iteration-count: 5;
   animation-delay: .7s;
+  em.highlight {
+    border-bottom: 1px solid rgba(65, 131, 196, .3);
+    background-color: rgba(242, 201, 76, .2);
+    font-weight: 900;
+  }
 }
 
 @keyframes blink-on-scroll {

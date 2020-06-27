@@ -151,6 +151,7 @@ class TOC extends Component {
       rootId !== nextProps.rootId
       || match !== nextProps.match
       || !isEqual(fullPath, nextProps.fullPath)
+      || (!this.props.contextRef && nextProps.contextRef)
     );
   }
 
@@ -162,7 +163,7 @@ class TOC extends Component {
       if (isNaN(stickyOffset)) {
         stickyOffset = 0;
       }
-      el.style.height        = `calc(100vh - ${stickyOffset}px)`;
+      el.style.height = `calc(100vh - ${stickyOffset}px)`;
     }
     const { activeId } = this.state;
     scrollToActive(activeId);
@@ -193,10 +194,10 @@ class TOC extends Component {
     const { name, number, year }      = getSourceById(leafId);
 
     let leafTitle;
-    switch(sourceId){
+    switch (sourceId) {
     case BS_SHAMATI:
-      leafTitle = isRTL 
-        ? `${hebrew(number)}. ${name}` 
+      leafTitle = isRTL
+        ? `${hebrew(number)}. ${name}`
         : `${number}. ${name}`;
       break;
     case RH_RECORDS:
@@ -211,14 +212,14 @@ class TOC extends Component {
     }
 
     return leafTitle;
-  }
+  };
 
   toc = (sourceId, path, firstLevel = false) => {
     // 1. Element that has children is CONTAINER
     // 2. Element that has NO children is NOT CONTAINER (though really it may be an empty container)
     // 3. If all children of the first level element are NOT CONTAINERS, than it is also NOT CONTAINER
 
-    const { getSourceById } = this.props;
+    const { getSourceById }         = this.props;
     const { name: title, children } = getSourceById(sourceId);
 
     if (isEmpty(children)) { // Leaf
@@ -231,7 +232,7 @@ class TOC extends Component {
     let panels;
     if (hasNoGrandsons) {
       const tree = children.reduce((acc, leafId) => {
-        const leafTitle = this.getLeafTitle(leafId, sourceId);  
+        const leafTitle = this.getLeafTitle(leafId, sourceId);
 
         acc.push({ leafId, leafTitle });
         return acc;

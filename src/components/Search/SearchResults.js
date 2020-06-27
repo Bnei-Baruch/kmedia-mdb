@@ -55,11 +55,14 @@ const SearchResults = (props) => {
 
   const filterByHitType = hit => hitType ? hit.type === hitType : true;
 
-  const renderHit = (hit, rank) => {
-    const { _source: { mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage }, _type: type } = hit;
+  const searchLanguageByIndex = (index, def) => index.split('_')[2] ?? def;
 
+  const renderHit = (hit, rank, searchLanguage) => {
+    const { _source: { mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage }, _type: type, _index } = hit;
+
+    searchLanguage = searchLanguageByIndex(_index, searchLanguage);
     const newProps = {
-      ...props, filters, getTagById, getSourceById, contentLanguage, getSourcePath,
+      ...props, filters, getTagById, getSourceById, contentLanguage, getSourcePath, searchLanguage,
       hit, rank, key: `${mdbUid || landingPage}_${type}`
     };
 
@@ -137,7 +140,7 @@ const SearchResults = (props) => {
     return <div>{t('search.results.empty-query')}</div>;
   }
 
-  const { search_result: results, typo_suggest } = queryResult;
+  const { search_result: results, typo_suggest, language: searchLanguage } = queryResult;
 
   if (isEmpty(results)) {
     return null;
@@ -165,7 +168,7 @@ const SearchResults = (props) => {
 
         <div className="searchResult_content">
           <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
-          {hits.filter(filterByHitType).map(renderHit)}
+          {hits.filter(filterByHitType).map((h, rank) => renderHit(h, rank, searchLanguage))}
         </div>
         <Divider fitted />
 
