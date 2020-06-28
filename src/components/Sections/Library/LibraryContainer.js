@@ -64,7 +64,8 @@ class LibraryContainer extends Component {
     fontSize: 0,
     theme: 'light',
     match: '',
-    scrollTopPosition: 0
+    scrollTopPosition: 0,
+    wasScroll: false
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -76,7 +77,7 @@ class LibraryContainer extends Component {
       && contentLanguage === nextProps.contentLanguage
       && sortBy === nextProps.sortBy
       && areSourcesLoaded === nextProps.areSourcesLoaded
-      && (!assetWIP && nextProps.assetWIP);
+      && assetWIP === nextProps.assetWIP;
 
     const equalIndexMap = indexMap && nextProps.indexMap && indexMap[sourceId] === nextProps.indexMap[sourceId];
 
@@ -125,18 +126,15 @@ class LibraryContainer extends Component {
     const { searchScroll } = getQuery(location);
     const scrollingElement = isReadable ? this.articleRef : document.scrollingElement;
 
-    if (searchScroll && !assetWIP) {
+    if (!this.state.wasScroll && searchScroll) {
       const element = document.getElementById(SCROLL_SEARCH_ID);
       element && (scrollingElement.scrollTop = element.offsetTop);
+      this.setState({ wasScroll: true });
     }
 
     //on change full screen and normal view scroll to position
     if (prevState.isReadable !== isReadable && this.articleRef) {
-      if (isReadable) {
-        scrollingElement.scrollTop = scrollTopPosition;
-      } else {
-        scrollingElement.scrollTop = scrollTopPosition;
-      }
+      scrollingElement.scrollTop = scrollTopPosition;
     }
 
     // hide toc if only one item
