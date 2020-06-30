@@ -230,12 +230,13 @@ body {
   .vh-button {
     font-size: .92857143rem !important;
     margin: 0 0.5em !important;
-    &.ui.button,
-    &.ui.button:focus {
-      background: rgb(244, 119, 33) !important;
+    &.ui.button {
+      background:#f2711c !important;
+      color: white !important;
     }
     &.ui.button:hover{
-      background: rgb(255, 102, 27) !important;
+      background:#f26202 !important;
+      color: white !important;
     }
   }
 }
