@@ -281,9 +281,13 @@ export const prepareScrollToSearch = (data, search) => {
 };
 
 export const selectWholeWorlds = (paragraph, subStr) => {
-  const start = paragraph.indexOf(subStr);
+  let start = paragraph.indexOf(subStr);
   if (start === -1) {
     return paragraph;
+  }
+  if(paragraph[start-1] === '>'){
+    paragraph = `${paragraph.substring(0, start)} ${paragraph.substring(start)}`;
+    start++;
   }
   const end            = start + subStr.length;
   let prevPosition     = 0, before = '', after = '', selected = '';

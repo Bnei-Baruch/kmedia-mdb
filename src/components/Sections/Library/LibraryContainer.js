@@ -113,7 +113,7 @@ class LibraryContainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { sourceId, areSourcesLoaded, getPathByID, location, assetWIP } = this.props;
+    const { sourceId, areSourcesLoaded, getPathByID, location} = this.props;
     if (!areSourcesLoaded) {
       return;
     }
