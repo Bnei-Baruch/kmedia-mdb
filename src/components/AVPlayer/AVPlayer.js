@@ -219,6 +219,9 @@ class AVPlayer extends Component {
     const { media, item } = this.props;
     try {
       switch (event.data.command) {
+      case undefined:
+        // Ignore commands that weren't sent to us
+        return;
       case 'play':
         media.play();
         break;
@@ -239,21 +242,19 @@ class AVPlayer extends Component {
         break;
       case 'setVolume':
         if (event.data.volume === undefined) {
-          this.sendCallbackMessage(event.data, {status: 'error', error: 'volume parameter is missing'});
-          return;
+          event.data.volume = 50;
         }
         media.setVolume(event.data.volume);
         break;
       case 'getVolume':
         this.sendCallbackMessage(event.data, { status: 'ok', result: media.volume });
         return;
-      case "getCurrentTime":
+      case 'getCurrentTime':
         this.sendCallbackMessage(event.data, { status: 'ok', result: media.currentTime });
         return;
-      case "setCurrentTime":
+      case 'setCurrentTime':
         if (event.data.currentTime === undefined) {
-          this.sendCallbackMessage(event.data, {status: 'error', error: 'currentTime parameter is missing'});
-          return;
+          event.data.currentTime = 0;
         }
         media.seekTo(event.data.currentTime);
         break;
@@ -273,17 +274,16 @@ class AVPlayer extends Component {
         this.sendCallbackMessage(event.data, { status: 'ok', result: media.isPlaying });
         return;
       default:
-        this.sendCallbackMessage(event.data, { status: 'error', error: 'command not found!' });
+        // Ignore commands that weren't sent to us
         return;
       }
       this.sendCallbackMessage(event.data, { status: 'ok' });
     } catch (e) {
       console.error('Error while receive external message in AVPlayer: ' + e);
-      this.sendCallbackMessage(event.data, { status: 'error', error: e });
     }
   }
 
-  sendCallbackMessage = (params, result) => window.parent?.postMessage({params, result}, '*');
+  sendCallbackMessage = (params, result) => window.parent?.postMessage({ params, result }, '*');
 
   // Remember the current time while switching.
   onSwitchAV = (...params) => {

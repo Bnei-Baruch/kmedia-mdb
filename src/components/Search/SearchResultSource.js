@@ -12,8 +12,8 @@ import { stringify as urlSearchStringify } from '../../helpers/url';
 class SearchResultSource extends SearchResultBase {
 
   buildLinkParams = () => {
-    const { t, queryResult: { search_result: { searchId } }, hit, rank, searchLanguage: language } = this.props;
-    const { _index: index, _source: { mdb_uid: id, result_type: resultType }, }                    = hit;
+    const { queryResult: { search_result: { searchId } }, hit, rank, searchLanguage: language } = this.props;
+    const { _index: index, _source: { mdb_uid: id, result_type: resultType }, }                 = hit;
 
     return {
       canonicalLinkParams: [{ id, content_type: 'SOURCE' }],
