@@ -51,8 +51,8 @@ class SearchResultCU extends SearchResultBase {
   };
 
   buildLinkParams = () => {
-    const { t, queryResult: { search_result: { searchId } }, cu, hit, rank, filters, searchLanguage: language } = this.props;
-    const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, }                             = hit;
+    const { queryResult: { search_result: { searchId } }, cu, hit, rank, filters, searchLanguage: language } = this.props;
+    const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, }                          = hit;
 
     return {
       canonicalLinkParams: [cu || { id: mdbUid, content_type: cu.content_type }, this.getMediaLanguage(filters)],

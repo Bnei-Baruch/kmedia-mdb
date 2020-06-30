@@ -5,16 +5,14 @@ import uniq from 'lodash/uniq';
 import { Container, Divider, Segment } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
-import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT } from '../../../../../../helpers/consts';
+import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, SCROLL_SEARCH_ID } from '../../../../../../helpers/consts';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import MediaHelper from '../../../../../../helpers/media';
 import * as shapes from '../../../../../shapes';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import WipErr from '../../../../../shared/WipErr/WipErr';
-import { withRouter } from 'react-router-dom';
 import { prepareScrollToSearch } from '../../../../../../helpers/utils';
-import { SCROLL_SEARCH_ID } from '../../../../../../helpers/consts';
 import { getQuery } from '../../../../../../helpers/url';
 
 const scrollToSearch = () => {
