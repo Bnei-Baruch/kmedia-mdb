@@ -6,7 +6,7 @@ import { Button, Menu, Sidebar } from 'semantic-ui-react';
 
 import { getPodcastLinkByLang, getRSSLinkByLang } from '../../helpers/utils';
 import NavLink from '../Language/MultiLanguageNavLink';
-import DonateNow from './DonateNow';
+import DonateNow, { VirtualHomeButton } from './DonateNow';
 import FeedBurner from './FeedBurner';
 
 const ITEMS = [
@@ -50,18 +50,7 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
         />
         <Menu.Item className="mobile-only">
           <DonateNow language={language} />
-          <Button
-            compact
-            basic
-            inverted
-            size="small"
-            icon="globe"
-            content={t('home.virtual-home')}
-            className="vh-button"
-            as="a"
-            href={`https://virtualhome.kli.one/`}
-            target="_blank"
-          />
+          <VirtualHomeButton />
         </Menu.Item>
         <Menu.Item
           key="rss"
