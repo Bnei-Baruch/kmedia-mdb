@@ -65,7 +65,6 @@ class LibraryContainer extends Component {
     theme: 'light',
     match: '',
     scrollTopPosition: 0,
-    wasScroll: false
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -113,7 +112,11 @@ class LibraryContainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { sourceId, areSourcesLoaded, getPathByID, location} = this.props;
+    const { sourceId, areSourcesLoaded, getPathByID, location, assetWIP } = this.props;
+    if (!assetWIP && prevProps.assetWIP) {
+      this.setState({ doScroll: true });
+    }
+
     if (!areSourcesLoaded) {
       return;
     }
@@ -121,15 +124,15 @@ class LibraryContainer extends Component {
     this.replaceOrFetch(sourceId);
     this.updateSticky();
 
-    let { isReadable, scrollTopPosition, tocIsActive } = this.state;
+    let { isReadable, scrollTopPosition, tocIsActive, doScroll = (!assetWIP && prevProps.assetWIP) } = this.state;
 
     const { searchScroll } = getQuery(location);
     const scrollingElement = isReadable ? this.articleRef : document.scrollingElement;
 
-    if (!this.state.wasScroll && searchScroll) {
+    if (doScroll && searchScroll) {
       const element = document.getElementById(SCROLL_SEARCH_ID);
       element && (scrollingElement.scrollTop = element.offsetTop);
-      this.setState({ wasScroll: true });
+      this.setState({ doScroll: false });
     }
 
     //on change full screen and normal view scroll to position
