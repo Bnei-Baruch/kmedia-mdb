@@ -64,7 +64,7 @@ class LibraryContainer extends Component {
     fontSize: 0,
     theme: 'light',
     match: '',
-    scrollTopPosition: 0
+    scrollTopPosition: 0,
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -76,7 +76,7 @@ class LibraryContainer extends Component {
       && contentLanguage === nextProps.contentLanguage
       && sortBy === nextProps.sortBy
       && areSourcesLoaded === nextProps.areSourcesLoaded
-      && (!assetWIP && nextProps.assetWIP);
+      && assetWIP === nextProps.assetWIP;
 
     const equalIndexMap = indexMap && nextProps.indexMap && indexMap[sourceId] === nextProps.indexMap[sourceId];
 
@@ -113,6 +113,10 @@ class LibraryContainer extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { sourceId, areSourcesLoaded, getPathByID, location, assetWIP } = this.props;
+    if (!assetWIP && prevProps.assetWIP) {
+      this.setState({ doScroll: true });
+    }
+
     if (!areSourcesLoaded) {
       return;
     }
@@ -120,23 +124,20 @@ class LibraryContainer extends Component {
     this.replaceOrFetch(sourceId);
     this.updateSticky();
 
-    let { isReadable, scrollTopPosition, tocIsActive } = this.state;
+    let { isReadable, scrollTopPosition, tocIsActive, doScroll = (!assetWIP && prevProps.assetWIP) } = this.state;
 
     const { searchScroll } = getQuery(location);
     const scrollingElement = isReadable ? this.articleRef : document.scrollingElement;
 
-    if (searchScroll && !assetWIP) {
+    if (doScroll && searchScroll) {
       const element = document.getElementById(SCROLL_SEARCH_ID);
       element && (scrollingElement.scrollTop = element.offsetTop);
+      this.setState({ doScroll: false });
     }
 
     //on change full screen and normal view scroll to position
     if (prevState.isReadable !== isReadable && this.articleRef) {
-      if (isReadable) {
-        scrollingElement.scrollTop = scrollTopPosition;
-      } else {
-        scrollingElement.scrollTop = scrollTopPosition;
-      }
+      scrollingElement.scrollTop = scrollTopPosition;
     }
 
     // hide toc if only one item
