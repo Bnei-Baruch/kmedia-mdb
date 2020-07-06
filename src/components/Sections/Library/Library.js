@@ -83,7 +83,8 @@ const Library = ({
   const location                    = useLocation();
   const history                     = useHistory();
   const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
-  const { searchScroll }            = getQuery(location);
+  const { srchstart, srchend }      = getQuery(location);
+  const search                      = { srchstart, srchend };
 
   const content = useSelector(state => selectors.getAsset(state.assets));
 
@@ -111,7 +112,7 @@ const Library = ({
     }));
   };
 
-  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, starts, t, searchScroll);
+  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, starts, t, search);
   if (contentsToDisplay === null) {
     return <Segment basic>{t('sources-library.no-source')}</Segment>;
   }
