@@ -271,21 +271,91 @@ export const areEqual = (prevProps, nextProps) => {
 };
 
 /* eslint-disable  no-useless-escape */
-const KEEP_LETTERS_RE            = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]]/g;
-const KEEP_LETTERS_WITH_SPACE_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]\s]/g;
+const KEEP_LETTERS_RE              = /[".,\/#!$%\^&\*;:{}=\-_`~()]/g;
+//const KEEP_LETTERS_RE = /[".,/#!$%^&*;:{}=\-_`~()]/g;
 
 // Inserts class="scroll-to-search" and id="${SCROLL_SEARCH_ID}" to the correct <p> element.
 export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }) => {
-  if (!start?.length || !end?.length) {
-    return data;
-  }
-  let tagsPosition    = [];
+  const tagsPosition  = [];
   data                = data.replace(/\r?\n|\r{1,}/g, ' ');
-  const dataCleanHtml = data
-    .replace(/<.+?>/g, (str, pos) => {
-      tagsPosition.push({ str, pos });
-      return '';
-    });
+  const dataCleanHtml = data.replace(/<.+?>/g, (str, pos) => {
+    tagsPosition.push({ str, pos });
+    return '';
+  });
+
+  const { tagsPositionInner, innerCleanHtml, from, to } = diffDataAndDataWithHtml(tagsPosition, data, dataCleanHtml, start, end);
+
+  if (!from || !to)
+    return data;
+
+  const before = data.slice(0, from);
+  const after  = data.slice(to);
+
+  let currentPosition = from;
+  let inner           = innerCleanHtml
+    .split(' ')
+    .map((word) => {
+      const tags = tagsPositionInner
+        .filter(t => {
+          return currentPosition <= t.pos && currentPosition + word.length + 1 >= t.pos;
+        })
+        .map(t => t.str)
+        .join('');
+
+      currentPosition += (word.length + 1) + tags.length;//word length + space + tag length
+
+      return word !== '' ? `<em class="highlight">${word}</em>${tags}` : tags;
+    })
+    .join(' ');
+
+  return `${before}<hr class="scroll-to-search"  id="${SCROLL_SEARCH_ID} />${inner}<hr class="scroll-to-search" />${after}`;
+};
+
+const diffDataAndDataWithHtml = (tagsPosition, data, dataCleanHtml, start, end) => {
+  const matchStart = getMatch(start, dataCleanHtml);
+  const matchEnd   = getMatch(end, dataCleanHtml);
+
+  if (!matchStart || !matchEnd) {
+    return { tagsPositionInner: [], from: null, to: null };
+  }
+
+  const tagsPositionInner = [];
+
+  let diff             = 0;
+  let from             = matchStart.index;
+  let to               = matchEnd.index + matchEnd[0].length;
+  const innerCleanHtml = dataCleanHtml.slice(from, to);
+
+  for (const p of tagsPosition) {
+    diff += p.str.length;
+
+    const tagEndP = p.pos + p.str.length;
+    const startP  = matchStart.index + diff;
+    const endP    = matchEnd.index + matchEnd[0].length + diff;
+
+    if (tagEndP >= endP) {
+      continue;
+    }
+
+    to = endP;
+
+    if (tagEndP <= startP) {
+      from = startP;
+      continue;
+    }
+
+    tagsPositionInner.push(p);
+  }
+  return { tagsPositionInner, from, to, innerCleanHtml };
+};
+
+const getMatch = (search, data) => {
+  const words    = search.replace(KEEP_LETTERS_RE, '.').split(' ').filter((word) => !!word).slice(0, 4);
+  const searchRe = new RegExp(words.map((word) => `(${word})`).join('(.{0,30})'), 's');
+  return data.match(searchRe);
+};
+
+/*
 
   tagsPosition = tagsPosition.reduce((acc, t) => {
     const prev = acc[acc.length - 1];
@@ -474,3 +544,4 @@ const isSelectionForward = (sel) => {
   range.detach();
   return res;
 };
+*/
