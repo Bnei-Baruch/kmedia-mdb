@@ -53,6 +53,7 @@ import ScoreDebug from './ScoreDebug';
 const PATH_SEPARATOR = ' > ';
 
 const MIN_NECESSARY_WORDS_FOR_SEARCH = 4;
+const NEW_LINE_SEPARATOR             = '__P__';
 
 const iconByContentTypeMap = new Map([
   [CT_LESSON_PART, 'lessons'],
@@ -278,7 +279,11 @@ class SearchResultBase extends Component {
   };
 
   clearStringForLink = (str) => {
-    return str.replace(/(\r?\n|\r){1,}/g, ' ').replace(/<.+?>/gi, '');
+    if (str.search(/\r\n|\r|\n/)) {
+      //select longest string separated with linebreaks
+      str = str.replace(/\r\n|\r|\n/gi, NEW_LINE_SEPARATOR).split(NEW_LINE_SEPARATOR).reduce((acc, x) => acc.length > x.length ? acc : x, '');
+    }
+    return str.replace(/<.+?>/gi, '');
   };
 
   highlightWrapToLink = (__html, index, pathname, search, logLinkParams) => {

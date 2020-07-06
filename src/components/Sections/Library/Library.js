@@ -72,14 +72,21 @@ const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, p
   }
 };
 
-const Library = ({ data, source, language = null, languages = [], langSelectorMount = null, downloadAllowed, handleLanguageChanged, t, }) => {
-  const location                            = useLocation();
-  const history                             = useHistory();
-  const [pageNumber, setPageNumber]         = useState(getPageFromLocation(location));
-  const [selectPosition, setSelectPosition] = useState();
-  const [searchUrl, setSearchUrl]           = useState();
-  const { srchstart, srchend }              = getQuery(location);
-  const search                              = { srchstart, srchend };
+const Library = ({
+  data,
+  source,
+  language = null,
+  languages = [],
+  langSelectorMount = null,
+  downloadAllowed,
+  handleLanguageChanged,
+  t,
+}) => {
+  const location                    = useLocation();
+  const history                     = useHistory();
+  const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
+  const { srchstart, srchend }      = getQuery(location);
+  const search                      = { srchstart, srchend };
 
   const content = useSelector(state => selectors.getAsset(state.assets));
 
@@ -107,22 +114,7 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
     }));
   };
 
-  const handleOnMouseUp = (event) => {
-    if (!window?.getSelection) {
-      return;
-    }
-
-    const selection = window.getSelection();
-    if (!selection.extentNode) {
-      return;
-    }
-    const url                                  = buildSearchLinkFromSelection(window.getSelection(), language);
-    const { offsetTop: top, offsetLeft: left } = selection.extentNode.parentElement;
-    setSelectPosition({ top, left });
-    setSearchUrl(url);
-  };
-
-  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, starts, t, search, handleOnMouseUp);
+  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, starts, t, search);
   if (contentsToDisplay === null) {
     return <Segment basic>{t('sources-library.no-source')}</Segment>;
   }
