@@ -257,12 +257,12 @@ export const getPodcastLinkByLang = language => {
 
 // Compare properties without functions
 const removeFunctions = (fromObj) => {
-  const obj = {}
+  const obj = {};
   // @description it only removes functions that are not inside nested object properties.
   // you can improve with recursion to remove all functions inside an object.
-  Object.keys(fromObj).forEach(key => !_.isFunction(fromObj[key]) && (obj[key] = fromObj[key]))
-  return obj
-}
+  Object.keys(fromObj).forEach(key => !_.isFunction(fromObj[key]) && (obj[key] = fromObj[key]));
+  return obj;
+};
 
 export const areEqual = (prevProps, nextProps) => {
   const [prev, next] = [prevProps, nextProps].map(removeFunctions);
@@ -270,11 +270,13 @@ export const areEqual = (prevProps, nextProps) => {
 };
 
 /* eslint-disable  no-useless-escape */
-const KEEP_LETTERS_RE              = /[".,\/#!$%\^&\*;:{}=\-_`~()]/g;
-//const KEEP_LETTERS_RE = /[".,/#!$%^&*;:{}=\-_`~()]/g;
+const KEEP_LETTERS_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()]/g;
 
 // Inserts class="scroll-to-search" and id="${SCROLL_SEARCH_ID}" to the correct <p> element.
 export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }) => {
+  if (!start?.length || !end?.length) {
+    return data;
+  }
   const tagsPosition  = [];
   data                = data.replace(/\r?\n|\r{1,}/g, ' ');
   const dataCleanHtml = data.replace(/<.+?>/g, (str, pos) => {
@@ -287,8 +289,7 @@ export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }) 
   if (!from || !to)
     return data;
 
-  const before = data.slice(0, from);
-  const after  = data.slice(to);
+  const { before, after } = wrapSeekingPlace(data, tagsPosition, from, to);
 
   let currentPosition = from;
   let inner           = innerCleanHtml
@@ -303,11 +304,11 @@ export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }) 
 
       currentPosition += (word.length + 1) + tags.length;//word length + space + tag length
 
-      return word !== '' ? `<em class="highlight">${word}</em>${tags}` : tags;
+      return word !== '' ? `<em class="_h">${word}</em>${tags}` : tags;
     })
     .join(' ');
 
-  return `${before}<hr class="scroll-to-search"  id="${SCROLL_SEARCH_ID} />${inner}<hr class="scroll-to-search" />${after}`;
+  return `${before}${inner}${after}`;
 };
 
 const diffDataAndDataWithHtml = (tagsPosition, data, dataCleanHtml, start, end) => {
@@ -354,50 +355,37 @@ const getMatch = (search, data) => {
   return data.match(searchRe);
 };
 
-/*
+export const wrapSeekingPlace = (data, tagsPosition, from, to) => {
+  const dataBefore = data.slice(0, to);
 
-export const prepareScrollToSearch = (data, search) => {
-  return data.split('<p').map((p, i) => {
-    const clearTags = p.replace(/<sup>.*?<\/sup>/ig, '').replace(/<.+?>/gi, '');
-    if (i === 0 || clearTags.indexOf(search) === -1) {
-      return p;
+  let openTagP;
+  let closeTagP;
+  let i = tagsPosition.length;
+  while (!(openTagP && closeTagP) && i >= 1) {
+    i--;
+
+    if (!openTagP) {
+      const tagDown = tagsPosition[i];
+      if (tagDown.pos < from && tagDown.str.indexOf('<p') !== -1) {
+        openTagP = tagDown;
+      }
     }
 
-    return ` class="scroll-to-search"  id="${SCROLL_SEARCH_ID}" ${selectWholeWorlds(p, search)}`;
-  }).join('<p');
+    if (!closeTagP) {
+      const tagUp = tagsPosition[tagsPosition.length - (i + 1)];
+      if (tagUp.pos > to && tagUp.str.indexOf('</p>') !== -1) {
+        closeTagP = tagUp;
+      }
+    }
+  }
+  openTagP  = openTagP ?? tagsPosition[0];
+  closeTagP = closeTagP ?? tagsPosition[tagsPosition.length - 1];
+
+  let before = dataBefore.slice(0, openTagP.pos);
+  before += dataBefore.slice(openTagP.pos, from).replace('<p', `<div class="scroll-to-search" id="${SCROLL_SEARCH_ID}"><p`);
+
+  let after = data.slice(to, closeTagP.pos);
+  after += data.slice(closeTagP.pos).replace('</p>', '</p></div>');
+
+  return { before, after };
 };
-
-export const selectWholeWorlds = (paragraph, subStr) => {
-  let start = paragraph.indexOf(subStr);
-  if (start === -1) {
-    return paragraph;
-  }
-  if(paragraph[start-1] === '>'){
-    paragraph = `${paragraph.substring(0, start)} ${paragraph.substring(start)}`;
-    start++;
-  }
-  const end            = start + subStr.length;
-  let prevPosition     = 0, before = '', after = '', selected = '';
-  const paragraphAsArr = paragraph.split(' ');
-
-  for (let i = 0; i < paragraphAsArr.length; i++) {
-    const s        = paragraphAsArr[i];
-    const position = i === 0 ? s.length : prevPosition + s.length + 1;
-
-    if (prevPosition > end) {
-      after += s + ' ';
-      continue;
-    }
-
-    prevPosition = position;
-
-    if (position < start) {
-      before += s + ' ';
-      continue;
-    }
-
-    selected += s + ' ';
-  }
-  return `${before.trim()} <em class="highlight">${selected.trim()}</em> ${after.trim()}`;
-};
-*/
