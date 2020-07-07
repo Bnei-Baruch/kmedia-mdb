@@ -5,6 +5,26 @@ import { Button } from 'semantic-ui-react';
 
 import { LANG_ENGLISH, LANG_RUSSIAN, LANG_UKRAINIAN } from '../../helpers/consts';
 
+const Vh_Button = ({ t }) => {
+  return <Button
+    compact
+    basic
+    size="small"
+    icon="globe"
+    content={t('home.virtual-home')}
+    className="vh-button"
+    as="a"
+    href={`https://virtualhome.kli.one/?bbref_internal=kmedia&bbref_lang=he`}
+    target="_blank"
+  />
+};
+
+Vh_Button.propTypes = {
+  t: PropTypes.func.isRequired,
+};
+
+export const VirtualHomeButton = withNamespaces()(Vh_Button);
+
 const DonateNow = ({ t, language }) => {
 
   let lang = language;
