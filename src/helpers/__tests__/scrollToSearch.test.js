@@ -8,7 +8,7 @@ import {
   data_withTagInMiddle,
   expected_withTagInMiddle,
   data_withP,
-  expected_withP, expected_wrapped_after, expected_wrapped_before
+  expected_withP, expected_wrapped_after, expected_wrapped_before, data_speedTest
 } from './scrollToSearchData';
 
 describe('Scroll to search, prepareScrollToSearch:', () => {
@@ -48,6 +48,23 @@ describe('Scroll to search, wrapSeekingPlace:', () => {
     expect(before).toEqual(expected_wrapped_before);
     expect(after).toEqual(expected_wrapped_after);
 
+  });
+
+});
+
+describe('Speed test', () => {
+
+  const srchstart = 'here to speak only through critique of empirical';
+  const srchend   = 'reality from the perspective of provision';
+
+  test('simple test', () => {
+    const nowStart = Date.now();
+    for (let i = 0; i < 100 * 1000; i++) {
+      prepareScrollToSearch(data_speedTest, { srchstart, srchend });
+    }
+
+    const nowEnd = Date.now();
+    expect(nowEnd - nowStart).toBeLessThan(1000);
   });
 
 });
