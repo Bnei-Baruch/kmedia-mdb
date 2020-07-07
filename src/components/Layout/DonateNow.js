@@ -6,7 +6,6 @@ import { Button } from 'semantic-ui-react';
 import { LANG_ENGLISH, LANG_RUSSIAN, LANG_UKRAINIAN } from '../../helpers/consts';
 
 const Vh_Button = ({ t }) => {
-  console.log("Type of t is:", typeof t);
   return <Button
     compact
     basic
