@@ -12,7 +12,7 @@ import MediaHelper from '../../../../../../helpers/media';
 import * as shapes from '../../../../../shapes';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import WipErr from '../../../../../shared/WipErr/WipErr';
-import { buildSearchLinkFromText, prepareScrollToSearch } from '../../../../../../helpers/utils';
+import { buildSearchLinkFromSelection, prepareScrollToSearch } from '../../../../../../helpers/utils';
 import { getQuery } from '../../../../../../helpers/url';
 import ShareBar from '../../../../../AVPlayer/Share/ShareBar';
 
@@ -179,7 +179,7 @@ class Transcription extends Component {
 
     const { language }                         = this.state;
     const selection                            = window.getSelection();
-    const searchUrl                            = buildSearchLinkFromText(window.getSelection().toString(), language);
+    const searchUrl                            = buildSearchLinkFromSelection(window.getSelection(), language);
     const { offsetTop: top, offsetLeft: left } = selection.extentNode.parentElement;
     this.setState({ selectPosition: { top, left }, searchUrl });
   };
