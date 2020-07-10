@@ -12,7 +12,7 @@ import MediaHelper from '../../../../../../helpers/media';
 import * as shapes from '../../../../../shapes';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import WipErr from '../../../../../shared/WipErr/WipErr';
-import { buildSearchLinkFromSelection, prepareScrollToSearch } from '../../../../../../helpers/utils';
+import { buildSearchLinkFromText, prepareScrollToSearch } from '../../../../../../helpers/utils';
 import { getQuery } from '../../../../../../helpers/url';
 import ShareBar from '../../../../../AVPlayer/Share/ShareBar';
 
@@ -179,7 +179,7 @@ class Transcription extends Component {
 
     const { language }                         = this.state;
     const selection                            = window.getSelection();
-    const searchUrl                            = buildSearchLinkFromSelection(window.getSelection(), language) + '&activeTab=transcription';
+    const searchUrl                            = buildSearchLinkFromText(window.getSelection().toString(), language);
     const { offsetTop: top, offsetLeft: left } = selection.extentNode.parentElement;
     this.setState({ selectPosition: { top, left }, searchUrl });
   };
@@ -214,7 +214,6 @@ class Transcription extends Component {
   render() {
     const { doc2htmlById, t, type }             = this.props;
     const { selectedFile, languages, language } = this.state;
-    const { srchstart, srchend }                = getQuery(location);
 
     if (!selectedFile) {
       const text = type || 'transcription';
@@ -229,15 +228,7 @@ class Transcription extends Component {
     }
 
     if (data) {
-      const direction = getLanguageDirection(language);
-
-      const content = (
-        <div
-          className="doc2html"
-          style={{ direction }}
-          dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(data, { srchstart, srchend }) }}
-        />
-      );
+      const content = this.prepareContent(data);
 
       if (languages.length === 1) {
         return content;
