@@ -12,7 +12,7 @@ import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSele
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { getQuery, updateQuery } from '../../../helpers/url';
-import { prepareScrollToSearch, buildSearchLinkFromText } from '../../../helpers/utils';
+import { prepareScrollToSearch, buildSearchLinkFromSelection } from '../../../helpers/utils';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
@@ -72,16 +72,7 @@ const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, p
   }
 };
 
-const Library = ({
-                   data,
-                   source,
-                   language = null,
-                   languages = [],
-                   langSelectorMount = null,
-                   downloadAllowed,
-                   handleLanguageChanged,
-                   t,
-                 }) => {
+const Library = ({ data, source, language = null, languages = [], langSelectorMount = null, downloadAllowed, handleLanguageChanged, t, }) => {
   const location                            = useLocation();
   const history                             = useHistory();
   const [pageNumber, setPageNumber]         = useState(getPageFromLocation(location));
@@ -122,7 +113,7 @@ const Library = ({
     }
 
     const selection                            = window.getSelection();
-    const url                                  = buildSearchLinkFromText(window.getSelection().toString(), language);
+    const url                                  = buildSearchLinkFromSelection(window.getSelection(), language);
     const { offsetTop: top, offsetLeft: left } = selection.extentNode.parentElement;
     setSelectPosition({ top, left });
     setSearchUrl(url);
