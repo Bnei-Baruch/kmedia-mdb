@@ -391,18 +391,51 @@ export const wrapSeekingPlace = (data, tagsPosition, from, to) => {
   return { before, after };
 };
 
-export const buildSearchLinkFromText = (text, language) => {
-  const words = text.toString().split(' ');
-  if (words.length === 1) {
+export const buildSearchLinkFromSelection = (sel, language) => {
+  if (sel.isCollapsed) {
     return null;
   }
+  const isForward = isSelectionForward(sel);
 
+  const words                                  = sel.toString().split(' ');
   const { protocol, hostname, port, pathname } = window.location;
-  const sStart                                 = words.slice(0, 5).join(' ');
-  const sEnd                                   = words.slice(-5).join(' ');
-  const query                                  = { srchstart: sStart, srchend: sEnd };
+  let sStart                                   = words.slice(0, 5).join(' ');
+  let sEnd                                     = words.slice(-5).join(' ');
+
+  let start = isForward ? { text: sel.anchorNode.textContent, offset: sel.anchorOffset }
+    : { text: sel.focusNode.textContent, offset: sel.focusOffset };
+  let end   = isForward ? { text: sel.focusNode.textContent, offset: sel.focusOffset }
+    : { text: sel.anchorNode.textContent, offset: sel.anchorNode };
+
+
+  const query = {
+    srchstart: wholeStartWord(start) + sStart,
+    srchend: sEnd + wholeEndWord(end)
+  };
+
   if (language) {
     query.language = language;
   }
   return `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
+};
+
+const wholeStartWord = ({ text, offset }) => {
+  if (offset === 0 || /[^a-zA-Z0-9]/.test(text[offset - 1]))
+    return '';
+  return text.slice(0, offset).split(/[^a-zA-Z0-9]/).slice(-1);
+};
+
+const wholeEndWord = ({ text, offset }) => {
+  if (offset === 0 || /[^a-zA-Z0-9]/.test(text[offset]))
+    return '';
+  return text.slice(offset).split(/[^a-zA-Z0-9]/)[0];
+};
+
+const isSelectionForward = (sel) => {
+  const range = document.createRange();
+  range.setStart(sel.anchorNode, sel.anchorOffset);
+  range.setEnd(sel.focusNode, sel.focusOffset);
+  const res = !range.collapsed;
+  range.detach();
+  return res;
 };
