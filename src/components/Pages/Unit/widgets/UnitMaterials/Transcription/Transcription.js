@@ -214,6 +214,7 @@ class Transcription extends Component {
   render() {
     const { doc2htmlById, t, type }             = this.props;
     const { selectedFile, languages, language } = this.state;
+    const { srchstart, srchend }                = getQuery(location);
 
     if (!selectedFile) {
       const text = type || 'transcription';
@@ -228,7 +229,15 @@ class Transcription extends Component {
     }
 
     if (data) {
-      const content = this.prepareContent(data);
+      const direction = getLanguageDirection(language);
+
+      const content = (
+        <div
+          className="doc2html"
+          style={{ direction }}
+          dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(data, { srchstart, srchend }) }}
+        />
+      );
 
       if (languages.length === 1) {
         return content;
