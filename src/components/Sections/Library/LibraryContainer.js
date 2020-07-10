@@ -113,7 +113,7 @@ class LibraryContainer extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { sourceId, areSourcesLoaded, getPathByID, location, assetWIP } = this.props;
-    if (!assetWIP && prevProps.assetWIP) {
+    if (!prevState.doScroll && !assetWIP && prevProps.assetWIP) {
       this.setState({ doScroll: true });
     }
 
@@ -126,10 +126,10 @@ class LibraryContainer extends Component {
 
     let { isReadable, scrollTopPosition, tocIsActive, doScroll = (!assetWIP && prevProps.assetWIP) } = this.state;
 
-    const { searchScroll } = getQuery(location);
-    const scrollingElement = isReadable ? this.articleRef : document.scrollingElement;
+    const { srchstart, srchend } = getQuery(location);
+    const scrollingElement       = isReadable ? this.articleRef : document.scrollingElement;
 
-    if (doScroll && searchScroll) {
+    if (srchstart && srchend && doScroll) {
       const element = document.getElementById(SCROLL_SEARCH_ID);
       element && (scrollingElement.scrollTop = element.offsetTop);
       this.setState({ doScroll: false });

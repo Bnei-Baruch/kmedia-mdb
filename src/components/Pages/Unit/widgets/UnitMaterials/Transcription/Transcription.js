@@ -101,11 +101,16 @@ class Transcription extends Component {
   state = {};
 
   componentDidMount() {
-    const { selectedFile } = this.state;
+    const { selectedFile }       = this.state;
+    const { srchstart, srchend } = getQuery(this.props.location);
 
     this.loadFile(selectedFile);
 
-    if (selectedFile && this.props.doc2htmlById[selectedFile.id] && this.props.doc2htmlById[selectedFile.id].wip === false) {
+    if (srchstart
+      && srchend
+      && selectedFile
+      && this.props.doc2htmlById[selectedFile.id]
+      && this.props.doc2htmlById[selectedFile.id].wip === false) {
       scrollToSearch();
     }
   }
@@ -124,12 +129,15 @@ class Transcription extends Component {
 
   componentDidUpdate(prevProp, prevState) {
     const { selectedFile, language } = this.state;
+    const { srchstart, srchend }     = getQuery(this.props.location);
 
     if (selectedFile !== prevState.selectedFile || language !== prevState.language) {
       this.loadFile(selectedFile);
     }
 
-    if (selectedFile
+    if (srchstart
+      && srchend
+      && selectedFile
       && prevProp.doc2htmlById[selectedFile.id]
       && prevProp.doc2htmlById[selectedFile.id].wip === true
       && this.props.doc2htmlById[selectedFile.id].wip === false) {
@@ -165,7 +173,7 @@ class Transcription extends Component {
   render() {
     const { doc2htmlById, t, type, location }   = this.props;
     const { selectedFile, languages, language } = this.state;
-    const { searchScroll }                      = getQuery(location);
+    const { srchstart, srchend }                = getQuery(location);
 
     if (!selectedFile) {
       const text = type || 'transcription';
@@ -186,7 +194,7 @@ class Transcription extends Component {
         <div
           className="doc2html"
           style={{ direction }}
-          dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(data, searchScroll) }}
+          dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(data, { srchstart, srchend }) }}
         />
       );
 
