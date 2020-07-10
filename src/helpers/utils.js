@@ -5,7 +5,16 @@ import _ from 'lodash';
 import isEqual from 'react-fast-compare';
 
 import { CollectionsBreakdown } from './mdb';
-import { LANG_GERMAN, LANG_HEBREW, LANG_ITALIAN, LANG_RUSSIAN, LANG_SPANISH, LANG_TURKISH, SCROLL_SEARCH_ID } from './consts';
+import {
+  LANG_GERMAN,
+  LANG_HEBREW,
+  LANG_ITALIAN,
+  LANG_RUSSIAN,
+  LANG_SPANISH,
+  LANG_TURKISH,
+  SCROLL_SEARCH_ID
+} from './consts';
+import { stringify } from './url';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
@@ -350,7 +359,7 @@ const diffDataAndDataWithHtml = (tagsPosition, data, dataCleanHtml, start, end) 
 };
 
 const getMatch = (search, data) => {
-  const words    = search.replace(KEEP_LETTERS_RE, '.').split(' ').filter((word) => !!word).slice(0, 4);
+  const words    = search.replace(KEEP_LETTERS_RE, '.').split(' ').filter((word) => !!word);
   const searchRe = new RegExp(words.map((word) => `(${word})`).join('(.{0,30})'), 's');
   return data.match(searchRe);
 };
@@ -388,4 +397,20 @@ export const wrapSeekingPlace = (data, tagsPosition, from, to) => {
   after += data.slice(closeTagP.pos).replace('</p>', '</p></div>');
 
   return { before, after };
+};
+
+export const buildSearchLinkFromText = (text, language) => {
+  const words = text.toString().split(' ');
+  if (words.length === 1) {
+    return null;
+  }
+
+  const { protocol, hostname, port, pathname } = window.location;
+  const sStart                                 = words.slice(0, 5).join(' ');
+  const sEnd                                   = words.slice(-5).join(' ');
+  const query                                  = { srchstart: sStart, srchend: sEnd };
+  if (language) {
+    query.language = language;
+  }
+  return `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
 };

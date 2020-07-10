@@ -12,10 +12,11 @@ import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSele
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { getQuery, updateQuery } from '../../../helpers/url';
-import { prepareScrollToSearch } from '../../../helpers/utils';
+import { prepareScrollToSearch, buildSearchLinkFromText } from '../../../helpers/utils';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
+import ShareBar from '../../AVPlayer/Share/ShareBar';
 
 export const checkRabashGroupArticles = (source) => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -40,7 +41,7 @@ const getFullUrl = (pdfFile, data, language, source) => {
   return assetUrl(`sources/${id}/${data[language].docx}`);
 };
 
-const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, pdfFile, startsFrom, t, search) => {
+const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, pdfFile, startsFrom, t, search, onMouseUpHandler) => {
   const { wip, err, data: contentData } = content;
 
   const wipErr = WipErr({ wip, err, t });
@@ -61,6 +62,7 @@ const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, p
     const direction = getLanguageDirection(language);
     return (
       <div
+        onMouseUp={onMouseUpHandler}
         style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
         dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(contentData, search) }}
       />
@@ -71,20 +73,22 @@ const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, p
 };
 
 const Library = ({
-  data,
-  source,
-  language = null,
-  languages = [],
-  langSelectorMount = null,
-  downloadAllowed,
-  handleLanguageChanged,
-  t,
-}) => {
-  const location                    = useLocation();
-  const history                     = useHistory();
-  const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
-  const { srchstart, srchend }      = getQuery(location);
-  const search                      = { srchstart, srchend };
+                   data,
+                   source,
+                   language = null,
+                   languages = [],
+                   langSelectorMount = null,
+                   downloadAllowed,
+                   handleLanguageChanged,
+                   t,
+                 }) => {
+  const location                            = useLocation();
+  const history                             = useHistory();
+  const [pageNumber, setPageNumber]         = useState(getPageFromLocation(location));
+  const [selectPosition, setSelectPosition] = useState();
+  const [searchUrl, setSearchUrl]           = useState();
+  const { srchstart, srchend }              = getQuery(location);
+  const search                              = { srchstart, srchend };
 
   const content = useSelector(state => selectors.getAsset(state.assets));
 
@@ -112,7 +116,19 @@ const Library = ({
     }));
   };
 
-  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, starts, t, search);
+  const onMouseUpHandler = (event) => {
+    if (!window?.getSelection) {
+      return;
+    }
+
+    const selection                            = window.getSelection();
+    const url                                  = buildSearchLinkFromText(window.getSelection().toString(), language);
+    const { offsetTop: top, offsetLeft: left } = selection.extentNode.parentElement;
+    setSelectPosition({ top, left });
+    setSearchUrl(url);
+  };
+
+  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, starts, t, search, onMouseUpHandler);
   if (contentsToDisplay === null) {
     return <Segment basic>{t('sources-library.no-source')}</Segment>;
   }
@@ -139,6 +155,13 @@ const Library = ({
 
   return (
     <div>
+      {
+        searchUrl && selectPosition ?
+          <div className={'share_search_on_page'} style={{ 'top': selectPosition.top, 'left': selectPosition.left }}>
+            <ShareBar url={searchUrl} buttonSize="medium" embedContent={searchUrl} buttonSize={'tiny'} />
+          </div>
+          : null
+      }
       {
         langSelectorMount && languageBar
           ? <Portal open preprend mountNode={langSelectorMount}>{languageBar}</Portal>
