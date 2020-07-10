@@ -1540,15 +1540,15 @@
 }
 
 .share-publication {
-  margin:0 5px;
+  margin: 0 5px;
 }
 
 .display-inline {
-  display:inline;
+  display: inline;
 }
 
 .library__nextPrevButtons {
-  height:20px;
+  height: 20px;
 }
 
 .library__nextPrevButton {
@@ -1562,6 +1562,8 @@
 .align-left {
   float: left
 }
+
+//search on the page
 .scroll-to-search {
   box-shadow: 0 0 0 6px #7dcff5;
   animation: blink-on-scroll .8s ease-in-out;
@@ -1582,4 +1584,10 @@
   100% {
     box-shadow: none;
   }
+}
+
+.share_search_on_page {
+  position: absolute;
+  top: 0;
+  left: 0
 }
