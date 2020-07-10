@@ -41,7 +41,7 @@ const getFullUrl = (pdfFile, data, language, source) => {
   return assetUrl(`sources/${id}/${data[language].docx}`);
 };
 
-const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, pdfFile, startsFrom, t, search, onMouseUpHandler) => {
+const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, pdfFile, startsFrom, t, search, handleOnMouseUp) => {
   const { wip, err, data: contentData } = content;
 
   const wipErr = WipErr({ wip, err, t });
@@ -62,7 +62,7 @@ const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, p
     const direction = getLanguageDirection(language);
     return (
       <div
-        onMouseUp={onMouseUpHandler}
+        onMouseUp={handleOnMouseUp}
         style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
         dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(contentData, search) }}
       />
@@ -116,7 +116,7 @@ const Library = ({
     }));
   };
 
-  const onMouseUpHandler = (event) => {
+  const handleOnMouseUp = (event) => {
     if (!window?.getSelection) {
       return;
     }
@@ -128,7 +128,7 @@ const Library = ({
     setSearchUrl(url);
   };
 
-  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, starts, t, search, onMouseUpHandler);
+  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, starts, t, search, handleOnMouseUp);
   if (contentsToDisplay === null) {
     return <Segment basic>{t('sources-library.no-source')}</Segment>;
   }
