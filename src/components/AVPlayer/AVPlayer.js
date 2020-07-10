@@ -191,7 +191,8 @@ class AVPlayer extends Component {
         setTimeout(media.pause, 0);
       }
     }
-    window.addEventListener('message', this.receiveMessage.bind(this), false);
+    this.receiveMessageFunc = this.receiveMessage.bind(this);
+    window.addEventListener('message', this.receiveMessageFunc, false);
   }
 
   componentDidUpdate() {
@@ -212,16 +213,13 @@ class AVPlayer extends Component {
       clearTimeout(this.autohideTimeoutId);
       this.autohideTimeoutId = null;
     }
-    window.removeEventListener('message', this.receiveMessage, false);
+    window.removeEventListener('message', this.receiveMessageFunc, false);
   }
 
   receiveMessage(event) {
     const { media, item } = this.props;
     try {
       switch (event.data.command) {
-      case undefined:
-        // Ignore commands that weren't sent to us
-        return;
       case 'play':
         media.play();
         break;
