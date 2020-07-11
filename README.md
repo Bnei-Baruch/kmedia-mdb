@@ -41,6 +41,8 @@ Open `.env` in your favorite editor and set all variables to their appropriate v
 $ yarn start
 ```
 
+## Player API
+[Kabbalahmedia Embedded Player APi](https://kabbalahmedia.info/KMedia+Player+Api.pdf)
 ## Thanks
 
 
