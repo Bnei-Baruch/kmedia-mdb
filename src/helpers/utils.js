@@ -5,7 +5,8 @@ import _ from 'lodash';
 import isEqual from 'react-fast-compare';
 
 import { CollectionsBreakdown } from './mdb';
-import { LANG_GERMAN, LANG_HEBREW, LANG_ITALIAN, LANG_RUSSIAN, LANG_SPANISH, LANG_TURKISH, LANGUAGES, SCROLL_SEARCH_ID } from './consts';
+import { canonicalSectionByUnit } from './links';
+import * as consts from './consts';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
@@ -226,11 +227,11 @@ export const getEscapedRegExp = term => {
 
 export const getRSSFeedByLang = language => {
   switch (language) {
-  case LANG_HEBREW:
+  case consts.LANG_HEBREW:
     return 'KabbalahVideoHeb';
-  case LANG_RUSSIAN:
+  case consts.LANG_RUSSIAN:
     return 'KabbalahVideoRus';
-  case LANG_SPANISH:
+  case consts.LANG_SPANISH:
     return 'kabbalah-archive/spa';
   default:
     return 'KabbalahVideoEng';
@@ -242,12 +243,12 @@ export const getRSSLinkByLang = language => 'https://feeds.feedburner.com/' + ge
 export const getRSSLinkByTopic = (topicId, language) => `https://kabbalahmedia.info/feeds/collections/${LANGUAGES[language].lang3}/${topicId}`;
 
 const podcastLinks = new Map([
-  [LANG_HEBREW, 'קבלה-מדיה-mp3-kab-heb/id1109848638?l=iw'],
-  [LANG_RUSSIAN, 'каббала-медиа-mp3-kab-rus/id1109845737?l=iw'],
-  [LANG_TURKISH, 'kabala-günlük-dersler-mp3-kab-trk/id1106592672?l=iw'],
-  [LANG_ITALIAN, 'kabbalah-media-mp3-kab-ita/id1109848953?l=iw'],
-  [LANG_GERMAN, 'kabbalah-media-mp3-kab-ger/id1109848570?l=iw'],
-  [LANG_SPANISH, 'kcabalá-media-mp3-kab-spa/id1109848764?l=iw'],
+  [consts.LANG_HEBREW, 'קבלה-מדיה-mp3-kab-heb/id1109848638?l=iw'],
+  [consts.LANG_RUSSIAN, 'каббала-медиа-mp3-kab-rus/id1109845737?l=iw'],
+  [consts.LANG_TURKISH, 'kabala-günlük-dersler-mp3-kab-trk/id1106592672?l=iw'],
+  [consts.LANG_ITALIAN, 'kabbalah-media-mp3-kab-ita/id1109848953?l=iw'],
+  [consts.LANG_GERMAN, 'kabbalah-media-mp3-kab-ger/id1109848570?l=iw'],
+  [consts.LANG_SPANISH, 'kcabalá-media-mp3-kab-spa/id1109848764?l=iw'],
 ]);
 
 export const getPodcastLinkByLang = language => {
@@ -276,7 +277,7 @@ export const prepareScrollToSearch = (data, search) => {
       return p;
     }
 
-    return ` class="scroll-to-search"  id="${SCROLL_SEARCH_ID}" ${selectWholeWorlds(p, search)}`;
+    return ` class="scroll-to-search"  id="${consts.SCROLL_SEARCH_ID}" ${selectWholeWorlds(p, search)}`;
   }).join('<p');
 };
 
@@ -313,3 +314,43 @@ export const selectWholeWorlds = (paragraph, subStr) => {
   }
   return `${before.trim()} <em class="highlight">${selected.trim()}</em> ${after.trim()}`;
 };
+
+// map units to sections
+export const unitsBySection = units => units?.reduce((acc, u) => {
+  const section = canonicalSectionByUnit(u);
+  if (acc[section]) {
+    acc[section].push(u);
+  } else {
+    acc[section] = [u];
+  }
+
+  return acc;
+}, {});
+
+// returns the value from common.json for translation
+export const getSectionForTranslation = content_type => {
+  switch(content_type){
+  case consts.CT_LESSON_PART:
+    return 'lessons.tabs.daily';
+  case consts.CT_WOMEN_LESSON:
+    return 'lessons.tabs.women';
+  case consts.CT_VIRTUAL_LESSON:
+    return 'lessons.tabs.virtual';
+  case consts.CT_CONGRESS:
+    return 'events.tabs.conventions';
+  case consts.CT_HOLIDAY:
+    return 'events.tabs.holidays';
+  case consts.CT_FRIENDS_GATHERING:
+    return 'events.tabs.friends-gatherings';
+  case consts.CT_MEAL:
+    return 'events.tabs.meals';
+  case consts.CT_ARTICLE:
+    return 'publications.tabs.articles';
+  case consts.CT_VIDEO_PROGRAM_CHAPTER:
+    return 'programs.tabs.main';
+  case consts.CT_CLIP:
+    return 'programs.tabs.clips';
+  default:
+    return '';
+  }
+}
