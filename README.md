@@ -42,7 +42,7 @@ $ yarn start
 ```
 
 ## Player API
-[Kabbalahmedia Embedded Player APi](https://github.com/kedia-mdb/public/KMedia+Player+Api.pdf)
+[Kabbalahmedia Embedded Player APi](public/KMedia+Player+Api.pdf)
 ## Thanks
 
 
