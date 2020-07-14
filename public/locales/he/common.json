@@ -24,7 +24,10 @@
     },
     "footer": {
       "copyright": "© כל הזכויות שמורות 2003-{{year}}",
-      "rights": "בני ברוך - קבלה לעם"
+      "rights": "בני ברוך - קבלה לעם",
+      "bottomTextStart": "",
+      "bottomTextLink": "",
+      "bottomTextEnd": ""
     }
   },
   "filters": {
