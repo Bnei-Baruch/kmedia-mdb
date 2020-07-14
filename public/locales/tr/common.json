@@ -25,7 +25,10 @@
     },
     "footer": {
       "copyright": "Telif Hakkı © 2003-{{year}}",
-      "rights": "Bnei Baruch – Kabbalah L’Am Association, Tüm Hakları Saklıdır"
+      "rights": "Bnei Baruch – Kabbalah L’Am Association, Tüm Hakları Saklıdır",
+      "bottomTextStart": "",
+      "bottomTextLink": "",
+      "bottomTextEnd": ""
     }
   },
   "filters": {

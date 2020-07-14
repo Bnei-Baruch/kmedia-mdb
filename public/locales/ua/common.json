@@ -25,7 +25,10 @@
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
-      "rights": "Бней Барух – Асоціація Кабала Ла-Ам, Всі права захищені"
+      "rights": "Бней Барух – Асоціація Кабала Ла-Ам, Всі права захищені",
+      "bottomTextStart": "",
+      "bottomTextLink": "",
+      "bottomTextEnd": ""
     }
   },
   "filters": {
