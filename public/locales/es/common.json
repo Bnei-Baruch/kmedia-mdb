@@ -24,7 +24,10 @@
     },
     "footer": {
       "copyright": "Derecho de autor 2003-{{year}}",
-      "rights": "Benei Baruj ‘ Cabalá LaAm"
+      "rights": "Benei Baruj ‘ Cabalá LaAm",
+      "bottomTextStart": "",
+      "bottomTextLink": "",
+      "bottomTextEnd": ""
     }
   },
   "filters": {

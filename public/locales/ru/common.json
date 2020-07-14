@@ -25,7 +25,10 @@
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
-      "rights": "Бней Барух – Ассоциация \"Каббала Ла-Ам\", Все права защищены"
+      "rights": "Бней Барух – Ассоциация \"Каббала Ла-Ам\", Все права защищены",
+      "bottomTextStart": "",
+      "bottomTextLink": "",
+      "bottomTextEnd": ""
     }
   },
   "filters": {

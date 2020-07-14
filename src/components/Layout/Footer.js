@@ -12,6 +12,15 @@ const Footer = ({ t }) => {
   const year = new Date().getFullYear();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
+  const getBottomText = () => (
+    <>
+      <br/>
+      {t('nav.footer.bottomTextStart')}
+      <a href={t('nav.footer.bottomTextLink')}>{t('nav.footer.bottomTextLink')}</a>
+      {t('nav.footer.bottomTextEnd')}
+    </>
+  );
+
   return (
     <div className="layout__footer">
       <Container>
@@ -20,11 +29,12 @@ const Footer = ({ t }) => {
             <Grid.Column>
               <Header inverted as="h5" floated="left">
                 {t('nav.top.header')}
-                <br />
+                <br/>
                 <small className="text grey">
-                  {t('nav.footer.copyright', { year })}
+                  {t('nav.footer.copyright', {year})}
                   {' '}
                   {t('nav.footer.rights')}
+                  {t('nav.footer.bottomTextStart') && getBottomText()}
                 </small>
               </Header>
 
@@ -35,7 +45,7 @@ const Footer = ({ t }) => {
                 basic
                 inverted
                 floated={isMobileDevice ? 'left' : 'right'}
-                href={getRSSLinkByLang(language)} />
+                href={getRSSLinkByLang(language)}/>
             </Grid.Column>
           </Grid.Row>
         </Grid>

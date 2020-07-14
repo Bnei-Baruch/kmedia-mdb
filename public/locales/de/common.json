@@ -25,7 +25,10 @@
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
-      "rights": "Bnei Baruch - Kabbala La Am Association, Alle Rechte vorbehalten"
+      "rights": "Bnei Baruch - Kabbala La Am Association, Alle Rechte vorbehalten",
+      "bottomTextStart": "",
+      "bottomTextLink": "",
+      "bottomTextEnd": ""
     }
   },
   "filters": {

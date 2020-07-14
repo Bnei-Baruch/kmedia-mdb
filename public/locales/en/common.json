@@ -25,7 +25,10 @@
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
-      "rights": "Bnei Baruch – Kabbalah L’Am Association, All rights reserved"
+      "rights": "Bnei Baruch – Kabbalah L’Am Association, All rights reserved",
+      "bottomTextStart": "Kabbalah Media is the official archive of the Bnei Baruch Kabbalah Education & Research Institute - ",
+      "bottomTextLink": "https://www.kabbalah.info",
+      "bottomTextEnd": " - updated regularly with viewable and downloadable versions of the Daily Kabbalah Lesson with Kabbalist Dr. Michael Laitman in video and audio formats, as well as other Bnei Baruch Kabbalah lessons, lectures, TV programs, music, video clips, books and texts. The Kabbalah Media archive can be browsed by keyword or key-phrase searches, calendar, language, content type, media type and catalogs. Bookmark Kabbalah Media's main page in order to be able to quickly and easily access the latest Kabbalah materials of the current day."
     }
   },
   "filters": {
