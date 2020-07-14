@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Grid, Feed } from 'semantic-ui-react';
+import { Container, Feed, Grid } from 'semantic-ui-react';
 import * as shapes from '../../shapes';
 import Helmets from '../../shared/Helmets';
 import SearchBar from './SearchBar';
@@ -14,42 +14,39 @@ import TwitterFeed from '../Publications/tabs/Twitter/Feed';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { isEqual } from 'lodash';
 
-const renderBlogPosts = (latestBlogPosts, language, t) => 
+const renderBlogPosts = (latestBlogPosts, language, t) =>
   latestBlogPosts.length
-    ? (
-      <Grid.Column mobile={16} tablet={11} computer={11} className="home-blog-posts">
-        <div className="titles">
-          <h4>{t('home.blog-title')}</h4>
-          <a href={`/${language}/publications/blog`}>{t('home.all-posts')}</a>
-        </div>
-        <BlogFeed snippetVersion items={latestBlogPosts} language={language} limitLength={4} />
-        <div className="read-more-bottom">
-          <a href={`/${language}/publications/blog`}>{t('home.read-more-posts')}</a>
-        </div>
-      </Grid.Column>
-    )
-    : null;
+  && (
+    <Grid.Column mobile={16} tablet={11} computer={11} className="home-blog-posts">
+      <div className="titles">
+        <h4>{t('home.blog-title')}</h4>
+        <a href={`/${language}/publications/blog`}>{t('home.all-posts')}</a>
+      </div>
+      <BlogFeed snippetVersion items={latestBlogPosts} language={language} limitLength={4} />
+      <div className="read-more-bottom">
+        <a href={`/${language}/publications/blog`}>{t('home.read-more-posts')}</a>
+      </div>
+    </Grid.Column>
+  );
 
-const renderTweets = (latestTweets, language, t) => 
+const renderTweets = (latestTweets, language, t) =>
   latestTweets.length
-    ? (
-      <Grid.Column mobile={16} tablet={5} computer={5} className="home-twitter">
-        <div className="titles">
-          <h4>{t('home.twitter-title')}</h4>
-          <a href={`/${language}/publications/twitter`}>{t('home.all-tweets')}</a>
-        </div>
-        <Feed>
-          {
-            latestTweets.slice(0, 4).map(item => <TwitterFeed twitter={item} key={item.twitter_id} />)
-          }
-        </Feed>
-        <div className="read-more-bottom">
-          <a href={`/${language}/publications/twitter`}>{t('home.read-more-tweets')}</a>
-        </div>
-      </Grid.Column>
-    )
-    :
-    null;
+  && (
+    <Grid.Column mobile={16} tablet={5} computer={5} className="home-twitter">
+      <div className="titles">
+        <h4>{t('home.twitter-title')}</h4>
+        <a href={`/${language}/publications/twitter`}>{t('home.all-tweets')}</a>
+      </div>
+      <Feed>
+        {
+          latestTweets.slice(0, 4).map(item => <TwitterFeed twitter={item} key={item.twitter_id} />)
+        }
+      </Feed>
+      <div className="read-more-bottom">
+        <a href={`/${language}/publications/twitter`}>{t('home.read-more-tweets')}</a>
+      </div>
+    </Grid.Column>
+  );
 
 const renderBlogPostsAndTweets = (latestBlogPosts, latestTweets, language, t) =>
   <div className="homepage__section home-social-section">
@@ -63,7 +60,7 @@ const renderBlogPostsAndTweets = (latestBlogPosts, latestTweets, language, t) =>
         </Grid>
       </Section>
     </Container>
-  </div>
+  </div>;
 
 const renderActiveSections = (t, isMobileDevice) => {
   const map = isMobileDevice ?
@@ -92,14 +89,14 @@ const renderActiveSectionsGrid = (t, isMobileDevice) =>
         </Grid>
       </Section>
     </Container>
-  </div>
+  </div>;
 
 const renderSearchBar = location =>
   <div className="homepage__header homepage__section">
     <Container className="padded horizontally">
       <SearchBar location={location} />
     </Container>
-  </div>
+  </div>;
 
 const renderLatestLessonAndBanner = (latestLesson, banner) =>
   <div className="homepage__featured homepage__section">
@@ -108,10 +105,9 @@ const renderLatestLessonAndBanner = (latestLesson, banner) =>
         <Grid.Row>
           {
             latestLesson
-              ? <Grid.Column computer={6} tablet={7} mobile={16}>
+              && <Grid.Column computer={6} tablet={7} mobile={16}>
                 <LatestDailyLesson collection={latestLesson} />
               </Grid.Column>
-              : null
           }
           <Grid.Column computer={6} tablet={7} mobile={16}>
             <Promoted banner={banner} />
@@ -119,18 +115,18 @@ const renderLatestLessonAndBanner = (latestLesson, banner) =>
         </Grid.Row>
       </Grid>
     </Container>
-  </div>
+  </div>;
 
-
-const HomePage = ( { 
-  banner, 
-  language, 
-  location, 
-  t, 
-  latestUnits = [], 
-  latestLesson = null, 
-  latestBlogPosts = [], 
-  latestTweets = [] }) => {
+const HomePage = ({
+  banner,
+  language,
+  location,
+  latestUnits = [],
+  latestLesson = null,
+  latestBlogPosts = [],
+  latestTweets = [],
+  t,
+}) => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
@@ -140,14 +136,14 @@ const HomePage = ( {
 
       {renderSearchBar(location)}
       {renderLatestLessonAndBanner(latestLesson, banner)}
-      {renderActiveSectionsGrid(t, isMobileDevice)}   
+      {renderActiveSectionsGrid(t, isMobileDevice)}
 
-      <LatestUpdatesSection latestUnits={latestUnits} t={t} />  
+      <LatestUpdatesSection latestUnits={latestUnits} t={t} />
 
       {renderBlogPostsAndTweets(latestBlogPosts, latestTweets, language, t)}
     </div>
   );
-}
+};
 
 HomePage.propTypes = {
   location: shapes.HistoryLocation.isRequired,

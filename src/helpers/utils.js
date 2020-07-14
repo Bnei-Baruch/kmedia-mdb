@@ -7,6 +7,7 @@ import isEqual from 'react-fast-compare';
 import { CollectionsBreakdown } from './mdb';
 import { canonicalSectionByUnit } from './links';
 import * as consts from './consts';
+import { LANGUAGES } from './consts';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
@@ -329,7 +330,7 @@ export const unitsBySection = units => units?.reduce((acc, u) => {
 
 // returns the value from common.json for translation
 export const getSectionForTranslation = content_type => {
-  switch(content_type){
+  switch (content_type) {
   case consts.CT_LESSON_PART:
     return 'lessons.tabs.daily';
   case consts.CT_WOMEN_LESSON:
@@ -353,4 +354,4 @@ export const getSectionForTranslation = content_type => {
   default:
     return '';
   }
-}
+};
