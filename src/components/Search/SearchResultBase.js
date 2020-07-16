@@ -279,11 +279,7 @@ class SearchResultBase extends Component {
   };
 
   clearStringForLink = (str) => {
-    if (str.search(/\r\n|\r|\n/)) {
-      //select longest string separated with linebreaks
-      str = str.replace(/\r\n|\r|\n/gi, NEW_LINE_SEPARATOR).split(NEW_LINE_SEPARATOR).reduce((acc, x) => acc.length > x.length ? acc : x, '');
-    }
-    return str.replace(/<.+?>/gi, '');
+    return str.replace(/(\r?\n|\r){1,}/g, ' ').replace(/<.+?>/gi, '');
   };
 
   highlightWrapToLink = (__html, index, pathname, search, logLinkParams) => {
