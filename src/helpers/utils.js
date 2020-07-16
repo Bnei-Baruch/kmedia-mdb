@@ -367,14 +367,14 @@ export const wrapSeekingPlace = (data, tagsPosition, from, to) => {
 
     if (!openTagP) {
       const tagDown = tagsPosition[i];
-      if (tagDown.pos < from && tagDown.str.indexOf('<p') !== -1) {
+      if (tagDown.pos < from && tagDown.str.search(/<p|<h/) !== -1) {
         openTagP = tagDown;
       }
     }
 
     if (!closeTagP) {
       const tagUp = tagsPosition[tagsPosition.length - (i + 1)];
-      if (tagUp.pos > to && tagUp.str.indexOf('</p>') !== -1) {
+      if (tagUp.pos > to && tagUp.str.search(/<\/p>|<\/h>/) !== -1) {
         closeTagP = tagUp;
       }
     }
@@ -383,10 +383,10 @@ export const wrapSeekingPlace = (data, tagsPosition, from, to) => {
   closeTagP = closeTagP ?? tagsPosition[tagsPosition.length - 1];
 
   let before = dataBefore.slice(0, openTagP.pos);
-  before += dataBefore.slice(openTagP.pos, from).replace('<p', `<div class="scroll-to-search" id="${SCROLL_SEARCH_ID}"><p`);
+  before += dataBefore.slice(openTagP.pos, from).replace(/<p|<h/, `<div class="scroll-to-search" id="${SCROLL_SEARCH_ID}"><p`);
 
   let after = data.slice(to, closeTagP.pos);
-  after += data.slice(closeTagP.pos).replace('</p>', '</p></div>');
+  after += data.slice(closeTagP.pos).replace(/<\/p>|<\/h>/, x => x + '</div>');
 
   return { before, after };
 };
@@ -406,7 +406,6 @@ export const buildSearchLinkFromSelection = (sel, language) => {
     : { text: sel.focusNode.textContent, offset: sel.focusOffset };
   let end   = isForward ? { text: sel.focusNode.textContent, offset: sel.focusOffset }
     : { text: sel.anchorNode.textContent, offset: sel.anchorNode };
-
 
   const query = {
     srchstart: wholeStartWord(start) + sStart,
