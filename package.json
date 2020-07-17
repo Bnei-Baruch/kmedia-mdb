@@ -112,7 +112,7 @@
     "invariant": "^2.2.4",
     "iphone-inline-video": "^2.2.2",
     "jaybe-react-loadable": "^5.6.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mock-local-storage": "^1.0.5",
     "moment": "^2.26.0",
     "moment-duration-format": "^2.2.2",
