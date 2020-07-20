@@ -279,19 +279,32 @@ export const areEqual = (prevProps, nextProps) => {
 };
 
 /* eslint-disable  no-useless-escape */
-const KEEP_LETTERS_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()]/g;
+const KEEP_LETTERS_RE            = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]]/g;
+const KEEP_LETTERS_WITH_SPACE_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]\s]/g;
 
 // Inserts class="scroll-to-search" and id="${SCROLL_SEARCH_ID}" to the correct <p> element.
 export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }) => {
   if (!start?.length || !end?.length) {
     return data;
   }
-  const tagsPosition  = [];
+  let tagsPosition    = [];
   data                = data.replace(/\r?\n|\r{1,}/g, ' ');
-  const dataCleanHtml = data.replace(/<.+?>/g, (str, pos) => {
-    tagsPosition.push({ str, pos });
-    return '';
-  });
+  const dataCleanHtml = data
+    .replace(/<.+?>/g, (str, pos) => {
+      tagsPosition.push({ str, pos });
+      return '';
+    });
+
+  tagsPosition = tagsPosition.reduce((acc, t) => {
+    const prev = acc[acc.length - 1];
+    if (prev && prev.pos + prev.str.length === t.pos) {
+      prev.str += t.str;
+    } else {
+      acc.push(t);
+    }
+    return acc;
+
+  }, []);
 
   const { tagsPositionInner, innerCleanHtml, from, to } = diffDataAndDataWithHtml(tagsPosition, data, dataCleanHtml, start, end);
 
@@ -304,18 +317,41 @@ export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }) 
   let inner           = innerCleanHtml
     .split(' ')
     .map((word) => {
-      const tags = tagsPositionInner
-        .filter(t => {
-          return currentPosition <= t.pos && currentPosition + word.length + 1 >= t.pos;
-        })
-        .map(t => t.str)
-        .join('');
+      let diffTagPosition = currentPosition;
+      const tags          = tagsPositionInner
+        .filter((t, i) => {
+          if (currentPosition < t.pos && currentPosition + word.length + 1 >= t.pos) {
+            currentPosition += t.str.length;
+            return true;
+          }
+          return false;
+        });
+      currentPosition += word.length + 1;//add word length and next space
+      if (tags.length === 0)
+        return word.length === 0 ? '' : `<em class="_h">${word}</em>`;
 
-      currentPosition += (word.length + 1) + tags.length;//word length + space + tag length
+      if (word.length === 0)
+        return tags.map(t => t.str).join('');
 
-      return word !== '' ? `<em class="_h">${word}</em>${tags}` : tags;
-    })
-    .join(' ');
+      const r = tags.reduce((acc, t, i) => {
+        const p                      = t.pos - diffTagPosition;
+        let { prevPosition, result } = acc;
+        diffTagPosition += t.str.length;
+        if (p !== 0) {
+          const s = word.slice(prevPosition, p);
+          prevPosition += s.length;
+          result.push(`<em class="_h">${s}</em>`);
+        }
+        result.push(t.str);
+        if (i === tags.length - 1) {
+          result.push(`<em class="_h">${word.slice(p)}</em>`);
+        }
+
+        return { prevPosition, result };
+      }, { prevPosition: 0, result: [] });
+      return r.result.join('');
+
+    }).join(' ');
 
   return `${before}${inner}${after}`;
 };
@@ -358,7 +394,7 @@ const diffDataAndDataWithHtml = (tagsPosition, data, dataCleanHtml, start, end) 
   return { tagsPositionInner, from, to, innerCleanHtml };
 };
 
-const getMatch = (search, data) => {
+export const getMatch = (search, data) => {
   const words    = search.replace(KEEP_LETTERS_RE, '.').split(' ').filter((word) => !!word);
   const searchRe = new RegExp(words.map((word) => `(${word})`).join('(.{0,30})'), 's');
   return data.match(searchRe);
@@ -405,7 +441,7 @@ export const buildSearchLinkFromSelection = (sel, language) => {
   }
   const isForward = isSelectionForward(sel);
 
-  const words                                  = sel.toString().split(' ');
+  const words                                  = sel.toString().replace(/\r?\n|\r{1,}/g, ' ').split(' ');
   const { protocol, hostname, port, pathname } = window.location;
   let sStart                                   = words.slice(0, 5).join(' ');
   let sEnd                                     = words.slice(-5).join(' ');
@@ -413,7 +449,7 @@ export const buildSearchLinkFromSelection = (sel, language) => {
   let start = isForward ? { text: sel.anchorNode.textContent, offset: sel.anchorOffset }
     : { text: sel.focusNode.textContent, offset: sel.focusOffset };
   let end   = isForward ? { text: sel.focusNode.textContent, offset: sel.focusOffset }
-    : { text: sel.anchorNode.textContent, offset: sel.anchorNode };
+    : { text: sel.anchorNode.textContent, offset: sel.anchorOffset };
 
   const query = {
     srchstart: wholeStartWord(start) + sStart,
@@ -427,15 +463,15 @@ export const buildSearchLinkFromSelection = (sel, language) => {
 };
 
 const wholeStartWord = ({ text, offset }) => {
-  if (offset === 0 || /[^a-zA-Z0-9]/.test(text[offset - 1]))
+  if (offset === 0 || KEEP_LETTERS_WITH_SPACE_RE.test(text[offset - 1]))
     return '';
-  return text.slice(0, offset).split(/[^a-zA-Z0-9]/).slice(-1);
+  return text.slice(0, offset).split(KEEP_LETTERS_WITH_SPACE_RE).slice(-1);
 };
 
 const wholeEndWord = ({ text, offset }) => {
-  if (offset === 0 || /[^a-zA-Z0-9]/.test(text[offset]))
+  if (offset === 0 || KEEP_LETTERS_WITH_SPACE_RE.test(text[offset]))
     return '';
-  return text.slice(offset).split(/[^a-zA-Z0-9]/)[0];
+  return text.slice(offset).split(KEEP_LETTERS_WITH_SPACE_RE)[0];
 };
 
 const isSelectionForward = (sel) => {
