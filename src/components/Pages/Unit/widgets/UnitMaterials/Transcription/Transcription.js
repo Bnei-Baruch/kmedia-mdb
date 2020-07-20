@@ -179,7 +179,7 @@ class Transcription extends Component {
 
     const { language }                         = this.state;
     const selection                            = window.getSelection();
-    const searchUrl                            = buildSearchLinkFromSelection(window.getSelection(), language);
+    const searchUrl                            = buildSearchLinkFromSelection(window.getSelection(), language) + '&activeTab=transcription';
     const { offsetTop: top, offsetLeft: left } = selection.extentNode.parentElement;
     this.setState({ selectPosition: { top, left }, searchUrl });
   };
@@ -212,7 +212,7 @@ class Transcription extends Component {
   };
 
   render() {
-    const { doc2htmlById, t, type, location }   = this.props;
+    const { doc2htmlById, t, type }             = this.props;
     const { selectedFile, languages, language } = this.state;
 
     if (!selectedFile) {
