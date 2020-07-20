@@ -112,7 +112,10 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
       return;
     }
 
-    const selection                            = window.getSelection();
+    const selection = window.getSelection();
+    if (!selection.extentNode) {
+      return;
+    }
     const url                                  = buildSearchLinkFromSelection(window.getSelection(), language);
     const { offsetTop: top, offsetLeft: left } = selection.extentNode.parentElement;
     setSelectPosition({ top, left });
