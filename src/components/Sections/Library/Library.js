@@ -152,7 +152,7 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
       {
         searchUrl && selectPosition ?
           <div className={'share_search_on_page'} style={{ 'top': selectPosition.top, 'left': selectPosition.left }}>
-            <ShareBar url={searchUrl} buttonSize="medium" embedContent={searchUrl} buttonSize={'tiny'} />
+            <ShareBar url={searchUrl} buttonSize="medium" embedContent={searchUrl} />
           </div>
           : null
       }
