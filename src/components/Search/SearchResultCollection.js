@@ -41,26 +41,25 @@ class SearchResultCollection extends SearchResultBase {
     }
   };
 
-  imgLoadHandler = () => {
+  imgLoadHandler  = () => {
     this.setState({ isImgLoaded: true });
+  };
+  buildLinkParams = () => {
+    const { queryResult: { search_result: { searchId } }, hit, rank, filters, c }   = this.props;
+    const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, } = hit;
+
+    return {
+      canonicalLinkParams: [c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters)],
+      canonicalLinkSearch: {},
+      logLinkParams: [mdbUid, index, resultType, rank, searchId]
+    };
   };
 
   render() {
-    const { t, location, c, hit, rank, queryResult, filters } = this.props;
-
-    const
-      {
-        _index: index,
-        _type: type,
-        _source: {
-          mdb_uid: mdbUid
-        },
-        highlight,
-        _score: score
-      }                                   = hit;
-    const { search_result: { searchId } } = queryResult;
-
-    const { isImgLoaded } = this.state;
+    const { t, location, c, hit }                = this.props;
+    const { highlight, _score: score }           = hit;
+    const { isImgLoaded }                        = this.state;
+    const { canonicalLinkParams, logLinkParams } = this.buildLinkParams();
 
     return (
       <Segment className="bg_hover_grey search__block">
@@ -81,21 +80,16 @@ class SearchResultCollection extends SearchResultBase {
             <Container as="h3">
               <Link
                 className="search__link"
-                onClick={() => this.logClick(mdbUid, index, type, rank, searchId)}
-                to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}
+                onClick={() => this.logClick(...logLinkParams)}
+                to={canonicalLink(...canonicalLinkParams)}
               >
                 {this.titleFromHighlight(highlight, c.name)}
               </Link>
             </Container>
 
             <Container className="content">
-              <Link
-                onClick={() => this.logClick(mdbUid, index, type, rank, searchId)}
-                to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}
-              >
-                {this.iconByContentType(c.content_type, true, t)}
-              </Link>
-              &nbsp;|&nbsp;
+              {this.iconByContentType(c.content_type, t)}
+              |
               <span>
                 {c.content_units.length}
                 {' '}
@@ -109,8 +103,8 @@ class SearchResultCollection extends SearchResultBase {
             {c.content_units.slice(0, 5).map(this.renderCU)}
 
             <Link
-              onClick={() => this.logClick(mdbUid, index, type, rank, searchId)}
-              to={canonicalLink(c || { id: mdbUid, content_type: c.content_type }, this.getMediaLanguage(filters))}
+              onClick={() => this.logClick(...logLinkParams)}
+              to={canonicalLink(...canonicalLinkParams)}
               className="margin-right-8"
             >
               <Icon name="tasks" size="small" />

@@ -116,7 +116,12 @@ class SearchResultIntent extends SearchResultBase {
             </Link>
           </Card.Header>
           <Card.Meta>
-            {this.iconByContentType(cu.content_type, true, t)}
+            <Link
+              onClick={() => this.logClick(mdbUid, index, type, rank, searchId)}
+              to={canonicalLink(cu, this.getMediaLanguage(this.props.filters))}
+            >
+              {this.iconByContentType(cu.content_type, t, true)}
+            </Link>
             |&nbsp;
             <strong>{filmDate}</strong>
           </Card.Meta>

@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Image, Segment } from 'semantic-ui-react';
+import { Container, Header, Segment } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../helpers/links';
-import { SectionLogo } from '../../helpers/images';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import Link from '../Language/MultiLanguageLink';
 import SearchResultBase from './SearchResultBase';
@@ -43,12 +42,7 @@ class SearchResultSource extends SearchResultBase {
           </Link>
         </Header>
         <Container>
-          <Image size="mini" verticalAlign="middle">
-            <SectionLogo name='sources' height='50' width='50' />
-          </Image>
-
-          &nbsp;&nbsp;
-          <span>{t('filters.sections-filter.sources')}</span>
+          {this.iconByContentType('sources', t)}
         </Container>
         <Container className="content">
           {this.snippetFromHighlightWithLink(highlight)}
