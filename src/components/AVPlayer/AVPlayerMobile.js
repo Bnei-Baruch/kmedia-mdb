@@ -536,20 +536,17 @@ class AVPlayerMobile extends Component {
             />
           </div>
         </div>
-        {
-          isSliceMode
-            ? <ShareFormMobile media={this.media} item={item} uiLanguage={uiLanguage} />
-            : null
-        }
+        {isSliceMode && <ShareFormMobile media={this.media} item={item} uiLanguage={uiLanguage} />}
         {
           isVideo && unMuteButton && this.renderUnmuteButton(isRtl, embed, t)
         }
         {
           !showControls
-            ? <div className="mediaplayer__mobileLoader">
+          && (
+            <div className="mediaplayer__mobileLoader">
               <AVSpinner isLoading={this.media ? this.media.isLoading : false} />
             </div>
-            : null
+          )
         }
       </div>
     );

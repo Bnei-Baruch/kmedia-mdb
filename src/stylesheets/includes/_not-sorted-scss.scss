@@ -387,6 +387,25 @@
   }
 }
 
+.ui.column.grid>[class*="eight wide"].column, .ui.grid>.column.row>[class*="eight wide"].column, .ui.grid>.row>[class*="eight wide"].column, .ui.grid>[class*="eight wide"].column {
+  width: 70% !important;
+}
+
+.collection-header {
+  .social-buttons {
+    position: absolute;
+    background: rgba(27, 28, 29, 0.8);
+    border-radius: calc(49px / 2 + .5rem);
+    margin: .6rem -.3rem;
+    padding: 0.25rem;
+    .icons {
+      position: absolute;
+      top: -3px;
+      left: -6px;
+    }
+  }
+}
+
 .tweet {
   margin-bottom: 1.5rem !important;
 

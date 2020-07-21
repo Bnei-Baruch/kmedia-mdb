@@ -1,14 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { Container, Grid, Header } from 'semantic-ui-react';
+import { Button, Container, Grid, Header } from 'semantic-ui-react';
 
 import { assetUrl } from '../../../helpers/Api';
 import * as shapes from '../../shapes';
 import CollectionLogo from '../../shared/Logo/CollectionLogo';
 import Helmets from '../../shared/Helmets';
+import { getRSSLinkByTopic } from '../../../helpers/utils';
+import { useSelector } from 'react-redux';
+import { selectors as settings } from '../../../redux/modules/settings';
+import ShareForm from './ShareForm';
 
 const CollectionPageHeader = ({ collection = null, namespace, t }) => {
+  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
+
   if (collection === null) {
     return <div className="collection-header" />;
   }
@@ -35,6 +41,14 @@ const CollectionPageHeader = ({ collection = null, namespace, t }) => {
                   <Header.Subheader className="section-header__subtitle">
                     {itemCount}&nbsp;
                     {t(`pages.collection.items.${namespace}`)}
+                    <span className="margin-right-8 margin-left-8">&nbsp;</span>
+                    <Button
+                      icon="rss"
+                      size="mini"
+                      color="orange"
+                      compact={true}
+                      href={getRSSLinkByTopic(collection.id, contentLanguage)} />
+                    <ShareForm collection={collection} />
                   </Header.Subheader>
                 </Header.Content>
               </Header>
