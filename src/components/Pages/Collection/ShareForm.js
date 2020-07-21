@@ -34,6 +34,9 @@ const RenderShare = ({ collection, callback, t }) => {
 
   return (
     <div className="social-buttons">
+      <Icon.Group>
+        <Icon name="close" onClick={() => callback()} corner="top right" inverted link circular fitted />
+      </Icon.Group>
       <FacebookShareButton url={url} quote={title} onShareWindowClose={callback}>
         <FacebookIcon size={bsPixels} round />
       </FacebookShareButton>
@@ -55,9 +58,6 @@ const RenderShare = ({ collection, callback, t }) => {
       <EmailShareButton url={url} subject={`${contentType} "${name}"`} body={description} onShareWindowClose={callback}>
         <EmailIcon size={bsPixels} round />
       </EmailShareButton>
-      <Icon.Group>
-        <Icon name="close" onClick={() => callback()} corner="top left" inverted link circular fitted />
-      </Icon.Group>
     </div>
   );
 };
@@ -71,7 +71,7 @@ const ShareForm = ({ collection, t }) => {
         size="mini"
         color="facebook"
         compact
-        onClick={() => setShare(true)}
+        onClick={() => setShare(!share)}
       >
         <Icon
           name="share alternate"
