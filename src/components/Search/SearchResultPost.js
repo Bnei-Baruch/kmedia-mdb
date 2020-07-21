@@ -7,38 +7,28 @@ import Link from '../Language/MultiLanguageLink';
 import SearchResultBase from './SearchResultBase';
 
 class SearchResultPost extends SearchResultBase {
+
   render() {
-    const { queryResult, hit, rank, filters, post, t } = this.props;
+    const { hit, post, t }                                           = this.props;
+    const { _source: { result_type: resultType, title }, highlight } = hit;
 
-    const { search_result: { searchId } } = queryResult;
-
-    const
-      {
-        _index: index,
-        _source: {
-          mdb_uid: mdbUid,
-          result_type: resultType,
-          title
-        },
-        highlight
-      } = hit;
-
-    const createdDate = post.created_at ? t('values.date', { date: post.created_at }) : '';
+    const createdDate                            = post.created_at ? t('values.date', { date: post.created_at }) : '';
+    const { canonicalLinkParams, logLinkParams } = this.buildLinkParams();
 
     return (
       <Segment className="bg_hover_grey search__block">
         <Header as="h3">
           <Link
             className="search__link content"
-            onClick={() => this.logClick(mdbUid, index, resultType, rank, searchId)}
-            to={canonicalLink({ id: mdbUid, content_type: 'POST' }, this.getMediaLanguage(filters))}
+            onClick={() => this.logClick(...logLinkParams)}
+            to={canonicalLink(...canonicalLinkParams)}
           >
             {this.titleFromHighlight(highlight, title)}
           </Link>
         </Header>
 
         <Container>
-          {this.iconByContentType(resultType === 'posts' ? CT_BLOG_POST : resultType, true, t)}
+          {this.iconByContentType(resultType === 'posts' ? CT_BLOG_POST : resultType, t)}
           |
           {' '}
           <strong>{createdDate}</strong>

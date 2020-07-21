@@ -82,7 +82,7 @@ class SearchResultCU extends SearchResultBase {
         </Header>
 
         <Container>
-          {this.iconByContentType(cu.content_type, true, t)}
+          {this.iconByContentType(cu.content_type, t)}
           {' '}
           |
           <strong>{filmDate}</strong>
