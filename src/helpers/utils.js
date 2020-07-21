@@ -5,7 +5,7 @@ import _ from 'lodash';
 import isEqual from 'react-fast-compare';
 
 import { CollectionsBreakdown } from './mdb';
-import { LANG_GERMAN, LANG_HEBREW, LANG_ITALIAN, LANG_RUSSIAN, LANG_SPANISH, LANG_TURKISH, SCROLL_SEARCH_ID } from './consts';
+import { LANG_GERMAN, LANG_HEBREW, LANG_ITALIAN, LANG_RUSSIAN, LANG_SPANISH, LANG_TURKISH, LANGUAGES, SCROLL_SEARCH_ID } from './consts';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
@@ -237,9 +237,9 @@ export const getRSSFeedByLang = language => {
   }
 };
 
-export const getRSSLinkByLang = language => {
-  return 'https://feeds.feedburner.com/' + getRSSFeedByLang(language);
-};
+export const getRSSLinkByLang = language => 'https://feeds.feedburner.com/' + getRSSFeedByLang(language);
+
+export const getRSSLinkByTopic = (topicId, language) => `https://kabbalahmedia.info/feeds/collections/${LANGUAGES[language].lang3}/${topicId}`;
 
 const podcastLinks = new Map([
   [LANG_HEBREW, 'קבלה-מדיה-mp3-kab-heb/id1109848638?l=iw'],
@@ -257,17 +257,17 @@ export const getPodcastLinkByLang = language => {
 
 // Compare properties without functions
 const removeFunctions = (fromObj) => {
-  const obj = {}
+  const obj = {};
   // @description it only removes functions that are not inside nested object properties.
   // you can improve with recursion to remove all functions inside an object.
-  Object.keys(fromObj).forEach(key => !_.isFunction(fromObj[key]) && (obj[key] = fromObj[key]))
-  return obj
-}
+  Object.keys(fromObj).forEach(key => !_.isFunction(fromObj[key]) && (obj[key] = fromObj[key]));
+  return obj;
+};
 
 export const areEqual = (prevProps, nextProps) => {
   const [prev, next] = [prevProps, nextProps].map(removeFunctions);
   return isEqual(prev, next);
-}
+};
 
 export const prepareScrollToSearch = (data, search) => {
   return data.split('<p').map((p, i) => {
@@ -285,7 +285,7 @@ export const selectWholeWorlds = (paragraph, subStr) => {
   if (start === -1) {
     return paragraph;
   }
-  if(paragraph[start-1] === '>'){
+  if (paragraph[start - 1] === '>') {
     paragraph = `${paragraph.substring(0, start)} ${paragraph.substring(start)}`;
     start++;
   }
