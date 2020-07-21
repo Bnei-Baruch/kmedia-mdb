@@ -284,12 +284,9 @@ class SearchResultBase extends Component {
 
   highlightWrapToLink = (__html, index, pathname, search, logLinkParams) => {
     const searchArr = this.clearStringForLink(__html).split(' ');
-    const wordsNum  = (searchArr.length >= MIN_NECESSARY_WORDS_FOR_SEARCH * 2)
-      ? MIN_NECESSARY_WORDS_FOR_SEARCH
-      : (searchArr.length - searchArr.length % 2) / 2;
 
-    search.srchstart = searchArr.slice(0, wordsNum).join(' ');
-    search.srchend   = searchArr.slice(-wordsNum).join(' ');
+    search.srchstart = searchArr.slice(0, MIN_NECESSARY_WORDS_FOR_SEARCH).join(' ');
+    search.srchend   = searchArr.slice(-1*MIN_NECESSARY_WORDS_FOR_SEARCH).join(' ');
 
     return (<Link
       key={`highlightLink_${index}`}
