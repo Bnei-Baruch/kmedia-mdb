@@ -63,6 +63,7 @@ const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, p
     return (
       <div
         onMouseUp={handleOnMouseUp}
+        onTouchEnd={handleOnMouseUp}
         style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
         dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(contentData, search) }}
       />
