@@ -536,7 +536,8 @@
       "LELO_MIKUD": "Bearbeitet - Ohne Fokusgruppen",
       "BLOG_POST": "Blog",
       "LESSONS_SERIES": "Ausgewählte Trainingsserien",
-      "KTAIM_NIVCHARIM": "Ausgewählte Highlights"
+      "KTAIM_NIVCHARIM": "Ausgewählte Highlights",
+      "sources": "Primäre Quellen"
     },
     "media-types": {
       "video": "Video",
