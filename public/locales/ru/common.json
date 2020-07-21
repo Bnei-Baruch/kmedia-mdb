@@ -571,7 +571,8 @@
       "LELO_MIKUD": "Отредактировано - без фокус-группы",
       "BLOG_POST": "Пост блога",
       "LESSONS_SERIES": "Избранные серии обучения",
-      "KTAIM_NIVCHARIM": "Избранные моменты"
+      "KTAIM_NIVCHARIM": "Избранные моменты",
+      "sources": "Первоисточники"
     },
     "media-types": {
       "video": "Видео",
