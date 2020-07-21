@@ -90,8 +90,7 @@ class SearchResultCollection extends SearchResultBase {
             <Container className="content">
               {this.iconByContentType(c.content_type, t)}
               |
-              {' '}
-              <span className="margin-left-">
+              <span>
                 {c.content_units.length}
                 {' '}
                 {t('pages.collection.items.programs-collection')}

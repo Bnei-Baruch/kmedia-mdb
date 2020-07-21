@@ -45,7 +45,7 @@ import {
 } from '../../helpers/consts';
 import { SectionLogo } from '../../helpers/images';
 import { canonicalLink } from '../../helpers/links';
-import { isDebMode, stringify } from '../../helpers/url';
+import { isDebMode, stringify as urlSearchStringify, stringify } from '../../helpers/url';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import ScoreDebug from './ScoreDebug';
@@ -251,7 +251,7 @@ class SearchResultBase extends Component {
         onClick={() => this.logClick(...logLinkParams)}
         to={{
           pathname: canonicalLink(...canonicalLinkParams),
-          search: stringify({ language })
+          search: urlSearchStringify({ language })
         }}
       >
         {content}
