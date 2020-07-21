@@ -192,6 +192,7 @@ class Transcription extends Component {
       <div
         className="doc2html"
         onMouseUp={this.handleOnMouseUp.bind(this)}
+        onTouchEnd={this.handleOnMouseUp.bind(this)}
         style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
         dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(data, { srchstart, srchend }) }}
       />
