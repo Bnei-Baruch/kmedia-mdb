@@ -23,6 +23,7 @@ const RenderShare = ({ collection, callback, t }) => {
   const { name, description, content_type } = collection;
 
   const contentType = t(`constants.content-types.${content_type}`);
+
   let title         = `${contentType} "${name}"`;
   if (description) {
     title += `: ${description}`;
