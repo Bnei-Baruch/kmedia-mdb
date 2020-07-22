@@ -189,6 +189,7 @@ class Transcription extends Component {
       return false;
     }
     this.updateSelection();
+    return false;
   };
 
   handleOnMouseDown = (e) => {
@@ -197,6 +198,7 @@ class Transcription extends Component {
     }
 
     this.setState({ searchUrl: null });
+    return false;
   };
 
   updateSelection = (isShareBarOpen = false) => {
@@ -219,23 +221,17 @@ class Transcription extends Component {
       messageTitle={t('share-text.message-title')}
       className="search-on-page--share-bar" />;
 
-    const bar = isMobileDevice ? (
-        <div className="search-on-page--share">
-          {
-            !isShareBarOpen ?
-              (<Button
-                icon
-                onClick={this.handleOnShareClick.bind(this)}
-              >
-                {t('share-text.share-button')}
-                <Icon name="share alternate" />
-              </Button>)
-              : null
-          }
-          {isShareBarOpen ? shareBar : null}
-        </div>
-      )
-      : searchUrl ? shareBar : null;
+    let bar = null;
+    if (isMobileDevice) {
+      const openClose = !isShareBarOpen ?
+        (<Button icon onClick={this.handleOnShareClick.bind(this)}>{t('share-text.share-button')}
+          <Icon name="share alternate" />
+        </Button>) : null;
+
+      bar = (<div className="search-on-page--share">{openClose} {isShareBarOpen ? shareBar : null}</div>);
+    } else {
+      bar = searchUrl ? shareBar : null;
+    }
 
     if (bar === null)
       return null;

@@ -98,6 +98,7 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
       return false;
     }
     updateSelection();
+    return false;
   };
 
   const handleOnMouseDown = (e) => {
@@ -105,6 +106,7 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
       return false;
     }
     setSearchUrl(null);
+    return false;
   };
 
   const renderShareBar = () => {
@@ -116,23 +118,17 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
       messageTitle={t('share-text.message-title')}
       className="search-on-page--share-bar" />;
 
-    const bar = isMobileDevice ? (
-        <div className="search-on-page--share">
-          {
-            !isShareBarOpen ?
-              (<Button
-                icon
-                onClick={handleOnShareClick}
-              >
-                {t('share-text.share-button')}
-                <Icon name="share alternate" />
-              </Button>)
-              : null
-          }
-          {isShareBarOpen ? shareBar : null}
-        </div>
-      )
-      : searchUrl ? shareBar : null;
+    let bar = null;
+    if (isMobileDevice) {
+      const openClose = !isShareBarOpen ?
+        (<Button icon onClick={handleOnShareClick}>{t('share-text.share-button')}
+          <Icon name="share alternate" />
+        </Button>) : null;
+
+      bar = (<div className="search-on-page--share">{openClose} {isShareBarOpen ? shareBar : null}</div>);
+    } else {
+      bar = searchUrl ? shareBar : null;
+    }
 
     if (bar === null)
       return null;
