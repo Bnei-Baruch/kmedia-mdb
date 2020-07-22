@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Container, Portal, Segment } from 'semantic-ui-react';
+import { Button, Container, Icon, Portal, Segment, Sticky } from 'semantic-ui-react';
 
 import { selectors } from '../../../redux/modules/assets';
 import { assetUrl } from '../../../helpers/Api';
@@ -17,6 +17,7 @@ import { getPageFromLocation } from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
 import ShareBar from '../../AVPlayer/Share/ShareBar';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 export const checkRabashGroupArticles = (source) => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -41,55 +42,25 @@ const getFullUrl = (pdfFile, data, language, source) => {
   return assetUrl(`sources/${id}/${data[language].docx}`);
 };
 
-const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, pdfFile, startsFrom, t, search, handleOnMouseUp) => {
-  const { wip, err, data: contentData } = content;
-
-  const wipErr = WipErr({ wip, err, t });
-  if (wipErr) {
-    return wipErr;
-  }
-
-  if (pdfFile) {
-    return (
-      <PDF
-        pdfFile={assetUrl(`sources/${pdfFile}`)}
-        pageNumber={pageNumber || 1}
-        startsFrom={startsFrom}
-        pageNumberHandler={pageNumberHandler}
-      />
-    );
-  } else if (contentData) {
-    const direction = getLanguageDirection(language);
-    return (
-      <div
-        onMouseUp={handleOnMouseUp}
-        onTouchEnd={handleOnMouseUp}
-        style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
-        dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(contentData, search) }}
-      />
-    );
-  } else {
-    return null;
-  }
-};
-
 const Library = ({ data, source, language = null, languages = [], langSelectorMount = null, downloadAllowed, handleLanguageChanged, t, }) => {
   const location                            = useLocation();
   const history                             = useHistory();
   const [pageNumber, setPageNumber]         = useState(getPageFromLocation(location));
-  const [selectPosition, setSelectPosition] = useState();
   const [searchUrl, setSearchUrl]           = useState();
+  const [isShareBarOpen, setIsShareBarOpen] = useState();
   const { srchstart, srchend }              = getQuery(location);
   const search                              = { srchstart, srchend };
+  const { isMobileDevice }                  = useContext(DeviceInfoContext);
 
   const content = useSelector(state => selectors.getAsset(state.assets));
+
+  const contentRef = useRef();
 
   if (!data) {
     return <Segment basic>&nbsp;</Segment>;
   }
 
-  const starts = startsFrom(source) || 1;
-  const taas   = isTaas(source);
+  const taas = isTaas(source);
 
   let pdfFile;
   if (data && taas) {
@@ -108,22 +79,109 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
     }));
   };
 
-  const handleOnMouseUp = (event) => {
-    if (!window?.getSelection) {
+  const updateSelection = () => {
+    let url = buildSearchLinkFromSelection(language);
+    if (!url)
       return;
-    }
-
-    const selection = window.getSelection();
-    if (!selection.extentNode) {
-      return;
-    }
-    const url                                  = buildSearchLinkFromSelection(window.getSelection(), language);
-    const { offsetTop: top, offsetLeft: left } = selection.extentNode.parentElement;
-    setSelectPosition({ top, left });
     setSearchUrl(url);
   };
 
-  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, starts, t, search, handleOnMouseUp);
+  const handleOnShareClick = (e) => {
+    setIsShareBarOpen(!isShareBarOpen);
+    updateSelection();
+  };
+
+  const handleOnTouchStart = (e) => setIsShareBarOpen(false);
+
+  const handleOnMouseUp = (e) => {
+    if (isMobileDevice) {
+      return false;
+    }
+    updateSelection();
+  };
+
+  const handleOnMouseDown = (e) => {
+    if (isMobileDevice) {
+      return false;
+    }
+    setSearchUrl(null);
+  };
+
+  const renderShareBar = () => {
+
+    const shareBar = <ShareBar
+      url={searchUrl}
+      buttonSize="medium"
+      embedContent={searchUrl}
+      messageTitle={t('share-text.message-title')}
+      className="search-on-page--share-bar" />;
+
+    const bar = isMobileDevice ? (
+        <div className="search-on-page--share">
+          {
+            !isShareBarOpen ?
+              (<Button
+                icon
+                onClick={handleOnShareClick}
+              >
+                {t('share-text.share-button')}
+                <Icon name="share alternate" />
+              </Button>)
+              : null
+          }
+          {isShareBarOpen ? shareBar : null}
+        </div>
+      )
+      : searchUrl ? shareBar : null;
+
+    if (bar === null)
+      return null;
+
+    return (
+      <Sticky context={contentRef} offset={isMobileDevice ? 30 : 80} styleElement={{ 'width': 'auto' }}>
+        {bar}
+      </Sticky>
+    );
+  };
+
+  const getContentToDisplay = () => {
+    const { wip, err, data: contentData } = content;
+    const starts                          = startsFrom(source) || 1;
+
+    const wipErr = WipErr({ wip, err, t });
+    if (wipErr) {
+      return wipErr;
+    }
+
+    if (pdfFile) {
+      return (
+        <PDF
+          pdfFile={assetUrl(`sources/${pdfFile}`)}
+          pageNumber={pageNumber || 1}
+          startsFrom={starts}
+          pageNumberHandler={pageNumberHandler}
+        />
+      );
+    } else if (contentData) {
+      const direction = getLanguageDirection(language);
+      return (
+        <div ref={contentRef} className="search-on-page--container">
+          {renderShareBar()}
+          <div
+            onMouseUp={handleOnMouseUp}
+            onMouseDown={handleOnMouseDown}
+            onTouchStart={handleOnTouchStart}
+            style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
+            dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(contentData, search) }}
+          />
+        </div>
+      );
+    } else {
+      return null;
+    }
+  };
+
+  const contentsToDisplay = getContentToDisplay();
   if (contentsToDisplay === null) {
     return <Segment basic>{t('sources-library.no-source')}</Segment>;
   }
@@ -150,13 +208,6 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
 
   return (
     <div>
-      {
-        searchUrl && selectPosition ?
-          <div className={'share_search_on_page'} style={{ 'top': selectPosition.top, 'left': selectPosition.left }}>
-            <ShareBar url={searchUrl} buttonSize="medium" embedContent={searchUrl} />
-          </div>
-          : null
-      }
       {
         langSelectorMount && languageBar
           ? <Portal open preprend mountNode={langSelectorMount}>{languageBar}</Portal>

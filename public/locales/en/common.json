@@ -575,5 +575,9 @@
     "language": "Language",
     "website_language": "Website Language",
     "content_language": "Content language"
+  },
+  "share-text": {
+    "message-title": "read this fragment",
+    "share-button": "Share fragment"
   }
 }
