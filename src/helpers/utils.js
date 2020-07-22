@@ -391,8 +391,12 @@ export const wrapSeekingPlace = (data, tagsPosition, from, to) => {
   return { before, after };
 };
 
-export const buildSearchLinkFromSelection = (sel, language) => {
-  if (sel.isCollapsed) {
+export const buildSearchLinkFromSelection = (language) => {
+  if (!window?.getSelection) {
+    return null;
+  }
+  const sel = window.getSelection();
+  if (sel.isCollapsed || !sel.anchorNode || !sel.focusNode) {
     return null;
   }
   const isForward = isSelectionForward(sel);

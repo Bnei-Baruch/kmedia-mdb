@@ -1505,6 +1505,7 @@
       padding-right: 15px !important;
     }
   }
+
   @media only screen and (max-width: $tabletBreakpoint) {
     .search-omnibox {
       .searchButton {
@@ -1609,8 +1610,32 @@
   }
 }
 
-.share_search_on_page {
-  position: absolute;
-  top: 0;
-  left: 0
+.search-on-page- {
+  &-container {
+    position: relative;
+
+    .social-buttons {
+      align-items: center;
+      background: rgba($black, .8);
+      border-radius: calc(36px / 2 + .5rem);
+      display: flex;
+      margin: auto 0 1rem;
+      padding: .5rem .25rem;
+
+      .embed-share-button {
+        vertical-align: text-bottom;
+      }
+    }
+  }
+
+  &-share {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  &-share-bar {
+    position: absolute;
+  }
 }
