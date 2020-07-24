@@ -152,11 +152,14 @@ const SearchResults = (props) => {
 
   if (total === 0) {
     return (
-      <Trans i18nKey="search.results.no-results">
-        Your search for
-        <strong style={{ fontStyle: 'italic' }}>{{ query }}</strong>
-        found no results.
-      </Trans>
+      <div>
+        {typo_suggest && <DidYouMean typo_suggest={typo_suggest} />}
+        <Trans i18nKey="search.results.no-results">
+          Your search for
+          <strong style={{ fontStyle: 'italic' }}>{{ query }}</strong>
+          found no results.
+        </Trans>
+      </div>
     );
   }
 
