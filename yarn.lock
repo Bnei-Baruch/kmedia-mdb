@@ -12748,7 +12748,7 @@ react-is@^16.12.0, react-is@^16.13.1, react-is@^16.3.2, react-is@^16.6.0, react-
 
 "react-media-player@github:Bnei-Baruch/react-media-player":
   version "0.7.8"
-  resolved "https://codeload.github.com/Bnei-Baruch/react-media-player/tar.gz/07a3d61263bbdfb976a15b50ea4f395bc11d1b2c"
+  resolved "https://codeload.github.com/Bnei-Baruch/react-media-player/tar.gz/05019bd9c9d7a1c329a822f941e88337368c6440"
   dependencies:
     cross-env "^6.0.3"
     prop-types "^15.5.10"
