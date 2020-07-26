@@ -188,7 +188,7 @@ class Layout extends Component {
           <span className="mobile-only">mobile</span>
         </div> */}
         <GAPageView location={location} />
-        <div className="headroom-z-index-801">
+        <div className="headroom-z-index-802">
           <Headroom>
             <div className="layout__header">
               <Menu inverted borderless size="huge" color="blue">
