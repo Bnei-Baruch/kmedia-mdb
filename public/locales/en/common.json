@@ -322,7 +322,8 @@
   "publications": {
     "header": {
       "text": "Publications",
-      "subtext": "Articles on current events, culture, popular science, relationships and more, presented from the unique perspective of the wisdom of Kabbalah"
+      "subtext": "Articles on current events, culture, popular science, relationships and more, presented from the unique perspective of the wisdom of Kabbalah",
+      "subtext2": "The content is based on talks given by Dr. Michael Laitman and is written and edited by his students."
     },
     "tabs": {
       "articles": "Articles",

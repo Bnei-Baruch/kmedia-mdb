@@ -5,7 +5,7 @@ import { Container, Grid, Header, Menu } from 'semantic-ui-react';
 
 import Helmets from './Helmets';
 
-const renderTitle = (title, subText, submenuItems = []) => {
+const renderTitle = (title, subText1, subText2, submenuItems = []) => {
   return (
     <Grid>
       <Grid.Row>
@@ -16,10 +16,19 @@ const renderTitle = (title, subText, submenuItems = []) => {
                 {title}
               </span>
               {
-                subText
+                subText1
                   ? (
                     <Header.Subheader className="section-header__subtitle">
-                      {subText}
+                      {subText1}
+                    </Header.Subheader>
+                  )
+                  : null
+              }
+              {
+                subText2
+                  ? (
+                    <Header.Subheader className="section-header__subtitle2">
+                      {subText2}
                     </Header.Subheader>
                   )
                   : null
@@ -47,14 +56,15 @@ const renderTitle = (title, subText, submenuItems = []) => {
 
 const SectionHeader = ({ section, t, submenuItems }) => {
   const title   = t(`${section}.header.text`);
-  const subText = t(`${section}.header.subtext`);
+  const subText1 = t(`${section}.header.subtext`);
+  const subText2 = t(`${section}.header.subtext2`);
 
   return (
     <div className="section-header">
-      <Helmets.Basic title={title} description={subText} />
+      <Helmets.Basic title={title} description={subText1} />
 
       <Container className="padded">
-        {renderTitle(title, subText, submenuItems)}
+        {renderTitle(title, subText1, subText2, submenuItems)}
       </Container>
     </div>
   );
