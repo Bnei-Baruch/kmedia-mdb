@@ -389,11 +389,17 @@ class LibraryContainer extends Component {
     const { sourceId, getPathByID } = props;
 
     const fullPath    = LibraryContainer.getFullPath(sourceId, getPathByID);
-    const activeIndex = getIndex(fullPath[1], fullPath[2]);
+
+    const len = fullPath.length;
+
+    if (len < 2)
+      return null;
+
+    const activeIndex = getIndex(fullPath[len-2], fullPath[len-1]);
     if (activeIndex === -1) {
       return null;
     }
-    const children = fullPath[1].children;
+    const children = fullPath[len-2].children;
     return (
       <div className="library__nextPrevButtons">
         {LibraryContainer.nextPrevLink(children, activeIndex - 1, false, props)}
