@@ -24,6 +24,7 @@ import { getLanguageDirection, isLanguageRtl } from '../../../helpers/i18n-utils
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getQuery } from '../../../helpers/url';
 import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
+import {isTaas} from "../../shared/PDF/PDF";
 
 class LibraryContainer extends Component {
   static contextType = DeviceInfoContext;
@@ -387,6 +388,9 @@ class LibraryContainer extends Component {
 
   static nextPrevButtons = props => {
     const { sourceId, getPathByID } = props;
+    
+    if (isTaas(sourceId))
+      return null;
 
     const fullPath    = LibraryContainer.getFullPath(sourceId, getPathByID);
 
