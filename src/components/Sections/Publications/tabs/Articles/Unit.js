@@ -95,6 +95,7 @@ class MyUnitPage extends UnitPage {
     const { unit, t, language } = this.props;
     const isRtl = isLanguageRtl(language);
     const position = isRtl ? 'right' : 'left';
+    const subText2 = t(`publications.header.subtext2`);
     return (
       <div className="section-header">
         <Container className="padded">
@@ -107,6 +108,15 @@ class MyUnitPage extends UnitPage {
                     {
                       unit.description
                         ? <Header.Subheader>{unit.description}</Header.Subheader>
+                        : null
+                    }
+                    {
+                      subText2
+                        ? (
+                          <Header.Subheader className="section-header__subtitle2">
+                            {subText2}
+                          </Header.Subheader>
+                        )
                         : null
                     }
                   </Header.Content>
