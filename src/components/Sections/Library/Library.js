@@ -1,9 +1,9 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Button, Container, Icon, Portal, Segment, Sticky } from 'semantic-ui-react';
+import { Container, Portal, Segment } from 'semantic-ui-react';
 
 import { selectors } from '../../../redux/modules/assets';
 import { assetUrl } from '../../../helpers/Api';
