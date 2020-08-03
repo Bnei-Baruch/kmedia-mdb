@@ -1,4 +1,4 @@
-import { getMatch } from '../utils';
+import { getMatch } from '../helper';
 
 describe('Bug on create regexp:', () => {
   const search = 'И сказал он [рав Хельбо';
