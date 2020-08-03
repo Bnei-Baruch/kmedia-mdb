@@ -53,7 +53,6 @@ import ScoreDebug from './ScoreDebug';
 const PATH_SEPARATOR = ' > ';
 
 const MIN_NECESSARY_WORDS_FOR_SEARCH = 4;
-const NEW_LINE_SEPARATOR             = '__P__';
 
 const iconByContentTypeMap = new Map([
   [CT_LESSON_PART, 'lessons'],
