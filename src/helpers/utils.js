@@ -5,8 +5,7 @@ import _ from 'lodash';
 import isEqual from 'react-fast-compare';
 
 import { CollectionsBreakdown } from './mdb';
-import { stringify } from './url';
-import { LANG_GERMAN, LANG_HEBREW, LANG_ITALIAN, LANG_RUSSIAN, LANG_SPANISH, LANG_TURKISH, LANGUAGES, SCROLL_SEARCH_ID } from './consts';
+import { LANG_GERMAN, LANG_HEBREW, LANG_ITALIAN, LANG_RUSSIAN, LANG_SPANISH, LANG_TURKISH, LANGUAGES } from './consts';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;

@@ -1,8 +1,8 @@
-import React, { Component, createRef } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import uniq from 'lodash/uniq';
-import { Button, Container, Divider, Icon, Segment, Sticky } from 'semantic-ui-react';
+import { Container, Divider, Segment } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
 import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, SCROLL_SEARCH_ID } from '../../../../../../helpers/consts';
