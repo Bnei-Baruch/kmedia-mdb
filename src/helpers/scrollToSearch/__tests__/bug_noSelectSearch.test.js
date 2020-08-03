@@ -1,12 +1,12 @@
-import { prepareScrollToSearch } from '../utils';
+import { prepareScrollToSearch } from '../helper';
 
-describe('no highlighte any text', () => {
+describe('no highlight any text', () => {
 
   const srchend   = (`этого»4. Т.е. «человек» означает трепет перед`);
   const srchstart = (`называетесь человеком»? И почему, исходя [только`);
 
   test('test', () => {
-    const result = prepareScrollToSearch(data, { srchstart, srchend });
+    const result = prepareScrollToSearch(data, { srchstart, srchend }, false);
     expect(result).not.toBeNull();
     expect(result).not.toEqual(data);
     expect(result).toEqual(expected);

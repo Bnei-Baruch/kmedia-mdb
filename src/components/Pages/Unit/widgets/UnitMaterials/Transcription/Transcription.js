@@ -12,9 +12,9 @@ import MediaHelper from '../../../../../../helpers/media';
 import * as shapes from '../../../../../shapes';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import WipErr from '../../../../../shared/WipErr/WipErr';
-import { buildSearchLinkFromSelection, prepareScrollToSearch } from '../../../../../../helpers/utils';
+import { buildSearchLinkFromSelection, prepareScrollToSearch } from '../../../../../../helpers/scrollToSearch/helper';
 import { getQuery } from '../../../../../../helpers/url';
-import ShareBar from '../../../../../AVPlayer/Share/ShareBar';
+import ShareBar from '../../../../../shared/ShareSelected';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 
 const scrollToSearch = () => {
@@ -43,8 +43,6 @@ class Transcription extends Component {
     unit: null,
     type: null,
   };
-
-  contextRef = createRef();
 
   static selectFile = (textFiles, language) => {
     const selectedFiles = textFiles.filter(x => x.language === language);
@@ -153,8 +151,6 @@ class Transcription extends Component {
     }
   }
 
-  handleContextRef = (ref) => this.contextRef = ref;
-
   loadFile = (selectedFile) => {
     if (selectedFile && selectedFile.id) {
       const { doc2htmlById, onContentChange } = this.props;
@@ -201,6 +197,16 @@ class Transcription extends Component {
     return false;
   };
 
+  renderShareBar = () => {
+    const { searchUrl } = this.state;
+    if (this.context.isMobileDevice || !searchUrl)
+      return null;
+
+    return (
+      <ShareBar url={searchUrl} />
+    );
+  };
+
   updateSelection = (isShareBarOpen = false) => {
     let searchUrl = buildSearchLinkFromSelection(this.state.language);
     if (!searchUrl)
@@ -209,51 +215,21 @@ class Transcription extends Component {
     this.setState({ searchUrl, isShareBarOpen });
   };
 
-  renderShareBar = () => {
-    const { searchUrl, isShareBarOpen } = this.state;
-    const { isMobileDevice }            = this.context;
-    const { t }                         = this.props;
-
-    const shareBar = <ShareBar
-      url={searchUrl}
-      buttonSize="medium"
-      embedContent={searchUrl}
-      messageTitle={t('share-text.message-title')}
-      className="search-on-page--share-bar" />;
-
-    let bar = null;
-    if (isMobileDevice) {
-      const openClose = !isShareBarOpen ?
-        (<Button icon onClick={this.handleOnShareClick.bind(this)}>{t('share-text.share-button')}
-          <Icon name="share alternate" />
-        </Button>) : null;
-
-      bar = (<div className="search-on-page--share">{openClose} {isShareBarOpen ? shareBar : null}</div>);
-    } else {
-      bar = searchUrl ? shareBar : null;
-    }
-
-    const { language }                         = this.state;
-    const selection                            = window.getSelection();
-    const searchUrl                            = buildSearchLinkFromSelection(window.getSelection(), language) + '&activeTab=transcription';
-    const { offsetTop: top, offsetLeft: left } = selection.extentNode.parentElement;
-    this.setState({ selectPosition: { top, left }, searchUrl });
-  };
-
   prepareContent = (data) => {
-    const direction              = getLanguageDirection(this.state.language);
-    const { srchstart, srchend } = getQuery(this.props.location);
+    const direction                            = getLanguageDirection(this.state.language);
+    const { srchstart, srchend, highlightAll } = getQuery(this.props.location);
 
     return (
-      <div ref={this.contextRef} className="search-on-page--container">
+      <div className="search-on-page--container">
         {this.renderShareBar()}
         <div
           className="doc2html"
           onMouseUp={this.handleOnMouseUp.bind(this)}
           onMouseDown={this.handleOnMouseDown.bind(this)}
-          onTouchStart={this.handleOnTouchStart.bind(this)}
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
-          dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(data, { srchstart, srchend }) }}
+          dangerouslySetInnerHTML={{
+            __html: prepareScrollToSearch(data, { srchstart, srchend }, highlightAll === 'true')
+          }}
         />
       </div>
     );
