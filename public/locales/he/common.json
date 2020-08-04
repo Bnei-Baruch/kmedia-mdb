@@ -417,6 +417,9 @@
     },
     "derived-units": {
       "header": "קטעים נבחרים"
+    },
+    "recommended": {
+      "title": "מומלצים"
     }
   },
   "sources-library": {
