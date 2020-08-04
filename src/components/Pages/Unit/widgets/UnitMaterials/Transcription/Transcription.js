@@ -129,8 +129,7 @@ class Transcription extends Component {
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
         || (state.selectedFile && (props.doc2htmlById[state.selectedFile.id].wip !== nextProps.doc2htmlById[state.selectedFile.id].wip))
         || nextState.language !== state.language
-        || nextState.searchUrl !== state.searchUrl
-        || nextState.isShareBarOpen !== state.isShareBarOpen);
+        || nextState.searchUrl !== state.searchUrl);
   }
 
   componentDidUpdate(prevProp, prevState) {
@@ -176,10 +175,6 @@ class Transcription extends Component {
     this.setState({ selectedFile, language: newLanguage });
   };
 
-  handleOnShareClick = (e) => this.updateSelection(!this.state.isShareBarOpen);
-
-  handleOnTouchStart = (e) => this.setState({ isShareBarOpen: false });
-
   handleOnMouseUp = (e) => {
     if (this.context.isMobileDevice) {
       return false;
@@ -207,12 +202,12 @@ class Transcription extends Component {
     );
   };
 
-  updateSelection = (isShareBarOpen = false) => {
+  updateSelection = () => {
     let searchUrl = buildSearchLinkFromSelection(this.state.language);
     if (!searchUrl)
       return;
     searchUrl += '&activeTab=transcription';
-    this.setState({ searchUrl, isShareBarOpen });
+    this.setState({ searchUrl});
   };
 
   prepareContent = (data) => {
