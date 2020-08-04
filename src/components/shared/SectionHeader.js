@@ -4,6 +4,7 @@ import { withNamespaces } from 'react-i18next';
 import { Container, Grid, Header, Menu } from 'semantic-ui-react';
 
 import Helmets from './Helmets';
+import i18next from "i18next";
 
 const renderTitle = (title, subText1, subText2, submenuItems = []) => {
   return (
@@ -57,8 +58,7 @@ const renderTitle = (title, subText1, subText2, submenuItems = []) => {
 const SectionHeader = ({ section, t, submenuItems }) => {
   const title   = t(`${section}.header.text`);
   const subText1 = t(`${section}.header.subtext`);
-  const subText2 = t(`${section}.header.subtext2`);
-
+  const subText2 = i18next.exists(`${section}.header.subtext2`) ? t(`${section}.header.subtext2`) : '';
   return (
     <div className="section-header">
       <Helmets.Basic title={title} description={subText1} />
