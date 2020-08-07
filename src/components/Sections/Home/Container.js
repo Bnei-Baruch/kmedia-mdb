@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 
+import { useInterval } from '../../../helpers/timer';
 import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../helpers/consts';
 import { actions, selectors } from '../../../redux/modules/home';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions as publicationsActions, selectors as publications } from '../../../redux/modules/publications';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
+import WipErr from '../../shared/WipErr/WipErr';
 import HomePage from './HomePage';
-import { useInterval } from '../../../helpers/timer';
 
 const FETCH_TIMEOUT = 10 * 60 * 1000;// every 10 min
 
@@ -88,7 +89,10 @@ const HomePageContainer = ({ location, t }) => {
 
   useInterval(() => fetchData(false), FETCH_TIMEOUT);
 
+  const wipErr = WipErr({ wip, err, t });
+  
   return (
+    wipErr ??
     <HomePage
       location={location}
       latestLesson={latestLesson}
@@ -97,8 +101,6 @@ const HomePageContainer = ({ location, t }) => {
       latestTweets={latestTweets}
       banner={banner}
       language={language}
-      wip={wip}
-      err={err}
       t={t}
     />
   );
