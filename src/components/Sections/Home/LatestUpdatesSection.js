@@ -29,6 +29,30 @@ const unitsByContentType = list =>
     return acc;
   }, {});
 
+const getComplexCard = (getCard) => {
+  const wl  = getCard(consts.CT_WOMEN_LESSON);
+  const vl  = getCard(consts.CT_VIRTUAL_LESSON);
+  const ls  = getCard(consts.CT_LECTURE_SERIES);
+  let cards = [];
+  if (wl) {
+    cards.push(wl);
+  }
+  if (vl) {
+    cards.push(vl);
+  }
+  if (cards.length < 2 && ls) {
+    cards.push(ls);
+  }
+  if (cards.length < 2) {
+    cards.push(getCard(consts.CT_LESSON_PART, 2));
+  }
+  if (cards.length < 2) {
+    cards.push(getCard(consts.CT_LESSON_PART, 3));
+  }
+
+  return cards;
+}
+
 const LatestUpdatesSection = ({ latestUnits = [], t }) => {
   const unitsByCT = unitsByContentType(latestUnits);
 
@@ -39,9 +63,11 @@ const LatestUpdatesSection = ({ latestUnits = [], t }) => {
     unitsByCT[content_type]?.length > index && getLatestUpdate(unitsByCT[content_type][index]);
 
   const getLatestUpdate = unit =>
-    <LatestUpdate key={unit.id} unit={unit} label={t(getSectionForTranslation(unit.content_type))} t={t}/>;
+    <LatestUpdate key={unit.id} unit={unit} label={t(getSectionForTranslation(unit.content_type))} t={t} />;
 
   const eventTypes = [consts.CT_CONGRESS, consts.CT_FRIENDS_GATHERING, consts.CT_MEAL, consts.CT_HOLIDAY];
+
+  const cards = getComplexCard(getCard);
 
   return (
     <div className="homepage__thumbnails homepage__section">
@@ -50,8 +76,8 @@ const LatestUpdatesSection = ({ latestUnits = [], t }) => {
           <Card.Group itemsPerRow={4} doubling>
             {getCard(consts.CT_LESSON_PART)}
             {getCard(consts.CT_LESSON_PART, 1)}
-            {getCard(consts.CT_WOMEN_LESSON) || getCard(consts.CT_LESSON_PART, 2)}
-            {getCard(consts.CT_VIRTUAL_LESSON)}
+            {cards[0]}
+            {cards[1]}
             {getCardArray(consts.CT_VIDEO_PROGRAM_CHAPTER, 4)}
             {getCardArray(consts.CT_CLIP, 4)}
             {getCardArray(consts.CT_ARTICLE, 4)}
