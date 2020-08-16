@@ -7,6 +7,7 @@ import * as shapes from '../../shapes';
 import Section from './Section';
 import LatestUpdate from './LatestUpdate';
 import { isEqual } from 'lodash';
+import moment from 'moment';
 
 const unitsByContentType = list =>
   list.reduce((acc, val) => {
@@ -29,32 +30,43 @@ const unitsByContentType = list =>
     return acc;
   }, {});
 
-const getComplexCard = (getCard) => {
+const getComplexCards = (getCard) => {
+  //  Switch by created at between:
+  //    women lesson unit CT_WOMEN_LESSON,
+  //    virtual lesson unit CT_VIRTUAL_LESSON,
+  //    lessons_series collection CT_LECTURE_SERIES, if one of them is older than 2 weeks use another lesson collection
+
   const wl  = getCard(consts.CT_WOMEN_LESSON);
   const vl  = getCard(consts.CT_VIRTUAL_LESSON);
-  const ls  = getCard(consts.CT_LECTURE_SERIES);
   let cards = [];
-  if (wl) {
+
+  if (wl && moment().diff(moment(wl.props.unit.film_date), 'days') < 14) {
     cards.push(wl);
   }
-  if (vl) {
+  if (vl && moment().diff(moment(vl.props.unit.film_date), 'days') < 14) {
     cards.push(vl);
   }
-  if (cards.length < 2 && ls) {
-    cards.push(ls);
+  if (cards.length < 2) {
+    cards.push(getCard(consts.CT_LECTURE_SERIES));
   }
   if (cards.length < 2) {
-    cards.push(getCard(consts.CT_LESSON_PART, 2));
-  }
-  if (cards.length < 2) {
-    cards.push(getCard(consts.CT_LESSON_PART, 3));
+    cards.push(getCard(consts.CT_LECTURE_SERIES, 1));
   }
 
   return cards;
-}
+};
 
 const LatestUpdatesSection = ({ latestUnits = [], t }) => {
-  const unitsByCT = unitsByContentType(latestUnits);
+  const unitsByCT                   = unitsByContentType(latestUnits);
+  unitsByCT[consts.CT_DAILY_LESSON] = unitsByCT[consts.CT_DAILY_LESSON].sort(
+    (a, b) => {
+      if (a.film_date !== b.film_date) {
+        return moment(a).diff(moment(b), 'days');
+      } else {
+        return a.name_in_collection - b.name_in_collection;
+      }
+    }
+  );
 
   const getCardArray = (content_type, itemsCount) =>
     unitsByCT[content_type]?.slice(0, itemsCount).map(unit => getLatestUpdate(unit));
@@ -67,15 +79,27 @@ const LatestUpdatesSection = ({ latestUnits = [], t }) => {
 
   const eventTypes = [consts.CT_CONGRESS, consts.CT_FRIENDS_GATHERING, consts.CT_MEAL, consts.CT_HOLIDAY];
 
-  const cards = getComplexCard(getCard);
+  const cards = getComplexCards(getCard);
+
+  // row #1:
+  //    a. lesson collection before the last lesson CT_DAILY_LESSON - 1
+  //    b. lesson collection before the collection in a CT_DAILY_LESSON - 2
+  //    c + d. switch by created at between:
+  //      women lesson unit CT_WOMEN_LESSON,
+  //      virtual lesson unit CT_VIRTUAL_LESSON,
+  //      lessons_series collection CT_LECTURE_SERIES, if one of them is older than 2 weeks use another lesson collection
+  // row #2: CT_VIDEO_PROGRAM_CHAPTER x 4
+  // row #3: CT_CLIP x 4
+  // row #4: CT_ARTICLE x 4
+  // row #5: CT_CONGRESS, CT_FRIENDS_GATHERING, CT_FRIENDS_GATHERING, CT_MEAL
 
   return (
     <div className="homepage__thumbnails homepage__section">
       <Container className="padded horizontally">
         <Section title={t('home.updates')}>
           <Card.Group itemsPerRow={4} doubling>
-            {getCard(consts.CT_LESSON_PART)}
-            {getCard(consts.CT_LESSON_PART, 1)}
+            {getCard(consts.CT_DAILY_LESSON, 0)}
+            {getCard(consts.CT_DAILY_LESSON, 1)}
             {cards[0]}
             {cards[1]}
             {getCardArray(consts.CT_VIDEO_PROGRAM_CHAPTER, 4)}
