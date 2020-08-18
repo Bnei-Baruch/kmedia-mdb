@@ -63,13 +63,14 @@ export const filterTagsByBorder = (from, to, tags) => {
 };
 
 export const textToHtml = (source, from, to, allTags) => {
-
+  let currentPos = from;
   return source
     .split(' ')
     .map((word) => {
 
       const tags = allTags
-        .filter((t, i) => from < t.noHtmlPos && from + word.length + 1 >= t.noHtmlPos);
+        .filter((t, i) => currentPos < t.noHtmlPos && currentPos + word.length + 1 >= t.noHtmlPos);
+      currentPos += word.length + 1;
 
       if (tags.length === 0)
         return word.length === 0 ? '' : `<em class="_h">${word}</em>`;
@@ -115,7 +116,7 @@ export const wrapSeekingPlace = (data, tags, fromNohtml, toNoHtml) => {
 
     if (!closeTagP) {
       const tagUp = tags[tags.length - (i + 1)];
-      if (tagUp.pos > to && tagUp.str.search(/<\/p>|<\/h>/) !== -1) {
+      if (tagUp.pos > to && tagUp.str.search(/<\/p>|<\/h\d>/) !== -1) {
         closeTagP = tagUp;
       }
     }
@@ -127,7 +128,7 @@ export const wrapSeekingPlace = (data, tags, fromNohtml, toNoHtml) => {
   before += data.slice(openTagP.pos, from).replace(/<p|<h/, x => `<div class="scroll-to-search" id="${SCROLL_SEARCH_ID}">${x}`);
 
   let after = data.slice(to, closeTagP.pos);
-  after += data.slice(closeTagP.pos).replace(/<\/p>|<\/h>/, x => x + '</div>');
+  after += data.slice(closeTagP.pos).replace(/<\/p>|<\/h\d>/, x => x + '</div>');
 
   return { before, after };
 };
