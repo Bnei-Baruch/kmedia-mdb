@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { withNamespaces } from 'react-i18next';
 import { Container, Grid } from 'semantic-ui-react';
 
@@ -10,7 +11,7 @@ import AVBox from './widgets/AVBox/AVBox';
 import Materials from './widgets/UnitMaterials/Materials';
 import Info from './widgets/Info/Info';
 import MediaDownloads from './widgets/Downloads/MediaDownloads';
-import SameCollection from './widgets/Recommended/SameCollection/Container';
+import Recommended from './widgets/Recommended/Main/Recommended';
 import playerHelper from '../../../helpers/player';
 
 export class UnitPage extends Component {
@@ -46,17 +47,24 @@ export class UnitPage extends Component {
   renderPlayer() {
     const { unit, language } = this.props;
     const { embed }          = this.state;
-    return !embed ? (
-      <div className="avbox">
-        <Container>
+
+    return !embed 
+      ? <div className="playlist-collection-page">
+        <Container className="avbox">
           <Grid centered padded>
-            <AVBox unit={unit} language={language} />
+            <Grid.Row className={classNames('', {'layout--is-audio': false})} >
+              <Grid.Column id="avbox__player" mobile={16} tablet={10} computer={10}>
+                <AVBox unit={unit} language={language} />
+              </Grid.Column>
+              <Grid.Column id="avbox__playlist" className="avbox__playlist" mobile={16} tablet={6} computer={6}>
+                <Recommended unit={unit}/>
+              </Grid.Column>
+            </Grid.Row>
           </Grid>
         </Container>
       </div>
-    ) : (
-      <AVBox unit={unit} language={language} />
-    );
+      : <AVBox unit={unit} language={language} />
+    ;
   }
 
   renderInfo() {
@@ -72,11 +80,6 @@ export class UnitPage extends Component {
   renderDownloads() {
     const { unit } = this.props;
     return <MediaDownloads unit={unit} />;
-  }
-
-  renderRecommendations() {
-    const { unit, section, language } = this.props;
-    return <SameCollection unit={unit} section={section} language={language} />;
   }
 
   renderContent() {
@@ -98,9 +101,9 @@ export class UnitPage extends Component {
                     <Grid.Column mobile={16} tablet={8} computer={16}>
                       {this.renderDownloads()}
                     </Grid.Column>
-                    <Grid.Column mobile={16} tablet={8} computer={16}>
+                    {/* <Grid.Column mobile={16} tablet={8} computer={16}>
                       {this.renderRecommendations()}
-                    </Grid.Column>
+                    </Grid.Column> */}
                   </Grid.Row>
                 </Grid>
               </Grid.Column>
