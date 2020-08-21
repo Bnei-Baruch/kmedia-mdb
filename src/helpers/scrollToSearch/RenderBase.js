@@ -27,7 +27,7 @@ export class RenderBase {
 
   defineMatch() {
     this.matchStart = getMatch(this.start, this.dataCleanHtml);
-    this.matchEnd   = getMatch(this.end, this.dataCleanHtml);
+    this.matchEnd   = getMatch(this.end, this.dataCleanHtml, this.matchStart.index);
   }
 
   buildHtml() {

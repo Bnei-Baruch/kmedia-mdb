@@ -22,10 +22,14 @@ export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }, 
   return render.build();
 };
 
-export const getMatch = (search, data) => {
+export const getMatch = (search, data, skip) => {
   const words    = search.replace(KEEP_LETTERS_RE, '.').split(' ').filter((word) => !!word);
-  const searchRe = new RegExp(words.map((word) => `(${word})`).join('(.{0,30})'), 's');
-  return data.match(searchRe);
+  const searchRe = new RegExp(words.map((word) => `(${word})`).join('(.{0,30})'), !skip ? 's': 'sg');
+
+  if(skip){
+    searchRe.lastIndex = skip
+  }
+  return searchRe.exec(data);
 };
 
 export const getPositionInHtml = (pos, tags) => {
