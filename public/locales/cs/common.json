@@ -471,7 +471,8 @@
       "TRAINING": "Výcvik",
       "KITEI_MAKOR": "Zdrojové materiály",
       "PUBLICATION": "Publikace",
-      "LELO_MIKUD": "Upraveno - Ne Focus Group"
+      "LELO_MIKUD": "Upraveno - Ne Focus Group",
+      "sources": "Zdroje"
     },
     "media-types": {
       "video": "Video",
