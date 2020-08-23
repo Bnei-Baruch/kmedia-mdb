@@ -1,6 +1,6 @@
 import { getPositionInHtml, prepareScrollToSearch, wrapSeekingPlace } from '../helper';
 import { RenderBase } from '../RenderBase';
-import { data, tagPositions, dataCleanHtml, source } from './base_data.test';
+import { data, tagPositions, dataCleanHtml, source } from './base_data';
 
 describe('Base tests:', () => {
   const start          = 'Before I clarify';
