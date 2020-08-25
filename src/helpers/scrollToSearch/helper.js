@@ -24,7 +24,7 @@ export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }, 
 
 export const getMatch = (search, data, skip) => {
   const words    = search.replace(KEEP_LETTERS_RE, '.').split(' ').filter((word) => !!word);
-  const searchRe = new RegExp(words.map((word) => `(${word})`).join('(.{0,30})'), !skip ? 's': 'sg');
+  const searchRe = new RegExp(words.map((word) => `(${word})`).join('(.{0,5})'), !skip ? 's': 'sg');
 
   if(skip){
     searchRe.lastIndex = skip
