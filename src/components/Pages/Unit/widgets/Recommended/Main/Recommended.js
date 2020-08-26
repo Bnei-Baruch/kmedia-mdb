@@ -35,7 +35,12 @@ const Recommended = ({ unit, t }) => {
     return wipErr;
   }
 
+  if (recommendedUnits.length === 0){
+    return null;
+  }
+
   const unitCollection = canonicalCollection(unit);
+  const unitCollectionId = unitCollection ? unitCollection.id : null;
 
   return (
     <div className="avbox__playlist-wrapper">
@@ -53,7 +58,7 @@ const Recommended = ({ unit, t }) => {
                 <Item.Image size="small">
                   <UnitLogo
                     unitId={rUnit.id}
-                    collectionId={unitCollection.id}
+                    collectionId={unitCollectionId}
                     width={150}
                     fallbackImg='programs'
                   />

@@ -172,24 +172,25 @@ class PlaylistAVBox extends Component {
     }
 
     const isAudio = playlist.items[selected].mediaType === MT_AUDIO;
-    return !embed ? (
-      <Grid.Row
-        className={classNames('', {
-          'layout--is-audio': isAudio,
-        })}
-      >
-        <Grid.Column id="avbox__player" mobile={16} tablet={10} computer={10}>
-          <AVPlaylistPlayer
-            items={playlist.items}
-            selected={selected}
-            language={playlist.language}
-            uiLanguage={uiLanguage}
-            onSelectedChange={this.handleSelectedChange}
-            onLanguageChange={this.handleLanguageChange}
-            onSwitchAV={this.handleSwitchAV}
-            history={history}
-          />
-        </Grid.Column>
+
+    return <Grid.Row
+      className={classNames('', {
+        'layout--is-audio': isAudio,
+      })}
+    >
+      <Grid.Column id="avbox__player" mobile={16} tablet={10} computer={10}>
+        <AVPlaylistPlayer
+          items={playlist.items}
+          selected={selected}
+          language={playlist.language}
+          uiLanguage={uiLanguage}
+          onSelectedChange={this.handleSelectedChange}
+          onLanguageChange={this.handleLanguageChange}
+          onSwitchAV={this.handleSwitchAV}
+          history={history}
+        />
+      </Grid.Column>
+      { !embed ?
         <Grid.Column id="avbox__playlist" className="avbox__playlist" mobile={16} tablet={6} computer={6}>
           <PlayListComponent
             playlist={playlist}
@@ -200,27 +201,9 @@ class PlaylistAVBox extends Component {
             prevLink={prevLink}
           />
         </Grid.Column>
-      </Grid.Row>
-    ) : (
-      <Grid.Row
-        className={classNames('', {
-          'layout--is-audio': isAudio,
-        })}
-      >
-        <Grid.Column id="avbox__player" mobile={16} tablet={10} computer={10}>
-          <AVPlaylistPlayer
-            items={playlist.items}
-            selected={selected}
-            language={playlist.language}
-            uiLanguage={uiLanguage}
-            onSelectedChange={this.handleSelectedChange}
-            onLanguageChange={this.handleLanguageChange}
-            onSwitchAV={this.handleSwitchAV}
-            history={history}
-          />
-        </Grid.Column>
-      </Grid.Row>
-    );
+        : null
+      }
+    </Grid.Row>
   }
 }
 
