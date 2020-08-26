@@ -294,8 +294,7 @@
   "publications": {
     "header": {
       "text": "Publikace",
-      "subtext": "Články o aktuálních událostech, kultuře, populární vědě, vztazích a dalších, představené z jedinečné perspektivy moudrosti Kabaly",
-      "subtext2": ""
+      "subtext": "Články o aktuálních událostech, kultuře, populární vědě, vztazích a dalších, představené z jedinečné perspektivy moudrosti Kabaly"
     },
     "tabs": {
       "articles": "Články",
@@ -472,7 +471,8 @@
       "TRAINING": "Výcvik",
       "KITEI_MAKOR": "Zdrojové materiály",
       "PUBLICATION": "Publikace",
-      "LELO_MIKUD": "Upraveno - Ne Focus Group"
+      "LELO_MIKUD": "Upraveno - Ne Focus Group",
+      "sources": "Zdroje"
     },
     "media-types": {
       "video": "Video",

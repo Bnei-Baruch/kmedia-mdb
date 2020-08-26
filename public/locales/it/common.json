@@ -321,8 +321,7 @@
   "publications": {
     "header": {
       "text": "Publicazioni",
-      "subtext": "Articles on current events, culture, popular science, relationships and more, presented from the unique perspective of the wisdom of Kabbalah",
-      "subtext2": ""
+      "subtext": "Articles on current events, culture, popular science, relationships and more, presented from the unique perspective of the wisdom of Kabbalah"
     },
     "tabs": {
       "articles": "Articles",
@@ -555,7 +554,8 @@
       "LELO_MIKUD": "Senza Focus Group",
       "BLOG_POST": "Post dal Blog",
       "LESSONS_SERIES": "Selected Study Series",
-      "KTAIM_NIVCHARIM": "Punti Salienti Selezionati"
+      "KTAIM_NIVCHARIM": "Punti Salienti Selezionati",
+      "sources": "Kabbalah Sources"
     },
     "media-types": {
       "video": "Video",

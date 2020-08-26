@@ -185,3 +185,16 @@ export const canonicalContentType = (entity) => {
     return [];
   }
 };
+
+export const canonicalSectionByUnit = unit => {
+  const link = canonicalLink(unit);
+  return canonicalSectionByLink(link);
+}
+
+export const canonicalSectionByLink = link => {
+  const s = link.split('/');
+  const canonicalSection = s.length > 2 ? s[1] : null;
+
+  return canonicalSection;
+}
+

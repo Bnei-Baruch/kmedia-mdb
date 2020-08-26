@@ -1,8 +1,8 @@
 import { createAction } from 'redux-actions';
 import identity from 'lodash/identity';
 
-import { tracePath } from '../../helpers/utils';
-import { canonicalContentType, canonicalLink } from '../../helpers/links';
+import { tracePath, unitsBySection } from '../../helpers/utils';
+import { canonicalContentType, canonicalSectionByUnit } from '../../helpers/links';
 import { TOPICS_FOR_DISPLAY } from '../../helpers/consts';
 import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
@@ -124,11 +124,6 @@ const onReceiveTags = (draft, payload) => {
   draft.displayRoots = displayRoots;
 };
 
-const getSectionOfUnit = (unit) => {
-  const s = canonicalLink(unit).split('/');
-  return s.length >= 3 ? s[1] : null;
-};
-
 const onDashboard = draft => {
   draft.wip = true;
 };
@@ -141,19 +136,10 @@ const onDashboardSuccess = (draft, { data }) => {
   }
 
   // map units to sections
-  const cuBySection = latestUnits.reduce((acc, u) => {
-    const section = getSectionOfUnit(u);
-    if (acc[section]) {
-      acc[section].push(u);
-    } else {
-      acc[section] = [u];
-    }
-
-    return acc;
-  }, {});
+  const cuBySection = unitsBySection(latestUnits);
 
   const getSectionUnits   = section => cuBySection[section];
-  const uniqueSectionsArr = [...new Set(latestUnits.map(u => getSectionOfUnit(u)).filter(x => !!x))].sort();
+  const uniqueSectionsArr = [...new Set(latestUnits.map(u => canonicalSectionByUnit(u)).filter(x => !!x))].sort();
 
   const getCounts = section => {
     const contentTypes = canonicalContentType(section);

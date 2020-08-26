@@ -317,8 +317,7 @@
   "publications": {
     "header": {
       "text": "Veröffentlichungen",
-      "subtext": "Artikel über aktuelle Ereignisse, Kultur, Volkswissenschaften, Beziehungen und vieles mehr, präsentiert von dem einzigartigen Standpunkt der Weisheit der Kabbala",
-      "subtext2": ""
+      "subtext": "Artikel über aktuelle Ereignisse, Kultur, Volkswissenschaften, Beziehungen und vieles mehr, präsentiert von dem einzigartigen Standpunkt der Weisheit der Kabbala"
     },
     "tabs": {
       "articles": "Artikel",
@@ -537,7 +536,8 @@
       "LELO_MIKUD": "Bearbeitet - Ohne Fokusgruppen",
       "BLOG_POST": "Blog",
       "LESSONS_SERIES": "Ausgewählte Trainingsserien",
-      "KTAIM_NIVCHARIM": "Ausgewählte Highlights"
+      "KTAIM_NIVCHARIM": "Ausgewählte Highlights",
+      "sources": "Primäre Quellen"
     },
     "media-types": {
       "video": "Video",

@@ -229,25 +229,32 @@ class SearchResultBase extends Component {
     );
   };
 
-  iconByContentType = (type, withTitle, t) => {
-    const icon = iconByContentTypeMap.get(type) || null;
+  iconByContentType = (type, t, noLink) => {
+    const icon    = iconByContentTypeMap.get(type) || null;
+    const content = <span>
+      <Image size="mini" verticalAlign="middle">
+        <SectionLogo name={icon} width='25' height='25' />
+      </Image>
+      &nbsp;
+      <span>{t(`constants.content-types.${type}`)}</span>
+    </span>;
 
-    if (!withTitle) {
-      return (
-        <Image size="mini" verticalAlign="middle">
-          <SectionLogo name={icon} width='25' height='25' />
-        </Image>
-      );
-    }
+    if (noLink)
+      return content;
+
+    const { canonicalLinkParams, logLinkParams, canonicalLinkSearch: { language } } = this.buildLinkParams();
 
     return (
-      <span>
-        <Image size="mini" verticalAlign="middle">
-          <SectionLogo name={icon} width='25' height='25' />
-        </Image>
-        &nbsp;
-        <span>{t(`constants.content-types.${type}`)}</span>
-      </span>
+      <Link
+        className="margin-right-4"
+        onClick={() => this.logClick(...logLinkParams)}
+        to={{
+          pathname: canonicalLink(...canonicalLinkParams),
+          search: stringify({ language })
+        }}
+      >
+        {content}
+      </Link>
     );
   };
 
@@ -312,8 +319,14 @@ class SearchResultBase extends Component {
   };
 
   buildLinkParams = () => {
-    console.error('must be override in child class');
-    return { canonicalLinkParams: [], logLinkParams: [], canonicalLinkSearch: {} };
+    const { queryResult: { search_result: { searchId } }, hit, rank, filters }      = this.props;
+    const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, } = hit;
+
+    return {
+      canonicalLinkParams: [{ id: mdbUid, content_type: 'POST' }, this.getMediaLanguage(filters)],
+      canonicalLinkSearch: {},
+      logLinkParams: [mdbUid, index, resultType, rank, searchId]
+    };
   };
 
   getFilterById = (index) => {
