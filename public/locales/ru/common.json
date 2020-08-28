@@ -680,5 +680,9 @@
     "language": "Язык",
     "website_language": "Язык сайта",
     "content_language": "Язык контента"
+  },
+  "share-text": {
+    "message-title": "Read this fragment",
+    "share-button": "Share fragment"
   }
 }

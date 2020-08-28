@@ -664,5 +664,9 @@
     "language": "שפה",
     "website_language": "שפת האתר",
     "content_language": "שפת תוכן"
+  },
+  "share-text": {
+    "message-title": "Read this fragment",
+    "share-button": "Share fragment"
   }
 }

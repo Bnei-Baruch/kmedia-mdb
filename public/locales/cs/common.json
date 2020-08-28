@@ -486,5 +486,9 @@
   },
   "values": {
     "date": "{{date, l}}"
+  },
+  "share-text": {
+    "message-title": "Read this fragment",
+    "share-button": "Share fragment"
   }
 }
