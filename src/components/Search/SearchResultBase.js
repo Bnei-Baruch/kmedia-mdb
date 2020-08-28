@@ -52,7 +52,8 @@ import ScoreDebug from './ScoreDebug';
 
 const PATH_SEPARATOR = ' > ';
 
-const MIN_NECESSARY_WORDS_FOR_SEARCH = 4;
+const MAX_URL_LENGTH     = 120;
+const NEW_LINE_SEPARATOR = '__P__';
 
 const iconByContentTypeMap = new Map([
   [CT_LESSON_PART, 'lessons'],
@@ -285,16 +286,15 @@ class SearchResultBase extends Component {
   };
 
   clearStringForLink = (str) => {
-    return str.replace(/(\r?\n|\r){1,}/g, ' ').replace(/<.+?>/gi, '');
+    if (str.search(/\r\n|\r|\n/)) {
+      //select longest string separated with linebreaks
+      str = str.replace(/\r\n|\r|\n/gi, NEW_LINE_SEPARATOR).split(NEW_LINE_SEPARATOR).reduce((acc, x) => acc.length > x.length ? acc : x, '');
+    }
+    return str.replace(/<.+?>/gi, '').slice(0, MAX_URL_LENGTH);
   };
 
   highlightWrapToLink = (__html, index, pathname, search, logLinkParams) => {
-    const searchArr = this.clearStringForLink(__html).split(' ');
-
-    search.srchstart       = searchArr.slice(0, MIN_NECESSARY_WORDS_FOR_SEARCH).join(' ');
-    search.srchend         = searchArr.slice(-1 * MIN_NECESSARY_WORDS_FOR_SEARCH).join(' ');
-    search.highlightAll = true;
-
+    search.searchScroll = this.clearStringForLink(__html);
     return (<Link
       key={`highlightLink_${index}`}
       onClick={() => this.logClick(...logLinkParams)}
