@@ -333,6 +333,8 @@ export const getSectionForTranslation = content_type => {
   switch (content_type) {
   case consts.CT_LESSON_PART:
     return 'lessons.tabs.daily';
+  case consts.CT_LESSONS_SERIES:
+    return 'lessons.tabs.series';
   case consts.CT_LECTURE_SERIES:
     return 'lessons.tabs.series';
   case consts.CT_DAILY_LESSON:

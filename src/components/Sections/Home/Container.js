@@ -90,7 +90,7 @@ const HomePageContainer = ({ location, t }) => {
   useInterval(() => fetchData(false), FETCH_TIMEOUT);
 
   const wipErr = WipErr({ wip, err, t });
-  
+
   return (
     wipErr ??
     <HomePage
