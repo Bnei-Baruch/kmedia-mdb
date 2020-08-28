@@ -49,6 +49,12 @@ export class Requests {
       .join('&')}`
   );
 
+  static imaginaryRandom = (action, params, urlPattern) => {
+    const rand = Math.floor(Math.random() * Math.floor(31)) + 1;
+    params.url = assetUrl(urlPattern.replace(/%s/, rand));
+    return Requests.imaginary(action, params);
+  };
+
   static imaginary = (action, params) => {
     if (!params.url.startsWith('http')) {
       params.url = `http://${IMAGINARY_INTERNAL_HOST}${params.url}`;
