@@ -566,9 +566,5 @@
     "language": "Idioma",
     "website_language": "Idioma del sitio",
     "content_language": "Idioma de contenido"
-  },
-  "share-text": {
-    "message-title": "Read this fragment",
-    "share-button": "Share fragment"
   }
 }

@@ -1509,7 +1509,6 @@
       padding-right: 15px !important;
     }
   }
-
   @media only screen and (max-width: $tabletBreakpoint) {
     .search-omnibox {
       .searchButton {
@@ -1568,15 +1567,15 @@
 }
 
 .share-publication {
-  margin: 0 5px;
+  margin:0 5px;
 }
 
 .display-inline {
-  display: inline;
+  display:inline;
 }
 
 .library__nextPrevButtons {
-  height: 20px;
+  height:20px;
 }
 
 .library__nextPrevButton {
@@ -1591,65 +1590,23 @@
   float: left
 }
 
-//search on the page
 .scroll-to-search {
-  box-shadow: 1px 1px 5px 1px #7dcff5;
+  box-shadow: 0 0 0 6px #7dcff5;
   animation: blink-on-scroll .8s ease-in-out;
   animation-iteration-count: 5;
   animation-delay: .7s;
-  background: rgba(197, 221, 250, 0.1);
-  padding: 5px;
-
-  em._h {
-    font-weight: bold;
+  em.highlight {
     border-bottom: 1px solid rgba(65, 131, 196, .3);
+    background-color: rgba(242, 201, 76, .2);
+    font-weight: 900;
   }
 }
 
 @keyframes blink-on-scroll {
   0% {
-    box-shadow: 1px 1px 5px 1px #7dcff5;
+    box-shadow: 0 0 0 5px #7dcff5;
   }
   100% {
     box-shadow: none;
-  }
-}
-
-.search-on-page- {
-  &-container {
-    position: relative;
-
-    .social-buttons {
-      align-items: center;
-      background: rgba($black, .8);
-      border-radius: calc(36px / 2 + .5rem);
-      display: flex;
-      margin: auto 0 1rem;
-      padding: .5rem .25rem;
-
-      .embed-share-button {
-        vertical-align: text-bottom;
-      }
-    }
-  }
-
-  &-share {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-
-  &-bar-position {
-    position: fixed;
-    top: 200px;
-  }
-
-  &-share-bar {
-
-    .message {
-      max-width: 500px;
-      word-wrap: break-word;
-    }
   }
 }
