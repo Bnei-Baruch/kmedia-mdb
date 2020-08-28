@@ -5,6 +5,7 @@ const ASSETS_BACKEND          = process.env.REACT_APP_ASSETS_BACKEND;
 const CMS_BACKEND             = process.env.REACT_APP_CMS_BACKEND || `${API_BACKEND}cms/`;
 const IMAGINARY_URL           = process.env.REACT_APP_IMAGINARY_URL;
 const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST || 'localhost';
+const API_RECOMMENDED         = process.env.REACT_APP_RECOMMENDED;
 
 export const backendUrl   = path => `${API_BACKEND}${path}`;
 export const assetUrl     = path => `${ASSETS_BACKEND}${path}`;
@@ -115,6 +116,27 @@ class Api {
   static simpleMode = ({ language, startDate: start_date, endDate: end_date }) => (
     Requests.get(`simple?${Requests.makeParams({ language, start_date, end_date })}`)
   );
+
+  static recommended = uid => {
+    var data = JSON.stringify({
+      "more_items": 20,
+      "current_feed": [],
+      "options": {
+        "recommend": {
+          "uid": uid  
+        }
+      }
+    });
+
+    var config = {
+      method: 'post',
+      url: `${API_RECOMMENDED}`, 
+      headers: { 'Content-Type': 'application/json' },
+      data: data
+    };
+
+    return axios(config);
+  }
 }
 
 export default Api;
