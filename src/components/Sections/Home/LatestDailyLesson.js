@@ -8,7 +8,7 @@ import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 
 const getRandomImage = () => {
-  const rand = Math.floor(Math.random() * Math.floor(9)) + 1;
+  const rand = Math.floor(Math.random() * Math.floor(31)) + 1;
 
   return Requests.imaginary('resize', {
     url: assetUrl(`lessons/latest_lesson_${rand}.jpg`),
