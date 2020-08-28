@@ -1,23 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Header, Image } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
-
-import { assetUrl, Requests } from '../../../helpers/Api';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
+import { Requests } from '../../../helpers/Api';
 
-const getRandomImage = () => {
-  const rand = Math.floor(Math.random() * Math.floor(31)) + 1;
-
-  return Requests.imaginary('resize', {
-    url: assetUrl(`lessons/latest_lesson_${rand}.jpg`),
+const getRandomImage = () => (
+  Requests.imaginaryRandom('resize', {
     width: 512,
     height: 288,
     nocrop: false,
     stripmeta: true,
-  });
-};
+  }, `lessons/latest_lesson_%s.jpg`)
+);
 
 const LatestDailyLesson = ({ collection, t }) => {
   const [imageSrc, setImage] = useState();

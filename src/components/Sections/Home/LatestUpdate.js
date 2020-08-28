@@ -6,6 +6,7 @@ import { canonicalLink, canonicalSectionByLink } from '../../../helpers/links';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
+import { Requests } from '../../../helpers/Api';
 import {
   CT_CONGRESS,
   CT_DAILY_LESSON,
@@ -22,13 +23,12 @@ import {
 } from '../../../helpers/consts';
 
 const LatestUpdate = ({ unit, label, t }) => {
-  const link             = canonicalLink(unit);
-  const canonicalSection = canonicalSectionByLink(link);
-  const name             = unit.name ||
+  const link       = canonicalLink(unit);
+  const name           = unit.name ||
     `${t('constants.content-types.' + unit.content_type)} ${t('lessons.list.number')} ${unit.name_in_collection}`;
-  let unitId             = unit.id;
+  let canonicalSection;
 
-  // collections -- get ID of first CU
+  // collections -- prepare random image
   switch (unit.content_type) {
   case CT_CONGRESS:
   case CT_MEALS:
@@ -42,16 +42,20 @@ const LatestUpdate = ({ unit, label, t }) => {
   case CT_PICNIC:
   case CT_UNITY_DAY:
   case CT_LESSONS_SERIES:
-    const key = Object.keys(unit.collections)[0];
-    if (key) {
-      unitId = unit.collections[key].id;
-    }
+    canonicalSection = Requests.imaginaryRandom('resize', {
+      width: 512,
+      height: 288,
+      nocrop: false,
+      stripmeta: true,
+    }, `lessons/latest_lesson_%s.jpg`);
     break;
+  default:
+    canonicalSection = canonicalSectionByLink(link);
   }
 
   return (
     <Card as={Link} to={link} raised>
-      <UnitLogo width={512} unitId={unitId} fallbackImg={canonicalSection} />
+      <UnitLogo width={512} unitId={unit.id} fallbackImg={canonicalSection} />
       <Card.Content>
         <Header size="tiny">{name}</Header>
       </Card.Content>
