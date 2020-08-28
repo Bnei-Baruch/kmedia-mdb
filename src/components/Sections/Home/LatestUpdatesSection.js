@@ -47,10 +47,10 @@ const getComplexCards = (getCard) => {
     cards.push(vl);
   }
   if (cards.length < 2) {
-    cards.push(getCard(consts.CT_LECTURE_SERIES));
+    cards.push(getCard(consts.CT_LESSONS_SERIES));
   }
   if (cards.length < 2) {
-    cards.push(getCard(consts.CT_LECTURE_SERIES, 1));
+    cards.push(getCard(consts.CT_LESSONS_SERIES, 1));
   }
 
   return cards;
@@ -58,15 +58,17 @@ const getComplexCards = (getCard) => {
 
 const LatestUpdatesSection = ({ latestUnits = [], t }) => {
   const unitsByCT                   = unitsByContentType(latestUnits);
-  unitsByCT[consts.CT_DAILY_LESSON] = unitsByCT[consts.CT_DAILY_LESSON].sort(
-    (a, b) => {
-      if (a.film_date !== b.film_date) {
-        return moment(a).diff(moment(b), 'days');
-      } else {
-        return a.name_in_collection - b.name_in_collection;
+  if (unitsByCT[consts.CT_DAILY_LESSON]) {
+    unitsByCT[consts.CT_DAILY_LESSON] = unitsByCT[consts.CT_DAILY_LESSON].sort(
+      (a, b) => {
+        if (a.film_date !== b.film_date) {
+          return moment(a).diff(moment(b), 'days');
+        } else {
+          return a.name_in_collection - b.name_in_collection;
+        }
       }
-    }
-  );
+    );
+  }
 
   const getCardArray = (content_type, itemsCount) =>
     unitsByCT[content_type]?.slice(0, itemsCount).map(unit => getLatestUpdate(unit));
@@ -87,7 +89,7 @@ const LatestUpdatesSection = ({ latestUnits = [], t }) => {
   //    c + d. switch by created at between:
   //      women lesson unit CT_WOMEN_LESSON,
   //      virtual lesson unit CT_VIRTUAL_LESSON,
-  //      lessons_series collection CT_LECTURE_SERIES, if one of them is older than 2 weeks use another lesson collection
+  //      lessons_series collection CT_LESSONS_SERIES, if one of them is older than 2 weeks use another lesson collection
   // row #2: CT_VIDEO_PROGRAM_CHAPTER x 4
   // row #3: CT_CLIP x 4
   // row #4: CT_ARTICLE x 4
