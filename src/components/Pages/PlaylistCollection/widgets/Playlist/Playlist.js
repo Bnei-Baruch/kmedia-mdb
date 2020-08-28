@@ -88,7 +88,7 @@ class PlaylistWidget extends Component {
     }
 
     return (
-      <Header as="h1">
+      <Header inverted as="h1">
         {content}
         <Header.Subheader>
           {prevLinkHtml}
