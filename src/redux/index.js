@@ -15,7 +15,6 @@ import { reducer as assets } from './modules/assets';
 import { reducer as home } from './modules/home';
 import { reducer as stats } from './modules/stats';
 import { reducer as simpleMode } from './modules/simpleMode';
-import { reducer as recommended } from './modules/recommended';
 
 export default history => combineReducers({
   router: connectRouter(history),
@@ -34,5 +33,4 @@ export default history => combineReducers({
   home,
   stats,
   simpleMode,
-  recommended
 });

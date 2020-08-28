@@ -27,21 +27,28 @@ export class SameCollectionContainer extends Component {
     section: '',
   };
 
+  state = {
+    collectionRequested: false,
+  };
+
   componentDidMount() {
     this.askForDataIfNeeded(this.props);
   }
 
-  componentDidUpdate(prevProps){
-    if (this.props.collectionID !== prevProps.collectionID){
-      this.askForDataIfNeeded(this.props);
-    }
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    this.askForDataIfNeeded(nextProps);
   }
 
   askForDataIfNeeded = (props) => {
     const { collectionID, wip, err, fetchCollection } = props;
+    const { collectionRequested }                     = this.state;
+    if (collectionRequested) {
+      return;
+    }
 
     if (collectionID && !(wip || err)) {
       fetchCollection(collectionID);
+      this.setState({ collectionRequested: true });
     }
   };
 
