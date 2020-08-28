@@ -101,9 +101,6 @@ export class UnitPage extends Component {
                     <Grid.Column mobile={16} tablet={8} computer={16}>
                       {this.renderDownloads()}
                     </Grid.Column>
-                    {/* <Grid.Column mobile={16} tablet={8} computer={16}>
-                      {this.renderRecommendations()}
-                    </Grid.Column> */}
                   </Grid.Row>
                 </Grid>
               </Grid.Column>

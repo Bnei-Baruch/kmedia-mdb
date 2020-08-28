@@ -190,7 +190,7 @@ class PlaylistAVBox extends Component {
           history={history}
         />
       </Grid.Column>
-      { !embed ?
+      { !embed &&
         <Grid.Column id="avbox__playlist" className="avbox__playlist" mobile={16} tablet={6} computer={6}>
           <PlayListComponent
             playlist={playlist}
@@ -201,7 +201,6 @@ class PlaylistAVBox extends Component {
             prevLink={prevLink}
           />
         </Grid.Column>
-        : null
       }
     </Grid.Row>
   }
