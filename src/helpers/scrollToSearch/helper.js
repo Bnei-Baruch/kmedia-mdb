@@ -22,14 +22,17 @@ export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }, 
   return render.build();
 };
 
-export const getMatch = (search, data, skip) => {
-  const words    = search.replace(KEEP_LETTERS_RE, '.').split(' ').filter((word) => !!word);
-  const searchRe = new RegExp(words.map((word) => `(${word})`).join('(.{0,5})'), !skip ? 's': 'sg');
+export const getMatches = (data, startStr, endStr) => {
+  const start = buildMatch(startStr, data);
+  const end   = buildMatch(endStr, data);
 
-  if(skip){
-    searchRe.lastIndex = skip
-  }
-  return searchRe.exec(data);
+  return { start, end };
+};
+
+const buildMatch = (search, data) => {
+  const words = search.replace(KEEP_LETTERS_RE, '.').split(' ').filter((word) => !!word);
+  const re    = new RegExp(words.map((word) => `(${word})`).join('(.{0,5})'), 'sg');
+  return data.matchAll(re);
 };
 
 export const getPositionInHtml = (pos, tags) => {
@@ -142,11 +145,11 @@ export const wrapSeekingPlace = (data, tags, fromNohtml, toNoHtml) => {
  */
 export const buildSearchLinkFromSelection = (language) => {
   if (!window?.getSelection) {
-    return null;
+    return { url: null };
   }
   const sel = window.getSelection();
   if (sel.isCollapsed || !sel.anchorNode || !sel.focusNode) {
-    return null;
+    return { url: null };
   }
   const isForward = isSelectionForward(sel);
 
@@ -168,7 +171,8 @@ export const buildSearchLinkFromSelection = (language) => {
   if (language) {
     query.language = language;
   }
-  return `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
+  const url = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
+  return { url, text: sel.toString() };
 };
 
 const wholeStartWord = ({ text, offset }) => {

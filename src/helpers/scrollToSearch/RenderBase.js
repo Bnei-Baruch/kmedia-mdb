@@ -1,4 +1,4 @@
-import { getMatch } from './helper';
+import { getMatches } from './helper';
 
 export class RenderBase {
   tagPositions = [];
@@ -26,8 +26,12 @@ export class RenderBase {
   }
 
   defineMatch() {
-    this.matchStart = getMatch(this.start, this.dataCleanHtml);
-    this.matchEnd   = getMatch(this.end, this.dataCleanHtml, this.matchStart.index);
+    const { start, end } = getMatches(this.dataCleanHtml, this.start, this.end);
+    if (!start || !end)
+      return;
+
+    this.matchStart = start;
+    this.matchEnd   = end;
   }
 
   buildHtml() {
