@@ -7,25 +7,45 @@ import { Button, Message, Popup, } from 'semantic-ui-react';
 import ShareBar from '../AVPlayer/Share/ShareBar';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import useStateWithCallback from '../../helpers/use-state-with-callback';
+import {
+  EmailIcon,
+  EmailShareButton,
+  FacebookIcon,
+  FacebookShareButton, MailruIcon, MailruShareButton, TelegramIcon, TelegramShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+  WhatsappIcon,
+  WhatsappShareButton
+} from 'react-share';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
-const LibraryShare = ({ t, url }) => {
+const ShareSelected = ({ t, url, text }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const contextRef = useRef();
 
-  const [isCopyOpen, setIsCopyOpen] = useStateWithCallback(false, isCopyOpen => {
-    if (isCopyOpen) {
-      timeout = setTimeout(() => setIsCopyOpen(false), POPOVER_CONFIRMATION_TIMEOUT);
+  const [copyLinkOpen, setCopyLinkOpen] = useStateWithCallback(false, copyLinkOpen => {
+    if (copyLinkOpen) {
+      timeout = setTimeout(() => setCopyLinkOpen(false), POPOVER_CONFIRMATION_TIMEOUT);
+    }
+  });
+
+  const [copyTextOpen, setCopyTextOpen] = useStateWithCallback(false, copyTextOpen => {
+    if (copyTextOpen) {
+      timeout = setTimeout(() => setCopyTextOpen(false), POPOVER_CONFIRMATION_TIMEOUT);
     }
   });
 
   let timeout = undefined;
 
-  const handleCopied = () => {
+  const handleLinkCopied = () => {
     clearPopupTimeout();
-    setIsCopyOpen(true);
+    setCopyLinkOpen(true);
+  };
+  const handleTextCopied = () => {
+    clearPopupTimeout();
+    setCopyTextOpen(true);
   };
 
   const clearPopupTimeout = () => {
@@ -36,7 +56,8 @@ const LibraryShare = ({ t, url }) => {
   };
 
   const render = () => {
-    const buttonSize = isMobileDevice ? 'tiny' : 'small';
+    const bsPixels = 36;
+    const title    = t('share-text.message-title');
 
     return (
       <>
@@ -49,22 +70,58 @@ const LibraryShare = ({ t, url }) => {
           position={`bottom left`}
           trigger={<div />}
           open
+          hideOnScroll
         >
           <Popup.Content>
-            <ShareBar url={url} buttonSize={buttonSize} messageTitle={t('share-text.message-title')} className="search-on-page--share-bar" />
-            <Message content={url} size="mini" />
-            <Popup // link was copied message popup
-              open={isCopyOpen}
-              content={t('messages.link-copied-to-clipboard')}
-              position={`bottom left`}
-              trigger={
-                (
-                  <CopyToClipboard text={url} onCopy={handleCopied}>
-                    <Button compact size="small" content={t('buttons.copy')} />
-                  </CopyToClipboard>
-                )
-              }
-            />
+            {/*<ShareBar url={url} buttonSize={buttonSize} messageTitle={} className="search-on-page--share-bar" />*/}
+
+
+            <div className="social-buttons">
+              <FacebookShareButton url={url} quote={title}>
+                <FacebookIcon size={bsPixels} round />
+              </FacebookShareButton>
+              <TwitterShareButton url={url} title={title}>
+                <TwitterIcon size={bsPixels} round />
+              </TwitterShareButton>
+              <WhatsappShareButton url={url} title={title} separator=": ">
+                <WhatsappIcon size={bsPixels} round />
+              </WhatsappShareButton>
+              <TelegramShareButton url={url} title={title}>
+                <TelegramIcon size={bsPixels} round />
+              </TelegramShareButton>
+              <MailruShareButton url={url} title={title}>
+                <MailruIcon size={bsPixels} round />
+              </MailruShareButton>
+              <EmailShareButton url={url} subject={title} body={url}>
+                <EmailIcon size={bsPixels} round />
+              </EmailShareButton>
+
+              <Popup // link was copied message popup
+                open={copyLinkOpen}
+                content={t('messages.link-copied-to-clipboard')}
+                position={`bottom left`}
+                trigger={
+                  (
+                    <CopyToClipboard text={url} onCopy={handleLinkCopied}>
+                      <Button compact size="small" content={t('share-text.copy_link')} />
+                    </CopyToClipboard>
+                  )
+                }
+              />
+
+              <Popup // link was copied message popup
+                open={copyTextOpen}
+                content={t('share-text.copy_text')}
+                position={`bottom left`}
+                trigger={
+                  (
+                    <CopyToClipboard text={text} onCopy={handleTextCopied}>
+                      <Button compact size="small" content={t('share-text.copy_text')} />
+                    </CopyToClipboard>
+                  )
+                }
+              />
+            </div>
           </Popup.Content>
         </Popup>
       </>
@@ -74,9 +131,9 @@ const LibraryShare = ({ t, url }) => {
   return render();
 };
 
-LibraryShare.propTypes = {
+ShareSelected.propTypes = {
   t: PropTypes.func.isRequired,
   url: PropTypes.string.isRequired,
 };
 
-export default withNamespaces()(LibraryShare);
+export default withNamespaces()(ShareSelected);

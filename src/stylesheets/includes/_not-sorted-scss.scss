@@ -1646,6 +1646,9 @@
   }
 
   &-share-bar {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 
     .message {
       max-width: 500px;

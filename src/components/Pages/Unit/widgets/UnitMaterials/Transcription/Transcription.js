@@ -193,21 +193,21 @@ class Transcription extends Component {
   };
 
   renderShareBar = () => {
-    const { searchUrl } = this.state;
+    const { searchUrl, searchText } = this.state;
     if (this.context.isMobileDevice || !searchUrl)
       return null;
 
     return (
-      <ShareBar url={searchUrl} />
+      <ShareBar url={searchUrl} text={searchText} />
     );
   };
 
   updateSelection = () => {
-    let searchUrl = buildSearchLinkFromSelection(this.state.language);
-    if (!searchUrl)
+    let { url, text } = buildSearchLinkFromSelection(this.state.language);
+    if (!url)
       return;
-    searchUrl += '&activeTab=transcription';
-    this.setState({ searchUrl});
+    url += '&activeTab=transcription';
+    this.setState({ searchUrl: url, searchText: text });
   };
 
   prepareContent = (data) => {

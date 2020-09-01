@@ -47,6 +47,7 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
   const history                              = useHistory();
   const [pageNumber, setPageNumber]          = useState(getPageFromLocation(location));
   const [searchUrl, setSearchUrl]            = useState();
+  const [searchText, setSearchText]          = useState();
   const { srchstart, srchend, highlightAll } = getQuery(location);
   const search                               = { srchstart, srchend };
   const { isMobileDevice }                   = useContext(DeviceInfoContext);
@@ -77,9 +78,10 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
   };
 
   const updateSelection = () => {
-    let url = buildSearchLinkFromSelection(language);
+    const { url, text } = buildSearchLinkFromSelection(language);
     if (!url)
       return;
+    setSearchText(text);
     setSearchUrl(url);
   };
 
@@ -104,7 +106,7 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
       return null;
 
     return (
-      <ShareBar url={searchUrl} />
+      <ShareBar url={searchUrl} text={searchText} />
     );
   };
 
