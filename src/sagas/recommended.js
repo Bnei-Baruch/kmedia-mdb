@@ -3,6 +3,7 @@ import { call, put, takeLatest, select } from 'redux-saga/effects';
 import Api from '../helpers/Api';
 import { actions, types } from '../redux/modules/recommended';
 import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
+import { selectors as settings } from '../redux/modules/settings';
 
 
 export function* fetchRecommended(action){
@@ -28,7 +29,8 @@ function* fetchMissingUnits(recommendedItems) {
     .map(item => item.uid));
 
   if (missingUnitIds.length > 0) {
-    const { data } = yield call(Api.units, { id: missingUnitIds });
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const { data } = yield call(Api.units, { id: missingUnitIds, language });
     yield put(mdbActions.receiveContentUnits(data.content_units));
   }
 }
