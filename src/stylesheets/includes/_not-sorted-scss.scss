@@ -389,6 +389,10 @@
 
 .ui.column.grid>[class*="eight wide"].column, .ui.grid>.column.row>[class*="eight wide"].column, .ui.grid>.row>[class*="eight wide"].column, .ui.grid>[class*="eight wide"].column {
   width: 70% !important;
+
+  @include mobile {
+    width: 100% !important;
+  } 
 }
 
 .collection-header {

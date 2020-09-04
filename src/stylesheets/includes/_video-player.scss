@@ -5,6 +5,7 @@
     #avbox__playlist,
     #avbox__player{
       width: 100% !important;
+      padding-bottom: 2em;
       .avbox__playlist-wrapper {
         display: block;
       padding-top: 2rem;
@@ -44,6 +45,7 @@
       padding-top: 100px;
       @include mobile {
         padding-top: 120px;
+        margin-bottom: 0;
       }
     
       &--edit-mode {
