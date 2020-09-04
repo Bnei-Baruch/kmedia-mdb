@@ -14,6 +14,7 @@ import { sagas as assets } from './assets';
 import { sagas as home } from './home';
 import { sagas as stats } from './stats';
 import { sagas as simpleMode } from './simpleMode';
+import { sagas as recommended } from './recommended';
 
 const allSagas = [
   ...mdb,
@@ -30,6 +31,7 @@ const allSagas = [
   ...home,
   ...stats,
   ...simpleMode,
+  ...recommended
 ];
 
 export function* rootSaga() {
