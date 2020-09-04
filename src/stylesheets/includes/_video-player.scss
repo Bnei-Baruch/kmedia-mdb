@@ -45,6 +45,7 @@
       padding-top: 100px;
       @include mobile {
         padding-top: 120px;
+        margin-bottom: 0;
       }
     
       &--edit-mode {

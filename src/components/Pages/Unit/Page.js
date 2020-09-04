@@ -13,6 +13,7 @@ import Info from './widgets/Info/Info';
 import MediaDownloads from './widgets/Downloads/MediaDownloads';
 import Recommended from './widgets/Recommended/Main/Recommended';
 import playerHelper from '../../../helpers/player';
+import { MT_VIDEO } from '../../../helpers/consts';
 
 export class UnitPage extends Component {
   static propTypes = {
@@ -45,8 +46,9 @@ export class UnitPage extends Component {
   }
 
   renderPlayer() {
-    const { unit, language } = this.props;
-    const { embed }          = this.state;
+    const { unit, language, location } = this.props;
+    const { embed }                    = this.state;
+    const mediaType                    = AVBox.getMediaType(location);
 
     return !embed 
       ? <div className="playlist-collection-page">
@@ -56,9 +58,12 @@ export class UnitPage extends Component {
               <Grid.Column id="avbox__player" mobile={16} tablet={10} computer={10}>
                 <AVBox unit={unit} language={language} />
               </Grid.Column>
-              <Grid.Column id="avbox__playlist" className="avbox__playlist" mobile={16} tablet={6} computer={6}>
-                <Recommended unit={unit}/>
-              </Grid.Column>
+              { mediaType === MT_VIDEO
+                ? <Grid.Column id="avbox__playlist" className="avbox__playlist" mobile={16} tablet={6} computer={6}>
+                  <Recommended unit={unit}/>
+                </Grid.Column>
+                : null
+              }
             </Grid.Row>
           </Grid>
         </Container>
@@ -66,6 +71,12 @@ export class UnitPage extends Component {
       : <AVBox unit={unit} language={language} />
     ;
   }
+
+  // renderRecommendations() {
+  //   const { unit } = this.props;
+  //   return <Recommended unit={unit}/>
+  //   // return <MyWrappedSameCollectionContainer unit={unit} />;
+  // }
 
   renderInfo() {
     const { unit, section } = this.props;
@@ -98,6 +109,9 @@ export class UnitPage extends Component {
               <Grid.Column mobile={16} tablet={16} computer={5} className="content__aside">
                 <Grid>
                   <Grid.Row>
+                    {/* <Grid.Column className="avbox__playlist" mobile={16} tablet={8} computer={16}>	
+                      {this.renderRecommendations()}	
+                    </Grid.Column> */}
                     <Grid.Column mobile={16} tablet={8} computer={16}>
                       {this.renderDownloads()}
                     </Grid.Column>

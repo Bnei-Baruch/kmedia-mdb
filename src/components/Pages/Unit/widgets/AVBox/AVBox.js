@@ -57,7 +57,9 @@ class AVBox extends Component {
     const { unit, uiLanguage, contentLanguage, location }         = nextProps;
     const
       {
-        unit: oldUnit, uiLanguage: oldUiLanguage, contentLanguage: oldContentLanguage,
+        unit: oldUnit, 
+        uiLanguage: oldUiLanguage, 
+        contentLanguage: oldContentLanguage,
         location: oldLocation
       }                                                           = this.props;
     const { playableItem, oldMediaEditMode, oldIsDropdownOpened } = this.state;
@@ -69,14 +71,13 @@ class AVBox extends Component {
     const newMediaType    = playerHelper.getMediaTypeFromQuery(location, preferredMT);
     const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
-    const equal =
-            oldUiLanguage === uiLanguage
-            && oldContentLanguage === contentLanguage
-            && prevMediaType === newMediaType
-            && newItemLanguage === playerLanguage
-            && oldMediaEditMode === mediaEditMode
-            && oldIsDropdownOpened === isDropdownOpened
-            && unit && oldUnit && unit.id === oldUnit.id;
+    const equal = oldUiLanguage === uiLanguage
+      && oldContentLanguage === contentLanguage
+      && prevMediaType === newMediaType
+      && newItemLanguage === playerLanguage
+      && oldMediaEditMode === mediaEditMode
+      && oldIsDropdownOpened === isDropdownOpened
+      && unit && oldUnit && unit.id === oldUnit.id;
 
     return !equal;
   }
