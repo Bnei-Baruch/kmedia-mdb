@@ -13,6 +13,9 @@ import { formatDuration, canonicalCollection } from '../../../../../../helpers/u
 import Link from '../../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../../shared/Logo/UnitLogo';
 
+// items to show
+const N = 12;
+
 const Recommended = ({ unit, t }) => {
   const wip = useSelector(state => selectors.getWip(state.recommended));
   const err = useSelector(state => selectors.getError(state.recommended));
@@ -44,6 +47,9 @@ const Recommended = ({ unit, t }) => {
   // console.log('recommendedItems:', recommendedItems);
   // console.log('recommendedUnits:', recommendedUnits);
 
+  // display only N units
+  const unitsToShow = recommendedUnits.length > N ? recommendedUnits.slice(0, N) : recommendedUnits;
+
   const unitCollection = canonicalCollection(unit);
   const unitCollectionId = unitCollection ? unitCollection.id : null;
 
@@ -52,7 +58,7 @@ const Recommended = ({ unit, t }) => {
       <Header as="h3" content={t('materials.recommended.title')} />
       <Item.Group divided unstackable link className="avbox__playlist-view">
         {
-          recommendedUnits
+          unitsToShow
             .map(rUnit => (
               <Item
                 key={rUnit.id}
