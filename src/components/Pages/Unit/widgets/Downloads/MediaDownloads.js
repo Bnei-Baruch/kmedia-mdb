@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { Button, Grid, Header, Popup, Table } from 'semantic-ui-react';
+import { Button, Grid, Popup, Table, Divider } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
 import {
@@ -47,7 +47,7 @@ class MediaDownloads extends Component {
   };
 
   static defaultProps = {
-    unit: undefined,
+    unit: undefined
   };
 
   timeout = {};
@@ -314,20 +314,20 @@ class MediaDownloads extends Component {
 
     return (
       <div className="media-downloads content__aside-unit">
-        <Grid columns="equal">
-          <Grid.Row>
-            <Grid.Column>
-              <Header as="h3" content={t('media-downloads.title')} />
-            </Grid.Column>
-            <Grid.Column>
-              <DropdownLanguageSelector
-                languages={languages}
-                defaultValue={language}
-                onSelect={this.handleChangeLanguage}
-              />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+        { languages.length > 1 
+          ? <Grid columns="equal">
+            <Grid.Row>
+              <Grid.Column>
+                <DropdownLanguageSelector
+                  languages={languages}
+                  defaultValue={language}
+                  onSelect={this.handleChangeLanguage}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+          : <Divider></Divider>
+        }
         <Table unstackable className="media-downloads__files" basic="very" compact="very">
           <Table.Body>
             {rows}

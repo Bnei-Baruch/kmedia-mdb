@@ -8,6 +8,7 @@ import TabsMenu from '../../../../shared/TabsMenu';
 import Summary from './Summary/Summary';
 import SourcesContainer from './Sources/SourcesContainer';
 import Sketches from './Sketches';
+import MediaDownloads from '../Downloads/MediaDownloads';
 import TranscriptionContainer from './Transcription/TranscriptionContainer';
 import { isEmpty } from '../../../../../helpers/utils';
 import DerivedUnits from './DerivedUnits';
@@ -46,6 +47,11 @@ const Materials = ({ unit = undefined, t }) => {
       label: t('materials.sketches.header'),
       component: <Sketches unit={unit} />,
     },
+    {
+      name: 'downloads',
+      label: t('media-downloads.title'),
+      component: <MediaDownloads unit={unit} />
+    }
   ];
 
   if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER || unit.content_type === CT_VIRTUAL_LESSON) {
