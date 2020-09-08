@@ -43,15 +43,15 @@ const Materials = ({ unit = undefined, t }) => {
       component: <SourcesContainer unit={unit} />
     },
     {
+      name: 'downloads',
+      label: t('media-downloads.title'),
+      component: <MediaDownloads unit={unit} />
+    },
+    {
       name: 'sketches',
       label: t('materials.sketches.header'),
       component: <Sketches unit={unit} />,
     },
-    {
-      name: 'downloads',
-      label: t('media-downloads.title'),
-      component: <MediaDownloads unit={unit} />
-    }
   ];
 
   if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER || unit.content_type === CT_VIRTUAL_LESSON) {
