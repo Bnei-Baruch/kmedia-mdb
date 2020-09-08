@@ -35,7 +35,10 @@ export class UnitPage extends Component {
   constructor(props) {
     super(props);
     const { location } = props;
-    this.state         = { embed: playerHelper.getEmbedFromQuery(location) };
+    this.state         = { 
+      embed: playerHelper.getEmbedFromQuery(location), 
+      // displayRecommended: true 
+    };
   }
 
   renderHelmet() {
@@ -63,9 +66,14 @@ export class UnitPage extends Component {
     );
   }
 
+  // displayRecommendedHandler = (displayRecommended) => {
+  //   this.setState({ displayRecommended });
+  // }
+
   renderRecommendations() {
     const { unit } = this.props;
-    return <Recommended unit={unit}/>
+    return <Recommended unit={unit} />;
+    // displayHandler={this.displayRecommendedHandler.bind(this)} />;
   }
 
   renderInfo() {
@@ -80,6 +88,9 @@ export class UnitPage extends Component {
 
   renderContent() {
     const { embed } = this.state;
+    // const computerWidth = displayRecommended ? 10 : 16;
+    // console.log('displayRecommended:', displayRecommended);
+
     return !embed ? (
       <div className="unit-page">
         {this.renderHelmet()}
@@ -98,6 +109,7 @@ export class UnitPage extends Component {
                 </Grid.Row>
               </Grid.Column>
               <Grid.Column mobile={16} tablet={6} computer={6}>	
+                {/* {displayRecommended &&  */}
                 {this.renderRecommendations()}	
               </Grid.Column>
             </Grid.Row>

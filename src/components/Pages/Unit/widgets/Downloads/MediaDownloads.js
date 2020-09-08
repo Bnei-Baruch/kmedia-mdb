@@ -234,43 +234,53 @@ class MediaDownloads extends Component {
     const { t, publisherById, unit }                     = this.props;
     const { language, languages, groups, derivedGroups } = this.state;
 
-    const byType                  = groups.get(language) || new Map();
-    const kiteiMakor              = derivedGroups[CT_KITEI_MAKOR];
-    const kiteiMakorByType        = (kiteiMakor && kiteiMakor.get(language)) ?? new Map();
-    const leloMikud               = derivedGroups[CT_LELO_MIKUD];
-    const leloMikudByType         = (leloMikud && leloMikud.get(language)) ?? new Map();
-    const publications            = derivedGroups[CT_PUBLICATION];
-    const publicationsByType      = (publications && publications.get(language)) ?? new Map();
-    const articles                = derivedGroups[CT_ARTICLE];
-    const articlesByType          = (articles && articles.get(language)) ?? new Map();
-    const researchMaterials       = derivedGroups[CT_RESEARCH_MATERIAL];
-    const researchMaterialsByType = (researchMaterials && researchMaterials.get(language)) ?? new Map();
+    const byType = groups.get(language) || new Map();
 
     let typeOverrides = MediaDownloads.getI18nTypeOverridesKey(unit);
     if (typeOverrides) {
       typeOverrides += '.';
     }
 
-    let rows;
-    if (byType.size === 0) {
-      rows = [
-        <Table.Row key="0">
-          <Table.Cell>{t('messages.no-files')}</Table.Cell>
-        </Table.Row>
-      ];
-    } else {
-      rows = MEDIA_ORDER.reduce((acc, val) => {
-        const baseLabel = t(`media-downloads.${typeOverrides}type-labels.${val}`);
-        const files     = (byType.get(val) || []).map((file) => {
-          let label = baseLabel;
-          if (file.video_size) {
-            label = `${label} [${VS_NAMES[file.video_size]}]`;
-          }
-          return this.renderRow(file, label, t);
-        });
-        return acc.concat(files);
-      }, []);
-    }
+    let rows = this.getRows(byType, t, typeOverrides);
+    let derivedRows = this.getDerivedRows(derivedGroups, language, t, typeOverrides, publisherById);
+
+    return (
+      <div className="media-downloads content__aside-unit">
+        { languages.length > 1 
+          ? <Grid columns="equal">
+            <Grid.Row>
+              <Grid.Column>
+                <DropdownLanguageSelector
+                  languages={languages}
+                  defaultValue={language}
+                  onSelect={this.handleChangeLanguage}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+          : <Divider></Divider>
+        }
+        <Table unstackable className="media-downloads__files" basic="very" compact="very">
+          <Table.Body>
+            {rows}
+            {derivedRows || null}
+          </Table.Body>
+        </Table>
+      </div>
+    );
+  }
+
+  getDerivedRows = (derivedGroups, language, t, typeOverrides, publisherById) => {
+    const kiteiMakor = derivedGroups[CT_KITEI_MAKOR];
+    const kiteiMakorByType = (kiteiMakor && kiteiMakor.get(language)) ?? new Map();
+    const leloMikud = derivedGroups[CT_LELO_MIKUD];
+    const leloMikudByType = (leloMikud && leloMikud.get(language)) ?? new Map();
+    const publications = derivedGroups[CT_PUBLICATION];
+    const publicationsByType = (publications && publications.get(language)) ?? new Map();
+    const articles = derivedGroups[CT_ARTICLE];
+    const articlesByType = (articles && articles.get(language)) ?? new Map();
+    const researchMaterials = derivedGroups[CT_RESEARCH_MATERIAL];
+    const researchMaterialsByType = (researchMaterials && researchMaterials.get(language)) ?? new Map();
 
     let derivedRows = [];
     if (kiteiMakorByType.size > 0) {
@@ -311,31 +321,32 @@ class MediaDownloads extends Component {
         return acc.concat(files);
       }, derivedRows);
     }
+    return derivedRows;
+  }
 
-    return (
-      <div className="media-downloads content__aside-unit">
-        { languages.length > 1 
-          ? <Grid columns="equal">
-            <Grid.Row>
-              <Grid.Column>
-                <DropdownLanguageSelector
-                  languages={languages}
-                  defaultValue={language}
-                  onSelect={this.handleChangeLanguage}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-          : <Divider></Divider>
-        }
-        <Table unstackable className="media-downloads__files" basic="very" compact="very">
-          <Table.Body>
-            {rows}
-            {derivedRows || null}
-          </Table.Body>
-        </Table>
-      </div>
-    );
+  getRows = (byType, t, typeOverrides) => {
+    let rows;
+    if (byType.size === 0) {
+      rows = [
+        <Table.Row key="0">
+          <Table.Cell>{t('messages.no-files')}</Table.Cell>
+        </Table.Row>
+      ];
+    }
+    else {
+      rows = MEDIA_ORDER.reduce((acc, val) => {
+        const baseLabel = t(`media-downloads.${typeOverrides}type-labels.${val}`);
+        const files = (byType.get(val) || []).map((file) => {
+          let label = baseLabel;
+          if (file.video_size) {
+            label = `${label} [${VS_NAMES[file.video_size]}]`;
+          }
+          return this.renderRow(file, label, t);
+        });
+        return acc.concat(files);
+      }, []);
+    }
+    return rows;
   }
 }
 
