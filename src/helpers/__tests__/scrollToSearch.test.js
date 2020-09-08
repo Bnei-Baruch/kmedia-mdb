@@ -11,25 +11,25 @@ describe('Scroll to search, selectWholeWorlds:', () => {
     expect(result).toEqual(pResult);
   });
 
-  test('test not whole start', () => {
+  test('not whole start', () => {
     const search = 'sum dolor sit amet';
     const result = selectWholeWorlds(p, search);
     expect(result).toEqual(pResult);
   });
 
-  test('test not whole end', () => {
+  test('not whole end', () => {
     const search = 'ipsum dolor sit am';
     const result = selectWholeWorlds(p, search);
     expect(result).toEqual(pResult);
   });
 
-  test('test not whole start and end', () => {
+  test('not whole start and end', () => {
     const search = 'sum dolor sit am';
     const result = selectWholeWorlds(p, search);
     expect(result).toEqual(pResult);
   });
 
-  test('test paragraph with html on start', () => {
+  test('paragraph with html on start', () => {
     const search = 'ipsum dolor sit am';
     const result = selectWholeWorlds(p_withTag, search);
     expect(result).toEqual(pResult);
@@ -54,13 +54,13 @@ describe('Scroll to search, prepareScrollToSearch:', () => {
 </p><p>
   <strong>Clearly, such a proof cannot be found in any spiritual matter, but only in physical matters, set up for perception by the senses. Hence, we are permitted to use the third method, to an extent. It engages only in matters of the body, in all those deductions that have been proven by experiments, and which no one doubts. The rest of the concepts, which combine the reason of their method and other methods, are fo…`);
 
-  test('test all whole', () => {
+  test('all whole', () => {
     const search = 'Before I clarify this exalted matter, it is important';
     const result = prepareScrollToSearch(data, search);
     expect(result).toEqual(dataResult);
   });
 
-  test('test not whole start and end', () => {
+  test('not whole start and end', () => {
     const search = 'Before I clarify this exalted matter, it is important';
     const result = prepareScrollToSearch(data, search);
     expect(result).toEqual(dataResult);

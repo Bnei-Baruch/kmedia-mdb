@@ -5,25 +5,30 @@ import { Button } from 'semantic-ui-react';
 
 import { LANG_ENGLISH, LANG_RUSSIAN, LANG_UKRAINIAN } from '../../helpers/consts';
 
-const Vh_Button = ({ t }) => {
-  return <Button
-    compact
-    basic
-    size="small"
-    icon="globe"
-    content={t('home.virtual-home')}
-    className="vh-button"
-    as="a"
-    href={`https://virtualhome.kli.one/?bbref_internal=kmedia&bbref_lang=he`}
-    target="_blank"
-  />
-};
+const Vh_Button = ({ t }) => (
+  DButton({ content: t('home.virtual-home'), href: `https://virtualhome.kli.one/?bbref_internal=kmedia&bbref_lang=he`, icon: 'globe', className: 'vh-button' })
+);
 
 Vh_Button.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
 export const VirtualHomeButton = withNamespaces()(Vh_Button);
+
+const DButton = ({ content, href, icon, className, color = 'blue' }) => (
+  <Button
+    compact
+    basic
+    size="small"
+    color={color}
+    icon={icon}
+    content={content}
+    className={className}
+    as="a"
+    href={href}
+    target="_blank"
+  />
+);
 
 const DonateNow = ({ t, language }) => {
 
@@ -39,19 +44,7 @@ const DonateNow = ({ t, language }) => {
     break;
   }
 
-  return (
-    <Button
-      compact
-      basic
-      size="small"
-      color="blue"
-      icon="heart"
-      content={t('home.donate')}
-      className="donate-button"
-      as="a"
-      href={`http://kab1.com/${lang}`}
-    />
-  );
+  return DButton({ content: t('home.donate'), href: `http://kab1.com/${lang}`, icon: 'heart', className: 'donate-button' });
 };
 
 DonateNow.propTypes = {
