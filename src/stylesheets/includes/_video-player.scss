@@ -99,7 +99,7 @@
   &__playlist-wrapper {
     @include mobile {
       display: block;
-      padding-top: 2rem;
+      padding-bottom: 1em;
       position: static;
 
       &::before {
@@ -119,7 +119,7 @@
     left: 1rem;
     position: absolute;
     right: 1rem;
-    top: 1em;
+    top: 0em;
 
     > .header {
       flex: 0 0 auto;
