@@ -142,6 +142,7 @@
     "no-results": "לא נמצאו תוצאות",
     "pagination-results": "תוצאות {{start}} - {{end}} מתוך {{total}}",
     "link-copied-to-clipboard": "!הקישור הועתק ללוח בהצלחה",
+    "text-copied-to-clipboard": "!הטקסט הועתק ללוח בהצלחה",
     "unknown": "לא ידוע",
     "unsupported-media-format": "פורמט לא נתמך.",
     "error-loading-file": "טעות בהעלאת קובץ.",
@@ -670,6 +671,8 @@
   },
   "share-text": {
     "message-title": "Read this fragment",
-    "share-button": "Share fragment"
+    "share-button": "Share fragment",
+    "copy-link": "העתק קישור",
+    "copy-text": "העתק טקסט"
   }
 }

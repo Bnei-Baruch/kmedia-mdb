@@ -143,6 +143,7 @@
     "no-results": "Немає результатів",
     "pagination-results": "Результати {{start}} - {{end}} из {{total}}",
     "link-copied-to-clipboard": "Посилання скопійоване!",
+    "text-copied-to-clipboard": "Текст скопійовано!",
     "unknown": "Невідома",
     "unsupported-media-format": "Непідтримуваний формат.",
     "error-loading-file": "Помилка при завантаженні файлу.",
@@ -660,6 +661,8 @@
   },
   "share-text": {
     "message-title": "Read this fragment",
-    "share-button": "Share fragment"
+    "share-button": "Share fragment",
+    "copy-link": "Копіювати посилання",
+    "copy-text": "Скопіювати текст"
   }
 }

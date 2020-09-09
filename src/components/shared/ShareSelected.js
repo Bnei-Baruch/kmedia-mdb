@@ -56,7 +56,7 @@ const ShareSelected = ({ t, url, text }) => {
   };
 
   const render = () => {
-    const bsPixels = 36;
+    const bsPixels = 28;
     const title    = t('share-text.message-title');
 
     return (
@@ -77,22 +77,22 @@ const ShareSelected = ({ t, url, text }) => {
 
 
             <div className="social-buttons">
-              <FacebookShareButton url={url} quote={title}>
+              <FacebookShareButton url={url} quote={title} className="margin-right-4">
                 <FacebookIcon size={bsPixels} round />
               </FacebookShareButton>
-              <TwitterShareButton url={url} title={title}>
+              <TwitterShareButton url={url} title={title} className="margin-right-4">
                 <TwitterIcon size={bsPixels} round />
               </TwitterShareButton>
-              <WhatsappShareButton url={url} title={title} separator=": ">
+              <WhatsappShareButton url={url} title={title} separator=": " className="margin-right-4">
                 <WhatsappIcon size={bsPixels} round />
               </WhatsappShareButton>
-              <TelegramShareButton url={url} title={title}>
+              <TelegramShareButton url={url} title={title} className="margin-right-4">
                 <TelegramIcon size={bsPixels} round />
               </TelegramShareButton>
-              <MailruShareButton url={url} title={title}>
+              <MailruShareButton url={url} title={title} className="margin-right-4">
                 <MailruIcon size={bsPixels} round />
               </MailruShareButton>
-              <EmailShareButton url={url} subject={title} body={url}>
+              <EmailShareButton url={url} subject={title} body={url} className="margin-right-8">
                 <EmailIcon size={bsPixels} round />
               </EmailShareButton>
 
@@ -102,8 +102,8 @@ const ShareSelected = ({ t, url, text }) => {
                 position={`bottom left`}
                 trigger={
                   (
-                    <CopyToClipboard text={url} onCopy={handleLinkCopied}>
-                      <Button compact size="small" content={t('share-text.copy_link')} />
+                    <CopyToClipboard text={url} onCopy={handleLinkCopied} className="margin-right-4 nowrap">
+                      <Button compact size="tiny" content={t('share-text.copy-link')} />
                     </CopyToClipboard>
                   )
                 }
@@ -111,12 +111,12 @@ const ShareSelected = ({ t, url, text }) => {
 
               <Popup // link was copied message popup
                 open={copyTextOpen}
-                content={t('share-text.copy_text')}
+                content={t('messages.text-copied-to-clipboard')}
                 position={`bottom left`}
                 trigger={
                   (
-                    <CopyToClipboard text={text} onCopy={handleTextCopied}>
-                      <Button compact size="small" content={t('share-text.copy_text')} />
+                    <CopyToClipboard text={text} onCopy={handleTextCopied} className="margin-right-4 nowrap">
+                      <Button compact size="tiny" content={t('share-text.copy-text')} />
                     </CopyToClipboard>
                   )
                 }

@@ -143,6 +143,7 @@
     "no-results": "Sonuç yok",
     "pagination-results": "Sonuçlar {{start}} - {{end}} da {{total}}",
     "link-copied-to-clipboard": "Bağlantı kopyalandı!",
+    "text-copied-to-clipboard": "Metin kopyalandı!",
     "unknown": "Bilinmeyen",
     "unsupported-media-format": "Desteklenmeyen format.",
     "error-loading-file": "Dosya yükleme hatası.",
@@ -582,6 +583,8 @@
   },
   "share-text": {
     "message-title": "Read this fragment",
-    "share-button": "Share fragment"
+    "share-button": "Share fragment",
+    "copy-link": "Bağlantıyı kopyala",
+    "copy-text": "Metni kopyala"
   }
 }
