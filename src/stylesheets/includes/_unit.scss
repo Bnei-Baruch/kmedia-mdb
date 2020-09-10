@@ -1,5 +1,4 @@
 .unit-info {
-  // background: red;
   margin-top: 2em;
   margin-bottom: 2em;
 }
@@ -11,27 +10,15 @@
 
   .menu {
     @include small-mobile {
-      flex-wrap: wrap;
+      // flex-wrap: wrap;
       border-bottom: 0!important;
-      // background-image: linear-gradient(
-      //   to top,
-      //  rgba(34, 36, 38, .15) 0,
-      //  rgba(34, 36, 38, .15) 2px,
-      //  transparent 2px,
-      //  transparent calc(1em + 2 * .857143em),
-      //  rgba(34, 36, 38, .15) calc(1em + 2 * .857143em),
-      //  rgba(34, 36, 38, .15) calc(1em + 2 * .857143em + 2px),
-      //  transparent calc(1em + 2 * .857143em + 2px)
-      //  ) !important;
-      
-      // background-position: left bottom !important;
-      // padding-bottom: 2px !important;
+      overflow-x: scroll;
     }
   }
 
   .item {
     @include small-mobile {
-      flex: 0 0 50% !important;
+      flex: 0 0 33% !important;
       border-color: rgba(34, 36, 38, .15) !important;
     }
     flex: 0 1 auto !important;
