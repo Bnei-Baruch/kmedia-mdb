@@ -59,14 +59,12 @@ const renderHeader = (unit, t, language) => {
   );
 }
 
-const renderHelmet = unit => {
-  return (
-    <Fragment>
-      <Helmets.NoIndex />
-      <Helmets.ArticleUnit unit={unit} />
-    </Fragment>
-  );
-}
+const renderHelmet = unit => (
+  <Fragment>
+    <Helmets.NoIndex />
+    <Helmets.ArticleUnit unit={unit} />
+  </Fragment>
+);
 
 const renderArticle = unit => (
   <Grid padded>

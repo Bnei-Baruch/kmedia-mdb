@@ -10,7 +10,7 @@ import WipErr from '../../../../../shared/WipErr/WipErr';
 import DisplayRecommended from './DisplayRecommended';
 
 
-const Recommended = ({ unit, t, /* displayHandler */ }) => {
+const Recommended = ({ unit, t }) => {
   const wip = useSelector(state => selectors.getWip(state.recommended));
   const err = useSelector(state => selectors.getError(state.recommended));
   
@@ -30,13 +30,6 @@ const Recommended = ({ unit, t, /* displayHandler */ }) => {
     .map(item => mdbSelectors.getDenormContentUnit(state.mdb, item.uid))
     .filter(item => !!item)) || [];
 
-  // useEffect(() => {
-  //   if (recommendedUnits.length === 0){
-  //     if (displayHandler)
-  //       displayHandler(false);
-  //   }
-  // }, [displayHandler, recommendedUnits.length]);
-
   if (wipErr) {
     return wipErr;
   }
@@ -53,7 +46,6 @@ const Recommended = ({ unit, t, /* displayHandler */ }) => {
 Recommended.propTypes = {
   unit: shapes.EventItem.isRequired,
   t: PropTypes.func.isRequired,
-  // displayHandler: PropTypes.func
 }
 
 const areEqual = (prevProps, nextProps) => prevProps.unit.id === nextProps.unit.id;

@@ -12,8 +12,11 @@ import Materials from './widgets/UnitMaterials/Materials';
 import Info from './widgets/Info/Info';
 import Recommended from './widgets/Recommended/Main/Recommended';
 import playerHelper from '../../../helpers/player';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 export class UnitPage extends Component {
+  static contextType = DeviceInfoContext;
+
   static propTypes = {
     unit: shapes.ContentUnit,
     wip: shapes.WIP,
@@ -37,7 +40,6 @@ export class UnitPage extends Component {
     const { location } = props;
     this.state         = { 
       embed: playerHelper.getEmbedFromQuery(location), 
-      // displayRecommended: true 
     };
   }
 
@@ -66,14 +68,9 @@ export class UnitPage extends Component {
     );
   }
 
-  // displayRecommendedHandler = (displayRecommended) => {
-  //   this.setState({ displayRecommended });
-  // }
-
   renderRecommendations() {
     const { unit } = this.props;
     return <Recommended unit={unit} />;
-    // displayHandler={this.displayRecommendedHandler.bind(this)} />;
   }
 
   renderInfo() {
@@ -88,9 +85,8 @@ export class UnitPage extends Component {
 
   renderContent() {
     const { embed } = this.state;
-    // const computerWidth = displayRecommended ? 10 : 16;
-    // console.log('displayRecommended:', displayRecommended);
-
+    const { isMobileDevice } = this.context;
+   
     return !embed ? (
       <div className="unit-page">
         {this.renderHelmet()}
@@ -109,8 +105,9 @@ export class UnitPage extends Component {
                 </Grid.Row>
               </Grid.Column>
               <Grid.Column mobile={16} tablet={6} computer={6}>	
-                {/* {displayRecommended &&  */}
-                {this.renderRecommendations()}	
+                {!isMobileDevice && 
+                  this.renderRecommendations()
+                }	
               </Grid.Column>
             </Grid.Row>
           </Grid>
