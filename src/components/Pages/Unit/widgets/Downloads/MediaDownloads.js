@@ -44,6 +44,7 @@ class MediaDownloads extends Component {
     language: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
+    displayDivider: PropTypes.bool
   };
 
   static defaultProps = {
@@ -231,7 +232,7 @@ class MediaDownloads extends Component {
   };
 
   render() {
-    const { t, publisherById, unit }                     = this.props;
+    const { t, publisherById, unit, displayDivider }     = this.props;
     const { language, languages, groups, derivedGroups } = this.state;
 
     const byType = groups.get(language) || new Map();
@@ -258,7 +259,8 @@ class MediaDownloads extends Component {
               </Grid.Column>
             </Grid.Row>
           </Grid>
-          : <Divider></Divider>
+          : displayDivider && 
+            <Divider></Divider> 
         }
         <Table unstackable className="media-downloads__files" basic="very" compact="very">
           <Table.Body>

@@ -75,7 +75,7 @@ const renderArticle = unit => (
     </Grid.Row>
     <Grid.Row>
       <Grid.Column>
-        <MediaDownloads unit={unit} displayTitle={true} />
+        <MediaDownloads unit={unit} displayDivider={true} />
       </Grid.Column> 
     </Grid.Row>
   </Grid>
