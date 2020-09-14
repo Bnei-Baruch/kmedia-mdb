@@ -1,26 +1,30 @@
 import React from 'react';
 
 import Helmets from '../../shared/Helmets';
+import WipErr from '../../shared/WipErr/WipErr';
 import { UnitContainer, wrap as wrapContainer } from '../../Pages/Unit/Container';
-import Page from '../../Pages/Unit/Page';
+import UnitPage, { wrap as wrapPage } from '../../Pages/Unit/Page';
 
 class MyUnitContainer extends UnitContainer {
   render() {
-    const { language, unit, location, wip, err } = this.props;
+    const { language, unit, location, wip, err, t } = this.props;
+    const wipErr = WipErr({ wip, err, t });
+    if (wipErr) {
+      return wipErr;
+    }
+
     return (
       <div>
         <Helmets.AVUnit unit={unit} language={language} />
-        <Page
+        <UnitPage
           section="programs"
           unit={wip || err ? null : unit}
           language={language}
           location={location}
-          wip={wip}
-          err={err}
         />
       </div>
     );
   }
 }
 
-export default wrapContainer(MyUnitContainer);
+export default wrapContainer(wrapPage(MyUnitContainer));

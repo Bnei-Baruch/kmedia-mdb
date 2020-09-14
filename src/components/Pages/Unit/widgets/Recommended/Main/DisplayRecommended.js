@@ -25,12 +25,12 @@ const DisplayRecommended = ({ unit, t, recommendedUnits }) => {
       <Item.Group divided unstackable link className="avbox__playlist-view">
         {
           unitsToDisplay
-            .map(rUnit => (
+            .map(rUnit => 
               <Item
                 key={rUnit.id}
                 as={Link}
                 to={canonicalLink(rUnit)}
-                className="recommended-same-collection__item"
+                className="item"
               >
                 <Item.Image size="small">
                   <UnitLogo
@@ -42,13 +42,11 @@ const DisplayRecommended = ({ unit, t, recommendedUnits }) => {
                 </Item.Image>
                 <Item.Content verticalAlign="top">
                   <Header as="h5">
-                    <small className="text grey uppercase recommended-same-collection__item-title">
+                    <small className="text grey uppercase">
                       {t('values.date', { date: rUnit.film_date })}
                     </small>
                     <br />
-                    <span className="recommended-same-collection__item-name">
-                      {rUnit.name}
-                    </span>
+                    <span>{rUnit.name}</span>
                   </Header>
                   {
                     rUnit.duration && (
@@ -59,7 +57,7 @@ const DisplayRecommended = ({ unit, t, recommendedUnits }) => {
                   }
                 </Item.Content>
               </Item>
-            ))
+            )
         }
       </Item.Group>
     </div>

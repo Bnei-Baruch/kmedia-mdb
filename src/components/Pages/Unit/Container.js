@@ -7,7 +7,8 @@ import { withRouter } from 'react-router-dom';
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
-import Page from './Page';
+import UnitPage, { wrap as wrapPage } from './Page';
+import WipErr from '../../shared/WipErr/WipErr';
 
 export class UnitContainer extends Component {
   static propTypes = {
@@ -57,13 +58,17 @@ export class UnitContainer extends Component {
   }
 
   render() {
-    const { language, unit, wip, err, section } = this.props;
+    const { language, unit, wip, err, section, t } = this.props;
+
+    const wipErr = WipErr({ wip, err, t });
+    if (wipErr) {
+      return wipErr;
+    }
+
     return (
-      <Page
+      <UnitPage
         unit={wip || err ? null : unit}
         language={language}
-        wip={wip}
-        err={err}
         section={section}
       />
     );
@@ -86,4 +91,4 @@ const mapDispatch = dispatch => bindActionCreators({
 
 export const wrap = WrappedComponent => withRouter(connect(mapState, mapDispatch)(WrappedComponent));
 
-export default wrap(UnitContainer);
+export default wrap(wrapPage(UnitContainer));
