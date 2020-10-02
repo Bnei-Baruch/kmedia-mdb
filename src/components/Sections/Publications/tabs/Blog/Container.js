@@ -43,7 +43,7 @@ class BlogContainer extends withPagination {
     this.handleFiltersHydrated = this.handleFiltersHydrated.bind(this);
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componenDidUpdate(nextProps) {
     // clear all filters when location's search is cleared by Menu click
     if (nextProps.location.search !== this.props.location.search) {
       if (!nextProps.location.search) {
@@ -57,7 +57,7 @@ class BlogContainer extends withPagination {
       }
     }
 
-    super.UNSAFE_componentWillReceiveProps(nextProps);
+    super.componenDidUpdate(nextProps);
   }
 
   extraFetchParams({ language }) {

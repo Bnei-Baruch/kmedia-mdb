@@ -4,12 +4,14 @@ import throttle from 'lodash/throttle';
 import noop from 'lodash/noop';
 import { withNamespaces } from 'react-i18next';
 import { Container, } from 'semantic-ui-react';
+import { Document, Page } from 'react-pdf';
+import { pdfjs } from 'react-pdf';
 
 import { BS_TAAS_PARTS } from '../../../helpers/consts';
 import PDFMenu from './PDFMenu';
-import LoadedPDF from './LoadedPDF';
+import { ErrorSplash, LoadingSplash } from '../Splash/Splash';
 
-export const isTaas = source => (BS_TAAS_PARTS[source] !== undefined);
+export const isTaas     = source => (BS_TAAS_PARTS[source] !== undefined);
 export const startsFrom = source => BS_TAAS_PARTS[source];
 
 class PDF extends Component {
@@ -86,8 +88,9 @@ class PDF extends Component {
   throttledSetDivSize = () => throttle(this.setDivSize, 500);
 
   render() {
-    const { numPages, pageNumber } = this.state;
-    const { startsFrom, }          = this.props;
+    const { numPages, pageNumber, width } = this.state;
+    const { pdfFile, startsFrom, t }      = this.props;
+    pdfjs.GlobalWorkerOptions.workerSrc   = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
     return (
       <div id="pdfWrapper" style={{ marginTop: '10px' }}>
@@ -100,7 +103,26 @@ class PDF extends Component {
           />
         </Container>
         <div style={{ direction: 'ltr' }}>
-          <LoadedPDF {...this.props} {...this.state} onDocumentLoadSuccess={this.onDocumentLoadSuccess} />
+          <Document
+            file={pdfFile}
+            onLoadSuccess={this.onDocumentLoadSuccess}
+            error={<ErrorSplash text={t('messages.server-error')} subtext={t('messages.failed-to-load-pdf-file')} />}
+            loading={<LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />}
+          >
+            {
+              numPages &&
+              (
+                <Page
+                  width={width}
+                  pageNumber={pageNumber + (-startsFrom) + 1}
+                  renderAnnotations={false}
+                  renderTextLayer={false}
+                  renderMode="svg"
+                />
+              )
+            }
+          </Document>
+
         </div>
         <Container fluid textAlign="center">
           <PDFMenu
