@@ -8,6 +8,7 @@ import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../helpers/consts';
 import { getEscapedRegExp, isEmpty } from '../../../helpers/utils';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { Reference } from '../../shapes';
+import classNames from 'classnames';
 
 const titleKey = id => `title-${id}`;
 
@@ -299,7 +300,15 @@ class TOC extends Component {
     const toc  = this.toc(rootId, path, true);
 
     return (
-      <Sticky context={contextRef} className="source__toc mobile-hidden tablet-hidden" active={active}>
+      <Sticky
+        context={contextRef}
+        className={classNames({
+          'source__toc': true,
+          'mobile-hidden': active,
+          'tablet-hidden': active,
+        })}
+        active={active}
+      >
         <Ref innerRef={this.handleAccordionContext}>
           <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} onTitleClick={handleTitleClick} />
         </Ref>
