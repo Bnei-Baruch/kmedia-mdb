@@ -388,7 +388,7 @@ class LibraryContainer extends Component {
 
   static nextPrevButtons = props => {
     const { sourceId, getPathByID } = props;
-    
+
     if (isTaas(sourceId))
       return null;
 

@@ -387,12 +387,12 @@
   }
 }
 
-.ui.column.grid>[class*="eight wide"].column, .ui.grid>.column.row>[class*="eight wide"].column, .ui.grid>.row>[class*="eight wide"].column, .ui.grid>[class*="eight wide"].column {
+.ui.column.grid > [class*="eight wide"].column, .ui.grid > .column.row > [class*="eight wide"].column, .ui.grid > .row > [class*="eight wide"].column, .ui.grid > [class*="eight wide"].column {
   width: 70% !important;
 
   @include mobile {
     width: 100% !important;
-  } 
+  }
 }
 
 .collection-header {
@@ -402,6 +402,7 @@
     border-radius: calc(49px / 2 + .5rem);
     margin: .6rem -.3rem;
     padding: 0.25rem;
+
     .icons {
       position: absolute;
       top: -3px;
@@ -1513,6 +1514,7 @@
       padding-right: 15px !important;
     }
   }
+
   @media only screen and (max-width: $tabletBreakpoint) {
     .search-omnibox {
       .searchButton {
@@ -1571,15 +1573,15 @@
 }
 
 .share-publication {
-  margin:0 5px;
+  margin: 0 5px;
 }
 
 .display-inline {
-  display:inline;
+  display: inline;
 }
 
 .library__nextPrevButtons {
-  height:20px;
+  height: 20px;
 }
 
 .library__nextPrevButton {
@@ -1599,6 +1601,7 @@
   animation: blink-on-scroll .8s ease-in-out;
   animation-iteration-count: 5;
   animation-delay: .7s;
+
   em.highlight {
     border-bottom: 1px solid rgba(65, 131, 196, .3);
     background-color: rgba(242, 201, 76, .2);

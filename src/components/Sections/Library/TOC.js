@@ -68,6 +68,9 @@ export const getIndex = (node1, node2) => {
 };
 
 const scrollToActive = (activeId) => {
+  if (activeId !== undefined) {
+    return;
+  }
   const element = document.getElementById(titleKey(activeId));
   if (element === null) {
     return;
@@ -296,7 +299,7 @@ class TOC extends Component {
     const toc  = this.toc(rootId, path, true);
 
     return (
-      <Sticky context={contextRef} className="source__toc" active={active}>
+      <Sticky context={contextRef} className="source__toc mobile-hidden tablet-hidden" active={active}>
         <Ref innerRef={this.handleAccordionContext}>
           <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} onTitleClick={handleTitleClick} />
         </Ref>
