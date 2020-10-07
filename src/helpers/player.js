@@ -157,12 +157,15 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
     items = units.map(x => playableItem(x, mediaType, uiLanguage, contentLanguage));
   }
 
+  // don't include items without unit
+  items = items.filter(item => !!item.unit);
+
   const shareUrl = canonicalLink(collection);
   items.forEach((x) => {
     x.shareUrl = shareUrl;
   });
 
-  const { language } = items[0];
+  const language = items[0]?.language || contentLanguage;
 
   return {
     collection,
