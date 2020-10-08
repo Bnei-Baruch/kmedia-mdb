@@ -29,7 +29,9 @@ const Recommended = ({ unit, t }) => {
   }, [dataLoaded, dispatch, unit, wip, err]);
 
   const recommendedItems = useSelector(state => selectors.getRecommendedItems(state.recommended)) || [];
-  const recommendedUnits = useSelector(state => recommendedItems.map(item => mdbSelectors.getDenormContentUnit(state.mdb, item.uid))) || [];
+  const recommendedUnits = useSelector(state => recommendedItems
+    .map(item => mdbSelectors.getDenormContentUnit(state.mdb, item.uid))
+    .filter(item => !!item)) || [];
 
   if (wipErr) {
     return wipErr;
@@ -38,6 +40,9 @@ const Recommended = ({ unit, t }) => {
   if (recommendedUnits.length === 0){
     return null;
   }
+
+  // console.log('recommendedItems:', recommendedItems);
+  // console.log('recommendedUnits:', recommendedUnits);
 
   const unitCollection = canonicalCollection(unit);
   const unitCollectionId = unitCollection ? unitCollection.id : null;

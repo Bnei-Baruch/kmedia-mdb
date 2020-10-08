@@ -387,8 +387,12 @@
   }
 }
 
-.ui.column.grid>[class*="eight wide"].column, .ui.grid>.column.row>[class*="eight wide"].column, .ui.grid>.row>[class*="eight wide"].column, .ui.grid>[class*="eight wide"].column {
+.ui.column.grid > [class*="eight wide"].column, .ui.grid > .column.row > [class*="eight wide"].column, .ui.grid > .row > [class*="eight wide"].column, .ui.grid > [class*="eight wide"].column {
   width: 70% !important;
+
+  @include mobile {
+    width: 100% !important;
+  }
 }
 
 .collection-header {
@@ -398,6 +402,7 @@
     border-radius: calc(49px / 2 + .5rem);
     margin: .6rem -.3rem;
     padding: 0.25rem;
+
     .icons {
       position: absolute;
       top: -3px;
@@ -1591,24 +1596,22 @@
   float: left
 }
 
-//search on the page
 .scroll-to-search {
-  box-shadow: 1px 1px 5px 1px #7dcff5;
+  box-shadow: 0 0 0 6px #7dcff5;
   animation: blink-on-scroll .8s ease-in-out;
   animation-iteration-count: 5;
   animation-delay: .7s;
-  background: rgba(197, 221, 250, 0.1);
-  padding: 5px;
 
-  em._h {
-    font-weight: bold;
+  em.highlight {
     border-bottom: 1px solid rgba(65, 131, 196, .3);
+    background-color: rgba(242, 201, 76, .2);
+    font-weight: 900;
   }
 }
 
 @keyframes blink-on-scroll {
   0% {
-    box-shadow: 1px 1px 5px 1px #7dcff5;
+    box-shadow: 0 0 0 5px #7dcff5;
   }
   100% {
     box-shadow: none;
