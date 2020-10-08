@@ -1,202 +1,140 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { withNamespaces } from 'react-i18next';
 
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, DATE_FORMAT } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
 import { actions, selectors } from '../../../redux/modules/mdb';
-import { selectors as settings } from '../../../redux/modules/settings';
-import * as shapes from '../../shapes';
+import WipErr from '../../shared/WipErr/WipErr';
 import Page from './Page';
 
-export class PlaylistCollectionContainer extends Component {
-  static propTypes = {
-    match: shapes.RouterMatch.isRequired,
-    collection: shapes.GenericCollection,
-    wip: shapes.WipMap.isRequired,
-    errors: shapes.ErrorsMap.isRequired,
-    language: PropTypes.string.isRequired,
-    contentLanguage: PropTypes.string.isRequired,
-    PlaylistComponent: PropTypes.func,
-    fetchCollection: PropTypes.func.isRequired,
-    fetchUnit: PropTypes.func.isRequired,
-    shouldRenderHelmet: PropTypes.bool,
-    fetchWindow: PropTypes.func.isRequired,
-    cWindow: shapes.cWindow.isRequired,
-    location: shapes.HistoryLocation.isRequired,
-  };
+const PlaylistCollectionContainer = ({ t, lastLessonId = undefined }) => {
+  let { id: cId } = useParams();
 
-  static defaultProps = {
-    collection: null,
-    PlaylistComponent: undefined,
-    shouldRenderHelmet: true,
-  };
+  // if we come from LastLesson page, use lastLessonId as cId
+  if (lastLessonId){
+    cId = lastLessonId;
+  }
 
-  static askForDataIfNeeded = (props) => {
-    const { match, collection, wip, errors, fetchCollection, fetchUnit } = props;
+  const collection = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId));
+  const wipMap = useSelector(state => selectors.getWip(state.mdb));
+  const errorMap = useSelector(state => selectors.getErrors(state.mdb));
+  const cWindow = useSelector(state => selectors.getWindow(state.mdb));
 
-    // We fetch stuff if we don't have it already
-    // and a request for it is not in progress or ended with an error.
-    const { id } = match.params;
+  const [nextLink, setNextLink] = useState(null);
+  const [prevLink, setPrevLink] = useState(null);
 
-    let fetchedSingle = false;
-    if (!Object.prototype.hasOwnProperty.call(wip.collections, id)) {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!Object.prototype.hasOwnProperty.call(wipMap.collections, cId)) {
       // never fetched as full so fetch now
-      fetchCollection(id);
-      fetchedSingle = true;
+      dispatch(actions.fetchCollection(cId));
     }
 
-    if (collection && collection.id === id && Array.isArray(collection.cuIDs)) {
-      collection.cuIDs.forEach((cuID) => {
-        const cu = collection.content_units.find(x => x.id === cuID);
-        if (!cu || !cu.files) {
-          if (!(wip.units[cuID] || errors.units[cuID])) {
-            fetchUnit(cuID);
+    if (collection){ 
+      const { id, cuIDs, content_units, content_type, film_date } = collection;
+
+      if (Array.isArray(cuIDs) && cuIDs.length > 0) {
+        cuIDs.forEach(cuID => {
+          if (!wipMap.units[cuID] && !errorMap.units[cuID]) {
+            const cu = content_units.find(x => x.id === cuID);
+            if (!cu || !cu.files) {
+              dispatch(actions.fetchUnit(cuID));
+            }
+          }
+        });
+      }
+
+      // next prev links only for lessons
+      if (content_type === CT_DAILY_LESSON
+        || content_type === CT_SPECIAL_LESSON) {
+
+        const fetchWindow = () => {
+          const filmDate = moment.utc(film_date);
+          dispatch(actions.fetchWindow({
+            id,
+            start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
+            end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
+          }));
+        }
+
+        // empty or no window
+        if (!cWindow.data || cWindow.data.length === 0) {
+          if (!wipMap.cWindow[cId]) {
+            // no wip, go fetch
+            fetchWindow(id, film_date);
+          }
+        } else {
+          const { id: cWindowId, data: collections } = cWindow;
+          const curIndex = collections.indexOf(cId);
+          console.log('cWindow:', cWindowId, curIndex, collections);
+
+          if (cId !== cWindowId
+            && (curIndex <= 0 || curIndex === collections.length - 1)
+            && !wipMap.cWindow[cId]) {
+            // it's not our window,
+            // we're not in it (at least not in the middle, we could reuse it otherwise)
+            // and our window is not wip
+            fetchWindow(id, film_date);
+          } else {
+            // it's a good window, extract the previous and next links
+            const prevCollectionId = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
+            const prevLnk = prevCollectionId 
+              ? canonicalLink({ id: prevCollectionId, content_type: CT_DAILY_LESSON }) 
+              : null;
+
+            setPrevLink(prevLnk);
+
+            const nextCollectionId = curIndex > 0 ? collections[curIndex - 1] : null;
+            const nextLnk = nextCollectionId 
+              ? canonicalLink({ id: nextCollectionId, content_type: CT_DAILY_LESSON }) 
+              : null;
+
+            setNextLink(nextLnk);
           }
         }
-      });
-    } else if (!fetchedSingle && !(wip.collections[id] || errors.collections[id])) {
-      fetchCollection(id);
-    }
+      }
+    } 
+  }, [cId, cWindow, collection, dispatch, errorMap.units, wipMap]);
 
-    // next prev links only for lessons
-    if (collection
-      && (collection.content_type === CT_DAILY_LESSON
-        || collection.content_type === CT_SPECIAL_LESSON)) {
-      return PlaylistCollectionContainer.getNextPrevLinks(props);
-    }
 
+  if (!collection || !Array.isArray(collection.content_units)) {
     return null;
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      nextLink: null,
-      prevLink: null,
-    };
   }
 
-  componentDidMount() {
-    const links = PlaylistCollectionContainer.askForDataIfNeeded(this.props);
-    this.setState(links);
+  // We're wip / err if some request is wip / err
+  let wip = wipMap.collections[cId] || (Array.isArray(collection.cuIDs) && collection.cuIDs.some(cuID => wipMap.units[cuID]));
+  let err = errorMap.collections[cId];
+  if (!err) {
+    const cuIDwithError = Array.isArray(collection.cuIDs) && collection.cuIDs.find(cuID => errorMap.units[cuID]);
+    err = cuIDwithError ? errorMap.units[cuIDwithError] : null;
   }
 
-  static getDerivedStateFromProps(nextProps) {
-    return PlaylistCollectionContainer.askForDataIfNeeded(nextProps);
+  const wipErr = WipErr({ wip, err, t });
+  if (wipErr) {
+    return wipErr;
   }
 
-  static getNextPrevLinks = (props) => {
-    const { match, wip, cWindow } = props;
-    const { id }                  = match.params;
-    let links                     = null;
+  return (
+    <Page
+      collection={collection}
+      nextLink={nextLink}
+      prevLink={prevLink}
+    />
+  );
+};
 
-    // empty or no window
-    if (!cWindow.data || cWindow.data.length === 0) {
-      if (!wip.cWindow[id]) {
-        // no wip, go fetch
-        PlaylistCollectionContainer.getWindow(props);
-      }
-      return null;
-    }
+PlaylistCollectionContainer.propTypes = {
+  lastLessonId: PropTypes.string,
+  t: PropTypes.func.isRequired
+};
 
-    const { id: cWindowId, data: collections } = cWindow;
+const areEqual = (prevProps, nextProps) =>
+  (!prevProps.lastLessonId && !nextProps.lastLessonId)
+  || prevProps.lastLessonId === nextProps.lastLessonId;
 
-    const curIndex = collections.indexOf(id);
-    if (id !== cWindowId
-      && (curIndex <= 0 || curIndex === collections.length - 1)
-      && !wip.cWindow[id]) {
-      // it's not our window,
-      // we're not in it (at least not in the middle, we could reuse it otherwise)
-      // and our window is not wip
-      PlaylistCollectionContainer.getWindow(props);
-    } else {
-      // it's a good window, extract the previous and next links
-      const prevCollection = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
-      const prevLink       = prevCollection ? canonicalLink({
-        id: prevCollection, content_type: CT_DAILY_LESSON
-      }) : null;
-
-      const nextCollection = curIndex > 0 ? collections[curIndex - 1] : null;
-      const nextLink       = nextCollection ? canonicalLink({
-        id: nextCollection,
-        content_type: CT_DAILY_LESSON
-      }) : null;
-
-      links = { nextLink, prevLink };
-    }
-
-    return links;
-  };
-
-  static getWindow = (props) => {
-    const { collection, fetchWindow } = props;
-
-    const filmDate = moment.utc(collection.film_date);
-    fetchWindow({
-      id: collection.id,
-      start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
-      end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
-    });
-  };
-
-  render() {
-    const { match, language, contentLanguage, collection, wip: wipMap, errors, PlaylistComponent, shouldRenderHelmet, location } = this.props;
-
-    // We're wip / err if some request is wip / err
-    const { id } = match.params;
-    let wip      = wipMap.collections[id];
-    let err      = errors.collections[id];
-    if (collection) {
-      wip = wip || (Array.isArray(collection.cuIDs) && collection.cuIDs.some(cuID => wipMap.units[cuID]));
-      if (!err) {
-        const cuIDwithError = Array.isArray(collection.cuIDs) && collection.cuIDs.find(cuID => errors.units[cuID]);
-        err                 = cuIDwithError ? errors.units[cuIDwithError] : null;
-      }
-    }
-
-    const { nextLink, prevLink } = this.state;
-
-    return (
-      <Page
-        collection={collection}
-        wip={wip}
-        err={err}
-        uiLanguage={language}
-        contentLanguage={contentLanguage}
-        PlaylistComponent={PlaylistComponent}
-        shouldRenderHelmet={shouldRenderHelmet}
-        location={location}
-        nextLink={nextLink}
-        prevLink={prevLink}
-      />
-    );
-  }
-}
-
-function mapState(state, props) {
-  const collection = selectors.getDenormCollectionWUnits(state.mdb, props.match.params.id);
-  return {
-    collection,
-    language: settings.getLanguage(state.settings),
-    contentLanguage: settings.getContentLanguage(state.settings),
-    wip: selectors.getWip(state.mdb),
-    errors: selectors.getErrors(state.mdb),
-    items: selectors.getCollections(state.mdb),
-    cWindow: selectors.getWindow(state.mdb),
-  };
-}
-
-function mapDispatch(dispatch) {
-  return bindActionCreators({
-    fetchCollection: actions.fetchCollection,
-    fetchUnit: actions.fetchUnit,
-    fetchWindow: actions.fetchWindow,
-  }, dispatch);
-}
-
-export default withRouter(connect(mapState, mapDispatch)(PlaylistCollectionContainer));
+export default React.memo(withNamespaces()(PlaylistCollectionContainer), areEqual);

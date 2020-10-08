@@ -1,21 +1,17 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
-import * as shapes from '../../../shapes';
-import Playlist from '../../../Pages/PlaylistCollection/Container';
+import PlaylistCollectionContainer from '../../../Pages/PlaylistCollection/Container';
 import UnitList from './UnitList';
 
-const MainPage = (props) => {
-  const { match: { params: { tab } } } = props;
+const MainPage = () => {
+  const { tab } = useParams();
 
   if (tab === 'daily' || tab === 'series') {
-    return <Playlist />;
+    return <PlaylistCollectionContainer />;
   }
 
   return <UnitList key={tab} />;
-};
-
-MainPage.propTypes = {
-  match: shapes.RouterMatch.isRequired,
 };
 
 export default MainPage;

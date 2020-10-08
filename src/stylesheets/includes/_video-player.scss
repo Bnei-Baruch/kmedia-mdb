@@ -3,27 +3,27 @@
   padding-top: 1em;
 
   .layout--is-audio {
-    #avbox__playlist,
-    #avbox__player{
-      width: 100% !important;
-      padding-bottom: 2em;
-      .avbox__playlist-wrapper {
-        display: block;
-      padding-top: 2rem;
-      position: static;
+      #avbox__playlist,
+      #avbox__player{
+        width: 100% !important;
+        padding-bottom: 2em;
+        .avbox__playlist-wrapper {
+          display: block;
+          padding-top: 2rem;
+          position: static;
 
-      &::before {
-        content: none;
-      }
-
-      > .header {
         &::before {
           content: none;
         }
-      }
+
+        > .header {
+          &::before {
+            content: none;
+          }
+        }
+        }
       }
     }
-  }
 
   &__player {
     @include mobile {
@@ -163,17 +163,27 @@
       color: $blue;
     }
 
-    .item .item {
-      margin-left: -1.14285714em;
-      margin-right: -1.14285714em;
-      padding-left: 1.14285714em * 2;
-      padding-right: 1.14285714em * 2;
+    .list .item {
+      padding: 0 !important;
+
+      .active {
+        background-color: rgba($blue, .2) !important;
+      }
+
+      table { width: 100% }
     }
+
+    .item .item {
+        margin-left: -1.14285714em;
+        margin-right: -1.14285714em;
+        padding-left: 1.14285714em * 2;
+        padding-right: 1.14285714em * 2;
+      }
+
     .menu > .item {
       &.active {
         background-color: rgba($blue, .2) !important;
       }
-      // padding-bottom: 0;
     }
   }
 }
