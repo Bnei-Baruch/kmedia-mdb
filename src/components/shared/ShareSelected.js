@@ -1,10 +1,9 @@
-import React, { useContext, useRef } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Popup, } from 'semantic-ui-react';
 
-import { DeviceInfoContext } from '../../helpers/app-contexts';
 import useStateWithCallback from '../../helpers/use-state-with-callback';
 import {
   EmailIcon,
