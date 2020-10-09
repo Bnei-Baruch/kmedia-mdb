@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
@@ -12,10 +12,12 @@ import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSele
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { getQuery, updateQuery } from '../../../helpers/url';
-import { prepareScrollToSearch } from '../../../helpers/utils';
+import { prepareScrollToSearch, buildSearchLinkFromSelection } from '../../../helpers/scrollToSearch/helper';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
+import ShareBar from '../../shared/ShareSelected';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 export const checkRabashGroupArticles = (source) => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -40,50 +42,15 @@ const getFullUrl = (pdfFile, data, language, source) => {
   return assetUrl(`sources/${id}/${data[language].docx}`);
 };
 
-const getContentToDisplay = (content, language, pageNumber, pageNumberHandler, pdfFile, startsFrom, t, search) => {
-  const { wip, err, data: contentData } = content;
-
-  const wipErr = WipErr({ wip, err, t });
-  if (wipErr) {
-    return wipErr;
-  }
-
-  if (pdfFile) {
-    return (
-      <PDF
-        pdfFile={assetUrl(`sources/${pdfFile}`)}
-        pageNumber={pageNumber || 1}
-        startsFrom={startsFrom}
-        pageNumberHandler={pageNumberHandler}
-      />
-    );
-  } else if (contentData) {
-    const direction = getLanguageDirection(language);
-    return (
-      <div
-        style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
-        dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(contentData, search) }}
-      />
-    );
-  } else {
-    return null;
-  }
-};
-
-const Library = ({
-  data,
-  source,
-  language = null,
-  languages = [],
-  langSelectorMount = null,
-  downloadAllowed,
-  handleLanguageChanged,
-  t,
-}) => {
-  const location                    = useLocation();
-  const history                     = useHistory();
-  const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
-  const { searchScroll }            = getQuery(location);
+const Library = ({ data, source, language = null, languages = [], langSelectorMount = null, downloadAllowed, handleLanguageChanged, t, }) => {
+  const location                             = useLocation();
+  const history                              = useHistory();
+  const [pageNumber, setPageNumber]          = useState(getPageFromLocation(location));
+  const [searchUrl, setSearchUrl]            = useState();
+  const [searchText, setSearchText]          = useState();
+  const { srchstart, srchend, highlightAll } = getQuery(location);
+  const search                               = { srchstart, srchend };
+  const { isMobileDevice }                   = useContext(DeviceInfoContext);
 
   const content = useSelector(state => selectors.getAsset(state.assets));
 
@@ -91,8 +58,7 @@ const Library = ({
     return <Segment basic>&nbsp;</Segment>;
   }
 
-  const starts = startsFrom(source) || 1;
-  const taas   = isTaas(source);
+  const taas = isTaas(source);
 
   let pdfFile;
   if (data && taas) {
@@ -111,7 +77,76 @@ const Library = ({
     }));
   };
 
-  const contentsToDisplay = getContentToDisplay(content, language, pageNumber, pageNumberHandler, pdfFile, starts, t, searchScroll);
+  const updateSelection = () => {
+    const { url, text } = buildSearchLinkFromSelection(language);
+    if (!url)
+      return;
+    setSearchText(text);
+    setSearchUrl(url);
+  };
+
+  const handleOnMouseUp = (e) => {
+    if (isMobileDevice) {
+      return false;
+    }
+    updateSelection();
+    return false;
+  };
+
+  const handleOnMouseDown = (e) => {
+    if (isMobileDevice) {
+      return false;
+    }
+    setSearchUrl(null);
+    return false;
+  };
+
+  const renderShareBar = () => {
+    if (isMobileDevice || !searchUrl)
+      return null;
+
+    return (
+      <ShareBar url={searchUrl} text={searchText} />
+    );
+  };
+
+  const getContentToDisplay = () => {
+    const { wip, err, data: contentData } = content;
+    const starts                          = startsFrom(source) || 1;
+
+    const wipErr = WipErr({ wip, err, t });
+    if (wipErr) {
+      return wipErr;
+    }
+
+    if (pdfFile) {
+      return (
+        <PDF
+          pdfFile={assetUrl(`sources/${pdfFile}`)}
+          pageNumber={pageNumber || 1}
+          startsFrom={starts}
+          pageNumberHandler={pageNumberHandler}
+        />
+      );
+    } else if (contentData) {
+      const direction = getLanguageDirection(language);
+      return (
+        <div className="search-on-page--container">
+          {renderShareBar()}
+          <div
+            onMouseUp={handleOnMouseUp}
+            onMouseDown={handleOnMouseDown}
+            style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
+            dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(contentData, search, highlightAll === 'true') }}
+          />
+        </div>
+      );
+    } else {
+      return null;
+    }
+  };
+
+  const contentsToDisplay = getContentToDisplay();
   if (contentsToDisplay === null) {
     return <Segment basic>{t('sources-library.no-source')}</Segment>;
   }
