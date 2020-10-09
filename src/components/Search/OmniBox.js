@@ -125,11 +125,12 @@ export class OmniBox extends Component {
       // to the search page when we redirect).
 
       push({ pathname: 'search', search: locationSearch });
+    }
 
-      // Reset filters for new search (query changed)
-      if (query && getQuery(location).q !== query) {
-        resetFilterNS('search');
-      }
+    // Reset filters for new search (query changed)
+    if (query && getQuery(location).q !== query) {
+      resetFilterNS('search');
+      push({ page: undefined });
     }
 
     search(query, 1, pageSize, suggest, isDebMode(location));
