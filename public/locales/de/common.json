@@ -559,5 +559,11 @@
     "language": "Sprache",
     "website_language": "Website Language",
     "content_language": "Content language"
+  },
+  "share-text": {
+    "message-title": "Read this fragment",
+    "share-button": "Share fragment",
+    "copy-link": "Copy link",
+    "copy-text": "Copy text"
   }
 }
