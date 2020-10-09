@@ -150,12 +150,13 @@ class TOC extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { rootId, match, fullPath } = this.props;
+    const { rootId, match, fullPath, active } = this.props;
     return (
       rootId !== nextProps.rootId
       || match !== nextProps.match
       || !isEqual(fullPath, nextProps.fullPath)
       || (!this.props.contextRef && nextProps.contextRef)
+      || active !== nextProps.active
     );
   }
 
@@ -304,8 +305,8 @@ class TOC extends Component {
         context={contextRef}
         className={classNames({
           'source__toc': true,
-          'mobile-hidden': active,
-          'tablet-hidden': active,
+          'mobile-hidden': !active,
+          'tablet-hidden': !active,
         })}
         active={active}
       >
