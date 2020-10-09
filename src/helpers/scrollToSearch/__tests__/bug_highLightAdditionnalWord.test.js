@@ -5,7 +5,7 @@ describe('highlighted additional word after end', () => {
   const srchstart = 'Его богатство — трепет';
   const srchend   = '31 Марта 1947 г';
 
-  test('test', () => {
+  test('additional highlighted reproduce bug', () => {
     const result = prepareScrollToSearch(data, { srchstart, srchend }, true);
     expect(result).not.toBeNull();
     expect(result).toEqual(expected);

@@ -5,7 +5,7 @@ describe('highlighted text is too big', () => {
   const srchend   = (`и радуйтесь в трепете".`);
   const srchstart = (`Трепет и радость Статья`);
 
-  test('test', () => {
+  test('test_reproduce bug', () => {
     const result = prepareScrollToSearch(data, { srchstart, srchend }, true);
     expect(result).not.toBeNull();
     expect(result).not.toEqual(data);

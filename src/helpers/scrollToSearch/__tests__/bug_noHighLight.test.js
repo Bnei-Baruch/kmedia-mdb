@@ -5,7 +5,7 @@ describe('no highlight any text', () => {
   const srchend   = ('rock like our God.”');
   const srchstart = ('This is why it');
 
-  test('test', () => {
+  test('reproduce bug no highlight_', () => {
     const result = prepareScrollToSearch(data, { srchstart, srchend }, true);
     expect(result).not.toBeNull();
     expect(result).not.toEqual(data);

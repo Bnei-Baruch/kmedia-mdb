@@ -1,11 +1,9 @@
-import React, { useContext, useRef } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { Button, Message, Popup, } from 'semantic-ui-react';
+import { Button, Popup, } from 'semantic-ui-react';
 
-import ShareBar from '../AVPlayer/Share/ShareBar';
-import { DeviceInfoContext } from '../../helpers/app-contexts';
 import useStateWithCallback from '../../helpers/use-state-with-callback';
 import {
   EmailIcon,
@@ -21,7 +19,6 @@ import {
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
 const ShareSelected = ({ t, url, text }) => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const contextRef = useRef();
 
