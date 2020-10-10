@@ -127,13 +127,19 @@ export class OmniBox extends Component {
       push({ pathname: 'search', search: locationSearch });
     }
 
+    const deb = isDebMode(location);
+
     // Reset filters for new search (query changed)
     if (query && getQuery(location).q !== query) {
       resetFilterNS('search');
-      push({ page: undefined });
+      const params = new URLSearchParams('');
+      if (deb) {
+        params.append("deb", "true");
+      }
+      push({ search: params.toString() });
     }
 
-    search(query, 1, pageSize, suggest, isDebMode(location));
+    search(query, 1, pageSize, suggest, deb);
     if (isOpen) {
       this.setState({ isOpen: false });
     }
