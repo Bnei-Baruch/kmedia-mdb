@@ -28,7 +28,8 @@
     "build:suitcase": "REACT_APP_ENV=suitcase yarn build",
     "test": "react-scripts test --verbose --watchAll",
     "test:coverage": "react-scripts test --verbose --watchAll --coverage",
-    "lint": "yarn run eslint -c .prepush.eslintrc.json src"
+    "lint": "yarn run eslint -c .prepush.eslintrc.json src",
+    "postinstall": "patch-package"
   },
   "husky": {
     "hooks": {
@@ -117,6 +118,8 @@
     "mock-local-storage": "^1.1.15",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.2.2",
+    "patch-package": "^6.2.2",
+    "postinstall-postinstall": "^2.1.0",
     "prop-types": "^15.6.1",
     "qs": "^6.9.0",
     "react": "^16.13.1",
