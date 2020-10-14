@@ -1,8 +1,8 @@
 import { ES_RESULT_TYPE_SOURCES, ES_RESULT_TYPE_TAGS } from '../consts';
-import { SuggestionsHelper } from '../search';
+import { localeCompareWithYear, SuggestionsHelper } from '../search';
 
 const buildResults = (query, options) => {
-  const results = {
+  const results                            = {
     suggest: {
       title_suggest: [{
         offset: 0,
@@ -85,5 +85,32 @@ describe('SuggestionsHelper', () => {
       { text: '21 3', title: '1 > 1 21 > 3', result_type: ES_RESULT_TYPE_SOURCES },
     ]));
     expect(sh.getSuggestions()).toEqual(['1 21 > 3']);
+  });
+
+  test('sort with year', () => {
+    const sh = new SuggestionsHelper(buildResults('21', [
+      { text: 'los angeles 2016', title: 'Convention in Los Angeles 2016' },
+      { text: 'los angeles 2014', title: 'Convention in Los Angeles 2014' },
+      { text: 'Los Angeles “Day Two” – 11.01.14', title: 'Convention In Los Angeles “Day Two” – 11.01.14' },
+      { text: 'los angeles 2010', title: 'Convention in Los Angeles 2009' },
+      { text: 'los angeles 2010', title: 'Convention in Los Angeles 2007' },
+      { text: 'Los Angeles “Day Two” – 16.01.14', title: 'Convention In Los Angeles “Day Two” – 16.01.14' },
+      { text: 'los angeles 2010', title: 'Convention in Los Angeles 2008' },
+      { text: 'los angeles 2010', title: 'Convention in Los Angeles 2010' },
+      { text: 'los angeles 2017', title: 'Convention in Los Angeles 2017' },
+      { text: 'los angeles 2015', title: 'Convention in Los Angeles 2015' },
+    ]));
+    expect(sh.getSuggestions()).toEqual([
+      'Convention In Los Angeles “Day Two” – 11.01.14',
+      'Convention In Los Angeles “Day Two” – 16.01.14',
+      'Convention in Los Angeles 2017',
+      'Convention in Los Angeles 2016',
+      'Convention in Los Angeles 2015',
+      'Convention in Los Angeles 2014',
+      'Convention in Los Angeles 2010',
+      'Convention in Los Angeles 2009',
+      'Convention in Los Angeles 2008',
+      'Convention in Los Angeles 2007'
+    ]);
   });
 });
