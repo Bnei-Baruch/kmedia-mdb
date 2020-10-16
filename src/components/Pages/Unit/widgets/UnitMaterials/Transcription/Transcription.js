@@ -69,11 +69,15 @@ class Transcription extends Component {
   static getUnitDerivedArticle(unit, type) {
     // suitable for having either derived articles or research materials only
     const ct = type === 'articles' ? CT_ARTICLE : CT_RESEARCH_MATERIAL;
-
-    return Object.values(unit.derived_units || {})
+    const units = Object.values(unit.derived_units || {})
       .filter(x => x.content_type === ct
-        && (x.files || []).some(f => f.type === MT_TEXT))
-      .map(x => x.files)
+        && (x.files || []).some(f => f.type === MT_TEXT));
+
+    units.forEach(unit => {
+      unit.files.forEach(file => file.title = unit.name);
+    });
+
+    return units.map(x => x.files)
       .reduce((acc, files) => [...acc, ...files], []);
   }
 
@@ -93,7 +97,7 @@ class Transcription extends Component {
       newLanguage = state.language;
     }
 
-    const selectedFile = Transcription.selectFile(textFiles, newLanguage);
+    const selectedFile = state.selectedFile ? state.selectedFile : Transcription.selectFile(textFiles, newLanguage);
 
     return { selectedFile, languages, language: newLanguage, textFiles };
   }
@@ -119,7 +123,8 @@ class Transcription extends Component {
       || (nextProps.unit.files !== props.unit.files
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
         || (state.selectedFile && (props.doc2htmlById[state.selectedFile.id].wip !== nextProps.doc2htmlById[state.selectedFile.id].wip))
-        || nextState.language !== state.language);
+        || nextState.language !== state.language
+        || nextState.selectedFile !== state.selectedFile);
   }
 
   componentDidUpdate(prevProp, prevState) {
@@ -164,7 +169,7 @@ class Transcription extends Component {
 
   render() {
     const { doc2htmlById, t, type, location }   = this.props;
-    const { selectedFile, languages, language } = this.state;
+    const { selectedFile, languages, language, textFiles } = this.state;
     const { searchScroll }                      = getQuery(location);
 
     if (!selectedFile) {
@@ -183,11 +188,25 @@ class Transcription extends Component {
       const direction = getLanguageDirection(language);
 
       const content = (
-        <div
-          className="doc2html"
-          style={{ direction }}
-          dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(data, searchScroll) }}
-        />
+        <div>
+          <select
+            className="doc2html-dropdown-container"
+            value={selectedFile.id}
+            onChange={e => this.setState({ selectedFile: textFiles.find(t => t.id === e.currentTarget.value) } ) }
+          >
+            {
+              textFiles.map(x =>
+                <option key={`opt-${x.id}`} value={x.id}>
+                  {x.title}
+                </option>)
+            }
+          </select>
+          <div
+            className="doc2html"
+            style={{ direction }}
+            dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(data, searchScroll) }}
+          />
+        </div>
       );
 
       if (languages.length === 1) {
