@@ -23,10 +23,9 @@ export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }, 
 };
 
 export const getMatches = (data, startStr, endStr) => {
-  const starts = buildMatch(startStr, data);
-  const ends   = buildMatch(endStr, data);
-
-  return findFirstPair(starts, ends);
+  const start = buildMatch(startStr, data);
+  const end = buildMatch(endStr, data, start.index);
+  return {start, end};
 };
 
 export const findFirstPair = (starts, ends) => {
@@ -56,10 +55,12 @@ export const findFirstPair = (starts, ends) => {
   return { start, end };
 };
 
-const buildMatch = (search, data) => {
+const buildMatch = (search, data, index) => {
   const words = search.replace(KEEP_LETTERS_RE, '.').split(' ').filter((word) => !!word);
-  const re    = new RegExp(words.map((word) => `(${word})`).join('(.{0,5})'), 'sg');
-  return Array.from(data.matchAll(re), m => m);
+  const re = new RegExp(words.map((word) => `(${word})`).join('(.{0,5})'), 's');
+  if (index)
+    re.lastIndex = index;
+  return data.match(re)
 };
 
 export const getPositionInHtml = (pos, tags) => {
