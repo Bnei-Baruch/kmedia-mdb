@@ -24,6 +24,8 @@ export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }, 
 
 export const getMatches = (data, startStr, endStr) => {
   const start = buildMatch(startStr, data);
+  if (!start)
+    return {start: null, end: null}
   const end = buildMatch(endStr, data, start.index);
   return {start, end};
 };
