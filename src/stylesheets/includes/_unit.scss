@@ -1,16 +1,23 @@
 .unit-info {
+  @include mobile {
+    margin-bottom: 0;
+  }
+
   margin-top: 2em;
   margin-bottom: 2em;
 }
 
 .unit-materials {
+  @include mobile {
+    margin-bottom: 0;
+  }
+
   background: $darkWhite;
   margin: 0 -1em 2em;
   padding: 0 1em 1em;
 
   .menu {
     @include small-mobile {
-      // flex-wrap: wrap;
       border-bottom: 0!important;
       overflow-x: scroll;
     }

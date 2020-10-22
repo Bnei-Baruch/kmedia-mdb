@@ -19,7 +19,7 @@ const getCollectionId = unit => {
 }
 
 export const renderPlaylistUnit = (unit, t) =>
-  <Table selectable compact padded unstackable>
+  <Table selectable compact unstackable>
     <Table.Body>
       <Table.Row verticalAlign="middle">
         <Table.Cell textAlign="left" width={4}>
@@ -74,7 +74,7 @@ const DisplayRecommended = ({ unit, t, recommendedUnits }) => {
   const unitCollectionId = unitCollection ? unitCollection.id : null;
 
   return (
-    <div className="avbox__playlist-wrapper">
+    <div id="avbox_recommended" className="avbox__playlist-wrapper">
       <Header as="h3" content={t('materials.recommended.title')} />
       {renderPlaylist(unitsToDisplay, unitCollectionId, t)}
     </div>
@@ -87,8 +87,8 @@ DisplayRecommended.propTypes = {
   t: PropTypes.func.isRequired
 }
 
-const areEqual = (prevProps, nextProps) => 
-  prevProps.unit.id === nextProps.unit.id && 
+const areEqual = (prevProps, nextProps) =>
+  prevProps.unit.id === nextProps.unit.id &&
   isEqual(prevProps.recommendedUnits, nextProps.recommendedUnits);
 
 export default React.memo(DisplayRecommended, areEqual);

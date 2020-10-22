@@ -65,7 +65,7 @@ const PlaylistWidget = ({ playlist, selected = 0, onSelectedChange, t, prevLink 
   const unitsToDisplay = playlist.items.filter(item => !!item.unit).map(item => item.unit);
 
   return (
-    <div className="avbox__playlist-wrapper">
+    <div id="avbox_playlist" className="avbox__playlist-wrapper">
       <Header as="h3">
         {collection.name || getContentByType(collection, t)}
         <Header.Subheader>
@@ -90,7 +90,7 @@ const PlaylistWidget = ({ playlist, selected = 0, onSelectedChange, t, prevLink 
             ))
           }
         </List>
-      </div>;
+      </div>
     </div>
   );
 }

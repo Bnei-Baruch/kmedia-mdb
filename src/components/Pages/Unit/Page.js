@@ -13,12 +13,12 @@ import Recommended from './widgets/Recommended/Main/Recommended';
 import playerHelper from '../../../helpers/player';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
-const renderPlayer = (unit, language, embed) => !embed 
+const renderPlayer = (unit, language, embed) => !embed
   ? <div className="playlist-collection-page">
     <Container className="avbox">
       <Grid>
         <Grid.Row className={classNames('', {'layout--is-audio': false})} >
-          <Grid.Column id="avbox__player">
+          <Grid.Column id="column_player">
             <AVBox unit={unit} language={language} />
           </Grid.Column>
         </Grid.Row>
@@ -31,7 +31,7 @@ const renderPlayer = (unit, language, embed) => !embed
 export const UnitPage = ({ unit, language, section = '', location = {} }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const embed = playerHelper.getEmbedFromQuery(location);
-  
+
   if (!unit) {
     return null;
   }
@@ -39,9 +39,9 @@ export const UnitPage = ({ unit, language, section = '', location = {} }) => {
   const computerWidth = !isMobileDevice ? 10 : 16;
 
   return !embed ? (
-    <div className="unit-page">
+    <div className="unit-page playlist-collection-page">
       <Helmets.AVUnit unit={unit} language={language} />
-      <Container>
+      <Container className="avbox">
         <Grid padded>
           <Grid.Row>
             <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}>
@@ -55,11 +55,11 @@ export const UnitPage = ({ unit, language, section = '', location = {} }) => {
                 </Grid.Column>
               </Grid.Row>
             </Grid.Column>
-            {!isMobileDevice && 
-              <Grid.Column mobile={16} tablet={6} computer={6}>	
+            {!isMobileDevice &&
+              <Grid.Column mobile={16} tablet={6} computer={6}>
                 <Recommended unit={unit} />
               </Grid.Column>
-            }	
+            }
           </Grid.Row>
         </Grid>
       </Container>

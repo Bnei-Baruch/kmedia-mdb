@@ -60,7 +60,7 @@ const PlaylistCollectionPage = ({
       }
     }
   }, [history, playlist, selected]);
-  
+
   // we need to calculate the playlist here, so we can filter items out of recommended
   // playlist { collection, language, mediaType, items, groups };
   const preferredMT     = playerHelper.restorePreferredMediaType();
@@ -80,7 +80,7 @@ const PlaylistCollectionPage = ({
 
     if (nSelected >= playlist?.items.length) {
       nSelected = 0;
-    } 
+    }
 
     handleSelectedChange(nSelected);
   }, [handleSelectedChange, location, playlist]);
@@ -109,62 +109,51 @@ const PlaylistCollectionPage = ({
 
   return !embed ? (
     <div className="playlist-collection-page">
-      <div className="avbox">
-        <Container>
-          <Grid padded>
-            <Grid.Row className={classNames('', { 'layout--is-audio': isAudio })}>
-              <Grid.Column id="avbox__player" mobile={16} tablet={10} computer={10}>
-                <AVPlaylistPlayer
-                  items={items}
-                  selected={selected}
-                  language={language}
-                  uiLanguage={uiLanguage}
-                  onSelectedChange={handleSelectedChange}
-                  onLanguageChange={handleLanguageChange}
-                  onSwitchAV={handleSwitchAV}
-                  history={history}
-                />
-              </Grid.Column>
-              <Grid.Column id="avbox__playlist" className="avbox__playlist" mobile={16} tablet={6} computer={6}>
-                <Playlist
-                  playlist={playlist}
-                  selected={selected}
-                  onSelectedChange={handleSelectedChange}
-                  nextLink={nextLink}
-                  prevLink={prevLink}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Container>
-      </div>
-      {
-        unit &&
-          <Container>
-            <Helmets.AVUnit unit={unit} language={uiLanguage} />
-            <Grid padded>
-              <Grid.Row>
-                <Grid.Column mobile={16} tablet={10} computer={10} className="content__main">
-                  <Info unit={unit} />
-                  <Materials unit={unit} />
-                </Grid.Column>
-                {!isMobileDevice && 
-                  <Grid.Column mobile={16} tablet={6} computer={6}>
-                    <Recommended unit={unit} filterOutUnits={filterOutUnits} />
-                  </Grid.Column>
-                }
-              </Grid.Row>
-            </Grid>
-          </Container>
-      }
+      <Grid container className="avbox">
+        <Grid.Row className={classNames('', { 'layout--is-audio': isAudio })}>
+          <Grid.Column mobile={16} tablet={10} computer={10}>
+            <AVPlaylistPlayer
+              items={items}
+              selected={selected}
+              language={language}
+              uiLanguage={uiLanguage}
+              onSelectedChange={handleSelectedChange}
+              onLanguageChange={handleLanguageChange}
+              onSwitchAV={handleSwitchAV}
+              history={history}
+            />
+            {
+              unit &&
+              <Container id="unit_container">
+                <Helmets.AVUnit unit={unit} language={uiLanguage} />
+                <Info unit={unit} />
+                <Materials unit={unit} />
+              </Container>
+            }
+          </Grid.Column>
+          <Grid.Column mobile={16} tablet={6} computer={6}>
+            <Playlist
+              playlist={playlist}
+              selected={selected}
+              onSelectedChange={handleSelectedChange}
+              nextLink={nextLink}
+              prevLink={prevLink}
+            />
+            {
+              unit && !isMobileDevice &&
+              <Recommended unit={unit} filterOutUnits={filterOutUnits} />
+            }
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     </div>
-  ) : 
+  ) :
     <Grid.Row
       className={classNames('', {
         'layout--is-audio': isAudio,
       })}
     >
-      <Grid.Column id="avbox__player" mobile={16} tablet={10} computer={10}>
+      <Grid.Column mobile={16} tablet={16} computer={16}>
         <AVPlaylistPlayer
           items={items}
           selected={selected}
@@ -188,7 +177,7 @@ PlaylistCollectionPage.propTypes = {
 const isEqualLink = (link1, link2) =>
   (!link1 && !link2) || link1 === link2;
 
-const areEqual = (prevProps, nextProps) => 
+const areEqual = (prevProps, nextProps) =>
   isEqual(prevProps.collection, nextProps.collection)
   && isEqualLink(prevProps.prevLink, nextProps.prevLink)
   && isEqualLink(prevProps.nextLink, nextProps.nextLink);
