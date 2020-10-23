@@ -167,6 +167,26 @@ class Transcription extends Component {
     this.setState({ selectedFile, language: newLanguage });
   };
 
+  getSelectFiles(selectedFile, textFiles) {
+    if (!textFiles)
+      return null;
+    const relevantTextFiles = textFiles.filter(t => t.title);
+    if (relevantTextFiles.length == 0)
+      return null;
+    return <select
+      className="doc2html-dropdown-container"
+      value={selectedFile.id}
+      onChange={e => this.setState({ selectedFile: textFiles.find(t => t.id === e.currentTarget.value) })}
+    >
+      {
+        textFiles.map(x =>
+          <option key={`opt-${x.id}`} value={x.id}>
+            {x.title}
+          </option>)
+      }
+    </select>;
+  }
+
   render() {
     const { doc2htmlById, t, type, location }   = this.props;
     const { selectedFile, languages, language, textFiles } = this.state;
@@ -189,18 +209,7 @@ class Transcription extends Component {
 
       const content = (
         <div>
-          <select
-            className="doc2html-dropdown-container"
-            value={selectedFile.id}
-            onChange={e => this.setState({ selectedFile: textFiles.find(t => t.id === e.currentTarget.value) } ) }
-          >
-            {
-              textFiles.map(x =>
-                <option key={`opt-${x.id}`} value={x.id}>
-                  {x.title}
-                </option>)
-            }
-          </select>
+          {this.getSelectFiles(selectedFile, textFiles)}
           <div
             className="doc2html"
             style={{ direction }}
