@@ -89,7 +89,7 @@ class AVPlaylistPlayer extends Component {
           'avbox__player--is-audio--normal-mode': isAudio && mediaEditMode === 0,
           'avbox__player--is-audio--dropdown-opened': isAudio && isDropdownOpened && !mediaEditMode,
           'avbox__player--is-audio--dropdown-closed': isAudio && !isDropdownOpened && !mediaEditMode,
-          'avbox__player--is-4x3': currentItem.unit.film_date < '2014',
+          'avbox__player--is-4x3': currentItem.unit?.film_date < '2014',
           'mobile-device': !autoPlayAllowed,
         })}
       >
