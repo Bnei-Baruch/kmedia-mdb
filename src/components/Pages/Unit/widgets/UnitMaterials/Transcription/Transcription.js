@@ -74,11 +74,15 @@ class Transcription extends Component {
   static getUnitDerivedArticle(unit, type) {
     // suitable for having either derived articles or research materials only
     const ct = type === 'articles' ? CT_ARTICLE : CT_RESEARCH_MATERIAL;
-
-    return Object.values(unit.derived_units || {})
+    const units = Object.values(unit.derived_units || {})
       .filter(x => x.content_type === ct
-        && (x.files || []).some(f => f.type === MT_TEXT))
-      .map(x => x.files)
+        && (x.files || []).some(f => f.type === MT_TEXT));
+
+    units.forEach(unit => {
+      unit.files.forEach(file => file.title = unit.name);
+    });
+
+    return units.map(x => x.files)
       .reduce((acc, files) => [...acc, ...files], []);
   }
 
@@ -98,7 +102,7 @@ class Transcription extends Component {
       newLanguage = state.language;
     }
 
-    const selectedFile = Transcription.selectFile(textFiles, newLanguage);
+    const selectedFile = state.selectedFile ? state.selectedFile : Transcription.selectFile(textFiles, newLanguage);
 
     return { selectedFile, languages, language: newLanguage, textFiles };
   }
@@ -135,7 +139,8 @@ class Transcription extends Component {
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
         || (state.selectedFile && (props.doc2htmlById[state.selectedFile.id].wip !== nextProps.doc2htmlById[state.selectedFile.id].wip))
         || nextState.language !== state.language
-        || nextState.searchUrl !== state.searchUrl);
+        || nextState.searchUrl !== state.searchUrl
+        || nextState.selectedFile !== state.selectedFile);
   }
 
   componentDidUpdate(prevProp, prevState) {
@@ -181,6 +186,26 @@ class Transcription extends Component {
     this.setState({ selectedFile, language: newLanguage });
   };
 
+  getSelectFiles(selectedFile, textFiles) {
+    if (!textFiles)
+      return null;
+    const relevantTextFiles = textFiles.filter(t => t.title);
+    if (relevantTextFiles.length == 0)
+      return null;
+    return <select
+      className="doc2html-dropdown-container"
+      value={selectedFile.id}
+      onChange={e => this.setState({ selectedFile: textFiles.find(t => t.id === e.currentTarget.value) })}
+    >
+      {
+        textFiles.map(x =>
+          <option key={`opt-${x.id}`} value={x.id}>
+            {x.title}
+          </option>)
+      }
+    </select>;
+  }
+
   handleOnMouseUp = (e) => {
     if (this.context.isMobileDevice) {
       return false;
@@ -223,6 +248,7 @@ class Transcription extends Component {
     return (
       <div className="search-on-page--container">
         {this.renderShareBar()}
+        {this.getSelectFiles(selectedFile, textFiles)}
         <div
           id={DOM_ROOT_ID}
           className="doc2html"
@@ -237,8 +263,8 @@ class Transcription extends Component {
   };
 
   render() {
-    const { doc2htmlById, t, type }             = this.props;
-    const { selectedFile, languages, language } = this.state;
+    const { doc2htmlById, t, type }   = this.props;
+    const { selectedFile, languages, language, textFiles } = this.state;
 
     if (!selectedFile) {
       const text = type || 'transcription';

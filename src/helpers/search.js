@@ -41,8 +41,13 @@ export class SuggestionsHelper {
         const suggest   = titleWords.slice(titleWords.length - suggestWordsWithSeparator).join(' ');
         const suggestLC = suggest.toLowerCase();
 
+        //take as year if contain number after 2000 for other date formats it's problematic cause
+        // we use not standard date format (dd.mm.yyyy in js standard mm.dd.yyyy)
+        const year = titleWords.find(w => !isNaN(w) && w > 2000);
+
         return {
           resultType,
+          year,
           part: reverseIdx,
           suggest: suggest,
           suggestLC: suggestLC,
@@ -65,6 +70,9 @@ export class SuggestionsHelper {
           b.resultType === SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE) {
           return 1;
         }
+        if (a.year && b.year) {
+          return localeCompareWithYear(a, b);
+        }
         return a.suggest.localeCompare(b.suggest);
       }).map(o => o.suggest);
 
@@ -76,7 +84,19 @@ export class SuggestionsHelper {
   getSuggestions() {
     return this.suggestions;
   }
+
 }
+
+const localeCompareWithYear = (a, b) => {
+  const aSliced = a.suggest.split(a.year).map(w => w.trim());
+  const bSliced = b.suggest.split(b.year).map(w => w.trim());
+
+  if (aSliced[0] && aSliced[0].toLowerCase() !== bSliced[0].toLowerCase())
+    return aSliced[0].localeCompare(bSliced[0]);
+  if (a.year !== b.year)
+    return new Date(b.year) - new Date(a.year);
+  return aSliced[1].localeCompare(bSliced[1]);
+};
 
 const uidBytes = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
