@@ -73,7 +73,7 @@ class Transcription extends Component {
 
   static getUnitDerivedArticle(unit, type) {
     // suitable for having either derived articles or research materials only
-    const ct = type === 'articles' ? CT_ARTICLE : CT_RESEARCH_MATERIAL;
+    const ct    = type === 'articles' ? CT_ARTICLE : CT_RESEARCH_MATERIAL;
     const units = Object.values(unit.derived_units || {})
       .filter(x => x.content_type === ct
         && (x.files || []).some(f => f.type === MT_TEXT));
@@ -242,8 +242,9 @@ class Transcription extends Component {
   };
 
   prepareContent = (data) => {
-    const direction                            = getLanguageDirection(this.state.language);
-    const { srchstart, srchend, highlightAll } = getQuery(this.props.location);
+    const { textFiles, selectedFile, language } = this.state;
+    const direction                             = getLanguageDirection(language);
+    const { srchstart, srchend, highlightAll }  = getQuery(this.props.location);
 
     return (
       <div className="search-on-page--container">
@@ -263,8 +264,8 @@ class Transcription extends Component {
   };
 
   render() {
-    const { doc2htmlById, t, type }   = this.props;
-    const { selectedFile, languages, language, textFiles } = this.state;
+    const { doc2htmlById, t, type }             = this.props;
+    const { selectedFile, languages, language } = this.state;
 
     if (!selectedFile) {
       const text = type || 'transcription';
