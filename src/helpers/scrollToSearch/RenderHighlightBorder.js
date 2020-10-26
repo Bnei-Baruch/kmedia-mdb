@@ -17,7 +17,7 @@ export class RenderHighlightBorder extends RenderBase {
 
     const { before, after } = wrapSeekingPlace(this.source, this.tagPositions, fromStart, toEnd);
     const innerBefore       = this.prepareHighlightedPart(fromStart, toStart);
-    const innerAfter = this.matchStart.index !== this.matchEnd.index ? this.prepareHighlightedPart(fromEnd, toEnd) : "";
+    const innerAfter        = this.matchStart.index !== this.matchEnd.index ? this.prepareHighlightedPart(fromEnd, toEnd) : '';
 
     return `${before}${innerBefore}${this.notHighLightedInner(toStart, fromEnd)}${innerAfter}${after}`;
   }

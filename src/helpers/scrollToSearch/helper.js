@@ -1,10 +1,10 @@
-import {SCROLL_SEARCH_ID} from '../consts';
-import {stringify} from '../url';
-import {RenderHighlightAll} from './RenderHighlightAll';
-import {RenderHighlightBorder} from './RenderHighlightBorder';
+import { SCROLL_SEARCH_ID } from '../consts';
+import { stringify } from '../url';
+import { RenderHighlightAll } from './RenderHighlightAll';
+import { RenderHighlightBorder } from './RenderHighlightBorder';
 
 /* eslint-disable  no-useless-escape */
-export const KEEP_LETTERS_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]]/g;
+export const KEEP_LETTERS_RE            = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]]/g;
 export const KEEP_LETTERS_WITH_SPACE_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]\s]/g;
 
 export const OFFSET_TEXT_SEPARATOR = ':$:';
@@ -12,7 +12,7 @@ export const OFFSET_TEXT_SEPARATOR = ':$:';
 /***
  * help functions for render html
  */
-export const prepareScrollToSearch = (data, {srchstart: start, srchend: end}, highlightAll = false) => {
+export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }, highlightAll = false) => {
   if (!start?.length || !end?.length) {
     return data;
   }
@@ -34,13 +34,13 @@ export const getPositionInHtml = (pos, tags) => {
 
 export const filterTagsByBorder = (from, to, tags) => {
   const result = [];
-  let diff = 0;
+  let diff     = 0;
   for (const p of tags) {
     diff += p.str.length;
 
     const tagEndP = p.pos + p.str.length;
-    const startP = from + diff;
-    const endP = to + diff;
+    const startP  = from + diff;
+    const endP    = to + diff;
 
     if (tagEndP >= endP) {
       continue;
@@ -55,7 +55,7 @@ export const filterTagsByBorder = (from, to, tags) => {
 
     result.push(p);
   }
-  return {tagsPositionInner: result, from, to};
+  return { tagsPositionInner: result, from, to };
 };
 
 export const textToHtml = (source, from, to, allTags) => {
@@ -75,8 +75,8 @@ export const textToHtml = (source, from, to, allTags) => {
         return tags.map(t => t.str).join('');
 
       const r = tags.reduce((acc, t, i) => {
-        const p = t.noHtmlPos - from;
-        let {prevPosition, result} = acc;
+        const p                      = t.noHtmlPos - from;
+        let { prevPosition, result } = acc;
         if (p !== 0) {
           const s = word.slice(prevPosition, p);
           prevPosition += s.length;
@@ -87,15 +87,15 @@ export const textToHtml = (source, from, to, allTags) => {
           result.push(`<em class="_h">${word.slice(p)}</em>`);
         }
 
-        return {prevPosition, result};
-      }, {prevPosition: 0, result: []});
+        return { prevPosition, result };
+      }, { prevPosition: 0, result: [] });
       return r.result.join('');
     }).join(' ');
 };
 
 export const wrapSeekingPlace = (data, tags, fromNohtml, toNoHtml) => {
   const from = getPositionInHtml(fromNohtml, tags);
-  const to = getPositionInHtml(toNoHtml, tags);
+  const to   = getPositionInHtml(toNoHtml, tags);
 
   let openTagP;
   let closeTagP;
@@ -117,7 +117,7 @@ export const wrapSeekingPlace = (data, tags, fromNohtml, toNoHtml) => {
       }
     }
   }
-  openTagP = openTagP ?? tags[0];
+  openTagP  = openTagP ?? tags[0];
   closeTagP = closeTagP ?? tags[tags.length - 1];
 
   let before = data.slice(0, openTagP.pos);
@@ -126,40 +126,39 @@ export const wrapSeekingPlace = (data, tags, fromNohtml, toNoHtml) => {
   let after = data.slice(to, closeTagP.pos);
   after += data.slice(closeTagP.pos).replace(/<\/p>|<\/h\d>/, x => x + '</div>');
 
-  return {before, after};
+  return { before, after };
 };
 
 /***
  * help functions for build link
  */
-export const DOM_ROOT_ID = "roodNodeOfShareText"
+export const DOM_ROOT_ID                  = 'roodNodeOfShareText';
 export const buildSearchLinkFromSelection = (language) => {
   if (!window?.getSelection) {
-    return {url: null};
+    return { url: null };
   }
   const sel = window.getSelection();
   if (sel.isCollapsed || !sel.anchorNode || !sel.focusNode) {
-    return {url: null};
+    return { url: null };
   }
   const isForward = isSelectionForward(sel);
 
-  const words = sel.toString().replace(/\r?\n|\r{1,}/g, ' ').split(' ');
-  const {protocol, hostname, port, pathname} = window.location;
-  let sStart = words.slice(0, 5).join(' ');
-  let sEnd = words.slice(-5).join(' ');
+  const words                                  = sel.toString().replace(/\r?\n|\r{1,}/g, ' ').split(' ');
+  const { protocol, hostname, port, pathname } = window.location;
+  let sStart                                   = words.slice(0, 5).join(' ');
+  let sEnd                                     = words.slice(-5).join(' ');
 
+  let start = isForward ? { node: sel.anchorNode, offset: sel.anchorOffset }
+    : { node: sel.focusNode, offset: sel.focusOffset };
 
-  let start = isForward ? {node: sel.anchorNode, offset: sel.anchorOffset}
-    : {node: sel.focusNode, offset: sel.focusOffset};
-
-  let end = isForward ? {node: sel.focusNode, offset: sel.focusOffset}
-    : {node: sel.anchorNode, offset: sel.anchorOffset};
+  let end = isForward ? { node: sel.focusNode, offset: sel.focusOffset }
+    : { node: sel.anchorNode, offset: sel.anchorOffset };
 
   const sOffset = findOffsetOfDOMNode(start.node, start.offset);
   const eOffset = findOffsetOfDOMNode(end.node, end.offset);
 
   if (sOffset === null || eOffset === null)
-    return {url: null, text: null};
+    return { url: null, text: null };
 
   const query = {
     srchstart: wholeStartWord(start.node.textContent, start.offset) + sStart + OFFSET_TEXT_SEPARATOR + sOffset,
@@ -170,7 +169,7 @@ export const buildSearchLinkFromSelection = (language) => {
     query.language = language;
   }
   const url = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
-  return {url, text: sel.toString()};
+  return { url, text: sel.toString() };
 };
 
 const findOffsetOfDOMNode = (node, offset) => {
@@ -182,7 +181,7 @@ const findOffsetOfDOMNode = (node, offset) => {
     return offset;
 
   return findOffsetOfDOMNode(parent, offset);
-}
+};
 
 const countOffsetFromParent = (node) => {
   let offset = 0;
@@ -191,7 +190,7 @@ const countOffsetFromParent = (node) => {
     node = node.previousSibling;
   }
   return offset;
-}
+};
 
 const wholeStartWord = (text, offset) => {
   if (offset === 0 || KEEP_LETTERS_WITH_SPACE_RE.test(text[offset - 1]))

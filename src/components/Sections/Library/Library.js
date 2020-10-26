@@ -1,23 +1,27 @@
-import React, {useContext, useState, useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useContext, useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import {withNamespaces} from 'react-i18next';
-import {useHistory, useLocation} from 'react-router-dom';
-import {Container, Portal, Segment} from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
+import { useHistory, useLocation } from 'react-router-dom';
+import { Container, Portal, Segment } from 'semantic-ui-react';
 
-import {selectors} from '../../../redux/modules/assets';
-import {assetUrl} from '../../../helpers/Api';
-import {isEmpty} from '../../../helpers/utils';
+import { selectors } from '../../../redux/modules/assets';
+import { assetUrl } from '../../../helpers/Api';
+import { isEmpty } from '../../../helpers/utils';
 import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
-import PDF, {isTaas, startsFrom} from '../../shared/PDF/PDF';
-import {getLanguageDirection} from '../../../helpers/i18n-utils';
-import {getQuery, updateQuery} from '../../../helpers/url';
-import {prepareScrollToSearch, buildSearchLinkFromSelection, DOM_ROOT_ID} from '../../../helpers/scrollToSearch/helper';
-import {getPageFromLocation} from '../../Pagination/withPagination';
+import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
+import { getQuery, updateQuery } from '../../../helpers/url';
+import {
+  prepareScrollToSearch,
+  buildSearchLinkFromSelection,
+  DOM_ROOT_ID
+} from '../../../helpers/scrollToSearch/helper';
+import { getPageFromLocation } from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
 import ShareBar from '../../shared/ShareSelected';
-import {DeviceInfoContext} from '../../../helpers/app-contexts';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 export const checkRabashGroupArticles = (source) => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -42,21 +46,21 @@ const getFullUrl = (pdfFile, data, language, source) => {
   return assetUrl(`sources/${id}/${data[language].docx}`);
 };
 
-const Library = ({data, source, language = null, languages = [], langSelectorMount = null, downloadAllowed, handleLanguageChanged, t,}) => {
-  const location = useLocation();
-  const history = useHistory();
-  const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
-  const [searchUrl, setSearchUrl] = useState();
-  const [searchText, setSearchText] = useState();
-  const {srchstart, srchend, highlightAll} = getQuery(location);
-  const search = {srchstart, srchend};
-  const {isMobileDevice} = useContext(DeviceInfoContext);
+const Library = ({ data, source, language = null, languages = [], langSelectorMount = null, downloadAllowed, handleLanguageChanged, t, }) => {
+  const location                             = useLocation();
+  const history                              = useHistory();
+  const [pageNumber, setPageNumber]          = useState(getPageFromLocation(location));
+  const [searchUrl, setSearchUrl]            = useState();
+  const [searchText, setSearchText]          = useState();
+  const { srchstart, srchend, highlightAll } = getQuery(location);
+  const search                               = { srchstart, srchend };
+  const { isMobileDevice }                   = useContext(DeviceInfoContext);
 
   const content = useSelector(state => selectors.getAsset(state.assets));
 
-//use  early definition for use in useEffect
+  //use  early definition for use in useEffect
   const updateSelection = () => {
-    const {url, text} = buildSearchLinkFromSelection(language);
+    const { url, text } = buildSearchLinkFromSelection(language);
     if (!url)
       return;
     setSearchText(text);
@@ -83,12 +87,11 @@ const Library = ({data, source, language = null, languages = [], langSelectorMou
 
     document.addEventListener('mouseup', handleOnMouseUp);
     return () => document.removeEventListener('mouseup', handleOnMouseUp);
-  }, []);
+  });
 
   if (!data) {
     return <Segment basic>&nbsp;</Segment>;
   }
-
 
   const taas = isTaas(source);
 
@@ -114,15 +117,15 @@ const Library = ({data, source, language = null, languages = [], langSelectorMou
       return null;
 
     return (
-      <ShareBar url={searchUrl} text={searchText}/>
+      <ShareBar url={searchUrl} text={searchText} />
     );
   };
 
   const getContentToDisplay = () => {
-    const {wip, err, data: contentData} = content;
-    const starts = startsFrom(source) || 1;
+    const { wip, err, data: contentData } = content;
+    const starts                          = startsFrom(source) || 1;
 
-    const wipErr = WipErr({wip, err, t});
+    const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
       return wipErr;
     }
@@ -144,8 +147,8 @@ const Library = ({data, source, language = null, languages = [], langSelectorMou
           <div
             id={DOM_ROOT_ID}
             onMouseDown={handleOnMouseDown}
-            style={{direction, textAlign: (direction === 'ltr' ? 'left' : 'right')}}
-            dangerouslySetInnerHTML={{__html: prepareScrollToSearch(contentData, search, highlightAll === 'true')}}
+            style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
+            dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(contentData, search, highlightAll === 'true') }}
           />
         </div>
       );
@@ -186,7 +189,7 @@ const Library = ({data, source, language = null, languages = [], langSelectorMou
           ? <Portal open preprend mountNode={langSelectorMount}>{languageBar}</Portal>
           : languageBar
       }
-      <Download path={fullUrlPath} mimeType={mimeType} downloadAllowed={downloadAllowed}/>
+      <Download path={fullUrlPath} mimeType={mimeType} downloadAllowed={downloadAllowed} />
       {contentsToDisplay}
     </div>
   );
