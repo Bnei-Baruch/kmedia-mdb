@@ -145,14 +145,13 @@ class Transcription extends Component {
 
   componentDidUpdate(prevProp, prevState) {
     const { selectedFile, language } = this.state;
-    const { srchstart, srchend }     = getQuery(this.props.location);
+    const { srchstart }     = getQuery(this.props.location);
 
     if (selectedFile !== prevState.selectedFile || language !== prevState.language) {
       this.loadFile(selectedFile);
     }
 
     if (srchstart
-      && srchend
       && selectedFile
       && prevProp.doc2htmlById[selectedFile.id]
       && prevProp.doc2htmlById[selectedFile.id].wip === true

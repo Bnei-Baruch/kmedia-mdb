@@ -1610,8 +1610,10 @@
   padding: 5px;
 
   em._h {
-    font-weight: bold;
     border-bottom: 1px solid rgba(65, 131, 196, .3);
+  }
+  em._b {
+    font-weight: bold;
   }
 }
 

@@ -1,6 +1,8 @@
 import { getPositionInHtml, OFFSET_TEXT_SEPARATOR, textToHtml, wrapSeekingPlace } from './helper';
 import { RenderBase } from './RenderBase';
 
+const MIN_STOP_TO_BOLD_BORDER = 700;
+
 export class RenderHighlightBorder extends RenderBase {
 
   constructor(data, start, end) {
@@ -48,16 +50,18 @@ export class RenderHighlightBorder extends RenderBase {
     if (!fromStart || !fromEnd)
       return this.source;
 
+    const isBold = toEnd - fromStart < MIN_STOP_TO_BOLD_BORDER;
+
     const { before, after } = wrapSeekingPlace(this.source, this.tagPositions, fromStart, toEnd);
-    const innerBefore       = this.prepareHighlightedPart(fromStart, toStart);
-    const innerAfter        = this.matchStart.index !== this.matchEnd.index ? this.prepareHighlightedPart(fromEnd, toEnd) : '';
+    const innerBefore       = this.prepareHighlightedPart(fromStart, toStart, isBold);
+    const innerAfter        = this.matchStart.index !== this.matchEnd.index ? this.prepareHighlightedPart(fromEnd, toEnd, isBold) : '';
 
     return `${before}${innerBefore}${this.notHighLightedInner(toStart, fromEnd)}${innerAfter}${after}`;
   }
 
-  prepareHighlightedPart(from, to) {
+  prepareHighlightedPart(from, to, isBold) {
     const cleanHtml = this.dataCleanHtml.slice(from, to);
-    return textToHtml(cleanHtml, from, to, this.tagPositions);
+    return textToHtml(cleanHtml, from, to, this.tagPositions, isBold);
   }
 
   notHighLightedInner(fromNoHtml, toNoHtml) {

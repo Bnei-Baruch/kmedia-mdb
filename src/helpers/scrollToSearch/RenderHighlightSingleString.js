@@ -3,7 +3,7 @@ import { RenderBase } from './RenderBase';
 
 export class RenderHighlightSingleString extends RenderBase {
   constructor(data, search) {
-    const splited = search.split(OFFSET_TEXT_SEPARATOR)[0];
+    const splited = search.split(OFFSET_TEXT_SEPARATOR);
     super(data, splited[0], null);
     this.place = splited[1];
 

@@ -9,6 +9,7 @@ export const KEEP_LETTERS_RE            = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]]/g;
 export const KEEP_LETTERS_WITH_SPACE_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]\s]/g;
 
 export const OFFSET_TEXT_SEPARATOR = ':$:';
+const MIN_NUMBER_WORDS_IN_LINK     = 5;
 
 /***
  * help functions for render html
@@ -61,7 +62,7 @@ export const filterTagsByBorder = (from, to, tags) => {
   return { tagsPositionInner: result, from, to };
 };
 
-export const textToHtml = (source, from, to, allTags) => {
+export const textToHtml = (source, from, to, allTags, isBold = true) => {
   let currentPos = from;
   return source
     .split(' ')
@@ -71,8 +72,9 @@ export const textToHtml = (source, from, to, allTags) => {
         .filter((t, i) => currentPos < t.noHtmlPos && currentPos + word.length + 1 >= t.noHtmlPos);
       currentPos += word.length + 1;
 
+      const cssClass = `_h ${isBold ? '_b' : ''}`;
       if (tags.length === 0)
-        return word.length === 0 ? '' : `<em class="_h">${word}</em>`;
+        return word.length === 0 ? '' : `<em class="${cssClass}">${word}</em>`;
 
       if (word.length === 0)
         return tags.map(t => t.str).join('');
@@ -83,11 +85,11 @@ export const textToHtml = (source, from, to, allTags) => {
         if (p !== 0) {
           const s = word.slice(prevPosition, p);
           prevPosition += s.length;
-          result.push(`<em class="_h">${s}</em>`);
+          result.push(`<em class="${cssClass}">${s}</em>`);
         }
         result.push(t.str);
         if (i === tags.length - 1) {
-          result.push(`<em class="_h">${word.slice(p)}</em>`);
+          result.push(`<em class="${cssClass}">${word.slice(p)}</em>`);
         }
 
         return { prevPosition, result };
@@ -146,10 +148,13 @@ export const buildSearchLinkFromSelection = (language) => {
   }
   const isForward = isSelectionForward(sel);
 
-  const words                                  = sel.toString().replace(/\r?\n|\r{1,}/g, ' ').split(' ');
+  const words = sel.toString().replace(/\r?\n|\r{1,}/g, ' ').split(' ');
+  if (words.length < MIN_NUMBER_WORDS_IN_LINK * 2)
+    return buildLinkForShortSelect(words, sel, isForward, language);
+
   const { protocol, hostname, port, pathname } = window.location;
-  let sStart                                   = words.slice(0, 5).join(' ');
-  let sEnd                                     = words.slice(-5).join(' ');
+  let sStart                                   = words.slice(0, MIN_NUMBER_WORDS_IN_LINK).join(' ');
+  let sEnd                                     = words.slice(-1 * MIN_NUMBER_WORDS_IN_LINK).join(' ');
 
   let start = isForward ? { node: sel.anchorNode, offset: sel.anchorOffset }
     : { node: sel.focusNode, offset: sel.focusOffset };
@@ -166,6 +171,29 @@ export const buildSearchLinkFromSelection = (language) => {
   const query = {
     srchstart: wholeStartWord(start.node.textContent, start.offset) + sStart + OFFSET_TEXT_SEPARATOR + sOffset,
     srchend: sEnd + wholeEndWord(end.node.textContent, end.offset) + OFFSET_TEXT_SEPARATOR + eOffset
+  };
+
+  if (language) {
+    query.language = language;
+  }
+  const url = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
+  return { url, text: sel.toString() };
+};
+
+const buildLinkForShortSelect = (words, sel, isForward, language) => {
+
+  const { protocol, hostname, port, pathname } = window.location;
+
+  const { node, offset } = isForward ? { node: sel.anchorNode, offset: sel.anchorOffset }
+    : { node: sel.focusNode, offset: sel.focusOffset };
+
+  const fullOffset = findOffsetOfDOMNode(node, offset);
+
+  if (fullOffset === null)
+    return { url: null, text: null };
+
+  const query = {
+    srchstart: wholeStartWord(node.textContent, offset) + words.join(' ') + OFFSET_TEXT_SEPARATOR + fullOffset,
   };
 
   if (language) {

@@ -1,4 +1,4 @@
-import { KEEP_LETTERS_RE, OFFSET_TEXT_SEPARATOR } from './helper';
+import { KEEP_LETTERS_RE } from './helper';
 
 export class RenderBase {
   tagPositions = [];

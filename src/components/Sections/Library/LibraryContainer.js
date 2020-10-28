@@ -24,7 +24,7 @@ import { getLanguageDirection, isLanguageRtl } from '../../../helpers/i18n-utils
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getQuery } from '../../../helpers/url';
 import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
-import {isTaas} from "../../shared/PDF/PDF";
+import { isTaas } from '../../shared/PDF/PDF';
 
 class LibraryContainer extends Component {
   static contextType = DeviceInfoContext;
@@ -127,10 +127,10 @@ class LibraryContainer extends Component {
 
     let { isReadable, scrollTopPosition, tocIsActive, doScroll = (!assetWIP && prevProps.assetWIP) } = this.state;
 
-    const { srchstart, srchend } = getQuery(location);
-    const scrollingElement       = isReadable ? this.articleRef : document.scrollingElement;
+    const { srchstart }    = getQuery(location);
+    const scrollingElement = isReadable ? this.articleRef : document.scrollingElement;
 
-    if (srchstart && srchend && doScroll) {
+    if (srchstart && doScroll) {
       const element = document.getElementById(SCROLL_SEARCH_ID);
       element && (scrollingElement.scrollTop = element.offsetTop);
       this.setState({ doScroll: false });
@@ -388,22 +388,22 @@ class LibraryContainer extends Component {
 
   static nextPrevButtons = props => {
     const { sourceId, getPathByID } = props;
-    
+
     if (isTaas(sourceId))
       return null;
 
-    const fullPath    = LibraryContainer.getFullPath(sourceId, getPathByID);
+    const fullPath = LibraryContainer.getFullPath(sourceId, getPathByID);
 
     const len = fullPath.length;
 
     if (len < 2)
       return null;
 
-    const activeIndex = getIndex(fullPath[len-2], fullPath[len-1]);
+    const activeIndex = getIndex(fullPath[len - 2], fullPath[len - 1]);
     if (activeIndex === -1) {
       return null;
     }
-    const children = fullPath[len-2].children;
+    const children = fullPath[len - 2].children;
     return (
       <div className="library__nextPrevButtons">
         {LibraryContainer.nextPrevLink(children, activeIndex - 1, false, props)}
