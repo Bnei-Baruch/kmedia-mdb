@@ -1,5 +1,5 @@
 import {OFFSET_TEXT_SEPARATOR, prepareScrollToSearch} from '../helper';
-import {RenderBase} from "../RenderBase";
+import {RenderHighlightBorder} from "../RenderHighlightBorder";
 
 
 describe('Bug - multi matches', () => {
@@ -14,7 +14,7 @@ describe('Bug - multi matches', () => {
     const eIndex = data.indexOf(end, sIndex);
     end = end + OFFSET_TEXT_SEPARATOR + eIndex;
 
-    const render = new RenderBase(data, start, end);
+    const render = new RenderHighlightBorder(data, start, end);
     render.clearHtmlFromTags();
     render.defineMatch();
 

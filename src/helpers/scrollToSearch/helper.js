@@ -2,6 +2,7 @@ import { SCROLL_SEARCH_ID } from '../consts';
 import { stringify } from '../url';
 import { RenderHighlightAll } from './RenderHighlightAll';
 import { RenderHighlightBorder } from './RenderHighlightBorder';
+import { RenderHighlightSingleString } from './RenderHighlightSingleString';
 
 /* eslint-disable  no-useless-escape */
 export const KEEP_LETTERS_RE            = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]]/g;
@@ -13,11 +14,13 @@ export const OFFSET_TEXT_SEPARATOR = ':$:';
  * help functions for render html
  */
 export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }, highlightAll = false) => {
-  if (!start?.length || !end?.length) {
+  if (!start?.length) {
     return data;
   }
   let render;
-  if (highlightAll)
+  if (!end?.length)
+    render = new RenderHighlightSingleString(data, start);
+  else if (highlightAll)
     render = new RenderHighlightAll(data, start, end);
   else
     render = new RenderHighlightBorder(data, start, end);

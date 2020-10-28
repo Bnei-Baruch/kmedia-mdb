@@ -4,13 +4,9 @@ export class RenderBase {
   tagPositions = [];
 
   constructor(data, start, end) {
-    this.source     = data.replace(/\r?\n|\r{1,}|\s{2,}/g, ' ');
-    const sSplited  = start.split(OFFSET_TEXT_SEPARATOR);
-    const eSplited  = end.split(OFFSET_TEXT_SEPARATOR);
-    this.startPlace = sSplited[1];
-    this.endPlace   = eSplited[1];
-    this.start      = sSplited[0];
-    this.end        = eSplited[0];
+    this.source = data.replace(/\r?\n|\r{1,}|\s{2,}/g, ' ');
+    this.start  = start;
+    this.end    = end;
   }
 
   build() {
@@ -39,26 +35,11 @@ export class RenderBase {
   }
 
   getMatches() {
-    const start = this.findClose(this.buildMatch(this.start, this.dataCleanHtml), this.startPlace);
-    const end   = this.findClose(this.buildMatch(this.end, this.dataCleanHtml), this.endPlace);
-    return { start, end };
+    throw new Error('abstract method');
   };
 
   findClose(list, pos) {
-    if (list.length === 0)
-      return null;
-    let result = list[0];
-    let diff   = Math.abs(result.index - pos);
-
-    for (const x of list) {
-      const nextDiff = Math.abs(x.index - pos);
-      if (nextDiff > diff) {
-        break;
-      }
-      diff   = nextDiff;
-      result = x;
-    }
-    return result;
+    throw new Error('abstract method');
   }
 
   buildMatch(search, data) {
