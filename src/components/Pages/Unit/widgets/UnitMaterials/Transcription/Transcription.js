@@ -87,7 +87,8 @@ class Transcription extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const { contentLanguage, uiLanguage, unit, type } = props;
+    const { contentLanguage, uiLanguage, unit, type, location } = props;
+    const { selectedFileId }                                    = getQuery(location);
 
     const textFiles = Transcription.getTextFiles(unit, type);
     const languages = uniq(textFiles.map(x => x.language));
@@ -101,9 +102,12 @@ class Transcription extends Component {
     if (newLanguage !== undefined && state.language && state.language !== newLanguage) {
       newLanguage = state.language;
     }
+    if (state.selectedFile) {
+      return { selectedFile: state.selectedFile, languages, language: newLanguage, textFiles };
+    }
 
-    const selectedFile = state.selectedFile ? state.selectedFile : Transcription.selectFile(textFiles, newLanguage);
-
+    const fileFromLocation = textFiles.find(f => f.id === selectedFileId);
+    const selectedFile  = fileFromLocation ? fileFromLocation : Transcription.selectFile(textFiles, newLanguage);
     return { selectedFile, languages, language: newLanguage, textFiles };
   }
 
@@ -137,7 +141,7 @@ class Transcription extends Component {
       || (nextProps.unit.id !== props.unit.id)
       || (nextProps.unit.files !== props.unit.files
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
-        || (state.selectedFile && (props.doc2htmlById[state.selectedFile.id].wip !== nextProps.doc2htmlById[state.selectedFile.id].wip))
+        || (state.selectedFile && props.doc2htmlById && (props.doc2htmlById[state.selectedFile.id]?.wip !== nextProps.doc2htmlById[state.selectedFile.id]?.wip))
         || nextState.language !== state.language
         || nextState.searchUrl !== state.searchUrl
         || nextState.selectedFile !== state.selectedFile);
@@ -145,7 +149,7 @@ class Transcription extends Component {
 
   componentDidUpdate(prevProp, prevState) {
     const { selectedFile, language } = this.state;
-    const { srchstart }     = getQuery(this.props.location);
+    const { srchstart }              = getQuery(this.props.location);
 
     if (selectedFile !== prevState.selectedFile || language !== prevState.language) {
       this.loadFile(selectedFile);
@@ -236,7 +240,8 @@ class Transcription extends Component {
     let { url, text: searchText } = buildSearchLinkFromSelection(this.state.language);
     if (!url)
       return;
-    const searchUrl = url + '&activeTab=transcription';
+    const selectedFileProps = this.state.selectedFile ? `&selectedFileId=${this.state.selectedFile.id}` : '';
+    const searchUrl         = `${url}&activeTab=${this.props.activeTab}${selectedFileProps}`;
     this.setState({ searchUrl, searchText });
   };
 
