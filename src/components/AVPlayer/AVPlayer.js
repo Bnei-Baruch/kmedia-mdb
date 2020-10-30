@@ -43,8 +43,6 @@ const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
 const playbackToValue = playback => parseFloat(playback.slice(0, -1));
 
 class AVPlayer extends Component {
-  static contextType = DeviceInfoContext;
-
   static propTypes = {
     t: PropTypes.func.isRequired,
     media: shapes.Media.isRequired,
@@ -174,7 +172,7 @@ class AVPlayer extends Component {
     this.hideControlsTimeout();
 
     const { media, item, autoPlay }                          = this.props;
-    const { deviceInfo: { browser: { name: browserName } } } = this.context;
+    const { deviceInfo: { browser: { name: browserName } } } = DeviceInfoContext;
     this.setState({
       isClient: true,
       start,
