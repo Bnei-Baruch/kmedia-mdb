@@ -41,7 +41,7 @@ const Materials = ({ unit = undefined, t }) => {
     {
       name: 'transcription',
       label: t('materials.transcription.header'),
-      component: <TranscriptionContainer unit={unit} key="transcription" activeTab="articles" />
+      component: <TranscriptionContainer unit={unit} key="transcription" />
     },
     {
       name: 'sources',
@@ -75,7 +75,7 @@ const Materials = ({ unit = undefined, t }) => {
     items.push({
       name: 'research',
       label: t('materials.research.header'),
-      component: <TranscriptionContainer unit={unit} key="research" type="research" activeTab="articles" />
+      component: <TranscriptionContainer unit={unit} key="research" type="research" activeTab="research" />
     });
   }
 
