@@ -72,10 +72,13 @@ export class SuggestionsHelper {
           b.resultType === ES_RESULT_TYPE_SOURCES) {
           return 1;
         }
-        if (a.suggestLC.startsWith(query) && !b.suggestLC.startsWith(query)) {
+        const aSuggestion = a.suggestLC.startsWith(query);
+        const bSuggestion = a.suggestLC.startsWith(query);
+        
+        if (aSuggestion && !bSuggestion) {
           return -1;
         }
-        if (!a.suggestLC.startsWith(query) && b.suggestLC.startsWith(query)) {
+        if (!aSuggestion && bSuggestion) {
           return 1;
         }
         if (a.year && b.year) {
