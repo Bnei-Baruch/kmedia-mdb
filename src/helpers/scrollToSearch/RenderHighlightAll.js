@@ -16,7 +16,7 @@ export class RenderHighlightAll extends RenderBase {
     for (const s of sMatch) {
       for (const e of eMatch) {
         const d = e.index - s.index;
-        if (d > diff) {
+        if (d < diff) {
           diff  = d;
           start = s;
           end   = e;
