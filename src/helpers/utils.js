@@ -271,51 +271,6 @@ export const areEqual = (prevProps, nextProps) => {
   return isEqual(prev, next);
 };
 
-export const prepareScrollToSearch = (data, search) => {
-  return data.split('<p').map((p, i) => {
-    const clearTags = p.replace(/<sup>.*?<\/sup>/ig, '').replace(/<.+?>/gi, '');
-    if (i === 0 || clearTags.indexOf(search) === -1) {
-      return p;
-    }
-
-    return ` class="scroll-to-search"  id="${consts.SCROLL_SEARCH_ID}" ${selectWholeWorlds(p, search)}`;
-  }).join('<p');
-};
-
-export const selectWholeWorlds = (paragraph, subStr) => {
-  let start = paragraph.indexOf(subStr);
-  if (start === -1) {
-    return paragraph;
-  }
-  if (paragraph[start - 1] === '>') {
-    paragraph = `${paragraph.substring(0, start)} ${paragraph.substring(start)}`;
-    start++;
-  }
-  const end            = start + subStr.length;
-  let prevPosition     = 0, before = '', after = '', selected = '';
-  const paragraphAsArr = paragraph.split(' ');
-
-  for (let i = 0; i < paragraphAsArr.length; i++) {
-    const s        = paragraphAsArr[i];
-    const position = i === 0 ? s.length : prevPosition + s.length + 1;
-
-    if (prevPosition > end) {
-      after += s + ' ';
-      continue;
-    }
-
-    prevPosition = position;
-
-    if (position < start) {
-      before += s + ' ';
-      continue;
-    }
-
-    selected += s + ' ';
-  }
-  return `${before.trim()} <em class="highlight">${selected.trim()}</em> ${after.trim()}`;
-};
-
 // map units to sections
 export const unitsBySection = units => units?.reduce((acc, u) => {
   const section = canonicalSectionByUnit(u);

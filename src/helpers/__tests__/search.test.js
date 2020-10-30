@@ -1,5 +1,5 @@
 import { ES_RESULT_TYPE_SOURCES, ES_RESULT_TYPE_TAGS } from '../consts';
-import { localeCompareWithYear, SuggestionsHelper } from '../search';
+import { SuggestionsHelper } from '../search';
 
 const buildResults = (query, options) => {
   const results                            = {
