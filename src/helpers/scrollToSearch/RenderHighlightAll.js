@@ -11,12 +11,12 @@ export class RenderHighlightAll extends RenderBase {
   findClose(sMatch, eMatch) {
     if (sMatch.length === 0 || eMatch.length === 0)
       return { start: null, end: null };
-    let start = null, end = null;
-    let diff  = 0;
+    let start = sMatch[0], end = eMatch[eMatch.length - 1];
+    let diff  = end.index - start.index;
     for (const s of sMatch) {
       for (const e of eMatch) {
         const d = e.index - s.index;
-        if (d < diff) {
+        if (d > 0 && d < diff) {
           diff  = d;
           start = s;
           end   = e;
