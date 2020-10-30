@@ -193,7 +193,7 @@ class Transcription extends Component {
     if (!textFiles)
       return null;
     const relevantTextFiles = textFiles.filter(t => t.title);
-    if (relevantTextFiles.length == 0)
+    if (relevantTextFiles.length === 0)
       return null;
     return <select
       className="doc2html-dropdown-container"

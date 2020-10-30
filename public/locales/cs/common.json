@@ -128,6 +128,7 @@
     "no-results": "Žádné výsledky",
     "pagination-results": "Výsledky {{start}} - {{end}}  {{total}}",
     "link-copied-to-clipboard": "Odkaz byl zkopírován",
+    "text-copied-to-clipboard": "Text bol skopírovaný!",
     "unknown": "Neznámé",
     "unsupported-media-format": "Nepodporovaný formát",
     "error-loading-file": "Chyba nahrávání souboru",

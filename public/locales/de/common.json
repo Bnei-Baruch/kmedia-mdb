@@ -142,6 +142,7 @@
     "no-results": "Keine Ergebnisse",
     "pagination-results": "Ergebnisse {{start}} - {{end}} von {{total}}",
     "link-copied-to-clipboard": "Link kopiert!",
+    "text-copied-to-clipboard": "Text wurde kopiert!",
     "unknown": "Unbekannt",
     "unsupported-media-format": "Nicht unterstütztes Format.",
     "error-loading-file": "Fehler beim Herunterladen der Datei.",

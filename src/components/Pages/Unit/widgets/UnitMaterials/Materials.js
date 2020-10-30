@@ -20,7 +20,7 @@ import { isEmpty } from '../../../../../helpers/utils';
 import DerivedUnits from './DerivedUnits';
 
 const derivedTextUnits = (unit) => {
-  const types = {};
+  const types    = {};
   const callback = (x) => {
     types[x.content_type] = (x.files || []).some(f => f.type === MT_TEXT);
   };
