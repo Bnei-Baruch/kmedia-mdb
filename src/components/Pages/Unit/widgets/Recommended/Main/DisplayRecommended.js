@@ -25,7 +25,7 @@ const DisplayRecommended = ({ unit, t, recommendedUnits }) => {
       <Item.Group divided unstackable link className="avbox__playlist-view">
         {
           unitsToDisplay
-            .map(rUnit => 
+            .map(rUnit =>
               <Item
                 key={rUnit.id}
                 as={Link}
@@ -70,8 +70,8 @@ DisplayRecommended.propTypes = {
   t: PropTypes.func.isRequired
 }
 
-const areEqual = (prevProps, nextProps) => 
-  prevProps.unit.id === nextProps.unit.id && 
+const areEqual = (prevProps, nextProps) =>
+  prevProps.unit.id === nextProps.unit.id &&
   isEqual(prevProps.recommendedUnits, nextProps.recommendedUnits);
 
 export default React.memo(DisplayRecommended, areEqual);

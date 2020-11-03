@@ -13,7 +13,7 @@ import Recommended from './widgets/Recommended/Main/Recommended';
 import playerHelper from '../../../helpers/player';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
-const renderPlayer = (unit, language, embed) => !embed 
+const renderPlayer = (unit, language, embed) => !embed
   ? <div className="playlist-collection-page">
     <Container className="avbox">
       <Grid>
@@ -31,7 +31,7 @@ const renderPlayer = (unit, language, embed) => !embed
 export const UnitPage = ({ unit, language, section = '', location = {} }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const embed = playerHelper.getEmbedFromQuery(location);
-  
+
   if (!unit) {
     return null;
   }
@@ -55,11 +55,11 @@ export const UnitPage = ({ unit, language, section = '', location = {} }) => {
                 </Grid.Column>
               </Grid.Row>
             </Grid.Column>
-            {!isMobileDevice && 
-              <Grid.Column mobile={16} tablet={6} computer={6}>	
+            {!isMobileDevice &&
+              <Grid.Column mobile={16} tablet={6} computer={6}>
                 <Recommended unit={unit} />
               </Grid.Column>
-            }	
+            }
           </Grid.Row>
         </Grid>
       </Container>
