@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withNamespaces } from 'react-i18next';
@@ -6,7 +6,6 @@ import { Container, Grid } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import Helmets from '../../shared/Helmets';
-import WipErr from '../../shared/WipErr/WipErr';
 import AVBox from './widgets/AVBox/AVBox';
 import Materials from './widgets/UnitMaterials/Materials';
 import Info from './widgets/Info/Info';
@@ -14,128 +13,71 @@ import Recommended from './widgets/Recommended/Main/Recommended';
 import playerHelper from '../../../helpers/player';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
-export class UnitPage extends Component {
-  static contextType = DeviceInfoContext;
+const renderPlayer = (unit, language, embed) => !embed
+  ? <div className="playlist-collection-page">
+    <Container className="avbox">
+      <Grid>
+        <Grid.Row className={classNames('', {'layout--is-audio': false})} >
+          <Grid.Column id="avbox__player">
+            <AVBox unit={unit} language={language} />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </Container>
+  </div>
+  : <AVBox unit={unit} language={language} />
 
-  static propTypes = {
-    unit: shapes.ContentUnit,
-    wip: shapes.WIP,
-    err: shapes.Error,
-    section: PropTypes.string,
-    language: PropTypes.string.isRequired,
-    t: PropTypes.func.isRequired,
-    location: shapes.HistoryLocation,
-  };
 
-  static defaultProps = {
-    unit: null,
-    wip: false,
-    err: null,
-    section: '',
-    location: {}
-  };
+export const UnitPage = ({ unit, language, section = '', location = {} }) => {
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const embed = playerHelper.getEmbedFromQuery(location);
 
-  constructor(props) {
-    super(props);
-    const { location } = props;
-    this.state         = { 
-      embed: playerHelper.getEmbedFromQuery(location), 
-    };
+  if (!unit) {
+    return null;
   }
 
-  renderHelmet() {
-    const { unit, language } = this.props;
-    return <Helmets.AVUnit unit={unit} language={language} />;
-  }
+  const computerWidth = !isMobileDevice ? 10 : 16;
 
-  renderPlayer() {
-    const { unit, language } = this.props;
-    const { embed }          = this.state;
-
-    return (!embed 
-      ? <div className="playlist-collection-page">
-        <Container className="avbox">
-          <Grid>
-            <Grid.Row className={classNames('', {'layout--is-audio': false})} >
-              <Grid.Column id="avbox__player">
-                <AVBox unit={unit} language={language} />
+  return !embed ? (
+    <div className="unit-page">
+      <Helmets.AVUnit unit={unit} language={language} />
+      <Container>
+        <Grid padded>
+          <Grid.Row>
+            <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}>
+              <Grid.Row>
+                {renderPlayer(unit, language, embed)}
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Column>
+                  <Info unit={unit} section={section} />
+                  <Materials unit={unit} />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid.Column>
+            {!isMobileDevice &&
+              <Grid.Column mobile={16} tablet={6} computer={6}>
+                <Recommended unit={unit} />
               </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Container>
-      </div>
-      : <AVBox unit={unit} language={language} />
-    );
-  }
-
-  renderRecommendations() {
-    const { unit } = this.props;
-    return <Recommended unit={unit} />;
-  }
-
-  renderInfo() {
-    const { unit, section } = this.props;
-    return <Info unit={unit} section={section} />;
-  }
-
-  renderMaterials() {
-    const { unit } = this.props;
-    return <Materials unit={unit} />;
-  }
-
-  renderContent() {
-    const { embed } = this.state;
-    const { isMobileDevice } = this.context;
-   
-    return !embed ? (
-      <div className="unit-page">
-        {this.renderHelmet()}
-        <Container>
-          <Grid padded>
-            <Grid.Row>
-              <Grid.Column mobile={16} tablet={10} computer={10}>
-                <Grid.Row>
-                  {this.renderPlayer()}
-                </Grid.Row>
-                <Grid.Row>
-                  <Grid.Column>
-                    {this.renderInfo()}
-                    {this.renderMaterials()}
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid.Column>
-              <Grid.Column mobile={16} tablet={6} computer={6}>	
-                {!isMobileDevice && 
-                  this.renderRecommendations()
-                }	
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Container>
-      </div>
-    ) : (
-      <div className="unit-page">
-        {this.renderPlayer()}
-      </div>
-    );
-  }
-
-  render() {
-    const { unit, wip, err, t } = this.props;
-
-    const wipErr = WipErr({ wip, err, t });
-    if (wipErr) {
-      return wipErr;
-    }
-
-    if (!unit) {
-      return null;
-    }
-
-    return this.renderContent();
-  }
+            }
+          </Grid.Row>
+        </Grid>
+      </Container>
+    </div>
+  ) : (
+    <div className="unit-page">
+      {renderPlayer(unit, language, embed)}
+    </div>
+  );
 }
+
+UnitPage.propTypes = {
+  unit: shapes.ContentUnit,
+  section: PropTypes.string,
+  language: PropTypes.string.isRequired,
+  location: shapes.HistoryLocation,
+};
 
 export const wrap = WrappedComponent => withNamespaces()(WrappedComponent);
 
-export default wrap(UnitPage);
+export default UnitPage;

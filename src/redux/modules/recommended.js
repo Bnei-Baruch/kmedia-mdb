@@ -40,6 +40,7 @@ const onSuccess = (state, action) => {
 const onFailure = (state, payload) => {
   state.wip = false;
   state.err = payload;
+  state.recommendedItems = [];
 
   return state;
 };

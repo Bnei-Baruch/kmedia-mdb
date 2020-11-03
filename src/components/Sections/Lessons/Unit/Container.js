@@ -2,23 +2,26 @@ import React from 'react';
 
 import { UnitContainer, wrap as wrapContainer } from '../../../Pages/Unit/Container';
 import { UnitPage, wrap as wrapPage } from '../../../Pages/Unit/Page';
-
-const MyWrappedUnitPage = wrapPage(UnitPage);
+import WipErr from '../../../shared/WipErr/WipErr';
 
 class MyUnitContainer extends UnitContainer {
   render() {
-    const { language, unit, location, wip, err } = this.props;
+    const { language, unit, location, wip, err, t } = this.props;
+
+    const wipErr = WipErr({ wip, err, t });
+    if (wipErr) {
+      return wipErr;
+    }
+
     return (
-      <MyWrappedUnitPage
+      <UnitPage
         section="lessons"
         unit={wip || err ? null : unit}
         language={language}
         location={location}
-        wip={wip}
-        err={err}
       />
     );
   }
 }
 
-export default wrapContainer(MyUnitContainer);
+export default wrapContainer(wrapPage(MyUnitContainer));

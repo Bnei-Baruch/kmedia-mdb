@@ -150,7 +150,7 @@ export const EventCollection = PropTypes.shape({
 
 export const EventItem = PropTypes.shape({
   ...MDBDenormalizedContentUnit,
-  film_date: PropTypes.string.isRequired,
+  film_date: PropTypes.string,
 });
 
 export const Author = PropTypes.shape({
