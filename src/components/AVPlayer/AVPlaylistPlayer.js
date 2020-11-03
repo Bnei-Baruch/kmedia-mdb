@@ -70,7 +70,7 @@ class AVPlaylistPlayer extends Component {
   render() {
     const { selected, items, language, onSwitchAV, onLanguageChange, uiLanguage } = this.props;
     const { autoPlay, mediaEditMode, isDropdownOpened }                           = this.state;
-    const { autoPlayAllowed }                                                     = this.context;
+    const { undefinedDevice }                                                     = this.context;
 
     const currentItem = items[selected];
 
@@ -89,8 +89,8 @@ class AVPlaylistPlayer extends Component {
           'avbox__player--is-audio--normal-mode': isAudio && mediaEditMode === 0,
           'avbox__player--is-audio--dropdown-opened': isAudio && isDropdownOpened && !mediaEditMode,
           'avbox__player--is-audio--dropdown-closed': isAudio && !isDropdownOpened && !mediaEditMode,
-          'avbox__player--is-4x3': currentItem.unit?.film_date < '2014',
-          'mobile-device': !autoPlayAllowed,
+          'avbox__player--is-4x3': currentItem.unit.film_date < '2014',
+          'mobile-device': !undefinedDevice,
         })}
       >
         <div className="avbox__media-wrapper">
@@ -115,7 +115,6 @@ class AVPlaylistPlayer extends Component {
               onPlay={this.onPlay}
               onMediaEditModeChange={this.handleMediaEditModeChange}
               onDropdownOpenedChange={this.handleDropdownOpenedChange}
-              autoPlayAllowed={autoPlayAllowed}
             />
           </Media>
         </div>

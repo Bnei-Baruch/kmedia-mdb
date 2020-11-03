@@ -136,7 +136,7 @@ class AVBox extends Component {
   render() {
     const { t, uiLanguage }                                                            = this.props;
     const { playableItem, mediaEditMode, autoPlay, isDropdownOpened, newItemLanguage } = this.state;
-    const { autoPlayAllowed }                                                          = this.context;
+    const { undefinedDevice }                                                          = this.context;
 
     if (isEmpty(playableItem)) {
       return (<div>{t('messages.no-playable-files')}</div>);
@@ -155,7 +155,7 @@ class AVBox extends Component {
               'avbox__player--is-audio--dropdown-opened': isAudio && isDropdownOpened && !mediaEditMode,
               'avbox__player--is-audio--dropdown-closed': isAudio && !isDropdownOpened && !mediaEditMode,
               'avbox__player--is-4x3': playableItem.unit.film_date < '2014',
-              'mobile-device': !autoPlayAllowed,
+              'mobile-device': !undefinedDevice,
             })}
           >
             <div className="avbox__media-wrapper">
@@ -172,7 +172,6 @@ class AVBox extends Component {
                   onLanguageChange={this.handleChangeLanguage}
                   onMediaEditModeChange={this.handleMediaEditModeChange}
                   onDropdownOpenedChange={this.handleDropdownOpenedChange}
-                  autoPlayAllowed={autoPlayAllowed}
                 />
               </Media>
             </div>

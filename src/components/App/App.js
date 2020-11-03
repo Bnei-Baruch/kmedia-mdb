@@ -16,7 +16,7 @@ const App = (props) => {
   const deviceInfoContext =  {
     deviceInfo: deviceInfo,
     isMobileDevice: deviceInfo.device?.type === 'mobile',
-    autoPlayAllowed: deviceInfo.device?.type === undefined
+    undefinedDevice: deviceInfo.device?.type === undefined
   };
   return (
     <I18nextProvider i18n={i18n} initialI18nStore={initialI18nStore} initialLanguage={initialLanguage}>
