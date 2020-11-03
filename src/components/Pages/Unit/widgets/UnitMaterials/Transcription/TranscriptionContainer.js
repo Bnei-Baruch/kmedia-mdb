@@ -9,7 +9,7 @@ import Transcription from './Transcription';
 import { withRouter } from 'react-router-dom';
 
 const TranscriptionContainer = (props) => {
-  const { unit, type = null, location } = props;
+  const { unit, type = null, location, activeTab = "transcription" } = props;
   const doc2htmlById          = useSelector(state => selectors.getDoc2htmlById(state.assets));
   const language              = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage       = useSelector(state => settings.getContentLanguage(state.settings, location));
@@ -26,6 +26,7 @@ const TranscriptionContainer = (props) => {
       type={type}
       onContentChange={handleContentChange}
       location={location}
+      activeTab={activeTab}
     />
   );
 };

@@ -1,4 +1,4 @@
-import { ES_RESULT_TYPE_TAGS, SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE } from './consts';
+import { ES_RESULT_TYPE_TAGS, SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE, ES_RESULT_TYPE_SOURCES } from './consts';
 
 export class SuggestionsHelper {
   constructor(results) {
@@ -56,18 +56,29 @@ export class SuggestionsHelper {
         if (a.part !== b.part) {
           return a.part - b.part;
         }
-        if (a.suggestLC.startsWith(query) && !b.suggestLC.startsWith(query)) {
-          return -1;
-        }
-        if (!a.suggestLC.startsWith(query) && b.suggestLC.startsWith(query)) {
-          return 1;
-        }
         if (a.resultType === SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE &&
           b.resultType !== SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE) {
           return -1;
         }
         if (a.resultType !== SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE &&
           b.resultType === SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE) {
+          return 1;
+        }
+        if (a.resultType === ES_RESULT_TYPE_SOURCES &&
+          b.resultType !== ES_RESULT_TYPE_SOURCES) {
+          return -1;
+        }
+        if (a.resultType !== ES_RESULT_TYPE_SOURCES &&
+          b.resultType === ES_RESULT_TYPE_SOURCES) {
+          return 1;
+        }
+        const aSuggestion = a.suggestLC.startsWith(query);
+        const bSuggestion = a.suggestLC.startsWith(query);
+        
+        if (aSuggestion && !bSuggestion) {
+          return -1;
+        }
+        if (!aSuggestion && bSuggestion) {
           return 1;
         }
         if (a.year && b.year) {
