@@ -2,7 +2,14 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 
-import { CT_ARTICLE, CT_RESEARCH_MATERIAL, CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, DERIVED_UNITS_CONTENT_TYPE, MT_TEXT } from '../../../../../helpers/consts';
+import {
+  CT_ARTICLE,
+  CT_RESEARCH_MATERIAL,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  CT_VIRTUAL_LESSON,
+  DERIVED_UNITS_CONTENT_TYPE,
+  MT_TEXT
+} from '../../../../../helpers/consts';
 import * as shapes from '../../../../shapes';
 import TabsMenu from '../../../../shared/TabsMenu';
 import Summary from './Summary/Summary';
@@ -78,7 +85,7 @@ const Materials = ({ unit = undefined, t }) => {
     items.push({
       name: 'articles',
       label: t('materials.articles.header'),
-      component: <TranscriptionContainer unit={unit} key="articles" type="articles" />
+      component: <TranscriptionContainer unit={unit} key="articles" type="articles" activeTab="articles" />
     });
   }
 
@@ -86,7 +93,7 @@ const Materials = ({ unit = undefined, t }) => {
     items.push({
       name: 'research',
       label: t('materials.research.header'),
-      component: <TranscriptionContainer unit={unit} key="research" type="research" />
+      component: <TranscriptionContainer unit={unit} key="research" type="research" activeTab="research" />
     });
   }
 
@@ -96,7 +103,7 @@ const Materials = ({ unit = undefined, t }) => {
       items.push({
         name: 'derived',
         label: t('materials.derived-units.header'),
-        component: <DerivedUnits selectedUnits={selectedUnits} key="derived" type="derived" t={t}/>
+        component: <DerivedUnits selectedUnits={selectedUnits} key="derived" type="derived" t={t} />
       });
     }
   }

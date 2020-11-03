@@ -12,8 +12,13 @@ import MediaHelper from '../../../../../../helpers/media';
 import * as shapes from '../../../../../shapes';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import WipErr from '../../../../../shared/WipErr/WipErr';
-import { prepareScrollToSearch } from '../../../../../../helpers/utils';
+import {
+  prepareScrollToSearch,
+  buildSearchLinkFromSelection,
+  DOM_ROOT_ID
+} from '../../../../../../helpers/scrollToSearch/helper';
 import { getQuery } from '../../../../../../helpers/url';
+import ShareBar from '../../../../../shared/ShareSelected';
 
 const scrollToSearch = () => {
   const element = document.getElementById(SCROLL_SEARCH_ID);
@@ -68,7 +73,7 @@ class Transcription extends Component {
 
   static getUnitDerivedArticle(unit, type) {
     // suitable for having either derived articles or research materials only
-    const ct = type === 'articles' ? CT_ARTICLE : CT_RESEARCH_MATERIAL;
+    const ct    = type === 'articles' ? CT_ARTICLE : CT_RESEARCH_MATERIAL;
     const units = Object.values(unit.derived_units || {})
       .filter(x => x.content_type === ct
         && (x.files || []).some(f => f.type === MT_TEXT));
@@ -82,7 +87,8 @@ class Transcription extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const { contentLanguage, uiLanguage, unit, type } = props;
+    const { contentLanguage, uiLanguage, unit, type, location } = props;
+    const { selectedFileId }                                    = getQuery(location);
 
     const textFiles = Transcription.getTextFiles(unit, type);
     const languages = uniq(textFiles.map(x => x.language));
@@ -96,22 +102,35 @@ class Transcription extends Component {
     if (newLanguage !== undefined && state.language && state.language !== newLanguage) {
       newLanguage = state.language;
     }
+    if (state.selectedFile) {
+      return { selectedFile: state.selectedFile, languages, language: newLanguage, textFiles };
+    }
 
-    const selectedFile = state.selectedFile ? state.selectedFile : Transcription.selectFile(textFiles, newLanguage);
-
+    const fileFromLocation = textFiles.find(f => f.id === selectedFileId);
+    const selectedFile  = fileFromLocation ? fileFromLocation : Transcription.selectFile(textFiles, newLanguage);
     return { selectedFile, languages, language: newLanguage, textFiles };
   }
 
   state = {};
 
   componentDidMount() {
-    const { selectedFile } = this.state;
+    const { selectedFile }       = this.state;
+    const { srchstart, srchend } = getQuery(this.props.location);
 
     this.loadFile(selectedFile);
+    document.addEventListener('mouseup', this.handleOnMouseUp);
 
-    if (selectedFile && this.props.doc2htmlById[selectedFile.id] && this.props.doc2htmlById[selectedFile.id].wip === false) {
+    if (srchstart
+      && srchend
+      && selectedFile
+      && this.props.doc2htmlById[selectedFile.id]
+      && this.props.doc2htmlById[selectedFile.id].wip === false) {
       scrollToSearch();
     }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mouseup', this.handleOnMouseUp);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -122,19 +141,22 @@ class Transcription extends Component {
       || (nextProps.unit.id !== props.unit.id)
       || (nextProps.unit.files !== props.unit.files
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
-        || (state.selectedFile && (props.doc2htmlById[state.selectedFile.id].wip !== nextProps.doc2htmlById[state.selectedFile.id].wip))
+        || (state.selectedFile && props.doc2htmlById && (props.doc2htmlById[state.selectedFile.id]?.wip !== nextProps.doc2htmlById[state.selectedFile.id]?.wip))
         || nextState.language !== state.language
+        || nextState.searchUrl !== state.searchUrl
         || nextState.selectedFile !== state.selectedFile);
   }
 
   componentDidUpdate(prevProp, prevState) {
     const { selectedFile, language } = this.state;
+    const { srchstart }              = getQuery(this.props.location);
 
     if (selectedFile !== prevState.selectedFile || language !== prevState.language) {
       this.loadFile(selectedFile);
     }
 
-    if (selectedFile
+    if (srchstart
+      && selectedFile
       && prevProp.doc2htmlById[selectedFile.id]
       && prevProp.doc2htmlById[selectedFile.id].wip === true
       && this.props.doc2htmlById[selectedFile.id].wip === false) {
@@ -171,7 +193,7 @@ class Transcription extends Component {
     if (!textFiles)
       return null;
     const relevantTextFiles = textFiles.filter(t => t.title);
-    if (relevantTextFiles.length == 0)
+    if (relevantTextFiles.length === 0)
       return null;
     return <select
       className="doc2html-dropdown-container"
@@ -187,10 +209,67 @@ class Transcription extends Component {
     </select>;
   }
 
+  handleOnMouseUp = (e) => {
+    if (this.context.isMobileDevice) {
+      return false;
+    }
+    this.updateSelection();
+    return false;
+  };
+
+  handleOnMouseDown = (e) => {
+    if (this.context.isMobileDevice) {
+      return false;
+    }
+
+    this.setState({ searchUrl: null });
+    return false;
+  };
+
+  renderShareBar = () => {
+    const { searchUrl, searchText } = this.state;
+    if (this.context.isMobileDevice || !searchUrl)
+      return null;
+
+    return (
+      <ShareBar url={searchUrl} text={searchText} />
+    );
+  };
+
+  updateSelection = () => {
+    let { url, text: searchText } = buildSearchLinkFromSelection(this.state.language);
+    if (!url)
+      return;
+    const selectedFileProps = this.state.selectedFile ? `&selectedFileId=${this.state.selectedFile.id}` : '';
+    const searchUrl         = `${url}&activeTab=${this.props.activeTab}${selectedFileProps}`;
+    this.setState({ searchUrl, searchText });
+  };
+
+  prepareContent = (data) => {
+    const { textFiles, selectedFile, language } = this.state;
+    const direction                             = getLanguageDirection(language);
+    const { srchstart, srchend, highlightAll }  = getQuery(this.props.location);
+
+    return (
+      <div className="search-on-page--container">
+        {this.renderShareBar()}
+        {this.getSelectFiles(selectedFile, textFiles)}
+        <div
+          id={DOM_ROOT_ID}
+          className="doc2html"
+          onMouseDown={this.handleOnMouseDown.bind(this)}
+          style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
+          dangerouslySetInnerHTML={{
+            __html: prepareScrollToSearch(data, { srchstart, srchend }, highlightAll === 'true')
+          }}
+        />
+      </div>
+    );
+  };
+
   render() {
-    const { doc2htmlById, t, type, location }   = this.props;
-    const { selectedFile, languages, language, textFiles } = this.state;
-    const { searchScroll }                      = getQuery(location);
+    const { doc2htmlById, t, type }             = this.props;
+    const { selectedFile, languages, language } = this.state;
 
     if (!selectedFile) {
       const text = type || 'transcription';
@@ -205,18 +284,7 @@ class Transcription extends Component {
     }
 
     if (data) {
-      const direction = getLanguageDirection(language);
-
-      const content = (
-        <div>
-          {this.getSelectFiles(selectedFile, textFiles)}
-          <div
-            className="doc2html"
-            style={{ direction }}
-            dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(data, searchScroll) }}
-          />
-        </div>
-      );
+      const content = this.prepareContent(data);
 
       if (languages.length === 1) {
         return content;

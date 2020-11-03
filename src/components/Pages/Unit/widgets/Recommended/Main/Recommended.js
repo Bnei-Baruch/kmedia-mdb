@@ -35,7 +35,7 @@ const Recommended = ({ unit, filterOutUnits = null, t }) => {
   useEffect(() => {
     if (unit && !wip && !err && !dataLoaded){
       dispatch(actions.fetchRecommended(unit.id));
-      setDataLoaded(true); 
+      setDataLoaded(true);
     }
   }, [dispatch, unit, wip, err, dataLoaded]);
 
@@ -44,6 +44,8 @@ const Recommended = ({ unit, filterOutUnits = null, t }) => {
   if (wipErr) {
     return wipErr;
   }
+
+  console.log('recommendedUnits:', recommendedUnits);
 
   if (recommendedUnits.length === 0){
     return null;
@@ -58,7 +60,7 @@ Recommended.propTypes = {
   filterOutUnits: PropTypes.arrayOf(shapes.EventItem)
 }
 
-const areEqual = (prevProps, nextProps) => 
+const areEqual = (prevProps, nextProps) =>
   prevProps.unit.id === nextProps.unit.id
   && isEqual(prevProps.filterOutUnits, nextProps.filterOutUnits);
 
