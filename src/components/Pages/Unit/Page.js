@@ -10,12 +10,13 @@ import WipErr from '../../shared/WipErr/WipErr';
 import AVBox from './widgets/AVBox/AVBox';
 import Materials from './widgets/UnitMaterials/Materials';
 import Info from './widgets/Info/Info';
-import MediaDownloads from './widgets/Downloads/MediaDownloads';
 import Recommended from './widgets/Recommended/Main/Recommended';
 import playerHelper from '../../../helpers/player';
-import { MT_VIDEO } from '../../../helpers/consts';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 export class UnitPage extends Component {
+  static contextType = DeviceInfoContext;
+
   static propTypes = {
     unit: shapes.ContentUnit,
     wip: shapes.WIP,
@@ -37,7 +38,9 @@ export class UnitPage extends Component {
   constructor(props) {
     super(props);
     const { location } = props;
-    this.state         = { embed: playerHelper.getEmbedFromQuery(location) };
+    this.state         = { 
+      embed: playerHelper.getEmbedFromQuery(location), 
+    };
   }
 
   renderHelmet() {
@@ -46,37 +49,29 @@ export class UnitPage extends Component {
   }
 
   renderPlayer() {
-    const { unit, language, location } = this.props;
-    const { embed }                    = this.state;
-    const mediaType                    = AVBox.getMediaType(location);
+    const { unit, language } = this.props;
+    const { embed }          = this.state;
 
-    return !embed 
+    return (!embed 
       ? <div className="playlist-collection-page">
         <Container className="avbox">
-          <Grid centered padded>
+          <Grid>
             <Grid.Row className={classNames('', {'layout--is-audio': false})} >
-              <Grid.Column id="avbox__player" mobile={16} tablet={10} computer={10}>
+              <Grid.Column id="avbox__player">
                 <AVBox unit={unit} language={language} />
               </Grid.Column>
-              { mediaType === MT_VIDEO
-                ? <Grid.Column id="avbox__playlist" className="avbox__playlist" mobile={16} tablet={6} computer={6}>
-                  <Recommended unit={unit}/>
-                </Grid.Column>
-                : null
-              }
             </Grid.Row>
           </Grid>
         </Container>
       </div>
       : <AVBox unit={unit} language={language} />
-    ;
+    );
   }
 
-  // renderRecommendations() {
-  //   const { unit } = this.props;
-  //   return <Recommended unit={unit}/>
-  //   // return <MyWrappedSameCollectionContainer unit={unit} />;
-  // }
+  renderRecommendations() {
+    const { unit } = this.props;
+    return <Recommended unit={unit} />;
+  }
 
   renderInfo() {
     const { unit, section } = this.props;
@@ -88,35 +83,31 @@ export class UnitPage extends Component {
     return <Materials unit={unit} />;
   }
 
-  renderDownloads() {
-    const { unit } = this.props;
-    return <MediaDownloads unit={unit} />;
-  }
-
   renderContent() {
     const { embed } = this.state;
+    const { isMobileDevice } = this.context;
+   
     return !embed ? (
       <div className="unit-page">
         {this.renderHelmet()}
-        {this.renderPlayer()}
         <Container>
           <Grid padded>
             <Grid.Row>
-              <Grid.Column mobile={16} tablet={16} computer={11} className="content__main">
-                {this.renderInfo()}
-                {this.renderMaterials()}
+              <Grid.Column mobile={16} tablet={10} computer={10}>
+                <Grid.Row>
+                  {this.renderPlayer()}
+                </Grid.Row>
+                <Grid.Row>
+                  <Grid.Column>
+                    {this.renderInfo()}
+                    {this.renderMaterials()}
+                  </Grid.Column>
+                </Grid.Row>
               </Grid.Column>
-              <Grid.Column mobile={16} tablet={16} computer={5} className="content__aside">
-                <Grid>
-                  <Grid.Row>
-                    {/* <Grid.Column className="avbox__playlist" mobile={16} tablet={8} computer={16}>	
-                      {this.renderRecommendations()}	
-                    </Grid.Column> */}
-                    <Grid.Column mobile={16} tablet={8} computer={16}>
-                      {this.renderDownloads()}
-                    </Grid.Column>
-                  </Grid.Row>
-                </Grid>
+              <Grid.Column mobile={16} tablet={6} computer={6}>	
+                {!isMobileDevice && 
+                  this.renderRecommendations()
+                }	
               </Grid.Column>
             </Grid.Row>
           </Grid>

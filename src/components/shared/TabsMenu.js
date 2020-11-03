@@ -27,7 +27,7 @@ const TabsMenu = ({location, items = [], active = ''}) => {
   const activeItem = items.find(x => x.name === internalActive);
 
   return (
-    <div className="tabs-menu">
+    <div className="menu">
       <Menu secondary pointing color="blue">
         {
           items.map((item) => {

@@ -1,5 +1,6 @@
 .avbox {
   background: $black;
+  padding-top: 1em;
 
   .layout--is-audio {
     #avbox__playlist,
@@ -98,7 +99,7 @@
   &__playlist-wrapper {
     @include mobile {
       display: block;
-      padding-top: 2rem;
+      padding-bottom: 1em;
       position: static;
 
       &::before {
@@ -118,7 +119,8 @@
     left: 1rem;
     position: absolute;
     right: 1rem;
-    top: 1em;
+    top: 0em;
+    margin-bottom: 1em;
 
     > .header {
       flex: 0 0 auto;

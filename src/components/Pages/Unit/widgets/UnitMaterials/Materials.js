@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 
@@ -15,13 +15,16 @@ import TabsMenu from '../../../../shared/TabsMenu';
 import Summary from './Summary/Summary';
 import SourcesContainer from './Sources/SourcesContainer';
 import Sketches from './Sketches';
+import MediaDownloads from '../Downloads/MediaDownloads';
 import TranscriptionContainer from './Transcription/TranscriptionContainer';
 import { isEmpty } from '../../../../../helpers/utils';
+import { DeviceInfoContext } from "../../../../../helpers/app-contexts";
 import DerivedUnits from './DerivedUnits';
+import Recommended from '../Recommended/Main/Recommended';
 
 const derivedTextUnits = (unit) => {
   const types    = {};
-  const callback = (x) => {
+  const callback = x => {
     types[x.content_type] = (x.files || []).some(f => f.type === MT_TEXT);
   };
 
@@ -32,6 +35,8 @@ const derivedTextUnits = (unit) => {
 };
 
 const Materials = ({ unit = undefined, t }) => {
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+
   if (!unit) {
     return null;
   }
@@ -49,6 +54,11 @@ const Materials = ({ unit = undefined, t }) => {
       component: <SourcesContainer unit={unit} />
     },
     {
+      name: 'downloads',
+      label: t('media-downloads.title'),
+      component: <MediaDownloads unit={unit} />
+    },
+    {
       name: 'sketches',
       label: t('materials.sketches.header'),
       component: <Sketches unit={unit} />,
@@ -60,6 +70,14 @@ const Materials = ({ unit = undefined, t }) => {
       name: 'summary',
       label: t('materials.summary.header'),
       component: <Summary unit={unit} />,
+    });
+  }
+
+  if (isMobileDevice){
+    items.unshift({
+      name: 'recommended',
+      label: t('materials.recommended.title'),
+      component: <Recommended unit={unit} />,
     });
   }
 

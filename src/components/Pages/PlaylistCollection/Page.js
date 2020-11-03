@@ -8,7 +8,6 @@ import WipErr from '../../shared/WipErr/WipErr';
 import Helmets from '../../shared/Helmets';
 import Materials from '../Unit/widgets/UnitMaterials/Materials';
 import Info from '../Unit/widgets/Info/Info';
-import MediaDownloads from '../Unit/widgets/Downloads/MediaDownloads';
 import PlaylistAVBox from './widgets/PlaylistAVBox/PlaylistAVBox';
 import Playlist from './widgets/Playlist/Playlist';
 import playerHelper from '../../../helpers/player';
@@ -68,15 +67,6 @@ const PlaylistCollectionPage = ({
                   <Grid.Column mobile={16} tablet={16} computer={11} className="content__main">
                     <Info unit={unit} />
                     <Materials unit={unit} />
-                  </Grid.Column>
-                  <Grid.Column mobile={16} tablet={16} computer={5} className="content__aside">
-                    <Grid>
-                      <Grid.Row>
-                        <Grid.Column mobile={16} tablet={8} computer={16}>
-                          <MediaDownloads unit={unit} />
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
