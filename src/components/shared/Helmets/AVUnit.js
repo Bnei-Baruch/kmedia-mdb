@@ -58,4 +58,8 @@ AVUnit.propTypes = {
   language: PropTypes.string
 };
 
-export default AVUnit;
+const areEqual = (prevProps, nextProps) =>
+  ((!prevProps.unit && !nextProps.unit) || prevProps.unit.id === nextProps.unit.id)
+  && prevProps.language === nextProps.language;
+
+export default React.memo(AVUnit, areEqual);

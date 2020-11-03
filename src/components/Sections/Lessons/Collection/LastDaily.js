@@ -1,120 +1,54 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
-import isEqual from 'react-fast-compare';
 
 import { actions, selectors } from '../../../../redux/modules/mdb';
-import { selectors as settings } from '../../../../redux/modules/settings';
-import * as shapes from '../../../shapes';
 import Helmets from '../../../shared/Helmets';
 import WipErr from '../../../shared/WipErr/WipErr';
-import { PlaylistCollectionContainer } from '../../../Pages/PlaylistCollection/Container';
+import PlaylistCollectionContainer from '../../../Pages/PlaylistCollection/Container';
 import { publicFile } from '../../../../helpers/utils';
 
-class LastLessonCollection extends Component {
-  static propTypes = {
-    match: shapes.RouterMatch.isRequired,
-    lastLessonId: PropTypes.string,
-    wip: shapes.WipMap.isRequired,
-    errors: shapes.ErrorsMap.isRequired,
-    uiLanguage: PropTypes.string.isRequired,
-    contentLanguage: PropTypes.string.isRequired,
-    fetchLatestLesson: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired,
-    fetchWindow: PropTypes.func.isRequired,
-    cWindow: shapes.cWindow.isRequired,
-  };
+const LastLessonCollection = ({ t }) => {
+  const lastLessonId = useSelector(state => selectors.getLastLessonId(state.mdb));
+  const wipMap = useSelector(state => selectors.getWip(state.mdb));
+  const errorMap = useSelector(state => selectors.getErrors(state.mdb));
 
-  static defaultProps = {
-    lastLessonId: '',
-  };
+  const wip = wipMap.lastLesson;
+  const err = errorMap.lastLesson;
+ 
+  // console.log('lastLessonId:', lastLessonId, wip, err);
 
-  componentDidMount() {
-    this.props.fetchLatestLesson();
-  }
+  const dispatch = useDispatch();
 
-  shouldComponentUpdate(nextProps) {
-    const { uiLanguage, contentLanguage, wip, errors, lastLessonId } = nextProps;
-    const { props }                                                  = this;
-
-    return (
-      (lastLessonId && (lastLessonId !== props.lastLessonId))
-      || uiLanguage !== props.uiLanguage
-      || contentLanguage !== props.contentLanguage
-      || !isEqual(wip, props.wip)
-      || !isEqual(errors, props.errors)
-    );
-  }
-
-  componentDidUpdate(prevProps) {
-    const { lastLessonId, uiLanguage, contentLanguage, fetchLatestLesson } = this.props;
-
-    if (!lastLessonId
-      && (uiLanguage !== prevProps.uiLanguage
-        || contentLanguage !== prevProps.contentLanguage)
-    ) {
-      fetchLatestLesson();
+  useEffect(() => {
+    if (!wip && !err && !lastLessonId){
+      dispatch(actions.fetchLatestLesson());
     }
+  }, [dispatch, err, lastLessonId, wip]);
+
+  const wipErr = WipErr({ wip, err, t });
+
+  if (wipErr) {
+    return wipErr;
   }
 
-  render() {
-    const { wip, errors, t, lastLessonId, contentLanguage } = this.props;
-
-    const wipErr = WipErr({ wip: wip.lastLesson, err: errors.lastLesson, t });
-
-    if (wipErr) {
-      return wipErr;
-    }
-
-    if (!lastLessonId) {
-      return null;
-    }
-
-    const props = {
-      ...this.props,
-      language: contentLanguage,
-      match: {
-        ...this.props.match,
-        params: {
-          id: lastLessonId,
-        }
-      },
-      shouldRenderHelmet: false,
-    };
-
-    return (
-      <div>
-        <Helmets.Basic title={t('lessons.last.title')} description={t('lessons.last.description')} />
-        <Helmets.Image unitOrUrl={publicFile('seo/last_lesson.jpg')} />
-
-        <PlaylistCollectionContainer {...props} />
-      </div>
-    );
+  if (!lastLessonId) {
+    return null;
   }
+
+  return (
+    <div>
+      <Helmets.Basic title={t('lessons.last.title')} description={t('lessons.last.description')} />
+      <Helmets.Image unitOrUrl={publicFile('seo/last_lesson.jpg')} />
+
+      <PlaylistCollectionContainer t={t} lastLessonId={lastLessonId} />
+    </div>
+  );
 }
 
-function mapState(state) {
-  return {
-    collection: selectors.getDenormCollectionWUnits(state.mdb, selectors.getLastLessonId(state.mdb)),
-    lastLessonId: selectors.getLastLessonId(state.mdb),
-    wip: selectors.getWip(state.mdb),
-    errors: selectors.getErrors(state.mdb),
-    uiLanguage: settings.getLanguage(state.settings),
-    contentLanguage: settings.getContentLanguage(state.settings),
-    cWindow: selectors.getWindow(state.mdb),
-  };
+LastLessonCollection.propTypes = {
+  t: PropTypes.func.isRequired
 }
 
-function mapDispatch(dispatch) {
-  return bindActionCreators({
-    fetchLatestLesson: actions.fetchLatestLesson,
-    fetchCollection: actions.fetchCollection,
-    fetchUnit: actions.fetchUnit,
-    fetchWindow: actions.fetchWindow,
-  }, dispatch);
-}
-
-export default withRouter(connect(mapState, mapDispatch)(withNamespaces()(LastLessonCollection)));
+export default withNamespaces()(LastLessonCollection);

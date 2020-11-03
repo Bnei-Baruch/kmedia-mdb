@@ -130,37 +130,6 @@
   opacity: 0;
 }
 
-/* player on mobile devices */
-.avbox__player.mobile-device {
-  height: auto;
-  padding-top: 0;
-
-  .avbox__media-wrapper {
-    overflow: visible;
-    padding-top: 0;
-    position: relative;
-  }
-
-  .mediaplayer__wrapper {
-    position: relative;
-  }
-
-  audio {
-    margin-top: 30px;
-  }
-
-  select {
-    background: transparent;
-    border-width: 0;
-    padding: 0.8em 0;
-    max-width: 8rem;
-
-    &:focus {
-      outline: none;
-    }
-  }
-}
-
 /* limit the height of the media player languages dropdown in order to not get out of the screen */
 .mediaplayer__languages .ui.floating.dropdown > .menu {
   max-height: 220px;

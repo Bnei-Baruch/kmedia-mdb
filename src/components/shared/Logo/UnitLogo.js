@@ -19,6 +19,7 @@ const UnitLogo = (props) => {
     <FallbackImage
       {...rest}
       src={src}
+      width={width}
       className={`unit-logo ${className} ui image`}
       fallbackImage={[
         collectionId ? assetUrl(`logos/collections/${collectionId}.png`) : null,
