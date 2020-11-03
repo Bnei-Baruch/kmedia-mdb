@@ -45,7 +45,7 @@ const Recommended = ({ unit, filterOutUnits = null, t }) => {
     return wipErr;
   }
 
-  console.log('recommendedUnits:', recommendedUnits);
+  //console.log('recommendedUnits:', recommendedUnits);
 
   if (recommendedUnits.length === 0){
     return null;
