@@ -85,7 +85,7 @@ const HomePageContainer = ({ location, t }) => {
     fetchSocialMedia('blog', fetchBlogList, language);
     fetchSocialMedia('tweet', fetchTweetsList, language);
     fetchBanner(language);
-  }, [language]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [language, fetchBanner, fetchBlogList, fetchData, fetchTweetsList]);
 
   useInterval(() => fetchData(false), FETCH_TIMEOUT);
 

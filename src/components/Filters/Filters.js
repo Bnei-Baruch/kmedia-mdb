@@ -44,7 +44,7 @@ class Filters extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const { namespace, language, contentLanguage, filters, rightItems, filtersData, sqDataWipErr } = this.props;
-    const { activeFilter }                                                        = this.state;
+    const { activeFilter }                                                                         = this.state;
 
     return (activeFilter !== nextState.activeFilter
       || namespace !== nextProps.namespace
@@ -83,6 +83,7 @@ class Filters extends Component {
   renderFilters = (store, langDir, popupStyle) => {
     const { filters, namespace, t, filtersData, language, contentLanguage } = this.props;
     const { activeFilter }                                                  = this.state;
+    const { isMobileDevice }                                                = this.context;
 
     return filters.filter(x => filterMediaLanguageFilter(x, contentLanguage)).map((item) => {
       const { component: FilterComponent, name } = item;
@@ -97,12 +98,15 @@ class Filters extends Component {
 
       const len = ((name === 'topics-filter' || name === 'sources-filter') && value) ? label.length : 0;
 
+      const cn = classNames('filter-popup', { mobile: isMobileDevice });
+
       return (
         <Popup
           className="filter-popup"
           basic
           flowing
           key={name}
+          popper={{ id: 'filter-popup', className: cn }}
           trigger={(
             <Menu.Item
               style={{ flexShrink: len }}
