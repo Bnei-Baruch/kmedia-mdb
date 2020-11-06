@@ -5,8 +5,8 @@ import { RenderHighlightBorder } from './RenderHighlightBorder';
 import { RenderHighlightSingleString } from './RenderHighlightSingleString';
 
 /* eslint-disable  no-useless-escape */
-export const KEEP_LETTERS_RE            = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]]/g;
-export const KEEP_LETTERS_WITH_SPACE_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]\s]/g;
+export const KEEP_LETTERS_RE            = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]‘’”“]/g;
+export const KEEP_LETTERS_WITH_SPACE_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]\s‘’”“]/g;
 
 export const OFFSET_TEXT_SEPARATOR = ':$:';
 const MIN_NUMBER_WORDS_IN_LINK     = 5;
