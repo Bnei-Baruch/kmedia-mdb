@@ -1,5 +1,3 @@
-import * as React from "react";
-
 function SvgImage(props) {
     return (
         <svg width="1em" height="1em" viewBox="0 0 960 796" {...props}>

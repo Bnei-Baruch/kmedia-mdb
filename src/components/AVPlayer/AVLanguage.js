@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import noop from 'lodash/noop';
+import { noop } from '../../helpers/utils';
 import { Dropdown } from 'semantic-ui-react';
 
 import { LANG_HEBREW, LANGUAGE_OPTIONS } from '../../helpers/consts';

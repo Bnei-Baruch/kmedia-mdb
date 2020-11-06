@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import moment from 'moment';
-import noop from 'lodash/noop';
+import { noop } from '../../../../helpers/utils';
 import { Accordion, Button, Header, Menu, Segment } from 'semantic-ui-react';
 
 import 'react-day-picker/lib/style.css';

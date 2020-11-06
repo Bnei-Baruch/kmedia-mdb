@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import noop from 'lodash/noop';
+import { noop } from '../../../helpers/utils';
 
 import { toHumanReadableTime } from '../../../helpers/time';
 import { getQuery, splitPathByLanguage, stringify } from '../../../helpers/url';

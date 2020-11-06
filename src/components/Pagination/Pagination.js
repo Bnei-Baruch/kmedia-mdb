@@ -23,7 +23,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import noop from 'lodash/noop';
+import { noop } from '../../helpers/utils';
 import { Icon, Menu } from 'semantic-ui-react';
 import classNames from 'classnames';
 

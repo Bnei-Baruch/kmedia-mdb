@@ -136,7 +136,7 @@ class Sketches extends React.Component {
 
     if (zipFiles) {
       this.setStateByZipFiles(zipFiles, contentLanguage, uiLanguage, unit);
-    } else{
+    } else {
       this.setState({ zipFileId: null, imageFiles: null });
     }
   };
@@ -264,7 +264,7 @@ class Sketches extends React.Component {
     // if imageObjs is not an array - create it
     let imageObjsArr = [];
     if (imageObjs) {
-      if(Array.isArray(imageObjs)) {
+      if (Array.isArray(imageObjs)) {
         imageObjsArr = imageObjs;
       } else {
         imageObjsArr.push(imageObjs);
@@ -276,7 +276,7 @@ class Sketches extends React.Component {
           .filter(this.removeErroneousImages)
           .map(this.imageGalleryItem)
           .sort((a, b) => strCmp(a.original, b.original));
-  
+
         return (
           <div>
             {

@@ -36,7 +36,7 @@ const SourcesFilter = (props) => {
   const roots = useSelector(state => selectors.getRoots(state.sources));
   const getSourceById = useSelector(state => selectors.getSourceById(state.sources));
 
-  const tree = useMemo(() => getTree(roots, getSourceById, cuStats, t), [roots, getSourceById, cuStats, t]); 
+  const tree = useMemo(() => getTree(roots, getSourceById, cuStats, t), [roots, getSourceById, cuStats, t]);
   return <HierarchicalFilter name="sources-filter" tree={tree} {...props} />;
 }
 

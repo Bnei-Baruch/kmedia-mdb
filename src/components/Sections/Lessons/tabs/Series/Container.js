@@ -32,7 +32,6 @@ const renderTree = (nodes, level) => (
 });
 
 const SeriesContainer = ({ t }) => {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const bySource = useSelector(state => selectors.getSeriesBySource(state.lessons, state.mdb, state.sources)) || [];
   const language = useSelector(state => settings.getLanguage(state.settings));
   const wip      = useSelector(state => selectors.getWip(state.lessons).series);

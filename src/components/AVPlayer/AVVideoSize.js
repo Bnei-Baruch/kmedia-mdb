@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import noop from 'lodash/noop';
+import { noop } from '../../helpers/utils';
 import { Dropdown } from 'semantic-ui-react';
 import { VS_DEFAULT, VS_FHD, VS_HD, VS_NAMES, VS_NHD } from '../../helpers/consts';
 

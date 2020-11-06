@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
-import noop from 'lodash/noop';
+import { noop } from '../../../helpers/utils';
 
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../helpers/consts';
 import { getEscapedRegExp, isEmpty } from '../../../helpers/utils';

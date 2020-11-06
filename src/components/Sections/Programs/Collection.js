@@ -16,7 +16,7 @@ const renderUnit = (unit, t) =>
     </Table.Cell>
   </Table.Row>
 
-const ProgramCollection = () => 
+const ProgramCollection = () =>
   <Collection namespace="programs-collection" renderUnit={renderUnit} />;
 
 export default ProgramCollection;

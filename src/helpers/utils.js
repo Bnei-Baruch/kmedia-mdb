@@ -316,3 +316,5 @@ export const getSectionForTranslation = content_type => {
     return '';
   }
 };
+
+export const noop = () => {};

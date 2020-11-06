@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import noop from 'lodash/noop';
+import { noop } from '../../../../../helpers/utils';
 import { withNamespaces } from 'react-i18next';
 import { Container, Divider } from 'semantic-ui-react';
 

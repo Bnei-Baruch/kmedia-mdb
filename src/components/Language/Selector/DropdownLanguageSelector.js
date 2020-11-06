@@ -2,7 +2,7 @@ import React from 'react';
 import { withNamespaces } from 'react-i18next';
 import { Dropdown } from 'semantic-ui-react';
 import classNames from 'classnames';
-import noop from 'lodash/noop';
+import { noop } from '../../../helpers/utils';
 import { getOptions } from '../../../helpers/language';
 import { LANG_HEBREW } from '../../../helpers/consts';
 

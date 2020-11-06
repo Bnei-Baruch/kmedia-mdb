@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import noop from 'lodash/noop';
+import { noop } from '../../../helpers/utils';
 import { Button, Header, Menu, Segment } from 'semantic-ui-react';
 
 const FlatListFilter = ({ options = [], value = null, onCancel = noop, onApply = noop, renderItem = x => x.text, name, t }) => {

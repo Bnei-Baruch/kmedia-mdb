@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push as routerPush } from 'connected-react-router';
 import debounce from 'lodash/debounce';
-import noop from 'lodash/noop';
+import { noop } from '../../helpers/utils';
 import { Icon, Input, Search } from 'semantic-ui-react';
 
 import { SuggestionsHelper } from '../../helpers/search';

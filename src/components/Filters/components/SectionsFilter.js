@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import noop from 'lodash/noop';
+import { noop } from '../../../helpers/utils';
 import { Button, Grid, Header, Segment } from 'semantic-ui-react';
 
 import { SectionLogo } from '../../../helpers/images';
