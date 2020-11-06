@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import noop from 'lodash/noop';
+import { noop } from '../../helpers/utils';
 import debounce from 'lodash/debounce';
 import { withRouter } from 'react-router-dom';
 import { Player, utils, withMediaProps } from 'react-media-player';

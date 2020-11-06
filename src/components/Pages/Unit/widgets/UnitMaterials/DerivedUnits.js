@@ -32,7 +32,7 @@ const renderUnit = (unit, t) => {
   );
 };
 
-const DerivedUnits = ({ selectedUnits, t }) => 
+const DerivedUnits = ({ selectedUnits, t }) =>
   <Table unstackable basic="very" className="index" sortable>
     <Table.Body>
       {selectedUnits.map(u => renderUnit(u, t))}

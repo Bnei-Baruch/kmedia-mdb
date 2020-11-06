@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
-import noop from 'lodash/noop';
+import { noop } from '../../../helpers/utils';
 import scrollIntoView from 'scroll-into-view';
 import { Button, Header, Input, Menu, Segment } from 'semantic-ui-react';
 

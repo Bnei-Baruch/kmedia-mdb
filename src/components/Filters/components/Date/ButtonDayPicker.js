@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import noop from 'lodash/noop';
+import { noop } from '../../../../helpers/utils';
 import moment from 'moment';
 import scrollIntoView from 'scroll-into-view';
 import Navbar from 'react-day-picker/build/Navbar';
@@ -34,7 +34,7 @@ class ButtonDayPicker extends Component {
 
   constructor(props) {
     super(props);
-    this.myRef = React.createRef();
+    this.myRef = createRef();
   }
 
   state = {

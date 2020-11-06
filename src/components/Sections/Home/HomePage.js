@@ -105,9 +105,9 @@ const renderLatestLessonAndBanner = (latestLesson, banner) =>
         <Grid.Row>
           {
             latestLesson
-              && <Grid.Column computer={6} tablet={7} mobile={16}>
-                <LatestDailyLesson collection={latestLesson} />
-              </Grid.Column>
+            && <Grid.Column computer={6} tablet={7} mobile={16}>
+              <LatestDailyLesson collection={latestLesson} />
+            </Grid.Column>
           }
           <Grid.Column computer={6} tablet={7} mobile={16}>
             <Promoted banner={banner} />

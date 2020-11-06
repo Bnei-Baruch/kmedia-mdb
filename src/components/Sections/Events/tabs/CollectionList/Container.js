@@ -32,7 +32,7 @@ const CollectionListContainer = ({ tabName }) => {
       dispatch(actions.fetchAllEvents());
       setDataLoaded(true);
     }
-    
+
   }, [language, dispatch, items, wip, err, dataLoaded]);
 
   return <Page tabName={tabName} items={items} wip={wip} err={err} />;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
 import { Flag } from 'semantic-ui-react';
-import noop from 'lodash/noop';
+import { noop } from '../../../helpers/utils';
 
 import { LANGUAGES } from '../../../helpers/consts';
 import Link from '../MultiLanguageLink';

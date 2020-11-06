@@ -59,7 +59,7 @@ const getComplexCards = (getCard) => {
 const LatestUpdatesSection = ({ latestUnits = [], t }) => {
   const unitsByCT = unitsByContentType(latestUnits);
 
-  if (unitsByCT[consts.CT_DAILY_LESSON]){
+  if (unitsByCT[consts.CT_DAILY_LESSON]) {
     unitsByCT[consts.CT_DAILY_LESSON] = unitsByCT[consts.CT_DAILY_LESSON].sort(
       (a, b) => {
         if (a.film_date !== b.film_date) {

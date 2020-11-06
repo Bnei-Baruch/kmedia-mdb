@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import noop from 'lodash/noop';
+import { noop } from '../../helpers/utils';
 
 const options = [
   { value: '2x', text: '2x' },
@@ -33,7 +33,7 @@ AVPlaybackRateMobile.propTypes = {
   value: PropTypes.string,
 };
 
-const arePropsEqual = (prevProps, nextProps) => 
+const arePropsEqual = (prevProps, nextProps) =>
   prevProps.value === nextProps.value;
 
 export default React.memo(AVPlaybackRateMobile, arePropsEqual);

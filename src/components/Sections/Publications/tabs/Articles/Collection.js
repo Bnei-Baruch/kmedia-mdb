@@ -6,7 +6,7 @@ import Collection from '../../../../Pages/Collection/Container';
 
 const PublicationCollection = () => <Collection namespace="publications-collection" renderUnit={renderUnit} />;
 
-const renderUnit = (unit, t) => 
+const renderUnit = (unit, t) =>
   (
     <Table.Row key={unit.id} verticalAlign="top">
       <Table.Cell collapsing singleLine>
