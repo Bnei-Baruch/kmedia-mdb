@@ -29,7 +29,10 @@ const Recommended = ({ unit, filterOutUnits = null, t }) => {
     .map(item => mdbSelectors.getDenormContentUnit(state.mdb, item.uid))
     .filter(item => !!item)) || [];
 
-  // console.log('recommendedUnits:', recommendedUnits, wip, err, dataLoaded);
+  // enable load once per unit
+  useEffect(() => {
+    setDataLoaded(false);
+  }, [unit]);
 
   const dispatch = useDispatch();
   useEffect(() => {

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Header, List, Table } from 'semantic-ui-react';
-import isEqual from 'react-fast-compare';
 
 import * as shapes from '../../../../../shapes';
 import { NO_NAME } from '../../../../../../helpers/consts';
@@ -88,7 +87,6 @@ DisplayRecommended.propTypes = {
 }
 
 const areEqual = (prevProps, nextProps) =>
-  prevProps.unit.id === nextProps.unit.id &&
-  isEqual(prevProps.recommendedUnits, nextProps.recommendedUnits);
+  prevProps.unit.id === nextProps.unit.id;
 
 export default React.memo(DisplayRecommended, areEqual);
