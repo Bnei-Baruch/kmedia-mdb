@@ -199,7 +199,11 @@
           background-color: rgba($blue, .2) !important;
         }
 
-        table { width: 100% }
+        table {
+          width: 100%;
+          background-color: inherit;
+          color: inherit;
+        }
       }
 
       .menu > .item {
