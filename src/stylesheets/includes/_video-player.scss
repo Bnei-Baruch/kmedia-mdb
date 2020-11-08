@@ -3,7 +3,7 @@
 
   .avbox {
     background-color: $darkWhite;
-    width: 100%;
+    width: 100% !important;
 
     #unit_container {
       @include mobile {
