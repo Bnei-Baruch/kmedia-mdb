@@ -73,7 +73,7 @@ const DisplayRecommended = ({ unit, t, recommendedUnits }) => {
   const unitCollectionId = unitCollection ? unitCollection.id : null;
 
   return (
-    <div id="avbox_recommended" className="avbox__playlist-wrapper">
+    <div className="avbox__playlist-wrapper">
       <Header as="h3" content={t('materials.recommended.title')} />
       {renderPlaylist(unitsToDisplay, unitCollectionId, t)}
     </div>

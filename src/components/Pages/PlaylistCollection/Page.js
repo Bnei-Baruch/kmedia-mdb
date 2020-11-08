@@ -141,7 +141,9 @@ const PlaylistCollectionPage = ({
             />
             {
               unit && !isMobileDevice &&
-              <Recommended unit={unit} filterOutUnits={filterOutUnits} />
+              <div id="avbox_recommended">
+                <Recommended unit={unit} filterOutUnits={filterOutUnits} />
+              </div>
             }
           </Grid.Column>
         </Grid.Row>
