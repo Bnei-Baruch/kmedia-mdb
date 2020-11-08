@@ -3,7 +3,7 @@
 
   .avbox {
     background-color: $darkWhite;
-    width: 100%;
+    width: 100% !important;
 
     #unit_container {
       @include mobile {
@@ -199,7 +199,11 @@
           background-color: rgba($blue, .2) !important;
         }
 
-        table { width: 100% }
+        table {
+          width: 100%;
+          background-color: inherit;
+          color: inherit;
+        }
       }
 
       .menu > .item {

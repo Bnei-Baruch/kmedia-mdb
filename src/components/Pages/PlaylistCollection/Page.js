@@ -65,8 +65,8 @@ const PlaylistCollectionPage = ({
   // playlist { collection, language, mediaType, items, groups };
   const preferredMT     = playerHelper.restorePreferredMediaType();
   const mediaType       = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-  const playerLanguage  = playlist ? playlist.language : contentLanguage;
-  const uiLang          = playlist ? playlist.language : uiLanguage;
+  const playerLanguage  = playlist?.language || contentLanguage;
+  const uiLang          = playlist?.language || uiLanguage;
   const contentLang     = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
   useEffect(() => {
@@ -141,7 +141,9 @@ const PlaylistCollectionPage = ({
             />
             {
               unit && !isMobileDevice &&
-              <Recommended unit={unit} filterOutUnits={filterOutUnits} />
+              <div id="avbox_recommended">
+                <Recommended unit={unit} filterOutUnits={filterOutUnits} />
+              </div>
             }
           </Grid.Column>
         </Grid.Row>

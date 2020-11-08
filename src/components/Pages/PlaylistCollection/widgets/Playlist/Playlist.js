@@ -34,7 +34,6 @@ const PlaylistWidget = ({ playlist, selected = 0, onSelectedChange, t, prevLink 
   const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
 
   const handleItemClick = useCallback((e, data) => {
-    console.log('click:', data);
     onSelectedChange(parseInt(data.name, 10));
   }, [onSelectedChange]);
 
