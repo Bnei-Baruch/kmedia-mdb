@@ -18,7 +18,7 @@ const renderPlayer = (unit, language, embed) => !embed
     <Container className="avbox">
       <Grid>
         <Grid.Row className={classNames('', {'layout--is-audio': false})} >
-          <Grid.Column id="column_player">
+          <Grid.Column>
             <AVBox unit={unit} language={language} />
           </Grid.Column>
         </Grid.Row>
