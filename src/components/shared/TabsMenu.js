@@ -30,7 +30,7 @@ const TabsMenu = ({ items = [], active = ''}) => {
 
   return (
     <div className="menu">
-      <Menu tabular secondary pointing color="blue">
+      <Menu tabular secondary compact pointing color="blue">
         {
           items.map(item => {
             const {name, label} = item;
