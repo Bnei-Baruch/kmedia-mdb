@@ -421,7 +421,10 @@
       "header": "Selected Highlights"
     },
     "recommended": {
-      "title": "Recommended"
+      "header": "Recommended"
+    },
+    "playlist":{
+      "header": "Up Next"
     }
   },
   "sources-library": {

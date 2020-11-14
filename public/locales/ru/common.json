@@ -436,7 +436,10 @@
       "header": "Избранные отрывки"
     },
     "recommended": {
-      "title": "Рекомендуемые"
+      "header": "Рекомендуемые"
+    },
+    "playlist":{
+      "header": "Следующий"
     }
   },
   "sources-library": {
