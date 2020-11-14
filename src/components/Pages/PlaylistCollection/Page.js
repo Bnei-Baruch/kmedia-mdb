@@ -107,11 +107,27 @@ const PlaylistCollectionPage = ({
   const filterOutUnits = items.map(item => item.unit).filter(u => !!u) || [];
   const isAudio = items[selected].mediaType === MT_AUDIO;
 
+  const PlaylistData = () =>
+    <div>
+      <Playlist
+        playlist={playlist}
+        selected={selected}
+        onSelectedChange={handleSelectedChange}
+        nextLink={nextLink}
+        prevLink={prevLink}
+      />
+      <div id="avbox_recommended">
+        <Recommended unit={unit} filterOutUnits={filterOutUnits} />
+      </div>
+    </div>;
+
+  const computerWidth = isMobileDevice ? 16 : 10;
+
   return !embed ? (
     <div className="playlist-collection-page">
       <Grid container className="avbox">
         <Grid.Row className={classNames('', { 'layout--is-audio': isAudio })}>
-          <Grid.Column mobile={16} tablet={10} computer={10}>
+          <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}>
             <AVPlaylistPlayer
               items={items}
               selected={selected}
@@ -127,25 +143,16 @@ const PlaylistCollectionPage = ({
               <Container id="unit_container">
                 <Helmets.AVUnit unit={unit} language={uiLanguage} />
                 <Info unit={unit} />
-                <Materials unit={unit} />
+                <Materials unit={unit} playlistComponent={PlaylistData} />
               </Container>
             }
           </Grid.Column>
-          <Grid.Column mobile={16} tablet={6} computer={6}>
-            <Playlist
-              playlist={playlist}
-              selected={selected}
-              onSelectedChange={handleSelectedChange}
-              nextLink={nextLink}
-              prevLink={prevLink}
-            />
-            {
-              unit && !isMobileDevice &&
-              <div id="avbox_recommended">
-                <Recommended unit={unit} filterOutUnits={filterOutUnits} />
-              </div>
-            }
-          </Grid.Column>
+          {
+            !isMobileDevice &&
+              <Grid.Column mobile={16} tablet={6} computer={6}>
+                {PlaylistData()}
+              </Grid.Column>
+          }
         </Grid.Row>
       </Grid>
     </div>
