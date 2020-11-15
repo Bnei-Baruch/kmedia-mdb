@@ -34,7 +34,7 @@ const derivedTextUnits = (unit) => {
   return types;
 };
 
-const Materials = ({ unit = undefined, t }) => {
+const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   if (!unit) {
@@ -74,11 +74,19 @@ const Materials = ({ unit = undefined, t }) => {
   }
 
   if (isMobileDevice){
-    items.unshift({
-      name: 'recommended',
-      label: t('materials.recommended.title'),
-      component: <Recommended unit={unit} />,
-    });
+    const item = playlistComponent === null
+      ? {
+        name: 'recommended',
+        label: t('materials.recommended.header'),
+        component: <Recommended unit={unit} />
+      }
+      : {
+        name: 'playlist',
+        label: t('materials.playlist.header'),
+        component: playlistComponent()
+      }
+
+    items.unshift(item);
   }
 
   if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER && derivedTexts[CT_ARTICLE]) {

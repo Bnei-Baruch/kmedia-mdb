@@ -420,7 +420,10 @@
       "header": "קטעים נבחרים"
     },
     "recommended": {
-      "title": "מומלצים"
+      "header": "מומלצים"
+    },
+    "playlist":{
+      "header": "הבא בתור"
     }
   },
   "sources-library": {

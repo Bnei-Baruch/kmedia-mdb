@@ -23,14 +23,13 @@ const TabsMenu = ({ items = [], active = ''}) => {
     || activeFromDefault(items);
 
   const [internalActive, setInternalActive] = useState(computedActive);
-
   const handleActiveChange = useCallback((e, {name}) => setInternalActive(name), []);
 
   const activeItem = items.find(x => x.name === internalActive);
 
   return (
     <div className="menu">
-      <Menu tabular secondary pointing color="blue">
+      <Menu tabular secondary compact pointing color="blue">
         {
           items.map(item => {
             const {name, label} = item;
