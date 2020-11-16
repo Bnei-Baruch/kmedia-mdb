@@ -44,6 +44,11 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
   const derivedTexts = derivedTextUnits(unit);
   const items        = [
     {
+      name: 'downloads',
+      label: t('media-downloads.title'),
+      component: <MediaDownloads unit={unit} />
+    },
+    {
       name: 'transcription',
       label: t('materials.transcription.header'),
       component: <TranscriptionContainer unit={unit} key="transcription" />
@@ -52,11 +57,6 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
       name: 'sources',
       label: t('materials.sources.header'),
       component: <SourcesContainer unit={unit} />
-    },
-    {
-      name: 'downloads',
-      label: t('media-downloads.title'),
-      component: <MediaDownloads unit={unit} />
     },
     {
       name: 'sketches',
@@ -78,7 +78,7 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
       ? {
         name: 'recommended',
         label: t('materials.recommended.header'),
-        component: <Recommended unit={unit} />
+        component: <Recommended unit={unit} displayTitle={false} />
       }
       : {
         name: 'playlist',

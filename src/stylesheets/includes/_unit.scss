@@ -20,6 +20,7 @@
     @include small-mobile {
       border-bottom: 0!important;
       overflow-x: scroll;
+      padding: 0 0.5em 1em;
     }
 
     .tab-downloads {
