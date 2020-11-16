@@ -11,7 +11,7 @@ import WipErr from '../../../../../shared/WipErr/WipErr';
 import DisplayRecommended from './DisplayRecommended';
 
 
-const Recommended = ({ unit, filterOutUnits = null, t }) => {
+const Recommended = ({ unit, filterOutUnits = null, t, displayTitle = true }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const wip = useSelector(state => selectors.getWip(state.recommended));
@@ -54,13 +54,14 @@ const Recommended = ({ unit, filterOutUnits = null, t }) => {
     return null;
   }
 
-  return <DisplayRecommended unit={unit} t={t} recommendedUnits={recommendedUnits} />
+  return <DisplayRecommended unit={unit} t={t} recommendedUnits={recommendedUnits} displayTitle={displayTitle} />
 }
 
 Recommended.propTypes = {
   unit: shapes.EventItem.isRequired,
   t: PropTypes.func.isRequired,
-  filterOutUnits: PropTypes.arrayOf(shapes.EventItem)
+  filterOutUnits: PropTypes.arrayOf(shapes.EventItem),
+  displayTitle: PropTypes.bool
 }
 
 const areEqual = (prevProps, nextProps) =>

@@ -65,7 +65,7 @@ const renderPlaylist = (unitsToDisplay, selected, t) =>
   </div>;
 
 
-const DisplayRecommended = ({ unit, t, recommendedUnits }) => {
+const DisplayRecommended = ({ unit, t, recommendedUnits, displayTitle = true }) => {
   // display only N units
   const unitsToDisplay = recommendedUnits.length > N ? recommendedUnits.slice(0, N) : recommendedUnits;
 
@@ -74,7 +74,7 @@ const DisplayRecommended = ({ unit, t, recommendedUnits }) => {
 
   return (
     <div className="avbox__playlist-wrapper">
-      <Header as="h3" content={t('materials.recommended.header')} />
+      { displayTitle && <Header as="h3" content={t('materials.recommended.header')} /> }
       {renderPlaylist(unitsToDisplay, unitCollectionId, t)}
     </div>
   );
@@ -83,7 +83,8 @@ const DisplayRecommended = ({ unit, t, recommendedUnits }) => {
 DisplayRecommended.propTypes = {
   unit: shapes.EventItem.isRequired,
   recommendedUnits: PropTypes.arrayOf(shapes.EventItem),
-  t: PropTypes.func.isRequired
+  t: PropTypes.func.isRequired,
+  displayTitle: PropTypes.bool
 }
 
 const areEqual = (prevProps, nextProps) =>
