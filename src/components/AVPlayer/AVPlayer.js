@@ -44,12 +44,13 @@ const playbackToValue = playback => parseFloat(playback.slice(0, -1));
 
 class AVPlayer extends Component {
   static contextType = DeviceInfoContext;
-  
+
   static propTypes = {
     t: PropTypes.func.isRequired,
     media: shapes.Media.isRequired,
     uiLanguage: PropTypes.string.isRequired,
     requestedLanguage: PropTypes.string,
+    chronicles: PropTypes.shape(),
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -198,6 +199,9 @@ class AVPlayer extends Component {
   componentDidUpdate() {
     const { item } = this.props;
     if (!isEqual(this.state.item, item)) {
+      if (this.props.media?.isPlaying && this.state.item?.unit?.id) {
+        this.props.chronicles.append('player-stop', this.buildAppendData(this.props.item, this.state.src, this.props.media));
+      }
       this.setState({
         error: false,
         errorReason: '',
@@ -214,6 +218,9 @@ class AVPlayer extends Component {
       this.autohideTimeoutId = null;
     }
     window.removeEventListener('message', this.receiveMessageFunc, false);
+    if (this.props.media?.isPlaying && this.props.item?.unit?.id) {
+      this.props.chronicles.append('player-stop', this.buildAppendData(this.props.item, this.state.src, this.props.media));
+    }
   }
 
   receiveMessage(event) {
@@ -342,10 +349,23 @@ class AVPlayer extends Component {
     }
   };
 
+  buildAppendData = (item, src, media) => {
+    return {
+      unit_uid: item.unit.id,
+      file_src: src,
+      current_time: media.currentTime,
+      duration: media.duration,
+    };
+  }
+
   onPlay = () => {
     const { onPlay } = this.props;
     if (onPlay) {
       onPlay();
+    }
+    if (this.props?.item?.unit?.id) {
+      const {unit, item: { mediaType }, selectedLanguage, uiLanguage } = this.props;
+      this.props.chronicles.append('player-play', this.buildAppendData(this.props.item, this.state.src, this.props.media));
     }
   };
 
@@ -359,6 +379,9 @@ class AVPlayer extends Component {
       onFinish();
     } else if (onPause) {
       onPause();
+    }
+    if (this?.props?.item?.unit?.id) {
+      this.props.chronicles.append('player-stop', this.buildAppendData(this.props.item, this.state.src, this.props.media));
     }
   };
 

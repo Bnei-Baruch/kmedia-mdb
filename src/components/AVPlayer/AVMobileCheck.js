@@ -2,13 +2,14 @@ import React, { useContext } from 'react';
 
 import AVPlayerMobile from './AVPlayerMobile';
 import AVPlayer from './AVPlayer';
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { ClientChroniclesContext, DeviceInfoContext } from "../../helpers/app-contexts";
 
 const AVMobileCheck = (props) => {
-  const { undefinedDevice } = useContext(DeviceInfoContext);
-  return undefinedDevice
-    ? <AVPlayer {...props} />
-    : <AVPlayerMobile {...props} />;
+  const deviceInfoContext = useContext(DeviceInfoContext);
+  const chronicles = useContext(ClientChroniclesContext);
+  return deviceInfoContext.undefinedDevice
+    ? <AVPlayer {...props} chronicles={chronicles} />
+    : <AVPlayerMobile {...props} chronicles={chronicles} />;
 };
 
 export default AVMobileCheck;

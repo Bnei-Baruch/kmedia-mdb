@@ -18,6 +18,8 @@ import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
 import { selectors as settings } from '../../../redux/modules/settings';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
 
+import { usePrevious } from '../../../helpers/utils';
+import { ClientChroniclesContext } from '../../../helpers/app-contexts';
 
 const PlaylistCollectionPage = ({
   collection,
@@ -27,6 +29,7 @@ const PlaylistCollectionPage = ({
   const location = useLocation();
   const history  = useHistory();
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const chronicles = useContext(ClientChroniclesContext);
 
   const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
@@ -36,12 +39,28 @@ const PlaylistCollectionPage = ({
   const [selected, setSelected] = useState(0);
   const [playlist, setPlaylist] = useState(null);
 
+  const prev = usePrevious({unit, collection});
+
   const handleSelectedChange = useCallback(nSelected => {
     if (nSelected !== selected){
       playerHelper.setActivePartInQuery(history, nSelected);
       setSelected(nSelected);
     }
   }, [history, selected]);
+
+  useEffect(() => {
+    if (prev?.unit?.id !== unit?.id) {
+      if (prev?.unit?.id) {
+        chronicles.append('collection-unit-unselected', {unit_uid: prev.unit.id});
+      }
+      if (unit?.id) {
+        chronicles.append('collection-unit-selected', {unit_uid: unit.id});
+      }
+    }
+    if (prev?.unit?.id && !unit?.id) {
+      chronicles.append('collection-unit-unselected', {unit_uid: unit.id});
+    }
+  }, [unit, prev?.unit]);
 
   const handleLanguageChange = useCallback((e, language) => {
     playerHelper.setLanguageInQuery(history, language);
