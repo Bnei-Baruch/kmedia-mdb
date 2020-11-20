@@ -9,6 +9,7 @@ import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, SCROLL_SEARCH_ID } from '../
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import MediaHelper from '../../../../../../helpers/media';
+import playerHelper from '../../../../../../helpers/player';
 import * as shapes from '../../../../../shapes';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import WipErr from '../../../../../shared/WipErr/WipErr';
@@ -107,7 +108,7 @@ class Transcription extends Component {
     }
 
     const fileFromLocation = textFiles.find(f => f.id === selectedFileId);
-    const selectedFile  = fileFromLocation ? fileFromLocation : Transcription.selectFile(textFiles, newLanguage);
+    const selectedFile     = fileFromLocation ? fileFromLocation : Transcription.selectFile(textFiles, newLanguage);
     return { selectedFile, languages, language: newLanguage, textFiles };
   }
 
@@ -237,11 +238,15 @@ class Transcription extends Component {
   };
 
   updateSelection = () => {
-    let { url, text: searchText } = buildSearchLinkFromSelection(this.state.language);
+    const { language, selectedFile } = this.state;
+    const { location, activeTab }    = this.props;
+
+    const ap                      = playerHelper.getActivePartFromQuery(location);
+    let { url, text: searchText } = buildSearchLinkFromSelection(language);
     if (!url)
       return;
-    const selectedFileProps = this.state.selectedFile ? `&selectedFileId=${this.state.selectedFile.id}` : '';
-    const searchUrl         = `${url}&activeTab=${this.props.activeTab}${selectedFileProps}`;
+    const selectedFileProps = selectedFile ? `&selectedFileId=${selectedFile.id}` : '';
+    const searchUrl         = `${url}&activeTab=${activeTab}${selectedFileProps}${!ap ? '' : '&ap=' + ap}`;
     this.setState({ searchUrl, searchText });
   };
 
