@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { actions, selectors as mdb } from '../../../redux/modules/mdb';
 import { actions as statsActions } from '../../../redux/modules/stats';
 import Page from './Page';
 
-const CollectionContainer = (props) => {
-  const { match, namespace, renderUnit } = props;
-  const { id }                           = match.params;
+const CollectionContainer = ({ namespace, renderUnit }) => {
+  const { id } = useParams();
 
   const collection = useSelector(state => mdb.getCollectionById(state.mdb, id));
   const wip        = useSelector(state => mdb.getWip(state.mdb));
@@ -38,4 +37,4 @@ const CollectionContainer = (props) => {
   );
 };
 
-export default withRouter(CollectionContainer);
+export default CollectionContainer;
