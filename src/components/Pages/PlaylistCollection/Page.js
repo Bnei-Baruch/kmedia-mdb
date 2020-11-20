@@ -133,7 +133,6 @@ const PlaylistCollectionPage = ({
               items={items}
               selected={selected}
               language={language}
-              uiLanguage={uiLanguage}
               onSelectedChange={handleSelectedChange}
               onLanguageChange={handleLanguageChange}
               onSwitchAV={handleSwitchAV}
@@ -175,11 +174,9 @@ const PlaylistCollectionPage = ({
           items={items}
           selected={selected}
           language={language}
-          uiLanguage={uiLanguage}
           onSelectedChange={handleSelectedChange}
           onLanguageChange={handleLanguageChange}
           onSwitchAV={handleSwitchAV}
-          history={history}
         />
       </Grid.Column>
     </Grid.Row>
