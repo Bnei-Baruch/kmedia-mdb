@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, DATE_FORMAT } from '../../../helpers/consts';
@@ -11,14 +10,7 @@ import { actions, selectors } from '../../../redux/modules/mdb';
 import WipErr from '../../shared/WipErr/WipErr';
 import Page from './Page';
 
-const PlaylistCollectionContainer = ({ t, lastLessonId = undefined }) => {
-  let { id: cId } = useParams();
-
-  // if we come from LastLesson page, use lastLessonId as cId
-  if (lastLessonId){
-    cId = lastLessonId;
-  }
-
+const PlaylistCollectionContainer = ({ cId, t }) => {
   const collection = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId));
   const wipMap = useSelector(state => selectors.getWip(state.mdb));
   const errorMap = useSelector(state => selectors.getErrors(state.mdb));
@@ -29,13 +21,29 @@ const PlaylistCollectionContainer = ({ t, lastLessonId = undefined }) => {
 
   const dispatch = useDispatch();
 
+  const createPrevNextLinks = (collections, curIndex) => {
+    const prevCollectionId = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
+    const prevLnk = prevCollectionId
+      ? canonicalLink({ id: prevCollectionId, content_type: CT_DAILY_LESSON })
+      : null;
+
+    setPrevLink(prevLnk);
+
+    const nextCollectionId = curIndex > 0 ? collections[curIndex - 1] : null;
+    const nextLnk = nextCollectionId
+      ? canonicalLink({ id: nextCollectionId, content_type: CT_DAILY_LESSON })
+      : null;
+
+    setNextLink(nextLnk);
+  };
+
   useEffect(() => {
     if (!Object.prototype.hasOwnProperty.call(wipMap.collections, cId)) {
       // never fetched as full so fetch now
       dispatch(actions.fetchCollection(cId));
     }
 
-    if (collection){ 
+    if (collection){
       const { id, cuIDs, content_units, content_type, film_date } = collection;
 
       if (Array.isArray(cuIDs) && cuIDs.length > 0) {
@@ -71,7 +79,7 @@ const PlaylistCollectionContainer = ({ t, lastLessonId = undefined }) => {
         } else {
           const { id: cWindowId, data: collections } = cWindow;
           const curIndex = collections.indexOf(cId);
-          console.log('cWindow:', cWindowId, curIndex, collections);
+          // console.log('cWindow:', cWindowId, curIndex, collections);
 
           if (cId !== cWindowId
             && (curIndex <= 0 || curIndex === collections.length - 1)
@@ -82,27 +90,15 @@ const PlaylistCollectionContainer = ({ t, lastLessonId = undefined }) => {
             fetchWindow(id, film_date);
           } else {
             // it's a good window, extract the previous and next links
-            const prevCollectionId = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
-            const prevLnk = prevCollectionId 
-              ? canonicalLink({ id: prevCollectionId, content_type: CT_DAILY_LESSON }) 
-              : null;
-
-            setPrevLink(prevLnk);
-
-            const nextCollectionId = curIndex > 0 ? collections[curIndex - 1] : null;
-            const nextLnk = nextCollectionId 
-              ? canonicalLink({ id: nextCollectionId, content_type: CT_DAILY_LESSON }) 
-              : null;
-
-            setNextLink(nextLnk);
+            createPrevNextLinks(collections, curIndex);
           }
         }
       }
-    } 
+    }
   }, [cId, cWindow, collection, dispatch, errorMap.units, wipMap]);
 
 
-  if (!collection || !Array.isArray(collection.content_units)) {
+  if (!cId || !collection || !Array.isArray(collection.content_units)) {
     return null;
   }
 
@@ -129,12 +125,11 @@ const PlaylistCollectionContainer = ({ t, lastLessonId = undefined }) => {
 };
 
 PlaylistCollectionContainer.propTypes = {
-  lastLessonId: PropTypes.string,
+  cId: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired
 };
 
 const areEqual = (prevProps, nextProps) =>
-  (!prevProps.lastLessonId && !nextProps.lastLessonId)
-  || prevProps.lastLessonId === nextProps.lastLessonId;
+  prevProps.cId === nextProps.cId;
 
 export default React.memo(withNamespaces()(PlaylistCollectionContainer), areEqual);

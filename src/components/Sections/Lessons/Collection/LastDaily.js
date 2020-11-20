@@ -16,7 +16,7 @@ const LastLessonCollection = ({ t }) => {
 
   const wip = wipMap.lastLesson;
   const err = errorMap.lastLesson;
- 
+
   // console.log('lastLessonId:', lastLessonId, wip, err);
 
   const dispatch = useDispatch();
@@ -42,7 +42,7 @@ const LastLessonCollection = ({ t }) => {
       <Helmets.Basic title={t('lessons.last.title')} description={t('lessons.last.description')} />
       <Helmets.Image unitOrUrl={publicFile('seo/last_lesson.jpg')} />
 
-      <PlaylistCollectionContainer t={t} lastLessonId={lastLessonId} />
+      <PlaylistCollectionContainer cId={lastLessonId} />
     </div>
   );
 }

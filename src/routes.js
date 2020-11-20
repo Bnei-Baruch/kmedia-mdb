@@ -17,8 +17,8 @@ import ArticleUnit from './components/Sections/Publications/tabs/Articles/Unit';
 import ArticleCollection from './components/Sections/Publications/tabs/Articles/Collection';
 import BlogPost from './components/Sections/Publications/tabs/Blog/Post/Container';
 import Events from './components/Sections/Events/MainPage';
-import EventUnit from './components/Sections/Events/Unit';
-import EventCollection from './components/Sections/Events/Collection';
+import UnitContainer from './components/Pages/Unit/Container';
+import PlaylistCollectionIdCheck from './components/Pages/PlaylistCollection/IdCheck';
 import LibraryHomepage from './components/Sections/Library/Homepage';
 import LibraryContainer from './components/Sections/Library/LibraryContainer';
 import LibraryPerson from './components/Sections/Library/LibraryPerson';
@@ -56,8 +56,8 @@ const routes = [
   },
   { path: 'events', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
   { path: 'events/:tab', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
-  { path: 'events/cu/:id', component: EventUnit, options: { ssrData: ssrDataLoaders.cuPage } },
-  { path: 'events/c/:id', component: EventCollection, options: { ssrData: ssrDataLoaders.playlistCollectionPage } },
+  { path: 'events/cu/:id', component: UnitContainer, options: { ssrData: ssrDataLoaders.cuPage } },
+  { path: 'events/c/:id', component: PlaylistCollectionIdCheck, options: { ssrData: ssrDataLoaders.playlistCollectionPage } },
   { path: 'publications', component: Publications, options: { ssrData: ssrDataLoaders.publicationsPage } },
   { path: 'publications/:tab', component: Publications, options: { ssrData: ssrDataLoaders.publicationsPage } },
   { path: 'publications/articles/cu/:id', component: ArticleUnit, options: { ssrData: ssrDataLoaders.articleCUPage } },
@@ -173,9 +173,11 @@ withLanguageRoutes.propTypes = {
   creator: PropTypes.func.isRequired,
 };
 
-export default [
+const exportArr = [
   {
     component: Root,
     routes: withLanguageRoutes('/:language([a-z]{2})', routesCreator)
   }
 ];
+
+export default exportArr;
