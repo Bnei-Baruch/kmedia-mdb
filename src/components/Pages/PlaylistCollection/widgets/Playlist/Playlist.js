@@ -8,7 +8,6 @@ import { DeviceInfoContext } from "../../../../../helpers/app-contexts";
 import { renderPlaylistUnit } from '../../../Unit/widgets/Recommended/Main/DisplayRecommended';
 import PlaylistHeader from './PlaylistHeader';
 
-
 const PlaylistWidget = ({ playlist, selected = 0, onSelectedChange, t, prevLink = null, nextLink = null}) => {
   const handleItemClick = useCallback((e, data) => {
     onSelectedChange(parseInt(data.name, 10));
