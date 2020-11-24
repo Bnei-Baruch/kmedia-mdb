@@ -109,7 +109,7 @@ const PlaylistCollectionPage = ({
   const isAudio = items[selected].mediaType === MT_AUDIO;
 
   const PlaylistData = () =>
-    <div>
+    <>
       <Playlist
         playlist={playlist}
         selected={selected}
@@ -120,7 +120,7 @@ const PlaylistCollectionPage = ({
       <div id="avbox_recommended">
         <Recommended unit={unit} filterOutUnits={filterOutUnits} />
       </div>
-    </div>;
+    </>;
 
   const computerWidth = isMobileDevice ? 16 : 10;
 
@@ -140,7 +140,7 @@ const PlaylistCollectionPage = ({
             />
             {
               unit &&
-              <div>
+              <>
                 { isMobileDevice &&
                   <div id="avbox_playlist">
                     <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} />
@@ -151,7 +151,7 @@ const PlaylistCollectionPage = ({
                   <Info unit={unit} />
                   <Materials unit={unit} playlistComponent={PlaylistData} />
                 </Container>
-              </div>
+              </>
             }
           </Grid.Column>
           {
