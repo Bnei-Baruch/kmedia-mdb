@@ -12,6 +12,7 @@ import Materials from '../Unit/widgets/UnitMaterials/Materials';
 import Info from '../Unit/widgets/Info/Info';
 import Recommended from '../Unit/widgets/Recommended/Main/Recommended';
 import Playlist from './widgets/Playlist/Playlist';
+import PlaylistHeader from './widgets/Playlist/PlaylistHeader';
 import playerHelper from '../../../helpers/player';
 import { DeviceInfoContext } from "../../../helpers/app-contexts";
 import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
@@ -140,11 +141,18 @@ const PlaylistCollectionPage = ({
             />
             {
               unit &&
-              <Container id="unit_container">
-                <Helmets.AVUnit unit={unit} language={uiLanguage} />
-                <Info unit={unit} />
-                <Materials unit={unit} playlistComponent={PlaylistData} />
-              </Container>
+              <div>
+                { isMobileDevice &&
+                  <div id="avbox_playlist">
+                    <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} />
+                  </div>
+                }
+                <Container id="unit_container">
+                  <Helmets.AVUnit unit={unit} language={uiLanguage} />
+                  <Info unit={unit} />
+                  <Materials unit={unit} playlistComponent={PlaylistData} />
+                </Container>
+              </div>
             }
           </Grid.Column>
           {

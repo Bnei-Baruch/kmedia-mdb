@@ -465,13 +465,15 @@ class AVPlayerMobile extends Component {
     let mediaEl;
 
     if (isVideo) {
-      mediaEl = <video
-        autoPlay={autoPlay}
-        playsInline
-        ref={this.handleMediaRef}
-        src={item.src}
-        preload="metadata"
-        poster={item.preImageUrl} />;
+      mediaEl =
+        <video
+          autoPlay={autoPlay}
+          playsInline
+          ref={this.handleMediaRef}
+          src={item.src}
+          preload="metadata"
+          poster={item.preImageUrl}
+        />;
     } else {
       mediaEl = <audio controls autoPlay={autoPlay} ref={this.handleMediaRef} src={item.src} preload="metadata" />;
     }
@@ -495,17 +497,15 @@ class AVPlayerMobile extends Component {
           <div className="mediaplayer__controls">
             <AVPlayPause
               withoutPlay
-              media={{
-                showControls: false,
-              }}
+              media={{ showControls: false }}
               showNextPrev={showNextPrev}
               hasNext={hasNext}
               hasPrev={hasPrev}
               onPrev={onPrev}
               onNext={onNext}
             />
-            <div className="mediaplayer__spacer" />
-            {!embed ? <AVEditSlice onActivateSlice={this.toggleSliceMode} /> : null}
+            {/* <div className="mediaplayer__spacer" /> */}
+            {!embed && <AVEditSlice onActivateSlice={this.toggleSliceMode} /> }
             <button type="button" tabIndex="-1" onClick={this.handleJumpBack}>
               -5s
               <Icon name="backward" />
@@ -537,16 +537,12 @@ class AVPlayerMobile extends Component {
           </div>
         </div>
         {isSliceMode && <ShareFormMobile media={this.media} item={item} uiLanguage={uiLanguage} />}
+        { isVideo && unMuteButton && this.renderUnmuteButton(isRtl, embed, t) }
         {
-          isVideo && unMuteButton && this.renderUnmuteButton(isRtl, embed, t)
-        }
-        {
-          !showControls
-          && (
-            <div className="mediaplayer__mobileLoader">
-              <AVSpinner isLoading={this.media ? this.media.isLoading : false} />
-            </div>
-          )
+          !showControls &&
+           <div className="mediaplayer__mobileLoader">
+             <AVSpinner isLoading={this.media ? this.media.isLoading : false} />
+           </div>
         }
       </div>
     );
