@@ -12,13 +12,13 @@ import Link from '../../../../Language/MultiLanguageLink';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 
 
-export const getContentByType = (collection, t) => {
+const getContentByType = (collection, t) => {
   const { content_type, number } = collection;
   const ct = content_type === CT_SPECIAL_LESSON ? CT_DAILY_LESSON : content_type;
   return `${t(`constants.content-types.${ct}`)}${number ? ` ${t('lessons.list.number')}${number}` : ''}`;
 }
 
-export const getSubHeader = (collection, t) => {
+const getSubHeader = (collection, t) => {
   const { film_date, start_date, end_date } = collection;
   let subheader = '';
   if (film_date) {
@@ -30,7 +30,7 @@ export const getSubHeader = (collection, t) => {
   return subheader;
 }
 
-export const getNextLink = (langDir, t, link) =>
+const getNextLink = (langDir, t, link) =>
   link &&
     <Link
       to={link}
@@ -40,7 +40,7 @@ export const getNextLink = (langDir, t, link) =>
       <Icon name={langDir === 'ltr' ? 'forward' : 'backward'} />
     </Link>
 
-export const getPrevLink = (langDir, t, link) =>
+const getPrevLink = (langDir, t, link) =>
   link &&
     <Link
       to={link}
