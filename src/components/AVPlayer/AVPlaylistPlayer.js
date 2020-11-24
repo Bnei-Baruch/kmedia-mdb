@@ -38,9 +38,7 @@ const AVPlaylistPlayer = ({ items, selected, language, onSelectedChange, onLangu
     }
   }, [onSelectedChange, selected]);
 
-  const onNext = useCallback(() => {
-    changeNext();
-  }, [changeNext]);
+  const onNext = useCallback(() => changeNext(), [changeNext]);
 
   const onFinish = useCallback(() => {
     changeNext();
