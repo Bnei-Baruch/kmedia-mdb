@@ -74,5 +74,4 @@ PlaylistHeader.propTypes = {
   prevLink: PropTypes.string,
 };
 
-
 export default withNamespaces()(PlaylistHeader);
