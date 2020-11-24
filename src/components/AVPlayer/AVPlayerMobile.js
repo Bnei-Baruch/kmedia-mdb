@@ -504,7 +504,6 @@ class AVPlayerMobile extends Component {
               onPrev={onPrev}
               onNext={onNext}
             />
-            {/* <div className="mediaplayer__spacer" /> */}
             {!embed && <AVEditSlice onActivateSlice={this.toggleSliceMode} /> }
             <button type="button" tabIndex="-1" onClick={this.handleJumpBack}>
               -5s
