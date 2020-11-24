@@ -43,7 +43,7 @@ const PlaylistCollectionContainer = ({ cId, t }) => {
       dispatch(actions.fetchCollection(cId));
     }
 
-    if (collection){
+    if (collection) {
       const { id, cuIDs, content_units, content_type, film_date } = collection;
 
       if (Array.isArray(cuIDs) && cuIDs.length > 0) {
