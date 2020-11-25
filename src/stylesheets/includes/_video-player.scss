@@ -1,7 +1,12 @@
-.playlist-collection-page{
+.playlist-collection-page {
   width: 100% !important;
 
   .avbox {
+     .row,
+     .column {
+      padding: 0 !important;
+     }
+
     background-color: $darkWhite;
     width: 100% !important;
 
@@ -18,8 +23,7 @@
     /* player on mobile devices */
     &__player.mobile-device {
       height: auto;
-      padding-top: 0;
-      margin-bottom: 0;
+      padding-top: 1em;
 
       .avbox__media-wrapper {
         overflow: visible;
@@ -32,8 +36,7 @@
       }
 
       audio {
-        margin-top: 10px;
-        padding-top: 10px;
+        margin: 0.5rem 0;
       }
 
       select {
