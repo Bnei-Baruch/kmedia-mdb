@@ -69,14 +69,14 @@ const renderHelmet = unit => (
 const renderArticle = unit => (
   <Grid padded>
     <Grid.Row>
-      <Grid.Column>	
+      <Grid.Column>
         <TranscriptionContainer unit={unit} />
       </Grid.Column>
     </Grid.Row>
     <Grid.Row>
       <Grid.Column>
         <MediaDownloads unit={unit} displayDivider={true} />
-      </Grid.Column> 
+      </Grid.Column>
     </Grid.Row>
   </Grid>
 );
@@ -88,34 +88,33 @@ const ArticlePage = ({ t, language, unit = null, location = {} }) => {
 
   const embed = playerHelper.getEmbedFromQuery(location);
 
-  return !embed ? (
-    <div className="unit-page">
-      {renderHelmet(unit)}
-      <Container>
-        <Grid padded>
-          <Grid.Row>
-            <Grid.Column mobile={16} tablet={10} computer={10}>
-              <Grid.Row>
-                {renderHeader(unit, t, language)}
-              </Grid.Row>
-              <Grid.Row>
-                <Grid.Column>
-                  {renderArticle(unit)}
-                </Grid.Column>
-              </Grid.Row>
-            </Grid.Column>
-            <Grid.Column mobile={16} tablet={6} computer={6}>	
-              <Recommended unit={unit} />	
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Container>
-    </div>
-  ) : (
-    <div className="unit-page">
-      {renderHeader(unit, t, language)}
-    </div>
-  );
+  return !embed
+    ? (
+      <>
+        {renderHelmet(unit)}
+        <Container>
+          <Grid padded>
+            <Grid.Row>
+              <Grid.Column mobile={16} tablet={10} computer={10}>
+                <Grid.Row>
+                  {renderHeader(unit, t, language)}
+                </Grid.Row>
+                <Grid.Row>
+                  <Grid.Column>
+                    {renderArticle(unit)}
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid.Column>
+              <Grid.Column mobile={16} tablet={6} computer={6}>
+                <Recommended unit={unit} />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Container>
+      </>
+    ) : (
+      renderHeader(unit, t, language)
+    );
 }
 
 ArticlePage.propTypes = {
