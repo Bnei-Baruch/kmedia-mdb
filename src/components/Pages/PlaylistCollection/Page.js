@@ -3,7 +3,6 @@ import { useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Container, Grid } from 'semantic-ui-react';
-import classNames from 'classnames';
 import isEqual from 'react-fast-compare';
 
 import * as shapes from '../../shapes';
@@ -106,7 +105,6 @@ const PlaylistCollectionPage = ({
   const { items, language } = playlist;
 
   const filterOutUnits = items.map(item => item.unit).filter(u => !!u) || [];
-  const isAudio = items[selected].mediaType === MT_AUDIO;
 
   const PlaylistData = () =>
     <>
@@ -117,29 +115,26 @@ const PlaylistCollectionPage = ({
         nextLink={nextLink}
         prevLink={prevLink}
       />
-      <div id="avbox_recommended">
-        <Recommended unit={unit} filterOutUnits={filterOutUnits} />
-      </div>
+      <Recommended unit={unit} filterOutUnits={filterOutUnits} />
     </>;
 
   const computerWidth = isMobileDevice ? 16 : 10;
 
   return !embed ? (
-    <div className="playlist-collection-page">
-      <Grid container className="avbox">
-        <Grid.Row className={classNames('', { 'layout--is-audio': isAudio })}>
-          <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}>
-            <AVPlaylistPlayer
-              items={items}
-              selected={selected}
-              language={language}
-              onSelectedChange={handleSelectedChange}
-              onLanguageChange={handleLanguageChange}
-              onSwitchAV={handleSwitchAV}
-              history={history}
-            />
-            {
-              unit &&
+    <Grid padded className="avbox">
+      <Grid.Row>
+        <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}>
+          <AVPlaylistPlayer
+            items={items}
+            selected={selected}
+            language={language}
+            onSelectedChange={handleSelectedChange}
+            onLanguageChange={handleLanguageChange}
+            onSwitchAV={handleSwitchAV}
+            history={history}
+          />
+          {
+            unit &&
               <>
                 { isMobileDevice &&
                   <div id="avbox_playlist">
@@ -152,34 +147,27 @@ const PlaylistCollectionPage = ({
                   <Materials unit={unit} playlistComponent={PlaylistData} />
                 </Container>
               </>
-            }
-          </Grid.Column>
-          {
-            !isMobileDevice &&
+          }
+        </Grid.Column>
+        {
+          !isMobileDevice &&
               <Grid.Column mobile={16} tablet={6} computer={6}>
                 {PlaylistData()}
               </Grid.Column>
-          }
-        </Grid.Row>
-      </Grid>
-    </div>
+        }
+      </Grid.Row>
+    </Grid>
   ) :
-    <Grid.Row
-      className={classNames('', {
-        'layout--is-audio': isAudio,
-      })}
-    >
-      <Grid.Column mobile={16} tablet={16} computer={16}>
-        <AVPlaylistPlayer
-          items={items}
-          selected={selected}
-          language={language}
-          onSelectedChange={handleSelectedChange}
-          onLanguageChange={handleLanguageChange}
-          onSwitchAV={handleSwitchAV}
-        />
-      </Grid.Column>
-    </Grid.Row>
+    <Container mobile={16} tablet={16} computer={16} className="avbox">
+      <AVPlaylistPlayer
+        items={items}
+        selected={selected}
+        language={language}
+        onSelectedChange={handleSelectedChange}
+        onLanguageChange={handleLanguageChange}
+        onSwitchAV={handleSwitchAV}
+      />
+    </Container>
 };
 
 PlaylistCollectionPage.propTypes = {

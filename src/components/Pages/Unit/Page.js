@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withNamespaces } from 'react-i18next';
-import { Container, Grid } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import Helmets from '../../shared/Helmets';
@@ -13,19 +12,8 @@ import Recommended from './widgets/Recommended/Main/Recommended';
 import playerHelper from '../../../helpers/player';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
-const renderPlayer = (unit, language, embed) => !embed
-  ? <div className="playlist-collection-page">
-    <Container className="avbox">
-      <Grid>
-        <Grid.Row className={classNames('', {'layout--is-audio': false})} >
-          <Grid.Column>
-            <AVBox unit={unit} language={language} />
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </Container>
-  </div>
-  : <AVBox unit={unit} language={language} />
+const renderPlayer = (unit, language) =>
+  <AVBox unit={unit} language={language} />
 
 
 export const UnitPage = ({ unit, language, section = '', location = {} }) => {
@@ -38,15 +26,15 @@ export const UnitPage = ({ unit, language, section = '', location = {} }) => {
 
   const computerWidth = !isMobileDevice ? 10 : 16;
 
-  return !embed ? (
-    <div className="unit-page playlist-collection-page">
-      <Helmets.AVUnit unit={unit} language={language} />
-      <Container className="avbox">
+  return !embed
+    ? (
+      <>
+        <Helmets.AVUnit unit={unit} language={language} />
         <Grid padded>
           <Grid.Row>
             <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}>
               <Grid.Row>
-                {renderPlayer(unit, language, embed)}
+                {renderPlayer(unit, language)}
               </Grid.Row>
               <Grid.Row>
                 <Grid.Column>
@@ -62,13 +50,10 @@ export const UnitPage = ({ unit, language, section = '', location = {} }) => {
             }
           </Grid.Row>
         </Grid>
-      </Container>
-    </div>
-  ) : (
-    <div className="unit-page">
-      {renderPlayer(unit, language, embed)}
-    </div>
-  );
+      </>
+    ) : (
+      renderPlayer(unit, language)
+    );
 }
 
 UnitPage.propTypes = {
