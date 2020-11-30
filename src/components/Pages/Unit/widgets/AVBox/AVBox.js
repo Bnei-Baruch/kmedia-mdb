@@ -4,7 +4,6 @@ import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
-import { Grid } from 'semantic-ui-react';
 import { Media } from 'react-media-player';
 import isEqual from 'react-fast-compare';
 
@@ -57,8 +56,8 @@ class AVBox extends Component {
     const { unit, uiLanguage, contentLanguage, location }         = nextProps;
     const
       {
-        unit: oldUnit, 
-        uiLanguage: oldUiLanguage, 
+        unit: oldUnit,
+        uiLanguage: oldUiLanguage,
         contentLanguage: oldContentLanguage,
         location: oldLocation
       }                                                           = this.props;
@@ -145,39 +144,37 @@ class AVBox extends Component {
     const isAudio = playableItem.mediaType === MT_AUDIO;
 
     return (
-      <Grid.Row>
-        <Grid.Column mobile={16} tablet={12} computer={10}>
-          <div
-            className={classNames('avbox__player', {
-              'avbox__player--is-audio': isAudio,
-              'avbox__player--is-audio--edit-mode': isAudio && mediaEditMode === 2,
-              'avbox__player--is-audio--normal-mode': isAudio && mediaEditMode === 0,
-              'avbox__player--is-audio--dropdown-opened': isAudio && isDropdownOpened && !mediaEditMode,
-              'avbox__player--is-audio--dropdown-closed': isAudio && !isDropdownOpened && !mediaEditMode,
-              'avbox__player--is-4x3': playableItem.unit.film_date < '2014',
-              'mobile-device': !undefinedDevice,
-            })}
-          >
-            <div className="avbox__media-wrapper">
-              <Media>
-                <AVMobileCheck
-                  autoPlay={autoPlay}
-                  item={playableItem}
-                  preImageUrl={playableItem.preImageUrl}
-                  onSwitchAV={this.handleSwitchAV}
-                  languages={playableItem.availableLanguages}
-                  uiLanguage={uiLanguage}
-                  selectedLanguage={playableItem.language}
-                  requestedLanguage={newItemLanguage}
-                  onLanguageChange={this.handleChangeLanguage}
-                  onMediaEditModeChange={this.handleMediaEditModeChange}
-                  onDropdownOpenedChange={this.handleDropdownOpenedChange}
-                />
-              </Media>
-            </div>
+      <div className="avbox" mobile={16} tablet={12} computer={10}>
+        <div
+          className={classNames('avbox__player', {
+            'avbox__player--is-audio': isAudio,
+            'avbox__player--is-audio--edit-mode': isAudio && mediaEditMode === 2,
+            'avbox__player--is-audio--normal-mode': isAudio && mediaEditMode === 0,
+            'avbox__player--is-audio--dropdown-opened': isAudio && isDropdownOpened && !mediaEditMode,
+            'avbox__player--is-audio--dropdown-closed': isAudio && !isDropdownOpened && !mediaEditMode,
+            'avbox__player--is-4x3': playableItem.unit.film_date < '2014',
+            'mobile-device': !undefinedDevice,
+          })}
+        >
+          <div className="avbox__media-wrapper">
+            <Media>
+              <AVMobileCheck
+                autoPlay={autoPlay}
+                item={playableItem}
+                preImageUrl={playableItem.preImageUrl}
+                onSwitchAV={this.handleSwitchAV}
+                languages={playableItem.availableLanguages}
+                uiLanguage={uiLanguage}
+                selectedLanguage={playableItem.language}
+                requestedLanguage={newItemLanguage}
+                onLanguageChange={this.handleChangeLanguage}
+                onMediaEditModeChange={this.handleMediaEditModeChange}
+                onDropdownOpenedChange={this.handleDropdownOpenedChange}
+              />
+            </Media>
           </div>
-        </Grid.Column>
-      </Grid.Row>
+        </div>
+      </div>
     );
   }
 }

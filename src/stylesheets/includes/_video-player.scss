@@ -1,12 +1,4 @@
-.playlist-collection-page {
-  width: 100% !important;
-
-  .avbox {
-     .row,
-     .column {
-      padding: 0 !important;
-     }
-
+.avbox {
     background-color: $darkWhite;
     width: 100% !important;
 
@@ -119,14 +111,10 @@
           padding-bottom: 0.5em;
         }
 
-        padding-top: 1rem;
-        padding-bottom: 1rem;
+        padding-bottom: 1em;
+        margin-top: 0;
         margin-bottom: 0;
       }
-    }
-
-    #avbox_recommended {
-      padding-top: 1.5rem;
     }
 
     &__playlist-wrapper {
@@ -151,37 +139,13 @@
       }
 
       background: $darkWhite;
-      bottom: -1rem;
       display: flex;
       flex-direction: column;
-      left: 1rem;
-      right: 1rem;
-      top: 0em;
 
       > .header {
         flex: 0 0 auto;
         position: relative;
-        padding-left: 1em;
-        padding-right: 1em;
-
-        &::before {
-          background: radial-gradient(farthest-side at 50% 0, rgba($black, .3), rgba($black, 0));
-          content: '';
-          height: .7rem;
-          left: 0;
-          top: calc(100% + 1rem);
-          width: 100%;
-        }
-      }
-
-      &::before {
-        background: radial-gradient(farthest-side at 50% 100%, rgba($black, .3), rgba($black, 0));
-        bottom: 0;
-        content: '';
-        height: .7rem;
-        left: 0;
-        position: absolute;
-        width: 100%;
+        padding: 1em 1em 0;
       }
     }
 
@@ -195,6 +159,7 @@
       overflow-y: auto;
       padding-bottom: 1rem;
       position: relative;
+      margin: 0;
 
       .header {
         color: $blue;
@@ -221,4 +186,3 @@
       }
     }
   }
-}
