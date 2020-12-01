@@ -15,7 +15,7 @@
     /* player on mobile devices */
     &__player.mobile-device {
       height: auto;
-      padding-top: 1em;
+      padding: 0;
 
       .avbox__media-wrapper {
         overflow: visible;
@@ -107,8 +107,7 @@
 
       > .header {
         @include mobile {
-          padding-top: 0.5em;
-          padding-bottom: 0.5em;
+          padding: 1em 1em 0.5em;
         }
 
         padding-bottom: 1em;

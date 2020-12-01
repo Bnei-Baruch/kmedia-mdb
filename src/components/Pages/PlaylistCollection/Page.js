@@ -121,20 +121,21 @@ const PlaylistCollectionPage = ({
   const computerWidth = isMobileDevice ? 16 : 10;
 
   return !embed ? (
-    <Grid padded className="avbox">
+    <Grid padded={!isMobileDevice} >
       <Grid.Row>
         <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}>
-          <AVPlaylistPlayer
-            items={items}
-            selected={selected}
-            language={language}
-            onSelectedChange={handleSelectedChange}
-            onLanguageChange={handleLanguageChange}
-            onSwitchAV={handleSwitchAV}
-            history={history}
-          />
-          {
-            unit &&
+          <div className="avbox">
+            <AVPlaylistPlayer
+              items={items}
+              selected={selected}
+              language={language}
+              onSelectedChange={handleSelectedChange}
+              onLanguageChange={handleLanguageChange}
+              onSwitchAV={handleSwitchAV}
+              history={history}
+            />
+            {
+              unit &&
               <>
                 { isMobileDevice &&
                   <div id="avbox_playlist">
@@ -147,7 +148,8 @@ const PlaylistCollectionPage = ({
                   <Materials unit={unit} playlistComponent={PlaylistData} />
                 </Container>
               </>
-          }
+            }
+          </div>
         </Grid.Column>
         {
           !isMobileDevice &&
