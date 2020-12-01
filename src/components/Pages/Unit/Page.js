@@ -30,7 +30,7 @@ export const UnitPage = ({ unit, language, section = '', location = {} }) => {
     ? (
       <>
         <Helmets.AVUnit unit={unit} language={language} />
-        <Grid padded>
+        <Grid padded={!isMobileDevice}>
           <Grid.Row>
             <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}>
               <Grid.Row>
