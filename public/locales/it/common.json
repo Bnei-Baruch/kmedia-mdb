@@ -142,7 +142,7 @@
     "no-results": "No results",
     "pagination-results": "Results {{start}} - {{end}} of {{total}}",
     "link-copied-to-clipboard": "Link was copied!",
-    "text-copied-to-clipboard": "Il testo è stato copiato!",
+    : "Il testo è stato copiato!",
     "unknown": "Unknown",
     "unsupported-media-format": "Unsupported format.",
     "error-loading-file": "Error loading file.",
@@ -674,6 +674,7 @@
     "message-title": "Read this fragment",
     "share-button": "Share fragment",
     "copy-link": "Copia link",
-    "copy-text": "Copia testo"
+    "copy-text": "Copia testo",
+    "disable-share": "disattivare"
   }
 }

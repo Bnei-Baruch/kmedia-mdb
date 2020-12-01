@@ -588,6 +588,7 @@
     "message-title": "Read this fragment",
     "share-button": "Share fragment",
     "copy-link": "Bağlantıyı kopyala",
-    "copy-text": "Metni kopyala"
+    "copy-text": "Metni kopyala",
+    "disable-share": "Devre dışı bırak"
   }
 }

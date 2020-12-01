@@ -29,22 +29,15 @@ const scrollToSearch = () => {
   setTimeout(() => element.scrollIntoView(), 0);
 };
 
-class Transcription extends Component {
-  static propTypes = {
-    unit: shapes.ContentUnit,
-    doc2htmlById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
-    uiLanguage: PropTypes.string.isRequired,
-    contentLanguage: PropTypes.string.isRequired,
-    t: PropTypes.func.isRequired,
-    type: PropTypes.string,
-    onContentChange: PropTypes.func.isRequired,
-    location: shapes.HistoryLocation.isRequired,
-  };
+let sessionEnableShare = true;
 
-  static defaultProps = {
-    unit: null,
-    type: null,
-  };
+class Transcription extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      enableShare: sessionEnableShare
+    };
+  }
 
   static selectFile = (textFiles, language) => {
     const selectedFiles = textFiles.filter(x => x.language === language);
@@ -112,7 +105,20 @@ class Transcription extends Component {
     return { selectedFile, languages, language: newLanguage, textFiles };
   }
 
-  state = {};
+  shouldComponentUpdate(nextProps, nextState) {
+    const { props, state } = this;
+    return (nextProps.uiLanguage !== props.uiLanguage)
+      || (nextProps.contentLanguage !== props.contentLanguage)
+      || (nextProps.unit && !props.unit)
+      || (nextProps.unit.id !== props.unit.id)
+      || (nextState.enableShare !== state.enableShare)
+      || (nextProps.unit.files !== props.unit.files
+        || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
+        || (state.selectedFile && props.doc2htmlById && (props.doc2htmlById[state.selectedFile.id]?.wip !== nextProps.doc2htmlById[state.selectedFile.id]?.wip))
+        || nextState.language !== state.language
+        || nextState.searchUrl !== state.searchUrl
+        || nextState.selectedFile !== state.selectedFile);
+  }
 
   componentDidMount() {
     const { selectedFile }       = this.state;
@@ -132,20 +138,6 @@ class Transcription extends Component {
 
   componentWillUnmount() {
     document.removeEventListener('mouseup', this.handleOnMouseUp);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    const { props, state } = this;
-    return (nextProps.uiLanguage !== props.uiLanguage)
-      || (nextProps.contentLanguage !== props.contentLanguage)
-      || (nextProps.unit && !props.unit)
-      || (nextProps.unit.id !== props.unit.id)
-      || (nextProps.unit.files !== props.unit.files
-        || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
-        || (state.selectedFile && props.doc2htmlById && (props.doc2htmlById[state.selectedFile.id]?.wip !== nextProps.doc2htmlById[state.selectedFile.id]?.wip))
-        || nextState.language !== state.language
-        || nextState.searchUrl !== state.searchUrl
-        || nextState.selectedFile !== state.selectedFile);
   }
 
   componentDidUpdate(prevProp, prevState) {
@@ -211,7 +203,7 @@ class Transcription extends Component {
   }
 
   handleOnMouseUp = (e) => {
-    if (this.context.isMobileDevice) {
+    if (this.context.isMobileDevice || !this.state.enableShare) {
       return false;
     }
     this.updateSelection();
@@ -219,12 +211,17 @@ class Transcription extends Component {
   };
 
   handleOnMouseDown = (e) => {
-    if (this.context.isMobileDevice) {
+    if (this.context.isMobileDevice || !this.state.enableShare) {
       return false;
     }
 
     this.setState({ searchUrl: null });
     return false;
+  };
+
+  disableShareBar = () => {
+    sessionEnableShare = false;
+    this.setState({ enableShare: false });
   };
 
   renderShareBar = () => {
@@ -233,7 +230,7 @@ class Transcription extends Component {
       return null;
 
     return (
-      <ShareBar url={searchUrl} text={searchText} />
+      <ShareBar url={searchUrl} text={searchText} disable={this.disableShareBar} />
     );
   };
 
@@ -251,13 +248,13 @@ class Transcription extends Component {
   };
 
   prepareContent = (data) => {
-    const { textFiles, selectedFile, language } = this.state;
-    const direction                             = getLanguageDirection(language);
-    const { srchstart, srchend, highlightAll }  = getQuery(this.props.location);
+    const { textFiles, selectedFile, language, enableShare } = this.state;
+    const direction                                          = getLanguageDirection(language);
+    const { srchstart, srchend, highlightAll }               = getQuery(this.props.location);
 
     return (
       <div className="search-on-page--container">
-        {this.renderShareBar()}
+        {enableShare && this.renderShareBar()}
         {this.getSelectFiles(selectedFile, textFiles)}
         <div
           id={DOM_ROOT_ID}
@@ -313,5 +310,21 @@ class Transcription extends Component {
     return null;
   }
 }
+
+Transcription.propTypes = {
+  unit: shapes.ContentUnit,
+  doc2htmlById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
+  uiLanguage: PropTypes.string.isRequired,
+  contentLanguage: PropTypes.string.isRequired,
+  t: PropTypes.func.isRequired,
+  type: PropTypes.string,
+  onContentChange: PropTypes.func.isRequired,
+  location: shapes.HistoryLocation.isRequired,
+};
+
+Transcription.defaultProps = {
+  unit: null,
+  type: null,
+};
 
 export default withNamespaces()(Transcription);

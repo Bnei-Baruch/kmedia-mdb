@@ -18,7 +18,7 @@ import {
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
-const ShareSelected = ({ t, url, text }) => {
+const ShareSelected = ({ t, url, text, disable }) => {
 
   const contextRef = useRef();
 
@@ -118,6 +118,7 @@ const ShareSelected = ({ t, url, text }) => {
                   )
                 }
               />
+              <Button compact size="tiny" content={t('share-text.disable-share')} onClick={disable} />
             </div>
           </Popup.Content>
         </Popup>
@@ -131,6 +132,7 @@ const ShareSelected = ({ t, url, text }) => {
 ShareSelected.propTypes = {
   t: PropTypes.func.isRequired,
   url: PropTypes.string.isRequired,
+  disable: PropTypes.func,
 };
 
 export default withNamespaces()(ShareSelected);

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
@@ -13,9 +13,9 @@ import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { getQuery, updateQuery } from '../../../helpers/url';
 import {
-  prepareScrollToSearch,
   buildSearchLinkFromSelection,
-  DOM_ROOT_ID
+  DOM_ROOT_ID,
+  prepareScrollToSearch
 } from '../../../helpers/scrollToSearch/helper';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
@@ -46,12 +46,16 @@ const getFullUrl = (pdfFile, data, language, source) => {
   return assetUrl(`sources/${id}/${data[language].docx}`);
 };
 
+let sessionEnableShare = true;
+
 const Library = ({ data, source, language = null, languages = [], langSelectorMount = null, downloadAllowed, handleLanguageChanged, t, }) => {
-  const location                             = useLocation();
-  const history                              = useHistory();
-  const [pageNumber, setPageNumber]          = useState(getPageFromLocation(location));
-  const [searchUrl, setSearchUrl]            = useState();
-  const [searchText, setSearchText]          = useState();
+  const location                      = useLocation();
+  const history                       = useHistory();
+  const [pageNumber, setPageNumber]   = useState(getPageFromLocation(location));
+  const [searchUrl, setSearchUrl]     = useState();
+  const [searchText, setSearchText]   = useState();
+  const [enableShare, setEnableShare] = useState(sessionEnableShare);
+
   const { srchstart, srchend, highlightAll } = getQuery(location);
   const search                               = { srchstart, srchend };
   const { isMobileDevice }                   = useContext(DeviceInfoContext);
@@ -68,7 +72,7 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
   };
 
   const handleOnMouseUp = (e) => {
-    if (isMobileDevice) {
+    if (isMobileDevice || !enableShare) {
       return false;
     }
     updateSelection();
@@ -76,7 +80,7 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
   };
 
   const handleOnMouseDown = (e) => {
-    if (isMobileDevice) {
+    if (isMobileDevice || !enableShare) {
       return false;
     }
     setSearchUrl(null);
@@ -84,7 +88,6 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
   };
 
   useEffect(() => {
-
     document.addEventListener('mouseup', handleOnMouseUp);
     return () => document.removeEventListener('mouseup', handleOnMouseUp);
   });
@@ -112,12 +115,17 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
     }));
   };
 
+  const disableShareBar = () => {
+    sessionEnableShare = false;
+    setEnableShare(false);
+  };
+
   const renderShareBar = () => {
     if (isMobileDevice || !searchUrl)
       return null;
 
     return (
-      <ShareBar url={searchUrl} text={searchText} />
+      <ShareBar url={searchUrl} text={searchText} disable={disableShareBar} />
     );
   };
 
@@ -143,7 +151,7 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
       const direction = getLanguageDirection(language);
       return (
         <div className="search-on-page--container">
-          {renderShareBar()}
+          {enableShare && renderShareBar()}
           <div
             id={DOM_ROOT_ID}
             onMouseDown={handleOnMouseDown}
