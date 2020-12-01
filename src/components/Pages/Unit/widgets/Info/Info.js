@@ -144,7 +144,7 @@ const Info = ({ unit = {}, section = '', t }) => {
 
   return (
     <div className="unit-info">
-      <Header as="h1">
+      <Header as="h2">
         <small className="text grey unit-info__film-date">
           {t('values.date', { date: filmDate })}
         </small>
