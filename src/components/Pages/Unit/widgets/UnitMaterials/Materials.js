@@ -116,11 +116,7 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
     }
   }
 
-  return (
-    <div className="unit-materials">
-      <TabsMenu items={items} />
-    </div>
-  );
+  return <TabsMenu items={items} />
 };
 
 Materials.propTypes = {
