@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { Button, Popup, } from 'semantic-ui-react';
+import { Button, Icon, Popup, } from 'semantic-ui-react';
 
 import useStateWithCallback from '../../helpers/use-state-with-callback';
 import {
@@ -118,7 +118,17 @@ const ShareSelected = ({ t, url, text, disable }) => {
                   )
                 }
               />
-              <Button compact size="tiny" content={t('share-text.disable-share')} onClick={disable} />
+
+              <Popup
+                content={t('share-text.disable-share')}
+                trigger={
+                  (
+                    <Button icon compact size="tiny" onClick={disable} style={{margin: '0 1em'}}>
+                      <Icon name="cancel" />
+                    </Button>
+                  )
+                }
+              />
             </div>
           </Popup.Content>
         </Popup>
