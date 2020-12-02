@@ -123,7 +123,13 @@ const ShareSelected = ({ t, url, text, disable }) => {
                 content={t('share-text.disable-share')}
                 trigger={
                   (
-                    <Button icon compact size="tiny" onClick={disable} style={{margin: '0 1em'}}>
+                    <Button
+                      className="cancel-button"
+                      icon
+                      compact
+                      size="tiny"
+                      onClick={disable}
+                    >
                       <Icon name="cancel" />
                     </Button>
                   )
