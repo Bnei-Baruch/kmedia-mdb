@@ -10,17 +10,29 @@
 .unit-materials {
   @include mobile {
     margin-bottom: 0;
+    padding: 0 1.5em;
   }
 
   background: $darkWhite;
   margin: 0 -1em 2em;
-  padding: 0 1em 1em;
 
   .menu {
-    @include small-mobile {
+    @include mobile {
       border-bottom: 0!important;
-      overflow-x: scroll;
-      padding: 0 0.5em 1em;
+      overflow-x: auto;
+      padding: 0;
+    }
+
+    padding: 0;
+    margin: 0;
+
+    .item {
+      @include mobile {
+        flex: 2 0 auto !important;
+        padding: 1em 0.5em !important;
+      }
+
+      padding: 1em !important;
     }
 
     .tab-downloads {
@@ -28,11 +40,4 @@
     }
   }
 
-  .item {
-    @include small-mobile {
-      flex: 0 0 33% !important;
-      border-color: rgba(34, 36, 38, .15) !important;
-    }
-    flex: 0 1 auto !important;
-  }
 }
