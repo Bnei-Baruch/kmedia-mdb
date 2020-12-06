@@ -21,7 +21,7 @@ import { getPageFromLocation } from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
 import ShareBar from '../../shared/ShareSelected';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
 
 export const checkRabashGroupArticles = (source) => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -46,19 +46,17 @@ const getFullUrl = (pdfFile, data, language, source) => {
   return assetUrl(`sources/${id}/${data[language].docx}`);
 };
 
-let sessionEnableShare = true;
-
 const Library = ({ data, source, language = null, languages = [], langSelectorMount = null, downloadAllowed, handleLanguageChanged, t, }) => {
-  const location                      = useLocation();
-  const history                       = useHistory();
-  const [pageNumber, setPageNumber]   = useState(getPageFromLocation(location));
-  const [searchUrl, setSearchUrl]     = useState();
-  const [searchText, setSearchText]   = useState();
-  const [enableShare, setEnableShare] = useState(sessionEnableShare);
-
+  const location                             = useLocation();
+  const history                              = useHistory();
+  const [pageNumber, setPageNumber]          = useState(getPageFromLocation(location));
+  const [searchUrl, setSearchUrl]            = useState();
+  const [searchText, setSearchText]          = useState();
   const { srchstart, srchend, highlightAll } = getQuery(location);
-  const search                               = { srchstart, srchend };
-  const { isMobileDevice }                   = useContext(DeviceInfoContext);
+
+  const search                                                          = { srchstart, srchend };
+  const { isMobileDevice }                                              = useContext(DeviceInfoContext);
+  const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
 
   const content = useSelector(state => selectors.getAsset(state.assets));
 
@@ -72,7 +70,7 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
   };
 
   const handleOnMouseUp = (e) => {
-    if (isMobileDevice || !enableShare) {
+    if (isMobileDevice || !isShareTextEnabled) {
       return false;
     }
     updateSelection();
@@ -80,7 +78,7 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
   };
 
   const handleOnMouseDown = (e) => {
-    if (isMobileDevice || !enableShare) {
+    if (isMobileDevice || !isShareTextEnabled) {
       return false;
     }
     setSearchUrl(null);
@@ -115,10 +113,7 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
     }));
   };
 
-  const disableShareBar = () => {
-    sessionEnableShare = false;
-    setEnableShare(false);
-  };
+  const disableShareBar = () => setEnableShareText(false);
 
   const renderShareBar = () => {
     if (isMobileDevice || !searchUrl)
@@ -151,7 +146,7 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
       const direction = getLanguageDirection(language);
       return (
         <div className="search-on-page--container">
-          {enableShare && renderShareBar()}
+          {isShareTextEnabled && renderShareBar()}
           <div
             id={DOM_ROOT_ID}
             onMouseDown={handleOnMouseDown}

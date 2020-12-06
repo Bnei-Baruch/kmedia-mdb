@@ -29,15 +29,8 @@ const scrollToSearch = () => {
   setTimeout(() => element.scrollIntoView(), 0);
 };
 
-let sessionEnableShare = true;
-
 class Transcription extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      enableShare: sessionEnableShare
-    };
-  }
+  state              = {};
 
   static selectFile = (textFiles, language) => {
     const selectedFiles = textFiles.filter(x => x.language === language);
@@ -111,7 +104,7 @@ class Transcription extends Component {
       || (nextProps.contentLanguage !== props.contentLanguage)
       || (nextProps.unit && !props.unit)
       || (nextProps.unit.id !== props.unit.id)
-      || (nextState.enableShare !== state.enableShare)
+      || (nextProps.enableShareText.isShareTextEnabled !== props.enableShareText.isShareTextEnabled)
       || (nextProps.unit.files !== props.unit.files
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
         || (state.selectedFile && props.doc2htmlById && (props.doc2htmlById[state.selectedFile.id]?.wip !== nextProps.doc2htmlById[state.selectedFile.id]?.wip))
@@ -203,7 +196,7 @@ class Transcription extends Component {
   }
 
   handleOnMouseUp = (e) => {
-    if (this.context.isMobileDevice || !this.state.enableShare) {
+    if (this.context.isMobileDevice || !this.props.enableShareText.isShareTextEnabled) {
       return false;
     }
     this.updateSelection();
@@ -211,7 +204,7 @@ class Transcription extends Component {
   };
 
   handleOnMouseDown = (e) => {
-    if (this.context.isMobileDevice || !this.state.enableShare) {
+    if (this.context.isMobileDevice || !this.props.enableShareText.isShareTextEnabled) {
       return false;
     }
 
@@ -219,10 +212,7 @@ class Transcription extends Component {
     return false;
   };
 
-  disableShareBar = () => {
-    sessionEnableShare = false;
-    this.setState({ enableShare: false });
-  };
+  disableShareBar = () => this.props.enableShareText.setEnableShareText(false);
 
   renderShareBar = () => {
     const { searchUrl, searchText } = this.state;
@@ -248,13 +238,13 @@ class Transcription extends Component {
   };
 
   prepareContent = (data) => {
-    const { textFiles, selectedFile, language, enableShare } = this.state;
-    const direction                                          = getLanguageDirection(language);
-    const { srchstart, srchend, highlightAll }               = getQuery(this.props.location);
+    const { textFiles, selectedFile, language } = this.state;
+    const direction                             = getLanguageDirection(language);
+    const { srchstart, srchend, highlightAll }  = getQuery(this.props.location);
 
     return (
       <div className="search-on-page--container">
-        {enableShare && this.renderShareBar()}
+        {this.props.enableShareText.isShareTextEnabled && this.renderShareBar()}
         {this.getSelectFiles(selectedFile, textFiles)}
         <div
           id={DOM_ROOT_ID}
