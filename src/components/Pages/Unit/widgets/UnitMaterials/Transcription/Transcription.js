@@ -30,21 +30,7 @@ const scrollToSearch = () => {
 };
 
 class Transcription extends Component {
-  static propTypes = {
-    unit: shapes.ContentUnit,
-    doc2htmlById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
-    uiLanguage: PropTypes.string.isRequired,
-    contentLanguage: PropTypes.string.isRequired,
-    t: PropTypes.func.isRequired,
-    type: PropTypes.string,
-    onContentChange: PropTypes.func.isRequired,
-    location: shapes.HistoryLocation.isRequired,
-  };
-
-  static defaultProps = {
-    unit: null,
-    type: null,
-  };
+  state              = {};
 
   static selectFile = (textFiles, language) => {
     const selectedFiles = textFiles.filter(x => x.language === language);
@@ -112,7 +98,20 @@ class Transcription extends Component {
     return { selectedFile, languages, language: newLanguage, textFiles };
   }
 
-  state = {};
+  shouldComponentUpdate(nextProps, nextState) {
+    const { props, state } = this;
+    return (nextProps.uiLanguage !== props.uiLanguage)
+      || (nextProps.contentLanguage !== props.contentLanguage)
+      || (nextProps.unit && !props.unit)
+      || (nextProps.unit.id !== props.unit.id)
+      || (nextProps.enableShareText.isShareTextEnabled !== props.enableShareText.isShareTextEnabled)
+      || (nextProps.unit.files !== props.unit.files
+        || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
+        || (state.selectedFile && props.doc2htmlById && (props.doc2htmlById[state.selectedFile.id]?.wip !== nextProps.doc2htmlById[state.selectedFile.id]?.wip))
+        || nextState.language !== state.language
+        || nextState.searchUrl !== state.searchUrl
+        || nextState.selectedFile !== state.selectedFile);
+  }
 
   componentDidMount() {
     const { selectedFile }       = this.state;
@@ -132,20 +131,6 @@ class Transcription extends Component {
 
   componentWillUnmount() {
     document.removeEventListener('mouseup', this.handleOnMouseUp);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    const { props, state } = this;
-    return (nextProps.uiLanguage !== props.uiLanguage)
-      || (nextProps.contentLanguage !== props.contentLanguage)
-      || (nextProps.unit && !props.unit)
-      || (nextProps.unit.id !== props.unit.id)
-      || (nextProps.unit.files !== props.unit.files
-        || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
-        || (state.selectedFile && props.doc2htmlById && (props.doc2htmlById[state.selectedFile.id]?.wip !== nextProps.doc2htmlById[state.selectedFile.id]?.wip))
-        || nextState.language !== state.language
-        || nextState.searchUrl !== state.searchUrl
-        || nextState.selectedFile !== state.selectedFile);
   }
 
   componentDidUpdate(prevProp, prevState) {
@@ -211,7 +196,7 @@ class Transcription extends Component {
   }
 
   handleOnMouseUp = (e) => {
-    if (this.context.isMobileDevice) {
+    if (this.context.isMobileDevice || !this.props.enableShareText.isShareTextEnabled) {
       return false;
     }
     this.updateSelection();
@@ -219,7 +204,7 @@ class Transcription extends Component {
   };
 
   handleOnMouseDown = (e) => {
-    if (this.context.isMobileDevice) {
+    if (this.context.isMobileDevice || !this.props.enableShareText.isShareTextEnabled) {
       return false;
     }
 
@@ -227,13 +212,15 @@ class Transcription extends Component {
     return false;
   };
 
+  disableShareBar = () => this.props.enableShareText.setEnableShareText(false);
+
   renderShareBar = () => {
     const { searchUrl, searchText } = this.state;
     if (this.context.isMobileDevice || !searchUrl)
       return null;
 
     return (
-      <ShareBar url={searchUrl} text={searchText} />
+      <ShareBar url={searchUrl} text={searchText} disable={this.disableShareBar} />
     );
   };
 
@@ -257,7 +244,7 @@ class Transcription extends Component {
 
     return (
       <div className="search-on-page--container">
-        {this.renderShareBar()}
+        {this.props.enableShareText.isShareTextEnabled && this.renderShareBar()}
         {this.getSelectFiles(selectedFile, textFiles)}
         <div
           id={DOM_ROOT_ID}
@@ -313,5 +300,21 @@ class Transcription extends Component {
     return null;
   }
 }
+
+Transcription.propTypes = {
+  unit: shapes.ContentUnit,
+  doc2htmlById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
+  uiLanguage: PropTypes.string.isRequired,
+  contentLanguage: PropTypes.string.isRequired,
+  t: PropTypes.func.isRequired,
+  type: PropTypes.string,
+  onContentChange: PropTypes.func.isRequired,
+  location: shapes.HistoryLocation.isRequired,
+};
+
+Transcription.defaultProps = {
+  unit: null,
+  type: null,
+};
 
 export default withNamespaces()(Transcription);

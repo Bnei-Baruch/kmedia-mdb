@@ -578,6 +578,7 @@
     "message-title": "Read this fragment",
     "share-button": "Share fragment",
     "copy-link": "Copiar link",
-    "copy-text": "Copiar texto"
+    "copy-text": "Copiar texto",
+    "disable-share": "Cancelar"
   }
 }

@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { Button, Popup, } from 'semantic-ui-react';
+import { Button, Icon, Popup, } from 'semantic-ui-react';
 
 import useStateWithCallback from '../../helpers/use-state-with-callback';
 import {
@@ -18,7 +18,7 @@ import {
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
-const ShareSelected = ({ t, url, text }) => {
+const ShareSelected = ({ t, url, text, disable }) => {
 
   const contextRef = useRef();
 
@@ -118,6 +118,23 @@ const ShareSelected = ({ t, url, text }) => {
                   )
                 }
               />
+
+              <Popup
+                content={t('share-text.disable-share')}
+                trigger={
+                  (
+                    <Button
+                      className="cancel-button"
+                      icon
+                      compact
+                      size="tiny"
+                      onClick={disable}
+                    >
+                      <Icon name="cancel" />
+                    </Button>
+                  )
+                }
+              />
             </div>
           </Popup.Content>
         </Popup>
@@ -131,6 +148,7 @@ const ShareSelected = ({ t, url, text }) => {
 ShareSelected.propTypes = {
   t: PropTypes.func.isRequired,
   url: PropTypes.string.isRequired,
+  disable: PropTypes.func,
 };
 
 export default withNamespaces()(ShareSelected);

@@ -88,7 +88,7 @@
 }
 
 .doc2html-dropdown-container {
-  margin-bottom:10px;
+  margin-bottom: 10px;
 }
 
 /* Program filters hack (rename, move to filters)*/
@@ -360,7 +360,7 @@
   }
 }
 
-.ui.column.grid>[class*="eight wide"].column, .ui.grid>.column.row>[class*="eight wide"].column, .ui.grid>.row>[class*="eight wide"].column, .ui.grid>[class*="eight wide"].column {
+.ui.column.grid > [class*="eight wide"].column, .ui.grid > .column.row > [class*="eight wide"].column, .ui.grid > .row > [class*="eight wide"].column, .ui.grid > [class*="eight wide"].column {
   width: 70% !important;
 
   @include mobile {
@@ -1581,6 +1581,7 @@
   em._h {
     border-bottom: 1px solid rgba(65, 131, 196, .3);
   }
+
   em._b {
     font-weight: bold;
   }
@@ -1630,9 +1631,18 @@
     border: none !important;
     box-shadow: none !important;
 
+    .social-buttons {
+      border-radius: 0.5rem;
+    }
+
     .message {
       max-width: 500px;
       word-wrap: break-word;
+    }
+
+    .cancel-button {
+      font-size: 0.6em !important;
+      margin: -2.3em 0.3em 0 1em;
     }
   }
 }

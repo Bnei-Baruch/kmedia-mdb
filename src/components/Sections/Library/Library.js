@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
@@ -13,15 +13,15 @@ import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { getQuery, updateQuery } from '../../../helpers/url';
 import {
-  prepareScrollToSearch,
   buildSearchLinkFromSelection,
-  DOM_ROOT_ID
+  DOM_ROOT_ID,
+  prepareScrollToSearch
 } from '../../../helpers/scrollToSearch/helper';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
 import ShareBar from '../../shared/ShareSelected';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
 
 export const checkRabashGroupArticles = (source) => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -53,8 +53,10 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
   const [searchUrl, setSearchUrl]            = useState();
   const [searchText, setSearchText]          = useState();
   const { srchstart, srchend, highlightAll } = getQuery(location);
-  const search                               = { srchstart, srchend };
-  const { isMobileDevice }                   = useContext(DeviceInfoContext);
+
+  const search                                                          = { srchstart, srchend };
+  const { isMobileDevice }                                              = useContext(DeviceInfoContext);
+  const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
 
   const content = useSelector(state => selectors.getAsset(state.assets));
 
@@ -68,7 +70,7 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
   };
 
   const handleOnMouseUp = (e) => {
-    if (isMobileDevice) {
+    if (isMobileDevice || !isShareTextEnabled) {
       return false;
     }
     updateSelection();
@@ -76,7 +78,7 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
   };
 
   const handleOnMouseDown = (e) => {
-    if (isMobileDevice) {
+    if (isMobileDevice || !isShareTextEnabled) {
       return false;
     }
     setSearchUrl(null);
@@ -84,7 +86,6 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
   };
 
   useEffect(() => {
-
     document.addEventListener('mouseup', handleOnMouseUp);
     return () => document.removeEventListener('mouseup', handleOnMouseUp);
   });
@@ -112,12 +113,14 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
     }));
   };
 
+  const disableShareBar = () => setEnableShareText(false);
+
   const renderShareBar = () => {
     if (isMobileDevice || !searchUrl)
       return null;
 
     return (
-      <ShareBar url={searchUrl} text={searchText} />
+      <ShareBar url={searchUrl} text={searchText} disable={disableShareBar} />
     );
   };
 
@@ -143,7 +146,7 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
       const direction = getLanguageDirection(language);
       return (
         <div className="search-on-page--container">
-          {renderShareBar()}
+          {isShareTextEnabled && renderShareBar()}
           <div
             id={DOM_ROOT_ID}
             onMouseDown={handleOnMouseDown}

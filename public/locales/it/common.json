@@ -674,6 +674,7 @@
     "message-title": "Read this fragment",
     "share-button": "Share fragment",
     "copy-link": "Copia link",
-    "copy-text": "Copia testo"
+    "copy-text": "Copia testo",
+    "disable-share": "Annulla"
   }
 }

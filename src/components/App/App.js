@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { renderRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
@@ -9,11 +9,16 @@ import routes from '../../routes';
 import ScrollToTop from '../shared/ScrollToTop/ScrollToTop';
 import '../../stylesheets/Kmedia.scss';
 import * as shapes from '../shapes';
-import { DeviceInfoContext } from '../../helpers/app-contexts'
+import { DeviceInfoContext, SessionInfoContext } from '../../helpers/app-contexts';
 
 const App = (props) => {
+  const [isShareTextEnabled, setEnableShareText]                                = useState(true);
   const { i18n, store, history, initialI18nStore, initialLanguage, deviceInfo } = props;
-  const deviceInfoContext =  {
+
+  const sessionInfo       = {
+    enableShareText: { isShareTextEnabled, setEnableShareText }
+  };
+  const deviceInfoContext = {
     deviceInfo: deviceInfo,
     isMobileDevice: deviceInfo.device?.type === 'mobile',
     undefinedDevice: deviceInfo.device?.type === undefined
@@ -22,11 +27,13 @@ const App = (props) => {
     <I18nextProvider i18n={i18n} initialI18nStore={initialI18nStore} initialLanguage={initialLanguage}>
       <Provider store={store}>
         <DeviceInfoContext.Provider value={deviceInfoContext}>
-          <ConnectedRouter history={history}>
-            <ScrollToTop>
-              {renderRoutes(routes)}
-            </ScrollToTop>
-          </ConnectedRouter>
+          <SessionInfoContext.Provider value={sessionInfo}>
+            <ConnectedRouter history={history}>
+              <ScrollToTop>
+                {renderRoutes(routes)}
+              </ScrollToTop>
+            </ConnectedRouter>
+          </SessionInfoContext.Provider>
         </DeviceInfoContext.Provider>
       </Provider>
     </I18nextProvider>

@@ -676,6 +676,7 @@
     "message-title": "Read this fragment",
     "share-button": "Share fragment",
     "copy-link": "העתק קישור",
-    "copy-text": "העתק טקסט"
+    "copy-text": "העתק טקסט",
+    "disable-share": "לבטל"
   }
 }

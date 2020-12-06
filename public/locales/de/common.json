@@ -411,7 +411,7 @@
     "recommended": {
       "header": "Recommended"
     },
-    "playlist":{
+    "playlist": {
       "header": "Up Next"
     }
   },
@@ -565,9 +565,10 @@
     "content_language": "Content language"
   },
   "share-text": {
-    "message-title": "Read this fragment",
-    "share-button": "Share fragment",
-    "copy-link": "Copy link",
-    "copy-text": "Copy text"
+    "message-title": "Lesen Sie dieses Fragment",
+    "share-button": "Fragment teilen",
+    "copy-link": "Link kopieren",
+    "copy-text": "Text kopieren",
+    "disable-share": "Stornieren"
   }
 }

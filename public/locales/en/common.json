@@ -589,6 +589,7 @@
     "message-title": "Read this fragment",
     "share-button": "Share fragment",
     "copy-link": "Copy link",
-    "copy-text": "Copy text"
+    "copy-text": "Copy text",
+    "disable-share": "Cancel"
   }
 }
