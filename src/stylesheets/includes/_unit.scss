@@ -9,16 +9,13 @@
 
 .unit-materials {
   @include mobile {
-    margin-bottom: 0;
-    padding: 0 1.5em;
+    padding: 0;
   }
 
   background: $darkWhite;
-  margin: 0 -1em 2em;
 
   .menu {
     @include mobile {
-      border-bottom: 0!important;
       overflow-x: auto;
       padding: 0;
     }
