@@ -144,7 +144,7 @@ class AVBox extends Component {
     const isAudio = playableItem.mediaType === MT_AUDIO;
 
     return (
-      <div className="avbox" mobile={16} tablet={12} computer={10}>
+      <div className="avbox">
         <div
           className={classNames('avbox__player', {
             'avbox__player--is-audio': isAudio,
