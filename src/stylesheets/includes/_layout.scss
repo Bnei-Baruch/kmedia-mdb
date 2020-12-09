@@ -215,14 +215,8 @@ body {
 }
 
 .ui.grid {
-  > .row.is-fitted {
-    padding-bottom: 0;
-    padding-top: 0;
-
-    > .column.is-fitted {
-      padding-left: 0;
-      padding-right: 0;
-    }
+  .is-fitted {
+    padding: 0 !important;
   }
 }
 

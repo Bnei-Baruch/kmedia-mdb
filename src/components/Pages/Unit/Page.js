@@ -30,25 +30,23 @@ export const UnitPage = ({ unit, language, section = '', location = {} }) => {
     ? (
       <>
         <Helmets.AVUnit unit={unit} language={language} />
-        <Grid container padded={!isMobileDevice}>
-          <Grid.Row className="is-fitted">
-            <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className="is-fitted">
-              <Grid.Row>
-                {renderPlayer(unit, language)}
-              </Grid.Row>
-              <Grid.Row>
-                <Grid.Column>
-                  <Info unit={unit} section={section} />
-                  <Materials unit={unit} />
-                </Grid.Column>
-              </Grid.Row>
-            </Grid.Column>
-            {!isMobileDevice &&
+        <Grid padded={!isMobileDevice}>
+          <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}>
+            <Grid.Row>
+              {renderPlayer(unit, language)}
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column>
+                <Info unit={unit} section={section} />
+                <Materials unit={unit} />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid.Column>
+          {!isMobileDevice &&
               <Grid.Column mobile={16} tablet={6} computer={6}>
                 <Recommended unit={unit} />
               </Grid.Column>
-            }
-          </Grid.Row>
+          }
         </Grid>
       </>
     ) : (

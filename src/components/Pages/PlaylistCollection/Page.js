@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { useSelector } from 'react-redux';
 import { Container, Grid } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
@@ -121,20 +122,20 @@ const PlaylistCollectionPage = ({
   const computerWidth = isMobileDevice ? 16 : 10;
 
   return !embed ? (
-    <Grid container padded={!isMobileDevice} className="avbox">
-      <Grid.Row className="is-fitted">
-        <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className="is-fitted">
-          <AVPlaylistPlayer
-            items={items}
-            selected={selected}
-            language={language}
-            onSelectedChange={handleSelectedChange}
-            onLanguageChange={handleLanguageChange}
-            onSwitchAV={handleSwitchAV}
-            history={history}
-          />
-          {
-            unit &&
+    <Grid padded={!isMobileDevice} className="avbox">
+      <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}
+        className={classNames({"is-fitted": isMobileDevice})}>
+        <AVPlaylistPlayer
+          items={items}
+          selected={selected}
+          language={language}
+          onSelectedChange={handleSelectedChange}
+          onLanguageChange={handleLanguageChange}
+          onSwitchAV={handleSwitchAV}
+          history={history}
+        />
+        {
+          unit &&
               <>
                 { isMobileDevice &&
                   <div id="avbox_playlist">
@@ -147,15 +148,14 @@ const PlaylistCollectionPage = ({
                   <Materials unit={unit} playlistComponent={PlaylistData} />
                 </Container>
               </>
-          }
-        </Grid.Column>
-        {
-          !isMobileDevice &&
-              <Grid.Column mobile={16} tablet={6} computer={6}>
-                {PlaylistData()}
-              </Grid.Column>
         }
-      </Grid.Row>
+      </Grid.Column>
+      {
+        !isMobileDevice &&
+          <Grid.Column mobile={16} tablet={6} computer={6}>
+            {PlaylistData()}
+          </Grid.Column>
+      }
     </Grid>
   ) :
     <Container mobile={16} tablet={16} computer={16} className="avbox">
