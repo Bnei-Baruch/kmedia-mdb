@@ -271,7 +271,7 @@ class Sources extends Component {
             {
               languages.length > 0
                 ? (
-                  <Grid.Column width={languages.length} textAlign="right">
+                  <Grid.Column width={languages.length} textAlign="center">
                     <ButtonsLanguageSelector
                       languages={languages}
                       defaultValue={uiLanguage}
