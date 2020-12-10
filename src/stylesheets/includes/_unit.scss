@@ -17,7 +17,8 @@
   .menu {
     @include mobile {
       overflow-x: auto;
-      padding: 0;
+      overflow-y: hidden;
+      border-bottom: 0!important;
     }
 
     padding: 0;
