@@ -56,7 +56,7 @@ class SearchResultCU extends SearchResultBase {
 
     return {
       canonicalLinkParams: [cu || { id: mdbUid, content_type: cu.content_type }, this.getMediaLanguage(filters)],
-      canonicalLinkSearch: { activeTab: 'transcription', language },
+      canonicalLinkSearch: { activeTab: 'transcription', language, autoPlay: 0 },
       logLinkParams: [mdbUid, index, resultType, rank, searchId]
     };
   };
