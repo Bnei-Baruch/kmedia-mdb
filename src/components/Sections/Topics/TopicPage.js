@@ -14,6 +14,7 @@ import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 import Link from '../../Language/MultiLanguageLink';
 import TopN from './TopN';
+import HelmetsBasic from '../../shared/Helmets/Basic';
 
 const TOP_N_ITEMS = 5;
 
@@ -81,33 +82,36 @@ const TopicPage = ({ match, t }) => {
     const breadCrumbIcon = `${isLanguageRtl(language) ? 'left' : 'right'} angle`;
 
     return (
-      <Container className="padded">
-        <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="large" />
-        <Divider hidden />
-        <Grid doubling columns={sections.length}>
-          {
-            sections.map(s => {
-              const sectionUnits = getSectionUnits(s);
-              const topicUrl     = getTopicUrl(s, tagPath, language);
-              const sectionCount = getCounts(s);
+      <>
+        <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
+        <Container className="padded">
+          <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="large" />
+          <Divider hidden />
+          <Grid doubling columns={sections.length}>
+            {
+              sections.map(s => {
+                const sectionUnits = getSectionUnits(s);
+                const topicUrl     = getTopicUrl(s, tagPath, language);
+                const sectionCount = getCounts(s);
 
-              return isEmpty(sectionUnits)
-                ? null
-                : (
-                  <Grid.Column key={s}>
-                    <TopN
-                      section={s}
-                      units={sectionUnits}
-                      N={TOP_N_ITEMS}
-                      topicUrl={topicUrl}
-                      sectionCount={sectionCount}
-                    />
-                  </Grid.Column>
-                );
-            })
-          }
-        </Grid>
-      </Container>
+                return isEmpty(sectionUnits)
+                  ? null
+                  : (
+                    <Grid.Column key={s}>
+                      <TopN
+                        section={s}
+                        units={sectionUnits}
+                        N={TOP_N_ITEMS}
+                        topicUrl={topicUrl}
+                        sectionCount={sectionCount}
+                      />
+                    </Grid.Column>
+                  );
+              })
+            }
+          </Grid>
+        </Container>
+      </>
     );
   }
 
