@@ -82,7 +82,7 @@ const TopicPage = ({ match, t }) => {
     const breadCrumbIcon = `${isLanguageRtl(language) ? 'left' : 'right'} angle`;
 
     return (
-      <div>
+      <>
         <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
         <Container className="padded">
           <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="large" />
@@ -111,7 +111,7 @@ const TopicPage = ({ match, t }) => {
             }
           </Grid>
         </Container>
-      </div>
+      </>
     );
   }
 
