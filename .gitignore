@@ -17,6 +17,7 @@ cc-test-reporter
 .env.local
 .env.staging
 .env.production
+.eslintcache
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

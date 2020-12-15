@@ -124,25 +124,25 @@ class Api {
   );
 
   static recommended = uid => {
-    var data = JSON.stringify({
-      "more_items": 20,
-      "current_feed": [],
-      "options": {
-        "recommend": {
-          "uid": uid  
+    const data = JSON.stringify({
+      'more_items': 20,
+      'current_feed': [],
+      'options': {
+        'recommend': {
+          'uid': uid
         }
       }
     });
 
-    var config = {
+    const config = {
       method: 'post',
-      url: `${API_RECOMMENDED}`, 
+      url: `${API_RECOMMENDED}`,
       headers: { 'Content-Type': 'application/json' },
       data: data
     };
 
     return axios(config);
-  }
+  };
 }
 
 export default Api;
