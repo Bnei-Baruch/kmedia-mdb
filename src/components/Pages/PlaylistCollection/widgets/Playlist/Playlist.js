@@ -14,9 +14,19 @@ const PlaylistWidget = ({ playlist, selected = 0, onSelectedChange, t, prevLink 
   }, [onSelectedChange]);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
-
   const { collection, items } = playlist;
-  const unitsToDisplay = items.filter(item => !!item.unit).map(item => item.unit);
+  
+  const unitsByContentType = items
+    .filter(item => !!item.unit)
+    .map(item => item.unit)
+    .reduce((acc, u) => {
+      if (!acc[u.content_type]){
+        acc[u.content_type] = [];
+      }
+
+      acc[u.content_type].push(u);
+      return acc;
+    }, []);
 
   return (
     <div id="avbox_playlist" className="avbox__playlist-wrapper">
@@ -24,21 +34,25 @@ const PlaylistWidget = ({ playlist, selected = 0, onSelectedChange, t, prevLink 
         <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} />
       }
       <div className="avbox__playlist-view">
-        {/* cannot use semantic Item because it doesn't recongnize the onClick event */}
-        <List selection size="tiny">
-          {
-            unitsToDisplay.map((unit, index) => (
-              <List.Item
-                key={unit.id}
-                name={`${index}`}
-                active={index === selected}
-                onClick={handleItemClick}
-              >
-                {renderPlaylistUnit(unit, t)}
-              </List.Item>
-            ))
-          }
-        </List>
+        {
+          Object.entries(unitsByContentType).map(([ct, units]) => (
+            <List selection size="tiny">
+              <List.Header>{t(`constants.content-types.${ct}`)}</List.Header>
+              {
+                units.map((unit, index) => (
+                  <List.Item
+                    key={unit.id}
+                    name={`${index}`}
+                    active={index === selected}
+                    onClick={handleItemClick}
+                  >
+                    {renderPlaylistUnit(unit, t)}
+                  </List.Item>
+                ))
+              }
+            </List>
+          ))
+        }
       </div>
     </div>
   );

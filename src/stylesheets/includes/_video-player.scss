@@ -162,7 +162,10 @@
       margin: 0;
 
       .header {
-        color: $blue;
+        // color: $blue;
+        font-size: small;
+        font-weight: bolder;
+        margin: 0.5em 0;
       }
 
       .list .item {
