@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
+import classNames from 'classnames';
 import { Grid } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
@@ -30,8 +31,9 @@ export const UnitPage = ({ unit, language, section = '', location = {} }) => {
     ? (
       <>
         <Helmets.AVUnit unit={unit} language={language} />
-        <Grid padded={!isMobileDevice}>
-          <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}>
+        <Grid padded={!isMobileDevice} className="avbox">
+          <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}
+            className={classNames({"is-fitted": isMobileDevice})}>
             <Grid.Row>
               {renderPlayer(unit, language)}
             </Grid.Row>
