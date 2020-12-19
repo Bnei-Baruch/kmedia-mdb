@@ -18,10 +18,10 @@
     @include mobile {
       overflow-x: auto;
       overflow-y: hidden;
-      border-bottom: 0!important;
+      border-bottom: 0 !important;
     }
 
-    padding: 0;
+    padding: 0 0 0.5em 0;
     margin: 0;
 
     .item {
