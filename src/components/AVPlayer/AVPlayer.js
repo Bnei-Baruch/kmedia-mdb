@@ -44,7 +44,7 @@ const playbackToValue = playback => parseFloat(playback.slice(0, -1));
 
 class AVPlayer extends Component {
   static contextType = DeviceInfoContext;
-  
+
   static propTypes = {
     t: PropTypes.func.isRequired,
     media: shapes.Media.isRequired,
@@ -750,7 +750,7 @@ class AVPlayer extends Component {
           poster={isVideo ? item.preImageUrl : null}
           vendor={isVideo ? 'video' : 'audio'}
           onReady={this.onPlayerReady}
-          preload={isClient ? 'metadata' : 'none'}
+          preload={'metadata'}
           controls={false}
           onError={this.onError}
           onPause={this.onPause}
