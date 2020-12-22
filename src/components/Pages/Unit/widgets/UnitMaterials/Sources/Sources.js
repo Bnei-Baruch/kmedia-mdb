@@ -232,60 +232,53 @@ class Sources extends Component {
       contentStatus    = doc2htmlById[actualFile.id] || {};
     }
 
-    const { wip: contentWip, err: contentErr, data: contentData } = contentStatus;
+    const { wip, err, data } = contentStatus;
     let contents;
-    if (contentErr) {
-      if (contentErr.response && contentErr.response.status === 404) {
-        contents = (
-          <FrownSplash
-            text={t('messages.source-content-not-found')}
-          />
-        );
+    if (err) {
+      if (err.response && err.response.status === 404) {
+        contents = <FrownSplash text={t('messages.source-content-not-found')} />;
       } else {
-        contents = <ErrorSplash text={t('messages.server-error')} subtext={formatError(contentErr)} />;
+        contents = <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
       }
-    } else if (contentWip) {
+    } else if (wip) {
       contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else if (taas && pdfFile) {
       contents = <PDF pdfFile={assetUrl(`sources/${selected}/${pdfFile}`)} pageNumber={1} startsFrom={starts} />;
     } else {
       const direction = getLanguageDirection(uiLanguage);
-      contents        = <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: contentData }} />;
+      contents = <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: data }} />;
     }
 
     return (
-      <div>
-        <Grid stackable>
-          <Grid.Row>
-            <Grid.Column width={16 - languages.length}>
-              <Dropdown
-                fluid
-                selection
-                value={selected}
-                options={options}
-                selectOnBlur={false}
-                selectOnNavigation={false}
-                onChange={this.handleSourceChanged}
-              />
-            </Grid.Column>
-            {
-              languages.length > 0
-                ? (
-                  <Grid.Column width={languages.length} textAlign="center">
-                    <ButtonsLanguageSelector
-                      languages={languages}
-                      defaultValue={uiLanguage}
-                      onSelect={this.handleLanguageChanged}
-                    />
-                  </Grid.Column>
-                )
-                : null
-            }
-          </Grid.Row>
+      <>
+        <Grid stackable padded>
+          {/* <Grid.Row> */}
+          <Grid.Column width={16 - languages.length}>
+            <Dropdown
+              fluid
+              selection
+              value={selected}
+              options={options}
+              selectOnBlur={false}
+              selectOnNavigation={false}
+              onChange={this.handleSourceChanged}
+            />
+          </Grid.Column>
+          {
+            languages.length > 0 &&
+                <Grid.Column width={languages.length} textAlign="center">
+                  <ButtonsLanguageSelector
+                    languages={languages}
+                    defaultValue={uiLanguage}
+                    onSelect={this.handleLanguageChanged}
+                  />
+                </Grid.Column>
+          }
+          {/* </Grid.Row> */}
         </Grid>
         <Divider hidden />
         {contents}
-      </div>
+      </>
     );
   }
 }
