@@ -1,41 +1,48 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { Segment } from 'semantic-ui-react';
 
-import { isEmpty } from '../../../../../../helpers/utils';
+import { tracePath, isEmpty } from '../../../../../../helpers/utils';
 import { selectors } from '../../../../../../redux/modules/sources';
 import { actions as assetsActions, selectors as assetsSelectors } from '../../../../../../redux/modules/assets';
-import { selectors as settings } from '../../../../../../redux/modules/settings';
 import * as shapes from '../../../../../shapes';
-import Sources from './Sources';
+import Sources, { getKiteiMakorUnits } from './Sources';
 
-const handleContentChange = (id, name, deriveId, fetchAsset, doc2html) => {
-  if (deriveId) {
-    doc2html(deriveId);
-  } else {
-    fetchAsset(`sources/${id}/${name}`);
-  }
+
+const getSourceOptions = (unit, indexMap, getSourceById, t) => {
+  const sourceOptions = (unit.sources || []).map(getSourceById).filter(x => !!x).map(x => ({
+    value: x.id,
+    text: tracePath(x, getSourceById).map(y => y.name).join(' > '),
+    disabled: indexMap[x.id] && !indexMap[x.id].data && !indexMap[x.id].wip,
+  }));
+
+  const derivedOptions = getKiteiMakorUnits(unit)
+    .map(x => ({
+      value: x.id,
+      text: t(`constants.content-types.${x.content_type}`),
+      type: x.content_type,
+      disabled: false,
+    })) || [];
+
+  return [...sourceOptions, ...derivedOptions];
 };
 
-const SourcesContainer = ({ unit }) => {
+const SourcesContainer = ({ unit, t }) => {
   const dispatch        = useDispatch();
   const sourceIndex     = useCallback(k => dispatch(assetsActions.sourceIndex(k)), [dispatch]);
-  const fetchAsset      = useCallback((name) => dispatch(assetsActions.fetchAsset(name)), [dispatch]);
-  const doc2html        = useCallback(deriveId => dispatch(assetsActions.doc2html(deriveId)), [dispatch]);
-  
+
+  const getSourceById   = useSelector(state => selectors.getSourceById(state.sources));
   const indexById       = useSelector(state => assetsSelectors.getSourceIndexById(state.assets));
+
   const reducer         = useCallback((acc, val) => {
     acc[val] = indexById[val];
     return acc;
   }, [indexById]);
-
   const indexMap        = useCallback(sources => (sources || []).reduce(reducer, {}), [reducer]);
-  
-  const content         = useSelector(state => assetsSelectors.getAsset(state.assets));
-  const doc2htmlById    = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
-  const language        = useSelector(state => settings.getLanguage(state.settings));
-  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
-  const getSourceById   = useSelector(state => selectors.getSourceById(state.sources));
+
+  const options = useMemo(() => getSourceOptions(unit, indexMap, getSourceById, t), [unit, indexMap, getSourceById, t]);
 
   useEffect(() => {
     Object.entries(indexMap(unit.sources)).forEach(([k, v]) => {
@@ -45,23 +52,18 @@ const SourcesContainer = ({ unit }) => {
     });
   }, [unit.sources, indexMap, sourceIndex]);
 
-  return (
-    <Sources
+  return options.length === 0
+    ? <Segment basic>{t('materials.sources.no-sources')}</Segment>
+    : <Sources
       unit={unit}
       indexMap={indexMap(unit.sources)}
-      content={content}
-      doc2htmlById={doc2htmlById}
-      uiLanguage={language}
-      contentLanguage={contentLanguage}
-      getSourceById={getSourceById}
-      onContentChange={(id, name, deriveId) => handleContentChange(id, name, deriveId, fetchAsset, doc2html)}
-    />
-  );
+      options={options}
+    />;
 };
-
-export default withNamespaces()(SourcesContainer);
 
 SourcesContainer.propTypes = {
   unit: shapes.ContentUnit.isRequired,
+  t: PropTypes.func.isRequired
 };
 
+export default withNamespaces()(SourcesContainer);
