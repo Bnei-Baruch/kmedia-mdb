@@ -9,11 +9,11 @@ import routes from '../../routes';
 import ScrollToTop from '../shared/ScrollToTop/ScrollToTop';
 import '../../stylesheets/Kmedia.scss';
 import * as shapes from '../shapes';
-import { DeviceInfoContext, SessionInfoContext } from '../../helpers/app-contexts';
+import { ClientChroniclesContext, DeviceInfoContext, SessionInfoContext } from '../../helpers/app-contexts';
 
 const App = (props) => {
-  const [isShareTextEnabled, setEnableShareText]                                = useState(true);
-  const { i18n, store, history, initialI18nStore, initialLanguage, deviceInfo } = props;
+  const [isShareTextEnabled, setEnableShareText]                                                  = useState(true);
+  const { i18n, store, history, initialI18nStore, initialLanguage, deviceInfo, clientChronicles } = props;
 
   const sessionInfo       = {
     enableShareText: { isShareTextEnabled, setEnableShareText }
@@ -26,15 +26,17 @@ const App = (props) => {
   return (
     <I18nextProvider i18n={i18n} initialI18nStore={initialI18nStore} initialLanguage={initialLanguage}>
       <Provider store={store}>
-        <DeviceInfoContext.Provider value={deviceInfoContext}>
-          <SessionInfoContext.Provider value={sessionInfo}>
-            <ConnectedRouter history={history}>
-              <ScrollToTop>
-                {renderRoutes(routes)}
-              </ScrollToTop>
-            </ConnectedRouter>
-          </SessionInfoContext.Provider>
-        </DeviceInfoContext.Provider>
+        <ClientChroniclesContext.Provider value={clientChronicles}>
+          <DeviceInfoContext.Provider value={deviceInfoContext}>
+            <SessionInfoContext.Provider value={sessionInfo}>
+              <ConnectedRouter history={history}>
+                <ScrollToTop>
+                  {renderRoutes(routes)}
+                </ScrollToTop>
+              </ConnectedRouter>
+            </SessionInfoContext.Provider>
+          </DeviceInfoContext.Provider>
+        </ClientChroniclesContext.Provider>
       </Provider>
     </I18nextProvider>
   );

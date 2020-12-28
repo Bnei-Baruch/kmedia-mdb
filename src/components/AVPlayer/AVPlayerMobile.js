@@ -38,6 +38,7 @@ class AVPlayerMobile extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     uiLanguage: PropTypes.string.isRequired,
+    chronicles: PropTypes.shape(),
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -140,6 +141,9 @@ class AVPlayerMobile extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.item !== this.props.item) {
+      if (this.media?.isPlaying && prevProps.item?.unit?.id) {
+        this.props.chronicles.append('player-stop', this.buildAppendData(prevProps.item, this.media));
+      }
       this.setState({ error: false, errorReason: '', firstSeek: true });
     }
   }
@@ -148,6 +152,18 @@ class AVPlayerMobile extends Component {
     if (this.seekTimeoutId) {
       clearTimeout(this.seekTimeoutId);
     }
+    if (this.media?.isPlaying && this.props.item?.unit?.id) {
+      this.props.chronicles.append('player-stop', this.buildAppendData(this.props.item, this.media));
+    }
+  }
+
+  buildAppendData = (item, media) => {
+    return {
+      unit_uid: item.unit.id,
+      file_src: item.src,
+      current_time: media.currentTime,
+      duration: media.duration,
+    };
   }
 
   onSwitchAV = (...params) => {
@@ -205,6 +221,11 @@ class AVPlayerMobile extends Component {
 
     // make future src changes autoplay
     this.media.autoplay = true;
+
+    if (this.props?.item?.unit?.id) {
+      const {unit, item: { mediaType }, selectedLanguage, uiLanguage } = this.props;
+      this.props.chronicles.append('player-play', this.buildAppendData(this.props.item, this.media));
+    }
   };
 
   handleVolumeChange = (e) => {
@@ -255,6 +276,9 @@ class AVPlayerMobile extends Component {
     if (Math.abs(this.media.currentTime - this.media.duration) > 0.1) {
       this.media.autoplay = false;
       this.saveCurrentTime(this.media.currentTime);
+    }
+    if (this?.props?.item?.unit?.id) {
+      this.props.chronicles.append('player-stop', this.buildAppendData(this.props.item, this.media));
     }
   };
 
