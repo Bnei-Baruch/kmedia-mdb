@@ -3,7 +3,6 @@ import 'moment-duration-format';
 import escapeRegExp from 'lodash/escapeRegExp';
 import _ from 'lodash';
 import isEqual from 'react-fast-compare';
-import { useEffect, useRef } from 'react';
 
 import { CollectionsBreakdown } from './mdb';
 import { canonicalSectionByUnit } from './links';
@@ -319,12 +318,3 @@ export const getSectionForTranslation = content_type => {
 };
 
 export const noop = () => {};
-
-// Used in React hooks to remember previous props.
-export const usePrevious = value => {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-};

@@ -26,7 +26,6 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { actions as ssr } from './redux/modules/ssr';
 import App from './components/App/App';
 import UAParser from 'ua-parser-js';
-import ClientChronicles from './helpers/clientChronicles'
 
 ReactGA.initialize('UA-108372395-1', { gaOptions: { transport: 'beacon' } });
 
@@ -42,13 +41,12 @@ const language = i18nData.initialLanguage ?? DEFAULT_LANGUAGE;
 moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
 
 const deviceInfo = new UAParser().getResult();
-const clientChronicles = new ClientChronicles(history);
 
 ReactDOM.hydrate(
   <React.StrictMode>
     <ErrorBoundary>
       <HelmetProvider>
-        <App i18n={i18n} store={store} history={history} deviceInfo={deviceInfo} clientChronicles={clientChronicles} {...i18nData} />
+        <App i18n={i18n} store={store} history={history} deviceInfo={deviceInfo} {...i18nData} />
       </HelmetProvider>
     </ErrorBoundary>
   </React.StrictMode>,

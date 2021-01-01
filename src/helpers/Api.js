@@ -6,14 +6,11 @@ const CMS_BACKEND             = process.env.REACT_APP_CMS_BACKEND || `${API_BACK
 const IMAGINARY_URL           = process.env.REACT_APP_IMAGINARY_URL;
 const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST || 'localhost';
 const API_RECOMMENDED         = process.env.REACT_APP_RECOMMENDED;
-const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
 
-export const backendUrl    = path => `${API_BACKEND}${path}`;
-export const assetUrl      = path => `${ASSETS_BACKEND}${path}`;
-export const cmsUrl        = path => `${CMS_BACKEND}${path}`;
-export const imaginaryUrl  = path => `${IMAGINARY_URL}${path}`;
-export const chroniclesUrl = path => `${CHRONICLES_BACKEND}${path}`;
-export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
+export const backendUrl   = path => `${API_BACKEND}${path}`;
+export const assetUrl     = path => `${ASSETS_BACKEND}${path}`;
+export const cmsUrl       = path => `${CMS_BACKEND}${path}`;
+export const imaginaryUrl = path => `${IMAGINARY_URL}${path}`;
 
 export class Requests {
   static get = path => axios(backendUrl(path));

@@ -15,6 +15,7 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 const renderPlayer = (unit, language) =>
   <AVBox unit={unit} language={language} />
 
+
 export const UnitPage = ({ unit, language, section = '', location = {} }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const embed = playerHelper.getEmbedFromQuery(location);
