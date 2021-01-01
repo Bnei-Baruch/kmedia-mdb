@@ -11,24 +11,6 @@ import * as shapes from '../../../../../shapes';
 import Sources, { getKiteiMakorUnits } from './Sources';
 
 
-const getSourceOptions = (unit, indexMap, getSourceById, t) => {
-  const sourceOptions = (unit.sources || []).map(getSourceById).filter(x => !!x).map(x => ({
-    value: x.id,
-    text: tracePath(x, getSourceById).map(y => y.name).join(' > '),
-    disabled: indexMap[x.id] && !indexMap[x.id].data && !indexMap[x.id].wip,
-  }));
-
-  const derivedOptions = getKiteiMakorUnits(unit)
-    .map(x => ({
-      value: x.id,
-      text: t(`constants.content-types.${x.content_type}`),
-      type: x.content_type,
-      disabled: false,
-    })) || [];
-
-  return [...sourceOptions, ...derivedOptions];
-};
-
 const SourcesContainer = ({ unit, t }) => {
   const dispatch        = useDispatch();
   const sourceIndex     = useCallback(k => dispatch(assetsActions.sourceIndex(k)), [dispatch]);
@@ -42,7 +24,26 @@ const SourcesContainer = ({ unit, t }) => {
   }, [indexById]);
   const indexMap        = useCallback(sources => (sources || []).reduce(reducer, {}), [reducer]);
 
-  const options = useMemo(() => getSourceOptions(unit, indexMap, getSourceById, t), [unit, indexMap, getSourceById, t]);
+  const sourceOptions = useMemo(() =>
+    (unit.sources || [])
+      .map(getSourceById)
+      .filter(x => !!x)
+      .map(x => ({
+        value: x.id,
+        text: tracePath(x, getSourceById).map(y => y.name).join(' > '),
+        disabled: indexMap[x.id] && !indexMap[x.id].data && !indexMap[x.id].wip,
+      })),
+  [getSourceById, indexMap, unit.sources]);
+
+  const derivedOptions = useMemo(() => getKiteiMakorUnits(unit)
+    .map(x => ({
+      value: x.id,
+      text: t(`constants.content-types.${x.content_type}`),
+      type: x.content_type,
+      disabled: false,
+    })) || [], [t, unit]);
+
+  const options = [...sourceOptions, ...derivedOptions];
 
   useEffect(() => {
     Object.entries(indexMap(unit.sources)).forEach(([k, v]) => {

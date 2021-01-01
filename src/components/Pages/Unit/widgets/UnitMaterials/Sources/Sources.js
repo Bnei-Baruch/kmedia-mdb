@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
+import classNames from 'classnames';
 
 import { selectors as assetsSelectors, actions as assetsActions } from '../../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
@@ -15,6 +16,7 @@ import * as shapes from '../../../../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash/Splash';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
+import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 
 export const getKiteiMakorUnits = unit => (
   Object.values(unit.derived_units || {})
@@ -129,25 +131,8 @@ const Sources = ({ unit, indexMap, t, options }) => {
   }, [doc2html, fetchAsset, fetched, indexMap, isKiteiMakor, language, selected, unit]);
 
 
-  const handleLanguageChanged = (e, lang) => {
-    if (lang === language){
-      e.preventDefault();
-      return;
-    }
-
-    setLanguage(lang);
-  };
-
-  const handleSourceChanged = (e, data) => {
-    const newSelected = data.value;
-
-    if (selected === newSelected) {
-      e.preventDefault();
-      return;
-    }
-
-    setSelected(newSelected);
-  };
+  const handleLanguageChanged = (e, lang) => setLanguage(lang);
+  const handleSourceChanged = (e, data) => setSelected(data.value);
 
   const getPdfFile = () => {
     let pdfFile;
@@ -186,10 +171,7 @@ const Sources = ({ unit, indexMap, t, options }) => {
     return contents;
   }
 
-  // render
-  if (options.length === 0) {
-    return <Segment basic>{t('materials.sources.no-sources')}</Segment>;
-  }
+  const { isMobileDevice } = useContext(DeviceInfoContext)
 
   if (!selected) {
     return <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
@@ -199,9 +181,11 @@ const Sources = ({ unit, indexMap, t, options }) => {
 
   return (
     <>
-      <Grid stackable padded>
-        {/* <Grid.Row> */}
-        <Grid.Column width={16 - languages.length}>
+      <Grid container padded={isMobileDevice ? "vertically" : true} columns={2}>
+        <Grid.Column
+          className={classNames({"is-fitted": isMobileDevice})}
+          width={isMobileDevice ? 16 : 16 - languages.length}
+        >
           <Dropdown
             fluid
             selection
@@ -214,7 +198,10 @@ const Sources = ({ unit, indexMap, t, options }) => {
         </Grid.Column>
         {
           languages.length > 0 &&
-            <Grid.Column width={languages.length} textAlign="center">
+            <Grid.Column
+              textAlign="center"
+              width={isMobileDevice ? 16 : languages.length}
+            >
               <ButtonsLanguageSelector
                 languages={languages}
                 defaultValue={contentLanguage}
@@ -222,9 +209,8 @@ const Sources = ({ unit, indexMap, t, options }) => {
               />
             </Grid.Column>
         }
-        {/* </Grid.Row> */}
       </Grid>
-      <Divider hidden />
+      <Divider hidden fitted />
       {contents}
     </>
   );
@@ -233,6 +219,7 @@ const Sources = ({ unit, indexMap, t, options }) => {
 Sources.propTypes = {
   unit: shapes.ContentUnit.isRequired,
   indexMap: PropTypes.objectOf(shapes.DataWipErr).isRequired,
+  options: PropTypes.arrayOf(PropTypes.object).isRequired,
   t: PropTypes.func.isRequired,
 };
 

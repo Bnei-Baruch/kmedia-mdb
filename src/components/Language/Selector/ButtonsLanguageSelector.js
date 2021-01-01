@@ -1,4 +1,5 @@
 import React from 'react';
+import isEqual from 'react-fast-compare';
 import { withNamespaces } from 'react-i18next';
 import { Button, Flag } from 'semantic-ui-react';
 
@@ -6,8 +7,6 @@ import { LANG_HEBREW, LANGUAGES } from '../../../helpers/consts';
 import { getOptions } from '../../../helpers/language';
 
 const ButtonsLanguageSelector = ({ languages = [], defaultValue = LANG_HEBREW, onSelect, t }) => {
-  const handleSelect = (e, lang) => onSelect(e, lang);
-
   const options = getOptions({ languages, t });
 
   return (
@@ -19,7 +18,7 @@ const ButtonsLanguageSelector = ({ languages = [], defaultValue = LANG_HEBREW, o
             key={x.value}
             active={x.value === defaultValue}
             title={x.text}
-            onClick={e => handleSelect(e, x.value)}
+            onClick={e => onSelect(e, x.value)}
           >
             <Flag name={LANGUAGES[x.value].flag} style={{ margin: 0 }} />
           </Button>
@@ -29,4 +28,8 @@ const ButtonsLanguageSelector = ({ languages = [], defaultValue = LANG_HEBREW, o
   );
 };
 
-export default withNamespaces()(ButtonsLanguageSelector);
+const areEqual = (prevProps, nextProps) =>
+  prevProps.defaultValue === nextProps.defaultValue
+  && isEqual(prevProps.languages, nextProps.languages)
+
+export default React.memo(withNamespaces()(ButtonsLanguageSelector), areEqual);
