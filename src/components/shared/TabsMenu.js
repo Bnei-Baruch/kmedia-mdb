@@ -28,8 +28,8 @@ const TabsMenu = ({ items = [], active = ''}) => {
   const activeItem = items.find(x => x.name === internalActive);
 
   return (
-    <div className="menu">
-      <Menu tabular secondary pointing color="blue">
+    <div className="unit-materials">
+      <Menu tabular secondary pointing color="blue" >
         {
           items.map(item => {
             const {name, label} = item;

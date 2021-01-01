@@ -510,8 +510,8 @@ class LibraryContainer extends Component {
           </div>
         </Headroom>
         <Container>
-          <Grid padded centered>
-            <Grid.Row className="is-fitted">
+          <Grid padded="horizontally" centered>
+            <Grid.Row>
               <Grid.Column
                 mobile={16}
                 tablet={16}

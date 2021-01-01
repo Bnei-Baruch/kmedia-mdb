@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
+import classNames from 'classnames';
 import { Grid } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
@@ -14,6 +15,7 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const renderPlayer = (unit, language) =>
   <AVBox unit={unit} language={language} />
+
 
 export const UnitPage = ({ unit, language, section = '', location = {} }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -29,25 +31,24 @@ export const UnitPage = ({ unit, language, section = '', location = {} }) => {
     ? (
       <>
         <Helmets.AVUnit unit={unit} language={language} />
-        <Grid padded>
-          <Grid.Row>
-            <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}>
-              <Grid.Row>
-                {renderPlayer(unit, language)}
-              </Grid.Row>
-              <Grid.Row>
-                <Grid.Column>
-                  <Info unit={unit} section={section} />
-                  <Materials unit={unit} />
-                </Grid.Column>
-              </Grid.Row>
-            </Grid.Column>
-            {!isMobileDevice &&
+        <Grid padded={!isMobileDevice} className="avbox">
+          <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}
+            className={classNames({"is-fitted": isMobileDevice})}>
+            <Grid.Row>
+              {renderPlayer(unit, language)}
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column>
+                <Info unit={unit} section={section} />
+                <Materials unit={unit} />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid.Column>
+          {!isMobileDevice &&
               <Grid.Column mobile={16} tablet={6} computer={6}>
                 <Recommended unit={unit} />
               </Grid.Column>
-            }
-          </Grid.Row>
+          }
         </Grid>
       </>
     ) : (

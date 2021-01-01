@@ -1,4 +1,9 @@
 .avbox {
+    @include mobile {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
     background-color: $darkWhite;
     width: 100% !important;
 
@@ -15,7 +20,7 @@
     /* player on mobile devices */
     &__player.mobile-device {
       height: auto;
-      padding-top: 1em;
+      padding: 0;
 
       .avbox__media-wrapper {
         overflow: visible;
@@ -28,7 +33,7 @@
       }
 
       audio {
-        margin: 0.5rem 0;
+        margin: 0;
       }
 
       select {
@@ -107,11 +112,10 @@
 
       > .header {
         @include mobile {
-          padding-top: 0.5em;
-          padding-bottom: 0.5em;
+          padding: 1em 1em 0.5em;
         }
 
-        padding-bottom: 1em;
+        padding: 0.5em 0.5em 1em;
         margin-top: 0;
         margin-bottom: 0;
       }
@@ -145,7 +149,7 @@
       > .header {
         flex: 0 0 auto;
         position: relative;
-        padding: 1em 1em 0;
+        padding: 0 0.5em;
       }
     }
 
@@ -165,19 +169,25 @@
         color: $blue;
       }
 
-      .list .item {
-        padding: 0 !important;
+      .list {
+        width: 100%;
 
-        .active {
-          background-color: rgba($blue, .2) !important;
-        }
+        .item {
+          padding: 0 !important;
 
-        table {
-          width: 100%;
-          background-color: inherit;
-          color: inherit;
+          .active {
+            background-color: rgba($blue, .2) !important;
+          }
+
+          table {
+            width: 100%;
+            background-color: inherit;
+            color: inherit;
+          }
         }
       }
+
+
 
       .menu > .item {
         &.active {
@@ -185,4 +195,4 @@
         }
       }
     }
-  }
+}
