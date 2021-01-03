@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
 import { Button, Header, Icon, Popup } from 'semantic-ui-react';
 
-import * as shapes from '../shapes';
 import UILanguage from './UILanguage';
 import ContentLanguage from './ContentLanguage';
 import { getLanguageDirection } from '../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 
-const HandleLanguages = ({ language, contentLanguage, setContentLanguage, location, t, push }) => {
+const HandleLanguages = ({ language, contentLanguage, setContentLanguage, t }) => {
   const [isActive, setIsActive] = useState(false);
   const { isMobileDevice }      = useContext(DeviceInfoContext);
   const langDir                 = getLanguageDirection(language);
@@ -34,7 +34,6 @@ const HandleLanguages = ({ language, contentLanguage, setContentLanguage, locati
   ));
 
   const handlePopupOpen = () => setIsActive(true);
-
   const handlePopupClose = () => setIsActive(false);
 
   return (
@@ -43,9 +42,7 @@ const HandleLanguages = ({ language, contentLanguage, setContentLanguage, locati
       key="handleLangs"
       flowing
       position="bottom right"
-      trigger={
-        <Trigger />
-      }
+      trigger={ <Trigger /> }
       open={isActive}
       onOpen={handlePopupOpen}
       onClose={handlePopupClose}
@@ -65,19 +62,8 @@ const HandleLanguages = ({ language, contentLanguage, setContentLanguage, locati
         </div>
       </Popup.Header>
       <Popup.Content>
-        <UILanguage
-          language={language}
-          contentLanguage={contentLanguage}
-          location={location}
-          push={push}
-        />
-        <ContentLanguage
-          language={language}
-          contentLanguage={contentLanguage}
-          location={location}
-          setContentLanguage={setContentLanguage}
-          push={push}
-        />
+        <UILanguage language={language} contentLanguage={contentLanguage} />
+        <ContentLanguage language={language} contentLanguage={contentLanguage} setContentLanguage={setContentLanguage} />
       </Popup.Content>
     </Popup>
   );
@@ -87,9 +73,7 @@ HandleLanguages.propTypes = {
   language: PropTypes.string.isRequired,
   contentLanguage: PropTypes.string.isRequired,
   setContentLanguage: PropTypes.func.isRequired,
-  location: shapes.HistoryLocation.isRequired,
   t: PropTypes.func.isRequired,
-  push: PropTypes.func.isRequired,
 };
 
-export default HandleLanguages;
+export default withNamespaces()(HandleLanguages);

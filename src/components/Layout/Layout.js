@@ -4,7 +4,6 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
-import { push } from 'connected-react-router';
 import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
@@ -44,11 +43,8 @@ const shouldShowSearch = (location) => {
 };
 
 const menuButtonElement1 = createRef();
-
 const menuButtonElement2 = createRef();
-
 const showSearchButtonElement = createRef();
-
 const headerSearchElement = createRef();
 
 class Layout extends Component {
@@ -61,7 +57,6 @@ class Layout extends Component {
     contentLanguage: PropTypes.string.isRequired,
     setContentLanguage: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
-    push: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -160,9 +155,9 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location, route, language, contentLanguage, setContentLanguage, push } = this.props;
-    const { sidebarActive, embed, isShowHeaderSearch }                                = this.state;
-    const { isMobileDevice }                                                          = this.context;
+    const { t, location, route, language, contentLanguage, setContentLanguage } = this.props;
+    const { sidebarActive, embed, isShowHeaderSearch }                          = this.state;
+    const { isMobileDevice }                                                    = this.context;
 
     const showSearch = shouldShowSearch(location);
 
@@ -219,9 +214,6 @@ class Layout extends Component {
                       language={language}
                       contentLanguage={contentLanguage}
                       setContentLanguage={setContentLanguage}
-                      location={location}
-                      push={push}
-                      t={t}
                     />
                   </Menu.Item>
                   {
@@ -290,6 +282,5 @@ export default connect(
   }),
   {
     setContentLanguage: actions.setContentLanguage,
-    push
   }
 )(withNamespaces()(Layout));
