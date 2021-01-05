@@ -78,8 +78,6 @@ const UILanguage = ({ t }) => {
   const language = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
 
-  console.log('languages:', language, contentLanguage);
-
   return (
     <Menu secondary>
       <Menu.Item header>
