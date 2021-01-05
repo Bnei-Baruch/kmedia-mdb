@@ -9,7 +9,7 @@ import Headroom from 'react-headroom';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
 import playerHelper from '../../helpers/player';
-import { actions, selectors as settings } from '../../redux/modules/settings';
+import { selectors as settings } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import WrappedOmniBox from '../Search/OmniBox';
@@ -54,8 +54,6 @@ class Layout extends Component {
     location: shapes.HistoryLocation.isRequired,
     route: shapes.Route.isRequired,
     language: PropTypes.string.isRequired,
-    contentLanguage: PropTypes.string.isRequired,
-    setContentLanguage: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -86,11 +84,10 @@ class Layout extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { location, language, contentLanguage } = this.props;
+    const { location, language } = this.props;
     const { sidebarActive, isShowHeaderSearch }   = this.state;
 
     return (language !== nextProps.language
-      || contentLanguage !== nextProps.contentLanguage
       || location.pathname !== nextProps.location.pathname
       || sidebarActive !== nextState.sidebarActive
       || isShowHeaderSearch !== nextState.isShowHeaderSearch);
@@ -155,9 +152,9 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location, route, language, contentLanguage, setContentLanguage } = this.props;
-    const { sidebarActive, embed, isShowHeaderSearch }                          = this.state;
-    const { isMobileDevice }                                                    = this.context;
+    const { t, location, route, language }              = this.props;
+    const { sidebarActive, embed, isShowHeaderSearch }  = this.state;
+    const { isMobileDevice }                            = this.context;
 
     const showSearch = shouldShowSearch(location);
 
@@ -203,29 +200,20 @@ class Layout extends Component {
                 </Menu.Item>
                 <Menu.Item className={isMobileDevice ? 'layout__search mobile-hidden' : 'layout__search layout__search_max_width'}>
                   {
-                    showSearch
-                      ? <WrappedOmniBox location={location} />
-                      : null
+                    showSearch && <WrappedOmniBox location={location} />
                   }
                 </Menu.Item>
                 <Menu.Menu position="right" className="no-padding no-margin">
                   <Menu.Item className="no-margin">
-                    <HandleLanguages
-                      language={language}
-                      contentLanguage={contentLanguage}
-                      setContentLanguage={setContentLanguage}
-                    />
+                    <HandleLanguages language={language} />
                   </Menu.Item>
                   {
-                    showSearch && isMobileDevice
-                      ? (
-                        <Ref innerRef={showSearchButtonElement}>
-                          <Menu.Item as="a" position="right">
-                            <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
-                          </Menu.Item>
-                        </Ref>
-                      )
-                      : null
+                    showSearch && isMobileDevice &&
+                      <Ref innerRef={showSearchButtonElement}>
+                        <Menu.Item as="a" position="right">
+                          <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
+                        </Menu.Item>
+                      </Ref>
                   }
                   <Menu.Item position="right" className="mobile-hidden">
                     <DonateNow language={language} />
@@ -275,12 +263,6 @@ class Layout extends Component {
   }
 }
 
-export default connect(
-  state => ({
-    language: settings.getLanguage(state.settings),
-    contentLanguage: settings.getContentLanguage(state.settings),
-  }),
-  {
-    setContentLanguage: actions.setContentLanguage,
-  }
-)(withNamespaces()(Layout));
+export default connect(state => ({
+  language: settings.getLanguage(state.settings),
+}))(withNamespaces()(Layout));
