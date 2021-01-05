@@ -8,12 +8,13 @@ import ContentLanguage from './ContentLanguage';
 import { getLanguageDirection } from '../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 
-const HandleLanguages = ({ language, contentLanguage, setContentLanguage, t }) => {
+const HandleLanguages = ({ language, t }) => {
   const [isActive, setIsActive] = useState(false);
   const { isMobileDevice }      = useContext(DeviceInfoContext);
-  const langDir                 = getLanguageDirection(language);
-  const popupStyle              = { direction: langDir };
+  const direction               = getLanguageDirection(language);
+  const popupStyle              = { direction };
 
+  // close popup after uiLanguage change
   useEffect(() => {
     setIsActive(false);
   }, [language]);
@@ -62,8 +63,8 @@ const HandleLanguages = ({ language, contentLanguage, setContentLanguage, t }) =
         </div>
       </Popup.Header>
       <Popup.Content>
-        <UILanguage language={language} contentLanguage={contentLanguage} />
-        <ContentLanguage language={language} contentLanguage={contentLanguage} setContentLanguage={setContentLanguage} />
+        <UILanguage />
+        <ContentLanguage />
       </Popup.Content>
     </Popup>
   );
@@ -71,8 +72,6 @@ const HandleLanguages = ({ language, contentLanguage, setContentLanguage, t }) =
 
 HandleLanguages.propTypes = {
   language: PropTypes.string.isRequired,
-  contentLanguage: PropTypes.string.isRequired,
-  setContentLanguage: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
 };
 

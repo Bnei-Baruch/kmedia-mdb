@@ -1,9 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Dropdown, Flag, Menu } from 'semantic-ui-react';
 import { useHistory, useLocation } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { actions, selectors as settings } from '../../redux/modules/settings';
 import { ALL_LANGUAGES, COOKIE_CONTENT_LANG, LANGUAGES } from '../../helpers/consts';
 import { setCookie } from '../../helpers/date';
 import { getToWithLanguage } from '../../helpers/url';
@@ -24,17 +26,17 @@ const DesktopLanguage = ({ language, contentLanguage, setContentLanguage, t }) =
   <Dropdown item scrolling text={`${t(`constants.languages.${contentLanguage}`)}`}>
     <Dropdown.Menu>
       {
-        ALL_LANGUAGES.map(x =>
+        ALL_LANGUAGES.map(lang =>
           <Dropdown.Item
-            key={x}
+            key={lang}
             as={Link}
-            active={x === contentLanguage}
-            onClick={() => storeContentLanguage(x, setContentLanguage)}
+            active={lang === contentLanguage}
+            onClick={() => storeContentLanguage(lang, setContentLanguage)}
             language={language}
-            contentLanguage={x}
+            contentLanguage={lang}
           >
-            <Flag name={LANGUAGES[x].flag} />
-            {t(`constants.languages.${x}`)}
+            <Flag name={LANGUAGES[lang].flag} />
+            {t(`constants.languages.${lang}`)}
           </Dropdown.Item>
         )
       }
@@ -71,8 +73,14 @@ const MobileLanguage = ({ language, contentLanguage, t, setContentLanguage }) =>
   );
 };
 
-const ContentLanguage = ({ language, contentLanguage, setContentLanguage, t }) => {
+const ContentLanguage = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const language = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
+
+  const dispatch = useDispatch();
+  const setContentLanguage = useCallback(cLang => dispatch(actions.setContentLanguage(cLang)), [dispatch]);
+
   return (
     <Menu secondary>
       <Menu.Item header>
@@ -103,9 +111,6 @@ const ContentLanguage = ({ language, contentLanguage, setContentLanguage, t }) =
 };
 
 ContentLanguage.propTypes = {
-  language: PropTypes.string.isRequired,
-  contentLanguage: PropTypes.string.isRequired,
-  setContentLanguage: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
 };
 
