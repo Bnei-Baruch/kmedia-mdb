@@ -30,6 +30,7 @@ class Filters extends Component {
     resetFilter: PropTypes.func.isRequired,
     filtersData: PropTypes.objectOf(PropTypes.object).isRequired,
     language: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     sqDataWipErr: PropTypes.bool
   };

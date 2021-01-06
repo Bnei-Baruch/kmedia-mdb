@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
 import { Table } from 'semantic-ui-react';
+import isEqual from 'react-fast-compare';
 
 import { NO_NAME } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
@@ -42,7 +42,8 @@ const EventsList = ({ items = [] }) => {
 
 EventsList.propTypes = {
   items: PropTypes.arrayOf(shapes.EventCollection),
-  t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(EventsList);
+const areEqual = (prevProps, nextProps) => isEqual(prevProps.items, nextProps.items);
+
+export default React.memo(EventsList, areEqual);
