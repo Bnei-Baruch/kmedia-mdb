@@ -24,6 +24,7 @@ import SearchResultTwitters from './SearchResultTwitters';
 import SearchResultSource from './SearchResultSource';
 import SearchResultPost from './SearchResultPost';
 import DidYouMean from './DidYouMean';
+import SearchResultSeries from './SearchResultSeries';
 
 const SearchResults = (props) => {
   /* Requested by Mizrahi
@@ -50,7 +51,7 @@ const SearchResults = (props) => {
       language,
       t,
       handlePageChange,
-      location,
+      location
     } = props;
 
   const filterByHitType = hit => hitType ? hit.type === hitType : true;
@@ -58,7 +59,11 @@ const SearchResults = (props) => {
   const searchLanguageByIndex = (index, def) => index.split('_')[2] ?? def;
 
   const renderHit = (hit, rank, searchLanguage) => {
-    const { _source: { mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage }, _type: type, _index } = hit;
+    const {
+            _source: { mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage },
+            _type: type,
+            _index
+          } = hit;
 
     searchLanguage = searchLanguageByIndex(_index, searchLanguage);
     const newProps = {
@@ -77,6 +82,9 @@ const SearchResults = (props) => {
 
     if (type === 'tweets_many') {
       return <SearchResultTwitters  {...newProps} />;
+    }
+    if (type === 'lecture_series') {
+      return <SearchResultSeries {...newProps} />;
     }
 
     let result = null;
@@ -230,7 +238,7 @@ SearchResults.defaultProps = {
   twitterMap: {},
   wip: false,
   err: null,
-  getSourcePath: undefined,
+  getSourcePath: undefined
 };
 
 export default withNamespaces()(SearchResults);
