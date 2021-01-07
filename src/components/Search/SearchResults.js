@@ -60,11 +60,10 @@ const SearchResults = (props) => {
 
   const renderHit = (hit, rank, searchLanguage) => {
     const {
-            _source: { mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage },
-            _type: type,
-            _index
-          } = hit;
-
+      _source: { mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage },
+      _type: type,
+      _index
+    }        = hit;
     searchLanguage = searchLanguageByIndex(_index, searchLanguage);
     const newProps = {
       ...props, filters, getTagById, getSourceById, contentLanguage, getSourcePath, searchLanguage,
