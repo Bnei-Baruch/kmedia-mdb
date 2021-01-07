@@ -103,7 +103,7 @@ class SearchResultSeries extends SearchResultBase {
             ? null
             : (
               <Container collapsing>
-                <ScoreDebug name={c.name} score={score} explanation={hit._explanation} />
+                <ScoreDebug name={s.name} score={score} explanation={hit._explanation} />
               </Container>
             )
         }
