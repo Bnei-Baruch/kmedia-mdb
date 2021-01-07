@@ -42,13 +42,16 @@ function* fetchLecturesList(action) {
 export function* fetchAllSeries(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
+    const params   = { ...action.payload };
+    //add default param with_units
+    !params.with_units && (params.with_units = false);
+
     const { data } = yield call(Api.collections, {
-      ...action.payload,
+      ...params,
       contentTypes: [CT_LESSONS_SERIES],
       language,
       pageNo: 1,
       pageSize: 1000, // NOTE: we need to get all, and the endpoint lets us fetch only with pagination,
-      with_units: false,
     });
     yield put(mdbActions.receiveCollections(data.collections));
     yield put(actions.fetchAllSeriesSuccess(data));
