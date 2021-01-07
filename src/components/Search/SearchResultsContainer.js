@@ -8,6 +8,7 @@ import { actions, selectors } from '../../redux/modules/search';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
 import { selectors as publicationSelectors } from '../../redux/modules/publications';
+import { actions as lessonsActions } from '../../redux/modules/lessons';
 import { BLOGS } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import SectionHeader from '../shared/SectionHeader';
@@ -59,6 +60,7 @@ class SearchResultsContainer extends Component {
 
   componentDidMount() {
     this.props.hydrateUrl();
+    this.props.fetchSeries({ with_units: true });
   }
 
   componentDidUpdate(prevProps) {
@@ -100,7 +102,21 @@ class SearchResultsContainer extends Component {
   };
 
   render() {
-    const { wip, err, queryResult, cMap, cuMap, postMap, twitterMap, pageNo, pageSize, sortBy, language, location, click } = this.props;
+    const {
+            wip,
+            err,
+            queryResult,
+            cMap,
+            cuMap,
+            postMap,
+            twitterMap,
+            pageNo,
+            pageSize,
+            sortBy,
+            language,
+            location,
+            click
+          } = this.props;
 
     return (
       <div>
@@ -207,6 +223,7 @@ const mapDispatch = dispatch => bindActionCreators({
   setPage: actions.setPage,
   setSortBy: actions.setSortBy,
   hydrateUrl: actions.hydrateUrl,
+  fetchSeries: lessonsActions.fetchAllSeries
 }, dispatch);
 
 export default connect(mapState, mapDispatch)(SearchResultsContainer);
