@@ -9,7 +9,7 @@ import { fromToLocalized } from '../../../../../helpers/date';
 import * as shapes from '../../../../shapes';
 import Link from '../../../../Language/MultiLanguageLink';
 
-const renderCollection = (collection) => {
+const renderCollection = collection => {
   const localDate = fromToLocalized(collection.start_date, collection.end_date);
 
   return (
