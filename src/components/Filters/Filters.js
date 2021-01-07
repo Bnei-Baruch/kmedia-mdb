@@ -17,6 +17,9 @@ import FiltersHydrator from './FiltersHydrator';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { POPULAR_LANGUAGES } from '../../helpers/consts';
 
+const filterMediaLanguageFilter = (filter, language) =>
+  filter.name !== 'language-filter' || !POPULAR_LANGUAGES.includes(language);
+
 class Filters extends Component {
   static contextType = DeviceInfoContext;
 
@@ -30,6 +33,7 @@ class Filters extends Component {
     resetFilter: PropTypes.func.isRequired,
     filtersData: PropTypes.objectOf(PropTypes.object).isRequired,
     language: PropTypes.string.isRequired,
+    contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     sqDataWipErr: PropTypes.bool
   };
@@ -85,7 +89,7 @@ class Filters extends Component {
     const { activeFilter }                                                  = this.state;
     const { isMobileDevice }                                                = this.context;
 
-    return filters.filter(x => filterMediaLanguageFilter(x, contentLanguage)).map((item) => {
+    return filters.filter(x => filterMediaLanguageFilter(x, contentLanguage)).map(item => {
       const { component: FilterComponent, name } = item;
 
       const isActive = name === activeFilter;
@@ -97,7 +101,6 @@ class Filters extends Component {
         : t('filters.all');
 
       const len = ((name === 'topics-filter' || name === 'sources-filter') && value) ? label.length : 0;
-
       const cn = classNames('filter-popup', { mobile: isMobileDevice });
 
       return (
@@ -128,7 +131,6 @@ class Filters extends Component {
                   }
                 </span>
               </div>
-
               {
                 value
                   ? (
@@ -171,28 +173,15 @@ class Filters extends Component {
 
   render() {
     const { namespace, onHydrated, t, rightItems, language } = this.props;
-    const { isMobileDevice }                                 = this.context;
 
     const langDir = getLanguageDirection(language);
-
-    let popupStyle = {
-      // padding: 0,
+    const popupStyle = {
       direction: langDir,
     };
-    if (isMobileDevice) {
-      popupStyle = {
-        ...popupStyle,
-        // top: 0,
-        // left: 0,
-        // bottom: 0,
-        // right: 0,
-      };
-    }
 
     return (
       <div className="filters">
         <FiltersHydrator namespace={namespace} onHydrated={onHydrated} />
-        {/* <Menu secondary pointing stackable className="index-filters" size="large"> */}
         <Container className="padded">
           <Menu className="filters__menu" stackable>
             <Menu.Item
@@ -204,9 +193,7 @@ class Filters extends Component {
               {({ store }) => (this.renderFilters(store, langDir, popupStyle))}
             </ReactReduxContext.Consumer>
             {
-              rightItems
-                ? <Menu.Menu position="right">{rightItems}</Menu.Menu>
-                : null
+              rightItems && <Menu.Menu position="right">{rightItems}</Menu.Menu>
             }
           </Menu>
         </Container>
@@ -229,10 +216,3 @@ export default connect(
     resetFilter: actions.resetFilter,
   }, dispatch)
 )(withNamespaces()(Filters));
-
-function filterMediaLanguageFilter(filter, language) {
-  if (filter.name === 'language-filter' && POPULAR_LANGUAGES.includes(language)) {
-    return false;
-  }
-  return true;
-}

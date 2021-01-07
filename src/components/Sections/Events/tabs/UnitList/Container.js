@@ -9,7 +9,6 @@ import UnitList from '../../../../Pages/UnitList/Container';
 const renderUnit = (unit, t) => {
   const breakdown = renderUnitHelper.getUnitCollectionsBreakdown(unit);
   const events    = breakdown.getEvents();
-
   const relatedItems = events.map(renderUnitHelper.renderUnitNameAsListItem);
 
   return (
@@ -27,18 +26,15 @@ const renderUnit = (unit, t) => {
   );
 };
 
-const Container = ({ tab }) => {
-  return (
-    <UnitList
-      key={tab}
-      namespace={`events-${tab}`}
-      extraFetchParams={{
-        content_type: tab === 'meals' ? CT_MEAL : CT_FRIENDS_GATHERING
-      }}
-      renderUnit={renderUnit}
-    />
-  );
-};
+const Container = ({ tab }) =>
+  <UnitList
+    key={tab}
+    namespace={`events-${tab}`}
+    extraFetchParams={{
+      content_type: tab === 'meals' ? CT_MEAL : CT_FRIENDS_GATHERING
+    }}
+    renderUnit={renderUnit}
+  />
 
 Container.propTypes = {
   tab: PropTypes.string.isRequired,
