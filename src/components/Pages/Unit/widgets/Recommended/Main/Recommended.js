@@ -18,8 +18,6 @@ const Recommended = ({ unit, filterOutUnits = null, t, displayTitle = true }) =>
   const err = useSelector(state => selectors.getError(state.recommended));
   let recommendedItems = useSelector(state => selectors.getRecommendedItems(state.recommended)) || [];
 
-  // console.log('recommendedItems:', dataLoaded, wip, err, recommendedItems);
-
   // filter out the given units
   if (Array.isArray(filterOutUnits) && filterOutUnits.length > 0){
     recommendedItems = recommendedItems.filter(item => !filterOutUnits.some(fUnit => fUnit.id === item.uid));
