@@ -20,11 +20,7 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
 
 
-const PlaylistCollectionPage = ({
-  collection,
-  nextLink = null,
-  prevLink = null,
-}) => {
+const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null }) => {
   const location = useLocation();
   const history  = useHistory();
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -89,10 +85,8 @@ const PlaylistCollectionPage = ({
 
   useEffect(() => {
     const newUnit = playlist?.items[selected]?.unit;
-    if (unit !== newUnit){
-      setUnit(newUnit);
-    }
-  }, [playlist, selected, unit]);
+    setUnit(newUnit);
+  }, [playlist, selected]);
 
 
   if (!collection || !Array.isArray(collection.content_units)) {
@@ -132,22 +126,21 @@ const PlaylistCollectionPage = ({
           onSelectedChange={handleSelectedChange}
           onLanguageChange={handleLanguageChange}
           onSwitchAV={handleSwitchAV}
-          history={history}
         />
         {
           unit &&
-              <>
-                { isMobileDevice &&
-                  <div id="avbox_playlist">
-                    <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} />
-                  </div>
-                }
-                <Container id="unit_container">
-                  <Helmets.AVUnit unit={unit} language={uiLanguage} />
-                  <Info unit={unit} />
-                  <Materials unit={unit} playlistComponent={PlaylistData} />
-                </Container>
-              </>
+            <>
+              { isMobileDevice &&
+                <div id="avbox_playlist">
+                  <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} />
+                </div>
+              }
+              <Container id="unit_container">
+                <Helmets.AVUnit unit={unit} language={uiLanguage} />
+                <Info unit={unit} />
+                <Materials unit={unit} playlistComponent={PlaylistData} />
+              </Container>
+            </>
         }
       </Grid.Column>
       {
