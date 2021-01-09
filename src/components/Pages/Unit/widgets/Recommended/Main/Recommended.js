@@ -11,21 +11,27 @@ import WipErr from '../../../../../shared/WipErr/WipErr';
 import DisplayRecommended from './DisplayRecommended';
 
 
-const Recommended = ({ unit, filterOutUnits = null, t, displayTitle = true }) => {
-  const [dataLoaded, setDataLoaded] = useState(false);
-
-  const wip = useSelector(state => selectors.getWip(state.recommended));
-  const err = useSelector(state => selectors.getError(state.recommended));
+export const RecommendedUnits = (filterOutUnits = null) => {
   let recommendedItems = useSelector(state => selectors.getRecommendedItems(state.recommended)) || [];
 
   // filter out the given units
-  if (Array.isArray(filterOutUnits) && filterOutUnits.length > 0){
+  if (Array.isArray(filterOutUnits) && filterOutUnits.length > 0) {
     recommendedItems = recommendedItems.filter(item => !filterOutUnits.some(fUnit => fUnit.id === item.uid));
   }
 
   const recommendedUnits = useSelector(state => recommendedItems
     .map(item => mdbSelectors.getDenormContentUnit(state.mdb, item.uid))
     .filter(item => !!item)) || [];
+
+  return recommendedUnits;
+};
+
+const Recommended = ({ unit, filterOutUnits = null, t, displayTitle = true }) => {
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  const wip = useSelector(state => selectors.getWip(state.recommended));
+  const err = useSelector(state => selectors.getError(state.recommended));
+  const recommendedUnits = RecommendedUnits(filterOutUnits);
 
   // enable load once per unit
   useEffect(() => {

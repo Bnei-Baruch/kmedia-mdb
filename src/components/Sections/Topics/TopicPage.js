@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 import { Breadcrumb, Container, Divider, Grid, Header } from 'semantic-ui-react';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
@@ -10,7 +10,6 @@ import { stringify as urlSearchStringify } from '../../../helpers/url';
 import { filtersTransformer } from '../../../filters/index';
 import { actions, selectors } from '../../../redux/modules/tags';
 import { selectors as settings } from '../../../redux/modules/settings';
-import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 import Link from '../../Language/MultiLanguageLink';
 import TopN from './TopN';
@@ -47,7 +46,7 @@ const getBreadCrumbSection = (p, index, arr) => {
   return section;
 };
 
-const TopicPage = ({ match, t }) => {
+const TopicPage = ({ t }) => {
   const wip             = useSelector(state => selectors.getWip(state.tags));
   const error           = useSelector(state => selectors.getError(state.tags));
   const sections        = useSelector(state => selectors.getSections(state.tags));
@@ -59,11 +58,11 @@ const TopicPage = ({ match, t }) => {
 
   const dispatch = useDispatch();
 
-  const tagId = match.params.id;
+  const { id } = useParams();
 
   useEffect(() => {
-    dispatch(actions.fetchDashboard(tagId));
-  }, [tagId, language, dispatch]);
+    dispatch(actions.fetchDashboard(id));
+  }, [id, language, dispatch]);
 
   const wipErr = WipErr({ wip, error, t });
   if (wipErr) {
@@ -71,7 +70,7 @@ const TopicPage = ({ match, t }) => {
   }
 
   if (getPathByID && !isEmpty(sections)) {
-    const tagPath = getPathByID(tagId);
+    const tagPath = getPathByID(id);
 
     // create breadCrumb sections from tagPath
     const breadCrumbSections = [
@@ -115,14 +114,14 @@ const TopicPage = ({ match, t }) => {
     );
   }
 
-  const tag = getTags ? getTags[tagId] : null;
+  const tag = getTags ? getTags[id] : null;
 
   return (
     <Container className="padded">
       <Header as="h3">
         {t(`nav.sidebar.topic`)}
         {' "'}
-        {tag ? tag.label : tagId}
+        {tag ? tag.label : id}
         {'" '}
         {t(`nav.sidebar.not-found`)}
       </Header>
@@ -131,8 +130,7 @@ const TopicPage = ({ match, t }) => {
 };
 
 TopicPage.propTypes = {
-  match: shapes.RouterMatch.isRequired,
   t: PropTypes.func.isRequired,
 };
 
-export default withRouter(withNamespaces()(TopicPage));
+export default withNamespaces()(TopicPage);
