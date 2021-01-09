@@ -37,12 +37,13 @@ export const renderPlaylistUnit = (unit, t) =>
             <span>{unit.name || NO_NAME}</span>
           </Header>
         </Table.Cell>
+        {unit.duration &&
         <Table.Cell textAlign="right" width={2}>
           <span>{formatDuration(unit.duration)}</span>
-        </Table.Cell>
+        </Table.Cell>}
       </Table.Row>
     </Table.Body>
-  </Table>
+  </Table>;
 
 
 const renderPlaylist = (unitsToDisplay, selected, t) =>

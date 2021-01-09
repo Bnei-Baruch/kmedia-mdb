@@ -24,7 +24,7 @@ const Recommended = ({ unit, filterOutUnits = null, t, displayTitle = true }) =>
   }
 
   const recommendedUnits = useSelector(state => recommendedItems
-    .map(item => mdbSelectors.getDenormContentUnit(state.mdb, item.uid))
+    .map(item => mdbSelectors.getDenormContentUnit(state.mdb, item.uid) || mdbSelectors.getDenormCollection(state.mdb, item.uid))
     .filter(item => !!item)) || [];
 
   // enable load once per unit
@@ -45,8 +45,6 @@ const Recommended = ({ unit, filterOutUnits = null, t, displayTitle = true }) =>
   if (wipErr) {
     return wipErr;
   }
-
-  //console.log('recommendedUnits:', recommendedUnits);
 
   if (recommendedUnits.length === 0){
     return null;
