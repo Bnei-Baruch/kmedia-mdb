@@ -36,14 +36,11 @@ const UnitPage = ({ section = '', t }) => {
 
   useEffect(() => {
     if (wip || err || (unit && unit.id === id && Array.isArray(unit.files))) {
-      console.log('no need to fetch:', id, wip, err);
       return;
     }
 
     dispatch(actions.fetchUnit(id));
   }, [dispatch, err, id, unit, wip])
-
-  console.log('unit:', id, language, unit);
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) {
