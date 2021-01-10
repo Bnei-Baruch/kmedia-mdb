@@ -58,9 +58,11 @@ class SearchResultSeries extends SearchResultBase {
       return null;
     }
 
-    const { _score: score, uid = 'bs_itcVAcFn_qMeV5M3Y' } = hit;
+    const { _score: score, _uid } = hit;
+    if (!_uid)
+      return
 
-    const series = uid.split('_').map(getSerieBySource);
+    const series = _uid.split('_').map(getSerieBySource);
     const s      = this.getLowestLevelSeries(series);
 
     const { logLinkParams } = this.buildLinkParams();
