@@ -1,10 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import classNames from 'classnames';
+import { useLocation, useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { Grid } from 'semantic-ui-react';
 
-import * as shapes from '../../shapes';
+import { actions, selectors } from '../../../redux/modules/mdb';
+import { selectors as settings } from '../../../redux/modules/settings';
+import WipErr from '../../shared/WipErr/WipErr';
 import Helmets from '../../shared/Helmets';
 import AVBox from './widgets/AVBox/AVBox';
 import Materials from './widgets/UnitMaterials/Materials';
@@ -17,9 +21,31 @@ const renderPlayer = (unit, language) =>
   <AVBox unit={unit} language={language} />
 
 
-export const UnitPage = ({ unit, language, section = '', location = {} }) => {
+const UnitPage = ({ section = '', t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const location = useLocation();
+  const { id } = useParams();
+
   const embed = playerHelper.getEmbedFromQuery(location);
+  const language = useSelector(state => settings.getLanguage(state.settings));
+  const unit = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
+  const wip = useSelector(state => selectors.getWip(state.mdb).units[id]);
+  const err = useSelector(state => selectors.getErrors(state.mdb).units[id]);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (wip || err || (unit && unit.id === id && Array.isArray(unit.files))) {
+      return;
+    }
+
+    dispatch(actions.fetchUnit(id));
+  }, [dispatch, err, id, unit, wip])
+
+  const wipErr = WipErr({ wip, err, t });
+  if (wipErr) {
+    return wipErr;
+  }
 
   if (!unit) {
     return null;
@@ -57,12 +83,8 @@ export const UnitPage = ({ unit, language, section = '', location = {} }) => {
 }
 
 UnitPage.propTypes = {
-  unit: shapes.ContentUnit,
   section: PropTypes.string,
-  language: PropTypes.string.isRequired,
-  location: shapes.HistoryLocation,
+  t: PropTypes.func.isRequired
 };
 
-export const wrap = WrappedComponent => withNamespaces()(WrappedComponent);
-
-export default UnitPage;
+export default withNamespaces()(UnitPage);

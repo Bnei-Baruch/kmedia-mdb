@@ -1,18 +1,17 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { actions, selectors } from '../../../../../../redux/modules/publications';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
-import * as shapes from '../../../../../shapes';
 import Page from './Page';
 
-const BlogPostContainer = ({ match }) => {
+const BlogPostContainer = () => {
   const wip      = useSelector(state => selectors.getBlogWipPost(state.publications));
   const err      = useSelector(state => selectors.getBlogErrorPost(state.publications));
   const language = useSelector(state => settings.getLanguage(state.settings));
 
-  const { blog, id } = match.params;
+  const { blog, id } = useParams();
   const post         = useSelector(state => selectors.getBlogPost(state.publications, blog, id));
 
   const dispatch = useDispatch();
@@ -44,8 +43,4 @@ const BlogPostContainer = ({ match }) => {
   );
 };
 
-BlogPostContainer.propTypes = {
-  match: shapes.RouterMatch.isRequired,
-};
-
-export default withRouter(BlogPostContainer);
+export default BlogPostContainer;
