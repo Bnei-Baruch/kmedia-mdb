@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useLocation } from 'react-router-dom';
@@ -23,30 +23,28 @@ const AVPlaylistPlayer = ({ items, selected, language, onSelectedChange, onLangu
   const [mediaEditMode, setMediaEditMode]       = useState(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
-  const handleMediaEditModeChange = useCallback(mediaEditMode => setMediaEditMode(mediaEditMode), []);
-  const handleDropdownOpenedChange = useCallback(isDropdownOpened => setIsDropdownOpened(isDropdownOpened), []);
+  const handleMediaEditModeChange = mediaEditMode => setMediaEditMode(mediaEditMode);
+  const handleDropdownOpenedChange = isDropdownOpened => setIsDropdownOpened(isDropdownOpened);
 
-  const changeNext = useCallback(() => {
-    if (selected < items.length - 1) {
-      onSelectedChange(selected + 1);
-    }
-  }, [items.length, onSelectedChange, selected]);
+  const onPlay = () => setAutoPlay(true);
+  const onPause = () => setAutoPlay(false);
 
-  const onPrev = useCallback(() => {
+  const onPrev = () => {
     if (selected > 0) {
       onSelectedChange(selected - 1);
     }
-  }, [onSelectedChange, selected]);
+  };
 
-  const onNext = useCallback(() => changeNext(), [changeNext]);
+  const onNext = () => {
+    if (selected < items.length - 1) {
+      onSelectedChange(selected + 1);
+    }
+  };
 
-  const onFinish = useCallback(() => {
-    changeNext();
+  const onFinish = () => {
+    onNext();
     setAutoPlay(true);
-  }, [changeNext]);
-
-  const onPlay = useCallback(() => setAutoPlay(true), []);
-  const onPause = useCallback(() => setAutoPlay(false), []);
+  };
 
   const currentItem = items[selected];
 

@@ -1,20 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions, selectors } from '../../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
 import * as shapes from '../../../../../shapes';
 import Transcription from './Transcription';
-import { withRouter } from 'react-router-dom';
+
 import { SessionInfoContext } from '../../../../../../helpers/app-contexts';
 
-const TranscriptionContainer = (props) => {
-  const { unit, type = null, location, activeTab = 'transcription' } = props;
-  const doc2htmlById                                                 = useSelector(state => selectors.getDoc2htmlById(state.assets));
-  const language                                                     = useSelector(state => settings.getLanguage(state.settings));
-  const contentLanguage                                              = useSelector(state => settings.getContentLanguage(state.settings, location));
-  const dispatch                                                     = useDispatch();
+const TranscriptionContainer = ({ unit, type = null, activeTab = 'transcription' }) => {
+  const location          = useLocation();
+  const doc2htmlById      = useSelector(state => selectors.getDoc2htmlById(state.assets));
+  const language          = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguage   = useSelector(state => settings.getContentLanguage(state.settings, location));
+  const dispatch          = useDispatch();
 
   const handleContentChange = id => dispatch(actions.doc2html(id));
 
@@ -43,7 +44,6 @@ const TranscriptionContainer = (props) => {
 TranscriptionContainer.propTypes = {
   unit: shapes.ContentUnit.isRequired,
   type: PropTypes.string,
-  location: shapes.HistoryLocation.isRequired,
 };
 
-export default withRouter(TranscriptionContainer);
+export default TranscriptionContainer;

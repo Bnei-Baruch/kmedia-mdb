@@ -1,15 +1,17 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
+import { useLocation, useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
+import { actions, selectors } from '../../../../../redux/modules/mdb';
+import { selectors as settings } from '../../../../../redux/modules/settings';
 import Helmets from '../../../../shared/Helmets/index';
-import { UnitContainer, wrap as wrapContainer } from '../../../../Pages/Unit/Container';
-import { wrap as wrapPage } from '../../../../Pages/Unit/Page';
 import TranscriptionContainer from '../../../../Pages/Unit/widgets/UnitMaterials/Transcription/TranscriptionContainer';
 import Share from "../../../Library/Share";
 import { isLanguageRtl } from "../../../../../helpers/i18n-utils";
 import MediaDownloads from '../../../../Pages/Unit/widgets/Downloads/MediaDownloads';
-import * as shapes from '../../../../shapes';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/Unit/widgets/Recommended/Main/Recommended';
 import playerHelper from '../../../../../helpers/player';
@@ -30,18 +32,14 @@ const renderHeader = (unit, t, language) => {
                 <Header.Content>
                   {unit.name}
                   {
-                    unit.description
-                      ? <Header.Subheader>{unit.description}</Header.Subheader>
-                      : null
+                    unit.description &&
+                      <Header.Subheader>{unit.description}</Header.Subheader>
                   }
                   {
-                    subText2
-                      ? (
-                        <Header.Subheader className="section-header__subtitle2">
-                          {subText2}
-                        </Header.Subheader>
-                      )
-                      : null
+                    subText2 &&
+                      <Header.Subheader className="section-header__subtitle2">
+                        {subText2}
+                      </Header.Subheader>
                   }
                 </Header.Content>
               </Header>
@@ -81,7 +79,30 @@ const renderArticle = unit => (
   </Grid>
 );
 
-const ArticlePage = ({ t, language, unit = null, location = {} }) => {
+const ArticlePage = ({ t }) => {
+  const location = useLocation();
+  const { id } = useParams();
+
+  const language = useSelector(state => settings.getLanguage(state.settings));
+  const unit = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
+  const wip = useSelector(state => selectors.getWip(state.mdb).units[id]);
+  const err = useSelector(state => selectors.getErrors(state.mdb).units[id]);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (wip || err || (unit && unit.id === id && Array.isArray(unit.files))) {
+      return;
+    }
+
+    dispatch(actions.fetchUnit(id));
+  }, [dispatch, err, id, unit, wip])
+
+  const wipErr = WipErr({ wip, err, t });
+  if (wipErr) {
+    return wipErr;
+  }
+
   if (!unit) {
     return null;
   }
@@ -118,29 +139,7 @@ const ArticlePage = ({ t, language, unit = null, location = {} }) => {
 }
 
 ArticlePage.propTypes = {
-  unit: shapes.ContentUnit,
-  language: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,
-  location: shapes.HistoryLocation,
 };
 
-class MyUnitContainer extends UnitContainer {
-  render() {
-    const { language, unit, wip, err, t } = this.props;
-
-    const wipErr = WipErr({ wip, err, t });
-    if (wipErr) {
-      return wipErr;
-    }
-
-    return (
-      <ArticlePage
-        unit={unit}
-        language={language}
-        t={t}
-      />
-    );
-  }
-}
-
-export default wrapContainer(wrapPage(MyUnitContainer));
+export default withNamespaces()(ArticlePage);
