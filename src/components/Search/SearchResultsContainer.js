@@ -76,7 +76,7 @@ class SearchResultsContainer extends Component {
   callSearch = (pageNo = 1) => {
     const { search, query, pageSize, deb } = this.props;
     search(query, pageNo, pageSize, '' /* suggest */, deb);
-  }
+  };
 
   handlePageChange = (pageNo) => {
     const { setPage } = this.props;
@@ -155,7 +155,7 @@ const cMapFromState = (state, results) => (
       if (val._source.result_type === 'collections') {
         const cID = val._source.mdb_uid;
         const c   = mdbSelectors.getDenormCollection(state.mdb, cID);
-        if (c) {
+        if (c && c.content_units?.length) {
           acc[cID] = c;
         }
       }
