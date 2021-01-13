@@ -60,16 +60,16 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null }
 
   // we need to calculate the playlist here, so we can filter items out of recommended
   // playlist { collection, language, mediaType, items, groups };
-  const preferredMT     = playerHelper.restorePreferredMediaType();
-  const mediaType       = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-  const playerLanguage  = playlist?.language || contentLanguage;
-  const uiLang          = playlist?.language || uiLanguage;
-  const contentLang     = playerHelper.getLanguageFromQuery(location, playerLanguage);
-
   useEffect(() => {
+    const preferredMT     = playerHelper.restorePreferredMediaType();
+    const mediaType       = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const playerLanguage  = playlist?.language || contentLanguage;
+    const uiLang          = playlist?.language || uiLanguage;
+    const contentLang     = playerHelper.getLanguageFromQuery(location, playerLanguage);
+
     const nPlaylist  = playerHelper.playlist(collection, mediaType, contentLang, uiLang);
     setPlaylist(nPlaylist);
-  }, [collection, contentLang, mediaType, uiLang]);
+  }, [collection, contentLanguage, location, playlist?.language, uiLanguage]);
 
 
   useEffect(() => {
