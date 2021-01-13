@@ -48,13 +48,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null }
     const selectedItem = playlist?.items[selected];
 
     if (selectedItem){
-      if (selectedItem.mediaType === MT_AUDIO && selectedItem.availableMediaTypes.includes(MT_VIDEO)) {
-        playerHelper.setMediaTypeInQuery(history, MT_VIDEO);
-        playerHelper.persistPreferredMediaType(MT_VIDEO);
-      } else if (selectedItem.mediaType === MT_VIDEO && selectedItem.availableMediaTypes.includes(MT_AUDIO)) {
-        playerHelper.setMediaTypeInQuery(history, MT_AUDIO);
-        playerHelper.persistPreferredMediaType(MT_AUDIO);
-      }
+      playerHelper.switchAV(selectedItem, history);
     }
   }, [history, playlist, selected]);
 

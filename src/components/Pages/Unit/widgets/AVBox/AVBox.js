@@ -31,6 +31,10 @@ const AVBox = ({ unit, t }) => {
   const [mediaEditMode, setMediaEditMode] = useState(0);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
+  const handleChangeLanguage = useCallback((e, language) => playerHelper.setLanguageInQuery(history, language), [history]);
+  const handleMediaEditModeChange = useCallback(newMediaEditMode => setMediaEditMode(newMediaEditMode), []);
+  const handleDropdownOpenedChange = useCallback(dropdownOpened => setIsDropdownOpened(dropdownOpened), []);
+
   useEffect(() => {
     const preferredMT = playerHelper.restorePreferredMediaType();
     const mediaType = playerHelper.getMediaTypeFromQuery(location, preferredMT);
@@ -47,25 +51,11 @@ const AVBox = ({ unit, t }) => {
 
 
   const handleSwitchAV = useCallback(() => {
-    const setMediaType = mediaType => {
-      playerHelper.setMediaTypeInQuery(history, mediaType);
-      playerHelper.persistPreferredMediaType(mediaType);
-    };
-
     if (playableItem) {
-      if (playableItem.mediaType === MT_VIDEO
-      && playableItem.availableMediaTypes.includes(MT_AUDIO)) {
-        setMediaType(MT_AUDIO);
-      } else if (playableItem.mediaType === MT_AUDIO
-      && playableItem.availableMediaTypes.includes(MT_VIDEO)) {
-        setMediaType(MT_VIDEO);
-      }
+      playerHelper.switchAV(playableItem, history);
     }
   }, [history, playableItem]);
 
-  const handleChangeLanguage = useCallback((e, language) => playerHelper.setLanguageInQuery(history, language), [history]);
-  const handleMediaEditModeChange = useCallback(newMediaEditMode => setMediaEditMode(newMediaEditMode), []);
-  const handleDropdownOpenedChange = useCallback(dropdownOpened => setIsDropdownOpened(dropdownOpened), []);
 
   const recommendedUnits = useRecommendedUnits({});
 
