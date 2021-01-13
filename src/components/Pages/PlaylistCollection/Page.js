@@ -15,7 +15,6 @@ import Playlist from './widgets/Playlist/Playlist';
 import PlaylistHeader from './widgets/Playlist/PlaylistHeader';
 import playerHelper from '../../../helpers/player';
 import { DeviceInfoContext } from "../../../helpers/app-contexts";
-import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
 import { selectors as settings } from '../../../redux/modules/settings';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
 

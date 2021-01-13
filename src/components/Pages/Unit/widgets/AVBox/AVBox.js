@@ -8,7 +8,7 @@ import { Media } from 'react-media-player';
 import isEqual from 'react-fast-compare';
 
 import { selectors as settings } from '../../../../../redux/modules/settings';
-import { MT_AUDIO, MT_VIDEO } from '../../../../../helpers/consts';
+import { MT_AUDIO } from '../../../../../helpers/consts';
 import playerHelper from '../../../../../helpers/player';
 import { isEmpty } from '../../../../../helpers/utils';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
