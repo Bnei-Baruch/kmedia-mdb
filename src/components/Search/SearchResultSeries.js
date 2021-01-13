@@ -44,6 +44,8 @@ class SearchResultSeries extends SearchResultBase {
   };
 
   getLowestLevelSeries = (series, rootId) => {
+    if (series.length <= 1)
+      return series[0];
     const root = series.find(s => s.parent_id === rootId || (!s.parent_id && !rootId));
     if (!(root?.children?.length !== 0)) {
       return root;
