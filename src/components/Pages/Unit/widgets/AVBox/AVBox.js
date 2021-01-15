@@ -1,184 +1,108 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import classNames from 'classnames';
 import { Media } from 'react-media-player';
 import isEqual from 'react-fast-compare';
 
-import { MT_AUDIO, MT_VIDEO } from '../../../../../helpers/consts';
-import playerHelper from '../../../../../helpers/player';
-import * as shapes from '../../../../shapes';
-import AVMobileCheck from '../../../../AVPlayer/AVMobileCheck';
 import { selectors as settings } from '../../../../../redux/modules/settings';
+import { MT_AUDIO } from '../../../../../helpers/consts';
+import playerHelper from '../../../../../helpers/player';
 import { isEmpty } from '../../../../../helpers/utils';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
+import { canonicalLink } from '../../../../../helpers/links';
+import * as shapes from '../../../../shapes';
+import AVMobileCheck from '../../../../AVPlayer/AVMobileCheck';
+import { useRecommendedUnits } from '../Recommended/Main/Recommended';
 
-class AVBox extends Component {
-  static contextType = DeviceInfoContext;
-  static propTypes   = {
-    unit: shapes.ContentUnit,
-    history: shapes.History.isRequired,
-    location: shapes.HistoryLocation.isRequired,
-    uiLanguage: PropTypes.string.isRequired,
-    contentLanguage: PropTypes.string.isRequired,
-    t: PropTypes.func.isRequired,
-  };
 
-  static defaultProps = {
-    unit: undefined,
-  };
+const AVBox = ({ unit, t }) => {
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const history = useHistory();
+  const location = useLocation();
 
-  static getMediaType = (location) => {
+  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
+
+  const [playableItem, setPlayableItem] = useState(null);
+  const [mediaEditMode, setMediaEditMode] = useState(0);
+  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+
+  const handleChangeLanguage = useCallback((e, language) => playerHelper.setLanguageInQuery(history, language), [history]);
+  const handleMediaEditModeChange = useCallback(newMediaEditMode => setMediaEditMode(newMediaEditMode), []);
+  const handleDropdownOpenedChange = useCallback(dropdownOpened => setIsDropdownOpened(dropdownOpened), []);
+
+  useEffect(() => {
     const preferredMT = playerHelper.restorePreferredMediaType();
-    return playerHelper.getMediaTypeFromQuery(location, preferredMT);
-  };
+    const mediaType = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const newPlayerLanguage = playerHelper.getLanguageFromQuery(location, contentLanguage);
+    const newPlayableItem = playerHelper.playableItem(unit, mediaType, uiLanguage, newPlayerLanguage);
 
-  constructor(props) {
-    super(props);
-    const { uiLanguage, contentLanguage, location, history, unit } = props;
+    setPlayableItem(playItem => isEqual(playItem, newPlayableItem) ? playItem : newPlayableItem);
+  }, [unit, location, uiLanguage, contentLanguage]);
 
-    const mediaType      = AVBox.getMediaType(location);
-    const playerLanguage = playerHelper.getLanguageFromQuery(location, contentLanguage);
-    const playableItem   = playerHelper.playableItem(unit, mediaType, uiLanguage, playerLanguage);
+  const handleSwitchAV = useCallback(() => {
+    if (playableItem) {
+      playerHelper.switchAV(playableItem, history);
+    }
+  }, [history, playableItem]);
 
-    this.state = {
-      playableItem,
-      autoPlay: true,
-      newItemLanguage: playerLanguage
-    };
 
-    playerHelper.setLanguageInQuery(history, playerLanguage);
-  }
+  const recommendedUnits = useRecommendedUnits({});
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const { unit, uiLanguage, contentLanguage, location }         = nextProps;
-    const
-      {
-        unit: oldUnit,
-        uiLanguage: oldUiLanguage,
-        contentLanguage: oldContentLanguage,
-        location: oldLocation
-      }                                                           = this.props;
-    const { playableItem, oldMediaEditMode, oldIsDropdownOpened } = this.state;
-    const { language: playerLanguage }                            = playableItem;
-    const { mediaEditMode, isDropdownOpened }                     = nextState;
+  const onFinish = () => {
+    const nextRecommendedUnit = recommendedUnits?.length > 0 ? recommendedUnits[0] : null;
 
-    const preferredMT     = playerHelper.restorePreferredMediaType();
-    const prevMediaType   = playerHelper.getMediaTypeFromQuery(oldLocation);
-    const newMediaType    = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
-
-    const equal = oldUiLanguage === uiLanguage
-      && oldContentLanguage === contentLanguage
-      && prevMediaType === newMediaType
-      && newItemLanguage === playerLanguage
-      && oldMediaEditMode === mediaEditMode
-      && oldIsDropdownOpened === isDropdownOpened
-      && unit && oldUnit && unit.id === oldUnit.id;
-
-    return !equal;
-  }
-
-  componentDidUpdate() {
-    this.setPlayableItemState();
-  }
-
-  handleSwitchAV = () => {
-    const { playableItem } = this.state;
-
-    if (playableItem.mediaType === MT_VIDEO
-      && playableItem.availableMediaTypes.includes(MT_AUDIO)) {
-      this.setMediaType(MT_AUDIO);
-    } else if (playableItem.mediaType === MT_AUDIO
-      && playableItem.availableMediaTypes.includes(MT_VIDEO)) {
-      this.setMediaType(MT_VIDEO);
+    if (nextRecommendedUnit) {
+      const link = canonicalLink(nextRecommendedUnit);
+      history.push(link);
     }
   };
 
-  setMediaType(mediaType) {
-    const { history } = this.props;
-
-    playerHelper.setMediaTypeInQuery(history, mediaType);
-    playerHelper.persistPreferredMediaType(mediaType);
-
-    this.setPlayableItemState(mediaType);
+  if (isEmpty(playableItem)) {
+    return (<div>{t('messages.no-playable-files')}</div>);
   }
 
-  setPlayableItemState(mediaType) {
-    const { unit, uiLanguage, location } = this.props;
-    const { playableItem }               = this.state;
-    const { language: playerLanguage }   = playableItem;
+  const isAudio = playableItem.mediaType === MT_AUDIO;
 
-    if (!mediaType) {
-      mediaType = AVBox.getMediaType(location);
-    }
-
-    const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
-    const newPlayableItem = playerHelper.playableItem(unit, mediaType, uiLanguage, newItemLanguage);
-
-    if (!isEqual(playableItem, newPlayableItem)) {
-      this.setState({ playableItem: newPlayableItem, newItemLanguage });
-    }
-  }
-
-  handleChangeLanguage = (e, language) => {
-    const { history } = this.props;
-    playerHelper.setLanguageInQuery(history, language);
-  };
-
-  handleMediaEditModeChange = mediaEditMode => this.setState({ mediaEditMode });
-
-  handleDropdownOpenedChange = isDropdownOpened => this.setState({ isDropdownOpened });
-
-  render() {
-    const { t, uiLanguage }                                                            = this.props;
-    const { playableItem, mediaEditMode, autoPlay, isDropdownOpened, newItemLanguage } = this.state;
-    const { undefinedDevice }                                                          = this.context;
-
-    if (isEmpty(playableItem)) {
-      return (<div>{t('messages.no-playable-files')}</div>);
-    }
-
-    const isAudio = playableItem.mediaType === MT_AUDIO;
-
-    return (
-      <div className={classNames('avbox__player', {
-        'avbox__player--is-audio': isAudio,
-        'avbox__player--is-audio--edit-mode': isAudio && mediaEditMode === 2,
-        'avbox__player--is-audio--normal-mode': isAudio && mediaEditMode === 0,
-        'avbox__player--is-audio--dropdown-opened': isAudio && isDropdownOpened && !mediaEditMode,
-        'avbox__player--is-audio--dropdown-closed': isAudio && !isDropdownOpened && !mediaEditMode,
-        'avbox__player--is-4x3': playableItem.unit.film_date < '2014',
-        'mobile-device': !undefinedDevice,
-      })}
-      >
-        <div className="avbox__media-wrapper">
-          <Media>
-            <AVMobileCheck
-              autoPlay={autoPlay}
-              item={playableItem}
-              preImageUrl={playableItem.preImageUrl}
-              onSwitchAV={this.handleSwitchAV}
-              languages={playableItem.availableLanguages}
-              uiLanguage={uiLanguage}
-              selectedLanguage={playableItem.language}
-              requestedLanguage={newItemLanguage}
-              onLanguageChange={this.handleChangeLanguage}
-              onMediaEditModeChange={this.handleMediaEditModeChange}
-              onDropdownOpenedChange={this.handleDropdownOpenedChange}
-            />
-          </Media>
-        </div>
+  return (
+    <div className={classNames('avbox__player', {
+      'avbox__player--is-audio': isAudio,
+      'avbox__player--is-audio--edit-mode': isAudio && mediaEditMode === 2,
+      'avbox__player--is-audio--normal-mode': isAudio && mediaEditMode === 0,
+      'avbox__player--is-audio--dropdown-opened': isAudio && isDropdownOpened && !mediaEditMode,
+      'avbox__player--is-audio--dropdown-closed': isAudio && !isDropdownOpened && !mediaEditMode,
+      'avbox__player--is-4x3': playableItem.unit.film_date < '2014',
+      'mobile-device': isMobileDevice,
+    })}
+    >
+      <div className="avbox__media-wrapper">
+        <Media>
+          <AVMobileCheck
+            autoPlay={true}
+            item={playableItem}
+            preImageUrl={playableItem.preImageUrl}
+            onSwitchAV={handleSwitchAV}
+            languages={playableItem.availableLanguages}
+            uiLanguage={uiLanguage}
+            selectedLanguage={playableItem.language}
+            requestedLanguage={contentLanguage}
+            onLanguageChange={handleChangeLanguage}
+            onMediaEditModeChange={handleMediaEditModeChange}
+            onDropdownOpenedChange={handleDropdownOpenedChange}
+            onFinish={onFinish}
+          />
+        </Media>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
-const mapState = state => ({
-  uiLanguage: settings.getLanguage(state.settings),
-  contentLanguage: settings.getContentLanguage(state.settings),
-});
+AVBox.propTypes = {
+  unit: shapes.ContentUnit,
+  t: PropTypes.func.isRequired,
+};
 
-export default withRouter(connect(mapState)(withNamespaces()(AVBox)));
+export default withNamespaces()(AVBox);

@@ -15,7 +15,6 @@ import Playlist from './widgets/Playlist/Playlist';
 import PlaylistHeader from './widgets/Playlist/PlaylistHeader';
 import playerHelper from '../../../helpers/player';
 import { DeviceInfoContext } from "../../../helpers/app-contexts";
-import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
 import { selectors as settings } from '../../../redux/modules/settings';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
 
@@ -48,28 +47,22 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null }
     const selectedItem = playlist?.items[selected];
 
     if (selectedItem){
-      if (selectedItem.mediaType === MT_AUDIO && selectedItem.availableMediaTypes.includes(MT_VIDEO)) {
-        playerHelper.setMediaTypeInQuery(history, MT_VIDEO);
-        playerHelper.persistPreferredMediaType(MT_VIDEO);
-      } else if (selectedItem.mediaType === MT_VIDEO && selectedItem.availableMediaTypes.includes(MT_AUDIO)) {
-        playerHelper.setMediaTypeInQuery(history, MT_AUDIO);
-        playerHelper.persistPreferredMediaType(MT_AUDIO);
-      }
+      playerHelper.switchAV(selectedItem, history);
     }
   }, [history, playlist, selected]);
 
   // we need to calculate the playlist here, so we can filter items out of recommended
   // playlist { collection, language, mediaType, items, groups };
-  const preferredMT     = playerHelper.restorePreferredMediaType();
-  const mediaType       = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-  const playerLanguage  = playlist?.language || contentLanguage;
-  const uiLang          = playlist?.language || uiLanguage;
-  const contentLang     = playerHelper.getLanguageFromQuery(location, playerLanguage);
-
   useEffect(() => {
+    const preferredMT     = playerHelper.restorePreferredMediaType();
+    const mediaType       = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const playerLanguage  = playlist?.language || contentLanguage;
+    const uiLang          = playlist?.language || uiLanguage;
+    const contentLang     = playerHelper.getLanguageFromQuery(location, playerLanguage);
+
     const nPlaylist  = playerHelper.playlist(collection, mediaType, contentLang, uiLang);
     setPlaylist(nPlaylist);
-  }, [collection, contentLang, mediaType, uiLang]);
+  }, [collection, contentLanguage, location, playlist?.language, uiLanguage]);
 
 
   useEffect(() => {
