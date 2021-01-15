@@ -26,7 +26,6 @@ const AVBox = ({ unit, t }) => {
   const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
 
-  const [playerLanguage, setPlayerLanguage] = useState(contentLanguage);
   const [playableItem, setPlayableItem] = useState(null);
   const [mediaEditMode, setMediaEditMode] = useState(0);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
@@ -38,17 +37,11 @@ const AVBox = ({ unit, t }) => {
   useEffect(() => {
     const preferredMT = playerHelper.restorePreferredMediaType();
     const mediaType = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const newPlayerLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
+    const newPlayerLanguage = playerHelper.getLanguageFromQuery(location, contentLanguage);
     const newPlayableItem = playerHelper.playableItem(unit, mediaType, uiLanguage, newPlayerLanguage);
 
-    setPlayerLanguage(newPlayableItem.language);
     setPlayableItem(playItem => isEqual(playItem, newPlayableItem) ? playItem : newPlayableItem);
-  }, [unit, location, playerLanguage, uiLanguage]);
-
-  useEffect(() => {
-    playerHelper.setLanguageInQuery(history, playerLanguage);
-  }, [history, playerLanguage]);
-
+  }, [unit, location, uiLanguage, contentLanguage]);
 
   const handleSwitchAV = useCallback(() => {
     if (playableItem) {
@@ -95,7 +88,7 @@ const AVBox = ({ unit, t }) => {
             languages={playableItem.availableLanguages}
             uiLanguage={uiLanguage}
             selectedLanguage={playableItem.language}
-            requestedLanguage={playerLanguage}
+            requestedLanguage={contentLanguage}
             onLanguageChange={handleChangeLanguage}
             onMediaEditModeChange={handleMediaEditModeChange}
             onDropdownOpenedChange={handleDropdownOpenedChange}
