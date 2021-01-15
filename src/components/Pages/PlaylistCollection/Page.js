@@ -103,6 +103,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null }
         nextLink={nextLink}
         prevLink={prevLink}
       />
+      <br />
       <Recommended unit={unit} filterOutUnits={filterOutUnits} />
     </>;
 
