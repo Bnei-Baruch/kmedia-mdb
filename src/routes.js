@@ -129,11 +129,10 @@ routesCreator.propTypes = {
 };
 
 /** A component that sets the language it got from the route params. */
-const RoutedLanguageSetter = ({ match, route }) => (
-  <LanguageSetter language={match.params.language || route.defaultLanguage}>
+const RoutedLanguageSetter = ({ match, route }) =>
+  <LanguageSetter language={match.params.language}>
     {renderRoutes(route.routes)}
-  </LanguageSetter>
-);
+  </LanguageSetter>;
 
 const RouteItem = PropTypes.shape({
   component: PropTypes.elementType.isRequired,
