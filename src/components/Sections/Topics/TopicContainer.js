@@ -74,12 +74,12 @@ class TopicContainer extends Component {
   }
 
   // filter stuff
-  getRegExp = (match) => {
+  getRegExp = match => {
     const escapedMatch = getEscapedRegExp(match);
     return new RegExp(escapedMatch, 'i');
   };
 
-  setVisibleState = (byId) => {
+  setVisibleState = byId => {
     const { expandedNodes } = this.state;
     const visibleItemsCount = 3;
     const list              = produce(byId || {}, draft => {
@@ -107,7 +107,7 @@ class TopicContainer extends Component {
     this.setState({ match: '' });
   };
 
-  sortRootsPosition = (roots) => {
+  sortRootsPosition = roots => {
     const extra = roots.filter(node => !TOPICS_FOR_DISPLAY.includes(node));
 
     return roots.length ? [...TOPICS_FOR_DISPLAY, ...extra] : roots;
@@ -174,17 +174,17 @@ class TopicContainer extends Component {
     return filteredRoots;
   };
 
-  isIncluded = id => (this.filteredById[id]);
+  isIncluded = id => !!this.filteredById[id];
 
-  hasChildren = node => (Array.isArray(node.children) && node.children.length > 0);
+  hasChildren = node => Array.isArray(node.children) && node.children.length > 0;
 
-  updateParentsVisibleState = (parentId) => {
+  updateParentsVisibleState = parentId => {
     const { expandedNodes } = this.state;
     expandedNodes[parentId] = !expandedNodes[parentId];
     this.setState({ expandedNodes });
   };
 
-  renderLeaf = (node) => {
+  renderLeaf = node => {
     const { stats } = this.props;
 
     return (
@@ -245,12 +245,9 @@ class TopicContainer extends Component {
     ) : null;
   };
 
-  renderSubHeader = node => (
-    this.hasChildren(node) ? this.renderNode(node)
-      : null
-  );
+  renderSubHeader = node => this.hasChildren(node) ? this.renderNode(node) : null;
 
-  renderBranch = (rootId) => {
+  renderBranch = rootId => {
     const rootNode = this.filteredById[rootId];
 
     if (!rootNode.children || rootNode.children.length === 0) {
