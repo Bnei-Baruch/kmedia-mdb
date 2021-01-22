@@ -7,6 +7,7 @@ function SvgLectures(props) {
             height="1em"
             viewBox="0 0 50 50"
             width="1em"
+            xmlns="http://www.w3.org/2000/svg"
             {...props}
         >
             <g stroke="#2185d0" strokeLinecap="square" strokeWidth={2}>

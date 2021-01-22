@@ -39,3 +39,4 @@ node_modules/
 !src/**/semantic.min.css
 !src/**/semantic.rtl.min.css
 .eslintrc
+.eslintcache

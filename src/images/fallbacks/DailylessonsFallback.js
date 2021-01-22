@@ -7,6 +7,7 @@ function SvgDailylessonsFallback(props) {
             height="1em"
             viewBox="0 0 480 270"
             width="1em"
+            xmlns="http://www.w3.org/2000/svg"
             {...props}
         >
             <path d="M0 0h480v270H0z" fill="#e5e5e5" />
