@@ -66,7 +66,7 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
     },
   ];
 
-  if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER || unit.content_type === CT_VIRTUAL_LESSON || unit.content_type === CT_CLIP) {
+  if ([CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type)) {
     items.unshift({
       name: 'summary',
       label: t('materials.summary.header'),
