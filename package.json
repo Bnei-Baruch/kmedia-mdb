@@ -11,7 +11,7 @@
     "critical-css": "node-sass src/stylesheets/critical.scss | yarn run postcss --use autoprefixer --use cssnano -o build/critical.css --no-map",
     "apply-critical-css": "sed \"s*</head>*<style type='text/css'>`cat build/critical.css`</style></head>*\" build/index.html > build/critical.html",
     "build:css": "echo '>>> Building CSS'; yarn critical-css && yarn apply-critical-css",
-    "build:svgs": "echo '>>> Building Icons...'; yarn svgr -d src/images/ --ignore-existing src/images/",
+    "build:svgs": "echo '>>> Building Icons...'; yarn svgr -d src/images/ --ignore-existing src/images/\\*",
     "build:scripts": "echo '>>> Building Scripts...'; react-scripts build",
     "analyze": "yarn build:production && source-map-explorer build/static/js/main.*",
     "start-js": "react-scripts start",
