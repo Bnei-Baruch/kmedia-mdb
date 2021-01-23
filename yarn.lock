@@ -1739,7 +1739,7 @@
     "@svgr/babel-plugin-transform-react-native-svg" "^5.4.0"
     "@svgr/babel-plugin-transform-svg-component" "^5.5.0"
 
-"@svgr/cli@^5.0.1":
+"@svgr/cli@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@svgr/cli/-/cli-5.5.0.tgz#b5b43383cc3b22c327a7bc3277dd8fc7d962452b"
   integrity sha512-KwEWi8olD7MpHR9pD5CrgsH7W8kQpzhSM0Ar3gGQyXqXdIuRYX5RgkWGm8Zi5ALZV9UhbPE+ObLhuSwEJxOzgA==
