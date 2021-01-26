@@ -20,7 +20,7 @@ export const useRecommendedUnits = ({ filterOutUnits = null }) => {
   }
 
   const recommendedUnits = useSelector(state => recommendedItems
-    .map(item => mdbSelectors.getDenormContentUnit(state.mdb, item.uid))
+    .map(item => mdbSelectors.getDenormContentUnit(state.mdb, item.uid) || mdbSelectors.getDenormCollection(state.mdb, item.uid))
     .filter(item => !!item)) || [];
 
   return recommendedUnits;
