@@ -10,7 +10,8 @@ import { selectors as settings } from '../redux/modules/settings';
 export function* fetchRecommended(action){
   const id = action.payload;
   try {
-    const { data } = yield call(Api.recommended, id);
+    const language = yield select(state => settings.getContentLanguage(state.settings));
+    const { data } = yield call(Api.recommended, {uid: id, languages: [language]});
     const recommendedItems = data.feed;
 
     if (Array.isArray(recommendedItems) && recommendedItems.length > 0){

@@ -123,14 +123,15 @@ class Api {
     Requests.get(`simple?${Requests.makeParams({ language, start_date, end_date })}`)
   );
 
-  static recommended = uid => {
+  static recommended = ({uid, languages}) => {
     var data = JSON.stringify({
       "more_items": 20,
       "current_feed": [],
       "options": {
         "recommend": {
-          "uid": uid  
-        }
+          uid,
+        },
+        languages,
       }
     });
 
