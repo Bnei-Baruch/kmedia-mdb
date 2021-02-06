@@ -151,6 +151,7 @@
     "semantic-ui-react": "^2.0.0",
     "serialize-javascript": "^5.0.1",
     "ua-parser-js": "^0.7.17",
+    "ulid": "^2.3.0",
     "warning": "^4.0.2",
     "worker-loader": "^3.0.4"
   },

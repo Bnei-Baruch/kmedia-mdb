@@ -44,12 +44,13 @@ const playbackToValue = playback => parseFloat(playback.slice(0, -1));
 
 class AVPlayer extends Component {
   static contextType = DeviceInfoContext;
-  
+
   static propTypes = {
     t: PropTypes.func.isRequired,
     media: shapes.Media.isRequired,
     uiLanguage: PropTypes.string.isRequired,
     requestedLanguage: PropTypes.string,
+    chronicles: PropTypes.shape(),
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -198,6 +199,9 @@ class AVPlayer extends Component {
   componentDidUpdate() {
     const { item } = this.props;
     if (!isEqual(this.state.item, item)) {
+      if (this.isUnitExistAndPlaying()) {
+        this.props.chronicles.append('player-stop', this.buildAppendData(this.props.item, this.state.src, this.props.media));
+      }
       this.setState({
         error: false,
         errorReason: '',
@@ -214,6 +218,13 @@ class AVPlayer extends Component {
       this.autohideTimeoutId = null;
     }
     window.removeEventListener('message', this.receiveMessageFunc, false);
+    if (this.isUnitExistAndPlaying()) {
+      this.props.chronicles.append('player-stop', this.buildAppendData(this.props.item, this.state.src, this.props.media));
+    }
+  }
+
+  isUnitExistAndPlaying() {
+    return this.props.media?.isPlaying && this.state.item?.unit?.id;
   }
 
   receiveMessage(event) {
@@ -342,16 +353,29 @@ class AVPlayer extends Component {
     }
   };
 
+  buildAppendData = (item, src, media) => {
+    return {
+      unit_uid: item.unit.id,
+      file_src: src,
+      current_time: media.currentTime,
+      duration: media.duration,
+    };
+  }
+
   onPlay = () => {
-    const { onPlay } = this.props;
+    const { onPlay, item } = this.props;
     if (onPlay) {
       onPlay();
+    }
+    if (item?.unit?.id) {
+      const {unit, item: { mediaType }, selectedLanguage, uiLanguage } = this.props;
+      this.props.chronicles.append('player-play', this.buildAppendData(item, this.state.src, this.props.media));
     }
   };
 
   onPause = (e) => {
     const { browserName }       = this.state;
-    const { onPause, onFinish } = this.props;
+    const { onPause, onFinish, item } = this.props;
     // when we're close to the end regard this as finished
     if (browserName !== 'IE'
       && Math.abs(e.currentTime - e.duration) < 0.1 && onFinish) {
@@ -359,6 +383,9 @@ class AVPlayer extends Component {
       onFinish();
     } else if (onPause) {
       onPause();
+    }
+    if (item?.unit?.id) {
+      this.props.chronicles.append('player-stop', this.buildAppendData(item, this.state.src, this.props.media));
     }
   };
 
