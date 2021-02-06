@@ -32,6 +32,7 @@ app.use(helmet({
       'default-src': [
         '\'self\'',
         '*.kbb1.com',
+        '*.kli.one',
         'kabbalahmedia.info',
         '*.kabbalahmedia.info',
         'archive',                      // suitcase
