@@ -41,6 +41,7 @@ app.use(helmet({
         '*.twimg.com',
         '*.youtube.com',
         '*.youtube-nocookie.com',
+        '*.google-analytics.com',
       ],
       'script-src': [
         '\'self\'',
