@@ -42,6 +42,7 @@ app.use(helmet({
         '*.youtube.com',
         '*.youtube-nocookie.com',
         '*.google-analytics.com',
+        'stats.g.doubleclick.net',
       ],
       'script-src': [
         '\'self\'',
