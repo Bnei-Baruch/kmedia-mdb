@@ -218,7 +218,17 @@ const getEmbedFromQuery = (location) => {
   return query.embed === '1';
 };
 
-export default {
+const switchAV = (selectedItem, history) => {
+  if (selectedItem.mediaType === MT_AUDIO && selectedItem.availableMediaTypes.includes(MT_VIDEO)) {
+    setMediaTypeInQuery(history, MT_VIDEO);
+    persistPreferredMediaType(MT_VIDEO);
+  } else if (selectedItem.mediaType === MT_VIDEO && selectedItem.availableMediaTypes.includes(MT_AUDIO)) {
+    setMediaTypeInQuery(history, MT_AUDIO);
+    persistPreferredMediaType(MT_AUDIO);
+  }
+}
+
+const exportMethods = {
   playableItem,
   playlist,
   getMediaTypeFromQuery,
@@ -232,4 +242,7 @@ export default {
   restorePreferredVideoSize,
   persistPreferredVideoSize,
   getEmbedFromQuery,
+  switchAV
 };
+
+export default exportMethods;

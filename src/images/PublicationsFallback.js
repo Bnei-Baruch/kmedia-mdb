@@ -4,9 +4,8 @@ function SvgPublicationsFallback(props) {
     return (
         <svg
             fill="none"
-            height="1em"
-            viewBox="0 0 480 270"
-            width="1em"
+            height={270}
+            width={480}
             xmlns="http://www.w3.org/2000/svg"
             {...props}
         >

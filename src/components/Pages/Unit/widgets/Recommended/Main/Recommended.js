@@ -10,8 +10,8 @@ import * as shapes from '../../../../../shapes';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 import DisplayRecommended from './DisplayRecommended';
 
-
-export const RecommendedUnits = (filterOutUnits = null) => {
+// a custom hook to get loaded recommended
+export const useRecommendedUnits = ({ filterOutUnits = null }) => {
   let recommendedItems = useSelector(state => selectors.getRecommendedItems(state.recommended)) || [];
 
   // filter out the given units
@@ -20,39 +20,33 @@ export const RecommendedUnits = (filterOutUnits = null) => {
   }
 
   const recommendedUnits = useSelector(state => recommendedItems
-    .map(item => mdbSelectors.getDenormContentUnit(state.mdb, item.uid))
+    .map(item => mdbSelectors.getDenormContentUnit(state.mdb, item.uid) || mdbSelectors.getDenormCollection(state.mdb, item.uid))
     .filter(item => !!item)) || [];
 
   return recommendedUnits;
 };
 
-const Recommended = ({ unit, filterOutUnits = null, t, displayTitle = true }) => {
-  const [dataLoaded, setDataLoaded] = useState(false);
+const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
+  const [unitId, setUnitId] = useState(null);
 
   const wip = useSelector(state => selectors.getWip(state.recommended));
   const err = useSelector(state => selectors.getError(state.recommended));
-  const recommendedUnits = RecommendedUnits(filterOutUnits);
-
-  // enable load once per unit
-  useEffect(() => {
-    setDataLoaded(false);
-  }, [unit]);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (unit && !wip && !err && !dataLoaded){
+    if (unit?.id && unit.id !== unitId && !wip && !err) {
       dispatch(actions.fetchRecommended(unit.id));
-      setDataLoaded(true);
+      setUnitId(unit.id);
     }
-  }, [dispatch, unit, wip, err, dataLoaded]);
+  }, [dispatch, unit, wip, err, unitId]);
+
+  const recommendedUnits = useRecommendedUnits({ unit, filterOutUnits });
 
   const wipErr = WipErr({ wip, err, t });
 
   if (wipErr) {
     return wipErr;
   }
-
-  //console.log('recommendedUnits:', recommendedUnits);
 
   if (recommendedUnits.length === 0){
     return null;

@@ -17,9 +17,7 @@ import Recommended from './widgets/Recommended/Main/Recommended';
 import playerHelper from '../../../helpers/player';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
-const renderPlayer = (unit, language) =>
-  <AVBox unit={unit} language={language} />
-
+const renderPlayer = unit => <AVBox unit={unit} />
 
 const UnitPage = ({ section = '', t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -27,7 +25,7 @@ const UnitPage = ({ section = '', t }) => {
   const { id } = useParams();
 
   const embed = playerHelper.getEmbedFromQuery(location);
-  const language = useSelector(state => settings.getLanguage(state.settings));
+  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
   const unit = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
   const wip = useSelector(state => selectors.getWip(state.mdb).units[id]);
   const err = useSelector(state => selectors.getErrors(state.mdb).units[id]);
@@ -56,12 +54,12 @@ const UnitPage = ({ section = '', t }) => {
   return !embed
     ? (
       <>
-        <Helmets.AVUnit unit={unit} language={language} />
+        <Helmets.AVUnit unit={unit} language={uiLanguage} />
         <Grid padded={!isMobileDevice} className="avbox">
           <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}
             className={classNames({"is-fitted": isMobileDevice})}>
             <Grid.Row>
-              {renderPlayer(unit, language)}
+              {renderPlayer(unit)}
             </Grid.Row>
             <Grid.Row>
               <Grid.Column>
@@ -78,7 +76,7 @@ const UnitPage = ({ section = '', t }) => {
         </Grid>
       </>
     ) : (
-      renderPlayer(unit, language)
+      renderPlayer(unit)
     );
 }
 

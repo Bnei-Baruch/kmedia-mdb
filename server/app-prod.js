@@ -32,6 +32,7 @@ app.use(helmet({
       'default-src': [
         '\'self\'',
         '*.kbb1.com',
+        '*.kli.one',
         'kabbalahmedia.info',
         '*.kabbalahmedia.info',
         'archive',                      // suitcase
@@ -40,6 +41,8 @@ app.use(helmet({
         '*.twimg.com',
         '*.youtube.com',
         '*.youtube-nocookie.com',
+        '*.google-analytics.com',
+        'stats.g.doubleclick.net',
       ],
       'script-src': [
         '\'self\'',

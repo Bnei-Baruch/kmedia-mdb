@@ -366,6 +366,12 @@
       margin: 0 .25rem;
     }
   }
+  .message-mobile {
+    max-width: 200px;
+    .content {
+      overflow: hidden;
+    }
+  }
 }
 
 .ui.column.grid > [class*="eight wide"].column, .ui.grid > .column.row > [class*="eight wide"].column, .ui.grid > .row > [class*="eight wide"].column, .ui.grid > [class*="eight wide"].column {

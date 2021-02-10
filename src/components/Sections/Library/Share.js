@@ -69,7 +69,7 @@ const LibraryShare = ({ t, position }) => {
       >
         <Popup.Content>
           <ShareBar url={url} buttonSize={buttonSize} messageTitle={t('sources-library.share-title')} />
-          <Message content={url} size="mini" />
+          <Message content={url} size="mini" className={isMobileDevice ? 'message-mobile' : ''} />
           <Popup // link was copied message popup
             open={isCopyOpen}
             content={t('messages.link-copied-to-clipboard')}

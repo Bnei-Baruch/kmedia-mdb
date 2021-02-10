@@ -15,15 +15,17 @@ import Playlist from './widgets/Playlist/Playlist';
 import PlaylistHeader from './widgets/Playlist/PlaylistHeader';
 import playerHelper from '../../../helpers/player';
 import { DeviceInfoContext } from "../../../helpers/app-contexts";
-import { MT_AUDIO, MT_VIDEO } from '../../../helpers/consts';
 import { selectors as settings } from '../../../redux/modules/settings';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
 
+import { usePrevious } from '../../../helpers/utils';
+import { ClientChroniclesContext } from '../../../helpers/app-contexts';
 
 const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null }) => {
   const location = useLocation();
   const history  = useHistory();
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const chronicles = useContext(ClientChroniclesContext);
 
   const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
@@ -33,12 +35,28 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null }
   const [selected, setSelected] = useState(0);
   const [playlist, setPlaylist] = useState(null);
 
+  const prev = usePrevious({unit, collection});
+
   const handleSelectedChange = useCallback(nSelected => {
     if (nSelected !== selected){
       playerHelper.setActivePartInQuery(history, nSelected);
       setSelected(nSelected);
     }
   }, [history, selected]);
+
+  useEffect(() => {
+    if (prev?.unit?.id !== unit?.id) {
+      if (prev?.unit?.id) {
+        chronicles.append('collection-unit-unselected', {unit_uid: prev.unit.id});
+      }
+      if (unit?.id) {
+        chronicles.append('collection-unit-selected', {unit_uid: unit.id});
+      }
+    }
+    if (prev?.unit?.id && !unit?.id) {
+      chronicles.append('collection-unit-unselected', {unit_uid: unit.id});
+    }
+  }, [unit, prev?.unit]);
 
   const handleLanguageChange = useCallback((e, language) => {
     playerHelper.setLanguageInQuery(history, language);
@@ -48,28 +66,22 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null }
     const selectedItem = playlist?.items[selected];
 
     if (selectedItem){
-      if (selectedItem.mediaType === MT_AUDIO && selectedItem.availableMediaTypes.includes(MT_VIDEO)) {
-        playerHelper.setMediaTypeInQuery(history, MT_VIDEO);
-        playerHelper.persistPreferredMediaType(MT_VIDEO);
-      } else if (selectedItem.mediaType === MT_VIDEO && selectedItem.availableMediaTypes.includes(MT_AUDIO)) {
-        playerHelper.setMediaTypeInQuery(history, MT_AUDIO);
-        playerHelper.persistPreferredMediaType(MT_AUDIO);
-      }
+      playerHelper.switchAV(selectedItem, history);
     }
   }, [history, playlist, selected]);
 
   // we need to calculate the playlist here, so we can filter items out of recommended
   // playlist { collection, language, mediaType, items, groups };
-  const preferredMT     = playerHelper.restorePreferredMediaType();
-  const mediaType       = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-  const playerLanguage  = playlist?.language || contentLanguage;
-  const uiLang          = playlist?.language || uiLanguage;
-  const contentLang     = playerHelper.getLanguageFromQuery(location, playerLanguage);
-
   useEffect(() => {
+    const preferredMT     = playerHelper.restorePreferredMediaType();
+    const mediaType       = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const playerLanguage  = playlist?.language || contentLanguage;
+    const uiLang          = playlist?.language || uiLanguage;
+    const contentLang     = playerHelper.getLanguageFromQuery(location, playerLanguage);
+
     const nPlaylist  = playerHelper.playlist(collection, mediaType, contentLang, uiLang);
     setPlaylist(nPlaylist);
-  }, [collection, contentLang, mediaType, uiLang]);
+  }, [collection, contentLanguage, location, playlist?.language, uiLanguage]);
 
 
   useEffect(() => {
@@ -110,6 +122,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null }
         nextLink={nextLink}
         prevLink={prevLink}
       />
+      <br />
       <Recommended unit={unit} filterOutUnits={filterOutUnits} />
     </>;
 
