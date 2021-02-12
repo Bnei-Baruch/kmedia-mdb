@@ -7,7 +7,7 @@ import UnitList from '../../../../Pages/UnitList/Container';
 
 const renderUnit = (unit, t) => {
   if (!unit) {
-    return;
+    return null;
   }
   const { clips, relatedItems }
           = renderUnitHelper.commonRenderUnitForClips(unit, t);
