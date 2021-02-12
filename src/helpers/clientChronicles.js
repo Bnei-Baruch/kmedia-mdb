@@ -185,7 +185,7 @@ export default class ClientChronicles {
       (async () => { return await axios.post(chroniclesUrl('append'), append); })();
     } else {
       axios.post(chroniclesUrl('append'), append)
-      .catch((error) => { console.warn(error); });
+        .catch((error) => { console.warn(error); });
     }
   }
 }
