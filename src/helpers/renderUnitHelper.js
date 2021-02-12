@@ -26,36 +26,36 @@ export const commonRenderUnitForClips = (unit, t) => {
 };
 
 export const getUnitCollectionsBreakdown = unit =>
-  new CollectionsBreakdown(Object.values(unit.collections || {}));
+  new CollectionsBreakdown(Object.values(unit?.collections || {}));
 
-export const getFilmDate = (unit, t) => 
-  unit.film_date ? t('values.date', { date: unit.film_date }) : ''
+export const getFilmDate = (unit, t) =>
+  unit?.film_date && t('values.date', { date: unit.film_date })
 
 export const renderFilmDate = filmDate =>
   <span className="index__date">{filmDate}</span>
 
 export const renderUnitFilmDate = (unit, t) => {
   const filmDate = getFilmDate(unit, t)
-  return filmDate ? renderFilmDate(filmDate) : null;
+  return filmDate && renderFilmDate(filmDate);
 };
 
-export const renderUnitNameAsListItem = unit => 
-  <List.Item key={unit.id} as={Link} to={canonicalLink(unit)}>
+export const renderUnitNameAsListItem = unit =>
+  unit && <List.Item key={unit.id} as={Link} to={canonicalLink(unit)}>
     {unit.name || NO_NAME}
   </List.Item>
 
 export const renderUnitNameLink = (unit, className="index__title") =>
-  <Link className={className} to={canonicalLink(unit)}>
+  unit && <Link className={className} to={canonicalLink(unit)}>
     {unit.name || NO_NAME}
   </Link>
 
-export const renderUnitLogo = (unit, fallbackImg) => 
-  <Link to={canonicalLink(unit)}>
+export const renderUnitLogo = (unit, fallbackImg) =>
+  unit && <Link to={canonicalLink(unit)}>
     <UnitLogo className="index__thumbnail" unitId={unit.id} fallbackImg={fallbackImg} />
   </Link>
 
 export const renderUnitCollectionLogo = (unit, fallbackImg, collectionId) =>
-  <Link to={canonicalLink(unit)}>
+  unit && <Link to={canonicalLink(unit)}>
     <UnitLogo
       className="index__thumbnail"
       unitId={unit.id}
@@ -65,13 +65,10 @@ export const renderUnitCollectionLogo = (unit, fallbackImg, collectionId) =>
   </Link>
 
 export const renderUnitDescription = unit =>
-  unit.description
-    ? (
-      <div className="index__description mobile-hidden">
-        {ellipsize(unit.description)}
-      </div>
-    )
-    : null
+  unit?.description &&
+  <div className="index__description mobile-hidden">
+    {ellipsize(unit.description)}
+  </div>
 
 export const renderRelatedItems = (relatedItems, header, className="index__collections") =>
   relatedItems.length === 0
