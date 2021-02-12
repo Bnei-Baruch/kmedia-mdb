@@ -40,9 +40,9 @@ export const renderUnitFilmDate = (unit, t) => {
 };
 
 export const renderUnitNameAsListItem = unit =>
-  unit ? <List.Item key={unit.id} as={Link} to={canonicalLink(unit)}>
+  unit && <List.Item key={unit.id} as={Link} to={canonicalLink(unit)}>
     {unit?.name || NO_NAME}
-  </List.Item> : null
+  </List.Item>
 
 export const renderUnitNameLink = (unit, className="index__title") =>
   <Link className={className} to={canonicalLink(unit)}>
@@ -50,19 +50,19 @@ export const renderUnitNameLink = (unit, className="index__title") =>
   </Link>
 
 export const renderUnitLogo = (unit, fallbackImg) =>
-  unit ? <Link to={canonicalLink(unit)}>
+  unit && <Link to={canonicalLink(unit)}>
     <UnitLogo className="index__thumbnail" unitId={unit.id} fallbackImg={fallbackImg} />
-  </Link> : null
+  </Link>
 
 export const renderUnitCollectionLogo = (unit, fallbackImg, collectionId) =>
-  unit ? <Link to={canonicalLink(unit)}>
+  unit && <Link to={canonicalLink(unit)}>
     <UnitLogo
       className="index__thumbnail"
       unitId={unit.id}
       collectionId={collectionId}
       fallbackImg={fallbackImg}
     />
-  </Link> : null
+  </Link>
 
 export const renderUnitDescription = unit =>
   unit?.description
