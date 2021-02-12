@@ -29,14 +29,14 @@ export const getUnitCollectionsBreakdown = unit =>
   new CollectionsBreakdown(Object.values(unit?.collections || {}));
 
 export const getFilmDate = (unit, t) =>
-  unit?.film_date ? t('values.date', { date: unit?.film_date }) : ''
+  unit && unit.film_date && t('values.date', { date: unit.film_date })
 
 export const renderFilmDate = filmDate =>
   <span className="index__date">{filmDate}</span>
 
 export const renderUnitFilmDate = (unit, t) => {
   const filmDate = getFilmDate(unit, t)
-  return filmDate ? renderFilmDate(filmDate) : null;
+  return filmDate && renderFilmDate(filmDate);
 };
 
 export const renderUnitNameAsListItem = unit =>
@@ -65,13 +65,10 @@ export const renderUnitCollectionLogo = (unit, fallbackImg, collectionId) =>
   </Link>
 
 export const renderUnitDescription = unit =>
-  unit?.description
-    ? (
-      <div className="index__description mobile-hidden">
-        {ellipsize(unit.description)}
-      </div>
-    )
-    : null
+  unit && unit.description &&
+  <div className="index__description mobile-hidden">
+    {ellipsize(unit.description)}
+  </div>
 
 export const renderRelatedItems = (relatedItems, header, className="index__collections") =>
   relatedItems.length === 0
