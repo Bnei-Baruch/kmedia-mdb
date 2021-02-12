@@ -6,11 +6,11 @@ import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import UnitList from '../../../../Pages/UnitList/Container';
 
 const renderUnit = (unit, t) => {
+  if (!unit) {
+    return;
+  }
   const { clips, relatedItems }
           = renderUnitHelper.commonRenderUnitForClips(unit, t);
-  if (!unit) {
-    return null;
-  }
   return <Table.Row key={unit.id} verticalAlign="top">
     <Table.Cell collapsing singleLine>
       {renderUnitHelper.renderUnitCollectionLogo(unit, 'clips', clips.length > 0 ? clips[0].id : null)}
