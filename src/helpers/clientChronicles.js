@@ -49,7 +49,7 @@ export default class ClientChronicles {
     // Setup the setInterval method to run every second.
     setInterval(() => {
       // Check for inactivity, only if was active since last inactive timestamp.
-      if (this.isUserActive() && Date.now() - this.lastActivityTimestampMs > MAX_INACTIVITY_MS) {
+      if (this.isUserActive() && !this.isPlayerPlaying() && Date.now() - this.lastActivityTimestampMs > MAX_INACTIVITY_MS) {
         // if the user has been inactive or idle for longer then the seconds specified in MAX_INACTIVITY_MS.
         console.log(`User has been inactive for more than ${MAX_INACTIVITY_MS} ms.`);
         this.append('user-inactive', {activities: Array.from(this.sessionActivities)});
@@ -140,8 +140,14 @@ export default class ClientChronicles {
     }, {eventType: '', timestamp: this.firstActivityTimestampMs});
   }
 
+  isPlayerPlaying() {
+    const play = this.LastEntriesByType.get('player-play');
+    const stop = this.LastEntriesByType.get('player-stop');
+    return play && (!stop || play.timestamp > stop.timestamp);
+  }
+
   isUserActive() {
-    return this.lastEventType().eventType !== 'user-inactive';
+    return this.isPlayerPlaying() || this.lastEventType().eventType !== 'user-inactive';
   }
 
   append(eventType, data, sync = false) {
@@ -185,7 +191,7 @@ export default class ClientChronicles {
       (async () => { return await axios.post(chroniclesUrl('append'), append); })();
     } else {
       axios.post(chroniclesUrl('append'), append)
-      .catch((error) => { console.warn(error); });
+        .catch((error) => { console.warn(error); });
     }
   }
 }
